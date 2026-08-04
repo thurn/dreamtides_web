@@ -365,10 +365,11 @@ commentary.
    `reintroduced_to_preserve_minimum_pool`; treat each restored entry as
    strongly discouraged but available when necessary.
 
-   Templates tagged `balance_class: deck_wide_modifier` change every card in
-   the deck or every card in a broad deck category. Their overall-use and
-   rank-1 omission thresholds are each one use lower than the corresponding
-   standard omission threshold, so they become hidden earlier. If minimum-pool
+   Templates tagged `balance_class: unique_effect` belong to an intentionally
+   general category for mechanics that should appear rarely; the category is
+   not tied to a particular mechanical family. Their overall-use and rank-1
+   omission thresholds are each one use lower than the corresponding standard
+   omission threshold, so they become hidden earlier. If minimum-pool
    protection reintroduces one, its availability does not weaken the selection
    rule: pick it only when it is a very strong, card-specific fit.
 
@@ -388,11 +389,11 @@ commentary.
     - **Chain strength:** Judge the prospective label and effect as one causal
       chain. A merely thematic reward with no convincing player act
       is a weak fit.
-    - **Deck-wide modifier restraint:** Treat every template tagged
-      `balance_class: deck_wide_modifier` as exceptional. Select one only when
+    - **Unique-effect restraint:** Treat every template tagged
+      `balance_class: unique_effect` as exceptional. Select one only when
       the depicted scene supports an unusually convincing causal act and the
-      source card's deck intent strongly calls for that specific deck-wide
-      change. General power, broad usefulness, or a merely acceptable thematic
+      source card's deck intent strongly calls for that specific effect.
+      General power, broad usefulness, or a merely acceptable thematic
       analogy never qualifies. This very-strong-fit requirement is mandatory,
       including for an unflagged or minimum-pool-reintroduced candidate.
 
@@ -687,7 +688,7 @@ commentary.
 - Choose conservative values when balance evidence is incomplete, but keep
   them on the live system's scale. Reject an option pair with an obvious
   universal best choice.
-- Pick a `deck_wide_modifier` template only for a very strong card-specific
+- Pick a `unique_effect` template only for a very strong card-specific
   scene-and-strategy fit. Its availability in the candidate list is never
   evidence that the fit is strong enough.
 - Never revise frozen prose to explain an effect. If a scene and pair cannot

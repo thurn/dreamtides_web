@@ -236,9 +236,9 @@ class ListTemplateCandidatesTests(unittest.TestCase):
         )
         self.assertEqual(output["special_variables"], ["$SYNTHETIC_CARD"])
 
-    def test_deck_wide_modifiers_hide_at_the_normal_warning_threshold(self) -> None:
+    def test_unique_effects_hide_at_the_normal_warning_threshold(self) -> None:
         templates = self.synthetic_templates(6)
-        templates[0]["balance_class"] = "deck_wide_modifier"
+        templates[0]["balance_class"] = "unique_effect"
         result = self.run_lister(
             templates,
             [[1], [2]],
@@ -250,11 +250,11 @@ class ListTemplateCandidatesTests(unittest.TestCase):
         balance = output["balance"]
         self.assertEqual(balance["soft_warning_threshold"], 1)
         self.assertEqual(balance["omission_threshold"], 2)
-        self.assertEqual(balance["deck_wide_modifier_omission_threshold"], 1)
+        self.assertEqual(balance["unique_effect_omission_threshold"], 1)
         self.assertEqual(balance["rank_1_soft_warning_threshold"], 1)
         self.assertEqual(balance["rank_1_omission_threshold"], 2)
         self.assertEqual(
-            balance["deck_wide_modifier_rank_1_omission_threshold"], 1
+            balance["unique_effect_rank_1_omission_threshold"], 1
         )
         self.assertEqual(
             balance["omitted_templates"],

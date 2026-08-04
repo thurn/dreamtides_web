@@ -150,7 +150,7 @@
   {
     "template_id": 40,
     "template": "Transfigure all cards in your deck",
-    "balance_class": "deck_wide_modifier"
+    "balance_class": "unique_effect"
   },
   {
     "template_id": 41,
@@ -247,22 +247,22 @@
   {
     "template_id": 64,
     "template": "All characters in your deck gain +1✦",
-    "balance_class": "deck_wide_modifier"
+    "balance_class": "unique_effect"
   },
   {
     "template_id": 65,
     "template": "All cards in your deck are reduced in cost by 1●. Gain {count} Nightmare cards.",
-    "balance_class": "deck_wide_modifier"
+    "balance_class": "unique_effect"
   },
   {
     "template_id": 66,
     "template": "All cards in your deck become ❖ (fast)",
-    "balance_class": "deck_wide_modifier"
+    "balance_class": "unique_effect"
   },
   {
     "template_id": 67,
     "template": "All characters in your deck become the subtype of your choice.",
-    "balance_class": "deck_wide_modifier"
+    "balance_class": "unique_effect"
   },
   {
     "template_id": 68,
