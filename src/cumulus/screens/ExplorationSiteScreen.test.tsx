@@ -180,6 +180,39 @@ function deckSparkRewardView(): ExplorationSiteView {
   };
 }
 
+function essenceRewardView(): ExplorationSiteView {
+  const base = view(true);
+  const cards = Array.from({ length: 6 }, (_unused, index) => ({
+    entryId: `spirit-animal-entry-${String(index + 1)}`,
+    model: {
+      ...base.card,
+      cardId: asCardId(
+        `00000000-0000-4000-8000-${String(index + 21).padStart(12, "0")}`,
+      ),
+      displaySnapshot: {
+        ...base.card.displaySnapshot,
+        id: asCardId(
+          `00000000-0000-4000-8000-${String(index + 21).padStart(12, "0")}`,
+        ),
+        name: asCardName(`Spirit Animal ${String(index + 1)}`),
+        cardNumber: index + 21,
+        imageNumber: index + 21,
+        subtype: "Spirit Animal",
+      },
+    },
+    isBane: false,
+  }));
+  return {
+    ...base,
+    reward: {
+      kind: "essence",
+      cards,
+      essencePerCard: 15,
+      totalEssence: 90,
+    },
+  };
+}
+
 function stubMatchMedia(): void {
   window.matchMedia = (query: string) => ({
     matches: query.includes("min-width"),
@@ -1338,6 +1371,83 @@ describe("ExplorationSiteScreen", () => {
     expect(onExit).toHaveBeenCalledOnce();
     act(() => root.unmount());
     expect(dreamsignTarget.style.visibility).toBe("");
+  });
+
+  it("counts the contributing Spirit Animals before announcing the total Essence", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = false;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function getBoundingClientRect(this: HTMLElement) {
+        if (this.hasAttribute("data-exploration-card-slot")) {
+          return new DOMRect(900, 180, 240, 336);
+        }
+        if (this instanceof HTMLImageElement && this.alt !== "") {
+          return new DOMRect(780, 150, 480, 291);
+        }
+        return new DOMRect(0, 0, 100, 100);
+      },
+    );
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={essenceRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    act(() => {
+      container
+        .querySelector("[data-exploration-card-travel]")
+        ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+    });
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() => {
+      container
+        .querySelector("[data-exploration-frame-break]")
+        ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+    });
+
+    expect(
+      container.querySelectorAll("[data-exploration-essence-card]"),
+    ).toHaveLength(6);
+    expect(
+      container.querySelectorAll('[data-resource-chip-kind="essence"]'),
+    ).toHaveLength(6);
+    expect(
+      container.querySelector("[data-exploration-essence-cards]")
+        ?.textContent,
+    ).toContain("+15");
+    expect(
+      container.querySelector("[data-exploration-essence-announcement]"),
+    ).toBeNull();
+
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    expect(
+      container.querySelector("[data-exploration-essence-cards]"),
+    ).toBeNull();
+    const announcement = container.querySelector(
+      "[data-exploration-essence-announcement]",
+    );
+    expect(announcement?.textContent).toContain("Essence Gained");
+    expect(announcement?.textContent).toContain("+90");
+    expect(announcement?.textContent).toContain("15 × 6 Spirit Animals");
+    expect(onExit).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
   });
 
   it("stages a face-down-to-face-up travel from the bottom-right deck anchor", () => {

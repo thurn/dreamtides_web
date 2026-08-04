@@ -37,6 +37,7 @@ import {
   JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP,
 } from "../components/hud/JourneyStatusBar";
 import { Dreamsign } from "../components/hud/Dreamsign";
+import { ResourceChip } from "../components/hud/ResourceChip";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import {
   RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
@@ -101,6 +102,15 @@ export type ExplorationRewardView =
       readonly amount: number;
       readonly announcement: string;
       readonly cards: readonly ExplorationCardChoiceView[];
+    }
+  | {
+      readonly kind: "essence";
+      /** Exact deck entries that contributed to the Essence reward. */
+      readonly cards: readonly ExplorationCardChoiceView[];
+      /** Essence granted by each contributing card. */
+      readonly essencePerCard: number;
+      /** Authoritative total applied by the reducer. */
+      readonly totalEssence: number;
     };
 
 export interface ExplorationCardChoiceView {
@@ -413,6 +423,7 @@ const FRAME_BREAK_DELAY_SECONDS = motionTimeSeconds("--dur-fast");
 const FRAME_FRACTURE_SECONDS =
   motionTimeSeconds("--dur-base") + motionTimeSeconds("--dur-fast");
 const REWARD_READING_SECONDS = motionTimeSeconds("--dur-slow") * 4;
+const ESSENCE_CARD_READING_SECONDS = motionTimeSeconds("--dur-slow") * 8;
 const REWARD_TRAVEL_SECONDS = motionTimeSeconds("--dur-slow") * 2;
 const REWARD_STAGGER_SECONDS = motionTimeSeconds("--dur-fast");
 const TYPEWRITER_SECONDS = motionTimeSeconds("--dur-exploration-typewriter");
@@ -428,6 +439,9 @@ const DESKTOP_DECK_SPARK_RADIUS_X = 280;
 const DESKTOP_DECK_SPARK_RADIUS_Y = 175;
 const MOBILE_DECK_SPARK_RADIUS_X = 132;
 const MOBILE_DECK_SPARK_RADIUS_Y = 205;
+const DESKTOP_ESSENCE_CARD_WIDTH = 156;
+const MOBILE_ESSENCE_CARD_WIDTH = "min(28vw, 112px)";
+const ESSENCE_CHIP_LAYER = 12;
 const DESKTOP_FLOATING_PANEL_BOTTOM =
   `calc(${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-9")})`;
 // The card preview cache appends a 21px watermark strip to a 259px-tall
@@ -851,6 +865,9 @@ export function ExplorationSiteScreen({
   const [rewardTrajectories, setRewardTrajectories] = useState<
     ReadonlyMap<string, RewardTrajectory> | null
   >(null);
+  const [essenceRewardPhase, setEssenceRewardPhase] = useState<
+    "cards" | "announcement"
+  >("cards");
   const fullArtUrl = resolveArtRef(view.fullArt);
   const trajectory = useCardTrajectory(
     cardTargetRef,
@@ -863,6 +880,8 @@ export function ExplorationSiteScreen({
     view.reward?.kind === "objects" ? view.reward : null;
   const deckSparkReward =
     view.reward?.kind === "deck-spark" ? view.reward : null;
+  const essenceReward =
+    view.reward?.kind === "essence" ? view.reward : null;
   const rewardItems = useMemo(() => rewardItemsFor(view.reward), [view.reward]);
   const rewardIdentity =
     view.resolvedActionId === null || view.reward === null
@@ -878,7 +897,6 @@ export function ExplorationSiteScreen({
             view.reward.kind,
             ...view.reward.cards.map((card) => card.entryId),
           ].join("|");
-
   useEffect(() => {
     if (view.resolvedActionId === null) return;
     setActiveActionId(null);
@@ -896,6 +914,7 @@ export function ExplorationSiteScreen({
     completedRewardItemsRef.current.clear();
     rewardItemRefs.current.clear();
     setRewardTrajectories(null);
+    setEssenceRewardPhase("cards");
   }, [rewardIdentity]);
 
   useLayoutEffect(() => {
@@ -1088,6 +1107,40 @@ export function ExplorationSiteScreen({
     deckSparkReward,
     frameBreakPhase,
     rewardIdentity,
+  ]);
+
+  useEffect(() => {
+    if (
+      essenceReward === null ||
+      frameBreakPhase !== "open" ||
+      essenceRewardPhase !== "cards"
+    ) {
+      return;
+    }
+    const timer = window.setTimeout(() => {
+      setEssenceRewardPhase("announcement");
+    }, ESSENCE_CARD_READING_SECONDS * 1000);
+    return () => window.clearTimeout(timer);
+  }, [essenceReward, essenceRewardPhase, frameBreakPhase]);
+
+  useEffect(() => {
+    if (
+      essenceReward === null ||
+      frameBreakPhase !== "open" ||
+      essenceRewardPhase !== "announcement"
+    ) {
+      return;
+    }
+    const timer = window.setTimeout(
+      completeExit,
+      RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
+    );
+    return () => window.clearTimeout(timer);
+  }, [
+    completeExit,
+    essenceReward,
+    essenceRewardPhase,
+    frameBreakPhase,
   ]);
 
   const finishRewardItem = (itemKey: string): void => {
@@ -1666,6 +1719,7 @@ export function ExplorationSiteScreen({
         frameBreakPhase === "open" &&
         activeAction === null &&
         objectReward !== null &&
+        rewardItems.length > 0 &&
         rewardTrajectories === null && (
           <motion.section
             data-exploration-reward-stage=""
@@ -1848,6 +1902,131 @@ export function ExplorationSiteScreen({
               announcementId={`exploration-deck-spark:${view.resolvedActionId ?? "resolved"}`}
             />
           </motion.section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
+        essenceReward !== null &&
+        essenceRewardPhase === "cards" && (
+          <motion.section
+            data-exploration-essence-cards=""
+            data-exploration-essence-card-count={
+              essenceReward.cards.length
+            }
+            role="status"
+            aria-label={`${String(essenceReward.cards.length)} Spirit Animal cards grant ${String(essenceReward.totalEssence)} Essence total, ${String(essenceReward.essencePerCard)} each`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "fixed",
+              top: safeAreaInsetAtLeast("top", "--space-9"),
+              right: token("--space-6"),
+              bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+              left: token("--space-6"),
+              zIndex: FRAME_BREAK_EXIT_LAYER + 1,
+              display: "flex",
+              flexWrap: "wrap",
+              alignContent: "center",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: isDesktop ? token("--space-4") : token("--space-3"),
+              pointerEvents: "none",
+            }}
+          >
+            {essenceReward.cards.map((card, index) => (
+              <motion.div
+                key={card.entryId}
+                data-exploration-essence-card=""
+                data-exploration-entry-id={card.entryId}
+                data-card-id={card.model.cardId}
+                initial={{
+                  opacity: reduceMotion ? 1 : 0,
+                  scale: reduceMotion ? 1 : 0.88,
+                  y: reduceMotion ? 0 : token("--space-6"),
+                }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{
+                  delay: reduceMotion ? 0 : index * REWARD_STAGGER_SECONDS,
+                  duration: reduceMotion
+                    ? 0
+                    : motionTimeSeconds("--dur-slow"),
+                  ease: DREAM_EASE,
+                }}
+                style={{
+                  position: "relative",
+                  width: isDesktop
+                    ? DESKTOP_ESSENCE_CARD_WIDTH
+                    : MOBILE_ESSENCE_CARD_WIDTH,
+                  aspectRatio: CARD_ASPECT_RATIO,
+                  flex: "none",
+                  pointerEvents: "auto",
+                }}
+              >
+                <GameCard
+                  model={card.model}
+                  testId={`cumulus-exploration-essence-card-${String(index)}`}
+                />
+                <motion.div
+                  data-exploration-essence-per-card=""
+                  initial={{ opacity: 0, scale: 0.72 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{
+                    delay: reduceMotion
+                      ? 0
+                      : index * REWARD_STAGGER_SECONDS +
+                        motionTimeSeconds("--dur-base"),
+                    duration: reduceMotion
+                      ? 0
+                      : motionTimeSeconds("--dur-base"),
+                    ease: DREAM_EASE,
+                  }}
+                  style={{
+                    position: "absolute",
+                    right: `calc(-1 * ${token("--space-2")})`,
+                    bottom: `calc(-1 * ${token("--space-2")})`,
+                    zIndex: ESSENCE_CHIP_LAYER,
+                    boxShadow: token("--shadow-md"),
+                    borderRadius: token("--radius-pill"),
+                  }}
+                >
+                  <ResourceChip
+                    kind="essence"
+                    value={`+${String(essenceReward.essencePerCard)}`}
+                    size="lg"
+                    chip
+                  />
+                </motion.div>
+              </motion.div>
+            ))}
+          </motion.section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        essenceReward !== null &&
+        essenceRewardPhase === "announcement" && (
+          <div
+            data-exploration-essence-announcement=""
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: FRAME_BREAK_EXIT_LAYER + 2,
+              pointerEvents: "none",
+            }}
+          >
+            <RadialAnnouncement
+              announcementId={`exploration:${view.siteId}:${view.resolvedActionId ?? "essence"}`}
+              headline="Essence Gained"
+              detail={`${String(essenceReward.essencePerCard)} × ${String(essenceReward.cards.length)} Spirit Animals`}
+              essenceGained={essenceReward.totalEssence}
+              tone="reward"
+              size={isDesktop ? "standard" : "compact"}
+              duration="extended"
+            />
+          </div>
         )}
       {frameBreakGeometry !== null &&
         frameBreakPhase === "open" &&

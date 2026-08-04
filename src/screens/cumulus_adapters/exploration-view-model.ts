@@ -521,6 +521,24 @@ function rewardForResolution(
       cards,
     };
   }
+  if (
+    resolvedAction?.effectKind === "gain-essence-per-card" &&
+    resolvedAction.essencePerCard !== undefined
+  ) {
+    return {
+      kind: "essence",
+      cards: resolution.affectedEntryIds.flatMap((entryId) => {
+        const entry = state.deck.find(
+          (candidate) => candidate.entryId === entryId,
+        );
+        if (entry === undefined) return [];
+        const card = deckCardChoice(entry, content);
+        return card === null ? [] : [card];
+      }),
+      essencePerCard: resolvedAction.essencePerCard,
+      totalEssence: resolution.essenceGained,
+    };
+  }
   const cards = resolution.gainedCardIds.flatMap((cardId) => {
     const card = cardById(content, cardId);
     return card === null ? [] : [modelForCard(card)];

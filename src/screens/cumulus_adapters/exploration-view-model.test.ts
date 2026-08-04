@@ -472,6 +472,124 @@ describe("exploration-view-model", () => {
     });
   });
 
+  it("builds an identity-safe Essence calculation from the affected deck entries", () => {
+    const source = card(sourceId, 17);
+    const firstSpiritAnimal = {
+      ...card(asCardId("f0000000-0000-4000-8000-000000000018"), 18),
+      subtype: "Spirit Animal",
+    };
+    const secondSpiritAnimal = {
+      ...card(asCardId("f0000000-0000-4000-8000-000000000019"), 19),
+      subtype: "Spirit Animal",
+    };
+    const state = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "spirit-entry-a",
+          cardNumber: firstSpiritAnimal.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        },
+        {
+          entryId: "spirit-entry-b",
+          cardNumber: secondSpiritAnimal.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        },
+      ],
+    };
+    const runtime: ExplorationSiteRuntime = {
+      kind: "exploration",
+      encounterCardId: source.id,
+      actionOffers: [
+        {
+          actionId: "gain-essence",
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+        {
+          actionId: "gain-card",
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+      ],
+      resolution: {
+        actionId: "gain-essence",
+        gainedCardIds: [],
+        gainedDreamsignIds: [],
+        purgedCardIds: [],
+        affectedEntryIds: ["spirit-entry-a", "spirit-entry-b"],
+        essenceGained: 30,
+      },
+    };
+    const content = {
+      cardDatabase: new Map([
+        [source.cardNumber, source],
+        [firstSpiritAnimal.cardNumber, firstSpiritAnimal],
+        [secondSpiritAnimal.cardNumber, secondSpiritAnimal],
+      ]),
+      dreamAvatars: [],
+      dreamwellCards: [],
+      dreamsignTemplates: [],
+      dreamscapes: [],
+      affiliations: [],
+      guides: [guide],
+      atlasConfig: { completionLevels: [] },
+      exploration: {
+        customCards: [],
+        customDreamsigns: [],
+        encounters: [
+          {
+            cardId: source.id,
+            prose: "The authored scene appears.",
+            actions: [
+              {
+                id: "gain-essence",
+                label: "Sound a gathering call",
+                effectText:
+                  "Gain 15 essence for each Spirit Animal card in your deck",
+                effectKind: "gain-essence-per-card",
+                predicate: "spirit-animal",
+                essencePerCard: 15,
+              },
+              {
+                id: "gain-card",
+                label: "Gain the card",
+                effectText: "Gain the card.",
+                effectKind: "gain-card",
+                cardId: source.id,
+              },
+            ],
+          },
+        ],
+      },
+    } as unknown as JourneyContent;
+
+    const view = buildExplorationSiteView({
+      sceneNode: null,
+      site: explorationSite,
+      guide,
+      runtime,
+      state,
+      content,
+    });
+
+    expect(view?.reward).toMatchObject({
+      kind: "essence",
+      cards: [
+        { entryId: "spirit-entry-a", model: { cardId: firstSpiritAnimal.id } },
+        { entryId: "spirit-entry-b", model: { cardId: secondSpiritAnimal.id } },
+      ],
+      essencePerCard: 15,
+      totalEssence: 30,
+    });
+  });
+
   it("resolves an offered-card placeholder and presents the UUID-backed card", () => {
     const source = card(sourceId, 17);
     const offered = card(
