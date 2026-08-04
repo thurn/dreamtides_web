@@ -37,6 +37,7 @@ describe("CardGalleryPanel", () => {
     act(() => root.render(<CardGalleryPanel title="Starting Deck" subtitle="Your cards" cards={[{ entryId: "entry-a", model: model("Archive Sentry"), testId: "card-a" }]} columns="four" frame="fullBleed" />));
     expect(container.querySelector("h2")?.textContent).toBe("Starting Deck");
     expect(container.querySelector("section")?.dataset.galleryColumns).toBe("4");
+    expect(container.querySelector("[data-card-choice-grid]")).not.toBeNull();
     expect(container.querySelector('[data-testid="card-a"]')?.textContent).toBe("Archive Sentry");
     act(() => root.unmount()); container.remove();
   });

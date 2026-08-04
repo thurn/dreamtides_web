@@ -7,6 +7,11 @@ import {
 } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { GameCard } from "../components/card/CardView";
+import {
+  CardChoiceGrid,
+  type CardChoiceGridColumns,
+  type CardChoiceGridSiteFit,
+} from "../components/card/CardChoiceGrid";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlowIcon } from "../components/controls/GlowIcon";
 import type { OfferTileModel } from "../components/controls/OfferTile";
@@ -388,7 +393,6 @@ function OfferDetailVisual({
   selectedChoiceId?: string;
   onSelect: (offerId: string, choiceId: string) => void;
 }) {
-  const directWidth = cardWidthForCount(1, layout);
   const choices = (
     items: readonly DreamAuguryCardChoiceView[],
     selectedBadge?: string,
@@ -416,7 +420,7 @@ function OfferDetailVisual({
         </div>
       );
     case "purge":
-      return <CardTile card={visual.card} width={directWidth} danger />;
+      return <CardRow cards={[visual.card]} layout={layout} tone="danger" />;
     case "purgeReplace":
       return (
         <TradeCards
@@ -460,7 +464,7 @@ function OfferDetailVisual({
           <CardRow
             cards={visual.cards}
             layout={layout}
-            width={layout === "desktop" ? "min(160px, 24cqw, 34cqh)" : "min(96px, 38cqw, 24cqh)"}
+            fit="mixed-reward"
           />
           <DreamsignRow dreamsigns={visual.dreamsigns} layout={layout} />
         </div>
@@ -470,62 +474,55 @@ function OfferDetailVisual({
 
 type CardTileWidth = CSSProperties["width"];
 
-/**
- * Complete desktop cards read in place at 240px. Container query units keep
- * that target whenever the detail body can hold it, then shrink the complete
- * set against both available width and height without introducing overflow.
- */
-function cardWidthForCount(count: number, layout: "mobile" | "desktop"): string {
-  if (layout === "desktop") {
-    const widthShare = count <= 1 ? 72 : count === 2 ? 42 : count === 3 ? 29 : 23.5;
-    return `min(240px, ${String(widthShare)}cqw, 64cqh)`;
-  }
-  const rows = count <= 2 ? 1 : 2;
-  const maxWidth = count <= 1 ? 180 : 128;
-  const widthShare = count <= 1 ? 72 : 40;
-  const heightShare = rows === 1 ? 56 : 31;
-  return `min(${String(maxWidth)}px, ${String(widthShare)}cqw, ${String(heightShare)}cqh)`;
+function cardGridColumns(
+  count: number,
+  layout: "mobile" | "desktop",
+): CardChoiceGridColumns {
+  const columns = layout === "desktop" ? Math.max(1, count) : Math.min(2, Math.max(1, count));
+  if (columns <= 1) return "one";
+  if (columns === 2) return "two";
+  if (columns === 3) return "three";
+  if (columns === 4) return "four";
+  return "five";
 }
 
-function cardGridColumns(count: number, layout: "mobile" | "desktop"): number {
-  return layout === "desktop" ? Math.max(1, count) : Math.min(2, Math.max(1, count));
-}
-
-function cardGridStyle(columns: number, width: CardTileWidth): CSSProperties {
-  return {
-    display: "grid",
-    gridTemplateColumns: `repeat(${String(columns)}, ${String(width)})`,
-    justifyContent: "center",
-    alignItems: "center",
-    gap: token("--space-4"),
-    minWidth: 0,
-  };
-}
-
-function CardChoices({ offerId, choices, layout, width = cardWidthForCount(choices.length, layout), columns = cardGridColumns(choices.length, layout), selectedChoiceId, selectedBadge, onSelect }: { offerId: string; choices: readonly DreamAuguryCardChoiceView[]; layout: "mobile" | "desktop"; width?: CardTileWidth; columns?: number; selectedChoiceId?: string; selectedBadge?: string; onSelect: (offerId: string, choiceId: string) => void }) {
+function CardChoices({ offerId, choices, layout, fit = "choice", columns = cardGridColumns(choices.length, layout), selectedChoiceId, selectedBadge, onSelect }: { offerId: string; choices: readonly DreamAuguryCardChoiceView[]; layout: "mobile" | "desktop"; fit?: CardChoiceGridSiteFit; columns?: CardChoiceGridColumns; selectedChoiceId?: string; selectedBadge?: string; onSelect: (offerId: string, choiceId: string) => void }) {
   return (
-    <div data-augury-card-grid-columns={columns} style={cardGridStyle(columns, width)}>
-      {choices.map((choice) => (
-        <CardTile key={choice.id} card={choice.card} width={width} selected={selectedChoiceId === choice.id} selectionBadge={selectedChoiceId === choice.id ? selectedBadge : undefined} onActivate={() => onSelect(offerId, choice.id)} testId={`cumulus-augury-choice-${choice.id}`} />
-      ))}
-    </div>
+    <CardChoiceGrid
+      cards={choices.map((choice) => ({
+        entryId: choice.id,
+        model: choice.card.model,
+        selected: selectedChoiceId === choice.id,
+        selectionColor: "accent-bright",
+        quantityBadge: selectedChoiceId === choice.id ? selectedBadge : undefined,
+        testId: `cumulus-augury-choice-${choice.id}`,
+      }))}
+      columns={columns}
+      layout={{ kind: "site", viewport: layout, fit }}
+      onCardPress={(choiceId) => onSelect(offerId, choiceId)}
+    />
   );
 }
 
-function CardRow({ cards, layout, width = cardWidthForCount(cards.length, layout) }: { cards: readonly DreamAuguryCardView[]; layout: "mobile" | "desktop"; width?: CardTileWidth }) {
-  const columns = cardGridColumns(cards.length, layout);
-  return <div data-augury-card-grid-columns={columns} style={cardGridStyle(columns, width)}>{cards.map((card) => <CardTile key={card.id} card={card} width={width} />)}</div>;
+function CardRow({ cards, layout, fit = "choice", tone = "default" }: { cards: readonly DreamAuguryCardView[]; layout: "mobile" | "desktop"; fit?: CardChoiceGridSiteFit; tone?: "default" | "danger" }) {
+  return (
+    <CardChoiceGrid
+      cards={cards.map((card) => ({
+        entryId: card.id,
+        model: card.model,
+        selected: tone === "danger",
+        selectionColor: tone === "danger" ? "danger" : undefined,
+      }))}
+      columns={cardGridColumns(cards.length, layout)}
+      layout={{ kind: "site", viewport: layout, fit }}
+    />
+  );
 }
 
-function CardTile({ card, width, selected = false, muted = false, danger = false, selectionBadge, onActivate, testId }: { card: DreamAuguryCardView; width: CardTileWidth; selected?: boolean; muted?: boolean; danger?: boolean; selectionBadge?: string; onActivate?: () => void; testId?: string }) {
+function CardTile({ card, width, selected = false, muted = false, danger = false, onActivate, testId }: { card: DreamAuguryCardView; width: CardTileWidth; selected?: boolean; muted?: boolean; danger?: boolean; onActivate?: () => void; testId?: string }) {
   return (
     <div style={{ position: "relative", width }}>
       <GameCard model={card.model} onActivate={onActivate} unavailable={muted} selected={selected || danger} selectionColor={danger ? "danger" : "accent-bright"} testId={testId} />
-      {selectionBadge !== undefined && (
-        <span aria-label={`${selectionBadge} copies`} data-augury-card-quantity-badge="" style={{ position: "absolute", right: token("--space-3"), bottom: token("--space-3"), zIndex: 20, width: 36, height: 36, borderRadius: token("--radius-control"), display: "grid", placeItems: "center", color: token("--text-on-accent"), background: token("--accent-bright"), boxShadow: token("--shadow-md"), font: token("--t-button-sm"), pointerEvents: "none" }}>
-          {selectionBadge}
-        </span>
-      )}
     </div>
   );
 }
@@ -541,12 +538,11 @@ function Transition({ before, after, layout }: { before: DreamAuguryCardView; af
 
 function TradeCards({ offerId, removed, choices, layout, selectedChoiceId, onSelect }: { offerId: string; removed: DreamAuguryCardView; choices: readonly DreamAuguryCardChoiceView[]; layout: "mobile" | "desktop"; selectedChoiceId?: string; onSelect: (offerId: string, choiceId: string) => void }) {
   const removedWidth = layout === "desktop" ? "min(190px, 18cqw, 55cqh)" : "min(96px, 23cqw, 58cqh)";
-  const choiceWidth = layout === "desktop" ? "min(178px, 15.5cqw, 52cqh)" : "min(74px, 18cqw, 27cqh)";
   return (
     <div data-augury-trade-layout={layout} style={{ display: "grid", gridTemplateColumns: "auto auto minmax(0, 1fr)", alignItems: "center", justifyContent: "center", gap: layout === "desktop" ? token("--space-5") : token("--space-3"), minWidth: 0 }}>
       <CardTile card={removed} width={removedWidth} danger />
       <TransitionArrow layout={layout} />
-      <CardChoices offerId={offerId} choices={choices} layout={layout} width={choiceWidth} columns={layout === "desktop" ? choices.length : 2} selectedChoiceId={selectedChoiceId} onSelect={onSelect} />
+      <CardChoices offerId={offerId} choices={choices} layout={layout} fit="compact-choice" columns={cardGridColumns(choices.length, layout)} selectedChoiceId={selectedChoiceId} onSelect={onSelect} />
     </div>
   );
 }

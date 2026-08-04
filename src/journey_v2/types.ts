@@ -5,13 +5,10 @@ import type { JourneyContent } from "../data/journey-content";
 import type { CardTransfigurationDisplay } from "../transfiguration/transfiguration-logic";
 import type { CardData } from "../types/cards";
 import type { DreamsignTemplate } from "../types/content";
+import type { JourneyRewardEffect } from "../rules/journey/reward-effects";
 import type {
-  CardKeywordModification,
-  CardTypeChange,
   DeckEntry,
   SiteState,
-  SiteType,
-  TransfigurationType,
 } from "../types/journey";
 import type {
   MerchantArchetypeId,
@@ -105,66 +102,22 @@ export interface MerchantContext {
   dreamsignTemplates: readonly DreamsignTemplate[];
 }
 
+type MerchantTransfigurationPayload = Extract<
+  JourneyRewardEffect,
+  { kind: "transfigure_deck_entry" }
+> & {
+  previewCard: CardData;
+  description: string;
+};
+
+/** Merchant-facing reward payload with its presentation-only preview fields. */
 export type MerchantApplyPayload =
-  | {
-      kind: "add_catalog_card";
-      cardUuid: string;
-      cardNumber: number;
-      /**
-       * When set, the granted deck entry enters pre-transfigured with this
-       * transfiguration. Used by `transfigured_draft`, where a composite child
-       * cannot target a deck entry that does not exist yet.
-       */
-      transfiguration?: TransfigurationType;
-    }
-  | {
-      kind: "add_dreamsign";
-      dreamsignId: string;
-      dreamsignTemplate: DreamsignTemplate;
-    }
-  | {
-      kind: "transfigure_deck_entry";
-      entryId: string;
-      cardUuid: string;
-      cardNumber: number;
-      transfiguration: TransfigurationType;
-      previewCard: CardData;
-      description: string;
-    }
-  | {
-      kind: "duplicate_deck_entry";
-      entryId: string;
-      cardUuid: string;
-      cardNumber: number;
-    }
-  | {
-      kind: "remove_deck_entry";
-      entryId: string;
-      cardUuid: string;
-      cardNumber: number;
-    }
-  | {
-      kind: "change_deck_entry_keywords";
-      entryId: string;
-      cardUuid: string;
-      cardNumber: number;
-      keywords: CardKeywordModification;
-    }
-  | {
-      kind: "change_deck_entry_type";
-      entryId: string;
-      cardUuid: string;
-      cardNumber: number;
-      typeChange: CardTypeChange;
-    }
-  | {
-      kind: "add_site";
-      siteType: SiteType;
-    }
-  | {
-      kind: "composite";
-      children: readonly MerchantApplyPayload[];
-    };
+  | Exclude<
+      JourneyRewardEffect,
+      { kind: "transfigure_deck_entry" } | { kind: "composite" }
+    >
+  | MerchantTransfigurationPayload
+  | { kind: "composite"; children: readonly MerchantApplyPayload[] };
 
 export interface MerchantChoiceRequest {
   choiceType: "catalogCard" | "dreamsign" | "replacementCard";

@@ -513,6 +513,144 @@
       "description": "Optional stable test id for the face-down card object."
     }
   ],
+  "CardChoiceGrid": [
+    {
+      "name": "cards",
+      "tsType": "readonly CardChoiceGridCardView[]",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Resolved cards rendered in order."
+    },
+    {
+      "name": "columns",
+      "tsType": "CardChoiceGridColumns",
+      "unionMembers": [
+        "one",
+        "two",
+        "three",
+        "four",
+        "five"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Named column count."
+    },
+    {
+      "name": "layout",
+      "tsType": "CardChoiceGridLayout",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Site preset or gallery-computed layout.",
+      "nested": {
+        "name": "CardChoiceGridLayout",
+        "fields": [
+          {
+            "name": "kind",
+            "tsType": "\"site\" | \"gallery\"",
+            "optional": false,
+            "description": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "endAction",
+      "tsType": "CardChoiceGridActionView",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional card-sized action appended after the cards.",
+      "nested": {
+        "name": "CardChoiceGridActionView",
+        "fields": [
+          {
+            "name": "entryId",
+            "tsType": "string",
+            "optional": false,
+            "description": "Stable action id reported through the action callback."
+          },
+          {
+            "name": "glyph",
+            "tsType": "Glyph",
+            "optional": false,
+            "description": "Large glyph that carries the action's visual identity."
+          },
+          {
+            "name": "label",
+            "tsType": "string",
+            "optional": false,
+            "description": "Accessible action label."
+          },
+          {
+            "name": "caption",
+            "tsType": "CardChoiceGridCaption",
+            "optional": false,
+            "description": "Small uncontained line rendered below the glyph."
+          },
+          {
+            "name": "disabled",
+            "tsType": "boolean",
+            "optional": true,
+            "description": "Detach interaction and visually recede the action."
+          },
+          {
+            "name": "interactionFeedback",
+            "tsType": "\"responsive\" | \"stationary\"",
+            "optional": true,
+            "description": "Interaction motion for the action surface."
+          },
+          {
+            "name": "testId",
+            "tsType": "string",
+            "optional": true,
+            "description": "Optional stable test id on the action button."
+          }
+        ]
+      }
+    },
+    {
+      "name": "onCardPress",
+      "tsType": "((entryId: string) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fires when an enabled card tile is activated."
+    },
+    {
+      "name": "onCardDragStart",
+      "tsType": "((entryId: string, event: DragEvent<HTMLDivElement>) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fires when a draggable card begins a native drag."
+    },
+    {
+      "name": "onCardDragEnd",
+      "tsType": "((entryId: string, event: DragEvent<HTMLDivElement>) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fires when a draggable card's native drag ends."
+    },
+    {
+      "name": "onCardContextMenu",
+      "tsType": "((entryId: string, event: MouseEvent<HTMLDivElement, MouseEvent>) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fires when a card requests contextual actions."
+    },
+    {
+      "name": "onEndActionPress",
+      "tsType": "((entryId: string) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fires with the trailing action's stable id."
+    }
+  ],
   "CardFeatureCallout": [
     {
       "name": "feature",
@@ -674,7 +812,7 @@
     },
     {
       "name": "cards",
-      "tsType": "readonly CardGalleryCardView[]",
+      "tsType": "readonly CardChoiceGridCardView[]",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -692,11 +830,11 @@
       "name": "columns",
       "tsType": "CardGalleryColumns",
       "unionMembers": [
-        "auto",
         "two",
         "three",
         "four",
-        "five"
+        "five",
+        "auto"
       ],
       "required": false,
       "defaultValue": "auto",
@@ -827,19 +965,19 @@
     },
     {
       "name": "endAction",
-      "tsType": "CardGalleryActionView",
+      "tsType": "CardChoiceGridActionView",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "Optional card-sized action appended after the cards.",
       "nested": {
-        "name": "CardGalleryActionView",
+        "name": "CardChoiceGridActionView",
         "fields": [
           {
             "name": "entryId",
             "tsType": "string",
             "optional": false,
-            "description": "Stable action id reported through `onEndActionPress`."
+            "description": "Stable action id reported through the action callback."
           },
           {
             "name": "glyph",
@@ -855,9 +993,9 @@
           },
           {
             "name": "caption",
-            "tsType": "CardGalleryCaption",
+            "tsType": "CardChoiceGridCaption",
             "optional": false,
-            "description": "Small uncontained line rendered directly below the glyph."
+            "description": "Small uncontained line rendered below the glyph."
           },
           {
             "name": "disabled",
@@ -869,7 +1007,7 @@
             "name": "interactionFeedback",
             "tsType": "\"responsive\" | \"stationary\"",
             "optional": true,
-            "description": "Interaction motion for the action surface. Defaults to `responsive`."
+            "description": "Interaction motion for the action surface."
           },
           {
             "name": "testId",

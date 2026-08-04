@@ -22,9 +22,9 @@ The shared card-browser surface: GlassPanel title and action chrome around a scr
 | `footerAction` | `CardGalleryFooterAction` | no | — | Optional centered GlassButton rendered below the card grid. |
 | `footerActions` | `readonly [CardGalleryFooterAction, CardGalleryFooterAction]` | no | — | Optional equal-width pair of GlassButtons rendered below the card grid. |
 | `toolbar` | `CardGalleryToolbar` | no | — | Optional structured search, sort, and filter toolbar above the card grid. |
-| `cards` | `readonly CardGalleryCardView[]` | yes | — | Resolved cards rendered in order. |
+| `cards` | `readonly CardChoiceGridCardView[]` | yes | — | Resolved cards rendered in order. |
 | `emptyLabel` | `string` | no | `No cards.` | Empty-state copy shown when `cards` is empty. |
-| `columns` | `CardGalleryColumns` = `"auto" \| "two" \| "three" \| "four" \| "five"` | no | `auto` | Card grid mode. Defaults to `auto`. |
+| `columns` | `CardGalleryColumns` = `"two" \| "three" \| "four" \| "five" \| "auto"` | no | `auto` | Card grid mode. Defaults to `auto`. |
 | `cardSize` | `CardGalleryCardSize` = `"compact" \| "standard" \| "roomy" \| "showcase"` | no | `standard` | Card size preset. Defaults to `standard`. Use `showcase` for low-count desktop choices; compact multi-row collections may use a denser preset. |
 | `frame` | `CardGalleryFrame` = `"floating" \| "fullBleed"` | no | `floating` | Panel frame geometry and material. `floating` uses liquid glass; `fullBleed` fills its parent edge-to-edge with the standard alpha scrim and no floating rim or shadow. Defaults to `floating`. |
 | `spacing` | `CardGallerySpacing` = `"compact" \| "spacious" \| "regular" \| "medium"` | no | `regular` | Internal padding and grid gap scale. Defaults to `regular`. |
@@ -38,7 +38,7 @@ The shared card-browser surface: GlassPanel title and action chrome around a scr
 | `onCardDragEnd` | `((entryId: string, event: DragEvent<HTMLDivElement>) => void)` | no | — | Fires when a draggable card entry's native drag ends. |
 | `onCardContextMenu` | `((entryId: string, event: MouseEvent<HTMLDivElement, MouseEvent>) => void)` | no | — | Fires when a card entry requests its contextual actions. |
 | `onCardDoubleTap` | `((entryId: string) => void)` | no | — | Fires when a card receives two quick activations. While present, a primary card press waits briefly so a second tap can take precedence. |
-| `endAction` | `CardGalleryActionView` | no | — | Optional card-sized action appended after the cards. |
+| `endAction` | `CardChoiceGridActionView` | no | — | Optional card-sized action appended after the cards. |
 | `onEndActionPress` | `((entryId: string) => void)` | no | — | Fires with the appended action's stable id when it is activated. |
 
 ### `rightAccessory`: the `GlassPanelAccessory` model
@@ -68,16 +68,16 @@ The shared card-browser surface: GlassPanel title and action chrome around a scr
 | `sort` | `CardGallerySelectControl` | yes | Sort-order control. |
 | `filter` | `CardGallerySelectControl` | yes | Type-filter control. |
 
-### `endAction`: the `CardGalleryActionView` model
+### `endAction`: the `CardChoiceGridActionView` model
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `entryId` | `string` | no | Stable action id reported through `onEndActionPress`. |
+| `entryId` | `string` | no | Stable action id reported through the action callback. |
 | `glyph` | `Glyph` | no | Large glyph that carries the action's visual identity. |
 | `label` | `string` | no | Accessible action label. |
-| `caption` | `CardGalleryCaption` | no | Small uncontained line rendered directly below the glyph. |
+| `caption` | `CardChoiceGridCaption` | no | Small uncontained line rendered below the glyph. |
 | `disabled` | `boolean` | yes | Detach interaction and visually recede the action. |
-| `interactionFeedback` | `"responsive" \| "stationary"` | yes | Interaction motion for the action surface. Defaults to `responsive`. |
+| `interactionFeedback` | `"responsive" \| "stationary"` | yes | Interaction motion for the action surface. |
 | `testId` | `string` | yes | Optional stable test id on the action button. |
 
 ## Usage

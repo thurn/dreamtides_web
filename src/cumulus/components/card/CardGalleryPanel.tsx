@@ -12,22 +12,16 @@ import {
   useEffect,
   useRef,
   useState,
-  type CSSProperties,
   type DragEvent,
   type MouseEvent,
   type ReactElement,
   type Ref,
 } from "react";
-import { useRevealSource } from "../../internal/reveal/context";
-import { revealEntityId } from "../../internal/reveal/identity";
-import type { CumulusColor } from "../../primitives/color";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
 import type { Glyph } from "../../primitives/glyph";
 import { GLYPHS } from "../../primitives/glyph";
-import { Pressable } from "../../primitives/Pressable";
 import { DOUBLE_TAP_WINDOW_MS } from "../../primitives/pointer-gesture";
 import { token } from "../../primitives/tokens";
-import { EssenceValue } from "../hud/EssenceValue";
 import { GlassButton, type GlassButtonVariant } from "../controls/GlassButton";
 import {
   SegmentedControl,
@@ -41,126 +35,22 @@ import {
   type GlassPanelHeaderSpacing,
 } from "../overlay/GlassPanel";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
-import { CardView, GameCard, type GameCardModel } from "./CardView";
-import { GalleryActionCard } from "./GalleryActionCard";
+import {
+  CardChoiceGrid,
+  type CardChoiceGridActionView,
+  type CardChoiceGridCaption,
+  type CardChoiceGridCardView,
+  type CardChoiceGridColumns,
+} from "./CardChoiceGrid";
 
 /** One resolved card in a {@link CardGalleryPanel}. */
-export interface CardGalleryCardView {
-  /** Stable id for the card tile; deck surfaces use the deck-entry id. */
-  entryId: string;
-  /** Canonical semantic model rendered by GameCard. */
-  model: GameCardModel;
-  /** Optional test id on the tile wrapper. */
-  testId?: string;
-  /** Draw the card's selection ring. */
-  selected?: boolean;
-  /** Detach card interaction and dim the tile. */
-  disabled?: boolean;
-  /** Selection-ring color. Defaults to `selected`. */
-  selectionColor?: CumulusColor;
-  /** Optional danger outline for always-free purge targets such as Banes. */
-  emphasis?: "danger";
-  /** Small uncontained line rendered directly below the card. */
-  caption?: CardGalleryCaption;
-  /** Visually recede this card while preserving press-preview behavior. */
-  muted?: boolean;
-  /** Preserve this card's grid footprint while hiding all of its content. */
-  reserved?: boolean;
-  /** Allow the caller to drag this physical card entry. */
-  draggable?: boolean;
-  /** Render a noninteractive offset copy beneath the primary card. */
-  stackedCopy?: boolean;
-  /** Horizontal fan direction for the offset copy. Defaults to `right`. */
-  stackedCopyDirection?: "left" | "right";
-}
+export type CardGalleryCardView = CardChoiceGridCardView;
 
 /** The small white line shown beneath a gallery item. */
-export type CardGalleryCaption =
-  { kind: "essence"; amount: number } | { kind: "text"; text: string };
+export type CardGalleryCaption = CardChoiceGridCaption;
 
 /** A card-sized action appended to the gallery grid. */
-export interface CardGalleryActionView {
-  /** Stable action id reported through `onEndActionPress`. */
-  entryId: string;
-  /** Large glyph that carries the action's visual identity. */
-  glyph: Glyph;
-  /** Accessible action label. */
-  label: string;
-  /** Small uncontained line rendered directly below the glyph. */
-  caption: CardGalleryCaption;
-  /** Detach interaction and visually recede the action. */
-  disabled?: boolean;
-  /** Interaction motion for the action surface. Defaults to `responsive`. */
-  interactionFeedback?: "responsive" | "stationary";
-  /** Optional stable test id on the action button. */
-  testId?: string;
-}
-
-function CardGalleryAction({
-  action,
-  cardWidth,
-  onActivate,
-}: {
-  readonly action: CardGalleryActionView;
-  readonly cardWidth: string;
-  readonly onActivate?: () => void;
-}): ReactElement {
-  const lastPointerType = useRef<string | null>(null);
-  const binding = useRevealSource({
-    identity: {
-      entityType: "gallery-action",
-      entityId: revealEntityId("gallery-action", action.entryId),
-    },
-    spec: {
-      primary: {
-        kind: "galleryAction",
-        action: { glyph: action.glyph, label: action.label },
-      },
-      secondaries: [],
-    },
-    onActivate: action.disabled === true ? undefined : onActivate,
-  });
-  const pointerDown = binding.sourceProps.onPointerDown;
-  return (
-    <Pressable
-      as="button"
-      ref={binding.ref}
-      {...binding.sourceProps}
-      aria-label={action.label}
-      aria-disabled={action.disabled || undefined}
-      disabled={action.disabled}
-      pressFeedback={
-        action.interactionFeedback === "stationary" ? "stationary" : "scale"
-      }
-      data-press-feedback={action.interactionFeedback ?? "responsive"}
-      data-testid={action.testId}
-      data-reveal-complete-game-card="false"
-      onPointerDown={(event) => {
-        lastPointerType.current = event.pointerType;
-        pointerDown?.(event);
-      }}
-      onClick={() => {
-        if (action.disabled !== true && lastPointerType.current !== "touch") {
-          onActivate?.();
-        }
-      }}
-      style={{
-        ...binding.sourceProps.style,
-        width: "100%",
-        display: "block",
-        appearance: "none",
-        padding: 0,
-        border: 0,
-        background: "transparent",
-      }}
-    >
-      <GalleryActionCard
-        action={{ glyph: action.glyph, label: action.label }}
-        width={cardWidth}
-      />
-    </Pressable>
-  );
-}
+export type CardGalleryActionView = CardChoiceGridActionView;
 
 /** The trailing header action rendered by a {@link CardGalleryPanel}. */
 export type CardGalleryAccessory = GlassPanelAccessory;
@@ -336,7 +226,6 @@ const DEFAULT_COLUMN_COUNT = 5;
 const CARD_WIDTH_FLOOR_PX = 64;
 // One caption voice plus its gap below each card/action. This is a content box
 // measure used by the gallery fitter so two captioned rows remain fully visible.
-const CAPTION_LINE_PX = 18;
 const CAPTION_BLOCK_PX = 22;
 // An offset, slightly fanned card needs a real footprint beyond its primary.
 // Reserving the rotated bounds keeps the copy clear of the next tile and the
@@ -357,6 +246,10 @@ function configuredColumnCount(columns: CardGalleryColumns): number {
 
 function renderedColumnCount(columns: CardGalleryColumns): number {
   return configuredColumnCount(columns);
+}
+
+function choiceGridColumns(columns: CardGalleryColumns): CardChoiceGridColumns {
+  return columns === "auto" ? "five" : columns;
 }
 
 function rowCountFor(cardCount: number, columnCount: number): number {
@@ -412,33 +305,6 @@ function fallbackCardWidth(
   return `clamp(${String(minWidth)}px, calc((100vw - ${edgeReserve} - ${edgeReserve} - (${padding} * 2) - (${columnGap} * ${String(gapSlots)})) / ${String(columnCount)}), ${String(maxWidth)}px)`;
 }
 
-function gridTemplate(columns: number, cardWidth: string): string {
-  return `repeat(${String(columns)}, ${cardWidth})`;
-}
-
-function captionNode(caption: CardGalleryCaption): ReactElement {
-  return (
-    <p
-      data-gallery-caption={caption.kind}
-      style={{
-        minHeight: CAPTION_LINE_PX,
-        margin: 0,
-        display: "grid",
-        placeItems: "center",
-        font: token("--t-caption"),
-        color: token("--text-on-glass"),
-        textAlign: "center",
-      }}
-    >
-      {caption.kind === "essence" ? (
-        <EssenceValue amount={caption.amount} tone="inherit" />
-      ) : (
-        caption.text
-      )}
-    </p>
-  );
-}
-
 function finitePositive(value: number): number | null {
   return Number.isFinite(value) && value > 0 ? value : null;
 }
@@ -487,12 +353,10 @@ function useGalleryMeasure({
 }): {
   readonly rootRef: React.RefObject<HTMLElement | null>;
   readonly bodyRef: React.RefObject<HTMLDivElement | null>;
-  readonly gridRef: React.RefObject<HTMLDivElement | null>;
   readonly measure: GalleryMeasure | null;
 } {
   const rootRef = useRef<HTMLElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
   const [measure, setMeasure] = useState<GalleryMeasure | null>(null);
 
   useEffect(() => {
@@ -512,10 +376,8 @@ function useGalleryMeasure({
       }
 
       const bodyStyle = window.getComputedStyle(body);
-      const gridStyle =
-        gridRef.current !== null
-          ? window.getComputedStyle(gridRef.current)
-          : bodyStyle;
+      const grid = body.querySelector<HTMLElement>("[data-card-choice-grid]");
+      const gridStyle = grid === null ? bodyStyle : window.getComputedStyle(grid);
       const inlinePadding =
         parsePixel(bodyStyle.paddingLeft) + parsePixel(bodyStyle.paddingRight);
       const blockPadding =
@@ -631,7 +493,7 @@ function useGalleryMeasure({
     trailingReservePx,
   ]);
 
-  return { rootRef, bodyRef, gridRef, measure };
+  return { rootRef, bodyRef, measure };
 }
 
 /** Shared card-gallery surface with a header accessory and scrolling grid. */
@@ -703,7 +565,7 @@ export function CardGalleryPanel({
     reserveStackedCopySpace || cards.some((card) => card.stackedCopy === true);
   const rowSupplementPx = hasCaptions ? CAPTION_BLOCK_PX : 0;
   const trailingReservePx = hasStackedCopy ? STACKED_COPY_RESERVE_PX : 0;
-  const { rootRef, bodyRef, gridRef, measure } = useGalleryMeasure({
+  const { rootRef, bodyRef, measure } = useGalleryMeasure({
     frame,
     columnCount,
     cardSize,
@@ -939,136 +801,29 @@ export function CardGalleryPanel({
               </p>
             </div>
           ) : (
-            <div
-              ref={gridRef}
-              style={{
-                display: "grid",
-                gridTemplateColumns: gridTemplate(columnCount, cardWidth),
+            <CardChoiceGrid
+              cards={cards}
+              columns={choiceGridColumns(columns)}
+              layout={{
+                kind: "gallery",
+                cardWidth,
                 columnGap: galleryColumnGap,
                 rowGap: galleryRowGap,
-                justifyContent: "center",
               }}
-            >
-              {cards.map((card) => {
-                const reserved = card.reserved === true;
-                const disabled = card.disabled === true || reserved;
-                const interactive =
-                  onCardPress !== undefined || onCardDoubleTap !== undefined;
-                const stackedCopyLeft = card.stackedCopyDirection === "left";
-                const tileStyle: CSSProperties = {
-                  position: "relative",
-                  zIndex: card.stackedCopy === true ? 1 : undefined,
-                  display: "block",
-                  width: "100%",
-                  borderRadius: token("--radius-card"),
-                  opacity: disabled ? 0.42 : 1,
-                  boxShadow:
-                    card.emphasis === "danger"
-                      ? `0 0 0 2px ${token("--danger")}`
-                      : "none",
-                  WebkitTouchCallout: "none",
-                  WebkitUserSelect: "none",
-                  userSelect: "none",
-                  touchAction: "pan-y",
-                };
-                const cardNode = (
-                  <div style={tileStyle}>
-                    {card.stackedCopy === true && (
-                      <div
-                        aria-hidden="true"
-                        data-gallery-stacked-copy=""
-                        style={{
-                          position: "absolute",
-                          inset: 0,
-                          zIndex: 0,
-                          pointerEvents: "none",
-                          transform: `translate(${
-                            stackedCopyLeft
-                              ? `calc(${token("--space-7")} * -1)`
-                              : token("--space-7")
-                          }, ${token("--space-7")}) rotate(${stackedCopyLeft ? "-3deg" : "3deg"})`,
-                          transformOrigin: "center",
-                        }}
-                      >
-                        <CardView
-                          card={card.model.displaySnapshot}
-                          transfiguration={card.model.transfiguration}
-                        />
-                      </div>
-                    )}
-                    <div style={{ position: "relative", zIndex: 1 }}>
-                      <GameCard
-                        model={card.model}
-                        selected={card.selected}
-                        selectionColor={card.selectionColor}
-                        unavailable={disabled}
-                        testId={card.testId}
-                        onActivate={
-                          interactive
-                            ? () => handleCardActivate(card.entryId)
-                            : undefined
-                        }
-                      />
-                    </div>
-                  </div>
-                );
-
-                return (
-                  <div
-                    key={card.entryId}
-                    data-gallery-entry-id={card.entryId}
-                    data-gallery-reserved={reserved || undefined}
-                    data-gallery-draggable={card.draggable || undefined}
-                    aria-hidden={reserved || undefined}
-                    draggable={card.draggable}
-                    onDragStart={(event) => {
-                      if (card.draggable === true) {
-                        onCardDragStart?.(card.entryId, event);
-                      }
-                    }}
-                    onDragEnd={(event) => {
-                      if (card.draggable === true) {
-                        onCardDragEnd?.(card.entryId, event);
-                      }
-                    }}
-                    onContextMenu={(event) => {
-                      cancelPendingCardTap(card.entryId);
-                      onCardContextMenu?.(card.entryId, event);
-                    }}
-                    style={{
-                      minWidth: 0,
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: card.caption === undefined ? 0 : token("--space-1"),
-                      opacity: card.muted === true ? 0.52 : 1,
-                      visibility: reserved ? "hidden" : undefined,
-                    }}
-                  >
-                    {cardNode}
-                    {card.caption !== undefined && captionNode(card.caption)}
-                  </div>
-                );
-              })}
-              {endAction !== undefined && (
-                <div
-                  key={endAction.entryId}
-                  style={{
-                    minWidth: 0,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: token("--space-1"),
-                    opacity: endAction.disabled === true ? 0.42 : 1,
-                  }}
-                >
-                  <CardGalleryAction
-                    action={endAction}
-                    cardWidth={cardWidth}
-                    onActivate={() => onEndActionPress?.(endAction.entryId)}
-                  />
-                  {captionNode(endAction.caption)}
-                </div>
-              )}
-            </div>
+              endAction={endAction}
+              onCardPress={
+                onCardPress === undefined && onCardDoubleTap === undefined
+                  ? undefined
+                  : handleCardActivate
+              }
+              onCardDragStart={onCardDragStart}
+              onCardDragEnd={onCardDragEnd}
+              onCardContextMenu={(entryId, event) => {
+                cancelPendingCardTap(entryId);
+                onCardContextMenu?.(entryId, event);
+              }}
+              onEndActionPress={onEndActionPress}
+            />
           )}
         </div>
       </GlassPanel>

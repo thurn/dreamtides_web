@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo } from "react";
 import { ExplorationSiteScreen } from "../../cumulus/screens/ExplorationSiteScreen";
 import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";
+import { selectCurrentSite } from "../../state/journey-selectors";
 import {
   buildExplorationSiteView,
   resolveExplorationGuide,
@@ -9,15 +10,9 @@ import {
 
 export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
   const { state, journeyContent, mutations } = useJourney();
-  const node =
-    state.currentDreamscape === null
-      ? null
-      : (state.atlas.nodes[state.currentDreamscape] ?? null);
-  const candidate = node?.sites.find((site) => site.id === siteId) ?? null;
-  const site =
-    candidate?.type === "Exploration"
-      ? { ...candidate, type: candidate.type }
-      : null;
+  const current = selectCurrentSite(state, siteId, "Exploration");
+  const node = current?.node ?? null;
+  const site = current?.site ?? null;
   const guide = resolveExplorationGuide(journeyContent.guides);
   const runtime = state.siteRuntime[siteId];
   const explorationRuntime = runtime?.kind === "exploration" ? runtime : null;

@@ -22,6 +22,10 @@ import type {
   SiteState,
 } from "../../types/journey";
 import { mintEntryId } from "../../rules/journey/deck";
+import {
+  applyJourneyRewardEffect,
+  type JourneyRewardEffect,
+} from "../../rules/journey/reward-effects";
 
 interface ExplorationSelection {
   entryIds?: unknown;
@@ -242,28 +246,32 @@ function cardIdForEntry(
   return cardForEntry(journey, content, entryId)?.card.id ?? null;
 }
 
-function appendCard(
-  journey: JourneyState,
+function addCardEffect(
   content: JourneyContent,
   cardId: string,
-  seq: number,
-  mintIndex: number,
   isBane = false,
-): JourneyState | null {
+): JourneyRewardEffect | null {
   const card = idIndex(content).get(cardId.toLowerCase());
   if (card === undefined) return null;
   return {
-    ...journey,
-    deck: [
-      ...journey.deck,
-      {
-        entryId: mintEntryId(journey.deck, seq, mintIndex),
-        cardNumber: card.cardNumber,
-        transfiguration: null,
-        isBane,
-      },
-    ],
+    kind: "add_catalog_card",
+    cardUuid: card.id,
+    cardNumber: card.cardNumber,
+    isBane,
   };
+}
+
+function deckTarget(
+  journey: JourneyState,
+  content: JourneyContent,
+  entryId: string,
+): { entryId: string; cardUuid: string; cardNumber: number } | null {
+  const entry = journey.deck.find((candidate) => candidate.entryId === entryId);
+  if (entry === undefined) return null;
+  const card = content.cardDatabase.get(entry.cardNumber);
+  return card === undefined
+    ? null
+    : { entryId, cardUuid: card.id, cardNumber: card.cardNumber };
 }
 
 function addDreamsign(
@@ -366,14 +374,26 @@ export function resolveExplorationChoice(input: {
   let next = journey;
   let mintIndex = 0;
 
+  const applyReward = (effect: JourneyRewardEffect): boolean => {
+    const applied = applyJourneyRewardEffect({
+      state: next,
+      journeyContent: content,
+      effect,
+      mintEntryId: (deck) => mintEntryId(deck, seq, mintIndex++),
+    });
+    if (applied === null) return false;
+    next = applied;
+    return true;
+  };
+
   const addCardIds = (cardIds: readonly string[], isBane = false): boolean => {
-    for (const cardId of cardIds) {
-      const added = appendCard(next, content, cardId, seq, mintIndex, isBane);
-      if (added === null) return false;
-      next = added;
-      mintIndex += 1;
-      result.gainedCardIds.push(cardId);
-    }
+    const children = cardIds.map((cardId) => addCardEffect(content, cardId, isBane));
+    if (children.some((child) => child === null)) return false;
+    if (!applyReward({
+      kind: "composite",
+      children: children as JourneyRewardEffect[],
+    })) return false;
+    result.gainedCardIds.push(...cardIds);
     return true;
   };
 
@@ -385,13 +405,22 @@ export function resolveExplorationChoice(input: {
       const purgeCardId = cardIdForEntry(next, content, purgeEntryId);
       const copied = next.deck.find((entry) => entry.entryId === copyEntryId);
       const copiedCardId = cardIdForEntry(next, content, copyEntryId);
-      if (purgeCardId === null || copied === undefined || copiedCardId === null) return null;
-      next = { ...next, deck: next.deck.filter((entry) => entry.entryId !== purgeEntryId) };
-      const copy: DeckEntry = {
-        ...copied,
-        entryId: mintEntryId(next.deck, seq, mintIndex),
-      };
-      next = { ...next, deck: [...next.deck, copy] };
+      const purgeTarget = deckTarget(next, content, purgeEntryId);
+      const copyTarget = deckTarget(next, content, copyEntryId);
+      if (
+        purgeCardId === null ||
+        copied === undefined ||
+        copiedCardId === null ||
+        purgeTarget === null ||
+        copyTarget === null ||
+        !applyReward({
+          kind: "composite",
+          children: [
+            { kind: "remove_deck_entry", ...purgeTarget },
+            { kind: "duplicate_deck_entry", ...copyTarget },
+          ],
+        })
+      ) return null;
       result.purgedCardIds.push(purgeCardId);
       result.gainedCardIds.push(copiedCardId);
       break;
@@ -430,14 +459,17 @@ export function resolveExplorationChoice(input: {
       const required = action.count ?? 1;
       if (entryIds === null || entryIds.length !== required) return null;
       if (entryIds.some((entryId) => offer.transfigurationByEntryId[entryId] === undefined)) return null;
-      next = {
-        ...next,
-        deck: next.deck.map((entry) =>
-          entryIds.includes(entry.entryId)
-            ? { ...entry, transfiguration: offer.transfigurationByEntryId[entry.entryId] }
-            : entry,
-        ),
-      };
+      const children = entryIds.map((entryId): JourneyRewardEffect | null => {
+        const target = deckTarget(next, content, entryId);
+        const transfiguration = offer.transfigurationByEntryId[entryId];
+        return target === null || transfiguration === undefined
+          ? null
+          : { kind: "transfigure_deck_entry", ...target, transfiguration };
+      });
+      if (
+        children.some((child) => child === null) ||
+        !applyReward({ kind: "composite", children: children as JourneyRewardEffect[] })
+      ) return null;
       result.affectedEntryIds.push(...entryIds);
       break;
     }
@@ -447,8 +479,17 @@ export function resolveExplorationChoice(input: {
       if (entryIds === null || entryIds.length !== required || action.predicate === undefined) return null;
       const selected = entryIds.map((entryId) => cardForEntry(next, content, entryId));
       if (selected.some((entry) => entry === null || !matchesPredicate(entry.card, action.predicate as ExplorationPredicate))) return null;
+      const targets = entryIds.map((entryId) => deckTarget(next, content, entryId));
+      if (
+        targets.some((target) => target === null) ||
+        !applyReward({
+          kind: "composite",
+          children: (targets as Array<NonNullable<(typeof targets)[number]>>).map(
+            (target) => ({ kind: "remove_deck_entry", ...target }),
+          ),
+        })
+      ) return null;
       result.purgedCardIds.push(...selected.map((entry) => (entry as { card: CardData }).card.id));
-      next = { ...next, deck: next.deck.filter((entry) => !entryIds.includes(entry.entryId)) };
       break;
     }
     case "choose-pack": {
@@ -472,11 +513,17 @@ export function resolveExplorationChoice(input: {
       const essenceGained =
         Math.max(0, selected.card.spark ?? 0) *
         (action.essencePerSpark ?? EXPLORATION_ESSENCE_PER_SPARK);
-      next = {
-        ...next,
-        deck: next.deck.filter((entry) => entry.entryId !== entryIds[0]),
-        essence: next.essence + essenceGained,
-      };
+      const target = deckTarget(next, content, entryIds[0]);
+      if (
+        target === null ||
+        !applyReward({
+          kind: "composite",
+          children: [
+            { kind: "remove_deck_entry", ...target },
+            { kind: "add_essence", amount: essenceGained },
+          ],
+        })
+      ) return null;
       result.purgedCardIds.push(selected.card.id);
       result.essenceGained = essenceGained;
       break;
@@ -486,14 +533,15 @@ export function resolveExplorationChoice(input: {
       if (entryIds === null || entryIds.length !== 1 || action.subtype === undefined) return null;
       const selected = cardForEntry(next, content, entryIds[0]);
       if (selected === null || selected.card.cardType !== "Character") return null;
-      next = {
-        ...next,
-        deck: next.deck.map((entry) =>
-          entry.entryId === entryIds[0]
-            ? { ...entry, typeChange: typeChange(action.subtype as string) }
-            : entry,
-        ),
-      };
+      const target = deckTarget(next, content, entryIds[0]);
+      if (
+        target === null ||
+        !applyReward({
+          kind: "change_deck_entry_type",
+          ...target,
+          typeChange: typeChange(action.subtype),
+        })
+      ) return null;
       result.affectedEntryIds.push(entryIds[0]);
       result.chosenSubtype = action.subtype;
       break;
@@ -504,14 +552,20 @@ export function resolveExplorationChoice(input: {
       const affected = resolvedDeckCards(next, content)
         .filter(({ card }) => card.cardType === "Character")
         .map(({ entry }) => entry.entryId);
-      next = {
-        ...next,
-        deck: next.deck.map((entry) =>
-          affected.includes(entry.entryId)
-            ? { ...entry, typeChange: typeChange(subtype) }
-            : entry,
-        ),
-      };
+      const targets = affected.map((entryId) => deckTarget(next, content, entryId));
+      if (
+        targets.some((target) => target === null) ||
+        !applyReward({
+          kind: "composite",
+          children: (targets as Array<NonNullable<(typeof targets)[number]>>).map(
+            (target) => ({
+              kind: "change_deck_entry_type",
+              ...target,
+              typeChange: typeChange(subtype),
+            }),
+          ),
+        })
+      ) return null;
       result.affectedEntryIds.push(...affected);
       result.chosenSubtype = subtype;
       break;
@@ -527,10 +581,25 @@ export function resolveExplorationChoice(input: {
       if (entryIds === null || entryIds.length !== 1) return null;
       const replacementId = offer.replacementCardIdByEntryId[entryIds[0]];
       const purgedCardId = cardIdForEntry(next, content, entryIds[0]);
-      if (replacementId === undefined || purgedCardId === null) return null;
-      next = { ...next, deck: next.deck.filter((entry) => entry.entryId !== entryIds[0]) };
+      const target = deckTarget(next, content, entryIds[0]);
+      const replacement = replacementId === undefined
+        ? null
+        : addCardEffect(content, replacementId);
+      if (
+        replacementId === undefined ||
+        purgedCardId === null ||
+        target === null ||
+        replacement === null ||
+        !applyReward({
+          kind: "composite",
+          children: [
+            { kind: "remove_deck_entry", ...target },
+            replacement,
+          ],
+        })
+      ) return null;
       result.purgedCardIds.push(purgedCardId);
-      if (!addCardIds([replacementId])) return null;
+      result.gainedCardIds.push(replacementId);
       break;
     }
     case "gain-bane-and-card": {
@@ -548,14 +617,15 @@ export function resolveExplorationChoice(input: {
       if (entryIds === null || entryIds.length !== 1 || action.transfiguration === undefined || action.predicate === undefined) return null;
       const selected = cardForEntry(next, content, entryIds[0]);
       if (selected === null || selected.entry.transfiguration !== null || !matchesPredicate(selected.card, action.predicate)) return null;
-      next = {
-        ...next,
-        deck: next.deck.map((entry) =>
-          entry.entryId === entryIds[0]
-            ? { ...entry, transfiguration: action.transfiguration as NonNullable<typeof action.transfiguration> }
-            : entry,
-        ),
-      };
+      const target = deckTarget(next, content, entryIds[0]);
+      if (
+        target === null ||
+        !applyReward({
+          kind: "transfigure_deck_entry",
+          ...target,
+          transfiguration: action.transfiguration,
+        })
+      ) return null;
       result.affectedEntryIds.push(entryIds[0]);
       break;
     }
@@ -567,7 +637,7 @@ export function resolveExplorationChoice(input: {
         matchesPredicate(card, action.predicate as ExplorationPredicate),
       );
       const essenceGained = matchingCards.length * action.essencePerCard;
-      next = { ...next, essence: next.essence + essenceGained };
+      if (!applyReward({ kind: "add_essence", amount: essenceGained })) return null;
       result.affectedEntryIds.push(
         ...matchingCards.map(({ entry }) => entry.entryId),
       );
@@ -579,15 +649,20 @@ export function resolveExplorationChoice(input: {
       const affectedEntryIds = resolvedDeckCards(next, content)
         .filter(({ card }) => card.cardType === "Character")
         .map(({ entry }) => entry.entryId);
-      const affected = new Set(affectedEntryIds);
-      next = {
-        ...next,
-        deck: next.deck.map((entry) =>
-          affected.has(entry.entryId)
-            ? { ...entry, sparkBonus: (entry.sparkBonus ?? 0) + sparkBonus }
-            : entry,
-        ),
-      };
+      const targets = affectedEntryIds.map((entryId) => deckTarget(next, content, entryId));
+      if (
+        targets.some((target) => target === null) ||
+        !applyReward({
+          kind: "composite",
+          children: (targets as Array<NonNullable<(typeof targets)[number]>>).map(
+            (target) => ({
+              kind: "add_deck_entry_spark_bonus",
+              ...target,
+              amount: sparkBonus,
+            }),
+          ),
+        })
+      ) return null;
       result.affectedEntryIds.push(...affectedEntryIds);
       break;
     }

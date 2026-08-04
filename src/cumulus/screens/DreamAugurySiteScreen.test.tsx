@@ -270,8 +270,8 @@ describe("DreamAugurySiteScreen", () => {
       container.querySelector<HTMLElement>("[data-augury-detail-visual]")?.style.overflow,
     ).toBe("hidden");
     expect(
-      container.querySelector("[data-augury-card-grid-columns]")
-        ?.getAttribute("data-augury-card-grid-columns"),
+      container.querySelector("[data-card-choice-grid-columns]")
+        ?.getAttribute("data-card-choice-grid-columns"),
     ).toBe("4");
     expect(
       container.querySelector('[data-testid="cumulus-dream-augury-choose-again"]'),
@@ -333,10 +333,10 @@ describe("DreamAugurySiteScreen", () => {
         ?.getAttribute("data-selection-color"),
     ).toBe("accent-bright");
     expect(
-      container.querySelector("[data-augury-card-quantity-badge]")?.textContent,
+      container.querySelector("[data-card-choice-quantity-badge]")?.textContent,
     ).toBe("2x");
     expect(
-      container.querySelector<HTMLElement>("[data-augury-card-quantity-badge]")
+      container.querySelector<HTMLElement>("[data-card-choice-quantity-badge]")
         ?.style.background,
     ).toBe("var(--accent-bright)");
   });

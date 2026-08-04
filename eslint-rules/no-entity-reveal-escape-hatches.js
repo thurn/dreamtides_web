@@ -12,6 +12,7 @@ const GENERIC_REVEAL_WRAPPERS = new Set(["HoverPopover", "RevealPopover", "Entit
 const CONTEXT_COMPONENTS = [
   "src/cumulus/components/atlas/AtlasNode.tsx",
   "src/cumulus/components/card/CardStatOrb.tsx",
+  "src/cumulus/components/card/CardChoiceGrid.tsx",
   "src/cumulus/components/card/CardGalleryPanel.tsx",
   "src/cumulus/components/card/DreamsignGalleryPanel.tsx",
   "src/cumulus/components/card/EntityReference.tsx",

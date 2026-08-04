@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";
+import { selectCurrentSite } from "../../state/journey-selectors";
 import { DreamAugurySiteScreen } from "../../cumulus/screens/DreamAugurySiteScreen";
 import {
   buildDreamAuguryAcceptRequest,
@@ -13,10 +14,9 @@ import {
 
 export function DreamAugurySiteScreenAdapter({ siteId }: { siteId: string }) {
   const { state, mutations, journeyContent } = useJourney();
-  const node = state.currentDreamscape === null
-    ? null
-    : (state.atlas.nodes[state.currentDreamscape] ?? null);
-  const site = node?.sites.find((candidate) => candidate.id === siteId) ?? null;
+  const current = selectCurrentSite(state, siteId, "DreamAugury");
+  const node = current?.node ?? null;
+  const site = current?.site ?? null;
   const guide = resolveDreamAuguryGuide(journeyContent.guides);
   const guideLineRef = useRef<string | null | undefined>(undefined);
   if (guideLineRef.current === undefined) {
