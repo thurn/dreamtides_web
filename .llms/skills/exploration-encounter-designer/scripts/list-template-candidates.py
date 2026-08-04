@@ -18,6 +18,8 @@ REPO_ROOT = SCRIPTS_DIR.parents[3]
 DEFAULT_TEMPLATE_CATALOG = REPO_ROOT / "data/templates.json"
 DEFAULT_ENCOUNTER_CANDIDATES = REPO_ROOT / "data/encounter_candidates.json"
 SPECIAL_VARIABLE_PATTERN = re.compile(r"\$[A-Z][A-Z0-9_]*")
+DECK_WIDE_MODIFIER_BALANCE_CLASS = "deck_wide_modifier"
+SUPPORTED_BALANCE_CLASSES = {DECK_WIDE_MODIFIER_BALANCE_CLASS}
 
 
 class CandidateListError(ValueError):
@@ -81,6 +83,7 @@ def load_catalog(path: Path) -> tuple[list[dict[str, Any]], dict[int, dict[str, 
             raise CandidateListError(f"Template catalog entry {index} must be an object")
         template_id = raw_entry.get("template_id")
         template = raw_entry.get("template")
+        balance_class = raw_entry.get("balance_class")
         if not isinstance(template_id, int) or isinstance(template_id, bool):
             raise CandidateListError(
                 f"Template catalog entry {index} has a non-integer template_id"
@@ -88,6 +91,11 @@ def load_catalog(path: Path) -> tuple[list[dict[str, Any]], dict[int, dict[str, 
         if not isinstance(template, str) or not template:
             raise CandidateListError(
                 f"Template catalog entry {index} has an invalid template string"
+            )
+        if balance_class is not None and balance_class not in SUPPORTED_BALANCE_CLASSES:
+            raise CandidateListError(
+                f"Template catalog entry {index} has unsupported balance_class "
+                f"{balance_class!r}"
             )
         if template_id in by_id:
             raise CandidateListError(
@@ -181,6 +189,7 @@ def build_output(
     minimum_uses = min(counts[template_id] for template_id in by_id)
     soft_warning_threshold = max(minimum_uses + 1, math.ceil(mean_uses))
     omission_threshold = soft_warning_threshold + 1
+    deck_wide_modifier_omission_threshold = soft_warning_threshold
 
     total_rank_one_uses = sum(rank_one_counts.values())
     mean_rank_one_uses = total_rank_one_uses / len(catalog)
@@ -191,12 +200,32 @@ def build_output(
         minimum_rank_one_uses + 1, math.ceil(mean_rank_one_uses)
     )
     rank_one_omission_threshold = rank_one_soft_warning_threshold + 1
+    deck_wide_modifier_rank_one_omission_threshold = (
+        rank_one_soft_warning_threshold
+    )
+
+    def is_deck_wide_modifier(template_id: int) -> bool:
+        return (
+            by_id[template_id].get("balance_class")
+            == DECK_WIDE_MODIFIER_BALANCE_CLASS
+        )
+
+    def overall_omission_threshold_for(template_id: int) -> int:
+        if is_deck_wide_modifier(template_id):
+            return deck_wide_modifier_omission_threshold
+        return omission_threshold
+
+    def rank_one_omission_threshold_for(template_id: int) -> int:
+        if is_deck_wide_modifier(template_id):
+            return deck_wide_modifier_rank_one_omission_threshold
+        return rank_one_omission_threshold
 
     overused_ids = {
         template_id
         for template_id in by_id
-        if counts[template_id] >= omission_threshold
-        or rank_one_counts[template_id] >= rank_one_omission_threshold
+        if counts[template_id] >= overall_omission_threshold_for(template_id)
+        or rank_one_counts[template_id]
+        >= rank_one_omission_threshold_for(template_id)
     }
     allowed_ids = set(by_id) - overused_ids
     reintroduced_ids: list[int] = []
@@ -234,10 +263,12 @@ def build_output(
 
     def reasons_for(template_id: int, *, omitted: bool) -> list[str]:
         overall_threshold = (
-            omission_threshold if omitted else soft_warning_threshold
+            overall_omission_threshold_for(template_id)
+            if omitted
+            else soft_warning_threshold
         )
         rank_one_threshold = (
-            rank_one_omission_threshold
+            rank_one_omission_threshold_for(template_id)
             if omitted
             else rank_one_soft_warning_threshold
         )
@@ -295,16 +326,24 @@ def build_output(
             "minimum_uses_per_template": minimum_uses,
             "soft_warning_threshold": soft_warning_threshold,
             "omission_threshold": omission_threshold,
+            "deck_wide_modifier_omission_threshold": (
+                deck_wide_modifier_omission_threshold
+            ),
             "recorded_rank_1_template_uses": total_rank_one_uses,
             "mean_rank_1_uses_per_template": round(mean_rank_one_uses, 3),
             "minimum_rank_1_uses_per_template": minimum_rank_one_uses,
             "rank_1_soft_warning_threshold": rank_one_soft_warning_threshold,
             "rank_1_omission_threshold": rank_one_omission_threshold,
+            "deck_wide_modifier_rank_1_omission_threshold": (
+                deck_wide_modifier_rank_one_omission_threshold
+            ),
             "required_template_count": required_template_count,
             "soft_warning_guidance": (
                 "Prefer fewer prior rank-1 uses first and fewer total uses second "
                 "when templates fit comparably well. A warned template remains "
-                "selectable when it is materially stronger."
+                "selectable when it is materially stronger. Templates tagged "
+                "deck_wide_modifier hide one use earlier and should be selected "
+                "only for a very strong card-specific fit."
             ),
             "soft_warnings": [
                 {

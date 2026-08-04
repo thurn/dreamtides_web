@@ -365,6 +365,13 @@ commentary.
    `reintroduced_to_preserve_minimum_pool`; treat each restored entry as
    strongly discouraged but available when necessary.
 
+   Templates tagged `balance_class: deck_wide_modifier` change every card in
+   the deck or every card in a broad deck category. Their overall-use and
+   rank-1 omission thresholds are each one use lower than the corresponding
+   standard omission threshold, so they become hidden earlier. If minimum-pool
+   protection reintroduces one, its availability does not weaken the selection
+   rule: pick it only when it is a very strong, card-specific fit.
+
 10. Shortlist returned candidate templates by testing each against the frozen
     scene bank and deck intent:
     - **Scene-grounded causality:** Imagine a 2–5 word act that makes the effect
@@ -381,6 +388,13 @@ commentary.
     - **Chain strength:** Judge the prospective label and effect as one causal
       chain. A merely thematic reward with no convincing player act
       is a weak fit.
+    - **Deck-wide modifier restraint:** Treat every template tagged
+      `balance_class: deck_wide_modifier` as exceptional. Select one only when
+      the depicted scene supports an unusually convincing causal act and the
+      source card's deck intent strongly calls for that specific deck-wide
+      change. General power, broad usefulness, or a merely acceptable thematic
+      analogy never qualifies. This very-strong-fit requirement is mandatory,
+      including for an unflagged or minimum-pool-reintroduced candidate.
 
     Do not select a template merely because its game term has a loose poetic
     analogue in the art. Do not translate purging into erasure, essence into
@@ -673,6 +687,9 @@ commentary.
 - Choose conservative values when balance evidence is incomplete, but keep
   them on the live system's scale. Reject an option pair with an obvious
   universal best choice.
+- Pick a `deck_wide_modifier` template only for a very strong card-specific
+  scene-and-strategy fit. Its availability in the candidate list is never
+  evidence that the fit is strong enough.
 - Never revise frozen prose to explain an effect. If a scene and pair cannot
   support two causal label-to-effect chains, assign another compatible
   frozen scene to that pair; that scene may already be used by another pair.

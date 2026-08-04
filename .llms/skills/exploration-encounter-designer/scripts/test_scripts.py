@@ -236,6 +236,49 @@ class ListTemplateCandidatesTests(unittest.TestCase):
         )
         self.assertEqual(output["special_variables"], ["$SYNTHETIC_CARD"])
 
+    def test_deck_wide_modifiers_hide_at_the_normal_warning_threshold(self) -> None:
+        templates = self.synthetic_templates(6)
+        templates[0]["balance_class"] = "deck_wide_modifier"
+        result = self.run_lister(
+            templates,
+            [[1], [2]],
+            rank_one_actions_per_card=1,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        output = json.loads(result.stdout)
+        balance = output["balance"]
+        self.assertEqual(balance["soft_warning_threshold"], 1)
+        self.assertEqual(balance["omission_threshold"], 2)
+        self.assertEqual(balance["deck_wide_modifier_omission_threshold"], 1)
+        self.assertEqual(balance["rank_1_soft_warning_threshold"], 1)
+        self.assertEqual(balance["rank_1_omission_threshold"], 2)
+        self.assertEqual(
+            balance["deck_wide_modifier_rank_1_omission_threshold"], 1
+        )
+        self.assertEqual(
+            balance["omitted_templates"],
+            [
+                {
+                    "template_id": 1,
+                    "usage_count": 1,
+                    "rank_1_usage_count": 1,
+                    "reasons": ["rank_1", "overall"],
+                }
+            ],
+        )
+        self.assertEqual(
+            balance["soft_warnings"],
+            [
+                {
+                    "template_id": 2,
+                    "usage_count": 1,
+                    "rank_1_usage_count": 1,
+                    "reasons": ["rank_1", "overall"],
+                }
+            ],
+        )
+
     def test_retains_minimum_candidate_pool_under_extreme_skew(self) -> None:
         result = self.run_lister(
             self.synthetic_templates(12),
