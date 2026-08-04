@@ -28,6 +28,77 @@ export interface EntityReferenceProps {
   readonly testId?: string;
 }
 
+export interface EntityReferenceDisplayDetails {
+  /** Canonical UUID used for QA and logging. */
+  readonly id: string;
+  /** Display name resolved from the canonical entity object. */
+  readonly name: string;
+}
+
+/** Resolve canonical display details for an entity reference. */
+export function entityReferenceDisplayDetails(
+  entity: EntityReferenceModel,
+): EntityReferenceDisplayDetails {
+  return entity.kind === "card"
+    ? { id: entity.card.id, name: entity.card.name }
+    : {
+        id: requireDreamsignId(entity.dreamsign, "Entity reference"),
+        name: entity.dreamsign.name,
+      };
+}
+
+function entityReferenceRevealDetails(
+  entity: EntityReferenceModel,
+) {
+  if (entity.kind === "card") {
+    return {
+      id: entity.card.id,
+      name: entity.card.name,
+      identity: { entityType: "game-card", entityId: entity.card.id },
+      spec: gameCardRevealSpec({
+        cardId: entity.card.id,
+        displaySnapshot: entity.card,
+      }),
+    };
+  }
+
+  const id = requireDreamsignId(entity.dreamsign, "Entity reference");
+  return {
+    id,
+    name: entity.dreamsign.name,
+    identity: {
+      entityType: "dreamsign",
+      entityId: revealEntityId("dreamsign", id),
+    },
+    spec: dreamsignRevealSpec(
+      entity.dreamsign,
+      Boolean(entity.dreamsign.imageName),
+    ),
+  };
+}
+
+export interface UseEntityReferenceRevealSourceOptions {
+  /** Action fired for a quick touch, mouse click, or keyboard activation. */
+  readonly onActivate?: () => void;
+  /** Source feedback policy; inline reading copy remains stationary. */
+  readonly feedback?: "scale" | "stationary";
+}
+
+/** Bind an enclosing control to the canonical reveal for one UUID-backed entity. */
+export function useEntityReferenceRevealSource(
+  entity: EntityReferenceModel,
+  options: UseEntityReferenceRevealSourceOptions = {},
+) {
+  const details = entityReferenceRevealDetails(entity);
+  const binding = useRevealSource({
+    identity: details.identity,
+    spec: details.spec,
+    onActivate: options.onActivate,
+    feedback: options.feedback,
+  });
+  return { details, binding };
+}
+
 /**
  * An underlined inline card or Dreamsign name. Hover, keyboard focus, and a
  * touch hold reveal the entity through the shared Cumulus coordinator.
@@ -36,27 +107,7 @@ export function EntityReference({
   entity,
   testId,
 }: EntityReferenceProps) {
-  const isCard = entity.kind === "card";
-  const id = isCard
-    ? entity.card.id
-    : requireDreamsignId(entity.dreamsign, "Entity reference");
-  const name = isCard ? entity.card.name : entity.dreamsign.name;
-  const binding = useRevealSource({
-    identity: isCard
-      ? { entityType: "game-card", entityId: entity.card.id }
-      : {
-          entityType: "dreamsign",
-          entityId: revealEntityId("dreamsign", id),
-        },
-    spec: isCard
-      ? gameCardRevealSpec({
-          cardId: entity.card.id,
-          displaySnapshot: entity.card,
-        })
-      : dreamsignRevealSpec(
-          entity.dreamsign,
-          Boolean(entity.dreamsign.imageName),
-        ),
+  const { details, binding } = useEntityReferenceRevealSource(entity, {
     feedback: "stationary",
   });
 
@@ -68,9 +119,9 @@ export function EntityReference({
       pressFeedback="stationary"
       hoverFeedback="stationary"
       tabIndex={0}
-      aria-label={`${isCard ? "Card" : "Dreamsign"}: ${name}`}
+      aria-label={`${entity.kind === "card" ? "Card" : "Dreamsign"}: ${details.name}`}
       data-entity-reference={entity.kind}
-      data-entity-reference-id={id}
+      data-entity-reference-id={details.id}
       data-testid={testId}
       style={{
         ...binding.sourceProps.style,
@@ -79,7 +130,7 @@ export function EntityReference({
         textDecoration: "underline",
       }}
     >
-      {name}
+      {details.name}
     </Pressable>
   );
 }

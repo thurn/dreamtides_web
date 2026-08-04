@@ -9,6 +9,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type RefObject,
 } from "react";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
@@ -18,9 +19,11 @@ import {
 } from "../components/card/CardChoiceGrid";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
 import {
-  EntityReference,
+  entityReferenceDisplayDetails,
   type EntityReferenceModel,
+  useEntityReferenceRevealSource,
 } from "../components/card/EntityReference";
+import { RichTextView, richText } from "../components/card/rich-text";
 import {
   CARD_ASPECT_RATIO,
   CARD_ASPECT_RATIO_VALUE,
@@ -171,6 +174,177 @@ interface RewardTrajectory {
   readonly source: RectSnapshot;
   readonly target: RectSnapshot;
   readonly destinationKind: "journey-deck" | "journey-dreamsign" | "viewport-corner";
+}
+
+function previewEntityForAction(
+  action: ExplorationActionView,
+): EntityReferenceModel | null {
+  for (const part of action.effectParts ?? []) {
+    if (part.kind === "entity") return part.entity;
+  }
+  return null;
+}
+
+function explorationChoiceStyle(
+  available: boolean,
+  revealStyle?: CSSProperties,
+): CSSProperties {
+  return {
+    ...revealStyle,
+    width: "100%",
+    minHeight: token("--touch-min"),
+    display: "grid",
+    gridTemplateColumns: "minmax(0, 1fr) auto",
+    alignItems: "center",
+    gap: token("--space-4"),
+    padding: token("--space-4"),
+    border: `1px solid ${token("--border-soft")}`,
+    borderRadius: token("--radius-control"),
+    background: token("--glass-on-glass-fill"),
+    color: token("--text-on-glass"),
+    textAlign: "left",
+    opacity: available ? 1 : 0.46,
+  };
+}
+
+function ExplorationChoiceContents({
+  action,
+  index,
+}: {
+  readonly action: ExplorationActionView;
+  readonly index: number;
+}) {
+  return (
+    <>
+      <span style={{ minWidth: 0, display: "grid", gap: token("--space-1") }}>
+        <strong style={{ font: token("--t-button") }}>{action.label}</strong>
+        <span
+          id={`exploration-effect-${String(index)}`}
+          style={{ font: token("--t-caption"), color: token("--text-muted") }}
+        >
+          {action.effectParts === undefined
+            ? action.effectText
+            : action.effectParts.map((part, partIndex) =>
+                part.kind === "text" ? (
+                  <span key={`text-${String(partIndex)}`}>{part.text}</span>
+                ) : (
+                  <ExplorationEntityLabel
+                    key={`entity-${String(partIndex)}`}
+                    entity={part.entity}
+                    data-testid={`cumulus-exploration-choice-${String(index)}-entity-${String(partIndex)}`}
+                  />
+                ),
+              )}
+        </span>
+      </span>
+      <span aria-hidden="true" style={{ font: token("--t-title") }}>
+        ›
+      </span>
+    </>
+  );
+}
+
+function ExplorationEntityLabel({
+  entity,
+  "data-testid": testId,
+}: {
+  readonly entity: EntityReferenceModel;
+  readonly "data-testid": string;
+}) {
+  const details = entityReferenceDisplayDetails(entity);
+  return (
+    <span
+      data-entity-reference-label={entity.kind}
+      data-entity-reference-id={details.id}
+      data-testid={testId}
+    >
+      <RichTextView value={richText.underline(details.name)} />
+    </span>
+  );
+}
+
+interface ExplorationChoiceProps {
+  readonly action: ExplorationActionView;
+  readonly index: number;
+  readonly onActivate: () => void;
+}
+
+function PlainExplorationChoice({
+  action,
+  index,
+  onActivate,
+}: ExplorationChoiceProps) {
+  return (
+    <Pressable
+      as="button"
+      disabled={!action.available}
+      aria-describedby={`exploration-effect-${String(index)}`}
+      data-testid={`cumulus-exploration-choice-${String(index)}`}
+      onClick={onActivate}
+      style={explorationChoiceStyle(action.available)}
+    >
+      <ExplorationChoiceContents action={action} index={index} />
+    </Pressable>
+  );
+}
+
+function EntityExplorationChoice({
+  action,
+  index,
+  onActivate,
+  entity,
+}: ExplorationChoiceProps & { readonly entity: EntityReferenceModel }) {
+  const { details, binding } = useEntityReferenceRevealSource(entity, {
+    onActivate: action.available ? onActivate : undefined,
+  });
+  const suppressCompatibilityClick = useRef(false);
+  const pointerDown = binding.sourceProps.onPointerDown;
+  const revealDescriptionId = binding.sourceProps["aria-describedby"];
+
+  return (
+    <Pressable
+      as="button"
+      ref={binding.ref}
+      {...binding.sourceProps}
+      disabled={!action.available}
+      aria-describedby={`${revealDescriptionId ?? ""} exploration-effect-${String(index)}`.trim()}
+      data-entity-reference={entity.kind}
+      data-entity-reference-id={details.id}
+      data-testid={`cumulus-exploration-choice-${String(index)}`}
+      onPointerDown={(event) => {
+        suppressCompatibilityClick.current = event.pointerType === "touch";
+        pointerDown?.(event);
+      }}
+      onClick={(event) => {
+        if (!action.available) return;
+        if (event.detail === 0) {
+          suppressCompatibilityClick.current = false;
+          onActivate();
+          return;
+        }
+        if (suppressCompatibilityClick.current) {
+          suppressCompatibilityClick.current = false;
+          return;
+        }
+        onActivate();
+      }}
+      style={explorationChoiceStyle(
+        action.available,
+        binding.sourceProps.style,
+      )}
+    >
+      <ExplorationChoiceContents action={action} index={index} />
+    </Pressable>
+  );
+}
+
+function ExplorationChoice(props: ExplorationChoiceProps) {
+  const entity = previewEntityForAction(props.action);
+  return entity === null ? (
+    <PlainExplorationChoice {...props} />
+  ) : (
+    <EntityExplorationChoice {...props} entity={entity} />
+  );
 }
 
 type ExplorationRewardItem =
@@ -1416,62 +1590,12 @@ export function ExplorationSiteScreen({
                 style={{ display: "grid", gap: token("--space-3") }}
               >
                   {view.actions.map((action, index) => (
-                    <Pressable
+                    <ExplorationChoice
                       key={action.id}
-                      as="button"
-                      disabled={!action.available}
-                      aria-describedby={`exploration-effect-${String(index)}`}
-                      data-testid={`cumulus-exploration-choice-${String(index)}`}
-                      onClick={(event) => {
-                        if (
-                          event.target instanceof Element &&
-                          event.target.closest("[data-entity-reference]") !== null
-                        ) {
-                          return;
-                        }
-                        openAction(action);
-                      }}
-                      style={{
-                        width: "100%",
-                        minHeight: token("--touch-min"),
-                        display: "grid",
-                        gridTemplateColumns: "minmax(0, 1fr) auto",
-                        alignItems: "center",
-                        gap: token("--space-4"),
-                        padding: token("--space-4"),
-                        border: `1px solid ${token("--border-soft")}`,
-                        borderRadius: token("--radius-control"),
-                        background: token("--glass-on-glass-fill"),
-                        color: token("--text-on-glass"),
-                        textAlign: "left",
-                        opacity: action.available ? 1 : 0.46,
-                      }}
-                    >
-                      <span style={{ minWidth: 0, display: "grid", gap: token("--space-1") }}>
-                        <strong style={{ font: token("--t-button") }}>{action.label}</strong>
-                        <span
-                          id={`exploration-effect-${String(index)}`}
-                          style={{ font: token("--t-caption"), color: token("--text-muted") }}
-                        >
-                          {action.effectParts === undefined
-                            ? action.effectText
-                            : action.effectParts.map((part, partIndex) =>
-                                part.kind === "text" ? (
-                                  <span key={`text-${String(partIndex)}`}>
-                                    {part.text}
-                                  </span>
-                                ) : (
-                                  <EntityReference
-                                    key={`entity-${String(partIndex)}`}
-                                    entity={part.entity}
-                                    testId={`cumulus-exploration-choice-${String(index)}-entity-${String(partIndex)}`}
-                                  />
-                                ),
-                              )}
-                        </span>
-                      </span>
-                      <span aria-hidden="true" style={{ font: token("--t-title") }}>›</span>
-                    </Pressable>
+                      action={action}
+                      index={index}
+                      onActivate={() => openAction(action)}
+                    />
                   ))}
               </div>
             </div>

@@ -180,6 +180,27 @@ function mount(element: ReactElement): {
   return { container, root };
 }
 
+function pointer(
+  type: "pointerdown" | "pointerup",
+  options: {
+    readonly pointerId: number;
+    readonly timeStamp: number;
+  },
+): Event {
+  const event = new MouseEvent(type, {
+    bubbles: true,
+    button: 0,
+    clientX: 280,
+    clientY: 160,
+  });
+  Object.defineProperties(event, {
+    pointerType: { value: "touch" },
+    pointerId: { value: options.pointerId },
+    timeStamp: { value: options.timeStamp },
+  });
+  return event;
+}
+
 beforeEach(() => {
   (
     globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
@@ -343,7 +364,7 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
-  it("reveals a referenced entity without resolving its surrounding choice", () => {
+  it("makes the full referenced choice cell the reveal and activation source", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),
     );
@@ -384,25 +405,111 @@ describe("ExplorationSiteScreen", () => {
         )
         ?.click(),
     );
-    const source = container.querySelector<HTMLElement>(
-      '[data-entity-reference="card"]',
+    const source = container.querySelector<HTMLButtonElement>(
+      '[data-testid="cumulus-exploration-choice-0"]',
     );
-    expect(source?.textContent).toBe(referencedCard.name);
+    const label = container.querySelector<HTMLElement>(
+      '[data-entity-reference-label="card"]',
+    );
+    expect(source?.textContent).toContain(referencedCard.name);
+    expect(source?.dataset.entityReference).toBe("card");
     expect(source?.dataset.entityReferenceId).toBe(referencedCard.id);
     expect(source?.dataset.revealPrimaryVariant).toBe("gameCard");
-    expect(source?.style.textDecoration).toBe("underline");
+    expect(label?.textContent).toBe(referencedCard.name);
+    expect(label?.querySelector("span")?.style.textDecoration).toBe(
+      "underline",
+    );
+    expect(label?.hasAttribute("data-reveal-entity-id")).toBe(false);
+    expect(label?.tabIndex).toBe(-1);
     act(() => source?.focus());
     expect(source?.dataset.revealActive).toBe("true");
     act(() => source?.click());
-    expect(onResolve).not.toHaveBeenCalled();
+    expect(onResolve).toHaveBeenCalledWith("choice-a");
+    act(() => root.unmount());
+  });
+
+  it("reveals on a full-cell touch hold while preserving quick-touch activation", () => {
+    vi.useFakeTimers();
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const base = view();
+    const referencedCard = makeCard();
+    const referencedView: ExplorationSiteView = {
+      ...base,
+      actions: [
+        {
+          ...base.actions[0],
+          effectText: `Gain ${referencedCard.name}.`,
+          effectParts: [
+            { kind: "text", text: "Gain " },
+            {
+              kind: "entity",
+              entity: { kind: "card", card: referencedCard },
+            },
+            { kind: "text", text: "." },
+          ],
+        },
+        base.actions[1],
+      ],
+    };
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={referencedView}
+        onChannel={vi.fn()}
+        onResolve={onResolve}
+        onExit={vi.fn()}
+      />,
+    );
+
     act(() =>
       container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-channel"]',
         )
         ?.click(),
     );
-    expect(onResolve).toHaveBeenCalledWith("choice-a");
+    const source = container.querySelector<HTMLButtonElement>(
+      '[data-testid="cumulus-exploration-choice-0"]',
+    )!;
+
+    act(() => {
+      source.dispatchEvent(
+        pointer("pointerdown", { pointerId: 8, timeStamp: 100 }),
+      );
+    });
+    act(() => {
+      vi.advanceTimersByTime(35);
+    });
+    expect(source.dataset.revealActive).toBe("true");
+    act(() => {
+      source.dispatchEvent(
+        pointer("pointerup", { pointerId: 8, timeStamp: 401 }),
+      );
+      source.dispatchEvent(
+        new MouseEvent("click", { bubbles: true, detail: 1 }),
+      );
+    });
+    expect(onResolve).not.toHaveBeenCalled();
+
+    act(() => {
+      source.dispatchEvent(
+        pointer("pointerdown", { pointerId: 9, timeStamp: 500 }),
+      );
+    });
+    act(() => {
+      source.dispatchEvent(
+        pointer("pointerup", { pointerId: 9, timeStamp: 600 }),
+      );
+    });
+    expect(onResolve).toHaveBeenCalledOnce();
+    act(() => {
+      source.dispatchEvent(
+        new MouseEvent("click", { bubbles: true, detail: 1 }),
+      );
+    });
+    expect(onResolve).toHaveBeenCalledOnce();
     act(() => root.unmount());
   });
 
