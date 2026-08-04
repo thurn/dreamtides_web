@@ -37,6 +37,11 @@ export const resourceChipDemo: CumulusComponent = {
       note: "Use the inherited tone when the parent glass or control surface supplies the readable text color.",
       code: `<ResourceChip kind="points" value={4} tone="inherit" />`,
     },
+    {
+      label: "Memory counter",
+      note: "Battle cards store memories as counters, always paired with the filled brain mark.",
+      code: `<ResourceChip kind="counter" value={2} />`,
+    },
   ],
   demo: {
     defaultArgs: {

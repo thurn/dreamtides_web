@@ -200,7 +200,7 @@ describe("RulesText", () => {
 
     expect(container.querySelector("i.bxf.bx-star-circle")).not.toBeNull();
     expect(container.querySelector("i.bxf.bx-moon")).not.toBeNull();
-    expect(container.querySelector("i.fa-solid.fa-brain")).not.toBeNull();
+    expect(container.querySelector("i.bxf.bx-brain")).not.toBeNull();
     expect(container.querySelector("i.bxf.bx-hourglass")).toBeNull();
     const renderedRules = container.querySelector(
       "[data-rules-text-paragraph]",
@@ -215,7 +215,7 @@ describe("RulesText", () => {
     const memoryEntry = requireGlossaryEntry(GLOSSARY_IDS.memory);
     expect(
       container.querySelector(`[data-glossary-term="${memoryEntry.term}"]`),
-    ).toContain(container.querySelector("i.fa-solid.fa-brain"));
+    ).toContain(container.querySelector("i.bxf.bx-brain"));
 
     act(() => {
       root.unmount();

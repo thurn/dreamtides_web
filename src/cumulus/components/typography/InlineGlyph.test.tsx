@@ -30,12 +30,12 @@ describe("InlineGlyph", () => {
     expect(markup).not.toContain("color:");
   });
 
-  it("constrains Font Awesome marks to the one-em metric box", () => {
+  it("constrains the memory mark to the one-em metric box", () => {
     const markup = renderToStaticMarkup(
       <InlineGlyph glyph={GLYPHS.memory} label="memory" />,
     );
 
-    expect(markup).toContain('class="fa-solid fa-brain"');
+    expect(markup).toContain('class="bxf bx-brain"');
     expect(markup).toContain("width:1em;font-size:1em;line-height:1");
   });
 });

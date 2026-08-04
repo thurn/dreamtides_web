@@ -232,7 +232,7 @@ describe("CharacterDialogue", () => {
     expect(container.querySelector("i.bxf.bx-caret-right")).toBeNull();
     expect(container.querySelector("i.bxf.bx-fire-alt")).not.toBeNull();
     expect(container.querySelector("i.bxf.bx-moon")).not.toBeNull();
-    expect(container.querySelector("i.fa-solid.fa-brain")).not.toBeNull();
+    expect(container.querySelector("i.bxf.bx-brain")).not.toBeNull();
     expect(container.querySelector("i.bxf.bx-star-circle")).not.toBeNull();
     expect(container.querySelector("i.bxf.bx-sparkle")).not.toBeNull();
     expect(container.querySelector("i.bxf.bx-crypto")).not.toBeNull();

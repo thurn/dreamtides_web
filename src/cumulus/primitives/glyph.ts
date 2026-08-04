@@ -39,13 +39,16 @@ export const GLYPHS = {
   /** The single-star spark, cleaner than `spark` at small inline sizes. */
   sparkInline: g("bxf bx-sparkle"),
   points: g("bxf bx-star-circle"),
-  counter: g("bxf bx-hourglass"),
-  /** Memory stored on cards, rendered as the Font Awesome filled brain. */
-  memory: g("fa-solid fa-brain"),
+  /** Memory counters stored on cards. */
+  counter: g("bxf bx-brain"),
+  /** Memory stored on cards, rendered as the filled brain. */
+  memory: g("bxf bx-brain"),
   /** The exhaust / tap activation mark (the filled moon). */
   exhaust: g("bxf bx-moon"),
   /** Activated-ability lightning bolt. */
   bolt: g("bxf bx-bolt"),
+  /** A duration or expiry, distinct from memory counters. */
+  duration: g("bxf bx-timer"),
 
   // Tide marks (Boxicons v3 filled) — the closed set of five tide icons. These
   // mirror the editor per-color tide glyphs in `src/editor/tide-visuals`

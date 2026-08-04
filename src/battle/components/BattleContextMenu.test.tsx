@@ -76,6 +76,44 @@ describe("BattleContextMenu", () => {
     act(() => root.unmount());
   });
 
+  it("renders memory counter commands with the filled brain instead of the source character", () => {
+    const board = state();
+    const battleCardId = board.sides.player.hand.find(
+      (id) => board.cardInstances[id]?.definition.battleCardKind === "character",
+    );
+    if (battleCardId === undefined) throw new Error("expected character");
+    board.cardInstances[battleCardId].status.counters = 2;
+    const host = document.createElement("div");
+    document.body.append(host);
+    const root = createRoot(host);
+
+    act(() => root.render(
+      <BattleContextMenu
+        battleCardId={battleCardId}
+        sourceSurface="inspector"
+        state={board}
+        x={200}
+        y={300}
+        onClose={() => undefined}
+        onCommand={() => undefined}
+        onOpenNoteEditor={() => undefined}
+      />,
+    ));
+
+    const memory = [...document.querySelectorAll<HTMLElement>('[role="menuitem"]')]
+      .find((element) => element.textContent?.trim() === "Memory (2)");
+    expect(memory?.querySelector("i.bxf.bx-brain")).not.toBeNull();
+    expect(document.body.textContent).not.toContain("⧗");
+
+    act(() => memory?.click());
+    const increment = [...document.querySelectorAll<HTMLElement>('[role="menuitem"]')]
+      .find((element) => element.textContent?.trim() === "+1");
+    expect(increment?.querySelector("i.bxf.bx-brain")).not.toBeNull();
+    expect(document.body.querySelector("i.bxf.bx-hourglass")).toBeNull();
+
+    act(() => root.unmount());
+  });
+
   it("accepts a typed signed spark adjustment instead of preset amounts", () => {
     const board = state();
     const battleCardId = board.sides.player.hand.find(

@@ -83,7 +83,7 @@ export function BattleCardNoteOverlay({
           </span>
           <Select
             ariaLabel="Note expiry"
-            leadingGlyph={GLYPHS.counter}
+            leadingGlyph={GLYPHS.duration}
             full
             options={[
               { value: "end-of-next-turn", label: "End of Next Turn" },

@@ -5,8 +5,8 @@
 // Each mark's glyph is a named `GLYPHS.<kind>` value, never a re-typed class
 // string, so an icon-font rename in the glyph vocabulary propagates here
 // automatically. Each color is the currency's role token (`--essence`,
-// `--energy`, `--spark`, `--points`, and `--accent-bright` for the generic
-// counter), never a raw hex, so a token reband propagates too.
+// `--energy`, `--spark`, `--points`, and `--accent-bright` for memory
+// counters), never a raw hex, so a token reband propagates too.
 //
 // ResourceChip paints each mark in `mark.color` so every HUD economy value uses
 // its semantic role color.

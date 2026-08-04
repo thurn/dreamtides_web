@@ -613,7 +613,7 @@ describe("MobileBattleScreen", () => {
       battlefield?.querySelector('[aria-label="Exhausted"]'),
     ).not.toBeNull();
     expect(
-      battlefield?.querySelector('[aria-label="4 stored-time counters"]'),
+      battlefield?.querySelector('[aria-label="4 memory counters"]'),
     ).not.toBeNull();
     expect(
       battlefield?.querySelector('[data-battle-card-status="figment-count"]'),
@@ -638,6 +638,8 @@ describe("MobileBattleScreen", () => {
     expect(storedTimeChip?.textContent).toBe("4");
     expect(storedTimeChip?.firstElementChild?.nodeName).toBe("SPAN");
     expect(storedTimeChip?.lastElementChild?.nodeName).toBe("I");
+    expect(storedTimeChip?.querySelector("i.bxf.bx-brain")).not.toBeNull();
+    expect(storedTimeChip?.querySelector("i.bxf.bx-hourglass")).toBeNull();
     expect(
       (storedTimeChip?.lastElementChild as HTMLElement | null)?.style.color,
     ).toBe("inherit");
@@ -666,7 +668,7 @@ describe("MobileBattleScreen", () => {
 
     expect(hand?.querySelector('[aria-label="Exhausted"]')).not.toBeNull();
     expect(
-      hand?.querySelector('[aria-label="5 stored-time counters"]'),
+      hand?.querySelector('[aria-label="5 memory counters"]'),
     ).not.toBeNull();
     expect(
       hand?.querySelector('[data-battle-card-status="figment-count"]'),

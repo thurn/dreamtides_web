@@ -3,7 +3,7 @@ import {
   ContextActionMenu,
   type CommandMenuItem,
 } from "../../cumulus/components/overlay/CommandMenus";
-import { GLYPHS } from "../../cumulus/primitives/glyph";
+import { GLYPHS, type Glyph } from "../../cumulus/primitives/glyph";
 import type {
   BattleCommand,
   BattleDebugZoneDestination,
@@ -240,7 +240,8 @@ export function BattleContextMenu({
         submenu: createStatusSubmenu(),
       });
       result.push({
-        label: `Counters ⧗ (${String(card.status.counters)})`,
+        label: `Memory (${String(card.status.counters)})`,
+        glyph: GLYPHS.memory,
         submenu: createCountersSubmenu(),
       });
       // Abandon and Rematerialize are in-play character gestures (rules
@@ -387,12 +388,14 @@ export function BattleContextMenu({
       const current = card.status.counters;
       const items: ContextMenuItem[] = [];
       items.push({
-        label: "+1 ⧗",
+        label: "+1",
+        glyph: GLYPHS.memory,
         action: () => setCounters(current + 1),
       });
       const decrementDisabled = current <= 0;
       items.push({
-        label: "-1 ⧗",
+        label: "-1",
+        glyph: GLYPHS.memory,
         action: () => {
           if (decrementDisabled) {
             return;
@@ -402,7 +405,8 @@ export function BattleContextMenu({
       });
       items.push({ divider: true });
       items.push({
-        label: "Clear ⧗",
+        label: "Clear Memory",
+        glyph: GLYPHS.memory,
         action: () => setCounters(0),
       });
       return items;
@@ -476,10 +480,12 @@ type ContextMenuItem =
   }
   | {
     label: string;
+    glyph?: Glyph;
     action: () => void;
   }
   | {
     label: string;
+    glyph?: Glyph;
     submenu: Array<ContextMenuItem>;
   };
 
@@ -506,7 +512,7 @@ function toCommandMenuItems(
         kind: "group",
         id,
         label: item.label,
-        glyph: GLYPHS.list,
+        glyph: item.glyph ?? GLYPHS.list,
         actions: toCommandMenuItems(item.submenu, battleCardId, id),
       };
     }
@@ -514,7 +520,7 @@ function toCommandMenuItems(
       kind: "action",
       id,
       label: item.label,
-      glyph: item.label.includes("Note") ? GLYPHS.pencilSquare : GLYPHS.edit,
+      glyph: item.glyph ?? (item.label.includes("Note") ? GLYPHS.pencilSquare : GLYPHS.edit),
       onCommand: item.action,
     };
   });

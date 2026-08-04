@@ -4325,7 +4325,7 @@
       ],
       "required": false,
       "defaultValue": "essence",
-      "description": "Which economy value: essence, energy, spark, points, counter. Rendered as\nthe parent's filled-Boxicon mark (bx-crypto / bx-fire-alt / bx-sparkles /\nbx-star-circle / bx-hourglass), colored by role."
+      "description": "Which economy value: essence, energy, spark, points, memory counter. Rendered as\nthe parent's filled-Boxicon mark (bx-crypto / bx-fire-alt / bx-sparkles /\nbx-star-circle / bx-brain), colored by role."
     },
     {
       "name": "value",

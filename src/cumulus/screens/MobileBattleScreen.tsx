@@ -2137,7 +2137,7 @@ function BattleCardStatusIndicators({
       ) : null}
       {card.storedTime > 0 ? (
         <div
-          aria-label={`${String(card.storedTime)} stored-time counter${card.storedTime === 1 ? "" : "s"}`}
+          aria-label={`${String(card.storedTime)} memory counter${card.storedTime === 1 ? "" : "s"}`}
           data-battle-card-status="stored-time"
           style={{
             ...BATTLE_CARD_STATUS_BADGE_STYLE,

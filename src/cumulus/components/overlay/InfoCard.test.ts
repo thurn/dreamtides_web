@@ -165,7 +165,7 @@ describe("InfoCard shell treatment", () => {
     expect(html).toContain("bxf bx-fire-alt");
     expect(html).toContain("bxf bx-star-circle");
     expect(html).toContain("bxf bx-moon");
-    expect(html).toContain("fa-solid fa-brain");
+    expect(html).toContain("bxf bx-brain");
     expect(html).not.toContain("bxf bx-caret-right");
     expect(html).toContain("bxf bx-bolt");
   });

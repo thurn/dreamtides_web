@@ -45,6 +45,12 @@ describe("ECONOMY_MARKS", () => {
     }
   });
 
+  it("uses the same filled brain for memory counters and rules text", () => {
+    expect(ECONOMY_MARKS.counter.glyph).toBe(GLYPHS.memory);
+    expect(ECONOMY_MARKS.counter.glyph).toBe("bxf bx-brain");
+    expect(ECONOMY_MARKS.counter.glyph).not.toContain("hourglass");
+  });
+
   it("colors each kind with its role token", () => {
     expect(ECONOMY_MARKS.essence.color).toContain("--essence");
     expect(ECONOMY_MARKS.energy.color).toContain("--energy");

@@ -1,8 +1,8 @@
 // ResourceChip — the sized, self-contained inline "value + mark" pairing for
-// the game's economy (energy, spark, essence, points, counters): a blue droplet
+// the game's economy (energy, spark, essence, points, memory counters): a blue droplet
 // for energy, a gold
-// sparkle for spark, a violet crypto-mark for essence/points, an hourglass
-// for generic counters. The kind→glyph/color table lives in the shared
+// sparkle for spark, a violet crypto-mark for essence/points, and a brain
+// for memory counters. The kind→glyph/color table lives in the shared
 // `economy-spec` module (imported below). Flowing essence amounts use
 // `EssenceValue`, while standalone essence marks use `EssenceGlyph`.
 //
@@ -61,9 +61,9 @@ const SPACING_PX: Record<ResourceChipSpacing, number> = {
 };
 
 export interface ResourceChipProps {
-  /** Which economy value: essence, energy, spark, points, counter. Rendered as
+  /** Which economy value: essence, energy, spark, points, memory counter. Rendered as
    *  the parent's filled-Boxicon mark (bx-crypto / bx-fire-alt / bx-sparkles /
-   *  bx-star-circle / bx-hourglass), colored by role. */
+   *  bx-star-circle / bx-brain), colored by role. */
   kind?: EconomyKind;
   /** The numeric value to show. Omit to render the mark alone. */
   value?: number | string;

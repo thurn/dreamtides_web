@@ -14,7 +14,7 @@ The sized, self-contained value-and-mark chip for the game economy. It owns the 
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `EconomyKind` = `"essence" \| "energy" \| "spark" \| "points" \| "counter"` | no | `essence` | Which economy value: essence, energy, spark, points, counter. Rendered as the parent's filled-Boxicon mark (bx-crypto / bx-fire-alt / bx-sparkles / bx-star-circle / bx-hourglass), colored by role. |
+| `kind` | `EconomyKind` = `"essence" \| "energy" \| "spark" \| "points" \| "counter"` | no | `essence` | Which economy value: essence, energy, spark, points, memory counter. Rendered as the parent's filled-Boxicon mark (bx-crypto / bx-fire-alt / bx-sparkles / bx-star-circle / bx-brain), colored by role. |
 | `value` | `string \| number` | no | — | The numeric value to show. Omit to render the mark alone. |
 | `size` | `ResourceChipSize` = `"sm" \| "md" \| "lg"` | no | `md` | Inline scale — sm (13px) / md (16px, default) / lg (20px). |
 | `chip` | `boolean` | no | `false` | Render as a solid pill badge (for HUD/over-art) instead of inline text. |
@@ -63,4 +63,12 @@ Use the inherited tone when the parent glass or control surface supplies the rea
 
 ```tsx
 <ResourceChip kind="points" value={4} tone="inherit" />
+```
+
+### Memory counter
+
+Battle cards store memories as counters, always paired with the filled brain mark.
+
+```tsx
+<ResourceChip kind="counter" value={2} />
 ```
