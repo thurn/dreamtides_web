@@ -518,6 +518,20 @@ function rewardForResolution(
   const resolvedAction = actions.find(
     (action) => action.id === resolution.actionId,
   );
+  if (resolvedAction?.effectKind === "purge-dreamsign-for-essence") {
+    const purgedDreamsignId = resolution.purgedDreamsignIds?.[0];
+    const purgedDreamsign =
+      purgedDreamsignId === undefined
+        ? null
+        : dreamsignById(content, purgedDreamsignId);
+    if (purgedDreamsign !== null) {
+      return {
+        kind: "purged-dreamsign-essence",
+        dreamsign: purgedDreamsign,
+        totalEssence: resolution.essenceGained,
+      };
+    }
+  }
   if (
     resolvedAction?.effectKind === "gain-essence-per-card" &&
     resolvedAction.essencePerCard !== undefined

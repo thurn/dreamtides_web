@@ -260,6 +260,24 @@ function essenceRewardView(): ExplorationSiteView {
   };
 }
 
+function purgedDreamsignEssenceRewardView(): ExplorationSiteView {
+  return {
+    ...view(true),
+    reward: {
+      kind: "purged-dreamsign-essence",
+      dreamsign: {
+        id: "purged-dreamsign-id",
+        name: "Purged Dreamsign",
+        effectDescription: "A synthetic purged sign.",
+        imageName: "purged-dreamsign.webp",
+        imageAlt: "Purged Dreamsign art",
+        isNegative: false,
+      },
+      totalEssence: 50,
+    },
+  };
+}
+
 function stubMatchMedia(): void {
   window.matchMedia = (query: string) => ({
     matches: query.includes("min-width"),
@@ -1861,6 +1879,65 @@ describe("ExplorationSiteScreen", () => {
     expect(announcement?.textContent).toContain("Essence Gained");
     expect(announcement?.textContent).toContain("+90");
     expect(announcement?.textContent).toContain("15 × 6 Spirit Animals");
+    expect(onExit).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
+  it("purges the chosen Dreamsign before announcing the gained Essence", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = false;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function getBoundingClientRect(this: HTMLElement) {
+        if (this.hasAttribute("data-exploration-card-slot")) {
+          return new DOMRect(900, 180, 240, 336);
+        }
+        if (this instanceof HTMLImageElement && this.alt !== "") {
+          return new DOMRect(780, 150, 480, 291);
+        }
+        return new DOMRect(0, 0, 100, 100);
+      },
+    );
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={purgedDreamsignEssenceRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    const purgedDreamsign = container.querySelector<HTMLElement>(
+      "[data-exploration-purged-dreamsign]",
+    );
+    expect(purgedDreamsign?.dataset.dreamsignId).toBe(
+      "purged-dreamsign-id",
+    );
+    expect(
+      container.querySelector(
+        "[data-exploration-purged-dreamsign-announcement]",
+      ),
+    ).toBeNull();
+    expect(onExit).not.toHaveBeenCalled();
+
+    act(() => {
+      purgedDreamsign?.dispatchEvent(
+        new MouseEvent("contextmenu", { bubbles: true }),
+      );
+    });
+    expect(
+      container.querySelector("[data-exploration-purged-dreamsign-stage]"),
+    ).toBeNull();
+    const announcement = container.querySelector(
+      "[data-exploration-purged-dreamsign-announcement]",
+    );
+    expect(announcement?.textContent).toContain("Essence Gained");
+    expect(announcement?.textContent).toContain("+50");
     expect(onExit).not.toHaveBeenCalled();
 
     act(() => {

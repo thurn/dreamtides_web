@@ -626,6 +626,7 @@ function explorationScene(isEnhanced: boolean): QaScene {
           card.cardType === "Character" && card.subtype === "Spirit Animal",
         6,
       );
+      const heldDreamsignTemplate = journeyContent.dreamsignTemplates[0];
       const qaState: JourneyState = {
         ...state,
         deck: [...selected.values()].map((card, index) => ({
@@ -634,6 +635,10 @@ function explorationScene(isEnhanced: boolean): QaScene {
           transfiguration: null,
           isBane: false,
         })),
+        dreamsigns:
+          heldDreamsignTemplate === undefined
+            ? state.dreamsigns
+            : [createDreamsign(heldDreamsignTemplate)],
       };
       const requestedCardId = options?.explorationCardId ?? null;
       if (requestedCardId === null) return qaState;

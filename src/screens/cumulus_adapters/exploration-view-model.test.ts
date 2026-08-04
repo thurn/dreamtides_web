@@ -968,14 +968,17 @@ describe("exploration-view-model", () => {
   it("builds Dreamsign follow-ups with UUID-keyed selection contracts", () => {
     const source = card(sourceId, 17);
     const heldDreamsignId = "held-dreamsign-id";
+    const heldDreamsign = {
+      id: heldDreamsignId,
+      name: "Held Dreamsign",
+      effectDescription: "A synthetic sign effect.",
+      imageName: "held-dreamsign.webp",
+      imageAlt: "Held Dreamsign art",
+      isNegative: false,
+    };
     const state = {
       ...createDefaultState(),
-      dreamsigns: [{
-        id: heldDreamsignId,
-        name: "Held Dreamsign",
-        effectDescription: "A synthetic sign effect.",
-        isNegative: false,
-      }],
+      dreamsigns: [heldDreamsign],
       maxDreamsigns: 1,
     };
     const runtime: ExplorationSiteRuntime = {
@@ -1011,7 +1014,7 @@ describe("exploration-view-model", () => {
       atlasConfig: { completionLevels: [] },
       exploration: {
         customCards: [],
-        customDreamsigns: [],
+        customDreamsigns: [heldDreamsign],
         encounters: [{
           cardId: source.id,
           prose: "The authored scene appears.",
@@ -1059,6 +1062,32 @@ describe("exploration-view-model", () => {
         selectionKey: "dreamsignId",
         dreamsigns: [{ id: heldDreamsignId }],
       },
+    });
+
+    const resolvedView = buildExplorationSiteView({
+      sceneNode: null,
+      site: explorationSite,
+      guide,
+      runtime: {
+        ...runtime,
+        resolution: {
+          actionId: "purge-dreamsign",
+          gainedCardIds: [],
+          gainedDreamsignIds: [],
+          purgedCardIds: [],
+          purgedDreamsignIds: [heldDreamsignId],
+          affectedEntryIds: [],
+          essenceGained: 50,
+        },
+      },
+      state: { ...state, dreamsigns: [], essence: state.essence + 50 },
+      content,
+    });
+
+    expect(resolvedView?.reward).toEqual({
+      kind: "purged-dreamsign-essence",
+      dreamsign: heldDreamsign,
+      totalEssence: 50,
     });
   });
 });

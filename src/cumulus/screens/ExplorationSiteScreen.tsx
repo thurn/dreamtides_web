@@ -112,6 +112,13 @@ export type ExplorationRewardView =
       readonly essencePerCard: number;
       /** Authoritative total applied by the reducer. */
       readonly totalEssence: number;
+    }
+  | {
+      readonly kind: "purged-dreamsign-essence";
+      /** UUID-resolved Dreamsign removed by the persisted resolution. */
+      readonly dreamsign: DreamsignData;
+      /** Authoritative total applied by the reducer after the purge. */
+      readonly totalEssence: number;
     };
 
 export interface ExplorationDeckModificationView {
@@ -443,6 +450,7 @@ const FRAME_BREAK_DELAY_SECONDS = motionTimeSeconds("--dur-fast");
 const FRAME_FRACTURE_SECONDS =
   motionTimeSeconds("--dur-base") + motionTimeSeconds("--dur-fast");
 const REWARD_READING_SECONDS = motionTimeSeconds("--dur-slow") * 4;
+const DREAMSIGN_PURGE_SECONDS = motionTimeSeconds("--dur-slow") * 4;
 const ESSENCE_CARD_READING_SECONDS = motionTimeSeconds("--dur-slow") * 8;
 const REWARD_TRAVEL_SECONDS = motionTimeSeconds("--dur-slow") * 2;
 const REWARD_STAGGER_SECONDS = motionTimeSeconds("--dur-fast");
@@ -887,6 +895,9 @@ export function ExplorationSiteScreen({
   const [essenceRewardPhase, setEssenceRewardPhase] = useState<
     "cards" | "announcement"
   >("cards");
+  const [dreamsignPurgeRewardPhase, setDreamsignPurgeRewardPhase] = useState<
+    "purging" | "announcement"
+  >("purging");
   const [deckModificationPresented, setDeckModificationPresented] =
     useState(false);
   const fullArtUrl = resolveArtRef(view.fullArt);
@@ -899,11 +910,15 @@ export function ExplorationSiteScreen({
     view.actions.find((action) => action.id === activeActionId) ?? null;
   const resolvedReward =
     view.reward !== null && !("kind" in view.reward) ? view.reward : null;
+  const effectReward =
+    view.reward !== null && "kind" in view.reward ? view.reward : null;
   const objectReward = resolvedReward?.objects ?? null;
   const purgedRewardCards = objectReward?.purgedCards ?? [];
   const deckModification = resolvedReward?.deckModification ?? null;
   const essenceReward =
-    view.reward !== null && "kind" in view.reward ? view.reward : null;
+    effectReward?.kind === "essence" ? effectReward : null;
+  const dreamsignPurgeReward =
+    effectReward?.kind === "purged-dreamsign-essence" ? effectReward : null;
   const rewardItems = useMemo(() => rewardItemsFor(view.reward), [view.reward]);
   const showDeckModification =
     deckModification !== null && !deckModificationPresented;
@@ -920,11 +935,18 @@ export function ExplorationSiteScreen({
     view.resolvedActionId === null || view.reward === null
       ? null
       : "kind" in view.reward
-        ? [
-            view.resolvedActionId,
-            view.reward.kind,
-            ...view.reward.cards.map((card) => card.entryId),
-          ].join("|")
+        ? view.reward.kind === "essence"
+          ? [
+              view.resolvedActionId,
+              view.reward.kind,
+              ...view.reward.cards.map((card) => card.entryId),
+            ].join("|")
+          : [
+              view.resolvedActionId,
+              view.reward.kind,
+              view.reward.dreamsign.id ?? "missing",
+              view.reward.totalEssence,
+            ].join("|")
         : [
             view.resolvedActionId,
             deckModification?.kind ?? "objects-only",
@@ -949,6 +971,7 @@ export function ExplorationSiteScreen({
     rewardItemRefs.current.clear();
     setRewardTrajectories(null);
     setEssenceRewardPhase("cards");
+    setDreamsignPurgeRewardPhase("purging");
     setDeckModificationPresented(false);
   }, [rewardIdentity]);
 
@@ -1208,6 +1231,26 @@ export function ExplorationSiteScreen({
     completeExit,
     essenceReward,
     essenceRewardPhase,
+    frameBreakPhase,
+  ]);
+
+  useEffect(() => {
+    if (
+      dreamsignPurgeReward === null ||
+      frameBreakPhase !== "open" ||
+      dreamsignPurgeRewardPhase !== "announcement"
+    ) {
+      return;
+    }
+    const timer = window.setTimeout(
+      completeExit,
+      RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
+    );
+    return () => window.clearTimeout(timer);
+  }, [
+    completeExit,
+    dreamsignPurgeReward,
+    dreamsignPurgeRewardPhase,
     frameBreakPhase,
   ]);
 
@@ -2056,6 +2099,82 @@ export function ExplorationSiteScreen({
               announcementId={`exploration-deck-modification:${deckModification.kind}:${view.resolvedActionId ?? "resolved"}`}
             />
           </motion.section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
+        dreamsignPurgeReward !== null &&
+        dreamsignPurgeRewardPhase === "purging" && (
+          <section
+            data-exploration-purged-dreamsign-stage=""
+            role="status"
+            aria-label={`Purging ${dreamsignPurgeReward.dreamsign.name}`}
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: FRAME_BREAK_EXIT_LAYER + 2,
+              display: "grid",
+              placeItems: "center",
+              pointerEvents: "none",
+            }}
+          >
+            <motion.div
+              data-exploration-purged-dreamsign=""
+              data-dreamsign-id={dreamsignPurgeReward.dreamsign.id}
+              initial={{ opacity: 1, scale: 1, rotate: 0 }}
+              animate={
+                reduceMotion
+                  ? { opacity: 0 }
+                  : {
+                      opacity: [1, 1, 0],
+                      scale: [1, 1.04, 0.24],
+                      rotate: [0, -2, 8],
+                    }
+              }
+              transition={{
+                duration: reduceMotion ? 0 : DREAMSIGN_PURGE_SECONDS,
+                times: [0, 0.5, 1],
+                ease: DREAM_EASE,
+              }}
+              onAnimationComplete={() =>
+                setDreamsignPurgeRewardPhase("announcement")
+              }
+            >
+              <Dreamsign
+                dreamsign={dreamsignPurgeReward.dreamsign}
+                sizePx={
+                  isDesktop
+                    ? DESKTOP_REWARD_DREAMSIGN_SIZE
+                    : MOBILE_REWARD_DREAMSIGN_SIZE
+                }
+                variant="revelation"
+                testid="cumulus-exploration-purged-dreamsign"
+              />
+            </motion.div>
+          </section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        dreamsignPurgeReward !== null &&
+        dreamsignPurgeRewardPhase === "announcement" && (
+          <div
+            data-exploration-purged-dreamsign-announcement=""
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: FRAME_BREAK_EXIT_LAYER + 2,
+              pointerEvents: "none",
+            }}
+          >
+            <RadialAnnouncement
+              announcementId={`exploration:${view.siteId}:${view.resolvedActionId ?? "purged-dreamsign-essence"}`}
+              headline="Essence Gained"
+              essenceGained={dreamsignPurgeReward.totalEssence}
+              tone="reward"
+              size={isDesktop ? "standard" : "compact"}
+              duration="extended"
+            />
+          </div>
         )}
       {frameBreakGeometry !== null &&
         frameBreakPhase === "open" &&

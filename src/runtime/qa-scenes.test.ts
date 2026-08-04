@@ -407,6 +407,23 @@ describe('the "exploration" QA scene', () => {
     }
   });
 
+  it("holds a UUID-backed Dreamsign so purge follow-ups are exercisable", () => {
+    const { content, encounterCardId } = explorationContent();
+    content.dreamsignTemplates = [{
+      id: "exploration-qa-dreamsign-id",
+      name: "Exploration QA Dreamsign",
+      effectDescription: "A QA effect.",
+    }];
+
+    const state = buildQaScene("exploration", content, {
+      explorationCardId: encounterCardId,
+    });
+
+    expect(state?.dreamsigns.map((dreamsign) => dreamsign.id)).toEqual([
+      "exploration-qa-dreamsign-id",
+    ]);
+  });
+
   it("fails to build when the requested UUID has no authored encounter", () => {
     const { content } = explorationContent();
 
