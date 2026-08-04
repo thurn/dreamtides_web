@@ -9,7 +9,11 @@ import {
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
-import { parseEncounterTemplates } from "./encounter-editor-data.mjs";
+import {
+  buildSimulatedPlayerDeck,
+  parseEncounterTemplates,
+  renderRuntimeTemplate,
+} from "./encounter-editor-data.mjs";
 import {
   EXPLORATION_EFFECT_DEFINITION_BY_KIND,
   EXPLORATION_EFFECT_DEFINITIONS,
@@ -136,6 +140,9 @@ function readCatalogs(rootDir, paths, fileSystem) {
       imageNumber: Number.isInteger(card["image-number"]) ? card["image-number"] : null,
       cardType: typeof card["card-type"] === "string" ? card["card-type"] : "",
       subtype: typeof card.subtype === "string" ? card.subtype : "",
+      energyCost: Number.isInteger(card["energy-cost"]) ? card["energy-cost"] : null,
+      isStarter: card.rarity === "Starter",
+      isOfferable: card.rarity !== "Starter" && card.rarity !== "Special",
     });
   }
   const dreamsigns = new Map();
@@ -656,12 +663,15 @@ function readContext(options = {}) {
 
 export function readExplorationEditorData(options = {}) {
   const context = readContext(options);
+  const random = options.random ?? Math.random;
   const source = context.fileSystem.readFileSync(
     join(context.rootDir, context.paths.exploration),
     "utf8",
   );
   const document = parse(source);
   validateExplorationDocument(document, context.templates, context.catalogs);
+  const catalog = [...context.catalogs.cards.values()];
+  const playerDeck = buildSimulatedPlayerDeck(catalog, random);
   const encounters = document.encounter.map((encounter) => {
     const cardId = encounter["card-id"];
     const card = context.catalogs.cards.get(cardId.toLowerCase());
@@ -671,10 +681,25 @@ export function readExplorationEditorData(options = {}) {
       cardName: card.name,
       cardAbilityText: card.renderedText,
       imageNumber: card.imageNumber,
-      actions: encounter.action.map((action) => ({
-        ...camelAction(action),
-        template: context.templates.get(action["template-id"]),
-      })),
+      actions: encounter.action.map((action) => {
+        const authoredAction = camelAction(action);
+        const template = context.templates.get(action["template-id"]);
+        const rendered = renderRuntimeTemplate(
+          template,
+          authoredAction.templateVariables,
+          authoredAction.selection,
+          catalog,
+          playerDeck,
+          random,
+        );
+        return {
+          ...authoredAction,
+          template,
+          renderedEffectText: rendered.renderedTemplate,
+          renderedEffectParts: rendered.renderedTemplateParts,
+          runtimeCardSelections: rendered.runtimeCardSelections,
+        };
+      }),
     };
   });
   return {

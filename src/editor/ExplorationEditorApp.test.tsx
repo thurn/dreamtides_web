@@ -59,6 +59,17 @@ const SERVER_DATA: ExplorationEditorServerData = {
       id: `${CARD_ID}:first`,
       label: "Gather a company",
       effectText: "Choose one of 2 packs of 3 Character cards to add to your deck",
+      renderedEffectText: "Choose one of 2 packs of 3 Character cards to add to your deck",
+      renderedEffectParts: [
+        { kind: "text", text: "Choose one of " },
+        { kind: "variable", placeholder: "{pack_count}", variableName: "pack_count", value: 2, text: "2" },
+        { kind: "text", text: " packs of " },
+        { kind: "variable", placeholder: "{pack_size}", variableName: "pack_size", value: 3, text: "3" },
+        { kind: "text", text: " " },
+        { kind: "variable", placeholder: "{predicate}", variableName: "predicate", value: "Character", text: "Character" },
+        { kind: "text", text: " cards to add to your deck" },
+      ],
+      runtimeCardSelections: [],
       templateId: 36,
       template: "Choose one of {pack_count} packs of {pack_size} {predicate} cards to add to your deck",
       templateVariables: { pack_count: 2, pack_size: 3, predicate: "Character" },
@@ -69,14 +80,30 @@ const SERVER_DATA: ExplorationEditorServerData = {
     }, {
       id: `${CARD_ID}:second`,
       label: "Invite an ally",
-      effectText: "Gain Fixture Ally",
-      templateId: 10,
-      template: "Gain {card_id}",
-      templateVariables: {
-        card_id: { id: REWARD_CARD_ID, display_name: "Fixture Ally" },
-      },
-      effectKind: "gain-card",
-      cardId: REWARD_CARD_ID,
+      effectText: "Gain $OFFERED_CARD",
+      renderedEffectText: "Gain Fixture Ally",
+      renderedEffectParts: [
+        { kind: "text", text: "Gain " },
+        {
+          kind: "card",
+          placeholder: "$OFFERED_CARD",
+          cardId: REWARD_CARD_ID,
+          cardName: "Fixture Ally",
+        },
+      ],
+      runtimeCardSelections: [{
+        placeholder: "$OFFERED_CARD",
+        predicate: "Character",
+        cardId: REWARD_CARD_ID,
+        cardName: "Fixture Ally",
+        source: "offer_pool",
+      }],
+      templateId: 11,
+      template: "Gain $OFFERED_CARD",
+      templateVariables: {},
+      selection: { $OFFERED_CARD: { predicate: "Character" } },
+      effectKind: "gain-offered-card",
+      predicate: "character",
     }],
   }],
   templates: [
@@ -84,6 +111,7 @@ const SERVER_DATA: ExplorationEditorServerData = {
     { id: 4, text: "Purge a chosen {predicate} card" },
     { id: 9, text: "Gain a random {predicate} card" },
     { id: 10, text: "Gain {card_id}" },
+    { id: 11, text: "Gain $OFFERED_CARD" },
     { id: 13, text: "Gain {count} random {predicate} cards" },
     { id: 36, text: "Choose one of {pack_count} packs of {pack_size} {predicate} cards to add to your deck" },
   ],
@@ -111,6 +139,11 @@ const SERVER_DATA: ExplorationEditorServerData = {
     label: "Gain card",
     templateIds: [10],
     fields: [{ key: "cardId", label: "Card", control: "card" }],
+  }, {
+    kind: "gain-offered-card",
+    label: "Gain offered card",
+    templateIds: [11],
+    fields: [{ key: "predicate", label: "Card predicate", control: "predicate" }],
   }, {
     kind: "gain-random-cards",
     label: "Gain random cards",
@@ -201,6 +234,9 @@ describe("ExplorationEditorApp", () => {
       .not.toBeNull();
     expect(container.querySelector(`[data-entity-reference-id='${REWARD_CARD_ID}']`))
       .not.toBeNull();
+    expect(container.querySelector("[data-runtime-card-placeholder='$OFFERED_CARD']"))
+      .not.toBeNull();
+    expect(container.textContent).not.toContain("$OFFERED_CARD");
     expect(container.querySelectorAll("[aria-label^='Effect for']")).toHaveLength(2);
     expect(container.querySelectorAll("[aria-label^='Template for']")).toHaveLength(0);
     act(() => root.unmount());
@@ -269,6 +305,13 @@ describe("ExplorationEditorApp", () => {
       id: `${CARD_ID}:first`,
       label: "Purge anything",
       effectText: "Purge a chosen Character card",
+      renderedEffectText: "Purge a chosen Character card",
+      renderedEffectParts: [
+        { kind: "text", text: "Purge a chosen " },
+        { kind: "variable", placeholder: "{predicate}", variableName: "predicate", value: "Character", text: "Character" },
+        { kind: "text", text: " card" },
+      ],
+      runtimeCardSelections: [],
       templateId: 4,
       template: "Purge a chosen {predicate} card",
       templateVariables: { predicate: "Character" },
@@ -283,6 +326,8 @@ describe("ExplorationEditorApp", () => {
       templateId: 3,
       template: "Purge a chosen card",
       templateVariables: {},
+      renderedEffectText: "Purge a chosen card",
+      renderedEffectParts: [{ kind: "text", text: "Purge a chosen card" }],
     };
     delete normalized.encounters[0].actions[0].predicate;
     const { cards: _cards, dreamsigns: _dreamsigns, ...normalizedData } = normalized;

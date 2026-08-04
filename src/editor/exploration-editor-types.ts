@@ -4,6 +4,10 @@ import type {
   ExplorationEffectKind,
   ExplorationPredicate,
 } from "../data/exploration";
+import type {
+  EncounterRenderedTemplatePart,
+  EncounterRuntimeCardSelection,
+} from "./encounter-editor-types";
 
 export type ExplorationEditorControl =
   | "number"
@@ -42,6 +46,9 @@ export interface ExplorationEditorAction {
   id: string;
   label: string;
   effectText: string;
+  renderedEffectText: string;
+  renderedEffectParts: EncounterRenderedTemplatePart[];
+  runtimeCardSelections: EncounterRuntimeCardSelection[];
   templateId: number;
   template: string;
   templateVariables: Record<string, unknown>;

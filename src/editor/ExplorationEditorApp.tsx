@@ -14,6 +14,7 @@ import type { Dreamsign } from "../types/journey";
 import EditableField from "./EditableField";
 import { EditorApiRequestError } from "./editor-api";
 import { explorationEditorClient } from "./exploration-editor-api";
+import type { EncounterRenderedTemplatePart } from "./encounter-editor-types";
 import type {
   ExplorationEditorAction,
   ExplorationEditorClient,
@@ -60,6 +61,54 @@ const EMPTY_CATALOG: ReferenceCatalog = {
   dreamsigns: [],
   dreamsignsById: new Map(),
 };
+
+function renderedEffect(
+  parts: EncounterRenderedTemplatePart[],
+  references: ReferenceCatalog,
+) {
+  return parts.map((part, index) => {
+    if (part.kind === "text") {
+      return <span key={`text-${String(index)}`}>{part.text}</span>;
+    }
+    if (part.kind === "variable") {
+      return (
+        <span
+          data-encounter-variable={part.variableName}
+          data-encounter-variable-placeholder={part.placeholder}
+          key={`${part.placeholder}-${String(index)}`}
+        >
+          {part.text}
+        </span>
+      );
+    }
+    if (part.kind === "card") {
+      const card = references.cardsById.get(part.cardId.toLowerCase());
+      return (
+        <span
+          data-runtime-card-id={part.cardId}
+          data-runtime-card-placeholder={part.placeholder}
+          key={`${part.placeholder}-${part.cardId}-${String(index)}`}
+        >
+          {card === undefined
+            ? <u data-entity-reference-unresolved="card">{part.cardName}</u>
+            : <EntityReference entity={{ kind: "card", card }} />}
+        </span>
+      );
+    }
+    const dreamsign = references.dreamsignsById.get(part.dreamsignId.toLowerCase());
+    return (
+      <span
+        data-runtime-dreamsign-id={part.dreamsignId}
+        data-runtime-dreamsign-placeholder={part.placeholder}
+        key={`${part.placeholder}-${part.dreamsignId}-${String(index)}`}
+      >
+        {dreamsign === undefined
+          ? <u data-entity-reference-unresolved="dreamsign">{part.dreamsignName}</u>
+          : <EntityReference entity={{ kind: "dreamsign", dreamsign }} />}
+      </span>
+    );
+  });
+}
 
 function messageFor(error: unknown): string {
   return error instanceof Error ? error.message : "The request failed.";
@@ -585,7 +634,7 @@ function ExplorationEditorRow({
         {editable(
           { cardId: `${encounter.cardId}:${String(slot)}`, field: "template" },
           action.template,
-          <p>{action.effectText}</p>,
+          <p>{renderedEffect(action.renderedEffectParts, catalog)}</p>,
           (value, revision) => saveActionText(slot, "template", value, revision),
         )}
         <div className="exploration-editor-action-selects">
@@ -738,6 +787,15 @@ export default function ExplorationEditorApp({
       logEvent("exploration_editor_loaded", {
         encounterCount: loaded.encounters.length,
         effectKindCount: loaded.effectDefinitions.length,
+        runtimeCardSelections: loaded.encounters.flatMap((encounter) =>
+          encounter.actions.flatMap((action, slot) =>
+            action.runtimeCardSelections.map((selection) => ({
+              encounterCardId: encounter.cardId,
+              actionId: action.id,
+              actionSlot: slot,
+              templateId: action.templateId,
+              ...selection,
+            })))),
       });
     }).catch((error: unknown) => {
       if (controller.signal.aborted) return;

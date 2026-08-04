@@ -362,7 +362,7 @@ function shuffle(cards, random) {
   return shuffled;
 }
 
-function buildSimulatedPlayerDeck(cards, random) {
+export function buildSimulatedPlayerDeck(cards, random) {
   const starterCards = cards.filter((card) => card.isStarter);
   const selectedStarters = starterCards.length <= SIMULATED_PLAYER_DECK_SIZE
     ? starterCards
@@ -429,7 +429,7 @@ function runtimeCardSelection(placeholder, selection, cards, playerDeck, random)
   };
 }
 
-function renderRuntimeTemplate(template, variables, selection, cards, playerDeck, random) {
+export function renderRuntimeTemplate(template, variables, selection, cards, playerDeck, random) {
   const variableParts = renderEncounterVariableParts(template, variables);
   const withVariables = variableParts.map((part) =>
     part.kind === "card"
