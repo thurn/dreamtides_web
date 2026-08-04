@@ -50,6 +50,15 @@ const ACTIONS_RESPONSE = {
       text: "Draft a card.",
     },
   },
+  purge: {
+    speechBubble: {
+      speaker: "mira",
+      horizontalOffset: 0,
+      verticalOffset: 0,
+      bubbleWidth: 600,
+      text: "Purge a card.",
+    },
+  },
   dreamsignRevelation: {
     speechBubble: {
       speaker: "mira",
@@ -281,6 +290,9 @@ describe("parseTutorialActions", () => {
     expect(
       parseTutorialSiteConfiguration(ACTIONS_RESPONSE.draft, "draft"),
     ).toEqual(ACTIONS_RESPONSE.draft);
+    expect(
+      parseTutorialSiteConfiguration(ACTIONS_RESPONSE.purge, "purge"),
+    ).toEqual(ACTIONS_RESPONSE.purge);
     expect(() =>
       parseTutorialSiteConfiguration(
         { speechBubble: { speaker: "enemy", text: "No." } },

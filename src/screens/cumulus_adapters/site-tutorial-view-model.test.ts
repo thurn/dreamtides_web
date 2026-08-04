@@ -73,6 +73,23 @@ describe("buildFirstVisitSiteTutorialView", () => {
     });
   });
 
+  it("maps the first Purge visit to the authored site tutorial", () => {
+    const purge: SiteState = {
+      id: "purge-a",
+      type: "Purge",
+      data: {},
+      isVisited: false,
+      isEnhanced: false,
+    };
+
+    expect(
+      buildFirstVisitSiteTutorialView(state(purge), "Purge", CONFIGURATION),
+    ).toMatchObject({
+      id: "run-a:first-visit:purge-a:Purge",
+      model: { text: "Choose one [purple]Dreamsign[/purple]." },
+    });
+  });
+
   it("suppresses the guidance after a site of the same type was visited", () => {
     expect(
       buildFirstVisitSiteTutorialView(

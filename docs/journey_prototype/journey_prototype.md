@@ -158,10 +158,11 @@ authored delay when the player dismisses the starting-deck modal. The Atlas
 guidance begins when the player reaches the Atlas after completing the starter
 dream.
 
-The `draft` and `dreamsignRevelation` tables author Mira guidance for the first
-visit to each of those site types in a journey. Each begins its authored delay
-when the site screen loads. Draft guidance retires with the first persisted pick;
-Dreamsign Revelation guidance persists until the site is completed.
+The `draft`, `purge`, and `dreamsignRevelation` tables author Mira guidance for
+the first visit to each of those site types in a journey. Each begins its
+authored delay when the site screen loads. Draft guidance retires with the first
+persisted pick; Purge and Dreamsign Revelation guidance persist until the site
+is completed.
 Completed-site state in the shared atlas determines eligibility across
 dreamscape travel. Site guidance takes priority over supplemental glossary
 triggers while active. Draft guidance is placed in measured free viewport

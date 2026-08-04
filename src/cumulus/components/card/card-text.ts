@@ -6,7 +6,7 @@ import {
 
 /** Symbol types recognized in card rules text. */
 export type SymbolType =
-  "energy" | "spark" | "trigger" | "points" | "lunar" | "store";
+  "energy" | "spark" | "essence" | "trigger" | "points" | "lunar" | "store";
 
 /**
  * A parsed segment of rules text.
@@ -14,8 +14,11 @@ export type SymbolType =
  * - `text` is a plain string run.
  * - `symbol` is a recognized glyph rendered with its own styling. Most are
  *   swapped for an icon-font mark by the renderer: energy → flame, spark →
- *   sparkle, points `⍟` → star-circle, lunar `☪` → moon, and store `⧗` →
- *   brain. The trigger `▸` remains a Unicode text character.
+ *   sparkle, essence `◆` → crypto, points `⍟` → star-circle, lunar `☪` →
+ *   moon, and store `⧗` → brain. The trigger `▸` remains a Unicode text
+ *   character.
+ *   A standalone authored `◆` is represented as a symbol segment and resolves
+ *   to the same essence Boxicon.
  * - `nobreak` groups inner segments that must render on the same line. The
  *   renderer wraps them in a `white-space: nowrap` span. A post-tokenization
  *   pass (`bindIconsToText`) wraps every inline icon together with the text it
@@ -63,6 +66,8 @@ const SYMBOL_MAP: Readonly<Record<string, SymbolType>> = {
   // are the spark symbol; the renderer draws either as the sparkle mark.
   "⍏": "spark",
   "✦": "spark",
+  // Standalone essence mark used by tutorial and rules copy.
+  "◆": "essence",
   "▸": "trigger",
   // Points scored toward winning (rendered as the filled star-circle).
   "⍟": "points",

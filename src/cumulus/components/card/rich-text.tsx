@@ -89,7 +89,7 @@ export const richText = {
 
 /** Vertical gap (px) between stacked rich-text parts. */
 const STACK_GAP = 8;
-const INLINE_RULE_SYMBOL_RE = /[●✦▸⍟☪⧗❖]/;
+const INLINE_RULE_SYMBOL_RE = /[●✦◆▸⍟☪⧗❖]/;
 
 interface RichTextRenderOptions {
   /**

@@ -81,6 +81,11 @@ const SITE_NAME_COLOR = "#60a5fa";
 const SYMBOL_ICON_CLASSES: Readonly<
   Record<string, { className: Glyph; color?: string; label: string }>
 > = {
+  essence: {
+    className: GLYPHS.essence,
+    color: ESSENCE_TEXT_COLOR,
+    label: "essence",
+  },
   points: { className: GLYPHS.points, label: "points" },
   lunar: { className: GLYPHS.exhaust, label: "lunar" },
   store: { className: GLYPHS.memory, label: "memory" },

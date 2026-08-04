@@ -1,6 +1,6 @@
 // PurgeSiteScreen — the Cumulus rendering of Master Takeshi's purge site.
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { DeckCardView } from "./MobileDeckViewer";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
 import type { GlassButtonWidthReservation } from "../components/controls/GlassButton";
@@ -10,6 +10,9 @@ import {
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
 import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
+import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
+import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
+import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
 
 export type PurgeGuideView = GuideGalleryGuideView;
 
@@ -25,6 +28,8 @@ export interface PurgeSiteView {
   scene: ArtRef | null;
   /** Master Takeshi's guide art and line. */
   guide: PurgeGuideView;
+  /** Mira guidance shown throughout the first Purge site visit. */
+  tutorial?: FirstVisitSiteTutorialView;
   /** Deck cards in acquisition order, already resolved by concrete entry id. */
   cards: readonly PurgeCardView[];
   /** Visit cost by paid-card count. Index 0 is always 0. */
@@ -40,12 +45,15 @@ export interface PurgeSiteScreenProps {
   onClose: () => void;
   /** Commit selected deck entries at the displayed total cost. */
   onPurge: (entryIds: readonly string[], cost: number) => void;
+  /** Reports when delayed first-visit guidance becomes visible. */
+  onTutorialShown?: (tutorial: FirstVisitSiteTutorialView) => void;
 }
 
 export function PurgeSiteScreen({
   view,
   onClose,
   onPurge,
+  onTutorialShown,
 }: PurgeSiteScreenProps) {
   const [selectedEntryIds, setSelectedEntryIds] = useState<readonly string[]>(
     [],
@@ -74,6 +82,15 @@ export function PurgeSiteScreen({
       ),
     [freeEntryIds, view.maxPaidSelections, view.visitCosts],
   );
+  const tutorialVisible = useDelayedTutorialSpeechBubbleVisibility(
+    view.tutorial?.id ?? view.tutorial?.model.text,
+    view.tutorial === undefined ? undefined : (view.tutorial.delaySeconds ?? 0),
+  );
+  useEffect(() => {
+    if (tutorialVisible && view.tutorial !== undefined) {
+      onTutorialShown?.(view.tutorial);
+    }
+  }, [onTutorialShown, tutorialVisible, view.tutorial]);
 
   const toggleSelection = useCallback(
     (entryId: string) => {
@@ -119,7 +136,21 @@ export function PurgeSiteScreen({
           onToggle={toggleSelection}
         />
       )}
-    />
+    >
+      {tutorialVisible && view.tutorial !== undefined && (
+        <ViewportTutorialDialogue
+          view={{
+            id: view.tutorial.id ?? view.tutorial.model.text,
+            dialogue: view.tutorial.model,
+            horizontalOffset: view.tutorial.horizontalOffset,
+            verticalOffset: view.tutorial.verticalOffset,
+            bubbleWidth: view.tutorial.bubbleWidth,
+          }}
+          visible
+          kind="site"
+        />
+      )}
+    </GuideGallerySiteLayout>
   );
 }
 

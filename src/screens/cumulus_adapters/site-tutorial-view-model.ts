@@ -7,7 +7,7 @@ import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bub
 /** Map one authored first-visit site tutorial to persistent Mira dialogue. */
 export function buildFirstVisitSiteTutorialView(
   state: JourneyState,
-  siteType: "Draft" | "DreamsignRevelation",
+  siteType: "Draft" | "Purge" | "DreamsignRevelation",
   configuration?: TutorialSiteConfiguration,
 ): FirstVisitSiteTutorialView | undefined {
   const activeSite = activeFirstVisitTutorialSite(state);

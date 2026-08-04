@@ -21,8 +21,10 @@ import type {
   PurgeSiteView,
 } from "../../cumulus/screens/PurgeSiteScreen";
 import type { DreamGuideContent } from "../../types/content";
+import type { TutorialSiteConfiguration } from "../../types/tutorial";
 import { toDeckCardView } from "./mobile-deck-view-model";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
+import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 
 const FALLBACK_GUIDE_ID = "takeshi";
 const FALLBACK_GUIDE_NAME = "Master Takeshi";
@@ -83,6 +85,7 @@ export function buildPurgeSiteView(params: {
   cardDatabase: Map<number, CardData>;
   guide: DreamGuideContent | null;
   guideLine: string | null;
+  tutorialConfiguration?: TutorialSiteConfiguration;
 }): PurgeSiteView {
   const modifiers: PurgePriceModifiers = {
     isEnhanced: params.site.isEnhanced,
@@ -106,6 +109,11 @@ export function buildPurgeSiteView(params: {
     siteId: params.site.id,
     scene,
     guide: buildPurgeGuideView(params.guide, params.guideLine),
+    tutorial: buildFirstVisitSiteTutorialView(
+      params.state,
+      "Purge",
+      params.tutorialConfiguration,
+    ),
     cards: buildPurgeCardViews(params.state.deck, params.cardDatabase),
     visitCosts: buildPurgeVisitCosts(modifiers),
     maxPaidSelections,

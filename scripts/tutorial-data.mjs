@@ -802,6 +802,7 @@ export function readTutorialConfiguration({
     dreamscape: validateTutorialDreamscapeConfiguration(parsed.dreamscape),
     atlas: validateTutorialAtlasConfiguration(parsed.atlas),
     draft: validateTutorialSiteConfiguration(parsed.draft, "draft"),
+    purge: validateTutorialSiteConfiguration(parsed.purge, "purge"),
     dreamsignRevelation: validateTutorialSiteConfiguration(
       parsed.dreamsignRevelation,
       "dreamsign-revelation",
@@ -827,6 +828,7 @@ export function serializeTutorialToml(
   dreamscape,
   atlas,
   draft,
+  purge,
   dreamsignRevelation,
   battleStart,
 ) {
@@ -840,6 +842,7 @@ export function serializeTutorialToml(
   const normalizedAtlas = validateTutorialAtlasConfiguration(atlas);
   const normalizedDraft =
     validateTutorialSiteConfiguration(draft, "draft");
+  const normalizedPurge = validateTutorialSiteConfiguration(purge, "purge");
   const normalizedDreamsignRevelation =
     validateTutorialSiteConfiguration(
       dreamsignRevelation,
@@ -852,6 +855,7 @@ export function serializeTutorialToml(
     dreamscape: normalizedDreamscape,
     atlas: normalizedAtlas,
     draft: normalizedDraft,
+    purge: normalizedPurge,
     dreamsignRevelation: normalizedDreamsignRevelation,
     battleStart: normalizedBattleStart,
     battle: normalizedBattle,
@@ -871,6 +875,7 @@ export function refreshTutorialDataJson({
     dreamscape,
     atlas,
     draft,
+    purge,
     dreamsignRevelation,
     battleStart,
     actions,
@@ -890,6 +895,7 @@ export function refreshTutorialDataJson({
       dreamscape,
       atlas,
       draft,
+      purge,
       dreamsignRevelation,
       battleStart,
       actions,
@@ -902,6 +908,7 @@ export function refreshTutorialDataJson({
     dreamscape,
     atlas,
     draft,
+    purge,
     dreamsignRevelation,
     battleStart,
     actions,

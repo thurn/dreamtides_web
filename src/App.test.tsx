@@ -62,6 +62,15 @@ vi.mock("./data/tutorial-actions", () => ({
         text: "Draft a card.",
       },
     },
+    purge: {
+      speechBubble: {
+        speaker: "mira",
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 600,
+        text: "Purge a card.",
+      },
+    },
     dreamsignRevelation: {
       speechBubble: {
         speaker: "mira",

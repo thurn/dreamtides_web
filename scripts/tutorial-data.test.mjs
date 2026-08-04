@@ -205,6 +205,9 @@ describe("tutorial data", () => {
     expect(
       validateTutorialSiteConfiguration(FIXTURE_SITE_TUTORIAL, "draft"),
     ).toEqual(FIXTURE_SITE_TUTORIAL);
+    expect(
+      validateTutorialSiteConfiguration(FIXTURE_SITE_TUTORIAL, "purge"),
+    ).toEqual(FIXTURE_SITE_TUTORIAL);
     expect(() =>
       validateTutorialSiteConfiguration(
         {
@@ -238,6 +241,7 @@ describe("tutorial data", () => {
         FIXTURE_ATLAS,
         FIXTURE_SITE_TUTORIAL,
         FIXTURE_SITE_TUTORIAL,
+        FIXTURE_SITE_TUTORIAL,
         FIXTURE_BATTLE_START,
       ),
     );
@@ -250,6 +254,7 @@ describe("tutorial data", () => {
     expect(result.dreamscape).toEqual(FIXTURE_DREAMSCAPE);
     expect(result.atlas).toEqual(FIXTURE_ATLAS);
     expect(result.draft).toEqual(FIXTURE_SITE_TUTORIAL);
+    expect(result.purge).toEqual(FIXTURE_SITE_TUTORIAL);
     expect(result.dreamsignRevelation).toEqual(FIXTURE_SITE_TUTORIAL);
     expect(result.battleStart).toEqual(FIXTURE_BATTLE_START);
     expect(
@@ -261,6 +266,7 @@ describe("tutorial data", () => {
       dreamscape: FIXTURE_DREAMSCAPE,
       atlas: FIXTURE_ATLAS,
       draft: FIXTURE_SITE_TUTORIAL,
+      purge: FIXTURE_SITE_TUTORIAL,
       dreamsignRevelation: FIXTURE_SITE_TUTORIAL,
       battleStart: FIXTURE_BATTLE_START,
       actions: FIXTURE_ACTIONS,
@@ -278,6 +284,7 @@ describe("tutorial data", () => {
           FIXTURE_ATLAS,
           FIXTURE_SITE_TUTORIAL,
           FIXTURE_SITE_TUTORIAL,
+          FIXTURE_SITE_TUTORIAL,
           FIXTURE_BATTLE_START,
         ),
       ),
@@ -286,6 +293,7 @@ describe("tutorial data", () => {
       dreamscape: FIXTURE_DREAMSCAPE,
       atlas: FIXTURE_ATLAS,
       draft: FIXTURE_SITE_TUTORIAL,
+      purge: FIXTURE_SITE_TUTORIAL,
       dreamsignRevelation: FIXTURE_SITE_TUTORIAL,
       battleStart: FIXTURE_BATTLE_START,
       actions: FIXTURE_ACTIONS,
@@ -610,6 +618,7 @@ describe("tutorial data", () => {
           FIXTURE_JOURNEY_START,
           FIXTURE_DREAMSCAPE,
           FIXTURE_ATLAS,
+          FIXTURE_SITE_TUTORIAL,
           FIXTURE_SITE_TUTORIAL,
           FIXTURE_SITE_TUTORIAL,
           FIXTURE_BATTLE_START,

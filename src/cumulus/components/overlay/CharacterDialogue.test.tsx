@@ -221,7 +221,7 @@ describe("CharacterDialogue", () => {
               portraitAlt: "Mira",
               speakerName: "Mira",
               text:
-                "A ▸Dissolved ability may cost 1● and ☪, store 1⧗, gain 2⍟ and 1✦, or use ❖.",
+                "A ▸Dissolved ability may cost 1● and ☪, store 1⧗, gain 2⍟ and 1✦, spend ◆ essence, or use ❖.",
             }}
             visible
           />
@@ -235,8 +235,9 @@ describe("CharacterDialogue", () => {
     expect(container.querySelector("i.fa-solid.fa-brain")).not.toBeNull();
     expect(container.querySelector("i.bxf.bx-star-circle")).not.toBeNull();
     expect(container.querySelector("i.bxf.bx-sparkle")).not.toBeNull();
+    expect(container.querySelector("i.bxf.bx-crypto")).not.toBeNull();
     expect(container.querySelector("i.bxf.bx-bolt")).not.toBeNull();
-    expect(container.querySelectorAll("[data-inline-glyph]")).toHaveLength(6);
+    expect(container.querySelectorAll("[data-inline-glyph]")).toHaveLength(7);
     expect(container.textContent).toContain("▸Dissolved");
     expect(container.textContent).not.toMatch(/[●☪⧗⍟✦❖]/u);
 

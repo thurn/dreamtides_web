@@ -1,6 +1,7 @@
 import type { JourneyState, SiteState, SiteType } from "../types/journey";
 
-export type FirstVisitTutorialSiteType = "Draft" | "DreamsignRevelation";
+export type FirstVisitTutorialSiteType =
+  "Draft" | "Purge" | "DreamsignRevelation";
 
 export interface FirstVisitTutorialSite {
   readonly siteId: string;
@@ -14,16 +15,21 @@ function allSites(state: JourneyState): readonly SiteState[] {
 function isFirstVisitTutorialSiteType(
   siteType: SiteType,
 ): siteType is FirstVisitTutorialSiteType {
-  return siteType === "Draft" || siteType === "DreamsignRevelation";
+  return (
+    siteType === "Draft" ||
+    siteType === "Purge" ||
+    siteType === "DreamsignRevelation"
+  );
 }
 
 /**
  * Resolve the active first-visit site tutorial from shared journey progress.
  *
  * Draft guidance remains eligible through the initial offer and retires with
- * the first persisted pick. Dreamsign Revelation remains eligible throughout
- * its first visit. Completing either site marks it visited in the atlas, which
- * suppresses the tutorial on later sites of the same type across travel.
+ * the first persisted pick. Purge and Dreamsign Revelation remain eligible
+ * throughout their first visits. Completing a site marks it visited in the
+ * atlas, which suppresses the tutorial on later sites of the same type across
+ * travel.
  */
 export function activeFirstVisitTutorialSite(
   state: JourneyState,

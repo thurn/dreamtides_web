@@ -107,6 +107,8 @@ export interface JourneyContent {
   tutorialAtlas?: TutorialAtlasConfiguration;
   /** Authored guidance shown throughout the first Draft site visit. */
   tutorialDraft?: TutorialSiteConfiguration;
+  /** Authored guidance shown throughout the first Purge site visit. */
+  tutorialPurge?: TutorialSiteConfiguration;
   /** Authored guidance shown throughout the first Dreamsign Revelation visit. */
   tutorialDreamsignRevelation?: TutorialSiteConfiguration;
   /** Authored guidance shown on the first two tutorial-journey battle previews. */

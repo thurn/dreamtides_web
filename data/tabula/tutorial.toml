@@ -32,6 +32,14 @@ bubbleWidth = 600
 delay = 1
 text = "At a [purple]Draft[/purple] site you build your deck by repeatedly selecting one of four cards to add."
 
+[purge.speechBubble]
+speaker = "mira"
+horizontalOffset = 0
+verticalOffset = 0
+bubbleWidth = 600
+delay = 1
+text = "You can [yellow]purge[/yellow] cards here, removing them from your deck for an ◆ essence cost."
+
 [dreamsignRevelation.speechBubble]
 speaker = "mira"
 horizontalOffset = 0

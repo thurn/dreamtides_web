@@ -1258,6 +1258,10 @@ export function setupAssets({
     tutorialSource.draft,
     "draft",
   );
+  const tutorialPurge = validateTutorialSiteConfiguration(
+    tutorialSource.purge,
+    "purge",
+  );
   const tutorialDreamsignRevelation = validateTutorialSiteConfiguration(
     tutorialSource.dreamsignRevelation,
     "dreamsign-revelation",
@@ -1275,6 +1279,7 @@ export function setupAssets({
       dreamscape: tutorialDreamscape,
       atlas: tutorialAtlas,
       draft: tutorialDraft,
+      purge: tutorialPurge,
       dreamsignRevelation: tutorialDreamsignRevelation,
       battleStart: tutorialBattleStart,
       actions: tutorialActions,

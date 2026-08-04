@@ -41,6 +41,10 @@ function fixtureRoot() {
     tutorialPath,
     `${readFileSync(tutorialPath, "utf8")}\n[battleStart.firstBattle.speechBubble]\nspeaker = "mira"\ndelay = 1\nhorizontalOffset = 0\nverticalOffset = 0\nbubbleWidth = 700\ntext = "Review the first opponent."\n\n[battleStart.secondBattle.speechBubble]\nspeaker = "mira"\ndelay = 1\nhorizontalOffset = 0\nverticalOffset = 0\nbubbleWidth = 700\ntext = "Prepare for the second battle."\n`,
   );
+  writeFileSync(
+    tutorialPath,
+    `${readFileSync(tutorialPath, "utf8")}\n[purge.speechBubble]\nspeaker = "mira"\nhorizontalOffset = 0\nverticalOffset = 0\nbubbleWidth = 600\ntext = "Purge a card."\n`,
+  );
   return rootDir;
 }
 
@@ -58,6 +62,7 @@ describe("tutorial editor api", () => {
     ]);
     expect(loaded.battleStart.firstBattle.speechBubble.delay).toBe(1);
     expect(loaded.battleStart.secondBattle.speechBubble.delay).toBe(1);
+    expect(loaded.purge.speechBubble.text).toBe("Purge a card.");
 
     const actions = [
       {
@@ -122,6 +127,12 @@ describe("tutorial editor api", () => {
           text: "Draft a card.",
         },
       },
+      purge: {
+        speechBubble: {
+          bubbleWidth: 600,
+          text: "Purge a card.",
+        },
+      },
       dreamsignRevelation: {
         speechBubble: {
           bubbleWidth: 600,
@@ -173,6 +184,12 @@ describe("tutorial editor api", () => {
         speechBubble: {
           bubbleWidth: 600,
           text: "Draft a card.",
+        },
+      },
+      purge: {
+        speechBubble: {
+          bubbleWidth: 600,
+          text: "Purge a card.",
         },
       },
       dreamsignRevelation: {

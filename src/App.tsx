@@ -635,6 +635,7 @@ export default function App({
           tutorialDreamscape: tutorial.dreamscape,
           tutorialAtlas: tutorial.atlas,
           tutorialDraft: tutorial.draft,
+          tutorialPurge: tutorial.purge,
           tutorialDreamsignRevelation: tutorial.dreamsignRevelation,
           tutorialBattleStart: tutorial.battleStart,
           tutorialTriggers: tutorial.triggers,

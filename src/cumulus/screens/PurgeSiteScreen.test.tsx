@@ -222,6 +222,50 @@ describe("PurgeSiteScreen", () => {
     });
   });
 
+  it("renders and reports authored first-visit guidance with the essence Boxicon", () => {
+    const onTutorialShown = vi.fn();
+    const tutorial = {
+      id: "run-a:first-visit:purge-site:Purge",
+      model: {
+        portrait: artRef.characterPortrait("mira"),
+        portraitAlt: "Mira",
+        speakerName: "Mira",
+        text: "You can [yellow]purge[/yellow] cards here for an ◆ essence cost.",
+      },
+      delaySeconds: 0,
+      horizontalOffset: 0,
+      verticalOffset: 0,
+      bubbleWidth: 600,
+    } as const;
+    const { container, root } = mount(
+      <PurgeSiteScreen
+        view={{ ...view(), tutorial }}
+        onClose={vi.fn()}
+        onPurge={vi.fn()}
+        onTutorialShown={onTutorialShown}
+      />,
+    );
+
+    const dialogue = container.querySelector<HTMLElement>(
+      '[data-testid="site-tutorial-dialogue"]',
+    );
+    expect(dialogue?.textContent).toContain(
+      "You can purge cards here for an  essence cost.",
+    );
+    expect(
+      dialogue?.querySelector('[data-tutorial-instruction-highlight="yellow"]')
+        ?.textContent,
+    ).toBe("purge");
+    expect(
+      dialogue?.querySelector('[aria-label="essence"] i')?.className,
+    ).toContain("bxf bx-crypto");
+    expect(onTutorialShown).toHaveBeenCalledWith(tutorial);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders the mobile card grid on the shared rounded glass panel", () => {
     const { container, root } = mount(
       <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,

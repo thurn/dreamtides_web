@@ -6,15 +6,17 @@ import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";
 import { PurgeSiteScreen } from "../../cumulus/screens/PurgeSiteScreen";
 import { buildPurgeSiteView, resolvePurgeGuide } from "./purge-view-model";
+import type { FirstVisitSiteTutorialView } from "../../cumulus/screens/site-tutorial-view";
 
 export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
   const { state, mutations, journeyContent } = useJourney();
+  const { cardDatabase, guides, tutorialPurge } = journeyContent;
   const node =
     state.currentDreamscape !== null
       ? (state.atlas.nodes[state.currentDreamscape] ?? null)
       : null;
   const site = node?.sites.find((candidate) => candidate.id === siteId) ?? null;
-  const guide = resolvePurgeGuide(journeyContent.guides);
+  const guide = resolvePurgeGuide(guides);
   const guideLine = useMemo(() => {
     if (guide === null || guide.dialog.length === 0) return null;
     return guide.dialog[Math.floor(Math.random() * guide.dialog.length)];
@@ -28,11 +30,32 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
             state,
             sceneNode: node,
             site,
-            cardDatabase: journeyContent.cardDatabase,
+            cardDatabase,
             guide,
             guideLine,
+            tutorialConfiguration: tutorialPurge,
           }),
-    [state, node, site, journeyContent.cardDatabase, guide, guideLine],
+    [state, node, site, cardDatabase, tutorialPurge, guide, guideLine],
+  );
+
+  const handleTutorialShown = useCallback(
+    (tutorial: FirstVisitSiteTutorialView) => {
+      logEventOnce(
+        `first-visit-site-tutorial:${tutorial.id}`,
+        "first_visit_site_tutorial_presented",
+        {
+          tutorialId: tutorial.id,
+          siteId,
+          siteType: "Purge",
+          text: tutorial.model.text,
+          delaySeconds: tutorial.delaySeconds ?? 0,
+          horizontalOffset: tutorial.horizontalOffset,
+          verticalOffset: tutorial.verticalOffset,
+          bubbleWidth: tutorial.bubbleWidth,
+        },
+      );
+    },
+    [siteId],
   );
 
   useEffect(() => {
@@ -74,7 +97,7 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
         entryIdSet.has(entry.entryId),
       );
       const purgedCardIds = purgedEntries
-        .map((entry) => journeyContent.cardDatabase.get(entry.cardNumber)?.id)
+        .map((entry) => cardDatabase.get(entry.cardNumber)?.id)
         .filter((id): id is NonNullable<typeof id> => id !== undefined);
 
       logEvent("purge_completed", {
@@ -92,11 +115,16 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
 
       mutations.purgeDeckCards(site.id, entryIds, "purge");
     },
-    [mutations, journeyContent.cardDatabase, site, state],
+    [mutations, cardDatabase, site, state],
   );
 
   if (site === null || view === null) return null;
   return (
-    <PurgeSiteScreen view={view} onClose={handleClose} onPurge={handlePurge} />
+    <PurgeSiteScreen
+      view={view}
+      onClose={handleClose}
+      onPurge={handlePurge}
+      onTutorialShown={handleTutorialShown}
+    />
   );
 }

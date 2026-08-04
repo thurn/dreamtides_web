@@ -126,6 +126,7 @@ export interface TutorialConfiguration {
   readonly dreamscape: TutorialDreamscapeConfiguration;
   readonly atlas: TutorialAtlasConfiguration;
   readonly draft: TutorialSiteConfiguration;
+  readonly purge: TutorialSiteConfiguration;
   readonly dreamsignRevelation: TutorialSiteConfiguration;
   readonly battleStart: TutorialBattleStartConfiguration;
   readonly actions: readonly TutorialAction[];

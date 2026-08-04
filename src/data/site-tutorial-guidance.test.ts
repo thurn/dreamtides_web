@@ -26,6 +26,10 @@ function state(
     ...site("revelation-a", "DreamsignRevelation"),
     isVisited: atlasVisited.has("revelation-a"),
   };
+  const purge = {
+    ...site("purge-a", "Purge"),
+    isVisited: atlasVisited.has("purge-a"),
+  };
   return {
     screen: { type: "site", siteId: current.id },
     visitedSites: [...visitedSites],
@@ -33,7 +37,7 @@ function state(
       nodes: {
         node: {
           id: "node",
-          sites: [draft, revelation, current],
+          sites: [draft, purge, revelation, current],
         },
       },
     },
@@ -43,6 +47,7 @@ function state(
 describe("activeFirstVisitTutorialSite", () => {
   it.each([
     ["Draft", "draft-a"],
+    ["Purge", "purge-a"],
     ["DreamsignRevelation", "revelation-a"],
   ] as const)("keeps the first %s visit eligible", (type, id) => {
     expect(activeFirstVisitTutorialSite(state(site(id, type)))).toEqual({
@@ -53,9 +58,7 @@ describe("activeFirstVisitTutorialSite", () => {
 
   it("suppresses later sites after a site of the same type was completed", () => {
     const later = site("draft-b", "Draft");
-    expect(
-      activeFirstVisitTutorialSite(state(later, ["draft-a"])),
-    ).toBeNull();
+    expect(activeFirstVisitTutorialSite(state(later, ["draft-a"]))).toBeNull();
   });
 
   it("stays suppressed after dreamscape travel resets visitedSites", () => {

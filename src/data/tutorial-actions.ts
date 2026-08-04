@@ -206,6 +206,7 @@ function parsePersistentTutorialConfiguration(
     | "dreamscape"
     | "atlas"
     | "draft"
+    | "purge"
     | "dreamsign-revelation"
     | "battle-start.first-battle"
     | "battle-start.second-battle",
@@ -258,7 +259,7 @@ export function parseTutorialAtlasConfiguration(
 /** Validate persistent Mira guidance for a first-visit site tutorial. */
 export function parseTutorialSiteConfiguration(
   value: unknown,
-  siteId: "draft" | "dreamsign-revelation",
+  siteId: "draft" | "purge" | "dreamsign-revelation",
 ): TutorialSiteConfiguration {
   return parsePersistentTutorialConfiguration(value, siteId);
 }
@@ -778,6 +779,7 @@ export async function loadTutorialConfiguration(
     dreamscape: parseTutorialDreamscapeConfiguration(record.dreamscape),
     atlas: parseTutorialAtlasConfiguration(record.atlas),
     draft: parseTutorialSiteConfiguration(record.draft, "draft"),
+    purge: parseTutorialSiteConfiguration(record.purge, "purge"),
     dreamsignRevelation: parseTutorialSiteConfiguration(
       record.dreamsignRevelation,
       "dreamsign-revelation",
