@@ -535,6 +535,125 @@ describe("exploration-view-model", () => {
     });
   });
 
+  it("resolves a deck-card placeholder to one UUID-keyed transfigured preview", () => {
+    const source = card(sourceId, 17);
+    const target = {
+      ...card(asCardId("f0000000-0000-4000-8000-000000000018"), 18),
+      cardType: "Event" as const,
+      subtype: "",
+      spark: null,
+    };
+    const state = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "entry-already-transfigured",
+          cardNumber: target.cardNumber,
+          transfiguration: "Kindled" as const,
+          isBane: false,
+        },
+        {
+          entryId: "entry-target",
+          cardNumber: target.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        },
+      ],
+    };
+    const runtime: ExplorationSiteRuntime = {
+      kind: "exploration",
+      encounterCardId: source.id,
+      actionOffers: [
+        {
+          actionId: "inspire-event",
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+        {
+          actionId: "gain-card",
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+      ],
+      resolution: null,
+    };
+    const content = {
+      cardDatabase: new Map([
+        [source.cardNumber, source],
+        [target.cardNumber, target],
+      ]),
+      dreamAvatars: [],
+      dreamwellCards: [],
+      dreamsignTemplates: [],
+      dreamscapes: [],
+      affiliations: [],
+      guides: [guide],
+      atlasConfig: { completionLevels: [] },
+      exploration: {
+        customCards: [],
+        customDreamsigns: [],
+        encounters: [
+          {
+            cardId: source.id,
+            prose: "The authored scene appears.",
+            actions: [
+              {
+                id: "inspire-event",
+                label: "Present a Written Charm",
+                effectText: "Apply Inspired to $DECK_CARD",
+                effectKind: "transfigure-fixed-selected",
+                predicate: "event",
+                transfiguration: "Inspired",
+              },
+              {
+                id: "gain-card",
+                label: "Gain the card",
+                effectText: "Gain the card.",
+                effectKind: "gain-card",
+                cardId: source.id,
+              },
+            ],
+          },
+        ],
+      },
+    } as unknown as JourneyContent;
+
+    const view = buildExplorationSiteView({
+      sceneNode: null,
+      site: explorationSite,
+      guide,
+      runtime,
+      state,
+      content,
+    });
+    if (view === null) throw new Error("Expected Exploration view");
+
+    expect(view.actions[0]).toMatchObject({
+      effectText: `Apply Inspired to ${target.name}`,
+      effectParts: [
+        { kind: "text", text: "Apply Inspired to " },
+        {
+          kind: "entity",
+          entity: {
+            kind: "card",
+            card: {
+              id: target.id,
+              renderedText: `${target.renderedText} Draw a card.`,
+            },
+            transfiguration: { type: "Inspired" },
+          },
+        },
+      ],
+      followup: { kind: "none" },
+      automaticSelection: { entryIds: ["entry-target"] },
+      available: true,
+    });
+  });
+
   it("builds the standard free-form transfiguration picker with zero-cost forms", () => {
     const source = card(sourceId, 17);
     const state = {

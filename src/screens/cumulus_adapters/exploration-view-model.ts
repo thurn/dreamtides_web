@@ -366,10 +366,56 @@ interface ExplorationEffectReference {
   readonly entity: EntityReferenceModel;
 }
 
+interface FixedTransfigurationTarget {
+  readonly entryId: string;
+  readonly entity: Extract<EntityReferenceModel, { readonly kind: "card" }>;
+}
+
+function fixedTransfigurationTarget(
+  action: ExplorationActionContent,
+  state: JourneyState,
+  content: JourneyContent,
+): FixedTransfigurationTarget | null {
+  if (
+    action.effectKind !== "transfigure-fixed-selected" ||
+    !action.effectText.includes("$DECK_CARD") ||
+    action.predicate === undefined ||
+    action.transfiguration === undefined
+  ) {
+    return null;
+  }
+  const predicate = action.predicate;
+  const transfiguration = action.transfiguration;
+  const target = state.deck.find((entry) => {
+    if (entry.transfiguration !== null) return false;
+    const base = content.cardDatabase.get(entry.cardNumber);
+    return (
+      base !== undefined &&
+      matchesPredicate(resolveDeckEntryCard(base, entry), predicate)
+    );
+  });
+  if (target === undefined) return null;
+  const base = content.cardDatabase.get(target.cardNumber);
+  if (base === undefined) return null;
+  const preview = buildTransfigurationDisplay(
+    resolveDeckEntryCard(base, target),
+    transfiguration,
+  );
+  return {
+    entryId: target.entryId,
+    entity: {
+      kind: "card",
+      card: preview.card,
+      transfiguration: preview.display,
+    },
+  };
+}
+
 function effectReferencesForAction(
   action: ExplorationActionContent,
   offer: ExplorationActionOfferRuntime,
   content: JourneyContent,
+  deckCardEntity?: FixedTransfigurationTarget["entity"],
 ): readonly ExplorationEffectReference[] {
   const references: ExplorationEffectReference[] = [];
   if (action.effectText.includes("$OFFERED_CARD")) {
@@ -382,6 +428,15 @@ function effectReferencesForAction(
         entity: { kind: "card", card: offeredCard },
       });
     }
+  }
+  if (
+    action.effectText.includes("$DECK_CARD") &&
+    deckCardEntity !== undefined
+  ) {
+    references.push({
+      needle: "$DECK_CARD",
+      entity: deckCardEntity,
+    });
   }
   const cardIds = [action.cardId];
   if (
@@ -428,8 +483,14 @@ export function buildExplorationActionEffect(
   action: ExplorationActionContent,
   offer: ExplorationActionOfferRuntime,
   content: JourneyContent,
+  deckCardEntity?: FixedTransfigurationTarget["entity"],
 ): Pick<ExplorationActionView, "effectText" | "effectParts"> {
-  const references = effectReferencesForAction(action, offer, content);
+  const references = effectReferencesForAction(
+    action,
+    offer,
+    content,
+    deckCardEntity,
+  );
   const parts: ExplorationActionEffectPart[] = [];
   let cursor = 0;
   while (cursor < action.effectText.length) {
@@ -478,13 +539,20 @@ function actionView(
   state: JourneyState,
   content: JourneyContent,
 ): ExplorationActionView {
-  const followup = followupForAction(action, offer, state, content);
+  const fixedTarget = fixedTransfigurationTarget(action, state, content);
+  const followup =
+    fixedTarget !== null
+      ? { kind: "none" as const }
+      : followupForAction(action, offer, state, content);
+  const requiresDeckCardTarget = action.effectText.includes("$DECK_CARD");
   const hasRequiredOffer =
     action.effectKind === "gain-random-dreamsign"
       ? (offer.offeredDreamsignIds?.length ?? 0) > 0
       : action.effectKind === "gain-offered-card"
         ? offer.offeredCardIds.length === 1
-        : true;
+        : requiresDeckCardTarget
+          ? fixedTarget !== null
+          : true;
   const available =
     hasRequiredOffer &&
     (followup.kind === "none" ||
@@ -497,11 +565,19 @@ function actionView(
   return {
     id: action.id,
     label: action.label,
-    ...buildExplorationActionEffect(action, offer, content),
+    ...buildExplorationActionEffect(
+      action,
+      offer,
+      content,
+      fixedTarget?.entity,
+    ),
     followup,
     ...(action.effectKind === "gain-offered-card" &&
     offer.offeredCardIds[0] !== undefined
       ? { automaticSelection: { cardIds: [offer.offeredCardIds[0]] } }
+      : action.effectKind === "transfigure-fixed-selected" &&
+          fixedTarget !== null
+        ? { automaticSelection: { entryIds: [fixedTarget.entryId] } }
       : {}),
     available,
   };

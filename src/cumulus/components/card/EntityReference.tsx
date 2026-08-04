@@ -1,5 +1,6 @@
 import type { FrozenCardData } from "../../../types/cards";
 import type { Dreamsign } from "../../../types/journey";
+import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
 import { requireDreamsignId } from "../../../data/dreamsigns";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
@@ -15,6 +16,8 @@ export type EntityReferenceModel =
       readonly card: FrozenCardData;
       /** Exact number of identical copies named by the surrounding sentence. */
       readonly copies?: number;
+      /** Optional applied transfiguration rendered on the reading copy. */
+      readonly transfiguration?: CardTransfigurationDisplay;
     }
   | {
       /** Show the canonical Dreamsign object InfoCard. */
@@ -70,6 +73,9 @@ function entityReferenceRevealDetails(
     const spec = gameCardRevealSpec({
       cardId: entity.card.id,
       displaySnapshot: entity.card,
+      ...(entity.transfiguration === undefined
+        ? {}
+        : { transfiguration: entity.transfiguration }),
     });
     return {
       id: entity.card.id,

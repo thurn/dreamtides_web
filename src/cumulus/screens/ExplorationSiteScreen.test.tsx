@@ -655,7 +655,7 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
-  it("makes the full referenced choice cell the reveal and activation source", () => {
+  it("makes the full referenced choice cell the reveal and activation source", async () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),
     );
@@ -671,7 +671,22 @@ describe("ExplorationSiteScreen", () => {
             { kind: "text", text: "Gain 3 " },
             {
               kind: "entity",
-              entity: { kind: "card", card: referencedCard, copies: 3 },
+              entity: {
+                kind: "card",
+                card: {
+                  ...referencedCard,
+                  renderedText: `${referencedCard.renderedText} Draw a card.`,
+                },
+                transfiguration: {
+                  type: "Inspired",
+                  color: TRANSFIGURATION_TINT_COLORS.Inspired,
+                  markedText: `${referencedCard.renderedText} Draw a card.`,
+                  energyChanged: false,
+                  sparkChanged: false,
+                  fastChanged: false,
+                },
+                copies: 3,
+              },
             },
             { kind: "text", text: " cards." },
           ],
@@ -715,6 +730,16 @@ describe("ExplorationSiteScreen", () => {
     expect(label?.tabIndex).toBe(-1);
     act(() => source?.focus());
     expect(source?.dataset.revealActive).toBe("true");
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+    await vi.waitFor(() =>
+      expect(
+        document.querySelector(
+          '[aria-label="Inspired transfiguration"]',
+        ),
+      ).not.toBeNull(),
+    );
     act(() => source?.click());
     expect(onResolve).toHaveBeenCalledWith("choice-a");
     act(() => root.unmount());

@@ -58,6 +58,19 @@ export const entityReferenceDemo: CumulusComponent = {
 </p>`,
     },
     {
+      label: "Transfigured card name in prose",
+      note: "Pass the resolved transfigured card snapshot and display descriptor so the reveal paints the applied form.",
+      code: `import { EntityReference } from "src/cumulus/components/card/EntityReference";
+
+<p>
+  Apply Inspired to <EntityReference entity={{
+    kind: "card",
+    card: preview.card,
+    transfiguration: preview.display,
+  }} />.
+</p>`,
+    },
+    {
       label: "Dreamsign name in prose",
       note: "Pass the resolved Dreamsign object to reuse its canonical object InfoCard and rules definitions.",
       code: `import { EntityReference } from "src/cumulus/components/card/EntityReference";
