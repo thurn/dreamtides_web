@@ -496,6 +496,32 @@ describe("resolveChallenge — supportContribution", () => {
     });
     expect(resolution.playerScoreDelta).toBe(7);
   });
+
+  it("applies a stack's total support contribution once per figment", () => {
+    const challenger = makeInstance("figments", {
+      owner: "player",
+      isFigment: true,
+      figmentSparks: [2, 2],
+    });
+    const blocker = makeInstance("blocker", {
+      owner: "enemy",
+      printedSpark: 3,
+    });
+    const state = lane0State(challenger, blocker);
+
+    const baseline = resolveChallenge({ state, activeSide: "player" });
+    expect(dissolvedIds(baseline)).toEqual(["figments"]);
+
+    const supported = resolveChallenge({
+      state,
+      activeSide: "player",
+      // +2 per member across a two-figment stack.
+      supportContribution: new Map([["figments", 4]]),
+    });
+    expect(dissolvedIds(supported)).toEqual(["blocker"]);
+    expect(supported.lanes[0]?.playerSpark).toBe(4);
+    expect(supported.playerScoreDelta).toBe(4);
+  });
 });
 
 describe("resolveChallenge — multiple lanes", () => {

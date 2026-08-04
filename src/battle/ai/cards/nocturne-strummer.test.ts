@@ -53,6 +53,22 @@ describe("Nocturne Strummer (#510)", () => {
     expect(contribution.get("ally")).toBe(2);
   });
 
+  it("grants +2 to every figment in a supported stack", () => {
+    const strummer = makeCard({ battleCardId: "strummer", cardNumber: 510 });
+    const figments = makeCard({
+      battleCardId: "figments",
+      cardNumber: 0,
+      basePrintedSpark: 1,
+      figmentCount: 3,
+    });
+    const model = makeModel({
+      aiFrontRank: { ...emptyFrontRankSlots(), F0: figments },
+      aiBackRank: { ...emptyBackRankSlots(), B0: strummer },
+    });
+
+    expect(buildSupportContribution(model).get("figments")).toBe(6);
+  });
+
   it("does not buff a deployed ally outside the supported slots", () => {
     const strummer = makeCard({ battleCardId: "strummer", cardNumber: 510 });
     const ally = makeCard({ battleCardId: "ally", cardNumber: 512, basePrintedSpark: 4 });

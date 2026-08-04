@@ -2,6 +2,7 @@ import type { BattleDebugEdit } from "../debug/commands";
 import {
   isFigmentInstance,
   selectEffectiveSparkForInstance,
+  selectFigmentCount,
   selectFigmentReserveSpark,
   selectFigmentSparkContext,
   selectTopmostFigmentSpark,
@@ -389,7 +390,8 @@ interface LaneSpark {
  * Resolves the spark a lane participant fights and scores with. A non-figment
  * fights and scores with its full effective spark (plus any support); a figment
  * stack fights with its topmost figment but can score its reserves separately
- * (rules §Figments — Challenge resolution). Support does not apply to figments.
+ * (rules §Figments — Challenge resolution). A stack's Support contribution is
+ * divided evenly across its figments because each member receives the bonus.
  */
 function laneSpark(
   state: BattleMutableState,
@@ -402,10 +404,15 @@ function laneSpark(
   }
   if (isFigmentInstance(instance)) {
     const context = selectFigmentSparkContext(state, instance);
+    const support =
+      battleCardId === null ? 0 : supportContribution?.get(battleCardId) ?? 0;
+    const count = Math.max(1, selectFigmentCount(instance));
+    const topmostSupport = support / count;
     return {
-      compare: selectTopmostFigmentSpark(instance, context),
-      total: selectEffectiveSparkForInstance(instance, context),
-      reserve: selectFigmentReserveSpark(instance, context),
+      compare: selectTopmostFigmentSpark(instance, context) + topmostSupport,
+      total: selectEffectiveSparkForInstance(instance, context) + support,
+      reserve:
+        selectFigmentReserveSpark(instance, context) + support - topmostSupport,
     };
   }
   const bonus =

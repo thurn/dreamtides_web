@@ -16,7 +16,7 @@
 **Conventions for every task:** TDD — write the failing test first, watch it fail, implement minimally, watch it pass, commit. Vitest files are co-located `*.test.ts(x)`. Commit after each green task with a detailed message; do not bundle unrelated files. Per-phase exit gate: `npm run lint && npm run typecheck && npm test` all green (plus browser QA where noted).
 
 **Two deviations from the spec, flagged for the reviewer:**
-1. **Support in the resolver is not read from card text.** Effective spark = structural base (printed / discrete figment) + `sparkDelta` (player-applied via the rail) + an optional `supportContribution` map supplied by the caller (the AI computes its own structurally; the human/automation path passes an empty map). Named-card "Support –" text is a player-applied bonus, consistent with the no-card-text rule.
+1. **Support reaches the resolver as structured spark data.** Effective spark = structural base (printed / discrete figment) + `sparkDelta` + `staticSparkBonus` + an optional `supportContribution` map supplied by the caller. The static contribution applies once to each figment, while the AI's caller-supplied contribution carries the stack's total Support bonus. Card prose remains presentation data rather than a rules input.
 2. **Challenger/defender designation snapshotting (spec §4.3) is deferred.** The resolver reads live front-rank positions at Challenge time. In a sandbox the player sets final positions before Challenge, so this is behaviorally correct; full end-of-Day / end-of-Dusk designation capture is left as a future enhancement (noted in §Phase 3).
 
 ---

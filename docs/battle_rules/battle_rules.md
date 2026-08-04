@@ -608,8 +608,9 @@ you control. Three Legionnaires alone are therefore 3✦ each.
 
 Figments follow normal character rules. Each counts separately as a character
 and subtype member, is targeted and modified individually, and materializes,
-challenges, scores, and interacts with Support on its own. A figment which is
-dissolved fires its '▸Dissolved' triggers before ceasing to exist.
+challenges, scores, and interacts with Support on its own. A Support spark bonus
+applies once to each figment. A figment which is dissolved fires its
+'▸Dissolved' triggers before ceasing to exist.
 
 ### Merging Figments
 

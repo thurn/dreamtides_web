@@ -34,6 +34,7 @@ interface InstanceSpec {
   battleCardId: string;
   cardId: string;
   subtype?: string;
+  figmentCount?: number;
   staticSparkBonus?: number;
 }
 
@@ -50,7 +51,12 @@ function makeInstance(spec: InstanceSpec): BattleCardInstance {
       subtype: spec.subtype ?? null,
       battleCardKind: "character",
     },
-    provenance: { kind: "journey-deck" },
+    ...(spec.figmentCount === undefined
+      ? {}
+      : { figments: Array.from({ length: spec.figmentCount }, () => 1) }),
+    provenance: {
+      kind: spec.figmentCount === undefined ? "journey-deck" : "generated-figment",
+    },
     staticSparkBonus: spec.staticSparkBonus ?? 0,
   } as unknown as BattleCardInstance;
 }
@@ -234,6 +240,31 @@ describe("planSupportRecompute — stacking", () => {
 
     expect(edits).toEqual([
       { kind: "SET_CARD_STATIC_SPARK_BONUS", battleCardId: "shared", value: 4 },
+    ]);
+  });
+
+  it("stores the Support bonus once per figment on a supported stack", () => {
+    const state = makeState({
+      player: {
+        back: {
+          B0: { battleCardId: "supporter", cardId: WOODLAND_APPARITION },
+        },
+        front: {
+          F0: {
+            battleCardId: "figments",
+            cardId: UNREGISTERED,
+            figmentCount: 3,
+          },
+        },
+      },
+    });
+
+    expect(planSupportRecompute(state, true, () => 0, 0)).toEqual([
+      {
+        kind: "SET_CARD_STATIC_SPARK_BONUS",
+        battleCardId: "figments",
+        value: 2,
+      },
     ]);
   });
 });

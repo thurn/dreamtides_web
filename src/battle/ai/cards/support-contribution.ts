@@ -6,11 +6,12 @@ import { starterCardModels } from "./index";
 /**
  * Computes every card-keyed +✦ bonus currently active on the AI's board.
  *
- * Returns a map from a front-rank card's `battleCardId` to the total flat spark
- * bonus it receives from Support: for each occupied back-rank card whose
+ * Returns a map from a front-rank card's `battleCardId` to the total spark bonus
+ * it receives from Support: for each occupied back-rank card whose
  *   model returns a `supportSpark` value `V`, add `V` to every occupied
  *   front-rank card sitting in a slot that back-rank card supports (per
- *   `supportedDeploySlots`).
+ *   `supportedDeploySlots`). Each figment in a stack receives the bonus, so a
+ *   stack contributes its member count times `V` to the map.
  *
  * Each on-board card's behavior is looked up by `cardNumber` in
  * {@link starterCardModels}; cards without a registered model contribute
@@ -43,7 +44,7 @@ export function buildSupportContribution(model: ForwardModel): Map<string, numbe
     for (const frontRankSlot of supportedDeploySlots(backRankSlot)) {
       const frontRankCard = model.aiFrontRank[frontRankSlot] ?? null;
       if (frontRankCard !== null) {
-        add(frontRankCard.battleCardId, bonus);
+        add(frontRankCard.battleCardId, bonus * frontRankCard.figmentCount);
       }
     }
   }

@@ -15,3 +15,9 @@ Unresolved: on the 390px Dream Augury comparison screen, the reveal coordinator
 uses the horizontally scrolling offer row as its placement boundary. A touch-hold
 InfoCard is therefore pinned to the row's top edge and overlaps the upper 39px of
 its offer tile instead of clearing the complete source area.
+
+Unresolved: the figment catalog has two inconsistent shapes. The authored TOML
+and current battle-rules table contain 10 types, while the built-in fallback in
+`src/battle/state/figment-catalog.ts` contains 14 types, including Ancient,
+Enigma, Celestial, and Radiant. Journey documentation describes the fallback's
+14-type shape, so available figments vary depending on catalog hydration.

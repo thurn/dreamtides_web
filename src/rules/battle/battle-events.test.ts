@@ -1733,6 +1733,33 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     expect(again).toEqual([]);
   });
 
+  it("settles Support onto every member of a figment stack at the fold boundary", () => {
+    const support = staticSupportFixtureScript();
+    const supporter = makeInstance("figment-support", support.id, "player");
+    const figments = makeInstance("supported-figments", "figment-card", "player");
+    figments.provenance.kind = "generated-figment";
+    figments.figments = [1, 1, 1];
+    const board = makeRichBoard({
+      turnNumber: 3,
+      phase: "day",
+      playerBack: { B0: supporter.battleCardId },
+      playerFront: { F0: figments.battleCardId },
+      instances: [supporter, figments],
+    });
+
+    const result = reduce(
+      { ...baseState(), battle: battleFrom(board) },
+      "BATTLE_COMMAND",
+      debugEdit({ kind: "SET_SCORE", side: "player", value: 3 }),
+    );
+
+    expect(result.outcome).toBe("applied");
+    expect(
+      result.state.battle?.board.cardInstances[figments.battleCardId]
+        ?.staticSparkBonus,
+    ).toBe(2);
+  });
+
   it("resolves the final front-rank lane during Challenge", () => {
     const challenger = makeInstance("challenge-final-lane", "final-lane-card", "player");
     challenger.definition.printedSpark = 2;

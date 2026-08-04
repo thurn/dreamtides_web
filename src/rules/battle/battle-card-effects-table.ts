@@ -289,8 +289,8 @@ export function battleCardAutomationStatus(cardId: string): "auto" | "none" {
 /**
  * Computes the Support edits needed to bring every in-play instance's
  * `staticSparkBonus` to its current total. The result is diff-based and
- * idempotent. Figment stack bonuses are maintained by the figment system and
- * are not overwritten here.
+ * idempotent. A figment stack stores the per-figment Support bonus here, and
+ * its spark selectors apply that bonus once to each member.
  */
 export function planStaticContributionSettlement(
   state: BattleMutableState,
@@ -408,7 +408,7 @@ function pushIfChanged(
   target: number,
 ): void {
   const instance = state.cardInstances[battleCardId];
-  if (instance === undefined || instance.provenance?.kind === "generated-figment") return;
+  if (instance === undefined) return;
   if (instance.staticSparkBonus === target) return;
   edits.push({ kind: "SET_CARD_STATIC_SPARK_BONUS", battleCardId, value: target });
 }

@@ -187,11 +187,11 @@ describe("selectEffectiveSparkForInstance", () => {
     expect(selectEffectiveSparkForInstance(instance)).toBe(6);
   });
 
-  it("adds the topmost gain once and the anthem per figment for a figment stack", () => {
+  it("adds the topmost gain once and the static bonus per figment for a stack", () => {
     const instance = makeFigment("f0", [3, 1]);
     instance.sparkDelta = 1;
     instance.staticSparkBonus = 2;
-    // members (3 + 1) + sparkDelta 1 (topmost gain) + anthem 2 × 2 figments = 9
+    // members (3 + 1) + sparkDelta 1 + static bonus 2 × 2 figments = 9
     expect(selectEffectiveSparkForInstance(instance)).toBe(9);
   });
 
@@ -220,13 +220,13 @@ describe("selectFigmentSparks", () => {
 });
 
 describe("selectTopmostFigmentSpark / selectFigmentReserveSpark", () => {
-  it("reads the topmost member (index 0) plus its riding gain and one anthem share", () => {
+  it("reads the topmost member plus its riding gain and one static-bonus share", () => {
     const instance = makeFigment("f0", [3, 1, 1]);
     instance.sparkDelta = 2;
     instance.staticSparkBonus = 1;
-    // topmost 3 + sparkDelta 2 + anthem 1 = 6
+    // topmost 3 + sparkDelta 2 + static bonus 1 = 6
     expect(selectTopmostFigmentSpark(instance)).toBe(6);
-    // total: members (3+1+1=5) + sparkDelta 2 + anthem 1×3 = 10; reserves 10 − 6 = 4
+    // total: members 5 + sparkDelta 2 + static bonus 1×3 = 10; reserves = 4
     expect(selectEffectiveSparkForInstance(instance)).toBe(10);
     expect(selectFigmentReserveSpark(instance)).toBe(4);
   });

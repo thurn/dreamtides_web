@@ -488,9 +488,9 @@ export interface BattleCardInstance {
    * granting static ability holds and does not travel across zones, whereas
    * `sparkDelta` is gained spark that persists. Effective spark adds both.
    *
-   * On a figment stack, Support does not apply (rules §Support); this field
-   * instead holds the per-figment anthem amount, applied to every figment in the
-   * stack, while `sparkDelta` is the targeted gain riding the topmost figment.
+   * On a figment stack, this field holds the per-figment static bonus, including
+   * Support. It is applied to every figment in the stack, while `sparkDelta` is
+   * the targeted gain riding the topmost figment.
    */
   staticSparkBonus: number;
   /** Shared rules knowledge, indexed by the canonical side viewing the card. */

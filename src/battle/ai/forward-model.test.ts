@@ -523,4 +523,12 @@ describe("effectiveSpark", () => {
     expect(effectiveSpark(model, "F0", sources)).toBe(6);
     expect(effectiveSpark(model, "F1", sources)).toBe(6);
   });
+
+  it("applies each support source once per figment in a stack", () => {
+    const model = makeEmptyModel();
+    model.aiFrontRank.F0 = makeAiCard("figments", 1, 0, 3);
+    model.aiBackRank.B0 = makeAiCard("supporter", 1, 0, 1);
+
+    expect(effectiveSpark(model, "F0", new Map([["supporter", 2]]))).toBe(9);
+  });
 });

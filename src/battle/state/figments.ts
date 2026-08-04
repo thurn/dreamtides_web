@@ -143,8 +143,9 @@ function memberBaseSpark(
 /**
  * The total effective spark of a figment stack — the sum of every member's
  * spark plus the topmost's targeted gain (`sparkDelta`) and the per-figment
- * anthem (`staticSparkBonus`, applied to each member). This is the value a stack
- * displays; combat compares the topmost only (see `selectTopmostFigmentSpark`).
+ * static contribution (`staticSparkBonus`, including Support and applied to
+ * each member). This is the value a stack displays; combat compares the topmost
+ * only (see `selectTopmostFigmentSpark`).
  */
 export function selectEffectiveSparkForInstance(
   instance: BattleCardInstance,
@@ -157,10 +158,10 @@ export function selectEffectiveSparkForInstance(
       0,
     );
     // `sparkDelta` is a targeted spark gain riding the topmost figment; it is
-    // added once. `staticSparkBonus` is a per-figment anthem, so it scales with
-    // the member count and can multiply a stack's total.
-    const anthem = instance.staticSparkBonus * members.length;
-    return Math.max(0, memberSpark + instance.sparkDelta + anthem);
+    // added once. `staticSparkBonus` is per figment, so it scales with the
+    // member count and can multiply a stack's total.
+    const staticContribution = instance.staticSparkBonus * members.length;
+    return Math.max(0, memberSpark + instance.sparkDelta + staticContribution);
   }
 
   return Math.max(
@@ -173,8 +174,8 @@ export function selectEffectiveSparkForInstance(
  * The spark of a figment stack's topmost (active) figment alone (rules
  * §Figments — Challenge resolution). The topmost carries its base spark, the
  * targeted gain riding it (`sparkDelta`), and one share of the per-figment
- * anthem. Reserve figments are not included. Returns the plain effective spark
- * for a non-figment.
+ * static contribution. Reserve figments are not included. Returns the plain
+ * effective spark for a non-figment.
  */
 export function selectTopmostFigmentSpark(
   instance: BattleCardInstance,

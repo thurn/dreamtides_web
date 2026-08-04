@@ -262,7 +262,8 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
  * `supportSources`, if that back-rank slot's adjacency covers `slot` (per
  * `supportedDeploySlots`), the mapped value is added to the total. Each
  * support source contributes its full value to every slot it covers
- * independently — the value is not divided across supported slots.
+ * independently — the value is not divided across supported slots. A figment
+ * stack receives that value once per member.
  *
  * Returns 0 if `slot` is empty.
  *
@@ -296,7 +297,7 @@ export function effectiveSpark(
     }
   }
 
-  return base + supportBonus;
+  return base + supportBonus * card.figmentCount;
 }
 
 function cloneAiCard(card: AiCard): AiCard {

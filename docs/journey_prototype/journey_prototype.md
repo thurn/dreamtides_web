@@ -280,7 +280,8 @@ Every in-play card carries a `BattleCardStatus`: `isExhausted`, counters,
 `grantedUnstoppable`, `grantedVengeful`, `grantedPreeminence`, and
 `grantedAwakened`. Figments are discrete entries (a `figments?: number[]` list)
 drawn from a 14-type catalog; the Figment creator on the debug rail produces
-them. Effective spark counts each figment on a character.
+them. Effective spark counts each figment on a character, including one share
+of any applicable Support spark bonus per figment.
 
 ### Turn structure
 
