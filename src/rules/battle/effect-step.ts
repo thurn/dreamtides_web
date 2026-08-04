@@ -38,6 +38,7 @@ export type EffectPrompt =
   | {
       kind: "pick-cards";
       label: string;
+      subtitle?: string;
       count: number;
       optional: boolean;
       candidates: (ctx: StepContext) => string[];

@@ -11,6 +11,7 @@ export type ActivePrompt =
   | {
       kind: "pick-cards";
       label: string;
+      subtitle?: string;
       candidateIds: string[];
       count: number;
       optional: boolean;
@@ -78,6 +79,7 @@ function buildActivePrompt(prompt: EffectPrompt, ctx: StepContext): ActivePrompt
       return {
         kind: "pick-cards",
         label: prompt.label,
+        ...(prompt.subtitle === undefined ? {} : { subtitle: prompt.subtitle }),
         candidateIds,
         count: prompt.count,
         optional: prompt.optional,

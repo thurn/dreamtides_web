@@ -268,6 +268,9 @@ function buildCardPickerView(
   return {
     key: String(pendingPrompt.promptId),
     label: pendingPrompt.options.label,
+    ...(pendingPrompt.options.subtitle === undefined
+      ? {}
+      : { subtitle: pendingPrompt.options.subtitle }),
     side: pendingPrompt.run.side,
     candidateOwner: candidates[0]?.owner ?? null,
     candidates,

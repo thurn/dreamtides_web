@@ -190,6 +190,7 @@ export interface MobileBattleView {
 export interface MobileBattleCardPickerView {
   readonly key: string;
   readonly label: string;
+  readonly subtitle?: string;
   readonly side: MobileBattleOwner;
   readonly candidateOwner?: MobileBattleOwner | null;
   readonly candidates: readonly MobileBattleCardPickerCandidateView[];
@@ -3518,7 +3519,10 @@ function CardPickerGallery({
       >
         <CardGalleryPanel
           title={cardPicker.label}
-          subtitle={`${String(selectedPickerCardIds.length)}/${String(requiredCount)} selected`}
+          subtitle={
+            cardPicker.subtitle ??
+            `${String(selectedPickerCardIds.length)}/${String(requiredCount)} selected`
+          }
           cards={cardPicker.candidates.map((candidate) => {
             const selected = selectedPickerCardIds.includes(
               candidate.instanceId,

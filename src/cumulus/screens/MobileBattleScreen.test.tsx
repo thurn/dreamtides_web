@@ -2718,6 +2718,7 @@ describe("MobileBattleScreen", () => {
         cardPicker: {
           key: "prompt-gallery",
           label: "Choose cards from hidden zones",
+          subtitle: "You may play it from your void this turn, then banish it.",
           side: "player",
           candidates,
           candidateIds: candidates.map((candidate) => candidate.instanceId),
@@ -2744,6 +2745,9 @@ describe("MobileBattleScreen", () => {
     expect(
       container.querySelector('[role="dialog"]')?.getAttribute("aria-label"),
     ).toBe("Choose cards from hidden zones");
+    expect(container.textContent).toContain(
+      "You may play it from your void this turn, then banish it.",
+    );
     expect(container.querySelectorAll("[data-gallery-entry-id]")).toHaveLength(
       4,
     );

@@ -184,6 +184,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
       prompt: {
         kind: "pick-cards",
         label: "Choose a void card to gain Reclaim",
+        subtitle: "You may play it from your void this turn, then banish it.",
         count: 1,
         optional: false,
         candidates: (ctx) => ctx.state.sides[ctx.side].void,

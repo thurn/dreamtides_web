@@ -357,6 +357,7 @@ describe("buildMobileBattleView", () => {
       options: {
         kind: "pick-cards",
         label: "Discard 2 cards",
+        subtitle: "Choose carefully.",
         candidateIds: board.sides.player.hand.slice(0, 2),
         count: 2,
         optional: false,
@@ -380,6 +381,7 @@ describe("buildMobileBattleView", () => {
     expect(optimistic.cardPicker).toMatchObject({
       key: "42",
       label: "Discard 2 cards",
+      subtitle: "Choose carefully.",
       candidateIds: prompt.options.candidateIds,
       count: 2,
       optional: false,

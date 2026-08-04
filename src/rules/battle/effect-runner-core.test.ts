@@ -93,6 +93,7 @@ describe("planNextEffectStep — pick-cards prompt head", () => {
     const pickPrompt: EffectPrompt = {
       kind: "pick-cards",
       label: "Choose a card",
+      subtitle: "Choose carefully.",
       count: 1,
       optional: false,
       candidates: (ctx) => {
@@ -123,6 +124,7 @@ describe("planNextEffectStep — pick-cards prompt head", () => {
 
     // Bug class: label not mirrored
     expect(result.active.label).toBe("Choose a card");
+    expect(result.active.subtitle).toBe("Choose carefully.");
 
     // Bug class: original prompt not carried through
     expect(result.prompt).toBe(pickPrompt);

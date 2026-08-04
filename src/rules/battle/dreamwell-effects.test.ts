@@ -619,6 +619,7 @@ describe("new prompt-driven Dreamwell UUIDs", () => {
   it("records the temporary Reclaim eligibility separately from reclaimed", () => {
     const prompt = getFirstPromptStep("14dec460-3ec6-40c1-978f-67e70cb0b227");
     if (prompt.kind !== "pick-cards") throw new Error("expected picker");
+    expect(prompt.subtitle).toBe("You may play it from your void this turn, then banish it.");
     const state = makeState({ playerVoid: ["void-card"], cardInstances: { "void-card": makeCharacter("void-card", "player", 2) } });
     const [edit] = prompt.resolve(["void-card"], makeCtx(state));
     expect(edit).toMatchObject({ kind: "SET_CARD_STATUS", battleCardId: "void-card", status: { temporaryReclaimUntilEnding: { activeSide: "player", turnNumber: 1 } } });
