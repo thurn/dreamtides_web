@@ -248,14 +248,7 @@ function followupForAction(
         "cardIds",
       );
     case "gain-offered-card":
-      return deckFollowup(
-        action.label,
-        "Take the offered card.",
-        offeredCards(offer.offeredCardIds, content),
-        "single",
-        1,
-        "cardIds",
-      );
+      return { kind: "none" };
     case "take-cards": {
       const cards = offeredCards(offer.offeredCardIds, content);
       return {
@@ -418,8 +411,11 @@ function actionView(
 ): ExplorationActionView {
   const followup = followupForAction(action, offer, state, content);
   const hasRequiredOffer =
-    action.effectKind !== "gain-random-dreamsign" ||
-    (offer.offeredDreamsignIds?.length ?? 0) > 0;
+    action.effectKind === "gain-random-dreamsign"
+      ? (offer.offeredDreamsignIds?.length ?? 0) > 0
+      : action.effectKind === "gain-offered-card"
+        ? offer.offeredCardIds.length === 1
+        : true;
   const available = hasRequiredOffer && (
     followup.kind === "none" ||
     (followup.kind === "cards" && followup.cards.length >= followup.min) ||
@@ -433,8 +429,35 @@ function actionView(
     ...buildExplorationActionEffect(action, offer, content),
     responseText: action.responseText,
     followup,
+    ...(action.effectKind === "gain-offered-card" &&
+    offer.offeredCardIds[0] !== undefined
+      ? { automaticSelection: { cardIds: [offer.offeredCardIds[0]] } }
+      : {}),
     available,
   };
+}
+
+function rewardForResolution(
+  runtime: ExplorationSiteRuntime,
+  state: JourneyState,
+  content: JourneyContent,
+): ExplorationSiteView["reward"] {
+  const resolution = runtime.resolution;
+  if (resolution === null) return null;
+  const cards = resolution.gainedCardIds.flatMap((cardId) => {
+    const card = cardById(content, cardId);
+    return card === null ? [] : [modelForCard(card)];
+  });
+  const dreamsigns = resolution.gainedDreamsignIds.flatMap((dreamsignId) => {
+    const normalized = dreamsignId.toLowerCase();
+    const dreamsign = state.dreamsigns.find(
+      (candidate) => candidate.id?.toLowerCase() === normalized,
+    );
+    return dreamsign === undefined ? [] : [dreamsign];
+  });
+  return cards.length === 0 && dreamsigns.length === 0
+    ? null
+    : { cards, dreamsigns };
 }
 
 /** Build the complete Exploration presentation from persisted domain data. */
@@ -488,9 +511,10 @@ export function buildExplorationSiteView(params: {
     response:
       resolvedAction === null
         ? null
-        : {
-            actionLabel: resolvedAction.label,
-            text: resolvedAction.responseText,
-          },
+          : {
+              actionLabel: resolvedAction.label,
+              text: resolvedAction.responseText,
+            },
+    reward: rewardForResolution(params.runtime, params.state, params.content),
   };
 }

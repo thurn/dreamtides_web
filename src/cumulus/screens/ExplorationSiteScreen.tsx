@@ -6,6 +6,7 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
   type RefObject,
@@ -32,6 +33,7 @@ import {
   JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
   JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP,
 } from "../components/hud/JourneyStatusBar";
+import { Dreamsign } from "../components/hud/Dreamsign";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
@@ -50,6 +52,7 @@ import {
 } from "./GuideGallerySiteLayout";
 import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 import { useIsDesktop } from "./use-is-desktop";
+import type { Dreamsign as DreamsignData } from "../../types/journey";
 
 export interface ExplorationSiteView {
   /** Stable site id exposed to QA and logging. */
@@ -68,6 +71,13 @@ export interface ExplorationSiteView {
   actions: readonly [ExplorationActionView, ExplorationActionView];
   /** Persisted response after one action has resolved. */
   response: ExplorationResponseView | null;
+  /** Exact UUID-backed objects granted by the persisted resolution. */
+  reward: ExplorationRewardView | null;
+}
+
+export interface ExplorationRewardView {
+  readonly cards: readonly GameCardModel[];
+  readonly dreamsigns: readonly DreamsignData[];
 }
 
 export interface ExplorationCardChoiceView {
@@ -125,6 +135,8 @@ export interface ExplorationActionView {
   readonly effectParts?: readonly ExplorationActionEffectPart[];
   readonly responseText: string;
   readonly followup: ExplorationFollowupView;
+  /** Reducer selection supplied directly when the effect needs no player choice. */
+  readonly automaticSelection?: Readonly<Record<string, unknown>>;
   readonly available: boolean;
 }
 
@@ -161,6 +173,26 @@ interface CardTrajectory {
   readonly sourceKind: "journey-deck" | "viewport-corner";
 }
 
+interface RewardTrajectory {
+  readonly source: RectSnapshot;
+  readonly target: RectSnapshot;
+  readonly destinationKind: "journey-deck" | "journey-dreamsign" | "viewport-corner";
+}
+
+type ExplorationRewardItem =
+  | {
+      readonly key: string;
+      readonly kind: "card";
+      readonly id: string;
+      readonly card: GameCardModel;
+    }
+  | {
+      readonly key: string;
+      readonly kind: "dreamsign";
+      readonly id: string;
+      readonly dreamsign: DreamsignData;
+    };
+
 interface FrameBreakGeometry {
   readonly frame: RectSnapshot;
   readonly art: RectSnapshot;
@@ -189,6 +221,12 @@ const FRAME_BREAK_DELAY_SECONDS = motionTimeSeconds("--dur-fast");
 const FRAME_FRACTURE_SECONDS =
   motionTimeSeconds("--dur-base") + motionTimeSeconds("--dur-fast");
 const RESPONSE_TEXT_DURATION_MS = 3_000;
+const REWARD_READING_SECONDS = motionTimeSeconds("--dur-slow") * 4;
+const REWARD_TRAVEL_SECONDS = motionTimeSeconds("--dur-slow") * 2;
+const REWARD_STAGGER_SECONDS = motionTimeSeconds("--dur-fast");
+const DESKTOP_REWARD_CARD_WIDTH = 240;
+const DESKTOP_REWARD_DREAMSIGN_SIZE = 240;
+const MOBILE_REWARD_DREAMSIGN_SIZE = 180;
 const DESKTOP_NARRATIVE_PANEL_BOTTOM =
   `calc(${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-9")})`;
 // The card preview cache appends a 21px watermark strip to a 259px-tall
@@ -307,6 +345,67 @@ function sourceRectFor(target: RectSnapshot): {
   };
 }
 
+function rewardItemsFor(
+  reward: ExplorationRewardView | null,
+): readonly ExplorationRewardItem[] {
+  if (reward === null) return [];
+  return [
+    ...reward.cards.map((card, index) => ({
+      key: `card:${String(index)}:${card.cardId}`,
+      kind: "card" as const,
+      id: card.cardId,
+      card,
+    })),
+    ...reward.dreamsigns.map((dreamsign, index) => ({
+      key: `dreamsign:${String(index)}:${dreamsign.id ?? "missing"}`,
+      kind: "dreamsign" as const,
+      id: dreamsign.id ?? "missing",
+      dreamsign,
+    })),
+  ];
+}
+
+function visibleHudDreamsign(dreamsignId: string): HTMLElement | null {
+  const targets = document.querySelectorAll<HTMLElement>("[data-dreamsign-id]");
+  for (const target of targets) {
+    if (
+      target.dataset.dreamsignId === dreamsignId &&
+      target.closest("[data-exploration-reward-stage]") === null &&
+      target.closest("[data-exploration-reward-flight]") === null
+    ) {
+      return target;
+    }
+  }
+  return null;
+}
+
+function rewardTargetFor(
+  item: ExplorationRewardItem,
+  source: RectSnapshot,
+): RewardTrajectory {
+  if (item.kind === "dreamsign") {
+    const dreamsignTarget = visibleHudDreamsign(item.id);
+    const dreamsignRect = dreamsignTarget?.getBoundingClientRect();
+    if (
+      dreamsignRect !== undefined &&
+      dreamsignRect.width > 0 &&
+      dreamsignRect.height > 0
+    ) {
+      return {
+        source,
+        target: snapshotRect(dreamsignRect),
+        destinationKind: "journey-dreamsign",
+      };
+    }
+  }
+  const destination = sourceRectFor(source);
+  return {
+    source,
+    target: destination.rect,
+    destinationKind: destination.kind,
+  };
+}
+
 function useCardTrajectory(
   targetRef: RefObject<HTMLDivElement | null>,
   cardId: string,
@@ -352,6 +451,8 @@ export function ExplorationSiteScreen({
   const isDesktop = useIsDesktop();
   const cardTargetRef = useRef<HTMLDivElement>(null);
   const exitCompletedRef = useRef(false);
+  const rewardItemRefs = useRef(new Map<string, HTMLDivElement>());
+  const completedRewardItemsRef = useRef(new Set<string>());
   const [revealed, setRevealed] = useState(reduceMotion);
   const [frameBreakGeometry, setFrameBreakGeometry] =
     useState<FrameBreakGeometry | null>(null);
@@ -368,6 +469,9 @@ export function ExplorationSiteScreen({
   const [selectedPackIndex, setSelectedPackIndex] = useState<number | null>(null);
   const [selectedSubtype, setSelectedSubtype] = useState<string | null>(null);
   const [selectedDreamsignId, setSelectedDreamsignId] = useState<string | null>(null);
+  const [rewardTrajectories, setRewardTrajectories] = useState<
+    ReadonlyMap<string, RewardTrajectory> | null
+  >(null);
   const fullArtUrl = resolveArtRef(view.fullArt);
   const trajectory = useCardTrajectory(
     cardTargetRef,
@@ -376,6 +480,14 @@ export function ExplorationSiteScreen({
   );
   const activeAction =
     view.actions.find((action) => action.id === activeActionId) ?? null;
+  const rewardItems = useMemo(() => rewardItemsFor(view.reward), [view.reward]);
+  const rewardIdentity =
+    view.response === null || view.reward === null
+      ? null
+      : [
+          view.response.actionLabel,
+          ...rewardItems.map((item) => item.key),
+        ].join("|");
 
   useEffect(() => {
     if (view.response === null) return;
@@ -386,6 +498,12 @@ export function ExplorationSiteScreen({
     setSelectedSubtype(null);
     setSelectedDreamsignId(null);
   }, [view.response]);
+
+  useEffect(() => {
+    completedRewardItemsRef.current.clear();
+    rewardItemRefs.current.clear();
+    setRewardTrajectories(null);
+  }, [rewardIdentity]);
 
   useEffect(() => {
     if (reduceMotion) setRevealed(true);
@@ -408,7 +526,7 @@ export function ExplorationSiteScreen({
     if (frameBreakGeometry === null || frameBreakPhase !== "open") return;
     const onKeyDown = (event: KeyboardEvent): void => {
       if (event.key !== "Escape") return;
-      if (view.response !== null) return;
+      if (view.response !== null || view.reward !== null) return;
       if (activeAction !== null && view.response === null) {
         setActiveActionId(null);
         setSelectedIds([]);
@@ -426,7 +544,7 @@ export function ExplorationSiteScreen({
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [activeAction, frameBreakGeometry, frameBreakPhase, reduceMotion, view.response]);
+  }, [activeAction, frameBreakGeometry, frameBreakPhase, reduceMotion, view.response, view.reward]);
 
   const startFrameBreak = (): void => {
     const geometry = measureFrameBreak(cardTargetRef.current);
@@ -455,6 +573,89 @@ export function ExplorationSiteScreen({
     onExit();
   }, [onExit]);
 
+  useLayoutEffect(() => {
+    if (
+      rewardIdentity === null ||
+      view.reward === null ||
+      frameBreakPhase !== "open"
+    ) {
+      return;
+    }
+    let animationFrame = 0;
+    const hiddenTargets = new Map<HTMLElement, string>();
+    const hideDockedDreamsigns = (): void => {
+      for (const dreamsign of view.reward?.dreamsigns ?? []) {
+        if (dreamsign.id === undefined) continue;
+        const target = visibleHudDreamsign(dreamsign.id);
+        if (target === null || hiddenTargets.has(target)) continue;
+        hiddenTargets.set(target, target.style.visibility);
+        target.style.visibility = "hidden";
+      }
+    };
+    animationFrame = window.requestAnimationFrame(hideDockedDreamsigns);
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      for (const [target, visibility] of hiddenTargets) {
+        target.style.visibility = visibility;
+      }
+    };
+  }, [frameBreakPhase, rewardIdentity, view.reward]);
+
+  useEffect(() => {
+    if (
+      rewardIdentity === null ||
+      rewardItems.length === 0 ||
+      frameBreakPhase !== "open" ||
+      rewardTrajectories !== null
+    ) {
+      return;
+    }
+    const timer = window.setTimeout(() => {
+      if (reduceMotion) {
+        completeExit();
+        return;
+      }
+      const trajectories = new Map<string, RewardTrajectory>();
+      for (const item of rewardItems) {
+        const sourceRect = rewardItemRefs.current
+          .get(item.key)
+          ?.getBoundingClientRect();
+        if (
+          sourceRect === undefined ||
+          sourceRect.width <= 0 ||
+          sourceRect.height <= 0
+        ) {
+          continue;
+        }
+        const source = snapshotRect(sourceRect);
+        trajectories.set(item.key, rewardTargetFor(item, source));
+      }
+      if (trajectories.size === 0) {
+        completeExit();
+        return;
+      }
+      setRewardTrajectories(trajectories);
+    }, REWARD_READING_SECONDS * 1000);
+    return () => window.clearTimeout(timer);
+  }, [
+    completeExit,
+    frameBreakPhase,
+    reduceMotion,
+    rewardIdentity,
+    rewardItems,
+    rewardTrajectories,
+  ]);
+
+  const finishRewardItem = (itemKey: string): void => {
+    completedRewardItemsRef.current.add(itemKey);
+    if (
+      completedRewardItemsRef.current.size >=
+      (rewardTrajectories?.size ?? Number.POSITIVE_INFINITY)
+    ) {
+      completeExit();
+    }
+  };
+
   const exitExploration = useCallback((): void => {
     setCollapseIntent("exit");
     setFrameBreakActive(false);
@@ -471,6 +672,7 @@ export function ExplorationSiteScreen({
   useEffect(() => {
     if (
       view.response === null ||
+      view.reward !== null ||
       frameBreakGeometry === null ||
       frameBreakPhase !== "open" ||
       activeAction !== null
@@ -488,6 +690,7 @@ export function ExplorationSiteScreen({
     frameBreakGeometry,
     frameBreakPhase,
     view.response,
+    view.reward,
   ]);
 
   const finishFrameBreakMotion = (): void => {
@@ -517,7 +720,11 @@ export function ExplorationSiteScreen({
 
   const openAction = (action: ExplorationActionView): void => {
     if (action.followup.kind === "none") {
-      onResolve(action.id);
+      if (action.automaticSelection === undefined) {
+        onResolve(action.id);
+      } else {
+        onResolve(action.id, action.automaticSelection);
+      }
       return;
     }
     setActiveActionId(action.id);
@@ -945,7 +1152,9 @@ export function ExplorationSiteScreen({
             pressFeedback="stationary"
             hoverFeedback="stationary"
             onClick={
-              frameBreakPhase === "open" && view.response === null
+              frameBreakPhase === "open" &&
+              view.response === null &&
+              view.reward === null
                 ? collapseFrameBreak
                 : undefined
             }
@@ -1009,7 +1218,158 @@ export function ExplorationSiteScreen({
           </Pressable>
         </motion.div>
       )}
-      {frameBreakGeometry !== null && frameBreakPhase === "open" && activeAction === null && (
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
+        view.reward !== null &&
+        rewardTrajectories === null && (
+          <motion.section
+            data-exploration-reward-stage=""
+            data-exploration-reward-count={rewardItems.length}
+            role="status"
+            aria-label={`Gained ${String(rewardItems.length)} ${rewardItems.length === 1 ? "reward" : "rewards"}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "fixed",
+              top: safeAreaInsetAtLeast("top", "--space-9"),
+              right: token("--space-6"),
+              bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+              left: token("--space-6"),
+              zIndex: FRAME_BREAK_EXIT_LAYER + 1,
+              display: "flex",
+              flexWrap: "wrap",
+              alignContent: "center",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: token("--space-6"),
+              pointerEvents: "none",
+            }}
+          >
+            {rewardItems.map((item, index) => {
+              const cardWidth = isDesktop
+                ? DESKTOP_REWARD_CARD_WIDTH
+                : rewardItems.length === 1
+                  ? "min(58vw, 240px)"
+                  : "min(40vw, 180px)";
+              const dreamsignSize = isDesktop
+                ? DESKTOP_REWARD_DREAMSIGN_SIZE
+                : MOBILE_REWARD_DREAMSIGN_SIZE;
+              return (
+                <motion.div
+                  key={item.key}
+                  ref={(element) => {
+                    if (element === null) {
+                      rewardItemRefs.current.delete(item.key);
+                    } else {
+                      rewardItemRefs.current.set(item.key, element);
+                    }
+                  }}
+                  data-exploration-reward-object={item.kind}
+                  data-exploration-reward-id={item.id}
+                  initial={{
+                    opacity: reduceMotion ? 1 : 0,
+                    scale: reduceMotion ? 1 : 0.88,
+                    y: reduceMotion ? 0 : token("--space-6"),
+                  }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{
+                    delay: reduceMotion ? 0 : index * REWARD_STAGGER_SECONDS,
+                    duration: reduceMotion
+                      ? 0
+                      : motionTimeSeconds("--dur-slow"),
+                    ease: DREAM_EASE,
+                  }}
+                  style={{
+                    width: item.kind === "card" ? cardWidth : dreamsignSize,
+                    aspectRatio:
+                      item.kind === "card" ? CARD_ASPECT_RATIO : "1 / 1",
+                    flex: "none",
+                    display: "grid",
+                    placeItems: "center",
+                    pointerEvents: "auto",
+                  }}
+                >
+                  {item.kind === "card" ? (
+                    <GameCard
+                      model={item.card}
+                      testId={`cumulus-exploration-reward-card-${String(index)}`}
+                    />
+                  ) : (
+                    <Dreamsign
+                      dreamsign={item.dreamsign}
+                      sizePx={dreamsignSize}
+                      variant="revelation"
+                      testid={`cumulus-exploration-reward-dreamsign-${String(index)}`}
+                    />
+                  )}
+                </motion.div>
+              );
+            })}
+          </motion.section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        rewardTrajectories !== null &&
+        rewardItems.map((item, index) => {
+          const trajectoryForReward = rewardTrajectories.get(item.key);
+          if (trajectoryForReward === undefined) return null;
+          const scale = Math.min(
+            trajectoryForReward.target.width / trajectoryForReward.source.width,
+            trajectoryForReward.target.height / trajectoryForReward.source.height,
+          );
+          return (
+            <motion.div
+              key={item.key}
+              data-exploration-reward-flight={item.kind}
+              data-exploration-reward-id={item.id}
+              data-exploration-destination={trajectoryForReward.destinationKind}
+              initial={{
+                x: trajectoryForReward.source.left,
+                y: trajectoryForReward.source.top,
+                scale: 1,
+                opacity: 1,
+              }}
+              animate={{
+                x: trajectoryForReward.target.left,
+                y: trajectoryForReward.target.top,
+                scale,
+                opacity: 1,
+              }}
+              transition={{
+                delay: index * REWARD_STAGGER_SECONDS,
+                duration: REWARD_TRAVEL_SECONDS,
+                ease: DREAM_EASE,
+              }}
+              onAnimationComplete={() => finishRewardItem(item.key)}
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                zIndex: FRAME_BREAK_EXIT_LAYER + 2,
+                width: trajectoryForReward.source.width,
+                height: trajectoryForReward.source.height,
+                transformOrigin: "top left",
+                pointerEvents: "none",
+              }}
+            >
+              {item.kind === "card" ? (
+                <GameCard model={item.card} />
+              ) : (
+                <Dreamsign
+                  dreamsign={item.dreamsign}
+                  sizePx={trajectoryForReward.source.width}
+                  variant="revelation"
+                />
+              )}
+            </motion.div>
+          );
+        })}
+      {frameBreakGeometry !== null && frameBreakPhase === "open" && activeAction === null && view.reward === null && (
         <motion.section
           data-exploration-narrative=""
           initial={{ opacity: 0, y: reduceMotion ? 0 : 18 }}
@@ -1366,7 +1726,8 @@ export function ExplorationSiteScreen({
       {frameBreakGeometry !== null &&
         frameBreakPhase === "open" &&
         activeAction === null &&
-        view.response === null && (
+        view.response === null &&
+        view.reward === null && (
         <motion.div
           data-exploration-exit-control=""
           initial={{ opacity: 0, scale: 0.92 }}

@@ -49,6 +49,12 @@ const guide: DreamGuideContent = {
 describe("exploration-view-model", () => {
   it("builds authored narrative, two actions, and a persisted response", () => {
     const source = card(sourceId, 17);
+    const gainedDreamsign = {
+      id: "gained-dreamsign-id",
+      name: "Gained Dreamsign",
+      effectDescription: "A synthetic reward sign.",
+      isBane: false,
+    };
     const state = {
       ...createDefaultState(),
       deck: [
@@ -59,6 +65,7 @@ describe("exploration-view-model", () => {
           isBane: false,
         },
       ],
+      dreamsigns: [gainedDreamsign],
     };
     const runtime: ExplorationSiteRuntime = {
       kind: "exploration",
@@ -81,8 +88,8 @@ describe("exploration-view-model", () => {
       ],
       resolution: {
         actionId: "action-b",
-        gainedCardIds: [],
-        gainedDreamsignIds: [],
+        gainedCardIds: [source.id, source.id],
+        gainedDreamsignIds: [gainedDreamsign.id],
         purgedCardIds: [],
         affectedEntryIds: [],
         essenceGained: 0,
@@ -146,6 +153,10 @@ describe("exploration-view-model", () => {
       response: {
         actionLabel: "Second choice",
         text: "The second response.",
+      },
+      reward: {
+        cards: [{ cardId: source.id }, { cardId: source.id }],
+        dreamsigns: [{ id: gainedDreamsign.id }],
       },
       card: { cardId: source.id },
     });
@@ -347,12 +358,8 @@ describe("exploration-view-model", () => {
         },
       ],
       available: true,
-      followup: {
-        kind: "cards",
-        title: "Invite someone through",
-        subtitle: "Take the offered card.",
-        cards: [{ entryId: offered.id, model: { cardId: offered.id } }],
-      },
+      followup: { kind: "none" },
+      automaticSelection: { cardIds: [offered.id] },
     });
     expect(view.actions[1].followup).toEqual({ kind: "none" });
   });

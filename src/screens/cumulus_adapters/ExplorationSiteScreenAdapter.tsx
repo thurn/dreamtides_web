@@ -114,6 +114,8 @@ export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
       siteId: site.id,
       presentedCardId: explorationRuntime.encounterCardId,
       actionId: explorationRuntime.resolution.actionId,
+      gainedCardIds: explorationRuntime.resolution.gainedCardIds,
+      gainedDreamsignIds: explorationRuntime.resolution.gainedDreamsignIds,
       isEnhanced: site.isEnhanced,
     });
     mutations.completeSite(site.id, "exploration_completed");

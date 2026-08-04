@@ -110,6 +110,45 @@ function view(resolved = false): ExplorationSiteView {
     response: resolved
       ? { actionLabel: "Choose A", text: "The fixture answers." }
       : null,
+    reward: null,
+  };
+}
+
+function twoCardRewardView(): ExplorationSiteView {
+  const base = view(true);
+  const second = {
+    ...base.card,
+    cardId: asCardId("00000000-0000-4000-8000-000000000018"),
+    displaySnapshot: {
+      ...base.card.displaySnapshot,
+      id: asCardId("00000000-0000-4000-8000-000000000018"),
+      name: asCardName("Second Survivor Fixture"),
+      cardNumber: 18,
+      imageNumber: 18,
+    },
+  };
+  return {
+    ...base,
+    reward: { cards: [base.card, second], dreamsigns: [] },
+  };
+}
+
+function dreamsignRewardView(): ExplorationSiteView {
+  return {
+    ...view(true),
+    reward: {
+      cards: [],
+      dreamsigns: [
+        {
+          id: "reward-dreamsign-id",
+          name: "Reward Dreamsign",
+          effectDescription: "A synthetic reward sign.",
+          imageName: "reward-dreamsign.webp",
+          imageAlt: "Reward Dreamsign art",
+          isBane: false,
+        },
+      ],
+    },
   };
 }
 
@@ -701,6 +740,162 @@ describe("ExplorationSiteScreen", () => {
     });
     expect(onExit).toHaveBeenCalledOnce();
     act(() => root.unmount());
+  });
+
+  it("shows a two-card reward at reading size and flies both cards to the deck", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = false;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function getBoundingClientRect(this: HTMLElement) {
+        if (this.hasAttribute("data-exploration-card-slot")) {
+          return new DOMRect(900, 180, 240, 336);
+        }
+        if (this.hasAttribute("data-exploration-reward-object")) {
+          const offset = this.dataset.explorationRewardId?.endsWith("18")
+            ? 660
+            : 390;
+          return new DOMRect(offset, 180, 240, 336);
+        }
+        if (this instanceof HTMLImageElement && this.alt !== "") {
+          return new DOMRect(780, 150, 480, 291);
+        }
+        return new DOMRect(0, 0, 100, 100);
+      },
+    );
+    const deckTarget = document.createElement("button");
+    deckTarget.dataset.journeyDeckTarget = "";
+    deckTarget.getBoundingClientRect = () => new DOMRect(1210, 720, 50, 70);
+    document.body.append(deckTarget);
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={twoCardRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    act(() => {
+      container
+        .querySelector("[data-exploration-card-travel]")
+        ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+    });
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() => {
+      container
+        .querySelector("[data-exploration-frame-break]")
+        ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+    });
+
+    expect(
+      container.querySelectorAll('[data-exploration-reward-object="card"]'),
+    ).toHaveLength(2);
+    expect(container.querySelector("[data-exploration-narrative]")).toBeNull();
+    expect(
+      container.querySelector('[data-testid="cumulus-exploration-continue"]'),
+    ).toBeNull();
+
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    const flights = container.querySelectorAll(
+      '[data-exploration-reward-flight="card"]',
+    );
+    expect(flights).toHaveLength(2);
+    expect(
+      [...flights].map((flight) =>
+        flight.getAttribute("data-exploration-destination"),
+      ),
+    ).toEqual(["journey-deck", "journey-deck"]);
+    expect(onExit).not.toHaveBeenCalled();
+
+    act(() => {
+      for (const flight of flights) {
+        flight.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+      }
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
+  it("flies a gained Dreamsign to its UUID-matched HUD dock", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = false;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function getBoundingClientRect(this: HTMLElement) {
+        if (this.hasAttribute("data-exploration-card-slot")) {
+          return new DOMRect(900, 180, 240, 336);
+        }
+        if (this.hasAttribute("data-exploration-reward-object")) {
+          return new DOMRect(520, 190, 240, 240);
+        }
+        if (this instanceof HTMLImageElement && this.alt !== "") {
+          return new DOMRect(780, 150, 480, 291);
+        }
+        return new DOMRect(0, 0, 100, 100);
+      },
+    );
+    const dreamsignTarget = document.createElement("span");
+    dreamsignTarget.dataset.dreamsignId = "reward-dreamsign-id";
+    dreamsignTarget.getBoundingClientRect = () =>
+      new DOMRect(1140, 730, 58, 58);
+    document.body.append(dreamsignTarget);
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={dreamsignRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    act(() => {
+      container
+        .querySelector("[data-exploration-card-travel]")
+        ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+    });
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() => {
+      container
+        .querySelector("[data-exploration-frame-break]")
+        ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+    });
+    expect(
+      container.querySelector(
+        '[data-exploration-reward-object="dreamsign"]',
+      ),
+    ).not.toBeNull();
+    expect(dreamsignTarget.style.visibility).toBe("hidden");
+
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    const flight = container.querySelector(
+      '[data-exploration-reward-flight="dreamsign"]',
+    );
+    expect(flight?.getAttribute("data-exploration-destination")).toBe(
+      "journey-dreamsign",
+    );
+    act(() => {
+      flight?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+    expect(dreamsignTarget.style.visibility).toBe("");
   });
 
   it("stages a face-down-to-face-up travel from the bottom-right deck anchor", () => {
