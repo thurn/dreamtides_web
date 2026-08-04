@@ -7,11 +7,31 @@ const CARD_VIEW_CSS = fileURLToPath(
 );
 
 describe("CardView event frame", () => {
-  it("uses Cumulus violet roles in an opaque frame treatment", () => {
+  it("owns a complete violet treatment with canonical token fallbacks", () => {
     const css = readFileSync(CARD_VIEW_CSS, "utf8");
 
-    expect(css).toMatch(
-      /\.card-view\[data-card-type="Event"\]\s*\{[\s\S]*?--cv-textbox-bg:\s*linear-gradient\([\s\S]*?var\(--accent-bright\)[\s\S]*?var\(--accent-strong\)[\s\S]*?var\(--surface-card\)[\s\S]*?\);[\s\S]*?--cv-textbox-border:\s*color-mix\(in srgb, var\(--accent-bright\)[\s\S]*?var\(--text-on-card\)\);[\s\S]*?\}/,
+    expect(css).toContain(
+      "--cv-event-accent-bright: var(--accent-bright, #c084fc);",
+    );
+    expect(css).toContain(
+      "--cv-event-accent-strong: var(--accent-strong, #7c3aed);",
+    );
+    expect(css).toContain(
+      "--cv-event-surface: var(--surface-card, #1a1525);",
+    );
+    expect(css).toContain(
+      "--cv-event-text: var(--text-on-card, #f6f6f5);",
+    );
+
+    const eventFrame = css.match(
+      /\.card-view\[data-card-type="Event"\]\s*\{[\s\S]*?\n\}/,
+    )?.[0];
+    expect(eventFrame).toContain("var(--cv-event-accent-bright)");
+    expect(eventFrame).toContain("var(--cv-event-accent-strong)");
+    expect(eventFrame).toContain("var(--cv-event-surface)");
+    expect(eventFrame).toContain("var(--cv-event-text)");
+    expect(eventFrame).not.toMatch(
+      /var\(--(?:accent-bright|accent-strong|surface-card|text-on-card)\)/,
     );
   });
 });

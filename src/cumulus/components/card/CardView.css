@@ -124,6 +124,14 @@
     rgba(2, 2, 3, 0.86) 100%
   );
   --cv-textbox-border: var(--primitive-line-mid, rgba(255, 255, 255, 0.14));
+
+  /* Event chrome remains a complete component-owned treatment in rendering
+   * contexts that do not provide the surrounding Cumulus token scope. The
+   * fallbacks are the resolved values of the matching semantic roles. */
+  --cv-event-accent-bright: var(--accent-bright, #c084fc);
+  --cv-event-accent-strong: var(--accent-strong, #7c3aed);
+  --cv-event-surface: var(--surface-card, #1a1525);
+  --cv-event-text: var(--text-on-card, #f6f6f5);
 }
 
 /* 899.98px is DESKTOP_MIN_WIDTH (900) − 0.02. It tracks CardView's
@@ -183,8 +191,22 @@
 .card-view[data-card-type="Event"] {
   --cv-textbox-bg: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--accent-bright) 62%, var(--surface-card)) 0%,
-    color-mix(in srgb, var(--accent-strong) 68%, var(--surface-card)) 100%
+    color-mix(
+        in srgb,
+        var(--cv-event-accent-bright) 62%,
+        var(--cv-event-surface)
+      )
+      0%,
+    color-mix(
+        in srgb,
+        var(--cv-event-accent-strong) 68%,
+        var(--cv-event-surface)
+      )
+      100%
   );
-  --cv-textbox-border: color-mix(in srgb, var(--accent-bright) 76%, var(--text-on-card));
+  --cv-textbox-border: color-mix(
+    in srgb,
+    var(--cv-event-accent-bright) 76%,
+    var(--cv-event-text)
+  );
 }
