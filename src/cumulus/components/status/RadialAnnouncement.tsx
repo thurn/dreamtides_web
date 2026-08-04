@@ -185,7 +185,9 @@ export function RadialAnnouncement({
           style={{
             position: "absolute",
             inset: `calc(-1 * ${token(
-              size === "mini" || size === "wager" ? "--space-1" : "--space-4",
+              size === "mini" || size === "wager"
+                ? "--space-1"
+                : "--space-4",
             )})`,
             border: `${token("--space-1")} solid ${accent}`,
             borderRadius: token("--radius-pill"),
@@ -194,7 +196,7 @@ export function RadialAnnouncement({
                 ? "radial-announcement-ripple-mini"
                 : size === "wager"
                   ? "radial-announcement-ripple-wager"
-                  : "radial-announcement-ripple"
+                : "radial-announcement-ripple"
             } ${animationDuration} ${token("--ease-out")} both`,
           }}
         />

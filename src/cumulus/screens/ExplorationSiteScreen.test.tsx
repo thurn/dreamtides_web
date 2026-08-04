@@ -1347,7 +1347,9 @@ describe("ExplorationSiteScreen", () => {
       "All characters in your deck gain +1✦",
     );
     expect(
-      [...(cards ?? [])].map((card) => card.dataset.explorationDeckEntryId),
+      [...(cards ?? [])].map(
+        (card) => card.dataset.explorationDeckEntryId,
+      ),
     ).toEqual(["deck-entry-a", "deck-entry-b"]);
     expect(
       reward?.querySelector("[data-radial-announcement]")?.textContent,
@@ -1427,9 +1429,7 @@ describe("ExplorationSiteScreen", () => {
     expect(
       announcement?.querySelector("[data-inline-glyph] i")?.className,
     ).toContain("bx-bolt");
-    expect(
-      reward?.querySelectorAll('[data-attribute-chip="fast"]'),
-    ).toHaveLength(2);
+    expect(reward?.querySelectorAll('[data-attribute-chip="fast"]')).toHaveLength(2);
     act(() => persisted.root.unmount());
   });
 
@@ -1464,9 +1464,8 @@ describe("ExplorationSiteScreen", () => {
     expect(
       container.querySelector("[data-exploration-deck-modification-reward]"),
     ).not.toBeNull();
-    expect(
-      container.querySelector("[data-exploration-reward-stage]"),
-    ).toBeNull();
+    expect(container.querySelector("[data-exploration-reward-stage]"))
+      .toBeNull();
 
     act(() => {
       vi.advanceTimersByTime(3_360);
@@ -1474,9 +1473,8 @@ describe("ExplorationSiteScreen", () => {
     expect(
       container.querySelector("[data-exploration-deck-modification-reward]"),
     ).toBeNull();
-    expect(
-      container.querySelector("[data-exploration-reward-stage]"),
-    ).not.toBeNull();
+    expect(container.querySelector("[data-exploration-reward-stage]"))
+      .not.toBeNull();
     expect(onExit).not.toHaveBeenCalled();
     act(() => root.unmount());
   });

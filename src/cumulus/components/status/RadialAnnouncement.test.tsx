@@ -55,12 +55,14 @@ describe("RadialAnnouncement", () => {
     });
 
     expect(
-      container.querySelector<HTMLElement>("[data-radial-announcement-disc]")
-        ?.style.width,
+      container.querySelector<HTMLElement>(
+        "[data-radial-announcement-disc]",
+      )?.style.width,
     ).toBe("108px");
     expect(
-      container.querySelector<HTMLElement>("[data-radial-announcement-ripple]")
-        ?.style.inset,
+      container.querySelector<HTMLElement>(
+        "[data-radial-announcement-ripple]",
+      )?.style.inset,
     ).toBe("calc(-1 * var(--space-1))");
 
     act(() => root.unmount());
