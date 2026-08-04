@@ -523,6 +523,45 @@ describe("MobileBattleScreen", () => {
         ?.style.zIndex,
     ).toBe("6");
 
+    const enemyPerspectivePlayer = {
+      ...player,
+      position: "far" as const,
+    };
+    const enemyPerspectiveEnemy = {
+      ...baseView.enemy,
+      position: "near" as const,
+    };
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <MobileBattleScreen
+            view={{
+              ...baseView,
+              perspective: "enemy",
+              near: enemyPerspectiveEnemy,
+              far: enemyPerspectivePlayer,
+              enemy: enemyPerspectiveEnemy,
+              player: enemyPerspectivePlayer,
+              activeSide: "player",
+              phase: "night",
+            }}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    const farPlayerChevron = container.querySelector<HTMLElement>(
+      '[data-battle-challenger-chevron="player"]',
+    );
+    expect(farPlayerChevron?.dataset.battleChallengerChevronDirection).toBe(
+      "down",
+    );
+    expect(farPlayerChevron?.style.top).toBe("");
+    expect(farPlayerChevron?.style.bottom).toBe("-4%");
+    expect(farPlayerChevron?.querySelector("svg")?.style.transform).toBe(
+      "rotate(180deg)",
+    );
+
     act(() => root.unmount());
   });
 

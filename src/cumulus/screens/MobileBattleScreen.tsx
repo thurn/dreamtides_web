@@ -1540,21 +1540,26 @@ function inverseLinearTransform(element: HTMLElement | null): LinearTransform {
   };
 }
 
-function ChallengerChevron({ owner }: { readonly owner: MobileBattleOwner }) {
+function ChallengerChevron({
+  owner,
+  position,
+}: {
+  readonly owner: MobileBattleOwner;
+  readonly position: BattleBoardPosition;
+}) {
+  const direction = position === "far" ? "down" : "up";
   return (
     <div
       role="img"
       aria-label={`${owner === "enemy" ? "Opponent" : "Player"} challenger`}
       data-battle-challenger-chevron={owner}
-      data-battle-challenger-chevron-direction={
-        owner === "enemy" ? "down" : "up"
-      }
+      data-battle-challenger-chevron-direction={direction}
       data-battle-challenger-chevron-style="circle-badge"
       style={{
         position: "absolute",
         zIndex: 7,
-        top: owner === "enemy" ? undefined : "-4%",
-        bottom: owner === "enemy" ? "-4%" : undefined,
+        top: position === "near" ? "-4%" : undefined,
+        bottom: position === "far" ? "-4%" : undefined,
         left: "50%",
         width: "22%",
         height: "16%",
@@ -1571,7 +1576,7 @@ function ChallengerChevron({ owner }: { readonly owner: MobileBattleOwner }) {
           width: "100%",
           height: "100%",
           overflow: "visible",
-          transform: owner === "enemy" ? "rotate(180deg)" : undefined,
+          transform: position === "far" ? "rotate(180deg)" : undefined,
           transformOrigin: "50% 50%",
         }}
       >
@@ -1610,6 +1615,7 @@ function FaceUpCard({
   showRulesText = false,
   snapLayout = false,
   challengerChevron,
+  challengerPosition,
   cardOverlay,
   selection,
   interaction,
@@ -1619,6 +1625,7 @@ function FaceUpCard({
   readonly showRulesText?: boolean;
   readonly snapLayout?: boolean;
   readonly challengerChevron?: MobileBattleOwner;
+  readonly challengerPosition?: BattleBoardPosition;
   readonly cardOverlay?: MobileBattleCardOverlayView | null;
   readonly selection?: {
     readonly selected: boolean;
@@ -1937,8 +1944,11 @@ function FaceUpCard({
           figment={card.figment}
           testId={`battle-card-face:${card.id}`}
         />
-        {challengerChevron !== undefined ? (
-          <ChallengerChevron owner={challengerChevron} />
+        {challengerChevron !== undefined && challengerPosition !== undefined ? (
+          <ChallengerChevron
+            owner={challengerChevron}
+            position={challengerPosition}
+          />
         ) : null}
       </motion.div>
       {selectionAboveExhaustion !== null ? (
@@ -2617,6 +2627,7 @@ function Rank({
                       ? owner
                       : undefined
                   }
+                  challengerPosition={position}
                   cardOverlay={cardOverlay}
                   selection={
                     candidate === null
