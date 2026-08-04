@@ -189,6 +189,12 @@ describe("ExplorationEditorApp", () => {
     expect(container.textContent).toContain("Choose one of 2 packs of 3 Character cards");
     expect(container.querySelector("img")?.getAttribute("src"))
       .toBe("/api/editor/encounters/art/42");
+    const cardLink = container.querySelector<HTMLAnchorElement>(
+      "a[aria-label='Open Fixture Guide exploration in a new tab']",
+    );
+    expect(cardLink?.getAttribute("href")).toBe(`/?goto=exploration&card=${CARD_ID}`);
+    expect(cardLink?.target).toBe("_blank");
+    expect(cardLink?.rel).toBe("noopener noreferrer");
     expect(container.querySelector(`[data-testid='exploration-packCount-${CARD_ID}-0']`))
       .not.toBeNull();
     expect(container.querySelector(`[data-testid='exploration-packSize-${CARD_ID}-0']`))

@@ -99,13 +99,26 @@
   font: var(--t-title);
 }
 
-.exploration-editor-copy-header code {
+.exploration-editor-card-link {
   display: block;
+  width: fit-content;
+  max-width: 100%;
   margin-top: var(--space-1);
   overflow: hidden;
   color: var(--text-muted);
   font: var(--t-caption);
+  text-decoration: underline;
   text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.exploration-editor-card-link code {
+  font: inherit;
+}
+
+.exploration-editor-card-link:hover,
+.exploration-editor-card-link:focus-visible {
+  color: var(--text-secondary);
 }
 
 .exploration-editor-card-ability {

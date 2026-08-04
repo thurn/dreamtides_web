@@ -659,7 +659,15 @@ function ExplorationEditorRow({
             <header className="exploration-editor-copy-header">
               <div>
                 <h2>{encounter.cardName}</h2>
-                <code>{encounter.cardId}</code>
+                <a
+                  aria-label={`Open ${encounter.cardName} exploration in a new tab`}
+                  className="exploration-editor-card-link"
+                  href={`/?goto=exploration&card=${encodeURIComponent(encounter.cardId)}`}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <code>{encounter.cardId}</code>
+                </a>
               </div>
               <div className="exploration-editor-card-ability">
                 <RulesText text={encounter.cardAbilityText} />
