@@ -38,6 +38,7 @@ const TUTORIAL_TRIGGER_EVENTS = new Set([
   "card-no-valid-targets",
   "dreamwell-resolve",
   "figment-created",
+  "transfiguration-seen",
 ]);
 const GLOSSARY_IDS = new Set(
   parseGlossarySource(
@@ -766,10 +767,12 @@ export function validateTutorialTriggers(value) {
     }
     if (
       normalizedMatch.kind === "any" &&
-      (candidate.on.length !== 1 || candidate.on[0] !== "figment-created")
+      (candidate.on.length !== 1 ||
+        (candidate.on[0] !== "figment-created" &&
+          candidate.on[0] !== "transfiguration-seen"))
     ) {
       throw invalid(
-        `Tutorial trigger ${JSON.stringify(id)} may use the any matcher only for figment creation.`,
+        `Tutorial trigger ${JSON.stringify(id)} may use the any matcher only for supported concept events.`,
       );
     }
     return {

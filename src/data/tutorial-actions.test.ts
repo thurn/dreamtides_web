@@ -876,6 +876,26 @@ describe("parseTutorialActions", () => {
       text: "There are no valid targets for this card",
     }]);
   });
+
+  it("parses a first-seen transfiguration concept trigger", () => {
+    const text = "Cards can be [yellow]transfigured[/yellow] to change their cost, spark, or abilities";
+    expect(
+      parseTutorialTriggers([{
+        id: "transfiguration",
+        on: ["transfiguration-seen"],
+        delay: { "transfiguration-seen": 1 },
+        duration: 5,
+        bubbleWidth: 500,
+        match: { kind: "any" },
+        text,
+      }]),
+    ).toMatchObject([{
+      id: "transfiguration",
+      on: ["transfiguration-seen"],
+      delay: { "transfiguration-seen": 1 },
+      text,
+    }]);
+  });
 });
 
 describe("parseTutorialDreamscapeConfiguration", () => {

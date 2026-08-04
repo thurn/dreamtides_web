@@ -27,6 +27,19 @@ export type MerchantArchetypeId =
   | "dreamsign_draft"
   | "add_site";
 
+const TRANSFIGURATION_MERCHANT_ARCHETYPE_IDS: ReadonlySet<MerchantArchetypeId> =
+  new Set([
+    "transfigured_draft",
+    "transfigure",
+    "starter_transfigure",
+  ]);
+
+export function isTransfigurationMerchantArchetype(
+  archetypeId: MerchantArchetypeId,
+): boolean {
+  return TRANSFIGURATION_MERCHANT_ARCHETYPE_IDS.has(archetypeId);
+}
+
 /** The 6 offer families. Slot B must come from a different family than slot A. */
 export type MerchantOfferFamily =
   | "grant"

@@ -12,6 +12,7 @@ export {
 export { renderMerchantDialogue } from "./dialogue/dialogue";
 export { MERCHANT_ARCHETYPE_BUILDERS } from "./archetypes/registry";
 export {
+  isTransfigurationMerchantArchetype,
   MERCHANT_ARCHETYPE_FAMILIES,
   MERCHANT_ARCHETYPE_LABELS,
 } from "./archetypes/types";

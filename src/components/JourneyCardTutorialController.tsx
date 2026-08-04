@@ -13,7 +13,7 @@ import {
 import { logEvent } from "../logging";
 import {
   cardIdsMatchCurrentDraftOffer,
-  currentCardTutorialScreenKey,
+  currentCardTutorialContext,
   selectCardTutorialGuidance,
 } from "../rules/card-tutorial-guidance";
 import { useJourney } from "../state/journey-context";
@@ -58,7 +58,9 @@ export function JourneyCardTutorialController({
     () => createCardTutorialGuidanceContentProvider(journeyContent),
     [journeyContent],
   );
-  const screenKey = currentCardTutorialScreenKey(state);
+  const context = currentCardTutorialContext(state, provider);
+  const screenKey = context?.screenKey ?? null;
+  const triggerEvent = context?.event ?? null;
   const presentation = state.cardTutorialPresentation ?? null;
   const siteTutorialActive =
     activeFirstVisitTutorialSite(state.journey) !== null;
@@ -83,8 +85,9 @@ export function JourneyCardTutorialController({
     }
 
     const inspect = (): void => {
-      const cardIds = visibleCardIds(stage);
-      if (cardIds.length === 0) return;
+      if (triggerEvent === null) return;
+      const cardIds = triggerEvent === "card-seen" ? visibleCardIds(stage) : [];
+      if (triggerEvent === "card-seen" && cardIds.length === 0) return;
       const signature = `${screenKey}:${cardIds.join(",")}`;
       if (attemptedSignatureRef.current === signature) return;
       attemptedSignatureRef.current = signature;
@@ -93,12 +96,14 @@ export function JourneyCardTutorialController({
         provider,
         cardIds,
         new Set(state.tutorialTriggerIdsSeen ?? []),
+        triggerEvent,
       );
       if (match === null) return;
       logEvent("card_tutorial_guidance_open_requested", {
         screenKey,
-        cardId: match.card.id,
+        cardId: match.card?.id ?? null,
         triggerId: match.trigger.id,
+        triggerEvent,
         visibleCardIds: cardIds,
       });
       void actions
@@ -125,6 +130,7 @@ export function JourneyCardTutorialController({
     stageRef,
     state.cardTutorialScreenKeysSeen,
     state.tutorialTriggerIdsSeen,
+    triggerEvent,
   ]);
 
   const complete = useCallback(

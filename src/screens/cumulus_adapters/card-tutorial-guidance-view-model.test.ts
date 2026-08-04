@@ -54,4 +54,28 @@ describe("buildCardTutorialGuidanceView", () => {
       },
     });
   });
+
+  it("maps a site concept to viewport dialogue without a card source", () => {
+    const view = buildCardTutorialGuidanceView(
+      {
+        id: "card-tutorial:transfiguration",
+        screenKey: "journey:1:site:site-a:concept:transfiguration",
+        cardId: null,
+        triggerId: "transfiguration",
+        speaker: "mira",
+        text: "Cards can be [yellow]transfigured[/yellow] to change their cost, spark, or abilities",
+        duration: 5,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 500,
+      },
+      new Map(),
+    );
+
+    expect(view).toMatchObject({
+      presentationId: "card-tutorial:transfiguration",
+      triggerId: "transfiguration",
+      source: { kind: "journey-site" },
+    });
+  });
 });

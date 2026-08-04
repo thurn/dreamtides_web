@@ -32,6 +32,9 @@ export type BattleTutorialGuidanceSourceView =
       readonly cardId: string;
     }
   | {
+      readonly kind: "journey-site";
+    }
+  | {
       readonly kind: "dreamwell";
       readonly model: DreamwellCardModel;
       readonly side: "player" | "enemy";
@@ -115,23 +118,35 @@ function sourceSurface(
   view: BattleTutorialGuidanceView,
   journey: HTMLElement,
 ): HTMLElement | null {
-  return view.source.kind === "card"
-    ? battleCardSurface(view.source.battleCardId, journey)
-    : view.source.kind === "journey-card"
-      ? journeyCardSurface(view.source.cardId, journey)
-    : dreamwellSurface(view.source.side, journey, false);
+  switch (view.source.kind) {
+    case "card":
+      return battleCardSurface(view.source.battleCardId, journey);
+    case "journey-card":
+      return journeyCardSurface(view.source.cardId, journey);
+    case "journey-site":
+      return null;
+    case "dreamwell":
+      return dreamwellSurface(view.source.side, journey, false);
+  }
 }
 
 function destinationSurface(
   view: BattleTutorialGuidanceView,
   journey: HTMLElement,
 ): HTMLElement | null {
-  return view.source.kind === "card"
-    ? battleCardSurface(view.source.battleCardId, journey)
-    : view.source.kind === "journey-card"
-      ? journeyCardSurface(view.source.cardId, journey)
-    : (dreamwellSurface(view.source.side, journey, true) ??
-        dreamwellSurface(view.source.side, journey, false));
+  switch (view.source.kind) {
+    case "card":
+      return battleCardSurface(view.source.battleCardId, journey);
+    case "journey-card":
+      return journeyCardSurface(view.source.cardId, journey);
+    case "journey-site":
+      return null;
+    case "dreamwell":
+      return (
+        dreamwellSurface(view.source.side, journey, true) ??
+        dreamwellSurface(view.source.side, journey, false)
+      );
+  }
 }
 
 function transformBetween(
@@ -188,7 +203,11 @@ export function BattleTutorialGuidance({
   );
 
   useEffect(() => {
-    if (duration === null || view?.source.kind === "journey-card") {
+    if (
+      duration === null ||
+      view?.source.kind === "journey-card" ||
+      view?.source.kind === "journey-site"
+    ) {
       return undefined;
     }
     const timeout = window.setTimeout(
@@ -229,7 +248,10 @@ export function BattleTutorialGuidance({
   useLayoutEffect(() => {
     const journey = journeyRef.current;
     const journeyView = journeyViewRef.current;
-    if (journeyView?.source.kind === "journey-card") {
+    if (
+      journeyView?.source.kind === "journey-card" ||
+      journeyView?.source.kind === "journey-site"
+    ) {
       if (active) return undefined;
       const timeout = window.setTimeout(
         () => setRetainedView(null),
@@ -374,7 +396,10 @@ export function BattleTutorialGuidance({
   );
 
   if (renderedView === null) return <></>;
-  if (renderedView.source.kind === "journey-card") {
+  if (
+    renderedView.source.kind === "journey-card" ||
+    renderedView.source.kind === "journey-site"
+  ) {
     return (
       <ViewportTutorialDialogue
         view={{
@@ -385,7 +410,7 @@ export function BattleTutorialGuidance({
           bubbleWidth: renderedView.bubbleWidth,
         }}
         visible={active && dialogueVisible}
-        kind="card"
+        kind={renderedView.source.kind === "journey-card" ? "card" : "site"}
         triggerId={renderedView.triggerId}
         messageIndex={renderedView.messageIndex}
       />

@@ -608,6 +608,7 @@ const TUTORIAL_TRIGGER_EVENTS: ReadonlySet<TutorialTriggerEvent> = new Set([
   "card-no-valid-targets",
   "dreamwell-resolve",
   "figment-created",
+  "transfiguration-seen",
 ]);
 
 /** Validate untrusted generated supplemental tutorial trigger data. */
@@ -719,10 +720,12 @@ export function parseTutorialTriggers(
     }
     if (
       parsedMatch.kind === "any" &&
-      (record.on.length !== 1 || record.on[0] !== "figment-created")
+      (record.on.length !== 1 ||
+        (record.on[0] !== "figment-created" &&
+          record.on[0] !== "transfiguration-seen"))
     ) {
       throw new Error(
-        `Tutorial trigger ${JSON.stringify(record.id)} may use the any matcher only for figment creation.`,
+        `Tutorial trigger ${JSON.stringify(record.id)} may use the any matcher only for supported concept events.`,
       );
     }
     return {

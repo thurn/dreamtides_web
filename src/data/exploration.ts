@@ -35,6 +35,15 @@ export type ExplorationEffectKind =
   | "gain-essence-per-card"
   | "increase-spark-all";
 
+const TRANSFIGURATION_EXPLORATION_EFFECT_KINDS: ReadonlySet<ExplorationEffectKind> =
+  new Set(["transfigure-selected", "transfigure-fixed-selected"]);
+
+export function isTransfigurationExplorationEffect(
+  effectKind: ExplorationEffectKind,
+): boolean {
+  return TRANSFIGURATION_EXPLORATION_EFFECT_KINDS.has(effectKind);
+}
+
 export interface ExplorationActionContent {
   id: string;
   label: string;

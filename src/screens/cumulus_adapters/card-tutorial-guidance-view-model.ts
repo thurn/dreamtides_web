@@ -8,10 +8,12 @@ export function buildCardTutorialGuidanceView(
   cardDatabase: ReadonlyMap<number, CardData>,
 ): BattleTutorialGuidanceView | null {
   if (presentation == null) return null;
-  const card = [...cardDatabase.values()].find(
-    (candidate) => candidate.id === presentation.cardId,
-  );
-  if (card === undefined) return null;
+  const card = presentation.cardId === null
+    ? null
+    : [...cardDatabase.values()].find(
+        (candidate) => candidate.id === presentation.cardId,
+      ) ?? null;
+  if (presentation.cardId !== null && card === null) return null;
   return {
     presentationId: presentation.id,
     triggerId: presentation.triggerId,
@@ -28,10 +30,12 @@ export function buildCardTutorialGuidanceView(
     horizontalOffset: presentation.horizontalOffset,
     verticalOffset: presentation.verticalOffset,
     bubbleWidth: presentation.bubbleWidth,
-    source: {
-      kind: "journey-card",
-      cardId: card.id,
-      model: { cardId: card.id, displaySnapshot: card },
-    },
+    source: card === null
+      ? { kind: "journey-site" }
+      : {
+          kind: "journey-card",
+          cardId: card.id,
+          model: { cardId: card.id, displaySnapshot: card },
+        },
   };
 }

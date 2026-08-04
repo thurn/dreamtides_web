@@ -89,7 +89,8 @@ export type TutorialTriggerEvent =
   | "card-play"
   | "card-no-valid-targets"
   | "dreamwell-resolve"
-  | "figment-created";
+  | "figment-created"
+  | "transfiguration-seen";
 
 /** Stable semantic condition authored for a supplemental tutorial. */
 export type TutorialTriggerMatcher =

@@ -6,18 +6,28 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { FoldState } from "../rules/fold-state";
 import { JourneyCardTutorialController } from "./JourneyCardTutorialController";
 
-const mocks = vi.hoisted(() => ({
-  open: vi.fn(() => Promise.resolve(1)),
-  select: vi.fn(),
-  state: {
-    cardTutorialPresentation: null,
-    cardTutorialScreenKeysSeen: [],
-    tutorialTriggerIdsSeen: [],
-    journey: {
-      screen: { type: "dreamscape" },
-    },
-  } as unknown as FoldState,
-}));
+const mocks = vi.hoisted(() => {
+  const context: {
+    screenKey: string;
+    event: "card-seen" | "transfiguration-seen";
+  } = {
+    screenKey: "journey:1:site:site-1",
+    event: "card-seen",
+  };
+  return {
+    open: vi.fn(() => Promise.resolve(1)),
+    select: vi.fn(),
+    context,
+    state: {
+      cardTutorialPresentation: null,
+      cardTutorialScreenKeysSeen: [],
+      tutorialTriggerIdsSeen: [],
+      journey: {
+        screen: { type: "dreamscape" },
+      },
+    } as unknown as FoldState,
+  };
+});
 
 vi.mock("../coop/hooks", () => ({
   useActions: () => ({
@@ -43,12 +53,13 @@ vi.mock("../coop/providers/card-tutorial-guidance-provider", () => ({
   createCardTutorialGuidanceContentProvider: () => ({
     triggers: [],
     cardById: () => undefined,
+    hasVisibleTransfigurationReward: () => false,
   }),
 }));
 
 vi.mock("../rules/card-tutorial-guidance", () => ({
   cardIdsMatchCurrentDraftOffer: () => true,
-  currentCardTutorialScreenKey: () => "journey:1:site:site-1",
+  currentCardTutorialContext: () => mocks.context,
   selectCardTutorialGuidance: (...args: unknown[]) => {
     const result: unknown = mocks.select(...args);
     return result;
@@ -105,6 +116,10 @@ beforeEach(() => {
     toJSON: () => ({}),
   });
   mocks.open.mockClear();
+  mocks.context = {
+    screenKey: "journey:1:site:site-1",
+    event: "card-seen",
+  };
   mocks.select.mockReset();
   mocks.select.mockImplementation(
     (_provider: unknown, cardIds: readonly string[]) => ({
@@ -158,6 +173,38 @@ describe("JourneyCardTutorialController", () => {
     expect(mocks.open).toHaveBeenLastCalledWith(
       "journey:1:site:site-1",
       ["card-c", "card-b"],
+    );
+
+    act(() => root.unmount());
+  });
+
+  it("submits a visible site concept without waiting for a GameCard", async () => {
+    mocks.context = {
+      screenKey: "journey:1:site:augury:concept:transfiguration",
+      event: "transfiguration-seen",
+    };
+    mocks.select.mockImplementation(() => ({
+      card: null,
+      trigger: { id: "transfiguration" },
+    }));
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    await act(async () => {
+      root.render(<Harness cardIds={[]} />);
+      await Promise.resolve();
+    });
+
+    expect(mocks.select).toHaveBeenCalledWith(
+      expect.anything(),
+      [],
+      new Set(),
+      "transfiguration-seen",
+    );
+    expect(mocks.open).toHaveBeenCalledWith(
+      "journey:1:site:augury:concept:transfiguration",
+      [],
     );
 
     act(() => root.unmount());

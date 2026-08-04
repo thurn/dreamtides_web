@@ -32,6 +32,7 @@ const TUTORIAL_CLEARANCE_SELECTOR = [
   "[data-draft-pick-counter]",
   "[data-journey-status-bar-anchor]",
   "[data-coop-presence-status]",
+  "[data-testid='dreamscape-menu-button']",
   "[data-gallery-frame]",
   "[data-speech-bubble-pointer-placement]",
   "[data-tutorial-guidance-obstacle]",

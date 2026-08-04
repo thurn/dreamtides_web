@@ -8,6 +8,7 @@ import type { TutorialTriggerDefinition } from "../types/tutorial";
 import { genesisFoldState, type FoldState } from "./fold-state";
 import {
   completeCardTutorialGuidance,
+  currentCardTutorialContext,
   currentCardTutorialScreenKey,
   openCardTutorialGuidance,
   registerCardTutorialGuidanceContentProvider,
@@ -72,6 +73,23 @@ function provider(): CardTutorialGuidanceContentProvider {
       trigger("erode", 100),
     ],
     cardById: (cardId) => cards.get(cardId),
+    hasVisibleTransfigurationReward: () => false,
+  };
+}
+
+function transfigurationTrigger(): TutorialTriggerDefinition {
+  return {
+    id: "transfiguration",
+    on: ["transfiguration-seen"],
+    priority: 100,
+    speaker: "mira",
+    delay: { "transfiguration-seen": 1 },
+    duration: 5,
+    horizontalOffset: 0,
+    verticalOffset: 0,
+    bubbleWidth: 500,
+    match: { kind: "any" },
+    text: "Cards can be [yellow]transfigured[/yellow] to change their cost, spark, or abilities",
   };
 }
 
@@ -121,6 +139,34 @@ function siteState(
             backwardIds: [],
             knownDreamsignId: null,
           },
+        },
+      },
+    },
+  };
+}
+
+function transfigurationSiteState(): FoldState {
+  const base = siteState("site-a", "Transfiguration");
+  return {
+    ...base,
+    journey: {
+      ...base.journey,
+      siteRuntime: {
+        "site-a": {
+          kind: "cardChoice",
+          choiceKind: "transfiguration",
+          entryIds: ["entry-a"],
+          acceptedEntryIds: [],
+          transfigurationOffers: [
+            {
+              entryId: "entry-a",
+              type: "Empowered",
+              effectDescription: "Costs 1 less.",
+              effectDetails: {},
+              previewCard: card("card-a", 1, "Support."),
+              essenceCost: 20,
+            },
+          ],
         },
       },
     },
@@ -184,7 +230,7 @@ describe("card tutorial guidance selection", () => {
       ["card-a", "card-b"],
       new Set(),
     );
-    expect(match?.card.id).toBe("card-a");
+    expect(match?.card?.id).toBe("card-a");
     expect(match?.trigger.id).toBe("foresee");
   });
 
@@ -194,8 +240,23 @@ describe("card tutorial guidance selection", () => {
       ["card-a", "card-b"],
       new Set(["support", "foresee"]),
     );
-    expect(match?.card.id).toBe("card-b");
+    expect(match?.card?.id).toBe("card-b");
     expect(match?.trigger.id).toBe("erode");
+  });
+
+  it("selects a site concept without requiring a visible card", () => {
+    const conceptProvider: CardTutorialGuidanceContentProvider = {
+      ...provider(),
+      triggers: [transfigurationTrigger()],
+    };
+    expect(
+      selectCardTutorialGuidance(
+        conceptProvider,
+        [],
+        new Set(),
+        "transfiguration-seen",
+      ),
+    ).toEqual({ card: null, trigger: transfigurationTrigger() });
   });
 });
 
@@ -216,7 +277,6 @@ describe("card tutorial guidance fold", () => {
   it.each([
     "Shop",
     "Purge",
-    "Transfiguration",
     "Duplication",
     "DreamAugury",
   ] satisfies readonly SiteType[])(
@@ -227,6 +287,25 @@ describe("card tutorial guidance fold", () => {
       ).toBeNull();
     },
   );
+
+  it("is eligible when a Transfiguration site has a usable reward", () => {
+    expect(currentCardTutorialContext(transfigurationSiteState())).toEqual({
+      screenKey: "journey:7:site:site-a:concept:transfiguration",
+      event: "transfiguration-seen",
+    });
+  });
+
+  it("is eligible when the current Dream Augury contains a transfiguration reward", () => {
+    const state = siteState("site-a", "DreamAugury");
+    const conceptProvider: CardTutorialGuidanceContentProvider = {
+      ...provider(),
+      hasVisibleTransfigurationReward: () => true,
+    };
+    expect(currentCardTutorialContext(state, conceptProvider)).toEqual({
+      screenKey: "journey:7:site:site-a:concept:transfiguration",
+      event: "transfiguration-seen",
+    });
+  });
 
   it("is eligible on a persisted Draft offer", () => {
     expect(
@@ -276,6 +355,30 @@ describe("card tutorial guidance fold", () => {
     });
     expect(opened?.tutorialTriggerIdsSeen).toEqual(["foresee"]);
     expect(opened?.cardTutorialScreenKeysSeen).toEqual([screenKey]);
+  });
+
+  it("opens the shared transfiguration tutorial once without a card", () => {
+    const conceptProvider: CardTutorialGuidanceContentProvider = {
+      ...provider(),
+      triggers: [transfigurationTrigger()],
+    };
+    registerCardTutorialGuidanceContentProvider(conceptProvider);
+    const before = transfigurationSiteState();
+    const screenKey = currentCardTutorialScreenKey(before);
+    const opened = openCardTutorialGuidance(before, {
+      screenKey,
+      cardIds: [],
+    });
+
+    expect(opened?.cardTutorialPresentation).toMatchObject({
+      screenKey,
+      cardId: null,
+      triggerId: "transfiguration",
+      delay: 1,
+      duration: 5,
+      text: transfigurationTrigger().text,
+    });
+    expect(opened?.tutorialTriggerIdsSeen).toEqual(["transfiguration"]);
   });
 
   it("allows no second tutorial on the same screen after the first settles", () => {
