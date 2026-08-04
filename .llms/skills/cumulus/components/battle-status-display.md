@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/battle-status-display`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The glass status card for one battle participant: centered current and maximum energy at left, a head-focused DreamAvatar portrait or loading placeholder at center, and centered current points at right.
+The glass status card for one battle participant: centered current and maximum energy at left, a head-focused DreamAvatar portrait or loading placeholder at center, and centered current and target points at right.
 
 > **Guidance:** Pass the canonical owner and its near/far relationship separately so accessibility copy follows the current perspective.
 
@@ -23,6 +23,7 @@ The glass status card for one battle participant: centered current and maximum e
 | `currentEnergy` | `number` | yes | — | Energy currently available to this combatant. |
 | `maxEnergy` | `number` | yes | — | Maximum energy available to this combatant. |
 | `points` | `number` | yes | — | Current battle points. |
+| `pointsToWin` | `number` | yes | — | Battle points required to win. |
 | `testId` | `string` | no | — | Optional stable test id for the complete status card. |
 
 ### `dreamAvatarProfile`: the `BattleStatusDreamAvatarProfile` model
@@ -49,6 +50,7 @@ import { BattleStatusDisplay } from "src/cumulus/components/battle/BattleStatusD
   currentEnergy={2}
   maxEnergy={3}
   points={4}
+  pointsToWin={25}
 />
 ```
 
@@ -63,5 +65,6 @@ Use the null portrait state while the participant identity is being populated.
   currentEnergy={0}
   maxEnergy={0}
   points={0}
+  pointsToWin={10}
 />
 ```

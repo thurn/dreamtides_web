@@ -723,12 +723,14 @@ describe("buildTutorialView", () => {
       currentEnergy: 4,
       maxEnergy: 4,
       points: 0,
+      pointsToWin: 10,
     });
     expect(view.enemy.status).toEqual({
       dreamAvatar: null,
       currentEnergy: 4,
       maxEnergy: 4,
       points: 0,
+      pointsToWin: 10,
     });
 
     expect(view.inspector.sides.player.zones.deck).toBe(30);

@@ -140,6 +140,16 @@ describe("buildMobileBattleView", () => {
     );
   });
 
+  it("maps the battle's target score onto both status displays", () => {
+    const init = { ...makeInit(), scoreToWin: 25 };
+    const board = makeBoard(init);
+
+    const view = buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR);
+
+    expect(view.player.status.pointsToWin).toBe(25);
+    expect(view.enemy.status.pointsToWin).toBe(25);
+  });
+
   it("maps victory reward copy and defeat/draw presentation state", () => {
     const init = makeInit();
     const board = makeBoard(init);
@@ -843,6 +853,7 @@ describe("buildMobileBattleView", () => {
       currentEnergy: 2,
       maxEnergy: 4,
       points: 5,
+      pointsToWin: 10,
     });
     expect(view.enemy.status).toEqual({
       dreamAvatar: {
@@ -858,6 +869,7 @@ describe("buildMobileBattleView", () => {
       currentEnergy: 1,
       maxEnergy: 3,
       points: 8,
+      pointsToWin: 10,
     });
 
     const fallback = buildMobileBattleView(

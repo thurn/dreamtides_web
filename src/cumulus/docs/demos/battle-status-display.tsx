@@ -16,6 +16,8 @@ function BattleStatusDisplayDemo(args: Record<string, unknown>) {
     typeof args.currentEnergy === "number" ? args.currentEnergy : 2;
   const maxEnergy = typeof args.maxEnergy === "number" ? args.maxEnergy : 3;
   const points = typeof args.points === "number" ? args.points : 4;
+  const pointsToWin =
+    typeof args.pointsToWin === "number" ? args.pointsToWin : 25;
   return (
     <div style={{ width: 280 }}>
       <BattleStatusDisplay
@@ -25,6 +27,7 @@ function BattleStatusDisplayDemo(args: Record<string, unknown>) {
         currentEnergy={currentEnergy}
         maxEnergy={maxEnergy}
         points={points}
+        pointsToWin={pointsToWin}
       />
     </div>
   );
@@ -34,7 +37,7 @@ export const battleStatusDisplayDemo: CumulusComponent = {
   id: "battle-status-display",
   title: "Battle Status Display",
   blurb:
-    "The glass status card for one battle participant: centered current and maximum energy at left, a head-focused DreamAvatar portrait or loading placeholder at center, and centered current points at right.",
+    "The glass status card for one battle participant: centered current and maximum energy at left, a head-focused DreamAvatar portrait or loading placeholder at center, and centered current and target points at right.",
   callout:
     "Pass the canonical owner and its near/far relationship separately so accessibility copy follows the current perspective.",
   group: "Components",
@@ -52,6 +55,7 @@ export const battleStatusDisplayDemo: CumulusComponent = {
   currentEnergy={2}
   maxEnergy={3}
   points={4}
+  pointsToWin={25}
 />`,
     },
     {
@@ -62,6 +66,7 @@ export const battleStatusDisplayDemo: CumulusComponent = {
   currentEnergy={0}
   maxEnergy={0}
   points={0}
+  pointsToWin={10}
 />`,
     },
   ],
@@ -72,6 +77,7 @@ export const battleStatusDisplayDemo: CumulusComponent = {
       currentEnergy: 2,
       maxEnergy: 3,
       points: 4,
+      pointsToWin: 25,
       placeholder: false,
     },
   },

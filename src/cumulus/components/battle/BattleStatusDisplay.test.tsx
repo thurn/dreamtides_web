@@ -27,11 +27,12 @@ describe("BattleStatusDisplay", () => {
           currentEnergy={1}
           maxEnergy={2}
           points={3}
+          pointsToWin={10}
         />,
       );
     });
     expect(container.querySelector("[data-battle-status]")?.getAttribute("aria-label"))
-      .toBe("Your side: 1 of 2 energy, 3 points");
+      .toBe("Your side: 1 of 2 energy, 3 of 10 points");
     act(() => root.unmount());
   });
   it("composes centered resources and a head portrait on standard Cumulus glass", () => {
@@ -51,6 +52,7 @@ describe("BattleStatusDisplay", () => {
           currentEnergy={2}
           maxEnergy={3}
           points={4}
+          pointsToWin={25}
           testId="enemy-status"
         />,
       );
@@ -61,8 +63,9 @@ describe("BattleStatusDisplay", () => {
     expect(status?.dataset.currentEnergy).toBe("2");
     expect(status?.dataset.maxEnergy).toBe("3");
     expect(status?.dataset.points).toBe("4");
+    expect(status?.dataset.pointsToWin).toBe("25");
     expect(status?.getAttribute("aria-label")).toBe(
-      "Enemy: 2 of 3 energy, 4 points",
+      "Enemy: 2 of 3 energy, 4 of 25 points",
     );
     expect(status?.style.background).toContain("var(--glass-sheen)");
     expect(status?.style.background).toContain("var(--glass-fill)");
@@ -73,7 +76,7 @@ describe("BattleStatusDisplay", () => {
     expect(status?.style.height).toBe("100%");
     expect(status?.style.boxSizing).toBe("border-box");
     expect(status?.textContent).toContain("2/3");
-    expect(status?.textContent).toContain("4");
+    expect(status?.textContent).toContain("4/25");
     const energy = status?.querySelector<HTMLElement>(
       '[data-battle-status-resource="energy"]',
     );
@@ -121,6 +124,7 @@ describe("BattleStatusDisplay", () => {
           currentEnergy={0}
           maxEnergy={0}
           points={0}
+          pointsToWin={10}
         />,
       );
     });
@@ -164,6 +168,7 @@ describe("BattleStatusDisplay", () => {
             currentEnergy={0}
             maxEnergy={0}
             points={0}
+            pointsToWin={10}
           />
         </CumulusRoot>,
       );

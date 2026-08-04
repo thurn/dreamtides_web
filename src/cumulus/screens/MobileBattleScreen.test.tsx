@@ -113,6 +113,7 @@ function makeSide(
       currentEnergy: owner === "enemy" ? 2 : 3,
       maxEnergy: owner === "enemy" ? 4 : 3,
       points: owner === "enemy" ? 5 : 6,
+      pointsToWin: 10,
     },
   };
 }
@@ -1707,9 +1708,14 @@ describe("MobileBattleScreen", () => {
       expect(
         row?.querySelector(`[data-testid="${owner}-battle-deck"]`),
       ).not.toBeNull();
+      const status = row?.querySelector<HTMLElement>(
+        `[data-testid="${owner}-battle-status"]`,
+      );
+      expect(status).not.toBeNull();
       expect(
-        row?.querySelector(`[data-testid="${owner}-battle-status"]`),
-      ).not.toBeNull();
+        status?.querySelector('[data-battle-status-resource="points"]')
+          ?.textContent,
+      ).toBe(`${String(view[owner].status.points)}/10`);
       expect(row?.style.gridTemplateColumns).toBe(
         "minmax(0, 1fr) max-content minmax(0, 1fr)",
       );

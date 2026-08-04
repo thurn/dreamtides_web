@@ -487,6 +487,14 @@
       "description": "Current battle points."
     },
     {
+      "name": "pointsToWin",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Battle points required to win."
+    },
+    {
       "name": "testId",
       "tsType": "string",
       "unionMembers": [],

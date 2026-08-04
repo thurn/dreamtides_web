@@ -115,6 +115,7 @@ export interface MobileBattleStatusView {
   readonly currentEnergy: number;
   readonly maxEnergy: number;
   readonly points: number;
+  readonly pointsToWin: number;
 }
 
 /** Every zone owned by one side of the battle. */
@@ -1306,6 +1307,7 @@ function SideZones({
             currentEnergy={side.status.currentEnergy}
             maxEnergy={side.status.maxEnergy}
             points={side.status.points}
+            pointsToWin={side.status.pointsToWin}
             testId={`${owner}-battle-status`}
           />
           {dreamwell !== null && dreamwell.side === owner ? (

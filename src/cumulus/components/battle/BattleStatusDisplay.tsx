@@ -37,6 +37,8 @@ export interface BattleStatusDisplayProps {
   readonly maxEnergy: number;
   /** Current battle points. */
   readonly points: number;
+  /** Battle points required to win. */
+  readonly pointsToWin: number;
   /** Optional stable test id for the complete status card. */
   readonly testId?: string;
 }
@@ -54,6 +56,7 @@ export function BattleStatusDisplay({
   currentEnergy,
   maxEnergy,
   points,
+  pointsToWin,
   testId,
 }: BattleStatusDisplayProps) {
   const ownerLabel = relationship === "near"
@@ -65,13 +68,14 @@ export function BattleStatusDisplay({
   return (
     <div
       role="group"
-      aria-label={`${ownerLabel}: ${String(currentEnergy)} of ${String(maxEnergy)} energy, ${String(points)} points`}
+      aria-label={`${ownerLabel}: ${String(currentEnergy)} of ${String(maxEnergy)} energy, ${String(points)} of ${String(pointsToWin)} points`}
       data-battle-status=""
       data-owner={owner}
       data-relationship={relationship}
       data-current-energy={String(currentEnergy)}
       data-max-energy={String(maxEnergy)}
       data-points={String(points)}
+      data-points-to-win={String(pointsToWin)}
       data-testid={testId}
       style={{
         width: "100%",
@@ -123,7 +127,12 @@ export function BattleStatusDisplay({
         data-battle-status-resource="points"
         style={{ display: "flex", justifyContent: "center", minWidth: 0 }}
       >
-        <ResourceChip kind="points" value={points} size="md" tone="inherit" />
+        <ResourceChip
+          kind="points"
+          value={`${String(points)}/${String(pointsToWin)}`}
+          size="md"
+          tone="inherit"
+        />
       </div>
     </div>
   );

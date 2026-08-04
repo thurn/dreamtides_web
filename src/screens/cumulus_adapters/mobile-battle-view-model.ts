@@ -84,12 +84,14 @@ export function buildMobileBattleView(
     "player" === perspective ? "near" : "far",
     init.dreamAvatarSummary ?? FALLBACK_PLAYER_DREAM_AVATAR,
     board,
+    init.scoreToWin,
   );
   const enemy = buildSideView(
     "enemy",
     "enemy" === perspective ? "near" : "far",
     enemyDreamAvatar,
     board,
+    init.scoreToWin,
     !opponentAbilityIsActive(init.completionLevelAtStart),
   );
   const near = perspective === "player" ? player : enemy;
@@ -439,6 +441,7 @@ function buildSideView(
   position: BattleBoardPosition,
   dreamAvatar: BattleDreamAvatarSummary | typeof FALLBACK_PLAYER_DREAM_AVATAR,
   board: BattleMutableState,
+  pointsToWin: number,
   abilityUnavailable = false,
 ): MobileBattleSideView {
   const sideState = board.sides[side];
@@ -455,7 +458,12 @@ function buildSideView(
     frontRank: frontRankSlotIds(frontSize).map((slotId) =>
       buildSlotView(slotId, sideState.frontRank[slotId] ?? null, board),
     ),
-    status: buildStatusView(dreamAvatar, sideState, abilityUnavailable),
+    status: buildStatusView(
+      dreamAvatar,
+      sideState,
+      pointsToWin,
+      abilityUnavailable,
+    ),
   };
 }
 
@@ -488,6 +496,7 @@ function buildSlotView(
 function buildStatusView(
   dreamAvatar: BattleDreamAvatarSummary | typeof FALLBACK_PLAYER_DREAM_AVATAR,
   sideState: BattleMutableState["sides"][BattleSide],
+  pointsToWin: number,
   abilityUnavailable: boolean,
 ): MobileBattleStatusView {
   return {
@@ -514,5 +523,6 @@ function buildStatusView(
     currentEnergy: sideState.currentEnergy,
     maxEnergy: sideState.maxEnergy,
     points: sideState.score,
+    pointsToWin,
   };
 }

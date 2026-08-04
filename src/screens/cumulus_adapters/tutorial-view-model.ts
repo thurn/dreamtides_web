@@ -30,6 +30,7 @@ const TUTORIAL_OPPONENT_DREAM_AVATAR_ID =
 const TUTORIAL_PLAYER_BACK_RANK_INDEX = 0;
 const TUTORIAL_PLAYER_FRONT_RANK_INDEX = 0;
 const TUTORIAL_STARTING_ENERGY = 4;
+const TUTORIAL_POINTS_TO_WIN = 10;
 const AUTUMN_GLADE_CARD_ID = "02e8ea92-1218-413c-9f0b-4c865a3921d3";
 const AUTUMN_GLADE_SCORE_GAIN = 2;
 export {
@@ -300,6 +301,7 @@ function emptySide(owner: "enemy" | "player"): MobileBattleSideView {
       currentEnergy: 0,
       maxEnergy: 0,
       points: 0,
+      pointsToWin: TUTORIAL_POINTS_TO_WIN,
     },
   };
 }
