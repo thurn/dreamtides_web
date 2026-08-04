@@ -283,5 +283,51 @@
   {
     "template_id": 72,
     "template": "Gain a random legendary card."
+  },
+  {
+    "template_id": 73,
+    "template": "Lose {essence} essence. Apply {transfiguration} to every eligible {predicate} card in your deck.",
+    "balance_class": "unique_effect"
+  },
+  {
+    "template_id": 74,
+    "template": "Purge a random {subtype} character. Every other {subtype} character in your deck gains +1✦.",
+    "balance_class": "unique_effect"
+  },
+  {
+    "template_id": 75,
+    "template": "Purge $DECK_CARD. Apply {transfiguration} to every other eligible card in your deck with the same card type.",
+    "balance_class": "unique_effect"
+  },
+  {
+    "template_id": 76,
+    "template": "Purge a chosen dreamsign. Gain 3 random dreamsigns."
+  },
+  {
+    "template_id": 77,
+    "template": "Every {predicate} card in your deck becomes ❖ (fast). Gain {count} Nightmare cards.",
+    "balance_class": "unique_effect"
+  },
+  {
+    "template_id": 78,
+    "template": "Gain any number of {predicate} cards from 4 choices and apply {transfiguration} to each eligible card gained. Gain {count} Nightmare cards."
+  },
+  {
+    "template_id": 79,
+    "template": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+    "balance_class": "unique_effect"
+  },
+  {
+    "template_id": 80,
+    "template": "Select 4 random cards from your deck and choose one to purge. Apply {transfiguration} to the other 3 eligible cards, then gain a copy of each."
+  },
+  {
+    "template_id": 81,
+    "template": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+    "balance_class": "unique_effect"
+  },
+  {
+    "template_id": 82,
+    "template": "Lose half your current essence. The next {count} items you purchase are free."
   }
 ]
