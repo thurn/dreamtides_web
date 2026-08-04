@@ -823,6 +823,7 @@ export function ExplorationSiteScreen({
   const isDesktop = useIsDesktop();
   const cardTargetRef = useRef<HTMLDivElement>(null);
   const exitCompletedRef = useRef(false);
+  const resumedResolutionRef = useRef<string | null>(null);
   const rewardItemRefs = useRef(new Map<string, HTMLDivElement>());
   const completedRewardItemsRef = useRef(new Set<string>());
   const [revealed, setRevealed] = useState(reduceMotion);
@@ -896,6 +897,34 @@ export function ExplorationSiteScreen({
     rewardItemRefs.current.clear();
     setRewardTrajectories(null);
   }, [rewardIdentity]);
+
+  useLayoutEffect(() => {
+    const resolutionId = view.resolvedActionId;
+    if (
+      resolutionId === null ||
+      frameBreakGeometry !== null ||
+      resumedResolutionRef.current === resolutionId
+    ) {
+      return;
+    }
+    let animationFrame = 0;
+    const resumePersistedResolution = (): void => {
+      const geometry = measureFrameBreak(cardTargetRef.current);
+      if (geometry === null) {
+        animationFrame = window.requestAnimationFrame(
+          resumePersistedResolution,
+        );
+        return;
+      }
+      resumedResolutionRef.current = resolutionId;
+      setRevealed(true);
+      setFrameBreakGeometry(geometry);
+      setFrameBreakActive(true);
+      setFrameBreakPhase("open");
+    };
+    animationFrame = window.requestAnimationFrame(resumePersistedResolution);
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, [frameBreakGeometry, view.resolvedActionId]);
 
   useEffect(() => {
     if (reduceMotion) setRevealed(true);

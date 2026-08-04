@@ -1030,23 +1030,6 @@ describe("ExplorationSiteScreen", () => {
       />,
     );
 
-    act(() => {
-      container
-        .querySelector("[data-exploration-card-travel]")
-        ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
-    });
-    act(() =>
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-channel"]',
-        )
-        ?.click(),
-    );
-    act(() => {
-      container
-        .querySelector("[data-exploration-frame-break]")
-        ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
-    });
     expect(
       container.querySelector(
         '[data-testid="cumulus-exploration-narrative-copy"]',
@@ -1248,6 +1231,41 @@ describe("ExplorationSiteScreen", () => {
       vi.advanceTimersByTime(10_000);
     });
     expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
+  it("resumes a persisted spark reward directly at the reward moment", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = false;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function getBoundingClientRect(this: HTMLElement) {
+        if (this.hasAttribute("data-exploration-card-slot")) {
+          return new DOMRect(900, 180, 240, 336);
+        }
+        if (this instanceof HTMLImageElement && this.alt !== "") {
+          return new DOMRect(780, 150, 480, 291);
+        }
+        return new DOMRect(0, 0, 100, 100);
+      },
+    );
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={deckSparkRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    expect(
+      container.querySelector("[data-exploration-deck-spark-reward]"),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-testid="cumulus-exploration-channel"]'),
+    ).toBeNull();
+    expect(onExit).not.toHaveBeenCalled();
+
     act(() => root.unmount());
   });
 
