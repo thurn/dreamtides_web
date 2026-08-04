@@ -392,6 +392,9 @@ const REWARD_READING_SECONDS = motionTimeSeconds("--dur-slow") * 4;
 const REWARD_TRAVEL_SECONDS = motionTimeSeconds("--dur-slow") * 2;
 const REWARD_STAGGER_SECONDS = motionTimeSeconds("--dur-fast");
 const TYPEWRITER_SECONDS = motionTimeSeconds("--dur-exploration-typewriter");
+const CHOICE_STAGGER_SECONDS = motionTimeSeconds(
+  "--delay-exploration-choice-stagger",
+);
 const DESKTOP_REWARD_CARD_WIDTH = 240;
 const DESKTOP_REWARD_DREAMSIGN_SIZE = 240;
 const MOBILE_REWARD_DREAMSIGN_SIZE = 180;
@@ -421,29 +424,47 @@ function ExplorationNarrativeChoices({
   const [visibleCharacterCount, setVisibleCharacterCount] = useState(
     reduceMotion ? characters.length : 0,
   );
-  const [choicesVisible, setChoicesVisible] = useState(reduceMotion);
+  const [revealedChoiceCount, setRevealedChoiceCount] = useState(
+    reduceMotion ? actions.length : 0,
+  );
 
   useEffect(() => {
     if (reduceMotion || characters.length === 0) {
       setVisibleCharacterCount(characters.length);
-      setChoicesVisible(true);
       return;
     }
 
     setVisibleCharacterCount(0);
-    setChoicesVisible(false);
     const durationMs = TYPEWRITER_SECONDS * 1_000;
     const timers = characters.map((_, index) => {
       const nextCount = index + 1;
       return window.setTimeout(() => {
         setVisibleCharacterCount(nextCount);
-        if (nextCount === characters.length) setChoicesVisible(true);
       }, (durationMs * nextCount) / characters.length);
     });
     return () => {
       for (const timer of timers) window.clearTimeout(timer);
     };
   }, [characters, reduceMotion]);
+
+  const typewriterComplete = visibleCharacterCount === characters.length;
+
+  useEffect(() => {
+    if (!typewriterComplete) {
+      setRevealedChoiceCount(0);
+      return;
+    }
+    if (reduceMotion || actions.length < 2) {
+      setRevealedChoiceCount(actions.length);
+      return;
+    }
+
+    setRevealedChoiceCount(1);
+    const timer = window.setTimeout(() => {
+      setRevealedChoiceCount(actions.length);
+    }, CHOICE_STAGGER_SECONDS * 1_000);
+    return () => window.clearTimeout(timer);
+  }, [actions.length, reduceMotion, typewriterComplete]);
 
   const visibleNarrative = characters
     .slice(0, visibleCharacterCount)
@@ -471,7 +492,7 @@ function ExplorationNarrativeChoices({
           aria-hidden="true"
           data-testid="cumulus-exploration-narrative-copy"
           data-exploration-typewriter-state={
-            choicesVisible ? "complete" : "typing"
+            typewriterComplete ? "complete" : "typing"
           }
           data-exploration-visible-character-count={visibleCharacterCount}
           style={{ gridArea: "1 / 1" }}
@@ -482,37 +503,56 @@ function ExplorationNarrativeChoices({
       <motion.div
         role="group"
         aria-label="Exploration choices"
-        aria-hidden={!choicesVisible}
+        aria-hidden={revealedChoiceCount === 0}
         data-exploration-choices-state={
-          choicesVisible ? "revealed" : "waiting"
+          revealedChoiceCount === actions.length
+            ? "revealed"
+            : revealedChoiceCount === 0
+              ? "waiting"
+              : "staggering"
         }
         initial={false}
-        animate={{
-          opacity: choicesVisible ? 1 : 0,
-          y: choicesVisible || reduceMotion ? 0 : token("--space-2"),
-        }}
-        transition={{
-          duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
-          ease: DREAM_EASE,
-        }}
         style={{
           display: "grid",
           gap: token("--space-3"),
-          visibility: choicesVisible ? "visible" : "hidden",
-          pointerEvents: choicesVisible ? "auto" : "none",
         }}
       >
-        {actions.map((action, index) => (
-          <ExplorationChoice
-            key={action.id}
-            action={{
-              ...action,
-              available: choicesVisible && action.available,
-            }}
-            index={index}
-            onActivate={() => onActivate(action)}
-          />
-        ))}
+        {actions.map((action, index) => {
+          const visible = index < revealedChoiceCount;
+          return (
+            <motion.div
+              key={action.id}
+              aria-hidden={!visible}
+              data-exploration-choice-reveal-state={
+                visible ? "revealed" : "waiting"
+              }
+              initial={false}
+              animate={{
+                opacity: visible ? 1 : 0,
+                y: visible || reduceMotion ? 0 : token("--space-2"),
+              }}
+              transition={{
+                duration: reduceMotion
+                  ? 0
+                  : motionTimeSeconds("--dur-base"),
+                ease: DREAM_EASE,
+              }}
+              style={{
+                visibility: visible ? "visible" : "hidden",
+                pointerEvents: visible ? "auto" : "none",
+              }}
+            >
+              <ExplorationChoice
+                action={{
+                  ...action,
+                  available: visible && action.available,
+                }}
+                index={index}
+                onActivate={() => onActivate(action)}
+              />
+            </motion.div>
+          );
+        })}
       </motion.div>
     </>
   );

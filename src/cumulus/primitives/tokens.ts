@@ -300,6 +300,7 @@ export const TOKENS = {
   "--dur-base": { var: "var(--dur-base)", value: "240ms", kind: "other" },
   "--dur-slow": { var: "var(--dur-slow)", value: "420ms", kind: "other" },
   "--dur-exploration-typewriter": { var: "var(--dur-exploration-typewriter)", value: "1000ms", kind: "other" },
+  "--delay-exploration-choice-stagger": { var: "var(--delay-exploration-choice-stagger)", value: "500ms", kind: "other" },
   "--dur-loading-screen-fade": { var: "var(--dur-loading-screen-fade)", value: "1200ms", kind: "other" },
   "--dur-tutorial-dreamwell-emerge": { var: "var(--dur-tutorial-dreamwell-emerge)", value: "1000ms", kind: "other" },
   "--dur-tutorial-character-reposition": { var: "var(--dur-tutorial-character-reposition)", value: "1000ms", kind: "other" },

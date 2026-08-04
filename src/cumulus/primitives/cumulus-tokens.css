@@ -588,6 +588,7 @@
   --dur-base: 240ms;  /* @kind other */
   --dur-slow: 420ms;  /* @kind other */
   --dur-exploration-typewriter: 1000ms;  /* @kind other */
+  --delay-exploration-choice-stagger: 500ms;  /* @kind other */
   --dur-loading-screen-fade: 1200ms;  /* @kind other */
   --dur-tutorial-dreamwell-emerge: 1000ms;  /* @kind other */
   --dur-tutorial-character-reposition: 1000ms;  /* @kind other */

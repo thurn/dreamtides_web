@@ -312,3 +312,4 @@ Re-exports under the production codebase's --dt-* and --color-* token names. Gam
 | `--gallery-action-rim` | `rgba(255, 255, 255, 0.20)` |  |
 | `--gallery-action-foreground` | `#d7d1c4` |  |
 | `--badge-disc-gradient` | `radial-gradient(closest-side, #2a2040, #14101f)` |  |
+| `--delay-exploration-choice-stagger` | `500ms` |  |

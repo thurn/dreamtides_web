@@ -410,10 +410,14 @@ describe("ExplorationSiteScreen", () => {
     const firstChoice = container.querySelector<HTMLButtonElement>(
       '[data-testid="cumulus-exploration-choice-0"]',
     );
+    const secondChoice = container.querySelector<HTMLButtonElement>(
+      '[data-testid="cumulus-exploration-choice-1"]',
+    );
     expect(narrative?.textContent).toBe("");
     expect(narrative?.dataset.explorationTypewriterState).toBe("typing");
-    expect(choices?.style.visibility).toBe("hidden");
+    expect(choices?.getAttribute("aria-hidden")).toBe("true");
     expect(firstChoice?.getAttribute("aria-disabled")).toBe("true");
+    expect(secondChoice?.getAttribute("aria-disabled")).toBe("true");
 
     act(() => {
       vi.advanceTimersByTime(500);
@@ -443,10 +447,27 @@ describe("ExplorationSiteScreen", () => {
     expect(narrative?.dataset.explorationTypewriterState).toBe("complete");
     expect(
       container.querySelector<HTMLElement>(
-        "[data-exploration-choices-state='revealed']",
-      )?.style.visibility,
-    ).toBe("visible");
+        "[data-exploration-choices-state='staggering']",
+      ),
+    ).not.toBeNull();
     expect(firstChoice?.hasAttribute("aria-disabled")).toBe(false);
+    expect(secondChoice?.getAttribute("aria-disabled")).toBe("true");
+
+    act(() => {
+      vi.advanceTimersByTime(499);
+    });
+    expect(
+      container.querySelector("[data-exploration-choices-state='revealed']"),
+    ).toBeNull();
+    expect(secondChoice?.getAttribute("aria-disabled")).toBe("true");
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(
+      container.querySelector("[data-exploration-choices-state='revealed']"),
+    ).not.toBeNull();
+    expect(secondChoice?.hasAttribute("aria-disabled")).toBe(false);
     act(() => root.unmount());
   });
 
