@@ -866,6 +866,81 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
+  it("resolves a pack from its explicit Choose button", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const base = view();
+    const followupView: ExplorationSiteView = {
+      ...base,
+      actions: [
+        {
+          ...base.actions[0],
+          followup: {
+            kind: "packs",
+            title: "Answer Their Muster",
+            subtitle: "Choose one pack to add to your deck.",
+            packs: [0, 1].map((index) => ({
+              index,
+              cards: [0, 1, 2].map((cardIndex) => ({
+                entryId: `pack-${String(index)}-card-${String(cardIndex)}`,
+                model: base.card,
+                isBane: false,
+              })),
+            })),
+          },
+        },
+        base.actions[1],
+      ],
+    };
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={followupView}
+        onChannel={vi.fn()}
+        onResolve={onResolve}
+        onExit={vi.fn()}
+      />,
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+
+    const secondPack = container.querySelector<HTMLElement>(
+      '[data-testid="cumulus-exploration-pack-1"]',
+    );
+    expect(secondPack?.tagName).toBe("SECTION");
+    expect(
+      container.querySelector(
+        '[data-testid="cumulus-exploration-followup-confirm"]',
+      ),
+    ).toBeNull();
+    act(() => secondPack?.click());
+    expect(onResolve).not.toHaveBeenCalled();
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-pack-1-choose"]',
+        )
+        ?.click(),
+    );
+    expect(onResolve).toHaveBeenCalledWith("choice-a", { packIndex: 1 });
+    act(() => root.unmount());
+  });
+
   it("presents four offered cards in the centered Augury choice grid without a Back button", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),

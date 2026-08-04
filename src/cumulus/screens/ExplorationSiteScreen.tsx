@@ -90,7 +90,6 @@ export interface ExplorationSiteView {
   /** Exact UUID-backed objects granted by the persisted resolution. */
   reward: ExplorationRewardView | null;
 }
-
 export type ExplorationRewardView =
   | {
       readonly kind: "objects";
@@ -853,7 +852,6 @@ export function ExplorationSiteScreen({
   const [activeActionId, setActiveActionId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<readonly string[]>([]);
   const [purgeEntryId, setPurgeEntryId] = useState<string | null>(null);
-  const [selectedPackIndex, setSelectedPackIndex] = useState<number | null>(null);
   const [selectedSubtype, setSelectedSubtype] = useState<string | null>(null);
   const [selectedDreamsignId, setSelectedDreamsignId] = useState<string | null>(null);
   const [selectedTransfigurationEntryId, setSelectedTransfigurationEntryId] =
@@ -902,7 +900,6 @@ export function ExplorationSiteScreen({
     setActiveActionId(null);
     setSelectedIds([]);
     setPurgeEntryId(null);
-    setSelectedPackIndex(null);
     setSelectedSubtype(null);
     setSelectedDreamsignId(null);
     setSelectedTransfigurationEntryId(null);
@@ -1223,7 +1220,6 @@ export function ExplorationSiteScreen({
     setActiveActionId(action.id);
     setSelectedIds([]);
     setPurgeEntryId(null);
-    setSelectedPackIndex(null);
     setSelectedSubtype(null);
     setSelectedDreamsignId(null);
     setSelectedTransfigurationEntryId(null);
@@ -1272,11 +1268,6 @@ export function ExplorationSiteScreen({
       onResolve(activeAction.id, { [followup.selectionKey]: selectedIds });
       return;
     }
-    if (followup.kind === "packs") {
-      if (selectedPackIndex === null) return;
-      onResolve(activeAction.id, { packIndex: selectedPackIndex });
-      return;
-    }
     if (followup.kind === "subtypes") {
       if (selectedSubtype === null) return;
       onResolve(activeAction.id, { subtype: selectedSubtype });
@@ -1299,7 +1290,7 @@ export function ExplorationSiteScreen({
         ? purgeEntryId !== null && selectedIds.length === 1
         : selectedIds.length >= followup.min && selectedIds.length <= followup.max;
     }
-    if (followup.kind === "packs") return selectedPackIndex !== null;
+    if (followup.kind === "packs") return false;
     if (followup.kind === "subtypes") return selectedSubtype !== null;
     return selectedDreamsignId !== null;
   })();
@@ -2345,26 +2336,18 @@ export function ExplorationSiteScreen({
               title={activeAction.followup.title}
               subtitle={activeAction.followup.subtitle}
               headingLevel="h1"
-              footer={
-                <div style={{ display: "flex", justifyContent: "flex-end", padding: token("--space-5") }}>
-                  <GlassButton label="Take This Pack" variant="accent" placement="onGlass" disabled={!canCommitFollowup} onPress={commitFollowup} testId="cumulus-exploration-followup-confirm" />
-                </div>
-              }
             >
               <div style={{ display: "grid", gridTemplateColumns: isDesktop ? "repeat(2, minmax(0, 1fr))" : "1fr", gap: token("--space-4"), padding: token("--space-5"), overflow: "auto" }}>
                 {activeAction.followup.packs.map((pack) => (
-                  <Pressable
+                  <section
                     key={pack.index}
-                    as="button"
-                    aria-pressed={selectedPackIndex === pack.index}
                     data-testid={`cumulus-exploration-pack-${String(pack.index)}`}
-                    onClick={() => setSelectedPackIndex(pack.index)}
                     style={{
                       display: "grid",
                       gap: token("--space-3"),
                       padding: token("--space-4"),
                       borderRadius: token("--radius-panel"),
-                      border: `2px solid ${selectedPackIndex === pack.index ? token("--selected") : token("--border-soft")}`,
+                      border: `2px solid ${token("--border-soft")}`,
                       background: token("--glass-on-glass-fill"),
                       color: token("--text-on-glass"),
                     }}
@@ -2373,7 +2356,15 @@ export function ExplorationSiteScreen({
                     <span style={{ display: "grid", gridTemplateColumns: `repeat(${String(pack.cards.length)}, minmax(0, 1fr))`, gap: token("--space-2") }}>
                       {pack.cards.map((card) => <GameCard key={card.entryId} model={card.model} />)}
                     </span>
-                  </Pressable>
+                    <GlassButton
+                      label="Choose"
+                      accessibilityLabel={`Choose Pack ${String(pack.index + 1)}`}
+                      variant="accent"
+                      placement="onGlass"
+                      onPress={() => onResolve(activeAction.id, { packIndex: pack.index })}
+                      testId={`cumulus-exploration-pack-${String(pack.index)}-choose`}
+                    />
+                  </section>
                 ))}
               </div>
             </GlassPanel>
