@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/radial-announcement`
 
-Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 
 The orbiting circular status moment for turn handoffs, wins, and failures.
 

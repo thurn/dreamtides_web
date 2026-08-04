@@ -38,6 +38,10 @@ import {
 } from "../components/hud/JourneyStatusBar";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { GlassPanel } from "../components/overlay/GlassPanel";
+import {
+  RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
+  RadialAnnouncement,
+} from "../components/status/RadialAnnouncement";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { motionTimeSeconds } from "../primitives/motion-time";
@@ -86,10 +90,18 @@ export interface ExplorationSiteView {
   reward: ExplorationRewardView | null;
 }
 
-export interface ExplorationRewardView {
-  readonly cards: readonly GameCardModel[];
-  readonly dreamsigns: readonly DreamsignData[];
-}
+export type ExplorationRewardView =
+  | {
+      readonly kind: "objects";
+      readonly cards: readonly GameCardModel[];
+      readonly dreamsigns: readonly DreamsignData[];
+    }
+  | {
+      readonly kind: "deck-spark";
+      readonly amount: number;
+      readonly announcement: string;
+      readonly cards: readonly ExplorationCardChoiceView[];
+    };
 
 export interface ExplorationCardChoiceView {
   /** Deck-entry UUID for deck cards, card UUID for catalog offers. */
@@ -410,6 +422,12 @@ const CHOICE_STAGGER_SECONDS = motionTimeSeconds(
 const DESKTOP_REWARD_CARD_WIDTH = 240;
 const DESKTOP_REWARD_DREAMSIGN_SIZE = 240;
 const MOBILE_REWARD_DREAMSIGN_SIZE = 180;
+const DESKTOP_DECK_SPARK_CARD_WIDTH = 126;
+const MOBILE_DECK_SPARK_CARD_WIDTH = 84;
+const DESKTOP_DECK_SPARK_RADIUS_X = 280;
+const DESKTOP_DECK_SPARK_RADIUS_Y = 175;
+const MOBILE_DECK_SPARK_RADIUS_X = 132;
+const MOBILE_DECK_SPARK_RADIUS_Y = 205;
 const DESKTOP_FLOATING_PANEL_BOTTOM =
   `calc(${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-9")})`;
 // The card preview cache appends a 21px watermark strip to a 259px-tall
@@ -680,7 +698,7 @@ function sourceRectFor(target: RectSnapshot): {
 function rewardItemsFor(
   reward: ExplorationRewardView | null,
 ): readonly ExplorationRewardItem[] {
-  if (reward === null) return [];
+  if (reward === null || reward.kind !== "objects") return [];
   return [
     ...reward.cards.map((card, index) => ({
       key: `card:${String(index)}:${card.cardId}`,
@@ -695,6 +713,28 @@ function rewardItemsFor(
       dreamsign,
     })),
   ];
+}
+
+function deckSparkCardPose(
+  index: number,
+  count: number,
+  layout: "mobile" | "desktop",
+): { readonly x: number; readonly y: number; readonly rotate: number } {
+  const angle = (index / Math.max(1, count)) * Math.PI * 2 - Math.PI / 2;
+  const radiusVariation = 0.9 + (index % 3) * 0.05;
+  const radiusX =
+    (layout === "desktop"
+      ? DESKTOP_DECK_SPARK_RADIUS_X
+      : MOBILE_DECK_SPARK_RADIUS_X) * radiusVariation;
+  const radiusY =
+    (layout === "desktop"
+      ? DESKTOP_DECK_SPARK_RADIUS_Y
+      : MOBILE_DECK_SPARK_RADIUS_Y) * radiusVariation;
+  return {
+    x: Math.cos(angle) * radiusX,
+    y: Math.sin(angle) * radiusY,
+    rotate: ((index % 5) - 2) * 3,
+  };
 }
 
 function visibleHudDreamsign(dreamsignId: string): HTMLElement | null {
@@ -818,14 +858,25 @@ export function ExplorationSiteScreen({
   );
   const activeAction =
     view.actions.find((action) => action.id === activeActionId) ?? null;
+  const objectReward =
+    view.reward?.kind === "objects" ? view.reward : null;
+  const deckSparkReward =
+    view.reward?.kind === "deck-spark" ? view.reward : null;
   const rewardItems = useMemo(() => rewardItemsFor(view.reward), [view.reward]);
   const rewardIdentity =
     view.resolvedActionId === null || view.reward === null
       ? null
-      : [
-          view.resolvedActionId,
-          ...rewardItems.map((item) => item.key),
-        ].join("|");
+      : view.reward.kind === "objects"
+        ? [
+            view.resolvedActionId,
+            view.reward.kind,
+            ...rewardItems.map((item) => item.key),
+          ].join("|")
+        : [
+            view.resolvedActionId,
+            view.reward.kind,
+            ...view.reward.cards.map((card) => card.entryId),
+          ].join("|");
 
   useEffect(() => {
     if (view.resolvedActionId === null) return;
@@ -920,7 +971,7 @@ export function ExplorationSiteScreen({
   useLayoutEffect(() => {
     if (
       rewardIdentity === null ||
-      view.reward === null ||
+      objectReward === null ||
       frameBreakPhase !== "open"
     ) {
       return;
@@ -928,7 +979,7 @@ export function ExplorationSiteScreen({
     let animationFrame = 0;
     const hiddenTargets = new Map<HTMLElement, string>();
     const hideDockedDreamsigns = (): void => {
-      for (const dreamsign of view.reward?.dreamsigns ?? []) {
+      for (const dreamsign of objectReward.dreamsigns) {
         if (dreamsign.id === undefined) continue;
         const target = visibleHudDreamsign(dreamsign.id);
         if (target === null || hiddenTargets.has(target)) continue;
@@ -943,7 +994,7 @@ export function ExplorationSiteScreen({
         target.style.visibility = visibility;
       }
     };
-  }, [frameBreakPhase, rewardIdentity, view.reward]);
+  }, [frameBreakPhase, objectReward, rewardIdentity]);
 
   useEffect(() => {
     if (
@@ -988,6 +1039,26 @@ export function ExplorationSiteScreen({
     rewardIdentity,
     rewardItems,
     rewardTrajectories,
+  ]);
+
+  useEffect(() => {
+    if (
+      rewardIdentity === null ||
+      deckSparkReward === null ||
+      frameBreakPhase !== "open"
+    ) {
+      return;
+    }
+    const timer = window.setTimeout(
+      completeExit,
+      RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
+    );
+    return () => window.clearTimeout(timer);
+  }, [
+    completeExit,
+    deckSparkReward,
+    frameBreakPhase,
+    rewardIdentity,
   ]);
 
   const finishRewardItem = (itemKey: string): void => {
@@ -1565,7 +1636,7 @@ export function ExplorationSiteScreen({
       {frameBreakGeometry !== null &&
         frameBreakPhase === "open" &&
         activeAction === null &&
-        view.reward !== null &&
+        objectReward !== null &&
         rewardTrajectories === null && (
           <motion.section
             data-exploration-reward-stage=""
@@ -1654,6 +1725,99 @@ export function ExplorationSiteScreen({
                 </motion.div>
               );
             })}
+          </motion.section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
+        deckSparkReward !== null && (
+          <motion.section
+            data-exploration-deck-spark-reward=""
+            data-exploration-deck-spark-count={deckSparkReward.cards.length}
+            role="status"
+            aria-label={deckSparkReward.announcement}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "fixed",
+              top: safeAreaInsetAtLeast("top", "--space-6"),
+              right: token("--space-4"),
+              bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+              left: token("--space-4"),
+              zIndex: FRAME_BREAK_EXIT_LAYER + 1,
+              overflow: "hidden",
+              pointerEvents: "none",
+            }}
+          >
+            {deckSparkReward.cards.map((card, index) => {
+              const cardWidth = isDesktop
+                ? DESKTOP_DECK_SPARK_CARD_WIDTH
+                : MOBILE_DECK_SPARK_CARD_WIDTH;
+              const pose = deckSparkCardPose(
+                index,
+                deckSparkReward.cards.length,
+                isDesktop ? "desktop" : "mobile",
+              );
+              return (
+                <motion.div
+                  key={card.entryId}
+                  data-exploration-deck-spark-card=""
+                  data-exploration-deck-entry-id={card.entryId}
+                  data-card-id={card.model.cardId}
+                  initial={{
+                    x: 0,
+                    y: 0,
+                    rotate: 0,
+                    scale: reduceMotion ? 1 : 0.72,
+                    opacity: reduceMotion ? 1 : 0,
+                  }}
+                  animate={{
+                    x: pose.x,
+                    y: pose.y,
+                    rotate: pose.rotate,
+                    scale: reduceMotion ? 1 : [0.72, 1.07, 1],
+                    opacity: 1,
+                  }}
+                  transition={{
+                    delay: reduceMotion
+                      ? 0
+                      : (index * REWARD_STAGGER_SECONDS) / 3,
+                    duration: reduceMotion
+                      ? 0
+                      : motionTimeSeconds("--dur-slow"),
+                    ease: DREAM_EASE,
+                  }}
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    width: cardWidth,
+                    aspectRatio: CARD_ASPECT_RATIO,
+                    marginLeft: -cardWidth / 2,
+                    marginTop: -(cardWidth / CARD_ASPECT_RATIO_VALUE) / 2,
+                  }}
+                >
+                  <GameCard
+                    model={card.model}
+                    selected
+                    selectionColor="spark"
+                    hideRulesText
+                    testId={`cumulus-exploration-deck-spark-card-${card.entryId}`}
+                  />
+                </motion.div>
+              );
+            })}
+            <RadialAnnouncement
+              headline={`+${String(deckSparkReward.amount)} ✦`}
+              tone="reward"
+              size={isDesktop ? "compact" : "mini"}
+              duration="extended"
+              announcementId={`exploration-deck-spark:${view.resolvedActionId ?? "resolved"}`}
+            />
           </motion.section>
         )}
       {frameBreakGeometry !== null &&

@@ -128,7 +128,7 @@ function twoCardRewardView(): ExplorationSiteView {
   };
   return {
     ...base,
-    reward: { cards: [base.card, second], dreamsigns: [] },
+    reward: { kind: "objects", cards: [base.card, second], dreamsigns: [] },
   };
 }
 
@@ -136,6 +136,7 @@ function dreamsignRewardView(): ExplorationSiteView {
   return {
     ...view(true),
     reward: {
+      kind: "objects",
       cards: [],
       dreamsigns: [
         {
@@ -146,6 +147,34 @@ function dreamsignRewardView(): ExplorationSiteView {
           imageAlt: "Reward Dreamsign art",
           isNegative: false,
         },
+      ],
+    },
+  };
+}
+
+function deckSparkRewardView(): ExplorationSiteView {
+  const base = view(true);
+  const second = {
+    ...base.card,
+    cardId: asCardId("00000000-0000-4000-8000-000000000018"),
+    displaySnapshot: {
+      ...base.card.displaySnapshot,
+      id: asCardId("00000000-0000-4000-8000-000000000018"),
+      name: asCardName("Second Spark Fixture"),
+      cardNumber: 18,
+      spark: 4,
+      imageNumber: 18,
+    },
+  };
+  return {
+    ...base,
+    reward: {
+      kind: "deck-spark",
+      amount: 1,
+      announcement: "All characters in your deck gain +1✦",
+      cards: [
+        { entryId: "deck-entry-a", model: base.card, isBane: false },
+        { entryId: "deck-entry-b", model: second, isBane: false },
       ],
     },
   };
@@ -1143,6 +1172,80 @@ describe("ExplorationSiteScreen", () => {
       for (const flight of flights) {
         flight.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
       }
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
+  it("fans every affected character around a spark reward announcement", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = false;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function getBoundingClientRect(this: HTMLElement) {
+        if (this.hasAttribute("data-exploration-card-slot")) {
+          return new DOMRect(900, 180, 240, 336);
+        }
+        if (this instanceof HTMLImageElement && this.alt !== "") {
+          return new DOMRect(780, 150, 480, 291);
+        }
+        return new DOMRect(0, 0, 100, 100);
+      },
+    );
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={deckSparkRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    act(() => {
+      container
+        .querySelector("[data-exploration-card-travel]")
+        ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+    });
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() => {
+      container
+        .querySelector("[data-exploration-frame-break]")
+        ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+    });
+
+    const reward = container.querySelector<HTMLElement>(
+      "[data-exploration-deck-spark-reward]",
+    );
+    const cards = reward?.querySelectorAll<HTMLElement>(
+      "[data-exploration-deck-spark-card]",
+    );
+    expect(reward?.dataset.explorationDeckSparkCount).toBe("2");
+    expect(reward?.getAttribute("aria-label")).toBe(
+      "All characters in your deck gain +1✦",
+    );
+    expect(
+      [...(cards ?? [])].map(
+        (card) => card.dataset.explorationDeckEntryId,
+      ),
+    ).toEqual(["deck-entry-a", "deck-entry-b"]);
+    expect(
+      reward?.querySelector("[data-radial-announcement]")?.textContent,
+    ).toContain("+1 ✦");
+    expect(
+      reward?.querySelector<HTMLElement>(
+        '[data-testid="cumulus-exploration-deck-spark-card-deck-entry-a"] .card-view',
+      )?.style.boxShadow,
+    ).toContain("var(--spark)");
+    expect(onExit).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(10_000);
     });
     expect(onExit).toHaveBeenCalledOnce();
     act(() => root.unmount());

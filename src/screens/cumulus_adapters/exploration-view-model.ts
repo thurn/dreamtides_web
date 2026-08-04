@@ -500,9 +500,27 @@ function rewardForResolution(
   runtime: ExplorationSiteRuntime,
   state: JourneyState,
   content: JourneyContent,
+  actions: readonly ExplorationActionContent[],
 ): ExplorationSiteView["reward"] {
   const resolution = runtime.resolution;
   if (resolution === null) return null;
+  const resolvedAction = actions.find(
+    (action) => action.id === resolution.actionId,
+  );
+  if (resolvedAction?.effectKind === "increase-spark-all") {
+    const affectedEntryIds = new Set(resolution.affectedEntryIds);
+    const cards = state.deck.flatMap((entry) => {
+      if (!affectedEntryIds.has(entry.entryId)) return [];
+      const card = deckCardChoice(entry, content);
+      return card === null ? [] : [card];
+    });
+    return {
+      kind: "deck-spark",
+      amount: resolvedAction.sparkBonus ?? 1,
+      announcement: resolvedAction.effectText,
+      cards,
+    };
+  }
   const cards = resolution.gainedCardIds.flatMap((cardId) => {
     const card = cardById(content, cardId);
     return card === null ? [] : [modelForCard(card)];
@@ -516,7 +534,7 @@ function rewardForResolution(
   });
   return cards.length === 0 && dreamsigns.length === 0
     ? null
-    : { cards, dreamsigns };
+    : { kind: "objects", cards, dreamsigns };
 }
 
 /** Build the complete Exploration presentation from persisted domain data. */
@@ -562,6 +580,11 @@ export function buildExplorationSiteView(params: {
     narrative: encounter.prose,
     actions: actions as [ExplorationActionView, ExplorationActionView],
     resolvedActionId: params.runtime.resolution?.actionId ?? null,
-    reward: rewardForResolution(params.runtime, params.state, params.content),
+    reward: rewardForResolution(
+      params.runtime,
+      params.state,
+      params.content,
+      encounter.actions,
+    ),
   };
 }

@@ -151,10 +151,129 @@ describe("exploration-view-model", () => {
       ],
       resolvedActionId: "action-b",
       reward: {
+        kind: "objects",
         cards: [{ cardId: source.id }, { cardId: source.id }],
         dreamsigns: [{ id: gainedDreamsign.id }],
       },
       card: { cardId: source.id },
+    });
+  });
+
+  it("builds a UUID-keyed deck-wide spark reward from the affected entries", () => {
+    const source = card(sourceId, 17);
+    const event = {
+      ...card(asCardId("f0000000-0000-4000-8000-000000000018"), 18),
+      cardType: "Event" as const,
+      spark: null,
+    };
+    const state = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "entry-character",
+          cardNumber: source.cardNumber,
+          transfiguration: null,
+          isBane: false,
+          sparkBonus: 1,
+        },
+        {
+          entryId: "entry-event",
+          cardNumber: event.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        },
+      ],
+    };
+    const runtime: ExplorationSiteRuntime = {
+      kind: "exploration",
+      encounterCardId: source.id,
+      actionOffers: [
+        {
+          actionId: "increase-spark",
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+        {
+          actionId: "gain-source",
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+      ],
+      resolution: {
+        actionId: "increase-spark",
+        gainedCardIds: [],
+        gainedDreamsignIds: [],
+        purgedCardIds: [],
+        affectedEntryIds: ["entry-character"],
+        essenceGained: 0,
+      },
+    };
+    const content = {
+      cardDatabase: new Map([
+        [source.cardNumber, source],
+        [event.cardNumber, event],
+      ]),
+      dreamAvatars: [],
+      dreamwellCards: [],
+      dreamsignTemplates: [],
+      dreamscapes: [],
+      affiliations: [],
+      guides: [guide],
+      atlasConfig: { completionLevels: [] },
+      exploration: {
+        customCards: [],
+        customDreamsigns: [],
+        encounters: [
+          {
+            cardId: source.id,
+            prose: "The authored scene appears.",
+            actions: [
+              {
+                id: "increase-spark",
+                label: "Receive Their Blessing",
+                effectText: "All characters in your deck gain +1✦",
+                effectKind: "increase-spark-all",
+                sparkBonus: 1,
+              },
+              {
+                id: "gain-source",
+                label: "Gain the source",
+                effectText: "Gain the source card.",
+                effectKind: "gain-card",
+                cardId: source.id,
+              },
+            ],
+          },
+        ],
+      },
+    } as unknown as JourneyContent;
+
+    const view = buildExplorationSiteView({
+      sceneNode: null,
+      site: explorationSite,
+      guide,
+      runtime,
+      state,
+      content,
+    });
+
+    expect(view?.reward).toMatchObject({
+      kind: "deck-spark",
+      amount: 1,
+      announcement: "All characters in your deck gain +1✦",
+      cards: [
+        {
+          entryId: "entry-character",
+          model: {
+            cardId: source.id,
+            displaySnapshot: { spark: 3 },
+          },
+        },
+      ],
     });
   });
 
