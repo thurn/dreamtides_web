@@ -47,6 +47,30 @@ describe("captureVisualViewport", () => {
     expect(Object.isFrozen(snapshot.boundary)).toBe(true);
   });
 
+  it("reserves the rendered journey status bar band on desktop", () => {
+    Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 1200, height: 700, offsetLeft: 7, offsetTop: 13 } });
+    const statusBar = document.createElement("div");
+    statusBar.dataset.journeyStatusBarAnchor = "";
+    statusBar.getBoundingClientRect = () => ({ x: 0, y: 610, left: 0, top: 610, right: 1207, bottom: 713, width: 1207, height: 103, toJSON: () => ({}) });
+    document.body.append(statusBar);
+
+    const snapshot = captureVisualViewport();
+
+    expect(snapshot.boundary).toEqual({ x: 7, y: 13, width: 1200, height: 597 });
+    statusBar.remove();
+  });
+
+  it("leaves the status bar band available to mobile reveal placement", () => {
+    Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 390, height: 700, offsetLeft: 0, offsetTop: 0 } });
+    const statusBar = document.createElement("div");
+    statusBar.dataset.journeyStatusBarAnchor = "";
+    statusBar.getBoundingClientRect = () => ({ x: 0, y: 610, left: 0, top: 610, right: 390, bottom: 700, width: 390, height: 90, toJSON: () => ({}) });
+    document.body.append(statusBar);
+
+    expect(captureVisualViewport().boundary).toBeUndefined();
+    statusBar.remove();
+  });
+
   it("uses the nearest scrolling ancestor as the reveal boundary", () => {
     const outer = document.createElement("div");
     const scroller = document.createElement("div");

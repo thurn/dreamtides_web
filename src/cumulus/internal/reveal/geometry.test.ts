@@ -78,6 +78,7 @@ describe("selectRevealPlacement", () => {
         width: 1440,
         height: 900,
         safeArea: { top: 0, right: 0, bottom: 0, left: 0 },
+        boundary: { x: 0, y: 0, width: 1440, height: 780 },
       },
       reason: "hover",
       touchPoint: undefined,
@@ -93,6 +94,8 @@ describe("selectRevealPlacement", () => {
       sourceRect.x + sourceRect.width + 14,
     );
     expect(result.primaryRect.width).toBe(240);
+    expect(result.primaryRect.y + result.primaryRect.height).toBeLessThanOrEqual(780);
+    expect(result.secondaryRects[0].y + result.secondaryRects[0].height).toBeLessThanOrEqual(780);
     expect(result.bestEffortPrimaryOverlap).toBe(false);
   });
 

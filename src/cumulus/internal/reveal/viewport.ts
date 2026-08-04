@@ -47,15 +47,21 @@ function captureBoundary(
     VisualViewportSnapshot,
     "width" | "height" | "offsetLeft" | "offsetTop"
   >,
+  reservedBottom?: number,
 ): RevealRect | undefined {
-  if (boundaryElement === null) return undefined;
-  const value = boundaryElement.getBoundingClientRect();
   const viewportRight = viewport.offsetLeft + viewport.width;
   const viewportBottom = viewport.offsetTop + viewport.height;
+  if (boundaryElement === null && reservedBottom === undefined) return undefined;
+  const value = boundaryElement?.getBoundingClientRect() ?? {
+    left: viewport.offsetLeft,
+    top: viewport.offsetTop,
+    right: viewportRight,
+    bottom: viewportBottom,
+  };
   const left = Math.max(viewport.offsetLeft, value.left);
   const top = Math.max(viewport.offsetTop, value.top);
   const right = Math.min(viewportRight, value.right);
-  const bottom = Math.min(viewportBottom, value.bottom);
+  const bottom = Math.min(viewportBottom, value.bottom, reservedBottom ?? Number.POSITIVE_INFINITY);
   if (right <= left || bottom <= top) return undefined;
   return Object.freeze({
     x: left,
@@ -63,6 +69,18 @@ function captureBoundary(
     width: right - left,
     height: bottom - top,
   });
+}
+
+function captureDesktopStatusBarTop(
+  target: Window,
+  viewport: Pick<VisualViewportSnapshot, "height" | "offsetTop">,
+): number | undefined {
+  const anchor = target.document.querySelector<HTMLElement>("[data-journey-status-bar-anchor]");
+  if (anchor === null) return undefined;
+  const value = anchor.getBoundingClientRect();
+  const viewportBottom = viewport.offsetTop + viewport.height;
+  if (!(value.height > 0) || value.top <= viewport.offsetTop || value.top >= viewportBottom) return undefined;
+  return value.top;
 }
 
 export function captureVisualViewport(
@@ -74,6 +92,7 @@ export function captureVisualViewport(
   const height = visual?.height ?? target.innerHeight;
   const offsetLeft = visual?.offsetLeft ?? 0;
   const offsetTop = visual?.offsetTop ?? 0;
+  const layout = width < 900 ? "mobile" : "desktop";
   const styles = target.getComputedStyle(target.document.documentElement);
   const safeArea = Object.freeze({
     top: physicalInset(styles, SAFE_AREA_INSET_PROPERTIES.top),
@@ -81,14 +100,16 @@ export function captureVisualViewport(
     bottom: physicalInset(styles, SAFE_AREA_INSET_PROPERTIES.bottom),
     left: physicalInset(styles, SAFE_AREA_INSET_PROPERTIES.left),
   });
-  const boundary = captureBoundary(boundaryElement, {
+  const viewportRect = {
     width,
     height,
     offsetLeft,
     offsetTop,
-  });
+  };
+  const reservedBottom = layout === "desktop" ? captureDesktopStatusBarTop(target, viewportRect) : undefined;
+  const boundary = captureBoundary(boundaryElement, viewportRect, reservedBottom);
   return Object.freeze({
-    layout: width < 900 ? "mobile" : "desktop",
+    layout,
     width,
     height,
     offsetLeft,
