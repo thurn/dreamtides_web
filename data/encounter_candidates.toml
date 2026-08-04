@@ -1,0 +1,203 @@
+# Generated from data/encounter_candidates.json and data/templates.json.
+# This is a partial Exploration authoring export. Runtime effect fields
+# such as effect-kind are intentionally pending.
+# $SPECIAL placeholders are preserved for runtime resolution.
+
+# selected prose: pair-2 (rank 2)
+# selected actions: pair-5 (rank 4)
+[[encounter]]
+card-id = "161482b6-af07-4d9e-822d-8c738672beb9"
+prose = "A young lantern bearer approaches a towering window of stars."
+
+[[encounter.action]]
+id = "161482b6-af07-4d9e-822d-8c738672beb9:pair-5:template-11"
+label = "Invite someone through"
+effect-text = "Gain $OFFERED_CARD"
+response-text = "A small silhouette emerges beside the lifted lantern."
+template-id = 11
+template-variables = {}
+selection = { "$OFFERED_CARD" = { predicate = "≤2● cost Character" } }
+
+[[encounter.action]]
+id = "161482b6-af07-4d9e-822d-8c738672beb9:pair-5:template-17"
+label = "Send a possession through"
+effect-text = "Apply a transfiguration to a chosen card"
+response-text = "It returns altered beneath the lantern's glow."
+template-id = 17
+template-variables = {}
+
+# selected prose: pair-1 (rank 1)
+# selected actions: pair-1 (rank 1)
+[[encounter]]
+card-id = "738a5af0-f848-4d48-bceb-9a43c9b11066"
+prose = "An armored traveler hunches beside a doorway veiled in luminous grids."
+
+[[encounter.action]]
+id = "738a5af0-f848-4d48-bceb-9a43c9b11066:pair-1:template-13"
+label = "Open the Passage"
+effect-text = "Gain 2 random Survivor cards"
+response-text = "The traveler signals; distant silhouettes approach through the light."
+template-id = 13
+template-variables = { count = 2, predicate = "Survivor" }
+
+[[encounter.action]]
+id = "738a5af0-f848-4d48-bceb-9a43c9b11066:pair-1:template-14"
+label = "Choose a Guide"
+effect-text = "Draft a Survivor from 4 choices"
+response-text = "The grid sharpens around a solitary waiting figure."
+template-id = 14
+template-variables = { predicate = "Survivor" }
+
+# selected prose: pair-1 (rank 1)
+# selected actions: pair-1 (rank 1)
+[[encounter]]
+card-id = "401bb341-8385-41e9-8f6f-7b48e9ce174d"
+prose = "A heavy-furred wolf prowls low through blazing grass, its eyes shining."
+
+[[encounter.action]]
+id = "401bb341-8385-41e9-8f6f-7b48e9ce174d:pair-1:template-14"
+label = "Call Across the Fire"
+effect-text = "Draft a Spirit Animal from 4 choices"
+response-text = "A distant animal cry answers through the smoke."
+template-id = 14
+template-variables = { predicate = "Spirit Animal" }
+
+[[encounter.action]]
+id = "401bb341-8385-41e9-8f6f-7b48e9ce174d:pair-1:template-58"
+label = "Invite Another to Follow"
+effect-text = "Change a chosen character card to be a Spirit Animal"
+response-text = "The wolf circles back, accepting them into its stride."
+template-id = 58
+template-variables = { subtype = "Spirit Animal" }
+
+# selected prose: pair-1 (rank 1)
+# selected actions: pair-1 (rank 1)
+[[encounter]]
+card-id = "8b5eb29c-146f-46fb-9407-55004128fba7"
+prose = "A skull-faced guardian extends a lantern ablaze with drifting motes."
+
+[[encounter.action]]
+id = "8b5eb29c-146f-46fb-9407-55004128fba7:pair-1:template-10"
+label = "Accept the Lantern"
+effect-text = "Gain Lantern Keeper"
+response-text = "The guardian releases its handle into your keeping."
+template-id = 10
+template-variables = { card_id = { id = "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", display_name = "Lantern Keeper" } }
+
+[[encounter.action]]
+id = "8b5eb29c-146f-46fb-9407-55004128fba7:pair-1:template-14"
+label = "Study the Motes"
+effect-text = "Draft a ≤2● cost Character from 4 choices"
+response-text = "Their shifting pattern reveals several worthy companions."
+template-id = 14
+template-variables = { predicate = "≤2● cost Character" }
+
+# selected prose: pair-1 (rank 2)
+# selected actions: pair-1 (rank 2)
+[[encounter]]
+card-id = "954e8d50-d494-4fb2-b4c7-74979083b774"
+prose = "A gunman stands braced as cables of shadow stream from him."
+
+[[encounter.action]]
+id = "954e8d50-d494-4fb2-b4c7-74979083b774:pair-1:template-10"
+label = "Answer His Signal"
+effect-text = "Gain Breach Artist"
+response-text = "Another operative steps through the bright frame."
+template-id = 10
+template-variables = { card_id = { id = "87aba308-00b4-40d8-a46f-4e6f58a664a8", display_name = "Breach Artist" } }
+
+[[encounter.action]]
+id = "954e8d50-d494-4fb2-b4c7-74979083b774:pair-1:template-58"
+label = "Accept His Commission"
+effect-text = "Change a chosen character card to be a Outsider"
+response-text = "He marks your chosen recruit for infiltration."
+template-id = 58
+template-variables = { subtype = "Outsider" }
+
+# selected prose: pair-1 (rank 1)
+# selected actions: pair-1 (rank 1)
+[[encounter]]
+card-id = "b8ecc46d-bd92-4826-a416-7ce177e69cbf"
+prose = "An owl perches heavily on the branch, its dense plumage backlit."
+
+[[encounter.action]]
+id = "b8ecc46d-bd92-4826-a416-7ce177e69cbf:pair-1:template-14"
+label = "Follow the owl's focus"
+effect-text = "Draft a Spirit Animal from 4 choices"
+response-text = "Its pupils narrow toward rustling beyond the trees."
+template-id = 14
+template-variables = { predicate = "Spirit Animal" }
+
+[[encounter.action]]
+id = "b8ecc46d-bd92-4826-a416-7ce177e69cbf:pair-1:template-13"
+label = "Answer its low call"
+effect-text = "Gain 2 random Spirit Animal cards"
+response-text = "Answering calls rise from deeper in the forest."
+template-id = 13
+template-variables = { count = 2, predicate = "Spirit Animal" }
+
+# selected prose: pair-3 (rank 3)
+# selected actions: pair-1 (rank 1)
+[[encounter]]
+card-id = "e2f542eb-090f-4a22-a42c-a120eb6caaa3"
+prose = "Beneath a starry haze, a dark whale banks with fins extended."
+
+[[encounter.action]]
+id = "e2f542eb-090f-4a22-a42c-a120eb6caaa3:pair-1:template-10"
+label = "Call Across the Sky"
+effect-text = "Gain Cloudmantle Ray"
+response-text = "A distant ray glides beneath the whale."
+template-id = 10
+template-variables = { card_id = { id = "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", display_name = "Cloudmantle Ray" } }
+
+[[encounter.action]]
+id = "e2f542eb-090f-4a22-a42c-a120eb6caaa3:pair-1:template-14"
+label = "Follow Its Crossing"
+effect-text = "Draft a Spirit Animal from 4 choices"
+response-text = "The whale turns as distant calls answer."
+template-id = 14
+template-variables = { predicate = "Spirit Animal" }
+
+# selected prose: pair-2 (rank 2)
+# selected actions: pair-1 (rank 1)
+[[encounter]]
+card-id = "46783333-78f9-4146-a8ec-0d1b81e1bf2f"
+prose = "An elephant looms through starry haze, bright tusks sharply curved."
+
+[[encounter.action]]
+id = "46783333-78f9-4146-a8ec-0d1b81e1bf2f:pair-1:template-27"
+label = "Reach toward the tusks"
+effect-text = "Gain Charm Pouch"
+response-text = "A braided charm gleams beneath its curved tip."
+template-id = 27
+template-variables = { dreamsign_name = { id = "2D4EB3EE-0931-45ED-8365-69F18096EAD5", display_name = "Charm Pouch" } }
+
+[[encounter.action]]
+id = "46783333-78f9-4146-a8ec-0d1b81e1bf2f:pair-1:template-59"
+label = "Sound a gathering call"
+effect-text = "Gain 15 essence for each Spirit Animal card in your deck"
+response-text = "The elephant answers with a deep, carrying rumble."
+template-id = 59
+template-variables = { essence_per_card = 15, predicate = "Spirit Animal" }
+
+# selected prose: pair-2 (rank 1)
+# selected actions: pair-5 (rank 3)
+[[encounter]]
+card-id = "886c9d49-b25f-4ddd-97f0-2ec4b42eda89"
+prose = "A colossal rider looms through star-filled haze, long hair streaming."
+
+[[encounter.action]]
+id = "886c9d49-b25f-4ddd-97f0-2ec4b42eda89:pair-5:template-36"
+label = "Answer Their Muster"
+effect-text = "Choose one of 2 packs of Warrior cards to add to your deck"
+response-text = "Warriors gather where their immense shadow touches down."
+template-id = 36
+template-variables = { predicate = "Warrior" }
+
+[[encounter.action]]
+id = "886c9d49-b25f-4ddd-97f0-2ec4b42eda89:pair-5:template-64"
+label = "Receive Their Blessing"
+effect-text = "All characters in your deck gain +1✦"
+response-text = "Their starlit shadow sweeps across your waiting company."
+template-id = 64
+template-variables = {}
