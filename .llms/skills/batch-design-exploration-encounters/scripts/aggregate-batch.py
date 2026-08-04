@@ -244,7 +244,6 @@ def render_card(
                 templates[action["template_id"]], action["variables"]
             )
             lines.append(f"   - ***{action['label']}*** — {rendered}")
-            lines.append(f"     - **Response:** {action['resolution']}")
         if index != len(events):
             lines.append("")
     return "\n".join(lines)

@@ -16,7 +16,6 @@ function candidate(rank, selected = false) {
       template_id: templateId,
       label: `Label ${String(templateId)}`,
       variables: templateId === 1 ? { count: rank } : {},
-      resolution: `Resolution ${String(templateId)}`,
     })),
     rank,
     ...(selected ? { selected: { prose: true, actions: true } } : {}),
@@ -199,12 +198,12 @@ describe("encounter editor API", () => {
   it("persists only the targeted action text", async () => {
     const url = `/api/editor/encounters/${CARD_ID}/candidates/pair-1`;
     const result = await call("PATCH", url, {
-      field: "resolution",
+      field: "label",
       actionTemplateId: 2,
-      value: "A revised resolution",
+      value: "A revised action",
     });
     expect(result.status).toBe(200);
-    expect(result.body.confirmation).toMatchObject({ actionTemplateId: 2, value: "A revised resolution" });
+    expect(result.body.confirmation).toMatchObject({ actionTemplateId: 2, value: "A revised action" });
   });
 
   it("persists only the targeted numeric template variable", async () => {

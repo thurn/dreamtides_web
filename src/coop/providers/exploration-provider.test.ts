@@ -171,7 +171,6 @@ describe("Exploration provider", () => {
       id: "gain-offered",
       label: "Invite someone through",
       effectText: "Gain $OFFERED_CARD",
-      responseText: "Someone arrives.",
       effectKind: "gain-offered-card",
       predicate: "cheap-character",
     };
@@ -179,7 +178,6 @@ describe("Exploration provider", () => {
       id: "transfigure",
       label: "Send a possession through",
       effectText: "Apply a transfiguration to a chosen card",
-      responseText: "It returns altered.",
       effectKind: "transfigure-selected",
       count: 1,
     };
@@ -221,7 +219,6 @@ describe("Exploration provider", () => {
       id: "essence-per-card",
       label: "Sound a gathering call",
       effectText: "Gain 15 essence for each Spirit Animal card in your deck",
-      responseText: "A call answers.",
       effectKind: "gain-essence-per-card",
       predicate: "spirit-animal",
       essencePerCard: 15,
@@ -230,7 +227,6 @@ describe("Exploration provider", () => {
       id: "increase-spark",
       label: "Receive Their Blessing",
       effectText: "All characters in your deck gain +1✦",
-      responseText: "Starlight passes over the company.",
       effectKind: "increase-spark-all",
       sparkBonus: 1,
     };
@@ -292,7 +288,6 @@ describe("Exploration provider", () => {
       id: "warrior-packs",
       label: "Answer Their Muster",
       effectText: "Choose one of 2 packs of Warrior cards to add to your deck",
-      responseText: "Warriors gather.",
       effectKind: "choose-pack",
       predicate: "warrior",
       packCount: 2,
@@ -302,7 +297,6 @@ describe("Exploration provider", () => {
       id: "random-survivors",
       label: "Open the Passage",
       effectText: "Gain 2 random Survivor cards",
-      responseText: "Travelers approach.",
       effectKind: "gain-random-cards",
       predicate: "survivor",
       count: 2,
@@ -330,7 +324,6 @@ describe("Exploration provider", () => {
       id: "gain-dreamsign",
       label: "Reach toward the tusks",
       effectText: "Gain Charm Pouch",
-      responseText: "A charm gleams.",
       effectKind: "gain-dreamsign",
       dreamsignId: CHARM_POUCH_ID,
     };
@@ -338,7 +331,6 @@ describe("Exploration provider", () => {
       id: "gain-card",
       label: "Gain a card",
       effectText: "Gain a card",
-      responseText: "A card arrives.",
       effectKind: "gain-card",
       cardId: SOURCE_CARD_ID,
     };
@@ -369,7 +361,6 @@ describe("Exploration provider", () => {
       id: "draft-two-copies",
       label: "Call for Reinforcements",
       effectText: "Draft a Survivor from 4 choices and gain 2 copies of it",
-      responseText: "Reinforcements answer.",
       effectKind: "draft-card",
       predicate: "survivor",
       offerCount: 4,
@@ -379,7 +370,6 @@ describe("Exploration provider", () => {
       id: "gain-source",
       label: "Gain a card",
       effectText: "Gain a card",
-      responseText: "A card arrives.",
       effectKind: "gain-card",
       cardId: SOURCE_CARD_ID,
     };
@@ -404,14 +394,12 @@ describe("Exploration provider", () => {
       id: "random-dreamsign",
       label: "Read the suspended pattern",
       effectText: "Gain a random dreamsign",
-      responseText: "A mark emerges.",
       effectKind: "gain-random-dreamsign",
     };
     const purgeDreamsignAction: ExplorationActionContent = {
       id: "purge-dreamsign",
       label: "Break the suspended pattern",
       effectText: "Purge a chosen dreamsign and gain 50 essence",
-      responseText: "The force disperses.",
       effectKind: "purge-dreamsign-for-essence",
       essence: 50,
     };
@@ -455,14 +443,12 @@ describe("Exploration provider", () => {
       id: "make-fast",
       label: "Accept the charge",
       effectText: "All cards in your deck become fast",
-      responseText: "The charge races onward.",
       effectKind: "make-fast-all",
     };
     const costAction: ExplorationActionContent = {
       id: "reduce-and-banes",
       label: "Overload the aperture",
       effectText: "Reduce all costs and gain three Nightmare banes",
-      responseText: "Dark residue remains.",
       effectKind: "reduce-cost-all-and-gain-banes",
       energyCostReduction: 1,
       baneCardId: NIGHTMARE_ID,

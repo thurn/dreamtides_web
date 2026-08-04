@@ -38,7 +38,7 @@ validating an encounter.
 Treat every snippet and comparison in this skill and its references as a
 structural, stylistic, or quality-boundary illustration only. Documentation
 does not nominate any mechanical option. Do not copy or favor a documented
-prose line, action label, resolution, predicate, value, template, pairing,
+prose line, action label, predicate, value, template, pairing,
 card, or dreamsign. Derive every design-specific choice from the supplied card,
 viewed artwork, canonical data, economy, and complete candidate catalog at the
 workflow stage assigned to it. In particular, never convert placeholders or
@@ -65,9 +65,7 @@ scores, ranking rationale, IDs, raw templates, variables, or commentary:
 
 1. <prose>
    - ***<action label>*** — <rendered canonical template>
-     - **Response:** <resolution>
    - ***<action label>*** — <rendered canonical template>
-     - **Response:** <resolution>
 
 2. <prose>
    - ...
@@ -80,8 +78,8 @@ renders inline. Include all five designs in ascending rank order. For each
 design, put `prose` at the top level, preserve the two actions' template-pair
 order, and render each action as a sub-bullet. Bold and italicize its thematic
 `label` with triple asterisks and put the rendered canonical template on that
-same sub-bullet, then put its `resolution` in a nested response bullet. Render the
-canonical string from `data/templates.json` by replacing every braced
+same sub-bullet. Render the canonical string from `data/templates.json` by
+replacing every braced
 `{placeholder}` with its value from `variables`. Leave every uppercase
 `$SPECIAL_VARIABLE` literal because the runtime resolves it later.
 
@@ -213,7 +211,7 @@ commentary.
 5. Interpret the card according to its canonical type, then make a private
    source-name watchlist. Do not quote the complete card name, use a distinctive
    multiword portion of it as a proper name, or mechanically repeat its words
-   across `prose`, `label`, and `resolution`. Individual name words remain
+   across `prose` and `label`. Individual name words remain
    available when they are ordinary language and the strongest description of
    visible evidence; do not replace `rider` with `mounted silhouette` merely
    because the card name contains `Rider`. For `Night Scavenger`, use the name
@@ -259,7 +257,7 @@ commentary.
    character or unsupported scenery for variety. For other card types, vary
    syntax, subject posture or motion, or which supported atmospheric detail
    accompanies the subject. A scene does not need conflict, danger, stakes, a dilemma, a
-   request, a problem, a resolution, or unresolved tension. Do not use
+   request, a problem, an outcome, or unresolved tension. Do not use
    anticipated quantities, operations, reward concepts, or effect recipients as
    scene ingredients.
 
@@ -369,8 +367,8 @@ commentary.
 
 10. Shortlist returned candidate templates by testing each against the frozen
     scene bank and deck intent:
-    - **Scene-grounded causality:** Imagine a 2–5 word act and immediate world
-      response that make the effect follow naturally from something the player
+    - **Scene-grounded causality:** Imagine a 2–5 word act that makes the effect
+      follow naturally from something the player
       can engage with in the depicted scene.
     - **Material honesty:** Reject templates that would require adding a person,
       object, condition, history, or symbolic meaning to the initial prose.
@@ -380,8 +378,8 @@ commentary.
       dreamsign references, transfigurations, and values can be populated with
       canonical content that fits both the scene and the strategy. Reject any
       card reference or runtime selection that can resolve to the source card.
-    - **Chain strength:** Judge the prospective label, resolution, and effect as
-      one causal chain. A merely thematic reward with no convincing player act
+    - **Chain strength:** Judge the prospective label and effect as one causal
+      chain. A merely thematic reward with no convincing player act
       is a weak fit.
 
     Do not select a template merely because its game term has a loose poetic
@@ -419,22 +417,17 @@ commentary.
     write a purposeful action label that is natural in the scene and makes the
     effect a plausible consequence. Privately complete: “When the player
     [label], [effect] follows because ___.” Require a concrete, scene-grounded
-    answer without game terminology. Let the action and resolution carry any
-    new consequence that happens after the player's choice; never pre-seed the
-    prose with extra figures or objects to literalize a mechanic.
+    answer without game terminology. The label names the act and the canonical
+    template states its consequence; never pre-seed the prose with extra figures
+    or objects to literalize a mechanic.
 
-    If a chain fails or scores below 7/10, first revise the label, resolution,
-    variables, or scene assignment. Never revise frozen prose merely to
+    If a chain fails or scores below 7/10, first revise the label, variables,
+    or scene assignment. Never revise frozen prose merely to
     distinguish it from another event. If the pair itself cannot support two
     strong chains, replace it with a stronger selection from the catalog and
     revalidate the request.
 
-14. Write a 5–10 word `resolution` for each action. Show the immediate response
-    to the player's act and bridge naturally into the displayed effect without
-    restating it. The scene, label, resolution, and effect should read as one
-    causal sequence.
-
-15. Calibrate mechanical values against the current game. Before choosing a
+14. Calibrate mechanical values against the current game. Before choosing a
     count or essence value, inspect relevant economy, pricing, pool, and effect
     data in the repository. Compare the likely low, typical, and high result of
     each choice. Do not guess a small-looking number in an economy whose units
@@ -443,7 +436,7 @@ commentary.
     choose a different template. Choose each predicate independently; never
     carry a predicate into another action merely because it fit once.
 
-16. Compare all five designs using the contract rubric, then assign unique
+15. Compare all five designs using the contract rubric, then assign unique
     ranks. Rank vivid descriptive precision, art fidelity, focus, and mechanical
     connection above literal completeness or poetic ornament. A faithful
     caption does not become excellent prose by naming more visible details, and
@@ -456,12 +449,12 @@ commentary.
     to the pair whose templates have fewer prior rank-1 uses. Never promote a
     materially weaker design solely to improve historical balance.
 
-17. Sort the five completed event objects by ascending `rank` as a final
+16. Sort the five completed event objects by ascending `rank` as a final
     readability pass, so rank 1 appears first and rank 5 last. Keep each event's
     `template_pair_id` and two actions together; sorting events must not alter
     or swap the actions within a template pair.
 
-18. Before validation, scan every `prose`, `label`, and `resolution` for
+17. Before validation, scan every `prose` and `label` for
     the complete card name, distinctive multiword fragments used as names, and
     mechanical repetition of source-name language. Replace those matches while
     preserving independently useful ordinary words. Reject any `prose` that
@@ -481,7 +474,7 @@ commentary.
       --input <request.json> --output <events.json>
     ```
 
-19. Emit the validated result in the selected output mode. In JSON mode, emit
+18. Emit the validated result in the selected output mode. In JSON mode, emit
     the bare JSON list with no Markdown fence or surrounding commentary. In
     display mode, including successful test mode, render only the Markdown
     structure specified in **Output modes**; do not expose the underlying
@@ -528,7 +521,7 @@ commentary.
   frame.
 - Do not infer physical scale from a close crop or portrait composition: a
   subject filling the frame does not imply that its features are massive or
-  enormous. In action labels and resolutions,
+  enormous. In action labels,
   name a visible person or use clear personal pronouns supported by the
   canonical identity (`she`/`her` when the character is explicitly described
   as a witch, `they`/`their` when gender is not established) instead of an
@@ -586,9 +579,8 @@ commentary.
 - Extrapolate only immediate sensory qualities strongly supported by the image,
   such as heat from visible fire or wind from visibly blown fabric. Do not add
   material subjects, props, architecture, terrain, weather, history, events,
-  impossible agency, or symbolic meaning. A resolution may introduce a
-  plausible material response after an action; the initial prose may not
-  anticipate that response.
+  impossible agency, or symbolic meaning. The initial prose may not anticipate
+  the action's mechanical consequence.
 - Use these art-fidelity regression checks:
   - For a Character card showing a lone warrior above burning ruins, prefer “A
     scarred warrior stands rigid above burning ruins, broad shoulders drawn
@@ -613,12 +605,8 @@ commentary.
   Observing, waiting, and listening suit effects involving knowledge, omens, or
   discovery; calling and welcoming suit new characters; offering and releasing
   suit losing or exchanging something; movement suits speed or travel.
-- Write each `resolution` in present tense using 5–10 words. Describe what the
-  world does immediately after the action. Keep game terminology and explicit
-  reward text out of it. Do not use the resolution to explain rules, repeat the
-  action label, or introduce unrelated lore.
-- Keep source-name language from becoming a refrain across `prose`, `label`, and
-  `resolution`. Do not quote the complete name or treat an archetype label as a
+- Keep source-name language from becoming a refrain across `prose` and `label`.
+  Do not quote the complete name or treat an archetype label as a
   proper noun. Ordinary words from the name may still describe visible evidence
   when they are the most evocative choice. The Markdown heading and canonical
   names produced by rendering canonical template variables remain unchanged.
@@ -665,7 +653,7 @@ commentary.
 - Reference existing cards and dreamsigns with real canonical UUIDs. Resolve
   names only for display. Validate transfiguration names and other fixed content
   against repository sources. Never key, compare, or select cards by name.
-- Exclude the source card UUID from every template resolution. A structured
+- Exclude the source card UUID from every template outcome. A structured
   `{card_id}` or `{card_name}` reference must identify a different canonical
   card, and `$OFFERED_CARD`, `$DECK_CARD`, and `$STARTER_CARD` always select from
   a pool with the source UUID removed. This rule is unconditional, including
@@ -673,7 +661,7 @@ commentary.
   in the player's deck or event pool. Do not identify the source card as an
   action's resolved target in any structured action field.
 - Choose exact cards, dreamsigns, predicates, and other variables for three-way
-  fit: they must suit the depicted world, the label-and-resolution chain, and
+  fit: they must suit the depicted world, the label-to-effect chain, and
   the deck strategy. Reject a named reward that is mechanically useful but
   narratively unrelated. In particular, select a thematically resonant
   dreamsign rather than forcing an arbitrary dreamsign into the narrative.
@@ -686,5 +674,5 @@ commentary.
   them on the live system's scale. Reject an option pair with an obvious
   universal best choice.
 - Never revise frozen prose to explain an effect. If a scene and pair cannot
-  support two causal label-and-resolution chains, assign another compatible
+  support two causal label-to-effect chains, assign another compatible
   frozen scene to that pair; that scene may already be used by another pair.

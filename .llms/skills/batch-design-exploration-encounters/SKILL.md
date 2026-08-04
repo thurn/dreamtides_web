@@ -79,9 +79,10 @@ and the number of single-card subagent assignments.
    The aggregator refuses stale catalog state, duplicate card UUIDs, missing
    results, invalid events, and unresolved artwork before writing. It marks the
    rank-1 candidate selected for the encounter editor. Candidate actions store
-   `template_id`, `variables`, and optional selection metadata only; canonical
-   template wording remains exclusively in `data/templates.json`. The display
-   renderer substitutes braced variables and preserves runtime
+   `label`, `template_id`, `variables`, and optional selection metadata;
+   canonical template wording remains exclusively in `data/templates.json`.
+   The display renderer emits one label-and-effect bullet per action,
+   substitutes braced variables, and preserves runtime
    `$SPECIAL_VARIABLE` tokens literally. If it reports that the
    catalog changed after selection, preserve the completed results, select a
    fresh batch, and reuse a result only when its UUID is selected again and the

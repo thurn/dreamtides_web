@@ -110,7 +110,6 @@ describe("loadJourneyContent", () => {
           id: `exploration-${String(encounterIndex + 1)}-${String(actionIndex + 1)}`,
           label: `Choice ${String(actionIndex + 1)}`,
           effectText: "Gain the fixture card.",
-          responseText: "The fixture responds.",
           effectKind: "gain-card",
           cardId: String(cards[0]?.id ?? "fixture-card"),
         })),

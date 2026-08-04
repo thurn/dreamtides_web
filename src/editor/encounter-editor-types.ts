@@ -1,7 +1,7 @@
 import type { CardData } from "../types/cards";
 import type { Dreamsign } from "../types/journey";
 
-export type EncounterCandidateTextField = "prose" | "label" | "resolution";
+export type EncounterCandidateTextField = "prose" | "label";
 export type EncounterEditableTextField = EncounterCandidateTextField | "template";
 export type EncounterSelectionKind = "prose" | "actions";
 
@@ -49,7 +49,6 @@ export interface EncounterEditorAction {
   runtime_card_selections: EncounterRuntimeCardSelection[];
   variables: Record<string, unknown>;
   label: string;
-  resolution: string;
   [key: string]: unknown;
 }
 

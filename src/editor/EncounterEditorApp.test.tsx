@@ -94,7 +94,6 @@ function candidate(rank: number, selected = false): EncounterEditorCandidate {
       }],
       variables: templateId === 1 ? { count: rank } : {},
       label: `Rank ${String(rank)} label ${String(templateId)}`,
-      resolution: `Rank ${String(rank)} resolution ${String(templateId)}`,
     })) as EncounterEditorCandidate["actions"],
     rank,
     ...(selected ? { selected: { prose: true, actions: true } } : {}),
@@ -225,7 +224,7 @@ describe("EncounterEditorApp", () => {
         '[data-entity-reference="dreamsign"]',
       )?.dataset.revealPrimaryVariant,
     ).toBe("object");
-    expect(container.textContent).toContain("Rank 1 resolution 1");
+    expect(container.textContent).toContain("Rank 1 label 1");
     expect(container.textContent).not.toContain("Prose for rank 2");
     expect(container.querySelector(".encounter-editor-card-ability")?.textContent)
       .toContain("▸Materialized: Gain 1, then foresee 1.");

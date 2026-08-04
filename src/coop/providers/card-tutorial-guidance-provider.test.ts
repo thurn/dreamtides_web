@@ -73,14 +73,12 @@ describe("card tutorial guidance content provider", () => {
       id: "transfigure-card",
       label: "Change a card",
       effectText: "Transfigure a chosen card.",
-      responseText: "The card changes.",
       effectKind: "transfigure-selected",
     };
     const ordinaryAction: ExplorationActionContent = {
       id: "gain-essence",
       label: "Gather essence",
       effectText: "Gain essence.",
-      responseText: "The essence gathers.",
       effectKind: "gain-essence-per-card",
       essencePerCard: 1,
     };

@@ -96,7 +96,6 @@ function view(resolved = false): ExplorationSiteView {
         id: "choice-a",
         label: "Choose A",
         effectText: "Gain the fixture.",
-        responseText: "The fixture answers.",
         followup: { kind: "none" },
         available: true,
       },
@@ -104,14 +103,11 @@ function view(resolved = false): ExplorationSiteView {
         id: "choice-b",
         label: "Choose B",
         effectText: "Change the fixture.",
-        responseText: "The fixture changes.",
         followup: { kind: "none" },
         available: true,
       },
     ],
-    response: resolved
-      ? { actionLabel: "Choose A", text: "The fixture answers." }
-      : null,
+    resolvedActionId: resolved ? "choice-a" : null,
     reward: null,
   };
 }
@@ -653,8 +649,7 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
-  it("shows the response for three seconds, then returns the card and leaves", () => {
-    vi.useFakeTimers();
+  it("returns immediately after a choice without a tangible reward", () => {
     window.requestAnimationFrame = (callback) => {
       callback(0);
       return 1;
@@ -705,8 +700,8 @@ describe("ExplorationSiteScreen", () => {
     expect(
       container.querySelector(
         '[data-testid="cumulus-exploration-narrative-copy"]',
-      )?.textContent,
-    ).toBe("The fixture answers.");
+      ),
+    ).toBeNull();
     expect(
       container.querySelector('[data-testid="cumulus-exploration-continue"]'),
     ).toBeNull();
@@ -714,19 +709,6 @@ describe("ExplorationSiteScreen", () => {
       container.querySelector('[data-testid="cumulus-exploration-exit"]'),
     ).toBeNull();
 
-    act(() => {
-      vi.advanceTimersByTime(2_999);
-    });
-    expect(
-      container
-        .querySelector("[data-exploration-frame-break]")
-        ?.getAttribute("data-exploration-frame-break-phase"),
-    ).toBe("open");
-    expect(onExit).not.toHaveBeenCalled();
-
-    act(() => {
-      vi.advanceTimersByTime(1);
-    });
     expect(
       container
         .querySelector("[data-exploration-frame-break]")

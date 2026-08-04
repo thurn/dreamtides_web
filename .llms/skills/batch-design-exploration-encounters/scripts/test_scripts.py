@@ -54,7 +54,6 @@ def events() -> list[dict[str, object]]:
             actions.append(
                 {
                     "label": f"Choose option {action_index + 1}",
-                    "resolution": "The synthetic world answers at once.",
                     "template_id": template_id,
                     "variables": {"count": 2} if template_id == 1 else {},
                 }

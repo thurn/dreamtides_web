@@ -52,7 +52,6 @@ export interface ExplorationActionContent {
   id: string;
   label: string;
   effectText: string;
-  responseText: string;
   effectKind: ExplorationEffectKind;
   predicate?: ExplorationPredicate;
   count?: number;
@@ -108,7 +107,6 @@ function validateAction(raw: ExplorationActionContent): ExplorationActionContent
     id: requiredString(raw.id, "action id"),
     label: requiredString(raw.label, "action label"),
     effectText: requiredString(raw.effectText, "action effect text"),
-    responseText: requiredString(raw.responseText, "action response text"),
     ...(raw.cardId === undefined ? {} : { cardId: asCardId(raw.cardId) }),
     ...(raw.baneCardId === undefined
       ? {}

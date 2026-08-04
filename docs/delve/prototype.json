@@ -15,13 +15,11 @@
         "actions": [
           {
             "label": "Exchange Familiar Forms",
-            "resolution": "One silhouette recedes as another emerges beside its double.",
             "template_id": 61,
             "variables": {}
           },
           {
             "label": "Request the Round Lantern",
-            "resolution": "The child lowers its steady glow into your hands.",
             "template_id": 28,
             "variables": {}
           }
@@ -42,7 +40,6 @@
         "actions": [
           {
             "label": "Invite the Lantern-Bearer",
-            "resolution": "The small figure steps through beside you.",
             "template_id": 9,
             "variables": {
               "predicate": "≤2● cost Character"
@@ -50,7 +47,6 @@
           },
           {
             "label": "Trade a Familiar Outline",
-            "resolution": "A different silhouette approaches through the opening.",
             "template_id": 7,
             "variables": {
               "predicate": "≤2● cost Character"
@@ -73,7 +69,6 @@
         "actions": [
           {
             "label": "Widen the Cosmic Opening",
-            "resolution": "Familiar silhouettes emerge bearing unfamiliar shapes.",
             "template_id": 22,
             "variables": {
               "count": 4,
@@ -82,7 +77,6 @@
           },
           {
             "label": "Release Familiar Silhouettes",
-            "resolution": "New outlines approach as old ones recede.",
             "template_id": 8,
             "variables": {
               "count": 3,
@@ -106,7 +100,6 @@
         "actions": [
           {
             "label": "Focus the Lantern Inward",
-            "resolution": "Its concentrated beam strengthens a nearby silhouette.",
             "template_id": 19,
             "variables": {
               "transfiguration": "Kindled"
@@ -119,7 +112,6 @@
           },
           {
             "label": "Cast the Light Beyond",
-            "resolution": "Distant offerings shimmer in unfamiliar forms.",
             "template_id": 37,
             "variables": {}
           }
@@ -140,7 +132,6 @@
         "actions": [
           {
             "label": "Call Your Companions Forward",
-            "resolution": "Each answering silhouette carries a bright point.",
             "template_id": 59,
             "variables": {
               "essence_per_card": 10,
@@ -149,7 +140,6 @@
           },
           {
             "label": "Call Through the Opening",
-            "resolution": "Matching shapes cross from the distant opening.",
             "template_id": 12,
             "variables": {
               "count": 2
@@ -184,7 +174,6 @@
         "actions": [
           {
             "label": "Invite the Sentinel",
-            "resolution": "The guardian rises and walks beside you.",
             "template_id": 10,
             "variables": {
               "card_id": {
@@ -195,7 +184,6 @@
           },
           {
             "label": "Study the Guardian",
-            "resolution": "Your companions adopt its measured discipline among the ruins.",
             "template_id": 20,
             "variables": {
               "count": 2,
@@ -219,7 +207,6 @@
         "actions": [
           {
             "label": "Exchange the Weary",
-            "resolution": "Fresh travelers arrive as their tired companions depart.",
             "template_id": 8,
             "variables": {
               "count": 2,
@@ -228,7 +215,6 @@
           },
           {
             "label": "Rearrange the Grid",
-            "resolution": "Unfamiliar emblems brighten across the fractured surface.",
             "template_id": 30,
             "variables": {}
           }
@@ -249,7 +235,6 @@
         "actions": [
           {
             "label": "Gather the Dark Fragment",
-            "resolution": "Dim light beads across the salvaged shard.",
             "template_id": 27,
             "variables": {
               "dreamsign_name": {
@@ -260,7 +245,6 @@
           },
           {
             "label": "Call a Formidable Guardian",
-            "resolution": "A commanding figure steps through the radiant breach.",
             "template_id": 72,
             "variables": {}
           }
@@ -281,7 +265,6 @@
         "actions": [
           {
             "label": "Call Beyond the Gate",
-            "resolution": "Weathered travelers gather beyond the shining opening.",
             "template_id": 36,
             "variables": {
               "predicate": "Survivor"
@@ -289,7 +272,6 @@
           },
           {
             "label": "Train Beside the Guardian",
-            "resolution": "Patient instruction hardens a companion for harsher journeys.",
             "template_id": 19,
             "variables": {
               "transfiguration": "Kindled"
@@ -317,7 +299,6 @@
         "actions": [
           {
             "label": "Signal the Outer Ruins",
-            "resolution": "A hardy traveler emerges from behind the debris.",
             "template_id": 9,
             "variables": {
               "predicate": "Survivor"
@@ -325,7 +306,6 @@
           },
           {
             "label": "Trade a Companion's Watch",
-            "resolution": "The departing traveler leaves precious salvage by the frame.",
             "template_id": 60,
             "variables": {
               "essence_per_energy": 40
@@ -360,7 +340,6 @@
         "actions": [
           {
             "label": "Feed the Fire",
-            "resolution": "The blaze consumes what you cast away.",
             "template_id": 4,
             "variables": {
               "predicate": "Event"
@@ -368,7 +347,6 @@
           },
           {
             "label": "Welcome Its Kin",
-            "resolution": "Other wolves emerge through the heated haze.",
             "template_id": 36,
             "variables": {
               "predicate": "Spirit Animal"
@@ -391,7 +369,6 @@
         "actions": [
           {
             "label": "Invite a Wild Companion",
-            "resolution": "Another great beast strides through the smoke.",
             "template_id": 9,
             "variables": {
               "predicate": "Spirit Animal"
@@ -399,7 +376,6 @@
           },
           {
             "label": "Seek the Wolf's Mark",
-            "resolution": "Its luminous gaze remakes one prized possession.",
             "template_id": 17,
             "variables": {}
           }
@@ -420,7 +396,6 @@
         "actions": [
           {
             "label": "Echo the Wolf's Arrival",
-            "resolution": "One companion arrives, departs, then returns bearing light.",
             "template_id": 19,
             "variables": {
               "transfiguration": "Resonant"
@@ -428,7 +403,6 @@
           },
           {
             "label": "Face the Wolf Together",
-            "resolution": "Your oldest companions emerge through the blaze changed.",
             "template_id": 25,
             "variables": {}
           }
@@ -449,13 +423,11 @@
         "actions": [
           {
             "label": "Cast Away Your Burden",
-            "resolution": "The fire takes it without a trace.",
             "template_id": 3,
             "variables": {}
           },
           {
             "label": "Trace Its Passage",
-            "resolution": "The scorched trail reaches a place of refuge.",
             "template_id": 46,
             "variables": {}
           }
@@ -476,7 +448,6 @@
         "actions": [
           {
             "label": "Call to the Wild",
-            "resolution": "Distant beasts answer with newly luminous eyes.",
             "template_id": 22,
             "variables": {
               "count": 2,
@@ -485,7 +456,6 @@
           },
           {
             "label": "Accept the Wolf's Escort",
-            "resolution": "At its approach, every merchant lowers their price.",
             "template_id": 56,
             "variables": {}
           }
@@ -518,7 +488,6 @@
         "actions": [
           {
             "label": "Invite a Lantern Visitor",
-            "resolution": "A new figure steps from between the panes.",
             "template_id": 11,
             "variables": {},
             "selection": {
@@ -529,7 +498,6 @@
           },
           {
             "label": "Trade Away a Figure",
-            "resolution": "A skeletal hand accepts the chosen offering.",
             "template_id": 60,
             "variables": {
               "essence_per_energy": 40
@@ -552,13 +520,11 @@
         "actions": [
           {
             "label": "Search Beyond the Glass",
-            "resolution": "Altered silhouettes gather behind the shining panes.",
             "template_id": 37,
             "variables": {}
           },
           {
             "label": "Reach Into the Radiance",
-            "resolution": "Familiar forms return with strengthened outlines.",
             "template_id": 24,
             "variables": {
               "count": 2
@@ -581,7 +547,6 @@
         "actions": [
           {
             "label": "Trace Figures on Glass",
-            "resolution": "Solid figures emerge from the lantern's chamber.",
             "template_id": 54,
             "variables": {
               "count": 2,
@@ -590,7 +555,6 @@
           },
           {
             "label": "Offer a Familiar Silhouette",
-            "resolution": "A fresh traveler emerges as the familiar outline fades.",
             "template_id": 34,
             "variables": {
               "predicate": "≤2● cost Character"
@@ -613,7 +577,6 @@
         "actions": [
           {
             "label": "Release Familiar Forms",
-            "resolution": "New figures gather where the older silhouettes stood.",
             "template_id": 35,
             "variables": {
               "predicate": "≤2● cost Character"
@@ -621,7 +584,6 @@
           },
           {
             "label": "Shape One Reflection",
-            "resolution": "The chosen outline changes beneath your guiding hand.",
             "template_id": 17,
             "variables": {}
           }
@@ -642,7 +604,6 @@
         "actions": [
           {
             "label": "Cross the Narrow Ledge",
-            "resolution": "A chosen companion returns steady from the far side.",
             "template_id": 58,
             "variables": {
               "subtype": "Survivor"
@@ -650,7 +611,6 @@
           },
           {
             "label": "Guide the Lantern Higher",
-            "resolution": "Distant stalls appear beneath the scattered stars.",
             "template_id": 43,
             "variables": {}
           }
@@ -683,7 +643,6 @@
         "actions": [
           {
             "label": "Enter the Luminous Frame",
-            "resolution": "Its bright outline alters one waiting silhouette.",
             "template_id": 58,
             "variables": {
               "subtype": "Outsider"
@@ -691,7 +650,6 @@
           },
           {
             "label": "Expand the Luminous Frame",
-            "resolution": "The widening glow reshapes every distant silhouette.",
             "template_id": 67,
             "variables": {}
           }
@@ -712,7 +670,6 @@
         "actions": [
           {
             "label": "Welcome the Veiled Operative",
-            "resolution": "A trench-coated silhouette emerges as the smoke darkens.",
             "template_id": 70,
             "variables": {
               "count": 1,
@@ -724,7 +681,6 @@
           },
           {
             "label": "Sever the Trailing Cables",
-            "resolution": "Stored current flashes through the falling lengths.",
             "template_id": 39,
             "variables": {
               "count": 5
@@ -747,7 +703,6 @@
         "actions": [
           {
             "label": "Study the Radiant Frame",
-            "resolution": "Layered possibilities resolve along its gleaming edges.",
             "template_id": 38,
             "variables": {
               "count": 5
@@ -755,7 +710,6 @@
           },
           {
             "label": "Step Through the Triangle",
-            "resolution": "Every familiar form returns with altered contours.",
             "template_id": 40,
             "variables": {}
           }
@@ -776,13 +730,11 @@
         "actions": [
           {
             "label": "Trace the Bright Edges",
-            "resolution": "Three distant destinations sharpen beyond the glowing frame.",
             "template_id": 46,
             "variables": {}
           },
           {
             "label": "Signal Through the Smoke",
-            "resolution": "Unfamiliar figures emerge as old companions recede.",
             "template_id": 35,
             "variables": {
               "predicate": "Outsider"
@@ -806,13 +758,11 @@
         "actions": [
           {
             "label": "Cut the Nearest Cable",
-            "resolution": "The severed line reveals a silent chamber.",
             "template_id": 45,
             "variables": {}
           },
           {
             "label": "Gather the Loose Strands",
-            "resolution": "A dark lock settles heavily across your palm.",
             "template_id": 69,
             "variables": {
               "count": 2,
@@ -851,7 +801,6 @@
         "actions": [
           {
             "label": "Ask the Figure's Counsel",
-            "resolution": "The smaller figure indicates several shapes in the haze.",
             "template_id": 14,
             "variables": {
               "predicate": "≤2● cost Character"
@@ -859,7 +808,6 @@
           },
           {
             "label": "Welcome the Owl's Kin",
-            "resolution": "Calls answer as animal forms settle among the branches.",
             "template_id": 16,
             "variables": {
               "predicate": "Spirit Animal"
@@ -882,13 +830,11 @@
         "actions": [
           {
             "label": "Borrow Its Steady Gaze",
-            "resolution": "Every companion stands taller beneath the unbroken stare.",
             "template_id": 64,
             "variables": {}
           },
           {
             "label": "Send One into the Forest",
-            "resolution": "A quiet wolf returns in their place.",
             "template_id": 47,
             "variables": {
               "card_id": {
@@ -914,13 +860,11 @@
         "actions": [
           {
             "label": "Offer a Worn Burden",
-            "resolution": "A hooked beak carries the small burden away.",
             "template_id": 33,
             "variables": {}
           },
           {
             "label": "Trade a Treasured Token",
-            "resolution": "Bright motes spill from beneath the lifted wing.",
             "template_id": 62,
             "variables": {
               "essence": 200
@@ -943,7 +887,6 @@
         "actions": [
           {
             "label": "Accept Its Feathered Burden",
-            "resolution": "Dark pinions settle on you; the passage clears.",
             "template_id": 65,
             "variables": {
               "count": 3
@@ -951,7 +894,6 @@
           },
           {
             "label": "Call Into the Canopy",
-            "resolution": "Answering cries gather among the hidden branches.",
             "template_id": 52,
             "variables": {
               "count": 2,
@@ -975,13 +917,11 @@
         "actions": [
           {
             "label": "Call Toward High Boughs",
-            "resolution": "A majestic figure descends through the glowing forest.",
             "template_id": 72,
             "variables": {}
           },
           {
             "label": "Scatter Your Talismans",
-            "resolution": "The owl gathers them, then releases stranger shapes.",
             "template_id": 63,
             "variables": {}
           }
@@ -1014,7 +954,6 @@
         "actions": [
           {
             "label": "Welcome a Smaller Swimmer",
-            "resolution": "A bright new shape circles beneath the giant.",
             "template_id": 27,
             "variables": {
               "dreamsign_name": {
@@ -1025,7 +964,6 @@
           },
           {
             "label": "Release a Fellow Swimmer",
-            "resolution": "Another broad silhouette rises into the open sky.",
             "template_id": 7,
             "variables": {
               "predicate": "Spirit Animal"
@@ -1048,7 +986,6 @@
         "actions": [
           {
             "label": "Enter Its Wake",
-            "resolution": "Its passage bears you swiftly beneath gathering darkness.",
             "template_id": 65,
             "variables": {
               "count": 5
@@ -1056,7 +993,6 @@
           },
           {
             "label": "Rise Beside It",
-            "resolution": "The great body carries you toward the stars.",
             "template_id": 18,
             "variables": {
               "transfiguration": "Empowered"
@@ -1079,7 +1015,6 @@
         "actions": [
           {
             "label": "Follow Its Slow Arc",
-            "resolution": "Its measured course reveals what waits ahead.",
             "template_id": 38,
             "variables": {
               "count": 2
@@ -1087,7 +1022,6 @@
           },
           {
             "label": "Shed Weight Beneath It",
-            "resolution": "A clear landing opens beyond its sweeping tail.",
             "template_id": 45,
             "variables": {}
           }
@@ -1108,7 +1042,6 @@
         "actions": [
           {
             "label": "Call Forth Its Twin",
-            "resolution": "A second vast outline gathers beside it.",
             "template_id": 50,
             "variables": {
               "count": 1
@@ -1116,7 +1049,6 @@
           },
           {
             "label": "Chart Its Returning Course",
-            "resolution": "A bright mooring appears along the mapped route.",
             "template_id": 41,
             "variables": {}
           }
@@ -1137,7 +1069,6 @@
         "actions": [
           {
             "label": "Reach Into Its Wake",
-            "resolution": "Luminous flecks settle around your outstretched hand.",
             "template_id": 2,
             "variables": {
               "essence1": 150,
@@ -1146,7 +1077,6 @@
           },
           {
             "label": "Pass Under Its Shadow",
-            "resolution": "Familiar shapes emerge changed beyond its trailing fins.",
             "template_id": 40,
             "variables": {}
           }
@@ -1179,7 +1109,6 @@
         "actions": [
           {
             "label": "Welcome the Great Beast",
-            "resolution": "The elephant kneels as the surrounding haze darkens.",
             "template_id": 70,
             "variables": {
               "count": 1,
@@ -1191,7 +1120,6 @@
           },
           {
             "label": "Call the Distant Herd",
-            "resolution": "Great animal shapes approach through the radiant mist.",
             "template_id": 52,
             "variables": {
               "count": 2,
@@ -1215,13 +1143,11 @@
         "actions": [
           {
             "label": "Honor the Colossal Beast",
-            "resolution": "The elephant steps forward beneath the scattered stars.",
             "template_id": 72,
             "variables": {}
           },
           {
             "label": "Approach the Lone Traveler",
-            "resolution": "A new guide emerges from the glowing haze.",
             "template_id": 57,
             "variables": {}
           }
@@ -1242,13 +1168,11 @@
         "actions": [
           {
             "label": "Follow the Luminous Tusks",
-            "resolution": "A busy exchange awaits beyond their glowing arc.",
             "template_id": 42,
             "variables": {}
           },
           {
             "label": "Exchange Your Old Company",
-            "resolution": "Great animal shapes gather in their vacated places.",
             "template_id": 35,
             "variables": {
               "predicate": "Spirit Animal"
@@ -1271,13 +1195,11 @@
         "actions": [
           {
             "label": "Follow the Elephant's Passage",
-            "resolution": "Its heavy steps lead toward a secluded clearing.",
             "template_id": 45,
             "variables": {}
           },
           {
             "label": "Offer a Burden",
-            "resolution": "A curved tusk lifts it into the starlit haze.",
             "template_id": 60,
             "variables": {
               "essence_per_energy": 40
@@ -1300,13 +1222,11 @@
         "actions": [
           {
             "label": "Join the Great Herd",
-            "resolution": "Every companion enters bearing a single animal likeness.",
             "template_id": 67,
             "variables": {}
           },
           {
             "label": "Call Figures from the Mist",
-            "resolution": "Living silhouettes emerge beside the towering elephant.",
             "template_id": 54,
             "variables": {
               "count": 2,
@@ -1342,7 +1262,6 @@
         "actions": [
           {
             "label": "Call Into the Distance",
-            "resolution": "A clear bell tolls beneath the distant horse.",
             "template_id": 27,
             "variables": {
               "dreamsign_name": {
@@ -1353,7 +1272,6 @@
           },
           {
             "label": "Gather the Falling Light",
-            "resolution": "A waiting traveler's outline shines with renewed strength.",
             "template_id": 19,
             "variables": {
               "transfiguration": "Kindled"
@@ -1381,13 +1299,11 @@
         "actions": [
           {
             "label": "Follow the Changing Figure",
-            "resolution": "Its scattered outline settles into unfamiliar forms.",
             "template_id": 37,
             "variables": {}
           },
           {
             "label": "Take the High Saddle",
-            "resolution": "A traveler ascends with the horseman's martial bearing.",
             "template_id": 58,
             "variables": {
               "subtype": "Warrior"
@@ -1410,7 +1326,6 @@
         "actions": [
           {
             "label": "Call the Mounted Host",
-            "resolution": "More silhouettes emerge through the luminous haze.",
             "template_id": 16,
             "variables": {
               "predicate": "Warrior"
@@ -1418,7 +1333,6 @@
           },
           {
             "label": "Clear the Overgrown Limb",
-            "resolution": "Loose moss falls away, exposing clean bark.",
             "template_id": 45,
             "variables": {}
           }
@@ -1439,13 +1353,11 @@
         "actions": [
           {
             "label": "Call for Its Double",
-            "resolution": "A second silhouette forms beside the fading horse.",
             "template_id": 41,
             "variables": {}
           },
           {
             "label": "Gather the Drifting Motes",
-            "resolution": "Bright specks collect among the moss-covered roots.",
             "template_id": 2,
             "variables": {
               "essence1": 200,
@@ -1469,7 +1381,6 @@
         "actions": [
           {
             "label": "Search Beneath the Moss",
-            "resolution": "A brown acorn drops free with clinging roots.",
             "template_id": 69,
             "variables": {
               "count": 2,
@@ -1481,7 +1392,6 @@
           },
           {
             "label": "Share the Horseman's Bearing",
-            "resolution": "Every companion assumes the same imposing posture.",
             "template_id": 67,
             "variables": {}
           }

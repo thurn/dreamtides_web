@@ -760,7 +760,7 @@ export function transformExplorationData(source) {
           `exploration.toml: action ${action.id} has unknown effect-kind ${String(action.effectKind)}`,
         );
       }
-      for (const key of ["label", "effectText", "responseText"]) {
+      for (const key of ["label", "effectText"]) {
         if (typeof action[key] !== "string" || action[key].trim() === "") {
           throw new Error(`exploration.toml: action ${action.id} requires ${key}`);
         }

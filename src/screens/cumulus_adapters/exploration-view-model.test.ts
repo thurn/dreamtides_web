@@ -47,7 +47,7 @@ const guide: DreamGuideContent = {
 };
 
 describe("exploration-view-model", () => {
-  it("builds authored narrative, two actions, and a persisted response", () => {
+  it("builds authored narrative, two actions, and persisted reward state", () => {
     const source = card(sourceId, 17);
     const gainedDreamsign = {
       id: "gained-dreamsign-id",
@@ -116,14 +116,12 @@ describe("exploration-view-model", () => {
                 id: "action-a",
                 label: "First choice",
                 effectText: "Purge a card and copy another.",
-                responseText: "The first response.",
                 effectKind: "purge-and-copy",
               },
               {
                 id: "action-b",
                 label: "Second choice",
                 effectText: "Gain the card.",
-                responseText: "The second response.",
                 effectKind: "gain-card",
                 cardId: source.id,
               },
@@ -150,10 +148,7 @@ describe("exploration-view-model", () => {
         { id: "action-a", followup: { kind: "cards" } },
         { id: "action-b", followup: { kind: "none" } },
       ],
-      response: {
-        actionLabel: "Second choice",
-        text: "The second response.",
-      },
+      resolvedActionId: "action-b",
       reward: {
         cards: [{ cardId: source.id }, { cardId: source.id }],
         dreamsigns: [{ id: gainedDreamsign.id }],
@@ -223,7 +218,6 @@ describe("exploration-view-model", () => {
                 id: "gather-light",
                 label: "Gather the Falling Light",
                 effectText: "Transfigure a cheap Character.",
-                responseText: "The light gathers.",
                 effectKind: "transfigure-fixed-selected",
                 predicate: "cheap-character",
                 transfiguration: "Kindled",
@@ -232,7 +226,6 @@ describe("exploration-view-model", () => {
                 id: "gain-card",
                 label: "Gain the card",
                 effectText: "Gain the card.",
-                responseText: "The card joins you.",
                 effectKind: "gain-card",
                 cardId: source.id,
               },
@@ -320,7 +313,6 @@ describe("exploration-view-model", () => {
                 id: "gain-offered",
                 label: "Invite someone through",
                 effectText: "Gain $OFFERED_CARD",
-                responseText: "Someone arrives.",
                 effectKind: "gain-offered-card",
                 predicate: "cheap-character",
               },
@@ -328,7 +320,6 @@ describe("exploration-view-model", () => {
                 id: "increase-spark",
                 label: "Receive Their Blessing",
                 effectText: "All characters in your deck gain +1✦",
-                responseText: "Starlight passes over the company.",
                 effectKind: "increase-spark-all",
                 sparkBonus: 1,
               },
@@ -413,7 +404,6 @@ describe("exploration-view-model", () => {
         id: "fixed-card",
         label: "Gain a card",
         effectText: `Gain ${fixedCard.name}`,
-        responseText: "The card arrives.",
         effectKind: "gain-card",
         cardId: fixedCard.id,
       },
@@ -425,7 +415,6 @@ describe("exploration-view-model", () => {
         id: "bane-card",
         label: "Accept the cost",
         effectText: 'Gain 3 "Nightmare" bane cards.',
-        responseText: "The nightmares gather.",
         effectKind: "reduce-cost-all-and-gain-banes",
         baneCardId: baneCard.id,
       },
@@ -437,7 +426,6 @@ describe("exploration-view-model", () => {
         id: "fixed-dreamsign",
         label: "Take the sign",
         effectText: "Gain Fixture Sign",
-        responseText: "The sign gleams.",
         effectKind: "gain-dreamsign",
         dreamsignId,
       },
@@ -525,14 +513,12 @@ describe("exploration-view-model", () => {
               id: "random-dreamsign",
               label: "Read the pattern",
               effectText: "Gain a random dreamsign",
-              responseText: "A mark emerges.",
               effectKind: "gain-random-dreamsign",
             },
             {
               id: "purge-dreamsign",
               label: "Break the pattern",
               effectText: "Purge a dreamsign for essence",
-              responseText: "The force disperses.",
               effectKind: "purge-dreamsign-for-essence",
               essence: 50,
             },

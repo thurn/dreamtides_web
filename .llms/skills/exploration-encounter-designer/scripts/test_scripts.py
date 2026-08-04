@@ -607,7 +607,6 @@ rendered-text = "Gain 1 energy."
                         {
                             "template_id": action["template_id"],
                             "label": "Take reward",
-                            "resolution": "The figure offers a quiet answer",
                             "variables": variables,
                         }
                     )

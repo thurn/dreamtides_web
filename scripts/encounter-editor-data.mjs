@@ -22,7 +22,14 @@ const ENTITY_UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
 const TEMPLATE_PAIR_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
 const VARIABLE_NAME_PATTERN = /^[a-z][a-z0-9_]*$/u;
-const ACTION_FIELDS = new Set(["label", "resolution"]);
+const ACTION_FIELDS = new Set(["label"]);
+const ACTION_KEYS = new Set([
+  "label",
+  "predicate_exception_rationale",
+  "selection",
+  "template_id",
+  "variables",
+]);
 const LEGACY_ACTION_FIELDS = new Set(["effect_text", "template"]);
 const SELECTION_KINDS = ["prose", "actions"];
 const PLACEHOLDER_PATTERN = /\{([a-z][a-z0-9_]*)\}/gu;
@@ -74,11 +81,15 @@ function validateAction(raw, label) {
       throw new Error(`${label}.${legacyField} is forbidden; template text lives only in data/templates.json.`);
     }
   }
+  for (const key of Object.keys(action)) {
+    if (!ACTION_KEYS.has(key)) {
+      throw new Error(`${label}.${key} is not an encounter action field.`);
+    }
+  }
   if (!Number.isInteger(action.template_id) || action.template_id < 0) {
     throw new Error(`${label}.template_id must be a non-negative integer.`);
   }
   requiredString(action.label, `${label}.label`);
-  requiredString(action.resolution, `${label}.resolution`);
   objectRecord(action.variables, `${label}.variables`);
   return action;
 }
@@ -613,7 +624,7 @@ export function editEncounterCandidateText(
     candidate.prose = confirmedValue;
   } else {
     if (!ACTION_FIELDS.has(field)) {
-      throw new Error("Only prose, label, and resolution are encounter-candidate text fields.");
+      throw new Error("Only prose and label are encounter-candidate text fields.");
     }
     if (!Number.isInteger(actionTemplateId) || actionTemplateId < 0) {
       throw new Error("Action text edits require a non-negative actionTemplateId.");

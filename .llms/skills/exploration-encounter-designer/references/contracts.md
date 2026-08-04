@@ -7,7 +7,7 @@ examples. Angle-bracket strings and nonpositive integers are documentation
 sentinels that must be replaced with values derived from the current card,
 artwork, canonical content, and complete template catalog. They are
 deliberately ineligible for validation and do not nominate any prose,
-mechanic, template, predicate, value, pairing, label, or resolution.
+mechanic, template, predicate, value, pairing, or label.
 
 ## Input
 
@@ -57,7 +57,6 @@ Return a bare JSON list of five event objects sorted by ascending `rank`:
     "actions": [
       {
         "label": "<first scene-grounded action label>",
-        "resolution": "<first immediate world response>",
         "template_id": 0,
         "variables": {
           "<required placeholder name>": "<resolved value>"
@@ -65,7 +64,6 @@ Return a bare JSON list of five event objects sorted by ascending `rank`:
       },
       {
         "label": "<second scene-grounded action label>",
-        "resolution": "<second immediate world response>",
         "template_id": -1,
         "variables": {
           "<required placeholder name>": "<resolved value>"
@@ -101,19 +99,17 @@ Markdown:
 
 1. <prose>
    - ***<action label>*** — <rendered canonical template>
-     - **Response:** <resolution>
    - ***<action label>*** — <rendered canonical template>
-     - **Response:** <resolution>
 ```
 
 The display starts with the canonical card `name` and complete `ability`, then
 the inline source artwork. It contains five top-level entries in ascending rank
 order. Each entry uses `prose` as its top-level text, preserves action order,
 places the bold-italic `label` and rendered canonical template together in a
-sub-bullet, and places its `resolution` in a nested response bullet. Rendering
+sub-bullet. Rendering
 replaces each braced placeholder with its `variables` value (or an entity
 reference's `display_name`) and preserves `$SPECIAL_VARIABLE` tokens literally.
-Omit all other JSON fields and any surrounding commentary from the display response.
+Omit all other JSON fields and any surrounding commentary from the display.
 
 Test mode uses `scripts/generate-exploration-input.py --card-type <type>` to
 choose a random canonical card from the `character`, `event`, or `all` pool.
@@ -197,13 +193,6 @@ not copy canonical template text. `data/templates.json` is the sole source of
 template wording. Rendering replaces `{placeholder}` tokens and deliberately
 leaves `$SPECIAL_VARIABLE` tokens unchanged.
 
-### Action resolutions
-
-Every action includes a `resolution` of 5–10 words. It is brief post-choice
-prose shown before or alongside the effect. It describes the world's immediate
-response to the label and makes the mechanical outcome feel earned without
-using game terminology or repeating the rendered template.
-
 ## Scoring and ranking
 
 Score each component from 1–10:
@@ -241,8 +230,8 @@ Score each component from 1–10:
   scenery to displace the source character. Reusing a strong visual focus across
   distinctly worded scenes does not lower this score; novelty does not raise it.
 - `action_quality` (15%): Whether both labels are distinct, purposeful things to
-  do in the scene and both resolutions are concise, vivid responses.
-- `mechanical_connection` (30%): Whether each label and resolution make its
+  do in the scene.
+- `mechanical_connection` (30%): Whether each label makes its
   effect feel like a plausible consequence, including the thematic fit of any
   selected card, dreamsign, or predicate. Score the weaker
   action chain rather than averaging the two; revise scores below 7.

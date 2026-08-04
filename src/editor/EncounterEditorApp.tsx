@@ -656,7 +656,6 @@ function EncounterEditorRow({
                             : [])}
                       </div>
                     )}
-                    {editable(selectedActions, "resolution", action.resolution, <p className="encounter-editor-resolution">{action.resolution}</p>, action.template_id)}
                   </section>
                 ))}
               </div>

@@ -69,8 +69,8 @@ export interface ExplorationSiteView {
   narrative: string;
   /** The two authored actions for this encounter. */
   actions: readonly [ExplorationActionView, ExplorationActionView];
-  /** Persisted response after one action has resolved. */
-  response: ExplorationResponseView | null;
+  /** Persisted action identity after one choice has resolved. */
+  resolvedActionId: string | null;
   /** Exact UUID-backed objects granted by the persisted resolution. */
   reward: ExplorationRewardView | null;
 }
@@ -133,7 +133,6 @@ export interface ExplorationActionView {
   readonly label: string;
   readonly effectText: string;
   readonly effectParts?: readonly ExplorationActionEffectPart[];
-  readonly responseText: string;
   readonly followup: ExplorationFollowupView;
   /** Reducer selection supplied directly when the effect needs no player choice. */
   readonly automaticSelection?: Readonly<Record<string, unknown>>;
@@ -143,11 +142,6 @@ export interface ExplorationActionView {
 export type ExplorationActionEffectPart =
   | { readonly kind: "text"; readonly text: string }
   | { readonly kind: "entity"; readonly entity: EntityReferenceModel };
-
-export interface ExplorationResponseView {
-  readonly actionLabel: string;
-  readonly text: string;
-}
 
 export interface ExplorationSiteScreenProps {
   /** Complete presentation view-model. */
@@ -220,7 +214,6 @@ const FRAME_BREAK_SECONDS = motionTimeSeconds("--dur-slow") * 2.5;
 const FRAME_BREAK_DELAY_SECONDS = motionTimeSeconds("--dur-fast");
 const FRAME_FRACTURE_SECONDS =
   motionTimeSeconds("--dur-base") + motionTimeSeconds("--dur-fast");
-const RESPONSE_TEXT_DURATION_MS = 3_000;
 const REWARD_READING_SECONDS = motionTimeSeconds("--dur-slow") * 4;
 const REWARD_TRAVEL_SECONDS = motionTimeSeconds("--dur-slow") * 2;
 const REWARD_STAGGER_SECONDS = motionTimeSeconds("--dur-fast");
@@ -482,22 +475,22 @@ export function ExplorationSiteScreen({
     view.actions.find((action) => action.id === activeActionId) ?? null;
   const rewardItems = useMemo(() => rewardItemsFor(view.reward), [view.reward]);
   const rewardIdentity =
-    view.response === null || view.reward === null
+    view.resolvedActionId === null || view.reward === null
       ? null
       : [
-          view.response.actionLabel,
+          view.resolvedActionId,
           ...rewardItems.map((item) => item.key),
         ].join("|");
 
   useEffect(() => {
-    if (view.response === null) return;
+    if (view.resolvedActionId === null) return;
     setActiveActionId(null);
     setSelectedIds([]);
     setPurgeEntryId(null);
     setSelectedPackIndex(null);
     setSelectedSubtype(null);
     setSelectedDreamsignId(null);
-  }, [view.response]);
+  }, [view.resolvedActionId]);
 
   useEffect(() => {
     completedRewardItemsRef.current.clear();
@@ -526,8 +519,8 @@ export function ExplorationSiteScreen({
     if (frameBreakGeometry === null || frameBreakPhase !== "open") return;
     const onKeyDown = (event: KeyboardEvent): void => {
       if (event.key !== "Escape") return;
-      if (view.response !== null || view.reward !== null) return;
-      if (activeAction !== null && view.response === null) {
+      if (view.resolvedActionId !== null || view.reward !== null) return;
+      if (activeAction !== null) {
         setActiveActionId(null);
         setSelectedIds([]);
         setPurgeEntryId(null);
@@ -544,7 +537,7 @@ export function ExplorationSiteScreen({
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [activeAction, frameBreakGeometry, frameBreakPhase, reduceMotion, view.response, view.reward]);
+  }, [activeAction, frameBreakGeometry, frameBreakPhase, reduceMotion, view.resolvedActionId, view.reward]);
 
   const startFrameBreak = (): void => {
     const geometry = measureFrameBreak(cardTargetRef.current);
@@ -671,7 +664,7 @@ export function ExplorationSiteScreen({
 
   useEffect(() => {
     if (
-      view.response === null ||
+      view.resolvedActionId === null ||
       view.reward !== null ||
       frameBreakGeometry === null ||
       frameBreakPhase !== "open" ||
@@ -679,17 +672,13 @@ export function ExplorationSiteScreen({
     ) {
       return;
     }
-    const timeout = window.setTimeout(
-      exitExploration,
-      RESPONSE_TEXT_DURATION_MS,
-    );
-    return () => window.clearTimeout(timeout);
+    exitExploration();
   }, [
     activeAction,
     exitExploration,
     frameBreakGeometry,
     frameBreakPhase,
-    view.response,
+    view.resolvedActionId,
     view.reward,
   ]);
 
@@ -1153,7 +1142,7 @@ export function ExplorationSiteScreen({
             hoverFeedback="stationary"
             onClick={
               frameBreakPhase === "open" &&
-              view.response === null &&
+              view.resolvedActionId === null &&
               view.reward === null
                 ? collapseFrameBreak
                 : undefined
@@ -1369,7 +1358,11 @@ export function ExplorationSiteScreen({
             </motion.div>
           );
         })}
-      {frameBreakGeometry !== null && frameBreakPhase === "open" && activeAction === null && view.reward === null && (
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
+        view.resolvedActionId === null &&
+        view.reward === null && (
         <motion.section
           data-exploration-narrative=""
           data-tutorial-guidance-concept="exploration-actions"
@@ -1415,14 +1408,13 @@ export function ExplorationSiteScreen({
                   lineHeight: 1.55,
                 }}
               >
-                {view.response?.text ?? view.narrative}
+                {view.narrative}
               </p>
-              {view.response === null && (
-                <div
-                  role="group"
-                  aria-label="Exploration choices"
-                  style={{ display: "grid", gap: token("--space-3") }}
-                >
+              <div
+                role="group"
+                aria-label="Exploration choices"
+                style={{ display: "grid", gap: token("--space-3") }}
+              >
                   {view.actions.map((action, index) => (
                     <Pressable
                       key={action.id}
@@ -1481,8 +1473,7 @@ export function ExplorationSiteScreen({
                       <span aria-hidden="true" style={{ font: token("--t-title") }}>›</span>
                     </Pressable>
                   ))}
-                </div>
-              )}
+              </div>
             </div>
           </GlassPanel>
         </motion.section>
@@ -1731,7 +1722,7 @@ export function ExplorationSiteScreen({
       {frameBreakGeometry !== null &&
         frameBreakPhase === "open" &&
         activeAction === null &&
-        view.response === null &&
+        view.resolvedActionId === null &&
         view.reward === null && (
         <motion.div
           data-exploration-exit-control=""

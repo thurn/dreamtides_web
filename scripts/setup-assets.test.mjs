@@ -59,7 +59,6 @@ describe("transformExplorationData", () => {
         id: `action-${String(encounterIndex)}-${String(actionIndex)}`,
         label: "Synthetic action",
         "effect-text": "Synthetic effect",
-        "response-text": "Synthetic response",
         "effect-kind": "gain-card",
       })),
     }));

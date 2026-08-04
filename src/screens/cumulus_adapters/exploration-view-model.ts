@@ -439,7 +439,6 @@ function actionView(
     id: action.id,
     label: action.label,
     ...buildExplorationActionEffect(action, offer, content),
-    responseText: action.responseText,
     followup,
     ...(action.effectKind === "gain-offered-card" &&
     offer.offeredCardIds[0] !== undefined
@@ -498,12 +497,6 @@ export function buildExplorationSiteView(params: {
       : [actionView(action, offer, params.state, params.content)];
   });
   if (actions.length !== 2) return null;
-  const resolvedAction =
-    params.runtime.resolution === null
-      ? null
-      : (actions.find(
-          (action) => action.id === params.runtime.resolution?.actionId,
-        ) ?? null);
   const guideId = params.guide?.id ?? FALLBACK_GUIDE_ID;
   const scene: ArtRef | null =
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
@@ -520,13 +513,7 @@ export function buildExplorationSiteView(params: {
     card: { cardId: asCardId(sourceCard.id), displaySnapshot: sourceCard },
     narrative: encounter.prose,
     actions: actions as [ExplorationActionView, ExplorationActionView],
-    response:
-      resolvedAction === null
-        ? null
-        : {
-            actionLabel: resolvedAction.label,
-            text: resolvedAction.responseText,
-          },
+    resolvedActionId: params.runtime.resolution?.actionId ?? null,
     reward: rewardForResolution(params.runtime, params.state, params.content),
   };
 }

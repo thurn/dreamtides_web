@@ -20,7 +20,6 @@ function sources() {
           actions: [
             {
               label: "Invite someone through",
-              resolution: "A silhouette answers.",
               template_id: 10,
               variables: { count: 2 },
               selection: {
@@ -29,7 +28,6 @@ function sources() {
             },
             {
               label: "Name the traveler",
-              resolution: "The traveler joins you.",
               template_id: 11,
               variables: {
                 card_id: {
@@ -48,13 +46,11 @@ function sources() {
           actions: [
             {
               label: "Unused first",
-              resolution: "Unused.",
               template_id: 20,
               variables: {},
             },
             {
               label: "Unused second",
-              resolution: "Unused.",
               template_id: 21,
               variables: {},
             },
@@ -89,7 +85,6 @@ describe("selected encounter TOML generation", () => {
         id: `${CARD_ID}:pair-1:template-10`,
         label: "Invite someone through",
         "effect-text": "Gain 2 copies of $OFFERED_CARD",
-        "response-text": "A silhouette answers.",
         "template-id": 10,
         "template-variables": { count: 2 },
         selection: {
@@ -100,7 +95,6 @@ describe("selected encounter TOML generation", () => {
         id: `${CARD_ID}:pair-1:template-11`,
         label: "Name the traveler",
         "effect-text": "Gain Fixture Traveler",
-        "response-text": "The traveler joins you.",
         "template-id": 11,
         "template-variables": {
           card_id: {

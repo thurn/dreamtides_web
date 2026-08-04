@@ -186,12 +186,22 @@ def validate_template_action(
     action: Any, path: str, catalog: dict[int, str]
 ) -> dict[str, Any]:
     obj = require_object(action, path)
+    allowed_fields = {
+        "label",
+        "predicate_exception_rationale",
+        "selection",
+        "template_id",
+        "variables",
+    }
     for legacy_field in ("template", "effect_text"):
         if legacy_field in obj:
             fail(
                 f"{path}.{legacy_field}",
                 "is forbidden; canonical template text lives only in data/templates.json",
             )
+    for field in obj:
+        if field not in allowed_fields:
+            fail(f"{path}.{field}", "is not an encounter action field")
     template_id = require_int(obj.get("template_id"), f"{path}.template_id", 1)
     if template_id not in catalog:
         fail(f"{path}.template_id", "is not present in the template catalog")
@@ -430,12 +440,6 @@ def validate_output(
                 fail(f"{action_path}.label", "must contain 2 to 5 words")
             if len(label) > 32:
                 fail(f"{action_path}.label", "must contain at most 32 characters")
-            resolution = require_string(
-                action_obj.get("resolution"), f"{action_path}.resolution"
-            )
-            resolution_words = words(resolution)
-            if not 5 <= len(resolution_words) <= 10:
-                fail(f"{action_path}.resolution", "must contain 5 to 10 words")
             validate_variables(
                 catalog[action_obj["template_id"]],
                 action_obj,

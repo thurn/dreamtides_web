@@ -84,7 +84,6 @@ export function generateSelectedEncountersToml(candidatesSource, templatesSource
         `id = ${tomlValue(actionId)}`,
         `label = ${tomlValue(action.label)}`,
         `effect-text = ${tomlValue(renderEncounterTemplate(template, action.variables))}`,
-        `response-text = ${tomlValue(action.resolution)}`,
         `template-id = ${String(action.template_id)}`,
         `template-variables = ${tomlValue(action.variables, "template-variables")}`,
       );

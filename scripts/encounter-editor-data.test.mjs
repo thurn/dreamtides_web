@@ -37,13 +37,11 @@ function candidate(rank, selected = false) {
     actions: [
       {
         label: `First ${String(rank)}`,
-        resolution: `First resolution ${String(rank)}`,
         template_id: rank * 10,
         variables: { count: rank },
       },
       {
         label: `Second ${String(rank)}`,
-        resolution: `Second resolution ${String(rank)}`,
         template_id: rank * 10 + 1,
         variables: {},
       },
@@ -94,14 +92,12 @@ function writeRuntimeSelectionFixtureRoot() {
         actions: [
           {
             label: "Find a spirit",
-            resolution: "A spirit answers.",
             template_id: 1,
             variables: {},
             selection: { "$DECK_CARD": { predicate: "Spirit Animal" } },
           },
           {
             label: "Make an offer",
-            resolution: "Two cards change places.",
             template_id: 2,
             variables: {},
             selection: { "$OFFERED_CARD": { predicate: "≤2● cost Character" } },
@@ -232,12 +228,12 @@ describe("encounter editor data", () => {
       cardId: CARD_ID,
       templatePairId: "pair-1",
       actionTemplateId: 11,
-      field: "resolution",
-      value: "A revised resolution.",
+      field: "label",
+      value: "A revised action.",
     });
     const edited = action.document[CARD_ID][0];
     expect(edited.prose).toBe("A revised scene.");
-    expect(edited.actions[1].resolution).toBe("A revised resolution.");
+    expect(edited.actions[1].label).toBe("A revised action.");
     expect(edited.actions[1]).not.toHaveProperty("template");
     expect(edited.rank).toBe(1);
   });
@@ -300,7 +296,6 @@ describe("encounter editor data", () => {
           actions: [
             {
               label: "Take the ally",
-              resolution: "The ally joins you.",
               template_id: 1,
               variables: {
                 card_id: { id: UNRELATED_CARD_ID, display_name: "Fixture Ally" },
@@ -308,7 +303,6 @@ describe("encounter editor data", () => {
             },
             {
               label: "Take the sign",
-              resolution: "The sign joins you.",
               template_id: 2,
               variables: {
                 dreamsign_name: { id: DREAMSIGN_ID, display_name: "Bell" },
