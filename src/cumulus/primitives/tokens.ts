@@ -300,11 +300,8 @@ export const TOKENS = {
   "--dur-base": { var: "var(--dur-base)", value: "240ms", kind: "other" },
   "--dur-slow": { var: "var(--dur-slow)", value: "420ms", kind: "other" },
   "--dur-loading-screen-fade": { var: "var(--dur-loading-screen-fade)", value: "1200ms", kind: "other" },
-  "--dur-loading-quote": { var: "var(--dur-loading-quote)", value: "1400ms", kind: "other" },
-  "--dur-loading-dot-cycle": { var: "var(--dur-loading-dot-cycle)", value: "1200ms", kind: "other" },
   "--dur-tutorial-dreamwell-emerge": { var: "var(--dur-tutorial-dreamwell-emerge)", value: "1000ms", kind: "other" },
   "--dur-tutorial-character-reposition": { var: "var(--dur-tutorial-character-reposition)", value: "1000ms", kind: "other" },
-  "--stagger-loading-dot": { var: "var(--stagger-loading-dot)", value: "180ms", kind: "other" },
   "--motion-object-travel": { var: "var(--motion-object-travel)", value: "420ms var(--ease-out)", kind: "other" },
   "--stagger-travel": { var: "var(--stagger-travel)", value: "55ms", kind: "other" },
 } as const;

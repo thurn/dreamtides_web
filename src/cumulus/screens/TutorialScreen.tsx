@@ -271,15 +271,12 @@ function tutorialTimingVariables(playbackSpeed: number): CSSProperties {
     "--dur-base": seconds("--dur-base"),
     "--dur-slow": seconds("--dur-slow"),
     "--dur-loading-screen-fade": seconds("--dur-loading-screen-fade"),
-    "--dur-loading-quote": seconds("--dur-loading-quote"),
-    "--dur-loading-dot-cycle": seconds("--dur-loading-dot-cycle"),
     "--dur-tutorial-dreamwell-emerge": seconds(
       "--dur-tutorial-dreamwell-emerge",
     ),
     "--dur-tutorial-character-reposition": seconds(
       "--dur-tutorial-character-reposition",
     ),
-    "--stagger-loading-dot": seconds("--stagger-loading-dot"),
     "--stagger-travel": seconds("--stagger-travel"),
     "--motion-object-travel": `${seconds("--dur-slow")} var(--ease-out)`,
   } as CSSProperties;

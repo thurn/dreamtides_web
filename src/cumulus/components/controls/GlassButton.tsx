@@ -168,13 +168,12 @@ export function GlassButton({
               ? "0 8px"
               : "0 14px",
         boxSizing: "border-box",
-        font: token(
+        font:
           size === "prominent"
-            ? "--t-button-lg"
+            ? token("--t-button-lg")
             : size === "compact"
-              ? "--t-button-sm"
-              : "--t-button",
-        ),
+              ? token("--t-button-sm")
+              : token("--t-button"),
         color: token("--text-on-glass"),
         textAlign: "center",
         whiteSpace: "nowrap",

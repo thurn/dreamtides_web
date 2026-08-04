@@ -203,11 +203,8 @@ Durations, easings, and the two material-continuity transitions (object-travel, 
 | `--dur-base` | `240ms` |  |
 | `--dur-slow` | `420ms` |  |
 | `--dur-loading-screen-fade` | `1200ms` |  |
-| `--dur-loading-quote` | `1400ms` |  |
-| `--dur-loading-dot-cycle` | `1200ms` |  |
 | `--dur-tutorial-dreamwell-emerge` | `1000ms` |  |
 | `--dur-tutorial-character-reposition` | `1000ms` |  |
-| `--stagger-loading-dot` | `180ms` |  |
 | `--motion-object-travel` | `420ms var(--ease-out)` |  |
 | `--stagger-travel` | `55ms` |  |
 

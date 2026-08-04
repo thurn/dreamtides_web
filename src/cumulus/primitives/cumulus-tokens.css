@@ -588,11 +588,8 @@
   --dur-base: 240ms;  /* @kind other */
   --dur-slow: 420ms;  /* @kind other */
   --dur-loading-screen-fade: 1200ms;  /* @kind other */
-  --dur-loading-quote: 1400ms;  /* @kind other */
-  --dur-loading-dot-cycle: 1200ms;  /* @kind other */
   --dur-tutorial-dreamwell-emerge: 1000ms;  /* @kind other */
   --dur-tutorial-character-reposition: 1000ms;  /* @kind other */
-  --stagger-loading-dot: 180ms;  /* @kind other */
 
   /* ---- Material-continuity motion ----
      The canonical transition for a value or card moving between two anchors,
