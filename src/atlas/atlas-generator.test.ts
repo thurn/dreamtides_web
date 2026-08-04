@@ -201,19 +201,19 @@ describe("generateSiteComposition", () => {
     }
   });
 
-  it("guarantees a Dream Augury in Layer II (0-indexed layer 1)", () => {
+  it("guarantees an Augury in Layer II (0-indexed layer 1)", () => {
     for (const dreamscape of NON_STARTER_DREAMSCAPES) {
       for (const layer of NON_STARTER_LAYERS) {
         let allHadAugury = true;
         for (let i = 0; i < 30; i++) {
           const sites = composeFor(dreamscape, layer);
-          const hasAugury = sites.some((s) => s.type === "DreamAugury");
+          const hasAugury = sites.some((s) => s.type === "Augury");
           if (layer === 1 && !hasAugury) {
             allHadAugury = false;
           }
           // Augury, when present, is never duplicated.
           expect(
-            sites.filter((s) => s.type === "DreamAugury").length,
+            sites.filter((s) => s.type === "Augury").length,
           ).toBeLessThanOrEqual(1);
         }
         if (layer === 1) {
@@ -1137,7 +1137,7 @@ describe("previewSiteTypes", () => {
       { id: "s1", type: "Shop", isEnhanced: false, isVisited: false },
       { id: "s2", type: "Essence", isEnhanced: false, isVisited: false },
       { id: "s3", type: "Purge", isEnhanced: false, isVisited: false },
-      { id: "s4", type: "DreamAugury", isEnhanced: false, isVisited: false },
+      { id: "s4", type: "Augury", isEnhanced: false, isVisited: false },
     ]);
     const preview = previewSiteTypes(node);
     expect(preview.length).toBeLessThanOrEqual(3);
@@ -1206,7 +1206,7 @@ describe("revealedAtlasSite", () => {
     const sites = [
       makeSite("s1", "Draft"),
       makeSite("s2", "Shop"),
-      makeSite("s3", "DreamAugury"),
+      makeSite("s3", "Augury"),
       makeSite("s4", "Essence"),
       makeSite("s5", "Battle"),
     ];
@@ -1220,7 +1220,7 @@ describe("revealedAtlasSite", () => {
       makeSite("a", "Draft"),
       makeSite("b", "Shop"),
       makeSite("c", "Essence"),
-      makeSite("d", "DreamAugury"),
+      makeSite("d", "Augury"),
       makeSite("e", "Battle"),
     ];
     const distinctTypes = new Set<SiteType>();

@@ -59,7 +59,7 @@ function model(
     },
     site: {
       id: SITE_ID,
-      name: "Dream Augury",
+      name: "Augury",
       blurb: "Study a curated vision of what waits ahead.",
       icon: GLYPHS.water,
     },
@@ -144,7 +144,7 @@ describe("AtlasNode semantic reveal contract", () => {
     expect(source.dataset.revealPrimaryVariant).toBe("atlasReveal");
     expect(source.dataset.revealSecondaryTitles?.split("\u001f")).toEqual([
       "Known Sign",
-      "Dream Augury",
+      "Augury",
       "Affiliation: Figments",
     ]);
     expect(source.dataset.revealFeedback).toBe("measured");
@@ -153,7 +153,7 @@ describe("AtlasNode semantic reveal contract", () => {
     );
     expect(description?.textContent).toContain("Wilderveil");
     expect(description?.textContent).toContain("Known Sign");
-    expect(description?.textContent).toContain("Dream Augury");
+    expect(description?.textContent).toContain("Augury");
     expect(description?.textContent).toContain("Affiliation: Figments");
   });
 

@@ -286,7 +286,7 @@ function purgeMandatoryForLayer(layer: LayerName): boolean {
 }
 
 /**
- * Whether Dream Augury is a *mandatory* site for a dreamscape on the given atlas
+ * Whether Augury is a *mandatory* site for a dreamscape on the given atlas
  * layer. An Augury is guaranteed somewhere in {@link LayerName.Two} so the
  * player always meets the seer once early in the run; in other layers it can
  * still appear through the random fill. The mandatory Augury is a plain
@@ -446,10 +446,10 @@ export function generateSiteComposition(
     usedTypes.add("Purge");
   }
 
-  // --- Mandatory: Dream Augury in Layer II. ---
-  if (auguryMandatoryForLayer(layer) && !usedTypes.has("DreamAugury")) {
-    preBattle.push(makeSite("DreamAugury", false));
-    usedTypes.add("DreamAugury");
+  // --- Mandatory: Augury in Layer II. ---
+  if (auguryMandatoryForLayer(layer) && !usedTypes.has("Augury")) {
+    preBattle.push(makeSite("Augury", false));
+    usedTypes.add("Augury");
   }
 
   // --- Known-dreamsign carrier: one fill slot becomes a Dreamsign Reward. ---
@@ -1481,9 +1481,9 @@ const SITE_TYPE_META: Record<
     icon: "bxf bx-treasure-chest",
     glossaryId: GLOSSARY_IDS.sites.Reward,
   },
-  DreamAugury: {
+  Augury: {
     icon: "bxf bx-eye",
-    glossaryId: GLOSSARY_IDS.sites.DreamAugury,
+    glossaryId: GLOSSARY_IDS.sites.Augury,
   },
   DreamsignMarket: {
     icon: "bxf bx-pyramid",

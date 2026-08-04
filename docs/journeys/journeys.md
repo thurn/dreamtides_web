@@ -155,7 +155,7 @@ sites appear and no site is enhanced.
 ### Wilderveil
 
 - **Dream Guide:** Aldric, the Seer
-- **Signature Site:** [Dream Augury](#dream-augury)
+- **Signature Site:** [Augury](#augury)
 - **Aesthetic:** An enchanted forest.
 - **Affiliation:** Abandon / Sacrifice
 - **Site Icon:** `boxicons3/eye`
@@ -290,7 +290,7 @@ square frame (head only). The other cards animate back to a small size.
 Dreamtides does *not* have card rarity. The one exception is a **legendary** tag
 applied to certain very strong cards. A card with the legendary tag is capped at
 a single copy in a run's draft pool, and the tag is referenced by reward effects
-such as Dream Augury offers; it carries no other rarity mechanics.
+such as Augury offers; it carries no other rarity mechanics.
 
 ## Draft Pool Construction
 
@@ -648,11 +648,11 @@ selected cards are permanently removed.
 
 Icon: `boxicons3/hot`
 
-### Dream Augury
+### Augury
 
-Dream Augury is run by **Aldric, the Seer** (home: Wilderveil). It functions
+Augury is run by **Aldric, the Seer** (home: Wilderveil). It functions
 like a random event in other roguelike deckbuilding games: the player chooses
-between two reward options to claim. Dream Augury rewards are pure upside, and
+between two reward options to claim. Augury rewards are pure upside, and
 this is where the biggest random effects live — effects that can structurally
 change a journey or modify the user's entire deck. The amount of information
 revealed about an effect is variable, and some auguries have highly random effects
@@ -741,7 +741,7 @@ enhancements are:
 | Durgan Forgehammer | Frostforge | Transfiguration | Pick any card and any applicable transfiguration |
 | Deacon Holt | Hope's End | Duplication | Pick any card to duplicate |
 | Master Takeshi | Tsukiren | Purge | Remove up to 3 cards or banes for free |
-| Aldric, the Seer | Wilderveil | Dream Augury | Bigger rewards, curated to the deck |
+| Aldric, the Seer | Wilderveil | Augury | Bigger rewards, curated to the deck |
 | Maddox | The Rust Expanse | Tempting Offer | Choose between two offers |
 | Gravok | Farpoint Station | Gamble | No initial fee, bigger payouts |
 | "Layaway" | Grid City | Exploration | Enhanced Exploration presentation |

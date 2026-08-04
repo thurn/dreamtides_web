@@ -37,7 +37,7 @@ reflected automatically:
 | `Transfiguration`    | `transfiguration`     |
 | `Duplication`        | `duplication`         |
 | `Reward`             | `reward`              |
-| `DreamAugury`        | `dream-augury`        |
+| `Augury`             | `augury`             |
 | `DreamsignMarket`    | `dreamsign-market`    |
 | `DreamsignRevelation`| `dreamsign-revelation`|
 | `TemptingOffer`      | `tempting-offer`      |

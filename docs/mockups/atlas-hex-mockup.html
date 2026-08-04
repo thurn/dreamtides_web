@@ -126,7 +126,7 @@ const DREAMSCAPES = [
 
 const SITE_GLYPH = {
   Battle:"⚔️", Draft:"🃏", Shop:"🏪", Purge:"🔥", Essence:"✨",
-  Transfiguration:"🦋", Duplication:"⧉", Reward:"🎁", DreamAugury:"🔮",
+  Transfiguration:"🦋", Duplication:"⧉", Reward:"🎁", Augury:"🔮",
   DreamsignMarket:"🜍", DreamsignRevelation:"🌟", TemptingOffer:"💎",
   Gamble:"🎲", Exploration:"🧭",
 };
@@ -210,12 +210,12 @@ function buildSites(n, L, bossLayer){
   const sites=[];
   const have=new Set();
   const add=(type,enhanced)=>{ if(type!=="Draft"&&have.has(type)) return; have.add(type); sites.push({type,enhanced:!!enhanced}); };
-  const enh = ["Transfiguration","Shop","Essence","DreamAugury","Duplication"][fnv1aHash(n.dreamId)%5];
+  const enh = ["Transfiguration","Shop","Essence","Augury","Duplication"][fnv1aHash(n.dreamId)%5];
   if(L>0) add(enh, true);
   const drafts = L<=1?2 : L<=3?1 : 0;
   for(let i=0;i<drafts;i++) add("Draft");
   if(L>=1 && L<=2 && Math.random()<0.6) add("Purge");
-  if(L===1) add("DreamAugury");
+  if(L===1) add("Augury");
   // weighted fill
   const fillTypes=["Shop","Essence","Gamble","TemptingOffer","Transfiguration","Duplication","Exploration","DreamsignMarket"];
   const fill = Math.max(0, ri(2,4)-sites.length);

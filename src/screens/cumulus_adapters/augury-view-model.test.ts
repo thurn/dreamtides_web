@@ -14,12 +14,12 @@ import {
   makeMerchantTestDeckEntry,
 } from "../../journey_v2/testing/fixtures";
 import {
-  buildDreamAuguryAcceptRequest,
-  buildDreamAuguryOfferHeadline,
-  buildDreamAuguryOfferSubtitle,
-  buildDreamAuguryOfferTileModel,
-  buildDreamAuguryOfferViews,
-} from "./dream-augury-view-model";
+  buildAuguryAcceptRequest,
+  buildAuguryOfferHeadline,
+  buildAuguryOfferSubtitle,
+  buildAuguryOfferTileModel,
+  buildAuguryOfferViews,
+} from "./augury-view-model";
 
 const card = makeMerchantTestCard({
   id: asCardId("81000000-0000-4000-8000-000000000012"),
@@ -204,7 +204,7 @@ const choiceRequest = (
 });
 
 function subtitleText(
-  subtitle: ReturnType<typeof buildDreamAuguryOfferSubtitle>,
+  subtitle: ReturnType<typeof buildAuguryOfferSubtitle>,
 ): string {
   return typeof subtitle === "string"
     ? subtitle
@@ -212,7 +212,7 @@ function subtitleText(
 }
 
 function subtitleEntities(
-  subtitle: ReturnType<typeof buildDreamAuguryOfferSubtitle>,
+  subtitle: ReturnType<typeof buildAuguryOfferSubtitle>,
 ): string[] {
   return typeof subtitle === "string"
     ? []
@@ -237,11 +237,11 @@ function dreamsignObject(
   };
 }
 
-describe("dream augury view model", () => {
+describe("augury view model", () => {
   const context = { deckEntryById: new Map() } as unknown as MerchantContext;
 
   it("maps both offers to short object-first views without production summaries", () => {
-    const offers = buildDreamAuguryOfferViews(encounter(), context);
+    const offers = buildAuguryOfferViews(encounter(), context);
 
     expect(offers).toHaveLength(2);
     expect(offers[0]).toMatchObject({
@@ -261,7 +261,7 @@ describe("dream augury view model", () => {
   });
 
   it("preserves card UUID identity and candidate choice ids", () => {
-    const offers = buildDreamAuguryOfferViews(encounter(), context);
+    const offers = buildAuguryOfferViews(encounter(), context);
     const chooser = offers[0];
     if (chooser?.visual.kind !== "cardChoices") {
       throw new Error("expected card choices");
@@ -306,7 +306,7 @@ describe("dream augury view model", () => {
         description: "Fixture",
       },
     });
-    const offers = buildDreamAuguryOfferViews(
+    const offers = buildAuguryOfferViews(
       { ...encounter(), offers: [offer, directOffer()] },
       mappingContext,
     );
@@ -333,7 +333,7 @@ describe("dream augury view model", () => {
       gameObjects: [{ ...deckObject, previewCard }],
       applyPayload: { kind: "composite", children: [] },
     });
-    const offers = buildDreamAuguryOfferViews(
+    const offers = buildAuguryOfferViews(
       { ...encounter(), offers: [offer, directOffer()] },
       mappingContext,
     );
@@ -354,7 +354,7 @@ describe("dream augury view model", () => {
       targetKey: "Shop",
       applyPayload: { kind: "add_site", siteType: "Shop" },
     });
-    const offers = buildDreamAuguryOfferViews(
+    const offers = buildAuguryOfferViews(
       { ...encounter(), offers: [offer, directOffer()] },
       mappingContext,
     );
@@ -371,7 +371,7 @@ describe("dream augury view model", () => {
   });
 
   it("builds the persisted accept request from stable offer and choice ids", () => {
-    expect(buildDreamAuguryAcceptRequest(encounter(), "A", "choice-2")).toEqual(
+    expect(buildAuguryAcceptRequest(encounter(), "A", "choice-2")).toEqual(
       {
         encounterSignature: "encounter-fixture",
         offerId: "A",
@@ -551,10 +551,10 @@ describe("dream augury view model", () => {
     ];
 
     for (const [offer, expectedKind, expectedHeadline] of cases) {
-      const model = buildDreamAuguryOfferTileModel(offer, mappingContext);
+      const model = buildAuguryOfferTileModel(offer, mappingContext);
       expect(model.kind, offer.archetypeId).toBe(expectedKind);
       expect(model.id).toBe(`mapping-encounter:${offer.offerId}`);
-      expect(buildDreamAuguryOfferHeadline(model), offer.archetypeId).toBe(
+      expect(buildAuguryOfferHeadline(model), offer.archetypeId).toBe(
         expectedHeadline,
       );
     }
@@ -601,44 +601,44 @@ describe("dream augury view model", () => {
     ];
 
     for (const [offer, expectedEntities] of cases) {
-      const subtitle = buildDreamAuguryOfferSubtitle(
-        buildDreamAuguryOfferTileModel(offer, mappingContext),
+      const subtitle = buildAuguryOfferSubtitle(
+        buildAuguryOfferTileModel(offer, mappingContext),
       );
       expect(subtitleEntities(subtitle), offer.archetypeId).toEqual(
         expectedEntities,
       );
     }
 
-    const starterModel = buildDreamAuguryOfferTileModel(
+    const starterModel = buildAuguryOfferTileModel(
       cases[4][0],
       mappingContext,
     );
-    expect(buildDreamAuguryOfferHeadline(starterModel)).toBe(
+    expect(buildAuguryOfferHeadline(starterModel)).toBe(
       "Transfigure Your Starters",
     );
-    expect(subtitleText(buildDreamAuguryOfferSubtitle(starterModel))).toBe(
+    expect(subtitleText(buildAuguryOfferSubtitle(starterModel))).toBe(
       "Transfigure Mapping Fixture 1 and Mapping Fixture 2",
     );
 
-    const tradeModel = buildDreamAuguryOfferTileModel(
+    const tradeModel = buildAuguryOfferTileModel(
       cases[2][0],
       mappingContext,
     );
-    expect(subtitleText(buildDreamAuguryOfferSubtitle(tradeModel))).toBe(
+    expect(subtitleText(buildAuguryOfferSubtitle(tradeModel))).toBe(
       "Purge Mapping Fixture 1 and choose a card to replace it",
     );
 
-    const siteModel = buildDreamAuguryOfferTileModel(
+    const siteModel = buildAuguryOfferTileModel(
       cases[3][0],
       mappingContext,
     );
-    expect(subtitleText(buildDreamAuguryOfferSubtitle(siteModel))).toBe(
+    expect(subtitleText(buildAuguryOfferSubtitle(siteModel))).toBe(
       "Add a purge site",
     );
   });
 
   it("rejects malformed fixed counts and resolves structured category and copy data", () => {
-    const category = buildDreamAuguryOfferTileModel(
+    const category = buildAuguryOfferTileModel(
       mappedOffer("category_draft_known", {
         targetKey: `type:Character:${mappingCards
           .slice(0, 4)
@@ -648,7 +648,7 @@ describe("dream augury view model", () => {
       }),
       mappingContext,
     );
-    const copies = buildDreamAuguryOfferTileModel(
+    const copies = buildAuguryOfferTileModel(
       mappedOffer("copies_draft", {
         choiceRequest: choiceRequest(fourCandidates(2)),
       }),
@@ -660,7 +660,7 @@ describe("dream augury view model", () => {
     });
     expect(copies).toMatchObject({ kind: "copies-draft", copyCount: 2 });
     expect(() =>
-      buildDreamAuguryOfferTileModel(
+      buildAuguryOfferTileModel(
         mappedOffer("fit_card_draft", {
           choiceRequest: choiceRequest(fourCandidates().slice(0, 3)),
         }),
@@ -668,7 +668,7 @@ describe("dream augury view model", () => {
       ),
     ).toThrow(/requires 4 candidates/);
     expect(() =>
-      buildDreamAuguryOfferTileModel(
+      buildAuguryOfferTileModel(
         mappedOffer("dreamsign_draft", {
           choiceRequest: choiceRequest(
             [

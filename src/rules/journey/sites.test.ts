@@ -156,7 +156,7 @@ function siteState(type: SiteType, overrides: Partial<JourneyState> = {}): FoldS
  * A deterministic fake {@link SiteContentProvider} whose runtime embeds an
  * rng-derived value so re-folding the same event yields a byte-identical
  * runtime and a fresh seq yields a different one. Content-free types (essence,
- * dreamAugury) are generated purely in-reducer and never reach this provider.
+ * augury) are generated purely in-reducer and never reach this provider.
  */
 const fakeProvider: SiteContentProvider = {
   openSite({ site, rng }) {
@@ -612,12 +612,12 @@ describe("dreamsign offer accept / reject", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Dream Augury: complete / reroll / force
+// Augury: complete / reroll / force
 // ---------------------------------------------------------------------------
 
-describe("Dream Augury", () => {
-  it("COMPLETE_DREAM_AUGURY marks completed and completes the site", () => {
-    const out = reduce(siteState("DreamAugury"), "COMPLETE_DREAM_AUGURY", {
+describe("Augury", () => {
+  it("COMPLETE_AUGURY marks completed and completes the site", () => {
+    const out = reduce(siteState("Augury"), "COMPLETE_AUGURY", {
       siteId: SITE_ID,
     });
     expect(out.outcome).toBe("applied");
@@ -628,18 +628,18 @@ describe("Dream Augury", () => {
     expect(out.state.journey.visitedSites).toContain(SITE_ID);
   });
 
-  it("REROLL_DREAM_AUGURY advances the runtime (nonce bumped, hash differs)", () => {
-    const opened = reduce(siteState("DreamAugury"), "OPEN_SITE", {
+  it("REROLL_AUGURY advances the runtime (nonce bumped, hash differs)", () => {
+    const opened = reduce(siteState("Augury"), "OPEN_SITE", {
       siteId: SITE_ID,
     }).state;
     const before = JSON.stringify(opened.journey.siteRuntime[SITE_ID]);
-    const out = reduce(opened, "REROLL_DREAM_AUGURY", { siteId: SITE_ID });
+    const out = reduce(opened, "REROLL_AUGURY", { siteId: SITE_ID });
     expect(out.outcome).toBe("applied");
     expect(JSON.stringify(out.state.journey.siteRuntime[SITE_ID])).not.toBe(
       before,
     );
     const first = out.state;
-    const second = reduce(first, "REROLL_DREAM_AUGURY", { siteId: SITE_ID });
+    const second = reduce(first, "REROLL_AUGURY", { siteId: SITE_ID });
     expect(JSON.stringify(second.state.journey.siteRuntime[SITE_ID])).not.toBe(
       JSON.stringify(first.journey.siteRuntime[SITE_ID]),
     );
@@ -647,17 +647,17 @@ describe("Dream Augury", () => {
 
   it("REROLL bounces once the augury is completed", () => {
     const completed = reduce(
-      siteState("DreamAugury"),
-      "COMPLETE_DREAM_AUGURY",
+      siteState("Augury"),
+      "COMPLETE_AUGURY",
       { siteId: SITE_ID },
     ).state;
     expect(
-      reduce(completed, "REROLL_DREAM_AUGURY", { siteId: SITE_ID }).outcome,
+      reduce(completed, "REROLL_AUGURY", { siteId: SITE_ID }).outcome,
     ).toBe("bounced");
   });
 
-  it("FORCE_DREAM_AUGURY_ARCHETYPE stores the forced archetype", () => {
-    const out = reduce(siteState("DreamAugury"), "FORCE_DREAM_AUGURY_ARCHETYPE", {
+  it("FORCE_AUGURY_ARCHETYPE stores the forced archetype", () => {
+    const out = reduce(siteState("Augury"), "FORCE_AUGURY_ARCHETYPE", {
       siteId: SITE_ID,
       archetypeId: "arch-x",
     });
@@ -798,7 +798,7 @@ describe("ACCEPT_DUPLICATION_CHOICE", () => {
 
 describe("COMPLETE_SITE", () => {
   it("marks the site visited and returns to the dreamscape", () => {
-    const out = reduce(siteState("DreamAugury"), "COMPLETE_SITE", {
+    const out = reduce(siteState("Augury"), "COMPLETE_SITE", {
       siteId: SITE_ID,
     });
     expect(out.outcome).toBe("applied");
@@ -807,7 +807,7 @@ describe("COMPLETE_SITE", () => {
   });
 
   it("bounces a second completion of an already-visited site", () => {
-    const done = reduce(siteState("DreamAugury"), "COMPLETE_SITE", {
+    const done = reduce(siteState("Augury"), "COMPLETE_SITE", {
       siteId: SITE_ID,
     }).state;
     expect(reduce(done, "COMPLETE_SITE", { siteId: SITE_ID }).outcome).toBe(

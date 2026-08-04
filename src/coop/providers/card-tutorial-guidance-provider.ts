@@ -47,7 +47,7 @@ export function createCardTutorialGuidanceContentProvider(
       if (site.type === "Exploration") {
         return explorationOffersTransfiguration(content, journey, site);
       }
-      if (site.type !== "DreamAugury") return false;
+      if (site.type !== "Augury") return false;
       try {
         const encounter = generateMerchantEncounter(
           buildMerchantContext({

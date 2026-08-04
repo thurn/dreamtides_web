@@ -264,7 +264,7 @@ function makeMutations(): JourneyMutations {
     ensureCardChoiceRuntime: vi.fn(),
     acceptTransfigurationChoice: vi.fn(),
     acceptDuplicationChoice: vi.fn(),
-    completeDreamAugurySite: vi.fn(),
+    completeAugurySite: vi.fn(),
     acceptDreamMerchantOffer: vi.fn(),
     declineDreamMerchant: vi.fn(),
     pickDraftCard: vi.fn(),

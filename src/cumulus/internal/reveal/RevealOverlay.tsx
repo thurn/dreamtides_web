@@ -15,7 +15,7 @@ import { captureVisualViewport, findRevealBoundary } from "./viewport";
 export interface RevealOverlayActive {
   readonly source: RevealCoordinatorSource;
   readonly spec: RevealSpec;
-  /** The one-off Dream Augury OfferTile placement exception. */
+  /** The one-off Augury OfferTile placement exception. */
   readonly placementException?: RevealPlacementException;
   readonly element: HTMLElement;
   readonly reason: RevealReason;

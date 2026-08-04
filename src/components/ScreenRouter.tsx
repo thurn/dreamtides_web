@@ -13,7 +13,7 @@ import {
   CumulusJourneyChrome,
   type CumulusJourneyChromeHandlers,
 } from "./CumulusJourneyChrome";
-import { useDreamAuguryJourneyMenuActions } from "./DreamAuguryJourneyMenu";
+import { useAuguryJourneyMenuActions } from "./AuguryJourneyMenu";
 import { ErrorBoundary } from "./ErrorBoundary";
 
 function screenKey(screen: Screen): string {
@@ -132,7 +132,7 @@ function SiteRoute({
       candidate.sites.some((site) => site.id === siteId)
     );
   const site = node?.sites.find((candidate) => candidate.id === siteId);
-  const dreamAuguryMenuActions = useDreamAuguryJourneyMenuActions(site, node);
+  const auguryMenuActions = useAuguryJourneyMenuActions(site, node);
 
   if (site === undefined) {
     throw new Error(
@@ -158,13 +158,13 @@ function SiteRoute({
   }
 
   const handlers =
-    dreamAuguryMenuActions.length === 0
+    auguryMenuActions.length === 0
       ? cumulusChromeHandlers
       : {
           ...cumulusChromeHandlers,
           contextualActions: [
             ...(cumulusChromeHandlers?.contextualActions ?? []),
-            ...dreamAuguryMenuActions,
+            ...auguryMenuActions,
           ],
         };
 

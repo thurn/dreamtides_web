@@ -1,4 +1,4 @@
-/** Fixed card-art fields used by symbolic Dream Augury offer compositions. */
+/** Fixed card-art fields used by symbolic Augury offer compositions. */
 export const OFFER_TILE_BACKGROUND_IMAGE_NUMBERS = {
   "dreamsign-gift": 386654065,
   "dreamsign-draft": 420863587,

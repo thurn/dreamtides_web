@@ -4,16 +4,16 @@ import {
   type MerchantArchetypeId,
 } from "../journey_v2";
 import {
-  buildDreamAugurySiteModel,
-  resolveDreamAuguryGuide,
-} from "../screens/cumulus_adapters/dream-augury-view-model";
+  buildAugurySiteModel,
+  resolveAuguryGuide,
+} from "../screens/cumulus_adapters/augury-view-model";
 import { useJourney } from "../state/journey-context";
 import type { DreamscapeNode, SiteState } from "../types/journey";
 import { GLYPHS } from "../cumulus/primitives/glyph";
 import type { JourneyUtilityMenuAction } from "./JourneyUtilityMenuController";
 
-/** Builds the Dream Augury commands contributed to the shared Cumulus menu. */
-export function useDreamAuguryJourneyMenuActions(
+/** Builds the Augury commands contributed to the shared Cumulus menu. */
+export function useAuguryJourneyMenuActions(
   site: SiteState | undefined,
   sceneNode: DreamscapeNode | undefined,
 ): readonly JourneyUtilityMenuAction[] {
@@ -21,17 +21,17 @@ export function useDreamAuguryJourneyMenuActions(
   const result = useMemo(() => {
     if (
       site === undefined ||
-      site.type !== "DreamAugury" ||
+      site.type !== "Augury" ||
       sceneNode === undefined
     ) {
       return null;
     }
-    return buildDreamAugurySiteModel({
+    return buildAugurySiteModel({
       state,
       sceneNode,
       site,
       journeyContent,
-      guide: resolveDreamAuguryGuide(journeyContent.guides),
+      guide: resolveAuguryGuide(journeyContent.guides),
       guideLine: null,
     });
   }, [journeyContent, sceneNode, site, state]);
@@ -45,7 +45,7 @@ export function useDreamAuguryJourneyMenuActions(
       return [];
     }
     const actions: JourneyUtilityMenuAction[] = [];
-    const forceCategory = mutations.forceDreamAuguryArchetype;
+    const forceCategory = mutations.forceAuguryArchetype;
     if (forceCategory !== undefined) {
       const forcedArchetypeId = result.context?.forcedArchetypeId ?? null;
       const eligibleArchetypes = [...(result.debug?.eligibleArchetypeIds ?? [])]
@@ -76,7 +76,7 @@ export function useDreamAuguryJourneyMenuActions(
         ],
       });
     }
-    const rerollJourney = mutations.rerollDreamAugury;
+    const rerollJourney = mutations.rerollAugury;
     if (rerollJourney !== undefined) {
       actions.push({
         id: "rerollJourney",

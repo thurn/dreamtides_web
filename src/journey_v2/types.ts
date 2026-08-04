@@ -68,7 +68,7 @@ export interface MerchantContext {
    * Debug-only: when set to an eligible `MerchantArchetypeId`, the generator
    * forces the first offer (slot A) to use that archetype instead of weighted
    * sampling. Typed as `string` because it is a persisted passthrough from
-   * `DreamAugurySiteRuntime`; the generator validates it against the eligible
+   * `AugurySiteRuntime`; the generator validates it against the eligible
    * builder set and ignores values that are not eligible.
    */
   forcedArchetypeId?: string;

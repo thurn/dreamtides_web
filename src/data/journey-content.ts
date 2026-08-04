@@ -849,7 +849,7 @@ export async function loadJourneyContent(
     // Fetch the committed `tides5` artifact only for the `tides5` variant.
     poolNeedsTides5 ? loadTides5Decks() : Promise.resolve(null),
     // The merchant corpus and dreamsign profiles are small and always loaded
-    // unconditionally so Dream Augury has signals on every path.
+    // unconditionally so Augury has signals on every path.
     loadMerchantCorpus(),
     loadDreamsignProfiles().catch(
       () => undefined as ReadonlyMap<string, DreamsignProfile> | undefined,

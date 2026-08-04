@@ -229,11 +229,11 @@ function makeMutations(): JourneyMutations {
     ensureCardChoiceRuntime: vi.fn(),
     acceptTransfigurationChoice: vi.fn(),
     acceptDuplicationChoice: vi.fn(),
-    completeDreamAugurySite: vi.fn(),
+    completeAugurySite: vi.fn(),
     acceptDreamMerchantOffer: vi.fn(),
     declineDreamMerchant: vi.fn(),
-    rerollDreamAugury: vi.fn(),
-    forceDreamAuguryArchetype: vi.fn(),
+    rerollAugury: vi.fn(),
+    forceAuguryArchetype: vi.fn(),
     pickDraftCard: vi.fn(),
     enterDraftSite: vi.fn(),
     addCard: vi.fn(),
@@ -408,9 +408,9 @@ afterEach(() => {
   resetLog();
 });
 
-describe("ScreenRouter DreamAugury routing", () => {
+describe("ScreenRouter Augury routing", () => {
   it("mounts the next route without waiting on the outgoing screen", () => {
-    const site = makeSite("DreamAugury");
+    const site = makeSite("Augury");
     const container = renderWithJourney({
       state: makeStateFor(site),
       journeyContent: merchantContent(),
@@ -431,7 +431,7 @@ describe("ScreenRouter DreamAugury routing", () => {
 
   it("makes an exiting route subtree inert", () => {
     motionPreference.isPresent = false;
-    const site = makeSite("DreamAugury");
+    const site = makeSite("Augury");
     const container = renderWithJourney({
       state: makeStateFor(site),
       journeyContent: merchantContent(),
@@ -447,8 +447,8 @@ describe("ScreenRouter DreamAugury routing", () => {
     expect(frame?.style.pointerEvents).toBe("none");
   });
 
-  it("renders the Cumulus Dream Augury screen", () => {
-    const site = makeSite("DreamAugury");
+  it("renders the Cumulus Augury screen", () => {
+    const site = makeSite("Augury");
     const state = makeStateFor(site);
     const container = renderWithJourney({
       state,
@@ -459,12 +459,12 @@ describe("ScreenRouter DreamAugury routing", () => {
     });
 
     expect(
-      container.querySelector('[data-testid="cumulus-dream-augury-offer-A"]'),
+      container.querySelector('[data-testid="cumulus-augury-offer-A"]'),
     ).not.toBeNull();
   });
 
-  it("renders generated offers for a DreamAugury site", () => {
-    const site = makeSite("DreamAugury");
+  it("renders generated offers for an Augury site", () => {
+    const site = makeSite("Augury");
     const state = makeStateFor(site);
     const container = renderWithJourney({
       state,
@@ -475,12 +475,12 @@ describe("ScreenRouter DreamAugury routing", () => {
     });
 
     expect(
-      container.querySelector('[data-testid="cumulus-dream-augury-offer-A"]'),
+      container.querySelector('[data-testid="cumulus-augury-offer-A"]'),
     ).not.toBeNull();
   });
 
-  it("renders the Cumulus Dream Augury screen by default", () => {
-    const site = makeSite("DreamAugury");
+  it("renders the Cumulus Augury screen by default", () => {
+    const site = makeSite("Augury");
     const container = renderWithJourney({
       state: makeStateFor(site),
       journeyContent: merchantContent(),
@@ -491,7 +491,7 @@ describe("ScreenRouter DreamAugury routing", () => {
 
     expect(
       container.querySelector(
-        '[data-testid="cumulus-dream-augury-site-screen"]',
+        '[data-testid="cumulus-augury-site-screen"]',
       ),
     ).not.toBeNull();
     expect(
@@ -500,7 +500,7 @@ describe("ScreenRouter DreamAugury routing", () => {
   });
 
   it("adds reroll and force-category debug commands to the Cumulus journey menu", () => {
-    const site = makeSite("DreamAugury");
+    const site = makeSite("Augury");
     const mutations = makeMutations();
     const state = makeStateFor(site);
     state.dreamAvatar = {
@@ -536,7 +536,7 @@ describe("ScreenRouter DreamAugury routing", () => {
     const reroll = menuRow("Reroll Journey");
     expect(reroll).toBeDefined();
     act(() => reroll?.click());
-    expect(mutations.rerollDreamAugury).toHaveBeenCalledWith(site.id);
+    expect(mutations.rerollAugury).toHaveBeenCalledWith(site.id);
 
     openMenu();
     act(() => menuRow("Force Category")?.click());
@@ -558,14 +558,14 @@ describe("ScreenRouter DreamAugury routing", () => {
     const category = menuRow(categoryLabel);
     expect(category).toBeDefined();
     act(() => category?.click());
-    expect(mutations.forceDreamAuguryArchetype).toHaveBeenCalledWith(
+    expect(mutations.forceAuguryArchetype).toHaveBeenCalledWith(
       site.id,
       firstEligible,
     );
   });
 
   it("logs screen_rendered exactly once per navigation under strict mode", () => {
-    const site = makeSite("DreamAugury");
+    const site = makeSite("Augury");
     const state = makeStateFor(site);
     renderWithJourney({
       state,
@@ -587,7 +587,7 @@ describe("ScreenRouter DreamAugury routing", () => {
   });
 
   it("logs the generated encounter debug once per encounter signature under strict mode", () => {
-    const site = makeSite("DreamAugury");
+    const site = makeSite("Augury");
     const state = makeStateFor(site);
     renderWithJourney({
       state,
@@ -619,7 +619,7 @@ describe("ScreenRouter DreamAugury routing", () => {
   });
 
   it("emits a per-offer merchant_offer_built event joined to the encounter", () => {
-    const site = makeSite("DreamAugury");
+    const site = makeSite("Augury");
     const state = makeStateFor(site);
     renderWithJourney({
       state,
@@ -660,7 +660,7 @@ describe("ScreenRouter DreamAugury routing", () => {
   it("sets card source debug for visible merchant grant cards", () => {
     // Use a fixture with a strong corpus quality signal so at least one
     // grant offer (strong_card or similar) appears in the encounter.
-    const site = makeSite("DreamAugury");
+    const site = makeSite("Augury");
     // Build content with no dreamsigns so dreamsign_draft is ineligible and
     // the generator falls back to grant/improve/etc. families that yield cards.
     const cards = fixtureCards();
@@ -704,7 +704,7 @@ describe("ScreenRouter DreamAugury routing", () => {
   });
 
   it("publishes card source debug once when the coop fold applies that debug state", async () => {
-    const site = makeSite("DreamAugury");
+    const site = makeSite("Augury");
     const state = { ...makeStateFor(site), deck: [] };
     const mutations = makeMutations();
     const foldedMutations = makeMutations();
@@ -731,7 +731,7 @@ describe("ScreenRouter DreamAugury routing", () => {
   });
 
   it("does not clear or republish card source debug during StrictMode effect replay", () => {
-    const site = makeSite("DreamAugury");
+    const site = makeSite("Augury");
     const mutations = makeMutations();
     renderWithJourney({
       state: { ...makeStateFor(site), deck: [] },
@@ -767,7 +767,7 @@ describe("ScreenRouter DreamAugury routing", () => {
   });
 
   it("renders a contained v2 fallback when merchant generation is unavailable", () => {
-    const site = makeSite("DreamAugury");
+    const site = makeSite("Augury");
     const state = makeStateFor(site);
     const mutations = makeMutations();
     const container = renderWithJourney({
@@ -780,7 +780,7 @@ describe("ScreenRouter DreamAugury routing", () => {
     });
 
     const walkAway = container.querySelector(
-      '[data-testid="cumulus-dream-augury-unavailable-exit"]',
+      '[data-testid="cumulus-augury-unavailable-exit"]',
     );
     if (!(walkAway instanceof HTMLButtonElement)) {
       throw new Error("expected fallback walk-away button");
@@ -790,7 +790,7 @@ describe("ScreenRouter DreamAugury routing", () => {
       walkAway.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
 
-    expect(mutations.completeDreamAugurySite).toHaveBeenCalledWith(site.id);
+    expect(mutations.completeAugurySite).toHaveBeenCalledWith(site.id);
   });
 });
 

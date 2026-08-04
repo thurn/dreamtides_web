@@ -81,7 +81,7 @@ home-specialty = "Master Takeshi will purge cards from your deck at no cost."
 id = "aldric_the_seer"
 name = "Aldric, the Seer"
 home-dreamscape-id = "wilderveil"
-site-type = "DreamAugury"
+site-type = "Augury"
 dialog = [
   "Two paths unfold before you. Choose one to shape your dream.",
   "Weigh both visions, then pick one path for your dream.",

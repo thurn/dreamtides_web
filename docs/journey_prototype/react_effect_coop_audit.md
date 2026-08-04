@@ -265,8 +265,8 @@ Recommended direction:
 - `src/components/BattleSiteRoute.tsx:74` uses one `beginRequestedKeyRef` with
   no sibling reset. `src/components/BattleSiteRoute.test.tsx:321` verifies one
   `BEGIN_BATTLE` append under StrictMode.
-- The Dream Augury card-source publishers in `src/components/ScreenRouter.tsx:502`
-  and `src/screens/cumulus_adapters/DreamAugurySiteScreenAdapter.tsx:48` use
+- The Augury card-source publishers in `src/components/ScreenRouter.tsx:502`
+  and `src/screens/cumulus_adapters/AugurySiteScreenAdapter.tsx:48` use
   signature guards and deferred generation-aware cleanup. The StrictMode test
   is `src/components/ScreenRouter.test.tsx:610`.
 - `src/battle/ai/use-battle-ai.ts:253` retains its per-turn blocking ref through

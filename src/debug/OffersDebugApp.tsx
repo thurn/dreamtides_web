@@ -385,7 +385,7 @@ export default function OffersDebugApp(): ReactElement {
               textTransform: "uppercase",
             }}
           >
-            Dream Augury Debug
+            Augury Debug
           </p>
           <h1 style={{ margin: 0, font: token("--t-display") }}>Offer Tiles</h1>
           <p style={{ margin: 0, font: token("--t-body-sm") }}>
@@ -397,7 +397,7 @@ export default function OffersDebugApp(): ReactElement {
         </header>
 
         <section
-          aria-label="Dream Augury offer categories"
+          aria-label="Augury offer categories"
           style={{
             display: "grid",
             gridTemplateColumns: `repeat(auto-fit, minmax(${isDesktop ? "300px" : "240px"}, 1fr))`,

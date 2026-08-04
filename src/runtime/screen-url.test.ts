@@ -96,7 +96,7 @@ describe("screenToJourneyPath", () => {
 
   it("appends the site-type slug for a site screen", () => {
     const purge = makeSite("site-7", "Purge");
-    const augury = makeSite("site-8", "DreamAugury");
+    const augury = makeSite("site-8", "Augury");
     const state = stateInDreamscape("Ember Wood", [purge, augury], "dreamscape-3", 2);
     expect(
       screenToJourneyPath({
@@ -109,7 +109,7 @@ describe("screenToJourneyPath", () => {
         ...state,
         screen: { type: "site", siteId: "site-8" },
       }),
-    ).toBe("/dreamscape/2-ember-wood/dream-augury");
+    ).toBe("/dreamscape/2-ember-wood/augury");
   });
 
   it("falls back to the node id slug when the biome is unnamed", () => {
@@ -142,7 +142,7 @@ describe("screenToJourneyPath", () => {
 describe("siteTypeSlug", () => {
   it("kebab-cases camel-case site types and lowercases simple ones", () => {
     expect(siteTypeSlug("Purge")).toBe("purge");
-    expect(siteTypeSlug("DreamAugury")).toBe("dream-augury");
+    expect(siteTypeSlug("Augury")).toBe("augury");
     expect(siteTypeSlug("DreamsignMarket")).toBe("dreamsign-market");
     expect(siteTypeSlug("Exploration")).toBe("exploration");
   });

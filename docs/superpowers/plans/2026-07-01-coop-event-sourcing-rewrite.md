@@ -112,13 +112,13 @@ Every multiplayer mutation in `src/state/multiplayer-journey-context.tsx` maps t
 | setDraftState *(debug)* | `SET_DRAFT_STATE` | `{ draftState }` |
 | pickDraftCard | `PICK_DRAFT_CARD` | `{ packIndex, cardId }` |
 | ensureRewardSiteRuntime / ensureDreamsignOfferRuntime / ensureEssenceSiteRuntime / ensureCardChoiceRuntime / ensureShopRuntime | `OPEN_SITE` | `{ siteId }`; reducer generates the site runtime for the site's type from `ctx.rng` and stores it; if runtime already exists the event is a no-change **applied** (idempotent — both players opening simultaneously must not toast) |
-| completeDreamAugurySite | `COMPLETE_DREAM_AUGURY` | `{ siteId }` |
+| completeAugurySite | `COMPLETE_AUGURY` | `{ siteId }` |
 | acceptRewardSite | `ACCEPT_REWARD` | `{ siteId }` (+ choice index if legacy signature carries one) |
 | acceptDreamsignOffer | `ACCEPT_DREAMSIGN_OFFER` | `{ siteId, dreamsignId }` |
 | rejectDreamsignOffer | `REJECT_DREAMSIGN_OFFER` | `{ siteId }` |
 | acceptEssenceSite | `ACCEPT_ESSENCE` | `{ siteId }` |
-| rerollDreamAugury *(debug)* | `REROLL_DREAM_AUGURY` | `{ siteId }`; redraw from `ctx.rng` at this event's seq |
-| forceDreamAuguryArchetype *(debug)* | `FORCE_DREAM_AUGURY_ARCHETYPE` | `{ siteId, archetypeId }` |
+| rerollAugury *(debug)* | `REROLL_AUGURY` | `{ siteId }`; redraw from `ctx.rng` at this event's seq |
+| forceAuguryArchetype *(debug)* | `FORCE_AUGURY_ARCHETYPE` | `{ siteId, archetypeId }` |
 | completeSite | `COMPLETE_SITE` | `{ siteId }` |
 | acceptDreamMerchantOffer | `ACCEPT_MERCHANT_OFFER` | `{ siteId }` + the legacy offer payload (effects applied in-case) |
 | declineDreamMerchant | `DECLINE_MERCHANT` | `{ siteId }` |
@@ -298,9 +298,9 @@ Cases: `PICK_DRAFT_CARD`, `SET_DRAFT_STATE`. Also plug the RNG leak the spec nam
 
 **Files:** Create: `src/rules/journey/sites.ts`, `src/rules/journey/sites.test.ts`; Modify: `src/rules/reducer.ts`
 
-Cases: `OPEN_SITE`, `COMPLETE_DREAM_AUGURY`, `ACCEPT_REWARD`, `ACCEPT_DREAMSIGN_OFFER`, `REJECT_DREAMSIGN_OFFER`, `ACCEPT_ESSENCE`, `REROLL_DREAM_AUGURY`, `FORCE_DREAM_AUGURY_ARCHETYPE`, `COMPLETE_SITE`. `OPEN_SITE` dispatches on the site's type and relocates the generation logic from each legacy `ensure*SiteRuntime` body, drawing from `ctx.rng`. Idempotence rule from the mapping table: existing runtime → unchanged state, outcome **applied**.
+Cases: `OPEN_SITE`, `COMPLETE_AUGURY`, `ACCEPT_REWARD`, `ACCEPT_DREAMSIGN_OFFER`, `REJECT_DREAMSIGN_OFFER`, `ACCEPT_ESSENCE`, `REROLL_AUGURY`, `FORCE_AUGURY_ARCHETYPE`, `COMPLETE_SITE`. `OPEN_SITE` dispatches on the site's type and relocates the generation logic from each legacy `ensure*SiteRuntime` body, drawing from `ctx.rng`. Idempotence rule from the mapping table: existing runtime → unchanged state, outcome **applied**.
 
-- [ ] **Step 1: Failing tests.** Bug classes: **generation nondeterminism** (same seed+seq: two folds of OPEN_SITE yield hash-identical runtime — for every site type, table-driven over the site types the legacy ensure* family handles); **idempotence** (second OPEN_SITE on same site: state hash unchanged, outcome applied); **accept-before-open** (ACCEPT_* on a site with no runtime bounces); **double-accept** (second ACCEPT_* on an accepted site bounces — the coop double-claim race made safe); **reroll advances** (REROLL_DREAM_AUGURY produces a different runtime than the original with overwhelming probability — assert hash differs for a seed where it does, fixture-pinned).
+- [ ] **Step 1: Failing tests.** Bug classes: **generation nondeterminism** (same seed+seq: two folds of OPEN_SITE yield hash-identical runtime — for every site type, table-driven over the site types the legacy ensure* family handles); **idempotence** (second OPEN_SITE on same site: state hash unchanged, outcome applied); **accept-before-open** (ACCEPT_* on a site with no runtime bounces); **double-accept** (second ACCEPT_* on an accepted site bounces — the coop double-claim race made safe); **reroll advances** (REROLL_AUGURY produces a different runtime than the original with overwhelming probability — assert hash differs for a seed where it does, fixture-pinned).
 - [ ] **Step 2–4: Red → implement → green. Step 5: Commit and push.**
 
 ### Task 15: Shop, merchant, modifier events

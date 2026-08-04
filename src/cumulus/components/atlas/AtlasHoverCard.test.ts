@@ -14,7 +14,7 @@ function residentContent(): AtlasHoverContent {
     figureArt: artRef.dreamGuide("aldric"),
     placeName: "Wilderveil",
     guideName: "Aldric, the Seer",
-    siteName: "Dream Augury",
+    siteName: "Augury",
     body: "Aldric offers curated visions of the future.",
     affiliation: "Abandon",
   };

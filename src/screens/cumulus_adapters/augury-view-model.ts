@@ -54,14 +54,14 @@ import { offerTileDescription } from "../../cumulus/components/controls/offer-ti
 import type { DreamscapeSiteModel } from "../../cumulus/components/dreamscape/SiteNode";
 import type { GlassPanelTextSegment } from "../../cumulus/components/overlay/GlassPanel";
 import type {
-  DreamAuguryCardChoiceView,
-  DreamAuguryCardView,
-  DreamAuguryDreamsignChoiceView,
-  DreamAuguryGuideView,
-  DreamAuguryOfferView,
-  DreamAuguryOfferVisualView,
-  DreamAugurySiteView,
-} from "../../cumulus/screens/DreamAugurySiteScreen";
+  AuguryCardChoiceView,
+  AuguryCardView,
+  AuguryDreamsignChoiceView,
+  AuguryGuideView,
+  AuguryOfferView,
+  AuguryOfferVisualView,
+  AugurySiteView,
+} from "../../cumulus/screens/AugurySiteScreen";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
 const FALLBACK_GUIDE_ID = "aldric_the_seer";
@@ -71,8 +71,8 @@ const FALLBACK_GUIDE_LINE =
 
 type CardObject = MerchantCatalogCard | MerchantDeckCard;
 
-export interface DreamAuguryBuildResult {
-  view: DreamAugurySiteView;
+export interface AuguryBuildResult {
+  view: AugurySiteView;
   context: MerchantContext | null;
   encounter: MerchantEncounter | null;
   debug: MerchantEncounterGenerationDebug | null;
@@ -81,22 +81,22 @@ export interface DreamAuguryBuildResult {
   errorMessage: string | null;
 }
 
-export interface DreamAuguryLogEntry {
+export interface AuguryLogEntry {
   key: string;
   event: string;
   payload: Record<string, unknown>;
 }
 
-export function resolveDreamAuguryGuide(
+export function resolveAuguryGuide(
   guides: readonly DreamGuideContent[],
 ): DreamGuideContent | null {
-  return guideForSiteType(guides, "DreamAugury");
+  return guideForSiteType(guides, "Augury");
 }
 
-export function buildDreamAuguryGuideView(
+export function buildAuguryGuideView(
   guide: DreamGuideContent | null,
   line: string | null,
-): DreamAuguryGuideView {
+): AuguryGuideView {
   const id = guide?.id ?? FALLBACK_GUIDE_ID;
   return {
     id,
@@ -111,7 +111,7 @@ function toCardView(
   idSuffix = "",
   card: CardData = object.card,
   includeTransfiguration = true,
-): DreamAuguryCardView {
+): AuguryCardView {
   return {
     id: `${object.cardUuid}${idSuffix}`,
     model: {
@@ -144,7 +144,7 @@ function namedEntitySubtitle(
   action: string,
   entityNames: readonly string[],
   suffix = "",
-): DreamAuguryOfferView["subtitle"] {
+): AuguryOfferView["subtitle"] {
   const segments: GlassPanelTextSegment[] = [
     { kind: "text", text: `${action} ` },
   ];
@@ -157,7 +157,7 @@ function namedEntitySubtitle(
 }
 
 /** Player-facing detail title derived from the offer's action category. */
-export function buildDreamAuguryOfferHeadline(model: OfferTileModel): string {
+export function buildAuguryOfferHeadline(model: OfferTileModel): string {
   switch (model.kind) {
     case "card-gift":
       return "Gain a Card";
@@ -193,9 +193,9 @@ export function buildDreamAuguryOfferHeadline(model: OfferTileModel): string {
 }
 
 /** Supporting detail copy with named outcomes identified at point of display. */
-export function buildDreamAuguryOfferSubtitle(
+export function buildAuguryOfferSubtitle(
   model: OfferTileModel,
-): DreamAuguryOfferView["subtitle"] {
+): AuguryOfferView["subtitle"] {
   switch (model.kind) {
     case "card-gift":
       return namedEntitySubtitle("Gain", [offerCardName(model.card)]);
@@ -251,7 +251,7 @@ export function buildDreamAuguryOfferSubtitle(
 function sitePreviewModel(siteType: SiteState["type"]): DreamscapeSiteModel {
   return {
     site: {
-      id: `dream-augury-preview:${siteType}`,
+      id: `augury-preview:${siteType}`,
       type: siteType,
       isEnhanced: false,
       isVisited: false,
@@ -297,7 +297,7 @@ function toDreamsign(
 }
 
 function unavailable(message: string): never {
-  throw new Error(`Dream Augury offer unavailable: ${message}`);
+  throw new Error(`Augury offer unavailable: ${message}`);
 }
 
 function tileCard(object: CardObject, preview = false): OfferTileCard {
@@ -442,7 +442,7 @@ function categoryName(offer: MerchantOffer, context: MerchantContext): string {
   return category.label;
 }
 
-export function buildDreamAuguryOfferTileModel(
+export function buildAuguryOfferTileModel(
   offer: MerchantOffer,
   context: MerchantContext,
 ): OfferTileModel {
@@ -611,8 +611,8 @@ export function buildDreamAuguryOfferTileModel(
 function cardChoices(
   candidates: NonNullable<MerchantOffer["choiceRequest"]>["candidates"],
   preview: boolean,
-): DreamAuguryCardChoiceView[] {
-  const choices: DreamAuguryCardChoiceView[] = [];
+): AuguryCardChoiceView[] {
+  const choices: AuguryCardChoiceView[] = [];
   for (const candidate of candidates) {
     const object = firstCard(candidate.gameObjects);
     if (object === undefined) continue;
@@ -632,8 +632,8 @@ function cardChoices(
 
 function dreamsignChoices(
   candidates: NonNullable<MerchantOffer["choiceRequest"]>["candidates"],
-): DreamAuguryDreamsignChoiceView[] {
-  const choices: DreamAuguryDreamsignChoiceView[] = [];
+): AuguryDreamsignChoiceView[] {
+  const choices: AuguryDreamsignChoiceView[] = [];
   for (const candidate of candidates) {
     const object = candidate.gameObjects.find(
       (
@@ -651,7 +651,7 @@ function dreamsignChoices(
 function buildOfferVisual(
   offer: MerchantOffer,
   context: Pick<MerchantContext, "deckEntryById">,
-): DreamAuguryOfferVisualView {
+): AuguryOfferVisualView {
   const presentation = resolveOfferPresentation(offer);
   switch (presentation.kind) {
     case "heroCard":
@@ -754,19 +754,19 @@ function buildOfferVisual(
   }
 }
 
-export function buildDreamAuguryOfferViews(
+export function buildAuguryOfferViews(
   encounter: MerchantEncounter,
   context: MerchantContext,
-): DreamAuguryOfferView[] {
+): AuguryOfferView[] {
   if (encounter.offers.length !== 2) {
     unavailable("encounter requires exactly 2 offers");
   }
   return encounter.offers.map((offer) => {
-    const tile = buildDreamAuguryOfferTileModel(offer, context);
+    const tile = buildAuguryOfferTileModel(offer, context);
     return {
       id: offer.offerId,
-      headline: buildDreamAuguryOfferHeadline(tile),
-      subtitle: buildDreamAuguryOfferSubtitle(tile),
+      headline: buildAuguryOfferHeadline(tile),
+      subtitle: buildAuguryOfferSubtitle(tile),
       requiresSelection: (offer.choiceRequest?.candidates.length ?? 0) > 0,
       tile,
       visual: buildOfferVisual(offer, context),
@@ -792,20 +792,20 @@ function collectVisibleGrantCards(encounter: MerchantEncounter): CardData[] {
   return [...byUuid.values()];
 }
 
-export function buildDreamAugurySiteModel(params: {
+export function buildAugurySiteModel(params: {
   state: JourneyState;
   sceneNode: DreamscapeNode | null;
   site: SiteState;
   journeyContent: JourneyContent;
   guide: DreamGuideContent | null;
   guideLine: string | null;
-}): DreamAuguryBuildResult {
+}): AuguryBuildResult {
   const scene: ArtRef | null =
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
   const baseView = {
     siteId: params.site.id,
     scene,
-    guide: buildDreamAuguryGuideView(params.guide, params.guideLine),
+    guide: buildAuguryGuideView(params.guide, params.guideLine),
   };
   try {
     const context = buildMerchantContext({
@@ -818,7 +818,7 @@ export function buildDreamAugurySiteModel(params: {
       view: {
         ...baseView,
         encounterSignature: encounter.encounterSignature,
-        offers: buildDreamAuguryOfferViews(encounter, context),
+        offers: buildAuguryOfferViews(encounter, context),
         unavailableMessage: null,
       },
       context,
@@ -852,7 +852,7 @@ export function buildDreamAugurySiteModel(params: {
   }
 }
 
-export function buildDreamAuguryAcceptRequest(
+export function buildAuguryAcceptRequest(
   encounter: MerchantEncounter,
   offerId: string,
   choiceId: string | null,
@@ -878,7 +878,7 @@ export function buildDreamAuguryAcceptRequest(
   };
 }
 
-export function buildDreamAuguryDeclineRequest(
+export function buildAuguryDeclineRequest(
   encounter: MerchantEncounter,
 ): MerchantDeclineRequest | null {
   const offer = encounter.offers[0];
@@ -890,12 +890,12 @@ export function buildDreamAuguryDeclineRequest(
       };
 }
 
-export function buildDreamAuguryLogEntries(
-  result: DreamAuguryBuildResult,
+export function buildAuguryLogEntries(
+  result: AuguryBuildResult,
   site: SiteState,
   guideId: string | null,
-): DreamAuguryLogEntry[] {
-  const entries: DreamAuguryLogEntry[] = [
+): AuguryLogEntry[] {
+  const entries: AuguryLogEntry[] = [
     {
       key: `augury:${site.id}:site-entered`,
       event: "site_entered",
@@ -970,7 +970,7 @@ export function buildDreamAuguryLogEntries(
   return entries;
 }
 
-export function dreamAuguryChoiceResult(
+export function auguryChoiceResult(
   result: MerchantOfferActionResult | void,
 ): { ok: true } | { ok: false; message: string } {
   if (result?.ok !== false) return { ok: true };

@@ -23,7 +23,7 @@ tune the economy.
 4. Implement **affiliations** as real IDF similarity-weighted reweighting of all
    random card/dreamsign draws plus opponent-deck bias.
 5. Remap existing sites to doc names; build the three doc sites that map cleanly
-   onto existing code (Dreamsign Market, Dreamsign Revelation, Dream Augury);
+   onto existing code (Dreamsign Market, Dreamsign Revelation, Augury);
    stub the three genuinely new sites (Tempting Offer, Gamble, Exploration).
 6. Apply economy tweaks (starting essence 200, purge `30 + 5·N·(N+1)`, single
    currency, banes folded into Purge).
@@ -35,8 +35,8 @@ tune the economy.
 - **Affiliations use real IDF similarity** now, reusing the tides4 /
   `tides-similarity` machinery.
 - **Three sites map to existing code** and are built properly: Dreamsign Market
-  (Shop variant), Dreamsign Revelation (existing dreamsign offering), Dream
-  Augury (renamed Dream Journey).
+  (Shop variant), Dreamsign Revelation (existing dreamsign offering), Augury
+  (renamed Dream Journey).
 - **Three sites are stubs** this pass: Tempting Offer, Gamble, Exploration —
   registered as site types with guides + atlas icons + a minimal placeholder
   screen so the atlas/dreamscape system is complete.
@@ -73,7 +73,7 @@ Major gaps this spec closes:
 | Dreamscapes | procedural biome names | 11 named dreamscapes w/ aesthetic, guide, affiliation |
 | Dream Guides | none | 10 named NPCs + dialog + home specialties |
 | Affiliations | none | IDF similarity reweighting on all draws + opponent bias |
-| Sites | DreamJourney/Cleanse/Omens | Dream Augury rename, Dreamsign Market, banes→Purge, single currency, 3 stubs |
+| Sites | DreamJourney/Cleanse/Omens | Augury rename, Dreamsign Market, banes→Purge, single currency, 3 stubs |
 | Economy | essence 250, purge `30+8N(N+1)` | essence 200, purge `30+5N(N+1)` |
 
 ## 4. Key file map (anchors)
@@ -139,7 +139,7 @@ acceptance criteria.
   types: layer-based `DreamAtlas` (layers, nodes, connections), 5-state node
   enum (`unrevealed | revealedLocked | available | completed | forgone`),
   dreamscape/guide/affiliation content types, known-dreamsign carrier fields,
-  new `SiteType` members (`DreamAugury`, `DreamsignMarket`, `TemptingOffer`,
+  new `SiteType` members (`Augury`, `DreamsignMarket`, `TemptingOffer`,
   `Gamble`, `Exploration`), retire `Cleanse`/Omens from the type surface.
 - **Manual QA:** load the app, confirm it still boots to the Dream Avatar select
   screen with no console errors after the type/data changes (compile-only QA;
@@ -192,7 +192,7 @@ acceptance criteria.
   card-similarity analysis (`tides-similarity` / tides4 infra). Apply the
   reweighting to **every** random draw inside an affiliated dreamscape: draft
   offers, shop stock, dreamsign draws, transfiguration/duplication candidates,
-  Dream Augury reward cards.
+  Augury reward cards.
 - Bias the **opponent's deck** at a dreamscape's Battle toward the affiliation.
 - Logging: for a sampled draw, log the affiliation, top weighted candidates, and
   resulting pick so behavior is reconstructable.
@@ -203,7 +203,7 @@ acceptance criteria.
   data-derived, not hardcoded card names); does not change pool membership.
 
 **T1.4 — Site remap, new sites, currency + banes consolidation, economy.**
-- Rename **Dream Journey → Dream Augury** across types/state/screens/logging
+- Rename **Dream Journey → Augury** across types/state/screens/logging
   (two-reward choice, pure upside).
 - **Dreamsign Market**: Shop variant selling dreamsigns for essence (3 items +
   50-essence restock), reusing Shop component + dreamsign pool.
@@ -217,7 +217,7 @@ acceptance criteria.
 - **Banes:** retire Cleanse; extend Purge to select + remove banes cheaply/free.
 - **Economy:** starting essence default **200**; purge formula
   `30 + 5·N·(N+1)` in `src/purge/purge-pricing.ts`; restock 50; cap 500.
-- **Manual QA:** visit Dream Augury (renamed), Dreamsign Market (buy with
+- **Manual QA:** visit Augury (renamed), Dreamsign Market (buy with
   essence + restock), Dreamsign Revelation (single + choice), each stub screen,
   and Purge (remove an ordinary card + a bane, prices match new formula).
   Confirm no Omens UI remains. Landscape + portrait.

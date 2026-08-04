@@ -21,7 +21,7 @@ vi.mock("../data/card-database", async (importOriginal) => {
 });
 
 describe("OffersDebugApp", () => {
-  it("shows one OfferTile for every distinct Dream Augury UI presentation", () => {
+  it("shows one OfferTile for every distinct Augury UI presentation", () => {
     (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean })
       .IS_REACT_ACT_ENVIRONMENT = true;
     const container = document.createElement("div");
@@ -59,7 +59,7 @@ describe("OffersDebugApp", () => {
       const model = OFFER_TILE_DEBUG_MODELS[archetypeId];
       expect(category).not.toBeNull();
       expect(description?.textContent).toBe(offerTileDescription(model));
-      expect(description?.textContent).not.toContain("Dream Augury");
+      expect(description?.textContent).not.toContain("Augury");
       expect(category?.textContent).toContain(
         OFFER_TILE_DEBUG_NOTES[archetypeId],
       );

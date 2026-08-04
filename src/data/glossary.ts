@@ -96,7 +96,7 @@ export const GLOSSARY_IDS = {
     Transfiguration: "site-transfiguration",
     Duplication: "site-duplication",
     Reward: "site-reward",
-    DreamAugury: "site-dream-augury",
+    Augury: "site-augury",
     DreamsignMarket: "site-dreamsign-market",
     DreamsignRevelation: "site-dreamsign-revelation",
     TemptingOffer: "site-tempting-offer",

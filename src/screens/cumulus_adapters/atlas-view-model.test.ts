@@ -378,7 +378,7 @@ describe("buildAtlasMapNodes", () => {
     atlas.nodes.middle.sites = [
       {
         id: "00000000-0000-4000-8000-000000000091",
-        type: "DreamAugury",
+        type: "Augury",
         isEnhanced: false,
         isVisited: false,
       },
@@ -391,9 +391,9 @@ describe("buildAtlasMapNodes", () => {
           name: "Wilderveil",
           aesthetic: "Moonlit forest",
           guideId: "aldric",
-          signatureSite: "DreamAugury",
+          signatureSite: "Augury",
           affiliationId: "figments",
-          siteIcon: "dream-augury",
+          siteIcon: "augury",
           isStarter: false,
           dreamAvatarIds: [],
         },
@@ -403,7 +403,7 @@ describe("buildAtlasMapNodes", () => {
           id: "aldric",
           name: "Aldric, the Seer",
           homeDreamscapeId: "wilderveil",
-          siteType: "DreamAugury",
+          siteType: "Augury",
           dialog: [],
           homeSpecialty: "Aldric offers curated visions of the future.",
         },
@@ -423,7 +423,7 @@ describe("buildAtlasMapNodes", () => {
     const middle = items.find((item) => item.node.id === "middle");
 
     expect(middle?.site).toMatchObject({
-      name: "Dream Augury",
+      name: "Augury",
     });
     expect(middle?.site?.blurb.length).toBeGreaterThan(0);
     expect(middle?.site?.icon).toContain("bx");

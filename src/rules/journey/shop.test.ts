@@ -568,7 +568,7 @@ describe("merchant offers", () => {
       },
     };
     registerSiteContentProvider(provider);
-    const state = stateWith([makeSite("DreamAugury")]);
+    const state = stateWith([makeSite("Augury")]);
     const result = reduce(state, "ACCEPT_MERCHANT_OFFER", { siteId: SITE_ID });
     expect(result.outcome).toBe("applied");
     expect(result.state.journey.essence).toBe(499);
@@ -584,14 +584,14 @@ describe("merchant offers", () => {
       },
     };
     registerSiteContentProvider(provider);
-    const state = stateWith([makeSite("DreamAugury")]);
+    const state = stateWith([makeSite("Augury")]);
     expect(
       reduce(state, "ACCEPT_MERCHANT_OFFER", { siteId: SITE_ID }).outcome,
     ).toBe("bounced");
   });
 
   it("ACCEPT_MERCHANT_OFFER bounces with no provider or unknown site", () => {
-    const state = stateWith([makeSite("DreamAugury")]);
+    const state = stateWith([makeSite("Augury")]);
     expect(
       reduce(state, "ACCEPT_MERCHANT_OFFER", { siteId: SITE_ID }).outcome,
     ).toBe("bounced");
@@ -621,7 +621,7 @@ describe("merchant offers", () => {
       },
     };
     registerSiteContentProvider(provider);
-    const state = stateWith([makeSite("DreamAugury")]);
+    const state = stateWith([makeSite("Augury")]);
     const result = reduce(state, "DECLINE_MERCHANT", { siteId: SITE_ID });
     expect(result.outcome).toBe("applied");
     expect(result.state.journey.visitedSites).toContain(SITE_ID);

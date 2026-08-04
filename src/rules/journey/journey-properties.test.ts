@@ -371,9 +371,9 @@ const DEBUG_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
   "SET_DECK_ENTRY_STAT_OVERRIDE",
   "SET_DECK_ENTRY_KEYWORDS",
   "SET_CARD_SOURCE_DEBUG",
-  "REROLL_DREAM_AUGURY",
+  "REROLL_AUGURY",
   "REROLL_DREAM_AVATAR_OFFER",
-  "FORCE_DREAM_AUGURY_ARCHETYPE",
+  "FORCE_AUGURY_ARCHETYPE",
   "RESET_JOURNEY",
 ]);
 
@@ -508,7 +508,7 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<(rng: () => number) => GeneratedEvent>
 
   // sites (bounce without a SiteContentProvider / matching runtime)
   (rng) => ({ type: "OPEN_SITE", payload: { siteId: pick(rng, SITE_IDS) } }),
-  (rng) => ({ type: "COMPLETE_DREAM_AUGURY", payload: { siteId: pick(rng, SITE_IDS) } }),
+  (rng) => ({ type: "COMPLETE_AUGURY", payload: { siteId: pick(rng, SITE_IDS) } }),
   (rng) => ({
     type: "ACCEPT_REWARD",
     payload: { siteId: pick(rng, SITE_IDS), choiceIndex: Math.floor(rng() * 3) },

@@ -91,7 +91,7 @@
             "name": "siteName",
             "tsType": "string | null",
             "optional": false,
-            "description": "The signature site's display name (e.g. \"Dream Augury\"); null for the\nstarter / boss."
+            "description": "The signature site's display name (e.g. \"Augury\"); null for the\nstarter / boss."
           },
           {
             "name": "body",

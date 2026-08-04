@@ -35,7 +35,7 @@ export interface AtlasHoverContent {
   /** The resident guide's name, or the boss incarnation title; null for the
    * starter. */
   guideName: string | null;
-  /** The signature site's display name (e.g. "Dream Augury"); null for the
+  /** The signature site's display name (e.g. "Augury"); null for the
    * starter / boss. */
   siteName: string | null;
   /** The site bonus, starter blurb, or boss incarnation description. */

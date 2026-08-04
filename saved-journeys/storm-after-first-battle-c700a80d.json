@@ -866,7 +866,7 @@
           "biomeColor": "#f472b6",
           "biomeName": "Wilderveil",
           "dreamscapeId": "wilderveil",
-          "enhancedSiteType": "DreamAugury",
+          "enhancedSiteType": "Augury",
           "forwardIds": [
             "dreamscape-18"
           ],
@@ -882,7 +882,7 @@
               "id": "site-12",
               "isEnhanced": true,
               "isVisited": false,
-              "type": "DreamAugury"
+              "type": "Augury"
             },
             {
               "id": "site-13",

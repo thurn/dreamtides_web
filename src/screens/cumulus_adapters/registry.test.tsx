@@ -24,7 +24,7 @@ describe("siteDispositionFor", () => {
     "Purge",
     "Transfiguration",
     "Duplication",
-    "DreamAugury",
+    "Augury",
     "DreamsignMarket",
     "DreamsignRevelation",
     "TemptingOffer",

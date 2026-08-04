@@ -274,6 +274,7 @@ that exact source-card UUID. It works with both `goto=exploration` and
 
 ```
 http://localhost:5173/?goto=atlas
+http://localhost:5173/?goto=augury
 http://localhost:5173/?goto=tutorial-dream-avatar-select
 http://localhost:5173/?goto=duplication-enhanced
 http://localhost:5173/?goto=tutorial-battle
@@ -353,6 +354,7 @@ http://localhost:5173/?seed=42                  # fixed seed
 http://localhost:5173/?game=journey42             # parsed multiplayer room id
 http://localhost:5173/?viewLogs=journey42         # read-only journey-log viewer for a room
 http://localhost:5173/?goto=atlas               # jump straight to a QA scene
+http://localhost:5173/?goto=augury              # jump straight to the Augury site
 http://localhost:5173/?realtime=1               # use cloud Firebase RTDB
 http://localhost:5173/?identicons=1             # force identicon art for cards
 http://localhost:5173/tutorial?tutorialSpeed=4  # play the tutorial at 4× speed

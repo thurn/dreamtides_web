@@ -10,9 +10,9 @@ import { resolveColor } from "../primitives/color";
 import { GLYPHS } from "../primitives/glyph";
 import { CumulusRoot } from "../CumulusRoot";
 import {
-  DreamAugurySiteScreen,
-  type DreamAugurySiteView,
-} from "./DreamAugurySiteScreen";
+  AugurySiteScreen,
+  type AugurySiteView,
+} from "./AugurySiteScreen";
 
 vi.mock("../components/card/CardView", async () => {
   const { Pressable } = await import("../primitives/Pressable");
@@ -77,7 +77,7 @@ function card(index: number): CardData {
   };
 }
 
-function view(): DreamAugurySiteView {
+function view(): AugurySiteView {
   const choices = [card(1), card(2), card(3), card(4)];
   const direct = card(5);
   return {
@@ -172,16 +172,16 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-describe("DreamAugurySiteScreen", () => {
+describe("AugurySiteScreen", () => {
   it("stages two offer tiles with Aldric's instruction and decline action", () => {
     const container = mount(
-      <DreamAugurySiteScreen view={view()} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
+      <AugurySiteScreen view={view()} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
     );
 
     expect(
       container.querySelector<HTMLElement>("[data-augury-phase]")?.dataset.auguryPhase,
     ).toBe("comparison");
-    expect(container.textContent).not.toContain("Dream Augury");
+    expect(container.textContent).not.toContain("Augury");
     expect(container.querySelectorAll("[data-offer-tile]")).toHaveLength(2);
     expect(
       container
@@ -189,27 +189,27 @@ describe("DreamAugurySiteScreen", () => {
         ?.getAttribute("data-guide-id"),
     ).toBe("aldric_the_seer");
     expect(container.textContent).toContain("Choose one path for your dream.");
-    expect(container.querySelector('[data-testid="cumulus-dream-augury-decline"]')).not.toBeNull();
+    expect(container.querySelector('[data-testid="cumulus-augury-decline"]')).not.toBeNull();
     expect(container.querySelectorAll("[data-glass-panel-frame]")).toHaveLength(0);
     expect(
       container.querySelector('[data-testid="cumulus-augury-choice-choice-1"]'),
     ).toBeNull();
     expect(
-      container.querySelector('[data-testid="cumulus-dream-augury-detail"]'),
+      container.querySelector('[data-testid="cumulus-augury-detail"]'),
     ).toBeNull();
   });
 
   it("keeps the 240px mobile offers in a centered horizontal snap row", () => {
     stubMatchMedia(false);
     const container = mount(
-      <DreamAugurySiteScreen view={view()} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
+      <AugurySiteScreen view={view()} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
     );
 
     const offers = container.querySelectorAll<HTMLElement>("[data-offer-tile]");
     expect(offers).toHaveLength(2);
     expect([...offers].every((offer) => offer.style.width === "240px")).toBe(true);
     const row = container.querySelector<HTMLElement>(
-      "[data-dream-augury-offer-row]",
+      "[data-augury-offer-row]",
     );
     expect(row?.style.overflowX).toBe("auto");
     expect(row?.style.scrollSnapType).toBe("x mandatory");
@@ -219,7 +219,7 @@ describe("DreamAugurySiteScreen", () => {
   it("opens one vision before exposing its detailed candidate pick", () => {
     const onInspectOffer = vi.fn();
     const container = mount(
-      <DreamAugurySiteScreen
+      <AugurySiteScreen
         view={view()}
         onInspectOffer={onInspectOffer}
         onChoose={() => ({ ok: true })}
@@ -229,7 +229,7 @@ describe("DreamAugurySiteScreen", () => {
 
     click(
       container.querySelector(
-        '[data-testid="cumulus-dream-augury-offer-A"]',
+        '[data-testid="cumulus-augury-offer-A"]',
       ),
     );
 
@@ -239,14 +239,14 @@ describe("DreamAugurySiteScreen", () => {
     ).toBe("detail");
     expect(
       container.querySelector<HTMLElement>(
-        '[data-testid="cumulus-dream-augury-detail"]',
+        '[data-testid="cumulus-augury-detail"]',
       )?.dataset.offerId,
     ).toBe("A");
     expect(container.querySelectorAll("[data-offer-tile]")).toHaveLength(0);
-    expect(container.querySelector('[data-testid="cumulus-dream-augury-speech"]')).toBeNull();
-    expect(container.querySelector('[data-testid="cumulus-dream-augury-guide-art"]')).not.toBeNull();
+    expect(container.querySelector('[data-testid="cumulus-augury-speech"]')).toBeNull();
+    expect(container.querySelector('[data-testid="cumulus-augury-guide-art"]')).not.toBeNull();
     expect(
-      container.querySelector('[data-testid="cumulus-dream-augury-offer-B"]'),
+      container.querySelector('[data-testid="cumulus-augury-offer-B"]'),
     ).toBeNull();
     expect(
       container.querySelectorAll('[data-testid^="cumulus-augury-choice-"]'),
@@ -274,23 +274,23 @@ describe("DreamAugurySiteScreen", () => {
         ?.getAttribute("data-card-choice-grid-columns"),
     ).toBe("4");
     expect(
-      container.querySelector('[data-testid="cumulus-dream-augury-choose-again"]'),
+      container.querySelector('[data-testid="cumulus-augury-choose-again"]'),
     ).not.toBeNull();
   });
 
   it("requires an inner candidate pick in detail, then confirms the selected offer", () => {
     const onChoose = vi.fn(() => ({ ok: true } as const));
     const container = mount(
-      <DreamAugurySiteScreen view={view()} onChoose={onChoose} onClose={() => undefined} />,
+      <AugurySiteScreen view={view()} onChoose={onChoose} onClose={() => undefined} />,
     );
 
     click(
       container.querySelector(
-        '[data-testid="cumulus-dream-augury-offer-A"]',
+        '[data-testid="cumulus-augury-offer-A"]',
       ),
     );
     const confirm = container.querySelector(
-      '[data-testid="cumulus-dream-augury-confirm-A"]',
+      '[data-testid="cumulus-augury-confirm-A"]',
     );
     expect(confirm?.getAttribute("aria-disabled")).toBe("true");
 
@@ -311,7 +311,7 @@ describe("DreamAugurySiteScreen", () => {
       throw new Error("missing card-choice fixture");
     }
     const container = mount(
-      <DreamAugurySiteScreen
+      <AugurySiteScreen
         view={{
           ...doubledView,
           offers: [
@@ -324,7 +324,7 @@ describe("DreamAugurySiteScreen", () => {
       />,
     );
 
-    click(container.querySelector('[data-testid="cumulus-dream-augury-offer-A"]'));
+    click(container.querySelector('[data-testid="cumulus-augury-offer-A"]'));
     click(container.querySelector('[data-testid="cumulus-augury-choice-choice-2"]'));
 
     expect(
@@ -344,12 +344,12 @@ describe("DreamAugurySiteScreen", () => {
   it("previews a direct offer before enabling its separate confirmation", () => {
     const onChoose = vi.fn(() => ({ ok: true } as const));
     const container = mount(
-      <DreamAugurySiteScreen view={view()} onChoose={onChoose} onClose={() => undefined} />,
+      <AugurySiteScreen view={view()} onChoose={onChoose} onClose={() => undefined} />,
     );
 
     click(
       container.querySelector(
-        '[data-testid="cumulus-dream-augury-offer-B"]',
+        '[data-testid="cumulus-augury-offer-B"]',
       ),
     );
     expect(onChoose).not.toHaveBeenCalled();
@@ -358,19 +358,19 @@ describe("DreamAugurySiteScreen", () => {
         ?.getAttribute("data-guide-gallery-desktop-layout-mode"),
     ).toBe("showcase");
     expect(
-      container.querySelector("[data-dream-augury-layout]")
+      container.querySelector("[data-augury-layout]")
         ?.getAttribute("data-augury-desktop-placement"),
     ).toBe("center");
     expect(
-      container.querySelector<HTMLElement>("[data-dream-augury-layout]")
+      container.querySelector<HTMLElement>("[data-augury-layout]")
         ?.style.justifySelf,
     ).toBe("center");
     expect(
-      container.querySelector('[data-testid="cumulus-dream-augury-guide-art"]'),
+      container.querySelector('[data-testid="cumulus-augury-guide-art"]'),
     ).not.toBeNull();
     click(
       container.querySelector(
-        '[data-testid="cumulus-dream-augury-confirm-B"]',
+        '[data-testid="cumulus-augury-confirm-B"]',
       ),
     );
     expect(onChoose).toHaveBeenCalledWith("B", null);
@@ -380,7 +380,7 @@ describe("DreamAugurySiteScreen", () => {
     const base = view();
     const first = base.offers[0];
     if (first === undefined) throw new Error("missing fixture offer");
-    const siteView: DreamAugurySiteView = {
+    const siteView: AugurySiteView = {
       ...base,
       offers: [
         {
@@ -392,7 +392,7 @@ describe("DreamAugurySiteScreen", () => {
             kind: "site",
             model: {
               site: {
-                id: "dream-augury-preview:Shop",
+                id: "augury-preview:Shop",
                 type: "Shop",
                 isEnhanced: false,
                 isVisited: false,
@@ -412,10 +412,10 @@ describe("DreamAugurySiteScreen", () => {
       ],
     };
     const container = mount(
-      <DreamAugurySiteScreen view={siteView} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
+      <AugurySiteScreen view={siteView} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
     );
 
-    click(container.querySelector('[data-testid="cumulus-dream-augury-offer-A"]'));
+    click(container.querySelector('[data-testid="cumulus-augury-offer-A"]'));
 
     expect(
       container.querySelector('[data-augury-site-preview] [data-site-type="Shop"]'),
@@ -434,7 +434,7 @@ describe("DreamAugurySiteScreen", () => {
     const base = view();
     const first = base.offers[0];
     if (first === undefined) throw new Error("missing fixture offer");
-    const dreamsignView: DreamAugurySiteView = {
+    const dreamsignView: AugurySiteView = {
       ...base,
       offers: [
         {
@@ -472,10 +472,10 @@ describe("DreamAugurySiteScreen", () => {
       ],
     };
     const container = mount(
-      <DreamAugurySiteScreen view={dreamsignView} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
+      <AugurySiteScreen view={dreamsignView} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
     );
 
-    click(container.querySelector('[data-testid="cumulus-dream-augury-offer-A"]'));
+    click(container.querySelector('[data-testid="cumulus-augury-offer-A"]'));
     click(container.querySelector('[data-testid="cumulus-augury-choice-sign-1"]'));
 
     const selected = container.querySelector<HTMLElement>(
@@ -500,7 +500,7 @@ describe("DreamAugurySiteScreen", () => {
     if (before === undefined || after === undefined) {
       throw new Error("missing card fixtures");
     }
-    const transfigureView: DreamAugurySiteView = {
+    const transfigureView: AugurySiteView = {
       ...base,
       offers: [
         {
@@ -520,10 +520,10 @@ describe("DreamAugurySiteScreen", () => {
       ],
     };
     const container = mount(
-      <DreamAugurySiteScreen view={transfigureView} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
+      <AugurySiteScreen view={transfigureView} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
     );
 
-    click(container.querySelector('[data-testid="cumulus-dream-augury-offer-A"]'));
+    click(container.querySelector('[data-testid="cumulus-augury-offer-A"]'));
 
     expect(container.querySelector("[data-glass-panel-header] h2")?.textContent).toBe(
       "Transfigure a Card",
@@ -542,12 +542,12 @@ describe("DreamAugurySiteScreen", () => {
 
   it("returns to both previews and clears an abandoned inner choice", () => {
     const container = mount(
-      <DreamAugurySiteScreen view={view()} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
+      <AugurySiteScreen view={view()} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
     );
 
     click(
       container.querySelector(
-        '[data-testid="cumulus-dream-augury-offer-A"]',
+        '[data-testid="cumulus-augury-offer-A"]',
       ),
     );
     click(
@@ -555,12 +555,12 @@ describe("DreamAugurySiteScreen", () => {
     );
     click(
       container.querySelector(
-        '[data-testid="cumulus-dream-augury-choose-again"]',
+        '[data-testid="cumulus-augury-choose-again"]',
       ),
     );
     click(
       container.querySelector(
-        '[data-testid="cumulus-dream-augury-offer-A"]',
+        '[data-testid="cumulus-augury-offer-A"]',
       ),
     );
 
@@ -571,7 +571,7 @@ describe("DreamAugurySiteScreen", () => {
     ).toBe("false");
     expect(
       container
-        .querySelector('[data-testid="cumulus-dream-augury-confirm-A"]')
+        .querySelector('[data-testid="cumulus-augury-confirm-A"]')
         ?.getAttribute("aria-disabled"),
     ).toBe("true");
   });
@@ -579,23 +579,23 @@ describe("DreamAugurySiteScreen", () => {
   it("declines from the initial state", () => {
     const onClose = vi.fn();
     const container = mount(
-      <DreamAugurySiteScreen view={view()} onChoose={() => ({ ok: true })} onClose={onClose} />,
+      <AugurySiteScreen view={view()} onChoose={() => ({ ok: true })} onClose={onClose} />,
     );
-    click(container.querySelector('[data-testid="cumulus-dream-augury-decline"]'));
+    click(container.querySelector('[data-testid="cumulus-augury-decline"]'));
     expect(onClose).toHaveBeenCalledOnce();
   });
 
   it("keeps rejected-action feedback inside the selected detail panel", () => {
     const container = mount(
-      <DreamAugurySiteScreen
+      <AugurySiteScreen
         view={view()}
         onChoose={() => ({ ok: false, message: "The visions shifted. Choose again." })}
         onClose={() => undefined}
       />,
     );
-    click(container.querySelector('[data-testid="cumulus-dream-augury-offer-B"]'));
-    click(container.querySelector('[data-testid="cumulus-dream-augury-confirm-B"]'));
-    expect(container.querySelector('[data-testid="cumulus-dream-augury-error"]')?.textContent).toBe(
+    click(container.querySelector('[data-testid="cumulus-augury-offer-B"]'));
+    click(container.querySelector('[data-testid="cumulus-augury-confirm-B"]'));
+    expect(container.querySelector('[data-testid="cumulus-augury-error"]')?.textContent).toBe(
       "The visions shifted. Choose again.",
     );
     expect(container.querySelectorAll("[data-glass-panel-frame]")).toHaveLength(1);
@@ -609,7 +609,7 @@ describe("DreamAugurySiteScreen", () => {
       unavailableMessage: "The visions are clouded. Walk on for now.",
     };
     const container = mount(
-      <DreamAugurySiteScreen view={unavailable} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
+      <AugurySiteScreen view={unavailable} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
     );
     expect(container.textContent).toContain("The visions are clouded. Walk on for now.");
     expect(container.querySelectorAll("button")).toHaveLength(1);

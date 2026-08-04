@@ -136,7 +136,7 @@ export interface CoopActions {
     actionId: string,
     selection?: unknown,
   ) => Promise<number>;
-  completeDreamAugury: (siteId: string) => Promise<number>;
+  completeAugury: (siteId: string) => Promise<number>;
   acceptReward: (siteId: string, choiceIndex?: number) => Promise<number>;
   acceptDreamsignOffer: (
     siteId: string,
@@ -144,8 +144,8 @@ export interface CoopActions {
   ) => Promise<number>;
   rejectDreamsignOffer: (siteId: string) => Promise<number>;
   acceptEssence: (siteId: string, runId?: string) => Promise<number>;
-  rerollDreamAugury: (siteId: string) => Promise<number>;
-  forceDreamAuguryArchetype: (
+  rerollAugury: (siteId: string) => Promise<number>;
+  forceAuguryArchetype: (
     siteId: string,
     archetypeId: string,
   ) => Promise<number>;
@@ -425,7 +425,7 @@ export function makeActions(append: AppendFn): CoopActions {
         actionId,
         ...(selection === undefined ? {} : { selection }),
       }),
-    completeDreamAugury: (siteId) => emit("COMPLETE_DREAM_AUGURY", { siteId }),
+    completeAugury: (siteId) => emit("COMPLETE_AUGURY", { siteId }),
     acceptReward: (siteId, choiceIndex) =>
       emit(
         "ACCEPT_REWARD",
@@ -441,9 +441,9 @@ export function makeActions(append: AppendFn): CoopActions {
         { siteId },
         siteIntentKey("accept-essence", siteId, runId),
       ),
-    rerollDreamAugury: (siteId) => emit("REROLL_DREAM_AUGURY", { siteId }),
-    forceDreamAuguryArchetype: (siteId, archetypeId) =>
-      emit("FORCE_DREAM_AUGURY_ARCHETYPE", { siteId, archetypeId }),
+    rerollAugury: (siteId) => emit("REROLL_AUGURY", { siteId }),
+    forceAuguryArchetype: (siteId, archetypeId) =>
+      emit("FORCE_AUGURY_ARCHETYPE", { siteId, archetypeId }),
     completeSite: (siteId, runId) =>
       emit(
         "COMPLETE_SITE",

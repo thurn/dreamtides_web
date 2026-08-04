@@ -33,7 +33,7 @@ const SITE_TYPES = [
   "Transfiguration",
   "Duplication",
   "Reward",
-  "DreamAugury",
+  "Augury",
   "DreamsignMarket",
   "DreamsignRevelation",
   "TemptingOffer",
@@ -51,7 +51,7 @@ const ROUTER_FILES = [
 const GENERIC_COMPONENT_SOURCES = [
   "src/components/BattleSiteRoute.tsx",
   "src/components/CumulusJourneyChrome.tsx",
-  "src/components/DreamAuguryJourneyMenu.ts",
+  "src/components/AuguryJourneyMenu.ts",
   "src/components/DreamscapeJourneyMenu.tsx",
   "src/components/ErrorBoundary.tsx",
   "src/components/FrontDoorRouter.tsx",

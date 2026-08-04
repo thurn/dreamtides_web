@@ -604,9 +604,9 @@ matches-rules-text = false
 variants = []
 
 [[entries]]
-id = "site-dream-augury"
+id = "site-augury"
 category = "Sites"
-term = "Dream Augury"
+term = "Augury"
 definition = "Choose one of two foreseen rewards."
 priority = 0
 matches-rules-text = false

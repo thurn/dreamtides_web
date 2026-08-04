@@ -494,13 +494,13 @@ const MERCHANT_GENESIS: Genesis = { ...GENESIS, seed: MERCHANT_SEED };
 const MERCHANT_SITE_ID = "site-merchant-resolve";
 const MERCHANT_NODE_ID = "dreamscape-a";
 
-/** A DreamAugury merchant fixture: content with a corpus + a journey state whose current dreamscape holds the merchant site. */
+/** An Augury merchant fixture: content with a corpus + a journey state whose current dreamscape holds the merchant site. */
 function makeMerchantFixture(): {
   journey: JourneyState;
   content: JourneyContent;
   site: SiteState;
 } {
-  const site = makeMerchantTestSite({ id: MERCHANT_SITE_ID, type: "DreamAugury" });
+  const site = makeMerchantTestSite({ id: MERCHANT_SITE_ID, type: "Augury" });
 
   const cards: CardData[] = [];
   const corpus: Record<string, Partial<MerchantCorpusCard> & { quality: number }> = {};

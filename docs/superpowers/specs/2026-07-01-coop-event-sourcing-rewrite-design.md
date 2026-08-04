@@ -333,7 +333,7 @@ compute identical offers. `OPEN_SITE` is CAS-exempt and idempotent: its
 reducer case draws only from `ctx.rng` at its own seq and is a no-change
 **applied** when the runtime already exists, so both players opening the
 same site simultaneously converge without a bounce toast. Rerolls
-(`rerollShop`, `rerollDreamAugury`) are events whose reducer case redraws
+(`rerollShop`, `rerollAugury`) are events whose reducer case redraws
 from the rng stream at their own seq.
 
 The `NON_NULLABLE_RUN_FIELDS` invariant guard is deleted rather than ported:

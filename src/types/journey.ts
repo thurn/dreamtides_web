@@ -55,7 +55,7 @@ export type SiteType =
   | "Transfiguration"
   | "Duplication"
   | "Reward"
-  | "DreamAugury"
+  | "Augury"
   | "DreamsignMarket"
   | "DreamsignRevelation"
   | "TemptingOffer"
@@ -371,12 +371,12 @@ export type CardChoiceSiteRuntime = {
     }
 );
 
-/** Runtime state for a Dream Augury site. */
-export interface DreamAugurySiteRuntime {
-  kind: "dreamAugury";
+/** Runtime state for an Augury site. */
+export interface AugurySiteRuntime {
+  kind: "augury";
   completed: boolean;
   /**
-   * Debug reroll counter. Incremented by `rerollDreamAugury` to regenerate the
+   * Debug reroll counter. Incremented by `rerollAugury` to regenerate the
    * encounter from the same journey parameters. Mixed into the encounter RNG salt
    * by `buildMerchantContext`, so the persisted value drives both the displayed
    * encounter and the signature checks on accept/decline. Absent (or `0`) for an
@@ -385,8 +385,8 @@ export interface DreamAugurySiteRuntime {
   rerollNonce?: number;
   /**
    * Debug-only: forces the first generated offer to use this archetype (a
-   * `MerchantArchetypeId`). Set by `forceDreamAuguryArchetype` from the Dream
-   * Augury "force a category" debug dropdown. Read by `buildMerchantContext` and
+   * `MerchantArchetypeId`). Set by `forceAuguryArchetype` from the Augury
+   * "force a category" debug dropdown. Read by `buildMerchantContext` and
    * honored during encounter generation, so it drives both the displayed
    * encounter and the signature checks on accept/decline. Absent when no
    * category is forced; the value is ignored if it is not eligible for the
@@ -459,7 +459,7 @@ export type SiteRuntimeState =
   | DreamsignOfferSiteRuntime
   | EssenceSiteRuntime
   | CardChoiceSiteRuntime
-  | DreamAugurySiteRuntime
+  | AugurySiteRuntime
   | GambleSiteRuntime
   | ExplorationSiteRuntime;
 
@@ -482,7 +482,7 @@ export type Screen =
   | { type: "journeyFailed" };
 
 /**
- * A modifier that affects upcoming battle resolutions. Pushed by Dream Augury
+ * A modifier that affects upcoming battle resolutions. Pushed by Augury
  * effects; decremented by the authoritative victory transition each time a battle
  * completes. Entries at `battlesRemaining === 0` drop on the same tick that
  * brought them to zero. Battle initialization reads `battleModifiers` to apply
@@ -535,7 +535,7 @@ export type DreamscapeModifier =
     };
 
 /**
- * Shop-side modifiers stacked by Dream Augury rewards. Free-reroll grants
+ * Shop-side modifiers stacked by Augury rewards. Free-reroll grants
  * stack additively and are consumed by `rerollShop`; `essenceDiscountPercent`
  * is a permanent additive discount on essence-priced shop slots.
  */

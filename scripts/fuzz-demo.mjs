@@ -381,7 +381,7 @@ async function avatarScenario(baseUrl, seed, publisher, host, actions) {
   return { game, url };
 }
 
-async function dreamAuguryExitScenario(
+async function auguryExitScenario(
   baseUrl,
   seed,
   publisher,
@@ -389,22 +389,22 @@ async function dreamAuguryExitScenario(
   actions,
 ) {
   const entryUrl =
-    `${baseUrl}/?goto=dreamaugury&seed=` +
-    encodeURIComponent(`${seed}:dream-augury-exit`);
+    `${baseUrl}/?goto=augury&seed=` +
+    encodeURIComponent(`${seed}:augury-exit`);
   await publisher.goto(entryUrl);
   await waitForProbe(publisher);
   const url = publisher.url();
   const game = new URL(url).searchParams.get("game");
   if (game === null)
-    throw new Error("Dream Augury scenario did not create a room");
+    throw new Error("Augury scenario did not create a room");
   await host.goto(url);
   await waitForProbe(host);
   await waitForConvergence(publisher, host);
 
   const exit = publisher.locator(
     [
-      '[data-testid="cumulus-dream-augury-decline"]',
-      '[data-testid="cumulus-dream-augury-unavailable-exit"]',
+      '[data-testid="cumulus-augury-decline"]',
+      '[data-testid="cumulus-augury-unavailable-exit"]',
     ].join(","),
   );
   await exit.waitFor({ state: "visible", timeout: 30_000 });
@@ -844,7 +844,7 @@ async function runBrowserIteration({
         await avatarScenario(baseUrl, seed, publisher, host, actions),
       );
       scenarios.push(
-        await dreamAuguryExitScenario(baseUrl, seed, publisher, host, actions),
+        await auguryExitScenario(baseUrl, seed, publisher, host, actions),
       );
       scenarios.push(
         await battleScenario(baseUrl, seed, host, publisher, actions),
@@ -854,7 +854,7 @@ async function runBrowserIteration({
         await avatarScenario(baseUrl, seed, publisher, host, actions),
       );
       scenarios.push(
-        await dreamAuguryExitScenario(baseUrl, seed, publisher, host, actions),
+        await auguryExitScenario(baseUrl, seed, publisher, host, actions),
       );
       scenarios.push(
         await battleScenario(baseUrl, seed, host, publisher, actions),

@@ -207,7 +207,7 @@ function residentModel(): Pick<AtlasNodeModel, "primary" | "dreamsign" | "site" 
     dreamsign: null,
     site: {
       id: "00000000-0000-4000-8000-000000000072",
-      name: "Dream Augury",
+      name: "Augury",
       blurb: "Study a curated vision of what waits ahead.",
       icon: GLYPHS.water,
     },
@@ -500,7 +500,7 @@ describe("Cumulus AtlasScreen", () => {
     });
 
     expect(document.body.textContent).toContain("Aldric, the Seer");
-    expect(document.body.textContent).toContain("Dream Augury");
+    expect(document.body.textContent).toContain("Augury");
     expect(document.body.textContent).toContain(
       "Study a curated vision of what waits ahead.",
     );

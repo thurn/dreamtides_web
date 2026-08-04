@@ -14,7 +14,7 @@ import { CardShopSiteScreenAdapter } from "./CardShopSiteScreenAdapter";
 import { DreamsignBazaarSiteScreenAdapter } from "./DreamsignBazaarSiteScreenAdapter";
 import { TransfigurationSiteScreenAdapter } from "./TransfigurationSiteScreenAdapter";
 import { DuplicationSiteScreenAdapter } from "./DuplicationSiteScreenAdapter";
-import { DreamAugurySiteScreenAdapter } from "./DreamAugurySiteScreenAdapter";
+import { AugurySiteScreenAdapter } from "./AugurySiteScreenAdapter";
 import { GambleSiteScreenAdapter } from "./GambleSiteScreenAdapter";
 import { WorkInProgressSiteScreenAdapter } from "./WorkInProgressSiteScreenAdapter";
 import { ExplorationSiteScreenAdapter } from "./ExplorationSiteScreenAdapter";
@@ -87,10 +87,10 @@ export function siteDispositionFor(site: SiteState): SiteDisposition {
         kind: "screen",
         screen: <DuplicationSiteScreenAdapter siteId={site.id} />,
       };
-    case "DreamAugury":
+    case "Augury":
       return {
         kind: "screen",
-        screen: <DreamAugurySiteScreenAdapter siteId={site.id} />,
+        screen: <AugurySiteScreenAdapter siteId={site.id} />,
       };
     case "TemptingOffer":
       return {

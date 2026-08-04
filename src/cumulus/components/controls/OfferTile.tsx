@@ -94,7 +94,7 @@ export type OfferTileDuplicateCards =
   | readonly [OfferTileCard, OfferTileCard]
   | readonly [OfferTileCard, OfferTileCard, OfferTileCard];
 
-/** Character subtypes that a Dream Augury offer can apply to a card. */
+/** Character subtypes that an Augury offer can apply to a card. */
 export type OfferTileCharacterSubtype =
   "Warrior" | "Spirit Animal" | "Survivor" | "Outsider";
 
@@ -118,7 +118,7 @@ interface OfferTileBase {
 }
 
 /**
- * Strict symbolic compositions for every Dream Augury offer category. The
+ * Strict symbolic compositions for every Augury offer category. The
  * component owns the composition; callers provide only UUID-backed subjects.
  */
 export type OfferTileModel =
@@ -194,13 +194,13 @@ export interface OfferTileProps {
 }
 
 /**
- * A 300×300 framed symbolic Dream Augury offer button. Its circular gold frame
+ * A 300×300 framed symbolic Augury offer button. Its circular gold frame
  * surrounds full-bleed card art, dreamsigns, and glyphs. Every inner
  * object is decorative and pointer-transparent. The complete tile is the only
- * hover/focus/press target and reveals one category InfoCard. Dream Augury is
+ * hover/focus/press target and reveals one category InfoCard. Augury is
  * the single one-off exception to normal Cumulus desktop InfoCard placement:
  * this card centers above its respective offer instead of sitting beside it.
- * That placement is specific to comparing the two Dream Augury visions and is
+ * That placement is specific to comparing the two Augury visions and is
  * not a reusable pattern for any other reveal source.
  */
 export function OfferTile({
@@ -224,9 +224,9 @@ export function OfferTile({
       },
       secondaries: [],
     },
-    // One-off Dream Augury exception: ordinary Cumulus InfoCards use the
+    // One-off Augury exception: ordinary Cumulus InfoCards use the
     // coordinator's normal beside-source desktop placement.
-    placementException: "dream-augury-offer-above-source",
+    placementException: "augury-offer-above-source",
     onActivate: () => onPress(model.id),
   });
   const lastPointerType = useRef<string | null>(null);

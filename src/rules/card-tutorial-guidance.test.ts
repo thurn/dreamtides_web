@@ -278,7 +278,7 @@ describe("card tutorial guidance fold", () => {
     "Shop",
     "Purge",
     "Duplication",
-    "DreamAugury",
+    "Augury",
   ] satisfies readonly SiteType[])(
     "does not trigger on the %s screen",
     (siteType) => {
@@ -295,8 +295,8 @@ describe("card tutorial guidance fold", () => {
     });
   });
 
-  it("is eligible when the current Dream Augury contains a transfiguration reward", () => {
-    const state = siteState("site-a", "DreamAugury");
+  it("is eligible when the current Augury contains a transfiguration reward", () => {
+    const state = siteState("site-a", "Augury");
     const conceptProvider: CardTutorialGuidanceContentProvider = {
       ...provider(),
       hasVisibleTransfigurationReward: () => true,

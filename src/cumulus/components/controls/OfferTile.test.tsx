@@ -386,7 +386,7 @@ describe("OfferTile", () => {
     expect(source.dataset.revealEntityId).toMatch(/^[0-9a-f-]{36}$/);
     expect(source.dataset.revealPrimaryVariant).toBe("text");
     expect(source.dataset.revealPlacementException).toBe(
-      "dream-augury-offer-above-source",
+      "augury-offer-above-source",
     );
     expect(source.getAttribute("aria-label")).toBe(
       "Choose a card to add to your deck.",

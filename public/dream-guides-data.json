@@ -69,7 +69,7 @@
     "id": "aldric_the_seer",
     "name": "Aldric, the Seer",
     "homeDreamscapeId": "wilderveil",
-    "siteType": "DreamAugury",
+    "siteType": "Augury",
     "dialog": [
       "Two paths unfold before you. Choose one to shape your dream.",
       "Weigh both visions, then pick one path for your dream.",

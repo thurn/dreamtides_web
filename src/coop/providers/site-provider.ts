@@ -378,7 +378,7 @@ export function createSiteContentProvider(
       };
     },
 
-    // Resolve a Dream Merchant / DreamAugury ACCEPT / DECLINE. The whole
+    // Resolve a Dream Merchant / Augury ACCEPT / DECLINE. The whole
     // resolution (encounter regeneration, offer lookup, payload application,
     // site completion) is a PURE function of `(journey, journeyContent, site,
     // request)` — no rng, no clock — so the provider `rng` is unused. Both

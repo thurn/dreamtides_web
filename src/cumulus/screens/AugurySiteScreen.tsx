@@ -34,70 +34,70 @@ import { token } from "../primitives/tokens";
 import type { Dreamsign as DreamsignData } from "../../types/journey";
 import { GuideGallerySiteLayout } from "./GuideGallerySiteLayout";
 
-export interface DreamAuguryGuideView {
+export interface AuguryGuideView {
   id: string;
   name: string;
   line: string;
   art: ArtRef;
 }
 
-export interface DreamAuguryCardView {
+export interface AuguryCardView {
   id: string;
   model: GameCardModel;
 }
 
-export interface DreamAuguryCardChoiceView {
+export interface AuguryCardChoiceView {
   id: string;
-  card: DreamAuguryCardView;
+  card: AuguryCardView;
 }
 
-export interface DreamAuguryDreamsignChoiceView {
+export interface AuguryDreamsignChoiceView {
   id: string;
   dreamsign: DreamsignData;
 }
 
-export type DreamAuguryOfferVisualView =
-  | { kind: "cards"; cards: readonly DreamAuguryCardView[] }
-  | { kind: "cardChoices"; choices: readonly DreamAuguryCardChoiceView[]; doubled: boolean }
-  | { kind: "beforeAfter"; pairs: readonly { id: string; before: DreamAuguryCardView; after: DreamAuguryCardView }[] }
-  | { kind: "purge"; card: DreamAuguryCardView }
-  | { kind: "purgeReplace"; removed: DreamAuguryCardView; choices: readonly DreamAuguryCardChoiceView[] }
-  | { kind: "duplicate"; card: DreamAuguryCardView }
-  | { kind: "duplicateChoices"; choices: readonly DreamAuguryCardChoiceView[] }
+export type AuguryOfferVisualView =
+  | { kind: "cards"; cards: readonly AuguryCardView[] }
+  | { kind: "cardChoices"; choices: readonly AuguryCardChoiceView[]; doubled: boolean }
+  | { kind: "beforeAfter"; pairs: readonly { id: string; before: AuguryCardView; after: AuguryCardView }[] }
+  | { kind: "purge"; card: AuguryCardView }
+  | { kind: "purgeReplace"; removed: AuguryCardView; choices: readonly AuguryCardChoiceView[] }
+  | { kind: "duplicate"; card: AuguryCardView }
+  | { kind: "duplicateChoices"; choices: readonly AuguryCardChoiceView[] }
   | { kind: "dreamsigns"; dreamsigns: readonly DreamsignData[] }
-  | { kind: "dreamsignChoices"; choices: readonly DreamAuguryDreamsignChoiceView[] }
+  | { kind: "dreamsignChoices"; choices: readonly AuguryDreamsignChoiceView[] }
   | { kind: "site"; model: DreamscapeSiteModel }
-  | { kind: "mixed"; cards: readonly DreamAuguryCardView[]; dreamsigns: readonly DreamsignData[] };
+  | { kind: "mixed"; cards: readonly AuguryCardView[]; dreamsigns: readonly DreamsignData[] };
 
-export interface DreamAuguryOfferView {
+export interface AuguryOfferView {
   id: string;
   headline: string;
   subtitle: string | readonly GlassPanelTextSegment[];
   requiresSelection: boolean;
   tile: OfferTileModel;
-  visual: DreamAuguryOfferVisualView;
+  visual: AuguryOfferVisualView;
 }
 
-export interface DreamAugurySiteView {
+export interface AugurySiteView {
   siteId: string;
   scene: ArtRef | null;
   encounterSignature: string | null;
-  guide: DreamAuguryGuideView;
-  offers: readonly DreamAuguryOfferView[];
+  guide: AuguryGuideView;
+  offers: readonly AuguryOfferView[];
   unavailableMessage: string | null;
 }
 
-export type DreamAuguryChoiceResult = { ok: true } | { ok: false; message: string };
+export type AuguryChoiceResult = { ok: true } | { ok: false; message: string };
 
-export interface DreamAugurySiteScreenProps {
-  view: DreamAugurySiteView;
+export interface AugurySiteScreenProps {
+  view: AugurySiteView;
   onInspectOffer?: (offerId: string) => void;
-  onChoose: (offerId: string, choiceId: string | null) => DreamAuguryChoiceResult;
+  onChoose: (offerId: string, choiceId: string | null) => AuguryChoiceResult;
   onClose: () => void;
 }
 
 function requiresWideDesktopDetail(
-  visual: DreamAuguryOfferVisualView,
+  visual: AuguryOfferVisualView,
 ): boolean {
   switch (visual.kind) {
     case "cards":
@@ -121,12 +121,12 @@ function requiresWideDesktopDetail(
   }
 }
 
-export function DreamAugurySiteScreen({
+export function AugurySiteScreen({
   view,
   onInspectOffer,
   onChoose,
   onClose,
-}: DreamAugurySiteScreenProps) {
+}: AugurySiteScreenProps) {
   const reduceMotion = useReducedMotion();
   const [selectedChoices, setSelectedChoices] = useState<ReadonlyMap<string, string>>(new Map());
   const [inspectedOfferId, setInspectedOfferId] = useState<string | null>(null);
@@ -148,7 +148,7 @@ export function DreamAugurySiteScreen({
     setSelectedChoices((current) => new Map(current).set(offerId, choiceId));
   }, []);
 
-  const inspectOffer = useCallback((offer: DreamAuguryOfferView) => {
+  const inspectOffer = useCallback((offer: AuguryOfferView) => {
     setErrorMessage(null);
     setInspectedOfferId(offer.id);
     onInspectOffer?.(offer.id);
@@ -165,7 +165,7 @@ export function DreamAugurySiteScreen({
     setInspectedOfferId(null);
   }, [committingOfferId, inspectedOfferId]);
 
-  const confirmOffer = useCallback((offer: DreamAuguryOfferView) => {
+  const confirmOffer = useCallback((offer: AuguryOfferView) => {
     const result = onChoose(offer.id, selectedChoices.get(offer.id) ?? null);
     if (!result.ok) {
       setErrorMessage(result.message);
@@ -188,13 +188,13 @@ export function DreamAugurySiteScreen({
       mobileComposition="revelation"
       mobileRegionSize={inspectedOffer === null ? "standard" : "expanded"}
       speechBubbleVisible={inspectedOffer === null}
-      screenTestId="cumulus-dream-augury-site-screen"
-      guideArtTestId="cumulus-dream-augury-guide-art"
-      speechAnchorTestId="cumulus-dream-augury-speech-anchor"
-      speechBubbleTestId="cumulus-dream-augury-speech"
+      screenTestId="cumulus-augury-site-screen"
+      guideArtTestId="cumulus-augury-guide-art"
+      speechAnchorTestId="cumulus-augury-speech-anchor"
+      speechBubbleTestId="cumulus-augury-speech"
       renderGallery={(layout) => (
         <section
-          data-dream-augury-layout={layout}
+          data-augury-layout={layout}
           data-augury-phase={inspectedOffer === null ? "comparison" : "detail"}
           data-augury-desktop-placement={
             inspectedOffer === null ? undefined : "center"
@@ -251,7 +251,7 @@ export function DreamAugurySiteScreen({
                 style={{ display: "grid", justifyItems: "center", gap: token("--space-5"), pointerEvents: "auto" }}
               >
                 <div
-                  data-dream-augury-offer-row=""
+                  data-augury-offer-row=""
                   style={{
                     display: "flex",
                     width: layout === "mobile" ? "100%" : undefined,
@@ -280,7 +280,7 @@ export function DreamAugurySiteScreen({
                         model={offer.tile}
                         size={layout === "desktop" ? "standard" : "compact"}
                         onPress={() => inspectOffer(offer)}
-                        testId={`cumulus-dream-augury-offer-${offer.id}`}
+                        testId={`cumulus-augury-offer-${offer.id}`}
                       />
                     </div>
                   ))}
@@ -289,12 +289,12 @@ export function DreamAugurySiteScreen({
                   label="Decline Offer"
                   disabled={committingOfferId !== null}
                   onPress={onClose}
-                  testId="cumulus-dream-augury-decline"
+                  testId="cumulus-augury-decline"
                 />
               </motion.div>
             ) : (
               <motion.div key="unavailable" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={transition} style={{ pointerEvents: "auto" }}>
-                <GlassButton label="Walk On" onPress={onClose} testId="cumulus-dream-augury-unavailable-exit" />
+                <GlassButton label="Walk On" onPress={onClose} testId="cumulus-augury-unavailable-exit" />
               </motion.div>
             )}
         </section>
@@ -313,19 +313,19 @@ function OfferDetailPanel({
   onChooseAgain,
   onConfirm,
 }: {
-  offer: DreamAuguryOfferView;
+  offer: AuguryOfferView;
   layout: "mobile" | "desktop";
   selectedChoiceId?: string;
   disabled: boolean;
   errorMessage: string | null;
   onSelect: (offerId: string, choiceId: string) => void;
   onChooseAgain: () => void;
-  onConfirm: (offer: DreamAuguryOfferView) => void;
+  onConfirm: (offer: AuguryOfferView) => void;
 }) {
   const confirmDisabled = disabled || (offer.requiresSelection && selectedChoiceId === undefined);
   return (
     <article
-      data-testid="cumulus-dream-augury-detail"
+      data-testid="cumulus-augury-detail"
       data-offer-id={offer.id}
       style={{ width: "100%", height: "100%", minWidth: 0, minHeight: 0, pointerEvents: "auto" }}
     >
@@ -337,7 +337,7 @@ function OfferDetailPanel({
         headerSpacing="medium"
         footer={
           <div
-            data-dream-augury-actions=""
+            data-augury-actions=""
             style={{
               display: "flex",
               justifyContent: layout === "mobile" ? "center" : "flex-end",
@@ -348,8 +348,8 @@ function OfferDetailPanel({
                 : `0 ${token("--space-8")} ${token("--space-6")}`,
             }}
           >
-            <GlassButton label="Choose Again" placement="onGlass" disabled={disabled} onPress={onChooseAgain} testId="cumulus-dream-augury-choose-again" />
-            <GlassButton label="Confirm" variant="accent" placement="onGlass" disabled={confirmDisabled} onPress={() => onConfirm(offer)} testId={`cumulus-dream-augury-confirm-${offer.id}`} />
+            <GlassButton label="Choose Again" placement="onGlass" disabled={disabled} onPress={onChooseAgain} testId="cumulus-augury-choose-again" />
+            <GlassButton label="Confirm" variant="accent" placement="onGlass" disabled={confirmDisabled} onPress={() => onConfirm(offer)} testId={`cumulus-augury-confirm-${offer.id}`} />
           </div>
         }
       >
@@ -370,7 +370,7 @@ function OfferDetailPanel({
         >
           <OfferDetailVisual offerId={offer.id} visual={offer.visual} layout={layout} selectedChoiceId={selectedChoiceId} onSelect={onSelect} />
           {errorMessage !== null && (
-            <p role="status" data-testid="cumulus-dream-augury-error" style={{ margin: 0, color: token("--danger"), font: token("--t-body"), textAlign: "center" }}>
+            <p role="status" data-testid="cumulus-augury-error" style={{ margin: 0, color: token("--danger"), font: token("--t-body"), textAlign: "center" }}>
               {errorMessage}
             </p>
           )}
@@ -388,13 +388,13 @@ function OfferDetailVisual({
   onSelect,
 }: {
   offerId: string;
-  visual: DreamAuguryOfferVisualView;
+  visual: AuguryOfferVisualView;
   layout: "mobile" | "desktop";
   selectedChoiceId?: string;
   onSelect: (offerId: string, choiceId: string) => void;
 }) {
   const choices = (
-    items: readonly DreamAuguryCardChoiceView[],
+    items: readonly AuguryCardChoiceView[],
     selectedBadge?: string,
   ) => (
     <CardChoices
@@ -486,7 +486,7 @@ function cardGridColumns(
   return "five";
 }
 
-function CardChoices({ offerId, choices, layout, fit = "choice", columns = cardGridColumns(choices.length, layout), selectedChoiceId, selectedBadge, onSelect }: { offerId: string; choices: readonly DreamAuguryCardChoiceView[]; layout: "mobile" | "desktop"; fit?: CardChoiceGridSiteFit; columns?: CardChoiceGridColumns; selectedChoiceId?: string; selectedBadge?: string; onSelect: (offerId: string, choiceId: string) => void }) {
+function CardChoices({ offerId, choices, layout, fit = "choice", columns = cardGridColumns(choices.length, layout), selectedChoiceId, selectedBadge, onSelect }: { offerId: string; choices: readonly AuguryCardChoiceView[]; layout: "mobile" | "desktop"; fit?: CardChoiceGridSiteFit; columns?: CardChoiceGridColumns; selectedChoiceId?: string; selectedBadge?: string; onSelect: (offerId: string, choiceId: string) => void }) {
   return (
     <CardChoiceGrid
       cards={choices.map((choice) => ({
@@ -504,7 +504,7 @@ function CardChoices({ offerId, choices, layout, fit = "choice", columns = cardG
   );
 }
 
-function CardRow({ cards, layout, fit = "choice", tone = "default" }: { cards: readonly DreamAuguryCardView[]; layout: "mobile" | "desktop"; fit?: CardChoiceGridSiteFit; tone?: "default" | "danger" }) {
+function CardRow({ cards, layout, fit = "choice", tone = "default" }: { cards: readonly AuguryCardView[]; layout: "mobile" | "desktop"; fit?: CardChoiceGridSiteFit; tone?: "default" | "danger" }) {
   return (
     <CardChoiceGrid
       cards={cards.map((card) => ({
@@ -519,7 +519,7 @@ function CardRow({ cards, layout, fit = "choice", tone = "default" }: { cards: r
   );
 }
 
-function CardTile({ card, width, selected = false, muted = false, danger = false, onActivate, testId }: { card: DreamAuguryCardView; width: CardTileWidth; selected?: boolean; muted?: boolean; danger?: boolean; onActivate?: () => void; testId?: string }) {
+function CardTile({ card, width, selected = false, muted = false, danger = false, onActivate, testId }: { card: AuguryCardView; width: CardTileWidth; selected?: boolean; muted?: boolean; danger?: boolean; onActivate?: () => void; testId?: string }) {
   return (
     <div style={{ position: "relative", width }}>
       <GameCard model={card.model} onActivate={onActivate} unavailable={muted} selected={selected || danger} selectionColor={danger ? "danger" : "accent-bright"} testId={testId} />
@@ -531,12 +531,12 @@ function TransitionArrow({ layout }: { layout: "mobile" | "desktop" }) {
   return <span data-augury-transition-arrow="" style={{ display: "grid", placeItems: "center", flexShrink: 0 }}><GlowIcon iconClass={GLYPHS.arrowRightFilled} color="white" size={layout === "desktop" ? "32px" : "24px"} /></span>;
 }
 
-function Transition({ before, after, layout }: { before: DreamAuguryCardView; after: DreamAuguryCardView; layout: "mobile" | "desktop" }) {
+function Transition({ before, after, layout }: { before: AuguryCardView; after: AuguryCardView; layout: "mobile" | "desktop" }) {
   const width = layout === "desktop" ? "min(240px, 40cqw, 64cqh)" : "min(124px, 38cqw, 58cqh)";
   return <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: token("--space-4") }}><CardTile card={before} width={width} muted /><TransitionArrow layout={layout} /><CardTile card={after} width={width} selected /></div>;
 }
 
-function TradeCards({ offerId, removed, choices, layout, selectedChoiceId, onSelect }: { offerId: string; removed: DreamAuguryCardView; choices: readonly DreamAuguryCardChoiceView[]; layout: "mobile" | "desktop"; selectedChoiceId?: string; onSelect: (offerId: string, choiceId: string) => void }) {
+function TradeCards({ offerId, removed, choices, layout, selectedChoiceId, onSelect }: { offerId: string; removed: AuguryCardView; choices: readonly AuguryCardChoiceView[]; layout: "mobile" | "desktop"; selectedChoiceId?: string; onSelect: (offerId: string, choiceId: string) => void }) {
   const removedWidth = layout === "desktop" ? "min(190px, 18cqw, 55cqh)" : "min(96px, 23cqw, 58cqh)";
   return (
     <div data-augury-trade-layout={layout} style={{ display: "grid", gridTemplateColumns: "auto auto minmax(0, 1fr)", alignItems: "center", justifyContent: "center", gap: layout === "desktop" ? token("--space-5") : token("--space-3"), minWidth: 0 }}>
@@ -547,7 +547,7 @@ function TradeCards({ offerId, removed, choices, layout, selectedChoiceId, onSel
   );
 }
 
-function DuplicateCards({ card, layout }: { card: DreamAuguryCardView; layout: "mobile" | "desktop" }) {
+function DuplicateCards({ card, layout }: { card: AuguryCardView; layout: "mobile" | "desktop" }) {
   const width = layout === "desktop" ? "min(300px, 72cqw, 62cqh)" : "min(210px, 72cqw, 56cqh)";
   return <div style={{ position: "relative", width, aspectRatio: "4 / 5" }}><div aria-hidden="true" style={{ position: "absolute", top: 0, right: 0, width: "80%" }}><GameCard model={card.model} /></div><div style={{ position: "absolute", bottom: 0, left: 0, width: "80%" }}><GameCard model={card.model} /></div></div>;
 }

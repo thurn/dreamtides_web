@@ -2,22 +2,22 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";
 import { selectCurrentSite } from "../../state/journey-selectors";
-import { DreamAugurySiteScreen } from "../../cumulus/screens/DreamAugurySiteScreen";
+import { AugurySiteScreen } from "../../cumulus/screens/AugurySiteScreen";
 import {
-  buildDreamAuguryAcceptRequest,
-  buildDreamAuguryDeclineRequest,
-  buildDreamAuguryLogEntries,
-  buildDreamAugurySiteModel,
-  dreamAuguryChoiceResult,
-  resolveDreamAuguryGuide,
-} from "./dream-augury-view-model";
+  buildAuguryAcceptRequest,
+  buildAuguryDeclineRequest,
+  buildAuguryLogEntries,
+  buildAugurySiteModel,
+  auguryChoiceResult,
+  resolveAuguryGuide,
+} from "./augury-view-model";
 
-export function DreamAugurySiteScreenAdapter({ siteId }: { siteId: string }) {
+export function AugurySiteScreenAdapter({ siteId }: { siteId: string }) {
   const { state, mutations, journeyContent } = useJourney();
-  const current = selectCurrentSite(state, siteId, "DreamAugury");
+  const current = selectCurrentSite(state, siteId, "Augury");
   const node = current?.node ?? null;
   const site = current?.site ?? null;
-  const guide = resolveDreamAuguryGuide(journeyContent.guides);
+  const guide = resolveAuguryGuide(journeyContent.guides);
   const guideLineRef = useRef<string | null | undefined>(undefined);
   if (guideLineRef.current === undefined) {
     const lines = guide?.dialog ?? [];
@@ -27,7 +27,7 @@ export function DreamAugurySiteScreenAdapter({ siteId }: { siteId: string }) {
   }
   const guideLine = guideLineRef.current;
   const result = useMemo(
-    () => site === null ? null : buildDreamAugurySiteModel({
+    () => site === null ? null : buildAugurySiteModel({
       state, sceneNode: node, site, journeyContent, guide, guideLine,
     }),
     [state, node, site, journeyContent, guide, guideLine],
@@ -37,7 +37,7 @@ export function DreamAugurySiteScreenAdapter({ siteId }: { siteId: string }) {
     () =>
       site === null || result === null
         ? []
-        : buildDreamAuguryLogEntries(result, site, guide?.id ?? null),
+        : buildAuguryLogEntries(result, site, guide?.id ?? null),
     [guide?.id, result, site],
   );
   useEffect(() => {
@@ -73,11 +73,11 @@ export function DreamAugurySiteScreenAdapter({ siteId }: { siteId: string }) {
       if (site === null || result?.encounter === null || result?.encounter === undefined) {
         return { ok: false as const, message: "The augury is clouded." };
       }
-      const request = buildDreamAuguryAcceptRequest(result.encounter, offerId, choiceId);
+      const request = buildAuguryAcceptRequest(result.encounter, offerId, choiceId);
       if (request === null) {
         return { ok: false as const, message: "Choose a vision first." };
       }
-      return dreamAuguryChoiceResult(
+      return auguryChoiceResult(
         mutations.acceptDreamMerchantOffer(site.id, request),
       );
     },
@@ -89,8 +89,8 @@ export function DreamAugurySiteScreenAdapter({ siteId }: { siteId: string }) {
     const request =
       result?.encounter === null || result?.encounter === undefined
         ? null
-        : buildDreamAuguryDeclineRequest(result.encounter);
-    if (request === null) mutations.completeDreamAugurySite(site.id);
+        : buildAuguryDeclineRequest(result.encounter);
+    if (request === null) mutations.completeAugurySite(site.id);
     else mutations.declineDreamMerchant(site.id, request);
   }, [mutations, result, site]);
 
@@ -110,7 +110,7 @@ export function DreamAugurySiteScreenAdapter({ siteId }: { siteId: string }) {
 
   if (site === null || result === null) return null;
   return (
-    <DreamAugurySiteScreen
+    <AugurySiteScreen
       key={result.view.encounterSignature ?? result.view.siteId}
       view={result.view}
       onInspectOffer={handleInspect}

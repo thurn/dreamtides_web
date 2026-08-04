@@ -193,7 +193,7 @@ has been dismissed. The room fold owns both the consumed offer identity and the
 active presentation, keeping reloads and connected clients aligned.
 
 Transfiguration guidance uses the same shared first-occurrence history. It
-appears when a usable Transfiguration site opens or when a visible Dream Augury
+appears when a usable Transfiguration site opens or when a visible Augury
 or Exploration reward offers to transfigure cards, whichever happens first.
 
 When a tutorial request adds a new kind of beat, extend the action type,

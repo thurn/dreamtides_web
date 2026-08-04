@@ -82,7 +82,7 @@ function markSiteComplete(state: JourneyState, siteId: string): JourneyState | n
       ...completed,
       siteRuntime: {
         ...completed.siteRuntime,
-        [siteId]: { kind: "dreamAugury", completed: true },
+        [siteId]: { kind: "augury", completed: true },
       },
     },
     { type: "dreamscape" },

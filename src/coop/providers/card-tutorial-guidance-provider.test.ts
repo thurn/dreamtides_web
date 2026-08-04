@@ -22,7 +22,7 @@ function uuid(index: number) {
 }
 
 describe("card tutorial guidance content provider", () => {
-  it("recognizes a transfiguration reward in a generated Dream Augury encounter", () => {
+  it("recognizes a transfiguration reward in a generated Augury encounter", () => {
     const cards = Array.from({ length: 16 }, (_, index) =>
       makeMerchantTestCard({
         id: uuid(index + 1),
@@ -35,7 +35,7 @@ describe("card tutorial guidance content provider", () => {
     const content = makeMerchantTestContent({ cards });
     const site = makeMerchantTestSite({
       id: "augury-with-transfiguration",
-      type: "DreamAugury",
+      type: "Augury",
     });
     const journey = makeMerchantTestJourneyState({
       deck: [
@@ -43,7 +43,7 @@ describe("card tutorial guidance content provider", () => {
       ],
       siteRuntime: {
         [site.id]: {
-          kind: "dreamAugury",
+          kind: "augury",
           completed: false,
           forcedArchetypeId: "transfigured_draft",
         },

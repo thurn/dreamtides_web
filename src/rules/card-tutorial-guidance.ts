@@ -86,7 +86,7 @@ export function currentCardTutorialContext(
       : null;
   }
   if (
-    (site.type === "DreamAugury" || site.type === "Exploration") &&
+    (site.type === "Augury" || site.type === "Exploration") &&
     provider?.hasVisibleTransfigurationReward(state.journey, site) === true
   ) {
     return {

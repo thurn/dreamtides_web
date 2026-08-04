@@ -18,7 +18,7 @@ function state(currentDreamscape: string | null): JourneyState {
             },
             {
               id: "augury",
-              type: "DreamAugury",
+              type: "Augury",
               isEnhanced: true,
               isVisited: false,
             },
@@ -39,11 +39,11 @@ describe("selectCurrentSite", () => {
     expect(selected?.node.id).toBe("current");
     expect(selected?.site.type).toBe("Exploration");
     expect(
-      selectCurrentSite(state("current"), "exploration", "DreamAugury"),
+      selectCurrentSite(state("current"), "exploration", "Augury"),
     ).toBeNull();
   });
 
   it("does not select sites outside an active dreamscape", () => {
-    expect(selectCurrentSite(state(null), "augury", "DreamAugury")).toBeNull();
+    expect(selectCurrentSite(state(null), "augury", "Augury")).toBeNull();
   });
 });

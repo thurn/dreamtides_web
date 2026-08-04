@@ -7,7 +7,7 @@ import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
 /**
  * Site types the merchant can place on the current dreamscape.
  *
- * Excludes types that are structural (Battle, Draft, DreamAugury) or that the
+ * Excludes types that are structural (Battle, Draft, Augury) or that the
  * player already controls via dedicated mechanics. The list covers all the
  * rewarding/utility sites a player would be excited to add.
  */

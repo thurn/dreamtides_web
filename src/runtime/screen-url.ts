@@ -78,7 +78,7 @@ function activeSite(state: JourneyState, siteId: string) {
 
 /**
  * Kebab-cases a `SiteType` for the URL. Derived from the type token itself
- * (`DreamAugury` -> `dream-augury`, `Purge` -> `purge`) so a new site type is
+ * (`Augury` -> `augury`, `Purge` -> `purge`) so a new site type is
  * reflected automatically without a hand-maintained lookup that could drift.
  */
 export function siteTypeSlug(type: SiteType): string {

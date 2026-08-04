@@ -116,13 +116,13 @@ function captureAllDrafts(): EventDraft[] {
   void actions.resolveExplorationChoice("site-1", "action-1", {
     entryIds: ["entry-1"],
   });
-  void actions.completeDreamAugury("site-1");
+  void actions.completeAugury("site-1");
   void actions.acceptReward("site-1");
   void actions.acceptDreamsignOffer("site-1", "ds-1");
   void actions.rejectDreamsignOffer("site-1");
   void actions.acceptEssence("site-1");
-  void actions.rerollDreamAugury("site-1");
-  void actions.forceDreamAuguryArchetype("site-1", "arch-1");
+  void actions.rerollAugury("site-1");
+  void actions.forceAuguryArchetype("site-1", "arch-1");
   void actions.completeSite("site-1");
   void actions.placeGravokWager("site-1", "six");
   void actions.settleGravokWager("site-1", "commitment-1");

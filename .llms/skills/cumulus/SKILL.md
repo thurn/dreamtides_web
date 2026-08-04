@@ -80,7 +80,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | Icon Button | Components | 19 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — neutral or purple accent liquid glass, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
 | Main Menu Button | Components | 1 | [components/main-menu-button.md](components/main-menu-button.md) | The text-first action for the Dreamtides main menu: outlined white at rest, showing the shared Cumulus liquid-glass material on hover or focus. |
 | Glass Button | Components | 31 | [components/glass-button.md](components/glass-button.md) | The labeled glass action — a bold text label with optional numerical essence cost on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface. |
-| Offer Tile | Components | 2 | [components/offer-tile.md](components/offer-tile.md) | The circular symbolic Dream Augury offer button in named 300×300 desktop and 240×240 mobile sizes: UUID-backed full-bleed card art, Dreamsigns and site glyphs over authored full-art fields, and centered operation marks inside the gold-and-feather frame. |
+| Offer Tile | Components | 2 | [components/offer-tile.md](components/offer-tile.md) | The circular symbolic Augury offer button in named 300×300 desktop and 240×240 mobile sizes: UUID-backed full-bleed card art, Dreamsigns and site glyphs over authored full-art fields, and centered operation marks inside the gold-and-feather frame. |
 | Glass Panel | Components | 13 | [components/glass-panel.md](components/glass-panel.md) | The shared liquid-glass content container: an optional structured header, a composed body, and an optional footer on the canonical floating material. |
 | Glass Dialog | Components | 14 | [components/glass-dialog.md](components/glass-dialog.md) | The glass overlay shell: a modal dialog with a bounded desktop panel and a full-bleed mobile overlay by default, plus centered content-sized and companion-paired popup presentations. |
 | Developer Rail | Components | 3 | [components/developer-rail.md](components/developer-rail.md) | The shared edge-attached shell for persistent developer tools, with canonical glass, header hierarchy, close action, scrolling body, and optional footer. |
@@ -364,9 +364,9 @@ adapter against its own inputs. Full rationale:
 - **Popup rule**: every reveal-on-interaction popup renders through
   `InfoCard` — pointer-anchored, no close button, no scrim; hover reveals on
   fine pointers, touch-hold on touch. Desktop InfoCards normally sit beside
-  their source. Dream Augury `OfferTile` is the single one-off exception: each
+  their source. Augury `OfferTile` is the single one-off exception: each
   offer's body-only InfoCard centers above that offer so the two choices remain
-  visually legible. This exception is specific to Dream Augury and is not a
+  visually legible. This exception is specific to Augury and is not a
   reusable placement pattern for other Cumulus surfaces.
 - **Content voice**: second person, literary register; Title Case titles;
   uppercase monospaced eyebrows; no emoji anywhere.

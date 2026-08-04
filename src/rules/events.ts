@@ -99,13 +99,13 @@ export interface EventPayloads {
     actionId: string;
     selection?: unknown;
   };
-  COMPLETE_DREAM_AUGURY: { siteId: string };
+  COMPLETE_AUGURY: { siteId: string };
   ACCEPT_REWARD: { siteId: string; choiceIndex?: number };
   ACCEPT_DREAMSIGN_OFFER: { siteId: string; dreamsignId: string };
   REJECT_DREAMSIGN_OFFER: { siteId: string };
   ACCEPT_ESSENCE: { siteId: string };
-  REROLL_DREAM_AUGURY: { siteId: string };
-  FORCE_DREAM_AUGURY_ARCHETYPE: { siteId: string; archetypeId: string };
+  REROLL_AUGURY: { siteId: string };
+  FORCE_AUGURY_ARCHETYPE: { siteId: string; archetypeId: string };
   COMPLETE_SITE: { siteId: string };
   PLACE_GRAVOK_WAGER: {
     siteId: string;
@@ -296,13 +296,13 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   ENTER_DRAFT_SITE: true,
   OPEN_SITE: true,
   RESOLVE_EXPLORATION_CHOICE: true,
-  COMPLETE_DREAM_AUGURY: true,
+  COMPLETE_AUGURY: true,
   ACCEPT_REWARD: true,
   ACCEPT_DREAMSIGN_OFFER: true,
   REJECT_DREAMSIGN_OFFER: true,
   ACCEPT_ESSENCE: true,
-  REROLL_DREAM_AUGURY: true,
-  FORCE_DREAM_AUGURY_ARCHETYPE: true,
+  REROLL_AUGURY: true,
+  FORCE_AUGURY_ARCHETYPE: true,
   COMPLETE_SITE: true,
   PLACE_GRAVOK_WAGER: true,
   SETTLE_GRAVOK_WAGER: true,

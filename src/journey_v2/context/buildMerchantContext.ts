@@ -159,9 +159,9 @@ export function buildMerchantContext({
 
   const siteRuntime = journeyState.siteRuntime[site.id];
   const rerollNonce =
-    siteRuntime?.kind === "dreamAugury" ? siteRuntime.rerollNonce ?? 0 : 0;
+    siteRuntime?.kind === "augury" ? siteRuntime.rerollNonce ?? 0 : 0;
   const forcedArchetypeId =
-    siteRuntime?.kind === "dreamAugury"
+    siteRuntime?.kind === "augury"
       ? siteRuntime.forcedArchetypeId
       : undefined;
 

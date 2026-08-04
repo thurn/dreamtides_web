@@ -91,6 +91,11 @@ describe("QA scenes", () => {
     expect(findQaScene("not-a-real-scene")).toBeNull();
     expect(buildQaScene("not-a-real-scene", makeJourneyContent())).toBeNull();
   });
+
+  it("registers the Augury site under its canonical QA ids", () => {
+    expect(findQaScene("augury")?.label).toBe("Augury");
+    expect(findQaScene("augury-enhanced")?.label).toBe("Augury (Enhanced)");
+  });
 });
 
 describe('the "dream-avatar-select" QA scene', () => {

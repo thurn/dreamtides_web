@@ -362,7 +362,7 @@ function totalSiteCount(atlas: DreamAtlas): number {
  * the state already has a different number of sites (preventing id collision on
  * repeated rewards).
  *
- * Dream Augury site rewards delegate here for `"current"` placement so every
+ * Augury site rewards delegate here for `"current"` placement so every
  * offer shape shares one implementation.
  */
 export function addSiteToCurrentDreamscape(

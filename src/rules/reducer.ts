@@ -475,8 +475,8 @@ export function routeDomain(
         state,
         sites.resolveExplorationChoice(journey, payload, ctx),
       );
-    case "COMPLETE_DREAM_AUGURY":
-      return journeyCase(state, sites.completeDreamAugury(journey, payload));
+    case "COMPLETE_AUGURY":
+      return journeyCase(state, sites.completeAugury(journey, payload));
     case "ACCEPT_REWARD":
       return journeyCase(state, sites.acceptReward(journey, payload));
     case "ACCEPT_DREAMSIGN_OFFER":
@@ -485,10 +485,10 @@ export function routeDomain(
       return journeyCase(state, sites.rejectDreamsignOffer(journey, payload));
     case "ACCEPT_ESSENCE":
       return journeyCase(state, sites.acceptEssence(journey, payload, ctx));
-    case "REROLL_DREAM_AUGURY":
-      return journeyCase(state, sites.rerollDreamAugury(journey, payload));
-    case "FORCE_DREAM_AUGURY_ARCHETYPE":
-      return journeyCase(state, sites.forceDreamAuguryArchetype(journey, payload));
+    case "REROLL_AUGURY":
+      return journeyCase(state, sites.rerollAugury(journey, payload));
+    case "FORCE_AUGURY_ARCHETYPE":
+      return journeyCase(state, sites.forceAuguryArchetype(journey, payload));
     case "COMPLETE_SITE":
       return journeyCase(state, sites.completeSite(journey, payload));
     case "PLACE_GRAVOK_WAGER":

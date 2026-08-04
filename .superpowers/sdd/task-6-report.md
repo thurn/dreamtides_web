@@ -197,7 +197,7 @@ Stable path: `screenshots/entity-reveals/`
   with a replacement mutation object; encounter-keyed publication plus a
   latest-callback ref now keeps publication at one event.
 - Clean normal-flow evidence used
-  `http://localhost:5176/dreamscape/0-firstlight-meadow/dream-augury?goto=dreamaugury&journey=v2&seed=task6-remediation-2b&game=ayafqt`
+  `http://localhost:5176/dreamscape/0-firstlight-meadow/augury?goto=augury&journey=v2&seed=task6-remediation-2b&game=ayafqt`
   at 1200×800, device scale 2, in isolated session
   `q6-remediation2b-5176`. The route rendered five JourneyCard sources with
   matching UUID attributes, zero retired zoom nodes, zero pending reveal nodes,

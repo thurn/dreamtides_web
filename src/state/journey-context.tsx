@@ -106,13 +106,13 @@ export interface JourneyMutations {
   ) => void;
   acceptDuplicationChoice: (siteId: string, entryId: string) => void;
   /**
-   * Marks a Dream Augury site as completed and returns to the dreamscape.
+   * Marks an Augury site as completed and returns to the dreamscape.
    * The augury screen is responsible for any narrative interaction; the
    * mutation itself applies no deck or resource changes — it lazily ensures
    * a runtime slot exists, flips the `completed` flag, and walks the
    * visit-tracking bookkeeping.
    */
-  completeDreamAugurySite: (siteId: string) => void;
+  completeAugurySite: (siteId: string) => void;
   acceptDreamMerchantOffer: (
     siteId: string,
     request: MerchantAcceptRequest,
@@ -122,15 +122,15 @@ export interface JourneyMutations {
     request: MerchantDeclineRequest,
   ) => void;
   /**
-   * Debug-only: regenerates the Dream Augury encounter for a site using the
+   * Debug-only: regenerates the Augury encounter for a site using the
    * same journey parameters by bumping `siteRuntime[siteId].rerollNonce`. Any
    * prior commit is cleared so the fresh encounter starts from a clean slate.
    * Optional because it is exposed only by the live journey providers, not by
    * lightweight test/demo mutation stubs.
    */
-  rerollDreamAugury?: (siteId: string) => void;
+  rerollAugury?: (siteId: string) => void;
   /**
-   * Debug-only: forces the next generated Dream Augury encounter to include an
+   * Debug-only: forces the next generated Augury encounter to include an
    * offer of the given archetype (in slot A), or clears the force when passed
    * `null`. Bumps `rerollNonce` so the encounter regenerates, and persists the
    * choice on `siteRuntime[siteId].forcedArchetypeId` so subsequent rerolls keep
@@ -138,7 +138,7 @@ export interface JourneyMutations {
    * eligible for the current journey state is ignored by the generator. Optional
    * because it is exposed only by the live journey providers.
    */
-  forceDreamAuguryArchetype?: (
+  forceAuguryArchetype?: (
     siteId: string,
     archetypeId: MerchantArchetypeId | null,
   ) => void;
@@ -156,7 +156,7 @@ export interface JourneyMutations {
   removeCard: (entryId: string, source: string) => void;
   /**
    * Apply a transfiguration to a deck entry, or clear it when `type` is
-   * `null`. The null variant supports Dream Augury reward templates that
+   * `null`. The null variant supports Augury reward templates that
    * "remove transfiguration"; `effectDescription` is the upstream source
    * string and `effectDetails` is forwarded into the `card_transfigured`
    * log payload.
@@ -245,7 +245,7 @@ export interface JourneyMutations {
   setDreamsignIsBane?: (index: number, isBane: boolean, source: string) => void;
   resetJourney: () => void;
 
-  // ---- Dream Augury effect plumbing (Wave 1) ----
+  // ---- Augury effect plumbing (Wave 1) ----
   /** Set essence to a non-negative `value`. */
   setEssence: (value: number, source: string) => void;
   /**

@@ -37,7 +37,7 @@ export const SITE_TYPES = [
   "Transfiguration",
   "Duplication",
   "Reward",
-  "DreamAugury",
+  "Augury",
   "DreamsignMarket",
   "DreamsignRevelation",
   "TemptingOffer",

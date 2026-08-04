@@ -79,7 +79,7 @@ const fileRoles = {
 
 for (const name of [
   "AtlasScreenAdapter", "BattleStartScreenAdapter", "CardShopSiteScreenAdapter",
-  "DesktopDeckViewerAdapter", "DraftSiteScreenAdapter", "DreamAugurySiteScreenAdapter", "PoolViewerAdapter",
+  "DesktopDeckViewerAdapter", "DraftSiteScreenAdapter", "AugurySiteScreenAdapter", "PoolViewerAdapter",
   "DreamscapeScreenAdapter", "DreamsignBazaarSiteScreenAdapter",
   "DreamsignRevelationScreenAdapter", "DuplicationSiteScreenAdapter",
   "GambleSiteScreenAdapter",

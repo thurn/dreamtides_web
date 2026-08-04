@@ -144,7 +144,7 @@ id = "wilderveil"
 name = "Wilderveil"
 aesthetic = "An enchanted forest of ancient trees and drifting lights."
 guide-id = "aldric_the_seer"
-signature-site = "DreamAugury"
+signature-site = "Augury"
 affiliation-id = "abandon_sacrifice"
 site-icon = "game-icons.net/sbed/crystal-ball"
 # Abandon: sacrifice your own allies for value. Ossian abandons to draw, Caedryn

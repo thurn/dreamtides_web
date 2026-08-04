@@ -328,7 +328,7 @@ export interface RevealSourceRegistration {
   readonly identity: RevealSourceIdentity;
   readonly spec: RevealSpec;
   /**
-   * The one-off Dream Augury OfferTile exception to normal beside-source
+   * The one-off Augury OfferTile exception to normal beside-source
    * desktop placement. Ordinary reveal sources must leave this unset.
    */
   readonly placementException?: RevealPlacementException;

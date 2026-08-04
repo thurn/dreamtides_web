@@ -1092,7 +1092,7 @@
               "id": "site-22",
               "isEnhanced": false,
               "isVisited": true,
-              "type": "DreamAugury"
+              "type": "Augury"
             },
             {
               "id": "site-23",
@@ -1157,7 +1157,7 @@
               "id": "site-28",
               "isEnhanced": false,
               "isVisited": false,
-              "type": "DreamAugury"
+              "type": "Augury"
             },
             {
               "id": "site-29",
@@ -1495,7 +1495,7 @@
     "siteRuntime": {
       "site-22": {
         "completed": true,
-        "kind": "dreamAugury"
+        "kind": "augury"
       },
       "site-3": {
         "accepted": true,

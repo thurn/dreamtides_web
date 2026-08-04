@@ -343,13 +343,13 @@ export function CoopJourneyProvider({
         emit("ACCEPT_TRANSFIGURATION_CHOICE", { siteId, entryId, type }),
       acceptDuplicationChoice: (siteId, entryId) =>
         dispatch(actions.acceptDuplicationChoice(siteId, entryId)),
-      completeDreamAugurySite: (siteId) =>
-        dispatch(actions.completeDreamAugury(siteId)),
-      rerollDreamAugury: (siteId) =>
-        dispatch(actions.rerollDreamAugury(siteId)),
-      forceDreamAuguryArchetype: (siteId, archetypeId) =>
+      completeAugurySite: (siteId) =>
+        dispatch(actions.completeAugury(siteId)),
+      rerollAugury: (siteId) =>
+        dispatch(actions.rerollAugury(siteId)),
+      forceAuguryArchetype: (siteId, archetypeId) =>
         // archetypeId may be null (clear the force); the reducer accepts it.
-        emit("FORCE_DREAM_AUGURY_ARCHETYPE", { siteId, archetypeId }),
+        emit("FORCE_AUGURY_ARCHETYPE", { siteId, archetypeId }),
       acceptDreamMerchantOffer: (siteId, request) => {
         emit("ACCEPT_MERCHANT_OFFER", { siteId, ...request });
       },

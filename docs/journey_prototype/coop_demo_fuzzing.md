@@ -41,13 +41,13 @@ The browser harness starts an isolated Firebase Database emulator and serves a
 fresh production-style Vite build, launches publisher and host contexts, and
 drives the visible UI. The
 smoke profile covers the fixed tutorial Dream Avatar selection, a second-client
-join, a Dream Augury exit back to its Dreamscape, a playable battle,
+join, an Augury exit back to its Dreamscape, a playable battle,
 **Control Opponent**, and an opponent score edit through the battle inspector.
 It then skips to rewards, continues to the Atlas, checks the complete victory
 handoff on both clients, reloads both clients, and checks the persisted fold
 again. The rehearsal profile enters through `/main`, plays all authored
 tutorial actions at accelerated playback, waits for the shared live-battle
-handoff, and then runs the avatar, Dream Augury, and cooperative battle
+handoff, and then runs the avatar, Augury, and cooperative battle
 scenarios. The soak profile repeats smoke runs for a bounded duration with a new
 deterministic seed per room.
 

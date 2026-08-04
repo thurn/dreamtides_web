@@ -2,7 +2,7 @@
 //
 // This module owns the journey events that spend at a shop, resolve a Dream
 // Merchant offer, and stack the battle / dreamscape / shop modifiers and atlas
-// edits that Dream Augury rewards and debug tools push. Each exported case
+// edits that Augury rewards and debug tools push. Each exported case
 // relocates the DOMAIN MATH of a legacy journey mutation
 // (`src/state/multiplayer-journey-context.tsx`) into a pure function of
 // `(journey, payload[, ctx])`. The legacy transaction / normalization / actionLog
@@ -51,7 +51,7 @@ const SITE_TYPES: ReadonlySet<SiteType> = new Set<SiteType>([
   "Transfiguration",
   "Duplication",
   "Reward",
-  "DreamAugury",
+  "Augury",
   "DreamsignMarket",
   "DreamsignRevelation",
   "TemptingOffer",

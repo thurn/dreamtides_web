@@ -1,7 +1,7 @@
 // Affiliation reweighting. Every non-starter dreamscape carries an
 // `affiliationId` naming the thematic faction backing it (see
 // `data/tabula/affiliations.toml`). When the player draws random card content
-// inside an affiliated dreamscape — a draft offer, a shop's card slots, a Dream
+// inside an affiliated dreamscape — a draft offer, a shop's card slots, an
 // Augury reward card — the affiliation pulls the draw toward cards that fit its
 // theme without ever removing any card from the running: every card keeps a
 // strictly positive selection weight, so any card the dreamscape could offer can
@@ -199,7 +199,7 @@ export function buildAffiliationNumberWeights(
  * candidates with their weights, and the card that was ultimately picked, so the
  * draw can be reconstructed from `logs/journey-log.jsonl`.
  *
- * `drawSite` names the sampler ("draft_offer", "shop_stock", "dream_augury", ...);
+ * `drawSite` names the sampler ("draft_offer", "shop_stock", "augury", ...);
  * `candidateWeights` is the `cardNumber -> multiplier` map actually applied;
  * `picked` is the card number(s) the draw produced.
  */

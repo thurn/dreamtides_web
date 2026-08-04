@@ -14,7 +14,7 @@
 // keyed by id and cards by UUID/entry-id only — never by name.
 //
 // OPEN_SITE generation splits by what the site's offer needs:
-//   - Essence and DreamAugury need no async content, so they are generated
+//   - Essence and Augury need no async content, so they are generated
 //     purely in-reducer, drawing from `ctx.rng` (replacing the legacy
 //     `Math.random`).
 //   - Reward / Dreamsign offer / Shop / Card choice generation reads the
@@ -29,7 +29,7 @@ import type { EventContext } from "../../eventlog/types";
 import type { DraftState } from "../../types/draft";
 import type {
   DeckEntry,
-  DreamAugurySiteRuntime,
+  AugurySiteRuntime,
   JourneyState,
   RuntimeShopSlot,
   SiteRuntimeState,
@@ -71,7 +71,7 @@ export interface SiteOpenResult {
  * generators behind this seam, reading from the injected rng instead of
  * `Math.random`. Until a provider is registered, `OPEN_SITE` on a
  * content-coupled type bounces (a recorded no-op, never a throw); Essence and
- * DreamAugury are generated purely in-reducer and never need it.
+ * Augury are generated purely in-reducer and never need it.
  */
 export interface SiteContentProvider {
   /**
@@ -298,8 +298,8 @@ function randomIntInRange(
  * `OPEN_SITE { siteId }` — collapses the five legacy `ensure*SiteRuntime`
  * writers into one type-dispatched generator. Dispatches on the
  * site's TYPE:
- *   - Essence / DreamAugury: generated purely in-reducer (Essence draws its
- *     amount from `ctx.rng`; DreamAugury seeds a fresh, un-completed runtime).
+ *   - Essence / Augury: generated purely in-reducer (Essence draws its
+ *     amount from `ctx.rng`; Augury seeds a fresh, un-completed runtime).
  *   - Reward / DreamsignRevelation / Shop / DreamsignMarket / Transfiguration /
  *     Duplication / Gamble: delegated to the registered {@link SiteContentProvider}.
  *
@@ -333,12 +333,12 @@ export function openSite(
         accepted: false,
       });
     }
-    case "DreamAugury": {
+    case "Augury": {
       // The augury encounter is generated at render time from the runtime's
       // nonce / forced archetype (see `buildMerchantContext`), so OPEN_SITE only
       // seeds a fresh, un-completed runtime.
       return withRuntime(journey, siteId, {
-        kind: "dreamAugury",
+        kind: "augury",
         completed: false,
       });
     }
@@ -680,16 +680,16 @@ export function acceptDuplicationChoice(
 }
 
 // ---------------------------------------------------------------------------
-// Dream Augury: complete / reroll / force
+// Augury: complete / reroll / force
 // ---------------------------------------------------------------------------
 
 /**
- * `COMPLETE_DREAM_AUGURY { siteId }` — legacy `completeDreamAugurySite`. Marks
+ * `COMPLETE_AUGURY { siteId }` — legacy `completeAugurySite`. Marks
  * the augury runtime completed (seeding one if the site was never opened) and
  * completes the site. Bounces on a wrong (non-augury) runtime or an
  * already-completed augury.
  */
-export function completeDreamAugury(
+export function completeAugury(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
@@ -699,14 +699,14 @@ export function completeDreamAugury(
   const existing = journey.siteRuntime[siteId];
   if (
     existing !== undefined &&
-    (existing.kind !== "dreamAugury" || existing.completed)
+    (existing.kind !== "augury" || existing.completed)
   ) {
     return null;
   }
-  const runtime: DreamAugurySiteRuntime =
-    existing?.kind === "dreamAugury"
+  const runtime: AugurySiteRuntime =
+    existing?.kind === "augury"
       ? existing
-      : { kind: "dreamAugury", completed: false };
+      : { kind: "augury", completed: false };
   return completeAndReturn(
     withRuntime(journey, siteId, { ...runtime, completed: true }),
     siteId,
@@ -714,26 +714,26 @@ export function completeDreamAugury(
 }
 
 /**
- * `REROLL_DREAM_AUGURY { siteId }` — legacy `rerollDreamAugury` (debug). Rebuilds
+ * `REROLL_AUGURY { siteId }` — legacy `rerollAugury` (debug). Rebuilds
  * the augury runtime from scratch with a bumped `rerollNonce` (a clean-slate
  * encounter), preserving any debug-forced archetype. Bounces on a wrong
  * (non-augury) runtime or an already-completed augury.
  */
-export function rerollDreamAugury(
+export function rerollAugury(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
   const siteId = asString(payload.siteId);
   if (siteId === null) return null;
   const existing = journey.siteRuntime[siteId];
-  if (existing !== undefined && existing.kind !== "dreamAugury") return null;
-  if (existing?.kind === "dreamAugury" && existing.completed) return null;
+  if (existing !== undefined && existing.kind !== "augury") return null;
+  if (existing?.kind === "augury" && existing.completed) return null;
   const previousNonce =
-    existing?.kind === "dreamAugury" ? existing.rerollNonce ?? 0 : 0;
+    existing?.kind === "augury" ? existing.rerollNonce ?? 0 : 0;
   const forcedArchetypeId =
-    existing?.kind === "dreamAugury" ? existing.forcedArchetypeId : undefined;
-  const runtime: DreamAugurySiteRuntime = {
-    kind: "dreamAugury",
+    existing?.kind === "augury" ? existing.forcedArchetypeId : undefined;
+  const runtime: AugurySiteRuntime = {
+    kind: "augury",
     completed: false,
     rerollNonce: previousNonce + 1,
     ...(forcedArchetypeId === undefined ? {} : { forcedArchetypeId }),
@@ -742,13 +742,13 @@ export function rerollDreamAugury(
 }
 
 /**
- * `FORCE_DREAM_AUGURY_ARCHETYPE { siteId, archetypeId }` — legacy
- * `forceDreamAuguryArchetype` (debug). Rebuilds the augury runtime with a bumped
+ * `FORCE_AUGURY_ARCHETYPE { siteId, archetypeId }` — legacy
+ * `forceAuguryArchetype` (debug). Rebuilds the augury runtime with a bumped
  * nonce and the forced archetype (a `null` archetype clears it). Bounces on a
  * wrong (non-augury) runtime, an already-completed augury, or a malformed
  * archetype value.
  */
-export function forceDreamAuguryArchetype(
+export function forceAuguryArchetype(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
@@ -759,12 +759,12 @@ export function forceDreamAuguryArchetype(
     payload.archetypeId === null ? null : asString(payload.archetypeId);
   if (payload.archetypeId !== null && archetypeId === null) return null;
   const existing = journey.siteRuntime[siteId];
-  if (existing !== undefined && existing.kind !== "dreamAugury") return null;
-  if (existing?.kind === "dreamAugury" && existing.completed) return null;
+  if (existing !== undefined && existing.kind !== "augury") return null;
+  if (existing?.kind === "augury" && existing.completed) return null;
   const previousNonce =
-    existing?.kind === "dreamAugury" ? existing.rerollNonce ?? 0 : 0;
-  const runtime: DreamAugurySiteRuntime = {
-    kind: "dreamAugury",
+    existing?.kind === "augury" ? existing.rerollNonce ?? 0 : 0;
+  const runtime: AugurySiteRuntime = {
+    kind: "augury",
     completed: false,
     rerollNonce: previousNonce + 1,
     ...(archetypeId === null ? {} : { forcedArchetypeId: archetypeId }),
