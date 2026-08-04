@@ -35,6 +35,8 @@ function CardChoiceGridDemo() {
                   model: { cardId: card.id, displaySnapshot: card },
                   selected: selected === card.id,
                   selectionColor: "accent-bright" as const,
+                  operation:
+                    selected === card.id ? ("copy" as const) : undefined,
                 },
               ];
         }),
@@ -72,7 +74,10 @@ export const cardChoiceGridDemo: CumulusComponent = {
       code: `import { CardChoiceGrid } from "src/cumulus/components/card/CardChoiceGrid";
 
 <CardChoiceGrid
-  cards={choices}
+  cards={choices.map((choice) => ({
+    ...choice,
+    operation: choice.entryId === selectedEntryId ? "copy" : undefined,
+  }))}
   columns="four"
   layout={{ kind: "site", viewport: "desktop", fit: "choice" }}
   onCardPress={chooseCard}

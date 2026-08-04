@@ -32,6 +32,7 @@ import {
 } from "../components/card/card-aspect";
 import { CardBack } from "../components/battle/CardBack";
 import { GlassButton } from "../components/controls/GlassButton";
+import { GlowIcon } from "../components/controls/GlowIcon";
 import { IconButton } from "../components/controls/IconButton";
 import {
   JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
@@ -97,6 +98,7 @@ export type ExplorationRewardView =
       /** Tangible objects granted by the resolution. */
       readonly objects: {
         readonly cards: readonly GameCardModel[];
+        readonly purgedCards: readonly GameCardModel[];
         readonly dreamsigns: readonly DreamsignData[];
       };
       /** Persisted mutation applied to every affected UUID-keyed deck entry. */
@@ -898,13 +900,22 @@ export function ExplorationSiteScreen({
   const resolvedReward =
     view.reward !== null && !("kind" in view.reward) ? view.reward : null;
   const objectReward = resolvedReward?.objects ?? null;
+  const purgedRewardCards = objectReward?.purgedCards ?? [];
   const deckModification = resolvedReward?.deckModification ?? null;
   const essenceReward =
     view.reward !== null && "kind" in view.reward ? view.reward : null;
   const rewardItems = useMemo(() => rewardItemsFor(view.reward), [view.reward]);
   const showDeckModification =
     deckModification !== null && !deckModificationPresented;
-  const showObjectReward = !showDeckModification && rewardItems.length > 0;
+  const showObjectReward =
+    !showDeckModification &&
+    (rewardItems.length > 0 || purgedRewardCards.length > 0);
+  const rewardStageAnnouncement =
+    purgedRewardCards.length === 0
+      ? `Gained ${String(rewardItems.length)} ${rewardItems.length === 1 ? "reward" : "rewards"}`
+      : rewardItems.length === 0
+        ? `Purging ${String(purgedRewardCards.length)} ${purgedRewardCards.length === 1 ? "card" : "cards"}`
+        : `Purging ${String(purgedRewardCards.length)} ${purgedRewardCards.length === 1 ? "card" : "cards"} and gaining ${String(rewardItems.length)} ${rewardItems.length === 1 ? "reward" : "rewards"}`;
   const rewardIdentity =
     view.resolvedActionId === null || view.reward === null
       ? null
@@ -918,6 +929,7 @@ export function ExplorationSiteScreen({
             view.resolvedActionId,
             deckModification?.kind ?? "objects-only",
             ...(deckModification?.cards.map((card) => card.entryId) ?? []),
+            ...purgedRewardCards.map((card) => `purged:${card.cardId}`),
             ...rewardItems.map((item) => item.key),
           ].join("|");
   useEffect(() => {
@@ -1112,6 +1124,30 @@ export function ExplorationSiteScreen({
     rewardIdentity,
     rewardItems,
     rewardTrajectories,
+    showObjectReward,
+  ]);
+
+  useEffect(() => {
+    if (
+      rewardIdentity === null ||
+      purgedRewardCards.length === 0 ||
+      rewardItems.length > 0 ||
+      !showObjectReward ||
+      frameBreakPhase !== "open"
+    ) {
+      return;
+    }
+    const timer = window.setTimeout(
+      completeExit,
+      REWARD_READING_SECONDS * 1000,
+    );
+    return () => window.clearTimeout(timer);
+  }, [
+    completeExit,
+    frameBreakPhase,
+    purgedRewardCards.length,
+    rewardIdentity,
+    rewardItems.length,
     showObjectReward,
   ]);
 
@@ -1756,9 +1792,11 @@ export function ExplorationSiteScreen({
         rewardTrajectories === null && (
           <motion.section
             data-exploration-reward-stage=""
-            data-exploration-reward-count={rewardItems.length}
+            data-exploration-reward-count={
+              rewardItems.length + purgedRewardCards.length
+            }
             role="status"
-            aria-label={`Gained ${String(rewardItems.length)} ${rewardItems.length === 1 ? "reward" : "rewards"}`}
+            aria-label={rewardStageAnnouncement}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{
@@ -1781,10 +1819,88 @@ export function ExplorationSiteScreen({
               pointerEvents: "none",
             }}
           >
+            {purgedRewardCards.map((card, index) => {
+              const cardWidth = isDesktop
+                ? DESKTOP_REWARD_CARD_WIDTH
+                : purgedRewardCards.length + rewardItems.length === 1
+                  ? "min(58vw, 240px)"
+                  : "min(40vw, 180px)";
+              return (
+                <motion.div
+                  key={`purged:${String(index)}:${card.cardId}`}
+                  data-exploration-purge-card=""
+                  data-card-id={card.cardId}
+                  initial={{
+                    opacity: reduceMotion ? 1 : 0,
+                    scale: reduceMotion ? 1 : 0.88,
+                    y: reduceMotion ? 0 : token("--space-6"),
+                    rotate: 0,
+                  }}
+                  animate={
+                    reduceMotion
+                      ? { opacity: 1, scale: 1, y: 0, rotate: 0 }
+                      : {
+                          opacity: [0, 1, 1, 0],
+                          scale: [0.88, 1, 1, 0.5],
+                          y: [token("--space-6"), 0, 0, token("--space-8")],
+                          rotate: [0, 0, 0, -8],
+                        }
+                  }
+                  transition={{
+                    duration: reduceMotion ? 0 : REWARD_READING_SECONDS,
+                    times: reduceMotion ? undefined : [0, 0.18, 0.68, 1],
+                    ease: DREAM_EASE,
+                  }}
+                  style={{
+                    position: "relative",
+                    width: cardWidth,
+                    aspectRatio: CARD_ASPECT_RATIO,
+                    flex: "none",
+                    pointerEvents: "none",
+                  }}
+                >
+                  <GameCard
+                    model={card}
+                    selected
+                    selectionColor="danger"
+                    testId={`cumulus-exploration-purged-card-${String(index)}`}
+                  />
+                  <motion.span
+                    data-exploration-purge-icon=""
+                    aria-hidden="true"
+                    initial={{ opacity: reduceMotion ? 1 : 0, scale: 0.72 }}
+                    animate={{ opacity: 1, scale: reduceMotion ? 1 : [0.72, 1, 1.2] }}
+                    transition={{
+                      duration: reduceMotion ? 0 : REWARD_READING_SECONDS,
+                      times: reduceMotion ? undefined : [0, 0.25, 1],
+                      ease: DREAM_EASE,
+                    }}
+                    style={{
+                      position: "absolute",
+                      right: token("--space-3"),
+                      bottom: token("--space-3"),
+                      width: "clamp(34px, 22%, 52px)",
+                      aspectRatio: "1 / 1",
+                      borderRadius: token("--radius-control"),
+                      display: "grid",
+                      placeItems: "center",
+                      background: token("--danger"),
+                      boxShadow: token("--shadow-md"),
+                    }}
+                  >
+                    <GlowIcon
+                      iconClass={GLYPHS.trash}
+                      color="text-on-accent"
+                      size="58%"
+                    />
+                  </motion.span>
+                </motion.div>
+              );
+            })}
             {rewardItems.map((item, index) => {
               const cardWidth = isDesktop
                 ? DESKTOP_REWARD_CARD_WIDTH
-                : rewardItems.length === 1
+                : purgedRewardCards.length + rewardItems.length === 1
                   ? "min(58vw, 240px)"
                   : "min(40vw, 180px)";
               const dreamsignSize = isDesktop
@@ -2357,6 +2473,12 @@ export function ExplorationSiteScreen({
                   card.entryId === purgeEntryId || selectedIds.includes(card.entryId),
                 selectionColor: card.entryId === purgeEntryId ? "danger" : "selected",
                 emphasis: card.isBane ? "danger" : undefined,
+                operation:
+                  card.entryId === purgeEntryId
+                    ? "purge"
+                    : selectedIds.includes(card.entryId)
+                      ? "copy"
+                      : undefined,
                 testId: `cumulus-exploration-card-${card.entryId}`,
               }))}
               emptyLabel="No eligible cards are available."

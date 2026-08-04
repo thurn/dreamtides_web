@@ -57,6 +57,7 @@ vi.mock("framer-motion", async () => {
       img: MotionElement,
       main: MotionElement,
       section: MotionElement,
+      span: MotionElement,
     },
     useReducedMotion: () => reducedMotionPreference.value,
   };
@@ -133,7 +134,26 @@ function twoCardRewardView(): ExplorationSiteView {
   return {
     ...base,
     reward: {
-      objects: { cards: [base.card, second], dreamsigns: [] },
+      objects: { cards: [base.card, second], purgedCards: [], dreamsigns: [] },
+      deckModification: null,
+    },
+  };
+}
+
+function purgeAndCopyRewardView(): ExplorationSiteView {
+  const base = twoCardRewardView();
+  if (base.reward === null || "kind" in base.reward) return base;
+  const copiedCard = base.reward.objects.cards[0];
+  const purgedCard = base.reward.objects.cards[1];
+  if (copiedCard === undefined || purgedCard === undefined) return base;
+  return {
+    ...base,
+    reward: {
+      objects: {
+        cards: [copiedCard],
+        purgedCards: [purgedCard],
+        dreamsigns: [],
+      },
       deckModification: null,
     },
   };
@@ -145,6 +165,7 @@ function dreamsignRewardView(): ExplorationSiteView {
     reward: {
       objects: {
         cards: [],
+        purgedCards: [],
         dreamsigns: [
           {
             id: "reward-dreamsign-id",
@@ -188,7 +209,7 @@ function deckModificationRewardView(
   return {
     ...base,
     reward: {
-      objects: { cards: [], dreamsigns: [] },
+      objects: { cards: [], purgedCards: [], dreamsigns: [] },
       deckModification: {
         kind,
         headline: kind === "spark" ? "+1 ✦" : "Fast",
@@ -1181,6 +1202,22 @@ describe("ExplorationSiteScreen", () => {
     );
     act(() => purgeCard?.click());
     expect(confirm?.textContent).toContain("Choose a card to copy");
+    expect(
+      container.querySelector(
+        '[data-gallery-entry-id="entry-a"] [data-card-choice-operation="purge"]',
+      ),
+    ).not.toBeNull();
+
+    const copyCard = container.querySelector<HTMLElement>(
+      '[data-testid="cumulus-exploration-card-entry-b"]',
+    );
+    act(() => copyCard?.click());
+    expect(
+      container.querySelector(
+        '[data-gallery-entry-id="entry-b"] [data-card-choice-operation="copy"]',
+      ),
+    ).not.toBeNull();
+    expect(confirm?.textContent).toContain("Confirm Choice");
 
     act(() =>
       container
@@ -1190,6 +1227,9 @@ describe("ExplorationSiteScreen", () => {
         ?.click(),
     );
     expect(confirm?.textContent).toContain("Choose a card to purge");
+    expect(
+      container.querySelector("[data-card-choice-operation]"),
+    ).toBeNull();
     act(() => root.unmount());
   });
 
@@ -1349,6 +1389,86 @@ describe("ExplorationSiteScreen", () => {
       for (const flight of flights) {
         flight.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
       }
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
+  it("dissolves the purged card while the copied card flies to the deck", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = false;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function getBoundingClientRect(this: HTMLElement) {
+        if (this.hasAttribute("data-exploration-card-slot")) {
+          return new DOMRect(900, 180, 240, 336);
+        }
+        if (this.hasAttribute("data-exploration-reward-object")) {
+          return new DOMRect(660, 180, 240, 336);
+        }
+        if (this instanceof HTMLImageElement && this.alt !== "") {
+          return new DOMRect(780, 150, 480, 291);
+        }
+        return new DOMRect(0, 0, 100, 100);
+      },
+    );
+    const deckTarget = document.createElement("button");
+    deckTarget.dataset.journeyDeckTarget = "";
+    deckTarget.getBoundingClientRect = () =>
+      new DOMRect(1210, 720, 50, 70);
+    document.body.append(deckTarget);
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={purgeAndCopyRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    act(() => {
+      container
+        .querySelector("[data-exploration-card-travel]")
+        ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+    });
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() => {
+      container
+        .querySelector("[data-exploration-frame-break]")
+        ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+    });
+
+    expect(
+      container.querySelector("[data-exploration-purge-card]"),
+    ).not.toBeNull();
+    expect(
+      container.querySelector("[data-exploration-purge-icon] .bx-trash"),
+    ).not.toBeNull();
+    expect(
+      container.querySelectorAll('[data-exploration-reward-object="card"]'),
+    ).toHaveLength(1);
+
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    expect(
+      container.querySelector("[data-exploration-purge-card]"),
+    ).toBeNull();
+    const flight = container.querySelector(
+      '[data-exploration-reward-flight="card"]',
+    );
+    expect(flight?.getAttribute("data-exploration-destination")).toBe(
+      "journey-deck",
+    );
+    expect(onExit).not.toHaveBeenCalled();
+    act(() => {
+      flight?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
     });
     expect(onExit).toHaveBeenCalledOnce();
     act(() => root.unmount());
@@ -1524,7 +1644,7 @@ describe("ExplorationSiteScreen", () => {
     const composite: ExplorationSiteView = {
       ...modified,
       reward: {
-        objects: { cards: [modified.card], dreamsigns: [] },
+        objects: { cards: [modified.card], purgedCards: [], dreamsigns: [] },
         deckModification,
       },
     };

@@ -88,10 +88,10 @@ describe("exploration-view-model", () => {
         },
       ],
       resolution: {
-        actionId: "action-b",
-        gainedCardIds: [source.id, source.id],
+        actionId: "action-a",
+        gainedCardIds: [source.id],
         gainedDreamsignIds: [gainedDreamsign.id],
-        purgedCardIds: [],
+        purgedCardIds: [source.id],
         affectedEntryIds: [],
         essenceGained: 0,
       },
@@ -149,10 +149,11 @@ describe("exploration-view-model", () => {
         { id: "action-a", followup: { kind: "cards" } },
         { id: "action-b", followup: { kind: "none" } },
       ],
-      resolvedActionId: "action-b",
+      resolvedActionId: "action-a",
       reward: {
         objects: {
-          cards: [{ cardId: source.id }, { cardId: source.id }],
+          cards: [{ cardId: source.id }],
+          purgedCards: [{ cardId: source.id }],
           dreamsigns: [{ id: gainedDreamsign.id }],
         },
         deckModification: null,
@@ -264,7 +265,7 @@ describe("exploration-view-model", () => {
     });
 
     expect(view?.reward).toMatchObject({
-      objects: { cards: [], dreamsigns: [] },
+      objects: { cards: [], purgedCards: [], dreamsigns: [] },
       deckModification: {
         kind: "spark",
         headline: "+1 ✦",
@@ -374,7 +375,7 @@ describe("exploration-view-model", () => {
     });
 
     expect(fastView?.reward).toMatchObject({
-      objects: { cards: [], dreamsigns: [] },
+      objects: { cards: [], purgedCards: [], dreamsigns: [] },
       deckModification: {
         kind: "fast",
         headline: "Fast",

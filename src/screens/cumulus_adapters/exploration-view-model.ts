@@ -586,6 +586,13 @@ function rewardForResolution(
     const card = cardById(content, cardId);
     return card === null ? [] : [modelForCard(card)];
   });
+  const purgedCards =
+    resolvedAction?.effectKind === "purge-and-copy"
+      ? resolution.purgedCardIds.flatMap((cardId) => {
+          const card = cardById(content, cardId);
+          return card === null ? [] : [modelForCard(card)];
+        })
+      : [];
   const dreamsigns = resolution.gainedDreamsignIds.flatMap((dreamsignId) => {
     const normalized = dreamsignId.toLowerCase();
     const dreamsign = state.dreamsigns.find(
@@ -593,9 +600,12 @@ function rewardForResolution(
     );
     return dreamsign === undefined ? [] : [dreamsign];
   });
-  return cards.length === 0 && dreamsigns.length === 0 && deckModification === null
+  return cards.length === 0 &&
+    purgedCards.length === 0 &&
+    dreamsigns.length === 0 &&
+    deckModification === null
     ? null
-    : { objects: { cards, dreamsigns }, deckModification };
+    : { objects: { cards, purgedCards, dreamsigns }, deckModification };
 }
 
 /** Build the complete Exploration presentation from persisted domain data. */

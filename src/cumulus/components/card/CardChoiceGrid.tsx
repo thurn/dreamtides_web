@@ -8,9 +8,10 @@ import {
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import type { CumulusColor } from "../../primitives/color";
-import type { Glyph } from "../../primitives/glyph";
+import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
+import { GlowIcon } from "../controls/GlowIcon";
 import { EssenceValue } from "../hud/EssenceValue";
 import { CardView, GameCard, type GameCardModel } from "./CardView";
 import { GalleryActionCard } from "./GalleryActionCard";
@@ -18,6 +19,9 @@ import { GalleryActionCard } from "./GalleryActionCard";
 /** A small line rendered directly below a card-choice tile. */
 export type CardChoiceGridCaption =
   { kind: "essence"; amount: number } | { kind: "text"; text: string };
+
+/** The pending operation identified on a selected card-choice tile. */
+export type CardChoiceOperation = "purge" | "copy";
 
 /** One resolved card presented by a {@link CardChoiceGrid}. */
 export interface CardChoiceGridCardView {
@@ -49,6 +53,8 @@ export interface CardChoiceGridCardView {
   stackedCopyDirection?: "left" | "right";
   /** Optional selected-card quantity shown over the lower corner. */
   quantityBadge?: string;
+  /** Pending operation shown as a semantic icon over the lower-right corner. */
+  operation?: CardChoiceOperation;
 }
 
 /** A card-sized action appended after the cards. */
@@ -361,7 +367,14 @@ export function CardChoiceGrid({
                     data-card-choice-quantity-badge=""
                     style={{
                       position: "absolute",
-                      right: token("--space-3"),
+                      right:
+                        card.operation === undefined
+                          ? token("--space-3")
+                          : undefined,
+                      left:
+                        card.operation === undefined
+                          ? undefined
+                          : token("--space-3"),
                       bottom: token("--space-3"),
                       zIndex: 20,
                       width: 36,
@@ -377,6 +390,44 @@ export function CardChoiceGrid({
                     }}
                   >
                     {card.quantityBadge}
+                  </span>
+                )}
+                {card.operation !== undefined && (
+                  <span
+                    aria-label={
+                      card.operation === "purge"
+                        ? "This card will be purged"
+                        : "This card will be copied"
+                    }
+                    data-card-choice-operation={card.operation}
+                    style={{
+                      position: "absolute",
+                      right: token("--space-3"),
+                      bottom: token("--space-3"),
+                      zIndex: 21,
+                      width: "clamp(26px, 22%, 44px)",
+                      aspectRatio: "1 / 1",
+                      borderRadius: token("--radius-control"),
+                      display: "grid",
+                      placeItems: "center",
+                      color: token("--text-on-accent"),
+                      background:
+                        card.operation === "purge"
+                          ? token("--danger")
+                          : token("--selected"),
+                      boxShadow: token("--shadow-md"),
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <GlowIcon
+                      iconClass={
+                        card.operation === "purge"
+                          ? GLYPHS.trash
+                          : GLYPHS.copy
+                      }
+                      color="text-on-accent"
+                      size="58%"
+                    />
                   </span>
                 )}
               </div>

@@ -50,7 +50,10 @@ A frameless, responsive grid for presenting resolved GameCards as choices inside
 import { CardChoiceGrid } from "src/cumulus/components/card/CardChoiceGrid";
 
 <CardChoiceGrid
-  cards={choices}
+  cards={choices.map((choice) => ({
+    ...choice,
+    operation: choice.entryId === selectedEntryId ? "copy" : undefined,
+  }))}
   columns="four"
   layout={{ kind: "site", viewport: "desktop", fit: "choice" }}
   onCardPress={chooseCard}

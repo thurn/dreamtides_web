@@ -77,6 +77,7 @@ describe("CardChoiceGrid", () => {
               selected: true,
               selectionColor: "accent-bright",
               quantityBadge: "2x",
+              operation: "copy",
             },
           ]}
           columns="two"
@@ -94,6 +95,11 @@ describe("CardChoiceGrid", () => {
     expect(
       container.querySelector("[data-card-choice-quantity-badge]")?.textContent,
     ).toBe("2x");
+    expect(
+      container
+        .querySelector('[data-card-choice-operation="copy"]')
+        ?.getAttribute("aria-label"),
+    ).toBe("This card will be copied");
     act(() =>
       (
         container.querySelector('[data-testid="choice-b"]') as HTMLButtonElement
