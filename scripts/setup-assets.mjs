@@ -5,6 +5,7 @@ import { dirname, resolve, join } from "node:path";
 import { homedir } from "node:os";
 import { pathToFileURL } from "node:url";
 import { parse } from "smol-toml";
+import { NIGHTMARE_CARD_ID } from "../src/data/nightmare-identity.ts";
 import { CARDS_V2_POOL_METADATA } from "../src/data/cards-v2-metadata.ts";
 import { DREAM_AVATAR_ARCHETYPES_BY_ID } from "../src/data/dream-avatars-v2-database.ts";
 import { OFFER_TILE_BACKGROUND_IMAGE_NUMBERS } from "../src/data/offer-tile-art.ts";
@@ -590,35 +591,6 @@ export function validateDreamAvatarMapping(dreamscapes, dreamAvatarIds) {
 export const DEFAULT_STARTING_ESSENCE = 200;
 
 /**
- * Bane card names that must be retained in the runtime card catalog despite
- * their `Special` rarity. Dream-journey effects (`gain_random_banes`,
- * `gain_named_banes`, `gain_named_banes_for_X_battles`) resolve a bane name
- * to a content card and add it to the player's deck; without these names in
- * `card-data.json` the apply step finds no card and silently no-ops the deck
- * mutation. The catalog currently ships `Nightmare`; other entries
- * (Despair, Oblivion, ...) are documented in `docs/journeys/banes.md` and will
- * land as content cards in a future content drop.
- *
- * Mirrors `BANE_NAMES` in `src/journeys/journey/effects.ts`. Keep the two in
- * sync; the runtime filter in `availableBaneNames` already gates rolling on
- * "this name has a card in the bundle", so adding a new bane card to the
- * TOML and to this set automatically lights it up in dream-journey rolls.
- */
-export const BANE_NAMES = new Set([
-  "Nightmare",
-  "Despair",
-  "Oblivion",
-  "Betrayal",
-  "Envy",
-  "Doubt",
-  "Silence",
-  "Paranoia",
-  "Burden",
-  "Paralysis",
-  "Lethargy",
-]);
-
-/**
  * Convert a TOML Dreamwell record to its JSON representation with camelCase keys.
  * Dreamwell cards are the shared cards drawn one per turn during the Dreamwell
  * phase (see docs/battle_rules/battle_rules.md). The transform is a plain
@@ -679,7 +651,7 @@ const EXPLORATION_EFFECT_KINDS = new Set([
   "change-subtype-all",
   "take-cards",
   "replace-selected",
-  "gain-bane-and-card",
+  "gain-nightmare-and-card",
   "gain-random-cards",
   "transfigure-fixed-selected",
   "gain-offered-card",
@@ -688,7 +660,7 @@ const EXPLORATION_EFFECT_KINDS = new Set([
   "gain-random-dreamsign",
   "purge-dreamsign-for-essence",
   "make-fast-all",
-  "reduce-cost-all-and-gain-banes",
+  "reduce-cost-all-and-gain-nightmares",
 ]);
 
 function transformTomlRecord(record) {
@@ -725,7 +697,7 @@ export function transformExplorationData(source) {
       id: dreamsign.id,
       name: dreamsign.name,
       effectDescription: dreamsign.renderedText ?? "",
-      isBane: false,
+      isNegative: false,
     };
   });
   const encounters = (source.encounter ?? []).map(transformTomlRecord);
@@ -790,15 +762,14 @@ export function transformExplorationData(source) {
         );
       }
       if (
-        action.effectKind === "reduce-cost-all-and-gain-banes" &&
+        action.effectKind === "reduce-cost-all-and-gain-nightmares" &&
         (typeof action.energyCostReduction !== "number" ||
           action.energyCostReduction <= 0 ||
-          typeof action.baneCardId !== "string" ||
-          typeof action.baneCount !== "number" ||
-          action.baneCount <= 0)
+          typeof action.nightmareCount !== "number" ||
+          action.nightmareCount <= 0)
       ) {
         throw new Error(
-          `exploration.toml: action ${action.id} requires cost reduction and banes`,
+          `exploration.toml: action ${action.id} requires cost reduction and Nightmares`,
         );
       }
     }
@@ -1080,12 +1051,10 @@ export function regenerateCardData({
 
   console.log(`Found ${allCards.length} total cards`);
 
-  // Filter out Special-rarity cards from the runtime pool, except for bane
-  // cards: bane content (Nightmare and any future entries) is required by
-  // dream-journey effects that add bane cards to the deck. Non-bane Special
-  // cards (e.g. the Void Indicator placeholder) stay excluded.
+  // Filter out Special-rarity cards from the runtime pool, except Nightmare,
+  // the sole Bane card required by journey effects.
   const cards = allCards.filter(
-    (c) => c.rarity !== "Special" || BANE_NAMES.has(c.name),
+    (c) => c.rarity !== "Special" || c.id === NIGHTMARE_CARD_ID,
   );
   console.log(`Filtered to ${cards.length} runtime cards`);
 
@@ -1663,7 +1632,7 @@ export function setupAssets({
       );
     }
     for (const action of encounter.action) {
-      for (const field of ["cardId", "baneCardId"]) {
+      for (const field of ["cardId"]) {
         if (
           typeof action[field] === "string" &&
           !knownCardIds.has(action[field].toLowerCase())

@@ -77,7 +77,7 @@ function state(): JourneyState {
         id: "dreamsign-uuid",
         name: "Fixture Sign",
         effectDescription: "A fixture effect.",
-        isBane: false,
+        isNegative: false,
       },
     ],
     atlas: {

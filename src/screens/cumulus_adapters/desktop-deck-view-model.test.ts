@@ -52,7 +52,7 @@ const dreamsign: Dreamsign = {
   id: "ds-1",
   name: "First Sign",
   effectDescription: "Draw an extra card.",
-  isBane: false,
+  isNegative: false,
 };
 
 const dreamAvatarContent: DreamAvatarContent = {

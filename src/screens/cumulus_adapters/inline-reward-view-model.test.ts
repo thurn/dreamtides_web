@@ -41,7 +41,7 @@ describe("buildInlineRewardCompletionLog", () => {
           id: "dreamsign-uuid",
           name: "Display name",
           effectDescription: "A test effect.",
-          isBane: false,
+          isNegative: false,
         },
       },
       remainingDreamsignPoolIds: [],

@@ -23,6 +23,8 @@
 // is registered those cases bounce (a recorded no-op, never a throw).
 
 import type { EventContext } from "../../eventlog/types";
+import { isNightmareCardId } from "../../data/nightmare";
+import { getDeckContentProvider } from "./deck";
 import { rerollCost } from "../../shop/shop-pricing";
 import type {
   BattleModifier,
@@ -393,8 +395,8 @@ function resolveMerchant(
 /**
  * `PUSH_BATTLE_MODIFIER { modifier }` — legacy `pushBattleRewardModifier`.
  * Appends a fully-formed reward-reduction modifier to `battleModifiers`.
- * Bounces on a malformed modifier. (The temporary-bane modifier has its own
- * event, `PUSH_TEMPORARY_BANE_GRANT`, because it also mints deck entries.)
+ * Bounces on a malformed modifier. (The temporary-Nightmare modifier has its
+ * own event because it also mints deck entries.)
  */
 export function pushBattleModifier(
   journey: JourneyState,
@@ -430,28 +432,22 @@ function asRewardReductionModifier(value: unknown): BattleModifier | null {
 }
 
 /**
- * `PUSH_TEMPORARY_BANE_GRANT { cardNumber, baneName, count, battlesRemaining,
- * source }` — legacy `pushTemporaryBaneGrant`. Mints `count` bane deck entries
- * of `cardNumber` (seq-deterministic entry ids) and pushes a
- * `temporary_bane_grant` battle modifier recording their ids so the entries
- * leave the deck when the modifier expires. The bane card's UUID is resolved to
- * `cardNumber` by the action builder at the boundary (Task 25); the pure
- * reducer works in cardNumbers only. Bounces on a malformed payload or a
- * non-positive count.
+ * `PUSH_TEMPORARY_NIGHTMARE_GRANT` mints `count` Nightmare entries and records
+ * their ids so they leave the deck after the configured number of battles.
+ * The UUID check keeps the event contract pinned to the sole Bane card.
  */
-export function pushTemporaryBaneGrant(
+export function pushTemporaryNightmareGrant(
   journey: JourneyState,
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
-  const cardNumber = integer(payload.cardNumber);
-  const baneName = asString(payload.baneName);
+  const cardId = asString(payload.cardId);
   const count = integer(payload.count);
   const battlesRemaining = integer(payload.battlesRemaining);
   const source = asString(payload.source);
   if (
-    cardNumber === null ||
-    baneName === null ||
+    cardId === null ||
+    !isNightmareCardId(cardId) ||
     count === null ||
     count <= 0 ||
     battlesRemaining === null ||
@@ -459,6 +455,8 @@ export function pushTemporaryBaneGrant(
   ) {
     return null;
   }
+  const cardNumber = getDeckContentProvider()?.resolveCardNumber(cardId) ?? null;
+  if (cardNumber === null) return null;
 
   let deck = journey.deck;
   const addedEntryIds: string[] = [];
@@ -473,8 +471,7 @@ export function pushTemporaryBaneGrant(
     deck = [...deck, entry];
   }
   const modifier: BattleModifier = {
-    kind: "temporary_bane_grant",
-    baneName,
+    kind: "temporary_nightmare_grant",
     count,
     battlesRemaining,
     addedEntryIds,

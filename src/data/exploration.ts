@@ -28,7 +28,7 @@ export type ExplorationEffectKind =
   | "change-subtype-all"
   | "take-cards"
   | "replace-selected"
-  | "gain-bane-and-card"
+  | "gain-nightmare-and-card"
   | "gain-random-cards"
   | "transfigure-fixed-selected"
   | "gain-offered-card"
@@ -37,7 +37,7 @@ export type ExplorationEffectKind =
   | "gain-random-dreamsign"
   | "purge-dreamsign-for-essence"
   | "make-fast-all"
-  | "reduce-cost-all-and-gain-banes";
+  | "reduce-cost-all-and-gain-nightmares";
 
 const TRANSFIGURATION_EXPLORATION_EFFECT_KINDS: ReadonlySet<ExplorationEffectKind> =
   new Set(["transfigure-selected", "transfigure-fixed-selected"]);
@@ -67,8 +67,7 @@ export interface ExplorationActionContent {
   energyCostReduction?: number;
   subtype?: string;
   subtypeOptions?: readonly string[];
-  baneCardId?: CardId;
-  baneCount?: number;
+  nightmareCount?: number;
   transfiguration?: TransfigurationType;
 }
 
@@ -108,9 +107,6 @@ function validateAction(raw: ExplorationActionContent): ExplorationActionContent
     label: requiredString(raw.label, "action label"),
     effectText: requiredString(raw.effectText, "action effect text"),
     ...(raw.cardId === undefined ? {} : { cardId: asCardId(raw.cardId) }),
-    ...(raw.baneCardId === undefined
-      ? {}
-      : { baneCardId: asCardId(raw.baneCardId) }),
   };
 }
 

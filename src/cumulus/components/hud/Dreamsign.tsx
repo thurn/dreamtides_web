@@ -1,9 +1,9 @@
 // Dreamsign — the unified dreamsign entity for Cumulus. A dreamsign is a
 // minor passive collectible; its art floats directly on the media with no
 // chrome — no tile border, background, or frame — so the collectible reads as
-// an object in the world rather than a card in a slot. Bane dreamsigns carry a
-// desaturation so the warning reads before the art does, and their reveal is
-// tagged with a Bane badge. Pressing / hovering the art reveals its full detail
+// an object in the world rather than a card in a slot. Negative Dreamsigns
+// carry a desaturation so the warning reads before the art does. Pressing or
+// hovering the art reveals its full detail
 // — name and rules text — through the shared coordinator as an InfoCard
 // `object` variant. Mouse and hover-capable pen reveal on hover; touch uses the
 // shared intent/hold state machine while preserving native scrolling.
@@ -20,9 +20,8 @@ import { Pressable } from "../../primitives/Pressable";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
 
-/** Desaturation applied to bane art so a bane reads as a warning before its
- * art does — the one signal that survives the chrome-free tile. */
-const BANE_FILTER = "grayscale(0.7)";
+/** Desaturation applied to negative Dreamsign art. */
+const NEGATIVE_FILTER = "grayscale(0.7)";
 
 /** The dreamsign object's own drop-shadow + violet glow (its material, not a
  * legibility overlay) — a faithfully-copied literal with no token equivalent.
@@ -56,8 +55,8 @@ export function dreamsignRevealSpec(
         ? {
             variant: "object" as const,
             image: artRef.dreamsign(String(dreamsign.imageName)),
-            imageFilter: dreamsign.isBane
-              ? ("dreamsign-portrait-bane" as const)
+            imageFilter: dreamsign.isNegative
+              ? ("dreamsign-portrait-negative" as const)
               : ("dreamsign-portrait" as const),
             title: dreamsign.name,
             body: effect ? richText.rules(effect) : undefined,
@@ -98,9 +97,8 @@ export interface DreamsignProps {
 
 /**
  * A dreamsign artwork tile that reveals its full detail through the shared
- * InfoCard `object` variant on hover (fine pointer) or press (touch). Boon tiles
- * carry a violet ring, banes a red ring plus a desaturation; a glyph fallback
- * shows when the dreamsign has no art.
+ * InfoCard `object` variant on hover (fine pointer) or press (touch). Negative
+ * Dreamsigns use a desaturated warning treatment.
  */
 export function Dreamsign({
   dreamsign,
@@ -123,11 +121,11 @@ export function Dreamsign({
   const pointerDown = binding.sourceProps.onPointerDown;
 
   // No chrome: the art floats on the media with no tile border, background,
-  // frame, or radius. A bane's desaturation and path-following drop-shadows are
+  // frame, or radius. A negative sign's desaturation and path-following shadows are
   // the only material the tile wears; both compose into the one filter.
   const tileFilter =
     [
-      dreamsign.isBane ? BANE_FILTER : null,
+      dreamsign.isNegative ? NEGATIVE_FILTER : null,
       variant === "hud" ? DS_SHADOW : null,
       variant === "revelation" ? DS_REVELATION_SHADOW : null,
     ]
@@ -159,10 +157,10 @@ export function Dreamsign({
       aria-disabled={unavailable || undefined}
       data-testid={testid}
       data-dreamsign-id={dreamsignId}
-      data-is-bane={String(dreamsign.isBane)}
+      data-is-negative={String(dreamsign.isNegative)}
       aria-label={
-        dreamsign.isBane
-          ? `Bane dreamsign: ${dreamsign.name}`
+        dreamsign.isNegative
+          ? `Negative Dreamsign: ${dreamsign.name}`
           : `Dreamsign: ${dreamsign.name}`
       }
       onPointerDown={(event) => { lastPointerType.current = event.pointerType; pointerDown?.(event); }}
@@ -190,10 +188,10 @@ export function Dreamsign({
           aria-hidden="true"
           style={{
             fontSize: sizePx * 0.42,
-            color: dreamsign.isBane ? "#fca5a5" : "#e9d5ff",
+            color: dreamsign.isNegative ? "#fca5a5" : "#e9d5ff",
           }}
         >
-          {dreamsign.isBane ? "☠" : "✦"}
+          {dreamsign.isNegative ? "☠" : "✦"}
         </span>
       )}
     </Pressable>

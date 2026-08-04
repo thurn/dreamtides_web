@@ -23,6 +23,7 @@ import type { EffectStep } from "../battle/effect-step";
 import type { EffectRun, ScriptRef } from "../battle/fold";
 import type { ChallengeCursor } from "../battle/fold";
 import type { EventContext } from "../../eventlog/types";
+import { normalizePersistedNightmareJourney } from "../nightmare-migration";
 import { cloneBattleMutableState } from "../../battle/state/create-initial-state";
 import { FRONT_RANK_SLOTS } from "../../battle/types";
 import { isTutorialBattleAiActionOverrides } from "../../types/tutorial-ai-action-overrides";
@@ -437,7 +438,7 @@ export function validateLoadedState(
   state: FoldState,
   payload: Record<string, unknown>,
 ): FoldState | null {
-  const snapshot = payload.snapshot;
+  const snapshot = normalizePersistedNightmareJourney(payload.snapshot);
   if (!isJourneyStateShape(snapshot)) return null;
   if (snapshot.seed !== state.journey.seed) return null;
 

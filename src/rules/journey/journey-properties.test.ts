@@ -319,7 +319,7 @@ function deckProvider(): DeckContentProvider {
         id: dreamsignId,
         name: `dreamsign-${match[1]}`,
         effectDescription: "effect",
-        isBane: false,
+        isNegative: false,
       };
     },
   };
@@ -482,15 +482,15 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<(rng: () => number) => GeneratedEvent>
     type: "ACCEPT_DUPLICATION_CHOICE",
     payload: { siteId: pick(rng, SITE_IDS), entryId: `entry-${Math.floor(rng() * 20)}` },
   }),
-  () => ({ type: "PURGE_ALL_BANE_CARDS", payload: {} }),
-  (rng) => ({ type: "PURGE_RANDOM_BANE_CARDS", payload: { count: Math.floor(rng() * 4) } }),
+  () => ({ type: "PURGE_ALL_NIGHTMARE_CARDS", payload: {} }),
+  (rng) => ({ type: "PURGE_RANDOM_NIGHTMARE_CARDS", payload: { count: Math.floor(rng() * 4) } }),
 
   // dreamsigns
   (rng) => ({ type: "ADD_DREAMSIGN", payload: { dreamsignId: `ds-${Math.floor(rng() * 1_000_000)}` } }),
   (rng) => ({ type: "REMOVE_DREAMSIGN", payload: { dreamsignId: `ds-${Math.floor(rng() * 1_000_000)}` } }),
   (rng) => ({
-    type: "SET_DREAMSIGN_IS_BANE",
-    payload: { dreamsignId: `ds-${Math.floor(rng() * 1_000_000)}`, isBane: rng() < 0.5 },
+    type: "SET_DREAMSIGN_IS_NEGATIVE",
+    payload: { dreamsignId: `ds-${Math.floor(rng() * 1_000_000)}`, isNegative: rng() < 0.5 },
   }),
 
   // draft — a pick aligned with the start draft's offer ([100,101,102]) so it
@@ -538,7 +538,7 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<(rng: () => number) => GeneratedEvent>
 
   // modifiers & atlas edits (non-debug)
   (rng) => ({ type: "PUSH_BATTLE_MODIFIER", payload: { modifier: { kind: "x", value: smallInt(rng, 5) } } }),
-  () => ({ type: "PUSH_TEMPORARY_BANE_GRANT", payload: { count: 1 } }),
+  () => ({ type: "PUSH_TEMPORARY_NIGHTMARE_GRANT", payload: { count: 1 } }),
   (rng) => ({
     type: "BAN_SITE_TYPE",
     payload: { siteType: pick(rng, SITE_TYPES), dreamscapesRemaining: Math.floor(rng() * 4) },

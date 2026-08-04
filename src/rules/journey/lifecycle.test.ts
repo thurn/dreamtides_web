@@ -676,6 +676,31 @@ describe("LOAD_STATE", () => {
     expect(loaded.journey.runId).toBe("journey:44");
   });
 
+  it("normalizes historical Bane fields specifically to Nightmare", () => {
+    const start = genesis();
+    const snapshot = {
+      ...start.journey,
+      deck: [
+        { entryId: "nightmare", cardNumber: 10002, isBane: false },
+        { entryId: "retired", cardNumber: 44, isBane: true },
+      ],
+      dreamsigns: [
+        { id: "negative", name: "Sign", effectDescription: "", isBane: true },
+      ],
+    };
+
+    const loaded = apply(start, "LOAD_STATE", { snapshot });
+
+    expect(loaded.journey.deck).toEqual([
+      expect.objectContaining({ entryId: "nightmare", isBane: true }),
+      expect.objectContaining({ entryId: "retired", cardNumber: 10002, isBane: true }),
+    ]);
+    expect(loaded.journey.dreamsigns[0]).toMatchObject({
+      id: "negative",
+      isNegative: true,
+    });
+  });
+
   it("bounces a non-object snapshot", () => {
     const start = genesis();
     const out = reduceGameEvent(

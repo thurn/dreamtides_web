@@ -10,7 +10,7 @@ import type { DeckEntry } from "../../types/journey";
 /**
  * Build the {@link ReplayDeps} for the given deck and fit model, or `undefined`
  * when there is no fit model (pool mode, or replay content that failed to load
- * a model). The full deck is passed straight through: Dreamtides starter/bane
+ * a model). The full deck is passed straight through: Dreamtides starter/Nightmare
  * cards are absent from the records corpus, so they carry ~0 fit weight, and
  * including them keeps the deck representation honest.
  */

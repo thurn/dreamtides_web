@@ -197,12 +197,12 @@ function makeBattleTestDreamsigns(): Dreamsign[] {
     {
       name: "Bolt Script",
       effectDescription: "The first event each turn costs 1 less.",
-      isBane: false,
+      isNegative: false,
     },
     {
       name: "Wilted Crown",
       effectDescription: "A lingering drawback for regression testing.",
-      isBane: true,
+      isNegative: true,
     },
   ];
 }

@@ -125,7 +125,7 @@ When an outsider you control scores ⍟, foresee 1 and draw a card.
    - ***Expand the Luminous Frame*** — All characters in your deck become the subtype of your choice.
 
 2. A gunman turns beneath black cables sweeping through the haze.
-   - ***Welcome the Veiled Operative*** — Gain 1 "Nightmare" bane cards. Gain Abyssal Deputy.
+   - ***Welcome the Veiled Operative*** — Gain 1 Nightmare cards. Gain Abyssal Deputy.
    - ***Sever the Trailing Cables*** — Gain 5 additional energy at the start of your next battle
 
 3. A radiant triangle isolates an armed figure within dense smoke.
@@ -138,7 +138,7 @@ When an outsider you control scores ⍟, foresee 1 and draw a card.
 
 5. A solitary figure stands beneath thick cables arcing through smoke.
    - ***Cut the Nearest Cable*** — Add a purge site to this dreamscape.
-   - ***Gather the Loose Strands*** — Gain 2 "Nightmare" bane cards. Gain Hair Lock.
+   - ***Gather the Loose Strands*** — Gain 2 Nightmare cards. Gain Hair Lock.
 
 ---
 
@@ -163,7 +163,7 @@ When an outsider you control scores ⍟, foresee 1 and draw a card.
    - ***Trade a Treasured Token*** — Purge a chosen dreamsign and gain 200 essence
 
 4. An enormous owl perches above you, framed by a bright crescent.
-   - ***Accept Its Feathered Burden*** — All cards in your deck are reduced in cost by 1●. Gain 3 "Nightmare" bane cards.
+   - ***Accept Its Feathered Burden*** — All cards in your deck are reduced in cost by 1●. Gain 3 Nightmare cards.
    - ***Call Into the Canopy*** — Gain one copy of each of 2 random Spirit Animal cards
 
 5. A giant owl fills your view, its round eyes bright beneath tangled boughs.
@@ -183,7 +183,7 @@ Once per turn, when you play a spirit animal, materialize a 1✦ spirit animal f
    - ***Release a Fellow Swimmer*** — Purge a chosen Spirit Animal card and gain a random Spirit Animal replacement
 
 2. An immense whale glides above you through a star-filled sky.
-   - ***Enter Its Wake*** — All cards in your deck are reduced in cost by 1●. Gain 5 "Nightmare" bane cards.
+   - ***Enter Its Wake*** — All cards in your deck are reduced in cost by 1●. Gain 5 Nightmare cards.
    - ***Rise Beside It*** — Apply Empowered to a chosen card
 
 3. Your tiny craft hangs beneath an immense whale crossing the stars.
@@ -209,7 +209,7 @@ Once per turn, when you play a spirit animal, materialize a 1✦ spirit animal f
 ![Source artwork for Emerald Guardian](</Users/dthurn/Documents/shutterstock/images/stock-photo-young-woman-facing-the-giant-elephant-with-glowing-green-tusks-digital-art-style-illustration-1169640025.jpg>)
 
 1. An enormous elephant emerges from starlit mist, its curved tusks shining.
-   - ***Welcome the Great Beast*** — Gain 1 "Nightmare" bane cards. Gain Emerald Guardian.
+   - ***Welcome the Great Beast*** — Gain 1 Nightmare cards. Gain Emerald Guardian.
    - ***Call the Distant Herd*** — Gain one copy of each of 2 random Spirit Animal cards
 
 2. A lone woman stands beneath an elephant towering through the luminous haze.
@@ -253,5 +253,5 @@ When you play a warrior, you may materialize a ≤2● cost character from your 
    - ***Gather the Drifting Motes*** — Gain a random amount of essence between 200 and 300
 
 5. A moss-covered limb stretches beneath you toward the colossal horseman.
-   - ***Search Beneath the Moss*** — Gain 2 "Nightmare" bane cards. Gain Brown Acorn.
+   - ***Search Beneath the Moss*** — Gain 2 Nightmare cards. Gain Brown Acorn.
    - ***Share the Horseman's Bearing*** — All characters in your deck become the subtype of your choice.

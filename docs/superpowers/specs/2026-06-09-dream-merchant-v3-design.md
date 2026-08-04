@@ -232,8 +232,8 @@ tribes.
 **`purge`** (w=8) — *Remove a weak card from your deck.* Candidate set:
 starter-rarity entries, plus non-starter entries whose leave-one-out misfit
 ranks in the bottom 20% of the deck **and** whose card has corpus signal
-(df >= minDf) — cards too new for the corpus are never called "weak". Banes are
-excluded (bane removal belongs to Cleanse sites, which `add_site` can place).
+(df >= minDf) — cards too new for the corpus are never called "weak". Nightmare
+is excluded (Nightmare removal belongs to Cleanse sites, which `add_site` can place).
 Signal for ranking: misfit (worst first), starters
 get +0.25. Band-sample 1 from the worst band. Face-up. Eligible when deck size
 >= 8 and >= 1 candidate exists.

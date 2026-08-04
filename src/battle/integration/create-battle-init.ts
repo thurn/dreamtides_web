@@ -200,7 +200,7 @@ function applyBattleRewardModifiers(
       case "reward_reduction_percent":
         reward = Math.floor((reward * (100 - modifier.percent)) / 100);
         break;
-      case "temporary_bane_grant":
+      case "temporary_nightmare_grant":
         break;
     }
 
@@ -622,7 +622,7 @@ export function buildEnemyDescriptor(
       effectDescription: template.effectDescription,
       imageName: template.imageName,
       imageAlt: template.imageAlt,
-      isBane: false,
+      isNegative: false,
     }),
   );
 
@@ -891,7 +891,7 @@ function freezeBattleDreamsignSummary(
     effectDescription: dreamsign.effectDescription,
     imageName: dreamsign.imageName,
     imageAlt: dreamsign.imageAlt,
-    isBane: dreamsign.isBane,
+    isNegative: dreamsign.isNegative,
   });
 }
 

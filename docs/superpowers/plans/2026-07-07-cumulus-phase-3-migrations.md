@@ -591,18 +591,18 @@ based); align the producer rather than fork the renderer.
 
 **Contract**
 - Extend `DreamsignProps` with `variant?: "flat" | "hud"`; compose the tile
-  `filter` as the join of `dreamsign.isBane ? BANE_FILTER : null` and
+  `filter` as the join of `dreamsign.isNegative ? NEGATIVE_FILTER : null` and
   `variant === "hud" ? DS_SHADOW : null` (falling back to `"none"`).
   `DS_SHADOW = "drop-shadow(0 3px 6px rgba(0,0,0,0.55)) drop-shadow(0 0 13px rgba(147,51,234,0.32))"`
   moves in from JourneyStatusBar (keep its "faithfully-copied literal, no token"
   comment).
 - **Retype the producer, not the renderer:** change `toQsbDreamsigns` to return
   the domain dreamsign shape `Dreamsign` needs (pass
-  `imageName`/`effectDescription`/`isBane` through; drop the
+  `imageName`/`effectDescription`/`isNegative` through; drop the
   `artRef.dreamsign(...)` pre-resolution and the `ability` rename). Retype
   `QsbDreamsign` in JourneyStatusBar to the domain `Dreamsign`
   (`import type { Dreamsign } from "../../../types/journey"`) or a structural subset
-  carrying `{ id, name, imageName, effectDescription?, isBane, imageAlt? }`. Update
+  carrying `{ id, name, imageName, effectDescription?, isNegative, imageAlt? }`. Update
   `buildDreamscapeHudView`'s `dreamsigns` field type accordingly.
 - Delete `QsbSignObject`. In the strip render
   `<Dreamsign variant="hud" dreamsign={s} sizePx={SIGN} stageRef={stageRef} />`;

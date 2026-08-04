@@ -473,7 +473,7 @@ export function endBattle(
 /**
  * Victory bookkeeping: bump the completion level, route to the post-battle
  * screen, clear the current dreamscape, decrement each battle modifier and
- * drop those that reach zero — removing any temporary-bane deck entries a
+ * drop those that reach zero — removing any temporary-Nightmare deck entries a
  * dropped modifier introduced. The battle slice is torn down.
  */
 function applyVictory(
@@ -511,14 +511,14 @@ function applyVictory(
   });
   if (atlas === null) return null;
 
-  const droppedBaneEntryIds = new Set<string>();
+  const droppedNightmareEntryIds = new Set<string>();
   const battleModifiers: BattleModifier[] = [];
   for (const modifier of journey.battleModifiers) {
     const battlesRemaining = modifier.battlesRemaining - 1;
     if (battlesRemaining <= 0) {
-      if (modifier.kind === "temporary_bane_grant") {
+      if (modifier.kind === "temporary_nightmare_grant") {
         for (const entryId of modifier.addedEntryIds) {
-          droppedBaneEntryIds.add(entryId);
+          droppedNightmareEntryIds.add(entryId);
         }
       }
       continue;
@@ -526,9 +526,9 @@ function applyVictory(
     battleModifiers.push({ ...modifier, battlesRemaining });
   }
   const deck =
-    droppedBaneEntryIds.size === 0
+    droppedNightmareEntryIds.size === 0
       ? journey.deck
-      : journey.deck.filter((entry) => !droppedBaneEntryIds.has(entry.entryId));
+      : journey.deck.filter((entry) => !droppedNightmareEntryIds.has(entry.entryId));
 
   return {
     ...state,

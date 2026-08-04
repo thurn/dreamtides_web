@@ -32,7 +32,7 @@ export async function loadDreamsignTemplates(): Promise<DreamsignTemplate[]> {
 /** Instantiates a collectible Dreamsign from a template. */
 export function createDreamsign(
   template: DreamsignTemplate,
-  isBane = false,
+  isNegative = false,
 ): Dreamsign {
   return {
     id: template.id,
@@ -40,7 +40,7 @@ export function createDreamsign(
     effectDescription: template.effectDescription,
     imageName: template.imageName,
     imageAlt: template.imageAlt,
-    isBane,
+    isNegative,
   };
 }
 

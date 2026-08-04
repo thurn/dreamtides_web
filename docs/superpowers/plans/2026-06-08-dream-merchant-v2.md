@@ -444,7 +444,7 @@ git push
 Tests should catch:
 - `grant_support_card` returns 3-5 chooser candidates when matching catalog cards exist
 - `grant_support_card` excludes starter/special cards and already-owned UUIDs when configured to avoid duplicates
-- `grant_dreamsign` returns 2-4 non-held non-bane candidates
+- `grant_dreamsign` returns 2-4 non-held non-negative candidates
 - `transfigure_card` renders a direct game object with preview metadata
 - `purge_weak_card` returns a deck-entry game object with a remove badge
 - every reward has `answersNeedIds`, `valueEssence > 0`, and either a direct apply payload or a non-empty choice request

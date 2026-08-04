@@ -815,8 +815,8 @@ export function completeSite(
 /**
  * `PURGE_DECK_CARDS { siteId, entryIds }` — remove the selected deck entries,
  * derive the visit price from authoritative state, charge essence, and complete
- * the Purge site atomically. Bane cards are free; paid cards use the canonical
- * visit price ladder and folded discounts.
+ * the Purge site atomically. Nightmare, the sole Bane card, is free; paid cards
+ * use the canonical visit price ladder and folded discounts.
  *
  * Bounces on malformed or duplicate ids, an ineligible/non-Purge site, an
  * oversized paid selection, or insufficient essence.

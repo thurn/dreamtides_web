@@ -41,7 +41,7 @@ The design rests on four product decisions:
   distinct need, each carrying its own essence price. The tension is *which
   need do I serve, and is the price worth it.*
 - **One-offer (non-essence price).** One strong reward paired with a meaningful
-  non-essence sacrifice — a bane, a purged good card, a dreamwell downgrade, a
+  non-essence sacrifice — Nightmare, a purged good card, a dreamwell downgrade, a
   surrendered dreamsign. The "real price."
 
 ### Non-goals (deferred past MVP)
@@ -74,7 +74,7 @@ dream-art matching, and the circular-image UI are not part of the Reckoner.
   `DeckEntry` and applied to the battle card at `create-battle-init.ts:428`.
   Empowered halves cost (`Math.round(cost/2)`); Kindled doubles spark (`0→1`);
   Inspired adds "Draw a card." to an event; Enduring adds "Reclaim."; others in §6.
-- **Bane** — a negative card or dreamsign carried into battle (`isBane`).
+- **Nightmare** — the sole Bane card carried into battle (`isBane`).
 - **Dreamsign** — an ongoing triggered/static effect object held during a run.
 - **CEC (converted essence)** — the value model's common unit; `1 CEC ≈ 1
   essence` (`ESSENCE_CONVERTED_ESSENCE_VALUE = 1`). Used to price and match
@@ -183,7 +183,7 @@ interface DeckRead { profile: DeckProfile; needs: Need[]; seed: string; }
 
 // ---- Effects (catalog output) ----
 interface EffectGameObject {
-  kind: "deckCard" | "newCard" | "bane" | "dreamsign" | "essence" | "dreamwell";
+  kind: "deckCard" | "newCard" | "nightmare" | "dreamsign" | "essence" | "dreamwell";
   cardNumber?: number; entryId?: string; uuid?: string; // identifies the real object to render
   amount?: number;                                       // essence
   badge?: { label: string; detail?: string };           // e.g. { label: "Empowered", detail: "4→2 ●" }
@@ -314,7 +314,7 @@ observations and the safest to voice explicitly.
 
 ### 5.3 `weak_card` — "remove a particularly bad card"
 
-For each deck entry (excluding banes and the Dream Avatar's signature cards),
+For each deck entry (excluding Nightmare and the Dream Avatar's signature cards),
 compute a corpus-fit contribution and flag the worst.
 
 ```
@@ -462,7 +462,7 @@ interface EffectMutations {
   removeDeckEntry(entryId: string, source: string): void;
   addCardById(cardId: string, source: string): string;           // returns new entryId
   addCardByIdWithTransfiguration(cardId, type, source): string;
-  addBaneCardById(cardId: string, source: string): string;
+  addCardById(cardId: string, source: string): string;
   duplicateDeckEntry(entryId: string, source: string): string;
   addDreamsign(sign: Dreamsign, sourceSiteType, purgeIndex?): void;
   // dreamwell, keyword, and modifier mutations as needed
@@ -494,8 +494,8 @@ a small menu the Director matches to a target value (§7.3).
 | Builder id | Kind | Effect | `valueEssence` (magnitude) |
 |---|---|---|---|
 | `pay_essence` | essence | `changeEssence(-price, "merchant:price")` | `price` (computed, §7.2) |
-| `gain_bane` | non-essence | `addBaneCardById(uuid, src)` | `BANE_VALUE_CONSTANTS.gainedByName` (Despair 110, Oblivion 145, …) |
-| `gain_temp_bane` | non-essence | bane for the next *k* battles (modifier) | base × `temporaryMultiplier` 0.45 |
+| `gain_nightmare` | non-essence | `addCardById(NIGHTMARE_CARD_ID, src)` | `NIGHTMARE_VALUE_CONSTANTS.permanent` (110) |
+| `gain_temp_nightmare` | non-essence | Nightmare for the next *k* battles (modifier) | base × `temporaryMultiplier` 0.45 |
 | `purge_good_card` | non-essence | `removeDeckEntry` a *strong* deck card | `usefulNonStarterSacrifice` 80 |
 | `downgrade_dreamwell` | non-essence | seed a negative dreamwell card | dreamwell loss value |
 | `surrender_dreamsign` | non-essence | remove a held dreamsign | `DREAMSIGN_VALUE_CONSTANTS.loss` 120 |
@@ -651,7 +651,7 @@ Miraculous Arrival enters play costing **2 ●**. Real mechanical payoff.
 `{ taken:"A", paidEssence:85, subject:"Miraculous Arrival" }`; nudge `mood` per
 §9; append the used template ids to `recentTemplateIds`.
 
-### 8.2 One-offer: double a finisher's spark for a permanent bane
+### 8.2 One-offer: double a finisher's spark for a permanent Nightmare
 
 **Situation.** An aggressive deck whose strongest early threat is a `2●` Warrior
 with `3✦`. The read finds no under-supported payoff but a high-leverage
@@ -673,13 +673,13 @@ transfigureCard(entryId,"Kindled","Spark: 3 → 6",{spark:{from:3,to:6}})`.
 
 **Price (non-essence).** Mode is one-offer (§7.1). `target = 90 ×
 brokerMargin(mood 0 ⇒ 1.2) = 108`. The cost search (§7.3) scans the non-essence
-menu: `gain_bane "Despair"` has magnitude **110** — closest to 108 — and is not
+menu: `gain_nightmare` has magnitude **110** — closest to 108 — and is not
 in `recentTemplateIds`. Selected.
 
 ```
-cost = ConcreteEffect { builderId:"gain_bane", summary:"Carry Despair",
-   gameObjects:[{ kind:"bane", uuid:<Despair>, badge:{label:"Bane", detail:"Despair"} }],
-   valueEssence:110, apply: m => m.addBaneCardById(<Despair uuid>, "merchant:price"),
+cost = ConcreteEffect { builderId:"gain_nightmare", summary:"Carry Nightmare",
+   gameObjects:[{ kind:"nightmare", uuid:NIGHTMARE_CARD_ID, badge:{label:"Bane", detail:"Nightmare"} }],
+   valueEssence:110, apply: m => m.addCardById(NIGHTMARE_CARD_ID, "merchant:price"),
    answers:[] }
 ```
 
@@ -687,19 +687,19 @@ cost = ConcreteEffect { builderId:"gain_bane", summary:"Carry Despair",
 
 > *"This one — your **\<Warrior\>** — wants to be terrible. I can make it so:
 > **three** becomes **six**, and the lane will fear it. But power of that kind
-> is never given freely. You will carry **Despair** out of here, and it will
+> is never given freely. You will carry **Nightmare** out of here, and it will
 > ride in your deck like a stone in a shoe. Yes? Or no."*
 
 **Render.** One-offer layout: the Warrior `CardView` with `Kindled · ✦ 3→6`;
-beneath it the actual **Despair** bane card with a `✚ cost` marker; `Accept` /
+beneath it the actual **Nightmare** card, identified as the sole Bane, with a `✚ cost` marker; `Accept` /
 `Walk away`.
 
 **Apply (Accept).** `m.transfigureCard(…Kindled…)`, then
-`m.addBaneCardById(<Despair>, …)`; log; complete. The Warrior now enters battle
-with `6✦`; Despair is shuffled into the deck and bites in future battles.
+`m.addCardById(NIGHTMARE_CARD_ID, …)`; log; complete. The Warrior now enters battle
+with `6✦`; Nightmare is shuffled into the deck and bites in future battles.
 
-**Remember.** Deal logged; `mood` nudges; `gain_bane`/used templates enter the
-anti-repetition window so the next encounter won't reach for Despair again.
+**Remember.** Deal logged; `mood` nudges; `gain_nightmare`/used templates enter the
+anti-repetition window so the next encounter won't reach for Nightmare again.
 
 ### 8.3 Two-offer: the marquee read — "you need an abandon outlet"
 
@@ -745,7 +745,7 @@ on resolve(encounter, outcome):
 
 moodDelta:
   took a high-price two-offer     → +1   (good custom)
-  accepted a bane one-offer       → +1   (he got his pound of flesh)
+  accepted a Nightmare one-offer  → +1   (he got his pound of flesh)
   walked away                     → -1   (snubbed)
   walked away twice in a row      → -1 extra
 ```
@@ -786,7 +786,7 @@ function renderEncounterDialogue(read: DeckRead, encounter: Encounter,
   selector drops recently-used ids before sampling, falling back to the full set
   if all are recent).
 - **Slots** bind from structured data only: `{cardName}`, `{themeName}`,
-  `{fromCost}`, `{toCost}`, `{fromSpark}`, `{toSpark}`, `{price}`, `{baneName}`,
+  `{fromCost}`, `{toCost}`, `{fromSpark}`, `{toSpark}`, `{price}`,
   `{mood}`, `{lastDealSubject}`. No free text is ever invented.
 - **Register** is chosen by `mood` bucket so the same content reads warm or cold.
 
@@ -834,13 +834,13 @@ offers touch.
 │ [portrait]  "...Miraculous Arrival │   │ [portrait]  "...I can make it      │
 │  Reckoner    bleeds four from you  │   │  Reckoner    terrible: three to six │
 │              each casting..."      │   │              — but you'll carry     │
-│                                    │   │              Despair for it."       │
+│                                    │   │              Nightmare for it."    │
 │  ┌─ REWARD A ──┐  ┌─ REWARD B ──┐  │   │        ┌──── REWARD ────┐           │
 │  │  [card art] │  │  [card art] │  │   │        │   [card art]   │           │
 │  │ Empowered    │  │ gain ↧      │  │   │        │ Kindled ✦ 3→6  │           │
 │  │ 4→2 ●       │  │ outlet card │  │   │        └────────────────┘           │
 │  └─────────────┘  └─────────────┘  │   │        ┌──── COST ─────┐            │
-│   85 ◇ [ Take ]   98 ◇ [ Take ]    │   │        │ [Despair bane] │  ✚        │
+│   85 ◇ [ Take ]   98 ◇ [ Take ]    │   │        │ [Nightmare]    │  ✚        │
 │            [ Walk away ]           │   │        └────────────────┘           │
 └───────────────────────────────────┘   │     [ Accept ]   [ Walk away ]      │
                                          └───────────────────────────────────┘
@@ -853,7 +853,7 @@ Each `EffectGameObject` maps to a real component:
 - `deckCard` / `newCard` → existing `CardView` for the `cardNumber`, with a
   corner **badge** drawn from `badge.label/detail` (`Empowered · 4→2 ●`, `✕
   remove`, `Kindled · ✦ 3→6`).
-- `bane` → the bane card rendered as a card with a hazard frame.
+- `nightmare` → the Nightmare card, the sole Bane, rendered with a hazard frame.
 - `dreamsign` → the dreamsign object (reuse the dreamsign offering renderer).
 - `essence` → an essence token showing `amount`.
 - `dreamwell` → the dreamwell card with a downgrade marker.
@@ -911,7 +911,7 @@ The Reckoner occupies the encounter slot in the atlas. Concretely:
 - `MerchantState` registered in `createDefaultState()` and
   `normalizeJourneyState()` with a `room-service.test.ts` round-trip case (§4).
 - The Reckoner mutation path writes via `multiplayer-journey-context.tsx`: the
-  deck/essence/bane mutations through the existing field/transaction writers,
+  deck/essence/Nightmare mutations through the existing field/transaction writers,
   and the `MerchantState` update as a field write. Because the *offer* is
   re-derived (not stored), only the resolution and memory are persisted.
 - Every offer shown and every resolution emits a `logEvent` (`merchant_offer_shown`,

@@ -93,7 +93,7 @@ Every multiplayer mutation in `src/state/multiplayer-journey-context.tsx` maps t
 | setCurrentDreamscape | `TRAVEL_TO_DREAMSCAPE` | `{ nodeId }`; visitedSites + dreamscapeModifiers decrement in-case |
 | markSiteVisited | `MARK_SITE_VISITED` | `{ siteId }` |
 | dismissStartingDeckPopup | `DISMISS_STARTING_DECK_POPUP` | `{}` |
-| addCard / addCardById / addCardByIdWithTransfiguration / addBaneCardById | `ADD_CARD` | `{ cardId, transfiguration?, isBane?, source? }` |
+| addCard / addCardById / addCardByIdWithTransfiguration | `ADD_CARD` | `{ cardId, transfiguration?, source? }`; the reducer derives Nightmare's Bane flag from its UUID |
 | removeDeckEntry | `REMOVE_DECK_ENTRY` | `{ entryId }` |
 | purgeDeckCards | `PURGE_DECK_CARDS` | `{ entryIds }` |
 | duplicateDeckEntry | `DUPLICATE_DECK_ENTRY` | `{ entryId }` |
@@ -103,12 +103,12 @@ Every multiplayer mutation in `src/state/multiplayer-journey-context.tsx` maps t
 | transfigureCard | `TRANSFIGURE_CARD` | `{ entryId, transfiguration }` |
 | acceptTransfigurationChoice | `ACCEPT_TRANSFIGURATION_CHOICE` | `{ siteId, entryId }`; marks siteRuntime accepted |
 | acceptDuplicationChoice | `ACCEPT_DUPLICATION_CHOICE` | `{ siteId, entryId }` |
-| purgeAllBaneCards | `PURGE_ALL_BANE_CARDS` | `{}` |
-| purgeRandomBaneCards | `PURGE_RANDOM_BANE_CARDS` | `{ count }`; selection via `ctx.rng` |
+| purgeAllNightmareCards | `PURGE_ALL_NIGHTMARE_CARDS` | `{}` |
+| purgeRandomNightmareCards | `PURGE_RANDOM_NIGHTMARE_CARDS` | `{ count }`; selection via `ctx.rng` |
 | addDreamsign | `ADD_DREAMSIGN` | `{ dreamsignId }` |
 | removeDreamsign | `REMOVE_DREAMSIGN` | `{ dreamsignId }` |
 | setRemainingDreamsignPool *(debug)* | `SET_DREAMSIGN_POOL` | `{ ids }` |
-| setDreamsignIsBane | `SET_DREAMSIGN_IS_BANE` | `{ dreamsignId, isBane }` |
+| setDreamsignIsNegative | `SET_DREAMSIGN_IS_NEGATIVE` | `{ dreamsignId, isNegative }` |
 | setDraftState *(debug)* | `SET_DRAFT_STATE` | `{ draftState }` |
 | pickDraftCard | `PICK_DRAFT_CARD` | `{ packIndex, cardId }` |
 | ensureRewardSiteRuntime / ensureDreamsignOfferRuntime / ensureEssenceSiteRuntime / ensureCardChoiceRuntime / ensureShopRuntime | `OPEN_SITE` | `{ siteId }`; reducer generates the site runtime for the site's type from `ctx.rng` and stores it; if runtime already exists the event is a no-change **applied** (idempotent — both players opening simultaneously must not toast) |
@@ -127,7 +127,7 @@ Every multiplayer mutation in `src/state/multiplayer-journey-context.tsx` maps t
 | grantFreeShopRerolls | `GRANT_FREE_REROLLS` | `{ count }` |
 | applyShopEssenceDiscount | `APPLY_SHOP_DISCOUNT` | `{ percent }` |
 | pushBattleRewardModifier | `PUSH_BATTLE_MODIFIER` | `{ modifier }` |
-| pushTemporaryBaneGrant | `PUSH_TEMPORARY_BANE_GRANT` | payload mirrors legacy args |
+| pushTemporaryNightmareGrant | `PUSH_TEMPORARY_NIGHTMARE_GRANT` | payload mirrors legacy args |
 | removeSiteTypeFromNextDreamscapes | `BAN_SITE_TYPE` | `{ siteType, dreamscapesRemaining }` |
 | boostSiteAppearance | `BOOST_SITE_APPEARANCE` | `{ siteType, percent, dreamscapesRemaining }` |
 | replaceSiteType | `REPLACE_SITE_TYPE` | `{ nodeId, fromSiteType, toSiteType }` |
@@ -280,9 +280,9 @@ Implement the reducer cases for: `START_JOURNEY`, `RESET_JOURNEY`, `LOAD_STATE`,
 
 **Files:** Create: `src/rules/journey/deck.ts`, `src/rules/journey/deck.test.ts`; Modify: `src/rules/reducer.ts`
 
-Cases: `ADD_CARD`, `REMOVE_DECK_ENTRY`, `PURGE_DECK_CARDS`, `DUPLICATE_DECK_ENTRY`, `SET_DECK_ENTRY_STAT_OVERRIDE`, `SET_DECK_ENTRY_KEYWORDS`, `SET_DECK_ENTRY_TYPE`, `TRANSFIGURE_CARD`, `ACCEPT_TRANSFIGURATION_CHOICE`, `ACCEPT_DUPLICATION_CHOICE`, `PURGE_ALL_BANE_CARDS`, `PURGE_RANDOM_BANE_CARDS`, `ADD_DREAMSIGN`, `REMOVE_DREAMSIGN`, `SET_DREAMSIGN_POOL`, `SET_DREAMSIGN_IS_BANE`. Same relocation method as Task 11.
+Cases: `ADD_CARD`, `REMOVE_DECK_ENTRY`, `PURGE_DECK_CARDS`, `DUPLICATE_DECK_ENTRY`, `SET_DECK_ENTRY_STAT_OVERRIDE`, `SET_DECK_ENTRY_KEYWORDS`, `SET_DECK_ENTRY_TYPE`, `TRANSFIGURE_CARD`, `ACCEPT_TRANSFIGURATION_CHOICE`, `ACCEPT_DUPLICATION_CHOICE`, `PURGE_ALL_NIGHTMARE_CARDS`, `PURGE_RANDOM_NIGHTMARE_CARDS`, `ADD_DREAMSIGN`, `REMOVE_DREAMSIGN`, `SET_DREAMSIGN_POOL`, `SET_DREAMSIGN_IS_NEGATIVE`. Same relocation method as Task 11.
 
-- [ ] **Step 1: Failing tests.** Bug classes: **entry-id collision** (DUPLICATE produces a deck entry with a fresh unique id — derive ids from `ctx.rng`/seq, never `Math.random`); **stale-target bounce** (REMOVE/TRANSFIGURE targeting an entryId not in the deck bounces rather than silently no-oping inside an "applied" outcome); **random purge determinism** (`PURGE_RANDOM_BANE_CARDS` with same seed+seq removes the same entries); **dreamsign limit** (ADD_DREAMSIGN at `maxDreamsigns` bounces).
+- [ ] **Step 1: Failing tests.** Bug classes: **entry-id collision** (DUPLICATE produces a deck entry with a fresh unique id — derive ids from `ctx.rng`/seq, never `Math.random`); **stale-target bounce** (REMOVE/TRANSFIGURE targeting an entryId not in the deck bounces rather than silently no-oping inside an "applied" outcome); **random purge determinism** (`PURGE_RANDOM_NIGHTMARE_CARDS` with same seed+seq removes the same entries); **dreamsign limit** (ADD_DREAMSIGN at `maxDreamsigns` bounces).
 - [ ] **Step 2–4: Red → implement → green. Step 5: Commit and push.**
 
 ### Task 13: Draft events
@@ -307,7 +307,7 @@ Cases: `OPEN_SITE`, `COMPLETE_AUGURY`, `ACCEPT_REWARD`, `ACCEPT_DREAMSIGN_OFFER`
 
 **Files:** Create: `src/rules/journey/shop.ts`, `src/rules/journey/shop.test.ts`; Modify: `src/rules/reducer.ts`
 
-Cases: `BUY_SHOP_SLOT`, `REROLL_SHOP`, `GRANT_FREE_REROLLS`, `APPLY_SHOP_DISCOUNT`, `ACCEPT_MERCHANT_OFFER`, `DECLINE_MERCHANT`, `PUSH_BATTLE_MODIFIER`, `PUSH_TEMPORARY_BANE_GRANT`, `BAN_SITE_TYPE`, `BOOST_SITE_APPEARANCE`, `REPLACE_SITE_TYPE`, `ADD_SITE_TO_DREAMSCAPE`, `UPDATE_ATLAS`, `SET_CARD_SOURCE_DEBUG`. Also in this task: grep the callers of the legacy `setFailureSummary`; if any caller sets a failure summary outside the battle-defeat path, add `JOURNEY_FAILED { summary }` (to `events.ts`, this file, and `actions.ts` in Task 25); otherwise `END_BATTLE { result: "defeat" }` fully covers it and no extra event exists.
+Cases: `BUY_SHOP_SLOT`, `REROLL_SHOP`, `GRANT_FREE_REROLLS`, `APPLY_SHOP_DISCOUNT`, `ACCEPT_MERCHANT_OFFER`, `DECLINE_MERCHANT`, `PUSH_BATTLE_MODIFIER`, `PUSH_TEMPORARY_NIGHTMARE_GRANT`, `BAN_SITE_TYPE`, `BOOST_SITE_APPEARANCE`, `REPLACE_SITE_TYPE`, `ADD_SITE_TO_DREAMSCAPE`, `UPDATE_ATLAS`, `SET_CARD_SOURCE_DEBUG`. Also in this task: grep the callers of the legacy `setFailureSummary`; if any caller sets a failure summary outside the battle-defeat path, add `JOURNEY_FAILED { summary }` (to `events.ts`, this file, and `actions.ts` in Task 25); otherwise `END_BATTLE { result: "defeat" }` fully covers it and no extra event exists.
 
 - [ ] **Step 1: Failing tests.** Bug classes: **insufficient-essence bounce** (BUY with price > essence bounces, essence unchanged); **double-buy bounce** (second BUY on the same slot bounces — the coop race); **discount application** (BUY with `shopModifiers.essenceDiscountPercent` set charges the discounted price — pins the documented ShopModifiers contract); **free-reroll consumption order** (REROLL consumes freeRerolls before charging essence).
 - [ ] **Step 2–4: Red → implement → green. Step 5: Commit and push.**

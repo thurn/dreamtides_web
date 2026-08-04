@@ -163,7 +163,7 @@ unchanged.
 
 Four-Suit Reprise asks the player to select one eligible card from their deck,
 then lets a suit determine its fate. The selected entry is locked by entry id
-and card UUID. It must be a non-Bane card with an eligible Transfiguration so
+and card UUID. It must be a non-Nightmare card with an eligible Transfiguration so
 all four outcomes can resolve.
 
 Each draw costs 25 Essence. After seeing a provisional result, the player may

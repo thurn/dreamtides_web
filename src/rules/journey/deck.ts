@@ -12,6 +12,7 @@
 // Cards and dreamsigns are keyed by UUID/entry-id only — never by name.
 
 import type { EventContext } from "../../eventlog/types";
+import { isNightmareCardId, NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import type { CardType } from "../../types/cards";
 import type {
   CardKeywordModification,
@@ -143,12 +144,12 @@ export function mintEntryId(
 // ---------------------------------------------------------------------------
 
 /**
- * `ADD_CARD { cardId, transfiguration?, isBane?, source? }` — consolidates the
- * four legacy add-card mutations (`addCard` / `addCardById` /
- * `addCardByIdWithTransfiguration` / `addBaneCardById`). The card UUID resolves
+ * `ADD_CARD { cardId, transfiguration?, source? }` adds one catalog card. The
+ * card UUID resolves
  * to its `cardNumber` through the registered {@link DeckContentProvider}
- * (mirroring legacy `resolveCardById`); the option fields select the variant:
- * `isBane` sets the bane flag, `transfiguration` stamps a badge. Bounces with no
+ * (mirroring legacy `resolveCardById`). Nightmare is the sole Bane, so its
+ * UUID sets the persisted Bane flag automatically; callers cannot mark another
+ * card as a Bane. `transfiguration` stamps a badge. Bounces with no
  * provider, an unknown card id, or a malformed `transfiguration`. The minted
  * entry id is deterministic in `ctx.seq` (legacy `addCardById` used
  * `crypto.randomUUID`).
@@ -160,9 +161,17 @@ export function addCard(
 ): JourneyState | null {
   const cardId = asString(payload.cardId);
   if (cardId === null) return null;
+  if (
+    payload.isBane !== undefined &&
+    payload.isBane !== true &&
+    payload.isBane !== false
+  ) {
+    return null;
+  }
+  const resolvedCardId = payload.isBane === true ? NIGHTMARE_CARD_ID : cardId;
   const provider = contentProvider;
   if (provider === null) return null;
-  const cardNumber = provider.resolveCardNumber(cardId);
+  const cardNumber = provider.resolveCardNumber(resolvedCardId);
   if (cardNumber === null) return null;
 
   // `transfiguration` is optional; present-but-invalid is a malformed payload.
@@ -176,7 +185,7 @@ export function addCard(
     entryId: mintEntryId(journey.deck, ctx.seq, 0),
     cardNumber,
     transfiguration,
-    isBane: payload.isBane === true,
+    isBane: isNightmareCardId(resolvedCardId),
   };
   return { ...journey, deck: [...journey.deck, entry] };
 }
@@ -410,36 +419,34 @@ export function transfigureCard(
 }
 
 // ---------------------------------------------------------------------------
-// Bane purges
+// Nightmare purges
 // ---------------------------------------------------------------------------
 
-/** `PURGE_ALL_BANE_CARDS { }` — legacy `purgeAllBaneCards`. Bounces with no banes. */
-export function purgeAllBaneCards(journey: JourneyState): JourneyState | null {
+/** `PURGE_ALL_NIGHTMARE_CARDS { }` removes every Nightmare. */
+export function purgeAllNightmareCards(journey: JourneyState): JourneyState | null {
   if (!journey.deck.some((entry) => entry.isBane)) return null;
   return { ...journey, deck: journey.deck.filter((entry) => !entry.isBane) };
 }
 
 /**
- * `PURGE_RANDOM_BANE_CARDS { count }` — legacy `purgeRandomBaneCards`. Selects
- * up to `count` bane entries via a partial Fisher–Yates over the (deterministic)
- * bane-entry-id order, drawing from `ctx.rng` at each step (legacy read
- * `Math.random`), so the same seed+seq removes the same entries. Bounces on a
- * non-positive count or when the deck holds no banes.
+ * `PURGE_RANDOM_NIGHTMARE_CARDS { count }` selects up to `count` Nightmare
+ * entries via a partial Fisher–Yates over deterministic entry-id order, so the
+ * same seed and sequence remove the same entries.
  */
-export function purgeRandomBaneCards(
+export function purgeRandomNightmareCards(
   journey: JourneyState,
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
   const count = finiteNumber(payload.count);
   if (count === null || count <= 0) return null;
-  const baneEntryIds = journey.deck
+  const nightmareEntryIds = journey.deck
     .filter((entry) => entry.isBane)
     .map((entry) => entry.entryId);
-  if (baneEntryIds.length === 0) return null;
+  if (nightmareEntryIds.length === 0) return null;
 
-  const target = Math.min(Math.floor(count), baneEntryIds.length);
-  const shuffled = [...baneEntryIds];
+  const target = Math.min(Math.floor(count), nightmareEntryIds.length);
+  const shuffled = [...nightmareEntryIds];
   for (let i = 0; i < target; i += 1) {
     const j = i + Math.floor(ctx.rng(i) * (shuffled.length - i));
     const temp = shuffled[i];
@@ -468,7 +475,7 @@ export function purgeRandomBaneCards(
  *   - Append (no `purgeIndex`): adds the dreamsign; bounces at the
  *     `maxDreamsigns` limit.
  *   - Replace-at-slot (`purgeIndex`): overwrites the held dreamsign at that
- *     index (the bane-dreamsign purge flow, which swaps a bane out for the new
+ *     index (the negative-Dreamsign purge flow, which swaps a negative sign for the new
  *     sign), so the `maxDreamsigns` limit does not apply. Bounces when the slot
  *     holds no dreamsign.
  *
@@ -533,24 +540,23 @@ export function setDreamsignPool(
 }
 
 /**
- * `SET_DREAMSIGN_IS_BANE { dreamsignId, isBane }` — legacy `setDreamsignIsBane`
- * (debug edit), keyed by UUID instead of index. Bounces on a missing id or a
- * non-boolean flag.
+ * `SET_DREAMSIGN_IS_NEGATIVE { dreamsignId, isNegative }` updates the
+ * presentation classification of one Dreamsign by UUID.
  */
-export function setDreamsignIsBane(
+export function setDreamsignIsNegative(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
   const dreamsignId = asString(payload.dreamsignId);
   if (dreamsignId === null) return null;
-  if (typeof payload.isBane !== "boolean") return null;
-  const isBane = payload.isBane;
+  if (typeof payload.isNegative !== "boolean") return null;
+  const isNegative = payload.isNegative;
   const index = journey.dreamsigns.findIndex((d) => d.id === dreamsignId);
   if (index === -1) return null;
   return {
     ...journey,
     dreamsigns: journey.dreamsigns.map((d, i) =>
-      i === index ? { ...d, isBane } : d,
+      i === index ? { ...d, isNegative } : d,
     ),
   };
 }

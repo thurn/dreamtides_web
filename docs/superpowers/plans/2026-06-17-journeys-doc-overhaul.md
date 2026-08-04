@@ -331,7 +331,7 @@ git add src/affiliations src/draft/draft-engine.ts src/dreamsign/dreamsign-pool.
 git commit -m "feat(journeys): IDF affiliation reweighting across all dreamscape card draws"
 ```
 
-## Task 5: Site remap + new sites + currency/banes consolidation + economy
+## Task 5: Site remap + new sites + currency/Nightmare consolidation + economy
 
 This task owns the destructive removals deferred from Task 1: `DreamJourney`→`Augury` rename, `Cleanse` removal, `omens` removal.
 
@@ -340,7 +340,7 @@ This task owns the destructive removals deferred from Task 1: `DreamJourney`→`
 - Modify: `src/components/ScreenRouter.tsx` (dispatch: rename DreamJourney case; add DreamsignMarket, DreamsignRevelation, and the three stub cases; remove Cleanse case)
 - Modify: `src/state/journey-context.tsx` + `src/state/journey-state-actions.ts` (drop `omens`, default essence)
 - Modify: `src/shop/*` (Dreamsign Market = essence-priced dreamsign variant; restock 50 essence; drop omen pricing), `src/journey_v2/*` (Augury naming)
-- Modify: `src/purge/purge-pricing.ts` (formula constant + doc table), Purge screen (bane selection — fold in Cleanse)
+- Modify: `src/purge/purge-pricing.ts` (formula constant + doc table), Purge screen (Nightmare selection — fold in Cleanse)
 - Create: `src/screens/StubSiteScreen.tsx` (Tempting Offer / Gamble / Exploration placeholder)
 - Modify: `src/screens/JourneyStartScreen.tsx` only if it reads `omens` (it does not currently)
 - Test: `src/purge/purge-pricing.test.ts` (or wherever it lives), site-dispatch coverage in an integration test
@@ -355,7 +355,7 @@ Update/author the purge pricing test to pin the doc's economy anchors as a small
 
 - [ ] **Step 4: Default essence → 200.** In `createDefaultState` set the default `essence` to 200; keep the per-Dream Avatar `startingEssence` override path intact. **Do not touch pool construction.**
 
-- [ ] **Step 5: Banes into Purge; retire Cleanse.** Remove the `Cleanse` `SiteType` member and its `ScreenRouter` case and screen. Extend the Purge screen to also list bane deck entries (`DeckEntry.isBane`) as selectable for removal, priced cheaply/free per the doc. Anything that previously generated a Cleanse site now relies on Purge.
+- [ ] **Step 5: Nightmare into Purge; retire Cleanse.** Remove the `Cleanse` `SiteType` member and its `ScreenRouter` case and screen. Extend the Purge screen to list Nightmare deck entries (`DeckEntry.isBane`) as selectable for removal, priced cheaply/free per the doc. Anything that previously generated a Cleanse site now relies on Purge.
 
 - [ ] **Step 6: Rename Dream Journey → Augury.** Rename the `SiteType` member, the runtime discriminant/kind if it embeds the name, screen/route labels, and log event names. The underlying merchant/journey mechanics stay; only the name changes. Keep `src/journey_v2` internals; update player-facing strings + type names.
 
@@ -367,13 +367,13 @@ Update/author the purge pricing test to pin the doc's economy anchors as a small
 
 - [ ] **Step 10: Run tests + standard verification.** Expected: PASS. Confirm no `omens`/`Cleanse`/`DreamJourney` identifiers remain (`grep -rn "omens\|Cleanse\|DreamJourney" src/` returns only intentional history-free results, ideally none).
 
-- [ ] **Step 11: Manual QA.** QA targets: visit Augury (renamed, two-reward choice works), Dreamsign Market (buy a dreamsign with essence + restock for 50 essence), Dreamsign Revelation (single + choice-of-3), each of the three stub screens (renders + Continue completes the site), and Purge (remove an ordinary card and a bane; prices follow 40/100/190…). Confirm no Omens appears anywhere in the HUD. Run the Manual QA Procedure at both viewports.
+- [ ] **Step 11: Manual QA.** QA targets: visit Augury (renamed, two-reward choice works), Dreamsign Market (buy a dreamsign with essence + restock for 50 essence), Dreamsign Revelation (single + choice-of-3), each of the three stub screens (renders + Continue completes the site), and Purge (remove an ordinary card and Nightmare; prices follow 40/100/190…). Confirm no Omens appears anywhere in the HUD. Run the Manual QA Procedure at both viewports.
 
 - [ ] **Step 12: Commit.**
 
 ```bash
 git add src
-git commit -m "feat(journeys): site remap (Augury, Dreamsign Market/Revelation, stubs), single-currency essence, banes into Purge, purge 30+5N(N+1), essence 200"
+git commit -m "feat(journeys): site remap (Augury, Dreamsign Market/Revelation, stubs), single-currency essence, Nightmare into Purge, purge 30+5N(N+1), essence 200"
 ```
 
 ## Task 6: Dream Guides + Home Specialties presentation
@@ -479,7 +479,7 @@ git commit -m "test(journeys): end-to-end journey flow integration coverage"
 
 ## Final self-review gate (after Task 10)
 
-- [ ] Re-read `docs/journeys/journeys.md` and confirm each system has a landing task: atlas (T2,T8), dreamscapes/composition (T3), guides/home specialties (T6), affiliations (T4), site remap + new + stubs (T5), currency/banes/economy (T5), opponent decks (T9), selection essence (T5), data/TOML (T1), integration (T10).
+- [ ] Re-read `docs/journeys/journeys.md` and confirm each system has a landing task: atlas (T2,T8), dreamscapes/composition (T3), guides/home specialties (T6), affiliations (T4), site remap + new + stubs (T5), currency/Nightmare/economy (T5), opponent decks (T9), selection essence (T5), data/TOML (T1), integration (T10).
 - [ ] `grep -rn "omens\|Cleanse\|DreamJourney" src/` is clean.
 - [ ] All manual QA screenshots captured at both viewports with zero console errors.
 
@@ -493,7 +493,7 @@ git commit -m "test(journeys): end-to-end journey flow integration coverage"
 | Fixed 7-layer atlas generation (§4, T1.1) | Task 2 |
 | Dreamscape site composition (§5/§T1.2) | Task 3 |
 | Affiliations real IDF (§7, T1.3) | Task 4 |
-| Site remap, new sites, currency, banes, economy (§8/§9, T1.4/T1.5) | Task 5 |
+| Site remap, new sites, currency, Nightmare, economy (§8/§9, T1.4/T1.5) | Task 5 |
 | Dream Guides + home specialties (§6, T1.x) | Task 6 |
 | Atlas/dreamscape UI 5 states (§T2.1) | Task 8 |
 | Battle opponent decks (§10, T2.2) | Task 9 |

@@ -16,8 +16,9 @@ import type { DeckEntry } from "../../types/journey";
 import type { FitModel } from "../../draft/replay/fit-model";
 import type { MerchantContext } from "../types";
 import { purgeBuilder, purgeReplaceBuilder } from "./remove";
-import { asCardId } from "../../types/card-identity";
+import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardId } from "../../types/card-identity";
+import { NIGHTMARE_CARD_ID, NIGHTMARE_CARD_NAME } from "../../data/nightmare";
 
 function uuid(n: number): CardId {
   const hex = n.toString(16).padStart(12, "0");
@@ -53,38 +54,39 @@ function makeContext(input: {
 }
 
 // ---------------------------------------------------------------------------
-// Bug-class: purge never selects a bane
+// Bug-class: purge never selects Nightmare
 // ---------------------------------------------------------------------------
 
-describe("purge — bane exclusion", () => {
-  it("never selects a bane entry as the purge target", () => {
-    // Deck of 8: one starter (non-bane) + one starter (bane) + 6 non-starters.
-    // The bane entry is a bane; the non-bane starter is the normal purge target.
-    // Purge must never select the bane.
+describe("purge — Nightmare exclusion", () => {
+  it("never selects a Nightmare entry as the purge target", () => {
+    // Deck of 8: one ordinary starter + Nightmare + 6 non-starters.
+    // The ordinary starter is the normal purge target; Nightmare is excluded.
 
-    const nonBaneStarterCard = makeMerchantTestCard({
+    const ordinaryStarterCard = makeMerchantTestCard({
       id: uuid(1),
       cardNumber: 1,
       isStarter: true,
     });
-    const baneCard = makeMerchantTestCard({
-      id: uuid(2),
-      cardNumber: 2,
-      isStarter: true, // starters are eligible but only if NOT bane
+    const nightmareCard = makeMerchantTestCard({
+      id: NIGHTMARE_CARD_ID,
+      name: asCardName(NIGHTMARE_CARD_NAME),
+      cardNumber: 10002,
+      cardType: "Event",
+      subtype: "Special",
     });
     const nonStarterCards = Array.from({ length: 6 }, (_, i) =>
       makeMerchantTestCard({ id: uuid(10 + i), cardNumber: 10 + i }),
     );
 
-    const nonBaneStarterEntry = makeMerchantTestDeckEntry({
-      entryId: "non-bane-starter",
+    const ordinaryStarterEntry = makeMerchantTestDeckEntry({
+      entryId: "ordinary-starter",
       cardNumber: 1,
       isBane: false,
     });
-    const baneEntry = makeMerchantTestDeckEntry({
-      entryId: "bane-entry",
-      cardNumber: 2,
-      isBane: true, // THIS is the bane — must never be selected
+    const nightmareEntry = makeMerchantTestDeckEntry({
+      entryId: "nightmare-entry",
+      cardNumber: 10002,
+      isBane: true,
     });
     const nonStarterEntries = nonStarterCards.map((c, i) =>
       makeMerchantTestDeckEntry({ entryId: `e${String(i)}`, cardNumber: c.cardNumber }),
@@ -93,26 +95,26 @@ describe("purge — bane exclusion", () => {
     // Corpus for all cards
     const corpusCards: Record<string, { quality: number; df: number }> = {};
     corpusCards[uuid(1)] = { quality: 0.5, df: 10 };
-    corpusCards[uuid(2)] = { quality: 0.5, df: 10 };
+    corpusCards[NIGHTMARE_CARD_ID] = { quality: 0.5, df: 10 };
     nonStarterCards.forEach((c) => {
       corpusCards[c.id] = { quality: 0.5, df: 10 };
     });
 
     const context = makeContext({
-      cards: [nonBaneStarterCard, baneCard, ...nonStarterCards],
-      deckEntries: [nonBaneStarterEntry, baneEntry, ...nonStarterEntries],
+      cards: [ordinaryStarterCard, nightmareCard, ...nonStarterCards],
+      deckEntries: [ordinaryStarterEntry, nightmareEntry, ...nonStarterEntries],
       corpusCards,
     });
 
     expect(purgeBuilder.eligible(context)).toBe(true);
 
-    // Over multiple seeds, confirm bane is never selected
+    // Over multiple seeds, confirm Nightmare is never selected.
     for (let seed = 0; seed < 30; seed += 1) {
-      const rng = merchantRng("purge-bane-test", String(seed));
+      const rng = merchantRng("purge-nightmare-test", String(seed));
       const offer = purgeBuilder.build(context, rng);
       if (offer !== null && offer.applyPayload !== undefined) {
         if (offer.applyPayload.kind === "remove_deck_entry") {
-          expect(offer.applyPayload.entryId).not.toBe("bane-entry");
+          expect(offer.applyPayload.entryId).not.toBe("nightmare-entry");
         }
       }
     }

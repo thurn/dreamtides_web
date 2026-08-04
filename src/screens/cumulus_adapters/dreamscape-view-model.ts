@@ -179,7 +179,7 @@ export function toQsbDreamsigns(
       imageName: sign.imageName,
       imageAlt: sign.imageAlt,
       effectDescription: sign.effectDescription,
-      isBane: sign.isBane,
+      isNegative: sign.isNegative,
     });
   });
   return docked;

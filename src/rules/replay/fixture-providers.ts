@@ -291,7 +291,7 @@ function deckProvider(): DeckContentProvider {
         id: dreamsignId,
         name: `dreamsign-${match[1]}`,
         effectDescription: "effect",
-        isBane: false,
+        isNegative: false,
       };
     },
   };

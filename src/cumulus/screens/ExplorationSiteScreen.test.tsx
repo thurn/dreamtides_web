@@ -143,7 +143,7 @@ function dreamsignRewardView(): ExplorationSiteView {
           effectDescription: "A synthetic reward sign.",
           imageName: "reward-dreamsign.webp",
           imageAlt: "Reward Dreamsign art",
-          isBane: false,
+          isNegative: false,
         },
       ],
     },

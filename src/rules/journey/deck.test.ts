@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from "vitest";
 
+import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
 import type { DeckEntry, Dreamsign, JourneyState } from "../../types/journey";
 import { genesisFoldState, type FoldState } from "../fold-state";
@@ -68,21 +69,21 @@ function stateWith(overrides: Partial<JourneyState>): FoldState {
   return { ...base, journey: { ...base.journey, ...overrides } };
 }
 
-/** A deck with two normal cards and three banes, entry ids deck-1..deck-5. */
+/** A deck with two normal cards and three Nightmares, entry ids deck-1..deck-5. */
 function stateWithDeck(): FoldState {
   return stateWith({
     deck: [
       makeEntry({ entryId: "deck-1", cardNumber: 10 }),
       makeEntry({ entryId: "deck-2", cardNumber: 20 }),
-      makeEntry({ entryId: "deck-3", cardNumber: 30, isBane: true }),
-      makeEntry({ entryId: "deck-4", cardNumber: 40, isBane: true }),
-      makeEntry({ entryId: "deck-5", cardNumber: 50, isBane: true }),
+      makeEntry({ entryId: "deck-3", cardNumber: 10002, isBane: true }),
+      makeEntry({ entryId: "deck-4", cardNumber: 10002, isBane: true }),
+      makeEntry({ entryId: "deck-5", cardNumber: 10002, isBane: true }),
     ],
   });
 }
 
-function dreamsign(id: string, isBane = false): Dreamsign {
-  return { id, name: "n", effectDescription: "e", isBane };
+function dreamsign(id: string, isNegative = false): Dreamsign {
+  return { id, name: "n", effectDescription: "e", isNegative };
 }
 
 /** A deterministic PRNG bound to a seed so a purge draw is reproducible. */
@@ -303,12 +304,12 @@ describe("SET_DECK_ENTRY_* plain object guards", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Purge determinism / bane purges
+// Purge determinism / Nightmare purges
 // ---------------------------------------------------------------------------
 
-describe("bane purges", () => {
-  it("PURGE_ALL_BANE_CARDS removes every bane and keeps the rest", () => {
-    const out = reduce(stateWithDeck(), "PURGE_ALL_BANE_CARDS", {});
+describe("Nightmare purges", () => {
+  it("PURGE_ALL_NIGHTMARE_CARDS removes every Nightmare and keeps the rest", () => {
+    const out = reduce(stateWithDeck(), "PURGE_ALL_NIGHTMARE_CARDS", {});
     expect(out.outcome).toBe("applied");
     expect(out.state.journey.deck.map((e) => e.entryId)).toEqual([
       "deck-1",
@@ -316,36 +317,45 @@ describe("bane purges", () => {
     ]);
   });
 
-  it("PURGE_ALL_BANE_CARDS bounces when there are no banes", () => {
+  it("replays the historical purge event as a Nightmare-only purge", () => {
+    const out = reduce(stateWithDeck(), "PURGE_ALL_BANE_CARDS", {});
+    expect(out.outcome).toBe("applied");
+    expect(out.state.journey.deck.map((entry) => entry.entryId)).toEqual([
+      "deck-1",
+      "deck-2",
+    ]);
+  });
+
+  it("PURGE_ALL_NIGHTMARE_CARDS bounces when there are no Nightmares", () => {
     const state = stateWith({
       deck: [makeEntry({ entryId: "deck-1" })],
     });
-    const out = reduce(state, "PURGE_ALL_BANE_CARDS", {});
+    const out = reduce(state, "PURGE_ALL_NIGHTMARE_CARDS", {});
     expect(out.outcome).toBe("bounced");
     expect(out.state).toBe(state);
   });
 
-  it("PURGE_RANDOM_BANE_CARDS removes the same entries for the same seed+seq", () => {
+  it("PURGE_RANDOM_NIGHTMARE_CARDS removes the same entries for the same seed+seq", () => {
     const context = ctx({ seq: 7, rng: makeRng(7) });
-    const a = reduce(stateWithDeck(), "PURGE_RANDOM_BANE_CARDS", { count: 2 }, context);
-    const b = reduce(stateWithDeck(), "PURGE_RANDOM_BANE_CARDS", { count: 2 }, ctx({ seq: 7, rng: makeRng(7) }));
+    const a = reduce(stateWithDeck(), "PURGE_RANDOM_NIGHTMARE_CARDS", { count: 2 }, context);
+    const b = reduce(stateWithDeck(), "PURGE_RANDOM_NIGHTMARE_CARDS", { count: 2 }, ctx({ seq: 7, rng: makeRng(7) }));
     expect(a.outcome).toBe("applied");
     const remainingA = a.state.journey.deck.map((e) => e.entryId).sort();
     const remainingB = b.state.journey.deck.map((e) => e.entryId).sort();
     expect(remainingA).toEqual(remainingB);
-    // Removed exactly two banes; the two non-banes survive.
+    // Removed exactly two Nightmares; the ordinary cards survive.
     expect(a.state.journey.deck).toHaveLength(3);
     expect(remainingA).toContain("deck-1");
     expect(remainingA).toContain("deck-2");
   });
 
-  it("PURGE_RANDOM_BANE_CARDS bounces with no banes or a non-positive count", () => {
-    const noBanes = stateWith({ deck: [makeEntry({ entryId: "deck-1" })] });
+  it("PURGE_RANDOM_NIGHTMARE_CARDS bounces with no Nightmares or a non-positive count", () => {
+    const noNightmares = stateWith({ deck: [makeEntry({ entryId: "deck-1" })] });
     expect(
-      reduce(noBanes, "PURGE_RANDOM_BANE_CARDS", { count: 3 }).outcome,
+      reduce(noNightmares, "PURGE_RANDOM_NIGHTMARE_CARDS", { count: 3 }).outcome,
     ).toBe("bounced");
     expect(
-      reduce(stateWithDeck(), "PURGE_RANDOM_BANE_CARDS", { count: 0 }).outcome,
+      reduce(stateWithDeck(), "PURGE_RANDOM_NIGHTMARE_CARDS", { count: 0 }).outcome,
     ).toBe("bounced");
   });
 });
@@ -378,7 +388,8 @@ describe("PURGE_DECK_CARDS", () => {
 
 describe("ADD_CARD", () => {
   const provider: DeckContentProvider = {
-    resolveCardNumber: (cardId) => (cardId === "known" ? 99 : null),
+    resolveCardNumber: (cardId) =>
+      cardId === "known" ? 99 : cardId === NIGHTMARE_CARD_ID ? 10002 : null,
     resolveDreamsign: () => null,
   };
 
@@ -405,11 +416,10 @@ describe("ADD_CARD", () => {
     expect(deckB[deckB.length - 1].entryId).toBe(added.entryId);
   });
 
-  it("honors isBane and transfiguration options", () => {
+  it("derives the Bane flag from Nightmare identity", () => {
     registerDeckContentProvider(provider);
     const out = reduce(stateWithDeck(), "ADD_CARD", {
-      cardId: "known",
-      isBane: true,
+      cardId: NIGHTMARE_CARD_ID,
       transfiguration: "Kindled",
     });
     expect(out.outcome).toBe("applied");
@@ -417,6 +427,32 @@ describe("ADD_CARD", () => {
     const added = deckOut[deckOut.length - 1];
     expect(added.isBane).toBe(true);
     expect(added.transfiguration).toBe("Kindled");
+  });
+
+  it("replays a historical Nightmare ADD_CARD payload", () => {
+    registerDeckContentProvider(provider);
+    const out = reduce(stateWithDeck(), "ADD_CARD", {
+      cardId: NIGHTMARE_CARD_ID,
+      isBane: true,
+    });
+    expect(out.outcome).toBe("applied");
+    expect(out.state.journey.deck[out.state.journey.deck.length - 1]).toMatchObject({
+      cardNumber: 10002,
+      isBane: true,
+    });
+  });
+
+  it("maps a historical Bane flag to Nightmare", () => {
+    registerDeckContentProvider(provider);
+    const out = reduce(stateWithDeck(), "ADD_CARD", {
+      cardId: "known",
+      isBane: true,
+    });
+    expect(out.outcome).toBe("applied");
+    expect(out.state.journey.deck[out.state.journey.deck.length - 1]).toMatchObject({
+      cardNumber: 10002,
+      isBane: true,
+    });
   });
 
   it("bounces an unknown card id", () => {
@@ -487,21 +523,31 @@ describe("dreamsigns", () => {
     expect(out.state.journey.remainingDreamsignPool).toEqual(["a", "b", "c"]);
   });
 
-  it("SET_DREAMSIGN_IS_BANE flips the flag on a matching id", () => {
+  it("SET_DREAMSIGN_IS_NEGATIVE flips the flag on a matching id", () => {
     const state = stateWith({ dreamsigns: [dreamsign("ds-1", false)] });
+    const out = reduce(state, "SET_DREAMSIGN_IS_NEGATIVE", {
+      dreamsignId: "ds-1",
+      isNegative: true,
+    });
+    expect(out.outcome).toBe("applied");
+    expect(out.state.journey.dreamsigns[0].isNegative).toBe(true);
+  });
+
+  it("replays the historical Dreamsign presentation event as negative", () => {
+    const state = stateWith({ dreamsigns: [dreamsign("ds-1")] });
     const out = reduce(state, "SET_DREAMSIGN_IS_BANE", {
       dreamsignId: "ds-1",
       isBane: true,
     });
     expect(out.outcome).toBe("applied");
-    expect(out.state.journey.dreamsigns[0].isBane).toBe(true);
+    expect(out.state.journey.dreamsigns[0]?.isNegative).toBe(true);
   });
 
-  it("SET_DREAMSIGN_IS_BANE bounces a missing id", () => {
+  it("SET_DREAMSIGN_IS_NEGATIVE bounces a missing id", () => {
     const state = stateWith({ dreamsigns: [dreamsign("ds-1")] });
-    const out = reduce(state, "SET_DREAMSIGN_IS_BANE", {
+    const out = reduce(state, "SET_DREAMSIGN_IS_NEGATIVE", {
       dreamsignId: "ghost",
-      isBane: true,
+      isNegative: true,
     });
     expect(out.outcome).toBe("bounced");
     expect(out.state).toBe(state);

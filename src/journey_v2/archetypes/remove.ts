@@ -98,12 +98,12 @@ export interface PurgeSelection {
 
 /**
  * Builds the purge candidate set:
- * - Starter entries (always candidates, banes excluded).
+ * - Starter entries (always candidates, Nightmare excluded).
  * - Non-starter entries in the bottom `purgeMisfitFraction` of
  *   `fitLooByEntry`. Entries whose card has no corpus signal are absent from
  *   `fitLooByEntry` and therefore never included.
  *
- * Banes are excluded from all candidates.
+ * Nightmare, the sole Bane card, is excluded from all candidates.
  */
 export function purgeSelection(context: MerchantContext): PurgeSelection {
   const fitModel = context.fitModel;
@@ -128,7 +128,7 @@ export function purgeSelection(context: MerchantContext): PurgeSelection {
   const candidates: PurgeCandidateEntry[] = [];
 
   for (const deckCard of context.deckCards) {
-    // Banes are never purge candidates.
+    // Nightmare is never a purge candidate.
     if (deckCard.deckEntry.isBane) continue;
 
     if (deckCard.card.isStarter) {
@@ -160,7 +160,7 @@ export function purgeSelection(context: MerchantContext): PurgeSelection {
   return { candidates, looThreshold, scoredEntryCount: looValues.length };
 }
 
-/** The purge candidate set (the misfit-ranked, banes-excluded deck entries). */
+/** The purge candidate set (the misfit-ranked, Nightmare-excluded deck entries). */
 export function purgeCandidates(
   context: MerchantContext,
 ): readonly PurgeCandidateEntry[] {
@@ -221,7 +221,7 @@ function removeDeckEntryPayload(
  *
  * Candidates: starter entries plus non-starter entries in the bottom
  * `purgeMisfitFraction` of `fitLooByEntry` (no-signal cards excluded).
- * Banes excluded. Signal: misfit (worst first), starters get
+ * Nightmare excluded. Signal: misfit (worst first), starters get
  * `starterPurgeBonus`. Band-sample 1. Face-up. Eligible when deck size >=
  * `minDeckForPurge` and >= 1 candidate exists.
  */

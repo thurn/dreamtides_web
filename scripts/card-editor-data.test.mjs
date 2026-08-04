@@ -10,6 +10,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { parse } from "smol-toml";
 import { describe, expect, it } from "vitest";
+import { NIGHTMARE_CARD_ID as NIGHTMARE_ID } from "../src/data/nightmare-identity.ts";
 import {
   patchRenderedCardsToml,
   readEditorCards,
@@ -21,8 +22,6 @@ import { transformCard } from "./setup-assets.mjs";
 const FIRST_ID = "11111111-1111-4111-8111-111111111111";
 const SECOND_ID = "22222222-2222-4222-8222-222222222222";
 const SPECIAL_ID = "33333333-3333-4333-8333-333333333333";
-const BANE_ID = "44444444-4444-4444-8444-444444444444";
-
 function fixtureToml() {
   return `[[cards]]
 name = "First Card"
@@ -77,9 +76,9 @@ card-number = 999
 
 [[cards]]
 name = "Nightmare"
-id = "${BANE_ID}"
-tides = ["bane"]
-rendered-text = "Bane text."
+id = "${NIGHTMARE_ID}"
+tides = ["special"]
+rendered-text = "Bane."
 energy-cost = 0
 card-type = "Event"
 subtype = ""
@@ -119,7 +118,7 @@ describe("readEditorCards", () => {
     expect(cards.map((card) => card.id)).toEqual([FIRST_ID, SECOND_ID]);
     expect(cards.some((card) => card.rarity === "Special")).toBe(false);
     expect(cards.some((card) => card.id === SPECIAL_ID)).toBe(false);
-    expect(cards.some((card) => card.id === BANE_ID)).toBe(false);
+    expect(cards.some((card) => card.id === NIGHTMARE_ID)).toBe(false);
   });
 
   it("exposes UUID identity separately from cardNumber content metadata", () => {

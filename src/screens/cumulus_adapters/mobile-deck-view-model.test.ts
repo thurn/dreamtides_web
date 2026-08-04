@@ -3,6 +3,7 @@ import type { CardData } from "../../types/cards";
 import type { DeckEntry } from "../../types/journey";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { buildMobileDeckView, toDeckCardView } from "./mobile-deck-view-model";
+import { NIGHTMARE_CARD_ID, NIGHTMARE_CARD_NAME } from "../../data/nightmare";
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
@@ -81,10 +82,14 @@ describe("toDeckCardView", () => {
     expect(view?.model.displaySnapshot.spark).toBe(5);
   });
 
-  it("preserves the bane flag", () => {
+  it("preserves the Nightmare flag", () => {
     const view = toDeckCardView(
-      makeEntry({ isBane: true }),
-      database(makeCard()),
+      makeEntry({ cardNumber: 10002, isBane: true }),
+      database(makeCard({
+        id: NIGHTMARE_CARD_ID,
+        name: asCardName(NIGHTMARE_CARD_NAME),
+        cardNumber: 10002,
+      })),
     );
     expect(view?.isBane).toBe(true);
   });

@@ -16,6 +16,7 @@ import { foldEvents, type FoldOutcome } from "../../eventlog/fold";
 import { hashState } from "../../eventlog/hash";
 import type { EngineConfig, GameEvent, Genesis } from "../../eventlog/types";
 import { genesisFoldState, type FoldState } from "../fold-state";
+import { normalizePersistedNightmareState } from "../nightmare-migration";
 import { reduceGameEvent } from "../reducer";
 
 /**
@@ -36,7 +37,8 @@ export const GAME_ENGINE_CONFIG: EngineConfig<FoldState> = {
   reducer: reduceGameEvent,
   genesisState: genesisFoldState,
   encode: (state) => JSON.stringify(state),
-  decode: (raw) => JSON.parse(raw) as FoldState,
+  decode: (raw) =>
+    normalizePersistedNightmareState(JSON.parse(raw)) as FoldState,
   hash: hashState,
 };
 

@@ -142,7 +142,7 @@ export interface Dreamsign {
   effectDescription: string;
   imageName?: string;
   imageAlt?: string;
-  isBane: boolean;
+  isNegative: boolean;
 }
 
 /**
@@ -506,13 +506,12 @@ export type BattleModifier =
       source: string;
     }
   | {
-      kind: "temporary_bane_grant";
-      baneName: string;
+      kind: "temporary_nightmare_grant";
       count: number;
       battlesRemaining: number;
       /**
        * The deck `entryId`s added when this modifier was pushed; removed when
-       * `battlesRemaining` hits 0 so the temporary banes leave the deck.
+       * `battlesRemaining` hits 0 so the temporary Nightmares leave the deck.
        */
       addedEntryIds: readonly string[];
       source: string;

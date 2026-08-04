@@ -1,20 +1,5 @@
 {
-  "customCards": [
-    {
-      "id": "b0a2c3d4-e5f6-4789-8abc-0def12345678",
-      "name": "Nightmare",
-      "cardNumber": 10002,
-      "cardType": "Event",
-      "subtype": "",
-      "energyCost": 0,
-      "renderedText": "Bane.",
-      "imageNumber": 1169640025,
-      "artOwned": false,
-      "spark": null,
-      "isFast": false,
-      "isStarter": false
-    }
-  ],
+  "customCards": [],
   "customDreamsigns": [],
   "encounters": [
     {
@@ -310,15 +295,14 @@
         {
           "id": "15b63630-d9f8-473b-9717-15ad91ff2f16:pair-1:template-65",
           "label": "Overload the aperture",
-          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 \"Nightmare\" bane cards.",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 Nightmare cards.",
           "templateId": 65,
           "templateVariables": {
             "count": 3
           },
-          "effectKind": "reduce-cost-all-and-gain-banes",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
           "energyCostReduction": 1,
-          "baneCardId": "b0a2c3d4-e5f6-4789-8abc-0def12345678",
-          "baneCount": 3
+          "nightmareCount": 3
         }
       ]
     },
@@ -342,15 +326,14 @@
         {
           "id": "764b62f6-6af9-40ad-8d1f-653cc1a11030:pair-5:template-65",
           "label": "Charge Through the Smoke",
-          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 \"Nightmare\" bane cards.",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 Nightmare cards.",
           "templateId": 65,
           "templateVariables": {
             "count": 3
           },
-          "effectKind": "reduce-cost-all-and-gain-banes",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
           "energyCostReduction": 1,
-          "baneCardId": "b0a2c3d4-e5f6-4789-8abc-0def12345678",
-          "baneCount": 3
+          "nightmareCount": 3
         }
       ]
     },

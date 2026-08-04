@@ -9,7 +9,7 @@ continues to serve Dream Journey sites for every other URL.
 This first pass implements only the two-offer construction variant. Each
 merchant encounter shows two useful rewards, each priced in essence. The player
 may take one offer or walk away. The reward pool is broad and concrete: the
-merchant can grant fitting non-starter catalog cards, grant fitting non-bane
+merchant can grant fitting non-starter catalog cards, grant fitting non-Nightmare
 Dreamsigns, duplicate deck entries, remove weak deck entries, apply
 transfigurations, add card keyword/type modifications where supported by journey
 mutations, and adjust immediate resources. The pool excludes future-run
@@ -33,7 +33,7 @@ avoid meaningful duplication without changing existing journey behavior.
   choose from merchant-generated candidates, such as one of four fitting support
   cards or one of several fitting Dreamsigns.
 - **Inventory reach:** New-card and Dreamsign rewards can use the full loaded
-  catalog, excluding starter/special/bane cards for card grants and bane
+  catalog, excluding starter/special/Nightmare cards for card grants and Nightmare
   Dreamsigns for Dreamsign grants. Catalog scope is intentionally wider than
   the current run's draft pool and remaining Dreamsign pool.
 - **Fit data:** `?journey=v2` opts into loading adapted draft records and
@@ -112,7 +112,7 @@ The context builder also prepares indexes:
 - `candidateDreamsigns`
 
 `candidateGrantCards` includes non-starter, non-special cards from the loaded
-catalog. `candidateDreamsigns` includes non-bane templates and filters out
+catalog. `candidateDreamsigns` includes non-negative templates and filters out
 currently held duplicates unless a reward explicitly supports duplication.
 
 ## Content Loading
@@ -193,7 +193,7 @@ Immediate reward builders:
   curve fit, rarity, and seed tie-break.
 - `grant_exact_card`: grants the single highest-ranked card when confidence is
   very high. Used sparingly so the merchant can make decisive offers.
-- `grant_dreamsign`: grants one fitting non-bane Dreamsign. Usually
+- `grant_dreamsign`: grants one fitting non-negative Dreamsign. Usually
   chooser-backed with 2-4 candidates. Candidates rank by text-role match,
   deck-read need kind, current held Dreamsigns, and deterministic tie-break.
 - `transfigure_card`: applies a high-leverage transfiguration to an existing
@@ -226,7 +226,7 @@ The catalog excludes:
 - battle reward modifiers
 - shop discounts and reroll tokens
 - dreamscape/site appearance modifiers
-- temporary bane grants or temporary protections
+- temporary Nightmare grants or temporary protections
 - delayed next-battle or next-dreamscape rewards
 - one-offer non-essence costs
 

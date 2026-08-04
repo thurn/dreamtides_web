@@ -301,7 +301,7 @@ function auguryMandatoryForLayer(layer: LayerName): boolean {
  * `homeSite`, on the given atlas layer. The fill draws from the other
  * dreamscapes' signature sites plus a generic Essence site. Transfiguration and
  * Duplication — the late-game card-shaping sites — are weighted up in the later
- * layers so deck refinement shows up once the deck is built. Bane removal is
+ * layers so deck refinement shows up once the deck is built. Nightmare removal is
  * handled at the Purge site, which appears in the mandatory early-layer slots.
  */
 function buildFillPool(

@@ -26,13 +26,12 @@ export type RulesTextGlossaryOwner = "card" | "dreamAvatar";
  *     as the trigger.
  *   * Matching is case-insensitive. The glossary's variant list also covers
  *     simple plural / past-tense forms (e.g. `banes`, `transfigured`), so
- *     casual prose like "transfigure your banes" matches the `Transfigure`
- *     and `Bane` entries.
+ *     prose like "Nightmares are banes" matches the `Bane` entry.
  *
  * Output rules:
  *   * Each entry appears at most once in the returned array — duplicates are
- *     deduplicated by glossary entry identity so two mentions of `bane` and
- *     `banes` collapse to one panel.
+ *     deduplicated by glossary entry identity so repeated mentions of Nightmare's
+ *     `Bane` keyword collapse to one panel.
  *   * Entries retain their first-occurrence order in `text`.
  *   * Empty input or input with no recognized terms returns an empty array.
  *

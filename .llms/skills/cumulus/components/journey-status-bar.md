@@ -32,7 +32,7 @@ The persistent, transparent bottom HUD for journey screens. Its journey variant 
 | `effectDescription` | `string` | no |  |
 | `imageName` | `string` | yes |  |
 | `imageAlt` | `string` | yes |  |
-| `isBane` | `boolean` | no |  |
+| `isNegative` | `boolean` | no |  |
 
 ### `dreamAvatar`: the `QsbDreamAvatar` model
 

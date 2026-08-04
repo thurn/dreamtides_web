@@ -20,7 +20,7 @@ import { CumulusRoot } from "../../CumulusRoot";
  *
  * The tile renders the dreamsign's `imageName` artwork (from
  * `/dreamsigns/<imageName>`) inside a sized square with no chrome — the art
- * floats on the media — conveys a bane via a desaturation filter, and reveals
+ * floats on the media — conveys a negative Dreamsign via a desaturation filter, and reveals
  * its full name + effect text through the shared InfoCard `object` variant.
  * jsdom exposes no `matchMedia`, so the reveal coordinator treats it as a coarse
  * pointer: a press-down reveals the card.
@@ -33,7 +33,7 @@ function makeDreamsign(
     name: overrides.name,
     effectDescription:
       overrides.effectDescription ?? `${overrides.name} effect.`,
-    isBane: overrides.isBane ?? false,
+    isNegative: overrides.isNegative ?? false,
     imageName: overrides.imageName,
     imageAlt: overrides.imageAlt,
     id: overrides.id ?? "00000000-0000-4000-8000-000000000031",
@@ -198,11 +198,11 @@ describe("Dreamsign", () => {
     });
   });
 
-  it("desaturates bane dreamsigns and renders no tile chrome", () => {
+  it("desaturates negative Dreamsigns and renders no tile chrome", () => {
     const sign = makeDreamsign({
       name: "Skull",
       imageName: "skull.png",
-      isBane: true,
+      isNegative: true,
     });
 
     const { container, root } = mountInto(
@@ -213,8 +213,8 @@ describe("Dreamsign", () => {
       '[data-testid="dreamsign-art-tile"]',
     );
     expect(tile).not.toBeNull();
-    expect(tile?.dataset.isBane).toBe("true");
-    // Bane art is desaturated so the warning reads before the art does.
+    expect(tile?.dataset.isNegative).toBe("true");
+    // Negative art is desaturated so the warning reads before the art does.
     expect(tile?.style.filter).toContain("grayscale");
     // The art floats on the media with no chrome: no border or background.
     expect(tile?.style.border).toBe("");
@@ -229,7 +229,7 @@ describe("Dreamsign", () => {
     const sign = makeDreamsign({
       name: "Moonstone",
       imageName: "moonstone.png",
-      isBane: false,
+      isNegative: false,
     });
 
     const { container, root } = mountInto(
@@ -239,7 +239,7 @@ describe("Dreamsign", () => {
     const tile = container.querySelector<HTMLElement>(
       '[data-testid="dreamsign-art-tile"]',
     );
-    expect(tile?.dataset.isBane).toBe("false");
+    expect(tile?.dataset.isNegative).toBe("false");
     expect(tile?.style.filter).not.toContain("grayscale");
     // No chrome: the boon art floats with no border or background.
     expect(tile?.style.border).toBe("");
@@ -292,11 +292,11 @@ describe("Dreamsign", () => {
     });
   });
 
-  it("combines the bane desaturation with the hud drop-shadow", () => {
+  it("combines negative desaturation with the hud drop-shadow", () => {
     const sign = makeDreamsign({
       name: "Amanita",
       imageName: "amanita.png",
-      isBane: true,
+      isNegative: true,
     });
 
     const { container, root } = mountInto(
@@ -306,7 +306,7 @@ describe("Dreamsign", () => {
     const tile = container.querySelector<HTMLElement>(
       '[data-testid="dreamsign-art-tile"]',
     );
-    // A bane docked in the HUD carries BOTH signals in one composed filter.
+    // A negative Dreamsign docked in the HUD carries both signals in one filter.
     expect(tile?.style.filter).toContain("grayscale");
     expect(tile?.style.filter).toContain("drop-shadow");
 

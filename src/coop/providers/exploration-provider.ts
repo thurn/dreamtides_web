@@ -6,6 +6,7 @@ import {
   type ExplorationActionContent,
   type ExplorationPredicate,
 } from "../../data/exploration";
+import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import {
   hashStringToSeed,
   type JourneyContent,
@@ -262,7 +263,6 @@ function cardIdForEntry(
 function addCardEffect(
   content: JourneyContent,
   cardId: string,
-  isBane = false,
 ): JourneyRewardEffect | null {
   const card = idIndex(content).get(cardId.toLowerCase());
   if (card === undefined) return null;
@@ -270,7 +270,6 @@ function addCardEffect(
     kind: "add_catalog_card",
     cardUuid: card.id,
     cardNumber: card.cardNumber,
-    isBane,
   };
 }
 
@@ -400,8 +399,8 @@ export function resolveExplorationChoice(input: {
     return true;
   };
 
-  const addCardIds = (cardIds: readonly string[], isBane = false): boolean => {
-    const children = cardIds.map((cardId) => addCardEffect(content, cardId, isBane));
+  const addCardIds = (cardIds: readonly string[]): boolean => {
+    const children = cardIds.map((cardId) => addCardEffect(content, cardId));
     if (children.some((child) => child === null)) return false;
     if (!applyReward({
       kind: "composite",
@@ -653,10 +652,13 @@ export function resolveExplorationChoice(input: {
       result.gainedCardIds.push(replacementId);
       break;
     }
-    case "gain-bane-and-card": {
-      if (action.baneCardId === undefined || action.cardId === undefined) return null;
-      const banes = Array.from({ length: action.baneCount ?? 1 }, () => action.baneCardId as string);
-      if (!addCardIds(banes, true) || !addCardIds([action.cardId])) return null;
+    case "gain-nightmare-and-card": {
+      if (action.cardId === undefined) return null;
+      const nightmares = Array.from(
+        { length: action.nightmareCount ?? 1 },
+        () => NIGHTMARE_CARD_ID,
+      );
+      if (!addCardIds(nightmares) || !addCardIds([action.cardId])) return null;
       break;
     }
     case "gain-random-cards": {
@@ -735,19 +737,18 @@ export function resolveExplorationChoice(input: {
       result.affectedEntryIds.push(...next.deck.map((entry) => entry.entryId));
       break;
     }
-    case "reduce-cost-all-and-gain-banes": {
+    case "reduce-cost-all-and-gain-nightmares": {
       if (
-        action.baneCardId === undefined ||
         action.energyCostReduction === undefined ||
-        action.baneCount === undefined ||
-        !Number.isInteger(action.baneCount) ||
-        action.baneCount <= 0
+        action.nightmareCount === undefined ||
+        !Number.isInteger(action.nightmareCount) ||
+        action.nightmareCount <= 0
       ) return null;
       const affectedEntryIds = next.deck.map((entry) => entry.entryId);
       const targets = affectedEntryIds.map((entryId) => deckTarget(next, content, entryId));
-      const bane = addCardEffect(content, action.baneCardId, true);
+      const nightmare = addCardEffect(content, NIGHTMARE_CARD_ID);
       if (
-        bane === null ||
+        nightmare === null ||
         targets.some((target) => target === null) ||
         !applyReward({
           kind: "composite",
@@ -759,13 +760,13 @@ export function resolveExplorationChoice(input: {
                 amount: action.energyCostReduction as number,
               }),
             ),
-            ...Array.from({ length: action.baneCount }, () => bane),
+            ...Array.from({ length: action.nightmareCount }, () => nightmare),
           ],
         })
       ) return null;
       result.affectedEntryIds.push(...affectedEntryIds);
       result.gainedCardIds.push(
-        ...Array.from({ length: action.baneCount }, () => action.baneCardId as string),
+        ...Array.from({ length: action.nightmareCount }, () => NIGHTMARE_CARD_ID),
       );
       break;
     }

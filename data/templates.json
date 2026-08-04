@@ -249,7 +249,7 @@
   },
   {
     "template_id": 65,
-    "template": "All cards in your deck are reduced in cost by 1●. Gain {count} \"Nightmare\" bane cards."
+    "template": "All cards in your deck are reduced in cost by 1●. Gain {count} Nightmare cards."
   },
   {
     "template_id": 66,
@@ -265,15 +265,15 @@
   },
   {
     "template_id": 69,
-    "template": "Gain {count} \"Nightmare\" bane cards. Gain {dreamsign}."
+    "template": "Gain {count} Nightmare cards. Gain {dreamsign}."
   },
   {
     "template_id": 70,
-    "template": "Gain {count} \"Nightmare\" bane cards. Gain {card_name}."
+    "template": "Gain {count} Nightmare cards. Gain {card_name}."
   },
   {
     "template_id": 71,
-    "template": "Gain {count} \"Nightmare\" bane cards. Gain one of 3 offered dreamsigns."
+    "template": "Gain {count} Nightmare cards. Gain one of 3 offered dreamsigns."
   },
   {
     "template_id": 72,

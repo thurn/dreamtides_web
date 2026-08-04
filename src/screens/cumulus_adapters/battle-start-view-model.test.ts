@@ -39,7 +39,7 @@ function makeInit() {
             effectDescription: "A stable test effect.",
             imageName: "test.webp",
             imageAlt: "A test Dreamsign",
-            isBane: false,
+            isNegative: false,
           },
         ],
         signatureCards: signature.map((card) => ({

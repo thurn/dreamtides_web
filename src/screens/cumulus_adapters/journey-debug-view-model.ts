@@ -27,7 +27,7 @@ export function buildJourneyDebugEditorView(
       actionId: `dreamsign:${String(index)}`,
       templateId: dreamsign.id ?? `unnamed:${String(index)}`,
       name: dreamsign.name,
-      isBane: dreamsign.isBane,
+      isNegative: dreamsign.isNegative,
     })),
     dreamsignOptions: dreamsignOptions.map((template) => ({
       id: template.id,

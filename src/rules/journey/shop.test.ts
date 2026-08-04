@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from "vitest";
 
+import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import type { EventContext, GameEvent } from "../../eventlog/types";
 import { LayerName } from "../../types/layer-name";
 import type {
@@ -18,6 +19,7 @@ import {
   type ShopRerollResult,
   type SiteContentProvider,
 } from "./sites";
+import { registerDeckContentProvider } from "./deck";
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -174,6 +176,7 @@ const rerollProvider: SiteContentProvider = {
 
 afterEach(() => {
   registerSiteContentProvider(null);
+  registerDeckContentProvider(null);
 });
 
 // ---------------------------------------------------------------------------
@@ -387,11 +390,14 @@ describe("battle modifiers", () => {
     ).toBe("bounced");
   });
 
-  it("PUSH_TEMPORARY_BANE_GRANT adds bane deck entries and a modifier", () => {
+  it("PUSH_TEMPORARY_NIGHTMARE_GRANT adds Nightmare entries and a modifier", () => {
+    registerDeckContentProvider({
+      resolveCardNumber: (cardId) => cardId === NIGHTMARE_CARD_ID ? 10002 : null,
+      resolveDreamsign: () => null,
+    });
     const state = shopState([cardSlot()]);
-    const result = reduce(state, "PUSH_TEMPORARY_BANE_GRANT", {
-      cardNumber: 3,
-      baneName: "Doubt",
+    const result = reduce(state, "PUSH_TEMPORARY_NIGHTMARE_GRANT", {
+      cardId: NIGHTMARE_CARD_ID,
       count: 2,
       battlesRemaining: 1,
       source: "augury",
@@ -399,12 +405,12 @@ describe("battle modifiers", () => {
     expect(result.outcome).toBe("applied");
     expect(result.state.journey.deck).toHaveLength(2);
     expect(result.state.journey.deck.every((e) => e.isBane)).toBe(true);
-    expect(result.state.journey.deck.every((e) => e.cardNumber === 3)).toBe(true);
+    expect(result.state.journey.deck.every((e) => e.cardNumber === 10002)).toBe(true);
     const modifiers = result.state.journey.battleModifiers;
     expect(modifiers).toHaveLength(1);
     const mod = modifiers[0];
-    expect(mod.kind).toBe("temporary_bane_grant");
-    if (mod.kind === "temporary_bane_grant") {
+    expect(mod.kind).toBe("temporary_nightmare_grant");
+    if (mod.kind === "temporary_nightmare_grant") {
       expect(mod.count).toBe(2);
       expect(mod.addedEntryIds).toHaveLength(2);
       expect(mod.addedEntryIds).toEqual(
@@ -413,12 +419,56 @@ describe("battle modifiers", () => {
     }
   });
 
-  it("PUSH_TEMPORARY_BANE_GRANT bounces a non-positive count", () => {
+  it("replays the historical temporary grant only for Nightmare", () => {
+    registerDeckContentProvider({
+      resolveCardNumber: (cardId) => cardId === NIGHTMARE_CARD_ID ? 10002 : null,
+      resolveDreamsign: () => null,
+    });
+    const state = shopState([cardSlot()]);
+    const result = reduce(state, "PUSH_TEMPORARY_BANE_GRANT", {
+      cardNumber: 10002,
+      baneName: "Nightmare",
+      count: 1,
+      battlesRemaining: 2,
+      source: "historical-log",
+    });
+    expect(result.outcome).toBe("applied");
+    expect(result.state.journey.deck).toEqual([
+      expect.objectContaining({ cardNumber: 10002, isBane: true }),
+    ]);
+    expect(result.state.journey.battleModifiers[0]?.kind).toBe(
+      "temporary_nightmare_grant",
+    );
+  });
+
+  it("maps every historical temporary Bane grant to Nightmare", () => {
+    registerDeckContentProvider({
+      resolveCardNumber: (cardId) => cardId === NIGHTMARE_CARD_ID ? 10002 : null,
+      resolveDreamsign: () => null,
+    });
+    const state = shopState([cardSlot()]);
+    const result = reduce(state, "PUSH_TEMPORARY_BANE_GRANT", {
+      cardNumber: 3,
+      baneName: "Historical value",
+      count: 1,
+      battlesRemaining: 2,
+      source: "historical-log",
+    });
+    expect(result.outcome).toBe("applied");
+    expect(result.state.journey.deck).toEqual([
+      expect.objectContaining({ cardNumber: 10002, isBane: true }),
+    ]);
+  });
+
+  it("PUSH_TEMPORARY_NIGHTMARE_GRANT bounces a non-positive count", () => {
+    registerDeckContentProvider({
+      resolveCardNumber: (cardId) => cardId === NIGHTMARE_CARD_ID ? 10002 : null,
+      resolveDreamsign: () => null,
+    });
     const state = shopState([cardSlot()]);
     expect(
-      reduce(state, "PUSH_TEMPORARY_BANE_GRANT", {
-        cardNumber: 3,
-        baneName: "Doubt",
+      reduce(state, "PUSH_TEMPORARY_NIGHTMARE_GRANT", {
+        cardId: NIGHTMARE_CARD_ID,
         count: 0,
         battlesRemaining: 1,
         source: "x",

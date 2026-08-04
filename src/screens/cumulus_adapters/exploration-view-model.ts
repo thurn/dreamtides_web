@@ -19,6 +19,7 @@ import {
 } from "../../data/exploration";
 import { createDreamsign } from "../../data/dreamsigns";
 import type { JourneyContent } from "../../data/journey-content";
+import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import { guideForSiteType } from "../../data/dreamscapes";
 import { asCardId } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
@@ -312,12 +313,12 @@ function followupForAction(
         dreamsigns: heldDreamsignChoices(state),
       };
     case "gain-card":
-    case "gain-bane-and-card":
+    case "gain-nightmare-and-card":
     case "gain-random-cards":
     case "gain-essence-per-card":
     case "increase-spark-all":
     case "make-fast-all":
-    case "reduce-cost-all-and-gain-banes":
+    case "reduce-cost-all-and-gain-nightmares":
       return { kind: "none" };
   }
 }
@@ -344,7 +345,14 @@ function effectReferencesForAction(
       });
     }
   }
-  for (const cardId of [action.cardId, action.baneCardId]) {
+  const cardIds = [action.cardId];
+  if (
+    action.effectKind === "gain-nightmare-and-card" ||
+    action.effectKind === "reduce-cost-all-and-gain-nightmares"
+  ) {
+    cardIds.push(NIGHTMARE_CARD_ID);
+  }
+  for (const cardId of cardIds) {
     if (cardId === undefined) continue;
     const card = cardById(content, cardId);
     if (card !== null) {

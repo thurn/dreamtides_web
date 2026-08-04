@@ -90,7 +90,6 @@ export interface CoopActions {
   addCard: (options: {
     cardId: string;
     transfiguration?: unknown;
-    isBane?: boolean;
     source?: unknown;
   }) => Promise<number>;
   removeDeckEntry: (entryId: string) => Promise<number>;
@@ -114,14 +113,14 @@ export interface CoopActions {
     entryId: string,
   ) => Promise<number>;
   acceptDuplicationChoice: (siteId: string, entryId: string) => Promise<number>;
-  purgeAllBaneCards: () => Promise<number>;
-  purgeRandomBaneCards: (count: number) => Promise<number>;
+  purgeAllNightmareCards: () => Promise<number>;
+  purgeRandomNightmareCards: (count: number) => Promise<number>;
 
   // --- dreamsigns ---
   addDreamsign: (dreamsignId: string) => Promise<number>;
   removeDreamsign: (dreamsignId: string) => Promise<number>;
   setDreamsignPool: (ids: readonly string[]) => Promise<number>;
-  setDreamsignIsBane: (dreamsignId: string, isBane: boolean) => Promise<number>;
+  setDreamsignIsNegative: (dreamsignId: string, isNegative: boolean) => Promise<number>;
 
   // --- draft ---
   setDraftState: (draftState: unknown) => Promise<number>;
@@ -179,7 +178,12 @@ export interface CoopActions {
 
   // --- modifiers & atlas ---
   pushBattleModifier: (modifier: unknown) => Promise<number>;
-  pushTemporaryBaneGrant: (payload: Record<string, unknown>) => Promise<number>;
+  pushTemporaryNightmareGrant: (payload: {
+    cardId: string;
+    count: number;
+    battlesRemaining: number;
+    source: string;
+  }) => Promise<number>;
   banSiteType: (
     siteType: string,
     dreamscapesRemaining: number,
@@ -394,15 +398,16 @@ export function makeActions(append: AppendFn): CoopActions {
       emit("ACCEPT_TRANSFIGURATION_CHOICE", { siteId, entryId }),
     acceptDuplicationChoice: (siteId, entryId) =>
       emit("ACCEPT_DUPLICATION_CHOICE", { siteId, entryId }),
-    purgeAllBaneCards: () => emit("PURGE_ALL_BANE_CARDS", {}),
-    purgeRandomBaneCards: (count) => emit("PURGE_RANDOM_BANE_CARDS", { count }),
+    purgeAllNightmareCards: () => emit("PURGE_ALL_NIGHTMARE_CARDS", {}),
+    purgeRandomNightmareCards: (count) =>
+      emit("PURGE_RANDOM_NIGHTMARE_CARDS", { count }),
 
     // --- dreamsigns ---
     addDreamsign: (dreamsignId) => emit("ADD_DREAMSIGN", { dreamsignId }),
     removeDreamsign: (dreamsignId) => emit("REMOVE_DREAMSIGN", { dreamsignId }),
     setDreamsignPool: (ids) => emit("SET_DREAMSIGN_POOL", { ids: [...ids] }),
-    setDreamsignIsBane: (dreamsignId, isBane) =>
-      emit("SET_DREAMSIGN_IS_BANE", { dreamsignId, isBane }),
+    setDreamsignIsNegative: (dreamsignId, isNegative) =>
+      emit("SET_DREAMSIGN_IS_NEGATIVE", { dreamsignId, isNegative }),
 
     // --- draft ---
     setDraftState: (draftState) => emit("SET_DRAFT_STATE", { draftState }),
@@ -486,8 +491,8 @@ export function makeActions(append: AppendFn): CoopActions {
     // --- modifiers & atlas ---
     pushBattleModifier: (modifier) =>
       emit("PUSH_BATTLE_MODIFIER", { modifier }),
-    pushTemporaryBaneGrant: (payload) =>
-      emit("PUSH_TEMPORARY_BANE_GRANT", { ...payload }),
+    pushTemporaryNightmareGrant: (payload) =>
+      emit("PUSH_TEMPORARY_NIGHTMARE_GRANT", { ...payload }),
     banSiteType: (siteType, dreamscapesRemaining) =>
       emit("BAN_SITE_TYPE", { siteType, dreamscapesRemaining }),
     boostSiteAppearance: (siteType, percent, dreamscapesRemaining) =>

@@ -44,7 +44,7 @@ describe("transformExplorationData", () => {
     expect(actions.map((action) => action.effectKind)).toEqual(
       expect.arrayContaining([
         "make-fast-all",
-        "reduce-cost-all-and-gain-banes",
+        "reduce-cost-all-and-gain-nightmares",
         "gain-random-dreamsign",
         "purge-dreamsign-for-essence",
       ]),

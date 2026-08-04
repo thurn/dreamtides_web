@@ -11,12 +11,12 @@
 /**
  * A named CSS `filter` for a piece of media. `dreamsign-portrait` is the soft
  * drop-shadow + violet bloom that grounds a transparent dreamsign portrait;
- * its `-bane` variant adds the desaturation a bane sign reads with. The `*-glow`
+ * its `-negative` variant adds the negative-sign desaturation. The `*-glow`
  * entries are emitted-light blooms for a resource-mark glyph.
  */
 export type MediaFilter =
   | "dreamsign-portrait"
-  | "dreamsign-portrait-bane"
+  | "dreamsign-portrait-negative"
   | "spark-glow"
   | "energy-glow";
 
@@ -25,7 +25,7 @@ const DREAMSIGN_PORTRAIT_SHADOW =
 
 const MEDIA_FILTERS: Record<MediaFilter, string> = {
   "dreamsign-portrait": DREAMSIGN_PORTRAIT_SHADOW,
-  "dreamsign-portrait-bane": `${DREAMSIGN_PORTRAIT_SHADOW} grayscale(0.5)`,
+  "dreamsign-portrait-negative": `${DREAMSIGN_PORTRAIT_SHADOW} grayscale(0.5)`,
   "spark-glow": "drop-shadow(0 0 6px rgba(243,195,63,0.65))",
   "energy-glow": "drop-shadow(0 0 6px rgba(14,165,233,0.60))",
 };

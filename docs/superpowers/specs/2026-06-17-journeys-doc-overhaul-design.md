@@ -26,7 +26,7 @@ tune the economy.
    onto existing code (Dreamsign Market, Dreamsign Revelation, Augury);
    stub the three genuinely new sites (Tempting Offer, Gamble, Exploration).
 6. Apply economy tweaks (starting essence 200, purge `30 + 5·N·(N+1)`, single
-   currency, banes folded into Purge).
+   currency, Nightmare folded into Purge).
 7. Keep everything tunable via TOML per the Golden Rule.
 
 ## 2. Locked decisions
@@ -42,7 +42,7 @@ tune the economy.
   screen so the atlas/dreamscape system is complete.
 - **Currency consolidation:** fold the existing "Omens" currency into **essence**
   (single currency per the doc). Dreamsign Market and shop restocks cost essence.
-- **Banes:** retire the separate "Cleanse" site; Purge selects and removes banes
+- **Nightmare:** retire the separate "Cleanse" site; Purge selects and removes Nightmare
   (cheaply / free) alongside ordinary cards.
 - **Dream Avatar selection:** only change is **starting essence default → 200**
   (keep the per-Dream Avatar `startingEssence` override). **Do not modify pool
@@ -73,7 +73,7 @@ Major gaps this spec closes:
 | Dreamscapes | procedural biome names | 11 named dreamscapes w/ aesthetic, guide, affiliation |
 | Dream Guides | none | 10 named NPCs + dialog + home specialties |
 | Affiliations | none | IDF similarity reweighting on all draws + opponent bias |
-| Sites | DreamJourney/Cleanse/Omens | Augury rename, Dreamsign Market, banes→Purge, single currency, 3 stubs |
+| Sites | DreamJourney/Cleanse/Omens | Augury rename, Dreamsign Market, Nightmare→Purge, single currency, 3 stubs |
 | Economy | essence 250, purge `30+8N(N+1)` | essence 200, purge `30+5N(N+1)` |
 
 ## 4. Key file map (anchors)
@@ -202,7 +202,7 @@ acceptance criteria.
 - **Acceptance:** test asserts reweighting shifts probabilities (statistical,
   data-derived, not hardcoded card names); does not change pool membership.
 
-**T1.4 — Site remap, new sites, currency + banes consolidation, economy.**
+**T1.4 — Site remap, new sites, currency + Nightmare consolidation, economy.**
 - Rename **Dream Journey → Augury** across types/state/screens/logging
   (two-reward choice, pure upside).
 - **Dreamsign Market**: Shop variant selling dreamsigns for essence (3 items +
@@ -214,12 +214,12 @@ acceptance criteria.
   close/continue that completes the site). Wired into generation and routing.
 - **Currency:** fold Omens into essence everywhere (shop dreamsign purchase,
   restocks). Remove Omens from state/UI.
-- **Banes:** retire Cleanse; extend Purge to select + remove banes cheaply/free.
+- **Nightmare:** retire Cleanse; extend Purge to select + remove Nightmare cheaply/free.
 - **Economy:** starting essence default **200**; purge formula
   `30 + 5·N·(N+1)` in `src/purge/purge-pricing.ts`; restock 50; cap 500.
 - **Manual QA:** visit Augury (renamed), Dreamsign Market (buy with
   essence + restock), Dreamsign Revelation (single + choice), each stub screen,
-  and Purge (remove an ordinary card + a bane, prices match new formula).
+  and Purge (remove an ordinary card + a Nightmare card, prices match new formula).
   Confirm no Omens UI remains. Landscape + portrait.
 - **Acceptance:** per-site behavior verified in-app; purge pricing test matches
   the new formula; no Omens references remain.

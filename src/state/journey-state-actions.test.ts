@@ -252,7 +252,7 @@ describe("journey state actions", () => {
         },
         {
           entryId: "deck-15",
-          cardNumber: 303,
+          cardNumber: 10002,
           transfiguration: null,
           isBane: true,
         },
@@ -283,7 +283,7 @@ describe("journey state actions", () => {
       ],
     };
 
-    const next = addCardToJourneyState(prev, 202, false);
+    const next = addCardToJourneyState(prev, 202);
 
     expect(next.deck).toEqual([
       prev.deck[0],

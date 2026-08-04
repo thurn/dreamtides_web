@@ -2,17 +2,6 @@
 # mechanics inspire the scene. Each encounter has exactly two player actions.
 # Template metadata traces each production action back to the selected design.
 
-[[custom-card]]
-id = "b0a2c3d4-e5f6-4789-8abc-0def12345678"
-name = "Nightmare"
-card-number = 10002
-card-type = "Event"
-subtype = ""
-energy-cost = 0
-rendered-text = "Bane."
-image-number = 1169640025
-art-owned = false
-
 # selected prose: pair-2 (rank 2)
 # selected actions: pair-5 (rank 4)
 [[encounter]]
@@ -259,13 +248,12 @@ effect-kind = "make-fast-all"
 [[encounter.action]]
 id = "15b63630-d9f8-473b-9717-15ad91ff2f16:pair-1:template-65"
 label = "Overload the aperture"
-effect-text = "All cards in your deck are reduced in cost by 1●. Gain 3 \"Nightmare\" bane cards."
+effect-text = "All cards in your deck are reduced in cost by 1●. Gain 3 Nightmare cards."
 template-id = 65
 template-variables = { count = 3 }
-effect-kind = "reduce-cost-all-and-gain-banes"
+effect-kind = "reduce-cost-all-and-gain-nightmares"
 energy-cost-reduction = 1
-bane-card-id = "b0a2c3d4-e5f6-4789-8abc-0def12345678"
-bane-count = 3
+nightmare-count = 3
 
 # selected prose: pair-1 (rank 1)
 # selected actions: pair-5 (rank 2)
@@ -287,13 +275,12 @@ pack-size = 3
 [[encounter.action]]
 id = "764b62f6-6af9-40ad-8d1f-653cc1a11030:pair-5:template-65"
 label = "Charge Through the Smoke"
-effect-text = "All cards in your deck are reduced in cost by 1●. Gain 3 \"Nightmare\" bane cards."
+effect-text = "All cards in your deck are reduced in cost by 1●. Gain 3 Nightmare cards."
 template-id = 65
 template-variables = { count = 3 }
-effect-kind = "reduce-cost-all-and-gain-banes"
+effect-kind = "reduce-cost-all-and-gain-nightmares"
 energy-cost-reduction = 1
-bane-card-id = "b0a2c3d4-e5f6-4789-8abc-0def12345678"
-bane-count = 3
+nightmare-count = 3
 
 # selected prose: pair-1 (rank 1)
 # selected actions: pair-1 (rank 1)

@@ -6,7 +6,8 @@ import {
   DEFAULT_DRAFT_RECORDS_DIR,
   readCardPopularity,
 } from "./lib/card-popularity.mjs";
-import { BANE_NAMES, transformCard } from "./setup-assets.mjs";
+import { NIGHTMARE_CARD_ID } from "../src/data/nightmare-identity.ts";
+import { transformCard } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 export const DEFAULT_CARD_TOML_PATH = join("data", "tabula", "cards.toml");
@@ -178,7 +179,7 @@ export function readEditorCards({
   // source TOML, so the same corpus tally applies regardless of cardTomlPath.
   const popularityCounts = readCardPopularity(join(rootDir, draftRecordsDir));
   // The editor does not display Special-rarity records: the only two are the
-  // "Void Indicator Card" placeholder and the "Nightmare" bane, neither of
+  // "Void Indicator Card" placeholder and Nightmare, the sole Bane card; neither
   // which is meaningful to edit through the card editor.
   return readSourceCards(rootDir, cardTomlPath)
     .filter((card) => card.rarity !== "Special")
@@ -813,7 +814,7 @@ function blockContentInsertOffset(blockText) {
 
 export function refreshCardDataJson({ rootDir = ROOT, cardTomlPath = DEFAULT_CARD_TOML_PATH } = {}) {
   const cards = readSourceCards(rootDir, cardTomlPath)
-    .filter((card) => card.rarity !== "Special" || BANE_NAMES.has(card.name))
+    .filter((card) => card.rarity !== "Special" || card.id === NIGHTMARE_CARD_ID)
     .map(transformCard);
   const cardJsonPath = join(rootDir, CARD_JSON_PATH);
 

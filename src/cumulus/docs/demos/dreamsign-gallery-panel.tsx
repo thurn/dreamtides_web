@@ -11,7 +11,7 @@ const DEMO_DREAMSIGNS: DreamsignData[] = [
     imageName: "acorn_gold.png",
     imageAlt: "Golden fruit-like charm with a mesh-patterned orb.",
     effectDescription: "Once per turn, when you discard a card, your next card this turn costs 2● less.",
-    isBane: false,
+    isNegative: false,
   },
   {
     id: "278EC1AB-F532-4862-84AE-63DF5E49548C",
@@ -19,7 +19,7 @@ const DEMO_DREAMSIGNS: DreamsignData[] = [
     imageName: "aertfact.png",
     imageAlt: "Blue-gray panel with bright red-orange branching nodes.",
     effectDescription: "The second character you play each turn costs 1● less.",
-    isBane: false,
+    isNegative: false,
   },
   {
     id: "6E20E6C7-295A-48B1-B252-B8B00D6902C9",
@@ -27,7 +27,7 @@ const DEMO_DREAMSIGNS: DreamsignData[] = [
     imageName: "amanita.png",
     imageAlt: "Red spotted mushroom with white flecks.",
     effectDescription: "Once per turn, when an ally leaves play, your next character this turn costs 2● less.",
-    isBane: true,
+    isNegative: true,
   },
 ];
 

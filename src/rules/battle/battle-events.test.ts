@@ -216,7 +216,7 @@ const fakeProvider: BattleInitProvider = {
 // ---------------------------------------------------------------------------
 
 function makeEntry(entryId: string, isBane = false): DeckEntry {
-  return { entryId, cardNumber: 1, transfiguration: null, isBane };
+  return { entryId, cardNumber: isBane ? 10002 : 1, transfiguration: null, isBane };
 }
 
 const SITE_ID = "site-42";
@@ -438,19 +438,18 @@ describe("END_BATTLE victory", () => {
       battlesRemaining: 2,
       source: "test",
     };
-    const expiringBaneMod: BattleModifier = {
-      kind: "temporary_bane_grant",
-      baneName: "b",
+    const expiringNightmareMod: BattleModifier = {
+      kind: "temporary_nightmare_grant",
       count: 1,
       battlesRemaining: 1,
-      addedEntryIds: ["bane-entry"],
+      addedEntryIds: ["nightmare-entry"],
       source: "test",
     };
     const state = inBattleState(
       {
         essence: 450,
-        battleModifiers: [survivingMod, expiringBaneMod],
-        deck: [makeEntry("keep-entry"), makeEntry("bane-entry", true)],
+        battleModifiers: [survivingMod, expiringNightmareMod],
+        deck: [makeEntry("keep-entry"), makeEntry("nightmare-entry", true)],
       },
       makeBattle(makeBoard({ result: "victory" }), makeInit()),
     );
@@ -475,7 +474,7 @@ describe("END_BATTLE victory", () => {
     expect(journey.battleModifiers).toEqual([
       { ...survivingMod, battlesRemaining: 1 },
     ]);
-    // Temporary-bane deck entries introduced by the dropped modifier leave the deck.
+    // Temporary Nightmare entries introduced by the dropped modifier leave the deck.
     expect(journey.deck.map((e) => e.entryId)).toEqual(["keep-entry"]);
     expect(journey.currentDreamscape).toBeNull();
     expect(result.state.battle).toBeNull();

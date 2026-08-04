@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { JourneyContent } from "../../data/journey-content";
+import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
@@ -53,7 +54,7 @@ describe("exploration-view-model", () => {
       id: "gained-dreamsign-id",
       name: "Gained Dreamsign",
       effectDescription: "A synthetic reward sign.",
-      isBane: false,
+      isNegative: false,
     };
     const state = {
       ...createDefaultState(),
@@ -355,20 +356,20 @@ describe("exploration-view-model", () => {
     expect(view.actions[1].followup).toEqual({ kind: "none" });
   });
 
-  it("builds UUID-backed references for fixed cards, banes, and Dreamsigns", () => {
+  it("builds UUID-backed references for fixed cards, Nightmare, and Dreamsigns", () => {
     const fixedCard = card(
       asCardId("f0000000-0000-4000-8000-000000000019"),
       19,
     );
-    const baneCard = {
-      ...card(asCardId("f0000000-0000-4000-8000-000000000020"), 20),
+    const nightmareCard = {
+      ...card(NIGHTMARE_CARD_ID, 20),
       name: asCardName("Nightmare"),
     };
     const dreamsignId = "f0000000-0000-4000-8000-000000000021";
     const content = {
       cardDatabase: new Map([
         [fixedCard.cardNumber, fixedCard],
-        [baneCard.cardNumber, baneCard],
+        [nightmareCard.cardNumber, nightmareCard],
       ]),
       dreamAvatars: [],
       dreamwellCards: [],
@@ -410,13 +411,12 @@ describe("exploration-view-model", () => {
       offer,
       content,
     );
-    const bane = buildExplorationActionEffect(
+    const nightmare = buildExplorationActionEffect(
       {
-        id: "bane-card",
+        id: "nightmare-card",
         label: "Accept the cost",
-        effectText: 'Gain 3 "Nightmare" bane cards.',
-        effectKind: "reduce-cost-all-and-gain-banes",
-        baneCardId: baneCard.id,
+        effectText: "Gain 3 Nightmare cards.",
+        effectKind: "reduce-cost-all-and-gain-nightmares",
       },
       offer,
       content,
@@ -440,14 +440,14 @@ describe("exploration-view-model", () => {
         entity: { kind: "card", card: { id: fixedCard.id } },
       },
     ]);
-    expect(bane.effectText).toBe('Gain 3 "Nightmare" bane cards.');
-    expect(bane.effectParts).toMatchObject([
-      { kind: "text", text: 'Gain 3 "' },
+    expect(nightmare.effectText).toBe("Gain 3 Nightmare cards.");
+    expect(nightmare.effectParts).toMatchObject([
+      { kind: "text", text: "Gain 3 " },
       {
         kind: "entity",
-        entity: { kind: "card", card: { id: baneCard.id } },
+        entity: { kind: "card", card: { id: nightmareCard.id } },
       },
-      { kind: "text", text: '" bane cards.' },
+      { kind: "text", text: " cards." },
     ]);
     expect(dreamsign.effectParts).toMatchObject([
       { kind: "text", text: "Gain " },
@@ -467,7 +467,7 @@ describe("exploration-view-model", () => {
         id: heldDreamsignId,
         name: "Held Dreamsign",
         effectDescription: "A synthetic sign effect.",
-        isBane: false,
+        isNegative: false,
       }],
       maxDreamsigns: 1,
     };

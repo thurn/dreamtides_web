@@ -48,7 +48,7 @@ revision.
 | 2 | Progressive Draw | Signature | stop or buy the next improving draw |
 | 3 | Odds Ladder | Alternate | choose Essence or a temporary card lock as each stake |
 | 4 | Cash-Out Ladder | Signature | bank the current prize or risk it |
-| 5 | Red-or-Black Insurance | Signature | choose coverage and which Bane remains exposed |
+| 5 | Red-or-Black Insurance | Signature | choose coverage and which Nightmare card remains exposed |
 | 6 | Wheel of 52 | Alternate | choose a low-variance or jackpot payout table |
 | 7 | Four-Suit Escrow | Signature | choose the exact card placed at risk |
 | 8 | High–Low | Signature | call a direction and choose when to cash out |
@@ -116,7 +116,7 @@ The card deck approximates that ladder with 5, 13, 26, and 39 winners:
 | 4 | hearts, diamonds, or clubs | 39 / 52 = 75.00% |
 
 Before each attempt the player chooses one of two payments: 20/30/45/65
-Essence for attempts 1–4, or lock a selected non-Bane card out of the next
+Essence for attempts 1–4, or lock a selected non-Nightmare card out of the next
 battle. Multiple card-lock payments extend the same lock by one additional
 battle. A success grants the shown Dreamsign; a failure offers the next row.
 Each attempt uses a reassembled deck so its displayed fraction is exact.
@@ -135,7 +135,7 @@ player cashes out or continues. Each stage reassembles the deck.
 | 2 | 2–4 | 12 / 52 = 23.08% | 140 Essence |
 | 3 | 2–7 | 24 / 52 = 46.15% | 140 Essence plus shown Dreamsign |
 
-A bust forfeits the unclaimed bank and adds one disclosed Bane. Surviving all
+A bust forfeits the unclaimed bank and adds one disclosed Nightmare card. Surviving all
 three has probability `48/52 × 40/52 × 28/52 = 38.23%`.
 
 ## 5. Red-or-Black Insurance
@@ -146,13 +146,13 @@ Golden Shrine’s larger reward with lasting deck pollution.
 The player receives the shown Dreamsign in every outcome. Before drawing they
 choose:
 
-- uninsured: no premium; 26 red cards are clean and 26 black cards add their
-  disclosed club or spade Bane;
-- insure clubs: pay 40 Essence; 39 cards are clean and only spades add a Bane;
-- insure spades: pay 40 Essence; 39 cards are clean and only clubs add a Bane.
+- uninsured: no premium; 26 red cards are clean and 26 black cards add a
+  Nightmare card;
+- insure clubs: pay 40 Essence; 39 cards are clean and only spades add a Nightmare card;
+- insure spades: pay 40 Essence; 39 cards are clean and only clubs add a Nightmare card.
 
-The player chooses coverage after comparing the two exact Banes, making the
-decision depend on the current deck rather than probability alone.
+The player chooses which black suit to insure after considering the premium,
+leaving the other suit exposed to the same Nightmare penalty.
 
 ## 6. Wheel of 52
 
@@ -179,7 +179,7 @@ input.
 Battlefield’s keep-for-two-battles contract, and Lifemother’s Remnant’s
 immediate-versus-delayed value.
 
-The player selects one non-starter, non-Bane entry and places it in escrow, then
+The player selects one non-starter, non-Nightmare entry and places it in escrow, then
 draws one card:
 
 | Suit | Chance | Contract |
@@ -250,7 +250,7 @@ base reward:
 
 The player chooses one stack and takes its base reward. They then either leave
 or expose that stack’s bottom card: red adds 100 Essence; black adds one
-disclosed Bane. If `r` of the three visible top cards are red, the chosen
+disclosed Nightmare card. If `r` of the three visible top cards are red, the chosen
 bottom card is red with exact probability `(26 − r) / 49`; black probability is
 the complementary `(23 + r) / 49`. The other two face-down bottom cards provide
 no additional information.
@@ -260,7 +260,7 @@ no additional information.
 **Inspiration:** Relic Trader’s exchange of an owned asset and Chaos Portal’s
 purge-for-random-reward structure.
 
-The player selects one valued non-starter card and one expendable non-Bane card,
+The player selects one valued non-starter card and one expendable non-Nightmare card,
 then chooses:
 
 - **Hedge:** red duplicates the valued card; black purges the expendable card.
@@ -331,7 +331,7 @@ starting:
 
 Each stage reassembles the deck. A win grants the assigned reward; after stages
 one and two the player may leave with all claimed rewards or continue. A loss
-adds one disclosed Bane but does not revoke rewards already claimed. Assigning
+adds one disclosed Nightmare card but does not revoke rewards already claimed. Assigning
 the most valuable reward to a safer stage limits upside later, because each
 reward can appear only once.
 
@@ -395,7 +395,7 @@ the 2–7, 8–J, and Q–A bands:
 
 - pay 100 Essence;
 - surrender one selected held Dreamsign;
-- add one selected Bane from two disclosed Bane ids.
+- add one selected Nightmare card from two disclosed Nightmare card ids.
 
 The bands contain 24, 16, and 12 cards, for exact chances of 46.15%, 30.77%,
 and 23.08%. One card selects exactly one price, then the complete reward
@@ -415,7 +415,7 @@ its first card:
 
 The player may take that prize or reveal the packet’s second card. A red second
 card doubles an Essence prize or adds 150 Essence to the Dreamsign; a black
-second card forfeits the first prize and adds one disclosed Bane. After the
+second card forfeits the first prize and adds one disclosed Nightmare card. After the
 first card is known, the exact double-up chance is `25 / 51 = 49.02%` if it was
 red and `26 / 51 = 50.98%` if it was black.
 

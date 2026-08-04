@@ -86,8 +86,8 @@ function makeEntry(
   };
 }
 
-function dreamsign(id: string, isBane = false): Dreamsign {
-  return { id, name: "n", effectDescription: "e", isBane };
+function dreamsign(id: string, isNegative = false): Dreamsign {
+  return { id, name: "n", effectDescription: "e", isNegative };
 }
 
 const SITE_ID = "site-1";
@@ -881,7 +881,7 @@ describe("COMPLETE_SITE", () => {
 });
 
 // ---------------------------------------------------------------------------
-// PURGE_DECK_CARDS (completed: essence + bane dreamsign + site coupling)
+// PURGE_DECK_CARDS (completed: essence + negative Dreamsign + site coupling)
 // ---------------------------------------------------------------------------
 
 describe("PURGE_DECK_CARDS full behavior", () => {
@@ -890,9 +890,9 @@ describe("PURGE_DECK_CARDS full behavior", () => {
       essence: 500,
       deck: [
         makeEntry({ entryId: "deck-1", cardNumber: 10 }),
-        makeEntry({ entryId: "deck-2", cardNumber: 20, isBane: true }),
+        makeEntry({ entryId: "nightmare", cardNumber: 10002, isBane: true }),
       ],
-      dreamsigns: [dreamsign("keep", false), dreamsign("bane", true)],
+      dreamsigns: [dreamsign("keep", false), dreamsign("negative", true)],
     });
   }
 
@@ -911,10 +911,10 @@ describe("PURGE_DECK_CARDS full behavior", () => {
     });
     expect(out.outcome).toBe("applied");
     expect(out.state.journey.essence).toBe(500 - 40);
-    expect(out.state.journey.deck.map((e) => e.entryId)).toEqual(["deck-2"]);
+    expect(out.state.journey.deck.map((e) => e.entryId)).toEqual(["nightmare"]);
     expect(out.state.journey.dreamsigns.map((d) => d.id)).toEqual([
       "keep",
-      "bane",
+      "negative",
     ]);
     expect(out.state.journey.visitedSites).toContain(SITE_ID);
     expect(out.state.journey.screen.type).toBe("dreamscape");
@@ -950,17 +950,17 @@ describe("PURGE_DECK_CARDS full behavior", () => {
     expect(out.state.journey.essence).toBe(60);
   });
 
-  it("does not remove a non-bane dreamsign even if its index is listed", () => {
+  it("does not remove a Dreamsign when a forged index list is supplied", () => {
     const state = purgeState();
     const out = reduce(state, "PURGE_DECK_CARDS", {
       entryIds: ["deck-1"],
       siteId: SITE_ID,
-      baneDreamsignIndices: [0],
+      negativeDreamsignIndices: [0],
     });
     expect(out.outcome).toBe("applied");
     expect(out.state.journey.dreamsigns.map((d) => d.id)).toEqual([
       "keep",
-      "bane",
+      "negative",
     ]);
   });
 

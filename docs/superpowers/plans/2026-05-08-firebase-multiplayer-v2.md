@@ -1734,7 +1734,7 @@ export function changeJourneyEssence(prev: JourneyState, delta: number): Journey
 export function addCardToJourneyState(
   prev: JourneyState,
   cardNumber: number,
-  isBane: boolean,
+  isNightmare: boolean,
 ): JourneyState {
   return {
     ...prev,
@@ -1744,7 +1744,7 @@ export function addCardToJourneyState(
         entryId: nextDeckEntryId(prev.deck),
         cardNumber,
         transfiguration: null,
-        isBane,
+        isBane: isNightmare,
       },
     ],
   };
@@ -1820,10 +1820,8 @@ export function startJourneyFromDreamAvatar({
     ],
     prev.deck,
   );
-  const playerHasBanes =
-    deck.some((entry) => entry.isBane) ||
-    prev.dreamsigns.some((dreamsign) => dreamsign.isBane);
-  const atlas = generateInitialAtlas(prev.completionLevel, { playerHasBanes });
+  const playerHasNightmare = deck.some((entry) => entry.isBane);
+  const atlas = generateInitialAtlas(prev.completionLevel, { playerHasNightmare });
   const firstNode = Object.values(atlas.nodes).find((node) => node.status === "available");
 
   return {
@@ -2144,9 +2142,6 @@ export function MultiplayerJourneyProvider({
       completeSite: (_siteId: string, _source: string) => {},
       pickDraftCard: (_siteId: string, _cardNumber: number) => {},
       addCard: (cardNumber: number, _source: string) => {
-        void cardNumber;
-      },
-      addBaneCard: (cardNumber: number, _source: string) => {
         void cardNumber;
       },
       removeCard: (entryId: string, _source: string) => {

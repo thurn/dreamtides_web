@@ -28,6 +28,7 @@ At minimum it must support:
   remainingDreamsignPool, ...).
 - **Deck entries:** `DeckEntry` in `src/types/journey.ts` holds
   `{ entryId, cardNumber, transfiguration, typeChange?, keywordModification?, isBane }`.
+  The `isBane` marker is derived from Nightmare's canonical UUID.
   Base stats (energy cost, spark, subtype) come from `CardData`
   (`src/types/cards.ts`, sourced from `data/tabula/cards.toml`); per-entry
   overrides today are transfiguration, typeChange (cardType + subtype), and
@@ -102,11 +103,11 @@ invariants. The editor never exposes nulling `dreamAvatar` / `resolvedPackage` /
 - **Resources:** reuse `setEssence`, `changeMaxEssence`; add `setEssenceCap`,
   `setMaxDreamsigns`, `setCompletionLevel`.
 - **Dreamsigns:** `addDreamsign(template)`, `removeDreamsign(index)`,
-  `setDreamsignIsBane(index, isBane)`.
+  `setDreamsignIsNegative(index, isNegative)`.
 - **Deck:** `addDeckCard(cardNumber)` (allocates a fresh `entryId`),
   `removeDeckEntry(entryId)`, and a single
   `setDeckEntryOverrides(entryId, partial)` covering `transfiguration`,
-  `typeChange`, `keywordModification`, `statOverride`, and `isBane`.
+  `typeChange`, `keywordModification`, and `statOverride`.
 
 ### 4. UI — `JourneyDebugEditor` overlay
 
@@ -118,14 +119,14 @@ collapsible sections:
 
 - **Resources:** numeric inputs for essence, essence cap, max dreamsigns, and
   completion level; commit on blur / Enter.
-- **Dreamsigns:** the current dreamsign list with a remove button and bane toggle
+- **Dreamsigns:** the current dreamsign list with a remove button and negative toggle
   per row; an "Add dreamsign" picker searchable over the available dreamsign
   catalog (the resolved package dreamsign pool plus `remainingDreamsignPool`).
 - **Deck:** a searchable add-card picker over the entire card database (matched by
   display name and UUID, names resolved at display time); the current deck list,
   each entry expandable to edit energy cost, spark, transfiguration (a dropdown of
   the nine transfiguration types plus "none"), card type + subtype, fast / reclaim
-  keywords, bane, and a remove button.
+  keywords, Nightmare status, and a remove button.
 
 Cards and dreamsigns are always identified internally by UUID / cardNumber; names
 are resolved only for display.

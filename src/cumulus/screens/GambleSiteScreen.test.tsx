@@ -16,7 +16,7 @@ const JACKPOT_DREAMSIGN = {
   name: "Fixture Jackpot",
   imageName: "fixture-jackpot.png",
   effectDescription: "Foresee 1.",
-  isBane: false,
+  isNegative: false,
 };
 
 const VIEW: GambleSiteView = {
@@ -394,7 +394,7 @@ describe("GambleSiteScreen", () => {
             id: "held-sign",
             name: "Held Sign",
             effectDescription: "A held effect.",
-            isBane: false,
+            isNegative: false,
           },
         ],
         maxDreamsigns: 1,

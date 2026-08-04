@@ -112,7 +112,7 @@ describe("glossaryDefinitionsCardModel", () => {
     const card = glossaryDefinitionsCardModel(
       [
         entry("fast", "Fast", { definitionSymbol: "fast" }),
-        entry("bane", "Bane"),
+        entry("bane", "Nightmare Bane"),
       ],
       ["fast", "interrupt"],
     );
@@ -121,8 +121,8 @@ describe("glossaryDefinitionsCardModel", () => {
       kind: "definitions",
       entries: [
         {
-          term: "Bane",
-          definition: "Bane definition.",
+          term: "Nightmare Bane",
+          definition: "Nightmare Bane definition.",
           symbol: undefined,
           termPresentation: undefined,
         },

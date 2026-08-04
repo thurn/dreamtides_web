@@ -29,7 +29,7 @@ function card(overrides: Partial<CardData> = {}): CardData {
     energyCost: 2,
     spark: 3,
     isFast: false,
-    renderedText: "Discard a bane.",
+    renderedText: "Nightmare is a Bane.",
     imageNumber: 1,
     artOwned: true,
     ...overrides,
@@ -97,12 +97,12 @@ function remeasure(): void {
 
 describe("GameCard reveal contract", () => {
   it("registers canonical UUID semantics and derives de-duplicated glossary secondaries", () => {
-    const { container, root } = mount(<GameCard model={model(card({ renderedText: "Bane, then discard another bane." }))} />);
+    const { container, root } = mount(<GameCard model={model(card({ renderedText: "Nightmare is a Bane. The Bane keyword identifies Nightmare." }))} />);
     const source = container.querySelector<HTMLElement>("[data-game-card-source]");
     expect(source?.getAttribute("aria-describedby")).toMatch(/^cumulus-reveal-description-/);
     const description = document.querySelector("[data-cumulus-reveal-descriptions]")?.textContent ?? "";
     expect(description).toContain("Archive Sentry");
-    expect(description).toContain("Bane, then discard another bane");
+    expect(description).toContain("Nightmare is a Bane. The Bane keyword identifies Nightmare");
     const baneEntry = glossary.lookupGlossaryTerm("bane");
     if (baneEntry === undefined) throw new Error("Bane glossary fixture missing");
     expect(description.split(baneEntry.definition).length - 1).toBe(1);
@@ -115,7 +115,7 @@ describe("GameCard reveal contract", () => {
         model={model(
           card({
             renderedText:
-              "Materialize a figment from your void. ▸Materialized: Banish a bane.",
+              "Materialize a figment from your void. ▸Materialized: Banish Nightmare.",
           }),
         )}
       />,
@@ -173,7 +173,7 @@ describe("GameCard reveal contract", () => {
   it("stacks the glossary-backed exhausted status before rules-text definitions", async () => {
     const { container, root } = mount(
       <GameCard
-        model={model(card({ renderedText: "Discard a bane." }))}
+        model={model(card({ renderedText: "Nightmare is a Bane." }))}
         exhausted
       />,
     );
@@ -188,7 +188,7 @@ describe("GameCard reveal contract", () => {
       glossary.requireGlossaryEntry(glossary.GLOSSARY_IDS.exhausted).definition,
     );
     expect(description.indexOf("Exhausted")).toBeLessThan(
-      description.indexOf("Bane"),
+      description.indexOf(glossary.requireGlossaryEntry("bane").definition),
     );
 
     act(() => {
@@ -220,7 +220,7 @@ describe("GameCard reveal contract", () => {
   it("stacks the glossary-backed figment status before rules-text definitions", async () => {
     const { container, root } = mount(
       <GameCard
-        model={model(card({ renderedText: "Discard a bane." }))}
+        model={model(card({ renderedText: "Nightmare is a Bane." }))}
         figment
       />,
     );
@@ -235,7 +235,7 @@ describe("GameCard reveal contract", () => {
       glossary.requireGlossaryEntry(glossary.GLOSSARY_IDS.figment).definition,
     );
     expect(description.indexOf("Figment")).toBeLessThan(
-      description.indexOf("Bane"),
+      description.indexOf(glossary.requireGlossaryEntry("bane").definition),
     );
 
     act(() => {
@@ -417,7 +417,7 @@ describe("GameCard reveal contract", () => {
     vi.spyOn(glossary, "glossaryEntry").mockReturnValue(undefined);
     const { container, root } = mount(
       <GameCard
-        model={model(card({ renderedText: "Discard a bane." }))}
+        model={model(card({ renderedText: "Nightmare is a Bane." }))}
         exhausted
       />,
     );
@@ -459,7 +459,7 @@ describe("GameCard reveal contract", () => {
       <div data-test-width="240">
         <GameCard
           model={model(card({
-            renderedText: "Bane. Materialize a 1✦ warrior figment.",
+            renderedText: "Nightmare is a Bane. Materialize a 1✦ warrior figment.",
           }))}
         />
       </div>,
@@ -561,7 +561,7 @@ describe("GameCard reveal contract", () => {
     await act(async () => { await new Promise((resolve) => setTimeout(resolve, 0)); });
     remeasure();
     await vi.waitFor(() => expect(document.querySelector('[data-cumulus-reveal-card="primary"]')).not.toBeNull());
-    expect(document.querySelector('[data-cumulus-reveal-card="primary"]')?.textContent).toContain("Discard a bane");
+    expect(document.querySelector('[data-cumulus-reveal-card="primary"]')?.textContent).toContain("Nightmare is a Bane");
     act(() => root.unmount());
   });
 
@@ -616,7 +616,7 @@ describe("GameCard reveal contract", () => {
     expect(reveal?.style.left).toBe("254px");
     expect(reveal?.textContent).toContain("Archive Sentry");
     expect(reveal?.textContent).toContain("Synth");
-    expect(reveal?.textContent).toContain("Discard a bane");
+    expect(reveal?.textContent).toContain("Nightmare is a Bane");
     expect(reveal?.querySelector('[data-card-energy-anchor]')).not.toBeNull();
 
     act(() => root.unmount());

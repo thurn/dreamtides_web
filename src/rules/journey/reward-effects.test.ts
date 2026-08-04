@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import type { JourneyContent } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
 import type { JourneyState } from "../../types/journey";
@@ -16,6 +17,7 @@ function fixture() {
     cardDatabase: new Map([
       [1, card(CARD_A, 1)],
       [2, card(CARD_B, 2)],
+      [10002, card(NIGHTMARE_CARD_ID, 10002)],
     ]),
     dreamsignTemplates: [],
   } as unknown as JourneyContent;
@@ -65,9 +67,8 @@ describe("applyJourneyRewardEffect", () => {
           },
           {
             kind: "add_catalog_card",
-            cardUuid: CARD_A,
-            cardNumber: 1,
-            isBane: true,
+            cardUuid: NIGHTMARE_CARD_ID,
+            cardNumber: 10002,
           },
           {
             kind: "add_deck_entry_spark_bonus",

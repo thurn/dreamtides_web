@@ -260,7 +260,7 @@ not by design.
   `rewards.ts:903-905` roll outcomes with `Math.random()` and ship the
   result in the payload — convergent but unreproducible from the seed, and
   under (a) the two clients roll different outcomes for the same option.
-  (c) `costs.ts:114` resolves a bane card by `card.name` equality — the
+  (c) `costs.ts:114` resolves Nightmare by `card.name` equality — the
   practice AGENTS.md bans outright. Fix: journey traversal/commitment
   becomes events (`COMMIT_JOURNEY_OPTION { nodeId, optionIndex }` folding
   costs/rewards from `ctx.rng` in the reducer); the name lookup becomes a

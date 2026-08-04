@@ -1,6 +1,7 @@
 import { mergeCardKeywordModification } from "../../card-type-change";
 import { createDreamsign } from "../../data/dreamsigns";
 import type { JourneyContent } from "../../data/journey-content";
+import { isNightmareCardId } from "../../data/nightmare";
 import { deriveEntryIdCounter } from "../../state/deck-entry-ids";
 import { addSiteToCurrentDreamscape } from "../../state/journey-state-actions";
 import type { DreamsignTemplate } from "../../types/content";
@@ -20,7 +21,6 @@ export type JourneyRewardEffect =
       cardUuid: string;
       cardNumber: number;
       transfiguration?: TransfigurationType;
-      isBane?: boolean;
     }
   | {
       kind: "add_dreamsign";
@@ -159,7 +159,7 @@ function applyEffect(
             entryId: entryIds.next(),
             cardNumber: effect.cardNumber,
             transfiguration: effect.transfiguration ?? null,
-            isBane: effect.isBane ?? false,
+            isBane: isNightmareCardId(effect.cardUuid),
           },
         ],
       };

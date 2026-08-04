@@ -51,7 +51,7 @@ export interface DeckCardView {
   entryId: string;
   /** Canonical UUID-backed semantic model rendered by GameCard. */
   model: GameCardModel;
-  /** True when the entry is a bane, marked with a corner glyph. */
+  /** True when the entry is Nightmare, the sole Bane, marked with a danger ring. */
   isBane: boolean;
 }
 
@@ -350,7 +350,7 @@ function DeckTile({
         display: "block",
         width: "100%",
         borderRadius: token("--radius-card"),
-        // A bane card wears a danger ring so a corrupted card is legible even at
+        // Nightmare wears a danger ring so the penalty card is legible even at
         // tile size, without inventing a new glyph.
         boxShadow: cardView.isBane ? `0 0 0 2px ${token("--danger")}` : "none",
         WebkitTouchCallout: "none",

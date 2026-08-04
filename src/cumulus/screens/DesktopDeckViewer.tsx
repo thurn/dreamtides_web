@@ -608,7 +608,7 @@ function DeckGrid({
 
 /**
  * One deck card in the grid: the full card, grown in place on hover with its
- * glossary definitions stacked beside it. A bane card wears a danger ring so a
+ * glossary definitions stacked beside it. Nightmare wears a danger ring so a
  * corrupted card is legible at tile size.
  */
 function DeckTile({ cardView }: { cardView: DeckCardView }) {

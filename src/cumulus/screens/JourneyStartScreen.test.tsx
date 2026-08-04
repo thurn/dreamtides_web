@@ -291,7 +291,7 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     if (reclaim === undefined || bane === undefined) {
       throw new Error("Expected representative glossary fixtures");
     }
-    const ability = `Reclaim a bane, then ${reclaim.variants?.[0] ?? "reclaim"} it.`;
+    const ability = `Reclaim Nightmare, the Bane card, then ${reclaim.variants?.[0] ?? "reclaim"} it.`;
     const dreamAvatar = { ...OFFERED[0], renderedText: ability };
     const { container, root } = mount(
       <JourneyStartScreen

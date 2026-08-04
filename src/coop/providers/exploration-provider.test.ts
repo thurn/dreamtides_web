@@ -5,6 +5,7 @@ import type {
   ExplorationContent,
 } from "../../data/exploration";
 import type { JourneyContent } from "../../data/journey-content";
+import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import { createDefaultState } from "../../state/journey-context";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
@@ -16,7 +17,7 @@ import {
 
 const SOURCE_CARD_ID = asCardId("161482b6-af07-4d9e-822d-8c738672beb9");
 const CHARM_POUCH_ID = "2D4EB3EE-0931-45ED-8365-69F18096EAD5";
-const NIGHTMARE_ID = asCardId("b0a2c3d4-e5f6-4789-8abc-0def12345678");
+const NIGHTMARE_ID = NIGHTMARE_CARD_ID;
 
 function card(
   id: string,
@@ -343,7 +344,7 @@ describe("Exploration provider", () => {
           id: "held-dreamsign",
           name: "Held Dreamsign",
           effectDescription: "A held fixture.",
-          isBane: false,
+          isNegative: false,
         },
       ],
     };
@@ -421,7 +422,7 @@ describe("Exploration provider", () => {
         id: CHARM_POUCH_ID,
         name: "Charm Pouch",
         effectDescription: "A fixture effect.",
-        isBane: false,
+        isNegative: false,
       }],
     });
     const purged = resolve(content, purgeState.journey, purgeDreamsignAction.id, {
@@ -438,7 +439,7 @@ describe("Exploration provider", () => {
     });
   });
 
-  it("makes the deck fast and applies cost reduction before adding Nightmare banes", () => {
+  it("makes the deck fast and applies cost reduction before adding Nightmare cards", () => {
     const fastAction: ExplorationActionContent = {
       id: "make-fast",
       label: "Accept the charge",
@@ -446,13 +447,12 @@ describe("Exploration provider", () => {
       effectKind: "make-fast-all",
     };
     const costAction: ExplorationActionContent = {
-      id: "reduce-and-banes",
+      id: "reduce-and-nightmares",
       label: "Overload the aperture",
-      effectText: "Reduce all costs and gain three Nightmare banes",
-      effectKind: "reduce-cost-all-and-gain-banes",
+      effectText: "Reduce all costs and gain three Nightmare cards",
+      effectKind: "reduce-cost-all-and-gain-nightmares",
       energyCostReduction: 1,
-      baneCardId: NIGHTMARE_ID,
-      baneCount: 3,
+      nightmareCount: 3,
     };
     const content = contentFixture([fastAction, costAction]);
     const fastState = buildState(content);

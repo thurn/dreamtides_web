@@ -71,7 +71,7 @@ The only substantive change vs. the CLI is replacing `crypto.createHash("sha256"
 - Create: `src/journeys/journey/shared/types.ts` (Predicate, Cost, Reward, TemplateParams).
 - Create: `src/journeys/journey/shared/text.ts` (joinSnippets, withLockedPrefix, quoteName — verbatim).
 - Create: `src/journeys/journey/shared/cec.ts` (CARD_CEC, STAGE_MULTIPLIER, cardPoolCEC).
-- Create: `src/journeys/journey/shared/content.ts` (predicate helpers: cardMatches, dreamsignMatches, baneCount, essenceAmount, maxEssence, pickFromList, transfigurationsEligibleForPredicate, isCardEligibleForTransfiguration, etc.).
+- Create: `src/journeys/journey/shared/content.ts` (predicate helpers: cardMatches, dreamsignMatches, nightmareCount, essenceAmount, maxEssence, pickFromList, transfigurationsEligibleForPredicate, isCardEligibleForTransfiguration, etc.).
 - Create: `src/journeys/journey/shared/predicates.ts` (the ~18 reusable predicates with their `text.plural` strings).
 - Create: `src/journeys/journey/shared/dreamwell.ts` — exports `POSITIVE_DREAMWELL_CARDS = []` and `NEGATIVE_DREAMWELL_CARDS = []`. The spec's Dreamwell-placeholder section is the authority.
 - Create: `src/journeys/content/types.ts`, `keywords.ts` (port of `/Users/dthurn/journeys/src/journey/content/keywords.ts`).
@@ -129,7 +129,7 @@ Three concrete decisions the spec already settled:
 - [ ] **Step 1: Write the rarity-normalization test.** Three input rarities and `undefined`, four expected outputs. **Bug class:** drift in the normalization table.
 - [ ] **Step 2: Write the dreamsign-kind test.** Two inputs, two expected outputs. Same bug class.
 - [ ] **Step 3: Write the seed-determinism test.** Same site + state → identical seed across calls; different sites → different seeds. **Bug class:** non-determinism in seed derivation (would break manifest stability across renders).
-- [ ] **Step 4: Write the bane-derivation test.** Build a deck fixture containing two bane-flagged entries and three normal cards; assert `projection.banes` has exactly the two banes and `projection.deck` has all five entries. **Bug class:** banes silently disappearing from the projection.
+- [ ] **Step 4: Write the Nightmare-derivation test.** Build a deck fixture containing two Nightmare entries and three ordinary cards; assert `projection.nightmares` has exactly the two Nightmare entries and `projection.deck` has all five entries. **Bug class:** Nightmare copies silently disappearing from the projection.
 - [ ] **Step 5: Run tests; expect FAIL.**
 - [ ] **Step 6: Implement adapter.** `seed.ts` is small (one hash call). `content-bridge.ts` maps journey types to journey-internal types. `buildContext.ts` assembles the `JourneyContext` and computes `contentVersion`.
 - [ ] **Step 7: Run tests; expect PASS.**
@@ -185,11 +185,11 @@ This is the first place the port *extends* the CLI rather than copying it. The C
 | Deck contains named card | `deckContainsCard(ctx, cardId)`. | `purge_named_card` (when the templated card name is parametric — verify against the CLI's parameter shape). |
 | Deck size ≥ N | `deckHasMinSize(ctx, N)`. | `discard_X_cards` patterns; `pay_essence_random_range` if it has a draw-X-cards companion. |
 | Active dreamsign required | `ctx.state.journey.activeDreamsigns.length >= N`. | `purge_named_dreamsign`, `purge_random_dreamsign`, `purge_chosen_dreamsign`, `transform_dreamsign_to_random`. |
-| Bane count ≥ N | `baneCount(ctx) >= N`. | `gain_random_banes`, `gain_named_banes` (these are bane-imposing, so they're always viable in kind; the "≥ N" pattern matters for "remove banes" rewards in Task 9, not for costs). |
+| Nightmare count ≥ N | `nightmareCount(ctx) >= N`. | `gain_nightmares` (always viable in kind; the "≥ N" pattern matters for Nightmare-removal rewards in Task 9, not for costs). |
 | Battle/shop/route modifier | `() => true`; the effect doesn't interrogate deck state. | `battle_reward_reduction_flat`, `battle_reward_reduction_percent`, `remove_shop_sites_from_next_dreamscapes`, `remove_dreamsign_sites_from_next_dreamscapes`, `set_starting_dreamwell_negative`, `shuffle_negative_dreamwell_cards`. |
 
 **Smell patterns to fix during the audit:**
-- `viable: () => true` on a template that actually requires a deck card, a specific dreamsign, or a bane. Upgrade to the matching category helper.
+- `viable: () => true` on a template that actually requires a deck card, a specific Dreamsign, or Nightmare. Upgrade to the matching category helper.
 - `cardMatches(ctx, { source: "deck" }).length >= 1` on a template whose effect operates on a specific predicate (e.g. "duplicate Warrior"). Upgrade to `deckContainsPredicate`.
 - `cardMatches(ctx, { source: "deck" }).length >= 1` on a template whose effect operates on a specific named card. Upgrade to `deckContainsCard`.
 - A `purge_all_*` template whose `viable` only checks deck non-empty rather than checking that at least one matching target exists. Upgrade to count the actual matches.
@@ -222,7 +222,7 @@ Same shape as Task 8 but for rewards. The CLI ships viability functions on most 
 | Starter cards in deck | `starterCardCount(ctx) >= N`. | `transfigure_random_starters`, `transfigure_all_starters`, `purge_named_starter`, `purge_random_starter`, `purge_random_starter_with_predicate_replacement`, `transform_starter_into_named_card`, `purge_chosen_starters`, `purge_all_starters`, `replace_starter_via_draft`. |
 | Dreamsign pool match required | `poolHasDreamsignWithTide(ctx, tide)` or `dreamsignMatches(ctx).length >= N` for the unfiltered form. | `gain_random_dreamsign`, `gain_named_dreamsign`, `choose_1_of_X_dreamsigns`, `temporary_dreamsign_for_X_battles`. |
 | Active dreamsign required | `ctx.state.journey.activeDreamsigns.length >= 1`. | `gain_copy_of_random_dreamsign`, `gain_copy_of_chosen_dreamsign`, `transform_dreamsign_to_named`. |
-| Bane count ≥ N | `baneCount(ctx) >= N`. | `purge_X_banes`, `purge_all_banes`. |
+| Nightmare count ≥ N | `nightmareCount(ctx) >= N`. | `purge_X_nightmares`, `purge_all_nightmares`. |
 | Route/shop modifier | `() => true`. | `add_site_to_dreamscape`, `add_site_to_next_dreamscape`, `replace_site_type`, `boost_site_appearance_chance`, `next_X_shop_rerolls_free`, `shop_essence_discount`, `shop_omen_discount`, `set_starting_dreamwell_positive`, `shuffle_positive_dreamwell_cards`. |
 | Deck size ≥ N (no predicate filter) | `ctx.state.journey.deck.summary.totalCards >= N`. | `duplicate_chosen_cards`, `draw_X_and_duplicate_chosen`, `make_random_cards_reclaim`, `make_random_cards_fast`, `apply_random_transfigurations_to_random_cards`, `change_card_to_become_type`, `make_card_reclaim`, `modify_random_cards_to_types`, `opening_hand_grant_for_X_battles`, `temporary_card_copy_for_X_battles`. |
 | Always viable in kind | `() => true`. | `card_cost_reduction_for_X_battles` (operates on future battles, not the current deck). |

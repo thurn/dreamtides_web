@@ -719,7 +719,7 @@ Tests by bug class:
 
 `purge` per spec: candidates = starter entries + non-starter entries in the
 bottom `purgeMisfitFraction` of `fitLooByEntry` (which already excludes
-no-signal cards); banes excluded; rank by misfit with `starterPurgeBonus`;
+no-signal cards); Nightmare excluded; rank by misfit with `starterPurgeBonus`;
 band-sample 1 from the worst band; payload `remove_deck_entry`; eligible at
 deck >= `minDeckForPurge` with >= 1 candidate. `purge_replace`: purge target
 selected identically; chooser of 4 fit-band replacements; each chooser
@@ -730,7 +730,7 @@ fitLoo); band-sample up to 3 as chooser (1 candidate renders as direct
 offer); payload `duplicate_deck_entry`.
 
 Tests by bug class:
-- Purge never selects a bane or a no-corpus-signal non-starter (bug: purging
+- Purge never selects Nightmare or a no-corpus-signal non-starter (bug: purging
   cards the corpus cannot judge).
 - Purge target diversity over 30 seeds on a fixture deck with 1 starter + 3
   bottom-band misfits: >= 2 distinct targets offered (bug: argmax on worst

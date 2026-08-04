@@ -23,6 +23,7 @@
 
 import { useCallback, useMemo, useRef, useState, type ReactNode } from "react";
 import type { JourneyContent } from "../data/journey-content";
+import { NIGHTMARE_CARD_ID } from "../data/nightmare";
 import { useActions, useAppend, useGameState } from "../coop/hooks";
 import {
   JourneyContextProvider,
@@ -35,7 +36,6 @@ import {
   createBattleInitProvider,
   settleDeferredOpponentLog,
 } from "../coop/providers/battle-init-provider";
-import type { CardData } from "../types/cards";
 import type { DreamAtlas, JourneyState } from "../types/journey";
 import {
   updateCardSourcePublication,
@@ -64,17 +64,6 @@ function findNextDreamscapeId(
     if (node !== undefined && node.state !== "completed") {
       return forwardId;
     }
-  }
-  return null;
-}
-
-/** Resolve a card catalog UUID back to its `cardNumber` key in the database. */
-function cardNumberForUuid(
-  cardDatabase: Map<number, CardData>,
-  cardId: string,
-): number | null {
-  for (const [cardNumber, card] of cardDatabase) {
-    if (card.id === cardId) return cardNumber;
   }
   return null;
 }
@@ -191,11 +180,6 @@ export function CoopJourneyProvider({
         if (cardId === null) return;
         dispatch(actions.addCard({ cardId, source }));
       },
-      addBaneCard: (cardNumber, source) => {
-        const cardId = cardIdFor(cardNumber);
-        if (cardId === null) return;
-        dispatch(actions.addCard({ cardId, isBane: true, source }));
-      },
       addCardById: (cardId, source) => {
         dispatch(actions.addCard({ cardId, source }));
         return null;
@@ -203,9 +187,6 @@ export function CoopJourneyProvider({
       addCardByIdWithTransfiguration: (cardId, type, source) => {
         dispatch(actions.addCard({ cardId, transfiguration: type, source }));
         return null;
-      },
-      addBaneCardById: (cardId, source) => {
-        dispatch(actions.addCard({ cardId, isBane: true, source }));
       },
       removeCard: (entryId) => dispatch(actions.removeDeckEntry(entryId)),
       removeDeckEntry: (entryId) => dispatch(actions.removeDeckEntry(entryId)),
@@ -234,9 +215,9 @@ export function CoopJourneyProvider({
         dispatch(actions.setDeckEntryType(entryId, typeChange)),
       purgeDeckCards: (siteId, entryIds) =>
         dispatch(actions.purgeDeckCards(siteId, entryIds)),
-      purgeRandomBaneCards: (count) =>
-        dispatch(actions.purgeRandomBaneCards(count)),
-      purgeAllBaneCards: () => dispatch(actions.purgeAllBaneCards()),
+      purgeRandomNightmareCards: (count) =>
+        dispatch(actions.purgeRandomNightmareCards(count)),
+      purgeAllNightmareCards: () => dispatch(actions.purgeAllNightmareCards()),
 
       // ---- dreamsigns ----
       addDreamsign: (dreamsign, _sourceSiteType, purgeIndex) => {
@@ -252,10 +233,10 @@ export function CoopJourneyProvider({
         if (dreamsignId === undefined) return;
         dispatch(actions.removeDreamsign(dreamsignId));
       },
-      setDreamsignIsBane: (index, isBane) => {
+      setDreamsignIsNegative: (index, isNegative) => {
         const dreamsignId = stateRef.current.dreamsigns[index]?.id;
         if (dreamsignId === undefined) return;
-        dispatch(actions.setDreamsignIsBane(dreamsignId, isBane));
+        dispatch(actions.setDreamsignIsNegative(dreamsignId, isNegative));
       },
       setRemainingDreamsignPool: (remainingDreamsignPool) =>
         dispatch(actions.setDreamsignPool(remainingDreamsignPool)),
@@ -388,18 +369,10 @@ export function CoopJourneyProvider({
               };
         dispatch(actions.pushBattleModifier(modifier));
       },
-      pushTemporaryBaneGrant: (baneCardId, baneName, count, battles, source) => {
-        const cardNumber = cardNumberForUuid(cardDatabase, baneCardId);
-        if (cardNumber === null) {
-          console.warn(
-            `pushTemporaryBaneGrant: unknown bane card id ${baneCardId}`,
-          );
-          return;
-        }
+      pushTemporaryNightmareGrant: (count, battles, source) => {
         dispatch(
-          actions.pushTemporaryBaneGrant({
-            cardNumber,
-            baneName,
+          actions.pushTemporaryNightmareGrant({
+            cardId: NIGHTMARE_CARD_ID,
             count,
             battlesRemaining: battles,
             source,

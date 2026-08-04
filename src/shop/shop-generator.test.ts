@@ -134,7 +134,7 @@ describe("effectivePrice", () => {
           id: "dreamsign-1",
           name: "Dreamsign One",
           effectDescription: "First effect.",
-          isBane: false,
+          isNegative: false,
         },
         basePrice: 50,
         discountPercent: 0,
@@ -154,7 +154,7 @@ describe("effectivePrice", () => {
           id: "dreamsign-1",
           name: "Dreamsign One",
           effectDescription: "First effect.",
-          isBane: false,
+          isNegative: false,
         },
         basePrice: 0,
         discountPercent: 0,
@@ -183,7 +183,7 @@ describe("shop runtime conversion", () => {
       id: "dreamsign-1",
       name: "Dreamsign One",
       effectDescription: "First effect.",
-      isBane: false,
+      isNegative: false,
     };
     const slots = [
       {

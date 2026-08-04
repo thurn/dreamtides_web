@@ -65,7 +65,6 @@ export interface EventPayloads {
   ADD_CARD: {
     cardId: string;
     transfiguration?: unknown;
-    isBane?: boolean;
     source?: unknown;
   };
   REMOVE_DECK_ENTRY: { entryId: string };
@@ -77,14 +76,14 @@ export interface EventPayloads {
   TRANSFIGURE_CARD: { entryId: string; transfiguration: unknown };
   ACCEPT_TRANSFIGURATION_CHOICE: { siteId: string; entryId: string };
   ACCEPT_DUPLICATION_CHOICE: { siteId: string; entryId: string };
-  PURGE_ALL_BANE_CARDS: Record<string, never>;
-  PURGE_RANDOM_BANE_CARDS: { count: number };
+  PURGE_ALL_NIGHTMARE_CARDS: Record<string, never>;
+  PURGE_RANDOM_NIGHTMARE_CARDS: { count: number };
 
   // --- dreamsigns ---
   ADD_DREAMSIGN: { dreamsignId: string };
   REMOVE_DREAMSIGN: { dreamsignId: string };
   SET_DREAMSIGN_POOL: { ids: string[] };
-  SET_DREAMSIGN_IS_BANE: { dreamsignId: string; isBane: boolean };
+  SET_DREAMSIGN_IS_NEGATIVE: { dreamsignId: string; isNegative: boolean };
 
   // --- draft ---
   SET_DRAFT_STATE: { draftState: unknown };
@@ -131,7 +130,12 @@ export interface EventPayloads {
 
   // --- modifiers & atlas ---
   PUSH_BATTLE_MODIFIER: { modifier: unknown };
-  PUSH_TEMPORARY_BANE_GRANT: Record<string, unknown>;
+  PUSH_TEMPORARY_NIGHTMARE_GRANT: {
+    cardId: string;
+    count: number;
+    battlesRemaining: number;
+    source: string;
+  };
   BAN_SITE_TYPE: { siteType: string; dreamscapesRemaining: number };
   BOOST_SITE_APPEARANCE: {
     siteType: string;
@@ -284,12 +288,12 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   TRANSFIGURE_CARD: true,
   ACCEPT_TRANSFIGURATION_CHOICE: true,
   ACCEPT_DUPLICATION_CHOICE: true,
-  PURGE_ALL_BANE_CARDS: true,
-  PURGE_RANDOM_BANE_CARDS: true,
+  PURGE_ALL_NIGHTMARE_CARDS: true,
+  PURGE_RANDOM_NIGHTMARE_CARDS: true,
   ADD_DREAMSIGN: true,
   REMOVE_DREAMSIGN: true,
   SET_DREAMSIGN_POOL: true,
-  SET_DREAMSIGN_IS_BANE: true,
+  SET_DREAMSIGN_IS_NEGATIVE: true,
   SET_DRAFT_STATE: true,
   PICK_DRAFT_CARD: true,
   REROLL_DRAFT_OFFER: true,
@@ -315,7 +319,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   GRANT_FREE_REROLLS: true,
   APPLY_SHOP_DISCOUNT: true,
   PUSH_BATTLE_MODIFIER: true,
-  PUSH_TEMPORARY_BANE_GRANT: true,
+  PUSH_TEMPORARY_NIGHTMARE_GRANT: true,
   BAN_SITE_TYPE: true,
   BOOST_SITE_APPEARANCE: true,
   REPLACE_SITE_TYPE: true,

@@ -83,7 +83,7 @@ function makeState(): JourneyState {
         id: "sign-1",
         name: "Night's Mark",
         effectDescription: "Draw deeper.",
-        isBane: false,
+        isNegative: false,
       },
     ],
     completionLevel: 0,

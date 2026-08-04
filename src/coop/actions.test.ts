@@ -22,6 +22,7 @@ import { describe, expect, it } from "vitest";
 import type { EventDraft } from "../eventlog/client";
 import { foldEvents } from "../eventlog/fold";
 import type { GameEvent, Genesis } from "../eventlog/types";
+import { NIGHTMARE_CARD_ID } from "../data/nightmare";
 import { KNOWN_EVENT_TYPES } from "../rules/events";
 import { GAME_ENGINE_CONFIG } from "../rules/replay/replay";
 import { makeActions } from "./actions";
@@ -102,12 +103,12 @@ function captureAllDrafts(): EventDraft[] {
   void actions.transfigureCard("entry-1", null);
   void actions.acceptTransfigurationChoice("site-1", "entry-1");
   void actions.acceptDuplicationChoice("site-1", "entry-1");
-  void actions.purgeAllBaneCards();
-  void actions.purgeRandomBaneCards(1);
+  void actions.purgeAllNightmareCards();
+  void actions.purgeRandomNightmareCards(1);
   void actions.addDreamsign("ds-1");
   void actions.removeDreamsign("ds-1");
   void actions.setDreamsignPool(["ds-1"]);
-  void actions.setDreamsignIsBane("ds-1", true);
+  void actions.setDreamsignIsNegative("ds-1", true);
   void actions.setDraftState({});
   void actions.pickDraftCard(0, "card-1");
   void actions.rerollDraftOffer("site-1");
@@ -135,7 +136,12 @@ function captureAllDrafts(): EventDraft[] {
   void actions.grantFreeRerolls(1);
   void actions.applyShopDiscount(10);
   void actions.pushBattleModifier({});
-  void actions.pushTemporaryBaneGrant({});
+  void actions.pushTemporaryNightmareGrant({
+    cardId: NIGHTMARE_CARD_ID,
+    count: 1,
+    battlesRemaining: 1,
+    source: "test",
+  });
   void actions.banSiteType("Shop", 1);
   void actions.boostSiteAppearance("Shop", 10, 1);
   void actions.replaceSiteType("node-1", "Shop", "Battle");

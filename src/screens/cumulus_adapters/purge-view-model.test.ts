@@ -50,18 +50,18 @@ const site: SiteState = {
 };
 
 describe("buildPurgeCardViews", () => {
-  it("keeps concrete entry ids and marks bane cards as free", () => {
+  it("keeps concrete entry ids and marks Nightmare as free", () => {
     const cards = buildPurgeCardViews(
       [
         makeEntry({ entryId: "paid", cardNumber: 1 }),
-        makeEntry({ entryId: "bane", cardNumber: 2, isBane: true }),
+        makeEntry({ entryId: "nightmare", cardNumber: 10002, isBane: true }),
       ],
-      database(makeCard({ cardNumber: 1 }), makeCard({ cardNumber: 2 })),
+      database(makeCard({ cardNumber: 1 }), makeCard({ cardNumber: 10002 })),
     );
 
     expect(cards.map((card) => [card.entryId, card.purgeCostKind])).toEqual([
       ["paid", "paid"],
-      ["bane", "free"],
+      ["nightmare", "free"],
     ]);
   });
 });
@@ -90,7 +90,7 @@ describe("buildPurgeGuideView", () => {
 });
 
 describe("buildPurgeSiteView", () => {
-  it("caps paid selections by current essence and leaves free bane cards selectable", () => {
+  it("caps paid selections by current essence and leaves free Nightmare selectable", () => {
     const base = createDefaultState();
     const state = {
       ...base,
@@ -98,7 +98,7 @@ describe("buildPurgeSiteView", () => {
       deck: [
         makeEntry({ entryId: "paid-a", cardNumber: 1 }),
         makeEntry({ entryId: "paid-b", cardNumber: 2 }),
-        makeEntry({ entryId: "bane", cardNumber: 3, isBane: true }),
+        makeEntry({ entryId: "nightmare", cardNumber: 10002, isBane: true }),
       ],
     };
 
@@ -109,7 +109,7 @@ describe("buildPurgeSiteView", () => {
       cardDatabase: database(
         makeCard({ cardNumber: 1 }),
         makeCard({ cardNumber: 2 }),
-        makeCard({ cardNumber: 3 }),
+        makeCard({ cardNumber: 10002 }),
       ),
       guide: null,
       guideLine: null,
@@ -121,7 +121,7 @@ describe("buildPurgeSiteView", () => {
     ).toEqual([
       ["paid-a", "paid"],
       ["paid-b", "paid"],
-      ["bane", "free"],
+      ["nightmare", "free"],
     ]);
   });
 

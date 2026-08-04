@@ -146,7 +146,7 @@ Implementation requirements:
 - `validateCardEdit` returns structured success or failure, not thrown validation errors.
 - `patchRenderedCardsToml` locates the `[[cards]]` block by exact `id` UUID and replaces one editable field.
 - `patchRenderedCardsToml` reparses the full patched TOML before returning.
-- `refreshCardDataJson` uses `BANE_NAMES` and `transformCard` from `scripts/setup-assets.mjs` and writes only `public/card-data.json`.
+- `refreshCardDataJson` uses `NIGHTMARE_CARD_NAME` and `transformCard` from `scripts/setup-assets.mjs` and writes only `public/card-data.json`.
 
 - [ ] **Step 3: Add TypeScript declarations**
 

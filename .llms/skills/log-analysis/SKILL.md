@@ -159,7 +159,7 @@ a category draft, or a **merchant offer** whose builder targeted a subtype.
 | Event | What it records |
 |---|---|
 | `dreamsign_pool_updated` | `source`, `remainingDreamsignPoolSize`, and the full `remainingDreamsignPool` (UUIDs) — the draw bag state. |
-| `dreamsign_acquired` | What was taken: `name`, `isBane`, `sourceSiteType`. |
+| `dreamsign_acquired` | What was taken: `name`, `isNegative`, `sourceSiteType`. |
 
 ### Merchant offers (the richest explainability trace)
 

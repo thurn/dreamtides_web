@@ -2167,7 +2167,7 @@
             "description": ""
           },
           {
-            "name": "isBane",
+            "name": "isNegative",
             "tsType": "boolean",
             "optional": false,
             "description": ""
@@ -3142,7 +3142,7 @@
       "tsType": "MediaFilter",
       "unionMembers": [
         "dreamsign-portrait",
-        "dreamsign-portrait-bane",
+        "dreamsign-portrait-negative",
         "spark-glow",
         "energy-glow"
       ],
@@ -3308,7 +3308,7 @@
       "tsType": "MediaFilter",
       "unionMembers": [
         "dreamsign-portrait",
-        "dreamsign-portrait-bane",
+        "dreamsign-portrait-negative",
         "spark-glow",
         "energy-glow"
       ],
@@ -3536,7 +3536,7 @@
             "description": ""
           },
           {
-            "name": "isBane",
+            "name": "isNegative",
             "tsType": "boolean",
             "optional": false,
             "description": ""

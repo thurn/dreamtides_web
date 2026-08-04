@@ -105,7 +105,7 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
         purgedEntryIds: entryIds,
         count: purgedCardIds.length,
         totalCost: cost,
-        baneCardsRemoved: purgedEntries.filter((entry) => entry.isBane).length,
+        nightmareCardsRemoved: purgedEntries.filter((entry) => entry.isBane).length,
         isEnhanced: site.isEnhanced,
         essenceBefore: state.essence,
         essenceAfter: Math.max(0, state.essence - cost),

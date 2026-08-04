@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use super-subagent-driven-development (recommended) or super-executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** A debug overlay, opened from the journey HUD "..." menu, that edits the live journey state in place — essence/caps, dreamsigns, deck add/remove, and per-card edits (energy cost, spark, transfiguration, type/subtype, keywords, bane).
+**Goal:** A debug overlay, opened from the journey HUD "..." menu, that edits the live journey state in place — essence/caps, Dreamsigns, deck add/remove, and per-card edits (energy cost, spark, transfiguration, type/subtype, keywords, Nightmare).
 
 **Architecture:** A new per-deck-entry `statOverride` field plus a unified `resolveDeckEntryCard` helper carry energy/spark edits into both the deck UI and battle. A small set of optional debug-only `JourneyMutations` (alongside the many existing reusable ones) write through `writeRoomTransaction`, preserving journey-state invariants and emitting `journey_debug_edit` log events. A `JourneyDebugEditor` overlay (mirroring the existing `DebugScreen` pattern) is wired into the HUD utility menu and `App.tsx`.
 
@@ -13,15 +13,15 @@
 ## Background the implementer must not re-derive
 
 - **Spec:** `docs/superpowers/specs/2026-06-24-journey-debug-editor-design.md`.
-- **Deck entry shape:** `DeckEntry` in `src/types/journey.ts:91` — `{ entryId, cardNumber, transfiguration, typeChange?, keywordModification?, isBane }`. Base stats (energyCost, spark, subtype) come from `CardData` (`src/types/cards.ts`), keyed by `cardNumber` in `journeyContent.cardDatabase: Map<number, CardData>`.
+- **Deck entry shape:** `DeckEntry` in `src/types/journey.ts:91` — `{ entryId, cardNumber, transfiguration, typeChange?, keywordModification?, isBane }`. The `isBane` marker identifies Nightmare and is derived from its canonical UUID. Base stats (energyCost, spark, subtype) come from `CardData` (`src/types/cards.ts`), keyed by `cardNumber` in `journeyContent.cardDatabase: Map<number, CardData>`.
 - **Resolution chokepoint:** a `DeckEntry` becomes an effective card by applying transfiguration (`applyTransfigurationToCard`, `src/transfiguration/transfiguration-logic.ts:277`, returns a new `CardData`) then `applyDeckEntryCardModification` (`src/card-type-change.ts:87`, applies typeChange + keywords). This pair is duplicated in `normalizePlayerDeckCard` (`src/battle/integration/create-battle-init.ts:709`) and `effectiveCardFor` (`src/journey_v2/archetypes/improve.ts`). Three other callers apply only `applyDeckEntryCardModification` (no transfiguration): `src/components/deck-summary.ts:28`, `src/components/DeckViewer.tsx:141`, `src/components/StartingDeckModal.tsx:81`.
 - **Battle reads the real entry:** `normalizePlayerDeckCard(entry, card)` is mapped over `padBattleDeck(state.deck)` (`create-battle-init.ts:229`), i.e. the real `DeckEntry[]` (with `statOverride`). The stripped `BattleJourneyDeckEntry` snapshot (`journeyDeckEntries`) is consumed only by a stats summary in `src/battle/state/selectors.ts`. **Therefore the battle types do not need a `statOverride` field** — baking the stat into the resolved definition is sufficient.
 - **Persistence + invariants:** all writes go through `writeRoomTransaction` (`src/state/multiplayer-journey-context.tsx:169`), which runs `validateRoomTransitionInvariants` (forbids nulling `dreamAvatar`/`resolvedPackage`/`draftState`, per `src/state/journey-state-invariants.ts`). The editor never exposes clearing those fields.
 - **Mutations contract:** `JourneyMutations` is declared in `src/state/journey-context.tsx` (interface starts ~line 336 within the file's mutation block) and implemented in `src/state/multiplayer-journey-context.tsx`. Debug-only mutations there are declared **optional** (`?`) so lightweight test/demo stubs need not implement them (see `rerollAugury?`, `bootstrapQaScene?`, `loadJourneyState?`).
-- **Reusable existing mutations** (do not reimplement): `setEssence(value, source)`, `changeMaxEssence(delta, source)`, `addCard(cardNumber, source)`, `addBaneCard(cardNumber, source)`, `removeCard(entryId, source)`, `transfigureCard(entryId, type|null, effectDescription, effectDetails)`, `changeDeckEntryType(entryId, typeChange, source)`, `changeDeckEntryKeywords(entryId, keywordModification, source)` (additive/merge), `addDreamsign(dreamsign, sourceSiteType, purgeIndex?)`, `removeDreamsign(index, reason)`.
+- **Reusable existing mutations** (do not reimplement): `setEssence(value, source)`, `changeMaxEssence(delta, source)`, `addCard(cardNumber, source)`, `removeCard(entryId, source)`, `transfigureCard(entryId, type|null, effectDescription, effectDetails)`, `changeDeckEntryType(entryId, typeChange, source)`, `changeDeckEntryKeywords(entryId, keywordModification, source)` (additive/merge), `addDreamsign(dreamsign, sourceSiteType, purgeIndex?)`, `removeDreamsign(index, reason)`.
 - **Logging:** `logEvent(event, fields)` from `src/logging.ts:73` (writes to `logs/journey-log.jsonl` via the dev server). Room-level audit entries use `buildActionLogEntry` inside the transaction (see `transfigureCard` in `multiplayer-journey-context.tsx`).
 - **Overlay + wiring pattern to copy:** `src/screens/DebugScreen.tsx` (Framer Motion full-screen overlay, Escape to close); App wiring at `src/App.tsx` (`debugScreenOpen` state line 64, `handleOpenDebugScreen` line 315, HUD prop `onOpenDebugScreen` line 417, render inside `<ErrorBoundary scope="overlay:debug-screen">` line 468). HUD utility menu lives in `src/components/HUD.tsx` (~lines 408-471); items are `<UtilityMenuButton>` entries; HUD props `onOpenDebugScreen` at line 65/86.
-- **Dreamsign catalog:** `journeyContent.dreamsignTemplates: readonly DreamsignTemplate[]` (`src/data/journey-content.ts:74`). `DreamsignTemplate` = `{ id, name, effectDescription, imageName?, imageAlt? }`. A `Dreamsign` adds `isBane: boolean`.
+- **Dreamsign catalog:** `journeyContent.dreamsignTemplates: readonly DreamsignTemplate[]` (`src/data/journey-content.ts:74`). `DreamsignTemplate` = `{ id, name, effectDescription, imageName?, imageAlt? }`. A `Dreamsign` adds `isNegative: boolean`.
 
 ## Worktree setup (run once before Task 1)
 
@@ -177,8 +177,8 @@ Seven new mutations, all declared **optional** (`?`) on `JourneyMutations` to ma
     typeChange: CardTypeChange | null,
     source: string,
   ) => void;
-  /** Debug-only: set the `isBane` flag on the dreamsign at `index`. */
-  setDreamsignIsBane?: (index: number, isBane: boolean, source: string) => void;
+  /** Debug-only: set the negative presentation on the dreamsign at `index`. */
+  setDreamsignIsNegative?: (index: number, isNegative: boolean, source: string) => void;
 ```
 
 - [ ] **Step 2: Write failing tests in `multiplayer-journey-context.test.tsx`.** Use the existing `onJourney`/captured-`JourneyContextValue` harness in that file (see its `onJourney` helper around line 486). Specify these guarantees:
@@ -241,7 +241,7 @@ const setDeckEntryStatOverride = useCallback(
 );
 ```
 
-Add a tiny local `omitStatOverride(entry)` helper that returns the entry without the `statOverride` key (Firebase rejects explicit `undefined`; clearing must drop the key). The scalar setters (`setEssenceCap`, `setMaxDreamsigns`, `setCompletionLevel`) write the field directly and `setEssenceCap` reclamps via the existing `clampEssence` (`src/state/journey-state-actions.ts:51`). `setDeckEntryKeywords`/`setDeckEntryTypeChange` mirror the stat-override shape, dropping the key on `null`. `setDreamsignIsBane` maps `dreamsigns[index]` to `{ ...d, isBane }`. Every mutation emits a `journey_debug_edit` `logEvent` with `{ target, field, before, after, source }` (and `entryId`/`index` where applicable) so a run's manual edits are reconstructable from `logs/journey-log.jsonl` (AGENTS.md).
+Add a tiny local `omitStatOverride(entry)` helper that returns the entry without the `statOverride` key (Firebase rejects explicit `undefined`; clearing must drop the key). The scalar setters (`setEssenceCap`, `setMaxDreamsigns`, `setCompletionLevel`) write the field directly and `setEssenceCap` reclamps via the existing `clampEssence` (`src/state/journey-state-actions.ts:51`). `setDeckEntryKeywords`/`setDeckEntryTypeChange` mirror the stat-override shape, dropping the key on `null`. `setDreamsignIsNegative` maps `dreamsigns[index]` to `{ ...d, isNegative }`. Every mutation emits a `journey_debug_edit` `logEvent` with `{ target, field, before, after, source }` (and `entryId`/`index` where applicable) so a run's manual edits are reconstructable from `logs/journey-log.jsonl` (AGENTS.md).
 
 - [ ] **Step 5: Run tests + typecheck, verify pass.** `npm test -- src/state/multiplayer-journey-context.test.tsx && npm run typecheck`
 
@@ -264,18 +264,18 @@ Copy the `DebugScreen.tsx` overlay scaffold (AnimatePresence + `motion.div` full
 
 - [ ] **Step 2: Build the Dreamsigns section in `JourneyDebugEditor.tsx`.**
 
-List `state.dreamsigns` with, per row: the resolved name, a bane toggle (`setDreamsignIsBane(index, !isBane, "journey_debug_editor")`), and a remove button (`removeDreamsign(index, "journey_debug_editor")`). An "Add dreamsign" control filters `journeyContent.dreamsignTemplates` by a text query (match on name and `id`); selecting one calls `addDreamsign({ id, name, effectDescription, imageName, imageAlt, isBane: false }, "journey_debug_editor")`. Disable add when `state.dreamsigns.length >= state.maxDreamsigns` (mirrors `addDreamsign`'s cap no-op) and surface that the cap is reached.
+List `state.dreamsigns` with, per row: the resolved name, a negative toggle (`setDreamsignIsNegative(index, !isNegative, "journey_debug_editor")`), and a remove button (`removeDreamsign(index, "journey_debug_editor")`). An "Add dreamsign" control filters `journeyContent.dreamsignTemplates` by a text query (match on name and `id`); selecting one calls `addDreamsign({ id, name, effectDescription, imageName, imageAlt, isNegative: false }, "journey_debug_editor")`. Disable add when `state.dreamsigns.length >= state.maxDreamsigns` (mirrors `addDreamsign`'s cap no-op) and surface that the cap is reached.
 
 - [ ] **Step 3: Build `JourneyDebugDeckSection.tsx`.**
 
-  - **Add card:** a searchable list over `cardDatabase.values()` filtered by query against resolved `name` and `id`; each result has "Add" (`addCard(cardNumber, "journey_debug_editor")`) and "Add as bane" (`addBaneCard(cardNumber, "journey_debug_editor")`). Cap the rendered result rows (e.g. first 50 matches) and show a "refine your search" note when truncated — do not silently drop matches.
+  - **Add card:** a searchable list over `cardDatabase.values()` filtered by query against resolved `name` and `id`; each result has "Add" (`addCard(cardNumber, "journey_debug_editor")`). Adding Nightmare derives its Bane flag from the canonical Nightmare UUID. Cap the rendered result rows (e.g. first 50 matches) and show a "refine your search" note when truncated — do not silently drop matches.
   - **Deck list:** one row per `state.deck` entry showing the resolved effective card (use `resolveDeckEntryCard(cardDatabase.get(entry.cardNumber), entry)` for displayed name/cost/spark/subtype). Each row expands to a per-entry editor and has a remove button (`removeCard(entry.entryId, "journey_debug_editor")`).
   - **Per-entry editor controls:**
     - Energy cost + spark: number inputs → `setDeckEntryStatOverride(entryId, { energyCost, spark }, "journey_debug_editor")`; a "reset stats" button passes `null`.
     - Transfiguration: a `<select>` of the nine `TransfigurationType` values plus "none" → `transfigureCard(entryId, type | null, "journey_debug_editor", {})`.
     - Type/subtype: a cardType `<select>` (`Character`/`Event`) + a free-text subtype input → `setDeckEntryTypeChange(entryId, { predicateId: "debug", cardType, subtype, label: "Debug edit" }, "journey_debug_editor")`; a "reset type" button passes `null`.
     - Keywords: a Fast checkbox + a Reclaim number input (blank = none) → `setDeckEntryKeywords(entryId, { fast, setReclaim }, "journey_debug_editor")` (replace semantics); a "clear keywords" button passes `null`.
-    - Bane: a checkbox. Toggling re-adds via remove + `addBaneCard`/`addCard` of the same `cardNumber` is **not** acceptable (it loses overrides and changes order). Instead, expose bane only when adding a card; for an existing entry, omit the bane toggle from the per-entry editor (documented limitation) — or, if quick, treat it as out of scope for v1 per the spec's "mark as bane" being satisfied by the add-as-bane path.
+    - Nightmare status is derived from canonical card identity and is read-only.
 
   Use the same numeric-commit pattern (blur / Enter) and the `DebugScreen` `StatBadge`/`InfoCard` visual primitives for consistency.
 
@@ -345,7 +345,7 @@ Import `JourneyDebugEditor` from `./screens/JourneyDebugEditor`. If any other co
 
 ## Self-review notes
 
-- **Spec coverage:** resources & caps → Task 3 setters + Task 4 Resources section; dreamsigns add/remove/bane → reused `addDreamsign`/`removeDreamsign` + new `setDreamsignIsBane`, Task 4 Dreamsigns section; deck add/remove → reused `addCard`/`addBaneCard`/`removeCard`, Task 4 deck section; per-card energy/spark → Tasks 1-3 `statOverride` + Task 4 per-entry editor; transfiguration → reused `transfigureCard`; type/subtype → new `setDeckEntryTypeChange`; keywords → new `setDeckEntryKeywords`; logging → Task 3; tests → Tasks 1/2/3/5; unified `resolveDeckEntryCard` → Tasks 1-2.
+- **Spec coverage:** resources & caps → Task 3 setters + Task 4 Resources section; Dreamsigns add/remove/negative → reused `addDreamsign`/`removeDreamsign` + new `setDreamsignIsNegative`, Task 4 Dreamsigns section; deck add/remove → reused `addCard`/`removeCard`, Task 4 deck section; per-card energy/spark → Tasks 1-3 `statOverride` + Task 4 per-entry editor; transfiguration → reused `transfigureCard`; type/subtype → new `setDeckEntryTypeChange`; keywords → new `setDeckEntryKeywords`; logging → Task 3; tests → Tasks 1/2/3/5; unified `resolveDeckEntryCard` → Tasks 1-2.
 - **Battle-type mirroring (spec §1):** intentionally dropped — `normalizePlayerDeckCard` reads the real `DeckEntry`, so baking the stat is sufficient and `BattleJourneyDeckEntry`/`BattleDeckCardDefinition` need no `statOverride` field. Recorded in Background.
-- **Bane-toggle on existing entries:** narrowed to the add-as-bane path for v1 (Task 4 Step 3) to avoid a destructive remove/re-add; flagged as a documented limitation rather than left ambiguous.
+- **Nightmare identity:** derived from the canonical card UUID for existing and newly added entries.
 - **Tests:** each specified by bug class (wrong-entry write, dropped layer, application order, invariant break, menu wiring); no tuning-value or table-mirror assertions; battle/stat assertions derive expected values from the live DB (printed+offset), resilient to TOML edits.

@@ -9784,6 +9784,23 @@ art-owned = false
 card-number = 520
 art = { x = 0.4, y = -0.3, scale = 2.17 }
 
+[[cards]]
+name = "Nightmare"
+mtg-name = ""
+id = "b0a2c3d4-e5f6-4789-8abc-0def12345678"
+rendered-text = "Bane."
+energy-cost = 0
+card-type = "Event"
+subtype = ""
+rarity = "Special"
+is-fast = false
+is-interrupt = false
+spark = ""
+tags = []
+image-number = 1169640025
+art-owned = false
+card-number = 10002
+
 
 [metadata]
 schema_version = 1

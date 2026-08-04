@@ -8,7 +8,7 @@ import { asCardId, asCardName } from "../../../types/card-identity";
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
 import { CardView } from "./CardView";
 
-const RULES_TEXT = "Discard a bane.";
+const RULES_TEXT = "Nightmare is a Bane.";
 
 describe("CardView visual editor surface", () => {
   it("clips the masked blur compositor to the bottom feather region", () => {

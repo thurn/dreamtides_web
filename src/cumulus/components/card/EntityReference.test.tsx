@@ -30,7 +30,7 @@ const DREAMSIGN: Dreamsign = {
   effectDescription: "At the start of battle, gain 1●.",
   imageName: "bell.png",
   imageAlt: "A small silver bell",
-  isBane: false,
+  isNegative: false,
 };
 
 function mount(element: ReactElement): {

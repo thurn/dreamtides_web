@@ -288,8 +288,8 @@ Pin these invariants (one test per bullet; no snapshots):
 - `shopModifiers` initializes to `{ freeRerolls: 0, upcomingOmenDiscounts: 0, essenceDiscountPercent: 0 }`.
 - `dreamscapeModifiers` is an empty readonly array on a freshly created `JourneyState`.
 - `pushBattleRewardModifier("flat", 10, 2, src)` appends a `{ kind: "reward_reduction_flat", amount: 10, battlesRemaining: 2, source }` entry.
-- `pushTemporaryBaneGrant(name, count, battles, src)` (a) appends a `{ kind: "temporary_bane_grant", ... addedEntryIds: [...] }` entry and (b) adds `count` bane cards to the deck whose `entryId`s match `addedEntryIds`.
-- `incrementCompletionLevel(..., isMiniboss=*)` for a battle decrements every `battleModifiers[*].battlesRemaining`; entries at 0 drop; `temporary_bane_grant` entries at 0 additionally `removeDeckEntry` for each `addedEntryId`.
+- `pushTemporaryNightmareGrant(count, battles, src)` (a) appends a `{ kind: "temporary_nightmare_grant", ... addedEntryIds: [...] }` entry and (b) adds `count` Nightmare cards to the deck whose `entryId`s match `addedEntryIds`.
+- `incrementCompletionLevel(..., isMiniboss=*)` for a battle decrements every `battleModifiers[*].battlesRemaining`; entries at 0 drop; `temporary_nightmare_grant` entries at 0 additionally `removeDeckEntry` for each `addedEntryId`.
 - `setCurrentDreamscape(newId)` (with `newId !== prev.currentDreamscape`) decrements every `dreamscapeModifiers[*].dreamscapesRemaining`; entries at 0 drop.
 - `rerollShop(site)` with `shopModifiers.freeRerolls > 0` does not charge the omen cost and decrements `freeRerolls`.
 - `grantFreeShopRerolls(3, src)` increments `shopModifiers.freeRerolls` by 3.
@@ -314,14 +314,14 @@ In `src/types/journey.ts` (or wherever `JourneyState` is defined), add the three
 Add the new method signatures to `JourneyMutations` in `src/state/journey-context.tsx`. Method names must be exactly:
 
 ```
-pushBattleRewardModifier, pushTemporaryBaneGrant,
+pushBattleRewardModifier, pushTemporaryNightmareGrant,
 addSiteToDreamscape, replaceSiteType, removeSiteTypeFromNextDreamscapes,
 grantFreeShopRerolls, applyShopEssenceDiscount, grantShopOmenDiscounts,
 boostSiteAppearance, removeDeckEntry, duplicateDeckEntry, addCardById,
-addBaneCardById, setEssence, changeOmens, changeMaxEssence
+addCardById, setEssence, changeOmens, changeMaxEssence
 ```
 
-Several of these (`removeCard`, `addCard`, `addBaneCard`, `changeEssence`) already exist on `JourneyMutations` but operate on `cardNumber: number` while the spec's `JourneyMutations` operates on `cardId: string`. Implement `addCardById` / `addBaneCardById` as new wrappers that look up the card by id (using `journeyContent.cardDatabase` keyed on `cardNumber` — adapter will pass the right number after lookup). `removeDeckEntry` should match the existing `removeCard(entryId, source)` exactly; if so, the new method can be an alias inside the adapter rather than a new reducer.
+Several of these (`removeCard`, `addCard`, `addCard`, `changeEssence`) already exist on `JourneyMutations` but operate on `cardNumber: number` while the spec's `JourneyMutations` operates on `cardId: string`. Implement `addCardById` / `addCardById` as new wrappers that look up the card by id (using `journeyContent.cardDatabase` keyed on `cardNumber` — adapter will pass the right number after lookup). `removeDeckEntry` should match the existing `removeCard(entryId, source)` exactly; if so, the new method can be an alias inside the adapter rather than a new reducer.
 
 The naming pivot here is intentional: `JourneyMutations` uses `cardId` (the journey module's identifier) while `JourneyMutations` uses `cardNumber` (the prototype's identifier). The adapter in Task 6 is the conversion site.
 
@@ -380,7 +380,7 @@ Do not test every method individually as a separate "registers method X" asserti
 
 - [ ] **Step 3: Implement the adapter**
 
-Export `createJourneyMutations(args: { mutations: JourneyMutations; cardDatabase: Map<number, CardData> }): JourneyMutations`. Each method delegates. The `cardDatabase` is used by `addCardById` / `addBaneCardById` to convert `cardId: string` → `cardNumber: number`; if the id is missing from the database, log a `console.warn` and skip.
+Export `createJourneyMutations(args: { mutations: JourneyMutations; cardDatabase: Map<number, CardData> }): JourneyMutations`. Each method delegates. The `cardDatabase` is used by `addCardById` / `addCardById` to convert `cardId: string` → `cardNumber: number`; if the id is missing from the database, log a `console.warn` and skip.
 
 For `transfigureDeckEntry(entryId, null, source)`, the adapter calls `mutations.transfigureCard(entryId, null, "remove_transfiguration", {})` — depending on Task 5's null support in the underlying reducer, this may need a small reducer addition there. If so, defer that addition into Task 5's commit by going back and amending; do not introduce it in this commit.
 
@@ -605,38 +605,37 @@ labeled RNG.
 
 ---
 
-### Task 10: Bane cost and reward apply
+### Task 10: Nightmare cost and reward apply
 
 **Files:**
 - Modify: `src/journeys/journey/shared/costs.ts`
 - Modify: `src/journeys/journey/shared/rewards.ts`
 - Test: `costs.apply.test.ts`, `rewards.apply.test.ts`
 
-**Templates in scope:** `gain_random_banes`, `gain_named_banes`, `gain_named_banes_for_X_battles` (costs); `purge_X_banes`, `purge_all_banes` (rewards).
+**Templates in scope:** `gain_nightmares`, `gain_nightmares`, `gain_nightmare_for_X_battles` (costs); `purge_X_nightmares`, `purge_all_nightmares` (rewards).
 
 - [ ] **Step 1: Write the failing tests**
 
 Per template, assert:
-- `gain_random_banes` with `{ count: 2 }` makes exactly 2 `addBaneCardById` calls; the bane names are drawn deterministically from `BANE_NAMES` for the fixed seed.
-- `gain_named_banes` with `{ baneName: "Despair", count: 1 }` makes one `addBaneCardById` whose `cardId` corresponds to the Despair bane (assert the cardId via the bane-name→cardId lookup helper).
-- `gain_named_banes_for_X_battles` with `{ baneName: "Despair", count: 1, battles: 3 }` makes exactly one `pushTemporaryBaneGrant("Despair", 1, 3, ...)` call (the bane-card addition happens *inside* the mutation, not at the apply layer).
-- `purge_X_banes` with `{ count: 3 }` → one `purgeRandomBaneCards(3, ...)` call.
-- `purge_all_banes` → one `purgeAllBaneCards(...)` call.
+- `gain_nightmares` with `{ count: 2 }` makes exactly 2 `addCardById(NIGHTMARE_CARD_ID, ...)` calls.
+- `gain_nightmare_for_X_battles` with `{ count: 1, battles: 3 }` makes exactly one `pushTemporaryNightmareGrant(1, 3, ...)` call (the Nightmare addition happens *inside* the mutation, not at the apply layer).
+- `purge_X_nightmares` with `{ count: 3 }` → one `purgeRandomNightmareCards(3, ...)` call.
+- `purge_all_nightmares` → one `purgeAllNightmareCards(...)` call.
 
-Each bane-name → cardId lookup needs a content fixture; build the smallest possible bundle (one bane card per bane name in `BANE_NAMES`).
+Use the canonical `NIGHTMARE_CARD_ID`; the content fixture needs exactly that card.
 
 - [ ] **Step 2: Run, confirm failure**
 
 - [ ] **Step 3: Implement**
 
-Look up bane card by name from the journey context's content bundle. If a name is missing from content, log a warn and skip that iteration.
+Look up Nightmare by canonical UUID from the journey context's content bundle. If it is missing from content, log a warning and skip that iteration.
 
 - [ ] **Step 4: Run, confirm pass**
 
 - [ ] **Step 5: Commit**
 
 ```
-wave1: apply bane templates.
+wave1: apply Nightmare templates.
 ```
 
 ---
@@ -922,7 +921,7 @@ npm run dev    # or whatever the repo's dev script is
 Open a Dream Journey site and verify each bullet in the spec's "Manual QA (run from the worktree) / After Wave 1" list:
 - `gain_essence` updates the resource bar.
 - `gain_random_predicate_cards` adds a card to the deck.
-- `purge_X_banes` removes banes from a state with banes.
+- `purge_X_nightmares` removes Nightmare copies from a state containing Nightmare.
 - `add_site_to_next_dreamscape` adds the site.
 - `battle_reward_reduction_flat` shows up in `state.battleModifiers`.
 - A visual no-op closes the journey, logs `dream_journey_skipped_visual`, deck unchanged.

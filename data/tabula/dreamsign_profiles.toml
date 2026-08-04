@@ -1525,7 +1525,7 @@ cost-bands = []
 keywords = []
 quality = 3
 
-# Raven Skull — Bane cards cannot be added to your deck; a generic protection
+# Raven Skull — Nightmare cards cannot be added to your deck; a generic protection
 # benefit for any deck. Featureless.
 [[dreamsigns]]
 id = "31DF4C62-6AB2-47F2-A4FF-C32B8E554B3B"
@@ -1535,8 +1535,8 @@ cost-bands = []
 keywords = []
 quality = 3
 
-# Strange Fruit — when you gain a Bane, gain 100 essence; a generic Bane economy
-# benefit for any deck. Featureless.
+# Mortal Skull — gain essence when a character dissolves an enemy in a challenge;
+# a broad combat reward. Featureless.
 [[dreamsigns]]
 id = "EB55B141-82F8-4BA4-B319-420F762E9EE4"
 subtypes = []
@@ -1545,8 +1545,8 @@ cost-bands = []
 keywords = []
 quality = 3
 
-# Twisted Herbs — on gain, add 2 Bane cards; ≥4● cost cards cost you 1● less;
-# rewards big-cost decks despite the Bane downside.
+# Twisted Herbs — on gain, add 5 Nightmare cards; characters have +1✦;
+# rewards character decks despite the Nightmare downside.
 [[dreamsigns]]
 id = "1CD25B9A-B176-4C51-8349-BB4DF35CBF05"
 subtypes = []

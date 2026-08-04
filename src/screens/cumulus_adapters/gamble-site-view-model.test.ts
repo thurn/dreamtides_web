@@ -31,7 +31,7 @@ const RUNTIME: GambleSiteRuntime = {
     id: "fixture-sign",
     name: "Fixture Sign",
     effectDescription: "A fixture effect.",
-    isBane: false,
+    isNegative: false,
   },
   result: null,
 };
@@ -135,7 +135,7 @@ describe("gamble-site-view-model", () => {
           id: "held-sign",
           name: "Held Sign",
           effectDescription: "Held effect.",
-          isBane: false,
+          isNegative: false,
         },
       ],
       siteRuntime: { [GAMBLE_SITE.id]: resultRuntime },

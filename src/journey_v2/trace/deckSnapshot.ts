@@ -75,7 +75,7 @@ export function deckFeatureTallies(
 /**
  * Builds the deck snapshot from a merchant context. The `hash` covers each
  * entry's card number and modifications (transfiguration, type change, keyword
- * modification, bane flag) sorted for stability, so two encounters scored
+ * modification, Nightmare flag) sorted for stability, so two encounters scored
  * against the same deck content share a hash.
  */
 export function buildMerchantDeckSnapshot(
@@ -92,7 +92,7 @@ export function buildMerchantDeckSnapshot(
         deckCard.deckEntry.transfiguration ?? "",
         deckCard.deckEntry.typeChange?.predicateId ?? "",
         deckCard.deckEntry.keywordModification === undefined ? "" : "kw",
-        deckCard.deckEntry.isBane ? "bane" : "",
+        deckCard.deckEntry.isBane ? "nightmare" : "",
       ].join(":"),
     )
     .sort()

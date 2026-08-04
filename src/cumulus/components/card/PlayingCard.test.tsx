@@ -126,7 +126,7 @@ describe("PlayingCard", () => {
       name: "Bezoar",
       imageName: "bezoar.png",
       effectDescription: "Foresee 1.",
-      isBane: false,
+      isNegative: false,
     };
 
     act(() => {

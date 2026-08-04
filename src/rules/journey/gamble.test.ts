@@ -31,7 +31,7 @@ const REWARD_DREAMSIGN: Dreamsign = {
   id: "reward-sign",
   name: "Reward Sign",
   effectDescription: "Fixture effect.",
-  isBane: false,
+  isNegative: false,
 };
 
 function runtime(
@@ -248,7 +248,7 @@ describe("Gravok's Three-Gate Wager", () => {
       id: "held-sign",
       name: "Held Sign",
       effectDescription: "Held effect.",
-      isBane: false,
+      isNegative: false,
     };
     const won = wager(
       stateWith("A", { maxDreamsigns: 1, dreamsigns: [held] }),

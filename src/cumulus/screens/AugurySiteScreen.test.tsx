@@ -452,7 +452,7 @@ describe("AugurySiteScreen", () => {
                   name: "Fixture Sign One",
                   effectDescription: "Fixture effect one.",
                   imageName: "fixture-one.png",
-                  isBane: false,
+                  isNegative: false,
                 },
               },
               {
@@ -462,7 +462,7 @@ describe("AugurySiteScreen", () => {
                   name: "Fixture Sign Two",
                   effectDescription: "Fixture effect two.",
                   imageName: "fixture-two.png",
-                  isBane: false,
+                  isNegative: false,
                 },
               },
             ],

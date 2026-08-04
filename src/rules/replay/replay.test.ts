@@ -17,6 +17,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import type { Genesis } from "../../eventlog/types";
+import { NIGHTMARE_CARD_NUMBER } from "../../data/nightmare";
 import { GAME_ENGINE_CONFIG, replayLog, type SeqEvent } from "./replay";
 import {
   FIXTURE_PROVIDER_SET,
@@ -49,6 +50,58 @@ afterAll(() => {
 });
 
 describe("replay fixtures", () => {
+  it("normalizes every compacted Bane reference to Nightmare", () => {
+    const state = GAME_ENGINE_CONFIG.genesisState(journeyOnly.genesis);
+    const decoded = GAME_ENGINE_CONFIG.decode(
+      JSON.stringify({
+        ...state,
+        journey: {
+          ...state.journey,
+          deck: [
+            { entryId: "nightmare", cardNumber: NIGHTMARE_CARD_NUMBER, isBane: false },
+            { entryId: "retired", cardNumber: 44, isBane: true },
+          ],
+          dreamsigns: [
+            { id: "negative", name: "Sign", effectDescription: "", isBane: true },
+          ],
+          battleModifiers: [
+            {
+              kind: "temporary_bane_grant",
+              count: 1,
+              battlesRemaining: 1,
+              addedEntryIds: ["nightmare"],
+              source: "historical-log",
+            },
+            {
+              kind: "temporary_bane_grant",
+              count: 1,
+              battlesRemaining: 1,
+              addedEntryIds: ["retired"],
+              source: "historical-log",
+            },
+          ],
+        },
+      }),
+    );
+
+    expect(decoded.journey.deck).toEqual([
+      expect.objectContaining({ entryId: "nightmare", isBane: true }),
+      expect.objectContaining({
+        entryId: "retired",
+        cardNumber: NIGHTMARE_CARD_NUMBER,
+        isBane: true,
+      }),
+    ]);
+    expect(decoded.journey.dreamsigns).toEqual([
+      expect.objectContaining({ id: "negative", isNegative: true }),
+    ]);
+    expect(decoded.journey.dreamsigns[0]).not.toHaveProperty("isBane");
+    expect(decoded.journey.battleModifiers).toEqual([
+      expect.objectContaining({ kind: "temporary_nightmare_grant" }),
+      expect.objectContaining({ kind: "temporary_nightmare_grant" }),
+    ]);
+  });
+
   it.each(FIXTURES)(
     "$name replays to its stamped finalHash",
     ({ fixture }) => {

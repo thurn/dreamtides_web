@@ -152,7 +152,6 @@ export interface JourneyMutations {
    */
   enterDraftSite: (siteId: string) => void;
   addCard: (cardNumber: number, source: string) => void;
-  addBaneCard: (cardNumber: number, source: string) => void;
   removeCard: (entryId: string, source: string) => void;
   /**
    * Apply a transfiguration to a deck entry, or clear it when `type` is
@@ -241,17 +240,18 @@ export interface JourneyMutations {
     typeChange: CardTypeChange | null,
     source: string,
   ) => void;
-  /** Debug-only: set the `isBane` flag on the dreamsign at `index`. */
-  setDreamsignIsBane?: (index: number, isBane: boolean, source: string) => void;
+  /** Debug-only: set the negative presentation flag on a Dreamsign. */
+  setDreamsignIsNegative?: (index: number, isNegative: boolean, source: string) => void;
   resetJourney: () => void;
 
   // ---- Augury effect plumbing (Wave 1) ----
   /** Set essence to a non-negative `value`. */
   setEssence: (value: number, source: string) => void;
   /**
-   * Add a non-bane card to the deck by catalog `cardId`. Mirrors `addCard`,
+   * Add a card to the deck by catalog `cardId`. Nightmare is marked as the
+   * sole Bane by the rules reducer. Mirrors `addCard`,
    * but resolves the catalog id internally by linear-scanning the small
-   * card database (the same pattern `pushTemporaryBaneGrant` uses). On a
+   * card database (the same pattern `pushTemporaryNightmareGrant` uses). On a
    * miss this no-ops and logs a console warning.
    */
   addCardById: (cardId: string, source: string) => string | null;
@@ -260,9 +260,6 @@ export interface JourneyMutations {
     type: TransfigurationType,
     source: string,
   ) => string | null;
-  /** Add a bane-flagged card to the deck by catalog `cardId`. Same lookup
-   *  semantics as `addCardById`. */
-  addBaneCardById: (cardId: string, source: string) => void;
   /** Remove the deck entry with the given entryId. Mirrors `removeCard`. */
   removeDeckEntry: (entryId: string, source: string) => void;
   /**
@@ -287,13 +284,12 @@ export interface JourneyMutations {
     source: string,
   ) => void;
   /**
-   * Remove up to `count` bane cards from the deck via uniform random
-   * selection (using `Math.random`). When fewer banes exist than `count`,
+   * Remove up to `count` Nightmare cards from the deck. When fewer Nightmares exist than `count`,
    * all of them are removed; non-positive counts no-op.
    */
-  purgeRandomBaneCards: (count: number, source: string) => void;
-  /** Remove every bane card from the deck. */
-  purgeAllBaneCards: (source: string) => void;
+  purgeRandomNightmareCards: (count: number, source: string) => void;
+  /** Remove every Nightmare card from the deck. */
+  purgeAllNightmareCards: (source: string) => void;
   /**
    * Stack a battle-window reward-reduction modifier. Decremented per battle
    * by the authoritative victory transition; entries at zero drop.
@@ -305,16 +301,10 @@ export interface JourneyMutations {
     source: string,
   ) => void;
   /**
-   * Add `count` bane cards to the deck immediately and stack a
-   * `temporary_bane_grant` modifier that removes the added entries when its
-   * `battlesRemaining` counter reaches zero. The bane's catalog entry is
-   * resolved via `journeyContent.cardDatabase` using `baneCardId` (UUID);
-   * `baneName` is a display/log label only and is not used for catalog lookup.
-   * An unresolvable `baneCardId` no-ops with a console warning.
+   * Add `count` Nightmare cards immediately and remove those exact entries
+   * after `battles` completed battles.
    */
-  pushTemporaryBaneGrant: (
-    baneCardId: string,
-    baneName: string,
+  pushTemporaryNightmareGrant: (
     count: number,
     battles: number,
     source: string,

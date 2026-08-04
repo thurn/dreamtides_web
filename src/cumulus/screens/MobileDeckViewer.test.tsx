@@ -15,7 +15,7 @@ function view(): MobileDeckView {
   return { cards: [{ entryId: "entry-a", isBane: false, model: { cardId, displaySnapshot: {
     id: cardId, name: asCardName("Archive Sentry"), cardNumber: 1, cardType: "Character",
     subtype: "Synth", isStarter: false, energyCost: 2, spark: 1, isFast: false,
-    renderedText: "Discard a bane.", imageNumber: 1, artOwned: true,
+    renderedText: "Nightmare is a Bane.", imageNumber: 1, artOwned: true,
   } } }] };
 }
 

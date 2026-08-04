@@ -45,7 +45,7 @@ describe("RichText", () => {
         value={richText.definitions([
           {
             term: "Bane",
-            definition: "A penalty card forced into your deck.",
+            definition: "The Nightmare card, a penalty card forced into your deck.",
           },
           {
             term: "Discover",
@@ -65,7 +65,7 @@ describe("RichText", () => {
     expect(markup).toContain(
       '<dt style="display:inline;font-weight:700">Discover</dt>',
     );
-    expect(markup).toContain(": A penalty card forced into your deck.");
+    expect(markup).toContain(": The Nightmare card, a penalty card forced into your deck.");
     expect(markup.match(/data-definition-divider=""/g)).toHaveLength(1);
     expect(markup).toContain(
       "margin:var(--space-4) auto;background:var(--border-glossary-definition)",

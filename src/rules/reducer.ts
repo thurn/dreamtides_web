@@ -36,6 +36,7 @@ import * as shop from "./journey/shop";
 import * as sites from "./journey/sites";
 import * as cardTutorial from "./card-tutorial-guidance";
 import { assertFoldInvariants } from "./invariants";
+import { NIGHTMARE_CARD_ID } from "../data/nightmare";
 
 /** The reducer's return shape (matches `EngineConfig.reducer`). */
 export type ReduceResult =
@@ -68,6 +69,7 @@ export function reduceGameEvent(
   event: GameEvent,
   ctx: EventContext,
 ): ReduceResult {
+  event = normalizeLegacyNightmareEvent(event);
   const controlDecision = authorizePlaytestIntent(state, event);
   if (controlDecision === "reject") {
     return bounce(state, "observer_read_only");
@@ -134,6 +136,42 @@ export function reduceGameEvent(
     ? { ...result, state }
     : result;
   return enforceInvariants(event, controlled);
+}
+
+/**
+ * Translate persisted event names from the historical schema. Each Bane alias
+ * applies specifically to Nightmare, regardless of the card identity carried
+ * by the historical payload.
+ */
+function normalizeLegacyNightmareEvent(event: GameEvent): GameEvent {
+  switch (event.type) {
+    case "PURGE_ALL_BANE_CARDS":
+      return { ...event, type: "PURGE_ALL_NIGHTMARE_CARDS" };
+    case "PURGE_RANDOM_BANE_CARDS":
+      return { ...event, type: "PURGE_RANDOM_NIGHTMARE_CARDS" };
+    case "PUSH_TEMPORARY_BANE_GRANT":
+      return {
+        ...event,
+        type: "PUSH_TEMPORARY_NIGHTMARE_GRANT",
+        payload: {
+          cardId: NIGHTMARE_CARD_ID,
+          count: event.payload.count,
+          battlesRemaining: event.payload.battlesRemaining,
+          source: event.payload.source,
+        },
+      };
+    case "SET_DREAMSIGN_IS_BANE":
+      return {
+        ...event,
+        type: "SET_DREAMSIGN_IS_NEGATIVE",
+        payload: {
+          dreamsignId: event.payload.dreamsignId,
+          isNegative: event.payload.isBane,
+        },
+      };
+    default:
+      return event;
+  }
 }
 
 function enforceInvariants(
@@ -451,10 +489,10 @@ export function routeDomain(
       return journeyCase(state, deck.setDeckEntryType(journey, payload));
     case "TRANSFIGURE_CARD":
       return journeyCase(state, deck.transfigureCard(journey, payload));
-    case "PURGE_ALL_BANE_CARDS":
-      return journeyCase(state, deck.purgeAllBaneCards(journey));
-    case "PURGE_RANDOM_BANE_CARDS":
-      return journeyCase(state, deck.purgeRandomBaneCards(journey, payload, ctx));
+    case "PURGE_ALL_NIGHTMARE_CARDS":
+      return journeyCase(state, deck.purgeAllNightmareCards(journey));
+    case "PURGE_RANDOM_NIGHTMARE_CARDS":
+      return journeyCase(state, deck.purgeRandomNightmareCards(journey, payload, ctx));
 
     case "ACCEPT_TRANSFIGURATION_CHOICE":
       return journeyCase(
@@ -521,8 +559,8 @@ export function routeDomain(
       return journeyCase(state, shop.declineMerchant(journey, payload, ctx));
     case "PUSH_BATTLE_MODIFIER":
       return journeyCase(state, shop.pushBattleModifier(journey, payload));
-    case "PUSH_TEMPORARY_BANE_GRANT":
-      return journeyCase(state, shop.pushTemporaryBaneGrant(journey, payload, ctx));
+    case "PUSH_TEMPORARY_NIGHTMARE_GRANT":
+      return journeyCase(state, shop.pushTemporaryNightmareGrant(journey, payload, ctx));
     case "BAN_SITE_TYPE":
       return journeyCase(state, shop.banSiteType(journey, payload));
     case "BOOST_SITE_APPEARANCE":
@@ -551,8 +589,8 @@ export function routeDomain(
       return journeyCase(state, deck.removeDreamsign(journey, payload));
     case "SET_DREAMSIGN_POOL":
       return journeyCase(state, deck.setDreamsignPool(journey, payload));
-    case "SET_DREAMSIGN_IS_BANE":
-      return journeyCase(state, deck.setDreamsignIsBane(journey, payload));
+    case "SET_DREAMSIGN_IS_NEGATIVE":
+      return journeyCase(state, deck.setDreamsignIsNegative(journey, payload));
 
     // --- battle lifecycle (create / tear down the battle slice) ---
     case "BEGIN_BATTLE":

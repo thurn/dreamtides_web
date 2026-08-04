@@ -608,9 +608,8 @@ Icon: `boxicons3/copy`
 
 Purge is run by **Master Takeshi** (home: Tsukiren). It lets the user pay essence
 to permanently remove cards from their deck, thinning out cards that don't fit
-their gameplan. Purge also removes [Banes](#banes): bane cards can be selected for
-removal alongside ordinary cards, and are removed cheaply or for free so that a
-bad bane is always shakeable.
+their gameplan. Purge also removes [Nightmare](#nightmare): Nightmare cards can
+be selected alongside ordinary cards and are removed cheaply or for free.
 
 A Purge site is guaranteed in layers 1, 2, and 3, so early-game deck-thinning is
 always available. From layer 4 onward, Purge is not guaranteed but can still appear
@@ -636,7 +635,7 @@ visit. Essence discounts also reduce purge prices. The pricing logic lives in
 `src/purge/purge-pricing.ts`.
 
 **Home Specialty.** In Tsukiren, Master Takeshi allows the player to remove up to
-3 cards (ordinary cards or banes) at no cost.
+3 cards, including Nightmare cards, at no cost.
 
 **UI:** The user's journey deck opens its browser view, showing every card.
 Selecting a card gives it a red outline and a price chip showing what that card
@@ -679,8 +678,8 @@ Icon: `boxicons3/eye`
 
 Tempting Offer is run by **Maddox** (home: The Rust Expanse). The player may take
 a powerful reward, but it comes at a cost: paying essence, gaining a
-[Bane](#banes), or losing something (such as a card from their deck). Tempting
-Offer is the primary source of banes during a journey.
+[Nightmare](#nightmare), or losing something (such as a card from their deck).
+Tempting Offer is the primary source of Nightmare cards during a journey.
 
 **Home Specialty.** In The Rust Expanse, Maddox offers the player their choice of
 two tempting offers.
@@ -740,7 +739,7 @@ enhancements are:
 | Sigrún | Winterwake Fjords | Dreamsign Revelation | Always a choice (never a single random dreamsign), more choices, tailored to the deck |
 | Durgan Forgehammer | Frostforge | Transfiguration | Pick any card and any applicable transfiguration |
 | Deacon Holt | Hope's End | Duplication | Pick any card to duplicate |
-| Master Takeshi | Tsukiren | Purge | Remove up to 3 cards or banes for free |
+| Master Takeshi | Tsukiren | Purge | Remove up to 3 cards, including Nightmare, for free |
 | Aldric, the Seer | Wilderveil | Augury | Bigger rewards, curated to the deck |
 | Maddox | The Rust Expanse | Tempting Offer | Choose between two offers |
 | Gravok | Farpoint Station | Gamble | No initial fee, bigger payouts |
@@ -796,13 +795,12 @@ dreamsign.
 
 Users may have only 1 dream avatar.
 
-## Banes
+## Nightmare
 
-Certain cards, called "banes", can be given to the user during a journey, typically
-as the cost side of a [Tempting Offer](#tempting-offer) or as the downside of a
-losing [Gamble](#gamble). Bane cards generally have negative effects when drawn.
-Bane cards can be removed at a [Purge](#purge) site, which removes banes cheaply
-or for free alongside ordinary cards. See [Banes](banes.md) for more information.
+[Nightmare](banes.md) is the sole Bane card. It can be given to the user during
+a journey, typically as the cost side of a [Tempting Offer](#tempting-offer) or
+as the downside of a losing [Gamble](#gamble). Nightmare can be removed cheaply
+or for free at a [Purge](#purge) site alongside ordinary cards.
 
 ## Dream Atlas
 

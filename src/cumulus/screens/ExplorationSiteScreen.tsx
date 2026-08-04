@@ -88,7 +88,7 @@ export interface ExplorationCardChoiceView {
   entryId: string;
   /** Complete resolved card presentation. */
   model: GameCardModel;
-  /** Whether this deck entry is a Bane. */
+  /** Whether this deck entry is Nightmare, the sole Bane card. */
   isBane: boolean;
 }
 

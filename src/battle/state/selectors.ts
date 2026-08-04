@@ -32,17 +32,17 @@ import { centerPreferredEmptySlot } from "../center-preferred-slot";
  * `journeyDeckEntries` mirror on `BattleInit` is spec-mandated (every battle
  * session must retain the journey-deck identity of each card it draws from)
  * and exposed through this selector so the Battle Inspector can render the
- * "N banes / M transfigured" line required by spec §B-21 without walking the
+ * "N Nightmares / M transfigured" line required by spec §B-21 without walking the
  * mutable card-instance graph (bug-037).
  */
 export function selectBattleJourneyDeckSummary(
   journeyDeckEntries: readonly BattleJourneyDeckEntry[],
-): { totalEntries: number; baneCount: number; transfiguredCount: number } {
-  let baneCount = 0;
+): { totalEntries: number; nightmareCount: number; transfiguredCount: number } {
+  let nightmareCount = 0;
   let transfiguredCount = 0;
   for (const entry of journeyDeckEntries) {
     if (entry.isBane) {
-      baneCount += 1;
+      nightmareCount += 1;
     }
     if (entry.transfiguration !== null) {
       transfiguredCount += 1;
@@ -50,7 +50,7 @@ export function selectBattleJourneyDeckSummary(
   }
   return {
     totalEntries: journeyDeckEntries.length,
-    baneCount,
+    nightmareCount,
     transfiguredCount,
   };
 }

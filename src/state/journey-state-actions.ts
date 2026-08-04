@@ -68,7 +68,6 @@ export function changeJourneyEssence(
 export function addCardToJourneyState(
   prev: JourneyState,
   cardNumber: number,
-  isBane: boolean,
 ): JourneyState {
   return {
     ...prev,
@@ -78,7 +77,7 @@ export function addCardToJourneyState(
         entryId: nextDeckEntryId(prev.deck),
         cardNumber,
         transfiguration: null,
-        isBane,
+        isBane: false,
       },
     ],
   };
@@ -122,7 +121,7 @@ export function pickDraftCardInJourneyState({
   // identical to advancing the draft state first. The engine's offer-
   // membership check still validates `cardNumber` against the PRE-pick
   // `currentOffer` (unchanged), so the reorder is safe.
-  const withCard = addCardToJourneyState(prev, cardNumber, false);
+  const withCard = addCardToJourneyState(prev, cardNumber);
   const draftState = structuredClone(prev.draftState);
   const offerDeps =
     draftState.mode === "replay"
