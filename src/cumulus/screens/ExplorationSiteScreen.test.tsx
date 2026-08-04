@@ -6,7 +6,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { CumulusRoot } from "../CumulusRoot";
+import { JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP } from "../components/hud/JourneyStatusBar";
 import { artRef } from "../primitives/art";
+import { token } from "../primitives/tokens";
 import {
   ExplorationSiteScreen,
   type ExplorationSiteView,
@@ -458,9 +460,13 @@ describe("ExplorationSiteScreen", () => {
         )
         ?.click(),
     );
-    expect(
-      container.querySelector('[data-exploration-followup="cards"]'),
-    ).not.toBeNull();
+    const followup = container.querySelector<HTMLElement>(
+      '[data-exploration-followup="cards"]',
+    );
+    expect(followup).not.toBeNull();
+    expect(followup?.style.bottom).toBe(
+      `calc(${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-9")})`,
+    );
     act(() =>
       container
         .querySelector<HTMLElement>(

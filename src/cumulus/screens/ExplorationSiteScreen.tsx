@@ -227,7 +227,7 @@ const REWARD_STAGGER_SECONDS = motionTimeSeconds("--dur-fast");
 const DESKTOP_REWARD_CARD_WIDTH = 240;
 const DESKTOP_REWARD_DREAMSIGN_SIZE = 240;
 const MOBILE_REWARD_DREAMSIGN_SIZE = 180;
-const DESKTOP_NARRATIVE_PANEL_BOTTOM =
+const DESKTOP_FLOATING_PANEL_BOTTOM =
   `calc(${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-9")})`;
 // The card preview cache appends a 21px watermark strip to a 259px-tall
 // content image. Licensed originals contain the 259px content region only.
@@ -1385,7 +1385,7 @@ export function ExplorationSiteScreen({
             position: "fixed",
             left: `max(var(--safe-area-inset-left), ${token("--space-5")})`,
             bottom: isDesktop
-              ? DESKTOP_NARRATIVE_PANEL_BOTTOM
+              ? DESKTOP_FLOATING_PANEL_BOTTOM
               : JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
             zIndex: FRAME_BREAK_EXIT_LAYER,
             width: isDesktop
@@ -1505,7 +1505,9 @@ export function ExplorationSiteScreen({
                 ? 0
                 : `calc(max(var(--safe-area-inset-right), ${token("--space-8")}) + ${String(MENU_BUTTON_PX)}px + ${token("--space-3")})`
               : `max(var(--safe-area-inset-right), ${token("--space-4")})`,
-            bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+            bottom: isDesktop
+              ? DESKTOP_FLOATING_PANEL_BOTTOM
+              : JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
             left: isDesktop
               ? activeAction.followup.kind === "cards" &&
                 activeAction.followup.selectionKey === "cardIds"

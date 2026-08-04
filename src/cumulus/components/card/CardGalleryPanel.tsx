@@ -603,6 +603,7 @@ export function CardGalleryPanel({
         style={{
           display: "grid",
           placeItems: "center",
+          paddingTop: galleryPadding,
           paddingRight: galleryPadding,
           paddingBottom: galleryPadding,
           paddingLeft: galleryPadding,

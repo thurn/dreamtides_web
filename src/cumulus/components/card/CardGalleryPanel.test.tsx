@@ -140,6 +140,7 @@ describe("CardGalleryPanel", () => {
     ]} /></CumulusRoot>));
     const actions = container.querySelector<HTMLElement>("[data-gallery-footer-actions]");
     expect(actions?.style.gridTemplateColumns).toBe("repeat(2, minmax(0, 1fr))");
+    expect(actions?.parentElement?.style.paddingTop).toBe("var(--space-8)");
     expect(
       container.querySelector<HTMLElement>("section")?.dataset
         .galleryReservesStackedCopy,
