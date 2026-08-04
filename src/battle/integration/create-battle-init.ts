@@ -16,6 +16,7 @@ import type { DraftRecord } from "../../data/cards-v2-database";
 import type { FitModel } from "../../draft/replay/fit-model";
 import { DEFAULT_POOL_VARIANT } from "../../draft/pool/types";
 import {
+  applyCardSparkBonus,
   applyCardStatOverride,
   applyDeckEntryCardModification,
   resolveDeckEntryCard,
@@ -778,16 +779,19 @@ function normalizePlayerDeckCard(
   card: CardData,
 ): BattleDeckCardDefinition {
   // Resolve the deck entry so the battle card carries the modified cost, spark,
-  // and rules text (transfiguration, type/keyword changes, then debug stat
-  // overrides) rather than the printed base values.
+  // and rules text (transfiguration, type/keyword changes, persistent spark,
+  // then debug stat overrides) rather than the printed base values.
   const effectiveCard = resolveDeckEntryCard(card, entry);
   const transfigurationDisplay = (() => {
     if (entry.transfiguration === null) return undefined;
     const transfigured = buildTransfigurationDisplay(card, entry.transfiguration);
     const markedCard = applyCardStatOverride(
-      applyDeckEntryCardModification(
-        { ...transfigured.card, renderedText: transfigured.display.markedText },
-        { typeChange: entry.typeChange, keywords: entry.keywordModification },
+      applyCardSparkBonus(
+        applyDeckEntryCardModification(
+          { ...transfigured.card, renderedText: transfigured.display.markedText },
+          { typeChange: entry.typeChange, keywords: entry.keywordModification },
+        ),
+        entry.sparkBonus,
       ),
       entry.statOverride,
     );

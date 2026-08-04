@@ -219,6 +219,7 @@ export function duplicateDeckEntry(
     ...(entry.keywordModification == null
       ? {}
       : { keywordModification: entry.keywordModification }),
+    ...(entry.sparkBonus === undefined ? {} : { sparkBonus: entry.sparkBonus }),
     isBane: entry.isBane,
   };
   return { ...journey, deck: [...journey.deck, copy] };

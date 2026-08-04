@@ -1,6 +1,7 @@
 // Pure view-model builder for the starting-deck reveal overlay. Resolves each
-// deck entry to the card the player actually holds — type/keyword changes and
-// debug stat overrides applied — in acquisition order, dropping any entry whose
+// deck entry to the card the player actually holds — type/keyword changes,
+// persistent spark bonuses, and debug stat overrides applied — in acquisition
+// order, dropping any entry whose
 // card is not in the database. No React, no state hooks: the adapter acquires
 // live state and calls `buildStartingDeckView`; this module maps domain data to
 // the overlay's view types and nothing else.
@@ -8,6 +9,7 @@
 import type { CardData } from "../../types/cards";
 import type { DeckEntry } from "../../types/journey";
 import {
+  applyCardSparkBonus,
   applyCardStatOverride,
   applyDeckEntryCardModification,
 } from "../../card-type-change";
@@ -22,8 +24,9 @@ import type {
  * dropped. Deterministic in its arguments.
  *
  * The card is resolved the same way the deck surfaces resolve it: type/keyword
- * modifications first, then the debug stat override applied last so an explicit
- * value wins. Each view is keyed by the stable `entryId` (never the card name,
+ * modifications first, then persistent spark and the debug stat override
+ * applied last so an explicit value wins. Each view is keyed by the stable
+ * `entryId` (never the card name,
  * which is not unique).
  */
 export function buildStartingDeckView(
@@ -35,10 +38,13 @@ export function buildStartingDeckView(
     const base = cardDatabase.get(entry.cardNumber);
     if (base === undefined) continue;
     const card = applyCardStatOverride(
-      applyDeckEntryCardModification(base, {
-        typeChange: entry.typeChange,
-        keywords: entry.keywordModification,
-      }),
+      applyCardSparkBonus(
+        applyDeckEntryCardModification(base, {
+          typeChange: entry.typeChange,
+          keywords: entry.keywordModification,
+        }),
+        entry.sparkBonus,
+      ),
       entry.statOverride,
     );
     cards.push({

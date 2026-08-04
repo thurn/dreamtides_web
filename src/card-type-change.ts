@@ -122,8 +122,27 @@ export function applyCardStatOverride<T extends CardStatFields>(
   };
 }
 
-/** The canonical deck-entry resolution: transfiguration, then type/keyword
- *  modifications, then debug stat overrides (applied last). */
+/** Returns a card-like value with a persistent additive spark bonus applied. */
+export function applyCardSparkBonus<T extends CardStatFields>(
+  card: T,
+  sparkBonus: number | null | undefined,
+): T {
+  if (
+    sparkBonus == null ||
+    !Number.isFinite(sparkBonus) ||
+    sparkBonus === 0 ||
+    card.spark === null
+  ) {
+    return card;
+  }
+  return {
+    ...card,
+    spark: Math.max(0, card.spark + sparkBonus),
+  };
+}
+
+/** The canonical deck-entry resolution: transfiguration, type/keyword changes,
+ *  additive spark, then debug stat overrides (applied last). */
 export function resolveDeckEntryCard(
   card: CardData,
   entry: DeckEntry,
@@ -136,5 +155,8 @@ export function resolveDeckEntryCard(
     typeChange: entry.typeChange,
     keywords: entry.keywordModification,
   });
-  return applyCardStatOverride(modified, entry.statOverride);
+  return applyCardStatOverride(
+    applyCardSparkBonus(modified, entry.sparkBonus),
+    entry.statOverride,
+  );
 }

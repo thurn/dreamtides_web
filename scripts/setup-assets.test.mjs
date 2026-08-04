@@ -41,6 +41,51 @@ describe("transformExplorationData", () => {
       .toBe(9);
     expect(new Set(actions.map((action) => action.id)).size).toBe(18);
   });
+
+  function syntheticExplorationSource(essencePerCard = 15) {
+    const encounters = Array.from({ length: 9 }, (_, encounterIndex) => ({
+      "card-id": `source-${String(encounterIndex)}`,
+      prose: `Synthetic prose ${String(encounterIndex)}`,
+      action: Array.from({ length: 2 }, (_, actionIndex) => ({
+        id: `action-${String(encounterIndex)}-${String(actionIndex)}`,
+        label: "Synthetic action",
+        "effect-text": "Synthetic effect",
+        "response-text": "Synthetic response",
+        "effect-kind": "gain-card",
+      })),
+    }));
+    encounters[0].action[0] = {
+      ...encounters[0].action[0],
+      "effect-kind": "gain-offered-card",
+    };
+    encounters[0].action[1] = {
+      ...encounters[0].action[1],
+      "effect-kind": "gain-essence-per-card",
+      "essence-per-card": essencePerCard,
+    };
+    encounters[1].action[0] = {
+      ...encounters[1].action[0],
+      "effect-kind": "increase-spark-all",
+      "spark-bonus": 1,
+    };
+    return { encounter: encounters };
+  }
+
+  it("compiles the redesigned encounter effect kinds", () => {
+    const compiled = transformExplorationData(syntheticExplorationSource());
+    const effectKinds = compiled.encounters.flatMap((encounter) =>
+      encounter.action.map((action) => action.effectKind),
+    );
+
+    expect(effectKinds).toContain("gain-offered-card");
+    expect(effectKinds).toContain("gain-essence-per-card");
+    expect(effectKinds).toContain("increase-spark-all");
+  });
+
+  it("rejects a non-positive per-card essence reward", () => {
+    expect(() => transformExplorationData(syntheticExplorationSource(0)))
+      .toThrow(/requires positive essence-per-card/);
+  });
 });
 
 afterEach(() => {

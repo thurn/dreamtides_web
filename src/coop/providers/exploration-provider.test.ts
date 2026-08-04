@@ -1,22 +1,21 @@
 import { describe, expect, it } from "vitest";
-import explorationData from "../../../public/exploration-data.json";
-import type { ExplorationContent } from "../../data/exploration";
-import {
-  hashStringToSeed,
-  type JourneyContent,
-} from "../../data/journey-content";
+import { resolveDeckEntryCard } from "../../card-type-change";
+import type {
+  ExplorationActionContent,
+  ExplorationContent,
+} from "../../data/exploration";
+import type { JourneyContent } from "../../data/journey-content";
 import { createDefaultState } from "../../state/journey-context";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
-import type {
-  ExplorationSiteRuntime,
-  JourneyState,
-  SiteState,
-} from "../../types/journey";
+import type { JourneyState, SiteState } from "../../types/journey";
 import {
   buildExplorationRuntime,
   resolveExplorationChoice,
 } from "./exploration-provider";
+
+const SOURCE_CARD_ID = asCardId("161482b6-af07-4d9e-822d-8c738672beb9");
+const CHARM_POUCH_ID = "2D4EB3EE-0931-45ED-8365-69F18096EAD5";
 
 function card(
   id: string,
@@ -33,7 +32,7 @@ function card(
     subtype,
     isStarter: false,
     energyCost,
-    spark: 2,
+    spark: cardType === "Character" ? 2 : null,
     isFast: false,
     renderedText: "Synthetic rules text.",
     imageNumber: cardNumber,
@@ -41,61 +40,61 @@ function card(
   };
 }
 
-function contentFixture(): JourneyContent {
-  const authored = explorationData as unknown as {
-    customCards: CardData[];
-    customDreamsigns: ExplorationContent["customDreamsigns"];
-    encounters: Array<{
-      cardId: string;
-      prose: string;
-      action: ExplorationContent["encounters"][number]["actions"];
-    }>;
-  };
-  const sourceCards = authored.encounters.map((encounter, index) =>
-    card(encounter.cardId, index + 1, "Character", "Fixture", 3),
-  );
-  const candidates = [
+function catalogCards(): CardData[] {
+  return [
+    card(SOURCE_CARD_ID, 1, "Character", "Warrior", 1),
     card("f0000000-0000-4000-8000-000000000001", 101, "Event", "", 1),
-    card("f0000000-0000-4000-8000-000000000002", 102, "Character", "Survivor"),
-    card("f0000000-0000-4000-8000-000000000003", 103, "Character", "Survivor"),
-    card("f0000000-0000-4000-8000-000000000004", 104, "Character", "Warrior"),
-    ...Array.from({ length: 8 }, (_, index) =>
+    ...Array.from({ length: 4 }, (_, index) =>
       card(
         `f0000000-0000-4000-8000-${String(index + 10).padStart(12, "0")}`,
         110 + index,
+        "Character",
+        "Survivor",
+      ),
+    ),
+    ...Array.from({ length: 6 }, (_, index) =>
+      card(
+        `f0000000-0000-4000-8000-${String(index + 20).padStart(12, "0")}`,
+        120 + index,
+        "Character",
+        "Warrior",
+      ),
+    ),
+    ...Array.from({ length: 8 }, (_, index) =>
+      card(
+        `f0000000-0000-4000-8000-${String(index + 30).padStart(12, "0")}`,
+        130 + index,
         "Character",
         "Spirit Animal",
       ),
     ),
   ];
-  const customCards = authored.customCards.map((entry) => ({
-    ...entry,
-    id: asCardId(entry.id),
-    name: asCardName(entry.name),
-  }));
-  const cards = [...sourceCards, ...candidates, ...customCards];
+}
+
+function contentFixture(
+  actions: readonly [ExplorationActionContent, ExplorationActionContent],
+): JourneyContent {
+  const cards = catalogCards();
+  const exploration: ExplorationContent = {
+    customCards: [],
+    customDreamsigns: [],
+    encounters: [
+      {
+        cardId: SOURCE_CARD_ID,
+        prose: "A synthetic scene.",
+        actions,
+      },
+    ],
+  };
   return {
     cardDatabase: new Map(cards.map((entry) => [entry.cardNumber, entry])),
-    exploration: {
-      customCards,
-      customDreamsigns: authored.customDreamsigns,
-      encounters: authored.encounters.map((encounter) => ({
-        cardId: asCardId(encounter.cardId),
-        prose: encounter.prose,
-        actions: encounter.action,
-      })),
-    },
+    exploration,
     dreamAvatars: [],
     dreamwellCards: [],
     dreamsignTemplates: [
       {
-        id: "3A22A33F-5682-4D00-B0EC-86E43B6ED9DF",
-        name: "Magic Fish",
-        effectDescription: "A fixture effect.",
-      },
-      {
-        id: "D1FDBE21-56F6-43C0-AAAC-1E4683964DA5",
-        name: "Bell",
+        id: CHARM_POUCH_ID,
+        name: "Charm Pouch",
         effectDescription: "A fixture effect.",
       },
     ],
@@ -107,21 +106,21 @@ function contentFixture(): JourneyContent {
 }
 
 function journeyFixture(content: JourneyContent): JourneyState {
-  const deckCards = [...content.cardDatabase.values()].filter(
-    (entry) => entry.cardNumber >= 101 && entry.cardNumber <= 117,
-  );
   return {
     ...createDefaultState(),
-    screen: { type: "site", siteId: "exploration-site" },
-    activeSiteId: "exploration-site",
+    seed: "exploration-provider-test",
+    screen: { type: "site", siteId: site.id },
+    activeSiteId: site.id,
     essence: 100,
     maxDreamsigns: 12,
-    deck: deckCards.map((entry, index) => ({
-      entryId: `entry-${String(index)}`,
-      cardNumber: entry.cardNumber,
-      transfiguration: null,
-      isBane: false,
-    })),
+    deck: [...content.cardDatabase.values()]
+      .filter((entry) => entry.cardNumber >= 101)
+      .map((entry, index) => ({
+        entryId: `entry-${String(index)}`,
+        cardNumber: entry.cardNumber,
+        transfiguration: null,
+        isBane: false,
+      })),
   };
 }
 
@@ -132,88 +131,216 @@ const site: SiteState = {
   isVisited: false,
 };
 
-function selectionFor(runtime: ExplorationSiteRuntime, actionId: string) {
-  const offer = runtime.actionOffers.find((candidate) => candidate.actionId === actionId);
-  if (offer === undefined) throw new Error(`Missing offer for ${actionId}`);
-  if (actionId.endsWith(":exchange-familiar-forms")) {
-    return { purgeEntryId: "entry-0", copyEntryId: "entry-1" };
-  }
-  if (actionId.endsWith(":study-guardian")) {
-    return { entryIds: Object.keys(offer.transfigurationByEntryId).slice(0, 2) };
-  }
-  if (actionId.endsWith(":feed-fire")) return { entryIds: ["entry-0"] };
-  if (actionId.endsWith(":welcome-kin")) return { packIndex: 0 };
-  if (actionId.endsWith(":invite-lantern-visitor") || actionId.endsWith(":ask-counsel")) {
-    return { cardIds: offer.offeredCardIds.slice(0, 1) };
-  }
-  if (actionId.endsWith(":trade-away-figure")) return { entryIds: ["entry-1"] };
-  if (actionId.endsWith(":enter-frame")) return { entryIds: ["entry-1"] };
-  if (actionId.endsWith(":expand-frame")) return { subtype: "Warrior" };
-  if (actionId.endsWith(":welcome-owl-kin")) return { cardIds: offer.offeredCardIds.slice(0, 2) };
-  if (actionId.endsWith(":release-swimmer")) {
-    return { entryIds: [Object.keys(offer.replacementCardIdByEntryId)[0]] };
-  }
-  if (actionId.endsWith(":gather-light")) return { entryIds: ["entry-1"] };
-  return {};
+function buildState(
+  content: JourneyContent,
+  journey = journeyFixture(content),
+): { journey: JourneyState; runtime: NonNullable<ReturnType<typeof buildExplorationRuntime>> } {
+  const runtime = buildExplorationRuntime(journey, site, content, () => 0.37);
+  if (runtime === null) throw new Error("Expected Exploration runtime");
+  return {
+    runtime,
+    journey: {
+      ...journey,
+      siteRuntime: { ...journey.siteRuntime, [site.id]: runtime },
+    },
+  };
 }
 
-function seedForEncounter(index: number, count: number): string {
-  for (let candidate = 0; candidate < 10_000; candidate += 1) {
-    const seed = `exploration-test-${String(candidate)}`;
-    if (
-      hashStringToSeed(`${seed}:${site.id}:exploration-card`) % count ===
-      index
-    ) {
-      return seed;
-    }
-  }
-  throw new Error(`Unable to find Exploration seed for index ${String(index)}`);
+function resolve(
+  content: JourneyContent,
+  journey: JourneyState,
+  actionId: string,
+  selection: Record<string, unknown> = {},
+): JourneyState {
+  const result = resolveExplorationChoice({
+    journey,
+    site,
+    payload: { actionId, selection },
+    seq: 91,
+    content,
+  });
+  if (result === null) throw new Error(`Expected ${actionId} to resolve`);
+  return result;
 }
 
 describe("Exploration provider", () => {
-  it("builds deterministic offers and resolves all 18 authored effects", () => {
-    const content = contentFixture();
-    const authored = content.exploration;
-    if (authored === undefined) throw new Error("Missing authored content");
-    const resolvedIds = new Set<string>();
+  it("builds and resolves the offered-card and unrestricted transfiguration effects", () => {
+    const offeredAction: ExplorationActionContent = {
+      id: "gain-offered",
+      label: "Invite someone through",
+      effectText: "Gain $OFFERED_CARD",
+      responseText: "Someone arrives.",
+      effectKind: "gain-offered-card",
+      predicate: "cheap-character",
+    };
+    const transfigureAction: ExplorationActionContent = {
+      id: "transfigure",
+      label: "Send a possession through",
+      effectText: "Apply a transfiguration to a chosen card",
+      responseText: "It returns altered.",
+      effectKind: "transfigure-selected",
+      count: 1,
+    };
+    const content = contentFixture([offeredAction, transfigureAction]);
+    const offeredState = buildState(content);
+    const offered = offeredState.runtime.actionOffers[0]?.offeredCardIds ?? [];
 
-    authored.encounters.forEach((encounter, encounterIndex) => {
-      for (const action of encounter.actions) {
-        const journey = {
-          ...journeyFixture(content),
-          seed: seedForEncounter(encounterIndex, authored.encounters.length),
-        };
-        const runtime = buildExplorationRuntime(journey, site, content, () => 0.37);
-        expect(runtime?.encounterCardId).toBe(encounter.cardId);
-        if (runtime === null) throw new Error("Expected Exploration runtime");
-        const state = {
-          ...journey,
-          siteRuntime: { ...journey.siteRuntime, [site.id]: runtime },
-        };
-        const result = resolveExplorationChoice({
-          journey: state,
-          site,
-          payload: {
-            actionId: action.id,
-            selection: selectionFor(runtime, action.id),
-          },
-          seq: 91 + resolvedIds.size,
-          content,
-        });
-        expect(result, action.id).not.toBeNull();
-        expect(result?.siteRuntime[site.id]).toMatchObject({
-          kind: "exploration",
-          resolution: { actionId: action.id },
-        });
-        resolvedIds.add(action.id);
-      }
+    expect(offered).toHaveLength(1);
+    expect(offered).not.toContain(SOURCE_CARD_ID);
+    const gained = resolve(
+      content,
+      offeredState.journey,
+      offeredAction.id,
+      { cardIds: offered },
+    );
+    expect(gained.deck).toHaveLength(offeredState.journey.deck.length + 1);
+    expect(gained.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: { gainedCardIds: offered },
     });
 
-    expect(resolvedIds.size).toBe(18);
+    const transfigureState = buildState(content);
+    const transfigurations =
+      transfigureState.runtime.actionOffers[1]?.transfigurationByEntryId ?? {};
+    const entryId = Object.keys(transfigurations)[0];
+    if (entryId === undefined) throw new Error("Expected a transfiguration offer");
+    const transfigured = resolve(
+      content,
+      transfigureState.journey,
+      transfigureAction.id,
+      { entryIds: [entryId] },
+    );
+    expect(transfigured.deck.find((entry) => entry.entryId === entryId)?.transfiguration)
+      .toBe(transfigurations[entryId]);
+  });
+
+  it("derives essence from matching deck entries and stacks spark on every Character", () => {
+    const essenceAction: ExplorationActionContent = {
+      id: "essence-per-card",
+      label: "Sound a gathering call",
+      effectText: "Gain 15 essence for each Spirit Animal card in your deck",
+      responseText: "A call answers.",
+      effectKind: "gain-essence-per-card",
+      predicate: "spirit-animal",
+      essencePerCard: 15,
+    };
+    const sparkAction: ExplorationActionContent = {
+      id: "increase-spark",
+      label: "Receive Their Blessing",
+      effectText: "All characters in your deck gain +1✦",
+      responseText: "Starlight passes over the company.",
+      effectKind: "increase-spark-all",
+      sparkBonus: 1,
+    };
+    const content = contentFixture([essenceAction, sparkAction]);
+    const essenceState = buildState(content);
+    const spiritAnimalCount = essenceState.journey.deck.filter((entry) => {
+      const base = content.cardDatabase.get(entry.cardNumber);
+      return base !== undefined && resolveDeckEntryCard(base, entry).subtype === "Spirit Animal";
+    }).length;
+    const withEssence = resolve(
+      content,
+      essenceState.journey,
+      essenceAction.id,
+    );
+    expect(withEssence.essence).toBe(100 + spiritAnimalCount * 15);
+    const essenceRuntime = withEssence.siteRuntime[site.id];
+    expect(essenceRuntime?.kind).toBe("exploration");
+    if (essenceRuntime?.kind !== "exploration") {
+      throw new Error("Expected Exploration resolution");
+    }
+    expect(essenceRuntime.resolution?.essenceGained)
+      .toBe(spiritAnimalCount * 15);
+    expect(essenceRuntime.resolution?.affectedEntryIds).toEqual(
+      expect.arrayContaining(
+        essenceState.journey.deck
+          .filter(
+            (entry) =>
+              content.cardDatabase.get(entry.cardNumber)?.subtype ===
+              "Spirit Animal",
+          )
+          .map((entry) => entry.entryId),
+      ),
+    );
+
+    const firstCharacterId = essenceState.journey.deck.find(
+      (entry) => content.cardDatabase.get(entry.cardNumber)?.cardType === "Character",
+    )?.entryId;
+    if (firstCharacterId === undefined) throw new Error("Expected a Character");
+    const stackedJourney = {
+      ...essenceState.journey,
+      deck: essenceState.journey.deck.map((entry) =>
+        entry.entryId === firstCharacterId ? { ...entry, sparkBonus: 2 } : entry,
+      ),
+    };
+    const sparkState = buildState(content, stackedJourney);
+    const withSpark = resolve(content, sparkState.journey, sparkAction.id);
+    for (const entry of withSpark.deck) {
+      const base = content.cardDatabase.get(entry.cardNumber);
+      if (base?.cardType === "Character") {
+        expect(entry.sparkBonus).toBe(entry.entryId === firstCharacterId ? 3 : 1);
+      } else {
+        expect(entry.sparkBonus).toBeUndefined();
+      }
+    }
+  });
+
+  it("builds two distinct Warrior packs and resolves the selected pack", () => {
+    const packAction: ExplorationActionContent = {
+      id: "warrior-packs",
+      label: "Answer Their Muster",
+      effectText: "Choose one of 2 packs of Warrior cards to add to your deck",
+      responseText: "Warriors gather.",
+      effectKind: "choose-pack",
+      predicate: "warrior",
+      packCount: 2,
+      packSize: 3,
+    };
+    const randomAction: ExplorationActionContent = {
+      id: "random-survivors",
+      label: "Open the Passage",
+      effectText: "Gain 2 random Survivor cards",
+      responseText: "Travelers approach.",
+      effectKind: "gain-random-cards",
+      predicate: "survivor",
+      count: 2,
+    };
+    const content = contentFixture([packAction, randomAction]);
+    const state = buildState(content);
+    const packs = state.runtime.actionOffers[0]?.packCardIds ?? [];
+
+    expect(packs).toHaveLength(2);
+    expect(packs.every((pack) => pack.length === 3)).toBe(true);
+    expect(new Set(packs.flat()).size).toBe(6);
+    expect(
+      packs.flat().every((cardId) =>
+        [...content.cardDatabase.values()].some(
+          (entry) => entry.id === cardId && entry.subtype === "Warrior",
+        ),
+      ),
+    ).toBe(true);
+    const result = resolve(content, state.journey, packAction.id, { packIndex: 0 });
+    expect(result.deck).toHaveLength(state.journey.deck.length + 3);
   });
 
   it("replaces a UUID-selected Dreamsign at the collection cap", () => {
-    const content = contentFixture();
+    const dreamsignAction: ExplorationActionContent = {
+      id: "gain-dreamsign",
+      label: "Reach toward the tusks",
+      effectText: "Gain Charm Pouch",
+      responseText: "A charm gleams.",
+      effectKind: "gain-dreamsign",
+      dreamsignId: CHARM_POUCH_ID,
+    };
+    const gainCardAction: ExplorationActionContent = {
+      id: "gain-card",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      responseText: "A card arrives.",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([dreamsignAction, gainCardAction]);
     const journey = {
       ...journeyFixture(content),
       maxDreamsigns: 1,
@@ -226,85 +353,12 @@ describe("Exploration provider", () => {
         },
       ],
     };
-    const runtime = buildExplorationRuntime(
-      { ...journey, seed: seedForEncounter(0, 9) },
-      site,
-      content,
-      () => 0,
-    );
-    if (runtime === null) throw new Error("Expected Exploration runtime");
-    const actionId = runtime.actionOffers[1]?.actionId;
-    if (actionId === undefined) throw new Error("Expected Dreamsign action");
-    const result = resolveExplorationChoice({
-      journey: {
-        ...journey,
-        siteRuntime: { ...journey.siteRuntime, [site.id]: runtime },
-      },
-      site,
-      payload: {
-        actionId,
-        selection: { replacedDreamsignId: "held-dreamsign" },
-      },
-      seq: 140,
-      content,
+    const state = buildState(content, journey);
+    const result = resolve(content, state.journey, dreamsignAction.id, {
+      replacedDreamsignId: "held-dreamsign",
     });
 
-    expect(result?.dreamsigns).toHaveLength(1);
-    expect(result?.dreamsigns[0]?.id).toBe(
-      "F46E59CB-32EC-4B50-8774-18F571B8FCE1",
-    );
-  });
-
-  it("uses the displayed essence-per-spark default when authored data omits it", () => {
-    const baseContent = contentFixture();
-    const authored = baseContent.exploration;
-    if (authored === undefined) throw new Error("Missing authored content");
-    const encounter = authored.encounters[3];
-    if (encounter === undefined) throw new Error("Missing essence encounter");
-    const content: JourneyContent = {
-      ...baseContent,
-      exploration: {
-        ...authored,
-        encounters: authored.encounters.map((candidate, index) =>
-          index === 3
-            ? {
-                ...candidate,
-                actions: candidate.actions.map((action) =>
-                  action.effectKind === "purge-for-essence"
-                    ? { ...action, essencePerSpark: undefined }
-                    : action,
-                ) as unknown as typeof candidate.actions,
-              }
-            : candidate,
-        ),
-      },
-    };
-    const journey = {
-      ...journeyFixture(content),
-      seed: seedForEncounter(3, authored.encounters.length),
-    };
-    const runtime = buildExplorationRuntime(journey, site, content, () => 0);
-    if (runtime === null) throw new Error("Expected Exploration runtime");
-    const action = encounter.actions.find(
-      (candidate) => candidate.effectKind === "purge-for-essence",
-    );
-    if (action === undefined) throw new Error("Missing essence action");
-
-    const result = resolveExplorationChoice({
-      journey: {
-        ...journey,
-        siteRuntime: { ...journey.siteRuntime, [site.id]: runtime },
-      },
-      site,
-      payload: { actionId: action.id, selection: { entryIds: ["entry-1"] } },
-      seq: 141,
-      content,
-    });
-
-    expect(result?.essence).toBe(journey.essence + 80);
-    expect(result?.siteRuntime[site.id]).toMatchObject({
-      kind: "exploration",
-      resolution: { essenceGained: 80 },
-    });
+    expect(result.dreamsigns).toHaveLength(1);
+    expect(result.dreamsigns[0]?.id).toBe(CHARM_POUCH_ID);
   });
 });

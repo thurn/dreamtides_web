@@ -136,4 +136,20 @@ describe("buildStartingDeckView", () => {
 
     expect(view.cards[0]?.model.displaySnapshot.energyCost).toBe(7);
   });
+
+  it("applies a persistent spark bonus to the resolved card", () => {
+    const deck: DeckEntry[] = [
+      {
+        entryId: "entry-1",
+        cardNumber: 1,
+        transfiguration: null,
+        isBane: false,
+        sparkBonus: 2,
+      },
+    ];
+
+    const view = buildStartingDeckView(deck, makeCardDatabase());
+
+    expect(view.cards[0]?.model.displaySnapshot.spark).toBe(3);
+  });
 });

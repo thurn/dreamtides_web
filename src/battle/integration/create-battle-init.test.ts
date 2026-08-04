@@ -685,6 +685,32 @@ describe("createBattleInit", () => {
       expect(changedCard?.printedSpark).toBe(overriddenSpark);
     });
 
+    it("applies journey deck entry spark bonuses to player battle card definitions", () => {
+      const baseInput = makeBaseInput();
+      const changedEntry = baseInput.state.deck[0];
+      if (changedEntry === undefined) throw new Error("Missing test deck entry");
+      const printed = makeBattleTestCardDatabase().get(changedEntry.cardNumber);
+      if (printed?.spark === null || printed?.spark === undefined) {
+        throw new Error("Expected a numeric printed spark");
+      }
+      const init = createBattleInit({
+        ...baseInput,
+        state: {
+          ...baseInput.state,
+          deck: baseInput.state.deck.map((entry) =>
+            entry.entryId === changedEntry.entryId
+              ? { ...entry, sparkBonus: 2 }
+              : entry,
+          ),
+        },
+      });
+      const changedCard = init.playerDeckOrder.find(
+        (card) => card.sourceDeckEntryId === changedEntry.entryId,
+      );
+
+      expect(changedCard?.printedSpark).toBe(printed.spark + 2);
+    });
+
     it("throws when a journey deck entry references a missing card number", () => {
       const baseInput = makeBaseInput();
       const stateWithUnknownCard = {

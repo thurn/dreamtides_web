@@ -5,6 +5,7 @@ import type { DeckEntry } from "./types/journey";
 import { asCardId, asCardName } from "./types/card-identity";
 import {
   applyCardKeywordModification,
+  applyCardSparkBonus,
   applyCardStatOverride,
   resolveDeckEntryCard,
 } from "./card-type-change";
@@ -84,6 +85,16 @@ describe("applyCardStatOverride", () => {
   });
 });
 
+describe("applyCardSparkBonus", () => {
+  it("adds a persistent bonus without manufacturing spark for a null stat", () => {
+    const character = makeCard({ cardType: "Character", spark: 2 });
+    const event = makeCard({ cardType: "Event", spark: null });
+
+    expect(applyCardSparkBonus(character, 1).spark).toBe(3);
+    expect(applyCardSparkBonus(event, 1)).toBe(event);
+  });
+});
+
 describe("resolveDeckEntryCard", () => {
   it("override wins over transfiguration-derived stats: Empowered halves cost but override takes precedence", () => {
     const card = makeCard({ energyCost: 8 });
@@ -98,7 +109,7 @@ describe("resolveDeckEntryCard", () => {
     expect(result.energyCost).toBe(3);
   });
 
-  it("resolveDeckEntryCard composes all layers: transfiguration, typeChange, keyword, and statOverride together", () => {
+  it("resolveDeckEntryCard composes transfiguration, type, keyword, spark bonus, and override layers", () => {
     const card = makeCard({
       cardType: "Event",
       subtype: "",
@@ -115,6 +126,7 @@ describe("resolveDeckEntryCard", () => {
         label: "Becomes a Spirit",
       },
       keywordModification: { fast: true, reclaim: 2 },
+      sparkBonus: 2,
       statOverride: { spark: 7 },
     });
 
@@ -127,8 +139,19 @@ describe("resolveDeckEntryCard", () => {
     expect(result.isFast).toBe(true);
     expect(result.reclaimCost).toBe(2);
     expect(result.renderedText).toContain("Reclaim 2●");
-    // statOverride layer (spark only; energyCost still transfiguration-derived 3)
+    // the absolute debug override is applied after the additive spark bonus
     expect(result.spark).toBe(7);
+    // statOverride layer (spark only; energyCost still transfiguration-derived 3)
     expect(result.energyCost).toBe(3);
+  });
+
+  it("applies an additive spark bonus after a transfiguration", () => {
+    const card = makeCard({ cardType: "Character", energyCost: 4, spark: 2 });
+    const entry = makeDeckEntry({
+      transfiguration: "Kindled",
+      sparkBonus: 1,
+    });
+
+    expect(resolveDeckEntryCard(card, entry).spark).toBe(5);
   });
 });

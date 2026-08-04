@@ -245,4 +245,107 @@ describe("exploration-view-model", () => {
       cards: [{ entryId: "entry-eligible" }],
     });
   });
+
+  it("resolves an offered-card placeholder and presents the UUID-backed card", () => {
+    const source = card(sourceId, 17);
+    const offered = card(
+      asCardId("f0000000-0000-4000-8000-000000000018"),
+      18,
+    );
+    const state = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "entry-a",
+          cardNumber: source.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        },
+      ],
+    };
+    const runtime: ExplorationSiteRuntime = {
+      kind: "exploration",
+      encounterCardId: source.id,
+      actionOffers: [
+        {
+          actionId: "gain-offered",
+          offeredCardIds: [offered.id],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+        {
+          actionId: "increase-spark",
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+      ],
+      resolution: null,
+    };
+    const content = {
+      cardDatabase: new Map([
+        [source.cardNumber, source],
+        [offered.cardNumber, offered],
+      ]),
+      dreamAvatars: [],
+      dreamwellCards: [],
+      dreamsignTemplates: [],
+      dreamscapes: [],
+      affiliations: [],
+      guides: [guide],
+      atlasConfig: { completionLevels: [] },
+      exploration: {
+        customCards: [],
+        customDreamsigns: [],
+        encounters: [
+          {
+            cardId: source.id,
+            prose: "The authored scene appears.",
+            actions: [
+              {
+                id: "gain-offered",
+                label: "Invite someone through",
+                effectText: "Gain $OFFERED_CARD",
+                responseText: "Someone arrives.",
+                effectKind: "gain-offered-card",
+                predicate: "cheap-character",
+              },
+              {
+                id: "increase-spark",
+                label: "Receive Their Blessing",
+                effectText: "All characters in your deck gain +1✦",
+                responseText: "Starlight passes over the company.",
+                effectKind: "increase-spark-all",
+                sparkBonus: 1,
+              },
+            ],
+          },
+        ],
+      },
+    } as unknown as JourneyContent;
+
+    const view = buildExplorationSiteView({
+      sceneNode: null,
+      site: explorationSite,
+      guide,
+      runtime,
+      state,
+      content,
+    });
+    if (view === null) throw new Error("Expected Exploration view");
+
+    expect(view.actions[0]).toMatchObject({
+      effectText: `Gain ${offered.name}`,
+      available: true,
+      followup: {
+        kind: "cards",
+        title: "Invite someone through",
+        subtitle: "Take the offered card.",
+        cards: [{ entryId: offered.id, model: { cardId: offered.id } }],
+      },
+    });
+    expect(view.actions[1].followup).toEqual({ kind: "none" });
+  });
 });

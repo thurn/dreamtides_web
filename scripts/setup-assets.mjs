@@ -676,6 +676,9 @@ const EXPLORATION_EFFECT_KINDS = new Set([
   "gain-bane-and-card",
   "gain-random-cards",
   "transfigure-fixed-selected",
+  "gain-offered-card",
+  "gain-essence-per-card",
+  "increase-spark-all",
 ]);
 
 function transformTomlRecord(record) {
@@ -751,6 +754,22 @@ export function transformExplorationData(source) {
         if (typeof action[key] !== "string" || action[key].trim() === "") {
           throw new Error(`exploration.toml: action ${action.id} requires ${key}`);
         }
+      }
+      if (
+        action.effectKind === "gain-essence-per-card" &&
+        (typeof action.essencePerCard !== "number" || action.essencePerCard <= 0)
+      ) {
+        throw new Error(
+          `exploration.toml: action ${action.id} requires positive essence-per-card`,
+        );
+      }
+      if (
+        action.effectKind === "increase-spark-all" &&
+        (typeof action.sparkBonus !== "number" || action.sparkBonus <= 0)
+      ) {
+        throw new Error(
+          `exploration.toml: action ${action.id} requires positive spark-bonus`,
+        );
       }
     }
   }

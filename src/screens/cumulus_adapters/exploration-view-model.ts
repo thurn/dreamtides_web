@@ -54,6 +54,8 @@ function matchesPredicate(card: CardData, predicate: ExplorationPredicate): bool
       return card.cardType === "Character" && card.subtype === "Spirit Animal";
     case "survivor":
       return card.cardType === "Character" && card.subtype === "Survivor";
+    case "warrior":
+      return card.cardType === "Character" && card.subtype === "Warrior";
   }
 }
 
@@ -152,8 +154,10 @@ function followupForAction(
       );
     case "transfigure-selected":
       return deckFollowup(
-        "Study the Guardian",
-        `Choose ${String(action.count ?? 2)} Survivor cards.`,
+        action.label,
+        action.count === undefined || action.count === 1
+          ? "Choose a card to transfigure."
+          : `Choose ${String(action.count)} cards to transfigure.`,
         deckCards.filter((card) =>
           Object.prototype.hasOwnProperty.call(
             offer.transfigurationByEntryId,
@@ -174,7 +178,7 @@ function followupForAction(
       );
     case "change-subtype-selected":
       return deckFollowup(
-        "Enter the Luminous Frame",
+        action.label,
         `Choose a Character to become ${action.subtype ?? "Outsider"}.`,
         deckCards,
         "single",
@@ -206,6 +210,15 @@ function followupForAction(
       return deckFollowup(
         action.label,
         "Choose one offered card.",
+        offeredCards(offer.offeredCardIds, content),
+        "single",
+        1,
+        "cardIds",
+      );
+    case "gain-offered-card":
+      return deckFollowup(
+        action.label,
+        "Take the offered card.",
         offeredCards(offer.offeredCardIds, content),
         "single",
         1,
@@ -264,8 +277,24 @@ function followupForAction(
     case "gain-card":
     case "gain-bane-and-card":
     case "gain-random-cards":
+    case "gain-essence-per-card":
+    case "increase-spark-all":
       return { kind: "none" };
   }
+}
+
+function effectTextForAction(
+  action: ExplorationActionContent,
+  offer: ExplorationActionOfferRuntime,
+  content: JourneyContent,
+): string {
+  if (!action.effectText.includes("$OFFERED_CARD")) return action.effectText;
+  const offeredCardId = offer.offeredCardIds[0];
+  if (offeredCardId === undefined) return action.effectText;
+  const offeredCard = cardById(content, offeredCardId);
+  return offeredCard === null
+    ? action.effectText
+    : action.effectText.split("$OFFERED_CARD").join(offeredCard.name);
 }
 
 function actionView(
@@ -284,7 +313,7 @@ function actionView(
   return {
     id: action.id,
     label: action.label,
-    effectText: action.effectText,
+    effectText: effectTextForAction(action, offer, content),
     responseText: action.responseText,
     followup,
     available,

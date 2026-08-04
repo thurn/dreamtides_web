@@ -67,13 +67,18 @@ describe("toDeckCardView", () => {
 
   it("carries a transfiguration display descriptor for a transfigured entry", () => {
     const card = makeCard({ cardNumber: 4, cardType: "Character", spark: 2 });
-    const entry = makeEntry({ cardNumber: 4, transfiguration: "Kindled" });
+    const entry = makeEntry({
+      cardNumber: 4,
+      transfiguration: "Kindled",
+      sparkBonus: 1,
+    });
 
     const view = toDeckCardView(entry, database(card));
 
     expect(view?.model.transfiguration).toBeDefined();
     // Kindled changes spark, so the display marks the spark as changed.
     expect(view?.model.transfiguration?.sparkChanged).toBe(true);
+    expect(view?.model.displaySnapshot.spark).toBe(5);
   });
 
   it("preserves the bane flag", () => {

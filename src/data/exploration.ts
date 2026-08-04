@@ -12,7 +12,8 @@ export type ExplorationPredicate =
   | "event"
   | "cheap-character"
   | "spirit-animal"
-  | "survivor";
+  | "survivor"
+  | "warrior";
 
 export type ExplorationEffectKind =
   | "purge-and-copy"
@@ -29,7 +30,10 @@ export type ExplorationEffectKind =
   | "replace-selected"
   | "gain-bane-and-card"
   | "gain-random-cards"
-  | "transfigure-fixed-selected";
+  | "transfigure-fixed-selected"
+  | "gain-offered-card"
+  | "gain-essence-per-card"
+  | "increase-spark-all";
 
 export interface ExplorationActionContent {
   id: string;
@@ -45,6 +49,8 @@ export interface ExplorationActionContent {
   packSize?: number;
   offerCount?: number;
   essencePerSpark?: number;
+  essencePerCard?: number;
+  sparkBonus?: number;
   subtype?: string;
   subtypeOptions?: readonly string[];
   baneCardId?: CardId;

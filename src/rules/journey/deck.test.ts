@@ -106,7 +106,16 @@ afterEach(() => {
 
 describe("DUPLICATE_DECK_ENTRY", () => {
   it("mints a fresh unique id distinct from every existing entry id", () => {
-    const state = stateWithDeck();
+    const base = stateWithDeck();
+    const state = {
+      ...base,
+      journey: {
+        ...base.journey,
+        deck: base.journey.deck.map((entry) =>
+          entry.entryId === "deck-2" ? { ...entry, sparkBonus: 2 } : entry,
+        ),
+      },
+    };
     const out = reduce(state, "DUPLICATE_DECK_ENTRY", { entryId: "deck-2" });
     expect(out.outcome).toBe("applied");
     const deck = out.state.journey.deck;
@@ -114,6 +123,7 @@ describe("DUPLICATE_DECK_ENTRY", () => {
     const newEntry = deck[deck.length - 1];
     // Copy carries the source card, fresh id.
     expect(newEntry.cardNumber).toBe(20);
+    expect(newEntry.sparkBonus).toBe(2);
     const existingIds = state.journey.deck.map((e) => e.entryId);
     expect(existingIds).not.toContain(newEntry.entryId);
     // Id unique within the resulting deck.

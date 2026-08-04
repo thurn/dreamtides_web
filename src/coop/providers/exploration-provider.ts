@@ -51,6 +51,8 @@ function matchesPredicate(card: CardData, predicate: ExplorationPredicate): bool
       return card.cardType === "Character" && card.subtype === "Spirit Animal";
     case "survivor":
       return card.cardType === "Character" && card.subtype === "Survivor";
+    case "warrior":
+      return card.cardType === "Character" && card.subtype === "Warrior";
   }
 }
 
@@ -66,6 +68,7 @@ function shuffled<T>(items: readonly T[], rng: () => number): T[] {
 function catalogCandidates(
   content: JourneyContent,
   predicate: ExplorationPredicate,
+  excludedCardId: string,
 ): CardData[] {
   const customCardIds = new Set(
     (content.exploration?.customCards ?? []).map((card) => card.id.toLowerCase()),
@@ -74,6 +77,7 @@ function catalogCandidates(
     .filter(
       (card) =>
         !customCardIds.has(card.id.toLowerCase()) &&
+        card.id.toLowerCase() !== excludedCardId.toLowerCase() &&
         matchesPredicate(card, predicate),
     )
     .sort((left, right) => left.id.localeCompare(right.id));
@@ -106,18 +110,45 @@ function buildActionOffer(
   journey: JourneyState,
   content: JourneyContent,
   rng: () => number,
+  encounterCardId: string,
 ): ExplorationActionOfferRuntime {
   const offer = emptyOffer(action.id);
+  if (action.effectKind === "transfigure-selected") {
+    const deckCards = resolvedDeckCards(journey, content).filter(
+      ({ card }) =>
+        action.predicate === undefined || matchesPredicate(card, action.predicate),
+    );
+    for (const { entry, card } of deckCards) {
+      if (entry.transfiguration !== null) continue;
+      const forms = offeredTransfigurationForms(card, entry.transfiguration);
+      const selected = forms[Math.floor(rng() * forms.length)];
+      if (selected !== undefined) {
+        offer.transfigurationByEntryId[entry.entryId] = selected.type;
+      }
+    }
+    return offer;
+  }
   if (action.predicate === undefined) return offer;
 
-  const candidates = catalogCandidates(content, action.predicate);
+  const candidates = catalogCandidates(
+    content,
+    action.predicate,
+    encounterCardId,
+  );
   if (
+    action.effectKind === "gain-offered-card" ||
     action.effectKind === "draft-card" ||
     action.effectKind === "take-cards" ||
     action.effectKind === "gain-random-cards"
   ) {
+    const offerCount =
+      action.effectKind === "gain-offered-card"
+        ? 1
+        : action.effectKind === "gain-random-cards"
+          ? action.count ?? 1
+          : action.offerCount ?? 4;
     offer.offeredCardIds = shuffled(candidates, rng)
-      .slice(0, action.effectKind === "gain-random-cards" ? action.count ?? 1 : action.offerCount ?? 4)
+      .slice(0, offerCount)
       .map((card) => card.id);
   } else if (action.effectKind === "choose-pack") {
     const ordered = shuffled(candidates, rng);
@@ -140,18 +171,6 @@ function buildActionOffer(
       const replacement = replacements[0];
       if (replacement !== undefined) {
         offer.replacementCardIdByEntryId[entry.entryId] = replacement.id;
-      }
-    }
-  } else if (action.effectKind === "transfigure-selected") {
-    const deckCards = resolvedDeckCards(journey, content).filter(({ card }) =>
-      matchesPredicate(card, action.predicate as ExplorationPredicate),
-    );
-    for (const { entry, card } of deckCards) {
-      if (entry.transfiguration !== null) continue;
-      const forms = offeredTransfigurationForms(card, entry.transfiguration);
-      const selected = forms[Math.floor(rng() * forms.length)];
-      if (selected !== undefined) {
-        offer.transfigurationByEntryId[entry.entryId] = selected.type;
       }
     }
   }
@@ -179,7 +198,7 @@ export function buildExplorationRuntime(
     kind: "exploration",
     encounterCardId: encounter.cardId,
     actionOffers: encounter.actions.map((action) =>
-      buildActionOffer(action, journey, content, rng),
+      buildActionOffer(action, journey, content, rng, encounter.cardId),
     ),
     resolution: null,
   };
@@ -387,6 +406,18 @@ export function resolveExplorationChoice(input: {
       if (action.cardId === undefined || !addCardIds([action.cardId])) return null;
       break;
     }
+    case "gain-offered-card": {
+      const cardIds = stringArray(selection.cardIds);
+      if (
+        cardIds === null ||
+        cardIds.length !== 1 ||
+        !offer.offeredCardIds.includes(cardIds[0]) ||
+        !addCardIds(cardIds)
+      ) {
+        return null;
+      }
+      break;
+    }
     case "transfigure-selected": {
       const entryIds = stringArray(selection.entryIds);
       const required = action.count ?? 1;
@@ -519,6 +550,38 @@ export function resolveExplorationChoice(input: {
         ),
       };
       result.affectedEntryIds.push(entryIds[0]);
+      break;
+    }
+    case "gain-essence-per-card": {
+      if (action.predicate === undefined || action.essencePerCard === undefined) {
+        return null;
+      }
+      const matchingCards = resolvedDeckCards(next, content).filter(({ card }) =>
+        matchesPredicate(card, action.predicate as ExplorationPredicate),
+      );
+      const essenceGained = matchingCards.length * action.essencePerCard;
+      next = { ...next, essence: next.essence + essenceGained };
+      result.affectedEntryIds.push(
+        ...matchingCards.map(({ entry }) => entry.entryId),
+      );
+      result.essenceGained = essenceGained;
+      break;
+    }
+    case "increase-spark-all": {
+      const sparkBonus = action.sparkBonus ?? 1;
+      const affectedEntryIds = resolvedDeckCards(next, content)
+        .filter(({ card }) => card.cardType === "Character")
+        .map(({ entry }) => entry.entryId);
+      const affected = new Set(affectedEntryIds);
+      next = {
+        ...next,
+        deck: next.deck.map((entry) =>
+          affected.has(entry.entryId)
+            ? { ...entry, sparkBonus: (entry.sparkBonus ?? 0) + sparkBonus }
+            : entry,
+        ),
+      };
+      result.affectedEntryIds.push(...affectedEntryIds);
       break;
     }
   }

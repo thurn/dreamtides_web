@@ -106,6 +106,8 @@ export interface DeckEntry {
   transfiguration: TransfigurationType | null;
   typeChange?: CardTypeChange | null;
   keywordModification?: CardKeywordModification | null;
+  /** Permanent additive spark granted to this concrete deck entry. */
+  sparkBonus?: number;
   /** Debug-only absolute overrides for printed stats on one concrete deck
    *  entry. Applied last, after transfiguration and card modifications, so an
    *  explicit value wins over transfiguration-derived math. A missing key

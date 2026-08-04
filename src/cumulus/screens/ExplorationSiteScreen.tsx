@@ -1107,9 +1107,7 @@ export function ExplorationSiteScreen({
             right: isDesktop
               ? `calc(max(var(--safe-area-inset-right), ${token("--space-8")}) + ${String(MENU_BUTTON_PX)}px + ${token("--space-3")})`
               : `max(var(--safe-area-inset-right), ${token("--space-4")})`,
-            bottom: isDesktop
-              ? safeAreaInsetAtLeast("bottom", "--space-8")
-              : `max(var(--safe-area-inset-bottom), ${token("--space-4")})`,
+            bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
             left: isDesktop
               ? "auto"
               : `max(var(--safe-area-inset-left), ${token("--space-4")})`,
