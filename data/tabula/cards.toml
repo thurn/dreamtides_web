@@ -9788,8 +9788,8 @@ art = { x = 0.4, y = -0.3, scale = 2.17 }
 name = "Nightmare"
 mtg-name = ""
 id = "b0a2c3d4-e5f6-4789-8abc-0def12345678"
-rendered-text = "Bane."
-energy-cost = 0
+rendered-text = "Draw a card."
+energy-cost = 2
 card-type = "Event"
 subtype = ""
 rarity = "Special"
@@ -9797,7 +9797,7 @@ is-fast = false
 is-interrupt = false
 spark = ""
 tags = []
-image-number = 1169640025
+image-number = 1486924805
 art-owned = false
 card-number = 10002
 
