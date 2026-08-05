@@ -481,6 +481,11 @@ interface FrameBreakGeometry {
   readonly viewport: RectSnapshot;
 }
 
+interface FullArtDimensions {
+  readonly width: number;
+  readonly height: number;
+}
+
 type FrameBreakPhase =
   | "idle"
   | "fracturing"
@@ -550,6 +555,7 @@ const CARD_PREVIEW_CONTENT_FRACTION = 259 / 280;
 // (40/41) and utility menu (60).
 const FRAME_BREAK_LAYER = 39;
 const FRAME_BREAK_EXIT_LAYER = 61;
+const FULL_ART_BLUR_FILL_SCALE = 1.08;
 const DREAM_EASE = [0.22, 0.61, 0.36, 1] as const;
 
 function ExplorationNarrativeChoices({
@@ -736,6 +742,30 @@ function snapshotRect(rect: DOMRect): RectSnapshot {
     top: rect.top,
     width: rect.width,
     height: rect.height,
+  };
+}
+
+function containedArtRect(
+  viewport: RectSnapshot,
+  art: FullArtDimensions,
+): RectSnapshot {
+  const artAspect = art.width / art.height;
+  const viewportAspect = viewport.width / viewport.height;
+  if (artAspect < viewportAspect) {
+    const width = viewport.height * artAspect;
+    return {
+      left: (viewport.width - width) / 2,
+      top: 0,
+      width,
+      height: viewport.height,
+    };
+  }
+  const height = viewport.width / artAspect;
+  return {
+    left: 0,
+    top: (viewport.height - height) / 2,
+    width: viewport.width,
+    height,
   };
 }
 
@@ -1074,6 +1104,8 @@ export function ExplorationSiteScreen({
     useState(false);
   const [transfigurationReturn, setTransfigurationReturn] =
     useState<RewardTrajectory | null>(null);
+  const [fullArtDimensions, setFullArtDimensions] =
+    useState<FullArtDimensions | null>(null);
   const fullArtUrl = resolveArtRef(view.fullArt);
   const trajectory = useCardTrajectory(
     cardTargetRef,
@@ -1137,6 +1169,15 @@ export function ExplorationSiteScreen({
     view.resolvedActionId,
     view.reward,
   );
+  const portraitFullArt =
+    fullArtDimensions !== null &&
+    fullArtDimensions.height > fullArtDimensions.width;
+  const expandedArtRect =
+    frameBreakGeometry !== null &&
+    portraitFullArt &&
+    fullArtDimensions !== null
+      ? containedArtRect(frameBreakGeometry.viewport, fullArtDimensions)
+      : frameBreakGeometry?.viewport;
   useEffect(() => {
     if (view.resolvedActionId === null) return;
     setActiveActionId(null);
@@ -2053,6 +2094,11 @@ export function ExplorationSiteScreen({
         aria-hidden="true"
         draggable={false}
         loading="eager"
+        onLoad={(event) => {
+          const { naturalWidth, naturalHeight } = event.currentTarget;
+          if (naturalWidth <= 0 || naturalHeight <= 0) return;
+          setFullArtDimensions({ width: naturalWidth, height: naturalHeight });
+        }}
         style={{ display: "none" }}
       />
       {frameBreakGeometry !== null && frameBreakPhase === "fracturing" && (
@@ -2088,6 +2134,9 @@ export function ExplorationSiteScreen({
             view.fullArt.kind === "exploration-card"
               ? view.fullArt.imageNumber
               : undefined
+          }
+          data-exploration-art-presentation={
+            portraitFullArt ? "contain-with-blur" : "cover"
           }
           initial={{
             x: frameBreakGeometry.frame.left,
@@ -2154,6 +2203,67 @@ export function ExplorationSiteScreen({
               background: "transparent",
             }}
           >
+            {portraitFullArt && (
+              <motion.div
+                data-exploration-full-art-blur-fill=""
+                aria-hidden="true"
+                initial={{
+                  x: frameBreakGeometry.art.left,
+                  y: frameBreakGeometry.art.top,
+                  width: frameBreakGeometry.art.width,
+                  height: frameBreakGeometry.art.height,
+                }}
+                animate={
+                  frameBreakActive
+                    ? {
+                        x: 0,
+                        y: 0,
+                        width: frameBreakGeometry.viewport.width,
+                        height: frameBreakGeometry.viewport.height,
+                      }
+                    : {
+                        x: frameBreakGeometry.art.left,
+                        y: frameBreakGeometry.art.top,
+                        width: frameBreakGeometry.art.width,
+                        height: frameBreakGeometry.art.height,
+                      }
+                }
+                transition={{
+                  delay:
+                    !reduceMotion && frameBreakActive
+                      ? FRAME_BREAK_DELAY_SECONDS
+                      : 0,
+                  duration: reduceMotion ? 0 : FRAME_BREAK_SECONDS,
+                  ease: DREAM_EASE,
+                }}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  overflow: "hidden",
+                }}
+              >
+                <img
+                  src={fullArtUrl}
+                  alt=""
+                  aria-hidden="true"
+                  draggable={false}
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    maxWidth: "none",
+                    maxHeight: "none",
+                    objectFit: "cover",
+                    objectPosition: "center",
+                    filter: `blur(${token("--glass-blur")})`,
+                    transform: `scale(${String(FULL_ART_BLUR_FILL_SCALE)})`,
+                    userSelect: "none",
+                  }}
+                />
+              </motion.div>
+            )}
             <motion.img
               data-exploration-full-art=""
               src={fullArtUrl}
@@ -2169,10 +2279,14 @@ export function ExplorationSiteScreen({
               animate={
                 frameBreakActive
                   ? {
-                      x: 0,
-                      y: 0,
-                      width: frameBreakGeometry.viewport.width,
-                      height: frameBreakGeometry.viewport.height,
+                      x: expandedArtRect?.left ?? 0,
+                      y: expandedArtRect?.top ?? 0,
+                      width:
+                        expandedArtRect?.width ??
+                        frameBreakGeometry.viewport.width,
+                      height:
+                        expandedArtRect?.height ??
+                        frameBreakGeometry.viewport.height,
                     }
                   : {
                       x: frameBreakGeometry.art.left,

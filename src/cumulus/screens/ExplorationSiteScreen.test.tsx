@@ -516,6 +516,18 @@ describe("ExplorationSiteScreen", () => {
     expect(channel?.dataset.glassVariant).toBe("accent");
     expect(channel?.dataset.glassPlacement).toBe("onMedia");
 
+    const fullArtPreload = container.querySelector<HTMLImageElement>(
+      'img[aria-hidden="true"][style*="display: none"]',
+    );
+    if (fullArtPreload === null) throw new Error("Expected full-art preload");
+    Object.defineProperties(fullArtPreload, {
+      naturalWidth: { configurable: true, value: 1060 },
+      naturalHeight: { configurable: true, value: 1600 },
+    });
+    act(() => {
+      fullArtPreload.dispatchEvent(new Event("load"));
+    });
+
     act(() => channel?.click());
     expect(onChannel).toHaveBeenCalledOnce();
     const frameBreak = container.querySelector<HTMLElement>(
@@ -523,10 +535,21 @@ describe("ExplorationSiteScreen", () => {
     );
     expect(frameBreak?.dataset.explorationFrameBreakPhase).toBe("open");
     expect(frameBreak?.dataset.explorationFullArtImageNumber).toBe("17");
+    expect(frameBreak?.dataset.explorationArtPresentation).toBe(
+      "contain-with-blur",
+    );
+    const blurFill = frameBreak?.querySelector<HTMLElement>(
+      "[data-exploration-full-art-blur-fill]",
+    );
+    expect(blurFill).not.toBeNull();
+    expect(blurFill?.querySelector("img")?.style.filter).toContain(
+      "var(--glass-blur)",
+    );
+    const fullArt = frameBreak?.querySelector<HTMLImageElement>(
+      "[data-exploration-full-art]",
+    );
     expect(
-      frameBreak
-        ?.querySelector("[data-exploration-full-art]")
-        ?.getAttribute("src"),
+      fullArt?.getAttribute("src"),
     ).toContain("/exploration/17.jpg");
     expect(
       container.querySelector('[data-testid="cumulus-exploration-channel"]'),
@@ -549,6 +572,47 @@ describe("ExplorationSiteScreen", () => {
     expect(
       container.querySelector('[data-testid="cumulus-exploration-channel"]'),
     ).not.toBeNull();
+    act(() => root.unmount());
+  });
+
+  it("keeps landscape art on the existing full-bleed presentation", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={view()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={vi.fn()}
+      />,
+    );
+    const fullArtPreload = container.querySelector<HTMLImageElement>(
+      'img[aria-hidden="true"][style*="display: none"]',
+    );
+    if (fullArtPreload === null) throw new Error("Expected full-art preload");
+    Object.defineProperties(fullArtPreload, {
+      naturalWidth: { configurable: true, value: 1600 },
+      naturalHeight: { configurable: true, value: 1060 },
+    });
+    act(() => {
+      fullArtPreload.dispatchEvent(new Event("load"));
+    });
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+
+    const frameBreak = container.querySelector<HTMLElement>(
+      "[data-exploration-frame-break]",
+    );
+    expect(frameBreak?.dataset.explorationArtPresentation).toBe("cover");
+    expect(
+      frameBreak?.querySelector("[data-exploration-full-art-blur-fill]"),
+    ).toBeNull();
     act(() => root.unmount());
   });
 
