@@ -201,6 +201,33 @@ describe("LoadingScreen", () => {
     ).toBe("Event");
   });
 
+  it("keeps the mobile footer inside the dynamic viewport and bottom safe area", () => {
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
+
+    const container = renderLoadingScreen();
+    const screen = container.querySelector<HTMLElement>(
+      "[data-loading-screen]",
+    );
+    const footer = container.querySelector<HTMLElement>(
+      "[data-loading-footer]",
+    );
+
+    expect(screen?.style.height).toBe("100dvh");
+    expect(screen?.style.minHeight).toBe("");
+    expect(footer?.style.bottom).toBe(
+      "max(var(--safe-area-inset-bottom), var(--space-3))",
+    );
+  });
+
   it("fills every spinner segment across the five-second loading interval", () => {
     const container = renderLoadingScreen();
     const segments = [

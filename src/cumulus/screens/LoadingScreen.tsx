@@ -441,7 +441,6 @@ export function LoadingScreen({
         inset: 0,
         width: "100vw",
         height: "100dvh",
-        minHeight: "100vh",
         overflow: "hidden",
         background: token("--bg-loading"),
         color: token("--text-loading"),
@@ -519,7 +518,9 @@ export function LoadingScreen({
         style={{
           position: "absolute",
           right: 0,
-          bottom: isDesktop ? "14%" : token("--space-1"),
+          bottom: isDesktop
+            ? "14%"
+            : `max(${token(SAFE_AREA_INSET_PROPERTIES.bottom)}, ${token("--space-3")})`,
           left: 0,
           zIndex: 10,
           display: "flex",
