@@ -7643,7 +7643,7 @@ art-owned = false
 card-number = 406
 
 [[cards]]
-name = "Invoker of Myths"
+name = "Sky Legion Invoker"
 mtg-name = "Losheel, Clockwork Scholar"
 id = "8367b757-c3d2-4c22-9043-8baadee1c5ba"
 rendered-text = "Once per turn, when you materialize a warrior, draw a card."
