@@ -184,21 +184,20 @@ describe("LoadingScreen", () => {
       ].map((callout) => callout.dataset.loadingCallout),
     ).toEqual(["cost", "spark", "ability", "cardType"]);
     expect(container.querySelector("[data-loading-quote]")).toBeNull();
-    expect(container.querySelector("[data-loading-indicator]")?.textContent).toBe(
-      "Loading",
-    );
+    expect(
+      container.querySelector("[data-loading-indicator]")?.textContent,
+    ).toBe("Loading");
     expect(
       container.querySelector("[data-loading-card-types-label]")?.textContent,
-    ).toBe("Dreamtides Card Types:");
+    ).toBe("Dreamtides Cards:");
     expect(
       container.querySelector(
         '[data-loading-card-type-label="runeboundChampion"]',
       )?.textContent,
     ).toBe("Character");
     expect(
-      container.querySelector(
-        '[data-loading-card-type-label="worldsAwait"]',
-      )?.textContent,
+      container.querySelector('[data-loading-card-type-label="worldsAwait"]')
+        ?.textContent,
     ).toBe("Event");
   });
 

@@ -477,7 +477,7 @@ export function LoadingScreen({
           textAlign: "center",
         }}
       >
-        Dreamtides Card Types:
+        Dreamtides Cards:
       </h1>
       <section
         aria-label="Card anatomy"

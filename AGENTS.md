@@ -23,11 +23,10 @@ Dreamtides battle rules are in docs/battle_rules/battle_rules.md
 
 Write deterministic tests against stable observable contracts using synthetic fixtures; never gate CI on mutable production data, copy, default algorithm choices, private implementation details, statistical or timing thresholds, load-sensitive behavior, or commands that reference deleted tests.
 
+Do not write tests which assert on specific UI strings being used
+
 If you encounter a pre-existing issue, please describe it in ./pre-existing-issues.txt
 and include this as part of your commit. 
-
-When analyzing images, assume your perception of color is incorrect, prefer to
-directly measure it.
 
 Do NOT commit image files to version control.
 
