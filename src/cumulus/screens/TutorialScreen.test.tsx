@@ -1339,7 +1339,7 @@ describe("TutorialScreen", () => {
     container.remove();
   });
 
-  it("plays the opponent card into the center of the fixed mobile back rank", () => {
+  it("plays the opponent card into the center of the opening mobile back rank", () => {
     vi.useFakeTimers();
     const container = document.createElement("div");
     document.body.append(container);
@@ -1409,13 +1409,13 @@ describe("TutorialScreen", () => {
     act(() => screenMocks.sceneAnimationComplete?.());
     act(() => screenMocks.cardAnimationComplete?.());
 
-    expect(screenMocks.props?.view.enemy.backRank).toHaveLength(10);
+    expect(screenMocks.props?.view.enemy.backRank).toHaveLength(6);
     expect(screenMocks.props?.view.enemy.backRank[0]?.card).toBeNull();
     expect(screenMocks.props?.view.enemy.backRank[1]?.card).toBeNull();
-    expect(screenMocks.props?.view.enemy.backRank[4]?.card?.model.cardId).toBe(
+    expect(screenMocks.props?.view.enemy.backRank[2]?.card?.model.cardId).toBe(
       "229ab3a1-3720-41a2-924c-8fe112188f8e",
     );
-    expect(screenMocks.props?.view.enemy.backRank[5]?.card).toBeNull();
+    expect(screenMocks.props?.view.enemy.backRank[3]?.card).toBeNull();
 
     act(() => root.unmount());
     container.remove();
