@@ -2,7 +2,7 @@
   "161482b6-af07-4d9e-822d-8c738672beb9": [
     {
       "template_pair_id": "pair-1",
-      "prose": "You find a child extending a round lantern toward a star-filled doorway.",
+      "prose": "A child extends a round lantern toward a star-filled doorway.",
       "actions": [
         {
           "label": "Signal through the doorway",
@@ -68,7 +68,7 @@
     },
     {
       "template_pair_id": "pair-3",
-      "prose": "You watch a child lift a glowing lantern beside the starry opening.",
+      "prose": "A child lifts a glowing lantern beside a starry opening.",
       "actions": [
         {
           "label": "Follow the lantern onward",
@@ -93,7 +93,7 @@
     },
     {
       "template_pair_id": "pair-5",
-      "prose": "You approach a child standing on rocky ground, lantern raised toward stars.",
+      "prose": "A child stands on rocky ground, lantern raised toward stars.",
       "actions": [
         {
           "label": "Invite someone through",
@@ -126,7 +126,7 @@
     },
     {
       "template_pair_id": "pair-4",
-      "prose": "Before you, a lone child holds a lantern near a vertical field of stars.",
+      "prose": "A lone child holds a lantern near a vertical field of stars.",
       "actions": [
         {
           "label": "Study the way ahead",
@@ -192,7 +192,7 @@
     },
     {
       "template_pair_id": "pair-5",
-      "prose": "You approach a plated sentry seated amid rubble, head bowed toward a radiant threshold.",
+      "prose": "A plated sentry sits amid rubble, head bowed toward a radiant threshold.",
       "actions": [
         {
           "label": "Knock on the Frame",
@@ -222,7 +222,7 @@
     },
     {
       "template_pair_id": "pair-4",
-      "prose": "You see an armored traveler, brow on one fist beside a glowing gate.",
+      "prose": "An armored traveler rests their brow on one fist beside a glowing gate.",
       "actions": [
         {
           "label": "Welcome the Arrival",
@@ -259,7 +259,7 @@
     },
     {
       "template_pair_id": "pair-2",
-      "prose": "You watch light catch a seated traveler's armor beside the gridded doorway.",
+      "prose": "Light catches a seated traveler's armor beside a gridded doorway.",
       "actions": [
         {
           "label": "Study Beside Them",
@@ -288,7 +288,7 @@
     },
     {
       "template_pair_id": "pair-3",
-      "prose": "You find a lone armored traveler hunched by the gate, elbow braced on knee.",
+      "prose": "A lone armored traveler hunches by a gate, elbow braced on one knee.",
       "actions": [
         {
           "label": "Offer Passage Fare",
@@ -570,7 +570,7 @@
     },
     {
       "template_pair_id": "pair-3",
-      "prose": "You face a skull-headed warden carrying a lantern bright with floating sparks.",
+      "prose": "A skull-headed warden carries a lantern bright with floating sparks.",
       "actions": [
         {
           "label": "Enter the Glow",
@@ -779,7 +779,7 @@
   "b8ecc46d-bd92-4826-a416-7ce177e69cbf": [
     {
       "template_pair_id": "pair-1",
-      "prose": "An owl perches heavily on the branch, its dense plumage backlit.",
+      "prose": "An owl perches heavily on a branch, dense plumage backlit.",
       "actions": [
         {
           "label": "Follow the owl's focus",
@@ -814,7 +814,7 @@
     },
     {
       "template_pair_id": "pair-4",
-      "prose": "An owl grips the branch, round eyes reflecting the forest glow.",
+      "prose": "An owl grips a branch, round eyes reflecting forest glow.",
       "actions": [
         {
           "label": "Follow its downward glance",
@@ -873,7 +873,7 @@
     },
     {
       "template_pair_id": "pair-3",
-      "prose": "A stout owl faces you, talons clenched around a dark branch.",
+      "prose": "A stout owl grips a dark branch, round eyes facing forward.",
       "actions": [
         {
           "label": "Study the reflected lights",
@@ -929,7 +929,7 @@
   "e2f542eb-090f-4a22-a42c-a120eb6caaa3": [
     {
       "template_pair_id": "pair-1",
-      "prose": "A broad-bellied whale sweeps over you through a luminous, star-filled sky.",
+      "prose": "A broad-bellied whale sweeps through a luminous, star-filled sky.",
       "actions": [
         {
           "label": "Call Across the Sky",
@@ -965,7 +965,7 @@
     },
     {
       "template_pair_id": "pair-2",
-      "prose": "A vast whale glides above you, its pleated underside softly gleaming.",
+      "prose": "A vast whale glides through starry haze, pleated underside softly gleaming.",
       "actions": [
         {
           "label": "Answer Its Low Call",
@@ -1027,7 +1027,7 @@
     },
     {
       "template_pair_id": "pair-4",
-      "prose": "A whale crosses the radiant sky, its long body poised in silence.",
+      "prose": "A whale crosses a radiant sky, long body poised in silence.",
       "actions": [
         {
           "label": "Shelter in Its Wake",
@@ -1057,7 +1057,7 @@
     },
     {
       "template_pair_id": "pair-5",
-      "prose": "You watch a whale pass, starlight tracing its ridged belly.",
+      "prose": "A whale passes through starlight, ridged belly softly gleaming.",
       "actions": [
         {
           "label": "Study Its Long Passage",
@@ -1159,7 +1159,7 @@
     },
     {
       "template_pair_id": "pair-4",
-      "prose": "Before you, an elephant emerges from glowing fog, its trunk hanging still.",
+      "prose": "An elephant emerges from glowing fog, trunk hanging still.",
       "actions": [
         {
           "label": "Echo its low call",
@@ -1301,7 +1301,7 @@
     },
     {
       "template_pair_id": "pair-3",
-      "prose": "You face a shadowed rider suspended amid drifting stars and radiant mist.",
+      "prose": "A shadowed rider hangs amid drifting stars and radiant mist.",
       "actions": [
         {
           "label": "Make an Offering",
@@ -1330,7 +1330,7 @@
     },
     {
       "template_pair_id": "pair-5",
-      "prose": "Across the luminous sky, a vast rider's ragged outline scatters before you.",
+      "prose": "A vast rider stretches across luminous sky, ragged outline dispersing.",
       "actions": [
         {
           "label": "Answer Their Muster",
@@ -1393,7 +1393,7 @@
     },
     {
       "template_pair_id": "pair-1",
-      "prose": "A dark rider stretches across the radiant mist above you, edges dispersing.",
+      "prose": "A dark rider stretches across radiant mist, ragged edges dispersing.",
       "actions": [
         {
           "label": "Call for Their Vanguard",
@@ -1426,7 +1426,7 @@
   "15b63630-d9f8-473b-9717-15ad91ff2f16": [
     {
       "template_pair_id": "pair-1",
-      "prose": "You face a kneeling synth beneath branching current from a broken aperture.",
+      "prose": "A kneeling figure braces beneath branching current from a broken aperture.",
       "actions": [
         {
           "label": "Accept the charge",
@@ -1457,7 +1457,7 @@
     },
     {
       "template_pair_id": "pair-3",
-      "prose": "Before you, a kneeling synth braces one hand beneath a crackling breach.",
+      "prose": "A kneeling figure braces one hand beneath a crackling breach.",
       "actions": [
         {
           "label": "Catch the descending arc",
@@ -1488,7 +1488,7 @@
     },
     {
       "template_pair_id": "pair-2",
-      "prose": "Branching currents surround a figure kneeling inside the ruptured chamber.",
+      "prose": "Branching currents surround a figure kneeling inside a ruptured chamber.",
       "actions": [
         {
           "label": "Read the branching current",
@@ -1524,7 +1524,7 @@
     },
     {
       "template_pair_id": "pair-4",
-      "prose": "Before you, a kneeling synth guards their shoulder as electrical arcs descend.",
+      "prose": "A kneeling figure guards their shoulder as electrical arcs descend.",
       "actions": [
         {
           "label": "Stabilize the aperture",
@@ -1549,7 +1549,7 @@
     },
     {
       "template_pair_id": "pair-5",
-      "prose": "You approach a kneeling synth framed by a fractured, sparking aperture.",
+      "prose": "A kneeling figure crouches within a fractured, sparking aperture.",
       "actions": [
         {
           "label": "Study their construction",
@@ -1611,7 +1611,7 @@
     },
     {
       "template_pair_id": "pair-5",
-      "prose": "Smoke rolls over a hooded warrior hauling the marked standard uphill.",
+      "prose": "Smoke rolls over a hooded warrior hauling a marked standard uphill.",
       "actions": [
         {
           "label": "Rally at the Crest",
@@ -1671,7 +1671,7 @@
     },
     {
       "template_pair_id": "pair-2",
-      "prose": "A hooded warrior grips the standard beneath a smoke-ringed sun.",
+      "prose": "A hooded warrior grips a standard beneath a smoke-ringed sun.",
       "actions": [
         {
           "label": "Trace the Lit Emblem",
@@ -1698,7 +1698,7 @@
     },
     {
       "template_pair_id": "pair-3",
-      "prose": "Against the steep slope, a shrouded warrior steadies a streaming banner.",
+      "prose": "Against a steep slope, a shrouded warrior steadies a streaming banner.",
       "actions": [
         {
           "label": "Repeat the Signal",
@@ -1819,7 +1819,7 @@
     },
     {
       "template_pair_id": "pair-4",
-      "prose": "Above tangled limbs, a lone man studies the hanging lanterns.",
+      "prose": "Above tangled limbs, a lone man studies rows of hanging lanterns.",
       "actions": [
         {
           "label": "Take His Descending Route",
@@ -1844,7 +1844,7 @@
     },
     {
       "template_pair_id": "pair-5",
-      "prose": "A man crosses the narrow bough amid rows of glowing lanterns.",
+      "prose": "A man crosses a narrow bough amid rows of glowing lanterns.",
       "actions": [
         {
           "label": "Keep Pace Beside Him",
@@ -1971,7 +1971,7 @@
     },
     {
       "template_pair_id": "pair-3",
-      "prose": "A respirator hides the soldier's face as they cross twisted debris.",
+      "prose": "A respirator hides a soldier's face as they cross twisted debris.",
       "actions": [
         {
           "label": "Shed Unneeded Gear",
@@ -2001,7 +2001,7 @@
     },
     {
       "template_pair_id": "pair-4",
-      "prose": "The soldier's patched armor and breathing mask catch the smoky light.",
+      "prose": "A soldier's patched armor and breathing mask catch smoky light.",
       "actions": [
         {
           "label": "Answer Their Signal",
@@ -2032,7 +2032,7 @@
   "e455225f-c444-44a2-8796-805cae2b755f": [
     {
       "template_pair_id": "pair-1",
-      "prose": "Before you, a witch extends both hands as stones hover around her.",
+      "prose": "A witch extends both hands as stones hover around her.",
       "actions": [
         {
           "label": "Trace the nearest stones",
@@ -2067,7 +2067,7 @@
     },
     {
       "template_pair_id": "pair-2",
-      "prose": "Wind buffets you while a witch suspends rock fragments between open hands.",
+      "prose": "Wind buffets a witch suspending rock fragments between open hands.",
       "actions": [
         {
           "label": "Entrust a recent deed",
@@ -2102,7 +2102,7 @@
     },
     {
       "template_pair_id": "pair-5",
-      "prose": "You approach a witch on broken ground, loose stones suspended between her hands.",
+      "prose": "A witch stands on broken ground, loose stones suspended between her hands.",
       "actions": [
         {
           "label": "Study every arrangement",
@@ -2135,7 +2135,7 @@
     },
     {
       "template_pair_id": "pair-3",
-      "prose": "You watch a witch hold scattered stones motionless above the jagged ledge.",
+      "prose": "A witch holds scattered stones motionless above a jagged ledge.",
       "actions": [
         {
           "label": "Read the suspended pattern",
@@ -2165,7 +2165,7 @@
     },
     {
       "template_pair_id": "pair-4",
-      "prose": "You find a witch with both hands poised amid floating rubble.",
+      "prose": "A witch holds both hands poised amid floating rubble.",
       "actions": [
         {
           "label": "Hold her pattern steady",
@@ -2321,7 +2321,7 @@
     },
     {
       "template_pair_id": "pair-4",
-      "prose": "Three hooded figures push through suspended grit, gloved hands low and faceplates shut against the haze.",
+      "prose": "Three hooded figures push through suspended grit, gloved hands low and faceplates shut against haze.",
       "actions": [
         {
           "label": "Study their crossing",
@@ -2383,7 +2383,7 @@
     },
     {
       "template_pair_id": "pair-2",
-      "prose": "A faceted head hangs beneath broad wings as linked plates repeat down the rigid abdomen.",
+      "prose": "A faceted head hangs beneath broad wings as linked plates repeat down a rigid abdomen.",
       "actions": [
         {
           "label": "Copy the linked armor pattern",
@@ -2418,7 +2418,7 @@
     },
     {
       "template_pair_id": "pair-1",
-      "prose": "The metal insect spreads translucent wings; dark ribs cross the haze above branch-braced legs.",
+      "prose": "A metal insect spreads translucent wings; dark ribs cross haze above branch-braced legs.",
       "actions": [
         {
           "label": "Trace the wing ribs",
@@ -2447,7 +2447,7 @@
     },
     {
       "template_pair_id": "pair-4",
-      "prose": "The machine balances on the branch, fitted leg segments below plates sheathing its extended abdomen.",
+      "prose": "A machine balances on a branch, fitted leg segments below plates sheathing its extended abdomen.",
       "actions": [
         {
           "label": "Exchange a fitted leg segment",
@@ -2479,7 +2479,7 @@
     },
     {
       "template_pair_id": "pair-5",
-      "prose": "Repeating body sections and hinged wing mounts define the immense mechanical insect's modular silhouette.",
+      "prose": "Repeating body sections and hinged wing mounts define an immense mechanical insect's modular silhouette.",
       "actions": [
         {
           "label": "Record the body pattern",
@@ -2506,7 +2506,7 @@
   "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034": [
     {
       "template_pair_id": "pair-4",
-      "prose": "An elongated arm reaches across the water while the giant's blackened shape repeats in broken reflections.",
+      "prose": "A blackened giant reaches across water, its shape repeating in broken reflections.",
       "actions": [
         {
           "label": "Trace a single reflection",
@@ -2543,7 +2543,7 @@
     },
     {
       "template_pair_id": "pair-2",
-      "prose": "A hulking skeletal creature stoops from the marsh, extending a broad, hooked hand over the shallows.",
+      "prose": "A hulking skeletal creature stoops from a marsh, extending a broad, hooked hand over shallows.",
       "actions": [
         {
           "label": "Cross beneath the hooked fingers",
@@ -2572,7 +2572,7 @@
     },
     {
       "template_pair_id": "pair-1",
-      "prose": "A skull-faced giant leans over the marsh, its long jaw dripping black fluid beneath a crescent.",
+      "prose": "A skull-faced giant leans over a marsh, long jaw dripping black fluid beneath a crescent.",
       "actions": [
         {
           "label": "Study the bare crown",
@@ -2636,7 +2636,7 @@
     },
     {
       "template_pair_id": "pair-5",
-      "prose": "A bare-skulled giant rises from the marsh, one claw hovering over a spread of crescent light.",
+      "prose": "A bare-skulled giant rises from a marsh, one claw hovering over spread crescent light.",
       "actions": [
         {
           "label": "Stand beneath the lifted claw",
@@ -2698,7 +2698,7 @@
     },
     {
       "template_pair_id": "pair-3",
-      "prose": "A broad-belled jellyfish rises through the stars, long tendrils streaming below.",
+      "prose": "A broad-belled jellyfish rises through stars, long tendrils streaming below.",
       "actions": [
         {
           "label": "Join its starward drift",
@@ -2758,7 +2758,7 @@
     },
     {
       "template_pair_id": "pair-2",
-      "prose": "Bands of light ripple through a translucent jellyfish drifting across the starfield.",
+      "prose": "Bands of light ripple through a translucent jellyfish drifting across a starfield.",
       "actions": [
         {
           "label": "Read its shifting light",
@@ -2877,7 +2877,7 @@
     },
     {
       "template_pair_id": "pair-4",
-      "prose": "An astronaut stands motionless while angular fragments tumble through the surrounding darkness.",
+      "prose": "An astronaut stands motionless while angular fragments tumble through surrounding darkness.",
       "actions": [
         {
           "label": "Catch a fragment",

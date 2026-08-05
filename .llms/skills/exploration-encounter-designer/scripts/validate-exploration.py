@@ -30,6 +30,8 @@ PROSE_PLAYER_REFERENCE_RE = re.compile(
     r"you|your|yours|yourself|yourselves|player|reader|viewer)\b",
     re.IGNORECASE,
 )
+PROSE_DEFINITE_ARTICLE_RE = re.compile(r"\bthe\b", re.IGNORECASE)
+PROSE_ONE_INTRODUCTION_RE = re.compile(r"^\s*one\b", re.IGNORECASE)
 SCENE_TAXONOMY_RE = re.compile(r"\bsynth\b", re.IGNORECASE)
 STANDARD_PREDICATES = {
     "Event",
@@ -459,6 +461,18 @@ def validate_output(
                 f"{event_path}.prose",
                 "must use entity-focused third-person prose without referring "
                 "to the player, reader, or viewer",
+            )
+        if PROSE_DEFINITE_ARTICLE_RE.search(prose):
+            fail(
+                f"{event_path}.prose",
+                "must not use the definite article 'the'; introduce each "
+                "singular subject with 'a' or 'an'",
+            )
+        if PROSE_ONE_INTRODUCTION_RE.search(prose):
+            fail(
+                f"{event_path}.prose",
+                "must not begin with 'one' as a singular-subject introduction; "
+                "use 'a' or 'an'",
             )
         if SCENE_TAXONOMY_RE.search(prose):
             fail(

@@ -219,7 +219,9 @@ Score each component from 1–10:
   materially faithful description of the card's artwork. Score it with mechanics
   and actions hidden. It uses entity-focused third-person present tense and
   contains no first- or second-person pronouns, player, reader, viewer, implied
-  off-image observer, or viewpoint-relative framing. Subjects, objects, setting
+  off-image observer, or viewpoint-relative framing. It never uses the definite
+  article `the`, and it never begins with `one` to introduce a singular subject;
+  each singular subject is introduced with `a` or `an`. Subjects, objects, setting
   features, depicted actions, and physical conditions must be visible or
   strongly implied. For a Character
   card, reject a candidate before scoring unless the canonical character

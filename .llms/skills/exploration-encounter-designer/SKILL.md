@@ -261,11 +261,17 @@ commentary.
    anticipated quantities, operations, reward concepts, or effect recipients as
    scene ingredients.
 
-7. Apply eight gates to every candidate with templates and actions hidden:
+7. Apply nine gates to every candidate with templates and actions hidden:
    - **Name gate:** Does it quote the complete source name, turn a distinctive
      portion of that name into a proper noun, or lean on repeated name words
      instead of fresh scene language? Reject it. Do not reject an independently
      useful ordinary word merely because it also occurs in the card name.
+   - **Introduction gate:** Does the prose use the definite article `the`
+     anywhere, or begin with `one` to introduce a singular subject? Reject it.
+     Each prose field is an independent first glimpse: introduce every singular
+     subject with `a` or `an`, or use a clear plural or uncountable construction.
+     A possessive pronoun may refer back to a subject already introduced in that
+     same prose field.
    - **Material-fidelity gate:** Are all subjects, objects, setting
      features, actions, and physical conditions visible or strongly implied?
      Reject invented companions, crowds, creatures, props, structures, weather
@@ -486,7 +492,8 @@ commentary.
     mechanical repetition of source-name language. Reject the word `synth` in
     scene prose or labels; canonical card taxonomy is not scene language.
     Replace those matches while preserving independently useful ordinary words.
-    Reject any `prose` that
+    Reject any `prose` containing the definite article `the`, and reject prose
+    beginning with `one` as a singular-subject introduction. Reject any `prose` that
     contains first- or second-person pronouns, names the player, reader, or
     viewer, implies an off-image observer, or frames an entity relative to that
     observer. For a Character card, audit
@@ -526,13 +533,13 @@ commentary.
   pronouns, a player, a reader, a viewer, or any substitute for an off-image
   observer. Do not orient the scene around an implied viewpoint with phrases
   such as `before you`, `toward you`, or `above you`.
-- Treat every `prose` field as an independent scene description. Introduce
-  material subjects clearly, but let the sentence lead with an
-  atmosphere, action, or sensory detail when that creates a
-  stronger entrance. Use `a` or `an`, not `one`, when directly introducing a
-  singular subject. A definite or possessive phrase may open the line when its
-  referent is immediately clear from the same image and sentence; reject only
-  genuine ambiguity, not expressive sequencing.
+- Treat every `prose` field as an independent first glimpse. Never use the
+  definite article `the` anywhere in prose. Introduce every singular subject
+  with `a` or `an`; never use `one` as its introductory determiner. A plural or
+  uncountable subject may appear without an article, and a possessive pronoun may
+  refer back to a subject already introduced in that same prose field. Let the
+  sentence lead with atmosphere, action, or sensory detail only when every
+  subject remains independently introduced and immediately clear.
 - Keep the entire `prose` field near 8–14 words and never above 16. Use more
   than one sentence only when the extra sentence adds real value.
 - Describe a scene, not a miniature quest or an illustrated reward. Establish
@@ -595,7 +602,7 @@ commentary.
   - Reject “Your small boat passes beneath a whale drifting across the stars.”
     Prefer “A whale sweeps overhead, its broad belly gleaming.”
   - Reject “A slender figure stands behind an immense owl gripping the branch.”
-    Prefer “A vast owl grips the branch, its round eyes unblinking.”
+    Prefer “A vast owl grips a branch, its round eyes unblinking.”
   - Reject “A bright triangle frames a suited gunman among curling black cables.”
     Prefer “A suited gunman stands motionless as black cables curl around a
     bright doorway.”

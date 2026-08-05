@@ -772,6 +772,38 @@ rendered-text = "Gain 1 energy."
                     result.stderr,
                 )
 
+    def test_rejects_the_definite_article_anywhere_in_prose(self) -> None:
+        for prose in (
+            "The silver owl spreads broad wings beneath stars",
+            "A silver owl grips the branch beneath stars",
+        ):
+            with self.subTest(prose=prose):
+                result = self.run_output_validator(
+                    "33333333-3333-4333-8333-333333333333",
+                    prose=prose,
+                )
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(
+                    "must not use the definite article 'the'", result.stderr
+                )
+
+    def test_allows_one_after_an_introduced_subject(self) -> None:
+        result = self.run_output_validator(
+            "33333333-3333-4333-8333-333333333333",
+            prose="A silver owl raises one wing beneath stars",
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_rejects_one_as_a_singular_subject_introduction(self) -> None:
+        result = self.run_output_validator(
+            "33333333-3333-4333-8333-333333333333",
+            prose="One silver owl spreads broad wings beneath stars",
+        )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("must not begin with 'one'", result.stderr)
+
     def test_rejects_synth_as_scene_taxonomy(self) -> None:
         for field, value in (
             ("prose", "A seated synth raises an open palm beneath a deep hood"),
