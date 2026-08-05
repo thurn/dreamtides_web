@@ -905,7 +905,7 @@
       ],
       "required": false,
       "defaultValue": "content",
-      "description": "Transparent layout-wrapper height behavior. Defaults to `content`.\n`fill` may reserve caller-owned stage space for card fitting, but the\nfloating glass surface still hugs its rendered header, grid, and footer."
+      "description": "Transparent layout-wrapper height behavior. Defaults to `content`.\n`fill` may reserve caller-owned stage space for card fitting, but the\nfloating glass surface still hugs its rendered header, grid, and footer\nand centers vertically within that reserved space."
     },
     {
       "name": "reserveStackedCopySpace",

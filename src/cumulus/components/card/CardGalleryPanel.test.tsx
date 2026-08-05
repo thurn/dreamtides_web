@@ -200,6 +200,8 @@ describe("CardGalleryPanel", () => {
     expect(panel?.dataset.galleryHeightMode).toBe("fill");
     expect(panel?.style.width).toBe("100%");
     expect(panel?.style.height).toBe("100%");
+    expect(panel?.style.display).toBe("grid");
+    expect(panel?.style.alignItems).toBe("center");
     expect(
       panel?.querySelector<HTMLElement>("[data-glass-panel-height-contract]")
         ?.dataset.glassPanelHeightContract,

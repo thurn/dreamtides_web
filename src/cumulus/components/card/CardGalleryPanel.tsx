@@ -183,7 +183,8 @@ export interface CardGalleryPanelProps {
   /**
    * Transparent layout-wrapper height behavior. Defaults to `content`.
    * `fill` may reserve caller-owned stage space for card fitting, but the
-   * floating glass surface still hugs its rendered header, grid, and footer.
+   * floating glass surface still hugs its rendered header, grid, and footer
+   * and centers vertically within that reserved space.
    */
   heightMode?: CardGalleryHeightMode;
   /** Reserve the fanned-copy footprint before any card displays its copy. */
@@ -746,6 +747,12 @@ export function CardGalleryPanel({
       style={{
         position: "relative",
         boxSizing: "border-box",
+        display:
+          frame === "floating" && heightMode === "fill" ? "grid" : undefined,
+        alignItems:
+          frame === "floating" && heightMode === "fill"
+            ? "center"
+            : undefined,
         width:
           frame === "fullBleed" || widthMode === "fill" ? "100%" : panelWidth,
         maxWidth: "100%",
