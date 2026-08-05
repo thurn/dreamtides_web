@@ -3,6 +3,7 @@ import { loadCardDatabase } from "../../../data/card-database";
 import type { CardData } from "../../../types/cards";
 import {
   CardChoiceGrid,
+  type CardChoiceOperation,
   type CardChoiceGridCardView,
 } from "../../components/card/CardChoiceGrid";
 import type { CumulusComponent } from "../registry";
@@ -13,6 +14,13 @@ const DEMO_CARD_IDS = [
   "161482b6-af07-4d9e-822d-8c738672beb9",
   "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
 ] as const;
+
+const DEMO_OPERATIONS: readonly CardChoiceOperation[] = [
+  "purge",
+  "copy",
+  "transfigure",
+  "change",
+];
 
 function CardChoiceGridDemo() {
   const [cards, setCards] = useState<readonly CardChoiceGridCardView[]>([]);
@@ -25,7 +33,7 @@ function CardChoiceGridDemo() {
       const byId = new Map<string, CardData>();
       for (const card of database.values()) byId.set(card.id, card);
       setCards(
-        DEMO_CARD_IDS.flatMap((id) => {
+        DEMO_CARD_IDS.flatMap((id, index) => {
           const card = byId.get(id);
           return card === undefined
             ? []
@@ -36,7 +44,9 @@ function CardChoiceGridDemo() {
                   selected: selected === card.id,
                   selectionColor: "accent-bright" as const,
                   operation:
-                    selected === card.id ? ("copy" as const) : undefined,
+                    selected === card.id
+                      ? DEMO_OPERATIONS[index]
+                      : undefined,
                 },
               ];
         }),
@@ -76,7 +86,7 @@ export const cardChoiceGridDemo: CumulusComponent = {
 <CardChoiceGrid
   cards={choices.map((choice) => ({
     ...choice,
-    operation: choice.entryId === selectedEntryId ? "copy" : undefined,
+    operation: choice.entryId === selectedEntryId ? selectionOperation : undefined,
   }))}
   columns="four"
   layout={{ kind: "site", viewport: "desktop", fit: "choice" }}

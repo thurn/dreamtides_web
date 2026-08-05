@@ -21,7 +21,41 @@ export type CardChoiceGridCaption =
   { kind: "essence"; amount: number } | { kind: "text"; text: string };
 
 /** The pending operation identified on a selected card-choice tile. */
-export type CardChoiceOperation = "purge" | "copy";
+export type CardChoiceOperation =
+  | "purge"
+  | "copy"
+  | "transfigure"
+  | "change";
+
+const OPERATION_PRESENTATION = {
+  purge: {
+    label: "This card will be purged",
+    glyph: GLYPHS.trash,
+    tone: "danger",
+  },
+  copy: {
+    label: "This card will be copied",
+    glyph: GLYPHS.copy,
+    tone: "selected",
+  },
+  transfigure: {
+    label: "This card will be transfigured",
+    glyph: GLYPHS.transfigurationSite,
+    tone: "selected",
+  },
+  change: {
+    label: "This card will be changed",
+    glyph: GLYPHS.refreshCcw,
+    tone: "selected",
+  },
+} as const satisfies Record<
+  CardChoiceOperation,
+  {
+    readonly label: string;
+    readonly glyph: Glyph;
+    readonly tone: "danger" | "selected";
+  }
+>;
 
 /** One resolved card presented by a {@link CardChoiceGrid}. */
 export interface CardChoiceGridCardView {
@@ -287,6 +321,10 @@ export function CardChoiceGrid({
         const reserved = card.reserved === true;
         const disabled = card.disabled === true || reserved;
         const stackedCopyLeft = card.stackedCopyDirection === "left";
+        const operationPresentation =
+          card.operation === undefined
+            ? null
+            : OPERATION_PRESENTATION[card.operation];
         const tileStyle: CSSProperties = {
           position: "relative",
           zIndex: card.stackedCopy === true ? 1 : undefined,
@@ -392,13 +430,9 @@ export function CardChoiceGrid({
                     {card.quantityBadge}
                   </span>
                 )}
-                {card.operation !== undefined && (
+                {operationPresentation !== null && (
                   <span
-                    aria-label={
-                      card.operation === "purge"
-                        ? "This card will be purged"
-                        : "This card will be copied"
-                    }
+                    aria-label={operationPresentation.label}
                     data-card-choice-operation={card.operation}
                     style={{
                       position: "absolute",
@@ -411,20 +445,17 @@ export function CardChoiceGrid({
                       display: "grid",
                       placeItems: "center",
                       color: token("--text-on-accent"),
-                      background:
-                        card.operation === "purge"
-                          ? token("--danger")
-                          : token("--selected"),
+                      background: token(
+                        operationPresentation.tone === "danger"
+                          ? "--danger"
+                          : "--selected",
+                      ),
                       boxShadow: token("--shadow-md"),
                       pointerEvents: "none",
                     }}
                   >
                     <GlowIcon
-                      iconClass={
-                        card.operation === "purge"
-                          ? GLYPHS.trash
-                          : GLYPHS.copy
-                      }
+                      iconClass={operationPresentation.glyph}
                       color="text-on-accent"
                       size="58%"
                     />

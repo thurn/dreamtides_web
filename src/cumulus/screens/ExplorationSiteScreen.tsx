@@ -15,6 +15,7 @@ import {
 import { GameCard, type GameCardModel } from "../components/card/CardView";
 import {
   CardChoiceGrid,
+  type CardChoiceOperation,
   type CardChoiceGridColumns,
 } from "../components/card/CardChoiceGrid";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
@@ -187,6 +188,8 @@ export interface ExplorationCardChoiceView {
   isBane: boolean;
 }
 
+export type ExplorationCardSelectionOperation = CardChoiceOperation;
+
 export type ExplorationFollowupView =
   | { readonly kind: "none" }
   | {
@@ -200,6 +203,8 @@ export type ExplorationFollowupView =
       readonly cards: readonly ExplorationCardChoiceView[];
       readonly mode: "single" | "exact" | "purge-and-copy";
       readonly selectionKey: "entryIds" | "cardIds";
+      /** Semantic badge shown on selected deck entries. */
+      readonly selectionOperation?: ExplorationCardSelectionOperation;
       readonly min: number;
       readonly max: number;
     }
@@ -709,6 +714,20 @@ function cardChoiceColumns(
   if (columns === 3) return "three";
   if (columns === 4) return "four";
   return "five";
+}
+
+function selectedCardOperation(
+  entryId: string,
+  followup: ExplorationFollowupView,
+  selectedEntryIds: readonly string[],
+  purgeEntryId: string | null,
+): ExplorationCardSelectionOperation | undefined {
+  if (followup.kind !== "cards") return undefined;
+  if (entryId === purgeEntryId) return "purge";
+  if (!selectedEntryIds.includes(entryId)) return undefined;
+  return followup.mode === "purge-and-copy"
+    ? "copy"
+    : followup.selectionOperation;
 }
 
 function snapshotRect(rect: DOMRect): RectSnapshot {
@@ -3375,12 +3394,12 @@ export function ExplorationSiteScreen({
                   card.entryId === purgeEntryId || selectedIds.includes(card.entryId),
                 selectionColor: card.entryId === purgeEntryId ? "danger" : "selected",
                 emphasis: card.isBane ? "danger" : undefined,
-                operation:
-                  card.entryId === purgeEntryId
-                    ? "purge"
-                    : selectedIds.includes(card.entryId)
-                      ? "copy"
-                      : undefined,
+                operation: selectedCardOperation(
+                  card.entryId,
+                  activeAction.followup,
+                  selectedIds,
+                  purgeEntryId,
+                ),
                 testId: `cumulus-exploration-card-${card.entryId}`,
               }))}
               emptyLabel="No eligible cards are available."

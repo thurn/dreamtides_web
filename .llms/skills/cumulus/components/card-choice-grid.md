@@ -52,7 +52,7 @@ import { CardChoiceGrid } from "src/cumulus/components/card/CardChoiceGrid";
 <CardChoiceGrid
   cards={choices.map((choice) => ({
     ...choice,
-    operation: choice.entryId === selectedEntryId ? "copy" : undefined,
+    operation: choice.entryId === selectedEntryId ? selectionOperation : undefined,
   }))}
   columns="four"
   layout={{ kind: "site", viewport: "desktop", fit: "choice" }}

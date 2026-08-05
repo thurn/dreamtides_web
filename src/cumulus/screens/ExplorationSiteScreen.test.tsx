@@ -1009,6 +1009,7 @@ describe("ExplorationSiteScreen", () => {
             ],
             mode: "single",
             selectionKey: "entryIds",
+            selectionOperation: "transfigure",
             min: 1,
             max: 1,
           },
@@ -1054,6 +1055,11 @@ describe("ExplorationSiteScreen", () => {
         )
         ?.click(),
     );
+    expect(
+      container.querySelector(
+        '[data-card-choice-operation="transfigure"] .fa-hammer',
+      ),
+    ).not.toBeNull();
     act(() =>
       container
         .querySelector<HTMLButtonElement>(

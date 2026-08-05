@@ -7,6 +7,7 @@ import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import type {
   ExplorationActionEffectPart,
   ExplorationActionView,
+  ExplorationCardSelectionOperation,
   ExplorationCardChoiceView,
   ExplorationFollowupView,
   ExplorationSiteView,
@@ -227,6 +228,7 @@ function deckFollowup(
   subtitle: string,
   cards: readonly ExplorationCardChoiceView[],
   mode: "single" | "exact" | "purge-and-copy",
+  selectionOperation: ExplorationCardSelectionOperation | undefined,
   count = 1,
   selectionKey: "entryIds" | "cardIds" = "entryIds",
 ): ExplorationFollowupView {
@@ -237,6 +239,7 @@ function deckFollowup(
     cards,
     mode,
     selectionKey,
+    ...(selectionOperation === undefined ? {} : { selectionOperation }),
     min: count,
     max: count,
   };
@@ -260,6 +263,7 @@ function followupForAction(
         "First choose a card to purge, then choose a different card to copy.",
         eligibleDeckCards(state, content),
         "purge-and-copy",
+        undefined,
         2,
       );
     case "transfigure-selected":
@@ -281,6 +285,7 @@ function followupForAction(
         "Choose an Event to purge.",
         deckCards,
         "single",
+        "purge",
       );
     case "purge-for-essence":
       return deckFollowup(
@@ -288,6 +293,7 @@ function followupForAction(
         `Choose a card to purge for ${String(action.essencePerSpark ?? EXPLORATION_ESSENCE_PER_SPARK)} essence per ✦.`,
         eligibleDeckCards(state, content),
         "single",
+        "purge",
       );
     case "change-subtype-selected":
       if (hasMintedDeckCard) return { kind: "none" };
@@ -296,6 +302,7 @@ function followupForAction(
         `Choose a Character to become ${action.subtype ?? "Outsider"}.`,
         deckCards,
         "single",
+        "change",
       );
     case "copy-selected-card":
       if (hasMintedDeckCard) return { kind: "none" };
@@ -304,6 +311,7 @@ function followupForAction(
         `Choose a card to gain ${String(action.count ?? 1)} copies of.`,
         deckCards,
         "single",
+        "copy",
       );
     case "copy-offered-deck-card":
       return deckFollowup(
@@ -311,6 +319,7 @@ function followupForAction(
         "Choose one offered card to copy.",
         offeredDeckCards(offer.offeredDeckEntryIds ?? [], state, content),
         "single",
+        "copy",
       );
     case "replace-selected":
       return deckFollowup(
@@ -323,6 +332,7 @@ function followupForAction(
           ),
         ),
         "single",
+        "purge",
       );
     case "replace-selected-with-card":
       return deckFollowup(
@@ -330,6 +340,7 @@ function followupForAction(
         "Choose a card to replace.",
         deckCards,
         "single",
+        "purge",
       );
     case "transfigure-fixed-selected":
       if (hasMintedDeckCard) return { kind: "none" };
@@ -346,6 +357,7 @@ function followupForAction(
             ).some((form) => form.type === action.transfiguration),
         ),
         "single",
+        "transfigure",
       );
     case "draft-card":
       return deckFollowup(
@@ -353,6 +365,7 @@ function followupForAction(
         "Choose one offered card.",
         offeredCards(offer.offeredCardIds, content),
         "single",
+        undefined,
         1,
         "cardIds",
       );

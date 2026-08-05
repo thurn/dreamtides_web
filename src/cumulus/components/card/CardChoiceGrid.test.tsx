@@ -109,4 +109,49 @@ describe("CardChoiceGrid", () => {
     act(() => root.unmount());
     container.remove();
   });
+
+  it("renders each semantic operation with its canonical glyph and label", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() =>
+      root.render(
+        <CardChoiceGrid
+          cards={[
+            { entryId: "purge", model: model("Purge"), operation: "purge" },
+            { entryId: "copy", model: model("Copy"), operation: "copy" },
+            {
+              entryId: "transfigure",
+              model: model("Transfigure"),
+              operation: "transfigure",
+            },
+            {
+              entryId: "change",
+              model: model("Change"),
+              operation: "change",
+            },
+          ]}
+          columns="four"
+          layout={{ kind: "site", viewport: "desktop", fit: "choice" }}
+        />,
+      ),
+    );
+
+    const expectations = [
+      ["purge", "This card will be purged", ".bx-trash"],
+      ["copy", "This card will be copied", ".bx-copy"],
+      ["transfigure", "This card will be transfigured", ".fa-hammer"],
+      ["change", "This card will be changed", ".bx-refresh-ccw"],
+    ] as const;
+    for (const [operation, label, glyph] of expectations) {
+      const badge = container.querySelector(
+        `[data-card-choice-operation="${operation}"]`,
+      );
+      expect(badge?.getAttribute("aria-label")).toBe(label);
+      expect(badge?.querySelector(glyph)).not.toBeNull();
+    }
+
+    act(() => root.unmount());
+    container.remove();
+  });
 });

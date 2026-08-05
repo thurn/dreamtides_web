@@ -552,6 +552,7 @@ describe("exploration-view-model", () => {
 
     expect(view.actions[0].followup).toMatchObject({
       kind: "cards",
+      selectionOperation: "transfigure",
       cards: [{ entryId: "entry-eligible" }],
     });
     expect(view.actions[0].effectText).toBe(
@@ -1786,6 +1787,7 @@ describe("exploration-view-model", () => {
     expect(replacementFollowup).toMatchObject({
       kind: "cards",
       selectionKey: "entryIds",
+      selectionOperation: "purge",
     });
     expect(
       replacementFollowup?.kind === "cards"
