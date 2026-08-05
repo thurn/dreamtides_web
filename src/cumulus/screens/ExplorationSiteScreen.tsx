@@ -138,6 +138,9 @@ export type ExplorationRewardView =
   | {
       readonly kind: "card-copies";
       readonly sourceEntryId: string;
+      /** Original deck entry the persisted copies were created from. */
+      readonly source: ExplorationCardChoiceView;
+      /** Newly created deck entries, in persisted insertion order. */
       readonly cards: readonly ExplorationCardChoiceView[];
       readonly count: number;
     }
@@ -473,6 +476,7 @@ type FrameBreakPhase =
   | "collapsing"
   | "returning";
 type CollapseIntent = "preview" | "exit";
+type CardCopiesPhase = "original" | "copies" | "travel";
 
 const DESKTOP_PANEL_HEIGHT = 580;
 const DESKTOP_PANEL_MAX_WIDTH = 620;
@@ -492,6 +496,9 @@ const DREAMSIGN_PURGE_SECONDS = motionTimeSeconds("--dur-slow") * 4;
 const ESSENCE_CARD_READING_SECONDS = motionTimeSeconds("--dur-slow") * 8;
 const REWARD_TRAVEL_SECONDS = motionTimeSeconds("--dur-slow") * 2;
 const REWARD_STAGGER_SECONDS = motionTimeSeconds("--dur-fast");
+const CARD_COPY_ORIGINAL_SECONDS = motionTimeSeconds("--dur-slow") * 2;
+const CARD_COPY_EMERGE_SECONDS = motionTimeSeconds("--dur-slow");
+const CARD_COPY_READING_SECONDS = motionTimeSeconds("--dur-slow") * 2;
 const TRANSFIGURATION_ORIGINAL_SECONDS = motionTimeSeconds("--dur-slow") * 2;
 const TRANSFIGURATION_FLIP_SECONDS = motionTimeSeconds("--dur-slow") * 2;
 const TRANSFIGURATION_READING_SECONDS = motionTimeSeconds("--dur-slow") * 4;
@@ -504,6 +511,13 @@ const DESKTOP_TRANSFIGURATION_CARD_WIDTH = 240;
 const MOBILE_TRANSFIGURATION_CARD_WIDTH = "min(58vw, 240px)";
 const DESKTOP_REWARD_DREAMSIGN_SIZE = 240;
 const MOBILE_REWARD_DREAMSIGN_SIZE = 180;
+const MOBILE_CARD_COPY_WIDTH = "min(40vw, 180px)";
+// Copy cards fan far enough to expose their faces while remaining a single
+// physical group that can collapse into the deck target together.
+const DESKTOP_CARD_COPY_FAN_STEP = 156;
+const MOBILE_CARD_COPY_FAN_STEP = 94;
+const CARD_COPY_FAN_RISE = 12;
+const CARD_COPY_FAN_ROTATION = 4;
 const DESKTOP_DREAMSIGN_CHOICE_SIZE = 154;
 const MOBILE_DREAMSIGN_CHOICE_SIZE = 120;
 const DESKTOP_DECK_MODIFICATION_CARD_WIDTH = 126;
@@ -916,6 +930,23 @@ function rewardTargetFor(
   };
 }
 
+function cardCopyFanPose(
+  index: number,
+  count: number,
+  layout: "mobile" | "desktop",
+): { readonly x: number; readonly y: number; readonly rotate: number } {
+  const centeredIndex = index - (count - 1) / 2;
+  const step =
+    layout === "desktop"
+      ? DESKTOP_CARD_COPY_FAN_STEP
+      : MOBILE_CARD_COPY_FAN_STEP;
+  return {
+    x: centeredIndex * step,
+    y: Math.abs(centeredIndex) * CARD_COPY_FAN_RISE,
+    rotate: centeredIndex * CARD_COPY_FAN_ROTATION,
+  };
+}
+
 function useCardTrajectory(
   targetRef: RefObject<HTMLDivElement | null>,
   cardId: string,
@@ -963,8 +994,10 @@ export function ExplorationSiteScreen({
   const exitCompletedRef = useRef(false);
   const resumedResolutionRef = useRef<string | null>(null);
   const rewardItemRefs = useRef(new Map<string, HTMLDivElement>());
+  const cardCopyRefs = useRef(new Map<string, HTMLDivElement>());
   const transfigurationCardRef = useRef<HTMLDivElement>(null);
   const completedRewardItemsRef = useRef(new Set<string>());
+  const completedCardCopyItemsRef = useRef(new Set<string>());
   const [revealed, setRevealed] = useState(reduceMotion);
   const [frameBreakGeometry, setFrameBreakGeometry] =
     useState<FrameBreakGeometry | null>(null);
@@ -986,6 +1019,11 @@ export function ExplorationSiteScreen({
   const [transfigurationConfirming, setTransfigurationConfirming] =
     useState(false);
   const [rewardTrajectories, setRewardTrajectories] = useState<
+    ReadonlyMap<string, RewardTrajectory> | null
+  >(null);
+  const [cardCopiesPhase, setCardCopiesPhase] =
+    useState<CardCopiesPhase>("original");
+  const [cardCopyTrajectories, setCardCopyTrajectories] = useState<
     ReadonlyMap<string, RewardTrajectory> | null
   >(null);
   const [essenceRewardPhase, setEssenceRewardPhase] = useState<
@@ -1024,6 +1062,13 @@ export function ExplorationSiteScreen({
     effectReward?.kind === "purged-dreamsign-essence" ? effectReward : null;
   const cardCopiesReward =
     effectReward?.kind === "card-copies" ? effectReward : null;
+  const cardCopyItems = useMemo(
+    () =>
+      cardCopiesReward === null
+        ? []
+        : [cardCopiesReward.source, ...cardCopiesReward.cards],
+    [cardCopiesReward],
+  );
   const battleModifierReward =
     effectReward?.kind === "battle-modifier" ? effectReward : null;
   const dreamAvatarReward =
@@ -1063,15 +1108,19 @@ export function ExplorationSiteScreen({
 
   useEffect(() => {
     completedRewardItemsRef.current.clear();
+    completedCardCopyItemsRef.current.clear();
     rewardItemRefs.current.clear();
+    cardCopyRefs.current.clear();
     setRewardTrajectories(null);
+    setCardCopiesPhase(reduceMotion ? "copies" : "original");
+    setCardCopyTrajectories(null);
     setEssenceRewardPhase("cards");
     setDreamsignPurgeRewardPhase("purging");
     setDeckModificationPresented(false);
     setPurgedCardsPresented(false);
     setTransfigurationRevealed(false);
     setTransfigurationReturn(null);
-  }, [rewardIdentity]);
+  }, [reduceMotion, rewardIdentity]);
 
   useLayoutEffect(() => {
     const resolutionId = view.resolvedActionId;
@@ -1428,24 +1477,87 @@ export function ExplorationSiteScreen({
   useEffect(() => {
     if (
       frameBreakPhase !== "open" ||
-      (cardCopiesReward === null &&
-        battleModifierReward === null &&
-        dreamAvatarReward === null)
+      (battleModifierReward === null && dreamAvatarReward === null)
     ) {
       return;
     }
-    const duration =
-      cardCopiesReward === null
-        ? RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS
-        : REWARD_READING_SECONDS * 1_000;
-    const timer = window.setTimeout(completeExit, duration);
+    const timer = window.setTimeout(
+      completeExit,
+      RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
+    );
+    return () => window.clearTimeout(timer);
+  }, [battleModifierReward, completeExit, dreamAvatarReward, frameBreakPhase]);
+
+  useEffect(() => {
+    if (
+      cardCopiesReward === null ||
+      frameBreakPhase !== "open" ||
+      cardCopiesPhase !== "original"
+    ) {
+      return;
+    }
+    const timer = window.setTimeout(
+      () => setCardCopiesPhase("copies"),
+      CARD_COPY_ORIGINAL_SECONDS * 1_000,
+    );
+    return () => window.clearTimeout(timer);
+  }, [cardCopiesPhase, cardCopiesReward, frameBreakPhase]);
+
+  useEffect(() => {
+    if (
+      cardCopiesReward === null ||
+      frameBreakPhase !== "open" ||
+      cardCopiesPhase !== "copies" ||
+      cardCopyTrajectories !== null
+    ) {
+      return;
+    }
+    const delay = reduceMotion
+      ? REWARD_READING_SECONDS
+      : CARD_COPY_EMERGE_SECONDS +
+        CARD_COPY_READING_SECONDS +
+        Math.max(0, cardCopiesReward.cards.length - 1) * REWARD_STAGGER_SECONDS;
+    const timer = window.setTimeout(() => {
+      if (reduceMotion) {
+        completeExit();
+        return;
+      }
+      const trajectories = new Map<string, RewardTrajectory>();
+      for (const card of cardCopyItems) {
+        const sourceRect = cardCopyRefs.current
+          .get(card.entryId)
+          ?.getBoundingClientRect();
+        if (
+          sourceRect === undefined ||
+          sourceRect.width <= 0 ||
+          sourceRect.height <= 0
+        ) {
+          continue;
+        }
+        const source = snapshotRect(sourceRect);
+        const destination = sourceRectFor(source);
+        trajectories.set(card.entryId, {
+          source,
+          target: destination.rect,
+          destinationKind: destination.kind,
+        });
+      }
+      if (trajectories.size !== cardCopyItems.length) {
+        completeExit();
+        return;
+      }
+      setCardCopyTrajectories(trajectories);
+      setCardCopiesPhase("travel");
+    }, delay * 1_000);
     return () => window.clearTimeout(timer);
   }, [
-    battleModifierReward,
+    cardCopiesPhase,
     cardCopiesReward,
+    cardCopyItems,
+    cardCopyTrajectories,
     completeExit,
-    dreamAvatarReward,
     frameBreakPhase,
+    reduceMotion,
   ]);
 
   const finishRewardItem = (itemKey: string): void => {
@@ -1453,6 +1565,16 @@ export function ExplorationSiteScreen({
     if (
       completedRewardItemsRef.current.size >=
       (rewardTrajectories?.size ?? Number.POSITIVE_INFINITY)
+    ) {
+      completeExit();
+    }
+  };
+
+  const finishCardCopyItem = (entryId: string): void => {
+    completedCardCopyItemsRef.current.add(entryId);
+    if (
+      completedCardCopyItemsRef.current.size >=
+      (cardCopyTrajectories?.size ?? Number.POSITIVE_INFINITY)
     ) {
       completeExit();
     }
@@ -2161,11 +2283,13 @@ export function ExplorationSiteScreen({
       {frameBreakGeometry !== null &&
         frameBreakPhase === "open" &&
         activeAction === null &&
-        cardCopiesReward !== null && (
+        cardCopiesReward !== null &&
+        cardCopyTrajectories === null && (
           <motion.section
             data-exploration-outcome="card-copies"
             data-exploration-source-entry-id={cardCopiesReward.sourceEntryId}
             data-exploration-copy-count={cardCopiesReward.count}
+            data-exploration-card-copies-phase={cardCopiesPhase}
             role="status"
             aria-label={`Gained ${String(cardCopiesReward.count)} ${cardCopiesReward.count === 1 ? "copy" : "copies"}`}
             initial={{ opacity: 0, scale: reduceMotion ? 1 : 0.92 }}
@@ -2181,55 +2305,134 @@ export function ExplorationSiteScreen({
               display: "grid",
               placeContent: "center",
               justifyItems: "center",
-              gap: token("--space-7"),
               pointerEvents: "none",
             }}
           >
             <div
+              data-exploration-card-copy-stage=""
               style={{
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                gap: token("--space-5"),
+                position: "relative",
+                width: isDesktop
+                  ? DESKTOP_REWARD_CARD_WIDTH
+                  : MOBILE_CARD_COPY_WIDTH,
+                aspectRatio: CARD_ASPECT_RATIO,
               }}
             >
-              {cardCopiesReward.cards.map((card, index) => (
-                <motion.div
-                  key={card.entryId}
-                  data-exploration-copied-entry-id={card.entryId}
-                  data-card-id={card.model.cardId}
-                  initial={{ y: reduceMotion ? 0 : token("--space-7"), opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{
-                    delay: reduceMotion ? 0 : index * REWARD_STAGGER_SECONDS,
-                    duration: reduceMotion ? 0 : motionTimeSeconds("--dur-slow"),
-                    ease: DREAM_EASE,
-                  }}
-                  style={{
-                    width: isDesktop
-                      ? DESKTOP_REWARD_CARD_WIDTH
-                      : "min(40vw, 180px)",
-                    aspectRatio: CARD_ASPECT_RATIO,
-                  }}
-                >
-                  <GameCard
-                    model={card.model}
-                    selected
-                    selectionColor="positive"
-                    testId={`cumulus-exploration-card-copy-${card.entryId}`}
-                  />
-                </motion.div>
-              ))}
+              {cardCopyItems.map((card, index) => {
+                const isSource = index === 0;
+                const fanPose = cardCopyFanPose(
+                  index,
+                  cardCopyItems.length,
+                  isDesktop ? "desktop" : "mobile",
+                );
+                const copiesVisible =
+                  reduceMotion || cardCopiesPhase !== "original";
+                return (
+                  <motion.div
+                    key={card.entryId}
+                    ref={(element) => {
+                      if (element === null) {
+                        cardCopyRefs.current.delete(card.entryId);
+                      } else {
+                        cardCopyRefs.current.set(card.entryId, element);
+                      }
+                    }}
+                    data-exploration-card-copy-role={
+                      isSource ? "original" : "copy"
+                    }
+                    data-exploration-copied-entry-id={
+                      isSource ? undefined : card.entryId
+                    }
+                    data-exploration-deck-entry-id={card.entryId}
+                    data-card-id={card.model.cardId}
+                    initial={false}
+                    animate={{
+                      x: copiesVisible ? fanPose.x : 0,
+                      y: copiesVisible ? fanPose.y : 0,
+                      rotate: copiesVisible ? fanPose.rotate : 0,
+                      opacity: isSource || copiesVisible ? 1 : 0,
+                    }}
+                    transition={{
+                      delay:
+                        reduceMotion || isSource
+                          ? 0
+                          : (index - 1) * REWARD_STAGGER_SECONDS,
+                      duration: reduceMotion ? 0 : CARD_COPY_EMERGE_SECONDS,
+                      ease: DREAM_EASE,
+                    }}
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      zIndex: isSource ? cardCopyItems.length + 1 : index,
+                      transformOrigin: "center bottom",
+                    }}
+                  >
+                    <GameCard
+                      model={card.model}
+                      selected
+                      selectionColor="positive"
+                      testId={`cumulus-exploration-card-copy-${card.entryId}`}
+                    />
+                  </motion.div>
+                );
+              })}
             </div>
-            <RadialAnnouncement
-              headline={`+${String(cardCopiesReward.count)} ${cardCopiesReward.count === 1 ? "Copy" : "Copies"}`}
-              tone="reward"
-              size={isDesktop ? "compact" : "mini"}
-              duration="extended"
-              announcementId={`exploration-card-copies:${view.resolvedActionId ?? "resolved"}`}
-            />
           </motion.section>
         )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        cardCopiesReward !== null &&
+        cardCopyTrajectories !== null &&
+        cardCopyItems.map((card) => {
+          const copyTrajectory = cardCopyTrajectories.get(card.entryId);
+          if (copyTrajectory === undefined) return null;
+          const scale = Math.min(
+            copyTrajectory.target.width / copyTrajectory.source.width,
+            copyTrajectory.target.height / copyTrajectory.source.height,
+          );
+          return (
+            <motion.div
+              key={card.entryId}
+              data-exploration-card-copy-flight=""
+              data-exploration-card-copy-role={
+                card.entryId === cardCopiesReward.sourceEntryId
+                  ? "original"
+                  : "copy"
+              }
+              data-exploration-deck-entry-id={card.entryId}
+              data-exploration-destination={copyTrajectory.destinationKind}
+              initial={{
+                x: copyTrajectory.source.left,
+                y: copyTrajectory.source.top,
+                scale: 1,
+                opacity: 1,
+              }}
+              animate={{
+                x: copyTrajectory.target.left,
+                y: copyTrajectory.target.top,
+                scale,
+                opacity: 1,
+              }}
+              transition={{
+                duration: REWARD_TRAVEL_SECONDS,
+                ease: DREAM_EASE,
+              }}
+              onAnimationComplete={() => finishCardCopyItem(card.entryId)}
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                zIndex: FRAME_BREAK_EXIT_LAYER + 2,
+                width: copyTrajectory.source.width,
+                height: copyTrajectory.source.height,
+                transformOrigin: "top left",
+                pointerEvents: "none",
+              }}
+            >
+              <GameCard model={card.model} selected selectionColor="positive" />
+            </motion.div>
+          );
+        })}
       {frameBreakGeometry !== null &&
         frameBreakPhase === "open" &&
         activeAction === null &&

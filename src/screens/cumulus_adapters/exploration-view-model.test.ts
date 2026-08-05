@@ -1632,6 +1632,7 @@ describe("exploration-view-model", () => {
       reward: {
         kind: "card-copies",
         sourceEntryId: "source-entry",
+        source: { entryId: "source-entry" },
         cards: [{ entryId: "copy-a" }, { entryId: "copy-b" }],
       },
     });

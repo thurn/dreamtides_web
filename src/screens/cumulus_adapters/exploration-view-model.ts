@@ -757,16 +757,22 @@ function rewardForResolution(
     resolvedAction?.effectKind === "copy-offered-deck-card"
   ) {
     const sourceEntryId = resolution.affectedEntryIds[0];
+    const sourceEntry = state.deck.find(
+      (candidate) => candidate.entryId === sourceEntryId,
+    );
+    const source =
+      sourceEntry === undefined ? null : deckCardChoice(sourceEntry, content);
     const cards = (resolution.gainedEntryIds ?? []).flatMap((entryId) => {
       const entry = state.deck.find((candidate) => candidate.entryId === entryId);
       if (entry === undefined) return [];
       const card = deckCardChoice(entry, content);
       return card === null ? [] : [card];
     });
-    if (sourceEntryId !== undefined && cards.length > 0) {
+    if (sourceEntryId !== undefined && source !== null && cards.length > 0) {
       return {
         kind: "card-copies",
         sourceEntryId,
+        source,
         cards,
         count: cards.length,
       };

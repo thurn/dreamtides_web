@@ -320,6 +320,7 @@ function cardCopiesRewardView(): ExplorationSiteView {
     reward: {
       kind: "card-copies",
       sourceEntryId: "source-entry",
+      source: { entryId: "source-entry", model: base.card, isBane: false },
       count: 2,
       cards: [
         { entryId: "copy-entry-a", model: base.card, isBane: false },
@@ -2390,11 +2391,25 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
-  it("presents exact copied entry UUIDs before completing the encounter", async () => {
+  it("shows the original, emits exact copied entries, and flies every card to the deck", () => {
     vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
-    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
-      new DOMRect(100, 100, 240, 336),
+    reducedMotionPreference.value = false;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function getBoundingClientRect(this: HTMLElement) {
+        if (this.hasAttribute("data-exploration-card-copy-role")) {
+          const role = this.dataset.explorationCardCopyRole;
+          const entryId = this.dataset.explorationDeckEntryId;
+          const left =
+            role === "original" ? 430 : entryId === "copy-entry-a" ? 590 : 750;
+          return new DOMRect(left, 180, 240, 336);
+        }
+        return new DOMRect(100, 100, 240, 336);
+      },
     );
+    const deckTarget = document.createElement("button");
+    deckTarget.dataset.journeyDeckTarget = "";
+    deckTarget.getBoundingClientRect = () => new DOMRect(1210, 720, 50, 70);
+    document.body.append(deckTarget);
     const onExit = vi.fn();
     const { container, root } = mount(
       <ExplorationSiteScreen
@@ -2410,6 +2425,12 @@ describe("ExplorationSiteScreen", () => {
     );
     expect(outcome?.dataset.explorationSourceEntryId).toBe("source-entry");
     expect(outcome?.dataset.explorationCopyCount).toBe("2");
+    expect(outcome?.dataset.explorationCardCopiesPhase).toBe("original");
+    expect(
+      container.querySelector(
+        '[data-exploration-card-copy-role="original"][data-exploration-deck-entry-id="source-entry"]',
+      ),
+    ).not.toBeNull();
     expect(
       [...container.querySelectorAll("[data-exploration-copied-entry-id]")].map(
         (element) => element.getAttribute("data-exploration-copied-entry-id"),
@@ -2417,9 +2438,36 @@ describe("ExplorationSiteScreen", () => {
     ).toEqual(["copy-entry-a", "copy-entry-b"]);
     expect(outcome?.getAttribute("aria-label")).toBe("Gained 2 copies");
     expect(onExit).not.toHaveBeenCalled();
-    await act(() => {
+    act(() => {
+      vi.advanceTimersByTime(1_000);
+    });
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-exploration-outcome="card-copies"]',
+      )?.dataset.explorationCardCopiesPhase,
+    ).toBe("copies");
+    act(() => {
       vi.advanceTimersByTime(10_000);
-      return Promise.resolve();
+    });
+    const flights = container.querySelectorAll(
+      "[data-exploration-card-copy-flight]",
+    );
+    expect(flights).toHaveLength(3);
+    expect(
+      [...flights].map((flight) => ({
+        entryId: flight.getAttribute("data-exploration-deck-entry-id"),
+        destination: flight.getAttribute("data-exploration-destination"),
+      })),
+    ).toEqual([
+      { entryId: "source-entry", destination: "journey-deck" },
+      { entryId: "copy-entry-a", destination: "journey-deck" },
+      { entryId: "copy-entry-b", destination: "journey-deck" },
+    ]);
+    expect(onExit).not.toHaveBeenCalled();
+    act(() => {
+      for (const flight of flights) {
+        flight.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+      }
     });
     expect(onExit).toHaveBeenCalledOnce();
     act(() => root.unmount());
