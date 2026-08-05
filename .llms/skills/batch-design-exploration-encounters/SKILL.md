@@ -1,6 +1,6 @@
 ---
 name: batch-design-exploration-encounters
-description: In a separate git worktree, select a requested-size random batch of canonical Dreamtides cards absent from data/exploration_candidates.json, delegate one exploration-encounter-designer run per card, append every validated encounter set atomically, commit and push the catalog update, and show the batch in display Markdown. Use when generating encounter candidates in parallel, running a batch of encounter-design subagents, or expanding the encounter candidate catalog by a target count.
+description: In a separate git worktree, select a requested-size random batch of canonical Dreamtides cards absent from data/exploration_candidates.json, delegate one exploration-encounter-designer run per card, append every validated encounter set atomically, commit and push the catalog update, show the batch in display Markdown, and offer to promote the catalog commit through the wt workflow. Use when generating encounter candidates in parallel, running a batch of encounter-design subagents, or expanding the encounter candidate catalog by a target count.
 ---
 
 # Batch Design Exploration Encounters
@@ -10,7 +10,8 @@ persistent deliverable is a committed update to `data/exploration_candidates.jso
 on a pushed worktree branch. The human-facing deliverable is the complete
 generated `display.md`. Keep card selection, collision detection, catalog
 writes, and display rendering in the bundled scripts; use subagents only for
-the creative single-card designs.
+the creative single-card designs. End with the `$wt` promotion handoff so an
+approved batch is replayed onto `master`.
 
 ## Required input
 
@@ -102,7 +103,17 @@ and the number of single-card subagent assignments.
    the presentation of the committed catalog update, not a substitute for that
    update. Preserve card order from the manifest and event rank order within
    each card. Do not add an introduction, summary, raw JSON, IDs, templates,
-   scores, or ranking commentary.
+   scores, or ranking commentary to the display.
+
+9. Immediately after `display.md`, perform the promotion handoff required by
+   section 3 of `$wt`. Ask whether to promote the committed worktree changes
+   onto `master`, with explicit **Yes** and **No** options. Do not ask before the
+   display, bury the question inside it, or end the turn without the promotion
+   choice. On **Yes**, follow `$wt` to replay the worktree commits onto `master`,
+   push `master`, and clean up the worktree branches. Confirm that the promoted
+   commit includes the batch's `data/exploration_candidates.json` update. On
+   **No**, leave the catalog commit on the pushed worktree branch and keep
+   `master` unchanged.
 
 ## Safety invariants
 
@@ -116,6 +127,7 @@ and the number of single-card subagent assignments.
   not contain editable template copy.
 - Never finish with only temporary result files or display Markdown; the batch
   is complete only after the worktree catalog change is committed and pushed.
+- Never omit the `$wt` promotion handoff after presenting the committed batch.
 - Never edit `data/exploration_candidates.json` in the primary checkout.
 - Use the scripts' path overrides only for synthetic tests or an explicitly
   supplied alternate repository data source.
