@@ -6,7 +6,9 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import re
 import sys
+import tomllib
 from collections import Counter
 from pathlib import Path
 from typing import Any
@@ -17,9 +19,13 @@ from template_rendering import PLACEHOLDER_RE, SPECIAL_RE
 SCRIPTS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPTS_DIR.parents[3]
 DEFAULT_TEMPLATE_CATALOG = REPO_ROOT / "data/templates.json"
-DEFAULT_ENCOUNTER_CANDIDATES = REPO_ROOT / "data/exploration_candidates.json"
+DEFAULT_EXPLORATION_DATA = REPO_ROOT / "data/tabula/exploration.toml"
 UNIQUE_EFFECT_BALANCE_CLASS = "unique_effect"
 SUPPORTED_BALANCE_CLASSES = {UNIQUE_EFFECT_BALANCE_CLASS}
+SELECTED_ACTIONS_RANK_RE = re.compile(
+    r"^# selected actions: .+ \(rank (?P<rank>[1-5])\)\n\[\[encounter\]\]$",
+    re.MULTILINE,
+)
 
 
 class CandidateListError(ValueError):
@@ -40,12 +46,12 @@ def parse_args() -> argparse.Namespace:
         help="Canonical template catalog (default: data/templates.json).",
     )
     parser.add_argument(
-        "--exploration-candidates",
+        "--exploration-data",
         type=Path,
-        default=DEFAULT_ENCOUNTER_CANDIDATES,
+        default=DEFAULT_EXPLORATION_DATA,
         help=(
-            "Completed encounter candidate data used for counts "
-            "(default: data/exploration_candidates.json)."
+            "Production encounter TOML used for prevalence counts "
+            "(default: data/tabula/exploration.toml)."
         ),
     )
     parser.add_argument(
@@ -110,62 +116,81 @@ def load_catalog(path: Path) -> tuple[list[dict[str, Any]], dict[int, dict[str, 
     return catalog, by_id
 
 
+def load_toml(path: Path, label: str) -> tuple[str, dict[str, Any]]:
+    try:
+        source = path.read_text(encoding="utf-8")
+    except FileNotFoundError as error:
+        raise CandidateListError(f"{label} does not exist: {path}") from error
+    try:
+        value = tomllib.loads(source)
+    except tomllib.TOMLDecodeError as error:
+        raise CandidateListError(
+            f"{label} is not valid TOML: {path}: {error}"
+        ) from error
+    return source, value
+
+
 def count_template_uses(
     path: Path, catalog_ids: set[int]
 ) -> tuple[int, Counter[int], Counter[int]]:
-    cards = load_json(path, "Encounter candidates")
-    if not isinstance(cards, dict):
+    source, exploration = load_toml(path, "Production exploration data")
+    encounters = exploration.get("encounter", [])
+    if not isinstance(encounters, list):
         raise CandidateListError(
-            f"Encounter candidates must contain a card-ID-keyed JSON object: {path}"
+            f"Production exploration data must contain an encounter array: {path}"
+        )
+    selected_action_ranks = [
+        int(match.group("rank"))
+        for match in SELECTED_ACTIONS_RANK_RE.finditer(source)
+    ]
+    if len(selected_action_ranks) != len(encounters):
+        raise CandidateListError(
+            "Each production encounter must have an adjacent "
+            f"'# selected actions: ... (rank N)' annotation: {path}"
         )
     counts: Counter[int] = Counter()
     rank_one_counts: Counter[int] = Counter()
 
-    for card_id, encounters in cards.items():
+    for encounter_index, (raw_encounter, selected_rank) in enumerate(
+        zip(encounters, selected_action_ranks)
+    ):
+        if not isinstance(raw_encounter, dict):
+            raise CandidateListError(
+                f"Production encounter {encounter_index} must be a table"
+            )
+        card_id = raw_encounter.get("card-id")
         if not isinstance(card_id, str) or not card_id:
             raise CandidateListError(
-                "Encounter candidates keys must be non-empty card IDs"
+                f"Production encounter {encounter_index} must have a non-empty card-id"
             )
-        if not isinstance(encounters, list):
+        actions = raw_encounter.get("action")
+        if not isinstance(actions, list):
             raise CandidateListError(
-                f"Encounter candidates entry {card_id} must be an encounters array"
+                f"Production encounter {card_id}:{encounter_index} must have "
+                "an action array"
             )
-        for encounter_index, raw_encounter in enumerate(encounters):
-            if not isinstance(raw_encounter, dict):
+        for action_index, raw_action in enumerate(actions):
+            if not isinstance(raw_action, dict):
                 raise CandidateListError(
-                    f"Encounter {card_id}:{encounter_index} must be an object"
+                    f"Production action {card_id}:{encounter_index}:{action_index} "
+                    "must be a table"
                 )
-            actions = raw_encounter.get("actions")
-            if not isinstance(actions, list):
+            template_id = raw_action.get("template-id")
+            if not isinstance(template_id, int) or isinstance(template_id, bool):
                 raise CandidateListError(
-                    f"Encounter {card_id}:{encounter_index} must have an actions array"
+                    f"Production action {card_id}:{encounter_index}:{action_index} "
+                    "has a non-integer template-id"
                 )
-            rank = raw_encounter.get("rank")
-            if not isinstance(rank, int) or isinstance(rank, bool):
+            if template_id not in catalog_ids:
                 raise CandidateListError(
-                    f"Encounter {card_id}:{encounter_index} has a non-integer rank"
+                    f"Production action {card_id}:{encounter_index}:{action_index} uses "
+                    f"unknown template-id {template_id}"
                 )
-            for action_index, raw_action in enumerate(actions):
-                if not isinstance(raw_action, dict):
-                    raise CandidateListError(
-                        f"Action {card_id}:{encounter_index}:{action_index} must be an object"
-                    )
-                template_id = raw_action.get("template_id")
-                if not isinstance(template_id, int) or isinstance(template_id, bool):
-                    raise CandidateListError(
-                        f"Action {card_id}:{encounter_index}:{action_index} "
-                        "has a non-integer template_id"
-                    )
-                if template_id not in catalog_ids:
-                    raise CandidateListError(
-                        f"Action {card_id}:{encounter_index}:{action_index} uses "
-                        f"unknown template_id {template_id}"
-                    )
-                counts[template_id] += 1
-                if rank == 1:
-                    rank_one_counts[template_id] += 1
+            counts[template_id] += 1
+            if selected_rank == 1:
+                rank_one_counts[template_id] += 1
 
-    return len(cards), counts, rank_one_counts
+    return len(encounters), counts, rank_one_counts
 
 
 def build_output(
@@ -342,11 +367,12 @@ def build_output(
             ),
             "required_template_count": required_template_count,
             "soft_warning_guidance": (
-                "Prefer fewer prior rank-1 uses first and fewer total uses second "
-                "when templates fit comparably well. A warned template remains "
-                "selectable when it is materially stronger. Templates tagged "
-                "unique_effect hide one use earlier and should be selected "
-                "only for a very strong card-specific fit."
+                "Production prevalence is authoritative. Prefer fewer prior "
+                "production rank-1 selections first and fewer total production "
+                "selections second when templates fit comparably well. A warned "
+                "template remains selectable when it is materially stronger. "
+                "Templates tagged unique_effect hide one use earlier and should "
+                "be selected only for a very strong card-specific fit."
             ),
             "soft_warnings": [
                 {
@@ -389,7 +415,7 @@ def main() -> int:
     try:
         catalog, by_id = load_catalog(args.template_catalog)
         completed_cards, counts, rank_one_counts = count_template_uses(
-            args.exploration_candidates, set(by_id)
+            args.exploration_data, set(by_id)
         )
         output = build_output(
             catalog,

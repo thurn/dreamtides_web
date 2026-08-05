@@ -24,14 +24,24 @@ function writeFixtureRoot() {
       template: `Synthetic template ${String(index + 1)}`,
     })),
   ));
-  const encounter = (rank, templateIds) => ({
-    rank,
-    actions: templateIds.map((templateId) => ({ template_id: templateId })),
-  });
-  writeFileSync(join(rootDir, "data", "exploration_candidates.json"), JSON.stringify({
-    "11111111-1111-4111-8111-111111111111": [encounter(1, [1, 2]), encounter(2, [3, 4])],
-    "22222222-2222-4222-8222-222222222222": [encounter(1, [1, 5]), encounter(2, [6, 7])],
-  }));
+  mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
+  writeFileSync(join(rootDir, "data", "tabula", "exploration.toml"), [
+    "# selected actions: pair-1 (rank 1)",
+    "[[encounter]]",
+    'card-id = "11111111-1111-4111-8111-111111111111"',
+    "[[encounter.action]]",
+    "template-id = 1",
+    "[[encounter.action]]",
+    "template-id = 2",
+    "",
+    "# selected actions: pair-2 (rank 2)",
+    "[[encounter]]",
+    'card-id = "22222222-2222-4222-8222-222222222222"',
+    "[[encounter.action]]",
+    "template-id = 1",
+    "[[encounter.action]]",
+    "template-id = 3",
+  ].join("\n"));
   return rootDir;
 }
 
@@ -48,10 +58,10 @@ describe("encounter template health", () => {
     expect(health).toMatchObject({
       completedCards: 2,
       catalogTemplateCount: 12,
-      recordedRankOneTemplateUses: 4,
+      recordedRankOneTemplateUses: 2,
       rankOneSoftWarningThreshold: 1,
       rankOneOmissionThreshold: 2,
-      recordedTemplateUses: 8,
+      recordedTemplateUses: 4,
       softWarningThreshold: 1,
       omissionThreshold: 2,
     });
@@ -59,10 +69,10 @@ describe("encounter template health", () => {
       { templateId: 1, status: "hidden" },
       { templateId: 2, status: "warning" },
       { templateId: 3, status: "warning" },
-      { templateId: 4, status: "warning" },
-      { templateId: 5, status: "warning" },
-      { templateId: 6, status: "warning" },
-      { templateId: 7, status: "warning" },
+      { templateId: 4, status: "unused" },
+      { templateId: 5, status: "unused" },
+      { templateId: 6, status: "unused" },
+      { templateId: 7, status: "unused" },
       { templateId: 8, status: "unused" },
       { templateId: 9, status: "unused" },
       { templateId: 10, status: "unused" },
@@ -72,8 +82,8 @@ describe("encounter template health", () => {
     expect(health.templates[0]).toMatchObject({
       templateId: 1,
       usageCount: 2,
-      rankOneUsageCount: 2,
-      reasons: ["rank_1", "overall"],
+      rankOneUsageCount: 1,
+      reasons: ["overall"],
     });
   });
 

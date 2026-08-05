@@ -30,6 +30,7 @@ PROSE_PLAYER_REFERENCE_RE = re.compile(
     r"you|your|yours|yourself|yourselves|player|reader|viewer)\b",
     re.IGNORECASE,
 )
+SCENE_TAXONOMY_RE = re.compile(r"\bsynth\b", re.IGNORECASE)
 STANDARD_PREDICATES = {
     "Event",
     "Warrior",
@@ -459,6 +460,12 @@ def validate_output(
                 "must use entity-focused third-person prose without referring "
                 "to the player, reader, or viewer",
             )
+        if SCENE_TAXONOMY_RE.search(prose):
+            fail(
+                f"{event_path}.prose",
+                "must describe the depicted subject without the card taxonomy "
+                "word 'synth'",
+            )
 
         actions = require_list(event_obj.get("actions"), f"{event_path}.actions")
         if len(actions) != 2:
@@ -476,6 +483,12 @@ def validate_output(
                 fail(f"{action_path}.label", "must contain 2 to 5 words")
             if len(label) > 32:
                 fail(f"{action_path}.label", "must contain at most 32 characters")
+            if SCENE_TAXONOMY_RE.search(label):
+                fail(
+                    f"{action_path}.label",
+                    "must describe the concrete action without the card taxonomy "
+                    "word 'synth'",
+                )
             validate_variables(
                 catalog[action_obj["template_id"]],
                 action_obj,

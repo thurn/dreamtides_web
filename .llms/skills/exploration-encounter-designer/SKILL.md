@@ -343,11 +343,12 @@ commentary.
    ```
 
    Do not open `data/templates.json` directly. The script reads the canonical
-   catalog and current usage in `data/exploration_candidates.json`, then prints
-   the complete selectable `templates` list for this run. Review every returned
-   template before committing; do not stop after finding the first ten
-   plausible entries. Every selectable template reports `required_variables`
-   and `special_variables` derived from its canonical wording. Treat
+   catalog and production prevalence in `data/tabula/exploration.toml`
+   exclusively, then prints the complete selectable `templates` list for this
+   run. Review every returned template before committing; do not stop after
+   finding the first ten plausible entries. Every selectable template reports
+   `required_variables` and `special_variables` derived from its canonical
+   wording. Treat
    `required_variables` as the exact set of keys for the action's `variables`
    object: populate every listed key and add no others. Use `selection` only for
    a listed special variable when its eligibility should be restricted.
@@ -356,16 +357,18 @@ commentary.
    `soft_warnings` remains selectable, but prefer an unflagged template when it
    fits the scene and deck intent comparably well. Entries in
    `omitted_templates` are diagnostic IDs, not candidates; do not select them or
-   reopen the raw catalog to recover them. The script counts rank-1 uses and
-   total uses separately, then orders candidates by fewest prior rank-1 uses
-   first and fewest total uses second. In each dimension, the warning threshold
+   reopen the raw catalog to recover them. The script counts final production
+   selections overall and the subset whose selected action pair was rank 1,
+   using the adjacent selection annotations in the production TOML. It orders
+   candidates by fewest prior production rank-1 selections first and fewest
+   total production selections second. In each dimension, the warning threshold
    is the larger of one use above the current least-used template and the
    ceiling of current mean usage; omission begins one use above that warning
    threshold. This gives rank-1 diversity priority, scales the target with
-   completed work, and prevents a rare-fit template from freezing the rest of
-   the catalog near zero. If an extremely skewed data set would leave fewer than
-   ten choices, the script restores the least-used omitted entries and lists
-   them in
+   production prevalence, and prevents a rare-fit template from freezing the
+   rest of the catalog near zero. If an extremely skewed data set would leave
+   fewer than ten choices, the script restores the least-used omitted entries
+   and lists them in
    `reintroduced_to_preserve_minimum_pool`; treat each restored entry as
    strongly discouraged but available when necessary.
 
@@ -390,6 +393,8 @@ commentary.
       dreamsign references, transfigurations, and values can be populated with
       canonical content that fits both the scene and the strategy. Reject any
       card reference or runtime selection that can resolve to the source card.
+      For a fixed `{card_id}` or `{card_name}` reward, verify that the target is
+      a genuinely strong card rather than filling the slot with a generic fit.
     - **Chain strength:** Judge the prospective label and effect as one causal
       chain. A merely thematic reward with no convincing player act
       is a weak fit.
@@ -438,7 +443,10 @@ commentary.
     [label], [effect] follows because ___.” Require a concrete, scene-grounded
     answer without game terminology. The label names the act and the canonical
     template states its consequence; never pre-seed the prose with extra figures
-    or objects to literalize a mechanic.
+    or objects to literalize a mechanic. Every person, object, group, or
+    environmental feature named or implied by a label must already be clearly
+    established in that event's frozen prose. A label cannot introduce a flock,
+    crowd, doorway, flame, or other target that the prose did not establish.
 
     If a chain fails or scores below 7/10, first revise the label, variables,
     or scene assignment. Never revise frozen prose merely to
@@ -452,8 +460,11 @@ commentary.
     each choice. Do not guess a small-looking number in an economy whose units
     operate at a different order of magnitude. A `{count}` placeholder always
     requires a value greater than 1; if the effect cannot support at least 2,
-    choose a different template. Choose each predicate independently; never
-    carry a predicate into another action merely because it fit once.
+    choose a different template. Balance costs and rewards proportionately at
+    the chosen values: paying multiple Nightmares for a fixed card calls for a
+    very powerful or Legendary reward, not a generic card. Choose each predicate
+    independently; never carry a predicate into another action merely because
+    it fit once.
 
 15. Compare all five designs using the contract rubric, then assign unique
     ranks. Rank vivid descriptive precision, art fidelity, focus, and mechanical
@@ -475,8 +486,10 @@ commentary.
 
 17. Before validation, scan every `prose` and `label` for
     the complete card name, distinctive multiword fragments used as names, and
-    mechanical repetition of source-name language. Replace those matches while
-    preserving independently useful ordinary words. Reject any `prose` that
+    mechanical repetition of source-name language. Reject the word `synth` in
+    scene prose or labels; canonical card taxonomy is not scene language.
+    Replace those matches while preserving independently useful ordinary words.
+    Reject any `prose` that
     contains first- or second-person pronouns, names the player, reader, or
     viewer, implies an off-image observer, or frames an entity relative to that
     observer. For a Character card, audit
@@ -484,6 +497,8 @@ commentary.
     reject the complete design if it describes another character, lets scenery
     displace the source character, or includes a scene element unsupported by
     the artwork. Scan every
+    label against its frozen prose and reject any label that refers to an
+    unestablished person, object, group, or environmental feature. Scan every
     action's structured card references and runtime card selections by UUID,
     rejecting any that identify or can resolve to the source card. Then write the complete event objects to
     JSON, validate them, and fix every error regardless of output mode:
@@ -531,6 +546,9 @@ commentary.
   symbolic meaning. Nothing needs to be wrong, threatened, requested, or unresolved.
   Keep game terms such as card, deck, draft, purge, essence, dreamsign, and
   transfiguration out of the prose.
+- Never use `synth` in prose or action labels. Card types and subtypes are
+  canonical metadata; describe the depicted subject and the concrete action
+  instead of importing taxonomy into the scene.
 - Treat the artwork as the source of truth for every material element in the
   prose. Select and omit visible evidence freely, but do not recast it as a
   symbol or give it impossible behavior. If the art shows a lone figure, keep
@@ -627,6 +645,10 @@ commentary.
   offer, follow, receive, trade, or gather. Do not paraphrase the reward. Both
   labels must be plausible ways to engage with the scene and establish why the
   effect follows.
+- Every noun or collective implied by a label must have a clear referent in the
+  event's prose. Do not introduce a flock, crowd, object, structure, weather
+  feature, or other target in the label merely because it appears in the art or
+  would help explain the effect.
 - Reject context-free gestures such as “Raise Both Arms,” “Meet the Gaze,” or
   “Stand Firm” when the effect does not naturally answer that gesture.
   Observing, waiting, and listening suit effects involving knowledge, omens, or
@@ -682,6 +704,11 @@ commentary.
 - Reference existing cards and dreamsigns with real canonical UUIDs. Resolve
   names only for display. Validate transfiguration names and other fixed content
   against repository sources. Never key, compare, or select cards by name.
+- Populate fixed `{card_id}` and `{card_name}` rewards with demonstrably strong
+  cards. Prefer a Legendary card or evidence of high demand in
+  `docs/draft_records_adapted`, aggregating draft evidence by UUID; a weak or
+  generic card is not an acceptable default. A narrower synergy card qualifies
+  only when the source card's deck intent makes it a premium outcome.
 - Exclude the source card UUID from every template outcome. A structured
   `{card_id}` or `{card_name}` reference must identify a different canonical
   card, and `$OFFERED_CARD`, `$DECK_CARD`, and `$STARTER_CARD` always select from
@@ -702,6 +729,9 @@ commentary.
 - Choose conservative values when balance evidence is incomplete, but keep
   them on the live system's scale. Reject an option pair with an obvious
   universal best choice.
+- Balance every cost against the actual value of its reward. In particular, a
+  fixed card paired with multiple Nightmares must be powerful enough to justify
+  that burden; otherwise reduce the cost or choose another template.
 - Pick a `unique_effect` template only for a very strong card-specific
   scene-and-strategy fit. Its availability in the candidate list is never
   evidence that the fit is strong enough.

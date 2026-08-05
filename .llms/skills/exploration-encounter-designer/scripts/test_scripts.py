@@ -95,53 +95,43 @@ class ListTemplateCandidatesTests(unittest.TestCase):
     def run_lister(
         self,
         templates: list[dict[str, object]],
-        card_template_uses: list[list[int]],
+        ranked_template_uses: list[tuple[int, list[int]]],
         required_template_count: int = 2,
-        rank_one_actions_per_card: int = 0,
     ) -> subprocess.CompletedProcess[str]:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             catalog_path = root / "templates.json"
             catalog_path.write_text(json.dumps(templates), encoding="utf-8")
-            candidates_path = root / "exploration_candidates.json"
-            candidates = {
-                f"synthetic-card-{card_index}": (
+            exploration_path = root / "exploration.toml"
+            exploration_lines: list[str] = []
+            for encounter_index, (rank, template_uses) in enumerate(
+                ranked_template_uses
+            ):
+                exploration_lines.extend(
                     [
-                        {
-                            "rank": 1,
-                            "actions": [
-                                {"template_id": template_id}
-                                for template_id in template_uses[
-                                    :rank_one_actions_per_card
-                                ]
-                            ],
-                        }
+                        f"# selected actions: pair-{encounter_index + 1} (rank {rank})",
+                        "[[encounter]]",
+                        f'card-id = "synthetic-card-{encounter_index}"',
                     ]
-                    if rank_one_actions_per_card
-                    else []
                 )
-                + [
-                    {
-                        "rank": 2,
-                        "actions": [
-                            {"template_id": template_id}
-                            for template_id in template_uses[
-                                rank_one_actions_per_card:
-                            ]
-                        ],
-                    }
-                ]
-                for card_index, template_uses in enumerate(card_template_uses)
-            }
-            candidates_path.write_text(json.dumps(candidates), encoding="utf-8")
+                for template_id in template_uses:
+                    exploration_lines.extend(
+                        [
+                            "[[encounter.action]]",
+                            f"template-id = {template_id}",
+                        ]
+                    )
+            exploration_path.write_text(
+                "\n".join(exploration_lines), encoding="utf-8"
+            )
             return subprocess.run(
                 [
                     sys.executable,
                     str(CANDIDATE_LISTER),
                     "--template-catalog",
                     str(catalog_path),
-                    "--exploration-candidates",
-                    str(candidates_path),
+                    "--exploration-data",
+                    str(exploration_path),
                     "--required-template-count",
                     str(required_template_count),
                 ],
@@ -205,7 +195,7 @@ class ListTemplateCandidatesTests(unittest.TestCase):
     def test_warns_then_omits_above_the_least_used_template(self) -> None:
         templates = self.synthetic_templates(6)
         templates[-1]["template"] = "Gain $SYNTHETIC_CARD"
-        result = self.run_lister(templates, [[1, 1, 1, 2, 2, 3]])
+        result = self.run_lister(templates, [(2, [1, 1, 1, 2, 2, 3])])
 
         self.assertEqual(result.returncode, 0, result.stderr)
         output = json.loads(result.stdout)
@@ -260,8 +250,7 @@ class ListTemplateCandidatesTests(unittest.TestCase):
         templates[0]["balance_class"] = "unique_effect"
         result = self.run_lister(
             templates,
-            [[1], [2]],
-            rank_one_actions_per_card=1,
+            [(1, [1]), (1, [2])],
         )
 
         self.assertEqual(result.returncode, 0, result.stderr)
@@ -301,7 +290,7 @@ class ListTemplateCandidatesTests(unittest.TestCase):
     def test_retains_minimum_candidate_pool_under_extreme_skew(self) -> None:
         result = self.run_lister(
             self.synthetic_templates(12),
-            [[template_id for template_id in range(1, 10) for _ in range(8)]],
+            [(2, [template_id for template_id in range(1, 10) for _ in range(8)])],
             required_template_count=10,
         )
 
@@ -356,8 +345,7 @@ class ListTemplateCandidatesTests(unittest.TestCase):
     def test_rank_one_usage_is_an_independent_primary_guard(self) -> None:
         result = self.run_lister(
             self.synthetic_templates(6),
-            [[1, 2, 3], [1, 4, 5, 6]],
-            rank_one_actions_per_card=1,
+            [(1, [1]), (2, [2, 3]), (1, [1]), (2, [4, 5, 6])],
         )
 
         self.assertEqual(result.returncode, 0, result.stderr)
@@ -387,7 +375,9 @@ class ListTemplateCandidatesTests(unittest.TestCase):
             for index in range(0, len(template_uses), 10)
         ]
         result = self.run_lister(
-            self.synthetic_templates(70), cards, required_template_count=10
+            self.synthetic_templates(70),
+            [(2, template_ids) for template_ids in cards],
+            required_template_count=10,
         )
 
         self.assertEqual(result.returncode, 0, result.stderr)
@@ -424,9 +414,8 @@ class ListTemplateCandidatesTests(unittest.TestCase):
         ]
         result = self.run_lister(
             self.synthetic_templates(70),
-            cards,
+            [(1, template_ids) for template_ids in cards],
             required_template_count=10,
-            rank_one_actions_per_card=2,
         )
 
         self.assertEqual(result.returncode, 0, result.stderr)
@@ -459,7 +448,9 @@ class ListTemplateCandidatesTests(unittest.TestCase):
             for card_index in range(100)
         ]
         result = self.run_lister(
-            self.synthetic_templates(70), cards, required_template_count=10
+            self.synthetic_templates(70),
+            [(2, template_ids) for template_ids in cards],
+            required_template_count=10,
         )
 
         self.assertEqual(result.returncode, 0, result.stderr)
@@ -591,6 +582,7 @@ rendered-text = "Gain 1 energy."
         referenced_card_id: str,
         placeholder: str = "card_id",
         prose: str | None = None,
+        label: str = "Take reward",
         variable_value: object | None = None,
         *,
         omit_variable: bool = False,
@@ -680,7 +672,7 @@ rendered-text = "Gain 1 energy."
                     actions.append(
                         {
                             "template_id": action["template_id"],
-                            "label": "Take reward",
+                            "label": label,
                             "variables": variables,
                         }
                     )
@@ -853,6 +845,19 @@ rendered-text = "Gain 1 energy."
                     "must use entity-focused third-person prose",
                     result.stderr,
                 )
+
+    def test_rejects_synth_as_scene_taxonomy(self) -> None:
+        for field, value in (
+            ("prose", "A seated synth raises an open palm beneath a deep hood"),
+            ("label", "Welcome the synth"),
+        ):
+            with self.subTest(field=field):
+                result = self.run_output_validator(
+                    "33333333-3333-4333-8333-333333333333",
+                    **{field: value},
+                )
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("card taxonomy word 'synth'", result.stderr)
 
 
 if __name__ == "__main__":
