@@ -648,7 +648,7 @@ function openTutorialGuidance(
   const seen = new Set(state.tutorialTriggerIdsSeen ?? []);
   const matches = matchTutorialGuidance(battle.init.tutorialTriggers ?? [], {
     event,
-    cardId: source.cardId,
+    cardId: source.kind === "challenge" ? undefined : source.cardId,
     renderedText,
     cardKind,
     seenTriggerIds: seen,
@@ -658,7 +658,9 @@ function openTutorialGuidance(
   const sourceIdentity =
     source.kind === "dreamwell"
       ? `${source.side}:${source.cardId}`
-      : `${source.side}:${source.battleCardId}`;
+      : source.kind === "challenge"
+        ? `${source.activeSide}:${String(source.turnNumber)}:${source.slotId}`
+        : `${source.side}:${source.battleCardId}`;
   return {
     ...state,
     tutorialTriggerIdsSeen: [...seen],
@@ -1640,6 +1642,23 @@ export function completeTutorialBattlePresentation(
   const settled = { ...advanced, board };
   const figmentGuidance = openFigmentCreatedGuidance(state, battle, settled);
   if (figmentGuidance !== null) return figmentGuidance;
+  if (presentation.kind === "challenge-resolved") {
+    const challengeGuidance = openTutorialGuidance(
+      { ...state, battle: settled },
+      settled,
+      "challenge-resolved",
+      {
+        kind: "challenge",
+        activeSide: presentation.activeSide,
+        turnNumber: settled.board.turnNumber,
+        slotId: presentation.slotId,
+      },
+      "",
+      undefined,
+      { kind: "commands", commands: [] },
+    );
+    if (challengeGuidance !== null) return challengeGuidance;
+  }
   // A paced Challenge beat parks its cursor rather than clearing it, so the
   // cursor is driven again here: the settled-Challenge beat resumes into its
   // deferred turn handoff. A presentation folded with no cursor is unaffected.

@@ -190,4 +190,37 @@ describe("buildBattleTutorialGuidanceView", () => {
       },
     });
   });
+
+  it("maps Challenge guidance to a bubble without a companion card", () => {
+    const battle = battleWithMessage({
+      triggerId: "spark-tie",
+      speaker: "mira",
+      duration: 5,
+      horizontalOffset: 0,
+      verticalOffset: 0,
+      bubbleWidth: 500,
+      text: "If spark values tie, both characters are dissolved.",
+    });
+    battle.tutorialPresentation = {
+      id: "tutorial-guidance:challenge-resolved:player:3:F0:spark-tie",
+      kind: "tutorial-guidance",
+      source: {
+        kind: "challenge",
+        activeSide: "player",
+        turnNumber: 3,
+        slotId: "F0",
+      },
+      messages: battle.tutorialPresentation?.kind === "tutorial-guidance"
+        ? battle.tutorialPresentation.messages
+        : [],
+      messageIndex: 0,
+      continuation: { kind: "commands", commands: [] },
+    };
+
+    expect(buildBattleTutorialGuidanceView(battle)).toMatchObject({
+      triggerId: "spark-tie",
+      duration: 5,
+      source: { kind: "battle" },
+    });
+  });
 });

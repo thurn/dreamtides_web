@@ -208,6 +208,12 @@ export type TutorialGuidanceSource =
       readonly cardId: string;
       readonly battleCardId: string;
       readonly side: BattleSide;
+    }
+  | {
+      readonly kind: "challenge";
+      readonly activeSide: BattleSide;
+      readonly turnNumber: number;
+      readonly slotId: FrontRankSlotId;
     };
 
 export type TutorialGuidanceContinuation =

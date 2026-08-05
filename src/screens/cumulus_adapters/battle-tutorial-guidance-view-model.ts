@@ -49,9 +49,25 @@ export function buildBattleTutorialGuidanceView(
   if (presentation?.kind !== "tutorial-guidance") return null;
   const message = presentation.messages[presentation.messageIndex];
   if (message === undefined) return null;
+  if (presentation.source.kind === "challenge") {
+    return {
+      presentationId: presentation.id,
+      triggerId: message.triggerId,
+      messageIndex: presentation.messageIndex,
+      messageCount: presentation.messages.length,
+      delay: message.delay ?? 0,
+      duration: tutorialGuidanceMessageDurationSeconds(presentation),
+      dialogue: guidanceDialogue(battle, message),
+      horizontalOffset: message.horizontalOffset ?? 0,
+      verticalOffset: message.verticalOffset ?? 0,
+      bubbleWidth: message.bubbleWidth ?? 700,
+      source: { kind: "battle" },
+    };
+  }
   if (presentation.source.kind === "dreamwell") {
+    const source = presentation.source;
     const definition = battle.init.dreamwellDeck.find(
-      (candidate) => candidate.id === presentation.source.cardId,
+      (candidate) => candidate.id === source.cardId,
     );
     if (definition === undefined) return null;
     return {
@@ -68,7 +84,7 @@ export function buildBattleTutorialGuidanceView(
       source: {
         kind: "dreamwell",
         model: dreamwellCardModel(definition),
-        side: presentation.source.side,
+        side: source.side,
       },
     };
   }

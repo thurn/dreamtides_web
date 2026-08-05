@@ -2773,6 +2773,83 @@ describe("paced Challenge beats", () => {
     expect(resumed.state.battle?.board.turnNumber).toBe(4);
   });
 
+  it("opens the first resolved-Challenge guidance after the result beat", () => {
+    const base = resolvedChallengeState({ tutorial: true });
+    const state: FoldState = {
+      ...base,
+      battle: {
+        ...base.battle!,
+        init: makeInit({
+          tutorialTriggers: [{
+            id: "spark-tie",
+            on: ["challenge-resolved"],
+            priority: 10,
+            speaker: "mira",
+            duration: 5,
+            horizontalOffset: 0,
+            verticalOffset: 0,
+            bubbleWidth: 500,
+            match: { kind: "any" },
+            text: "If spark values tie, both characters are dissolved.",
+          }],
+        }),
+      },
+    };
+    const resolved = reduce(
+      state,
+      "BATTLE_COMMAND",
+      HANDOFF_TO_ENEMY,
+      ctx(),
+      TUTORIAL_ACTOR,
+    );
+    const resultPresentationId =
+      resolved.state.battle?.tutorialPresentation?.id;
+    expect(resolved.state.battle?.tutorialPresentation?.kind).toBe(
+      "challenge-resolved",
+    );
+
+    const guided = reduce(
+      resolved.state,
+      "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+      { presentationId: resultPresentationId },
+      ctx(),
+      TUTORIAL_ACTOR,
+    );
+
+    expect(guided.outcome).toBe("applied");
+    expect(guided.state.tutorialTriggerIdsSeen).toEqual(["spark-tie"]);
+    expect(guided.state.battle?.tutorialPresentation).toMatchObject({
+      kind: "tutorial-guidance",
+      source: {
+        kind: "challenge",
+        activeSide: "player",
+        turnNumber: 3,
+        slotId: "F0",
+      },
+      messages: [{
+        triggerId: "spark-tie",
+        text: "If spark values tie, both characters are dissolved.",
+      }],
+    });
+    expect(guided.state.battle?.board.activeSide).toBe("player");
+
+    const handedOff = reduce(
+      guided.state,
+      "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+      {
+        presentationId: guided.state.battle?.tutorialPresentation?.id,
+        messageIndex: 0,
+      },
+      ctx(),
+      TUTORIAL_ACTOR,
+    );
+
+    expect(handedOff.outcome).toBe("applied");
+    expect(handedOff.state.battle?.tutorialPresentation ?? null).toBeNull();
+    expect(handedOff.state.battle?.board.activeSide).toBe("enemy");
+    expect(handedOff.state.battle?.board.turnNumber).toBe(4);
+  });
+
   it("rejects a tutorial presentation completion from an observer", () => {
     const resolved = reduce(
       resolvedChallengeState({ tutorial: true }),

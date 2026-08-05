@@ -216,6 +216,45 @@ describe("BattleTutorialGuidance", () => {
     vi.useRealTimers();
   });
 
+  it("renders companion-free Challenge guidance as a battle tutorial", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <BattleTutorialGuidance
+            view={{
+              presentationId: "guidance:spark-tie",
+              triggerId: "spark-tie",
+              messageIndex: 0,
+              messageCount: 1,
+              ...guidanceFields(
+                "If spark values tie, both characters are dissolved.",
+                { bubbleWidth: 500 },
+              ),
+              source: { kind: "battle" },
+            }}
+            onDismiss={() => {}}
+            onDurationComplete={() => {}}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    expect(
+      container.querySelector('[aria-label="Battle tutorial"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-testid="battle-tutorial-dialogue"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-testid="battle-tutorial-card"]'),
+    ).toBeNull();
+
+    act(() => root.unmount());
+  });
+
   it("carries one battle-card identity from its source into guidance and on to its destination", () => {
     const battleCardId = "battle-card-1";
     const cardId = asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af");

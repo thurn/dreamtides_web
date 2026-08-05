@@ -26,7 +26,7 @@ export interface ViewportTutorialDialogueView {
 export interface ViewportTutorialDialogueProps {
   readonly view: ViewportTutorialDialogueView;
   readonly visible: boolean;
-  readonly kind: "card" | "site";
+  readonly kind: "battle" | "card" | "site";
   readonly triggerId?: string;
   readonly messageIndex?: number;
 }
@@ -164,11 +164,18 @@ export function ViewportTutorialDialogue({
 
   return (
     <section
-      aria-label={kind === "card" ? "Card tutorial" : "Site tutorial"}
+      aria-label={
+        kind === "battle"
+          ? "Battle tutorial"
+          : kind === "card"
+            ? "Card tutorial"
+            : "Site tutorial"
+      }
       aria-live={visible ? "polite" : "off"}
       aria-hidden={visible ? undefined : "true"}
       data-card-tutorial-guidance={kind === "card" ? "" : undefined}
       data-site-tutorial-guidance={kind === "site" ? "" : undefined}
+      data-battle-tutorial-guidance={kind === "battle" ? "" : undefined}
       data-presentation-id={view.id}
       data-trigger-id={triggerId}
       data-message-index={messageIndex}
@@ -184,6 +191,9 @@ export function ViewportTutorialDialogue({
         ref={layoutRef}
         data-card-tutorial-dialogue-layout={kind === "card" ? "" : undefined}
         data-site-tutorial-dialogue-layout={kind === "site" ? "" : undefined}
+        data-battle-tutorial-dialogue-layout={
+          kind === "battle" ? "" : undefined
+        }
         style={{
           position: "absolute",
           left: position === null ? 0 : position.left,
@@ -203,7 +213,9 @@ export function ViewportTutorialDialogue({
           testId={
             kind === "card"
               ? "card-tutorial-dialogue"
-              : "site-tutorial-dialogue"
+              : kind === "battle"
+                ? "battle-tutorial-dialogue"
+                : "site-tutorial-dialogue"
           }
         />
       </div>

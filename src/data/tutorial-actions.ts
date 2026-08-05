@@ -607,6 +607,7 @@ const TUTORIAL_TRIGGER_EVENTS: ReadonlySet<TutorialTriggerEvent> = new Set([
   "card-seen",
   "card-play",
   "card-no-valid-targets",
+  "challenge-resolved",
   "dreamwell-resolve",
   "figment-created",
   "transfiguration-seen",
@@ -722,7 +723,8 @@ export function parseTutorialTriggers(
     if (
       parsedMatch.kind === "any" &&
       (record.on.length !== 1 ||
-        (record.on[0] !== "figment-created" &&
+        (record.on[0] !== "challenge-resolved" &&
+          record.on[0] !== "figment-created" &&
           record.on[0] !== "transfiguration-seen"))
     ) {
       throw new Error(

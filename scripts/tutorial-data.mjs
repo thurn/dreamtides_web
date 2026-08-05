@@ -36,6 +36,7 @@ const TUTORIAL_TRIGGER_EVENTS = new Set([
   "card-seen",
   "card-play",
   "card-no-valid-targets",
+  "challenge-resolved",
   "dreamwell-resolve",
   "figment-created",
   "transfiguration-seen",
@@ -768,7 +769,8 @@ export function validateTutorialTriggers(value) {
     if (
       normalizedMatch.kind === "any" &&
       (candidate.on.length !== 1 ||
-        (candidate.on[0] !== "figment-created" &&
+        (candidate.on[0] !== "challenge-resolved" &&
+          candidate.on[0] !== "figment-created" &&
           candidate.on[0] !== "transfiguration-seen"))
     ) {
       throw invalid(

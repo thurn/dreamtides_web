@@ -88,6 +88,7 @@ export type TutorialTriggerEvent =
   | "card-seen"
   | "card-play"
   | "card-no-valid-targets"
+  | "challenge-resolved"
   | "dreamwell-resolve"
   | "figment-created"
   | "transfiguration-seen";

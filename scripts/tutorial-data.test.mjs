@@ -686,4 +686,22 @@ describe("tutorial data", () => {
       text,
     }]);
   });
+
+  it("normalizes a first-resolved Challenge concept trigger", () => {
+    const text = "If there is a tie in spark (✦) values, both characters in the challenge are dissolved";
+    expect(
+      validateTutorialTriggers([{
+        id: "spark-tie",
+        on: ["challenge-resolved"],
+        duration: 5,
+        bubbleWidth: 500,
+        match: { kind: "any" },
+        text,
+      }]),
+    ).toMatchObject([{
+      id: "spark-tie",
+      on: ["challenge-resolved"],
+      text,
+    }]);
+  });
 });

@@ -35,6 +35,9 @@ export type BattleTutorialGuidanceSourceView =
       readonly kind: "journey-site";
     }
   | {
+      readonly kind: "battle";
+    }
+  | {
       readonly kind: "dreamwell";
       readonly model: DreamwellCardModel;
       readonly side: "player" | "enemy";
@@ -125,6 +128,8 @@ function sourceSurface(
       return journeyCardSurface(view.source.cardId, journey);
     case "journey-site":
       return null;
+    case "battle":
+      return null;
     case "dreamwell":
       return dreamwellSurface(view.source.side, journey, false);
   }
@@ -140,6 +145,8 @@ function destinationSurface(
     case "journey-card":
       return journeyCardSurface(view.source.cardId, journey);
     case "journey-site":
+      return null;
+    case "battle":
       return null;
     case "dreamwell":
       return (
@@ -249,7 +256,8 @@ export function BattleTutorialGuidance({
     const journeyView = journeyViewRef.current;
     if (
       journeyView?.source.kind === "journey-card" ||
-      journeyView?.source.kind === "journey-site"
+      journeyView?.source.kind === "journey-site" ||
+      journeyView?.source.kind === "battle"
     ) {
       if (active) return undefined;
       const timeout = window.setTimeout(
@@ -397,7 +405,8 @@ export function BattleTutorialGuidance({
   if (renderedView === null) return <></>;
   if (
     renderedView.source.kind === "journey-card" ||
-    renderedView.source.kind === "journey-site"
+    renderedView.source.kind === "journey-site" ||
+    renderedView.source.kind === "battle"
   ) {
     return (
       <ViewportTutorialDialogue
@@ -409,7 +418,13 @@ export function BattleTutorialGuidance({
           bubbleWidth: renderedView.bubbleWidth,
         }}
         visible={active && dialogueVisible}
-        kind={renderedView.source.kind === "journey-card" ? "card" : "site"}
+        kind={
+          renderedView.source.kind === "journey-card"
+            ? "card"
+            : renderedView.source.kind === "battle"
+              ? "battle"
+              : "site"
+        }
         triggerId={renderedView.triggerId}
         messageIndex={renderedView.messageIndex}
       />
