@@ -179,14 +179,15 @@ describe("resolveChallenge — plain spark comparison", () => {
     expect(dissolvedIds(resolution)).toEqual([]);
   });
 
-  it("dissolves the lower-spark character in a blocked lane", () => {
+  it("scores a winning challenger's spark advantage in a blocked lane", () => {
     const state = lane0State(
-      makeInstance("p0", { owner: "player", printedSpark: 5 }),
-      makeInstance("e0", { owner: "enemy", printedSpark: 3 }),
+      makeInstance("p0", { owner: "player", printedSpark: 8 }),
+      makeInstance("e0", { owner: "enemy", printedSpark: 2 }),
     );
     const resolution = resolveChallenge({ state, activeSide: "player" });
     expect(dissolvedIds(resolution)).toEqual(["e0"]);
-    expect(resolution.playerScoreDelta).toBe(0);
+    expect(resolution.playerScoreDelta).toBe(6);
+    expect(resolution.lanes[0].scoreDelta).toBe(6);
     expect(resolution.lanes[0].winner).toBe("player");
   });
 
@@ -208,6 +209,7 @@ describe("resolveChallenge — plain spark comparison", () => {
     const resolution = resolveChallenge({ state, activeSide: "player" });
     // Effective player spark 5 > enemy 4 → enemy dissolves.
     expect(dissolvedIds(resolution)).toEqual(["e0"]);
+    expect(resolution.playerScoreDelta).toBe(1);
   });
 
   it("resolves from the enemy's perspective when the enemy is active", () => {
@@ -385,7 +387,7 @@ describe("resolveChallenge — figment stacks (rules §Figments)", () => {
 
   it("scores reserve figments while the topmost wins and survives", () => {
     // Three 4✦ Monstrosity figments. Topmost 4 > blocker 3 → blocker dissolves;
-    // the topmost survives scoring nothing; the two reserves score 8⍟.
+    // the topmost scores its 1✦ advantage; the two reserves score 8⍟.
     const figment = makeInstance("fig", {
       owner: "player",
       isFigment: true,
@@ -396,7 +398,7 @@ describe("resolveChallenge — figment stacks (rules §Figments)", () => {
     const state = lane0State(figment, blocker);
     const resolution = resolveChallenge({ state, activeSide: "player" });
     expect(dissolvedIds(resolution)).toEqual(["e0"]);
-    expect(resolution.playerScoreDelta).toBe(8);
+    expect(resolution.playerScoreDelta).toBe(9);
   });
 
   it("scores the surviving Unstoppable topmost on top of the reserves", () => {
@@ -444,10 +446,10 @@ describe("resolveChallenge — figment stacks (rules §Figments)", () => {
     expect(dissolvedIds(resolution)).toEqual([]);
   });
 
-  it("stack vs stack: only the challenging stack scores, by its reserves", () => {
+  it("stack vs stack: the challenging stack scores its advantage and reserves", () => {
     // Challenger topmost 3 beats blocker topmost 1: the blocker stack sheds its
-    // topmost; the challenger's reserves (3✦) score. The blocker stack, blocking,
-    // scores nothing.
+    // topmost; the challenger's topmost scores its 2✦ advantage and its reserve
+    // scores 3⍟. The blocker stack, blocking, scores nothing.
     const challenger = makeInstance("fig", {
       owner: "player",
       isFigment: true,
@@ -461,7 +463,7 @@ describe("resolveChallenge — figment stacks (rules §Figments)", () => {
     const state = lane0State(challenger, blocker);
     const resolution = resolveChallenge({ state, activeSide: "player" });
     expect(dissolvedIds(resolution)).toEqual(["e0"]);
-    expect(resolution.playerScoreDelta).toBe(3);
+    expect(resolution.playerScoreDelta).toBe(5);
     expect(resolution.enemyScoreDelta).toBe(0);
   });
 });
@@ -521,7 +523,7 @@ describe("resolveChallenge — supportContribution", () => {
     });
     expect(dissolvedIds(supported)).toEqual(["blocker"]);
     expect(supported.lanes[0]?.playerSpark).toBe(4);
-    expect(supported.playerScoreDelta).toBe(4);
+    expect(supported.playerScoreDelta).toBe(5);
   });
 });
 
@@ -538,7 +540,7 @@ describe("resolveChallenge — multiple lanes", () => {
       instances: [
         // F0: unpaired challenger scores 3.
         makeInstance("p0", { owner: "player", printedSpark: 3 }),
-        // F1: player 6 > enemy 2 → enemy dissolves.
+        // F1: player 6 > enemy 2 → enemy dissolves and player scores 4.
         makeInstance("p1", { owner: "player", printedSpark: 6 }),
         makeInstance("e1", { owner: "enemy", printedSpark: 2 }),
         // F2: player 1 < enemy 5 → player dissolves.
@@ -547,7 +549,7 @@ describe("resolveChallenge — multiple lanes", () => {
       ],
     });
     const resolution = resolveChallenge({ state, activeSide: "player" });
-    expect(resolution.playerScoreDelta).toBe(3);
+    expect(resolution.playerScoreDelta).toBe(7);
     expect(dissolvedIds(resolution).sort()).toEqual(["e1", "p2"]);
     // Lanes span every occupied lane (F0–F2 here); the play area grows without
     // bound, so empty trailing lanes beyond the last occupant are not resolved.

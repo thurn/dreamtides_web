@@ -8,10 +8,10 @@ import type { PlannedAction } from "./planner";
  *
  * The challenge planner (`planner.ts`) only runs on the AI's own turn. During
  * the opponent's Dusk the AI is the blocker: it positions front-rank blockers
- * opposite the opponent's challengers so they do not score unopposed
- * (`battle_rules.md` §Challengers, Blockers, and Scoring — a blocked
- * challenger does not score). This module decides which back-rank bodies to push
- * up into which lanes; the hook dispatches the resulting moves.
+ * opposite the opponent's challengers to reduce or prevent their scoring
+ * (`battle_rules.md` §Challengers, Blockers, and Scoring). This module decides
+ * which back-rank bodies to push up into which lanes; the hook dispatches the
+ * resulting moves.
  *
  * Only an un-exhausted back-rank body can be moved to the front (the engine
  * stamps entered-play turns, projected as `canChallengeThisTurn`), matching the
@@ -122,18 +122,35 @@ export function planBlockingWithDecision(
     }
   }
 
+  const scoreAgainstBlocker = (challengerSpark: number, blockerSpark: number): number =>
+    Math.max(0, challengerSpark - blockerSpark);
   const unblockedChallengers = challengers.filter(
-    (challenger) => (model.aiFrontRank[challenger.slot] ?? null) === null,
+    (challenger) => model.aiFrontRank[challenger.slot] === null,
   );
-  const incomingScoreBeforeBlocks = unblockedChallengers.reduce(
-    (total, challenger) => total + challenger.spark,
+  const incomingScoreBeforeBlocks = challengers.reduce(
+    (total, challenger) => {
+      const blocker = model.aiFrontRank[challenger.slot];
+      return (
+        total +
+        (blocker === null
+          ? challenger.spark
+          : scoreAgainstBlocker(challenger.spark, bodySpark(blocker)))
+      );
+    },
     0,
   );
   const lethalBeforeBlocks =
     model.playerScore + incomingScoreBeforeBlocks >= opts.scoreToWin;
+  const blockerSparksDescending = available
+    .map((body) => body.spark)
+    .sort((a, b) => b - a);
   const maximumPreventableScore = unblockedChallengers
-    .slice(0, available.length)
-    .reduce((total, challenger) => total + challenger.spark, 0);
+    .slice(0, blockerSparksDescending.length)
+    .reduce(
+      (total, challenger, index) =>
+        total + Math.min(challenger.spark, blockerSparksDescending[index] ?? 0),
+      0,
+    );
   const lethalPreventable =
     lethalBeforeBlocks &&
     model.playerScore + incomingScoreBeforeBlocks - maximumPreventableScore <
@@ -187,7 +204,7 @@ export function planBlockingWithDecision(
     const blocker = choice.blocker;
     usedBackRank.add(blocker.slot);
     moves.push(makeBlockAction(blocker.card, challenger.slot));
-    incomingScoreAfterBlocks -= challenger.spark;
+    incomingScoreAfterBlocks -= Math.min(challenger.spark, blocker.spark);
     lanes.push({
       challengerBattleCardId: challenger.battleCardId,
       lane: challenger.slot,

@@ -186,7 +186,7 @@ describe("tutorial battle controller", () => {
     const runeboundChampionBattleCardId =
       "a28ad36d-fa74-4190-a463-7efd3a6233d0";
     const player = side();
-    player.score = 8;
+    player.score = 7;
     player.frontRank.F0 = markedDirewolfBattleCardId;
     const enemy = side();
     enemy.score = 9;
@@ -216,10 +216,10 @@ describe("tutorial battle controller", () => {
     expect(result.intent).toMatchObject({
       kind: "battle-ai-block",
       decision: {
-        opponentScore: 8,
+        opponentScore: 7,
         scoreToWin: 10,
         incomingScoreBeforeBlocks: 4,
-        incomingScoreAfterBlocks: 0,
+        incomingScoreAfterBlocks: 1,
         lethalBeforeBlocks: true,
         lethalPreventable: true,
         lanes: [

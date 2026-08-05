@@ -117,6 +117,22 @@ describe("scoreAgainstOpponent", () => {
     expect(openScore).toBeGreaterThan(blockedScore);
   });
 
+  it("projects a winning blocked challenger scoring the spark difference", () => {
+    const model = emptyModel();
+    model.aiScore = 19;
+    model.aiFrontRank.F0 = makeCard({
+      battleCardId: "8-spark-challenger",
+      basePrintedSpark: 8,
+    });
+    model.opponentBodies = [
+      makeBody({ battleCardId: "2-spark-blocker", effectiveSpark: 2 }),
+    ];
+
+    // The sampled no-block line scores 8 and the block-biggest line scores 6.
+    // Both reach the 25-point target, so even the worst case is terminally good.
+    expect(scoreAgainstOpponent(model, "worstCase", 2, 7)).toBeGreaterThan(1e8);
+  });
+
   it("bounds the number of sampled responses by sampleCap", async () => {
     const evaluateModule = await import("./evaluate");
     const spy = vi.spyOn(evaluateModule, "evaluate");

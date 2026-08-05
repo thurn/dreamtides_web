@@ -1781,6 +1781,32 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     expect(result.state.battle?.challengeCursor).toBeNull();
   });
 
+  it("scores a winning blocked challenger by the spark difference", () => {
+    const challenger = makeInstance("difference-challenger", "challenger-card", "player");
+    challenger.definition.printedSpark = 8;
+    const blocker = makeInstance("difference-blocker", "blocker-card", "enemy");
+    blocker.definition.printedSpark = 2;
+    const board = makeRichBoard({
+      instances: [challenger, blocker],
+      playerFront: { F0: challenger.battleCardId },
+    });
+    board.sides.enemy.frontRank.F0 = blocker.battleCardId;
+
+    const result = reduce(
+      { ...baseState(), battle: battleFrom(board) },
+      "BATTLE_COMMAND",
+      debugEdit({ kind: "SET_PHASE", phase: "challenge" }),
+      ctx(),
+      "player",
+    );
+
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.board.sides.player.score).toBe(6);
+    expect(result.state.battle?.board.sides.enemy.void).toContain(
+      blocker.battleCardId,
+    );
+  });
+
   it("resolves Challenge lanes from the settled board after an F0 dissolved trigger", () => {
     const support = staticSupportFixtureScript();
     const f0 = makeInstance("challenge-f0", BATTLE_EFFECT_DISSOLVE_SUPPORT_FIXTURE_CARD_ID, "player");
@@ -2479,7 +2505,7 @@ describe("BATTLE_AI_BLOCK", () => {
         [frontRankSlotId(1)]: smallerChallengerId,
       },
     });
-    board.sides.player.score = 6;
+    board.sides.player.score = 5;
     board.sides.enemy.score = 9;
     board.sides.enemy.backRank[backRankSlotId(0)] = blockerId;
     const state = {
@@ -2499,10 +2525,10 @@ describe("BATTLE_AI_BLOCK", () => {
       (entry) => entry.event === "battle_ai_blocking_decision",
     );
     expect(decisionLog?.fields).toMatchObject({
-      opponentScore: 6,
+      opponentScore: 5,
       scoreToWin: 10,
       incomingScoreBeforeBlocks: 5,
-      incomingScoreAfterBlocks: 2,
+      incomingScoreAfterBlocks: 4,
       lethalBeforeBlocks: true,
       lethalPreventable: true,
       lanes: [

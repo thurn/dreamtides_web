@@ -68,9 +68,10 @@ const BOOKEND_PHASES: ReadonlySet<BattlePhase> = new Set<BattlePhase>([
  *  - **Events resolve to the void.** An event played from hand is routed to the
  *    void instead of staying in play (rules §Card Types — Event).
  *  - **The Challenge phase resolves by spark.** When the active player ends
- *    their turn, each front-rank lane (`F0`–`F3`) is resolved by comparing
+ *    their turn, each front-rank lane (`F0`–`F8`) is resolved by comparing
  *    spark: the lower-spark character dissolves to the void, an unpaired
- *    challenger scores ⍟ equal to its spark, and the keyword rules below apply
+ *    challenger scores ⍟ equal to its spark, a challenger that wins a blocked
+ *    lane scores the spark difference, and the keyword rules below apply
  *    (rules §Challengers, Blockers, and Scoring).
  *  - **Keyword awareness.** Preeminence wins spark ties, Vengeful drags the
  *    winner down when its bearer loses, and Unstoppable scores when a blocked

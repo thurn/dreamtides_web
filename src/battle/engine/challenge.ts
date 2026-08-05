@@ -27,8 +27,8 @@ import { frontRankSlotIds, rankSlotIds, slotIndex } from "../types";
  *
  * The four combat keywords (rules §Keywords and Effects):
  *
- *  - **Unstoppable** — a surviving blocked character scores ⍟ equal to its
- *    spark, in addition to resolving the spark comparison normally.
+ *  - **Unstoppable** — a surviving blocked winner scores ⍟ equal to its full
+ *    spark instead of a challenger's ordinary spark-difference score.
  *  - **Vengeful** — when its bearer loses a challenge, it drags the opposing
  *    enemy character down too (both dissolve).
  *  - **Preeminence** — wins spark ties; if both characters in a lane have
@@ -332,11 +332,14 @@ function resolveLane(params: {
   let opposingScored = 0;
 
   // The challenger's reserve figments are unopposed and always score; a
-  // non-figment has no reserves. The contested topmost scores only when it
-  // survives with Unstoppable.
+  // non-figment has no reserves. When the contested challenger wins and
+  // survives, it scores its spark advantage over the blocker. Unstoppable
+  // replaces that difference with the challenger's full spark.
   activeScored += challengerSpark.reserve;
-  if (!challengerDissolves && blockerDissolves && hasCombatKeyword(challenger, "unstoppable")) {
-    activeScored += challengerSpark.compare;
+  if (!challengerDissolves && blockerDissolves) {
+    activeScored += hasCombatKeyword(challenger, "unstoppable")
+      ? challengerSpark.compare
+      : Math.max(0, challengerSpark.compare - blockerSpark.compare);
   }
 
   // A blocking figment scores nothing. A blocking non-figment keeps the
@@ -366,8 +369,7 @@ function resolveLane(params: {
     winner = opposingSide;
   }
 
-  // The lane's `scoreDelta` records the points scored *in this lane*. Only an
-  // unpaired challenger or a surviving Unstoppable character scores, so at most
+  // The lane's `scoreDelta` records the points scored *in this lane*. At most
   // one side scores per blocked lane; report that total.
   return {
     judgment: lane(winner, activeScored + opposingScored),

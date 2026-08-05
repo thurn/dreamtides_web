@@ -20,7 +20,7 @@ import { rankSlotIds, type FrontRankSlotId } from "../types";
  * `BattleMutableState` instances the projection deliberately omits), applying
  * the rules in `battle_rules.md` §"Challenge phase resolution":
  *   - Blocked challenger vs blocker: the lower effective spark dissolves; a
- *     tie dissolves both; a blocked challenger does not score.
+ *     tie dissolves both; a winning challenger scores the spark difference.
  *   - Unpaired challenger: scores victory points equal to its spark.
  * The Starter pool has no Preeminence/Unstoppable, so those keyword carve-outs
  * do not apply here.
@@ -173,9 +173,9 @@ function consumeOpponentBody(model: ForwardModel, originalIndex: number): void {
 /**
  * Resolves a single lane between one AI challenger and one blocker body over
  * the cloned model (`battle_rules.md` §"Challenge phase resolution"). The
- * blocked challenger never scores; the lower spark dissolves; a tie dissolves
- * both. Returns the blocker's surviving spark contribution removed from play
- * (it is consumed from `opponentBodies` if it dissolves).
+ * lower spark dissolves, a tie dissolves both, and a winning challenger scores
+ * the spark difference. The blocker is consumed from `opponentBodies` if it
+ * dissolves.
  */
 function resolveLane(
   model: ForwardModel,
@@ -186,7 +186,8 @@ function resolveLane(
     // Challenger dissolves; blocker survives.
     dissolveChallenger(model, challenger.slot);
   } else if (challenger.effectiveSpark > blocker.effectiveSpark) {
-    // Blocker dissolves; challenger survives but, being blocked, does not score.
+    // Blocker dissolves; the challenger scores its spark advantage.
+    model.aiScore += challenger.effectiveSpark - blocker.effectiveSpark;
     consumeOpponentBody(model, blocker.index);
   } else {
     // Tie: both dissolve (no Preeminence in the Starter pool).

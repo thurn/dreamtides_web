@@ -312,8 +312,9 @@ into the ordered edits the rules require:
   status before control passes to the opponent.
 - **Challenge resolution.** Entering the `challenge` phase resolves each
   front-rank lane (`F0`–`F8`) by spark: the lower-spark character dissolves to
-  the void, an unpaired challenger scores ⍟ equal to its spark, and the keyword
-  rules apply.
+  the void, an unpaired challenger scores ⍟ equal to its spark, a challenger
+  that wins a blocked lane scores the spark difference, and the keyword rules
+  apply.
 - **Ending banish and Fatigue.** The outgoing side discards down to the ten-card
   hand limit, then banishes its ephemeral cards still in hand and offering cards
   still in play. Drawing from an empty deck triggers Fatigue: the opponent gains
@@ -326,13 +327,13 @@ into the ordered edits the rules require:
 ### The Challenge resolver
 
 `engine/challenge.ts` `resolveChallenge` is the unified, keyword-aware resolver
-used by both sides. It compares challenger and blocker spark lane by lane and
-scans for the four sanctioned keywords: **Preeminence** wins spark ties,
-**Vengeful** drags the winner down when its bearer loses, and **Unstoppable**
-scores even when blocked. **Awakened** is detected only so keyword detection is
-uniform across all four; the exhaust system, not the resolver, consumes it. The
-resolver returns the score deltas and the dissolve-to-void edits that commit the
-outcome.
+used by both sides. It compares challenger and blocker spark lane by lane,
+scores a winning challenger's spark advantage, and scans for the four sanctioned
+keywords: **Preeminence** wins spark ties, **Vengeful** drags the winner down
+when its bearer loses, and **Unstoppable** lets a winner score its full spark.
+**Awakened** is detected only so keyword detection is uniform across all four;
+the exhaust system, not the resolver, consumes it. The resolver returns the
+score deltas and the dissolve-to-void edits that commit the outcome.
 
 ### The debug rail
 

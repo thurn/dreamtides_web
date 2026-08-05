@@ -117,6 +117,27 @@ describe("planBlocking", () => {
     expect(planBlocking(model, OPTS)).toHaveLength(0);
   });
 
+  it("counts only a blocker's spark as prevented score", () => {
+    const model = makeModel({
+      aiScore: 0,
+      playerScore: 3,
+      aiBackRank: {
+        ...emptyBackRankSlots(),
+        B0: makeCard({ battleCardId: "2-spark-blocker", basePrintedSpark: 2 }),
+      },
+      opponentBodies: [
+        makeBody({ battleCardId: "8-spark-challenger", effectiveSpark: 8 }),
+      ],
+    });
+
+    expect(planBlockingWithDecision(model, { scoreToWin: 10 }).decision).toMatchObject({
+      incomingScoreBeforeBlocks: 8,
+      incomingScoreAfterBlocks: 6,
+      lethalBeforeBlocks: true,
+      lethalPreventable: true,
+    });
+  });
+
   it("chump-blocks with the smallest body when behind and unable to win the trade", () => {
     const model = makeModel({
       aiScore: 0,
@@ -155,7 +176,7 @@ describe("planBlocking", () => {
     const smallerChallengerId = "55f731c8-95f9-4505-868d-f93aeed9a3cf";
     const model = makeModel({
       aiScore: 9,
-      playerScore: 6,
+      playerScore: 5,
       aiBackRank: {
         ...emptyBackRankSlots(),
         B0: makeCard({ battleCardId: blockerId, basePrintedSpark: 1 }),
@@ -182,10 +203,10 @@ describe("planBlocking", () => {
       toSlot: "F0",
     });
     expect(plan.decision).toMatchObject({
-      opponentScore: 6,
+      opponentScore: 5,
       scoreToWin: 10,
       incomingScoreBeforeBlocks: 5,
-      incomingScoreAfterBlocks: 2,
+      incomingScoreAfterBlocks: 4,
       lethalBeforeBlocks: true,
       lethalPreventable: true,
       availableBlockerBattleCardIds: [blockerId],

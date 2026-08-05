@@ -694,8 +694,8 @@ describe("useBattleAi", () => {
     }
 
     it("scores a surviving blocked Unstoppable challenger for the AI side", async () => {
-      // Keyword-blind: a blocked challenger never scored. Keyword-aware: the
-      // AI's surviving Unstoppable challenger scores its spark.
+      // The ordinary blocked score would be the 3✦ advantage. Unstoppable lets
+      // the AI's surviving challenger score its full 6✦ instead.
       const edits = await endTurnEdits((mutable) => {
         placeFrontRankCharacter(mutable, "enemy", "aiUnstoppable", 6, "Unstoppable");
         placeFrontRankCharacter(mutable, "player", "blocker", 3, "");
