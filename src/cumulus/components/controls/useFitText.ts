@@ -33,11 +33,27 @@ export function useFitText(
   maxFontPx: number,
   minFontPx: number,
   deps: readonly unknown[],
-  options?: { eager?: boolean },
+  options?: {
+    eager?: boolean;
+    /**
+     * Multiply the fitted measurement size before rendering it. Use with
+     * `measurementMaxHeightPx` when a type-scale lift must preserve the
+     * relative shrink ratios established by an earlier fit contract.
+     */
+    renderScale?: number;
+    /**
+     * Temporarily constrain the element to this height while fitting, then
+     * restore its rendered max-height. This separates the stable measurement
+     * contract from a larger display area needed by `renderScale`.
+     */
+    measurementMaxHeightPx?: number;
+  },
 ): { ref: RefObject<HTMLDivElement | null>; fontSize: number } {
   const eager = options?.eager ?? false;
+  const renderScale = options?.renderScale ?? 1;
+  const measurementMaxHeightPx = options?.measurementMaxHeightPx;
   const ref = useRef<HTMLDivElement | null>(null);
-  const [fontSize, setFontSize] = useState(maxFontPx);
+  const [fontSize, setFontSize] = useState(maxFontPx * renderScale);
 
   useLayoutEffect(() => {
     const element = ref.current;
@@ -57,6 +73,11 @@ export function useFitText(
     };
 
     const measure = (): void => {
+      const renderedMaxHeight = element.style.maxHeight;
+      if (measurementMaxHeightPx !== undefined) {
+        element.style.maxHeight = `${String(measurementMaxHeightPx)}px`;
+      }
+
       let best = minFontPx;
       if (fits(maxFontPx)) {
         best = maxFontPx;
@@ -73,10 +94,14 @@ export function useFitText(
           }
         }
       }
-      element.style.fontSize = `${String(best)}px`;
+      if (measurementMaxHeightPx !== undefined) {
+        element.style.maxHeight = renderedMaxHeight;
+      }
+      const renderedBest = best * renderScale;
+      element.style.fontSize = `${String(renderedBest)}px`;
       lastClientW = element.clientWidth;
       lastClientH = element.clientHeight;
-      setFontSize(best);
+      setFontSize(renderedBest);
     };
 
     let cancelled = false;
@@ -173,7 +198,14 @@ export function useFitText(
         window.removeEventListener("resize", measure);
       }
     };
-  }, [maxFontPx, minFontPx, eager, ...deps]);
+  }, [
+    maxFontPx,
+    minFontPx,
+    eager,
+    renderScale,
+    measurementMaxHeightPx,
+    ...deps,
+  ]);
 
   return { ref, fontSize };
 }

@@ -438,26 +438,29 @@ const ENERGY_ORB_RATIO = 0.16;
 const SPARK_ORB_RATIO = 0.16;
 
 /**
- * Rules-text ceiling size as a fraction of the rendered card width, matching
- * the `--cv-rules-font-cap` display cap in `CardView.css`. The fitter writes the
- * chosen size straight onto the element, so this ceiling is the size a card
- * whose text fits renders at; the fit only drops below it when the text
- * overflows the reserved area. The text box reserves three lines at the larger
- * `--cv-rules-font-size`, so text up to a little over three capped lines still
- * holds the cap before the fitter shrinks it. The floor fraction bounds how
- * small a wordy card may shrink before its overflow is clipped.
+ * Rules-text fit sizes as fractions of rendered card width. These retain the
+ * established three-line measurement contract; `CARD_TYPOGRAPHY_SCALE` lifts
+ * the resulting size for display so ordinary and verbose cards grow by the
+ * same proportion. The display area permits a fourth line because enlarging a
+ * fitted paragraph can introduce one additional wrap at the fixed card width.
+ * The floor fraction bounds how small a wordy card may shrink before clipping.
  *
- * Mobile viewports use a larger ceiling (`RULES_FONT_RATIO_MOBILE`, matching
- * the raised `--cv-rules-font-cap` in the `.card-view` mobile media query):
+ * Mobile viewports use a larger ceiling (`RULES_FONT_RATIO_MOBILE`, whose
+ * scaled result matches the raised CSS cap in the mobile media query):
  * card frame sizes are all `cqw`, so a card reads at a fixed physical size for
  * its width on any device, which leaves the ability text hard to read on the
  * small cards a phone renders. The raised ceiling feeds the same auto-shrink
  * fit into the taller mobile box, lifting the whole rules body a couple
- * notches. Both ratios must track their CSS counterparts so the JS search
- * ceiling and the CSS render cap stay equal at each breakpoint.
+ * notches. The fit ratios remain the unscaled measurement baseline; their
+ * rendered values must track the CSS caps at each breakpoint.
  */
+const CARD_TYPOGRAPHY_SCALE = 13 / 11.8;
 const RULES_FONT_RATIO = 0.042;
 const RULES_FONT_RATIO_MOBILE = 0.0485;
+const RULES_AREA_FONT_RATIO = 0.045;
+const RULES_AREA_FONT_RATIO_MOBILE = 0.052;
+const RULES_LINE_HEIGHT = 1.2;
+const RULES_FIT_LINE_COUNT = 3;
 const RULES_MIN_FONT_FRACTION = 0.5;
 const ADJACENT_FIGMENT_RULES_TEXT_SCALE = 1.5;
 
@@ -713,8 +716,8 @@ export interface CardViewProps {
   /**
    * Grow the rules text box to a taller editing height. The card editor sets
    * this while its rules-text field is open so the inline textarea has room to
-   * show and edit several lines at once instead of being clipped to the
-   * three-line display cap.
+   * show and edit several lines at once instead of being clipped to the normal
+   * proportional display cap.
    */
   rulesTextboxExpanded?: boolean;
 }
@@ -760,12 +763,12 @@ function GameCardSurface(props: CardViewProps) {
   const bandBoxRef = useRef<HTMLDivElement | null>(null);
   const { cardRef, textScale, widthPx } = useCardMetrics(large);
 
-  // Auto-shrink the rules body so a card needing more than the reserved three
-  // lines still fits the fixed text box. The ceiling sits just above the
-  // `--cv-rules-font-cap` display cap (text that fits keeps the shared type
-  // scale); the fitted size only drops below the cap when the text overflows
-  // the reserved area. Mobile viewports raise both the ceiling and the CSS box
-  // + cap together, so the same fit lands a couple notches larger.
+  // Auto-shrink against the established three-line fit, then lift the result by
+  // the shared typography scale. The rendered box permits a fourth line so a
+  // paragraph that wraps once more at the larger size remains complete. This
+  // preserves the relative shrink of verbose cards while ordinary cards land
+  // at the raised CSS cap. Mobile keeps its larger baseline before the same
+  // proportional lift.
   const mobileCardText = useMobileCardText();
   const rulesFontRatio = mobileCardText
     ? RULES_FONT_RATIO_MOBILE
@@ -776,11 +779,24 @@ function GameCardSurface(props: CardViewProps) {
       : 1;
   const rulesMaxFontPx = widthPx * rulesFontRatio * rulesTextScale;
   const rulesMinFontPx = rulesMaxFontPx * RULES_MIN_FONT_FRACTION;
+  const rulesFitAreaFontRatio = mobileCardText
+    ? RULES_AREA_FONT_RATIO_MOBILE
+    : RULES_AREA_FONT_RATIO;
+  const rulesFitAreaHeightPx =
+    widthPx *
+    rulesFitAreaFontRatio *
+    rulesTextScale *
+    RULES_LINE_HEIGHT *
+    RULES_FIT_LINE_COUNT;
   const { ref: rulesFitRef, fontSize: rulesFontPx } = useFitText(
     rulesMaxFontPx,
     rulesMinFontPx,
     [card.renderedText, textScale, rulesTextPresentation],
-    { eager: eagerRulesFit },
+    {
+      eager: eagerRulesFit,
+      renderScale: CARD_TYPOGRAPHY_SCALE,
+      measurementMaxHeightPx: rulesFitAreaHeightPx,
+    },
   );
 
   // Surface the fitted rules-text font size to interested callers (the card
@@ -1053,10 +1069,10 @@ function GameCardSurface(props: CardViewProps) {
       data-card-rules-text=""
       style={{
         // The box shrinks to this element, so its height is the rules text up to
-        // a three-line cap: shorter text makes a shorter box, while text longer
-        // than three lines auto-shrinks its font (the `maxHeight` cap bounds the
-        // element's client height, which is what lets `useFitText` detect the
-        // overflow and size down) until it fits the three-line area.
+        // a four-line display cap. The fitter measures against the established
+        // three-line baseline before proportionally enlarging the result; the
+        // extra rendered line absorbs the one additional wrap that enlargement
+        // can introduce.
         maxHeight: "var(--cv-textbox-rules-area-height)",
         overflow: "hidden",
         textAlign: "left",
@@ -1187,13 +1203,13 @@ function GameCardSurface(props: CardViewProps) {
     onBoxTopFracChange?.(boxTopFrac);
   }, [boxTopFrac, onBoxTopFracChange]);
 
-  // The box shrinks to its rules text, bottom-aligned, capped at the three-line
-  // height (`--cv-textbox-height`): a short card gets a short box, while text
-  // beyond three lines auto-shrinks to the cap. A type-only editor box (no rules
-  // text) keeps the larger `--cv-textbox-max-height` cap. While the editor's
-  // rules-text field is open the box takes a fixed, taller editing height so the
-  // inline textarea has room to show several lines at once; the column is
-  // bottom-anchored, so the box grows upward over the art.
+  // The box shrinks to its rules text, bottom-aligned, capped at the four-line
+  // display height (`--cv-textbox-height`): a short card gets a short box, while
+  // verbose text retains its proportional fitted size. A type-only editor box
+  // (no rules text) keeps the larger `--cv-textbox-max-height` cap. While the
+  // editor's rules-text field is open the box takes a fixed, taller editing
+  // height so the inline textarea has room to show several lines at once; the
+  // column is bottom-anchored, so the box grows upward over the art.
   const textboxSizing: CSSProperties = showRulesText
     ? rulesTextboxExpanded
       ? {
@@ -1336,7 +1352,7 @@ function GameCardSurface(props: CardViewProps) {
         Bottom-anchored chrome column: the floating type/subtype label sits on
         the art as the top row, with the rules text box stacked below it. The
         column is pinned to the card's bottom and sizes to its content, so the
-        box shrinks to its rules text (bottom-aligned, capped at three lines) and
+        box shrinks to its rules text (bottom-aligned, capped at four lines) and
         the label always rides a constant gap above the box's actual top. The
         label has no plate — its legibility comes from the faux outline +
         halo/drop treatment; the box's blur + translucent gradient let the art

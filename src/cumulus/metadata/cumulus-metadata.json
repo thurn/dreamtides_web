@@ -1465,7 +1465,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Grow the rules text box to a taller editing height. The card editor sets\nthis while its rules-text field is open so the inline textarea has room to\nshow and edit several lines at once instead of being clipped to the\nthree-line display cap."
+      "description": "Grow the rules text box to a taller editing height. The card editor sets\nthis while its rules-text field is open so the inline textarea has room to\nshow and edit several lines at once instead of being clipped to the normal\nproportional display cap."
     }
   ],
   "CharacterDialogue": [

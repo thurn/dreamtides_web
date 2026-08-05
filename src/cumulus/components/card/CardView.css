@@ -59,8 +59,8 @@
   /* Corner resource marks. */
   --cv-energy-orb-size: 12cqw;
   --cv-spark-orb-size: var(--cv-energy-orb-size);
-  --cv-energy-orb-font-size: 9cqw;
-  --cv-spark-orb-font-size: 9cqw;
+  --cv-energy-orb-font-size: 9.92cqw;
+  --cv-spark-orb-font-size: 9.92cqw;
   --cv-energy-orb-top: 2cqw;
   --cv-energy-orb-left: 5cqw;
   --cv-battlefield-spark-top: 2.8cqw;
@@ -91,7 +91,7 @@
   --cv-paragraph-gap: 0.4em;
   --cv-typelabel-gap: 1.1cqw;
   --cv-textbox-rules-area-height: calc(
-    var(--cv-rules-font-size) * var(--cv-rules-line-height) * 3
+    var(--cv-rules-font-size) * var(--cv-rules-line-height) * 4.25
   );
   --cv-textbox-height: calc(
     var(--cv-textbox-rules-area-height) + 2 * var(--cv-textbox-pad-y)
@@ -101,11 +101,14 @@
   /* Five pixels at the card's canonical 500px design width. */
   --cv-rules-change-badge-corner-shift: 1cqw;
 
-  /* Typography and its three-line readable rules-text cap. */
-  --cv-name-font-size: 5.2cqw;
-  --cv-type-font-size: 4.95cqw;
-  --cv-rules-font-size-base: 4.5cqw;
-  --cv-rules-font-cap-base: 4.2cqw;
+  /* Typography is 13 / 11.8 times the prior scale, making the common rules
+   * voice 13px wherever it previously rendered at 11.8px. The rendered area
+   * permits the extra line that the larger voice can produce, while CardView's
+   * fitter retains the prior three-line fit as its proportional baseline. */
+  --cv-name-font-size: 5.73cqw;
+  --cv-type-font-size: 5.46cqw;
+  --cv-rules-font-size-base: 4.96cqw;
+  --cv-rules-font-cap-base: 4.63cqw;
   --cv-rules-font-size: var(--cv-rules-font-size-base);
   --cv-rules-font-cap: var(--cv-rules-font-cap-base);
   --cv-name-font-family: "EB Garamond", Georgia, serif;
@@ -140,13 +143,13 @@
  * MOBILE_CARD_TEXT_QUERY and use-is-desktop's DESKTOP_QUERY. */
 @media (max-width: 899.98px) {
   .card-view {
-    --cv-rules-font-size-base: 5.2cqw;
-    --cv-rules-font-cap-base: 4.85cqw;
-    --cv-name-font-size: 6cqw;
-    --cv-type-font-size: 5.7cqw;
+    --cv-rules-font-size-base: 5.73cqw;
+    --cv-rules-font-cap-base: 5.35cqw;
+    --cv-name-font-size: 6.61cqw;
+    --cv-type-font-size: 6.28cqw;
     --cv-energy-orb-size: 13.85cqw;
-    --cv-energy-orb-font-size: 10.4cqw;
-    --cv-spark-orb-font-size: 10.4cqw;
+    --cv-energy-orb-font-size: 11.46cqw;
+    --cv-spark-orb-font-size: 11.46cqw;
     --cv-energy-orb-overlap: 5.5cqw;
     --cv-namebar-height: 10.4cqw;
     --cv-namebar-radius: 2.95cqw;
