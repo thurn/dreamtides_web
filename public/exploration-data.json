@@ -455,7 +455,7 @@
       "action": [
         {
           "id": "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6:pair-5:template-53",
-          "label": "Fit a matching hood",
+          "label": "Learn their ways",
           "effectText": "Change $DECK_CARD to become a Survivor",
           "templateId": 53,
           "templateVariables": {
@@ -472,7 +472,7 @@
         },
         {
           "id": "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6:pair-5:template-9",
-          "label": "Walk beside the sealed trio",
+          "label": "Recruit an Ally",
           "effectText": "Gain a random Survivor card",
           "templateId": 9,
           "templateVariables": {

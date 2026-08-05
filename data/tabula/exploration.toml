@@ -371,7 +371,7 @@ prose = "Three sealed figures press through billowing haze, opaque visors hidden
 
 [[encounter.action]]
 id = "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6:pair-5:template-53"
-label = "Fit a matching hood"
+label = "Learn their ways"
 effect-text = "Change $DECK_CARD to become a Survivor"
 template-id = 53
 template-variables = { card_type = "Survivor" }
@@ -382,7 +382,7 @@ subtype = "Survivor"
 
 [[encounter.action]]
 id = "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6:pair-5:template-9"
-label = "Walk beside the sealed trio"
+label = "Recruit an Ally"
 effect-text = "Gain a random Survivor card"
 template-id = 9
 template-variables = { predicate = "Survivor" }
