@@ -201,6 +201,8 @@ function applyBattleRewardModifiers(
         reward = Math.floor((reward * (100 - modifier.percent)) / 100);
         break;
       case "temporary_nightmare_grant":
+      case "opening_hand_bonus":
+      case "starting_energy_bonus":
         break;
     }
 
@@ -441,6 +443,20 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     100 + completionLevelAtStart * 50,
     state.battleModifiers,
   );
+  const openingHandBonus = state.battleModifiers.reduce(
+    (total, modifier) =>
+      modifier.kind === "opening_hand_bonus" && modifier.battlesRemaining > 0
+        ? total + modifier.count
+        : total,
+    0,
+  );
+  const playerStartingEnergy = state.battleModifiers.reduce(
+    (total, modifier) =>
+      modifier.kind === "starting_energy_bonus" && modifier.battlesRemaining > 0
+        ? total + modifier.count
+        : total,
+    0,
+  );
 
   // Phase 2 runtime invariants (B-6, C-10): the player always starts and
   // skips the round-one draw. The `BattleInit` field types are widened to
@@ -464,7 +480,9 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     completionLevelAtStart,
     isFinalBoss: completionLevelAtStart === 6,
     essenceReward,
-    openingHandSize: 5,
+    openingHandSize: 5 + openingHandBonus,
+    enemyOpeningHandSize: 5,
+    playerStartingEnergy,
     // The opening dreamscape (completion level 0) is a shorter, gentler
     // introduction won at 10 points; every later dreamscape is played to 25.
     scoreToWin: completionLevelAtStart === 0 ? 10 : 25,

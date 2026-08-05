@@ -661,6 +661,12 @@ const EXPLORATION_EFFECT_KINDS = new Set([
   "purge-dreamsign-for-essence",
   "make-fast-all",
   "reduce-cost-all-and-gain-nightmares",
+  "copy-selected-card",
+  "copy-offered-deck-card",
+  "next-battle-opening-hand",
+  "next-battle-starting-energy",
+  "choose-dream-avatar",
+  "purge-duplicates-and-grant-reclaim",
 ]);
 
 function transformTomlRecord(record) {
@@ -702,10 +708,8 @@ export function transformExplorationData(source) {
   });
   const encounters = (source.encounter ?? []).map(transformTomlRecord);
 
-  if (encounters.length !== 14) {
-    throw new Error(
-      `exploration.toml: expected 14 encounters, found ${String(encounters.length)}`,
-    );
+  if (encounters.length === 0) {
+    throw new Error("exploration.toml: requires at least one encounter");
   }
   const encounterIds = new Set();
   const actionIds = new Set();
@@ -770,6 +774,36 @@ export function transformExplorationData(source) {
       ) {
         throw new Error(
           `exploration.toml: action ${action.id} requires cost reduction and Nightmares`,
+        );
+      }
+      if (
+        [
+          "copy-selected-card",
+          "next-battle-opening-hand",
+          "next-battle-starting-energy",
+        ].includes(action.effectKind) &&
+        (typeof action.count !== "number" || !Number.isInteger(action.count) || action.count <= 0)
+      ) {
+        throw new Error(
+          `exploration.toml: action ${action.id} requires a positive whole-number count`,
+        );
+      }
+      if (
+        ["copy-offered-deck-card", "choose-dream-avatar"].includes(action.effectKind) &&
+        (typeof action.offerCount !== "number" ||
+          !Number.isInteger(action.offerCount) ||
+          action.offerCount <= 0)
+      ) {
+        throw new Error(
+          `exploration.toml: action ${action.id} requires a positive whole-number offer-count`,
+        );
+      }
+      if (
+        action.effectKind === "change-subtype-selected" &&
+        (typeof action.subtype !== "string" || action.subtype.trim() === "")
+      ) {
+        throw new Error(
+          `exploration.toml: action ${action.id} requires a non-empty subtype`,
         );
       }
     }

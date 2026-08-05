@@ -186,6 +186,34 @@ describe("createBattleInit", () => {
     expect(first.playerDrawSkipsTurnOne).toBe(true);
   });
 
+  it("applies active Exploration opening-hand and starting-energy bonuses", () => {
+    const baseState = makeBattleTestState();
+    const init = createBattleInit({
+      ...makeBaseInput(),
+      state: {
+        ...baseState,
+        battleModifiers: [
+          {
+            kind: "opening_hand_bonus",
+            count: 2,
+            battlesRemaining: 1,
+            source: "exploration:test:hand",
+          },
+          {
+            kind: "starting_energy_bonus",
+            count: 3,
+            battlesRemaining: 1,
+            source: "exploration:test:energy",
+          },
+        ],
+      },
+    });
+
+    expect(init.openingHandSize).toBe(7);
+    expect(init.enemyOpeningHandSize).toBe(5);
+    expect(init.playerStartingEnergy).toBe(3);
+  });
+
   describe("seed determinism (B-10)", () => {
     it("same seed produces identical enemy descriptor and deck orders", () => {
       const input = makeBaseInput();

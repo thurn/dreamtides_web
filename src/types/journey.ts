@@ -431,6 +431,10 @@ export interface ExplorationActionOfferRuntime {
   actionId: string;
   offeredCardIds: string[];
   offeredDreamsignIds?: string[];
+  /** Randomly offered concrete deck-entry UUIDs for deck-copy effects. */
+  offeredDeckEntryIds?: string[];
+  /** Randomly offered DreamAvatar UUIDs for identity replacement effects. */
+  offeredDreamAvatarIds?: string[];
   packCardIds: string[][];
   replacementCardIdByEntryId: Record<string, string>;
   transfigurationByEntryId: Record<string, TransfigurationType>;
@@ -439,14 +443,30 @@ export interface ExplorationActionOfferRuntime {
 /** Persisted result shown with the authored response before leaving the site. */
 export interface ExplorationResolution {
   actionId: string;
+  /** Validated UUID-only player intent persisted for replay and diagnostics. */
+  selection?: Record<string, string | string[] | number>;
   gainedCardIds: string[];
+  /** Concrete deck-entry UUIDs minted by this resolution. */
+  gainedEntryIds?: string[];
   gainedDreamsignIds: string[];
   purgedCardIds: string[];
+  /** Concrete deck-entry UUIDs removed by this resolution. */
+  purgedEntryIds?: string[];
   purgedDreamsignIds?: string[];
   affectedEntryIds: string[];
   essenceGained: number;
   chosenTransfiguration?: TransfigurationType;
   chosenSubtype?: string;
+  /** Exact Reclaim cost applied to each surviving concrete deck entry. */
+  reclaimCostByEntryId?: Record<string, number>;
+  /** Exact one-battle modifier created by the resolution. */
+  battleModifier?: {
+    kind: "opening-hand" | "starting-energy";
+    amount: number;
+    battlesRemaining: number;
+  };
+  previousDreamAvatarId?: string;
+  chosenDreamAvatarId?: string;
 }
 
 /** Shared, replayable runtime for one Exploration encounter. */
@@ -515,6 +535,18 @@ export type BattleModifier =
        * `battlesRemaining` hits 0 so the temporary Nightmares leave the deck.
        */
       addedEntryIds: readonly string[];
+      source: string;
+    }
+  | {
+      kind: "opening_hand_bonus";
+      count: number;
+      battlesRemaining: number;
+      source: string;
+    }
+  | {
+      kind: "starting_energy_bonus";
+      count: number;
+      battlesRemaining: number;
       source: string;
     };
 

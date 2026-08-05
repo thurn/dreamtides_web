@@ -63,7 +63,12 @@ export function createInitialBattleState(battleInit: BattleInit): BattleMutableS
       // the Dreamwell cards it draws (rules §The Dreamwell and Energy). The
       // active player's opening Dreamwell card is revealed (and its energy
       // applied under basic automation) when the Dreamwell phase resolves.
-      player: createInitialSideState(0, 0, [], []),
+      player: createInitialSideState(
+        Math.max(0, battleInit.playerStartingEnergy ?? 0),
+        Math.max(0, battleInit.playerStartingEnergy ?? 0),
+        [],
+        [],
+      ),
       enemy: createInitialSideState(0, 0, [], []),
     },
     cardInstances: {},
@@ -75,8 +80,12 @@ export function createInitialBattleState(battleInit: BattleInit): BattleMutableS
     createBattleCardInstance(state, definition, "enemy"),
   );
   const openingHandSize = Math.max(0, battleInit.openingHandSize);
+  const enemyOpeningHandSize = Math.max(
+    0,
+    battleInit.enemyOpeningHandSize ?? openingHandSize,
+  );
   const playerOpeningHand = playerDeckCardIds.slice(0, openingHandSize);
-  const enemyOpeningHand = enemyDeckCardIds.slice(0, openingHandSize);
+  const enemyOpeningHand = enemyDeckCardIds.slice(0, enemyOpeningHandSize);
   state.sides.player.hand = playerOpeningHand;
   state.sides.player.deck = playerDeckCardIds.slice(playerOpeningHand.length);
   state.sides.enemy.hand = enemyOpeningHand;

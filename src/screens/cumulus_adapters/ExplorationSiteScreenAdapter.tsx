@@ -7,6 +7,11 @@ import {
   buildExplorationSiteView,
   resolveExplorationGuide,
 } from "./exploration-view-model";
+import {
+  buildExplorationCompletionLog,
+  buildExplorationEntryLog,
+  buildExplorationResolutionLog,
+} from "./exploration-logging-view-model";
 
 export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
   const { state, journeyContent, mutations } = useJourney();
@@ -43,16 +48,7 @@ export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
     logEventOnce(`exploration:${site.id}:site-entered`, "site_entered", {
       siteType: site.type,
       isEnhanced: site.isEnhanced,
-      presentedCardId: explorationRuntime.encounterCardId,
-      actionIds: explorationRuntime.actionOffers.map((offer) => offer.actionId),
-      offers: explorationRuntime.actionOffers.map((offer) => ({
-        actionId: offer.actionId,
-        offeredCardIds: offer.offeredCardIds,
-        offeredDreamsignIds: offer.offeredDreamsignIds ?? [],
-        packCardIds: offer.packCardIds,
-        replacementCardIdByEntryId: offer.replacementCardIdByEntryId,
-        transfigurationByEntryId: offer.transfigurationByEntryId,
-      })),
+      ...buildExplorationEntryLog(view, explorationRuntime),
     });
     if (guide !== null) {
       logEventOnce(
@@ -69,17 +65,23 @@ export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
 
   useEffect(() => {
     const resolution = explorationRuntime?.resolution;
-    if (site === null || explorationRuntime === null || resolution == null) return;
+    if (
+      site === null ||
+      explorationRuntime === null ||
+      resolution == null ||
+      view === null
+    ) return;
+    const log = buildExplorationResolutionLog(view, explorationRuntime);
+    if (log === null) return;
     logEventOnce(
       `exploration:${site.id}:resolved:${resolution.actionId}`,
       "exploration_choice_resolved",
       {
         siteId: site.id,
-        presentedCardId: explorationRuntime.encounterCardId,
-        ...resolution,
+        ...log,
       },
     );
-  }, [explorationRuntime, site]);
+  }, [explorationRuntime, site, view]);
 
   const handleChannel = useCallback(() => {
     if (site === null || explorationRuntime === null || view === null) return;
@@ -109,20 +111,16 @@ export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
   );
 
   const handleExit = useCallback(() => {
-    if (site === null || explorationRuntime?.resolution == null) return;
+    if (site === null || explorationRuntime?.resolution == null || view === null) return;
+    const completionLog = buildExplorationCompletionLog(view, explorationRuntime);
+    if (completionLog === null) return;
     logEvent("exploration_completed", {
       siteId: site.id,
-      presentedCardId: explorationRuntime.encounterCardId,
-      actionId: explorationRuntime.resolution.actionId,
-      gainedCardIds: explorationRuntime.resolution.gainedCardIds,
-      gainedDreamsignIds: explorationRuntime.resolution.gainedDreamsignIds,
-      purgedDreamsignIds:
-        explorationRuntime.resolution.purgedDreamsignIds ?? [],
-      essenceGained: explorationRuntime.resolution.essenceGained,
+      ...completionLog,
       isEnhanced: site.isEnhanced,
     });
     mutations.completeSite(site.id, "exploration_completed");
-  }, [explorationRuntime, mutations, site]);
+  }, [explorationRuntime, mutations, site, view]);
 
   if (site === null || view === null) return null;
   return <ExplorationSiteScreen view={view} onChannel={handleChannel} onResolve={handleResolve} onExit={handleExit} />;

@@ -357,6 +357,10 @@ export interface BattleInit {
   isFinalBoss: boolean;
   essenceReward: number;
   openingHandSize: number;
+  /** Enemy opening-hand size when it differs from the player's authored bonus. */
+  enemyOpeningHandSize?: number;
+  /** Additional energy available to the player before the first Dreamwell card. */
+  playerStartingEnergy?: number;
   scoreToWin: number;
   turnLimit: number;
   maxEnergyCap: number;

@@ -86,6 +86,31 @@ describe("createInitialBattleState", () => {
     expect(state).not.toHaveProperty("stack");
   });
 
+  it("applies player-only Exploration opening-hand and starting-energy bonuses", () => {
+    const baseInit = createBattleInit({
+      battleEntryKey: "site-7::2::dreamscape-2",
+      site: makeBattleTestSite(),
+      state: makeBattleTestState(),
+      cardDatabase: makeBattleTestCardDatabase(),
+      dreamAvatars: makeBattleTestDreamAvatars(),
+    });
+    const battleInit = {
+      ...baseInit,
+      openingHandSize: 7,
+      enemyOpeningHandSize: 5,
+      playerStartingEnergy: 2,
+    };
+
+    const state = createInitialBattleState(battleInit);
+
+    expect(state.sides.player.hand).toHaveLength(7);
+    expect(state.sides.enemy.hand).toHaveLength(5);
+    expect(state.sides.player.currentEnergy).toBe(2);
+    expect(state.sides.player.maxEnergy).toBe(2);
+    expect(state.sides.enemy.currentEnergy).toBe(0);
+    expect(state.sides.enemy.maxEnergy).toBe(0);
+  });
+
   it("initializes per-side visibility flags required by the spec state model", () => {
     const battleInit = createBattleInit({
       battleEntryKey: "site-7::2::dreamscape-2",

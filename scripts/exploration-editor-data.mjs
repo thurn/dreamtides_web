@@ -315,6 +315,7 @@ function placeholderValue(name, action, catalogs) {
     essence: action.essence,
     energy_cost_reduction: action.energyCostReduction,
     nightmare_count: action.nightmareCount,
+    card_type: action.subtype,
     subtype: action.subtype,
     transfiguration: action.transfiguration,
     card_id: card === undefined ? undefined : { id: card.id, display_name: card.name },
@@ -397,8 +398,8 @@ export function normalizeExplorationAction(rawAction, context) {
 }
 
 function validateExplorationDocument(document, templates, catalogs) {
-  if (!Array.isArray(document.encounter) || document.encounter.length !== 14) {
-    throw editorError("INVALID_EXPLORATION", "Exploration requires exactly 14 encounters.");
+  if (!Array.isArray(document.encounter) || document.encounter.length === 0) {
+    throw editorError("INVALID_EXPLORATION", "Exploration requires at least one encounter.");
   }
   const encounterIds = new Set();
   const actionIds = new Set();

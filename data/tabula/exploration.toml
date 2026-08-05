@@ -362,3 +362,127 @@ template-id = 62
 template-variables = { essence = 50 }
 effect-kind = "purge-dreamsign-for-essence"
 essence = 50
+
+# selected prose: pair-2 (rank 1)
+# selected actions: pair-5 (rank 3)
+[[encounter]]
+card-id = "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6"
+prose = "Three sealed figures press through billowing haze, opaque visors hidden beneath hoods."
+
+[[encounter.action]]
+id = "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6:pair-5:template-53"
+label = "Fit a matching hood"
+effect-text = "Change $DECK_CARD to become a Survivor"
+template-id = 53
+template-variables = { card_type = "Survivor" }
+selection = { "$DECK_CARD" = { predicate = "≤2● cost Character" } }
+effect-kind = "change-subtype-selected"
+predicate = "cheap-character"
+subtype = "Survivor"
+
+[[encounter.action]]
+id = "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6:pair-5:template-9"
+label = "Walk beside the sealed trio"
+effect-text = "Gain a random Survivor card"
+template-id = 9
+template-variables = { predicate = "Survivor" }
+effect-kind = "gain-random-cards"
+predicate = "survivor"
+count = 1
+
+# selected prose: pair-3 (rank 1)
+# selected actions: pair-2 (rank 2)
+[[encounter]]
+card-id = "f9a65b32-537b-457c-9eaf-b512cf1f3791"
+prose = "Luminous seams thread a heavy thorax; articulated legs fold above a branch beneath spread wings."
+
+[[encounter.action]]
+id = "f9a65b32-537b-457c-9eaf-b512cf1f3791:pair-2:template-49"
+label = "Copy the linked armor pattern"
+effect-text = "Gain 2 copies of $DECK_CARD"
+template-id = 49
+template-variables = { count = 2 }
+selection = { "$DECK_CARD" = { predicate = "≤2● cost Character" } }
+effect-kind = "copy-selected-card"
+predicate = "cheap-character"
+count = 2
+
+[[encounter.action]]
+id = "f9a65b32-537b-457c-9eaf-b512cf1f3791:pair-2:template-55"
+label = "Compare the repeating plates"
+effect-text = "Select 4 random cards from your deck and choose one to gain a copy of"
+template-id = 55
+template-variables = {}
+effect-kind = "copy-offered-deck-card"
+offer-count = 4
+
+# selected prose: pair-4 (rank 1)
+# selected actions: pair-1 (rank 3)
+[[encounter]]
+card-id = "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034"
+prose = "A blackened giant reaches across water, its shape repeating in broken reflections."
+
+[[encounter.action]]
+id = "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034:pair-1:template-27"
+label = "Study the bare crown"
+effect-text = "Gain Mortal Skull"
+template-id = 27
+template-variables = { dreamsign_name = { id = "EB55B141-82F8-4BA4-B319-420F762E9EE4", display_name = "Mortal Skull" } }
+effect-kind = "gain-dreamsign"
+dreamsign-id = "EB55B141-82F8-4BA4-B319-420F762E9EE4"
+
+[[encounter.action]]
+id = "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034:pair-1:template-38"
+label = "Hold the hollow gaze"
+effect-text = "Draw 2 additional cards at the start of your next battle"
+template-id = 38
+template-variables = { count = 2 }
+effect-kind = "next-battle-opening-hand"
+count = 2
+
+# selected prose: pair-1 (rank 1)
+# selected actions: pair-1 (rank 1)
+[[encounter]]
+card-id = "86fd585b-e9d0-4dc1-bce9-488014b9316d"
+prose = "A luminous jellyfish glides among stars, its flowing tendrils brightly lit."
+
+[[encounter.action]]
+id = "86fd585b-e9d0-4dc1-bce9-488014b9316d:pair-1:template-38"
+label = "Study its measured pulse"
+effect-text = "Draw 2 additional cards at the start of your next battle"
+template-id = 38
+template-variables = { count = 2 }
+effect-kind = "next-battle-opening-hand"
+count = 2
+
+[[encounter.action]]
+id = "86fd585b-e9d0-4dc1-bce9-488014b9316d:pair-1:template-39"
+label = "Follow its radiant wake"
+effect-text = "Gain 2 additional energy at the start of your next battle"
+template-id = 39
+template-variables = { count = 2 }
+effect-kind = "next-battle-starting-energy"
+count = 2
+
+# selected prose: pair-1 (rank 1)
+# selected actions: pair-1 (rank 1)
+[[encounter]]
+card-id = "b1d36337-5668-4f1d-b155-2d07fc00f872"
+prose = "A lone astronaut stands rigid where luminous steps meet a vast black aperture."
+
+[[encounter.action]]
+id = "b1d36337-5668-4f1d-b155-2d07fc00f872:pair-1:template-57"
+label = "Follow the astronaut"
+effect-text = "Pick a new Dream Avatar from 3 choices"
+template-id = 57
+template-variables = {}
+effect-kind = "choose-dream-avatar"
+offer-count = 3
+
+[[encounter.action]]
+id = "b1d36337-5668-4f1d-b155-2d07fc00f872:pair-1:template-79"
+label = "Enter the aperture alone"
+effect-text = "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim."
+template-id = 79
+template-variables = {}
+effect-kind = "purge-duplicates-and-grant-reclaim"

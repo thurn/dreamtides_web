@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/dream-avatar-portrait`
 
-Real consumers: **17** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **18** (imports outside `src/cumulus/docs/` and tests).
 
 The shared framed and stage-filling DreamAvatar art surface: the transparent full-body cutout in one of six fixed framings. Three are self-framing over an opaque light-gray backing — a large `hero` showcase, a square `panel` for profile cards and popovers, and a small square `thumb` for HUD rows and resident lists. Three fill a caller's own stage — `standing` adds the desktop DreamAvatar-select glow, `cutout` leaves the scene beneath it untouched, and `fullBleed` creates the mobile carousel showcase. The frame chrome and the per-variant crop belong to the design system; a caller supplies only the dreamAvatar data, the variant, and an optional pixel `size`. When the art asset 404s the portrait falls back to a monogram so a missing image never leaves an empty hole.
 

@@ -103,7 +103,7 @@ function normalizedEnergyCostReduction(reduction: number | undefined): number {
 }
 
 function normalizedReclaimCost(reclaim: number | undefined): number | null {
-  return reclaim === undefined || !Number.isFinite(reclaim) || reclaim <= 0
+  return reclaim === undefined || !Number.isFinite(reclaim) || reclaim < 0
     ? null
     : Math.trunc(reclaim);
 }

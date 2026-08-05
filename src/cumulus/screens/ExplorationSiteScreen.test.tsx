@@ -100,6 +100,8 @@ function view(resolved = false): ExplorationSiteView {
     actions: [
       {
         id: "choice-a",
+        effectKind: "gain-card",
+        mechanics: { effectKind: "gain-card" },
         label: "Choose A",
         effectText: "Gain the fixture.",
         followup: { kind: "none" },
@@ -107,6 +109,8 @@ function view(resolved = false): ExplorationSiteView {
       },
       {
         id: "choice-b",
+        effectKind: "change-subtype-selected",
+        mechanics: { effectKind: "change-subtype-selected" },
         label: "Choose B",
         effectText: "Change the fixture.",
         followup: { kind: "none" },
@@ -115,6 +119,7 @@ function view(resolved = false): ExplorationSiteView {
     ],
     resolvedActionId: resolved ? "choice-a" : null,
     reward: null,
+    outcomeKind: null,
   };
 }
 
@@ -301,6 +306,55 @@ function purgedDreamsignEssenceRewardView(): ExplorationSiteView {
         isNegative: false,
       },
       totalEssence: 50,
+    },
+  };
+}
+
+function cardCopiesRewardView(): ExplorationSiteView {
+  const base = view(true);
+  return {
+    ...base,
+    outcomeKind: "card-copies",
+    reward: {
+      kind: "card-copies",
+      sourceEntryId: "source-entry",
+      count: 2,
+      cards: [
+        { entryId: "copy-entry-a", model: base.card, isBane: false },
+        { entryId: "copy-entry-b", model: base.card, isBane: false },
+      ],
+    },
+  };
+}
+
+function battleModifierRewardView(): ExplorationSiteView {
+  return {
+    ...view(true),
+    outcomeKind: "battle-modifier",
+    reward: {
+      kind: "battle-modifier",
+      modifier: "starting-energy",
+      amount: 2,
+      battlesRemaining: 1,
+    },
+  };
+}
+
+function dreamAvatarRewardView(): ExplorationSiteView {
+  return {
+    ...view(true),
+    outcomeKind: "dream-avatar",
+    reward: {
+      kind: "dream-avatar",
+      previous: null,
+      current: {
+        id: "dream-avatar-new",
+        name: "New Dream Avatar",
+        title: "The Synthetic",
+        renderedText: "A synthetic ability.",
+        imageNumber: "017",
+        startingEssence: 250,
+      },
     },
   };
 }
@@ -2194,6 +2248,88 @@ describe("ExplorationSiteScreen", () => {
         ?.getAttribute("data-exploration-channel-state"),
     ).toBe("waiting");
 
+    act(() => root.unmount());
+  });
+
+  it("presents exact copied entry UUIDs before completing the encounter", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={cardCopiesRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    const outcome = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="card-copies"]',
+    );
+    expect(outcome?.dataset.explorationSourceEntryId).toBe("source-entry");
+    expect(outcome?.dataset.explorationCopyCount).toBe("2");
+    expect(
+      [...container.querySelectorAll("[data-exploration-copied-entry-id]")].map(
+        (element) => element.getAttribute("data-exploration-copied-entry-id"),
+      ),
+    ).toEqual(["copy-entry-a", "copy-entry-b"]);
+    expect(outcome?.getAttribute("aria-label")).toBe("Gained 2 copies");
+    expect(onExit).not.toHaveBeenCalled();
+    await act(() => {
+      vi.advanceTimersByTime(10_000);
+      return Promise.resolve();
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
+  it("presents the persisted next-battle modifier with its exact amount", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={battleModifierRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={vi.fn()}
+      />,
+    );
+    const outcome = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="battle-modifier"]',
+    );
+    expect(outcome?.dataset.explorationBattleModifier).toBe("starting-energy");
+    expect(outcome?.dataset.explorationBattleModifierAmount).toBe("2");
+    expect(outcome?.dataset.explorationBattlesRemaining).toBe("1");
+    expect(outcome?.textContent).toContain("Next Battle");
+    act(() => root.unmount());
+  });
+
+  it("presents the exact persisted replacement Dream Avatar", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={dreamAvatarRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={vi.fn()}
+      />,
+    );
+    const outcome = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="dream-avatar"]',
+    );
+    expect(outcome?.dataset.explorationDreamAvatarId).toBe("dream-avatar-new");
+    expect(outcome?.textContent).toContain("New Dream Avatar");
+    expect(outcome?.getAttribute("aria-label")).toBe(
+      "New Dream Avatar is now your Dream Avatar",
+    );
     act(() => root.unmount());
   });
 });

@@ -1,5 +1,6 @@
 import { resolveDeckEntryCard } from "../../card-type-change";
 import { createDreamsign } from "../../data/dreamsigns";
+import { toJourneyDreamAvatar } from "../../data/dream-avatar-selection";
 import {
   EXPLORATION_ESSENCE_PER_SPARK,
   explorationEncounterForCard,
@@ -38,6 +39,7 @@ interface ExplorationSelection {
   subtype?: unknown;
   replacedDreamsignId?: unknown;
   dreamsignId?: unknown;
+  dreamAvatarId?: unknown;
 }
 
 function idIndex(content: JourneyContent): ReadonlyMap<string, CardData> {
@@ -107,6 +109,8 @@ function emptyOffer(actionId: string): ExplorationActionOfferRuntime {
     actionId,
     offeredCardIds: [],
     offeredDreamsignIds: [],
+    offeredDeckEntryIds: [],
+    offeredDreamAvatarIds: [],
     packCardIds: [],
     replacementCardIdByEntryId: {},
     transfigurationByEntryId: {},
@@ -130,6 +134,22 @@ function buildActionOffer(
     );
     const selected = shuffled(candidates, rng)[0];
     if (selected !== undefined) offer.offeredDreamsignIds = [selected];
+    return offer;
+  }
+  if (action.effectKind === "copy-offered-deck-card") {
+    offer.offeredDeckEntryIds = shuffled(journey.deck, rng)
+      .slice(0, action.offerCount ?? 4)
+      .map((entry) => entry.entryId);
+    return offer;
+  }
+  if (action.effectKind === "choose-dream-avatar") {
+    const currentId = journey.dreamAvatar?.id.toLowerCase();
+    const candidates = content.dreamAvatars
+      .filter((dreamAvatar) => dreamAvatar.id.toLowerCase() !== currentId)
+      .sort((left, right) => left.id.localeCompare(right.id));
+    offer.offeredDreamAvatarIds = shuffled(candidates, rng)
+      .slice(0, action.offerCount ?? 3)
+      .map((dreamAvatar) => dreamAvatar.id);
     return offer;
   }
   if (action.predicate === undefined) return offer;
@@ -322,9 +342,12 @@ function typeChange(subtype: string) {
 function baseResolution(actionId: string): ExplorationResolution {
   return {
     actionId,
+    selection: {},
     gainedCardIds: [],
+    gainedEntryIds: [],
     gainedDreamsignIds: [],
     purgedCardIds: [],
+    purgedEntryIds: [],
     purgedDreamsignIds: [],
     affectedEntryIds: [],
     essenceGained: 0,
@@ -386,6 +409,7 @@ export function resolveExplorationChoice(input: {
   };
 
   const addCardIds = (cardIds: readonly string[]): boolean => {
+    const beforeEntryIds = new Set(next.deck.map((entry) => entry.entryId));
     const children = cardIds.map((cardId) => addCardEffect(content, cardId));
     if (children.some((child) => child === null)) return false;
     if (!applyReward({
@@ -393,10 +417,195 @@ export function resolveExplorationChoice(input: {
       children: children as JourneyRewardEffect[],
     })) return false;
     result.gainedCardIds.push(...cardIds);
+    result.gainedEntryIds?.push(
+      ...next.deck
+        .filter((entry) => !beforeEntryIds.has(entry.entryId))
+        .map((entry) => entry.entryId),
+    );
+    return true;
+  };
+
+  const duplicateEntry = (entryId: string, count: number): boolean => {
+    if (!Number.isInteger(count) || count <= 0) return false;
+    const target = deckTarget(next, content, entryId);
+    const cardId = cardIdForEntry(next, content, entryId);
+    if (target === null || cardId === null) return false;
+    const beforeEntryIds = new Set(next.deck.map((entry) => entry.entryId));
+    if (
+      !applyReward({
+        kind: "composite",
+        children: Array.from({ length: count }, () => ({
+          kind: "duplicate_deck_entry" as const,
+          ...target,
+        })),
+      })
+    ) {
+      return false;
+    }
+    result.gainedCardIds.push(...Array.from({ length: count }, () => cardId));
+    result.gainedEntryIds?.push(
+      ...next.deck
+        .filter((entry) => !beforeEntryIds.has(entry.entryId))
+        .map((entry) => entry.entryId),
+    );
+    result.affectedEntryIds.push(entryId);
     return true;
   };
 
   switch (action.effectKind) {
+    case "copy-selected-card": {
+      const entryIds = stringArray(selection.entryIds);
+      if (entryIds === null || entryIds.length !== 1) return null;
+      const selected = cardForEntry(next, content, entryIds[0]);
+      if (
+        selected === null ||
+        (action.predicate !== undefined &&
+          !matchesPredicate(selected.card, action.predicate)) ||
+        !duplicateEntry(entryIds[0], action.count ?? 1)
+      ) {
+        return null;
+      }
+      result.selection = { entryIds };
+      break;
+    }
+    case "copy-offered-deck-card": {
+      const entryIds = stringArray(selection.entryIds);
+      if (
+        entryIds === null ||
+        entryIds.length !== 1 ||
+        !(offer.offeredDeckEntryIds ?? []).includes(entryIds[0]) ||
+        !duplicateEntry(entryIds[0], 1)
+      ) {
+        return null;
+      }
+      result.selection = { entryIds };
+      break;
+    }
+    case "next-battle-opening-hand": {
+      const count = action.count ?? 1;
+      if (!Number.isInteger(count) || count <= 0) return null;
+      next = {
+        ...next,
+        battleModifiers: [
+          ...next.battleModifiers,
+          {
+            kind: "opening_hand_bonus",
+            count,
+            battlesRemaining: 1,
+            source: `exploration:${site.id}:${action.id}`,
+          },
+        ],
+      };
+      result.battleModifier = {
+        kind: "opening-hand",
+        amount: count,
+        battlesRemaining: 1,
+      };
+      break;
+    }
+    case "next-battle-starting-energy": {
+      const count = action.count ?? 1;
+      if (!Number.isInteger(count) || count <= 0) return null;
+      next = {
+        ...next,
+        battleModifiers: [
+          ...next.battleModifiers,
+          {
+            kind: "starting_energy_bonus",
+            count,
+            battlesRemaining: 1,
+            source: `exploration:${site.id}:${action.id}`,
+          },
+        ],
+      };
+      result.battleModifier = {
+        kind: "starting-energy",
+        amount: count,
+        battlesRemaining: 1,
+      };
+      break;
+    }
+    case "choose-dream-avatar": {
+      const dreamAvatarId = stringValue(selection.dreamAvatarId);
+      if (
+        dreamAvatarId === null ||
+        !(offer.offeredDreamAvatarIds ?? []).includes(dreamAvatarId)
+      ) {
+        return null;
+      }
+      const dreamAvatar = content.dreamAvatars.find(
+        (candidate) => candidate.id.toLowerCase() === dreamAvatarId.toLowerCase(),
+      );
+      if (dreamAvatar === undefined) return null;
+      result.previousDreamAvatarId = next.dreamAvatar?.id;
+      result.chosenDreamAvatarId = dreamAvatar.id;
+      result.selection = { dreamAvatarId: dreamAvatar.id };
+      next = {
+        ...next,
+        dreamAvatar: toJourneyDreamAvatar(dreamAvatar),
+        resolvedPackage:
+          next.resolvedPackage === null
+            ? null
+            : { ...next.resolvedPackage, dreamAvatar },
+      };
+      break;
+    }
+    case "purge-duplicates-and-grant-reclaim": {
+      const resolved = resolvedDeckCards(next, content);
+      const counts = new Map<string, number>();
+      for (const { card } of resolved) {
+        const key = card.id.toLowerCase();
+        counts.set(key, (counts.get(key) ?? 0) + 1);
+      }
+      const purged = resolved.filter(
+        ({ card }) => (counts.get(card.id.toLowerCase()) ?? 0) > 1,
+      );
+      const survivors = resolved.filter(
+        ({ card }) => (counts.get(card.id.toLowerCase()) ?? 0) === 1,
+      );
+      const purgeTargets = purged.map(({ entry }) =>
+        deckTarget(next, content, entry.entryId),
+      );
+      const survivorTargets = survivors.map(({ entry }) =>
+        deckTarget(next, content, entry.entryId),
+      );
+      if (
+        purgeTargets.some((target) => target === null) ||
+        survivorTargets.some((target) => target === null)
+      ) {
+        return null;
+      }
+      const reclaimCostByEntryId = Object.fromEntries(
+        survivors.map(({ entry, card }) => [
+          entry.entryId,
+          Math.max(0, card.energyCost ?? 0),
+        ]),
+      );
+      if (
+        !applyReward({
+          kind: "composite",
+          children: [
+            ...(purgeTargets as Array<NonNullable<(typeof purgeTargets)[number]>>).map(
+              (target) => ({ kind: "remove_deck_entry" as const, ...target }),
+            ),
+            ...(survivorTargets as Array<NonNullable<(typeof survivorTargets)[number]>>).map(
+              (target) => ({
+                kind: "change_deck_entry_keywords" as const,
+                ...target,
+                keywords: { setReclaim: reclaimCostByEntryId[target.entryId] },
+              }),
+            ),
+          ],
+        })
+      ) {
+        return null;
+      }
+      result.purgedCardIds.push(...purged.map(({ card }) => card.id));
+      result.purgedEntryIds?.push(...purged.map(({ entry }) => entry.entryId));
+      result.affectedEntryIds.push(...survivors.map(({ entry }) => entry.entryId));
+      result.reclaimCostByEntryId = reclaimCostByEntryId;
+      break;
+    }
     case "purge-and-copy": {
       const purgeEntryId = stringValue(selection.purgeEntryId);
       const copyEntryId = stringValue(selection.copyEntryId);
@@ -421,7 +630,9 @@ export function resolveExplorationChoice(input: {
         })
       ) return null;
       result.purgedCardIds.push(purgeCardId);
+      result.purgedEntryIds?.push(purgeEntryId);
       result.gainedCardIds.push(copiedCardId);
+      result.selection = { purgeEntryId, copyEntryId };
       break;
     }
     case "gain-dreamsign": {
@@ -435,6 +646,9 @@ export function resolveExplorationChoice(input: {
       if (added === null) return null;
       next = added;
       result.gainedDreamsignIds.push(action.dreamsignId);
+      const replacedDreamsignId = stringValue(selection.replacedDreamsignId);
+      result.selection =
+        replacedDreamsignId === null ? {} : { replacedDreamsignId };
       break;
     }
     case "gain-random-dreamsign": {
@@ -449,6 +663,9 @@ export function resolveExplorationChoice(input: {
       if (added === null) return null;
       next = added;
       result.gainedDreamsignIds.push(dreamsignId);
+      const replacedDreamsignId = stringValue(selection.replacedDreamsignId);
+      result.selection =
+        replacedDreamsignId === null ? {} : { replacedDreamsignId };
       break;
     }
     case "gain-card": {
@@ -515,6 +732,8 @@ export function resolveExplorationChoice(input: {
         })
       ) return null;
       result.purgedCardIds.push(...selected.map((entry) => (entry as { card: CardData }).card.id));
+      result.purgedEntryIds?.push(...entryIds);
+      result.selection = { entryIds };
       break;
     }
     case "choose-pack": {
@@ -551,6 +770,7 @@ export function resolveExplorationChoice(input: {
         dreamsignId,
       ];
       result.essenceGained = action.essence;
+      result.selection = { dreamsignId };
       break;
     }
     case "purge-for-essence": {
@@ -573,7 +793,9 @@ export function resolveExplorationChoice(input: {
         })
       ) return null;
       result.purgedCardIds.push(selected.card.id);
+      result.purgedEntryIds?.push(entryIds[0]);
       result.essenceGained = essenceGained;
+      result.selection = { entryIds };
       break;
     }
     case "change-subtype-selected": {
@@ -592,6 +814,7 @@ export function resolveExplorationChoice(input: {
       ) return null;
       result.affectedEntryIds.push(entryIds[0]);
       result.chosenSubtype = action.subtype;
+      result.selection = { entryIds };
       break;
     }
     case "change-subtype-all": {

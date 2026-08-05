@@ -19,6 +19,7 @@ import {
   type ExplorationPredicate,
 } from "../../data/exploration";
 import { createDreamsign } from "../../data/dreamsigns";
+import { toJourneyDreamAvatar } from "../../data/dream-avatar-selection";
 import type { JourneyContent } from "../../data/journey-content";
 import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import { guideForSiteType } from "../../data/dreamscapes";
@@ -99,6 +100,14 @@ function dreamsignById(
     (dreamsign) => dreamsign.id.toLowerCase() === normalized,
   );
   return template === undefined ? null : createDreamsign(template);
+}
+
+function dreamAvatarById(content: JourneyContent, dreamAvatarId: string) {
+  const normalized = dreamAvatarId.toLowerCase();
+  const dreamAvatar = content.dreamAvatars.find(
+    (candidate) => candidate.id.toLowerCase() === normalized,
+  );
+  return dreamAvatar === undefined ? null : toJourneyDreamAvatar(dreamAvatar);
 }
 
 function modelForCard(card: CardData): GameCardModel {
@@ -188,6 +197,19 @@ function offeredCards(
   });
 }
 
+function offeredDeckCards(
+  ids: readonly string[],
+  state: JourneyState,
+  content: JourneyContent,
+): readonly ExplorationCardChoiceView[] {
+  return ids.flatMap((entryId) => {
+    const entry = state.deck.find((candidate) => candidate.entryId === entryId);
+    if (entry === undefined) return [];
+    const card = deckCardChoice(entry, content);
+    return card === null ? [] : [card];
+  });
+}
+
 function heldDreamsignChoices(state: JourneyState) {
   return state.dreamsigns.filter(
     (dreamsign): dreamsign is typeof dreamsign & { readonly id: string } =>
@@ -258,6 +280,20 @@ function followupForAction(
         action.label,
         `Choose a Character to become ${action.subtype ?? "Outsider"}.`,
         deckCards,
+        "single",
+      );
+    case "copy-selected-card":
+      return deckFollowup(
+        action.label,
+        `Choose a card to gain ${String(action.count ?? 1)} copies of.`,
+        deckCards,
+        "single",
+      );
+    case "copy-offered-deck-card":
+      return deckFollowup(
+        action.label,
+        "Choose one offered card to copy.",
+        offeredDeckCards(offer.offeredDeckEntryIds ?? [], state, content),
         "single",
       );
     case "replace-selected":
@@ -344,6 +380,16 @@ function followupForAction(
         selectionKey: "dreamsignId",
         dreamsigns: heldDreamsignChoices(state),
       };
+    case "choose-dream-avatar":
+      return {
+        kind: "dreamAvatars",
+        title: action.label,
+        subtitle: "Choose your new Dream Avatar.",
+        dreamAvatars: (offer.offeredDreamAvatarIds ?? []).flatMap((id) => {
+          const dreamAvatar = dreamAvatarById(content, id);
+          return dreamAvatar === null ? [] : [dreamAvatar];
+        }),
+      };
     case "gain-card":
     case "gain-nightmare-and-card":
     case "gain-random-cards":
@@ -351,6 +397,9 @@ function followupForAction(
     case "increase-spark-all":
     case "make-fast-all":
     case "reduce-cost-all-and-gain-nightmares":
+    case "next-battle-opening-hand":
+    case "next-battle-starting-energy":
+    case "purge-duplicates-and-grant-reclaim":
       return { kind: "none" };
   }
 }
@@ -593,9 +642,14 @@ function actionView(
       ? (offer.offeredDreamsignIds?.length ?? 0) > 0
       : action.effectKind === "gain-offered-card"
         ? offer.offeredCardIds.length === 1
-        : requiresDeckCardTarget
-          ? fixedTarget !== null
-          : true;
+        : action.effectKind === "copy-offered-deck-card"
+          ? (offer.offeredDeckEntryIds?.length ?? 0) > 0
+          : action.effectKind === "choose-dream-avatar"
+            ? (offer.offeredDreamAvatarIds?.length ?? 0) > 0
+            : requiresDeckCardTarget &&
+                action.effectKind === "transfigure-fixed-selected"
+              ? fixedTarget !== null
+              : true;
   const available =
     hasRequiredOffer &&
     (followup.kind === "none" ||
@@ -604,7 +658,8 @@ function actionView(
       (followup.kind === "cards" && followup.cards.length >= followup.min) ||
       (followup.kind === "packs" && followup.packs.length > 0) ||
       (followup.kind === "subtypes" && followup.options.length > 0) ||
-      (followup.kind === "dreamsigns" && followup.dreamsigns.length > 0));
+      (followup.kind === "dreamsigns" && followup.dreamsigns.length > 0) ||
+      (followup.kind === "dreamAvatars" && followup.dreamAvatars.length > 0));
   const effect = appendFixedTransfigurationEffect(
     buildExplorationActionEffect(
       action,
@@ -616,6 +671,39 @@ function actionView(
   );
   return {
     id: action.id,
+    effectKind: action.effectKind,
+    mechanics: {
+      effectKind: action.effectKind,
+      ...(action.templateId === undefined ? {} : { templateId: action.templateId }),
+      ...(action.predicate === undefined ? {} : { predicate: action.predicate }),
+      ...(action.count === undefined ? {} : { count: action.count }),
+      ...(action.cardId === undefined ? {} : { cardId: action.cardId }),
+      ...(action.offerCount === undefined ? {} : { offerCount: action.offerCount }),
+      ...(action.packCount === undefined ? {} : { packCount: action.packCount }),
+      ...(action.packSize === undefined ? {} : { packSize: action.packSize }),
+      ...(action.essencePerSpark === undefined
+        ? {}
+        : { essencePerSpark: action.essencePerSpark }),
+      ...(action.essencePerCard === undefined
+        ? {}
+        : { essencePerCard: action.essencePerCard }),
+      ...(action.sparkBonus === undefined ? {} : { sparkBonus: action.sparkBonus }),
+      ...(action.essence === undefined ? {} : { essence: action.essence }),
+      ...(action.energyCostReduction === undefined
+        ? {}
+        : { energyCostReduction: action.energyCostReduction }),
+      ...(action.nightmareCount === undefined
+        ? {}
+        : { nightmareCount: action.nightmareCount }),
+      ...(action.dreamsignId === undefined ? {} : { dreamsignId: action.dreamsignId }),
+      ...(action.subtype === undefined ? {} : { subtype: action.subtype }),
+      ...(action.subtypeOptions === undefined
+        ? {}
+        : { subtypeOptions: action.subtypeOptions }),
+      ...(action.transfiguration === undefined
+        ? {}
+        : { transfiguration: action.transfiguration }),
+    },
     label: action.label,
     ...effect,
     followup,
@@ -641,6 +729,52 @@ function rewardForResolution(
   const resolvedAction = actions.find(
     (action) => action.id === resolution.actionId,
   );
+  if (
+    resolvedAction?.effectKind === "copy-selected-card" ||
+    resolvedAction?.effectKind === "copy-offered-deck-card"
+  ) {
+    const sourceEntryId = resolution.affectedEntryIds[0];
+    const cards = (resolution.gainedEntryIds ?? []).flatMap((entryId) => {
+      const entry = state.deck.find((candidate) => candidate.entryId === entryId);
+      if (entry === undefined) return [];
+      const card = deckCardChoice(entry, content);
+      return card === null ? [] : [card];
+    });
+    if (sourceEntryId !== undefined && cards.length > 0) {
+      return {
+        kind: "card-copies",
+        sourceEntryId,
+        cards,
+        count: cards.length,
+      };
+    }
+  }
+  if (
+    resolvedAction?.effectKind === "next-battle-opening-hand" ||
+    resolvedAction?.effectKind === "next-battle-starting-energy"
+  ) {
+    const modifier = resolution.battleModifier;
+    if (modifier !== undefined) {
+      return {
+        kind: "battle-modifier",
+        modifier: modifier.kind,
+        amount: modifier.amount,
+        battlesRemaining: modifier.battlesRemaining,
+      };
+    }
+  }
+  if (resolvedAction?.effectKind === "choose-dream-avatar") {
+    const currentId = resolution.chosenDreamAvatarId;
+    const current =
+      currentId === undefined ? null : dreamAvatarById(content, currentId);
+    const previous =
+      resolution.previousDreamAvatarId === undefined
+        ? null
+        : dreamAvatarById(content, resolution.previousDreamAvatarId);
+    if (current !== null) {
+      return { kind: "dream-avatar", previous, current };
+    }
+  }
   if (
     resolvedAction?.effectKind === "transfigure-selected" ||
     resolvedAction?.effectKind === "transfigure-fixed-selected"
@@ -740,12 +874,22 @@ function rewardForResolution(
           cards,
         };
       case "change-subtype-all":
+      case "change-subtype-selected":
         return {
           kind: "subtype" as const,
           headline: resolution.chosenSubtype ?? "Subtype",
           announcement: resolvedAction.effectText,
           selectionColor: "accent-bright" as const,
           cards,
+        };
+      case "purge-duplicates-and-grant-reclaim":
+        return {
+          kind: "reclaim" as const,
+          headline: "Reclaim",
+          announcement: resolvedAction.effectText,
+          selectionColor: "positive" as const,
+          cards,
+          reclaimCostByEntryId: resolution.reclaimCostByEntryId ?? {},
         };
       default:
         return null;
@@ -756,7 +900,8 @@ function rewardForResolution(
     return card === null ? [] : [modelForCard(card)];
   });
   const purgedCards =
-    resolvedAction?.effectKind === "purge-and-copy"
+    resolvedAction?.effectKind === "purge-and-copy" ||
+    resolvedAction?.effectKind === "purge-duplicates-and-grant-reclaim"
       ? resolution.purgedCardIds.flatMap((cardId) => {
           const card = cardById(content, cardId);
           return card === null ? [] : [modelForCard(card)];
@@ -806,6 +951,18 @@ export function buildExplorationSiteView(params: {
   const guideId = params.guide?.id ?? FALLBACK_GUIDE_ID;
   const scene: ArtRef | null =
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
+  const reward = rewardForResolution(
+    params.runtime,
+    params.state,
+    params.content,
+    encounter.actions,
+  );
+  const outcomeKind =
+    reward === null
+      ? null
+      : "kind" in reward
+        ? reward.kind
+        : reward.deckModification?.kind ?? "objects";
   return {
     siteId: params.site.id,
     scene,
@@ -820,11 +977,7 @@ export function buildExplorationSiteView(params: {
     narrative: encounter.prose,
     actions: actions as [ExplorationActionView, ExplorationActionView],
     resolvedActionId: params.runtime.resolution?.actionId ?? null,
-    reward: rewardForResolution(
-      params.runtime,
-      params.state,
-      params.content,
-      encounter.actions,
-    ),
+    reward,
+    outcomeKind,
   };
 }

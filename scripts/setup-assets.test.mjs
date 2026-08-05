@@ -26,7 +26,7 @@ import {
 } from "./setup-assets.mjs";
 
 describe("transformExplorationData", () => {
-  it("compiles fourteen UUID-keyed encounters with two actions each", () => {
+  it("compiles a non-empty UUID-keyed catalog with two actions per encounter", () => {
     const source = parse(
       readFileSync(
         join(import.meta.dirname, "../data/tabula/exploration.toml"),
@@ -36,23 +36,29 @@ describe("transformExplorationData", () => {
     const compiled = transformExplorationData(source);
     const actions = compiled.encounters.flatMap((encounter) => encounter.action);
 
-    expect(compiled.encounters).toHaveLength(14);
-    expect(actions).toHaveLength(28);
+    expect(compiled.encounters.length).toBeGreaterThan(0);
+    expect(actions).toHaveLength(compiled.encounters.length * 2);
     expect(new Set(compiled.encounters.map((encounter) => encounter.cardId)).size)
-      .toBe(14);
-    expect(new Set(actions.map((action) => action.id)).size).toBe(28);
+      .toBe(compiled.encounters.length);
+    expect(new Set(actions.map((action) => action.id)).size).toBe(actions.length);
     expect(actions.map((action) => action.effectKind)).toEqual(
       expect.arrayContaining([
         "make-fast-all",
         "reduce-cost-all-and-gain-nightmares",
         "gain-random-dreamsign",
         "purge-dreamsign-for-essence",
+        "copy-selected-card",
+        "copy-offered-deck-card",
+        "next-battle-opening-hand",
+        "next-battle-starting-energy",
+        "choose-dream-avatar",
+        "purge-duplicates-and-grant-reclaim",
       ]),
     );
   });
 
   function syntheticExplorationSource(essencePerCard = 15) {
-    const encounters = Array.from({ length: 14 }, (_, encounterIndex) => ({
+    const encounters = Array.from({ length: 2 }, (_, encounterIndex) => ({
       "card-id": `source-${String(encounterIndex)}`,
       prose: `Synthetic prose ${String(encounterIndex)}`,
       action: Array.from({ length: 2 }, (_, actionIndex) => ({
@@ -93,6 +99,42 @@ describe("transformExplorationData", () => {
   it("rejects a non-positive per-card essence reward", () => {
     expect(() => transformExplorationData(syntheticExplorationSource(0)))
       .toThrow(/requires positive essence-per-card/);
+  });
+
+  it("rejects invalid cardinalities for new Exploration mechanics", () => {
+    const countSource = syntheticExplorationSource();
+    countSource.encounter[0].action[0] = {
+      ...countSource.encounter[0].action[0],
+      "effect-kind": "copy-selected-card",
+      count: 0,
+    };
+    expect(() => transformExplorationData(countSource)).toThrow(
+      /requires a positive whole-number count/,
+    );
+
+    const offerSource = syntheticExplorationSource();
+    offerSource.encounter[0].action[0] = {
+      ...offerSource.encounter[0].action[0],
+      "effect-kind": "choose-dream-avatar",
+      "offer-count": 0,
+    };
+    expect(() => transformExplorationData(offerSource)).toThrow(
+      /requires a positive whole-number offer-count/,
+    );
+  });
+
+  it("requires a concrete subtype for selected subtype changes", () => {
+    const source = syntheticExplorationSource();
+    source.encounter[0].action[0] = {
+      ...source.encounter[0].action[0],
+      "effect-kind": "change-subtype-selected",
+      predicate: "cheap-character",
+      subtype: "",
+    };
+
+    expect(() => transformExplorationData(source)).toThrow(
+      /requires a non-empty subtype/,
+    );
   });
 });
 

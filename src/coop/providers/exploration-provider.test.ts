@@ -92,7 +92,15 @@ function contentFixture(
   return {
     cardDatabase: new Map(cards.map((entry) => [entry.cardNumber, entry])),
     exploration,
-    dreamAvatars: [],
+    dreamAvatars: Array.from({ length: 4 }, (_, index) => ({
+      id: `dream-avatar-${String(index)}`,
+      name: `Dream Avatar ${String(index)}`,
+      title: "Synthetic",
+      renderedText: "A synthetic Dream Avatar ability.",
+      imageNumber: String(index),
+      startingEssence: 250,
+      signatureCards: [],
+    })),
     dreamwellCards: [],
     dreamsignTemplates: [
       {
@@ -531,5 +539,197 @@ describe("Exploration provider", () => {
         expect(entry.keywordModification?.energyCostReduction).toBeUndefined();
       }
     }
+  });
+
+  it("mints deck-entry offers and persists exact duplicated entry UUIDs", () => {
+    const selectedCopy: ExplorationActionContent = {
+      id: "copy-selected",
+      label: "Copy a selected card",
+      effectText: "Gain 2 copies of $DECK_CARD",
+      effectKind: "copy-selected-card",
+      predicate: "cheap-character",
+      count: 2,
+    };
+    const offeredCopy: ExplorationActionContent = {
+      id: "copy-offered",
+      label: "Copy an offered card",
+      effectText: "Choose one of four deck cards to copy",
+      effectKind: "copy-offered-deck-card",
+      offerCount: 4,
+    };
+    const content = contentFixture([selectedCopy, offeredCopy]);
+    const selectedState = buildState(content);
+    const selectedEntry = selectedState.journey.deck.find((entry) =>
+      content.cardDatabase.get(entry.cardNumber)?.cardType === "Character",
+    );
+    if (selectedEntry === undefined) throw new Error("Expected a selected card");
+    const copied = resolve(content, selectedState.journey, selectedCopy.id, {
+      entryIds: [selectedEntry.entryId],
+    });
+    const copiedRuntime = copied.siteRuntime[site.id];
+    expect(copied.deck).toHaveLength(selectedState.journey.deck.length + 2);
+    expect(copiedRuntime).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        selection: { entryIds: [selectedEntry.entryId] },
+        affectedEntryIds: [selectedEntry.entryId],
+        gainedEntryIds: ["deck-91-0", "deck-91-1"],
+      },
+    });
+
+    const offeredState = buildState(content);
+    const offeredEntryIds =
+      offeredState.runtime.actionOffers[1]?.offeredDeckEntryIds ?? [];
+    expect(offeredEntryIds).toHaveLength(4);
+    const offeredEntryId = offeredEntryIds[0];
+    if (offeredEntryId === undefined) throw new Error("Expected a deck offer");
+    const offered = resolve(content, offeredState.journey, offeredCopy.id, {
+      entryIds: [offeredEntryId],
+    });
+    expect(offered.deck).toHaveLength(offeredState.journey.deck.length + 1);
+    expect(
+      resolveExplorationChoice({
+        journey: offeredState.journey,
+        site,
+        payload: {
+          actionId: offeredCopy.id,
+          selection: { entryIds: ["foreign-entry"] },
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+  });
+
+  it("persists one-battle opening-hand and starting-energy modifiers", () => {
+    const openingHand: ExplorationActionContent = {
+      id: "opening-hand",
+      label: "Draw more",
+      effectText: "Draw 2 additional cards at the start of your next battle",
+      effectKind: "next-battle-opening-hand",
+      count: 2,
+    };
+    const startingEnergy: ExplorationActionContent = {
+      id: "starting-energy",
+      label: "Gather energy",
+      effectText: "Gain 2 additional energy at the start of your next battle",
+      effectKind: "next-battle-starting-energy",
+      count: 2,
+    };
+    const content = contentFixture([openingHand, startingEnergy]);
+    const handState = buildState(content);
+    const withHand = resolve(content, handState.journey, openingHand.id);
+    expect(withHand.battleModifiers[withHand.battleModifiers.length - 1]).toEqual({
+      kind: "opening_hand_bonus",
+      count: 2,
+      battlesRemaining: 1,
+      source: `exploration:${site.id}:${openingHand.id}`,
+    });
+    expect(withHand.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        battleModifier: {
+          kind: "opening-hand",
+          amount: 2,
+          battlesRemaining: 1,
+        },
+      },
+    });
+
+    const energyState = buildState(content);
+    const withEnergy = resolve(content, energyState.journey, startingEnergy.id);
+    expect(
+      withEnergy.battleModifiers[withEnergy.battleModifiers.length - 1],
+    ).toMatchObject({
+      kind: "starting_energy_bonus",
+      count: 2,
+      battlesRemaining: 1,
+    });
+  });
+
+  it("offers a replacement Dream Avatar and atomically purges duplicated UUIDs before granting Reclaim", () => {
+    const chooseAvatar: ExplorationActionContent = {
+      id: "choose-avatar",
+      label: "Choose an avatar",
+      effectText: "Pick a new Dream Avatar from 3 choices",
+      effectKind: "choose-dream-avatar",
+      offerCount: 3,
+    };
+    const uniqueDeck: ExplorationActionContent = {
+      id: "unique-deck",
+      label: "Enter alone",
+      effectText: "Purge duplicates and grant reclaim",
+      effectKind: "purge-duplicates-and-grant-reclaim",
+    };
+    const content = contentFixture([chooseAvatar, uniqueDeck]);
+    const initialAvatar = content.dreamAvatars[0];
+    if (initialAvatar === undefined) throw new Error("Expected a Dream Avatar");
+    const avatarState = buildState(content, {
+      ...journeyFixture(content),
+      dreamAvatar: {
+        id: initialAvatar.id,
+        name: initialAvatar.name,
+        title: initialAvatar.title,
+        renderedText: initialAvatar.renderedText,
+        imageNumber: initialAvatar.imageNumber,
+        startingEssence: initialAvatar.startingEssence,
+      },
+    });
+    const offeredAvatarIds =
+      avatarState.runtime.actionOffers[0]?.offeredDreamAvatarIds ?? [];
+    expect(offeredAvatarIds).toHaveLength(3);
+    expect(offeredAvatarIds).not.toContain(initialAvatar.id);
+    const chosenAvatarId = offeredAvatarIds[0];
+    if (chosenAvatarId === undefined) throw new Error("Expected an avatar offer");
+    const avatarResult = resolve(content, avatarState.journey, chooseAvatar.id, {
+      dreamAvatarId: chosenAvatarId,
+    });
+    expect(avatarResult.dreamAvatar?.id).toBe(chosenAvatarId);
+    expect(avatarResult.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        previousDreamAvatarId: initialAvatar.id,
+        chosenDreamAvatarId: chosenAvatarId,
+      },
+    });
+
+    const baseJourney = journeyFixture(content);
+    const duplicateSource = baseJourney.deck[1];
+    const duplicateTarget = baseJourney.deck[2];
+    if (duplicateSource === undefined || duplicateTarget === undefined) {
+      throw new Error("Expected duplicate fixtures");
+    }
+    const duplicateJourney = {
+      ...baseJourney,
+      deck: baseJourney.deck.map((entry) =>
+        entry.entryId === duplicateTarget.entryId
+          ? { ...entry, cardNumber: duplicateSource.cardNumber }
+          : entry,
+      ),
+    };
+    const uniqueState = buildState(content, duplicateJourney);
+    const uniqueResult = resolve(content, uniqueState.journey, uniqueDeck.id);
+    expect(
+      uniqueResult.deck.some(
+        (entry) => entry.cardNumber === duplicateSource.cardNumber,
+      ),
+    ).toBe(false);
+    expect(
+      uniqueResult.deck.every(
+        (entry) => (entry.keywordModification?.setReclaim ?? 0) > 0,
+      ),
+    ).toBe(true);
+    const runtime = uniqueResult.siteRuntime[site.id];
+    expect(runtime?.kind).toBe("exploration");
+    expect(
+      runtime?.kind === "exploration"
+        ? runtime.resolution?.purgedEntryIds
+        : undefined,
+    ).toEqual(
+      expect.arrayContaining([
+        duplicateSource.entryId,
+        duplicateTarget.entryId,
+      ]),
+    );
   });
 });

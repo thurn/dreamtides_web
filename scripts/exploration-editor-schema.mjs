@@ -93,8 +93,11 @@ export const EXPLORATION_EFFECT_DEFINITIONS = [
   {
     kind: "change-subtype-selected",
     label: "Change selected subtype",
-    templateIds: [58],
-    fields: [field("subtype", "Subtype", "subtype")],
+    templateIds: [53, 58],
+    fields: [
+      field("predicate", "Card predicate", "predicate", { optional: true }),
+      field("subtype", "Subtype", "subtype"),
+    ],
   },
   {
     kind: "change-subtype-all",
@@ -199,6 +202,47 @@ export const EXPLORATION_EFFECT_DEFINITIONS = [
         defaultValue: 3, min: 1,
       }),
     ],
+  },
+  {
+    kind: "copy-selected-card",
+    label: "Copy a selected deck card",
+    templateIds: [49],
+    fields: [
+      field("predicate", "Card predicate", "predicate", { optional: true }),
+      field("count", "Copies", "number", { defaultValue: 1, min: 1 }),
+    ],
+  },
+  {
+    kind: "copy-offered-deck-card",
+    label: "Copy an offered deck card",
+    templateIds: [55],
+    fields: [field("offerCount", "Offer count", "number", { defaultValue: 4, min: 1 })],
+  },
+  {
+    kind: "next-battle-opening-hand",
+    label: "Increase next opening hand",
+    templateIds: [38],
+    fields: [field("count", "Additional cards", "number", { defaultValue: 1, min: 1 })],
+  },
+  {
+    kind: "next-battle-starting-energy",
+    label: "Increase next starting energy",
+    templateIds: [39],
+    fields: [field("count", "Additional energy", "number", {
+      defaultValue: 1, min: 1, resource: "energy",
+    })],
+  },
+  {
+    kind: "choose-dream-avatar",
+    label: "Choose a new Dream Avatar",
+    templateIds: [57],
+    fields: [field("offerCount", "Offer count", "number", { defaultValue: 3, min: 1 })],
+  },
+  {
+    kind: "purge-duplicates-and-grant-reclaim",
+    label: "Purge duplicates and grant Reclaim",
+    templateIds: [79],
+    fields: [],
   },
 ];
 

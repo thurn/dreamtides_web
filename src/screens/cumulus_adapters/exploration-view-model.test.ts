@@ -1,10 +1,16 @@
 import { describe, expect, it } from "vitest";
 import type { JourneyContent } from "../../data/journey-content";
+import type { ExplorationActionContent } from "../../data/exploration";
 import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
-import type { ExplorationSiteRuntime, SiteState } from "../../types/journey";
+import type {
+  ExplorationResolution,
+  ExplorationSiteRuntime,
+  JourneyState,
+  SiteState,
+} from "../../types/journey";
 import { createDefaultState } from "../../state/journey-context";
 import {
   buildExplorationActionEffect,
@@ -1333,6 +1339,245 @@ describe("exploration-view-model", () => {
       kind: "purged-dreamsign-essence",
       dreamsign: heldDreamsign,
       totalEssence: 50,
+    });
+  });
+
+  it("builds semantic outcomes for copied cards, next-battle modifiers, Reclaim, and Dream Avatar replacement", () => {
+    const source = card(sourceId, 17);
+    const survivor = card(
+      asCardId("f0000000-0000-4000-8000-000000000018"),
+      18,
+    );
+    const dreamAvatars = Array.from({ length: 4 }, (_, index) => ({
+      id: `avatar-${String(index)}`,
+      name: `Avatar ${String(index)}`,
+      title: "Synthetic",
+      renderedText: "A synthetic ability.",
+      imageNumber: String(index),
+      startingEssence: 250,
+      signatureCards: [],
+    }));
+    const baseState: JourneyState = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "source-entry",
+          cardNumber: source.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        },
+        {
+          entryId: "copy-a",
+          cardNumber: source.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        },
+        {
+          entryId: "copy-b",
+          cardNumber: source.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        },
+        {
+          entryId: "survivor-entry",
+          cardNumber: survivor.cardNumber,
+          transfiguration: null,
+          keywordModification: { setReclaim: 2 },
+          isBane: false,
+        },
+      ],
+      dreamAvatar: {
+        id: "avatar-2",
+        name: "Avatar 2",
+        title: "Synthetic",
+        renderedText: "A synthetic ability.",
+        imageNumber: "2",
+        startingEssence: 250,
+      },
+    };
+    const build = (
+      action: ExplorationActionContent,
+      resolution: ExplorationResolution,
+      state: JourneyState = baseState,
+    ) => {
+      const fallback: ExplorationActionContent = {
+        id: "fallback",
+        label: "Fallback",
+        effectText: "Gain a card",
+        effectKind: "gain-card",
+        cardId: source.id,
+      };
+      const content = {
+        cardDatabase: new Map([
+          [source.cardNumber, source],
+          [survivor.cardNumber, survivor],
+        ]),
+        dreamAvatars,
+        dreamwellCards: [],
+        dreamsignTemplates: [],
+        dreamscapes: [],
+        affiliations: [],
+        guides: [guide],
+        atlasConfig: { completionLevels: [] },
+        exploration: {
+          customCards: [],
+          customDreamsigns: [],
+          encounters: [
+            {
+              cardId: source.id,
+              prose: "A scene.",
+              actions: [action, fallback],
+            },
+          ],
+        },
+      } as unknown as JourneyContent;
+      return buildExplorationSiteView({
+        sceneNode: null,
+        site: explorationSite,
+        guide,
+        state,
+        content,
+        runtime: {
+          kind: "exploration",
+          encounterCardId: source.id,
+          actionOffers: [
+            {
+              actionId: action.id,
+              offeredCardIds: [],
+              offeredDreamAvatarIds: ["avatar-1", "avatar-2", "avatar-3"],
+              packCardIds: [],
+              replacementCardIdByEntryId: {},
+              transfigurationByEntryId: {},
+            },
+            {
+              actionId: fallback.id,
+              offeredCardIds: [],
+              packCardIds: [],
+              replacementCardIdByEntryId: {},
+              transfigurationByEntryId: {},
+            },
+          ],
+          resolution,
+        },
+      });
+    };
+
+    const emptyResolution = (actionId: string): ExplorationResolution => ({
+      actionId,
+      gainedCardIds: [],
+      gainedDreamsignIds: [],
+      purgedCardIds: [],
+      affectedEntryIds: [],
+      essenceGained: 0,
+    });
+
+    const copied = build(
+      {
+        id: "copy",
+        label: "Copy",
+        effectText: "Gain 2 copies of $DECK_CARD",
+        effectKind: "copy-selected-card",
+        count: 2,
+      },
+      {
+        ...emptyResolution("copy"),
+        gainedCardIds: [source.id, source.id],
+        gainedEntryIds: ["copy-a", "copy-b"],
+        affectedEntryIds: ["source-entry"],
+      },
+    );
+    expect(copied).toMatchObject({
+      outcomeKind: "card-copies",
+      reward: {
+        kind: "card-copies",
+        sourceEntryId: "source-entry",
+        cards: [{ entryId: "copy-a" }, { entryId: "copy-b" }],
+      },
+    });
+
+    const modifier = build(
+      {
+        id: "energy",
+        label: "Energy",
+        effectText: "Gain 2 additional energy at the start of your next battle",
+        effectKind: "next-battle-starting-energy",
+        count: 2,
+      },
+      {
+        ...emptyResolution("energy"),
+        battleModifier: {
+          kind: "starting-energy",
+          amount: 2,
+          battlesRemaining: 1,
+        },
+      },
+    );
+    expect(modifier).toMatchObject({
+      outcomeKind: "battle-modifier",
+      reward: { kind: "battle-modifier", modifier: "starting-energy", amount: 2 },
+    });
+
+    const reclaim = build(
+      {
+        id: "reclaim",
+        label: "Enter alone",
+        effectText: "Purge duplicates and grant reclaim",
+        effectKind: "purge-duplicates-and-grant-reclaim",
+      },
+      {
+        ...emptyResolution("reclaim"),
+        purgedCardIds: [source.id, source.id, source.id],
+        purgedEntryIds: ["source-entry", "copy-a", "copy-b"],
+        affectedEntryIds: ["survivor-entry"],
+        reclaimCostByEntryId: { "survivor-entry": 2 },
+      },
+      { ...baseState, deck: [baseState.deck[3]] },
+    );
+    expect(reclaim).toMatchObject({
+      outcomeKind: "reclaim",
+      reward: {
+        objects: {
+          purgedCards: [
+            { cardId: source.id },
+            { cardId: source.id },
+            { cardId: source.id },
+          ],
+        },
+        deckModification: {
+          kind: "reclaim",
+          cards: [{ entryId: "survivor-entry" }],
+          reclaimCostByEntryId: { "survivor-entry": 2 },
+        },
+      },
+    });
+
+    const avatar = build(
+      {
+        id: "avatar",
+        label: "Follow",
+        effectText: "Pick a new Dream Avatar from 3 choices",
+        effectKind: "choose-dream-avatar",
+        offerCount: 3,
+      },
+      {
+        ...emptyResolution("avatar"),
+        previousDreamAvatarId: "avatar-0",
+        chosenDreamAvatarId: "avatar-2",
+      },
+    );
+    expect(avatar).toMatchObject({
+      outcomeKind: "dream-avatar",
+      reward: {
+        kind: "dream-avatar",
+        previous: { id: "avatar-0" },
+        current: { id: "avatar-2" },
+      },
+    });
+    expect(avatar?.actions[0]).toMatchObject({
+      followup: {
+        kind: "dreamAvatars",
+        dreamAvatars: [{ id: "avatar-1" }, { id: "avatar-2" }, { id: "avatar-3" }],
+      },
     });
   });
 });

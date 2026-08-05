@@ -39,6 +39,7 @@ import {
   JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP,
 } from "../components/hud/JourneyStatusBar";
 import { Dreamsign } from "../components/hud/Dreamsign";
+import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
 import { ResourceChip } from "../components/hud/ResourceChip";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import {
@@ -70,6 +71,7 @@ import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 import { useIsDesktop } from "./use-is-desktop";
 import type {
   Dreamsign as DreamsignData,
+  DreamAvatar,
   TransfigurationType,
 } from "../../types/journey";
 
@@ -92,6 +94,8 @@ export interface ExplorationSiteView {
   resolvedActionId: string | null;
   /** Exact UUID-backed objects granted by the persisted resolution. */
   reward: ExplorationRewardView | null;
+  /** Semantic outcome variant presented for logging and browser QA. */
+  outcomeKind: string | null;
 }
 export type ExplorationRewardView =
   | {
@@ -130,11 +134,28 @@ export type ExplorationRewardView =
       readonly dreamsign: DreamsignData;
       /** Authoritative total applied by the reducer after the purge. */
       readonly totalEssence: number;
+    }
+  | {
+      readonly kind: "card-copies";
+      readonly sourceEntryId: string;
+      readonly cards: readonly ExplorationCardChoiceView[];
+      readonly count: number;
+    }
+  | {
+      readonly kind: "battle-modifier";
+      readonly modifier: "opening-hand" | "starting-energy";
+      readonly amount: number;
+      readonly battlesRemaining: number;
+    }
+  | {
+      readonly kind: "dream-avatar";
+      readonly previous: DreamAvatar | null;
+      readonly current: DreamAvatar;
     };
 
 export interface ExplorationDeckModificationView {
   /** Semantic modifier used for the announcement and QA contract. */
-  readonly kind: "spark" | "fast" | "energy-cost" | "subtype";
+  readonly kind: "spark" | "fast" | "energy-cost" | "subtype" | "reclaim";
   /** Compact center copy for the radial announcement. */
   readonly headline: string;
   /** Complete authored effect copy exposed to assistive technology. */
@@ -143,6 +164,8 @@ export interface ExplorationDeckModificationView {
   readonly selectionColor: CumulusColor;
   /** Exact post-resolution snapshots of the affected deck entries. */
   readonly cards: readonly ExplorationCardChoiceView[];
+  /** Exact Reclaim cost by deck-entry UUID for the Reclaim outcome. */
+  readonly reclaimCostByEntryId?: Readonly<Record<string, number>>;
 }
 
 export interface ExplorationCardChoiceView {
@@ -191,10 +214,18 @@ export type ExplorationFollowupView =
       readonly subtitle: string;
       readonly selectionKey: "replacedDreamsignId" | "dreamsignId";
       readonly dreamsigns: readonly (DreamsignData & { readonly id: string })[];
+    }
+  | {
+      readonly kind: "dreamAvatars";
+      readonly title: string;
+      readonly subtitle: string;
+      readonly dreamAvatars: readonly DreamAvatar[];
     };
 
 export interface ExplorationActionView {
   readonly id: string;
+  readonly effectKind: string;
+  readonly mechanics: Readonly<Record<string, unknown>>;
   readonly label: string;
   readonly effectText: string;
   readonly effectParts?: readonly ExplorationActionEffectPart[];
@@ -771,6 +802,55 @@ function rewardItemsFor(
   ];
 }
 
+function explorationRewardIdentity(
+  actionId: string | null,
+  reward: ExplorationRewardView | null,
+): string | null {
+  if (actionId === null || reward === null) return null;
+  if (!("kind" in reward)) {
+    return [
+      actionId,
+      reward.deckModification?.kind ?? "objects-only",
+      ...(reward.deckModification?.cards.map((card) => card.entryId) ?? []),
+      ...reward.objects.purgedCards.map((card) => `purged:${card.cardId}`),
+      ...reward.objects.cards.map((card) => `gained:${card.cardId}`),
+      ...reward.objects.dreamsigns.map(
+        (dreamsign) => `dreamsign:${dreamsign.id ?? "missing"}`,
+      ),
+    ].join("|");
+  }
+  switch (reward.kind) {
+    case "essence":
+      return [actionId, reward.kind, ...reward.cards.map((card) => card.entryId)].join("|");
+    case "transfiguration":
+      return [
+        actionId,
+        reward.kind,
+        reward.entryId,
+        reward.after.cardId,
+        reward.after.transfiguration.type,
+      ].join("|");
+    case "purged-dreamsign-essence":
+      return [
+        actionId,
+        reward.kind,
+        reward.dreamsign.id ?? "missing",
+        reward.totalEssence,
+      ].join("|");
+    case "card-copies":
+      return [
+        actionId,
+        reward.kind,
+        reward.sourceEntryId,
+        ...reward.cards.map((card) => card.entryId),
+      ].join("|");
+    case "battle-modifier":
+      return [actionId, reward.kind, reward.modifier, reward.amount].join("|");
+    case "dream-avatar":
+      return [actionId, reward.kind, reward.current.id].join("|");
+  }
+}
+
 function deckModificationCardPose(
   index: number,
   count: number,
@@ -939,6 +1019,12 @@ export function ExplorationSiteScreen({
     effectReward?.kind === "essence" ? effectReward : null;
   const dreamsignPurgeReward =
     effectReward?.kind === "purged-dreamsign-essence" ? effectReward : null;
+  const cardCopiesReward =
+    effectReward?.kind === "card-copies" ? effectReward : null;
+  const battleModifierReward =
+    effectReward?.kind === "battle-modifier" ? effectReward : null;
+  const dreamAvatarReward =
+    effectReward?.kind === "dream-avatar" ? effectReward : null;
   const rewardItems = useMemo(() => rewardItemsFor(view.reward), [view.reward]);
   const showDeckModification =
     deckModification !== null && !deckModificationPresented;
@@ -951,37 +1037,10 @@ export function ExplorationSiteScreen({
       : rewardItems.length === 0
         ? `Purging ${String(purgedRewardCards.length)} ${purgedRewardCards.length === 1 ? "card" : "cards"}`
         : `Purging ${String(purgedRewardCards.length)} ${purgedRewardCards.length === 1 ? "card" : "cards"} and gaining ${String(rewardItems.length)} ${rewardItems.length === 1 ? "reward" : "rewards"}`;
-  const rewardIdentity =
-    view.resolvedActionId === null || view.reward === null
-      ? null
-      : "kind" in view.reward
-        ? view.reward.kind === "essence"
-          ? [
-              view.resolvedActionId,
-              view.reward.kind,
-              ...view.reward.cards.map((card) => card.entryId),
-            ].join("|")
-          : view.reward.kind === "transfiguration"
-            ? [
-                view.resolvedActionId,
-                view.reward.kind,
-                view.reward.entryId,
-                view.reward.after.cardId,
-                view.reward.after.transfiguration.type,
-              ].join("|")
-            : [
-                view.resolvedActionId,
-                view.reward.kind,
-                view.reward.dreamsign.id ?? "missing",
-                view.reward.totalEssence,
-              ].join("|")
-        : [
-            view.resolvedActionId,
-            deckModification?.kind ?? "objects-only",
-            ...(deckModification?.cards.map((card) => card.entryId) ?? []),
-            ...purgedRewardCards.map((card) => `purged:${card.cardId}`),
-            ...rewardItems.map((item) => item.key),
-          ].join("|");
+  const rewardIdentity = explorationRewardIdentity(
+    view.resolvedActionId,
+    view.reward,
+  );
   useEffect(() => {
     if (view.resolvedActionId === null) return;
     setActiveActionId(null);
@@ -1278,7 +1337,7 @@ export function ExplorationSiteScreen({
       return;
     }
     const timer = window.setTimeout(() => {
-      if (rewardItems.length === 0) {
+      if (rewardItems.length === 0 && purgedRewardCards.length === 0) {
         completeExit();
         return;
       }
@@ -1290,6 +1349,7 @@ export function ExplorationSiteScreen({
     deckModification,
     frameBreakPhase,
     rewardIdentity,
+    purgedRewardCards.length,
     rewardItems.length,
     showDeckModification,
   ]);
@@ -1345,6 +1405,29 @@ export function ExplorationSiteScreen({
     completeExit,
     dreamsignPurgeReward,
     dreamsignPurgeRewardPhase,
+    frameBreakPhase,
+  ]);
+
+  useEffect(() => {
+    if (
+      frameBreakPhase !== "open" ||
+      (cardCopiesReward === null &&
+        battleModifierReward === null &&
+        dreamAvatarReward === null)
+    ) {
+      return;
+    }
+    const duration =
+      cardCopiesReward === null
+        ? RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS
+        : REWARD_READING_SECONDS * 1_000;
+    const timer = window.setTimeout(completeExit, duration);
+    return () => window.clearTimeout(timer);
+  }, [
+    battleModifierReward,
+    cardCopiesReward,
+    completeExit,
+    dreamAvatarReward,
     frameBreakPhase,
   ]);
 
@@ -1514,7 +1597,9 @@ export function ExplorationSiteScreen({
         ? "min(1120px, calc(100vw - 64px))"
         : activeAction?.followup.kind === "dreamsigns"
           ? `min(max(420px, calc(${String(dreamsignChoiceColumns)} * ${String(DESKTOP_DREAMSIGN_CHOICE_SIZE)}px + ${String(dreamsignChoiceColumns - 1)} * ${token("--space-9")} + 2 * ${token("--space-8")})), calc(100vw - 64px))`
-          : null;
+          : activeAction?.followup.kind === "dreamAvatars"
+            ? "min(960px, calc(100vw - 64px))"
+            : null;
 
   return (
     <GuideGallerySiteLayout
@@ -2059,6 +2144,154 @@ export function ExplorationSiteScreen({
       {frameBreakGeometry !== null &&
         frameBreakPhase === "open" &&
         activeAction === null &&
+        cardCopiesReward !== null && (
+          <motion.section
+            data-exploration-outcome="card-copies"
+            data-exploration-source-entry-id={cardCopiesReward.sourceEntryId}
+            data-exploration-copy-count={cardCopiesReward.count}
+            role="status"
+            aria-label={`Gained ${String(cardCopiesReward.count)} ${cardCopiesReward.count === 1 ? "copy" : "copies"}`}
+            initial={{ opacity: 0, scale: reduceMotion ? 1 : 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: reduceMotion ? 0 : motionTimeSeconds("--dur-slow"),
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "fixed",
+              inset: `${safeAreaInsetAtLeast("top", "--space-7")} ${token("--space-5")} ${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE}`,
+              zIndex: FRAME_BREAK_EXIT_LAYER + 1,
+              display: "grid",
+              placeContent: "center",
+              justifyItems: "center",
+              gap: token("--space-7"),
+              pointerEvents: "none",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: token("--space-5"),
+              }}
+            >
+              {cardCopiesReward.cards.map((card, index) => (
+                <motion.div
+                  key={card.entryId}
+                  data-exploration-copied-entry-id={card.entryId}
+                  data-card-id={card.model.cardId}
+                  initial={{ y: reduceMotion ? 0 : token("--space-7"), opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{
+                    delay: reduceMotion ? 0 : index * REWARD_STAGGER_SECONDS,
+                    duration: reduceMotion ? 0 : motionTimeSeconds("--dur-slow"),
+                    ease: DREAM_EASE,
+                  }}
+                  style={{
+                    width: isDesktop
+                      ? DESKTOP_REWARD_CARD_WIDTH
+                      : "min(40vw, 180px)",
+                    aspectRatio: CARD_ASPECT_RATIO,
+                  }}
+                >
+                  <GameCard
+                    model={card.model}
+                    selected
+                    selectionColor="positive"
+                    testId={`cumulus-exploration-card-copy-${card.entryId}`}
+                  />
+                </motion.div>
+              ))}
+            </div>
+            <RadialAnnouncement
+              headline={`+${String(cardCopiesReward.count)} ${cardCopiesReward.count === 1 ? "Copy" : "Copies"}`}
+              tone="reward"
+              size={isDesktop ? "compact" : "mini"}
+              duration="extended"
+              announcementId={`exploration-card-copies:${view.resolvedActionId ?? "resolved"}`}
+            />
+          </motion.section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
+        battleModifierReward !== null && (
+          <section
+            data-exploration-outcome="battle-modifier"
+            data-exploration-battle-modifier={battleModifierReward.modifier}
+            data-exploration-battle-modifier-amount={battleModifierReward.amount}
+            data-exploration-battles-remaining={battleModifierReward.battlesRemaining}
+            role="status"
+            aria-label={`${String(battleModifierReward.amount)} additional ${battleModifierReward.modifier === "opening-hand" ? "opening hand cards" : "starting energy"} in the next battle`}
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: FRAME_BREAK_EXIT_LAYER + 1,
+              display: "grid",
+              placeItems: "center",
+              pointerEvents: "none",
+            }}
+          >
+            <RadialAnnouncement
+              headline={`+${String(battleModifierReward.amount)} ${battleModifierReward.modifier === "opening-hand" ? "Cards" : "●"}`}
+              detail="Next Battle"
+              tone="reward"
+              size={isDesktop ? "compact" : "mini"}
+              duration="extended"
+              announcementId={`exploration-battle-modifier:${battleModifierReward.modifier}:${view.resolvedActionId ?? "resolved"}`}
+            />
+          </section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
+        dreamAvatarReward !== null && (
+          <motion.section
+            data-exploration-outcome="dream-avatar"
+            data-exploration-previous-dream-avatar-id={
+              dreamAvatarReward.previous?.id ?? ""
+            }
+            data-exploration-dream-avatar-id={dreamAvatarReward.current.id}
+            role="status"
+            aria-label={`${dreamAvatarReward.current.name} is now your Dream Avatar`}
+            initial={{ opacity: 0, scale: reduceMotion ? 1 : 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: reduceMotion ? 0 : motionTimeSeconds("--dur-slow"),
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "fixed",
+              inset: `${safeAreaInsetAtLeast("top", "--space-7")} ${token("--space-5")} ${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE}`,
+              zIndex: FRAME_BREAK_EXIT_LAYER + 1,
+              display: "grid",
+              placeContent: "center",
+              justifyItems: "center",
+              gap: token("--space-5"),
+              color: token("--text-primary"),
+              textAlign: "center",
+              pointerEvents: "none",
+            }}
+          >
+            <DreamAvatarPortrait
+              dreamAvatar={dreamAvatarReward.current}
+              variant="hero"
+              size={isDesktop ? 260 : 210}
+            />
+            <div style={{ display: "grid", gap: token("--space-1") }}>
+              <strong style={{ font: token("--t-title") }}>
+                {dreamAvatarReward.current.name}
+              </strong>
+              <span style={{ font: token("--t-body"), color: token("--text-secondary") }}>
+                {dreamAvatarReward.current.title}
+              </span>
+            </div>
+          </motion.section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
         objectReward !== null &&
         showObjectReward &&
         rewardTrajectories === null && (
@@ -2273,6 +2506,11 @@ export function ExplorationSiteScreen({
                   key={card.entryId}
                   data-exploration-deck-modification-card=""
                   data-exploration-deck-entry-id={card.entryId}
+                  data-exploration-reclaim-cost={
+                    deckModification.kind === "reclaim"
+                      ? deckModification.reclaimCostByEntryId?.[card.entryId]
+                      : undefined
+                  }
                   data-card-id={card.model.cardId}
                   initial={{
                     x: 0,
@@ -2970,6 +3208,72 @@ export function ExplorationSiteScreen({
                     testid={`cumulus-exploration-dreamsign-${dreamsign.id}`}
                     onPress={() => chooseDreamsign(dreamsign.id)}
                   />
+                ))}
+              </div>
+            </GlassPanel>
+          )}
+          {activeAction.followup.kind === "dreamAvatars" && (
+            <GlassPanel
+              eyebrow="Exploration"
+              title={activeAction.followup.title}
+              subtitle={activeAction.followup.subtitle}
+              headingLevel="h1"
+            >
+              <div
+                data-exploration-dream-avatar-choices=""
+                role="group"
+                aria-label={activeAction.followup.subtitle}
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: isDesktop
+                    ? "repeat(3, minmax(0, 1fr))"
+                    : "repeat(auto-fit, minmax(150px, 1fr))",
+                  gap: isDesktop ? token("--space-7") : token("--space-5"),
+                  placeItems: "center",
+                  padding: isDesktop ? token("--space-8") : token("--space-5"),
+                  overflow: "auto",
+                }}
+              >
+                {activeAction.followup.dreamAvatars.map((dreamAvatar) => (
+                  <div
+                    key={dreamAvatar.id}
+                    data-exploration-dream-avatar-choice={dreamAvatar.id}
+                    style={{
+                      display: "grid",
+                      justifyItems: "center",
+                      gap: token("--space-3"),
+                      color: token("--text-on-glass"),
+                      textAlign: "center",
+                    }}
+                  >
+                    <DreamAvatarPortrait
+                      dreamAvatar={dreamAvatar}
+                      variant="panel"
+                      size={isDesktop ? 196 : 150}
+                      profile={{
+                        id: dreamAvatar.id,
+                        ability: dreamAvatar.renderedText,
+                      }}
+                      onActivate={() =>
+                        onResolve(activeAction.id, {
+                          dreamAvatarId: dreamAvatar.id,
+                        })
+                      }
+                    />
+                    <div style={{ display: "grid", gap: token("--space-1") }}>
+                      <strong style={{ font: token("--t-button") }}>
+                        {dreamAvatar.name}
+                      </strong>
+                      <span
+                        style={{
+                          font: token("--t-caption"),
+                          color: token("--text-on-glass-muted"),
+                        }}
+                      >
+                        {dreamAvatar.title}
+                      </span>
+                    </div>
+                  </div>
                 ))}
               </div>
             </GlassPanel>

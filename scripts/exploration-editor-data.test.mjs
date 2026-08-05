@@ -44,10 +44,12 @@ afterEach(() => {
 });
 
 describe("exploration editor data", () => {
-  it("loads the fixed UUID-keyed catalog with resolved card information", () => {
+  it("loads the UUID-keyed catalog with resolved card information", () => {
     const data = readExplorationEditorData({ rootDir: fixtureRoot() });
-    expect(data.encounters).toHaveLength(14);
-    expect(data.effectDefinitions).toHaveLength(22);
+    expect(data.encounters.length).toBeGreaterThan(0);
+    expect(data.effectDefinitions).toHaveLength(
+      EXPLORATION_EFFECT_DEFINITIONS.length,
+    );
     expect(data.encounters.every((encounter) =>
       encounter.cardId.match(/^[0-9a-f-]{36}$/iu) &&
       encounter.cardName.length > 0 &&

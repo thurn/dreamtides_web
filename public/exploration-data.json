@@ -448,6 +448,155 @@
           "essence": 50
         }
       ]
+    },
+    {
+      "cardId": "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6",
+      "prose": "Three sealed figures press through billowing haze, opaque visors hidden beneath hoods.",
+      "action": [
+        {
+          "id": "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6:pair-5:template-53",
+          "label": "Fit a matching hood",
+          "effectText": "Change $DECK_CARD to become a Survivor",
+          "templateId": 53,
+          "templateVariables": {
+            "card_type": "Survivor"
+          },
+          "selection": {
+            "$DECK_CARD": {
+              "predicate": "≤2● cost Character"
+            }
+          },
+          "effectKind": "change-subtype-selected",
+          "predicate": "cheap-character",
+          "subtype": "Survivor"
+        },
+        {
+          "id": "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6:pair-5:template-9",
+          "label": "Walk beside the sealed trio",
+          "effectText": "Gain a random Survivor card",
+          "templateId": 9,
+          "templateVariables": {
+            "predicate": "Survivor"
+          },
+          "effectKind": "gain-random-cards",
+          "predicate": "survivor",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "cardId": "f9a65b32-537b-457c-9eaf-b512cf1f3791",
+      "prose": "Luminous seams thread a heavy thorax; articulated legs fold above a branch beneath spread wings.",
+      "action": [
+        {
+          "id": "f9a65b32-537b-457c-9eaf-b512cf1f3791:pair-2:template-49",
+          "label": "Copy the linked armor pattern",
+          "effectText": "Gain 2 copies of $DECK_CARD",
+          "templateId": 49,
+          "templateVariables": {
+            "count": 2
+          },
+          "selection": {
+            "$DECK_CARD": {
+              "predicate": "≤2● cost Character"
+            }
+          },
+          "effectKind": "copy-selected-card",
+          "predicate": "cheap-character",
+          "count": 2
+        },
+        {
+          "id": "f9a65b32-537b-457c-9eaf-b512cf1f3791:pair-2:template-55",
+          "label": "Compare the repeating plates",
+          "effectText": "Select 4 random cards from your deck and choose one to gain a copy of",
+          "templateId": 55,
+          "templateVariables": {},
+          "effectKind": "copy-offered-deck-card",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034",
+      "prose": "A blackened giant reaches across water, its shape repeating in broken reflections.",
+      "action": [
+        {
+          "id": "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034:pair-1:template-27",
+          "label": "Study the bare crown",
+          "effectText": "Gain Mortal Skull",
+          "templateId": 27,
+          "templateVariables": {
+            "dreamsign_name": {
+              "id": "EB55B141-82F8-4BA4-B319-420F762E9EE4",
+              "display_name": "Mortal Skull"
+            }
+          },
+          "effectKind": "gain-dreamsign",
+          "dreamsignId": "EB55B141-82F8-4BA4-B319-420F762E9EE4"
+        },
+        {
+          "id": "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034:pair-1:template-38",
+          "label": "Hold the hollow gaze",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "templateId": 38,
+          "templateVariables": {
+            "count": 2
+          },
+          "effectKind": "next-battle-opening-hand",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "86fd585b-e9d0-4dc1-bce9-488014b9316d",
+      "prose": "A luminous jellyfish glides among stars, its flowing tendrils brightly lit.",
+      "action": [
+        {
+          "id": "86fd585b-e9d0-4dc1-bce9-488014b9316d:pair-1:template-38",
+          "label": "Study its measured pulse",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "templateId": 38,
+          "templateVariables": {
+            "count": 2
+          },
+          "effectKind": "next-battle-opening-hand",
+          "count": 2
+        },
+        {
+          "id": "86fd585b-e9d0-4dc1-bce9-488014b9316d:pair-1:template-39",
+          "label": "Follow its radiant wake",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "templateId": 39,
+          "templateVariables": {
+            "count": 2
+          },
+          "effectKind": "next-battle-starting-energy",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "b1d36337-5668-4f1d-b155-2d07fc00f872",
+      "prose": "A lone astronaut stands rigid where luminous steps meet a vast black aperture.",
+      "action": [
+        {
+          "id": "b1d36337-5668-4f1d-b155-2d07fc00f872:pair-1:template-57",
+          "label": "Follow the astronaut",
+          "effectText": "Pick a new Dream Avatar from 3 choices",
+          "templateId": 57,
+          "templateVariables": {},
+          "effectKind": "choose-dream-avatar",
+          "offerCount": 3
+        },
+        {
+          "id": "b1d36337-5668-4f1d-b155-2d07fc00f872:pair-1:template-79",
+          "label": "Enter the aperture alone",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "templateId": 79,
+          "templateVariables": {},
+          "effectKind": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
     }
   ]
 }

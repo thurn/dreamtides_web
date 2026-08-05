@@ -37,6 +37,15 @@ describe("applyCardKeywordModification", () => {
     });
   });
 
+  it("treats zero-cost Reclaim as an explicit playable keyword", () => {
+    const card = makeCard();
+
+    expect(applyCardKeywordModification(card, { setReclaim: 0 })).toMatchObject({
+      reclaimCost: 0,
+      renderedText: "Draw a card.\n\nReclaim 0●",
+    });
+  });
+
   it("keeps Reclaim text stable when applying the same modifier repeatedly", () => {
     const card = makeCard();
 

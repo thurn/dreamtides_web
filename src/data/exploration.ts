@@ -37,7 +37,13 @@ export type ExplorationEffectKind =
   | "gain-random-dreamsign"
   | "purge-dreamsign-for-essence"
   | "make-fast-all"
-  | "reduce-cost-all-and-gain-nightmares";
+  | "reduce-cost-all-and-gain-nightmares"
+  | "copy-selected-card"
+  | "copy-offered-deck-card"
+  | "next-battle-opening-hand"
+  | "next-battle-starting-energy"
+  | "choose-dream-avatar"
+  | "purge-duplicates-and-grant-reclaim";
 
 const TRANSFIGURATION_EXPLORATION_EFFECT_KINDS: ReadonlySet<ExplorationEffectKind> =
   new Set(["transfigure-selected", "transfigure-fixed-selected"]);
@@ -52,6 +58,8 @@ export interface ExplorationActionContent {
   id: string;
   label: string;
   effectText: string;
+  templateId?: number;
+  templateVariables?: Readonly<Record<string, unknown>>;
   effectKind: ExplorationEffectKind;
   predicate?: ExplorationPredicate;
   count?: number;
@@ -137,10 +145,27 @@ export async function loadExplorationContent(): Promise<ExplorationContent> {
       actions: [validateAction(actions[0]), validateAction(actions[1])],
     } satisfies ExplorationEncounterContent;
   });
-  if (encounters.length !== 14) {
-    throw new Error(
-      `Invalid Exploration data: expected 14 encounters, found ${String(encounters.length)}`,
-    );
+  if (encounters.length === 0) {
+    throw new Error("Invalid Exploration data: requires at least one encounter");
+  }
+  const encounterIds = new Set<string>();
+  const actionIds = new Set<string>();
+  for (const encounter of encounters) {
+    const encounterId = encounter.cardId.toLowerCase();
+    if (encounterIds.has(encounterId)) {
+      throw new Error(
+        `Invalid Exploration data: duplicate encounter card id ${encounter.cardId}`,
+      );
+    }
+    encounterIds.add(encounterId);
+    for (const action of encounter.actions) {
+      if (actionIds.has(action.id)) {
+        throw new Error(
+          `Invalid Exploration data: duplicate action id ${action.id}`,
+        );
+      }
+      actionIds.add(action.id);
+    }
   }
   return {
     customCards,
