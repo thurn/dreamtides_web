@@ -17,6 +17,7 @@ import type {
 const CARD_ID = "11111111-1111-4111-8111-111111111111";
 const REWARD_CARD_ID = "22222222-2222-4222-8222-222222222222";
 const DREAMSIGN_ID = "33333333-3333-4333-8333-333333333333";
+const LAST_CARD_ID = "44444444-4444-4444-8444-444444444444";
 
 const SOURCE_CARD: CardData = {
   id: asCardId(CARD_ID),
@@ -213,6 +214,23 @@ afterEach(() => {
 });
 
 describe("ExplorationEditorApp", () => {
+  it("renders the last TOML encounter first", async () => {
+    const loaded = loadResult();
+    loaded.encounters.push({
+      ...structuredClone(loaded.encounters[0]),
+      cardId: LAST_CARD_ID,
+      cardName: "Last Authored Encounter",
+    });
+
+    const { container, root } = await renderLoaded(client({
+      load: vi.fn().mockResolvedValue(loaded),
+    }));
+    expect([...container.querySelectorAll<HTMLElement>("[data-exploration-card-id]")]
+      .map((row) => row.dataset.explorationCardId))
+      .toEqual([LAST_CARD_ID, CARD_ID]);
+    act(() => root.unmount());
+  });
+
   it("renders source art, card information, editable copy, and typed controls", async () => {
     const { container, root } = await renderLoaded(client());
     expect(container.textContent).toContain("Fixture Guide");

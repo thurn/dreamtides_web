@@ -876,7 +876,7 @@ export default function ExplorationEditorApp({
         )}
         {loadState === "ready" && data !== null && (
           <div className="exploration-editor-list">
-            {data.encounters.map((encounter, index) => (
+            {[...data.encounters].reverse().map((encounter, index) => (
               <ExplorationEditorRow
                 key={encounter.cardId}
                 client={client}
