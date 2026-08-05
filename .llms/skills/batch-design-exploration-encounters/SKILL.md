@@ -13,11 +13,10 @@ writes, and display rendering in the bundled scripts; use subagents only for
 the creative single-card designs. End with the `$wt` promotion handoff so an
 approved batch is replayed onto `master`.
 
-## Required input
+## Input
 
-Require a positive target batch size. Accept an optional integer seed when the
-caller wants reproducible card selection. The batch size is the number of cards
-and the number of single-card subagent assignments.
+The batch size is the number of cards and the number of single-card subagent
+assignments. The default batch size is 5.
 
 ## Workflow
 
