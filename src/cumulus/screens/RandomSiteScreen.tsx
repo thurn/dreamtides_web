@@ -113,7 +113,6 @@ export function RandomSiteScreen({
                     transition={{ duration: reduceMotion === true ? 0 : 0.38, ease: [0.22, 0.61, 0.36, 1] }}
                     style={{
                       position: "relative",
-                      top: layout === "desktop" ? (index === 1 ? 60 : -60) : 0,
                       width: "100%",
                       height: 150,
                     }}
