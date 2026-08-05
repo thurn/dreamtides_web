@@ -233,6 +233,27 @@ describe("ExplorationCandidatesEditorApp", () => {
     act(() => root.unmount());
   });
 
+  it("renders the newest encounter group first", async () => {
+    const newestGroup: ExplorationCandidatesEditorGroup = {
+      ...structuredClone(GROUPS[0]),
+      cardId: OTHER_CARD_ID,
+      cardName: "The Newest Crossing",
+    };
+    const load = vi.fn().mockResolvedValue({
+      groups: [structuredClone(GROUPS[0]), newestGroup],
+      cards: [structuredClone(REFERENCE_CARD)],
+      dreamsigns: [structuredClone(REFERENCE_DREAMSIGN)],
+    });
+
+    const { container, root } = await renderLoaded(client({ load }));
+
+    expect(
+      [...container.querySelectorAll<HTMLElement>("[data-encounter-card-id]")]
+        .map((element) => element.dataset.encounterCardId),
+    ).toEqual([OTHER_CARD_ID, CARD_ID]);
+    act(() => root.unmount());
+  });
+
   it("scrolls a linked encounter into view after its group loads", async () => {
     window.history.replaceState(null, "", `/exploration_candidates#encounter-${CARD_ID}`);
     const { root } = await renderLoaded(client());

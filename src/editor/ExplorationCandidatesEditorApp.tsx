@@ -849,7 +849,7 @@ export default function ExplorationCandidatesEditorApp({
         )}
         {loadState === "ready" && (
           <div className="exploration-candidates-editor-list">
-            {groups.map((group, index) => (
+            {[...groups].reverse().map((group, index) => (
               <ExplorationCandidatesEditorRow
                 client={client}
                 group={group}
