@@ -153,7 +153,9 @@ function purgeAndCopyRewardView(): ExplorationSiteView {
   if (copiedCard === undefined || purgedCard === undefined) return base;
   return {
     ...base,
+    outcomeKind: "card-replacement",
     reward: {
+      semanticKind: "card-replacement",
       objects: {
         cards: [copiedCard],
         purgedCards: [
@@ -358,6 +360,31 @@ function dreamAvatarRewardView(): ExplorationSiteView {
         imageNumber: "017",
         startingEssence: 250,
       },
+    },
+  };
+}
+
+function siteOfferModifierRewardView(): ExplorationSiteView {
+  return {
+    ...view(true),
+    outcomeKind: "site-offer-modifier",
+    reward: {
+      kind: "site-offer-modifier",
+      modifier: "transfigure-next-draft-or-shop",
+      sourceSiteId: "exploration-site",
+      sourceActionId: "choice-a",
+    },
+  };
+}
+
+function emptyCardAcquisitionRewardView(): ExplorationSiteView {
+  return {
+    ...view(true),
+    outcomeKind: "card-acquisition",
+    reward: {
+      semanticKind: "card-acquisition",
+      objects: { cards: [], purgedCards: [], dreamsigns: [] },
+      deckModification: null,
     },
   };
 }
@@ -1781,6 +1808,11 @@ describe("ExplorationSiteScreen", () => {
       container.querySelector("[data-exploration-purge-card]"),
     ).not.toBeNull();
     expect(
+      container.querySelector<HTMLElement>(
+        '[data-exploration-outcome="card-replacement"]',
+      )?.dataset.explorationRewardCount,
+    ).toBe("2");
+    expect(
       container.querySelector("[data-exploration-purge-icon] .bx-trash"),
     ).not.toBeNull();
     expect(
@@ -2517,6 +2549,63 @@ describe("ExplorationSiteScreen", () => {
     expect(outcome?.getAttribute("aria-label")).toBe(
       "New Dream Avatar is now your Dream Avatar",
     );
+    act(() => root.unmount());
+  });
+
+  it("presents the persisted future-site modifier as a dedicated semantic outcome", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = true;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={siteOfferModifierRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+    const outcome = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="site-offer-modifier"]',
+    );
+    expect(outcome?.dataset.explorationSiteOfferModifier).toBe(
+      "transfigure-next-draft-or-shop",
+    );
+    expect(outcome?.dataset.explorationSourceSiteId).toBe("exploration-site");
+    expect(outcome?.dataset.explorationSourceActionId).toBe("choice-a");
+    expect(outcome?.getAttribute("aria-label")).toBe(
+      "The next Draft or Shop will contain transfigured cards",
+    );
+    expect(outcome?.textContent).toContain("Next Draft or Shop");
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
+  it("presents an exact zero-card acquisition under reduced motion", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = true;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={emptyCardAcquisitionRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={vi.fn()}
+      />,
+    );
+    const outcome = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="card-acquisition"]',
+    );
+    expect(outcome?.dataset.explorationRewardCount).toBe("0");
+    expect(outcome?.getAttribute("aria-label")).toBe("No cards taken");
+    expect(outcome?.textContent).toContain("No Cards Taken");
     act(() => root.unmount());
   });
 });

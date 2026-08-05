@@ -211,6 +211,21 @@ describe("BUY_SHOP_SLOT", () => {
     expect(runtime.slots[0].purchased).toBe(true);
   });
 
+  it("preserves a persisted Shop-slot transfiguration on the purchased entry", () => {
+    const state = shopState(
+      [cardSlot({ cardNumber: 9, transfiguration: "Empowered" })],
+      { essence: 300 },
+    );
+    const result = reduce(state, "BUY_SHOP_SLOT", {
+      siteId: SITE_ID,
+      slotIndex: 0,
+    });
+    expect(result.outcome).toBe("applied");
+    expect(result.state.journey.deck).toMatchObject([
+      { cardNumber: 9, transfiguration: "Empowered" },
+    ]);
+  });
+
   it("bounces a second buy on the same slot (the coop double-buy race)", () => {
     const state = shopState([cardSlot({ basePrice: 100 })], { essence: 300 });
     const first = reduce(state, "BUY_SHOP_SLOT", {

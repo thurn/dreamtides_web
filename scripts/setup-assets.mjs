@@ -650,11 +650,13 @@ const EXPLORATION_EFFECT_KINDS = new Set([
   "change-subtype-selected",
   "change-subtype-all",
   "take-cards",
+  "replace-selected-with-card",
   "replace-selected",
   "gain-nightmare-and-card",
   "gain-random-cards",
   "transfigure-fixed-selected",
   "gain-offered-card",
+  "transfigure-next-draft-or-shop",
   "gain-essence-per-card",
   "increase-spark-all",
   "gain-random-dreamsign",
@@ -754,6 +756,55 @@ export function transformExplorationData(source) {
         if (typeof action[key] !== "string" || action[key].trim() === "") {
           throw new Error(`exploration.toml: action ${action.id} requires ${key}`);
         }
+      }
+      if (
+        ["gain-offered-card", "draft-card", "take-cards"].includes(
+          action.effectKind,
+        ) &&
+        (typeof action.predicate !== "string" || action.predicate.length === 0)
+      ) {
+        throw new Error(
+          `exploration.toml: action ${action.id} requires predicate`,
+        );
+      }
+      if (
+        (action.effectKind === "draft-card" ||
+          (action.effectKind === "gain-offered-card" &&
+            action.templateId === 12)) &&
+        (typeof action.count !== "number" ||
+          !Number.isInteger(action.count) ||
+          action.count <= 0)
+      ) {
+        throw new Error(
+          `exploration.toml: action ${action.id} requires a positive whole-number count`,
+        );
+      }
+      if (
+        ["draft-card", "take-cards"].includes(action.effectKind) &&
+        (typeof action.offerCount !== "number" ||
+          !Number.isInteger(action.offerCount) ||
+          action.offerCount <= 0)
+      ) {
+        throw new Error(
+          `exploration.toml: action ${action.id} requires a positive whole-number offer-count`,
+        );
+      }
+      if (
+        action.effectKind === "replace-selected-with-card" &&
+        (typeof action.cardId !== "string" || action.cardId.length === 0)
+      ) {
+        throw new Error(
+          `exploration.toml: action ${action.id} requires card-id`,
+        );
+      }
+      if (
+        action.effectKind === "transfigure-fixed-selected" &&
+        (typeof action.transfiguration !== "string" ||
+          action.transfiguration.length === 0)
+      ) {
+        throw new Error(
+          `exploration.toml: action ${action.id} requires transfiguration`,
+        );
       }
       if (
         action.effectKind === "gain-essence-per-card" &&

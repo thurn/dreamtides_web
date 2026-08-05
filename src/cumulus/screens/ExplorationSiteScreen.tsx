@@ -100,6 +100,7 @@ export interface ExplorationSiteView {
 export type ExplorationRewardView =
   | {
       /** Tangible objects granted by the resolution. */
+      readonly semanticKind?: "card-acquisition" | "card-replacement" | "objects";
       readonly objects: {
         readonly cards: readonly GameCardModel[];
         readonly purgedCards: readonly ExplorationCardChoiceView[];
@@ -154,6 +155,12 @@ export type ExplorationRewardView =
       readonly kind: "dream-avatar";
       readonly previous: DreamAvatar | null;
       readonly current: DreamAvatar;
+    }
+  | {
+      readonly kind: "site-offer-modifier";
+      readonly modifier: "transfigure-next-draft-or-shop";
+      readonly sourceSiteId: string;
+      readonly sourceActionId: string;
     };
 
 export interface ExplorationDeckModificationView {
@@ -824,6 +831,7 @@ function explorationRewardIdentity(
   if (!("kind" in reward)) {
     return [
       actionId,
+      reward.semanticKind ?? "objects",
       reward.deckModification?.kind ?? "objects-only",
       ...(reward.deckModification?.cards.map((card) => card.entryId) ?? []),
       ...reward.objects.purgedCards.map(
@@ -864,6 +872,14 @@ function explorationRewardIdentity(
       return [actionId, reward.kind, reward.modifier, reward.amount].join("|");
     case "dream-avatar":
       return [actionId, reward.kind, reward.current.id].join("|");
+    case "site-offer-modifier":
+      return [
+        actionId,
+        reward.kind,
+        reward.modifier,
+        reward.sourceSiteId,
+        reward.sourceActionId,
+      ].join("|");
   }
 }
 
@@ -1073,6 +1089,8 @@ export function ExplorationSiteScreen({
     effectReward?.kind === "battle-modifier" ? effectReward : null;
   const dreamAvatarReward =
     effectReward?.kind === "dream-avatar" ? effectReward : null;
+  const siteOfferModifierReward =
+    effectReward?.kind === "site-offer-modifier" ? effectReward : null;
   const rewardItems = useMemo(() => rewardItemsFor(view.reward), [view.reward]);
   const purgeBeforeDeckModification =
     deckModification?.kind === "reclaim" && purgedRewardCards.length > 0;
@@ -1085,6 +1103,11 @@ export function ExplorationSiteScreen({
       ? !purgedCardsPresented
       : !showDeckModification) &&
     (rewardItems.length > 0 || purgedRewardCards.length > 0);
+  const emptyObjectOutcome =
+    resolvedReward !== null &&
+    resolvedReward.deckModification === null &&
+    rewardItems.length === 0 &&
+    purgedRewardCards.length === 0;
   const rewardStageAnnouncement =
     purgedRewardCards.length === 0
       ? `Gained ${String(rewardItems.length)} ${rewardItems.length === 1 ? "reward" : "rewards"}`
@@ -1477,7 +1500,10 @@ export function ExplorationSiteScreen({
   useEffect(() => {
     if (
       frameBreakPhase !== "open" ||
-      (battleModifierReward === null && dreamAvatarReward === null)
+      (battleModifierReward === null &&
+        dreamAvatarReward === null &&
+        siteOfferModifierReward === null &&
+        !emptyObjectOutcome)
     ) {
       return;
     }
@@ -1486,7 +1512,14 @@ export function ExplorationSiteScreen({
       RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
     );
     return () => window.clearTimeout(timer);
-  }, [battleModifierReward, completeExit, dreamAvatarReward, frameBreakPhase]);
+  }, [
+    battleModifierReward,
+    completeExit,
+    dreamAvatarReward,
+    emptyObjectOutcome,
+    frameBreakPhase,
+    siteOfferModifierReward,
+  ]);
 
   useEffect(() => {
     if (
@@ -2512,11 +2545,70 @@ export function ExplorationSiteScreen({
       {frameBreakGeometry !== null &&
         frameBreakPhase === "open" &&
         activeAction === null &&
+        siteOfferModifierReward !== null && (
+          <section
+            data-exploration-outcome="site-offer-modifier"
+            data-exploration-site-offer-modifier={siteOfferModifierReward.modifier}
+            data-exploration-source-site-id={siteOfferModifierReward.sourceSiteId}
+            data-exploration-source-action-id={siteOfferModifierReward.sourceActionId}
+            role="status"
+            aria-label="The next Draft or Shop will contain transfigured cards"
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: FRAME_BREAK_EXIT_LAYER + 1,
+              display: "grid",
+              placeItems: "center",
+              pointerEvents: "none",
+            }}
+          >
+            <RadialAnnouncement
+              headline="Transfigured Cards"
+              detail="Next Draft or Shop"
+              tone="reward"
+              size={isDesktop ? "compact" : "mini"}
+              duration="extended"
+              announcementId={`exploration-site-offer-modifier:${siteOfferModifierReward.sourceActionId}`}
+            />
+          </section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
+        emptyObjectOutcome &&
+        resolvedReward !== null && (
+          <section
+            data-exploration-outcome={resolvedReward.semanticKind ?? "objects"}
+            data-exploration-reward-count="0"
+            role="status"
+            aria-label="No cards taken"
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: FRAME_BREAK_EXIT_LAYER + 1,
+              display: "grid",
+              placeItems: "center",
+              pointerEvents: "none",
+            }}
+          >
+            <RadialAnnouncement
+              headline="No Cards Taken"
+              tone="reward"
+              size={isDesktop ? "compact" : "mini"}
+              duration="extended"
+              announcementId={`exploration-empty-card-acquisition:${view.resolvedActionId ?? "resolved"}`}
+            />
+          </section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
         objectReward !== null &&
         showObjectReward &&
         rewardTrajectories === null && (
           <motion.section
             data-exploration-reward-stage=""
+            data-exploration-outcome={resolvedReward?.semanticKind ?? "objects"}
             data-exploration-reward-count={
               rewardItems.length + purgedRewardCards.length
             }

@@ -180,7 +180,7 @@ export function buyShopSlot(
     const entry: DeckEntry = {
       entryId: mintEntryId(journey.deck, ctx.seq, 0),
       cardNumber: slot.cardNumber,
-      transfiguration: null,
+      transfiguration: slot.transfiguration ?? null,
       isBane: false,
     };
     next = { ...next, deck: [...next.deck, entry] };

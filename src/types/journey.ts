@@ -291,6 +291,8 @@ export type RuntimeShopSlot =
   | {
       itemType: "card";
       cardNumber: number;
+      /** Exact form minted when an Exploration modifier transfigures this Shop. */
+      transfiguration?: TransfigurationType;
       basePrice: number;
       discountPercent: number;
       purchased: boolean;
@@ -309,6 +311,11 @@ export interface ShopSiteRuntime {
   slots: RuntimeShopSlot[];
   rerollCount: number;
   remainingDreamsignPoolIds: string[];
+  /** Exploration action whose one-use modifier transfigures this Shop visit. */
+  transfiguredOfferSource?: {
+    siteId: string;
+    actionId: string;
+  };
 }
 
 /**
@@ -467,6 +474,8 @@ export interface ExplorationResolution {
   };
   previousDreamAvatarId?: string;
   chosenDreamAvatarId?: string;
+  /** Exact one-use future-site modifier created by the resolution. */
+  siteOfferModifier?: TransfiguredSiteOfferModifier;
 }
 
 /** Shared, replayable runtime for one Exploration encounter. */
@@ -580,6 +589,13 @@ export interface ShopModifiers {
   readonly essenceDiscountPercent: number;
 }
 
+/** A one-use Exploration modifier consumed by the next eligible Draft or Shop. */
+export interface TransfiguredSiteOfferModifier {
+  readonly kind: "transfigure-next-draft-or-shop";
+  readonly sourceSiteId: string;
+  readonly sourceActionId: string;
+}
+
 /** The top-level journey state object. */
 export interface JourneyState {
   /** Event-log identity of the current assembled or loaded run. */
@@ -636,6 +652,8 @@ export interface JourneyState {
    * essence-priced shop purchase.
    */
   readonly shopModifiers: ShopModifiers;
+  /** One-use modifiers waiting for the next eligible Draft or Shop visit. */
+  readonly siteOfferModifiers: readonly TransfiguredSiteOfferModifier[];
   /**
    * Modifiers consumed by future dreamscapes. Each modifier decrements when
    * a new dreamscape opens; entries at zero drop on the same tick.

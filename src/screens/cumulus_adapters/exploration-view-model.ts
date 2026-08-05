@@ -324,15 +324,26 @@ function followupForAction(
         ),
         "single",
       );
+    case "replace-selected-with-card":
+      return deckFollowup(
+        action.label,
+        "Choose a card to replace.",
+        deckCards,
+        "single",
+      );
     case "transfigure-fixed-selected":
       if (hasMintedDeckCard) return { kind: "none" };
       return deckFollowup(
-        "Gather the Falling Light",
-        `Choose a Character to become ${action.transfiguration ?? "Kindled"}.`,
+        action.label,
+        `Choose a card to become ${action.transfiguration ?? "Kindled"}.`,
         deckCards.filter(
           (card) =>
             state.deck.find((entry) => entry.entryId === card.entryId)
-              ?.transfiguration === null,
+              ?.transfiguration === null &&
+            offeredTransfigurationForms(
+              card.model.displaySnapshot,
+              null,
+            ).some((form) => form.type === action.transfiguration),
         ),
         "single",
       );
@@ -417,6 +428,7 @@ function followupForAction(
     case "next-battle-opening-hand":
     case "next-battle-starting-energy":
     case "purge-duplicates-and-grant-reclaim":
+    case "transfigure-next-draft-or-shop":
       return { kind: "none" };
   }
 }
@@ -805,6 +817,17 @@ function rewardForResolution(
     }
   }
   if (
+    resolvedAction?.effectKind === "transfigure-next-draft-or-shop" &&
+    resolution.siteOfferModifier !== undefined
+  ) {
+    return {
+      kind: "site-offer-modifier",
+      modifier: resolution.siteOfferModifier.kind,
+      sourceSiteId: resolution.siteOfferModifier.sourceSiteId,
+      sourceActionId: resolution.siteOfferModifier.sourceActionId,
+    };
+  }
+  if (
     resolvedAction?.effectKind === "transfigure-selected" ||
     resolvedAction?.effectKind === "transfigure-fixed-selected"
   ) {
@@ -930,7 +953,9 @@ function rewardForResolution(
   });
   const purgedCards =
     resolvedAction?.effectKind === "purge-and-copy" ||
-    resolvedAction?.effectKind === "purge-duplicates-and-grant-reclaim"
+    resolvedAction?.effectKind === "purge-duplicates-and-grant-reclaim" ||
+    resolvedAction?.effectKind === "replace-selected" ||
+    resolvedAction?.effectKind === "replace-selected-with-card"
       ? resolution.purgedCardIds.flatMap((cardId, index) => {
           const card = cardById(content, cardId);
           if (card === null) return [];
@@ -950,12 +975,26 @@ function rewardForResolution(
     );
     return dreamsign === undefined ? [] : [dreamsign];
   });
+  const semanticKind =
+    resolvedAction?.effectKind === "replace-selected" ||
+    resolvedAction?.effectKind === "replace-selected-with-card"
+      ? "card-replacement"
+      : resolvedAction?.effectKind === "gain-offered-card" ||
+          resolvedAction?.effectKind === "draft-card" ||
+          resolvedAction?.effectKind === "take-cards"
+        ? "card-acquisition"
+        : "objects";
   return cards.length === 0 &&
     purgedCards.length === 0 &&
     dreamsigns.length === 0 &&
-    deckModification === null
+    deckModification === null &&
+    semanticKind === "objects"
     ? null
-    : { objects: { cards, purgedCards, dreamsigns }, deckModification };
+    : {
+        semanticKind,
+        objects: { cards, purgedCards, dreamsigns },
+        deckModification,
+      };
 }
 
 /** Build the complete Exploration presentation from persisted domain data. */
@@ -999,7 +1038,7 @@ export function buildExplorationSiteView(params: {
       ? null
       : "kind" in reward
         ? reward.kind
-        : reward.deckModification?.kind ?? "objects";
+        : reward.deckModification?.kind ?? reward.semanticKind ?? "objects";
   return {
     siteId: params.site.id,
     scene,

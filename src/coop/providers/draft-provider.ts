@@ -10,6 +10,7 @@ import { DEFAULT_DRAFT_CONFIG, type OfferDeps } from "../../draft/draft-engine";
 import type { DraftConfig, DraftState } from "../../types/draft";
 import type { CardData } from "../../types/cards";
 import type { DraftContentProvider } from "../../rules/journey/draft";
+import { offeredTransfigurationForms } from "../../transfiguration/transfiguration-logic";
 
 export function createDraftContentProvider(
   content: JourneyContent,
@@ -52,5 +53,12 @@ export function createDraftContentProvider(
     // seam carries the node, the draft config stays neutral (engine default), so
     // it is deterministic; affiliation-steered draft offers are a follow-up.
     draftConfigFor: (): DraftConfig | undefined => undefined,
+    transfigurationForCard: (cardNumber, rng) => {
+      const card = content.cardDatabase.get(cardNumber);
+      if (card === undefined) return null;
+      const forms = offeredTransfigurationForms(card, null);
+      if (forms.length === 0) return null;
+      return forms[Math.floor(rng() * forms.length)]?.type ?? null;
+    },
   };
 }

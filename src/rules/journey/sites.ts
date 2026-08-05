@@ -35,6 +35,7 @@ import type {
   SiteRuntimeState,
   SiteState,
   TransfigurationType,
+  TransfiguredSiteOfferModifier,
 } from "../../types/journey";
 import { mintEntryId } from "./deck";
 import {
@@ -55,6 +56,8 @@ import {
 export interface SiteOpenResult {
   runtime: SiteRuntimeState;
   remainingDreamsignPool?: string[];
+  /** Updated one-use modifier queue when this site consumed an entry. */
+  siteOfferModifiers?: readonly TransfiguredSiteOfferModifier[];
 }
 
 /**
@@ -355,8 +358,15 @@ export function openSite(
       const result = provider.openSite({ journey, site, rng: ctx.rng });
       if (result === null) return null;
       const next = withRuntime(journey, siteId, result.runtime);
-      if (result.remainingDreamsignPool === undefined) return next;
-      return { ...next, remainingDreamsignPool: [...result.remainingDreamsignPool] };
+      return {
+        ...next,
+        ...(result.remainingDreamsignPool === undefined
+          ? {}
+          : { remainingDreamsignPool: [...result.remainingDreamsignPool] }),
+        ...(result.siteOfferModifiers === undefined
+          ? {}
+          : { siteOfferModifiers: [...result.siteOfferModifiers] }),
+      };
     }
     default:
       // Battle / Draft / Purge / TemptingOffer carry no

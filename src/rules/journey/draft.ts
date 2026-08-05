@@ -14,7 +14,11 @@
 import type { EventContext } from "../../eventlog/types";
 import type { CardData } from "../../types/cards";
 import type { DraftConfig, DraftState } from "../../types/draft";
-import type { DeckEntry, JourneyState } from "../../types/journey";
+import type {
+  DeckEntry,
+  JourneyState,
+  TransfigurationType,
+} from "../../types/journey";
 import {
   DEFAULT_DRAFT_CONFIG,
   enterDraftSite as engineEnterDraftSite,
@@ -68,6 +72,11 @@ export interface DraftContentProvider {
    * `undefined` for a neutral dreamscape (the engine default applies).
    */
   draftConfigFor(draftState: DraftState): DraftConfig | undefined;
+  /** Deterministically choose a legal form for one offered card, when any. */
+  transfigurationForCard?(
+    cardNumber: number,
+    rng: () => number,
+  ): TransfigurationType | null;
 }
 
 let contentProvider: DraftContentProvider | null = null;
@@ -109,6 +118,22 @@ function integer(value: unknown): number | null {
 function rngStream(ctx: EventContext): () => number {
   let drawIndex = 0;
   return () => ctx.rng(drawIndex++);
+}
+
+function rollOfferTransfigurations(
+  draftState: DraftState,
+  provider: DraftContentProvider,
+  rng: () => number,
+): Record<string, TransfigurationType> {
+  return Object.fromEntries(
+    draftState.currentOffer.flatMap((cardNumber) => {
+      const transfiguration =
+        provider.transfigurationForCard?.(cardNumber, rng) ?? null;
+      return transfiguration === null
+        ? []
+        : [[String(cardNumber), transfiguration] as const];
+    }),
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -163,7 +188,8 @@ export function pickDraftCard(
   const entry: DeckEntry = {
     entryId: mintEntryId(journey.deck, ctx.seq, 0),
     cardNumber,
-    transfiguration: null,
+    transfiguration:
+      draftState.currentOfferTransfigurations?.[String(cardNumber)] ?? null,
     isBane: false,
   };
   const deck = [...journey.deck, entry];
@@ -174,14 +200,24 @@ export function pickDraftCard(
   const nextDraftState = structuredClone(draftState);
   const offerDeps = provider.offerDepsFor(nextDraftState, deckCardNumbers);
   const config = provider.draftConfigFor(nextDraftState) ?? DEFAULT_DRAFT_CONFIG;
+  const stream = rngStream(ctx);
   processPlayerPickWithoutLogging(
     cardNumber,
     nextDraftState,
     provider.cardDatabase(),
     config,
     offerDeps,
-    rngStream(ctx),
+    stream,
   );
+  if (nextDraftState.transfiguredOfferSource !== undefined) {
+    nextDraftState.currentOfferTransfigurations = rollOfferTransfigurations(
+      nextDraftState,
+      provider,
+      stream,
+    );
+  } else {
+    delete nextDraftState.currentOfferTransfigurations;
+  }
 
   return { ...journey, deck, draftState: nextDraftState };
 }
@@ -224,15 +260,39 @@ export function enterDraftSite(
   const deckCardNumbers = journey.deck.map((entry) => entry.cardNumber);
   const offerDeps = provider.offerDepsFor(nextDraftState, deckCardNumbers);
   const config = provider.draftConfigFor(nextDraftState) ?? DEFAULT_DRAFT_CONFIG;
+  const stream = rngStream(ctx);
   engineEnterDraftSite(
     nextDraftState,
     siteId,
     provider.cardDatabase(),
     config,
     offerDeps,
-    rngStream(ctx),
+    stream,
   );
-
+  const modifierIndex = journey.siteOfferModifiers.findIndex(
+    (modifier) => modifier.kind === "transfigure-next-draft-or-shop",
+  );
+  if (modifierIndex >= 0) {
+    const modifier = journey.siteOfferModifiers[modifierIndex];
+    nextDraftState.transfiguredOfferSource = {
+      siteId: modifier.sourceSiteId,
+      actionId: modifier.sourceActionId,
+    };
+    nextDraftState.currentOfferTransfigurations = rollOfferTransfigurations(
+      nextDraftState,
+      provider,
+      stream,
+    );
+    return {
+      ...journey,
+      draftState: nextDraftState,
+      siteOfferModifiers: journey.siteOfferModifiers.filter(
+        (_modifier, index) => index !== modifierIndex,
+      ),
+    };
+  }
+  delete nextDraftState.transfiguredOfferSource;
+  delete nextDraftState.currentOfferTransfigurations;
   return { ...journey, draftState: nextDraftState };
 }
 
@@ -271,13 +331,23 @@ export function rerollDraftOffer(
   const offerDeps = provider.offerDepsFor(nextDraftState, deckCardNumbers);
   const config =
     provider.draftConfigFor(nextDraftState) ?? DEFAULT_DRAFT_CONFIG;
+  const stream = rngStream(ctx);
   const hasOffer = engineRerollDraftOffer(
     nextDraftState,
     config,
     offerDeps,
-    rngStream(ctx),
+    stream,
   );
   if (!hasOffer) return null;
+  if (nextDraftState.transfiguredOfferSource !== undefined) {
+    nextDraftState.currentOfferTransfigurations = rollOfferTransfigurations(
+      nextDraftState,
+      provider,
+      stream,
+    );
+  } else {
+    delete nextDraftState.currentOfferTransfigurations;
+  }
 
   return { ...journey, draftState: nextDraftState };
 }

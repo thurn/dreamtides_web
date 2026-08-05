@@ -812,4 +812,168 @@ describe("Exploration provider", () => {
       ]),
     );
   });
+
+  it("persists exact UUID selections for offered copies and any-number card takes", () => {
+    const copiesAction: ExplorationActionContent = {
+      id: "offered-copies",
+      label: "Echo the wingbeats",
+      effectText: "Gain 3 copies of $OFFERED_CARD",
+      effectKind: "gain-offered-card",
+      predicate: "spirit-animal",
+      count: 3,
+    };
+    const takeAction: ExplorationActionContent = {
+      id: "take-any",
+      label: "Join the flight",
+      effectText: "Take any number of Spirit Animal cards from 4 choices",
+      effectKind: "take-cards",
+      predicate: "spirit-animal",
+      offerCount: 4,
+    };
+    const content = contentFixture([copiesAction, takeAction]);
+    const copiesState = buildState(content);
+    const offeredCardId = copiesState.runtime.actionOffers[0]?.offeredCardIds[0];
+    if (offeredCardId === undefined) throw new Error("Expected an offered card");
+    const copies = resolve(content, copiesState.journey, copiesAction.id, {
+      cardIds: [offeredCardId],
+    });
+    expect(copies.deck).toHaveLength(copiesState.journey.deck.length + 3);
+    expect(copies.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        selection: { cardIds: [offeredCardId] },
+        gainedCardIds: [offeredCardId, offeredCardId, offeredCardId],
+        gainedEntryIds: ["deck-91-0", "deck-91-1", "deck-91-2"],
+      },
+    });
+
+    const takeState = buildState(content);
+    const offered = takeState.runtime.actionOffers[1]?.offeredCardIds ?? [];
+    expect(offered).toHaveLength(4);
+    const selected = [offered[0], offered[2]].filter(
+      (cardId): cardId is string => cardId !== undefined,
+    );
+    const taken = resolve(content, takeState.journey, takeAction.id, {
+      cardIds: selected,
+    });
+    expect(taken.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        selection: { cardIds: selected },
+        gainedCardIds: selected,
+      },
+    });
+    const tookNone = resolve(
+      content,
+      buildState(content).journey,
+      takeAction.id,
+      { cardIds: [] },
+    );
+    expect(tookNone.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: { selection: { cardIds: [] }, gainedCardIds: [] },
+    });
+    expect(
+      resolveExplorationChoice({
+        journey: takeState.journey,
+        site,
+        payload: {
+          actionId: takeAction.id,
+          selection: { cardIds: ["foreign-card-id"] },
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+  });
+
+  it("atomically replaces a selected entry with a fixed UUID and transfigures an unrestricted card", () => {
+    const replacementCardId = "f0000000-0000-4000-8000-000000000001";
+    const replaceAction: ExplorationActionContent = {
+      id: "fixed-replacement",
+      label: "Feed it, then gaze",
+      effectText: "Choose a card to purge and replace it with a fixed card",
+      effectKind: "replace-selected-with-card",
+      cardId: asCardId(replacementCardId),
+    };
+    const transfigureAction: ExplorationActionContent = {
+      id: "fixed-transfiguration",
+      label: "Touch a luminous seam",
+      effectText: "Apply Empowered to a chosen card",
+      effectKind: "transfigure-fixed-selected",
+      transfiguration: "Empowered",
+    };
+    const content = contentFixture([replaceAction, transfigureAction]);
+    const replaceState = buildState(content);
+    const target = replaceState.journey.deck[0];
+    if (target === undefined) throw new Error("Expected a deck entry");
+    const purgedId = content.cardDatabase.get(target.cardNumber)?.id;
+    if (purgedId === undefined) throw new Error("Expected a catalog card");
+    const replaced = resolve(content, replaceState.journey, replaceAction.id, {
+      entryIds: [target.entryId],
+    });
+    expect(replaced.deck.some((entry) => entry.entryId === target.entryId)).toBe(false);
+    expect(replaced.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        selection: { entryIds: [target.entryId] },
+        purgedCardIds: [purgedId],
+        purgedEntryIds: [target.entryId],
+        gainedCardIds: [replacementCardId],
+        gainedEntryIds: ["deck-91-0"],
+      },
+    });
+
+    const transfigureState = buildState(content);
+    const transfigureTarget = transfigureState.journey.deck[0];
+    if (transfigureTarget === undefined) throw new Error("Expected a deck entry");
+    const transfigured = resolve(
+      content,
+      transfigureState.journey,
+      transfigureAction.id,
+      { entryIds: [transfigureTarget.entryId] },
+    );
+    expect(
+      transfigured.deck.find(
+        (entry) => entry.entryId === transfigureTarget.entryId,
+      )?.transfiguration,
+    ).toBe("Empowered");
+    expect(transfigured.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        selection: { entryIds: [transfigureTarget.entryId] },
+        affectedEntryIds: [transfigureTarget.entryId],
+        chosenTransfiguration: "Empowered",
+      },
+    });
+  });
+
+  it("persists a one-use transfigured Draft-or-Shop modifier", () => {
+    const futureAction: ExplorationActionContent = {
+      id: "transfigure-next-site",
+      label: "Follow its lowered gaze",
+      effectText: "The next draft or shop site will contain transfigured cards",
+      effectKind: "transfigure-next-draft-or-shop",
+    };
+    const fallbackAction: ExplorationActionContent = {
+      id: "fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([futureAction, fallbackAction]);
+    const state = buildState(content);
+    const result = resolve(content, state.journey, futureAction.id);
+    const modifier = {
+      kind: "transfigure-next-draft-or-shop",
+      sourceSiteId: site.id,
+      sourceActionId: futureAction.id,
+    } as const;
+    expect(result.siteOfferModifiers).toEqual([modifier]);
+    expect(result.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: { siteOfferModifier: modifier },
+    });
+  });
 });

@@ -338,6 +338,7 @@ function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
       freeRerolls: 0,
       essenceDiscountPercent: 0,
     },
+    siteOfferModifiers: [],
     dreamscapeModifiers: [],
     ...overrides,
   };

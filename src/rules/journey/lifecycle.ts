@@ -478,6 +478,7 @@ function isJourneyStateShape(value: unknown): value is JourneyState {
     "remainingDreamsignPool",
     "dreamsigns",
     "visitedSites",
+    "siteOfferModifiers",
   ];
   for (const key of arrayKeys) {
     if (!Array.isArray(value[key])) return false;

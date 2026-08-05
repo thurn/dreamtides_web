@@ -115,6 +115,15 @@ export const EXPLORATION_EFFECT_DEFINITIONS = [
     ],
   },
   {
+    kind: "replace-selected-with-card",
+    label: "Replace selected card with a fixed card",
+    templateIds: [47],
+    fields: [
+      field("predicate", "Card predicate", "predicate", { optional: true }),
+      field("cardId", "Replacement card", "card"),
+    ],
+  },
+  {
     kind: "replace-selected",
     label: "Replace selected card",
     templateIds: [7],
@@ -145,9 +154,9 @@ export const EXPLORATION_EFFECT_DEFINITIONS = [
   {
     kind: "transfigure-fixed-selected",
     label: "Apply a fixed transfiguration",
-    templateIds: [19],
+    templateIds: [18, 19],
     fields: [
-      field("predicate", "Card predicate", "predicate", { defaultValue: "character" }),
+      field("predicate", "Card predicate", "predicate", { optional: true }),
       field("transfiguration", "Transfiguration", "transfiguration", {
         defaultValue: "Empowered",
       }),
@@ -156,10 +165,21 @@ export const EXPLORATION_EFFECT_DEFINITIONS = [
   {
     kind: "gain-offered-card",
     label: "Gain an offered card",
-    templateIds: [11],
-    fields: [field("predicate", "Offer predicate", "predicate", {
-      defaultValue: "character",
-    })],
+    templateIds: [11, 12],
+    fields: [
+      field("predicate", "Offer predicate", "predicate", {
+        defaultValue: "character",
+      }),
+      field("count", "Copies", "number", {
+        defaultValue: 1, min: 1, templateIds: [12],
+      }),
+    ],
+  },
+  {
+    kind: "transfigure-next-draft-or-shop",
+    label: "Transfigure the next Draft or Shop",
+    templateIds: [37],
+    fields: [],
   },
   {
     kind: "gain-essence-per-card",

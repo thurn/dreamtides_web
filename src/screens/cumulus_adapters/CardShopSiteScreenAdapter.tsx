@@ -8,6 +8,7 @@ import { CardShopSiteScreen } from "../../cumulus/screens/CardShopSiteScreen";
 import {
   buildCardShopDebugState,
   buildCardShopSiteView,
+  buildCardShopTransfiguredOfferLog,
   resolveCardShopGuide,
 } from "./card-shop-view-model";
 
@@ -82,8 +83,14 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
       isEnhanced: site.isEnhanced,
       wareCount: view.offers.length,
       essence: state.essence,
+      ...(shopRuntime?.transfiguredOfferSource === undefined
+        ? {}
+        : buildCardShopTransfiguredOfferLog(
+            view,
+            shopRuntime.transfiguredOfferSource,
+          )),
     });
-  }, [site, state.essence, view]);
+  }, [shopRuntime?.transfiguredOfferSource, site, state.essence, view]);
 
   useEffect(() => {
     if (guide === null || site === null) return;
@@ -107,10 +114,7 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
   }, [mutations, site]);
   const handleClose = useCallback(() => {
     if (site === null) return;
-    logEvent("site_completed", {
-      siteType: "Shop",
-      outcome: "left",
-    });
+    logEvent("site_completed", { siteType: "Shop", outcome: "left" });
     mutations.completeSite(site.id, "shop_left");
   }, [mutations, site]);
 

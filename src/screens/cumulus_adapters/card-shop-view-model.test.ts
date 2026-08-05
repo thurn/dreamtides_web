@@ -2,11 +2,13 @@ import { describe, expect, it } from "vitest";
 import { createDefaultState } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
+import { artRef } from "../../cumulus/primitives/art";
 import type { ShopSiteRuntime, SiteState } from "../../types/journey";
 import {
   buildCardShopOffers,
   buildCardShopRestock,
   buildCardShopSiteView,
+  buildCardShopTransfiguredOfferLog,
 } from "./card-shop-view-model";
 
 function makeCard(cardNumber: number, id: string): CardData {
@@ -105,6 +107,44 @@ describe("buildCardShopOffers", () => {
         state: "purchased",
       },
     ]);
+  });
+
+  it("renders and logs the exact transfiguration persisted on a Shop slot", () => {
+    const transfiguredRuntime: ShopSiteRuntime = {
+      ...runtime(),
+      slots: runtime().slots.map((slot, index) =>
+        slot.itemType === "card" && index === 0
+          ? { ...slot, transfiguration: "Empowered" }
+          : slot,
+      ),
+    };
+    const offers = buildCardShopOffers(transfiguredRuntime, database(), 500, {
+      essenceDiscountPercent: 0,
+    });
+    expect(offers[0]?.model.transfiguration?.type).toBe("Empowered");
+    expect(
+      buildCardShopTransfiguredOfferLog(
+        {
+          siteId: "shop-site",
+          scene: null,
+          guide: {
+            id: "guide",
+            name: "Guide",
+            line: "Line",
+            art: artRef.dreamGuide("guide"),
+          },
+          offers,
+          restock: { entryId: "restock", price: 0, state: "available" },
+        },
+        { siteId: "exploration-site", actionId: "exploration-action" },
+      ),
+    ).toMatchObject({
+      sourceSiteId: "exploration-site",
+      sourceActionId: "exploration-action",
+      cards: [
+        { cardId: "card-uuid-a", slotIndex: 0, transfiguration: "Empowered" },
+      ],
+    });
   });
 });
 

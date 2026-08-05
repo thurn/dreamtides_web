@@ -184,6 +184,7 @@ function provider(): DraftContentProvider {
     cardDatabase: () => CARD_DB,
     offerDepsFor: () => undefined,
     draftConfigFor: () => undefined,
+    transfigurationForCard: () => "Empowered",
   };
 }
 
@@ -377,6 +378,62 @@ describe("REROLL_DRAFT_OFFER", () => {
 // ---------------------------------------------------------------------------
 
 describe("ENTER_DRAFT_SITE", () => {
+  it("consumes the one-use modifier and persists exact forms across the Draft visit", () => {
+    registerDraftContentProvider(provider());
+    const source = {
+      kind: "transfigure-next-draft-or-shop" as const,
+      sourceSiteId: "exploration-site",
+      sourceActionId: "exploration-action",
+    };
+    const start = stateWithDraftSites(
+      poolDraftState({
+        activeSiteId: null,
+        currentOffer: [],
+        siteShownCardNumbers: [],
+      }),
+      { siteOfferModifiers: [source] },
+    );
+
+    const entered = reduce(
+      start,
+      "ENTER_DRAFT_SITE",
+      { siteId: "site-a" },
+      ctx({ seq: 14, rng: makeRng(14) }),
+    );
+
+    expect(entered.outcome).toBe("applied");
+    const active = entered.state.journey.draftState as PoolDraftState;
+    expect(entered.state.journey.siteOfferModifiers).toEqual([]);
+    expect(active.transfiguredOfferSource).toEqual({
+      siteId: source.sourceSiteId,
+      actionId: source.sourceActionId,
+    });
+    expect(active.currentOfferTransfigurations).toEqual(
+      Object.fromEntries(
+        active.currentOffer.map((cardNumber) => [String(cardNumber), "Empowered"]),
+      ),
+    );
+
+    const pickedNumber = active.currentOffer[0];
+    if (pickedNumber === undefined) throw new Error("Expected a Draft offer");
+    const picked = reduce(
+      entered.state,
+      "PICK_DRAFT_CARD",
+      { packIndex: 0, cardId: `card-${String(pickedNumber)}` },
+      ctx({ seq: 15, rng: makeRng(15) }),
+    );
+    expect(picked.outcome).toBe("applied");
+    expect(
+      picked.state.journey.deck[picked.state.journey.deck.length - 1]
+        ?.transfiguration,
+    ).toBe("Empowered");
+    const advanced = picked.state.journey.draftState as PoolDraftState;
+    expect(advanced.transfiguredOfferSource).toEqual(active.transfiguredOfferSource);
+    expect(Object.values(advanced.currentOfferTransfigurations ?? {})).toEqual(
+      advanced.currentOffer.map(() => "Empowered"),
+    );
+  });
+
   it("allows an observer to commit the displayed draft site's deterministic entry", () => {
     registerDraftContentProvider(provider());
     const start = stateWithDraftSites(

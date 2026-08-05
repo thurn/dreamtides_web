@@ -735,14 +735,18 @@ export function resolveExplorationChoice(input: {
     }
     case "gain-offered-card": {
       const cardIds = stringArray(selection.cardIds);
+      const copies = action.count ?? 1;
       if (
         cardIds === null ||
         cardIds.length !== 1 ||
         !offer.offeredCardIds.includes(cardIds[0]) ||
-        !addCardIds(cardIds)
+        !Number.isInteger(copies) ||
+        copies <= 0 ||
+        !addCardIds(Array.from({ length: copies }, () => cardIds[0]))
       ) {
         return null;
       }
+      result.selection = { cardIds };
       break;
     }
     case "transfigure-selected": {
@@ -810,6 +814,7 @@ export function resolveExplorationChoice(input: {
       const copies = action.count ?? 1;
       if (!Number.isInteger(copies) || copies <= 0) return null;
       if (!addCardIds(Array.from({ length: copies }, () => cardIds[0]))) return null;
+      result.selection = { cardIds };
       break;
     }
     case "purge-dreamsign-for-essence": {
@@ -912,6 +917,47 @@ export function resolveExplorationChoice(input: {
       const cardIds = stringArray(selection.cardIds);
       if (cardIds === null || cardIds.some((cardId) => !offer.offeredCardIds.includes(cardId))) return null;
       if (!addCardIds(cardIds)) return null;
+      result.selection = { cardIds };
+      break;
+    }
+    case "replace-selected-with-card": {
+      const entryIds = stringArray(selection.entryIds);
+      if (entryIds === null || entryIds.length !== 1 || action.cardId === undefined) {
+        return null;
+      }
+      const selected = cardForEntry(next, content, entryIds[0]);
+      const target = deckTarget(next, content, entryIds[0]);
+      const replacement = addCardEffect(content, action.cardId);
+      if (
+        selected === null ||
+        target === null ||
+        replacement === null ||
+        (action.predicate !== undefined &&
+          !matchesPredicate(selected.card, action.predicate))
+      ) {
+        return null;
+      }
+      const beforeEntryIds = new Set(next.deck.map((entry) => entry.entryId));
+      if (
+        !applyReward({
+          kind: "composite",
+          children: [
+            { kind: "remove_deck_entry", ...target },
+            replacement,
+          ],
+        })
+      ) {
+        return null;
+      }
+      result.purgedCardIds.push(selected.card.id);
+      result.purgedEntryIds?.push(entryIds[0]);
+      result.gainedCardIds.push(action.cardId);
+      result.gainedEntryIds?.push(
+        ...next.deck
+          .filter((entry) => !beforeEntryIds.has(entry.entryId))
+          .map((entry) => entry.entryId),
+      );
+      result.selection = { entryIds };
       break;
     }
     case "replace-selected": {
@@ -955,9 +1001,17 @@ export function resolveExplorationChoice(input: {
     }
     case "transfigure-fixed-selected": {
       const entryIds = stringArray(selection.entryIds);
-      if (entryIds === null || entryIds.length !== 1 || action.transfiguration === undefined || action.predicate === undefined) return null;
+      if (entryIds === null || entryIds.length !== 1 || action.transfiguration === undefined) return null;
       const selected = cardForEntry(next, content, entryIds[0]);
-      if (selected === null || selected.entry.transfiguration !== null || !matchesPredicate(selected.card, action.predicate)) return null;
+      if (
+        selected === null ||
+        selected.entry.transfiguration !== null ||
+        (action.predicate !== undefined &&
+          !matchesPredicate(selected.card, action.predicate)) ||
+        !offeredTransfigurationForms(selected.card, null).some(
+          (form) => form.type === action.transfiguration,
+        )
+      ) return null;
       const target = deckTarget(next, content, entryIds[0]);
       if (
         target === null ||
@@ -968,6 +1022,21 @@ export function resolveExplorationChoice(input: {
         })
       ) return null;
       result.affectedEntryIds.push(entryIds[0]);
+      result.chosenTransfiguration = action.transfiguration;
+      result.selection = { entryIds };
+      break;
+    }
+    case "transfigure-next-draft-or-shop": {
+      const modifier = {
+        kind: "transfigure-next-draft-or-shop" as const,
+        sourceSiteId: site.id,
+        sourceActionId: action.id,
+      };
+      next = {
+        ...next,
+        siteOfferModifiers: [...next.siteOfferModifiers, modifier],
+      };
+      result.siteOfferModifier = modifier;
       break;
     }
     case "gain-essence-per-card": {

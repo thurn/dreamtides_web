@@ -26,6 +26,7 @@ import type {
   CardShopSiteView,
 } from "../../cumulus/screens/CardShopSiteScreen";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
+import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 
 const FALLBACK_GUIDE_ID = "tobias_tanglefur";
 const FALLBACK_GUIDE_NAME = "Tobias Tanglefur";
@@ -64,11 +65,22 @@ export function buildCardShopOffers(
     if (slot.itemType !== "card") return;
     const card = cardDatabase.get(slot.cardNumber);
     if (card === undefined) return;
+    const transfigured =
+      slot.transfiguration === undefined
+        ? null
+        : buildTransfigurationDisplay(card, slot.transfiguration);
     const price = effectivePrice(slot, priceModifiers);
     offers.push({
       entryId: `shop-slot-${String(slotIndex)}-${card.id}`,
       slotIndex,
-      model: { cardId: card.id, displaySnapshot: card },
+      model:
+        transfigured === null
+          ? { cardId: card.id, displaySnapshot: card }
+          : {
+              cardId: card.id,
+              displaySnapshot: transfigured.card,
+              transfiguration: transfigured.display,
+            },
       price,
       state: slot.purchased
         ? "purchased"
@@ -112,6 +124,26 @@ export function buildCardShopDebugState(
       .map((offer) => offer.model.displaySnapshot),
     resolvedPackage,
   );
+}
+
+/** UUID-only reconstruction payload for an Exploration-transfigured Shop. */
+export function buildCardShopTransfiguredOfferLog(
+  view: CardShopSiteView,
+  source: { readonly siteId: string; readonly actionId: string },
+) {
+  return {
+    sourceSiteId: source.siteId,
+    sourceActionId: source.actionId,
+    cards: view.offers.flatMap((offer) =>
+      offer.model.transfiguration === undefined
+        ? []
+        : [{
+            cardId: offer.model.cardId,
+            slotIndex: offer.slotIndex,
+            transfiguration: offer.model.transfiguration.type,
+          }],
+    ),
+  };
 }
 
 /** Build the complete Cumulus Card Shop view-model. */

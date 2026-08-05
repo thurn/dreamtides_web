@@ -6,12 +6,17 @@
 
 import { draftSitePickCount } from "../../draft/draft-site-config";
 import type { CardData } from "../../types/cards";
-import type { DreamscapeNode, SiteState } from "../../types/journey";
+import type {
+  DreamscapeNode,
+  SiteState,
+  TransfigurationType,
+} from "../../types/journey";
 import type { DraftView } from "../../cumulus/screens/DraftScreen";
 import type { JourneyState } from "../../types/journey";
 import type { TutorialSiteConfiguration } from "../../types/tutorial";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
+import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 
 /**
  * Sort an offered pack for display: cheapest first, then alphabetically as a
@@ -50,6 +55,7 @@ export function resolveOfferCards(
  */
 export function buildDraftView(params: {
   offerCardNumbers: readonly number[];
+  offerTransfigurations?: Readonly<Record<string, TransfigurationType>>;
   cardDatabase: ReadonlyMap<number, CardData>;
   sceneNode: DreamscapeNode | null;
   site: Pick<SiteState, "data"> | null;
@@ -62,10 +68,18 @@ export function buildDraftView(params: {
     scene:
       params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null,
     offer: resolveOfferCards(params.offerCardNumbers, params.cardDatabase).map(
-      (card) => ({
-        cardId: card.id,
-        displaySnapshot: card,
-      }),
+      (card) => {
+        const type = params.offerTransfigurations?.[String(card.cardNumber)];
+        if (type === undefined) {
+          return { cardId: card.id, displaySnapshot: card };
+        }
+        const transfigured = buildTransfigurationDisplay(card, type);
+        return {
+          cardId: card.id,
+          displaySnapshot: transfigured.card,
+          transfiguration: transfigured.display,
+        };
+      },
     ),
     offerKey: params.offerCardNumbers.join(","),
     // Clamp so the last pack never reads past the total (e.g. "(6/5)").
@@ -79,5 +93,22 @@ export function buildDraftView(params: {
             "Draft",
             params.tutorialConfiguration,
           ),
+  };
+}
+
+/** UUID-only reconstruction payload for an Exploration-transfigured Draft offer. */
+export function buildDraftTransfiguredOfferLog(
+  view: DraftView,
+  source: { readonly siteId: string; readonly actionId: string },
+) {
+  return {
+    sourceSiteId: source.siteId,
+    sourceActionId: source.actionId,
+    pickNumber: view.pickNumber,
+    cards: view.offer.flatMap((model) =>
+      model.transfiguration === undefined
+        ? []
+        : [{ cardId: model.cardId, transfiguration: model.transfiguration.type }],
+    ),
   };
 }

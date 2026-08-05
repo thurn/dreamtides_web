@@ -16,6 +16,7 @@ import type {
   SiteRuntimeState,
   SiteState,
   JourneyState,
+  RuntimeShopSlot,
 } from "../../types/journey";
 import type { CardData } from "../../types/cards";
 import {
@@ -93,6 +94,21 @@ function rngShuffle<T>(items: readonly T[], rng: () => number): T[] {
     [pool[index], pool[swap]] = [pool[swap], pool[index]];
   }
   return pool;
+}
+
+function transfigureShopSlots(
+  slots: readonly RuntimeShopSlot[],
+  content: JourneyContent,
+  rng: () => number,
+): RuntimeShopSlot[] {
+  return slots.map((slot) => {
+    if (slot.itemType !== "card") return slot;
+    const card = content.cardDatabase.get(slot.cardNumber);
+    if (card === undefined) return slot;
+    const forms = offeredTransfigurationForms(card, null);
+    const form = forms[Math.floor(rng() * forms.length)];
+    return form === undefined ? slot : { ...slot, transfiguration: form.type };
+  });
 }
 
 function buildGambleRuntime(
@@ -306,11 +322,34 @@ export function createSiteContentProvider(
             ...(isMarket ? { cardCount: 0, dreamsignCount: 3 } : {}),
             rng: stream,
           });
+          const baseSlots = shopSlotsToRuntime(generated.slots);
+          const modifierIndex =
+            site.type === "Shop"
+              ? journey.siteOfferModifiers.findIndex(
+                  (modifier) =>
+                    modifier.kind === "transfigure-next-draft-or-shop",
+                )
+              : -1;
+          const modifier =
+            modifierIndex < 0
+              ? undefined
+              : journey.siteOfferModifiers[modifierIndex];
           const runtime: SiteRuntimeState = {
             kind: "shop",
-            slots: shopSlotsToRuntime(generated.slots),
+            slots:
+              modifier === undefined
+                ? baseSlots
+                : transfigureShopSlots(baseSlots, content, stream),
             rerollCount: 0,
             remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
+            ...(modifier === undefined
+              ? {}
+              : {
+                  transfiguredOfferSource: {
+                    siteId: modifier.sourceSiteId,
+                    actionId: modifier.sourceActionId,
+                  },
+                }),
           };
           // SEAM (Task 27): the `SiteOpenResult` seam cannot carry the spent
           // draft state (only `remainingDreamsignPool`), so a pool-mode shop's
@@ -320,6 +359,13 @@ export function createSiteContentProvider(
           return {
             runtime,
             remainingDreamsignPool: generated.remainingDreamsignPoolIds,
+            ...(modifierIndex < 0
+              ? {}
+              : {
+                  siteOfferModifiers: journey.siteOfferModifiers.filter(
+                    (_modifier, index) => index !== modifierIndex,
+                  ),
+                }),
           };
         }
         case "Transfiguration":
@@ -370,8 +416,17 @@ export function createSiteContentProvider(
       const draftState = isDeckFitDraft(journey)
         ? journey.draftState
         : generated.draftState ?? journey.draftState;
+      const currentRuntime = journey.siteRuntime[site.id];
       return {
-        slots: shopSlotsToRuntime(generated.slots),
+        slots:
+          currentRuntime?.kind === "shop" &&
+          currentRuntime.transfiguredOfferSource !== undefined
+            ? transfigureShopSlots(
+                shopSlotsToRuntime(generated.slots),
+                content,
+                stream,
+              )
+            : shopSlotsToRuntime(generated.slots),
         remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
         remainingDreamsignPool: generated.remainingDreamsignPoolIds,
         draftState,

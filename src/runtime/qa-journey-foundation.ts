@@ -96,6 +96,7 @@ export function createQaJourneyFoundation(
       freeRerolls: 0,
       essenceDiscountPercent: 0,
     },
+    siteOfferModifiers: [],
     dreamscapeModifiers: [],
   };
 

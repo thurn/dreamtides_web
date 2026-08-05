@@ -450,8 +450,12 @@ describe("exploration-view-model", () => {
     });
   });
 
-  it("omits already-transfigured cards from a fixed transfiguration choice", () => {
+  it("omits already-transfigured and fixed-form-ineligible cards", () => {
     const source = card(sourceId, 17);
+    const zeroCost = {
+      ...card(asCardId("f0000000-0000-4000-8000-000000000017"), 18),
+      energyCost: 0,
+    };
     const state = {
       ...createDefaultState(),
       deck: [
@@ -465,6 +469,12 @@ describe("exploration-view-model", () => {
           entryId: "entry-transfigured",
           cardNumber: source.cardNumber,
           transfiguration: "Inspired" as const,
+          isBane: false,
+        },
+        {
+          entryId: "entry-zero-cost",
+          cardNumber: zeroCost.cardNumber,
+          transfiguration: null,
           isBane: false,
         },
       ],
@@ -491,7 +501,10 @@ describe("exploration-view-model", () => {
       resolution: null,
     };
     const content = {
-      cardDatabase: new Map([[source.cardNumber, source]]),
+      cardDatabase: new Map([
+        [source.cardNumber, source],
+        [zeroCost.cardNumber, zeroCost],
+      ]),
       dreamAvatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [],
@@ -510,10 +523,9 @@ describe("exploration-view-model", () => {
               {
                 id: "gather-light",
                 label: "Gather the Falling Light",
-                effectText: "Transfigure a cheap Character.",
+                effectText: "Apply Empowered to a chosen card.",
                 effectKind: "transfigure-fixed-selected",
-                predicate: "cheap-character",
-                transfiguration: "Kindled",
+                transfiguration: "Empowered",
               },
               {
                 id: "gain-card",
@@ -543,7 +555,7 @@ describe("exploration-view-model", () => {
       cards: [{ entryId: "entry-eligible" }],
     });
     expect(view.actions[0].effectText).toBe(
-      "Transfigure a cheap Character. (Double its ✦, or set it to 1 if it is 0)",
+      "Apply Empowered to a chosen card. (Halve its ● cost, rounded down)",
     );
   });
 
@@ -1719,6 +1731,91 @@ describe("exploration-view-model", () => {
       followup: {
         kind: "dreamAvatars",
         dreamAvatars: [{ id: "avatar-1" }, { id: "avatar-2" }, { id: "avatar-3" }],
+      },
+    });
+
+    const tookNone = build(
+      {
+        id: "take-none",
+        label: "Take any",
+        effectText: "Take any number of Character cards from 4 choices",
+        effectKind: "take-cards",
+        predicate: "character",
+        offerCount: 4,
+      },
+      { ...emptyResolution("take-none"), selection: { cardIds: [] } },
+    );
+    expect(tookNone).toMatchObject({
+      outcomeKind: "card-acquisition",
+      reward: {
+        semanticKind: "card-acquisition",
+        objects: { cards: [], purgedCards: [], dreamsigns: [] },
+      },
+    });
+
+    const replacement = build(
+      {
+        id: "replace-fixed",
+        label: "Replace",
+        effectText: `Choose a card to purge and replace it with ${survivor.name}`,
+        effectKind: "replace-selected-with-card",
+        cardId: survivor.id,
+      },
+      {
+        ...emptyResolution("replace-fixed"),
+        selection: { entryIds: ["source-entry"] },
+        purgedCardIds: [source.id],
+        purgedEntryIds: ["source-entry"],
+        gainedCardIds: [survivor.id],
+        gainedEntryIds: ["replacement-entry"],
+      },
+    );
+    expect(replacement).toMatchObject({
+      outcomeKind: "card-replacement",
+      reward: {
+        semanticKind: "card-replacement",
+        objects: {
+          cards: [{ cardId: survivor.id }],
+          purgedCards: [
+            { entryId: "source-entry", model: { cardId: source.id } },
+          ],
+        },
+      },
+    });
+    const replacementFollowup = replacement?.actions[0].followup;
+    expect(replacementFollowup).toMatchObject({
+      kind: "cards",
+      selectionKey: "entryIds",
+    });
+    expect(
+      replacementFollowup?.kind === "cards"
+        ? replacementFollowup.cards.map((entry) => entry.entryId)
+        : [],
+    ).toContain("source-entry");
+
+    const future = build(
+      {
+        id: "future-transfigured-site",
+        label: "Follow",
+        effectText: "The next draft or shop site will contain transfigured cards",
+        effectKind: "transfigure-next-draft-or-shop",
+      },
+      {
+        ...emptyResolution("future-transfigured-site"),
+        siteOfferModifier: {
+          kind: "transfigure-next-draft-or-shop",
+          sourceSiteId: explorationSite.id,
+          sourceActionId: "future-transfigured-site",
+        },
+      },
+    );
+    expect(future).toMatchObject({
+      outcomeKind: "site-offer-modifier",
+      reward: {
+        kind: "site-offer-modifier",
+        modifier: "transfigure-next-draft-or-shop",
+        sourceSiteId: explorationSite.id,
+        sourceActionId: "future-transfigured-site",
       },
     });
   });

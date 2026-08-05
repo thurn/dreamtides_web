@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import {
+  buildDraftTransfiguredOfferLog,
   buildDraftView,
   resolveOfferCards,
   sortOfferCards,
@@ -128,5 +129,37 @@ describe("buildDraftView", () => {
     });
     expect(view.offer).toEqual([]);
     expect(view.offerKey).toBe("");
+  });
+
+  it("renders and logs exact persisted transfigurations by offered card identity", () => {
+    const view = buildDraftView({
+      offerCardNumbers: [5, 6],
+      offerTransfigurations: { "5": "Empowered", "6": "Kindled" },
+      cardDatabase: cardDatabase([
+        card({ cardNumber: 5, energyCost: 4 }),
+        card({ cardNumber: 6, spark: 2 }),
+      ]),
+      sceneNode: null,
+      site: { data: { draftPickCount: 5 } },
+      sitePicksCompleted: 0,
+    });
+    expect(view.offer.map((model) => model.transfiguration?.type)).toEqual([
+      "Kindled",
+      "Empowered",
+    ]);
+    expect(
+      buildDraftTransfiguredOfferLog(view, {
+        siteId: "exploration-site",
+        actionId: "exploration-action",
+      }),
+    ).toEqual({
+      sourceSiteId: "exploration-site",
+      sourceActionId: "exploration-action",
+      pickNumber: 1,
+      cards: [
+        { cardId: "card-6", transfiguration: "Kindled" },
+        { cardId: "card-5", transfiguration: "Empowered" },
+      ],
+    });
   });
 });

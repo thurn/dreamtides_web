@@ -12,7 +12,10 @@ import { useCallback, useEffect, useMemo } from "react";
 import { useJourney } from "../../state/journey-context";
 import { logEvent, logEventOnce } from "../../logging";
 import { readDraftSiteProgress } from "../../data/draft-site-bootstrap";
-import { buildDraftView } from "./draft-view-model";
+import {
+  buildDraftTransfiguredOfferLog,
+  buildDraftView,
+} from "./draft-view-model";
 import { DraftScreen } from "../../cumulus/screens/DraftScreen";
 import type { FirstVisitSiteTutorialView } from "../../cumulus/screens/site-tutorial-view";
 
@@ -40,6 +43,7 @@ export function DraftSiteScreenAdapter({ siteId }: { siteId: string }) {
     () =>
       buildDraftView({
         offerCardNumbers: progress.offerCardNumbers,
+        offerTransfigurations: state.draftState?.currentOfferTransfigurations,
         cardDatabase,
         sceneNode: node,
         site,
@@ -50,6 +54,7 @@ export function DraftSiteScreenAdapter({ siteId }: { siteId: string }) {
     [
       progress.offerCardNumbers,
       progress.sitePicksCompleted,
+      state.draftState?.currentOfferTransfigurations,
       cardDatabase,
       node,
       site,
@@ -77,6 +82,17 @@ export function DraftSiteScreenAdapter({ siteId }: { siteId: string }) {
     },
     [siteId],
   );
+
+  useEffect(() => {
+    const source = state.draftState?.transfiguredOfferSource;
+    if (source === undefined) return;
+    const details = buildDraftTransfiguredOfferLog(view, source);
+    logEventOnce(
+      `draft:${siteId}:transfigured-offer:${String(view.pickNumber)}`,
+      "draft_transfigured_offer_presented",
+      { siteId, ...details },
+    );
+  }, [siteId, state.draftState?.transfiguredOfferSource, view]);
 
   const handlePick = useCallback(
     (cardNumber: number) => {

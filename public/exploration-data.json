@@ -612,6 +612,176 @@
           "effectKind": "purge-duplicates-and-grant-reclaim"
         }
       ]
+    },
+    {
+      "cardId": "edb479be-68a5-45bc-bd19-2602156edb57",
+      "prose": "A colossal eagle beats broad wings through canyon haze, dark feathers edged with glare.",
+      "action": [
+        {
+          "id": "edb479be-68a5-45bc-bd19-2602156edb57:pair-1:template-12",
+          "label": "Echo its wingbeats",
+          "effectText": "Gain 3 copies of $OFFERED_CARD",
+          "templateId": 12,
+          "templateVariables": {
+            "count": 3
+          },
+          "selection": {
+            "$OFFERED_CARD": {
+              "predicate": "Spirit Animal"
+            }
+          },
+          "effectKind": "gain-offered-card",
+          "predicate": "spirit-animal",
+          "count": 3,
+          "specialVariables": [
+            "$OFFERED_CARD"
+          ]
+        },
+        {
+          "id": "edb479be-68a5-45bc-bd19-2602156edb57:pair-1:template-16",
+          "label": "Join its flight",
+          "effectText": "Take any number of Spirit Animal cards from 4 choices",
+          "templateId": 16,
+          "templateVariables": {
+            "offer_count": 4,
+            "predicate": "Spirit Animal"
+          },
+          "effectKind": "take-cards",
+          "predicate": "spirit-animal",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e",
+      "prose": "A lone fisher casts a slender line across misty, light-speckled water.",
+      "action": [
+        {
+          "id": "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e:pair-1:template-15",
+          "label": "Haul his line",
+          "effectText": "Draft a ≤2● cost Character from 4 choices and gain 2 copies of it",
+          "templateId": 15,
+          "templateVariables": {
+            "count": 2,
+            "offer_count": 4,
+            "predicate": "≤2● cost Character"
+          },
+          "effectKind": "draft-card",
+          "predicate": "cheap-character",
+          "count": 2,
+          "offerCount": 4
+        },
+        {
+          "id": "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e:pair-1:template-16",
+          "label": "Guide his cast",
+          "effectText": "Take any number of ≤2● cost Character cards from 4 choices",
+          "templateId": 16,
+          "templateVariables": {
+            "offer_count": 4,
+            "predicate": "≤2● cost Character"
+          },
+          "effectKind": "take-cards",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "2ce84a16-1295-4738-9e2d-1f57590b2269",
+      "prose": "A hooded warrior stands rigid as marked slabs orbit a luminous sword.",
+      "action": [
+        {
+          "id": "2ce84a16-1295-4738-9e2d-1f57590b2269:pair-3:template-16",
+          "label": "Join His Vigil",
+          "effectText": "Take any number of ≤2● cost Character cards from 4 choices",
+          "templateId": 16,
+          "templateVariables": {
+            "offer_count": 4,
+            "predicate": "≤2● cost Character"
+          },
+          "effectKind": "take-cards",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        },
+        {
+          "id": "2ce84a16-1295-4738-9e2d-1f57590b2269:pair-3:template-12",
+          "label": "Answer His Summons",
+          "effectText": "Gain 2 copies of $OFFERED_CARD",
+          "templateId": 12,
+          "templateVariables": {
+            "count": 2
+          },
+          "selection": {
+            "$OFFERED_CARD": {
+              "predicate": "≤2● cost Character"
+            }
+          },
+          "effectKind": "gain-offered-card",
+          "predicate": "cheap-character",
+          "count": 2,
+          "specialVariables": [
+            "$OFFERED_CARD"
+          ]
+        }
+      ]
+    },
+    {
+      "cardId": "9d14885c-a757-40cc-b43e-87dbec7ec379",
+      "prose": "A tentacled colossus surges through a furnace-bright rupture.",
+      "action": [
+        {
+          "id": "9d14885c-a757-40cc-b43e-87dbec7ec379:pair-1:template-47",
+          "label": "Feed it, then gaze",
+          "effectText": "Choose a card to purge and replace it with Glimpse of Infinity",
+          "templateId": 47,
+          "templateVariables": {
+            "card_id": {
+              "id": "1658d9a0-c3b0-4eb7-babc-4933acf362c4",
+              "display_name": "Glimpse of Infinity"
+            }
+          },
+          "effectKind": "replace-selected-with-card",
+          "cardId": "1658d9a0-c3b0-4eb7-babc-4933acf362c4"
+        },
+        {
+          "id": "9d14885c-a757-40cc-b43e-87dbec7ec379:pair-1:template-16",
+          "label": "Witness its emergence",
+          "effectText": "Take any number of Event cards from 4 choices",
+          "templateId": 16,
+          "templateVariables": {
+            "offer_count": 4,
+            "predicate": "Event"
+          },
+          "effectKind": "take-cards",
+          "predicate": "event",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2",
+      "prose": "An immense creature crouches between slender trunks, rough limbs glowing with narrow lines.",
+      "action": [
+        {
+          "id": "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2:pair-4:template-18",
+          "label": "Touch a luminous seam",
+          "effectText": "Apply Empowered to a chosen card",
+          "templateId": 18,
+          "templateVariables": {
+            "transfiguration": "Empowered"
+          },
+          "effectKind": "transfigure-fixed-selected",
+          "transfiguration": "Empowered"
+        },
+        {
+          "id": "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2:pair-4:template-37",
+          "label": "Follow its lowered gaze",
+          "effectText": "The next draft or shop site you visit will contain transfigured cards",
+          "templateId": 37,
+          "templateVariables": {},
+          "effectKind": "transfigure-next-draft-or-shop"
+        }
+      ]
     }
   ]
 }

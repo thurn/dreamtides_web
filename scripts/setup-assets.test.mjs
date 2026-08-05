@@ -76,6 +76,7 @@ describe("transformExplorationData", () => {
     encounters[0].action[0] = {
       ...encounters[0].action[0],
       "effect-kind": "gain-offered-card",
+      predicate: "character",
     };
     encounters[0].action[1] = {
       ...encounters[0].action[1],
@@ -139,6 +140,42 @@ describe("transformExplorationData", () => {
 
     expect(() => transformExplorationData(source)).toThrow(
       /requires a non-empty subtype/,
+    );
+  });
+
+  it("validates the fields required by offered copies, fixed replacement, and fixed transfiguration", () => {
+    const offered = syntheticExplorationSource();
+    offered.encounter[0].action[0] = {
+      ...offered.encounter[0].action[0],
+      "effect-kind": "gain-offered-card",
+      "template-id": 12,
+      predicate: "spirit-animal",
+      count: 3,
+    };
+    offered.encounter[0].action[1] = {
+      ...offered.encounter[0].action[1],
+      "effect-kind": "replace-selected-with-card",
+      "card-id": "fixed-card-id",
+    };
+    offered.encounter[1].action[0] = {
+      ...offered.encounter[1].action[0],
+      "effect-kind": "transfigure-fixed-selected",
+      transfiguration: "Empowered",
+    };
+    expect(() => transformExplorationData(offered)).not.toThrow();
+
+    const missingCount = structuredClone(offered);
+    delete missingCount.encounter[0].action[0].count;
+    expect(() => transformExplorationData(missingCount)).toThrow(
+      /positive whole-number count/,
+    );
+    const missingCard = structuredClone(offered);
+    delete missingCard.encounter[0].action[1]["card-id"];
+    expect(() => transformExplorationData(missingCard)).toThrow(/requires card-id/);
+    const missingForm = structuredClone(offered);
+    delete missingForm.encounter[1].action[0].transfiguration;
+    expect(() => transformExplorationData(missingForm)).toThrow(
+      /requires transfiguration/,
     );
   });
 });

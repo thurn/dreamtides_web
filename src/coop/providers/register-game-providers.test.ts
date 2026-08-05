@@ -377,6 +377,50 @@ describe("registerGameProviders (real content providers)", () => {
     ).toContain(requiredId);
   });
 
+  it("consumes the one-use modifier while minting exact transfigured Shop slots", () => {
+    const content = makeJourneyContent();
+    const started = replayLog({
+      genesis: GENESIS,
+      events: [
+        ev(1, "START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }),
+        ev(2, "SELECT_DREAM_AVATAR", { dreamAvatarId: DREAM_AVATAR_ID }),
+      ],
+    }).finalState.journey;
+    const shop: SiteState = {
+      id: "transfigured-shop",
+      type: "Shop",
+      isEnhanced: false,
+      isVisited: false,
+      data: {},
+    };
+    const modifier = {
+      kind: "transfigure-next-draft-or-shop" as const,
+      sourceSiteId: "exploration-site",
+      sourceActionId: "exploration-action",
+    };
+
+    const result = createSiteContentProvider(content).openSite({
+      journey: { ...started, siteOfferModifiers: [modifier] },
+      site: shop,
+      rng: () => 0,
+    });
+
+    expect(result?.siteOfferModifiers).toEqual([]);
+    expect(result?.runtime).toMatchObject({
+      kind: "shop",
+      transfiguredOfferSource: {
+        siteId: modifier.sourceSiteId,
+        actionId: modifier.sourceActionId,
+      },
+    });
+    if (result?.runtime.kind !== "shop") return;
+    const cards = result.runtime.slots.filter(
+      (slot) => slot.itemType === "card",
+    );
+    expect(cards.length).toBeGreaterThan(0);
+    expect(cards.every((slot) => slot.transfiguration !== undefined)).toBe(true);
+  });
+
   it("rebuilds debug progress as one consistent Atlas transition", () => {
     const events = [
       ev(1, "START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }),

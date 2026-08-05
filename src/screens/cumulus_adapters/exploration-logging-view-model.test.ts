@@ -90,4 +90,61 @@ describe("exploration logging view model", () => {
       outcomeKind: "card-copies",
     });
   });
+
+  it("records the exact one-use future-site modifier and presented outcome", () => {
+    const actionId = "future-site";
+    const modifier = {
+      kind: "transfigure-next-draft-or-shop" as const,
+      sourceSiteId: "exploration-site",
+      sourceActionId: actionId,
+    };
+    const view = {
+      actions: [
+        {
+          id: actionId,
+          effectKind: "transfigure-next-draft-or-shop",
+          mechanics: {
+            effectKind: "transfigure-next-draft-or-shop",
+            templateId: 37,
+          },
+        },
+      ],
+      outcomeKind: "site-offer-modifier",
+    } as unknown as ExplorationSiteView;
+    const runtime: ExplorationSiteRuntime = {
+      kind: "exploration",
+      encounterCardId: "encounter-card-uuid",
+      actionOffers: [
+        {
+          actionId,
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+      ],
+      resolution: {
+        actionId,
+        selection: {},
+        gainedCardIds: [],
+        gainedDreamsignIds: [],
+        purgedCardIds: [],
+        affectedEntryIds: [],
+        essenceGained: 0,
+        siteOfferModifier: modifier,
+      },
+    };
+
+    expect(buildExplorationResolutionLog(view, runtime)).toMatchObject({
+      effectKind: "transfigure-next-draft-or-shop",
+      authoredMechanics: { templateId: 37 },
+      outcomeKind: "site-offer-modifier",
+      siteOfferModifier: modifier,
+    });
+    expect(buildExplorationCompletionLog(view, runtime)).toMatchObject({
+      actionId,
+      outcomeKind: "site-offer-modifier",
+      siteOfferModifier: modifier,
+    });
+  });
 });

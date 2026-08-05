@@ -52,6 +52,13 @@ interface DraftStateCommon {
    * fixtures omit it safely; live states maintained by the engine always set it.
    */
   siteShownCardNumbers?: number[];
+  /** Exact transfiguration rolled for each card in the currently visible offer. */
+  currentOfferTransfigurations?: Record<string, import("./journey").TransfigurationType>;
+  /** Exploration action whose one-use modifier transfigures this Draft visit. */
+  transfiguredOfferSource?: {
+    siteId: string;
+    actionId: string;
+  };
 }
 
 /**

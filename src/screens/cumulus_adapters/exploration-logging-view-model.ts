@@ -67,6 +67,7 @@ export function buildExplorationCompletionLog(
     battleModifier: resolution.battleModifier ?? null,
     chosenDreamAvatarId: resolution.chosenDreamAvatarId ?? null,
     reclaimCostByEntryId: resolution.reclaimCostByEntryId ?? {},
+    siteOfferModifier: resolution.siteOfferModifier ?? null,
     outcomeKind: view.outcomeKind,
     essenceGained: resolution.essenceGained,
   };
