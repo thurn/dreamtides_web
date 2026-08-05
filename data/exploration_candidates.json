@@ -2188,5 +2188,767 @@
       "rank": 5,
       "ranking_rationale": "The stonework gives both site choices concrete visual causality, but their strategic support is broad rather than card-specific."
     }
+  ],
+  "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6": [
+    {
+      "template_pair_id": "pair-2",
+      "prose": "Three sealed figures press through billowing haze, opaque visors hidden beneath hoods crossed by illuminated piping.",
+      "actions": [
+        {
+          "label": "Shadow the central figure",
+          "template_id": 34,
+          "variables": {
+            "predicate": "Survivor"
+          }
+        },
+        {
+          "label": "Separate one from the trio",
+          "template_id": 74,
+          "variables": {
+            "subtype": "Survivor"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 10,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 10,
+        "overall": 10
+      },
+      "rank": 1,
+      "ranking_rationale": "The sealed trio makes following one survivor or sacrificing one to strengthen the rest unusually clear, and both effects directly reinforce a survivor-abandonment engine.",
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
+    },
+    {
+      "template_pair_id": "pair-1",
+      "prose": "Three hooded travelers advance through windblown dust, their sealed suits traced by narrow luminous seams.",
+      "actions": [
+        {
+          "label": "Join their locked formation",
+          "template_id": 16,
+          "variables": {
+            "offer_count": 4,
+            "predicate": "Survivor"
+          }
+        },
+        {
+          "label": "Count the advancing suits",
+          "template_id": 59,
+          "variables": {
+            "essence_per_card": 25,
+            "predicate": "Survivor"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "The advancing formation naturally supports recruiting more survivors or profiting from an existing survivor column, with excellent strategic fit."
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "A sealed trio moves through rolling smoke, illuminated strips outlining bulky suits beneath opaque hoods.",
+      "actions": [
+        {
+          "label": "Fit a matching hood",
+          "template_id": 53,
+          "variables": {
+            "card_type": "Survivor"
+          },
+          "selection": {
+            "$DECK_CARD": {
+              "predicate": "≤2● cost Character"
+            }
+          }
+        },
+        {
+          "label": "Walk beside the sealed trio",
+          "template_id": 9,
+          "variables": {
+            "predicate": "Survivor"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 3,
+      "ranking_rationale": "Matching the trio's sealed gear supports survivor conversion and recruitment, both of which supply the source card's preferred sacrifice fuel."
+    },
+    {
+      "template_pair_id": "pair-3",
+      "prose": "Three suited wanderers stride from smoke, fitted seals and rigid hoods enclosing each dark visor.",
+      "actions": [
+        {
+          "label": "Study the fitted seals",
+          "template_id": 18,
+          "variables": {
+            "transfiguration": "Empowered"
+          }
+        },
+        {
+          "label": "Match their measured stride",
+          "template_id": 39,
+          "variables": {
+            "count": 2
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 4,
+      "ranking_rationale": "The protective construction and steady advance give clear preparation acts, though their rewards support the deck more broadly than the higher-ranked survivor effects."
+    },
+    {
+      "template_pair_id": "pair-4",
+      "prose": "Three hooded figures push through suspended grit, gloved hands low and faceplates shut against the haze.",
+      "actions": [
+        {
+          "label": "Study their crossing",
+          "template_id": 38,
+          "variables": {
+            "count": 2
+          }
+        },
+        {
+          "label": "Trace their passage",
+          "template_id": 37,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 7,
+        "archetype_fit": 8,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "The disciplined crossing supports tactical study and route-following, but the future-site reward is less directly tied to survivor sacrifice."
+    }
+  ],
+  "f9a65b32-537b-457c-9eaf-b512cf1f3791": [
+    {
+      "template_pair_id": "pair-3",
+      "prose": "Luminous seams thread the heavy thorax; articulated legs fold above the branch beneath spread wings.",
+      "actions": [
+        {
+          "label": "Tune the luminous seams",
+          "template_id": 18,
+          "variables": {
+            "transfiguration": "Resonant"
+          }
+        },
+        {
+          "label": "Align the leg joints",
+          "template_id": 20,
+          "variables": {
+            "count": 2,
+            "predicate": "≤2● cost Character"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 1,
+      "ranking_rationale": "The visible conduits and jointwork make both precise adjustments immediate, while both rewards strongly improve a cheap materialization loop.",
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
+    },
+    {
+      "template_pair_id": "pair-2",
+      "prose": "A faceted head hangs beneath broad wings as linked plates repeat down the rigid abdomen.",
+      "actions": [
+        {
+          "label": "Copy the linked armor pattern",
+          "template_id": 49,
+          "variables": {
+            "count": 2
+          },
+          "selection": {
+            "$DECK_CARD": {
+              "predicate": "≤2● cost Character"
+            }
+          }
+        },
+        {
+          "label": "Compare the repeating plates",
+          "template_id": 55,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "Its repeated armor gives both copying actions a clear material basis, with especially strong support for duplicating inexpensive materialization characters."
+    },
+    {
+      "template_pair_id": "pair-1",
+      "prose": "The metal insect spreads translucent wings; dark ribs cross the haze above branch-braced legs.",
+      "actions": [
+        {
+          "label": "Trace the wing ribs",
+          "template_id": 38,
+          "variables": {
+            "count": 2
+          }
+        },
+        {
+          "label": "Flex the wing ribs",
+          "template_id": 39,
+          "variables": {
+            "count": 2
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 3,
+      "ranking_rationale": "The enormous ribbed wings cleanly support study or activation, and either temporary battle reward helps assemble and replay a materialization sequence."
+    },
+    {
+      "template_pair_id": "pair-4",
+      "prose": "The machine balances on the branch, fitted leg segments below plates sheathing its extended abdomen.",
+      "actions": [
+        {
+          "label": "Exchange a fitted leg segment",
+          "template_id": 7,
+          "variables": {
+            "predicate": "≤2● cost Character"
+          }
+        },
+        {
+          "label": "Trade an abdomen plate",
+          "template_id": 47,
+          "variables": {
+            "card_id": {
+              "id": "b8a66998-f2d8-401d-8262-d5a658563936",
+              "display_name": "Consumed Marksman"
+            }
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 8,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 8
+      },
+      "rank": 4,
+      "ranking_rationale": "The replaceable plating makes both trades concrete, and the guaranteed low-cost materialization reward offers a particularly useful replay target."
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "Repeating body sections and hinged wing mounts define the immense mechanical insect's modular silhouette.",
+      "actions": [
+        {
+          "label": "Record the body pattern",
+          "template_id": 41,
+          "variables": {}
+        },
+        {
+          "label": "Diagram the hinged wing mounts",
+          "template_id": 44,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 8,
+        "action_quality": 8,
+        "mechanical_connection": 7,
+        "archetype_fit": 8,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "The modular construction credibly points toward duplication or modification facilities, though the future-site connection is less immediate than the higher-ranked encounters."
+    }
+  ],
+  "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034": [
+    {
+      "template_pair_id": "pair-4",
+      "prose": "One elongated arm reaches across the water while the giant's blackened shape repeats in broken reflections.",
+      "actions": [
+        {
+          "label": "Trace a single reflection",
+          "template_id": 49,
+          "variables": {
+            "count": 2
+          },
+          "selection": {
+            "$DECK_CARD": {
+              "predicate": "≤2● cost Character"
+            }
+          }
+        },
+        {
+          "label": "Part the twin reflections",
+          "template_id": 51,
+          "variables": {
+            "count": 2
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 1,
+      "ranking_rationale": "The repeated reflection creates the clearest duplication logic, while both choices supply flexible low-cost character fodder for the card's abandonment plan.",
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
+    },
+    {
+      "template_pair_id": "pair-2",
+      "prose": "A hulking skeletal creature stoops from the marsh, extending a broad, hooked hand over the shallows.",
+      "actions": [
+        {
+          "label": "Cross beneath the hooked fingers",
+          "template_id": 3,
+          "variables": {}
+        },
+        {
+          "label": "Reach toward the hooked hand",
+          "template_id": 15,
+          "variables": {
+            "count": 2,
+            "offer_count": 4,
+            "predicate": "≤2● cost Character"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 9,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "The outstretched hand supports a strong give-or-take choice between deck refinement and acquiring abundant inexpensive characters."
+    },
+    {
+      "template_pair_id": "pair-1",
+      "prose": "A skull-faced giant leans over the marsh, its long jaw dripping black fluid beneath a crescent.",
+      "actions": [
+        {
+          "label": "Study the bare crown",
+          "template_id": 27,
+          "variables": {
+            "dreamsign_name": {
+              "id": "EB55B141-82F8-4BA4-B319-420F762E9EE4",
+              "display_name": "Mortal Skull"
+            }
+          }
+        },
+        {
+          "label": "Hold the hollow gaze",
+          "template_id": 38,
+          "variables": {
+            "count": 2
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 8,
+        "overall": 9
+      },
+      "rank": 3,
+      "ranking_rationale": "The exposed skull and empty gaze anchor both rewards vividly, though the dreamsign is less directly tied to abandonment than the higher-ranked choices."
+    },
+    {
+      "template_pair_id": "pair-3",
+      "prose": "A corpse-like giant bends over flooded ground, luminous slime running from its forearms into still water.",
+      "actions": [
+        {
+          "label": "Gather the luminous runoff",
+          "template_id": 18,
+          "variables": {
+            "transfiguration": "Kindled"
+          }
+        },
+        {
+          "label": "Enter the deepest pool",
+          "template_id": 60,
+          "variables": {
+            "essence_per_spark": 20
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 4,
+      "ranking_rationale": "The luminous runoff supports potent transformation and spark conversion, but the second action's causal link is less immediate than those above it."
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "A bare-skulled giant rises from the marsh, one claw hovering over a spread of crescent light.",
+      "actions": [
+        {
+          "label": "Stand beneath the lifted claw",
+          "template_id": 39,
+          "variables": {
+            "count": 2
+          }
+        },
+        {
+          "label": "Read the crescent light",
+          "template_id": 29,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 8,
+        "action_quality": 8,
+        "mechanical_connection": 7,
+        "archetype_fit": 8,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "The moonlit tableau remains faithful and offers useful tempo or long-term utility, though its action-to-effect chains are the set's least direct."
+    }
+  ],
+  "86fd585b-e9d0-4dc1-bce9-488014b9316d": [
+    {
+      "template_pair_id": "pair-1",
+      "prose": "A luminous jellyfish glides among stars, its flowing tendrils brightly lit.",
+      "actions": [
+        {
+          "label": "Study its measured pulse",
+          "template_id": 38,
+          "variables": {
+            "count": 2
+          }
+        },
+        {
+          "label": "Follow its radiant wake",
+          "template_id": 39,
+          "variables": {
+            "count": 2
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 1,
+      "ranking_rationale": "The measured light and drifting wake support the clearest preparation-versus-momentum choice while reinforcing an energy-rich deck.",
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
+    },
+    {
+      "template_pair_id": "pair-3",
+      "prose": "A broad-belled jellyfish rises through the stars, long tendrils streaming below.",
+      "actions": [
+        {
+          "label": "Join its starward drift",
+          "template_id": 16,
+          "variables": {
+            "offer_count": 4,
+            "predicate": "Spirit Animal"
+          }
+        },
+        {
+          "label": "Pass through its tendrils",
+          "template_id": 35,
+          "variables": {
+            "predicate": "Spirit Animal"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "Its ascent and streaming tendrils make recruitment and wholesale conversion vivid alternatives for a Spirit Animal strategy."
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "A translucent jellyfish drifts in starlight, fine tendrils curling beneath its bell.",
+      "actions": [
+        {
+          "label": "Touch its shining bell",
+          "template_id": 18,
+          "variables": {
+            "transfiguration": "Kindled"
+          }
+        },
+        {
+          "label": "Enter its curling tendrils",
+          "template_id": 20,
+          "variables": {
+            "count": 2,
+            "predicate": "Spirit Animal"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 3,
+      "ranking_rationale": "Contact with the glowing bell or enveloping tendrils grounds a precise single upgrade against broader Spirit Animal refinement."
+    },
+    {
+      "template_pair_id": "pair-2",
+      "prose": "Bands of light ripple through a translucent jellyfish drifting across the starfield.",
+      "actions": [
+        {
+          "label": "Read its shifting light",
+          "template_id": 29,
+          "variables": {}
+        },
+        {
+          "label": "Reorder its glowing bands",
+          "template_id": 30,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 8,
+        "overall": 8
+      },
+      "rank": 4,
+      "ranking_rationale": "The rippling bands strongly invite interpretation, though dreamsign selection serves the source strategy less directly."
+    },
+    {
+      "template_pair_id": "pair-4",
+      "prose": "A radiant jellyfish floats amid stars, warm light filling its glassy bell.",
+      "actions": [
+        {
+          "label": "Rest within its radiance",
+          "template_id": 1,
+          "variables": {
+            "essence": 40
+          }
+        },
+        {
+          "label": "Share its steady pulse",
+          "template_id": 59,
+          "variables": {
+            "essence_per_card": 15,
+            "predicate": "Spirit Animal"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 7,
+        "archetype_fit": 9,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "The warm radiance supports two balanced essence rewards, but their causal distinction is subtler than the higher-ranked pairs."
+    }
+  ],
+  "b1d36337-5668-4f1d-b155-2d07fc00f872": [
+    {
+      "template_pair_id": "pair-1",
+      "prose": "A lone astronaut stands rigid where luminous steps meet a vast black aperture.",
+      "actions": [
+        {
+          "label": "Follow the astronaut",
+          "template_id": 57,
+          "variables": {}
+        },
+        {
+          "label": "Enter the aperture alone",
+          "template_id": 79,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 1,
+      "ranking_rationale": "The stark threshold scene supports two decisive crossings whose identity and deck transformations closely match the source card's sweeping reset plan.",
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "A helmeted astronaut faces a black opening freckled with distant starlight.",
+      "actions": [
+        {
+          "label": "Enter the opening",
+          "template_id": 70,
+          "variables": {
+            "card_name": {
+              "id": "1658d9a0-c3b0-4eb7-babc-4933acf362c4",
+              "display_name": "Glimpse of Infinity"
+            },
+            "nightmare_count": 2
+          }
+        },
+        {
+          "label": "Study the starlight",
+          "template_id": 38,
+          "variables": {
+            "count": 2
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "The opening and starlight create clear risk and study actions that reward an Event-heavy deck with a premium Event or future draw."
+    },
+    {
+      "template_pair_id": "pair-4",
+      "prose": "An astronaut stands motionless while angular fragments tumble through the surrounding darkness.",
+      "actions": [
+        {
+          "label": "Catch a fragment",
+          "template_id": 9,
+          "variables": {
+            "predicate": "Event"
+          }
+        },
+        {
+          "label": "Release a fragment",
+          "template_id": 7,
+          "variables": {
+            "predicate": "Event"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 3,
+      "ranking_rationale": "Catching or releasing the tumbling fragments forms an immediate gain-or-exchange choice tailored to Event density."
+    },
+    {
+      "template_pair_id": "pair-2",
+      "prose": "A white-suited astronaut climbs a glowing stairway toward a lightless opening.",
+      "actions": [
+        {
+          "label": "Climb the stairway",
+          "template_id": 39,
+          "variables": {
+            "count": 3
+          }
+        },
+        {
+          "label": "Continue into darkness",
+          "template_id": 37,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 8,
+        "overall": 8
+      },
+      "rank": 4,
+      "ranking_rationale": "The illuminated ascent strongly supports momentum, while the unseen destination credibly promises altered future discoveries."
+    },
+    {
+      "template_pair_id": "pair-3",
+      "prose": "An astronaut pauses beneath concentric rings surrounding a deep black opening.",
+      "actions": [
+        {
+          "label": "Study the rings",
+          "template_id": 29,
+          "variables": {}
+        },
+        {
+          "label": "Pass through the rings",
+          "template_id": 63,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 7,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "The rings cleanly frame deliberation versus surrender, though dreamsign renewal supports the source strategy less directly than the higher-ranked pairs."
+    }
   ]
 }
