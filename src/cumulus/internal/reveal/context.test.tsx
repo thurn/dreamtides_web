@@ -183,6 +183,32 @@ describe("Cumulus reveal coordinator root", () => {
     expect(button.dataset.revealActive).toBe("false");
   });
 
+  it.each(["pointerup", "pointercancel"] as const)("dismisses a touch reveal when terminal %s is retargeted away from its source", (eventType) => {
+    vi.useFakeTimers();
+    const activate = vi.fn();
+    const { container } = mount(<CumulusRoot><Source id={UUID_A} onActivate={activate} /></CumulusRoot>);
+    const button = container.querySelector("button")!;
+    button.getBoundingClientRect = () => DOMRect.fromRect({ x: 20, y: 220, width: 120, height: 60 });
+
+    act(() => {
+      button.dispatchEvent(new PointerEvent("pointerdown", {
+        bubbles: true, pointerType: "touch", pointerId: 12,
+      }));
+      vi.advanceTimersByTime(30);
+    });
+    expect(document.querySelector("[data-cumulus-reveal-portal]")).not.toBeNull();
+
+    act(() => {
+      window.dispatchEvent(new PointerEvent(eventType, {
+        bubbles: true, pointerType: "touch", pointerId: 12,
+      }));
+    });
+
+    expect(button.dataset.revealActive).toBe("false");
+    expect(document.querySelector("[data-cumulus-reveal-portal]")).toBeNull();
+    expect(activate).not.toHaveBeenCalled();
+  });
+
   it("does not reveal for a contact pen pointer-enter", () => {
     const { container } = mount(<CumulusRoot><Source id={UUID_A} /></CumulusRoot>);
     const button = container.querySelector("button")!;

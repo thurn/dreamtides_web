@@ -183,6 +183,15 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
       if (event.key === "Escape") dispatch({ type: "escape", timestamp: event.timeStamp });
     };
     const handlePointerDown = () => { keyboardFocusEligibleRef.current = false; };
+    // Mobile WebKit can retarget a touch's terminal event away from the source
+    // after the reveal portal mounts. Window-level ownership guarantees that
+    // every observed release or cancellation closes the active interaction.
+    const handlePointerUp = (event: PointerEvent) => {
+      dispatch({ type: "pointer-up", pointerId: event.pointerId, timestamp: event.timeStamp });
+    };
+    const handlePointerCancel = (event: PointerEvent) => {
+      dispatch({ type: "pointer-cancel", pointerId: event.pointerId, timestamp: event.timeStamp });
+    };
     const events = [
       [window, "resize", () => dispatch({ type: "resize", timestamp: now() })],
       [window, "orientationchange", () => dispatch({ type: "orientation-change", timestamp: now() })],
@@ -210,6 +219,8 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
     for (const [target, name, handler] of events) target.addEventListener(name, handler);
     window.addEventListener("keydown", handleKeyDown, true);
     window.addEventListener("pointerdown", handlePointerDown, true);
+    window.addEventListener("pointerup", handlePointerUp);
+    window.addEventListener("pointercancel", handlePointerCancel);
     window.addEventListener("scroll", handleScroll, true);
     window.addEventListener("dragstart", handleDragStart, true);
     window.visualViewport?.addEventListener?.("resize", handleVisualViewportResize);
@@ -217,6 +228,8 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
       for (const [target, name, handler] of events) target.removeEventListener(name, handler);
       window.removeEventListener("keydown", handleKeyDown, true);
       window.removeEventListener("pointerdown", handlePointerDown, true);
+      window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("pointercancel", handlePointerCancel);
       window.removeEventListener("scroll", handleScroll, true);
       window.removeEventListener("dragstart", handleDragStart, true);
       window.visualViewport?.removeEventListener?.("resize", handleVisualViewportResize);
