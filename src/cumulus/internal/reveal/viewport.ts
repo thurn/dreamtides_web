@@ -75,7 +75,9 @@ function captureDesktopStatusBarTop(
   target: Window,
   viewport: Pick<VisualViewportSnapshot, "height" | "offsetTop">,
 ): number | undefined {
-  const anchor = target.document.querySelector<HTMLElement>("[data-journey-status-bar-anchor]");
+  const anchor = target.document.querySelector<HTMLElement>(
+    '[data-journey-status-bar-anchor]:not([data-journey-status-bar-variant="battle"])',
+  );
   if (anchor === null) return undefined;
   const value = anchor.getBoundingClientRect();
   const viewportBottom = viewport.offsetTop + viewport.height;

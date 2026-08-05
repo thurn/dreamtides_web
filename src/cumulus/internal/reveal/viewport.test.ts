@@ -71,6 +71,18 @@ describe("captureVisualViewport", () => {
     statusBar.remove();
   });
 
+  it("leaves the partial battle HUD band available to desktop card reveals", () => {
+    Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 1200, height: 700, offsetLeft: 0, offsetTop: 0 } });
+    const statusBar = document.createElement("div");
+    statusBar.dataset.journeyStatusBarAnchor = "";
+    statusBar.dataset.journeyStatusBarVariant = "battle";
+    statusBar.getBoundingClientRect = () => ({ x: 0, y: 610, left: 0, top: 610, right: 1200, bottom: 700, width: 1200, height: 90, toJSON: () => ({}) });
+    document.body.append(statusBar);
+
+    expect(captureVisualViewport().boundary).toBeUndefined();
+    statusBar.remove();
+  });
+
   it("uses the nearest scrolling ancestor as the reveal boundary", () => {
     const outer = document.createElement("div");
     const scroller = document.createElement("div");
