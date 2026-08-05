@@ -2192,7 +2192,7 @@
   "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6": [
     {
       "template_pair_id": "pair-2",
-      "prose": "Three sealed figures press through billowing haze, opaque visors hidden beneath hoods crossed by illuminated piping.",
+      "prose": "Three sealed figures press through billowing haze, opaque visors hidden beneath hoods.",
       "actions": [
         {
           "label": "Shadow the central figure",
@@ -2219,8 +2219,7 @@
       "rank": 1,
       "ranking_rationale": "The sealed trio makes following one survivor or sacrificing one to strengthen the rest unusually clear, and both effects directly reinforce a survivor-abandonment engine.",
       "selected": {
-        "prose": true,
-        "actions": true
+        "prose": true
       }
     },
     {
@@ -2286,7 +2285,10 @@
         "overall": 9
       },
       "rank": 3,
-      "ranking_rationale": "Matching the trio's sealed gear supports survivor conversion and recruitment, both of which supply the source card's preferred sacrifice fuel."
+      "ranking_rationale": "Matching the trio's sealed gear supports survivor conversion and recruitment, both of which supply the source card's preferred sacrifice fuel.",
+      "selected": {
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-3",
@@ -2348,7 +2350,7 @@
   "f9a65b32-537b-457c-9eaf-b512cf1f3791": [
     {
       "template_pair_id": "pair-3",
-      "prose": "Luminous seams thread the heavy thorax; articulated legs fold above the branch beneath spread wings.",
+      "prose": "Luminous seams thread a heavy thorax; articulated legs fold above a branch beneath spread wings.",
       "actions": [
         {
           "label": "Tune the luminous seams",
@@ -2376,8 +2378,7 @@
       "rank": 1,
       "ranking_rationale": "The visible conduits and jointwork make both precise adjustments immediate, while both rewards strongly improve a cheap materialization loop.",
       "selected": {
-        "prose": true,
-        "actions": true
+        "prose": true
       }
     },
     {
@@ -2410,7 +2411,10 @@
         "overall": 9
       },
       "rank": 2,
-      "ranking_rationale": "Its repeated armor gives both copying actions a clear material basis, with especially strong support for duplicating inexpensive materialization characters."
+      "ranking_rationale": "Its repeated armor gives both copying actions a clear material basis, with especially strong support for duplicating inexpensive materialization characters.",
+      "selected": {
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-1",
@@ -2502,7 +2506,7 @@
   "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034": [
     {
       "template_pair_id": "pair-4",
-      "prose": "One elongated arm reaches across the water while the giant's blackened shape repeats in broken reflections.",
+      "prose": "An elongated arm reaches across the water while the giant's blackened shape repeats in broken reflections.",
       "actions": [
         {
           "label": "Trace a single reflection",
@@ -2534,8 +2538,7 @@
       "rank": 1,
       "ranking_rationale": "The repeated reflection creates the clearest duplication logic, while both choices supply flexible low-cost character fodder for the card's abandonment plan.",
       "selected": {
-        "prose": true,
-        "actions": true
+        "prose": true
       }
     },
     {
@@ -2597,7 +2600,10 @@
         "overall": 9
       },
       "rank": 3,
-      "ranking_rationale": "The exposed skull and empty gaze anchor both rewards vividly, though the dreamsign is less directly tied to abandonment than the higher-ranked choices."
+      "ranking_rationale": "The exposed skull and empty gaze anchor both rewards vividly, though the dreamsign is less directly tied to abandonment than the higher-ranked choices.",
+      "selected": {
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-3",
