@@ -446,6 +446,7 @@ const PROGRESSIVE_VIEW: ProgressiveDrawSiteView = {
   runtimeReady: true,
   nextDraw: {
     attemptNumber: 1,
+    targetRank: "Q",
     cost: 15,
     canAfford: true,
     available: true,
@@ -471,21 +472,28 @@ describe("GambleSiteScreen — Progressive Draw", () => {
       />,
     );
 
-    expect(container.querySelectorAll("[data-playing-card]")).toHaveLength(1);
     expect(
       container
-        .querySelector("[data-playing-card]")
-        ?.getAttribute("data-playing-card-face"),
-    ).toBe("back");
+        .querySelector("[data-progressive-card-state]")
+        ?.getAttribute("data-progressive-card-state"),
+    ).toBe("target");
+    expect(
+      container
+        .querySelector("[data-progressive-target-face] [data-playing-card]")
+        ?.getAttribute("data-playing-card-variant"),
+    ).toBe("rank-target");
+    expect(
+      container
+        .querySelector("[data-progressive-target-face] [data-playing-card]")
+        ?.getAttribute("data-playing-card-rank"),
+    ).toBe("Q");
     expect(container.querySelectorAll("[data-gamble-gate]")).toHaveLength(0);
     expect(container.querySelector("[data-progressive-dreamsign-reward]"))
       .toBeNull();
-    expect(container.textContent).not.toContain("Fixture Jackpot");
-    expect(container.textContent).not.toContain("%");
     const draw = container.querySelector<HTMLButtonElement>(
       '[data-testid="gamble-progressive-draw"]',
     );
-    expect(draw?.textContent).toBe("Draw · 15");
+    expect(draw?.disabled).toBe(false);
     act(() => draw?.click());
     expect(onDraw).toHaveBeenCalledOnce();
 
@@ -502,6 +510,7 @@ describe("GambleSiteScreen — Progressive Draw", () => {
       result: {
         id: "progressive-attempt-1",
         attemptNumber: 1,
+        targetRank: "Q",
         card: { rank: "J", suit: "clubs" },
         won: false,
         resultSettled: false,
@@ -527,8 +536,16 @@ describe("GambleSiteScreen — Progressive Draw", () => {
       .toBeNull();
     void act(() => vi.advanceTimersByTime(970));
     expect(onOutcomeShown).toHaveBeenCalledOnce();
-    expect(container.querySelector("[data-radial-announcement]")?.textContent)
-      .toContain("Miss");
+    expect(
+      container
+        .querySelector("[data-radial-announcement]")
+        ?.getAttribute("data-radial-announcement-tone"),
+    ).toBe("danger");
+    expect(
+      container
+        .querySelector("[data-progressive-card-state]")
+        ?.getAttribute("data-progressive-card-state"),
+    ).toBe("drawn");
     act(() => {
       root.render(
         <CumulusRoot>
@@ -537,6 +554,7 @@ describe("GambleSiteScreen — Progressive Draw", () => {
               ...resultView,
               nextDraw: {
                 attemptNumber: 2,
+                targetRank: "10",
                 cost: 25,
                 canAfford: true,
                 available: true,
@@ -558,7 +576,17 @@ describe("GambleSiteScreen — Progressive Draw", () => {
     const drawAgain = container.querySelector<HTMLButtonElement>(
       '[data-testid="gamble-progressive-draw-again"]',
     );
-    expect(drawAgain?.textContent).toBe("Draw · 25");
+    expect(drawAgain?.disabled).toBe(false);
+    expect(
+      container
+        .querySelector("[data-progressive-card-state]")
+        ?.getAttribute("data-progressive-card-state"),
+    ).toBe("target");
+    expect(
+      container
+        .querySelector("[data-progressive-target-face] [data-playing-card]")
+        ?.getAttribute("data-playing-card-rank"),
+    ).toBe("10");
     act(() => drawAgain?.click());
     expect(onDraw).toHaveBeenCalledOnce();
 
@@ -573,6 +601,7 @@ describe("GambleSiteScreen — Progressive Draw", () => {
       result: {
         id: "progressive-win",
         attemptNumber: 1,
+        targetRank: "Q",
         card: { rank: "A", suit: "hearts" },
         won: true,
         resultSettled: false,

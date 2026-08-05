@@ -13,6 +13,7 @@ import {
 import {
   nextTidemarkAttemptNumber,
   tidemarkAttemptCost,
+  tidemarkAttemptRule,
 } from "../../data/tidemark-progressive-draw";
 import { guideForSiteType } from "../../data/dreamscapes";
 import type { DreamGuideContent } from "../../types/content";
@@ -29,7 +30,8 @@ import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
 export const GRAVOK_WAGER_GUIDE_LINE =
   "The game's called Three Gates. Place your bet on the next card drawn!";
-export const TIDEMARK_PROGRESSIVE_GUIDE_LINE = "Draw?";
+export const TIDEMARK_PROGRESSIVE_GUIDE_LINE =
+  "Progressive Draw! Match or beat the target to win a Dreamsign. Miss, and the next draw is easier—but pricier.";
 
 /** The next gate in display order supplies the non-selected reveal object. */
 export function gravokRevealGateId(selectedGateId: GravokGateId): GravokGateId {
@@ -180,6 +182,7 @@ function buildProgressiveDrawSiteView(params: {
         ? null
         : {
             attemptNumber: nextAttempt,
+            targetRank: tidemarkAttemptRule(nextAttempt).threshold,
             cost: nextCost,
             canAfford: params.state.essence >= nextCost,
             available:
@@ -192,6 +195,7 @@ function buildProgressiveDrawSiteView(params: {
         : {
             id: `${params.site.id}:${runtime.shuffleCommitments[result.attemptNumber - 1] ?? "unprepared"}:${String(result.attemptNumber)}`,
             attemptNumber: result.attemptNumber,
+            targetRank: tidemarkAttemptRule(result.attemptNumber).threshold,
             card: result.card,
             won: result.won,
             resultSettled: result.resultSettled,

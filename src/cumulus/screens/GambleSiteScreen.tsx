@@ -8,6 +8,7 @@ import {
   PlayingCard,
   WagerPrizeCard,
   type PlayingCardRank,
+  type PlayingCardSize,
   type PlayingCardSuit,
 } from "../components/card/PlayingCard";
 import { GlassButton } from "../components/controls/GlassButton";
@@ -102,6 +103,8 @@ export interface ProgressiveDrawResultView {
   id: string;
   /** One-based attempt that produced this card. */
   attemptNumber: 1 | 2 | 3 | 4;
+  /** Inclusive rank target shown before this attempt was drawn. */
+  targetRank: PlayingCardRank;
   card: {
     rank: PlayingCardRank;
     suit: PlayingCardSuit;
@@ -123,6 +126,7 @@ export interface ProgressiveDrawSiteView {
   /** Only the currently unlocked attempt; future attempts stay undisclosed. */
   nextDraw: {
     attemptNumber: 1 | 2 | 3 | 4;
+    targetRank: PlayingCardRank;
     cost: number;
     canAfford: boolean;
     available: boolean;
@@ -157,6 +161,93 @@ const DESKTOP_GAMBLE_REGION_MAX_WIDTH = 650;
 const BET_SETTLE_DELAY_MS = 250;
 const REDUCED_MOTION_DELAY_MS = 80;
 const FADE_DURATION_SECONDS = motionTimeSeconds("--dur-slow");
+
+function ProgressiveDrawCard({
+  targetRank,
+  drawnCard,
+  revealDrawnCard,
+  size,
+}: {
+  targetRank: PlayingCardRank;
+  drawnCard: ProgressiveDrawResultView["card"] | null;
+  revealDrawnCard: boolean;
+  size: PlayingCardSize;
+}) {
+  const reduceMotion = useReducedMotion() === true;
+  const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
+  return (
+    <div
+      role="img"
+      aria-label={
+        revealDrawnCard && drawnCard !== null
+          ? `${drawnCard.rank} of ${drawnCard.suit}`
+          : `Rank target ${targetRank} or higher`
+      }
+      data-progressive-card-state={revealDrawnCard ? "drawn" : "target"}
+      data-progressive-card-target={targetRank}
+      style={{
+        position: "relative",
+        width: sizeSpec.square,
+        height: sizeSpec.square,
+        perspective: PLAYING_CARD_DESIGN.flip.perspective,
+      }}
+    >
+      <motion.div
+        initial={false}
+        animate={{ rotateY: revealDrawnCard ? 180 : 0 }}
+        transition={
+          reduceMotion
+            ? { duration: 0 }
+            : {
+                duration: PLAYING_CARD_DESIGN.flip.durationSeconds,
+                ease: PLAYING_CARD_DESIGN.flip.ease,
+              }
+        }
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "100%",
+          transformStyle: "preserve-3d",
+        }}
+      >
+        <div
+          aria-hidden="true"
+          data-progressive-target-face=""
+          style={{
+            position: "absolute",
+            inset: 0,
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+          }}
+        >
+          <PlayingCard
+            rank={targetRank}
+            suit="spades"
+            size={size}
+            variant="rank-target"
+          />
+        </div>
+        <div
+          aria-hidden="true"
+          data-progressive-drawn-card-face=""
+          style={{
+            position: "absolute",
+            inset: 0,
+            transform: "rotateY(180deg)",
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+          }}
+        >
+          <PlayingCard
+            rank={drawnCard?.rank ?? "A"}
+            suit={drawnCard?.suit ?? "spades"}
+            size={size}
+          />
+        </div>
+      </motion.div>
+    </div>
+  );
+}
 
 type GambleGatePresentation =
   | "available"
@@ -782,6 +873,11 @@ function ProgressiveDrawScreen({
           result.rewardDreamsign !== null;
         const cardSize = layout === "desktop" ? "wager" : "wagerCompact";
         const dreamsignSize = PLAYING_CARD_DESIGN.sizes[cardSize].square;
+        const showNextTarget =
+          roundActionsVisible && view.nextDraw !== null;
+        const targetRank = showNextTarget && view.nextDraw !== null
+          ? view.nextDraw.targetRank
+          : result?.targetRank ?? view.nextDraw?.targetRank ?? "Q";
         return (
           <main
             data-gamble-wager-region=""
@@ -857,11 +953,11 @@ function ProgressiveDrawScreen({
                 data-progressive-draw-card=""
                 style={{ gridColumn: 2, gridRow: 1 }}
               >
-                <PlayingCard
-                  rank={result?.card.rank ?? "A"}
-                  suit={result?.card.suit ?? "spades"}
+                <ProgressiveDrawCard
+                  targetRank={targetRank}
+                  drawnCard={result?.card ?? null}
                   size={cardSize}
-                  face={resultRevealed ? "front" : "back"}
+                  revealDrawnCard={resultRevealed && !showNextTarget}
                 />
               </div>
               {rewardVisible && result.rewardDreamsign !== null && (

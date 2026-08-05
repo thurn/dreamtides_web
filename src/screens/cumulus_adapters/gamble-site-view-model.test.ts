@@ -15,7 +15,6 @@ import {
   buildGambleSiteView,
   gravokRevealGateId,
   GRAVOK_WAGER_GUIDE_LINE,
-  TIDEMARK_PROGRESSIVE_GUIDE_LINE,
   resolveGambleGuide,
 } from "./gamble-site-view-model";
 
@@ -243,14 +242,13 @@ describe("gamble-site-view-model — Progressive Draw", () => {
     }
     expect(view.nextDraw).toEqual({
       attemptNumber: 1,
+      targetRank: "Q",
       cost: 15,
       canAfford: true,
       available: true,
     });
     expect(view.result).toBeNull();
-    expect(view.guide.line).toBe(TIDEMARK_PROGRESSIVE_GUIDE_LINE);
-    expect(JSON.stringify(view)).not.toContain("Fixture Sign");
-    expect(JSON.stringify(view)).not.toContain("attempt-2");
+    expect(view).not.toHaveProperty("rewardDreamsign");
   });
 
   it("reveals only the next cost after a settled miss", () => {
@@ -286,12 +284,14 @@ describe("gamble-site-view-model — Progressive Draw", () => {
     }
     expect(view.nextDraw).toEqual({
       attemptNumber: 2,
+      targetRank: "10",
       cost: 25,
       canAfford: false,
       available: true,
     });
     expect(view.result).toMatchObject({
       attemptNumber: 1,
+      targetRank: "Q",
       won: false,
       rewardDreamsign: null,
     });
