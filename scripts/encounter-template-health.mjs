@@ -20,7 +20,7 @@ const VALID_STATUSES = new Set([
   "unused",
   "available",
 ]);
-const VALID_REASONS = new Set(["rank_1", "overall"]);
+const VALID_REASONS = new Set(["production"]);
 
 function objectRecord(value, label) {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
@@ -63,7 +63,6 @@ function parseTemplateDiagnostic(raw, index) {
     templateId: requiredInteger(entry.template_id, `template_diagnostics[${String(index)}].template_id`),
     template: requiredString(entry.template, `template_diagnostics[${String(index)}].template`),
     usageCount: requiredInteger(entry.usage_count, `template_diagnostics[${String(index)}].usage_count`),
-    rankOneUsageCount: requiredInteger(entry.rank_1_usage_count, `template_diagnostics[${String(index)}].rank_1_usage_count`),
     status,
     reasons: entry.reasons,
   };
@@ -105,16 +104,12 @@ export function readEncounterTemplateHealth({
     throw new Error("Template balance diagnostics contain duplicate template IDs.");
   }
   return {
-    completedCards: requiredInteger(balance.completed_cards, "balance.completed_cards"),
+    productionEncounters: requiredInteger(balance.production_encounters, "balance.production_encounters"),
     recordedTemplateUses: requiredInteger(balance.recorded_template_uses, "balance.recorded_template_uses"),
     catalogTemplateCount: requiredInteger(balance.catalog_template_count, "balance.catalog_template_count"),
     meanUsesPerTemplate: requiredNumber(balance.mean_uses_per_template, "balance.mean_uses_per_template"),
     softWarningThreshold: requiredInteger(balance.soft_warning_threshold, "balance.soft_warning_threshold"),
     omissionThreshold: requiredInteger(balance.omission_threshold, "balance.omission_threshold"),
-    recordedRankOneTemplateUses: requiredInteger(balance.recorded_rank_1_template_uses, "balance.recorded_rank_1_template_uses"),
-    meanRankOneUsesPerTemplate: requiredNumber(balance.mean_rank_1_uses_per_template, "balance.mean_rank_1_uses_per_template"),
-    rankOneSoftWarningThreshold: requiredInteger(balance.rank_1_soft_warning_threshold, "balance.rank_1_soft_warning_threshold"),
-    rankOneOmissionThreshold: requiredInteger(balance.rank_1_omission_threshold, "balance.rank_1_omission_threshold"),
     guidance: requiredString(balance.soft_warning_guidance, "balance.soft_warning_guidance"),
     templates,
   };

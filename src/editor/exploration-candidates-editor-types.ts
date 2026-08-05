@@ -76,28 +76,23 @@ export type EncounterTemplateHealthStatus =
   | "unused"
   | "available";
 
-export type EncounterTemplateHealthReason = "rank_1" | "overall";
+export type EncounterTemplateHealthReason = "production";
 
 export interface EncounterTemplateHealthEntry {
   templateId: number;
   template: string;
   usageCount: number;
-  rankOneUsageCount: number;
   status: EncounterTemplateHealthStatus;
   reasons: EncounterTemplateHealthReason[];
 }
 
 export interface EncounterTemplateHealth {
-  completedCards: number;
+  productionEncounters: number;
   recordedTemplateUses: number;
   catalogTemplateCount: number;
   meanUsesPerTemplate: number;
   softWarningThreshold: number;
   omissionThreshold: number;
-  recordedRankOneTemplateUses: number;
-  meanRankOneUsesPerTemplate: number;
-  rankOneSoftWarningThreshold: number;
-  rankOneOmissionThreshold: number;
   guidance: string;
   templates: EncounterTemplateHealthEntry[];
 }

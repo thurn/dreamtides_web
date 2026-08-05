@@ -764,7 +764,7 @@ export default function ExplorationCandidatesEditorApp({
       setTemplateHealthLoadState("ready");
       logEvent("encounter_editor_template_health_loaded", {
         reason,
-        completedCards: loaded.completedCards,
+        productionEncounters: loaded.productionEncounters,
         catalogTemplateCount: loaded.catalogTemplateCount,
         hiddenTemplateCount: loaded.templates.filter((entry) => entry.status === "hidden").length,
         warningTemplateCount: loaded.templates.filter((entry) => entry.status === "warning").length,

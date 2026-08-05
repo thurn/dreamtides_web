@@ -56,11 +56,8 @@ describe("encounter template health", () => {
       balanceScriptPath: BALANCE_SCRIPT,
     });
     expect(health).toMatchObject({
-      completedCards: 2,
+      productionEncounters: 2,
       catalogTemplateCount: 12,
-      recordedRankOneTemplateUses: 2,
-      rankOneSoftWarningThreshold: 1,
-      rankOneOmissionThreshold: 2,
       recordedTemplateUses: 4,
       softWarningThreshold: 1,
       omissionThreshold: 2,
@@ -82,8 +79,7 @@ describe("encounter template health", () => {
     expect(health.templates[0]).toMatchObject({
       templateId: 1,
       usageCount: 2,
-      rankOneUsageCount: 1,
-      reasons: ["overall"],
+      reasons: ["production"],
     });
   });
 

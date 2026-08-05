@@ -153,7 +153,7 @@ describe("Exploration candidates editor API", () => {
 
   it("loads template health from its dedicated read-only endpoint", async () => {
     const templateHealthReader = vi.fn().mockReturnValue({
-      completedCards: 1,
+      productionEncounters: 1,
       templates: [{ templateId: 14, status: "hidden" }],
     });
     middleware = createExplorationCandidatesEditorApiMiddleware({ rootDir, templateHealthReader });
@@ -162,7 +162,7 @@ describe("Exploration candidates editor API", () => {
       status: 200,
       body: {
         templateHealth: {
-          completedCards: 1,
+          productionEncounters: 1,
           templates: [{ templateId: 14, status: "hidden" }],
         },
       },

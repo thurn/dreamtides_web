@@ -6,7 +6,6 @@ from __future__ import annotations
 import argparse
 import json
 import math
-import re
 import sys
 import tomllib
 from collections import Counter
@@ -22,10 +21,6 @@ DEFAULT_TEMPLATE_CATALOG = REPO_ROOT / "data/templates.json"
 DEFAULT_EXPLORATION_DATA = REPO_ROOT / "data/tabula/exploration.toml"
 UNIQUE_EFFECT_BALANCE_CLASS = "unique_effect"
 SUPPORTED_BALANCE_CLASSES = {UNIQUE_EFFECT_BALANCE_CLASS}
-SELECTED_ACTIONS_RANK_RE = re.compile(
-    r"^# selected actions: .+ \(rank (?P<rank>[1-5])\)\n\[\[encounter\]\]$",
-    re.MULTILINE,
-)
 
 
 class CandidateListError(ValueError):
@@ -116,44 +111,31 @@ def load_catalog(path: Path) -> tuple[list[dict[str, Any]], dict[int, dict[str, 
     return catalog, by_id
 
 
-def load_toml(path: Path, label: str) -> tuple[str, dict[str, Any]]:
+def load_toml(path: Path, label: str) -> dict[str, Any]:
     try:
         source = path.read_text(encoding="utf-8")
     except FileNotFoundError as error:
         raise CandidateListError(f"{label} does not exist: {path}") from error
     try:
-        value = tomllib.loads(source)
+        return tomllib.loads(source)
     except tomllib.TOMLDecodeError as error:
         raise CandidateListError(
             f"{label} is not valid TOML: {path}: {error}"
         ) from error
-    return source, value
 
 
 def count_template_uses(
     path: Path, catalog_ids: set[int]
-) -> tuple[int, Counter[int], Counter[int]]:
-    source, exploration = load_toml(path, "Production exploration data")
+) -> tuple[int, Counter[int]]:
+    exploration = load_toml(path, "Production exploration data")
     encounters = exploration.get("encounter", [])
     if not isinstance(encounters, list):
         raise CandidateListError(
             f"Production exploration data must contain an encounter array: {path}"
         )
-    selected_action_ranks = [
-        int(match.group("rank"))
-        for match in SELECTED_ACTIONS_RANK_RE.finditer(source)
-    ]
-    if len(selected_action_ranks) != len(encounters):
-        raise CandidateListError(
-            "Each production encounter must have an adjacent "
-            f"'# selected actions: ... (rank N)' annotation: {path}"
-        )
     counts: Counter[int] = Counter()
-    rank_one_counts: Counter[int] = Counter()
 
-    for encounter_index, (raw_encounter, selected_rank) in enumerate(
-        zip(encounters, selected_action_ranks)
-    ):
+    for encounter_index, raw_encounter in enumerate(encounters):
         if not isinstance(raw_encounter, dict):
             raise CandidateListError(
                 f"Production encounter {encounter_index} must be a table"
@@ -187,18 +169,15 @@ def count_template_uses(
                     f"unknown template-id {template_id}"
                 )
             counts[template_id] += 1
-            if selected_rank == 1:
-                rank_one_counts[template_id] += 1
 
-    return len(encounters), counts, rank_one_counts
+    return len(encounters), counts
 
 
 def build_output(
     catalog: list[dict[str, Any]],
     by_id: dict[int, dict[str, Any]],
-    completed_cards: int,
+    production_encounters: int,
     counts: Counter[int],
-    rank_one_counts: Counter[int],
     required_template_count: int,
 ) -> dict[str, Any]:
     if required_template_count <= 0:
@@ -216,17 +195,6 @@ def build_output(
     omission_threshold = soft_warning_threshold + 1
     unique_effect_omission_threshold = soft_warning_threshold
 
-    total_rank_one_uses = sum(rank_one_counts.values())
-    mean_rank_one_uses = total_rank_one_uses / len(catalog)
-    minimum_rank_one_uses = min(
-        rank_one_counts[template_id] for template_id in by_id
-    )
-    rank_one_soft_warning_threshold = max(
-        minimum_rank_one_uses + 1, math.ceil(mean_rank_one_uses)
-    )
-    rank_one_omission_threshold = rank_one_soft_warning_threshold + 1
-    unique_effect_rank_one_omission_threshold = rank_one_soft_warning_threshold
-
     def is_unique_effect(template_id: int) -> bool:
         return (
             by_id[template_id].get("balance_class")
@@ -238,17 +206,10 @@ def build_output(
             return unique_effect_omission_threshold
         return omission_threshold
 
-    def rank_one_omission_threshold_for(template_id: int) -> int:
-        if is_unique_effect(template_id):
-            return unique_effect_rank_one_omission_threshold
-        return rank_one_omission_threshold
-
     overused_ids = {
         template_id
         for template_id in by_id
         if counts[template_id] >= overall_omission_threshold_for(template_id)
-        or rank_one_counts[template_id]
-        >= rank_one_omission_threshold_for(template_id)
     }
     allowed_ids = set(by_id) - overused_ids
     reintroduced_ids: list[int] = []
@@ -258,7 +219,6 @@ def build_output(
         reintroduced_ids = sorted(
             overused_ids,
             key=lambda template_id: (
-                rank_one_counts[template_id],
                 counts[template_id],
                 template_id,
             ),
@@ -269,7 +229,6 @@ def build_output(
     allowed_entries = sorted(
         (by_id[template_id] for template_id in allowed_ids),
         key=lambda entry: (
-            rank_one_counts[entry["template_id"]],
             counts[entry["template_id"]],
             entry["template_id"],
         ),
@@ -278,8 +237,6 @@ def build_output(
         entry["template_id"]
         for entry in allowed_entries
         if counts[entry["template_id"]] >= soft_warning_threshold
-        or rank_one_counts[entry["template_id"]]
-        >= rank_one_soft_warning_threshold
     ]
     warning_id_set = set(warning_ids)
     reintroduced_id_set = set(reintroduced_ids)
@@ -293,24 +250,12 @@ def build_output(
         }
 
     def reasons_for(template_id: int, *, omitted: bool) -> list[str]:
-        overall_threshold = (
+        threshold = (
             overall_omission_threshold_for(template_id)
             if omitted
             else soft_warning_threshold
         )
-        rank_one_threshold = (
-            rank_one_omission_threshold_for(template_id)
-            if omitted
-            else rank_one_soft_warning_threshold
-        )
-        return [
-            reason
-            for reason, applies in (
-                ("rank_1", rank_one_counts[template_id] >= rank_one_threshold),
-                ("overall", counts[template_id] >= overall_threshold),
-            )
-            if applies
-        ]
+        return ["production"] if counts[template_id] >= threshold else []
 
     template_diagnostics = []
     for entry in catalog:
@@ -334,7 +279,6 @@ def build_output(
             {
                 **authoring_entry(entry),
                 "usage_count": counts[template_id],
-                "rank_1_usage_count": rank_one_counts[template_id],
                 "status": status,
                 "reasons": reasons,
             }
@@ -349,7 +293,7 @@ def build_output(
 
     return {
         "balance": {
-            "completed_cards": completed_cards,
+            "production_encounters": production_encounters,
             "recorded_template_uses": total_uses,
             "catalog_template_count": len(catalog),
             "mean_uses_per_template": round(mean_uses, 3),
@@ -357,19 +301,10 @@ def build_output(
             "soft_warning_threshold": soft_warning_threshold,
             "omission_threshold": omission_threshold,
             "unique_effect_omission_threshold": unique_effect_omission_threshold,
-            "recorded_rank_1_template_uses": total_rank_one_uses,
-            "mean_rank_1_uses_per_template": round(mean_rank_one_uses, 3),
-            "minimum_rank_1_uses_per_template": minimum_rank_one_uses,
-            "rank_1_soft_warning_threshold": rank_one_soft_warning_threshold,
-            "rank_1_omission_threshold": rank_one_omission_threshold,
-            "unique_effect_rank_1_omission_threshold": (
-                unique_effect_rank_one_omission_threshold
-            ),
             "required_template_count": required_template_count,
             "soft_warning_guidance": (
                 "Production prevalence is authoritative. Prefer fewer prior "
-                "production rank-1 selections first and fewer total production "
-                "selections second when templates fit comparably well. A warned "
+                "production uses when templates fit comparably well. A warned "
                 "template remains selectable when it is materially stronger. "
                 "Templates tagged unique_effect hide one use earlier and should "
                 "be selected only for a very strong card-specific fit."
@@ -378,7 +313,6 @@ def build_output(
                 {
                     "template_id": template_id,
                     "usage_count": counts[template_id],
-                    "rank_1_usage_count": rank_one_counts[template_id],
                     "reasons": reasons_for(template_id, omitted=False),
                 }
                 for template_id in warning_ids
@@ -387,19 +321,17 @@ def build_output(
                 {
                     "template_id": template_id,
                     "usage_count": counts[template_id],
-                    "rank_1_usage_count": rank_one_counts[template_id],
                     "reasons": reasons_for(template_id, omitted=True),
                 }
                 for template_id in sorted(
                     omitted_ids,
-                    key=lambda item: (-rank_one_counts[item], -counts[item], item),
+                    key=lambda item: (-counts[item], item),
                 )
             ],
             "reintroduced_to_preserve_minimum_pool": [
                 {
                     "template_id": template_id,
                     "usage_count": counts[template_id],
-                    "rank_1_usage_count": rank_one_counts[template_id],
                 }
                 for template_id in reintroduced_ids
             ],
@@ -414,15 +346,14 @@ def main() -> int:
     args = parse_args()
     try:
         catalog, by_id = load_catalog(args.template_catalog)
-        completed_cards, counts, rank_one_counts = count_template_uses(
+        production_encounters, counts = count_template_uses(
             args.exploration_data, set(by_id)
         )
         output = build_output(
             catalog,
             by_id,
-            completed_cards,
+            production_encounters,
             counts,
-            rank_one_counts,
             args.required_template_count,
         )
     except (CandidateListError, OSError) as error:

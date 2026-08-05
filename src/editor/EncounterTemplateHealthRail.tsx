@@ -24,9 +24,7 @@ const STATUS_LABELS: Record<EncounterTemplateHealthStatus, string> = {
 
 function reasonLabel(entry: EncounterTemplateHealthEntry): string {
   if (entry.status === "unused") return "Never used";
-  if (entry.reasons.includes("rank_1") && entry.reasons.includes("overall")) return "Rank 1 + all ranks";
-  if (entry.reasons.includes("rank_1")) return "Rank 1";
-  if (entry.reasons.includes("overall")) return "All ranks";
+  if (entry.reasons.includes("production")) return "Production prevalence";
   return "Balanced usage";
 }
 
@@ -57,12 +55,10 @@ function candidatesFor(
   };
   return filtered.sort((left, right) => {
     if (filter === "candidates") {
-      return left.rankOneUsageCount - right.rankOneUsageCount
-        || left.usageCount - right.usageCount
+      return left.usageCount - right.usageCount
         || left.templateId - right.templateId;
     }
     return statusOrder[left.status] - statusOrder[right.status]
-      || right.rankOneUsageCount - left.rankOneUsageCount
       || right.usageCount - left.usageCount
       || left.templateId - right.templateId;
   });
@@ -91,7 +87,7 @@ export function EncounterTemplateHealthRail({
   const isLoading = loadState === "loading";
   const subtitle = health === null
     ? isLoading ? "Reading current candidate balance…" : "Candidate balance unavailable"
-    : `${String(health.completedCards)} cards · ${String(health.catalogTemplateCount)} templates${isLoading ? " · refreshing…" : ""}`;
+    : `${String(health.productionEncounters)} production encounters · ${String(health.catalogTemplateCount)} templates${isLoading ? " · refreshing…" : ""}`;
 
   function chooseFilter(next: string) {
     const selected = next as TemplateHealthFilter;
@@ -131,22 +127,12 @@ export function EncounterTemplateHealthRail({
           <section className="encounter-template-health-priority" aria-labelledby="template-health-priority-heading">
             <div className="encounter-template-health-section-heading">
               <span>Primary signal</span>
-              <h2 id="template-health-priority-heading">Rank-1 diversity</h2>
+              <h2 id="template-health-priority-heading">Production diversity</h2>
             </div>
             <div className="encounter-template-health-metric-grid">
               <div>
-                <strong>{health.recordedRankOneTemplateUses}</strong>
-                <span>rank-1 uses</span>
-                <small>Mean {health.meanRankOneUsesPerTemplate.toFixed(2)}</small>
-              </div>
-              <div>
-                <strong>{health.rankOneSoftWarningThreshold} / {health.rankOneOmissionThreshold}</strong>
-                <span>warn / hide</span>
-                <small>Per template</small>
-              </div>
-              <div>
                 <strong>{health.recordedTemplateUses}</strong>
-                <span>all-rank uses</span>
+                <span>production uses</span>
                 <small>Mean {health.meanUsesPerTemplate.toFixed(2)}</small>
               </div>
               <div>
@@ -198,8 +184,7 @@ export function EncounterTemplateHealthRail({
                   </header>
                   <p>{entry.template}</p>
                   <footer>
-                    <span><strong>{entry.rankOneUsageCount}</strong> rank 1</span>
-                    <span><strong>{entry.usageCount}</strong> all ranks</span>
+                    <span><strong>{entry.usageCount}</strong> production uses</span>
                     <span>{reasonLabel(entry)}</span>
                   </footer>
                 </article>

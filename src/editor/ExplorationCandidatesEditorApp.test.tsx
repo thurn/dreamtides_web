@@ -109,22 +109,18 @@ const GROUPS: ExplorationCandidatesEditorGroup[] = [{
 }];
 
 const TEMPLATE_HEALTH: EncounterTemplateHealth = {
-  completedCards: 9,
+  productionEncounters: 9,
   recordedTemplateUses: 90,
   catalogTemplateCount: 70,
   meanUsesPerTemplate: 1.286,
   softWarningThreshold: 2,
   omissionThreshold: 3,
-  recordedRankOneTemplateUses: 18,
-  meanRankOneUsesPerTemplate: 0.257,
-  rankOneSoftWarningThreshold: 1,
-  rankOneOmissionThreshold: 2,
-  guidance: "Prefer fewer prior rank-1 uses first.",
+  guidance: "Prefer fewer prior production uses.",
   templates: [
-    { templateId: 14, template: "Draw a card", usageCount: 9, rankOneUsageCount: 6, status: "hidden", reasons: ["rank_1", "overall"] },
-    { templateId: 37, template: "Gain a dreamsign", usageCount: 2, rankOneUsageCount: 1, status: "warning", reasons: ["rank_1", "overall"] },
-    { templateId: 1, template: "Gain essence", usageCount: 0, rankOneUsageCount: 0, status: "unused", reasons: [] },
-    { templateId: 2, template: "Purge a card", usageCount: 1, rankOneUsageCount: 0, status: "available", reasons: [] },
+    { templateId: 14, template: "Draw a card", usageCount: 9, status: "hidden", reasons: ["production"] },
+    { templateId: 37, template: "Gain a dreamsign", usageCount: 2, status: "warning", reasons: ["production"] },
+    { templateId: 1, template: "Gain essence", usageCount: 0, status: "unused", reasons: [] },
+    { templateId: 2, template: "Purge a card", usageCount: 1, status: "available", reasons: [] },
   ],
 };
 
@@ -255,7 +251,7 @@ describe("ExplorationCandidatesEditorApp", () => {
       await Promise.resolve();
     });
     expect(loadTemplateHealth).toHaveBeenCalledOnce();
-    expect(container.textContent).toContain("Rank-1 diversity");
+    expect(container.textContent).toContain("Production diversity");
     expect(container.textContent).toContain("Draw a card");
     expect(container.textContent).toContain("Gain a dreamsign");
     expect(container.textContent).not.toContain("Gain essence");

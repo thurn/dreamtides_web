@@ -357,28 +357,25 @@ commentary.
    `soft_warnings` remains selectable, but prefer an unflagged template when it
    fits the scene and deck intent comparably well. Entries in
    `omitted_templates` are diagnostic IDs, not candidates; do not select them or
-   reopen the raw catalog to recover them. The script counts final production
-   selections overall and the subset whose selected action pair was rank 1,
-   using the adjacent selection annotations in the production TOML. It orders
-   candidates by fewest prior production rank-1 selections first and fewest
-   total production selections second. In each dimension, the warning threshold
-   is the larger of one use above the current least-used template and the
-   ceiling of current mean usage; omission begins one use above that warning
-   threshold. This gives rank-1 diversity priority, scales the target with
-   production prevalence, and prevents a rare-fit template from freezing the
-   rest of the catalog near zero. If an extremely skewed data set would leave
-   fewer than ten choices, the script restores the least-used omitted entries
-   and lists them in
+   reopen the raw catalog to recover them. The script counts every final
+   production assignment equally and orders candidates by fewest prior
+   production uses. The warning threshold is the larger of one use above the
+   current least-used template and the ceiling of current mean usage; omission
+   begins one use above that warning threshold. This balances shipped encounter
+   behavior, scales the target with production prevalence, and prevents a
+   rare-fit template from freezing the rest of the catalog near zero. If an
+   extremely skewed data set would leave fewer than ten choices, the script
+   restores the least-used omitted entries and lists them in
    `reintroduced_to_preserve_minimum_pool`; treat each restored entry as
    strongly discouraged but available when necessary.
 
    Templates tagged `balance_class: unique_effect` belong to an intentionally
    general category for mechanics that should appear rarely; the category is
-   not tied to a particular mechanical family. Their overall-use and rank-1
-   omission thresholds are each one use lower than the corresponding standard
-   omission threshold, so they become hidden earlier. If minimum-pool
-   protection reintroduces one, its availability does not weaken the selection
-   rule: pick it only when it is a very strong, card-specific fit.
+   not tied to a particular mechanical family. Their production-use omission
+   threshold is one use lower than the standard omission threshold, so they
+   become hidden earlier. If minimum-pool protection reintroduces one, its
+   availability does not weaken the selection rule: pick it only when it is a
+   very strong, card-specific fit.
 
 10. Shortlist returned candidate templates by testing each against the frozen
     scene bank and deck intent:
@@ -475,9 +472,9 @@ commentary.
     average. Revise any chain below 7/10. A shared narrative or visual focus
     loses no points, and textual novelty earns no points beyond satisfying the
     distinct-wording requirement. When two designs are otherwise comparable,
-    use the step-9 rank-1 usage counts as the tie-breaker: give the better rank
-    to the pair whose templates have fewer prior rank-1 uses. Never promote a
-    materially weaker design solely to improve historical balance.
+    use the step-9 production usage counts as the tie-breaker: give the better
+    rank to the pair whose templates have fewer prior production uses. Never
+    promote a materially weaker design solely to improve historical balance.
 
 16. Sort the five completed event objects by ascending `rank` as a final
     readability pass, so rank 1 appears first and rank 5 last. Keep each event's
