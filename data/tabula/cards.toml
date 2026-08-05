@@ -2895,7 +2895,7 @@ card-number = 153
 art = { x = 0, y = 1, scale = 1 }
 
 [[cards]]
-name = "Firey Apparition"
+name = "Fiery Apparition"
 mtg-name = "Anax, Hardened in the Forge"
 id = "6d6ce556-60df-486f-b2d8-5df168a6f75e"
 rendered-text = "When a non-figment character you control is dissolved, materialize a 1✦ ember figment with awakened. When an ember figment is dissolved, this character gains +1✦."

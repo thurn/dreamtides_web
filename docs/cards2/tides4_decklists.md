@@ -407,7 +407,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Molten Duel
 - 1× Desperation
 - 1× Mystic Boatman
-- 1× Firey Apparition
+- 1× Fiery Apparition
 - 1× Secrets of the Deep
 - 1× Underroot Diviner
 - 1× Salvage Colossus

@@ -255,28 +255,29 @@ blockerCardId = "e83014d3-9d35-4e80-a1b3-9b25360ad2af"
 wait = 1
 
 [[actions]]
-id = "challenge-resolution-points"
-action = "display-speech-bubble"
-wait = 0
-
-[actions.speechBubble]
-speaker = "mira"
-duration = 3
-verticalOffset = 30
-bubbleWidth = 500
-text = "A [yellow]blocked[/yellow] character doesn't score points (⍟)."
-
-[[actions]]
 id = "challenge-resolution-dissolved"
 action = "display-speech-bubble"
 wait = 0
 
 [actions.speechBubble]
 speaker = "mira"
-duration = 7
+duration = 10
 verticalOffset = -30
 bubbleWidth = 500
-text = "Instead, the lowest spark (✦) character in the challenge is [yellow]dissolved[/yellow] and sent to the void."
+text = "The lowest spark (✦) character in the challenge is [yellow]dissolved[/yellow] and sent to the void."
+
+
+[[actions]]
+id = "challenge-resolution-points"
+action = "display-speech-bubble"
+wait = 0
+
+[actions.speechBubble]
+speaker = "mira"
+duration = 10
+verticalOffset = 30
+bubbleWidth = 500
+text = "A [yellow]blocked[/yellow] character that isn't dissolved scores fewer points (⍟), reduced by the enemy's spark (✦)."
 
 [[actions]]
 id = "player-voltsurge"

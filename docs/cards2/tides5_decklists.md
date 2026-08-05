@@ -414,7 +414,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Sky Collapse
 - 1× Part the Veil
 - 1× Entropy Spike
-- 1× Firey Apparition
+- 1× Fiery Apparition
 - 1× Secrets of the Deep
 - 1× Clockwork Salvager
 - 1× Underroot Diviner
@@ -626,7 +626,7 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 1× Sky Collapse
 - 1× The Dread Sovereign
 - 1× Entropy Spike
-- 1× Firey Apparition
+- 1× Fiery Apparition
 - 1× Clockwork Salvager
 - 1× Underroot Diviner
 - 1× Apocalypse
@@ -1238,7 +1238,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Desperation
 - 1× Chronicle Claimer
 - 1× Archive of the Forgotten
-- 1× Firey Apparition
+- 1× Fiery Apparition
 - 1× Secrets of the Deep
 - 1× Clockwork Salvager
 - 1× Underroot Diviner
@@ -2804,7 +2804,7 @@ This tide is almost entirely characters (43 of 45 copies), with warriors making 
 - 1× Sky Collapse
 - 1× Part the Veil
 - 1× Entropy Spike
-- 1× Firey Apparition
+- 1× Fiery Apparition
 - 1× Apocalypse
 - 1× Catastrophe Broker
 - 1× Duskwall Delver

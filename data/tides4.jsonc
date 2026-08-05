@@ -418,7 +418,7 @@
         {"id":"6044f6da-cf71-4dbb-9feb-f71ae66a4f5b","name":"Molten Duel","text":"Dissolve a ≤3✦ character.","copies":1},
         {"id":"625fe37e-8059-481c-99fd-109fd02ceedd","name":"Desperation","text":"To play this event, abandon a character or discard a card. Dissolve an enemy.","copies":1},
         {"id":"69d9e550-eacc-49f2-8cc5-30b8940c9eed","name":"Mystic Boatman","subtype":"Visitor","text":"▸Materialized: Discover a ≤2● cost character.","copies":1},
-        {"id":"6d6ce556-60df-486f-b2d8-5df168a6f75e","name":"Firey Apparition","subtype":"Elemental","text":"When a non-figment character you control is dissolved, materialize a 1✦ ember figment with awakened. When an ember figment is dissolved, this character gains +1✦.","copies":1},
+        {"id":"6d6ce556-60df-486f-b2d8-5df168a6f75e","name":"Fiery Apparition","subtype":"Elemental","text":"When a non-figment character you control is dissolved, materialize a 1✦ ember figment with awakened. When an ember figment is dissolved, this character gains +1✦.","copies":1},
         {"id":"6f0b709d-0f57-46de-bfba-6a8b4df2b991","name":"Secrets of the Deep","text":"Gain 3⍟. If you reclaimed this card, gain 6⍟ instead.\n\nReclaim 4●","copies":1},
         {"id":"6fa9c440-3912-4b1e-868c-840ae772fe1c","name":"Underroot Diviner","subtype":"Visitor","text":"☪, Banish 3 cards from your void: Draw a card.","copies":1},
         {"id":"713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc","name":"Salvage Colossus","subtype":"Synth","text":"▸Materialized: Draw 2 cards.\n\nReclaim – 3●, Banish 7 cards from your void.","copies":1},
