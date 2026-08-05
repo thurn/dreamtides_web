@@ -3713,5 +3713,734 @@
       "rank": 5,
       "ranking_rationale": "A ponderous crossing supports recruitment and exertion, though its reward chains are less immediate."
     }
+  ],
+  "1dc8f23e-58bd-47e5-9510-b48315fba1df": [
+    {
+      "template_pair_id": "pair-3",
+      "prose": "A dark-coated explorer holds a bright lantern as wind whips his hair.",
+      "actions": [
+        {
+          "label": "Touch his lanternlight",
+          "template_id": 17,
+          "variables": {}
+        },
+        {
+          "label": "Follow his light onward",
+          "template_id": 37,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 1,
+      "ranking_rationale": "Radiant contact and illuminated travel make immediate and future transfiguration equally clear while strengthening an active character deck.",
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
+    },
+    {
+      "template_pair_id": "pair-1",
+      "prose": "A cloaked explorer braces in tall grass, a round light blazing.",
+      "actions": [
+        {
+          "label": "Stand within his light",
+          "template_id": 21,
+          "variables": {
+            "count": 2,
+            "predicate": "≤2● cost Character",
+            "transfiguration": "Kindled"
+          }
+        },
+        {
+          "label": "March beside him",
+          "template_id": 39,
+          "variables": {
+            "count": 2
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "Sheltering in his light or matching his stride naturally yields kindled allies or battle energy, both ideal for repeated awakening."
+    },
+    {
+      "template_pair_id": "pair-4",
+      "prose": "A lone explorer carries a glowing lamp toward a shattered hull.",
+      "actions": [
+        {
+          "label": "Follow him onward",
+          "template_id": 44,
+          "variables": {}
+        },
+        {
+          "label": "Guide him elsewhere",
+          "template_id": 46,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 8,
+        "overall": 9
+      },
+      "rank": 3,
+      "ranking_rationale": "His purposeful approach makes following or redirecting him a convincing route to a specialized or flexible new site."
+    },
+    {
+      "template_pair_id": "pair-2",
+      "prose": "A windblown explorer raises a radiant lantern beside splintered wreckage.",
+      "actions": [
+        {
+          "label": "Raise his lantern higher",
+          "template_id": 9,
+          "variables": {
+            "predicate": "≤2● cost Character"
+          }
+        },
+        {
+          "label": "Study his lantern glow",
+          "template_id": 29,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 4,
+      "ranking_rationale": "A raised beacon plausibly summons a nimble ally or reveals dreamsigns, with recruitment providing especially strong awakening support."
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "A windswept explorer stands beside a broken ship, warm light at his hip.",
+      "actions": [
+        {
+          "label": "Salvage beside him",
+          "template_id": 2,
+          "variables": {
+            "essence1": 100,
+            "essence2": 180
+          }
+        },
+        {
+          "label": "Spread his warm light",
+          "template_id": 25,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 7,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "Wreckage and spreading light credibly support salvage or broad starter renewal, though both outcomes offer less specific awakening synergy."
+    }
+  ],
+  "7ad10754-690c-45fa-abe6-28944da6eef6": [
+    {
+      "template_pair_id": "pair-3",
+      "prose": "A rigid figure fractures into dark pieces beside a molten fissure.",
+      "actions": [
+        {
+          "label": "Temper scattered pieces",
+          "template_id": 20,
+          "variables": {
+            "count": 2,
+            "predicate": "≤2● cost Character"
+          }
+        },
+        {
+          "label": "Cast pieces into fissure",
+          "template_id": 25,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 1,
+      "ranking_rationale": "Visible fracture and molten stone make both transformation chains exceptionally direct while strengthening an awakened character plan.",
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
+    },
+    {
+      "template_pair_id": "pair-1",
+      "prose": "A dark figure sheds glowing fragments above a lava-split outcrop.",
+      "actions": [
+        {
+          "label": "Separate drifting fragments",
+          "template_id": 51,
+          "variables": {
+            "count": 2
+          }
+        },
+        {
+          "label": "Fuse glowing fragments",
+          "template_id": 50,
+          "variables": {
+            "count": 2
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "A precise fragmenting silhouette supports two distinct duplication choices with strong deck-building flexibility."
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "A shadowed figure stands upright as fiery light catches drifting fragments.",
+      "actions": [
+        {
+          "label": "Collect drifting fragments",
+          "template_id": 1,
+          "variables": {
+            "essence": 100
+          }
+        },
+        {
+          "label": "Stand within fiery light",
+          "template_id": 39,
+          "variables": {
+            "count": 2
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 8,
+        "overall": 8
+      },
+      "rank": 3,
+      "ranking_rationale": "Fiery illumination and collectible fragments ground a balanced choice between lasting wealth and immediate battle energy."
+    },
+    {
+      "template_pair_id": "pair-4",
+      "prose": "A solitary figure loses dark pieces into a field of sparks.",
+      "actions": [
+        {
+          "label": "Catch a falling piece",
+          "template_id": 9,
+          "variables": {
+            "predicate": "≤2● cost Character"
+          }
+        },
+        {
+          "label": "Offer a falling piece",
+          "template_id": 34,
+          "variables": {
+            "predicate": "≤2● cost Character"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 7,
+        "archetype_fit": 9,
+        "overall": 8
+      },
+      "rank": 4,
+      "ranking_rationale": "Falling pieces plausibly yield new forms, and both rewards supply inexpensive characters that benefit from awakening."
+    },
+    {
+      "template_pair_id": "pair-2",
+      "prose": "A lone silhouette sheds ember-bright fragments, its shoulder breaking apart.",
+      "actions": [
+        {
+          "label": "Scatter broken fragments",
+          "template_id": 5,
+          "variables": {
+            "count": 2
+          }
+        },
+        {
+          "label": "Exchange glowing fragments",
+          "template_id": 61,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 7,
+        "archetype_fit": 8,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "A breaking shoulder clearly establishes pieces to scatter or exchange, though its removal chains are less immediate than higher-ranked designs."
+    }
+  ],
+  "7dd2214f-8d16-453a-9f28-62712e64eae1": [
+    {
+      "template_pair_id": "pair-4",
+      "prose": "A black firefly hovers beside a ribbed leaf, amber abdomen blazing.",
+      "actions": [
+        {
+          "label": "Rest in its radiance",
+          "template_id": 39,
+          "variables": {
+            "count": 2
+          }
+        },
+        {
+          "label": "Gather its amber light",
+          "template_id": 59,
+          "variables": {
+            "essence_per_card": 15,
+            "predicate": "Spirit Animal"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 9,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 1,
+      "ranking_rationale": "Blazing light makes both energy rewards immediate, while each outcome directly supports a Spirit Animal ramp deck.",
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
+    },
+    {
+      "template_pair_id": "pair-3",
+      "prose": "A luminous firefly glides through green dusk, translucent wings spread wide.",
+      "actions": [
+        {
+          "label": "Touch its radiance",
+          "template_id": 17,
+          "variables": {}
+        },
+        {
+          "label": "Share its radiance",
+          "template_id": 20,
+          "variables": {
+            "count": 2,
+            "predicate": "Spirit Animal"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "Radiant flight grounds both transfiguration choices, balancing flexible improvement against concentrated tribal support."
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "A broad-winged firefly displays a segmented glow above a deeply veined leaf.",
+      "actions": [
+        {
+          "label": "Mirror its wings",
+          "template_id": 50,
+          "variables": {
+            "count": 2
+          }
+        },
+        {
+          "label": "Answer its bright display",
+          "template_id": 52,
+          "variables": {
+            "count": 2,
+            "predicate": "Spirit Animal"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 3,
+      "ranking_rationale": "Visible wings and luminous signaling support duplication and tribal recruitment with useful depth-versus-variety tension."
+    },
+    {
+      "template_pair_id": "pair-2",
+      "prose": "A long-antennaed firefly hangs in forest haze, gold tail shining.",
+      "actions": [
+        {
+          "label": "Read its golden light",
+          "template_id": 29,
+          "variables": {}
+        },
+        {
+          "label": "Reinterpret its glow",
+          "template_id": 30,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 8,
+        "action_quality": 9,
+        "mechanical_connection": 8,
+        "archetype_fit": 7,
+        "overall": 8
+      },
+      "rank": 4,
+      "ranking_rationale": "A shining nocturnal signal supports both dreamsign readings clearly, though their value is broadly strategic."
+    },
+    {
+      "template_pair_id": "pair-1",
+      "prose": "An amber-tailed firefly floats above a curved leaf, luminous abdomen aglow.",
+      "actions": [
+        {
+          "label": "Bask in its glow",
+          "template_id": 1,
+          "variables": {
+            "essence": 100
+          }
+        },
+        {
+          "label": "Feed its glow",
+          "template_id": 60,
+          "variables": {
+            "essence_per_spark": 20
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 8,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "Luminous anatomy strongly supports essence gain, with a meaningful choice between certainty and conversion."
+    }
+  ],
+  "5b2b2188-b9f0-4b3b-9185-26a820d343c7": [
+    {
+      "template_pair_id": "pair-2",
+      "prose": "A suited astronaut crosses glassy water as blue canyon light spills ahead.",
+      "actions": [
+        {
+          "label": "Follow canyon light",
+          "template_id": 39,
+          "variables": {
+            "count": 2
+          }
+        },
+        {
+          "label": "Enter blue radiance",
+          "template_id": 81,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 1,
+      "ranking_rationale": "A luminous forward route grounds both momentum effects, including an exceptional discount for a rapid multi-card strategy.",
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
+    },
+    {
+      "template_pair_id": "pair-3",
+      "prose": "A solitary astronaut pauses in shallow water, visor fixed on canyon reflections.",
+      "actions": [
+        {
+          "label": "Study canyon reflections",
+          "template_id": 55,
+          "variables": {}
+        },
+        {
+          "label": "Follow mirrored ripples",
+          "template_id": 49,
+          "variables": {
+            "count": 2
+          },
+          "selection": {
+            "$DECK_CARD": {
+              "predicate": "≤2● cost Character"
+            }
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "Clear reflections support two distinct forms of copying while favoring cheap cards that enable repeated plays."
+    },
+    {
+      "template_pair_id": "pair-1",
+      "prose": "A lone astronaut wades through luminous shallows beside a hovering black orb.",
+      "actions": [
+        {
+          "label": "Study the hovering orb",
+          "template_id": 29,
+          "variables": {}
+        },
+        {
+          "label": "Rinse the hovering orb",
+          "template_id": 30,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 7,
+        "overall": 8
+      },
+      "rank": 3,
+      "ranking_rationale": "A mysterious orb makes consultation and renewal immediate, though dreamsign rewards only broadly support card velocity."
+    },
+    {
+      "template_pair_id": "pair-4",
+      "prose": "A lone astronaut approaches a radiant gap, pale light flashing across a visor.",
+      "actions": [
+        {
+          "label": "Pass through the radiance",
+          "template_id": 20,
+          "variables": {
+            "count": 2,
+            "predicate": "Event"
+          }
+        },
+        {
+          "label": "Reflect light from visor",
+          "template_id": 21,
+          "variables": {
+            "count": 2,
+            "predicate": "≤2● cost Character",
+            "transfiguration": "Resonant"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 8,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 8
+      },
+      "rank": 4,
+      "ranking_rationale": "Radiance cleanly supports transformation, with Resonant cheap characters reinforcing a second-card engine."
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "A helmeted astronaut follows a sunlit canyon passage through reflective water.",
+      "actions": [
+        {
+          "label": "Chart the canyon passage",
+          "template_id": 42,
+          "variables": {}
+        },
+        {
+          "label": "Mark its brightest reach",
+          "template_id": 44,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 8,
+        "action_quality": 8,
+        "mechanical_connection": 7,
+        "archetype_fit": 8,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "A chartable passage plausibly reveals future services, but its site connections are less immediate than other pairs."
+    }
+  ],
+  "77f31db4-0397-49a7-8886-f5459ee960e9": [
+    {
+      "template_pair_id": "pair-1",
+      "prose": "An armored warrior sweeps a glowing scythe through wind-driven sand.",
+      "actions": [
+        {
+          "label": "Yield to glowing edge",
+          "template_id": 60,
+          "variables": {
+            "essence_per_spark": 20
+          }
+        },
+        {
+          "label": "Barter beside warrior",
+          "template_id": 61,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 1,
+      "ranking_rationale": "A forceful scythe sweep grounds two sacrifice conversions that directly support an abandon-driven strategy.",
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
+    },
+    {
+      "template_pair_id": "pair-3",
+      "prose": "A masked warrior lunges uphill, a bright scythe carving across sand.",
+      "actions": [
+        {
+          "label": "Join warrior's charge",
+          "template_id": 9,
+          "variables": {
+            "predicate": "Warrior"
+          }
+        },
+        {
+          "label": "Follow scythe's sweep",
+          "template_id": 32,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "A vivid uphill charge supports either recruiting sacrifice-ready strength or pruning a weak starter."
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "An armored warrior charges upslope, orange seams glowing amid airborne grit.",
+      "actions": [
+        {
+          "label": "Match armored sprint",
+          "template_id": 39,
+          "variables": {
+            "count": 2
+          }
+        },
+        {
+          "label": "Study glowing plates",
+          "template_id": 37,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 8,
+        "overall": 8
+      },
+      "rank": 3,
+      "ranking_rationale": "Visible momentum and luminous armor create clear routes toward battle tempo or future modifications."
+    },
+    {
+      "template_pair_id": "pair-2",
+      "prose": "An armored warrior crouches mid-stride, ember-lit plates flexing against sand.",
+      "actions": [
+        {
+          "label": "Refit ember-lit plates",
+          "template_id": 20,
+          "variables": {
+            "count": 2,
+            "predicate": "Warrior"
+          }
+        },
+        {
+          "label": "Temper rigid armor",
+          "template_id": 23,
+          "variables": {
+            "count": 2,
+            "predicate": "Warrior",
+            "transfiguration": "Kindled"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 7,
+        "overall": 8
+      },
+      "rank": 4,
+      "ranking_rationale": "Articulated glowing armor strongly supports two modification paths, though spark growth is only broadly synergistic."
+    },
+    {
+      "template_pair_id": "pair-4",
+      "prose": "An armored warrior runs beneath a pale moon, trailing a luminous scythe.",
+      "actions": [
+        {
+          "label": "Receive lunar omen",
+          "template_id": 29,
+          "variables": {}
+        },
+        {
+          "label": "Exchange lunar omen",
+          "template_id": 30,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 6,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "A pale moon makes both omen actions immediate, but dreamsign flexibility serves this strategy indirectly."
+    }
   ]
 }
