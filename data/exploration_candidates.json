@@ -2956,5 +2956,758 @@
       "rank": 5,
       "ranking_rationale": "The rings cleanly frame deliberation versus surrender, though dreamsign renewal supports the source strategy less directly than the higher-ranked pairs."
     }
+  ],
+  "edb479be-68a5-45bc-bd19-2602156edb57": [
+    {
+      "template_pair_id": "pair-1",
+      "prose": "A colossal eagle beats broad wings through canyon haze, dark feathers edged with glare.",
+      "actions": [
+        {
+          "label": "Echo its wingbeats",
+          "template_id": 12,
+          "variables": {
+            "count": 3
+          },
+          "selection": {
+            "$OFFERED_CARD": {
+              "predicate": "Spirit Animal"
+            }
+          }
+        },
+        {
+          "label": "Join its flight",
+          "template_id": 16,
+          "variables": {
+            "offer_count": 4,
+            "predicate": "Spirit Animal"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 1,
+      "ranking_rationale": "Forceful wingbeats make imitation and joining equally natural, while both rewards directly deepen a spirit-animal strategy.",
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
+    },
+    {
+      "template_pair_id": "pair-2",
+      "prose": "A giant eagle glides across amber radiance, broad wings rimmed with light.",
+      "actions": [
+        {
+          "label": "Enter its radiance",
+          "template_id": 18,
+          "variables": {
+            "transfiguration": "Empowered"
+          }
+        },
+        {
+          "label": "Shelter beneath its wings",
+          "template_id": 20,
+          "variables": {
+            "count": 3,
+            "predicate": "Spirit Animal"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "Visible radiance and sheltering wings support a focused improvement or a broader tribal transformation with comparable appeal."
+    },
+    {
+      "template_pair_id": "pair-3",
+      "prose": "A towering eagle climbs between smoky cliffs, outspread wings steady above hooked talons.",
+      "actions": [
+        {
+          "label": "Match its ascent",
+          "template_id": 39,
+          "variables": {
+            "count": 2
+          }
+        },
+        {
+          "label": "Offer to its talons",
+          "template_id": 60,
+          "variables": {
+            "essence_per_spark": 25
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 8,
+        "archetype_fit": 8,
+        "overall": 9
+      },
+      "rank": 3,
+      "ranking_rationale": "A steep ascent and waiting talons give both actions concrete anchors, with energy especially supporting an expensive tribal activation."
+    },
+    {
+      "template_pair_id": "pair-4",
+      "prose": "An eagle banks along a misty ravine, pale eye fixed on a sunlit passage.",
+      "actions": [
+        {
+          "label": "Read its flight",
+          "template_id": 29,
+          "variables": {}
+        },
+        {
+          "label": "Trace its passage",
+          "template_id": 46,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 8,
+        "archetype_fit": 7,
+        "overall": 8
+      },
+      "rank": 4,
+      "ranking_rationale": "Banking flight through a visible passage clearly supports omen-reading and route-finding, though both rewards are strategically broad."
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "A massive eagle reaches through smoky air, curved talons opening wide.",
+      "actions": [
+        {
+          "label": "Release into its talons",
+          "template_id": 3,
+          "variables": {}
+        },
+        {
+          "label": "Exchange through its talons",
+          "template_id": 7,
+          "variables": {
+            "predicate": "Spirit Animal"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 8,
+        "action_quality": 8,
+        "mechanical_connection": 7,
+        "archetype_fit": 8,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "Open talons make release and exchange tangible, but replacement is less directly visible than higher-ranked consequences."
+    }
+  ],
+  "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e": [
+    {
+      "template_pair_id": "pair-1",
+      "prose": "A lone fisher casts a slender line across misty, light-speckled water.",
+      "actions": [
+        {
+          "label": "Haul his line",
+          "template_id": 15,
+          "variables": {
+            "count": 2,
+            "offer_count": 4,
+            "predicate": "≤2● cost Character"
+          }
+        },
+        {
+          "label": "Guide his cast",
+          "template_id": 16,
+          "variables": {
+            "offer_count": 4,
+            "predicate": "≤2● cost Character"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 1,
+      "ranking_rationale": "A precise cast supports two strong catch structures that both deepen cheap-character recursion.",
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
+    },
+    {
+      "template_pair_id": "pair-2",
+      "prose": "A young fisher holds a bowed rod as floating lights drift nearby.",
+      "actions": [
+        {
+          "label": "Touch lights with his rod",
+          "template_id": 18,
+          "variables": {
+            "transfiguration": "Kindled"
+          }
+        },
+        {
+          "label": "Sweep his rod through lights",
+          "template_id": 23,
+          "variables": {
+            "count": 2,
+            "predicate": "≤2● cost Character",
+            "transfiguration": "Kindled"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "Visible lights make both upgrades immediate and clear, with precision balanced against wider risk."
+    },
+    {
+      "template_pair_id": "pair-4",
+      "prose": "A small fisher stands among palms while scattered lights hover over water.",
+      "actions": [
+        {
+          "label": "Read scattered lights",
+          "template_id": 29,
+          "variables": {}
+        },
+        {
+          "label": "Gather scattered lights",
+          "template_id": 59,
+          "variables": {
+            "essence_per_card": 15,
+            "predicate": "≤2● cost Character"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 3,
+      "ranking_rationale": "Reading or gathering visible lights creates vivid alternatives between guidance and a scaled payoff."
+    },
+    {
+      "template_pair_id": "pair-3",
+      "prose": "A silent fisher watches concentric ripples spread beneath his hanging line.",
+      "actions": [
+        {
+          "label": "Trace an inner ripple",
+          "template_id": 50,
+          "variables": {
+            "count": 2
+          }
+        },
+        {
+          "label": "Trace widening ripples",
+          "template_id": 51,
+          "variables": {
+            "count": 2
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 8,
+        "action_quality": 8,
+        "mechanical_connection": 7,
+        "archetype_fit": 9,
+        "overall": 8
+      },
+      "rank": 4,
+      "ranking_rationale": "Concentric ripples distinguish focused duplication from broader reinforcement, though causality is more dreamlike."
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "A hooded fisher steadies a taut line beside mist and hovering lights.",
+      "actions": [
+        {
+          "label": "Cut his line free",
+          "template_id": 3,
+          "variables": {}
+        },
+        {
+          "label": "Follow hovering lights",
+          "template_id": 44,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 8,
+        "action_quality": 8,
+        "mechanical_connection": 7,
+        "archetype_fit": 7,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "Line and lights ground useful cleanup and future improvement, but deck-specific support is lighter."
+    }
+  ],
+  "2ce84a16-1295-4738-9e2d-1f57590b2269": [
+    {
+      "template_pair_id": "pair-1",
+      "prose": "A hooded warrior stands rigid as marked slabs orbit a luminous sword.",
+      "actions": [
+        {
+          "label": "Study a Marked Slab",
+          "template_id": 28,
+          "variables": {}
+        },
+        {
+          "label": "Reach for His Sword",
+          "template_id": 17,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 8,
+        "overall": 9
+      },
+      "rank": 1,
+      "ranking_rationale": "Marked slabs and a luminous sword make both revelation and transfiguration exceptionally immediate.",
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
+    },
+    {
+      "template_pair_id": "pair-2",
+      "prose": "A cloaked warrior grips a glowing blade while jagged energy crosses stone.",
+      "actions": [
+        {
+          "label": "Channel His Blade",
+          "template_id": 39,
+          "variables": {
+            "count": 2
+          }
+        },
+        {
+          "label": "Brace Beside Him",
+          "template_id": 81,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 9,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "Crackling power supports both battle preparations, while built-in card draw offsets reduced opening access."
+    },
+    {
+      "template_pair_id": "pair-4",
+      "prose": "A black-armored warrior plants a radiant sword amid branching arcs.",
+      "actions": [
+        {
+          "label": "Bow Beneath His Blade",
+          "template_id": 5,
+          "variables": {
+            "count": 2
+          }
+        },
+        {
+          "label": "Yield to His Blade",
+          "template_id": 60,
+          "variables": {
+            "essence_per_spark": 20
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 3,
+      "ranking_rationale": "A planted blade credibly frames two distinct sacrifices that refine or monetize expendable cards."
+    },
+    {
+      "template_pair_id": "pair-3",
+      "prose": "A hooded warrior holds a bright sword beneath suspended black stones.",
+      "actions": [
+        {
+          "label": "Join His Vigil",
+          "template_id": 16,
+          "variables": {
+            "offer_count": 4,
+            "predicate": "≤2● cost Character"
+          }
+        },
+        {
+          "label": "Answer His Summons",
+          "template_id": 12,
+          "variables": {
+            "count": 2
+          },
+          "selection": {
+            "$OFFERED_CARD": {
+              "predicate": "≤2● cost Character"
+            }
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 8,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 8
+      },
+      "rank": 4,
+      "ranking_rationale": "Joining a solitary sentinel supplies flexible low-cost recruits for a sacrifice-driven deck."
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "A masked warrior faces forward, sword blazing as black plates hover overhead.",
+      "actions": [
+        {
+          "label": "Enter His Vigil",
+          "template_id": 35,
+          "variables": {
+            "predicate": "Warrior"
+          }
+        },
+        {
+          "label": "Fight Beside Him",
+          "template_id": 9,
+          "variables": {
+            "predicate": "Warrior"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 8,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 8,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "Martial allegiance clearly supports either a sweeping starter conversion or one conservative recruit."
+    }
+  ],
+  "9d14885c-a757-40cc-b43e-87dbec7ec379": [
+    {
+      "template_pair_id": "pair-1",
+      "prose": "A tentacled colossus surges through a furnace-bright rupture.",
+      "actions": [
+        {
+          "label": "Feed it, then gaze",
+          "template_id": 47,
+          "variables": {
+            "card_id": {
+              "id": "1658d9a0-c3b0-4eb7-babc-4933acf362c4",
+              "display_name": "Glimpse of Infinity"
+            }
+          }
+        },
+        {
+          "label": "Witness its emergence",
+          "template_id": 16,
+          "variables": {
+            "offer_count": 4,
+            "predicate": "Event"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 10,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 10,
+        "overall": 10
+      },
+      "rank": 1,
+      "ranking_rationale": "A blazing rupture supports both a legendary exchange and event discovery with exceptional fidelity to an event-focused deck.",
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "A vast creature heaves through incandescent foundry debris.",
+      "actions": [
+        {
+          "label": "Chronicle its upheaval",
+          "template_id": 52,
+          "variables": {
+            "count": 2,
+            "predicate": "Event"
+          }
+        },
+        {
+          "label": "Scavenge foundry debris",
+          "template_id": 68,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "Visible devastation grounds both chronicling new events and scavenging wealth, with especially direct support for an event-heavy deck."
+    },
+    {
+      "template_pair_id": "pair-4",
+      "prose": "A colossal tentacled body crawls beneath forked lightning.",
+      "actions": [
+        {
+          "label": "Follow its passage",
+          "template_id": 37,
+          "variables": {}
+        },
+        {
+          "label": "Capture forked lightning",
+          "template_id": 39,
+          "variables": {
+            "count": 2
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 8,
+        "overall": 9
+      },
+      "rank": 3,
+      "ranking_rationale": "Movement and lightning create two immediate actions whose future improvement and battle energy remain broadly useful."
+    },
+    {
+      "template_pair_id": "pair-2",
+      "prose": "A sprawling creature coils across molten industrial wreckage.",
+      "actions": [
+        {
+          "label": "Salvage molten wreckage",
+          "template_id": 1,
+          "variables": {
+            "essence": 100
+          }
+        },
+        {
+          "label": "Feed it",
+          "template_id": 3,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 8,
+        "archetype_fit": 7,
+        "overall": 8
+      },
+      "rank": 4,
+      "ranking_rationale": "Molten wreckage makes salvage and sacrifice concrete, though both rewards serve general deck maintenance more than event specialization."
+    },
+    {
+      "template_pair_id": "pair-3",
+      "prose": "A many-tentacled creature arches beneath branching lightning.",
+      "actions": [
+        {
+          "label": "Read its tentacles",
+          "template_id": 29,
+          "variables": {}
+        },
+        {
+          "label": "Approach its tentacles",
+          "template_id": 71,
+          "variables": {
+            "count": 2
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 7,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "Tentacle patterns support cautious divination and a riskier approach, but dreamsign rewards connect less directly to discard strategy."
+    }
+  ],
+  "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2": [
+    {
+      "template_pair_id": "pair-4",
+      "prose": "An immense forest giant bends low, luminous seams framing an unwavering gaze.",
+      "actions": [
+        {
+          "label": "Touch a luminous seam",
+          "template_id": 18,
+          "variables": {
+            "transfiguration": "Empowered"
+          }
+        },
+        {
+          "label": "Follow its lowered gaze",
+          "template_id": 37,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 10,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 1,
+      "ranking_rationale": "Radiant anatomy supports immediate and future transfiguration, while Empowered can create additional low-cost fodder.",
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
+    },
+    {
+      "template_pair_id": "pair-2",
+      "prose": "An immense creature crouches between slender trunks, rough limbs glowing with narrow lines.",
+      "actions": [
+        {
+          "label": "Cross beneath its limbs",
+          "template_id": 8,
+          "variables": {
+            "count": 2,
+            "predicate": "≤2● cost Character"
+          }
+        },
+        {
+          "label": "Trace its glowing lines",
+          "template_id": 20,
+          "variables": {
+            "count": 2,
+            "predicate": "≤2● cost Character"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "Passing under charged limbs convincingly enables two distinct ways to improve low-cost characters."
+    },
+    {
+      "template_pair_id": "pair-1",
+      "prose": "A towering forest creature lowers its broad head, luminous eyes unblinking.",
+      "actions": [
+        {
+          "label": "Accept its judgment",
+          "template_id": 7,
+          "variables": {
+            "predicate": "≤2● cost Character"
+          }
+        },
+        {
+          "label": "Request its guidance",
+          "template_id": 16,
+          "variables": {
+            "offer_count": 4,
+            "predicate": "≤2● cost Character"
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 3,
+      "ranking_rationale": "An imposing gaze grounds judgment and guidance that either refines or expands low-cost fodder."
+    },
+    {
+      "template_pair_id": "pair-3",
+      "prose": "A hulking creature peers from hanging tendrils, bright eyes fixed and unwavering.",
+      "actions": [
+        {
+          "label": "Yield to its verdict",
+          "template_id": 5,
+          "variables": {
+            "count": 2
+          }
+        },
+        {
+          "label": "Read its gaze",
+          "template_id": 29,
+          "variables": {}
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 8,
+        "overall": 8
+      },
+      "rank": 4,
+      "ranking_rationale": "A steady stare cleanly supports either surrendering weak holdings or receiving lasting insight."
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "A long-limbed giant wades through forest water, broad feet spreading ripples.",
+      "actions": [
+        {
+          "label": "Travel in its wake",
+          "template_id": 52,
+          "variables": {
+            "count": 2,
+            "predicate": "≤2● cost Character"
+          }
+        },
+        {
+          "label": "Match its wading pace",
+          "template_id": 39,
+          "variables": {
+            "count": 2
+          }
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 7,
+        "archetype_fit": 9,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "A ponderous crossing supports recruitment and exertion, though its reward chains are less immediate."
+    }
   ]
 }
