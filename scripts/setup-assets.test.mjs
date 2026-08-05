@@ -41,6 +41,11 @@ describe("transformExplorationData", () => {
     expect(new Set(compiled.encounters.map((encounter) => encounter.cardId)).size)
       .toBe(compiled.encounters.length);
     expect(new Set(actions.map((action) => action.id)).size).toBe(actions.length);
+    expect(
+      actions
+        .filter((action) => action.effectText.includes("$DECK_CARD"))
+        .every((action) => action.specialVariables.includes("$DECK_CARD")),
+    ).toBe(true);
     expect(actions.map((action) => action.effectKind)).toEqual(
       expect.arrayContaining([
         "make-fast-all",

@@ -431,7 +431,7 @@ export interface ExplorationActionOfferRuntime {
   actionId: string;
   offeredCardIds: string[];
   offeredDreamsignIds?: string[];
-  /** Randomly offered concrete deck-entry UUIDs for deck-copy effects. */
+  /** Randomly minted concrete deck-entry UUIDs for deck-card effects. */
   offeredDeckEntryIds?: string[];
   /** Randomly offered DreamAvatar UUIDs for identity replacement effects. */
   offeredDreamAvatarIds?: string[];

@@ -706,7 +706,21 @@ export function transformExplorationData(source) {
       isNegative: false,
     };
   });
-  const encounters = (source.encounter ?? []).map(transformTomlRecord);
+  const encounters = (source.encounter ?? []).map((rawEncounter) => {
+    const encounter = transformTomlRecord(rawEncounter);
+    return {
+      ...encounter,
+      action: (encounter.action ?? []).map((action) => {
+        const specialVariables = [
+          ...new Set(action.effectText?.match(/\$[A-Z][A-Z0-9_]*/gu) ?? []),
+        ];
+        return {
+          ...action,
+          ...(specialVariables.length === 0 ? {} : { specialVariables }),
+        };
+      }),
+    };
+  });
 
   if (encounters.length === 0) {
     throw new Error("exploration.toml: requires at least one encounter");

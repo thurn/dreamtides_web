@@ -547,6 +547,7 @@ describe("Exploration provider", () => {
       label: "Copy a selected card",
       effectText: "Gain 2 copies of $DECK_CARD",
       effectKind: "copy-selected-card",
+      selection: { "$DECK_CARD": { predicate: "≤2● cost Character" } },
       predicate: "cheap-character",
       count: 2,
     };
@@ -559,23 +560,34 @@ describe("Exploration provider", () => {
     };
     const content = contentFixture([selectedCopy, offeredCopy]);
     const selectedState = buildState(content);
-    const selectedEntry = selectedState.journey.deck.find((entry) =>
-      content.cardDatabase.get(entry.cardNumber)?.cardType === "Character",
-    );
-    if (selectedEntry === undefined) throw new Error("Expected a selected card");
+    const selectedEntryId =
+      selectedState.runtime.actionOffers[0]?.offeredDeckEntryIds?.[0];
+    if (selectedEntryId === undefined) throw new Error("Expected a selected card");
     const copied = resolve(content, selectedState.journey, selectedCopy.id, {
-      entryIds: [selectedEntry.entryId],
+      entryIds: [selectedEntryId],
     });
     const copiedRuntime = copied.siteRuntime[site.id];
     expect(copied.deck).toHaveLength(selectedState.journey.deck.length + 2);
     expect(copiedRuntime).toMatchObject({
       kind: "exploration",
       resolution: {
-        selection: { entryIds: [selectedEntry.entryId] },
-        affectedEntryIds: [selectedEntry.entryId],
+        selection: { entryIds: [selectedEntryId] },
+        affectedEntryIds: [selectedEntryId],
         gainedEntryIds: ["deck-91-0", "deck-91-1"],
       },
     });
+    expect(
+      resolveExplorationChoice({
+        journey: selectedState.journey,
+        site,
+        payload: {
+          actionId: selectedCopy.id,
+          selection: { entryIds: ["foreign-entry"] },
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
 
     const offeredState = buildState(content);
     const offeredEntryIds =
@@ -599,6 +611,74 @@ describe("Exploration provider", () => {
         content,
       }),
     ).toBeNull();
+  });
+
+  it("mints a non-matching subtype target for $DECK_CARD and rejects another eligible card", () => {
+    const subtypeAction: ExplorationActionContent = {
+      id: "become-survivor",
+      label: "Fit a matching hood",
+      effectText: "Change $DECK_CARD to become a Survivor",
+      effectKind: "change-subtype-selected",
+      selection: { "$DECK_CARD": { predicate: "≤2● cost Character" } },
+      predicate: "cheap-character",
+      subtype: "Survivor",
+    };
+    const fallback: ExplorationActionContent = {
+      id: "fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([subtypeAction, fallback]);
+    const source = content.cardDatabase.get(1);
+    const survivor = content.cardDatabase.get(110);
+    const warrior = content.cardDatabase.get(120);
+    if (source === undefined || survivor === undefined || warrior === undefined) {
+      throw new Error("Expected subtype fixtures");
+    }
+    const journey = {
+      ...journeyFixture(content),
+      deck: [
+        { entryId: "source-entry", cardNumber: source.cardNumber, transfiguration: null, isBane: false },
+        { entryId: "survivor-entry", cardNumber: survivor.cardNumber, transfiguration: null, isBane: false },
+        { entryId: "warrior-entry", cardNumber: warrior.cardNumber, transfiguration: null, isBane: false },
+      ],
+    };
+    const state = buildState(content, journey);
+
+    expect(state.runtime.actionOffers[0]?.offeredDeckEntryIds).toEqual([
+      "warrior-entry",
+    ]);
+    expect(
+      resolveExplorationChoice({
+        journey: state.journey,
+        site,
+        payload: {
+          actionId: subtypeAction.id,
+          selection: { entryIds: ["survivor-entry"] },
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+
+    const changed = resolve(content, state.journey, subtypeAction.id, {
+      entryIds: ["warrior-entry"],
+    });
+    const changedEntry = changed.deck.find(
+      (entry) => entry.entryId === "warrior-entry",
+    );
+    if (changedEntry === undefined) throw new Error("Expected changed entry");
+    expect(resolveDeckEntryCard(warrior, changedEntry).subtype).toBe("Survivor");
+    expect(changed.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        selection: { entryIds: ["warrior-entry"] },
+        affectedEntryIds: ["warrior-entry"],
+        chosenSubtype: "Survivor",
+      },
+    });
   });
 
   it("persists one-battle opening-hand and starting-energy modifiers", () => {

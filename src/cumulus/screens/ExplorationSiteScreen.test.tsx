@@ -578,6 +578,55 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
+  it("submits a preselected deck-card target without opening a picker", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const onResolve = vi.fn();
+    const base = view();
+    const automaticView: ExplorationSiteView = {
+      ...base,
+      actions: [
+        {
+          ...base.actions[0],
+          automaticSelection: { entryIds: ["minted-entry"] },
+        },
+        base.actions[1],
+      ],
+    };
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={automaticView}
+        onChannel={vi.fn()}
+        onResolve={onResolve}
+        onExit={vi.fn()}
+      />,
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+
+    expect(
+      container.querySelector("[data-exploration-followup]"),
+    ).toBeNull();
+    expect(onResolve).toHaveBeenCalledWith("choice-a", {
+      entryIds: ["minted-entry"],
+    });
+    act(() => root.unmount());
+  });
+
   it("renders resource marks in structured Exploration choice copy", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),

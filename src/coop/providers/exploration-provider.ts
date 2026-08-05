@@ -3,6 +3,7 @@ import { createDreamsign } from "../../data/dreamsigns";
 import { toJourneyDreamAvatar } from "../../data/dream-avatar-selection";
 import {
   EXPLORATION_ESSENCE_PER_SPARK,
+  explorationActionUsesSpecialVariable,
   explorationEncounterForCard,
   type ExplorationActionContent,
   type ExplorationPredicate,
@@ -104,6 +105,43 @@ function resolvedDeckCards(
   });
 }
 
+function usesDeckCardVariable(action: ExplorationActionContent): boolean {
+  return explorationActionUsesSpecialVariable(action, "$DECK_CARD");
+}
+
+function isEligibleDeckCardVariableTarget(
+  action: ExplorationActionContent,
+  entry: DeckEntry,
+  card: CardData,
+): boolean {
+  if (action.predicate !== undefined && !matchesPredicate(card, action.predicate)) {
+    return false;
+  }
+  switch (action.effectKind) {
+    case "change-subtype-selected":
+      return (
+        action.subtype !== undefined &&
+        card.cardType === "Character" &&
+        card.subtype !== action.subtype
+      );
+    case "transfigure-fixed-selected":
+      return (
+        entry.transfiguration === null &&
+        action.transfiguration !== undefined &&
+        offeredTransfigurationForms(card, null).some(
+          (form) => form.type === action.transfiguration,
+        )
+      );
+    case "transfigure-selected":
+      return (
+        entry.transfiguration === null &&
+        offeredTransfigurationForms(card, null).length > 0
+      );
+    default:
+      return true;
+  }
+}
+
 function emptyOffer(actionId: string): ExplorationActionOfferRuntime {
   return {
     actionId,
@@ -150,6 +188,18 @@ function buildActionOffer(
     offer.offeredDreamAvatarIds = shuffled(candidates, rng)
       .slice(0, action.offerCount ?? 3)
       .map((dreamAvatar) => dreamAvatar.id);
+    return offer;
+  }
+  if (usesDeckCardVariable(action)) {
+    const target = shuffled(
+      resolvedDeckCards(journey, content).filter(
+        ({ entry, card }) =>
+          card.id.toLowerCase() !== encounterCardId.toLowerCase() &&
+          isEligibleDeckCardVariableTarget(action, entry, card),
+      ),
+      rng,
+    )[0];
+    if (target !== undefined) offer.offeredDeckEntryIds = [target.entry.entryId];
     return offer;
   }
   if (action.predicate === undefined) return offer;
@@ -392,6 +442,17 @@ export function resolveExplorationChoice(input: {
     typeof payload.selection === "object" && payload.selection !== null
       ? (payload.selection as ExplorationSelection)
       : {};
+  if (usesDeckCardVariable(action)) {
+    const entryIds = stringArray(selection.entryIds);
+    if (
+      entryIds === null ||
+      entryIds.length !== 1 ||
+      offer.offeredDeckEntryIds?.length !== 1 ||
+      entryIds[0] !== offer.offeredDeckEntryIds[0]
+    ) {
+      return null;
+    }
+  }
   const result = baseResolution(actionId);
   let next = journey;
   let mintIndex = 0;
@@ -802,7 +863,13 @@ export function resolveExplorationChoice(input: {
       const entryIds = stringArray(selection.entryIds);
       if (entryIds === null || entryIds.length !== 1 || action.subtype === undefined) return null;
       const selected = cardForEntry(next, content, entryIds[0]);
-      if (selected === null || selected.card.cardType !== "Character") return null;
+      if (
+        selected === null ||
+        selected.card.cardType !== "Character" ||
+        selected.card.subtype === action.subtype ||
+        (action.predicate !== undefined &&
+          !matchesPredicate(selected.card, action.predicate))
+      ) return null;
       const target = deckTarget(next, content, entryIds[0]);
       if (
         target === null ||

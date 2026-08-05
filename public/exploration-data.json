@@ -18,7 +18,10 @@
             }
           },
           "effectKind": "gain-offered-card",
-          "predicate": "cheap-character"
+          "predicate": "cheap-character",
+          "specialVariables": [
+            "$OFFERED_CARD"
+          ]
         },
         {
           "id": "161482b6-af07-4d9e-822d-8c738672beb9:pair-5:template-17",
@@ -382,7 +385,10 @@
           },
           "effectKind": "transfigure-fixed-selected",
           "predicate": "event",
-          "transfiguration": "Inspired"
+          "transfiguration": "Inspired",
+          "specialVariables": [
+            "$DECK_CARD"
+          ]
         }
       ]
     },
@@ -420,7 +426,10 @@
           },
           "effectKind": "transfigure-fixed-selected",
           "predicate": "survivor",
-          "transfiguration": "Kindled"
+          "transfiguration": "Kindled",
+          "specialVariables": [
+            "$DECK_CARD"
+          ]
         }
       ]
     },
@@ -468,7 +477,10 @@
           },
           "effectKind": "change-subtype-selected",
           "predicate": "cheap-character",
-          "subtype": "Survivor"
+          "subtype": "Survivor",
+          "specialVariables": [
+            "$DECK_CARD"
+          ]
         },
         {
           "id": "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6:pair-5:template-9",
@@ -503,7 +515,10 @@
           },
           "effectKind": "copy-selected-card",
           "predicate": "cheap-character",
-          "count": 2
+          "count": 2,
+          "specialVariables": [
+            "$DECK_CARD"
+          ]
         },
         {
           "id": "f9a65b32-537b-457c-9eaf-b512cf1f3791:pair-2:template-55",

@@ -579,6 +579,7 @@ describe("exploration-view-model", () => {
         {
           actionId: "inspire-event",
           offeredCardIds: [],
+          offeredDeckEntryIds: ["entry-target"],
           packCardIds: [],
           replacementCardIdByEntryId: {},
           transfigurationByEntryId: {},
@@ -618,6 +619,7 @@ describe("exploration-view-model", () => {
                 label: "Present a Written Charm",
                 effectText: "Apply Inspired to $DECK_CARD",
                 effectKind: "transfigure-fixed-selected",
+                selection: { "$DECK_CARD": { predicate: "Event" } },
                 predicate: "event",
                 transfiguration: "Inspired",
               },
@@ -669,6 +671,142 @@ describe("exploration-view-model", () => {
       followup: { kind: "none" },
       automaticSelection: { entryIds: ["entry-target"] },
       available: true,
+    });
+  });
+
+  it("renders a minted subtype target by name and resolves it without a picker", () => {
+    const source = card(sourceId, 17);
+    const target = {
+      ...card(asCardId("f0000000-0000-4000-8000-000000000019"), 19),
+      subtype: "Warrior",
+    };
+    const state = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "entry-target",
+          cardNumber: target.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        },
+      ],
+    };
+    const runtime: ExplorationSiteRuntime = {
+      kind: "exploration",
+      encounterCardId: source.id,
+      actionOffers: [
+        {
+          actionId: "become-survivor",
+          offeredCardIds: [],
+          offeredDeckEntryIds: ["entry-target"],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+        {
+          actionId: "gain-card",
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+      ],
+      resolution: null,
+    };
+    const content = {
+      cardDatabase: new Map([
+        [source.cardNumber, source],
+        [target.cardNumber, target],
+      ]),
+      dreamAvatars: [],
+      dreamwellCards: [],
+      dreamsignTemplates: [],
+      dreamscapes: [],
+      affiliations: [],
+      guides: [guide],
+      atlasConfig: { completionLevels: [] },
+      exploration: {
+        customCards: [],
+        customDreamsigns: [],
+        encounters: [
+          {
+            cardId: source.id,
+            prose: "The authored scene appears.",
+            actions: [
+              {
+                id: "become-survivor",
+                label: "Fit a matching hood",
+                effectText: "Change $DECK_CARD to become a Survivor",
+                effectKind: "change-subtype-selected",
+                selection: {
+                  "$DECK_CARD": { predicate: "≤2● cost Character" },
+                },
+                predicate: "cheap-character",
+                subtype: "Survivor",
+              },
+              {
+                id: "gain-card",
+                label: "Gain the card",
+                effectText: "Gain the card.",
+                effectKind: "gain-card",
+                cardId: source.id,
+              },
+            ],
+          },
+        ],
+      },
+    } as unknown as JourneyContent;
+
+    const view = buildExplorationSiteView({
+      sceneNode: null,
+      site: explorationSite,
+      guide,
+      runtime,
+      state,
+      content,
+    });
+    if (view === null) throw new Error("Expected Exploration view");
+
+    expect(view.actions[0]).toMatchObject({
+      effectText: `Change ${target.name} to become a Survivor`,
+      effectParts: [
+        { kind: "text", text: "Change " },
+        {
+          kind: "entity",
+          entity: { kind: "card", card: { id: target.id } },
+        },
+        { kind: "text", text: " to become a Survivor" },
+      ],
+      followup: { kind: "none" },
+      automaticSelection: { entryIds: ["entry-target"] },
+      available: true,
+    });
+    expect(view.actions[0].effectText).not.toContain("$DECK_CARD");
+
+    const resolvedView = buildExplorationSiteView({
+      sceneNode: null,
+      site: explorationSite,
+      guide,
+      runtime: {
+        ...runtime,
+        resolution: {
+          actionId: "become-survivor",
+          selection: { entryIds: ["entry-target"] },
+          gainedCardIds: [],
+          gainedDreamsignIds: [],
+          purgedCardIds: [],
+          affectedEntryIds: ["entry-target"],
+          essenceGained: 0,
+          chosenSubtype: "Survivor",
+        },
+      },
+      state,
+      content,
+    });
+    expect(resolvedView?.reward).toMatchObject({
+      deckModification: {
+        announcement: `Change ${target.name} to become a Survivor`,
+      },
     });
   });
 

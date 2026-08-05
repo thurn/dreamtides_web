@@ -14,6 +14,7 @@ import type {
 import type { TransfigurationCandidateView } from "../../cumulus/screens/TransfigurationSiteScreen";
 import {
   EXPLORATION_ESSENCE_PER_SPARK,
+  explorationActionUsesSpecialVariable,
   explorationEncounterForCard,
   type ExplorationActionContent,
   type ExplorationPredicate,
@@ -150,8 +151,12 @@ function freeTransfigurationCandidates(
   state: JourneyState,
   content: JourneyContent,
   predicate?: ExplorationPredicate,
+  offeredEntryIds?: readonly string[],
 ): readonly TransfigurationCandidateView[] {
+  const offered =
+    offeredEntryIds === undefined ? null : new Set(offeredEntryIds);
   return state.deck.flatMap((entry) => {
+    if (offered !== null && !offered.has(entry.entryId)) return [];
     if (entry.transfiguration !== null) return [];
     const base = content.cardDatabase.get(entry.cardNumber);
     if (base === undefined) return [];
@@ -244,6 +249,10 @@ function followupForAction(
   content: JourneyContent,
 ): ExplorationFollowupView {
   const deckCards = eligibleDeckCards(state, content, action.predicate);
+  const hasMintedDeckCard = explorationActionUsesSpecialVariable(
+    action,
+    "$DECK_CARD",
+  );
   switch (action.effectKind) {
     case "purge-and-copy":
       return deckFollowup(
@@ -258,7 +267,12 @@ function followupForAction(
         kind: "transfiguration",
         candidates:
           action.count === undefined || action.count === 1
-            ? freeTransfigurationCandidates(state, content, action.predicate)
+            ? freeTransfigurationCandidates(
+                state,
+                content,
+                action.predicate,
+                hasMintedDeckCard ? offer.offeredDeckEntryIds ?? [] : undefined,
+              )
             : [],
       };
     case "purge-selected":
@@ -276,6 +290,7 @@ function followupForAction(
         "single",
       );
     case "change-subtype-selected":
+      if (hasMintedDeckCard) return { kind: "none" };
       return deckFollowup(
         action.label,
         `Choose a Character to become ${action.subtype ?? "Outsider"}.`,
@@ -283,6 +298,7 @@ function followupForAction(
         "single",
       );
     case "copy-selected-card":
+      if (hasMintedDeckCard) return { kind: "none" };
       return deckFollowup(
         action.label,
         `Choose a card to gain ${String(action.count ?? 1)} copies of.`,
@@ -309,6 +325,7 @@ function followupForAction(
         "single",
       );
     case "transfigure-fixed-selected":
+      if (hasMintedDeckCard) return { kind: "none" };
       return deckFollowup(
         "Gather the Falling Light",
         `Choose a Character to become ${action.transfiguration ?? "Kindled"}.`,
@@ -409,7 +426,7 @@ interface ExplorationEffectReference {
   readonly entity: EntityReferenceModel;
 }
 
-interface FixedTransfigurationTarget {
+interface DeckCardVariableTarget {
   readonly entryId: string;
   readonly entity: Extract<EntityReferenceModel, { readonly kind: "card" }>;
 }
@@ -463,43 +480,37 @@ function appendFixedTransfigurationEffect(
   };
 }
 
-function fixedTransfigurationTarget(
+function deckCardVariableTarget(
   action: ExplorationActionContent,
+  offer: ExplorationActionOfferRuntime,
   state: JourneyState,
   content: JourneyContent,
-): FixedTransfigurationTarget | null {
-  if (
-    action.effectKind !== "transfigure-fixed-selected" ||
-    !action.effectText.includes("$DECK_CARD") ||
-    action.predicate === undefined ||
-    action.transfiguration === undefined
-  ) {
+): DeckCardVariableTarget | null {
+  if (!explorationActionUsesSpecialVariable(action, "$DECK_CARD")) return null;
+  const offeredEntryId = offer.offeredDeckEntryIds?.[0];
+  if (offeredEntryId === undefined || offer.offeredDeckEntryIds?.length !== 1) {
     return null;
   }
-  const predicate = action.predicate;
-  const transfiguration = action.transfiguration;
-  const target = state.deck.find((entry) => {
-    if (entry.transfiguration !== null) return false;
-    const base = content.cardDatabase.get(entry.cardNumber);
-    return (
-      base !== undefined &&
-      matchesPredicate(resolveDeckEntryCard(base, entry), predicate)
-    );
-  });
+  const target = state.deck.find((entry) => entry.entryId === offeredEntryId);
   if (target === undefined) return null;
   const base = content.cardDatabase.get(target.cardNumber);
   if (base === undefined) return null;
-  const preview = buildTransfigurationDisplay(
-    resolveDeckEntryCard(base, target),
-    transfiguration,
-  );
+  const card = resolveDeckEntryCard(base, target);
+  const entity =
+    action.effectKind === "transfigure-fixed-selected" &&
+    action.transfiguration !== undefined
+      ? (() => {
+          const preview = buildTransfigurationDisplay(card, action.transfiguration);
+          return {
+            kind: "card" as const,
+            card: preview.card,
+            transfiguration: preview.display,
+          };
+        })()
+      : { kind: "card" as const, card };
   return {
     entryId: target.entryId,
-    entity: {
-      kind: "card",
-      card: preview.card,
-      transfiguration: preview.display,
-    },
+    entity,
   };
 }
 
@@ -507,7 +518,7 @@ function effectReferencesForAction(
   action: ExplorationActionContent,
   offer: ExplorationActionOfferRuntime,
   content: JourneyContent,
-  deckCardEntity?: FixedTransfigurationTarget["entity"],
+  deckCardEntity?: DeckCardVariableTarget["entity"],
 ): readonly ExplorationEffectReference[] {
   const references: ExplorationEffectReference[] = [];
   if (action.effectText.includes("$OFFERED_CARD")) {
@@ -575,7 +586,7 @@ export function buildExplorationActionEffect(
   action: ExplorationActionContent,
   offer: ExplorationActionOfferRuntime,
   content: JourneyContent,
-  deckCardEntity?: FixedTransfigurationTarget["entity"],
+  deckCardEntity?: DeckCardVariableTarget["entity"],
 ): Pick<ExplorationActionView, "effectText" | "effectParts"> {
   const references = effectReferencesForAction(
     action,
@@ -606,7 +617,11 @@ export function buildExplorationActionEffect(
     cursor = next.index + next.reference.needle.length;
   }
   if (!parts.some((part) => part.kind === "entity")) {
-    return { effectText: action.effectText };
+    return {
+      effectText: action.effectText
+        .split("$DECK_CARD")
+        .join("an eligible card"),
+    };
   }
   if (cursor < action.effectText.length) {
     parts.push({ kind: "text", text: action.effectText.slice(cursor) });
@@ -631,12 +646,12 @@ function actionView(
   state: JourneyState,
   content: JourneyContent,
 ): ExplorationActionView {
-  const fixedTarget = fixedTransfigurationTarget(action, state, content);
-  const followup =
-    fixedTarget !== null
-      ? { kind: "none" as const }
-      : followupForAction(action, offer, state, content);
-  const requiresDeckCardTarget = action.effectText.includes("$DECK_CARD");
+  const deckCardTarget = deckCardVariableTarget(action, offer, state, content);
+  const followup = followupForAction(action, offer, state, content);
+  const requiresDeckCardTarget = explorationActionUsesSpecialVariable(
+    action,
+    "$DECK_CARD",
+  );
   const hasRequiredOffer =
     action.effectKind === "gain-random-dreamsign"
       ? (offer.offeredDreamsignIds?.length ?? 0) > 0
@@ -646,9 +661,8 @@ function actionView(
           ? (offer.offeredDeckEntryIds?.length ?? 0) > 0
           : action.effectKind === "choose-dream-avatar"
             ? (offer.offeredDreamAvatarIds?.length ?? 0) > 0
-            : requiresDeckCardTarget &&
-                action.effectKind === "transfigure-fixed-selected"
-              ? fixedTarget !== null
+            : requiresDeckCardTarget
+              ? deckCardTarget !== null
               : true;
   const available =
     hasRequiredOffer &&
@@ -665,7 +679,7 @@ function actionView(
       action,
       offer,
       content,
-      fixedTarget?.entity,
+      deckCardTarget?.entity,
     ),
     action,
   );
@@ -710,9 +724,11 @@ function actionView(
     ...(action.effectKind === "gain-offered-card" &&
     offer.offeredCardIds[0] !== undefined
       ? { automaticSelection: { cardIds: [offer.offeredCardIds[0]] } }
-      : action.effectKind === "transfigure-fixed-selected" &&
-          fixedTarget !== null
-        ? { automaticSelection: { entryIds: [fixedTarget.entryId] } }
+      : deckCardTarget !== null &&
+          (action.effectKind === "transfigure-fixed-selected" ||
+            action.effectKind === "change-subtype-selected" ||
+            action.effectKind === "copy-selected-card")
+        ? { automaticSelection: { entryIds: [deckCardTarget.entryId] } }
       : {}),
     available,
   };
@@ -723,12 +739,19 @@ function rewardForResolution(
   state: JourneyState,
   content: JourneyContent,
   actions: readonly ExplorationActionContent[],
+  actionViews: readonly ExplorationActionView[],
 ): ExplorationSiteView["reward"] {
   const resolution = runtime.resolution;
   if (resolution === null) return null;
   const resolvedAction = actions.find(
     (action) => action.id === resolution.actionId,
   );
+  const resolvedEffectText =
+    actionViews.find((action) => action.id === resolution.actionId)?.effectText ??
+    resolvedAction?.effectText
+      .split("$DECK_CARD")
+      .join("the affected card") ??
+    "Exploration effect resolved";
   if (
     resolvedAction?.effectKind === "copy-selected-card" ||
     resolvedAction?.effectKind === "copy-offered-deck-card"
@@ -853,7 +876,7 @@ function rewardForResolution(
         return {
           kind: "spark" as const,
           headline: `+${String(resolvedAction.sparkBonus ?? 1)} ✦`,
-          announcement: resolvedAction.effectText,
+          announcement: resolvedEffectText,
           selectionColor: "spark" as const,
           cards,
         };
@@ -861,7 +884,7 @@ function rewardForResolution(
         return {
           kind: "fast" as const,
           headline: "Fast",
-          announcement: resolvedAction.effectText,
+          announcement: resolvedEffectText,
           selectionColor: "energy-bright" as const,
           cards,
         };
@@ -869,7 +892,7 @@ function rewardForResolution(
         return {
           kind: "energy-cost" as const,
           headline: `−${String(resolvedAction.energyCostReduction ?? 0)} ●`,
-          announcement: resolvedAction.effectText,
+          announcement: resolvedEffectText,
           selectionColor: "energy" as const,
           cards,
         };
@@ -878,7 +901,7 @@ function rewardForResolution(
         return {
           kind: "subtype" as const,
           headline: resolution.chosenSubtype ?? "Subtype",
-          announcement: resolvedAction.effectText,
+          announcement: resolvedEffectText,
           selectionColor: "accent-bright" as const,
           cards,
         };
@@ -886,7 +909,7 @@ function rewardForResolution(
         return {
           kind: "reclaim" as const,
           headline: "Reclaim",
-          announcement: resolvedAction.effectText,
+          announcement: resolvedEffectText,
           selectionColor: "positive" as const,
           cards,
           reclaimCostByEntryId: resolution.reclaimCostByEntryId ?? {},
@@ -963,6 +986,7 @@ export function buildExplorationSiteView(params: {
     params.state,
     params.content,
     encounter.actions,
+    actions,
   );
   const outcomeKind =
     reward === null

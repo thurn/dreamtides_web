@@ -15,6 +15,11 @@ export type ExplorationPredicate =
   | "survivor"
   | "warrior";
 
+export type ExplorationSpecialVariable =
+  | "$OFFERED_CARD"
+  | "$DECK_CARD"
+  | "$STARTER_CARD";
+
 export type ExplorationEffectKind =
   | "purge-and-copy"
   | "gain-dreamsign"
@@ -60,6 +65,10 @@ export interface ExplorationActionContent {
   effectText: string;
   templateId?: number;
   templateVariables?: Readonly<Record<string, unknown>>;
+  /** Authored special-variable eligibility keyed by the canonical token. */
+  selection?: Readonly<Record<string, { readonly predicate?: string }>>;
+  /** Special selections compiled from the authored template syntax. */
+  specialVariables?: readonly ExplorationSpecialVariable[];
   effectKind: ExplorationEffectKind;
   predicate?: ExplorationPredicate;
   count?: number;
@@ -77,6 +86,16 @@ export interface ExplorationActionContent {
   subtypeOptions?: readonly string[];
   nightmareCount?: number;
   transfiguration?: TransfigurationType;
+}
+
+export function explorationActionUsesSpecialVariable(
+  action: ExplorationActionContent,
+  variable: ExplorationSpecialVariable,
+): boolean {
+  return (
+    action.specialVariables?.includes(variable) === true ||
+    action.selection?.[variable] !== undefined
+  );
 }
 
 export interface ExplorationEncounterContent {
