@@ -360,7 +360,10 @@ function OfferDetailPanel({
             minWidth: 0,
             minHeight: 0,
             overflow: "hidden",
-            containerType: "size",
+            // The floating GlassPanel hugs its contents, so block-size
+            // containment would make this fitter's intrinsic height zero
+            // and collapse every cqh-sized reward to 0x0.
+            containerType: "inline-size",
             display: "grid",
             placeItems: "center",
             gap: token("--space-4"),

@@ -270,6 +270,9 @@ describe("AugurySiteScreen", () => {
       container.querySelector<HTMLElement>("[data-augury-detail-visual]")?.style.overflow,
     ).toBe("hidden");
     expect(
+      container.querySelector<HTMLElement>("[data-augury-detail-visual]")?.style.containerType,
+    ).toBe("inline-size");
+    expect(
       container.querySelector("[data-card-choice-grid-columns]")
         ?.getAttribute("data-card-choice-grid-columns"),
     ).toBe("4");
