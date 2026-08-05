@@ -902,9 +902,16 @@ function rewardForResolution(
   const purgedCards =
     resolvedAction?.effectKind === "purge-and-copy" ||
     resolvedAction?.effectKind === "purge-duplicates-and-grant-reclaim"
-      ? resolution.purgedCardIds.flatMap((cardId) => {
+      ? resolution.purgedCardIds.flatMap((cardId, index) => {
           const card = cardById(content, cardId);
-          return card === null ? [] : [modelForCard(card)];
+          if (card === null) return [];
+          return [{
+            entryId:
+              resolution.purgedEntryIds?.[index] ??
+              `purged:${String(index)}:${card.id}`,
+            model: modelForCard(card),
+            isBane: false,
+          }];
         })
       : [];
   const dreamsigns = resolution.gainedDreamsignIds.flatMap((dreamsignId) => {

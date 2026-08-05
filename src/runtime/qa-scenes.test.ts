@@ -407,6 +407,29 @@ describe('the "exploration" QA scene', () => {
     }
   });
 
+  it("provides a dedicated duplicate-deck scene with two duplicated card UUIDs", () => {
+    const { content, encounterCardId } = explorationContent();
+
+    const state = buildQaScene("exploration-duplicates", content, {
+      explorationCardId: encounterCardId,
+    });
+
+    expect(state).not.toBeNull();
+    const countsByCardNumber = new Map<number, number>();
+    for (const entry of state?.deck ?? []) {
+      countsByCardNumber.set(
+        entry.cardNumber,
+        (countsByCardNumber.get(entry.cardNumber) ?? 0) + 1,
+      );
+    }
+    expect(
+      [...countsByCardNumber.values()].filter((count) => count > 1),
+    ).toEqual([2, 2]);
+    expect(new Set(state?.deck.map((entry) => entry.entryId)).size).toBe(
+      state?.deck.length,
+    );
+  });
+
   it("holds a UUID-backed Dreamsign so purge follow-ups are exercisable", () => {
     const { content, encounterCardId } = explorationContent();
     content.dreamsignTemplates = [{

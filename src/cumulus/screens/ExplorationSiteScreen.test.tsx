@@ -156,7 +156,9 @@ function purgeAndCopyRewardView(): ExplorationSiteView {
     reward: {
       objects: {
         cards: [copiedCard],
-        purgedCards: [purgedCard],
+        purgedCards: [
+          { entryId: "purged-entry", model: purgedCard, isBane: false },
+        ],
         dreamsigns: [],
       },
       deckModification: null,
@@ -1965,6 +1967,94 @@ describe("ExplorationSiteScreen", () => {
     expect(container.querySelector("[data-exploration-reward-stage]"))
       .not.toBeNull();
     expect(onExit).not.toHaveBeenCalled();
+    act(() => root.unmount());
+  });
+
+  it("presents the complete purge-then-Reclaim sequence under reduced motion", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = true;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const modified = deckModificationRewardView();
+    if (modified.reward === null || "kind" in modified.reward) {
+      throw new Error("fixture requires a deck modification reward");
+    }
+    const purgedCard = modified.reward.deckModification?.cards[0]?.model;
+    const survivorCards = modified.reward.deckModification?.cards;
+    if (purgedCard === undefined || survivorCards === undefined) {
+      throw new Error("fixture requires purged and surviving cards");
+    }
+    const reclaimView: ExplorationSiteView = {
+      ...modified,
+      reward: {
+        objects: {
+          cards: [],
+          purgedCards: [
+            { entryId: "purged-entry-a", model: purgedCard, isBane: false },
+            { entryId: "purged-entry-b", model: purgedCard, isBane: false },
+          ],
+          dreamsigns: [],
+        },
+        deckModification: {
+          kind: "reclaim",
+          headline: "Reclaim",
+          announcement:
+            "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          selectionColor: "positive",
+          cards: survivorCards,
+          reclaimCostByEntryId: {
+            "deck-entry-a": 2,
+            "deck-entry-b": 4,
+          },
+        },
+      },
+    };
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={reclaimView}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    const purgedCards = container.querySelectorAll<HTMLElement>(
+      "[data-exploration-purge-card]",
+    );
+    expect(purgedCards).toHaveLength(2);
+    expect(
+      [...purgedCards].map(
+        (card) => card.dataset.explorationDeckEntryId,
+      ),
+    ).toEqual(["purged-entry-a", "purged-entry-b"]);
+    expect(
+      container.querySelector("[data-exploration-deck-modification-reward]"),
+    ).toBeNull();
+    expect(onExit).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(3_100);
+    });
+    expect(
+      container.querySelector("[data-exploration-purge-card]"),
+    ).toBeNull();
+    const reclaim = container.querySelector<HTMLElement>(
+      '[data-exploration-deck-modification-kind="reclaim"]',
+    );
+    expect(reclaim?.dataset.explorationDeckModificationCount).toBe("2");
+    expect(
+      reclaim?.querySelector<HTMLElement>(
+        '[data-exploration-deck-entry-id="deck-entry-a"]',
+      )?.dataset.explorationReclaimCost,
+    ).toBe("2");
+    expect(onExit).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    expect(onExit).toHaveBeenCalledOnce();
     act(() => root.unmount());
   });
 

@@ -47,11 +47,13 @@ random hand).
 
 `?goto=exploration&card=<UUID>` opens the Exploration scene with the authored
 encounter for that exact source-card UUID. The same option composes with
-`?goto=exploration-enhanced`. The UUID must identify one of the source cards in
-the Exploration encounter catalog.
+`?goto=exploration-enhanced` and `?goto=exploration-duplicates`. The duplicate
+scene adds one extra copy of each of two cards in its QA deck. The UUID must
+identify one of the source cards in the Exploration encounter catalog.
 
 ```
 http://localhost:5174/?goto=exploration&card=161482b6-af07-4d9e-822d-8c738672beb9
+http://localhost:5174/?goto=exploration-duplicates&card=b1d36337-5668-4f1d-b155-2d07fc00f872
 ```
 
 ## Atlas layers
@@ -181,6 +183,7 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `gamble-enhanced`               | Gravok’s Three-Gate Wager at Farpoint Station (free wagers)                                                                                                                                                    |
 | `exploration`                   | Exploration card-channeling site                                                                                                                                                                               |
 | `exploration-enhanced`          | Exploration card-channeling site, enhanced                                                                                                                                                                     |
+| `exploration-duplicates`        | Exploration card-channeling site with two duplicated card UUIDs in the QA deck                                                                                                                                |
 | `dreamsign-revelation`          | Dreamsign Revelation site                                                                                                                                                                                       |
 | `dreamsign-revelation-enhanced` | Dreamsign Revelation site, enhanced (four choices)                                                                                                                                                              |
 | `journeycomplete`                 | Journey victory end screen (completion stats + final-deck reveal)                                                                                                                                                 |

@@ -591,12 +591,25 @@ function parkOnSite(siteType: SiteType, isEnhanced: boolean): QaScene["build"] {
 }
 
 /** Exploration scene with enough eligible cards to exercise every follow-up. */
-function explorationScene(isEnhanced: boolean): QaScene {
+function explorationScene(
+  isEnhanced: boolean,
+  deckPreset: "unique" | "duplicates" = "unique",
+): QaScene {
+  const hasDuplicates = deckPreset === "duplicates";
   return {
-    id: isEnhanced ? "exploration-enhanced" : "exploration",
-    label: isEnhanced ? "Exploration (Enhanced)" : "Exploration",
+    id: hasDuplicates
+      ? "exploration-duplicates"
+      : isEnhanced
+        ? "exploration-enhanced"
+        : "exploration",
+    label: hasDuplicates
+      ? "Exploration (Duplicate Deck)"
+      : isEnhanced
+        ? "Exploration (Enhanced)"
+        : "Exploration",
     description:
-      "The Exploration site with Event, Survivor, cheap Character, and Spirit Animal cards available for interaction QA.",
+      "The Exploration site with Event, Survivor, cheap Character, and Spirit Animal cards available for interaction QA" +
+      (hasDuplicates ? ", including two duplicated card UUIDs." : "."),
     build: (journeyContent, options) => {
       const state = parkOnSite("Exploration", isEnhanced)(journeyContent);
       if (state === null) return null;
@@ -627,14 +640,21 @@ function explorationScene(isEnhanced: boolean): QaScene {
         6,
       );
       const heldDreamsignTemplate = journeyContent.dreamsignTemplates[0];
+      const uniqueDeck = [...selected.values()].map((card, index) => ({
+        entryId: `exploration-qa-${String(index + 1)}`,
+        cardNumber: card.cardNumber,
+        transfiguration: null,
+        isBane: false,
+      }));
+      const duplicateEntries = hasDuplicates
+        ? uniqueDeck.slice(0, 2).map((entry, index) => ({
+            ...entry,
+            entryId: `exploration-qa-duplicate-${String(index + 1)}`,
+          }))
+        : [];
       const qaState: JourneyState = {
         ...state,
-        deck: [...selected.values()].map((card, index) => ({
-          entryId: `exploration-qa-${String(index + 1)}`,
-          cardNumber: card.cardNumber,
-          transfiguration: null,
-          isBane: false,
-        })),
+        deck: [...uniqueDeck, ...duplicateEntries],
         dreamsigns:
           heldDreamsignTemplate === undefined
             ? state.dreamsigns
@@ -851,6 +871,7 @@ export const QA_SCENES: readonly QaScene[] = [
   ),
   explorationScene(false),
   explorationScene(true),
+  explorationScene(false, "duplicates"),
   siteScene(
     "dreamsign-revelation",
     "Dreamsign Revelation",

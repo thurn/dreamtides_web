@@ -98,6 +98,7 @@ describe("exploration-view-model", () => {
         gainedCardIds: [source.id],
         gainedDreamsignIds: [gainedDreamsign.id],
         purgedCardIds: [source.id],
+        purgedEntryIds: ["entry-purged"],
         affectedEntryIds: [],
         essenceGained: 0,
       },
@@ -159,7 +160,9 @@ describe("exploration-view-model", () => {
       reward: {
         objects: {
           cards: [{ cardId: source.id }],
-          purgedCards: [{ cardId: source.id }],
+          purgedCards: [
+            { entryId: "entry-purged", model: { cardId: source.id } },
+          ],
           dreamsigns: [{ id: gainedDreamsign.id }],
         },
         deckModification: null,
@@ -1538,9 +1541,9 @@ describe("exploration-view-model", () => {
       reward: {
         objects: {
           purgedCards: [
-            { cardId: source.id },
-            { cardId: source.id },
-            { cardId: source.id },
+            { entryId: "source-entry", model: { cardId: source.id } },
+            { entryId: "copy-a", model: { cardId: source.id } },
+            { entryId: "copy-b", model: { cardId: source.id } },
           ],
         },
         deckModification: {

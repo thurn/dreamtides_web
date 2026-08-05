@@ -102,7 +102,7 @@ export type ExplorationRewardView =
       /** Tangible objects granted by the resolution. */
       readonly objects: {
         readonly cards: readonly GameCardModel[];
-        readonly purgedCards: readonly GameCardModel[];
+        readonly purgedCards: readonly ExplorationCardChoiceView[];
         readonly dreamsigns: readonly DreamsignData[];
       };
       /** Persisted mutation applied to every affected UUID-keyed deck entry. */
@@ -812,7 +812,9 @@ function explorationRewardIdentity(
       actionId,
       reward.deckModification?.kind ?? "objects-only",
       ...(reward.deckModification?.cards.map((card) => card.entryId) ?? []),
-      ...reward.objects.purgedCards.map((card) => `purged:${card.cardId}`),
+      ...reward.objects.purgedCards.map(
+        (card) => `purged:${card.entryId}:${card.model.cardId}`,
+      ),
       ...reward.objects.cards.map((card) => `gained:${card.cardId}`),
       ...reward.objects.dreamsigns.map(
         (dreamsign) => `dreamsign:${dreamsign.id ?? "missing"}`,
@@ -994,6 +996,7 @@ export function ExplorationSiteScreen({
   >("purging");
   const [deckModificationPresented, setDeckModificationPresented] =
     useState(false);
+  const [purgedCardsPresented, setPurgedCardsPresented] = useState(false);
   const [transfigurationRevealed, setTransfigurationRevealed] =
     useState(false);
   const [transfigurationReturn, setTransfigurationReturn] =
@@ -1026,10 +1029,16 @@ export function ExplorationSiteScreen({
   const dreamAvatarReward =
     effectReward?.kind === "dream-avatar" ? effectReward : null;
   const rewardItems = useMemo(() => rewardItemsFor(view.reward), [view.reward]);
+  const purgeBeforeDeckModification =
+    deckModification?.kind === "reclaim" && purgedRewardCards.length > 0;
   const showDeckModification =
-    deckModification !== null && !deckModificationPresented;
+    deckModification !== null &&
+    !deckModificationPresented &&
+    (!purgeBeforeDeckModification || purgedCardsPresented);
   const showObjectReward =
-    !showDeckModification &&
+    (purgeBeforeDeckModification
+      ? !purgedCardsPresented
+      : !showDeckModification) &&
     (rewardItems.length > 0 || purgedRewardCards.length > 0);
   const rewardStageAnnouncement =
     purgedRewardCards.length === 0
@@ -1059,6 +1068,7 @@ export function ExplorationSiteScreen({
     setEssenceRewardPhase("cards");
     setDreamsignPurgeRewardPhase("purging");
     setDeckModificationPresented(false);
+    setPurgedCardsPresented(false);
     setTransfigurationRevealed(false);
     setTransfigurationReturn(null);
   }, [rewardIdentity]);
@@ -1314,7 +1324,9 @@ export function ExplorationSiteScreen({
       return;
     }
     const timer = window.setTimeout(
-      completeExit,
+      purgeBeforeDeckModification
+        ? () => setPurgedCardsPresented(true)
+        : completeExit,
       REWARD_READING_SECONDS * 1000,
     );
     return () => window.clearTimeout(timer);
@@ -1322,6 +1334,7 @@ export function ExplorationSiteScreen({
     completeExit,
     frameBreakPhase,
     purgedRewardCards.length,
+    purgeBeforeDeckModification,
     rewardIdentity,
     rewardItems.length,
     showObjectReward,
@@ -1337,7 +1350,10 @@ export function ExplorationSiteScreen({
       return;
     }
     const timer = window.setTimeout(() => {
-      if (rewardItems.length === 0 && purgedRewardCards.length === 0) {
+      if (
+        purgeBeforeDeckModification ||
+        (rewardItems.length === 0 && purgedRewardCards.length === 0)
+      ) {
         completeExit();
         return;
       }
@@ -1350,6 +1366,7 @@ export function ExplorationSiteScreen({
     frameBreakPhase,
     rewardIdentity,
     purgedRewardCards.length,
+    purgeBeforeDeckModification,
     rewardItems.length,
     showDeckModification,
   ]);
@@ -2332,9 +2349,10 @@ export function ExplorationSiteScreen({
                   : "min(40vw, 180px)";
               return (
                 <motion.div
-                  key={`purged:${String(index)}:${card.cardId}`}
+                  key={`purged:${card.entryId}`}
                   data-exploration-purge-card=""
-                  data-card-id={card.cardId}
+                  data-exploration-deck-entry-id={card.entryId}
+                  data-card-id={card.model.cardId}
                   initial={{
                     opacity: reduceMotion ? 1 : 0,
                     scale: reduceMotion ? 1 : 0.88,
@@ -2365,7 +2383,7 @@ export function ExplorationSiteScreen({
                   }}
                 >
                   <GameCard
-                    model={card}
+                    model={card.model}
                     selected
                     selectionColor="danger"
                     testId={`cumulus-exploration-purged-card-${String(index)}`}

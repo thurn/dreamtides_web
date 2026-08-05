@@ -269,8 +269,10 @@ room. That selection presents the three authored Valor tides from
 their 150-card pool and collaborative room control.
 
 For the Exploration QA scenes, `card=<UUID>` selects the authored encounter for
-that exact source-card UUID. It works with both `goto=exploration` and
-`goto=exploration-enhanced`.
+that exact source-card UUID. It works with `goto=exploration`,
+`goto=exploration-enhanced`, and `goto=exploration-duplicates`. The duplicate
+deck scene includes two duplicated card UUIDs so effects that remove every copy
+of duplicated cards have a deterministic browser-QA fixture.
 
 ```
 http://localhost:5173/?goto=atlas
@@ -280,6 +282,7 @@ http://localhost:5173/?goto=duplication-enhanced
 http://localhost:5173/?goto=tutorial-battle
 http://localhost:5173/?goto=tutorial-victory
 http://localhost:5173/?goto=exploration&card=161482b6-af07-4d9e-822d-8c738672beb9
+http://localhost:5173/?goto=exploration-duplicates&card=b1d36337-5668-4f1d-b155-2d07fc00f872
 ```
 
 ## `identicons`

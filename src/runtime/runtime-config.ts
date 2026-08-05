@@ -64,8 +64,9 @@ export interface RuntimeConfig {
   gotoScene?: string | null;
   /**
    * Exploration encounter source-card UUID from `?card=`. This is consumed by
-   * the `exploration` and `exploration-enhanced` QA scenes so browser QA can
-   * open one exact authored encounter. Null when absent or malformed.
+   * the `exploration`, `exploration-enhanced`, and `exploration-duplicates` QA
+   * scenes so browser QA can open one exact authored encounter. Null when absent
+   * or malformed.
    */
   explorationCardId?: CardId | null;
   /**
