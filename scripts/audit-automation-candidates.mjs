@@ -18,7 +18,7 @@
 //   - Support –       (em-dash U+2013) or "Support -" (ascii hyphen)
 //
 // Only the relevant trigger CLAUSE is parsed for effects. Activated abilities
-// ("N●, ☪: ..."), other keywords (▸Dissolved, Reclaim, ▸Challenge), and play
+// ("N●, ☾: ..."), other keywords (▸Dissolved, Reclaim, ▸Challenge), and play
 // costs ("To play this card, ...") are resolved manually and never contribute
 // effect atoms to a trigger's classification.
 //

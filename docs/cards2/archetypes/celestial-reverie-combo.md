@@ -166,11 +166,11 @@ materialized, spending 3⧗ for 3● — both turning a flurry of cheap bodies i
 energy that feeds the next replay.
 
 The spirit-animal "mana dorks" double as the loop's energy backbone. Spirit of
-the Greenwood is a 1● Awakened spirit animal with "1●, ☪: Gain 1● for each allied
-character," Blazing Emberwing is a 3● spirit animal with "☪: Gain 1● for each
+the Greenwood is a 1● Awakened spirit animal with "1●, ☾: Gain 1● for each allied
+character," Blazing Emberwing is a 3● spirit animal with "☾: Gain 1● for each
 allied character," and Mountainwatch Alpha taps for 1● per allied spirit animal —
 on a wide board each is a large energy refund that can restart a stalled loop.
-Verdant Pilgrim ("☪: Awaken an ally") and Moonbound Wolf ("☪, Return an ally to
+Verdant Pilgrim ("☾: Awaken an ally") and Moonbound Wolf ("☾, Return an ally to
 hand: Trigger the 'Dawn' ability of an allied spirit animal") add bounce and
 awaken effects that re-buy materialization and ▸Dawn triggers, extending the
 chain. The payoffs carry over too: Mystic Runefish sets each allied spirit

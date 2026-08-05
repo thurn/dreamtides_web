@@ -338,7 +338,7 @@ score deltas and the dissolve-to-void edits that commit the outcome.
 
 The debug rail is where the player resolves printed effects and drives manual
 gestures the rules leave to the controller. It provides Status toggles (and the
-☪ retreat control), Counters, Erode, the 10-type Figment creator, and
+☾ retreat control), Counters, Erode, the 10-type Figment creator, and
 Abandon / Rematerialize / Dreamwell-draw actions. Cards drag between zones, and
 every committed change flows through the `DEBUG_EDIT` command path so the battle
 log, undo, and redo all keep working.

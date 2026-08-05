@@ -102,7 +102,7 @@ adjacency map (`engine/support.ts`, currently dead for scoring) into resolution.
 Enforce the two positional rules that are currently unenforced:
 
 - An **exhausted character cannot be moved to the front rank** (by either player).
-- Paying a `☪` cost **auto-retreats** a front-rank character to an open back-rank
+- Paying a `☾` cost **auto-retreats** a front-rank character to an open back-rank
   position (and is illegal if none is available).
 
 **New `BattleCardInstance` state the rules require:**
@@ -288,7 +288,7 @@ engine/automation modules.
   Appendix B checklist landed; add the Phasing definition (§8) to
   `docs/battle_rules/battle_rules.md`; inventory the exact rename surface.
 - **Phase 1 — Model & types.** Slot/zone/phase renames; status fields; discrete
-  figments + 14-type catalog; positional rules (exhaust-can't-advance, ☪
+  figments + 14-type catalog; positional rules (exhaust-can't-advance, ☾
   auto-retreat). Engine unit tests.
 - **Phase 2 — Energy & automation v2.** Energy track + Dreamwell/Draw step; phase
   auto-advance; Dawn exhaust-clear; Ending banish; Fatigue. Automation unit tests.
@@ -379,7 +379,7 @@ automation can own) vs **66 [CHOICE]** (player-driven via the debug rail).
 **Highest-frequency mechanics:** Materialize / figment creation (177) · Draw (98) ·
 allied/ally references (95) · Abandon (87) · Discard (84) · Dissolve (83) ·
 ▸Materialized (81, largest trigger) · in/from your void (81) · Reclaim (73) · Gain
-N● (67); then ≤N● cost predicate (59), ☪ exhaust costs (65), ▸Dawn (41),
+N● (67); then ≤N● cost predicate (59), ☾ exhaust costs (65), ▸Dawn (41),
 Discover (31).
 
 **Hardest / unusual (mostly MANUAL or special RAIL tools):** extra turn

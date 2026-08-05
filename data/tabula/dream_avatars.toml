@@ -53,7 +53,7 @@ title = "Whisperer of Wraiths"
 id = "F0F5449E-01C2-4635-BCE1-76B179FC2108"
 image-number = "0073"
 portrait-focus = { x = 0.500, y = 0.170 }
-rendered-text = "3●, X●, ☪: Discover a card with cost X●."
+rendered-text = "3●, X●, ☾: Discover a card with cost X●."
 
 [[dreamAvatar]]
 name = "Seld Rakor"
@@ -69,7 +69,7 @@ title = "the Reckoning Blade"
 id = "B9BF6D4B-907C-4750-B51C-811AFF29DE59"
 image-number = "0022"
 portrait-focus = { x = 0.540, y = 0.281 }
-rendered-text = "2●, ☪, Abandon a character with 1✦: Draw a card."
+rendered-text = "2●, ☾, Abandon a character with 1✦: Draw a card."
 
 [[dreamAvatar]]
 name = "Kaleth"
@@ -77,7 +77,7 @@ title = "The Dreaming"
 id = "3C4773E4-F8E1-4686-86CB-B407A42489D4"
 image-number = "0026"
 portrait-focus = { x = 0.500, y = 0.206 }
-rendered-text = "2●, ☪: Awaken a character you control."
+rendered-text = "2●, ☾: Awaken a character you control."
 
 [[dreamAvatar]]
 name = "Calloway Flint"
@@ -85,7 +85,7 @@ title = "Cutthroat Admiral"
 id = "8A2FCD65-BBA7-459C-A6B0-F0391B9293FD"
 image-number = "0052"
 portrait-focus = { x = 0.500, y = 0.256 }
-rendered-text = "❖❖ – 4●, ☪: Draw a card."
+rendered-text = "❖❖ – 4●, ☾: Draw a card."
 
 [[dreamAvatar]]
 name = "Senemhet"
@@ -117,7 +117,7 @@ title = "Cantor of the Unreal"
 id = "9E19B3D1-12F2-43C1-9CB1-08DE7CD32E32"
 image-number = "0098"
 portrait-focus = { x = 0.530, y = 0.177 }
-rendered-text = "1●, ☪: If you materialized a figment this turn, draw a card."
+rendered-text = "1●, ☾: If you materialized a figment this turn, draw a card."
 
 [[dreamAvatar]]
 name = "Korrax"
@@ -150,7 +150,7 @@ title = "Shrouded Inquisitor"
 id = "9D64A4A2-3DC7-456E-9EB2-5FE3A48883C4"
 image-number = "0112"
 portrait-focus = { x = 0.550, y = 0.200 }
-rendered-text = "2●, ☪, Abandon a character: Materialize a random character with cost 1● higher from your deck."
+rendered-text = "2●, ☾, Abandon a character: Materialize a random character with cost 1● higher from your deck."
 mtg-name = "Viscera Seer"
 signature-cards = [
   "4644db03-fbcd-4af5-a229-17962ce093d5", # Duskreaper
@@ -236,7 +236,7 @@ title = "Recon Commander"
 id = "81954CA0-DA36-49DD-915C-1CCB1B2D7B05"
 image-number = "0007"
 portrait-focus = { x = 0.500, y = 0.164 }
-rendered-text = "2●, ☪, Discard a card: Materialize a 1✦ survivor figment."
+rendered-text = "2●, ☾, Discard a card: Materialize a 1✦ survivor figment."
 mtg-name = "Zombie Infestation"
 signature-cards = [
   "9495f501-f627-4b74-a848-b3d928641229", # Emberwatch Veteran
@@ -270,7 +270,7 @@ title = "the Invocant"
 id = "5E28154D-770A-4B84-8AAC-9DE44F5D7D02"
 image-number = "0080"
 portrait-focus = { x = 0.550, y = 0.276 }
-rendered-text = "❖ – 4●, ☪: Materialize a 1✦ outsider figment."
+rendered-text = "❖ – 4●, ☾: Materialize a 1✦ outsider figment."
 # Signatures authored by hand around three evasive outsiders (see commit a98fbb67);
 # not derived from the card_associations.md archetype mapping.
 signature-cards = [
@@ -285,7 +285,7 @@ title = "the Dredger"
 id = "4D5E3933-7DD6-406B-922D-DD78ACFA044A"
 image-number = "0005"
 portrait-focus = { x = 0.487, y = 0.193 }
-rendered-text = "❖❖ – 2●, ☪, Discard a card: An event in your void gains reclaim until end of turn."
+rendered-text = "❖❖ – 2●, ☾, Discard a card: An event in your void gains reclaim until end of turn."
 mtg-name = "Snapcaster Mage"
 signature-cards = [
   "954e8d50-d494-4fb2-b4c7-74979083b774", # Driftrider
@@ -302,7 +302,7 @@ title = "Wearer of the Stolen Face"
 id = "2B7E921D-0CD7-4C20-A415-9E7EEDE7B477"
 image-number = "0060"
 portrait-focus = { x = 0.513, y = 0.223 }
-rendered-text = "4●, ☪: Copy the next event you play this turn."
+rendered-text = "4●, ☾: Copy the next event you play this turn."
 mtg-name = "Bonus Round"
 signature-cards = [
   "4d4618bd-4779-4953-b446-dab05e1da5db", # Nebula's Wake
@@ -334,7 +334,7 @@ title = "Lector of the Receding Rite"
 id = "F6208407-C4E9-42AC-B533-346704F5E39E"
 image-number = "0078"
 portrait-focus = { x = 0.500, y = 0.162 }
-rendered-text = "2●, ☪: If you played an event this turn, draw an event."
+rendered-text = "2●, ☾: If you played an event this turn, draw an event."
 mtg-name = "Young Pyromancer"
 signature-cards = [
   "3811a0a2-66af-4c06-b179-948dfa9b2ee3", # Weblight Waif
@@ -349,7 +349,7 @@ title = "Scion of the Returning Tide"
 id = "FE2510D9-BFEE-4C35-97F9-30E0CD2E2851"
 image-number = "0084"
 portrait-focus = { x = 0.503, y = 0.201 }
-rendered-text = "2●, ☪: Return a character you control to hand. Its cost is reduced by 1●."
+rendered-text = "2●, ☾: Return a character you control to hand. Its cost is reduced by 1●."
 # Original hand-picked signature set; not derived from the card_associations.md
 # archetype mapping.
 signature-cards = [
@@ -366,7 +366,7 @@ title = "Packmaster"
 id = "94E7C651-25E9-4A62-9DE4-EAF5BA20542C"
 image-number = "0095"
 portrait-focus = { x = 0.510, y = 0.169 }
-rendered-text = "4●, ☪: Gain 1● for each spirit animal you control."
+rendered-text = "4●, ☾: Gain 1● for each spirit animal you control."
 mtg-name = "Priest of Titania"
 signature-cards = [
   "61060827-8bed-4b63-b63d-6c3b0536e941", # Sunshadow Eagle
@@ -432,7 +432,7 @@ title = "Daimyo of Lacquered Fury"
 id = "BF72ADFF-7D74-4BE8-9B93-1DB7BA13A1DB"
 image-number = "0029"
 portrait-focus = { x = 0.500, y = 0.220 }
-rendered-text = "2●, ☪: Materialize a 0✦ figment copy of the last warrior you played this turn."
+rendered-text = "2●, ☾: Materialize a 0✦ figment copy of the last warrior you played this turn."
 mtg-name = "Mishra's Workshop"
 signature-cards = [
   "426825c7-7259-41af-ac1c-c042b878d69b", # Burning Revenant
@@ -448,7 +448,7 @@ title = "Warhost Exemplar"
 id = "91D4C3B5-FD63-480B-9ED5-979109A227BB"
 image-number = "0056"
 portrait-focus = { x = 0.500, y = 0.228 }
-rendered-text = "2●, ☪: A warrior in your void gains reclaim until end of turn."
+rendered-text = "2●, ☾: A warrior in your void gains reclaim until end of turn."
 mtg-name = "Emry, Lurker of the Loch"
 signature-cards = [
   "b977afaf-f583-45ec-8e34-99fbfa4e9190", # Grim Reclaimer

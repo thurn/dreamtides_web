@@ -203,7 +203,7 @@ export type BattleDebugEdit =
   | {
     // Merges a partial `BattleCardStatus` onto the instance's status. Basic
     // automation emits this during Ending to clear `isExhausted` from in-play
-    // characters. Its handler also owns the ☪ auto-retreat
+    // characters. Its handler also owns the ☾ auto-retreat
     // behaviour and surfaces the toggle UI.
     kind: "SET_CARD_STATUS";
     battleCardId: string;

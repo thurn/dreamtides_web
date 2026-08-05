@@ -15,7 +15,7 @@ import {
   infoCardWidth,
 } from "./InfoCard";
 
-const SUBSTITUTED_RULES_SYMBOL_PATTERN = /[●✦⍏⍟☪⧗❖]/u;
+const SUBSTITUTED_RULES_SYMBOL_PATTERN = /[●✦⍏⍟☾⧗❖]/u;
 
 describe("infoCardWidth — the viewport-driven mobile width", () => {
   it("lays a card out at ~45% of a narrow (mobile) screen", () => {
@@ -134,7 +134,7 @@ describe("InfoCard shell treatment", () => {
         variant: "text",
         title: "Costs 2● and grants 1✦",
         meta: "Gain ⍏3 and 4⍟",
-        subtitle: "Pay ☪ and store 1⧗",
+        subtitle: "Pay ☾ and store 1⧗",
         body: richText.stack(
           richText.plain("▸Dawn"),
           richText.underline("❖ Fast"),
@@ -178,7 +178,7 @@ describe("InfoCard shell treatment", () => {
         title: "Gain 1●",
         meta: "Score 2⍟",
         subtitle: "Store 1⧗",
-        body: richText.plain("Pay ☪."),
+        body: richText.plain("Pay ☾."),
       }),
     );
     const atlasReveal = renderToStaticMarkup(

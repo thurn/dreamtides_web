@@ -227,16 +227,16 @@ describe("contextual glossary definitions", () => {
         {
           owner: "dreamAvatar",
           definition:
-            "You may exhaust (☪) this dreamAvatar to activate this ability once per turn.",
+            "You may exhaust (☾) this dreamAvatar to activate this ability once per turn.",
         },
       ],
     );
 
     expect(
-      contextualizeGlossaryEntry(exhaust, "2●, ☪: Draw a card.", "dreamAvatar")
+      contextualizeGlossaryEntry(exhaust, "2●, ☾: Draw a card.", "dreamAvatar")
         .definition,
     ).toBe(
-      "You may exhaust (☪) this dreamAvatar to activate this ability once per turn.",
+      "You may exhaust (☾) this dreamAvatar to activate this ability once per turn.",
     );
   });
 });

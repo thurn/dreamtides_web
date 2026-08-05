@@ -46,7 +46,7 @@ A companion to [outsiders.md](outsiders.md), listing every CardsV2 card with a s
 
 ## Rematerialize / blink package
 
-28. Duskmount — enters Awakened, "☪: Rematerialize an ally. This character gains +1✦," re-firing Glimmerwood Scout or Voidcaller every turn while it grows.
+28. Duskmount — enters Awakened, "☾: Rematerialize an ally. This character gains +1✦," re-firing Glimmerwood Scout or Voidcaller every turn while it grows.
 29. Starlight Guide — fast ▸Challenge "Rematerialize an ally," re-buying a ▸Materialized body without spending a card.
 30. Dreadwood Emissary — ▸Materialized gives an event in your void reclaim until end of turn, re-buying a spent prevent or removal event.
 

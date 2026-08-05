@@ -14,7 +14,7 @@ export type SymbolType =
  * - `text` is a plain string run.
  * - `symbol` is a recognized glyph rendered with its own styling. Most are
  *   swapped for an icon-font mark by the renderer: energy → flame, spark →
- *   sparkle, essence `◆` → crypto, points `⍟` → star-circle, lunar `☪` →
+ *   sparkle, essence `◆` → crypto, points `⍟` → star-circle, lunar `☾` →
  *   moon, and store `⧗` → brain. The trigger `▸` remains a Unicode text
  *   character.
  *   A standalone authored `◆` is represented as a symbol segment and resolves
@@ -72,7 +72,7 @@ const SYMBOL_MAP: Readonly<Record<string, SymbolType>> = {
   // Points scored toward winning (rendered as the filled star-circle).
   "⍟": "points",
   // The lunar activation cost (rendered as the filled moon).
-  "☪": "lunar",
+  "☾": "lunar",
   // Memories stored on cards (rendered as the filled brain).
   "⧗": "store",
 };

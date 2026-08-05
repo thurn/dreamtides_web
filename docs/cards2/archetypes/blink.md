@@ -49,7 +49,7 @@ entry effect — point both at Winterbough Monk and you have returned two cards
 from your void, or at Dusk Duelist to dissolve two enemies.
 
 Duskmount is the engine you build around. It enters Awakened, so it can act the
-turn it lands, and its ability is "☪: Rematerialize an ally. This character
+turn it lands, and its ability is "☾: Rematerialize an ally. This character
 gains +1✦." Every turn it exhausts to re-fire a chosen ally's ▸Materialized and
 grows by +1✦ while it does so, turning into a real threat on the side. Aim it at
 Glimmerwood Scout for a recurring banish, or at Frost Visionary for a card a
@@ -168,7 +168,7 @@ character") and Conduit of Resonance ("When you play a character, trigger the
 '▸Dawn' ability of each other allied character") both reward the many-materialize
 turns Blink naturally produces. Cindermarch un-exhausts your whole board every
 time a character enters, which keeps Duskmount and Starlight Guide ready and lets
-☪-cost bodies fire more than once; with a free body from Nexus Wayfinder you can
+☾-cost bodies fire more than once; with a free body from Nexus Wayfinder you can
 materialize repeatedly and keep the board awakened. Conduit of Resonance turns
 each character you play into a board-wide ▸Dawn pulse — with energy producers
 like Cloudmantle Ray and Sky Voyager out, every fresh body refills your energy,

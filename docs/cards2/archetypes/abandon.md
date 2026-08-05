@@ -198,7 +198,7 @@ the Lost ("For each card you've played this turn, materialize a 1✦ ember figme
 with awakened. Reclaim 2●") and Packcaller of Shadows ("For each card you've
 played this turn, materialize a 1✦ ethereal figment") spit out a wide board of
 fodder after a long turn, and Radiant Trio ("Materialize X 1✦ ethereal figments")
-makes them directly. Shadowbinder ("☪: Materialize two 1✦ ember figments with
+makes them directly. Shadowbinder ("☾: Materialize two 1✦ ember figments with
 awakened. Abandon them at end of turn") hands you two free bodies a turn whose
 end-of-turn abandon you would rather take early through an outlet. Each of those
 figments is a free abandon into your drains, and Wreckborn and Dustborn Veteran
@@ -241,8 +241,8 @@ you abandon it last.
 
 The warrior theme supplies a parallel set of outlets and recursion that slots
 straight into the deck. Spirit Reaping and Arc Disciple are warrior outlets;
-Dreaming Obelisk ("☪, Abandon a warrior: Materialize a warrior from your void")
-and Pit Descender ("☪, Abandon a warrior: Materialize a warrior with cost 2● or
+Dreaming Obelisk ("☾, Abandon a warrior: Materialize a warrior from your void")
+and Pit Descender ("☾, Abandon a warrior: Materialize a warrior with cost 2● or
 less from your void") are "welder" outlets that loop a warrior through the void
 for value. Burning Revenant ("When an allied warrior is dissolved, return a
 warrior with lesser cost from your void to hand"), Starbound Striker ("▸Dissolved:
@@ -251,7 +251,7 @@ Return another warrior from your void to your hand"), and Tranquil Duelist
 abandoning warriors self-replacing. Fathomscourge ("Once per turn, when an allied
 warrior is dissolved, materialize a 1✦ warrior figment") and Voidsire-style
 figment makers keep the warrior board wide, and Smoldering Ancient ("When an
-allied warrior is dissolved, this character gains +1✦. ☪, Abandon a warrior: Gain
+allied warrior is dissolved, this character gains +1✦. ☾, Abandon a warrior: Gain
 1⍟") is both a payoff and an outlet in one warrior body.
 
 The void theme contributes the recursion that keeps fodder coming. Shadowcaller
@@ -285,7 +285,7 @@ with 3✦ or less") and Forsaken Skyline ("Dissolve an enemy with 2✦ or less. 
 you discard this card, it gains reclaim 1● until end of turn. Reclaim 4●") clear
 small bodies, the latter coming back from the void. Fury of the Clan ("Play this
 card only with 3 allied warriors. Dissolve an enemy") is free removal once the
-figment army is wide. Colossal Convergence ("❖❖ – ☪, Abandon a character: Give an
+figment army is wide. Colossal Convergence ("❖❖ – ☾, Abandon a character: Give an
 ally +X✦ where X is the abandoned character's ✦") and Forsworn Champion ("❖❖ –
 Abandon a warrior: This character gains +1✦") let you abandon at Interrupt speed
 to spring a challenge in your favor, converting a dying body into the spark that

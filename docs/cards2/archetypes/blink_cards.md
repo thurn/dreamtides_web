@@ -5,7 +5,7 @@ A companion to [blink.md](blink.md), listing every CardsV2 card with a specific 
 ## Rematerialize enablers
 
 1. Passage Through Oblivion — 1● "Rematerialize an ally" with Reclaim 1●; the cheapest, cleanest re-fire, and it buys itself back for a second trigger.
-2. Duskmount — Awakened "☪: Rematerialize an ally. This character gains +1✦"; the build-around engine that re-fires a trigger every turn and grows into a finisher.
+2. Duskmount — Awakened "☾: Rematerialize an ally. This character gains +1✦"; the build-around engine that re-fires a trigger every turn and grows into a finisher.
 3. Starlight Guide — 2● body with "▸Challenge: Rematerialize an ally"; the rematerialize comes free off committing it to a lane.
 
 ## Bounce-and-replay enablers
@@ -64,7 +64,7 @@ A companion to [blink.md](blink.md), listing every CardsV2 card with a specific 
 ## Going wider and looping
 
 39. Nexus Wayfinder — "Characters with cost 2● or less cost you 0●"; lets you dump strings of cheap ▸Materialized bodies for free, firing trigger after trigger.
-40. Cindermarch — "When you materialize a character, awaken each other allied character"; un-exhausts the board on many-materialize turns, keeping Duskmount and ☪-bodies ready.
+40. Cindermarch — "When you materialize a character, awaken each other allied character"; un-exhausts the board on many-materialize turns, keeping Duskmount and ☾-bodies ready.
 41. Conduit of Resonance — "When you play a character, trigger the '▸Dawn' of each other ally"; turns each body into a board-wide ▸Dawn pulse that can chain energy into more plays.
 42. Roots of Rebirth — "Materialize two random characters with cost 2● or less from your deck"; slams two cheap bodies into play and fires both entry triggers at once.
 

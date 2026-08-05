@@ -147,7 +147,7 @@ describe("glossary", () => {
 
   it("loads symbol explanations as definition-only copy", () => {
     const symbolEntries = [
-      [GLOSSARY_IDS.exhaustCost, "☪"],
+      [GLOSSARY_IDS.exhaustCost, "☾"],
       [GLOSSARY_IDS.interrupt, "❖❖"],
       [GLOSSARY_IDS.fast, "❖"],
       [GLOSSARY_IDS.points, "⍟"],

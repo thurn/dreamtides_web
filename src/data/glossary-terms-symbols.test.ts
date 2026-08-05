@@ -32,7 +32,7 @@ vi.mock("./glossary", () => ({
   GLOSSARY: [
     { ...FIXTURES.fast, rulesTextForms: ["❖"] },
     { ...FIXTURES.interrupt, rulesTextForms: ["❖❖"] },
-    { ...FIXTURES.exhaustCost, rulesTextForms: ["☪"] },
+    { ...FIXTURES.exhaustCost, rulesTextForms: ["☾"] },
     { ...FIXTURES.points, rulesTextForms: ["⍟"] },
     { ...FIXTURES.night, rulesTextForms: ["▸Night"] },
   ],
@@ -42,7 +42,7 @@ vi.mock("./glossary", () => ({
     [
       ["❖", FIXTURES.fast],
       ["❖❖", FIXTURES.interrupt],
-      ["☪", FIXTURES.exhaustCost],
+      ["☾", FIXTURES.exhaustCost],
       ["⍟", FIXTURES.points],
       ["▸night", FIXTURES.night],
     ].find(([key]) => key === form.toLocaleLowerCase())?.[1],
@@ -52,7 +52,7 @@ import { extractGlossaryTerms } from "./glossary-terms";
 
 describe("extractGlossaryTerms symbol forms", () => {
   it("extracts one-bolt fast, two-bolt interrupt, and exhaust cost in occurrence order", () => {
-    expect(extractGlossaryTerms("❖ – Draw. ❖❖ – 2●, ☪: Draw again.")).toEqual([
+    expect(extractGlossaryTerms("❖ – Draw. ❖❖ – 2●, ☾: Draw again.")).toEqual([
       FIXTURES.fast,
       FIXTURES.interrupt,
       FIXTURES.exhaustCost,
@@ -60,7 +60,7 @@ describe("extractGlossaryTerms symbol forms", () => {
   });
 
   it("treats a single bolt as fast rather than interrupt", () => {
-    expect(extractGlossaryTerms("❖ – ☪: Draw a card.")).toEqual([
+    expect(extractGlossaryTerms("❖ – ☾: Draw a card.")).toEqual([
       FIXTURES.fast,
       FIXTURES.exhaustCost,
     ]);

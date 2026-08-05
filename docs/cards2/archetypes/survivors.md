@@ -31,7 +31,7 @@ like Deathwalker or a drain like Silent Avenger attached, that neutral loop
 turns into raw card advantage or points.
 
 Sorrow Watcher is the enabler that keeps the engine fed. A 1● 1✦ survivor, its
-▸Materialized trigger materializes a 1✦ survivor figment, and its ☪ ability
+▸Materialized trigger materializes a 1✦ survivor figment, and its ☾ ability
 draws a card for each 3 allied survivors. It builds the board, refills the hand,
 and — because every survivor figment it makes counts toward later payoffs — it
 quietly scales the whole deck. There is real tension in when to commit it:
@@ -79,7 +79,7 @@ eroded.
 
 Here you prioritize good abandon outlets and recurrent threats. Infernal
 Ascendant is the workhorse outlet, turning each abandoned character into 1●;
-Dreadweaver ("2●, ☪, Abandon two other characters: This character gains +2✦.
+Dreadweaver ("2●, ☾, Abandon two other characters: This character gains +2✦.
 Draw 2 cards.") is a top-end engine that empties a stalled board into a pump and
 two cards. Volcanic Channeler ("When an ally is dissolved, gain 1●") rewards the
 attrition with energy on every loss, fueling the next replay of Kindred Sparks.
@@ -107,7 +107,7 @@ The discard build plays like a void-recursion deck: erode and discard to load
 the void with threats, then cast them out for a discount or for free. Searcher
 in the Mists ("▸Materialized, Dissolved: Erode 4") and Ashwalker ("▸Materialized:
 Erode 4" plus "▸Dissolved: Return a character from your void to your hand") fill
-the void and then mine it. Evacuation Enforcer ("Awakened. ☪: Draw 2 cards,
+the void and then mine it. Evacuation Enforcer ("Awakened. ☾: Draw 2 cards,
 then discard 3 cards") and Urban Cipher ("▸Materialized: Discard your hand, then
 draw 3 cards") are the heavy discard outlets that set up the void in a hurry.
 
@@ -181,9 +181,9 @@ both a body and a board-wide pump.
 - Pathwalker
 
 Survivors can stall without some form of acceleration, and a few cards provide it
-alongside utility. Ruin Scavenger ("☪, Banish a card from the opponent's void:
+alongside utility. Ruin Scavenger ("☾, Banish a card from the opponent's void:
 This character gains +1✦") doubles as void hate against opposing recursion and a
-growing body. Lanternhearted ("Awakened. ☪: Awaken an ally. Reclaim 1●") fixes
+growing body. Lanternhearted ("Awakened. ☾: Awaken an ally. Reclaim 1●") fixes
 the deck's tempo problem — characters enter exhausted, and Lanternhearted lets a
 freshly replayed Kindred Sparks or a returned recurrent body act the turn it
 arrives, then reclaims itself for 1●.

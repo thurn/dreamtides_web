@@ -7,7 +7,7 @@ A companion to [wake-the-fallen-combo.md](wake-the-fallen-combo.md), listing eve
 1. Wake the Fallen — The marquee enabler: 3● to materialize *everything* in your void that dissolved this turn, no cost ceiling, so it returns your whole abandoned board at once.
 2. Shadow March — Functionally the second Wake the Fallen at 3●, returning all dissolved-this-turn bodies with cost 2● or less — exactly the half the deck is built from.
 3. Heroic Rescue — The cheap surgical version at 1●: materialize up to three chosen dissolved-this-turn characters, enough to re-arm a loop without paying full price and leaving fodder behind on purpose.
-4. Veilseeker — A mass-return engine on a body: "5●, ☪, Abandon this character: Return all characters with cost 2● or less from your void to play." Re-arms the whole loop and feeds the void abandoning itself.
+4. Veilseeker — A mass-return engine on a body: "5●, ☾, Abandon this character: Return all characters with cost 2● or less from your void to play." Re-arms the whole loop and feeds the void abandoning itself.
 5. Phantom Flotilla — Materializes up to two 2● bodies from your void regardless of when they died, and Reclaim 5● lets it come back to re-arm a loop on a turn you did not abandon a full board.
 6. Borrowed Minutes — Materializes each character with cost X● or less in your void and banishes them at end of turn — a one-turn army built straight out of the void that you abandon through your outlets before it banishes anyway.
 7. Cradle of Storms — Materializes all characters in your void *discarded* this turn; the discard-fed parallel to Wake the Fallen that pairs with Pulse of Sacrifice and other hand-dump outlets, and Reclaims 0● when discarded.
@@ -98,7 +98,7 @@ A companion to [wake-the-fallen-combo.md](wake-the-fallen-combo.md), listing eve
 68. Aftermath Bloom — "To play this event, abandon a warrior: Discover a warrior with higher cost, then materialize it," a warrior outlet that trades up the curve while feeding the void.
 69. Winterbough Monk — "▸Materialized: Return a card from your void to your hand," a recurring body that fishes a spent mass-return spell back to hand and re-fires that recovery each loop.
 70. Ironclad Marksman — "Abandon this character: Shuffle up to 3 cards from your void into your deck. Draw a card," self-abandoning fodder that recovers banished-risk pieces and cantrips.
-71. Wreckage Prowler — "1●: Return a 2● body from your void to your hand. 1●, ☪, Abandon a character: Draw a card," fishing fodder back and acting as a draw outlet.
+71. Wreckage Prowler — "1●: Return a 2● body from your void to your hand. 1●, ☾, Abandon a character: Draw a card," fishing fodder back and acting as a draw outlet.
 72. Nightmare — "Gain 2●. Draw a card. If reclaimed, copy it. Reclaim 6●," energy and a card that comes back bigger from the void during a long turn.
 
 ## Finishers

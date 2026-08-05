@@ -25,7 +25,7 @@ A companion to [reclaim-combo.md](reclaim-combo.md), listing every CardsV2 card 
 10. Infernal Ascendant — "Abandon another character: Gain 1●," the premier outlet that nets +1● per loop.
 11. Arc Disciple — "Abandon another character: Gain 2●," the same job for double the energy banked each cycle.
 12. Stargazer Adrift — "Abandon another character: Foresee 1," trades energy for sculpting the top of your deck while you loop.
-13. The Dread Sovereign — "X●, ☪, Abandon another character: Discover a character with cost X●, then materialize it," an outlet that also tutors the turn's missing piece.
+13. The Dread Sovereign — "X●, ☾, Abandon another character: Discover a character with cost X●, then materialize it," an outlet that also tutors the turn's missing piece.
 
 ## Drain Payoffs — score ⍟ off each abandon
 

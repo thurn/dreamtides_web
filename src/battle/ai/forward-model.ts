@@ -41,7 +41,7 @@ export interface AiCard {
    * Whether this character is allowed to challenge (or, on the opponent's turn,
    * block) during the current turn. Projection reads the authoritative
    * {@link BattleCardStatus.isExhausted} flag: an exhausted body cannot
-   * challenge, block, or pay ☪ costs, so a character with `isExhausted` set is
+   * challenge, block, or pay ☾ costs, so a character with `isExhausted` set is
    * `false` and an awakened body is `true`. Characters enter play exhausted and
    * in-play exhaustion is cleared during Ending (see
    * `battle_rules.md` §Exhaust and Awaken). The planner additionally sets this

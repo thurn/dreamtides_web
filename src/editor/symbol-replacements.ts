@@ -7,7 +7,7 @@ export const SYMBOL_REPLACEMENTS: ReadonlyArray<readonly [string, string]> = [
   ["\\e", "●"],
   ["\\c", "⧗"],
   ["\\p", "⍟"],
-  ["\\x", "☪"],
+  ["\\x", "☾"],
   ["\\s", "✦"],
   ["\\f", "❖"],
   ["\\d", "–"],

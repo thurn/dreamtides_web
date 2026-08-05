@@ -43,7 +43,7 @@ characters awakened, and "When you discard or erode this card, it gains reclaim
 The first thing the deck wants is an outlet — a repeatable way to convert cards
 in hand into cards in the void on demand. Evacuation Enforcer is the premier
 engine, the closest thing to a free repeatable outlet: a 1● Awakened trooper
-with "☪: Draw 2 cards, then discard 3 cards." It enters awakened so it works the
+with "☾: Draw 2 cards, then discard 3 cards." It enters awakened so it works the
 turn it lands, and each activation loots two-for-three, churning three cards into
 the void every turn. It is the central signal to be in the archetype, and it
 turns any card in your hand into raw void fuel.
@@ -68,7 +68,7 @@ you mid-game and dump a fresh hand of madness cards into the void on the way.
 For the more incidental outlets, Spiral Offering pays its discard up front — "To
 play this event, discard 2 cards" to draw 3 — so it is card advantage that
 happens to fill the void with two cards. Sunken Radiance (draw 2, discard 2,
-Reclaim 2●) loots and recurs itself. Shadowpaw is a 1● body whose "☪, Discard a
+Reclaim 2●) loots and recurs itself. Shadowpaw is a 1● body whose "☾, Discard a
 card: Erode 2" doubles a discard with two milled cards, deepening the void fast.
 Liminal Dreamer turns a stored count into a refill — it stores 1⧗ each Dawn and
 "Discard your hand: Draw one card per stored ⧗," emptying your hand into the void
@@ -80,7 +80,7 @@ deck you want to find an Evacuation Enforcer or a Curio Dealer.
 
 These are the cards that get value from the discard itself, rather than from the
 card that was discarded. Minstrel of Falling Light is the strongest: a 2● body
-with "☪, Discard an event: Draw an event" and "This character has +1✦ for each
+with "☾, Discard an event: Draw an event" and "This character has +1✦ for each
 event in your void." It loots events for free, grows as the void fills with the
 events it discards, and becomes a sizable threat in a deck doing exactly what it
 wants. Key Sifter pays the same way from the other angle — "Once per turn, when
@@ -95,7 +95,7 @@ discard a card, you may play that card from your void this turn." It triggers of
 Sorrowful Prince to Evacuation Enforcer and you can play both from the void this
 turn. Crack a Pulse of Sacrifice with Flagbearer in play and the entire
 discarded hand becomes playable. Shoreline Penitent is the smaller, self-fueling
-version — "3●, ☪, Discard a card: Draw a card" plus "When you discard a card, it
+version — "3●, ☾, Discard a card: Draw a card" plus "When you discard a card, it
 gains reclaim until end of turn" — so it is both an outlet and a payoff, handing
 reclaim to whatever it discards. Gleamharvester pays in spark and tempo: "When
 you discard a card, this character gains +2✦ until end of turn," and on
@@ -106,7 +106,7 @@ The repeatable free-discard creatures make all of this card-positive. Silent
 Gatherer returns itself from the void to hand each Dawn, so it is an unlimited
 discard target — feed it to an outlet every turn for free. Resilient Wanderer
 does the same with a 1● tax. Wandering Archivist closes the gap to points
-directly: "2●, ☪: Draw a card, then discard a card" loots, and "When you discard
+directly: "2●, ☾: Draw a card, then discard a card" loots, and "When you discard
 a card, gain 1⍟" means every discard, from any source, also drains the opponent.
 Rubble Diviner is the ▸Challenge looter — "You may pay 2● and discard a card to
 draw two cards" — pulling cards while it attacks. Stack a free-discard creature
@@ -193,7 +193,7 @@ a 3● survivor with Veil 3●, "When an ally is dissolved, materialize a 1✦ s
 figment," and "When you discard or erode this card, it gains reclaim 0●." You
 discard it to the void as setup, replay it for free, and it turns the deck's
 attrition into a growing board of figments. Sorrow Watcher and Tidewreck
-Navigator make survivor figments and draw cards, and Tidewreck Navigator's "☪,
+Navigator make survivor figments and draw cards, and Tidewreck Navigator's "☾,
 Discard a card: Materialize a 1✦ survivor figment" is itself a discard outlet
 that builds the board. Veil of the Wastes returns itself from the void to play
 whenever you materialize a survivor — a recurring body the discard deck fuels for
@@ -211,7 +211,7 @@ are inexhaustible discard fodder. Reclaim events give you repeat interaction and
 draw: Sanctum Awakened (draw 2, Reclaim 2●), Sunken Radiance (loot, Reclaim 2●),
 and Shatter the Frail (dissolve an enemy with 1✦ or less, Reclaim 1●) all come
 back from the void for a second pass. Scrap Reclaimer is the recursion engine —
-"2●, ☪, Discard a card: Return up to 2 characters with cost 2● or less from your
+"2●, ☾, Discard a card: Return up to 2 characters with cost 2● or less from your
 void to your hand" — a single outlet that loots a card and refills your hand with
 two void creatures, so the discard deck never runs out of bodies to redeploy.
 Pathwalker abandons itself to return an event from the void, and Steel
@@ -231,7 +231,7 @@ removal — "Discard a character with cost 2● or less: Dissolve an enemy with 
 is a self-contained wheel-on-a-body, discarding your hand and drawing 3 on
 ▸Materialized, and Verdant Wayfarer draws 2 and recurs from the void by banishing
 7 cards from it, a payoff the deep void enables. Soulbinder and Dreaming Obelisk
-bridge into the Abandon and Warrior loops respectively, and Harborwarden ("☪,
+bridge into the Abandon and Warrior loops respectively, and Harborwarden ("☾,
 Discard a card: Materialize a 1✦ warrior figment") is a discard outlet that
 builds a warrior board for the aggressive builds.
 

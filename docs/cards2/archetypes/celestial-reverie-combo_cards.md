@@ -29,9 +29,9 @@ A companion to [celestial-reverie-combo.md](celestial-reverie-combo.md), listing
 ## Energy engines
 
 16. Melodist of the Finale — 2● Veil "When you play a character, gain 1●," refunding a point per play to make the loop net-positive on energy.
-17. Spirit of the Greenwood — 1● Awakened "1●, ☪: Gain 1● for each allied character," a large refund on a wide loop board.
-18. Blazing Emberwing — 3● "☪: Gain 1● for each allied character," a big energy burst to restart a stalled loop.
-19. Mountainwatch Alpha — 2● "☪: Gain 1● for each allied spirit animal," the spirit-animal energy backbone.
+17. Spirit of the Greenwood — 1● Awakened "1●, ☾: Gain 1● for each allied character," a large refund on a wide loop board.
+18. Blazing Emberwing — 3● "☾: Gain 1● for each allied character," a big energy burst to restart a stalled loop.
+19. Mountainwatch Alpha — 2● "☾: Gain 1● for each allied spirit animal," the spirit-animal energy backbone.
 20. Skyborne Jellyfish — 2● "▸Dawn: Gain 1● for each allied cost-2●-or-less character," scaling energy on a flooded board.
 21. Sunshadow Eagle — 1● stores 1⧗ per spirit animal materialized, spending 3⧗ for 3● to refuel the loop.
 22. Dawnprowler Panther — 1● gains 1● on the second-and-later spirit animal each turn, turning a flurry of cheap bodies into energy.
@@ -60,7 +60,7 @@ A companion to [celestial-reverie-combo.md](celestial-reverie-combo.md), listing
 39. Call of the Lost — 3● "materialize a 1✦ awakened ember figment for each card played this turn," dropping a full attack stack after a long loop, Reclaim 2●.
 40. Field Reverent — 3● "X●: each allied character's ✦ becomes X," converting a figment stack into a lethal challenger.
 41. Spirit Bond — 7● "allied characters have +X✦ where X is the number of allied characters," turning a wide board into high-spark challengers.
-42. Mystic Runefish — 2● "5●, ☪: each allied spirit animal's ✦ becomes 7," the spirit-animal go-wide finisher.
+42. Mystic Runefish — 2● "5●, ☾: each allied spirit animal's ✦ becomes 7," the spirit-animal go-wide finisher.
 43. Spiritbound Alpha — 3● gives allied spirit animals +3✦ and Vengeful, pushing the loop's wide board through.
 44. Intermezzo Balladeer — 3● "When you play a card, gain 1⍟ for each other card played this turn," scoring a growing pile as the loop runs, no separate finisher needed.
 45. Angel of the Eclipse — 3● "When you materialize another character, gain 1⍟," dripping points on every loop replay.
@@ -81,6 +81,6 @@ A companion to [celestial-reverie-combo.md](celestial-reverie-combo.md), listing
 
 ## Spirit Animal awaken/replay support
 
-54. Verdant Pilgrim — 1● "☪: Awaken an ally," re-buying materialization-style readiness on the loop's bodies.
-55. Moonbound Wolf — 1● "☪, Return an ally to hand: Trigger a spirit animal's Dawn," adding bounce and re-fired ▸Dawn value to extend the chain.
+54. Verdant Pilgrim — 1● "☾: Awaken an ally," re-buying materialization-style readiness on the loop's bodies.
+55. Moonbound Wolf — 1● "☾, Return an ally to hand: Trigger a spirit animal's Dawn," adding bounce and re-fired ▸Dawn value to extend the chain.
 56. Lunar Hart — 1● "▸Materialized, Dawn: Gain 2●," a repeating energy source when Conduit of Resonance re-fires ▸Dawn each play.

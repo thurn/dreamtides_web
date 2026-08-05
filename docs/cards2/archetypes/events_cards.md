@@ -18,15 +18,15 @@ A companion to [events.md](events.md), listing every CardsV2 card with a specifi
 ## Event recursion and reuse
 
 11. Somber Flockmaster — on ▸Dawn, a void event with cost ≤ its ✦ gains reclaim 0● until end of turn, recurring spent removal/prevents for free.
-12. Keeper of the Lightpath — ☪ gives a void event with cost 3● or less reclaim on demand, buying back a prevent or removal when needed.
+12. Keeper of the Lightpath — ☾ gives a void event with cost 3● or less reclaim on demand, buying back a prevent or removal when needed.
 13. Whisper of the Past — 1● to give a void event reclaim until end of turn, and it loops itself back onto the deck by eroding.
 14. Dreadwood Emissary — ▸Materialized gives an event in your void reclaim until end of turn.
 15. Spirit of Smoldering Echoes — 2● to give a void event reclaim until end of turn, a repeatable recursion engine.
 16. Ashlight Caller — discard a card to give a void event reclaim until end of turn, a cheap recurring enabler.
 17. Weblight Waif — ▸Materialized returns an event from your void to hand, re-buying a key interactive spell.
 18. Pathwalker — Abandon to return an event from your void to your hand; recurs your best event on demand.
-19. Minstrel of Falling Light — ☪, discard an event: draw an event, and grows +1✦ per event in your void.
-20. Echo Technician — ☪ lets you play an event directly from your void, a repeatable recursion outlet.
+19. Minstrel of Falling Light — ☾, discard an event: draw an event, and grows +1✦ per event in your void.
+20. Echo Technician — ☾ lets you play an event directly from your void, a repeatable recursion outlet.
 21. Archive of the Forgotten — up to 2 void events with cost X● or less gain reclaim 0● this turn, recurring a pair of cheap events at once.
 22. From the Barrow — until end of turn, events in your void gain reclaim; a mass reclaim turn for the whole event suite.
 

@@ -32,7 +32,7 @@ card that was merely renamed or reworded but kept its UUID counts as *kept* (and
 is called out where it happens).
 
 **Glyph legend.** ● Energy · ✦ Spark · ⍟ Victory points · ⧗ Counters ·
-☪ Exhaust cost · ❖ Fast. Key keywords: *Reclaim* (play from void, then banish on
+☾ Exhaust cost · ❖ Fast. Key keywords: *Reclaim* (play from void, then banish on
 leaving) · *Ephemeral* (a card drawn with Ephemeral is banished at end of turn if
 unused) · *Erode N* (mill N from deck to void) · *Foresee N* (scry-and-reorder) ·
 *Offering* (play for 0● by banishing a void card) · *Veil N●* (costs the opponent
@@ -90,7 +90,7 @@ control/point identity on top of the reanimation engine.
 
 ## Caedryn, Shrouded Inquisitor
 
-**Ability:** 2●, ☪, Abandon an ally: Materialize a random character with cost 1●
+**Ability:** 2●, ☾, Abandon an ally: Materialize a random character with cost 1●
 higher from your deck.
 
 **Original signatures (5):** Harborwarden (warrior figments / abandon warriors to
@@ -226,7 +226,7 @@ into a focused discard-to-reclaim loop.
 
 ## Kael Voss, Recon Commander
 
-**Ability:** 2●, ☪, Discard a card: Materialize a 1✦ survivor figment.
+**Ability:** 2●, ☾, Discard a card: Materialize a 1✦ survivor figment.
 
 **Original signatures (5):** Ashborn Necromancer, Wasteland Tamer (each player
 abandons a non-figment), Dreadweaver, Skull Weaver, Kindred Sparks.
@@ -272,7 +272,7 @@ specifically cycle the void.
 
 ## Edran, the Invocant
 
-**Ability:** ❖ – 4●, ☪: Materialize a 1✦ outsider figment.
+**Ability:** ❖ – 4●, ☾: Materialize a 1✦ outsider figment.
 
 **Original signatures (5):** Riftwalker (Materialized: banish a card from the
 opponent's hand), Dreaming Groves (discard a chosen enemy event), Lurking Dread
@@ -298,7 +298,7 @@ fewer signatures (3) in exchange for perfect alignment.
 
 ## Zeva, the Dredger
 
-**Ability:** ❖❖ – 2●, ☪, Discard a card: An event in your void gains reclaim until
+**Ability:** ❖❖ – 2●, ☾, Discard a card: An event in your void gains reclaim until
 end of turn.
 
 **Original signatures (5):** Dreadwood Emissary (Materialized: grant a void event
@@ -323,7 +323,7 @@ event-recursion engine of the original.
 
 ## Kasane, Wearer of the Stolen Face
 
-**Ability:** 4●, ☪: Copy the next event you play this turn.
+**Ability:** 4●, ☾: Copy the next event you play this turn.
 
 **Original signatures (5):** Archive of the Forgotten (grant up to two cheap void
 events reclaim 0●), Cascade of Reflections, Arc Gate Opening (gain 4●), From the
@@ -367,7 +367,7 @@ card flow, giving Rael staying power beyond the combo turn.
 
 ## Ovanel, Lector of the Receding Rite
 
-**Ability:** 2●, ☪: If you played an event this turn, draw an event.
+**Ability:** 2●, ☾: If you played an event this turn, draw an event.
 
 **Original signatures (5):** Archive of the Forgotten, Arc Gate Opening, From the
 Barrow, Genesis Burst (double your current ●), Broadcast Array (uncounterable; ⍟
@@ -389,7 +389,7 @@ leaner four-card set is a tighter event-value-and-removal loop.
 
 ## Yveth Coravel, Scion of the Returning Tide
 
-**Ability:** 2●, ☪: Return an ally to hand. Its cost is reduced by 1●.
+**Ability:** 2●, ☾: Return an ally to hand. Its cost is reduced by 1●.
 
 **Original signatures (5):** Celestial Reverie, Ambush Operative, Featherlight
 Summoner, Skyborne Jellyfish, Mountainwatch Alpha.
@@ -414,7 +414,7 @@ useful signal that her initial signatures hit the intended mark.
 
 ## Grath, Packmaster
 
-**Ability:** 4●, ☪: Gain 1● for each allied spirit animal.
+**Ability:** 4●, ☾: Gain 1● for each allied spirit animal.
 
 **Original signatures (5):** Mountainwatch Alpha (● per spirit animal), Ethereal
 Trailblazer (Dawn: gain 1●), Skyborne Jellyfish (kept, now Cloudmantle Ray), Young
@@ -447,7 +447,7 @@ Mountainwatch Alpha, Worldsong Behemoth (Dawn: gain 1●), Oathbound Pair
 
 **Current signatures (5):** Dawnprowler Panther (extra spirit animals → 1●),
 Nightprowler Panther (Dawn/abandon → 1●; reclaim), **Celestial Reverie (kept)**,
-Mother of Flames (awakened; ☪ + bounce → awaken an ally), Lumin-Gate Seer (Veil;
+Mother of Flames (awakened; ☾ + bounce → awaken an ally), Lumin-Gate Seer (Veil;
 materialize a character → draw).
 
 **What changed:** Kept 1, removed 4, added 4 (5 → 5).
@@ -469,7 +469,7 @@ ephemeral.
 Jellyfish, Mountainwatch Alpha, Sunshadow Eagle (kept, now Vigilant Howler).
 
 **Current signatures (5):** Ethereal Courser (play a spirit animal → return self for
-0●), Moonbound Wolf (awakened; ☪ + bounce → trigger an allied spirit animal's Dawn),
+0●), Moonbound Wolf (awakened; ☾ + bounce → trigger an allied spirit animal's Dawn),
 **Vigilant Howler (kept)**, Nexus Wayfinder (≤2● characters cost you 0●), Nightprowler
 Panther.
 
@@ -485,7 +485,7 @@ condition; the current one is engineered for it.
 
 ## Gunnar Deepforge, The Hammer's Echo
 
-**Ability:** 2●, ☪: Materialize a 0✦ figment copy of the last warrior you played
+**Ability:** 2●, ☾: Materialize a 0✦ figment copy of the last warrior you played
 this turn.
 
 **Original signatures (5):** Crucible Warlord (Materialized: draw a warrior),
@@ -495,7 +495,7 @@ Reforged Automaton (draw a warrior; +✦ on non-figment warriors).
 
 **Current signatures (6):** Spellweaver (abandon a warrior → warrior figment),
 Riftwalker (abandon self → bounce), Grim Reclaimer (abandon two warriors → draw),
-Voidsire (play a warrior → warrior figment), Worldbreacher (☪: warrior figment),
+Voidsire (play a warrior → warrior figment), Worldbreacher (☾: warrior figment),
 Inspiring Templar (+1✦ per allied warrior; +1✦ to other warriors).
 
 **What changed:** Kept 0, removed 5, added 6 (5 → 6).
@@ -520,7 +520,7 @@ Aftermath Bloom (abandon a warrior → discover a bigger one), Grim Reclaimer.
 
 **Current signatures (5):** Burning Revenant (allied warrior dissolved → return a
 cheaper warrior from void), Pit Descender (abandon a warrior → materialize a cheap
-warrior from void), Worldbreacher (☪: warrior figment), Cinderblade Legionnaire
+warrior from void), Worldbreacher (☾: warrior figment), Cinderblade Legionnaire
 (vengeful; Dissolved → return a warrior from void), Vengeance Taker (Dissolved →
 dissolve a cheap enemy).
 
@@ -537,7 +537,7 @@ the draw-trigger.
 
 ## Valdren, Warhost Exemplar
 
-**Ability:** 2●, ☪: A warrior in your void gains reclaim until end of turn.
+**Ability:** 2●, ☾: A warrior in your void gains reclaim until end of turn.
 
 **Original signatures (5):** Crucible Warlord, Assault Leader, Wolfbond Chieftain
 (awakened; ● per warrior), Invoker of Myths, Flamestride Rider.
@@ -578,7 +578,7 @@ boost; no synergy package required.
 card-advantage boost; archetype-agnostic.
 
 ## Vethran, Whisperer of Wraiths
-**Ability:** 3●, X●, ☪: Discover a card with cost X●. — A repeatable on-curve
+**Ability:** 3●, X●, ☾: Discover a card with cost X●. — A repeatable on-curve
 tutor; works with any deck, so no fixed signatures.
 
 ## Seld Rakor, Standing Orders
@@ -587,15 +587,15 @@ foresee 1. — A void-fueled selection trigger that supports any void-leaning bu
 without a dedicated package.
 
 ## Ossian, the Reckoning Blade
-**Ability:** 2●, ☪, Abandon an ally with 1✦: Draw a card. — A self-contained
+**Ability:** 2●, ☾, Abandon an ally with 1✦: Draw a card. — A self-contained
 sacrifice-to-draw outlet.
 
 ## Kaleth, The Dreaming
-**Ability:** 2●, ☪: Awaken an ally. — A generic tempo enabler (unexhaust a body to
+**Ability:** 2●, ☾: Awaken an ally. — A generic tempo enabler (unexhaust a body to
 attack/block immediately).
 
 ## Calloway Flint, Cutthroat Admiral
-**Ability:** ❖❖ – 4●, ☪: Draw a card. — A fast, repeatable cantrip; archetype-
+**Ability:** ❖❖ – 4●, ☾: Draw a card. — A fast, repeatable cantrip; archetype-
 neutral.
 
 ## Senemhet, Lord of the Radiant Court
@@ -612,7 +612,7 @@ scoring; independent of your own deck's theme.
 card. — A built-in loot engine that rewards general tempo, not a curated package.
 
 ## Serenath Veyl, Cantor of the Unreal
-**Ability:** 1●, ☪: If you materialized a figment this turn, draw a card. — A
+**Ability:** 1●, ☾: If you materialized a figment this turn, draw a card. — A
 figment-payoff cantrip that slots into any figment-generating shell.
 
 ## Korrax, Iron Sovereign

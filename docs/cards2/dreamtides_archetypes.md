@@ -164,7 +164,7 @@ Soulrender erosion.
 ### Cindermarch / Shadow Soloist Combo
 Engines built on repeatedly awakening characters. Cindermarch awakens your whole
 board whenever a character enters play, going infinite with zero-energy character
-producers and ☪ abilities that net energy (Crescendo Channeler, Wolfbond
+producers and ☾ abilities that net energy (Crescendo Channeler, Wolfbond
 Chieftain); Conduit of Resonance does the same by re-triggering ▸Dawn on every
 character you play. Shadow Soloist awakens each allied character whenever you play
 an event, pairing with cheap and Offering events plus energy producers to fuel

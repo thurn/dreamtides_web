@@ -31,7 +31,7 @@ import {
  *   - the spark `✦` glyph swapped for the amber-gold sparkle mark
  *   - the fast marker `❖` (and interrupt `❖❖`) swapped for the filled
  *     lightning bolt(s) shown before the card name in the title bar
- *   - the points `⍟`, lunar `☪`, and memory `⧗` glyphs swapped for their
+ *   - the points `⍟`, lunar `☾`, and memory `⧗` glyphs swapped for their
  *     filled marks (star-circle, moon, brain)
  *   - the trigger marker `▸` rendered as authored Unicode in the surrounding
  *     font and color

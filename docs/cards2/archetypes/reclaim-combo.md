@@ -31,7 +31,7 @@ for characters and goes to the void when it is abandoned or dissolved. That puts
 it right back where you can reclaim it again.
 
 Reclaimer of Lost Paths is the one to prioritize. At 2● for a 2✦ body it carries
-the static and also reads "2●, ☪: A character in your void gains reclaim until
+the static and also reads "2●, ☾: A character in your void gains reclaim until
 end of turn," which lets it hand reclaim to a void card that does not have the
 keyword printed on it — a second way to feed the loop and a fine value play on
 its own. Titan of Forgotten Echoes is the redundant copy of the static, a 2● 1✦
@@ -138,10 +138,10 @@ void — so selection earns its slot. Door to Possibility ("Choose a value of X.
 Discover an event with cost X") and Curio Dealer ("1●, Discard a character with
 cost X●: Discover a character with cost X●") dig toward missing pieces, and
 discarding a Reclaim 0● body to Curio Dealer puts it straight into the void where
-the loop wants it. The Dread Sovereign — "X●, ☪, Abandon another character:
+the loop wants it. The Dread Sovereign — "X●, ☾, Abandon another character:
 Discover a character with cost X●, then materialize it" — is an outlet that also
 tutors, abandoning a looping body to fetch and materialize whatever the turn
-needs. Reclaimer of Lost Paths' own "2●, ☪: A character in your void gains
+needs. Reclaimer of Lost Paths' own "2●, ☾: A character in your void gains
 reclaim until end of turn" lets you turn an ordinary character in the void into a
 loop piece in a pinch.
 

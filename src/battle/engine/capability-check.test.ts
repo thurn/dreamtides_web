@@ -80,7 +80,7 @@ describe("needsManualResolution", () => {
 
     it("returns true when ▸ appears mid-text (second paragraph)", () => {
       // Real text from card #4 in cards_v2-data.json
-      const instance = makeInstance("▸Dawn: Gain 1●.\n\n4●, ☪: This character gains +1✦.", 200);
+      const instance = makeInstance("▸Dawn: Gain 1●.\n\n4●, ☾: This character gains +1✦.", 200);
       expect(needsManualResolution(instance, MODELED)).toBe(true);
     });
   });

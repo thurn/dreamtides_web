@@ -46,7 +46,7 @@ even though its cards may support several strategies.
 
 9. **Outsider Tempo (approximately 6.3%)** — Uses Phasing, positional movement, and return-to-hand effects to score safely while disrupting the opponent and generating cards.
 
-10. **Event/Awaken Warriors (approximately 6%)** — Combines Warrior bodies with event-driven awakening, draw-discard effects, and reusable ☪ abilities to produce repeated value and explosive turns.
+10. **Event/Awaken Warriors (approximately 6%)** — Combines Warrior bodies with event-driven awakening, draw-discard effects, and reusable ☾ abilities to produce repeated value and explosive turns.
 
 ## Interpretation
 

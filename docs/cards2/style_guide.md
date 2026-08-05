@@ -23,7 +23,7 @@ concept out only when no symbol applies.
 | `✦` | Spark |
 | `⧗` | Counters (stored on a card) |
 | `⍟` | Victory points |
-| `☪` | Exhaust — an exhaust cost, or the act of exhausting |
+| `☾` | Exhaust — an exhaust cost, or the act of exhausting |
 | `❖` | Fast (timing marker on an activated ability) |
 | `❖❖` | Interrupt (timing marker on an activated ability) |
 | `–` | Marker preceding a keyword such as `Reclaim` or `Support` |
@@ -62,7 +62,7 @@ single blank line. Within the TOML this is a multi-line string:
 rendered-text = '''
 ▸Dawn: Gain 1●.
 
-4●, ☪: This character gains +1✦.'''
+4●, ☾: This character gains +1✦.'''
 ```
 
 A single ability that runs across two sentences keeps both sentences in one
@@ -143,7 +143,7 @@ The first word of every ability paragraph is capitalized, and so is the first
 word of an effect that follows a trigger or cost colon:
 
 - `▸Dawn: Gain 1●.`
-- `2●, ☪: Draw a card.`
+- `2●, ☾: Draw a card.`
 
 A word mid-sentence stays lowercase, including the second clause after a comma or
 `then`:
@@ -230,8 +230,8 @@ An activated ability is written `Cost: Effect.` — the cost, a colon, a space,
 then the effect as a capitalized sentence:
 
 ```
-2●, ☪: Draw a card.
-☪: Store 1⧗.
+2●, ☾: Draw a card.
+☾: Store 1⧗.
 Abandon this character: Return an event from your void to your hand.
 ```
 
@@ -240,14 +240,14 @@ Abandon this character: Return an event from your void to your hand.
 Costs are listed in a fixed order, comma-separated:
 
 1. **Symbolic costs first**, energy before exhaust: energy `N●`, then exhaust
-   `☪`, then a counter cost `N⧗`.
+   `☾`, then a counter cost `N⧗`.
 2. **Word costs after the symbols**, with the first word capitalized — for
    example `Abandon a character`, `Discard a card`.
 
 ```
-4●, ☪: This character gains +1✦.
-2●, ☪, Discard a card: Return up to 2 ≤2● cost characters from your void to your hand.
-☪, Discard an event: Draw an event.
+4●, ☾: This character gains +1✦.
+2●, ☾, Discard a card: Return up to 2 ≤2● cost characters from your void to your hand.
+☾, Discard an event: Draw an event.
 ```
 
 ### 5.3 Fast and Interrupt timing

@@ -43,7 +43,7 @@ reads "✦" rather than "spark". The symbols are:
 - **●** — Energy
 - **⧗** — Counters
 - **⍟** — Victory points
-- **☪** — Exhaust (an exhaust cost, or the act of exhausting)
+- **☾** — Exhaust (an exhaust cost, or the act of exhausting)
 - **✦** — Spark
 - **❖** — Fast
 - **❖❖** — Interrupt
@@ -75,7 +75,7 @@ character has a spark value (✦) used during the Challenge phase, and a subtype
 reference. Subtypes are an open-ended set of tribal tags. Characters can have
 triggered, activated, and static abilities. A character entering play is
 **exhausted** unless it is **awakened**, so it cannot challenge, block, or pay
-☪ costs on the turn it is played. Characters remain in play until removed by an
+☾ costs on the turn it is played. Characters remain in play until removed by an
 effect (Dissolve, Banish, or Abandon) or dissolved in a challenge. Characters
 may be marked Fast (❖) or Interrupt (❖❖), controlling when they can be played
 outside the Day phase.
@@ -264,18 +264,18 @@ player's first turn skips the Draw phase.
 ## Exhaust and Awaken
 
 The **exhausted** status marks a character that cannot challenge, block, or
-activate abilities with ☪ costs. The status persists until the current turn's
+activate abilities with ☾ costs. The status persists until the current turn's
 Ending phase, when it is cleared from every character in play.
 
 - Characters enter play exhausted and therefore cannot challenge, block, or pay
-  ☪ costs on the turn they are played.
+  ☾ costs on the turn they are played.
 - An **awakened** character enters play without the exhausted status. Awaken can
   also be applied as an effect — for example "2●: Awaken a character you
   control" clears the exhausted status, allowing that character to challenge,
-  block, and pay ☪ costs.
-- Paying a ☪ cost exhausts that character.
+  block, and pay ☾ costs.
+- Paying a ☾ cost exhausts that character.
 
-Front-rank characters cannot activate abilities with ☪ costs. Because an
+Front-rank characters cannot activate abilities with ☾ costs. Because an
 exhausted character cannot be moved to the front rank, exhausting a back-rank
 character keeps it from challenging or blocking until it awakens.
 
@@ -525,7 +525,7 @@ directly into play satisfies only ▸Materialized. Combined triggers such as
 responded to; they resolve immediately.
 
 **Activated abilities** — Abilities with a cost the controller chooses to pay,
-written as "Cost: Effect" (for example "2●: Draw a card" or "1⧗, ☪: Draw a
+written as "Cost: Effect" (for example "2●: Draw a card" or "1⧗, ☾: Draw a
 card"). They can be used any number of times per turn unless "Once per turn"
 appears. Activated abilities use the same timing categories as cards: standard
 abilities are Day-only while the stack is empty, Fast abilities follow Fast
@@ -545,7 +545,7 @@ Cards use counters (⧗) to track internal state.
 - A card can **store** counters to increase its count, as in "When you discard a
   card, store 1⧗."
 - Counters are local to a card; each card has its own counter value.
-- Stored counters can be spent to pay costs, as in "1⧗, ☪: Draw a card", or
+- Stored counters can be spent to pay costs, as in "1⧗, ☾: Draw a card", or
   referenced by abilities, as in "Supported characters have +1✦ for each stored ⧗."
 - A card's counters reset to 0 when it leaves play.
 

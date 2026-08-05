@@ -120,7 +120,7 @@ describe("RichText", () => {
           {
             term: "Exhaust Cost",
             definition:
-              "You may exhaust (☪) this character to activate this ability.",
+              "You may exhaust (☾) this character to activate this ability.",
             symbol: "exhaust",
             termPresentation: "symbolOnly",
           },
@@ -129,7 +129,7 @@ describe("RichText", () => {
     );
 
     expect(markup.match(/bxf bx-moon/g)).toHaveLength(2);
-    expect(markup).not.toContain("☪");
+    expect(markup).not.toContain("☾");
   });
   it("renders the points symbol inside glossary definitions as a Boxicon", () => {
     const markup = renderToStaticMarkup(

@@ -61,7 +61,7 @@ id = "9b9c2743-75b3-499d-b5fb-c3429c92d420"
 rendered-text = '''
 ▸Dawn: Gain 1●.
 
-4●, ☪: This character gains +1✦.'''
+4●, ☾: This character gains +1✦.'''
 energy-cost = 1
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -139,7 +139,7 @@ art = { x = 0.21, y = 0.369, scale = 1.17 }
 name = "Chronicle Claimer"
 mtg-name = "Currency Converter"
 id = "68978d92-aa8b-4873-bb0b-6e52f12b0849"
-rendered-text = "❖ – ☪: Draw a card, then discard a card."
+rendered-text = "❖ – ☾: Draw a card, then discard a card."
 energy-cost = 2
 card-type = "Character"
 subtype = "Hacker"
@@ -157,7 +157,7 @@ name = "Radiants' Captain"
 mtg-name = "Currency Converter"
 id = "724a1362-3f0f-4b77-b14e-22c0b877349a"
 rendered-text = """
-2●, ☪: Draw a card, then discard a card.
+2●, ☾: Draw a card, then discard a card.
 
 Once per turn, when you discard a card, materialize a 2✦ shadow figment."""
 energy-cost = 2
@@ -375,7 +375,7 @@ id = "738a5af0-f848-4d48-bceb-9a43c9b11066"
 rendered-text = '''
 Cards you reclaim are not banished when they leave play.
 
-2●, ☪: Choose a character in your void to gain reclaim.'''
+2●, ☾: Choose a character in your void to gain reclaim.'''
 energy-cost = 2
 card-type = "Character"
 subtype = "Suvivor"
@@ -435,7 +435,7 @@ id = "975f49d3-213a-43fc-8079-5fe40f126a7b"
 rendered-text = '''
 Awakened
 
-2●, ☪, Discard a card: Return up to two ≤2● cost characters from your void to your hand.'''
+2●, ☾, Discard a card: Return up to two ≤2● cost characters from your void to your hand.'''
 energy-cost = 0
 card-type = "Character"
 subtype = "Entity"
@@ -663,7 +663,7 @@ id = "f4082c01-fdc8-4583-afdb-76bac980b3bf"
 rendered-text = """
 When you materialize a figment, store 1⧗.
 
-1⧗, ☪: Draw a card."""
+1⧗, ☾: Draw a card."""
 energy-cost = 2
 card-type = "Character"
 subtype = "Warrior"
@@ -816,7 +816,7 @@ name = "Desolation's Edge"
 mtg-name = "Ratchet Bomb"
 id = "8855e20c-e23f-4499-a5e8-a7a46ff81d2b"
 rendered-text = """
-☪: Store 1⧗.
+☾: Store 1⧗.
 
 Abandon this character: Dissolve each character with cost less than or equal to the stored ⧗."""
 energy-cost = 2
@@ -892,7 +892,7 @@ id = "c8579b20-95ff-4b1d-b4c6-6bd049fc4760"
 rendered-text = '''
 Support – Supported spirit animals have +2✦.
 
-☪: Gain 1● for each spirit animal you control.'''
+☾: Gain 1● for each spirit animal you control.'''
 energy-cost = 3
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -913,7 +913,7 @@ id = "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6"
 rendered-text = """
 Support – Supported spirit animals have +1✦.
 
-2●, ☪: Draw a spirit animal."""
+2●, ☾: Draw a spirit animal."""
 energy-cost = 2
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -973,7 +973,7 @@ art = { x = 0.4, y = 1, scale = 1.17 }
 name = "The Dread Sovereign"
 mtg-name = "Fiend Artisan"
 id = "648237c5-ceff-4a28-aaf8-4aa099eae80d"
-rendered-text = "X●, ☪, Abandon another character: Discover a character with cost X●, then materialize it."
+rendered-text = "X●, ☾, Abandon another character: Discover a character with cost X●, then materialize it."
 energy-cost = 2
 card-type = "Character"
 subtype = "Ancient"
@@ -1760,7 +1760,7 @@ name = "Flameforged"
 mtg-name = "Rielle, the Everwise"
 id = "8896c178-757e-4775-b117-a4357ebfe30f"
 rendered-text = """
-☪, Discard an event: Draw an event.
+☾, Discard an event: Draw an event.
 
 This character has +1✦ for each event in your void."""
 energy-cost = 2
@@ -1897,7 +1897,7 @@ id = "5a27e236-86d7-442f-81d2-fb29a2b7f12a"
 rendered-text = """
 Awakened
 
-☪: Materialize two 1✦ ember figments with awakened. Abandon them at end of turn."""
+☾: Materialize two 1✦ ember figments with awakened. Abandon them at end of turn."""
 energy-cost = 2
 card-type = "Character"
 subtype = "Visitor"
@@ -1915,7 +1915,7 @@ art = { x = -0.042, y = 0.897, scale = 1.07 }
 name = "Keeper of the Lightpath"
 mtg-name = "Chandra, Acolyte of Flame"
 id = "3a4ee059-4b6a-4a85-b3b8-a472834ea843"
-rendered-text = "☪: Choose a ≤3● cost event in your void to gain reclaim."
+rendered-text = "☾: Choose a ≤3● cost event in your void to gain reclaim."
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -1989,7 +1989,7 @@ id = "7992dbb5-ca45-4066-aca3-ff1d6d87619e"
 rendered-text = """
 Awakened
 
-☪, Return a character you control to hand: Trigger the 'Dawn' ability of a spirit animal you control."""
+☾, Return a character you control to hand: Trigger the 'Dawn' ability of a spirit animal you control."""
 energy-cost = 1
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -2024,7 +2024,7 @@ art = { x = 0, y = -0.197, scale = 1.87 }
 name = "Worldbreacher"
 mtg-name = "Retrofitter Foundry"
 id = "8c117d3f-09af-4312-9897-694a76bd23c6"
-rendered-text = "☪: Materialize a 1✦ warrior figment."
+rendered-text = "☾: Materialize a 1✦ warrior figment."
 energy-cost = 1
 card-type = "Character"
 subtype = "Warrior"
@@ -2511,9 +2511,9 @@ name = "Duneguard Captain"
 mtg-name = "Cryptbreaker"
 id = "16f4962d-2950-4360-8f55-bc47428480ef"
 rendered-text = """
-☪: Materialize a 1✦ survivor figment.
+☾: Materialize a 1✦ survivor figment.
 
-☪: Draw a card for each 3 survivors you control."""
+☾: Draw a card for each 3 survivors you control."""
 energy-cost = 1
 card-type = "Character"
 subtype = "Survivor"
@@ -2532,9 +2532,9 @@ name = "Tidewreck Navigator"
 mtg-name = "Cryptbreaker"
 id = "34ea77a8-66e4-49b8-a934-a9d95cb74376"
 rendered-text = """
-☪, Discard a card: Materialize a 1✦ survivor figment.
+☾, Discard a card: Materialize a 1✦ survivor figment.
 
-☪, Abandon a survivor: Return a survivor from your void to your hand."""
+☾, Abandon a survivor: Return a survivor from your void to your hand."""
 energy-cost = 1
 card-type = "Character"
 subtype = "Survivor"
@@ -2781,7 +2781,7 @@ art = { x = 0, y = -0.617, scale = 1.91 }
 name = "Blood Moon Triad"
 mtg-name = "Priest of Titania"
 id = "eed92573-8052-494c-adae-9838de5375a1"
-rendered-text = "☪: Gain 1● for each spirit animal you control."
+rendered-text = "☾: Gain 1● for each spirit animal you control."
 energy-cost = 2
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -2877,7 +2877,7 @@ id = "0458658d-7e02-4286-9249-93674d16620b"
 rendered-text = """
 ▸Dawn: Gain 1●.
 
-☪, Abandon a character: Gain 1●."""
+☾, Abandon a character: Gain 1●."""
 energy-cost = 1
 card-type = "Character"
 subtype = "Ancient"
@@ -2931,7 +2931,7 @@ art = { x = -0.378, y = 1, scale = 1.27 }
 name = "Phantom Angler"
 mtg-name = "Lurrus of the Dream-Den"
 id = "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e"
-rendered-text = "☪: Choose a ≤2● cost character in your void to gain reclaim."
+rendered-text = "☾: Choose a ≤2● cost character in your void to gain reclaim."
 energy-cost = 2
 card-type = "Character"
 subtype = "Ancient"
@@ -3160,7 +3160,7 @@ id = "26a05558-4692-43d2-ae6c-a6eb385a6d22"
 rendered-text = """
 When a character you control gains ✦, it gains an additional +1✦.
 
-2●, ☪: Give a character you control +1✦."""
+2●, ☾: Give a character you control +1✦."""
 energy-cost = 1
 card-type = "Character"
 subtype = "Warrior"
@@ -3200,7 +3200,7 @@ name = "Threshold Seeker"
 mtg-name = "Conspiracy Theorist"
 id = "d755cfa4-d7c0-46d8-a836-909c45c68890"
 rendered-text = '''
-2●, ☪, Discard a card: Draw a card.
+2●, ☾, Discard a card: Draw a card.
 
 When you discard a card, it gains reclaim.'''
 energy-cost = 2
@@ -3240,7 +3240,7 @@ id = "d6ec65a2-d61e-4617-bdd0-75d5573c063d"
 rendered-text = """
 When a warrior you control is dissolved, this character gains +1✦.
 
-☪, Abandon a warrior: Gain 1⍟."""
+☾, Abandon a warrior: Gain 1⍟."""
 energy-cost = 2
 card-type = "Character"
 subtype = "Warrior"
@@ -3507,7 +3507,7 @@ art = { x = 0, y = -0.29, scale = 1.77 }
 name = "Veil Crosser"
 mtg-name = "Wight of the Reliquary"
 id = "f10a9ba9-f5eb-4011-9426-a89c5de3b550"
-rendered-text = "☪, Abandon another character: Discover a ≤2● cost character, then materialize it."
+rendered-text = "☾, Abandon another character: Discover a ≤2● cost character, then materialize it."
 energy-cost = 2
 card-type = "Character"
 subtype = "Survivor"
@@ -3779,7 +3779,7 @@ art = { x = 0, y = -0.346, scale = 1.57 }
 name = "Vanguard Charger"
 mtg-name = "Michiko's Reign of Truth // Portrait of Michiko"
 id = "d6e8842f-c0a4-4b4c-93bd-377cfae60894"
-rendered-text = "❖ – ☪: Give a character you control +1✦ for each warrior you control until end of turn."
+rendered-text = "❖ – ☾: Give a character you control +1✦ for each warrior you control until end of turn."
 energy-cost = 3
 card-type = "Character"
 subtype = "Warrior"
@@ -4112,7 +4112,7 @@ id = "867b98cf-171b-497b-9252-9af5dcf70726"
 rendered-text = """
 ▸Dawn: Materialize a 1✦ warrior figment.
 
-2●, ☪: Gain 1● for each warrior you control."""
+2●, ☾: Gain 1● for each warrior you control."""
 energy-cost = 4
 card-type = "Character"
 subtype = "Warrior"
@@ -4219,7 +4219,7 @@ art = { x = 0, y = 0.5, scale = 1.17 }
 name = "Soul Harvester"
 mtg-name = "Priest of Forgotten Gods"
 id = "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034"
-rendered-text = "2●, ☪, Abandon two other characters: This character gains +2✦. Draw 2 cards."
+rendered-text = "2●, ☾, Abandon two other characters: This character gains +2✦. Draw 2 cards."
 energy-cost = 3
 card-type = "Character"
 subtype = "Ancient"
@@ -4502,7 +4502,7 @@ name = "Dustway Ringleader"
 mtg-name = "Kaito Shizuki"
 id = "8e003d04-e489-4c55-9c72-fc5612909d07"
 rendered-text = '''
-3●, ☪: Materialize a 1✦ outsider figment.
+3●, ☾: Materialize a 1✦ outsider figment.
 
 When an outsider you control scores ⍟, draw a card and gain 2⍟.'''
 energy-cost = 3
@@ -4560,7 +4560,7 @@ id = "99ca2635-a91a-46ba-a9d3-4d2581c354f3"
 rendered-text = """
 Awakened
 
-1●, ☪: Gain 1● for each character you control."""
+1●, ☾: Gain 1● for each character you control."""
 energy-cost = 1
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -4578,7 +4578,7 @@ art = { x = 0.059, y = 0, scale = 1.67 }
 name = "Sworn Defender"
 mtg-name = "Giver of Runes"
 id = "2708c635-9332-4cfb-b43d-889ba2e329b6"
-rendered-text = "❖❖ – ☪: Another character you control cannot be targeted by effects this turn."
+rendered-text = "❖❖ – ☾: Another character you control cannot be targeted by effects this turn."
 energy-cost = 1
 card-type = "Character"
 subtype = "Warrior"
@@ -4632,7 +4632,7 @@ art = { x = 0.546, y = 0.608, scale = 1.17 }
 name = "Sunshadow Eagle"
 mtg-name = "Allosaurus Shepherd"
 id = "edb479be-68a5-45bc-bd19-2602156edb57"
-rendered-text = "5●, ☪: The base ✦ of each spirit animal you control becomes 7 until end of turn."
+rendered-text = "5●, ☾: The base ✦ of each spirit animal you control becomes 7 until end of turn."
 energy-cost = 2
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -4857,7 +4857,7 @@ art = { x = 0, y = -0.266, scale = 2.57 }
 name = "Simulacra"
 mtg-name = "Saheeli, Sublime Artificer"
 id = "ccff822e-e2ae-4d38-9720-6df289dbe4cd"
-rendered-text = "2●, ☪: Materialize a figment copy of a character you control until end of turn."
+rendered-text = "2●, ☾: Materialize a figment copy of a character you control until end of turn."
 energy-cost = 3
 card-type = "Character"
 subtype = "Synth"
@@ -4948,7 +4948,7 @@ art = { x = -0.21, y = 0, scale = 1.57 }
 name = "Blazing Emberwing"
 mtg-name = "Circle of Dreams Druid"
 id = "18ff6a45-148a-40bf-85ae-4a51f32f406a"
-rendered-text = "☪: Gain 1● for each character you control."
+rendered-text = "☾: Gain 1● for each character you control."
 energy-cost = 3
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -5188,7 +5188,7 @@ card-number = 277
 name = "Grief Shaman"
 mtg-name = "Witch's Oven"
 id = "85251f03-c873-46d8-81be-ab421c901a53"
-rendered-text = "☪, Abandon a character: Materialize a 2✦ shadow figment."
+rendered-text = "☾, Abandon a character: Materialize a 2✦ shadow figment."
 energy-cost = 1
 card-type = "Character"
 subtype = "Mage"
@@ -5343,7 +5343,7 @@ art = { x = -0.168, y = 0.032, scale = 1.17 }
 name = "Prophet of the Consumed"
 mtg-name = "Goblin Welder"
 id = "8a5d7d67-91c9-41c4-b22e-8287954efa09"
-rendered-text = "☪, Abandon a warrior: Materialize a warrior from your void."
+rendered-text = "☾, Abandon a warrior: Materialize a warrior from your void."
 energy-cost = 2
 card-type = "Character"
 subtype = "Warrior"
@@ -5434,7 +5434,7 @@ id = "cd3d8e4a-618e-4c2f-be60-0363b81887f1"
 rendered-text = """
 ▸Materialized: Erode 4.
 
-☪: You may play an event from your void."""
+☾: You may play an event from your void."""
 energy-cost = 2
 card-type = "Character"
 subtype = "Tinkerer"
@@ -5580,7 +5580,7 @@ art = { x = 0.029, y = 0, scale = 1.47 }
 name = "Memory Tracer"
 mtg-name = "Six"
 id = "db4618f6-121b-4c97-98d3-c29849c5824e"
-rendered-text = "☪: Choose a card in your void to gain reclaim."
+rendered-text = "☾: Choose a card in your void to gain reclaim."
 energy-cost = 3
 card-type = "Character"
 subtype = "Child"
@@ -5672,7 +5672,7 @@ art = { x = 0.168, y = 0.032, scale = 1.17 }
 name = "Thief of Memory"
 mtg-name = "Agatha's Soul Cauldron"
 id = "e72245f2-c153-4e79-ba8e-956d18202b48"
-rendered-text = "☪: Banish a character from a player's void. This character gains the abilities of that character."
+rendered-text = "☾: Banish a character from a player's void. This character gains the abilities of that character."
 energy-cost = 3
 card-type = "Character"
 subtype = "Tinkerer"
@@ -5862,7 +5862,7 @@ id = "1dc8f23e-58bd-47e5-9510-b48315fba1df"
 rendered-text = '''
 Awakened, Reclaim 1●
 
-☪: Awaken a character you control.'''
+☾: Awaken a character you control.'''
 energy-cost = 3
 card-type = "Character"
 subtype = "Explorer"
@@ -5934,7 +5934,7 @@ art = { x = -0.198, y = -0.71, scale = 2.27 }
 name = "Underroot Diviner"
 mtg-name = "Grim Lavamancer"
 id = "6fa9c440-3912-4b1e-868c-840ae772fe1c"
-rendered-text = "☪, Banish 3 cards from your void: Draw a card."
+rendered-text = "☾, Banish 3 cards from your void: Draw a card."
 energy-cost = 1
 card-type = "Character"
 subtype = "Visitor"
@@ -5976,7 +5976,7 @@ id = "017a7b4b-3ccf-4635-9956-28a72b22274e"
 rendered-text = """
 This character has +1✦ for each ≤2● cost character in your void.
 
-☪, Discard a card: Draw a ≤2● cost character."""
+☾, Discard a card: Draw a ≤2● cost character."""
 energy-cost = 2
 card-type = "Character"
 subtype = "Monster"
@@ -5994,7 +5994,7 @@ art = { x = -0.24, y = 0.28, scale = 1.37 }
 name = "Flesh Cultivator"
 mtg-name = "Knight of the Reliquary"
 id = "7977748d-02c1-4702-ba68-5c49f7f0759b"
-rendered-text = "☪, Abandon a ≤2● cost character: Materialize a random ≤2● cost character from your deck. This character gains +1✦."
+rendered-text = "☾, Abandon a ≤2● cost character: Materialize a random ≤2● cost character from your deck. This character gains +1✦."
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -6071,7 +6071,7 @@ art = { x = 0, y = -0.237, scale = 1.87 }
 name = "Empyreal Light"
 mtg-name = "Quirion Ranger"
 id = "a36898f6-707e-4b28-89dc-ec896f484203"
-rendered-text = "☪: Awaken a character you control."
+rendered-text = "☾: Awaken a character you control."
 energy-cost = 1
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -6112,7 +6112,7 @@ id = "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b"
 rendered-text = """
 1●: Return a ≤2● cost character from your void to your hand.
 
-1●, ☪, Abandon a character: Draw a card."""
+1●, ☾, Abandon a character: Draw a card."""
 energy-cost = 2
 card-type = "Character"
 subtype = "Visitor"
@@ -6170,9 +6170,9 @@ name = "Ash Harbinger"
 mtg-name = "Asmoranomardicadaistinaculdacar"
 id = "956aaeb1-5280-4294-bf80-73079f35c5f6"
 rendered-text = """
-☪, Discard a card: Materialize a 1✦ warrior figment.
+☾, Discard a card: Materialize a 1✦ warrior figment.
 
-☪, Abandon 2 warrior figments: Dissolve a ≤4✦ enemy."""
+☾, Abandon 2 warrior figments: Dissolve a ≤4✦ enemy."""
 energy-cost = 2
 card-type = "Character"
 subtype = "Ancient"
@@ -6441,7 +6441,7 @@ name = "Chaos Crasher"
 mtg-name = "The Underworld Cookbook"
 id = "ed4d5342-0690-40b7-ab48-6b76035466f2"
 rendered-text = """
-☪, Discard a card: Erode 2.
+☾, Discard a card: Erode 2.
 
 4●, Abandon this character: Return a character from your void to your hand."""
 energy-cost = 1
@@ -6874,7 +6874,7 @@ card-number = 366
 name = "Weaver of Rhapsody"
 mtg-name = "Loran of the Third Path"
 id = "31ecf933-c897-41a5-ab94-822ea65898d8"
-rendered-text = "☪: Each player draws two cards."
+rendered-text = "☾: Each player draws two cards."
 energy-cost = 2
 card-type = "Character"
 subtype = "Musician"
@@ -6952,7 +6952,7 @@ card-number = 370
 name = "Lumineth"
 mtg-name = "Fauna Shaman"
 id = "94818862-2875-4ee1-8f72-7c0cdc624202"
-rendered-text = "☪, Discard a character: Discover a character with cost 1● higher."
+rendered-text = "☾, Discard a character: Discover a character with cost 1● higher."
 energy-cost = 2
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -6970,7 +6970,7 @@ art = { x = 0.252, y = 1, scale = 1.17 }
 name = "Bloodbroker"
 mtg-name = "Oswald Fiddlebender"
 id = "a7820b34-9fdc-46cc-8357-53c8caa056b1"
-rendered-text = "☪, Abandon a warrior: Discover a warrior with cost 1● higher and materialize it."
+rendered-text = "☾, Abandon a warrior: Discover a warrior with cost 1● higher and materialize it."
 energy-cost = 2
 card-type = "Character"
 subtype = "Tinkerer"
@@ -7215,7 +7215,7 @@ card-number = 384
 name = "Lantern Keeper"
 mtg-name = "Jace, Vryn's Prodigy // Jace, Telepath Unbound"
 id = "e26e0ac8-d6c9-4b0c-8672-4f73651f2586"
-rendered-text = "☪, Discard a card: Draw a card."
+rendered-text = "☾, Discard a card: Draw a card."
 energy-cost = 1
 card-type = "Character"
 subtype = "Visitor"
@@ -7272,7 +7272,7 @@ id = "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d"
 rendered-text = """
 Awakened
 
-☪: Draw 2 cards, then discard 3 cards."""
+☾: Draw 2 cards, then discard 3 cards."""
 energy-cost = 1
 card-type = "Character"
 subtype = "Warrior"
@@ -7451,7 +7451,7 @@ id = "d8c90a33-a581-469a-9fd3-9a80d1cc5315"
 rendered-text = """
 ▸Materialized: Erode 3.
 
-5●, ☪, Abandon this character: Return all ≤2● cost characters from your void to play."""
+5●, ☾, Abandon this character: Return all ≤2● cost characters from your void to play."""
 energy-cost = 3
 card-type = "Character"
 subtype = "Ancient"
@@ -7772,7 +7772,7 @@ id = "81074582-dfb3-497c-8c04-f97a24d6b1d4"
 rendered-text = """
 ▸Materialized: Erode 3.
 
-☪, Abandon a warrior: Materialize a ≤2● cost warrior from your void."""
+☾, Abandon a warrior: Materialize a ≤2● cost warrior from your void."""
 energy-cost = 2
 card-type = "Character"
 subtype = "Visitor"
@@ -8075,7 +8075,7 @@ name = "Dawnhorn Elder"
 mtg-name = "Joraga Treespeaker"
 id = "691883df-63d8-4664-a1fe-d5f3b5becd11"
 rendered-text = """
-2●, ☪: Store 1⧗.
+2●, ☾: Store 1⧗.
 
 ▸Dawn: Gain 1● for each stored ⧗."""
 energy-cost = 1
@@ -8522,7 +8522,7 @@ id = "ccbefadc-aab8-4f8c-a705-07bd70c91731"
 rendered-text = """
 ▸Dawn: Store 1⧗.
 
-❖ – ☪: Materialize a ≤X● cost character from your hand, where X is the stored ⧗."""
+❖ – ☾: Materialize a ≤X● cost character from your hand, where X is the stored ⧗."""
 energy-cost = 1
 card-type = "Character"
 subtype = "Synth"
@@ -8669,7 +8669,7 @@ name = "Mnemonic Operator"
 mtg-name = "Glint-Horn Buccaneer"
 id = "faadc87f-98fe-4a58-b1a9-a7c0cff70e08"
 rendered-text = """
-2●, ☪: Draw a card, then discard a card.
+2●, ☾: Draw a card, then discard a card.
 
 When you discard a card, gain 1⍟."""
 energy-cost = 3
@@ -9028,7 +9028,7 @@ id = "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c"
 rendered-text = """
 Awakened
 
-☪: Rematerialize a character you control. This character gains +1✦."""
+☾: Rematerialize a character you control. This character gains +1✦."""
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -9102,7 +9102,7 @@ art = { x = 0, y = -0.142, scale = 1.47 }
 name = "Gilded Catalyst"
 mtg-name = "Diamond Lion"
 id = "0bddeb19-ff49-4a77-bc06-955377ba3ed1"
-rendered-text = "☪, Discard your hand, abandon this character: Gain 3●."
+rendered-text = "☾, Discard your hand, abandon this character: Gain 3●."
 energy-cost = 1
 card-type = "Character"
 subtype = "Warrior"
@@ -9123,7 +9123,7 @@ id = "be6a2712-cfe3-4d61-b62c-fab8990786a1"
 rendered-text = """
 Awakened
 
-☪: Gain 1● for each warrior you control."""
+☾: Gain 1● for each warrior you control."""
 energy-cost = 1
 card-type = "Character"
 subtype = "Visitor"

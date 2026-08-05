@@ -150,7 +150,7 @@ mechanics rarely survive intact; map the *function*, not the wording.
 | Madness ("cast when discarded") | "When you discard this card, it gains reclaim" |
 | Summoning sickness | Exhausted (characters enter exhausted unless Awakened) |
 | Untap / vigilance | Awaken (clears exhausted) |
-| Tap ability ({T}) | ☪ exhaust cost |
+| Tap ability ({T}) | ☾ exhaust cost |
 | Hexproof / ward | Veil N● (opponent pays N● extra to target) |
 | Counterspell | Prevent (always an Interrupt) |
 | Mill | Erode (top N of deck → void); empty deck → Fatigue |
@@ -216,7 +216,7 @@ real card text. Examples already adapted in `dreamtides_archetypes.md`:
   Dynamo).
 - **Cindermarch / Shadow Soloist (Untap):** awakening replaces untapping.
   Cindermarch awakens the board on each materialize; Shadow Soloist awakens it on
-  each event. Net-energy ☪ abilities + free producers drive the loop.
+  each event. Net-energy ☾ abilities + free producers drive the loop.
 - **Celestial Reverie (Glimpse):** "when you play a character, draw a card" +
   self-bouncing bodies made free (Nexus Wayfinder, Heavenward Penitent) +
   energy (Melodist of the Finale) → draw/energy loop; finish on Worlds Await
@@ -228,7 +228,7 @@ real card text. Examples already adapted in `dreamtides_archetypes.md`:
   and the source `archetypes.md`: a short framing paragraph per archetype,
   concrete card names woven into prose, overlap noted across archetypes.
 - Use Dreamtides symbols and notation per `docs/cards2/style_guide.md`: `●`,
-  `✦`, `⧗`, `⍟`, `☪`, `❖`, glued to their numbers (`1●`, `+2✦`).
+  `✦`, `⧗`, `⍟`, `☾`, `❖`, glued to their numbers (`1●`, `+2✦`).
 - Refer to Dreamtides card names, never MTG names, in the adapted prose. (The
   `mtg-name` linkage lives in the data, not the writeup.)
 - **Documentation describes the current system.** Do not write what the system

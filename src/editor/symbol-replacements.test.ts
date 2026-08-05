@@ -10,7 +10,7 @@ describe("applySymbolReplacements", () => {
 
   it("replaces every supported sequence", () => {
     const result = applySymbolReplacements("\\e\\c\\p\\x\\s\\f\\d\\t", 16);
-    expect(result.value).toBe("●⧗⍟☪✦❖–▸");
+    expect(result.value).toBe("●⧗⍟☾✦❖–▸");
   });
 
   it("replaces sequences embedded in surrounding text", () => {

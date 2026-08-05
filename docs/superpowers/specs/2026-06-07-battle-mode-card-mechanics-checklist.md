@@ -10,7 +10,7 @@ support, derived from a survey of the card pool.
 
 **Counting method:** frequencies are occurrence counts of the symbol/phrase across all
 `rendered-text` fields, computed with UTF-8-correct regex (Python `re`). Multi-byte symbols
-(● ⧗ ⍟ ☪ ✦ ❖ – ▸ ≤ ≥) are mis-counted by byte-oriented `grep -o`; the numbers below are the
+(● ⧗ ⍟ ☾ ✦ ❖ – ▸ ≤ ≥) are mis-counted by byte-oriented `grep -o`; the numbers below are the
 corrected values. A count is "occurrences", which can exceed the number of distinct cards
 (one card may use a mechanic twice). Where useful, distinct-card counts are noted.
 
@@ -30,10 +30,10 @@ mechanics must be surfaced through a manual tool the player drives.
 ---
 
 ## Symbol legend (for reference)
-● energy · ⧗ counters · ⍟ victory points · ☪ exhaust · ✦ spark · ❖ fast · ❖❖ interrupt ·
+● energy · ⧗ counters · ⍟ victory points · ☾ exhaust · ✦ spark · ❖ fast · ❖❖ interrupt ·
 – keyword marker · ▸ named-trigger marker · ≤ at-most · ≥ at-least
 
-Raw symbol occurrence counts (cards_v2): ● 285 · ✦ 142 · ▸ 157 · ☪ 65 · ⍟ 45 · ⧗ 38 ·
+Raw symbol occurrence counts (cards_v2): ● 285 · ✦ 142 · ▸ 157 · ☾ 65 · ⍟ 45 · ⧗ 38 ·
 – 32 · ❖ 19 · ≤ 80 · ≥ 1.
 
 ---
@@ -65,7 +65,7 @@ Raw symbol occurrence counts (cards_v2): ● 285 · ✦ 142 · ▸ 157 · ☪ 65
 - [ ] **Support – <benefit>** — back-rank character benefits the ≤2 front-rank positions it supports. Keyword form "Support –": 8; "Supported" refs: 8. **[DET]** (positional, board-derived)
   - Examples: *"Support – Supported allies have +1✦ for each stored ⧗."*, *"Support – Supported allies have +2✦."*
 - [ ] **Awakened (keyword) / Awaken (effect)** — enters/becomes un-exhausted. Awakened keyword 15; Awaken verb 7 (30 total "awaken*"). **[DET]** keyword; **[CHOICE]** when "Awaken an ally" picks a target
-  - Example: *Kaleth* (dream avatar): "2●, ☪: Awaken an ally."
+  - Example: *Kaleth* (dream avatar): "2●, ☾: Awaken an ally."
 - [ ] **Phasing** — keyword on 6 cards. **NOT DEFINED in battle_rules.md — flag for designer.** Appears as a standalone keyword line like Awakened. **[?]** (needs a rule before classification)
   - Examples: *Headtaker Wurm*, *Thronebound Arbiter*, *Driftrider*, *Northlight Maestro*, *Vanishing Inquisitor*, *Breach Artist*
 - [ ] **Prevent** — counter a card on the stack (always Interrupt); conditional forms ("unless the opponent pays N●"). 14. **[CHOICE]** (choose to respond + which card)
@@ -131,15 +131,15 @@ Raw symbol occurrence counts (cards_v2): ● 285 · ✦ 142 · ▸ 157 · ☪ 65
 
 - [ ] **● energy cost** ("N●:") — 54 (+ 16 on dream avatars). **[DET]** to pay (resource check)
 - [ ] **X● cost** ("X●:") — 7. **[CHOICE]** (player picks X)
-- [ ] **☪ exhaust cost** ("☪:") — 65 (+ 15 on dream avatars). **[DET]** to pay; auto back-rank move on front-rank source is **[DET]**
+- [ ] **☾ exhaust cost** ("☾:") — 65 (+ 15 on dream avatars). **[DET]** to pay; auto back-rank move on front-rank source is **[DET]**
 - [ ] **⧗ counter spend** ("N⧗:") — 9. **[DET]** to pay (uses stored counters)
 - [ ] **Abandon-a/-another-character cost** — "Abandon …:" 63; "Abandon another" 11. **[CHOICE]** (pick which ally) — "Abandon this character:" 20 is **[DET]** (self)
 - [ ] **Discard-as-cost** ("Discard …:") — 19. **[CHOICE]** (pick card from hand)
-  - Example: *Kael Voss* (dream avatar): "2●, ☪, Discard a card: Materialize a 1✦ survivor figment."
+  - Example: *Kael Voss* (dream avatar): "2●, ☾, Discard a card: Materialize a 1✦ survivor figment."
 - [ ] **Banish-from-void cost** — 4. **[CHOICE]** (pick void card)
 - [ ] **"Once per turn" limiter** — 12 (+ 6 dream avatars). **[DET]** (usage gate)
-- [ ] **Composite costs** (e.g. "2●, ☪, Abandon an ally", "3●, X●, ☪") — common across dream avatars and cards. **[MIXED]** (resource parts [DET]; target/X parts [CHOICE])
-  - Examples: *Caedryn*: "2●, ☪, Abandon an ally: …"; *Vethran*: "3●, X●, ☪: Discover a card with cost X●."
+- [ ] **Composite costs** (e.g. "2●, ☾, Abandon an ally", "3●, X●, ☾") — common across dream avatars and cards. **[MIXED]** (resource parts [DET]; target/X parts [CHOICE])
+  - Examples: *Caedryn*: "2●, ☾, Abandon an ally: …"; *Vethran*: "3●, X●, ☾: Discover a card with cost X●."
 
 ---
 
@@ -157,7 +157,7 @@ Raw symbol occurrence counts (cards_v2): ● 285 · ✦ 142 · ▸ 157 · ☪ 65
 ## 7. Counters (⧗)
 
 - [ ] **Store ⧗** ("store N⧗", "store 1⧗ when …") — 9 store-phrasings (19 "store"-line hits incl. triggers). **[DET]** (increment on trigger)
-- [ ] **Spend ⧗ as cost** ("N⧗, ☪: …") — see §5 (9). **[DET]**
+- [ ] **Spend ⧗ as cost** ("N⧗, ☾: …") — see §5 (9). **[DET]**
 - [ ] **Reference stored ⧗** ("+1✦ for each stored ⧗", "cost ≤ stored ⧗") — "stored ⧗"/"each ⧗" 6. **[DET]** (board-derived scaling)
   - Examples: *"Supported allies have +1✦ for each stored ⧗."*, *Desolation's Edge*: "Dissolve each character with cost ≤ the stored ⧗."
 - [ ] **Counters reset to 0 on leaving play** — rule. **[DET]**
@@ -207,7 +207,7 @@ Figment-creation counts by type (occurrences of "<type> figment" in rendered-tex
 - [ ] **Ethereal** (1✦) — 6. **[DET]**
 - [ ] **Radiant** (2✦) — 0–1 ("radiant figment" appears, e.g. "materialize a 2✦ radiant figment"). **[DET]**
 - [ ] **Ember** (1✦, Awakened) — 2. **[DET]** (often "with awakened … abandon at end of turn")
-  - Example: *"☪: Materialize two 1✦ ember figments with awakened. Abandon them at end of turn."*
+  - Example: *"☾: Materialize two 1✦ ember figments with awakened. Abandon them at end of turn."*
 - [ ] **Outsider** (1✦) — 0–1 ("outsider figment", e.g. *Edran*). **[DET]**
 - [ ] **Figment copy of a named card** — uses the copied card's printed identity. **[CHOICE]/[MIXED]** (which card)
   - Examples: *"Materialize a figment copy of 'Blade of Unity'."*, *"Materialize a figment copy of an ally until end of turn."*
@@ -277,8 +277,8 @@ Figment-creation counts by type (occurrences of "<type> figment" in rendered-tex
 ## 15. Exhaust / Awaken / Repositioning (board state)
 
 - [ ] **Exhaust an enemy / exhaust a character** (effect) — "Exhaust …" effect present (rules example "2●: Exhaust an enemy"). **[CHOICE]** (target)
-- [ ] **Awaken an ally** (effect) — *Kaleth* "2●, ☪: Awaken an ally." **[CHOICE]** (target)
-- [ ] **Auto back-rank move when front-rank source pays ☪** — rule/structural. **[DET]**
+- [ ] **Awaken an ally** (effect) — *Kaleth* "2●, ☾: Awaken an ally." **[CHOICE]** (target)
+- [ ] **Auto back-rank move when front-rank source pays ☾** — rule/structural. **[DET]**
 - [ ] **Repositioning** (Day by active player; Dusk by opponent; exhausted can't enter front rank; swaps on occupied) — structural. **[CHOICE]** (player drags positions) but rule-constrained
 - [ ] **Give an ally +N✦ (this turn or permanent)** — e.g. *Korrax* "Give an ally +1✦." **[CHOICE]** (target)
 
@@ -318,14 +318,14 @@ Mechanically referenced in card text (drive triggers/anthems/targets/figment-cre
 
 ## 18. Dream Avatar Ongoing Abilities (identity cards)
 
-32 dream avatars. Ability shapes (occurrences within dream_avatars_v2): ● activated 16, ☪
+32 dream avatars. Ability shapes (occurrences within dream_avatars_v2): ● activated 16, ☾
 activated 15, Once-per-turn 6, ▸Dawn 1, ▸Night 1, Abandon-cost 3, figment-creation 4. No
 "Choose one" and no static "+✦" anthems among dream avatars; their power is mostly activated and
 "when you …" triggered abilities.
 
 - [ ] **At-start-of-turn passive** (gain ●/draw/foresee, conditional) — *Drusus Calvus*, *Threxan*, *Seld Rakor*, *Senemhet*. **[DET]**
-- [ ] **Activated ● / ☪ / composite abilities** — *Vethran*, *Ossian*, *Kaleth*, *Caedryn*, *Kael Voss*, *Grath*, *Yveth Coravel*, etc. **[MIXED]**
-- [ ] **Fast/Interrupt activated abilities** — *Calloway Flint* ("❖❖ – 4●, ☪"), *Edran* ("❖ – 4●, ☪"), *Zeva* ("❖❖ …"). **[DET]** timing flag
+- [ ] **Activated ● / ☾ / composite abilities** — *Vethran*, *Ossian*, *Kaleth*, *Caedryn*, *Kael Voss*, *Grath*, *Yveth Coravel*, etc. **[MIXED]**
+- [ ] **Fast/Interrupt activated abilities** — *Calloway Flint* ("❖❖ – 4●, ☾"), *Edran* ("❖ – 4●, ☾"), *Zeva* ("❖❖ …"). **[DET]** timing flag
 - [ ] **"When you play your second card/event/character"** — *Tessa*, *Seraveth*, *Rael*. **[DET]** trigger
 - [ ] **Discard/void-synergy triggers** ("when you discard", "when a card leaves your void", reclaim-granting) — *Vrakmoth*, *Corvath*, *Vaela*. **[DET]** trigger; reclaim grant choice may be **[CHOICE]**
 - [ ] **"unless the opponent pays N●"** interactive — *Karev Soltis*. **[CHOICE]** (opponent)

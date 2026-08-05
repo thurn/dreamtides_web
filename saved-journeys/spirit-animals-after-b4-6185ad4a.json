@@ -2610,7 +2610,7 @@
               "mtgName": "Noble Hierarch",
               "name": "Kindlehorn",
               "rarity": "",
-              "renderedText": "▸Dawn: Gain 1●.\n\n4●, ☪: This character gains +1✦.",
+              "renderedText": "▸Dawn: Gain 1●.\n\n4●, ☾: This character gains +1✦.",
               "spark": 0,
               "subtype": "Spirit Animal",
               "tags": [
@@ -2626,8 +2626,8 @@
             "effectDescription": "Number in text: 1 → 2",
             "effectDetails": {
               "renderedText": {
-                "from": "▸Dawn: Gain 1●.\n\n4●, ☪: This character gains +1✦.",
-                "to": "▸Dawn: Gain 2●.\n\n4●, ☪: This character gains +1✦."
+                "from": "▸Dawn: Gain 1●.\n\n4●, ☾: This character gains +1✦.",
+                "to": "▸Dawn: Gain 2●.\n\n4●, ☾: This character gains +1✦."
               }
             },
             "entryId": "deck-11",
@@ -2689,7 +2689,7 @@
               "mtgName": "Noble Hierarch",
               "name": "Kindlehorn",
               "rarity": "",
-              "renderedText": "▸Dawn: Gain 2●.\n\n4●, ☪: This character gains +1✦.",
+              "renderedText": "▸Dawn: Gain 2●.\n\n4●, ☾: This character gains +1✦.",
               "spark": 0,
               "subtype": "Spirit Animal",
               "tags": [
@@ -2768,7 +2768,7 @@
               "mtgName": "Noble Hierarch",
               "name": "Kindlehorn",
               "rarity": "",
-              "renderedText": "▸Dawn: Gain 1●.\n\n4●, ☪: This character gains +1✦.",
+              "renderedText": "▸Dawn: Gain 1●.\n\n4●, ☾: This character gains +1✦.",
               "spark": 1,
               "subtype": "Spirit Animal",
               "tags": [
@@ -2784,8 +2784,8 @@
             "effectDescription": "Widens a named trigger to fire more often.",
             "effectDetails": {
               "renderedText": {
-                "from": "▸Dawn: Gain 1●.\n\n4●, ☪: This character gains +1✦.",
-                "to": "▸Materialized, Dawn: Gain 1●.\n\n4●, ☪: This character gains +1✦."
+                "from": "▸Dawn: Gain 1●.\n\n4●, ☾: This character gains +1✦.",
+                "to": "▸Materialized, Dawn: Gain 1●.\n\n4●, ☾: This character gains +1✦."
               }
             },
             "entryId": "deck-11",
@@ -2847,7 +2847,7 @@
               "mtgName": "Noble Hierarch",
               "name": "Kindlehorn",
               "rarity": "",
-              "renderedText": "▸Materialized, Dawn: Gain 1●.\n\n4●, ☪: This character gains +1✦.",
+              "renderedText": "▸Materialized, Dawn: Gain 1●.\n\n4●, ☾: This character gains +1✦.",
               "spark": 0,
               "subtype": "Spirit Animal",
               "tags": [
@@ -2863,8 +2863,8 @@
             "effectDescription": "Activated ability costs 1 less.",
             "effectDetails": {
               "renderedText": {
-                "from": "▸Dawn: Gain 1●.\n\n4●, ☪: This character gains +1✦.",
-                "to": "▸Dawn: Gain 1●.\n\n3●, ☪: This character gains +1✦."
+                "from": "▸Dawn: Gain 1●.\n\n4●, ☾: This character gains +1✦.",
+                "to": "▸Dawn: Gain 1●.\n\n3●, ☾: This character gains +1✦."
               }
             },
             "entryId": "deck-11",
@@ -2926,7 +2926,7 @@
               "mtgName": "Noble Hierarch",
               "name": "Kindlehorn",
               "rarity": "",
-              "renderedText": "▸Dawn: Gain 1●.\n\n3●, ☪: This character gains +1✦.",
+              "renderedText": "▸Dawn: Gain 1●.\n\n3●, ☾: This character gains +1✦.",
               "spark": 0,
               "subtype": "Spirit Animal",
               "tags": [
@@ -4023,7 +4023,7 @@
               "mtgName": "Wirewood Symbiote",
               "name": "Moonbound Wolf",
               "rarity": "",
-              "renderedText": "Awakened\n\n☪, Return an ally to hand: Trigger the 'Dawn' ability of an allied spirit animal.",
+              "renderedText": "Awakened\n\n☾, Return an ally to hand: Trigger the 'Dawn' ability of an allied spirit animal.",
               "spark": 1,
               "subtype": "Spirit Animal"
             },
@@ -4079,7 +4079,7 @@
               "mtgName": "Wirewood Symbiote",
               "name": "Moonbound Wolf",
               "rarity": "",
-              "renderedText": "Awakened\n\n☪, Return an ally to hand: Trigger the 'Dawn' ability of an allied spirit animal.",
+              "renderedText": "Awakened\n\n☾, Return an ally to hand: Trigger the 'Dawn' ability of an allied spirit animal.",
               "spark": 2,
               "subtype": "Spirit Animal"
             },
@@ -4115,7 +4115,7 @@
               "mtgName": "Gaea's Cradle",
               "name": "Spirit of the Greenwood",
               "rarity": "Legendary",
-              "renderedText": "Awakened\n\n1●, ☪: Gain 1● for each allied character.",
+              "renderedText": "Awakened\n\n1●, ☾: Gain 1● for each allied character.",
               "spark": 1,
               "subtype": "Spirit Animal",
               "tags": [
@@ -4128,8 +4128,8 @@
             "effectDescription": "Number in text: 1 → 2",
             "effectDetails": {
               "renderedText": {
-                "from": "Awakened\n\n1●, ☪: Gain 1● for each allied character.",
-                "to": "Awakened\n\n2●, ☪: Gain 1● for each allied character."
+                "from": "Awakened\n\n1●, ☾: Gain 1● for each allied character.",
+                "to": "Awakened\n\n2●, ☾: Gain 1● for each allied character."
               }
             },
             "entryId": "deck-18",
@@ -4154,7 +4154,7 @@
               "mtgName": "Gaea's Cradle",
               "name": "Spirit of the Greenwood",
               "rarity": "Legendary",
-              "renderedText": "Awakened\n\n2●, ☪: Gain 1● for each allied character.",
+              "renderedText": "Awakened\n\n2●, ☾: Gain 1● for each allied character.",
               "spark": 1,
               "subtype": "Spirit Animal",
               "tags": [
@@ -4193,7 +4193,7 @@
               "mtgName": "Gaea's Cradle",
               "name": "Spirit of the Greenwood",
               "rarity": "Legendary",
-              "renderedText": "Awakened\n\n1●, ☪: Gain 1● for each allied character.",
+              "renderedText": "Awakened\n\n1●, ☾: Gain 1● for each allied character.",
               "spark": 2,
               "subtype": "Spirit Animal",
               "tags": [
@@ -4206,8 +4206,8 @@
             "effectDescription": "Activated ability costs 1 less.",
             "effectDetails": {
               "renderedText": {
-                "from": "Awakened\n\n1●, ☪: Gain 1● for each allied character.",
-                "to": "Awakened\n\n0●, ☪: Gain 1● for each allied character."
+                "from": "Awakened\n\n1●, ☾: Gain 1● for each allied character.",
+                "to": "Awakened\n\n0●, ☾: Gain 1● for each allied character."
               }
             },
             "entryId": "deck-18",
@@ -4232,7 +4232,7 @@
               "mtgName": "Gaea's Cradle",
               "name": "Spirit of the Greenwood",
               "rarity": "Legendary",
-              "renderedText": "Awakened\n\n0●, ☪: Gain 1● for each allied character.",
+              "renderedText": "Awakened\n\n0●, ☾: Gain 1● for each allied character.",
               "spark": 1,
               "subtype": "Spirit Animal",
               "tags": [
@@ -5834,7 +5834,7 @@
               "mtgName": "Gaea's Cradle",
               "name": "Spirit of the Greenwood",
               "rarity": "Legendary",
-              "renderedText": "Awakened\n\n1●, ☪: Gain 1● for each allied character.",
+              "renderedText": "Awakened\n\n1●, ☾: Gain 1● for each allied character.",
               "spark": 1,
               "subtype": "Spirit Animal",
               "tags": [
@@ -5847,8 +5847,8 @@
             "effectDescription": "Number in text: 1 → 2",
             "effectDetails": {
               "renderedText": {
-                "from": "Awakened\n\n1●, ☪: Gain 1● for each allied character.",
-                "to": "Awakened\n\n2●, ☪: Gain 1● for each allied character."
+                "from": "Awakened\n\n1●, ☾: Gain 1● for each allied character.",
+                "to": "Awakened\n\n2●, ☾: Gain 1● for each allied character."
               }
             },
             "entryId": "deck-25",
@@ -5873,7 +5873,7 @@
               "mtgName": "Gaea's Cradle",
               "name": "Spirit of the Greenwood",
               "rarity": "Legendary",
-              "renderedText": "Awakened\n\n2●, ☪: Gain 1● for each allied character.",
+              "renderedText": "Awakened\n\n2●, ☾: Gain 1● for each allied character.",
               "spark": 1,
               "subtype": "Spirit Animal",
               "tags": [
@@ -5912,7 +5912,7 @@
               "mtgName": "Gaea's Cradle",
               "name": "Spirit of the Greenwood",
               "rarity": "Legendary",
-              "renderedText": "Awakened\n\n1●, ☪: Gain 1● for each allied character.",
+              "renderedText": "Awakened\n\n1●, ☾: Gain 1● for each allied character.",
               "spark": 2,
               "subtype": "Spirit Animal",
               "tags": [
@@ -5925,8 +5925,8 @@
             "effectDescription": "Activated ability costs 1 less.",
             "effectDetails": {
               "renderedText": {
-                "from": "Awakened\n\n1●, ☪: Gain 1● for each allied character.",
-                "to": "Awakened\n\n0●, ☪: Gain 1● for each allied character."
+                "from": "Awakened\n\n1●, ☾: Gain 1● for each allied character.",
+                "to": "Awakened\n\n0●, ☾: Gain 1● for each allied character."
               }
             },
             "entryId": "deck-25",
@@ -5951,7 +5951,7 @@
               "mtgName": "Gaea's Cradle",
               "name": "Spirit of the Greenwood",
               "rarity": "Legendary",
-              "renderedText": "Awakened\n\n0●, ☪: Gain 1● for each allied character.",
+              "renderedText": "Awakened\n\n0●, ☾: Gain 1● for each allied character.",
               "spark": 1,
               "subtype": "Spirit Animal",
               "tags": [
@@ -6016,7 +6016,7 @@
               "mtgName": "Allosaurus Shepherd",
               "name": "Sunshadow Eagle",
               "rarity": "",
-              "renderedText": "5●, ☪: Each allied spirit animal's ✦ becomes 7.",
+              "renderedText": "5●, ☾: Each allied spirit animal's ✦ becomes 7.",
               "spark": 2,
               "subtype": "Spirit Animal",
               "tags": [
@@ -6031,8 +6031,8 @@
             "effectDescription": "Number in text: 5 → 6",
             "effectDetails": {
               "renderedText": {
-                "from": "5●, ☪: Each allied spirit animal's ✦ becomes 7.",
-                "to": "6●, ☪: Each allied spirit animal's ✦ becomes 7."
+                "from": "5●, ☾: Each allied spirit animal's ✦ becomes 7.",
+                "to": "6●, ☾: Each allied spirit animal's ✦ becomes 7."
               }
             },
             "entryId": "deck-26",
@@ -6083,7 +6083,7 @@
               "mtgName": "Allosaurus Shepherd",
               "name": "Sunshadow Eagle",
               "rarity": "",
-              "renderedText": "6●, ☪: Each allied spirit animal's ✦ becomes 7.",
+              "renderedText": "6●, ☾: Each allied spirit animal's ✦ becomes 7.",
               "spark": 2,
               "subtype": "Spirit Animal",
               "tags": [
@@ -6150,7 +6150,7 @@
               "mtgName": "Allosaurus Shepherd",
               "name": "Sunshadow Eagle",
               "rarity": "",
-              "renderedText": "5●, ☪: Each allied spirit animal's ✦ becomes 7.",
+              "renderedText": "5●, ☾: Each allied spirit animal's ✦ becomes 7.",
               "spark": 4,
               "subtype": "Spirit Animal",
               "tags": [
@@ -6165,8 +6165,8 @@
             "effectDescription": "Activated ability costs 1 less.",
             "effectDetails": {
               "renderedText": {
-                "from": "5●, ☪: Each allied spirit animal's ✦ becomes 7.",
-                "to": "4●, ☪: Each allied spirit animal's ✦ becomes 7."
+                "from": "5●, ☾: Each allied spirit animal's ✦ becomes 7.",
+                "to": "4●, ☾: Each allied spirit animal's ✦ becomes 7."
               }
             },
             "entryId": "deck-26",
@@ -6217,7 +6217,7 @@
               "mtgName": "Allosaurus Shepherd",
               "name": "Sunshadow Eagle",
               "rarity": "",
-              "renderedText": "4●, ☪: Each allied spirit animal's ✦ becomes 7.",
+              "renderedText": "4●, ☾: Each allied spirit animal's ✦ becomes 7.",
               "spark": 2,
               "subtype": "Spirit Animal",
               "tags": [
@@ -6874,7 +6874,7 @@
               "mtgName": "Circle of Dreams Druid",
               "name": "Blazing Emberwing",
               "rarity": "",
-              "renderedText": "☪: Gain 1● for each allied character.",
+              "renderedText": "☾: Gain 1● for each allied character.",
               "spark": 3,
               "subtype": "Spirit Animal",
               "tags": [
@@ -6887,8 +6887,8 @@
             "effectDescription": "Number in text: 1 → 2",
             "effectDetails": {
               "renderedText": {
-                "from": "☪: Gain 1● for each allied character.",
-                "to": "☪: Gain 2● for each allied character."
+                "from": "☾: Gain 1● for each allied character.",
+                "to": "☾: Gain 2● for each allied character."
               }
             },
             "entryId": "deck-30",
@@ -6929,7 +6929,7 @@
               "mtgName": "Circle of Dreams Druid",
               "name": "Blazing Emberwing",
               "rarity": "",
-              "renderedText": "☪: Gain 2● for each allied character.",
+              "renderedText": "☾: Gain 2● for each allied character.",
               "spark": 3,
               "subtype": "Spirit Animal",
               "tags": [
@@ -6984,7 +6984,7 @@
               "mtgName": "Circle of Dreams Druid",
               "name": "Blazing Emberwing",
               "rarity": "",
-              "renderedText": "☪: Gain 1● for each allied character.",
+              "renderedText": "☾: Gain 1● for each allied character.",
               "spark": 6,
               "subtype": "Spirit Animal",
               "tags": [
@@ -7018,7 +7018,7 @@
               "mtgName": "Phyrexian Tower",
               "name": "Nightmare Manifest",
               "rarity": "",
-              "renderedText": "▸Dawn: Gain 1●.\n\n☪, Abandon a character: Gain 1●.",
+              "renderedText": "▸Dawn: Gain 1●.\n\n☾, Abandon a character: Gain 1●.",
               "spark": 1,
               "subtype": "Ancient",
               "tags": [
@@ -7032,8 +7032,8 @@
             "effectDescription": "Number in text: 1 → 2",
             "effectDetails": {
               "renderedText": {
-                "from": "▸Dawn: Gain 1●.\n\n☪, Abandon a character: Gain 1●.",
-                "to": "▸Dawn: Gain 2●.\n\n☪, Abandon a character: Gain 1●."
+                "from": "▸Dawn: Gain 1●.\n\n☾, Abandon a character: Gain 1●.",
+                "to": "▸Dawn: Gain 2●.\n\n☾, Abandon a character: Gain 1●."
               }
             },
             "entryId": "deck-31",
@@ -7053,7 +7053,7 @@
               "mtgName": "Phyrexian Tower",
               "name": "Nightmare Manifest",
               "rarity": "",
-              "renderedText": "▸Dawn: Gain 2●.\n\n☪, Abandon a character: Gain 1●.",
+              "renderedText": "▸Dawn: Gain 2●.\n\n☾, Abandon a character: Gain 1●.",
               "spark": 1,
               "subtype": "Ancient",
               "tags": [
@@ -7088,7 +7088,7 @@
               "mtgName": "Phyrexian Tower",
               "name": "Nightmare Manifest",
               "rarity": "",
-              "renderedText": "▸Dawn: Gain 1●.\n\n☪, Abandon a character: Gain 1●.",
+              "renderedText": "▸Dawn: Gain 1●.\n\n☾, Abandon a character: Gain 1●.",
               "spark": 2,
               "subtype": "Ancient",
               "tags": [
@@ -7102,8 +7102,8 @@
             "effectDescription": "Widens a named trigger to fire more often.",
             "effectDetails": {
               "renderedText": {
-                "from": "▸Dawn: Gain 1●.\n\n☪, Abandon a character: Gain 1●.",
-                "to": "▸Materialized, Dawn: Gain 1●.\n\n☪, Abandon a character: Gain 1●."
+                "from": "▸Dawn: Gain 1●.\n\n☾, Abandon a character: Gain 1●.",
+                "to": "▸Materialized, Dawn: Gain 1●.\n\n☾, Abandon a character: Gain 1●."
               }
             },
             "entryId": "deck-31",
@@ -7123,7 +7123,7 @@
               "mtgName": "Phyrexian Tower",
               "name": "Nightmare Manifest",
               "rarity": "",
-              "renderedText": "▸Materialized, Dawn: Gain 1●.\n\n☪, Abandon a character: Gain 1●.",
+              "renderedText": "▸Materialized, Dawn: Gain 1●.\n\n☾, Abandon a character: Gain 1●.",
               "spark": 1,
               "subtype": "Ancient",
               "tags": [

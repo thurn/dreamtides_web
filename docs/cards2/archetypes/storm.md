@@ -207,7 +207,7 @@ side effect of chaining cheap cards.
 A few characters give the storm deck repeatable fuel without spending a card from
 hand each turn. Silent Gatherer returns itself from the void to your hand on
 ▸Dawn, so it is a recurring cheap play that never runs out. Dreaming Obelisk
-materializes a warrior from your void on ☪ and an abandon, recurring bodies into
+materializes a warrior from your void on ☾ and an abandon, recurring bodies into
 the chain. Searcher in the Mists erodes 4 on ▸Materialized and again when
 dissolved, filling your own void to fuel reclaim engines (and, pointed correctly,
 helping toward an empty-deck Terminus or a Fatigue close). The Ringleader and

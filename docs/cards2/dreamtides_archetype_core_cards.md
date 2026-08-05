@@ -20,7 +20,7 @@ the archetype. Archetypes follow the order in `dreamtides_archetypes.md`.
 *1● Character — Spirit Animal, 1✦*
 
 > Awakened
-> 1●, ☪: Gain 1● for each allied character.
+> 1●, ☾: Gain 1● for each allied character.
 
 The 1● "mana dork" that turns a wide board into energy and powers explosive starts.
 
@@ -184,7 +184,7 @@ The premier enabler: with another survivor it replays from hand or void for 1●
 *1● Character — Survivor, 1✦*
 
 > ▸Materialized: Materialize a 1✦ survivor figment.
-> ☪: Draw a card for each 3 allied survivors.
+> ☾: Draw a card for each 3 allied survivors.
 
 Makes survivor figments and draws cards as the survivor count climbs.
 
@@ -231,7 +231,7 @@ Erodes for value and gains reclaim when discarded, the archetypal "good to throw
 
 *2● Character — Musician, 2✦*
 
-> ☪, Discard an event: Draw an event.
+> ☾, Discard an event: Draw an event.
 > This character has +1✦ for each event in your void.
 
 The discard outlet/draw engine that loots events and scales off the void.
@@ -364,7 +364,7 @@ A ▸Challenge body that rematerializes an ally on demand.
 *3● Character — Visitor, 2✦*
 
 > Awakened
-> ☪: Rematerialize an ally. This character gains +1✦.
+> ☾: Rematerialize an ally. This character gains +1✦.
 
 An awakened engine that rematerializes an ally every turn.
 
@@ -476,7 +476,7 @@ The warrior tutor: abandon a small warrior to dig up and deploy a larger one.
 
 *2● Character — Warrior, 2✦*
 
-> ☪, Abandon a warrior: Materialize a warrior from your void.
+> ☾, Abandon a warrior: Materialize a warrior from your void.
 
 The "welder" that recurs warriors from the void for near-infinite value.
 
@@ -489,7 +489,7 @@ The "welder" that recurs warriors from the void for near-infinite value.
 *2● Character — Visitor, 2✦*
 
 > Cards you reclaim are not banished when they leave play.
-> 2●, ☪: A character in your void gains reclaim until end of turn.
+> 2●, ☾: A character in your void gains reclaim until end of turn.
 
 Strips the reclaimed-banish rule so a Reclaim 0● body can be replayed endlessly, and hands out reclaim itself.
 

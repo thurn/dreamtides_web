@@ -995,12 +995,12 @@ function setCardMarkers(
  * Ending. Acts only on the status FIELD; the merge leaves untouched fields
  * intact. A merge that changes nothing is a no-op.
  *
- * ☪ auto-retreat (rules §Exhaust and Awaken): when the merge sets
+ * ☾ auto-retreat (rules §Exhaust and Awaken): when the merge sets
  * `isExhausted: true` on a front-rank character, the body is automatically moved
  * to an available back-rank position so it does not remain a potential
  * challenger or blocker. If the back rank has no open position, the exhaust is
  * rejected entirely (the state is returned unchanged), matching the rule that a
- * front-rank source which cannot retreat cannot pay the ☪ cost.
+ * front-rank source which cannot retreat cannot pay the ☾ cost.
  */
 function setCardStatus(
   state: BattleMutableState,

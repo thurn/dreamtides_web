@@ -222,23 +222,23 @@ definition = "An interrupt (❖❖) ability may be activated in response to an o
 id = "exhaust-cost"
 category = "Keywords"
 term = "Exhaust Cost"
-definition = "A back-rank character may exhaust (☪) once per turn to use an ability instead of challenging."
+definition = "A back-rank character may exhaust (☾) once per turn to use an ability instead of challenging."
 priority = 95
 matches-rules-text = false
 variants = []
-rules-text-forms = [ "☪" ]
+rules-text-forms = [ "☾" ]
 definition-uses-rules-text = true
 term-presentation = "definition-only"
 
 [[entries.contexts]]
 owner = "dreamAvatar"
-definition = "You may exhaust (☪) this avatar to activate this ability once per turn."
+definition = "You may exhaust (☾) this avatar to activate this ability once per turn."
 
 [[entries]]
 id = "awakened"
 category = "Keywords"
 term = "Awakened"
-definition = "Can challenge and activate ☪ abilities on the same turn in which it is materialized."
+definition = "Can challenge and activate ☾ abilities on the same turn in which it is materialized."
 priority = 90
 matches-rules-text = true
 variants = [ "awaken", "awakens" ]
@@ -247,7 +247,7 @@ variants = [ "awaken", "awakens" ]
 id = "exhausted"
 category = "Battle Status"
 term = "Exhausted"
-definition = "This character cannot challenge or use ☪ abilities until next turn."
+definition = "This character cannot challenge or use ☾ abilities until next turn."
 priority = 30
 matches-rules-text = true
 variants = []

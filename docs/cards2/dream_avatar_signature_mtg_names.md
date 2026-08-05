@@ -11,7 +11,7 @@ Dream Avatar heading also shows its own title and ability from
 
 ### Yveth Coravel, Scion of the Returning Tide
 
-*2●, ☪: Return an ally to hand. Its cost is reduced by 1●.*
+*2●, ☾: Return an ally to hand. Its cost is reduced by 1●.*
 
 | Dreamtides card | MTG name |
 | --- | --- |
@@ -39,7 +39,7 @@ Dream Avatar heading also shows its own title and ability from
 
 ### Caedryn, Shrouded Inquisitor
 
-*2●, ☪, Abandon an ally: Materialize a random character with cost 1● higher from your deck.*
+*2●, ☾, Abandon an ally: Materialize a random character with cost 1● higher from your deck.*
 
 | Dreamtides card | MTG name |
 | --- | --- |
@@ -103,7 +103,7 @@ Dream Avatar heading also shows its own title and ability from
 
 ### Kael Voss, Recon Commander
 
-*2●, ☪, Discard a card: Materialize a 1✦ survivor figment.*
+*2●, ☾, Discard a card: Materialize a 1✦ survivor figment.*
 
 | Dreamtides card | MTG name |
 | --- | --- |
@@ -129,7 +129,7 @@ Dream Avatar heading also shows its own title and ability from
 
 ### Edran, the Invocant
 
-*❖ – 4●, ☪: Materialize a 1✦ outsider figment.*
+*❖ – 4●, ☾: Materialize a 1✦ outsider figment.*
 
 | Dreamtides card | MTG name |
 | --- | --- |
@@ -141,7 +141,7 @@ Dream Avatar heading also shows its own title and ability from
 
 ### Zeva, the Dredger
 
-*❖❖ – 2●, ☪, Discard a card: An event in your void gains reclaim until end of turn.*
+*❖❖ – 2●, ☾, Discard a card: An event in your void gains reclaim until end of turn.*
 
 | Dreamtides card | MTG name |
 | --- | --- |
@@ -155,7 +155,7 @@ Dream Avatar heading also shows its own title and ability from
 
 ### Kasane, Wearer of the Stolen Face
 
-*4●, ☪: Copy the next event you play this turn.*
+*4●, ☾: Copy the next event you play this turn.*
 
 | Dreamtides card | MTG name |
 | --- | --- |
@@ -179,7 +179,7 @@ Dream Avatar heading also shows its own title and ability from
 
 ### Ovanel, Lector of the Receding Rite
 
-*2●, ☪: If you played an event this turn, draw an event.*
+*2●, ☾: If you played an event this turn, draw an event.*
 
 | Dreamtides card | MTG name |
 | --- | --- |
@@ -193,7 +193,7 @@ Dream Avatar heading also shows its own title and ability from
 
 ### Grath, Packmaster
 
-*4●, ☪: Gain 1● for each allied spirit animal.*
+*4●, ☾: Gain 1● for each allied spirit animal.*
 
 | Dreamtides card | MTG name |
 | --- | --- |
@@ -231,7 +231,7 @@ Dream Avatar heading also shows its own title and ability from
 
 ### Gunnar Deepforge, The Hammer's Echo
 
-*2●, ☪: Materialize a 0✦ figment copy of the last warrior you played this turn.*
+*2●, ☾: Materialize a 0✦ figment copy of the last warrior you played this turn.*
 
 | Dreamtides card | MTG name |
 | --- | --- |
@@ -255,7 +255,7 @@ Dream Avatar heading also shows its own title and ability from
 
 ### Valdren, Warhost Exemplar
 
-*2●, ☪: A warrior in your void gains reclaim until end of turn.*
+*2●, ☾: A warrior in your void gains reclaim until end of turn.*
 
 | Dreamtides card | MTG name |
 | --- | --- |

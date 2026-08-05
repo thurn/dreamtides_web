@@ -48,7 +48,7 @@ them.
 - **Forge-Twin** (3●, Warrior) — "▸Materialized: Materialize a figment copy of 'Blade of Unity'." The figment is inert without other warriors.
 - **Gilded Catalyst** (3●, Visitor) — "When you play a warrior, you may pay 2● to materialize a figment copy of 'Blade of Unity'." Needs warriors.
 - **Assault Leader** (3●, Warrior) — "▸Dawn: Each allied warrior gains +1✦." Needs warriors.
-- **Ride of the Vanguard** (3●, Warrior) — "❖ – ☪: Give an ally +1✦ for each allied warrior until end of turn." Needs warriors.
+- **Ride of the Vanguard** (3●, Warrior) — "❖ – ☾: Give an ally +1✦ for each allied warrior until end of turn." Needs warriors.
 - **Shadow Reflection** (1● event) — "Give an ally +1✦ for each allied warrior." Needs warriors.
 - **Flamestride Rider** (4●, Warrior) — "Allied warriors cannot be dissolved while challenging." Needs warriors.
 - **Dreadmount Sovereign** (5●, Warrior) — "This character costs 1● less for each allied warrior. Support – Supported warriors have +3✦." Needs warriors.
@@ -60,8 +60,8 @@ them.
 - **Sundown Ronin** (4●, Warrior) — "Warriors cost you 1● less." Needs warriors.
 - **Company Commander** (2●, Warrior) — "When you play a warrior, this character gains +1✦." Needs warriors.
 - **Voidsire** (3●, Ancient) — "When you play a warrior, materialize a 1✦ warrior figment." Needs warriors (and feeds the warrior count it cares about).
-- **Crescendo Channeler** (4●, Warrior) — "▸Dawn: Materialize a 1✦ warrior figment. 2●, ☪: Gain 1● for each allied warrior." Energy scales with warrior count.
-- **Wolfbond Chieftain** (1●, Visitor) — "☪: Gain 1● for each allied warrior." Needs a warrior board to ramp.
+- **Crescendo Channeler** (4●, Warrior) — "▸Dawn: Materialize a 1✦ warrior figment. 2●, ☾: Gain 1● for each allied warrior." Energy scales with warrior count.
+- **Wolfbond Chieftain** (1●, Visitor) — "☾: Gain 1● for each allied warrior." Needs a warrior board to ramp.
 - **Reforged Automaton** (2●, Synth) — "▸Materialized: Draw a warrior. When you materialize a non-figment warrior, this character gains +1 spark." Needs warriors.
 - **Invoker of Myths** (2●, Warrior) — "Once per turn, when you materialize a warrior, draw a card." Needs warriors.
 - **Crucible Warlord** (3●, Warrior) — "▸Materialized: Draw a warrior." Needs warriors in deck.
@@ -71,22 +71,22 @@ them.
 - **Forsworn Champion** (2●, Warrior) — "❖❖ – Abandon a warrior: This character gains +1✦." Needs warriors to feed it.
 - **Spirit Reaping** (4●, Warrior) — "Abandon a warrior: Gain 2●." Energy engine for warrior combo.
 - **Grim Reclaimer** (2●, Visitor) — "2●, Abandon 2 warriors: Draw a card." Needs a wide warrior board.
-- **Harborwarden** (2●, Warrior) — "☪, Discard a card: Materialize a 1✦ warrior figment. ☪, Abandon 2 warriors: Dissolve an enemy with 4✦ or less." Removal gated on warriors.
+- **Harborwarden** (2●, Warrior) — "☾, Discard a card: Materialize a 1✦ warrior figment. ☾, Abandon 2 warriors: Dissolve an enemy with 4✦ or less." Removal gated on warriors.
 - **Spellweaver** (2●, Warrior) — "1●, Abandon a non-figment warrior: Materialize a 1✦ warrior figment." Needs warriors.
 
 **Warrior recursion and tutoring** — dead without warriors in deck/void:
 
 - **Burning Revenant** (3●, Warrior) — "When an allied warrior is dissolved, return a warrior with lesser cost from your void to hand." Needs warriors and a way to dissolve them.
 - **Fathomscourge** (2●, Warrior) — "Once per turn, when an allied warrior is dissolved, materialize a 1✦ warrior figment." Needs warriors + dissolves.
-- **Smoldering Ancient** (2●, Warrior) — "When an allied warrior is dissolved, this character gains +1✦. ☪, Abandon a warrior: Gain 1⍟." Needs warriors + dissolves.
+- **Smoldering Ancient** (2●, Warrior) — "When an allied warrior is dissolved, this character gains +1✦. ☾, Abandon a warrior: Gain 1⍟." Needs warriors + dissolves.
 - **Starbound Striker** (2●, Warrior) — "▸Dissolved: Return another warrior from your void to your hand." Needs warriors in void.
 - **Infernal Cavalier** (3●, Warrior) — "▸Dissolved: Return another warrior with cost 4● or less from your void to your hand." Needs warriors in void.
 - **Tranquil Duelist** (3●, Warrior) — "Vengeful / ▸Dissolved: Return another warrior from your void to your hand." Needs warriors in void.
-- **Dreaming Obelisk** (2●, Warrior) — "☪, Abandon a warrior: Materialize a warrior from your void." A "welder" — needs warriors in play and void.
-- **Pit Descender** (2●, Explorer) — "▸Materialized: Erode 3. ☪, Abandon a warrior: Materialize a warrior with cost 2● or less from your void." Needs warriors.
+- **Dreaming Obelisk** (2●, Warrior) — "☾, Abandon a warrior: Materialize a warrior from your void." A "welder" — needs warriors in play and void.
+- **Pit Descender** (2●, Explorer) — "▸Materialized: Erode 3. ☾, Abandon a warrior: Materialize a warrior with cost 2● or less from your void." Needs warriors.
 - **Scorched Crusader** (2●, Warrior) — "When you materialize a non-figment character, store 1⧗. 3⧗: Return a warrior from your void to your hand." Needs warriors in void.
 - **Prism Caller** (4●, Explorer) — "When you play a warrior, you may materialize a character with cost 2● or less from your void." Needs warriors + cheap void targets.
-- **Mirror Protocol** (2●, Tinkerer) — "☪, Abandon a warrior: Discover a warrior with cost 1● higher and materialize it." Warrior tutor chain.
+- **Mirror Protocol** (2●, Tinkerer) — "☾, Abandon a warrior: Discover a warrior with cost 1● higher and materialize it." Warrior tutor chain.
 - **Aftermath Bloom** (2● event) — "To play this event, abandon a warrior. Discover a warrior with higher cost, then materialize it." Needs a small warrior to trade up.
 - **Phantasmal Recruiter** (3●, Warrior) — "Abandon a character: Store 1⧗. 2●, 2⧗: Materialize two 1✦ warrior figments." Goes wide on warriors.
 
@@ -97,12 +97,12 @@ flooding the board with them.
 
 **Lords and anthems** — need other spirit animals:
 
-- **Ghostlight Wolves** (3●, Spirit Animal) — "☪: Gain 1● for each allied spirit animal. Support – Supported spirit animals have +2✦." Needs spirit animals + front rank.
-- **Eternal Stag** (2●, Spirit Animal) — "Allied spirit animals have +1✦. 2●, ☪: Draw a spirit animal." Needs spirit animals.
+- **Ghostlight Wolves** (3●, Spirit Animal) — "☾: Gain 1● for each allied spirit animal. Support – Supported spirit animals have +2✦." Needs spirit animals + front rank.
+- **Eternal Stag** (2●, Spirit Animal) — "Allied spirit animals have +1✦. 2●, ☾: Draw a spirit animal." Needs spirit animals.
 - **Lord of Hidden Paths** (2●, Spirit Animal) — "Allied spirit animals have +1✦. When you play a spirit animal, you may pay 1● to draw a card." Needs spirit animals.
-- **Mystic Runefish** (2●, Spirit Animal) — "5●, ☪: Each allied spirit animal's ✦ becomes 7." A finisher that needs a flooded board.
+- **Mystic Runefish** (2●, Spirit Animal) — "5●, ☾: Each allied spirit animal's ✦ becomes 7." A finisher that needs a flooded board.
 - **Spiritbound Alpha** (3●, Spirit Animal) — "❖ – 5●: Allied spirit animals gain +3✦ and vengeful until end of turn." Needs spirit animals.
-- **Mountainwatch Alpha** (2●, Spirit Animal) — "☪: Gain 1● for each allied spirit animal." Needs spirit animals.
+- **Mountainwatch Alpha** (2●, Spirit Animal) — "☾: Gain 1● for each allied spirit animal." Needs spirit animals.
 - **Luminwings** (0●, Spirit Animal) — "▸Dawn: With 3 allied spirit animals, gain 1●." Inert below the threshold.
 - **Undying Fang** (1●, Spirit Animal) — "▸Dawn: Gain 1●. With 3 allied spirit animals, gain 2● instead." Scales with the tribe.
 
@@ -113,7 +113,7 @@ flooding the board with them.
 - **Dawnprowler Panther** (1●, Spirit Animal) — "When you materialize a spirit animal, if it is not the first spirit animal you have materialized this turn, gain 1●." Needs multiple per turn.
 - **Sunshadow Eagle** (1●, Spirit Animal) — "When you materialize a spirit animal, store 1⧗. 3⧗: Gain 3●." Needs spirit animals.
 - **Stoneborn Eternal** (1●, Spirit Animal) — "When you play a spirit animal, return this character to hand. It costs 0● this turn." A free body only if you keep playing spirit animals.
-- **Moonbound Wolf** (1●, Spirit Animal) — "☪, Return an ally to hand: Trigger the '▸Dawn' ability of an allied spirit animal." Needs a spirit animal with a Dawn ability worth re-firing.
+- **Moonbound Wolf** (1●, Spirit Animal) — "☾, Return an ally to hand: Trigger the '▸Dawn' ability of an allied spirit animal." Needs a spirit animal with a Dawn ability worth re-firing.
 - **Scrapyard Custodian** (1●, Synth) — "Abandon a spirit animal: Materialize this character from your void." Recursion keyed to spirit-animal fodder.
 - **Through the Rift** (1● event) — "Discover a spirit animal." Only useful with spirit animals in deck.
 
@@ -126,8 +126,8 @@ aren't build-arounds individually, but they are the fuel these payoffs require.
 The void's value tribe — survivors do double duty across discard, abandon, and
 death themes.
 
-- **Sorrow Watcher** (1●, Survivor) — "▸Materialized: Materialize a 1✦ survivor figment. ☪: Draw a card for each 3 allied survivors." Card draw scales only with a survivor board.
-- **Tidewreck Navigator** (1●, Survivor) — "☪, Discard a card: Materialize a 1✦ survivor figment. ☪, Abandon a survivor: Return a survivor from your void to your hand." Needs survivors.
+- **Sorrow Watcher** (1●, Survivor) — "▸Materialized: Materialize a 1✦ survivor figment. ☾: Draw a card for each 3 allied survivors." Card draw scales only with a survivor board.
+- **Tidewreck Navigator** (1●, Survivor) — "☾, Discard a card: Materialize a 1✦ survivor figment. ☾, Abandon a survivor: Return a survivor from your void to your hand." Needs survivors.
 - **Deathwalker** (2●, Survivor) — "When an allied survivor is dissolved, draw a card." Needs survivors + deaths.
 - **Dustborn Veteran** (3●, Survivor) — "When a non-figment allied survivor is dissolved, materialize a 1✦ survivor figment." Needs survivors + deaths.
 - **Kindred Sparks** (4●, Survivor) — "With an allied survivor, you may play this card from your hand or void for 1●." Its whole value (cheap, recurring) needs another survivor in play.
@@ -143,7 +143,7 @@ both outsiders and a clock that connects.
 
 - **Thronebound Arbiter** (4●, Outsider) — "▸Materialized: Return another ally to hand. Move this character to that ally's position. When an allied outsider scores ⍟, draw a card." Needs outsiders that score.
 - **Driftrider** (2●, Outsider) — "…When an allied outsider scores ⍟, foresee 1, then draw a card." Needs outsiders that score.
-- **Last Beacon** (3●, Visitor) — "3●, ☪: Materialize a 1✦ outsider figment. When an allied outsider scores ⍟, draw a card and gain ⍟ equal to its ● cost." Needs outsiders.
+- **Last Beacon** (3●, Visitor) — "3●, ☾: Materialize a 1✦ outsider figment. When an allied outsider scores ⍟, draw a card and gain ⍟ equal to its ● cost." Needs outsiders.
 
 The self-contained outsider bounce bodies (Vanishing Inquisitor, Northlight
 Maestro, Breach Artist) are the enablers these payoffs build around.
@@ -155,7 +155,7 @@ existing or dying, and so need a figment generator first.
 
 - **Ashfront Lieutenant** (2●, Visitor) — "▸Dawn: Gain 1● for each allied figment." Needs figment makers.
 - **Embersummoner** (3●, Visitor) — "When you materialize a figment, materialize a 1✦ ethereal figment." Needs an initial figment source.
-- **Wasteland Holdout** (2●, Warrior) — "When you materialize a figment, store 1⧗. 1⧗, ☪: Draw a card." Needs figment makers.
+- **Wasteland Holdout** (2●, Warrior) — "When you materialize a figment, store 1⧗. 1⧗, ☾: Draw a card." Needs figment makers.
 - **Shardwoven Tyrant** (2●, Ancient) — "1●, Abandon X figments: Dissolve an enemy with X✦." Removal that needs a figment stash.
 - **Marrow Drinker** (1●, Survivor) — "When a character card leaves your void, materialize a 2✦ shadow figment." Needs void churn (banish/recur effects).
 - **Wreckborn** (3●, Visitor) — "When a non-figment ally is dissolved, materialize a 1✦ ember figment. When an ember figment is dissolved, this character gains +1✦." Needs deaths.
@@ -188,11 +188,11 @@ interactive events.
 Event-reclaim engines also build around an event-dense void:
 
 - **Somber Flockmaster** (2●, Mage) — "▸Dawn: An event in your void with cost ≤ this character's ✦ gains reclaim 0● until end of turn."
-- **Keeper of the Lightpath** (3●, Visitor) — "☪: An event with cost 3● or less in your void gains reclaim."
+- **Keeper of the Lightpath** (3●, Visitor) — "☾: An event with cost 3● or less in your void gains reclaim."
 - **Dreadwood Emissary** (2●, Tinkerer) — "▸Materialized: An event in your void gains reclaim until end of turn."
 - **Spirit of Smoldering Echoes** (2●, Ancient) — "2●: An event in your void gains reclaim until end of turn."
 - **Ashlight Caller** (1●, Visitor) — "Discard a card: An event in your void gains reclaim until end of turn."
-- **Minstrel of Falling Light** (2●, Musician) — "☪, Discard an event: Draw an event. This character has +1✦ for each event in your void." Needs an event-heavy deck.
+- **Minstrel of Falling Light** (2●, Musician) — "☾, Discard an event: Draw an event. This character has +1✦ for each event in your void." Needs an event-heavy deck.
 - **Ashen Avenger** (3●, Visitor), **From the Barrow** (5● event), **Path to Redemption** (3● event), **Whisper of the Past** (1● event) — mass/targeted reclaim, all needing cards in the void.
 
 ### Play or materialize a character
@@ -229,11 +229,11 @@ payoffs to make the discarding worthwhile.
 - **Torchbearer of the Abyss** (3●, Visitor) — "Once per turn, when you discard a card, draw a card and gain 1●."
 - **Key Sifter** (2●, Tinkerer) — "Once per turn, when you discard one or more cards, draw that many cards."
 - **Unbroken** (1●, Renegade) — "When you discard a card, this character gains +1✦."
-- **Radiants' Captain** (1●, Warrior) — "When you discard a card, store 1⧗. ☪, 1⧗: Materialize a 2✦ radiant figment."
+- **Radiants' Captain** (1●, Warrior) — "When you discard a card, store 1⧗. ☾, 1⧗: Materialize a 2✦ radiant figment."
 - **Flagbearer of Decay** (2●, Warrior) — "When you discard a card, you may play that card from your void this turn."
 - **Gleamharvester** (3●, Explorer) — "When you discard a card, this character gains +2✦ until end of turn."
 - **Pattern Seeker** (2●, Child) — "When you discard a card, draw a card with ephemeral."
-- **Wandering Archivist** (3●, Explorer) — "2●, ☪: Draw a card, then discard a card. When you discard a card, gain 1⍟." (Both outlet and payoff.)
+- **Wandering Archivist** (3●, Explorer) — "2●, ☾: Draw a card, then discard a card. When you discard a card, gain 1⍟." (Both outlet and payoff.)
 - **Gloomantler** (3●, Ancient) — "Once per turn, if you have one or fewer cards in hand, you may play a character from your void. When you discard your third card in a turn, materialize this character from your void." Needs heavy discarding.
 - **Forgotten Titan** (4●, Ancient) — "If you've discarded a card this turn, this character costs 3● less." Needs a discard outlet.
 
@@ -277,8 +277,8 @@ Abandon decks pair a **payoff** that triggers on abandon/death with a free
 - **Arc Disciple** (3●, Warrior) — "Abandon another character: Gain 2●."
 - **Soulrender** (3●, Warrior) — "Abandon a character: Chosen player erodes X, where X is that character's cost."
 - **Lanternwood Scout** (2●, Explorer) — "1●, Abandon another character: Store 1⧗. Abandon this character: Gain X⍟ where X is the stored ⧗."
-- **Colossal Convergence** (4●, Warrior) — "❖❖ – ☪, Abandon a character: Give an ally +X✦ where X is the abandoned character's ✦."
-- **Dreadweaver** (2●, Mage) — "2●, ☪, Abandon two other characters: This character gains +2✦. Draw 2 cards."
+- **Colossal Convergence** (4●, Warrior) — "❖❖ – ☾, Abandon a character: Give an ally +X✦ where X is the abandoned character's ✦."
+- **Dreadweaver** (2●, Mage) — "2●, ☾, Abandon two other characters: This character gains +2✦. Draw 2 cards."
 
 **Zero-cost fodder** that these outlets feed on: Conduit of Ashes, Blightmaw,
 Rebirth Ritualist, Dread Arbiter, Pyrewatcher, Starshot Gunner, Junkfield
@@ -315,7 +315,7 @@ want an unanswered challenger.
 Reclaim is the void engine. Some cards strip the reclaim-banish rule to enable
 loops; others pay you for reclaiming.
 
-- **Reclaimer of Lost Paths** (2●, Visitor) — "Cards you reclaim are not banished when they leave play. 2●, ☪: A character in your void gains reclaim until end of turn." Pairs with Reclaim 0● bodies.
+- **Reclaimer of Lost Paths** (2●, Visitor) — "Cards you reclaim are not banished when they leave play. 2●, ☾: A character in your void gains reclaim until end of turn." Pairs with Reclaim 0● bodies.
 - **Titan of Forgotten Echoes** (2●, Ancient) — "Cards you reclaim are not banished when they leave play." Useless until you reclaim things.
 - **Thornwood Delver** (2●, Explorer) — "Once per turn, when you reclaim a card, gain X⍟ where X is this character's ✦. Then this character gains +1✦." Needs a reclaim engine.
 - **Starrunner** (2●, Spirit Animal), **Torn Circuit Feeder** (2●, Synth), **Enginespeaker** (2●, Child) — Reclaim 0● bodies that loop only with a banish-stripper above + an abandon outlet.
@@ -328,7 +328,7 @@ Mists, Veilseeker) and erode events.
 
 - **Fargazer** (4●, Explorer) — "When you erode one or more cards, draw that many cards." Needs erode sources.
 - **Speaker for the Forgotten** (3●, Mage) — "5●: Erode 1. That card gains reclaim 0● until end of turn." Wants reclaim payoffs.
-- **The Devourer** (1●, Ancient) — "☪, Banish 3 cards from your void: Draw a card." Needs a stocked void.
+- **The Devourer** (1●, Ancient) — "☾, Banish 3 cards from your void: Draw a card." Needs a stocked void.
 
 ### Cards played this turn (Storm)
 
@@ -378,7 +378,7 @@ piece is mediocre alone; together they snowball.
 - **Nexus Wayfinder** (4●, Explorer) — "Characters with cost 2● or less cost you 0●."
 - **Starsea Traveler** (3●, Explorer) — "Once per turn, you may play a character with cost 2● or less from your void."
 - **Clockwork Conductor** (4●, Tinkerer) — "You may play characters with cost 2● or less from your void."
-- **Revenant of the Lost** (2●, Ancient) — "☪: A character in your void with cost 2● or less gains reclaim until end of turn."
+- **Revenant of the Lost** (2●, Ancient) — "☾: A character in your void with cost 2● or less gains reclaim until end of turn."
 - **Dream Garden Visitor** (2●, Child) — "…Once per turn, you may play a warrior from your void."
 - **Phantom Flotilla** (4● event) / **Radiant Convergence** (1● event) / **Shadow March** (3● event) / **Borrowed Minutes** (1,X● event) — mass-return cheap bodies from void; need a void full of them.
 - **Light of Emergence** (3●, Visitor), **Veilseeker** (3●, Explorer), **Wondrous Clearing** (1●, Visitor) — payoffs and engines built on a cheap-creature core.
@@ -411,9 +411,9 @@ Storage cards are inert until paired with the trigger that fills them; they're
 listed here because the "store" half references an action the deck must repeat.
 
 - **Eclipse Herald** (3●, Warrior) / **Walking Ballista**-style: "3●: Store 1⧗. X⧗: Dissolve an enemy with ✦ X or less." Self-fueling but slow alone.
-- **Dawnhorn Elder** (1●, Spirit Animal) — "2●, ☪: Store 1⧗. ▸Dawn: Gain 1● for each stored ⧗."
-- **Mirrorlight Architect** (1●, Synth) — "▸Dawn: Store 1⧗. ❖ – ☪: Materialize a character from your hand with cost X● or less, where X is the stored ⧗."
-- **Desolation's Edge** (2●, Warrior) — "☪: Store 1⧗. Abandon this character: Dissolve each character with cost ≤ the stored ⧗."
+- **Dawnhorn Elder** (1●, Spirit Animal) — "2●, ☾: Store 1⧗. ▸Dawn: Gain 1● for each stored ⧗."
+- **Mirrorlight Architect** (1●, Synth) — "▸Dawn: Store 1⧗. ❖ – ☾: Materialize a character from your hand with cost X● or less, where X is the stored ⧗."
+- **Desolation's Edge** (2●, Warrior) — "☾: Store 1⧗. Abandon this character: Dissolve each character with cost ≤ the stored ⧗."
 
 Other storage payoffs key their "store" to a theme already covered: discard
 (Radiants' Captain), abandon (Soulbinder, Obliterator of Worlds, Phantasmal
@@ -434,18 +434,18 @@ other.
 - **Pyrestone Avatar** (4●, Avatar) — "Allied characters have awakened."
 - **Pinnacle Ascendant** (5●, Tinkerer) — "Allied characters have awakened…"
 - **Pyre Challenger** (1●, Warrior) — "Awakened / ▸Challenge: This character gains +1✦." Wants to attack every turn.
-- **Cindermarch** (4●, Monster) and **Shadow Soloist** (3●, Musician) — repeatedly awaken the board (see above), going infinite with zero-cost producers and net-energy ☪ abilities.
+- **Cindermarch** (4●, Monster) and **Shadow Soloist** (3●, Musician) — repeatedly awaken the board (see above), going infinite with zero-cost producers and net-energy ☾ abilities.
 
 **Enablers (awaken effects):**
 
-- **Mother of Flames** (2●, Renegade) — "☪, Return an ally to hand: Awaken an ally."
-- **Verdant Pilgrim** (1●, Spirit Animal) — "☪: Awaken an ally."
-- **Lanternhearted** (3●, Explorer) — "Awakened / ☪: Awaken an ally."
-- **Duskmount** (3●, Visitor) — "Awakened / ☪: Rematerialize an ally. This character gains +1✦."
+- **Mother of Flames** (2●, Renegade) — "☾, Return an ally to hand: Awaken an ally."
+- **Verdant Pilgrim** (1●, Spirit Animal) — "☾: Awaken an ally."
+- **Lanternhearted** (3●, Explorer) — "Awakened / ☾: Awaken an ally."
+- **Duskmount** (3●, Visitor) — "Awakened / ☾: Rematerialize an ally. This character gains +1✦."
 - **Rootbound Witness** (1●, Warrior) — "Abandon this character: Allied characters gain awakened this turn."
 - **Surge of Fury** (4● event) — "Trigger the '▸Dawn' ability of each allied character. Awaken each allied character."
 
-These pair naturally with the energy dorks and ☪ engines that turn an awakened
+These pair naturally with the energy dorks and ☾ engines that turn an awakened
 board into a resource loop.
 
 ---

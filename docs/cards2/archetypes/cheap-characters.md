@@ -62,9 +62,9 @@ fair version of the same effect, buying back one body per turn for grindy value.
 Both are at their best when something keeps refilling the void — every dissolved
 or abandoned cheap character is another card the engine can replay.
 
-Scrap Reclaimer (a 0● 0✦ tinkerer with Awakened, Veil 2●, and "2●, ☪, Discard a
+Scrap Reclaimer (a 0● 0✦ tinkerer with Awakened, Veil 2●, and "2●, ☾, Discard a
 card: Return up to 2 characters with cost 2● or less from your void to your
-hand") is the bulk-recursion piece. It enters awakened so it can pay its ☪ cost
+hand") is the bulk-recursion piece. It enters awakened so it can pay its ☾ cost
 the turn it lands, and Veil 2● protects it; each activation rebuilds your hand
 from the void two bodies at a time while also feeding the discard a card the void
 deck is happy to spend. Steel Abomination (a 3● 3✦ tinkerer) does the same return
@@ -73,7 +73,7 @@ void to your hand," and it also reads "When a character with cost 2● or less i
 put into your void, this character gains +1✦," so it grows while you grind and
 pays out a two-card refund when it finally trades. Wreckage Prowler (a 2● 2✦
 visitor, "1●: Return a character with cost 2● or less from your void to your
-hand" plus "1●, ☪, Abandon a character: Draw a card") buys bodies back one at a
+hand" plus "1●, ☾, Abandon a character: Draw a card") buys bodies back one at a
 time and converts the surplus into cards. Pathwalker (a 3● 2✦ survivor, "Abandon
 this character: Return an event from your void to your hand" plus "▸Dawn: If this
 card is in your void, erode 3") rounds out the recursion on the event side and
@@ -148,7 +148,7 @@ churn, so that the grind itself becomes the clock. Abomination of Memory (a 1●
 1✦ ancient, "This character has +4✦ if there are three or more characters with
 cost 2● or less in your void") is a 5✦ body for a single energy the moment your
 void fills, which it does almost immediately. Reclaimer of Lost Paths (a 2● 2✦
-visitor, "Cards you reclaim are not banished when they leave play" plus "2●, ☪: A
+visitor, "Cards you reclaim are not banished when they leave play" plus "2●, ☾: A
 character in your void gains reclaim until end of turn") both grants reclaim to a
 void body on demand and removes the reclaimed-banish rule, so cards you reclaim
 return to the void rather than being banished — letting reclaimed cheap bodies
@@ -183,7 +183,7 @@ single card and simply gain the points to close.
 
 The deck's removal doubles as engine fuel because so much of it is paid with the
 cheap bodies and the void you are already cycling. Desolation's Edge (a 2● 2✦
-warrior, "☪: Store 1⧗" plus "Abandon this character: Dissolve each character with
+warrior, "☾: Store 1⧗" plus "Abandon this character: Dissolve each character with
 cost less than or equal to the stored ⧗") banks counters over a few turns and
 then sweeps the board of cheap characters when abandoned — a one-sided wrath if
 your own threats sit above the stored ⧗, and an abandon trigger on top. Duneveil
@@ -212,7 +212,7 @@ after turn from the void.
 
 The deck stalls without a way to convert its surplus into fresh cards, and a
 couple of utility pieces fill that role. Evacuation Enforcer (a 1● 1✦ trooper
-with Awakened and "☪: Draw 2 cards, then discard 3 cards") enters awakened so it
+with Awakened and "☾: Draw 2 cards, then discard 3 cards") enters awakened so it
 digs the turn it lands, and the discard is upside here — it is exactly how you
 load the void with cheap bodies for the recursion engines to replay. Vaultbreaker
 is the top-end the abandon outlets pay for, arriving as an 8✦ body once enough

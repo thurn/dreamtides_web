@@ -3,10 +3,10 @@
 This is the pool's awaken-engine archetype: a family of loops built on
 characters that re-awaken your board over and over within a single turn. A
 character enters play exhausted and stays that way until your next Dawn phase,
-so it cannot challenge, defend, or pay a ☪ cost the turn it arrives. The two
+so it cannot challenge, defend, or pay a ☾ cost the turn it arrives. The two
 backbone cards rip that restriction open. Cindermarch awakens your whole board
 every time a character materializes; Shadow Soloist awakens it every time you
-play an event. Once the board keeps refreshing, a ☪ ability that nets energy becomes
+play an event. Once the board keeps refreshing, a ☾ ability that nets energy becomes
 a faucet you can open as many times as you can trigger the awakener. Built around the right free producers, that faucet
 runs without end, and the overflow pours into Storm counts, Abandon drains, and
 deterministic finishes. Neither backbone is a deck on its own; both are the
@@ -43,20 +43,20 @@ underneath it.
 ## The Cindermarch energy loop
 
 Cindermarch awakens the board on each materialize, so the engine wants a
-character producer you can fire repeatedly and a ☪ ability that produces more
+character producer you can fire repeatedly and a ☾ ability that produces more
 energy than the cycle costs.
 
-The net-energy ☪ abilities are the payoff. Wolfbond Chieftain is a 1● visitor
-that enters awakened and reads "☪: Gain 1● for each allied warrior." Crescendo
+The net-energy ☾ abilities are the payoff. Wolfbond Chieftain is a 1● visitor
+that enters awakened and reads "☾: Gain 1● for each allied warrior." Crescendo
 Channeler is a 4● warrior with "▸Dawn: Materialize a 1✦ warrior figment" and
-"2●, ☪: Gain 1● for each allied warrior" — it both widens the board on Dawn and
+"2●, ☾: Gain 1● for each allied warrior" — it both widens the board on Dawn and
 taps for a pile of energy once a few warriors are down. Each is a one-shot
 faucet on a normal turn, because tapping exhausts it. Cindermarch is what turns
 the faucet back on.
 
 The repeatable producer closes the loop. Dreaming Obelisk, a 2● warrior, reads
-"☪, Abandon a warrior: Materialize a warrior from your void." Pit Descender does
-the same with a floor on cost: "☪, Abandon a warrior: Materialize a warrior with
+"☾, Abandon a warrior: Materialize a warrior from your void." Pit Descender does
+the same with a floor on cost: "☾, Abandon a warrior: Materialize a warrior with
 cost 2● or less from your void." Each activation materializes a character, which
 fires Cindermarch and re-awakens every *other* ally — including a second
 producer and the energy taps. With two such producers down, they ping-pong: tap
@@ -106,7 +106,7 @@ plus the producers that turn an event into more energy or more bodies.
 Melodist of the Finale, a 2● musician with Veil 2●, reads "When you play a
 character, gain 1●" — energy on each character you deploy, refilling the pool a
 chain spends. Driftcaller Sovereign (1● spirit animal, "▸Dawn: Gain 1●";
-"4●, ☪: This character gains +1✦") and Cloudmantle Ray (1● spirit animal,
+"4●, ☾: This character gains +1✦") and Cloudmantle Ray (1● spirit animal,
 "▸Dawn: Gain 1●", Reclaim 3●) are cheap producers whose ▸Dawn energy is
 re-triggered by Conduit of Resonance on every character you play, so the event
 shell and the materialize shell feed each other. Seedling Sage, a 1● child,
@@ -141,13 +141,13 @@ Some cards grant awakened as a static rather than re-applying it on a trigger,
 and they form the quiet backbone under both loops. Pyrestone Avatar (4● avatar,
 Offering) and Pinnacle Ascendant (5● tinkerer) both read "Allied characters have
 awakened," so every body you deploy arrives ready to challenge and ready to pay
-its ☪ cost the same turn. Pinnacle Ascendant also reads "When you discard or
+its ☾ cost the same turn. Pinnacle Ascendant also reads "When you discard or
 erode this card, it gains reclaim 0●," so the loot and erode engines can throw it
 away and replay it for free. Pyrestone Avatar's Offering line lets you bank it
 for 0● by banishing a card from hand for a single explosive awakened turn.
 
 Lanternhearted, a 3● explorer, is the spot awakener: it enters awakened and reads
-"☪: Awaken an ally," with Reclaim 1●. It hands the awakened status to one
+"☾: Awaken an ally," with Reclaim 1●. It hands the awakened status to one
 character on demand — enough to awaken a single energy producer or push one
 exhausted body to the front rank — and it can be bought back from the void for
 1● when it is spent. Scrap Reclaimer (0● tinkerer, Awakened, Veil 2●) is a free
@@ -178,7 +178,7 @@ replay events from the void, and Speaker for the Forgotten erodes and hands back
 a free reclaim — wins on the spot. Paradox Enforcer, a 1● visitor with 7✦,
 costs "banish 7 cards from your void" and can be played from the void; a loop
 that floods the void with spent bodies and events deploys a large threat cheaply.
-Wandering Archivist (2●, ☪: loot; "When you discard a card, gain 1⍟") and Rubble
+Wandering Archivist (2●, ☾: loot; "When you discard a card, gain 1⍟") and Rubble
 Diviner turn the loot triggers from Gearwright into a slow drain while the engine
 assembles.
 
@@ -200,7 +200,7 @@ a warrior, which fires ▸Dissolved triggers, and Conduit of Ashes, Inferno's
 Herald, and Forsworn Champion all want to be abandoned for energy, spark, or a
 figment flood. Forsworn Champion, a 2● warrior, reads "❖❖ – Abandon a warrior:
 This character gains +1✦," and Colossal Convergence, a 4● warrior, reads
-"❖❖ – ☪, Abandon a character: Give an ally +X✦ where X is the abandoned
+"❖❖ – ☾, Abandon a character: Give an ally +X✦ where X is the abandoned
 character's ✦" — both turn the loop's expendable bodies into front-rank spark.
 An awaken loop that keeps refreshing the board supplies the steady stream of
 bodies an Abandon drain wants to eat.
@@ -211,14 +211,14 @@ void to hand when they are dissolved, recurring bodies into the next cycle.
 Dreaming Obelisk and Pit Descender materialize warriors straight from the void.
 Echo Technician and Dream Garden Visitor replay events and warriors from the
 void, refilling a chain that has emptied the hand. Simulacra, a 3● synth, reads
-"2●, ☪: Materialize a figment copy of an ally until end of turn," a repeatable
+"2●, ☾: Materialize a figment copy of an ally until end of turn," a repeatable
 materialize the awakened board can keep firing for fresh Cindermarch triggers.
 
 ## How to draft and play it
 
 Take a backbone first. Cindermarch and Conduit of Resonance anchor the
 materialize loop; Shadow Soloist anchors the event loop, with Gearwright and
-Moonlit Dancer as its strong support. Then secure the net-energy ☪ abilities —
+Moonlit Dancer as its strong support. Then secure the net-energy ☾ abilities —
 Wolfbond Chieftain and Crescendo Channeler — and at least one repeatable producer
 in Dreaming Obelisk or Pit Descender, since those are what turn a single awaken
 into an unbounded one. Round out with free bodies (Aspiring Guardian, Conduit of

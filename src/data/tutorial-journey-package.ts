@@ -9,7 +9,7 @@ import { STARTER_CARD_NUMBERS } from "./starter-cards";
 import type { TutorialJourneyPool } from "./tutorial-journey-pool";
 import { extractGlossaryTerms } from "./glossary-terms";
 
-const RULES_TEXT_SYMBOL_RE = /[●⍏✦▸⍟☪⧗❖]/u;
+const RULES_TEXT_SYMBOL_RE = /[●⍏✦▸⍟☾⧗❖]/u;
 
 /**
  * Resolve the tutorial's authored UUID multiset into the same package shape as

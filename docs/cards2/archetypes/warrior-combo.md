@@ -62,7 +62,7 @@ Caller turns each warrior you cast into two materializations of value.
 
 Spirit Reaping is the gold-standard abandon outlet for Warrior Combo, and the
 card you most want to find and tutor toward, because it enables loops nothing
-else can: "Abandon a warrior: Gain 2●." There is no ☪ cost and no per-turn
+else can: "Abandon a warrior: Gain 2●." There is no ☾ cost and no per-turn
 limit, so you can feed it any number of warriors in a single turn, each abandon
 firing ▸Dissolved (and therefore Burning Revenant), each one paying you 2● back.
 This is what converts a board of cheap warriors into a near-bottomless pool of
@@ -95,13 +95,13 @@ a lethal challenger across a single combo turn.
 - Pit Descender
 
 The welders return warriors directly to play rather than to hand. Dreaming
-Obelisk reads "☪, Abandon a warrior: Materialize a warrior from your void," and
-Pit Descender reads "☪, Abandon a warrior: Materialize a warrior with cost 2● or
+Obelisk reads "☾, Abandon a warrior: Materialize a warrior from your void," and
+Pit Descender reads "☾, Abandon a warrior: Materialize a warrior with cost 2● or
 less from your void" (with a ▸Materialized: Erode 3 attached to seed your void).
 They are happy to endlessly recycle warriors with ▸Materialized and ▸Dissolved
 triggers — abandon Ossuary Overlord ("▸Materialized, ▸Dissolved: Draw a card") to
 a welder and you draw on the way out and draw again on the way back in. Because
-each activation costs ☪, a lone welder cycles once per turn; the way to multiply
+each activation costs ☾, a lone welder cycles once per turn; the way to multiply
 it is to awaken it again (Crescendo Channeler's board, Wolfbond Chieftain) or run
 both welders together so two warriors return each turn. Pit Descender's Erode 3
 also stocks the void with fresh targets, making it the better standalone setup
@@ -117,7 +117,7 @@ warrior. Discover a warrior with higher cost, then materialize it." You feed it 
 small warrior — which itself fires ▸Dissolved, triggering Burning Revenant or a
 Striker — and dig up a larger piece, putting it straight into play. It is both a
 combo enabler and a fail-safe, trading a 0● body for whichever engine you are
-missing. Mirror Protocol does the same upward climb on a stick: "☪, Abandon a
+missing. Mirror Protocol does the same upward climb on a stick: "☾, Abandon a
 warrior: Discover a warrior with cost 1● higher and materialize it." Repeated
 across turns it assembles a chain of successively larger warriors directly onto
 the board, doubling as the tutor that finds Spirit Reaping or Burning Revenant in
@@ -140,7 +140,7 @@ materialize a 1✦ warrior figment," so every warrior you cast widens the board 
 another figment, and those figments stack into a single growing position.
 
 Crescendo Channeler is the energy engine: "▸Dawn: Materialize a 1✦ warrior
-figment" plus "2●, ☪: Gain 1● for each allied warrior." On a wide warrior board
+figment" plus "2●, ☾: Gain 1● for each allied warrior." On a wide warrior board
 that activated ability nets far more energy than it costs, and the energy refunds
 fuel another lap of abandon outlets and recursion. Spellweaver ("1●, Abandon a
 non-figment warrior: Materialize a 1✦ warrior figment") converts your real
@@ -202,7 +202,7 @@ play you net two returns per abandon, so the chain refills faster than it drains
 materializes one from the void, firing the returned body's ▸Materialized trigger.
 Pair it with Ossuary Overlord or Spent Courier and each lap draws a card; pair it
 with Burning Revenant and the abandon half also returns a lesser warrior to hand.
-The ☪ cost caps a single welder at one lap per turn, so the engine wants a
+The ☾ cost caps a single welder at one lap per turn, so the engine wants a
 re-awaken (Crescendo Channeler keeping the board wide and energy flowing) or both
 welders at once.
 
@@ -214,7 +214,7 @@ cheap warriors — and Intermezzo Balladeer turns that sequence into a mounting 
 total, while Twilight Suppressor banks a ⧗ per play.
 
 **The energy math.** Whether a loop is truly infinite comes down to net energy.
-Count the energy a lap costs (welder ☪ is free; replaying a returned warrior
+Count the energy a lap costs (welder ☾ is free; replaying a returned warrior
 costs its reduced price) against what the lap refunds (Spirit Reaping 2●, Arc
 Disciple 2●, Pyrewatcher's 3● one-shot, Glimpse of Infinity and Pulse of
 Sacrifice as burst fuel, Crescendo Channeler scaling with the board). If the

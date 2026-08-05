@@ -26,10 +26,10 @@ expensive one.
 
 Behind it sit the energy producers that convert a wide board back into ●.
 **Wolfbond Chieftain** is a 1● Awakened body — it enters ready, so it can pay its
-☪ cost the turn it lands — with "☪: Gain 1● for each allied warrior." On a board
+☾ cost the turn it lands — with "☾: Gain 1● for each allied warrior." On a board
 of three or four warriors it is a one-turn energy explosion that refuels a
 second wave. **Crescendo Channeler** does the same job from the four-slot, adding
-"2●, ☪: Gain 1● for each allied warrior" on top of a ▸Dawn that materializes a
+"2●, ☾: Gain 1● for each allied warrior" on top of a ▸Dawn that materializes a
 1✦ warrior figment each turn — it both widens the board and cashes that width in
 for energy. The burst-energy texture rounds out with **Lunar Hart**
 ("▸Materialized, Dawn: Gain 2●.") and **Emberfang** ("▸Dawn: Gain 2●. The
@@ -67,7 +67,7 @@ the whole team: "▸Dawn: Each allied warrior gains +1✦," compounding every tu
 it stays in play. **Momentum's Edge** is the flexible anthem — "▸Materialized:
 Choose a character type. This character is that character type. Characters of the
 chosen type have +1✦" — name warrior and it becomes a team-wide +1✦ that also
-counts itself. **Ride of the Vanguard** is the burst finisher: "❖ – ☪: Give an
+counts itself. **Ride of the Vanguard** is the burst finisher: "❖ – ☾: Give an
 ally +1✦ for each allied warrior until end of turn," a one-shot pump that can
 push an unpaired challenger to a lethal ⍟ swing during the Day phase.
 
@@ -78,7 +78,7 @@ attacker" play, dropped on a front-rank warrior the turn you want to score big.
 ## Figment makers keep the board wide
 
 The type payoffs all scale on warrior count, so the deck wants engines that keep
-producing bodies. **Worldbreacher** is the cheapest — a 1● body with "☪:
+producing bodies. **Worldbreacher** is the cheapest — a 1● body with "☾:
 Materialize a 1✦ warrior figment" that turns each turn into another warrior for
 the count (note it enters exhausted, so the first figment comes the following
 turn). **Crescendo Channeler** adds a figment every ▸Dawn for free. **Inferno's
@@ -133,22 +133,22 @@ When the aggression stalls, the deck can pivot toward the warrior engines it
 shares with Warrior Combo. **Aftermath Bloom** is a warrior tutor — "To play
 this event, abandon a warrior. Discover a warrior with higher cost, then
 materialize it" — trading a spent 1✦ body for a bigger threat straight into play.
-**Mirror Protocol** does it repeatably: "☪, Abandon a warrior: Discover a warrior
+**Mirror Protocol** does it repeatably: "☾, Abandon a warrior: Discover a warrior
 with cost 1● higher and materialize it," a ladder that climbs the curve one
 warrior at a time, the Oswald-style chain that both digs and develops.
 
 The recursion line lives in the void-erosion bodies. **Pit Descender**
-("▸Materialized: Erode 3" plus "☪, Abandon a warrior: Materialize a warrior with
+("▸Materialized: Erode 3" plus "☾, Abandon a warrior: Materialize a warrior with
 cost 2● or less from your void") fills the void and then re-buys cheap warriors
 out of it, a self-contained value loop that does not need the rest of the combo.
 **Dream Garden Visitor** ("▸Materialized, Dawn: Erode 1. Once per turn, you may
 play a warrior from your void") and **Echo Technician** ("▸Materialized: Erode 4"
-plus "☪: You may play an event from your void") provide the same recur-from-the-
+plus "☾: You may play an event from your void") provide the same recur-from-the-
 void texture for grinding games. **Forsworn Champion** and **Colossal
 Convergence** are the abandon-fueled growth finishers borrowed from the combo
 side: Forsworn Champion ("❖❖ – Abandon a warrior: This character gains +1✦")
 sacrifices the board to grow itself for a lethal swing, and Colossal Convergence
-("❖❖ – ☪, Abandon a character: Give an ally +X✦ where X is the abandoned
+("❖❖ – ☾, Abandon a character: Give an ally +X✦ where X is the abandoned
 character's ✦") dumps a dying board's spark onto one unpaired challenger.
 
 A note on **Vault Infiltrator** ("Players may only play one card per turn"): it

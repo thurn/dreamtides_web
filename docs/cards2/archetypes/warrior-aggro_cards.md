@@ -5,8 +5,8 @@ A companion to [warrior-aggro.md](warrior-aggro.md), listing every CardsV2 card 
 ## Explosive deployment enablers
 
 1. Tethered Hollow — "The first warrior you play each turn costs 3● less"; the premier 1● enabler that drops the curve a turn ahead.
-2. Wolfbond Chieftain — Awakened 1● body with "☪: Gain 1● for each allied warrior"; one-turn energy burst that refuels a wide board.
-3. Crescendo Channeler — ▸Dawn warrior figment plus "2●, ☪: Gain 1● for each allied warrior"; widens the board and cashes width for energy.
+2. Wolfbond Chieftain — Awakened 1● body with "☾: Gain 1● for each allied warrior"; one-turn energy burst that refuels a wide board.
+3. Crescendo Channeler — ▸Dawn warrior figment plus "2●, ☾: Gain 1● for each allied warrior"; widens the board and cashes width for energy.
 4. Lunar Hart — "▸Materialized, Dawn: Gain 2●"; cheap burst-energy accelerant for the turn-two dump.
 5. Emberfang — "▸Dawn: Gain 2●. The opponent gains 3⍟"; free 0● accelerant for the fastest builds that close before the tax matters.
 6. Sundown Ronin — "Warriors cost you 1● less"; flat curve discount on the whole warrior plan.
@@ -29,7 +29,7 @@ A companion to [warrior-aggro.md](warrior-aggro.md), listing every CardsV2 card 
 17. Company Commander — "When you play a warrior, this character gains +1✦"; permanent growth that becomes a finisher on its own.
 18. Assault Leader — "▸Dawn: Each allied warrior gains +1✦"; team-wide pump that compounds every turn.
 19. Momentum's Edge — name warrior on ▸Materialized for a team-wide +1✦ that also counts itself.
-20. Ride of the Vanguard — "❖ – ☪: Give an ally +1✦ for each allied warrior until end of turn"; burst finisher during the Day phase.
+20. Ride of the Vanguard — "❖ – ☾: Give an ally +1✦ for each allied warrior until end of turn"; burst finisher during the Day phase.
 21. Inspiring Templar — "+1✦ for each allied warrior" itself and "Other allied warriors have +1✦"; a body-plus-anthem in one warrior.
 22. Liminal Striker — "+1✦ for each allied warrior"; cheap self-scaling body that grows with the board.
 23. Charnel Seraph — "Support – Supported characters have +3✦" with an abandon-reposition; big back-rank pump for the front lane.
@@ -43,12 +43,12 @@ A companion to [warrior-aggro.md](warrior-aggro.md), listing every CardsV2 card 
 28. Wired Duelist — "▸Dawn: +1✦" then "▸Dissolved: Give an ally +X✦"; a growing body that dumps its spark onto an attacker when it trades.
 29. Nineborn Specter — 2● warrior, "▸Dissolved: Gain 2⍟"; a body that still scores when it trades in a challenge.
 30. Apocalypse Vigilante — "When this character scores ⍟, the opponent loses an equivalent quantity of ⍟"; a warrior finisher that doubles the swing.
-31. Colossal Convergence — "❖❖ – ☪, Abandon a character: Give an ally +X✦"; dumps a dying board's spark onto one challenger.
+31. Colossal Convergence — "❖❖ – ☾, Abandon a character: Give an ally +X✦"; dumps a dying board's spark onto one challenger.
 32. Forsworn Champion — "❖❖ – Abandon a warrior: This character gains +1✦"; sacrifices the board to grow itself for a lethal swing.
 
 ## Figment makers to keep the board wide
 
-33. Worldbreacher — 1● body, "☪: Materialize a 1✦ warrior figment"; cheapest engine that adds a warrior each turn for the count.
+33. Worldbreacher — 1● body, "☾: Materialize a 1✦ warrior figment"; cheapest engine that adds a warrior each turn for the count.
 34. Voidsire — "When you play a warrior, materialize a 1✦ warrior figment"; doubles every warrior you deploy into board width.
 35. Standard Bearer — "When you play a character, materialize a 1✦ warrior figment"; warrior figment on every character played.
 36. Inferno's Herald — "▸Dawn: +1✦" then "▸Dissolved: Materialize a 1✦ warrior figment for each ✦"; grow then refill the board on a trade.
@@ -56,7 +56,7 @@ A companion to [warrior-aggro.md](warrior-aggro.md), listing every CardsV2 card 
 38. Forge-Twin — ▸Materialized makes a Blade of Unity figment ("+1✦ for each allied warrior"); a warrior that brings a scaling warrior.
 39. Gilded Catalyst — "When you play a warrior, pay 2● to materialize a Blade of Unity figment"; repeatable scaling-figment maker.
 40. Fathomscourge — "when an allied warrior is dissolved, materialize a 1✦ warrior figment"; rebuilds width through combat trades.
-41. Harborwarden — "☪, Discard a card: Materialize a 1✦ warrior figment" plus a warrior-fueled removal mode.
+41. Harborwarden — "☾, Discard a card: Materialize a 1✦ warrior figment" plus a warrior-fueled removal mode.
 42. Twilight Troubadour — "When you play an event, materialize a 1✦ warrior figment"; turns the deck's events into warrior bodies.
 43. Phantasmal Recruiter — stores ⧗ on abandon, then "2●, 2⧗: Materialize two 1✦ warrior figments"; a wide-board refill engine.
 44. Reforged Automaton — "▸Materialized: Draw a warrior" and grows when you materialize non-figment warriors; a Synth that runs with the tribe.
@@ -76,9 +76,9 @@ A companion to [warrior-aggro.md](warrior-aggro.md), listing every CardsV2 card 
 ## Tutors, recursion, and warrior staying power
 
 54. Aftermath Bloom — "abandon a warrior. Discover a warrior with higher cost, then materialize it"; warrior tutor straight into play.
-55. Mirror Protocol — "☪, Abandon a warrior: Discover a warrior with cost 1● higher and materialize it"; a repeatable ladder up the curve.
-56. Dreaming Obelisk — "☪, Abandon a warrior: Materialize a warrior from your void"; reanimates warriors out of the bin.
-57. Pit Descender — "▸Materialized: Erode 3" plus "☪, Abandon a warrior: Materialize a warrior with cost 2● or less from your void"; self-contained warrior value loop.
+55. Mirror Protocol — "☾, Abandon a warrior: Discover a warrior with cost 1● higher and materialize it"; a repeatable ladder up the curve.
+56. Dreaming Obelisk — "☾, Abandon a warrior: Materialize a warrior from your void"; reanimates warriors out of the bin.
+57. Pit Descender — "▸Materialized: Erode 3" plus "☾, Abandon a warrior: Materialize a warrior with cost 2● or less from your void"; self-contained warrior value loop.
 58. Dream Garden Visitor — "Once per turn, you may play a warrior from your void"; grindy void recursion for the tribe.
 59. Prism Caller — "When you play a warrior, materialize a cost-2-or-less character from your void"; warrior triggers reanimation.
 60. Burning Revenant — "When an allied warrior is dissolved, return a warrior with lesser cost from your void to hand"; trades refill the hand.
@@ -87,7 +87,7 @@ A companion to [warrior-aggro.md](warrior-aggro.md), listing every CardsV2 card 
 63. Infernal Cavalier — "▸Dissolved: Return another warrior with cost 4● or less from your void to your hand"; mid-cost warrior with built-in recursion.
 64. Dune Reaper — "2●, Banish a card from your void: Materialize this character from your void"; a 3✦ warrior that re-buys itself.
 65. Wreckheap Survivor — "▸Night: pay 2● to return this from your void to play"; a warrior that keeps coming back to attack.
-66. Echo Technician — "▸Materialized: Erode 4" plus "☪: play an event from your void"; void texture for grinding the warrior shell.
+66. Echo Technician — "▸Materialized: Erode 4" plus "☾: play an event from your void"; void texture for grinding the warrior shell.
 
 ## Type-flexible bodies and tribal removal
 

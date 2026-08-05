@@ -47,7 +47,7 @@ A companion to [survivors.md](survivors.md), listing every CardsV2 card with a s
 32. Searcher in the Mists — survivor that erodes 4 on entry and on dissolve, the premier void-filler.
 33. Ashwalker — survivor that erodes 4 then mines the void on dissolve (return a character from void to hand).
 34. Pathwalker — survivor that erodes 3 at Dawn from the void and buys back an event when abandoned, a discard-pile utility piece.
-35. Evacuation Enforcer — draw 2, discard 3 each ☪, the heavy discard outlet that loads the void fast.
+35. Evacuation Enforcer — draw 2, discard 3 each ☾, the heavy discard outlet that loads the void fast.
 36. Urban Cipher — discard your hand then draw 3, the burst discard outlet that sets up the void.
 37. Soulkindler — a board-wide +1✦ pump that works from the void; actively wants to be discarded or eroded.
 38. Shadowcaller — makes a survivor figment whenever an ally dies and gains reclaim 0● when discarded/eroded, bridging both builds.
@@ -67,7 +67,7 @@ A companion to [survivors.md](survivors.md), listing every CardsV2 card with a s
 
 ## Recursion support and acceleration
 
-49. Lanternhearted — awakens an ally each ☪ and reclaims for 1●, letting a replayed Kindred Sparks or recurrent body act immediately.
+49. Lanternhearted — awakens an ally each ☾ and reclaims for 1●, letting a replayed Kindred Sparks or recurrent body act immediately.
 50. Ruin Scavenger — grows by banishing the opponent's void, void hate plus a scaling body.
 51. Scrap Reclaimer — discard a card to return up to two cheap characters from your void, a recursion engine.
 52. Unquenched — retriggers each materialized ally's Dawn ability, multiplying the value of recurred bodies.

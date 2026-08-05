@@ -26,7 +26,7 @@ Two characters do the heavy lifting for grinding through a fair game.
 **Dreamvale Monarch** is the redundant card-advantage body — "▸Materialized: Draw
 a card" — so every copy you play replaces itself and keeps you digging. **Moonbound
 Wolf** is the recursion engine: it enters Awakened, and its activated ability is
-"☪, Return an ally to hand: Trigger the '▸Dawn' ability of an allied spirit
+"☾, Return an ally to hand: Trigger the '▸Dawn' ability of an allied spirit
 animal." Bouncing a body to hand means you get to replay it for another
 ▸Materialized trigger, so once you have a Wolf and a Monarch you do not need to
 keep finding fresh characters in your deck — you recycle the same one for repeated
@@ -47,24 +47,24 @@ The obvious question for a deck that wants to dump its whole hand in one turn is
 how it pays for all of it. The answer is that the characters pay for themselves.
 
 **Spirit of the Greenwood** is the engine the deck is named around — it enters
-Awakened, so it produces the turn it lands, and its ability is "1●, ☪: Gain 1● for
+Awakened, so it produces the turn it lands, and its ability is "1●, ☾: Gain 1● for
 each allied character." With a flooded board it is a net-positive energy faucet,
 and because each 1● spirit animal you have already played makes its activation
 bigger, every cheap body you commit is effectively "free" once the Greenwood is
-online. **Blazing Emberwing** ("☪: Gain 1● for each allied character") is the same
+online. **Blazing Emberwing** ("☾: Gain 1● for each allied character") is the same
 engine without the up-front 1●, and it counts every character, not only spirit
 animals.
 
 The tribal energy producers scale with how wide you have gone.
-**Mountainwatch Alpha** ("☪: Gain 1● for each allied spirit animal") and
-**Ghostlight Wolves** ("☪: Gain 1● for each allied spirit animal", plus "Support –
+**Mountainwatch Alpha** ("☾: Gain 1● for each allied spirit animal") and
+**Ghostlight Wolves** ("☾: Gain 1● for each allied spirit animal", plus "Support –
 Supported spirit animals have +2✦") both reward a board stuffed with the type, and
 the Wolves double as a back-rank anthem that pushes the front rank's spark up. The
 key with all of these is to play as many bodies as you can before you tap them, so
-you extract the maximum from each ☪.
+you extract the maximum from each ☾.
 
 A second set of producers triggers off the act of playing characters rather than
-off a ☪. **Melodist of the Finale** is "Veil 2●. When you play a character, gain
+off a ☾. **Melodist of the Finale** is "Veil 2●. When you play a character, gain
 1●", so it refunds energy on every card you chain — the closer the deck gets to a
 Storm turn, the more it produces, and the Veil keeps it alive through removal.
 **Seedling Sage** ("When you play a character, store 1⧗. 2⧗: Gain 1●") and
@@ -100,7 +100,7 @@ board count. With a back rank
 also stacked, repositioning fresh bodies forward before the strike turns the whole
 flood into points in a single Challenge phase.
 
-**Mystic Runefish** ("5●, ☪: Each allied spirit animal's ✦ becomes 7") is the
+**Mystic Runefish** ("5●, ☾: Each allied spirit animal's ✦ becomes 7") is the
 tribal nuke: it sets every spirit animal to 7✦ at once, which a wide board
 converts into a crushing front rank. It is also resilient — once the board is big
 enough, a single activation is lethal, so the deck keeps energy open through the
@@ -124,7 +124,7 @@ is the top-end payoff — a single resolution makes the entire rest of your boar
 10✦ wall — and it can be found rather than drawn. **Beacon of Tomorrow** ("Choose a
 value of X. Discover a character with cost X●") is the deck's tutor, fetching
 whichever finisher the board wants, while **The Dread Sovereign**
-("X●, ☪, Abandon another character: Discover a character with cost X●, then
+("X●, ☾, Abandon another character: Discover a character with cost X●, then
 materialize it") both finds and deploys it in one activation, converting a spare
 body directly into the missing piece.
 
@@ -156,7 +156,7 @@ the tribe and turns into a spirit animal anthem on top.
 
 A board that materializes exhausted cannot challenge the turn it lands, so the
 deck carries ways to wake itself up and swing immediately. **Verdant Pilgrim**
-("☪: Awaken an ally") wakes one body at a time, while **Cindermarch** ("When you
+("☾: Awaken an ally") wakes one body at a time, while **Cindermarch** ("When you
 materialize a character, awaken each other allied character") wakes the whole board
 on every deployment — so a Storm turn that floods bodies also un-exhausts them,
 letting the entire flood challenge the same turn it was played. **Pyrestone Avatar**
@@ -176,7 +176,7 @@ Cloudmantle Ray pays you the moment it enters.
 ## Card advantage and tutors
 
 Beyond **Dreamvale Monarch** and the Celestial Reverie loop, the deck has dedicated
-diggers. **Eternal Stag** ("Allied spirit animals have +1✦. 2●, ☪: Draw a spirit
+diggers. **Eternal Stag** ("Allied spirit animals have +1✦. 2●, ☾: Draw a spirit
 animal") is both an anthem and a tribal draw engine, refilling on exactly the cards
 the deck wants. **Oathbound Pair** ("▸Materialized, Dawn: Give an ally +1✦") grows a
 threat a little every turn and again the moment it lands, a steady spark gain that

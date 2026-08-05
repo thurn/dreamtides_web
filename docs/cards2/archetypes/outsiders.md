@@ -121,7 +121,7 @@ conditions.
 - Dreadwood Emissary
 
 You can lean further into the rematerialize angle with a small blink package.
-Duskmount enters Awakened and reads "☪: Rematerialize an ally. This character
+Duskmount enters Awakened and reads "☾: Rematerialize an ally. This character
 gains +1✦," firing a chosen ally's ▸Materialized again every turn while it grows
 — point it at Glimmerwood Scout or Voidcaller for a recurring banish without even
 spending a card. Keeper of the Tides is a disruptive body in this slot:
@@ -181,7 +181,7 @@ cheap to deploy and bounce.
 Thronebound Arbiter is the top-end Outsider at 4●: it bounces on entry and draws
 a card whenever any allied outsider scores, the same board-wide trigger as
 Driftrider stapled to a sturdier 2✦ payoff. Last Beacon is not an Outsider
-itself, but it fits perfectly. It makes Outsider figments ("3●, ☪: Materialize a
+itself, but it fits perfectly. It makes Outsider figments ("3●, ☾: Materialize a
 1✦ outsider figment"), giving you extra scoring bodies that trigger the
 outsider-scores payoffs, and its own trigger — "when an allied outsider scores ⍟,
 draw a card and gain ⍟ equal to its ● cost" — turns each scoring Outsider into

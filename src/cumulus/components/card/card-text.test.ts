@@ -218,15 +218,15 @@ describe("tokenizeRulesText", () => {
     expect(reconstructText(result)).toBe("Gain 2⍟.");
   });
 
-  it("identifies the lunar symbol ☪", () => {
-    const result = tokenizeRulesText("☪: Draw a card.");
+  it("identifies the lunar symbol ☾", () => {
+    const result = tokenizeRulesText("☾: Draw a card.");
     const lunar = collectSymbols(result).find(
       (segment) => segment.symbol === "lunar",
     );
     expect(lunar).toMatchObject({
       kind: "symbol",
       symbol: "lunar",
-      char: "☪",
+      char: "☾",
     });
     expect(lunar?.entry?.id).toBe("exhaust-cost");
   });

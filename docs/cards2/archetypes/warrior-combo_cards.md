@@ -18,20 +18,20 @@ A companion to [warrior-combo.md](warrior-combo.md), listing every CardsV2 card 
 
 ## Welders (return to play)
 
-12. Dreaming Obelisk — "☪, Abandon a warrior: Materialize a warrior from your void" — recycles warriors with ▸Materialized/▸Dissolved triggers.
-13. Pit Descender — "☪, Abandon a warrior: Materialize a warrior ≤2● from your void," with ▸Materialized Erode 3 to stock the void.
+12. Dreaming Obelisk — "☾, Abandon a warrior: Materialize a warrior from your void" — recycles warriors with ▸Materialized/▸Dissolved triggers.
+13. Pit Descender — "☾, Abandon a warrior: Materialize a warrior ≤2● from your void," with ▸Materialized Erode 3 to stock the void.
 14. Veilseeker — "Abandon this character: Return all characters ≤2● from your void to play" — a mass warrior reanimation finisher.
 15. Radiant Convergence — Materializes a ≤2● character from void, with reclaim by abandoning two characters.
 
 ## Abandon outlets
 
-16. Spirit Reaping — The gold-standard outlet: "Abandon a warrior: Gain 2●," no ☪ and no per-turn cap, fueling unbounded loops.
+16. Spirit Reaping — The gold-standard outlet: "Abandon a warrior: Gain 2●," no ☾ and no per-turn cap, fueling unbounded loops.
 17. Arc Disciple — "Abandon another character: Gain 2●," the redundant uncapped energy outlet.
 18. Infernal Ascendant — "Abandon another character: Gain 1●," the same uncapped engine at a lower rate.
 19. Forsworn Champion — "Abandon a warrior: This character gains +1✦," a spark-paying Interrupt-speed outlet that grows lethal across a combo turn.
 20. Spellweaver — "1●, Abandon a non-figment warrior: Materialize a 1✦ warrior figment" — converts real warriors into figment fodder while firing ▸Dissolved.
 21. Grim Reclaimer — "2●, Abandon 2 warriors: Draw a card" — an abandon outlet that converts bodies into cards.
-22. Nightmare Manifest — "☪, Abandon a character: Gain 1●" plus ▸Dawn energy — repeatable abandon energy outlet.
+22. Nightmare Manifest — "☾, Abandon a character: Gain 1●" plus ▸Dawn energy — repeatable abandon energy outlet.
 23. Virtuoso of Harmony — "Abandon a character ≤2●: Gain 1●" — a free repeatable outlet for cheap fodder.
 24. Soulbinder — "Abandon a character: Store 1⧗" / "2⧗: Gain 1●" — abandon outlet that banks toward energy.
 25. Herald of the Last Light — Grows on every abandon and "3●, Abandon a character: Draw a card" — an abandon outlet and payoff in one.
@@ -42,19 +42,19 @@ A companion to [warrior-combo.md](warrior-combo.md), listing every CardsV2 card 
 ## Tutors and assembly
 
 29. Aftermath Bloom — "Abandon a warrior. Discover a warrior with higher cost, then materialize it" — the warrior tutor and combo fail-safe.
-30. Mirror Protocol — "☪, Abandon a warrior: Discover a warrior 1● higher and materialize it" — a tutor on a stick that climbs the curve.
+30. Mirror Protocol — "☾, Abandon a warrior: Discover a warrior 1● higher and materialize it" — a tutor on a stick that climbs the curve.
 
 ## Figment / board makers
 
 31. Voidsire — "When you play a warrior, materialize a 1✦ warrior figment" — widens the board and feeds every abandon and Prism Caller trigger.
 32. Forge-Twin — Materializes a figment copy of Blade of Unity, a scaling warrior that feeds the count.
-33. Crescendo Channeler — ▸Dawn warrior figment plus "2●, ☪: Gain 1● for each allied warrior" — the energy engine that refunds laps of the loop.
-34. Worldbreacher — "☪: Materialize a 1✦ warrior figment" — a repeatable figment maker.
+33. Crescendo Channeler — ▸Dawn warrior figment plus "2●, ☾: Gain 1● for each allied warrior" — the energy engine that refunds laps of the loop.
+34. Worldbreacher — "☾: Materialize a 1✦ warrior figment" — a repeatable figment maker.
 35. Standard Bearer — "When you play a character, materialize a 1✦ warrior figment" — broad figment engine for the loop.
 36. Fathomscourge — "When an allied warrior is dissolved, materialize a 1✦ warrior figment" — replaces abandoned bodies with fresh fodder.
 37. Inferno's Herald — ▸Dissolved makes a warrior figment per ✦ it has — a death payoff that refills the board.
 38. Phantasmal Recruiter — "Abandon a character: Store 1⧗" / "2●, 2⧗: Materialize two 1✦ warrior figments" — abandon-fueled figment engine.
-39. Harborwarden — "☪, Discard: Materialize a warrior figment" plus "Abandon 2 warriors: Dissolve an enemy ≤4✦" — figment maker and abandon-powered removal.
+39. Harborwarden — "☾, Discard: Materialize a warrior figment" plus "Abandon 2 warriors: Dissolve an enemy ≤4✦" — figment maker and abandon-powered removal.
 
 ## Drain / death payoffs (finishers)
 
@@ -95,7 +95,7 @@ A companion to [warrior-combo.md](warrior-combo.md), listing every CardsV2 card 
 
 69. Invoker of Myths — "Once per turn, when you materialize a warrior, draw a card" — card advantage off Prism Caller, welders, and figment makers.
 70. Reforged Automaton — "▸Materialized: Draw a warrior" and grows on each non-figment warrior — refuels the warrior count.
-71. Smoldering Ancient — Grows on warrior dissolves and "☪, Abandon a warrior: Gain 1⍟" — abandon outlet and drain payoff.
+71. Smoldering Ancient — Grows on warrior dissolves and "☾, Abandon a warrior: Gain 1⍟" — abandon outlet and drain payoff.
 
 ## Cost reduction (enables the replay loop)
 
@@ -108,8 +108,8 @@ A companion to [warrior-combo.md](warrior-combo.md), listing every CardsV2 card 
 75. Skyflame Commander — Supports +1✦ for each allied warrior — the anthem the wide figment board wants.
 76. Momentum's Edge — Sets a chosen type and gives +1✦ to it — flexible warrior-board buff.
 77. Shadow Reflection — "Give an ally +1✦ for each allied warrior" — a burst pump off the wide board.
-78. Colossal Convergence — "☪, Abandon a character: Give an ally +X✦ (abandoned ✦)" — an abandon outlet that converts bodies to spark.
-79. Wolfbond Chieftain — "☪: Gain 1● for each allied warrior" — the re-awakenable energy engine for combo turns.
+78. Colossal Convergence — "☾, Abandon a character: Give an ally +X✦ (abandoned ✦)" — an abandon outlet that converts bodies to spark.
+79. Wolfbond Chieftain — "☾: Gain 1● for each allied warrior" — the re-awakenable energy engine for combo turns.
 
 ## Burst energy
 

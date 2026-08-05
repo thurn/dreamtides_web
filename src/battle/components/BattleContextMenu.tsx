@@ -116,11 +116,11 @@ export function BattleContextMenu({
 
     if (card.definition.battleCardKind === "character") {
       // A direct exhaust toggle for in-play characters: marks the body exhausted
-      // (☪) so an exhaust icon shows over it until Ending clears it. The same
+      // (☾) so an exhaust icon shows over it until Ending clears it. The same
       // toggle is also available under the Status submenu.
       if (location.zone === "frontRank" || location.zone === "backRank") {
         result.push({
-          label: card.status.isExhausted ? "Awaken" : "Exhaust ☪",
+          label: card.status.isExhausted ? "Awaken" : "Exhaust ☾",
           action: () => setStatus({ isExhausted: !card.status.isExhausted }),
         });
       }
@@ -316,7 +316,7 @@ export function BattleContextMenu({
 
     /**
      * Card-scoped status toggles emitting `SET_CARD_STATUS` (rules §Exhaust and
-     * Awaken, §Keywords). Exhausting a front-rank body triggers the engine's ☪
+     * Awaken, §Keywords). Exhausting a front-rank body triggers the engine's ☾
      * auto-retreat to an open back-rank position (and is rejected when the back
      * rank is full); the menu just dispatches the edit and the engine applies
      * that positional rule. Awaken clears the exhausted status in place.
@@ -326,7 +326,7 @@ export function BattleContextMenu({
       const items: ContextMenuItem[] = [];
 
       items.push({
-        label: status.isExhausted ? "Awaken" : "Exhaust ☪",
+        label: status.isExhausted ? "Awaken" : "Exhaust ☾",
         action: () => setStatus({ isExhausted: !status.isExhausted }),
       });
       items.push({ divider: true });

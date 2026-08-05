@@ -77,7 +77,7 @@ until you have at least eight solid 1● and 2● events.
 
 The pool rewards getting extra mileage out of each interactive event. Somber
 Flockmaster, covered above, hands free reclaim to a void event each Dawn. Keeper
-of the Lightpath does the same on demand — ☪ gives an event with cost 3● or less
+of the Lightpath does the same on demand — ☾ gives an event with cost 3● or less
 in your void reclaim, so you can buy back a prevent or a removal spell at the
 moment you need it. Whisper of the Past is the cheapest enabler of all: for 1● it
 gives an event in your void reclaim until end of turn, and it loops itself back
@@ -141,8 +141,8 @@ awakens each allied character whenever you play an event, turning a chain of
 cheap events into a fully awakened board mid-turn. Gearwright loots — draw a card,
 then discard a card — every time you play an event, and Moonlit Dancer gives
 allied characters +1✦ until end of turn on each event, so a flurry of cheap
-interaction also pushes spark onto the front rank. Lanternhearted (☪: Awaken an
-ally) provides repeatable awakens to keep ☪ producers online while the events
+interaction also pushes spark onto the front rank. Lanternhearted (☾: Awaken an
+ally) provides repeatable awakens to keep ☾ producers online while the events
 flow. These pieces are the awaken backbone shared with the Storm and Abandon
 loops rather than a standalone plan, but they show how naturally the cheap-event
 core feeds the rest of the pool.

@@ -204,7 +204,7 @@ Encode the rules §Figments table — base spark + implicit keyword — for: War
 
 **Files:** Modify `src/battle/state/apply-debug-edit.ts` (`SWAP_BATTLEFIELD_SLOTS` and the battlefield-destination branch of `MOVE_CARD_TO_ZONE`). Test: extend `src/battle/state/apply-debug-edit.test.ts`.
 
-Rules §The Play Area: an exhausted character cannot be moved to the front rank by either player. (The ☪-pay auto-retreat is wired with the exhaust tool in Phase 4.)
+Rules §The Play Area: an exhausted character cannot be moved to the front rank by either player. (The ☾-pay auto-retreat is wired with the exhaust tool in Phase 4.)
 
 - [ ] **Step 1:** Write a failing test: moving/swapping an exhausted (`status.isExhausted === true`) character into a `frontRank` slot leaves state unchanged (the move is rejected); a non-exhausted character moves normally; moving an exhausted character within the back rank is allowed. Bug class: an exhausted body sneaking into combat.
 - [ ] **Step 2:** Run — fails.
@@ -255,7 +255,7 @@ basicAutomation: params.get("automation") !== "0",
 
 **Files:** Modify `src/battle/automation/basic-automation.ts`. Test: `src/battle/automation/basic-automation.test.ts`.
 
-When the turn handoff brings a side to its turn, that side's characters clear `isExhausted` (rules §Dawn). The cleanest hook is the existing `planTurnHandoff`: append, for each in-play character of the incoming side, a status edit clearing exhaustion. **Introduce the status edit here** (its toggle UI and the ☪ auto-retreat behavior come in Task 4.1):
+When the turn handoff brings a side to its turn, that side's characters clear `isExhausted` (rules §Dawn). The cleanest hook is the existing `planTurnHandoff`: append, for each in-play character of the incoming side, a status edit clearing exhaustion. **Introduce the status edit here** (its toggle UI and the ☾ auto-retreat behavior come in Task 4.1):
 
 ```ts
 | { kind: "SET_CARD_STATUS"; battleCardId: string; status: Partial<BattleCardStatus> }
@@ -362,17 +362,17 @@ Behavior (rules §Challengers/Defenders/Scoring + §Figments): per front-rank la
 
 The rail is the player's surface for every CHOICE/MANUAL mechanic in the coverage checklist. Most tasks add a `BattleDebugEdit` kind + its `apply-debug-edit` handler + a button wired through `battle-ui-commands.ts` into the Inspector/context menu. Browser QA at the end.
 
-### Task 4.1: Status edits (`SET_CARD_STATUS`) + ☪ auto-retreat
+### Task 4.1: Status edits (`SET_CARD_STATUS`) + ☾ auto-retreat
 
 **Files:** Modify `state/apply-debug-edit.ts` (extend the `SET_CARD_STATUS` handler from Task 2.3), components for the toggles. Test: `apply-debug-edit.test.ts`.
 
-`SET_CARD_STATUS` already exists (Task 2.3, merges a `Partial<BattleCardStatus>`). Extend its handler with the ☪ auto-retreat rule: when a change sets `isExhausted: true` on a front-rank character, auto-retreat it to an open back-rank slot (rules §Exhaust and Awaken); if none is open, reject the exhaust (return state unchanged). Then add the card-scoped toggle UI (exhaust/awaken, reclaim/offering/ephemeral, veil N, granted keywords) via the existing dispatch path.
+`SET_CARD_STATUS` already exists (Task 2.3, merges a `Partial<BattleCardStatus>`). Extend its handler with the ☾ auto-retreat rule: when a change sets `isExhausted: true` on a front-rank character, auto-retreat it to an open back-rank slot (rules §Exhaust and Awaken); if none is open, reject the exhaust (return state unchanged). Then add the card-scoped toggle UI (exhaust/awaken, reclaim/offering/ephemeral, veil N, granted keywords) via the existing dispatch path.
 
-- [ ] **Step 1:** Failing tests: `SET_CARD_STATUS` merges partials (toggling `reclaimed` leaves `counters` intact); exhausting a front-rank character moves it to a back-rank slot; exhausting with the back rank full and no front-rank swap target is rejected. Bug class: a front-rank character paying ☪ but staying a challenger; partial-merge clobbering other status fields.
+- [ ] **Step 1:** Failing tests: `SET_CARD_STATUS` merges partials (toggling `reclaimed` leaves `counters` intact); exhausting a front-rank character moves it to a back-rank slot; exhausting with the back rank full and no front-rank swap target is rejected. Bug class: a front-rank character paying ☾ but staying a challenger; partial-merge clobbering other status fields.
 - [ ] **Step 2:** Run — fails; implement; pass.
 - [ ] **Step 3:** Wire toggle buttons (exhaust/awaken, reclaim/offering/ephemeral, veil N, granted keywords) into the card-scoped Inspector surface, reusing the existing command-dispatch path (`withDefaultSourceSurface`, `sourceSurface: "inspector"`).
 - [ ] **Step 4:** `npm run typecheck && npm test`.
-- [ ] **Step 5:** Commit: `feat(battle): card status debug tools with ☪ auto-retreat`.
+- [ ] **Step 5:** Commit: `feat(battle): card status debug tools with ☾ auto-retreat`.
 
 ### Task 4.2: Counters tool (`SET_COUNTERS`)
 

@@ -27,7 +27,7 @@
 
 Cards you reclaim are not banished when they leave play.
 
-2●, ☪: Choose a character in your void to gain reclaim.
+2●, ☾: Choose a character in your void to gain reclaim.
 
 ![Source artwork for Seeker of Lost Paths](</Users/dthurn/Documents/shutterstock/images/stock-photo-futuristic-man-sitting-guarding-the-dimensional-gate-in-an-abandoned-place-digital-art-style-2287436067.jpg>)
 

@@ -17,7 +17,7 @@ export type RulesTextGlossaryOwner = "card" | "dreamAvatar";
  *   * Words are runs of ASCII letters (`[A-Za-z]+`), optionally led by the
  *     trigger arrow `▸` when it is glued to the word (e.g. `▸Materialized`).
  *     The single-bolt fast marker `❖`, double-bolt interrupt marker `❖❖`, and
- *     exhaust-cost `☪` glyph are also glossary tokens. Other punctuation,
+ *     exhaust-cost `☾` glyph are also glossary tokens. Other punctuation,
  *     numbers, and symbols split runs apart, so `bane,` and `bane.` both yield
  *     the bare word `bane`. An arrow-prefixed token resolves to an
  *     arrow-specific glossary entry when one exists (`▸Materialized`),

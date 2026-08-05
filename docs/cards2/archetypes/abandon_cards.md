@@ -15,12 +15,12 @@ A companion to [abandon.md](abandon.md), listing every CardsV2 card with a speci
 9. Pyrewatcher — "Abandon this character: Gain 3●"; self-abandoning warrior burst-ramp body.
 10. Lanternwood Scout — "Abandon another: Store 1⧗" / "Abandon this: Gain X⍟ (stored ⧗)"; banks a chain of abandons into a single point burst.
 11. Virtuoso of Harmony — "Abandon a character with cost 2● or less: Gain 1●"; cheap recurring energy outlet.
-12. Nightmare Manifest — "☪, Abandon a character: Gain 1●"; extra energy outlet on a 1-cost body.
-13. The Dread Sovereign — "X●, ☪, Abandon another character: Discover a character with cost X●, then materialize it"; outlet that also tutors and rebuilds the board.
-14. Veil Crosser — "☪, Abandon another character: Discover a character with cost 2● or less, then materialize it"; survivor outlet that replaces the body.
-15. Light of Emergence — "☪, Abandon a character with cost 2● or less: Materialize a random ≤2● character from your deck"; outlet that refills the board with fodder.
-16. Wreckage Prowler — "1●, ☪, Abandon a character: Draw a card"; also returns ≤2● bodies; card-draw outlet.
-17. Dreadweaver — "2●, ☪, Abandon two other characters: +2✦, Draw 2 cards"; double-abandon outlet that draws.
+12. Nightmare Manifest — "☾, Abandon a character: Gain 1●"; extra energy outlet on a 1-cost body.
+13. The Dread Sovereign — "X●, ☾, Abandon another character: Discover a character with cost X●, then materialize it"; outlet that also tutors and rebuilds the board.
+14. Veil Crosser — "☾, Abandon another character: Discover a character with cost 2● or less, then materialize it"; survivor outlet that replaces the body.
+15. Light of Emergence — "☾, Abandon a character with cost 2● or less: Materialize a random ≤2● character from your deck"; outlet that refills the board with fodder.
+16. Wreckage Prowler — "1●, ☾, Abandon a character: Draw a card"; also returns ≤2● bodies; card-draw outlet.
+17. Dreadweaver — "2●, ☾, Abandon two other characters: +2✦, Draw 2 cards"; double-abandon outlet that draws.
 18. Stargazer Adrift — "Abandon another character: Foresee 1"; cheap selection outlet on a 1-cost body.
 19. Warfield Stalwart — "1●, Abandon another character: Foresee 1"; also makes a figment when an ally left play; selection outlet plus payoff.
 20. Ashen Remnant — "Abandon another character: Erode 1"; spark-scaling body that self-feeds an erosion clock.
@@ -30,13 +30,13 @@ A companion to [abandon.md](abandon.md), listing every CardsV2 card with a speci
 24. Carrion Lord — "When you abandon a ≤2● character, materialize a 4✦ monstrosity figment" / "4●: Abandon a ≤2● character"; built-in outlet plus a fat payoff.
 25. Celestial Lookout — "Abandon X characters: Materialize a character with cost X● from the opponent's deck"; mass-abandon outlet plus a figment maker.
 26. Shardwoven Tyrant — "1●, Abandon X figments: Dissolve an enemy with X✦"; converts figment fodder into removal.
-27. Harborwarden — "☪, Abandon 2 warriors: Dissolve an enemy with 4✦ or less"; also makes warrior figments; outlet plus removal.
+27. Harborwarden — "☾, Abandon 2 warriors: Dissolve an enemy with 4✦ or less"; also makes warrior figments; outlet plus removal.
 28. Grim Reclaimer — "2●, Abandon 2 warriors: Draw a card"; warrior abandon outlet for cards.
 29. Phantasmal Recruiter — "Abandon a character: Store 1⧗" / "2●, 2⧗: Materialize two 1✦ warrior figments"; outlet that rebuilds the board with fodder.
 30. Twilight Suppressor — "When you play a character, store 1⧗" / "1⧗, Abandon a character: Gain 1⍟"; outlet plus point payoff in one body.
 31. Spellweaver — "1●, Abandon a non-figment warrior: Materialize a 1✦ warrior figment"; trades a warrior for a fresh figment to re-feed.
-32. Mirror Protocol — "☪, Abandon a warrior: Discover a warrior with cost 1● higher and materialize it"; warrior outlet that trades up the curve.
-33. Fractured Vessel — "☪, Abandon a character: Materialize a 1✦ spirit animal figment"; outlet that replaces the abandoned body with fodder.
+32. Mirror Protocol — "☾, Abandon a warrior: Discover a warrior with cost 1● higher and materialize it"; warrior outlet that trades up the curve.
+33. Fractured Vessel — "☾, Abandon a character: Materialize a 1✦ spirit animal figment"; outlet that replaces the abandoned body with fodder.
 34. Herald of the Last Light — "When you abandon a character, +1✦" / "3●, Abandon a character: Draw a card"; payoff plus draw outlet.
 35. Thundercatcher — "2●, Abandon a 1✦ ally: Draw 2 cards"; turns the deck's surplus 1✦ bodies and figments into cards.
 
@@ -53,7 +53,7 @@ A companion to [abandon.md](abandon.md), listing every CardsV2 card with a speci
 44. Starshot Gunner — "1●, Abandon this character: Return a character to hand"; self-outlet with a bounce.
 45. Pathwalker — "Abandon this character: Return an event from your void to your hand"; self-outlet that rebuys a key spell.
 46. Ironclad Marksman — "Abandon this character: Shuffle up to 3 from void into deck. Draw a card"; self-cycling fodder with deck refill.
-47. Blade of Oblivion — "☪, Discard your hand, Abandon this character: Gain 3●"; warrior self-outlet burst-ramp.
+47. Blade of Oblivion — "☾, Discard your hand, Abandon this character: Gain 3●"; warrior self-outlet burst-ramp.
 
 ## Death-trigger payoffs
 
@@ -63,7 +63,7 @@ A companion to [abandon.md](abandon.md), listing every CardsV2 card with a speci
 51. Duskreaper — "When an ally is dissolved, gain 1⍟"; redundant copy of the core point drain.
 52. Avatar of Cosmic Reckoning — "When an ally is dissolved, gain 1⍟"; also makes a figment on entry; payoff plus fodder.
 53. Cinderheart — "When you abandon a character, +1✦. ▸Dissolved: Gain ⍟ equal to ✦"; banks abandons as spark, cashes the pile as points when fed to an outlet.
-54. Smoldering Ancient — "When an allied warrior is dissolved, +1✦. ☪, Abandon a warrior: Gain 1⍟"; payoff and outlet in one warrior body.
+54. Smoldering Ancient — "When an allied warrior is dissolved, +1✦. ☾, Abandon a warrior: Gain 1⍟"; payoff and outlet in one warrior body.
 55. Volcanic Channeler — "When an ally is dissolved, gain 1●"; refunds the next play in the loop.
 56. Nineborn Specter — "▸Dissolved: Gain 2⍟"; warrior fodder that pays points when abandoned.
 57. Overstory Explorer — "▸Dissolved: Gain 1 maximum ●"; permanent ramp every time it dies.
@@ -114,8 +114,8 @@ A companion to [abandon.md](abandon.md), listing every CardsV2 card with a speci
 
 ## Welder outlets (loop a warrior through the void)
 
-90. Dreaming Obelisk — "☪, Abandon a warrior: Materialize a warrior from your void"; welder outlet that loops a warrior for value.
-91. Pit Descender — "☪, Abandon a warrior: Materialize a ≤2● warrior from your void"; welder outlet for cheap warriors.
+90. Dreaming Obelisk — "☾, Abandon a warrior: Materialize a warrior from your void"; welder outlet that loops a warrior for value.
+91. Pit Descender — "☾, Abandon a warrior: Materialize a ≤2● warrior from your void"; welder outlet for cheap warriors.
 
 ## Free-replay enablers and fodder generators
 
@@ -128,10 +128,10 @@ A companion to [abandon.md](abandon.md), listing every CardsV2 card with a speci
 98. Radiant Trio — "Materialize X 1✦ ethereal figments"; makes free abandon-fodder directly.
 99. Conjured Zenith — "Materialize two 1✦ ethereal figments. Reclaim 2●"; recurring pair of free fodder bodies.
 100. Embersummoner — "When you materialize a figment, materialize a 1✦ ethereal figment"; doubles every figment, snowballing the fodder army.
-101. Shadowbinder — "☪: Materialize two 1✦ ember figments with awakened. Abandon them at end of turn"; hands you two free bodies a turn to feed an outlet early.
+101. Shadowbinder — "☾: Materialize two 1✦ ember figments with awakened. Abandon them at end of turn"; hands you two free bodies a turn to feed an outlet early.
 102. Carrion Shepherd — "▸Dawn: ... materialize a 0✦ wraith figment with vengeful"; seeds vengeful fodder the deck is glad to abandon.
 103. Sorrow Watcher — "▸Materialized: Materialize a 1✦ survivor figment"; cheap survivor that brings extra fodder.
-104. Tidewreck Navigator — "☪, Discard a card: Materialize a 1✦ survivor figment" / "☪, Abandon a survivor: Return a survivor from void"; fodder maker plus survivor outlet.
+104. Tidewreck Navigator — "☾, Discard a card: Materialize a 1✦ survivor figment" / "☾, Abandon a survivor: Return a survivor from void"; fodder maker plus survivor outlet.
 105. Hope's Vanguard — "Discard a card: Materialize a 1✦ survivor figment"; repeatable survivor-fodder maker.
 
 ## Mass-return engines
@@ -141,14 +141,14 @@ A companion to [abandon.md](abandon.md), listing every CardsV2 card with a speci
 108. Heroic Rescue — "Materialize up to three chosen characters in your void which dissolved this turn"; selective mass-return for a combo turn.
 109. Borrowed Minutes — "Materialize each ≤X● character in your void. Banish them at end of turn"; drops a temporary board you abandon before it banishes.
 110. Path to Redemption — "Until end of turn, cards in your void gain reclaim"; lets a stocked void of fodder come back at once.
-111. Veilseeker — "5●, ☪, Abandon this character: Return all ≤2● characters from void to play"; self-abandoning mass-return engine.
+111. Veilseeker — "5●, ☾, Abandon this character: Return all ≤2● characters from void to play"; self-abandoning mass-return engine.
 112. Fading Farewell — "Until end of turn, when an ally is dissolved, return it to your hand"; the cleanest free-loop enabler with a free body and outlet.
 
 ## Closers and combo finishers
 
 113. The Forsaker — "Abandon a ≤2● character: Gain 1⍟"; cheap repeatable point engine that closes a cheap-body loop.
 114. Vaultbreaker — "Abandon a character, reveal from hand: Reduce cost by 1●"; turns a long abandon chain into a cheap 8/8 finisher.
-115. Colossal Convergence — "❖❖ – ☪, Abandon a character: Give an ally +X✦ (abandoned ✦)"; abandons at interrupt speed to swing a challenge.
+115. Colossal Convergence — "❖❖ – ☾, Abandon a character: Give an ally +X✦ (abandoned ✦)"; abandons at interrupt speed to swing a challenge.
 116. Forsworn Champion — "❖❖ – Abandon a warrior: +1✦"; interrupt-speed warrior abandon to win a lane.
 
 ## Removal that overlaps the engine

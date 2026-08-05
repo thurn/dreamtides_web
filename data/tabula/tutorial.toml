@@ -493,7 +493,7 @@ delay = { card-seen = 1 }
 duration = 3
 bubbleWidth = 500
 match = { kind = "glossary", id = "awakened" }
-text = "An [yellow]awakened[/yellow] character can challenge and use ☪ abilities on the turn it enters play."
+text = "An [yellow]awakened[/yellow] character can challenge and use ☾ abilities on the turn it enters play."
 
 [[triggers]]
 id = "phasing"

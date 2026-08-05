@@ -110,7 +110,7 @@ edition of Lurrus.
 
 Identical except type. Fully interchangeable outside tribal contexts.
 
-### 1.6 `☪: Draw a card, then discard a card.`
+### 1.6 `☾: Draw a card, then discard a card.`
 
 **Tag:** `Merfolk Looter`
 
@@ -346,8 +346,8 @@ the cost curve.
 
 **Tag:** `Merfolk Looter`
 
-The two free `☪: Draw a card, then discard a card` printings (§1.6) plus
-Conspiracy Theorist, which gates the same wheel behind `2●, ☪, Discard a card`
+The two free `☾: Draw a card, then discard a card` printings (§1.6) plus
+Conspiracy Theorist, which gates the same wheel behind `2●, ☾, Discard a card`
 and adds a Reclaim rider.
 
 ### 2.11 Cantrips — dig + draw Events (≈6, "Cantrips")
@@ -476,7 +476,7 @@ Whitemane Lion, Kor Skyfisher (+Awakened), Oracle of Kruphix (+rider) share
 
 **Tag:** `Awaken`
 
-Quirion Ranger (`☪: Awaken an ally`), Scryb Ranger and Fatestitcher (both
+Quirion Ranger (`☾: Awaken an ally`), Scryb Ranger and Fatestitcher (both
 `Awakened` + a tap-to-awaken ability with an extra cost/rider).
 
 ### 2.23 Spirit-animal energy taps & lords
@@ -538,7 +538,7 @@ apparent variety and should be normalized.
 | §1.3 / §2.3 ETB draw a card | 6 | Exact/Near | `ETB Draw` | Spirited Companion ≡ Elvish Visionary |
 | §1.4 play ≤2● from void | 2 | Exact | `Lurrus` | Ramunap = costlier Lurrus |
 | §1.5 banish from hand (body) | 2 | Exact | `Tidehollow Sculler` | Type-only difference |
-| §1.6 / §2.10 ☪ looter | 3 | Exact/Near | `Merfolk Looter` | Two free loots identical |
+| §1.6 / §2.10 ☾ looter | 3 | Exact/Near | `Merfolk Looter` | Two free loots identical |
 | §1.7 / §2.8 abandon → 1● | 3 | Exact | `Free Sacrifice` | Warren ≡ Phyrexian Altar |
 | §1.8 Vengeful + ETB draw | 2 | Exact | `ETB Draw` | Fast-only difference |
 | §1.9 / §2.6 rituals | 7 | Exact/Near | `Ritual` | Several share net energy |

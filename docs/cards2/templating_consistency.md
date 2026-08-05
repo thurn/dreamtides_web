@@ -169,8 +169,8 @@ is specifically on stat buffs. Pick one phrasing for temporary stat changes.
 
 ### 5.2 Activated-cost ordering
 
-The norm is `N●, ☪:` (energy before the moon symbol). The lone reversal is
-#248 Mystic Runefish — `☪, 5●:`.
+The norm is `N●, ☾:` (energy before the moon symbol). The lone reversal is
+#248 Mystic Runefish — `☾, 5●:`.
 
 ### 5.3 Reclaim cost format
 

@@ -16,7 +16,7 @@ import type { CumulusComponent } from "../registry";
 const SAMPLE_TEXT = [
   "❖ – Draw a card.",
   "❖❖ – Draw another card.",
-  "☪ ⍟",
+  "☾ ⍟",
 ].join("\n");
 
 // CardTermDefinitions' `text` prop is required, which the registry's
