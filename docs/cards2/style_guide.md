@@ -129,7 +129,7 @@ of the text.
 ### 2.3 Ability order within a card
 
 When a character carries more than one ability, order them: standalone keywords
-first (`Vengeful`, `Unstoppable`, `Veil 2●`), then named (`▸`) triggers, then
+first (`Vengeful`, `Veil 2●`), then named (`▸`) triggers, then
 descriptive (`When …`) triggers, then activated abilities. Reclaim, when present
 on an event or character, is written as its own final paragraph.
 
@@ -157,7 +157,7 @@ The period rule turns on *what kind of line* it is:
 
 - **Standalone keywords take no terminal period.** These are keywords that grant
   a static property on their own line: `Veil 2●`, `Reclaim 1●`,
-  `Reclaim – Discard a card`, `Vengeful`, `Unstoppable`, `Awakened`, `Offering`,
+  `Reclaim – Discard a card`, `Vengeful`, `Awakened`, `Offering`,
   `Preeminence`, `Ephemeral`.
 - **Effects always take a terminal period.** An effect such as `Erode 3` or
   `Store 1⧗` never stands alone — it is always reached through a trigger or cost

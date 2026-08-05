@@ -88,10 +88,10 @@ Forgotten Factory Titan is the same loop with a body that can also fight: a 2●
 synth that is Awakened and reads "▸Materialized: Return an ally to hand." Awakened
 means it enters ready to challenge, so if you stop the loop with it on the board
 it is an immediate threat rather than a do-nothing. Nomad of Endless Paths is the
-high-spark variant — a 2● explorer with Unstoppable and "▸Materialized: Return
+high-spark variant — a 2● explorer with "▸Materialized: Return
 another ally to hand." It returns **another** ally rather than itself, so it does
 not self-loop, but it re-buys a second body's ▸Materialized trigger each time and
-leaves a 5✦ Unstoppable threat behind when the loop ends. Stoneborn Eternal is
+leaves a 5✦ threat behind when the loop ends. Stoneborn Eternal is
 the Spirit Animal engine on the same idea: a 1● spirit animal reading "When you
 play a spirit animal, return this character to hand. It costs 0● this turn," so
 in a board of spirit animals it bounces itself for free every time you play
@@ -145,9 +145,9 @@ A wide figment board needs a way to push spark onto the front rank. Field Revere
 is the converter: a 3● warrior whose "X●: Each allied character's ✦ becomes X
 until end of turn" sets the whole board — figments included — to a single high
 value, turning a stack of 1✦ figments into a lethal challenger. Spirit Bond is the
-finishing pump, a 7● event reading "Until end of turn, allied characters gain
-unstoppable and +X✦ where X is the number of allied characters," so a wide board
-all scores ⍟ at once. Intermezzo Balladeer scores as the loop runs — a 3● musician
+finishing pump, a 7● event reading "Until end of turn, allied characters have
++X✦ where X is the number of allied characters," so a wide board attacks with a
+large spark bonus. Intermezzo Balladeer scores as the loop runs — a 3● musician
 reading "When you play a card, gain 1⍟ for each other card you've played this
 turn," so each replay during a long loop hands you a growing pile of points
 without needing a separate finisher at all.

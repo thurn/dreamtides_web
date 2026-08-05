@@ -298,7 +298,7 @@ describe("planBasicAutomationCommands — playing cards", () => {
   });
 });
 
-// The Challenge resolver itself (spark comparison, the four combat keywords,
+// The Challenge resolver itself (spark comparison, the three combat keywords,
 // figment dissolution) is unit-tested in `src/battle/engine/challenge.test.ts`,
 // its canonical home. Here we exercise the automation path that routes through
 // it (turn handoff and bookend advance), proving the resolver's edits are folded

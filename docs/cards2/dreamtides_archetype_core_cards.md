@@ -50,9 +50,9 @@ The tribal anthem/finisher that pushes a flooded board through as lethal damage.
 
 *7● Event*
 
-> Until end of turn, allied characters gain unstoppable and +X✦ where X is the number of allied characters.
+> Until end of turn, allied characters have +X✦ where X is the number of allied characters.
 
-The overrun payoff: unstoppable plus +X✦ scaling with your character count closes the game.
+The overrun payoff: +X✦ scaling with your character count closes the game.
 
 - MTG: Craterhoof Behemoth
 

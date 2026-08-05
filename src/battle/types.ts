@@ -419,7 +419,6 @@ export interface BattleCardStatus {
    * opponent controls, it instead loses Veil.
    */
   veil: boolean;
-  grantedUnstoppable: boolean;
   grantedVengeful: boolean;
   grantedPreeminence: boolean;
   grantedAwakened: boolean;

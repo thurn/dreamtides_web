@@ -283,44 +283,6 @@ describe("resolveChallenge — Vengeful", () => {
   });
 });
 
-describe("resolveChallenge — Unstoppable", () => {
-  it("scores a blocked Unstoppable challenger that survives", () => {
-    const state = lane0State(
-      makeInstance("p0", { owner: "player", printedSpark: 6, renderedText: "Unstoppable" }),
-      makeInstance("e0", { owner: "enemy", printedSpark: 3 }),
-    );
-    const resolution = resolveChallenge({ state, activeSide: "player" });
-    expect(resolution.playerScoreDelta).toBe(6);
-    expect(dissolvedIds(resolution)).toEqual(["e0"]);
-    expect(resolution.lanes[0].scoreDelta).toBe(6);
-  });
-
-  it("does not score an Unstoppable challenger that dissolves", () => {
-    const state = lane0State(
-      makeInstance("p0", { owner: "player", printedSpark: 2, renderedText: "Unstoppable" }),
-      makeInstance("e0", { owner: "enemy", printedSpark: 5 }),
-    );
-    const resolution = resolveChallenge({ state, activeSide: "player" });
-    expect(resolution.playerScoreDelta).toBe(0);
-    expect(dissolvedIds(resolution)).toEqual(["p0"]);
-  });
-
-  it("scores a surviving Unstoppable blocker for the opposing side", () => {
-    const state = lane0State(
-      makeInstance("p0", { owner: "player", printedSpark: 2 }),
-      makeInstance("e0", { owner: "enemy", printedSpark: 6, renderedText: "Unstoppable" }),
-    );
-    const resolution = resolveChallenge({ state, activeSide: "player" });
-    expect(resolution.enemyScoreDelta).toBe(6);
-    expect(dissolvedIds(resolution)).toEqual(["p0"]);
-    expect(resolution.edits).toContainEqual({
-      kind: "ADJUST_SCORE",
-      side: "enemy",
-      amount: 6,
-    });
-  });
-});
-
 describe("resolveChallenge — Awakened has no challenge effect", () => {
   it("does not change scoring or dissolution for an Awakened character", () => {
     const withAwakened = lane0State(
@@ -336,34 +298,6 @@ describe("resolveChallenge — Awakened has no challenge effect", () => {
     expect(dissolvedIds(a)).toEqual(dissolvedIds(b));
     expect(a.playerScoreDelta).toBe(b.playerScoreDelta);
     expect(a.enemyScoreDelta).toBe(b.enemyScoreDelta);
-  });
-});
-
-describe("resolveChallenge — keyword combinations", () => {
-  it("Vengeful + Unstoppable: a Vengeful loser drags down a surviving Unstoppable, who then does not score", () => {
-    const state = lane0State(
-      makeInstance("p0", { owner: "player", printedSpark: 5, renderedText: "Unstoppable" }),
-      makeInstance("e0", { owner: "enemy", printedSpark: 2, renderedText: "Vengeful" }),
-    );
-    const resolution = resolveChallenge({ state, activeSide: "player" });
-    // Enemy loses (2 < 5) and Vengeful drags the player down too; both dissolve.
-    expect(dissolvedIds(resolution).sort()).toEqual(["e0", "p0"]);
-    // The Unstoppable challenger did NOT survive, so it scores nothing.
-    expect(resolution.playerScoreDelta).toBe(0);
-  });
-
-  it("Preeminence saves a tied Unstoppable, which then scores", () => {
-    const state = lane0State(
-      makeInstance("p0", {
-        owner: "player",
-        printedSpark: 4,
-        renderedText: "Unstoppable, Preeminence",
-      }),
-      makeInstance("e0", { owner: "enemy", printedSpark: 4 }),
-    );
-    const resolution = resolveChallenge({ state, activeSide: "player" });
-    expect(dissolvedIds(resolution)).toEqual(["e0"]);
-    expect(resolution.playerScoreDelta).toBe(4);
   });
 });
 
@@ -399,23 +333,6 @@ describe("resolveChallenge — figment stacks (rules §Figments)", () => {
     const resolution = resolveChallenge({ state, activeSide: "player" });
     expect(dissolvedIds(resolution)).toEqual(["e0"]);
     expect(resolution.playerScoreDelta).toBe(9);
-  });
-
-  it("scores the surviving Unstoppable topmost on top of the reserves", () => {
-    // Two 4✦ Monstrosity figments granted Unstoppable. Topmost dissolves the 3✦ blocker and
-    // survives, scoring 4⍟; the reserve scores 4⍟, for 8⍟ total.
-    const figment = makeInstance("fig", {
-      owner: "player",
-      isFigment: true,
-      subtype: "Monstrosity",
-      figmentSparks: [4, 4],
-      status: { grantedUnstoppable: true },
-    });
-    const blocker = makeInstance("e0", { owner: "enemy", printedSpark: 3 });
-    const state = lane0State(figment, blocker);
-    const resolution = resolveChallenge({ state, activeSide: "player" });
-    expect(dissolvedIds(resolution)).toEqual(["e0"]);
-    expect(resolution.playerScoreDelta).toBe(8);
   });
 
   it("trades the topmost Wraith for the blocker via Vengeful and scores nothing", () => {
@@ -562,19 +479,13 @@ describe("hasCombatKeyword — detection precedence", () => {
   it("detects a keyword granted by a status flag even with empty text", () => {
     const instance = makeInstance("p0", {
       owner: "player",
-      status: { grantedUnstoppable: true },
+      status: { grantedVengeful: true },
     });
-    expect(hasCombatKeyword(instance, "unstoppable")).toBe(true);
-    expect(hasCombatKeyword(instance, "vengeful")).toBe(false);
+    expect(hasCombatKeyword(instance, "vengeful")).toBe(true);
+    expect(hasCombatKeyword(instance, "preeminence")).toBe(false);
   });
 
   it("detects each keyword from a printed-text scan", () => {
-    expect(
-      hasCombatKeyword(
-        makeInstance("a", { owner: "player", renderedText: "This has Unstoppable here." }),
-        "unstoppable",
-      ),
-    ).toBe(true);
     expect(
       hasCombatKeyword(
         makeInstance("b", { owner: "player", renderedText: "Vengeful." }),
@@ -598,9 +509,8 @@ describe("hasCombatKeyword — detection precedence", () => {
   it("does not match a keyword substring inside another word", () => {
     const instance = makeInstance("p0", {
       owner: "player",
-      renderedText: "unstoppableX vengefulness",
+      renderedText: "vengefulness",
     });
-    expect(hasCombatKeyword(instance, "unstoppable")).toBe(false);
     expect(hasCombatKeyword(instance, "vengeful")).toBe(false);
   });
 

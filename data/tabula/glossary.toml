@@ -253,15 +253,6 @@ matches-rules-text = true
 variants = []
 
 [[entries]]
-id = "unstoppable"
-category = "Keywords"
-term = "Unstoppable"
-definition = "Scores points equal to its ✦ when dissolving a blocker during a challenge."
-priority = 90
-matches-rules-text = true
-variants = []
-
-[[entries]]
 id = "preeminence"
 category = "Keywords"
 term = "Preeminence"

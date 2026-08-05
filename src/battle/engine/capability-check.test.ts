@@ -89,7 +89,7 @@ describe("needsManualResolution", () => {
     it("returns true for an unmodeled card with 'Support – ...' keyword line", () => {
       // Real text from card #35 in cards_v2-data.json
       const instance = makeInstance(
-        "Support – Supported allies have +2✦ and have unstoppable.\n\nReclaim – 3●, Banish 3 cards from your void.",
+        "Support – Supported allies have +2✦.\n\nReclaim – 3●, Banish 3 cards from your void.",
         300,
       );
       expect(needsManualResolution(instance, MODELED)).toBe(true);
@@ -101,22 +101,7 @@ describe("needsManualResolution", () => {
     });
   });
 
-  describe("resolution keywords Unstoppable / Vengeful (case-insensitive word match)", () => {
-    it("returns true for an unmodeled card with standalone 'Unstoppable'", () => {
-      // Real text from card #413 in cards_v2-data.json
-      const instance = makeInstance("To play this character, pay 2⍟.\n\nUnstoppable", 413);
-      expect(needsManualResolution(instance, MODELED)).toBe(true);
-    });
-
-    it("returns true for an unmodeled card with 'Unstoppable' mid-text (all caps)", () => {
-      // Real text from card #297 in cards_v2-data.json
-      const instance = makeInstance(
-        "To play this character, banish 7 cards from your void.\n\nYou may play this character from your void.\n\nUnstoppable",
-        297,
-      );
-      expect(needsManualResolution(instance, MODELED)).toBe(true);
-    });
-
+  describe("resolution keywords (case-insensitive word match)", () => {
     it("returns true for an unmodeled card with standalone 'Vengeful'", () => {
       // Real text from card #6 in cards_v2-data.json (not in MODELED set)
       const instance = makeInstance(
@@ -137,14 +122,6 @@ describe("needsManualResolution", () => {
       expect(needsManualResolution(instance, MODELED)).toBe(true);
     });
 
-    it("matches keywords case-insensitively (lowercase 'unstoppable' in effect)", () => {
-      // Card #13: 'Until end of turn, allied characters gain unstoppable and +X✦...'
-      const instance = makeInstance(
-        "Until end of turn, allied characters gain unstoppable and +X✦ where X is the number of allied characters.",
-        13,
-      );
-      expect(needsManualResolution(instance, MODELED)).toBe(true);
-    });
   });
 
   describe("static spark text +<number>✦ (U+2726)", () => {

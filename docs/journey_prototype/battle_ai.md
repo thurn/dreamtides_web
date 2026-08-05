@@ -308,8 +308,8 @@ can change a turn's outcome:
    order, so a ▸Dissolved — or a Support source dissolving — in an early lane can
    change the spark of later lanes: a supporter dying in `F0` silently drops +✦
    from a challenger in `F2`.
-3. **Keywords and statics that bend the comparison.** Unstoppable, Vengeful,
-   Preeminence, and continuous Support / "+X✦ for each…" each change a lane's
+3. **Keywords and statics that bend the comparison.** Vengeful, Preeminence,
+   and continuous Support / "+X✦ for each…" each change a lane's
    result.
 
 The design handles this by separating two concerns that are easy to conflate:
@@ -333,7 +333,7 @@ At each window the engine resolves automatically only:
 
 - effects from cards it fully models (the AI's ten Starter cards), and
 - a small allowlist of *general* keywords that are rules rather than card-specific
-  text — Unstoppable, Vengeful, Preeminence, and the base spark comparison.
+  text — Vengeful, Preeminence, and the base spark comparison.
 
 For anything else in play, a conservative **capability check** decides whether to
 pause. It is a lightweight scan of the in-play card's `renderedText`, keywords,

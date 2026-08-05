@@ -175,10 +175,9 @@ The deterministic finishes close it outright. Terminus, a 1● event, reads "If
 you have no cards in your deck, you win the game," so a loop that draws or erodes
 your own deck to empty — Echo Technician erodes 4 on ▸Materialized and lets you
 replay events from the void, and Speaker for the Forgotten erodes and hands back
-a free reclaim — wins on the spot. Paradox Enforcer, a 1● visitor with 7✦ and
-Unstoppable, costs "banish 7 cards from your void" and can be played from the
-void; a loop that floods the void with spent bodies and events deploys an
-unstoppable threat that scores its full spark as ⍟ when it wins a challenge.
+a free reclaim — wins on the spot. Paradox Enforcer, a 1● visitor with 7✦,
+costs "banish 7 cards from your void" and can be played from the void; a loop
+that floods the void with spent bodies and events deploys a large threat cheaply.
 Wandering Archivist (2●, ☪: loot; "When you discard a card, gain 1⍟") and Rubble
 Diviner turn the loot triggers from Gearwright into a slow drain while the engine
 assembles.

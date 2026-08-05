@@ -102,7 +102,7 @@
         "support"
       ],
       "ruleLines": {
-        "support": "Support – Supported characters have +2✦ and unstoppable."
+        "support": "Support – Supported characters have +2✦."
       },
       "effects": [
         {
@@ -111,9 +111,8 @@
           "target": "all-supported"
         }
       ],
-      "classification": "partial",
-      "scriptable": true,
-      "notes": "grants unstoppable (not scriptable)"
+      "classification": "deterministic",
+      "scriptable": true
     },
     {
       "id": "14ac6804-ed1d-4148-aad7-11796b6fff6c",
@@ -505,7 +504,7 @@
       ],
       "ruleLines": {
         "materialized": "▸Materialized: Draw a card.",
-        "support": "Support - Supported characters gain +2✦."
+        "support": "Support - Supported characters have +2✦."
       },
       "effects": [
         {
@@ -514,7 +513,9 @@
           "target": "self"
         },
         {
-          "kind": "other"
+          "kind": "support-spark",
+          "amount": 2,
+          "target": "all-supported"
         }
       ],
       "classification": "manual",
@@ -656,7 +657,7 @@
     },
     {
       "id": "4b4cc613-2e28-4851-975f-14146286a062",
-      "name": "Pathfinder",
+      "name": "Legion Lieutenant",
       "triggers": [
         "materialized"
       ],

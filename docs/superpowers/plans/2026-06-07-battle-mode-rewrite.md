@@ -142,7 +142,6 @@ export interface BattleCardStatus {
   veil: number;            // Veil N● targeting tax; 0 = no veil
   // Granted combat keywords (for non-figment characters an effect grants one).
   // The resolver also text-scans printed keywords and reads figment types.
-  grantedUnstoppable: boolean;
   grantedVengeful: boolean;
   grantedPreeminence: boolean;
   grantedAwakened: boolean;
@@ -194,9 +193,9 @@ Single-target effects (pump/dissolve-one/abandon) act on `figments[0]` (the top)
 
 **Files:** Create `src/battle/state/figment-catalog.ts`; modify `state/apply-debug-edit.ts` (`CREATE_FIGMENT` resolves catalog defaults), `components/BattleFigmentCreator.tsx` (Phase 4 consumes it). Test: `src/battle/state/figment-catalog.test.ts`.
 
-Encode the rules §Figments table — base spark + implicit keyword — for: Warrior 1, Ancient 4 (Unstoppable), Enigma 0, Shadow 2, Spirit Animal 1, Synth 0 (Support +1✦), Monstrosity 4, Survivor 1, Celestial 2 (Preeminence), Wraith 0 (Vengeful), Ethereal 1, Radiant 2, Ember 1 (Awakened), Outsider 1. Export a lookup keyed by normalized subtype returning `{ baseSpark, keyword? }`.
+Encode the rules §Figments table — base spark + implicit keyword — for: Warrior 1, Ancient 4, Enigma 0, Shadow 2, Spirit Animal 1, Synth 0 (Support +1✦), Monstrosity 4, Survivor 1, Celestial 2 (Preeminence), Wraith 0 (Vengeful), Ethereal 1, Radiant 2, Ember 1 (Awakened), Outsider 1. Export a lookup keyed by normalized subtype returning `{ baseSpark, keyword? }`.
 
-- [ ] **Step 1:** Write a failing test pinning the **invariants**, not each row by value: all 14 types are present (count === 14); every base spark is a non-negative integer; the keyword set is exactly {ancient→unstoppable, synth→support, celestial→preeminence, wraith→vengeful, ember→awakened} and the other nine carry no keyword. Bug class: a missing type, a typo'd subtype key, or a misassigned keyword. (Use a snapshot of the rendered catalog table if you prefer locking exact base sparks; do not write 14 per-row `toBe` asserts.)
+- [ ] **Step 1:** Write a failing test pinning the **invariants**, not each row by value: all 14 types are present (count === 14); every base spark is a non-negative integer; the keyword set is exactly {synth→support, celestial→preeminence, wraith→vengeful, ember→awakened} and the other ten carry no keyword. Bug class: a missing type, a typo'd subtype key, or a misassigned keyword. (Use a snapshot of the rendered catalog table if you prefer locking exact base sparks; do not write 14 per-row `toBe` asserts.)
 - [ ] **Step 2:** Run — fails (module absent).
 - [ ] **Step 3:** Implement the catalog; have `CREATE_FIGMENT` default `chosenSpark` to the catalog base when the caller passes a sentinel/omits it, and stamp the keyword onto `status.granted*` for the matching figment.
 - [ ] **Step 4:** Run — passes; `npm run typecheck && npm test`.
@@ -332,12 +331,12 @@ export interface ChallengeResolution {
 export function resolveChallenge(input: ChallengeInput): ChallengeResolution;
 ```
 
-Behavior (rules §Challengers/Defenders/Scoring + §Figments): per front-rank lane `F0..F3`, effective spark = `selectEffectiveSparkForInstance(i)` + `supportContribution.get(id) ?? 0`; unpaired challenger scores its spark; defended pairing dissolves the lower (ties both) with Preeminence breaking ties, Vengeful dragging the winner down, Unstoppable scoring a surviving defended character; figment stacks resolve top-down via `selectFigmentChallengeLossCount` and dissolve partially (decrement) or fully. Combat keywords come from: `status.granted*` flags first, then the narrow printed-text scan (`/\bunstoppable\b/i` etc.), then figment-type (catalog). Keep `FIGMENT_KEYWORDS`/`KEYWORD_PATTERNS` logic — relocate it here.
+Behavior (rules §Challengers/Defenders/Scoring + §Figments): per front-rank lane `F0..F3`, effective spark = `selectEffectiveSparkForInstance(i)` + `supportContribution.get(id) ?? 0`; unpaired challenger scores its spark; defended pairing dissolves the lower (ties both) with Preeminence breaking ties and Vengeful dragging the winner down; figment stacks resolve top-down via `selectFigmentChallengeLossCount` and dissolve partially (decrement) or fully. Combat keywords come from: `status.granted*` flags first, then the narrow printed-text scan, then figment-type (catalog). Keep `FIGMENT_KEYWORDS`/`KEYWORD_PATTERNS` logic — relocate it here.
 
 - [ ] **Step 1:** Write failing tests by bug class (port + extend the cases that `basic-automation.test.ts` already covers, now against `challenge.ts`):
   - unpaired challenger scores spark; empty/defender-only lanes score nothing;
   - lower spark dissolves; equal spark dissolves both; Preeminence wins a tie (both-Preeminence dissolves both);
-  - Vengeful loser drags the opponent down; Unstoppable surviving defended character scores;
+  - Vengeful loser drags the opponent down;
   - figment stack partial loss (decrement, instance stays) vs full loss (to void);
   - `supportContribution` raises a character over its defender and flips the outcome.
 - [ ] **Step 2:** Run — fails (module absent).
@@ -406,7 +405,7 @@ Sets `status.counters` (clamped ≥ 0). Counters reset to 0 when a card leaves p
 
 Replace free-typed subtype/spark with a picker over the 14 catalog types; selecting a type pre-fills base spark and shows its keyword; spark stays editable for off-base figments.
 
-- [ ] **Step 1:** Failing test: the creator lists 14 types; choosing "Ancient" pre-fills spark 4 and surfaces Unstoppable; confirming dispatches `CREATE_FIGMENT` with the chosen subtype/spark. Bug class: a type missing from the picker, or the keyword not stamped. (One render+interaction test over the catalog, not 14 tests.)
+- [ ] **Step 1:** Failing test: the creator lists 14 types; choosing "Wraith" pre-fills spark 0 and surfaces Vengeful; confirming dispatches `CREATE_FIGMENT` with the chosen subtype/spark. Bug class: a type missing from the picker, or the keyword not stamped. (One render+interaction test over the catalog, not 14 tests.)
 - [ ] **Step 2–4:** Implement, `npm test`.
 - [ ] **Step 5:** Commit: `feat(battle): figment creator backed by the 14-type catalog`.
 

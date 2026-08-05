@@ -134,7 +134,7 @@ These four keep the warrior count high, which feeds every loop above (more
 warriors to abandon, more triggers off Prism Caller and Voidsire) and every
 warrior anthem the deck borrows from Warrior Aggro. Forge-Twin materializes a
 figment copy of Blade of Unity ("▸Materialized: Materialize a figment copy of
-'Blade of Unity'"), an Unstoppable warrior that has +1✦ for each allied warrior —
+'Blade of Unity'"), a warrior that has +1✦ for each allied warrior —
 a free body that scales with the board. Voidsire reads "When you play a warrior,
 materialize a 1✦ warrior figment," so every warrior you cast widens the board by
 another figment, and those figments stack into a single growing position.

@@ -94,10 +94,9 @@ There are many ways to close, and which you reach for depends on what enablers y
 have assembled.
 
 The default finisher is **Spirit Bond**: "Until end of turn, allied characters
-gain unstoppable and +X✦ where X is the number of allied characters." On a wide
-board this is an alpha strike — every front-rank challenger swings for its spark
-plus the full board count and scores ⍟ even into defenders, because Unstoppable
-lets a character that wins its challenge score its spark directly. With a back rank
+have +X✦ where X is the number of allied characters." On a wide board this is an
+alpha strike — every front-rank challenger swings for its spark plus the full
+board count. With a back rank
 also stacked, repositioning fresh bodies forward before the strike turns the whole
 flood into points in a single Challenge phase.
 

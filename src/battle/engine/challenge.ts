@@ -22,20 +22,18 @@ import { frontRankSlotIds, rankSlotIds, slotIndex } from "../types";
  * one active side as a pure proposal: it reads `input.state` but never mutates
  * it, never performs the void moves itself, and never interprets a card's
  * printed effect prose. The ONLY card text it reads is the narrow scan for the
- * four combat keywords below (see `hasCombatKeyword`); everything else is driven
+ * three combat keywords below (see `hasCombatKeyword`); everything else is driven
  * by board structure and card fields (spark, type, figment membership).
  *
- * The four combat keywords (rules §Keywords and Effects):
+ * The three combat keywords (rules §Keywords and Effects):
  *
- *  - **Unstoppable** — a surviving blocked winner scores ⍟ equal to its full
- *    spark instead of a challenger's ordinary spark-difference score.
  *  - **Vengeful** — when its bearer loses a challenge, it drags the opposing
  *    enemy character down too (both dissolve).
  *  - **Preeminence** — wins spark ties; if both characters in a lane have
  *    Preeminence the tie resolves normally (both dissolve).
  *  - **Awakened** — an enter-play / exhaustion keyword. It has no effect on
  *    Challenge resolution (scoring or dissolution); it is detected here only so
- *    keyword detection is uniform across all four combat keywords. The exhaust
+ *    keyword detection is uniform across all three combat keywords. The exhaust
  *    system, not this resolver, consumes Awakened.
  *
  * Keyword detection precedence (rules §Figments — implicit keywords): an
@@ -88,11 +86,7 @@ export function resolveChallengeLane(
 }
 
 /** A combat keyword the resolver detects. */
-export type CombatKeyword =
-  | "unstoppable"
-  | "vengeful"
-  | "preeminence"
-  | "awakened";
+export type CombatKeyword = "vengeful" | "preeminence" | "awakened";
 
 /**
  * Figment base types carry an implicit combat keyword (rules §Figments). Their
@@ -102,7 +96,6 @@ export type CombatKeyword =
  * promoted reserve keeps it.
  */
 const FIGMENT_KEYWORDS: Readonly<Record<string, CombatKeyword>> = {
-  ancient: "unstoppable",
   wraith: "vengeful",
   ember: "awakened",
 };
@@ -113,7 +106,6 @@ const FIGMENT_KEYWORDS: Readonly<Record<string, CombatKeyword>> = {
  * pattern is a whole-word, case-insensitive match for the keyword name.
  */
 const KEYWORD_PATTERNS: Readonly<Record<CombatKeyword, RegExp>> = {
-  unstoppable: /\bunstoppable\b/i,
   vengeful: /\bvengeful\b/i,
   preeminence: /\bpreeminence\b/i,
   awakened: /\bawakened\b/i,
@@ -127,7 +119,6 @@ const KEYWORD_PATTERNS: Readonly<Record<CombatKeyword, RegExp>> = {
 const GRANTED_FLAGS: Readonly<
   Record<CombatKeyword, keyof BattleCardInstance["status"]>
 > = {
-  unstoppable: "grantedUnstoppable",
   vengeful: "grantedVengeful",
   preeminence: "grantedPreeminence",
   awakened: "grantedAwakened",
@@ -137,7 +128,7 @@ const GRANTED_FLAGS: Readonly<
  * Whether `instance` carries `keyword`, checking, in precedence order: the
  * effect-`granted*` status flag, then the narrow printed-text scan, then the
  * figment type's implicit keyword. This is the sole reader of card prose in the
- * engine and is strictly limited to the four combat keywords.
+ * engine and is strictly limited to the three combat keywords.
  */
 export function hasCombatKeyword(
   instance: BattleCardInstance,
@@ -214,14 +205,9 @@ function resolutionFromLanes(
   dissolved: readonly { battleCardId: string; side: BattleSide }[],
 ): ChallengeResolution {
   const activeScored = lanes.reduce((total, lane) => total + lane.activeScored, 0);
-  const opposingScored = lanes.reduce((total, lane) => total + lane.opposingScored, 0);
-  const opposingSide: BattleSide = activeSide === "player" ? "enemy" : "player";
   const edits: BattleDebugEdit[] = [];
   if (activeScored > 0) {
     edits.push({ kind: "ADJUST_SCORE", side: activeSide, amount: activeScored });
-  }
-  if (opposingScored > 0) {
-    edits.push({ kind: "ADJUST_SCORE", side: opposingSide, amount: opposingScored });
   }
   for (const entry of dissolved) {
     edits.push({
@@ -234,15 +220,14 @@ function resolutionFromLanes(
     lanes: lanes.map((lane) => lane.judgment),
     edits,
     dissolved: [...dissolved],
-    playerScoreDelta: activeSide === "player" ? activeScored : opposingScored,
-    enemyScoreDelta: activeSide === "enemy" ? activeScored : opposingScored,
+    playerScoreDelta: activeSide === "player" ? activeScored : 0,
+    enemyScoreDelta: activeSide === "enemy" ? activeScored : 0,
   };
 }
 
 interface LaneResolution {
   judgment: BattleLaneJudgment;
   activeScored: number;
-  opposingScored: number;
 }
 
 function resolveLane(params: {
@@ -288,7 +273,7 @@ function resolveLane(params: {
   // A lane with no challenger never scores or dissolves for the active side —
   // whether it holds an opposing blocker or is empty, nothing happens.
   if (challenger === null || challengerId === null) {
-    return { judgment: lane(null, 0), activeScored: 0, opposingScored: 0 };
+    return { judgment: lane(null, 0), activeScored: 0 };
   }
 
   // Unpaired challenger: scores ⍟ equal to its total spark. For a figment stack
@@ -297,7 +282,6 @@ function resolveLane(params: {
     return {
       judgment: lane(null, challengerSpark.total),
       activeScored: challengerSpark.total,
-      opposingScored: 0,
     };
   }
 
@@ -329,28 +313,13 @@ function resolveLane(params: {
 
   // Scoring. Only a challenger scores (rules §Figments — Challenge resolution).
   let activeScored = 0;
-  let opposingScored = 0;
 
   // The challenger's reserve figments are unopposed and always score; a
   // non-figment has no reserves. When the contested challenger wins and
-  // survives, it scores its spark advantage over the blocker. Unstoppable
-  // replaces that difference with the challenger's full spark.
+  // survives, it scores its spark advantage over the blocker.
   activeScored += challengerSpark.reserve;
   if (!challengerDissolves && blockerDissolves) {
-    activeScored += hasCombatKeyword(challenger, "unstoppable")
-      ? challengerSpark.compare
-      : Math.max(0, challengerSpark.compare - blockerSpark.compare);
-  }
-
-  // A blocking figment scores nothing. A blocking non-figment keeps the
-  // existing Unstoppable-survivor scoring.
-  if (
-    !isFigmentInstance(blocker) &&
-    !blockerDissolves &&
-    challengerDissolves &&
-    hasCombatKeyword(blocker, "unstoppable")
-  ) {
-    opposingScored += blockerSpark.compare;
+    activeScored += Math.max(0, challengerSpark.compare - blockerSpark.compare);
   }
 
   if (challengerDissolves) {
@@ -370,11 +339,10 @@ function resolveLane(params: {
   }
 
   // The lane's `scoreDelta` records the points scored *in this lane*. At most
-  // one side scores per blocked lane; report that total.
+  // the active challenger can score in a blocked lane.
   return {
-    judgment: lane(winner, activeScored + opposingScored),
+    judgment: lane(winner, activeScored),
     activeScored,
-    opposingScored,
   };
 }
 

@@ -85,7 +85,7 @@ A companion to [cindermarch-shadow-soloist-combo.md](cindermarch-shadow-soloist-
 52. Call of the Lost — "For each card you've played this turn, materialize a 1✦ ember figment with awakened", Reclaim 2●; the Storm/Soloist board-flood payoff.
 53. Fleeting Reunion — "Gain X⍟. Reclaim – Discard X cards" cashes a flooded late-chain hand straight into points.
 54. Terminus — "If you have no cards in your deck, you win the game"; the deck-out finish the erode loops enable.
-55. Paradox Enforcer — 7✦ Unstoppable playable from the void for "banish 7 cards from your void"; a void-flood finisher that scores its full spark.
+55. Paradox Enforcer — 7✦ body playable from the void for "banish 7 cards from your void"; a void-flood finisher.
 56. Speaker for the Forgotten — "5●: Erode 1. That card gains reclaim 0●" mills the deck toward Terminus while handing back free reclaims.
 57. Wandering Archivist — "2●, ☪: loot" and "When you discard a card, gain 1⍟"; a repeatable ☪ drain off the loot triggers.
 58. Rubble Diviner — "▸Challenge: pay 2● and discard to draw two" turns the awakened board's challenges into card and discard fuel for the drain.

@@ -740,9 +740,9 @@ tags = ["J12", "Tag OK", "Ally Audit"]
 id = "4D762FAE-AE9F-4C35-A03B-051D7ECC3532"
 name = "Blazing Orb"
 image_name = "magic_ball.png"
-tides = ["spark_tall", "point_pressure", "spark_growth", "finishers"]
-rendered-text = "The character you control with the most ✦ has unstoppable."
-tags = ["J12", "Tag OK", "Ally Audit"]
+tides = []
+rendered-text = ""
+tags = []
 
 [[dreamsign]]
 id = "C92438FC-8E1F-4F97-9DCF-8CA0EDAA8607"

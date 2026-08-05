@@ -13,7 +13,7 @@ A companion to [celestial-reverie-combo.md](celestial-reverie-combo.md), listing
 
 5. Still Dreamer — 2● "▸Materialized: Return an ally to hand"; returns itself, so with a free-cast enabler it replays for 0● indefinitely. The core loop piece.
 6. Forgotten Factory Titan — 2● Awakened body with the same self-returning ▸Materialized, doubling as an immediate threat when the loop stops.
-7. Nomad of Endless Paths — 2● Unstoppable that returns another ally each materialize, re-buying a second body's trigger and leaving a 5✦ threat behind.
+7. Nomad of Endless Paths — 2● body that returns another ally each materialize, re-buying a second body's trigger and leaving a 5✦ threat behind.
 8. Ethereal Courser — 1● "▸Materialized: Return an ally to hand," another cheap self-bouncing body to keep the chain going.
 9. Stoneborn Eternal — 1● spirit animal that returns itself for 0● whenever you play a spirit animal, chaining draws off the trigger with no enabler.
 10. Wondrous Clearing — 1● "▸Materialized: you may materialize a cost-2●-or-less character from hand," deploying an extra body that itself draws under the trigger.
@@ -59,7 +59,7 @@ A companion to [celestial-reverie-combo.md](celestial-reverie-combo.md), listing
 38. Dreamborne Leviathan — 2● spirit animal "once per turn, when you play a spirit animal, materialize a 1✦ spirit animal figment," widening the board.
 39. Call of the Lost — 3● "materialize a 1✦ awakened ember figment for each card played this turn," dropping a full attack stack after a long loop, Reclaim 2●.
 40. Field Reverent — 3● "X●: each allied character's ✦ becomes X," converting a figment stack into a lethal challenger.
-41. Spirit Bond — 7● "allied characters gain unstoppable and +X✦ where X is the number of allied characters," scoring the whole wide board at once.
+41. Spirit Bond — 7● "allied characters have +X✦ where X is the number of allied characters," turning a wide board into high-spark challengers.
 42. Mystic Runefish — 2● "5●, ☪: each allied spirit animal's ✦ becomes 7," the spirit-animal go-wide finisher.
 43. Spiritbound Alpha — 3● gives allied spirit animals +3✦ and Vengeful, pushing the loop's wide board through.
 44. Intermezzo Balladeer — 3● "When you play a card, gain 1⍟ for each other card played this turn," scoring a growing pile as the loop runs, no separate finisher needed.

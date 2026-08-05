@@ -13,7 +13,7 @@ A companion to [blink.md](blink.md), listing every CardsV2 card with a specific 
 4. Still Dreamer — "▸Materialized: Return an ally to hand"; picks up a spent value body to recast, and can return itself to keep cycling.
 5. Forgotten Factory Titan — Awakened "▸Materialized: Return an ally to hand"; same bounce loop, can act the turn it lands and bounce itself.
 6. Ethereal Courser — 1● "▸Materialized: Return an ally to hand," with a void-shuffle rider whenever you bounce; a cheap repeatable bounce enabler.
-7. Nomad of Endless Paths — "▸Materialized: Return another ally to hand"; a 5-spark unstoppable body that doubles as a bounce setup.
+7. Nomad of Endless Paths — "▸Materialized: Return another ally to hand"; a 5-spark body that doubles as a bounce setup.
 8. Key to the Moment — "Return all but one allied character to hand. Draw a card for each"; mass bounce that refuels and resets every ▸Materialized at once.
 9. Stoneborn Leviathan — "1●, Return an ally to hand: Give an ally +1✦"; a repeatable bounce activator that folds into the replay loop.
 

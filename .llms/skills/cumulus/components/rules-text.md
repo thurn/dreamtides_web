@@ -23,5 +23,5 @@ Renders authored rules-text markup: energy / spark glyphs become inline pips, `�
 ```tsx
 import { RulesText } from "src/cumulus/components/card/RulesText";
 
-<RulesText text={"Support – Supported allies have +2✦ and unstoppable."} />
+<RulesText text={"Support – Supported allies have +2✦."} />
 ```

@@ -74,7 +74,7 @@ This is the audit step. A script does the enumeration + first-pass classificatio
   Classification rules the script applies (document them in a header comment):
   - **deterministic** — every effect atom maps to a deterministic builder (gain-energy/points, draw N, erode N, add-spark to self, discard-your-hand, support-spark). `scriptable: true`.
   - **interactive** — at least one atom needs a player choice (foresee, "discard a card"/"a card you choose", pick a target). `scriptable: true`.
-  - **partial** — part is scriptable, part is not (e.g. Support grants `+N✦ and unstoppable`; automate the spark, leave the rest). `scriptable: true`, `notes` names the manual remainder.
+  - **partial** — part is scriptable, part is not; automate the deterministic portion and name the manual remainder. `scriptable: true`, `notes` names the manual remainder.
   - **manual** — nothing reliably scriptable (conditional/targeted effects the builders can't express). `scriptable: false`, `notes` says why.
   - Anything whose rule line does not match a known phrase pattern → `classification: "manual"`, `scriptable: false`, `notes: "unrecognized phrasing — needs human review"`. **Err toward `manual`**; a missed card is safe (no gear, no automation), a mis-scripted card is not.
 
@@ -167,7 +167,7 @@ const POST_DAWN_PHASES = new Set(["day", "dusk", "night", "challenge"]);
 
 ### Tasks 5–8: Register all audited scriptable cards, by pattern
 
-Each task adds `BATTLE_CARD_EFFECTS` entries for one slice of the catalog. For every card: read its **exact current `renderedText`** from `public/cards_v2-data.json`, write the script (steps/support) using the Task-2 builders and Task-3/4 prompt steps, and set `textHash: fnv1aHex(<that exact text>)` (compute with the project's FNV-1a — e.g. a small node script importing `rules-text-hash`). The existing hash-drift test + structural-invariant test cover every new entry automatically — **do not add per-card tests** (anti-pattern). For **partial** cards, automate the scriptable portion and name the manual remainder in the entry's comment (as Woodland Apparition does for "unstoppable"). For **manual** (`scriptable: false`) cards, register nothing.
+Each task adds `BATTLE_CARD_EFFECTS` entries for one slice of the catalog. For every card: read its **exact current `renderedText`** from `public/cards_v2-data.json`, write the script (steps/support) using the Task-2 builders and Task-3/4 prompt steps, and set `textHash: fnv1aHex(<that exact text>)` (compute with the project's FNV-1a — e.g. a small node script importing `rules-text-hash`). The existing hash-drift test + structural-invariant test cover every new entry automatically — **do not add per-card tests** (anti-pattern). For **partial** cards, automate the scriptable portion and name the manual remainder in the entry's comment. For **manual** (`scriptable: false`) cards, register nothing.
 
 Split so each task is reviewable and the registry stays navigable. Within each task, work straight down the catalog's matching entries — **register every scriptable one; do not sample.**
 

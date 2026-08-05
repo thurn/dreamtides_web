@@ -2,7 +2,7 @@
 // this follows. RulesText takes a plain `text` string and renders the authored
 // rules-text markup: energy/spark glyphs become inline pips, `▸` remains
 // compact Unicode text, `❖` becomes a bolt icon, and the curated keyword set
-// (support, unstoppable, reclaim, banish, …) is emphasized in spark amber. The
+// (support, reclaim, banish, …) is emphasized in spark amber. The
 // memory source symbol renders as its filled brain and carries the Memory
 // glossary reveal.
 //
@@ -20,7 +20,7 @@ import { RulesText } from "../../components/card/RulesText";
 import type { CumulusComponent } from "../registry";
 
 const SAMPLE_RULES_TEXT = [
-  "Support – Supported allies have +2✦ and unstoppable.",
+  "Support – Supported allies have +2✦.",
   "",
   "Reclaim – 3●, Banish 3 cards from your void.",
   "",
@@ -48,7 +48,7 @@ export const rulesTextDemo: CumulusComponent = {
       note: "Renders authored rules-text markup: energy / spark glyphs become inline pips, `⧗` becomes the memory brain, `▸` remains compact Unicode text in the surrounding font and color, `❖` becomes a bolt icon, and the curated keyword set is emphasized. Numeric Foresee, Erode, and Reclaim definitions reflect the exact count or energy cost and use singular grammar where appropriate; granted Reclaim refers to its target card. Pass the card's rendered-text string as `text`.",
       code: `import { RulesText } from "src/cumulus/components/card/RulesText";
 
-<RulesText text={"Support – Supported allies have +2✦ and unstoppable."} />`,
+<RulesText text={"Support – Supported allies have +2✦."} />`,
     },
   ],
   demo: {

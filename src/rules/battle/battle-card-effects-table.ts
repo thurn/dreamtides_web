@@ -214,7 +214,7 @@ export const BATTLE_CARD_EFFECTS: Record<string, BattleCardEffectScript> = {
   "1268a899-b209-46bb-bce4-6def1dcd0404": {
     id: "1268a899-b209-46bb-bce4-6def1dcd0404",
     trigger: "support",
-    textHash: "facf0878",
+    textHash: "04484014",
     support: { bonus: () => 2 },
   },
   "5a980eff-6ec7-44d8-9977-b98e66bbc2c8": {

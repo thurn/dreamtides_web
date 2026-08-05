@@ -38,7 +38,7 @@ unused) · *Erode N* (mill N from deck to void) · *Foresee N* (scry-and-reorder
 *Offering* (play for 0● by banishing a void card) · *Veil N●* (costs the opponent
 N● more to target) · *Phasing* (Materialized: bounce another ally and move) ·
 *Awakened* (enters unexhausted) · *Vengeful* (kills the opposing challenger on a
-loss) · *Unstoppable* (scores after winning a challenge) · *Figment* (token).
+loss) · *Figment* (token).
 
 **Two structural shifts visible across the whole roster:**
 
@@ -183,7 +183,7 @@ character), Veil of the Wastes (recur on materializing a survivor).
 
 **Current signatures (6):** Ridge Vortex Explorer (discard this → materialize it),
 Silent Gatherer (Veil; Dawn ● per allied figment), Flagbearer of Decay (character
-leaves void → shadow figment), The Rising God (8● unstoppable finisher with
+leaves void → shadow figment), The Rising God (8● finisher with
 reclaim), Shadowcaller (ally dissolved → survivor figment; self-reclaim),
 Sunset Chronicler (ally dissolved → draw).
 
@@ -235,7 +235,7 @@ abandons a non-figment), Dreadweaver, Skull Weaver, Kindred Sparks.
 Vessel of Echoes (+5✦ with 6+ void cards; reclaim 1●), Salvage Engine (discard →
 +2✦), Specter of Silent Snow (Dawn abandon; abandon → draw and +1✦), Resilient
 Wanderer (Dissolved draw; Dawn self-return), Paradox Enforcer (banish 7 void → play
-from void; unstoppable).
+from void).
 
 **What changed:** Kept 0, removed 5, added 6 (5 → 6).
 

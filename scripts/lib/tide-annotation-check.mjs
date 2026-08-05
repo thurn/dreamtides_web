@@ -39,7 +39,6 @@ export const MECHANIC_PATTERNS = {
   points: /⍟/,
   recursion:
     /from your void to (play|your hand|hand)|return [^.]*from your void|materialize this character from your void/i,
-  unstoppable: /\bunstoppable\b/i,
   foresee: /\bforesee\b/i,
 };
 

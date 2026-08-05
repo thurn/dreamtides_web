@@ -73,9 +73,8 @@ const BOOKEND_PHASES: ReadonlySet<BattlePhase> = new Set<BattlePhase>([
  *    challenger scores ⍟ equal to its spark, a challenger that wins a blocked
  *    lane scores the spark difference, and the keyword rules below apply
  *    (rules §Challengers, Blockers, and Scoring).
- *  - **Keyword awareness.** Preeminence wins spark ties, Vengeful drags the
- *    winner down when its bearer loses, and Unstoppable scores when a blocked
- *    character survives (rules §Keywords and Effects).
+ *  - **Keyword awareness.** Preeminence wins spark ties and Vengeful drags the
+ *    winner down when its bearer loses (rules §Keywords and Effects).
  *  - **Bookend phases auto-advance.** A `SET_PHASE` into a bookend phase
  *    (`draw`, `dawn`, `ending`) carries no player action: it folds in that
  *    bookend's effect and steps forward — chaining through consecutive bookends

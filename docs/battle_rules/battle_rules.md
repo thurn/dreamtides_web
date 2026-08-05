@@ -287,8 +287,8 @@ directly opposite a challenger as of the end of the Dusk phase. Repositioning
 during the Night phase can change which characters hold these designations.
 
 A character "scores ⍟" when a challenge converts its spark into victory points —
-that is, when an unpaired challenger scores, when a challenger wins a blocked
-lane, or when an Unstoppable character wins a challenge. This is the event that
+that is, when an unpaired challenger scores or when a challenger wins a blocked
+lane. This is the event that
 abilities reading "When an X you control scores ⍟" respond to. By contrast, a
 flat "gain N⍟" effect (such as an Abandon-for-points ability, or Fatigue) awards
 victory points to a player without any character scoring, and does not count as
@@ -302,9 +302,8 @@ right:
   dissolved (unless one has Preeminence; see [Keywords](#keywords-and-effects)).
   When the challenger wins, it scores victory points equal to the difference
   between its spark and the blocker's spark. For example, an 8✦ challenger that
-  wins against a 2✦ blocker scores 6⍟. A winning blocker scores only if an
-  ability such as Unstoppable says it does. ▸Dissolved triggers fire after each
-  lane is resolved.
+  wins against a 2✦ blocker scores 6⍟. A winning blocker scores 0⍟.
+  ▸Dissolved triggers fire after each lane is resolved.
 - **Unpaired challenger:** The challenger scores victory points equal to its
   spark for the active player.
 - **Only the opposing player has a front-rank character in the lane:** Nothing
@@ -472,10 +471,6 @@ includes X, X is 0.
 
 **Ephemeral** — A card drawn with Ephemeral is banished at the end of the turn if
 it is still in hand, so it must be played the turn it is drawn.
-
-**Unstoppable** — When this character wins a challenge against an opposing enemy
-character, it scores ⍟ equal to its spark. A winning challenger with
-Unstoppable scores its full spark rather than the spark difference.
 
 **Vengeful** — When this character loses a challenge, it dissolves the opposing
 enemy character. In effect both characters in the challenge are dissolved.

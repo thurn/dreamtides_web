@@ -45,7 +45,6 @@ describe("rules-text highlight emphasis", () => {
       "veil",
       "reclaim",
       "offering",
-      "unstoppable",
       "vengeful",
       "preeminence",
     ]) {
@@ -94,11 +93,11 @@ describe("rules-text highlight emphasis", () => {
   // not, even though both resolve to the same glossary entry.
   it("splits support from supported", () => {
     const segments = termHighlights(
-      "Support – Supported allies gain unstoppable.",
+      "Support – Supported allies gain vengeful.",
     );
     expect(segments).toContainEqual({ word: "Support", highlighted: true });
     expect(segments).toContainEqual({ word: "Supported", highlighted: false });
-    expect(segments).toContainEqual({ word: "unstoppable", highlighted: true });
+    expect(segments).toContainEqual({ word: "vengeful", highlighted: true });
   });
 
   it("does not emphasize the named triggers in their arrow form", () => {

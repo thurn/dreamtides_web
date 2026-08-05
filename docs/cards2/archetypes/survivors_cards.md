@@ -61,9 +61,9 @@ A companion to [survivors.md](survivors.md), listing every CardsV2 card with a s
 
 ## Void finishers
 
-46. Paradox Enforcer — 1●/7✦ Unstoppable cast from the void by banishing 7 cards, the discard build's natural payoff.
+46. Paradox Enforcer — 1●/7✦ body cast from the void by banishing 7 cards, the discard build's natural payoff.
 47. Verdant Wayfarer — draws 2 and reclaims by banishing 7 void cards, converting a deep void into cards.
-48. The Rising God — 8●/7✦ Unstoppable that reclaims for 2● and two abandons, the lategame abandon closer.
+48. The Rising God — 8●/7✦ body that reclaims for 2● and two abandons, the lategame abandon closer.
 
 ## Recursion support and acceleration
 

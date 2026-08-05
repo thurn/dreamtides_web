@@ -88,10 +88,10 @@ Recurrent bodies are what make abandoning sustainable. Duskwall Delver ("When an
 ally is dissolved, you may pay 1● to materialize this character from your void")
 returns itself for 1● whenever anything dies, and Cinderfang ("▸Dissolved: You
 may pay 1● to return this character to hand") bounces back to hand to be replayed.
-The Rising God is the lategame closer: an 8● 7✦ Unstoppable Ancient with
+The Rising God is the lategame closer: an 8● 7✦ Ancient with
 "Reclaim – 2●, Abandon two characters", it comes back out of the void for 2● and
-two bodies you were happy to feed an outlet anyway, then scores its full spark
-directly as ⍟ when it goes unanswered.
+two bodies you were happy to feed an outlet anyway, then threatens a large
+unpaired score when it goes unanswered.
 
 The deck wins this way by converting the loop into points or cards. Silent
 Avenger ("When a character is dissolved, gain 1⍟") and Fathomless Maw ("When you
@@ -138,12 +138,12 @@ turn where everything you have milled becomes castable at once.
 
 A void full of survivors wants a finisher that turns all that material into a
 win. Paradox Enforcer ("To play this character, banish 7 cards from your void.
-You may play this character from your void. Unstoppable") is a 1● 7✦ Unstoppable
+You may play this character from your void.") is a 1● 7✦
 body that the discard build's eroding naturally pays for, and you can cast it
 straight out of the void. Verdant Wayfarer ("▸Materialized: Draw 2 cards.
 Reclaim – 3●, Banish 7 cards from your void") similarly converts a deep void into
 cards. The Rising God closes the abandon build the same way, recurring for 2●
-and two abandons to land a 7✦ Unstoppable threat that scores its spark as ⍟.
+and two abandons to land a 7✦ threat.
 
 ## Misc. role players
 

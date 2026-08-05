@@ -102,7 +102,7 @@ A companion to [discard-madness.md](discard-madness.md), listing every CardsV2 c
 
 ## Void-count / void-scaling threats
 
-84. Paradox Enforcer — 1●, 7✦ Unstoppable played from void by banishing 7; a huge threat the filled void enables.
+84. Paradox Enforcer — 1●, 7✦ body played from void by banishing 7; a huge threat the filled void enables.
 85. Vessel of Echoes — "+5✦ with six or more cards in void," Reclaim 1●; flips on once the void is stocked.
 86. Architect of Memory — "+4✦ and awakened with 7+ cards in void"; chaff that becomes a threat.
 87. Abomination of Memory — "+4✦ with three or more cost-2● characters in void"; scales on the small cards you discard.
@@ -117,7 +117,7 @@ A companion to [discard-madness.md](discard-madness.md), listing every CardsV2 c
 ## Recurring void threats
 
 95. Harrowing Officiant — "When you play your second card in a turn, materialize this from your void"; recurs every turn a discard deck plays two cards.
-96. The Rising God — 8● Unstoppable; "Reclaim – 2●, Abandon two characters"; discard it early, bring it back as a finisher.
+96. The Rising God — 8●; "Reclaim – 2●, Abandon two characters"; discard it early, bring it back as a finisher.
 97. Eternal Sentry — "When you draw your third card in a turn, materialize this from your void"; a discard/loot deck triggers it easily.
 98. Specter of Silent Snow — abandons each Dawn and draws + grows on abandon; an attrition body fueled by the void plan.
 99. Soulkindler — "If this is in your void, allied characters have +1✦"; you actively discard it to anthem the team.

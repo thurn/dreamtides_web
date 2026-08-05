@@ -527,16 +527,6 @@ match = { kind = "glossary", id = "offering" }
 text = "[yellow]Offering[/yellow] lets you play this card for 0● by banishing a card from your hand. If you do, banish it at end of turn."
 
 [[triggers]]
-id = "unstoppable"
-on = [ "card-seen", "card-play", "dreamwell-resolve" ]
-priority = 100
-delay = { card-seen = 1 }
-duration = 3
-bubbleWidth = 500
-match = { kind = "glossary", id = "unstoppable" }
-text = "An [yellow]unstoppable[/yellow] challenger scores points equal to its ✦ when it dissolves a blocker."
-
-[[triggers]]
 id = "vengeful"
 on = [ "card-seen", "card-play", "dreamwell-resolve" ]
 priority = 100

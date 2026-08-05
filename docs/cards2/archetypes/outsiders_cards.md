@@ -9,7 +9,7 @@ A companion to [outsiders.md](outsiders.md), listing every CardsV2 card with a s
 3. Driftrider — 2● Outsider whose payoff fires off *any* allied outsider scoring: "foresee 1, then draw a card," so it scales with the team.
 4. Thronebound Arbiter — 4● top-end Outsider; board-wide "draw a card when an allied outsider scores" on a sturdier 2✦ payoff.
 5. Breach Artist — 4● Outsider with the bounce line plus "when you return an ally to hand, reduce its cost by 2●," cheapening every rebuy.
-6. Nomad of Endless Paths — carries the exact "▸Materialized: Return another ally to hand" bounce, an unstoppable body that re-buys ▸Materialized value.
+6. Nomad of Endless Paths — carries the exact "▸Materialized: Return another ally to hand" bounce, a body that re-buys ▸Materialized value.
 
 ## Outsider payoffs and card-advantage engines
 

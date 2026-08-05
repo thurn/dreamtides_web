@@ -44,7 +44,7 @@ them.
 - **Skyflame Commander** (2●, Warrior) — "Support – Supported characters have +1✦ for each allied warrior." Needs warriors **and** a front-rank ally to support.
 - **Inspiring Templar** (3●, Warrior) — "This character has +1✦ for each allied warrior. Other allied warriors have +1✦." Its own spark is 0; needs warriors.
 - **Liminal Striker** (2●, Warrior) — "This character has +1✦ for each allied warrior." Needs warriors.
-- **Blade of Unity** (X●, Warrior) — "Unstoppable" body whose printed identity (a 2● warrior with "+1✦ for each allied warrior") is copied by Forge-Twin and Gilded Catalyst. Needs warriors.
+- **Blade of Unity** (X●, Warrior) — body whose printed identity (a 2● warrior with "+1✦ for each allied warrior") is copied by Forge-Twin and Gilded Catalyst. Needs warriors.
 - **Forge-Twin** (3●, Warrior) — "▸Materialized: Materialize a figment copy of 'Blade of Unity'." The figment is inert without other warriors.
 - **Gilded Catalyst** (3●, Visitor) — "When you play a warrior, you may pay 2● to materialize a figment copy of 'Blade of Unity'." Needs warriors.
 - **Assault Leader** (3●, Warrior) — "▸Dawn: Each allied warrior gains +1✦." Needs warriors.
@@ -305,7 +305,7 @@ outlet or sacrificial board.
 ### A character scores ⍟
 
 Beyond the Outsider payoffs above, a few cards reward the act of scoring and so
-want an Unstoppable threat or an unanswered challenger.
+want an unanswered challenger.
 
 - **Apocalypse Vigilante** (3●, Warrior) — "When this character scores ⍟, the opponent loses an equivalent quantity of ⍟." Wants to connect repeatedly.
 - **Northlight Maestro** (2●, Outsider) / **Vanishing Inquisitor** (1●, Outsider) — "When this character scores ⍟, draw a card (then discard)." Needs to score.
@@ -363,7 +363,7 @@ need self-mill, discard, and erode to come online.
 - **Wraith of Twisting Shadows** (3●, Visitor) — "This character has +1✦ for each character with cost 2● or less in your void…"
 - **Vessel of Echoes** (1●, Survivor) — "If there are 6 or more cards in your void, this character has +5✦."
 - **Weight of Memory** (0● event) — "Dissolve an enemy with ✦ less than or equal to the number of cards in your void." Weak until the void is deep.
-- **Paradox Enforcer** (1●, Visitor) — "To play this character, banish 7 cards from your void. You may play this character from your void. Unstoppable." Needs a stocked void.
+- **Paradox Enforcer** (1●, Visitor) — "To play this character, banish 7 cards from your void. You may play this character from your void." Needs a stocked void.
 - **Knowledge Restored** (2● event) / **Fractured Veil** (2● event) / **Fleeting Reunion** — pay with void cards; dead with an empty void.
 - **Soulkindler** (4●, Visitor) — "If this card is in your void, allied characters have +1✦." Only works once it has been discarded/dies.
 - **Ferryman of the Falls** (6●, Explorer) — "When a character with cost 2● or less is put into your void, draw a card." Needs cheap-creature churn.
@@ -387,7 +387,7 @@ piece is mediocre alone; together they snowball.
 
 Cards that scale with total characters in play want a flood strategy.
 
-- **Spirit Bond** (7● event) — "Until end of turn, allied characters gain unstoppable and +X✦ where X is the number of allied characters." A wide-board finisher.
+- **Spirit Bond** (7● event) — "Until end of turn, allied characters have +X✦ where X is the number of allied characters." A wide-board finisher.
 - **Field Reverent** (3●, Warrior) — "X●: Each allied character's ✦ becomes X until end of turn." Pump scales with board size.
 - **Crumbling Behemoth** (10●, Ancient) — "Other allied characters have 10✦." Needs other characters.
 - **Wildflower Colossus** (6●, Synth) — "This character has +2✦ for each supporting ally." Needs a back rank.
@@ -400,7 +400,7 @@ a Support bonus aimed at a figment stack applies per figment.)
 
 - **Last Light Herald** (1●, Warrior) — "Support – Supported characters have +2✦."
 - **Nocturne Strummer** (2●, Musician) — "Support – Supported characters have +2✦."
-- **Woodland Apparition** (3●, Visitor) — "Support – Supported allies have +2✦ and have unstoppable."
+- **Woodland Apparition** (3●, Visitor) — "Support – Supported allies have +2✦."
 - **Charnel Seraph** (3●, Warrior) — "Support – Supported characters have +3✦."
 - **Spirit Field Reclaimer** (3●, Warrior) — "Support – Supported allies have +1✦ for each stored ⧗." Needs both supported allies and stored counters.
 - **Skyflame Commander** and **Ghostlight Wolves** (above) also key their Support off a tribe.

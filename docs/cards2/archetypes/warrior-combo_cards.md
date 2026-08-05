@@ -47,7 +47,7 @@ A companion to [warrior-combo.md](warrior-combo.md), listing every CardsV2 card 
 ## Figment / board makers
 
 31. Voidsire — "When you play a warrior, materialize a 1✦ warrior figment" — widens the board and feeds every abandon and Prism Caller trigger.
-32. Forge-Twin — Materializes a figment copy of Blade of Unity, a scaling Unstoppable warrior that feeds the count.
+32. Forge-Twin — Materializes a figment copy of Blade of Unity, a scaling warrior that feeds the count.
 33. Crescendo Channeler — ▸Dawn warrior figment plus "2●, ☪: Gain 1● for each allied warrior" — the energy engine that refunds laps of the loop.
 34. Worldbreacher — "☪: Materialize a 1✦ warrior figment" — a repeatable figment maker.
 35. Standard Bearer — "When you play a character, materialize a 1✦ warrior figment" — broad figment engine for the loop.

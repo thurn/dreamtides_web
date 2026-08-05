@@ -100,7 +100,6 @@ function card(battleCardId: string, controller: "player" | "enemy"): BattleCardI
       offering: false,
       ephemeral: false,
       veil: false,
-      grantedUnstoppable: false,
       grantedVengeful: false,
       grantedPreeminence: false,
       grantedAwakened: false,

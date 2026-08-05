@@ -37,7 +37,7 @@ import { richText } from "src/cumulus/components/card/rich-text";
 <InfoCard
   variant="text"
   title="Woodland Apparition"
-  body={richText.rules("Support - Supported allies have +2 and unstoppable.")}
+  body={richText.rules("Support - Supported allies have +2.")}
 />
 ```
 

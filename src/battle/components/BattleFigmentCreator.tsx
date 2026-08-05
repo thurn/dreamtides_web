@@ -44,7 +44,6 @@ function defaultFigmentName(entry: FigmentCatalogEntry): string {
 }
 
 const FIGMENT_KEYWORD_LABELS: Readonly<Record<FigmentKeyword, string>> = {
-  unstoppable: "Unstoppable",
   vengeful: "Vengeful",
   awakened: "Awakened",
 };

@@ -19,10 +19,7 @@ import type { ArtCrop } from "../../types/cards";
  * A keyword a figment type carries implicitly. Each maps onto the matching
  * combat-keyword `granted*` status flag, carried by every figment of that type.
  */
-export type FigmentKeyword =
-  | "unstoppable"
-  | "vengeful"
-  | "awakened";
+export type FigmentKeyword = "vengeful" | "awakened";
 
 export interface FigmentCatalogEntry {
   /** Stable identity for this authored figment type. */
@@ -74,7 +71,7 @@ export const LEGIONNAIRE_FIGMENT_ID =
   "e757b306-5bab-4a5a-8493-28c0f3aa6440";
 
 function normalizeHydratedKeyword(keyword: string | undefined): FigmentKeyword | undefined {
-  if (keyword === "unstoppable" || keyword === "vengeful" || keyword === "awakened") {
+  if (keyword === "vengeful" || keyword === "awakened") {
     return keyword;
   }
   return undefined;

@@ -19,10 +19,10 @@ import {
 import type { CumulusComponent } from "../registry";
 
 // The seeded rules value: a two-ability card body that exercises keyword
-// emphasis (Support / unstoppable / Reclaim / Banish), a `+2✦` spark pip, and a
+// emphasis (Support / Reclaim / Banish), a `+2✦` spark pip, and a
 // `3●` energy cost in one string.
 const SAMPLE_VALUE: RichText = richText.rules(
-  "Support – Supported allies have +2✦ and unstoppable.\n\nReclaim – 3●, Banish 3 cards from your void.",
+  "Support – Supported allies have +2✦.\n\nReclaim – 3●, Banish 3 cards from your void.",
 );
 
 // RichTextView's `value` prop is required, which the registry's
@@ -54,7 +54,7 @@ import { richText } from "src/cumulus/components/card/rich-text";
 <InfoCard
   variant="text"
   title="Woodland Apparition"
-  body={richText.rules("Support - Supported allies have +2 and unstoppable.")}
+  body={richText.rules("Support - Supported allies have +2.")}
 />`,
     },
     {

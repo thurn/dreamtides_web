@@ -1360,9 +1360,6 @@ function applyFigmentKeywordToStatus(
   }
 
   switch (keyword) {
-    case "unstoppable":
-      instance.status.grantedUnstoppable = true;
-      return;
     case "vengeful":
       instance.status.grantedVengeful = true;
       return;

@@ -43,9 +43,9 @@ export function needsManualResolution(
   }
 
   // ── Rule 3: resolution keywords (case-insensitive whole-word match) ────────
-  // Unstoppable, Vengeful, and Preeminence modify how combat resolution or
+  // Vengeful and Preeminence modify how combat resolution or
   // zone transitions work; the engine cannot apply them without special logic.
-  if (/\b(?:unstoppable|vengeful|preeminence)\b/i.test(text)) {
+  if (/\b(?:vengeful|preeminence)\b/i.test(text)) {
     return true;
   }
 

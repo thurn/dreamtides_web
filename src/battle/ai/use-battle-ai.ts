@@ -525,8 +525,8 @@ function enrichDeferredCommands(
  * AI-authored DEBUG_EDIT command.
  *
  * The AI resolves combat through the same source of truth the rest of the
- * engine uses, so its committed Challenge outcome honors the four combat
- * keywords (Unstoppable, Vengeful, Preeminence, Awakened) and figment
+ * engine uses, so its committed Challenge outcome honors the three combat
+ * keywords (Vengeful, Preeminence, Awakened) and figment
  * dissolution exactly as the human path does.
  */
 function buildEndTurnProposal(

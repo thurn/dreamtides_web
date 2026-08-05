@@ -22,8 +22,8 @@ import { rankSlotIds, type FrontRankSlotId } from "../types";
  *   - Blocked challenger vs blocker: the lower effective spark dissolves; a
  *     tie dissolves both; a winning challenger scores the spark difference.
  *   - Unpaired challenger: scores victory points equal to its spark.
- * The Starter pool has no Preeminence/Unstoppable, so those keyword carve-outs
- * do not apply here.
+ * The Starter pool has no Preeminence, so that keyword carve-out does not apply
+ * here.
  */
 
 export type OpponentMode = "expectiminimax" | "worstCase";

@@ -600,7 +600,6 @@ function defaultStatus(): BattleCardStatus {
     offering: false,
     ephemeral: false,
     veil: false,
-    grantedUnstoppable: false,
     grantedVengeful: false,
     grantedPreeminence: false,
     grantedAwakened: false,
@@ -1815,7 +1814,6 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     f0Enemy.definition.printedSpark = 4;
     const f1 = makeInstance("challenge-f1", "player-f1", "player");
     f1.definition.printedSpark = 2;
-    f1.definition.renderedText = "Unstoppable";
     const f1Enemy = makeInstance("challenge-f1-enemy", "enemy-f1", "enemy");
     f1Enemy.definition.printedSpark = 3;
     const supporter = makeInstance("challenge-support", support.id, "player");
@@ -1881,7 +1879,7 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     expect(duplicate.state.battle?.board.sides.player.score).toBe(4);
   });
 
-  it("stops Challenge after an F0 victory while tutorial enemy scoring stays non-terminal", () => {
+  it("stops Challenge after an F0 victory and gives a winning blocker no score", () => {
     const f0 = makeInstance("victory-f0", "victory-player", "player");
     f0.definition.printedSpark = 5;
     const f1 = makeInstance("victory-f1", "victory-player-1", "player");
@@ -1904,7 +1902,6 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     player.definition.printedSpark = 1;
     const enemy = makeInstance("tutorial-enemy", "tutorial-enemy-card", "enemy");
     enemy.definition.printedSpark = 5;
-    enemy.definition.renderedText = "Unstoppable";
     const tutorialBoard = makeRichBoard({
       instances: [player, enemy],
       playerFront: { F0: player.battleCardId },
@@ -1932,7 +1929,7 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
       ctx(),
       "tutorial-ai:player",
     );
-    expect(tutorial.state.battle?.board.sides.enemy.score).toBe(5);
+    expect(tutorial.state.battle?.board.sides.enemy.score).toBe(0);
     expect(tutorial.state.battle?.board.result).toBeNull();
   });
 

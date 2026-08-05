@@ -162,8 +162,8 @@ Gateway Defender are Interrupt abandon outlets ("❖❖ – Abandon … : An all
 be targeted by effects this turn") that double as protection for the static when
 the opponent reaches for it. Volcanic Channeler ("When an ally is dissolved, gain
 1●") banks energy off every looped abandon, a second free-energy source behind
-Starrunner. Blade of Unity and Molten Duel round out the curve with an
-Unstoppable threat and cheap removal.
+Starrunner. Blade of Unity and Molten Duel round out the curve with a scaling
+threat and cheap removal.
 
 ## Combos
 

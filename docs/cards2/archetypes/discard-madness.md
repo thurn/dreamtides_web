@@ -121,14 +121,13 @@ threats. The first kind recurs from the void on its own. Harrowing Officiant is 
 5● ancient with "When you play your second card in a turn, materialize this
 character from your void," so once it is in the void — discarded or eroded there
 — it keeps coming back every turn you play two cards, which a discard deck does
-trivially. The Rising God is the top-end recursive threat: an 8● Unstoppable
+trivially. The Rising God is the top-end recursive threat: an 8●
 ancient with "Reclaim – 2●, Abandon two characters," so you discard it into the
-void early and bring it back later for two bodies and 2●, where its Unstoppable
-spark scores directly as ⍟.
+void early and bring it back later for two bodies and 2●.
 
-The second kind scales off a full void. Paradox Enforcer is a 1●, 7✦ Unstoppable
+The second kind scales off a full void. Paradox Enforcer is a 1●, 7✦
 visitor that you play *from your void* by banishing 7 cards from it — a discard
-deck fills the void to that depth quickly, then deploys a huge Unstoppable
+deck fills the void to that depth quickly, then deploys a huge
 threat for a single energy. Forgotten Titan is a 4●, 5✦ ancient that costs 3●
 less if you have discarded a card this turn, so a routine discard turns it into a
 1● body. Vessel of Echoes has +5✦ with six or more cards in your void and carries

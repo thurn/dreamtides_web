@@ -59,14 +59,12 @@ Raw symbol occurrence counts (cards_v2): ● 285 · ✦ 142 · ▸ 157 · ☪ 65
   - Example: *Miraculous Arrival*
 - [ ] **Ephemeral** — drawn-with-ephemeral cards banish at end of turn if still in hand. Rendered lowercase: "draw a card with ephemeral", 9 occurrences. **[DET]** (end-of-turn banish is automatic)
   - Examples: *Vrakmoth* (dream avatar), several "draw a card with ephemeral" cards
-- [ ] **Unstoppable** — scores ⍟ = its spark on winning a challenge. 5 occurrences (plus innate on Ancient/Synth-anthem figments). **[DET]** (resolves from challenge outcome)
-  - Example: *"…allied characters gain unstoppable and +X✦…"*
 - [ ] **Vengeful** — on losing a challenge, dissolves the opposing enemy. 5 occurrences (plus innate on Wraith figment). **[DET]**
 - [ ] **Preeminence** — wins spark ties. 0 on cards; innate on **Celestial** figment only. **[DET]**
 - [ ] **Veil N●** — opponent pays N● extra to target this character. 18 occurrences. **[DET]** for the source; the opponent's pay-or-fail is **[CHOICE]** at target time
   - Examples: *"Veil 2●"*, *"Awakened, Veil 2●"*
 - [ ] **Support – <benefit>** — back-rank character benefits the ≤2 front-rank positions it supports. Keyword form "Support –": 8; "Supported" refs: 8. **[DET]** (positional, board-derived)
-  - Examples: *"Support – Supported allies have +1✦ for each stored ⧗."*, *"Support – Supported allies have +2✦ and have unstoppable."*
+  - Examples: *"Support – Supported allies have +1✦ for each stored ⧗."*, *"Support – Supported allies have +2✦."*
 - [ ] **Awakened (keyword) / Awaken (effect)** — enters/becomes un-exhausted. Awakened keyword 15; Awaken verb 7 (30 total "awaken*"). **[DET]** keyword; **[CHOICE]** when "Awaken an ally" picks a target
   - Example: *Kaleth* (dream avatar): "2●, ☪: Awaken an ally."
 - [ ] **Phasing** — keyword on 6 cards. **NOT DEFINED in battle_rules.md — flag for designer.** Appears as a standalone keyword line like Awakened. **[?]** (needs a rule before classification)
@@ -153,7 +151,7 @@ Raw symbol occurrence counts (cards_v2): ● 285 · ✦ 142 · ▸ 157 · ☪ 65
 - [ ] **Self-scaling spark** ("This character has +1✦ for each allied warrior") — present. **[DET]**
 - [ ] **Void-anchored static** ("If this card is in your void, allied characters have +1✦.") — present. **[DET]** (zone-conditioned static)
 - [ ] **Cost reductions** ("costs ● less", "the next character you play costs 2● less") — "● less" 6 (+ dream avatar *Kragg*; *Yveth Coravel* "cost reduced by 1●"). **[DET]** (continuous cost mod)
-- [ ] **Rule-change statics** (granting keywords to a group, e.g. "Supported allies … have unstoppable") — folded into anthems above. **[DET]**
+- [ ] **Rule-change statics** (granting keywords to a group) — folded into anthems above. **[DET]**
 
 ---
 
@@ -196,7 +194,7 @@ Creation phrasing is "Materialize a N✦ <type> figment" (38 "<type> figment" hi
 Figment-creation counts by type (occurrences of "<type> figment" in rendered-text):
 
 - [ ] **Warrior** (base 1✦) — 6. **[DET]** create
-- [ ] **Ancient** (4✦, Unstoppable) — 0 created in text (subtype exists). **[DET]**
+- [ ] **Ancient** (4✦) — 0 created in text (subtype exists). **[DET]**
 - [ ] **Enigma** (0✦) — 0 created. **[DET]**
 - [ ] **Shadow** (2✦) — 3. **[DET]**
   - Example: *"When a character card leaves your void, materialize a 2✦ shadow figment."*
@@ -298,7 +296,7 @@ Figment-creation counts by type (occurrences of "<type> figment" in rendered-tex
 - [ ] **Gain control of an enemy** — see §2. **[CHOICE]** — moves a character across sides; ownership re-assignment.
 - [ ] **Phasing** — 6 cards, **undefined in current rules**. **[?]** — must define before automating.
 - [ ] **Shuffle hand+void into deck + draw 5 (+ gain ●)** ("reset" effect) — see §13. **[DET]** (deterministic bulk move).
-- [ ] **"Until end of turn" temporary grants** (gain unstoppable +X✦, gain reclaim, cost reductions) — duration tracking. **[DET]** bookkeeping; underlying grant may target ([CHOICE]).
+- [ ] **"Until end of turn" temporary grants** (gain +X✦, gain reclaim, cost reductions) — duration tracking. **[DET]** bookkeeping; underlying grant may target ([CHOICE]).
 - [ ] **Pay-or-prevent / "unless opponent pays N●" interactive branches** — opponent decision points. **[CHOICE]** (opponent).
 
 ---

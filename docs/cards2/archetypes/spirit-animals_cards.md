@@ -73,7 +73,7 @@ A companion to [spirit-animals.md](spirit-animals.md), listing every CardsV2 car
 
 ## Finishers
 
-52. Spirit Bond — "Allied characters gain unstoppable and +X✦ where X is the number of allied characters"; the default wide-board alpha strike.
+52. Spirit Bond — "Allied characters have +X✦ where X is the number of allied characters"; the default wide-board alpha strike.
 53. Mystic Runefish — spirit animal, "5●, ☪: Each allied spirit animal's ✦ becomes 7"; the tribal nuke a wide board makes lethal.
 54. Spiritbound Alpha — spirit animal, "❖ – 5●: Allied spirit animals gain +3✦ and vengeful"; the Fast tribal finisher that trades up in the opponent's window.
 55. Field Reverent — "X●: Each allied character's ✦ becomes X until end of turn"; the finisher for a mixed board scaled to energy.

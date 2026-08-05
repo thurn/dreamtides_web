@@ -668,7 +668,7 @@ describe("useBattleAi", () => {
 
   // The endTurn proposal resolves the Challenge through the unified, keyword-
   // aware `engine/challenge.resolveChallenge` (Task 5.2). These cases prove the
-  // four combat keywords flow through the AI's committed Challenge edits —
+  // three combat keywords flow through the AI's committed Challenge edits —
   // outcomes the prior keyword-blind judgment shim dropped. Each places the AI's
   // (enemy) challenger and the player's blocker in front-rank F0, then inspects
   // the endTurn proposal's DEBUG_EDIT edits.
@@ -692,21 +692,6 @@ describe("useBattleAi", () => {
       expect(dispatch).not.toHaveBeenCalled();
       return proposalEdits();
     }
-
-    it("scores a surviving blocked Unstoppable challenger for the AI side", async () => {
-      // The ordinary blocked score would be the 3✦ advantage. Unstoppable lets
-      // the AI's surviving challenger score its full 6✦ instead.
-      const edits = await endTurnEdits((mutable) => {
-        placeFrontRankCharacter(mutable, "enemy", "aiUnstoppable", 6, "Unstoppable");
-        placeFrontRankCharacter(mutable, "player", "blocker", 3, "");
-      });
-
-      expect(edits).toContainEqual({
-        kind: "ADJUST_SCORE",
-        side: "enemy",
-        amount: 6,
-      });
-    });
 
     it("drags the AI winner down when the opposing loser is Vengeful", async () => {
       // Keyword-blind: only the 2-spark loser dissolved. Keyword-aware: the

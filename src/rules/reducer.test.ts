@@ -227,7 +227,6 @@ function makeCardInstance(battleCardId: string): BattleCardInstance {
       offering: false,
       ephemeral: false,
       veil: false,
-      grantedUnstoppable: false,
       grantedVengeful: false,
       grantedPreeminence: false,
       grantedAwakened: false,

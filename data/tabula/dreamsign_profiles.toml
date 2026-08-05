@@ -30,7 +30,7 @@ quality = 2
 [[dreamsigns]]
 id = "278EC1AB-F532-4862-84AE-63DF5E49548C"
 subtypes = []
-card-types = ["Character"]
+card-types = []
 cost-bands = ["cheap"]
 keywords = []
 quality = 2
@@ -951,15 +951,14 @@ cost-bands = []
 keywords = []
 quality = 2
 
-# Blazing Orb — the allied character with the most ✦ has unstoppable; rewards
-# spark-tall decks that concentrate ✦ on a single big finisher.
+# Blazing Orb — Featureless.
 [[dreamsigns]]
 id = "4D762FAE-AE9F-4C35-A03B-051D7ECC3532"
 subtypes = []
 card-types = ["Character"]
-cost-bands = ["big"]
+cost-bands = []
 keywords = []
-quality = 1
+quality = 3
 
 # Black Horn — when you dissolve or banish an enemy character, gain 2●; a
 # removal payoff that helps any deck and the vocabulary cannot express removal

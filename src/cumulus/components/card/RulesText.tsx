@@ -37,7 +37,7 @@ import {
  *     font and color
  *   - glossary terms rendered as plain prose by default, with a curated set
  *     of keyword effects and action verbs (`dissolve`, `banish`, `prevent`,
- *     `foresee`, `veil`, `unstoppable`, `reclaim`, …) emphasized in the spark
+ *     `foresee`, `veil`, `vengeful`, `reclaim`, …) emphasized in the spark
  *     amber so the eye catches them (see `HIGHLIGHTED_TERMS`). The
  *     plain-language definitions travel with named entity reveal specifications
  *     through the shared reveal coordinator.
@@ -130,7 +130,6 @@ const HIGHLIGHTED_TERMS: ReadonlySet<string> = new Set([
   "reclaim",
   "reclaimed",
   "offering",
-  "unstoppable",
   "vengeful",
   "preeminence",
   // Journey verbs that appear in dreamsign text.

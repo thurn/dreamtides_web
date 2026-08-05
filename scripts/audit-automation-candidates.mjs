@@ -54,9 +54,6 @@
 //   - deterministic : every atom is a deterministic builder. scriptable:true.
 //   - interactive   : >=1 atom needs a player choice (interactive:true /
 //                     foresee), and the rest are scriptable. scriptable:true.
-//   - partial       : part scriptable, part not (e.g. Support "+N✦ and
-//                     unstoppable" — automate the spark, leave the rest).
-//                     scriptable:true; notes name the manual remainder.
 //   - manual        : nothing reliably scriptable (conditional / targeted /
 //                     for-each / opponent-directed effects, or any phrasing the
 //                     parser does not recognize). scriptable:false.
@@ -204,8 +201,7 @@ function parseClause(body) {
 // Effect parsing for Support clauses
 // ---------------------------------------------------------------------------
 //
-// Recognized: "Supported <filter> have +N✦" optionally followed by
-// " and have unstoppable" (partial — spark scriptable, unstoppable manual).
+// Recognized: "Supported <filter> have +N✦".
 // The allied-warrior-count variant is deterministic from the board. Other
 // "for each ..." variants remain manual.
 
@@ -230,14 +226,12 @@ function parseSupport(body) {
   }
 
   // e.g. "Supported spirit animals have +2✦."
-  //      "Supported allies have +2✦ and have unstoppable."
   let m = body.match(
-    /^Supported ([a-z ]+?) have \+(\d+)✦( and (?:have )?unstoppable)?\.?$/
+    /^Supported ([a-z ]+?) have \+(\d+)✦\.?$/
   );
   if (m) {
     const filterPhrase = m[1].trim();
     const amount = Number(m[2]);
-    const hasUnstoppable = Boolean(m[3]);
     if (Object.prototype.hasOwnProperty.call(SUPPORT_SUBTYPES, filterPhrase)) {
       const subtype = SUPPORT_SUBTYPES[filterPhrase];
       const atom = {
@@ -246,11 +240,7 @@ function parseSupport(body) {
         target: 'all-supported',
       };
       if (subtype) atom.subtypeFilter = subtype;
-      const atoms = [atom];
-      if (hasUnstoppable) {
-        return { atoms, partialNote: 'grants unstoppable (not scriptable)' };
-      }
-      return { atoms };
+      return { atoms: [atom] };
     }
   }
   // "for each ..." and any other phrasing -> not scriptable.
@@ -301,8 +291,7 @@ function classify(triggers, atoms, partialNote) {
   const hasInteractive = atoms.some((a) => a.interactive === true);
   const hasDeterministic = atoms.some((a) => DETERMINISTIC_KINDS.has(a.kind));
 
-  // Partial: a recognized scriptable atom plus a known non-scriptable rider
-  // (currently only Support "+N✦ and unstoppable").
+  // Partial: a recognized scriptable atom plus a known non-scriptable rider.
   if (partialNote) {
     return {
       classification: 'partial',

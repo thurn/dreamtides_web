@@ -230,7 +230,7 @@ art = { x = 0.353, y = 1, scale = 1.17 }
 name = "Spirit Bond"
 mtg-name = "Craterhoof Behemoth"
 id = "3cda9dd7-cb81-43c1-9db5-1444d7363e13"
-rendered-text = "Until end of turn, characters you control gain unstoppable and +X✦ where X is the number of characters you control."
+rendered-text = "Until end of turn, characters you control have +X✦ where X is the number of characters you control."
 energy-cost = 7
 card-type = "Event"
 subtype = ""
@@ -641,7 +641,7 @@ name = "Woodland Apparition"
 mtg-name = "Detective's Phoenix"
 id = "1268a899-b209-46bb-bce4-6def1dcd0404"
 rendered-text = '''
-Support – Supported characters have +2✦ and unstoppable.
+Support – Supported characters have +2✦.
 
 Reclaim – 3●, Banish 3 cards from your void.'''
 energy-cost = 3
@@ -853,10 +853,7 @@ art = { x = -0.336, y = 0.369, scale = 1.17 }
 name = "Brawler Battlesuit"
 mtg-name = "Stonecloaker"
 id = "44ae8838-4714-43a5-a7bd-e9f806f35ca9"
-rendered-text = """
-Unstoppable.
-
-▸Materialized: Return a character you control to hand."""
+rendered-text = "▸Materialized: Return a character you control to hand."
 energy-cost = 2
 card-type = "Character"
 subtype = "Vehicle"
@@ -2555,7 +2552,7 @@ art = { x = 0, y = 0.243, scale = 1.37 }
 name = "Young Huntress"
 mtg-name = "Ornithopter"
 id = "8fed2e20-09c6-43e0-b6e0-5a4a417529a1"
-rendered-text = "Unstoppable"
+rendered-text = ""
 energy-cost = 0
 card-type = "Character"
 subtype = "Warrior"
@@ -5547,10 +5544,7 @@ card-number = 296
 name = "Abomination of Memory"
 mtg-name = "Hogaak, Arisen Necropolis"
 id = "3e802ecd-a83b-491b-9528-a4672d0e986f"
-rendered-text = '''
-To play this character, banish 7 cards from your void. You may play this character from your void.
-
-Unstoppable'''
+rendered-text = "To play this character, banish 7 cards from your void. You may play this character from your void."
 energy-cost = 1
 card-type = "Character"
 subtype = "Ancient"
@@ -6810,10 +6804,7 @@ art = { x = 0.092, y = 1, scale = 1.11 }
 name = "The Rising God"
 mtg-name = "Scourge of Nel Toth"
 id = "cd7ff671-2317-4a54-b9da-acfefb90e6b0"
-rendered-text = """
-Unstoppable
-
-Reclaim – 2●, Abandon two characters."""
+rendered-text = "Reclaim – 2●, Abandon two characters."
 energy-cost = 8
 card-type = "Character"
 subtype = "Ancient"
@@ -7760,10 +7751,7 @@ art = { x = 0, y = 1, scale = 1.17 }
 name = "He Who Lies Dreaming"
 mtg-name = "Porcelain Legionnaire"
 id = "78599234-6054-4df1-8e79-c38782517f9a"
-rendered-text = '''
-To play this character, pay 4⍟.
-
-Unstoppable'''
+rendered-text = "To play this character, pay 4⍟."
 energy-cost = 2
 card-type = "Character"
 subtype = "Visitor"
@@ -8980,7 +8968,7 @@ art = { x = -0.546, y = 1, scale = 1.17 }
 name = "Assault Trooper"
 mtg-name = "Stonecoil Serpent"
 id = "c92a7dc0-04b0-4c54-9485-59a92505eabc"
-rendered-text = "Unstoppable"
+rendered-text = ""
 energy-cost = "X"
 card-type = "Character"
 subtype = "Warrior"

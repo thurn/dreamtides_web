@@ -38,7 +38,7 @@ Synergy Cube card it was adapted from. This is the bridge between the two pools.
 [[cards]]
 name = "Spirit Bond"
 mtg-name = "Craterhoof Behemoth"
-rendered-text = "Until end of turn, allied characters gain unstoppable and +X✦ where X is the number of allied characters."
+rendered-text = "Until end of turn, allied characters have +X✦ where X is the number of allied characters."
 ```
 
 Two critical facts about this mapping:

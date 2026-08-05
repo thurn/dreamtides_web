@@ -348,7 +348,6 @@ function defaultStatus(): BattleCardStatus {
     offering: false,
     ephemeral: false,
     veil: false,
-    grantedUnstoppable: false,
     grantedVengeful: false,
     grantedPreeminence: false,
     grantedAwakened: false,

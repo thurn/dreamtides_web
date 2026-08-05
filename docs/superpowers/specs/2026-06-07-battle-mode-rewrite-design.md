@@ -51,7 +51,7 @@ card fields** — energy cost, spark, card type, subtype, figment type, zone, ra
 phase, status flags, counters. They **never interpret a card's printed effect
 prose.** Players remain responsible for resolving card effects, using the debug
 rail. (One narrow, explicit exception: a text-scan for the combat keywords
-Unstoppable / Vengeful / Preeminence / Awakened during Challenge resolution —
+Vengeful / Preeminence / Awakened during Challenge resolution —
 see §3.)
 
 **Non-goals (explicitly out of scope):**
@@ -79,8 +79,8 @@ These were confirmed during brainstorming and are not open:
    per-turn schedule, surfaced as a Dreamwell/Draw automation step. No shared
    Dreamwell deck; the text-y per-card bonus effects are applied by the player via
    the debug rail.
-4. **Combat keywords:** **pragmatic text-scan**, limited strictly to Unstoppable /
-   Vengeful / Preeminence / Awakened during Challenge resolution (as today).
+4. **Combat keywords:** **pragmatic text-scan**, limited strictly to Vengeful /
+   Preeminence / Awakened during Challenge resolution.
    Figments derive their keyword from their type. No other card-text scanning.
 5. **Figments:** **discrete per-figment instances** — a stack holds individual
    figments each with their own spark.
@@ -114,7 +114,7 @@ Enforce the two positional rules that are currently unenforced:
 - Persistent statuses: `reclaimed`, `offering`, `ephemeral`, plus `veil` (as a
   carried value/flag). These travel across zones per the rules.
 - Combat-keyword flags for non-figment characters where an effect grants one
-  (e.g. a player toggles Unstoppable). The Challenge resolver reads the flag first
+  (e.g. a player toggles Vengeful). The Challenge resolver reads the flag first
   and falls back to the combat-keyword text-scan (decision §3.4).
 
 **Figments — discrete instances.** Replace the single-instance `figmentCount`
@@ -135,7 +135,7 @@ a figment yields correct defaults instead of free-typed values:
 | Type | Base ✦ | Keyword | | Type | Base ✦ | Keyword |
 | --- | --- | --- | --- | --- | --- | --- |
 | Warrior | 1 | — | | Survivor | 1 | — |
-| Ancient | 4 | Unstoppable | | Celestial | 2 | Preeminence |
+| Ancient | 4 | — | | Celestial | 2 | Preeminence |
 | Enigma | 0 | — | | Wraith | 0 | Vengeful |
 | Shadow | 2 | — | | Ethereal | 1 | — |
 | Spirit Animal | 1 | — | | Radiant | 2 | — |
@@ -194,9 +194,8 @@ must:
   static contributions** (fixing the current silent omission);
 - resolve defended (lower/tied dissolves; ties dissolve both) and unpaired
   (scores ⍟ = spark) cases;
-- apply combat keywords: Preeminence breaks ties, Vengeful drags the winner down,
-  Unstoppable scores on a surviving defended character (keyword via status flag,
-  then the narrow text-scan, then figment-type);
+- apply combat keywords: Preeminence breaks ties and Vengeful drags the winner
+  down (keyword via status flag, then the narrow text-scan, then figment-type);
 - resolve **figment stacks top-down** over discrete figments;
 - snapshot challenger/defender **designations** (challengers at end of Day,
   defenders at end of Dusk) so Night repositioning can change them per the rules;
