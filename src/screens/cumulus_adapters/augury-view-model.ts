@@ -89,8 +89,9 @@ export interface AuguryLogEntry {
 
 export function resolveAuguryGuide(
   guides: readonly DreamGuideContent[],
+  guideIdOverride?: string,
 ): DreamGuideContent | null {
-  return guideForSiteType(guides, "Augury");
+  return guideForSiteType(guides, "Augury", guideIdOverride);
 }
 
 export function buildAuguryGuideView(

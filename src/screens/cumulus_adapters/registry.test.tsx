@@ -27,7 +27,7 @@ describe("siteDispositionFor", () => {
     "Augury",
     "DreamsignMarket",
     "DreamsignRevelation",
-    "TemptingOffer",
+    "RandomSite",
     "Gamble",
     "Exploration",
   ] as const satisfies readonly SiteType[];

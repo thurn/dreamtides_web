@@ -137,7 +137,7 @@ Examples of shared site runtime:
 - Transfiguration candidates and accepted entries.
 - Duplication candidates and generated copy counts.
 - Essence site roll.
-- Dream Journey and Tempting Offer revealed options/outcomes.
+- Dream Journey and Random Site revealed options/outcomes.
 
 Draft offers already live in `draftState.currentOffer`, so draft flow can keep
 using `DraftState` for the current offer and fixed-pool progress.
@@ -182,7 +182,7 @@ One-time reveals use a first-successful-reveal-wins rule. A client checks whethe
 the shared reveal exists, generates and writes it only when absent, and renders
 the stored result afterward. This applies to shops, rewards, Dreamsign surfaces,
 transfiguration candidates, duplication candidates, essence rolls, Dream Journey
-outcomes, and Tempting Offer outcomes.
+outcomes, and Random Site outcomes.
 
 This keeps generation client-side while preventing two connected players from
 seeing different offers for the same site.

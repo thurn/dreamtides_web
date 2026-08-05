@@ -161,9 +161,9 @@ id = "rust_expanse"
 name = "The Rust Expanse"
 aesthetic = "A Mad-Max post-apocalyptic wasteland of scrap and dust."
 guide-id = "maddox"
-signature-site = "TemptingOffer"
+signature-site = "RandomSite"
 affiliation-id = "survivors"
-site-icon = "game-icons.net/sbed/scales"
+site-icon = "?"
 # Survivors: grind-it-out attrition in the wasteland. Kell Tarn's signature deck
 # is built on survivor bodies (Wreckland Maverick); Karev Soltis punishes the
 # opponent's scoring, and Calloway Flint is the scavenging raider admiral.

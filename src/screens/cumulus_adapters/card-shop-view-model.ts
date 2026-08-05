@@ -35,8 +35,9 @@ const FALLBACK_GUIDE_LINE = "Welcome, friend! Browse a while.";
 /** Resolve Tobias, the resident Dream Guide for Card Shops. */
 export function resolveCardShopGuide(
   guides: readonly DreamGuideContent[],
+  guideIdOverride?: string,
 ): DreamGuideContent | null {
-  return guideForSiteType(guides, "Shop");
+  return guideForSiteType(guides, "Shop", guideIdOverride);
 }
 
 /** Build Tobias's guide slice for the shared character-gallery layout. */

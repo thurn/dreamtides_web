@@ -18,7 +18,7 @@ export function DreamsignRevelationScreenAdapter({ siteId }: { siteId: string })
   const options = offerRuntime?.offeredDreamsigns ?? null;
   const optionCount = site?.isEnhanced === true ? 4 : 3;
   const remainingDreamsignPoolKey = state.remainingDreamsignPool.join("\u0000");
-  const guide = resolveDreamsignRevelationGuide(journeyContent.guides);
+  const guide = resolveDreamsignRevelationGuide(journeyContent.guides, site?.guideIdOverride);
   const guideLine = useMemo(
     () => guide?.dialog.length ? guide.dialog[Math.floor(Math.random() * guide.dialog.length)] : null,
     [guide],

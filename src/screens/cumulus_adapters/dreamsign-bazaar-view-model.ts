@@ -31,8 +31,9 @@ const FALLBACK_GUIDE_LINE = "The sands remember all dreams.";
 /** Resolve Amunet, the resident Dream Guide for Dreamsign Markets. */
 export function resolveDreamsignBazaarGuide(
   guides: readonly DreamGuideContent[],
+  guideIdOverride?: string,
 ): DreamGuideContent | null {
-  return guideForSiteType(guides, "DreamsignMarket");
+  return guideForSiteType(guides, "DreamsignMarket", guideIdOverride);
 }
 
 /** Build Amunet's guide slice for the shared character-gallery layout. */

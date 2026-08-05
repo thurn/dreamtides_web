@@ -85,7 +85,7 @@ export interface SiteNodeProps {
   /** Enable the calm floaty drift (disabled under reduced-motion via CSS). */
   motion: boolean;
   /** Scene placement or a large reward preview. Defaults to `scene`. */
-  presentation?: "scene" | "reward";
+  presentation?: "scene" | "reward" | "choice";
   /** Enter the site; fired on a tap / click of an interactive node only. */
   onSelect: (siteId: string) => void;
 }
@@ -115,7 +115,9 @@ export function SiteNode({
 
   const diameter = presentation === "reward"
     ? REWARD_NODE_SIZE
-    : SCENE_NODE_SIZE;
+    : presentation === "choice"
+      ? "clamp(72px, 9vw, 112px)"
+      : SCENE_NODE_SIZE;
   // A locked guardian stays at full opacity but its disc is desaturated to a
   // clear, readable "disabled" grey. The dimming lands on the disc alone so the
   // lock badge stays crisp and legible.
@@ -133,8 +135,8 @@ export function SiteNode({
     top: `${String(pos.y)}%`,
     width: diameter,
     height: diameter,
-    marginLeft: -diameter / 2,
-    marginTop: -diameter / 2,
+    marginLeft: typeof diameter === "number" ? -diameter / 2 : `calc(${diameter} / -2)`,
+    marginTop: typeof diameter === "number" ? -diameter / 2 : `calc(${diameter} / -2)`,
     animationDelay: `${String(index * -1.37)}s`,
     zIndex: binding.sourceProps["data-reveal-active"] === "true" ? 40 : 10,
     ...binding.sourceProps.style,
@@ -175,9 +177,9 @@ export function SiteNode({
         <span
           className="ds-ico"
           style={{
-            fontSize: diameter * 0.52,
-            width: diameter * 0.52,
-            height: diameter * 0.52,
+            fontSize: typeof diameter === "number" ? diameter * 0.52 : "clamp(38px, 4.7vw, 58px)",
+            width: typeof diameter === "number" ? diameter * 0.52 : "clamp(38px, 4.7vw, 58px)",
+            height: typeof diameter === "number" ? diameter * 0.52 : "clamp(38px, 4.7vw, 58px)",
           }}
         >
           <i

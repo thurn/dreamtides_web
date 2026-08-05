@@ -211,6 +211,8 @@ function makeMutations(): JourneyMutations {
     completeSite: vi.fn(),
     ensureGambleSiteRuntime: vi.fn(),
     ensureExplorationSiteRuntime: vi.fn(),
+    ensureRandomSiteRuntime: vi.fn(),
+    chooseRandomSite: vi.fn(),
     resolveExplorationChoice: vi.fn(),
     placeGravokWager: vi.fn(),
     settleGravokWager: vi.fn(),
@@ -886,13 +888,25 @@ describe("ScreenRouter site-dispatch completeness", () => {
     ).toBe(site.id);
   });
 
-  it.each(["TemptingOffer"] as const)(
-    "routes %s to the Cumulus work-in-progress site and completes it",
-    (type) => {
-      const site = makeSite(type);
+  it("routes RandomSite to Maddox's mandatory three-choice screen", () => {
+      motionPreference.reduced = true;
+      const site: SiteState = {
+        ...makeSite("RandomSite"),
+        isEnhanced: true,
+        randomSite: {
+          mode: "homeChoice" as const,
+          candidateSiteTypes: ["Shop", "Purge", "Augury"],
+        },
+      };
       const mutations = makeMutations();
+      const state = makeStateFor(site);
+      state.siteRuntime[site.id] = {
+        kind: "randomSite",
+        offeredSiteTypes: ["Shop", "Purge", "Augury"],
+        selectedSiteType: null,
+      };
       const container = renderWithJourney({
-        state: makeStateFor(site),
+        state,
         journeyContent: merchantContent(),
         mutations,
         children: (
@@ -900,29 +914,14 @@ describe("ScreenRouter site-dispatch completeness", () => {
         ),
       });
 
-      expect(
-        container
-          .querySelector("[data-work-in-progress-panel]")
-          ?.getAttribute("data-work-in-progress-site-type"),
-      ).toBe(type);
-
-      const continueButton = container.querySelector(
-        '[data-testid="cumulus-work-in-progress-continue"]',
-      );
-      if (!(continueButton instanceof HTMLButtonElement)) {
-        throw new Error(`expected a Continue button for ${type}`);
-      }
+      expect(container.querySelectorAll("[data-random-site-choice]")).toHaveLength(3);
+      const firstChoice = container.querySelector("[data-random-site-choice] button");
+      if (!(firstChoice instanceof HTMLButtonElement)) throw new Error("expected a Random Site choice");
       act(() => {
-        continueButton.dispatchEvent(
-          new MouseEvent("click", { bubbles: true }),
-        );
+        firstChoice.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       });
-      expect(mutations.completeSite).toHaveBeenCalledWith(
-        site.id,
-        "stub_site_continue",
-      );
-    },
-  );
+      expect(mutations.chooseRandomSite).toHaveBeenCalledWith(site.id, "Shop");
+    });
 
   it("routes Gamble to the Three-Gate Wager screen", () => {
     const site = makeSite("Gamble");
@@ -967,7 +966,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
       site.id,
       undefined,
     );
-    expect(container.querySelector("[data-work-in-progress-panel]")).toBeNull();
+    expect(container.querySelector("[data-random-site-choice-panel]")).toBeNull();
   });
 
   it("passes a forced Progressive Draw URL choice into Gamble initialization", () => {

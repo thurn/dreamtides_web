@@ -259,29 +259,38 @@ export function CoopJourneyProvider({
 
       // ---- sites: runtime reveal collapses to OPEN_SITE ----
       ensureRewardSiteRuntime: (siteId) =>
-        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined)),
+        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined, "Reward")),
       ensureDreamsignOfferRuntime: (siteId) =>
-        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined)),
+        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined, "DreamsignRevelation")),
       ensureEssenceSiteRuntime: (siteId) =>
-        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined)),
+        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined, "Essence")),
       ensureShopRuntime: (site) =>
-        dispatch(actions.openSite(site.id, stateRef.current.runId ?? undefined)),
-      ensureCardChoiceRuntime: (siteId) =>
-        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined)),
+        dispatch(actions.openSite(site.id, stateRef.current.runId ?? undefined, site.type)),
+      ensureCardChoiceRuntime: (siteId, kind) =>
+        dispatch(actions.openSite(
+          siteId,
+          stateRef.current.runId ?? undefined,
+          kind === "transfiguration" ? "Transfiguration" : "Duplication",
+        )),
       ensureGambleSiteRuntime: (siteId, gambleGameId) =>
         dispatch(
           actions.openSite(
             siteId,
             stateRef.current.runId ?? undefined,
+            "Gamble",
             gambleGameId,
           ),
         ),
       ensureExplorationSiteRuntime: (siteId) =>
-        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined)),
+        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined, "Exploration")),
+      ensureRandomSiteRuntime: (siteId) =>
+        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined, "RandomSite")),
 
       // ---- sites: player actions ----
       completeSite: (siteId) =>
         dispatch(actions.completeSite(siteId, stateRef.current.runId ?? undefined)),
+      chooseRandomSite: (siteId, siteType) =>
+        dispatch(actions.chooseRandomSite(siteId, siteType)),
       resolveExplorationChoice: (siteId, actionId, selection) =>
         dispatch(actions.resolveExplorationChoice(siteId, actionId, selection)),
       placeGravokWager: (siteId, gateId) =>

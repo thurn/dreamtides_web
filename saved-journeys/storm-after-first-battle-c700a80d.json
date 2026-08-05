@@ -930,7 +930,7 @@
           "biomeColor": "#fb923c",
           "biomeName": "The Rust Expanse",
           "dreamscapeId": "rust_expanse",
-          "enhancedSiteType": "TemptingOffer",
+          "enhancedSiteType": "RandomSite",
           "id": "dreamscape-18",
           "indexInLayer": 0,
           "layer": 6,
@@ -943,7 +943,17 @@
               "id": "site-6",
               "isEnhanced": true,
               "isVisited": false,
-              "type": "TemptingOffer"
+              "type": "RandomSite",
+              "randomSite": {
+                "mode": "homeChoice",
+                "candidateSiteTypes": [
+                  "DreamsignMarket",
+                  "Duplication",
+                  "Purge",
+                  "Augury",
+                  "Gamble"
+                ]
+              }
             },
             {
               "id": "site-7",
@@ -1202,9 +1212,16 @@
             },
             {
               "id": "site-33",
-              "isEnhanced": false,
+              "isEnhanced": true,
               "isVisited": false,
-              "type": "TemptingOffer"
+              "type": "RandomSite",
+              "randomSite": {
+                "mode": "single",
+                "candidateSiteTypes": [
+                  "DreamsignMarket"
+                ],
+                "destinationSiteType": "DreamsignMarket"
+              }
             },
             {
               "id": "site-34",
@@ -1264,9 +1281,16 @@
             },
             {
               "id": "site-39",
-              "isEnhanced": false,
+              "isEnhanced": true,
               "isVisited": false,
-              "type": "TemptingOffer"
+              "type": "RandomSite",
+              "randomSite": {
+                "mode": "single",
+                "candidateSiteTypes": [
+                  "Shop"
+                ],
+                "destinationSiteType": "Shop"
+              }
             },
             {
               "id": "site-40",

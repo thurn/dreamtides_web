@@ -39,6 +39,7 @@ import type {
 } from "../../types/journey";
 import { mintEntryId } from "./deck";
 import { findSite, getSiteContentProvider } from "./sites";
+import { RANDOM_SITE_DESTINATIONS } from "../../random-site/random-site";
 
 // ---------------------------------------------------------------------------
 // Shared helpers
@@ -56,7 +57,7 @@ const SITE_TYPES: ReadonlySet<SiteType> = new Set<SiteType>([
   "Augury",
   "DreamsignMarket",
   "DreamsignRevelation",
-  "TemptingOffer",
+  "RandomSite",
   "Gamble",
   "Exploration",
 ]);
@@ -127,6 +128,31 @@ function nextSiteId(atlas: DreamAtlas): string {
     }
   }
   return `site-${String(max + 1)}`;
+}
+
+function debugSite(
+  id: string,
+  type: SiteType,
+  siblingSites: readonly SiteState[],
+): SiteState {
+  if (type !== "RandomSite") {
+    return { id, type, isEnhanced: false, isVisited: false };
+  }
+  const visible = new Set(siblingSites.map((site) => site.type));
+  const destinationSiteType =
+    RANDOM_SITE_DESTINATIONS.find((candidate) => !visible.has(candidate)) ??
+    "Exploration";
+  return {
+    id,
+    type,
+    isEnhanced: true,
+    isVisited: false,
+    randomSite: {
+      mode: "single",
+      candidateSiteTypes: [destinationSiteType],
+      destinationSiteType,
+    },
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -583,12 +609,7 @@ export function replaceSiteType(
   if (targetIndex === -1) return null;
   if (node.sites[targetIndex].id === journey.activeSiteId) return null;
 
-  const replacement: SiteState = {
-    id: nextSiteId(journey.atlas),
-    type: toSiteType,
-    isEnhanced: false,
-    isVisited: false,
-  };
+  const replacement = debugSite(nextSiteId(journey.atlas), toSiteType, node.sites);
   const sites = node.sites.map((site, index) =>
     index === targetIndex ? replacement : site,
   );
@@ -616,12 +637,7 @@ export function addSiteToDreamscape(
   const node = journey.atlas.nodes[nodeId];
   if (node === undefined) return null;
 
-  const site: SiteState = {
-    id: nextSiteId(journey.atlas),
-    type: siteType,
-    isEnhanced: false,
-    isVisited: false,
-  };
+  const site = debugSite(nextSiteId(journey.atlas), siteType, node.sites);
   return {
     ...journey,
     atlas: {

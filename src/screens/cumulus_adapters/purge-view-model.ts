@@ -33,8 +33,9 @@ const FALLBACK_GUIDE_LINE = "A precise cut leaves the dream lighter.";
 /** Resolve Master Takeshi, the resident guide for Purge. */
 export function resolvePurgeGuide(
   guides: readonly DreamGuideContent[],
+  guideIdOverride?: string,
 ): DreamGuideContent | null {
-  return guideForSiteType(guides, "Purge");
+  return guideForSiteType(guides, "Purge", guideIdOverride);
 }
 
 /** Build the guide slice shown at the top of the purge screen. */

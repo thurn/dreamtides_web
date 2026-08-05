@@ -22,7 +22,7 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
     persistedRuntime.choiceKind === "duplication"
       ? persistedRuntime
       : null;
-  const guide = resolveDuplicationGuide(journeyContent.guides);
+  const guide = resolveDuplicationGuide(journeyContent.guides, site?.guideIdOverride);
   const guideLineRef = useRef<string | null | undefined>(undefined);
   if (guideLineRef.current === undefined) {
     guideLineRef.current =

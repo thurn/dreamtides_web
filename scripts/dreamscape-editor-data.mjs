@@ -40,7 +40,7 @@ export const SITE_TYPES = [
   "Augury",
   "DreamsignMarket",
   "DreamsignRevelation",
-  "TemptingOffer",
+  "RandomSite",
   "Gamble",
   "Exploration",
 ];

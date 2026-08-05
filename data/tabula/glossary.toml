@@ -613,10 +613,10 @@ matches-rules-text = false
 variants = []
 
 [[entries]]
-id = "site-tempting-offer"
+id = "site-random-site"
 category = "Sites"
-term = "Offer"
-definition = "Pay a cost for an outsized payoff."
+term = "Random Site"
+definition = "Enter a random enhanced site hosted by Maddox."
 priority = 0
 matches-rules-text = false
 variants = []

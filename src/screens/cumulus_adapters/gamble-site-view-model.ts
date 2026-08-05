@@ -44,8 +44,9 @@ export function gravokRevealGateId(selectedGateId: GravokGateId): GravokGateId {
 /** Resolve the resident Dream Guide for Gamble. */
 export function resolveGambleGuide(
   guides: readonly DreamGuideContent[],
+  guideIdOverride?: string,
 ): DreamGuideContent | null {
-  return guideForSiteType(guides, "Gamble");
+  return guideForSiteType(guides, "Gamble", guideIdOverride);
 }
 
 /** Map the authoritative rules table and locked jackpot into three choices. */
@@ -78,13 +79,16 @@ function commonGambleView(params: {
   guideLine: string;
 }): { scene: ArtRef | null; guide: GravokWagerSiteView["guide"] } {
   const guideId = params.guide?.id ?? "gravok";
+  const guideLine = params.guide?.id === "maddox"
+    ? params.guide.dialog[0] ?? "Let’s see where this road takes us."
+    : params.guideLine;
   return {
     scene:
       params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode),
     guide: {
       id: guideId,
       name: params.guide?.name ?? "Gravok",
-      line: params.guideLine,
+      line: guideLine,
       art: artRef.dreamGuide(guideId),
     },
   };

@@ -21,11 +21,11 @@ The premiere “Mono Black” archetype in this cube is Zombies. This wasn’t o
 
 Gravecrawler is THE zombies card. It is difficult to overstate how strong this card is in the cube. With so many different payoffs for sacrifice, ways to mill yourself and combo off, this little guy does it all. I take him going late as a sign that Zombies is open and move in. He goes infinite with Phyrexian Altar and Pitiless Plunderer, represents a crazy amount of cards with Skullclamp or Undead Augur or Midnight Reaper and just overall good value with stuff like Altar of Dementia. (With Altar specifically, you can use it to mill into your Gravecrawler and other combo pieces).
 
-Next up is Cryptbreaker. If Gravecrawler is the big payoff of Zombies, Cryptbreaker is the enabler. It draws a ton of cards, creates an army and is a serviceable discard outlet as well. There is a strange tension with when you should play this card. Casting it early is great for utilizing the discard ability, but you also may want to keep it in hand to protect it until you can draw cards immediately when it comes down. 
+Next up is Cryptbreaker. If Gravecrawler is the big payoff of Zombies, Cryptbreaker is the enabler. It draws a ton of cards, creates an army and is a serviceable discard outlet as well. There is a strange tension with when you should play this card. Casting it early is great for utilizing the discard ability, but you also may want to keep it in hand to protect it until you can draw cards immediately when it comes down.
 
-Headless Rider is another fantastic enabler for this deck, as it makes all of your non-token Zombies die into more zombies! There are so many ways to go deep with this card, many of them involving the powerful sacrifice outlets in the cube like Yawgmoth, Thran Physician, Phyrexian Altar or Goblin Bombardment. 
+Headless Rider is another fantastic enabler for this deck, as it makes all of your non-token Zombies die into more zombies! There are so many ways to go deep with this card, many of them involving the powerful sacrifice outlets in the cube like Yawgmoth, Thran Physician, Phyrexian Altar or Goblin Bombardment.
 
-The last of the Zombie tribal cards is Undead Augur, which is just a cheaper Midnight Reaper but specific to Zombies. 
+The last of the Zombie tribal cards is Undead Augur, which is just a cheaper Midnight Reaper but specific to Zombies.
 
 And that’s it! There are no Zombie lords or beatdown plans. While Zombies only have a few “tribal” payoffs, the real strength to the deck comes from the fact that you essentially get these tribal payoffs for free, as most of the cards you would want to be playing are Zombies anyway. So when I refer to the “Zombies” deck, know that I am primarily referring to the overall gameplan and only secondarily the creature type. It is like how artifact decks can be called “affinity” even if they don’t have any affinity cards in them.
 
@@ -35,7 +35,7 @@ And that’s it! There are no Zombie lords or beatdown plans. While Zombies only
 - Rotting Rats
 - Scourge of Nel Toth
 
-The Zombies deck plays at the intersection of most of what black is trying to do: Discard, Sacrifice and Dredge. It feels very thematic to play. Within the deck you can lean into whatever strategies seem to be open to you. The crazy thing is even within one color pairing there is so much flexibility. For example you can play BR zombies by leaning into sacrifice with Mayhem Devil and Anax, Hardened in the Forge or discard with Bazaar of Baghdad, Bridge From Below and Anger. There are even cards that combine both discard and sacrifice like Rotting Rats, Nether Traitor and Scourge of Nel Toth. 
+The Zombies deck plays at the intersection of most of what black is trying to do: Discard, Sacrifice and Dredge. It feels very thematic to play. Within the deck you can lean into whatever strategies seem to be open to you. The crazy thing is even within one color pairing there is so much flexibility. For example you can play BR zombies by leaning into sacrifice with Mayhem Devil and Anax, Hardened in the Forge or discard with Bazaar of Baghdad, Bridge From Below and Anger. There are even cards that combine both discard and sacrifice like Rotting Rats, Nether Traitor and Scourge of Nel Toth.
 
 - Carrion Feeder
 
@@ -45,11 +45,11 @@ In this build, you’ll want to prioritize good sacrifice outlets and recurrent 
 
 - Bridge from Below
 
-The discard version of the deck plays more like a reanimator/dredge deck with cards like Stitcher's Supplier hoping to mill into cards like Hogaak, Arisen Necropolis, Bridge From Below and Scourge of Nel Toth. You can also just discard these cards using something like Putrid Imp or the blood tokens from Voldaren Bloodcaster. 
+The discard version of the deck plays more like a reanimator/dredge deck with cards like Stitcher's Supplier hoping to mill into cards like Hogaak, Arisen Necropolis, Bridge From Below and Scourge of Nel Toth. You can also just discard these cards using something like Putrid Imp or the blood tokens from Voldaren Bloodcaster.
 
 In this archetype, you absolutely need to prioritize discard outlets since they will be key for setting up your deck. Cards like Bridge From Below aren’t so great when they’re stuck in your hand. You may have to get creative with your discard outlets, keeping in mind that stuff like Cabal Therapy and Raven's Crime can be cast on yourself if needed.
 
-Red is also a good color pairing for the really discard heavy builds, as it offers great discard options and payoffs like Ox of Agonas, Faithless Looting and Anje's Ravager. 
+Red is also a good color pairing for the really discard heavy builds, as it offers great discard options and payoffs like Ox of Agonas, Faithless Looting and Anje's Ravager.
 
 ### Misc. Role Players
 
@@ -57,7 +57,7 @@ Red is also a good color pairing for the really discard heavy builds, as it offe
 - Cabal Therapy
 - Divest
 
-This deck really benefits from the abundance of interactive and disruptive cards available to it. I cannot overstate just how impactful even a single discard spell can be in some games. I brought up Divest specifically in this example because I think it is one of the most underrated of the discard options. It hits 287 out of the 448 nonland cards in this cube (as of the time of writing this), most of those being win conditions and combo pieces. 
+This deck really benefits from the abundance of interactive and disruptive cards available to it. I cannot overstate just how impactful even a single discard spell can be in some games. I brought up Divest specifically in this example because I think it is one of the most underrated of the discard options. It hits 287 out of the 448 nonland cards in this cube (as of the time of writing this), most of those being win conditions and combo pieces.
 
 Unless you get fast mana and every combo piece with some tutors, this deck wants to trade resources with the opponent. Being largely centered on black you can load up on the best interaction in the entire cube and grind your opponent to dust. Cards like Miasmic Mummy might look innocuous, but they allow you to advance this disruptive gameplan while also being an enabler and body on your side. These small hindrances like discarding a card or sacrificing a creature really begin to add up to something meaningful.
 
@@ -69,9 +69,9 @@ The zombie decks can struggle a little bit if they don’t get some form of acce
 
 - Darkblast
 
-While it may only look like a decent removal spell, the Dredge 3 makes Darkblast a great utility piece. It is entirely possible to put this card into a deck that has no intention of ever casting it, and that’s what makes it so fun! Darkblast + Bazaar of Baghdad can fill your graveyard in a hurry. It also kills ~47% of the creatures in the cube, which is nothing to scoff at either! 
+While it may only look like a decent removal spell, the Dredge 3 makes Darkblast a great utility piece. It is entirely possible to put this card into a deck that has no intention of ever casting it, and that’s what makes it so fun! Darkblast + Bazaar of Baghdad can fill your graveyard in a hurry. It also kills ~47% of the creatures in the cube, which is nothing to scoff at either!
 
-Life From the Loam should be mentioned for a similar reason. You can use it to dredge just like Darkblast, but it also can be used to fill up your hand and help you find or re-buy your Bazaar. 
+Life From the Loam should be mentioned for a similar reason. You can use it to dredge just like Darkblast, but it also can be used to fill up your hand and help you find or re-buy your Bazaar.
 
 ## Discard
 
@@ -109,7 +109,7 @@ Because the black discard deck is really more focused with getting cards into th
 
 Sacrifice might be the most “standard” archetype in my cube. I have already written about the standard versions to some length in my red article, which [you can read here](https://calebgannon.com/2022/03/08/red-archetypes-in-my-powered-synergy-cube/#sacrifice) (since sacrifice tends to focus around BR). That being said, there are lot of interesting things you can do in black that I hadn’t mentioned before.
 
-The basics of the sacrifice deck is combining cards that sacrifice things for value with stuff that wants to be sacrificed. Phyrexian Altar and Shambling Ghast are a good example of this. Now you can either make mana and kill an opposing creature or create a Treasure token. 
+The basics of the sacrifice deck is combining cards that sacrifice things for value with stuff that wants to be sacrificed. Phyrexian Altar and Shambling Ghast are a good example of this. Now you can either make mana and kill an opposing creature or create a Treasure token.
 
 - Carrion Feeder
 - Altar of Dementia
@@ -145,7 +145,7 @@ Remember how I said above that our key enablers worked with tokens? Well these a
 
 - Chatterfang, Squirrel General
 
-Chatterfang is worth mentioning for a few reasons. First, it lets you go even bigger by doubling all of your token production. Chatterfang into Empty the Warrens can create an absolutely crazy number of tokens. Second, Chatterfang gives you a sacrifice outlet and removal for free. I’m always high on combo pieces that can also be disruptive, and this fits that theme perfectly. 
+Chatterfang is worth mentioning for a few reasons. First, it lets you go even bigger by doubling all of your token production. Chatterfang into Empty the Warrens can create an absolutely crazy number of tokens. Second, Chatterfang gives you a sacrifice outlet and removal for free. I’m always high on combo pieces that can also be disruptive, and this fits that theme perfectly.
 
 Lastly, Chatterfang is an infinite combo with Pitiless Plunderer, which is a card this deck already wants to be running. Whenever a squirrel dies, you make a Treasure. Then whenever you make a treasure, you also make a squirrel. The result is squirrels that infinitely come back and infinite mana, so you can machine gun down your opponent’s entire board and then win however you see fit.
 
@@ -177,7 +177,7 @@ Aside from clamp, there are quite a few “when creature dies, draw” effects l
 
 The trick to the Standard bearer is to hold out for as long as possible so you can maximize the cards drawn. Be careful not to deck yourself though as the trigger is not a may ability. Recurring this card can lead to some crazy games, so keep your eyes open to lines involving Relentless Dead, Eternal Witness and Undead Butler bringing back the Standard Bearer. As well as Rally the Ancestors and Brought Back.
 
-For any who have played Zubera storm you may already know the trick, but you can stack the Standard Bearer’s Enter the battlefield trigger and sacrifice it in response before bringing it back with something like Undead Butler or Relentless Dead and sacrificing it (and any other creatures you returned) again. The original card draw trigger and the second trigger will then both resolve, and you will gain all of the additional draws from the additional sacrifices with your first draw trigger. This can really let you stretch this card for an enormous amount of value. 
+For any who have played Zubera storm you may already know the trick, but you can stack the Standard Bearer’s Enter the battlefield trigger and sacrifice it in response before bringing it back with something like Undead Butler or Relentless Dead and sacrificing it (and any other creatures you returned) again. The original card draw trigger and the second trigger will then both resolve, and you will gain all of the additional draws from the additional sacrifices with your first draw trigger. This can really let you stretch this card for an enormous amount of value.
 
 - Diabolic Intent
 - Demonic Tutor
@@ -193,13 +193,13 @@ Usually I have to write more for this section, but winning the game in these dec
 
 - Yawgmoth’s Will
 
-It can be tempting to want to run Yawgmoth’s Will in this archetype, but be wary that the exile effect replaces all of your death triggers, so you won’t be able to win with Blood Artist or anything like that. I think this card still does have a place, especially in the token storm heavy Empty the Warrens versions of this deck. Just keep in mind not to exile all your win conditions. Winning on your opponent’s upkeep is a fairly easy workaround for this.
+It can be appealing to run Yawgmoth’s Will in this archetype, but be wary that the exile effect replaces all of your death triggers, so you won’t be able to win with Blood Artist or anything like that. I think this card still does have a place, especially in the token storm heavy Empty the Warrens versions of this deck. Just keep in mind not to exile all your win conditions. Winning on your opponent’s upkeep is a fairly easy workaround for this.
 
 - Stitcher’s Supplier
 - Lion’s Eye Diamond
 - Underworld Breach
 
-Unlike Yawgmoth's Will, Underworld Breach does not interfere with death triggers and is perfectly serviceable in decks like this. You can use it to cast your Chatterstorm multiple times, or assemble the above combo with a sacrifice outlet to mill your entire deck and create lots of mana. (The Supplier mills 6 cards from ETB + death, which is what you need to pay the escape cost for LED and supplier. You only need to cast LED 1/3 times so you can use the other milled cards to cast other things.) Combine this with Pitiless Plunderer and you don’t even need LED at all. Undead Butler can work for this too, but to a lesser extent. 
+Unlike Yawgmoth's Will, Underworld Breach does not interfere with death triggers and is perfectly serviceable in decks like this. You can use it to cast your Chatterstorm multiple times, or assemble the above combo with a sacrifice outlet to mill your entire deck and create lots of mana. (The Supplier mills 6 cards from ETB + death, which is what you need to pay the escape cost for LED and supplier. You only need to cast LED 1/3 times so you can use the other milled cards to cast other things.) Combine this with Pitiless Plunderer and you don’t even need LED at all. Undead Butler can work for this too, but to a lesser extent.
 
 ## Storm
 
@@ -207,17 +207,17 @@ Unlike Yawgmoth's Will, Underworld Breach does not interfere with death triggers
 - Yawgmoth’s Will
 - Tendrils of Agony
 
-Strange that I would consider storm one of the more obvious archetypes in this cube but here we are. This archetype is fairly standard compared to most other vintage cubes so I don’t think it deserves too much of a deep explanation (I have lots of videos of me playing this deck on my YouTube channel). You cast some rituals or LED to build up your storm count, then bring them all back with Yawgmoth’s will or Past in Flames. 
+Strange that I would consider storm one of the more obvious archetypes in this cube but here we are. This archetype is fairly standard compared to most other vintage cubes so I don’t think it deserves too much of a deep explanation (I have lots of videos of me playing this deck on my YouTube channel). You cast some rituals or LED to build up your storm count, then bring them all back with Yawgmoth’s will or Past in Flames.
 
-The major difference for storm in this cube compared to a regular vintage cube is that you have a lot more directions to pivot into. Token storm, Glimpse of Nature combos, KCI loops, etc. 
+The major difference for storm in this cube compared to a regular vintage cube is that you have a lot more directions to pivot into. Token storm, Glimpse of Nature combos, KCI loops, etc.
 
-All I really want to get across in this section is to encourage you to not get stuck thinking about storm as specifically LED + Yawg Will + Tendrils. Maybe you mill yourself using Stitcher's Supplier to power up Underworld Breach or you run Yawgmoth's Will \+ Phyrexian Altar as a way to sacrifice your elves and then re-cast them with an active Glimpse of Nature (just make sure to cast Will after you sacrifice things). 
+All I really want to get across in this section is to encourage you to not get stuck thinking about storm as specifically LED + Yawg Will + Tendrils. Maybe you mill yourself using Stitcher's Supplier to power up Underworld Breach or you run Yawgmoth's Will \+ Phyrexian Altar as a way to sacrifice your elves and then re-cast them with an active Glimpse of Nature (just make sure to cast Will after you sacrifice things).
 
 There are so many ways to storm off. While traditional storm is one way, I encourage you to get creative and improvise. I’m not saying to intentionally turn it down when the dream LED Yawg Will Tendrils deck falls in your lap, but just stay flexible and open. Your decks will end up better and you will have more fun playing a larger variety of decks in the instances when everything doesn’t perfectly come together for the one specific build of storm most people are accustomed to.
 
 ## Conclusion
 
-Black has a lot going on. In addition to all the things I mentioned above, discard + removal is what really makes this color work. Being able to interact with the board and hand is difficult for many decks to handle, and the amount of time you lose when you spend a spell and some mana to disrupt your opponent you will often gain back in the time you gain by slowing them down. 
+Black has a lot going on. In addition to all the things I mentioned above, discard + removal is what really makes this color work. Being able to interact with the board and hand is difficult for many decks to handle, and the amount of time you lose when you spend a spell and some mana to disrupt your opponent you will often gain back in the time you gain by slowing them down.
 
 While there are a ton of different archetypes you can play, there is a limited pool of disruptive spells in the cube. If you are in the deck that wants Scourge of Nel Toth, there’s a pretty good chance nobody else will be able to make use of it. This is true for many of the more narrow synergistic cards. If you take things like Thoughtseize first, the synergy cards are more likely to come around than if you draft them in the other order. The first discard and removal spell do a lot for your deck, and you’ll usually want at least two of each.
 

@@ -258,6 +258,97 @@ function runtimeOf(result: ReduceResult): SiteRuntimeState | undefined {
   return result.state.journey.siteRuntime[SITE_ID];
 }
 
+describe("Random Site", () => {
+  function homeRandomSite(): SiteState {
+    return {
+      ...makeSite("RandomSite", true),
+      randomSite: {
+        mode: "homeChoice",
+        candidateSiteTypes: ["Shop", "Purge", "Augury", "Gamble", "Exploration"],
+      },
+    };
+  }
+
+  it("persists three distinct deterministic home choices", () => {
+    const first = reduce(stateWithSites([homeRandomSite()]), "OPEN_SITE", {
+      siteId: SITE_ID,
+    });
+    const replay = reduce(stateWithSites([homeRandomSite()]), "OPEN_SITE", {
+      siteId: SITE_ID,
+    });
+    expect(first.outcome).toBe("applied");
+    expect(runtimeOf(first)).toEqual(runtimeOf(replay));
+    const runtime = runtimeOf(first);
+    expect(runtime?.kind).toBe("randomSite");
+    if (runtime?.kind !== "randomSite") throw new Error("expected Random Site runtime");
+    expect(runtime.offeredSiteTypes).toHaveLength(3);
+    expect(new Set(runtime.offeredSiteTypes).size).toBe(3);
+  });
+
+  it("materializes the first valid home choice as an enhanced Maddox-hosted site", () => {
+    const opened = reduce(stateWithSites([homeRandomSite()]), "OPEN_SITE", {
+      siteId: SITE_ID,
+    });
+    const runtime = runtimeOf(opened);
+    if (runtime?.kind !== "randomSite") throw new Error("expected Random Site runtime");
+    const selected = runtime.offeredSiteTypes[0];
+    const chosen = reduce(opened.state, "CHOOSE_RANDOM_SITE", {
+      siteId: SITE_ID,
+      siteType: selected,
+    });
+    const materialized = chosen.state.journey.atlas.nodes[NODE_ID].sites[0];
+    expect(chosen.outcome).toBe("applied");
+    expect(materialized).toMatchObject({
+      id: SITE_ID,
+      type: selected,
+      isEnhanced: true,
+      guideIdOverride: "maddox",
+      randomSite: { mode: "homeChoice", destinationSiteType: selected, materialized: true },
+    });
+    expect(chosen.state.journey.siteRuntime[SITE_ID]).toBeUndefined();
+
+    const stale = reduce(chosen.state, "CHOOSE_RANDOM_SITE", {
+      siteId: SITE_ID,
+      siteType: runtime.offeredSiteTypes[1],
+    });
+    expect(stale.outcome).toBe("bounced");
+  });
+
+  it("materializes a persisted single destination when entered", () => {
+    const wrapper: SiteState = {
+      ...makeSite("RandomSite", true),
+      randomSite: {
+        mode: "single",
+        candidateSiteTypes: ["Exploration"],
+        destinationSiteType: "Exploration",
+      },
+    };
+    const base = stateWithSites([wrapper], {
+      screen: { type: "dreamscape" },
+      activeSiteId: null,
+    });
+    const entered = reduce(base, "ENTER_SITE", { siteId: SITE_ID });
+    expect(entered.outcome).toBe("applied");
+    expect(entered.state.journey.atlas.nodes[NODE_ID].sites[0]).toMatchObject({
+      id: SITE_ID,
+      type: "Exploration",
+      isEnhanced: true,
+      guideIdOverride: "maddox",
+    });
+  });
+
+  it("bounces choices that were not offered", () => {
+    const opened = reduce(stateWithSites([homeRandomSite()]), "OPEN_SITE", {
+      siteId: SITE_ID,
+    });
+    const out = reduce(opened.state, "CHOOSE_RANDOM_SITE", {
+      siteId: SITE_ID,
+      siteType: "DreamsignMarket",
+    });
+    expect(out.outcome).toBe("bounced");
+  });
+});
+
 // ---------------------------------------------------------------------------
 // OPEN_SITE — generation determinism
 // ---------------------------------------------------------------------------

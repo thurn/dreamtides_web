@@ -1037,9 +1037,16 @@
             },
             {
               "id": "site-15",
-              "type": "TemptingOffer",
-              "isEnhanced": false,
-              "isVisited": false
+              "type": "RandomSite",
+              "isEnhanced": true,
+              "isVisited": false,
+              "randomSite": {
+                "mode": "single",
+                "candidateSiteTypes": [
+                  "Shop"
+                ],
+                "destinationSiteType": "Shop"
+              }
             },
             {
               "id": "site-16",

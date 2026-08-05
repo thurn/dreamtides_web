@@ -43,6 +43,10 @@ import {
   MAX_PURGE_PER_VISIT,
   purgeVisitCost,
 } from "../../purge/purge-pricing";
+import {
+  isRandomSiteDestinationType,
+  materializeRandomSite,
+} from "../../random-site/random-site";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (OPEN_SITE generation for content-coupled site types)
@@ -337,6 +341,25 @@ export function openSite(
   }
 
   switch (site.type) {
+    case "RandomSite": {
+      if (
+        site.randomSite?.mode !== "homeChoice" ||
+        site.randomSite.candidateSiteTypes.length < 3
+      ) {
+        return null;
+      }
+      const remaining = [...site.randomSite.candidateSiteTypes];
+      const offeredSiteTypes: typeof remaining = [];
+      for (let index = 0; index < 3; index += 1) {
+        const choiceIndex = Math.floor(ctx.rng(index) * remaining.length);
+        offeredSiteTypes.push(remaining.splice(choiceIndex, 1)[0]);
+      }
+      return withRuntime(journey, siteId, {
+        kind: "randomSite",
+        offeredSiteTypes,
+        selectedSiteType: null,
+      });
+    }
     case "Essence": {
       const amount = site.isEnhanced
         ? randomIntInRange(ctx.rng, 0, 400, 600)
@@ -387,10 +410,54 @@ export function openSite(
       };
     }
     default:
-      // Battle / Draft / Purge / TemptingOffer carry no
+      // Battle / Draft / Purge carry no
       // site runtime — nothing to generate.
       return null;
   }
+}
+
+/** Select and materialize one of Maddox's persisted home-site destinations. */
+export function chooseRandomSite(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  const siteType = payload.siteType;
+  if (siteId === null || !isRandomSiteDestinationType(siteType)) return null;
+  if (journey.screen.type !== "site" || journey.screen.siteId !== siteId) {
+    return null;
+  }
+  const site = findSite(journey, siteId);
+  const runtime = journey.siteRuntime[siteId];
+  if (
+    site?.type !== "RandomSite" ||
+    site.randomSite?.mode !== "homeChoice" ||
+    runtime?.kind !== "randomSite" ||
+    runtime.selectedSiteType !== null ||
+    !runtime.offeredSiteTypes.includes(siteType)
+  ) {
+    return null;
+  }
+  const nodes = { ...journey.atlas.nodes };
+  const owner = Object.values(nodes).find((node) =>
+    node.sites.some((candidate) => candidate.id === siteId),
+  );
+  if (owner === undefined) return null;
+  nodes[owner.id] = {
+    ...owner,
+    sites: owner.sites.map((candidate) =>
+      candidate.id === siteId
+        ? materializeRandomSite(candidate, siteType)
+        : candidate,
+    ),
+  };
+  const siteRuntime = { ...journey.siteRuntime };
+  delete siteRuntime[siteId];
+  return {
+    ...journey,
+    atlas: { ...journey.atlas, nodes },
+    siteRuntime,
+  };
 }
 
 /** Resolve one authored Exploration action while leaving its response on screen. */

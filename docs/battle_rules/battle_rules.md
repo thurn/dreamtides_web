@@ -618,7 +618,7 @@ spark granted by static abilities.
 Merging figments is irreversible and follows all normal repositioning timing
 and exhaustion rules. The source figment is not dissolved or banished, and this
 process does not cause triggers to fire. An exhausted figment cannot be merged
-with a non-exhausted figment, and attempting to do so displays an explanatory
+with a non-exhausted figment, and trying to do so displays an explanatory
 message.
 
 Combining **Legionnaire** figments causes only the base 1✦ spark value to be

@@ -25,8 +25,9 @@ const FALLBACK_GUIDE_LINE = "Pick one, and I'll make another.";
 /** Resolve Deacon Holt, the resident guide for Duplication. */
 export function resolveDuplicationGuide(
   guides: readonly DreamGuideContent[],
+  guideIdOverride?: string,
 ): DreamGuideContent | null {
-  return guideForSiteType(guides, "Duplication");
+  return guideForSiteType(guides, "Duplication", guideIdOverride);
 }
 
 /** Build the guide art and stable greeting used by the shared site layout. */

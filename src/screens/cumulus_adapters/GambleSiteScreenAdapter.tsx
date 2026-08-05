@@ -31,7 +31,7 @@ export function GambleSiteScreenAdapter({
     : null;
   const runtimeCandidate = state.siteRuntime[siteId];
   const runtime = runtimeCandidate?.kind === "gamble" ? runtimeCandidate : null;
-  const guide = resolveGambleGuide(journeyContent.guides);
+  const guide = resolveGambleGuide(journeyContent.guides, site?.guideIdOverride);
   const view = useMemo(
     () => site === null
       ? null

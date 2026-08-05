@@ -114,6 +114,7 @@ function captureAllDrafts(): EventDraft[] {
   void actions.rerollDraftOffer("site-1");
   void actions.enterDraftSite("site-1");
   void actions.openSite("site-1");
+  void actions.chooseRandomSite("site-1", "Shop");
   void actions.resolveExplorationChoice("site-1", "action-1", {
     entryIds: ["entry-1"],
   });
@@ -227,7 +228,7 @@ describe("coop actions facade", () => {
     });
 
     void actions.advanceFrontDoor("loading", "event:9");
-    void actions.openSite("site-7", "journey:12");
+    void actions.openSite("site-7", "journey:12", "RandomSite");
     void actions.enterDraftSite("site-7", "journey:12");
     void actions.acceptEssence("site-7", "journey:12");
     void actions.completeSite("site-7", "journey:12");
@@ -251,7 +252,7 @@ describe("coop actions facade", () => {
 
     expect(captured.map((draft) => draft.intentKey)).toEqual([
       "front-door:event:9:loading",
-      "open-site:journey:12:site-7",
+      "open-site:RandomSite:journey:12:site-7",
       "enter-draft-site:journey:12:site-7",
       "accept-essence:journey:12:site-7",
       "complete-site:journey:12:site-7",

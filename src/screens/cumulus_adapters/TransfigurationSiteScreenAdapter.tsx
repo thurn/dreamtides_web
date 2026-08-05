@@ -23,7 +23,7 @@ export function TransfigurationSiteScreenAdapter({ siteId }: { siteId: string })
     persistedRuntime.choiceKind === "transfiguration"
       ? persistedRuntime
       : null;
-  const guide = resolveTransfigurationGuide(journeyContent.guides);
+  const guide = resolveTransfigurationGuide(journeyContent.guides, site?.guideIdOverride);
   const guideLineRef = useRef<string | null | undefined>(undefined);
   if (guideLineRef.current === undefined) {
     guideLineRef.current =

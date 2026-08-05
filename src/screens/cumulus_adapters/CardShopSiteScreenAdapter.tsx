@@ -21,7 +21,7 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
   const site = node?.sites.find((candidate) => candidate.id === siteId) ?? null;
   const runtime = state.siteRuntime[siteId];
   const shopRuntime = runtime?.kind === "shop" ? runtime : null;
-  const guide = resolveCardShopGuide(journeyContent.guides);
+  const guide = resolveCardShopGuide(journeyContent.guides, site?.guideIdOverride);
   const guideLineRef = useRef<string | null | undefined>(undefined);
   if (guideLineRef.current === undefined) {
     guideLineRef.current =

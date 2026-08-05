@@ -95,12 +95,11 @@ home-specialty = "Aldric offers curated visions of the future."
 id = "maddox"
 name = "Maddox"
 home-dreamscape-id = "rust_expanse"
-site-type = "TemptingOffer"
+site-type = "RandomSite"
 dialog = [
-  "Out here, every deal's a gamble.",
-  "Two offers. Pick your poison.",
+  "Let’s see where this road takes us.",
 ]
-home-specialty = "Maddox will make you two offers to improve your deck."
+home-specialty = "Maddox presents three random enhanced sites and lets you choose one."
 
 [[guides]]
 id = "gravok"

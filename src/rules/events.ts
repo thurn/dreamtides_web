@@ -98,6 +98,7 @@ export interface EventPayloads {
       | "gravok-three-gate-wager"
       | "tidemark-progressive-draw";
   };
+  CHOOSE_RANDOM_SITE: { siteId: string; siteType: string };
   RESOLVE_EXPLORATION_CHOICE: {
     siteId: string;
     actionId: string;
@@ -313,6 +314,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   REROLL_DRAFT_OFFER: true,
   ENTER_DRAFT_SITE: true,
   OPEN_SITE: true,
+  CHOOSE_RANDOM_SITE: true,
   RESOLVE_EXPLORATION_CHOICE: true,
   COMPLETE_AUGURY: true,
   ACCEPT_REWARD: true,

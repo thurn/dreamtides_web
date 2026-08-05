@@ -793,6 +793,56 @@ function siteScene(
   };
 }
 
+function randomSiteScene(mode: "single" | "homeChoice"): QaScene {
+  return {
+    id: mode === "single" ? "random-site" : "random-site-home",
+    label: mode === "single" ? "Random Site (Hosted Shop)" : "Random Site (Home Choice)",
+    description: mode === "single"
+      ? "A deterministic enhanced Shop hosted by Maddox after its hidden Random Site destination materializes."
+      : "Maddox's home Random Site with three persisted destinations ready to be offered.",
+    build: (journeyContent) => {
+      const state = parkOnSite(mode === "single" ? "Shop" : "RandomSite", true)(journeyContent);
+      if (state === null || state.currentDreamscape === null || state.activeSiteId === null) return null;
+      const node = state.atlas.nodes[state.currentDreamscape];
+      const sites = node.sites.map((site) => site.id !== state.activeSiteId
+        ? site
+        : mode === "single"
+          ? {
+              ...site,
+              type: "Shop" as const,
+              guideIdOverride: "maddox",
+              randomSite: {
+                mode: "single" as const,
+                candidateSiteTypes: ["Shop" as const],
+                destinationSiteType: "Shop" as const,
+                materialized: true,
+              },
+            }
+          : {
+              ...site,
+              type: "RandomSite" as const,
+              randomSite: {
+                mode: "homeChoice" as const,
+                candidateSiteTypes: [
+                  "Shop" as const,
+                  "Purge" as const,
+                  "Augury" as const,
+                  "Gamble" as const,
+                  "Exploration" as const,
+                ],
+              },
+            });
+      return {
+        ...state,
+        atlas: {
+          ...state.atlas,
+          nodes: { ...state.atlas.nodes, [node.id]: { ...node, sites } },
+        },
+      };
+    },
+  };
+}
+
 /** All registered QA scenes, keyed by `id`. */
 export const QA_SCENES: readonly QaScene[] = [
   DREAM_AVATAR_SELECT_SCENE,
@@ -860,8 +910,8 @@ export const QA_SCENES: readonly QaScene[] = [
     "Augury",
     true,
   ),
-  siteScene("tempting", "Offer", "TemptingOffer"),
-  siteScene("tempting-enhanced", "Offer (Enhanced)", "TemptingOffer", true),
+  randomSiteScene("single"),
+  randomSiteScene("homeChoice"),
   siteScene("gamble", "Gamble", "Gamble"),
   siteScene(
     "gamble-enhanced",

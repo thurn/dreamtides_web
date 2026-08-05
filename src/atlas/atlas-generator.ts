@@ -20,6 +20,10 @@ import { otherGuideSignatureSites } from "../data/dreamscapes";
 import { GLOSSARY_IDS, requireGlossaryEntry } from "../data/glossary";
 import { draftSiteData } from "../draft/draft-site-config";
 import { logEvent } from "../logging";
+import {
+  RANDOM_SITE_DESTINATIONS,
+} from "../random-site/random-site";
+import type { RandomSiteDestinationType } from "../types/journey";
 
 /** Parameters for site generation that require external data. */
 export interface SiteGenerationContext {
@@ -380,6 +384,37 @@ function makeSite(type: SiteType, isEnhanced: boolean): SiteState {
   };
 }
 
+function randomSiteCandidates(
+  usedTypes: ReadonlySet<SiteType>,
+  modifiers: readonly DreamscapeModifier[] = [],
+): RandomSiteDestinationType[] {
+  const removed = removedSiteTypesFromModifiers(modifiers);
+  return RANDOM_SITE_DESTINATIONS.filter(
+    (type) => !usedTypes.has(type) && !removed.has(type),
+  );
+}
+
+function makeRandomSite(
+  mode: "single" | "homeChoice",
+  candidates: RandomSiteDestinationType[],
+): SiteState {
+  if (mode === "homeChoice" && candidates.length < 3) {
+    throw new Error("Random Site home choice requires at least three eligible destinations.");
+  }
+  const destinationSiteType =
+    mode === "single" && candidates.length > 0
+      ? candidates[randomInt(0, candidates.length - 1)]
+      : undefined;
+  return {
+    ...makeSite("RandomSite", true),
+    randomSite: {
+      mode,
+      candidateSiteTypes: candidates,
+      ...(destinationSiteType === undefined ? {} : { destinationSiteType }),
+    },
+  };
+}
+
 /**
  * Generates the ordered site composition for one dreamscape node, following the
  * doc's named-dreamscape rules. Total sites stay within 3-6 and the Battle is
@@ -484,14 +519,59 @@ export function generateSiteComposition(
   const fillCount = Math.min(randomInt(minFill, maxFill), remainingPool.length);
   const chosenFill: SiteType[] = [];
   for (let i = 0; i < fillCount && remainingPool.length > 0; i++) {
+    if (homeSite === "RandomSite") {
+      for (let index = remainingPool.length - 1; index >= 0; index -= 1) {
+        const prospective = new Set(usedTypes);
+        prospective.add(remainingPool[index][0]);
+        if (
+          randomSiteCandidates(prospective, context.dreamscapeModifiers).length < 3
+        ) {
+          remainingPool.splice(index, 1);
+        }
+      }
+      if (remainingPool.length === 0) break;
+    }
     const siteType = weightedPick(remainingPool);
-    preBattle.push(makeSite(siteType, false));
+    if (siteType === "RandomSite") {
+      const candidates = randomSiteCandidates(
+        usedTypes,
+        context.dreamscapeModifiers,
+      );
+      const randomSite = makeRandomSite("single", candidates);
+      preBattle.push(randomSite);
+      if (randomSite.randomSite?.destinationSiteType !== undefined) {
+        usedTypes.add(randomSite.randomSite.destinationSiteType);
+        for (let index = remainingPool.length - 1; index >= 0; index -= 1) {
+          if (remainingPool[index][0] === randomSite.randomSite.destinationSiteType) {
+            remainingPool.splice(index, 1);
+          }
+        }
+      }
+    } else {
+      preBattle.push(makeSite(siteType, false));
+    }
     usedTypes.add(siteType);
     chosenFill.push(siteType);
     for (let index = remainingPool.length - 1; index >= 0; index -= 1) {
       if (remainingPool[index][0] === siteType) {
         remainingPool.splice(index, 1);
       }
+    }
+  }
+
+  if (homeSite === "RandomSite") {
+    const occupiedGuideTypes = new Set<SiteType>(
+      preBattle
+        .map((site) => site.type)
+        .filter((type) => type !== "RandomSite"),
+    );
+    const candidates = randomSiteCandidates(
+      occupiedGuideTypes,
+      context.dreamscapeModifiers,
+    );
+    const homeIndex = preBattle.findIndex((site) => site.type === "RandomSite");
+    if (homeIndex >= 0) {
+      preBattle[homeIndex] = makeRandomSite("homeChoice", candidates);
     }
   }
 
@@ -511,6 +591,14 @@ export function generateSiteComposition(
       hasKnownDreamsign: hasKnownDreamsign === true,
       fillWeights: fillDistribution,
       fillChosen: chosenFill,
+      randomSites: sites
+        .filter((site) => site.randomSite !== undefined)
+        .map((site) => ({
+          siteId: site.id,
+          mode: site.randomSite?.mode,
+          candidateSiteTypes: site.randomSite?.candidateSiteTypes,
+          hiddenDestinationSiteType: site.randomSite?.destinationSiteType ?? null,
+        })),
       siteTypes: sites.map((s) => s.type),
     });
   }
@@ -1493,9 +1581,9 @@ const SITE_TYPE_META: Record<
     icon: "bxf bx-meteor",
     glossaryId: GLOSSARY_IDS.sites.DreamsignRevelation,
   },
-  TemptingOffer: {
-    icon: "bxf bx-law",
-    glossaryId: GLOSSARY_IDS.sites.TemptingOffer,
+  RandomSite: {
+    icon: "fa-solid fa-question",
+    glossaryId: GLOSSARY_IDS.sites.RandomSite,
   },
   Gamble: {
     icon: "bxf bx-coin",

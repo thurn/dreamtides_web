@@ -163,10 +163,10 @@ sites appear and no site is enhanced.
 ### The Rust Expanse
 
 - **Dream Guide:** Maddox
-- **Signature Site:** [Tempting Offer](#tempting-offer)
+- **Signature Site:** [Random Site](#random-site)
 - **Aesthetic:** A "Mad Max" post-apocalyptic wasteland.
 - **Affiliation:** Survivors
-- **Site Icon:** `boxicons3/law`
+- **Site Icon:** `?`
 
 ### Farpoint Station
 
@@ -674,24 +674,20 @@ For auguries with multiple effects, each animation plays in sequence.
 
 Icon: `boxicons3/eye`
 
-### Tempting Offer
+### Random Site
 
-Tempting Offer is run by **Maddox** (home: The Rust Expanse). The player may take
-a powerful reward, but it comes at a cost: paying essence, gaining a
-[Nightmare](#nightmare), or losing something (such as a card from their deck).
-Tempting Offer is the primary source of Nightmare cards during a journey.
+Random Site is hosted by **Maddox** (home: The Rust Expanse). Outside his home,
+the site appears as a `?` and deterministically conceals one enhanced site drawn
+uniformly from the other Dream Guides' site types. Entering it reveals the
+stored destination, preserves the site id, and opens that site's normal
+interface with Maddox in place of its resident guide.
 
-**Home Specialty.** In The Rust Expanse, Maddox offers the player their choice of
-two tempting offers.
+**Home Specialty.** In The Rust Expanse, entering Random Site presents Maddox
+and three distinct eligible destinations in a glass panel. Each circle exposes
+the destination's normal site information on hover, focus, or touch. The player
+must choose one; the selected destination opens enhanced with Maddox as host.
 
-**UI:** Maddox performs an animation and displays a speech bubble. The offer
-card(s) animate in from the center of his chest and are shown beside him in
-landscape, below in portrait, with the reward and its cost both displayed. A
-purple button accepts the offer; the cost and reward animations play in sequence
-(for example, essence draining away and then a reward animating to the journey
-deck). A close button allows the user to decline.
-
-Icon: `boxicons3/law`
+Icon: `?`
 
 ### Gamble
 
@@ -741,7 +737,7 @@ enhancements are:
 | Deacon Holt | Hope's End | Duplication | Pick any card to duplicate |
 | Master Takeshi | Tsukiren | Purge | Remove up to 3 cards, including Nightmare, for free |
 | Aldric, the Seer | Wilderveil | Augury | Bigger rewards, curated to the deck |
-| Maddox | The Rust Expanse | Tempting Offer | Choose between two offers |
+| Maddox | The Rust Expanse | Random Site | Choose one of three random enhanced sites |
 | Gravok | Farpoint Station | Gamble | No initial fee, bigger payouts |
 | "Layaway" | Grid City | Exploration | Enhanced Exploration presentation |
 
@@ -798,8 +794,8 @@ Users may have only 1 dream avatar.
 ## Nightmare
 
 [Nightmare](banes.md) is the sole Bane card. It can be given to the user during
-a journey, typically as the cost side of a [Tempting Offer](#tempting-offer) or
-as the downside of a losing [Gamble](#gamble). Nightmare can be removed cheaply
+a journey through authored effects or as the downside of a losing
+[Gamble](#gamble). Nightmare can be removed cheaply
 or for free at a [Purge](#purge) site alongside ordinary cards.
 
 ## Dream Atlas

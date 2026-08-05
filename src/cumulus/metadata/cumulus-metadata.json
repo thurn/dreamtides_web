@@ -4678,8 +4678,9 @@
     },
     {
       "name": "presentation",
-      "tsType": "\"scene\" | \"reward\"",
+      "tsType": "\"choice\" | \"scene\" | \"reward\"",
       "unionMembers": [
+        "choice",
         "scene",
         "reward"
       ],

@@ -1,6 +1,6 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { AnimatePresence, motion, useIsPresent } from "framer-motion";
-import { logEvent } from "../logging";
+import { logEvent, logEventOnce } from "../logging";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import {
   screenFor,
@@ -133,6 +133,17 @@ function SiteRoute({
     );
   const site = node?.sites.find((candidate) => candidate.id === siteId);
   const auguryMenuActions = useAuguryJourneyMenuActions(site, node);
+
+  useEffect(() => {
+    if (site?.randomSite?.materialized !== true) return;
+    logEventOnce(`random-site:${site.id}:hosted:${site.type}`, "random_site_entered", {
+      siteId: site.id,
+      siteType: site.type,
+      guideId: site.guideIdOverride ?? "maddox",
+      isEnhanced: site.isEnhanced,
+      sourceMode: site.randomSite.mode,
+    });
+  }, [site]);
 
   if (site === undefined) {
     throw new Error(

@@ -508,6 +508,8 @@ export function routeDomain(
     // --- sites ---
     case "OPEN_SITE":
       return journeyCase(state, sites.openSite(journey, payload, ctx));
+    case "CHOOSE_RANDOM_SITE":
+      return journeyCase(state, sites.chooseRandomSite(journey, payload));
     case "RESOLVE_EXPLORATION_CHOICE":
       return journeyCase(
         state,

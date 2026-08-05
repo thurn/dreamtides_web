@@ -4,7 +4,8 @@ import type {
   DreamGuideContent,
   DreamscapeContent,
 } from "../types/content";
-import type { SiteType } from "../types/journey";
+import type { SiteState, SiteType } from "../types/journey";
+import { MADDOX_GUIDE_ID } from "../random-site/random-site";
 
 // Re-export the content types so callers can import dreamscape/guide/affiliation
 // shapes alongside their loaders from one module.
@@ -119,6 +120,24 @@ export function otherGuideSignatureSites(
 export function guideForSiteType(
   guides: readonly DreamGuideContent[],
   siteType: SiteType,
+  guideIdOverride?: string,
 ): DreamGuideContent | null {
+  if (guideIdOverride !== undefined) {
+    return guides.find((guide) => guide.id === guideIdOverride) ?? null;
+  }
   return guides.find((guide) => guide.siteType === siteType) ?? null;
+}
+
+/** Resolve the guide for a concrete site, honoring Random Site hosting. */
+export function guideForSite(
+  guides: readonly DreamGuideContent[],
+  site: Pick<SiteState, "type" | "guideIdOverride">,
+): DreamGuideContent | null {
+  if (site.guideIdOverride !== undefined) {
+    return guides.find((guide) => guide.id === site.guideIdOverride) ?? null;
+  }
+  if (site.type === "RandomSite") {
+    return guides.find((guide) => guide.id === MADDOX_GUIDE_ID) ?? null;
+  }
+  return guideForSiteType(guides, site.type);
 }

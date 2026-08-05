@@ -40,7 +40,7 @@ reflected automatically:
 | `Augury`             | `augury`             |
 | `DreamsignMarket`    | `dreamsign-market`    |
 | `DreamsignRevelation`| `dreamsign-revelation`|
-| `TemptingOffer`      | `tempting-offer`      |
+| `RandomSite`         | `random-site`         |
 | `Gamble`             | `gamble`              |
 | `Exploration`       | `exploration`       |
 

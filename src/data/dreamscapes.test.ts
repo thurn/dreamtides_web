@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   guideForSiteType,
+  guideForSite,
   loadAffiliations,
   loadDreamGuides,
   loadDreamscapes,
@@ -200,9 +201,20 @@ describe("dreamscape content referential integrity", () => {
       expect(elsewhereComposition.enhancedSiteType).not.toBe(guide.siteType);
       for (const site of elsewhereComposition.sites) {
         if (site.type === guide.siteType) {
-          expect(site.isEnhanced).toBe(false);
+          expect(site.isEnhanced).toBe(guide.siteType === "RandomSite");
         }
       }
+    }
+  });
+
+  it("resolves Maddox as host for every materialized Random Site destination", async () => {
+    const guides = await loadDreamGuides();
+    const destinationTypes = [
+      "Shop", "DreamsignMarket", "DreamsignRevelation", "Transfiguration",
+      "Duplication", "Purge", "Augury", "Gamble", "Exploration",
+    ] as const;
+    for (const type of destinationTypes) {
+      expect(guideForSite(guides, { type, guideIdOverride: "maddox" })?.id).toBe("maddox");
     }
   });
 

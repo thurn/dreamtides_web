@@ -83,12 +83,11 @@
     "id": "maddox",
     "name": "Maddox",
     "homeDreamscapeId": "rust_expanse",
-    "siteType": "TemptingOffer",
+    "siteType": "RandomSite",
     "dialog": [
-      "Out here, every deal's a gamble.",
-      "Two offers. Pick your poison."
+      "Let’s see where this road takes us."
     ],
-    "homeSpecialty": "Maddox will make you two offers to improve your deck."
+    "homeSpecialty": "Maddox presents three random enhanced sites and lets you choose one."
   },
   {
     "id": "gravok",

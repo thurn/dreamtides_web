@@ -128,9 +128,9 @@
     "name": "The Rust Expanse",
     "aesthetic": "A Mad-Max post-apocalyptic wasteland of scrap and dust.",
     "guideId": "maddox",
-    "signatureSite": "TemptingOffer",
+    "signatureSite": "RandomSite",
     "affiliationId": "survivors",
-    "siteIcon": "game-icons.net/sbed/scales",
+    "siteIcon": "?",
     "dreamAvatarIds": [
       "133E22DD-F81B-406D-B4E3-98C346D7FD4E",
       "9E4862FD-E18C-463E-9D5F-E5D73C29A66F",

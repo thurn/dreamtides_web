@@ -52,8 +52,9 @@ const FALLBACK_GUIDE_LINE =
 /** Resolve Layaway, the resident guide for Exploration. */
 export function resolveExplorationGuide(
   guides: readonly DreamGuideContent[],
+  guideIdOverride?: string,
 ): DreamGuideContent | null {
-  return guideForSiteType(guides, "Exploration");
+  return guideForSiteType(guides, "Exploration", guideIdOverride);
 }
 
 function matchesPredicate(

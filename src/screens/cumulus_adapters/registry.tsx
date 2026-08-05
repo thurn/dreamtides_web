@@ -17,7 +17,7 @@ import { TransfigurationSiteScreenAdapter } from "./TransfigurationSiteScreenAda
 import { DuplicationSiteScreenAdapter } from "./DuplicationSiteScreenAdapter";
 import { AugurySiteScreenAdapter } from "./AugurySiteScreenAdapter";
 import { GambleSiteScreenAdapter } from "./GambleSiteScreenAdapter";
-import { WorkInProgressSiteScreenAdapter } from "./WorkInProgressSiteScreenAdapter";
+import { RandomSiteScreenAdapter } from "./RandomSiteScreenAdapter";
 import { ExplorationSiteScreenAdapter } from "./ExplorationSiteScreenAdapter";
 import { JourneyCompleteScreenAdapter } from "./JourneyCompleteScreenAdapter";
 import { JourneyFailedScreenAdapter } from "./JourneyFailedScreenAdapter";
@@ -96,10 +96,10 @@ export function siteDispositionFor(
         kind: "screen",
         screen: <AugurySiteScreenAdapter siteId={site.id} />,
       };
-    case "TemptingOffer":
+    case "RandomSite":
       return {
         kind: "screen",
-        screen: <WorkInProgressSiteScreenAdapter siteId={site.id} />,
+        screen: <RandomSiteScreenAdapter siteId={site.id} />,
       };
     case "Gamble":
       return {

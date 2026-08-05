@@ -17,7 +17,7 @@ export function AugurySiteScreenAdapter({ siteId }: { siteId: string }) {
   const current = selectCurrentSite(state, siteId, "Augury");
   const node = current?.node ?? null;
   const site = current?.site ?? null;
-  const guide = resolveAuguryGuide(journeyContent.guides);
+  const guide = resolveAuguryGuide(journeyContent.guides, site?.guideIdOverride);
   const guideLineRef = useRef<string | null | undefined>(undefined);
   if (guideLineRef.current === undefined) {
     const lines = guide?.dialog ?? [];

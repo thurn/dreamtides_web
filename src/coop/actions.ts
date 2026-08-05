@@ -25,6 +25,7 @@
 import type { EventDraft } from "../eventlog/client";
 import type { BeginTutorialOptions, TutorialAction } from "../types/tutorial";
 import type { GambleGameId, GravokGateId } from "../types/gamble";
+import type { RandomSiteDestinationType, SiteType } from "../types/journey";
 
 /**
  * Appends a stamped event, resolving to its committed seq. In production this
@@ -132,7 +133,12 @@ export interface CoopActions {
   openSite: (
     siteId: string,
     runId?: string,
+    siteType?: SiteType,
     gambleGameId?: GambleGameId,
+  ) => Promise<number>;
+  chooseRandomSite: (
+    siteId: string,
+    siteType: RandomSiteDestinationType,
   ) => Promise<number>;
   resolveExplorationChoice: (
     siteId: string,
@@ -436,14 +442,16 @@ export function makeActions(append: AppendFn): CoopActions {
       ),
 
     // --- sites ---
-    openSite: (siteId, runId, gambleGameId) =>
+    openSite: (siteId, runId, siteType, gambleGameId) =>
       emit(
         "OPEN_SITE",
         gambleGameId === undefined ? { siteId } : { siteId, gambleGameId },
         gambleGameId === undefined
-          ? siteIntentKey("open-site", siteId, runId)
-          : `${siteIntentKey("open-site", siteId, runId)}:${gambleGameId}`,
+          ? siteIntentKey(`open-site:${siteType ?? "unknown"}`, siteId, runId)
+          : `${siteIntentKey(`open-site:${siteType ?? "unknown"}`, siteId, runId)}:${gambleGameId}`,
       ),
+    chooseRandomSite: (siteId, siteType) =>
+      emit("CHOOSE_RANDOM_SITE", { siteId, siteType }),
     resolveExplorationChoice: (siteId, actionId, selection) =>
       emit("RESOLVE_EXPLORATION_CHOICE", {
         siteId,

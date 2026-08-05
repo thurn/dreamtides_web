@@ -91,7 +91,7 @@ for (const name of [
   "StartingDeckOverlayAdapter", "TransfigurationSiteScreenAdapter",
   "ExplorationSiteScreenAdapter",
   "TutorialBattleScreenAdapter", "TutorialScreenAdapter",
-  "WorkInProgressSiteScreenAdapter", "registry",
+  "RandomSiteScreenAdapter", "registry",
 ]) {
   // The registry is the production resolver; the rest are state/effect wiring.
   fileRoles[`src/screens/cumulus_adapters/${name}.tsx`] = OUTER_UI_ROLES.STATE_ADAPTER;

@@ -827,7 +827,7 @@
           "biomeColor": "#fb923c",
           "biomeName": "The Rust Expanse",
           "dreamscapeId": "rust_expanse",
-          "enhancedSiteType": "TemptingOffer",
+          "enhancedSiteType": "RandomSite",
           "forwardIds": [
             "dreamscape-16",
             "dreamscape-15"
@@ -844,7 +844,17 @@
               "id": "site-12",
               "isEnhanced": true,
               "isVisited": false,
-              "type": "TemptingOffer"
+              "type": "RandomSite",
+              "randomSite": {
+                "mode": "homeChoice",
+                "candidateSiteTypes": [
+                  "DreamsignMarket",
+                  "Duplication",
+                  "Purge",
+                  "Augury",
+                  "Exploration"
+                ]
+              }
             },
             {
               "id": "site-13",

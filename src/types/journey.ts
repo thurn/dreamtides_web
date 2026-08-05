@@ -62,7 +62,7 @@ export type SiteType =
   | "Augury"
   | "DreamsignMarket"
   | "DreamsignRevelation"
-  | "TemptingOffer"
+  | "RandomSite"
   | "Gamble"
   | "Exploration";
 
@@ -179,7 +179,31 @@ export interface SiteState {
   type: SiteType;
   isEnhanced: boolean;
   isVisited: boolean;
+  /** Random Site wrapper/origin metadata persisted for deterministic replay. */
+  randomSite?: RandomSiteMetadata;
+  /** Dream Guide displayed instead of the resident guide for this site. */
+  guideIdOverride?: string;
   data?: Record<string, unknown>;
+}
+
+export type RandomSiteDestinationType =
+  | "Shop"
+  | "DreamsignMarket"
+  | "DreamsignRevelation"
+  | "Transfiguration"
+  | "Duplication"
+  | "Purge"
+  | "Augury"
+  | "Gamble"
+  | "Exploration";
+
+export interface RandomSiteMetadata {
+  /** One hidden destination outside Maddox's home; three choices at home. */
+  mode: "single" | "homeChoice";
+  candidateSiteTypes: RandomSiteDestinationType[];
+  destinationSiteType?: RandomSiteDestinationType;
+  /** Set once the wrapper becomes the selected concrete destination. */
+  materialized?: boolean;
 }
 
 /**
@@ -537,6 +561,13 @@ export type GambleSiteRuntime =
 /** Stable Gamble game id, re-exported beside its persisted runtime union. */
 export type GambleSiteGameId = GambleGameId;
 
+/** Shared, replayable three-destination offer at Maddox's home Random Site. */
+export interface RandomSiteRuntime {
+  kind: "randomSite";
+  offeredSiteTypes: RandomSiteDestinationType[];
+  selectedSiteType: RandomSiteDestinationType | null;
+}
+
 /** Serialized runtime state keyed by site id. */
 export type SiteRuntimeState =
   | ShopSiteRuntime
@@ -546,7 +577,8 @@ export type SiteRuntimeState =
   | CardChoiceSiteRuntime
   | AugurySiteRuntime
   | GambleSiteRuntime
-  | ExplorationSiteRuntime;
+  | ExplorationSiteRuntime
+  | RandomSiteRuntime;
 
 /** Discriminated union for the current screen. */
 export type Screen =

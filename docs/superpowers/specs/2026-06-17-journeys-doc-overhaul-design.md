@@ -24,7 +24,7 @@ tune the economy.
    random card/dreamsign draws plus opponent-deck bias.
 5. Remap existing sites to doc names; build the three doc sites that map cleanly
    onto existing code (Dreamsign Market, Dreamsign Revelation, Augury);
-   stub the three genuinely new sites (Tempting Offer, Gamble, Exploration).
+   stub the three genuinely new sites (Random Site, Gamble, Exploration).
 6. Apply economy tweaks (starting essence 200, purge `30 + 5·N·(N+1)`, single
    currency, Nightmare folded into Purge).
 7. Keep everything tunable via TOML per the Golden Rule.
@@ -37,7 +37,7 @@ tune the economy.
 - **Three sites map to existing code** and are built properly: Dreamsign Market
   (Shop variant), Dreamsign Revelation (existing dreamsign offering), Augury
   (renamed Dream Journey).
-- **Three sites are stubs** this pass: Tempting Offer, Gamble, Exploration —
+- **Three sites are stubs** this pass: Random Site, Gamble, Exploration —
   registered as site types with guides + atlas icons + a minimal placeholder
   screen so the atlas/dreamscape system is complete.
 - **Currency consolidation:** fold the existing "Omens" currency into **essence**
@@ -139,7 +139,7 @@ acceptance criteria.
   types: layer-based `DreamAtlas` (layers, nodes, connections), 5-state node
   enum (`unrevealed | revealedLocked | available | completed | forgone`),
   dreamscape/guide/affiliation content types, known-dreamsign carrier fields,
-  new `SiteType` members (`Augury`, `DreamsignMarket`, `TemptingOffer`,
+  new `SiteType` members (`Augury`, `DreamsignMarket`, `RandomSite`,
   `Gamble`, `Exploration`), retire `Cleanse`/Omens from the type surface.
 - **Manual QA:** load the app, confirm it still boots to the Dream Avatar select
   screen with no console errors after the type/data changes (compile-only QA;
@@ -209,7 +209,7 @@ acceptance criteria.
   50-essence restock), reusing Shop component + dreamsign pool.
 - **Dreamsign Revelation**: existing dreamsign offering (1 random or choice-of-3;
   home = always a choice).
-- **Stubs:** Tempting Offer, Gamble, Exploration — site type + guide + atlas
+- **Stubs:** Random Site, Gamble, Exploration — site type + guide + atlas
   icon + minimal placeholder screen (guide framing, a "coming soon" body, a
   close/continue that completes the site). Wired into generation and routing.
 - **Currency:** fold Omens into essence everywhere (shop dreamsign purchase,
@@ -334,7 +334,7 @@ commits with a detailed message and pushes immediately per AGENTS.md.
 ## 11. Out of scope / explicitly deferred
 
 - 3D models, character animations, and the doc's choreographed UI motion.
-- Full mechanics for Tempting Offer, Gamble, Exploration (stubs only).
+- Full mechanics for Random Site, Gamble, Exploration (stubs only).
 - Final-boss unique abilities/cards beyond reusing the existing battle path
   (see `docs/journeys/bosses.md` for future work).
 - Meta-progression unlocks (`docs/journeys/meta_progression.md`).

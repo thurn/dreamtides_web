@@ -96,7 +96,7 @@ export type SiteType =
   | "Reward" | "Cleanse"
   // Added this pass:
   | "Augury" | "DreamsignMarket" | "DreamsignRevelation"
-  | "TemptingOffer" | "Gamble" | "Exploration";
+  | "RandomSite" | "Gamble" | "Exploration";
 ```
 
 - Add the layered atlas node state and content types as **new** declarations (the live `DreamAtlas`/`DreamscapeNode` are reshaped in Task 2, not here):
@@ -341,7 +341,7 @@ This task owns the destructive removals deferred from Task 1: `DreamJourney`→`
 - Modify: `src/state/journey-context.tsx` + `src/state/journey-state-actions.ts` (drop `omens`, default essence)
 - Modify: `src/shop/*` (Dreamsign Market = essence-priced dreamsign variant; restock 50 essence; drop omen pricing), `src/journey_v2/*` (Augury naming)
 - Modify: `src/purge/purge-pricing.ts` (formula constant + doc table), Purge screen (Nightmare selection — fold in Cleanse)
-- Create: `src/screens/StubSiteScreen.tsx` (Tempting Offer / Gamble / Exploration placeholder)
+- Create: `src/screens/StubSiteScreen.tsx` (Random Site / Gamble / Exploration placeholder)
 - Modify: `src/screens/JourneyStartScreen.tsx` only if it reads `omens` (it does not currently)
 - Test: `src/purge/purge-pricing.test.ts` (or wherever it lives), site-dispatch coverage in an integration test
 
@@ -361,7 +361,7 @@ Update/author the purge pricing test to pin the doc's economy anchors as a small
 
 - [ ] **Step 7: Dreamsign Market + Dreamsign Revelation.** Dreamsign Market: a Shop variant that sells dreamsigns for essence (3 items + 50-essence restock) reusing `ShopScreen` + dreamsign pool. Dreamsign Revelation: route to the existing dreamsign offering screen (1 random, or choice-of-3; home dreamscape → always a choice). Add both `ScreenRouter` cases.
 
-- [ ] **Step 8: Three stub sites.** Add `StubSiteScreen.tsx` rendering the guide framing + a short "coming soon" body + a Continue button that calls `completeJourneySite`. Add `ScreenRouter` cases for `TemptingOffer`, `Gamble`, `Exploration` → `StubSiteScreen`.
+- [ ] **Step 8: Three stub sites.** Add `StubSiteScreen.tsx` rendering the guide framing + a short "coming soon" body + a Continue button that calls `completeJourneySite`. Add `ScreenRouter` cases for `RandomSite`, `Gamble`, `Exploration` → `StubSiteScreen`.
 
 - [ ] **Step 9: Integration test for dispatch completeness.** Add/extend an integration test asserting that for **every** `SiteType` the screen router resolves a screen (no unhandled site type) and that completing each site type advances journey state. *(Catches an unrouted new/renamed site — a contract at the router boundary.)* Derive the site-type list from the `SiteType` union via a representative array maintained in one place; assert none falls through.
 
@@ -380,7 +380,7 @@ git commit -m "feat(journeys): site remap (Augury, Dreamsign Market/Revelation, 
 
 **Files:**
 - Create: `src/components/DreamGuideFrame.tsx` (portrait=top / landscape=side framing + dialog)
-- Modify: guide-bearing site screens to render the frame (Shop, Dreamsign Market, Dreamsign Revelation, Transfiguration, Duplication, Purge, Augury, Tempting Offer, Gamble, Exploration)
+- Modify: guide-bearing site screens to render the frame (Shop, Dreamsign Market, Dreamsign Revelation, Transfiguration, Duplication, Purge, Augury, Random Site, Gamble, Exploration)
 - Modify: enhancement application — where `isEnhanced` is set, surface the guide's `homeSpecialty` (the enhanced behavior already flows through `isEnhanced`; this task makes the guide identity + specialty visible and ensures each guide maps to its site)
 - Test: extend an integration test asserting guide↔site mapping
 

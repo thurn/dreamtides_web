@@ -18,7 +18,7 @@ export function DreamsignBazaarSiteScreenAdapter({ siteId }: { siteId: string })
   const site = node?.sites.find((candidate) => candidate.id === siteId) ?? null;
   const runtime = state.siteRuntime[siteId];
   const shopRuntime = runtime?.kind === "shop" ? runtime : null;
-  const guide = resolveDreamsignBazaarGuide(journeyContent.guides);
+  const guide = resolveDreamsignBazaarGuide(journeyContent.guides, site?.guideIdOverride);
   const guideLineRef = useRef<string | null | undefined>(undefined);
   const [pendingSlotIndex, setPendingSlotIndex] = useState<number | null>(null);
   const pendingDreamsign = pendingSlotIndex === null || shopRuntime === null

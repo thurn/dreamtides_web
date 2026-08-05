@@ -128,6 +128,45 @@ function counts(sites: SiteState[]): Partial<Record<SiteType, number>> {
 }
 
 describe("generateSiteComposition", () => {
+  it("builds Maddox's home Random Site with a distinct eligible candidate pool", () => {
+    const home = NON_STARTER_DREAMSCAPES.find(
+      (dreamscape) => dreamscape.signatureSite === "RandomSite",
+    );
+    if (home === undefined) throw new Error("expected a Random Site dreamscape");
+    const sites = composeFor(home, 4);
+    const randomSite = sites.find((site) => site.type === "RandomSite");
+    expect(randomSite?.isEnhanced).toBe(true);
+    expect(randomSite?.randomSite?.mode).toBe("homeChoice");
+    expect(randomSite?.randomSite?.candidateSiteTypes.length).toBeGreaterThanOrEqual(3);
+    expect(new Set(randomSite?.randomSite?.candidateSiteTypes).size).toBe(
+      randomSite?.randomSite?.candidateSiteTypes.length,
+    );
+    const visibleTypes = new Set(sites.map((site) => site.type));
+    for (const candidate of randomSite?.randomSite?.candidateSiteTypes ?? []) {
+      expect(visibleTypes.has(candidate)).toBe(false);
+    }
+  });
+
+  it("excludes hard-removed destinations from Maddox's candidate pool", () => {
+    const home = NON_STARTER_DREAMSCAPES.find(
+      (dreamscape) => dreamscape.signatureSite === "RandomSite",
+    );
+    if (home === undefined) throw new Error("expected a Random Site dreamscape");
+    const result = generateSiteComposition({
+      layer: LayerName.Five,
+      dreamscape: home,
+      dreamscapes: TEST_DREAMSCAPES,
+      context: {
+        dreamscapeModifiers: [{
+          kind: "remove_shop_sites",
+          dreamscapesRemaining: 1,
+          source: "fixture",
+        }],
+      },
+    });
+    const randomSite = result.sites.find((site) => site.type === "RandomSite");
+    expect(randomSite?.randomSite?.candidateSiteTypes).not.toContain("Shop");
+  });
   it("produces 3-6 sites per non-starter dreamscape at every layer", () => {
     for (const dreamscape of NON_STARTER_DREAMSCAPES) {
       for (const layer of NON_STARTER_LAYERS) {
@@ -162,8 +201,11 @@ describe("generateSiteComposition", () => {
           );
           expect(signature).toHaveLength(1);
           expect(signature[0].isEnhanced).toBe(true);
-          // It is the only enhanced site.
-          expect(sites.filter((s) => s.isEnhanced)).toHaveLength(1);
+          // Maddox's hidden destination is also enhanced when Random Site fills
+          // a different guide's dreamscape.
+          expect(sites.filter((s) => s.isEnhanced)).toHaveLength(
+            1 + (sites.some((site) => site.type === "RandomSite" && site !== signature[0]) ? 1 : 0),
+          );
         }
       }
     }

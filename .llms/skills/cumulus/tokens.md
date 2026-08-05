@@ -132,7 +132,6 @@ Each --t-* bundles face + weight + size/line-height: apply a voice with one toke
 | `--t-hero-epithet` | `500 21px/1.15 var(--primitive-font-serif)` | the epithet under the hero name |
 | `--t-title` | `600 30px/1.08 var(--primitive-font-serif)` | place / screen name |
 | `--t-title-sm` | `600 23px/1.12 var(--primitive-font-serif)` | card-detail name, section |
-| `--t-serif-body` | `500 17px/1.4 var(--primitive-font-serif)` | quotes, flavor |
 | `--t-tutorial-dialogue` | `500 17px/1.3 var(--primitive-font-serif)` | tutorial speech bubbles |
 | `--t-tutorial-instruction` | `600 22px/1.3 var(--primitive-font-sans)` | desktop tutorial guidance |
 | `--t-lead` | `600 19px/1.3 var(--primitive-font-sans)` | prominent UI heading |

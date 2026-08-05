@@ -10,10 +10,10 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Genesis, LogNode } from "../eventlog/types";
-import { getLogEntries, resetLog } from "../logging";
+import { resetLog } from "../logging";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 
-const REDUCER_VERSION = "dreamtides-coop-v8";
+const REDUCER_VERSION = "dreamtides-coop-v9";
 
 // Captured subscriber so a test can hand RoomGate a chosen log node.
 let deliverNode: ((node: LogNode) => void) | null = null;
@@ -203,7 +203,7 @@ describe("RoomGate content-config gate", () => {
     expect(container.querySelector("[data-room-children]")).toBeNull();
   });
 
-  it("mounts children for a reviewed legacy reducer build", async () => {
+  it("renders the version gate for a prior reducer build", async () => {
     mount(runtimeConfig());
     await flush();
 
@@ -221,18 +221,8 @@ describe("RoomGate content-config gate", () => {
     });
     await flush();
 
-    expect(container.querySelector("[data-version-gate]")).toBeNull();
-    expect(container.querySelector("[data-room-children]")).not.toBeNull();
-    expect(
-      getLogEntries().find(
-        (entry) => entry.event === "room_reducer_compatibility",
-      ),
-    ).toMatchObject({
-      clientBuildHash: "build-1",
-      clientReducerVersion: REDUCER_VERSION,
-      compatibility: "legacy",
-      roomReducerVersion: "0dfbc840a6a3-6d94b82e9b7a",
-    });
+    expect(container.querySelector("[data-version-gate]")).not.toBeNull();
+    expect(container.querySelector("[data-room-children]")).toBeNull();
   });
 
   it("renders the version gate for an incompatible reducer protocol", async () => {

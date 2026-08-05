@@ -217,7 +217,6 @@ export const TOKENS = {
   "--t-hero-epithet": { var: "var(--t-hero-epithet)", value: "500 21px/1.15 var(--primitive-font-serif)" },
   "--t-title": { var: "var(--t-title)", value: "600 30px/1.08 var(--primitive-font-serif)" },
   "--t-title-sm": { var: "var(--t-title-sm)", value: "600 23px/1.12 var(--primitive-font-serif)" },
-  "--t-serif-body": { var: "var(--t-serif-body)", value: "500 17px/1.4 var(--primitive-font-serif)" },
   "--t-tutorial-dialogue": { var: "var(--t-tutorial-dialogue)", value: "500 17px/1.3 var(--primitive-font-serif)" },
   "--t-tutorial-instruction": { var: "var(--t-tutorial-instruction)", value: "600 22px/1.3 var(--primitive-font-sans)" },
   "--t-lead": { var: "var(--t-lead)", value: "600 19px/1.3 var(--primitive-font-sans)" },

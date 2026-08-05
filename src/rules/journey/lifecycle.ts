@@ -18,7 +18,7 @@ import type { BattleFoldState, FoldState } from "../fold-state";
 import { battleModeOf, resolveScript } from "../battle/fold";
 import { toJourneyDreamAvatar } from "../../data/dream-avatar-selection";
 import type { ResolvedDreamAvatarPackage } from "../../types/content";
-import type { JourneyState } from "../../types/journey";
+import type { JourneyState, SiteType } from "../../types/journey";
 import type { EffectStep } from "../battle/effect-step";
 import type { EffectRun, ScriptRef } from "../battle/fold";
 import type { ChallengeCursor } from "../battle/fold";
@@ -28,6 +28,10 @@ import { cloneBattleMutableState } from "../../battle/state/create-initial-state
 import { FRONT_RANK_SLOTS } from "../../battle/types";
 import { isTutorialBattleAiActionOverrides } from "../../types/tutorial-ai-action-overrides";
 import { canVisitSite } from "./sites";
+import {
+  isRandomSiteMetadata,
+  materializeRandomSite,
+} from "../../random-site/random-site";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (SELECT_DREAM_AVATAR / START_JOURNEY)
@@ -171,6 +175,35 @@ export function enterSite(
     )
   ) {
     return null;
+  }
+  const node = journey.atlas.nodes[journey.currentDreamscape];
+  const site = node.sites.find((candidate) => candidate.id === siteId);
+  if (
+    site?.type === "RandomSite" &&
+    site.randomSite?.mode === "single" &&
+    site.randomSite.destinationSiteType !== undefined
+  ) {
+    const materialized = materializeRandomSite(
+      site,
+      site.randomSite.destinationSiteType,
+    );
+    return {
+      ...journey,
+      atlas: {
+        ...journey.atlas,
+        nodes: {
+          ...journey.atlas.nodes,
+          [node.id]: {
+            ...node,
+            sites: node.sites.map((candidate) =>
+              candidate.id === siteId ? materialized : candidate,
+            ),
+          },
+        },
+      },
+      screen: { type: "site", siteId },
+      activeSiteId: siteId,
+    };
   }
   return {
     ...journey,
@@ -461,6 +494,38 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
+const CURRENT_SITE_TYPES: ReadonlySet<string> = new Set<SiteType>([
+  "Battle", "Draft", "Shop", "Purge", "Essence", "Transfiguration",
+  "Duplication", "Reward", "Augury", "DreamsignMarket",
+  "DreamsignRevelation", "RandomSite", "Gamble", "Exploration",
+]);
+
+function hasValidAtlasSites(atlas: Record<string, unknown>): boolean {
+  if (!isRecord(atlas.nodes)) return false;
+  for (const node of Object.values(atlas.nodes)) {
+    if (!isRecord(node) || !Array.isArray(node.sites)) return false;
+    for (const site of node.sites) {
+      if (
+        !isRecord(site) ||
+        typeof site.id !== "string" ||
+        typeof site.type !== "string" ||
+        !CURRENT_SITE_TYPES.has(site.type) ||
+        typeof site.isEnhanced !== "boolean" ||
+        typeof site.isVisited !== "boolean"
+      ) {
+        return false;
+      }
+      if (site.type === "RandomSite" && !isRandomSiteMetadata(site.randomSite)) {
+        return false;
+      }
+      if (site.randomSite !== undefined && !isRandomSiteMetadata(site.randomSite)) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 /**
  * Structural guard: `value` carries every `JourneyState` field this validator
  * relies on, each with the correct primitive/container type. Nullable fields are
@@ -491,7 +556,7 @@ function isJourneyStateShape(value: unknown): value is JourneyState {
   )
     return false;
   if (typeof value.hasSeenStartingDeckPopup !== "boolean") return false;
-  if (!isRecord(value.atlas)) return false;
+  if (!isRecord(value.atlas) || !hasValidAtlasSites(value.atlas)) return false;
   if (!isRecord(value.screen)) return false;
   if (!isRecord(value.siteRuntime)) return false;
   if (!Array.isArray(value.battleModifiers)) return false;

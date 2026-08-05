@@ -20,8 +20,9 @@ const FALLBACK_GUIDE_LINE =
 /** Resolve Sigrun, the resident guide for Dreamsign Revelation. */
 export function resolveDreamsignRevelationGuide(
   guides: readonly DreamGuideContent[],
+  guideIdOverride?: string,
 ): DreamGuideContent | null {
-  return guideForSiteType(guides, "DreamsignRevelation");
+  return guideForSiteType(guides, "DreamsignRevelation", guideIdOverride);
 }
 
 /** Build the guide slice shown beside the offer. */

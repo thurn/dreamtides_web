@@ -50,7 +50,7 @@
   - `src/screens/TransfigurationSiteScreen.tsx`
   - `src/screens/DuplicationSiteScreen.tsx`
   - `src/screens/DreamJourneyScreen.tsx`
-  - `src/screens/TemptingOfferScreen.tsx`
+  - `src/screens/RandomSiteScreen.tsx`
 - Add or adjust tests beside each converted screen.
 - Create `docs/journey_prototype/firebase_multiplayer.md`: setup, rules, Hosting, and manual two-window QA.
 
@@ -1488,8 +1488,8 @@ export interface DreamJourneySiteRuntime {
   completed: boolean;
 }
 
-export interface TemptingOfferSiteRuntime {
-  kind: "temptingOffer";
+export interface RandomSiteRuntime {
+  kind: "randomSite";
   optionIds: string[];
   completed: boolean;
 }
@@ -1501,7 +1501,7 @@ export type SiteRuntimeState =
   | EssenceSiteRuntime
   | CardChoiceSiteRuntime
   | DreamJourneySiteRuntime
-  | TemptingOfferSiteRuntime;
+  | RandomSiteRuntime;
 ```
 
 Add to `JourneyState`:
@@ -3255,7 +3255,7 @@ Expected: commit succeeds and pushes.
 - Modify: `src/screens/TransfigurationSiteScreen.tsx`
 - Modify: `src/screens/DuplicationSiteScreen.tsx`
 - Modify: `src/screens/DreamJourneyScreen.tsx`
-- Modify: `src/screens/TemptingOfferScreen.tsx`
+- Modify: `src/screens/RandomSiteScreen.tsx`
 - Modify: `src/state/journey-context.tsx`
 - Modify: `src/state/multiplayer-journey-context.tsx`
 - Modify: related tests
@@ -3271,8 +3271,8 @@ acceptTransfigurationChoice: (siteId: string, entryId: string, type: Transfigura
 acceptDuplicationChoice: (siteId: string, entryId: string, copyCount: number) => void;
 ensureDreamJourneyRuntime: (siteId: string) => void;
 completeDreamJourneyOption: (siteId: string, optionId: string) => void;
-ensureTemptingOfferRuntime: (siteId: string) => void;
-completeTemptingOfferOption: (siteId: string, optionId: string) => void;
+ensureRandomSiteRuntime: (siteId: string) => void;
+completeRandomSiteOption: (siteId: string, optionId: string) => void;
 ```
 
 - [ ] **Step 2: Convert transfiguration and duplication**
@@ -3299,7 +3299,7 @@ const candidates = runtime.entryIds
 
 Use `"duplication"` for `DuplicationSiteScreen`. Replace accept handlers with the composed mutations from Step 1.
 
-- [ ] **Step 3: Convert Dream Journey and Tempting Offer**
+- [ ] **Step 3: Convert Dream Journey and Random Site**
 
 Replace local shuffled option state with shared runtime:
 
@@ -3317,7 +3317,7 @@ if (runtime === undefined || runtime.kind !== "dreamJourney") {
 }
 ```
 
-Use the equivalent `ensureTemptingOfferRuntime` and `kind !== "temptingOffer"` in `TemptingOfferScreen`.
+Use the equivalent `ensureRandomSiteRuntime` and `kind !== "randomSite"` in `RandomSiteScreen`.
 
 - [ ] **Step 4: Implement provider methods**
 
@@ -3374,7 +3374,7 @@ Assert composed mutations are called instead of individual `addCard`, `removeCar
 Run:
 
 ```bash
-npm test -- src/screens/TransfigurationSiteScreen.test.tsx src/screens/DuplicationSiteScreen.test.tsx src/screens/DreamJourneyScreen.test.tsx src/screens/TemptingOfferScreen.test.tsx
+npm test -- src/screens/TransfigurationSiteScreen.test.tsx src/screens/DuplicationSiteScreen.test.tsx src/screens/DreamJourneyScreen.test.tsx src/screens/RandomSiteScreen.test.tsx
 npm run typecheck
 ```
 
@@ -3387,8 +3387,8 @@ Expected: all available targeted tests PASS, and typecheck PASS.
 Run:
 
 ```bash
-git add src/screens/TransfigurationSiteScreen.tsx src/screens/DuplicationSiteScreen.tsx src/screens/DreamJourneyScreen.tsx src/screens/TemptingOfferScreen.tsx src/state/journey-context.tsx src/state/multiplayer-journey-context.tsx src/screens/*.test.tsx
-git commit -m "Share generated site choice runtime" -m "Move transfiguration, duplication, Dream Journey, and Tempting Offer generated choices into shared site runtime with composed completion writes."
+git add src/screens/TransfigurationSiteScreen.tsx src/screens/DuplicationSiteScreen.tsx src/screens/DreamJourneyScreen.tsx src/screens/RandomSiteScreen.tsx src/state/journey-context.tsx src/state/multiplayer-journey-context.tsx src/screens/*.test.tsx
+git commit -m "Share generated site choice runtime" -m "Move transfiguration, duplication, Dream Journey, and Random Site generated choices into shared site runtime with composed completion writes."
 git push
 ```
 

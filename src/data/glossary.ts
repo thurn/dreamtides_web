@@ -99,7 +99,7 @@ export const GLOSSARY_IDS = {
     Augury: "site-augury",
     DreamsignMarket: "site-dreamsign-market",
     DreamsignRevelation: "site-dreamsign-revelation",
-    TemptingOffer: "site-tempting-offer",
+    RandomSite: "site-random-site",
     Gamble: "site-gamble",
     Exploration: "site-exploration",
   },

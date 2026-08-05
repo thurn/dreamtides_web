@@ -12,6 +12,7 @@ import type {
   CardSourceDebugState,
   Dreamsign,
   JourneyState,
+  RandomSiteDestinationType,
   SiteState,
   SiteType,
   TransfigurationType,
@@ -43,6 +44,13 @@ export interface JourneyMutations {
   ) => void;
   /** Materialize the shared encounter and every randomized follow-up offer. */
   ensureExplorationSiteRuntime: (siteId: string) => void;
+  /** Materialize Maddox's three persisted home-site choices. */
+  ensureRandomSiteRuntime: (siteId: string) => void;
+  /** Choose one offered destination; the event log makes first valid choice win. */
+  chooseRandomSite: (
+    siteId: string,
+    siteType: RandomSiteDestinationType,
+  ) => void;
   /** Resolve one authored choice and its optional card-selection payload. */
   resolveExplorationChoice: (
     siteId: string,
