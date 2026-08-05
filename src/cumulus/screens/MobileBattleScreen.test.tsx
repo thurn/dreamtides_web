@@ -2267,6 +2267,154 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("centers the canonical live-battle window across the tutorial handoff", () => {
+    const view = makeView();
+    const enemyBackCard = makeCard(230, "tutorial-enemy-back-card");
+    const playerFrontCard = makeCard(231, "tutorial-player-front-card");
+    const canonicalRank = (
+      rank: "back" | "front",
+      count: number,
+      filledIndex: number | null,
+      card: MobileBattleCardView | null,
+    ) =>
+      Array.from({ length: count }, (_unused, index) => ({
+        id: `${rank === "back" ? "B" : "F"}${String(index)}`,
+        card: index === filledIndex ? card : null,
+      }));
+    const enemy = {
+      ...view.enemy,
+      backRank: canonicalRank("back", 10, 5, enemyBackCard),
+      frontRank: canonicalRank("front", 9, null, null),
+    };
+    const player = {
+      ...view.player,
+      // The live tutorial handoff currently materializes only B0-B4 here.
+      // Presentation still normalizes it to the centered canonical window.
+      backRank: canonicalRank("back", 5, null, null),
+      frontRank: canonicalRank("front", 9, 4, playerFrontCard),
+    };
+    const { container, root } = mount({
+      ...view,
+      enemy,
+      player,
+      near: player,
+      far: enemy,
+    });
+    const slotIds = (owner: "enemy" | "player", rank: "back" | "front") =>
+      Array.from(
+        container.querySelectorAll<HTMLElement>(
+          `[data-battle-rank="${owner}-${rank}"] [data-battle-slot-id]`,
+        ),
+        (slot) => slot.dataset.battleSlotId,
+      );
+
+    expect(slotIds("enemy", "back")).toEqual([
+      "B2",
+      "B3",
+      "B4",
+      "B5",
+      "B6",
+      "B7",
+    ]);
+    expect(slotIds("enemy", "front")).toEqual([
+      "F2",
+      "F3",
+      "F4",
+      "F5",
+      "F6",
+    ]);
+    expect(slotIds("player", "back")).toEqual([
+      "B2",
+      "B3",
+      "B4",
+      "B5",
+      "B6",
+      "B7",
+    ]);
+    expect(slotIds("player", "front")).toEqual([
+      "F2",
+      "F3",
+      "F4",
+      "F5",
+      "F6",
+    ]);
+    expect(
+      container.querySelector(
+        '[data-battle-rank="enemy-back"] [data-battle-slot-id="B5"] [data-battle-card-id="tutorial-enemy-back-card"]',
+      ),
+    ).not.toBeNull();
+    expect(
+      container.querySelector(
+        '[data-battle-rank="player-front"] [data-battle-slot-id="F4"] [data-battle-card-id="tutorial-player-front-card"]',
+      ),
+    ).not.toBeNull();
+
+    act(() => root.unmount());
+  });
+
+  it("moves the shared mobile window to keep an occupied edge lane visible", () => {
+    const view = makeView();
+    const edgeCard = makeCard(232, "edge-back-card");
+    const canonicalRank = (rank: "back" | "front", count: number) =>
+      Array.from({ length: count }, (_unused, index) => ({
+        id: `${rank === "back" ? "B" : "F"}${String(index)}`,
+        card: rank === "back" && index === 0 ? edgeCard : null,
+      }));
+    const player = {
+      ...view.player,
+      backRank: canonicalRank("back", 10),
+      frontRank: canonicalRank("front", 9),
+    };
+    const enemy = {
+      ...view.enemy,
+      backRank: canonicalRank("back", 10).map((slot) => ({
+        ...slot,
+        card: null,
+      })),
+      frontRank: canonicalRank("front", 9),
+    };
+    const { container, root } = mount({
+      ...view,
+      enemy,
+      player,
+      near: player,
+      far: enemy,
+    });
+    const slotIds = (owner: "enemy" | "player", rank: "back" | "front") =>
+      Array.from(
+        container.querySelectorAll<HTMLElement>(
+          `[data-battle-rank="${owner}-${rank}"] [data-battle-slot-id]`,
+        ),
+        (slot) => slot.dataset.battleSlotId,
+      );
+
+    expect(slotIds("player", "back")).toEqual([
+      "B0",
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5",
+    ]);
+    expect(slotIds("player", "front")).toEqual([
+      "F0",
+      "F1",
+      "F2",
+      "F3",
+      "F4",
+    ]);
+    expect(slotIds("enemy", "back")).toEqual([
+      "B0",
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5",
+    ]);
+
+    act(() => root.unmount());
+  });
+
   it("uses art-and-spark faces on the battlefield and complete faces in hand", () => {
     const { container, root } = mount();
     const battlefieldCards = Array.from(
@@ -3010,7 +3158,7 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("expands one staggered pair when a mobile formation fills its visible ranks", () => {
+  it("expands one shared staggered pair when a mobile formation fills its visible ranks", () => {
     const view = makeView();
     const playerBackRank = Array.from({ length: 10 }, (_, index) => ({
       id: `B${String(index)}`,
@@ -3038,8 +3186,8 @@ describe("MobileBattleScreen", () => {
         `[data-battle-rank="${owner}-${rank}"] [data-battle-rank-track]`,
       )?.style.gridTemplateColumns;
 
-    expect(trackColumns("enemy", "back")).toContain("repeat(6,");
-    expect(trackColumns("enemy", "front")).toContain("repeat(5,");
+    expect(trackColumns("enemy", "back")).toContain("repeat(7,");
+    expect(trackColumns("enemy", "front")).toContain("repeat(6,");
     expect(trackColumns("player", "back")).toContain("repeat(7,");
     expect(trackColumns("player", "front")).toContain("repeat(6,");
     expect(

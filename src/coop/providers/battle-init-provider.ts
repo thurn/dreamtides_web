@@ -343,10 +343,9 @@ function arrangeTutorialHandoff(
   board.sides.player.maxEnergy = 5;
   board.sides.player.score = 0;
   board.sides.player.hand = playerHand;
-  // The authored tutorial's compact 2/3 formation is centered in the visual
-  // 9/10 formation. Preserve those rendered lanes when its cards enter the
-  // rules-engine board: F0 is the authored center front cell and B1 is the
-  // authored right-center back cell.
+  // Center the authored tutorial's compact 2/3 formation in the canonical
+  // rules-engine board. Responsive battlefield windows preserve these lanes:
+  // F0 is the authored center front cell and B1 is its right-center back cell.
   board.sides.player.frontRank = { F0: null, F1: null, F2: null, F3: null, F4: playerStarter, F5: null, F6: null, F7: null, F8: null };
   board.sides.player.backRank = { B0: null, B1: null, B2: null, B3: null, B4: null };
   board.sides.player.dreamwellCardIndex = 1;

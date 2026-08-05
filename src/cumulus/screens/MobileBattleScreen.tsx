@@ -2168,61 +2168,111 @@ function BattleCardStatusIndicators({
   );
 }
 
-function battlefieldLayoutBackSlotCount(
-  view: MobileBattleView,
-  isDesktop: boolean,
-): number {
+function desktopBattlefieldLayoutBackSlotCount(view: MobileBattleView): number {
   const sides = [view.enemy, view.player] as const;
-  if (!isDesktop) {
-    return Math.max(
-      ...sides.map((side) => mobileBattlefieldWindow(side).backSlotCount),
-    );
-  }
-  const backSlotCount = Math.max(
+  return Math.max(
     DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS,
     ...sides.map((side) => side.backRank.length),
     ...sides.map((side) => side.frontRank.length + 1),
   );
-  return backSlotCount;
 }
 
-function mobileBattlefieldWindow(side: MobileBattleSideView): {
+function mobileBattlefieldWindow(view: MobileBattleView): {
   readonly backSlotCount: number;
   readonly frontSlotCount: number;
+  readonly startIndex: number;
 } {
-  const backOccupancy = rankOccupancy(side.backRank);
-  const frontOccupancy = rankOccupancy(side.frontRank);
+  const sides = [view.enemy, view.player] as const;
+  const backOccupancies = sides.map((side) =>
+    rankOccupancy(side.backRank, "back"),
+  );
+  const frontOccupancies = sides.map((side) =>
+    rankOccupancy(side.frontRank, "front"),
+  );
   const frontSlotCount = Math.min(
     MOBILE_BATTLE_MAX_FRONT_RANK_SLOTS,
     Math.max(
       MOBILE_BATTLE_MIN_FRONT_RANK_SLOTS,
-      frontOccupancy.highestOccupiedIndex + 1,
-      backOccupancy.highestOccupiedIndex,
-      frontOccupancy.count + 1,
-      backOccupancy.count,
+      ...frontOccupancies.map(
+        (occupancy) => occupancy.highestOccupiedIndex + 1,
+      ),
+      ...backOccupancies.map(
+        (occupancy) => occupancy.highestOccupiedIndex,
+      ),
+      ...frontOccupancies.map((occupancy) => occupancy.count + 1),
+      ...backOccupancies.map((occupancy) => occupancy.count),
     ),
   );
+  const backSlotCount = Math.max(
+    MOBILE_BATTLE_MIN_BACK_RANK_SLOTS,
+    Math.min(frontSlotCount + 1, MOBILE_BATTLE_MAX_BACK_RANK_SLOTS),
+  );
+  const maximumStart = MOBILE_BATTLE_MAX_BACK_RANK_SLOTS - backSlotCount;
+  const centeredStart = Math.floor(maximumStart / 2);
+  const occupiedRanges = [
+    ...backOccupancies.map((occupancy) => ({
+      ...occupancy,
+      slotCount: backSlotCount,
+    })),
+    ...frontOccupancies.map((occupancy) => ({
+      ...occupancy,
+      slotCount: frontSlotCount,
+    })),
+  ].filter((occupancy) => occupancy.highestOccupiedIndex >= 0);
+  const minimumStart = Math.max(
+    0,
+    ...occupiedRanges.map(
+      (occupancy) =>
+        occupancy.highestOccupiedIndex - occupancy.slotCount + 1,
+    ),
+  );
+  const maximumOccupiedStart = Math.min(
+    maximumStart,
+    ...occupiedRanges.map((occupancy) => occupancy.lowestOccupiedIndex),
+  );
+  const startIndex =
+    occupiedRanges.length > 0 && minimumStart <= maximumOccupiedStart
+      ? Math.min(
+          Math.max(centeredStart, minimumStart),
+          maximumOccupiedStart,
+        )
+      : centeredStart;
   return {
     frontSlotCount,
-    backSlotCount: Math.max(
-      MOBILE_BATTLE_MIN_BACK_RANK_SLOTS,
-      Math.min(frontSlotCount + 1, MOBILE_BATTLE_MAX_BACK_RANK_SLOTS),
-    ),
+    backSlotCount,
+    startIndex,
   };
 }
 
-function rankOccupancy(slots: readonly MobileBattleSlotView[]): {
+function rankOccupancy(
+  slots: readonly MobileBattleSlotView[],
+  rank: MobileBattleRank,
+): {
   readonly count: number;
+  readonly lowestOccupiedIndex: number;
   readonly highestOccupiedIndex: number;
 } {
   let count = 0;
+  let lowestOccupiedIndex = Number.POSITIVE_INFINITY;
   let highestOccupiedIndex = -1;
   slots.forEach((slot, index) => {
     if (slot.card === null) return;
     count += 1;
-    highestOccupiedIndex = index;
+    const occupiedIndex = canonicalRankIndex(slot.id, rank) ?? index;
+    lowestOccupiedIndex = Math.min(lowestOccupiedIndex, occupiedIndex);
+    highestOccupiedIndex = Math.max(
+      highestOccupiedIndex,
+      occupiedIndex,
+    );
   });
-  return { count, highestOccupiedIndex };
+  return {
+    count,
+    lowestOccupiedIndex:
+      lowestOccupiedIndex === Number.POSITIVE_INFINITY
+        ? -1
+        : lowestOccupiedIndex,
+    highestOccupiedIndex,
+  };
 }
 
 function battlefieldDensityBackSlotCount(view: MobileBattleView): number {
@@ -2265,7 +2315,7 @@ function battlefieldCardSize(
 ): string {
   const slotCount = Math.max(layoutBackSlotCount, 1);
   if (!isDesktop && densityBackSlotCount >= MOBILE_BATTLE_MAX_BACK_RANK_SLOTS) {
-    return `min(22cqw, calc((${String(BATTLEFIELD_FULL_WIDTH_PERCENT)}cqw - 0 * ${token("--space-1")}) / 10), calc((100cqh - ${centerOffset} - ${centerOffset}) / 2))`;
+    return `min(22cqw, calc((${String(BATTLEFIELD_FULL_WIDTH_PERCENT)}cqw - 0 * ${token("--space-1")}) / ${String(MOBILE_BATTLE_MAX_BACK_RANK_SLOTS)}), calc((100cqh - ${centerOffset} - ${centerOffset}) / 2))`;
   }
   const horizontalGapCount = Math.max(slotCount - 1, 0);
   const density = isDesktop
@@ -2313,6 +2363,66 @@ function visibleRankSlots(
       card: null,
     })),
   ];
+}
+
+function canonicalRankIndex(
+  slotId: string,
+  rank: MobileBattleRank,
+): number | null {
+  const prefix = rank === "back" ? "B" : "F";
+  const match = new RegExp(`^${prefix}(\\d+)$`).exec(slotId);
+  if (match === null) return null;
+  const index = Number.parseInt(match[1] ?? "", 10);
+  return Number.isSafeInteger(index) && index >= 0 ? index : null;
+}
+
+/**
+ * Selects a centered window from the canonical battle formation on mobile.
+ * Occupied edge cells pull the window just far enough to remain visible, while
+ * compact tutorial-only formations keep their authored local slot identities.
+ */
+function visibleMobileRankSlots(
+  slots: readonly MobileBattleSlotView[],
+  rank: MobileBattleRank,
+  slotCount: number,
+  startIndex: number,
+): readonly MobileBattleSlotView[] {
+  const maximumSlotCount =
+    rank === "back"
+      ? MOBILE_BATTLE_MAX_BACK_RANK_SLOTS
+      : MOBILE_BATTLE_MAX_FRONT_RANK_SLOTS;
+  const canonicalSlots = slots.map((slot) => ({
+    slot,
+    index: canonicalRankIndex(slot.id, rank),
+  }));
+  const usesCanonicalSlots = canonicalSlots.every(
+    (entry) => entry.index !== null,
+  );
+  if (!usesCanonicalSlots) {
+    return visibleRankSlots(slots, rank, slotCount);
+  }
+
+  const prefix = rank === "back" ? "B" : "F";
+  const slotsByIndex = new Map(
+    canonicalSlots.flatMap(({ slot, index }) =>
+      index === null || index >= maximumSlotCount ? [] : [[index, slot]],
+    ),
+  );
+  const normalizedSlots = Array.from(
+    { length: maximumSlotCount },
+    (_unused, index) =>
+      slotsByIndex.get(index) ?? {
+        id: `${prefix}${String(index)}`,
+        card: null,
+      },
+  );
+  const visibleCount = Math.min(
+    Math.max(slotCount, 1),
+    normalizedSlots.length,
+  );
+  const maximumStart = normalizedSlots.length - visibleCount;
+  const start = Math.min(Math.max(startIndex, 0), maximumStart);
+  return normalizedSlots.slice(start, start + visibleCount);
 }
 
 function sameSlotTarget(
@@ -2413,6 +2523,7 @@ function Rank({
   rank,
   slots,
   mobileSlotCount,
+  mobileStartIndex,
   layoutBackSlotCount,
   densityBackSlotCount,
   centerAsymmetricDesktopRanks,
@@ -2439,6 +2550,7 @@ function Rank({
   readonly rank: MobileBattleRank;
   readonly slots: readonly MobileBattleSlotView[];
   readonly mobileSlotCount: number;
+  readonly mobileStartIndex: number;
   readonly layoutBackSlotCount: number;
   readonly densityBackSlotCount: number;
   readonly centerAsymmetricDesktopRanks: boolean;
@@ -2479,7 +2591,12 @@ function Rank({
     ? centerAsymmetricDesktopRanks
       ? slots
       : visibleRankSlots(slots, rank, desktopSlotCount)
-    : visibleRankSlots(slots, rank, mobileSlotCount);
+    : visibleMobileRankSlots(
+        slots,
+        rank,
+        mobileSlotCount,
+        mobileStartIndex,
+      );
   const containsDraggingCard =
     draggingCardId !== null &&
     visibleSlots.some((slot) => slot.card?.id === draggingCardId);
@@ -2761,6 +2878,7 @@ function PlayArea({
   owner,
   position,
   side,
+  mobileWindow,
   layoutBackSlotCount,
   densityBackSlotCount,
   centerAsymmetricDesktopRanks,
@@ -2785,6 +2903,7 @@ function PlayArea({
   readonly owner: MobileBattleOwner;
   readonly position: BattleBoardPosition;
   readonly side: MobileBattleSideView;
+  readonly mobileWindow: ReturnType<typeof mobileBattlefieldWindow>;
   readonly layoutBackSlotCount: number;
   readonly densityBackSlotCount: number;
   readonly centerAsymmetricDesktopRanks: boolean;
@@ -2810,7 +2929,6 @@ function PlayArea({
   readonly cardOverlay?: MobileBattleCardOverlayView | null;
   readonly interactions?: MobileBattleInteractions;
 }) {
-  const mobileWindow = mobileBattlefieldWindow(side);
   const ranks =
     position === "far"
       ? ([
@@ -2852,6 +2970,7 @@ function PlayArea({
               ? mobileWindow.backSlotCount
               : mobileWindow.frontSlotCount
           }
+          mobileStartIndex={mobileWindow.startIndex}
           layoutBackSlotCount={layoutBackSlotCount}
           densityBackSlotCount={densityBackSlotCount}
           centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks}
@@ -4680,7 +4799,10 @@ export function MobileBattleScreen({
       ? view.enemyHand
       : view.playerHand
     : view.farHand.cards;
-  const layoutBackSlotCount = battlefieldLayoutBackSlotCount(view, isDesktop);
+  const mobileWindow = mobileBattlefieldWindow(view);
+  const layoutBackSlotCount = isDesktop
+    ? desktopBattlefieldLayoutBackSlotCount(view)
+    : mobileWindow.backSlotCount;
   const densityBackSlotCount = battlefieldDensityBackSlotCount(view);
   const centerOffset = BATTLEFIELD_CENTER_OFFSET;
   const cardSize = battlefieldCardSize(
@@ -5070,6 +5192,7 @@ export function MobileBattleScreen({
           owner={far.owner}
           position="far"
           side={far}
+          mobileWindow={mobileWindow}
           layoutBackSlotCount={layoutBackSlotCount}
           densityBackSlotCount={densityBackSlotCount}
           centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks}
@@ -5097,6 +5220,7 @@ export function MobileBattleScreen({
           owner={near.owner}
           position="near"
           side={near}
+          mobileWindow={mobileWindow}
           layoutBackSlotCount={layoutBackSlotCount}
           densityBackSlotCount={densityBackSlotCount}
           centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks}
