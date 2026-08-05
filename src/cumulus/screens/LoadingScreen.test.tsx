@@ -220,9 +220,22 @@ describe("LoadingScreen", () => {
     const footer = container.querySelector<HTMLElement>(
       "[data-loading-footer]",
     );
+    const stage = container.querySelector<HTMLElement>(
+      "[data-loading-card-stage]",
+    );
+    const cards = [
+      ...container.querySelectorAll<HTMLElement>("[data-loading-card]"),
+    ];
 
     expect(screen?.style.height).toBe("100dvh");
     expect(screen?.style.minHeight).toBe("");
+    expect(stage?.style.gap).toBe("var(--space-12)");
+    expect(cards).toHaveLength(2);
+    expect(
+      cards.every((card) =>
+        card.style.width.startsWith("min(47vw, 200px,"),
+      ),
+    ).toBe(true);
     expect(footer?.style.bottom).toBe(
       "max(var(--safe-area-inset-bottom), var(--space-3))",
     );

@@ -257,7 +257,7 @@ function AnnotatedLoadingCard({
 
   const cardWidth = isDesktop
     ? "min(26vw, 300px)"
-    : `min(51vw, 220px, calc(35.7dvh - ${token("--space-12")} - ${token("--space-3")}))`;
+    : `min(47vw, 200px, calc(35.7dvh - ${token("--space-12")} - ${token("--space-3")}))`;
   const cardTypeTop = isDesktop
     ? `calc(50% + min(18.2vw, 210px) + ${token("--space-3")})`
     : `calc(50% + min(35.7vw, 154px, calc(25dvh - ${token("--space-11")} - ${token("--space-1")})) + ${token("--space-3")})`;
@@ -489,7 +489,7 @@ export function LoadingScreen({
           flexDirection: isDesktop ? "row" : "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: isDesktop ? token("--space-4") : token("--space-9"),
+          gap: isDesktop ? token("--space-4") : token("--space-12"),
           paddingTop: `max(${token(SAFE_AREA_INSET_PROPERTIES.top)}, ${token("--space-3")})`,
           paddingRight: token("--space-2"),
           paddingBottom: isDesktop
