@@ -1628,7 +1628,7 @@
       "supports": []
     },
     "4b4cc613-2e28-4851-975f-14146286a062": {
-      "name": "Pathfinder",
+      "name": "Legion Lieutenant",
       "needs": [
         {
           "theme": "warriors",
@@ -3919,7 +3919,7 @@
       ]
     },
     "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7": {
-      "name": "Starbound Striker",
+      "name": "Pathfinder",
       "needs": [
         {
           "theme": "warriors",

@@ -1728,7 +1728,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 2× Company Commander
 - 2× Winterbough Guide
 - 2× Silent Observer
-- 2× Starbound Striker
+- 2× Pathfinder
 - 2× Revered Prince
 - 2× Wolfbond Chieftain
 - 2× Battlefield Medic
@@ -1750,7 +1750,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× Vengeance Taker
 - 1× Haunted Betrayer
 - 1× Glimmerwood Scout
-- 1× Pathfinder
+- 1× Legion Lieutenant
 - 1× Gateway Defender
 - 1× Shadow March
 - 1× Barrage Specialist
@@ -1826,7 +1826,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 2× Winterbough Guide
 - 2× Bloodbroker
 - 2× Silent Observer
-- 2× Starbound Striker
+- 2× Pathfinder
 - 2× Revered Prince
 - 2× Wolfbond Chieftain
 - 2× Flamestride Rider
@@ -1851,7 +1851,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 1× Relentless Pursuer
 - 1× Vengeance Taker
 - 1× Haunted Betrayer
-- 1× Pathfinder
+- 1× Legion Lieutenant
 - 1× Shadow March
 - 1× Barrage Specialist
 - 1× Inspiring Templar
@@ -1907,7 +1907,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 2× Sky Legion Captain
 - 2× Burning Revenant
 - 2× Cinderblade Legionnaire
-- 2× Pathfinder
+- 2× Legion Lieutenant
 - 2× Skyflame Commander
 - 2× Dragonward
 - 2× Blood Reaver
@@ -1922,7 +1922,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 2× Winterbough Guide
 - 2× Shapeshifter Spirit
 - 2× Silent Observer
-- 2× Starbound Striker
+- 2× Pathfinder
 - 2× Infernal Cavalier
 - 2× Revered Prince
 - 2× Wolfbond Chieftain
@@ -2487,7 +2487,7 @@ Tide-fac-30 is built almost entirely around spirit animal characters (36 of 45 c
 - 1× Sky Legion Captain
 - 1× Extractor of Souls
 - 1× Cinderblade Legionnaire
-- 1× Pathfinder
+- 1× Legion Lieutenant
 - 1× Skyflame Commander
 - 1× Inspiring Templar
 - 1× Clifftop Marksman
@@ -2509,7 +2509,7 @@ Tide-fac-30 is built almost entirely around spirit animal characters (36 of 45 c
 - 1× Bloodbroker
 - 1× Riftwalker
 - 1× Silent Observer
-- 1× Starbound Striker
+- 1× Pathfinder
 - 1× Infernal Cavalier
 - 1× Blood Altar Monarch
 - 1× Revered Prince
@@ -2641,7 +2641,7 @@ This tide is almost entirely characters (43 of 45 copies), with warriors making 
 - 1× Extractor of Souls
 - 1× Burning Revenant
 - 1× Cinderblade Legionnaire
-- 1× Pathfinder
+- 1× Legion Lieutenant
 - 1× Clifftop Marksman
 - 1× Dragonward
 - 1× Assault Leader
@@ -2658,7 +2658,7 @@ This tide is almost entirely characters (43 of 45 copies), with warriors making 
 - 1× Bloodbroker
 - 1× Riftwalker
 - 1× Silent Observer
-- 1× Starbound Striker
+- 1× Pathfinder
 - 1× Infernal Cavalier
 - 1× Blood Altar Monarch
 - 1× Revered Prince
@@ -2684,7 +2684,7 @@ This tide is almost entirely warriors (43 of 45 cards) built around a tight loop
 
 - 2× Cinderblade Legionnaire
 - 2× Blood Reaver
-- 2× Starbound Striker
+- 2× Pathfinder
 - 2× Ethereal Trailblazer
 - 1× Harbor Warden
 - 1× The Deathsworn
@@ -2693,7 +2693,7 @@ This tide is almost entirely warriors (43 of 45 cards) built around a tight loop
 - 1× Extractor of Souls
 - 1× Burning Revenant
 - 1× Haunted Betrayer
-- 1× Pathfinder
+- 1× Legion Lieutenant
 - 1× Skyflame Commander
 - 1× Inspiring Templar
 - 1× Clifftop Marksman
@@ -2741,7 +2741,7 @@ Tide-fac-16 is almost entirely characters (43 of 45 copies), nearly all warriors
 - 1× Extractor of Souls
 - 1× Burning Revenant
 - 1× Cinderblade Legionnaire
-- 1× Pathfinder
+- 1× Legion Lieutenant
 - 1× Skyflame Commander
 - 1× Inspiring Templar
 - 1× Dragonward
@@ -2763,7 +2763,7 @@ Tide-fac-16 is almost entirely characters (43 of 45 copies), nearly all warriors
 - 1× Bloodbroker
 - 1× Riftwalker
 - 1× Silent Observer
-- 1× Starbound Striker
+- 1× Pathfinder
 - 1× Infernal Cavalier
 - 1× Blood Altar Monarch
 - 1× Revered Prince
@@ -3400,7 +3400,7 @@ This is a 43-character warrior tide with only two events, so its card flow and r
 - 1× Burning Revenant
 - 1× Haunted Betrayer
 - 1× Cinderblade Legionnaire
-- 1× Pathfinder
+- 1× Legion Lieutenant
 - 1× Barrage Specialist
 - 1× Skyflame Commander
 - 1× Clifftop Marksman
@@ -3420,7 +3420,7 @@ This is a 43-character warrior tide with only two events, so its card flow and r
 - 1× Bloodbroker
 - 1× Riftwalker
 - 1× Silent Observer
-- 1× Starbound Striker
+- 1× Pathfinder
 - 1× Infernal Cavalier
 - 1× Blood Altar Monarch
 - 1× Revered Prince
@@ -3723,7 +3723,7 @@ Tide-neu-04 is built almost entirely of warriors (28 of 30 cards are characters,
 - 1× Winterbough Guide
 - 1× Bloodbroker
 - 1× Silent Observer
-- 1× Starbound Striker
+- 1× Pathfinder
 - 1× Revered Prince
 - 1× Wolfbond Chieftain
 - 1× Battlefield Medic
@@ -3912,7 +3912,7 @@ Tide-neu-09 is a character-heavy neutral tide (25 characters, 5 events, all at 1
 - 1× Vigil Keeper
 - 1× Skull Weaver
 
-## Broad: Starbound Striker / Harbor Warden — Dissolution Recursion
+## Broad: Pathfinder / Harbor Warden — Dissolution Recursion
 
 `tide-neu-10` — neutral tide, 29 distinct cards, 30 copies
 
@@ -3920,13 +3920,13 @@ Tide-neu-09 is a character-heavy neutral tide (25 characters, 5 events, all at 1
 
 Tide-neu-10 is built almost entirely from warriors, with its central engine driven by dissolution triggers that loop warriors back from the void to hand. The double-copy anchor, Starbound Striker, reads "▸Dissolved: Return another warrior from your void to your hand," and the tide amplifies this loop with Burning Revenant ("When an allied warrior is dissolved, return a warrior with lesser cost from your void to hand"), Cinderblade Legionnaire (the same dissolved-return effect with Vengeful attached), and the event Wake the Fallen ("Materialize all characters in your void which dissolved this turn") as a burst refill. Prism Caller and Dream Garden Visitor provide additional void-access by replaying warriors directly onto the board when new warriors are played. Alongside the recursion loop, several ✦-scaling payoffs reward a full battlefield: Skyflame Commander's support grants +1✦ per allied warrior, Dreadmount Sovereign boosts supported warriors by +3✦, and Shadow Reflection gives a fast +1✦-per-warrior spike. Compared to the nearest sibling (tide-fac-17), which runs more copies of Blood Reaver and Ethereal Trailblazer and leans on figment-token producers like Spellweaver and Crescendo Channeler to build density through voluntarily abandoned bodies, tide-neu-10's value comes specifically from dissolution events — warriors that dissolve in challenges and return rather than warriors sacrificed by choice to climb the energy curve.
 
-- 2× Starbound Striker
+- 2× Pathfinder
 - 1× Harbor Warden
 - 1× Storm Soloist
 - 1× Sky Legion Captain
 - 1× Burning Revenant
 - 1× Cinderblade Legionnaire
-- 1× Pathfinder
+- 1× Legion Lieutenant
 - 1× Skyflame Commander
 - 1× Dragonward
 - 1× Aspiring Guardian

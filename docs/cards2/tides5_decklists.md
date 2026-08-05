@@ -1764,7 +1764,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 2× Vault Infiltrator
 - 2× Winterbough Guide
 - 2× Silent Observer
-- 2× Starbound Striker
+- 2× Pathfinder
 - 2× Revered Prince
 - 2× Battlefield Medic
 - 2× Lightning Channeler
@@ -1787,7 +1787,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× Vengeance Taker
 - 1× Haunted Betrayer
 - 1× Glimmerwood Scout
-- 1× Pathfinder
+- 1× Legion Lieutenant
 - 1× Phantom Angler
 - 1× Gateway Defender
 - 1× Barrage Specialist
@@ -1866,7 +1866,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 2× Vault Infiltrator
 - 2× Winterbough Guide
 - 2× Silent Observer
-- 2× Starbound Striker
+- 2× Pathfinder
 - 2× Infernal Cavalier
 - 2× Revered Prince
 - 2× Flamestride Rider
@@ -1890,7 +1890,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 1× Vengeance Taker
 - 1× Haunted Betrayer
 - 1× Glimmerwood Scout
-- 1× Pathfinder
+- 1× Legion Lieutenant
 - 1× Barrage Specialist
 - 1× Seeker for the Way
 - 1× Molten Duel
@@ -1961,7 +1961,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 2× Vault Infiltrator
 - 2× Winterbough Guide
 - 2× Silent Observer
-- 2× Starbound Striker
+- 2× Pathfinder
 - 2× Infernal Cavalier
 - 2× Revered Prince
 - 2× Flamestride Rider
@@ -1982,7 +1982,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 1× Vengeance Taker
 - 1× Haunted Betrayer
 - 1× Glimmerwood Scout
-- 1× Pathfinder
+- 1× Legion Lieutenant
 - 1× Gateway Defender
 - 1× Shadow March
 - 1× Barrage Specialist
@@ -2635,14 +2635,14 @@ This is a 43-character warrior tide with only two events, so its card flow and r
 - 2× Sun Clan Lieutenant
 - 2× Cinderblade Legionnaire
 - 2× Aurora Rider
-- 2× Starbound Striker
+- 2× Pathfinder
 - 1× Harbor Warden
 - 1× The Deathsworn
 - 1× Sky Legion Captain
 - 1× Extractor of Souls
 - 1× Burning Revenant
 - 1× Haunted Betrayer
-- 1× Pathfinder
+- 1× Legion Lieutenant
 - 1× Barrage Specialist
 - 1× Skyflame Commander
 - 1× Inspiring Templar
@@ -2833,7 +2833,7 @@ This tide is almost entirely warriors (43 of 45 cards) built around a tight loop
 - 2× Cinderblade Legionnaire
 - 2× Skyflame Commander
 - 2× Silent Observer
-- 2× Starbound Striker
+- 2× Pathfinder
 - 1× Inferno's Herald
 - 1× Harbor Warden
 - 1× The Deathsworn
@@ -2841,7 +2841,7 @@ This tide is almost entirely warriors (43 of 45 cards) built around a tight loop
 - 1× Extractor of Souls
 - 1× Burning Revenant
 - 1× Glimmerwood Scout
-- 1× Pathfinder
+- 1× Legion Lieutenant
 - 1× Barrage Specialist
 - 1× Inspiring Templar
 - 1× Dragonward
@@ -2882,7 +2882,7 @@ This tide is almost entirely warriors (43 of 45 cards) built around a tight loop
 - 1× Burning Revenant
 - 1× Vengeance Taker
 - 1× Cinderblade Legionnaire
-- 1× Pathfinder
+- 1× Legion Lieutenant
 - 1× Barrage Specialist
 - 1× Skyflame Commander
 - 1× Inspiring Templar
@@ -2907,7 +2907,7 @@ This tide is almost entirely warriors (43 of 45 cards) built around a tight loop
 - 1× Riftwalker
 - 1× Silent Observer
 - 1× Nightmare Shepherd
-- 1× Starbound Striker
+- 1× Pathfinder
 - 1× Infernal Cavalier
 - 1× Revered Prince
 - 1× Wolfbond Chieftain
@@ -3455,14 +3455,14 @@ This tide is split between characters and events (22 characters, 23 events), wit
 - 2× Sun Clan Lieutenant
 - 2× Cinderblade Legionnaire
 - 2× Aurora Rider
-- 2× Starbound Striker
+- 2× Pathfinder
 - 1× Harbor Warden
 - 1× The Deathsworn
 - 1× Sky Legion Captain
 - 1× Extractor of Souls
 - 1× Burning Revenant
 - 1× Haunted Betrayer
-- 1× Pathfinder
+- 1× Legion Lieutenant
 - 1× Barrage Specialist
 - 1× Skyflame Commander
 - 1× Inspiring Templar
@@ -3630,7 +3630,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Extractor of Souls
 - 1× Burning Revenant
 - 1× Cinderblade Legionnaire
-- 1× Pathfinder
+- 1× Legion Lieutenant
 - 1× Skyflame Commander
 - 1× Dragonward
 - 1× Blood Reaver
@@ -3643,7 +3643,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Winterbough Guide
 - 1× Shapeshifter Spirit
 - 1× Silent Observer
-- 1× Starbound Striker
+- 1× Pathfinder
 - 1× Revered Prince
 - 1× Wolfbond Chieftain
 - 1× Battlefield Medic
@@ -3713,7 +3713,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Winterbough Guide
 - 1× Riftwalker
 - 1× Silent Observer
-- 1× Starbound Striker
+- 1× Pathfinder
 - 1× Revered Prince
 - 1× Battlefield Medic
 - 1× Assault Trooper
@@ -3748,7 +3748,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Winterbough Guide
 - 1× Riftwalker
 - 1× Silent Observer
-- 1× Starbound Striker
+- 1× Pathfinder
 - 1× Revered Prince
 - 1× Battlefield Medic
 - 1× Assault Trooper
@@ -3783,7 +3783,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Young Huntress
 - 1× Silent Observer
 - 1× Nightmare Shepherd
-- 1× Starbound Striker
+- 1× Pathfinder
 - 1× Infernal Cavalier
 - 1× Wolfbond Chieftain
 - 1× Flamestride Rider
@@ -3878,7 +3878,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Riftwalker
 - 1× Silent Observer
 - 1× Nightmare Shepherd
-- 1× Starbound Striker
+- 1× Pathfinder
 - 1× Infernal Cavalier
 - 1× Revered Prince
 - 1× Battlefield Medic
