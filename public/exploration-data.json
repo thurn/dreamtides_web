@@ -508,7 +508,7 @@
         {
           "id": "f9a65b32-537b-457c-9eaf-b512cf1f3791:pair-2:template-55",
           "label": "Compare the repeating plates",
-          "effectText": "Select 4 random cards from your deck and choose one to gain a copy of",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
           "templateId": 55,
           "templateVariables": {},
           "effectKind": "copy-offered-deck-card",

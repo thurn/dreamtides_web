@@ -1,6 +1,6 @@
 Use the `wt` skill for all work unless explicitly asked to work "on master".
 
-~/.llms/skills/wt/SKILL.md
+~/.llms/skills/wt/SKILL.md (note this is not project-local)
 
 Never edit files in the main repo directly unless explicitly asked to work "on master".
 

@@ -410,7 +410,7 @@ count = 2
 [[encounter.action]]
 id = "f9a65b32-537b-457c-9eaf-b512cf1f3791:pair-2:template-55"
 label = "Compare the repeating plates"
-effect-text = "Select 4 random cards from your deck and choose one to gain a copy of"
+effect-text = "Draw 4 cards from your deck and choose one to gain a copy of."
 template-id = 55
 template-variables = {}
 effect-kind = "copy-offered-deck-card"
