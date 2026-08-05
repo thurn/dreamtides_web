@@ -1398,6 +1398,10 @@ describe("ExplorationSiteScreen", () => {
         ?.getAttribute("data-card-choice-grid-columns"),
     ).toBe("4");
     expect(
+      offer?.querySelector<HTMLElement>("[data-card-choice-grid]")
+        ?.parentElement?.style.containerType,
+    ).toBe("inline-size");
+    expect(
       container.querySelector(
         '[data-testid="cumulus-exploration-card-followup"]',
       ),
