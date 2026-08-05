@@ -3286,8 +3286,7 @@
       "rank": 1,
       "ranking_rationale": "Marked slabs and a luminous sword make both revelation and transfiguration exceptionally immediate.",
       "selected": {
-        "prose": true,
-        "actions": true
+        "prose": true
       }
     },
     {
@@ -3379,7 +3378,10 @@
         "overall": 8
       },
       "rank": 4,
-      "ranking_rationale": "Joining a solitary sentinel supplies flexible low-cost recruits for a sacrifice-driven deck."
+      "ranking_rationale": "Joining a solitary sentinel supplies flexible low-cost recruits for a sacrifice-driven deck.",
+      "selected": {
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-5",
@@ -3587,7 +3589,6 @@
       "rank": 1,
       "ranking_rationale": "Radiant anatomy supports immediate and future transfiguration, while Empowered can create additional low-cost fodder.",
       "selected": {
-        "prose": true,
         "actions": true
       }
     },
@@ -3620,7 +3621,10 @@
         "overall": 9
       },
       "rank": 2,
-      "ranking_rationale": "Passing under charged limbs convincingly enables two distinct ways to improve low-cost characters."
+      "ranking_rationale": "Passing under charged limbs convincingly enables two distinct ways to improve low-cost characters.",
+      "selected": {
+        "prose": true
+      }
     },
     {
       "template_pair_id": "pair-1",
