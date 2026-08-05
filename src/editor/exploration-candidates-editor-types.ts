@@ -27,8 +27,8 @@ export type EncounterRenderedTemplatePart =
     dreamsignName: string;
   };
 
-export interface EncounterEditorLoadResult {
-  groups: EncounterEditorGroup[];
+export interface ExplorationCandidatesEditorLoadResult {
+  groups: ExplorationCandidatesEditorGroup[];
   cards: CardData[];
   dreamsigns: Dreamsign[];
 }
@@ -41,7 +41,7 @@ export interface EncounterRuntimeCardSelection {
   source: "player_deck" | "catalog_fallback" | "offer_pool" | "starter_deck";
 }
 
-export interface EncounterEditorAction {
+export interface ExplorationCandidatesEditorAction {
   template_id: number;
   template: string;
   rendered_template: string;
@@ -52,21 +52,21 @@ export interface EncounterEditorAction {
   [key: string]: unknown;
 }
 
-export interface EncounterEditorCandidate {
+export interface ExplorationCandidatesEditorCandidate {
   template_pair_id: string;
   prose: string;
-  actions: [EncounterEditorAction, EncounterEditorAction];
+  actions: [ExplorationCandidatesEditorAction, ExplorationCandidatesEditorAction];
   rank: number;
   selected?: Partial<Record<EncounterSelectionKind, true>>;
   [key: string]: unknown;
 }
 
-export interface EncounterEditorGroup {
+export interface ExplorationCandidatesEditorGroup {
   cardId: string;
   cardName: string;
   cardAbilityText: string;
   imageNumber: number;
-  encounters: EncounterEditorCandidate[];
+  encounters: ExplorationCandidatesEditorCandidate[];
 }
 
 export type EncounterTemplateHealthStatus =
@@ -133,8 +133,8 @@ export interface EncounterVariableSaveRequest {
   clientRevision: number;
 }
 
-export interface EncounterEditorClient {
-  load(signal?: AbortSignal): Promise<EncounterEditorLoadResult>;
+export interface ExplorationCandidatesEditorClient {
+  load(signal?: AbortSignal): Promise<ExplorationCandidatesEditorLoadResult>;
   loadTemplateHealth(signal?: AbortSignal): Promise<EncounterTemplateHealth>;
   saveSelection(request: EncounterSelectionSaveRequest): Promise<{
     clientRevision: number;
@@ -159,6 +159,6 @@ export interface EncounterEditorClient {
       templateId: number;
       template: string;
     };
-    groups: EncounterEditorGroup[];
+    groups: ExplorationCandidatesEditorGroup[];
   }>;
 }

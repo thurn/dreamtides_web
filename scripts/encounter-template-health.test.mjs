@@ -28,7 +28,7 @@ function writeFixtureRoot() {
     rank,
     actions: templateIds.map((templateId) => ({ template_id: templateId })),
   });
-  writeFileSync(join(rootDir, "data", "encounter_candidates.json"), JSON.stringify({
+  writeFileSync(join(rootDir, "data", "exploration_candidates.json"), JSON.stringify({
     "11111111-1111-4111-8111-111111111111": [encounter(1, [1, 2]), encounter(2, [3, 4])],
     "22222222-2222-4222-8222-222222222222": [encounter(1, [1, 5]), encounter(2, [6, 7])],
   }));

@@ -5,10 +5,10 @@ import {
   parseEncounterCandidates,
   parseEncounterTemplates,
   renderEncounterTemplate,
-} from "./encounter-editor-data.mjs";
+} from "./exploration-candidates-editor-data.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const DEFAULT_CANDIDATES_PATH = resolve(ROOT, "data", "encounter_candidates.json");
+const DEFAULT_CANDIDATES_PATH = resolve(ROOT, "data", "exploration_candidates.json");
 const DEFAULT_TEMPLATES_PATH = resolve(ROOT, "data", "templates.json");
 
 function selectedCandidate(encounters, selectionKind, cardId) {
@@ -52,7 +52,7 @@ export function generateSelectedEncountersToml(candidatesSource, templatesSource
   const candidates = parseEncounterCandidates(candidatesSource);
   const templates = parseEncounterTemplates(templatesSource).byId;
   const lines = [
-    "# Generated from data/encounter_candidates.json and data/templates.json.",
+    "# Generated from data/exploration_candidates.json and data/templates.json.",
     "# This is a partial Exploration authoring export. Runtime effect fields",
     "# such as effect-kind are intentionally pending.",
     "# $SPECIAL placeholders are preserved for runtime resolution.",
@@ -144,7 +144,7 @@ function usage() {
     "Usage: node scripts/generate-selected-encounters-toml.mjs [options]",
     "",
     "Options:",
-    "  --candidates <path>  Candidate JSON (default: data/encounter_candidates.json)",
+    "  --candidates <path>  Candidate JSON (default: data/exploration_candidates.json)",
     "  --templates <path>   Template JSON (default: data/templates.json)",
     "  --output <path>      Write TOML to a file instead of stdout",
     "  --help               Show this help",

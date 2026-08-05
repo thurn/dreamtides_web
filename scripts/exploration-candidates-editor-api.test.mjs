@@ -3,7 +3,7 @@ import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "nod
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { createEncounterEditorApiMiddleware } from "./encounter-editor-api.mjs";
+import { createExplorationCandidatesEditorApiMiddleware } from "./exploration-candidates-editor-api.mjs";
 
 const CARD_ID = "11111111-1111-4111-8111-111111111111";
 const OTHER_CARD_ID = "22222222-2222-4222-8222-222222222222";
@@ -46,17 +46,17 @@ function response() {
   };
 }
 
-describe("encounter editor API", () => {
+describe("Exploration candidates editor API", () => {
   let rootDir;
   let middleware;
 
   beforeEach(() => {
-    rootDir = mkdtempSync(join(tmpdir(), "encounter-editor-api-"));
+    rootDir = mkdtempSync(join(tmpdir(), "exploration-candidates-editor-api-"));
     mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
     mkdirSync(join(rootDir, "curated-art"), { recursive: true });
     mkdirSync(join(rootDir, "source-art"), { recursive: true });
     writeFileSync(
-      join(rootDir, "data", "encounter_candidates.json"),
+      join(rootDir, "data", "exploration_candidates.json"),
       `${JSON.stringify({ [CARD_ID]: [candidate(1, true), candidate(2)] }, null, 2)}\n`,
     );
     writeFileSync(
@@ -70,7 +70,7 @@ describe("encounter editor API", () => {
       join(rootDir, "data", "tabula", "cards.toml"),
       `[[cards]]\nid = "${CARD_ID}"\nname = "The Test Crossing"\nrendered-text = "Gain 1●."\nimage-number = 42\n`,
     );
-    middleware = createEncounterEditorApiMiddleware({
+    middleware = createExplorationCandidatesEditorApiMiddleware({
       rootDir,
       curatedArtDir: join(rootDir, "curated-art"),
       sourceArtDir: join(rootDir, "source-art"),
@@ -99,7 +99,7 @@ describe("encounter editor API", () => {
   }
 
   it("loads validated groups enriched with canonical card display data", async () => {
-    const result = await call("GET", "/api/editor/encounters");
+    const result = await call("GET", "/api/editor/exploration_candidates");
     expect(result.status).toBe(200);
     expect(result.body.groups[0]).toMatchObject({
       cardId: CARD_ID,
@@ -118,7 +118,7 @@ describe("encounter editor API", () => {
       join(rootDir, "source-art", "stock-photo-test-crossing-42.png"),
       "source-png",
     );
-    const result = await callRaw("GET", "/api/editor/encounters/art/42");
+    const result = await callRaw("GET", "/api/editor/exploration_candidates/art/42");
     expect(result.status).toBe(200);
     expect(result.headers["Content-Type"]).toBe("image/png");
     expect(result.body.toString()).toBe("source-png");
@@ -130,17 +130,17 @@ describe("encounter editor API", () => {
       join(rootDir, "source-art", "stock-photo-test-crossing-42.jpg"),
       "source-jpg",
     );
-    const result = await callRaw("GET", "/api/editor/encounters/art/42");
+    const result = await callRaw("GET", "/api/editor/exploration_candidates/art/42");
     expect(result.status).toBe(200);
     expect(result.headers["Content-Type"]).toBe("image/jpeg");
     expect(result.body.toString()).toBe("curated-jpg");
   });
 
   it("rejects invalid and ambiguous artwork identities", async () => {
-    const invalid = await call("GET", "/api/editor/encounters/art/not-a-number");
+    const invalid = await call("GET", "/api/editor/exploration_candidates/art/not-a-number");
     writeFileSync(join(rootDir, "source-art", "first-42.jpg"), "first");
     writeFileSync(join(rootDir, "source-art", "second-42.webp"), "second");
-    const ambiguous = await call("GET", "/api/editor/encounters/art/42");
+    const ambiguous = await call("GET", "/api/editor/exploration_candidates/art/42");
     expect(invalid).toMatchObject({
       status: 400,
       body: { error: { code: "INVALID_ART_ID" } },
@@ -156,8 +156,8 @@ describe("encounter editor API", () => {
       completedCards: 1,
       templates: [{ templateId: 14, status: "hidden" }],
     });
-    middleware = createEncounterEditorApiMiddleware({ rootDir, templateHealthReader });
-    const result = await call("GET", "/api/editor/encounters/template-health");
+    middleware = createExplorationCandidatesEditorApiMiddleware({ rootDir, templateHealthReader });
+    const result = await call("GET", "/api/editor/exploration_candidates/template-health");
     expect(result).toMatchObject({
       status: 200,
       body: {
@@ -171,12 +171,12 @@ describe("encounter editor API", () => {
   });
 
   it("rejects writes to the template-health endpoint", async () => {
-    const result = await call("PATCH", "/api/editor/encounters/template-health", {});
+    const result = await call("PATCH", "/api/editor/exploration_candidates/template-health", {});
     expect(result).toMatchObject({ status: 405, body: { error: { code: "METHOD_NOT_ALLOWED" } } });
   });
 
   it("persists selection by stable identities and echoes the revision", async () => {
-    const result = await call("PATCH", `/api/editor/encounters/${CARD_ID}/selection`, {
+    const result = await call("PATCH", `/api/editor/exploration_candidates/${CARD_ID}/selection`, {
       templatePairId: "pair-2",
       selectionKind: "actions",
       clientRevision: 7,
@@ -188,7 +188,7 @@ describe("encounter editor API", () => {
         confirmation: { selectionKind: "actions", selectedRank: 2 },
       },
     });
-    const saved = JSON.parse(readFileSync(join(rootDir, "data", "encounter_candidates.json"), "utf8"));
+    const saved = JSON.parse(readFileSync(join(rootDir, "data", "exploration_candidates.json"), "utf8"));
     expect(saved[CARD_ID].map((entry) => entry.selected)).toEqual([
       { prose: true },
       { actions: true },
@@ -196,7 +196,7 @@ describe("encounter editor API", () => {
   });
 
   it("persists only the targeted action text", async () => {
-    const url = `/api/editor/encounters/${CARD_ID}/candidates/pair-1`;
+    const url = `/api/editor/exploration_candidates/${CARD_ID}/candidates/pair-1`;
     const result = await call("PATCH", url, {
       field: "label",
       actionTemplateId: 2,
@@ -207,7 +207,7 @@ describe("encounter editor API", () => {
   });
 
   it("persists only the targeted numeric template variable", async () => {
-    const url = `/api/editor/encounters/${CARD_ID}/candidates/pair-1`;
+    const url = `/api/editor/exploration_candidates/${CARD_ID}/candidates/pair-1`;
     const result = await call("PATCH", url, {
       field: "variable",
       actionTemplateId: 1,
@@ -228,13 +228,13 @@ describe("encounter editor API", () => {
         },
       },
     });
-    const saved = JSON.parse(readFileSync(join(rootDir, "data", "encounter_candidates.json"), "utf8"));
+    const saved = JSON.parse(readFileSync(join(rootDir, "data", "exploration_candidates.json"), "utf8"));
     expect(saved[CARD_ID][0].actions[0].variables.count).toBe(4);
     expect(saved[CARD_ID][0].actions[1].variables).toEqual({});
   });
 
   it("persists a template edit to templates.json and returns globally refreshed groups", async () => {
-    const result = await call("PATCH", "/api/editor/encounters/templates/1", {
+    const result = await call("PATCH", "/api/editor/exploration_candidates/templates/1", {
       value: "Draw {count} additional cards and keep $RUNTIME_CARD",
       clientRevision: 9,
     });
@@ -252,14 +252,14 @@ describe("encounter editor API", () => {
       .toBe("Draw 1 additional cards and keep $RUNTIME_CARD");
     const templates = JSON.parse(readFileSync(join(rootDir, "data", "templates.json"), "utf8"));
     expect(templates[0].template).toBe("Draw {count} additional cards and keep $RUNTIME_CARD");
-    const candidates = JSON.parse(readFileSync(join(rootDir, "data", "encounter_candidates.json"), "utf8"));
+    const candidates = JSON.parse(readFileSync(join(rootDir, "data", "exploration_candidates.json"), "utf8"));
     expect(candidates[CARD_ID][0].actions[0]).not.toHaveProperty("template");
   });
 
   it("rejects template edits that make stored variables invalid", async () => {
     const path = join(rootDir, "data", "templates.json");
     const before = readFileSync(path, "utf8");
-    const result = await call("PATCH", "/api/editor/encounters/templates/1", {
+    const result = await call("PATCH", "/api/editor/exploration_candidates/templates/1", {
       value: "Draw {amount} cards",
     });
     expect(result.status).toBe(400);
@@ -268,13 +268,13 @@ describe("encounter editor API", () => {
   });
 
   it("rejects malformed identities and missing targets without touching the file", async () => {
-    const path = join(rootDir, "data", "encounter_candidates.json");
+    const path = join(rootDir, "data", "exploration_candidates.json");
     const before = readFileSync(path, "utf8");
-    const malformed = await call("PATCH", "/api/editor/encounters/not-a-uuid/selection", {
+    const malformed = await call("PATCH", "/api/editor/exploration_candidates/not-a-uuid/selection", {
       templatePairId: "pair-2",
       selectionKind: "prose",
     });
-    const missing = await call("PATCH", `/api/editor/encounters/${OTHER_CARD_ID}/selection`, {
+    const missing = await call("PATCH", `/api/editor/exploration_candidates/${OTHER_CARD_ID}/selection`, {
       templatePairId: "pair-2",
       selectionKind: "prose",
     });

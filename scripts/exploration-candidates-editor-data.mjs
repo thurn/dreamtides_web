@@ -7,7 +7,7 @@ const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 
 export const DEFAULT_ENCOUNTER_CANDIDATES_PATH = join(
   "data",
-  "encounter_candidates.json",
+  "exploration_candidates.json",
 );
 export const DEFAULT_ENCOUNTER_CARD_PATH = join(
   "data",
@@ -303,7 +303,7 @@ export function parseEncounterCandidates(source) {
   try {
     raw = JSON.parse(source);
   } catch {
-    throw new Error("encounter_candidates.json must contain valid JSON.");
+    throw new Error("exploration_candidates.json must contain valid JSON.");
   }
   return validateEncounterCandidates(raw);
 }
@@ -348,7 +348,7 @@ function randomIndex(length, random) {
   if (length < 1) throw new Error("Cannot select from an empty card list.");
   const value = random();
   if (!Number.isFinite(value) || value < 0 || value >= 1) {
-    throw new Error("Encounter editor randomness must return a number in [0, 1).");
+    throw new Error("Exploration candidates editor randomness must return a number in [0, 1).");
   }
   return Math.floor(value * length);
 }
@@ -484,7 +484,7 @@ export function renderRuntimeTemplate(template, variables, selection, cards, pla
   };
 }
 
-export function readEncounterEditorGroups({
+export function readExplorationCandidatesEditorGroups({
   rootDir = ROOT,
   candidatesPath = DEFAULT_ENCOUNTER_CANDIDATES_PATH,
   cardTomlPath = DEFAULT_ENCOUNTER_CARD_PATH,

@@ -22,7 +22,7 @@ DESIGNER_SCRIPTS = REPO_ROOT / ".llms/skills/exploration-encounter-designer/scri
 sys.path.insert(0, str(DESIGNER_SCRIPTS))
 from template_rendering import render_template  # noqa: E402
 
-DEFAULT_CANDIDATES = REPO_ROOT / "data/encounter_candidates.json"
+DEFAULT_CANDIDATES = REPO_ROOT / "data/exploration_candidates.json"
 DEFAULT_VALIDATOR = DESIGNER_SCRIPTS / "validate-exploration.py"
 DEFAULT_ART_FINDER = DESIGNER_SCRIPTS / "find-card-art.py"
 DEFAULT_TEMPLATES = REPO_ROOT / "data/templates.json"
@@ -40,7 +40,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--results-dir", type=Path, required=True)
     parser.add_argument(
-        "--encounter-candidates", type=Path, default=DEFAULT_CANDIDATES
+        "--exploration-candidates", type=Path, default=DEFAULT_CANDIDATES
     )
     parser.add_argument("--display-output", type=Path)
     parser.add_argument("--images-dir", type=Path)
@@ -96,7 +96,7 @@ def load_manifest(path: Path) -> dict[str, Any]:
         if card_id in seen_ids:
             raise AggregationError(f"Batch manifest repeats card UUID {card_id}")
         seen_ids.add(card_id)
-    digest = manifest.get("encounter_candidates_sha256")
+    digest = manifest.get("exploration_candidates_sha256")
     if not isinstance(digest, str) or len(digest) != 64:
         raise AggregationError("Batch manifest has an invalid candidates digest")
     return manifest
@@ -248,11 +248,11 @@ def atomic_write_json(path: Path, value: Any) -> None:
 
 def aggregate(args: argparse.Namespace) -> str:
     manifest = load_manifest(args.manifest)
-    recorded_path = Path(manifest.get("encounter_candidates", ""))
-    if recorded_path.resolve() != args.encounter_candidates.resolve():
-        raise AggregationError("Manifest and --encounter-candidates identify different files")
+    recorded_path = Path(manifest.get("exploration_candidates", ""))
+    if recorded_path.resolve() != args.exploration_candidates.resolve():
+        raise AggregationError("Manifest and --exploration-candidates identify different files")
     document = read_candidate_document(
-        args.encounter_candidates, manifest["encounter_candidates_sha256"]
+        args.exploration_candidates, manifest["exploration_candidates_sha256"]
     )
     templates = read_templates(args.template_catalog)
 
@@ -286,7 +286,7 @@ def aggregate(args: argparse.Namespace) -> str:
 
     if args.display_output is not None:
         args.display_output.write_text(display, encoding="utf-8")
-    atomic_write_json(args.encounter_candidates, document)
+    atomic_write_json(args.exploration_candidates, document)
     return display
 
 

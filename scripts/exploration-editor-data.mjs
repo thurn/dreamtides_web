@@ -13,7 +13,7 @@ import {
   buildSimulatedPlayerDeck,
   parseEncounterTemplates,
   renderRuntimeTemplate,
-} from "./encounter-editor-data.mjs";
+} from "./exploration-candidates-editor-data.mjs";
 import {
   EXPLORATION_EFFECT_DEFINITION_BY_KIND,
   EXPLORATION_EFFECT_DEFINITIONS,

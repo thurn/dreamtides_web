@@ -7,15 +7,15 @@ import {
   editEncounterTemplate,
   editEncounterCandidateText,
   editEncounterCandidateVariable,
-  readEncounterEditorGroups,
+  readExplorationCandidatesEditorGroups,
   selectEncounterCandidate,
   updateEncounterCandidates,
   updateEncounterTemplate,
-} from "./encounter-editor-data.mjs";
+} from "./exploration-candidates-editor-data.mjs";
 import { readEncounterTemplateHealth } from "./encounter-template-health.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const BASE_PATH = "/api/editor/encounters";
+const BASE_PATH = "/api/editor/exploration_candidates";
 const DEFAULT_CURATED_ART_DIR = join(
   homedir(),
   "Documents",
@@ -66,7 +66,7 @@ async function imageFiles(directory) {
 }
 
 /** Resolve editor art using the curated full-resolution set before Shutterstock sources. */
-export async function resolveEncounterEditorArt(
+export async function resolveExplorationCandidatesEditorArt(
   imageNumber,
   {
     curatedArtDir = DEFAULT_CURATED_ART_DIR,
@@ -164,7 +164,7 @@ function statusFor(error) {
   return 400;
 }
 
-export function createEncounterEditorApiMiddleware(options = {}) {
+export function createExplorationCandidatesEditorApiMiddleware(options = {}) {
   const rootDir = options.rootDir ?? ROOT;
   const fileSystem = options.fileSystem;
   const artOptions = {
@@ -173,14 +173,14 @@ export function createEncounterEditorApiMiddleware(options = {}) {
   };
   const templateHealthReader = options.templateHealthReader ?? readEncounterTemplateHealth;
   const dataOptions = { rootDir, ...(fileSystem === undefined ? {} : { fileSystem }) };
-  return async function encounterEditorApi(req, res, next) {
+  return async function explorationCandidatesEditorApi(req, res, next) {
     const route = routeFor(req.url);
     if (route === null) {
       next();
       return;
     }
     if (route.kind === "invalid" || route.kind === "missing") {
-      fail(res, route.kind === "invalid" ? 400 : 404, "INVALID_API_PATH", "Encounter editor endpoint was not found.");
+      fail(res, route.kind === "invalid" ? 400 : 404, "INVALID_API_PATH", "Exploration candidates editor endpoint was not found.");
       return;
     }
     try {
@@ -189,7 +189,7 @@ export function createEncounterEditorApiMiddleware(options = {}) {
           fail(res, 405, "METHOD_NOT_ALLOWED", "This endpoint only supports GET.");
           return;
         }
-        respond(res, 200, { groups: readEncounterEditorGroups(dataOptions) });
+        respond(res, 200, { groups: readExplorationCandidatesEditorGroups(dataOptions) });
         return;
       }
       if (route.kind === "art") {
@@ -197,7 +197,7 @@ export function createEncounterEditorApiMiddleware(options = {}) {
           fail(res, 405, "METHOD_NOT_ALLOWED", "This endpoint only supports GET.");
           return;
         }
-        const artPath = await resolveEncounterEditorArt(route.imageNumber, artOptions);
+        const artPath = await resolveExplorationCandidatesEditorArt(route.imageNumber, artOptions);
         const contentType = IMAGE_CONTENT_TYPES.get(extname(artPath).toLowerCase());
         const body = await readFile(artPath);
         res.writeHead(200, {
@@ -238,7 +238,7 @@ export function createEncounterEditorApiMiddleware(options = {}) {
         );
         respond(res, 200, {
           confirmation,
-          groups: readEncounterEditorGroups(dataOptions),
+          groups: readExplorationCandidatesEditorGroups(dataOptions),
           ...(body.clientRevision === undefined ? {} : { clientRevision: body.clientRevision }),
         });
         return;
@@ -299,7 +299,7 @@ export function createEncounterEditorApiMiddleware(options = {}) {
         ...(body.clientRevision === undefined ? {} : { clientRevision: body.clientRevision }),
       });
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Encounter editor request failed.";
+      const message = error instanceof Error ? error.message : "Exploration candidates editor request failed.";
       fail(res, statusFor(error), error.code ?? "INVALID_REQUEST", message);
     }
   };

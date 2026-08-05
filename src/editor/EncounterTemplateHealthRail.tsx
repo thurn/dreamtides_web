@@ -7,7 +7,7 @@ import type {
   EncounterTemplateHealth,
   EncounterTemplateHealthEntry,
   EncounterTemplateHealthStatus,
-} from "./encounter-editor-types";
+} from "./exploration-candidates-editor-types";
 
 export const TEMPLATE_HEALTH_RAIL_ID = "encounter-template-health";
 

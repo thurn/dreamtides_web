@@ -19,10 +19,10 @@ import {
   editEncounterTemplate,
   editEncounterCandidateText,
   parseEncounterCandidates,
-  readEncounterEditorGroups,
+  readExplorationCandidatesEditorGroups,
   renderEncounterTemplate,
   selectEncounterCandidate,
-} from "./encounter-editor-data.mjs";
+} from "./exploration-candidates-editor-data.mjs";
 
 const CARD_ID = "11111111-1111-4111-8111-111111111111";
 const UNRELATED_CARD_ID = "22222222-2222-4222-8222-222222222222";
@@ -58,10 +58,10 @@ function documentFixture() {
 }
 
 function writeFixtureRoot() {
-  const rootDir = mkdtempSync(join(tmpdir(), "journey-encounter-editor-data-"));
+  const rootDir = mkdtempSync(join(tmpdir(), "journey-exploration-candidates-editor-data-"));
   mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
   writeFileSync(
-    join(rootDir, "data", "encounter_candidates.json"),
+    join(rootDir, "data", "exploration_candidates.json"),
     `${JSON.stringify(documentFixture(), null, 2)}\n`,
   );
   writeFileSync(
@@ -84,7 +84,7 @@ function writeRuntimeSelectionFixtureRoot() {
   const rootDir = mkdtempSync(join(tmpdir(), "journey-encounter-runtime-cards-"));
   mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
   writeFileSync(
-    join(rootDir, "data", "encounter_candidates.json"),
+    join(rootDir, "data", "exploration_candidates.json"),
     `${JSON.stringify({
       [CARD_ID]: [{
         template_pair_id: "pair-1",
@@ -139,9 +139,9 @@ function writeRuntimeSelectionFixtureRoot() {
   return rootDir;
 }
 
-describe("encounter editor data", () => {
+describe("Exploration candidates editor data", () => {
   it("loads validated groups enriched from UUID-keyed cards", () => {
-    const groups = readEncounterEditorGroups({ rootDir: writeFixtureRoot() });
+    const groups = readExplorationCandidatesEditorGroups({ rootDir: writeFixtureRoot() });
     expect(groups).toHaveLength(1);
     expect(groups[0]).toMatchObject({
       cardId: CARD_ID,
@@ -160,7 +160,7 @@ describe("encounter editor data", () => {
   });
 
   it("resolves runtime card placeholders by UUID and falls back outside the simulated deck", () => {
-    const groups = readEncounterEditorGroups({
+    const groups = readExplorationCandidatesEditorGroups({
       rootDir: writeRuntimeSelectionFixtureRoot(),
       random: () => 0,
     });
@@ -288,7 +288,7 @@ describe("encounter editor data", () => {
     const rootDir = mkdtempSync(join(tmpdir(), "journey-encounter-entity-references-"));
     mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
     writeFileSync(
-      join(rootDir, "data", "encounter_candidates.json"),
+      join(rootDir, "data", "exploration_candidates.json"),
       `${JSON.stringify({
         [CARD_ID]: [{
           template_pair_id: "pair-1",
@@ -326,7 +326,7 @@ describe("encounter editor data", () => {
       `[[cards]]\nid = "${CARD_ID}"\nname = "Fixture Guide"\nrendered-text = "Gain 1●."\nimage-number = 42\n\n[[cards]]\nid = "${UNRELATED_CARD_ID}"\nname = "Fixture Ally"\nrendered-text = "Gain 2●."\nimage-number = 43\n`,
     );
 
-    const [group] = readEncounterEditorGroups({ rootDir, random: () => 0 });
+    const [group] = readExplorationCandidatesEditorGroups({ rootDir, random: () => 0 });
     expect(group.encounters[0].actions[0].rendered_template_parts).toEqual([
       { kind: "text", text: "Gain " },
       {
@@ -391,7 +391,7 @@ describe("encounter editor data", () => {
 
   it("restores the original file when atomic replacement fails", () => {
     const rootDir = writeFixtureRoot();
-    const path = join(rootDir, "data", "encounter_candidates.json");
+    const path = join(rootDir, "data", "exploration_candidates.json");
     const before = readFileSync(path, "utf8");
     const next = selectEncounterCandidate(documentFixture(), {
       cardId: CARD_ID,

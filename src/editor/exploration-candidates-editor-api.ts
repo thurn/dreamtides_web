@@ -2,14 +2,14 @@ import { EditorApiRequestError } from "./editor-api";
 import { loadCardDatabase } from "../data/card-database";
 import { createDreamsign, loadDreamsignTemplates } from "../data/dreamsigns";
 import type {
-  EncounterEditorClient,
-  EncounterEditorGroup,
+  ExplorationCandidatesEditorClient,
+  ExplorationCandidatesEditorGroup,
   EncounterTemplateHealth,
   EncounterSelectionSaveRequest,
   EncounterTemplateSaveRequest,
   EncounterTextSaveRequest,
   EncounterVariableSaveRequest,
-} from "./encounter-editor-types";
+} from "./exploration-candidates-editor-types";
 
 async function readResponse<T>(response: Response): Promise<T> {
   const text = await response.text();
@@ -21,7 +21,7 @@ async function readResponse<T>(response: Response): Promise<T> {
     throw new EditorApiRequestError({
       code: error?.code,
       details: undefined,
-      message: error?.message ?? `Encounter editor API request failed with ${String(response.status)}`,
+      message: error?.message ?? `Exploration candidates editor API request failed with ${String(response.status)}`,
       status: response.status,
     });
   }
@@ -36,17 +36,17 @@ async function patch<T>(path: string, body: unknown): Promise<T> {
   }));
 }
 
-export const encounterEditorClient: EncounterEditorClient = {
+export const explorationCandidatesEditorClient: ExplorationCandidatesEditorClient = {
   async load(signal) {
     const [response, cardDatabase, dreamsignTemplates] = await Promise.all([
-      fetch("/api/editor/encounters", {
+      fetch("/api/editor/exploration_candidates", {
         headers: { Accept: "application/json" },
         signal,
       }),
       loadCardDatabase(),
       loadDreamsignTemplates(),
     ]);
-    const body = await readResponse<{ groups: EncounterEditorGroup[] }>(response);
+    const body = await readResponse<{ groups: ExplorationCandidatesEditorGroup[] }>(response);
     return {
       groups: body.groups,
       cards: [...cardDatabase.values()],
@@ -55,7 +55,7 @@ export const encounterEditorClient: EncounterEditorClient = {
   },
 
   async loadTemplateHealth(signal) {
-    const response = await fetch("/api/editor/encounters/template-health", {
+    const response = await fetch("/api/editor/exploration_candidates/template-health", {
       headers: { Accept: "application/json" },
       signal,
     });
@@ -65,7 +65,7 @@ export const encounterEditorClient: EncounterEditorClient = {
 
   saveSelection(request: EncounterSelectionSaveRequest) {
     return patch(
-      `/api/editor/encounters/${encodeURIComponent(request.cardId)}/selection`,
+      `/api/editor/exploration_candidates/${encodeURIComponent(request.cardId)}/selection`,
       {
         templatePairId: request.templatePairId,
         selectionKind: request.selectionKind,
@@ -76,7 +76,7 @@ export const encounterEditorClient: EncounterEditorClient = {
 
   saveText(request: EncounterTextSaveRequest) {
     return patch(
-      `/api/editor/encounters/${encodeURIComponent(request.cardId)}/candidates/${encodeURIComponent(request.templatePairId)}`,
+      `/api/editor/exploration_candidates/${encodeURIComponent(request.cardId)}/candidates/${encodeURIComponent(request.templatePairId)}`,
       {
         field: request.field,
         ...(request.actionTemplateId === undefined
@@ -90,7 +90,7 @@ export const encounterEditorClient: EncounterEditorClient = {
 
   saveVariable(request: EncounterVariableSaveRequest) {
     return patch(
-      `/api/editor/encounters/${encodeURIComponent(request.cardId)}/candidates/${encodeURIComponent(request.templatePairId)}`,
+      `/api/editor/exploration_candidates/${encodeURIComponent(request.cardId)}/candidates/${encodeURIComponent(request.templatePairId)}`,
       {
         field: "variable",
         actionTemplateId: request.actionTemplateId,
@@ -103,7 +103,7 @@ export const encounterEditorClient: EncounterEditorClient = {
 
   saveTemplate(request: EncounterTemplateSaveRequest) {
     return patch(
-      `/api/editor/encounters/templates/${encodeURIComponent(String(request.templateId))}`,
+      `/api/editor/exploration_candidates/templates/${encodeURIComponent(String(request.templateId))}`,
       {
         value: request.value,
         clientRevision: request.clientRevision,

@@ -7,7 +7,7 @@ import type {
 import type {
   EncounterRenderedTemplatePart,
   EncounterRuntimeCardSelection,
-} from "./encounter-editor-types";
+} from "./exploration-candidates-editor-types";
 
 export type ExplorationEditorControl =
   | "number"

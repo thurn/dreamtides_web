@@ -7,17 +7,17 @@ import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { asCardId, asCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { Dreamsign } from "../types/journey";
-import EncounterEditorApp from "./EncounterEditorApp";
+import ExplorationCandidatesEditorApp from "./ExplorationCandidatesEditorApp";
 import type {
-  EncounterEditorCandidate,
-  EncounterEditorClient,
-  EncounterEditorGroup,
+  ExplorationCandidatesEditorCandidate,
+  ExplorationCandidatesEditorClient,
+  ExplorationCandidatesEditorGroup,
   EncounterSelectionSaveRequest,
   EncounterTemplateSaveRequest,
   EncounterTemplateHealth,
   EncounterTextSaveRequest,
   EncounterVariableSaveRequest,
-} from "./encounter-editor-types";
+} from "./exploration-candidates-editor-types";
 
 const CARD_ID = "11111111-1111-4111-8111-111111111111";
 const OTHER_CARD_ID = "22222222-2222-4222-8222-222222222222";
@@ -47,7 +47,7 @@ const REFERENCE_DREAMSIGN: Dreamsign = {
   isNegative: false,
 };
 
-function candidate(rank: number, selected = false): EncounterEditorCandidate {
+function candidate(rank: number, selected = false): ExplorationCandidatesEditorCandidate {
   return {
     template_pair_id: `pair-${String(rank)}`,
     prose: `Prose for rank ${String(rank)}`,
@@ -94,13 +94,13 @@ function candidate(rank: number, selected = false): EncounterEditorCandidate {
       }],
       variables: templateId === 1 ? { count: rank } : {},
       label: `Rank ${String(rank)} label ${String(templateId)}`,
-    })) as EncounterEditorCandidate["actions"],
+    })) as ExplorationCandidatesEditorCandidate["actions"],
     rank,
     ...(selected ? { selected: { prose: true, actions: true } } : {}),
   };
 }
 
-const GROUPS: EncounterEditorGroup[] = [{
+const GROUPS: ExplorationCandidatesEditorGroup[] = [{
   cardId: CARD_ID,
   cardName: "The Test Crossing",
   cardAbilityText: "▸Materialized: Gain 1●, then foresee 1.",
@@ -138,7 +138,7 @@ function deferred<T>() {
   return { promise, reject, resolve };
 }
 
-function client(overrides: Partial<EncounterEditorClient> = {}): EncounterEditorClient {
+function client(overrides: Partial<ExplorationCandidatesEditorClient> = {}): ExplorationCandidatesEditorClient {
   return {
     load: vi.fn().mockResolvedValue({
       groups: structuredClone(GROUPS),
@@ -172,7 +172,7 @@ function setTextareaValue(textarea: HTMLTextAreaElement, value: string) {
 beforeEach(() => {
   (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean })
     .IS_REACT_ACT_ENVIRONMENT = true;
-  window.history.replaceState(null, "", "/encounters");
+  window.history.replaceState(null, "", "/exploration_candidates");
   scrollIntoView = vi.fn<(arg?: boolean | ScrollIntoViewOptions) => void>();
   Element.prototype.scrollIntoView = scrollIntoView;
   vi.spyOn(console, "log").mockImplementation(() => undefined);
@@ -184,16 +184,16 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-async function renderLoaded(apiClient: EncounterEditorClient) {
+async function renderLoaded(apiClient: ExplorationCandidatesEditorClient) {
   const mounted = mount();
   await act(async () => {
-    mounted.root.render(<CumulusRoot><EncounterEditorApp client={apiClient} /></CumulusRoot>);
+    mounted.root.render(<CumulusRoot><ExplorationCandidatesEditorApp client={apiClient} /></CumulusRoot>);
     await Promise.resolve();
   });
   return mounted;
 }
 
-describe("EncounterEditorApp", () => {
+describe("ExplorationCandidatesEditorApp", () => {
   it("renders only the selected candidate with prominent art and all editable copy", async () => {
     const { container, root } = await renderLoaded(client());
     expect(container.textContent).not.toContain("Selected rank");
@@ -226,19 +226,19 @@ describe("EncounterEditorApp", () => {
     ).toBe("object");
     expect(container.textContent).toContain("Rank 1 label 1");
     expect(container.textContent).not.toContain("Prose for rank 2");
-    expect(container.querySelector(".encounter-editor-card-ability")?.textContent)
+    expect(container.querySelector(".exploration-candidates-editor-card-ability")?.textContent)
       .toContain("▸Materialized: Gain 1, then foresee 1.");
-    expect(container.querySelector(".encounter-editor-card-ability [aria-label='energy']"))
+    expect(container.querySelector(".exploration-candidates-editor-card-ability [aria-label='energy']"))
       .not.toBeNull();
     expect(container.querySelector("img")?.getAttribute("src"))
-      .toBe("/api/editor/encounters/art/42");
+      .toBe("/api/editor/exploration_candidates/art/42");
     expect(container.querySelector(`[data-encounter-card-id='${CARD_ID}']`)?.id)
       .toBe(`encounter-${CARD_ID}`);
     act(() => root.unmount());
   });
 
   it("scrolls a linked encounter into view after its group loads", async () => {
-    window.history.replaceState(null, "", `/encounters#encounter-${CARD_ID}`);
+    window.history.replaceState(null, "", `/exploration_candidates#encounter-${CARD_ID}`);
     const { root } = await renderLoaded(client());
     expect(scrollIntoView).toHaveBeenCalledWith({ block: "start" });
     act(() => root.unmount());
@@ -281,7 +281,7 @@ describe("EncounterEditorApp", () => {
   });
 
   it("optimistically selects prose independently and confirms by identity", async () => {
-    const pending = deferred<Awaited<ReturnType<EncounterEditorClient["saveSelection"]>>>();
+    const pending = deferred<Awaited<ReturnType<ExplorationCandidatesEditorClient["saveSelection"]>>>();
     const saveSelection = vi.fn().mockReturnValue(pending.promise);
     const { container, root } = await renderLoaded(client({ saveSelection }));
     const next = container.querySelector<HTMLButtonElement>(`[data-testid='next-prose-${CARD_ID}']`)!;
@@ -452,7 +452,7 @@ describe("EncounterEditorApp", () => {
   });
 
   it("opens only the clicked occurrence when a canonical template is reused", async () => {
-    const repeatedGroups: EncounterEditorGroup[] = [
+    const repeatedGroups: ExplorationCandidatesEditorGroup[] = [
       structuredClone(GROUPS[0]),
       {
         ...structuredClone(GROUPS[0]),

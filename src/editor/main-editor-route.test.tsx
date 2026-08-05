@@ -48,8 +48,8 @@ vi.mock("./GlossaryEditorApp", () => ({
   },
 }));
 
-vi.mock("./EncounterEditorApp", () => ({
-  default: function MockEncounterEditorApp() {
+vi.mock("./ExplorationCandidatesEditorApp", () => ({
+  default: function MockExplorationCandidatesEditorApp() {
     return null;
   },
 }));
@@ -212,8 +212,8 @@ describe("main editor route", () => {
     expect(mocks.render).toHaveBeenCalledTimes(1);
   });
 
-  it("mounts the isolated encounter editor for the Vite-served /encounters/ path", async () => {
-    window.history.pushState(null, "", "/encounters/");
+  it("mounts the exploration candidates editor for the Vite-served /exploration_candidates/ path", async () => {
+    window.history.pushState(null, "", "/exploration_candidates/");
 
     await import("../main.tsx");
 

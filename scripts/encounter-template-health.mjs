@@ -71,7 +71,7 @@ function parseTemplateDiagnostic(raw, index) {
 
 export function readEncounterTemplateHealth({
   rootDir = ROOT,
-  candidatesPath = join("data", "encounter_candidates.json"),
+  candidatesPath = join("data", "exploration_candidates.json"),
   catalogPath = DEFAULT_TEMPLATE_CATALOG_PATH,
   balanceScriptPath = DEFAULT_TEMPLATE_BALANCE_SCRIPT_PATH,
   pythonExecutable = "python3",
@@ -83,7 +83,7 @@ export function readEncounterTemplateHealth({
       resolve(rootDir, balanceScriptPath),
       "--template-catalog",
       resolve(rootDir, catalogPath),
-      "--encounter-candidates",
+      "--exploration-candidates",
       resolve(rootDir, candidatesPath),
     ],
     { encoding: "utf8", maxBuffer: 2_000_000 },

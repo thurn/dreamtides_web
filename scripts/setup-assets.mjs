@@ -833,7 +833,7 @@ function recreateDir(dir) {
 /**
  * Link the full-screen Exploration art for the authored encounter catalog.
  * Curated full-resolution files win; encounters without one use the same
- * source-art file that the development encounter editor serves.
+ * source-art file that the development Exploration candidates editor serves.
  */
 export function linkExplorationArt({
   destinationDir,
@@ -2177,7 +2177,7 @@ export function setupAssets({
 
   // Exploration expands source-card art to the viewport. Prefer the curated
   // full-resolution library and fall back to the source files used by the
-  // encounter editor when an encounter is still awaiting curated art.
+  // Exploration candidates editor when an encounter is still awaiting curated art.
   const explorationArt = linkExplorationArt({
     destinationDir: explorationDir,
     highResArtDir: explorationHighResArtDir,

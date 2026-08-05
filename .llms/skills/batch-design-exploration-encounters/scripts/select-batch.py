@@ -17,7 +17,7 @@ from typing import Any
 SCRIPTS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPTS_DIR.parents[3]
 DEFAULT_CARDS = REPO_ROOT / "data/tabula/cards.toml"
-DEFAULT_CANDIDATES = REPO_ROOT / "data/encounter_candidates.json"
+DEFAULT_CANDIDATES = REPO_ROOT / "data/exploration_candidates.json"
 
 
 class SelectionError(ValueError):
@@ -31,7 +31,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", type=int, help="optional reproducible random seed")
     parser.add_argument("--cards", type=Path, default=DEFAULT_CARDS)
     parser.add_argument(
-        "--encounter-candidates", type=Path, default=DEFAULT_CANDIDATES
+        "--exploration-candidates", type=Path, default=DEFAULT_CANDIDATES
     )
     return parser.parse_args()
 
@@ -161,8 +161,8 @@ def create_batch(
         "schema_version": 1,
         "batch_size": batch_size,
         "seed": seed,
-        "encounter_candidates": str(candidates_path.resolve()),
-        "encounter_candidates_sha256": candidates_digest,
+        "exploration_candidates": str(candidates_path.resolve()),
+        "exploration_candidates_sha256": candidates_digest,
         "cards": selected,
     }
     manifest_path = run_dir / "manifest.json"
@@ -180,7 +180,7 @@ def main() -> int:
     try:
         output = create_batch(
             cards_path=args.cards,
-            candidates_path=args.encounter_candidates,
+            candidates_path=args.exploration_candidates,
             run_dir=args.run_dir,
             batch_size=args.batch_size,
             seed=args.seed,

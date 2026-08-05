@@ -343,7 +343,7 @@ commentary.
    ```
 
    Do not open `data/templates.json` directly. The script reads the canonical
-   catalog and current usage in `data/encounter_candidates.json`, then prints
+   catalog and current usage in `data/exploration_candidates.json`, then prints
    the complete selectable `templates` list for this run. Review every returned
    template before committing; do not stop after finding the first ten
    plausible entries. Every selectable template reports `required_variables`

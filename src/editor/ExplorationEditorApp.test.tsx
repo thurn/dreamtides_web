@@ -221,7 +221,7 @@ describe("ExplorationEditorApp", () => {
     expect(container.textContent).toContain("Gather a company");
     expect(container.textContent).toContain("Choose one of 2 packs of 3 Character cards");
     expect(container.querySelector("img")?.getAttribute("src"))
-      .toBe("/api/editor/encounters/art/42");
+      .toBe("/api/editor/exploration_candidates/art/42");
     const cardLink = container.querySelector<HTMLAnchorElement>(
       "a[aria-label='Open Fixture Guide exploration in a new tab']",
     );

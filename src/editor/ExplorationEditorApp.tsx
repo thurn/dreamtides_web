@@ -14,7 +14,7 @@ import type { Dreamsign } from "../types/journey";
 import EditableField from "./EditableField";
 import { EditorApiRequestError } from "./editor-api";
 import { explorationEditorClient } from "./exploration-editor-api";
-import type { EncounterRenderedTemplatePart } from "./encounter-editor-types";
+import type { EncounterRenderedTemplatePart } from "./exploration-candidates-editor-types";
 import type {
   ExplorationEditorAction,
   ExplorationEditorClient,
@@ -701,7 +701,7 @@ function ExplorationEditorRow({
               alt={`Art for ${encounter.cardName}`}
               className="exploration-editor-art"
               loading={index < 2 ? "eager" : "lazy"}
-              src={resolveArtRef(artRef.encounterEditorCard(encounter.imageNumber))}
+              src={resolveArtRef(artRef.explorationCandidatesEditorCard(encounter.imageNumber))}
             />
           </div>
           <div className="exploration-editor-copy">

@@ -1,4 +1,4 @@
-# Generated from data/encounter_candidates.json and data/templates.json.
+# Generated from data/exploration_candidates.json and data/templates.json.
 # This is a partial Exploration authoring export. Runtime effect fields
 # such as effect-kind are intentionally pending.
 # $SPECIAL placeholders are preserved for runtime resolution.

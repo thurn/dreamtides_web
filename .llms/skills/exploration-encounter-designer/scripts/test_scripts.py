@@ -103,7 +103,7 @@ class ListTemplateCandidatesTests(unittest.TestCase):
             root = Path(directory)
             catalog_path = root / "templates.json"
             catalog_path.write_text(json.dumps(templates), encoding="utf-8")
-            candidates_path = root / "encounter_candidates.json"
+            candidates_path = root / "exploration_candidates.json"
             candidates = {
                 f"synthetic-card-{card_index}": (
                     [
@@ -140,7 +140,7 @@ class ListTemplateCandidatesTests(unittest.TestCase):
                     str(CANDIDATE_LISTER),
                     "--template-catalog",
                     str(catalog_path),
-                    "--encounter-candidates",
+                    "--exploration-candidates",
                     str(candidates_path),
                     "--required-template-count",
                     str(required_template_count),

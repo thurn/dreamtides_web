@@ -12,22 +12,22 @@ import type { CardData } from "../types/cards";
 import type { Dreamsign } from "../types/journey";
 import EditableField from "./EditableField";
 import { EditorApiRequestError } from "./editor-api";
-import { encounterEditorClient } from "./encounter-editor-api";
+import { explorationCandidatesEditorClient } from "./exploration-candidates-editor-api";
 import {
   EncounterTemplateHealthRail,
 } from "./EncounterTemplateHealthRail";
 import type {
-  EncounterEditorAction,
-  EncounterEditorCandidate,
-  EncounterEditorClient,
-  EncounterEditorGroup,
+  ExplorationCandidatesEditorAction,
+  ExplorationCandidatesEditorCandidate,
+  ExplorationCandidatesEditorClient,
+  ExplorationCandidatesEditorGroup,
   EncounterRenderedTemplatePart,
   EncounterEditableTextField,
   EncounterSelectionKind,
   EncounterTemplateHealth,
   EncounterCandidateTextField,
   EncounterVariableSaveRequest,
-} from "./encounter-editor-types";
+} from "./exploration-candidates-editor-types";
 import {
   beginFieldEdit,
   cancelFieldEdit,
@@ -42,7 +42,7 @@ import {
   type EditableSaveState,
   type FieldTarget,
 } from "./save-state";
-import "./encounter-editor.css";
+import "./exploration-candidates-editor.css";
 
 type LoadState = "loading" | "ready" | "error";
 interface SelectionState {
@@ -71,9 +71,9 @@ function messageFor(error: unknown): string {
 }
 
 function selectedCandidate(
-  group: EncounterEditorGroup,
+  group: ExplorationCandidatesEditorGroup,
   selectionKind: EncounterSelectionKind,
-): EncounterEditorCandidate {
+): ExplorationCandidatesEditorCandidate {
   const selected = group.encounters.filter(
     (candidate) => candidate.selected?.[selectionKind] === true,
   );
@@ -84,11 +84,11 @@ function selectedCandidate(
 }
 
 function replaceSelection(
-  groups: EncounterEditorGroup[],
+  groups: ExplorationCandidatesEditorGroup[],
   cardId: string,
   templatePairId: string,
   selectionKind: EncounterSelectionKind,
-): EncounterEditorGroup[] {
+): ExplorationCandidatesEditorGroup[] {
   return groups.map((group) => group.cardId !== cardId ? group : {
     ...group,
     encounters: group.encounters.map((candidate) => {
@@ -104,7 +104,7 @@ function replaceSelection(
 }
 
 function updateConfirmedText(
-  groups: EncounterEditorGroup[],
+  groups: ExplorationCandidatesEditorGroup[],
   request: {
     cardId: string;
     templatePairId: string;
@@ -112,7 +112,7 @@ function updateConfirmedText(
     actionTemplateId?: number;
     value: string;
   },
-): EncounterEditorGroup[] {
+): ExplorationCandidatesEditorGroup[] {
   return groups.map((group) => group.cardId !== request.cardId ? group : {
     ...group,
     encounters: group.encounters.map((candidate) => {
@@ -124,7 +124,7 @@ function updateConfirmedText(
           action.template_id === request.actionTemplateId
             ? { ...action, [request.field]: request.value }
             : action,
-        ) as [EncounterEditorAction, EncounterEditorAction],
+        ) as [ExplorationCandidatesEditorAction, ExplorationCandidatesEditorAction],
       };
     }),
   });
@@ -137,9 +137,9 @@ function renderedPartText(part: EncounterRenderedTemplatePart): string {
 }
 
 function updateVariableQuantity(
-  groups: EncounterEditorGroup[],
+  groups: ExplorationCandidatesEditorGroup[],
   request: Omit<EncounterVariableSaveRequest, "clientRevision">,
-): EncounterEditorGroup[] {
+): ExplorationCandidatesEditorGroup[] {
   return groups.map((group) => group.cardId !== request.cardId ? group : {
     ...group,
     encounters: group.encounters.map((candidate) => {
@@ -158,7 +158,7 @@ function updateVariableQuantity(
             rendered_template: renderedTemplateParts.map(renderedPartText).join(""),
             rendered_template_parts: renderedTemplateParts,
           };
-        }) as [EncounterEditorAction, EncounterEditorAction],
+        }) as [ExplorationCandidatesEditorAction, ExplorationCandidatesEditorAction],
       };
     }),
   });
@@ -176,8 +176,8 @@ function variableStep(variableName: string): number {
 }
 
 function fieldTarget(
-  group: EncounterEditorGroup,
-  candidate: EncounterEditorCandidate,
+  group: ExplorationCandidatesEditorGroup,
+  candidate: ExplorationCandidatesEditorCandidate,
   field: EncounterEditableTextField,
   actionTemplateId?: number,
 ): FieldTarget {
@@ -243,7 +243,7 @@ function renderedTemplate(
   });
 }
 
-function EncounterEditorRow({
+function ExplorationCandidatesEditorRow({
   client,
   group,
   index,
@@ -254,13 +254,13 @@ function EncounterEditorRow({
   setSaveState,
   setSelectionStates,
 }: {
-  client: EncounterEditorClient;
-  group: EncounterEditorGroup;
+  client: ExplorationCandidatesEditorClient;
+  group: ExplorationCandidatesEditorGroup;
   index: number;
   selectionStates: SelectionStates;
   references: EncounterReferenceCatalog;
   saveState: EditableSaveState;
-  setGroups: React.Dispatch<React.SetStateAction<EncounterEditorGroup[]>>;
+  setGroups: React.Dispatch<React.SetStateAction<ExplorationCandidatesEditorGroup[]>>;
   setSaveState: (update: (state: EditableSaveState) => EditableSaveState) => void;
   setSelectionStates: React.Dispatch<React.SetStateAction<Record<string, SelectionStates>>>;
 }) {
@@ -353,7 +353,7 @@ function EncounterEditorRow({
   }
 
   function editable(
-    candidate: EncounterEditorCandidate,
+    candidate: ExplorationCandidatesEditorCandidate,
     field: EncounterEditableTextField,
     value: string,
     children: React.ReactNode,
@@ -499,7 +499,7 @@ function EncounterEditorRow({
     return (
       <span
         aria-live="polite"
-        className="encounter-editor-selection-status"
+        className="exploration-candidates-editor-selection-status"
         data-status={state.status}
       >
         {message}
@@ -508,8 +508,8 @@ function EncounterEditorRow({
   }
 
   function variableEditor(
-    candidate: EncounterEditorCandidate,
-    action: EncounterEditorAction,
+    candidate: ExplorationCandidatesEditorCandidate,
+    action: ExplorationCandidatesEditorAction,
     variableName: string,
     value: number,
   ) {
@@ -579,7 +579,7 @@ function EncounterEditorRow({
           : "";
     return (
       <div
-        className="encounter-editor-variable-control"
+        className="exploration-candidates-editor-variable-control"
         data-save-status={entry?.status ?? "idle"}
         key={variableName}
       >
@@ -596,7 +596,7 @@ function EncounterEditorRow({
           onDecrement={() => void adjust(-1)}
           onIncrement={() => void adjust(1)}
         />
-        <span aria-live="polite" className="encounter-editor-variable-status">
+        <span aria-live="polite" className="exploration-candidates-editor-variable-status">
           {statusMessage}
         </span>
       </div>
@@ -606,7 +606,7 @@ function EncounterEditorRow({
   return (
     <article
       ref={rowRef}
-      className="encounter-editor-row"
+      className="exploration-candidates-editor-row"
       data-encounter-card-id={group.cardId}
       id={`encounter-${group.cardId}`}
     >
@@ -615,35 +615,35 @@ function EncounterEditorRow({
         overflow="hidden"
         testId={`encounter-row-${group.cardId}`}
       >
-        <div className="encounter-editor-row-grid">
-          <div className="encounter-editor-art-frame">
+        <div className="exploration-candidates-editor-row-grid">
+          <div className="exploration-candidates-editor-art-frame">
             <img
               alt={`Art for ${group.cardName}`}
-              className="encounter-editor-art"
+              className="exploration-candidates-editor-art"
               loading={index < 2 ? "eager" : "lazy"}
-              src={resolveArtRef(artRef.encounterEditorCard(group.imageNumber))}
+              src={resolveArtRef(artRef.explorationCandidatesEditorCard(group.imageNumber))}
             />
           </div>
-          <div className="encounter-editor-copy">
-            <header className="encounter-editor-copy-header">
+          <div className="exploration-candidates-editor-copy">
+            <header className="exploration-candidates-editor-copy-header">
               <h2>{group.cardName}</h2>
-              <div className="encounter-editor-card-ability">
+              <div className="exploration-candidates-editor-card-ability">
                 <RulesText text={group.cardAbilityText} />
               </div>
             </header>
-            <div className="encounter-editor-prose">
+            <div className="exploration-candidates-editor-prose">
               {selectionButton("prose", -1, selectedProseIndex)}
-              <div className="encounter-editor-prose-copy">
+              <div className="exploration-candidates-editor-prose-copy">
                 {editable(selectedProse, "prose", selectedProse.prose, <p>{selectedProse.prose}</p>)}
               </div>
               {selectionButton("prose", 1, selectedProseIndex)}
               {selectionStatus("prose")}
             </div>
-            <div className="encounter-editor-actions-shell">
+            <div className="exploration-candidates-editor-actions-shell">
               {selectionButton("actions", -1, selectedActionsIndex)}
-              <div className="encounter-editor-actions">
+              <div className="exploration-candidates-editor-actions">
                 {selectedActions.actions.map((action) => (
-                  <section className="encounter-editor-action" key={action.template_id}>
+                  <section className="exploration-candidates-editor-action" key={action.template_id}>
                     {editable(selectedActions, "label", action.label, <h3>{action.label}</h3>, action.template_id, "single-line")}
                     {editable(
                       selectedActions,
@@ -653,7 +653,7 @@ function EncounterEditorRow({
                       action.template_id,
                     )}
                     {Object.entries(action.variables).some(([, value]) => typeof value === "number") && (
-                      <div className="encounter-editor-variable-list">
+                      <div className="exploration-candidates-editor-variable-list">
                         {Object.entries(action.variables).flatMap(([variableName, value]) =>
                           typeof value === "number"
                             ? [variableEditor(selectedActions, action, variableName, value)]
@@ -673,12 +673,12 @@ function EncounterEditorRow({
   );
 }
 
-export default function EncounterEditorApp({
-  client = encounterEditorClient,
+export default function ExplorationCandidatesEditorApp({
+  client = explorationCandidatesEditorClient,
 }: {
-  client?: EncounterEditorClient;
+  client?: ExplorationCandidatesEditorClient;
 }) {
-  const [groups, setGroups] = useState<EncounterEditorGroup[]>([]);
+  const [groups, setGroups] = useState<ExplorationCandidatesEditorGroup[]>([]);
   const [references, setReferences] = useState<EncounterReferenceCatalog>(
     EMPTY_REFERENCE_CATALOG,
   );
@@ -810,17 +810,17 @@ export default function EncounterEditorApp({
 
   return (
     <div
-      className="cumulus encounter-editor-layout"
+      className="cumulus exploration-candidates-editor-layout"
       data-template-health-open={templateHealthOpen ? "true" : "false"}
     >
-      <main className="encounter-editor-shell">
-        <header className="encounter-editor-page-header">
+      <main className="exploration-candidates-editor-shell">
+        <header className="exploration-candidates-editor-page-header">
           <div>
             <p>Exploration workshop</p>
             <h1>Encounter designs</h1>
           </div>
           {loadState === "ready" && (
-            <div className="encounter-editor-page-actions">
+            <div className="exploration-candidates-editor-page-actions">
               <span>{groups.length} encounters · click any text to edit</span>
               <GlassButton
                 label="Template health"
@@ -832,11 +832,11 @@ export default function EncounterEditorApp({
             </div>
           )}
         </header>
-        {loadState === "loading" && <div className="encounter-editor-notice">Loading encounter designs…</div>}
+        {loadState === "loading" && <div className="exploration-candidates-editor-notice">Loading encounter designs…</div>}
         {loadState === "error" && (
-          <div className="encounter-editor-error">
+          <div className="exploration-candidates-editor-error">
             <GlassPanel title="Encounter designs could not be loaded" subtitle={loadMessage}>
-              <div className="encounter-editor-error-action">
+              <div className="exploration-candidates-editor-error-action">
                 <GlassButton
                   label="Retry"
                   placement="onGlass"
@@ -848,9 +848,9 @@ export default function EncounterEditorApp({
           </div>
         )}
         {loadState === "ready" && (
-          <div className="encounter-editor-list">
+          <div className="exploration-candidates-editor-list">
             {groups.map((group, index) => (
-              <EncounterEditorRow
+              <ExplorationCandidatesEditorRow
                 client={client}
                 group={group}
                 index={index}

@@ -83,7 +83,7 @@ class BatchScriptTests(unittest.TestCase):
         self.root = Path(self.temporary.name)
         self.cards_path = self.root / "cards.toml"
         write_cards(self.cards_path)
-        self.candidates_path = self.root / "encounter_candidates.json"
+        self.candidates_path = self.root / "exploration_candidates.json"
         self.candidates_path.write_text(
             json.dumps({CARD_IDS[0]: [{"rank": 1}]}, indent=2) + "\n",
             encoding="utf-8",
@@ -107,7 +107,7 @@ class BatchScriptTests(unittest.TestCase):
                 str(run_dir),
                 "--cards",
                 str(self.cards_path),
-                "--encounter-candidates",
+                "--exploration-candidates",
                 str(self.candidates_path),
             ],
             capture_output=True,
@@ -128,7 +128,7 @@ class BatchScriptTests(unittest.TestCase):
         manifest = json.loads(Path(first_output["manifest"]).read_text())
         self.assertEqual(manifest["batch_size"], 2)
         self.assertEqual(
-            manifest["encounter_candidates_sha256"],
+            manifest["exploration_candidates_sha256"],
             hashlib.sha256(self.candidates_path.read_bytes()).hexdigest(),
         )
         self.assertEqual(
@@ -190,7 +190,7 @@ class BatchScriptTests(unittest.TestCase):
             str(output["manifest"]),
             "--results-dir",
             str(output["results_dir"]),
-            "--encounter-candidates",
+            "--exploration-candidates",
             str(self.candidates_path),
             "--images-dir",
             str(self.root / "images"),

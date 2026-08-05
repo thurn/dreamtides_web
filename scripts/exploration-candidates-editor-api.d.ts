@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 
-export interface EncounterEditorApiFileSystem {
+export interface ExplorationCandidatesEditorApiFileSystem {
   existsSync(path: string): boolean;
   readFileSync(path: string, encoding: "utf8"): string;
   renameSync(oldPath: string, newPath: string): void;
@@ -8,9 +8,9 @@ export interface EncounterEditorApiFileSystem {
   writeFileSync(path: string, data: string): void;
 }
 
-export function createEncounterEditorApiMiddleware(options?: {
+export function createExplorationCandidatesEditorApiMiddleware(options?: {
   rootDir?: string;
-  fileSystem?: EncounterEditorApiFileSystem;
+  fileSystem?: ExplorationCandidatesEditorApiFileSystem;
 }): (
   req: IncomingMessage,
   res: ServerResponse,

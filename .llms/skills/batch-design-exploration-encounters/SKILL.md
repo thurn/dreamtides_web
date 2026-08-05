@@ -1,12 +1,12 @@
 ---
 name: batch-design-exploration-encounters
-description: In a separate git worktree, select a requested-size random batch of canonical Dreamtides cards absent from data/encounter_candidates.json, delegate one exploration-encounter-designer run per card, append every validated encounter set atomically, commit and push the catalog update, and show the batch in display Markdown. Use when generating encounter candidates in parallel, running a batch of encounter-design subagents, or expanding the encounter candidate catalog by a target count.
+description: In a separate git worktree, select a requested-size random batch of canonical Dreamtides cards absent from data/exploration_candidates.json, delegate one exploration-encounter-designer run per card, append every validated encounter set atomically, commit and push the catalog update, and show the batch in display Markdown. Use when generating encounter candidates in parallel, running a batch of encounter-design subagents, or expanding the encounter candidate catalog by a target count.
 ---
 
 # Batch Design Exploration Encounters
 
 Produce one validated five-encounter set per randomly selected card. The
-persistent deliverable is a committed update to `data/encounter_candidates.json`
+persistent deliverable is a committed update to `data/exploration_candidates.json`
 on a pushed worktree branch. The human-facing deliverable is the complete
 generated `display.md`. Keep card selection, collision detection, catalog
 writes, and display rendering in the bundled scripts; use subagents only for
@@ -52,7 +52,7 @@ and the number of single-card subagent assignments.
    request at <requests_dir>/<card-uuid>.json. Follow that skill completely,
    including artwork inspection and validation. Write the resulting bare JSON
    list of five ranked event objects to <results_dir>/<card-uuid>.json. Do not
-   edit data/encounter_candidates.json or any other batch result. In your final
+   edit data/exploration_candidates.json or any other batch result. In your final
    response, report only the card UUID and result path.
    ```
 
@@ -81,7 +81,7 @@ and the number of single-card subagent assignments.
    results, invalid events, and unresolved artwork before writing. It validates
    the exact delivered result files from their card-only requests and reports
    all per-card failures in one pass. It marks the
-   rank-1 candidate selected for the encounter editor. Candidate actions store
+   rank-1 candidate selected for the Exploration candidates editor. Candidate actions store
    `label`, `template_id`, `variables`, and optional selection metadata;
    canonical template wording remains exclusively in `data/templates.json`.
    The display renderer emits one label-and-effect bullet per action,
@@ -92,7 +92,7 @@ and the number of single-card subagent assignments.
    single-card validator still accepts it.
 
 7. Confirm that aggregation modified the worktree's
-   `data/encounter_candidates.json` and that every manifest UUID has exactly one
+   `data/exploration_candidates.json` and that every manifest UUID has exactly one
    newly appended catalog entry with five ranked events. Treat a successful
    `display.md` without the corresponding catalog diff as a failed run. Run the
    repository's required diff-aware review, commit the catalog update with a
@@ -116,6 +116,6 @@ and the number of single-card subagent assignments.
   not contain editable template copy.
 - Never finish with only temporary result files or display Markdown; the batch
   is complete only after the worktree catalog change is committed and pushed.
-- Never edit `data/encounter_candidates.json` in the primary checkout.
+- Never edit `data/exploration_candidates.json` in the primary checkout.
 - Use the scripts' path overrides only for synthetic tests or an explicitly
   supplied alternate repository data source.

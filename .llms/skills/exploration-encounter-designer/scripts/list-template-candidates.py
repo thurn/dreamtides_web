@@ -17,7 +17,7 @@ from template_rendering import PLACEHOLDER_RE, SPECIAL_RE
 SCRIPTS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPTS_DIR.parents[3]
 DEFAULT_TEMPLATE_CATALOG = REPO_ROOT / "data/templates.json"
-DEFAULT_ENCOUNTER_CANDIDATES = REPO_ROOT / "data/encounter_candidates.json"
+DEFAULT_ENCOUNTER_CANDIDATES = REPO_ROOT / "data/exploration_candidates.json"
 UNIQUE_EFFECT_BALANCE_CLASS = "unique_effect"
 SUPPORTED_BALANCE_CLASSES = {UNIQUE_EFFECT_BALANCE_CLASS}
 
@@ -40,12 +40,12 @@ def parse_args() -> argparse.Namespace:
         help="Canonical template catalog (default: data/templates.json).",
     )
     parser.add_argument(
-        "--encounter-candidates",
+        "--exploration-candidates",
         type=Path,
         default=DEFAULT_ENCOUNTER_CANDIDATES,
         help=(
             "Completed encounter candidate data used for counts "
-            "(default: data/encounter_candidates.json)."
+            "(default: data/exploration_candidates.json)."
         ),
     )
     parser.add_argument(
@@ -389,7 +389,7 @@ def main() -> int:
     try:
         catalog, by_id = load_catalog(args.template_catalog)
         completed_cards, counts, rank_one_counts = count_template_uses(
-            args.encounter_candidates, set(by_id)
+            args.exploration_candidates, set(by_id)
         )
         output = build_output(
             catalog,
