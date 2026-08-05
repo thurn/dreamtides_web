@@ -266,12 +266,14 @@ commentary.
      portion of that name into a proper noun, or lean on repeated name words
      instead of fresh scene language? Reject it. Do not reject an independently
      useful ordinary word merely because it also occurs in the card name.
-   - **Introduction gate:** Does the prose use the definite article `the`
-     anywhere, or begin with `one` to introduce a singular subject? Reject it.
-     Each prose field is an independent first glimpse: introduce every singular
-     subject with `a` or `an`, or use a clear plural or uncountable construction.
-     A possessive pronoun may refer back to a subject already introduced in that
-     same prose field.
+   - **First-arrival gate:** Does the prose read as a newcomer's first sight of
+     the scene, introducing pictured referents without presuming prior
+     familiarity? Reject prose that uses the definite article `the` anywhere or
+     begins with `one` to introduce a singular subject. Use `a` or `an` as the
+     default when directly introducing a singular count noun, while allowing any
+     immediately clear self-contained construction, including plural,
+     quantified, and uncountable subjects. A possessive pronoun may refer back
+     to a subject already introduced in that same prose field.
    - **Material-fidelity gate:** Are all subjects, objects, setting
      features, actions, and physical conditions visible or strongly implied?
      Reject invented companions, crowds, creatures, props, structures, weather
@@ -533,13 +535,16 @@ commentary.
   pronouns, a player, a reader, a viewer, or any substitute for an off-image
   observer. Do not orient the scene around an implied viewpoint with phrases
   such as `before you`, `toward you`, or `above you`.
-- Treat every `prose` field as an independent first glimpse. Never use the
-  definite article `the` anywhere in prose. Introduce every singular subject
-  with `a` or `an`; never use `one` as its introductory determiner. A plural or
-  uncountable subject may appear without an article, and a possessive pronoun may
-  refer back to a subject already introduced in that same prose field. Let the
-  sentence lead with atmosphere, action, or sensory detail only when every
-  subject remains independently introduced and immediately clear.
+- Write every `prose` field as a newcomer's first sight of the scene. Introduce
+  pictured referents without presuming that they are already familiar: write
+  `An owl clutches a branch`, not `The owl clutches the branch`. Never use the
+  definite article `the` anywhere in prose. Use `a` or `an` as the general
+  default when directly introducing a singular count noun; it is not mandatory
+  when another immediately clear, self-contained construction introduces the
+  subject. Plural, quantified, and uncountable subjects may appear without an
+  article, and a possessive pronoun may refer back to a subject already
+  introduced in that same prose field. Never use `one` merely as a substitute
+  introductory determiner for `a` or `an`.
 - Keep the entire `prose` field near 8–14 words and never above 16. Use more
   than one sentence only when the extra sentence adds real value.
 - Describe a scene, not a miniature quest or an illustrated reward. Establish

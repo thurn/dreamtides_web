@@ -465,14 +465,14 @@ def validate_output(
         if PROSE_DEFINITE_ARTICLE_RE.search(prose):
             fail(
                 f"{event_path}.prose",
-                "must not use the definite article 'the'; introduce each "
-                "singular subject with 'a' or 'an'",
+                "must read as a newcomer's first sight of the scene and must "
+                "not use the definite article 'the'",
             )
         if PROSE_ONE_INTRODUCTION_RE.search(prose):
             fail(
                 f"{event_path}.prose",
                 "must not begin with 'one' as a singular-subject introduction; "
-                "use 'a' or 'an'",
+                "use 'a', 'an', or another clear introductory form",
             )
         if SCENE_TAXONOMY_RE.search(prose):
             fail(

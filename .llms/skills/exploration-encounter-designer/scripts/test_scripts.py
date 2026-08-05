@@ -774,6 +774,7 @@ rendered-text = "Gain 1 energy."
 
     def test_rejects_the_definite_article_anywhere_in_prose(self) -> None:
         for prose in (
+            "The owl clutches the branch",
             "The silver owl spreads broad wings beneath stars",
             "A silver owl grips the branch beneath stars",
         ):
@@ -794,6 +795,20 @@ rendered-text = "Gain 1 energy."
         )
 
         self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_accepts_clear_subject_introductions_without_a_or_an(self) -> None:
+        for prose in (
+            "An owl clutches a branch",
+            "Luminous seams cross silver plating beneath stars",
+            "Three silver owls spread broad wings beneath stars",
+            "Moonlight gleams across feathered wings beneath stars",
+        ):
+            with self.subTest(prose=prose):
+                result = self.run_output_validator(
+                    "33333333-3333-4333-8333-333333333333",
+                    prose=prose,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_rejects_one_as_a_singular_subject_introduction(self) -> None:
         result = self.run_output_validator(

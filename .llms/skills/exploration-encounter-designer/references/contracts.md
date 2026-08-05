@@ -219,12 +219,15 @@ Score each component from 1–10:
   materially faithful description of the card's artwork. Score it with mechanics
   and actions hidden. It uses entity-focused third-person present tense and
   contains no first- or second-person pronouns, player, reader, viewer, implied
-  off-image observer, or viewpoint-relative framing. It never uses the definite
-  article `the`, and it never begins with `one` to introduce a singular subject;
-  each singular subject is introduced with `a` or `an`. Subjects, objects, setting
-  features, depicted actions, and physical conditions must be visible or
-  strongly implied. For a Character
-  card, reject a candidate before scoring unless the canonical character
+  off-image observer, or viewpoint-relative framing. Each prose field reads as
+  a newcomer's first sight of the scene and introduces pictured referents
+  without presuming prior familiarity. It never uses the definite article `the`
+  or begins with `one` to introduce a singular subject. `A` or `an` is the
+  general default for a directly introduced singular count noun, while other
+  immediately clear plural, quantified, uncountable, or self-contained
+  constructions remain valid. Subjects, objects, setting features, depicted
+  actions, and physical conditions must be visible or strongly implied. For a
+  Character card, reject a candidate before scoring unless the canonical character
   identified by the card name is the primary subject and the only person,
   creature, or character-like figure described. Visible non-character elements
   such as props, architecture, terrain, weather, light, and framing shapes may
