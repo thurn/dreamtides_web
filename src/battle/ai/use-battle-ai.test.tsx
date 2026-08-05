@@ -668,7 +668,7 @@ describe("useBattleAi", () => {
 
   // The endTurn proposal resolves the Challenge through the unified, keyword-
   // aware `engine/challenge.resolveChallenge` (Task 5.2). These cases prove the
-  // three combat keywords flow through the AI's committed Challenge edits —
+  // combat keywords flow through the AI's committed Challenge edits —
   // outcomes the prior keyword-blind judgment shim dropped. Each places the AI's
   // (enemy) challenger and the player's blocker in front-rank F0, then inspects
   // the endTurn proposal's DEBUG_EDIT edits.
@@ -713,29 +713,6 @@ describe("useBattleAi", () => {
         battleCardId: loser,
         destination: { side: "player", zone: "void" },
       });
-    });
-
-    it("lets an AI Preeminence character win a spark tie instead of trading", async () => {
-      // Keyword-blind: a 4v4 tie dissolved both. Keyword-aware: the AI's
-      // Preeminence bearer survives; only the opposing blocker dissolves.
-      let champion = "";
-      let blocker = "";
-      const edits = await endTurnEdits((mutable) => {
-        champion = placeFrontRankCharacter(mutable, "enemy", "aiPreeminence", 4, "Preeminence");
-        blocker = placeFrontRankCharacter(mutable, "player", "blocker", 4, "");
-      });
-
-      expect(edits).toContainEqual({
-        kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: blocker,
-        destination: { side: "player", zone: "void" },
-      });
-      expect(
-        edits.some(
-          (edit) =>
-            edit.kind === "MOVE_CARD_TO_ZONE" && edit.battleCardId === champion,
-        ),
-      ).toBe(false);
     });
   });
 });

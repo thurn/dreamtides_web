@@ -60,7 +60,6 @@ Raw symbol occurrence counts (cards_v2): ● 285 · ✦ 142 · ▸ 157 · ☪ 65
 - [ ] **Ephemeral** — drawn-with-ephemeral cards banish at end of turn if still in hand. Rendered lowercase: "draw a card with ephemeral", 9 occurrences. **[DET]** (end-of-turn banish is automatic)
   - Examples: *Vrakmoth* (dream avatar), several "draw a card with ephemeral" cards
 - [ ] **Vengeful** — on losing a challenge, dissolves the opposing enemy. 5 occurrences (plus innate on Wraith figment). **[DET]**
-- [ ] **Preeminence** — wins spark ties. 0 on cards; innate on **Celestial** figment only. **[DET]**
 - [ ] **Veil N●** — opponent pays N● extra to target this character. 18 occurrences. **[DET]** for the source; the opponent's pay-or-fail is **[CHOICE]** at target time
   - Examples: *"Veil 2●"*, *"Awakened, Veil 2●"*
 - [ ] **Support – <benefit>** — back-rank character benefits the ≤2 front-rank positions it supports. Keyword form "Support –": 8; "Supported" refs: 8. **[DET]** (positional, board-derived)
@@ -203,7 +202,7 @@ Figment-creation counts by type (occurrences of "<type> figment" in rendered-tex
 - [ ] **Monstrosity** (4✦) — 1. **[DET]**
 - [ ] **Survivor** (1✦) — 4. **[DET]**
   - Example: *"▸Dissolved: Materialize X 1✦ survivor figments, where X is this character's spark."*
-- [ ] **Celestial** (2✦, Preeminence) — 0 created. **[DET]**
+- [ ] **Celestial** (2✦) — 0 created. **[DET]**
 - [ ] **Wraith** (0✦, Vengeful) — 1. **[DET]**
 - [ ] **Ethereal** (1✦) — 6. **[DET]**
 - [ ] **Radiant** (2✦) — 0–1 ("radiant figment" appears, e.g. "materialize a 2✦ radiant figment"). **[DET]**
@@ -339,8 +338,8 @@ activated 15, Once-per-turn 6, ▸Dawn 1, ▸Night 1, Abandon-cost 3, figment-cr
 
 - **Phasing** (6 cards) has no definition in `battle_rules.md`. Needs a rule before it can be
   automated. Currently unclassifiable.
-- **Preeminence** and several figment types (Ancient, Enigma, Synth, Celestial) are not created
-  by any card text but still need engine support because the figment table defines them and
+- Several figment types (Ancient, Enigma, Synth, Celestial) are not created by
+  any card text but still need engine support because the figment table defines them and
   subtypes appear on real cards.
 - The biggest automation wins are the **named triggers** (▸Materialized 81, ▸Dawn 41,
   ▸Dissolved 20) and **figment materialization** (177 materialize occurrences) — all [DET]

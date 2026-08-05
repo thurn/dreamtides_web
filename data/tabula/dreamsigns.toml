@@ -204,14 +204,6 @@ rendered-text = "If the first card you draw during your turn is a warrior, reduc
 tags = ["Tag OK"]
 
 [[dreamsign]]
-id = "59D44948-210A-4703-B031-CB938C917150"
-name = "Carved Stick"
-image_name = "stick.png"
-tides = ["warrior_pressure", "warrior_bastion", "spark_growth"]
-rendered-text = "Warriors you control have preeminence."
-tags = ["Tag OK", "Ally Audit"]
-
-[[dreamsign]]
 id = "DBBADE86-9FB6-4283-B2DC-9C1EF66FD531"
 name = "Skull Drum"
 image_name = "drum.png"

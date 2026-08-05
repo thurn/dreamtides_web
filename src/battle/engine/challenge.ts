@@ -22,18 +22,16 @@ import { frontRankSlotIds, rankSlotIds, slotIndex } from "../types";
  * one active side as a pure proposal: it reads `input.state` but never mutates
  * it, never performs the void moves itself, and never interprets a card's
  * printed effect prose. The ONLY card text it reads is the narrow scan for the
- * three combat keywords below (see `hasCombatKeyword`); everything else is driven
+ * two combat keywords below (see `hasCombatKeyword`); everything else is driven
  * by board structure and card fields (spark, type, figment membership).
  *
- * The three combat keywords (rules §Keywords and Effects):
+ * The two combat keywords (rules §Keywords and Effects):
  *
  *  - **Vengeful** — when its bearer loses a challenge, it drags the opposing
  *    enemy character down too (both dissolve).
- *  - **Preeminence** — wins spark ties; if both characters in a lane have
- *    Preeminence the tie resolves normally (both dissolve).
  *  - **Awakened** — an enter-play / exhaustion keyword. It has no effect on
  *    Challenge resolution (scoring or dissolution); it is detected here only so
- *    keyword detection is uniform across all three combat keywords. The exhaust
+ *    keyword detection is uniform across both combat keywords. The exhaust
  *    system, not this resolver, consumes Awakened.
  *
  * Keyword detection precedence (rules §Figments — implicit keywords): an
@@ -86,7 +84,7 @@ export function resolveChallengeLane(
 }
 
 /** A combat keyword the resolver detects. */
-export type CombatKeyword = "vengeful" | "preeminence" | "awakened";
+export type CombatKeyword = "vengeful" | "awakened";
 
 /**
  * Figment base types carry an implicit combat keyword (rules §Figments). Their
@@ -102,12 +100,11 @@ const FIGMENT_KEYWORDS: Readonly<Record<string, CombatKeyword>> = {
 
 /**
  * The narrow, sanctioned text scan: the ONLY place the engine reads printed card
- * prose, and it is limited to detecting these four combat-keyword lines. Each
+ * prose, and it is limited to detecting these combat-keyword lines. Each
  * pattern is a whole-word, case-insensitive match for the keyword name.
  */
 const KEYWORD_PATTERNS: Readonly<Record<CombatKeyword, RegExp>> = {
   vengeful: /\bvengeful\b/i,
-  preeminence: /\bpreeminence\b/i,
   awakened: /\bawakened\b/i,
 };
 
@@ -120,7 +117,6 @@ const GRANTED_FLAGS: Readonly<
   Record<CombatKeyword, keyof BattleCardInstance["status"]>
 > = {
   vengeful: "grantedVengeful",
-  preeminence: "grantedPreeminence",
   awakened: "grantedAwakened",
 };
 
@@ -128,7 +124,7 @@ const GRANTED_FLAGS: Readonly<
  * Whether `instance` carries `keyword`, checking, in precedence order: the
  * effect-`granted*` status flag, then the narrow printed-text scan, then the
  * figment type's implicit keyword. This is the sole reader of card prose in the
- * engine and is strictly limited to the three combat keywords.
+ * engine and is strictly limited to the two combat keywords.
  */
 export function hasCombatKeyword(
   instance: BattleCardInstance,
@@ -285,19 +281,15 @@ function resolveLane(params: {
     };
   }
 
-  // Both present: resolve the topmost-vs-topmost spark comparison, with
-  // Preeminence breaking ties. A Figment that loses destroys only its topmost
-  // member; the leave-play replacement keeps its reserves in play.
+  // Both present: resolve the topmost-vs-topmost spark comparison. A losing
+  // Figment stack loses only its topmost member; the leave-play replacement
+  // keeps its reserves in play.
   const baseChallengerDissolves = dissolvesAgainst(
-    challenger,
     challengerSpark.compare,
-    blocker,
     blockerSpark.compare,
   );
   const baseBlockerDissolves = dissolvesAgainst(
-    blocker,
     blockerSpark.compare,
-    challenger,
     challengerSpark.compare,
   );
   let challengerDissolves = baseChallengerDissolves;
@@ -392,35 +384,14 @@ function laneSpark(
 }
 
 /**
- * Whether `self` loses its spark comparison against `opposing`. A character
- * dissolves on a lower or tied spark, except a tie won by Preeminence. For a
- * figment stack `selfSpark`/`opposingSpark` are the topmost figments' sparks, so
- * a losing stack destroys only its topmost Figment through the leave-play
- * replacement.
+ * Whether a participant loses its spark comparison. A character dissolves on
+ * lower or tied spark. For a figment stack `selfSpark`/`opposingSpark` are the
+ * topmost figments' sparks, so a losing stack loses only its topmost Figment
+ * through the leave-play replacement.
  */
 function dissolvesAgainst(
-  self: BattleCardInstance,
   selfSpark: number,
-  opposing: BattleCardInstance,
   opposingSpark: number,
 ): boolean {
-  if (selfSpark > opposingSpark) {
-    return false;
-  }
-  if (selfSpark < opposingSpark) {
-    return true;
-  }
-  // Spark tie: Preeminence wins unless the opponent also has it.
-  return !winsTieByPreeminence(self, opposing);
-}
-
-/** Whether `self` wins a spark tie because only it carries Preeminence. */
-function winsTieByPreeminence(
-  self: BattleCardInstance,
-  opposing: BattleCardInstance,
-): boolean {
-  return (
-    hasCombatKeyword(self, "preeminence") &&
-    !hasCombatKeyword(opposing, "preeminence")
-  );
+  return selfSpark <= opposingSpark;
 }

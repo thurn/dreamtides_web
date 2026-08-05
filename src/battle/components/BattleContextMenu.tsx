@@ -352,7 +352,6 @@ export function BattleContextMenu({
       items.push({ divider: true });
 
       items.push(grantedKeywordItem("Vengeful", "grantedVengeful", status.grantedVengeful));
-      items.push(grantedKeywordItem("Preeminence", "grantedPreeminence", status.grantedPreeminence));
       items.push(grantedKeywordItem("Awakened", "grantedAwakened", status.grantedAwakened));
 
       return items;
@@ -360,7 +359,7 @@ export function BattleContextMenu({
 
     function grantedKeywordItem(
       label: string,
-      field: "grantedVengeful" | "grantedPreeminence" | "grantedAwakened",
+      field: "grantedVengeful" | "grantedAwakened",
       isGranted: boolean,
     ): ContextMenuItem {
       return {

@@ -267,8 +267,8 @@ rules (`docs/battle_rules/battle_rules.md`). Structural automation runs the
 deterministic bookkeeping the rules derive purely from board state, while the
 player resolves character rules text by hand through the debug rail. Static
 Support spark is automated. Dreamwell cards retain their independent effect
-automation. The Challenge resolver also applies the three sanctioned resolution
-keywords (Vengeful, Preeminence, Awakened).
+automation. The Challenge resolver also applies the sanctioned resolution
+keywords Vengeful and Awakened.
 
 ### Board and ranks
 
@@ -282,7 +282,7 @@ position `Bi` supports front positions `F(i-1)` and `Fi` wherever they exist.
 
 Every in-play card carries a `BattleCardStatus`: `isExhausted`, counters,
 `reclaimed`, `offering`, `ephemeral`, `veil`, and the granted keyword flags
-`grantedVengeful`, `grantedPreeminence`, and `grantedAwakened`. Figments are
+`grantedVengeful` and `grantedAwakened`. Figments are
 discrete entries (a `figments?: number[]` list)
 drawn from a 10-type catalog; the Figment creator on the debug rail produces
 them. Effective spark counts each figment on a character, including one share
@@ -328,10 +328,9 @@ into the ordered edits the rules require:
 
 `engine/challenge.ts` `resolveChallenge` is the unified, keyword-aware resolver
 used by both sides. It compares challenger and blocker spark lane by lane,
-scores a winning challenger's spark advantage, and scans for the three sanctioned
-keywords: **Preeminence** wins spark ties and **Vengeful** drags the winner down
-when its bearer loses. **Awakened** is detected only so keyword detection is
-uniform across all three;
+scores a winning challenger's spark advantage, and scans for the sanctioned
+keywords. **Vengeful** drags the winner down when its bearer loses.
+**Awakened** is detected so keyword detection remains centralized;
 the exhaust system, not the resolver, consumes it. The resolver returns the
 score deltas and the dissolve-to-void edits that commit the outcome.
 

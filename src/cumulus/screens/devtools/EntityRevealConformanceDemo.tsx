@@ -59,7 +59,7 @@ const TRUNCATION_CARD: CardData = {
   id: asCardId("88888888-8888-4888-8888-888888888888"),
   name: asCardName("Conformance Lexicon"),
   cardNumber: 8,
-  renderedText: "Figment. Materialize. Rematerialize. Dissolve. Banish. Abandon. Score. Reclaim. Foresee. Discover. Erode. Fast. Awakened. Preeminence. Veil. Vengeful. Support. Challenger. Prevent. Offering. Phasing. Ephemeral. Transfigure. Purge. Duplicate. Bane. Essence. Enhanced.",
+  renderedText: "Figment. Materialize. Rematerialize. Dissolve. Banish. Abandon. Score. Reclaim. Foresee. Discover. Erode. Fast. Awakened. Veil. Vengeful. Support. Challenger. Prevent. Offering. Phasing. Ephemeral. Transfigure. Purge. Duplicate. Bane. Essence. Enhanced.",
 };
 const DREAM_AVATAR = { id: "99999999-9999-4999-8999-999999999999", name: "Conformance Guide", title: "Keeper of Context", imageNumber: "0071" };
 

@@ -158,7 +158,7 @@ The period rule turns on *what kind of line* it is:
 - **Standalone keywords take no terminal period.** These are keywords that grant
   a static property on their own line: `Veil 2●`, `Reclaim 1●`,
   `Reclaim – Discard a card`, `Vengeful`, `Awakened`, `Offering`,
-  `Preeminence`, `Ephemeral`.
+  `Ephemeral`.
 - **Effects always take a terminal period.** An effect such as `Erode 3` or
   `Store 1⧗` never stands alone — it is always reached through a trigger or cost
   — so it ends the sentence it belongs to: `When you discard a card, store 1⧗.`,

@@ -420,7 +420,6 @@ export interface BattleCardStatus {
    */
   veil: boolean;
   grantedVengeful: boolean;
-  grantedPreeminence: boolean;
   grantedAwakened: boolean;
   /** A one-turn permission to play this card from its controller's void. */
   temporaryReclaimUntilEnding?: {

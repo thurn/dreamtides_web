@@ -229,36 +229,6 @@ describe("resolveChallenge — plain spark comparison", () => {
   });
 });
 
-describe("resolveChallenge — Preeminence", () => {
-  it("lets a Preeminence character win a spark tie (printed text)", () => {
-    const state = lane0State(
-      makeInstance("p0", { owner: "player", printedSpark: 4, renderedText: "Preeminence" }),
-      makeInstance("e0", { owner: "enemy", printedSpark: 4 }),
-    );
-    const resolution = resolveChallenge({ state, activeSide: "player" });
-    expect(dissolvedIds(resolution)).toEqual(["e0"]);
-    expect(resolution.lanes[0].winner).toBe("player");
-  });
-
-  it("dissolves both when both have Preeminence on a tie", () => {
-    const state = lane0State(
-      makeInstance("p0", { owner: "player", printedSpark: 4, renderedText: "Preeminence" }),
-      makeInstance("e0", { owner: "enemy", printedSpark: 4, renderedText: "Preeminence" }),
-    );
-    const resolution = resolveChallenge({ state, activeSide: "player" });
-    expect(dissolvedIds(resolution).sort()).toEqual(["e0", "p0"]);
-  });
-
-  it("does not save a Preeminence character that is strictly outsparked", () => {
-    const state = lane0State(
-      makeInstance("p0", { owner: "player", printedSpark: 3, renderedText: "Preeminence" }),
-      makeInstance("e0", { owner: "enemy", printedSpark: 5 }),
-    );
-    const resolution = resolveChallenge({ state, activeSide: "player" });
-    expect(dissolvedIds(resolution)).toEqual(["p0"]);
-  });
-});
-
 describe("resolveChallenge — Vengeful", () => {
   it("drags the winner down when the loser is Vengeful", () => {
     const state = lane0State(
@@ -482,7 +452,6 @@ describe("hasCombatKeyword — detection precedence", () => {
       status: { grantedVengeful: true },
     });
     expect(hasCombatKeyword(instance, "vengeful")).toBe(true);
-    expect(hasCombatKeyword(instance, "preeminence")).toBe(false);
   });
 
   it("detects each keyword from a printed-text scan", () => {
@@ -490,12 +459,6 @@ describe("hasCombatKeyword — detection precedence", () => {
       hasCombatKeyword(
         makeInstance("b", { owner: "player", renderedText: "Vengeful." }),
         "vengeful",
-      ),
-    ).toBe(true);
-    expect(
-      hasCombatKeyword(
-        makeInstance("c", { owner: "player", renderedText: "Preeminence" }),
-        "preeminence",
       ),
     ).toBe(true);
     expect(
@@ -521,14 +484,6 @@ describe("hasCombatKeyword — detection precedence", () => {
       subtype: "Wraith",
     });
     expect(hasCombatKeyword(wraith, "vengeful")).toBe(true);
-
-    // Monstrosity carries no inherent combat keyword.
-    const monstrosity = makeInstance("fig3", {
-      owner: "player",
-      isFigment: true,
-      subtype: "Monstrosity",
-    });
-    expect(hasCombatKeyword(monstrosity, "preeminence")).toBe(false);
 
     const ember = makeInstance("fig4", {
       owner: "player",

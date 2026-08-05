@@ -131,7 +131,6 @@ const HIGHLIGHTED_TERMS: ReadonlySet<string> = new Set([
   "reclaimed",
   "offering",
   "vengeful",
-  "preeminence",
   // Journey verbs that appear in dreamsign text.
   "enhanced",
   "duplicate",

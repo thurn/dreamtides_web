@@ -253,15 +253,6 @@ matches-rules-text = true
 variants = []
 
 [[entries]]
-id = "preeminence"
-category = "Keywords"
-term = "Preeminence"
-definition = "Wins ✦ ties during challenges."
-priority = 90
-matches-rules-text = true
-variants = []
-
-[[entries]]
 id = "veil"
 category = "Keywords"
 term = "Veil"

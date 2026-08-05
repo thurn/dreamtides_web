@@ -13,7 +13,7 @@ import type { Genesis, LogNode } from "../eventlog/types";
 import { getLogEntries, resetLog } from "../logging";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 
-const REDUCER_VERSION = "dreamtides-coop-v7";
+const REDUCER_VERSION = "dreamtides-coop-v8";
 
 // Captured subscriber so a test can hand RoomGate a chosen log node.
 let deliverNode: ((node: LogNode) => void) | null = null;

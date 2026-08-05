@@ -36,7 +36,6 @@ export function createDefaultBattleCardStatus(): BattleCardStatus {
     ephemeral: false,
     veil: false,
     grantedVengeful: false,
-    grantedPreeminence: false,
     grantedAwakened: false,
     temporaryReclaimUntilEnding: null,
     temporaryBanishUntilEnding: null,

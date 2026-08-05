@@ -256,8 +256,7 @@ by both sides (the human benefits from it too).
   front-rank lane `F0`–`F8`, compare the controller's challenger spark against
   the opposing blocker directly opposite. Apply the rules in
   `battle_rules.md` §Challengers, Blockers, and Scoring: lower spark dissolves,
-  ties dissolve both (respecting Preeminence — absent from the Starter pool but
-  cheap to support), unpaired challengers score their spark, figment stacks
+  ties dissolve both, unpaired challengers score their spark, figment stacks
   resolve top-down using the existing `selectFigmentChallengeLossCount`.
   `resolveChallenge` is a pure function: it reads the state but mutates nothing,
   returning a `ChallengeResolution` with the score deltas and the edits that
@@ -308,8 +307,8 @@ can change a turn's outcome:
    order, so a ▸Dissolved — or a Support source dissolving — in an early lane can
    change the spark of later lanes: a supporter dying in `F0` silently drops +✦
    from a challenger in `F2`.
-3. **Keywords and statics that bend the comparison.** Vengeful, Preeminence,
-   and continuous Support / "+X✦ for each…" each change a lane's
+3. **Keywords and statics that bend the comparison.** Vengeful and continuous
+   Support / "+X✦ for each…" each change a lane's
    result.
 
 The design handles this by separating two concerns that are easy to conflate:
@@ -333,12 +332,12 @@ At each window the engine resolves automatically only:
 
 - effects from cards it fully models (the AI's ten Starter cards), and
 - a small allowlist of *general* keywords that are rules rather than card-specific
-  text — Vengeful, Preeminence, and the base spark comparison.
+  text — Vengeful and the base spark comparison.
 
 For anything else in play, a conservative **capability check** decides whether to
 pause. It is a lightweight scan of the in-play card's `renderedText`, keywords,
 and `tags` for the markers the rules already standardize — a `▸` trigger, a `–`
-keyword, the resolution keywords above, or static `+X✦` text — during a relevant
+keyword, the resolution keyword above, or static `+X✦` text — during a relevant
 window. It does not interpret the effect; it only detects that one exists, which
 is enough to stop and hand the step to the human. The AI's own cards are
 whitelisted, so the AI side never pauses spuriously.

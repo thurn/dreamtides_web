@@ -101,7 +101,6 @@ function card(battleCardId: string, controller: "player" | "enemy"): BattleCardI
       ephemeral: false,
       veil: false,
       grantedVengeful: false,
-      grantedPreeminence: false,
       grantedAwakened: false,
     },
     markers: { isPrevented: false, isCopied: false },

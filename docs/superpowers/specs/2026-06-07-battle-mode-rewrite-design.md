@@ -51,7 +51,7 @@ card fields** — energy cost, spark, card type, subtype, figment type, zone, ra
 phase, status flags, counters. They **never interpret a card's printed effect
 prose.** Players remain responsible for resolving card effects, using the debug
 rail. (One narrow, explicit exception: a text-scan for the combat keywords
-Vengeful / Preeminence / Awakened during Challenge resolution —
+Vengeful / Awakened during Challenge resolution —
 see §3.)
 
 **Non-goals (explicitly out of scope):**
@@ -80,7 +80,7 @@ These were confirmed during brainstorming and are not open:
    Dreamwell deck; the text-y per-card bonus effects are applied by the player via
    the debug rail.
 4. **Combat keywords:** **pragmatic text-scan**, limited strictly to Vengeful /
-   Preeminence / Awakened during Challenge resolution.
+   Awakened during Challenge resolution.
    Figments derive their keyword from their type. No other card-text scanning.
 5. **Figments:** **discrete per-figment instances** — a stack holds individual
    figments each with their own spark.
@@ -135,7 +135,7 @@ a figment yields correct defaults instead of free-typed values:
 | Type | Base ✦ | Keyword | | Type | Base ✦ | Keyword |
 | --- | --- | --- | --- | --- | --- | --- |
 | Warrior | 1 | — | | Survivor | 1 | — |
-| Ancient | 4 | — | | Celestial | 2 | Preeminence |
+| Ancient | 4 | — | | Celestial | 2 | — |
 | Enigma | 0 | — | | Wraith | 0 | Vengeful |
 | Shadow | 2 | — | | Ethereal | 1 | — |
 | Spirit Animal | 1 | — | | Radiant | 2 | — |
@@ -194,8 +194,8 @@ must:
   static contributions** (fixing the current silent omission);
 - resolve defended (lower/tied dissolves; ties dissolve both) and unpaired
   (scores ⍟ = spark) cases;
-- apply combat keywords: Preeminence breaks ties and Vengeful drags the winner
-  down (keyword via status flag, then the narrow text-scan, then figment-type);
+- apply combat keywords: Vengeful drags the winner down (keyword via status
+  flag, then the narrow text-scan, then figment-type);
 - resolve **figment stacks top-down** over discrete figments;
 - snapshot challenger/defender **designations** (challengers at end of Day,
   defenders at end of Dusk) so Night repositioning can change them per the rules;
@@ -389,7 +389,7 @@ Discover (31).
 hand+void-into-deck resets.
 
 **Coverage notes:** (a) **Phasing** (~6 cards) is now defined — a ▸Materialized
-return-and-reposition — and must be documented in `battle_rules.md` (see §8). (b) Preeminence and the figment types
+return-and-reposition — and must be documented in `battle_rules.md` (see §8). (b) The figment types
 Ancient / Enigma / Synth / Celestial are never produced by card text but still need
 engine support (figment catalog / subtypes). (c) **▸Dusk** has zero card instances
 today, but the trigger slot must still exist.

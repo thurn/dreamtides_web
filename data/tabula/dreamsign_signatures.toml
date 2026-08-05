@@ -353,21 +353,6 @@ signature-card-ids = [
 ]
 
 [[dreamsigns]]
-id = "59d44948-210a-4703-b031-cb938c917150"
-category = "tailored"
-signature-card-ids = [
-  "57bb1572-6075-4efd-a592-102b134132fd",
-  "7947e9db-a85e-4277-a42a-8d45f7475295",
-  "742a376f-68db-466a-b087-405188634ba4",
-  "56411ed4-bda9-4fdf-82e5-b5492de67039",
-  "f79c63f6-7cf1-4030-be39-217fd3c2fb7f",
-  "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a",
-  "8c117d3f-09af-4312-9897-694a76bd23c6",
-  "90a6a7a0-b739-475e-8379-647741aab423",
-  "867b98cf-171b-497b-9252-9af5dcf70726",
-]
-
-[[dreamsigns]]
 id = "dbbade86-9fb6-4283-b2dc-9c1ef66fd531"
 category = "tailored"
 signature-card-ids = [

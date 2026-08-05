@@ -46,7 +46,6 @@ describe("rules-text highlight emphasis", () => {
       "reclaim",
       "offering",
       "vengeful",
-      "preeminence",
     ]) {
       expect(isHighlightedRulesTextTerm(word)).toBe(true);
     }

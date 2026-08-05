@@ -101,7 +101,7 @@ describe("needsManualResolution", () => {
     });
   });
 
-  describe("resolution keywords (case-insensitive word match)", () => {
+  describe("resolution keyword (case-insensitive word match)", () => {
     it("returns true for an unmodeled card with standalone 'Vengeful'", () => {
       // Real text from card #6 in cards_v2-data.json (not in MODELED set)
       const instance = makeInstance(
@@ -115,11 +115,6 @@ describe("needsManualResolution", () => {
       );
       expect(needsManualResolution(instance, MODELED)).toBe(false); // allowlisted
       expect(needsManualResolution(instance2, MODELED)).toBe(true);
-    });
-
-    it("returns true for an unmodeled card whose text mentions 'Preeminence'", () => {
-      const instance = makeInstance("Preeminence\n\nThis character cannot be banished.", 500);
-      expect(needsManualResolution(instance, MODELED)).toBe(true);
     });
 
   });

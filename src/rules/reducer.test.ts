@@ -228,7 +228,6 @@ function makeCardInstance(battleCardId: string): BattleCardInstance {
       ephemeral: false,
       veil: false,
       grantedVengeful: false,
-      grantedPreeminence: false,
       grantedAwakened: false,
     },
     markers: { isPrevented: false, isCopied: false },

@@ -277,16 +277,6 @@ cost-bands = []
 keywords = []
 quality = 2
 
-# Carved Bone — allied warriors have Preeminence; a Warrior-wide global buff
-# that pays off with any warrior board.
-[[dreamsigns]]
-id = "59D44948-210A-4703-B031-CB938C917150"
-subtypes = ["Warrior"]
-card-types = ["Character"]
-cost-bands = []
-keywords = []
-quality = 1
-
 # Skull Drum — when you play an event with ≥3 allied spirit animals, it costs
 # 1● less; rewards Spirit Animal decks that also chain events.
 [[dreamsigns]]

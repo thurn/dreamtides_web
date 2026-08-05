@@ -42,10 +42,10 @@ export function needsManualResolution(
     return true;
   }
 
-  // ── Rule 3: resolution keywords (case-insensitive whole-word match) ────────
-  // Vengeful and Preeminence modify how combat resolution or
-  // zone transitions work; the engine cannot apply them without special logic.
-  if (/\b(?:vengeful|preeminence)\b/i.test(text)) {
+  // ── Rule 3: resolution keyword (case-insensitive whole-word match) ─────────
+  // Vengeful modifies how combat resolution and zone transitions work; the
+  // engine cannot apply it without special logic.
+  if (/\bvengeful\b/i.test(text)) {
     return true;
   }
 

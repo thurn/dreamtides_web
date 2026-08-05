@@ -299,7 +299,7 @@ right:
 
 - **Blocked challenger:** Compare the spark of the challenger and its blocker.
   The character with lower spark is dissolved. If both have equal spark, both are
-  dissolved (unless one has Preeminence; see [Keywords](#keywords-and-effects)).
+  dissolved.
   When the challenger wins, it scores victory points equal to the difference
   between its spark and the blocker's spark. For example, an 8✦ challenger that
   wins against a 2✦ blocker scores 6⍟. A winning blocker scores 0⍟.
@@ -474,9 +474,6 @@ it is still in hand, so it must be played the turn it is drawn.
 
 **Vengeful** — When this character loses a challenge, it dissolves the opposing
 enemy character. In effect both characters in the challenge are dissolved.
-
-**Preeminence** — This character wins spark ties in a challenge. If both
-characters in a challenge have Preeminence, both are dissolved as normal.
 
 **Prevent** — Counter a card on the stack, sending it to the void without
 resolving. Prevent effects are always Interrupts. Variants include conditional
