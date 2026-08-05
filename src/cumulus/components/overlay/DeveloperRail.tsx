@@ -57,7 +57,6 @@ export function DeveloperRail({
     >
       <GlassPanel
         frame="edgeRail"
-        heightMode="fill"
         eyebrow="Developer Tools"
         title={title}
         subtitle={subtitle}

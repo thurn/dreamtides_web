@@ -1104,8 +1104,8 @@ describe("ExplorationSiteScreen", () => {
     );
     expect(
       container.querySelector<HTMLElement>(
-        '[data-exploration-followup="dreamsigns"] [data-glass-panel-height-mode]',
-      )?.dataset.glassPanelHeightMode,
+        '[data-exploration-followup="dreamsigns"] [data-glass-panel-height-contract]',
+      )?.dataset.glassPanelHeightContract,
     ).toBe("content");
     expect(
       container.querySelector(

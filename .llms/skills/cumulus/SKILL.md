@@ -347,12 +347,13 @@ adapter against its own inputs. Full rationale:
 
 ## Core rendering rules
 
-- **Panels hug content by default**: `GlassPanel` sizes to its header, body,
-  and footer. A wrapper may constrain width and placement, but it does not add
-  decorative height. Use `heightMode="fill"` only for a definite-height rail,
-  scrolling gallery, or authored composition stage whose layout demonstrably
-  needs that height; ordinary prompts, menus, summaries, and choices remain
-  content-sized.
+- **Panels hug content without exception**: a floating `GlassPanel` sizes to
+  its header, body, and footer. Unassigned interior whitespace is invalid. A
+  wrapper may constrain width and placement, but neither the panel nor its
+  slots receive decorative height, flex growth, stretch equalization, or a
+  spacer that separates content. Cap overflowing content with `max-height` and
+  scrolling. Definite-height developer rails and full-bleed galleries use
+  their named frame contracts instead of stretching a floating panel.
 - **Material continuity**: meaningful objects travel or expand between
   states (object-travel / container-transform); nothing pops in or out.
 - **Always in motion**: tangible game objects (cards, dreamsigns, resources)

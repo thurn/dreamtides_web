@@ -201,9 +201,9 @@ describe("CardGalleryPanel", () => {
     expect(panel?.style.width).toBe("100%");
     expect(panel?.style.height).toBe("100%");
     expect(
-      panel?.querySelector<HTMLElement>("[data-glass-panel-height-mode]")
-        ?.dataset.glassPanelHeightMode,
-    ).toBe("fill");
+      panel?.querySelector<HTMLElement>("[data-glass-panel-height-contract]")
+        ?.dataset.glassPanelHeightContract,
+    ).toBe("content");
     const entry = container.querySelector<HTMLElement>('[data-gallery-entry-id="physical-card"]');
     expect(entry?.draggable).toBe(true);
 

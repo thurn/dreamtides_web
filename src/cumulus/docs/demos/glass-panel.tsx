@@ -44,7 +44,7 @@ export const glassPanelDemo: CumulusComponent = {
   blurb:
     "The content-hugging liquid-glass container: an optional structured header, a composed body, and an optional footer on the canonical floating material.",
   callout:
-    "Use this for persistent titled content that floats over scene art. Panels hug their header, body, and footer by default; never assign height merely to occupy available space. Use heightMode=\"fill\" only when the panel is itself a rail, scrolling gallery, or authored composition stage with a deliberate definite height. Width and placement belong to the caller's wrapper; glass material, text roles, header hierarchy, and accessory placement belong to the panel.",
+    "Use this for persistent titled content that floats over scene art. Floating panels always hug their header, body, and footer; unassigned interior whitespace is not allowed. Do not give the panel or its slots a decorative height, flex growth, or spacer that separates content. Cap an overflowing body with max-height and scrolling instead. Width and placement belong to the caller's wrapper. Edge-rail and full-bleed frames own their bounded height through those named frame contracts.",
   group: "Components",
   docName: "GlassPanel",
   Component: GlassPanelDemo,
@@ -69,14 +69,6 @@ export const glassPanelDemo: CumulusComponent = {
 >
   <OfferDetails offer={offer} />
 </GlassPanel>`,
-    },
-    {
-      note: "A definite-height panel is an explicit exception for a scrolling rail, gallery, or composition stage.",
-      code: `<div style={{ height: "100dvh" }}>
-  <GlassPanel heightMode="fill">
-    <ScrollableRailContent />
-  </GlassPanel>
-</div>`,
     },
   ],
   demo: {

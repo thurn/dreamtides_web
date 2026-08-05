@@ -2985,7 +2985,7 @@ export function ExplorationSiteScreen({
               data-exploration-card-offer=""
               style={{
                 width: "100%",
-                height: isDesktop ? "min(660px, 100%)" : "100%",
+                maxHeight: isDesktop ? "min(660px, 100%)" : "100%",
                 minHeight: 0,
               }}
             >
@@ -2993,7 +2993,6 @@ export function ExplorationSiteScreen({
                 title={activeAction.followup.title}
                 subtitle={activeAction.followup.subtitle}
                 headingLevel="h1"
-                heightMode="fill"
                 headerSpacing="medium"
                 footer={
                   <div

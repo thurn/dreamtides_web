@@ -10,7 +10,7 @@ Real consumers: **10** (imports outside `src/cumulus/docs/` and tests).
 
 The shared card-browser surface: GlassPanel title and action chrome around a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim.
 
-> **Guidance:** Use this when a screen presents a card collection as the primary task surface, such as the Starting Deck reveal, a card-selection site, or a searchable zone browser. The component derives material from frame geometry: floating is rounded glass and full-bleed is the edge-to-edge standard alpha scrim. It owns the header, optional mode/search/sort/filter toolbar, accessory slot, internal scroll, fixed grid modes, optional captions and footer actions, and mobile press-preview sizing with whole-card touch-circle clearance. Callers provide resolved card models keyed by entry id or UUID.
+> **Guidance:** Use this when a screen presents a card collection as the primary task surface, such as the Starting Deck reveal, a card-selection site, or a searchable zone browser. A floating gallery hugs its header, toolbar, rendered card rows, and footer; blank glass inserted to fill a stage is not allowed. heightMode="fill" reserves only a transparent caller-owned fitting wrapper and never stretches the glass. The component derives material from frame geometry: floating is rounded glass and full-bleed is the edge-to-edge standard alpha scrim. It owns the header, optional mode/search/sort/filter toolbar, accessory slot, internal scroll, fixed grid modes, optional captions and footer actions, and mobile press-preview sizing with whole-card touch-circle clearance. Callers provide resolved card models keyed by entry id or UUID.
 
 ## Props
 
@@ -29,7 +29,7 @@ The shared card-browser surface: GlassPanel title and action chrome around a scr
 | `frame` | `CardGalleryFrame` = `"floating" \| "fullBleed"` | no | `floating` | Panel frame geometry and material. `floating` uses liquid glass; `fullBleed` fills its parent edge-to-edge with the standard alpha scrim and no floating rim or shadow. Defaults to `floating`. |
 | `spacing` | `CardGallerySpacing` = `"compact" \| "spacious" \| "regular" \| "medium"` | no | `regular` | Internal padding and grid gap scale. Defaults to `regular`. |
 | `widthMode` | `CardGalleryWidthMode` = `"content" \| "fill"` | no | `content` | Floating-frame width behavior. Defaults to `content`. |
-| `heightMode` | `CardGalleryHeightMode` = `"content" \| "fill"` | no | `content` | Floating-frame height behavior. Defaults to `content`. |
+| `heightMode` | `CardGalleryHeightMode` = `"content" \| "fill"` | no | `content` | Transparent layout-wrapper height behavior. Defaults to `content`. `fill` may reserve caller-owned stage space for card fitting, but the floating glass surface still hugs its rendered header, grid, and footer. |
 | `reserveStackedCopySpace` | `boolean` | no | `false` | Reserve the fanned-copy footprint before any card displays its copy. |
 | `testId` | `string` | no | — | Test id for the panel root. |
 | `cutoutAwareAccessory` | `boolean` | no | `false` | When a screen-cutout box is known, float the accessory beside the device island instead of sharing the header row. |

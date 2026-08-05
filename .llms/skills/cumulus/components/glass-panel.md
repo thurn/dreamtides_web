@@ -10,7 +10,7 @@ Real consumers: **14** (imports outside `src/cumulus/docs/` and tests).
 
 The content-hugging liquid-glass container: an optional structured header, a composed body, and an optional footer on the canonical floating material.
 
-> **Guidance:** Use this for persistent titled content that floats over scene art. Panels hug their header, body, and footer by default; never assign height merely to occupy available space. Use heightMode="fill" only when the panel is itself a rail, scrolling gallery, or authored composition stage with a deliberate definite height. Width and placement belong to the caller's wrapper; glass material, text roles, header hierarchy, and accessory placement belong to the panel.
+> **Guidance:** Use this for persistent titled content that floats over scene art. Floating panels always hug their header, body, and footer; unassigned interior whitespace is not allowed. Do not give the panel or its slots a decorative height, flex growth, or spacer that separates content. Cap an overflowing body with max-height and scrolling instead. Width and placement belong to the caller's wrapper. Edge-rail and full-bleed frames own their bounded height through those named frame contracts.
 
 ## Props
 
@@ -29,7 +29,6 @@ The content-hugging liquid-glass container: an optional structured header, a com
 | `frame` | `GlassPanelFrame` = `"floating" \| "fullBleed" \| "edgeRail"` | no | `floating` | Floating glass, edge-attached rail glass, or the standard full-bleed gallery scrim. |
 | `radius` | `GlassPanelRadius` = `"panel" \| "popover" \| "control"` | no | `panel` | Named corner geometry for a floating panel. Defaults to `panel`. |
 | `tint` | `GlassPanelTint` = `"default" \| "popover"` | no | `default` | Floating glass tint. Defaults to `default`. |
-| `heightMode` | `GlassPanelHeightMode` = `"content" \| "fill"` | no | `content` | Vertical sizing contract. `content` hugs the header, body, and footer and is the default for ordinary panels. `fill` consumes a caller-owned definite height and is reserved for rails, galleries, and composition stages whose content must scroll or center inside that height. |
 | `overflow` | `"hidden" \| "visible"` | no | `hidden` | Clip content to the panel edge. Defaults to `hidden`. |
 | `children` | `ReactNode` | yes | — | Panel body content. |
 | `footer` | `ReactNode` | no | — | Optional footer content rendered after the body. |
@@ -42,8 +41,6 @@ The content-hugging liquid-glass container: an optional structured header, a com
 | `kind` | `"glassButton" \| "iconButton" \| "iconButtonGroup"` | no |  |
 
 ## Usage
-
-### Variant 1
 
 A content-sized scene panel with a canonical named-entity underline in its subtitle, close accessory, and composed body content. Its wrapper constrains width but supplies no decorative height.
 
@@ -66,16 +63,4 @@ import { GlassPanel } from "src/cumulus/components/overlay/GlassPanel";
 >
   <OfferDetails offer={offer} />
 </GlassPanel>
-```
-
-### Variant 2
-
-A definite-height panel is an explicit exception for a scrolling rail, gallery, or composition stage.
-
-```tsx
-<div style={{ height: "100dvh" }}>
-  <GlassPanel heightMode="fill">
-    <ScrollableRailContent />
-  </GlassPanel>
-</div>
 ```

@@ -19,22 +19,22 @@ device class. Adapters only choose the data and callbacks to pass to the screen.
 
 ## Content-Sized Panels
 
-`GlassPanel` hugs its header, body, and footer. Screen wrappers constrain the
-panel's width, place it within the stage, and provide viewport-safe maximums;
-they do not assign height simply because space is available. Prompts, menus,
-summaries, confirmation surfaces, and small choice sets therefore remain compact
-and leave the scene visible around them.
+`GlassPanel` hugs its header, body, and footer. This is an invariant, not a
+default that callers may override. Screen wrappers constrain width, place the
+panel within the stage, and provide viewport-safe maximums; they do not assign
+decorative height to the panel or its slots. Prompts, menus, summaries,
+confirmation surfaces, and choice sets remain compact and leave the scene
+visible around them.
 
-`heightMode="fill"` is the explicit definite-height contract. Use it for a
-docked rail, a scrolling gallery, or an authored composition stage whose
-children need a real height for scrolling, centering, or container queries. A
-fill panel requires a caller-owned definite-height wrapper. If removing the
-height leaves every control visible and the content readable, the surface is a
-content panel.
+Unassigned interior whitespace is not allowed. Do not use fixed height,
+minimum height, flex growth, grid stretch, `space-between`, or spacer elements
+to separate a panel's content. When content can exceed the viewport, give the
+body a viewport-safe `max-height` and scroll that body. Definite-height
+developer rails and full-bleed galleries use their named frame contracts; an
+ordinary floating panel never becomes a composition stage.
 
 During browser QA, measure the panel against its header, content, and footer.
-Unassigned interior space is a layout finding unless the panel is an explicit
-fill stage and the empty region has a named compositional purpose.
+Any gap beyond authored padding or grid spacing is a layout finding.
 
 ## Backdrop And Motes
 

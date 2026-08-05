@@ -611,7 +611,6 @@ function ExplorationCandidatesEditorRow({
       id={`encounter-${group.cardId}`}
     >
       <GlassPanel
-        heightMode="fill"
         overflow="hidden"
         testId={`encounter-row-${group.cardId}`}
       >

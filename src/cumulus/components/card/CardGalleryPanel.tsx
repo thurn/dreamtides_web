@@ -180,7 +180,11 @@ export interface CardGalleryPanelProps {
   spacing?: CardGallerySpacing;
   /** Floating-frame width behavior. Defaults to `content`. */
   widthMode?: CardGalleryWidthMode;
-  /** Floating-frame height behavior. Defaults to `content`. */
+  /**
+   * Transparent layout-wrapper height behavior. Defaults to `content`.
+   * `fill` may reserve caller-owned stage space for card fitting, but the
+   * floating glass surface still hugs its rendered header, grid, and footer.
+   */
   heightMode?: CardGalleryHeightMode;
   /** Reserve the fanned-copy footprint before any card displays its copy. */
   reserveStackedCopySpace?: boolean;
@@ -760,11 +764,6 @@ export function CardGalleryPanel({
         frame={frame}
         radius="popover"
         tint="popover"
-        heightMode={
-          frame === "fullBleed" || heightMode === "fill"
-            ? "fill"
-            : "content"
-        }
         headerSpacing={panelHeaderSpacingFor(spacing)}
         footer={footerNode}
       >
@@ -772,15 +771,9 @@ export function CardGalleryPanel({
         <div
           ref={bodyRef}
           style={{
-            flex:
-              frame === "fullBleed" || heightMode === "fill"
-                ? "1 1 auto"
-                : `0 1 ${bodyHeight}`,
+            flex: frame === "fullBleed" ? "1 1 auto" : `0 1 ${bodyHeight}`,
             minHeight: 0,
-            height:
-              frame === "fullBleed" || heightMode === "fill"
-                ? undefined
-                : bodyHeight,
+            height: frame === "fullBleed" ? undefined : bodyHeight,
             overflowY: "auto",
             WebkitOverflowScrolling: "touch",
             touchAction: "pan-y",

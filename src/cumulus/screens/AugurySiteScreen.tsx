@@ -331,7 +331,6 @@ function OfferDetailPanel({
     >
       <GlassPanel
         title={offer.headline}
-        heightMode="fill"
         {...(typeof offer.subtitle === "string"
           ? { subtitle: offer.subtitle }
           : { structuredSubtitle: offer.subtitle })}
