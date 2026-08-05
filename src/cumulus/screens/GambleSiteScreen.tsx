@@ -857,6 +857,7 @@ function ProgressiveDrawScreen({
       siteId={view.siteId}
       scene={view.scene}
       guide={view.guide}
+      mobileComposition="dialog"
       screenTestId="cumulus-gamble-site-screen"
       guideArtTestId="cumulus-gamble-guide-art"
       speechAnchorTestId="cumulus-gamble-speech-anchor"

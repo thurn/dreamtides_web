@@ -43,8 +43,8 @@ export interface GuideGallerySiteLayoutProps {
   renderGallery: (layout: "mobile" | "desktop") => ReactElement;
   /** Give a low-count desktop gallery the full stage width. */
   desktopComposition?: "split" | "showcase";
-  /** Mobile guide/gallery staging. Defaults to the compact stacked band. */
-  mobileComposition?: "band" | "revelation";
+  /** Mobile guide/gallery staging. Dialog preserves a complete portrait beside longer copy. */
+  mobileComposition?: "band" | "dialog" | "revelation";
   /** Revelation gallery height. Expanded grows upward for dense content. */
   mobileRegionSize?: "standard" | "expanded";
   /** Whether the guide's speech bubble is rendered. Defaults to visible. */
@@ -76,6 +76,9 @@ const DESKTOP_DIALOG_LEFT = `clamp(calc(${token("--space-12")} + ${token("--spac
 // Below this width the gallery leaves too little horizontal space for dialog,
 // so the speech bubble moves into the clear band above the showcase panel.
 const COMPACT_SHOWCASE_MAX_WIDTH_PX = 1200;
+// The transparent guide render needs this width for its visible silhouette to
+// clear the longer dialog column while remaining fully inside the mobile band.
+const MOBILE_DIALOG_GUIDE_WIDTH = "46vw";
 
 function useCompactShowcase(): boolean {
   const queryText = `(max-width: ${String(COMPACT_SHOWCASE_MAX_WIDTH_PX)}px)`;
@@ -116,6 +119,7 @@ export function GuideGallerySiteLayout({
   const isDesktop = useIsDesktop();
   const compactShowcase = useCompactShowcase();
   const revelationMobile = !isDesktop && mobileComposition === "revelation";
+  const dialogMobile = !isDesktop && mobileComposition === "dialog";
   const sceneUrl = scene !== null ? resolveArtRef(scene) : null;
 
   return (
@@ -186,6 +190,7 @@ export function GuideGallerySiteLayout({
         <>
           <MobileGuideBand
             guide={guide}
+            dialog={dialogMobile}
             speechBubbleVisible={speechBubbleVisible}
             guideArtTestId={guideArtTestId}
             speechAnchorTestId={speechAnchorTestId}
@@ -428,6 +433,7 @@ function DesktopGuideScene({
 
 function MobileGuideBand({
   guide,
+  dialog = false,
   revelation = false,
   speechBubbleVisible,
   guideArtTestId,
@@ -435,6 +441,7 @@ function MobileGuideBand({
   speechBubbleTestId,
 }: {
   readonly guide: GuideGalleryGuideView;
+  readonly dialog?: boolean;
   readonly revelation?: boolean;
   readonly speechBubbleVisible: boolean;
   readonly guideArtTestId?: string;
@@ -445,6 +452,9 @@ function MobileGuideBand({
   return (
     <header
       data-guide-gallery-guide=""
+      data-guide-gallery-mobile-guide={
+        revelation ? "revelation" : dialog ? "dialog" : "band"
+      }
       data-guide-id={guide.id}
       style={{
         position: "relative",
@@ -465,9 +475,19 @@ function MobileGuideBand({
           top: revelation ? token("--space-4") : undefined,
           left: revelation
             ? `calc(-1 * (${token("--space-12")} + ${token("--space-4")}))`
-            : GUIDE_GALLERY_MOBILE_GUIDE_LEFT,
-          bottom: revelation ? undefined : GUIDE_GALLERY_MOBILE_GUIDE_BOTTOM,
-          width: revelation ? "62vw" : GUIDE_GALLERY_MOBILE_GUIDE_WIDTH,
+            : dialog
+              ? "0"
+              : GUIDE_GALLERY_MOBILE_GUIDE_LEFT,
+          bottom: revelation
+            ? undefined
+            : dialog
+              ? "0"
+              : GUIDE_GALLERY_MOBILE_GUIDE_BOTTOM,
+          width: revelation
+            ? "62vw"
+            : dialog
+              ? MOBILE_DIALOG_GUIDE_WIDTH
+              : GUIDE_GALLERY_MOBILE_GUIDE_WIDTH,
           height: revelation ? "70dvh" : "100%",
           objectFit: "contain",
           objectPosition: revelation ? "50% 0%" : "50% 100%",
@@ -482,7 +502,9 @@ function MobileGuideBand({
             left: revelation ? "34vw" : "40vw",
             right: revelation
               ? `calc(${token("--space-5")} + ${token("--space-11")} + ${token("--space-3")})`
-              : `calc(${token("--gutter")} + ${token("--space-11")})`,
+              : dialog
+                ? token("--gutter")
+                : `calc(${token("--gutter")} + ${token("--space-11")})`,
             top: revelation ? token("--space-5") : token("--space-2"),
           }}
         >

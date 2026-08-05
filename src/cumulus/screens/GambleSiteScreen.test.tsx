@@ -88,6 +88,19 @@ function stubMatchMedia(): void {
   });
 }
 
+function stubMobileMatchMedia(): void {
+  window.matchMedia = (query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: () => undefined,
+    removeEventListener: () => undefined,
+    addListener: () => undefined,
+    removeListener: () => undefined,
+    dispatchEvent: () => false,
+  });
+}
+
 class ResizeObserverStub {
   observe(): void {}
   unobserve(): void {}
@@ -457,6 +470,30 @@ const PROGRESSIVE_VIEW: ProgressiveDrawSiteView = {
 };
 
 describe("GambleSiteScreen — Progressive Draw", () => {
+  it("uses the full-portrait dialog composition on mobile", () => {
+    stubMobileMatchMedia();
+    const { container, root } = mount(
+      <GambleSiteScreen
+        view={PROGRESSIVE_VIEW}
+        onChooseGate={() => undefined}
+        onLeave={() => undefined}
+        onOutcomeShown={() => undefined}
+        onPlayAgain={() => undefined}
+        onDrawProgressive={() => undefined}
+        onProgressiveOutcomeShown={() => undefined}
+        onReplaceDreamsign={() => undefined}
+      />,
+    );
+
+    expect(
+      container
+        .querySelector("[data-guide-gallery-mobile-guide]")
+        ?.getAttribute("data-guide-gallery-mobile-guide"),
+    ).toBe("dialog");
+
+    act(() => root.unmount());
+  });
+
   it("shows only draw one without future odds or the Dreamsign identity", () => {
     const onDraw = vi.fn();
     const { container, root } = mount(
