@@ -7,6 +7,7 @@ import { createDreamsign } from "../data/dreamsigns";
 import { TUTORIAL_DREAM_AVATAR_ID } from "../data/tutorial-cards";
 import { createQaJourneyFoundation } from "./qa-journey-foundation";
 import { buildExplorationRuntime } from "../coop/providers/exploration-provider";
+import { MADDOX_GUIDE_ID } from "../random-site/random-site";
 
 export interface QaSceneBuildOptions {
   /** Exact authored encounter source-card UUID for Exploration QA scenes. */
@@ -166,6 +167,62 @@ const ATLAS_SCENE: QaScene = {
     '"Layer II" (after the starter dreamscape), with the boss node and Apollyon ' +
     "incarnation, for atlas UI and boss-preview QA.",
   build: atlasLayerSceneState(1),
+};
+
+/** The first Atlas frontier with Maddox's home dreamscape available to inspect. */
+const RANDOM_SITE_ATLAS_SCENE: QaScene = {
+  id: "random-site-atlas",
+  label: "Dream Atlas (Maddox Random Site)",
+  description:
+    "The first Atlas frontier with The Rust Expanse available, including its " +
+    "Random Site badge and Maddox reveal cards.",
+  build: (journeyContent) => {
+    const state = ATLAS_SCENE.build(journeyContent);
+    const dreamscape = journeyContent.dreamscapes.find(
+      (candidate) => candidate.guideId === MADDOX_GUIDE_ID,
+    );
+    if (state === null || dreamscape === undefined) return null;
+
+    const target = Object.values(state.atlas.nodes).find(
+      (node) => node.state === "available" && node.id !== state.atlas.bossNodeId,
+    );
+    if (target === undefined) return null;
+
+    const signatureIndex = target.sites.findIndex(
+      (site) => site.isEnhanced && site.type !== "Battle" && site.type !== "Draft",
+    );
+    if (signatureIndex < 0) return null;
+
+    const sites = [...target.sites];
+    sites[signatureIndex] = {
+      id: sites[signatureIndex].id,
+      type: "RandomSite",
+      isEnhanced: true,
+      isVisited: false,
+      randomSite: {
+        mode: "homeChoice",
+        candidateSiteTypes: ["Shop", "Purge", "Augury", "Gamble", "Exploration"],
+      },
+    };
+    const node = {
+      ...target,
+      dreamscapeId: dreamscape.id,
+      biomeName: dreamscape.name,
+      sites,
+      enhancedSiteType: "RandomSite" as const,
+      knownDreamsignId: null,
+    };
+    return {
+      ...state,
+      atlas: {
+        ...state.atlas,
+        nodes: { ...state.atlas.nodes, [node.id]: node },
+        knownDreamsignCarrierIds: state.atlas.knownDreamsignCarrierIds.filter(
+          (nodeId) => nodeId !== node.id,
+        ),
+      },
+    };
+  },
 };
 
 /** The first Atlas frontier in the authored tutorial journey. */
@@ -848,6 +905,7 @@ export const QA_SCENES: readonly QaScene[] = [
   DREAM_AVATAR_SELECT_SCENE,
   TUTORIAL_DREAM_AVATAR_SELECT_SCENE,
   ATLAS_SCENE,
+  RANDOM_SITE_ATLAS_SCENE,
   TUTORIAL_ATLAS_SCENE,
   // Atlas resting screen at each reachable frontier, numbered by the UI's
   // "Layer N" column label (columns I–VII). Column I is the starter you begin

@@ -70,7 +70,7 @@ export function RandomSiteScreen({
             justifySelf: "center",
           }}
         >
-          <GlassPanel headerDivider={false} testId="cumulus-random-site-panel">
+          <GlassPanel title="Choose a Site" headerDivider={false} testId="cumulus-random-site-panel">
             <div
               style={{
                 minHeight: 260,

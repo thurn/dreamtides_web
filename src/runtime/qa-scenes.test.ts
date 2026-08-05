@@ -178,6 +178,47 @@ describe('the "atlas" QA scene', () => {
   });
 });
 
+describe('the "random-site-atlas" QA scene', () => {
+  it("places Maddox's enhanced Random Site on an available Atlas node", () => {
+    const content = makeJourneyContent();
+    content.dreamscapes = [
+      ...content.dreamscapes,
+      {
+        id: "rust-expanse-test",
+        name: "The Rust Expanse",
+        aesthetic: "A test wasteland.",
+        guideId: "maddox",
+        signatureSite: "RandomSite",
+        affiliationId: null,
+        siteIcon: "?",
+        isStarter: false,
+        dreamAvatarIds: [],
+      },
+    ];
+    content.guides = [{
+      id: "maddox",
+      name: "Maddox",
+      homeDreamscapeId: "rust-expanse-test",
+      siteType: "RandomSite",
+      dialog: ["Pick a road."],
+      homeSpecialty: "Choose one of three sites.",
+    }];
+
+    const state = buildQaScene("random-site-atlas", content);
+
+    expect(state?.screen.type).toBe("atlas");
+    const maddoxNode = Object.values(state?.atlas.nodes ?? {}).find(
+      (node) =>
+        node.dreamscapeId === "rust-expanse-test" && node.state === "available",
+    );
+    expect(maddoxNode?.state).toBe("available");
+    expect(maddoxNode?.enhancedSiteType).toBe("RandomSite");
+    const randomSite = maddoxNode?.sites.find((site) => site.type === "RandomSite");
+    expect(randomSite?.isEnhanced).toBe(true);
+    expect(randomSite?.randomSite?.mode).toBe("homeChoice");
+  });
+});
+
 describe('the "tutorial-atlas" QA scene', () => {
   it("parks the tutorial journey at its first Atlas frontier", () => {
     const state = buildQaScene("tutorial-atlas", makeJourneyContent());
