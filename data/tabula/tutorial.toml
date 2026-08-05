@@ -340,6 +340,15 @@ bubbleWidth = 500
 text = "An [purple]event[purple] card has a one-time effect, and then is sent the void."
 
 [[triggers]]
+id = "opponent-reposition-opportunity"
+on = [ "opponent-reposition-opportunity" ]
+priority = 10
+duration = 5
+bubbleWidth = 500
+match = { kind = "any" }
+text = "During your [purple]Dusk[/purple] phase, the opposing player may reposition their characters."
+
+[[triggers]]
 id = "flashpoint-no-valid-targets"
 on = [ "card-no-valid-targets" ]
 priority = 10

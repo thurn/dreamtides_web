@@ -214,6 +214,11 @@ export type TutorialGuidanceSource =
       readonly activeSide: BattleSide;
       readonly turnNumber: number;
       readonly slotId: FrontRankSlotId;
+    }
+  | {
+      readonly kind: "battle";
+      readonly activeSide: BattleSide;
+      readonly turnNumber: number;
     };
 
 export type TutorialGuidanceContinuation =

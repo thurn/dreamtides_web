@@ -49,7 +49,10 @@ export function buildBattleTutorialGuidanceView(
   if (presentation?.kind !== "tutorial-guidance") return null;
   const message = presentation.messages[presentation.messageIndex];
   if (message === undefined) return null;
-  if (presentation.source.kind === "challenge") {
+  if (
+    presentation.source.kind === "challenge" ||
+    presentation.source.kind === "battle"
+  ) {
     return {
       presentationId: presentation.id,
       triggerId: message.triggerId,

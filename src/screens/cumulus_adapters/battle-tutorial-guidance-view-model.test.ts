@@ -222,4 +222,36 @@ describe("buildBattleTutorialGuidanceView", () => {
       source: { kind: "battle" },
     });
   });
+
+  it("maps a phase-level trigger to a bubble without a companion card", () => {
+    const battle = battleWithMessage({
+      triggerId: "opponent-reposition-opportunity",
+      speaker: "mira",
+      duration: 5,
+      horizontalOffset: 0,
+      verticalOffset: 0,
+      bubbleWidth: 500,
+      text: "Repositioning explanation.",
+    });
+    battle.tutorialPresentation = {
+      id: "tutorial-guidance:opponent-reposition-opportunity:player:3",
+      kind: "tutorial-guidance",
+      source: {
+        kind: "battle",
+        activeSide: "player",
+        turnNumber: 3,
+      },
+      messages: battle.tutorialPresentation?.kind === "tutorial-guidance"
+        ? battle.tutorialPresentation.messages
+        : [],
+      messageIndex: 0,
+      continuation: { kind: "commands", commands: [] },
+    };
+
+    expect(buildBattleTutorialGuidanceView(battle)).toMatchObject({
+      triggerId: "opponent-reposition-opportunity",
+      duration: 5,
+      source: { kind: "battle" },
+    });
+  });
 });

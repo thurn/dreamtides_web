@@ -646,9 +646,15 @@ function openTutorialGuidance(
   continuation: TutorialGuidanceContinuation,
 ): FoldState | null {
   const seen = new Set(state.tutorialTriggerIdsSeen ?? []);
+  const sourceCardId =
+    source.kind === "card" ||
+    source.kind === "dreamwell" ||
+    source.kind === "figment"
+      ? source.cardId
+      : undefined;
   const matches = matchTutorialGuidance(battle.init.tutorialTriggers ?? [], {
     event,
-    cardId: source.kind === "challenge" ? undefined : source.cardId,
+    cardId: sourceCardId,
     renderedText,
     cardKind,
     seenTriggerIds: seen,
@@ -660,6 +666,8 @@ function openTutorialGuidance(
       ? `${source.side}:${source.cardId}`
       : source.kind === "challenge"
         ? `${source.activeSide}:${String(source.turnNumber)}:${source.slotId}`
+        : source.kind === "battle"
+          ? `${source.activeSide}:${String(source.turnNumber)}`
         : `${source.side}:${source.battleCardId}`;
   return {
     ...state,
@@ -1126,6 +1134,28 @@ function battleCommandInternal(
   }
   const completed = driveChallengeCursor(current, ctx.seq, random, nowMs);
   if (!suppressGuidance) {
+    const openedOpponentRepositionOpportunity =
+      command.id === "DEBUG_EDIT" &&
+      command.edit.kind === "SET_PHASE" &&
+      command.edit.phase === "dusk" &&
+      battle.board.activeSide === "player" &&
+      battle.board.phase === "day";
+    if (openedOpponentRepositionOpportunity) {
+      const guidance = openTutorialGuidance(
+        { ...state, battle: completed },
+        completed,
+        "opponent-reposition-opportunity",
+        {
+          kind: "battle",
+          activeSide: completed.board.activeSide,
+          turnNumber: completed.board.turnNumber,
+        },
+        "",
+        undefined,
+        { kind: "commands", commands: [] },
+      );
+      if (guidance !== null) return guidance;
+    }
     const guidance = openFigmentCreatedGuidance(state, battle, completed);
     if (guidance !== null) return guidance;
   }

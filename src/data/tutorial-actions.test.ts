@@ -926,6 +926,23 @@ describe("parseTutorialActions", () => {
       text,
     }]);
   });
+
+  it("parses an opponent reposition opportunity concept trigger", () => {
+    expect(
+      parseTutorialTriggers([{
+        id: "opponent-reposition-opportunity",
+        on: ["opponent-reposition-opportunity"],
+        duration: 5,
+        bubbleWidth: 500,
+        match: { kind: "any" },
+        text: "Repositioning explanation.",
+      }]),
+    ).toMatchObject([{
+      id: "opponent-reposition-opportunity",
+      on: ["opponent-reposition-opportunity"],
+      match: { kind: "any" },
+    }]);
+  });
 });
 
 describe("parseTutorialDreamscapeConfiguration", () => {

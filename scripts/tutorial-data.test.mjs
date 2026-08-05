@@ -704,4 +704,21 @@ describe("tutorial data", () => {
       text,
     }]);
   });
+
+  it("normalizes an opponent reposition opportunity concept trigger", () => {
+    expect(
+      validateTutorialTriggers([{
+        id: "opponent-reposition-opportunity",
+        on: ["opponent-reposition-opportunity"],
+        duration: 5,
+        bubbleWidth: 500,
+        match: { kind: "any" },
+        text: "Repositioning explanation.",
+      }]),
+    ).toMatchObject([{
+      id: "opponent-reposition-opportunity",
+      on: ["opponent-reposition-opportunity"],
+      match: { kind: "any" },
+    }]);
+  });
 });

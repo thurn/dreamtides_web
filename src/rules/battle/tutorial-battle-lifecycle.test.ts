@@ -420,6 +420,76 @@ describe("tutorial battle lifecycle", () => {
     );
   });
 
+  it("opens phase guidance after entering the player's Dusk reposition window", () => {
+    const tutorialContent = content();
+    tutorialContent.tutorialTriggers = [{
+      id: "opponent-reposition-opportunity",
+      on: ["opponent-reposition-opportunity"],
+      priority: 10,
+      speaker: "mira",
+      duration: 5,
+      horizontalOffset: 0,
+      verticalOffset: 0,
+      bubbleWidth: 500,
+      match: { kind: "any" },
+      text: "Repositioning explanation.",
+    }];
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(tutorialContent),
+    );
+    const started = begin().state;
+    const ready = {
+      ...started,
+      battle: {
+        ...started.battle!,
+        board: {
+          ...started.battle!.board,
+          activeSide: "player" as const,
+          phase: "day" as const,
+        },
+      },
+    };
+
+    const opened = reduceTutorial(ready, "BATTLE_COMMAND", {
+      command: {
+        id: "DEBUG_EDIT",
+        edit: { kind: "SET_PHASE", phase: "dusk" },
+        sourceSurface: "tutorial-player",
+      },
+    });
+
+    expect(opened.outcome).toBe("applied");
+    expect(opened.state.battle?.board).toMatchObject({
+      activeSide: "player",
+      phase: "dusk",
+    });
+    expect(opened.state.battle?.tutorialPresentation).toMatchObject({
+      kind: "tutorial-guidance",
+      source: {
+        kind: "battle",
+        activeSide: "player",
+        turnNumber: opened.state.battle?.board.turnNumber,
+      },
+      messages: [{ triggerId: "opponent-reposition-opportunity" }],
+      continuation: { kind: "commands", commands: [] },
+    });
+    expect(opened.state.tutorialTriggerIdsSeen).toEqual([
+      "opponent-reposition-opportunity",
+    ]);
+
+    const continued = reduceTutorial(
+      opened.state,
+      "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+      {
+        presentationId: opened.state.battle?.tutorialPresentation?.id,
+        messageIndex: 0,
+      },
+    );
+    expect(continued.outcome).toBe("applied");
+    expect(continued.state.battle?.tutorialPresentation).toBeNull();
+    expect(continued.state.battle?.board.phase).toBe("dusk");
+  });
+
   it("accepts only the terminal tutorial cursor once and builds the canonical handoff", () => {
     registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
     const result = begin();
