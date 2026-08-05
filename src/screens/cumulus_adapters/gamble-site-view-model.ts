@@ -31,16 +31,14 @@ import { dreamscapeSceneRef } from "./dreamscape-view-model";
 export const GRAVOK_WAGER_GUIDE_LINE =
   "The game's called Three Gates. Place your bet on the next card drawn!";
 export const TIDEMARK_PROGRESSIVE_GUIDE_LINE =
-  "Progressive Draw! Match or beat the target to win a Dreamsign. Miss, and the next draw is easier—but pricier.";
+  "The game's Walk the Ladder. Match or beat the target to win a Dreamsign. Try again if you miss!";
 
 /** The next gate in display order supplies the non-selected reveal object. */
 export function gravokRevealGateId(selectedGateId: GravokGateId): GravokGateId {
   const selectedIndex = GRAVOK_GATE_RULES.findIndex(
     (gate) => gate.id === selectedGateId,
   );
-  return GRAVOK_GATE_RULES[
-    (selectedIndex + 1) % GRAVOK_GATE_RULES.length
-  ].id;
+  return GRAVOK_GATE_RULES[(selectedIndex + 1) % GRAVOK_GATE_RULES.length].id;
 }
 
 /** Resolve the resident Dream Guide for Gamble. */
@@ -64,7 +62,7 @@ export function buildGambleGateViews(
     oddsDenominator: gate.oddsDenominator,
     essenceReward: gate.essenceReward,
     rewardDreamsign: gate.awardsDreamsign
-      ? runtime?.rewardDreamsign ?? null
+      ? (runtime?.rewardDreamsign ?? null)
       : null,
     available:
       !gate.awardsDreamsign ||
@@ -82,9 +80,7 @@ function commonGambleView(params: {
   const guideId = params.guide?.id ?? "gravok";
   return {
     scene:
-      params.sceneNode === null
-        ? null
-        : dreamscapeSceneRef(params.sceneNode),
+      params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode),
     guide: {
       id: guideId,
       name: params.guide?.name ?? "Gravok",
@@ -137,8 +133,7 @@ function buildGravokWagerSiteView(params: {
             essenceGained: result.essenceGained,
             essenceSettled: result.essenceSettled !== false,
             rewardDreamsign,
-            pendingDreamsignReplacement:
-              result.pendingDreamsignReplacement,
+            pendingDreamsignReplacement: result.pendingDreamsignReplacement,
           },
     replacement:
       result?.pendingDreamsignReplacement === true &&
@@ -204,8 +199,7 @@ function buildProgressiveDrawSiteView(params: {
               result.won && result.resultSettled
                 ? runtime.rewardDreamsign
                 : null,
-            pendingDreamsignReplacement:
-              result.pendingDreamsignReplacement,
+            pendingDreamsignReplacement: result.pendingDreamsignReplacement,
           },
     replacement:
       result?.pendingDreamsignReplacement === true &&
