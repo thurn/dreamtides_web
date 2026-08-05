@@ -2369,8 +2369,7 @@
       "rank": 1,
       "ranking_rationale": "The buckling aircraft makes salvaging or replacing ruined parts immediate, while both effects reward a resource-conscious Event deck.",
       "selected": {
-        "prose": true,
-        "actions": true
+        "prose": true
       }
     },
     {
@@ -2459,7 +2458,10 @@
         "overall": 9
       },
       "rank": 4,
-      "ranking_rationale": "The falling debris supports uncertain salvage or deliberate clearing with excellent clarity but only general deck-building value."
+      "ranking_rationale": "The falling debris supports uncertain salvage or deliberate clearing with excellent clarity but only general deck-building value.",
+      "selected": {
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-4",
@@ -2670,8 +2672,7 @@
       "rank": 1,
       "ranking_rationale": "The flying flock grounds the draw-for-discount tradeoff and recruitment choice, both precisely matching a low-cost materialization engine.",
       "selected": {
-        "prose": true,
-        "actions": true
+        "prose": true
       }
     },
     {
@@ -2792,7 +2793,10 @@
         "overall": 8
       },
       "rank": 5,
-      "ranking_rationale": "The rooftop flight path supports both destination choices, though their site rewards connect more broadly to the source strategy."
+      "ranking_rationale": "The rooftop flight path supports both destination choices, though their site rewards connect more broadly to the source strategy.",
+      "selected": {
+        "actions": true
+      }
     }
   ],
   "1b341984-d32e-42a7-ae56-b22059c59737": [
@@ -2823,8 +2827,7 @@
       "rank": 1,
       "ranking_rationale": "The elevated survey and abundant salvage give both actions exceptionally immediate visual causes.",
       "selected": {
-        "prose": true,
-        "actions": true
+        "prose": true
       }
     },
     {
@@ -2852,7 +2855,10 @@
         "overall": 9
       },
       "rank": 2,
-      "ranking_rationale": "The faithful windblown portrait supports a strong survivor alliance and a clear luminous omen."
+      "ranking_rationale": "The faithful windblown portrait supports a strong survivor alliance and a clear luminous omen.",
+      "selected": {
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-1",
