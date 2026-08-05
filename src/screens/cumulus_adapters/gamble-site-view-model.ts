@@ -31,7 +31,7 @@ import { dreamscapeSceneRef } from "./dreamscape-view-model";
 export const GRAVOK_WAGER_GUIDE_LINE =
   "The game's called Three Gates. Place your bet on the next card drawn!";
 export const TIDEMARK_PROGRESSIVE_GUIDE_LINE =
-  "The game's Walk the Ladder. Match or beat the target to win a Dreamsign. Try again if you miss!";
+  "The game's Ladder Climb. Match or beat the target to win a Dreamsign. Try again if you miss!";
 
 /** The next gate in display order supplies the non-selected reveal object. */
 export function gravokRevealGateId(selectedGateId: GravokGateId): GravokGateId {
