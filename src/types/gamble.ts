@@ -33,7 +33,7 @@ export type GravokGateId = "six" | "nine" | "jack";
 /** Stable game ids persisted by Gamble site runtimes. */
 export type GambleGameId =
   | "gravok-three-gate-wager"
-  | "tidemark-progressive-draw";
+  | "tidemark-ladder-climb";
 
-/** One-based attempt number in Tidemark Progressive Draw. */
-export type TidemarkProgressiveAttemptNumber = 1 | 2 | 3 | 4;
+/** One-based attempt number in Tidemark Ladder Climb. */
+export type TidemarkLadderClimbAttemptNumber = 1 | 2 | 3 | 4;

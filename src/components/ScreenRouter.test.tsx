@@ -218,9 +218,9 @@ function makeMutations(): JourneyMutations {
     settleGravokWager: vi.fn(),
     playAgainGravokWager: vi.fn(),
     replaceGravokWagerDreamsign: vi.fn(),
-    drawTidemarkProgressive: vi.fn(),
-    settleTidemarkProgressive: vi.fn(),
-    replaceTidemarkProgressiveDreamsign: vi.fn(),
+    drawTidemarkLadderClimb: vi.fn(),
+    settleTidemarkLadderClimb: vi.fn(),
+    replaceTidemarkLadderClimbDreamsign: vi.fn(),
     ensureRewardSiteRuntime: vi.fn(),
     acceptRewardSite: vi.fn(),
     ensureDreamsignOfferRuntime: vi.fn(),
@@ -969,7 +969,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
     expect(container.querySelector("[data-random-site-choice-panel]")).toBeNull();
   });
 
-  it("passes a forced Progressive Draw URL choice into Gamble initialization", () => {
+  it("passes a forced Ladder Climb URL choice into Gamble initialization", () => {
     const site = makeSite("Gamble");
     const mutations = makeMutations();
     const container = renderWithJourney({
@@ -979,7 +979,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
       children: (
         <ScreenRouter
           runtimeConfig={parseRuntimeConfig(
-            "?gambleGame=progressive-draw",
+            "?gambleGame=ladder-climb",
           )}
         />
       ),
@@ -987,7 +987,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
 
     expect(mutations.ensureGambleSiteRuntime).toHaveBeenCalledWith(
       site.id,
-      "tidemark-progressive-draw",
+      "tidemark-ladder-climb",
     );
     expect(container.querySelector("[data-gamble-gates]")).toBeNull();
   });

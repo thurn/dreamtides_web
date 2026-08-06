@@ -9,7 +9,7 @@ import { artRef } from "../primitives/art";
 import {
   GambleSiteScreen,
   type GravokWagerSiteView,
-  type ProgressiveDrawSiteView,
+  type LadderClimbSiteView,
 } from "./GambleSiteScreen";
 
 const JACKPOT_DREAMSIGN = {
@@ -143,8 +143,8 @@ describe("GambleSiteScreen", () => {
         onLeave={onLeave}
         onOutcomeShown={() => undefined}
         onPlayAgain={() => undefined}
-        onDrawProgressive={() => undefined}
-        onProgressiveOutcomeShown={() => undefined}
+        onDrawLadder={() => undefined}
+        onLadderOutcomeShown={() => undefined}
         onReplaceDreamsign={() => undefined}
       />,
     );
@@ -244,8 +244,8 @@ describe("GambleSiteScreen", () => {
         onLeave={onLeave}
         onOutcomeShown={onOutcomeShown}
         onPlayAgain={onPlayAgain}
-        onDrawProgressive={() => undefined}
-        onProgressiveOutcomeShown={() => undefined}
+        onDrawLadder={() => undefined}
+        onLadderOutcomeShown={() => undefined}
         onReplaceDreamsign={() => undefined}
       />,
     );
@@ -326,8 +326,8 @@ describe("GambleSiteScreen", () => {
             onLeave={onLeave}
             onOutcomeShown={onOutcomeShown}
             onPlayAgain={onPlayAgain}
-            onDrawProgressive={() => undefined}
-            onProgressiveOutcomeShown={() => undefined}
+            onDrawLadder={() => undefined}
+            onLadderOutcomeShown={() => undefined}
             onReplaceDreamsign={() => undefined}
           />
         </CumulusRoot>,
@@ -374,8 +374,8 @@ describe("GambleSiteScreen", () => {
             onLeave={onLeave}
             onOutcomeShown={onOutcomeShown}
             onPlayAgain={onPlayAgain}
-            onDrawProgressive={() => undefined}
-            onProgressiveOutcomeShown={() => undefined}
+            onDrawLadder={() => undefined}
+            onLadderOutcomeShown={() => undefined}
             onReplaceDreamsign={() => undefined}
           />
         </CumulusRoot>,
@@ -430,8 +430,8 @@ describe("GambleSiteScreen", () => {
         onLeave={() => undefined}
         onOutcomeShown={() => undefined}
         onPlayAgain={() => undefined}
-        onDrawProgressive={() => undefined}
-        onProgressiveOutcomeShown={() => undefined}
+        onDrawLadder={() => undefined}
+        onLadderOutcomeShown={() => undefined}
         onReplaceDreamsign={onReplaceDreamsign}
       />,
     );
@@ -451,12 +451,13 @@ describe("GambleSiteScreen", () => {
   });
 });
 
-const PROGRESSIVE_VIEW: ProgressiveDrawSiteView = {
-  gameId: "tidemark-progressive-draw",
+const LADDER_VIEW: LadderClimbSiteView = {
+  gameId: "tidemark-ladder-climb",
   siteId: "fixture-gamble-site",
   scene: null,
   isFarpoint: false,
   runtimeReady: true,
+  rewardDreamsign: JACKPOT_DREAMSIGN,
   nextDraw: {
     attemptNumber: 1,
     targetRank: "Q",
@@ -469,18 +470,18 @@ const PROGRESSIVE_VIEW: ProgressiveDrawSiteView = {
   replacement: null,
 };
 
-describe("GambleSiteScreen — Progressive Draw", () => {
+describe("GambleSiteScreen — Ladder Climb", () => {
   it("uses the full-portrait dialog composition on mobile", () => {
     stubMobileMatchMedia();
     const { container, root } = mount(
       <GambleSiteScreen
-        view={PROGRESSIVE_VIEW}
+        view={LADDER_VIEW}
         onChooseGate={() => undefined}
         onLeave={() => undefined}
         onOutcomeShown={() => undefined}
         onPlayAgain={() => undefined}
-        onDrawProgressive={() => undefined}
-        onProgressiveOutcomeShown={() => undefined}
+        onDrawLadder={() => undefined}
+        onLadderOutcomeShown={() => undefined}
         onReplaceDreamsign={() => undefined}
       />,
     );
@@ -494,41 +495,35 @@ describe("GambleSiteScreen — Progressive Draw", () => {
     act(() => root.unmount());
   });
 
-  it("shows only draw one without future odds or the Dreamsign identity", () => {
+  it("shows the first draw target and locked Dreamsign on the shared prize face", () => {
     const onDraw = vi.fn();
     const { container, root } = mount(
       <GambleSiteScreen
-        view={PROGRESSIVE_VIEW}
+        view={LADDER_VIEW}
         onChooseGate={() => undefined}
         onLeave={() => undefined}
         onOutcomeShown={() => undefined}
         onPlayAgain={() => undefined}
-        onDrawProgressive={onDraw}
-        onProgressiveOutcomeShown={() => undefined}
+        onDrawLadder={onDraw}
+        onLadderOutcomeShown={() => undefined}
         onReplaceDreamsign={() => undefined}
       />,
     );
 
     expect(
       container
-        .querySelector("[data-progressive-card-state]")
-        ?.getAttribute("data-progressive-card-state"),
-    ).toBe("target");
-    expect(
-      container
-        .querySelector("[data-progressive-target-face] [data-playing-card]")
-        ?.getAttribute("data-playing-card-variant"),
-    ).toBe("rank-target");
-    expect(
-      container
-        .querySelector("[data-progressive-target-face] [data-playing-card]")
-        ?.getAttribute("data-playing-card-rank"),
-    ).toBe("Q");
+        .querySelector("[data-wager-prize-card]")
+        ?.getAttribute("data-wager-prize-card-state"),
+    ).toBe("prize");
     expect(container.querySelectorAll("[data-gamble-gate]")).toHaveLength(0);
-    expect(container.querySelector("[data-progressive-dreamsign-reward]"))
-      .toBeNull();
+    expect(container.querySelector("[data-wager-prize-title]")).not.toBeNull();
+    expect(
+      container.querySelector('[data-testid="gamble-ladder-dreamsign-name"]'),
+    ).not.toBeNull();
+    expect(container.querySelector("[data-wager-prize-dreamsign-source]"))
+      .not.toBeNull();
     const draw = container.querySelector<HTMLButtonElement>(
-      '[data-testid="gamble-progressive-draw"]',
+      '[data-testid="gamble-ladder-climb"]',
     );
     expect(draw?.disabled).toBe(false);
     act(() => draw?.click());
@@ -541,18 +536,17 @@ describe("GambleSiteScreen — Progressive Draw", () => {
     vi.useFakeTimers();
     const onDraw = vi.fn();
     const onOutcomeShown = vi.fn();
-    const resultView: ProgressiveDrawSiteView = {
-      ...PROGRESSIVE_VIEW,
+    const resultView: LadderClimbSiteView = {
+      ...LADDER_VIEW,
       nextDraw: null,
       result: {
-        id: "progressive-attempt-1",
+        id: "ladder-attempt-1",
         attemptNumber: 1,
         targetRank: "Q",
         card: { rank: "J", suit: "clubs" },
         won: false,
         resultSettled: false,
         terminal: false,
-        rewardDreamsign: null,
         pendingDreamsignReplacement: false,
       },
     };
@@ -563,13 +557,13 @@ describe("GambleSiteScreen — Progressive Draw", () => {
         onLeave={() => undefined}
         onOutcomeShown={() => undefined}
         onPlayAgain={() => undefined}
-        onDrawProgressive={onDraw}
-        onProgressiveOutcomeShown={onOutcomeShown}
+        onDrawLadder={onDraw}
+        onLadderOutcomeShown={onOutcomeShown}
         onReplaceDreamsign={() => undefined}
       />,
     );
 
-    expect(container.querySelector('[data-testid="gamble-progressive-draw-again"]'))
+    expect(container.querySelector('[data-testid="gamble-ladder-climb-again"]'))
       .toBeNull();
     void act(() => vi.advanceTimersByTime(970));
     expect(onOutcomeShown).toHaveBeenCalledOnce();
@@ -580,8 +574,8 @@ describe("GambleSiteScreen — Progressive Draw", () => {
     ).toBe("danger");
     expect(
       container
-        .querySelector("[data-progressive-card-state]")
-        ?.getAttribute("data-progressive-card-state"),
+        .querySelector("[data-wager-prize-card]")
+        ?.getAttribute("data-wager-prize-card-state"),
     ).toBe("drawn");
     act(() => {
       root.render(
@@ -602,8 +596,8 @@ describe("GambleSiteScreen — Progressive Draw", () => {
             onLeave={() => undefined}
             onOutcomeShown={() => undefined}
             onPlayAgain={() => undefined}
-            onDrawProgressive={onDraw}
-            onProgressiveOutcomeShown={onOutcomeShown}
+            onDrawLadder={onDraw}
+            onLadderOutcomeShown={onOutcomeShown}
             onReplaceDreamsign={() => undefined}
           />
         </CumulusRoot>,
@@ -611,39 +605,36 @@ describe("GambleSiteScreen — Progressive Draw", () => {
     });
     void act(() => vi.advanceTimersByTime(3_360));
     const drawAgain = container.querySelector<HTMLButtonElement>(
-      '[data-testid="gamble-progressive-draw-again"]',
+      '[data-testid="gamble-ladder-climb-again"]',
     );
     expect(drawAgain?.disabled).toBe(false);
     expect(
       container
-        .querySelector("[data-progressive-card-state]")
-        ?.getAttribute("data-progressive-card-state"),
-    ).toBe("target");
+        .querySelector("[data-wager-prize-card]")
+        ?.getAttribute("data-wager-prize-card-state"),
+    ).toBe("prize");
     expect(
-      container
-        .querySelector("[data-progressive-target-face] [data-playing-card]")
-        ?.getAttribute("data-playing-card-rank"),
-    ).toBe("10");
+      container.querySelector('[data-testid="gamble-ladder-dreamsign-name"]'),
+    ).not.toBeNull();
     act(() => drawAgain?.click());
     expect(onDraw).toHaveBeenCalledOnce();
 
     act(() => root.unmount());
   });
 
-  it("shows the won Dreamsign only at the settled outcome", () => {
+  it("keeps the result inside the same prize object", () => {
     vi.useFakeTimers();
-    const resultView: ProgressiveDrawSiteView = {
-      ...PROGRESSIVE_VIEW,
+    const resultView: LadderClimbSiteView = {
+      ...LADDER_VIEW,
       nextDraw: null,
       result: {
-        id: "progressive-win",
+        id: "ladder-win",
         attemptNumber: 1,
         targetRank: "Q",
         card: { rank: "A", suit: "hearts" },
         won: true,
         resultSettled: false,
         terminal: true,
-        rewardDreamsign: null,
         pendingDreamsignReplacement: false,
       },
     };
@@ -654,14 +645,13 @@ describe("GambleSiteScreen — Progressive Draw", () => {
         onLeave={() => undefined}
         onOutcomeShown={() => undefined}
         onPlayAgain={() => undefined}
-        onDrawProgressive={() => undefined}
-        onProgressiveOutcomeShown={() => undefined}
+        onDrawLadder={() => undefined}
+        onLadderOutcomeShown={() => undefined}
         onReplaceDreamsign={() => undefined}
       />,
     );
 
-    expect(container.querySelector("[data-progressive-dreamsign-reward]"))
-      .toBeNull();
+    expect(container.querySelectorAll("[data-wager-prize-card]")).toHaveLength(1);
     void act(() => vi.advanceTimersByTime(970));
     act(() => {
       root.render(
@@ -672,25 +662,21 @@ describe("GambleSiteScreen — Progressive Draw", () => {
               result: {
                 ...resultView.result!,
                 resultSettled: true,
-                rewardDreamsign: JACKPOT_DREAMSIGN,
               },
             }}
             onChooseGate={() => undefined}
             onLeave={() => undefined}
             onOutcomeShown={() => undefined}
             onPlayAgain={() => undefined}
-            onDrawProgressive={() => undefined}
-            onProgressiveOutcomeShown={() => undefined}
+            onDrawLadder={() => undefined}
+            onLadderOutcomeShown={() => undefined}
             onReplaceDreamsign={() => undefined}
           />
         </CumulusRoot>,
       );
     });
-    expect(
-      container
-        .querySelector("[data-progressive-dreamsign-reward]")
-        ?.querySelector('[data-dreamsign-id="00000000-0000-4000-8000-000000000041"]'),
-    ).not.toBeNull();
+    expect(container.querySelectorAll("[data-wager-prize-card]")).toHaveLength(1);
+    expect(container.querySelector("[data-ladder-dreamsign-reward]")).toBeNull();
 
     act(() => root.unmount());
   });

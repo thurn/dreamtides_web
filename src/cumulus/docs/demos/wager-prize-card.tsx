@@ -19,7 +19,7 @@ function WagerPrizeCardDemo({
 }) {
   return (
     <WagerPrizeCard
-      gateId="jack"
+      prizeId="jack"
       targetLabel="J-A"
       essenceReward={200}
       rewardDreamsign={SAMPLE_DREAMSIGN}
@@ -33,7 +33,7 @@ export const wagerPrizeCardDemo: CumulusComponent = {
   id: "wager-prize-card",
   title: "Wager Prize Card",
   blurb:
-    "The Three Gates prize object: one PlayingCard superellipse with a target title, a single reward sentence, an optional whole-face Dreamsign reveal, and a committed-card reverse face.",
+    "The shared Gamble prize object: one PlayingCard superellipse with a target title, a single Essence and/or Dreamsign reward sentence, an optional whole-face Dreamsign reveal, and a committed-card reverse face.",
   callout:
     "Keep the reward in one sentence. When a Dreamsign is present, the entire prize face is its hover and press reveal source.",
   group: "Components",
@@ -43,7 +43,7 @@ export const wagerPrizeCardDemo: CumulusComponent = {
     {
       label: "Prize",
       code: `<WagerPrizeCard
-  gateId="jack"
+  prizeId="jack"
   targetLabel="J-A"
   essenceReward={200}
   rewardDreamsign={dreamsign}
@@ -51,9 +51,19 @@ export const wagerPrizeCardDemo: CumulusComponent = {
 `,
     },
     {
+      label: "Dreamsign prize",
+      code: `<WagerPrizeCard
+  prizeId="ladder-climb"
+  targetLabel="Q-A"
+  essenceReward={null}
+  rewardDreamsign={dreamsign}
+/>
+`,
+    },
+    {
       label: "Drawn reverse",
       code: `<WagerPrizeCard
-  gateId="jack"
+  prizeId="jack"
   targetLabel="J-A"
   essenceReward={200}
   rewardDreamsign={dreamsign}

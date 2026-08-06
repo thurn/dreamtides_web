@@ -6,27 +6,27 @@ import {
 } from "../journey_v2/testing/fixtures";
 import { asCardId } from "../types/card-identity";
 import {
-  nextTidemarkAttemptNumber,
-  rankWinsTidemarkAttempt,
-  scoreTidemarkDreamsignCandidates,
-  tidemarkAttemptCost,
-} from "./tidemark-progressive-draw";
+  nextTidemarkLadderClimbAttemptNumber,
+  rankWinsTidemarkLadderClimbAttempt,
+  scoreTidemarkLadderClimbDreamsignCandidates,
+  tidemarkLadderClimbAttemptCost,
+} from "./tidemark-ladder-climb";
 
-describe("Tidemark Progressive Draw rules", () => {
+describe("Tidemark Ladder Climb rules", () => {
   it("uses the four inclusive thresholds and Farpoint-only cost schedule", () => {
-    expect(rankWinsTidemarkAttempt("Q", 1)).toBe(true);
-    expect(rankWinsTidemarkAttempt("J", 1)).toBe(false);
-    expect(rankWinsTidemarkAttempt("10", 2)).toBe(true);
-    expect(rankWinsTidemarkAttempt("9", 2)).toBe(false);
-    expect(rankWinsTidemarkAttempt("8", 3)).toBe(true);
-    expect(rankWinsTidemarkAttempt("7", 3)).toBe(false);
-    expect(rankWinsTidemarkAttempt("6", 4)).toBe(true);
-    expect(rankWinsTidemarkAttempt("5", 4)).toBe(false);
+    expect(rankWinsTidemarkLadderClimbAttempt("Q", 1)).toBe(true);
+    expect(rankWinsTidemarkLadderClimbAttempt("J", 1)).toBe(false);
+    expect(rankWinsTidemarkLadderClimbAttempt("10", 2)).toBe(true);
+    expect(rankWinsTidemarkLadderClimbAttempt("9", 2)).toBe(false);
+    expect(rankWinsTidemarkLadderClimbAttempt("8", 3)).toBe(true);
+    expect(rankWinsTidemarkLadderClimbAttempt("7", 3)).toBe(false);
+    expect(rankWinsTidemarkLadderClimbAttempt("6", 4)).toBe(true);
+    expect(rankWinsTidemarkLadderClimbAttempt("5", 4)).toBe(false);
     expect([1, 2, 3, 4].map((attempt) =>
-      tidemarkAttemptCost(attempt as 1 | 2 | 3 | 4, false),
+      tidemarkLadderClimbAttemptCost(attempt as 1 | 2 | 3 | 4, false),
     )).toEqual([15, 25, 40, 60]);
     expect([1, 2, 3, 4].map((attempt) =>
-      tidemarkAttemptCost(attempt as 1 | 2 | 3 | 4, true),
+      tidemarkLadderClimbAttemptCost(attempt as 1 | 2 | 3 | 4, true),
     )).toEqual([10, 20, 30, 45]);
   });
 
@@ -44,28 +44,28 @@ describe("Tidemark Progressive Draw rules", () => {
     } as const;
 
     expect(
-      nextTidemarkAttemptNumber({ revealedCards: [], result: null }),
+      nextTidemarkLadderClimbAttemptNumber({ revealedCards: [], result: null }),
     ).toBe(1);
     expect(
-      nextTidemarkAttemptNumber({
+      nextTidemarkLadderClimbAttemptNumber({
         revealedCards: [card],
         result: settledMiss,
       }),
     ).toBe(2);
     expect(
-      nextTidemarkAttemptNumber({
+      nextTidemarkLadderClimbAttemptNumber({
         revealedCards: [card],
         result: { ...settledMiss, resultSettled: false },
       }),
     ).toBeNull();
     expect(
-      nextTidemarkAttemptNumber({
+      nextTidemarkLadderClimbAttemptNumber({
         revealedCards: [card],
         result: { ...settledMiss, won: true },
       }),
     ).toBeNull();
     expect(
-      nextTidemarkAttemptNumber({
+      nextTidemarkLadderClimbAttemptNumber({
         revealedCards: [card, card, card, card],
         result: {
           ...settledMiss,
@@ -126,7 +126,7 @@ describe("Tidemark Progressive Draw rules", () => {
     ]);
 
     expect(
-      scoreTidemarkDreamsignCandidates({ templates, profiles, deckCards }),
+      scoreTidemarkLadderClimbDreamsignCandidates({ templates, profiles, deckCards }),
     ).toEqual([
       { dreamsignId: "sign-z-matched", score: 1 },
       { dreamsignId: "sign-a-generic", score: 0.4 },

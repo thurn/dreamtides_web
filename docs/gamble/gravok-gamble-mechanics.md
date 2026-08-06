@@ -8,7 +8,7 @@ makes with the casino’s otherworldly character.
 | Game | Core decision |
 | --- | --- |
 | **Gravok’s Three-Gate Wager** | Choose one of three rank thresholds before each draw. |
-| **Tidemark Progressive Draw** | Buy increasingly favorable attempts at one strong Dreamsign. |
+| **Tidemark Ladder Climb** | Buy increasingly favorable attempts at one strong Dreamsign. |
 | **Gravok’s Cash-Out Climb** | Bank an Essence prize or risk it on the next rung. |
 | **Four-Suit Reprise** | Risk one deck card, then accept its suit outcome or pay to draw again. |
 | **Twenty-One** | Hit or stand to finish from 17 through 21 without busting. |
@@ -51,7 +51,7 @@ The casino uses two Dreamsign selection methods:
   current deck with the existing Dreamsign match model, sort by descending
   score with UUID as the tiebreaker, and retain the best 50, or all eligible
   Dreamsigns when fewer than 50 remain. Select uniformly from that pool.
-  Tidemark Progressive Draw and Twenty-One use this method. This preserves
+  Tidemark Ladder Climb and Twenty-One use this method. This preserves
   variety while making the reward meaningfully better than unrestricted random
   selection.
 
@@ -68,7 +68,7 @@ flow.
 | Game | Ordinary cost | Farpoint Station’s only change |
 | --- | --- | --- |
 | Gravok’s Three-Gate Wager | Each wager costs 50 Essence. | The wager costs 0 Essence. |
-| Tidemark Progressive Draw | Attempts cost 15/25/40/60 Essence. | Attempts cost 10/20/30/45 Essence. |
+| Tidemark Ladder Climb | Attempts cost 15/25/40/60 Essence. | Attempts cost 10/20/30/45 Essence. |
 | Gravok’s Cash-Out Climb | Starting the climb costs 10 Essence. | Starting the climb costs 0 Essence. |
 | Four-Suit Reprise | Each draw costs 25 Essence. | Each draw costs 15 Essence. |
 | Twenty-One | The deal costs 50 Essence; each hit costs 10 Essence. | Hits cost 0 Essence. |
@@ -104,17 +104,18 @@ the visit.
 The chosen wager costs 0 Essence. The thresholds, odds, and rewards are
 unchanged.
 
-## 2. Tidemark Progressive Draw
+## 2. Tidemark Ladder Climb
 
-Tidemark Progressive Draw offers up to four separately purchased attempts to
+Tidemark Ladder Climb offers up to four separately purchased attempts to
 win one displayed Dreamsign from the strong Dreamsign pool. Each miss unlocks
 a more expensive attempt with a broader winning range. The player may leave
 after any miss. A win grants the Dreamsign and ends the game; leaving or
 missing all four attempts grants nothing.
 
-The UI displays the Dreamsign and the full attempt schedule before the first
-draw. After a miss, the revealed card and cumulative amount spent remain
-visible beside `Draw Again — [next cost]` and `Leave`.
+The prize card displays `Draw Q–A` above `Win [Dreamsign name]` before the
+first draw. Hovering, focusing, or touch-holding the prize reveals the displayed
+Dreamsign. After a miss settles, the same prize card advances to the next rank
+target and the controls offer the next paid draw or `Leave`.
 
 | Attempt | Cost | Cumulative cost | Winning ranks | Chance |
 | --- | ---: | ---: | --- | ---: |
@@ -247,7 +248,7 @@ Logs must make a production game reconstructable. Record:
 1. **Gravok’s Three-Gate Wager** establishes deterministic shuffling, exact
    odds, Essence costs and payouts, Dreamsign preparation, Farpoint cost
    changes, co-op replay, and Gamble logging with one draw.
-2. **Tidemark Progressive Draw** and **Gravok’s Cash-Out Climb** add repeated
+2. **Tidemark Ladder Climb** and **Gravok’s Cash-Out Climb** add repeated
    decisions, stop conditions, and cumulative costs or banks.
 3. **Four-Suit Reprise** adds locked deck targets, provisional outcomes, and
    repeated draws.

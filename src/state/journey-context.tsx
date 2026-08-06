@@ -71,15 +71,15 @@ export interface JourneyMutations {
     siteId: string,
     replacedDreamsignId: string,
   ) => void;
-  /** Buy and reveal the next Progressive Draw attempt. */
-  drawTidemarkProgressive: (siteId: string) => void;
-  /** Settle the current Progressive Draw outcome after its card reveal. */
-  settleTidemarkProgressive: (
+  /** Buy and reveal the next Ladder Climb attempt. */
+  drawTidemarkLadderClimb: (siteId: string) => void;
+  /** Settle the current Ladder Climb outcome after its card reveal. */
+  settleTidemarkLadderClimb: (
     siteId: string,
     shuffleCommitment: string,
   ) => void;
-  /** Replace a held Dreamsign after a Progressive Draw win at the cap. */
-  replaceTidemarkProgressiveDreamsign: (
+  /** Replace a held Dreamsign after a Ladder Climb win at the cap. */
+  replaceTidemarkLadderClimbDreamsign: (
     siteId: string,
     replacedDreamsignId: string,
   ) => void;

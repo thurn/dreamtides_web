@@ -4,7 +4,7 @@ import type { DreamGuideContent } from "../../types/content";
 import type {
   GravokWagerSiteRuntime,
   SiteState,
-  TidemarkProgressiveSiteRuntime,
+  TidemarkLadderClimbSiteRuntime,
 } from "../../types/journey";
 import type {
   GambleSiteView,
@@ -199,10 +199,10 @@ describe("gamble-site-view-model", () => {
   });
 });
 
-const PROGRESSIVE_RUNTIME: TidemarkProgressiveSiteRuntime = {
+const LADDER_RUNTIME: TidemarkLadderClimbSiteRuntime = {
   kind: "gamble",
-  gameId: "tidemark-progressive-draw",
-  rulesVersion: "fixture-progressive-rules",
+  gameId: "tidemark-ladder-climb",
+  rulesVersion: "fixture-ladder-rules",
   isFarpoint: false,
   shuffleCommitments: ["attempt-1", "attempt-2", "attempt-3", "attempt-4"],
   committedCards: [
@@ -216,18 +216,18 @@ const PROGRESSIVE_RUNTIME: TidemarkProgressiveSiteRuntime = {
   ],
   strongPoolSize: 1,
   strongPoolCutoffScore: 1,
-  rewardDreamsign: RUNTIME.rewardDreamsign,
+  rewardDreamsign: RUNTIME.rewardDreamsign!,
   revealedCards: [],
   cumulativeCost: 0,
   result: null,
 };
 
-describe("gamble-site-view-model — Progressive Draw", () => {
-  it("shows only draw one and keeps the locked Dreamsign out of the view", () => {
+describe("gamble-site-view-model — Ladder Climb", () => {
+  it("shows only draw one with the locked Dreamsign prize", () => {
     const state = {
       ...createDefaultState(),
       essence: 75,
-      siteRuntime: { [GAMBLE_SITE.id]: PROGRESSIVE_RUNTIME },
+      siteRuntime: { [GAMBLE_SITE.id]: LADDER_RUNTIME },
     };
     const view = buildGambleSiteView({
       state,
@@ -236,9 +236,9 @@ describe("gamble-site-view-model — Progressive Draw", () => {
       guide: null,
     });
 
-    expect(view?.gameId).toBe("tidemark-progressive-draw");
-    if (view?.gameId !== "tidemark-progressive-draw") {
-      throw new Error("expected Progressive Draw view");
+    expect(view?.gameId).toBe("tidemark-ladder-climb");
+    if (view?.gameId !== "tidemark-ladder-climb") {
+      throw new Error("expected Ladder Climb view");
     }
     expect(view.nextDraw).toEqual({
       attemptNumber: 1,
@@ -248,17 +248,17 @@ describe("gamble-site-view-model — Progressive Draw", () => {
       available: true,
     });
     expect(view.result).toBeNull();
-    expect(view).not.toHaveProperty("rewardDreamsign");
+    expect(view.rewardDreamsign?.id).toBe("fixture-sign");
   });
 
   it("reveals only the next cost after a settled miss", () => {
-    const runtime: TidemarkProgressiveSiteRuntime = {
-      ...PROGRESSIVE_RUNTIME,
-      revealedCards: [PROGRESSIVE_RUNTIME.committedCards[0]],
+    const runtime: TidemarkLadderClimbSiteRuntime = {
+      ...LADDER_RUNTIME,
+      revealedCards: [LADDER_RUNTIME.committedCards[0]],
       cumulativeCost: 15,
       result: {
         attemptNumber: 1,
-        card: PROGRESSIVE_RUNTIME.committedCards[0],
+        card: LADDER_RUNTIME.committedCards[0],
         won: false,
         costPaid: 15,
         cumulativeCost: 15,
@@ -278,9 +278,9 @@ describe("gamble-site-view-model — Progressive Draw", () => {
       guide: null,
     });
 
-    expect(view?.gameId).toBe("tidemark-progressive-draw");
-    if (view?.gameId !== "tidemark-progressive-draw") {
-      throw new Error("expected Progressive Draw view");
+    expect(view?.gameId).toBe("tidemark-ladder-climb");
+    if (view?.gameId !== "tidemark-ladder-climb") {
+      throw new Error("expected Ladder Climb view");
     }
     expect(view.nextDraw).toEqual({
       attemptNumber: 2,
@@ -293,11 +293,11 @@ describe("gamble-site-view-model — Progressive Draw", () => {
       attemptNumber: 1,
       targetRank: "Q",
       won: false,
-      rewardDreamsign: null,
     });
+    expect(view.rewardDreamsign?.id).toBe("fixture-sign");
   });
 
-  it("reveals the Dreamsign only after a winning result settles", () => {
+  it("keeps the locked Dreamsign stable while a winning result settles", () => {
     const winningResult = {
       attemptNumber: 1 as const,
       card: { rank: "Q" as const, suit: "hearts" as const },
@@ -313,7 +313,7 @@ describe("gamble-site-view-model — Progressive Draw", () => {
         ...createDefaultState(),
         siteRuntime: {
           [GAMBLE_SITE.id]: {
-            ...PROGRESSIVE_RUNTIME,
+            ...LADDER_RUNTIME,
             revealedCards: [winningResult.card],
             cumulativeCost: 15,
             result: { ...winningResult, resultSettled },
@@ -327,18 +327,16 @@ describe("gamble-site-view-model — Progressive Draw", () => {
 
     const before = build(false);
     const after = build(true);
-    expect(before?.gameId).toBe("tidemark-progressive-draw");
-    expect(after?.gameId).toBe("tidemark-progressive-draw");
+    expect(before?.gameId).toBe("tidemark-ladder-climb");
+    expect(after?.gameId).toBe("tidemark-ladder-climb");
     if (
-      before?.gameId !== "tidemark-progressive-draw" ||
-      after?.gameId !== "tidemark-progressive-draw"
+      before?.gameId !== "tidemark-ladder-climb" ||
+      after?.gameId !== "tidemark-ladder-climb"
     ) {
-      throw new Error("expected Progressive Draw views");
+      throw new Error("expected Ladder Climb views");
     }
-    expect(before.result?.rewardDreamsign).toBeNull();
-    expect(after.result?.rewardDreamsign).toMatchObject({
-      id: "fixture-sign",
-    });
+    expect(before.rewardDreamsign?.id).toBe("fixture-sign");
+    expect(after.rewardDreamsign?.id).toBe("fixture-sign");
     expect(after.nextDraw).toBeNull();
   });
 
@@ -347,7 +345,7 @@ describe("gamble-site-view-model — Progressive Draw", () => {
       state: {
         ...createDefaultState(),
         siteRuntime: {
-          [GAMBLE_SITE.id]: { ...PROGRESSIVE_RUNTIME, isFarpoint: true },
+          [GAMBLE_SITE.id]: { ...LADDER_RUNTIME, isFarpoint: true },
         },
       },
       sceneNode: null,
@@ -355,9 +353,9 @@ describe("gamble-site-view-model — Progressive Draw", () => {
       guide: null,
     });
 
-    expect(view?.gameId).toBe("tidemark-progressive-draw");
-    if (view?.gameId !== "tidemark-progressive-draw") {
-      throw new Error("expected Progressive Draw view");
+    expect(view?.gameId).toBe("tidemark-ladder-climb");
+    if (view?.gameId !== "tidemark-ladder-climb") {
+      throw new Error("expected Ladder Climb view");
     }
     expect(view.nextDraw?.cost).toBe(10);
   });

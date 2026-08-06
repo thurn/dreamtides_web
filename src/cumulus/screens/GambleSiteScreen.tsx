@@ -4,11 +4,8 @@ import type { GravokGateId } from "../../types/gamble";
 import type { Dreamsign as DreamsignData } from "../../types/journey";
 import {
   PLAYING_CARD_FLIP_DURATION_MS,
-  PLAYING_CARD_DESIGN,
-  PlayingCard,
   WagerPrizeCard,
   type PlayingCardRank,
-  type PlayingCardSize,
   type PlayingCardSuit,
 } from "../components/card/PlayingCard";
 import { GlassButton } from "../components/controls/GlassButton";
@@ -16,7 +13,6 @@ import {
   RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
   RadialAnnouncement,
 } from "../components/status/RadialAnnouncement";
-import { Dreamsign } from "../components/hud/Dreamsign";
 import type { ArtRef } from "../primitives/art";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
@@ -98,7 +94,7 @@ export interface GravokWagerSiteView {
   replacement: DreamsignReplacementView | null;
 }
 
-export interface ProgressiveDrawResultView {
+export interface LadderClimbResultView {
   /** Stable result identity for animation replay. */
   id: string;
   /** One-based attempt that produced this card. */
@@ -112,17 +108,17 @@ export interface ProgressiveDrawResultView {
   won: boolean;
   resultSettled: boolean;
   terminal: boolean;
-  /** Present only after the winning outcome has settled. */
-  rewardDreamsign: DreamsignData | null;
   pendingDreamsignReplacement: boolean;
 }
 
-export interface ProgressiveDrawSiteView {
-  gameId: "tidemark-progressive-draw";
+export interface LadderClimbSiteView {
+  gameId: "tidemark-ladder-climb";
   siteId: string;
   scene: ArtRef | null;
   isFarpoint: boolean;
   runtimeReady: boolean;
+  /** Locked Dreamsign shown as the prize from the opening state. */
+  rewardDreamsign: DreamsignData;
   /** Only the currently unlocked attempt; future attempts stay undisclosed. */
   nextDraw: {
     attemptNumber: 1 | 2 | 3 | 4;
@@ -132,11 +128,11 @@ export interface ProgressiveDrawSiteView {
     available: boolean;
   } | null;
   guide: GuideGalleryGuideView;
-  result: ProgressiveDrawResultView | null;
+  result: LadderClimbResultView | null;
   replacement: DreamsignReplacementView | null;
 }
 
-export type GambleSiteView = GravokWagerSiteView | ProgressiveDrawSiteView;
+export type GambleSiteView = GravokWagerSiteView | LadderClimbSiteView;
 
 export interface GambleSiteScreenProps {
   /** View-model rendered by the pure screen. */
@@ -149,10 +145,10 @@ export interface GambleSiteScreenProps {
   onOutcomeShown: () => void;
   /** Prepare a fresh committed draw after the result animation. */
   onPlayAgain: () => void;
-  /** Buy and reveal the next Progressive Draw attempt. */
-  onDrawProgressive: () => void;
-  /** Settle a Progressive Draw result when its outcome appears. */
-  onProgressiveOutcomeShown: () => void;
+  /** Buy and reveal the next Ladder Climb attempt. */
+  onDrawLadder: () => void;
+  /** Settle a Ladder Climb result when its outcome appears. */
+  onLadderOutcomeShown: () => void;
   /** Replace one UUID-identified held Dreamsign after a jackpot win. */
   onReplaceDreamsign: (dreamsignId: string) => void;
 }
@@ -161,93 +157,6 @@ const DESKTOP_GAMBLE_REGION_MAX_WIDTH = 650;
 const BET_SETTLE_DELAY_MS = 250;
 const REDUCED_MOTION_DELAY_MS = 80;
 const FADE_DURATION_SECONDS = motionTimeSeconds("--dur-slow");
-
-function ProgressiveDrawCard({
-  targetRank,
-  drawnCard,
-  revealDrawnCard,
-  size,
-}: {
-  targetRank: PlayingCardRank;
-  drawnCard: ProgressiveDrawResultView["card"] | null;
-  revealDrawnCard: boolean;
-  size: PlayingCardSize;
-}) {
-  const reduceMotion = useReducedMotion() === true;
-  const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
-  return (
-    <div
-      role="img"
-      aria-label={
-        revealDrawnCard && drawnCard !== null
-          ? `${drawnCard.rank} of ${drawnCard.suit}`
-          : `Rank target ${targetRank} or higher`
-      }
-      data-progressive-card-state={revealDrawnCard ? "drawn" : "target"}
-      data-progressive-card-target={targetRank}
-      style={{
-        position: "relative",
-        width: sizeSpec.square,
-        height: sizeSpec.square,
-        perspective: PLAYING_CARD_DESIGN.flip.perspective,
-      }}
-    >
-      <motion.div
-        initial={false}
-        animate={{ rotateY: revealDrawnCard ? 180 : 0 }}
-        transition={
-          reduceMotion
-            ? { duration: 0 }
-            : {
-                duration: PLAYING_CARD_DESIGN.flip.durationSeconds,
-                ease: PLAYING_CARD_DESIGN.flip.ease,
-              }
-        }
-        style={{
-          position: "relative",
-          width: "100%",
-          height: "100%",
-          transformStyle: "preserve-3d",
-        }}
-      >
-        <div
-          aria-hidden="true"
-          data-progressive-target-face=""
-          style={{
-            position: "absolute",
-            inset: 0,
-            backfaceVisibility: "hidden",
-            WebkitBackfaceVisibility: "hidden",
-          }}
-        >
-          <PlayingCard
-            rank={targetRank}
-            suit="spades"
-            size={size}
-            variant="rank-target"
-          />
-        </div>
-        <div
-          aria-hidden="true"
-          data-progressive-drawn-card-face=""
-          style={{
-            position: "absolute",
-            inset: 0,
-            transform: "rotateY(180deg)",
-            backfaceVisibility: "hidden",
-            WebkitBackfaceVisibility: "hidden",
-          }}
-        >
-          <PlayingCard
-            rank={drawnCard?.rank ?? "A"}
-            suit={drawnCard?.suit ?? "spades"}
-            size={size}
-          />
-        </div>
-      </motion.div>
-    </div>
-  );
-}
 
 type GambleGatePresentation =
   | "available"
@@ -272,7 +181,7 @@ function GambleGateCard({
 }) {
   const prizeCard = (
     <WagerPrizeCard
-      gateId={gate.id}
+      prizeId={gate.id}
       targetLabel={gate.targetLabel}
       essenceReward={gate.essenceReward}
       rewardDreamsign={gate.rewardDreamsign}
@@ -408,17 +317,17 @@ export function GambleSiteScreen({
   onLeave,
   onOutcomeShown,
   onPlayAgain,
-  onDrawProgressive,
-  onProgressiveOutcomeShown,
+  onDrawLadder,
+  onLadderOutcomeShown,
   onReplaceDreamsign,
 }: GambleSiteScreenProps) {
-  if (view.gameId === "tidemark-progressive-draw") {
+  if (view.gameId === "tidemark-ladder-climb") {
     return (
-      <ProgressiveDrawScreen
+      <LadderClimbScreen
         view={view}
-        onDraw={onDrawProgressive}
+        onDraw={onDrawLadder}
         onLeave={onLeave}
-        onOutcomeShown={onProgressiveOutcomeShown}
+        onOutcomeShown={onLadderOutcomeShown}
         onReplaceDreamsign={onReplaceDreamsign}
       />
     );
@@ -444,7 +353,7 @@ function GravokWagerScreen({
   onReplaceDreamsign,
 }: Omit<
   GambleSiteScreenProps,
-  "view" | "onDrawProgressive" | "onProgressiveOutcomeShown"
+  "view" | "onDrawLadder" | "onLadderOutcomeShown"
 > & { view: GravokWagerSiteView }) {
   const reduceMotion = useReducedMotion() === true;
   const [revealStarted, setRevealStarted] = useState(false);
@@ -761,14 +670,14 @@ function GravokWagerScreen({
   );
 }
 
-function ProgressiveDrawScreen({
+function LadderClimbScreen({
   view,
   onDraw,
   onLeave,
   onOutcomeShown,
   onReplaceDreamsign,
 }: {
-  view: ProgressiveDrawSiteView;
+  view: LadderClimbSiteView;
   onDraw: () => void;
   onLeave: () => void;
   onOutcomeShown: () => void;
@@ -868,12 +777,7 @@ function ProgressiveDrawScreen({
           result !== null && revealedResultId === result.id;
         const outcomeVisible =
           result !== null && outcomeResultId === result.id;
-        const rewardVisible =
-          result?.won === true &&
-          result.resultSettled &&
-          result.rewardDreamsign !== null;
         const cardSize = layout === "desktop" ? "wager" : "wagerCompact";
-        const dreamsignSize = PLAYING_CARD_DESIGN.sizes[cardSize].square;
         const showNextTarget =
           roundActionsVisible && view.nextDraw !== null;
         const targetRank = showNextTarget && view.nextDraw !== null
@@ -914,8 +818,8 @@ function ProgressiveDrawScreen({
             }}
           >
             <section
-              aria-label="Progressive draw"
-              data-progressive-draw-stage=""
+              aria-label="Ladder climb"
+              data-ladder-climb-stage=""
               style={{
                 position: "relative",
                 width: "100%",
@@ -931,7 +835,7 @@ function ProgressiveDrawScreen({
             >
               {outcomeVisible && result !== null && (
                 <div
-                  data-progressive-outcome=""
+                  data-ladder-outcome=""
                   style={{
                     position: "relative",
                     gridColumn: 1,
@@ -951,40 +855,24 @@ function ProgressiveDrawScreen({
                 </div>
               )}
               <div
-                data-progressive-draw-card=""
+                data-ladder-climb-card=""
                 style={{ gridColumn: 2, gridRow: 1 }}
               >
-                <ProgressiveDrawCard
-                  targetRank={targetRank}
+                <WagerPrizeCard
+                  prizeId="ladder-climb"
+                  targetLabel={`${targetRank}-A`}
+                  essenceReward={null}
+                  rewardDreamsign={view.rewardDreamsign}
                   drawnCard={result?.card ?? null}
                   size={cardSize}
                   revealDrawnCard={resultRevealed && !showNextTarget}
+                  dreamsignTestId="gamble-ladder-dreamsign-name"
                 />
               </div>
-              {rewardVisible && result.rewardDreamsign !== null && (
-                <motion.div
-                  key={result.id}
-                  data-progressive-dreamsign-reward=""
-                  initial={reduceMotion ? false : { opacity: 0, scale: 0.72 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{
-                    duration: FADE_DURATION_SECONDS,
-                    ease: "easeOut",
-                  }}
-                  style={{ gridColumn: 3, gridRow: 1 }}
-                >
-                  <Dreamsign
-                    dreamsign={result.rewardDreamsign}
-                    sizePx={dreamsignSize}
-                    variant="revelation"
-                    testid="progressive-dreamsign-reward"
-                  />
-                </motion.div>
-              )}
             </section>
 
             <div
-              data-progressive-actions={
+              data-ladder-actions={
                 roundActionsVisible ? "visible" : "hidden"
               }
               style={{
@@ -1011,13 +899,13 @@ function ProgressiveDrawScreen({
                       !view.nextDraw.available ||
                       !view.nextDraw.canAfford
                     }
-                    testId="gamble-progressive-draw"
+                    testId="gamble-ladder-climb"
                     onPress={onDraw}
                   />
                 </div>
               ) : roundActionsVisible ? (
                 <div
-                  data-progressive-round-action-group=""
+                  data-ladder-round-action-group=""
                   style={{
                     gridColumn: "1 / span 3",
                     width: "100%",
@@ -1040,13 +928,13 @@ function ProgressiveDrawScreen({
                       disabled={
                         !view.nextDraw.available || !view.nextDraw.canAfford
                       }
-                      testId="gamble-progressive-draw-again"
+                      testId="gamble-ladder-climb-again"
                       onPress={onDraw}
                     />
                   )}
                   <GlassButton
                     label="Leave"
-                    testId="gamble-progressive-leave-after-draw"
+                    testId="gamble-ladder-leave-after-draw"
                     onPress={onLeave}
                   />
                 </div>
@@ -1067,7 +955,7 @@ function ProgressiveDrawScreen({
               >
                 <GlassButton
                   label="Leave"
-                  testId="gamble-progressive-leave"
+                  testId="gamble-ladder-leave"
                   onPress={onLeave}
                 />
               </div>
@@ -1078,7 +966,7 @@ function ProgressiveDrawScreen({
                 <GlassButton
                   label="Choose Replacement"
                   variant="accent"
-                  testId="gamble-progressive-open-replacement"
+                  testId="gamble-ladder-open-replacement"
                   onPress={() => setReplacementVisible(true)}
                 />
               )}

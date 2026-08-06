@@ -11,7 +11,7 @@ import type {
   GravokWagerSiteRuntime,
   JourneyState,
   SiteState,
-  TidemarkProgressiveSiteRuntime,
+  TidemarkLadderClimbSiteRuntime,
 } from "../../types/journey";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
@@ -118,9 +118,9 @@ function apply(
     | "SETTLE_GRAVOK_WAGER"
     | "PLAY_AGAIN_GRAVOK_WAGER"
     | "REPLACE_GRAVOK_WAGER_DREAMSIGN"
-    | "DRAW_TIDEMARK_PROGRESSIVE"
-    | "SETTLE_TIDEMARK_PROGRESSIVE"
-    | "REPLACE_TIDEMARK_PROGRESSIVE_DREAMSIGN"
+    | "DRAW_TIDEMARK_LADDER_CLIMB"
+    | "SETTLE_TIDEMARK_LADDER_CLIMB"
+    | "REPLACE_TIDEMARK_LADDER_CLIMB_DREAMSIGN"
     | "COMPLETE_SITE",
   payload: Record<string, unknown>,
 ) {
@@ -391,14 +391,14 @@ describe("Gravok's Three-Gate Wager", () => {
   });
 });
 
-function progressiveRuntime(
+function ladderRuntime(
   cards: readonly StandardPlayingCard[],
-  overrides: Partial<TidemarkProgressiveSiteRuntime> = {},
-): TidemarkProgressiveSiteRuntime {
+  overrides: Partial<TidemarkLadderClimbSiteRuntime> = {},
+): TidemarkLadderClimbSiteRuntime {
   return {
     kind: "gamble",
-    gameId: "tidemark-progressive-draw",
-    rulesVersion: "fixture-progressive-rules",
+    gameId: "tidemark-ladder-climb",
+    rulesVersion: "fixture-ladder-rules",
     isFarpoint: false,
     shuffleCommitments: ["attempt-1", "attempt-2", "attempt-3", "attempt-4"],
     committedCards: [...cards],
@@ -415,10 +415,10 @@ function progressiveRuntime(
   };
 }
 
-function progressiveStateWith(
+function ladderStateWith(
   cards: readonly StandardPlayingCard[],
   journeyOverrides: Partial<JourneyState> = {},
-  runtimeOverrides: Partial<TidemarkProgressiveSiteRuntime> = {},
+  runtimeOverrides: Partial<TidemarkLadderClimbSiteRuntime> = {},
 ): FoldState {
   const base = stateWith("2", journeyOverrides);
   return {
@@ -426,33 +426,33 @@ function progressiveStateWith(
     journey: {
       ...base.journey,
       siteRuntime: {
-        [SITE_ID]: progressiveRuntime(cards, runtimeOverrides),
+        [SITE_ID]: ladderRuntime(cards, runtimeOverrides),
       },
     },
   };
 }
 
-function drawProgressive(state: FoldState) {
-  return apply(state, "DRAW_TIDEMARK_PROGRESSIVE", { siteId: SITE_ID });
+function drawLadder(state: FoldState) {
+  return apply(state, "DRAW_TIDEMARK_LADDER_CLIMB", { siteId: SITE_ID });
 }
 
-function settleProgressive(state: FoldState) {
+function settleLadder(state: FoldState) {
   const siteRuntime = state.journey.siteRuntime[SITE_ID];
   if (
     siteRuntime?.kind !== "gamble" ||
-    siteRuntime.gameId !== "tidemark-progressive-draw" ||
+    siteRuntime.gameId !== "tidemark-ladder-climb" ||
     siteRuntime.result === null
   ) {
-    throw new Error("expected Progressive Draw result");
+    throw new Error("expected Ladder Climb result");
   }
-  return apply(state, "SETTLE_TIDEMARK_PROGRESSIVE", {
+  return apply(state, "SETTLE_TIDEMARK_LADDER_CLIMB", {
     siteId: SITE_ID,
     shuffleCommitment:
       siteRuntime.shuffleCommitments[siteRuntime.result.attemptNumber - 1],
   });
 }
 
-describe("Tidemark Progressive Draw", () => {
+describe("Tidemark Ladder Climb", () => {
   const missCards: readonly StandardPlayingCard[] = [
     { rank: "J", suit: "clubs" },
     { rank: "9", suit: "diamonds" },
@@ -461,8 +461,8 @@ describe("Tidemark Progressive Draw", () => {
   ];
 
   it("charges attempt one and grants its hidden Dreamsign only at settlement", () => {
-    const drawn = drawProgressive(
-      progressiveStateWith([
+    const drawn = drawLadder(
+      ladderStateWith([
         { rank: "Q", suit: "clubs" },
         ...missCards.slice(1),
       ]),
@@ -485,7 +485,7 @@ describe("Tidemark Progressive Draw", () => {
       apply(drawn.state, "COMPLETE_SITE", { siteId: SITE_ID }).outcome,
     ).toBe("bounced");
 
-    const settled = settleProgressive(drawn.state);
+    const settled = settleLadder(drawn.state);
     expect(settled.outcome).toBe("applied");
     expect(settled.state.journey.dreamsigns.map((sign) => sign.id)).toEqual([
       "reward-sign",
@@ -500,14 +500,14 @@ describe("Tidemark Progressive Draw", () => {
         pendingDreamsignReplacement: false,
       },
     });
-    expect(drawProgressive(settled.state).outcome).toBe("bounced");
+    expect(drawLadder(settled.state).outcome).toBe("bounced");
     expect(
       apply(settled.state, "COMPLETE_SITE", { siteId: SITE_ID }).outcome,
     ).toBe("applied");
   });
 
   it("unlocks broader attempts one at a time with Farpoint's reduced costs", () => {
-    const start = progressiveStateWith(
+    const start = ladderStateWith(
       [
         { rank: "J", suit: "clubs" },
         { rank: "10", suit: "diamonds" },
@@ -516,15 +516,15 @@ describe("Tidemark Progressive Draw", () => {
       {},
       { isFarpoint: true },
     );
-    const first = drawProgressive(start);
+    const first = drawLadder(start);
     expect(first.state.journey.essence).toBe(190);
     expect(first.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       result: { attemptNumber: 1, won: false, costPaid: 10 },
     });
-    expect(drawProgressive(first.state).outcome).toBe("bounced");
+    expect(drawLadder(first.state).outcome).toBe("bounced");
 
-    const firstSettled = settleProgressive(first.state);
-    const second = drawProgressive(firstSettled.state);
+    const firstSettled = settleLadder(first.state);
+    const second = drawLadder(firstSettled.state);
     expect(second.state.journey.essence).toBe(170);
     expect(second.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       cumulativeCost: 30,
@@ -533,14 +533,14 @@ describe("Tidemark Progressive Draw", () => {
   });
 
   it("charges 140 Essence across four misses and stops after the last draw", () => {
-    let current = progressiveStateWith(missCards);
+    let current = ladderStateWith(missCards);
     for (let attempt = 1; attempt <= 4; attempt += 1) {
-      const drawn = drawProgressive(current);
+      const drawn = drawLadder(current);
       expect(drawn.outcome).toBe("applied");
       expect(drawn.state.journey.siteRuntime[SITE_ID]).toMatchObject({
         result: { attemptNumber: attempt, won: false },
       });
-      current = settleProgressive(drawn.state).state;
+      current = settleLadder(drawn.state).state;
     }
 
     expect(current.journey.essence).toBe(60);
@@ -549,19 +549,14 @@ describe("Tidemark Progressive Draw", () => {
       cumulativeCost: 140,
       revealedCards: missCards,
     });
-    expect(drawProgressive(current).outcome).toBe("bounced");
+    expect(drawLadder(current).outcome).toBe("bounced");
   });
 
-  it("bounces unavailable and unaffordable attempts without charging Essence", () => {
-    const unavailable = drawProgressive(
-      progressiveStateWith(missCards, {}, { rewardDreamsign: null }),
-    );
-    const poor = drawProgressive(
-      progressiveStateWith(missCards, { essence: 14 }),
+  it("bounces unaffordable attempts without charging Essence", () => {
+    const poor = drawLadder(
+      ladderStateWith(missCards, { essence: 14 }),
     );
 
-    expect(unavailable.outcome).toBe("bounced");
-    expect(unavailable.state.journey.essence).toBe(200);
     expect(poor.outcome).toBe("bounced");
     expect(poor.state.journey.essence).toBe(14);
   });
@@ -573,13 +568,13 @@ describe("Tidemark Progressive Draw", () => {
       effectDescription: "Held effect.",
       isNegative: false,
     };
-    const drawn = drawProgressive(
-      progressiveStateWith(
+    const drawn = drawLadder(
+      ladderStateWith(
         [{ rank: "A", suit: "spades" }, ...missCards.slice(1)],
         { maxDreamsigns: 1, dreamsigns: [held] },
       ),
     );
-    const settled = settleProgressive(drawn.state);
+    const settled = settleLadder(drawn.state);
     expect(settled.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       result: {
         resultSettled: true,
@@ -593,7 +588,7 @@ describe("Tidemark Progressive Draw", () => {
 
     const replaced = apply(
       settled.state,
-      "REPLACE_TIDEMARK_PROGRESSIVE_DREAMSIGN",
+      "REPLACE_TIDEMARK_LADDER_CLIMB_DREAMSIGN",
       { siteId: SITE_ID, replacedDreamsignId: "held-sign" },
     );
     expect(replaced.outcome).toBe("applied");

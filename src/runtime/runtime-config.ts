@@ -198,7 +198,7 @@ function parseExplorationCardId(rawCardId: string | null): CardId | null {
 
 function parseGambleGameId(rawGame: string | null): GambleGameId | null {
   if (rawGame === "three-gate") return "gravok-three-gate-wager";
-  if (rawGame === "progressive-draw") return "tidemark-progressive-draw";
+  if (rawGame === "ladder-climb") return "tidemark-ladder-climb";
   return null;
 }
 

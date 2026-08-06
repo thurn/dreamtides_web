@@ -315,19 +315,19 @@ export function CoopJourneyProvider({
         dispatch(
           actions.replaceGravokWagerDreamsign(siteId, replacedDreamsignId),
         ),
-      drawTidemarkProgressive: (siteId) =>
-        dispatch(actions.drawTidemarkProgressive(siteId)),
-      settleTidemarkProgressive: (siteId, shuffleCommitment) =>
+      drawTidemarkLadderClimb: (siteId) =>
+        dispatch(actions.drawTidemarkLadderClimb(siteId)),
+      settleTidemarkLadderClimb: (siteId, shuffleCommitment) =>
         dispatch(
-          actions.settleTidemarkProgressive(
+          actions.settleTidemarkLadderClimb(
             siteId,
             shuffleCommitment,
             stateRef.current.runId ?? undefined,
           ),
         ),
-      replaceTidemarkProgressiveDreamsign: (siteId, replacedDreamsignId) =>
+      replaceTidemarkLadderClimbDreamsign: (siteId, replacedDreamsignId) =>
         dispatch(
-          actions.replaceTidemarkProgressiveDreamsign(
+          actions.replaceTidemarkLadderClimbDreamsign(
             siteId,
             replacedDreamsignId,
           ),

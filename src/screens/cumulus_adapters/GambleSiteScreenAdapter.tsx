@@ -71,19 +71,19 @@ export function GambleSiteScreenAdapter({
     if (runtime?.gameId !== "gravok-three-gate-wager") return;
     mutations.playAgainGravokWager(siteId, runtime.shuffleCommitment);
   }, [mutations, runtime, siteId]);
-  const drawProgressive = useCallback(
-    () => mutations.drawTidemarkProgressive(siteId),
+  const drawLadder = useCallback(
+    () => mutations.drawTidemarkLadderClimb(siteId),
     [mutations, siteId],
   );
-  const settleProgressive = useCallback(() => {
+  const settleLadder = useCallback(() => {
     if (
-      runtime?.gameId !== "tidemark-progressive-draw" ||
+      runtime?.gameId !== "tidemark-ladder-climb" ||
       runtime.result === null
     ) return;
     const commitment =
       runtime.shuffleCommitments[runtime.result.attemptNumber - 1];
     if (commitment === undefined) return;
-    mutations.settleTidemarkProgressive(siteId, commitment);
+    mutations.settleTidemarkLadderClimb(siteId, commitment);
   }, [mutations, runtime, siteId]);
   const replaceDreamsign = useCallback((dreamsignId: string) => {
     if (runtime === null) return;
@@ -93,8 +93,8 @@ export function GambleSiteScreenAdapter({
       dreamsignId,
       runtime.rewardDreamsign?.id,
     );
-    if (runtime.gameId === "tidemark-progressive-draw") {
-      mutations.replaceTidemarkProgressiveDreamsign(siteId, dreamsignId);
+    if (runtime.gameId === "tidemark-ladder-climb") {
+      mutations.replaceTidemarkLadderClimbDreamsign(siteId, dreamsignId);
     } else {
       mutations.replaceGravokWagerDreamsign(siteId, dreamsignId);
     }
@@ -108,8 +108,8 @@ export function GambleSiteScreenAdapter({
       onLeave={complete}
       onOutcomeShown={settleGravok}
       onPlayAgain={playAgain}
-      onDrawProgressive={drawProgressive}
-      onProgressiveOutcomeShown={settleProgressive}
+      onDrawLadder={drawLadder}
+      onLadderOutcomeShown={settleLadder}
       onReplaceDreamsign={replaceDreamsign}
     />
   );

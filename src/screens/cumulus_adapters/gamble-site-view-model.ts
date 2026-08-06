@@ -3,7 +3,7 @@ import type {
   GambleGateView,
   GambleSiteView,
   GravokWagerSiteView,
-  ProgressiveDrawSiteView,
+  LadderClimbSiteView,
 } from "../../cumulus/screens/GambleSiteScreen";
 import {
   GRAVOK_GATE_RULES,
@@ -11,10 +11,10 @@ import {
   gravokGateChanceLabel,
 } from "../../data/gravok-wager";
 import {
-  nextTidemarkAttemptNumber,
-  tidemarkAttemptCost,
-  tidemarkAttemptRule,
-} from "../../data/tidemark-progressive-draw";
+  nextTidemarkLadderClimbAttemptNumber,
+  tidemarkLadderClimbAttemptCost,
+  tidemarkLadderClimbAttemptRule,
+} from "../../data/tidemark-ladder-climb";
 import { guideForSiteType } from "../../data/dreamscapes";
 import type { DreamGuideContent } from "../../types/content";
 import type {
@@ -23,14 +23,14 @@ import type {
   GravokWagerSiteRuntime,
   JourneyState,
   SiteState,
-  TidemarkProgressiveSiteRuntime,
+  TidemarkLadderClimbSiteRuntime,
 } from "../../types/journey";
 import type { GravokGateId } from "../../types/gamble";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
 export const GRAVOK_WAGER_GUIDE_LINE =
   "The game's called Three Gates. Place your bet on the next card drawn!";
-export const TIDEMARK_PROGRESSIVE_GUIDE_LINE =
+export const TIDEMARK_LADDER_CLIMB_GUIDE_LINE =
   "The game's Ladder Climb. Match or beat the target to win a Dreamsign. Try again with better odds if you miss!";
 
 /** The next gate in display order supplies the non-selected reveal object. */
@@ -152,42 +152,41 @@ function buildGravokWagerSiteView(params: {
   };
 }
 
-function buildProgressiveDrawSiteView(params: {
+function buildLadderClimbSiteView(params: {
   state: JourneyState;
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent | null;
-  runtime: TidemarkProgressiveSiteRuntime;
-}): ProgressiveDrawSiteView {
+  runtime: TidemarkLadderClimbSiteRuntime;
+}): LadderClimbSiteView {
   const { runtime } = params;
   const result = runtime.result;
-  const nextAttempt = nextTidemarkAttemptNumber(runtime);
+  const nextAttempt = nextTidemarkLadderClimbAttemptNumber(runtime);
   const nextCost =
     nextAttempt === null
       ? null
-      : tidemarkAttemptCost(nextAttempt, runtime.isFarpoint);
+      : tidemarkLadderClimbAttemptCost(nextAttempt, runtime.isFarpoint);
 
   return {
-    gameId: "tidemark-progressive-draw",
+    gameId: "tidemark-ladder-climb",
     siteId: params.site.id,
     ...commonGambleView({
       sceneNode: params.sceneNode,
       guide: params.guide,
-      guideLine: TIDEMARK_PROGRESSIVE_GUIDE_LINE,
+      guideLine: TIDEMARK_LADDER_CLIMB_GUIDE_LINE,
     }),
     isFarpoint: runtime.isFarpoint,
     runtimeReady: true,
+    rewardDreamsign: runtime.rewardDreamsign,
     nextDraw:
       nextAttempt === null || nextCost === null
         ? null
         : {
             attemptNumber: nextAttempt,
-            targetRank: tidemarkAttemptRule(nextAttempt).threshold,
+            targetRank: tidemarkLadderClimbAttemptRule(nextAttempt).threshold,
             cost: nextCost,
             canAfford: params.state.essence >= nextCost,
-            available:
-              runtime.rewardDreamsign !== null &&
-              params.state.maxDreamsigns > 0,
+            available: params.state.maxDreamsigns > 0,
           },
     result:
       result === null
@@ -195,20 +194,15 @@ function buildProgressiveDrawSiteView(params: {
         : {
             id: `${params.site.id}:${runtime.shuffleCommitments[result.attemptNumber - 1] ?? "unprepared"}:${String(result.attemptNumber)}`,
             attemptNumber: result.attemptNumber,
-            targetRank: tidemarkAttemptRule(result.attemptNumber).threshold,
+            targetRank: tidemarkLadderClimbAttemptRule(result.attemptNumber).threshold,
             card: result.card,
             won: result.won,
             resultSettled: result.resultSettled,
             terminal: result.won || result.attemptNumber === 4,
-            rewardDreamsign:
-              result.won && result.resultSettled
-                ? runtime.rewardDreamsign
-                : null,
             pendingDreamsignReplacement: result.pendingDreamsignReplacement,
           },
     replacement:
-      result?.pendingDreamsignReplacement === true &&
-      runtime.rewardDreamsign !== null
+      result?.pendingDreamsignReplacement === true
         ? {
             pendingDreamsign: runtime.rewardDreamsign,
             currentDreamsigns: params.state.dreamsigns,
@@ -229,7 +223,7 @@ export function buildGambleSiteView(params: {
   const runtime: GambleSiteRuntime | null =
     runtimeCandidate?.kind === "gamble" ? runtimeCandidate : null;
   if (runtime === null) return null;
-  return runtime.gameId === "tidemark-progressive-draw"
-    ? buildProgressiveDrawSiteView({ ...params, runtime })
+  return runtime.gameId === "tidemark-ladder-climb"
+    ? buildLadderClimbSiteView({ ...params, runtime })
     : buildGravokWagerSiteView({ ...params, runtime });
 }

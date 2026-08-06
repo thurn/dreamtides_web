@@ -631,7 +631,7 @@ describe("createSiteContentProvider — Gamble", () => {
       site,
       rng: () => 0,
     });
-    const randomProgressive = provider.openSite({
+    const randomLadder = provider.openSite({
       journey,
       site,
       rng: () => 0.999,
@@ -642,32 +642,32 @@ describe("createSiteContentProvider — Gamble", () => {
       rng: () => 0.999,
       gambleGameId: "gravok-three-gate-wager",
     });
-    const forcedProgressive = provider.openSite({
+    const forcedLadder = provider.openSite({
       journey,
       site,
       rng: () => 0,
-      gambleGameId: "tidemark-progressive-draw",
+      gambleGameId: "tidemark-ladder-climb",
     });
 
     expect(randomThreeGate?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "gravok-three-gate-wager",
     });
-    expect(randomProgressive?.runtime).toMatchObject({
+    expect(randomLadder?.runtime).toMatchObject({
       kind: "gamble",
-      gameId: "tidemark-progressive-draw",
+      gameId: "tidemark-ladder-climb",
     });
     expect(forcedThreeGate?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "gravok-three-gate-wager",
     });
-    expect(forcedProgressive?.runtime).toMatchObject({
+    expect(forcedLadder?.runtime).toMatchObject({
       kind: "gamble",
-      gameId: "tidemark-progressive-draw",
+      gameId: "tidemark-ladder-climb",
     });
   });
 
-  it("selects the Progressive Draw reward uniformly from the strongest 50", () => {
+  it("selects the Ladder Climb reward uniformly from the strongest 50", () => {
     const fixture = makeMerchantFixture();
     const templates = Array.from({ length: 55 }, (_value, index) => {
       const id = `dsign-${String(index).padStart(3, "0")}`;
@@ -693,19 +693,38 @@ describe("createSiteContentProvider — Gamble", () => {
       journey,
       site: makeMerchantTestSite({ id: "gamble-site", type: "Gamble" }),
       rng: () => 0.999,
-      gambleGameId: "tidemark-progressive-draw",
+      gambleGameId: "tidemark-ladder-climb",
     });
 
     expect(result?.runtime.kind).toBe("gamble");
     if (
       result?.runtime.kind !== "gamble" ||
-      result.runtime.gameId !== "tidemark-progressive-draw"
+      result.runtime.gameId !== "tidemark-ladder-climb"
     ) {
       return;
     }
     expect(result.runtime.dreamsignCandidateScores).toHaveLength(55);
     expect(result.runtime.strongPoolSize).toBe(50);
     expect(result.runtime.rewardDreamsign?.id).toBe("dsign-049");
+  });
+
+  it("falls back to Three Gates when Ladder Climb cannot prepare a Dreamsign", () => {
+    const fixture = makeMerchantFixture();
+    const result = createSiteContentProvider(fixture.content).openSite({
+      journey: {
+        ...fixture.journey,
+        remainingDreamsignPool: [],
+      },
+      site: makeMerchantTestSite({ id: "gamble-site", type: "Gamble" }),
+      rng: () => 0,
+      gambleGameId: "tidemark-ladder-climb",
+    });
+
+    expect(result?.runtime).toMatchObject({
+      kind: "gamble",
+      gameId: "gravok-three-gate-wager",
+      rewardDreamsign: null,
+    });
   });
 });
 

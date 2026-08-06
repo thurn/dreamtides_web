@@ -4,19 +4,19 @@ import type { CardData } from "../types/cards";
 import type { DreamsignTemplate } from "../types/content";
 import type {
   StandardPlayingCardRank,
-  TidemarkProgressiveAttemptNumber,
+  TidemarkLadderClimbAttemptNumber,
 } from "../types/gamble";
 import type {
-  TidemarkDreamsignCandidateScore,
-  TidemarkProgressiveSiteRuntime,
+  TidemarkLadderClimbDreamsignCandidateScore,
+  TidemarkLadderClimbSiteRuntime,
 } from "../types/journey";
 import { STANDARD_PLAYING_CARD_RANKS } from "./gravok-wager";
 
-export const TIDEMARK_PROGRESSIVE_RULES_VERSION = "tidemark-progressive-v1";
+export const TIDEMARK_LADDER_CLIMB_RULES_VERSION = "tidemark-ladder-climb-v1";
 export const TIDEMARK_STRONG_POOL_LIMIT = 50;
 
-export interface TidemarkProgressiveAttemptRule {
-  attemptNumber: TidemarkProgressiveAttemptNumber;
+export interface TidemarkLadderClimbAttemptRule {
+  attemptNumber: TidemarkLadderClimbAttemptNumber;
   ordinaryCost: number;
   farpointCost: number;
   threshold: StandardPlayingCardRank;
@@ -24,8 +24,8 @@ export interface TidemarkProgressiveAttemptRule {
   oddsDenominator: number;
 }
 
-/** Stable costs and inclusive rank thresholds for each progressive attempt. */
-export const TIDEMARK_PROGRESSIVE_ATTEMPTS: readonly TidemarkProgressiveAttemptRule[] = [
+/** Stable costs and inclusive rank thresholds for each ladder attempt. */
+export const TIDEMARK_LADDER_CLIMB_ATTEMPTS: readonly TidemarkLadderClimbAttemptRule[] = [
   {
     attemptNumber: 1,
     ordinaryCost: 15,
@@ -60,47 +60,47 @@ export const TIDEMARK_PROGRESSIVE_ATTEMPTS: readonly TidemarkProgressiveAttemptR
   },
 ];
 
-export function tidemarkAttemptRule(
-  attemptNumber: TidemarkProgressiveAttemptNumber,
-): TidemarkProgressiveAttemptRule {
-  return TIDEMARK_PROGRESSIVE_ATTEMPTS[attemptNumber - 1];
+export function tidemarkLadderClimbAttemptRule(
+  attemptNumber: TidemarkLadderClimbAttemptNumber,
+): TidemarkLadderClimbAttemptRule {
+  return TIDEMARK_LADDER_CLIMB_ATTEMPTS[attemptNumber - 1];
 }
 
-export function tidemarkAttemptCost(
-  attemptNumber: TidemarkProgressiveAttemptNumber,
+export function tidemarkLadderClimbAttemptCost(
+  attemptNumber: TidemarkLadderClimbAttemptNumber,
   isFarpoint: boolean,
 ): number {
-  const rule = tidemarkAttemptRule(attemptNumber);
+  const rule = tidemarkLadderClimbAttemptRule(attemptNumber);
   return isFarpoint ? rule.farpointCost : rule.ordinaryCost;
 }
 
 /** The next attempt the current result state permits, if play may continue. */
-export function nextTidemarkAttemptNumber(
-  runtime: Pick<TidemarkProgressiveSiteRuntime, "result" | "revealedCards">,
-): TidemarkProgressiveAttemptNumber | null {
+export function nextTidemarkLadderClimbAttemptNumber(
+  runtime: Pick<TidemarkLadderClimbSiteRuntime, "result" | "revealedCards">,
+): TidemarkLadderClimbAttemptNumber | null {
   if (
     runtime.result !== null &&
     (!runtime.result.resultSettled ||
       runtime.result.won ||
-      runtime.result.attemptNumber >= TIDEMARK_PROGRESSIVE_ATTEMPTS.length)
+      runtime.result.attemptNumber >= TIDEMARK_LADDER_CLIMB_ATTEMPTS.length)
   ) {
     return null;
   }
   return (
-    TIDEMARK_PROGRESSIVE_ATTEMPTS[runtime.revealedCards.length]
+    TIDEMARK_LADDER_CLIMB_ATTEMPTS[runtime.revealedCards.length]
       ?.attemptNumber ?? null
   );
 }
 
 /** Whether a rank crosses the current attempt's inclusive threshold. */
-export function rankWinsTidemarkAttempt(
+export function rankWinsTidemarkLadderClimbAttempt(
   rank: StandardPlayingCardRank,
-  attemptNumber: TidemarkProgressiveAttemptNumber,
+  attemptNumber: TidemarkLadderClimbAttemptNumber,
 ): boolean {
   return (
     STANDARD_PLAYING_CARD_RANKS.indexOf(rank) >=
     STANDARD_PLAYING_CARD_RANKS.indexOf(
-      tidemarkAttemptRule(attemptNumber).threshold,
+      tidemarkLadderClimbAttemptRule(attemptNumber).threshold,
     )
   );
 }
@@ -115,11 +115,11 @@ function compareUuid(left: string, right: string): number {
  * Score every eligible Dreamsign against the current deck, ordered by the
  * strong-pool contract: descending match score with UUID as the tiebreaker.
  */
-export function scoreTidemarkDreamsignCandidates(params: {
+export function scoreTidemarkLadderClimbDreamsignCandidates(params: {
   templates: readonly DreamsignTemplate[];
   profiles: ReadonlyMap<string, DreamsignProfile> | undefined;
   deckCards: readonly CardData[];
-}): TidemarkDreamsignCandidateScore[] {
+}): TidemarkLadderClimbDreamsignCandidateScore[] {
   return params.templates
     .map((template) => ({
       dreamsignId: template.id,

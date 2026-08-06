@@ -5160,16 +5160,17 @@
   ],
   "WagerPrizeCard": [
     {
-      "name": "gateId",
-      "tsType": "GravokGateId",
+      "name": "prizeId",
+      "tsType": "WagerPrizeCardId",
       "unionMembers": [
         "six",
         "nine",
-        "jack"
+        "jack",
+        "ladder-climb"
       ],
       "required": true,
       "defaultValue": null,
-      "description": "Stable Three Gates choice represented by this prize object."
+      "description": "Stable Gamble choice represented by this prize object."
     },
     {
       "name": "targetLabel",
@@ -5178,22 +5179,6 @@
       "required": true,
       "defaultValue": null,
       "description": "Inclusive winning rank range shown as authored compact notation."
-    },
-    {
-      "name": "essenceReward",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Essence awarded when the gate wins."
-    },
-    {
-      "name": "rewardDreamsign",
-      "tsType": "Dreamsign | null",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Jackpot Dreamsign appended to the reward sentence, when present."
     },
     {
       "name": "size",
@@ -5228,7 +5213,23 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Optional stable selector for the jackpot Dreamsign name."
+      "description": "Optional stable selector for the prize Dreamsign name."
+    },
+    {
+      "name": "essenceReward",
+      "tsType": "number | null",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Essence awarded on a win.\nNull selects a Dreamsign-only prize."
+    },
+    {
+      "name": "rewardDreamsign",
+      "tsType": "Dreamsign | null",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Dreamsign appended to the Essence reward, when present.\nDreamsign used as the complete reward."
     }
   ]
 }

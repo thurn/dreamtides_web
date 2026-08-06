@@ -180,7 +180,7 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `random-site`                      | A materialized enhanced Shop hosted by Maddox                                                                                                                                                                |
 | `random-site-home`                 | Maddox's home Random Site with three destination choices                                                                                                                                                     |
 | `random-site-atlas`                | The first Dream Atlas frontier with The Rust Expanse available, including its Random Site badge and Maddox reveal cards                                                                                      |
-| `gamble`                        | Gamble site; the game is selected randomly or fixed with `?gambleGame=three-gate` / `?gambleGame=progressive-draw`                                                                                            |
+| `gamble`                        | Gamble site; the game is selected randomly or fixed with `?gambleGame=three-gate` / `?gambleGame=ladder-climb`                                                                                            |
 | `gamble-enhanced`               | Farpoint Gamble site with the selected game’s discounted cost rule                                                                                                                                              |
 | `exploration`                   | Exploration card-channeling site                                                                                                                                                                               |
 | `exploration-enhanced`          | Exploration card-channeling site, enhanced                                                                                                                                                                     |
@@ -195,8 +195,8 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 `?goto=` composes with the other runtime parameters documented in
 `url_parameters.md` (read once at page load, not reactive). For example, pair it
 with `?seed=` for a fixed RNG seed, or `?algo=` to select a draft-pool strategy
-for the bootstrapped run. Use `?goto=gamble&gambleGame=progressive-draw` for a
-stable Progressive Draw QA entry point.
+for the bootstrapped run. Use `?goto=gamble&gambleGame=ladder-climb` for a
+stable Ladder Climb QA entry point.
 
 ## Adding a scene
 

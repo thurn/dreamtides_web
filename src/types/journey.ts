@@ -9,7 +9,7 @@ import type {
   GambleGameId,
   GravokGateId,
   StandardPlayingCard,
-  TidemarkProgressiveAttemptNumber,
+  TidemarkLadderClimbAttemptNumber,
 } from "./gamble";
 
 /** Badge applied to a card via a Transfiguration site. */
@@ -513,14 +513,14 @@ export interface ExplorationSiteRuntime {
 }
 
 /** One scored candidate considered for a strong-pool Dreamsign reward. */
-export interface TidemarkDreamsignCandidateScore {
+export interface TidemarkLadderClimbDreamsignCandidateScore {
   dreamsignId: string;
   score: number;
 }
 
-/** The currently revealed attempt in Tidemark Progressive Draw. */
-export interface TidemarkProgressiveResult {
-  attemptNumber: TidemarkProgressiveAttemptNumber;
+/** The currently revealed attempt in Tidemark Ladder Climb. */
+export interface TidemarkLadderClimbResult {
+  attemptNumber: TidemarkLadderClimbAttemptNumber;
   card: StandardPlayingCard;
   won: boolean;
   costPaid: number;
@@ -532,31 +532,31 @@ export interface TidemarkProgressiveResult {
   replacedDreamsignId?: string;
 }
 
-/** Shared, replayable runtime for one Tidemark Progressive Draw encounter. */
-export interface TidemarkProgressiveSiteRuntime {
+/** Shared, replayable runtime for one Tidemark Ladder Climb encounter. */
+export interface TidemarkLadderClimbSiteRuntime {
   kind: "gamble";
-  gameId: "tidemark-progressive-draw";
+  gameId: "tidemark-ladder-climb";
   rulesVersion: string;
   isFarpoint: boolean;
   /** One independent full-deck commitment for each possible attempt. */
   shuffleCommitments: string[];
   committedCards: StandardPlayingCard[];
   /** All eligible candidates, sorted by descending match score then UUID. */
-  dreamsignCandidateScores: TidemarkDreamsignCandidateScore[];
+  dreamsignCandidateScores: TidemarkLadderClimbDreamsignCandidateScore[];
   /** Number retained in the strong pool (at most 50). */
   strongPoolSize: number;
   /** Score of the final retained candidate, or null for an empty pool. */
   strongPoolCutoffScore: number | null;
-  rewardDreamsign: Dreamsign | null;
+  rewardDreamsign: Dreamsign;
   revealedCards: StandardPlayingCard[];
   cumulativeCost: number;
-  result: TidemarkProgressiveResult | null;
+  result: TidemarkLadderClimbResult | null;
 }
 
 /** Every game runtime currently available at a Gamble site. */
 export type GambleSiteRuntime =
   | GravokWagerSiteRuntime
-  | TidemarkProgressiveSiteRuntime;
+  | TidemarkLadderClimbSiteRuntime;
 
 /** Stable Gamble game id, re-exported beside its persisted runtime union. */
 export type GambleSiteGameId = GambleGameId;

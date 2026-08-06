@@ -6,16 +6,16 @@ import {
   rankWinsGravokGate,
 } from "../../data/gravok-wager";
 import {
-  nextTidemarkAttemptNumber,
-  rankWinsTidemarkAttempt,
-  tidemarkAttemptCost,
-} from "../../data/tidemark-progressive-draw";
+  nextTidemarkLadderClimbAttemptNumber,
+  rankWinsTidemarkLadderClimbAttempt,
+  tidemarkLadderClimbAttemptCost,
+} from "../../data/tidemark-ladder-climb";
 import type { GravokGateId } from "../../types/gamble";
 import type {
   GambleSiteRuntime,
   GravokWagerSiteRuntime,
   JourneyState,
-  TidemarkProgressiveSiteRuntime,
+  TidemarkLadderClimbSiteRuntime,
 } from "../../types/journey";
 import type { EventContext } from "../../eventlog/types";
 import { findSite, getSiteContentProvider } from "./sites";
@@ -68,9 +68,9 @@ function gravokRuntimeFor(
 function tidemarkRuntimeFor(
   journey: JourneyState,
   siteId: string,
-): TidemarkProgressiveSiteRuntime | null {
+): TidemarkLadderClimbSiteRuntime | null {
   const runtime = runtimeFor(journey, siteId);
-  return runtime?.gameId === "tidemark-progressive-draw" ? runtime : null;
+  return runtime?.gameId === "tidemark-ladder-climb" ? runtime : null;
 }
 
 /**
@@ -274,8 +274,8 @@ export function replaceGravokWagerDreamsign(
   );
 }
 
-/** Buy and reveal the next independently committed Progressive Draw attempt. */
-export function drawTidemarkProgressive(
+/** Buy and reveal the next independently committed Ladder Climb attempt. */
+export function drawTidemarkLadderClimb(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
@@ -283,19 +283,19 @@ export function drawTidemarkProgressive(
   if (siteId === null) return null;
 
   const runtime = tidemarkRuntimeFor(journey, siteId);
-  if (runtime === null || runtime.rewardDreamsign === null) return null;
+  if (runtime === null) return null;
   if (journey.maxDreamsigns === 0) return null;
 
-  const attemptNumber = nextTidemarkAttemptNumber(runtime);
+  const attemptNumber = nextTidemarkLadderClimbAttemptNumber(runtime);
   if (attemptNumber === null) return null;
   const card = runtime.committedCards[attemptNumber - 1];
   const shuffleCommitment = runtime.shuffleCommitments[attemptNumber - 1];
   if (card === undefined || shuffleCommitment === undefined) return null;
 
-  const costPaid = tidemarkAttemptCost(attemptNumber, runtime.isFarpoint);
+  const costPaid = tidemarkLadderClimbAttemptCost(attemptNumber, runtime.isFarpoint);
   if (journey.essence < costPaid) return null;
   const cumulativeCost = runtime.cumulativeCost + costPaid;
-  const won = rankWinsTidemarkAttempt(card.rank, attemptNumber);
+  const won = rankWinsTidemarkLadderClimbAttempt(card.rank, attemptNumber);
 
   return withRuntime(
     { ...journey, essence: journey.essence - costPaid },
@@ -319,10 +319,10 @@ export function drawTidemarkProgressive(
 }
 
 /**
- * Settle the revealed Progressive Draw result at the outcome moment, granting
+ * Settle the revealed Ladder Climb result at the outcome moment, granting
  * its locked Dreamsign only after a win becomes visible.
  */
-export function settleTidemarkProgressive(
+export function settleTidemarkLadderClimb(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
@@ -349,8 +349,7 @@ export function settleTidemarkProgressive(
   }
 
   const rewardDreamsign = runtime.rewardDreamsign;
-  const rewardDreamsignId = rewardDreamsign?.id;
-  if (rewardDreamsign === null || rewardDreamsignId === undefined) return null;
+  const rewardDreamsignId = rewardDreamsign.id;
   const needsReplacement =
     journey.dreamsigns.length >= journey.maxDreamsigns;
   const dreamsigns = needsReplacement
@@ -375,8 +374,8 @@ export function settleTidemarkProgressive(
   );
 }
 
-/** Replace one held Dreamsign after a settled Progressive Draw win at the cap. */
-export function replaceTidemarkProgressiveDreamsign(
+/** Replace one held Dreamsign after a settled Ladder Climb win at the cap. */
+export function replaceTidemarkLadderClimbDreamsign(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
@@ -387,7 +386,6 @@ export function replaceTidemarkProgressiveDreamsign(
   const runtime = tidemarkRuntimeFor(journey, siteId);
   if (
     runtime === null ||
-    runtime.rewardDreamsign === null ||
     runtime.result === null ||
     !runtime.result.won ||
     !runtime.result.resultSettled ||
@@ -401,7 +399,7 @@ export function replaceTidemarkProgressiveDreamsign(
   );
   if (replaceIndex < 0) return null;
   const dreamsigns = journey.dreamsigns.map((dreamsign, index) =>
-    index === replaceIndex ? runtime.rewardDreamsign! : dreamsign,
+    index === replaceIndex ? runtime.rewardDreamsign : dreamsign,
   );
 
   return withRuntime(

@@ -335,7 +335,7 @@ export function openSite(
   if (
     rawGambleGameId !== undefined &&
     rawGambleGameId !== "gravok-three-gate-wager" &&
-    rawGambleGameId !== "tidemark-progressive-draw"
+    rawGambleGameId !== "tidemark-ladder-climb"
   ) {
     return null;
   }
@@ -899,7 +899,7 @@ export function completeSite(
       return null;
     }
     if (
-      runtime.gameId === "tidemark-progressive-draw" &&
+      runtime.gameId === "tidemark-ladder-climb" &&
       (runtime.result?.resultSettled === false ||
         runtime.result?.pendingDreamsignReplacement === true)
     ) {

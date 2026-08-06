@@ -177,13 +177,13 @@ export interface CoopActions {
     siteId: string,
     replacedDreamsignId: string,
   ) => Promise<number>;
-  drawTidemarkProgressive: (siteId: string) => Promise<number>;
-  settleTidemarkProgressive: (
+  drawTidemarkLadderClimb: (siteId: string) => Promise<number>;
+  settleTidemarkLadderClimb: (
     siteId: string,
     shuffleCommitment: string,
     runId?: string,
   ) => Promise<number>;
-  replaceTidemarkProgressiveDreamsign: (
+  replaceTidemarkLadderClimbDreamsign: (
     siteId: string,
     replacedDreamsignId: string,
   ) => Promise<number>;
@@ -502,19 +502,19 @@ export function makeActions(append: AppendFn): CoopActions {
         siteId,
         replacedDreamsignId,
       }),
-    drawTidemarkProgressive: (siteId) =>
-      emit("DRAW_TIDEMARK_PROGRESSIVE", { siteId }),
-    settleTidemarkProgressive: (siteId, shuffleCommitment, runId) =>
+    drawTidemarkLadderClimb: (siteId) =>
+      emit("DRAW_TIDEMARK_LADDER_CLIMB", { siteId }),
+    settleTidemarkLadderClimb: (siteId, shuffleCommitment, runId) =>
       emit(
-        "SETTLE_TIDEMARK_PROGRESSIVE",
+        "SETTLE_TIDEMARK_LADDER_CLIMB",
         { siteId, shuffleCommitment },
-        `${siteIntentKey("settle-tidemark-progressive", siteId, runId)}:${shuffleCommitment}`,
+        `${siteIntentKey("settle-tidemark-ladder-climb", siteId, runId)}:${shuffleCommitment}`,
       ),
-    replaceTidemarkProgressiveDreamsign: (
+    replaceTidemarkLadderClimbDreamsign: (
       siteId,
       replacedDreamsignId,
     ) =>
-      emit("REPLACE_TIDEMARK_PROGRESSIVE_DREAMSIGN", {
+      emit("REPLACE_TIDEMARK_LADDER_CLIMB_DREAMSIGN", {
         siteId,
         replacedDreamsignId,
       }),

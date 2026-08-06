@@ -130,9 +130,9 @@ function captureAllDrafts(): EventDraft[] {
   void actions.settleGravokWager("site-1", "commitment-1");
   void actions.playAgainGravokWager("site-1", "commitment-1");
   void actions.replaceGravokWagerDreamsign("site-1", "ds-1");
-  void actions.drawTidemarkProgressive("site-1");
-  void actions.settleTidemarkProgressive("site-1", "commitment-1");
-  void actions.replaceTidemarkProgressiveDreamsign("site-1", "ds-1");
+  void actions.drawTidemarkLadderClimb("site-1");
+  void actions.settleTidemarkLadderClimb("site-1", "commitment-1");
+  void actions.replaceTidemarkLadderClimbDreamsign("site-1", "ds-1");
   void actions.acceptMerchantOffer("site-1");
   void actions.declineMerchant("site-1");
   void actions.buyShopSlot("site-1", 0);

@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/wager-prize-card`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The Three Gates prize object: one PlayingCard superellipse with a target title, a single reward sentence, an optional whole-face Dreamsign reveal, and a committed-card reverse face.
+The shared Gamble prize object: one PlayingCard superellipse with a target title, a single Essence and/or Dreamsign reward sentence, an optional whole-face Dreamsign reveal, and a committed-card reverse face.
 
 > **Guidance:** Keep the reward in one sentence. When a Dreamsign is present, the entire prize face is its hover and press reveal source.
 
@@ -16,14 +16,14 @@ The Three Gates prize object: one PlayingCard superellipse with a target title, 
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `gateId` | `GravokGateId` = `"six" \| "nine" \| "jack"` | yes | — | Stable Three Gates choice represented by this prize object. |
+| `prizeId` | `WagerPrizeCardId` = `"six" \| "nine" \| "jack" \| "ladder-climb"` | yes | — | Stable Gamble choice represented by this prize object. |
 | `targetLabel` | `string` | yes | — | Inclusive winning rank range shown as authored compact notation. |
-| `essenceReward` | `number` | yes | — | Essence awarded when the gate wins. |
-| `rewardDreamsign` | `Dreamsign \| null` | yes | — | Jackpot Dreamsign appended to the reward sentence, when present. |
 | `size` | `WagerPrizeCardSize` = `"wagerCompact" \| "wager"` | no | — | Named desktop or mobile square size. Defaults to `wager`. |
 | `drawnCard` | `{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } \| null` | no | — | Committed card shown on the reverse face after a bet. |
 | `revealDrawnCard` | `boolean` | no | — | Turn the prize face over to its committed card. |
-| `dreamsignTestId` | `string` | no | — | Optional stable selector for the jackpot Dreamsign name. |
+| `dreamsignTestId` | `string` | no | — | Optional stable selector for the prize Dreamsign name. |
+| `essenceReward` | `number \| null` | yes | — | Essence awarded on a win. Null selects a Dreamsign-only prize. |
+| `rewardDreamsign` | `Dreamsign \| null` | yes | — | Dreamsign appended to the Essence reward, when present. Dreamsign used as the complete reward. |
 
 ## Usage
 
@@ -31,9 +31,21 @@ The Three Gates prize object: one PlayingCard superellipse with a target title, 
 
 ```tsx
 <WagerPrizeCard
-  gateId="jack"
+  prizeId="jack"
   targetLabel="J-A"
   essenceReward={200}
+  rewardDreamsign={dreamsign}
+/>
+
+```
+
+### Dreamsign prize
+
+```tsx
+<WagerPrizeCard
+  prizeId="ladder-climb"
+  targetLabel="Q-A"
+  essenceReward={null}
   rewardDreamsign={dreamsign}
 />
 
@@ -43,7 +55,7 @@ The Three Gates prize object: one PlayingCard superellipse with a target title, 
 
 ```tsx
 <WagerPrizeCard
-  gateId="jack"
+  prizeId="jack"
   targetLabel="J-A"
   essenceReward={200}
   rewardDreamsign={dreamsign}

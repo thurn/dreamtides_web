@@ -1,8 +1,8 @@
 import type { GambleSiteView } from "../../cumulus/screens/GambleSiteScreen";
 import {
-  TIDEMARK_PROGRESSIVE_ATTEMPTS,
-  tidemarkAttemptCost,
-} from "../../data/tidemark-progressive-draw";
+  TIDEMARK_LADDER_CLIMB_ATTEMPTS,
+  tidemarkLadderClimbAttemptCost,
+} from "../../data/tidemark-ladder-climb";
 import { logEventOnce } from "../../logging";
 import type { GambleSiteRuntime, SiteState } from "../../types/journey";
 
@@ -52,8 +52,8 @@ export function logGamblePrepared(
   }
 
   if (
-    runtime.gameId !== "tidemark-progressive-draw" ||
-    view.gameId !== "tidemark-progressive-draw"
+    runtime.gameId !== "tidemark-ladder-climb" ||
+    view.gameId !== "tidemark-ladder-climb"
   ) {
     return;
   }
@@ -70,9 +70,9 @@ export function logGamblePrepared(
       strongPoolSize: runtime.strongPoolSize,
       strongPoolCutoffScore: runtime.strongPoolCutoffScore,
       selectedDreamsignId: runtime.rewardDreamsign?.id ?? null,
-      attempts: TIDEMARK_PROGRESSIVE_ATTEMPTS.map((attempt) => ({
+      attempts: TIDEMARK_LADDER_CLIMB_ATTEMPTS.map((attempt) => ({
         attemptNumber: attempt.attemptNumber,
-        cost: tidemarkAttemptCost(attempt.attemptNumber, runtime.isFarpoint),
+        cost: tidemarkLadderClimbAttemptCost(attempt.attemptNumber, runtime.isFarpoint),
         oddsNumerator: attempt.oddsNumerator,
         oddsDenominator: attempt.oddsDenominator,
         threshold: attempt.threshold,
@@ -116,12 +116,12 @@ export function logGambleResolved(
     return;
   }
 
-  if (runtime.gameId !== "tidemark-progressive-draw") return;
+  if (runtime.gameId !== "tidemark-ladder-climb") return;
   const result = runtime.result;
   if (result === null) return;
-  const attempt = TIDEMARK_PROGRESSIVE_ATTEMPTS[result.attemptNumber - 1];
+  const attempt = TIDEMARK_LADDER_CLIMB_ATTEMPTS[result.attemptNumber - 1];
   logEventOnce(
-    `Gamble:${siteId}:progressive-result:${runtime.shuffleCommitments[result.attemptNumber - 1] ?? "unknown"}`,
+    `Gamble:${siteId}:ladder-result:${runtime.shuffleCommitments[result.attemptNumber - 1] ?? "unknown"}`,
     "gamble_wager_resolved",
     {
       siteId,
@@ -169,7 +169,7 @@ export function logGambleSettled(
 
   if (runtime.result?.resultSettled !== true) return;
   logEventOnce(
-    `Gamble:${siteId}:progressive-settled:${runtime.shuffleCommitments[runtime.result.attemptNumber - 1] ?? "unknown"}`,
+    `Gamble:${siteId}:ladder-settled:${runtime.shuffleCommitments[runtime.result.attemptNumber - 1] ?? "unknown"}`,
     "gamble_wager_settled",
     {
       siteId,

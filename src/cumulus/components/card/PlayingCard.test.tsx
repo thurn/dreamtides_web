@@ -133,7 +133,7 @@ describe("PlayingCard", () => {
       root.render(
         <CumulusRoot>
           <WagerPrizeCard
-            gateId="jack"
+            prizeId="jack"
             targetLabel="J-A"
             essenceReward={200}
             rewardDreamsign={dreamsign}
@@ -172,7 +172,7 @@ describe("PlayingCard", () => {
       root.render(
         <CumulusRoot>
           <WagerPrizeCard
-            gateId="jack"
+            prizeId="jack"
             targetLabel="J-A"
             essenceReward={200}
             rewardDreamsign={dreamsign}
@@ -188,6 +188,43 @@ describe("PlayingCard", () => {
     expect(revealed?.dataset.wagerPrizeCardState).toBe("drawn");
     expect(revealed?.dataset.playingCard).toBe("Q-hearts");
     expect(revealed?.getAttribute("aria-label")).toBe("Q of hearts");
+
+    act(() => root.unmount());
+  });
+
+  it("uses the same prize face for a Dreamsign-only Ladder Climb reward", () => {
+    const host = document.createElement("div");
+    document.body.append(host);
+    const root = createRoot(host);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <WagerPrizeCard
+            prizeId="ladder-climb"
+            targetLabel="Q-A"
+            essenceReward={null}
+            rewardDreamsign={{
+              id: "00000000-0000-4000-8000-000000000052",
+              name: "Crystal Wand",
+              imageName: "crystal-wand.png",
+              effectDescription: "Your first card costs 1 less.",
+              isNegative: false,
+            }}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    const prize = host.querySelector<HTMLElement>("[data-wager-prize-card]");
+    expect(prize?.dataset.wagerPrizeCard).toBe("ladder-climb");
+    expect(prize?.querySelector("[data-wager-prize-title]")).not.toBeNull();
+    expect(
+      prize?.querySelector("[data-wager-prize-dreamsign-name]"),
+    ).not.toBeNull();
+    expect(
+      prize?.querySelector("[data-wager-prize-dreamsign-source]"),
+    ).not.toBeNull();
 
     act(() => root.unmount());
   });

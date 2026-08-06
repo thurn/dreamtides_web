@@ -34,8 +34,8 @@ describe("parseRuntimeConfig", () => {
         "gravok-three-gate-wager",
       );
       expect(
-        parseRuntimeConfig("?gambleGame=progressive-draw").gambleGameId,
-      ).toBe("tidemark-progressive-draw");
+        parseRuntimeConfig("?gambleGame=ladder-climb").gambleGameId,
+      ).toBe("tidemark-ladder-climb");
     });
 
     it("uses random selection for absent or unrecognized values", () => {
@@ -43,6 +43,9 @@ describe("parseRuntimeConfig", () => {
       expect(parseRuntimeConfig("?gambleGame=").gambleGameId).toBeNull();
       expect(
         parseRuntimeConfig("?gambleGame=twenty-one").gambleGameId,
+      ).toBeNull();
+      expect(
+        parseRuntimeConfig("?gambleGame=progressive-draw").gambleGameId,
       ).toBeNull();
     });
   });

@@ -12,6 +12,7 @@ import type {
   CardChoiceTransfigurationOffer,
   DeckEntry,
   GambleSiteRuntime,
+  TidemarkLadderClimbSiteRuntime,
   RewardSiteRuntime,
   SiteRuntimeState,
   SiteState,
@@ -26,10 +27,10 @@ import {
   STANDARD_PLAYING_CARD_DECK,
 } from "../../data/gravok-wager";
 import {
-  scoreTidemarkDreamsignCandidates,
-  TIDEMARK_PROGRESSIVE_RULES_VERSION,
+  scoreTidemarkLadderClimbDreamsignCandidates,
+  TIDEMARK_LADDER_CLIMB_RULES_VERSION,
   TIDEMARK_STRONG_POOL_LIMIT,
-} from "../../data/tidemark-progressive-draw";
+} from "../../data/tidemark-ladder-climb";
 import { createDreamsign } from "../../data/dreamsigns";
 import { generateRewardSiteData } from "../../rewards/reward-generator";
 import { drawDreamsignOptions } from "../../dreamsign/dreamsign-pool";
@@ -191,22 +192,23 @@ function buildGravokWagerRuntime(
   };
 }
 
-function buildTidemarkProgressiveRuntime(
+function buildTidemarkLadderClimbRuntime(
   journey: JourneyState,
   site: SiteState,
   content: JourneyContent,
   rng: () => number,
-): GambleSiteRuntime {
+): TidemarkLadderClimbSiteRuntime | null {
+  const { templates } = eligibleGambleDreamsigns(journey, content);
+  if (templates.length === 0) return null;
   const commitments = Array.from({ length: 4 }, () => ({
     shuffleCommitment: gambleShuffleCommitment(rng),
     card: gambleCommittedCard(rng),
   }));
-  const { templates } = eligibleGambleDreamsigns(journey, content);
   const deckCards = journey.deck.flatMap((entry) => {
     const card = content.cardDatabase.get(entry.cardNumber);
     return card === undefined ? [] : [card];
   });
-  const dreamsignCandidateScores = scoreTidemarkDreamsignCandidates({
+  const dreamsignCandidateScores = scoreTidemarkLadderClimbDreamsignCandidates({
     templates,
     profiles: content.dreamsignProfiles,
     deckCards,
@@ -225,11 +227,12 @@ function buildTidemarkProgressiveRuntime(
       : templates.find(
           (template) => template.id === selectedCandidate.dreamsignId,
         ) ?? null;
+  if (selectedTemplate === null) return null;
 
   return {
     kind: "gamble",
-    gameId: "tidemark-progressive-draw",
-    rulesVersion: TIDEMARK_PROGRESSIVE_RULES_VERSION,
+    gameId: "tidemark-ladder-climb",
+    rulesVersion: TIDEMARK_LADDER_CLIMB_RULES_VERSION,
     isFarpoint: site.isEnhanced,
     shuffleCommitments: commitments.map((entry) => entry.shuffleCommitment),
     committedCards: commitments.map((entry) => entry.card),
@@ -237,8 +240,7 @@ function buildTidemarkProgressiveRuntime(
     strongPoolSize: strongPool.length,
     strongPoolCutoffScore:
       strongPool[strongPool.length - 1]?.score ?? null,
-    rewardDreamsign:
-      selectedTemplate === null ? null : createDreamsign(selectedTemplate),
+    rewardDreamsign: createDreamsign(selectedTemplate),
     revealedCards: [],
     cumulativeCost: 0,
     result: null,
@@ -256,10 +258,17 @@ function buildGambleRuntime(
     requestedGameId ??
     (rng() < 0.5
       ? "gravok-three-gate-wager"
-      : "tidemark-progressive-draw");
-  return gameId === "tidemark-progressive-draw"
-    ? buildTidemarkProgressiveRuntime(journey, site, content, rng)
-    : buildGravokWagerRuntime(journey, site, content, rng);
+      : "tidemark-ladder-climb");
+  if (gameId === "tidemark-ladder-climb") {
+    const ladderRuntime = buildTidemarkLadderClimbRuntime(
+      journey,
+      site,
+      content,
+      rng,
+    );
+    return ladderRuntime ?? buildGravokWagerRuntime(journey, site, content, rng);
+  }
+  return buildGravokWagerRuntime(journey, site, content, rng);
 }
 
 /**

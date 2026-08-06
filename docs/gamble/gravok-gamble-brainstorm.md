@@ -33,7 +33,7 @@ The independent review identified two issues in the initial draft:
    another is riskier. The 70%/30% figures came from the request’s illustrative
    example, so proposals using those targets attribute the two-payout structure
    to The Joust and the numerical targets to the request.
-2. Affordability is checked at each committed step. Progressive games do not
+2. Affordability is checked at each committed step. Multi-attempt games do not
    require enough Essence for every possible future step at entry.
 
 The memory-pair direction is recorded only as a rejected branch. The
@@ -45,7 +45,7 @@ revision.
 | # | Candidate | Disposition | Primary choice |
 | ---: | --- | --- | --- |
 | 1 | Three-Way Wager | Signature | choose one of three odds/reward tiers |
-| 2 | Progressive Draw | Signature | stop or buy the next improving draw |
+| 2 | Ladder Climb | Signature | stop or buy the next improving draw |
 | 3 | Odds Ladder | Alternate | choose Essence or a temporary card lock as each stake |
 | 4 | Cash-Out Ladder | Signature | bank the current prize or risk it |
 | 5 | Red-or-Black Insurance | Signature | choose coverage and which Nightmare card remains exposed |
@@ -84,7 +84,7 @@ A losing card forfeits the stake. The player selects the Transfiguration target
 before choosing a tier. Deterministic Essence replacements keep all three tiers
 available when there is no eligible target.
 
-## 2. Progressive Draw
+## 2. Ladder Climb
 
 **Inspiration:** Scrap Ooze’s increasing cost and success chance, plus Tablet of
 Truth’s repeated payment for incremental gain.

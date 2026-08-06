@@ -103,7 +103,10 @@ export type PlayingCardFace = "front" | "back";
 export type PlayingCardVariant =
   "rank-and-suit" | "rank-display" | "suit-display" | "rank-target";
 
-/** Named square sizes reserved for the Three Gates prize row. */
+/** Stable Gamble prize identities rendered by the shared wager object. */
+export type WagerPrizeCardId = GravokGateId | "ladder-climb";
+
+/** Named square sizes reserved for Gamble prize cards. */
 export type WagerPrizeCardSize = "wagerCompact" | "wager";
 
 const SUIT_SYMBOLS: Record<PlayingCardSuit, string> = {
@@ -415,15 +418,11 @@ export function PlayingCard({
   );
 }
 
-export interface WagerPrizeCardProps {
-  /** Stable Three Gates choice represented by this prize object. */
-  gateId: GravokGateId;
+interface WagerPrizeCardBaseProps {
+  /** Stable Gamble choice represented by this prize object. */
+  prizeId: WagerPrizeCardId;
   /** Inclusive winning rank range shown as authored compact notation. */
   targetLabel: string;
-  /** Essence awarded when the gate wins. */
-  essenceReward: number;
-  /** Jackpot Dreamsign appended to the reward sentence, when present. */
-  rewardDreamsign: DreamsignData | null;
   /** Named desktop or mobile square size. Defaults to `wager`. */
   size?: WagerPrizeCardSize;
   /** Committed card shown on the reverse face after a bet. */
@@ -433,14 +432,31 @@ export interface WagerPrizeCardProps {
   } | null;
   /** Turn the prize face over to its committed card. */
   revealDrawnCard?: boolean;
-  /** Optional stable selector for the jackpot Dreamsign name. */
+  /** Optional stable selector for the prize Dreamsign name. */
   dreamsignTestId?: string;
 }
 
+/** A prize always carries Essence, a Dreamsign, or both. */
+export type WagerPrizeCardProps = WagerPrizeCardBaseProps &
+  (
+    | {
+        /** Essence awarded on a win. */
+        essenceReward: number;
+        /** Dreamsign appended to the Essence reward, when present. */
+        rewardDreamsign: DreamsignData | null;
+      }
+    | {
+        /** Null selects a Dreamsign-only prize. */
+        essenceReward: null;
+        /** Dreamsign used as the complete reward. */
+        rewardDreamsign: DreamsignData;
+      }
+  );
+
 /**
- * A Three Gates prize on the PlayingCard superellipse. Its jackpot copy stays
- * one sentence, and an assigned result flips into the standard rank-and-suit
- * face without changing the object's footprint.
+ * A Gamble prize on the PlayingCard superellipse. Its reward copy stays one
+ * sentence, and an assigned result flips into the standard rank-and-suit face
+ * without changing the object's footprint.
  */
 export function WagerPrizeCard(
   props: WagerPrizeCardProps,
@@ -479,7 +495,7 @@ function DreamsignWagerPrizeCard(
 }
 
 function WagerPrizeCardObject({
-  gateId,
+  prizeId,
   targetLabel,
   essenceReward,
   rewardDreamsign,
@@ -494,9 +510,12 @@ function WagerPrizeCardObject({
   const reduceMotion = useReducedMotion() === true;
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const showingDrawnCard = revealDrawnCard && drawnCard !== null;
-  const prizeLabel = `Draw ${targetLabel}. Win ${String(essenceReward)} Essence${
-    rewardDreamsign === null ? "" : ` and ${rewardDreamsign.name}`
-  }.`;
+  const rewardLabel = essenceReward === null
+    ? rewardDreamsign?.name ?? ""
+    : `${String(essenceReward)} Essence${
+        rewardDreamsign === null ? "" : ` and ${rewardDreamsign.name}`
+      }`;
+  const prizeLabel = `Draw ${targetLabel}. Win ${rewardLabel}.`;
   const drawnCardLabel =
     drawnCard === null
       ? prizeLabel
@@ -539,22 +558,23 @@ function WagerPrizeCardObject({
               size === "wager" ? token("--t-body") : token("--t-body-sm"),
           }}
         >
-          Win <EssenceValue amount={essenceReward} tone="inherit" />
+          Win{" "}
+          {essenceReward !== null && (
+            <EssenceValue amount={essenceReward} tone="inherit" />
+          )}
+          {essenceReward !== null && rewardDreamsign !== null && " and "}
           {rewardDreamsign !== null && (
-            <>
-              {" and "}
-              <span
-                data-testid={dreamsignTestId}
-                data-wager-prize-dreamsign-name=""
-                style={{
-                  display: "inline-block",
-                  font: "inherit",
-                  textDecoration: "underline",
-                }}
-              >
-                {rewardDreamsign.name}
-              </span>
-            </>
+            <span
+              data-testid={dreamsignTestId}
+              data-wager-prize-dreamsign-name=""
+              style={{
+                display: "inline-block",
+                font: "inherit",
+                textDecoration: "underline",
+              }}
+            >
+              {rewardDreamsign.name}
+            </span>
           )}
         </p>
       </div>
@@ -573,7 +593,7 @@ function WagerPrizeCardObject({
     <div
       role={showingDrawnCard ? "img" : "group"}
       aria-label={showingDrawnCard ? drawnCardLabel : prizeLabel}
-      data-wager-prize-card={gateId}
+      data-wager-prize-card={prizeId}
       data-wager-prize-card-state={showingDrawnCard ? "drawn" : "prize"}
       data-wager-prize-card-size={size}
       data-wager-prize-drawn-card={
