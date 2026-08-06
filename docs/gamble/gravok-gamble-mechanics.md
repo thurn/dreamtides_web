@@ -155,8 +155,8 @@ Taking a prize or reaching the top offers only `Leave`. The player may retry
 twice, for a maximum of three independent rounds during one visit. A complete
 three-tier climb costs 90 Essence.
 
-The UI lists all three tier squircles before play, each showing the minimum
-safe draw (`Draw 3+`, `Draw 5+`, or `Draw 8+`) and prize. The current tier uses
+The UI lists all three tier squircles before play, each showing its inclusive
+safe-draw range (`Draw 3-A`, `Draw 5-A`, or `Draw 8-A`) and prize. The current tier uses
 the same purple soft-wash and bright rim as an accent button. Other tiers mute
 their foreground content while retaining the full-strength glass background.
 During a draw, the previous tier keeps its accent until the complete result

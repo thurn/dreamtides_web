@@ -62,7 +62,7 @@ export function starwayStairsBustRangeLabel(
   return tier.highestBustRank === "2" ? "2" : `2-${tier.highestBustRank}`;
 }
 
-/** Compact minimum safe draw shown on a Starway tier prize. */
+/** Inclusive safe-draw range shown on a Starway tier prize. */
 export function starwayStairsDrawTargetLabel(
   tier: StarwayStairsTierRule,
 ): string {
@@ -71,7 +71,7 @@ export function starwayStairsDrawTargetLabel(
   if (minimumSafeRank === undefined) {
     throw new Error(`Starway tier ${String(tier.tierNumber)} has no safe rank`);
   }
-  return `${minimumSafeRank}+`;
+  return `${minimumSafeRank}-A`;
 }
 
 /** Whether the drawn rank busts the specified tier. */

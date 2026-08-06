@@ -1482,7 +1482,6 @@ function StarwayStairsScreen({
                         | "starway-1"
                         | "starway-2"
                         | "starway-3"}
-                      presentation="draw-minimum"
                       targetLabel={tier.drawTargetLabel}
                       essenceReward={tier.essenceReward}
                       rewardDreamsign={null}

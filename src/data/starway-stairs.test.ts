@@ -19,9 +19,9 @@ describe("Starway Stairs rules", () => {
         reward: tier.essenceReward,
       })),
     ).toEqual([
-      { tierNumber: 1, bustRange: "2", drawTarget: "3+", reward: 60 },
-      { tierNumber: 2, bustRange: "2-4", drawTarget: "5+", reward: 140 },
-      { tierNumber: 3, bustRange: "2-7", drawTarget: "8+", reward: 300 },
+      { tierNumber: 1, bustRange: "2", drawTarget: "3-A", reward: 60 },
+      { tierNumber: 2, bustRange: "2-4", drawTarget: "5-A", reward: 140 },
+      { tierNumber: 3, bustRange: "2-7", drawTarget: "8-A", reward: 300 },
     ]);
   });
 

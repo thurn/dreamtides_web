@@ -88,21 +88,21 @@ const STARWAY_VIEW: StarwayStairsSiteView = {
   tiers: [
     {
       tierNumber: 1,
-      drawTargetLabel: "3+",
+      drawTargetLabel: "3-A",
       essenceReward: 60,
       state: "current",
       card: null,
     },
     {
       tierNumber: 2,
-      drawTargetLabel: "5+",
+      drawTargetLabel: "5-A",
       essenceReward: 140,
       state: "future",
       card: null,
     },
     {
       tierNumber: 3,
-      drawTargetLabel: "8+",
+      drawTargetLabel: "8-A",
       essenceReward: 300,
       state: "future",
       card: null,
@@ -858,7 +858,7 @@ describe("GambleSiteScreen — Ladder Climb", () => {
 });
 
 describe("GambleSiteScreen — Starway Stairs", () => {
-  it("shows three minimum-draw prize squircles above centered Bet and Leave actions", () => {
+  it("shows three safe-draw range prizes above centered Bet and Leave actions", () => {
     const onDrawStarway = vi.fn();
     const { container, root } = mount(
       <GambleSiteScreen
@@ -880,6 +880,16 @@ describe("GambleSiteScreen — Starway Stairs", () => {
     expect(container.querySelectorAll("[data-wager-prize-card]")).toHaveLength(3);
     expect(container.querySelectorAll("[data-starway-tier-button]")).toHaveLength(1);
     expect(container.querySelectorAll("[data-wager-prize-title]")).toHaveLength(3);
+    expect(
+      Array.from(container.querySelectorAll("[data-wager-prize-title]"), (title) =>
+        title.textContent
+      ),
+    ).toEqual(["Draw 3-A", "Draw 5-A", "Draw 8-A"]);
+    expect(
+      Array.from(container.querySelectorAll("[data-wager-prize-card]"), (card) =>
+        card.getAttribute("data-wager-prize-presentation")
+      ),
+    ).toEqual(["draw-target", "draw-target", "draw-target"]);
     expect(container.textContent).not.toContain("%");
     expect(container.textContent).toContain(
       "Starway Stairs is the game. Keep betting to see how high you can go!",
