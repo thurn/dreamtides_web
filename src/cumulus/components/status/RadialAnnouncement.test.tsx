@@ -105,15 +105,20 @@ describe("RadialAnnouncement", () => {
     ).toBe("78%");
     expect(announcement?.querySelector("i.bxf.bx-star-circle")).not.toBeNull();
     expect(announcement?.textContent).not.toContain("⍟");
+    const disc = announcement?.querySelector<HTMLElement>(
+      "[data-radial-announcement-disc]",
+    );
+    expect(disc?.hasAttribute("data-battle-card-points-bubble")).toBe(true);
     expect(
-      announcement?.querySelector<HTMLElement>(
-        "[data-radial-announcement-disc]",
-      )?.style.animation,
-    ).toContain("radial-announcement-disc");
+      disc?.querySelector("[data-battle-card-points-value]")?.textContent,
+    ).toBe("3");
+    expect(
+      announcement?.querySelector("[data-radial-announcement-ripple]"),
+    ).toBeNull();
     const orbit = announcement?.querySelector<HTMLElement>(
       "[data-radial-announcement-orbit]",
     );
-    expect(orbit?.getAttribute("style")).toContain("var(--border-accent)");
+    expect(orbit?.hasAttribute("data-battle-card-points-orbit")).toBe(true);
     expect(orbit?.getAttribute("style")).toContain("var(--accent-bright)");
 
     act(() => root.unmount());

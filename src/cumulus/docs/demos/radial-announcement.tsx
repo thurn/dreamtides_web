@@ -17,18 +17,6 @@ const FROZEN_ANNOUNCEMENT_CSS = `
   }
 `;
 
-// The production component is intentionally transient and finishes fully
-// transparent. Documentation keeps the same reduced-motion resting state in
-// view so the overview remains useful after the first animation cycle.
-const FROZEN_ANNOUNCEMENT_CSS = `
-  [data-radial-announcement-demo-frozen] [data-radial-announcement-disc],
-  [data-radial-announcement-demo-frozen] [data-radial-announcement-orbit],
-  [data-radial-announcement-demo-frozen] [data-radial-announcement-ripple],
-  [data-radial-announcement-demo-frozen] [data-radial-announcement-copy] {
-    animation: none !important;
-  }
-`;
-
 function RadialAnnouncementDemo(args: Record<string, unknown>) {
   const tone: RadialAnnouncementTone =
     args.tone === "reward" || args.tone === "danger" ? args.tone : "accent";
@@ -87,7 +75,7 @@ export const radialAnnouncementDemo: CumulusComponent = {
   id: "radial-announcement",
   title: "Radial Announcement",
   blurb: "The single orbiting circular status system for scene announcements, card scoring, merge targets, and terminal victory.",
-  callout: "Use a strict named variant for every orbiting circular status moment. The component owns the disc material, rings, animation, content treatment, and reduced-motion behavior; callers only place it in the relevant scene or card context.",
+  callout: "Use a strict named variant for every orbiting circular status moment. Each enum branch owns its established production choreography—including the card-attached scoring travel—while callers only place it in the relevant scene or card context.",
   group: "Components",
   docName: "RadialAnnouncement",
   Component: RadialAnnouncementDemo,

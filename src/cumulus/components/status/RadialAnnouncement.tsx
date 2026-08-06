@@ -2,10 +2,13 @@
 // scene announcements, card scoring, merge targets, and victory moments.
 
 import { useState, type ReactElement } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { renderRulesSymbolsInline } from "../card/RulesText";
+import { StandaloneGlyph } from "../controls/StandaloneGlyph";
 import { EssenceValue } from "../hud/EssenceValue";
 import { InlineGlyph } from "../typography/InlineGlyph";
-import type { Glyph } from "../../primitives/glyph";
+import { GLYPHS, type Glyph } from "../../primitives/glyph";
+import { motionTimeSeconds } from "../../primitives/motion-time";
 import { token } from "../../primitives/tokens";
 
 export const RADIAL_ANNOUNCEMENT_DURATION_MS = 2_100;
@@ -19,6 +22,7 @@ const RADIAL_ANNOUNCEMENT_SIZE = {
 } as const;
 
 const CARD_SCORE_DISC_WIDTH = "78%";
+const CARD_SCORE_ANIMATION_SECONDS = motionTimeSeconds("--dur-slow") * 4;
 const MERGE_TARGET_DISC_WIDTH = "72%";
 const VICTORY_STAGE_SIZE = "min(76vw, 420px)";
 const VICTORY_CORE_SIZE = "min(43vw, 236px)";
@@ -351,7 +355,6 @@ function SceneAnnouncement({
       tone={tone}
       size={size}
       duration={duration}
-      placement="scene"
     />
   );
 }
@@ -360,16 +363,104 @@ function CardScoreAnnouncement({
   points,
   announcementId,
 }: RadialAnnouncementCardScoreProps): ReactElement {
+  const reduceMotion = useReducedMotion();
+  const animationDuration = reduceMotion ? 0 : CARD_SCORE_ANIMATION_SECONDS;
   return (
-    <TransientAnnouncement
-      announcementId={announcementId}
-      headline={`${String(points)}⍟`}
-      tone="accent"
-      size="mini"
-      duration="standard"
-      placement="card"
-      points={points}
-    />
+    <div
+      role="status"
+      aria-live="polite"
+      aria-label={`${String(points)} points`}
+      data-radial-announcement={announcementId ?? ""}
+      data-radial-announcement-variant="card-score"
+      data-radial-announcement-tone="accent"
+      data-radial-announcement-points={points}
+      style={{
+        position: "absolute",
+        inset: 0,
+        zIndex: 8,
+        display: "grid",
+        placeItems: "center",
+        pointerEvents: "none",
+      }}
+    >
+      <motion.div
+        data-radial-announcement-disc=""
+        data-battle-card-points-bubble=""
+        initial={
+          reduceMotion
+            ? false
+            : { opacity: 0, scale: 0.48, y: "24%", rotate: -12 }
+        }
+        animate={
+          reduceMotion
+            ? { opacity: 1, scale: 1, y: 0, rotate: 0 }
+            : {
+                opacity: [0, 1, 1, 0],
+                scale: [0.48, 1.08, 1, 0.86],
+                y: ["24%", "0%", "-8%", "-18%"],
+                rotate: [-12, 3, 0, 0],
+              }
+        }
+        transition={{
+          duration: animationDuration,
+          times: reduceMotion ? undefined : [0, 0.18, 0.72, 1],
+          ease: "easeInOut",
+        }}
+        style={{
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: token("--space-xxs"),
+          width: CARD_SCORE_DISC_WIDTH,
+          aspectRatio: "1",
+          borderRadius: token("--radius-pill"),
+          background: RADIAL_DISC_BACKGROUND,
+          boxShadow: `${token("--shadow-lg")}, ${token("--glow-accent-soft")}`,
+          color: token("--text-primary"),
+          font: token("--t-popover-headline"),
+          textShadow: token("--text-outline-media"),
+        }}
+      >
+        <motion.span
+          aria-hidden="true"
+          data-radial-announcement-orbit=""
+          data-battle-card-points-orbit=""
+          animate={
+            reduceMotion
+              ? { opacity: 0.42, scale: 1, rotate: 0 }
+              : {
+                  opacity: [0, 0.88, 0.42, 0],
+                  scale: [0.64, 1, 1, 1.24],
+                  rotate: [-70, 0, 140, 250],
+                }
+          }
+          transition={{
+            duration: animationDuration,
+            times: reduceMotion ? undefined : [0, 0.24, 0.74, 1],
+            ease: "easeInOut",
+          }}
+          style={{
+            position: "absolute",
+            inset: token("--space-xs"),
+            border: `${token("--space-xxs")} solid ${token("--border-accent")}`,
+            borderTopColor: token("--accent-bright"),
+            borderRadius: token("--radius-pill"),
+          }}
+        />
+        <span
+          data-radial-announcement-headline=""
+          data-battle-card-points-value=""
+        >
+          {points}
+        </span>
+        <StandaloneGlyph
+          glyph={GLYPHS.points}
+          color="text-primary"
+          depth="content-protection"
+        />
+      </motion.div>
+    </div>
   );
 }
 
@@ -382,8 +473,6 @@ function TransientAnnouncement({
   tone,
   size,
   duration,
-  placement,
-  points,
 }: {
   readonly announcementId?: string;
   readonly headline: string;
@@ -393,15 +482,8 @@ function TransientAnnouncement({
   readonly tone: RadialAnnouncementTone;
   readonly size: RadialAnnouncementSize;
   readonly duration: RadialAnnouncementDuration;
-  readonly placement: "scene" | "card";
-  readonly points?: number;
 }): ReactElement {
   const accent = toneColor(tone);
-  const isCard = placement === "card";
-  const orbitColor = isCard ? token("--border-accent") : accent;
-  const orbitHighlight = isCard
-    ? token("--accent-bright")
-    : token("--text-primary");
   const animationDuration = `calc(${token("--dur-slow")} * ${duration === "extended" ? "8" : "5"})`;
   const rippleAnimation =
     size === "mini"
@@ -414,16 +496,14 @@ function TransientAnnouncement({
     <div
       role="status"
       aria-live="polite"
-      aria-label={points === undefined ? undefined : `${String(points)} points`}
       data-radial-announcement={announcementId ?? ""}
-      data-radial-announcement-variant={isCard ? "card-score" : "announcement"}
+      data-radial-announcement-variant="announcement"
       data-radial-announcement-tone={tone}
       data-radial-announcement-duration={duration}
-      data-radial-announcement-points={points}
       style={{
         position: "absolute",
         inset: 0,
-        zIndex: isCard ? 8 : 55,
+        zIndex: 55,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -439,10 +519,9 @@ function TransientAnnouncement({
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: isCard ? token("--space-xxs") : token("--space-xs"),
-          width: isCard ? CARD_SCORE_DISC_WIDTH : RADIAL_ANNOUNCEMENT_SIZE[size],
-          height: isCard ? undefined : RADIAL_ANNOUNCEMENT_SIZE[size],
-          aspectRatio: isCard ? "1" : undefined,
+          gap: token("--space-xs"),
+          width: RADIAL_ANNOUNCEMENT_SIZE[size],
+          height: RADIAL_ANNOUNCEMENT_SIZE[size],
           borderRadius: token("--radius-pill"),
           background: RADIAL_DISC_BACKGROUND,
           boxShadow: `${token("--shadow-lg")}, ${token("--glow-accent-soft")}`,
@@ -454,13 +533,13 @@ function TransientAnnouncement({
           data-radial-announcement-orbit=""
           style={{
             position: "absolute",
-            inset: isCard ? token("--space-xs") : token("--space-s"),
+            inset: token("--space-s"),
             borderWidth: token("--space-xxs"),
             borderStyle: "solid",
-            borderTopColor: orbitHighlight,
-            borderRightColor: orbitColor,
-            borderBottomColor: orbitColor,
-            borderLeftColor: orbitColor,
+            borderTopColor: token("--text-primary"),
+            borderRightColor: accent,
+            borderBottomColor: accent,
+            borderLeftColor: accent,
             borderRadius: token("--radius-pill"),
             animation: `radial-announcement-orbit ${animationDuration} ${token("--ease-dream")} both`,
           }}
@@ -471,7 +550,7 @@ function TransientAnnouncement({
           style={{
             position: "absolute",
             inset: `calc(-1 * ${token(
-              isCard || size === "mini" || size === "wager"
+              size === "mini" || size === "wager"
                 ? "--space-xxs"
                 : "--space-s",
             )})`,
@@ -487,7 +566,7 @@ function TransientAnnouncement({
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: isCard ? token("--space-xxs") : token("--space-xs"),
+            gap: token("--space-xs"),
             color: token("--text-primary"),
             textAlign: "center",
             textShadow: token("--text-outline-media"),
@@ -499,9 +578,7 @@ function TransientAnnouncement({
             data-radial-announcement-headline-glyph={headlineGlyph}
             style={{
               font: token(
-                isCard
-                  ? "--t-popover-headline"
-                  : headlineGlyph === undefined
+                headlineGlyph === undefined
                     ? size === "mini"
                       ? "--t-title-sm"
                       : "--t-title"
