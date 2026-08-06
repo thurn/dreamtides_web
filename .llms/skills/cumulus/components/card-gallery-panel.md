@@ -47,14 +47,19 @@ The component derives material from frame geometry: floating is rounded glass an
 
 ### `rightAccessory`: the `CardGalleryAccessory` model
 
+#### `GlassPanelGlassButtonAccessory`
+
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `kind` | `"glassButton" \| "iconButton"` | no |  |
-| `label` | `string` | no |  |
-| `onPress` | `(() => void) \| (() => void)` | no |  |
-| `glyph` | `Glyph` | yes |  |
-| `disabled` | `boolean` | yes |  |
-| `testId` | `string` | yes | A `data-testid` for selecting the button in tests. A `data-testid` for selecting the disc in tests. |
+| `kind` | `"glassButton"` | no |  |
+| `button` | `GlassPanelGlassButtonProps` | no | Props forwarded to the labeled control; placement is panel-owned. |
+
+#### `GlassPanelIconButtonAccessory`
+
+| Field | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `kind` | `"iconButton"` | no |  |
+| `button` | `GlassPanelIconButtonProps` | no | Props forwarded to the icon control; placement is panel-owned. |
 
 ### `footerAction`: the `CardGalleryFooterAction` model
 
@@ -100,11 +105,13 @@ import { CardGalleryPanel } from "src/cumulus/components/card/CardGalleryPanel";
   subtitle="Choose any number of cards to remove from your deck for an essence cost"
   rightAccessory={{
     kind: "glassButton",
-    label: selectedCount === 0 ? "Decline" : `Purge ${selectedCount}`,
-    essenceCost: selectedCount === 0 ? null : totalCost,
-    widthReservations: possibleActions,
-    variant: selectedCount === 0 ? "default" : "danger",
-    onPress: selectedCount === 0 ? decline : purge,
+    button: {
+      label: selectedCount === 0 ? "Decline" : `Purge ${selectedCount}`,
+      essenceCost: selectedCount === 0 ? null : totalCost,
+      widthReservations: possibleActions,
+      variant: selectedCount === 0 ? "default" : "danger",
+      onPress: selectedCount === 0 ? decline : purge,
+    },
   }}
   cards={cards}
   columns="five"

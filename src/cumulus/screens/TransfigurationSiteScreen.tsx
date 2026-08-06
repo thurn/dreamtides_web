@@ -378,9 +378,11 @@ export function TransfigurationPickerPanel({
         enhanced || !desktop
           ? {
               kind: "glassButton",
-              label: "Decline",
-              onPress: onClose,
-              testId: "cumulus-transfiguration-decline",
+              button: {
+                label: "Decline",
+                onPress: onClose,
+                testId: "cumulus-transfiguration-decline",
+              },
             }
           : undefined
       }

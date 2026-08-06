@@ -304,9 +304,11 @@ export function CardZoneBrowserOverlay({
           subtitle={subtitle}
           rightAccessory={{
             kind: "iconButton",
-            glyph: GLYPHS.close,
-            label: `Close ${zoneLabel(zone).toLocaleLowerCase()} browser`,
-            onPress: onClose,
+            button: {
+              glyph: GLYPHS.close,
+              label: `Close ${zoneLabel(zone).toLocaleLowerCase()} browser`,
+              onPress: onClose,
+            },
           }}
           toolbar={toolbar}
           cards={galleryCards}

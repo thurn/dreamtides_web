@@ -65,14 +65,16 @@ export function DeveloperRail({
           headerAction === undefined
             ? {
                 kind: "iconButton",
-                glyph: GLYPHS.close,
-                label: `Close ${title.toLowerCase()}`,
-                onPress: onClose,
-                size: "sm",
+                button: {
+                  glyph: GLYPHS.close,
+                  label: `Close ${title.toLowerCase()}`,
+                  onPress: onClose,
+                  size: "sm",
+                },
               }
             : {
                 kind: "iconButtonGroup",
-                actions: [
+                buttons: [
                   { ...headerAction, size: "sm" },
                   {
                     glyph: GLYPHS.close,

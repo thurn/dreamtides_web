@@ -73,15 +73,17 @@ function CardGalleryPanelDemo() {
         subtitle="Choose any number of cards to remove from your deck for an essence cost"
         rightAccessory={{
           kind: "glassButton",
-          label: selected === null ? "Decline" : "Purge 1",
-          essenceCost: selected === null ? null : 40,
-          widthReservations: [
-            { label: "Decline", essenceCost: null },
-            { label: "Purge 1", essenceCost: 40 },
-          ],
-          variant: selected === null ? "default" : "danger",
-          glyph: selected === null ? GLYPHS.close : undefined,
-          onPress: () => setSelected(null),
+          button: {
+            label: selected === null ? "Decline" : "Purge 1",
+            essenceCost: selected === null ? null : 40,
+            widthReservations: [
+              { label: "Decline", essenceCost: null },
+              { label: "Purge 1", essenceCost: 40 },
+            ],
+            variant: selected === null ? "default" : "danger",
+            glyph: selected === null ? GLYPHS.close : undefined,
+            onPress: () => setSelected(null),
+          },
         }}
         cards={cards}
         toolbar={{
@@ -153,11 +155,13 @@ export const cardGalleryPanelDemo: CumulusComponent = {
   subtitle="Choose any number of cards to remove from your deck for an essence cost"
   rightAccessory={{
     kind: "glassButton",
-    label: selectedCount === 0 ? "Decline" : \`Purge \${selectedCount}\`,
-    essenceCost: selectedCount === 0 ? null : totalCost,
-    widthReservations: possibleActions,
-    variant: selectedCount === 0 ? "default" : "danger",
-    onPress: selectedCount === 0 ? decline : purge,
+    button: {
+      label: selectedCount === 0 ? "Decline" : \`Purge \${selectedCount}\`,
+      essenceCost: selectedCount === 0 ? null : totalCost,
+      widthReservations: possibleActions,
+      variant: selectedCount === 0 ? "default" : "danger",
+      onPress: selectedCount === 0 ? decline : purge,
+    },
   }}
   cards={cards}
   columns="five"

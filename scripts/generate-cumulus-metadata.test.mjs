@@ -106,6 +106,7 @@ describe("extractPropMeta (Cumulus docgen)", () => {
       "label",
       "count",
       "tone",
+      "imported",
     ]);
     const byField = (name) => model.nested.fields.find((f) => f.name === name);
     // Required vs optional members, member types, and JSDoc all survive.
@@ -116,6 +117,9 @@ describe("extractPropMeta (Cumulus docgen)", () => {
     expect(byField("count").tsType).toBe("number");
     // A string-literal union member keeps its readable type string.
     expect(byField("tone").tsType).toBe('"calm" | "loud"');
+    // Imported project models stay portable instead of rendering as an
+    // import("/absolute/worktree/path").QualifiedType expression.
+    expect(byField("imported").tsType).toBe("DocgenFixtureProps");
   });
 
   it("expands an array-of-model prop using the element model", () => {
@@ -124,7 +128,7 @@ describe("extractPropMeta (Cumulus docgen)", () => {
     const models = (nestedProps ?? []).find((p) => p.name === "models");
     expect(models.nested).toBeTruthy();
     expect(models.nested.name).toBe("NestedFixtureModel");
-    expect(models.nested.fields.length).toBe(3);
+    expect(models.nested.fields.length).toBe(4);
   });
 
   it("expands every object branch of a discriminated model union", () => {

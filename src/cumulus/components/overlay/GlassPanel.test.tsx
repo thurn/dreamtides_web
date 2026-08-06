@@ -44,10 +44,15 @@ describe("GlassPanel", () => {
             ]}
             rightAccessory={{
               kind: "iconButton",
-              glyph: GLYPHS.close,
-              label: "Close",
-              onPress: onClose,
-              testId: "close-panel",
+              button: {
+                glyph: GLYPHS.close,
+                overlayGlyph: GLYPHS.check,
+                label: "Close",
+                onPress: onClose,
+                ariaExpanded: true,
+                ariaControls: "controlled-panel",
+                testId: "close-panel",
+              },
             }}
             footer={<span>Footer action</span>}
             testId="glass-panel"
@@ -80,11 +85,15 @@ describe("GlassPanel", () => {
     expect(panel?.textContent).toContain("Transfigure A Thread Rewoven");
     expect(panel?.textContent).toContain("Panel content");
     expect(panel?.querySelector("footer")?.textContent).toBe("Footer action");
+    const closeButton = panel?.querySelector<HTMLButtonElement>(
+      '[data-testid="close-panel"]',
+    );
+    expect(closeButton?.getAttribute("aria-expanded")).toBe("true");
+    expect(closeButton?.getAttribute("aria-controls")).toBe("controlled-panel");
+    expect(closeButton?.querySelector("[data-icon-button-glyph-stack]")).not.toBeNull();
 
     act(() => {
-      panel
-        ?.querySelector<HTMLButtonElement>('[data-testid="close-panel"]')
-        ?.click();
+      closeButton?.click();
     });
     expect(onClose).toHaveBeenCalledOnce();
 
@@ -119,6 +128,47 @@ describe("GlassPanel", () => {
     expect(panel?.style.borderStyle).toBe("none");
     expect(panel?.style.borderRadius).toBe("0px");
     expect(panel?.style.boxShadow).toBe("none");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("forwards the labeled control API while owning its surface placement", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <GlassPanel
+            frame="fullBleed"
+            rightAccessory={{
+              kind: "glassButton",
+              button: {
+                label: "Action",
+                onPress: () => undefined,
+                essenceValue: 7,
+                size: "compact",
+                pressed: true,
+                accessibilityLabel: "Accessible action",
+                testId: "panel-action",
+              },
+            }}
+          >
+            <span />
+          </GlassPanel>
+        </CumulusRoot>,
+      );
+    });
+
+    const action = container.querySelector<HTMLButtonElement>(
+      '[data-testid="panel-action"]',
+    );
+    expect(action?.dataset.glassPlacement).toBe("onMedia");
+    expect(action?.getAttribute("aria-pressed")).toBe("true");
+    expect(action?.getAttribute("aria-label")).toBe("Accessible action");
+    expect(action?.querySelector("[data-essence-value]")).not.toBeNull();
 
     act(() => root.unmount());
     container.remove();

@@ -194,10 +194,12 @@ function CardShopGallery({
         title="Dream Market"
         rightAccessory={{
           kind: "iconButton",
-          glyph: GLYPHS.close,
-          label: "Leave card shop",
-          onPress: onClose,
-          testId: "cumulus-card-shop-leave",
+          button: {
+            glyph: GLYPHS.close,
+            label: "Leave card shop",
+            onPress: onClose,
+            testId: "cumulus-card-shop-leave",
+          },
         }}
         cards={offers.map((offer) => ({
           entryId: offer.entryId,

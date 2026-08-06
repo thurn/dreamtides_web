@@ -110,9 +110,11 @@ export function DeckGalleryOverlay({
               subtitle={subtitle}
               rightAccessory={{
                 kind: "glassButton",
-                label: actionLabel,
-                variant: "accent",
-                onPress: onClose,
+                button: {
+                  label: actionLabel,
+                  variant: "accent",
+                  onPress: onClose,
+                },
               }}
               cards={cards}
               emptyLabel={emptyLabel}

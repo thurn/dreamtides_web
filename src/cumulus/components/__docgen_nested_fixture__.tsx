@@ -7,12 +7,15 @@
 // fixture, so the generator's real-file glob skips it and it never leaks into
 // the committed cumulus-metadata.json.
 
+import type { DocgenFixtureProps } from "./__docgen_fixture__";
+
 /** A nested model the fixture prop points at. */
 export interface NestedFixtureModel {
   /** How the widget is labelled. */
   label: string;
   count?: number;
   tone: "calm" | "loud";
+  imported?: DocgenFixtureProps;
 }
 
 interface NestedFixturePrimaryVariant {

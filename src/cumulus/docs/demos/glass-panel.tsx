@@ -11,8 +11,10 @@ function GlassPanelDemo() {
         subtitle="Spend Essence to add cards to your deck."
         rightAccessory={{
           kind: "glassButton",
-          label: "Leave",
-          onPress: () => undefined,
+          button: {
+            label: "Leave",
+            onPress: () => undefined,
+          },
         }}
         footer={
           <div
@@ -59,8 +61,10 @@ export const glassPanelDemo: CumulusComponent = {
   subtitle="Spend Essence to add cards to your deck."
   rightAccessory={{
     kind: "glassButton",
-    label: "Leave",
-    onPress: leaveShop,
+    button: {
+      label: "Leave",
+      onPress: leaveShop,
+    },
   }}
 >
   <OfferGrid offers={offers} />

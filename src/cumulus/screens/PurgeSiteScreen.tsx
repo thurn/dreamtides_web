@@ -202,15 +202,17 @@ function PurgeGallery({
         subtitle="Choose any number of cards to remove from your deck for an essence cost"
         rightAccessory={{
           kind: "glassButton",
-          label:
-            selectedCount === 0
-              ? "Decline"
-              : `Purge ${String(selectedCount)}`,
-          essenceCost: selectedCount === 0 ? null : totalCost,
-          widthReservations: actionWidthReservations,
-          variant: selectedCount === 0 ? "default" : "danger",
-          onPress: selectedCount === 0 ? onClose : onPurge,
-          testId: "cumulus-purge-header-action",
+          button: {
+            label:
+              selectedCount === 0
+                ? "Decline"
+                : `Purge ${String(selectedCount)}`,
+            essenceCost: selectedCount === 0 ? null : totalCost,
+            widthReservations: actionWidthReservations,
+            variant: selectedCount === 0 ? "default" : "danger",
+            onPress: selectedCount === 0 ? onClose : onPurge,
+            testId: "cumulus-purge-header-action",
+          },
         }}
         cards={cards.map((card) => {
           const selected = selectedEntryIds.includes(card.entryId);

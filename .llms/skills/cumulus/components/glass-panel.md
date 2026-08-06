@@ -42,9 +42,26 @@ Width and placement belong to the caller's wrapper. Edge-rail and full-bleed fra
 
 ### `rightAccessory`: the `GlassPanelAccessory` model
 
+#### `GlassPanelGlassButtonAccessory`
+
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `kind` | `"iconButtonGroup" \| "glassButton" \| "iconButton"` | no |  |
+| `kind` | `"glassButton"` | no |  |
+| `button` | `GlassPanelGlassButtonProps` | no | Props forwarded to the labeled control; placement is panel-owned. |
+
+#### `GlassPanelIconButtonAccessory`
+
+| Field | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `kind` | `"iconButton"` | no |  |
+| `button` | `GlassPanelIconButtonProps` | no | Props forwarded to the icon control; placement is panel-owned. |
+
+#### `GlassPanelIconButtonGroupAccessory`
+
+| Field | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `kind` | `"iconButtonGroup"` | no |  |
+| `buttons` | `readonly GlassPanelIconButtonProps[]` | no | Props forwarded to each icon control; placement is panel-owned. |
 
 ## Usage
 
@@ -59,8 +76,10 @@ import { GlassPanel } from "src/cumulus/components/overlay/GlassPanel";
   subtitle="Spend Essence to add cards to your deck."
   rightAccessory={{
     kind: "glassButton",
-    label: "Leave",
-    onPress: leaveShop,
+    button: {
+      label: "Leave",
+      onPress: leaveShop,
+    },
   }}
 >
   <OfferGrid offers={offers} />

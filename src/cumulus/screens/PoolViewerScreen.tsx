@@ -233,7 +233,7 @@ export function PoolViewerScreen({
         <CardGalleryPanel
           title={view.title}
           subtitle={`${String(view.visibleCount)} of ${String(view.totalCount)} cards`}
-          rightAccessory={{ kind: "iconButton", glyph: GLYPHS.close, label: "Close pool viewer", onPress: onClose, testId: "pool-viewer-close" }}
+          rightAccessory={{ kind: "iconButton", button: { glyph: GLYPHS.close, label: "Close pool viewer", onPress: onClose, testId: "pool-viewer-close" } }}
           toolbar={{
             search: { label: "Search cards", value: view.filters.query, onChange: (query) => onFiltersChange({ query }), testId: "pool-viewer-search" },
             sort: { ariaLabel: "Sort cards", value: view.filters.sort, options: [...view.sortOptions], onChange: (sort) => onFiltersChange({ sort }) },

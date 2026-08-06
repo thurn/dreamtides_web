@@ -4,54 +4,45 @@ import { useEffect, useState, type ReactElement, type ReactNode } from "react";
 import { hasInjectedDisplayCutout } from "../../../runtime/device-frame";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
-import type { Glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
-import {
-  GlassButton,
-  type GlassButtonVariant,
-  type GlassButtonWidthReservation,
-} from "../controls/GlassButton";
-import { IconButton, type IconButtonSize } from "../controls/IconButton";
+import { GlassButton, type GlassButtonProps } from "../controls/GlassButton";
+import { IconButton, type IconButtonProps } from "../controls/IconButton";
 
-/** A structured action rendered at the trailing edge of a GlassPanel header. */
+/** GlassButton props available inside a panel-owned accessory placement. */
+export type GlassPanelGlassButtonProps = Omit<GlassButtonProps, "placement">;
+
+/** IconButton props available inside a panel-owned accessory placement. */
+export type GlassPanelIconButtonProps = Omit<IconButtonProps, "placement">;
+
+/** A labeled control rendered at the trailing edge of a GlassPanel header. */
+export interface GlassPanelGlassButtonAccessory {
+  kind: "glassButton";
+  /** Props forwarded to the labeled control; placement is panel-owned. */
+  button: GlassPanelGlassButtonProps;
+}
+
+/** An icon control rendered at the trailing edge of a GlassPanel header. */
+export interface GlassPanelIconButtonAccessory {
+  kind: "iconButton";
+  /** Props forwarded to the icon control; placement is panel-owned. */
+  button: GlassPanelIconButtonProps;
+}
+
+/** Compact icon controls rendered together at the trailing edge. */
+export interface GlassPanelIconButtonGroupAccessory {
+  kind: "iconButtonGroup";
+  /** Props forwarded to each icon control; placement is panel-owned. */
+  buttons: readonly GlassPanelIconButtonProps[];
+}
+
+/**
+ * A structured control rendered at the trailing edge of a GlassPanel header.
+ * Each branch carries the control's public props while the panel owns placement.
+ */
 export type GlassPanelAccessory =
-  | {
-      kind: "glassButton";
-      label: string;
-      onPress: () => void;
-      glyph?: Glyph;
-      disabled?: boolean;
-      /** Optional numerical essence cost rendered after the label. */
-      essenceCost?: number | null;
-      /** Dynamic label/essence-cost states whose widest footprint is reserved. */
-      widthReservations?: readonly GlassButtonWidthReservation[];
-      /** Semantic surface treatment for the action. */
-      variant?: GlassButtonVariant;
-      /** A `data-testid` for selecting the button in tests. */
-      testId?: string;
-    }
-  | {
-      kind: "iconButton";
-      glyph: Glyph;
-      label: string;
-      onPress: () => void;
-      disabled?: boolean;
-      size?: IconButtonSize;
-      /** A `data-testid` for selecting the disc in tests. */
-      testId?: string;
-    }
-  | {
-      kind: "iconButtonGroup";
-      /** Compact header actions rendered together at the trailing edge. */
-      actions: readonly {
-        glyph: Glyph;
-        label: string;
-        onPress: () => void;
-        disabled?: boolean;
-        size?: IconButtonSize;
-        testId?: string;
-      }[];
-    };
+  | GlassPanelGlassButtonAccessory
+  | GlassPanelIconButtonAccessory
+  | GlassPanelIconButtonGroupAccessory;
 
 /** The panel frame geometry and material. */
 export type GlassPanelFrame = "floating" | "fullBleed" | "edgeRail";
@@ -135,49 +126,22 @@ function accessoryNode(
   placement: GlassControlPlacement,
 ): ReactElement {
   if (accessory.kind === "glassButton") {
-    return (
-      <GlassButton
-        placement={placement}
-        label={accessory.label}
-        glyph={accessory.glyph}
-        disabled={accessory.disabled}
-        essenceCost={accessory.essenceCost}
-        widthReservations={accessory.widthReservations}
-        variant={accessory.variant}
-        testId={accessory.testId}
-        onPress={accessory.onPress}
-      />
-    );
+    return <GlassButton {...accessory.button} placement={placement} />;
   }
   if (accessory.kind === "iconButtonGroup") {
     return (
       <div style={{ display: "flex", alignItems: "center", gap: token("--space-xs") }}>
-        {accessory.actions.map((action) => (
+        {accessory.buttons.map((button, index) => (
           <IconButton
-            key={action.label}
+            {...button}
+            key={button.testId ?? `${button.label}:${String(index)}`}
             placement={placement}
-            glyph={action.glyph}
-            size={action.size}
-            label={action.label}
-            disabled={action.disabled}
-            testId={action.testId}
-            onPress={action.onPress}
           />
         ))}
       </div>
     );
   }
-  return (
-    <IconButton
-      placement={placement}
-      glyph={accessory.glyph}
-      size={accessory.size}
-      label={accessory.label}
-      disabled={accessory.disabled}
-      testId={accessory.testId}
-      onPress={accessory.onPress}
-    />
-  );
+  return <IconButton {...accessory.button} placement={placement} />;
 }
 
 function structuredTextNode(text: readonly GlassPanelTextSegment[]): ReactNode {

@@ -252,7 +252,8 @@ function buildNestedResolver(filePaths) {
       const rendered = checker.typeToString(
         symbolType,
         node,
-        ts.TypeFormatFlags.NoTruncation,
+        ts.TypeFormatFlags.NoTruncation
+          | ts.TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
       );
       fields.push({
         name: symbol.getName(),
@@ -275,7 +276,8 @@ function buildNestedResolver(filePaths) {
         const name = checker.typeToString(
           variant,
           node,
-          ts.TypeFormatFlags.NoTruncation,
+          ts.TypeFormatFlags.NoTruncation
+            | ts.TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
         );
         const fields = fieldsForType(variant, node);
         return { name, fields };

@@ -628,42 +628,40 @@
       "description": "Optional trailing header action.",
       "nested": {
         "name": "CardGalleryAccessory",
-        "fields": [
+        "variants": [
           {
-            "name": "kind",
-            "tsType": "\"glassButton\" | \"iconButton\"",
-            "optional": false,
-            "description": ""
+            "name": "GlassPanelGlassButtonAccessory",
+            "fields": [
+              {
+                "name": "kind",
+                "tsType": "\"glassButton\"",
+                "optional": false,
+                "description": ""
+              },
+              {
+                "name": "button",
+                "tsType": "GlassPanelGlassButtonProps",
+                "optional": false,
+                "description": "Props forwarded to the labeled control; placement is panel-owned."
+              }
+            ]
           },
           {
-            "name": "label",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "onPress",
-            "tsType": "(() => void) | (() => void)",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "glyph",
-            "tsType": "Glyph",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "disabled",
-            "tsType": "boolean",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "testId",
-            "tsType": "string",
-            "optional": true,
-            "description": "A `data-testid` for selecting the button in tests.\nA `data-testid` for selecting the disc in tests."
+            "name": "GlassPanelIconButtonAccessory",
+            "fields": [
+              {
+                "name": "kind",
+                "tsType": "\"iconButton\"",
+                "optional": false,
+                "description": ""
+              },
+              {
+                "name": "button",
+                "tsType": "GlassPanelIconButtonProps",
+                "optional": false,
+                "description": "Props forwarded to the icon control; placement is panel-owned."
+              }
+            ]
           }
         ]
       }
@@ -2438,9 +2436,9 @@
       "name": "variant",
       "tsType": "GlassButtonVariant",
       "unionMembers": [
-        "default",
+        "accent",
         "danger",
-        "accent"
+        "default"
       ],
       "required": false,
       "defaultValue": "default",
@@ -2674,12 +2672,57 @@
       "description": "Optional structured action at the trailing edge of the header. On desktop,\nprefer an intent-labeled `glassButton`, such as “Leave” on a shop screen;\na generic X `iconButton` is discouraged for panel navigation.",
       "nested": {
         "name": "GlassPanelAccessory",
-        "fields": [
+        "variants": [
           {
-            "name": "kind",
-            "tsType": "\"iconButtonGroup\" | \"glassButton\" | \"iconButton\"",
-            "optional": false,
-            "description": ""
+            "name": "GlassPanelGlassButtonAccessory",
+            "fields": [
+              {
+                "name": "kind",
+                "tsType": "\"glassButton\"",
+                "optional": false,
+                "description": ""
+              },
+              {
+                "name": "button",
+                "tsType": "GlassPanelGlassButtonProps",
+                "optional": false,
+                "description": "Props forwarded to the labeled control; placement is panel-owned."
+              }
+            ]
+          },
+          {
+            "name": "GlassPanelIconButtonAccessory",
+            "fields": [
+              {
+                "name": "kind",
+                "tsType": "\"iconButton\"",
+                "optional": false,
+                "description": ""
+              },
+              {
+                "name": "button",
+                "tsType": "GlassPanelIconButtonProps",
+                "optional": false,
+                "description": "Props forwarded to the icon control; placement is panel-owned."
+              }
+            ]
+          },
+          {
+            "name": "GlassPanelIconButtonGroupAccessory",
+            "fields": [
+              {
+                "name": "kind",
+                "tsType": "\"iconButtonGroup\"",
+                "optional": false,
+                "description": ""
+              },
+              {
+                "name": "buttons",
+                "tsType": "readonly GlassPanelIconButtonProps[]",
+                "optional": false,
+                "description": "Props forwarded to each icon control; placement is panel-owned."
+              }
+            ]
           }
         ]
       }
@@ -3067,12 +3110,12 @@
       "name": "color",
       "tsType": "CumulusColor",
       "unionMembers": [
-        "danger",
         "accent",
         "accent-bright",
         "essence",
         "energy",
         "spark",
+        "danger",
         "positive",
         "selected",
         "text-primary",
@@ -3757,8 +3800,8 @@
       "name": "tone",
       "tsType": "RadialAnnouncementTone",
       "unionMembers": [
-        "danger",
         "accent",
+        "danger",
         "reward"
       ],
       "required": false,
@@ -4200,12 +4243,12 @@
       "name": "color",
       "tsType": "CumulusColor",
       "unionMembers": [
-        "danger",
         "accent",
         "accent-bright",
         "essence",
         "energy",
         "spark",
+        "danger",
         "positive",
         "selected",
         "text-primary",

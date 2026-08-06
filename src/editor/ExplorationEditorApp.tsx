@@ -207,10 +207,12 @@ function ExplorationCardPicker({
         subtitle={`${String(shown.length)} shown · ${String(visible.length)} matches · ${String(cards.length)} total · UUID-safe selection`}
         rightAccessory={{
           kind: "iconButton",
-          glyph: GLYPHS.close,
-          label: "Close card picker",
-          onPress: onClose,
-          testId: "exploration-card-picker-close",
+          button: {
+            glyph: GLYPHS.close,
+            label: "Close card picker",
+            onPress: onClose,
+            testId: "exploration-card-picker-close",
+          },
         }}
         toolbar={{
           search: {

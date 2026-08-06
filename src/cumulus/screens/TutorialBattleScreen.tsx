@@ -380,9 +380,11 @@ export function TutorialBattleScreen({
             radius="control"
             rightAccessory={{
               kind: "glassButton",
-              label: "Cancel",
-              testId: "tutorial-target-cancel",
-              onPress: () => interactions.onTargetSelectionCancel?.(),
+              button: {
+                label: "Cancel",
+                testId: "tutorial-target-cancel",
+                onPress: () => interactions.onTargetSelectionCancel?.(),
+              },
             }}
           >
             <span />

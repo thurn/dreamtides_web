@@ -31,8 +31,9 @@ import { Select, type SelectOption } from "../controls/Select";
 import { TextField } from "../controls/TextField";
 import {
   GlassPanel,
-  type GlassPanelAccessory,
+  type GlassPanelGlassButtonAccessory,
   type GlassPanelHeaderSpacing,
+  type GlassPanelIconButtonAccessory,
 } from "../overlay/GlassPanel";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
 import {
@@ -53,10 +54,9 @@ export type CardGalleryCaption = CardChoiceGridCaption;
 export type CardGalleryActionView = CardChoiceGridActionView;
 
 /** The trailing header action rendered by a {@link CardGalleryPanel}. */
-export type CardGalleryAccessory = Exclude<
-  GlassPanelAccessory,
-  { kind: "iconButtonGroup" }
->;
+export type CardGalleryAccessory =
+  | GlassPanelGlassButtonAccessory
+  | GlassPanelIconButtonAccessory;
 
 export type CardGalleryFooterVariant = Exclude<GlassButtonVariant, "danger">;
 
