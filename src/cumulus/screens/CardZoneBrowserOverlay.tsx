@@ -5,15 +5,13 @@ import {
   useRef,
   useState,
   type DragEvent,
+  type ComponentProps,
   type MouseEvent,
   type ReactElement,
 } from "react";
 import { motion } from "framer-motion";
-import {
-  CardGalleryPanel,
-  type CardGalleryCardView,
-  type CardGalleryToolbar,
-} from "../components/card/CardGalleryPanel";
+import { CardBrowserPanel } from "../components/card/CardBrowserPanel";
+import type { CardChoiceGridCardView as CardGalleryCardView } from "../components/card/CardChoiceGrid";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "./use-is-desktop";
@@ -22,6 +20,9 @@ export type CardZoneBrowserZone = "deck" | "void" | "banished";
 export type CardZoneBrowserSort = "current" | "cost" | "spark" | "name";
 export type CardZoneBrowserFilter = "all" | "character" | "event";
 export type CardZoneBrowserOwner = "viewer" | "opponent";
+type CardBrowserToolbar = NonNullable<
+  ComponentProps<typeof CardBrowserPanel>["toolbar"]
+>;
 
 export interface CardZoneBrowserOwnerSwitch {
   /** Owner whose cards are currently shown. */
@@ -215,7 +216,7 @@ export function CardZoneBrowserOverlay({
         onChange: (value: string) =>
           ownerSwitch.onChange(value as CardZoneBrowserOwner),
       };
-  const toolbar: CardGalleryToolbar = zone === "void"
+  const toolbar: CardBrowserToolbar = zone === "void"
     ? {
         segmented,
         sort: {
@@ -248,7 +249,6 @@ export function CardZoneBrowserOverlay({
           onChange: (value) => setFilter(value as CardZoneBrowserFilter),
         },
       };
-  const fillsDesktopFrame = isDesktop && zone !== "void";
   const title = ownerSwitch === undefined
     ? `${ownerLabel} ${zoneLabel(zone)}`
     : "Banished Cards";
@@ -286,11 +286,9 @@ export function CardZoneBrowserOverlay({
           width: isDesktop
             ? `min(100%, ${String(DESKTOP_BROWSER_MAX_WIDTH_PX)}px)`
             : "100%",
-          height: fillsDesktopFrame
+          height: isDesktop
             ? `calc(100vh - ${token("--space-2xl")} - ${token("--space-2xl")})`
-            : isDesktop
-              ? undefined
-              : "100%",
+            : "100%",
           maxHeight: isDesktop
             ? `calc(100vh - ${token("--space-2xl")} - ${token("--space-2xl")})`
             : undefined,
@@ -299,7 +297,7 @@ export function CardZoneBrowserOverlay({
           justifyContent: "center",
         }}
       >
-        <CardGalleryPanel
+        <CardBrowserPanel
           title={title}
           subtitle={subtitle}
           rightAccessory={{
@@ -313,13 +311,7 @@ export function CardZoneBrowserOverlay({
           toolbar={toolbar}
           cards={galleryCards}
           emptyLabel={cards.length === 0 ? "No Cards." : "No Matching Cards."}
-          columns={isDesktop ? (zone === "deck" ? "five" : "three") : "four"}
-          cardSize={isDesktop ? "standard" : "compact"}
-          frame={isDesktop ? "floating" : "fullBleed"}
-          spacing={isDesktop ? "spacious" : "medium"}
-          widthMode={fillsDesktopFrame ? "fill" : "content"}
-          heightMode={fillsDesktopFrame ? "fill" : "content"}
-          cutoutAwareAccessory
+          presentation="overlay"
           onCardDragStart={onCardDragStart}
           onCardDragEnd={onCardDragEnd}
           onCardContextMenu={onCardContextMenu}

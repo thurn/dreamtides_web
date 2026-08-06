@@ -122,9 +122,9 @@ describe("DuplicationSiteScreen", () => {
     const gallery = container.querySelector<HTMLElement>(
       '[data-testid="cumulus-duplication-card-gallery"]',
     );
+    expect(gallery?.dataset.galleryRole).toBe("picker");
     expect(gallery?.dataset.galleryColumns).toBe("3");
-    expect(gallery?.dataset.galleryCardSize).toBe("showcase");
-    expect(gallery?.dataset.galleryWidthMode).toBe("content");
+    expect(gallery?.dataset.galleryCardSize).toBe("reading");
     expect(gallery?.dataset.galleryReservesStackedCopy).toBe("true");
     expect(
       container.querySelector<HTMLElement>(

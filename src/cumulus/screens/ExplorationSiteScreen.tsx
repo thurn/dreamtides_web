@@ -22,7 +22,7 @@ import {
   type CardChoiceOperation,
   type CardChoiceGridColumns,
 } from "../components/card/CardChoiceGrid";
-import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
+import { CardPickerPanel } from "../components/card/CardPickerPanel";
 import { RichTextView, richText } from "../components/card/rich-text";
 import { renderRulesSymbolsInline } from "../components/card/RulesText";
 import {
@@ -3977,7 +3977,7 @@ export function ExplorationSiteScreen({
           )}
           {activeAction.followup.kind === "cards" &&
             activeAction.followup.selectionKey === "entryIds" && (
-            <CardGalleryPanel
+            <CardPickerPanel
               title={activeAction.followup.title}
               subtitle={activeAction.followup.subtitle}
               footerActions={[
@@ -4013,12 +4013,6 @@ export function ExplorationSiteScreen({
                 testId: `cumulus-exploration-card-${card.entryId}`,
               }))}
               emptyLabel="No eligible cards are available."
-              columns={isDesktop ? "four" : "three"}
-              cardSize="standard"
-              frame="floating"
-              widthMode="fill"
-              heightMode="fill"
-              spacing={isDesktop ? "regular" : "compact"}
               testId="cumulus-exploration-card-followup"
               onCardPress={toggleCard}
             />

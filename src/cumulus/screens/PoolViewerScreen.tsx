@@ -7,7 +7,8 @@
 
 import type { CSSProperties, DragEvent, ReactElement } from "react";
 import { useEffect, useState } from "react";
-import { CardGalleryPanel, type CardGalleryCardView } from "../components/card/CardGalleryPanel";
+import { CardBrowserPanel } from "../components/card/CardBrowserPanel";
+import type { CardChoiceGridCardView as CardGalleryCardView } from "../components/card/CardChoiceGrid";
 import { DisclosureSection } from "../components/controls/DisclosureSection";
 import { SegmentedControl } from "../components/controls/SegmentedControl";
 import { Select } from "../components/controls/Select";
@@ -23,7 +24,6 @@ export type PoolViewerSourceId =
   | "deck"
   | "history";
 
-export type PoolViewerDensity = "compact" | "standard" | "roomy";
 export type PoolViewerSortDirection = "asc" | "desc";
 export type PoolViewerTypeFilter = "all" | "character" | "event";
 export type PoolViewerCostFilter = "all" | "0" | "1" | "2" | "3" | "4" | "5plus" | "x";
@@ -35,7 +35,6 @@ export interface PoolViewerFilterView {
   type: PoolViewerTypeFilter;
   subtype: string;
   cost: PoolViewerCostFilter;
-  density: PoolViewerDensity;
 }
 
 export interface PoolViewerSourceOption {
@@ -192,16 +191,6 @@ export function PoolViewerScreen({
           value={view.filters.cost}
           onChange={(cost) => onFiltersChange({ cost: cost as PoolViewerCostFilter })}
         />
-        <SegmentedControl
-          size="sm"
-          options={[
-            { value: "compact", label: "S" },
-            { value: "standard", label: "M" },
-            { value: "roomy", label: "L" },
-          ]}
-          value={view.filters.density}
-          onChange={(density) => onFiltersChange({ density: density as PoolViewerDensity })}
-        />
       </div>
       {view.disclosures.map((disclosure) => (
         <DisclosureSection
@@ -230,7 +219,7 @@ export function PoolViewerScreen({
           ))}
         </section>
       ) : (
-        <CardGalleryPanel
+        <CardBrowserPanel
           title={view.title}
           subtitle={`${String(view.visibleCount)} of ${String(view.totalCount)} cards`}
           rightAccessory={{ kind: "iconButton", button: { glyph: GLYPHS.close, label: "Close pool viewer", onPress: onClose, testId: "pool-viewer-close" } }}
@@ -240,11 +229,7 @@ export function PoolViewerScreen({
           }}
           cards={galleryCards}
           emptyLabel={view.error ?? view.emptyLabel}
-          cardSize={view.filters.density}
-          frame={view.frame === "fullScreen" ? "fullBleed" : "floating"}
-          spacing="compact"
-          widthMode="fill"
-          heightMode="fill"
+          presentation={view.frame === "fullScreen" ? "fullScreen" : "embedded"}
           testId="pool-viewer-gallery"
           onCardPress={onCardPress}
           onCardDragStart={onCardDragStart}

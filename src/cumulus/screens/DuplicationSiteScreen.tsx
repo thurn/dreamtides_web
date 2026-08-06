@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import type { GameCardModel } from "../components/card/CardView";
-import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
+import { CardPickerPanel } from "../components/card/CardPickerPanel";
 import type { ArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
 import {
@@ -81,11 +81,6 @@ export function DuplicationSiteScreen({
       renderGallery={(layout) => {
         const desktop = layout === "desktop";
         const columnCount = view.isEnhanced ? (desktop ? 5 : 4) : 3;
-        const columns = view.isEnhanced
-          ? desktop
-            ? "five"
-            : "four"
-          : "three";
         return (
           <section
             data-duplication-card-grid=""
@@ -108,7 +103,7 @@ export function DuplicationSiteScreen({
               justifyItems: desktop && !view.isEnhanced ? "end" : undefined,
             }}
           >
-            <CardGalleryPanel
+            <CardPickerPanel
               title="Duplication"
               subtitle={
                 view.ready
@@ -138,20 +133,16 @@ export function DuplicationSiteScreen({
                 testId: `cumulus-duplication-card-${card.entryId}`,
                 selection:
                   selectedEntryId === card.entryId ? "copied" : undefined,
-                stackedCopy: selectedEntryId === card.entryId,
-                stackedCopyDirection:
-                  (index + 1) % columnCount === 0 ? "left" : "right",
+                stackedCopy: {
+                  shown: selectedEntryId === card.entryId,
+                  direction:
+                    (index + 1) % columnCount === 0 ? "left" : "right",
+                },
                 disabled: locked,
               }))}
               emptyLabel={
                 view.ready ? "No cards available to copy." : "Gathering possibilities…"
               }
-              columns={columns}
-              cardSize={view.isEnhanced ? "standard" : desktop ? "showcase" : "standard"}
-              frame="floating"
-              spacing="medium"
-              widthMode={view.isEnhanced || !desktop ? "fill" : "content"}
-              reserveStackedCopySpace
               testId="cumulus-duplication-card-gallery"
               onCardPress={toggleSelection}
             />

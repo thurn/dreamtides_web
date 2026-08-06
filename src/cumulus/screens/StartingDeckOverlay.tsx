@@ -3,7 +3,7 @@
 //
 // The first time a run has a DreamAvatar and has not yet seen its deck, the app
 // shows the player the cards they begin the journey with. This is that popup: a
-// CardGalleryPanel with the same left-aligned title/subtitle, trailing primary
+// CardBrowserPanel with the same left-aligned title/subtitle, trailing primary
 // action, and internal card-grid scroll used by card-selection sites.
 //
 // The body is a scrolling grid of the starting cards in acquisition order. Each
@@ -11,7 +11,7 @@
 // press-to-read large preview as the Deck Viewer. The gallery sizes itself to
 // the screen: desktop uses a roomy floating five-column glass panel, while
 // mobile uses a full-bleed four-column alpha scrim with the gallery body's
-// scroll affordance handled by CardGalleryPanel. The content is
+// scroll affordance handled by CardBrowserPanel. The content is
 // intentionally minimal — the title, one line of intro copy, the cards, and
 // the Begin Journey action. Dismissal is the action or Escape.
 //
@@ -53,7 +53,7 @@ export interface StartingDeckOverlayProps {
 }
 
 /**
- * The starting-deck reveal overlay: a modal CardGalleryPanel with a scrolling
+ * The starting-deck reveal overlay: a modal CardBrowserPanel with a scrolling
  * grid of the starting cards. Closed by Begin Journey or Escape.
  */
 export function StartingDeckOverlay({

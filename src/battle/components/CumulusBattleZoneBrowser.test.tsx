@@ -120,12 +120,11 @@ describe("CumulusBattleZoneBrowser", () => {
     expect(container.textContent).not.toContain("Hide Top");
     expect(container.textContent).not.toContain("Foresee…");
     expect(container.textContent).not.toContain("Reorder Full Deck");
-    expect(
-      container.querySelector<HTMLElement>("section")?.dataset.galleryWidthMode,
-    ).toBe("fill");
-    expect(
-      container.querySelector<HTMLElement>("section")?.dataset.galleryHeightMode,
-    ).toBe("fill");
+    const gallery = container.querySelector<HTMLElement>(
+      "[data-gallery-role=browser]",
+    );
+    expect(gallery?.dataset.galleryFrame).toBe("floating");
+    expect(gallery?.dataset.galleryHeightMode).toBe("fill");
 
     act(() => mounted.root.unmount());
   });
@@ -150,6 +149,18 @@ describe("CumulusBattleZoneBrowser", () => {
 
     act(() => yourTab?.click());
     expect(mounted.onSideChange).toHaveBeenCalledWith("enemy");
+
+    act(() => mounted.root.unmount());
+  });
+
+  it("uses the canonical bounded overlay geometry for the desktop void browser", () => {
+    const mounted = mount("void");
+    const gallery = mounted.container.querySelector<HTMLElement>(
+      "[data-gallery-role=browser]",
+    );
+    expect(gallery?.dataset.galleryFrame).toBe("floating");
+    expect(gallery?.dataset.galleryHeightMode).toBe("fill");
+    expect(gallery?.parentElement?.style.height).toContain("100vh");
 
     act(() => mounted.root.unmount());
   });

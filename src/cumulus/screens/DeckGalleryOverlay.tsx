@@ -1,9 +1,7 @@
 import { useEffect, type ReactElement } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  CardGalleryPanel,
-  type CardGalleryCardView,
-} from "../components/card/CardGalleryPanel";
+import { CardBrowserPanel } from "../components/card/CardBrowserPanel";
+import type { CardChoiceGridCardView as CardGalleryCardView } from "../components/card/CardChoiceGrid";
 import { token } from "../primitives/tokens";
 import { MENU_BUTTON_PX, MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
 import { useIsDesktop } from "./use-is-desktop";
@@ -105,7 +103,7 @@ export function DeckGalleryOverlay({
               justifyContent: "center",
             }}
           >
-            <CardGalleryPanel
+            <CardBrowserPanel
               title={title}
               subtitle={subtitle}
               rightAccessory={{
@@ -118,11 +116,7 @@ export function DeckGalleryOverlay({
               }}
               cards={cards}
               emptyLabel={emptyLabel}
-              columns={isDesktop ? "five" : "four"}
-              cardSize={isDesktop ? "roomy" : "standard"}
-              frame={isDesktop ? "floating" : "fullBleed"}
-              spacing={isDesktop ? "regular" : "compact"}
-              cutoutAwareAccessory
+              presentation="overlay"
             />
           </div>
         </motion.div>

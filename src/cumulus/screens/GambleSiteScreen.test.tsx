@@ -1242,6 +1242,11 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     );
 
     expect(container.querySelector("[data-four-suit-picker]")).not.toBeNull();
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-testid="gamble-four-suit-card-gallery"]',
+      )?.dataset.galleryRole,
+    ).toBe("picker");
     expect(container.querySelector("[data-four-suit-prize]")).toBeNull();
     act(() => {
       container.querySelector<HTMLButtonElement>(

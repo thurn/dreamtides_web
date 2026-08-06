@@ -1,12 +1,8 @@
-// CardGalleryPanel — the shared card-browser surface.
+// Shared implementation for the two public card-panel roles.
 //
-// A card-gallery surface is the recurring "title + subtitle, trailing action,
-// scrolling GameCard grid" pattern used by the starting-deck reveal and card
-// selection sites. The component owns the frame material, header row, body
-// scroll, screen-aware row peeking, and fixed card grid modes. A floating frame
-// is glass; a full-bleed frame is the standard alpha scrim. Callers choose the
-// frame and column contract and provide resolved card models keyed by deck entry
-// id / UUID.
+// The public components encode the product role instead of exposing independent
+// spacing, frame, sizing, and column knobs. They share one private fitted-grid
+// renderer so card geometry and scrolling stay consistent.
 
 import {
   useEffect,
@@ -48,7 +44,7 @@ import {
   type CardChoiceGridColumns,
 } from "./CardChoiceGrid";
 
-/** One resolved card in a {@link CardGalleryPanel}. */
+/** One resolved card in a {@link CardBrowserPanel} or {@link CardPickerPanel}. */
 export type CardGalleryCardView = CardChoiceGridCardView;
 
 /** The small white line shown beneath a gallery item. */
@@ -57,22 +53,22 @@ export type CardGalleryCaption = CardChoiceGridCaption;
 /** A card-sized action appended to the gallery grid. */
 export type CardGalleryActionView = CardChoiceGridActionView;
 
-/** The trailing header action rendered by a {@link CardGalleryPanel}. */
-export type CardGalleryAccessory =
+/** The trailing header action rendered by either card-panel role. */
+export type CardPanelAccessory =
   | GlassPanelGlassButtonAccessory
   | GlassPanelIconButtonAccessory;
 
-export type CardGalleryFooterVariant = Exclude<GlassButtonVariant, "danger">;
+export type CardPickerFooterVariant = Exclude<GlassButtonVariant, "danger">;
 
-/** A centered labeled action rendered below the card grid. */
-export interface CardGalleryFooterAction
+/** A labeled action rendered in the picker footer. */
+export interface CardPickerFooterAction
   extends Omit<GlassButtonAction, "variant"> {
   /** Semantic surface treatment for the action. */
-  variant?: CardGalleryFooterVariant;
+  variant?: CardPickerFooterVariant;
 }
 
 /** Controlled search field shown in the gallery's browser toolbar. */
-export interface CardGallerySearchControl {
+export interface CardBrowserSearchControl {
   /** Visible label for the search field. */
   label: string;
   /** Current search text. */
@@ -88,7 +84,7 @@ export interface CardGallerySearchControl {
 }
 
 /** Controlled dropdown shown in the gallery's browser toolbar. */
-export interface CardGallerySelectControl {
+export interface CardBrowserSelectControl {
   /** Accessible name for the dropdown trigger. */
   ariaLabel: string;
   /** Current option value. */
@@ -100,7 +96,7 @@ export interface CardGallerySelectControl {
 }
 
 /** Controlled mode switch shown across the top of a browser gallery. */
-export interface CardGallerySegmentedControl {
+export interface CardBrowserSegmentedControl {
   /** Segments represented by stable values and visible labels. */
   options: readonly (string | SegmentedOption)[];
   /** Currently selected segment value. */
@@ -110,88 +106,46 @@ export interface CardGallerySegmentedControl {
 }
 
 /** Structured mode, search, sort, and filter controls for browser galleries. */
-export interface CardGalleryToolbar {
+export interface CardBrowserToolbar {
   /** Optional primary mode switch rendered on its own toolbar row. */
-  segmented?: CardGallerySegmentedControl;
+  segmented?: CardBrowserSegmentedControl;
   /** Search-by-name control. */
-  search?: CardGallerySearchControl;
+  search?: CardBrowserSearchControl;
   /** Sort-order control. */
-  sort?: CardGallerySelectControl;
+  sort?: CardBrowserSelectControl;
   /** Type-filter control. */
-  filter?: CardGallerySelectControl;
+  filter?: CardBrowserSelectControl;
 }
 
-/** The grid column count for the card body. */
-export type CardGalleryColumns = "auto" | "two" | "three" | "four" | "five";
+/** How a card browser integrates with its host surface. */
+export type CardBrowserPresentation =
+  | "embedded"
+  | "overlay"
+  | "fullScreen";
 
-/**
- * The gallery card-size preset. Desktop galleries showing two or three cards
- * should use `showcase` so cards reach the 240px reading width when space permits.
- */
-export type CardGalleryCardSize = "compact" | "standard" | "roomy" | "showcase";
+/** How a transactional card picker integrates with its host surface. */
+export type CardPickerPresentation = "embedded" | "overlay";
 
-/** The panel frame geometry. */
-export type CardGalleryFrame = "floating" | "fullBleed";
-
-/** The gallery's internal spacing scale. */
-export type CardGallerySpacing = "spacious" | "regular" | "medium" | "compact";
-
-/** Whether a floating gallery hugs its grid or fills the caller's width. */
-export type CardGalleryWidthMode = "content" | "fill";
-
-/** Whether a floating gallery hugs its content or fills the caller's height. */
-export type CardGalleryHeightMode = "content" | "fill";
-
-export interface CardGalleryPanelProps {
+interface CardPanelBaseProps {
   /** Header title, rendered as an `<h2>`. */
   title: string;
   /** Optional intro line under the title. */
   subtitle?: string;
   /** Optional trailing header action. */
-  rightAccessory?: CardGalleryAccessory;
-  /** Optional one-or-two-action GlassButton footer below the card grid. */
-  footerActions?:
-    | readonly [CardGalleryFooterAction]
-    | readonly [CardGalleryFooterAction, CardGalleryFooterAction];
-  /** Optional structured search, sort, and filter toolbar above the card grid. */
-  toolbar?: CardGalleryToolbar;
+  rightAccessory?: CardPanelAccessory;
   /** Resolved cards rendered in order. */
   cards: readonly CardGalleryCardView[];
   /** Empty-state copy shown when `cards` is empty. */
   emptyLabel?: string;
-  /** Card grid mode. Defaults to `auto`. */
-  columns?: CardGalleryColumns;
-  /**
-   * Card size preset. Defaults to `standard`. Use `showcase` for low-count
-   * desktop choices; compact multi-row collections may use a denser preset.
-   */
-  cardSize?: CardGalleryCardSize;
-  /**
-   * Panel frame geometry and material. `floating` uses liquid glass;
-   * `fullBleed` fills its parent edge-to-edge with the standard alpha scrim
-   * and no floating rim or shadow. Defaults to `floating`.
-   */
-  frame?: CardGalleryFrame;
-  /** Internal padding and grid gap scale. Defaults to `regular`. */
-  spacing?: CardGallerySpacing;
-  /** Floating-frame width behavior. Defaults to `content`. */
-  widthMode?: CardGalleryWidthMode;
-  /**
-   * Transparent layout-wrapper height behavior. Defaults to `content`.
-   * `fill` may reserve caller-owned stage space for card fitting, but the
-   * floating glass surface still hugs its rendered header, grid, and footer
-   * and centers vertically within that reserved space.
-   */
-  heightMode?: CardGalleryHeightMode;
-  /** Reserve the fanned-copy footprint before any card displays its copy. */
-  reserveStackedCopySpace?: boolean;
   /** Test id for the panel root. */
   testId?: string;
-  /**
-   * When a screen-cutout box is known, float the accessory beside the device
-   * island instead of sharing the header row.
-   */
-  cutoutAwareAccessory?: boolean;
+}
+
+export interface CardBrowserPanelProps extends CardPanelBaseProps {
+  /** Optional structured search, sort, and filter toolbar above the card grid. */
+  toolbar?: CardBrowserToolbar;
+  /** Host integration. `overlay` is floating on desktop and full-bleed on mobile. */
+  presentation?: CardBrowserPresentation;
   /** Fires when an enabled card tile is activated. */
   onCardPress?: (entryId: string) => void;
   /** Fires when a draggable card entry begins a native drag. */
@@ -205,9 +159,46 @@ export interface CardGalleryPanelProps {
    * card press waits briefly so a second tap can take precedence.
    */
   onCardDoubleTap?: (entryId: string) => void;
+}
+
+export interface CardPickerPanelProps extends CardPanelBaseProps {
+  /** Host integration. `overlay` is floating on desktop and full-bleed on mobile. */
+  presentation?: CardPickerPresentation;
+  /** Optional one-or-two-action GlassButton footer below the card grid. */
+  footerActions?:
+    | readonly [CardPickerFooterAction]
+    | readonly [CardPickerFooterAction, CardPickerFooterAction];
+  /** Fires when an enabled card tile is activated. */
+  onCardPress?: (entryId: string) => void;
   /** Optional card-sized action appended after the cards. */
   endAction?: CardGalleryActionView;
   /** Fires with the appended action's stable id when it is activated. */
+  onEndActionPress?: (entryId: string) => void;
+}
+
+type GalleryColumns = "two" | "three" | "four" | "five";
+type GalleryCardSize = "compact" | "standard" | "reading";
+type GalleryFrame = "floating" | "fullBleed";
+type GallerySpacing = "regular" | "compact";
+type GalleryHeightMode = "content" | "fill";
+
+interface CardGallerySurfaceProps extends CardPanelBaseProps {
+  toolbar?: CardBrowserToolbar;
+  footerActions?:
+    | readonly [CardPickerFooterAction]
+    | readonly [CardPickerFooterAction, CardPickerFooterAction];
+  columns: GalleryColumns;
+  cardSize: GalleryCardSize;
+  frame: GalleryFrame;
+  spacing: GallerySpacing;
+  heightMode: GalleryHeightMode;
+  role: "browser" | "picker";
+  onCardPress?: (entryId: string) => void;
+  onCardDragStart?: (entryId: string, event: DragEvent<HTMLDivElement>) => void;
+  onCardDragEnd?: (entryId: string, event: DragEvent<HTMLDivElement>) => void;
+  onCardContextMenu?: (entryId: string, event: MouseEvent<HTMLDivElement>) => void;
+  onCardDoubleTap?: (entryId: string) => void;
+  endAction?: CardGalleryActionView;
   onEndActionPress?: (entryId: string) => void;
 }
 
@@ -217,13 +208,11 @@ const STANDARD_CARD_MAX_WIDTH_PX = 176;
 // choice surface wholly visible; this is a fit floor, not a caller size knob.
 const COMPACT_CARD_MIN_WIDTH_PX = 44;
 const COMPACT_CARD_MAX_WIDTH_PX = 176;
-const ROOMY_CARD_MIN_WIDTH_PX = 126;
-const ROOMY_CARD_MAX_WIDTH_PX = 188;
-// Low-count choice surfaces should render a complete reading card whenever
-// their stage has room, which also lets desktop reveal keep the source in place.
-const SHOWCASE_CARD_MIN_WIDTH_PX = ROOMY_CARD_MIN_WIDTH_PX;
-const SHOWCASE_CARD_MAX_WIDTH_PX = 240;
-const DEFAULT_COLUMN_COUNT = 5;
+// Low-count desktop pickers should render at the complete physical reading
+// width whenever their stage has room. The picker selects this tier from card
+// count; it is not a public appearance choice.
+const READING_CARD_MIN_WIDTH_PX = 126;
+const READING_CARD_MAX_WIDTH_PX = 240;
 const CARD_WIDTH_FLOOR_PX = 64;
 // One caption voice plus its gap below each card/action. This is a content box
 // measure used by the gallery fitter so two captioned rows remain fully visible.
@@ -238,19 +227,19 @@ interface GalleryMeasure {
   visibleGapSlots: number;
 }
 
-function configuredColumnCount(columns: CardGalleryColumns): number {
+function configuredColumnCount(columns: GalleryColumns): number {
   if (columns === "two") return 2;
   if (columns === "three") return 3;
   if (columns === "four") return 4;
-  return DEFAULT_COLUMN_COUNT;
+  return 5;
 }
 
-function renderedColumnCount(columns: CardGalleryColumns): number {
+function renderedColumnCount(columns: GalleryColumns): number {
   return configuredColumnCount(columns);
 }
 
-function choiceGridColumns(columns: CardGalleryColumns): CardChoiceGridColumns {
-  return columns === "auto" ? "five" : columns;
+function choiceGridColumns(columns: GalleryColumns): CardChoiceGridColumns {
+  return columns;
 }
 
 function rowCountFor(cardCount: number, columnCount: number): number {
@@ -268,27 +257,25 @@ function gapSlotsFor(visibleRows: number): number {
     : Math.max(0, Math.floor(visibleRows));
 }
 
-function maxCardWidth(cardSize: CardGalleryCardSize): number {
-  if (cardSize === "compact") return COMPACT_CARD_MAX_WIDTH_PX;
-  if (cardSize === "showcase") return SHOWCASE_CARD_MAX_WIDTH_PX;
-  return cardSize === "roomy"
-    ? ROOMY_CARD_MAX_WIDTH_PX
+function maxCardWidth(cardSize: GalleryCardSize): number {
+  if (cardSize === "reading") return READING_CARD_MAX_WIDTH_PX;
+  return cardSize === "compact"
+    ? COMPACT_CARD_MAX_WIDTH_PX
     : STANDARD_CARD_MAX_WIDTH_PX;
 }
 
-function minCardWidth(cardSize: CardGalleryCardSize): number {
-  if (cardSize === "compact") return COMPACT_CARD_MIN_WIDTH_PX;
-  if (cardSize === "showcase") return SHOWCASE_CARD_MIN_WIDTH_PX;
-  return cardSize === "roomy"
-    ? ROOMY_CARD_MIN_WIDTH_PX
+function minCardWidth(cardSize: GalleryCardSize): number {
+  if (cardSize === "reading") return READING_CARD_MIN_WIDTH_PX;
+  return cardSize === "compact"
+    ? COMPACT_CARD_MIN_WIDTH_PX
     : STANDARD_CARD_MIN_WIDTH_PX;
 }
 
 function fallbackCardWidth(
-  frame: CardGalleryFrame,
-  cardSize: CardGalleryCardSize,
+  frame: GalleryFrame,
+  cardSize: GalleryCardSize,
   columnCount: number,
-  spacing: CardGallerySpacing,
+  spacing: GallerySpacing,
   columnGap: string,
 ): string {
   const minWidth = minCardWidth(cardSize);
@@ -297,9 +284,7 @@ function fallbackCardWidth(
     frame === "floating"
       ? spacing === "compact"
         ? token("--space-xxs")
-        : spacing === "medium"
-          ? token("--space-s")
-          : token("--space-2xl")
+        : token("--space-2xl")
       : "0px";
   const gapSlots = Math.max(0, columnCount - 1);
   const padding = bodyPaddingFor(spacing);
@@ -315,23 +300,19 @@ function parsePixel(value: string): number {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
-function bodyPaddingFor(spacing: CardGallerySpacing): string {
+function bodyPaddingFor(spacing: GallerySpacing): string {
   if (spacing === "compact") return token("--space-s");
-  if (spacing === "medium") return token("--space-m");
   return token("--space-2xl");
 }
 
 function panelHeaderSpacingFor(
-  spacing: CardGallerySpacing,
+  spacing: GallerySpacing,
 ): GlassPanelHeaderSpacing {
   if (spacing === "compact") return "compact";
-  if (spacing === "medium") return "medium";
-  if (spacing === "spacious") return "spacious";
   return "regular";
 }
 
-function gridGapFor(spacing: CardGallerySpacing): string {
-  if (spacing === "spacious") return token("--space-l");
+function gridGapFor(spacing: GallerySpacing): string {
   return spacing === "compact" ? token("--space-xs") : token("--space-s");
 }
 
@@ -344,10 +325,10 @@ function useGalleryMeasure({
   rowSupplementPx,
   trailingReservePx,
 }: {
-  readonly frame: CardGalleryFrame;
+  readonly frame: GalleryFrame;
   readonly columnCount: number;
-  readonly cardSize: CardGalleryCardSize;
-  readonly spacing: CardGallerySpacing;
+  readonly cardSize: GalleryCardSize;
+  readonly spacing: GallerySpacing;
   readonly fallbackVisibleRows: number;
   readonly rowSupplementPx: number;
   readonly trailingReservePx: number;
@@ -497,8 +478,8 @@ function useGalleryMeasure({
   return { rootRef, bodyRef, measure };
 }
 
-function cardGalleryFooterButton(
-  action: CardGalleryFooterAction,
+function cardPickerFooterButton(
+  action: CardPickerFooterAction,
   placement: GlassControlPlacement,
   key?: string,
 ): ReactElement {
@@ -508,8 +489,8 @@ function cardGalleryFooterButton(
   );
 }
 
-/** Shared card-gallery surface with a header accessory and scrolling grid. */
-export function CardGalleryPanel({
+/** Private fitted card-gallery surface shared by the two public product roles. */
+function CardGallerySurface({
   title,
   subtitle,
   rightAccessory,
@@ -517,15 +498,13 @@ export function CardGalleryPanel({
   toolbar,
   cards,
   emptyLabel = "No cards.",
-  columns = "auto",
-  cardSize = "standard",
-  frame = "floating",
-  spacing = "regular",
-  widthMode = "content",
-  heightMode = "content",
-  reserveStackedCopySpace = false,
+  columns,
+  cardSize,
+  frame,
+  spacing,
+  heightMode,
+  role,
   testId,
-  cutoutAwareAccessory = false,
   onCardPress,
   onCardDragStart,
   onCardDragEnd,
@@ -533,7 +512,7 @@ export function CardGalleryPanel({
   onCardDoubleTap,
   endAction,
   onEndActionPress,
-}: CardGalleryPanelProps): ReactElement {
+}: CardGallerySurfaceProps): ReactElement {
   const pendingCardTapsRef = useRef(new Map<string, number>());
   const cancelPendingCardTap = (entryId: string): void => {
     const timer = pendingCardTapsRef.current.get(entryId);
@@ -572,8 +551,7 @@ export function CardGalleryPanel({
   const fallbackVisibleGapSlots = gapSlotsFor(fallbackVisibleRows);
   const hasCaptions =
     endAction !== undefined || cards.some((card) => card.caption !== undefined);
-  const hasStackedCopy =
-    reserveStackedCopySpace || cards.some((card) => card.stackedCopy === true);
+  const hasStackedCopy = cards.some((card) => card.stackedCopy !== undefined);
   const rowSupplementPx = hasCaptions ? CAPTION_BLOCK_PX : 0;
   const trailingReservePx = hasStackedCopy ? STACKED_COPY_RESERVE_PX : 0;
   const { rootRef, bodyRef, measure } = useGalleryMeasure({
@@ -631,7 +609,7 @@ export function CardGalleryPanel({
             }}
           >
             {footerActions.map((action) =>
-              cardGalleryFooterButton(
+              cardPickerFooterButton(
                 action,
                 accessoryPlacement,
                 action.testId ?? action.label,
@@ -639,14 +617,12 @@ export function CardGalleryPanel({
             )}
           </div>
         ) : (
-          cardGalleryFooterButton(footerActions[0], accessoryPlacement)
+          cardPickerFooterButton(footerActions[0], accessoryPlacement)
         )}
       </div>
     ) : undefined;
 
-  const toolbarGap = spacing === "spacious"
-    ? token("--space-l")
-    : token("--space-s");
+  const toolbarGap = token("--space-s");
   const toolbarNode = toolbar === undefined ? null : (
     <div
       data-gallery-toolbar=""
@@ -727,14 +703,14 @@ export function CardGalleryPanel({
     <section
       ref={rootRef}
       data-testid={testId}
+      data-gallery-role={role}
       data-gallery-frame={frame}
       data-gallery-columns={columnCount}
       data-gallery-visible-rows={visibleRows}
       data-gallery-spacing={spacing}
       data-gallery-card-size={cardSize}
-      data-gallery-width-mode={widthMode}
       data-gallery-height-mode={heightMode}
-      data-gallery-reserves-stacked-copy={reserveStackedCopySpace || undefined}
+      data-gallery-reserves-stacked-copy={hasStackedCopy || undefined}
       style={{
         position: "relative",
         boxSizing: "border-box",
@@ -744,8 +720,7 @@ export function CardGalleryPanel({
           frame === "floating" && heightMode === "fill"
             ? "center"
             : undefined,
-        width:
-          frame === "fullBleed" || widthMode === "fill" ? "100%" : panelWidth,
+        width: frame === "fullBleed" ? "100%" : panelWidth,
         maxWidth: "100%",
         height:
           frame === "fullBleed" || heightMode === "fill" ? "100%" : undefined,
@@ -758,7 +733,7 @@ export function CardGalleryPanel({
         title={title}
         subtitle={subtitle}
         rightAccessory={rightAccessory}
-        cutoutAwareAccessory={cutoutAwareAccessory}
+        cutoutAwareAccessory={frame === "fullBleed"}
         frame={frame}
         radius="popover"
         tint="popover"
@@ -827,3 +802,6 @@ export function CardGalleryPanel({
     </section>
   );
 }
+
+/** @internal Shared renderer used by the public role components. */
+export const cardGallerySurface = CardGallerySurface;

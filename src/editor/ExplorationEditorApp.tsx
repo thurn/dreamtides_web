@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { CardGalleryPanel } from "../cumulus/components/card/CardGalleryPanel";
+import { CardBrowserPanel } from "../cumulus/components/card/CardBrowserPanel";
 import { RulesText } from "../cumulus/components/card/RulesText";
 import { GlassButton } from "../cumulus/components/controls/GlassButton";
 import { NumberStepper } from "../cumulus/components/controls/NumberStepper";
@@ -202,7 +202,7 @@ function ExplorationCardPicker({
   const shown = visible.slice(0, 60);
   return (
     <div className="exploration-editor-card-picker" role="dialog" aria-modal="true" aria-label="Choose a card">
-      <CardGalleryPanel
+      <CardBrowserPanel
         title="Choose a card"
         subtitle={`${String(shown.length)} shown · ${String(visible.length)} matches · ${String(cards.length)} total · UUID-safe selection`}
         rightAccessory={{
@@ -230,12 +230,7 @@ function ExplorationCardPicker({
           testId: `exploration-card-option-${card.id}`,
         }))}
         emptyLabel="No cards match this search."
-        columns="five"
-        cardSize="compact"
-        frame="fullBleed"
-        spacing="compact"
-        widthMode="fill"
-        heightMode="fill"
+        presentation="fullScreen"
         testId="exploration-card-picker"
         onCardPress={onSelect}
       />

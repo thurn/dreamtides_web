@@ -535,7 +535,7 @@ Pool Viewer is mounted from both `App.tsx` and the playable battle. It currently
 owns custom segmented buttons, panel and header material, close control,
 filter/search/size toolbar, source tabs, provenance sections, replay pick
 history, card grid, count badges, drag handling, and a separate full-screen
-card overlay. The Cumulus catalog already provides `CardGalleryPanel`,
+card overlay. The Cumulus catalog already provides `CardBrowserPanel`,
 `SegmentedControl`, `Select`, `TextField`, `IconButton`, `GameCard`, and the
 shared entity-reveal system.
 
@@ -550,9 +550,8 @@ shared entity-reveal system.
 3. Use UUID-backed `GameCardModel` values and stable entry IDs. Do not use card
    names as keys. Translate drag payloads to a domain identifier only at the
    adapter boundary when an existing action still requires one.
-4. Build the primary collection with `CardGalleryPanel`. Extend it only through
-   strict structured variants justified by the Pool Viewer and another
-   catalog-level use case.
+4. Build the primary collection with `CardBrowserPanel`. Keep collection
+   browsing behavior within its structured toolbar and interaction contracts.
 5. Use canonical controls for search, source, sort, direction, type, subtype,
    cost, and density. Pool-specific source choices are structured options, not
    raw buttons or injected `ReactNode` controls.

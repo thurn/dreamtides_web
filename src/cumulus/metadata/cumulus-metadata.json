@@ -470,6 +470,184 @@
       "description": "Optional stable test id for the face-down card object."
     }
   ],
+  "CardBrowserPanel": [
+    {
+      "name": "toolbar",
+      "tsType": "CardBrowserToolbar",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional structured search, sort, and filter toolbar above the card grid.",
+      "nested": {
+        "name": "CardBrowserToolbar",
+        "fields": [
+          {
+            "name": "segmented",
+            "tsType": "CardBrowserSegmentedControl",
+            "optional": true,
+            "description": "Optional primary mode switch rendered on its own toolbar row."
+          },
+          {
+            "name": "search",
+            "tsType": "CardBrowserSearchControl",
+            "optional": true,
+            "description": "Search-by-name control."
+          },
+          {
+            "name": "sort",
+            "tsType": "CardBrowserSelectControl",
+            "optional": true,
+            "description": "Sort-order control."
+          },
+          {
+            "name": "filter",
+            "tsType": "CardBrowserSelectControl",
+            "optional": true,
+            "description": "Type-filter control."
+          }
+        ]
+      }
+    },
+    {
+      "name": "presentation",
+      "tsType": "CardBrowserPresentation",
+      "unionMembers": [
+        "embedded",
+        "overlay",
+        "fullScreen"
+      ],
+      "required": false,
+      "defaultValue": "embedded",
+      "description": "Host integration. `overlay` is floating on desktop and full-bleed on mobile."
+    },
+    {
+      "name": "onCardPress",
+      "tsType": "((entryId: string) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fires when an enabled card tile is activated."
+    },
+    {
+      "name": "onCardDragStart",
+      "tsType": "((entryId: string, event: DragEvent<HTMLDivElement>) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fires when a draggable card entry begins a native drag."
+    },
+    {
+      "name": "onCardDragEnd",
+      "tsType": "((entryId: string, event: DragEvent<HTMLDivElement>) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fires when a draggable card entry's native drag ends."
+    },
+    {
+      "name": "onCardContextMenu",
+      "tsType": "((entryId: string, event: MouseEvent<HTMLDivElement, MouseEvent>) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fires when a card entry requests its contextual actions."
+    },
+    {
+      "name": "onCardDoubleTap",
+      "tsType": "((entryId: string) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fires when a card receives two quick activations. While present, a primary\ncard press waits briefly so a second tap can take precedence."
+    },
+    {
+      "name": "title",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Header title, rendered as an `<h2>`."
+    },
+    {
+      "name": "subtitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional intro line under the title."
+    },
+    {
+      "name": "rightAccessory",
+      "tsType": "CardPanelAccessory",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional trailing header action.",
+      "nested": {
+        "name": "CardPanelAccessory",
+        "variants": [
+          {
+            "name": "GlassPanelGlassButtonAccessory",
+            "fields": [
+              {
+                "name": "kind",
+                "tsType": "\"glassButton\"",
+                "optional": false,
+                "description": ""
+              },
+              {
+                "name": "button",
+                "tsType": "GlassPanelGlassButtonProps",
+                "optional": false,
+                "description": "Props forwarded to the labeled control; placement is panel-owned."
+              }
+            ]
+          },
+          {
+            "name": "GlassPanelIconButtonAccessory",
+            "fields": [
+              {
+                "name": "kind",
+                "tsType": "\"iconButton\"",
+                "optional": false,
+                "description": ""
+              },
+              {
+                "name": "button",
+                "tsType": "GlassPanelIconButtonProps",
+                "optional": false,
+                "description": "Props forwarded to the icon control; placement is panel-owned."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "cards",
+      "tsType": "readonly CardChoiceGridCardView[]",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Resolved cards rendered in order."
+    },
+    {
+      "name": "emptyLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Empty-state copy shown when `cards` is empty."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Test id for the panel root."
+    }
+  ],
   "CardChoiceGrid": [
     {
       "name": "cards",
@@ -602,227 +780,62 @@
       "description": "Fires with the trailing action's stable id."
     }
   ],
-  "CardGalleryPanel": [
+  "CardOrderEditor": [
     {
-      "name": "title",
+      "name": "items",
+      "tsType": "readonly CardOrderEditorItem[]",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Ordered cards, from top to bottom."
+    },
+    {
+      "name": "label",
       "tsType": "string",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Header title, rendered as an `<h2>`."
+      "description": "Accessible name for the ordered collection."
     },
     {
-      "name": "subtitle",
-      "tsType": "string",
+      "name": "onOrderChange",
+      "tsType": "(orderedIds: readonly string[]) => void",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
-      "description": "Optional intro line under the title."
+      "description": "Returns the complete top-to-bottom sequence of card ids after a move."
     },
     {
-      "name": "rightAccessory",
-      "tsType": "CardGalleryAccessory",
-      "unionMembers": [],
+      "name": "placement",
+      "tsType": "GlassControlPlacement",
+      "unionMembers": [
+        "onMedia",
+        "onGlass"
+      ],
       "required": false,
-      "defaultValue": null,
-      "description": "Optional trailing header action.",
-      "nested": {
-        "name": "CardGalleryAccessory",
-        "variants": [
-          {
-            "name": "GlassPanelGlassButtonAccessory",
-            "fields": [
-              {
-                "name": "kind",
-                "tsType": "\"glassButton\"",
-                "optional": false,
-                "description": ""
-              },
-              {
-                "name": "button",
-                "tsType": "GlassPanelGlassButtonProps",
-                "optional": false,
-                "description": "Props forwarded to the labeled control; placement is panel-owned."
-              }
-            ]
-          },
-          {
-            "name": "GlassPanelIconButtonAccessory",
-            "fields": [
-              {
-                "name": "kind",
-                "tsType": "\"iconButton\"",
-                "optional": false,
-                "description": ""
-              },
-              {
-                "name": "button",
-                "tsType": "GlassPanelIconButtonProps",
-                "optional": false,
-                "description": "Props forwarded to the icon control; placement is panel-owned."
-              }
-            ]
-          }
-        ]
-      }
+      "defaultValue": "onMedia",
+      "description": "Surface beneath the editor. `onMedia` gives the editor its own liquid glass\nboundary; `onGlass` uses a lighter tonal lens inside an existing glass\npanel or dialog. Defaults to `onMedia`."
+    }
+  ],
+  "CardPickerPanel": [
+    {
+      "name": "presentation",
+      "tsType": "CardPickerPresentation",
+      "unionMembers": [
+        "embedded",
+        "overlay"
+      ],
+      "required": false,
+      "defaultValue": "embedded",
+      "description": "Host integration. `overlay` is floating on desktop and full-bleed on mobile."
     },
     {
       "name": "footerActions",
-      "tsType": "readonly [CardGalleryFooterAction] | readonly [CardGalleryFooterAction, CardGalleryFooterAction]",
+      "tsType": "readonly [CardPickerFooterAction] | readonly [CardPickerFooterAction, CardPickerFooterAction]",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "Optional one-or-two-action GlassButton footer below the card grid."
-    },
-    {
-      "name": "toolbar",
-      "tsType": "CardGalleryToolbar",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional structured search, sort, and filter toolbar above the card grid.",
-      "nested": {
-        "name": "CardGalleryToolbar",
-        "fields": [
-          {
-            "name": "segmented",
-            "tsType": "CardGallerySegmentedControl",
-            "optional": true,
-            "description": "Optional primary mode switch rendered on its own toolbar row."
-          },
-          {
-            "name": "search",
-            "tsType": "CardGallerySearchControl",
-            "optional": true,
-            "description": "Search-by-name control."
-          },
-          {
-            "name": "sort",
-            "tsType": "CardGallerySelectControl",
-            "optional": true,
-            "description": "Sort-order control."
-          },
-          {
-            "name": "filter",
-            "tsType": "CardGallerySelectControl",
-            "optional": true,
-            "description": "Type-filter control."
-          }
-        ]
-      }
-    },
-    {
-      "name": "cards",
-      "tsType": "readonly CardChoiceGridCardView[]",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Resolved cards rendered in order."
-    },
-    {
-      "name": "emptyLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "No cards.",
-      "description": "Empty-state copy shown when `cards` is empty."
-    },
-    {
-      "name": "columns",
-      "tsType": "CardGalleryColumns",
-      "unionMembers": [
-        "two",
-        "three",
-        "four",
-        "five",
-        "auto"
-      ],
-      "required": false,
-      "defaultValue": "auto",
-      "description": "Card grid mode. Defaults to `auto`."
-    },
-    {
-      "name": "cardSize",
-      "tsType": "CardGalleryCardSize",
-      "unionMembers": [
-        "compact",
-        "standard",
-        "roomy",
-        "showcase"
-      ],
-      "required": false,
-      "defaultValue": "standard",
-      "description": "Card size preset. Defaults to `standard`. Use `showcase` for low-count\ndesktop choices; compact multi-row collections may use a denser preset."
-    },
-    {
-      "name": "frame",
-      "tsType": "CardGalleryFrame",
-      "unionMembers": [
-        "floating",
-        "fullBleed"
-      ],
-      "required": false,
-      "defaultValue": "floating",
-      "description": "Panel frame geometry and material. `floating` uses liquid glass;\n`fullBleed` fills its parent edge-to-edge with the standard alpha scrim\nand no floating rim or shadow. Defaults to `floating`."
-    },
-    {
-      "name": "spacing",
-      "tsType": "CardGallerySpacing",
-      "unionMembers": [
-        "compact",
-        "spacious",
-        "regular",
-        "medium"
-      ],
-      "required": false,
-      "defaultValue": "regular",
-      "description": "Internal padding and grid gap scale. Defaults to `regular`."
-    },
-    {
-      "name": "widthMode",
-      "tsType": "CardGalleryWidthMode",
-      "unionMembers": [
-        "content",
-        "fill"
-      ],
-      "required": false,
-      "defaultValue": "content",
-      "description": "Floating-frame width behavior. Defaults to `content`."
-    },
-    {
-      "name": "heightMode",
-      "tsType": "CardGalleryHeightMode",
-      "unionMembers": [
-        "content",
-        "fill"
-      ],
-      "required": false,
-      "defaultValue": "content",
-      "description": "Transparent layout-wrapper height behavior. Defaults to `content`.\n`fill` may reserve caller-owned stage space for card fitting, but the\nfloating glass surface still hugs its rendered header, grid, and footer\nand centers vertically within that reserved space."
-    },
-    {
-      "name": "reserveStackedCopySpace",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "false",
-      "description": "Reserve the fanned-copy footprint before any card displays its copy."
-    },
-    {
-      "name": "testId",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Test id for the panel root."
-    },
-    {
-      "name": "cutoutAwareAccessory",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "false",
-      "description": "When a screen-cutout box is known, float the accessory beside the device\nisland instead of sharing the header row."
     },
     {
       "name": "onCardPress",
@@ -831,38 +844,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Fires when an enabled card tile is activated."
-    },
-    {
-      "name": "onCardDragStart",
-      "tsType": "((entryId: string, event: DragEvent<HTMLDivElement>) => void)",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Fires when a draggable card entry begins a native drag."
-    },
-    {
-      "name": "onCardDragEnd",
-      "tsType": "((entryId: string, event: DragEvent<HTMLDivElement>) => void)",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Fires when a draggable card entry's native drag ends."
-    },
-    {
-      "name": "onCardContextMenu",
-      "tsType": "((entryId: string, event: MouseEvent<HTMLDivElement, MouseEvent>) => void)",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Fires when a card entry requests its contextual actions."
-    },
-    {
-      "name": "onCardDoubleTap",
-      "tsType": "((entryId: string) => void)",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Fires when a card receives two quick activations. While present, a primary\ncard press waits briefly so a second tap can take precedence."
     },
     {
       "name": "endAction",
@@ -920,43 +901,93 @@
       "required": false,
       "defaultValue": null,
       "description": "Fires with the appended action's stable id when it is activated."
-    }
-  ],
-  "CardOrderEditor": [
-    {
-      "name": "items",
-      "tsType": "readonly CardOrderEditorItem[]",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Ordered cards, from top to bottom."
     },
     {
-      "name": "label",
+      "name": "title",
       "tsType": "string",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Accessible name for the ordered collection."
+      "description": "Header title, rendered as an `<h2>`."
     },
     {
-      "name": "onOrderChange",
-      "tsType": "(orderedIds: readonly string[]) => void",
+      "name": "subtitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional intro line under the title."
+    },
+    {
+      "name": "rightAccessory",
+      "tsType": "CardPanelAccessory",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional trailing header action.",
+      "nested": {
+        "name": "CardPanelAccessory",
+        "variants": [
+          {
+            "name": "GlassPanelGlassButtonAccessory",
+            "fields": [
+              {
+                "name": "kind",
+                "tsType": "\"glassButton\"",
+                "optional": false,
+                "description": ""
+              },
+              {
+                "name": "button",
+                "tsType": "GlassPanelGlassButtonProps",
+                "optional": false,
+                "description": "Props forwarded to the labeled control; placement is panel-owned."
+              }
+            ]
+          },
+          {
+            "name": "GlassPanelIconButtonAccessory",
+            "fields": [
+              {
+                "name": "kind",
+                "tsType": "\"iconButton\"",
+                "optional": false,
+                "description": ""
+              },
+              {
+                "name": "button",
+                "tsType": "GlassPanelIconButtonProps",
+                "optional": false,
+                "description": "Props forwarded to the icon control; placement is panel-owned."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "cards",
+      "tsType": "readonly CardChoiceGridCardView[]",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Returns the complete top-to-bottom sequence of card ids after a move."
+      "description": "Resolved cards rendered in order."
     },
     {
-      "name": "placement",
-      "tsType": "GlassControlPlacement",
-      "unionMembers": [
-        "onMedia",
-        "onGlass"
-      ],
+      "name": "emptyLabel",
+      "tsType": "string",
+      "unionMembers": [],
       "required": false,
-      "defaultValue": "onMedia",
-      "description": "Surface beneath the editor. `onMedia` gives the editor its own liquid glass\nboundary; `onGlass` uses a lighter tonal lens inside an existing glass\npanel or dialog. Defaults to `onMedia`."
+      "defaultValue": null,
+      "description": "Empty-state copy shown when `cards` is empty."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Test id for the panel root."
     }
   ],
   "CardPile": [
@@ -2592,9 +2623,9 @@
       "tsType": "GlassPanelHeaderSpacing",
       "unionMembers": [
         "compact",
-        "spacious",
         "regular",
-        "medium"
+        "medium",
+        "spacious"
       ],
       "required": false,
       "defaultValue": "regular",

@@ -8,7 +8,7 @@ import {
 import { motion, useReducedMotion } from "framer-motion";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
-import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
+import { CardPickerPanel } from "../components/card/CardPickerPanel";
 import type { GravokGateId, StarwayStairsTierNumber } from "../../types/gamble";
 import type {
   Dreamsign as DreamsignData,
@@ -2117,7 +2117,7 @@ function FourSuitRepriseScreen({
                 alignItems: "center",
               }}
             >
-              <CardGalleryPanel
+              <CardPickerPanel
                 title="Four-Suit Reprise"
                 subtitle="Choose a card to wager"
                 footerActions={[
@@ -2133,11 +2133,6 @@ function FourSuitRepriseScreen({
                   testId: `gamble-four-suit-card-${card.entryId}`,
                 }))}
                 emptyLabel="No eligible cards remain."
-                columns={layout === "desktop" ? "five" : "four"}
-                cardSize="standard"
-                frame="floating"
-                spacing={layout === "desktop" ? "regular" : "medium"}
-                widthMode="fill"
                 testId="gamble-four-suit-card-gallery"
                 onCardPress={setSelectedEntryId}
               />

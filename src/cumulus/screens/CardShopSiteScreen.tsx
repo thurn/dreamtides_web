@@ -9,7 +9,7 @@ import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
 import type { ArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
-import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
+import { CardPickerPanel } from "../components/card/CardPickerPanel";
 import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,
@@ -190,7 +190,7 @@ function CardShopGallery({
         alignItems: desktop ? "center" : undefined,
       }}
     >
-      <CardGalleryPanel
+      <CardPickerPanel
         title="Dream Market"
         rightAccessory={{
           kind: "iconButton",
@@ -211,11 +211,6 @@ function CardShopGallery({
             offer.state === "purchased" ||
             locallyPurchasedEntryIds.has(offer.entryId),
         }))}
-        columns="three"
-        cardSize={desktop ? "standard" : "compact"}
-        frame="floating"
-        widthMode="fill"
-        spacing={desktop ? "regular" : "compact"}
         testId="cumulus-card-shop-gallery"
         onCardPress={(entryId) => {
           const offer = offers.find((candidate) => candidate.entryId === entryId);

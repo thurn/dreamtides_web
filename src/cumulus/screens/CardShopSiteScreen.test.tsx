@@ -115,10 +115,10 @@ describe("CardShopSiteScreen", () => {
     const gallery = container.querySelector<HTMLElement>(
       '[data-testid="cumulus-card-shop-gallery"]',
     );
-    expect(gallery?.dataset.galleryColumns).toBe("3");
+    expect(gallery?.dataset.galleryRole).toBe("picker");
+    expect(gallery?.dataset.galleryColumns).toBe("4");
     expect(gallery?.dataset.galleryVisibleRows).toBe("2");
     expect(gallery?.dataset.galleryCardSize).toBe("compact");
-    expect(gallery?.dataset.galleryWidthMode).toBe("fill");
     expect(
       container.querySelectorAll('[data-testid^="cumulus-card-shop-offer-"]'),
     ).toHaveLength(5);
@@ -152,7 +152,7 @@ describe("CardShopSiteScreen", () => {
     act(() => root.unmount());
   });
 
-  it("uses the shared desktop guide-and-gallery composition with a full-width panel", () => {
+  it("uses the shared desktop guide-and-picker composition", () => {
     stubMatchMedia(true);
     const { container, root } = mount(
       <CardShopSiteScreen
@@ -183,12 +183,13 @@ describe("CardShopSiteScreen", () => {
     expect(region?.dataset.cardShopLayout).toBe("desktop");
     expect(region?.style.display).toBe("grid");
     expect(region?.style.alignItems).toBe("center");
-    expect(gallery?.dataset.galleryColumns).toBe("3");
+    expect(gallery?.dataset.galleryRole).toBe("picker");
+    expect(gallery?.dataset.galleryColumns).toBe("5");
     expect(gallery?.dataset.galleryVisibleRows).toBe("2");
     expect(gallery?.dataset.galleryCardSize).toBe("standard");
     expect(gallery?.dataset.gallerySpacing).toBe("regular");
-    expect(gallery?.dataset.galleryWidthMode).toBe("fill");
-    expect(gallery?.style.width).toBe("100%");
+    expect(gallery?.style.width).not.toBe("100%");
+    expect(gallery?.style.width).toMatch(/^calc\(/);
     expect(
       container.querySelector("[data-gallery-action-label]")?.textContent,
     ).toBe("Restock Offers");

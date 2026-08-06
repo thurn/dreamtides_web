@@ -28,7 +28,7 @@ Width and placement belong to the caller's wrapper. Edge-rail and full-bleed fra
 | `structuredSubtitle` | `readonly GlassPanelTextSegment[]` | no | — | Optional structured subtitle whose entity runs receive the canonical underline. |
 | `headingLevel` | `"h1" \| "h2"` | no | `h2` | Semantic heading element for the title. Defaults to `h2`. |
 | `titleVoice` | `GlassPanelTitleVoice` = `"standard" \| "hero"` | no | `standard` | Title and subtitle typography. Defaults to `standard`. |
-| `headerSpacing` | `GlassPanelHeaderSpacing` = `"compact" \| "spacious" \| "regular" \| "medium"` | no | `regular` | Header padding preset. Defaults to `regular`. |
+| `headerSpacing` | `GlassPanelHeaderSpacing` = `"compact" \| "regular" \| "medium" \| "spacious"` | no | `regular` | Header padding preset. Defaults to `regular`. |
 | `headerDivider` | `boolean` | no | `true` | Draw the standard divider below the header. Defaults to `true`. |
 | `rightAccessory` | `GlassPanelAccessory` | no | — | Optional structured action at the trailing edge of the header. On desktop, prefer an intent-labeled `glassButton`, such as “Leave” on a shop screen; a generic X `iconButton` is discouraged for panel navigation. |
 | `cutoutAwareAccessory` | `boolean` | no | `false` | Float the accessory beside an injected display cutout when present. |

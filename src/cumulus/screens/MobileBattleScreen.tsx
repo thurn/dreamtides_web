@@ -13,7 +13,7 @@ import {
   type GameCardModel,
   type GameCardSelection,
 } from "../components/card/CardView";
-import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
+import { CardPickerPanel } from "../components/card/CardPickerPanel";
 import { renderRulesSymbolsInline } from "../components/card/RulesText";
 import {
   BATTLEFIELD_CARD_ASPECT_RATIO,
@@ -3419,15 +3419,6 @@ function pickerZoneCaption(
   return candidate.highlighted ? "Just Drawn" : `${owner} ${zone}`;
 }
 
-function cardPickerColumns(
-  candidateCount: number,
-): "two" | "three" | "four" | "five" {
-  if (candidateCount <= 2) return "two";
-  if (candidateCount === 3) return "three";
-  if (candidateCount === 4) return "four";
-  return "five";
-}
-
 function CardPickerGallery({
   cardPicker,
   selectedPickerCardIds,
@@ -3494,7 +3485,7 @@ function CardPickerGallery({
           minHeight: 0,
         }}
       >
-        <CardGalleryPanel
+        <CardPickerPanel
           title={cardPicker.label}
           subtitle={
             cardPicker.subtitle ??
@@ -3520,13 +3511,7 @@ function CardPickerGallery({
             };
           })}
           emptyLabel="No valid targets."
-          columns={
-            isDesktop ? cardPickerColumns(cardPicker.candidates.length) : "two"
-          }
-          cardSize="compact"
-          frame={isDesktop ? "floating" : "fullBleed"}
-          widthMode="fill"
-          heightMode="fill"
+          presentation="overlay"
           testId="battle-card-picker-gallery-panel"
           footerActions={
             optionalWithCandidates

@@ -179,7 +179,7 @@ afterEach(() => {
 });
 
 describe("TransfigurationSiteScreen", () => {
-  it("shows exactly three standard candidates inside the shared desktop glass gallery", () => {
+  it("shows exactly three reading-width candidates inside the shared desktop glass gallery", () => {
     const { container, root } = mount(
       <TransfigurationSiteScreen
         view={view()}
@@ -206,12 +206,12 @@ describe("TransfigurationSiteScreen", () => {
       container.querySelector<HTMLElement>(
         '[data-testid="cumulus-transfiguration-picker"]',
       )?.dataset.gallerySpacing,
-    ).toBe("medium");
+    ).toBe("regular");
     expect(
       container.querySelector<HTMLElement>(
         '[data-testid="cumulus-transfiguration-picker"]',
       )?.dataset.galleryCardSize,
-    ).toBe("showcase");
+    ).toBe("reading");
     expect(
       container.querySelector<HTMLElement>(
         "[data-guide-gallery-desktop-layout]",
@@ -220,8 +220,8 @@ describe("TransfigurationSiteScreen", () => {
     expect(
       container.querySelector<HTMLElement>(
         '[data-testid="cumulus-transfiguration-picker"]',
-      )?.dataset.galleryWidthMode,
-    ).toBe("content");
+      )?.dataset.galleryRole,
+    ).toBe("picker");
     expect(
       container.querySelector('[data-testid="cumulus-transfiguration-decline"]')
         ?.textContent,
@@ -249,7 +249,7 @@ describe("TransfigurationSiteScreen", () => {
     );
     expect(picker?.dataset.galleryColumns).toBe("5");
     expect(picker?.dataset.gallerySpacing).toBe("regular");
-    expect(picker?.dataset.galleryWidthMode).toBe("fill");
+    expect(picker?.dataset.galleryRole).toBe("picker");
     expect(container.textContent).toContain("Pick any card to reforge");
     expect(
       container.querySelectorAll(
@@ -534,8 +534,8 @@ describe("TransfigurationSiteScreen", () => {
         ?.dataset.transfigurationLayout,
     ).toBe("mobile");
     expect(picker?.dataset.galleryColumns).toBe("3");
-    expect(picker?.dataset.gallerySpacing).toBe("medium");
-    expect(picker?.dataset.galleryWidthMode).toBe("fill");
+    expect(picker?.dataset.gallerySpacing).toBe("compact");
+    expect(picker?.dataset.galleryRole).toBe("picker");
     expect(
       container.querySelector('[data-testid="cumulus-transfiguration-decline"]')
         ?.textContent,

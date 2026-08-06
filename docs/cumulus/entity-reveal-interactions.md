@@ -444,11 +444,11 @@ reading width. A card already at least 240px wide remains at its current size.
 
 Desktop layouts should preserve a rendered width of at least 240px whenever a
 surface presents only two or three cards and the available stage can accommodate
-them. `CardGalleryPanel` callers use the `showcase` card-size preset for this
-low-count choice pattern. Dense deck browsers, multi-row galleries, battle
-zones, and constrained viewports may render smaller cards because fitting the
-whole collection or game state takes priority; those cards use the shared
-240px reading copy.
+them. `CardPickerPanel` selects this low-count choice geometry from the number of
+cards. Dense `CardBrowserPanel` collections, multi-row galleries, battle zones,
+and constrained viewports may render smaller cards because fitting the whole
+collection or game state takes priority; those cards use the shared 240px
+reading copy.
 
 The reading copy preserves the source card's center and translates only enough
 to stay inside the visual viewport. Secondary cards prefer the right side of

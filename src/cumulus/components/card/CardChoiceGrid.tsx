@@ -83,10 +83,17 @@ export interface CardChoiceGridCardView {
   reserved?: boolean;
   /** Allow the caller to drag this physical card entry. */
   draggable?: boolean;
-  /** Render a noninteractive offset copy beneath the primary card. */
-  stackedCopy?: boolean;
-  /** Horizontal fan direction for the offset copy. */
-  stackedCopyDirection?: "left" | "right";
+  /**
+   * Optional offset-copy capability. The gallery reserves the fan footprint
+   * whenever this model is present, while `shown` controls whether the copy is
+   * currently visible.
+   */
+  stackedCopy?: {
+    /** Show the noninteractive offset copy beneath the primary card. */
+    shown: boolean;
+    /** Horizontal fan direction for the offset copy. */
+    direction: "left" | "right";
+  };
   /** Optional selected-card quantity shown over the lower corner. */
   quantityBadge?: string;
   /** Pending operation shown as a semantic icon over the lower-right corner. */
@@ -125,7 +132,7 @@ export type CardChoiceGridLayout =
     }
   | {
       kind: "gallery";
-      /** Card width computed by CardGalleryPanel's container fitter. */
+      /** Card width computed by the card-panel container fitter. */
       cardWidth: string;
       /** Column gap computed from the gallery spacing preset. */
       columnGap: string;
@@ -318,14 +325,15 @@ export function CardChoiceGrid({
       {cards.map((card) => {
         const reserved = card.reserved === true;
         const disabled = card.disabled === true || reserved;
-        const stackedCopyLeft = card.stackedCopyDirection === "left";
+        const stackedCopyShown = card.stackedCopy?.shown === true;
+        const stackedCopyLeft = card.stackedCopy?.direction === "left";
         const operationPresentation =
           card.operation === undefined
             ? null
             : OPERATION_PRESENTATION[card.operation];
         const tileStyle: CSSProperties = {
           position: "relative",
-          zIndex: card.stackedCopy === true ? 1 : undefined,
+          zIndex: stackedCopyShown ? 1 : undefined,
           display: "block",
           width: "100%",
           borderRadius: token("--radius-panel"),
@@ -365,7 +373,7 @@ export function CardChoiceGrid({
             }}
           >
             <div style={tileStyle}>
-              {card.stackedCopy === true && (
+              {stackedCopyShown && (
                 <div
                   aria-hidden="true"
                   data-gallery-stacked-copy=""

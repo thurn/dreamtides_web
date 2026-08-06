@@ -4,7 +4,7 @@ import type { PoolVariant } from "../../draft/pool/types";
 import type { CardData } from "../../types/cards";
 import type { ResolvedDreamAvatarPackage, SeedProvenanceSummary, Tides4ProvenanceSummary } from "../../types/content";
 import type { DraftState } from "../../types/draft";
-import type { CardGalleryCardView } from "../../cumulus/components/card/CardGalleryPanel";
+import type { CardChoiceGridCardView as CardGalleryCardView } from "../../cumulus/components/card/CardChoiceGrid";
 import type { PoolViewerCostFilter, PoolViewerDisclosureView, PoolViewerFilterView, PoolViewerReplayRowView, PoolViewerSourceId, PoolViewerView } from "../../cumulus/screens/PoolViewerScreen";
 
 export const DEFAULT_POOL_VIEWER_FILTERS: PoolViewerFilterView = {
@@ -14,7 +14,6 @@ export const DEFAULT_POOL_VIEWER_FILTERS: PoolViewerFilterView = {
   type: "all",
   subtype: "",
   cost: "all",
-  density: "standard",
 };
 
 interface PoolEntry {

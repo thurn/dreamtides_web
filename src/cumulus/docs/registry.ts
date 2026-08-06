@@ -17,7 +17,8 @@ import { battleStatusDisplayDemo } from "./demos/battle-status-display";
 import { cardBackDemo } from "./demos/card-back";
 import { tutorialFeatureCalloutDemo } from "./demos/tutorial-feature-callout";
 import { cardChoiceGridDemo } from "./demos/card-choice-grid";
-import { cardGalleryPanelDemo } from "./demos/card-gallery-panel";
+import { cardBrowserPanelDemo } from "./demos/card-browser-panel";
+import { cardPickerPanelDemo } from "./demos/card-picker-panel";
 import { cardPileDemo } from "./demos/card-pile";
 import { cardOrderEditorDemo } from "./demos/card-order-editor";
 import { cardStatOrbDemo } from "./demos/card-stat-orb";
@@ -211,7 +212,8 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   cardBackDemo,
   cardPileDemo,
   cardChoiceGridDemo,
-  cardGalleryPanelDemo,
+  cardBrowserPanelDemo,
+  cardPickerPanelDemo,
   glossaryDefinitionCardDemo,
   cardStatOrbDemo,
   atlasNodeDemo,

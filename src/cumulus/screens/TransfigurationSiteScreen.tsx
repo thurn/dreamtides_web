@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useCallback, useState } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { GameCard } from "../components/card/CardView";
-import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
+import { CardPickerPanel } from "../components/card/CardPickerPanel";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
 import { GlassButton } from "../components/controls/GlassButton";
 import {
@@ -365,7 +365,7 @@ export function TransfigurationPickerPanel({
   const desktop = layout === "desktop";
   const enhanced = isEnhanced;
   return (
-    <CardGalleryPanel
+    <CardPickerPanel
       title="Transfiguration"
       subtitle={
         ready
@@ -414,11 +414,6 @@ export function TransfigurationPickerPanel({
       emptyLabel={
         ready ? "No eligible cards to reforge." : "Heating the forge…"
       }
-      columns={enhanced ? (desktop ? "five" : "four") : "three"}
-      cardSize={enhanced ? "standard" : desktop ? "showcase" : "standard"}
-      frame="floating"
-      widthMode={enhanced || !desktop ? "fill" : "content"}
-      spacing={enhanced && desktop ? "regular" : "medium"}
       testId="cumulus-transfiguration-picker"
       onCardPress={onPick}
     />

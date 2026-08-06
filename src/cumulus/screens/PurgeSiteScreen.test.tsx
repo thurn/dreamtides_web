@@ -289,18 +289,19 @@ describe("PurgeSiteScreen", () => {
     expect(cardRegion?.style.minHeight).toBe("0px");
     expect(surface?.style.background).toContain("var(--glass-fill-popover)");
     expect(surface?.style.borderRadius).toBe("var(--radius-compact)");
+    expect(gallery?.dataset.galleryRole).toBe("picker");
     expect(gallery?.dataset.galleryFrame).toBe("floating");
-    expect(gallery?.dataset.galleryColumns).toBe("4");
-    expect(gallery?.dataset.gallerySpacing).toBe("medium");
+    expect(gallery?.dataset.galleryColumns).toBe("2");
+    expect(gallery?.dataset.gallerySpacing).toBe("compact");
     expect(gallery?.querySelector<HTMLElement>("header")?.style.padding).toBe(
-      "var(--space-l)",
+      "var(--space-m)",
     );
     const galleryBody = gallery?.querySelector<HTMLElement>(
       "[data-glass-panel-content] > div",
     );
-    expect(galleryBody?.style.padding).toBe("var(--space-m)");
+    expect(galleryBody?.style.padding).toBe("var(--space-s)");
     expect(galleryBody?.firstElementChild?.getAttribute("style")).toContain(
-      "gap: var(--space-s)",
+      "gap: var(--space-xs)",
     );
     expect(surface?.style.borderLeft).not.toContain("var(--border-soft)");
 
@@ -396,8 +397,9 @@ describe("PurgeSiteScreen", () => {
     expect(cardRegion?.style.alignItems).toBe("center");
     expect(surface?.style.background).toContain("var(--glass-fill-popover)");
     expect(surface?.style.borderRadius).toBe("var(--radius-compact)");
+    expect(gallery?.dataset.galleryRole).toBe("picker");
     expect(gallery?.dataset.galleryFrame).toBe("floating");
-    expect(gallery?.dataset.galleryColumns).toBe("5");
+    expect(gallery?.dataset.galleryColumns).toBe("2");
     expect(surface?.style.borderLeft).not.toContain("var(--border-soft)");
 
     act(() => {

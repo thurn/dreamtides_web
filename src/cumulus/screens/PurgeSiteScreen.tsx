@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { DeckCardView } from "./MobileDeckViewer";
-import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
+import { CardPickerPanel } from "../components/card/CardPickerPanel";
 import type { GlassButtonWidthReservation } from "../components/controls/GlassButton";
 import type { ArtRef } from "../primitives/art";
 import {
@@ -197,7 +197,7 @@ function PurgeGallery({
         alignItems: desktop ? "center" : undefined,
       }}
     >
-      <CardGalleryPanel
+      <CardPickerPanel
         title="Purge Cards"
         subtitle="Choose any number of cards to remove from your deck for an essence cost"
         rightAccessory={{
@@ -227,9 +227,6 @@ function PurgeGallery({
             emphasis: card.purgeCostKind === "free" ? "danger" : undefined,
           };
         })}
-        columns={desktop ? "five" : "four"}
-        frame="floating"
-        spacing={desktop ? "regular" : "medium"}
         testId="cumulus-purge-card-gallery"
         onCardPress={onToggle}
       />

@@ -104,7 +104,7 @@ function mount(element: ReactElement): {
   return { container, root };
 }
 
-/** The panel wrapper bounds the shared CardGalleryPanel. */
+/** The panel wrapper bounds the shared CardBrowserPanel. */
 function panelOf(container: HTMLElement): HTMLElement | null {
   return galleryOf(container)?.parentElement ?? null;
 }

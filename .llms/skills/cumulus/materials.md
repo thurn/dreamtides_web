@@ -74,10 +74,10 @@ and blur, while the control adds a low-alpha neutral fill, a brighter rim and
 specular edge, and a tighter shadow. This keeps the inherited scene color
 visible through the control and makes the nested object boundary clear.
 
-CardGalleryPanel composes GlassPanel and derives this relationship from its
-frame. A floating gallery renders labeled and icon accessories with
-`placement="onGlass"`; a full-bleed gallery uses the standard scrim and renders
-them with `placement="onMedia"`.
+CardBrowserPanel and CardPickerPanel compose GlassPanel and derive this
+relationship from their host presentation. A floating card panel renders
+labeled and icon accessories with `placement="onGlass"`; a full-bleed card
+panel uses the standard scrim and renders them with `placement="onMedia"`.
 
 ## Content inside glass
 
