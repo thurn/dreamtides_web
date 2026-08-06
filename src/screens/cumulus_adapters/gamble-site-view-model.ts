@@ -438,7 +438,10 @@ function buildFourSuitRepriseSiteView(params: {
     phase: runtime.phase,
     cards,
     result:
-      latestRound === null || target === null || resultTarget === null
+      runtime.phase !== "result" ||
+      latestRound === null ||
+      target === null ||
+      resultTarget === null
         ? null
         : {
             id: `${params.site.id}:${latestRound.shuffleCommitment}:${latestRound.targetEntryId}`,

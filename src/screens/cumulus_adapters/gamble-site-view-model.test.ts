@@ -764,5 +764,6 @@ describe("gamble-site-view-model — Four-Suit Reprise", () => {
       throw new Error("expected Four-Suit Reprise replay view");
     }
     expect(replayView.roundNumber).toBe(2);
+    expect(replayView.result).toBeNull();
   });
 });

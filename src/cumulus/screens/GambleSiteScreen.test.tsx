@@ -1285,7 +1285,7 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       container.querySelector(
         '[data-four-suit-actions] [data-testid="gamble-four-suit-choose-again"]',
       ),
-    ).toBeNull();
+    ).toBe(reselect);
     act(() => reselect?.click());
     expect(container.querySelector("[data-four-suit-picker]")).not.toBeNull();
     act(() => {
@@ -1372,8 +1372,101 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     act(() => confirm?.click());
     expect(onChooseTransfiguration).toHaveBeenCalledWith("Empowered");
 
+    const revealedResult = revealedView.result;
+    const previewModel = revealedResult?.transfigurationCandidate.forms[0]
+      ?.previewModel;
+    if (previewModel === undefined || revealedResult === null) {
+      throw new Error("expected fixture Transfiguration preview");
+    }
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <GambleSiteScreen
+            view={fourSuitResultView({
+              resultRevealed: true,
+              resultSettled: true,
+              chosenTransfiguration: "Empowered",
+              target: {
+                ...revealedResult.target,
+                model: previewModel,
+              },
+            })}
+            onChooseGate={() => undefined}
+            onLeave={() => undefined}
+            onOutcomeShown={() => undefined}
+            onPlayAgain={() => undefined}
+            onDrawLadder={() => undefined}
+            onLadderOutcomeShown={() => undefined}
+            onFourSuitOutcomeShown={onOutcomeShown}
+            onChooseFourSuitTransfiguration={onChooseTransfiguration}
+            onReplaceDreamsign={() => undefined}
+          />
+        </CumulusRoot>,
+      );
+    });
+    expect(
+      container.querySelector(
+        '[data-four-suit-card-outcome="transfiguration"]',
+      ),
+    ).not.toBeNull();
+    expect(
+      container.querySelectorAll("[data-four-suit-transfiguration-face]"),
+    ).toHaveLength(2);
+    void act(() => vi.advanceTimersByTime(2_600));
+    expect(container.querySelector("[data-four-suit-target]")).toBeNull();
+
     act(() => root.unmount());
   });
+
+  it.each([
+    ["essence", "diamonds", 50],
+    ["duplication", "hearts", 0],
+    ["purge", "clubs", 0],
+  ] as const)(
+    "animates the target card away for a %s result",
+    (outcome, suit, essenceGained) => {
+      vi.useFakeTimers();
+      const { container, root } = mount(
+        <GambleSiteScreen
+          view={fourSuitResultView({
+            card: { rank: "7", suit },
+            outcome,
+            resultRevealed: true,
+            resultSettled: true,
+            essenceGained,
+          })}
+          onChooseGate={() => undefined}
+          onLeave={() => undefined}
+          onOutcomeShown={() => undefined}
+          onPlayAgain={() => undefined}
+          onDrawLadder={() => undefined}
+          onLadderOutcomeShown={() => undefined}
+          onReplaceDreamsign={() => undefined}
+        />,
+      );
+
+      void act(() => vi.advanceTimersByTime(1_000));
+      expect(
+        container.querySelector(
+          `[data-four-suit-card-outcome="${outcome}"]`,
+        ),
+      ).not.toBeNull();
+      if (outcome === "duplication") {
+        expect(
+          container.querySelectorAll("[data-four-suit-duplicate-card]"),
+        ).toHaveLength(2);
+      }
+      if (outcome === "essence") {
+        expect(
+          container.querySelector("[data-four-suit-essence-badge]"),
+        ).not.toBeNull();
+      }
+      void act(() => vi.advanceTimersByTime(2_600));
+      expect(container.querySelector("[data-four-suit-target]")).toBeNull();
+
+      act(() => root.unmount());
+    },
+  );
 
   it("offers a shared replay only after a settled result", () => {
     vi.useFakeTimers();
@@ -1405,6 +1498,48 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     expect(replay).not.toBeNull();
     act(() => replay?.click());
     expect(onPlayAgain).toHaveBeenCalledOnce();
+
+    const replayView: FourSuitRepriseSiteView = {
+      ...fourSuitResultView({
+        card: { rank: "7", suit: "hearts" },
+        outcome: "duplication",
+        resultRevealed: true,
+        resultSettled: true,
+      }),
+      phase: "choose",
+      roundNumber: 2,
+      cards: [FOUR_SUIT_VIEW.cards[1]],
+    };
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <GambleSiteScreen
+            view={replayView}
+            onChooseGate={() => undefined}
+            onLeave={() => undefined}
+            onOutcomeShown={() => undefined}
+            onPlayAgain={() => undefined}
+            onDrawLadder={() => undefined}
+            onLadderOutcomeShown={() => undefined}
+            onPlayAgainFourSuit={onPlayAgain}
+            onReplaceDreamsign={() => undefined}
+          />
+        </CumulusRoot>,
+      );
+    });
+    act(() => {
+      container.querySelector<HTMLButtonElement>(
+        '[data-testid="gamble-four-suit-card-four-suit-entry-2"]',
+      )?.click();
+    });
+    expect(
+      container.querySelector('[data-four-suit-target="four-suit-entry-2"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector(
+        '[data-wager-prize-card="four-suit-reprise"][data-wager-prize-card-state="prize"]',
+      ),
+    ).not.toBeNull();
 
     act(() => root.unmount());
   });
