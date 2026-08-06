@@ -1,5 +1,3 @@
-import { DEFAULT_RUN_LAYER_COUNT } from "../battle/integration/opponent-deck";
-
 /** The opponent-deck algorithm a generation is viewed through. */
 export type OpponentDebugAlgo = "coherent" | "corpus";
 
@@ -12,7 +10,7 @@ export type OpponentDebugAlgo = "coherent" | "corpus";
  * choice that does not affect the seed.
  */
 export interface OpponentDebugParams {
-  /** Run position, 0 (opening) through `DEFAULT_RUN_LAYER_COUNT - 1` (boss). */
+  /** Run position, 0 (opening) through the loaded Atlas's final layer (boss). */
   completionLevel: number;
   /** The dreamscape whose affiliation steers the build, or `null` for neutral. */
   dreamscapeId: string | null;
@@ -21,9 +19,6 @@ export interface OpponentDebugParams {
   /** The deck-building algorithm to view the generation through. */
   algo: OpponentDebugAlgo;
 }
-
-/** Highest valid layer index (boss). */
-const MAX_LAYER = DEFAULT_RUN_LAYER_COUNT - 1;
 
 /** Query-param / id tokens that all denote "no affiliation". */
 const NEUTRAL_TOKENS: ReadonlySet<string> = new Set([
@@ -36,9 +31,9 @@ const NEUTRAL_TOKENS: ReadonlySet<string> = new Set([
  * `opponent_deck_constructed` log's `battleEntryKey`. */
 const ID_PREFIX = "opponent-debug";
 
-function clampLayer(value: number): number {
+function clampLayer(value: number, maxLayer: number): number {
   if (!Number.isFinite(value)) return 0;
-  return Math.min(MAX_LAYER, Math.max(0, Math.trunc(value)));
+  return Math.min(maxLayer, Math.max(0, Math.trunc(value)));
 }
 
 function normalizeNonce(value: number): number {
@@ -85,6 +80,7 @@ export function opponentGenerationId(params: OpponentDebugParams): string {
  */
 export function parseOpponentGenerationId(
   id: string,
+  maxLayer = Number.MAX_SAFE_INTEGER,
 ): OpponentDebugParams | null {
   const parts = id.split(":");
   if (parts.length !== 4 || parts[0] !== ID_PREFIX) return null;
@@ -92,7 +88,7 @@ export function parseOpponentGenerationId(
   const nonce = Number(parts[3]);
   if (!Number.isFinite(layer) || !Number.isFinite(nonce)) return null;
   return {
-    completionLevel: clampLayer(layer),
+    completionLevel: clampLayer(layer, maxLayer),
     dreamscapeId: normalizeDreamscape(parts[1]),
     nonce: normalizeNonce(nonce),
     algo: "corpus",
@@ -107,6 +103,7 @@ export function parseOpponentGenerationId(
  */
 export function parseOpponentDebugParams(
   search: string,
+  maxLayer = Number.MAX_SAFE_INTEGER,
 ): OpponentDebugParams {
   const query = new URLSearchParams(search);
 
@@ -116,12 +113,12 @@ export function parseOpponentDebugParams(
 
   const gen = query.get("gen");
   if (gen != null) {
-    const fromId = parseOpponentGenerationId(gen);
+    const fromId = parseOpponentGenerationId(gen, maxLayer);
     if (fromId !== null) return { ...fromId, algo };
   }
 
   return {
-    completionLevel: clampLayer(Number(query.get("layer"))),
+    completionLevel: clampLayer(Number(query.get("layer")), maxLayer),
     dreamscapeId: normalizeDreamscape(query.get("dreamscape")),
     nonce: normalizeNonce(Number(query.get("n"))),
     algo,

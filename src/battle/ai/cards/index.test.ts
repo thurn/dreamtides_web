@@ -3,14 +3,24 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { starterCardModels } from "./index";
-import { buildAiStarterDeck } from "../deck";
+import { buildAiConfiguredDeck } from "../deck";
 import type { CardData } from "../../../types/cards";
+import { opponentsFixture } from "../../../testing/opponents-fixture";
 
-const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "..");
+const REPO_ROOT = join(
+  dirname(fileURLToPath(import.meta.url)),
+  "..",
+  "..",
+  "..",
+  "..",
+);
 
 /** Loads the real runtime card catalog the headless scripts read. */
 function loadCardDatabase(): Map<number, CardData> {
-  const json = readFileSync(join(REPO_ROOT, "public", "cards_v2-data.json"), "utf8");
+  const json = readFileSync(
+    join(REPO_ROOT, "public", "cards_v2-data.json"),
+    "utf8",
+  );
   const cards = JSON.parse(json) as CardData[];
   return new Map(cards.map((card) => [card.cardNumber, card]));
 }
@@ -33,7 +43,10 @@ describe("starterCardModels registry", () => {
   });
 
   it("every distinct cardNumber in the real AI deck has a registered model", () => {
-    const deck = buildAiStarterDeck(loadCardDatabase());
+    const deck = buildAiConfiguredDeck(
+      loadCardDatabase(),
+      opponentsFixture().journeyAiDeck,
+    );
     expect(deck.length).toBeGreaterThan(0);
     const distinct = new Set(deck.map((card) => card.cardNumber));
     for (const cardNumber of distinct) {

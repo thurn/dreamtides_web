@@ -15,7 +15,7 @@
 // SIMULATION SUBSTRATE -- a faithful, self-contained two-sided world.
 //   - A `World` holds BOTH sides. Each side carries its own hand/deck/deployed/
 //     reserve as concrete `AiCard`s, plus energy/maxEnergy/score. Decks are
-//     built from buildAiStarterDeck (Task 2.1) -- mirror decks for every
+//     built from the compiled journey AI deck -- mirror decks for every
 //     matchup, which is fine: the point is to exercise the planner.
 //   - On the active side's turn we PROJECT a ForwardModel for that side
 //     (`projectFromWorld`): the side's own zones with full identity, the OTHER
@@ -36,7 +36,7 @@
 //   - At the start of each side's turn we apply the energy ramp (target =
 //     min(turnNumber+1, 10); current reset to
 //     max), reusing energyRampEdits' formula.
-//   - Win at score >= 25; draw if the turn limit (50) is reached.
+//   - Win and turn-limit values come from opponents-data.json.
 //
 // Run: npx tsx scripts/battle-ai-experiment.mjs
 //   (The src/battle modules use extensionless imports, which node's
@@ -48,15 +48,13 @@ import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 import { performance } from "node:perf_hooks";
 
-import { buildAiStarterDeck } from "../src/battle/ai/deck.ts";
+import { buildAiConfiguredDeck } from "../src/battle/ai/deck.ts";
 import { planNextAction } from "../src/battle/ai/planner.ts";
 import { evaluate } from "../src/battle/ai/evaluate.ts";
 import { buildSupportContribution } from "../src/battle/ai/cards/support-contribution.ts";
 import { starterCardModels } from "../src/battle/ai/cards/index.ts";
-import {
-  DEPLOY_SLOT_IDS,
-  RESERVE_SLOT_IDS,
-} from "../src/battle/types.ts";
+import { resolveBattleAiConfiguration } from "../src/types/opponents-data.ts";
+import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../src/battle/types.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));
@@ -64,11 +62,13 @@ const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));
 // --- Card database --------------------------------------------------------
 const cardsArray = readJson("public/cards_v2-data.json");
 const cardDatabase = new Map(cardsArray.map((c) => [c.cardNumber, c]));
+const opponentsData = readJson("public/opponents-data.json");
+const aiConfiguration = resolveBattleAiConfiguration(opponentsData, "journey");
 
-// --- Constants (mirroring the real BattleInit config) ---------------------
-const SCORE_TO_WIN = 25;
-const MAX_ENERGY_CAP = 10;
-const TURN_LIMIT = 50;
+// --- Compiled battle configuration ----------------------------------------
+const SCORE_TO_WIN = opponentsData.battle.scoreTargets.at(-1);
+const MAX_ENERGY_CAP = opponentsData.battle.energyCap;
+const TURN_LIMIT = opponentsData.battle.turnLimit;
 
 // Planner options used by the planner actor (and the mirror baseline). The
 // deadline is effectively disabled (nowMs < deadlineMs always) because timing is
@@ -76,9 +76,14 @@ const TURN_LIMIT = 50;
 // full search every decision so the latency we report is the real cost.
 const PLANNER_OPTS = {
   deadlineMs: 1,
-  beamWidth: 12,
-  opponentMode: "expectiminimax",
-  sampleCap: 8,
+  beamWidth: aiConfiguration.beamWidth,
+  opponentMode: aiConfiguration.opponentMode,
+  sampleCap: aiConfiguration.sampleCount,
+  maxSearchDepth: aiConfiguration.searchDepth,
+  scoreToWin: SCORE_TO_WIN,
+  evaluation: aiConfiguration.evaluation,
+  opponentModel: aiConfiguration.opponentModel,
+  aiPresetId: aiConfiguration.id,
   nowMs: 0,
   rngSeed: 0,
 };
@@ -132,13 +137,14 @@ function shuffle(array, rng) {
   return a;
 }
 
-const STARTING_HAND = 5;
+const STARTING_HAND = opponentsData.battle.enemyOpeningHandSize;
 
 /** Builds one side's starting state from a freshly shuffled starter deck. */
 function buildSide(sideTag, rng) {
-  const deck = buildAiStarterDeck(cardDatabase).map((def) =>
-    defToAiCard(def, sideTag),
-  );
+  const deck = buildAiConfiguredDeck(
+    cardDatabase,
+    opponentsData.journeyAiDeck,
+  ).map((def) => defToAiCard(def, sideTag));
   const shuffled = shuffle(deck, rng);
   const hand = shuffled.slice(0, STARTING_HAND);
   const rest = shuffled.slice(STARTING_HAND);
@@ -388,13 +394,13 @@ function randomActor(model, rng) {
 /** greedy one-ply: pick the legal action maximizing evaluate after applying it;
  *  END_TURN if none beats the current board. No look-ahead. */
 function greedyActor(model) {
-  const baseline = evaluate(model);
+  const baseline = evaluate(model, SCORE_TO_WIN, aiConfiguration.evaluation);
   let best = null;
   let bestScore = baseline;
   for (const action of legalActions(model)) {
     const probe = cloneModelForProbe(model);
     applyActionToModel(probe, action);
-    const score = evaluate(probe);
+    const score = evaluate(probe, SCORE_TO_WIN, aiConfiguration.evaluation);
     if (score > bestScore) {
       bestScore = score;
       best = action;
@@ -426,10 +432,12 @@ function startTurn(side, turnNumber) {
 
   // Re-arm every body so deployed challengers can act this turn.
   for (const slot of DEPLOY_SLOT_IDS) {
-    if (side.deployed[slot] !== null) side.deployed[slot].canChallengeThisTurn = true;
+    if (side.deployed[slot] !== null)
+      side.deployed[slot].canChallengeThisTurn = true;
   }
   for (const slot of RESERVE_SLOT_IDS) {
-    if (side.reserve[slot] !== null) side.reserve[slot].canChallengeThisTurn = true;
+    if (side.reserve[slot] !== null)
+      side.reserve[slot].canChallengeThisTurn = true;
   }
 
   // Draw for the turn.
@@ -599,7 +607,11 @@ function runMatchup(label, opponentKind) {
   const allDecisionMs = [];
 
   for (const seed of SEEDS) {
-    const { winner, turns, decisionMs } = playGame("planner", opponentKind, seed);
+    const { winner, turns, decisionMs } = playGame(
+      "planner",
+      opponentKind,
+      seed,
+    );
     if (winner === "a") wins += 1;
     else if (winner === "b") losses += 1;
     else draws += 1;
@@ -619,14 +631,24 @@ function runMatchup(label, opponentKind) {
       : 0;
   const maxMs = allDecisionMs.length > 0 ? Math.max(...allDecisionMs) : 0;
 
-  return { label, wins, losses, draws, winRate, avgTurns, meanMs, maxMs, decisions: allDecisionMs.length };
+  return {
+    label,
+    wins,
+    losses,
+    draws,
+    winRate,
+    avgTurns,
+    meanMs,
+    maxMs,
+    decisions: allDecisionMs.length,
+  };
 }
 
 // --- Run + report ---------------------------------------------------------
 console.log(
   `Battle AI self-play harness -- planner vs baselines over ${SEEDS.length} seeded games each.\n` +
     `Planner: beamWidth=${PLANNER_OPTS.beamWidth}, sampleCap=${PLANNER_OPTS.sampleCap}, ` +
-    `mode=${PLANNER_OPTS.opponentMode}. Score-to-win ${SCORE_TO_WIN}, turn limit ${TURN_LIMIT}.\n`,
+    `mode=${PLANNER_OPTS.opponentMode}, preset=${aiConfiguration.id}. Score-to-win ${SCORE_TO_WIN}, turn limit ${TURN_LIMIT}.\n`,
 );
 
 const matchups = [
@@ -641,7 +663,16 @@ for (const [label, opp] of matchups) {
 }
 
 const W = [20, 6, 6, 6, 9, 9, 9, 9];
-const head = ["matchup", "win", "loss", "draw", "winRate", "avgTurns", "meanMs", "maxMs"];
+const head = [
+  "matchup",
+  "win",
+  "loss",
+  "draw",
+  "winRate",
+  "avgTurns",
+  "meanMs",
+  "maxMs",
+];
 console.log(
   head.map((h, i) => (i === 0 ? h.padEnd(W[i]) : h.padStart(W[i]))).join(""),
 );
@@ -653,7 +684,9 @@ for (const r of rows) {
       String(r.losses).padStart(W[2]) +
       String(r.draws).padStart(W[3]) +
       `${(r.winRate * 100).toFixed(1)}%`.padStart(W[4]) +
-      (Number.isNaN(r.avgTurns) ? "  -  " : r.avgTurns.toFixed(1)).padStart(W[5]) +
+      (Number.isNaN(r.avgTurns) ? "  -  " : r.avgTurns.toFixed(1)).padStart(
+        W[5],
+      ) +
       r.meanMs.toFixed(3).padStart(W[6]) +
       r.maxMs.toFixed(2).padStart(W[7]),
   );
@@ -701,5 +734,9 @@ console.log(
 );
 
 console.log("");
-console.log(ok ? "RESULT: planner is competent and within the timing budget." : "RESULT: one or more checks FAILED -- tune evaluate.ts weights and re-run.");
+console.log(
+  ok
+    ? "RESULT: planner is competent and within the timing budget."
+    : "RESULT: one or more checks FAILED -- tune evaluate.ts weights and re-run.",
+);
 process.exitCode = ok ? 0 : 1;

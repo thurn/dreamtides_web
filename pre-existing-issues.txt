@@ -5,9 +5,13 @@ therefore resolves to zero, collapsing all four demo cards to 0×0 geometry.
 The Transfiguration Button catalog demo fixes its specimen stage at 560px
 with two equal columns. At a 390px viewport, the priced controls overlap their
 labels and Essence values instead of adapting to the available width.
-
 `npm audit` reports a high-severity quadratic-CPU advisory in the transitive
 `js-yaml` dependency (GHSA-5p4m-2wfm-xmqj) and a moderate out-of-bounds-read
 advisory in the transitive `re2` dependency (GHSA-j4r3-hg7j-8chg). Fixed
 dependency releases are available, but updating their parent dependency chains
 is outside the LToDD image-publishing change.
+
+`npm run opponent-coherence-metric` produces zero for every corpus, generated,
+greedy, and random coherence score, causing `beatsRandomFloor` and
+`beatsOldRandom` to fail. The same failure occurs on the unchanged master
+worktree, so it predates the `opponents.toml` configuration work.

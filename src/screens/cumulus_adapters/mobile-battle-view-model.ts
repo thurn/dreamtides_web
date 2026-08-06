@@ -36,7 +36,6 @@ import {
 import type { MobileBattleResultView } from "../../cumulus/screens/BattleResultSurface";
 import { cardIsRevealedTo } from "../../battle/state/card-visibility";
 import { starterCardHasRequiredTargets } from "../../battle/starter-card-targets";
-import { opponentAbilityIsActive } from "../../battle/integration/opponent-deck";
 
 const FALLBACK_PLAYER_DREAM_AVATAR = {
   imageNumber: "001",
@@ -92,7 +91,7 @@ export function buildMobileBattleView(
     enemyDreamAvatar,
     board,
     init.scoreToWin,
-    !opponentAbilityIsActive(init.completionLevelAtStart),
+    !init.opponentAbilityActive,
   );
   const near = perspective === "player" ? player : enemy;
   const far = farSide === "player" ? player : enemy;
@@ -104,17 +103,21 @@ export function buildMobileBattleView(
     (instance) =>
       board.activeSide === perspective &&
       board.phase === "day" &&
-      instance.definition.energyCost <= board.sides[perspective].currentEnergy &&
+      instance.definition.energyCost <=
+        board.sides[perspective].currentEnergy &&
       starterCardHasRequiredTargets(board, instance.battleCardId),
   );
-  const promptCandidateIds = ownsPrompt && viewOptions.pendingPrompt?.options.kind === "pick-cards"
-    ? new Set(viewOptions.pendingPrompt.options.candidateIds)
-    : new Set<string>();
+  const promptCandidateIds =
+    ownsPrompt && viewOptions.pendingPrompt?.options.kind === "pick-cards"
+      ? new Set(viewOptions.pendingPrompt.options.candidateIds)
+      : new Set<string>();
   const farVisibleIds = board.sides[farSide].hand.filter((battleCardId) => {
     const instance = board.cardInstances[battleCardId];
-    return (viewOptions.isFarHandRevealed ?? viewOptions.isOpponentHandRevealed) ||
+    return (
+      (viewOptions.isFarHandRevealed ?? viewOptions.isOpponentHandRevealed) ||
       promptCandidateIds.has(battleCardId) ||
-      (instance !== undefined && cardIsRevealedTo(instance, perspective));
+      (instance !== undefined && cardIsRevealedTo(instance, perspective))
+    );
   });
   return {
     battleId: init.battleId,
@@ -125,9 +128,10 @@ export function buildMobileBattleView(
       owner: perspective,
       position: "near",
       cardIds: [...board.sides[perspective].hand],
-      cards: (viewOptions.isNearHandHidden ?? viewOptions.isPlayerHandHidden)
-        ? []
-        : nearHandCards,
+      cards:
+        (viewOptions.isNearHandHidden ?? viewOptions.isPlayerHandHidden)
+          ? []
+          : nearHandCards,
     },
     farHand: {
       owner: farSide,
@@ -135,12 +139,13 @@ export function buildMobileBattleView(
       cardIds: [...board.sides[farSide].hand],
       cards: buildCardViews(farVisibleIds, board),
     },
-    promptNotice: promptSide !== null && !ownsPrompt
-      ? {
-          promptSide,
-          message: `Switch to the ${promptSide === "enemy" ? "Opponent" : "Player"} side to resolve this choice.`,
-        }
-      : null,
+    promptNotice:
+      promptSide !== null && !ownsPrompt
+        ? {
+            promptSide,
+            message: `Switch to the ${promptSide === "enemy" ? "Opponent" : "Player"} side to resolve this choice.`,
+          }
+        : null,
     aiApproval:
       aiProposal === null
         ? null
@@ -149,12 +154,12 @@ export function buildMobileBattleView(
             canReject: aiProposal.kind === "action",
           },
     cardPicker: buildCardPickerView(
-      ownsPrompt ? viewOptions.pendingPrompt ?? null : null,
+      ownsPrompt ? (viewOptions.pendingPrompt ?? null) : null,
       viewOptions.confirmedPromptId ?? null,
       board,
     ),
     choicePrompt: buildChoicePromptView(
-      ownsPrompt ? viewOptions.pendingPrompt ?? null : null,
+      ownsPrompt ? (viewOptions.pendingPrompt ?? null) : null,
       viewOptions.confirmedPromptId ?? null,
     ),
     dreamwell: buildDreamwellView(init, board),
@@ -334,13 +339,14 @@ function buildInspectorView(
       nextDreamwell === undefined ? "Complete" : String(nextDreamwell.order),
     isOpponentHandRevealed: options.isOpponentHandRevealed,
     isPlayerHandHidden: options.isPlayerHandHidden,
-    isFarHandRevealed: options.isFarHandRevealed ?? options.isOpponentHandRevealed,
+    isFarHandRevealed:
+      options.isFarHandRevealed ?? options.isOpponentHandRevealed,
     isNearHandHidden: options.isNearHandHidden ?? options.isPlayerHandHidden,
     sides: {
       player: buildInspectorSideView("player", board),
       enemy: buildInspectorSideView("enemy", board),
     },
-    ai: options.aiMode ? buildAiView(board, aiProposal) : null,
+    ai: options.aiMode ? buildAiView(init, board, aiProposal) : null,
   };
 }
 
@@ -371,11 +377,16 @@ function buildInspectorSideView(
 }
 
 function buildAiView(
+  init: BattleInit,
   board: BattleMutableState,
   proposal: MobileBattleAiProposal | null,
 ): NonNullable<MobileBattleInspectorView["ai"]> {
   const trace = proposal?.trace ?? null;
-  const liveEvaluation = evaluate(forwardModelFromState(board, "enemy"));
+  const liveEvaluation = evaluate(
+    forwardModelFromState(board, "enemy"),
+    init.scoreToWin,
+    init.aiConfiguration.evaluation,
+  );
   const before = trace?.heuristicScoreBefore;
   const after = trace?.heuristicScoreAfter;
   return {

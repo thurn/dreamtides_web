@@ -15,6 +15,7 @@ import type {
   PinnedGenesis,
 } from "../eventlog/types";
 import type { EconomyData } from "../types/economy-data";
+import type { OpponentsData } from "../types/opponents-data";
 import {
   createRoomEvictingStale,
   generateRoomId,
@@ -36,7 +37,10 @@ import {
   isReducerVersionCompatible,
 } from "./reducer-version";
 import type { FrontDoorPhase } from "../rules/fold-state";
-import { installJourneyLogSink, type JourneyLogSinkHandle } from "./journey-log-sink";
+import {
+  installJourneyLogSink,
+  type JourneyLogSinkHandle,
+} from "./journey-log-sink";
 import { ConfigGateScreen } from "./ConfigGateScreen";
 import { UnreadableRoomScreen } from "./UnreadableRoomScreen";
 import { VersionGateScreen } from "./VersionGateScreen";
@@ -56,8 +60,9 @@ interface SessionStorageLike {
 /** Return the stable tab identity for a room, minting it once per session. */
 export function roomScopedClientId(
   roomId: string | null,
-  storage: SessionStorageLike | null =
-    typeof window === "undefined" ? null : window.sessionStorage,
+  storage: SessionStorageLike | null = typeof window === "undefined"
+    ? null
+    : window.sessionStorage,
 ): string {
   if (roomId === null || storage === null) return mintClientId();
   const key = `${CLIENT_ID_STORAGE_PREFIX}${roomId}`;
@@ -99,6 +104,7 @@ interface RoomGateProps {
   atlasFoldHash: string;
   /** Validated economy content and journey defaults pinned into room genesis. */
   economyData: EconomyData;
+  opponentsData: OpponentsData;
   /** Scene stamped into genesis only when this mount creates a fresh room. */
   frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting" | "journey">;
   children: (context: RoomReadyContext) => ReactNode;
@@ -211,13 +217,12 @@ export function gateStatusFor(
   return "ready";
 }
 
-function hasPinnedContentConfig(
-  genesis: Genesis,
-): genesis is PinnedGenesis {
+function hasPinnedContentConfig(genesis: Genesis): genesis is PinnedGenesis {
   return (
     genesis.contentConfig !== undefined &&
     typeof genesis.contentConfig.atlasFoldHash === "string" &&
     typeof genesis.contentConfig.economyFoldHash === "string" &&
+    typeof genesis.contentConfig.opponentsFoldHash === "string" &&
     typeof genesis.contentConfig.defaultStartingEssence === "number" &&
     typeof genesis.contentConfig.dreamsignCap === "number"
   );
@@ -245,13 +250,20 @@ export function RoomGate({
   runtimeConfig,
   atlasFoldHash,
   economyData,
+  opponentsData,
   frontDoorEntry,
   children,
 }: RoomGateProps): ReactNode {
   const clientId = useMemo(() => roomScopedClientId(gameId), [gameId]);
   const localContentConfig = useMemo(
-    () => contentConfigFromRuntime(runtimeConfig, atlasFoldHash, economyData),
-    [atlasFoldHash, economyData, runtimeConfig],
+    () =>
+      contentConfigFromRuntime(
+        runtimeConfig,
+        atlasFoldHash,
+        economyData,
+        opponentsData,
+      ),
+    [atlasFoldHash, economyData, opponentsData, runtimeConfig],
   );
   const autoCreateFiredRef = useRef(false);
   const [activeRoomId, setActiveRoomId] = useState<string | null>(gameId);
@@ -260,7 +272,9 @@ export function RoomGate({
       ? { status: "creating" }
       : { status: "loading", roomId: gameId },
   );
-  const [logSink, setLogSinkHandle] = useState<JourneyLogSinkHandle | null>(null);
+  const [logSink, setLogSinkHandle] = useState<JourneyLogSinkHandle | null>(
+    null,
+  );
 
   const readyRoomId = gateState.status === "ready" ? gateState.roomId : null;
   const readyReducerVersion =
@@ -431,6 +445,7 @@ export function RoomGate({
       roomReducerVersion: readyReducerVersion,
       atlasFoldHash: localContentConfig.atlasFoldHash,
       economyFoldHash: localContentConfig.economyFoldHash,
+      opponentsFoldHash: localContentConfig.opponentsFoldHash,
       defaultStartingEssence: localContentConfig.defaultStartingEssence,
       dreamsignCap: localContentConfig.dreamsignCap,
     });
@@ -460,9 +475,7 @@ export function RoomGate({
   if (gateState.status === "configGate") {
     return (
       <ConfigGateScreen
-        roomContentConfig={
-          gateState.genesis.contentConfig
-        }
+        roomContentConfig={gateState.genesis.contentConfig}
         localContentConfig={localContentConfig}
         onStartNewGame={() => void handleCreateGame()}
       />
@@ -484,15 +497,13 @@ export function RoomGate({
         />
       );
     }
-    return (
-      children({
-          db,
-          roomId: gateState.roomId,
-          clientId,
-          genesis: gateState.genesis,
-          logSink,
-        })
-    );
+    return children({
+      db,
+      roomId: gateState.roomId,
+      clientId,
+      genesis: gateState.genesis,
+      logSink,
+    });
   }
 
   if (gateState.status === "creating") {
@@ -528,11 +539,13 @@ export function RoomGate({
           kind: "unreachableRoom",
           title: "Game Not Found",
           message: `Could not load ${gateState.roomId}. The game may not exist, or the database is unreachable.`,
-          actions: [{
-            id: "primary",
-            label: "Create New Game",
-            onPress: () => void handleCreateGame(),
-          }],
+          actions: [
+            {
+              id: "primary",
+              label: "Create New Game",
+              onPress: () => void handleCreateGame(),
+            },
+          ],
         }}
       />
     );
@@ -545,11 +558,13 @@ export function RoomGate({
         title: "Something Went Wrong",
         message: "The game could not finish its room setup.",
         detail: gateState.message,
-        actions: [{
-          id: "primary",
-          label: "Try Again",
-          onPress: () => void handleCreateGame(),
-        }],
+        actions: [
+          {
+            id: "primary",
+            label: "Try Again",
+            onPress: () => void handleCreateGame(),
+          },
+        ],
       }}
     />
   );

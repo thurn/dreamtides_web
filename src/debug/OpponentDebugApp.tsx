@@ -6,12 +6,13 @@ import type {
   DreamscapeContent,
   DreamsignTemplate,
 } from "../types/content";
-import { loadJourneyContent, type JourneyContent } from "../data/journey-content";
+import {
+  loadJourneyContent,
+  type JourneyContent,
+} from "../data/journey-content";
 import {
   buildOpponentDreamsigns,
-  DEFAULT_RUN_LAYER_COUNT,
   opponentCarriesDreamsign,
-  runMidpointCompletionLevel,
   selectOpponentDreamAvatar,
 } from "../battle/integration/opponent-deck";
 import { createBattleRngStreams, deriveBattleSeed } from "../battle/random";
@@ -20,10 +21,7 @@ import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import { CardView } from "../cumulus/components/card/CardView";
 import { DreamAvatarPortrait } from "../cumulus/components/hud/DreamAvatarPortrait";
 import { dreamsignIconUrl } from "../cumulus/components/atlas/atlas-display";
-import {
-  getAlgorithm,
-  OPPONENT_ALGORITHMS,
-} from "./opponent-algorithms";
+import { getAlgorithm, OPPONENT_ALGORITHMS } from "./opponent-algorithms";
 import {
   normalizeOpponentDebugAlgo,
   opponentDebugSearch,
@@ -79,7 +77,7 @@ function generateOpponent(
   nonce: number,
   algo: string,
 ): OpponentGeneration {
-  const layerCount = DEFAULT_RUN_LAYER_COUNT;
+  const layerCount = content.atlasData.layers.length;
   // The generation id IS the logged battleEntryKey, so the id a user shares
   // (in the URL or verbally) greps the `opponent_deck_constructed` log directly.
   // The id identifies the seeded generation; the algo (also carried in the URL)
@@ -97,7 +95,7 @@ function generateOpponent(
   const dreamscape =
     dreamscapeId === null
       ? null
-      : content.dreamscapes.find((d) => d.id === dreamscapeId) ?? null;
+      : (content.dreamscapes.find((d) => d.id === dreamscapeId) ?? null);
 
   // The corpus algorithm fields the dreamscape's RESIDENT DreamAvatars (and the
   // known-good decks associated with them); other algorithms draw from the full
@@ -106,7 +104,7 @@ function generateOpponent(
   // regardless of the pool size, so narrowing the pool leaves the subsequent
   // dreamsign draw stable.
   const eligibleDreamAvatarIds =
-    algo === "corpus" ? dreamscape?.dreamAvatarIds ?? null : null;
+    algo === "corpus" ? (dreamscape?.dreamAvatarIds ?? null) : null;
 
   // Mirror createBattleInit's order of RNG consumption on the enemyDescriptor
   // stream: select the opponent DreamAvatar first, then its dreamsigns.
@@ -118,7 +116,7 @@ function generateOpponent(
   );
   const dreamsigns = buildOpponentDreamsigns(
     completionLevel,
-    layerCount,
+    content.opponentsData.progression.dreamsignsFromLayer,
     content.dreamsignTemplates,
     streams.enemyDescriptor,
   );
@@ -142,8 +140,8 @@ function generateOpponent(
   const affiliation =
     dreamscape?.affiliationId == null
       ? null
-      : content.affiliations.find((a) => a.id === dreamscape.affiliationId) ??
-        null;
+      : (content.affiliations.find((a) => a.id === dreamscape.affiliationId) ??
+        null);
 
   const poolSeed = deriveEnemyPoolSeed(seed);
 
@@ -161,7 +159,10 @@ function generateOpponent(
     poolSeed,
     completionLevel,
     layerCount,
-    carriesDreamsign: opponentCarriesDreamsign(completionLevel, layerCount),
+    carriesDreamsign: opponentCarriesDreamsign(
+      completionLevel,
+      content.opponentsData.progression.dreamsignsFromLayer,
+    ),
   };
 }
 
@@ -259,6 +260,14 @@ export default function OpponentDebugApp() {
     }
   }, [content, dreamscapeId]);
 
+  // URL layers are parsed before the Atlas catalog is available. Clamp the
+  // requested layer once the authored layer count has loaded.
+  useEffect(() => {
+    if (content === null) return;
+    const lastLayer = Math.max(0, content.atlasData.layers.length - 1);
+    setCompletionLevel((level) => Math.min(Math.max(0, level), lastLayer));
+  }, [content]);
+
   const generation = useMemo(() => {
     if (content === null) return null;
     return generateOpponent(
@@ -298,10 +307,14 @@ export default function OpponentDebugApp() {
 
   const dreamscapeOptions = useMemo(() => {
     if (content === null) return [] as DreamscapeContent[];
-    return [...content.dreamscapes].sort((a, b) => a.name.localeCompare(b.name));
+    return [...content.dreamscapes].sort((a, b) =>
+      a.name.localeCompare(b.name),
+    );
   }, [content]);
 
-  const midpoint = runMidpointCompletionLevel(DEFAULT_RUN_LAYER_COUNT);
+  const layerCount = content?.atlasData.layers.length ?? 1;
+  const dreamsignsFromLayer =
+    content?.opponentsData.progression.dreamsignsFromLayer ?? layerCount;
 
   const deckCards: readonly CardData[] = view?.deckCards ?? [];
 
@@ -385,15 +398,15 @@ export default function OpponentDebugApp() {
                   }}
                   style={selectStyle}
                 >
-                  {Array.from({ length: DEFAULT_RUN_LAYER_COUNT }, (_, i) => i).map(
+                  {Array.from({ length: layerCount }, (_, i) => i).map(
                     (level) => (
                       <option key={level} value={level}>
                         Layer {level}
                         {level === 0
                           ? " — opening"
-                          : level === DEFAULT_RUN_LAYER_COUNT - 1
+                          : level === layerCount - 1
                             ? " — boss"
-                            : level >= midpoint
+                            : level >= dreamsignsFromLayer
                               ? " (carries dreamsign)"
                               : ""}
                       </option>
@@ -472,7 +485,9 @@ export default function OpponentDebugApp() {
                   minWidth: 280,
                 }}
               >
-                <span style={labelStyle}>Generation ID (shareable / logged)</span>
+                <span style={labelStyle}>
+                  Generation ID (shareable / logged)
+                </span>
                 <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
                   <code
                     title="Identical to the battleEntryKey in the opponent_deck_constructed log entry"
@@ -565,7 +580,11 @@ export default function OpponentDebugApp() {
                       {generation.dreamAvatar.name}
                     </div>
                     <div
-                      style={{ fontSize: 12, color: "#a78bfa", marginBottom: 8 }}
+                      style={{
+                        fontSize: 12,
+                        color: "#a78bfa",
+                        marginBottom: 8,
+                      }}
                     >
                       {generation.dreamAvatar.title}
                     </div>
@@ -592,7 +611,7 @@ export default function OpponentDebugApp() {
                   <div style={{ fontSize: 12, color: FAINT }}>
                     {generation.carriesDreamsign
                       ? "None available"
-                      : `None before layer ${String(midpoint)}`}
+                      : `None before layer ${String(dreamsignsFromLayer)}`}
                   </div>
                 ) : (
                   generation.dreamsigns.map((sign) => (
@@ -704,7 +723,10 @@ export default function OpponentDebugApp() {
                       }}
                     >
                       {deckCards.map((card, index) => (
-                        <CardView key={`${card.id}:${String(index)}`} card={card} />
+                        <CardView
+                          key={`${card.id}:${String(index)}`}
+                          card={card}
+                        />
                       ))}
                     </div>
                     {view.provenance}

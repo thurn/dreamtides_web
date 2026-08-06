@@ -24,7 +24,10 @@
 // replacements are all computed on UUIDs.
 
 import { STARTER_CARD_NUMBERS } from "../../data/starter-cards.ts";
-import { buildCooccurrence, synergyAscending } from "../../draft/deck-cooccurrence.ts";
+import {
+  buildCooccurrence,
+  synergyAscending,
+} from "../../draft/deck-cooccurrence.ts";
 import {
   buildIdfStats,
   computeAffinity,
@@ -34,12 +37,13 @@ import {
 import type { IdfCorpus, IdfDeck } from "../../draft/idf-fit.ts";
 import { logEvent } from "../../logging.ts";
 import { createBattleRng } from "../random.ts";
-import {
-  OPPONENT_ABILITY_ACTIVE_FROM_LAYER,
-  opponentAbilityIsActive,
-} from "./opponent-deck.ts";
+import { opponentAbilityIsActive } from "./opponent-deck.ts";
+import type { OpponentsData } from "../../types/opponents-data.ts";
 
-import type { KnownGoodDecklist, DreamsignSignature } from "../../data/journey-content.ts";
+import type {
+  KnownGoodDecklist,
+  DreamsignSignature,
+} from "../../data/journey-content.ts";
 import type { CardData } from "../../types/cards.ts";
 import type {
   AffiliationContent,
@@ -53,7 +57,6 @@ import type {
  * with a much higher signature fit cannot be overtaken by affiliation alone.
  * Tunable — do NOT pin this value in tests.
  */
-const AFFILIATION_WEIGHT = 0.25;
 
 /**
  * Size of the top-ranked window the seeded sampler picks from. The selection
@@ -61,7 +64,6 @@ const AFFILIATION_WEIGHT = 0.25;
  * window gives the same DreamAvatar different opponent decks across seeds.
  * Tunable — do NOT pin this value in tests.
  */
-const TOP_K = 8;
 
 // ---------------------------------------------------------------------------
 // Stage B layer-schedule constants (all tunable; do NOT pin in tests).
@@ -72,22 +74,11 @@ const TOP_K = 8;
 // ---------------------------------------------------------------------------
 
 /** From this layer on, Legendary cards in the base deck are retained. */
-const LEGENDARY_ALLOWED_FROM_LAYER = 5;
-
-/** From this layer on, the opponent carries exactly one dreamsign. */
-const DREAMSIGN_FROM_LAYER = 3;
-
 /**
  * Number of Starters folded into the deck (replacing the least-synergistic
  * non-starter cards) at each early layer, indexed by `layer`. Layers past the
  * array length add zero Starters.
  */
-const STARTER_DILUTION: readonly number[] = [10, 5];
-
-/** Number of Starters scheduled to be added at a given layer (0 when absent). */
-function starterDilutionAt(layer: number): number {
-  return STARTER_DILUTION[layer] ?? 0;
-}
 
 /**
  * One layer's tuning schedule. Derived from the constants above and exposed so
@@ -103,28 +94,34 @@ export interface StageBLayerSpec {
 }
 
 /**
- * The Stage B per-layer schedule, one entry per layer up to the highest layer
- * any constant references. Index by `completionLevel`.
+ * The Stage B per-layer schedule through the highest authored unlock or
+ * dilution entry. Index by `completionLevel`; later dilution entries resolve to
+ * zero in the builder.
  */
-export const STAGE_B_LAYER_SPEC: readonly StageBLayerSpec[] = (() => {
+export function buildStageBLayerSpec(
+  progression: OpponentsData["progression"],
+): readonly StageBLayerSpec[] {
   const highest = Math.max(
-    OPPONENT_ABILITY_ACTIVE_FROM_LAYER,
-    LEGENDARY_ALLOWED_FROM_LAYER,
-    DREAMSIGN_FROM_LAYER,
-    STARTER_DILUTION.length - 1,
+    progression.abilityActiveFromLayer,
+    progression.legendariesFromLayer,
+    progression.dreamsignsFromLayer,
+    progression.starterDilution.length - 1,
   );
   const spec: StageBLayerSpec[] = [];
   for (let layer = 0; layer <= highest; layer += 1) {
     spec.push({
       layer,
-      abilityActive: opponentAbilityIsActive(layer),
-      legendaryAllowed: layer >= LEGENDARY_ALLOWED_FROM_LAYER,
-      startersAdded: starterDilutionAt(layer),
-      dreamsignAssigned: layer >= DREAMSIGN_FROM_LAYER,
+      abilityActive: opponentAbilityIsActive(
+        layer,
+        progression.abilityActiveFromLayer,
+      ),
+      legendaryAllowed: layer >= progression.legendariesFromLayer,
+      startersAdded: progression.starterDilution[layer] ?? 0,
+      dreamsignAssigned: layer >= progression.dreamsignsFromLayer,
     });
   }
   return spec;
-})();
+}
 
 export interface CorpusOpponentDeckBuild {
   source: { id: string; name: string; sourceFile?: string };
@@ -195,6 +192,9 @@ export function buildCorpusOpponentDeck(args: {
   completionLevel: number;
   layerCount: number;
   poolSeed: number;
+  opponentsContentHash: string;
+  progression: OpponentsData["progression"];
+  selectionConfig: OpponentsData["corpusSelection"];
   /**
    * The battle entry key the deck is built for, recorded in
    * `corpus_opponent_deck_constructed` so a production battle's opponent deck
@@ -228,6 +228,7 @@ export function buildCorpusOpponentDeck(args: {
       emit();
     },
   } = args;
+  const { opponentsContentHash, progression, selectionConfig } = args;
 
   if (knownGoodDecklists.length === 0) return null;
 
@@ -248,9 +249,7 @@ export function buildCorpusOpponentDeck(args: {
 
   // Signature probe: the opponent DreamAvatar's signature card UUIDs. Empty
   // for a null DreamAvatar or one with no signature cards.
-  const sigSet = new Set(
-    (opponentDreamAvatar?.signatureCardIds ?? []).map(lc),
-  );
+  const sigSet = new Set((opponentDreamAvatar?.signatureCardIds ?? []).map(lc));
 
   // Affiliation affinity over the corpus. Absent affiliation -> 0 everywhere.
   const affinity =
@@ -271,7 +270,7 @@ export function buildCorpusOpponentDeck(args: {
       name: deck.name,
       signatureFit: sig,
       affiliationFit: aff,
-      combined: sig + AFFILIATION_WEIGHT * aff,
+      combined: sig + selectionConfig.affiliationWeight * aff,
     };
   });
 
@@ -285,9 +284,7 @@ export function buildCorpusOpponentDeck(args: {
   if (sigSet.size === 0) {
     candidates = scored;
   } else {
-    const gated = scored.filter((s) =>
-      hasOverlap(deckSets[s.index], sigSet),
-    );
+    const gated = scored.filter((s) => hasOverlap(deckSets[s.index], sigSet));
     candidates = gated.length > 0 ? gated : scored;
   }
 
@@ -298,7 +295,10 @@ export function buildCorpusOpponentDeck(args: {
     return compareCodeUnits(b.id, a.id);
   });
 
-  const window = ranked.slice(0, Math.min(TOP_K, ranked.length));
+  const window = ranked.slice(
+    0,
+    Math.min(selectionConfig.topRankedSamplingWindow, ranked.length),
+  );
   const topK = window.map((s) => ({
     id: s.id,
     name: s.name,
@@ -366,7 +366,7 @@ export function buildCorpusOpponentDeck(args: {
   // highest mean-co-occurrence non-legendary card to the CURRENT deck, drawn
   // from the union of the TOP-K window decks' card UUIDs that are not already
   // in the deck, not legendary, and not already used as a replacement.
-  const legendaryAllowed = layer >= LEGENDARY_ALLOWED_FROM_LAYER;
+  const legendaryAllowed = layer >= progression.legendariesFromLayer;
   if (!legendaryAllowed) {
     // Candidate pool: union of the TOP-K window decks' card UUIDs.
     const windowPool = new Set<string>();
@@ -431,7 +431,7 @@ export function buildCorpusOpponentDeck(args: {
   // At layer 0 the desired count is "all Starters"; at other layers it is the
   // layer's scheduled dilution count.  Starters are chosen by highest
   // signatureFit (seeded tie-break), not-already-in-deck.
-  const starterCount = starterDilutionAt(layer);
+  const starterCount = progression.starterDilution[layer] ?? 0;
   if (starterCount > 0) {
     // Determine which Starters are addable (not already in deck) BEFORE cuts,
     // because the pre-cut deck is the authoritative state for duplicate checks.
@@ -475,7 +475,11 @@ export function buildCorpusOpponentDeck(args: {
 
     // Three-way cap: can't cut more than we have; can't add more than are
     // addable; can't exceed the layer's desired dilution count.
-    const count = Math.min(starterCount, cuttableUuids.length, candidateStarters.length);
+    const count = Math.min(
+      starterCount,
+      cuttableUuids.length,
+      candidateStarters.length,
+    );
 
     const cutUuids = cuttableUuids.slice(0, count);
     const cutSet = new Set(cutUuids);
@@ -496,17 +500,16 @@ export function buildCorpusOpponentDeck(args: {
   // one dreamsign: the highest-fit tailored dreamsign whose signatures overlap
   // the tuned deck (fit > 0), else a seeded neutral dreamsign.
   let dreamsign: { id: string; name: string; fit: number } | null = null;
-  if (layer >= DREAMSIGN_FROM_LAYER) {
+  if (layer >= progression.dreamsignsFromLayer) {
     const templateName = new Map<string, string>();
-    for (const tpl of dreamsignTemplates) templateName.set(lc(tpl.id), tpl.name);
+    for (const tpl of dreamsignTemplates)
+      templateName.set(lc(tpl.id), tpl.name);
     const nameFor = (id: string): string => templateName.get(lc(id)) ?? id;
 
     const idfDeckForFit = tunedIdfDeck();
 
     // Best-fitting tailored dreamsign (fit > 0).
-    let bestTailored:
-      | { id: string; fit: number }
-      | null = null;
+    let bestTailored: { id: string; fit: number } | null = null;
     if (dreamsignSignatures !== undefined) {
       const tailoredScored: { id: string; fit: number }[] = [];
       for (const sig of dreamsignSignatures.values()) {
@@ -553,7 +556,10 @@ export function buildCorpusOpponentDeck(args: {
   }
 
   // Step 4 — Ability flag.
-  const abilityActive = opponentAbilityIsActive(layer);
+  const abilityActive = opponentAbilityIsActive(
+    layer,
+    progression.abilityActiveFromLayer,
+  );
 
   const finalCards = deck;
 
@@ -576,6 +582,9 @@ export function buildCorpusOpponentDeck(args: {
       poolSeed,
       completionLevel,
       layerCount,
+      opponentsContentHash,
+      progression,
+      selectionConfig,
       legendariesRemoved: legendariesRemoved.map(cardSummary),
       legendaryReplacements: legendaryReplacements.map(cardSummary),
       cardsCut: cardsCut.map(cardSummary),
@@ -583,7 +592,11 @@ export function buildCorpusOpponentDeck(args: {
       dreamsign:
         dreamsign === null
           ? null
-          : { id: dreamsign.id, name: dreamsign.name, fit: round4(dreamsign.fit) },
+          : {
+              id: dreamsign.id,
+              name: dreamsign.name,
+              fit: round4(dreamsign.fit),
+            },
       abilityActive,
       finalCardIds: finalCards.map(uuidOf),
     });
@@ -672,7 +685,8 @@ function pickTopN<T>(
   let i = 0;
   while (i < sorted.length) {
     let j = i + 1;
-    while (j < sorted.length && scoreOf(sorted[j]) === scoreOf(sorted[i])) j += 1;
+    while (j < sorted.length && scoreOf(sorted[j]) === scoreOf(sorted[i]))
+      j += 1;
     const group = sorted.slice(i, j);
     if (group.length > 1) {
       for (let k = group.length - 1; k > 0; k -= 1) {
@@ -692,7 +706,8 @@ function hasOverlap(
   probe: ReadonlySet<string>,
 ): boolean {
   // Iterate the smaller set for cheaper membership checks.
-  const [small, large] = deck.size <= probe.size ? [deck, probe] : [probe, deck];
+  const [small, large] =
+    deck.size <= probe.size ? [deck, probe] : [probe, deck];
   for (const key of small) {
     if (large.has(key)) return true;
   }

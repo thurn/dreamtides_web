@@ -1,13 +1,12 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { economyFixture } from "../../testing/economy-fixture";
+import { opponentsFixture } from "../../testing/opponents-fixture";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { JourneyContent } from "../../data/journey-content";
 import { genesisFoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
-import {
-  registerTutorialBattleInitProvider,
-} from "./battle-events";
+import { registerTutorialBattleInitProvider } from "./battle-events";
 import { createTutorialBattleInitProvider } from "../../coop/providers/battle-init-provider";
 import { planTutorialBattleController } from "../../battle/tutorial-battle-controller";
 import type { EventContext } from "../../eventlog/types";
@@ -20,12 +19,15 @@ const GENESIS = {
   seed: "tutorial-room-seed",
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null },
+  contentConfig: {
+    poolVariant: "test",
+    draftMode: "pool",
+    fresh20PackSize: null,
+  },
 };
 const RUN_ID = "event:41";
 const FIGMENT_DREAMWELL_CARD_ID = "51caf26d-83bf-45a9-bc80-010d353277db";
-const TUTORIAL_TWILIGHT_CARD_ID =
-  "229ab3a1-3720-41a2-924c-8fe112188f8e";
+const TUTORIAL_TWILIGHT_CARD_ID = "229ab3a1-3720-41a2-924c-8fe112188f8e";
 const TWILIGHT_OVERRIDE_ID = "play-twilight-after-nomads-verge";
 const CTX: EventContext = {
   seq: 42,
@@ -77,15 +79,72 @@ const ENEMY_DRAW_SEQUENCE = [
 ] as const;
 
 const TUTORIAL_ACTIONS = [
-  { id: "draw-first-opponent", action: "draw-opponent-card", cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e", wait: 0 },
-  { id: "play-first-opponent", action: "reveal-and-play-opponent-card", cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e", revealDuration: 0, wait: 0 },
-  { id: "draw-second-opponent", action: "draw-opponent-card", cardId: "a28ad36d-fa74-4190-a463-7efd3a6233d0", wait: 0 },
-  { id: "play-second-opponent", action: "reveal-and-play-opponent-card", cardId: "a28ad36d-fa74-4190-a463-7efd3a6233d0", revealDuration: 0, wait: 0 },
-  { id: "player-effect-one", action: "draw-card", owner: "player", cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8", reason: "dreamwell-effect", wait: 0 },
-  { id: "player-effect-two", action: "draw-card", owner: "player", cardId: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", reason: "dreamwell-effect", wait: 0 },
-  { id: "enemy-effect-one", action: "draw-card", owner: "enemy", cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e", reason: "dreamwell-effect", wait: 0 },
-  { id: "enemy-effect-two", action: "draw-card", owner: "enemy", cardId: "4408b942-09a0-4f4e-a403-10c708c6e3c5", reason: "dreamwell-effect", wait: 0 },
-  { id: "player-turn-draw", action: "draw-card", owner: "player", cardId: "2162742c-09d0-4e62-ae49-0f8f79b45adc", reason: "turn-draw", wait: 0 },
+  {
+    id: "draw-first-opponent",
+    action: "draw-opponent-card",
+    cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+    wait: 0,
+  },
+  {
+    id: "play-first-opponent",
+    action: "reveal-and-play-opponent-card",
+    cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+    revealDuration: 0,
+    wait: 0,
+  },
+  {
+    id: "draw-second-opponent",
+    action: "draw-opponent-card",
+    cardId: "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+    wait: 0,
+  },
+  {
+    id: "play-second-opponent",
+    action: "reveal-and-play-opponent-card",
+    cardId: "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+    revealDuration: 0,
+    wait: 0,
+  },
+  {
+    id: "player-effect-one",
+    action: "draw-card",
+    owner: "player",
+    cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+    reason: "dreamwell-effect",
+    wait: 0,
+  },
+  {
+    id: "player-effect-two",
+    action: "draw-card",
+    owner: "player",
+    cardId: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+    reason: "dreamwell-effect",
+    wait: 0,
+  },
+  {
+    id: "enemy-effect-one",
+    action: "draw-card",
+    owner: "enemy",
+    cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+    reason: "dreamwell-effect",
+    wait: 0,
+  },
+  {
+    id: "enemy-effect-two",
+    action: "draw-card",
+    owner: "enemy",
+    cardId: "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+    reason: "dreamwell-effect",
+    wait: 0,
+  },
+  {
+    id: "player-turn-draw",
+    action: "draw-card",
+    owner: "player",
+    cardId: "2162742c-09d0-4e62-ae49-0f8f79b45adc",
+    reason: "turn-draw",
+    wait: 0,
+  },
 ] as const satisfies readonly TutorialAction[];
 
 function card(cardNumber: number, id: string): CardData {
@@ -119,8 +178,24 @@ function content(): JourneyContent {
   return {
     cardDatabase: new Map(cards.map((item) => [item.cardNumber, item])),
     dreamAvatars: [
-      { id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5", name: "Tensho", title: "Tutor", renderedText: "inactive", imageNumber: "0029", startingEssence: 0, signatureCards: [] },
-      { id: "B99936CA-97F9-4930-AF5A-FA9EF92557EF", name: "Threxan", title: "Tutor", renderedText: "inactive", imageNumber: "0025", startingEssence: 0, signatureCards: [] },
+      {
+        id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+        name: "Tensho",
+        title: "Tutor",
+        renderedText: "inactive",
+        imageNumber: "0029",
+        startingEssence: 0,
+        signatureCards: [],
+      },
+      {
+        id: "B99936CA-97F9-4930-AF5A-FA9EF92557EF",
+        name: "Threxan",
+        title: "Tutor",
+        renderedText: "inactive",
+        imageNumber: "0025",
+        startingEssence: 0,
+        signatureCards: [],
+      },
     ],
     dreamwellCards: [
       ...DREAMWELL_SEQUENCE.map((id, index) => ({
@@ -132,7 +207,15 @@ function content(): JourneyContent {
         cardNumber: index + 1,
         imageNumber: index + 1,
       })),
-      { id: "other", name: "Other", renderedText: "", energyAdded: 1, order: 2, cardNumber: 99, imageNumber: 99 },
+      {
+        id: "other",
+        name: "Other",
+        renderedText: "",
+        energyAdded: 1,
+        order: 2,
+        cardNumber: 99,
+        imageNumber: 99,
+      },
     ],
     tutorialBattle: {
       playerDraws: PLAYER_DRAW_SEQUENCE,
@@ -159,6 +242,7 @@ function content(): JourneyContent {
     guides: [],
     atlasData: MINIMAL_ATLAS_DATA,
     economyData: economyFixture(),
+    opponentsData: opponentsFixture(),
   };
 }
 
@@ -184,13 +268,17 @@ function terminalTutorialState(): FoldState {
 }
 
 function begin(state: FoldState = terminalTutorialState()) {
-  return reduceGameEvent(state, {
-    type: "BEGIN_TUTORIAL_BATTLE",
-    payload: { tutorialRunId: RUN_ID },
-    actor: "client-a",
-    basedOnSeq: 41,
-    clientTimestamp: CTX.timestamp,
-  }, CTX);
+  return reduceGameEvent(
+    state,
+    {
+      type: "BEGIN_TUTORIAL_BATTLE",
+      payload: { tutorialRunId: RUN_ID },
+      actor: "client-a",
+      basedOnSeq: 41,
+      clientTimestamp: CTX.timestamp,
+    },
+    CTX,
+  );
 }
 
 function reduceTutorial(
@@ -200,17 +288,27 @@ function reduceTutorial(
   actor = "client-a",
   context: EventContext = CTX,
 ) {
-  return reduceGameEvent(state, {
-    type,
-    payload,
-    actor,
-    basedOnSeq: 41,
-    clientTimestamp: CTX.timestamp,
-  }, context);
+  return reduceGameEvent(
+    state,
+    {
+      type,
+      payload,
+      actor,
+      basedOnSeq: 41,
+      clientTimestamp: CTX.timestamp,
+    },
+    context,
+  );
 }
 
-function ids(battle: NonNullable<ReturnType<typeof begin>["state"]["battle"]>, side: "player" | "enemy", zone: "deck" | "hand" | "void") {
-  return battle.board.sides[side][zone].map((id) => battle.board.cardInstances[id]?.definition.cardId);
+function ids(
+  battle: NonNullable<ReturnType<typeof begin>["state"]["battle"]>,
+  side: "player" | "enemy",
+  zone: "deck" | "hand" | "void",
+) {
+  return battle.board.sides[side][zone].map(
+    (id) => battle.board.cardInstances[id]?.definition.cardId,
+  );
 }
 
 function handInstanceId(
@@ -258,23 +356,26 @@ describe("tutorial battle lifecycle", () => {
   it("parks a legal card play before movement and resumes it after Mira advances", () => {
     const tutorialContent = content();
     const supportCard = tutorialContent.cardDatabase.get(510);
-    if (supportCard === undefined) throw new Error("missing tutorial support card");
+    if (supportCard === undefined)
+      throw new Error("missing tutorial support card");
     tutorialContent.cardDatabase.set(510, {
       ...supportCard,
       renderedText: "Support – Supported characters have +2✦.",
     });
-    tutorialContent.tutorialTriggers = [{
-      id: "support",
-      on: ["card-play"],
-      priority: 100,
-      speaker: "player",
-      duration: 5,
-      horizontalOffset: 12,
-      verticalOffset: -20,
-      bubbleWidth: 300,
-      match: { kind: "glossary", id: "support" },
-      text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
-    }];
+    tutorialContent.tutorialTriggers = [
+      {
+        id: "support",
+        on: ["card-play"],
+        priority: 100,
+        speaker: "player",
+        duration: 5,
+        horizontalOffset: 12,
+        verticalOffset: -20,
+        bubbleWidth: 300,
+        match: { kind: "glossary", id: "support" },
+        text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
+      },
+    ];
     registerTutorialBattleInitProvider(
       createTutorialBattleInitProvider(tutorialContent),
     );
@@ -306,17 +407,21 @@ describe("tutorial battle lifecycle", () => {
     expect(opened.state.battle?.tutorialPresentation).toMatchObject({
       kind: "tutorial-guidance",
       source: { kind: "card", battleCardId, side: "player" },
-      messages: [{
-        triggerId: "support",
-        speaker: "player",
-        duration: 5,
-        horizontalOffset: 12,
-        verticalOffset: -20,
-        bubbleWidth: 300,
-      }],
+      messages: [
+        {
+          triggerId: "support",
+          speaker: "player",
+          duration: 5,
+          horizontalOffset: 12,
+          verticalOffset: -20,
+          bubbleWidth: 300,
+        },
+      ],
       messageIndex: 0,
     });
-    expect(opened.state.battle?.board.sides.player.hand).toContain(battleCardId);
+    expect(opened.state.battle?.board.sides.player.hand).toContain(
+      battleCardId,
+    );
     expect(opened.state.tutorialTriggerIdsSeen).toEqual(["support"]);
 
     const continued = reduceTutorial(
@@ -344,18 +449,20 @@ describe("tutorial battle lifecycle", () => {
       ...enemySupportCard,
       renderedText: "Support – Supported characters have +2✦.",
     });
-    tutorialContent.tutorialTriggers = [{
-      id: "support",
-      on: ["card-play"],
-      priority: 100,
-      speaker: "mira",
-      duration: 3,
-      horizontalOffset: 0,
-      verticalOffset: 0,
-      bubbleWidth: 700,
-      match: { kind: "glossary", id: "support" },
-      text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
-    }];
+    tutorialContent.tutorialTriggers = [
+      {
+        id: "support",
+        on: ["card-play"],
+        priority: 100,
+        speaker: "mira",
+        duration: 3,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 700,
+        match: { kind: "glossary", id: "support" },
+        text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
+      },
+    ];
     registerTutorialBattleInitProvider(
       createTutorialBattleInitProvider(tutorialContent),
     );
@@ -424,18 +531,20 @@ describe("tutorial battle lifecycle", () => {
 
   it("opens phase guidance after entering the player's Dusk reposition window", () => {
     const tutorialContent = content();
-    tutorialContent.tutorialTriggers = [{
-      id: "opponent-reposition-opportunity",
-      on: ["opponent-reposition-opportunity"],
-      priority: 10,
-      speaker: "mira",
-      duration: 5,
-      horizontalOffset: 0,
-      verticalOffset: 0,
-      bubbleWidth: 500,
-      match: { kind: "any" },
-      text: "Repositioning explanation.",
-    }];
+    tutorialContent.tutorialTriggers = [
+      {
+        id: "opponent-reposition-opportunity",
+        on: ["opponent-reposition-opportunity"],
+        priority: 10,
+        speaker: "mira",
+        duration: 5,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 500,
+        match: { kind: "any" },
+        text: "Repositioning explanation.",
+      },
+    ];
     registerTutorialBattleInitProvider(
       createTutorialBattleInitProvider(tutorialContent),
     );
@@ -494,18 +603,20 @@ describe("tutorial battle lifecycle", () => {
 
   it("opens six-second guidance when the player's post-script Night begins", () => {
     const tutorialContent = content();
-    tutorialContent.tutorialTriggers = [{
-      id: "player-night-phase",
-      on: ["player-night-phase"],
-      priority: 10,
-      speaker: "mira",
-      duration: 6,
-      horizontalOffset: 0,
-      verticalOffset: 0,
-      bubbleWidth: 500,
-      match: { kind: "any" },
-      text: "Night guidance with ❖ timing marks.",
-    }];
+    tutorialContent.tutorialTriggers = [
+      {
+        id: "player-night-phase",
+        on: ["player-night-phase"],
+        priority: 10,
+        speaker: "mira",
+        duration: 6,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 500,
+        match: { kind: "any" },
+        text: "Night guidance with ❖ timing marks.",
+      },
+    ];
     registerTutorialBattleInitProvider(
       createTutorialBattleInitProvider(tutorialContent),
     );
@@ -547,43 +658,77 @@ describe("tutorial battle lifecycle", () => {
       messages: [{ triggerId: "player-night-phase", duration: 6 }],
       continuation: { kind: "commands", commands: [] },
     });
-    expect(opened.state.tutorialTriggerIdsSeen).toEqual([
-      "player-night-phase",
-    ]);
+    expect(opened.state.tutorialTriggerIdsSeen).toEqual(["player-night-phase"]);
   });
 
   it("accepts only the terminal tutorial cursor once and builds the canonical handoff", () => {
-    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(content()),
+    );
     const result = begin();
     expect(result.outcome).toBe("applied");
     const battle = result.state.battle!;
     expect(battle.mode).toEqual({
-      kind: "tutorial", tutorialRunId: RUN_ID, restartNumber: 0,
+      kind: "tutorial",
+      tutorialRunId: RUN_ID,
+      restartNumber: 0,
       resultConfig: { playerOnlyVictory: true, turnLimitDisabled: true },
     });
-    expect(battle.board).toMatchObject({ activeSide: "player", turnNumber: 4, phase: "dawn", dreamwellDeckIndex: 2 });
-    expect(battle.init).toMatchObject({ scoreToWin: 10, turnLimit: Number.MAX_SAFE_INTEGER });
-    expect(battle.board.sides.player).toMatchObject({ currentEnergy: 5, maxEnergy: 5, score: 0, dreamwellCardIndex: 1 });
-    expect(battle.board.sides.enemy).toMatchObject({ currentEnergy: 0, maxEnergy: 5, score: 2, dreamwellCardIndex: 0 });
-    expect(battle.init.dreamwellDeck.slice(0, DREAMWELL_SEQUENCE.length).map((card) => card.id))
-      .toEqual(DREAMWELL_SEQUENCE);
+    expect(battle.board).toMatchObject({
+      activeSide: "player",
+      turnNumber: 4,
+      phase: "dawn",
+      dreamwellDeckIndex: 2,
+    });
+    expect(battle.init).toMatchObject({
+      scoreToWin: 10,
+      turnLimit: Number.MAX_SAFE_INTEGER,
+    });
+    expect(battle.board.sides.player).toMatchObject({
+      currentEnergy: 5,
+      maxEnergy: 5,
+      score: 0,
+      dreamwellCardIndex: 1,
+    });
+    expect(battle.board.sides.enemy).toMatchObject({
+      currentEnergy: 0,
+      maxEnergy: 5,
+      score: 2,
+      dreamwellCardIndex: 0,
+    });
+    expect(
+      battle.init.dreamwellDeck
+        .slice(0, DREAMWELL_SEQUENCE.length)
+        .map((card) => card.id),
+    ).toEqual(DREAMWELL_SEQUENCE);
     const playerF4 = battle.board.sides.player.frontRank.F4!;
     const enemyB5 = battle.board.sides.enemy.backRank.B5!;
     // These are the authored tutorial's rendered center cells after its 2/3
     // formation expands to the persistent 9/10 battlefield.
-    expect(battle.board.cardInstances[playerF4]?.definition.cardId).toBe("e83014d3-9d35-4e80-a1b3-9b25360ad2af");
-    expect(battle.board.cardInstances[enemyB5]?.definition.cardId).toBe("a28ad36d-fa74-4190-a463-7efd3a6233d0");
-    expect(battle.board.cardInstances[playerF4]?.status.isExhausted).toBe(false);
+    expect(battle.board.cardInstances[playerF4]?.definition.cardId).toBe(
+      "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+    );
+    expect(battle.board.cardInstances[enemyB5]?.definition.cardId).toBe(
+      "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+    );
+    expect(battle.board.cardInstances[playerF4]?.status.isExhausted).toBe(
+      false,
+    );
     expect(battle.board.cardInstances[enemyB5]?.status.isExhausted).toBe(false);
     expect(Object.keys(battle.board.sides.player.frontRank)).toHaveLength(9);
     expect(Object.keys(battle.board.sides.enemy.backRank)).toHaveLength(10);
     expect(ids(battle, "player", "hand")).toEqual([
-      "5a980eff-6ec7-44d8-9977-b98e66bbc2c8", "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", "2162742c-09d0-4e62-ae49-0f8f79b45adc",
+      "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+      "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+      "2162742c-09d0-4e62-ae49-0f8f79b45adc",
     ]);
     expect(ids(battle, "enemy", "hand")).toEqual([
-      "229ab3a1-3720-41a2-924c-8fe112188f8e", "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+      "229ab3a1-3720-41a2-924c-8fe112188f8e",
+      "4408b942-09a0-4f4e-a403-10c708c6e3c5",
     ]);
-    expect(ids(battle, "enemy", "void")).toEqual(["229ab3a1-3720-41a2-924c-8fe112188f8e"]);
+    expect(ids(battle, "enemy", "void")).toEqual([
+      "229ab3a1-3720-41a2-924c-8fe112188f8e",
+    ]);
     expect(ids(battle, "player", "deck").slice(0, 6)).toEqual(
       PLAYER_DRAW_SEQUENCE,
     );
@@ -594,13 +739,26 @@ describe("tutorial battle lifecycle", () => {
     expect(ids(battle, "enemy", "deck")).toHaveLength(28);
     for (const [, cardId] of STARTERS) {
       for (const side of ["player", "enemy"] as const) {
-        expect(Object.values(battle.board.cardInstances).filter((instance) => instance.owner === side && instance.definition.cardId === cardId)).toHaveLength(3);
+        expect(
+          Object.values(battle.board.cardInstances).filter(
+            (instance) =>
+              instance.owner === side && instance.definition.cardId === cardId,
+          ),
+        ).toHaveLength(3);
       }
     }
     expect(begin(result.state).outcome).toBe("bounced");
     const inProgress = terminalTutorialState();
     const tutorial = inProgress.frontDoor.tutorial!;
-    expect(begin({ ...inProgress, frontDoor: { ...inProgress.frontDoor, tutorial: { ...tutorial, currentActionIndex: 0 } } }).outcome).toBe("bounced");
+    expect(
+      begin({
+        ...inProgress,
+        frontDoor: {
+          ...inProgress.frontDoor,
+          tutorial: { ...tutorial, currentActionIndex: 0 },
+        },
+      }).outcome,
+    ).toBe("bounced");
   });
 
   it("stacks card and Dreamwell draws from the authored battle configuration", () => {
@@ -639,7 +797,9 @@ describe("tutorial battle lifecycle", () => {
       ENEMY_DRAW_SEQUENCE[1],
       ENEMY_DRAW_SEQUENCE[0],
     ]);
-    expect(battle.init.dreamwellDeck.slice(0, 4).map((card) => card.id)).toEqual([
+    expect(
+      battle.init.dreamwellDeck.slice(0, 4).map((card) => card.id),
+    ).toEqual([
       DREAMWELL_SEQUENCE[0],
       DREAMWELL_SEQUENCE[1],
       DREAMWELL_SEQUENCE[3],
@@ -796,7 +956,11 @@ describe("tutorial battle lifecycle", () => {
     state = applyCommand(state);
     expect(plan(state).intent?.kind).toBe("complete-presentation");
     state = completePresentations(state);
-    for (let step = 0; step < 3 && state.battle?.board.phase !== "day"; step += 1) {
+    for (
+      let step = 0;
+      step < 3 && state.battle?.board.phase !== "day";
+      step += 1
+    ) {
       state = applyCommand(state);
     }
     expect(state.battle?.board).toMatchObject({
@@ -918,8 +1082,7 @@ describe("tutorial battle lifecycle", () => {
         targetBattleCardIds: planned.intent.targetBattleCardIds,
         aiChoices: planned.intent.aiChoices,
         characterDestination: planned.intent.characterDestination,
-        tutorialAiActionOverrideId:
-          planned.intent.tutorialAiActionOverrideId,
+        tutorialAiActionOverrideId: planned.intent.tutorialAiActionOverrideId,
       },
       "tutorial-ai:client-a",
     );
@@ -928,9 +1091,9 @@ describe("tutorial battle lifecycle", () => {
     expect(
       Object.values(played.state.battle!.board.sides.enemy.backRank),
     ).toContain(twilightBattleCardId);
-    expect(
-      played.state.battle?.consumedTutorialAiActionOverrideIds,
-    ).toEqual([TWILIGHT_OVERRIDE_ID]);
+    expect(played.state.battle?.consumedTutorialAiActionOverrideIds).toEqual([
+      TWILIGHT_OVERRIDE_ID,
+    ]);
     expect(played.state.battle?.lastTransition?.logEvents).toHaveLength(1);
     expect(played.state.battle?.lastTransition?.logEvents[0]).toMatchObject({
       event: "battle_ai_action_override_applied",
@@ -944,14 +1107,17 @@ describe("tutorial battle lifecycle", () => {
   });
 
   it("allows player battlefield swaps during Day and a back-to-front swap during enemy Dusk", () => {
-    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(content()),
+    );
     const started = begin().state;
     const battle = started.battle!;
     const frontCardId = battle.board.sides.player.frontRank.F4!;
-    const backCardId = Object.values(battle.board.cardInstances).find((instance) =>
-      instance.controller === "player" &&
-      instance.definition.battleCardKind === "character" &&
-      instance.battleCardId !== frontCardId,
+    const backCardId = Object.values(battle.board.cardInstances).find(
+      (instance) =>
+        instance.controller === "player" &&
+        instance.definition.battleCardKind === "character" &&
+        instance.battleCardId !== frontCardId,
     )!.battleCardId;
     const player = battle.board.sides.player;
     const board = {
@@ -971,7 +1137,10 @@ describe("tutorial battle lifecycle", () => {
       },
     };
     const state = { ...started, battle: { ...battle, board } };
-    const swap = (source: Record<string, unknown>, target: Record<string, unknown>) => ({
+    const swap = (
+      source: Record<string, unknown>,
+      target: Record<string, unknown>,
+    ) => ({
       command: {
         id: "DEBUG_EDIT",
         edit: { kind: "SWAP_BATTLEFIELD_SLOTS", source, target },
@@ -988,11 +1157,21 @@ describe("tutorial battle lifecycle", () => {
       ),
     );
     expect(legalDusk.outcome).toBe("applied");
-    expect(legalDusk.state.battle?.board.sides.player.frontRank.F4).toBe(backCardId);
-    expect(legalDusk.state.battle?.board.sides.player.backRank.B0).toBe(frontCardId);
+    expect(legalDusk.state.battle?.board.sides.player.frontRank.F4).toBe(
+      backCardId,
+    );
+    expect(legalDusk.state.battle?.board.sides.player.backRank.B0).toBe(
+      frontCardId,
+    );
 
     const playerDay = reduceTutorial(
-      { ...state, battle: { ...state.battle, board: { ...board, activeSide: "player", phase: "day" } } },
+      {
+        ...state,
+        battle: {
+          ...state.battle,
+          board: { ...board, activeSide: "player", phase: "day" },
+        },
+      },
       "BATTLE_COMMAND",
       swap(
         { side: "player", zone: "backRank", slotId: "B0" },
@@ -1001,12 +1180,19 @@ describe("tutorial battle lifecycle", () => {
     );
     expect(playerDay.outcome).toBe("applied");
 
-    expect(reduceTutorial(state, "BATTLE_COMMAND", swap(
-      { side: "enemy", zone: "backRank", slotId: "B1" },
-      { side: "player", zone: "frontRank", slotId: "F4" },
-    )).outcome).toBe("bounced");
-    const eventCardId = player.hand.find((id) =>
-      battle.board.cardInstances[id]?.definition.battleCardKind === "event",
+    expect(
+      reduceTutorial(
+        state,
+        "BATTLE_COMMAND",
+        swap(
+          { side: "enemy", zone: "backRank", slotId: "B1" },
+          { side: "player", zone: "frontRank", slotId: "F4" },
+        ),
+      ).outcome,
+    ).toBe("bounced");
+    const eventCardId = player.hand.find(
+      (id) =>
+        battle.board.cardInstances[id]?.definition.battleCardKind === "event",
     )!;
     const nonCharacterState = {
       ...state,
@@ -1025,26 +1211,53 @@ describe("tutorial battle lifecycle", () => {
         },
       },
     };
-    expect(reduceTutorial(nonCharacterState, "BATTLE_COMMAND", swap(
-      { side: "player", zone: "backRank", slotId: "B2" },
-      { side: "player", zone: "frontRank", slotId: "F4" },
-    )).outcome).toBe("bounced");
-    expect(reduceTutorial(state, "BATTLE_COMMAND", swap(
-      { side: "player", zone: "backRank", slotId: "B0" },
-      { side: "enemy", zone: "backRank", slotId: "B1" },
-    )).outcome).toBe("bounced");
-    expect(reduceTutorial(state, "BATTLE_COMMAND", swap(
-      { side: "player", zone: "frontRank", slotId: "F4" },
-      { side: "player", zone: "backRank", slotId: "B0" },
-    )).outcome).toBe("applied");
-    expect(reduceTutorial(state, "BATTLE_COMMAND", swap(
-      { side: "player", zone: "backRank", slotId: "B0" },
-      { side: "player", zone: "frontRank", slotId: "F0" },
-    ), "client-observer").outcome).toBe("bounced");
+    expect(
+      reduceTutorial(
+        nonCharacterState,
+        "BATTLE_COMMAND",
+        swap(
+          { side: "player", zone: "backRank", slotId: "B2" },
+          { side: "player", zone: "frontRank", slotId: "F4" },
+        ),
+      ).outcome,
+    ).toBe("bounced");
+    expect(
+      reduceTutorial(
+        state,
+        "BATTLE_COMMAND",
+        swap(
+          { side: "player", zone: "backRank", slotId: "B0" },
+          { side: "enemy", zone: "backRank", slotId: "B1" },
+        ),
+      ).outcome,
+    ).toBe("bounced");
+    expect(
+      reduceTutorial(
+        state,
+        "BATTLE_COMMAND",
+        swap(
+          { side: "player", zone: "frontRank", slotId: "F4" },
+          { side: "player", zone: "backRank", slotId: "B0" },
+        ),
+      ).outcome,
+    ).toBe("applied");
+    expect(
+      reduceTutorial(
+        state,
+        "BATTLE_COMMAND",
+        swap(
+          { side: "player", zone: "backRank", slotId: "B0" },
+          { side: "player", zone: "frontRank", slotId: "F0" },
+        ),
+        "client-observer",
+      ).outcome,
+    ).toBe("bounced");
   });
 
   it("folds the exact semantic Dusk destination and applies exhaustion only to front-rank targets", () => {
-    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(content()),
+    );
     const started = begin().state;
     const battle = started.battle!;
     const battleCardId = battle.board.sides.player.frontRank.F4!;
@@ -1060,18 +1273,14 @@ describe("tutorial battle lifecycle", () => {
         },
       },
     };
-    const bankMove = reduceTutorial(
-      duskState,
-      "BATTLE_REPOSITION_CHARACTER",
-      {
-        battleCardId,
-        destination: {
-          side: "player",
-          zone: "backRank",
-          slotId: "B1",
-        },
+    const bankMove = reduceTutorial(duskState, "BATTLE_REPOSITION_CHARACTER", {
+      battleCardId,
+      destination: {
+        side: "player",
+        zone: "backRank",
+        slotId: "B1",
       },
-    );
+    });
     expect(bankMove.outcome).toBe("applied");
     expect(bankMove.state.battle?.board.sides.player).toMatchObject({
       frontRank: { F4: null },
@@ -1094,34 +1303,32 @@ describe("tutorial battle lifecycle", () => {
         },
       },
     };
-    expect(reduceTutorial(
-      exhaustedState,
-      "BATTLE_REPOSITION_CHARACTER",
-      {
+    expect(
+      reduceTutorial(exhaustedState, "BATTLE_REPOSITION_CHARACTER", {
         battleCardId,
         destination: {
           side: "player",
           zone: "backRank",
           slotId: "B1",
         },
-      },
-    ).outcome).toBe("applied");
-    expect(reduceTutorial(
-      exhaustedState,
-      "BATTLE_REPOSITION_CHARACTER",
-      {
+      }).outcome,
+    ).toBe("applied");
+    expect(
+      reduceTutorial(exhaustedState, "BATTLE_REPOSITION_CHARACTER", {
         battleCardId,
         destination: {
           side: "player",
           zone: "frontRank",
           slotId: "F1",
         },
-      },
-    ).outcome).toBe("bounced");
+      }).outcome,
+    ).toBe("bounced");
   });
 
   it("folds a long player Day move into the intended visible front-rank slot", () => {
-    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(content()),
+    );
     const started = begin().state;
     const battle = started.battle!;
     const battleCardId = battle.board.sides.player.frontRank.F4!;
@@ -1175,36 +1382,68 @@ describe("tutorial battle lifecycle", () => {
   });
 
   it("restarts under transferred room control, then hands victory into the tutorial DreamAvatar offer", () => {
-    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(content()),
+    );
     const first = begin();
     const beforeJourney = first.state.journey;
     const original = first.state.battle!;
-    const transferred = reduceGameEvent(first.state, {
-      type: "TAKE_PLAYTEST_CONTROL",
-      payload: { previousControllerClientId: "client-a" },
-      actor: "client-b",
-      basedOnSeq: 42,
-      clientTimestamp: CTX.timestamp,
-    }, { ...CTX, seq: 43 });
-    const restart = reduceGameEvent(transferred.state, {
-      type: "RESTART_TUTORIAL_BATTLE",
-      payload: { battleId: original.board.battleId },
-      actor: "client-b", basedOnSeq: 43, clientTimestamp: CTX.timestamp,
-    }, { ...CTX, seq: 44 });
+    const transferred = reduceGameEvent(
+      first.state,
+      {
+        type: "TAKE_PLAYTEST_CONTROL",
+        payload: { previousControllerClientId: "client-a" },
+        actor: "client-b",
+        basedOnSeq: 42,
+        clientTimestamp: CTX.timestamp,
+      },
+      { ...CTX, seq: 43 },
+    );
+    const restart = reduceGameEvent(
+      transferred.state,
+      {
+        type: "RESTART_TUTORIAL_BATTLE",
+        payload: { battleId: original.board.battleId },
+        actor: "client-b",
+        basedOnSeq: 43,
+        clientTimestamp: CTX.timestamp,
+      },
+      { ...CTX, seq: 44 },
+    );
     expect(restart.outcome).toBe("applied");
     const rebuilt = restart.state.battle!;
     expect(rebuilt.mode).toMatchObject({ restartNumber: 1 });
     expect(rebuilt.board.battleId).not.toBe(original.board.battleId);
-    expect(ids(rebuilt, "player", "deck")).not.toEqual(ids(original, "player", "deck"));
-    const replay = createTutorialBattleInitProvider(content()).beginTutorialBattle({ journey: beforeJourney, actions: TUTORIAL_ACTIONS, tutorialRunId: RUN_ID, restartNumber: 1, seq: 44, rng: () => 0, timestamp: CTX.timestamp });
+    expect(ids(rebuilt, "player", "deck")).not.toEqual(
+      ids(original, "player", "deck"),
+    );
+    const replay = createTutorialBattleInitProvider(
+      content(),
+    ).beginTutorialBattle({
+      journey: beforeJourney,
+      actions: TUTORIAL_ACTIONS,
+      tutorialRunId: RUN_ID,
+      restartNumber: 1,
+      seq: 44,
+      rng: () => 0,
+      timestamp: CTX.timestamp,
+    });
     expect(rebuilt).toMatchObject({
       ...replay,
       basicAutomationEnabled: true,
       mode: rebuilt.mode,
     });
-    const exited = reduceGameEvent(restart.state, {
-      type: "EXIT_TUTORIAL_BATTLE", payload: { battleId: rebuilt.board.battleId }, actor: "client-b", basedOnSeq: 44, clientTimestamp: CTX.timestamp,
-    }, { ...CTX, seq: 45 });
+    const exited = reduceGameEvent(
+      restart.state,
+      {
+        type: "EXIT_TUTORIAL_BATTLE",
+        payload: { battleId: rebuilt.board.battleId },
+        actor: "client-b",
+        basedOnSeq: 44,
+        clientTimestamp: CTX.timestamp,
+      },
+      { ...CTX, seq: 45 },
+    );
     expect(exited.state).toMatchObject({
       battle: null,
       frontDoor: { phase: "journey", journeyId: null, tutorial: null },
@@ -1219,16 +1458,22 @@ describe("tutorial battle lifecycle", () => {
   });
 
   it("transfers room authority without changing tutorial battle progress", () => {
-    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(content()),
+    );
     const started = begin().state;
     const original = started.battle!;
-    const claimed = reduceGameEvent(started, {
-      type: "TAKE_PLAYTEST_CONTROL",
-      payload: { previousControllerClientId: "client-a" },
-      actor: "client-b",
-      basedOnSeq: 0,
-      clientTimestamp: CTX.timestamp,
-    }, { ...CTX, seq: 43 });
+    const claimed = reduceGameEvent(
+      started,
+      {
+        type: "TAKE_PLAYTEST_CONTROL",
+        payload: { previousControllerClientId: "client-a" },
+        actor: "client-b",
+        basedOnSeq: 0,
+        clientTimestamp: CTX.timestamp,
+      },
+      { ...CTX, seq: 43 },
+    );
 
     expect(claimed.outcome).toBe("applied");
     expect(claimed.state.battle).toEqual(original);
@@ -1236,14 +1481,15 @@ describe("tutorial battle lifecycle", () => {
   });
 
   it("transfers authority through an open prompt and lets the promoted driver resolve it", () => {
-    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(content()),
+    );
     const started = begin().state;
     const battle = started.battle!;
     const ringwatcherId = Object.values(battle.board.cardInstances).find(
       (instance) =>
         instance.controller === "player" &&
-        instance.definition.cardId ===
-          "647f5150-b2e0-424b-9480-27557642524e",
+        instance.definition.cardId === "647f5150-b2e0-424b-9480-27557642524e",
     )!.battleCardId;
     const player = battle.board.sides.player;
     const promptReady = {
@@ -1285,51 +1531,65 @@ describe("tutorial battle lifecycle", () => {
     expect(claimed.outcome).toBe("applied");
     expect(claimed.state.battle!.pendingPrompt).toEqual(pending);
     expect(claimed.state.playtestControl?.controllerClientId).toBe("client-b");
-    expect(reduceTutorial(
-      claimed.state,
-      "RESOLVE_PROMPT",
-      {
-        promptId: pending.promptId,
-        resolution: { kind: "foresee" },
-      },
-      "client-b",
-      { ...CTX, seq: 45 },
-    ).outcome).toBe("applied");
+    expect(
+      reduceTutorial(
+        claimed.state,
+        "RESOLVE_PROMPT",
+        {
+          promptId: pending.promptId,
+          resolution: { kind: "foresee" },
+        },
+        "client-b",
+        { ...CTX, seq: 45 },
+      ).outcome,
+    ).toBe("applied");
   });
 
   it("binds restart and exit to the persisted room controller", () => {
-    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
-    expect(reduceTutorial(
-      terminalTutorialState(),
-      "BEGIN_TUTORIAL_BATTLE",
-      { tutorialRunId: RUN_ID },
-      "client-observer",
-    ).outcome).toBe("applied");
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(content()),
+    );
+    expect(
+      reduceTutorial(
+        terminalTutorialState(),
+        "BEGIN_TUTORIAL_BATTLE",
+        { tutorialRunId: RUN_ID },
+        "client-observer",
+      ).outcome,
+    ).toBe("applied");
 
     const started = begin().state;
     const battleId = started.battle!.board.battleId;
-    expect(reduceTutorial(
-      started,
-      "RESTART_TUTORIAL_BATTLE",
-      { battleId },
-      "client-observer",
-    ).outcome).toBe("bounced");
-    expect(reduceTutorial(
-      started,
-      "TAKE_PLAYTEST_CONTROL",
-      { previousControllerClientId: "client-stale" },
-      "client-observer",
-    ).outcome).toBe("bounced");
-    expect(reduceTutorial(
-      started,
-      "EXIT_TUTORIAL_BATTLE",
-      { battleId },
-      "client-observer",
-    ).outcome).toBe("bounced");
+    expect(
+      reduceTutorial(
+        started,
+        "RESTART_TUTORIAL_BATTLE",
+        { battleId },
+        "client-observer",
+      ).outcome,
+    ).toBe("bounced");
+    expect(
+      reduceTutorial(
+        started,
+        "TAKE_PLAYTEST_CONTROL",
+        { previousControllerClientId: "client-stale" },
+        "client-observer",
+      ).outcome,
+    ).toBe("bounced");
+    expect(
+      reduceTutorial(
+        started,
+        "EXIT_TUTORIAL_BATTLE",
+        { battleId },
+        "client-observer",
+      ).outcome,
+    ).toBe("bounced");
   });
 
   it("binds human and automatic tutorial intents to the persisted driver", () => {
-    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(content()),
+    );
     const started = begin().state;
     const battle = started.battle!;
     const enemyCardId = handInstanceId(
@@ -1353,22 +1613,48 @@ describe("tutorial battle lifecycle", () => {
       targetBattleCardIds: [targetCardId],
       aiChoices: [],
     };
-    const spoofed = reduceGameEvent(active, {
-      type: "BATTLE_PLAY_CARD", payload, actor: "tutorial-ai:client-observer", basedOnSeq: 42, clientTimestamp: CTX.timestamp,
-    }, CTX);
+    const spoofed = reduceGameEvent(
+      active,
+      {
+        type: "BATTLE_PLAY_CARD",
+        payload,
+        actor: "tutorial-ai:client-observer",
+        basedOnSeq: 42,
+        clientTimestamp: CTX.timestamp,
+      },
+      CTX,
+    );
     expect(spoofed.outcome).toBe("bounced");
-    const automatic = reduceGameEvent(active, {
-      type: "BATTLE_PLAY_CARD", payload, actor: "tutorial-ai:client-a", basedOnSeq: 42, clientTimestamp: CTX.timestamp,
-    }, CTX);
+    const automatic = reduceGameEvent(
+      active,
+      {
+        type: "BATTLE_PLAY_CARD",
+        payload,
+        actor: "tutorial-ai:client-a",
+        basedOnSeq: 42,
+        clientTimestamp: CTX.timestamp,
+      },
+      CTX,
+    );
     expect(automatic.outcome).toBe("applied");
-    const observer = reduceGameEvent(active, {
-      type: "BATTLE_PLAY_CARD", payload, actor: "client-observer", basedOnSeq: 42, clientTimestamp: CTX.timestamp,
-    }, CTX);
+    const observer = reduceGameEvent(
+      active,
+      {
+        type: "BATTLE_PLAY_CARD",
+        payload,
+        actor: "client-observer",
+        basedOnSeq: 42,
+        clientTimestamp: CTX.timestamp,
+      },
+      CTX,
+    );
     expect(observer.outcome).toBe("bounced");
   });
 
   it("rejects observer command, play, gesture, prompt, and exit intents while accepting driver intent", () => {
-    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(content()),
+    );
     const started = begin().state;
     const humanState = {
       ...started,
@@ -1382,22 +1668,61 @@ describe("tutorial battle lifecycle", () => {
       edit: { kind: "SET_PHASE", phase: "dusk" },
       sourceSurface: "phase-control",
     };
-    expect(reduceTutorial(humanState, "BATTLE_COMMAND", { command: phaseCommand }, "client-observer").outcome).toBe("bounced");
-    expect(reduceTutorial(humanState, "BATTLE_COMMAND", { command: phaseCommand }).outcome).toBe("applied");
-    expect(reduceTutorial(humanState, "BATTLE_GESTURE", { commands: [phaseCommand] }, "client-observer").outcome).toBe("bounced");
-    expect(reduceTutorial(humanState, "BATTLE_GESTURE", { commands: [phaseCommand] }).outcome).toBe("applied");
+    expect(
+      reduceTutorial(
+        humanState,
+        "BATTLE_COMMAND",
+        { command: phaseCommand },
+        "client-observer",
+      ).outcome,
+    ).toBe("bounced");
+    expect(
+      reduceTutorial(humanState, "BATTLE_COMMAND", { command: phaseCommand })
+        .outcome,
+    ).toBe("applied");
+    expect(
+      reduceTutorial(
+        humanState,
+        "BATTLE_GESTURE",
+        { commands: [phaseCommand] },
+        "client-observer",
+      ).outcome,
+    ).toBe("bounced");
+    expect(
+      reduceTutorial(humanState, "BATTLE_GESTURE", { commands: [phaseCommand] })
+        .outcome,
+    ).toBe("applied");
 
     const playerCardId = humanState.battle.board.sides.player.hand[0];
-    const play = { battleCardId: playerCardId, targetBattleCardIds: [], aiChoices: [] };
-    expect(reduceTutorial(humanState, "BATTLE_PLAY_CARD", play, "client-observer").outcome).toBe("bounced");
-    expect(reduceTutorial(humanState, "BATTLE_PLAY_CARD", play).outcome).toBe("applied");
-    expect(reduceTutorial(started, "EXIT_TUTORIAL_BATTLE", {
-      battleId: started.battle!.board.battleId,
-    }, "client-observer").outcome).toBe("bounced");
+    const play = {
+      battleCardId: playerCardId,
+      targetBattleCardIds: [],
+      aiChoices: [],
+    };
+    expect(
+      reduceTutorial(humanState, "BATTLE_PLAY_CARD", play, "client-observer")
+        .outcome,
+    ).toBe("bounced");
+    expect(reduceTutorial(humanState, "BATTLE_PLAY_CARD", play).outcome).toBe(
+      "applied",
+    );
+    expect(
+      reduceTutorial(
+        started,
+        "EXIT_TUTORIAL_BATTLE",
+        {
+          battleId: started.battle!.board.battleId,
+        },
+        "client-observer",
+      ).outcome,
+    ).toBe("bounced");
 
-    const ringwatcherId = Object.values(started.battle!.board.cardInstances).find((instance) =>
-      instance.controller === "player" &&
-      instance.definition.cardId === "647f5150-b2e0-424b-9480-27557642524e",
+    const ringwatcherId = Object.values(
+      started.battle!.board.cardInstances,
+    ).find(
+      (instance) =>
+        instance.controller === "player" &&
+        instance.definition.cardId === "647f5150-b2e0-424b-9480-27557642524e",
     )!.battleCardId;
     const player = started.battle!.board.sides.player;
     const promptState = {
@@ -1421,17 +1746,33 @@ describe("tutorial battle lifecycle", () => {
       },
     };
     const opened = reduceTutorial(promptState, "BATTLE_PLAY_CARD", {
-      battleCardId: ringwatcherId, targetBattleCardIds: [], aiChoices: [],
+      battleCardId: ringwatcherId,
+      targetBattleCardIds: [],
+      aiChoices: [],
     });
     expect(opened.outcome).toBe("applied");
     const pending = opened.state.battle!.pendingPrompt!;
-    const resolution = { promptId: pending.promptId, resolution: { kind: "foresee" } };
-    expect(reduceTutorial(opened.state, "RESOLVE_PROMPT", resolution, "client-observer").outcome).toBe("bounced");
-    expect(reduceTutorial(opened.state, "RESOLVE_PROMPT", resolution).outcome).toBe("applied");
+    const resolution = {
+      promptId: pending.promptId,
+      resolution: { kind: "foresee" },
+    };
+    expect(
+      reduceTutorial(
+        opened.state,
+        "RESOLVE_PROMPT",
+        resolution,
+        "client-observer",
+      ).outcome,
+    ).toBe("bounced");
+    expect(
+      reduceTutorial(opened.state, "RESOLVE_PROMPT", resolution).outcome,
+    ).toBe("applied");
   });
 
   it("accepts only the exact tutorial AI actor for automatic command, play, blocking, and prompt resolution", () => {
-    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(content()),
+    );
     const started = begin().state;
     const automaticActor = "tutorial-ai:client-a";
     const spoofedActor = "tutorial-ai:client-observer";
@@ -1442,8 +1783,18 @@ describe("tutorial battle lifecycle", () => {
         sourceSurface: "auto-system",
       },
     };
-    expect(reduceTutorial(started, "BATTLE_COMMAND", automaticCommand, spoofedActor).outcome).toBe("bounced");
-    expect(reduceTutorial(started, "BATTLE_COMMAND", automaticCommand, automaticActor).outcome).toBe("applied");
+    expect(
+      reduceTutorial(started, "BATTLE_COMMAND", automaticCommand, spoofedActor)
+        .outcome,
+    ).toBe("bounced");
+    expect(
+      reduceTutorial(
+        started,
+        "BATTLE_COMMAND",
+        automaticCommand,
+        automaticActor,
+      ).outcome,
+    ).toBe("applied");
 
     const enemyCardId = handInstanceId(
       started.battle!,
@@ -1471,8 +1822,22 @@ describe("tutorial battle lifecycle", () => {
       targetBattleCardIds: [targetCardId],
       aiChoices: [],
     };
-    expect(reduceTutorial(enemyPlayState, "BATTLE_PLAY_CARD", enemyPlay, spoofedActor).outcome).toBe("bounced");
-    expect(reduceTutorial(enemyPlayState, "BATTLE_PLAY_CARD", enemyPlay, automaticActor).outcome).toBe("applied");
+    expect(
+      reduceTutorial(
+        enemyPlayState,
+        "BATTLE_PLAY_CARD",
+        enemyPlay,
+        spoofedActor,
+      ).outcome,
+    ).toBe("bounced");
+    expect(
+      reduceTutorial(
+        enemyPlayState,
+        "BATTLE_PLAY_CARD",
+        enemyPlay,
+        automaticActor,
+      ).outcome,
+    ).toBe("applied");
 
     const blockingState = {
       ...started,
@@ -1481,12 +1846,29 @@ describe("tutorial battle lifecycle", () => {
         board: { ...started.battle!.board, phase: "dusk" as const },
       },
     };
-    expect(reduceTutorial(blockingState, "BATTLE_AI_BLOCK", { aiSide: "enemy" }, spoofedActor).outcome).toBe("bounced");
-    expect(reduceTutorial(blockingState, "BATTLE_AI_BLOCK", { aiSide: "enemy" }, automaticActor).outcome).toBe("applied");
+    expect(
+      reduceTutorial(
+        blockingState,
+        "BATTLE_AI_BLOCK",
+        { aiSide: "enemy" },
+        spoofedActor,
+      ).outcome,
+    ).toBe("bounced");
+    expect(
+      reduceTutorial(
+        blockingState,
+        "BATTLE_AI_BLOCK",
+        { aiSide: "enemy" },
+        automaticActor,
+      ).outcome,
+    ).toBe("applied");
 
-    const ringwatcherId = Object.values(started.battle!.board.cardInstances).find((instance) =>
-      instance.controller === "enemy" &&
-      instance.definition.cardId === "647f5150-b2e0-424b-9480-27557642524e",
+    const ringwatcherId = Object.values(
+      started.battle!.board.cardInstances,
+    ).find(
+      (instance) =>
+        instance.controller === "enemy" &&
+        instance.definition.cardId === "647f5150-b2e0-424b-9480-27557642524e",
     )!.battleCardId;
     const enemy = started.battle!.board.sides.enemy;
     const promptState = {
@@ -1511,9 +1893,16 @@ describe("tutorial battle lifecycle", () => {
         },
       },
     };
-    const opened = reduceTutorial(promptState, "BATTLE_PLAY_CARD", {
-      battleCardId: ringwatcherId, targetBattleCardIds: [], aiChoices: [],
-    }, automaticActor);
+    const opened = reduceTutorial(
+      promptState,
+      "BATTLE_PLAY_CARD",
+      {
+        battleCardId: ringwatcherId,
+        targetBattleCardIds: [],
+        aiChoices: [],
+      },
+      automaticActor,
+    );
     expect(opened.outcome).toBe("applied");
     const presentation = opened.state.battle!.tutorialPresentation;
     expect(presentation).toMatchObject({
@@ -1529,13 +1918,28 @@ describe("tutorial battle lifecycle", () => {
     );
     expect(resumed.outcome).toBe("applied");
     const pending = resumed.state.battle!.pendingPrompt!;
-    const resolution = { promptId: pending.promptId, resolution: { kind: "foresee" } };
-    expect(reduceTutorial(resumed.state, "RESOLVE_PROMPT", resolution, spoofedActor).outcome).toBe("bounced");
-    expect(reduceTutorial(resumed.state, "RESOLVE_PROMPT", resolution, automaticActor).outcome).toBe("applied");
+    const resolution = {
+      promptId: pending.promptId,
+      resolution: { kind: "foresee" },
+    };
+    expect(
+      reduceTutorial(resumed.state, "RESOLVE_PROMPT", resolution, spoofedActor)
+        .outcome,
+    ).toBe("bounced");
+    expect(
+      reduceTutorial(
+        resumed.state,
+        "RESOLVE_PROMPT",
+        resolution,
+        automaticActor,
+      ).outcome,
+    ).toBe("applied");
   });
 
   it("leaves journey-mode command, play, gesture, and blocking actor behavior unchanged", () => {
-    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(content()),
+    );
     const started = begin().state;
     const journeyState = {
       ...started,
@@ -1555,20 +1959,55 @@ describe("tutorial battle lifecycle", () => {
       edit: { kind: "SET_SCORE", side: "enemy", value: 8 },
       sourceSurface: "test",
     };
-    expect(reduceTutorial(journeyState, "BATTLE_COMMAND", { command: scoreCommand }, observer).outcome).toBe("applied");
-    expect(reduceTutorial(journeyState, "BATTLE_GESTURE", { commands: [scoreCommand] }, observer).outcome).toBe("applied");
-    expect(reduceTutorial(journeyState, "BATTLE_PLAY_CARD", {
-      battleCardId: journeyState.battle.board.sides.player.hand[0], targetBattleCardIds: [], aiChoices: [],
-    }, observer).outcome).toBe("applied");
+    expect(
+      reduceTutorial(
+        journeyState,
+        "BATTLE_COMMAND",
+        { command: scoreCommand },
+        observer,
+      ).outcome,
+    ).toBe("applied");
+    expect(
+      reduceTutorial(
+        journeyState,
+        "BATTLE_GESTURE",
+        { commands: [scoreCommand] },
+        observer,
+      ).outcome,
+    ).toBe("applied");
+    expect(
+      reduceTutorial(
+        journeyState,
+        "BATTLE_PLAY_CARD",
+        {
+          battleCardId: journeyState.battle.board.sides.player.hand[0],
+          targetBattleCardIds: [],
+          aiChoices: [],
+        },
+        observer,
+      ).outcome,
+    ).toBe("applied");
     const blockingState = {
       ...journeyState,
-      battle: { ...journeyState.battle, board: { ...journeyState.battle.board, phase: "dusk" as const } },
+      battle: {
+        ...journeyState.battle,
+        board: { ...journeyState.battle.board, phase: "dusk" as const },
+      },
     };
-    expect(reduceTutorial(blockingState, "BATTLE_AI_BLOCK", { aiSide: "enemy" }, observer).outcome).toBe("applied");
+    expect(
+      reduceTutorial(
+        blockingState,
+        "BATTLE_AI_BLOCK",
+        { aiSide: "enemy" },
+        observer,
+      ).outcome,
+    ).toBe("applied");
   });
 
   it("runs initial and post-Dreamwell Dawn triggers exactly once through the tutorial controller", () => {
-    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(content()),
+    );
     const automaticActor = "tutorial-ai:client-a";
     const commandFrom = (state: FoldState) => {
       const plan = planTutorialBattleController({
@@ -1577,20 +2016,34 @@ describe("tutorial battle lifecycle", () => {
         connectedClientIds: ["client-a"],
       });
       expect(plan.intent?.kind).toBe("battle-command");
-      if (plan.intent?.kind !== "battle-command") throw new Error("expected automatic battle command");
+      if (plan.intent?.kind !== "battle-command")
+        throw new Error("expected automatic battle command");
       return plan.intent.command;
     };
     const started = begin().state;
 
     const initialDawn = commandFrom(started);
-    const initial = reduceTutorial(started, "BATTLE_COMMAND", { command: initialDawn }, automaticActor);
+    const initial = reduceTutorial(
+      started,
+      "BATTLE_COMMAND",
+      { command: initialDawn },
+      automaticActor,
+    );
     expect(initial.outcome).toBe("applied");
     expect(initial.state.battle).toMatchObject({
       board: { phase: "day", activeSide: "player", turnNumber: 4 },
       triggerDawnFired: { player: 4, enemy: null },
     });
-    const initialReplay = reduceTutorial(initial.state, "BATTLE_COMMAND", { command: initialDawn }, automaticActor);
-    expect(initialReplay.state.battle?.triggerDawnFired).toEqual({ player: 4, enemy: null });
+    const initialReplay = reduceTutorial(
+      initial.state,
+      "BATTLE_COMMAND",
+      { command: initialDawn },
+      automaticActor,
+    );
+    expect(initialReplay.state.battle?.triggerDawnFired).toEqual({
+      player: 4,
+      enemy: null,
+    });
 
     const prior = initial.state.battle!;
     const later = {
@@ -1604,40 +2057,71 @@ describe("tutorial battle lifecycle", () => {
           phase: "dreamwell" as const,
           sides: {
             ...prior.board.sides,
-            enemy: { ...prior.board.sides.enemy, dreamwellDrawnTurn: null, score: 2 },
+            enemy: {
+              ...prior.board.sides.enemy,
+              dreamwellDrawnTurn: null,
+              score: 2,
+            },
           },
         },
       },
     };
-    const reveal = reduceTutorial(later, "BATTLE_COMMAND", { command: commandFrom(later) }, automaticActor);
-    expect(reveal.state.battle?.board).toMatchObject({ activeSide: "enemy", phase: "dreamwell", turnNumber: 5 });
+    const reveal = reduceTutorial(
+      later,
+      "BATTLE_COMMAND",
+      { command: commandFrom(later) },
+      automaticActor,
+    );
+    expect(reveal.state.battle?.board).toMatchObject({
+      activeSide: "enemy",
+      phase: "dreamwell",
+      turnNumber: 5,
+    });
     const presentationPlan = planTutorialBattleController({
       state: reveal.state,
       clientId: "client-a",
       connectedClientIds: ["client-a"],
     });
-    expect(presentationPlan.intent).toMatchObject({ kind: "complete-presentation" });
-    if (presentationPlan.intent?.kind !== "complete-presentation") throw new Error("expected Dreamwell presentation completion");
+    expect(presentationPlan.intent).toMatchObject({
+      kind: "complete-presentation",
+    });
+    if (presentationPlan.intent?.kind !== "complete-presentation")
+      throw new Error("expected Dreamwell presentation completion");
     const resumed = reduceTutorial(
       reveal.state,
       "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
       { presentationId: presentationPlan.intent.presentationId },
       automaticActor,
     );
-    const dawn = reduceTutorial(resumed.state, "BATTLE_COMMAND", { command: commandFrom(resumed.state) }, automaticActor);
+    const dawn = reduceTutorial(
+      resumed.state,
+      "BATTLE_COMMAND",
+      { command: commandFrom(resumed.state) },
+      automaticActor,
+    );
     expect(dawn.outcome).toBe("applied");
     expect(dawn.state.battle).toMatchObject({
       board: { activeSide: "enemy", phase: "day", turnNumber: 5 },
       triggerDawnFired: { player: 4, enemy: 5 },
     });
     expect(dawn.state.battle?.board.sides.enemy.score).toBe(3);
-    const duplicateDawn = reduceTutorial(dawn.state, "BATTLE_COMMAND", { command: commandFrom(resumed.state) }, automaticActor);
+    const duplicateDawn = reduceTutorial(
+      dawn.state,
+      "BATTLE_COMMAND",
+      { command: commandFrom(resumed.state) },
+      automaticActor,
+    );
     expect(duplicateDawn.state.battle?.board.sides.enemy.score).toBe(3);
-    expect(duplicateDawn.state.battle?.triggerDawnFired).toEqual({ player: 4, enemy: 5 });
+    expect(duplicateDawn.state.battle?.triggerDawnFired).toEqual({
+      player: 4,
+      enemy: 5,
+    });
   });
 
   it("keeps the tutorial handoff playable through Dreamwell, draw, scoring, and player-only victory", () => {
-    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(content()),
+    );
     const automaticActor = "tutorial-ai:client-a";
     const started = begin().state;
     const initial = started.battle!;
@@ -1649,13 +2133,23 @@ describe("tutorial battle lifecycle", () => {
       },
     };
     const enemyHandBefore = handoffState.battle.board.sides.enemy.hand.length;
-    const handoff = reduceTutorial(handoffState, "BATTLE_COMMAND", {
-      command: {
-        id: "DEBUG_EDIT",
-        edit: { kind: "SET_BATTLE_FLOW", activeSide: "enemy", phase: "dreamwell", turnNumber: 5 },
-        sourceSurface: "auto-system",
+    const handoff = reduceTutorial(
+      handoffState,
+      "BATTLE_COMMAND",
+      {
+        command: {
+          id: "DEBUG_EDIT",
+          edit: {
+            kind: "SET_BATTLE_FLOW",
+            activeSide: "enemy",
+            phase: "dreamwell",
+            turnNumber: 5,
+          },
+          sourceSurface: "auto-system",
+        },
       },
-    }, automaticActor);
+      automaticActor,
+    );
     expect(handoff.outcome).toBe("applied");
     let handedOffState = handoff.state;
     for (
@@ -1674,17 +2168,34 @@ describe("tutorial battle lifecycle", () => {
       expect(completed.outcome).toBe("applied");
       handedOffState = completed.state;
     }
-    expect(handedOffState.battle?.board).toMatchObject({ activeSide: "enemy", phase: "dreamwell", turnNumber: 5 });
-    expect(handedOffState.battle?.board.sides.enemy.hand).toHaveLength(enemyHandBefore);
+    expect(handedOffState.battle?.board).toMatchObject({
+      activeSide: "enemy",
+      phase: "dreamwell",
+      turnNumber: 5,
+    });
+    expect(handedOffState.battle?.board.sides.enemy.hand).toHaveLength(
+      enemyHandBefore,
+    );
 
     const revealPlan = planTutorialBattleController({
       state: handedOffState,
       clientId: "client-a",
       connectedClientIds: ["client-a"],
     });
-    expect(revealPlan.intent).toMatchObject({ kind: "battle-command", command: { edit: { kind: "DRAW_DREAMWELL_CARD", side: "enemy", turnNumber: 5 } } });
-    if (revealPlan.intent?.kind !== "battle-command") throw new Error("expected Dreamwell reveal");
-    const revealed = reduceTutorial(handedOffState, "BATTLE_COMMAND", { command: revealPlan.intent.command }, automaticActor);
+    expect(revealPlan.intent).toMatchObject({
+      kind: "battle-command",
+      command: {
+        edit: { kind: "DRAW_DREAMWELL_CARD", side: "enemy", turnNumber: 5 },
+      },
+    });
+    if (revealPlan.intent?.kind !== "battle-command")
+      throw new Error("expected Dreamwell reveal");
+    const revealed = reduceTutorial(
+      handedOffState,
+      "BATTLE_COMMAND",
+      { command: revealPlan.intent.command },
+      automaticActor,
+    );
     expect(revealed.outcome).toBe("applied");
     expect(revealed.state.battle?.board.sides.enemy.dreamwellDrawnTurn).toBe(5);
     const dreamwellPresentation = revealed.state.battle?.tutorialPresentation;
@@ -1730,20 +2241,31 @@ describe("tutorial battle lifecycle", () => {
       enemyHandBefore + 1,
     );
 
-    const enemyTen = reduceTutorial({
-      ...afterDreamwell.state,
-      battle: {
-        ...afterDreamwell.state.battle!,
-        board: { ...afterDreamwell.state.battle!.board, turnNumber: Number.MAX_SAFE_INTEGER - 1 },
+    const enemyTen = reduceTutorial(
+      {
+        ...afterDreamwell.state,
+        battle: {
+          ...afterDreamwell.state.battle!,
+          board: {
+            ...afterDreamwell.state.battle!.board,
+            turnNumber: Number.MAX_SAFE_INTEGER - 1,
+          },
+        },
       },
-    }, "BATTLE_COMMAND", {
-      command: {
-        id: "DEBUG_EDIT",
-        edit: { kind: "SET_SCORE", side: "enemy", value: 10 },
-        sourceSurface: "auto-system",
+      "BATTLE_COMMAND",
+      {
+        command: {
+          id: "DEBUG_EDIT",
+          edit: { kind: "SET_SCORE", side: "enemy", value: 10 },
+          sourceSurface: "auto-system",
+        },
       },
-    }, automaticActor);
-    expect(enemyTen.state.battle?.board).toMatchObject({ result: null, forcedResult: null });
+      automaticActor,
+    );
+    expect(enemyTen.state.battle?.board).toMatchObject({
+      result: null,
+      forcedResult: null,
+    });
     expect(enemyTen.state.battle?.board.sides.enemy.score).toBe(10);
 
     const playerCardId = initial.board.sides.player.frontRank.F4!;
@@ -1758,39 +2280,59 @@ describe("tutorial battle lifecycle", () => {
           sides: {
             ...initial.board.sides,
             player: { ...initial.board.sides.player, score: 9 },
-            enemy: { ...initial.board.sides.enemy, frontRank: { ...initial.board.sides.enemy.frontRank, F0: null } },
+            enemy: {
+              ...initial.board.sides.enemy,
+              frontRank: { ...initial.board.sides.enemy.frontRank, F0: null },
+            },
           },
           cardInstances: {
             ...initial.board.cardInstances,
             [playerCardId]: {
               ...initial.board.cardInstances[playerCardId],
-              definition: { ...initial.board.cardInstances[playerCardId].definition, printedSpark: 1 },
+              definition: {
+                ...initial.board.cardInstances[playerCardId].definition,
+                printedSpark: 1,
+              },
             },
           },
         },
       },
     };
-    const victory = reduceTutorial(playerVictoryState, "BATTLE_COMMAND", {
-      command: { id: "DEBUG_EDIT", edit: { kind: "SET_PHASE", phase: "challenge" }, sourceSurface: "auto-system" },
-    }, automaticActor);
+    const victory = reduceTutorial(
+      playerVictoryState,
+      "BATTLE_COMMAND",
+      {
+        command: {
+          id: "DEBUG_EDIT",
+          edit: { kind: "SET_PHASE", phase: "challenge" },
+          sourceSurface: "auto-system",
+        },
+      },
+      automaticActor,
+    );
     expect(victory.outcome).toBe("applied");
-    expect(victory.state.battle?.board).toMatchObject({ result: "victory", forcedResult: "victory" });
+    expect(victory.state.battle?.board).toMatchObject({
+      result: "victory",
+      forcedResult: "victory",
+    });
   });
 
   it("opens figment guidance after an opponent Dreamwell reveal creates a figment", () => {
     const tutorialContent = content();
-    tutorialContent.tutorialTriggers = [{
-      id: "figment-created",
-      on: ["figment-created"],
-      priority: 100,
-      speaker: "mira",
-      duration: 6,
-      horizontalOffset: 0,
-      verticalOffset: 0,
-      bubbleWidth: 500,
-      match: { kind: "any" },
-      text: "Figments are token representations of characters.",
-    }];
+    tutorialContent.tutorialTriggers = [
+      {
+        id: "figment-created",
+        on: ["figment-created"],
+        priority: 100,
+        speaker: "mira",
+        duration: 6,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 500,
+        match: { kind: "any" },
+        text: "Figments are token representations of characters.",
+      },
+    ];
     registerTutorialBattleInitProvider(
       createTutorialBattleInitProvider(tutorialContent),
     );
@@ -1870,21 +2412,38 @@ describe("tutorial battle lifecycle", () => {
     // The tutorial's guided figment lands centered on the rendered back rank
     // (not the documented leftmost-open default real games use), so the
     // teaching moment doesn't read as materializing off in a board corner.
-    expect(continued.state.battle!.board.sides.enemy.backRank.B4).not.toBeNull();
+    expect(
+      continued.state.battle!.board.sides.enemy.backRank.B4,
+    ).not.toBeNull();
     expect(continued.state.battle!.board.sides.enemy.backRank.B0).toBeNull();
   });
 
   it("normalizes a mode-less persisted battle to journey mode through LOAD_STATE", () => {
-    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(content()),
+    );
     const battle = begin().state.battle!;
-    const legacy = JSON.parse(JSON.stringify(battle)) as Record<string, unknown>;
+    const legacy = JSON.parse(JSON.stringify(battle)) as Record<
+      string,
+      unknown
+    >;
     delete legacy.mode;
     const state = terminalTutorialState();
-    const loaded = reduceGameEvent(state, {
-      type: "LOAD_STATE", payload: { snapshot: state.journey, battle: legacy }, actor: "client-a", basedOnSeq: 41, clientTimestamp: CTX.timestamp,
-    }, CTX);
+    const loaded = reduceGameEvent(
+      state,
+      {
+        type: "LOAD_STATE",
+        payload: { snapshot: state.journey, battle: legacy },
+        actor: "client-a",
+        basedOnSeq: 41,
+        clientTimestamp: CTX.timestamp,
+      },
+      CTX,
+    );
     expect(loaded.outcome).toBe("applied");
     expect(loaded.state.battle?.mode).toEqual({ kind: "journey" });
-    expect(JSON.parse(JSON.stringify(begin().state.battle))).toMatchObject({ mode: { kind: "tutorial" } });
+    expect(JSON.parse(JSON.stringify(begin().state.battle))).toMatchObject({
+      mode: { kind: "tutorial" },
+    });
   });
 });

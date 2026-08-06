@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { economyFixture } from "../testing/economy-fixture";
+import { opponentsFixture } from "../testing/opponents-fixture";
 import {
   loadTestAffiliations,
   loadTestAtlasData,
@@ -87,12 +88,14 @@ function makeJourneyContent(
     cardDatabase,
     dreamAvatars: [dreamAvatar],
 
-    dreamwellCards: [],    dreamsignTemplates: [],
+    dreamwellCards: [],
+    dreamsignTemplates: [],
     dreamscapes: loadTestDreamscapes(),
     affiliations: loadTestAffiliations(),
     guides: loadTestDreamGuides(),
     atlasData: loadTestAtlasData(),
     economyData: economyFixture(),
+    opponentsData: opponentsFixture(),
     poolContext: makeTestPoolContext(["dreamsign-a", "dreamsign-b"]),
   };
 }
@@ -429,8 +432,9 @@ describe("journey state actions", () => {
     // non-empty draft pool was produced rather than checking exact card numbers.
     expect(next.resolvedPackage).not.toBeNull();
     expect(next.resolvedPackage?.draftPoolSize).toBeGreaterThan(0);
-    expect(Object.keys(next.resolvedPackage?.draftPoolCopiesByCard ?? {}).length)
-      .toBeGreaterThan(0);
+    expect(
+      Object.keys(next.resolvedPackage?.draftPoolCopiesByCard ?? {}).length,
+    ).toBeGreaterThan(0);
     // The state seed matches the seed the pool was built from.
     expect(next.seed).toBe("journey-seed-1");
     // The remaining dreamsign pool is the resolved pool minus any dreamsigns the
@@ -477,9 +481,10 @@ describe("journey state actions", () => {
     // Journey start builds the draft pool, which emits exactly one provenance log
     // recording the algorithm and seed the pool was constructed from.
     expect(logSpy).toHaveBeenCalledTimes(1);
-    const constructed = JSON.parse(
-      logSpy.mock.calls[0][0] as string,
-    ) as Record<string, unknown>;
+    const constructed = JSON.parse(logSpy.mock.calls[0][0] as string) as Record<
+      string,
+      unknown
+    >;
     expect(constructed.event).toBe("draft_pool_constructed");
     expect(constructed.dreamAvatarId).toBe(dreamAvatar.id);
     expect(typeof constructed.seed).toBe("number");
@@ -521,9 +526,9 @@ describe("journey state actions", () => {
     expect(next.resolvedPackage).toBe(authoredPackage);
     expect(next.isTutorialJourney).toBe(true);
     expect(next.draftState?.mode).toBe("pool");
-    expect(
-      (next.draftState as PoolDraftState).draftPoolCopiesByCard,
-    ).toEqual(authoredCopies);
+    expect((next.draftState as PoolDraftState).draftPoolCopiesByCard).toEqual(
+      authoredCopies,
+    );
     expect(next.remainingDreamsignPool).toContain("dreamsign-a");
     expect(
       next.atlas.knownDreamsignCarrierIds
@@ -534,7 +539,10 @@ describe("journey state actions", () => {
 
   it("sets the journey screen and active site together", () => {
     const prev = createDefaultState();
-    const siteScreen = setJourneyScreen(prev, { type: "site", siteId: "site-1" });
+    const siteScreen = setJourneyScreen(prev, {
+      type: "site",
+      siteId: "site-1",
+    });
     const atlasScreen = setJourneyScreen(siteScreen, { type: "atlas" });
 
     expect(siteScreen.screen).toEqual({ type: "site", siteId: "site-1" });
@@ -707,12 +715,13 @@ describe("journey state actions (replay draft)", () => {
     });
     // The prepared next offer is computed against the deck WITH C1, so it leads
     // with C2 just like the direct-pick path.
-    expect(
-      (prepared.next.draftState?.currentOffer ?? [])[0],
-    ).toBe(2);
+    expect((prepared.next.draftState?.currentOffer ?? [])[0]).toBe(2);
 
     // Happy path: state unchanged since prepare -> commit writes prepared.next.
-    const committed = commitPreparedDraftCardPickInJourneyState({ prev, prepared });
+    const committed = commitPreparedDraftCardPickInJourneyState({
+      prev,
+      prepared,
+    });
     expect(committed?.deck).toEqual(prepared.next.deck);
     expect(committed?.draftState?.currentOffer).toEqual(
       prepared.next.draftState?.currentOffer,
@@ -740,7 +749,12 @@ describe("journey state actions (replay draft)", () => {
     const staleDeck: JourneyState = {
       ...prev,
       deck: [
-        { entryId: "deck-1", cardNumber: 99, transfiguration: null, isBane: false },
+        {
+          entryId: "deck-1",
+          cardNumber: 99,
+          transfiguration: null,
+          isBane: false,
+        },
       ],
     };
     expect(
@@ -782,7 +796,12 @@ describe("journey state actions (replay draft)", () => {
     });
 
     expect(next.deck).toEqual([
-      { entryId: "deck-1", cardNumber: 101, transfiguration: null, isBane: false },
+      {
+        entryId: "deck-1",
+        cardNumber: 101,
+        transfiguration: null,
+        isBane: false,
+      },
     ]);
     expect(next.draftState?.pickNumber).toBe(2);
     expect(next.draftState?.sitePicksCompleted).toBe(1);

@@ -5,6 +5,7 @@
 // content-coupled event chain through the canonical game engine config, so the
 // previously-bouncing provider-backed events APPLY:
 import { economyFixture } from "../../testing/economy-fixture";
+import { opponentsFixture } from "../../testing/opponents-fixture";
 //
 //   START_JOURNEY -> SELECT_DREAM_AVATAR -> OPEN_SITE (every content-coupled site
 //   type) -> REROLL_SHOP -> BEGIN_BATTLE
@@ -35,7 +36,10 @@ import { genesisFoldState } from "../../rules/fold-state";
 import { reduceGameEvent } from "../../rules/reducer";
 import type { JourneyContent } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
-import type { DreamAvatarContent, DreamsignTemplate } from "../../types/content";
+import type {
+  DreamAvatarContent,
+  DreamsignTemplate,
+} from "../../types/content";
 import type { FoldState } from "../../rules/fold-state";
 import type { JourneyState, SiteState, SiteType } from "../../types/journey";
 import { asCardId, asCardName } from "../../types/card-identity";
@@ -77,7 +81,11 @@ const GENESIS: Genesis = {
   seed: "real-provider-seed",
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null },
+  contentConfig: {
+    poolVariant: "test",
+    draftMode: "pool",
+    fresh20PackSize: null,
+  },
 };
 
 /** Eight dreamsign templates so the reward / dreamsign / market generators have a live pool. */
@@ -145,6 +153,7 @@ function makeJourneyContent(): JourneyContent {
     guides: loadTestDreamGuides(),
     atlasData: loadTestAtlasData(),
     economyData: economyFixture(),
+    opponentsData: opponentsFixture(),
     poolContext: makeTestPoolContext(dreamsignIds),
   };
 }
@@ -211,7 +220,9 @@ describe("registerGameProviders (real content providers)", () => {
     const addSiteEvents: SeqEvent[] = [];
     for (const siteType of [...CONTENT_SITE_TYPES, "Battle" as SiteType]) {
       seq += 1;
-      addSiteEvents.push(ev(seq, "ADD_SITE_TO_DREAMSCAPE", { nodeId, siteType }));
+      addSiteEvents.push(
+        ev(seq, "ADD_SITE_TO_DREAMSCAPE", { nodeId, siteType }),
+      );
     }
 
     // Fold the site-additions so we can resolve the minted site ids by type.
@@ -220,9 +231,9 @@ describe("registerGameProviders (real content providers)", () => {
       events: [...prefix, ...addSiteEvents],
     });
     for (const added of addSiteEvents) {
-      expect(
-        withSites.outcomes.find((o) => o.seq === added.seq)?.outcome,
-      ).toBe("applied");
+      expect(withSites.outcomes.find((o) => o.seq === added.seq)?.outcome).toBe(
+        "applied",
+      );
     }
     const node = withSites.finalState.journey.atlas.nodes[nodeId];
     const siteIdByType = new Map<SiteType, string>();
@@ -238,10 +249,15 @@ describe("registerGameProviders (real content providers)", () => {
     // Battle-last rule then permits the terminal battle sequence.
     const tail: SeqEvent[] = [];
     const openedTypes = new Set<SiteType>();
-    for (const site of node.sites.filter((candidate) => candidate.type !== "Battle")) {
+    for (const site of node.sites.filter(
+      (candidate) => candidate.type !== "Battle",
+    )) {
       seq += 1;
       tail.push(ev(seq, "ENTER_SITE", { siteId: site.id }));
-      if (CONTENT_SITE_TYPES.includes(site.type) && !openedTypes.has(site.type)) {
+      if (
+        CONTENT_SITE_TYPES.includes(site.type) &&
+        !openedTypes.has(site.type)
+      ) {
         openedTypes.add(site.type);
         seq += 1;
         tail.push(ev(seq, "OPEN_SITE", { siteId: site.id }));
@@ -253,9 +269,7 @@ describe("registerGameProviders (real content providers)", () => {
       seq += 1;
       tail.push(ev(seq, "COMPLETE_SITE", { siteId: site.id }));
     }
-    const battleSiteId = node.sites.find(
-      (site) => site.type === "Battle",
-    )?.id;
+    const battleSiteId = node.sites.find((site) => site.type === "Battle")?.id;
     expect(battleSiteId).toBeDefined();
     seq += 1;
     tail.push(ev(seq, "ENTER_SITE", { siteId: battleSiteId }));
@@ -292,9 +306,9 @@ describe("registerGameProviders (real content providers)", () => {
       .map((id) => first.finalState.journey.atlas.nodes[id])
       .filter((candidate) => candidate?.state === "available");
     expect(frontier.length).toBeGreaterThan(0);
-    expect(
-      frontier.every((candidate) => candidate.dreamscapeId !== null),
-    ).toBe(true);
+    expect(frontier.every((candidate) => candidate.dreamscapeId !== null)).toBe(
+      true,
+    );
     const marketSiteId = siteIdByType.get("DreamsignMarket");
     expect(marketSiteId).toBeDefined();
     if (marketSiteId !== undefined) {
@@ -427,7 +441,9 @@ describe("registerGameProviders (real content providers)", () => {
       (slot) => slot.itemType === "card",
     );
     expect(cards.length).toBeGreaterThan(0);
-    expect(cards.every((slot) => slot.transfiguration !== undefined)).toBe(true);
+    expect(cards.every((slot) => slot.transfiguration !== undefined)).toBe(
+      true,
+    );
   });
 
   it("rebuilds debug progress as one consistent Atlas transition", () => {
@@ -458,10 +474,7 @@ describe("registerGameProviders (real content providers)", () => {
   it("plays all seven real-content layers through authoritative reducer events", () => {
     let state = genesisFoldState(GENESIS);
     let seq = 1;
-    const apply = (
-      type: string,
-      payload: Record<string, unknown>,
-    ): void => {
+    const apply = (type: string, payload: Record<string, unknown>): void => {
       const event = {
         type,
         payload,
@@ -556,7 +569,10 @@ function makeMerchantFixture(): {
   const site = makeMerchantTestSite({ id: MERCHANT_SITE_ID, type: "Augury" });
 
   const cards: CardData[] = [];
-  const corpus: Record<string, Partial<MerchantCorpusCard> & { quality: number }> = {};
+  const corpus: Record<
+    string,
+    Partial<MerchantCorpusCard> & { quality: number }
+  > = {};
   for (let i = 0; i < 30; i += 1) {
     const cardNumber = 1000 + i;
     const id = `aaaa0000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`;
@@ -574,7 +590,9 @@ function makeMerchantFixture(): {
   const profiles: Record<string, DreamsignProfile> = {};
   for (let i = 0; i < 10; i += 1) {
     const id = `dsign-${String(i)}`;
-    templates.push(makeMerchantTestDreamsignTemplate({ id, name: `Sign ${String(i)}` }));
+    templates.push(
+      makeMerchantTestDreamsignTemplate({ id, name: `Sign ${String(i)}` }),
+    );
     profiles[id] = makeMerchantTestDreamsignProfile({ id });
   }
 
@@ -591,7 +609,10 @@ function makeMerchantFixture(): {
     screen: { type: "site", siteId: site.id },
     activeSiteId: site.id,
     deck: [1000, 1001, 1002, 1003, 1004, 1005].map((cardNumber, index) =>
-      makeMerchantTestDeckEntry({ entryId: `deck-${String(index + 1)}`, cardNumber }),
+      makeMerchantTestDeckEntry({
+        entryId: `deck-${String(index + 1)}`,
+        cardNumber,
+      }),
     ),
     atlas: {
       nodes: {
@@ -727,7 +748,10 @@ describe("createSiteContentProvider — Gamble", () => {
     const fixture = makeMerchantFixture();
     const templates = Array.from({ length: 55 }, (_value, index) => {
       const id = `dsign-${String(index).padStart(3, "0")}`;
-      return makeMerchantTestDreamsignTemplate({ id, name: `Sign ${String(index)}` });
+      return makeMerchantTestDreamsignTemplate({
+        id,
+        name: `Sign ${String(index)}`,
+      });
     });
     const profiles = new Map(
       templates.map((template) => [

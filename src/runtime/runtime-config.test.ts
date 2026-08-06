@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool";
 import type { ContentConfig } from "../eventlog/types";
 import { economyFixture } from "../testing/economy-fixture";
+import { opponentsFixture } from "../testing/opponents-fixture";
 import {
   applyContentConfigToSearch,
   contentConfigFromRuntime,
@@ -34,9 +35,9 @@ describe("parseRuntimeConfig", () => {
       expect(parseRuntimeConfig("?gambleGame=three-gate").gambleGameId).toBe(
         "gravok-three-gate-wager",
       );
-      expect(
-        parseRuntimeConfig("?gambleGame=ladder-climb").gambleGameId,
-      ).toBe("tidemark-ladder-climb");
+      expect(parseRuntimeConfig("?gambleGame=ladder-climb").gambleGameId).toBe(
+        "tidemark-ladder-climb",
+      );
       expect(
         parseRuntimeConfig("?gambleGame=starway-stairs").gambleGameId,
       ).toBe("starway-stairs");
@@ -79,7 +80,9 @@ describe("parseRuntimeConfig", () => {
     });
 
     it("returns null when card is absent, blank, or not a UUID", () => {
-      expect(parseRuntimeConfig("?goto=exploration").explorationCardId).toBeNull();
+      expect(
+        parseRuntimeConfig("?goto=exploration").explorationCardId,
+      ).toBeNull();
       expect(
         parseRuntimeConfig("?goto=exploration&card=%20%20").explorationCardId,
       ).toBeNull();
@@ -315,14 +318,23 @@ describe("removeUiParamFromSearch", () => {
 describe("contentConfigFromRuntime", () => {
   const atlasFoldHash = "fixture-atlas-fold-hash";
   const economyData = economyFixture();
+  const opponentsData = opponentsFixture();
 
   it("extracts the fold-relevant slice with defaults for absent optionals", () => {
-    expect(contentConfigFromRuntime(parseRuntimeConfig(""), atlasFoldHash, economyData)).toEqual({
+    expect(
+      contentConfigFromRuntime(
+        parseRuntimeConfig(""),
+        atlasFoldHash,
+        economyData,
+        opponentsData,
+      ),
+    ).toEqual({
       poolVariant: DEFAULT_POOL_VARIANT,
       draftMode: "pool",
       fresh20PackSize: null,
       atlasFoldHash,
       economyFoldHash: economyData.foldHash,
+      opponentsFoldHash: opponentsData.foldHash,
       defaultStartingEssence: economyData.journey.defaultStartingEssence,
       dreamsignCap: economyData.journey.dreamsignCap,
     });
@@ -334,6 +346,7 @@ describe("contentConfigFromRuntime", () => {
         parseRuntimeConfig("?algo=fresh20&packsize=15"),
         atlasFoldHash,
         economyData,
+        opponentsData,
       ),
     ).toEqual({
       poolVariant: DEFAULT_POOL_VARIANT,
@@ -341,6 +354,7 @@ describe("contentConfigFromRuntime", () => {
       fresh20PackSize: 15,
       atlasFoldHash,
       economyFoldHash: economyData.foldHash,
+      opponentsFoldHash: opponentsData.foldHash,
       defaultStartingEssence: economyData.journey.defaultStartingEssence,
       dreamsignCap: economyData.journey.dreamsignCap,
     });
@@ -348,7 +362,12 @@ describe("contentConfigFromRuntime", () => {
 
   it("reflects a named pool variant", () => {
     expect(
-      contentConfigFromRuntime(parseRuntimeConfig("?algo=idf2"), atlasFoldHash, economyData).poolVariant,
+      contentConfigFromRuntime(
+        parseRuntimeConfig("?algo=idf2"),
+        atlasFoldHash,
+        economyData,
+        opponentsData,
+      ).poolVariant,
     ).toBe("idf2");
   });
 });
@@ -361,6 +380,7 @@ describe("contentConfigsEqual", () => {
     fresh20PackSize: null,
     atlasFoldHash: "fixture-atlas-fold-hash",
     economyFoldHash: economyData.foldHash,
+    opponentsFoldHash: opponentsFixture().foldHash,
     defaultStartingEssence: economyData.journey.defaultStartingEssence,
     dreamsignCap: economyData.journey.dreamsignCap,
   };
@@ -379,12 +399,21 @@ describe("contentConfigsEqual", () => {
     expect(contentConfigsEqual(base, { ...base, fresh20PackSize: 20 })).toBe(
       false,
     );
-    expect(contentConfigsEqual(base, { ...base, atlasFoldHash: "different" })).toBe(
+    expect(
+      contentConfigsEqual(base, { ...base, atlasFoldHash: "different" }),
+    ).toBe(false);
+    expect(
+      contentConfigsEqual(base, { ...base, economyFoldHash: "different" }),
+    ).toBe(false);
+    expect(
+      contentConfigsEqual(base, { ...base, opponentsFoldHash: "different" }),
+    ).toBe(false);
+    expect(
+      contentConfigsEqual(base, { ...base, defaultStartingEssence: 999 }),
+    ).toBe(false);
+    expect(contentConfigsEqual(base, { ...base, dreamsignCap: 999 })).toBe(
       false,
     );
-    expect(contentConfigsEqual(base, { ...base, economyFoldHash: "different" })).toBe(false);
-    expect(contentConfigsEqual(base, { ...base, defaultStartingEssence: 999 })).toBe(false);
-    expect(contentConfigsEqual(base, { ...base, dreamsignCap: 999 })).toBe(false);
   });
 });
 
@@ -393,6 +422,7 @@ describe("applyContentConfigToSearch", () => {
     const economyData = economyFixture();
     const pinnedEconomy = {
       economyFoldHash: economyData.foldHash,
+      opponentsFoldHash: opponentsFixture().foldHash,
       defaultStartingEssence: economyData.journey.defaultStartingEssence,
       dreamsignCap: economyData.journey.dreamsignCap,
     };
@@ -428,13 +458,20 @@ describe("applyContentConfigToSearch", () => {
     ];
     for (const config of configs) {
       const search = applyContentConfigToSearch("", config);
-      expect(contentConfigFromRuntime(
-        parseRuntimeConfig(search),
-        config.atlasFoldHash ?? "fixture-atlas-fold-hash",
-        { ...economyData, foldHash: config.economyFoldHash ?? economyData.foldHash },
-      )).toEqual(
-        config,
-      );
+      expect(
+        contentConfigFromRuntime(
+          parseRuntimeConfig(search),
+          config.atlasFoldHash ?? "fixture-atlas-fold-hash",
+          {
+            ...economyData,
+            foldHash: config.economyFoldHash ?? economyData.foldHash,
+          },
+          {
+            ...opponentsFixture(),
+            foldHash: config.opponentsFoldHash ?? opponentsFixture().foldHash,
+          },
+        ),
+      ).toEqual(config);
     }
   });
 

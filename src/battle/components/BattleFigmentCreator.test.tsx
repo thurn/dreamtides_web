@@ -4,7 +4,7 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { BattleDebugEdit } from "../debug/commands";
-import { createBattleInit } from "../integration/create-battle-init";
+import { createTestBattleInit } from "../../testing/create-battle-init";
 import { createInitialBattleState } from "../state/create-initial-state";
 import {
   FIGMENT_CATALOG_ENTRIES,
@@ -16,7 +16,7 @@ import { makeBattleTestCardDatabase, makeBattleTestDreamAvatars, makeBattleTestS
 import { BattleFigmentCreator } from "./BattleFigmentCreator";
 
 function state() {
-  return createInitialBattleState(createBattleInit({ battleEntryKey: "test", site: makeBattleTestSite(), state: makeBattleTestState(), cardDatabase: makeBattleTestCardDatabase(), dreamAvatars: makeBattleTestDreamAvatars() }));
+  return createInitialBattleState(createTestBattleInit({ battleEntryKey: "test", site: makeBattleTestSite(), state: makeBattleTestState(), cardDatabase: makeBattleTestCardDatabase(), dreamAvatars: makeBattleTestDreamAvatars() }));
 }
 function chooseType(label: string): void {
   const trigger = document.querySelector<HTMLButtonElement>('button[aria-label="Figment type"]');

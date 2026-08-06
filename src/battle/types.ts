@@ -40,12 +40,16 @@ export function frontRankSlotId(index: number): FrontRankSlotId {
 
 /** The first `count` back-rank slot ids, in left-to-right order. */
 export function backRankSlotIds(count: number): BackRankSlotId[] {
-  return Array.from({ length: Math.max(0, count) }, (_unused, index) => backRankSlotId(index));
+  return Array.from({ length: Math.max(0, count) }, (_unused, index) =>
+    backRankSlotId(index),
+  );
 }
 
 /** The first `count` front-rank slot ids, in left-to-right order. */
 export function frontRankSlotIds(count: number): FrontRankSlotId[] {
-  return Array.from({ length: Math.max(0, count) }, (_unused, index) => frontRankSlotId(index));
+  return Array.from({ length: Math.max(0, count) }, (_unused, index) =>
+    frontRankSlotId(index),
+  );
 }
 
 /** Parses the 0-based positional index out of a slot id (`"B3" → 3`). */
@@ -67,7 +71,9 @@ export function isFrontRankSlotId(value: string): value is FrontRankSlotId {
  * scan of a rank's occupants stays correct as the rank grows without bound.
  */
 export function rankSlotIds<K extends string, V>(rank: Record<K, V>): K[] {
-  return (Object.keys(rank) as K[]).sort((left, right) => slotIndex(left) - slotIndex(right));
+  return (Object.keys(rank) as K[]).sort(
+    (left, right) => slotIndex(left) - slotIndex(right),
+  );
 }
 
 /**
@@ -118,14 +124,17 @@ export function densifyRank<K extends string>(
  * `Record<K, null>` is assignable to the wider `Record<K, string | null>` /
  * `Record<K, AiCard | null>` shapes callers declare.
  */
-export function createEmptySlotRecord<K extends string>(slotIds: readonly K[]): Record<K, null> {
+export function createEmptySlotRecord<K extends string>(
+  slotIds: readonly K[],
+): Record<K, null> {
   const record = {} as Record<K, null>;
   for (const slotId of slotIds) {
     record[slotId] = null;
   }
   return record;
 }
-export type BattleZoneId = "deck" | "hand" | "void" | "banished" | "backRank" | "frontRank";
+export type BattleZoneId =
+  "deck" | "hand" | "void" | "banished" | "backRank" | "frontRank";
 export type BattlefieldZone = "backRank" | "frontRank";
 export type BrowseableZone = "deck" | "hand" | "void" | "banished";
 export type MarkerDiffState = "set" | "cleared" | "unchanged";
@@ -150,8 +159,10 @@ export type BattleHistoryEntryKind =
   | "visibility"
   | "battle-flow"
   | "result";
-export type BattleResultReason = "score_target_reached" | "turn_limit_reached" | "forced_result";
-export type BattleAiDecisionStage = "character" | "reposition" | "nonCharacter" | "endTurn";
+export type BattleResultReason =
+  "score_target_reached" | "turn_limit_reached" | "forced_result";
+export type BattleAiDecisionStage =
+  "character" | "reposition" | "nonCharacter" | "endTurn";
 
 /**
  * Actor responsible for producing a battle command. `player`/`enemy` reflect the
@@ -363,6 +374,10 @@ export interface BattleInit {
   scoreToWin: number;
   turnLimit: number;
   maxEnergyCap: number;
+  handLimit: number;
+  opponentsContentHash: string;
+  opponentAbilityActive: boolean;
+  aiConfiguration: import("../types/opponents-data").ResolvedBattleAiConfiguration;
   // bug-039: widened from the Phase 1 literals (`"player"` / `true`) so tests
   // and future phases can exercise the no-skip and enemy-first paths. Runtime
   // invariants (B-6, C-10) are still enforced in `create-battle-init.ts`.
@@ -450,10 +465,7 @@ export interface BattleCardNote {
 }
 
 export type BattleCardProvenanceKind =
-  | "journey-deck"
-  | "generated-copy"
-  | "generated-figment"
-  | "generated-pool";
+  "journey-deck" | "generated-copy" | "generated-figment" | "generated-pool";
 
 export interface BattleCardProvenance {
   kind: BattleCardProvenanceKind;
@@ -602,9 +614,7 @@ export interface BattleFieldCardLocation {
 }
 
 export type BattleCardLocation =
-  | BattleHandCardLocation
-  | BattleZoneCardLocation
-  | BattleFieldCardLocation;
+  BattleHandCardLocation | BattleZoneCardLocation | BattleFieldCardLocation;
 
 export interface BattleLaneJudgment {
   slotId: FrontRankSlotId;
@@ -655,6 +665,7 @@ export interface BattleResultChange {
 }
 
 export interface BattleAiChoiceTrace {
+  aiPresetId?: string;
   stage: BattleAiDecisionStage;
   choice: "PLAY_CARD" | "MOVE_CARD" | "END_TURN";
   battleCardId: string | null;
@@ -751,18 +762,18 @@ export type BattleActivity = BattleCommandActivity | BattleHistoryActivity;
 
 export type BattleReducerAction =
   | {
-    type: "DEBUG_EDIT";
-    edit: BattleDebugEdit;
-    metadata: BattleHistoryEntryMetadata;
-    /**
-     * AI choice trace(s) carried from the command envelope onto the resulting
-     * transition's `aiChoices`. Omitted for human/debug commands.
-     */
-    aiChoices?: BattleAiChoiceTrace[];
-  }
+      type: "DEBUG_EDIT";
+      edit: BattleDebugEdit;
+      metadata: BattleHistoryEntryMetadata;
+      /**
+       * AI choice trace(s) carried from the command envelope onto the resulting
+       * transition's `aiChoices`. Omitted for human/debug commands.
+       */
+      aiChoices?: BattleAiChoiceTrace[];
+    }
   | {
-    type: "FORCE_RESULT";
-    result: BattleResult;
-    metadata: BattleHistoryEntryMetadata;
-    aiChoices?: BattleAiChoiceTrace[];
-  };
+      type: "FORCE_RESULT";
+      result: BattleResult;
+      metadata: BattleHistoryEntryMetadata;
+      aiChoices?: BattleAiChoiceTrace[];
+    };

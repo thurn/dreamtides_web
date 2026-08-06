@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createBattleInit } from "../integration/create-battle-init";
+import { createTestBattleInit } from "../../testing/create-battle-init";
 import { createInitialBattleState } from "../state/create-initial-state";
 import {
   makeBattleTestCardDatabase,
@@ -17,7 +17,7 @@ const EMISSION = {
 } as const;
 
 function makeBattle() {
-  const init = createBattleInit({
+  const init = createTestBattleInit({
     battleEntryKey: "site-7::2::dreamscape-2",
     site: makeBattleTestSite(),
     state: makeBattleTestState(),

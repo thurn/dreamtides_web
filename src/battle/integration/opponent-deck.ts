@@ -48,12 +48,10 @@ import {
   simulateCoherentDraft,
   type DraftPickTrace,
 } from "./coherent-draft";
-import {
-  scoreDeckCoherence,
-  type DeckCoherenceScore,
-} from "./coherence";
+import { scoreDeckCoherence, type DeckCoherenceScore } from "./coherence";
 import { logEvent } from "../../logging";
 import type { BattleRng } from "../random";
+import type { OpponentsData, OpponentCurve } from "../../types/opponents-data";
 
 /**
  * Default run length used when the atlas snapshot does not carry its per-layer
@@ -61,17 +59,15 @@ import type { BattleRng } from "../random";
  * a 7-layer atlas, so the midpoint derives from 7 unless the
  * caller supplies a populated atlas, which always wins.
  */
-export const DEFAULT_RUN_LAYER_COUNT = 7;
-
-/** The first 0-indexed completion level whose opponent ability is active. */
-export const OPPONENT_ABILITY_ACTIVE_FROM_LAYER = 1;
-
 /**
  * Whether the opposing DreamAvatar's ability is active at this run layer.
  * The opening battle is the sole dormant layer.
  */
-export function opponentAbilityIsActive(completionLevel: number): boolean {
-  return completionLevel >= OPPONENT_ABILITY_ACTIVE_FROM_LAYER;
+export function opponentAbilityIsActive(
+  completionLevel: number,
+  abilityActiveFromLayer: number,
+): boolean {
+  return completionLevel >= abilityActiveFromLayer;
 }
 
 /**
@@ -83,8 +79,6 @@ export function opponentAbilityIsActive(completionLevel: number): boolean {
  * drafted count is below the battle deck minimum the deck is topped up with
  * distinct draftable cards (never repeats) so it still has no duplicates.
  */
-const MIN_OPPONENT_DISTINCT_CARDS = 14;
-const MAX_OPPONENT_DISTINCT_CARDS = 30;
 
 /**
  * Post-draft removals: after the draft the opponent prunes its least-coherent
@@ -94,8 +88,6 @@ const MAX_OPPONENT_DISTINCT_CARDS = 30;
  * pick budget is the target distinct count plus removals, so a later opponent
  * drafts a larger pool and prunes harder.
  */
-const MIN_OPPONENT_REMOVALS = 2;
-const MAX_OPPONENT_REMOVALS = 8;
 
 /**
  * Exploration temperature for the simulated draft, by run progress. Early
@@ -105,8 +97,6 @@ const MAX_OPPONENT_REMOVALS = 8;
  * well above the random baseline. Decreasing in completion level, so deck
  * tightness is monotonic in run progress.
  */
-const EARLY_DRAFT_TEMPERATURE = 0.45;
-const LATE_DRAFT_TEMPERATURE = 0.12;
 
 /**
  * Number of independent seeded drafts run per battle. The winner is the draft
@@ -114,7 +104,6 @@ const LATE_DRAFT_TEMPERATURE = 0.12;
  * handful of drafts is enough to make affiliation fit reliable while staying
  * cheap against the cached fit model.
  */
-const OPPONENT_BEST_OF_N = 4;
 
 /**
  * Weight on affiliation fit relative to coherence in best-of-N draft selection,
@@ -122,7 +111,6 @@ const OPPONENT_BEST_OF_N = 4;
  * being a pile of high-affinity but unsynergistic cards; this term tilts the
  * choice toward the draft that landed on the affiliation.
  */
-const AFFILIATION_OBJECTIVE_WEIGHT = 1;
 
 /**
  * How many real corpus records' pack structures the simulated draft draws its
@@ -131,36 +119,25 @@ const AFFILIATION_OBJECTIVE_WEIGHT = 1;
  * consumes. Reusing real packs keeps pack composition unbiased beyond the corpus
  * play-rate, exactly as the cards the fit model learned from.
  */
-const OPPONENT_PACK_SOURCE_RECORDS = 48;
 
 /**
- * The run length for `state.atlas`: the number of layers, which is the number of
- * battles in the run. Falls back to {@link DEFAULT_RUN_LAYER_COUNT} when the
- * atlas does not carry its per-layer node lists.
+ * The run length for `state.atlas`: the number of authored layers and therefore
+ * the number of battles in the run. An empty synthetic test atlas has one
+ * effective layer.
  */
 export function resolveRunLayerCount(layers: readonly unknown[]): number {
-  return layers.length > 0 ? layers.length : DEFAULT_RUN_LAYER_COUNT;
+  return Math.max(1, layers.length);
 }
 
 /**
- * The 0-indexed `completionLevel` at which opponents begin carrying a dreamsign.
- * Derived from the run length — the middle of the run — so it tracks the layer
- * count rather than a hardcoded battle number. For the live 7-layer run this is
- * `floor(7 / 2) = 3` (the fourth battle, 1-indexed layer 4).
- */
-export function runMidpointCompletionLevel(layerCount: number): number {
-  return Math.floor(Math.max(1, layerCount) / 2);
-}
-
-/**
- * Whether an opponent at `completionLevel` (0-indexed) in a `layerCount`-layer
- * run carries a dreamsign: true from the run midpoint onward, false before it.
+ * Whether an opponent at `completionLevel` carries a Dreamsign under the
+ * authored zero-indexed unlock layer.
  */
 export function opponentCarriesDreamsign(
   completionLevel: number,
-  layerCount: number,
+  dreamsignsFromLayer: number,
 ): boolean {
-  return completionLevel >= runMidpointCompletionLevel(layerCount);
+  return completionLevel >= dreamsignsFromLayer;
 }
 
 /**
@@ -184,10 +161,10 @@ function progressFraction(completionLevel: number, layerCount: number): number {
 export function opponentDistinctCardCount(
   completionLevel: number,
   layerCount: number,
+  curve: OpponentCurve,
 ): number {
   const fraction = progressFraction(completionLevel, layerCount);
-  const span = MAX_OPPONENT_DISTINCT_CARDS - MIN_OPPONENT_DISTINCT_CARDS;
-  return MIN_OPPONENT_DISTINCT_CARDS + Math.round(span * fraction);
+  return curve.first + Math.round((curve.last - curve.first) * fraction);
 }
 
 /**
@@ -199,10 +176,10 @@ export function opponentDistinctCardCount(
 export function opponentRemovalCount(
   completionLevel: number,
   layerCount: number,
+  curve: OpponentCurve,
 ): number {
   const fraction = progressFraction(completionLevel, layerCount);
-  const span = MAX_OPPONENT_REMOVALS - MIN_OPPONENT_REMOVALS;
-  return MIN_OPPONENT_REMOVALS + Math.round(span * fraction);
+  return curve.first + Math.round((curve.last - curve.first) * fraction);
 }
 
 /**
@@ -213,10 +190,12 @@ export function opponentRemovalCount(
 export function opponentPickBudget(
   completionLevel: number,
   layerCount: number,
+  distinctCurve: OpponentCurve,
+  removalCurve: OpponentCurve,
 ): number {
   return (
-    opponentDistinctCardCount(completionLevel, layerCount) +
-    opponentRemovalCount(completionLevel, layerCount)
+    opponentDistinctCardCount(completionLevel, layerCount, distinctCurve) +
+    opponentRemovalCount(completionLevel, layerCount, removalCurve)
   );
 }
 
@@ -229,12 +208,10 @@ export function opponentPickBudget(
 export function opponentDraftTemperature(
   completionLevel: number,
   layerCount: number,
+  curve: OpponentCurve,
 ): number {
   const fraction = progressFraction(completionLevel, layerCount);
-  return (
-    EARLY_DRAFT_TEMPERATURE -
-    (EARLY_DRAFT_TEMPERATURE - LATE_DRAFT_TEMPERATURE) * fraction
-  );
+  return curve.first + (curve.last - curve.first) * fraction;
 }
 
 /**
@@ -285,11 +262,11 @@ export function selectOpponentDreamAvatar(
  */
 export function buildOpponentDreamsigns(
   completionLevel: number,
-  layerCount: number,
+  dreamsignsFromLayer: number,
   dreamsignTemplates: readonly DreamsignTemplate[],
   rng: BattleRng,
 ): DreamsignTemplate[] {
-  if (!opponentCarriesDreamsign(completionLevel, layerCount)) {
+  if (!opponentCarriesDreamsign(completionLevel, dreamsignsFromLayer)) {
     return [];
   }
   if (dreamsignTemplates.length === 0) {
@@ -338,12 +315,13 @@ function buildPackSource(
   draftRecords: readonly DraftRecord[],
   idIndex: ReadonlyMap<string, number>,
   seed: number,
+  recordCount: number,
 ): number[][] {
   if (draftRecords.length === 0) return [];
   const rng = createSeededRng(seed ^ 0x51ed270b);
   const indices = draftRecords.map((_, i) => i);
   // Seeded partial shuffle: pick the first OPPONENT_PACK_SOURCE_RECORDS records.
-  const take = Math.min(OPPONENT_PACK_SOURCE_RECORDS, indices.length);
+  const take = Math.min(recordCount, indices.length);
   for (let i = 0; i < take; i += 1) {
     const j = i + Math.floor(rng() * (indices.length - i));
     const tmp = indices[i];
@@ -376,7 +354,7 @@ function affiliationPackWeights(
     let sum = 0;
     for (const card of pack) {
       const id = numberToId.get(card);
-      sum += id === undefined ? 0 : ctx.affinityById.get(id) ?? 0;
+      sum += id === undefined ? 0 : (ctx.affinityById.get(id) ?? 0);
     }
     return 1 + strength * (sum / pack.length);
   });
@@ -420,7 +398,10 @@ function pruneToTarget(
       const score = cardCohesion(kept[i], rest, fitModel);
       // Lowest cohesion wins removal; tie-break by higher card number for a
       // deterministic, reproducible cut.
-      if (score < worstScore || (score === worstScore && kept[i] > kept[worstIdx])) {
+      if (
+        score < worstScore ||
+        (score === worstScore && kept[i] > kept[worstIdx])
+      ) {
         worstScore = score;
         worstIdx = i;
       }
@@ -502,6 +483,7 @@ export function buildOpponentDeck(args: {
   completionLevel: number;
   layerCount: number;
   poolSeed: number;
+  config: OpponentsData["coherentDraft"];
 }): OpponentDeckBuild | null {
   const {
     opponentDreamAvatar,
@@ -514,12 +496,18 @@ export function buildOpponentDeck(args: {
     layerCount,
     poolSeed,
   } = args;
+  const config = args.config;
 
   if (fitModel === undefined || draftRecords.length === 0) {
     return null;
   }
 
-  const packs = buildPackSource(draftRecords, fitModel.idIndex, poolSeed);
+  const packs = buildPackSource(
+    draftRecords,
+    fitModel.idIndex,
+    poolSeed,
+    config.packSourceRecords,
+  );
   if (packs.length === 0) {
     return null;
   }
@@ -564,10 +552,27 @@ export function buildOpponentDeck(args: {
     numberToId,
   );
 
-  const targetDistinct = opponentDistinctCardCount(completionLevel, layerCount);
-  const removalCount = opponentRemovalCount(completionLevel, layerCount);
-  const pickBudget = opponentPickBudget(completionLevel, layerCount);
-  const temperature = opponentDraftTemperature(completionLevel, layerCount);
+  const targetDistinct = opponentDistinctCardCount(
+    completionLevel,
+    layerCount,
+    config.distinctCardCurve,
+  );
+  const removalCount = opponentRemovalCount(
+    completionLevel,
+    layerCount,
+    config.removalCurve,
+  );
+  const pickBudget = opponentPickBudget(
+    completionLevel,
+    layerCount,
+    config.distinctCardCurve,
+    config.removalCurve,
+  );
+  const temperature = opponentDraftTemperature(
+    completionLevel,
+    layerCount,
+    config.temperatureCurve,
+  );
 
   interface Candidate {
     distinct: number[];
@@ -582,7 +587,7 @@ export function buildOpponentDeck(args: {
   let winner: Candidate | null = null;
   let winningIndex = 0;
 
-  for (let n = 0; n < OPPONENT_BEST_OF_N; n += 1) {
+  for (let n = 0; n < config.bestOf; n += 1) {
     const rng = createSeededRng((poolSeed ^ (DRAFT_SEED_SALT * (n + 1))) >>> 0);
     const draft = simulateCoherentDraft({
       fitModel,
@@ -598,14 +603,23 @@ export function buildOpponentDeck(args: {
       targetDistinct,
       fitModel,
     );
-    const coherence = scoreDeckCoherence(kept, fitModel);
+    const coherence = scoreDeckCoherence(kept, fitModel, {
+      knn: config.coherence.nearestNeighbors,
+      wNeighbor: config.coherence.neighborWeight,
+      wCooccur: config.coherence.cooccurrenceWeight,
+      wSelf: config.coherence.selfConsistencyWeight,
+      selfDistractors: config.coherence.selfDistractors,
+      selfRecallK: config.coherence.selfRecallK,
+    });
     const affiliationFit =
       affiliationCtx === null
         ? 0
         : scoreDeckAffiliationFit(kept, affiliationCtx);
     const combined =
       coherence.score +
-      (affiliationCtx === null ? 0 : AFFILIATION_OBJECTIVE_WEIGHT * affiliationFit);
+      (affiliationCtx === null
+        ? 0
+        : config.affiliationObjectiveWeight * affiliationFit);
 
     candidateSummaries.push({
       draftIndex: n,
@@ -615,7 +629,14 @@ export function buildOpponentDeck(args: {
     });
 
     if (winner === null || combined > winner.combined) {
-      winner = { distinct: kept, removed, trace: draft.trace, coherence, affiliationFit, combined };
+      winner = {
+        distinct: kept,
+        removed,
+        trace: draft.trace,
+        coherence,
+        affiliationFit,
+        combined,
+      };
       winningIndex = n;
     }
   }
@@ -639,8 +660,9 @@ export function buildOpponentDeck(args: {
   return {
     cards,
     distinctCards,
-    targetAffiliationId: affiliationCtx === null ? null : affiliation?.id ?? null,
-    candidateCount: OPPONENT_BEST_OF_N,
+    targetAffiliationId:
+      affiliationCtx === null ? null : (affiliation?.id ?? null),
+    candidateCount: config.bestOf,
     winningDraftIndex: winningIndex,
     coherence: winner.coherence,
     affiliationFit: winner.affiliationFit,
@@ -673,6 +695,9 @@ export interface OpponentDeckLogArgs {
   dreamsigns: readonly DreamsignTemplate[];
   build: OpponentDeckBuild | null;
   fallbackDeckSize: number;
+  opponentsContentHash: string;
+  progression: OpponentsData["progression"];
+  coherentDraft: OpponentsData["coherentDraft"];
 }
 
 /** Round a score for compact, stable log output. */
@@ -692,6 +717,9 @@ export function logOpponentDeckConstructed(args: OpponentDeckLogArgs): void {
     dreamsigns,
     build,
     fallbackDeckSize,
+    opponentsContentHash,
+    progression,
+    coherentDraft,
   } = args;
 
   const topCardNumbers = (build?.distinctCards ?? [])
@@ -722,8 +750,13 @@ export function logOpponentDeckConstructed(args: OpponentDeckLogArgs): void {
     poolSeed,
     completionLevel,
     layerCount,
-    midpointCompletionLevel: runMidpointCompletionLevel(layerCount),
-    carriesDreamsign: opponentCarriesDreamsign(completionLevel, layerCount),
+    opponentsContentHash,
+    progression,
+    coherentDraft,
+    carriesDreamsign: opponentCarriesDreamsign(
+      completionLevel,
+      progression.dreamsignsFromLayer,
+    ),
     affiliationId: affiliation?.id ?? null,
     targetAffiliationId: build?.targetAffiliationId ?? null,
     dreamsignIds: dreamsigns.map((dreamsign) => dreamsign.id),

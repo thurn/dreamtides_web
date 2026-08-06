@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { forwardModelFromState, type ForwardModel } from "./forward-model";
-import { planNextActionAsync, type PlannedAction, type PlannerOptions } from "./planner";
-import { AI_DIFFICULTY_V1 } from "./difficulty";
+import {
+  planNextActionAsync,
+  type PlannedAction,
+  type PlannerOptions,
+} from "./planner";
 import { buildTrace } from "./trace";
 import { actionToCommands } from "./driver";
 import { buildSupportContribution } from "./cards/support-contribution";
@@ -15,6 +18,7 @@ import {
   type BattleSide,
   isBackRankSlotId,
 } from "../types";
+import type { ResolvedBattleAiConfiguration } from "../../types/opponents-data";
 
 /**
  * A held AI proposal: the plain-language description, the enriched trace, and
@@ -43,22 +47,14 @@ export interface AiProposal {
   };
 }
 
-/** Planning budget in ms past the snapshot clock. */
-const PLAN_BUDGET_MS = 100;
-
-/** Defaults for the win/turn/energy caps when the init is unavailable. */
-const DEFAULT_SCORE_TO_WIN = 25;
-const DEFAULT_TURN_LIMIT = 50;
-const DEFAULT_MAX_ENERGY_CAP = 10;
-
 /** Worlds Await (#519) grants +3✦ to the chosen ally. */
 const WORLDS_AWAIT_CARD_NUMBER = 519;
 const WORLDS_AWAIT_SPARK_BONUS = 3;
 
 interface BattleCapsInput {
-  scoreToWin?: number;
-  turnLimit?: number;
-  maxEnergyCap?: number;
+  scoreToWin: number;
+  turnLimit: number;
+  maxEnergyCap: number;
 }
 
 export interface UseBattleAiArgs {
@@ -74,8 +70,8 @@ export interface UseBattleAiArgs {
   enabled: boolean;
   /** The side the AI controls (e.g. "enemy"). */
   aiSide: BattleSide;
-  /** Optional win/turn/energy caps; defaults to 25/50/10. */
-  caps?: BattleCapsInput;
+  /** Folded win/turn/energy caps for this battle. */
+  caps: BattleCapsInput;
   /**
    * Whether basic automation is resolving turn bookends. When on, the AI ends
    * its Day with an `endPhase` proposal and lets the human drive the rest;
@@ -83,6 +79,8 @@ export interface UseBattleAiArgs {
    * whole end-of-turn into a single `endTurn` proposal.
    */
   basicAutomation: boolean;
+  /** Complete preset and tuning persisted in the folded battle init. */
+  aiConfiguration: ResolvedBattleAiConfiguration;
 }
 
 export interface UseBattleAiResult {
@@ -149,6 +147,7 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
     aiSide,
     caps,
     basicAutomation,
+    aiConfiguration,
   } = args;
   const mutable = board;
   // A stable replan key: the driver owns nondeterministic triggers, so there is
@@ -219,6 +218,7 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
       excludedKeys,
       caps,
       basicAutomation,
+      aiConfiguration,
       yieldToEventLoop,
     ).then((next) => {
       if (planTokenRef.current !== token) {
@@ -241,19 +241,23 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
     excludedKeys,
     caps,
     basicAutomation,
+    aiConfiguration,
   ]);
 
-  const submitCommands = useCallback((commands: readonly BattleCommand[]): void => {
-    const [firstCommand] = commands;
-    if (firstCommand === undefined) {
-      return;
-    }
-    if (commands.length === 1) {
-      submitCommand(firstCommand);
-      return;
-    }
-    submitGesture(commands);
-  }, [submitCommand, submitGesture]);
+  const submitCommands = useCallback(
+    (commands: readonly BattleCommand[]): void => {
+      const [firstCommand] = commands;
+      if (firstCommand === undefined) {
+        return;
+      }
+      if (commands.length === 1) {
+        submitCommand(firstCommand);
+        return;
+      }
+      submitGesture(commands);
+    },
+    [submitCommand, submitGesture],
+  );
 
   // ONLY this path dispatches. It applies the held proposal's commands in order;
   // the resulting state change re-runs the planning effect to produce the next
@@ -316,13 +320,21 @@ async function computeProposalAsync(
   mutable: BattleMutableState,
   aiSide: BattleSide,
   excludedKeys: ReadonlySet<string>,
-  caps: BattleCapsInput | undefined,
+  caps: BattleCapsInput,
   basicAutomation: boolean,
+  aiConfiguration: ResolvedBattleAiConfiguration,
   yieldFn: () => Promise<void>,
 ): Promise<AiProposal | null> {
   const model = forwardModelFromState(mutable, aiSide);
 
-  const action = await planNonExcludedActionAsync(model, mutable, excludedKeys, yieldFn);
+  const action = await planNonExcludedActionAsync(
+    model,
+    mutable,
+    excludedKeys,
+    aiConfiguration,
+    caps.scoreToWin,
+    yieldFn,
+  );
   if (action !== null && action.kind !== "END_TURN") {
     return buildActionProposal(mutable, action, aiSide);
   }
@@ -371,16 +383,23 @@ async function planNonExcludedActionAsync(
   model: ForwardModel,
   mutable: BattleMutableState,
   excludedKeys: ReadonlySet<string>,
+  aiConfiguration: ResolvedBattleAiConfiguration,
+  scoreToWin: number,
   yieldFn: () => Promise<void>,
 ): Promise<PlannedAction | null> {
-  const opts = plannerOptions(aiHandSeed(model, mutable.turnNumber));
+  const opts = plannerOptions(
+    aiHandSeed(model, mutable.turnNumber),
+    aiConfiguration,
+    scoreToWin,
+  );
   let workingModel = model;
 
   // Bounded retry: each iteration removes one excluded card and re-plans, so the
   // loop terminates after the hand/board is exhausted. The board size is read
   // from the model's current ranks since the play area grows without bound.
   const battlefieldSlotCount =
-    Object.keys(model.aiBackRank).length + Object.keys(model.aiFrontRank).length;
+    Object.keys(model.aiBackRank).length +
+    Object.keys(model.aiFrontRank).length;
   const maxAttempts = model.aiHand.length + battlefieldSlotCount + 1;
   for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
     const action = await planNextActionAsync(workingModel, opts, yieldFn);
@@ -392,7 +411,10 @@ async function planNonExcludedActionAsync(
       return action;
     }
     // Remove the excluded card from the working model and re-plan.
-    const without = removeCardFromModel(workingModel, action.self?.battleCardId);
+    const without = removeCardFromModel(
+      workingModel,
+      action.self?.battleCardId,
+    );
     if (without === null) {
       return null;
     }
@@ -452,9 +474,10 @@ function buildActionProposal(
   // replace the command rather than mutating it in place so the proposal's
   // stored command stays a plain rebuild on each render.
   const [firstCommand, ...restCommands] = commands;
-  const tracedCommands = firstCommand === undefined
-    ? commands
-    : [{ ...firstCommand, aiChoices: [trace] }, ...restCommands];
+  const tracedCommands =
+    firstCommand === undefined
+      ? commands
+      : [{ ...firstCommand, aiChoices: [trace] }, ...restCommands];
   const plannedSlot = action.toSlot;
   const characterDestination =
     plannedSlot !== undefined && isBackRankSlotId(plannedSlot)
@@ -468,14 +491,18 @@ function buildActionProposal(
     ...(action.kind !== "PLAY_CARD" || action.self === undefined
       ? {}
       : {
-        playCard: {
-          battleCardId: action.self.battleCardId,
-          targetBattleCardIds: action.targets?.targetBattleCardId === undefined || action.targets.targetBattleCardId === null
-            ? []
-            : [action.targets.targetBattleCardId],
-          ...(characterDestination === undefined ? {} : { characterDestination }),
-        },
-      }),
+          playCard: {
+            battleCardId: action.self.battleCardId,
+            targetBattleCardIds:
+              action.targets?.targetBattleCardId === undefined ||
+              action.targets.targetBattleCardId === null
+                ? []
+                : [action.targets.targetBattleCardId],
+            ...(characterDestination === undefined
+              ? {}
+              : { characterDestination }),
+          },
+        }),
   };
 }
 
@@ -533,7 +560,7 @@ function buildEndTurnProposal(
   mutable: BattleMutableState,
   model: ForwardModel,
   aiSide: BattleSide,
-  caps: BattleCapsInput | undefined,
+  caps: BattleCapsInput,
 ): AiProposal {
   const supportContribution = buildSupportContribution(model);
   const challenge = resolveChallenge({
@@ -544,9 +571,9 @@ function buildEndTurnProposal(
 
   const handoff = planHandoff({
     state: mutable,
-    scoreToWin: caps?.scoreToWin ?? DEFAULT_SCORE_TO_WIN,
-    turnLimit: caps?.turnLimit ?? DEFAULT_TURN_LIMIT,
-    maxEnergyCap: caps?.maxEnergyCap ?? DEFAULT_MAX_ENERGY_CAP,
+    scoreToWin: caps.scoreToWin,
+    turnLimit: caps.turnLimit,
+    maxEnergyCap: caps.maxEnergyCap,
   });
 
   // Hand-limit discard is the human player's responsibility and is
@@ -574,7 +601,11 @@ function buildEndTurnProposal(
 
 // --- Planner options + seeding ---------------------------------------------
 
-function plannerOptions(rngSeed: number): PlannerOptions {
+function plannerOptions(
+  rngSeed: number,
+  config: ResolvedBattleAiConfiguration,
+  scoreToWin: number,
+): PlannerOptions {
   // In the browser `performance.now()` is available; under jsdom/node it is too.
   // The planner treats `nowMs` as a fixed snapshot, so a single read suffices.
   const nowMs =
@@ -582,10 +613,15 @@ function plannerOptions(rngSeed: number): PlannerOptions {
       ? performance.now()
       : 0;
   return {
-    deadlineMs: nowMs + PLAN_BUDGET_MS,
-    beamWidth: AI_DIFFICULTY_V1.beamWidth,
-    opponentMode: AI_DIFFICULTY_V1.opponentMode,
-    sampleCap: AI_DIFFICULTY_V1.sampleCap,
+    deadlineMs: nowMs + config.journeyPlanningBudgetMs,
+    beamWidth: config.beamWidth,
+    opponentMode: config.opponentMode,
+    sampleCap: config.sampleCount,
+    maxSearchDepth: config.searchDepth,
+    scoreToWin,
+    evaluation: config.evaluation,
+    opponentModel: config.opponentModel,
+    aiPresetId: config.id,
     nowMs,
     rngSeed,
   };
@@ -613,7 +649,10 @@ function aiHandSeed(model: ForwardModel, turnNumber: number): number {
  * Wraps a {@link BattleDebugEdit} as an AI-authored DEBUG_EDIT command, matching
  * the driver's envelope (`actor: aiSide`, `sourceSurface: "auto-system"`).
  */
-function makeAiCommand(edit: BattleDebugEdit, aiSide: BattleSide): BattleCommand {
+function makeAiCommand(
+  edit: BattleDebugEdit,
+  aiSide: BattleSide,
+): BattleCommand {
   return {
     id: "DEBUG_EDIT",
     edit,

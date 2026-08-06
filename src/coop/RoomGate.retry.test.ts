@@ -41,6 +41,7 @@ const CONTENT_CONFIG: PinnedContentConfig = {
   fresh20PackSize: null,
   atlasFoldHash: "fixture-atlas-fold-hash",
   economyFoldHash: "a".repeat(64),
+  opponentsFoldHash: "b".repeat(64),
   defaultStartingEssence: 17,
   dreamsignCap: 4,
 };

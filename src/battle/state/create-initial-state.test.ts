@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createBattleInit } from "../integration/create-battle-init";
+import { createTestBattleInit } from "../../testing/create-battle-init";
 import { makeBattleTestCardDatabase, makeBattleTestDreamAvatars, makeBattleTestSite, makeBattleTestState } from "../test-support";
 import type { BattleDeckCardDefinition } from "../types";
 import {
@@ -11,7 +11,7 @@ import {
 
 describe("createInitialBattleState", () => {
   it("draws the configured opening hand size for both sides and seeds both sides at 2/2", () => {
-    const battleInit = createBattleInit({
+    const battleInit = createTestBattleInit({
       battleEntryKey: "site-7::2::dreamscape-2",
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
@@ -55,7 +55,7 @@ describe("createInitialBattleState", () => {
   });
 
   it("seeds the raw initial state with empty board and no automatic draw or refresh", () => {
-    const battleInit = createBattleInit({
+    const battleInit = createTestBattleInit({
       battleEntryKey: "site-7::2::dreamscape-2",
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
@@ -87,7 +87,7 @@ describe("createInitialBattleState", () => {
   });
 
   it("applies player-only Exploration opening-hand and starting-energy bonuses", () => {
-    const baseInit = createBattleInit({
+    const baseInit = createTestBattleInit({
       battleEntryKey: "site-7::2::dreamscape-2",
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
@@ -112,7 +112,7 @@ describe("createInitialBattleState", () => {
   });
 
   it("initializes per-side visibility flags required by the spec state model", () => {
-    const battleInit = createBattleInit({
+    const battleInit = createTestBattleInit({
       battleEntryKey: "site-7::2::dreamscape-2",
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
@@ -128,7 +128,7 @@ describe("createInitialBattleState", () => {
 
 describe("cloneBattleMutableState", () => {
   function makeBattleState() {
-    const battleInit = createBattleInit({
+    const battleInit = createTestBattleInit({
       battleEntryKey: "site-7::2::dreamscape-2",
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
@@ -220,7 +220,7 @@ describe("allocateBattleCardInstance", () => {
   }
 
   it("assigns zero-padded ordinal ids that increase monotonically across calls", () => {
-    const battleInit = createBattleInit({
+    const battleInit = createTestBattleInit({
       battleEntryKey: "site-7::2::dreamscape-2",
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
@@ -298,7 +298,7 @@ describe("allocateBattleCardInstance", () => {
   });
 
   it("preserves caller-provided definition and provenance references instead of cloning them", () => {
-    const battleInit = createBattleInit({
+    const battleInit = createTestBattleInit({
       battleEntryKey: "site-7::2::dreamscape-2",
       site: makeBattleTestSite(),
       state: makeBattleTestState(),

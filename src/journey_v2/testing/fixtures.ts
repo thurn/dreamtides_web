@@ -1,7 +1,11 @@
 import { asCardName } from "../../types/card-identity";
 import { economyFixture } from "../../testing/economy-fixture";
+import { opponentsFixture } from "../../testing/opponents-fixture";
 import type { FitModel } from "../../draft/replay/fit-model";
-import { MINIMAL_ATLAS_DATA, MINIMAL_DREAMSCAPES } from "../../__test-helpers__/atlas-fixtures";
+import {
+  MINIMAL_ATLAS_DATA,
+  MINIMAL_DREAMSCAPES,
+} from "../../__test-helpers__/atlas-fixtures";
 import type {
   MerchantCorpus,
   MerchantCorpusCard,
@@ -15,7 +19,12 @@ import type {
   DreamsignTemplate,
   ResolvedDreamAvatarPackage,
 } from "../../types/content";
-import type { DeckEntry, Dreamsign, JourneyState, SiteState } from "../../types/journey";
+import type {
+  DeckEntry,
+  Dreamsign,
+  JourneyState,
+  SiteState,
+} from "../../types/journey";
 import { createDefaultState } from "../../state/journey-context";
 
 export const TEST_CARD_UUIDS = {
@@ -61,7 +70,9 @@ export function makeMerchantTestDeckEntry(
   };
 }
 
-export function makeMerchantTestSite(overrides: Partial<SiteState> = {}): SiteState {
+export function makeMerchantTestSite(
+  overrides: Partial<SiteState> = {},
+): SiteState {
   return {
     id: "site-merchant-fixture",
     type: "Reward",
@@ -151,9 +162,11 @@ export function makeMerchantTestContent({
     dreamwellCards: [],
     dreamsignTemplates,
     dreamscapes: MINIMAL_DREAMSCAPES,
-    affiliations: [], guides: [],
+    affiliations: [],
+    guides: [],
     atlasData: MINIMAL_ATLAS_DATA,
     economyData: economyFixture(),
+    opponentsData: opponentsFixture(),
     fitModel,
     merchantCorpus,
     dreamsignProfiles,

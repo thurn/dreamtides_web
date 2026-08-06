@@ -28,9 +28,8 @@ import {
   type FitModel,
 } from "../../draft/replay/fit-model";
 
-/** Tuning knobs for the coherence metric. Tuned against the validation harness
- * (`scripts/opponent-coherence-experiment.mjs`,
- * `npm run opponent-coherence-metric`); see {@link DEFAULT_COHERENCE_TUNING}. */
+/** Tuning knobs for the coherence metric. Authored in `opponents.toml` and
+ * measured by `npm run opponent-coherence-metric`. */
 export interface CoherenceTuning {
   /** Number of nearest corpus decks averaged for the neighbour term. */
   knn: number;
@@ -45,23 +44,6 @@ export interface CoherenceTuning {
   /** A held-out card counts as "re-picked" when it ranks within this many. */
   selfRecallK: number;
 }
-
-/**
- * Tuned defaults. Chosen so the aggregate score cleanly separates real corpus
- * decks from random piles (`npm run opponent-coherence-metric`). The three blend
- * weights sum to 1 so the aggregate stays on a comparable scale to its
- * components. `knn` mirrors a small neighbourhood (the replay fit model plateaus
- * by K=50, but a deck-shape resemblance signal wants the *closest* decks, so a
- * tighter neighbourhood reads cleaner here).
- */
-export const DEFAULT_COHERENCE_TUNING: CoherenceTuning = {
-  knn: 10,
-  wNeighbor: 0.5,
-  wCooccur: 0.3,
-  wSelf: 0.2,
-  selfDistractors: 12,
-  selfRecallK: 4,
-};
 
 /** The three corpus-relative components of a deck's coherence, each in [0,1]. */
 export interface CoherenceComponents {
@@ -213,12 +195,12 @@ function selfConsistency(
  * @param deckCardNumbers The deck's card numbers (duplicates and copies are
  *   collapsed to the distinct set the corpus signals operate on).
  * @param fitModel The shared model from `buildFitModel`.
- * @param tuning Optional overrides for {@link DEFAULT_COHERENCE_TUNING}.
+ * @param tuning Validated authored coefficients for the coherence objective.
  */
 export function scoreDeckCoherence(
   deckCardNumbers: readonly number[],
   fitModel: FitModel,
-  tuning: CoherenceTuning = DEFAULT_COHERENCE_TUNING,
+  tuning: CoherenceTuning,
 ): DeckCoherenceScore {
   const { numberToId } = fitModel;
 

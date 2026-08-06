@@ -5,7 +5,7 @@
  * compatible rules fixes. Bump it only when this client cannot safely fold or
  * append to rooms written by the preceding reducer protocol.
  */
-export const CURRENT_REDUCER_VERSION = "dreamtides-coop-v14";
+export const CURRENT_REDUCER_VERSION = "dreamtides-coop-v15";
 
 /**
  * Build-scoped reducer ids from deployed clients whose fold behavior was
@@ -15,9 +15,8 @@ export const CURRENT_REDUCER_VERSION = "dreamtides-coop-v14";
  * Keep the full id: its digest includes generated runtime catalogs, so a
  * different catalog build is not accepted accidentally.
  */
-export const COMPATIBLE_LEGACY_REDUCER_VERSIONS: ReadonlySet<string> = new Set([
-  "dreamtides-coop-v13",
-]);
+export const COMPATIBLE_LEGACY_REDUCER_VERSIONS: ReadonlySet<string> =
+  new Set();
 
 export type ReducerCompatibility = "current" | "legacy" | "incompatible";
 

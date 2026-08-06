@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { BattleEngineEmissionContext, BattleMutableState } from "../../battle/types";
-import { createBattleInit } from "../../battle/integration/create-battle-init";
+import { createTestBattleInit } from "../../testing/create-battle-init";
 import { createInitialBattleState } from "../../battle/state/create-initial-state";
 import {
   makeBattleTestCardDatabase,
@@ -16,7 +16,7 @@ const EMISSION: BattleEngineEmissionContext = {
 };
 
 function createTestState(): BattleMutableState {
-  return createInitialBattleState(createBattleInit({
+  return createInitialBattleState(createTestBattleInit({
     battleEntryKey: "site-7::2::dreamscape-2",
     site: makeBattleTestSite(),
     state: makeBattleTestState(),

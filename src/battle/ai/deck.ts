@@ -3,24 +3,24 @@ import type { BattleDeckCardDefinition } from "../types";
 import type { CardData } from "../../types/cards";
 
 /**
- * Builds the AI's starter deck by filtering `cardDatabase` to cards with
- * `isStarter === true`, sorting by `cardNumber` for deterministic ordering,
- * and expanding each to `copiesPerCard` copies via
- * `createBaseBattleDeckCardDefinition`.
- *
- * The default `copiesPerCard` of 3 matches the standard starter multiset.
+ * Builds the journey AI deck from UUID-keyed configured entries, preserving
+ * authored entry order and expanding each positive copy count.
  */
-export function buildAiStarterDeck(
+export function buildAiConfiguredDeck(
   cardDatabase: ReadonlyMap<number, CardData>,
-  copiesPerCard = 3,
+  entries: readonly { cardId: string; count: number }[],
 ): BattleDeckCardDefinition[] {
-  const starters = [...cardDatabase.values()]
-    .filter((card) => card.isStarter)
-    .sort((a, b) => a.cardNumber - b.cardNumber);
-
-  return starters.flatMap((card) =>
-    Array.from({ length: copiesPerCard }, () =>
-      createBaseBattleDeckCardDefinition(card),
-    ),
+  const byId = new Map(
+    [...cardDatabase.values()].map((card) => [card.id.toLowerCase(), card]),
   );
+
+  return entries.flatMap((entry) => {
+    const card = byId.get(entry.cardId.toLowerCase());
+    if (card === undefined) {
+      throw new Error(`AI deck references missing card UUID ${entry.cardId}`);
+    }
+    return Array.from({ length: entry.count }, () =>
+      createBaseBattleDeckCardDefinition(card),
+    );
+  });
 }

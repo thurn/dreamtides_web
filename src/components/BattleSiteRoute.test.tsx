@@ -2,6 +2,7 @@
 
 import { StrictMode, act, type ReactElement } from "react";
 import { economyFixture } from "../testing/economy-fixture";
+import { opponentsFixture } from "../testing/opponents-fixture";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
@@ -20,7 +21,7 @@ import {
   makeBattleTestSite,
   makeBattleTestState,
 } from "../battle/test-support";
-import { createBattleInit } from "../battle/integration/create-battle-init";
+import { createTestBattleInit } from "../testing/create-battle-init";
 import { createInitialBattleState } from "../battle/state/create-initial-state";
 import { emptyDawnFired } from "../rules/battle/fold";
 
@@ -100,7 +101,7 @@ function makeSite(): SiteState {
 }
 
 function makeFoldStateWithBattle(): FoldState {
-  const init = createBattleInit({
+  const init = createTestBattleInit({
     battleEntryKey: "site-7::3::dreamscape-2",
     site: makeBattleTestSite(),
     state: makeBattleTestState(),
@@ -179,6 +180,7 @@ function setJourneyState(
       guides: [],
       atlasData: MINIMAL_ATLAS_DATA,
       economyData: economyFixture(),
+      opponentsData: opponentsFixture(),
     },
   });
 }

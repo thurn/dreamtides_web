@@ -1,6 +1,3 @@
-import {
-  opponentAbilityIsActive,
-} from "../../battle/integration/opponent-deck";
 import type { BattleInit } from "../../battle/types";
 import type { CardData } from "../../types/cards";
 import type { TutorialBattleStartConfiguration } from "../../types/tutorial";
@@ -51,7 +48,7 @@ export function buildBattleStartView(
       title: enemy.subtitle,
       imageNumber: enemy.imageNumber ?? "001",
       ability: enemy.abilityText.trim(),
-      abilityActive: opponentAbilityIsActive(init.completionLevelAtStart),
+      abilityActive: init.opponentAbilityActive,
     },
     dreamsigns: (enemy.dreamsigns ?? []).flatMap((dreamsign) =>
       dreamsign.id === undefined ? [] : [{ ...dreamsign, id: dreamsign.id }],

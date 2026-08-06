@@ -21,13 +21,12 @@ import type {
 import {
   buildOpponentDeck,
   logOpponentDeckConstructed,
-  opponentCarriesDreamsign,
 } from "../battle/integration/opponent-deck";
 import {
   buildCorpusOpponentDeck,
-  STAGE_B_LAYER_SPEC,
   type CorpusOpponentDeckBuild,
 } from "../battle/integration/corpus-opponent-deck";
+import { opponentAbilityIsActive } from "../battle/integration/opponent-deck";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import { CardView } from "../cumulus/components/card/CardView";
 
@@ -110,6 +109,7 @@ const coherentAlgorithm: DebugAlgorithm = {
       completionLevel: params.completionLevel,
       layerCount: params.layerCount,
       poolSeed: params.poolSeed,
+      config: content.opponentsData.coherentDraft,
     });
 
     // Record the generation so the debug run is reconstructable from the journey
@@ -125,6 +125,9 @@ const coherentAlgorithm: DebugAlgorithm = {
       dreamsigns: params.dreamsigns,
       build,
       fallbackDeckSize: build?.cards.length ?? 0,
+      opponentsContentHash: content.opponentsData.contentHash,
+      progression: content.opponentsData.progression,
+      coherentDraft: content.opponentsData.coherentDraft,
     });
 
     return {
@@ -156,9 +159,9 @@ const coherentAlgorithm: DebugAlgorithm = {
         },
       ],
       dreamsignLabels: params.dreamsigns.map((d) => d.name),
-      abilityActive: opponentCarriesDreamsign(
+      abilityActive: opponentAbilityIsActive(
         params.completionLevel,
-        params.layerCount,
+        content.opponentsData.progression.abilityActiveFromLayer,
       ),
       unavailable: build === null,
     };
@@ -185,6 +188,9 @@ const corpusAlgorithm: DebugAlgorithm = {
       completionLevel: params.completionLevel,
       layerCount: params.layerCount,
       poolSeed: params.poolSeed,
+      opponentsContentHash: content.opponentsData.contentHash,
+      progression: content.opponentsData.progression,
+      selectionConfig: content.opponentsData.corpusSelection,
     });
     if (build === null) return null;
 
@@ -204,6 +210,9 @@ const corpusAlgorithm: DebugAlgorithm = {
         <CorpusProvenance
           build={build}
           completionLevel={params.completionLevel}
+          dreamsignsFromLayer={
+            content.opponentsData.progression.dreamsignsFromLayer
+          }
         />
       ),
     };
@@ -262,34 +271,45 @@ function CardThumbGrid({ cards }: { cards: readonly CardData[] }) {
   );
 }
 
-/** Lowest layer at which the corpus schedule assigns a dreamsign. */
-const DREAMSIGN_FROM_LAYER =
-  STAGE_B_LAYER_SPEC.find((spec) => spec.dreamsignAssigned)?.layer ?? 0;
-
 function CorpusProvenance({
   build,
   completionLevel,
+  dreamsignsFromLayer,
 }: {
   build: CorpusOpponentDeckBuild;
   completionLevel: number;
+  dreamsignsFromLayer: number;
 }) {
   const { source, topK, modifications, dreamsign, abilityActive } = build;
   const dreamsignText =
     dreamsign === null
-      ? completionLevel < DREAMSIGN_FROM_LAYER
-        ? `none — layer < ${String(DREAMSIGN_FROM_LAYER)}`
+      ? completionLevel < dreamsignsFromLayer
+        ? `none — layer < ${String(dreamsignsFromLayer)}`
         : "none"
       : `${dreamsign.name} (fit ${dreamsign.fit.toFixed(3)})`;
 
   return (
-    <div style={{ marginTop: 18, borderTop: "0.5px solid rgba(255,255,255,0.12)", paddingTop: 14 }}>
+    <div
+      style={{
+        marginTop: 18,
+        borderTop: "0.5px solid rgba(255,255,255,0.12)",
+        paddingTop: 14,
+      }}
+    >
       <div style={{ fontSize: 14, fontWeight: 600, color: "#f8fafc" }}>
         Corpus provenance
       </div>
 
       <div style={sectionLabelStyle}>Source seat</div>
       <div style={{ fontSize: 13, color: TEXT }}>{source.name}</div>
-      <div style={{ fontSize: 11, color: FAINT, fontFamily: "monospace", marginTop: 2 }}>
+      <div
+        style={{
+          fontSize: 11,
+          color: FAINT,
+          fontFamily: "monospace",
+          marginTop: 2,
+        }}
+      >
         {source.id}
       </div>
       {source.sourceFile !== undefined && source.sourceFile !== source.id && (
@@ -342,7 +362,8 @@ function CorpusProvenance({
       {modifications.legendaryReplacements.length > 0 && (
         <>
           <div style={sectionLabelStyle}>
-            Legendary replacements ({modifications.legendaryReplacements.length})
+            Legendary replacements ({modifications.legendaryReplacements.length}
+            )
           </div>
           <CardThumbGrid cards={modifications.legendaryReplacements} />
         </>

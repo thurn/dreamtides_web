@@ -29,35 +29,46 @@ import { readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
-import { loadCorpus, buildFitModel, DEFAULT_TUNING } from "./draft-replay-experiment.mjs";
+import {
+  loadCorpus,
+  buildFitModel,
+  DEFAULT_TUNING,
+} from "./draft-replay-experiment.mjs";
 import { buildCardMaps } from "./setup-assets.mjs";
+import { compileOpponentsData } from "./opponents-data.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readText = (p) => readFileSync(resolve(ROOT, p), "utf8");
 
 // ---------------------------------------------------------------------------
-// Tuning mirrors (keep in sync with the TS constants).
+// Authored tuning used by the runtime opponent builder.
 // ---------------------------------------------------------------------------
 
+const authoredCards = parse(readText("data/tabula/cards.toml")).cards;
+const opponentsData = compileOpponentsData(
+  parse(readText("data/tabula/opponents.toml")),
+  { cardIds: authoredCards.map((card) => card.id) },
+);
+const coherentConfig = opponentsData.coherentDraft;
 const COHERENCE_TUNING = {
-  knn: 10,
-  wNeighbor: 0.5,
-  wCooccur: 0.3,
-  wSelf: 0.2,
-  selfDistractors: 12,
-  selfRecallK: 4,
+  knn: coherentConfig.coherence.nearestNeighbors,
+  wNeighbor: coherentConfig.coherence.neighborWeight,
+  wCooccur: coherentConfig.coherence.cooccurrenceWeight,
+  wSelf: coherentConfig.coherence.selfConsistencyWeight,
+  selfDistractors: coherentConfig.coherence.selfDistractors,
+  selfRecallK: coherentConfig.coherence.selfRecallK,
 };
 
-const LAYER_COUNT = 7;
-const MIN_DISTINCT = 14;
-const MAX_DISTINCT = 30;
-const MIN_REMOVALS = 2;
-const MAX_REMOVALS = 8;
-const EARLY_TEMP = 0.45;
-const LATE_TEMP = 0.12;
-const BEST_OF_N = 4;
-const PACK_SOURCE_RECORDS = 48;
-const AFFILIATION_OBJECTIVE_WEIGHT = 1;
+const LAYER_COUNT = parse(readText("data/tabula/atlas.toml")).layers.length;
+const MIN_DISTINCT = coherentConfig.distinctCardCurve.first;
+const MAX_DISTINCT = coherentConfig.distinctCardCurve.last;
+const MIN_REMOVALS = coherentConfig.removalCurve.first;
+const MAX_REMOVALS = coherentConfig.removalCurve.last;
+const EARLY_TEMP = coherentConfig.temperatureCurve.first;
+const LATE_TEMP = coherentConfig.temperatureCurve.last;
+const BEST_OF_N = coherentConfig.bestOf;
+const PACK_SOURCE_RECORDS = coherentConfig.packSourceRecords;
+const AFFILIATION_OBJECTIVE_WEIGHT = coherentConfig.affiliationObjectiveWeight;
 const DRAFT_SEED_SALT = 0x9e3779b1;
 
 const progressFraction = (level) => {
@@ -66,11 +77,14 @@ const progressFraction = (level) => {
 };
 const lerp = (a, b, f) => a + (b - a) * f;
 const distinctTarget = (level) =>
-  MIN_DISTINCT + Math.round((MAX_DISTINCT - MIN_DISTINCT) * progressFraction(level));
+  MIN_DISTINCT +
+  Math.round((MAX_DISTINCT - MIN_DISTINCT) * progressFraction(level));
 const removalCount = (level) =>
-  MIN_REMOVALS + Math.round((MAX_REMOVALS - MIN_REMOVALS) * progressFraction(level));
+  MIN_REMOVALS +
+  Math.round((MAX_REMOVALS - MIN_REMOVALS) * progressFraction(level));
 const pickBudget = (level) => distinctTarget(level) + removalCount(level);
-const draftTemperature = (level) => lerp(EARLY_TEMP, LATE_TEMP, progressFraction(level));
+const draftTemperature = (level) =>
+  lerp(EARLY_TEMP, LATE_TEMP, progressFraction(level));
 const copiesPerCard = (level) => 1 + Math.round(1 * progressFraction(level));
 
 // ---------------------------------------------------------------------------
@@ -122,7 +136,10 @@ function scoreNeighborCF(candidates, deckSet, model, tuning) {
   }
   const deckVec = { cards: deckSet, norm: Math.sqrt(sq) || 1 };
   const idfOf = (c) => idf.get(c) ?? 0;
-  const scored = decks.map((d, i) => ({ i, sim: idfCosine(deckVec, d, idfOf) }));
+  const scored = decks.map((d, i) => ({
+    i,
+    sim: idfCosine(deckVec, d, idfOf),
+  }));
   scored.sort((a, b) => b.sim - a.sim || a.i - b.i);
   const neighbors = scored.slice(0, tuning.K);
   let sumSim = 0;
@@ -161,7 +178,10 @@ function scoreFit(candidates, deckSet, model, tuning) {
   const prN = minMaxNormalize(prRaw);
   const out = new Map();
   candidates.forEach((c, i) => {
-    out.set(c, tuning.alpha * nfN[i] + tuning.beta * coN[i] + tuning.gamma * prN[i]);
+    out.set(
+      c,
+      tuning.alpha * nfN[i] + tuning.beta * coN[i] + tuning.gamma * prN[i],
+    );
   });
   return out;
 }
@@ -184,7 +204,9 @@ function nearestNeighbor(deckSet, model, knn) {
   let sq = 0;
   for (const c of deckSet) sq += idfOf(c) ** 2;
   const vec = { cards: deckSet, norm: Math.sqrt(sq) || 1 };
-  const sims = model.decks.map((d) => idfCosine(vec, d, idfOf)).sort((a, b) => b - a);
+  const sims = model.decks
+    .map((d) => idfCosine(vec, d, idfOf))
+    .sort((a, b) => b - a);
   const k = Math.min(knn, sims.length);
   if (k === 0) return 0;
   let sum = 0;
@@ -270,20 +292,34 @@ function weightedIndex(weights, rng) {
 }
 
 function sampleCandidate(candidates, fitOf, temperature, rng) {
-  const ranked = [...candidates].sort((a, b) => fitOf(b) - fitOf(a) || (a < b ? -1 : 1));
+  const ranked = [...candidates].sort(
+    (a, b) => fitOf(b) - fitOf(a) || (a < b ? -1 : 1),
+  );
   if (!(temperature > 0)) return ranked[0];
   let maxFit = -Infinity;
   for (const c of candidates) maxFit = Math.max(maxFit, fitOf(c));
-  const weights = candidates.map((c) => Math.exp((fitOf(c) - maxFit) / temperature));
+  const weights = candidates.map((c) =>
+    Math.exp((fitOf(c) - maxFit) / temperature),
+  );
   const idx = weightedIndex(weights, rng);
   return candidates[idx === -1 ? 0 : idx];
 }
 
-function simulateDraft({ model, packs, signatures, budget, temperature, packWeights, rng }) {
+function simulateDraft({
+  model,
+  packs,
+  signatures,
+  budget,
+  temperature,
+  packWeights,
+  rng,
+}) {
   const picked = [];
   const pickedSet = new Set();
   if (packs.length === 0) return picked;
-  const weights = packs.map((_, i) => (packWeights && packWeights[i] > 0 ? packWeights[i] : 1));
+  const weights = packs.map((_, i) =>
+    packWeights && packWeights[i] > 0 ? packWeights[i] : 1,
+  );
   const exhausted = new Set();
   while (picked.length < budget && exhausted.size < packs.length) {
     const pi = weightedIndex(weights, rng);
@@ -302,7 +338,12 @@ function simulateDraft({ model, packs, signatures, budget, temperature, packWeig
     }
     const deckSoFar = new Set([...picked, ...signatures]);
     const fit = scoreFit(candidates, deckSoFar, model, DEFAULT_TUNING);
-    const card = sampleCandidate(candidates, (c) => fit.get(c) ?? 0, temperature, rng);
+    const card = sampleCandidate(
+      candidates,
+      (c) => fit.get(c) ?? 0,
+      temperature,
+      rng,
+    );
     picked.push(card);
     pickedSet.add(card);
   }
@@ -357,7 +398,13 @@ function buildPackSource(records, seed) {
 /** Best-of-N coherent draft for a battle. `affinity` (name->0..1) and
  * `biasStrength` are null/0 for a neutral build. Returns the winner's kept deck
  * plus the kept-fit power proxy term. */
-function buildOpponentDeck(records, model, level, seed, { signatures = [], affinity = null, biasStrength = 0 } = {}) {
+function buildOpponentDeck(
+  records,
+  model,
+  level,
+  seed,
+  { signatures = [], affinity = null, biasStrength = 0 } = {},
+) {
   const packs = buildPackSource(records, seed);
   if (packs.length === 0) return null;
   const target = distinctTarget(level);
@@ -367,7 +414,10 @@ function buildOpponentDeck(records, model, level, seed, { signatures = [], affin
   const seeds = [...signatures];
   if (affinity) {
     // Widen the seed with the affiliation probe's strongest cards.
-    const probe = [...affinity.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8).map((e) => e[0]);
+    const probe = [...affinity.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8)
+      .map((e) => e[0]);
     seeds.push(...probe);
   }
   const packWeights = affinity
@@ -381,11 +431,20 @@ function buildOpponentDeck(records, model, level, seed, { signatures = [], affin
   let winner = null;
   for (let n = 0; n < BEST_OF_N; n += 1) {
     const rng = createSeededRng((seed ^ (DRAFT_SEED_SALT * (n + 1))) >>> 0);
-    const picked = simulateDraft({ model, packs, signatures: seeds, budget, temperature, packWeights, rng });
+    const picked = simulateDraft({
+      model,
+      packs,
+      signatures: seeds,
+      budget,
+      temperature,
+      packWeights,
+      rng,
+    });
     const { kept } = pruneToTarget(picked, target, model);
     const coherence = scoreCoherence(kept, model);
     const affFit = affinity ? deckAffinityFit(kept, affinity) : 0;
-    const combined = coherence.score + (affinity ? AFFILIATION_OBJECTIVE_WEIGHT * affFit : 0);
+    const combined =
+      coherence.score + (affinity ? AFFILIATION_OBJECTIVE_WEIGHT * affFit : 0);
     if (winner === null || combined > winner.combined) {
       winner = { kept, coherence, affFit, combined };
     }
@@ -496,7 +555,8 @@ function oldRandomDeck(universe, model, size, rng) {
 // Stats helpers.
 // ---------------------------------------------------------------------------
 
-const mean = (xs) => (xs.length === 0 ? 0 : xs.reduce((a, b) => a + b, 0) / xs.length);
+const mean = (xs) =>
+  xs.length === 0 ? 0 : xs.reduce((a, b) => a + b, 0) / xs.length;
 const r3 = (x) => Number(x.toFixed(3));
 function stats(xs) {
   if (xs.length === 0) return { n: 0, mean: 0, min: 0, max: 0 };
@@ -550,7 +610,12 @@ function run() {
         levelDecks.push(built);
       }
       // Greedy ceiling: temperature 0 (best-of-1 is enough; greedy is deterministic).
-      const greedyTemp = buildOpponentDeckGreedy(records, model, level, seed >>> 0);
+      const greedyTemp = buildOpponentDeckGreedy(
+        records,
+        model,
+        level,
+        seed >>> 0,
+      );
       if (greedyTemp) greedyDecks.push(greedyTemp);
     }
     generatedByLevel.set(level, levelDecks);
@@ -560,7 +625,11 @@ function run() {
   const refSize = distinctTarget(Math.floor(LAYER_COUNT / 2));
   const realCorpus = records
     .map((r) => [...new Set(r.mainboard)])
-    .filter((d) => d.length >= DEFAULT_TUNING.minDeckSize && d.length <= DEFAULT_TUNING.maxDeckSize)
+    .filter(
+      (d) =>
+        d.length >= DEFAULT_TUNING.minDeckSize &&
+        d.length <= DEFAULT_TUNING.maxDeckSize,
+    )
     .map((d) => scoreCoherence(d, model).score);
   const oldRandom = [];
   const sizeRandom = [];
@@ -568,8 +637,13 @@ function run() {
     const rngA = createSeededRng(seed >>> 0);
     const rngB = createSeededRng((seed ^ 0xabcdef) >>> 0);
     for (let i = 0; i < 7; i += 1) {
-      oldRandom.push(scoreCoherence(oldRandomDeck(universe, model, refSize, rngA), model).score);
-      sizeRandom.push(scoreCoherence(sizeMatchedRandom(universe, refSize, rngB), model).score);
+      oldRandom.push(
+        scoreCoherence(oldRandomDeck(universe, model, refSize, rngA), model)
+          .score,
+      );
+      sizeRandom.push(
+        scoreCoherence(sizeMatchedRandom(universe, refSize, rngB), model).score,
+      );
     }
   }
 
@@ -582,7 +656,9 @@ function run() {
   for (const seed of SEEDS) {
     const rng = createSeededRng((seed ^ 0x777) >>> 0);
     for (let i = 0; i < 7; i += 1) {
-      oldOrphanRates.push(orphanRate(oldRandomDeck(universe, model, refSize, rng), model));
+      oldOrphanRates.push(
+        orphanRate(oldRandomDeck(universe, model, refSize, rng), model),
+      );
     }
   }
   const oldOrphan = mean(oldOrphanRates);
@@ -596,7 +672,15 @@ function run() {
     // Power proxy: distinct size * copies + mean kept-card cohesion. Label-free,
     // monotonicity check only.
     const power = decks.map((d) => {
-      const meanCohesion = mean(d.kept.map((c, _i, arr) => cardCohesion(c, arr.filter((x) => x !== c), model)));
+      const meanCohesion = mean(
+        d.kept.map((c, _i, arr) =>
+          cardCohesion(
+            c,
+            arr.filter((x) => x !== c),
+            model,
+          ),
+        ),
+      );
       return d.kept.length * copiesPerCard(level) + meanCohesion;
     });
     levelPower.push(mean(power));
@@ -609,8 +693,9 @@ function run() {
     xs.every((v, i) => i === 0 || v >= xs[i - 1] - MONOTONIC_TOLERANCE);
 
   // Affiliation fit: build affiliated decks per affiliation, compare to neutral.
-  const affiliationsToml = parse(readText("data/tabula/affiliations.toml")).affiliations ?? [];
-  const cardsV2 = parse(readText("data/tabula/cards.toml")).cards;
+  const affiliationsToml =
+    parse(readText("data/tabula/affiliations.toml")).affiliations ?? [];
+  const cardsV2 = authoredCards;
   const { idToName } = buildCardMaps(cardsV2);
   const affLevel = Math.floor(LAYER_COUNT / 2);
   const affiliationResults = [];
@@ -625,7 +710,13 @@ function run() {
     const neutralFits = [];
     const ownCoherence = [];
     for (const seed of SEEDS) {
-      const affiliated = buildOpponentDeck(records, model, affLevel, seed >>> 0, { affinity, biasStrength: bias });
+      const affiliated = buildOpponentDeck(
+        records,
+        model,
+        affLevel,
+        seed >>> 0,
+        { affinity, biasStrength: bias },
+      );
       const neutral = buildOpponentDeck(records, model, affLevel, seed >>> 0);
       if (affiliated) {
         ownFits.push(deckAffinityFit(affiliated.kept, affinity));
@@ -651,7 +742,9 @@ function run() {
     orphanRateReduced: genOrphan < oldOrphan,
     coherenceMonotonic: nonDecreasing(levelCoherence),
     powerMonotonic: nonDecreasing(levelPower),
-    affiliationFitAchieved: affiliationResults.every((a) => a.ownFit > a.neutralFit),
+    affiliationFitAchieved: affiliationResults.every(
+      (a) => a.ownFit > a.neutralFit,
+    ),
   };
   const allPass = Object.values(criteria).every(Boolean);
 
@@ -695,14 +788,22 @@ function reportText(result) {
   console.log(line("old random", d.oldRandom));
   console.log(line("size-matched random", d.sizeMatchedRandom));
   console.log("");
-  console.log(`Build-around orphan rate: generated=${result.orphanRate.generated}  old-random=${result.orphanRate.oldRandom}`);
+  console.log(
+    `Build-around orphan rate: generated=${result.orphanRate.generated}  old-random=${result.orphanRate.oldRandom}`,
+  );
   console.log("");
-  console.log(`Coherence by completion level: ${result.monotonicity.coherenceByLevel.join(", ")}`);
-  console.log(`Power proxy by completion level: ${result.monotonicity.powerByLevel.join(", ")}`);
+  console.log(
+    `Coherence by completion level: ${result.monotonicity.coherenceByLevel.join(", ")}`,
+  );
+  console.log(
+    `Power proxy by completion level: ${result.monotonicity.powerByLevel.join(", ")}`,
+  );
   console.log("");
   console.log("Affiliation fit (own vs neutral; own coherence):");
   for (const a of result.affiliations) {
-    console.log(`  ${a.id.padEnd(20)} own=${a.ownFit}  neutral=${a.neutralFit}  coherence=${a.ownCoherence}`);
+    console.log(
+      `  ${a.id.padEnd(20)} own=${a.ownFit}  neutral=${a.neutralFit}  coherence=${a.ownCoherence}`,
+    );
   }
   console.log("");
   console.log("Acceptance criteria:");

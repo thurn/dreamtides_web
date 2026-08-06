@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { economyFixture } from "../../testing/economy-fixture";
+import { opponentsFixture } from "../../testing/opponents-fixture";
 import { LayerName } from "../../types/layer-name";
 import type {
   DreamAtlas,
@@ -36,6 +37,7 @@ const EMPTY_CONTENT: JourneyContent = {
   guides: [],
   atlasData: MINIMAL_ATLAS_DATA,
   economyData: economyFixture(),
+  opponentsData: opponentsFixture(),
 };
 
 function makeNode(

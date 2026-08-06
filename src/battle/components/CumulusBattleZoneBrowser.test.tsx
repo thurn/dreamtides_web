@@ -5,7 +5,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../../cumulus/CumulusRoot";
 import { DOUBLE_TAP_WINDOW_MS } from "../../cumulus/primitives/pointer-gesture";
-import { createBattleInit } from "../integration/create-battle-init";
+import { createTestBattleInit } from "../../testing/create-battle-init";
 import { createInitialBattleState } from "../state/create-initial-state";
 import {
   makeBattleTestCardDatabase,
@@ -16,7 +16,7 @@ import {
 import { CumulusBattleZoneBrowser } from "./CumulusBattleZoneBrowser";
 
 function createState() {
-  return createInitialBattleState(createBattleInit({
+  return createInitialBattleState(createTestBattleInit({
     battleEntryKey: "site-7::2::dreamscape-2",
     site: makeBattleTestSite(),
     state: makeBattleTestState(),

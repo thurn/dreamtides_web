@@ -369,6 +369,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     aiSide: "enemy",
     caps: aiCaps,
     basicAutomation: true,
+    aiConfiguration: battleInit.aiConfiguration,
   });
 
   const aiBlockingTurn = battle.aiBlockingTurn;

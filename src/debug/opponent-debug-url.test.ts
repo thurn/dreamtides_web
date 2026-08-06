@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_RUN_LAYER_COUNT } from "../battle/integration/opponent-deck";
+const DEFAULT_RUN_LAYER_COUNT = 7;
 import {
   opponentDebugSearch,
   opponentGenerationId,
@@ -118,10 +118,12 @@ describe("opponent-debug-url", () => {
 
   it("clamps an out-of-range layer into the valid run window", () => {
     expect(
-      parseOpponentDebugParams(`?layer=${String(MAX_LAYER + 10)}`)
+      parseOpponentDebugParams(`?layer=${String(MAX_LAYER + 10)}`, MAX_LAYER)
         .completionLevel,
     ).toBe(MAX_LAYER);
-    expect(parseOpponentDebugParams("?layer=-3").completionLevel).toBe(0);
+    expect(parseOpponentDebugParams("?layer=-3", MAX_LAYER).completionLevel).toBe(
+      0,
+    );
   });
 
   it("defaults a bare query to the layer-0 neutral corpus generation", () => {

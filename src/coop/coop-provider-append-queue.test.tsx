@@ -35,7 +35,21 @@ const fake = vi.hoisted(() => {
     events: Map<number, FakeEvent>;
     appliedIndex: Map<number, { actor: string; type: string }>;
   }
-  const genesis = { seed: "s", reducerVersion: "v", createdAt: 0, contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null, atlasFoldHash: "fixture-atlas-fold-hash", economyFoldHash: "a".repeat(64), defaultStartingEssence: 17, dreamsignCap: 4 } };
+  const genesis = {
+    seed: "s",
+    reducerVersion: "v",
+    createdAt: 0,
+    contentConfig: {
+      poolVariant: "test",
+      draftMode: "pool",
+      fresh20PackSize: null,
+      atlasFoldHash: "fixture-atlas-fold-hash",
+      economyFoldHash: "a".repeat(64),
+      opponentsFoldHash: "b".repeat(64),
+      defaultStartingEssence: 17,
+      dreamsignCap: 4,
+    },
+  };
   const committed: FakeEvent[] = [];
   let subscriber: ((node: unknown) => void) | null = null;
 
@@ -83,19 +97,29 @@ const fake = vi.hoisted(() => {
 });
 
 vi.mock("../eventlog/subscribe", () => ({
-  subscribeToLog: (_db: unknown, _roomId: unknown, onNode: (node: unknown) => void) =>
-    fake.subscribe(onNode),
+  subscribeToLog: (
+    _db: unknown,
+    _roomId: unknown,
+    onNode: (node: unknown) => void,
+  ) => fake.subscribe(onNode),
 }));
 vi.mock("../eventlog/append", () => ({
-  appendEvent: (_db: unknown, _roomId: unknown, _config: unknown, event: unknown) =>
-    fake.append(event),
+  appendEvent: (
+    _db: unknown,
+    _roomId: unknown,
+    _config: unknown,
+    event: unknown,
+  ) => fake.append(event),
 }));
 // A toy engine config: every event applies and bumps a counter. JSON encode/
 // decode/hash keep it deterministic so the divergence tripwire stays quiet.
 vi.mock("../rules/replay/replay", () => ({
   GAME_ENGINE_CONFIG: {
     genesisState: () => ({ n: 0 }),
-    reducer: (state: { n: number }) => ({ state: { n: state.n + 1 }, outcome: "applied" }),
+    reducer: (state: { n: number }) => ({
+      state: { n: state.n + 1 },
+      outcome: "applied",
+    }),
     encode: (state: unknown) => JSON.stringify(state),
     decode: (raw: string) => JSON.parse(raw) as unknown,
     hash: (state: unknown) => JSON.stringify(state),
@@ -153,12 +177,18 @@ function OutcomeCollector({
 }: {
   onOutcome: (type: string, seq: number, outcome: string) => void;
 }): null {
-  useEventOutcomes((event, seq, outcome) => onOutcome(event.type, seq, outcome));
+  useEventOutcomes((event, seq, outcome) =>
+    onOutcome(event.type, seq, outcome),
+  );
   return null;
 }
 
 /** Hands the live `append` fn to the test so it can append after the baseline. */
-function CaptureAppend({ onReady }: { onReady: (append: AppendFn) => void }): null {
+function CaptureAppend({
+  onReady,
+}: {
+  onReady: (append: AppendFn) => void;
+}): null {
   const append = useAppend();
   useEffect(() => onReady(append), [append, onReady]);
   return null;

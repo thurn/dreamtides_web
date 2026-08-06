@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createBattleInit } from "../../battle/integration/create-battle-init";
+import { createTestBattleInit } from "../../testing/create-battle-init";
 import {
   makeBattleTestCardDatabase,
   makeBattleTestDreamAvatars,
@@ -10,7 +10,7 @@ import { buildBattleStartView } from "./battle-start-view-model";
 
 function makeInit() {
   const cardDatabase = makeBattleTestCardDatabase();
-  const base = createBattleInit({
+  const base = createTestBattleInit({
     battleEntryKey: "battle-entry",
     site: makeBattleTestSite(),
     state: makeBattleTestState(),
@@ -82,7 +82,11 @@ describe("buildBattleStartView", () => {
   it("keeps the opponent ability dormant in the opening battle", () => {
     const { init, cardDatabase } = makeInit();
     const view = buildBattleStartView(
-      { ...init, completionLevelAtStart: 0 },
+      {
+        ...init,
+        completionLevelAtStart: 0,
+        opponentAbilityActive: false,
+      },
       cardDatabase,
     );
 

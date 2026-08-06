@@ -1,10 +1,10 @@
 # Battle AI Design
 
 This document describes the design for an automated opponent ("Battle AI") for
-the journey prototype's playable battle. The AI plays a fixed deck built from the
-`rarity = "Starter"` cards, makes decisions with a blend of heuristics, shallow
-search, and light Monte Carlo sampling, and is engineered to spend well under
-100ms on any single choice.
+the journey prototype's playable battle. The AI plays the UUID-keyed deck
+authored in `data/tabula/opponents.toml`, makes decisions with a blend of
+heuristics, shallow search, and light Monte Carlo sampling, and observes the
+planning budget of its resolved preset.
 
 It is written to be read alongside:
 
@@ -13,10 +13,13 @@ It is written to be read alongside:
   behavior.
 - `docs/journey_prototype/qa_tooling.md` — headless module invocation and browser
   QA.
+- `docs/journey_prototype/opponents_data.md` — authored decks, evaluation
+  weights, opponent-model tuning, and AI presets.
 
 ## Table of Contents
 
 - [Goals and Non-Goals](#goals-and-non-goals)
+- [Authored Configuration](#authored-configuration)
 - [Current Battle Architecture](#current-battle-architecture)
 - [The AI Deck](#the-ai-deck)
 - [Design Principles](#design-principles)
@@ -42,15 +45,15 @@ It is written to be read alongside:
 
 **Goals.**
 
-- An enemy that proposes its own turns, plays its Starter deck competently, and
-  competes for the 25⍟ victory threshold.
+- An enemy that proposes its own turns, plays its authored deck competently, and
+  competes for the active battle's score target.
 - Every AI action is a suggestion the human approves with an explicit click
   before it commits; the AI never mutates shared battle state on its own.
 - Decisions driven by heuristics plus a shallow search and a thin Monte Carlo
   layer over opponent responses.
-- A hard per-decision time budget of 100ms, with graceful degradation (return
+- A preset-defined per-decision time budget, with graceful degradation (return
   the best plan found so far) if the budget is ever approached.
-- Deep, exact understanding of the AI's *own* ten cards.
+- Deep, exact understanding of the AI's _own_ ten cards.
 - Visible AI reasoning: the player can see what the AI is doing and, in a debug
   surface, why.
 - Enabled by a URL parameter (`?ai=1`), and integrated
@@ -59,15 +62,25 @@ It is written to be read alongside:
 **Non-Goals.**
 
 - A full rules engine that simulates every card in `cards.toml`. The AI
-  understands its own deck plus general rules and broad *classes* of cards; it
+  understands its own deck plus general rules and broad _classes_ of cards; it
   treats opponent cards abstractly.
-- Perfect play or a difficulty-tuned ladder. One competent difficulty is the
-  target; difficulty knobs are noted as future work.
+- Perfect play or a player-facing difficulty selector. Named presets provide the
+  tuning contract used by journey and tutorial automation.
 - Driving the human player's side, or any autonomous mutation. The human keeps
-  the existing controls; the AI only *proposes* the enemy side's actions and the
+  the existing controls; the AI only _proposes_ the enemy side's actions and the
   combat outcome, which the human approves.
 - Networked/remote AI. The AI runs locally on the journey client (see
   [Codebase Integration](#codebase-integration)).
+
+## Authored Configuration
+
+`opponents.toml` owns the journey AI deck, evaluation weights, removal and
+response priors, sample safety cap, and named presets. A preset contains beam
+width, opponent-response mode, sample count, search depth, journey planning
+budget, and deterministic tutorial expansion budget. `BattleInit` persists the
+complete resolved preset and ID, and both AI controllers consume that folded
+configuration. Terminal evaluation receives the same persisted `scoreToWin`
+used by battle resolution.
 
 ## Battle Architecture
 
@@ -97,7 +110,7 @@ their own cards through the debug rail. Four facts shape this design:
 
 3. **AI scaffolding lives in the type model.** `src/battle/types.ts` defines
    `BattleAiDecisionStage = "character" | "reposition" | "nonCharacter" |
-   "endTurn"`, a `BattleAiChoiceTrace` record (including `heuristicScoreBefore`
+"endTurn"`, a `BattleAiChoiceTrace` record (including `heuristicScoreBefore`
    and `heuristicScoreAfter`), and an `aiChoices: BattleAiChoiceTrace[]` field on
    every transition that flows through `src/multiplayer/battle-normalize.ts` to
    the log surfaces. The AI fills that scaffolding rather than inventing a
@@ -125,18 +138,18 @@ The AI's entire world is the ten Starter cards. They form a coherent midrange
 deck and, critically, share three properties that make a small, fast AI
 tractable.
 
-| Card | Cost | ✦ | Type / Subtype | Text | Role |
-| --- | --- | --- | --- | --- | --- |
-| Nocturne Strummer | 2● | 1 | Character / Musician | Support – Supported characters have +2✦. | Back-rank anchor; buffs front rank |
-| Ringwatcher | 3● | 1 | Character / Visionary | ▸Materialized: Foresee 1. | Filtering body |
-| Marked Direwolf | 4● | 4 | Character / Spirit Animal | (vanilla) | Efficient beater |
-| Runebound Champion | 5● | 3 | Character / Warrior | ▸Dawn: Gain 1⍟. | Durable body |
-| Final Witness | 3● | 2 | Character / Visitor | ▸Dissolved: Draw a card. | Value trader |
-| Rusted Colossus | 6● | 6 | Character / Synth | This character has +2✦ for each supporting character. | Finisher / payoff |
-| Flashpoint Detonation | 3● | — | Event | Dissolve an enemy with cost 2● or less. | Removal |
-| Glimpse of What Was | 1● | — | Event | Draw a card, then foresee 1. | Cantrip / dig |
-| Sign of Arrival | 2● | — | Event | Discover a character. | Toolbox / card advantage |
-| Worlds Await | 1● | — | Event | Give an ally +3✦. | Proactive pump |
+| Card                  | Cost | ✦   | Type / Subtype            | Text                                                  | Role                               |
+| --------------------- | ---- | --- | ------------------------- | ----------------------------------------------------- | ---------------------------------- |
+| Nocturne Strummer     | 2●   | 1   | Character / Musician      | Support – Supported characters have +2✦.              | Back-rank anchor; buffs front rank |
+| Ringwatcher           | 3●   | 1   | Character / Visionary     | ▸Materialized: Foresee 1.                             | Filtering body                     |
+| Marked Direwolf       | 4●   | 4   | Character / Spirit Animal | (vanilla)                                             | Efficient beater                   |
+| Runebound Champion    | 5●   | 3   | Character / Warrior       | ▸Dawn: Gain 1⍟.                                       | Durable body                       |
+| Final Witness         | 3●   | 2   | Character / Visitor       | ▸Dissolved: Draw a card.                              | Value trader                       |
+| Rusted Colossus       | 6●   | 6   | Character / Synth         | This character has +2✦ for each supporting character. | Finisher / payoff                  |
+| Flashpoint Detonation | 3●   | —   | Event                     | Dissolve an enemy with cost 2● or less.               | Removal                            |
+| Glimpse of What Was   | 1●   | —   | Event                     | Draw a card, then foresee 1.                          | Cantrip / dig                      |
+| Sign of Arrival       | 2●   | —   | Event                     | Discover a character.                                 | Toolbox / card advantage           |
+| Worlds Await          | 1●   | —   | Event                     | Give an ally +3✦.                                     | Proactive pump                     |
 
 **The three simplifying properties:**
 
@@ -166,7 +179,7 @@ selection, and a proactive pump.
 Support, and its events while modeling the opponent abstractly. Concretely, the
 AI reads opponent characters only as
 "a body with effective spark `S` at front/back position `P`," reads the
-opponent's hand only as a *count* of unknown cards, and reasons about the
+opponent's hand only as a _count_ of unknown cards, and reasons about the
 opponent's deck only through broad priors ("an unknown hand of N cards may
 contain removal or a blocker"). The AI never needs a definition table for cards
 it does not own. This is the single most important commitment: it bounds the
@@ -187,7 +200,7 @@ most of the work. Search exists to order plays, choose targets, and avoid
 walking challengers into bad combat — not to look many plies ahead.
 
 **5. The AI proposes; the human commits.** This is the cornerstone of the
-integration. The AI is a *suggestion engine*: it computes what it wants to do but
+integration. The AI is a _suggestion engine_: it computes what it wants to do but
 mutates nothing directly. Every action — playing a character, playing removal,
 declaring challengers, resolving the Challenge phase — is surfaced as a single
 proposal that the human approves with an explicit click before it is applied. The
@@ -266,7 +279,7 @@ by both sides (the human benefits from it too).
   dissolved body — are the edits that commit the outcome (firing `▸Dissolved`,
   e.g. Final Witness) once the human approves. Effective spark here must include
   Support bonuses (see [The Forward Model](#the-forward-model)). The
-  resolver produces a *proposal* and defers anything it cannot fully model to a
+  resolver produces a _proposal_ and defers anything it cannot fully model to a
   manual step; see
   [Auto-Resolution and Manual Steps](#auto-resolution-and-manual-steps).
 
@@ -281,7 +294,7 @@ by both sides (the human benefits from it too).
   resolves, advance `activeSide`/`turnNumber`/`phase` via `SET_BATTLE_FLOW`
   (reusing the turn-pair helpers already in `PlayableBattleScreen.tsx`), apply
   the next side's draw and energy ramp, and check the win condition (`score >=
-  scoreToWin`, or `turnNumber > turnLimit` → draw), surfaced through the existing
+scoreToWin`, or `turnNumber > turnLimit` → draw), surfaced through the existing
   `result` field and reward flow.
 
 The spine touches only mechanics that are already typed for. It does not attempt
@@ -331,7 +344,7 @@ per window is auto versus manual.
 At each window the engine resolves automatically only:
 
 - effects from cards it fully models (the AI's ten Starter cards), and
-- a small allowlist of *general* keywords that are rules rather than card-specific
+- a small allowlist of _general_ keywords that are rules rather than card-specific
   text — Vengeful and the base spark comparison.
 
 For anything else in play, a conservative **capability check** decides whether to
@@ -344,8 +357,8 @@ whitelisted, so the AI side never pauses spuriously.
 
 Even the pure-arithmetic lane resolution is presented as a **preview the human
 confirms** and can hand-edit before commit, since the human is the authority on
-their own cards. The flow is therefore *auto-propose, human-in-the-loop* rather
-than *auto-resolve*.
+their own cards. The flow is therefore _auto-propose, human-in-the-loop_ rather
+than _auto-resolve_.
 
 This maps cleanly onto the existing code. The resolver returns a
 `ChallengeResolution` proposal plus the `BattleDebugEdit[]` that commit it,
@@ -360,7 +373,7 @@ auto-resolver is thus a flow guide, a math helper, and a safety interlock, not a
 general effect engine.
 
 Under [The Approval Loop](#the-approval-loop) this is strengthened further: every
-AI action *and* the Challenge outcome are already gated behind explicit human
+AI action _and_ the Challenge outcome are already gated behind explicit human
 approval, so the human is always in the loop by construction. The capability
 check's job is then to keep each proposal honest and legible — flagging any
 in-play card whose trigger or keyword could change the result so the human can
@@ -377,7 +390,7 @@ times per turn. `forward-model.ts` provides a cheap, mutable projection of
 - The AI's hand, deck (as an ordered list for draw/foresee), void, and board
   (the two ranks with exact card identities).
 - The opponent's board as abstract bodies (`{ effectiveSpark, rank, slot,
-  isFigment }`), the opponent's hand as a count, and the opponent's void as a
+isFigment }`), the opponent's hand as a count, and the opponent's void as a
   count.
 - Derived, recomputed-on-read **effective spark including Support**. The model implements the
   support-adjacency map from `battle_rules.md` (B0→F0; B1→F0,F1; continuing
@@ -385,7 +398,7 @@ times per turn. `forward-model.ts` provides a cheap, mutable projection of
   so that registered Support bonuses produce correct numbers.
 
 The forward model is a plain data structure with pure mutators, deliberately
-*not* the real reducer: it is allowed to be approximate about anything outside
+_not_ the real reducer: it is allowed to be approximate about anything outside
 the AI's deck. Cloning it is a shallow structural copy (the state is tiny: ≤ 9
 characters per side, ≤ ~10 hand cards), which keeps beam-search branching cheap.
 
@@ -393,7 +406,7 @@ Two distinct uses:
 
 1. **Planning** — the planner applies candidate AI actions to a cloned model and
    evaluates the result.
-2. **Execution** — the chosen plan is replayed against the *real* state by
+2. **Execution** — the chosen plan is replayed against the _real_ state by
    `driver.ts` as `BattleDebugEdit` commands, so the authoritative state and the
    AI's intent never diverge.
 
@@ -447,15 +460,15 @@ AI deck later means adding one `StarterCardModel`.
 `evaluate.ts` maps a forward-model state to a single scalar from the AI's point
 of view (higher is better). It is a weighted sum of interpretable terms:
 
-| Term | Intuition |
-| --- | --- |
-| Score differential | `aiScore - playerScore`, weighted heavily; 25 wins. |
-| Board spark | Effective spark of AI bodies minus opponent bodies, with front-rank/un-exhausted spark weighted above back-rank. |
-| Expected next-Challenge points | Estimated spark that will score unblocked given the committed front rank and the opponent-response model. |
-| Card advantage | AI hand size plus event-based card selection. |
-| Tempo / energy waste | Small penalty for unspent energy. |
-| Risk exposure | Penalty for over-committing fragile bodies into likely removal/blocks (informed by the opponent model). |
-| Terminal | `+∞` when AI reaches `scoreToWin`; `-∞` when the opponent does. |
+| Term                           | Intuition                                                                                                        |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| Score differential             | `aiScore - playerScore`, weighted heavily; 25 wins.                                                              |
+| Board spark                    | Effective spark of AI bodies minus opponent bodies, with front-rank/un-exhausted spark weighted above back-rank. |
+| Expected next-Challenge points | Estimated spark that will score unblocked given the committed front rank and the opponent-response model.        |
+| Card advantage                 | AI hand size plus event-based card selection.                                                                    |
+| Tempo / energy waste           | Small penalty for unspent energy.                                                                                |
+| Risk exposure                  | Penalty for over-committing fragile bodies into likely removal/blocks (informed by the opponent model).          |
+| Terminal                       | `+∞` when AI reaches `scoreToWin`; `-∞` when the opponent does.                                                  |
 
 Weights are constants tuned by self-play (see
 [Testing and Tuning](#testing-and-tuning)). The function is pure and O(board
@@ -485,7 +498,7 @@ map one-to-one onto the existing `BattleAiDecisionStage` enum:
    which the rules spine proposes the Challenge outcome for approval.
 
 The search keeps a **beam** of the top-K partial plans (K ≈ 8–16) ranked by the
-evaluation function, expanding each by *every* legal action per round until the
+evaluation function, expanding each by _every_ legal action per round until the
 action set is exhausted (no card affordable, no reposition available) or the
 `MAX_DEPTH`/deadline guard trips. Crucially the expansion is NOT gated on
 "strictly improving": a momentarily neutral-or-worse setup play stays in the
@@ -513,7 +526,7 @@ choice kind, card, target, before/after heuristic score) used to render the
 proposal and the log.
 
 The planner runs in a **receding-horizon** loop. It plans the whole intended turn
-so that look-ahead captures order-sensitive synergies, but only the *first* action
+so that look-ahead captures order-sensitive synergies, but only the _first_ action
 is surfaced as a proposal. After the human approves it (and the command is
 applied) or rejects it, the planner re-runs from the live state to produce the
 next proposal. Re-planning each step is cheap (well under the budget) and keeps
@@ -551,7 +564,7 @@ be selected by a difficulty setting:
   more block-oriented AI that over-commits less.
 
 "Monte Carlo" here means sampling a handful (≤ ~16) of concrete responses from
-those archetypes — including sampling *which* unknown card the opponent might
+those archetypes — including sampling _which_ unknown card the opponent might
 hold — resolving each directly over the forward-model projection (the abstract
 opponent bodies) with the same combat rules, and averaging. The shared
 `resolveChallenge` operates on full `BattleMutableState` with real instances, so
@@ -619,9 +632,8 @@ still treats 100ms as a hard ceiling, enforced structurally:
 
 - A `deadline` timestamp is threaded into the planner. Beam expansion checks it
   between stages and returns the best complete plan found so far if approached.
-- Search breadth (beam width K) and Monte Carlo sample count are explicit
-  constants, so worst-case work is bounded by construction rather than by hoping
-  the search terminates.
+- Search breadth, search depth, and Monte Carlo sample count come from the
+  resolved preset. The global sampling safety cap bounds every authored preset.
 - The evaluation function is pure and cheap; partial results are memoized within
   a single planning pass keyed by a structural hash of the forward model.
 - Single, isolated choices (a Foresee ordering, a Discover pick presented
@@ -693,11 +705,14 @@ site; the surrounding padding/shuffle logic is reused unchanged.
 **3. The driver hook and proposal surface.** `ai/use-battle-ai.ts` is a hook
 mounted by `PlayableBattleScreen` only when `aiMode` is on. It watches
 `reducerState.mutable`, and instead of dispatching directly it holds the AI's
-*current proposal* as React state for `BattleAiProposalBar` to render:
+_current proposal_ as React state for `BattleAiProposalBar` to render:
 
 ```ts
-const { proposal, approve, reject, endAiTurn } =
-  useBattleAi({ reducerState, dispatch, enabled: aiMode });
+const { proposal, approve, reject, endAiTurn } = useBattleAi({
+  reducerState,
+  dispatch,
+  enabled: aiMode,
+});
 // internally:
 //   when mutable.activeSide === "enemy" && mutable.result === null:
 //     proposal = planNextAction(forwardModelFrom(mutable), deadline)  // one action
@@ -723,7 +738,7 @@ return so the player can position blockers and play Fast cards. Pass
 `data-battle-status-meta="has-ai"`).
 
 **5. Multiplayer coexistence.** The battle state is shared through
-`useMultiplayerBattle()` / Firebase. The AI is a *local* actor: it must run on
+`useMultiplayerBattle()` / Firebase. The AI is a _local_ actor: it must run on
 exactly one client. In the single-player journey flow this is the only client, so
 the simplest rule is to enable the driver only outside a shared multiplayer room
 (or gate it to the room owner). The `aiChoices` trace already round-trips through
@@ -741,7 +756,7 @@ handoff) and `FORCE_RESULT` only via the normal win-detection path.
 The AI's reasoning is surfaced through three layers, reusing existing surfaces.
 
 - **The proposal bar (always on, the primary surface).** Every AI action appears
-  in `BattleAiProposalBar` *before* it happens, as a plain-language suggestion
+  in `BattleAiProposalBar` _before_ it happens, as a plain-language suggestion
   with the referenced card(s), the AI's rationale from the `BattleAiChoiceTrace`,
   and **Approve** / **Reject** / **End AI Turn** controls. The player therefore
   both sees and gates each move — playing a character, removal, declaring
@@ -763,9 +778,9 @@ The AI's reasoning is surfaced through three layers, reusing existing surfaces.
   tuning and stays out of the normal player flow, consistent with how the
   prototype keeps package internals behind debug surfaces.
 
-Together these satisfy the requirement that the player both *sees and approves*
+Together these satisfy the requirement that the player both _sees and approves_
 what the AI does (the proposal bar), keeps a durable record of it (the log), and,
-when desired, can *inspect why* (the debug panel) — all built on the `aiChoices`
+when desired, can _inspect why_ (the debug panel) — all built on the `aiChoices`
 channel that already exists end to end.
 
 ## Testing and Tuning
@@ -807,28 +822,20 @@ channel that already exists end to end.
 6. **Presentation.** `aiChoices` trace population, the proposal bar's
    plain-language descriptions and rationale, the thinking indicator, and the
    debug inspector tab.
-7. **Hardening.** Browser QA, multiplayer-coexistence gating, and difficulty
-   knobs (beam width, expectiminimax vs. worst-case, sample count).
+7. **Hardening.** Browser QA, multiplayer-coexistence gating, and TOML-authored
+   difficulty presets.
 
 Each phase is independently testable; phases 1–4 need no UI and are exercised
 entirely through the headless harness.
 
 ## Open Questions
 
-- **Energy / Dreamwell model.** The prototype has no Dreamwell, so the energy
-  ramp is a stand-in. Is `maxEnergy = min(turnNumber + 1, 10)` acceptable, or
-  should the AI follow a specific curve? This affects both sides' tempo.
 - **Manual-step granularity.** End-of-turn resolution pauses for the human's
   interaction windows and for any in-play card it cannot fully model (see
   [Auto-Resolution and Manual Steps](#auto-resolution-and-manual-steps)). How
   aggressive should the capability check be — pause on any `▸`/keyword card for
   safety, or keep an allowlist of full-pool cards known to be
   challenge-irrelevant to cut down on confirm prompts?
-- **Deck multiset.** Default is 3× each Starter card (30, padded context of 25).
-  Confirm the counts, or specify a curve-tuned distribution.
-- **Difficulty.** Ship one competent difficulty first; expose beam width,
-  expectiminimax-vs-worst-case, and Monte Carlo sample count as the difficulty
-  axes later. Is a single difficulty acceptable for v1?
 - **Rejection and convenience.** Approving each action is the default. What
   should **Reject** do — skip the action and let the AI propose its next-best
   alternative (re-plan), or end the AI's turn outright? And should there be an
@@ -842,24 +849,24 @@ entirely through the headless harness.
 
 ## Appendix: File-by-File Change Summary
 
-| File | Change |
-| --- | --- |
-| `src/runtime/runtime-config.ts` | `aiMode` parsed from `?ai` (on only for `?ai=1`). |
-| `src/App.tsx` / screen router / `BattleSiteRoute` | Thread `aiMode` to the battle screen. |
-| `src/battle/integration/create-battle-init.ts` | When `aiMode`, build `enemyDeckDefinition` from the Starter deck. |
-| `src/battle/ai/deck.ts` | NEW — Starter-deck builder. |
-| `src/battle/ai/forward-model.ts` | NEW — planning projection + support-adjacency spark. |
-| `src/battle/ai/cards/*` | NEW — ten `StarterCardModel`s and the registry. |
-| `src/battle/ai/evaluate.ts` | NEW — static board evaluation. |
-| `src/battle/ai/planner.ts` | NEW — staged beam search; emits `TurnPlan` + traces. |
-| `src/battle/ai/opponent-model.ts` | NEW — abstract opponent + response sampling. |
-| `src/battle/ai/driver.ts` | NEW — next planned action → proposed `BattleCommand[]` (committed on approval). |
-| `src/battle/ai/use-battle-ai.ts` | NEW — hook watching `activeSide`; holds the current proposal, commits on approval, re-plans. |
-| `src/battle/ai/trace.ts` | NEW — builds `BattleAiChoiceTrace` entries (proposal + log). |
-| `src/battle/components/BattleAiProposalBar.tsx` | NEW — proposal/approval surface (Approve / Reject / End AI Turn + rationale). |
-| `src/battle/engine/challenge.ts` | Shared Challenge-phase resolver. |
-| `src/battle/engine/energy.ts` | Shared start-of-turn energy ramp. |
-| `src/battle/components/PlayableBattleScreen.tsx` | Mount the AI hook + proposal bar; gate `canPlayerAct` to the proposal during AI proposals; pass `hasAiOpponent`. |
-| `src/battle/components/BattleInspector.tsx` | Debug-gated AI reasoning tab. |
-| `src/battle/components/BattleLogDrawer.tsx` | Render populated `aiChoices`. |
-| `scripts/battle-ai-experiment.mjs` | NEW — headless self-play harness for tuning. |
+| File                                              | Change                                                                                                           |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `src/runtime/runtime-config.ts`                   | `aiMode` parsed from `?ai` (on only for `?ai=1`).                                                                |
+| `src/App.tsx` / screen router / `BattleSiteRoute` | Thread `aiMode` to the battle screen.                                                                            |
+| `src/battle/integration/create-battle-init.ts`    | When `aiMode`, build `enemyDeckDefinition` from the Starter deck.                                                |
+| `src/battle/ai/deck.ts`                           | NEW — Starter-deck builder.                                                                                      |
+| `src/battle/ai/forward-model.ts`                  | NEW — planning projection + support-adjacency spark.                                                             |
+| `src/battle/ai/cards/*`                           | NEW — ten `StarterCardModel`s and the registry.                                                                  |
+| `src/battle/ai/evaluate.ts`                       | NEW — static board evaluation.                                                                                   |
+| `src/battle/ai/planner.ts`                        | NEW — staged beam search; emits `TurnPlan` + traces.                                                             |
+| `src/battle/ai/opponent-model.ts`                 | NEW — abstract opponent + response sampling.                                                                     |
+| `src/battle/ai/driver.ts`                         | NEW — next planned action → proposed `BattleCommand[]` (committed on approval).                                  |
+| `src/battle/ai/use-battle-ai.ts`                  | NEW — hook watching `activeSide`; holds the current proposal, commits on approval, re-plans.                     |
+| `src/battle/ai/trace.ts`                          | NEW — builds `BattleAiChoiceTrace` entries (proposal + log).                                                     |
+| `src/battle/components/BattleAiProposalBar.tsx`   | NEW — proposal/approval surface (Approve / Reject / End AI Turn + rationale).                                    |
+| `src/battle/engine/challenge.ts`                  | Shared Challenge-phase resolver.                                                                                 |
+| `src/battle/engine/energy.ts`                     | Shared start-of-turn energy ramp.                                                                                |
+| `src/battle/components/PlayableBattleScreen.tsx`  | Mount the AI hook + proposal bar; gate `canPlayerAct` to the proposal during AI proposals; pass `hasAiOpponent`. |
+| `src/battle/components/BattleInspector.tsx`       | Debug-gated AI reasoning tab.                                                                                    |
+| `src/battle/components/BattleLogDrawer.tsx`       | Render populated `aiChoices`.                                                                                    |
+| `scripts/battle-ai-experiment.mjs`                | NEW — headless self-play harness for tuning.                                                                     |

@@ -1,7 +1,13 @@
 import { loadDreamsignTemplates } from "./dreamsigns";
 import { loadMerchantCorpus, type MerchantCorpus } from "./merchant-corpus";
-import { loadDreamsignProfiles, type DreamsignProfile } from "./dreamsign-profiles";
-import { loadDreamsignSignatures, type DreamsignSignature } from "./dreamsign-signatures";
+import {
+  loadDreamsignProfiles,
+  type DreamsignProfile,
+} from "./dreamsign-profiles";
+import {
+  loadDreamsignSignatures,
+  type DreamsignSignature,
+} from "./dreamsign-signatures";
 import { logEvent } from "../logging";
 import {
   type DreamAvatarContent,
@@ -17,15 +23,16 @@ import {
 } from "../types/content";
 import { asCardId, type CardId } from "../types/card-identity";
 import type { CardData } from "../types/cards";
-import type { GeneratedPool, PoolData, PoolVariant } from "../draft/pool/types.ts";
+import type {
+  GeneratedPool,
+  PoolData,
+  PoolVariant,
+} from "../draft/pool/types.ts";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types.ts";
 import { generatePoolFromData } from "../draft/pool/generate.ts";
 import { buildPoolData } from "../draft/pool/pool-data";
 import { loadFigmentDatabase } from "./figment-database";
-import {
-  loadExplorationContent,
-  type ExplorationContent,
-} from "./exploration";
+import { loadExplorationContent, type ExplorationContent } from "./exploration";
 import {
   buildIdIndex,
   buildLegendaryCardNumbers,
@@ -57,7 +64,9 @@ import {
 } from "./dreamscapes";
 import { loadAtlasData } from "./atlas-data";
 import { loadEconomyData } from "./economy-data";
+import { loadOpponentsData } from "./opponents-data";
 import type { EconomyData } from "../types/economy-data";
+import type { OpponentsData } from "../types/opponents-data";
 import type {
   AffiliationContent,
   ApollyonIncarnationContent,
@@ -140,6 +149,8 @@ export interface JourneyContent {
   atlasData: AtlasData;
   /** Validated direct economy tuning loaded before room folding begins. */
   economyData: EconomyData;
+  /** Fold-relevant opponent and battle tuning loaded before room entry. */
+  opponentsData: OpponentsData;
   /**
    * Apollyon's ten incarnations, loaded from
    * `public/apollyon-incarnations-data.json`. Atlas generation picks one per run
@@ -231,15 +242,16 @@ const POOL_TARGET_SIZE = 200;
  * any record-driven variant omitted here will silently fall back to the random
  * color-pool generator at runtime.
  */
-const POOL_VARIANTS_NEEDING_RECORDS: ReadonlySet<PoolVariant> = new Set<PoolVariant>([
-  "pickfit",
-  "pickearly",
-  "pickpos",
-  "pickchoice",
-  "pickcohere",
-  "picksig",
-  "sigseed",
-]);
+const POOL_VARIANTS_NEEDING_RECORDS: ReadonlySet<PoolVariant> =
+  new Set<PoolVariant>([
+    "pickfit",
+    "pickearly",
+    "pickpos",
+    "pickchoice",
+    "pickcohere",
+    "picksig",
+    "sigseed",
+  ]);
 
 /** Whether `variant` grows its pool from the draft-record corpus. */
 export function poolVariantNeedsRecords(variant: PoolVariant): boolean {
@@ -650,7 +662,8 @@ export function buildDreamAvatarSeedProvenance(
 
   // Display names are a render-time convenience resolved from the card id; the
   // provenance is keyed by id throughout, so same-name cards stay distinct.
-  const nameOf = (id: CardId): string => ctx.poolData.cardNameById?.get(id) ?? id;
+  const nameOf = (id: CardId): string =>
+    ctx.poolData.cardNameById?.get(id) ?? id;
   const starterSet = new Set(STARTER_CARD_NUMBERS);
   const cardProvenanceByNumber: Record<string, SeedCardProvenance> = {};
   for (const [key, entry] of Object.entries(provenance.cardProvenanceById)) {
@@ -814,6 +827,7 @@ export async function loadJourneyContent(
     guides,
     atlasData,
     economyData,
+    opponentsData,
     apollyonIncarnations,
     _figmentCatalog,
   ] = await Promise.all([
@@ -839,9 +853,7 @@ export async function loadJourneyContent(
     // room events can be folded.
     loadKnownGoodDecklists(),
     // Fetch the committed corpus only for the variants that grow from it.
-    poolNeedsCorpus
-      ? loadAffinityCorpus()
-      : Promise.resolve(null),
+    poolNeedsCorpus ? loadAffinityCorpus() : Promise.resolve(null),
     // Fetch the committed tide decks only for the `tides` variant.
     poolNeedsTides ? loadTideDecks() : Promise.resolve(null),
     // Fetch the committed `tides2` tide decks only for the `tides2` variant.
@@ -872,6 +884,7 @@ export async function loadJourneyContent(
     loadDreamGuides(),
     loadAtlasData(),
     loadEconomyData(),
+    loadOpponentsData(),
     // Apollyon's incarnations are small and always loaded so the Atlas can
     // present a per-run guise for the boss node.
     loadApollyonIncarnations(),
@@ -899,7 +912,8 @@ export async function loadJourneyContent(
     renderedText: dc.renderedText,
     imageNumber: dc.imageNumber,
     portraitFocus: dc.portraitFocus,
-    startingEssence: dc.startingEssence ?? economyData.journey.defaultStartingEssence,
+    startingEssence:
+      dc.startingEssence ?? economyData.journey.defaultStartingEssence,
     signatureCards: [...(dc.signatureCards ?? [])],
     signatureCardIds: [...(dc.signatureCardIds ?? [])],
   }));
@@ -977,6 +991,7 @@ export async function loadJourneyContent(
     guides,
     atlasData,
     economyData,
+    opponentsData,
     apollyonIncarnations,
     poolContext,
     draftMode,
@@ -1032,14 +1047,18 @@ export function buildReplayDraftState(
   });
 }
 
-function countDraftPoolSize(draftPoolCopiesByCard: Record<string, number>): number {
+function countDraftPoolSize(
+  draftPoolCopiesByCard: Record<string, number>,
+): number {
   return Object.values(draftPoolCopiesByCard).reduce(
     (total, copies) => total + copies,
     0,
   );
 }
 
-function countDoubledCards(draftPoolCopiesByCard: Record<string, number>): number {
+function countDoubledCards(
+  draftPoolCopiesByCard: Record<string, number>,
+): number {
   return Object.values(draftPoolCopiesByCard).filter((copies) => copies === 2)
     .length;
 }

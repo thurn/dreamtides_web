@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createBattleInit } from "../integration/create-battle-init";
+import { createTestBattleInit } from "../../testing/create-battle-init";
 import { createInitialBattleState } from "../state/create-initial-state";
 import {
   makeBattleTestCardDatabase,
@@ -12,7 +12,7 @@ import { createBaseBattleDeckCardDefinition } from "../card-definition";
 
 function board() {
   return createInitialBattleState(
-    createBattleInit({
+    createTestBattleInit({
       battleEntryKey: "site-7::2::dreamscape-2",
       site: makeBattleTestSite(),
       state: makeBattleTestState(),

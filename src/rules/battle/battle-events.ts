@@ -41,8 +41,15 @@ import type {
   BattleResult,
   BattleSide,
 } from "../../battle/types";
-import { FRONT_RANK_SLOTS, frontRankSlotId, rankSlotIds } from "../../battle/types";
-import type { BattleCommand, BattleDebugEdit } from "../../battle/debug/commands";
+import {
+  FRONT_RANK_SLOTS,
+  frontRankSlotId,
+  rankSlotIds,
+} from "../../battle/types";
+import type {
+  BattleCommand,
+  BattleDebugEdit,
+} from "../../battle/debug/commands";
 import { automaticBattleIntentKey } from "../../battle/automatic-intent-key";
 import type {
   BattleModifier,
@@ -116,11 +123,7 @@ import {
 } from "../../battle/starter-card-targets";
 import { TUTORIAL_DREAM_AVATAR_ID } from "../../data/tutorial-cards";
 import { resetJourney } from "../journey/lifecycle";
-import {
-  canVisitSite,
-  completeJourneySite,
-  findSite,
-} from "../journey/sites";
+import { canVisitSite, completeJourneySite, findSite } from "../journey/sites";
 
 // ---------------------------------------------------------------------------
 // Battle-init provider seam (BEGIN_BATTLE construction)
@@ -264,14 +267,19 @@ export function beginBattle(
     return null;
   }
   const rawSeedOverride = payload.seedOverride;
-  const seedOverride = rawSeedOverride === undefined || rawSeedOverride === null
-    ? null
-    : typeof rawSeedOverride === "number"
-      && Number.isSafeInteger(rawSeedOverride)
-      && rawSeedOverride >= 0
-      ? rawSeedOverride
-      : null;
-  if (rawSeedOverride !== undefined && rawSeedOverride !== null && seedOverride === null) {
+  const seedOverride =
+    rawSeedOverride === undefined || rawSeedOverride === null
+      ? null
+      : typeof rawSeedOverride === "number" &&
+          Number.isSafeInteger(rawSeedOverride) &&
+          rawSeedOverride >= 0
+        ? rawSeedOverride
+        : null;
+  if (
+    rawSeedOverride !== undefined &&
+    rawSeedOverride !== null &&
+    seedOverride === null
+  ) {
     return null;
   }
   const provider = battleInitProvider;
@@ -529,7 +537,9 @@ function applyVictory(
   const deck =
     droppedNightmareEntryIds.size === 0
       ? journey.deck
-      : journey.deck.filter((entry) => !droppedNightmareEntryIds.has(entry.entryId));
+      : journey.deck.filter(
+          (entry) => !droppedNightmareEntryIds.has(entry.entryId),
+        );
 
   return {
     ...state,
@@ -669,7 +679,7 @@ function openTutorialGuidance(
         ? `${source.activeSide}:${String(source.turnNumber)}:${source.slotId}`
         : source.kind === "battle"
           ? `${source.activeSide}:${String(source.turnNumber)}`
-        : `${source.side}:${source.battleCardId}`;
+          : `${source.side}:${source.battleCardId}`;
   return {
     ...state,
     tutorialTriggerIdsSeen: [...seen],
@@ -710,7 +720,7 @@ function openFigmentCreatedGuidance(
       const previous = before.board.cardInstances[instance.battleCardId];
       const previousCount =
         previous?.provenance.kind === "generated-figment"
-          ? previous.figments?.length ?? 1
+          ? (previous.figments?.length ?? 1)
           : 0;
       return (instance.figments?.length ?? 1) > previousCount;
     },
@@ -826,12 +836,11 @@ function applyBattleCommandStep(
     )) {
       const beforeEndingEdit = board;
       board = applyBoardEdits(board, [endingEdit]);
-      scheduleBattleTriggerEdges(
-        queue,
-        beforeEndingEdit,
-        board,
-        { id: "DEBUG_EDIT", edit: endingEdit, sourceSurface: "auto-system" },
-      );
+      scheduleBattleTriggerEdges(queue, beforeEndingEdit, board, {
+        id: "DEBUG_EDIT",
+        edit: endingEdit,
+        sourceSurface: "auto-system",
+      });
     }
   }
 
@@ -847,7 +856,10 @@ function applyBattleCommandStep(
     forEachInPlay(boardAfter, boardAfter.activeSide, (battleCardId) => {
       enqueueBattleTrigger(queue, boardAfter, battleCardId, "dawn");
     });
-    triggerDawnFired = { ...triggerDawnFired, [boardAfter.activeSide]: boardAfter.turnNumber };
+    triggerDawnFired = {
+      ...triggerDawnFired,
+      [boardAfter.activeSide]: boardAfter.turnNumber,
+    };
   }
 
   // Step 3 — Dreamwell reveal → queue the revealed card's script. Checked
@@ -881,13 +893,15 @@ function applyBattleCommandStep(
 
   const tutorialMode = battleModeOf(battle);
   if (tutorialMode.kind === "tutorial") {
-    const revealedSide = BATTLE_SIDES.find((side) =>
-      boardBefore.sides[side].dreamwellDrawnTurn !== boardAfter.turnNumber &&
-      boardAfter.sides[side].dreamwellDrawnTurn === boardAfter.turnNumber,
+    const revealedSide = BATTLE_SIDES.find(
+      (side) =>
+        boardBefore.sides[side].dreamwellDrawnTurn !== boardAfter.turnNumber &&
+        boardAfter.sides[side].dreamwellDrawnTurn === boardAfter.turnNumber,
     );
     if (revealedSide !== undefined) {
       const index = boardAfter.sides[revealedSide].dreamwellCardIndex;
-      const card = index === null ? undefined : battle.init.dreamwellDeck[index];
+      const card =
+        index === null ? undefined : battle.init.dreamwellDeck[index];
       if (card !== undefined) {
         return {
           ...battle,
@@ -910,7 +924,14 @@ function applyBattleCommandStep(
 
   // Step 4 — advance the queue, continuing the SAME draw counter.
   const advanced = advanceEffectQueueWithStream(
-    { ...battle, board, effectQueue: queue, pendingPrompt: null, dawnFired, triggerDawnFired },
+    {
+      ...battle,
+      board,
+      effectQueue: queue,
+      pendingPrompt: null,
+      dawnFired,
+      triggerDawnFired,
+    },
     seq,
     random,
     nowMs,
@@ -972,11 +993,8 @@ export function isPassiveHostedBattleHandoff(
     command.id !== "DEBUG_EDIT" ||
     command.actor !== "system" ||
     command.sourceSurface !== "auto-system" ||
-    automaticBattleIntentKey(
-      battle.init.battleId,
-      battle.board,
-      command,
-    ) !== intentKey
+    automaticBattleIntentKey(battle.init.battleId, battle.board, command) !==
+      intentKey
   ) {
     return false;
   }
@@ -1015,12 +1033,15 @@ function battleCommandInternal(
   if (command === null) {
     return null;
   }
-  if (!tutorialCommandIsAuthorized(
-    battle,
-    command,
-    actor,
-    state.playtestControl?.controllerClientId ?? null,
-  )) return null;
+  if (
+    !tutorialCommandIsAuthorized(
+      battle,
+      command,
+      actor,
+      state.playtestControl?.controllerClientId ?? null,
+    )
+  )
+    return null;
   if (!voidPlaySourceIsLegal(battle.board, command)) return null;
 
   let drawIndex = 0;
@@ -1049,10 +1070,11 @@ function battleCommandInternal(
   const commands = isChallengeEntryCommand(command)
     ? [command]
     : planBasicAutomationCommands(battle.board, command, {
-    maxEnergyCap: battle.init.maxEnergyCap,
-    scoreToWin: battle.init.scoreToWin,
-    dreamwellDeck: battle.init.dreamwellDeck,
-  });
+        maxEnergyCap: battle.init.maxEnergyCap,
+        scoreToWin: battle.init.scoreToWin,
+        handLimit: battle.init.handLimit,
+        dreamwellDeck: battle.init.dreamwellDeck,
+      });
   if (
     !suppressGuidance &&
     command.id === "DEBUG_EDIT" &&
@@ -1200,12 +1222,15 @@ export function battleRepositionCharacter(
 ): FoldState | null {
   const battle = state.battle;
   if (battle === null || battleModeOf(battle).kind !== "tutorial") return null;
-  if (!tutorialActorIsAuthorized(
-    battle,
-    actor,
-    false,
-    state.playtestControl?.controllerClientId ?? null,
-  )) return null;
+  if (
+    !tutorialActorIsAuthorized(
+      battle,
+      actor,
+      false,
+      state.playtestControl?.controllerClientId ?? null,
+    )
+  )
+    return null;
   const battleCardId = payload.battleCardId;
   const candidate = payload.destination;
   if (
@@ -1253,15 +1278,27 @@ export function battleRepositionCharacter(
 }
 
 /** Semantic source legality for moves that are actually plays from a void. */
-function voidPlaySourceIsLegal(board: BattleMutableState, command: BattleCommand): boolean {
-  if (command.id !== "DEBUG_EDIT" || command.edit.kind !== "MOVE_CARD_TO_ZONE") return true;
+function voidPlaySourceIsLegal(
+  board: BattleMutableState,
+  command: BattleCommand,
+): boolean {
+  if (command.id !== "DEBUG_EDIT" || command.edit.kind !== "MOVE_CARD_TO_ZONE")
+    return true;
   if (!("slotId" in command.edit.destination)) return true;
   const location = selectBattleCardLocation(board, command.edit.battleCardId);
   if (location?.zone !== "void") return true;
   const instance = board.cardInstances[command.edit.battleCardId];
   if (instance === undefined) return false;
-  if (instance.definition.reclaimCost === null && !hasTemporaryReclaimEligibility(board, instance)) return false;
-  if (board.sides[instance.controller].currentEnergy < instance.definition.energyCost) return false;
+  if (
+    instance.definition.reclaimCost === null &&
+    !hasTemporaryReclaimEligibility(board, instance)
+  )
+    return false;
+  if (
+    board.sides[instance.controller].currentEnergy <
+    instance.definition.energyCost
+  )
+    return false;
   if (!instance.definition.isFast) {
     return board.activeSide === instance.controller && board.phase === "day";
   }
@@ -1299,48 +1336,62 @@ function tutorialCommandIsAuthorized(
   if (
     controllerClientId !== null &&
     actor === `tutorial-ai:${controllerClientId}`
-  ) return true;
+  )
+    return true;
   if (
-    !tutorialActorIsAuthorized(
-      battle,
-      actor,
-      false,
-      controllerClientId,
-    ) ||
+    !tutorialActorIsAuthorized(battle, actor, false, controllerClientId) ||
     command.id !== "DEBUG_EDIT"
-  ) return false;
+  )
+    return false;
   const edit = command.edit;
   if (edit.kind === "SET_PHASE") {
-    return (battle.board.activeSide === "player" && battle.board.phase === "day" && edit.phase === "dusk") ||
-      (battle.board.activeSide === "player" && battle.board.phase === "night" && edit.phase === "challenge") ||
-      (battle.board.activeSide === "enemy" && battle.board.phase === "dusk" && edit.phase === "night");
+    return (
+      (battle.board.activeSide === "player" &&
+        battle.board.phase === "day" &&
+        edit.phase === "dusk") ||
+      (battle.board.activeSide === "player" &&
+        battle.board.phase === "night" &&
+        edit.phase === "challenge") ||
+      (battle.board.activeSide === "enemy" &&
+        battle.board.phase === "dusk" &&
+        edit.phase === "night")
+    );
   }
   if (edit.kind === "SWAP_BATTLEFIELD_SLOTS") {
-    const battleCardId = selectBattlefieldSlotOccupant(battle.board, edit.source);
+    const battleCardId = selectBattlefieldSlotOccupant(
+      battle.board,
+      edit.source,
+    );
     if (battleCardId === null) return false;
     const planned = planTutorialCharacterReposition(
       battle.board,
       battleCardId,
       edit.target,
     );
-    return planned?.kind === "SWAP_BATTLEFIELD_SLOTS" &&
+    return (
+      planned?.kind === "SWAP_BATTLEFIELD_SLOTS" &&
       planned.source.side === edit.source.side &&
       planned.source.zone === edit.source.zone &&
-      planned.source.slotId === edit.source.slotId;
+      planned.source.slotId === edit.source.slotId
+    );
   }
-  if (edit.kind !== "MOVE_CARD_TO_ZONE" || !("slotId" in edit.destination)) return false;
-  return planTutorialCharacterReposition(
-    battle.board,
-    edit.battleCardId,
-    edit.destination,
-  )?.kind === "MOVE_CARD_TO_ZONE";
+  if (edit.kind !== "MOVE_CARD_TO_ZONE" || !("slotId" in edit.destination))
+    return false;
+  return (
+    planTutorialCharacterReposition(
+      battle.board,
+      edit.battleCardId,
+      edit.destination,
+    )?.kind === "MOVE_CARD_TO_ZONE"
+  );
 }
 
 interface BattlePlayCardIntent {
   battleCardId: string;
   targetBattleCardIds: string[];
   aiChoices: BattleAiChoiceTrace[];
-  characterDestination: import("../../battle/types").BattleFieldSlotAddress | null;
+  characterDestination:
+    import("../../battle/types").BattleFieldSlotAddress | null;
   tutorialAiActionOverrideId: string | null;
 }
 
@@ -1364,8 +1415,7 @@ function battlePlayCardInternal(
   const battle = state.battle;
   const intent = coerceBattlePlayCardIntent(payload);
   const mode = battle === null ? null : battleModeOf(battle);
-  const controllerClientId =
-    state.playtestControl?.controllerClientId ?? null;
+  const controllerClientId = state.playtestControl?.controllerClientId ?? null;
   const automatic =
     mode?.kind === "tutorial" &&
     controllerClientId !== null &&
@@ -1375,13 +1425,9 @@ function battlePlayCardInternal(
     intent === null ||
     battle.pendingPrompt !== null ||
     battle.board.result !== null ||
-    !tutorialActorIsAuthorized(
-      battle,
-      actor,
-      automatic,
-      controllerClientId,
-    )
-  ) return null;
+    !tutorialActorIsAuthorized(battle, actor, automatic, controllerClientId)
+  )
+    return null;
   const before = battle.board;
   const instance = before.cardInstances[intent.battleCardId];
   const location = selectBattleCardLocation(before, intent.battleCardId);
@@ -1390,19 +1436,24 @@ function battlePlayCardInternal(
       ? null
       : automatic || suppressGuidance
         ? resolveTutorialAiPlayCardOverride(
-          battle,
-          intent.tutorialAiActionOverrideId,
-          intent.battleCardId,
-        )
+            battle,
+            intent.tutorialAiActionOverrideId,
+            intent.battleCardId,
+          )
         : null;
   if (
-    instance === undefined || location?.zone !== "hand" || location.side !== instance.controller ||
+    instance === undefined ||
+    location?.zone !== "hand" ||
+    location.side !== instance.controller ||
     !isBattleCardSemanticPlayAutomated(instance.definition.cardId) ||
     (intent.tutorialAiActionOverrideId !== null && scriptedOverride === null) ||
     before.activeSide !== instance.controller ||
-    before.phase !== "day" || instance.definition.isFast ||
-    before.sides[instance.controller].currentEnergy < instance.definition.energyCost
-  ) return null;
+    before.phase !== "day" ||
+    instance.definition.isFast ||
+    before.sides[instance.controller].currentEnergy <
+      instance.definition.energyCost
+  )
+    return null;
   const targetsAreLegal = semanticPlayTargetsAreLegal(
     before,
     instance.controller,
@@ -1444,11 +1495,15 @@ function battlePlayCardInternal(
         before.sides[requested.side].backRank[
           requested.slotId as `B${number}`
         ] != null
-      ) return null;
+      )
+        return null;
       destination = requested;
     } else {
-      const slotId = rankSlotIds(before.sides[instance.controller].backRank).find(
-        (candidate) => before.sides[instance.controller].backRank[candidate] === null,
+      const slotId = rankSlotIds(
+        before.sides[instance.controller].backRank,
+      ).find(
+        (candidate) =>
+          before.sides[instance.controller].backRank[candidate] === null,
       );
       if (slotId === undefined) return null;
       destination = { side: instance.controller, zone: "backRank", slotId };
@@ -1482,14 +1537,36 @@ function battlePlayCardInternal(
 
   // Work on a local board so every validation finishes before the cost becomes
   // observable. Queue draining happens only after movement and cost coexist.
-  const move = { kind: "MOVE_CARD_TO_ZONE" as const, battleCardId: intent.battleCardId, destination };
+  const move = {
+    kind: "MOVE_CARD_TO_ZONE" as const,
+    battleCardId: intent.battleCardId,
+    destination,
+  };
   let board = applyBoardEdits(before, [
-    { kind: "ADJUST_CURRENT_ENERGY", side: instance.controller, amount: -instance.definition.energyCost },
+    {
+      kind: "ADJUST_CURRENT_ENERGY",
+      side: instance.controller,
+      amount: -instance.definition.energyCost,
+    },
     move,
-    ...(character ? [{ kind: "SET_CARD_STATUS" as const, battleCardId: intent.battleCardId, status: { isExhausted: true } }] : []),
+    ...(character
+      ? [
+          {
+            kind: "SET_CARD_STATUS" as const,
+            battleCardId: intent.battleCardId,
+            status: { isExhausted: true },
+          },
+        ]
+      : []),
   ]);
   const queue = [...battle.effectQueue];
-  scheduleBattleTriggerEdges(queue, before, board, { id: "DEBUG_EDIT", edit: move, sourceSurface: "auto-system" }, intent.targetBattleCardIds);
+  scheduleBattleTriggerEdges(
+    queue,
+    before,
+    board,
+    { id: "DEBUG_EDIT", edit: move, sourceSurface: "auto-system" },
+    intent.targetBattleCardIds,
+  );
   // The tutorial opponent's card remains the authoritative presentation focus
   // before any of its triggered work is drained. The follow-up event resumes
   // this exact queued state, so a remount cannot skip or duplicate effects.
@@ -1502,39 +1579,53 @@ function battlePlayCardInternal(
     );
     return {
       ...state,
-      battle: consumeTutorialAiActionOverride({
-        ...battle,
-        board,
-        effectQueue: queue,
-        pendingPrompt: null,
-        tutorialPresentation: {
-          id: `opponent-play:${intent.battleCardId}`,
-          kind: "opponent-play",
-          cardId: instance.definition.cardId,
-          battleCardId: intent.battleCardId,
-          cardKind: instance.definition.battleCardKind,
+      battle: consumeTutorialAiActionOverride(
+        {
+          ...battle,
+          board,
+          effectQueue: queue,
+          pendingPrompt: null,
+          tutorialPresentation: {
+            id: `opponent-play:${intent.battleCardId}`,
+            kind: "opponent-play",
+            cardId: instance.definition.cardId,
+            battleCardId: intent.battleCardId,
+            cardKind: instance.definition.battleCardKind,
+          },
+          lastTransition: transition,
         },
-        lastTransition: transition,
-      }, scriptedOverride?.id ?? null),
+        scriptedOverride?.id ?? null,
+      ),
     };
   }
   let drawIndex = 0;
   const random = (): number => ctx.rng(drawIndex++);
   const nowMs = isoTimestampToMs(ctx.timestamp) ?? 0;
-  const advanced = advanceEffectQueueWithStream({ ...battle, board, effectQueue: queue, pendingPrompt: null }, ctx.seq, random, nowMs);
-  board = applyBoardEdits(advanced.board, planStaticContributionSettlement(advanced.board, true, random, nowMs));
+  const advanced = advanceEffectQueueWithStream(
+    { ...battle, board, effectQueue: queue, pendingPrompt: null },
+    ctx.seq,
+    random,
+    nowMs,
+  );
+  board = applyBoardEdits(
+    advanced.board,
+    planStaticContributionSettlement(advanced.board, true, random, nowMs),
+  );
   return {
     ...state,
-    battle: consumeTutorialAiActionOverride({
-      ...advanced,
-      board,
-      lastTransition: battlePlayCardTransition(
-        battle,
-        intent,
-        instance,
-        scriptedOverride,
-      ),
-    }, scriptedOverride?.id ?? null),
+    battle: consumeTutorialAiActionOverride(
+      {
+        ...advanced,
+        board,
+        lastTransition: battlePlayCardTransition(
+          battle,
+          intent,
+          instance,
+          scriptedOverride,
+        ),
+      },
+      scriptedOverride?.id ?? null,
+    ),
   };
 }
 
@@ -1551,21 +1642,21 @@ function battlePlayCardTransition(
       scriptedOverride === null
         ? []
         : [
-          {
-            event: "battle_ai_action_override_applied",
-            fields: {
-              battleId: battle.board.battleId,
-              overrideId: scriptedOverride.id,
-              triggerKind: scriptedOverride.trigger.kind,
-              triggerCardId: scriptedOverride.trigger.cardId,
-              actionKind: scriptedOverride.action.kind,
-              actionCardId: scriptedOverride.action.cardId,
-              battleCardId: instance.battleCardId,
-              side: instance.controller,
-              turnNumber: battle.board.turnNumber,
+            {
+              event: "battle_ai_action_override_applied",
+              fields: {
+                battleId: battle.board.battleId,
+                overrideId: scriptedOverride.id,
+                triggerKind: scriptedOverride.trigger.kind,
+                triggerCardId: scriptedOverride.trigger.cardId,
+                actionKind: scriptedOverride.action.kind,
+                actionCardId: scriptedOverride.action.cardId,
+                battleCardId: instance.battleCardId,
+                side: instance.controller,
+                turnNumber: battle.board.turnNumber,
+              },
             },
-          },
-        ],
+          ],
   };
 }
 
@@ -1583,17 +1674,12 @@ export function completeTutorialBattlePresentation(
   const battle = state.battle;
   const presentation = battle?.tutorialPresentation ?? null;
   const mode = battle === null ? null : battleModeOf(battle);
-  const controllerClientId =
-    state.playtestControl?.controllerClientId ?? null;
+  const controllerClientId = state.playtestControl?.controllerClientId ?? null;
   const presentationActorIsAuthorized =
     mode?.kind !== "tutorial" ||
-    (
-      controllerClientId !== null &&
-      (
-        actor === controllerClientId ||
-        actor === `tutorial-ai:${controllerClientId}`
-      )
-    );
+    (controllerClientId !== null &&
+      (actor === controllerClientId ||
+        actor === `tutorial-ai:${controllerClientId}`));
   if (
     battle !== null &&
     presentationActorIsAuthorized &&
@@ -1656,12 +1742,7 @@ export function completeTutorialBattlePresentation(
         ...advanced,
         board: applyBoardEdits(
           advanced.board,
-          planStaticContributionSettlement(
-            advanced.board,
-            true,
-            random,
-            nowMs,
-          ),
+          planStaticContributionSettlement(advanced.board, true, random, nowMs),
         ),
       };
     }
@@ -1720,21 +1801,26 @@ export function completeTutorialBattlePresentation(
   // deferred turn handoff. A presentation folded with no cursor is unaffected.
   return {
     ...state,
-    battle: driveChallengeCursor(
-      settled,
-      ctx.seq,
-      random,
-      nowMs,
-    ),
+    battle: driveChallengeCursor(settled, ctx.seq, random, nowMs),
   };
 }
 
-function coerceBattlePlayCardIntent(raw: Record<string, unknown>): BattlePlayCardIntent | null {
-  if (!isNonEmptyString(raw.battleCardId) || !isStringArray(raw.targetBattleCardIds)) return null;
-  if (new Set(raw.targetBattleCardIds).size !== raw.targetBattleCardIds.length) return null;
-  const aiChoices = raw.aiChoices === undefined ? [] : coerceAiChoices(raw.aiChoices);
+function coerceBattlePlayCardIntent(
+  raw: Record<string, unknown>,
+): BattlePlayCardIntent | null {
+  if (
+    !isNonEmptyString(raw.battleCardId) ||
+    !isStringArray(raw.targetBattleCardIds)
+  )
+    return null;
+  if (new Set(raw.targetBattleCardIds).size !== raw.targetBattleCardIds.length)
+    return null;
+  const aiChoices =
+    raw.aiChoices === undefined ? [] : coerceAiChoices(raw.aiChoices);
   if (aiChoices === null) return null;
-  const characterDestination = coerceCharacterDestination(raw.characterDestination);
+  const characterDestination = coerceCharacterDestination(
+    raw.characterDestination,
+  );
   if (characterDestination === undefined) return null;
   const tutorialAiActionOverrideId =
     raw.tutorialAiActionOverrideId === undefined
@@ -1756,8 +1842,13 @@ function coerceCharacterDestination(
   raw: unknown,
 ): import("../../battle/types").BattleFieldSlotAddress | null | undefined {
   if (raw === undefined) return null;
-  if (!isPlainRecord(raw) || raw.side !== "player" && raw.side !== "enemy" ||
-    raw.zone !== "backRank" || typeof raw.slotId !== "string") return undefined;
+  if (
+    !isPlainRecord(raw) ||
+    (raw.side !== "player" && raw.side !== "enemy") ||
+    raw.zone !== "backRank" ||
+    typeof raw.slotId !== "string"
+  )
+    return undefined;
   const destination = {
     side: raw.side,
     zone: raw.zone,
@@ -1771,17 +1862,51 @@ function coerceAiChoices(raw: unknown): BattleAiChoiceTrace[] | null {
   const choices: BattleAiChoiceTrace[] = [];
   for (const value of raw) {
     if (!isPlainRecord(value)) return null;
-    const { stage, choice, battleCardId, cardName, sourceHandIndex, sourceSlotId, targetSlotId, heuristicScoreBefore, heuristicScoreAfter, rationale, targetBattleCardId } = value;
+    const {
+      stage,
+      choice,
+      battleCardId,
+      cardName,
+      sourceHandIndex,
+      sourceSlotId,
+      targetSlotId,
+      heuristicScoreBefore,
+      heuristicScoreAfter,
+      rationale,
+      targetBattleCardId,
+    } = value;
     if (
-      (stage !== "character" && stage !== "reposition" && stage !== "nonCharacter" && stage !== "endTurn") ||
-      (choice !== "PLAY_CARD" && choice !== "MOVE_CARD" && choice !== "END_TURN") ||
-      !isNullableString(battleCardId) || !isNullableString(cardName) ||
-      !isNullableInteger(sourceHandIndex) || !isNullableString(sourceSlotId) ||
-      !isNullableString(targetSlotId) || !isNullableFiniteNumber(heuristicScoreBefore) ||
-      !isNullableFiniteNumber(heuristicScoreAfter) || !isNullableString(rationale) ||
+      (stage !== "character" &&
+        stage !== "reposition" &&
+        stage !== "nonCharacter" &&
+        stage !== "endTurn") ||
+      (choice !== "PLAY_CARD" &&
+        choice !== "MOVE_CARD" &&
+        choice !== "END_TURN") ||
+      !isNullableString(battleCardId) ||
+      !isNullableString(cardName) ||
+      !isNullableInteger(sourceHandIndex) ||
+      !isNullableString(sourceSlotId) ||
+      !isNullableString(targetSlotId) ||
+      !isNullableFiniteNumber(heuristicScoreBefore) ||
+      !isNullableFiniteNumber(heuristicScoreAfter) ||
+      !isNullableString(rationale) ||
       !isNullableString(targetBattleCardId)
-    ) return null;
-    choices.push({ stage, choice, battleCardId, cardName, sourceHandIndex, sourceSlotId: sourceSlotId as BattleAiChoiceTrace["sourceSlotId"], targetSlotId: targetSlotId as BattleAiChoiceTrace["targetSlotId"], heuristicScoreBefore, heuristicScoreAfter, rationale, targetBattleCardId });
+    )
+      return null;
+    choices.push({
+      stage,
+      choice,
+      battleCardId,
+      cardName,
+      sourceHandIndex,
+      sourceSlotId: sourceSlotId as BattleAiChoiceTrace["sourceSlotId"],
+      targetSlotId: targetSlotId as BattleAiChoiceTrace["targetSlotId"],
+      heuristicScoreBefore,
+      heuristicScoreAfter,
+      rationale,
+      targetBattleCardId,
+    });
   }
   return choices;
 }
@@ -1791,11 +1916,15 @@ function isNullableString(value: unknown): value is string | null {
 }
 
 function isNullableInteger(value: unknown): value is number | null {
-  return value === null || (typeof value === "number" && Number.isInteger(value));
+  return (
+    value === null || (typeof value === "number" && Number.isInteger(value))
+  );
 }
 
 function isNullableFiniteNumber(value: unknown): value is number | null {
-  return value === null || (typeof value === "number" && Number.isFinite(value));
+  return (
+    value === null || (typeof value === "number" && Number.isFinite(value))
+  );
 }
 
 /**
@@ -1834,23 +1963,24 @@ export function battleGesture(
     }
     commands.push(command);
   }
-  if (!commands.every((command) =>
-    tutorialCommandIsAuthorized(
-      battle,
-      command,
-      actor,
-      state.playtestControl?.controllerClientId ?? null,
+  if (
+    !commands.every((command) =>
+      tutorialCommandIsAuthorized(
+        battle,
+        command,
+        actor,
+        state.playtestControl?.controllerClientId ?? null,
+      ),
     )
-  )) return null;
+  )
+    return null;
   const playedCardCommand = commands.find(
     (candidate) =>
       candidate.id === "DEBUG_EDIT" &&
       candidate.edit.kind === "MOVE_CARD_TO_ZONE" &&
       "slotId" in candidate.edit.destination &&
-      selectBattleCardLocation(
-        battle.board,
-        candidate.edit.battleCardId,
-      )?.zone === "hand",
+      selectBattleCardLocation(battle.board, candidate.edit.battleCardId)
+        ?.zone === "hand",
   );
   if (
     playedCardCommand?.id === "DEBUG_EDIT" &&
@@ -1887,10 +2017,7 @@ export function battleGesture(
       candidate.id === "DEBUG_EDIT" &&
       candidate.edit.kind === "DRAW_DREAMWELL_CARD",
   );
-  if (
-    dreamwellCommand !== undefined &&
-    battle.init.dreamwellDeck.length > 0
-  ) {
+  if (dreamwellCommand !== undefined && battle.init.dreamwellDeck.length > 0) {
     const definition =
       battle.init.dreamwellDeck[
         battle.board.dreamwellDeckIndex % battle.init.dreamwellDeck.length
@@ -1919,7 +2046,13 @@ export function battleGesture(
 
   let current = battle;
   for (const command of commands) {
-    const next = applyBattleCommandStep(current, command, ctx.seq, random, nowMs);
+    const next = applyBattleCommandStep(
+      current,
+      command,
+      ctx.seq,
+      random,
+      nowMs,
+    );
     if (next === null) {
       return null;
     }
@@ -1952,12 +2085,15 @@ export function battleAiBlock(
   ) {
     return null;
   }
-  if (!tutorialActorIsAuthorized(
-    battle,
-    actor,
-    true,
-    state.playtestControl?.controllerClientId ?? null,
-  )) return null;
+  if (
+    !tutorialActorIsAuthorized(
+      battle,
+      actor,
+      true,
+      state.playtestControl?.controllerClientId ?? null,
+    )
+  )
+    return null;
 
   const marker = battle.aiBlockingTurn;
   if (
@@ -1975,9 +2111,10 @@ export function battleAiBlock(
   for (const move of blocking.actions) {
     const moveCommands = actionToCommands(move, aiSide);
     const [firstCommand, ...restCommands] = moveCommands;
-    const tracedCommands = firstCommand === undefined
-      ? moveCommands
-      : [{ ...firstCommand, aiChoices: [buildTrace(move)] }, ...restCommands];
+    const tracedCommands =
+      firstCommand === undefined
+        ? moveCommands
+        : [{ ...firstCommand, aiChoices: [buildTrace(move)] }, ...restCommands];
     commands.push(...tracedCommands);
   }
 
@@ -1991,8 +2128,7 @@ export function battleAiBlock(
   }
 
   const blockers = declaredBlockers(battle.board, nextBattle.board, aiSide);
-  const transition =
-    nextBattle.lastTransition ?? createEmptyTransitionData();
+  const transition = nextBattle.lastTransition ?? createEmptyTransitionData();
   // The blocker's move into a contested lane and that lane's resolution are one
   // fold step apart, so the tutorial parks here. Without the beat the blocker
   // enters and dissolves inside a single frame and the player only ever sees the
@@ -2007,13 +2143,13 @@ export function battleAiBlock(
       ...nextBattle,
       ...(pacedBlock
         ? {
-          tutorialPresentation: {
-            id: `opponent-block:${battle.board.activeSide}:${String(battle.board.turnNumber)}`,
-            kind: "opponent-block",
-            activeSide: battle.board.activeSide,
-            blockers,
-          } satisfies OpponentBlockPresentation,
-        }
+            tutorialPresentation: {
+              id: `opponent-block:${battle.board.activeSide}:${String(battle.board.turnNumber)}`,
+              kind: "opponent-block",
+              activeSide: battle.board.activeSide,
+              blockers,
+            } satisfies OpponentBlockPresentation,
+          }
         : {}),
       lastTransition: {
         ...transition,
@@ -2025,16 +2161,18 @@ export function battleAiBlock(
           },
           ...(blockers.length === 0
             ? []
-            : [{
-              event: "battle_ai_blockers_declared",
-              fields: {
-                aiSide,
-                activeSide: battle.board.activeSide,
-                turnNumber: battle.board.turnNumber,
-                paced: pacedBlock,
-                blockers: blockers.map((blocker) => ({ ...blocker })),
-              },
-            }]),
+            : [
+                {
+                  event: "battle_ai_blockers_declared",
+                  fields: {
+                    aiSide,
+                    activeSide: battle.board.activeSide,
+                    turnNumber: battle.board.turnNumber,
+                    paced: pacedBlock,
+                    blockers: blockers.map((blocker) => ({ ...blocker })),
+                  },
+                },
+              ]),
         ],
       },
       aiBlockingTurn: {
@@ -2110,16 +2248,26 @@ function settleTemporaryDreamwellEffects(
     const instance = board.cardInstances[battleCardId];
     if (instance === undefined) continue;
     const reclaim = instance.status.temporaryReclaimUntilEnding;
-    if (reclaim?.activeSide === activeSide && reclaim.turnNumber === turnNumber) {
-      edits.push({ kind: "SET_CARD_STATUS", battleCardId, status: { temporaryReclaimUntilEnding: null } });
+    if (
+      reclaim?.activeSide === activeSide &&
+      reclaim.turnNumber === turnNumber
+    ) {
+      edits.push({
+        kind: "SET_CARD_STATUS",
+        battleCardId,
+        status: { temporaryReclaimUntilEnding: null },
+      });
     }
 
     const banish = instance.status.temporaryBanishUntilEnding;
-    if (banish?.activeSide !== activeSide || banish.turnNumber !== turnNumber) continue;
+    if (banish?.activeSide !== activeSide || banish.turnNumber !== turnNumber)
+      continue;
     const location = selectBattleCardLocation(board, battleCardId);
     if (location?.zone !== "banished") continue;
     const backRank = board.sides[banish.priorController].backRank;
-    const slotId = rankSlotIds(backRank).find((candidate) => backRank[candidate] === null);
+    const slotId = rankSlotIds(backRank).find(
+      (candidate) => backRank[candidate] === null,
+    );
     // A full materialized back rank leaves the card banished. The persisted
     // marker records the deterministic reason/source for battle inspection.
     if (slotId === undefined) continue;
@@ -2129,7 +2277,11 @@ function settleTemporaryDreamwellEffects(
         battleCardId,
         destination: { side: banish.priorController, zone: "backRank", slotId },
       },
-      { kind: "SET_CARD_STATUS", battleCardId, status: { temporaryBanishUntilEnding: null } },
+      {
+        kind: "SET_CARD_STATUS",
+        battleCardId,
+        status: { temporaryBanishUntilEnding: null },
+      },
     );
   }
   return edits;
@@ -2149,21 +2301,35 @@ function challengeStartFor(
   command: BattleCommand,
   battle: BattleFoldState,
 ): { command: BattleCommand; cursor: ChallengeCursor } | null {
-  if (battle.challengeCursor !== null && battle.challengeCursor !== undefined) return null;
+  if (battle.challengeCursor !== null && battle.challengeCursor !== undefined)
+    return null;
   if (command.id !== "DEBUG_EDIT") return null;
   const { edit } = command;
-  if (edit.kind === "SET_PHASE" && edit.phase === "challenge" && battle.board.phase !== "challenge") {
+  if (
+    edit.kind === "SET_PHASE" &&
+    edit.phase === "challenge" &&
+    battle.board.phase !== "challenge"
+  ) {
     return {
       command,
-      cursor: { activeSide: battle.board.activeSide, nextLane: 0, handoff: null },
+      cursor: {
+        activeSide: battle.board.activeSide,
+        nextLane: 0,
+        handoff: null,
+      },
     };
   }
   if (edit.kind !== "SET_BATTLE_FLOW") return null;
   if (edit.activeSide === battle.board.activeSide) {
-    if (edit.phase !== "challenge" || battle.board.phase === "challenge") return null;
+    if (edit.phase !== "challenge" || battle.board.phase === "challenge")
+      return null;
     return {
       command,
-      cursor: { activeSide: battle.board.activeSide, nextLane: 0, handoff: null },
+      cursor: {
+        activeSide: battle.board.activeSide,
+        nextLane: 0,
+        handoff: null,
+      },
     };
   }
   if (battle.board.phase === "challenge") return null;
@@ -2187,9 +2353,12 @@ function challengeStartFor(
 
 /** True for a repeat Challenge phase intent, which must never score it again. */
 function isChallengeEntryCommand(command: BattleCommand): boolean {
-  return command.id === "DEBUG_EDIT" && (
-    (command.edit.kind === "SET_PHASE" && command.edit.phase === "challenge") ||
-    (command.edit.kind === "SET_BATTLE_FLOW" && command.edit.phase === "challenge")
+  return (
+    command.id === "DEBUG_EDIT" &&
+    ((command.edit.kind === "SET_PHASE" &&
+      command.edit.phase === "challenge") ||
+      (command.edit.kind === "SET_BATTLE_FLOW" &&
+        command.edit.phase === "challenge"))
   );
 }
 
@@ -2207,7 +2376,10 @@ function driveChallengeCursor(
   nowMs: number,
 ): BattleFoldState {
   let current = battle;
-  while (current.challengeCursor !== null && current.challengeCursor !== undefined) {
+  while (
+    current.challengeCursor !== null &&
+    current.challengeCursor !== undefined
+  ) {
     const cursor = current.challengeCursor;
     const pendingPresentation = cursor.pendingPresentation ?? null;
     if (pendingPresentation !== null) {
@@ -2230,7 +2402,8 @@ function driveChallengeCursor(
     if (current.board.result !== null) {
       return { ...current, challengeCursor: null };
     }
-    if (current.pendingPrompt !== null || current.effectQueue.length > 0) return current;
+    if (current.pendingPrompt !== null || current.effectQueue.length > 0)
+      return current;
 
     if (cursor.nextLane >= CHALLENGE_LANE_COUNT) {
       current = { ...current, challengeCursor: null };
@@ -2248,13 +2421,21 @@ function driveChallengeCursor(
       const commands = planBasicAutomationCommands(current.board, handoff, {
         maxEnergyCap: current.init.maxEnergyCap,
         scoreToWin: current.init.scoreToWin,
+        handLimit: current.init.handLimit,
         dreamwellDeck: current.init.dreamwellDeck,
       });
       for (const command of commands) {
-        const next = applyBattleCommandStep(current, command, seq, random, nowMs);
+        const next = applyBattleCommandStep(
+          current,
+          command,
+          seq,
+          random,
+          nowMs,
+        );
         if (next === null) return current;
         current = next;
-        if (current.board.result !== null || current.pendingPrompt !== null) return current;
+        if (current.board.result !== null || current.pendingPrompt !== null)
+          return current;
       }
       return current;
     }
@@ -2306,7 +2487,8 @@ function driveChallengeCursor(
       );
       if (next === null) return current;
       current = next;
-      if (current.board.result !== null || current.pendingPrompt !== null) break;
+      if (current.board.result !== null || current.pendingPrompt !== null)
+        break;
     }
   }
   return current;
@@ -2337,8 +2519,7 @@ function challengeResolvedPresentation(input: {
             battleCardId:
               input.activeSide === "enemy"
                 ? input.challengerBattleCardId
-                : (input.blockerBattleCardId ??
-                  input.challengerBattleCardId),
+                : (input.blockerBattleCardId ?? input.challengerBattleCardId),
             side: "enemy",
             points: input.enemyScoreDelta,
           }
@@ -2408,31 +2589,43 @@ function coerceBattleDebugEdit(raw: unknown): BattleDebugEdit | null {
     case "SET_SCORE":
     case "SET_CURRENT_ENERGY":
     case "SET_MAX_ENERGY":
-      return isBattleSide(raw.side) && isFiniteNumber(raw.value) ? raw as unknown as BattleDebugEdit : null;
+      return isBattleSide(raw.side) && isFiniteNumber(raw.value)
+        ? (raw as unknown as BattleDebugEdit)
+        : null;
     case "INCREASE_MAX_ENERGY_AND_FILL":
     case "DRAW_CARD":
-      return isBattleSide(raw.side) ? raw as unknown as BattleDebugEdit : null;
+      return isBattleSide(raw.side)
+        ? (raw as unknown as BattleDebugEdit)
+        : null;
     case "ADJUST_SCORE":
     case "ADJUST_CURRENT_ENERGY":
     case "ADJUST_MAX_ENERGY":
     case "KINDLE":
-      return isBattleSide(raw.side) && isFiniteNumber(raw.amount) ? raw as unknown as BattleDebugEdit : null;
+      return isBattleSide(raw.side) && isFiniteNumber(raw.amount)
+        ? (raw as unknown as BattleDebugEdit)
+        : null;
     case "SET_CARD_SPARK":
     case "SET_CARD_SPARK_DELTA":
     case "SET_CARD_STATIC_SPARK_BONUS":
     case "SET_COUNTERS":
-      return isNonEmptyString(raw.battleCardId) && isFiniteNumber(raw.value) ? raw as unknown as BattleDebugEdit : null;
+      return isNonEmptyString(raw.battleCardId) && isFiniteNumber(raw.value)
+        ? (raw as unknown as BattleDebugEdit)
+        : null;
     case "MOVE_CARD_TO_ZONE":
-      return isNonEmptyString(raw.battleCardId) && isDebugZoneDestination(raw.destination)
-        ? raw as unknown as BattleDebugEdit
+      return isNonEmptyString(raw.battleCardId) &&
+        isDebugZoneDestination(raw.destination)
+        ? (raw as unknown as BattleDebugEdit)
         : null;
     case "SWAP_BATTLEFIELD_SLOTS":
-      return isBattleFieldSlotAddress(raw.source) && isBattleFieldSlotAddress(raw.target)
-        ? raw as unknown as BattleDebugEdit
+      return isBattleFieldSlotAddress(raw.source) &&
+        isBattleFieldSlotAddress(raw.target)
+        ? (raw as unknown as BattleDebugEdit)
         : null;
     case "DRAW_DREAMWELL_CARD":
-      return isBattleSide(raw.side) && Number.isInteger(raw.turnNumber) && (raw.additional === undefined || typeof raw.additional === "boolean")
-        ? raw as unknown as BattleDebugEdit
+      return isBattleSide(raw.side) &&
+        Number.isInteger(raw.turnNumber) &&
+        (raw.additional === undefined || typeof raw.additional === "boolean")
+        ? (raw as unknown as BattleDebugEdit)
         : null;
     case "ERODE":
     case "REVEAL_DECK_TOP":
@@ -2440,25 +2633,29 @@ function coerceBattleDebugEdit(raw: unknown): BattleDebugEdit | null {
       return isBattleSide(raw.side) &&
         Number.isInteger(raw.count) &&
         (raw.viewer === undefined || isBattleSide(raw.viewer))
-        ? raw as unknown as BattleDebugEdit
+        ? (raw as unknown as BattleDebugEdit)
         : null;
     case "DISCARD_CARD":
     case "ABANDON":
     case "REMATERIALIZE":
     case "CLEAR_CARD_NOTES":
     case "REVEAL_HAND_CARD":
-      return isNonEmptyString(raw.battleCardId) ? raw as unknown as BattleDebugEdit : null;
+      return isNonEmptyString(raw.battleCardId)
+        ? (raw as unknown as BattleDebugEdit)
+        : null;
     case "SET_CARD_VISIBILITY":
       return isNonEmptyString(raw.battleCardId) &&
         (raw.viewer === undefined || isBattleSide(raw.viewer)) &&
-        (typeof raw.isRevealed === "boolean" || typeof raw.isRevealedToPlayer === "boolean")
-        ? raw as unknown as BattleDebugEdit
+        (typeof raw.isRevealed === "boolean" ||
+          typeof raw.isRevealedToPlayer === "boolean")
+        ? (raw as unknown as BattleDebugEdit)
         : null;
     case "SET_SIDE_HAND_VISIBILITY":
       return isBattleSide(raw.side) &&
         (raw.viewer === undefined || isBattleSide(raw.viewer)) &&
-        (typeof raw.isRevealed === "boolean" || typeof raw.isRevealedToPlayer === "boolean")
-        ? raw as unknown as BattleDebugEdit
+        (typeof raw.isRevealed === "boolean" ||
+          typeof raw.isRevealedToPlayer === "boolean")
+        ? (raw as unknown as BattleDebugEdit)
         : null;
     case "ADD_CARD_NOTE":
       return isNonEmptyString(raw.battleCardId) &&
@@ -2466,23 +2663,34 @@ function coerceBattleDebugEdit(raw: unknown): BattleDebugEdit | null {
         typeof raw.text === "string" &&
         isFiniteNumber(raw.createdAtMs) &&
         isBattleCardNoteExpiry(raw.expiry)
-        ? raw as unknown as BattleDebugEdit
+        ? (raw as unknown as BattleDebugEdit)
         : null;
     case "DISMISS_CARD_NOTE":
-      return isNonEmptyString(raw.battleCardId) && isNonEmptyString(raw.noteId) ? raw as unknown as BattleDebugEdit : null;
+      return isNonEmptyString(raw.battleCardId) && isNonEmptyString(raw.noteId)
+        ? (raw as unknown as BattleDebugEdit)
+        : null;
     case "SET_CARD_MARKERS":
-      return isNonEmptyString(raw.battleCardId) && isPlainRecord(raw.markers) ? raw as unknown as BattleDebugEdit : null;
+      return isNonEmptyString(raw.battleCardId) && isPlainRecord(raw.markers)
+        ? (raw as unknown as BattleDebugEdit)
+        : null;
     case "SET_CARD_STATUS":
-      return isNonEmptyString(raw.battleCardId) && isPlainRecord(raw.status) ? raw as unknown as BattleDebugEdit : null;
+      return isNonEmptyString(raw.battleCardId) && isPlainRecord(raw.status)
+        ? (raw as unknown as BattleDebugEdit)
+        : null;
     case "CREATE_CARD_COPY":
-      return isNonEmptyString(raw.sourceBattleCardId) && isDebugZoneDestination(raw.destination) && isFiniteNumber(raw.createdAtMs)
-        ? raw as unknown as BattleDebugEdit
+      return isNonEmptyString(raw.sourceBattleCardId) &&
+        isDebugZoneDestination(raw.destination) &&
+        isFiniteNumber(raw.createdAtMs)
+        ? (raw as unknown as BattleDebugEdit)
         : null;
     case "ADD_FIGMENTS":
-      return isNonEmptyString(raw.battleCardId) && Number.isInteger(raw.count) ? raw as unknown as BattleDebugEdit : null;
+      return isNonEmptyString(raw.battleCardId) && Number.isInteger(raw.count)
+        ? (raw as unknown as BattleDebugEdit)
+        : null;
     case "CREATE_FIGMENT":
       return isBattleSide(raw.side) &&
-        (raw.chosenFigmentId === undefined || isNonEmptyString(raw.chosenFigmentId)) &&
+        (raw.chosenFigmentId === undefined ||
+          isNonEmptyString(raw.chosenFigmentId)) &&
         (raw.count === undefined ||
           (typeof raw.count === "number" &&
             Number.isInteger(raw.count) &&
@@ -2493,11 +2701,13 @@ function coerceBattleDebugEdit(raw: unknown): BattleDebugEdit | null {
         typeof raw.name === "string" &&
         isDebugZoneDestination(raw.destination) &&
         isFiniteNumber(raw.createdAtMs)
-        ? raw as unknown as BattleDebugEdit
+        ? (raw as unknown as BattleDebugEdit)
         : null;
     case "CREATE_CARD_FROM_DEFINITION":
-      return isPlainRecord(raw.definition) && isDebugZoneDestination(raw.destination) && isFiniteNumber(raw.createdAtMs)
-        ? raw as unknown as BattleDebugEdit
+      return isPlainRecord(raw.definition) &&
+        isDebugZoneDestination(raw.destination) &&
+        isFiniteNumber(raw.createdAtMs)
+        ? (raw as unknown as BattleDebugEdit)
         : null;
     case "FILL_BATTLEFIELD_PREVIEW": {
       const definitions = raw.definitions;
@@ -2505,12 +2715,14 @@ function coerceBattleDebugEdit(raw: unknown): BattleDebugEdit | null {
         isBattlefieldPreviewDefinitionList(definitions.player) &&
         isBattlefieldPreviewDefinitionList(definitions.enemy) &&
         isFiniteNumber(raw.createdAtMs)
-        ? raw as unknown as BattleDebugEdit
+        ? (raw as unknown as BattleDebugEdit)
         : null;
     }
     case "REORDER_DECK":
-      return isBattleSide(raw.side) && Array.isArray(raw.order) && raw.order.every((id) => typeof id === "string")
-        ? raw as unknown as BattleDebugEdit
+      return isBattleSide(raw.side) &&
+        Array.isArray(raw.order) &&
+        raw.order.every((id) => typeof id === "string")
+        ? (raw as unknown as BattleDebugEdit)
         : null;
     case "FORESEE":
       return isBattleSide(raw.side) &&
@@ -2518,17 +2730,22 @@ function coerceBattleDebugEdit(raw: unknown): BattleDebugEdit | null {
         isStringArray(raw.viewedCardIds) &&
         isStringArray(raw.orderedCardIds) &&
         isStringArray(raw.voidCardIds)
-        ? raw as unknown as BattleDebugEdit
+        ? (raw as unknown as BattleDebugEdit)
         : null;
     case "PLAY_FROM_DECK_TOP":
-      return isBattleSide(raw.side) && (raw.target === undefined || isBattleFieldSlotAddress(raw.target))
-        ? raw as unknown as BattleDebugEdit
+      return isBattleSide(raw.side) &&
+        (raw.target === undefined || isBattleFieldSlotAddress(raw.target))
+        ? (raw as unknown as BattleDebugEdit)
         : null;
     case "SET_PHASE":
-      return isBattlePhase(raw.phase) ? raw as unknown as BattleDebugEdit : null;
+      return isBattlePhase(raw.phase)
+        ? (raw as unknown as BattleDebugEdit)
+        : null;
     case "SET_BATTLE_FLOW":
-      return isBattlePhase(raw.phase) && isBattleSide(raw.activeSide) && Number.isInteger(raw.turnNumber)
-        ? raw as unknown as BattleDebugEdit
+      return isBattlePhase(raw.phase) &&
+        isBattleSide(raw.activeSide) &&
+        Number.isInteger(raw.turnNumber)
+        ? (raw as unknown as BattleDebugEdit)
         : null;
     default:
       return null;
@@ -2540,7 +2757,9 @@ function isBattleResult(value: unknown): value is BattleResult {
 }
 
 function isStringArray(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every((entry) => typeof entry === "string");
+  return (
+    Array.isArray(value) && value.every((entry) => typeof entry === "string")
+  );
 }
 
 function isBattleSide(value: unknown): value is BattleSide {
@@ -2567,12 +2786,10 @@ function isFiniteNumber(value: unknown): value is number {
 function isBattlefieldPreviewDefinitionList(value: unknown): boolean {
   return (
     Array.isArray(value) &&
-    (
-      value.length === 9 ||
+    (value.length === 9 ||
       value.length === 14 ||
       value.length === 24 ||
-      value.length === 25
-    ) &&
+      value.length === 25) &&
     value.every(isPlainRecord)
   );
 }
@@ -2582,12 +2799,15 @@ function isNonEmptyString(value: unknown): value is string {
 }
 
 function isPlainRecord(value: unknown): value is Record<string, unknown> {
-  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  if (typeof value !== "object" || value === null || Array.isArray(value))
+    return false;
   const prototype: unknown = Object.getPrototypeOf(value);
   return prototype === Object.prototype || prototype === null;
 }
 
-function isBattleFieldSlotAddress(value: unknown): value is BattleFieldSlotAddress {
+function isBattleFieldSlotAddress(
+  value: unknown,
+): value is BattleFieldSlotAddress {
   return (
     isPlainRecord(value) &&
     isBattleSide(value.side) &&
@@ -2602,16 +2822,27 @@ function isDebugZoneDestination(value: unknown): boolean {
   if (value.zone === "frontRank" || value.zone === "backRank") {
     return isBattleFieldSlotAddress(value);
   }
-  if (value.zone === "hand" || value.zone === "void" || value.zone === "banished") {
+  if (
+    value.zone === "hand" ||
+    value.zone === "void" ||
+    value.zone === "banished"
+  ) {
     return true;
   }
-  return value.zone === "deck" && (value.position === "top" || value.position === "bottom");
+  return (
+    value.zone === "deck" &&
+    (value.position === "top" || value.position === "bottom")
+  );
 }
 
 function isBattleCardNoteExpiry(value: unknown): value is BattleCardNoteExpiry {
   if (!isPlainRecord(value)) return false;
   if (value.kind === "manual") return true;
-  return value.kind === "atStartOfTurn" && isBattleSide(value.side) && Number.isInteger(value.turnNumber);
+  return (
+    value.kind === "atStartOfTurn" &&
+    isBattleSide(value.side) &&
+    Number.isInteger(value.turnNumber)
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -2661,12 +2892,15 @@ export function resolvePrompt(
   if (battle === null) {
     return null;
   }
-  if (!tutorialActorIsAuthorized(
-    battle,
-    actor,
-    battle.pendingPrompt?.run.side === "enemy",
-    state.playtestControl?.controllerClientId ?? null,
-  )) return null;
+  if (
+    !tutorialActorIsAuthorized(
+      battle,
+      actor,
+      battle.pendingPrompt?.run.side === "enemy",
+      state.playtestControl?.controllerClientId ?? null,
+    )
+  )
+    return null;
   const pending = battle.pendingPrompt;
   if (pending === null) {
     return null;
@@ -2703,7 +2937,12 @@ export function resolvePrompt(
   );
   return {
     ...state,
-    battle: driveChallengeCursor({ ...resolved, board }, ctx.seq, random, nowMs),
+    battle: driveChallengeCursor(
+      { ...resolved, board },
+      ctx.seq,
+      random,
+      nowMs,
+    ),
   };
 }
 
@@ -2721,14 +2960,23 @@ function scheduleBattleTriggerEdges(
   if (edit.kind === "REMATERIALIZE") {
     const location = selectBattleCardLocation(before, edit.battleCardId);
     if (location !== null && isBattlefieldZone(location.zone)) {
-      enqueueBattleTrigger(queue, before, edit.battleCardId, "rematerialized", targetBattleCardIds);
+      enqueueBattleTrigger(
+        queue,
+        before,
+        edit.battleCardId,
+        "rematerialized",
+        targetBattleCardIds,
+      );
     }
     return;
   }
 
-  const movedId = edit.kind === "MOVE_CARD_TO_ZONE" ? edit.battleCardId
-    : edit.kind === "ABANDON" ? edit.battleCardId
-      : null;
+  const movedId =
+    edit.kind === "MOVE_CARD_TO_ZONE"
+      ? edit.battleCardId
+      : edit.kind === "ABANDON"
+        ? edit.battleCardId
+        : null;
   if (movedId === null) return;
   const source = selectBattleCardLocation(before, movedId);
   const destination = selectBattleCardLocation(after, movedId);
@@ -2737,14 +2985,29 @@ function scheduleBattleTriggerEdges(
 
   const sourceInPlay = isBattlefieldZone(source.zone);
   const destinationInPlay = isBattlefieldZone(destination.zone);
-  if (source.zone === "hand" && instance.definition.battleCardKind === "event") {
+  if (
+    source.zone === "hand" &&
+    instance.definition.battleCardKind === "event"
+  ) {
     enqueueBattleTrigger(queue, before, movedId, "played", targetBattleCardIds);
   }
   if (!sourceInPlay && destinationInPlay) {
-    enqueueBattleTrigger(queue, before, movedId, "materialized", targetBattleCardIds);
+    enqueueBattleTrigger(
+      queue,
+      before,
+      movedId,
+      "materialized",
+      targetBattleCardIds,
+    );
   }
   if (sourceInPlay && destination.zone === "void") {
-    enqueueBattleTrigger(queue, before, movedId, edit.kind === "ABANDON" ? "abandoned" : "dissolved", targetBattleCardIds);
+    enqueueBattleTrigger(
+      queue,
+      before,
+      movedId,
+      edit.kind === "ABANDON" ? "abandoned" : "dissolved",
+      targetBattleCardIds,
+    );
   }
 }
 
@@ -2761,18 +3024,23 @@ function enqueueBattleTrigger(
 ): void {
   const instance = board.cardInstances[battleCardId];
   if (instance === undefined) return;
-  queue.push(newEffectRun(
-    { table: "battle", id: battleTriggerScriptId(instance.definition.cardId, trigger) },
-    instance.controller,
-    battleCardId,
-    {
-      trigger,
-      sourceCardId: instance.definition.cardId,
-      sourceController: instance.controller,
-      sourceZone: selectBattleCardLocation(board, battleCardId)?.zone,
-      ...(targetBattleCardIds === undefined ? {} : { targetBattleCardIds }),
-    },
-  ));
+  queue.push(
+    newEffectRun(
+      {
+        table: "battle",
+        id: battleTriggerScriptId(instance.definition.cardId, trigger),
+      },
+      instance.controller,
+      battleCardId,
+      {
+        trigger,
+        sourceCardId: instance.definition.cardId,
+        sourceController: instance.controller,
+        sourceZone: selectBattleCardLocation(board, battleCardId)?.zone,
+        ...(targetBattleCardIds === undefined ? {} : { targetBattleCardIds }),
+      },
+    ),
+  );
 }
 
 function forEachInPlay(
@@ -2780,7 +3048,10 @@ function forEachInPlay(
   side: BattleSide,
   visit: (battleCardId: string) => void,
 ): void {
-  for (const zone of [board.sides[side].backRank, board.sides[side].frontRank]) {
+  for (const zone of [
+    board.sides[side].backRank,
+    board.sides[side].frontRank,
+  ]) {
     for (const battleCardId of Object.values(zone)) {
       if (battleCardId !== null) visit(battleCardId);
     }
@@ -2844,19 +3115,25 @@ function promptResolutionIsValid(
     return false;
   }
   const isCharacterDiscover =
-    pending.run.bindings?.sourceCardId === "910b4cf9-dec7-4e03-af4f-7d5ae342eeba" ||
+    pending.run.bindings?.sourceCardId ===
+      "910b4cf9-dec7-4e03-af4f-7d5ae342eeba" ||
     DISCOVER_CHARACTER_SCRIPT_IDS.has(pending.run.scriptRef.id);
-  const isLowCostDiscover = pending.run.scriptRef.id === DISCOVER_ANY_LOW_COST_SCRIPT_ID;
+  const isLowCostDiscover =
+    pending.run.scriptRef.id === DISCOVER_ANY_LOW_COST_SCRIPT_ID;
   if (isCharacterDiscover || isLowCostDiscover) {
     // Discover stores its sampled ids on the prompt, but selection still needs
     // a live deck character. This makes a stale/corrupt parked prompt bounce
     // instead of moving a card from an unrelated zone during resolution.
-    if (!chosen.every((id) =>
-      board.sides[pending.run.side].deck.includes(id) &&
-      (isCharacterDiscover
-        ? board.cardInstances[id]?.definition.battleCardKind === "character"
-        : (board.cardInstances[id]?.definition.energyCost ?? Infinity) <= 2),
-    )) {
+    if (
+      !chosen.every(
+        (id) =>
+          board.sides[pending.run.side].deck.includes(id) &&
+          (isCharacterDiscover
+            ? board.cardInstances[id]?.definition.battleCardKind === "character"
+            : (board.cardInstances[id]?.definition.energyCost ?? Infinity) <=
+              2),
+      )
+    ) {
       return false;
     }
   }

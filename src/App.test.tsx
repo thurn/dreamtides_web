@@ -2,6 +2,7 @@
 
 import { act } from "react";
 import { economyFixture } from "./testing/economy-fixture";
+import { opponentsFixture } from "./testing/opponents-fixture";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
@@ -24,89 +25,91 @@ vi.mock("./data/journey-content", () => ({
   loadJourneyContent: vi.fn(),
 }));
 vi.mock("./data/tutorial-actions", () => ({
-  loadTutorialConfiguration: vi.fn(() => Promise.resolve({
-    journeyStart: {
-      speechBubble: {
-        speaker: "mira",
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 550,
-        text: "Choose an avatar.",
+  loadTutorialConfiguration: vi.fn(() =>
+    Promise.resolve({
+      journeyStart: {
+        speechBubble: {
+          speaker: "mira",
+          horizontalOffset: 0,
+          verticalOffset: 0,
+          bubbleWidth: 550,
+          text: "Choose an avatar.",
+        },
       },
-    },
-    dreamscape: {
-      speechBubble: {
-        speaker: "mira",
-        delay: 2,
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 700,
-        text: "Visit Dream Sites.",
+      dreamscape: {
+        speechBubble: {
+          speaker: "mira",
+          delay: 2,
+          horizontalOffset: 0,
+          verticalOffset: 0,
+          bubbleWidth: 700,
+          text: "Visit Dream Sites.",
+        },
       },
-    },
-    atlas: {
-      speechBubble: {
-        speaker: "mira",
-        delay: 1,
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 700,
-        text: "Choose the next dream.",
-      },
-    },
-    draft: {
-      speechBubble: {
-        speaker: "mira",
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 600,
-        text: "Draft a card.",
-      },
-    },
-    purge: {
-      speechBubble: {
-        speaker: "mira",
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 600,
-        text: "Purge a card.",
-      },
-    },
-    dreamsignRevelation: {
-      speechBubble: {
-        speaker: "mira",
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 600,
-        text: "Choose a Dreamsign.",
-      },
-    },
-    battleStart: {
-      firstBattle: {
+      atlas: {
         speechBubble: {
           speaker: "mira",
           delay: 1,
           horizontalOffset: 0,
           verticalOffset: 0,
           bubbleWidth: 700,
-          text: "Review the first opponent.",
+          text: "Choose the next dream.",
         },
       },
-      secondBattle: {
+      draft: {
         speechBubble: {
           speaker: "mira",
-          delay: 1,
           horizontalOffset: 0,
           verticalOffset: 0,
-          bubbleWidth: 700,
-          text: "Prepare for the second battle.",
+          bubbleWidth: 600,
+          text: "Draft a card.",
         },
       },
-    },
-    actions: [],
-    triggers: [],
-    battle: { playerDraws: [], enemyDraws: [], dreamwellDraws: [] },
-  })),
+      purge: {
+        speechBubble: {
+          speaker: "mira",
+          horizontalOffset: 0,
+          verticalOffset: 0,
+          bubbleWidth: 600,
+          text: "Purge a card.",
+        },
+      },
+      dreamsignRevelation: {
+        speechBubble: {
+          speaker: "mira",
+          horizontalOffset: 0,
+          verticalOffset: 0,
+          bubbleWidth: 600,
+          text: "Choose a Dreamsign.",
+        },
+      },
+      battleStart: {
+        firstBattle: {
+          speechBubble: {
+            speaker: "mira",
+            delay: 1,
+            horizontalOffset: 0,
+            verticalOffset: 0,
+            bubbleWidth: 700,
+            text: "Review the first opponent.",
+          },
+        },
+        secondBattle: {
+          speechBubble: {
+            speaker: "mira",
+            delay: 1,
+            horizontalOffset: 0,
+            verticalOffset: 0,
+            bubbleWidth: 700,
+            text: "Prepare for the second battle.",
+          },
+        },
+      },
+      actions: [],
+      triggers: [],
+      battle: { playerDraws: [], enemyDraws: [], dreamwellDraws: [] },
+    }),
+  ),
 }));
 
 vi.mock("./firebase/app-config", () => ({
@@ -366,6 +369,7 @@ function makeJourneyContent(): JourneyContent {
     guides: [],
     atlasData: MINIMAL_ATLAS_DATA,
     economyData: economyFixture(),
+    opponentsData: opponentsFixture(),
   };
 }
 
@@ -385,6 +389,7 @@ function setJourneyState(state: JourneyState): void {
       guides: [],
       atlasData: MINIMAL_ATLAS_DATA,
       economyData: economyFixture(),
+      opponentsData: opponentsFixture(),
     },
   });
 }
@@ -493,7 +498,9 @@ describe("App", () => {
 
     await flushAppEffects();
 
-    expect(container.querySelector('[data-application-state="recoverableError"]')).not.toBeNull();
+    expect(
+      container.querySelector('[data-application-state="recoverableError"]'),
+    ).not.toBeNull();
     expect(container.textContent).toContain("Journey Content Failed to Load");
     expect(container.textContent).toContain("Failed to load draft records");
     expect(container.querySelector("[data-room-gate]")).toBeNull();
@@ -523,7 +530,9 @@ describe("App", () => {
 
     await flushAppEffects();
 
-    expect(container.querySelector('[data-application-state="fatalConfiguration"]')).not.toBeNull();
+    expect(
+      container.querySelector('[data-application-state="fatalConfiguration"]'),
+    ).not.toBeNull();
     expect(container.textContent).toContain("Firebase Setup Issue");
     expect(container.textContent).toContain(
       "Missing VITE_FIREBASE_DATABASE_URL",
@@ -556,7 +565,9 @@ describe("App", () => {
     await flushAppEffects();
 
     expect(getFirebaseDatabase).toHaveBeenCalledWith("realtime");
-    expect(container.querySelector('[data-application-state="fatalConfiguration"]')).not.toBeNull();
+    expect(
+      container.querySelector('[data-application-state="fatalConfiguration"]'),
+    ).not.toBeNull();
     expect(container.textContent).toContain("Firebase Setup Issue");
     expect(container.textContent).toContain(
       "Missing VITE_FIREBASE_DATABASE_URL",
@@ -673,6 +684,7 @@ describe("JourneyApp", () => {
         guides: [],
         atlasData: MINIMAL_ATLAS_DATA,
         economyData: economyFixture(),
+        opponentsData: opponentsFixture(),
       },
     });
 

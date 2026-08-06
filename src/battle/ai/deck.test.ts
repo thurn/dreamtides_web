@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
-import { buildAiStarterDeck } from "./deck";
+import { buildAiConfiguredDeck } from "./deck";
 
 /** Minimal valid CardData for test fixtures. */
 function makeCard(
@@ -41,14 +41,24 @@ function makeFixture(): ReadonlyMap<number, CardData> {
   return new Map(cards.map((c) => [c.cardNumber, c]));
 }
 
+function configuredDeck(db: ReadonlyMap<number, CardData>, count = 3) {
+  return buildAiConfiguredDeck(
+    db,
+    [...db.values()]
+      .filter((card) => card.isStarter)
+      .sort((a, b) => a.cardNumber - b.cardNumber)
+      .map((card) => ({ cardId: card.id, count })),
+  );
+}
+
 const STARTER_CARD_NUMBERS = new Set([10, 30, 50]);
 const NON_STARTER_CARD_NUMBERS = new Set([20, 40]);
 const STARTER_COUNT = STARTER_CARD_NUMBERS.size;
 
-describe("buildAiStarterDeck", () => {
+describe("configuredDeck", () => {
   describe("default copies (3 per card)", () => {
     const db = makeFixture();
-    const result = buildAiStarterDeck(db);
+    const result = configuredDeck(db);
 
     it("output length equals starters × 3", () => {
       expect(result).toHaveLength(STARTER_COUNT * 3);
@@ -71,7 +81,7 @@ describe("buildAiStarterDeck", () => {
 
   describe("custom copies (2 per card)", () => {
     const db = makeFixture();
-    const result = buildAiStarterDeck(db, 2);
+    const result = configuredDeck(db, 2);
 
     it("output length equals starters × 2", () => {
       expect(result).toHaveLength(STARTER_COUNT * 2);
@@ -94,7 +104,7 @@ describe("buildAiStarterDeck", () => {
 
   describe("edge cases", () => {
     it("empty database returns empty array", () => {
-      expect(buildAiStarterDeck(new Map())).toHaveLength(0);
+      expect(configuredDeck(new Map())).toHaveLength(0);
     });
 
     it("database with no starters returns empty array", () => {
@@ -102,12 +112,12 @@ describe("buildAiStarterDeck", () => {
         [20, makeCard(20, "Non-Starter One", false)],
         [40, makeCard(40, "Non-Starter Two", false)],
       ]);
-      expect(buildAiStarterDeck(db)).toHaveLength(0);
+      expect(configuredDeck(db)).toHaveLength(0);
     });
 
     it("copiesPerCard = 1 returns each starter exactly once", () => {
       const db = makeFixture();
-      const result = buildAiStarterDeck(db, 1);
+      const result = configuredDeck(db, 1);
       expect(result).toHaveLength(STARTER_COUNT);
       for (const cardNumber of STARTER_CARD_NUMBERS) {
         const count = result.filter((d) => d.cardNumber === cardNumber).length;
@@ -119,7 +129,7 @@ describe("buildAiStarterDeck", () => {
   describe("output correctness", () => {
     it("definitions are produced via createBaseBattleDeckCardDefinition (spot-check fields)", () => {
       const db = makeFixture();
-      const result = buildAiStarterDeck(db, 1);
+      const result = configuredDeck(db, 1);
       const alpha = result.find((d) => d.cardNumber === 10);
       expect(alpha).toBeDefined();
       expect(alpha?.name).toBe("Starter Alpha");
@@ -130,14 +140,14 @@ describe("buildAiStarterDeck", () => {
 
     it("output is sorted by cardNumber (deterministic order)", () => {
       const db = makeFixture();
-      const result = buildAiStarterDeck(db, 1);
+      const result = configuredDeck(db, 1);
       const numbers = result.map((d) => d.cardNumber);
       expect(numbers).toEqual([...numbers].sort((a, b) => a - b));
     });
 
     it("within each group copies are contiguous and identically valued", () => {
       const db = makeFixture();
-      const result = buildAiStarterDeck(db, 2);
+      const result = configuredDeck(db, 2);
       // For cardNumber 10, entries at indices 0 and 1 should both be cardNumber 10
       const group10 = result.slice(0, 2);
       expect(group10.every((d) => d.cardNumber === 10)).toBe(true);

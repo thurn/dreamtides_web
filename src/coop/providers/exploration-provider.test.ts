@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { economyFixture } from "../../testing/economy-fixture";
+import { opponentsFixture } from "../../testing/opponents-fixture";
 import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
 import { resolveDeckEntryCard } from "../../card-type-change";
 import type {
@@ -119,6 +120,7 @@ function contentFixture(
     guides: [],
     atlasData: MINIMAL_ATLAS_DATA,
     economyData: economyFixture(),
+    opponentsData: opponentsFixture(),
   };
 }
 
@@ -136,13 +138,13 @@ function journeyFixture(content: JourneyContent): JourneyState {
     essence: 100,
     maxDreamsigns: 12,
     deck: Array.from({ length: 8 }, (_, index) =>
-      index % 2 === 0 ? event : spiritAnimal)
-      .map((entry, index) => ({
-        entryId: `entry-${String(index)}`,
-        cardNumber: entry.cardNumber,
-        transfiguration: null,
-        isBane: false,
-      })),
+      index % 2 === 0 ? event : spiritAnimal,
+    ).map((entry, index) => ({
+      entryId: `entry-${String(index)}`,
+      cardNumber: entry.cardNumber,
+      transfiguration: null,
+      isBane: false,
+    })),
   };
 }
 
@@ -156,7 +158,10 @@ const site: SiteState = {
 function buildState(
   content: JourneyContent,
   journey = journeyFixture(content),
-): { journey: JourneyState; runtime: NonNullable<ReturnType<typeof buildExplorationRuntime>> } {
+): {
+  journey: JourneyState;
+  runtime: NonNullable<ReturnType<typeof buildExplorationRuntime>>;
+} {
   const runtime = buildExplorationRuntime(journey, site, content, () => 0.37);
   if (runtime === null) throw new Error("Expected Exploration runtime");
   return {
@@ -181,7 +186,8 @@ function resolve(
     payload: {
       actionId,
       selection,
-      ...(runtime?.kind === "exploration" && runtime.selectionRulesVersion !== undefined
+      ...(runtime?.kind === "exploration" &&
+      runtime.selectionRulesVersion !== undefined
         ? { selectionRulesVersion: runtime.selectionRulesVersion }
         : {}),
     },
@@ -210,7 +216,12 @@ describe("Exploration provider", () => {
     };
     const content = contentFixture([offeredAction, fallbackAction]);
     const journey = journeyFixture(content);
-    const legacy = buildLegacyExplorationRuntime(journey, site, content, () => 0.37);
+    const legacy = buildLegacyExplorationRuntime(
+      journey,
+      site,
+      content,
+      () => 0.37,
+    );
     const current = buildExplorationRuntime(journey, site, content, () => 0.37);
 
     expect(legacy).toMatchObject({
@@ -259,10 +270,12 @@ describe("Exploration provider", () => {
       kind: "exploration",
       selectionRulesVersion: SELECTION_RULES_VERSION,
     });
-    expect(provider.openSite({
-      ...input,
-      selectionRulesVersion: "unsupported-selection-version",
-    })).toBeNull();
+    expect(
+      provider.openSite({
+        ...input,
+        selectionRulesVersion: "unsupported-selection-version",
+      }),
+    ).toBeNull();
   });
 
   it("builds and resolves the offered-card and unrestricted transfiguration effects", () => {
@@ -286,12 +299,9 @@ describe("Exploration provider", () => {
 
     expect(offered).toHaveLength(1);
     expect(offered).not.toContain(SOURCE_CARD_ID);
-    const gained = resolve(
-      content,
-      offeredState.journey,
-      offeredAction.id,
-      { cardIds: offered },
-    );
+    const gained = resolve(content, offeredState.journey, offeredAction.id, {
+      cardIds: offered,
+    });
     expect(gained.deck).toHaveLength(offeredState.journey.deck.length + 1);
     expect(gained.siteRuntime[site.id]).toMatchObject({
       kind: "exploration",
@@ -310,8 +320,10 @@ describe("Exploration provider", () => {
       transfigureAction.id,
       { entryIds: [entryId], transfiguration: "Empowered" },
     );
-    expect(transfigured.deck.find((entry) => entry.entryId === entryId)?.transfiguration)
-      .toBe("Empowered");
+    expect(
+      transfigured.deck.find((entry) => entry.entryId === entryId)
+        ?.transfiguration,
+    ).toBe("Empowered");
     expect(transfigured.siteRuntime[site.id]).toMatchObject({
       kind: "exploration",
       resolution: {
@@ -354,7 +366,10 @@ describe("Exploration provider", () => {
     const essenceState = buildState(content);
     const spiritAnimalCount = essenceState.journey.deck.filter((entry) => {
       const base = content.cardDatabase.get(entry.cardNumber);
-      return base !== undefined && resolveDeckEntryCard(base, entry).subtype === "Spirit Animal";
+      return (
+        base !== undefined &&
+        resolveDeckEntryCard(base, entry).subtype === "Spirit Animal"
+      );
     }).length;
     const withEssence = resolve(
       content,
@@ -367,8 +382,9 @@ describe("Exploration provider", () => {
     if (essenceRuntime?.kind !== "exploration") {
       throw new Error("Expected Exploration resolution");
     }
-    expect(essenceRuntime.resolution?.essenceGained)
-      .toBe(spiritAnimalCount * 15);
+    expect(essenceRuntime.resolution?.essenceGained).toBe(
+      spiritAnimalCount * 15,
+    );
     expect(essenceRuntime.resolution?.affectedEntryIds).toEqual(
       expect.arrayContaining(
         essenceState.journey.deck
@@ -382,13 +398,16 @@ describe("Exploration provider", () => {
     );
 
     const firstCharacterId = essenceState.journey.deck.find(
-      (entry) => content.cardDatabase.get(entry.cardNumber)?.cardType === "Character",
+      (entry) =>
+        content.cardDatabase.get(entry.cardNumber)?.cardType === "Character",
     )?.entryId;
     if (firstCharacterId === undefined) throw new Error("Expected a Character");
     const stackedJourney = {
       ...essenceState.journey,
       deck: essenceState.journey.deck.map((entry) =>
-        entry.entryId === firstCharacterId ? { ...entry, sparkBonus: 2 } : entry,
+        entry.entryId === firstCharacterId
+          ? { ...entry, sparkBonus: 2 }
+          : entry,
       ),
     };
     const sparkState = buildState(content, stackedJourney);
@@ -396,7 +415,9 @@ describe("Exploration provider", () => {
     for (const entry of withSpark.deck) {
       const base = content.cardDatabase.get(entry.cardNumber);
       if (base?.cardType === "Character") {
-        expect(entry.sparkBonus).toBe(entry.entryId === firstCharacterId ? 3 : 1);
+        expect(entry.sparkBonus).toBe(
+          entry.entryId === firstCharacterId ? 3 : 1,
+        );
       } else {
         expect(entry.sparkBonus).toBeUndefined();
       }
@@ -429,13 +450,17 @@ describe("Exploration provider", () => {
     expect(packs.every((pack) => pack.length === 3)).toBe(true);
     expect(new Set(packs.flat()).size).toBe(6);
     expect(
-      packs.flat().every((cardId) =>
-        [...content.cardDatabase.values()].some(
-          (entry) => entry.id === cardId && entry.subtype === "Warrior",
+      packs
+        .flat()
+        .every((cardId) =>
+          [...content.cardDatabase.values()].some(
+            (entry) => entry.id === cardId && entry.subtype === "Warrior",
+          ),
         ),
-      ),
     ).toBe(true);
-    const result = resolve(content, state.journey, packAction.id, { packIndex: 0 });
+    const result = resolve(content, state.journey, packAction.id, {
+      packIndex: 0,
+    });
     expect(result.deck).toHaveLength(state.journey.deck.length + 3);
   });
 
@@ -499,11 +524,13 @@ describe("Exploration provider", () => {
       ...base,
       exploration: {
         ...base.exploration,
-        customDreamsigns: [{
-          id: customDreamsignId,
-          name: "Custom Exploration Dreamsign",
-          effectDescription: "A synthetic custom effect.",
-        }],
+        customDreamsigns: [
+          {
+            id: customDreamsignId,
+            name: "Custom Exploration Dreamsign",
+            effectDescription: "A synthetic custom effect.",
+          },
+        ],
       },
     };
     const state = buildState(content);
@@ -575,7 +602,9 @@ describe("Exploration provider", () => {
       entryIds: [selectedEntry.entryId],
     });
     expect(result.deck).toHaveLength(state.journey.deck.length - 1);
-    expect(result.deck.some((entry) => entry.entryId === selectedEntry.entryId)).toBe(false);
+    expect(
+      result.deck.some((entry) => entry.entryId === selectedEntry.entryId),
+    ).toBe(false);
     expect(result.siteRuntime[site.id]).toMatchObject({
       kind: "exploration",
       resolution: { affectedEntryIds: [], purgedCardIds: [purgedCardId] },
@@ -596,16 +625,25 @@ describe("Exploration provider", () => {
       effectKind: "purge-dreamsign-for-essence",
       essence: 50,
     };
-    const content = contentFixture([randomDreamsignAction, purgeDreamsignAction]);
+    const content = contentFixture([
+      randomDreamsignAction,
+      purgeDreamsignAction,
+    ]);
     const randomState = buildState(content, {
       ...journeyFixture(content),
       remainingDreamsignPool: [CHARM_POUCH_ID],
     });
-    expect(randomState.runtime.actionOffers[0]?.offeredDreamsignIds)
-      .toEqual([CHARM_POUCH_ID]);
-    const gained = resolve(content, randomState.journey, randomDreamsignAction.id);
-    expect(gained.dreamsigns.map((dreamsign) => dreamsign.id))
-      .toContain(CHARM_POUCH_ID);
+    expect(randomState.runtime.actionOffers[0]?.offeredDreamsignIds).toEqual([
+      CHARM_POUCH_ID,
+    ]);
+    const gained = resolve(
+      content,
+      randomState.journey,
+      randomDreamsignAction.id,
+    );
+    expect(gained.dreamsigns.map((dreamsign) => dreamsign.id)).toContain(
+      CHARM_POUCH_ID,
+    );
     expect(gained.remainingDreamsignPool).not.toContain(CHARM_POUCH_ID);
 
     const alternateDreamsignId = "3D4EB3EE-0931-45ED-8365-69F18096EAD5";
@@ -622,16 +660,23 @@ describe("Exploration provider", () => {
     };
     const purgeState = buildState(purgeContent, {
       ...journeyFixture(content),
-      dreamsigns: [{
-        id: CHARM_POUCH_ID,
-        name: "Charm Pouch",
-        effectDescription: "A fixture effect.",
-      }],
+      dreamsigns: [
+        {
+          id: CHARM_POUCH_ID,
+          name: "Charm Pouch",
+          effectDescription: "A fixture effect.",
+        },
+      ],
       remainingDreamsignPool: [alternateDreamsignId],
     });
-    const purged = resolve(purgeContent, purgeState.journey, purgeDreamsignAction.id, {
-      dreamsignId: CHARM_POUCH_ID,
-    });
+    const purged = resolve(
+      purgeContent,
+      purgeState.journey,
+      purgeDreamsignAction.id,
+      {
+        dreamsignId: CHARM_POUCH_ID,
+      },
+    );
     expect(purged.dreamsigns).toEqual([]);
     expect(purged.essence).toBe(150);
     expect(purged.siteRuntime[site.id]).toMatchObject({
@@ -661,11 +706,14 @@ describe("Exploration provider", () => {
     const content = contentFixture([fastAction, costAction]);
     const fastState = buildState(content);
     const fast = resolve(content, fastState.journey, fastAction.id);
-    expect(fast.deck.every((entry) => entry.keywordModification?.fast === true))
-      .toBe(true);
+    expect(
+      fast.deck.every((entry) => entry.keywordModification?.fast === true),
+    ).toBe(true);
 
     const costState = buildState(content);
-    const originalEntryIds = new Set(costState.journey.deck.map((entry) => entry.entryId));
+    const originalEntryIds = new Set(
+      costState.journey.deck.map((entry) => entry.entryId),
+    );
     const reduced = resolve(content, costState.journey, costAction.id);
     expect(reduced.deck).toHaveLength(costState.journey.deck.length + 3);
     for (const entry of reduced.deck) {
@@ -673,8 +721,9 @@ describe("Exploration provider", () => {
       if (base === undefined) throw new Error("Expected a catalog card");
       if (originalEntryIds.has(entry.entryId)) {
         expect(entry.keywordModification?.energyCostReduction).toBe(1);
-        expect(resolveDeckEntryCard(base, entry).energyCost)
-          .toBe(base.energyCost === null ? null : Math.max(0, base.energyCost - 1));
+        expect(resolveDeckEntryCard(base, entry).energyCost).toBe(
+          base.energyCost === null ? null : Math.max(0, base.energyCost - 1),
+        );
       } else {
         expect(base.id).toBe(NIGHTMARE_ID);
         expect(entry.isBane).toBe(true);
@@ -689,7 +738,7 @@ describe("Exploration provider", () => {
       label: "Copy a selected card",
       effectText: "Gain 2 copies of $DECK_CARD",
       effectKind: "copy-selected-card",
-      selection: { "$DECK_CARD": { predicate: "≤2● cost Character" } },
+      selection: { $DECK_CARD: { predicate: "≤2● cost Character" } },
       predicate: "cheap-character",
       count: 2,
     };
@@ -704,7 +753,8 @@ describe("Exploration provider", () => {
     const selectedState = buildState(content);
     const selectedEntryId =
       selectedState.runtime.actionOffers[0]?.offeredDeckEntryIds?.[0];
-    if (selectedEntryId === undefined) throw new Error("Expected a selected card");
+    if (selectedEntryId === undefined)
+      throw new Error("Expected a selected card");
     const copied = resolve(content, selectedState.journey, selectedCopy.id, {
       entryIds: [selectedEntryId],
     });
@@ -836,19 +886,23 @@ describe("Exploration provider", () => {
     const content = contentFixture([purgeForEssence, fallback]);
     const journey = journeyFixture(content);
     const target = journey.deck[1];
-    if (target === undefined) throw new Error("Expected a Character deck entry");
+    if (target === undefined)
+      throw new Error("Expected a Character deck entry");
     const modifiedTarget = { ...target, sparkBonus: 3 };
     const state = buildState(content, {
       ...journey,
       deck: journey.deck.map((entry) =>
-        entry.entryId === target.entryId ? modifiedTarget : entry),
+        entry.entryId === target.entryId ? modifiedTarget : entry,
+      ),
     });
     const result = resolve(content, state.journey, purgeForEssence.id, {
       entryIds: [target.entryId],
     });
 
     expect(result.essence).toBe(state.journey.essence + 100);
-    expect(result.deck.some((entry) => entry.entryId === target.entryId)).toBe(false);
+    expect(result.deck.some((entry) => entry.entryId === target.entryId)).toBe(
+      false,
+    );
     expect(result.siteRuntime[site.id]).toMatchObject({
       kind: "exploration",
       resolution: {
@@ -882,7 +936,8 @@ describe("Exploration provider", () => {
       throw new Error("Expected purge-and-copy deck entries");
     }
     const copiedCardId = content.cardDatabase.get(copied.cardNumber)?.id;
-    if (copiedCardId === undefined) throw new Error("Expected copied card UUID");
+    if (copiedCardId === undefined)
+      throw new Error("Expected copied card UUID");
     const copiesBefore = state.journey.deck.filter(
       (entry) => entry.cardNumber === copied.cardNumber,
     ).length;
@@ -892,9 +947,12 @@ describe("Exploration provider", () => {
       copyEntryId: copied.entryId,
     });
 
-    expect(result.deck.some((entry) => entry.entryId === purged.entryId)).toBe(false);
-    expect(result.deck.filter((entry) => entry.cardNumber === copied.cardNumber))
-      .toHaveLength(copiesBefore + 1);
+    expect(result.deck.some((entry) => entry.entryId === purged.entryId)).toBe(
+      false,
+    );
+    expect(
+      result.deck.filter((entry) => entry.cardNumber === copied.cardNumber),
+    ).toHaveLength(copiesBefore + 1);
     expect(result.siteRuntime[site.id]).toMatchObject({
       kind: "exploration",
       resolution: {
@@ -917,7 +975,7 @@ describe("Exploration provider", () => {
       label: "Fit a matching hood",
       effectText: "Change $DECK_CARD to become a Survivor",
       effectKind: "change-subtype-selected",
-      selection: { "$DECK_CARD": { predicate: "≤2● cost Character" } },
+      selection: { $DECK_CARD: { predicate: "≤2● cost Character" } },
       predicate: "cheap-character",
       subtype: "Survivor",
     };
@@ -932,15 +990,34 @@ describe("Exploration provider", () => {
     const source = content.cardDatabase.get(1);
     const survivor = content.cardDatabase.get(110);
     const warrior = content.cardDatabase.get(120);
-    if (source === undefined || survivor === undefined || warrior === undefined) {
+    if (
+      source === undefined ||
+      survivor === undefined ||
+      warrior === undefined
+    ) {
       throw new Error("Expected subtype fixtures");
     }
     const journey = {
       ...journeyFixture(content),
       deck: [
-        { entryId: "source-entry", cardNumber: source.cardNumber, transfiguration: null, isBane: false },
-        { entryId: "survivor-entry", cardNumber: survivor.cardNumber, transfiguration: null, isBane: false },
-        { entryId: "warrior-entry", cardNumber: warrior.cardNumber, transfiguration: null, isBane: false },
+        {
+          entryId: "source-entry",
+          cardNumber: source.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        },
+        {
+          entryId: "survivor-entry",
+          cardNumber: survivor.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        },
+        {
+          entryId: "warrior-entry",
+          cardNumber: warrior.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        },
       ],
     };
     const state = buildState(content, journey);
@@ -968,7 +1045,9 @@ describe("Exploration provider", () => {
       (entry) => entry.entryId === "warrior-entry",
     );
     if (changedEntry === undefined) throw new Error("Expected changed entry");
-    expect(resolveDeckEntryCard(warrior, changedEntry).subtype).toBe("Survivor");
+    expect(resolveDeckEntryCard(warrior, changedEntry).subtype).toBe(
+      "Survivor",
+    );
     expect(changed.siteRuntime[site.id]).toMatchObject({
       kind: "exploration",
       resolution: {
@@ -997,7 +1076,9 @@ describe("Exploration provider", () => {
     const content = contentFixture([openingHand, startingEnergy]);
     const handState = buildState(content);
     const withHand = resolve(content, handState.journey, openingHand.id);
-    expect(withHand.battleModifiers[withHand.battleModifiers.length - 1]).toEqual({
+    expect(
+      withHand.battleModifiers[withHand.battleModifiers.length - 1],
+    ).toEqual({
       kind: "opening_hand_bonus",
       count: 2,
       battlesRemaining: 1,
@@ -1080,7 +1161,8 @@ describe("Exploration provider", () => {
     };
     const baseContent = contentFixture([chooseAvatar, uniqueDeck]);
     const avatarTemplate = baseContent.dreamAvatars[0];
-    if (avatarTemplate === undefined) throw new Error("Expected a Dream Avatar");
+    if (avatarTemplate === undefined)
+      throw new Error("Expected a Dream Avatar");
     const content: JourneyContent = {
       ...baseContent,
       dreamAvatars: Array.from({ length: 32 }, (_, index) => ({
@@ -1107,10 +1189,16 @@ describe("Exploration provider", () => {
     expect(offeredAvatarIds).toHaveLength(3);
     expect(offeredAvatarIds).not.toContain(initialAvatar.id);
     const chosenAvatarId = offeredAvatarIds[0];
-    if (chosenAvatarId === undefined) throw new Error("Expected an avatar offer");
-    const avatarResult = resolve(content, avatarState.journey, chooseAvatar.id, {
-      dreamAvatarId: chosenAvatarId,
-    });
+    if (chosenAvatarId === undefined)
+      throw new Error("Expected an avatar offer");
+    const avatarResult = resolve(
+      content,
+      avatarState.journey,
+      chooseAvatar.id,
+      {
+        dreamAvatarId: chosenAvatarId,
+      },
+    );
     expect(avatarResult.dreamAvatar?.id).toBe(chosenAvatarId);
     expect(avatarResult.siteRuntime[site.id]).toMatchObject({
       kind: "exploration",
@@ -1177,8 +1265,9 @@ describe("Exploration provider", () => {
     };
     const content = contentFixture([replaceAction, otherAction]);
     const { runtime } = buildState(content);
-    const offer = runtime.actionOffers.find((candidate) =>
-      candidate.actionId === replaceAction.id);
+    const offer = runtime.actionOffers.find(
+      (candidate) => candidate.actionId === replaceAction.id,
+    );
     expect(offer?.selectionSignature).toMatch(/^[0-9a-f]{64}$/u);
     expect(offer?.selectionTraces?.length).toBeGreaterThan(0);
     expect(offer?.selectionTraces).toHaveLength(
@@ -1206,20 +1295,27 @@ describe("Exploration provider", () => {
     const draftOffer = state.runtime.actionOffers[0];
     const siteOffer = state.runtime.actionOffers[1];
     expect(draftOffer?.offeredCardIds).toHaveLength(4);
-    expect(Object.keys(draftOffer?.transfigurationByCardId ?? {})).toHaveLength(4);
-    expect(["Shop", "Purge", "Transfiguration", "Duplication"])
-      .toContain(siteOffer?.offeredSiteType);
+    expect(Object.keys(draftOffer?.transfigurationByCardId ?? {})).toHaveLength(
+      4,
+    );
+    expect(["Shop", "Purge", "Transfiguration", "Duplication"]).toContain(
+      siteOffer?.offeredSiteType,
+    );
 
     const selectedCardId = draftOffer?.offeredCardIds[0];
-    if (selectedCardId === undefined) throw new Error("Expected a transfigured card offer");
+    if (selectedCardId === undefined)
+      throw new Error("Expected a transfigured card offer");
     const resolved = resolve(content, state.journey, transfiguredDraft.id, {
       cardIds: [selectedCardId],
     });
     const resolution = resolved.siteRuntime[site.id];
-    const gainedEntryId = resolution?.kind === "exploration"
-      ? resolution.resolution?.gainedEntryIds?.[0]
-      : undefined;
-    const gainedEntry = resolved.deck.find((entry) => entry.entryId === gainedEntryId);
+    const gainedEntryId =
+      resolution?.kind === "exploration"
+        ? resolution.resolution?.gainedEntryIds?.[0]
+        : undefined;
+    const gainedEntry = resolved.deck.find(
+      (entry) => entry.entryId === gainedEntryId,
+    );
     expect(gainedEntry?.transfiguration).toBe(
       draftOffer?.transfigurationByCardId?.[selectedCardId],
     );
@@ -1244,8 +1340,10 @@ describe("Exploration provider", () => {
     };
     const content = contentFixture([copiesAction, takeAction]);
     const copiesState = buildState(content);
-    const offeredCardId = copiesState.runtime.actionOffers[0]?.offeredCardIds[0];
-    if (offeredCardId === undefined) throw new Error("Expected an offered card");
+    const offeredCardId =
+      copiesState.runtime.actionOffers[0]?.offeredCardIds[0];
+    if (offeredCardId === undefined)
+      throw new Error("Expected an offered card");
     const copies = resolve(content, copiesState.journey, copiesAction.id, {
       cardIds: [offeredCardId],
     });
@@ -1324,7 +1422,9 @@ describe("Exploration provider", () => {
     const replaced = resolve(content, replaceState.journey, replaceAction.id, {
       entryIds: [target.entryId],
     });
-    expect(replaced.deck.some((entry) => entry.entryId === target.entryId)).toBe(false);
+    expect(
+      replaced.deck.some((entry) => entry.entryId === target.entryId),
+    ).toBe(false);
     expect(replaced.siteRuntime[site.id]).toMatchObject({
       kind: "exploration",
       resolution: {
@@ -1338,7 +1438,8 @@ describe("Exploration provider", () => {
 
     const transfigureState = buildState(content);
     const transfigureTarget = transfigureState.journey.deck[0];
-    if (transfigureTarget === undefined) throw new Error("Expected a deck entry");
+    if (transfigureTarget === undefined)
+      throw new Error("Expected a deck entry");
     const transfigured = resolve(
       content,
       transfigureState.journey,

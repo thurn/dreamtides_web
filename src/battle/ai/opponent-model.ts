@@ -3,6 +3,10 @@ import { buildSupportContribution } from "./cards/support-contribution";
 import * as evaluateModule from "./evaluate";
 import { cloneForwardModel, type ForwardModel } from "./forward-model";
 import { rankSlotIds, type FrontRankSlotId } from "../types";
+import type {
+  AiEvaluationWeights,
+  AiOpponentModelTuning,
+} from "../../types/opponents-data";
 
 /**
  * Abstract opponent-response model. Given a {@link ForwardModel} projection
@@ -32,7 +36,6 @@ export type OpponentMode = "expectiminimax" | "worstCase";
  * removal is `min(1, REMOVAL_PRIOR * opponentHandCount)`: more unknown cards,
  * more likely a piece of removal is among them. Tuning knob.
  */
-const REMOVAL_PRIOR = 0.1;
 
 /**
  * Prior weight of each archetypal response for the expectiminimax (mean)
@@ -40,11 +43,6 @@ const REMOVAL_PRIOR = 0.1;
  * "Trade evenly" and "block biggest" (competent blocking play) outweigh the
  * passive "no blocking" line. Tuning knobs.
  */
-const ARCHETYPE_PRIORS: Record<ResponseArchetype, number> = {
-  noBlocks: 1,
-  blockBiggest: 2,
-  tradeEvenly: 3,
-};
 
 type ResponseArchetype = "noBlocks" | "blockBiggest" | "tradeEvenly";
 
@@ -55,7 +53,6 @@ const ARCHETYPE_ORDER: readonly ResponseArchetype[] = [
 ];
 
 /** Hard cap on sampled responses, matching the spec ("≤ ~16"). */
-const MAX_SAMPLE_CAP = 16;
 
 /**
  * Finite stand-in for ±Infinity returned by `evaluate` on terminal boards.
@@ -263,7 +260,10 @@ function applyResponse(
             continue;
           }
           if (blocker.effectiveSpark >= challenger.effectiveSpark) {
-            if (best === null || challenger.effectiveSpark > best.effectiveSpark) {
+            if (
+              best === null ||
+              challenger.effectiveSpark > best.effectiveSpark
+            ) {
               best = challenger;
             }
           }
@@ -297,8 +297,12 @@ function sampleResponses(
   model: ForwardModel,
   cap: number,
   rng: () => number,
+  tuning: AiOpponentModelTuning,
 ): SampledResponse[] {
-  const removalChance = Math.min(1, REMOVAL_PRIOR * model.opponentHandCount);
+  const removalChance = Math.min(
+    1,
+    tuning.removalPrior * model.opponentHandCount,
+  );
   const responses: SampledResponse[] = [];
 
   for (const archetype of ARCHETYPE_ORDER) {
@@ -306,7 +310,11 @@ function sampleResponses(
       break;
     }
     // Base (no-removal) response.
-    responses.push({ archetype, removesTopThreat: false, weight: ARCHETYPE_PRIORS[archetype] });
+    responses.push({
+      archetype,
+      removesTopThreat: false,
+      weight: tuning.responseArchetypePriors[archetype],
+    });
 
     if (responses.length >= cap) {
       break;
@@ -318,7 +326,7 @@ function sampleResponses(
       responses.push({
         archetype,
         removesTopThreat: true,
-        weight: ARCHETYPE_PRIORS[archetype] * removalChance,
+        weight: tuning.responseArchetypePriors[archetype] * removalChance,
       });
     }
   }
@@ -345,17 +353,23 @@ export function scoreAgainstOpponent(
   mode: OpponentMode,
   sampleCap: number,
   rngSeed: number,
+  scoreToWin: number,
+  evaluation: AiEvaluationWeights,
+  tuning: AiOpponentModelTuning,
 ): number {
-  const cap = Math.max(1, Math.min(MAX_SAMPLE_CAP, Math.floor(sampleCap)));
+  const cap = Math.max(
+    1,
+    Math.min(tuning.sampleSafetyCap, Math.floor(sampleCap)),
+  );
   const rng = createRng(rngSeed);
 
   const challengers = buildChallengers(model);
-  const responses = sampleResponses(model, cap, rng);
+  const responses = sampleResponses(model, cap, rng, tuning);
 
   // With no responses (cap forces at least one, but guard anyway) just evaluate
   // the position as-is.
   if (responses.length === 0) {
-    return evaluateModule.evaluate(model);
+    return evaluateModule.evaluate(model, scoreToWin, evaluation);
   }
 
   let weightedSum = 0;
@@ -365,7 +379,9 @@ export function scoreAgainstOpponent(
   for (const response of responses) {
     const clone = cloneForwardModel(model);
     applyResponse(clone, challengers, response);
-    const score = clampEval(evaluateModule.evaluate(clone));
+    const score = clampEval(
+      evaluateModule.evaluate(clone, scoreToWin, evaluation),
+    );
 
     weightedSum += response.weight * score;
     totalWeight += response.weight;

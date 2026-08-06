@@ -1,4 +1,7 @@
-import type { BattleCommand, BattleDebugEdit } from "../../battle/debug/commands";
+import type {
+  BattleCommand,
+  BattleDebugEdit,
+} from "../../battle/debug/commands";
 import {
   type ChallengeResolution,
   resolveChallenge,
@@ -97,12 +100,11 @@ const BOOKEND_PHASES: ReadonlySet<BattlePhase> = new Set<BattlePhase>([
  */
 
 /** Hand-size limit enforced during the Ending phase (rules §Zones — Hand). */
-export const BASIC_AUTOMATION_HAND_LIMIT = 10;
-
 /** Caps the automation needs from `BattleInit` to ramp energy and detect a win. */
 export interface BasicAutomationCaps {
   maxEnergyCap: number;
   scoreToWin: number;
+  handLimit: number;
   /**
    * The shared Dreamwell deck (`BattleInit.dreamwellDeck`). Read at the active
    * `dreamwellDeckIndex` so a `DRAW_DREAMWELL_CARD` reveal also applies the
@@ -144,7 +146,7 @@ export function planBasicAutomationCommands(
         command.edit.phase === "challenge"
           ? planChallengeOnly(state, command, caps)
           : BOOKEND_PHASES.has(command.edit.phase)
-            ? planBookendAdvance(state, command, command.edit)
+            ? planBookendAdvance(state, command, command.edit, caps)
             : [command];
       if (
         state.phase !== "dreamwell" ||
@@ -174,7 +176,8 @@ function planCardPlay(
   const instance = state.cardInstances[edit.battleCardId];
   if (instance === undefined) return [command];
   const isTemporaryVoidPlay =
-    location?.zone === "void" && hasTemporaryReclaimEligibility(state, instance);
+    location?.zone === "void" &&
+    hasTemporaryReclaimEligibility(state, instance);
   if (location?.zone !== "hand" && !isTemporaryVoidPlay) {
     return [command];
   }
@@ -191,13 +194,13 @@ function planCardPlay(
   // Events never stay in play — they resolve to the void.
   const primary: BattleCommand = isEvent
     ? {
-      ...command,
-      edit: {
-        kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: edit.battleCardId,
-        destination: { side, zone: "void" },
-      },
-    }
+        ...command,
+        edit: {
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId: edit.battleCardId,
+          destination: { side, zone: "void" },
+        },
+      }
     : command;
 
   // Reduce current ● by the card's cost, clamped so energy never goes negative.
@@ -205,25 +208,31 @@ function planCardPlay(
   const spend = Math.min(cost, state.sides[side].currentEnergy);
   const commands: BattleCommand[] = [];
   if (spend > 0) {
-    commands.push(autoCommand({
-      kind: "ADJUST_CURRENT_ENERGY",
-      side,
-      amount: -spend,
-    }));
+    commands.push(
+      autoCommand({
+        kind: "ADJUST_CURRENT_ENERGY",
+        side,
+        amount: -spend,
+      }),
+    );
   }
   if (isTemporaryVoidPlay) {
-    commands.push(autoCommand({
-      kind: "SET_CARD_STATUS",
-      battleCardId: edit.battleCardId,
-      status: { reclaimed: true },
-    }));
+    commands.push(
+      autoCommand({
+        kind: "SET_CARD_STATUS",
+        battleCardId: edit.battleCardId,
+        status: { reclaimed: true },
+      }),
+    );
   }
   if (!isEvent) {
-    commands.push(autoCommand({
-      kind: "SET_CARD_STATUS",
-      battleCardId: edit.battleCardId,
-      status: { isExhausted: true },
-    }));
+    commands.push(
+      autoCommand({
+        kind: "SET_CARD_STATUS",
+        battleCardId: edit.battleCardId,
+        status: { isExhausted: true },
+      }),
+    );
   }
   commands.push(primary);
 
@@ -305,13 +314,21 @@ function planTurnHandoff(
     });
     commands.push(...challenge.edits.map(autoCommand));
 
-    const victoryCommand = buildVictoryCommand(state, challenge, caps.scoreToWin);
+    const victoryCommand = buildVictoryCommand(
+      state,
+      challenge,
+      caps.scoreToWin,
+    );
     if (victoryCommand !== null) {
       commands.push(victoryCommand);
     }
   }
 
-  for (const discardEdit of handLimitDiscardEdits(state, outgoingSide)) {
+  for (const discardEdit of handLimitDiscardEdits(
+    state,
+    outgoingSide,
+    caps.handLimit,
+  )) {
     commands.push(autoCommand(discardEdit));
   }
 
@@ -367,7 +384,10 @@ function planChallengeOnly(
     activeSide: state.activeSide,
     supportContribution: NO_SUPPORT_CONTRIBUTION,
   });
-  const commands: BattleCommand[] = [command, ...challenge.edits.map(autoCommand)];
+  const commands: BattleCommand[] = [
+    command,
+    ...challenge.edits.map(autoCommand),
+  ];
   const victoryCommand = buildVictoryCommand(state, challenge, caps.scoreToWin);
   if (victoryCommand !== null) {
     commands.push(victoryCommand);
@@ -387,6 +407,7 @@ function planBookendAdvance(
   state: BattleMutableState,
   command: BattleCommand,
   edit: Extract<BattleDebugEdit, { kind: "SET_PHASE" }>,
+  caps: BasicAutomationCaps,
 ): BattleCommand[] {
   const side = state.activeSide;
   // Keep the original navigation so the bookend entry stays in history.
@@ -398,7 +419,13 @@ function planBookendAdvance(
   // finite `PHASE_SEQUENCE` toward a surfaced phase (`ending` is the last
   // bookend and resolves to `day`).
   while (BOOKEND_PHASES.has(phase)) {
-    for (const effectEdit of bookendEffectEdits(state, side, phase, state.turnNumber)) {
+    for (const effectEdit of bookendEffectEdits(
+      state,
+      side,
+      phase,
+      state.turnNumber,
+      caps.handLimit,
+    )) {
       commands.push(autoCommand(effectEdit));
     }
     phase = nextSurfaceableTarget(phase);
@@ -438,6 +465,7 @@ function bookendEffectEdits(
   side: BattleSide,
   phase: BattlePhase,
   turnNumber: number,
+  handLimit: number,
 ): BattleDebugEdit[] {
   switch (phase) {
     case "draw":
@@ -448,7 +476,7 @@ function bookendEffectEdits(
       return [];
     case "ending":
       return [
-        ...handLimitDiscardEdits(state, side),
+        ...handLimitDiscardEdits(state, side, handLimit),
         ...endingBanishEdits(state, side),
       ];
     default:
@@ -463,9 +491,10 @@ function bookendEffectEdits(
 function handLimitDiscardEdits(
   state: BattleMutableState,
   side: BattleSide,
+  handLimit: number,
 ): BattleDebugEdit[] {
   const hand = state.sides[side].hand;
-  const excess = hand.length - BASIC_AUTOMATION_HAND_LIMIT;
+  const excess = hand.length - handLimit;
   if (excess <= 0) {
     return [];
   }
@@ -488,11 +517,12 @@ function buildVictoryCommand(
 ): BattleCommand | null {
   const projectedPlayer = state.sides.player.score + challenge.playerScoreDelta;
   const projectedEnemy = state.sides.enemy.score + challenge.enemyScoreDelta;
-  const result: BattleResult | null = projectedPlayer >= scoreToWin
-    ? "victory"
-    : projectedEnemy >= scoreToWin
-      ? "defeat"
-      : null;
+  const result: BattleResult | null =
+    projectedPlayer >= scoreToWin
+      ? "victory"
+      : projectedEnemy >= scoreToWin
+        ? "defeat"
+        : null;
   if (result === null) {
     return null;
   }

@@ -1,0 +1,116 @@
+schema-version = 1
+
+[battle]
+minimum-deck-size = 25
+player-opening-hand-size = 5
+enemy-opening-hand-size = 5
+score-targets = [10, 25]
+turn-limit = 50
+energy-cap = 10
+hand-limit = 10
+starting-side = "player"
+skip-player-opening-draw = true
+opponent-signature-card-count = 3
+
+[dreamwell]
+opening-orders = [0]
+recurring-orders = [1, 2, 3, 4]
+cards-per-recurring-order = 5
+minimum-constructed-length = 62
+
+[progression]
+ability-active-from-layer = 1
+dreamsigns-from-layer = 3
+legendaries-from-layer = 5
+starter-dilution = [10, 5]
+
+[coherent-draft]
+distinct-card-curve = { first = 14, last = 30 }
+removal-curve = { first = 2, last = 8 }
+temperature-curve = { first = 0.45, last = 0.12 }
+best-of = 4
+affiliation-objective-weight = 1
+pack-source-records = 48
+
+[coherent-draft.coherence]
+nearest-neighbors = 10
+neighbor-weight = 0.5
+cooccurrence-weight = 0.3
+self-consistency-weight = 0.2
+self-distractors = 12
+self-recall-k = 4
+
+[corpus-selection]
+affiliation-weight = 0.25
+top-ranked-sampling-window = 8
+
+[[journey-ai-deck]]
+card-id = "5a980eff-6ec7-44d8-9977-b98e66bbc2c8"
+count = 3
+
+[[journey-ai-deck]]
+card-id = "647f5150-b2e0-424b-9480-27557642524e"
+count = 3
+
+[[journey-ai-deck]]
+card-id = "e83014d3-9d35-4e80-a1b3-9b25360ad2af"
+count = 3
+
+[[journey-ai-deck]]
+card-id = "a28ad36d-fa74-4190-a463-7efd3a6233d0"
+count = 3
+
+[[journey-ai-deck]]
+card-id = "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"
+count = 3
+
+[[journey-ai-deck]]
+card-id = "5ab11bef-5dcd-49f5-be49-ae2ccde76e70"
+count = 3
+
+[[journey-ai-deck]]
+card-id = "4408b942-09a0-4f4e-a403-10c708c6e3c5"
+count = 3
+
+[[journey-ai-deck]]
+card-id = "2162742c-09d0-4e62-ae49-0f8f79b45adc"
+count = 3
+
+[[journey-ai-deck]]
+card-id = "910b4cf9-dec7-4e03-af4f-7d5ae342eeba"
+count = 3
+
+[[journey-ai-deck]]
+card-id = "944e15d2-d680-4ebe-8d18-36826f4b1535"
+count = 3
+
+[ai]
+journey-default-preset = "standard"
+tutorial-default-preset = "standard"
+
+[ai.evaluation]
+score-difference-weight = 10
+front-rank-spark-weight = 1
+back-rank-spark-weight = 0.5
+hand-card-weight = 1.5
+value-hint-weight = 1
+energy-waste-weight = 0.25
+expected-points-weight = 1
+
+[ai.opponent-model]
+removal-prior = 0.1
+sample-safety-cap = 16
+
+[ai.opponent-model.response-archetype-priors]
+no-blocks = 1
+block-biggest = 2
+trade-evenly = 3
+
+[[ai.presets]]
+id = "standard"
+beam-width = 12
+opponent-mode = "expectiminimax"
+sample-count = 8
+search-depth = 16
+journey-planning-budget-ms = 100
+tutorial-expansion-budget = 256

@@ -3,6 +3,10 @@ import type { AiTargetChoice } from "./cards/index";
 import { CHARACTER_CARD_NUMBERS } from "./cards/card-numbers";
 import { evaluate } from "./evaluate";
 import { scoreAgainstOpponent, type OpponentMode } from "./opponent-model";
+import type {
+  AiEvaluationWeights,
+  AiOpponentModelTuning,
+} from "../../types/opponents-data";
 import {
   centerPreferredEmptyModelSlot,
   cloneForwardModel,
@@ -64,6 +68,11 @@ export interface PlannerOptions {
    * action from the same confirmed fold.
    */
   expansionBudget?: number;
+  scoreToWin: number;
+  maxSearchDepth?: number;
+  evaluation: AiEvaluationWeights;
+  opponentModel: AiOpponentModelTuning;
+  aiPresetId?: string;
 }
 
 // --- Card classification --------------------------------------------------
@@ -119,9 +128,17 @@ function hasCommittedChallenger(model: ForwardModel): boolean {
 
 function scorePlan(model: ForwardModel, opts: PlannerOptions): number {
   if (hasCommittedChallenger(model)) {
-    return scoreAgainstOpponent(model, opts.opponentMode, opts.sampleCap, opts.rngSeed);
+    return scoreAgainstOpponent(
+      model,
+      opts.opponentMode,
+      opts.sampleCap,
+      opts.rngSeed,
+      opts.scoreToWin,
+      opts.evaluation,
+      opts.opponentModel,
+    );
   }
-  return evaluate(model);
+  return evaluate(model, opts.scoreToWin, opts.evaluation);
 }
 
 // --- Candidate generation -------------------------------------------------
@@ -138,7 +155,9 @@ function applyAction(model: ForwardModel, action: PlanAction): void {
       return;
     }
     // Re-locate the live card instance in the clone's hand by id.
-    const live = model.aiHand.find((c) => c.battleCardId === action.card.battleCardId);
+    const live = model.aiHand.find(
+      (c) => c.battleCardId === action.card.battleCardId,
+    );
     const self = live ?? action.card;
     cardModel.play(model, self, action.targets);
     return;
@@ -310,7 +329,6 @@ function actionSortKey(action: PlanAction): string {
  * reposition fills a front-rank slot), so the search terminates well before
  * this; the cap is a belt-and-suspenders guard.
  */
-const MAX_DEPTH = 16;
 
 /**
  * Expands every partial plan in `beam` by one action and returns the next beam
@@ -364,14 +382,19 @@ function expandBeamRound(
       const score = scorePlan(nextModel, opts);
       // Keep EVERY legal expansion — non-improving steps included — so a later
       // payoff in the same turn can still be discovered.
-      const child: BeamEntry = { model: nextModel, actions: [...entry.actions, action], score };
+      const child: BeamEntry = {
+        model: nextModel,
+        actions: [...entry.actions, action],
+        score,
+      };
       expansions.push(child);
       expansionCount += 1;
       // Track the best complete plan across the whole search. Tie-break on the
       // plan's action path so identical inputs pick the same plan.
       if (
         score > nextBest.score ||
-        (score === nextBest.score && planSortKey(child).localeCompare(planSortKey(nextBest)) < 0)
+        (score === nextBest.score &&
+          planSortKey(child).localeCompare(planSortKey(nextBest)) < 0)
       ) {
         nextBest = child;
       }
@@ -393,7 +416,10 @@ function expandBeamRound(
   };
 }
 
-function keepBestBeam(expansions: BeamEntry[], opts: PlannerOptions): BeamEntry[] {
+function keepBestBeam(
+  expansions: BeamEntry[],
+  opts: PlannerOptions,
+): BeamEntry[] {
   expansions.sort((a, b) => {
     if (b.score !== a.score) {
       return b.score - a.score;
@@ -413,7 +439,10 @@ function keepBestBeam(expansions: BeamEntry[], opts: PlannerOptions): BeamEntry[
  * highest-scoring node encountered anywhere in the tree (the root/END_TURN
  * baseline included) and returns its action list.
  */
-function searchBestPlan(rootModel: ForwardModel, opts: PlannerOptions): PlanAction[] {
+function searchBestPlan(
+  rootModel: ForwardModel,
+  opts: PlannerOptions,
+): PlanAction[] {
   const rootScore = scorePlan(rootModel, opts);
   const root: BeamEntry = { model: rootModel, actions: [], score: rootScore };
 
@@ -429,7 +458,8 @@ function searchBestPlan(rootModel: ForwardModel, opts: PlannerOptions): PlanActi
   let beam: BeamEntry[] = [root];
   let expansionsRemaining = opts.expansionBudget ?? Number.POSITIVE_INFINITY;
 
-  for (let depth = 0; depth < MAX_DEPTH; depth += 1) {
+  const maxDepth = opts.maxSearchDepth ?? 16;
+  for (let depth = 0; depth < maxDepth; depth += 1) {
     if (deadlineApproached(opts) || expansionsRemaining <= 0) {
       break;
     }
@@ -469,7 +499,8 @@ async function searchBestPlanAsync(
   let beam: BeamEntry[] = [root];
   let expansionsRemaining = opts.expansionBudget ?? Number.POSITIVE_INFINITY;
 
-  for (let depth = 0; depth < MAX_DEPTH; depth += 1) {
+  const maxDepth = opts.maxSearchDepth ?? 16;
+  for (let depth = 0; depth < maxDepth; depth += 1) {
     // Yield before each round after the first so the main thread is released
     // between rounds rather than blocked for the whole search.
     if (depth > 0) {
@@ -507,12 +538,13 @@ function deadlineApproached(opts: PlannerOptions): boolean {
 
 // --- Trace + result assembly ----------------------------------------------
 
-function endTurnAction(): PlannedAction {
+function endTurnAction(aiPresetId?: string): PlannedAction {
   return {
     stage: "endTurn",
     kind: "END_TURN",
     targets: null,
     trace: {
+      ...(aiPresetId === undefined ? {} : { aiPresetId }),
       stage: "endTurn",
       choice: "END_TURN",
       battleCardId: null,
@@ -551,6 +583,7 @@ function buildPlannedAction(
     targets: action.targets,
     toSlot: action.toSlot ?? undefined,
     trace: {
+      ...(opts.aiPresetId === undefined ? {} : { aiPresetId: opts.aiPresetId }),
       stage: action.stage,
       choice: action.kind,
       battleCardId: action.card.battleCardId,
@@ -571,17 +604,20 @@ function buildPlannedAction(
  * of the best plan (receding horizon). Always returns a valid action and never
  * throws: a passed deadline or an empty best plan yields `END_TURN`.
  */
-export function planNextAction(model: ForwardModel, opts: PlannerOptions): PlannedAction {
+export function planNextAction(
+  model: ForwardModel,
+  opts: PlannerOptions,
+): PlannedAction {
   // Deadline guard: if the injected clock has already reached the deadline,
   // short-circuit to END_TURN before any expensive expansion. (No partial plan
   // has been committed at this point, so END_TURN is the best-so-far.)
   if (deadlineApproached(opts)) {
-    return endTurnAction();
+    return endTurnAction(opts.aiPresetId);
   }
 
   const plan = searchBestPlan(model, opts);
   if (plan.length === 0) {
-    return endTurnAction();
+    return endTurnAction(opts.aiPresetId);
   }
   return buildPlannedAction(model, plan[0], opts);
 }
@@ -598,12 +634,12 @@ export async function planNextActionAsync(
   yieldFn: () => Promise<void>,
 ): Promise<PlannedAction> {
   if (deadlineApproached(opts)) {
-    return endTurnAction();
+    return endTurnAction(opts.aiPresetId);
   }
 
   const plan = await searchBestPlanAsync(model, opts, yieldFn);
   if (plan.length === 0) {
-    return endTurnAction();
+    return endTurnAction(opts.aiPresetId);
   }
   return buildPlannedAction(model, plan[0], opts);
 }

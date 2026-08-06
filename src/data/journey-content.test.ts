@@ -15,6 +15,7 @@ import {
 } from "../draft/replay/draft-records";
 import { asCardId, asCardName } from "../types/card-identity";
 import { MINIMAL_ATLAS_DATA } from "../__test-helpers__/atlas-fixtures";
+import { opponentsFixture } from "../testing/opponents-fixture";
 
 function makeCard(cardNumber: number): CardData {
   return {
@@ -37,7 +38,10 @@ function makeCards(count: number): CardData[] {
   return Array.from({ length: count }, (_value, index) => makeCard(index + 1));
 }
 
-function makeValidDraftRecord(id: string, mainboard: readonly string[]): DraftRecord {
+function makeValidDraftRecord(
+  id: string,
+  mainboard: readonly string[],
+): DraftRecord {
   return {
     id,
     draftId: `draft-${id}`,
@@ -129,7 +133,10 @@ describe("loadJourneyContent", () => {
           });
         }
         if (path === "/cards_v2-data.json") {
-          return Promise.resolve({ ok: true, json: () => Promise.resolve(cards) });
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve(cards),
+          });
         }
         if (path === "/dream-avatars-v2-data.json") {
           return Promise.resolve({
@@ -215,6 +222,12 @@ describe("loadJourneyContent", () => {
             json: () => Promise.resolve(economyFixture()),
           });
         }
+        if (path === "/opponents-data.json") {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve(opponentsFixture()),
+          });
+        }
         // Any other asset the loader requests is an optional, variant-specific
         // artifact (a tides bundle, dreamsign profiles, etc.). Returning a 404
         // here keeps these tests focused on the shared load path.
@@ -251,8 +264,12 @@ describe("loadJourneyContent", () => {
     expect(content.cardDatabase.size).toBe(cards.length);
     expect(content.dreamAvatars).toHaveLength(1);
     // The DreamAvatar mapping must carry the V2 signature cards through.
-    expect(content.dreamAvatars[0].signatureCards).toEqual(["Card 1", "Card 2"]);
+    expect(content.dreamAvatars[0].signatureCards).toEqual([
+      "Card 1",
+      "Card 2",
+    ]);
     expect(content.dreamAvatars[0].startingEssence).toBe(235);
+    expect(content.opponentsData).toEqual(opponentsFixture());
 
     // The pool context indexes every loaded card by id and carries the decklists.
     expect(content.poolContext).toBeDefined();
@@ -270,29 +287,33 @@ describe("loadJourneyContent", () => {
     ["/draft-records-data.json", "Failed to load draft records"],
     ["/known-good-decklists-data.json", "Failed to load known-good decklists"],
     ["/merchant-corpus-data.json", "Failed to load merchant corpus"],
-  ])("rejects when fold-relevant content fetch %s fails", async (path, message) => {
-    const cards = [makeCard(1), makeCard(2), makeCard(3)];
-    const dreamAvatars = [
-      {
-        id: "dc-a",
-        name: "Alpha",
-        title: "A",
-        renderedText: "",
-        imageNumber: "0001",
-        startingEssence: 250,
-        signatureCards: ["Card 1"],
-      },
-    ];
-    stubFetch({
-      cards,
-      dreamAvatars,
-      dreamsigns: [],
-      decklists: [["Card 1", "Card 2"]],
-      failingPaths: [path],
-    });
+    ["/opponents-data.json", "Failed to load opponent data"],
+  ])(
+    "rejects when fold-relevant content fetch %s fails",
+    async (path, message) => {
+      const cards = [makeCard(1), makeCard(2), makeCard(3)];
+      const dreamAvatars = [
+        {
+          id: "dc-a",
+          name: "Alpha",
+          title: "A",
+          renderedText: "",
+          imageNumber: "0001",
+          startingEssence: 250,
+          signatureCards: ["Card 1"],
+        },
+      ];
+      stubFetch({
+        cards,
+        dreamAvatars,
+        dreamsigns: [],
+        decklists: [["Card 1", "Card 2"]],
+        failingPaths: [path],
+      });
 
-    await expect(loadJourneyContent()).rejects.toThrow(message);
-  });
+      await expect(loadJourneyContent()).rejects.toThrow(message);
+    },
+  );
 
   it("fetches the draft-record corpus for pick-data pool variants", async () => {
     // pickearly (like pickfit/pickpos/pickchoice) grows its pool from the draft
@@ -484,24 +505,30 @@ describe("loadJourneyContent", () => {
     const cards = [makeCard(1), makeCard(2)];
     const economy = economyFixture();
     economy.journey.defaultStartingEssence = 137;
-    const dreamAvatars = [{
-      id: "dc-defaulted",
-      name: "Defaulted",
-      title: "D",
-      renderedText: "",
-      imageNumber: "0001",
-      signatureCards: ["Card 1"],
-    }];
+    const dreamAvatars = [
+      {
+        id: "dc-defaulted",
+        name: "Defaulted",
+        title: "D",
+        renderedText: "",
+        imageNumber: "0001",
+        signatureCards: ["Card 1"],
+      },
+    ];
     stubFetch({ cards, dreamAvatars, dreamsigns: [], decklists: [["Card 1"]] });
     const catalogFetch = vi.mocked(fetch).getMockImplementation()!;
     vi.mocked(fetch).mockImplementation((input: string | URL | Request) => {
-      const path = typeof input === "string"
-        ? input
-        : input instanceof URL
-          ? input.href
-          : input.url;
+      const path =
+        typeof input === "string"
+          ? input
+          : input instanceof URL
+            ? input.href
+            : input.url;
       return path === "/economy-data.json"
-        ? Promise.resolve({ ok: true, json: () => Promise.resolve(economy) } as Response)
+        ? Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve(economy),
+          } as Response)
         : catalogFetch(input);
     });
 
@@ -649,7 +676,12 @@ describe("buildReplayDraftState", () => {
     const dc = makeDreamAvatar([]);
     const ids = new Set<string>();
     for (let i = 0; i < 20; i += 1) {
-      const state = buildReplayDraftState(dc, idIndex, `seed-${String(i)}`, records);
+      const state = buildReplayDraftState(
+        dc,
+        idIndex,
+        `seed-${String(i)}`,
+        records,
+      );
       ids.add(state.recordId);
     }
     // Both records must appear across the 20 seeds (probability of failure ≈ 2^-19).
@@ -723,9 +755,18 @@ describe("buildReplayDraftState", () => {
 
   it("with a fitModel whose idf has no weight for any signature, falls back to uniform", () => {
     // All idf weights are 0 for the signature cards.
-    const fitModel = makeFitModelStub([[card1.id, 0], [card2.id, 0]]);
+    const fitModel = makeFitModelStub([
+      [card1.id, 0],
+      [card2.id, 0],
+    ]);
     const dc = makeDreamAvatar([card1.id, card2.id]);
-    const state1 = buildReplayDraftState(dc, idIndex, "journey-fm-2", records, fitModel);
+    const state1 = buildReplayDraftState(
+      dc,
+      idIndex,
+      "journey-fm-2",
+      records,
+      fitModel,
+    );
     const state2 = buildReplayDraftState(dc, idIndex, "journey-fm-2", records);
     // Both should pick the same record (uniform fallback in both cases).
     expect(state1.recordId).toBe(state2.recordId);

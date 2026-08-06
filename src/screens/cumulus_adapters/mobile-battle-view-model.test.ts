@@ -19,6 +19,8 @@ import {
   resolvePendingPrompt,
 } from "../../rules/battle/driver";
 import type { EventContext } from "../../eventlog/types";
+import { opponentsFixture } from "../../testing/opponents-fixture";
+import { resolveBattleAiConfiguration } from "../../types/opponents-data";
 
 const ENEMY_DREAM_AVATAR: BattleDreamAvatarSummary = {
   id: "enemy-dream-avatar-uuid",
@@ -63,6 +65,13 @@ function makeInit(): BattleInit {
     scoreToWin: 10,
     turnLimit: 12,
     maxEnergyCap: 8,
+    handLimit: 7,
+    opponentsContentHash: opponentsFixture().contentHash,
+    opponentAbilityActive: true,
+    aiConfiguration: resolveBattleAiConfiguration(
+      opponentsFixture(),
+      "journey",
+    ),
     startingSide: "player",
     playerDrawSkipsTurnOne: true,
     journeyDeckEntries: [],
@@ -295,10 +304,15 @@ describe("buildMobileBattleView", () => {
       Array.from({ length: 9 }, (_unused, index) => `F${String(index)}`),
     );
     expect(view.nearHand.cardIds).toEqual(board.sides.enemy.hand);
-    expect(view.nearHand.cards.map((card) => card.id)).toEqual(board.sides.enemy.hand);
+    expect(view.nearHand.cards.map((card) => card.id)).toEqual(
+      board.sides.enemy.hand,
+    );
     expect(view.farHand.cardIds).toEqual(board.sides.player.hand);
     expect(view.farHand.cards).toEqual([]);
-    expect(view.result).toMatchObject({ outcome: "victory", essenceReward: 30 });
+    expect(view.result).toMatchObject({
+      outcome: "victory",
+      essenceReward: 30,
+    });
   });
 
   it("rebuilds complete card status from the committed battle instance", () => {
@@ -885,7 +899,11 @@ describe("buildMobileBattleView", () => {
   });
 
   it("replaces the opening opponent ability with dormant hover copy", () => {
-    const init = { ...makeInit(), completionLevelAtStart: 0 };
+    const init = {
+      ...makeInit(),
+      completionLevelAtStart: 0,
+      opponentAbilityActive: false,
+    };
     const board = makeBoard(init);
     const view = buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR);
 

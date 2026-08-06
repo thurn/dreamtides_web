@@ -1,9 +1,5 @@
 import { actionToCommands } from "./ai/driver";
-import {
-  planBlockingWithDecision,
-  type BlockingDecision,
-} from "./ai/blocking";
-import { AI_DIFFICULTY_V1 } from "./ai/difficulty";
+import { planBlockingWithDecision, type BlockingDecision } from "./ai/blocking";
 import { forwardModelFromState } from "./ai/forward-model";
 import { planNextAction } from "./ai/planner";
 import { buildTrace } from "./ai/trace";
@@ -20,15 +16,8 @@ import type { PromptResolution } from "../rules/battle/effect-runner-core";
 import { battleModeOf, type PendingPrompt } from "../rules/battle/fold";
 import type { FoldState } from "../rules/fold-state";
 
-/** Fixed search work for tutorial AI. It is intentionally independent of time. */
-export const TUTORIAL_AI_EXPANSION_BUDGET = 256;
-
 export type TutorialDriverStatus =
-  | "not-tutorial"
-  | "driver"
-  | "observer"
-  | "paused-driver-absent"
-  | "terminal";
+  "not-tutorial" | "driver" | "observer" | "paused-driver-absent" | "terminal";
 
 export interface TutorialBattleControllerInput {
   /** The confirmed room fold only; optimistic state must never drive automation. */
@@ -48,7 +37,12 @@ export interface TutorialAiActionOverrideMiss {
 }
 
 export type TutorialAutomaticIntent = (
-  | { kind: "battle-command"; command: BattleCommand; intentKey: string; reason: string }
+  | {
+      kind: "battle-command";
+      command: BattleCommand;
+      intentKey: string;
+      reason: string;
+    }
   | {
       kind: "battle-play-card";
       battleCardId: string;
@@ -63,7 +57,12 @@ export type TutorialAutomaticIntent = (
       intentKey: string;
       reason: string;
     }
-  | { kind: "battle-gesture"; commands: readonly BattleCommand[]; intentKey: string; reason: string }
+  | {
+      kind: "battle-gesture";
+      commands: readonly BattleCommand[];
+      intentKey: string;
+      reason: string;
+    }
   | {
       kind: "battle-ai-block";
       decision: BlockingDecision;
@@ -76,7 +75,13 @@ export type TutorialAutomaticIntent = (
       intentKey: string;
       reason: string;
     }
-  | { kind: "resolve-prompt"; promptId: number; resolution: PromptResolution; intentKey: string; reason: string }
+  | {
+      kind: "resolve-prompt";
+      promptId: number;
+      resolution: PromptResolution;
+      intentKey: string;
+      reason: string;
+    }
 ) & { aiActionOverrideMiss?: TutorialAiActionOverrideMiss };
 
 export interface TutorialBattleControllerPlan {
@@ -115,9 +120,7 @@ export function planTutorialBattleController(
   if (!isDriverPresent) {
     return {
       status:
-        battle.board.result === null
-          ? "paused-driver-absent"
-          : "terminal",
+        battle.board.result === null ? "paused-driver-absent" : "terminal",
       driverClientId: controllerClientId,
       isCurrentClientDriver,
       isDriverPresent,
@@ -129,10 +132,24 @@ export function planTutorialBattleController(
     battle.board.result !== null &&
     (presentation === null || !isCurrentClientDriver)
   ) {
-    return { status: "terminal", driverClientId: controllerClientId, isCurrentClientDriver, isDriverPresent, requiresHumanDecision: false, intent: null };
+    return {
+      status: "terminal",
+      driverClientId: controllerClientId,
+      isCurrentClientDriver,
+      isDriverPresent,
+      requiresHumanDecision: false,
+      intent: null,
+    };
   }
   if (!isCurrentClientDriver) {
-    return { status: "observer", driverClientId: controllerClientId, isCurrentClientDriver, isDriverPresent, requiresHumanDecision: false, intent: null };
+    return {
+      status: "observer",
+      driverClientId: controllerClientId,
+      isCurrentClientDriver,
+      isDriverPresent,
+      requiresHumanDecision: false,
+      intent: null,
+    };
   }
 
   if (presentation !== null) {
@@ -151,17 +168,33 @@ export function planTutorialBattleController(
     };
   }
   if (battle.board.result !== null) {
-    return { status: "terminal", driverClientId: controllerClientId, isCurrentClientDriver, isDriverPresent, requiresHumanDecision: false, intent: null };
+    return {
+      status: "terminal",
+      driverClientId: controllerClientId,
+      isCurrentClientDriver,
+      isDriverPresent,
+      requiresHumanDecision: false,
+      intent: null,
+    };
   }
 
   const prompt = battle.pendingPrompt;
   if (prompt !== null) {
     if (prompt.run.side === "player") {
-      return { status: "driver", driverClientId: controllerClientId, isCurrentClientDriver: true, isDriverPresent: true, requiresHumanDecision: true, intent: null };
+      return {
+        status: "driver",
+        driverClientId: controllerClientId,
+        isCurrentClientDriver: true,
+        isDriverPresent: true,
+        requiresHumanDecision: true,
+        intent: null,
+      };
     }
     return {
       status: "driver",
-      driverClientId: controllerClientId, isCurrentClientDriver: true, isDriverPresent: true,
+      driverClientId: controllerClientId,
+      isCurrentClientDriver: true,
+      isDriverPresent: true,
       requiresHumanDecision: false,
       intent: promptIntent(battle.board.battleId, prompt),
     };
@@ -172,14 +205,22 @@ export function planTutorialBattleController(
   if (board.phase === "dawn") {
     if (battle.triggerDawnFired?.[board.activeSide] !== board.turnNumber) {
       return commandPlan(
-        { id: "DEBUG_EDIT", edit: { kind: "SET_PHASE", phase: "dawn" }, sourceSurface: "auto-system" },
+        {
+          id: "DEBUG_EDIT",
+          edit: { kind: "SET_PHASE", phase: "dawn" },
+          sourceSurface: "auto-system",
+        },
         `${key}:dawn:triggers`,
         "resolve-dawn-triggers",
         controllerClientId,
       );
     }
     return commandPlan(
-      { id: "DEBUG_EDIT", edit: { kind: "SET_PHASE", phase: "day" }, sourceSurface: "auto-system" },
+      {
+        id: "DEBUG_EDIT",
+        edit: { kind: "SET_PHASE", phase: "day" },
+        sourceSurface: "auto-system",
+      },
       `${key}:dawn:day`,
       "advance-dawn",
       controllerClientId,
@@ -188,14 +229,26 @@ export function planTutorialBattleController(
   if (board.phase === "dreamwell") {
     if (board.sides[board.activeSide].dreamwellDrawnTurn !== board.turnNumber) {
       return commandPlan(
-      { id: "DEBUG_EDIT", edit: { kind: "DRAW_DREAMWELL_CARD", side: board.activeSide, turnNumber: board.turnNumber }, sourceSurface: "auto-system" },
-      `${key}:dreamwell:reveal`,
-      "reveal-dreamwell",
-      controllerClientId,
+        {
+          id: "DEBUG_EDIT",
+          edit: {
+            kind: "DRAW_DREAMWELL_CARD",
+            side: board.activeSide,
+            turnNumber: board.turnNumber,
+          },
+          sourceSurface: "auto-system",
+        },
+        `${key}:dreamwell:reveal`,
+        "reveal-dreamwell",
+        controllerClientId,
       );
     }
     return commandPlan(
-      { id: "DEBUG_EDIT", edit: { kind: "SET_PHASE", phase: "dawn" }, sourceSurface: "auto-system" },
+      {
+        id: "DEBUG_EDIT",
+        edit: { kind: "SET_PHASE", phase: "dawn" },
+        sourceSurface: "auto-system",
+      },
       `${key}:dreamwell:dawn`,
       "advance-dreamwell",
       controllerClientId,
@@ -204,7 +257,14 @@ export function planTutorialBattleController(
 
   if (board.activeSide === "player") {
     if (board.phase === "day" || board.phase === "night") {
-      return { status: "driver", driverClientId: controllerClientId, isCurrentClientDriver: true, isDriverPresent: true, requiresHumanDecision: true, intent: null };
+      return {
+        status: "driver",
+        driverClientId: controllerClientId,
+        isCurrentClientDriver: true,
+        isDriverPresent: true,
+        requiresHumanDecision: true,
+        intent: null,
+      };
     }
     const aiBlockingAlreadyProcessed =
       battle.aiBlockingTurn?.activeSide === board.activeSide &&
@@ -216,7 +276,9 @@ export function planTutorialBattleController(
       );
       return {
         status: "driver",
-        driverClientId: controllerClientId, isCurrentClientDriver: true, isDriverPresent: true,
+        driverClientId: controllerClientId,
+        isCurrentClientDriver: true,
+        isDriverPresent: true,
         requiresHumanDecision: false,
         intent: {
           kind: "battle-ai-block",
@@ -228,7 +290,11 @@ export function planTutorialBattleController(
     }
     if (board.phase === "dusk") {
       return commandPlan(
-        { id: "DEBUG_EDIT", edit: { kind: "SET_PHASE", phase: "night" }, sourceSurface: "auto-system" },
+        {
+          id: "DEBUG_EDIT",
+          edit: { kind: "SET_PHASE", phase: "night" },
+          sourceSurface: "auto-system",
+        },
         `${key}:night`,
         "advance-player-dusk",
         controllerClientId,
@@ -290,12 +356,12 @@ export function planTutorialBattleController(
           ...(destination === null
             ? {}
             : {
-              characterDestination: {
-                side: "enemy",
-                zone: "backRank",
-                slotId: destinationSlotId as `B${number}`,
-              },
-            }),
+                characterDestination: {
+                  side: "enemy",
+                  zone: "backRank",
+                  slotId: destinationSlotId as `B${number}`,
+                },
+              }),
           tutorialAiActionOverrideId: scripted.override.id,
           intentKey: `${key}:enemy-scripted-play:${scripted.override.id}`,
           reason: "enemy-scripted-day-play",
@@ -313,20 +379,28 @@ export function planTutorialBattleController(
             reason: scriptedPlan.reason,
           }
         : undefined;
+    const aiConfiguration = battle.init.aiConfiguration;
     const action = planNextAction(forwardModelFromState(board, "enemy"), {
       deadlineMs: Number.POSITIVE_INFINITY,
       nowMs: 0,
-      expansionBudget: TUTORIAL_AI_EXPANSION_BUDGET,
-      beamWidth: AI_DIFFICULTY_V1.beamWidth,
-      opponentMode: AI_DIFFICULTY_V1.opponentMode,
-      sampleCap: AI_DIFFICULTY_V1.sampleCap,
+      expansionBudget: aiConfiguration.tutorialExpansionBudget,
+      beamWidth: aiConfiguration.beamWidth,
+      opponentMode: aiConfiguration.opponentMode,
+      sampleCap: aiConfiguration.sampleCount,
+      maxSearchDepth: aiConfiguration.searchDepth,
+      scoreToWin: battle.init.scoreToWin,
+      evaluation: aiConfiguration.evaluation,
+      opponentModel: aiConfiguration.opponentModel,
+      aiPresetId: aiConfiguration.id,
       rngSeed: tutorialPlannerSeed(board.battleId, board.turnNumber),
     });
     const trace = buildTrace(action);
     if (action.kind === "PLAY_CARD" && action.self !== undefined) {
-      const targets = action.targets?.targetBattleCardId === null || action.targets?.targetBattleCardId === undefined
-        ? []
-        : [action.targets.targetBattleCardId];
+      const targets =
+        action.targets?.targetBattleCardId === null ||
+        action.targets?.targetBattleCardId === undefined
+          ? []
+          : [action.targets.targetBattleCardId];
       const plannedSlot = action.toSlot;
       const characterDestination =
         plannedSlot !== undefined && isBackRankSlotId(plannedSlot)
@@ -338,14 +412,18 @@ export function planTutorialBattleController(
           : undefined;
       return {
         status: "driver",
-      driverClientId: controllerClientId, isCurrentClientDriver: true, isDriverPresent: true,
+        driverClientId: controllerClientId,
+        isCurrentClientDriver: true,
+        isDriverPresent: true,
         requiresHumanDecision: false,
         intent: {
           kind: "battle-play-card",
           battleCardId: action.self.battleCardId,
           targetBattleCardIds: targets,
           aiChoices: [trace],
-          ...(characterDestination === undefined ? {} : { characterDestination }),
+          ...(characterDestination === undefined
+            ? {}
+            : { characterDestination }),
           ...(aiActionOverrideMiss === undefined
             ? {}
             : { aiActionOverrideMiss }),
@@ -358,11 +436,15 @@ export function planTutorialBattleController(
       const commands = actionToCommands(action, "enemy");
       return {
         status: "driver",
-        driverClientId: controllerClientId, isCurrentClientDriver: true, isDriverPresent: true,
+        driverClientId: controllerClientId,
+        isCurrentClientDriver: true,
+        isDriverPresent: true,
         requiresHumanDecision: false,
         intent: {
           kind: "battle-gesture",
-          commands: commands.map((command, index) => index === 0 ? { ...command, aiChoices: [trace] } : command),
+          commands: commands.map((command, index) =>
+            index === 0 ? { ...command, aiChoices: [trace] } : command,
+          ),
           ...(aiActionOverrideMiss === undefined
             ? {}
             : { aiActionOverrideMiss }),
@@ -372,7 +454,12 @@ export function planTutorialBattleController(
       };
     }
     return commandPlan(
-      { id: "DEBUG_EDIT", edit: { kind: "SET_PHASE", phase: "dusk" }, sourceSurface: "auto-system", aiChoices: [trace] },
+      {
+        id: "DEBUG_EDIT",
+        edit: { kind: "SET_PHASE", phase: "dusk" },
+        sourceSurface: "auto-system",
+        aiChoices: [trace],
+      },
       `${key}:enemy-day-complete`,
       "enemy-day-complete",
       controllerClientId,
@@ -381,13 +468,27 @@ export function planTutorialBattleController(
   }
 
   if (board.phase === "dusk" && enemyHasChallenger(input.state)) {
-    return { status: "driver", driverClientId: controllerClientId, isCurrentClientDriver: true, isDriverPresent: true, requiresHumanDecision: true, intent: null };
+    return {
+      status: "driver",
+      driverClientId: controllerClientId,
+      isCurrentClientDriver: true,
+      isDriverPresent: true,
+      requiresHumanDecision: true,
+      intent: null,
+    };
   }
   return handoffPlan(input.state, "advance-enemy-no-choice-phase");
 }
 
 function idlePlan(status: "not-tutorial"): TutorialBattleControllerPlan {
-  return { status, driverClientId: null, isCurrentClientDriver: false, isDriverPresent: false, requiresHumanDecision: false, intent: null };
+  return {
+    status,
+    driverClientId: null,
+    isCurrentClientDriver: false,
+    isDriverPresent: false,
+    requiresHumanDecision: false,
+    intent: null,
+  };
 }
 
 function commandPlan(
@@ -408,14 +509,15 @@ function commandPlan(
       command,
       intentKey,
       reason,
-      ...(aiActionOverrideMiss === undefined
-        ? {}
-        : { aiActionOverrideMiss }),
+      ...(aiActionOverrideMiss === undefined ? {} : { aiActionOverrideMiss }),
     },
   };
 }
 
-function handoffPlan(state: FoldState, reason: string): TutorialBattleControllerPlan {
+function handoffPlan(
+  state: FoldState,
+  reason: string,
+): TutorialBattleControllerPlan {
   const battle = state.battle;
   if (battle === null) return idlePlan("not-tutorial");
   const flowEdit = planHandoff({
@@ -432,7 +534,10 @@ function handoffPlan(state: FoldState, reason: string): TutorialBattleController
   );
 }
 
-function promptIntent(battleId: string, prompt: PendingPrompt): TutorialAutomaticIntent {
+function promptIntent(
+  battleId: string,
+  prompt: PendingPrompt,
+): TutorialAutomaticIntent {
   return {
     kind: "resolve-prompt",
     promptId: prompt.promptId,
@@ -442,12 +547,16 @@ function promptIntent(battleId: string, prompt: PendingPrompt): TutorialAutomati
   };
 }
 
-function deterministicPromptResolution(prompt: PendingPrompt): PromptResolution {
+function deterministicPromptResolution(
+  prompt: PendingPrompt,
+): PromptResolution {
   switch (prompt.options.kind) {
     case "pick-cards":
       return {
         kind: "pick-cards",
-        chosenIds: [...prompt.options.candidateIds].sort().slice(0, prompt.options.count),
+        chosenIds: [...prompt.options.candidateIds]
+          .sort()
+          .slice(0, prompt.options.count),
       };
     case "choice":
       return { kind: "choice", optionIndex: 0 };
@@ -464,10 +573,17 @@ function deterministicPromptResolution(prompt: PendingPrompt): PromptResolution 
 function enemyHasChallenger(state: FoldState): boolean {
   const board = state.battle?.board;
   if (board === undefined) return false;
-  return Object.values(board.sides.enemy.frontRank).some((battleCardId) => battleCardId !== null);
+  return Object.values(board.sides.enemy.frontRank).some(
+    (battleCardId) => battleCardId !== null,
+  );
 }
 
-function intentKeyPrefix(board: { battleId: string; activeSide: string; turnNumber: number; phase: string }): string {
+function intentKeyPrefix(board: {
+  battleId: string;
+  activeSide: string;
+  turnNumber: number;
+  phase: string;
+}): string {
   return `tutorial-battle:${board.battleId}:${board.activeSide}:${String(board.turnNumber)}:${board.phase}`;
 }
 

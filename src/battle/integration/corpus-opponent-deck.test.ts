@@ -14,10 +14,37 @@ import { getLogEntries, resetLog } from "../../logging";
 import { STARTER_CARD_NUMBERS } from "../../data/starter-cards";
 
 import {
-  STAGE_B_LAYER_SPEC,
-  buildCorpusOpponentDeck,
+  buildStageBLayerSpec,
+  buildCorpusOpponentDeck as buildConfiguredCorpusOpponentDeck,
   compareCodeUnits,
 } from "./corpus-opponent-deck";
+import { opponentsFixture } from "../../testing/opponents-fixture";
+
+const OPPONENTS = opponentsFixture();
+const STAGE_B_LAYER_SPEC = buildStageBLayerSpec(OPPONENTS.progression);
+
+type ConfiguredCorpusArgs = Parameters<
+  typeof buildConfiguredCorpusOpponentDeck
+>[0];
+type TestCorpusArgs = Omit<
+  ConfiguredCorpusArgs,
+  "opponentsContentHash" | "progression" | "selectionConfig"
+> &
+  Partial<
+    Pick<
+      ConfiguredCorpusArgs,
+      "opponentsContentHash" | "progression" | "selectionConfig"
+    >
+  >;
+
+function buildCorpusOpponentDeck(args: TestCorpusArgs) {
+  return buildConfiguredCorpusOpponentDeck({
+    opponentsContentHash: OPPONENTS.contentHash,
+    progression: OPPONENTS.progression,
+    selectionConfig: OPPONENTS.corpusSelection,
+    ...args,
+  });
+}
 
 // ---------------------------------------------------------------------------
 // Synthetic fixtures
@@ -356,7 +383,11 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
     // The selection axis is unaffected by Stage B tuning: baseCards still holds
     // the selected deck's distinct cards in order, and the source/topK reflect
     // the single candidate.
-    expect(result!.baseCards.map((c) => c.id)).toEqual([C.a.id, C.b.id, C.c.id]);
+    expect(result!.baseCards.map((c) => c.id)).toEqual([
+      C.a.id,
+      C.b.id,
+      C.c.id,
+    ]);
     expect(result!.source.id).toBe("d1");
     expect(result!.topK.map((t) => t.id)).toEqual(["d1"]);
   });
@@ -461,8 +492,18 @@ const STARTERS: CardData[] = STARTER_CARD_NUMBERS.map((num, i) =>
 
 /** Two Legendary cards (rarity "Legendary"). */
 const LEG = {
-  l1: makeCard("aaaa1111-0000-0000-0000-0000000000l1", 201, "Leg One", "Legendary"),
-  l2: makeCard("aaaa2222-0000-0000-0000-0000000000l2", 202, "Leg Two", "Legendary"),
+  l1: makeCard(
+    "aaaa1111-0000-0000-0000-0000000000l1",
+    201,
+    "Leg One",
+    "Legendary",
+  ),
+  l2: makeCard(
+    "aaaa2222-0000-0000-0000-0000000000l2",
+    202,
+    "Leg Two",
+    "Legendary",
+  ),
 };
 
 /**
@@ -508,12 +549,7 @@ const STAGE_B_DB = cardDb([...STARTERS, LEG.l1, LEG.l2, ...N, SIG, ...R]);
  * The target deck: the signature card, both legendaries, and all twelve
  * ordinary cards.
  */
-const STAGE_B_DECK_IDS = [
-  SIG.id,
-  LEG.l1.id,
-  LEG.l2.id,
-  ...N.map((c) => c.id),
-];
+const STAGE_B_DECK_IDS = [SIG.id, LEG.l1.id, LEG.l2.id, ...N.map((c) => c.id)];
 
 // Supporting corpus decks shape co-occurrence. The "core" cluster (n00..n05 +
 // the legendaries) appears together in many decks → high synergy. The "fringe"
@@ -525,7 +561,13 @@ const STAGE_B_DECKS: KnownGoodDecklist[] = [
   makeDecklist("target", STAGE_B_DECK_IDS, "Target Deck"),
   makeDecklist(
     "target2",
-    [SIG.id, LEG.l1.id, LEG.l2.id, ...N.map((c) => c.id), ...R.map((c) => c.id)],
+    [
+      SIG.id,
+      LEG.l1.id,
+      LEG.l2.id,
+      ...N.map((c) => c.id),
+      ...R.map((c) => c.id),
+    ],
     "Target Deck 2",
   ),
   makeDecklist("core1", [LEG.l1.id, N[0].id, N[1].id, N[2].id, N[3].id]),
@@ -569,10 +611,7 @@ const STAGE_B_SIGNATURES: ReadonlyMap<string, DreamsignSignature> = new Map([
       signatureCardIds: [N[11].id],
     },
   ],
-  [
-    DS_NEUTRAL,
-    { id: DS_NEUTRAL, category: "neutral", signatureCardIds: [] },
-  ],
+  [DS_NEUTRAL, { id: DS_NEUTRAL, category: "neutral", signatureCardIds: [] }],
 ]);
 
 const STAGE_B_TEMPLATES: DreamsignTemplate[] = [
@@ -651,7 +690,9 @@ describe("buildCorpusOpponentDeck Stage B (layer tuning)", () => {
   it("applies the ability flag per the schedule at every layer", () => {
     for (let layer = 0; layer < STAGE_B_LAYER_SPEC.length; layer += 1) {
       const result = buildAtLayer(layer);
-      expect(result.abilityActive).toBe(STAGE_B_LAYER_SPEC[layer].abilityActive);
+      expect(result.abilityActive).toBe(
+        STAGE_B_LAYER_SPEC[layer].abilityActive,
+      );
     }
   });
 
@@ -668,9 +709,9 @@ describe("buildCorpusOpponentDeck Stage B (layer tuning)", () => {
         // No legendary survives in the final deck.
         expect(finalLegendaries).toHaveLength(0);
         // Every base legendary was recorded as removed.
-        expect(result.modifications.legendariesRemoved.map((c) => c.id).sort()).toEqual(
-          baseLegendaries.map((c) => c.id).sort(),
-        );
+        expect(
+          result.modifications.legendariesRemoved.map((c) => c.id).sort(),
+        ).toEqual(baseLegendaries.map((c) => c.id).sort());
         // Replacements are non-legendary and not already used.
         for (const rep of result.modifications.legendaryReplacements) {
           expect(isLegendary(rep)).toBe(false);
@@ -710,7 +751,14 @@ describe("buildCorpusOpponentDeck Stage B (layer tuning)", () => {
     // the fringe cards (n06..n11) are designed to be the least-synergistic, so
     // any cut at a small N takes from the fringe, never the tightly-clustered
     // core cards (n00..n05).
-    const coreIds = new Set([N[0].id, N[1].id, N[2].id, N[3].id, N[4].id, N[5].id]);
+    const coreIds = new Set([
+      N[0].id,
+      N[1].id,
+      N[2].id,
+      N[3].id,
+      N[4].id,
+      N[5].id,
+    ]);
     for (const cut of result.modifications.cardsCut) {
       expect(coreIds.has(cut.id)).toBe(false);
     }
@@ -740,7 +788,10 @@ describe("buildCorpusOpponentDeck Stage B (layer tuning)", () => {
     // No tailored sign overlaps: only a neutral signature, and only the neutral
     // template is offered, so the neutral fallback is unambiguous.
     const onlyNeutral = new Map<string, DreamsignSignature>([
-      [DS_NEUTRAL, { id: DS_NEUTRAL, category: "neutral", signatureCardIds: [] }],
+      [
+        DS_NEUTRAL,
+        { id: DS_NEUTRAL, category: "neutral", signatureCardIds: [] },
+      ],
     ]);
     const result = buildAtLayer(startLayer, {
       dreamsignSignatures: onlyNeutral,
@@ -770,7 +821,9 @@ describe("buildCorpusOpponentDeck Stage B (layer tuning)", () => {
     for (let layer = 0; layer < STAGE_B_LAYER_SPEC.length; layer += 1) {
       const a = buildAtLayer(layer);
       const b = buildAtLayer(layer);
-      expect(a.finalCards.map((c) => c.id)).toEqual(b.finalCards.map((c) => c.id));
+      expect(a.finalCards.map((c) => c.id)).toEqual(
+        b.finalCards.map((c) => c.id),
+      );
       expect(a.dreamsign?.id ?? null).toBe(b.dreamsign?.id ?? null);
       expect(a.modifications.cardsCut.map((c) => c.id)).toEqual(
         b.modifications.cardsCut.map((c) => c.id),
@@ -792,11 +845,15 @@ describe("buildCorpusOpponentDeck Stage B starter-dilution size preservation (bo
   //   startersAdded.length === cardsCut.length
   //   no duplicate UUIDs in finalCards
 
-  function assertSizePreserved(result: ReturnType<typeof buildCorpusOpponentDeck>) {
+  function assertSizePreserved(
+    result: ReturnType<typeof buildCorpusOpponentDeck>,
+  ) {
     expect(result).not.toBeNull();
     const r = result!;
     expect(r.finalCards.length).toBe(r.baseCards.length);
-    expect(r.modifications.startersAdded.length).toBe(r.modifications.cardsCut.length);
+    expect(r.modifications.startersAdded.length).toBe(
+      r.modifications.cardsCut.length,
+    );
     const finalUuids = r.finalCards.map((c) => c.id.toLowerCase());
     expect(new Set(finalUuids).size).toBe(finalUuids.length);
   }
@@ -813,15 +870,31 @@ describe("buildCorpusOpponentDeck Stage B starter-dilution size preservation (bo
     // Guard: this test only makes sense if layer 0 has a dilution > 2.
     expect(layer0DilutionSpec.startersAdded).toBeGreaterThan(2);
 
-    const tinyCard1 = makeCard("fe000001-0000-0000-0000-000000000001", 9001, "Tiny A");
-    const tinyCard2 = makeCard("fe000002-0000-0000-0000-000000000002", 9002, "Tiny B");
-    const tinySig = makeCard("fe000003-0000-0000-0000-000000000003", 9003, "Tiny Sig");
+    const tinyCard1 = makeCard(
+      "fe000001-0000-0000-0000-000000000001",
+      9001,
+      "Tiny A",
+    );
+    const tinyCard2 = makeCard(
+      "fe000002-0000-0000-0000-000000000002",
+      9002,
+      "Tiny B",
+    );
+    const tinySig = makeCard(
+      "fe000003-0000-0000-0000-000000000003",
+      9003,
+      "Tiny Sig",
+    );
 
     // All STARTERS + the tiny cards must be in the database.
     const tinyDb = cardDb([...STARTERS, tinyCard1, tinyCard2, tinySig]);
 
     // Two decklists: target (only the tiny non-starters) and a filler for corpus.
-    const tinyDeck = makeDecklist("tiny", [tinySig.id, tinyCard1.id, tinyCard2.id]);
+    const tinyDeck = makeDecklist("tiny", [
+      tinySig.id,
+      tinyCard1.id,
+      tinyCard2.id,
+    ]);
     const fillerDeck = makeDecklist("filler", [tinyCard1.id, tinyCard2.id]);
 
     const result = buildCorpusOpponentDeck({
@@ -857,8 +930,16 @@ describe("buildCorpusOpponentDeck Stage B starter-dilution size preservation (bo
     // Build a deck: 1 sig card + 1 ordinary card + 1 starter already present.
     // This guarantees addable = total_starters - 1 < desired (at layer 0 desired
     // = total starters) — so the cap from addable.length kicks in.
-    const preseedSig = makeCard("fd000001-0000-0000-0000-000000000001", 9101, "PS Sig");
-    const preseedOrd = makeCard("fd000002-0000-0000-0000-000000000002", 9102, "PS Ord");
+    const preseedSig = makeCard(
+      "fd000001-0000-0000-0000-000000000001",
+      9101,
+      "PS Sig",
+    );
+    const preseedOrd = makeCard(
+      "fd000002-0000-0000-0000-000000000002",
+      9102,
+      "PS Ord",
+    );
     const preseededStarter = STARTERS[0]; // already in deck
 
     const preseedDb = cardDb([...STARTERS, preseedSig, preseedOrd]);

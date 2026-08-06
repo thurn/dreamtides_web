@@ -26,7 +26,7 @@ import { buildTransfigurationDisplay } from "../../transfiguration/transfigurati
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
 import type { BattleRng } from "../random";
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
-import { buildAiStarterDeck } from "../ai/deck";
+import { buildAiConfiguredDeck } from "../ai/deck";
 import {
   buildOpponentDeck,
   buildOpponentDreamsigns,
@@ -56,14 +56,17 @@ import type {
 import type { DreamwellCard } from "../../data/dreamwell-database";
 import type { TutorialTriggerDefinition } from "../../types/tutorial";
 import type { EconomyData } from "../../types/economy-data";
+import {
+  resolveBattleAiConfiguration,
+  type OpponentsData,
+} from "../../types/opponents-data";
+import { opponentAbilityIsActive } from "./opponent-deck";
 
 /**
  * Minimum journey deck size for a battle. A deck below this is padded with
  * whole-deck copies until it reaches the threshold, so a player who has not
  * drafted much still has a workable battle deck.
  */
-const MIN_BATTLE_DECK_SIZE = 25;
-
 /**
  * Pads a journey deck up to `MIN_BATTLE_DECK_SIZE` for battle by repeating
  * whole-deck copies (e.g. a 9-card deck becomes 27). Padded entries reuse the
@@ -73,18 +76,21 @@ const MIN_BATTLE_DECK_SIZE = 25;
  */
 function padBattleDeck(
   deck: readonly JourneyState["deck"][number][],
+  minimumDeckSize: number,
 ): JourneyState["deck"][number][] {
-  if (deck.length === 0 || deck.length >= MIN_BATTLE_DECK_SIZE) {
+  if (deck.length === 0 || deck.length >= minimumDeckSize) {
     return [...deck];
   }
   const padded = [...deck];
-  while (padded.length < MIN_BATTLE_DECK_SIZE) {
+  while (padded.length < minimumDeckSize) {
     padded.push(...deck);
   }
   return padded;
 }
 
 export interface CreateBattleInitInput {
+  /** Complete authored opponent and battle tuning for this folded battle. */
+  opponentsData: OpponentsData;
   /** Direct battle payout tuning. Omitted only by historical engine fixtures. */
   economyData?: EconomyData;
   battleEntryKey: string;
@@ -167,9 +173,9 @@ export interface CreateBattleInitInput {
   draftRecords?: readonly DraftRecord[];
   seedOverride?: number | null;
   /**
-   * When true, the enemy deck is built from the AI Starter deck
-   * ({@link buildAiStarterDeck}) instead of the run's steered pool. Used by the
-   * `?ai=1` runtime mode that pits the player against the battle AI opponent.
+   * When true, the enemy deck is built from the configured journey AI deck.
+   * Used by the `?ai=1` runtime mode that pits the player against the battle AI
+   * opponent.
    */
   aiMode?: boolean;
   /**
@@ -227,19 +233,22 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     dreamsignTemplates = [],
     seedOverride,
   } = input;
+  const opponentsData = input.opponentsData;
   const seed = resolveSeed(battleEntryKey, state.seed, seedOverride);
   const streams = createBattleRngStreams(seed);
   const journeyDeckEntries: readonly BattleJourneyDeckEntry[] = Object.freeze(
-    state.deck.map((entry) => Object.freeze({
-      entryId: entry.entryId,
-      cardNumber: entry.cardNumber,
-      transfiguration: entry.transfiguration,
-      ...(entry.typeChange == null ? {} : { typeChange: entry.typeChange }),
-      ...(entry.keywordModification == null
-        ? {}
-        : { keywordModification: entry.keywordModification }),
-      isBane: entry.isBane,
-    })),
+    state.deck.map((entry) =>
+      Object.freeze({
+        entryId: entry.entryId,
+        cardNumber: entry.cardNumber,
+        transfiguration: entry.transfiguration,
+        ...(entry.typeChange == null ? {} : { typeChange: entry.typeChange }),
+        ...(entry.keywordModification == null
+          ? {}
+          : { keywordModification: entry.keywordModification }),
+        isBane: entry.isBane,
+      }),
+    ),
   );
   const playerBattleEnergyCostReduction = state.battleModifiers.reduce(
     (total, modifier) =>
@@ -252,13 +261,18 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   // The journey deck is padded up to the minimum battle deck size before being
   // shuffled into the battle draw order. `journeyDeckEntries` above still
   // mirrors the unpadded journey deck.
-  const battleDeck = padBattleDeck(state.deck);
+  const battleDeck = padBattleDeck(
+    state.deck,
+    opponentsData.battle.minimumDeckSize,
+  );
   const playerDeckOrder = streams.playerDeckOrder
     .shuffle(battleDeck)
     .map((entry) => {
       const card = cardDatabase.get(entry.cardNumber);
       if (card === undefined) {
-        throw new Error(`Missing card data for journey deck entry #${String(entry.cardNumber)}`);
+        throw new Error(
+          `Missing card data for journey deck entry #${String(entry.cardNumber)}`,
+        );
       }
       return freezeBattleDeckCardDefinition(
         normalizePlayerDeckCard(entry, card, playerBattleEnergyCostReduction),
@@ -276,7 +290,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   const currentNode =
     state.currentDreamscape === null
       ? null
-      : state.atlas.nodes[state.currentDreamscape] ?? null;
+      : (state.atlas.nodes[state.currentDreamscape] ?? null);
   // The opponent DreamAvatar is one of the dreamscape's RESIDENTS (the corpus
   // algorithm fields native rivals); a neutral / starter dreamscape, or a
   // battle whose dreamscape content is absent, has no residents and the full
@@ -293,7 +307,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   );
   const opponentDreamsigns = buildOpponentDreamsigns(
     completionLevelAtStart,
-    layerCount,
+    opponentsData.progression.dreamsignsFromLayer,
     dreamsignTemplates,
     streams.enemyDescriptor,
   );
@@ -329,6 +343,9 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
           layerCount,
           poolSeed,
           battleEntryKey,
+          opponentsContentHash: opponentsData.contentHash,
+          progression: opponentsData.progression,
+          selectionConfig: opponentsData.corpusSelection,
           deferLog: (emit) => {
             emitCorpusDeckLog = emit;
           },
@@ -350,6 +367,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
           completionLevel: completionLevelAtStart,
           layerCount,
           poolSeed,
+          config: opponentsData.coherentDraft,
         });
 
   const chosenCards = corpusBuild?.finalCards ?? coherentBuild?.cards ?? null;
@@ -358,6 +376,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     cardDatabase,
     streams.enemyDeckOrder,
     aiMode,
+    opponentsData,
   ).map(freezeBattleDeckCardDefinition);
 
   // The opponent's signature cards: the three deck cards most representative of
@@ -373,7 +392,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   const signatureSelections = selectSignatureCards({
     abilityText: opponentDreamAvatar?.renderedText ?? "",
     candidates: signatureCandidates,
-    count: 3,
+    count: opponentsData.battle.opponentSignatureCardCount,
   });
   const enemyDescriptor = freezeBattleEnemyDescriptor({
     ...enemyDescriptorBase,
@@ -415,8 +434,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
         dreamscapeId: state.currentDreamscape,
         completionLevel: completionLevelAtStart,
         restrictedToDreamscapeResidents:
-          residentDreamAvatarIds != null &&
-          residentDreamAvatarIds.length > 0,
+          residentDreamAvatarIds != null && residentDreamAvatarIds.length > 0,
         eligibleDreamAvatarIds: residentDreamAvatarIds ?? [],
         selectedDreamAvatarId: opponentDreamAvatar?.id ?? null,
         selectedDreamAvatarName: opponentDreamAvatar?.name ?? null,
@@ -429,7 +447,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
       opponentDreamAvatar,
       poolVariant: aiMode
         ? "ai_starter"
-        : input.poolContext?.poolVariant ?? DEFAULT_POOL_VARIANT,
+        : (input.poolContext?.poolVariant ?? DEFAULT_POOL_VARIANT),
       poolSeed,
       completionLevel: completionLevelAtStart,
       layerCount,
@@ -437,6 +455,9 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
       dreamsigns: opponentDreamsigns,
       build: coherentBuild,
       fallbackDeckSize: enemyDeckDefinition.length,
+      opponentsContentHash: opponentsData.contentHash,
+      progression: opponentsData.progression,
+      coherentDraft: opponentsData.coherentDraft,
     };
     logOpponentDeckConstructed(opponentDeckLogArgs);
   };
@@ -451,6 +472,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   const dreamwellDeck = buildDreamwellDeck(
     input.dreamwellCards ?? [],
     streams.dreamwellDeck,
+    opponentsData.dreamwell,
   ).map((definition) => Object.freeze(definition));
   const dreamAvatarSummary = freezeBattleDreamAvatarSummary(state.dreamAvatar);
   const dreamsignSummaries = state.dreamsigns.map(freezeBattleDreamsignSummary);
@@ -462,7 +484,8 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   const essenceReward = Math.max(
     battleReward.minimumEssence,
     applyBattleRewardModifiers(
-      battleReward.baseEssence + completionLevelAtStart * battleReward.essencePerCompletionLevel,
+      battleReward.baseEssence +
+        completionLevelAtStart * battleReward.essencePerCompletionLevel,
       state.battleModifiers,
     ),
   );
@@ -489,8 +512,16 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   // `BattleSide` / `boolean` (bug-039) so tests can exercise the no-skip and
   // enemy-first paths without lying to the type system; the runtime values
   // here enforce the phase's invariant.
-  const startingSide: BattleInit["startingSide"] = "player";
-  const playerDrawSkipsTurnOne: BattleInit["playerDrawSkipsTurnOne"] = true;
+  const startingSide = opponentsData.battle.startingSide;
+  const playerDrawSkipsTurnOne = opponentsData.battle.skipPlayerOpeningDraw;
+  const scoreTargetIndex = Math.min(
+    Math.max(0, completionLevelAtStart),
+    opponentsData.battle.scoreTargets.length - 1,
+  );
+  const aiConfiguration = resolveBattleAiConfiguration(
+    opponentsData,
+    "journey",
+  );
 
   return Object.freeze({
     // bug-032: battleId and battleEntryKey were previously the same string,
@@ -504,16 +535,26 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     siteId: site.id,
     dreamscapeId: state.currentDreamscape,
     completionLevelAtStart,
-    isFinalBoss: completionLevelAtStart === 6,
+    isFinalBoss: completionLevelAtStart === layerCount - 1,
     essenceReward,
-    openingHandSize: Math.max(0, 5 + openingHandAdjustment),
-    enemyOpeningHandSize: 5,
+    openingHandSize: Math.max(
+      0,
+      opponentsData.battle.playerOpeningHandSize + openingHandAdjustment,
+    ),
+    enemyOpeningHandSize: opponentsData.battle.enemyOpeningHandSize,
     playerStartingEnergy,
     // The opening dreamscape (completion level 0) is a shorter, gentler
     // introduction won at 10 points; every later dreamscape is played to 25.
-    scoreToWin: completionLevelAtStart === 0 ? 10 : 25,
-    turnLimit: 50,
-    maxEnergyCap: 10,
+    scoreToWin: opponentsData.battle.scoreTargets[scoreTargetIndex],
+    turnLimit: opponentsData.battle.turnLimit,
+    maxEnergyCap: opponentsData.battle.energyCap,
+    handLimit: opponentsData.battle.handLimit,
+    opponentsContentHash: opponentsData.contentHash,
+    opponentAbilityActive: opponentAbilityIsActive(
+      completionLevelAtStart,
+      opponentsData.progression.abilityActiveFromLayer,
+    ),
+    aiConfiguration: Object.freeze(aiConfiguration),
     startingSide,
     playerDrawSkipsTurnOne,
     ...(input.tutorialTriggers === undefined
@@ -536,10 +577,8 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
  * Number of cards drawn per `order` group (1-4) in each Dreamwell deck cycle.
  * The order-0 starting cards lead the first cycle in addition to these.
  */
-const DREAMWELL_CARDS_PER_ORDER = 5;
 
 /** Order groups, lowest first, that fill each Dreamwell deck cycle. */
-const DREAMWELL_CYCLE_ORDERS = [1, 2, 3, 4] as const;
 
 /**
  * Minimum length of the pre-built Dreamwell deck. Both players draw one card
@@ -547,7 +586,6 @@ const DREAMWELL_CYCLE_ORDERS = [1, 2, 3, 4] as const;
  * long is never exhausted in practice; the draw edit still recycles safely if
  * it somehow reaches the end.
  */
-const DREAMWELL_DECK_MIN_LENGTH = 62;
 
 /**
  * Builds the shared Dreamwell deck (rules §The Dreamwell and Energy):
@@ -567,6 +605,7 @@ const DREAMWELL_DECK_MIN_LENGTH = 62;
 export function buildDreamwellDeck(
   cards: readonly DreamwellCard[],
   rng: BattleRng,
+  config: OpponentsData["dreamwell"],
 ): DreamwellCardDefinition[] {
   const byOrder = new Map<number, DreamwellCardDefinition[]>();
   for (const card of cards) {
@@ -581,15 +620,17 @@ export function buildDreamwellDeck(
 
   const deck: DreamwellCardDefinition[] = [];
   let firstCycle = true;
-  while (deck.length < DREAMWELL_DECK_MIN_LENGTH) {
+  while (deck.length < config.minimumConstructedLength) {
     const lengthBeforeCycle = deck.length;
     if (firstCycle) {
-      deck.push(...rng.shuffle(byOrder.get(0) ?? []));
+      for (const order of config.openingOrders) {
+        deck.push(...rng.shuffle(byOrder.get(order) ?? []));
+      }
       firstCycle = false;
     }
-    for (const order of DREAMWELL_CYCLE_ORDERS) {
+    for (const order of config.recurringOrders) {
       const group = byOrder.get(order) ?? [];
-      deck.push(...rng.shuffle(group).slice(0, DREAMWELL_CARDS_PER_ORDER));
+      deck.push(...rng.shuffle(group).slice(0, config.cardsPerRecurringOrder));
     }
     // No order 1-4 cards (and no order-0 cards on the first pass) means the deck
     // cannot grow; stop rather than loop forever on a sparse catalog.
@@ -600,7 +641,9 @@ export function buildDreamwellDeck(
   return deck;
 }
 
-function toDreamwellCardDefinition(card: DreamwellCard): DreamwellCardDefinition {
+function toDreamwellCardDefinition(
+  card: DreamwellCard,
+): DreamwellCardDefinition {
   const definition: DreamwellCardDefinition = {
     id: card.id,
     name: card.name,
@@ -745,10 +788,11 @@ function finalizeEnemyDeck(
   cardDatabase: ReadonlyMap<number, CardData>,
   rng: BattleRng,
   aiMode: boolean,
+  opponentsData: OpponentsData,
 ): BattleDeckCardDefinition[] {
   if (aiMode) {
     return rng
-      .shuffle(buildAiStarterDeck(cardDatabase))
+      .shuffle(buildAiConfiguredDeck(cardDatabase, opponentsData.journeyAiDeck))
       .map(cloneBattleDeckCardDefinition);
   }
 
@@ -762,7 +806,12 @@ function finalizeEnemyDeck(
     );
   }
 
-  const padded = padEnemyDeck(chosen, cardDatabase, rng);
+  const padded = padEnemyDeck(
+    chosen,
+    cardDatabase,
+    rng,
+    opponentsData.battle.minimumDeckSize,
+  );
 
   return rng
     .shuffle(padded.map(createBaseBattleDeckCardDefinition))
@@ -780,6 +829,7 @@ function padEnemyDeck(
   cards: readonly CardData[],
   cardDatabase: ReadonlyMap<number, CardData>,
   rng: BattleRng,
+  minimumDeckSize: number,
 ): CardData[] {
   const seen = new Set<number>();
   const deck: CardData[] = [];
@@ -788,7 +838,7 @@ function padEnemyDeck(
     seen.add(card.cardNumber);
     deck.push(card);
   }
-  if (deck.length >= MIN_BATTLE_DECK_SIZE) {
+  if (deck.length >= minimumDeckSize) {
     return deck;
   }
   // Top up with distinct draftable cards the deck does not already hold, so the
@@ -802,7 +852,7 @@ function padEnemyDeck(
     ),
   );
   for (const card of filler) {
-    if (deck.length >= MIN_BATTLE_DECK_SIZE) break;
+    if (deck.length >= minimumDeckSize) break;
     seen.add(card.cardNumber);
     deck.push(card);
   }
@@ -833,11 +883,17 @@ function normalizePlayerDeckCard(
   );
   const transfigurationDisplay = (() => {
     if (entry.transfiguration === null) return undefined;
-    const transfigured = buildTransfigurationDisplay(card, entry.transfiguration);
+    const transfigured = buildTransfigurationDisplay(
+      card,
+      entry.transfiguration,
+    );
     const markedCard = applyCardStatOverride(
       applyCardSparkBonus(
         applyDeckEntryCardModification(
-          { ...transfigured.card, renderedText: transfigured.display.markedText },
+          {
+            ...transfigured.card,
+            renderedText: transfigured.display.markedText,
+          },
           { typeChange: entry.typeChange, keywords: entry.keywordModification },
         ),
         entry.sparkBonus,
@@ -855,7 +911,8 @@ function normalizePlayerDeckCard(
     cardId: card.id,
     cardNumber: card.cardNumber,
     name: card.name,
-    battleCardKind: effectiveCard.cardType === "Character" ? "character" : "event",
+    battleCardKind:
+      effectiveCard.cardType === "Character" ? "character" : "event",
     subtype: effectiveCard.subtype,
     energyCost: effectiveCard.energyCost ?? 0,
     printedEnergyCost: effectiveCard.energyCost,
@@ -863,7 +920,9 @@ function normalizePlayerDeckCard(
     // explicit `undefined` in the serialized battle state). A transfiguration
     // that changes the energy cost clears this on the source `CardData`, so the
     // recomputed single orb is shown instead of stale multi-cost orbs.
-    ...(effectiveCard.energyCosts ? { energyCosts: effectiveCard.energyCosts } : {}),
+    ...(effectiveCard.energyCosts
+      ? { energyCosts: effectiveCard.energyCosts }
+      : {}),
     printedSpark: effectiveCard.spark ?? 0,
     isFast: effectiveCard.isFast,
     timing: effectiveCard.isFast ? "fast" : "standard",
@@ -892,7 +951,11 @@ function freezeBattleDeckCardDefinition(
     ...definition,
     ...(definition.transfigurationDisplay === undefined
       ? {}
-      : { transfigurationDisplay: Object.freeze({ ...definition.transfigurationDisplay }) }),
+      : {
+          transfigurationDisplay: Object.freeze({
+            ...definition.transfigurationDisplay,
+          }),
+        }),
   });
 }
 
@@ -943,7 +1006,9 @@ function freezeBattleDreamsignSummary(
   });
 }
 
-function freezeAtlasSnapshot(atlas: JourneyState["atlas"]): JourneyState["atlas"] {
+function freezeAtlasSnapshot(
+  atlas: JourneyState["atlas"],
+): JourneyState["atlas"] {
   return deepFreeze(structuredClone(atlas));
 }
 

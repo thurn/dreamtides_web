@@ -1,7 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { evaluate } from "./evaluate";
+import { evaluate as evaluateConfigured } from "./evaluate";
 import type { AiCard, AiOpponentBody, ForwardModel } from "./forward-model";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
+import { opponentsFixture } from "../../testing/opponents-fixture";
+
+const EVALUATION = opponentsFixture().ai.evaluation;
+
+function evaluate(
+  model: ForwardModel,
+  scoreToWin = 25,
+  weights = EVALUATION,
+): number {
+  return evaluateConfigured(model, scoreToWin, weights);
+}
 
 function emptyFrontRank(): ForwardModel["aiFrontRank"] {
   return emptyFrontRankSlots();
@@ -62,13 +73,30 @@ function opponentBody(overrides: Partial<AiOpponentBody> = {}): AiOpponentBody {
 describe("evaluate", () => {
   describe("terminal", () => {
     it("returns +Infinity when the AI has reached the win threshold", () => {
-      expect(evaluate(baseModel({ aiScore: 25 }))).toBe(Number.POSITIVE_INFINITY);
-      expect(evaluate(baseModel({ aiScore: 30 }))).toBe(Number.POSITIVE_INFINITY);
+      expect(evaluate(baseModel({ aiScore: 25 }))).toBe(
+        Number.POSITIVE_INFINITY,
+      );
+      expect(evaluate(baseModel({ aiScore: 30 }))).toBe(
+        Number.POSITIVE_INFINITY,
+      );
     });
 
     it("returns -Infinity when the player has reached the win threshold", () => {
-      expect(evaluate(baseModel({ playerScore: 25 }))).toBe(Number.NEGATIVE_INFINITY);
-      expect(evaluate(baseModel({ playerScore: 31 }))).toBe(Number.NEGATIVE_INFINITY);
+      expect(evaluate(baseModel({ playerScore: 25 }))).toBe(
+        Number.NEGATIVE_INFINITY,
+      );
+      expect(evaluate(baseModel({ playerScore: 31 }))).toBe(
+        Number.NEGATIVE_INFINITY,
+      );
+    });
+
+    it("uses the active battle's score target", () => {
+      expect(evaluate(baseModel({ aiScore: 10 }), 10)).toBe(
+        Number.POSITIVE_INFINITY,
+      );
+      expect(evaluate(baseModel({ playerScore: 10 }), 10)).toBe(
+        Number.NEGATIVE_INFINITY,
+      );
     });
 
     it("short-circuits the AI win even with an otherwise terrible board", () => {
@@ -121,24 +149,34 @@ describe("evaluate", () => {
           ...emptyFrontRank(),
           F0: makeCard({ basePrintedSpark: 5 }),
         },
-        opponentBodies: [opponentBody({ effectiveSpark: 1, rank: "front", slot: "F0" })],
+        opponentBodies: [
+          opponentBody({ effectiveSpark: 1, rank: "front", slot: "F0" }),
+        ],
       });
       const oppAhead = baseModel({
         aiFrontRank: {
           ...emptyFrontRank(),
           F0: makeCard({ basePrintedSpark: 1 }),
         },
-        opponentBodies: [opponentBody({ effectiveSpark: 5, rank: "front", slot: "F0" })],
+        opponentBodies: [
+          opponentBody({ effectiveSpark: 5, rank: "front", slot: "F0" }),
+        ],
       });
       expect(evaluate(aiAhead)).toBeGreaterThan(evaluate(oppAhead));
     });
 
     it("weights front-rank spark above back-rank spark", () => {
       const front = baseModel({
-        aiFrontRank: { ...emptyFrontRank(), F0: makeCard({ basePrintedSpark: 4 }) },
+        aiFrontRank: {
+          ...emptyFrontRank(),
+          F0: makeCard({ basePrintedSpark: 4 }),
+        },
       });
       const back = baseModel({
-        aiBackRank: { ...emptyBackRank(), B0: makeCard({ basePrintedSpark: 4 }) },
+        aiBackRank: {
+          ...emptyBackRank(),
+          B0: makeCard({ basePrintedSpark: 4 }),
+        },
       });
       expect(evaluate(front)).toBeGreaterThan(evaluate(back));
     });

@@ -4,6 +4,8 @@ import { act, useState, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useBattleAi, type AiProposal } from "./use-battle-ai";
+import { opponentsFixture } from "../../testing/opponents-fixture";
+import { resolveBattleAiConfiguration } from "../../types/opponents-data";
 import { aiMayRunHere } from "./ai-may-run-here";
 import { allocateBattleCardInstance } from "../state/create-initial-state";
 import type { BattleCommand, BattleDebugEdit } from "../debug/commands";
@@ -22,6 +24,12 @@ vi.mock("../../logging", () => ({
   logEvent: vi.fn(),
   logEventOnce: vi.fn(),
 }));
+
+const TEST_AI_CONFIGURATION = resolveBattleAiConfiguration(
+  opponentsFixture(),
+  "journey",
+);
+const TEST_BATTLE_CAPS = { scoreToWin: 25, turnLimit: 50, maxEnergyCap: 10 };
 
 // --- Fixture helpers -------------------------------------------------------
 
@@ -212,7 +220,14 @@ function placeFrontRankCharacter(
   printedSpark: number,
   renderedText: string,
 ): string {
-  return placeFrontRankCharacterInSlot(state, side, "F0", name, printedSpark, renderedText);
+  return placeFrontRankCharacterInSlot(
+    state,
+    side,
+    "F0",
+    name,
+    printedSpark,
+    renderedText,
+  );
 }
 
 function placeBackRankCharacter(
@@ -317,6 +332,8 @@ function HookHarness({
     enabled,
     aiSide,
     basicAutomation,
+    caps: TEST_BATTLE_CAPS,
+    aiConfiguration: TEST_AI_CONFIGURATION,
   });
   latest = {
     proposal: handle.proposal,
@@ -324,10 +341,19 @@ function HookHarness({
     approve: handle.approve,
     reject: handle.reject,
   };
-  return <div data-test-proposal={handle.proposal === null ? "null" : handle.proposal.kind} />;
+  return (
+    <div
+      data-test-proposal={
+        handle.proposal === null ? "null" : handle.proposal.kind
+      }
+    />
+  );
 }
 
-function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
+function mount(element: ReactElement): {
+  container: HTMLDivElement;
+  root: Root;
+} {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -352,7 +378,9 @@ afterEach(() => {
 describe("useBattleAi", () => {
   it("computes a proposal WITHOUT dispatching anything (safety contract)", async () => {
     const dispatch = vi.fn();
-    mount(<HookHarness initialState={makeEnemyTurnState()} submit={dispatch} />);
+    mount(
+      <HookHarness initialState={makeEnemyTurnState()} submit={dispatch} />,
+    );
     await settleProposal();
 
     expect(latest?.proposal).not.toBeNull();
@@ -361,7 +389,9 @@ describe("useBattleAi", () => {
 
   it("approve() dispatches each of the proposal's commands in order", async () => {
     const dispatch = vi.fn();
-    mount(<HookHarness initialState={makeEnemyTurnState()} submit={dispatch} />);
+    mount(
+      <HookHarness initialState={makeEnemyTurnState()} submit={dispatch} />,
+    );
     await settleProposal();
 
     const proposal = latest?.proposal;
@@ -435,7 +465,9 @@ describe("useBattleAi", () => {
 
   it("attaches the action proposal's trace to the first dispatched command's aiChoices", async () => {
     const dispatch = vi.fn();
-    mount(<HookHarness initialState={makeEnemyTurnState()} submit={dispatch} />);
+    mount(
+      <HookHarness initialState={makeEnemyTurnState()} submit={dispatch} />,
+    );
     await settleProposal();
 
     const proposal = latest?.proposal;
@@ -455,7 +487,9 @@ describe("useBattleAi", () => {
 
   it("reject() dispatches nothing and changes the proposal", async () => {
     const dispatch = vi.fn();
-    mount(<HookHarness initialState={makeEnemyTurnState()} submit={dispatch} />);
+    mount(
+      <HookHarness initialState={makeEnemyTurnState()} submit={dispatch} />,
+    );
     await settleProposal();
 
     const before = latest?.proposal;
@@ -491,7 +525,12 @@ describe("useBattleAi", () => {
     expect(dispatch).not.toHaveBeenCalled();
     expect(latest?.proposal?.kind).toBe("endPhase");
     expect(proposalEdits()).toEqual([
-      { kind: "SET_BATTLE_FLOW", phase: "dusk", activeSide: "enemy", turnNumber: 2 },
+      {
+        kind: "SET_BATTLE_FLOW",
+        phase: "dusk",
+        activeSide: "enemy",
+        turnNumber: 2,
+      },
     ]);
   });
 
@@ -563,8 +602,22 @@ describe("useBattleAi", () => {
       mutable.phase = "dusk";
       mutable.turnNumber = 3;
       mutable.sides.enemy.backRank = emptyBackRankSlots();
-      placeFrontRankCharacterInSlot(mutable, "player", "F0", "challengerA", 2, "");
-      placeFrontRankCharacterInSlot(mutable, "player", "F1", "challengerB", 3, "");
+      placeFrontRankCharacterInSlot(
+        mutable,
+        "player",
+        "F0",
+        "challengerA",
+        2,
+        "",
+      );
+      placeFrontRankCharacterInSlot(
+        mutable,
+        "player",
+        "F1",
+        "challengerB",
+        3,
+        "",
+      );
       placeBackRankCharacter(mutable, "enemy", "B0", "blockerA", 4);
       placeBackRankCharacter(mutable, "enemy", "B1", "blockerB", 5);
     });
@@ -700,7 +753,13 @@ describe("useBattleAi", () => {
       let loser = "";
       const edits = await endTurnEdits((mutable) => {
         winner = placeFrontRankCharacter(mutable, "enemy", "aiWinner", 5, "");
-        loser = placeFrontRankCharacter(mutable, "player", "vengefulLoser", 2, "Vengeful");
+        loser = placeFrontRankCharacter(
+          mutable,
+          "player",
+          "vengefulLoser",
+          2,
+          "Vengeful",
+        );
       });
 
       expect(edits).toContainEqual({

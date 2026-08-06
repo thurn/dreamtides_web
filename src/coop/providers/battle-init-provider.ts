@@ -37,6 +37,7 @@ import type {
   TutorialBattleConfiguration,
 } from "../../types/tutorial";
 import { advanceAtlas } from "../../atlas/atlas-generator";
+import { resolveBattleAiConfiguration } from "../../types/opponents-data";
 
 const deferredOpponentLogs = new Map<number, () => void>();
 
@@ -100,6 +101,7 @@ function buildBattleInit(
     journey.completionLevel,
   );
   return createBattleInit({
+    opponentsData: content.opponentsData,
     battleEntryKey,
     battleInstanceId: `battle:${journey.runId ?? "unscoped"}:${battleEntryKey}`,
     seedOverride,
@@ -142,7 +144,12 @@ export function createBattleInitProvider(
   content: JourneyContent,
 ): BattleInitProvider {
   return {
-    beginBattle: ({ journey, siteId, seedOverride, seq }): BattleFoldState | null => {
+    beginBattle: ({
+      journey,
+      siteId,
+      seedOverride,
+      seq,
+    }): BattleFoldState | null => {
       const init = buildBattleInit(
         content,
         journey,
@@ -224,12 +231,7 @@ export function createTutorialBattleInitProvider(
         battleConfiguration,
       );
       const board = createInitialBattleState(init);
-      arrangeTutorialHandoff(
-        content,
-        board,
-        actions,
-        battleConfiguration,
-      );
+      arrangeTutorialHandoff(content, board, actions, battleConfiguration);
       return {
         init,
         board,
@@ -260,8 +262,10 @@ function createTutorialBattleInit(
         };
       }),
     );
-    return createBattleRng(deriveBattleSeed(`${key}:${side}`), "playerDeckOrder")
-      .shuffle(definitions);
+    return createBattleRng(
+      deriveBattleSeed(`${key}:${side}`),
+      "playerDeckOrder",
+    ).shuffle(definitions);
   };
   const tensho = dreamAvatarById(content, TENSHO_ID);
   const threxan = dreamAvatarById(content, THREXAN_ID);
@@ -280,6 +284,13 @@ function createTutorialBattleInit(
     // behavior. This numeric value keeps the shared engine's current contract.
     turnLimit: Number.MAX_SAFE_INTEGER,
     maxEnergyCap: 10,
+    handLimit: content.opponentsData.battle.handLimit,
+    opponentsContentHash: content.opponentsData.contentHash,
+    opponentAbilityActive: false,
+    aiConfiguration: resolveBattleAiConfiguration(
+      content.opponentsData,
+      "tutorial",
+    ),
     startingSide: "player",
     playerDrawSkipsTurnOne: false,
     tutorialTriggers: content.tutorialTriggers ?? [],
@@ -311,8 +322,16 @@ function arrangeTutorialHandoff(
   actions: readonly TutorialAction[],
   battleConfiguration: TutorialBattleConfiguration,
 ): void {
-  const playerStarter = takeCard(board, "player", "e83014d3-9d35-4e80-a1b3-9b25360ad2af");
-  const enemyStarter = takeCard(board, "enemy", "a28ad36d-fa74-4190-a463-7efd3a6233d0");
+  const playerStarter = takeCard(
+    board,
+    "player",
+    "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+  );
+  const enemyStarter = takeCard(
+    board,
+    "enemy",
+    "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+  );
   const authoredHands = deriveTutorialHandCardIds(actions);
   const playerHand = materializeAuthoredHand(
     content,
@@ -326,9 +345,14 @@ function arrangeTutorialHandoff(
     "enemy",
     authoredHands.enemy,
   );
-  const twilight = createBaseBattleDeckCardDefinition(cardById(content, TUTORIAL_TWILIGHT_ID));
+  const twilight = createBaseBattleDeckCardDefinition(
+    cardById(content, TUTORIAL_TWILIGHT_ID),
+  );
   const enemyTwilightVoid = allocateBattleCardInstance(board, {
-    definition: { ...twilight, sourceDeckEntryId: "tutorial:enemy:twilight:void" },
+    definition: {
+      ...twilight,
+      sourceDeckEntryId: "tutorial:enemy:twilight:void",
+    },
     owner: "enemy",
     controller: "enemy",
     provenance: tutorialProvenance(),
@@ -347,8 +371,24 @@ function arrangeTutorialHandoff(
   // Center the authored tutorial's compact 2/3 formation in the canonical
   // rules-engine board. Responsive battlefield windows preserve these lanes:
   // F0 is the authored center front cell and B1 is its right-center back cell.
-  board.sides.player.frontRank = { F0: null, F1: null, F2: null, F3: null, F4: playerStarter, F5: null, F6: null, F7: null, F8: null };
-  board.sides.player.backRank = { B0: null, B1: null, B2: null, B3: null, B4: null };
+  board.sides.player.frontRank = {
+    F0: null,
+    F1: null,
+    F2: null,
+    F3: null,
+    F4: playerStarter,
+    F5: null,
+    F6: null,
+    F7: null,
+    F8: null,
+  };
+  board.sides.player.backRank = {
+    B0: null,
+    B1: null,
+    B2: null,
+    B3: null,
+    B4: null,
+  };
   board.sides.player.dreamwellCardIndex = 1;
   board.sides.player.dreamwellDrawnTurn = 3;
 
@@ -357,8 +397,29 @@ function arrangeTutorialHandoff(
   board.sides.enemy.score = 2;
   board.sides.enemy.hand = enemyHand;
   board.sides.enemy.void = [enemyTwilightVoid];
-  board.sides.enemy.frontRank = { F0: null, F1: null, F2: null, F3: null, F4: null, F5: null, F6: null, F7: null, F8: null };
-  board.sides.enemy.backRank = { B0: null, B1: null, B2: null, B3: null, B4: null, B5: enemyStarter, B6: null, B7: null, B8: null, B9: null };
+  board.sides.enemy.frontRank = {
+    F0: null,
+    F1: null,
+    F2: null,
+    F3: null,
+    F4: null,
+    F5: null,
+    F6: null,
+    F7: null,
+    F8: null,
+  };
+  board.sides.enemy.backRank = {
+    B0: null,
+    B1: null,
+    B2: null,
+    B3: null,
+    B4: null,
+    B5: enemyStarter,
+    B6: null,
+    B7: null,
+    B8: null,
+    B9: null,
+  };
   board.sides.enemy.dreamwellCardIndex = 0;
   board.sides.enemy.dreamwellDrawnTurn = 2;
 }
@@ -404,8 +465,7 @@ function materializeAuthoredHand(
     return allocateBattleCardInstance(board, {
       definition: {
         ...definition,
-        sourceDeckEntryId:
-          `tutorial:${side}:authored-hand:${String(index)}:${cardId}`,
+        sourceDeckEntryId: `tutorial:${side}:authored-hand:${String(index)}:${cardId}`,
       },
       owner: side,
       controller: side,
@@ -433,7 +493,8 @@ function takeCardIfPresent(
 ): string | null {
   const deck = board.sides[side].deck;
   const index = deck.findIndex(
-    (battleCardId) => board.cardInstances[battleCardId]?.definition.cardId === cardId,
+    (battleCardId) =>
+      board.cardInstances[battleCardId]?.definition.cardId === cardId,
   );
   if (index < 0) return null;
   return deck.splice(index, 1)[0] ?? null;
@@ -475,7 +536,9 @@ function tutorialDreamwellDeck(
   const fixed = cardIds.map((cardId) => {
     const card = byId.get(cardId);
     if (card === undefined) {
-      throw new Error(`Tutorial Dreamwell card ${cardId} is missing from the runtime catalog.`);
+      throw new Error(
+        `Tutorial Dreamwell card ${cardId} is missing from the runtime catalog.`,
+      );
     }
     return card;
   });
@@ -483,8 +546,10 @@ function tutorialDreamwellDeck(
   const rest = [...content.dreamwellCards].filter(
     (card) => !fixedIds.has(card.id),
   );
-  const shuffled = createBattleRng(deriveBattleSeed(`${key}:dreamwell`), "dreamwellDeck")
-    .shuffle(rest);
+  const shuffled = createBattleRng(
+    deriveBattleSeed(`${key}:dreamwell`),
+    "dreamwellDeck",
+  ).shuffle(rest);
   return [...fixed, ...shuffled].map((card) => ({
     id: card.id,
     name: card.name,
@@ -509,18 +574,30 @@ function requireTutorialBattleConfiguration(
 }
 
 function cardById(content: JourneyContent, cardId: string) {
-  const card = [...content.cardDatabase.values()].find((candidate) => candidate.id === cardId);
-  if (card === undefined) throw new Error(`Tutorial card ${cardId} is missing from the runtime catalog.`);
+  const card = [...content.cardDatabase.values()].find(
+    (candidate) => candidate.id === cardId,
+  );
+  if (card === undefined)
+    throw new Error(
+      `Tutorial card ${cardId} is missing from the runtime catalog.`,
+    );
   return card;
 }
 
 function dreamAvatarById(content: JourneyContent, id: string) {
-  const dreamAvatar = content.dreamAvatars.find((candidate) => candidate.id === id);
-  if (dreamAvatar === undefined) throw new Error(`Tutorial DreamAvatar ${id} is missing from the runtime catalog.`);
+  const dreamAvatar = content.dreamAvatars.find(
+    (candidate) => candidate.id === id,
+  );
+  if (dreamAvatar === undefined)
+    throw new Error(
+      `Tutorial DreamAvatar ${id} is missing from the runtime catalog.`,
+    );
   return dreamAvatar;
 }
 
-function tutorialEnemyDescriptor(threxan: JourneyContent["dreamAvatars"][number]): BattleEnemyDescriptor {
+function tutorialEnemyDescriptor(
+  threxan: JourneyContent["dreamAvatars"][number],
+): BattleEnemyDescriptor {
   return {
     id: threxan.id,
     name: threxan.name,

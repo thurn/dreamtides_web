@@ -2,10 +2,20 @@ import { describe, expect, it } from "vitest";
 import { emptyBackRankSlots, emptyFrontRankSlots } from "./test-support";
 import { planTutorialBattleController } from "./tutorial-battle-controller";
 import type { FoldState } from "../rules/fold-state";
-import type { BattleCardInstance, BattleInit, BattleMutableState } from "./types";
+import type {
+  BattleCardInstance,
+  BattleInit,
+  BattleMutableState,
+} from "./types";
+import { opponentsFixture } from "../testing/opponents-fixture";
+import { resolveBattleAiConfiguration } from "../types/opponents-data";
 
 const DRIVER = "client-driver";
 const OBSERVER = "client-observer";
+const TUTORIAL_AI_CONFIGURATION = resolveBattleAiConfiguration(
+  opponentsFixture(),
+  "tutorial",
+);
 
 function stateFor(
   boardOverrides: Partial<BattleMutableState> = {},
@@ -35,12 +45,15 @@ function stateFor(
         turnLimit: Number.MAX_SAFE_INTEGER,
         maxEnergyCap: 10,
         dreamwellDeck: [],
+        aiConfiguration: TUTORIAL_AI_CONFIGURATION,
       } as unknown as BattleInit,
       board,
       effectQueue: [],
       pendingPrompt: (extras.pendingPrompt ?? null) as never,
       dawnFired: { player: null, enemy: null },
-      ...(extras.aiBlockingTurn === undefined ? {} : { aiBlockingTurn: extras.aiBlockingTurn as never }),
+      ...(extras.aiBlockingTurn === undefined
+        ? {}
+        : { aiBlockingTurn: extras.aiBlockingTurn as never }),
     },
   };
 }
@@ -85,7 +98,10 @@ function side(): BattleMutableState["sides"]["player"] {
   };
 }
 
-function card(battleCardId: string, controller: "player" | "enemy"): BattleCardInstance {
+function card(
+  battleCardId: string,
+  controller: "player" | "enemy",
+): BattleCardInstance {
   return {
     battleCardId,
     owner: controller,
@@ -105,7 +121,15 @@ function card(battleCardId: string, controller: "player" | "enemy"): BattleCardI
     },
     markers: { isPrevented: false, isCopied: false },
     notes: [],
-    provenance: { kind: "journey-deck", sourceBattleCardId: null, chosenSpark: null, chosenSubtype: null, createdAtTurnNumber: 1, createdAtSide: controller, createdAtMs: 0 },
+    provenance: {
+      kind: "journey-deck",
+      sourceBattleCardId: null,
+      chosenSpark: null,
+      chosenSubtype: null,
+      createdAtTurnNumber: 1,
+      createdAtSide: controller,
+      createdAtMs: 0,
+    },
     definition: {
       sourceDeckEntryId: null,
       cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
@@ -126,7 +150,11 @@ function card(battleCardId: string, controller: "player" | "enemy"): BattleCardI
   };
 }
 
-function plan(state: FoldState, clientId = DRIVER, connectedClientIds: readonly string[] | null = [DRIVER, OBSERVER]) {
+function plan(
+  state: FoldState,
+  clientId = DRIVER,
+  connectedClientIds: readonly string[] | null = [DRIVER, OBSERVER],
+) {
   return planTutorialBattleController({ state, clientId, connectedClientIds });
 }
 
@@ -134,7 +162,10 @@ describe("tutorial battle controller", () => {
   it("assigns automatic work exclusively to the persisted, present driver", () => {
     const state = stateFor({ phase: "dawn" });
     expect(plan(state).intent?.kind).toBe("battle-command");
-    expect(plan(state, OBSERVER)).toMatchObject({ status: "observer", intent: null });
+    expect(plan(state, OBSERVER)).toMatchObject({
+      status: "observer",
+      intent: null,
+    });
   });
 
   it("pauses when the controller disconnects without promoting a viewer", () => {
@@ -143,7 +174,9 @@ describe("tutorial battle controller", () => {
       status: "paused-driver-absent",
       intent: null,
     });
-    expect(plan(state, DRIVER, [DRIVER, OBSERVER]).intent?.kind).toBe("battle-command");
+    expect(plan(state, DRIVER, [DRIVER, OBSERVER]).intent?.kind).toBe(
+      "battle-command",
+    );
   });
 
   it("leaves takeover explicit when several viewers remain", () => {
@@ -159,21 +192,35 @@ describe("tutorial battle controller", () => {
     const first = plan(state).intent;
     const second = plan(JSON.parse(JSON.stringify(state)) as FoldState).intent;
     expect(first).toEqual(second);
-    expect(first?.intentKey).toBe("tutorial-battle:tutorial-battle-run-uuid:player:4:dawn:dawn:triggers");
+    expect(first?.intentKey).toBe(
+      "tutorial-battle:tutorial-battle-run-uuid:player:4:dawn:dawn:triggers",
+    );
   });
 
   it("treats the claimant of a rebuilt tutorial snapshot as the new driver", () => {
     const state = stateFor({ phase: "dawn" }, { driverClientId: OBSERVER });
-    expect(plan(state, DRIVER)).toMatchObject({ status: "observer", intent: null });
+    expect(plan(state, DRIVER)).toMatchObject({
+      status: "observer",
+      intent: null,
+    });
     expect(plan(state, OBSERVER).status).toBe("driver");
   });
 
   it("stops at player Day and Night while advancing player Dusk through enemy blocking", () => {
     expect(plan(stateFor()).requiresHumanDecision).toBe(true);
-    expect(plan(stateFor({ phase: "dusk" })).intent).toMatchObject({ kind: "battle-ai-block" });
-    expect(plan(stateFor({ phase: "dusk" }, {
-      aiBlockingTurn: { activeSide: "player", turnNumber: 4 },
-    })).intent).toMatchObject({
+    expect(plan(stateFor({ phase: "dusk" })).intent).toMatchObject({
+      kind: "battle-ai-block",
+    });
+    expect(
+      plan(
+        stateFor(
+          { phase: "dusk" },
+          {
+            aiBlockingTurn: { activeSide: "player", turnNumber: 4 },
+          },
+        ),
+      ).intent,
+    ).toMatchObject({
       kind: "battle-command",
       command: { edit: { kind: "SET_PHASE", phase: "night" } },
     });
@@ -287,13 +334,30 @@ describe("tutorial battle controller", () => {
   it("pauses for player blocking on an enemy challenge and advances empty enemy Dusk", () => {
     const challengingEnemy = side();
     challengingEnemy.frontRank.F0 = "enemy-card-uuid";
-    expect(plan(stateFor({ activeSide: "enemy", phase: "dusk", sides: { player: side(), enemy: challengingEnemy } }))).toMatchObject({
+    expect(
+      plan(
+        stateFor({
+          activeSide: "enemy",
+          phase: "dusk",
+          sides: { player: side(), enemy: challengingEnemy },
+        }),
+      ),
+    ).toMatchObject({
       requiresHumanDecision: true,
       intent: null,
     });
-    expect(plan(stateFor({ activeSide: "enemy", phase: "dusk" })).intent).toMatchObject({
+    expect(
+      plan(stateFor({ activeSide: "enemy", phase: "dusk" })).intent,
+    ).toMatchObject({
       kind: "battle-command",
-      command: { edit: { kind: "SET_BATTLE_FLOW", activeSide: "player", phase: "dreamwell", turnNumber: 5 } },
+      command: {
+        edit: {
+          kind: "SET_BATTLE_FLOW",
+          activeSide: "player",
+          phase: "dreamwell",
+          turnNumber: 5,
+        },
+      },
     });
   });
 
@@ -301,11 +365,16 @@ describe("tutorial battle controller", () => {
     const enemyCardId = "enemy-card-uuid";
     const enemy = side();
     enemy.hand = [enemyCardId];
-    const state = stateFor({ activeSide: "enemy", phase: "day", sides: { player: side(), enemy } });
+    const state = stateFor({
+      activeSide: "enemy",
+      phase: "day",
+      sides: { player: side(), enemy },
+    });
     const result = plan(state);
     expect(result.intent).toMatchObject({
       kind: "battle-play-card",
       battleCardId: enemyCardId,
+      aiChoices: [{ aiPresetId: "standard" }],
       characterDestination: {
         side: "enemy",
         zone: "backRank",
@@ -347,16 +416,41 @@ describe("tutorial battle controller", () => {
   it("resolves enemy prompts deterministically but leaves player prompts interactive", () => {
     const enemyPrompt = {
       promptId: 41,
-      run: { scriptRef: { table: "battle", id: "card-uuid" }, cursor: [0], side: "enemy" },
+      run: {
+        scriptRef: { table: "battle", id: "card-uuid" },
+        cursor: [0],
+        side: "enemy",
+      },
       kind: "pick-cards",
-      options: { kind: "pick-cards", label: "Discover", candidateIds: ["b-uuid", "a-uuid"], count: 1, optional: false, highlightCardIds: [] },
+      options: {
+        kind: "pick-cards",
+        label: "Discover",
+        candidateIds: ["b-uuid", "a-uuid"],
+        count: 1,
+        optional: false,
+        highlightCardIds: [],
+      },
     };
-    expect(plan(stateFor({}, { pendingPrompt: enemyPrompt })).intent).toMatchObject({
+    expect(
+      plan(stateFor({}, { pendingPrompt: enemyPrompt })).intent,
+    ).toMatchObject({
       kind: "resolve-prompt",
       promptId: 41,
       resolution: { kind: "pick-cards", chosenIds: ["a-uuid"] },
     });
-    expect(plan(stateFor({}, { pendingPrompt: { ...enemyPrompt, run: { ...enemyPrompt.run, side: "player" } } }))).toMatchObject({
+    expect(
+      plan(
+        stateFor(
+          {},
+          {
+            pendingPrompt: {
+              ...enemyPrompt,
+              run: { ...enemyPrompt.run, side: "player" },
+            },
+          },
+        ),
+      ),
+    ).toMatchObject({
       requiresHumanDecision: true,
       intent: null,
     });
@@ -365,26 +459,61 @@ describe("tutorial battle controller", () => {
   it("keeps deterministic choice and Foresee resolutions legal", () => {
     const base = {
       promptId: 44,
-      run: { scriptRef: { table: "battle", id: "card-uuid" }, cursor: [0], side: "enemy" },
+      run: {
+        scriptRef: { table: "battle", id: "card-uuid" },
+        cursor: [0],
+        side: "enemy",
+      },
     };
-    const choicePlan = plan(stateFor({}, { pendingPrompt: {
-      ...base,
-      kind: "choice",
-      options: { kind: "choice", label: "Choose", options: [{ label: "first" }, { label: "second" }] },
-    } }));
-    expect(choicePlan.intent).toMatchObject({ resolution: { kind: "choice", optionIndex: 0 } });
-    const foreseePlan = plan(stateFor({}, { pendingPrompt: {
-      ...base,
-      kind: "foresee",
-      options: { kind: "foresee", count: 2, cardIds: ["deck-b-uuid", "deck-a-uuid"] },
-    } }));
+    const choicePlan = plan(
+      stateFor(
+        {},
+        {
+          pendingPrompt: {
+            ...base,
+            kind: "choice",
+            options: {
+              kind: "choice",
+              label: "Choose",
+              options: [{ label: "first" }, { label: "second" }],
+            },
+          },
+        },
+      ),
+    );
+    expect(choicePlan.intent).toMatchObject({
+      resolution: { kind: "choice", optionIndex: 0 },
+    });
+    const foreseePlan = plan(
+      stateFor(
+        {},
+        {
+          pendingPrompt: {
+            ...base,
+            kind: "foresee",
+            options: {
+              kind: "foresee",
+              count: 2,
+              cardIds: ["deck-b-uuid", "deck-a-uuid"],
+            },
+          },
+        },
+      ),
+    );
     expect(foreseePlan.intent).toMatchObject({
-      resolution: { kind: "foresee", orderedCardIds: ["deck-b-uuid", "deck-a-uuid"], voidCardIds: [] },
+      resolution: {
+        kind: "foresee",
+        orderedCardIds: ["deck-b-uuid", "deck-a-uuid"],
+        voidCardIds: [],
+      },
     });
   });
 
   it("never emits a post-terminal intent", () => {
-    expect(plan(stateFor({ result: "victory" }))).toMatchObject({ status: "terminal", intent: null });
+    expect(plan(stateFor({ result: "victory" }))).toMatchObject({
+      status: "terminal",
+      intent: null,
+    });
   });
 
   it("finishes a winning Challenge presentation before exposing terminal state", () => {
@@ -420,10 +549,14 @@ describe("tutorial battle controller", () => {
   it("keeps terminal authority with the present controller and pauses after departure", () => {
     const terminal = stateFor({ result: "victory" });
     expect(plan(terminal, DRIVER, [DRIVER, OBSERVER])).toMatchObject({
-      status: "terminal", isCurrentClientDriver: true, isDriverPresent: true,
+      status: "terminal",
+      isCurrentClientDriver: true,
+      isDriverPresent: true,
     });
     expect(plan(terminal, OBSERVER, [DRIVER, OBSERVER])).toMatchObject({
-      status: "terminal", isCurrentClientDriver: false, isDriverPresent: true,
+      status: "terminal",
+      isCurrentClientDriver: false,
+      isDriverPresent: true,
     });
     expect(plan(terminal, OBSERVER, [OBSERVER])).toMatchObject({
       status: "terminal",

@@ -1,8 +1,4 @@
-import type {
-  ContentConfig,
-  EncodedLogNode,
-  Genesis,
-} from "./types";
+import type { ContentConfig, EncodedLogNode, Genesis } from "./types";
 
 /** A validated RTDB log envelope whose native-tree values remain untrusted. */
 export interface RtdbLogNode {
@@ -25,9 +21,7 @@ function isNonNegativeSafeInteger(value: unknown): value is number {
   return typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
 }
 
-function decodeContentConfig(
-  value: unknown,
-): ContentConfig | undefined | null {
+function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
   if (value === undefined) return undefined;
   if (!isRecord(value)) return null;
   const {
@@ -36,6 +30,7 @@ function decodeContentConfig(
     fresh20PackSize,
     atlasFoldHash,
     economyFoldHash,
+    opponentsFoldHash,
     defaultStartingEssence,
     dreamsignCap,
   } = value;
@@ -44,19 +39,18 @@ function decodeContentConfig(
     typeof draftMode !== "string" ||
     !(
       fresh20PackSize === null ||
-      (typeof fresh20PackSize === "number" &&
-        Number.isFinite(fresh20PackSize))
+      (typeof fresh20PackSize === "number" && Number.isFinite(fresh20PackSize))
     ) ||
     !(atlasFoldHash === undefined || typeof atlasFoldHash === "string") ||
     !(economyFoldHash === undefined || typeof economyFoldHash === "string") ||
     !(
+      opponentsFoldHash === undefined || typeof opponentsFoldHash === "string"
+    ) ||
+    !(
       defaultStartingEssence === undefined ||
       isNonNegativeSafeInteger(defaultStartingEssence)
     ) ||
-    !(
-      dreamsignCap === undefined ||
-      isNonNegativeSafeInteger(dreamsignCap)
-    )
+    !(dreamsignCap === undefined || isNonNegativeSafeInteger(dreamsignCap))
   ) {
     return null;
   }
@@ -66,6 +60,7 @@ function decodeContentConfig(
     fresh20PackSize,
     ...(atlasFoldHash === undefined ? {} : { atlasFoldHash }),
     ...(economyFoldHash === undefined ? {} : { economyFoldHash }),
+    ...(opponentsFoldHash === undefined ? {} : { opponentsFoldHash }),
     ...(defaultStartingEssence === undefined ? {} : { defaultStartingEssence }),
     ...(dreamsignCap === undefined ? {} : { dreamsignCap }),
   };

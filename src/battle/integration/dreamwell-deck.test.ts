@@ -1,7 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { buildDreamwellDeck } from "./create-battle-init";
+import { buildDreamwellDeck as buildConfiguredDreamwellDeck } from "./create-battle-init";
 import { createBattleRng } from "../random";
 import type { DreamwellCard } from "../../data/dreamwell-database";
+import { opponentsFixture } from "../../testing/opponents-fixture";
+
+const DREAMWELL_CONFIG = opponentsFixture().dreamwell;
+
+function buildTestDreamwellDeck(
+  cards: readonly DreamwellCard[],
+  rng: Parameters<typeof buildConfiguredDreamwellDeck>[1],
+  config = DREAMWELL_CONFIG,
+) {
+  return buildConfiguredDreamwellDeck(cards, rng, config);
+}
 
 /**
  * Synthetic Dreamwell catalog. The deck builder is deck-shape logic, not TOML
@@ -37,7 +48,7 @@ function ordersOf(deck: { order: number }[]): number[] {
 
 describe("buildDreamwellDeck", () => {
   it("leads the first cycle with all order-0 cards, then five from each of orders 1-4", () => {
-    const deck = buildDreamwellDeck(
+    const deck = buildTestDreamwellDeck(
       makeCatalog(),
       createBattleRng(1234, "dreamwellDeck"),
     );
@@ -46,15 +57,12 @@ describe("buildDreamwellDeck", () => {
     expect(ordersOf(deck).slice(0, 2)).toEqual([0, 0]);
     // Then five of order 1, five of order 2, five of order 3, five of order 4.
     expect(ordersOf(deck).slice(2, 22)).toEqual([
-      1, 1, 1, 1, 1,
-      2, 2, 2, 2, 2,
-      3, 3, 3, 3, 3,
-      4, 4, 4, 4, 4,
+      1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4,
     ]);
   });
 
   it("drops the order-0 cards from every cycle after the first", () => {
-    const deck = buildDreamwellDeck(
+    const deck = buildTestDreamwellDeck(
       makeCatalog(),
       createBattleRng(1234, "dreamwellDeck"),
     );
@@ -64,10 +72,38 @@ describe("buildDreamwellDeck", () => {
     expect(deck.length).toBeGreaterThanOrEqual(62);
   });
 
+  it("uses configured orders, recurring counts, and minimum length", () => {
+    const deck = buildTestDreamwellDeck(
+      makeCatalog(),
+      createBattleRng(4, "dreamwellDeck"),
+      {
+        openingOrders: [2],
+        recurringOrders: [1, 3],
+        cardsPerRecurringOrder: 2,
+        minimumConstructedLength: 11,
+      },
+    );
+
+    expect(ordersOf(deck).slice(0, 10)).toEqual([2, 2, 2, 2, 2, 2, 1, 1, 3, 3]);
+    expect(deck.length).toBeGreaterThanOrEqual(11);
+    expect(deck.some((card) => card.order === 0 || card.order === 4)).toBe(
+      false,
+    );
+  });
+
   it("is deterministic for a given seed and varies across seeds", () => {
-    const a = buildDreamwellDeck(makeCatalog(), createBattleRng(7, "dreamwellDeck"));
-    const b = buildDreamwellDeck(makeCatalog(), createBattleRng(7, "dreamwellDeck"));
-    const c = buildDreamwellDeck(makeCatalog(), createBattleRng(99, "dreamwellDeck"));
+    const a = buildTestDreamwellDeck(
+      makeCatalog(),
+      createBattleRng(7, "dreamwellDeck"),
+    );
+    const b = buildTestDreamwellDeck(
+      makeCatalog(),
+      createBattleRng(7, "dreamwellDeck"),
+    );
+    const c = buildTestDreamwellDeck(
+      makeCatalog(),
+      createBattleRng(99, "dreamwellDeck"),
+    );
     expect(a.map((card) => card.id)).toEqual(b.map((card) => card.id));
     expect(a.map((card) => card.id)).not.toEqual(c.map((card) => card.id));
   });
@@ -83,7 +119,10 @@ describe("buildDreamwellDeck", () => {
       makeCard(2, 3),
       makeCard(2, 4),
     ];
-    const deck = buildDreamwellDeck(sparse, createBattleRng(3, "dreamwellDeck"));
+    const deck = buildTestDreamwellDeck(
+      sparse,
+      createBattleRng(3, "dreamwellDeck"),
+    );
     // Order 1 has only two cards, so each cycle contributes both (never five).
     const orderOnePerCycle = deck.filter((card) => card.order === 1).length;
     expect(orderOnePerCycle).toBeGreaterThan(0);
@@ -93,6 +132,8 @@ describe("buildDreamwellDeck", () => {
   });
 
   it("returns an empty deck for an empty catalog without looping forever", () => {
-    expect(buildDreamwellDeck([], createBattleRng(1, "dreamwellDeck"))).toEqual([]);
+    expect(buildTestDreamwellDeck([], createBattleRng(1, "dreamwellDeck"))).toEqual(
+      [],
+    );
   });
 });

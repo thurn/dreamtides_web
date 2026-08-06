@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { economyFixture } from "../../testing/economy-fixture";
+import { opponentsFixture } from "../../testing/opponents-fixture";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
@@ -30,6 +31,7 @@ function makeContent(): JourneyContent {
     guides: [],
     atlasData: MINIMAL_ATLAS_DATA,
     economyData: economyFixture(),
+    opponentsData: opponentsFixture(),
   };
 }
 

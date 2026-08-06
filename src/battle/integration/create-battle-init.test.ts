@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { makeBattleTestCardDatabase, makeBattleTestDreamAvatars, makeBattleTestSite, makeBattleTestState } from "../test-support";
-import { createBattleInit, type CreateBattleInitInput } from "./create-battle-init";
+import {
+  makeBattleTestCardDatabase,
+  makeBattleTestDreamAvatars,
+  makeBattleTestSite,
+  makeBattleTestState,
+} from "../test-support";
+import {
+  createBattleInit,
+  type CreateBattleInitInput,
+} from "./create-battle-init";
 import { deriveBattleSeed } from "../random";
 import type { DraftRecord } from "../../data/cards-v2-database";
 import { buildFitModel, type FitModel } from "../../draft/replay/fit-model";
@@ -10,17 +18,25 @@ import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { DreamAvatarContent } from "../../types/content";
 import type { PoolCard } from "../../draft/pool/types";
-import type { CardKeywordModification, CardTypeChange } from "../../types/journey";
+import type {
+  CardKeywordModification,
+  CardTypeChange,
+} from "../../types/journey";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
-import { TRANSFIGURE_MARK_END, TRANSFIGURE_MARK_START } from "../../runtime/transfigure-markers";
+import {
+  TRANSFIGURE_MARK_END,
+  TRANSFIGURE_MARK_START,
+} from "../../runtime/transfigure-markers";
 import { economyFixture } from "../../testing/economy-fixture";
+import { opponentsFixture } from "../../testing/opponents-fixture";
 
 // The padded minimum battle deck size; the enemy deck is padded up to this.
 const MIN_BATTLE_DECK_SIZE = 25;
 
 function makeBaseInput(): CreateBattleInitInput {
   return {
+    opponentsData: opponentsFixture(),
     battleEntryKey: "site-7::2::dreamscape-2",
     site: makeBattleTestSite(),
     state: makeBattleTestState(),
@@ -30,7 +46,11 @@ function makeBaseInput(): CreateBattleInitInput {
 }
 
 function stripTransfigurationMarkers(text: string): string {
-  return text.split(TRANSFIGURE_MARK_START).join("").split(TRANSFIGURE_MARK_END).join("");
+  return text
+    .split(TRANSFIGURE_MARK_START)
+    .join("")
+    .split(TRANSFIGURE_MARK_END)
+    .join("");
 }
 
 function makePackageCard(
@@ -85,9 +105,11 @@ function makeSteeredPoolContext(): {
   const decklistA = Array.from({ length: 24 }, (_, i) => byNumber(1000 + i));
   const decklistB = Array.from({ length: 24 }, (_, i) => byNumber(1100 + i));
 
-  const poolCards: PoolCard[] = Array.from(cardDatabase.values()).map((card) => ({
-    name: card.name,
-  }));
+  const poolCards: PoolCard[] = Array.from(cardDatabase.values()).map(
+    (card) => ({
+      name: card.name,
+    }),
+  );
   const poolData = buildPoolData(poolCards, [decklistA, decklistB]);
 
   // This synthetic corpus carries no card UUIDs, so each card's identity is its
@@ -115,8 +137,10 @@ function makeSteeredPoolContext(): {
       const packs: string[][] = [];
       for (let p = 0; p < 30; p += 1) {
         const pack: string[] = [];
-        for (let k = 0; k < 6; k += 1) pack.push(cards[(p * 3 + k) % cards.length]);
-        for (let k = 0; k < 4; k += 1) pack.push(other[(p * 2 + k) % other.length]);
+        for (let k = 0; k < 6; k += 1)
+          pack.push(cards[(p * 3 + k) % cards.length]);
+        for (let k = 0; k < 4; k += 1)
+          pack.push(other[(p * 2 + k) % other.length]);
         packs.push(pack);
       }
       records.push({
@@ -187,6 +211,63 @@ describe("createBattleInit", () => {
     expect(first.playerDrawSkipsTurnOne).toBe(true);
   });
 
+  it("resolves non-default battle and AI values from opponent configuration", () => {
+    const opponentsData = opponentsFixture();
+    opponentsData.contentHash = "c".repeat(64);
+    opponentsData.battle = {
+      ...opponentsData.battle,
+      minimumDeckSize: 9,
+      playerOpeningHandSize: 3,
+      enemyOpeningHandSize: 4,
+      scoreTargets: [7, 13],
+      turnLimit: 31,
+      energyCap: 8,
+      handLimit: 6,
+      startingSide: "enemy",
+      skipPlayerOpeningDraw: false,
+      opponentSignatureCardCount: 1,
+    };
+    opponentsData.progression = {
+      ...opponentsData.progression,
+      abilityActiveFromLayer: 6,
+    };
+    opponentsData.ai.presets.standard = {
+      ...opponentsData.ai.presets.standard,
+      beamWidth: 5,
+      searchDepth: 9,
+    };
+    const state = { ...makeBattleTestState(), completionLevel: 6 };
+    const cardDatabase = makeBattleTestCardDatabase();
+    const signatureCardIds = [...cardDatabase.values()]
+      .slice(0, 2)
+      .map((card) => card.id);
+    const init = createBattleInit({
+      ...makeBaseInput(),
+      opponentsData,
+      state,
+      cardDatabase,
+      dreamAvatars: makeSignatureDreamAvatars(signatureCardIds),
+    });
+
+    expect(init.playerDeckOrder).toHaveLength(16);
+    expect(init.openingHandSize).toBe(3);
+    expect(init.enemyOpeningHandSize).toBe(4);
+    expect(init.scoreToWin).toBe(13);
+    expect(init.turnLimit).toBe(31);
+    expect(init.maxEnergyCap).toBe(8);
+    expect(init.handLimit).toBe(6);
+    expect(init.startingSide).toBe("enemy");
+    expect(init.playerDrawSkipsTurnOne).toBe(false);
+    expect(init.opponentsContentHash).toBe("c".repeat(64));
+    expect(init.opponentAbilityActive).toBe(true);
+    expect(init.aiConfiguration).toMatchObject({
+      id: "standard",
+      beamWidth: 5,
+      searchDepth: 9,
+    });
+    expect(init.enemyDescriptor.signatureCards).toHaveLength(1);
+  });
+
   it("applies active Exploration opening-hand and starting-energy bonuses", () => {
     const baseState = makeBattleTestState();
     const init = createBattleInit({
@@ -236,7 +317,9 @@ describe("createBattleInit", () => {
 
     expect(discounted.openingHandSize).toBe(4);
     expect(discounted.enemyOpeningHandSize).toBe(5);
-    expect(discounted.enemyDeckDefinition).toEqual(baseline.enemyDeckDefinition);
+    expect(discounted.enemyDeckDefinition).toEqual(
+      baseline.enemyDeckDefinition,
+    );
     expect(discounted.playerDeckOrder).toHaveLength(
       baseline.playerDeckOrder.length,
     );
@@ -255,9 +338,9 @@ describe("createBattleInit", () => {
       const second = createBattleInit(input);
 
       expect(first.enemyDescriptor).toEqual(second.enemyDescriptor);
-      expect(first.playerDeckOrder.map((card) => card.sourceDeckEntryId)).toEqual(
-        second.playerDeckOrder.map((card) => card.sourceDeckEntryId),
-      );
+      expect(
+        first.playerDeckOrder.map((card) => card.sourceDeckEntryId),
+      ).toEqual(second.playerDeckOrder.map((card) => card.sourceDeckEntryId));
       expect(first.enemyDeckDefinition.map((card) => card.cardNumber)).toEqual(
         second.enemyDeckDefinition.map((card) => card.cardNumber),
       );
@@ -284,9 +367,9 @@ describe("createBattleInit", () => {
         JSON.stringify(a.enemyDeckDefinition.map((c) => c.cardNumber)) ===
         JSON.stringify(b.enemyDeckDefinition.map((c) => c.cardNumber));
 
-      expect(
-        sameEnemyDescriptor && samePlayerDeckOrder && sameEnemyDeck,
-      ).toBe(false);
+      expect(sameEnemyDescriptor && samePlayerDeckOrder && sameEnemyDeck).toBe(
+        false,
+      );
     });
 
     it("same battle entry in different journey seeds uses a different battle seed", () => {
@@ -342,7 +425,13 @@ describe("createBattleInit", () => {
     });
 
     it("rejects negative, non-finite, or non-integer seedOverride values (bug-008)", () => {
-      for (const invalid of [-1, 1.5, Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY]) {
+      for (const invalid of [
+        -1,
+        1.5,
+        Number.NaN,
+        Number.POSITIVE_INFINITY,
+        Number.NEGATIVE_INFINITY,
+      ]) {
         expect(() =>
           createBattleInit({ ...makeBaseInput(), seedOverride: invalid }),
         ).toThrow(/seedOverride/);
@@ -377,15 +466,21 @@ describe("createBattleInit", () => {
       const state = {
         ...makeBattleTestState(),
         completionLevel: 3,
-        battleModifiers: [{
-          kind: "reward_reduction_flat" as const,
-          amount: 200,
-          battlesRemaining: 1,
-          source: "journey:test",
-        }],
+        battleModifiers: [
+          {
+            kind: "reward_reduction_flat" as const,
+            amount: 200,
+            battlesRemaining: 1,
+            source: "journey:test",
+          },
+        ],
       };
 
-      const init = createBattleInit({ ...makeBaseInput(), state, economyData: economy });
+      const init = createBattleInit({
+        ...makeBaseInput(),
+        state,
+        economyData: economy,
+      });
 
       expect(init.essenceReward).toBe(11);
     });
@@ -509,7 +604,9 @@ describe("createBattleInit", () => {
             .filter((id): id is string => id !== null),
         ),
       ].sort();
-      const inputIds = makeBaseInput().state.deck.map((entry) => entry.entryId).sort();
+      const inputIds = makeBaseInput()
+        .state.deck.map((entry) => entry.entryId)
+        .sort();
       expect(sourceIds).toEqual(inputIds);
     });
 
@@ -561,7 +658,9 @@ describe("createBattleInit", () => {
         if (card.sourceDeckEntryId === null) {
           continue;
         }
-        const journeyEntry = journeyEntriesByEntryId.get(card.sourceDeckEntryId);
+        const journeyEntry = journeyEntriesByEntryId.get(
+          card.sourceDeckEntryId,
+        );
         expect(journeyEntry).toBeDefined();
         expect(journeyEntry).toEqual({
           entryId: card.sourceDeckEntryId,
@@ -575,38 +674,58 @@ describe("createBattleInit", () => {
     it.each([
       {
         type: "Inspired" as const,
-        card: { cardType: "Event" as const, energyCost: 2, spark: null, isFast: false,
-          renderedText: "Foresee." },
+        card: {
+          cardType: "Event" as const,
+          energyCost: 2,
+          spark: null,
+          isFast: false,
+          renderedText: "Foresee.",
+        },
       },
       {
         type: "Perfected" as const,
-        card: { cardType: "Character" as const, energyCost: 0, spark: 3, isFast: false,
-          renderedText: "A wall of thorns." },
-      },
-    ])("persists the exact shared $type display descriptor", ({ type, card: overrides }) => {
-      const baseInput = makeBaseInput();
-      const sourceEntry = baseInput.state.deck[0];
-      const original = baseInput.cardDatabase.get(sourceEntry.cardNumber);
-      if (original === undefined) throw new Error("expected source card");
-      const card = { ...original, ...overrides };
-      const input = {
-        ...baseInput,
-        cardDatabase: new Map(baseInput.cardDatabase).set(card.cardNumber, card),
-        state: {
-          ...baseInput.state,
-          deck: baseInput.state.deck.map((entry, index) => index === 0
-            ? { ...entry, transfiguration: type }
-            : entry),
+        card: {
+          cardType: "Character" as const,
+          energyCost: 0,
+          spark: 3,
+          isFast: false,
+          renderedText: "A wall of thorns.",
         },
-      };
-      const definition = createBattleInit(input).playerDeckOrder.find(
-        (entry) => entry.sourceDeckEntryId === sourceEntry.entryId,
-      );
-      const display = (definition as typeof definition & {
-        transfigurationDisplay?: CardTransfigurationDisplay;
-      })?.transfigurationDisplay;
-      expect(display).toEqual(buildTransfigurationDisplay(card, type).display);
-    });
+      },
+    ])(
+      "persists the exact shared $type display descriptor",
+      ({ type, card: overrides }) => {
+        const baseInput = makeBaseInput();
+        const sourceEntry = baseInput.state.deck[0];
+        const original = baseInput.cardDatabase.get(sourceEntry.cardNumber);
+        if (original === undefined) throw new Error("expected source card");
+        const card = { ...original, ...overrides };
+        const input = {
+          ...baseInput,
+          cardDatabase: new Map(baseInput.cardDatabase).set(
+            card.cardNumber,
+            card,
+          ),
+          state: {
+            ...baseInput.state,
+            deck: baseInput.state.deck.map((entry, index) =>
+              index === 0 ? { ...entry, transfiguration: type } : entry,
+            ),
+          },
+        };
+        const definition = createBattleInit(input).playerDeckOrder.find(
+          (entry) => entry.sourceDeckEntryId === sourceEntry.entryId,
+        );
+        const display = (
+          definition as typeof definition & {
+            transfigurationDisplay?: CardTransfigurationDisplay;
+          }
+        )?.transfigurationDisplay;
+        expect(display).toEqual(
+          buildTransfigurationDisplay(card, type).display,
+        );
+      },
+    );
 
     it("keeps later type and keyword changes visible but outside transfiguration markers", () => {
       const baseInput = makeBaseInput();
@@ -616,21 +735,38 @@ describe("createBattleInit", () => {
       const card: CardData = {
         ...original,
         id: asCardId("11111111-1111-4111-8111-111111111111"),
-        cardType: "Event", subtype: "Vision", energyCost: 2, spark: null,
-        isFast: false, renderedText: "Foresee.",
+        cardType: "Event",
+        subtype: "Vision",
+        energyCost: 2,
+        spark: null,
+        isFast: false,
+        renderedText: "Foresee.",
       };
       const keywordModification: CardKeywordModification = { reclaim: 2 };
       const typeChange: CardTypeChange = {
-        predicateId: "visions", cardType: "Character", subtype: "Seer", label: "Seer",
+        predicateId: "visions",
+        cardType: "Character",
+        subtype: "Seer",
+        label: "Seer",
       };
       const input: CreateBattleInitInput = {
         ...baseInput,
-        cardDatabase: new Map(baseInput.cardDatabase).set(card.cardNumber, card),
+        cardDatabase: new Map(baseInput.cardDatabase).set(
+          card.cardNumber,
+          card,
+        ),
         state: {
           ...baseInput.state,
-          deck: baseInput.state.deck.map((entry, index) => index === 0
-            ? { ...entry, transfiguration: "Inspired", keywordModification, typeChange }
-            : entry),
+          deck: baseInput.state.deck.map((entry, index) =>
+            index === 0
+              ? {
+                  ...entry,
+                  transfiguration: "Inspired",
+                  keywordModification,
+                  typeChange,
+                }
+              : entry,
+          ),
         },
       };
       const definition = createBattleInit(input).playerDeckOrder.find(
@@ -642,13 +778,17 @@ describe("createBattleInit", () => {
 
       expect(definition.cardId).toBe(card.id);
       expect(definition.battleCardKind).toBe("character");
-      expect(stripTransfigurationMarkers(definition.transfigurationDisplay.markedText))
-        .toBe(definition.renderedText);
+      expect(
+        stripTransfigurationMarkers(
+          definition.transfigurationDisplay.markedText,
+        ),
+      ).toBe(definition.renderedText);
       expect(definition.transfigurationDisplay.markedText).toBe(
         `Foresee. ${TRANSFIGURE_MARK_START}Draw a card.${TRANSFIGURE_MARK_END}\n\nReclaim 2●`,
       );
-      expect(definition.transfigurationDisplay.markedText)
-        .not.toContain(`${TRANSFIGURE_MARK_START}Reclaim`);
+      expect(definition.transfigurationDisplay.markedText).not.toContain(
+        `${TRANSFIGURE_MARK_START}Reclaim`,
+      );
     });
 
     it("applies journey deck entry type changes to player battle card definitions", () => {
@@ -672,7 +812,10 @@ describe("createBattleInit", () => {
         ),
       };
 
-      const init = createBattleInit({ ...baseInput, state: stateWithTypeChange });
+      const init = createBattleInit({
+        ...baseInput,
+        state: stateWithTypeChange,
+      });
       const changedCard = init.playerDeckOrder.find(
         (card) => card.sourceDeckEntryId === changedEntryId,
       );
@@ -688,7 +831,10 @@ describe("createBattleInit", () => {
     it("applies journey deck entry keyword changes to player battle card definitions", () => {
       const baseInput = makeBaseInput();
       const changedEntryId = "deck-5";
-      const keywordModification: CardKeywordModification = { fast: true, reclaim: 2 };
+      const keywordModification: CardKeywordModification = {
+        fast: true,
+        reclaim: 2,
+      };
       const stateWithKeywordChange = {
         ...baseInput.state,
         deck: baseInput.state.deck.map((entry) =>
@@ -731,7 +877,9 @@ describe("createBattleInit", () => {
       // survives edits to the fixture's printed values.
       const printed = makeBattleTestCardDatabase().get(changedEntry.cardNumber);
       if (printed === undefined) {
-        throw new Error(`Missing test card: ${String(changedEntry.cardNumber)}`);
+        throw new Error(
+          `Missing test card: ${String(changedEntry.cardNumber)}`,
+        );
       }
       const printedEnergyCost = printed.energyCost;
       const printedSpark = printed.spark;
@@ -773,7 +921,8 @@ describe("createBattleInit", () => {
     it("applies journey deck entry spark bonuses to player battle card definitions", () => {
       const baseInput = makeBaseInput();
       const changedEntry = baseInput.state.deck[0];
-      if (changedEntry === undefined) throw new Error("Missing test deck entry");
+      if (changedEntry === undefined)
+        throw new Error("Missing test deck entry");
       const printed = makeBattleTestCardDatabase().get(changedEntry.cardNumber);
       if (printed?.spark === null || printed?.spark === undefined) {
         throw new Error("Expected a numeric printed spark");
@@ -881,7 +1030,9 @@ describe("createBattleInit", () => {
         expect(dreamsignNames.has(dreamsign.name)).toBe(true);
       }
       const dreamsign = init.enemyDescriptor.dreamsigns[0];
-      const source = templates.find((template) => template.id === dreamsign?.id);
+      const source = templates.find(
+        (template) => template.id === dreamsign?.id,
+      );
       expect(source).toBeDefined();
       expect(dreamsign).toMatchObject({
         id: source?.id,
@@ -1031,7 +1182,10 @@ describe("createBattleInit", () => {
     });
 
     it("falls back to a non-empty deck when poolContext is undefined", () => {
-      const init = createBattleInit({ ...makeBaseInput(), poolContext: undefined });
+      const init = createBattleInit({
+        ...makeBaseInput(),
+        poolContext: undefined,
+      });
       expect(init.enemyDeckDefinition.length).toBeGreaterThan(0);
       for (const card of init.enemyDeckDefinition) {
         expect(makeBattleTestCardDatabase().get(card.cardNumber)).toBeDefined();
@@ -1046,8 +1200,11 @@ describe("createBattleInit", () => {
       const augmented = new Map(baseInput.cardDatabase);
       const starterNumbers = Array.from({ length: 10 }, (_, i) => 510 + i);
       for (const cardNumber of starterNumbers) {
+        const cardId =
+          opponentsFixture().journeyAiDeck[cardNumber - 510].cardId;
         augmented.set(cardNumber, {
           ...makePackageCard(cardNumber, "Character", 1, "starter"),
+          id: asCardId(cardId),
           isStarter: true,
         });
       }

@@ -1,4 +1,11 @@
-import { readFileSync, mkdirSync, rmSync, symlinkSync, existsSync, readdirSync } from "node:fs";
+import {
+  readFileSync,
+  mkdirSync,
+  rmSync,
+  symlinkSync,
+  existsSync,
+  readdirSync,
+} from "node:fs";
 import { writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { dirname, resolve, join } from "node:path";
@@ -26,20 +33,38 @@ import {
   validateTutorialBattleConfiguration,
   validateTutorialTriggers,
 } from "./tutorial-data.mjs";
-import {
-  collectAtlasAssetSources,
-  compileAtlasData,
-} from "./atlas-data.mjs";
+import { collectAtlasAssetSources, compileAtlasData } from "./atlas-data.mjs";
 import { compileEconomyData } from "./economy-data.mjs";
+import { compileOpponentsData } from "./opponents-data.mjs";
 import { EXPLORATION_EFFECT_DEFINITION_BY_KIND } from "./exploration-editor-schema.mjs";
 
 // Re-exported for `setup-assets.test.mjs`, which exercises the JSONC comment
 // stripper alongside the asset-build helpers defined here.
 export { stripJsonComments };
 
+/** Compile the authored opponent catalog and write its browser artifact. */
+export function generateOpponentsData({
+  opponentsTomlPath,
+  opponentsJsonPath,
+  cardIds,
+}) {
+  const compiled = compileOpponentsData(
+    parse(readFileSync(opponentsTomlPath, "utf8")),
+    { cardIds },
+  );
+  writeFileSync(opponentsJsonPath, `${JSON.stringify(compiled, null, 2)}\n`);
+  return compiled;
+}
+
 const ROOT = resolve(import.meta.dirname, "..");
 const DATA_DIR = join(ROOT, "data");
-export const IMAGE_CACHE_DIR = join(homedir(), "Library", "Caches", "io.github.dreamtides.tv", "image_cache");
+export const IMAGE_CACHE_DIR = join(
+  homedir(),
+  "Library",
+  "Caches",
+  "io.github.dreamtides.tv",
+  "image_cache",
+);
 const DREAM_AVATAR_ART_DIR_CANDIDATES = [
   join(homedir(), "Documents", "synty", "dream-avatars"),
   join(homedir(), "Documents", "sytny", "dream-avatars"),
@@ -57,7 +82,12 @@ const DREAMSIGN_ART_DIR = join(
   "filtered",
   "outlined",
 );
-const JOURNEY_ART_DIR = join(homedir(), "Documents", "shutterstock", "images_journeys");
+const JOURNEY_ART_DIR = join(
+  homedir(),
+  "Documents",
+  "shutterstock",
+  "images_journeys",
+);
 const MAIN_MENU_BACKGROUND_ART_PATH = join(
   homedir(),
   "Documents",
@@ -92,9 +122,24 @@ const TUTORIAL_DIALOGUE_FRAME_ART_PATH = join(
 // (`<id>.png`, the hover-card art) and a circular node icon (`<id>_icon.png`).
 // Dream-guide character renders (one per guide, plus the boss `apollyon.png`)
 // and the ornate round frame used for unrevealed nodes round out the set.
-export const DREAMSCAPE_SCENE_ART_DIR = join(homedir(), "Documents", "synty", "dreamscape_images");
-export const DREAMSCAPE_ICON_ART_DIR = join(homedir(), "Documents", "synty", "dreamscape_icons");
-export const DREAM_GUIDE_ART_DIR = join(homedir(), "Documents", "synty", "dream_guides");
+export const DREAMSCAPE_SCENE_ART_DIR = join(
+  homedir(),
+  "Documents",
+  "synty",
+  "dreamscape_images",
+);
+export const DREAMSCAPE_ICON_ART_DIR = join(
+  homedir(),
+  "Documents",
+  "synty",
+  "dreamscape_icons",
+);
+export const DREAM_GUIDE_ART_DIR = join(
+  homedir(),
+  "Documents",
+  "synty",
+  "dream_guides",
+);
 
 /**
  * Maps each Dream Guide id to the basename of its character render in
@@ -216,7 +261,10 @@ export function parseEnergyCost(value) {
     }
   }
 
-  return { energyCost: base, energyCosts: segments.map(energyCostSegmentLabel) };
+  return {
+    energyCost: base,
+    energyCosts: segments.map(energyCostSegmentLabel),
+  };
 }
 
 /**
@@ -335,7 +383,9 @@ export function buildDraftRecords(dir, cardMaps, opts = {}) {
 
   const records = [];
 
-  for (const filename of readdirSync(dir).filter((f) => f.endsWith(".jsonc")).sort()) {
+  for (const filename of readdirSync(dir)
+    .filter((f) => f.endsWith(".jsonc"))
+    .sort()) {
     const raw = JSON.parse(
       stripJsonComments(readFileSync(join(dir, filename), "utf8")),
     );
@@ -367,7 +417,8 @@ export function buildDraftRecords(dir, cardMaps, opts = {}) {
 
       // When a seat filter is supplied, keep only the requested (draftId, seat)
       // seats — the rest are skipped before any resolution work.
-      if (seatFilter !== null && !seatFilter.has(`${draftId}#${seat}`)) continue;
+      if (seatFilter !== null && !seatFilter.has(`${draftId}#${seat}`))
+        continue;
 
       // Skip seats without a non-empty mainboard or a picks array.
       if (!Array.isArray(rawMainboard) || rawMainboard.length === 0) continue;
@@ -408,10 +459,14 @@ export function buildDraftRecords(dir, cardMaps, opts = {}) {
   }
 
   if (skippedIncomplete > 0) {
-    console.log(`Skipped ${skippedIncomplete} draft seats that did not yield exactly 30 trimmed picks`);
+    console.log(
+      `Skipped ${skippedIncomplete} draft seats that did not yield exactly 30 trimmed picks`,
+    );
   }
   if (droppedNames > 0) {
-    console.log(`Dropped ${droppedNames} unresolved card names from draft records`);
+    console.log(
+      `Dropped ${droppedNames} unresolved card names from draft records`,
+    );
   }
 
   return records;
@@ -435,12 +490,18 @@ export function buildDraftRecords(dir, cardMaps, opts = {}) {
  * @param {{ idToName: Map<string,string> }} cardMaps
  * @returns {Array<{ id: string, draftId: string, seat: number, name: string, mainboardIds: string[] }>}
  */
-export function buildKnownGoodDecklists(manifestPath, draftRecordsAdaptedDir, cardMaps) {
+export function buildKnownGoodDecklists(
+  manifestPath,
+  draftRecordsAdaptedDir,
+  cardMaps,
+) {
   const parsed = JSON.parse(readFileSync(manifestPath, "utf8"));
   const decklists = parsed.decklists;
 
   const seatFilter = new Set(decklists.map((d) => `${d.draftId}#${d.seat}`));
-  const nameByKey = new Map(decklists.map((d) => [`${d.draftId}#${d.seat}`, d.name]));
+  const nameByKey = new Map(
+    decklists.map((d) => [`${d.draftId}#${d.seat}`, d.name]),
+  );
 
   const records = buildDraftRecords(draftRecordsAdaptedDir, cardMaps, {
     seatFilter,
@@ -618,8 +679,8 @@ export function transformDreamsign(dreamsign, altTextByImageName = new Map()) {
     name: dreamsign.name,
     imageName: dreamsign.image_name,
     imageAlt:
-      altTextByImageName.get(dreamsign.image_name)
-      ?? `${dreamsign.name} Dreamsign artwork`,
+      altTextByImageName.get(dreamsign.image_name) ??
+      `${dreamsign.name} Dreamsign artwork`,
     effectDescription: dreamsign["rendered-text"] ?? "",
   };
 }
@@ -702,7 +763,9 @@ export function transformExplorationData(source) {
     return {
       ...encounter,
       action: (encounter.action ?? []).map((action) => {
-        const definition = EXPLORATION_EFFECT_DEFINITION_BY_KIND.get(action.effectKind);
+        const definition = EXPLORATION_EFFECT_DEFINITION_BY_KIND.get(
+          action.effectKind,
+        );
         const specialVariables = [
           ...new Set(action.effectText?.match(/\$[A-Z][A-Z0-9_]*/gu) ?? []),
         ];
@@ -715,7 +778,8 @@ export function transformExplorationData(source) {
             ? {}
             : {
                 selectionPolicyId:
-                  action.selectionPolicyId ?? definition.defaultSelectionPolicyId,
+                  action.selectionPolicyId ??
+                  definition.defaultSelectionPolicyId,
               }),
           ...(specialVariables.length === 0 ? {} : { specialVariables }),
         };
@@ -733,7 +797,9 @@ export function transformExplorationData(source) {
       throw new Error("exploration.toml: every encounter requires card-id");
     }
     if (encounterIds.has(encounter.cardId.toLowerCase())) {
-      throw new Error(`exploration.toml: duplicate encounter card-id ${encounter.cardId}`);
+      throw new Error(
+        `exploration.toml: duplicate encounter card-id ${encounter.cardId}`,
+      );
     }
     encounterIds.add(encounter.cardId.toLowerCase());
     if (!Array.isArray(encounter.action) || encounter.action.length !== 2) {
@@ -743,7 +809,9 @@ export function transformExplorationData(source) {
     }
     for (const action of encounter.action) {
       if (typeof action.id !== "string" || actionIds.has(action.id)) {
-        throw new Error(`exploration.toml: missing or duplicate action id ${String(action.id)}`);
+        throw new Error(
+          `exploration.toml: missing or duplicate action id ${String(action.id)}`,
+        );
       }
       actionIds.add(action.id);
       if (!EXPLORATION_EFFECT_KINDS.has(action.effectKind)) {
@@ -751,7 +819,9 @@ export function transformExplorationData(source) {
           `exploration.toml: action ${action.id} has unknown effect-kind ${String(action.effectKind)}`,
         );
       }
-      const definition = EXPLORATION_EFFECT_DEFINITION_BY_KIND.get(action.effectKind);
+      const definition = EXPLORATION_EFFECT_DEFINITION_BY_KIND.get(
+        action.effectKind,
+      );
       if (
         definition?.allowedSelectionPolicyIds !== undefined &&
         !definition.allowedSelectionPolicyIds.includes(action.selectionPolicyId)
@@ -762,13 +832,18 @@ export function transformExplorationData(source) {
       }
       for (const key of ["label", "effectText"]) {
         if (typeof action[key] !== "string" || action[key].trim() === "") {
-          throw new Error(`exploration.toml: action ${action.id} requires ${key}`);
+          throw new Error(
+            `exploration.toml: action ${action.id} requires ${key}`,
+          );
         }
       }
       if (
-        ["gain-offered-card", "draft-card", "take-cards", "transfigured-card-draft"].includes(
-          action.effectKind,
-        ) &&
+        [
+          "gain-offered-card",
+          "draft-card",
+          "take-cards",
+          "transfigured-card-draft",
+        ].includes(action.effectKind) &&
         (typeof action.predicate !== "string" || action.predicate.length === 0)
       ) {
         throw new Error(
@@ -788,7 +863,9 @@ export function transformExplorationData(source) {
         );
       }
       if (
-        ["draft-card", "take-cards", "transfigured-card-draft"].includes(action.effectKind) &&
+        ["draft-card", "take-cards", "transfigured-card-draft"].includes(
+          action.effectKind,
+        ) &&
         (typeof action.offerCount !== "number" ||
           !Number.isInteger(action.offerCount) ||
           action.offerCount <= 0)
@@ -816,7 +893,8 @@ export function transformExplorationData(source) {
       }
       if (
         action.effectKind === "gain-essence-per-card" &&
-        (typeof action.essencePerCard !== "number" || action.essencePerCard <= 0)
+        (typeof action.essencePerCard !== "number" ||
+          action.essencePerCard <= 0)
       ) {
         throw new Error(
           `exploration.toml: action ${action.id} requires positive essence-per-card`,
@@ -856,7 +934,9 @@ export function transformExplorationData(source) {
           "next-battle-opening-hand",
           "next-battle-starting-energy",
         ].includes(action.effectKind) &&
-        (typeof action.count !== "number" || !Number.isInteger(action.count) || action.count <= 0)
+        (typeof action.count !== "number" ||
+          !Number.isInteger(action.count) ||
+          action.count <= 0)
       ) {
         throw new Error(
           `exploration.toml: action ${action.id} requires a positive whole-number count`,
@@ -873,7 +953,9 @@ export function transformExplorationData(source) {
         );
       }
       if (
-        ["copy-offered-deck-card", "choose-dream-avatar"].includes(action.effectKind) &&
+        ["copy-offered-deck-card", "choose-dream-avatar"].includes(
+          action.effectKind,
+        ) &&
         (typeof action.offerCount !== "number" ||
           !Number.isInteger(action.offerCount) ||
           action.offerCount <= 0)
@@ -935,7 +1017,9 @@ export function shutterstockImageUrl(imageNumber) {
  * Compute the SHA-256 hash of the Shutterstock URL for a given image number.
  */
 export function imageHash(imageNumber) {
-  return createHash("sha256").update(shutterstockImageUrl(imageNumber)).digest("hex");
+  return createHash("sha256")
+    .update(shutterstockImageUrl(imageNumber))
+    .digest("hex");
 }
 
 /**
@@ -969,14 +1053,19 @@ export function linkExplorationArt({
     for (const filename of readdirSync(highResArtDir)) {
       const match = /^(\d+)\.jpg$/u.exec(filename);
       if (match === null || !wanted.has(match[1])) continue;
-      symlinkSync(join(highResArtDir, filename), join(destinationDir, filename));
+      symlinkSync(
+        join(highResArtDir, filename),
+        join(destinationDir, filename),
+      );
       linked.add(match[1]);
       highResolutionCount++;
     }
   }
 
   const sourceFiles = existsSync(sourceArtDir)
-    ? readdirSync(sourceArtDir).filter((filename) => filename.toLowerCase().endsWith(".jpg"))
+    ? readdirSync(sourceArtDir).filter((filename) =>
+        filename.toLowerCase().endsWith(".jpg"),
+      )
     : [];
   for (const imageNumber of wanted) {
     if (linked.has(imageNumber)) continue;
@@ -1239,9 +1328,7 @@ function setupCatalogFixture({
 }) {
   const parsedCards = parse(readFileSync(cardTomlPath, "utf8"));
   const jsonCards = (parsedCards.cards ?? []).map(transformCard);
-  const parsedDreamAvatars = parse(
-    readFileSync(dreamAvatarV2TomlPath, "utf8"),
-  );
+  const parsedDreamAvatars = parse(readFileSync(dreamAvatarV2TomlPath, "utf8"));
   const jsonDreamAvatars = (parsedDreamAvatars.dreamAvatar ?? []).map(
     transformDreamAvatar,
   );
@@ -1306,14 +1393,23 @@ export function setupAssets({
   dreamAvatarV2TomlPath = join(DATA_DIR, "tabula", "dream_avatars.toml"),
   dreamwellTomlPath = join(DATA_DIR, "tabula", "dreamwell.toml"),
   dreamsignTomlPath = join(DATA_DIR, "tabula", "dreamsigns.toml"),
-  dreamsignProfilesTomlPath = join(DATA_DIR, "tabula", "dreamsign_profiles.toml"),
-  dreamsignSignaturesTomlPath = join(DATA_DIR, "tabula", "dreamsign_signatures.toml"),
+  dreamsignProfilesTomlPath = join(
+    DATA_DIR,
+    "tabula",
+    "dreamsign_profiles.toml",
+  ),
+  dreamsignSignaturesTomlPath = join(
+    DATA_DIR,
+    "tabula",
+    "dreamsign_signatures.toml",
+  ),
   dreamscapesTomlPath = join(DATA_DIR, "tabula", "dreamscapes.toml"),
   dreamGuidesTomlPath = join(DATA_DIR, "tabula", "dream_guides.toml"),
   explorationTomlPath = join(DATA_DIR, "tabula", "exploration.toml"),
   affiliationsTomlPath = join(DATA_DIR, "tabula", "affiliations.toml"),
   atlasTomlPath = join(DATA_DIR, "tabula", "atlas.toml"),
   economyTomlPath = join(DATA_DIR, "tabula", "economy.toml"),
+  opponentsTomlPath = join(DATA_DIR, "tabula", "opponents.toml"),
   glossaryTomlPath = join(DATA_DIR, "tabula", "glossary.toml"),
   apollyonIncarnationsTomlPath = join(
     DATA_DIR,
@@ -1372,14 +1468,21 @@ export function setupAssets({
   const dreamAvatarV2JsonPath = join(publicDir, "dream-avatars-v2-data.json");
   const dreamwellJsonPath = join(publicDir, "dreamwell-data.json");
   const dreamsignJsonPath = join(publicDir, "dreamsign-data.json");
-  const dreamsignProfilesJsonPath = join(publicDir, "dreamsign-profiles-data.json");
-  const dreamsignSignaturesJsonPath = join(publicDir, "dreamsign-signatures-data.json");
+  const dreamsignProfilesJsonPath = join(
+    publicDir,
+    "dreamsign-profiles-data.json",
+  );
+  const dreamsignSignaturesJsonPath = join(
+    publicDir,
+    "dreamsign-signatures-data.json",
+  );
   const dreamscapesJsonPath = join(publicDir, "dreamscapes-data.json");
   const dreamGuidesJsonPath = join(publicDir, "dream-guides-data.json");
   const explorationJsonPath = join(publicDir, "exploration-data.json");
   const affiliationsJsonPath = join(publicDir, "affiliations-data.json");
   const atlasJsonPath = join(publicDir, "atlas-data.json");
   const economyJsonPath = join(publicDir, "economy-data.json");
+  const opponentsJsonPath = join(publicDir, "opponents-data.json");
   const apollyonIncarnationsJsonPath = join(
     publicDir,
     "apollyon-incarnations-data.json",
@@ -1423,22 +1526,30 @@ export function setupAssets({
     tutorialSource.battleStart,
   );
   const tutorialActions = validateTutorialActions(tutorialSource.actions);
-  const tutorialTriggers = validateTutorialTriggers(tutorialSource.triggers ?? []);
-  const tutorialBattle = validateTutorialBattleConfiguration(tutorialSource.battle);
+  const tutorialTriggers = validateTutorialTriggers(
+    tutorialSource.triggers ?? [],
+  );
+  const tutorialBattle = validateTutorialBattleConfiguration(
+    tutorialSource.battle,
+  );
   writeFileSync(
     tutorialJsonPath,
-    `${JSON.stringify({
-      journeyStart: tutorialJourneyStart,
-      dreamscape: tutorialDreamscape,
-      atlas: tutorialAtlas,
-      draft: tutorialDraft,
-      purge: tutorialPurge,
-      dreamsignRevelation: tutorialDreamsignRevelation,
-      battleStart: tutorialBattleStart,
-      actions: tutorialActions,
-      triggers: tutorialTriggers,
-      battle: tutorialBattle,
-    }, null, 2)}\n`,
+    `${JSON.stringify(
+      {
+        journeyStart: tutorialJourneyStart,
+        dreamscape: tutorialDreamscape,
+        atlas: tutorialAtlas,
+        draft: tutorialDraft,
+        purge: tutorialPurge,
+        dreamsignRevelation: tutorialDreamsignRevelation,
+        battleStart: tutorialBattleStart,
+        actions: tutorialActions,
+        triggers: tutorialTriggers,
+        battle: tutorialBattle,
+      },
+      null,
+      2,
+    )}\n`,
   );
   console.log(
     `Wrote ${tutorialActions.length} tutorial actions and ${tutorialTriggers.length} triggers to tutorial-data.json`,
@@ -1455,7 +1566,10 @@ export function setupAssets({
   // keyed by current card name (`string[][]`, one inner array per deck), matching
   // the name-based pool engine and oracle tests.
   console.log("Bundling real decklists from the adapted draft records...");
-  const decklists = readAdaptedRecordDecklists(draftRecordsAdaptedDir, cardMaps);
+  const decklists = readAdaptedRecordDecklists(
+    draftRecordsAdaptedDir,
+    cardMaps,
+  );
   writeFileSync(decklistsJsonPath, JSON.stringify(decklists) + "\n");
   console.log(`Wrote ${decklists.length} decklists to decklists-data.json`);
 
@@ -1467,9 +1581,14 @@ export function setupAssets({
   // corpus, which the `decklists` variant and the human-readable tooling still
   // read. Built from the SAME seats (every non-empty mainboard), so the two
   // corpora line up index-for-index.
-  const decklistIds = readAdaptedRecordDecklistIds(draftRecordsAdaptedDir, cardMaps);
+  const decklistIds = readAdaptedRecordDecklistIds(
+    draftRecordsAdaptedDir,
+    cardMaps,
+  );
   writeFileSync(decklistIdsJsonPath, JSON.stringify(decklistIds) + "\n");
-  console.log(`Wrote ${decklistIds.length} id-keyed decklists to decklist-ids-data.json`);
+  console.log(
+    `Wrote ${decklistIds.length} id-keyed decklists to decklist-ids-data.json`,
+  );
 
   // Adapted draft records bundled for the record-replay draft mode and the
   // pick-data pool variants. Each JSON file in `docs/draft_records_adapted` is
@@ -1478,7 +1597,9 @@ export function setupAssets({
   console.log("Bundling adapted draft records from the corpus...");
   const draftRecords = buildDraftRecords(draftRecordsAdaptedDir, cardMaps);
   writeFileSync(draftRecordsJsonPath, JSON.stringify(draftRecords) + "\n");
-  console.log(`Wrote ${draftRecords.length} draft-record seats to draft-records-data.json`);
+  console.log(
+    `Wrote ${draftRecords.length} draft-record seats to draft-records-data.json`,
+  );
 
   console.log("Bundling known-good decklists corpus...");
   const knownGoodDecklists = buildKnownGoodDecklists(
@@ -1486,8 +1607,13 @@ export function setupAssets({
     draftRecordsAdaptedDir,
     cardMaps,
   );
-  writeFileSync(join(publicDir, "known-good-decklists-data.json"), JSON.stringify(knownGoodDecklists) + "\n");
-  console.log(`Wrote ${knownGoodDecklists.length} known-good decklists to known-good-decklists-data.json`);
+  writeFileSync(
+    join(publicDir, "known-good-decklists-data.json"),
+    JSON.stringify(knownGoodDecklists) + "\n",
+  );
+  console.log(
+    `Wrote ${knownGoodDecklists.length} known-good decklists to known-good-decklists-data.json`,
+  );
 
   // The committed affinity corpus the `embedded` pool variant grows from. It is an
   // authored/baked artifact (run `npm run bake-affinity-corpus` to regenerate it
@@ -1503,7 +1629,9 @@ export function setupAssets({
     // Strip comments and re-serialize so the served asset is valid JSON.
     const served = JSON.stringify(JSON.parse(stripJsonComments(corpusJsonc)));
     writeFileSync(affinityCorpusJsonPath, served + "\n");
-    console.log("Copied affinity_corpus.jsonc to affinity-corpus-data.json (comments stripped)");
+    console.log(
+      "Copied affinity_corpus.jsonc to affinity-corpus-data.json (comments stripped)",
+    );
   } else {
     console.log(
       "No data/affinity_corpus.jsonc found; the `embedded` pool variant will " +
@@ -1603,7 +1731,9 @@ export function setupAssets({
   const tides2RelJsonPath = join(publicDir, "tides2-relationships-data.json");
   if (existsSync(tides2RelSourcePath)) {
     const tides2RelJsonc = readFileSync(tides2RelSourcePath, "utf8");
-    const served = JSON.stringify(JSON.parse(stripJsonComments(tides2RelJsonc)));
+    const served = JSON.stringify(
+      JSON.parse(stripJsonComments(tides2RelJsonc)),
+    );
     writeFileSync(tides2RelJsonPath, served + "\n");
     console.log(
       "Copied tides2_relationships.jsonc to tides2-relationships-data.json (comments stripped)",
@@ -1671,8 +1801,13 @@ export function setupAssets({
   }
 
   const jsonDreamwell = allDreamwell.map(transformDreamwell);
-  writeFileSync(dreamwellJsonPath, JSON.stringify(jsonDreamwell, null, 2) + "\n");
-  console.log(`Wrote ${jsonDreamwell.length} dreamwell cards to dreamwell-data.json`);
+  writeFileSync(
+    dreamwellJsonPath,
+    JSON.stringify(jsonDreamwell, null, 2) + "\n",
+  );
+  console.log(
+    `Wrote ${jsonDreamwell.length} dreamwell cards to dreamwell-data.json`,
+  );
   // Dreamwell card art is symlinked into `public/cards` alongside the other
   // catalogs further below, after `recreateDir(cardsDir)` has created the
   // directory.
@@ -1708,10 +1843,17 @@ export function setupAssets({
     ]),
   );
   const explorationImageNumbers = explorationData.encounters.map(
-    (encounter) => explorationCardById.get(encounter.cardId.toLowerCase())?.imageNumber,
+    (encounter) =>
+      explorationCardById.get(encounter.cardId.toLowerCase())?.imageNumber,
   );
-  if (explorationImageNumbers.some((imageNumber) => typeof imageNumber !== "number")) {
-    throw new Error("exploration.toml: every encounter card requires an image-number");
+  if (
+    explorationImageNumbers.some(
+      (imageNumber) => typeof imageNumber !== "number",
+    )
+  ) {
+    throw new Error(
+      "exploration.toml: every encounter card requires an image-number",
+    );
   }
   const knownCardIds = new Set(
     [...jsonCardsV2, ...explorationData.customCards].map((card) =>
@@ -1761,7 +1903,10 @@ export function setupAssets({
   // Dreamsign profiles: parse the curated TOML and write the kebab->camel JSON
   // the runtime loader fetches.
   console.log("Parsing dreamsign_profiles.toml...");
-  const dreamsignProfilesTomlContent = readFileSync(dreamsignProfilesTomlPath, "utf8");
+  const dreamsignProfilesTomlContent = readFileSync(
+    dreamsignProfilesTomlPath,
+    "utf8",
+  );
   const parsedDreamsignProfiles = parse(dreamsignProfilesTomlContent);
   const allDreamsignProfiles = parsedDreamsignProfiles.dreamsigns;
 
@@ -1769,7 +1914,9 @@ export function setupAssets({
     throw new Error("Expected [[dreamsigns]] array in dreamsign_profiles.toml");
   }
 
-  const jsonDreamsignProfiles = allDreamsignProfiles.map(transformDreamsignProfile);
+  const jsonDreamsignProfiles = allDreamsignProfiles.map(
+    transformDreamsignProfile,
+  );
   writeFileSync(
     dreamsignProfilesJsonPath,
     JSON.stringify(jsonDreamsignProfiles, null, 2) + "\n",
@@ -1783,15 +1930,22 @@ export function setupAssets({
   // set of signature card ids). Validate all signature-card-ids against the card
   // database so a dangling UUID fails the build loudly.
   console.log("Parsing dreamsign_signatures.toml...");
-  const dreamsignSignaturesTomlContent = readFileSync(dreamsignSignaturesTomlPath, "utf8");
+  const dreamsignSignaturesTomlContent = readFileSync(
+    dreamsignSignaturesTomlPath,
+    "utf8",
+  );
   const parsedDreamsignSignatures = parse(dreamsignSignaturesTomlContent);
   const allDreamsignSignatures = parsedDreamsignSignatures.dreamsigns;
 
   if (!Array.isArray(allDreamsignSignatures)) {
-    throw new Error("Expected [[dreamsigns]] array in dreamsign_signatures.toml");
+    throw new Error(
+      "Expected [[dreamsigns]] array in dreamsign_signatures.toml",
+    );
   }
 
-  const jsonDreamsignSignatures = allDreamsignSignatures.map(transformDreamsignProfile);
+  const jsonDreamsignSignatures = allDreamsignSignatures.map(
+    transformDreamsignProfile,
+  );
   for (const entry of jsonDreamsignSignatures) {
     validateCardIds(
       entry.signatureCardIds ?? [],
@@ -1838,7 +1992,9 @@ export function setupAssets({
     dreamscapesJsonPath,
     JSON.stringify(jsonDreamscapes, null, 2) + "\n",
   );
-  console.log(`Wrote ${jsonDreamscapes.length} dreamscapes to dreamscapes-data.json`);
+  console.log(
+    `Wrote ${jsonDreamscapes.length} dreamscapes to dreamscapes-data.json`,
+  );
 
   // Dream Guides: the resident character of each non-starter dreamscape. Parse
   // the TOML and write the kebab->camel JSON fetched at /dream-guides-data.json.
@@ -1856,7 +2012,9 @@ export function setupAssets({
     dreamGuidesJsonPath,
     JSON.stringify(jsonDreamGuides, null, 2) + "\n",
   );
-  console.log(`Wrote ${jsonDreamGuides.length} dream guides to dream-guides-data.json`);
+  console.log(
+    `Wrote ${jsonDreamGuides.length} dream guides to dream-guides-data.json`,
+  );
 
   // Affiliations: the thematic factions backing each dreamscape. Signature
   // cards are authored as stable cards_v2 UUIDs; validate them against the card
@@ -1882,7 +2040,9 @@ export function setupAssets({
     affiliationsJsonPath,
     JSON.stringify(jsonAffiliations, null, 2) + "\n",
   );
-  console.log(`Wrote ${jsonAffiliations.length} affiliations to affiliations-data.json`);
+  console.log(
+    `Wrote ${jsonAffiliations.length} affiliations to affiliations-data.json`,
+  );
 
   // Dream Atlas rules, content, and presentation data. Compile the TOML through
   // the same strict normalizer used by targeted dev hot reload.
@@ -1906,10 +2066,7 @@ export function setupAssets({
       ? {}
       : { assetSources: atlasAssetSources }),
   });
-  writeFileSync(
-    atlasJsonPath,
-    JSON.stringify(jsonAtlasData, null, 2) + "\n",
-  );
+  writeFileSync(atlasJsonPath, JSON.stringify(jsonAtlasData, null, 2) + "\n");
   console.log("Wrote Atlas data to atlas-data.json");
 
   console.log("Parsing economy.toml...");
@@ -1921,6 +2078,14 @@ export function setupAssets({
     JSON.stringify(jsonEconomyData, null, 2) + "\n",
   );
   console.log("Wrote Economy data to economy-data.json");
+
+  console.log("Parsing opponents.toml...");
+  generateOpponentsData({
+    opponentsTomlPath,
+    opponentsJsonPath,
+    cardIds: cardMaps.idToName.keys(),
+  });
+  console.log("Wrote Opponent data to opponents-data.json");
 
   // Apollyon incarnations: the final DreamAvatar's ten guises. Parse the TOML
   // and write the kebab->camel JSON the runtime loader fetches at
@@ -2016,7 +2181,9 @@ export function setupAssets({
     }
   }
 
-  console.log(`Linked ${linked} of ${jsonCards.length} card images (${missing} missing)`);
+  console.log(
+    `Linked ${linked} of ${jsonCards.length} card images (${missing} missing)`,
+  );
 
   // Link figment art into the same cards directory, keyed by image number. A
   // figment with no assigned art keeps image-number 0 and is skipped; the battle
@@ -2086,7 +2253,9 @@ export function setupAssets({
   // directory so local review and production uploads resolve the same assets.
   let linkedOfferTileBackgrounds = 0;
   let missingOfferTileBackgrounds = 0;
-  for (const imageNumber of Object.values(OFFER_TILE_BACKGROUND_IMAGE_NUMBERS)) {
+  for (const imageNumber of Object.values(
+    OFFER_TILE_BACKGROUND_IMAGE_NUMBERS,
+  )) {
     const hash = imageHash(imageNumber);
     const cachePath = join(imageCacheDir, hash);
     const symlinkPath = join(cardsDir, `${imageNumber}.webp`);
@@ -2152,7 +2321,10 @@ export function setupAssets({
   const dreamAvatarArtByImageNumber = new Map();
   for (const dreamAvatar of jsonDreamAvatarsV2) {
     if (!dreamAvatarArtByImageNumber.has(dreamAvatar.imageNumber)) {
-      dreamAvatarArtByImageNumber.set(dreamAvatar.imageNumber, dreamAvatar.name);
+      dreamAvatarArtByImageNumber.set(
+        dreamAvatar.imageNumber,
+        dreamAvatar.name,
+      );
     }
   }
 
@@ -2288,10 +2460,7 @@ export function setupAssets({
   // linked into the ignored public asset tree for local serving and upload.
   recreateDir(mainMenuDir);
   if (existsSync(mainMenuBackgroundArtPath)) {
-    symlinkSync(
-      mainMenuBackgroundArtPath,
-      join(mainMenuDir, "background.jpg"),
-    );
+    symlinkSync(mainMenuBackgroundArtPath, join(mainMenuDir, "background.jpg"));
     console.log("Linked main-menu background image");
   } else {
     console.warn(
@@ -2410,7 +2579,9 @@ export function setupAssets({
       missingGuideArt++;
     }
   };
-  for (const [guideId, sourceFile] of Object.entries(GUIDE_PORTRAIT_SOURCE_BY_ID)) {
+  for (const [guideId, sourceFile] of Object.entries(
+    GUIDE_PORTRAIT_SOURCE_BY_ID,
+  )) {
     linkGuidePortrait(sourceFile, `${guideId}.png`);
   }
   linkGuidePortrait(
@@ -2452,7 +2623,9 @@ export function setupAssets({
   console.log("Asset setup complete.");
 }
 
-if (process.argv[1] !== undefined &&
-  import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (
+  process.argv[1] !== undefined &&
+  import.meta.url === pathToFileURL(process.argv[1]).href
+) {
   setupAssets();
 }

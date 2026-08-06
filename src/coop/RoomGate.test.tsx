@@ -13,14 +13,16 @@ import type { Genesis, LogNode } from "../eventlog/types";
 import { resetLog } from "../logging";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { economyFixture } from "../testing/economy-fixture";
+import { opponentsFixture } from "../testing/opponents-fixture";
 
-const REDUCER_VERSION = "dreamtides-coop-v14";
+const REDUCER_VERSION = "dreamtides-coop-v15";
 const ATLAS_FOLD_HASH = "fixture-atlas-fold-hash";
 const ECONOMY = economyFixture();
 const PINNED_ECONOMY = {
   economyFoldHash: ECONOMY.foldHash,
   defaultStartingEssence: ECONOMY.journey.defaultStartingEssence,
   dreamsignCap: ECONOMY.journey.dreamsignCap,
+  opponentsFoldHash: opponentsFixture().foldHash,
 };
 
 // Captured subscriber so a test can hand RoomGate a chosen log node.
@@ -31,7 +33,11 @@ vi.mock("./build-hash", () => ({
 }));
 
 vi.mock("../eventlog/subscribe", () => ({
-  subscribeToLog: (_db: unknown, _roomId: unknown, onNode: (node: LogNode) => void) => {
+  subscribeToLog: (
+    _db: unknown,
+    _roomId: unknown,
+    onNode: (node: LogNode) => void,
+  ) => {
     deliverNode = onNode;
     return () => {
       deliverNode = null;
@@ -40,7 +46,10 @@ vi.mock("../eventlog/subscribe", () => ({
 }));
 
 vi.mock("../eventlog/room", async () => {
-  const actual = await vi.importActual<typeof import("../eventlog/room")>("../eventlog/room");
+  const actual =
+    await vi.importActual<typeof import("../eventlog/room")>(
+      "../eventlog/room",
+    );
   return {
     ...actual,
     mintClientId: () => "client-test",
@@ -64,7 +73,8 @@ vi.mock("firebase/database", () => ({
 }));
 
 // Imported after the mocks are registered.
-const { createFreshGenesis, RoomGate, roomScopedClientId } = await import("./RoomGate");
+const { createFreshGenesis, RoomGate, roomScopedClientId } =
+  await import("./RoomGate");
 
 function runtimeConfig(overrides: Partial<RuntimeConfig> = {}): RuntimeConfig {
   return {
@@ -114,6 +124,7 @@ function mount(config: RuntimeConfig): void {
         runtimeConfig={config}
         atlasFoldHash={ATLAS_FOLD_HASH}
         economyData={ECONOMY}
+        opponentsData={opponentsFixture()}
       >
         {() => <div data-room-children="true">room children</div>}
       </RoomGate>,
@@ -129,8 +140,9 @@ async function flush(): Promise<void> {
 }
 
 beforeEach(() => {
-  (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT =
-    true;
+  (
+    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
+  ).IS_REACT_ACT_ENVIRONMENT = true;
   deliverNode = null;
   resetLog();
 });
@@ -205,6 +217,30 @@ describe("RoomGate content-config gate", () => {
 
     expect(container.querySelector("[data-config-gate]")).toBeNull();
     expect(container.querySelector("[data-room-children]")).not.toBeNull();
+  });
+
+  it("gates a room pinned to different opponent rules", async () => {
+    mount(runtimeConfig());
+    await flush();
+
+    act(() => {
+      deliverNode?.(
+        nodeWith(
+          genesisWith({
+            poolVariant: "tides4",
+            draftMode: "pool",
+            fresh20PackSize: null,
+            atlasFoldHash: ATLAS_FOLD_HASH,
+            ...PINNED_ECONOMY,
+            opponentsFoldHash: "c".repeat(64),
+          }),
+        ),
+      );
+    });
+    await flush();
+
+    expect(container.querySelector("[data-config-gate]")).not.toBeNull();
+    expect(container.textContent).toContain("Opponent Rules");
   });
 
   it("treats a genesis with no contentConfig as a mismatch (config gate)", async () => {

@@ -1,6 +1,24 @@
 import { describe, expect, it } from "vitest";
 import { buildFitModel } from "../../draft/replay/fit-model";
-import { scoreDeckCoherence } from "./coherence";
+import { scoreDeckCoherence as scoreConfiguredDeckCoherence } from "./coherence";
+import { opponentsFixture } from "../../testing/opponents-fixture";
+
+const AUTHORED_COHERENCE = opponentsFixture().coherentDraft.coherence;
+const COHERENCE_TUNING = {
+  knn: AUTHORED_COHERENCE.nearestNeighbors,
+  wNeighbor: AUTHORED_COHERENCE.neighborWeight,
+  wCooccur: AUTHORED_COHERENCE.cooccurrenceWeight,
+  wSelf: AUTHORED_COHERENCE.selfConsistencyWeight,
+  selfDistractors: AUTHORED_COHERENCE.selfDistractors,
+  selfRecallK: AUTHORED_COHERENCE.selfRecallK,
+};
+
+function scoreDeckCoherence(
+  deck: readonly number[],
+  fitModel: Parameters<typeof scoreConfiguredDeckCoherence>[1],
+) {
+  return scoreConfiguredDeckCoherence(deck, fitModel, COHERENCE_TUNING);
+}
 
 // A synthetic two-cluster corpus: alpha cards co-occur in alpha decks, beta cards
 // in beta decks. The fit model learns the clusters; a deck drawn purely from one

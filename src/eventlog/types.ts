@@ -96,6 +96,7 @@ export interface ContentConfig {
   atlasFoldHash?: string;
   /** Economy coefficients and genesis defaults pinned independently of URL settings. */
   economyFoldHash?: string;
+  opponentsFoldHash?: string;
   defaultStartingEssence?: number;
   dreamsignCap?: number;
 }
@@ -103,6 +104,7 @@ export interface ContentConfig {
 export interface PinnedContentConfig extends ContentConfig {
   atlasFoldHash: string;
   economyFoldHash: string;
+  opponentsFoldHash: string;
   defaultStartingEssence: number;
   dreamsignCap: number;
 }

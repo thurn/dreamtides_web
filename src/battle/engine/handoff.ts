@@ -4,13 +4,13 @@ import { rankSlotIds } from "../types";
 
 export interface HandoffInput {
   state: BattleMutableState;
-  scoreToWin: number;   // BattleInit.scoreToWin === 25
-  turnLimit: number;    // BattleInit.turnLimit === 50
-  maxEnergyCap: number; // 10
+  scoreToWin: number;
+  turnLimit: number;
+  maxEnergyCap: number;
 }
 
 export interface HandoffPlan {
-  result: BattleResult | null;        // "victory"|"defeat"|"draw"|null, from the PLAYER's POV
+  result: BattleResult | null; // "victory"|"defeat"|"draw"|null, from the PLAYER's POV
   /**
    * Ending bookend for the OUTGOING side: its ephemeral hand cards and offering
    * in-play cards are banished (rules §Turn Structure — Ending). Applied before
@@ -47,10 +47,22 @@ export function endingBanishEdits(
     appendBanishEdit(state, side, battleCardId, "ephemeral", edits);
   }
   for (const slotId of rankSlotIds(sideState.backRank)) {
-    appendBanishEdit(state, side, sideState.backRank[slotId], "offering", edits);
+    appendBanishEdit(
+      state,
+      side,
+      sideState.backRank[slotId],
+      "offering",
+      edits,
+    );
   }
   for (const slotId of rankSlotIds(sideState.frontRank)) {
-    appendBanishEdit(state, side, sideState.frontRank[slotId], "offering", edits);
+    appendBanishEdit(
+      state,
+      side,
+      sideState.frontRank[slotId],
+      "offering",
+      edits,
+    );
   }
 
   return edits;

@@ -2,6 +2,7 @@ import { buildSupportContribution } from "./cards/support-contribution";
 import { starterCardModels } from "./cards/index";
 import { rankSlotIds } from "../types";
 import type { AiCard, ForwardModel } from "./forward-model";
+import type { AiEvaluationWeights } from "../../types/opponents-data";
 
 /**
  * Static board evaluation. Maps a {@link ForwardModel} to a single scalar from
@@ -31,28 +32,6 @@ import type { AiCard, ForwardModel } from "./forward-model";
 // competent. Re-run the harness after changing any of them.
 
 /** Score reaching this value wins the game (matches `BattleInit.scoreToWin`). */
-const SCORE_TO_WIN = 25;
-
-/** Score differential dominates; one point is worth a large board swing. */
-const SCORE_DIFF_WEIGHT = 10;
-
-/** Front-rank board spark. Weighted above back-rank. */
-const FRONT_SPARK_WEIGHT = 1;
-
-/** Back-rank board spark. Lower than front so front-rank bodies lead. */
-const BACK_SPARK_WEIGHT = 0.5;
-
-/** Each card in the AI's hand. */
-const HAND_CARD_WEIGHT = 1.5;
-
-/** Multiplier on the summed per-card `valueHint` of engine cards in play/hand. */
-const VALUE_HINT_WEIGHT = 1;
-
-/** Penalty per point of energy left unspent (tempo waste). Small. */
-const ENERGY_WASTE_WEIGHT = 0.25;
-
-/** Simple estimate of spark that will score unblocked next Challenge. */
-const EXPECTED_POINTS_WEIGHT = 1;
 
 // --- Helpers --------------------------------------------------------------
 
@@ -75,20 +54,24 @@ function valueHintSum(model: ForwardModel, card: AiCard): number {
 
 // --- Evaluation -----------------------------------------------------------
 
-export function evaluate(model: ForwardModel): number {
+export function evaluate(
+  model: ForwardModel,
+  scoreToWin: number,
+  weights: AiEvaluationWeights,
+): number {
   // Terminal check first, short-circuiting every other term: a terminal state
   // is decisive regardless of the board.
-  if (model.aiScore >= SCORE_TO_WIN) {
+  if (model.aiScore >= scoreToWin) {
     return Number.POSITIVE_INFINITY;
   }
-  if (model.playerScore >= SCORE_TO_WIN) {
+  if (model.playerScore >= scoreToWin) {
     return Number.NEGATIVE_INFINITY;
   }
 
   let score = 0;
 
   // Score differential — the dominant term.
-  score += SCORE_DIFF_WEIGHT * (model.aiScore - model.playerScore);
+  score += weights.scoreDifference * (model.aiScore - model.playerScore);
 
   // Board spark. AI effective spark adds the support contribution to each
   // front-rank body's base spark; opponent bodies use their abstract
@@ -145,14 +128,14 @@ export function evaluate(model: ForwardModel): number {
     }
   }
 
-  score += FRONT_SPARK_WEIGHT * (aiFrontSpark - opponentFrontSpark);
-  score += BACK_SPARK_WEIGHT * (aiBackSpark - opponentBackSpark);
+  score += weights.frontRankSpark * (aiFrontSpark - opponentFrontSpark);
+  score += weights.backRankSpark * (aiBackSpark - opponentBackSpark);
 
   // Simple expected next-Challenge points estimate.
-  score += EXPECTED_POINTS_WEIGHT * expectedPoints;
+  score += weights.expectedPoints * expectedPoints;
 
   // Card advantage: hand size plus per-card value hints across board + hand.
-  score += HAND_CARD_WEIGHT * model.aiHand.length;
+  score += weights.handCard * model.aiHand.length;
 
   let hintTotal = 0;
   for (const card of model.aiHand) {
@@ -170,10 +153,10 @@ export function evaluate(model: ForwardModel): number {
       hintTotal += valueHintSum(model, card);
     }
   }
-  score += VALUE_HINT_WEIGHT * hintTotal;
+  score += weights.valueHint * hintTotal;
 
   // Tempo / energy waste: small penalty for unspent AI energy.
-  score -= ENERGY_WASTE_WEIGHT * model.aiEnergy;
+  score -= weights.energyWaste * model.aiEnergy;
 
   return score;
 }

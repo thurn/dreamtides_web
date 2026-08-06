@@ -34,7 +34,16 @@ const fake = vi.hoisted(() => {
     seed: "s",
     reducerVersion: "v",
     createdAt: 0,
-    contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null, atlasFoldHash: "fixture-atlas-fold-hash", economyFoldHash: "a".repeat(64), defaultStartingEssence: 17, dreamsignCap: 4 },
+    contentConfig: {
+      poolVariant: "test",
+      draftMode: "pool",
+      fresh20PackSize: null,
+      atlasFoldHash: "fixture-atlas-fold-hash",
+      economyFoldHash: "a".repeat(64),
+      opponentsFoldHash: "b".repeat(64),
+      defaultStartingEssence: 17,
+      dreamsignCap: 4,
+    },
   };
   const committed: FakeEvent[] = [];
   let subscriber: ((node: unknown) => void) | null = null;
@@ -42,7 +51,14 @@ const fake = vi.hoisted(() => {
   function buildNode(): unknown {
     const events = new Map<number, FakeEvent>();
     committed.forEach((event, index) => events.set(index + 1, event));
-    return { genesis, baseSeq: 0, baseSnapshot: null, head: committed.length, events, appliedIndex: new Map() };
+    return {
+      genesis,
+      baseSeq: 0,
+      baseSnapshot: null,
+      head: committed.length,
+      events,
+      appliedIndex: new Map(),
+    };
   }
   function deliver(): void {
     const node = buildNode();
@@ -71,11 +87,19 @@ const fake = vi.hoisted(() => {
 });
 
 vi.mock("../eventlog/subscribe", () => ({
-  subscribeToLog: (_db: unknown, _roomId: unknown, onNode: (node: unknown) => void) =>
-    fake.subscribe(onNode),
+  subscribeToLog: (
+    _db: unknown,
+    _roomId: unknown,
+    onNode: (node: unknown) => void,
+  ) => fake.subscribe(onNode),
 }));
 vi.mock("../eventlog/append", () => ({
-  appendEvent: (_db: unknown, _roomId: unknown, _config: unknown, event: unknown) => fake.append(event),
+  appendEvent: (
+    _db: unknown,
+    _roomId: unknown,
+    _config: unknown,
+    event: unknown,
+  ) => fake.append(event),
 }));
 // A toy config whose reducer bounces via a genuine intervening-window rule (a
 // cross-actor applied partner in the window), not a payload flag — so
@@ -91,7 +115,10 @@ vi.mock("../rules/replay/replay", () => ({
       if (event.type === "INVALID") {
         return { state, outcome: "bounced", bounceReason: "invalid_action" };
       }
-      if (ctx.intervening !== "unknown" && ctx.intervening.some((e) => e.actor !== event.actor)) {
+      if (
+        ctx.intervening !== "unknown" &&
+        ctx.intervening.some((e) => e.actor !== event.actor)
+      ) {
         return { state, outcome: "bounced", bounceReason: "partner_conflict" };
       }
       return { state: { n: state.n + 1 }, outcome: "applied" };
@@ -109,7 +136,9 @@ vi.mock("firebase/database", () => ({
 import { CoopProvider, useAppend } from "./hooks";
 import type { RoomReadyContext } from "./RoomGate";
 
-const bounceCalls: Array<[number, readonly number[], BounceReason | undefined]> = [];
+const bounceCalls: Array<
+  [number, readonly number[], BounceReason | undefined]
+> = [];
 
 function makeContext(): RoomReadyContext {
   return {
@@ -131,7 +160,11 @@ function makeContext(): RoomReadyContext {
   };
 }
 
-function CaptureAppend({ onReady }: { onReady: (append: AppendFn) => void }): null {
+function CaptureAppend({
+  onReady,
+}: {
+  onReady: (append: AppendFn) => void;
+}): null {
   const append = useAppend();
   useEffect(() => onReady(append), [append, onReady]);
   return null;
@@ -202,9 +235,9 @@ describe("hooks.ts bounce diagnostics", () => {
     expect(seq).toBe(2);
     expect(interveningSeqs).toEqual([1]);
     expect(bounceReason).toBe("partner_conflict");
-    expect(container.querySelector("[data-coop-bounce-toast]")?.textContent).toBe(
-      PARTNER_CONFLICT_MESSAGE,
-    );
+    expect(
+      container.querySelector("[data-coop-bounce-toast]")?.textContent,
+    ).toBe(PARTNER_CONFLICT_MESSAGE);
   });
 
   it("shows an invalid-action error without blaming a partner", async () => {

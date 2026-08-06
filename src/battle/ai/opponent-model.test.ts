@@ -1,8 +1,31 @@
 import { describe, expect, it, vi } from "vitest";
 
 import type { AiCard, AiOpponentBody, ForwardModel } from "./forward-model";
-import { scoreAgainstOpponent } from "./opponent-model";
+import { scoreAgainstOpponent as scoreConfiguredAgainstOpponent } from "./opponent-model";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
+import { opponentsFixture } from "../../testing/opponents-fixture";
+
+const OPPONENTS = opponentsFixture();
+
+function scoreAgainstOpponent(
+  model: ForwardModel,
+  mode: Parameters<typeof scoreConfiguredAgainstOpponent>[1],
+  sampleCap: number,
+  rngSeed: number,
+  scoreToWin = 25,
+  evaluation = OPPONENTS.ai.evaluation,
+  tuning = OPPONENTS.ai.opponentModel,
+): number {
+  return scoreConfiguredAgainstOpponent(
+    model,
+    mode,
+    sampleCap,
+    rngSeed,
+    scoreToWin,
+    evaluation,
+    tuning,
+  );
+}
 
 // --- Fixtures -------------------------------------------------------------
 

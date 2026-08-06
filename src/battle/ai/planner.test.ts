@@ -5,6 +5,9 @@ import type { AiCard, AiOpponentBody, ForwardModel } from "./forward-model";
 import { isBackRankSlotId, isFrontRankSlotId, rankSlotIds } from "../types";
 import type { FrontRankSlotId } from "../types";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
+import { opponentsFixture } from "../../testing/opponents-fixture";
+
+const AI_TUNING = opponentsFixture().ai;
 
 // --- Fixture helpers -------------------------------------------------------
 
@@ -72,6 +75,9 @@ function defaultOptions(overrides: Partial<PlannerOptions> = {}): PlannerOptions
     sampleCap: 8,
     nowMs: 0,
     rngSeed: 12345,
+    scoreToWin: 25,
+    evaluation: AI_TUNING.evaluation,
+    opponentModel: AI_TUNING.opponentModel,
     ...overrides,
   };
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createBattleInit } from "../integration/create-battle-init";
+import { createTestBattleInit } from "../../testing/create-battle-init";
 import { createInitialBattleState } from "./create-initial-state";
 import {
   selectEffectiveSpark,
@@ -20,7 +20,7 @@ import {
 describe("selectEffectiveSpark", () => {
   it("clamps negative printedSpark + sparkDelta to zero per spec E-5", () => {
     const state = createInitialBattleState(
-      createBattleInit({
+      createTestBattleInit({
         battleEntryKey: "site-7::2::dreamscape-2",
         site: makeBattleTestSite(),
         state: makeBattleTestState(),
@@ -46,7 +46,7 @@ describe("selectEffectiveSpark", () => {
 
   it("returns null for missing or null battleCardId (bug-041)", () => {
     const state = createInitialBattleState(
-      createBattleInit({
+      createTestBattleInit({
         battleEntryKey: "site-7::2::dreamscape-2",
         site: makeBattleTestSite(),
         state: makeBattleTestState(),
@@ -62,7 +62,7 @@ describe("selectEffectiveSpark", () => {
 describe("selectEffectiveSparkOrZero", () => {
   it("coalesces a missing card to zero for display callers", () => {
     const state = createInitialBattleState(
-      createBattleInit({
+      createTestBattleInit({
         battleEntryKey: "site-7::2::dreamscape-2",
         site: makeBattleTestSite(),
         state: makeBattleTestState(),
@@ -93,7 +93,7 @@ describe("selectFailureOverlayResult", () => {
 describe("selectPlayAreaSize", () => {
   function emptyBattleState(): BattleMutableState {
     return createInitialBattleState(
-      createBattleInit({
+      createTestBattleInit({
         battleEntryKey: "site-7::2::dreamscape-2",
         site: makeBattleTestSite(),
         state: makeBattleTestState(),
@@ -123,7 +123,7 @@ describe("selectPlayAreaSize", () => {
 describe("selectCenterPreferredCharacterPlaySlot", () => {
   it("chooses the nearest open center slot with a deterministic lower-index tie break", () => {
     const state = createInitialBattleState(
-      createBattleInit({
+      createTestBattleInit({
         battleEntryKey: "site-7::2::dreamscape-2",
         site: makeBattleTestSite(),
         state: makeBattleTestState(),

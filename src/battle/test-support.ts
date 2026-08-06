@@ -1,9 +1,22 @@
 import { asCardId, asCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
-import type { DreamAvatarContent, ResolvedDreamAvatarPackage } from "../types/content";
-import type { DeckEntry, DreamAvatar, Dreamsign, JourneyState, SiteState } from "../types/journey";
+import type {
+  DreamAvatarContent,
+  ResolvedDreamAvatarPackage,
+} from "../types/content";
+import type {
+  DeckEntry,
+  DreamAvatar,
+  Dreamsign,
+  JourneyState,
+  SiteState,
+} from "../types/journey";
 import { LayerName } from "../types/layer-name";
-import { backRankSlotIds, createEmptySlotRecord, frontRankSlotIds } from "./types";
+import {
+  backRankSlotIds,
+  createEmptySlotRecord,
+  frontRankSlotIds,
+} from "./types";
 import type { BackRankSlotId, FrontRankSlotId } from "./types";
 
 /** A generous materialized window for test ranks. The play area grows without
@@ -42,7 +55,8 @@ export function makeBattleTestDreamAvatars(): DreamAvatarContent[] {
       id: "dream-avatar-arc",
       name: "Aeris, the Prism Guide",
       title: "Storm Archivist",
-      renderedText: "Whenever the first event each turn resolves, gain momentum.",
+      renderedText:
+        "Whenever the first event each turn resolves, gain momentum.",
       imageNumber: "001",
       startingEssence: 250,
     },
@@ -153,7 +167,7 @@ export function makeBattleTestState(): Pick<
       startingNodeId: "dreamscape-2",
       bossNodeId: "dreamscape-2",
       currentNodeId: "dreamscape-2",
-      layers: [],
+      layers: [["dreamscape-2"], [], [], [], [], [], []],
       knownDreamsignCarrierIds: [],
     },
     battleModifiers: [],

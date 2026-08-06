@@ -27,7 +27,10 @@ export function ConfigGateScreen({
     roomContentConfig?.atlasFoldHash !== undefined &&
     roomContentConfig.atlasFoldHash === localContentConfig.atlasFoldHash &&
     roomContentConfig.economyFoldHash !== undefined &&
-    roomContentConfig.economyFoldHash === localContentConfig.economyFoldHash;
+    roomContentConfig.economyFoldHash === localContentConfig.economyFoldHash &&
+    roomContentConfig.opponentsFoldHash !== undefined &&
+    roomContentConfig.opponentsFoldHash ===
+      localContentConfig.opponentsFoldHash;
 
   const handleUseRoomSettings = useCallback(() => {
     if (!canAdopt || roomContentConfig === undefined) return;
@@ -43,25 +46,27 @@ export function ConfigGateScreen({
       view={{
         kind: "contentConfigGate",
         title: "This Game Uses Different Settings",
-        message:
-          "Both players use the same content settings to play together.",
+        message: "Both players use the same content settings to play together.",
         comparison: configComparisonRows(roomContentConfig, localContentConfig),
         ...(canAdopt
           ? {
-              actions: [{
-                id: "primary",
-                label: "Use This Game’s Settings",
-                onPress: handleUseRoomSettings,
-              }],
+              actions: [
+                {
+                  id: "primary",
+                  label: "Use This Game’s Settings",
+                  onPress: handleUseRoomSettings,
+                },
+              ],
             }
           : {
-              detail:
-                "This game needs settings this build cannot adopt.",
-              actions: [{
-                id: "primary",
-                label: "Start a New Game",
-                onPress: onStartNewGame,
-              }],
+              detail: "This game needs settings this build cannot adopt.",
+              actions: [
+                {
+                  id: "primary",
+                  label: "Start a New Game",
+                  onPress: onStartNewGame,
+                },
+              ],
             }),
       }}
     />
@@ -93,6 +98,7 @@ function describeConfig(
       { label: "Pack Size", value: "Unavailable" },
       { label: "Atlas Rules", value: "Unavailable" },
       { label: "Economy Rules", value: "Unavailable" },
+      { label: "Opponent Rules", value: "Unavailable" },
     ];
   }
   return [
@@ -100,7 +106,10 @@ function describeConfig(
     { label: "Draft", value: config.draftMode },
     {
       label: "Pack Size",
-      value: config.fresh20PackSize === null ? "Default" : String(config.fresh20PackSize),
+      value:
+        config.fresh20PackSize === null
+          ? "Default"
+          : String(config.fresh20PackSize),
     },
     {
       label: "Atlas Rules",
@@ -109,6 +118,10 @@ function describeConfig(
     {
       label: "Economy Rules",
       value: config.economyFoldHash?.slice(0, 12) ?? "Unavailable",
+    },
+    {
+      label: "Opponent Rules",
+      value: config.opponentsFoldHash?.slice(0, 12) ?? "Unavailable",
     },
   ];
 }

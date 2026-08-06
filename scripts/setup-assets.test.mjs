@@ -13,6 +13,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { parse } from "smol-toml";
 import {
   buildDraftRecords,
+  generateOpponentsData,
   imageHash,
   linkExplorationArt,
   parseEnergyCost,
@@ -24,6 +25,35 @@ import {
   validateDreamAvatarMapping,
 } from "./setup-assets.mjs";
 
+describe("generateOpponentsData", () => {
+  it("writes the compiled browser artifact during asset setup", () => {
+    const tempRoot = mkdtempSync(join(tmpdir(), "opponents-assets-"));
+    const opponentsJsonPath = join(tempRoot, "opponents-data.json");
+    const opponentsTomlPath = join(
+      import.meta.dirname,
+      "../data/tabula/opponents.toml",
+    );
+    const cardIds = parse(
+      readFileSync(
+        join(import.meta.dirname, "../data/tabula/cards.toml"),
+        "utf8",
+      ),
+    ).cards.map((card) => card.id);
+
+    const compiled = generateOpponentsData({
+      opponentsTomlPath,
+      opponentsJsonPath,
+      cardIds,
+    });
+
+    expect(existsSync(opponentsJsonPath)).toBe(true);
+    expect(JSON.parse(readFileSync(opponentsJsonPath, "utf8"))).toEqual(
+      compiled,
+    );
+    expect(compiled.foldHash).toBe(compiled.contentHash);
+  });
+});
+
 describe("transformExplorationData", () => {
   it("compiles a non-empty UUID-keyed catalog with two actions per encounter", () => {
     const source = parse(
@@ -33,13 +63,18 @@ describe("transformExplorationData", () => {
       ),
     );
     const compiled = transformExplorationData(source);
-    const actions = compiled.encounters.flatMap((encounter) => encounter.action);
+    const actions = compiled.encounters.flatMap(
+      (encounter) => encounter.action,
+    );
 
     expect(compiled.encounters.length).toBeGreaterThan(0);
     expect(actions).toHaveLength(compiled.encounters.length * 2);
-    expect(new Set(compiled.encounters.map((encounter) => encounter.cardId)).size)
-      .toBe(compiled.encounters.length);
-    expect(new Set(actions.map((action) => action.id)).size).toBe(actions.length);
+    expect(
+      new Set(compiled.encounters.map((encounter) => encounter.cardId)).size,
+    ).toBe(compiled.encounters.length);
+    expect(new Set(actions.map((action) => action.id)).size).toBe(
+      actions.length,
+    );
     expect(
       actions
         .filter((action) => action.effectText.includes("$DECK_CARD"))
@@ -118,8 +153,9 @@ describe("transformExplorationData", () => {
   });
 
   it("rejects a non-positive per-card essence reward", () => {
-    expect(() => transformExplorationData(syntheticExplorationSource(0)))
-      .toThrow(/requires positive essence-per-card/);
+    expect(() =>
+      transformExplorationData(syntheticExplorationSource(0)),
+    ).toThrow(/requires positive essence-per-card/);
   });
 
   it("rejects invalid cardinalities for new Exploration mechanics", () => {
@@ -219,7 +255,9 @@ describe("transformExplorationData", () => {
     );
     const missingCard = structuredClone(offered);
     delete missingCard.encounter[0].action[1]["card-id"];
-    expect(() => transformExplorationData(missingCard)).toThrow(/requires card-id/);
+    expect(() => transformExplorationData(missingCard)).toThrow(
+      /requires card-id/,
+    );
     const missingForm = structuredClone(offered);
     delete missingForm.encounter[1].action[0].transfiguration;
     expect(() => transformExplorationData(missingForm)).toThrow(
@@ -278,10 +316,10 @@ describe("validateDreamAvatarMapping", () => {
 
   it("throws when a non-starter region has fewer than 3 or more than 4", () => {
     expect(() =>
-      validateDreamAvatarMapping([scape("a", ["dc-1", "dc-2"])], [
-        "dc-1",
-        "dc-2",
-      ]),
+      validateDreamAvatarMapping(
+        [scape("a", ["dc-1", "dc-2"])],
+        ["dc-1", "dc-2"],
+      ),
     ).toThrow(/must have 3-4/);
     expect(() =>
       validateDreamAvatarMapping(
@@ -504,7 +542,9 @@ rendered-text = "Use the canonical Dreamsign text."
     ]);
     expect(existsSync(join(publicDir, "cards", "101.webp"))).toBe(true);
     expect(existsSync(join(publicDir, "dream-avatars", "0007.png"))).toBe(true);
-    expect(existsSync(join(publicDir, "dreamsigns", "test-sign.png"))).toBe(true);
+    expect(existsSync(join(publicDir, "dreamsigns", "test-sign.png"))).toBe(
+      true,
+    );
   });
 
   it("passes through tuned starting-essence values from the TOML", () => {
@@ -688,8 +728,14 @@ describe("linkExplorationArt", () => {
     mkdirSync(highResArtDir, { recursive: true });
     mkdirSync(sourceArtDir, { recursive: true });
     writeFileSync(join(highResArtDir, "101.jpg"), "curated-101");
-    writeFileSync(join(sourceArtDir, "stock-photo-first-101.jpg"), "source-101");
-    writeFileSync(join(sourceArtDir, "stock-photo-second-202.jpg"), "source-202");
+    writeFileSync(
+      join(sourceArtDir, "stock-photo-first-101.jpg"),
+      "source-101",
+    );
+    writeFileSync(
+      join(sourceArtDir, "stock-photo-second-202.jpg"),
+      "source-202",
+    );
 
     const result = linkExplorationArt({
       destinationDir,
@@ -703,10 +749,12 @@ describe("linkExplorationArt", () => {
       sourceCount: 1,
       missingCount: 1,
     });
-    expect(readFileSync(join(destinationDir, "101.jpg"), "utf8"))
-      .toBe("curated-101");
-    expect(readFileSync(join(destinationDir, "202.jpg"), "utf8"))
-      .toBe("source-202");
+    expect(readFileSync(join(destinationDir, "101.jpg"), "utf8")).toBe(
+      "curated-101",
+    );
+    expect(readFileSync(join(destinationDir, "202.jpg"), "utf8")).toBe(
+      "source-202",
+    );
     expect(existsSync(join(destinationDir, "303.jpg"))).toBe(false);
   });
 });
@@ -717,9 +765,18 @@ describe("parseEnergyCost", () => {
   });
 
   it("treats blank and variable single values as a null cost", () => {
-    expect(parseEnergyCost("")).toEqual({ energyCost: null, energyCosts: null });
-    expect(parseEnergyCost("*")).toEqual({ energyCost: null, energyCosts: null });
-    expect(parseEnergyCost("X")).toEqual({ energyCost: null, energyCosts: null });
+    expect(parseEnergyCost("")).toEqual({
+      energyCost: null,
+      energyCosts: null,
+    });
+    expect(parseEnergyCost("*")).toEqual({
+      energyCost: null,
+      energyCosts: null,
+    });
+    expect(parseEnergyCost("X")).toEqual({
+      energyCost: null,
+      energyCosts: null,
+    });
   });
 
   it("splits a comma-separated multi-cost into orb labels and a base cost", () => {
@@ -870,10 +927,7 @@ describe("buildDraftRecords", () => {
 
   it("skips a file that has no seats array", () => {
     const dir = mkdtempSync(join(tmpdir(), "journey-draft-records-"));
-    writeFileSync(
-      join(dir, "names.jsonc"),
-      JSON.stringify({ notSeats: true }),
-    );
+    writeFileSync(join(dir, "names.jsonc"), JSON.stringify({ notSeats: true }));
     const result = buildDraftRecords(dir, cardMaps);
     expect(result).toEqual([]);
   });
@@ -995,7 +1049,13 @@ describe("buildDraftRecords", () => {
     // Packs 1-3 carry resolvable per-pack markers (P1..P3); packs 4-5 carry
     // markers absent from the catalog, so even if they were not trimmed they
     // would resolve to nothing.
-    const PACK_MARKER = { 1: ID.P1, 2: ID.P2, 3: ID.P3, 4: "pack-4", 5: "pack-5" };
+    const PACK_MARKER = {
+      1: ID.P1,
+      2: ID.P2,
+      3: ID.P3,
+      4: "pack-4",
+      5: "pack-5",
+    };
     const picks = [];
     let pickNumber = 0;
     for (let pack = 1; pack <= 5; pack++) {

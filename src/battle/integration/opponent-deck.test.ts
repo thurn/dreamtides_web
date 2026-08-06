@@ -13,7 +13,6 @@ import {
   opponentDraftTemperature,
   opponentPickBudget,
   opponentRemovalCount,
-  runMidpointCompletionLevel,
   selectOpponentDreamAvatar,
 } from "./opponent-deck";
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
@@ -32,6 +31,9 @@ import type {
 import type { CardData } from "../../types/cards";
 import { asCardName, type CardId } from "../../types/card-identity";
 import type { PoolCard } from "../../draft/pool/types";
+import { opponentsFixture } from "../../testing/opponents-fixture";
+
+const OPPONENTS = opponentsFixture();
 
 const MIN_BATTLE_DECK_SIZE = 25;
 
@@ -173,7 +175,9 @@ function makeDreamAvatars(
   db?: ReadonlyMap<number, CardData>,
 ): DreamAvatarContent[] {
   const idByName = new Map(
-    db === undefined ? [] : [...db.values()].map((card) => [card.name, card.id]),
+    db === undefined
+      ? []
+      : [...db.values()].map((card) => [card.name, card.id]),
   );
   return [
     {
@@ -207,7 +211,9 @@ function makeDreamsignTemplates(count: number): DreamsignTemplate[] {
 function makeAffiliationContent(db: ReadonlyMap<number, CardData>): {
   dreamscapes: DreamscapeContent[];
   affiliations: AffiliationContent[];
-  affiliatedNode: ReturnType<typeof makeBattleTestState>["atlas"]["nodes"][string];
+  affiliatedNode: ReturnType<
+    typeof makeBattleTestState
+  >["atlas"]["nodes"][string];
 } {
   const alphaSignatureUuids = ALPHA_CARDS.slice(0, 12).map((n) => {
     const card = db.get(n);
@@ -264,6 +270,7 @@ function makeInput(
     },
   };
   return {
+    opponentsData: OPPONENTS,
     battleEntryKey: "site-1::0::dreamscape-2",
     site: baseState.atlas.nodes["dreamscape-2"].sites[0],
     state,
@@ -282,23 +289,19 @@ afterEach(() => {
 
 describe("opponent deck pure helpers", () => {
   it("keeps only the opening opponent ability dormant", () => {
-    expect(opponentAbilityIsActive(0)).toBe(false);
-    expect(opponentAbilityIsActive(1)).toBe(true);
-    expect(opponentAbilityIsActive(6)).toBe(true);
+    const activeFrom = OPPONENTS.progression.abilityActiveFromLayer;
+    expect(opponentAbilityIsActive(0, activeFrom)).toBe(false);
+    expect(opponentAbilityIsActive(1, activeFrom)).toBe(true);
+    expect(opponentAbilityIsActive(6, activeFrom)).toBe(true);
   });
 
-  it("derives the midpoint from the run length (7-layer run midpoint = 3)", () => {
-    expect(runMidpointCompletionLevel(7)).toBe(3);
-    // Midpoint tracks the layer count rather than a hardcoded number.
-    expect(runMidpointCompletionLevel(5)).toBe(2);
-    expect(runMidpointCompletionLevel(9)).toBe(4);
-  });
-
-  it("only carries a dreamsign at/after the midpoint", () => {
+  it("only carries a dreamsign at/after the configured layer", () => {
     const layerCount = 7;
-    const midpoint = runMidpointCompletionLevel(layerCount);
+    const dreamsignsFromLayer = 3;
     for (let level = 0; level < layerCount; level += 1) {
-      expect(opponentCarriesDreamsign(level, layerCount)).toBe(level >= midpoint);
+      expect(opponentCarriesDreamsign(level, dreamsignsFromLayer)).toBe(
+        level >= dreamsignsFromLayer,
+      );
     }
   });
 
@@ -309,10 +312,27 @@ describe("opponent deck pure helpers", () => {
     let prevRemovals = -Infinity;
     let prevTemp = Infinity;
     for (let level = 0; level < layerCount; level += 1) {
-      const distinct = opponentDistinctCardCount(level, layerCount);
-      const budget = opponentPickBudget(level, layerCount);
-      const removals = opponentRemovalCount(level, layerCount);
-      const temp = opponentDraftTemperature(level, layerCount);
+      const distinct = opponentDistinctCardCount(
+        level,
+        layerCount,
+        OPPONENTS.coherentDraft.distinctCardCurve,
+      );
+      const budget = opponentPickBudget(
+        level,
+        layerCount,
+        OPPONENTS.coherentDraft.distinctCardCurve,
+        OPPONENTS.coherentDraft.removalCurve,
+      );
+      const removals = opponentRemovalCount(
+        level,
+        layerCount,
+        OPPONENTS.coherentDraft.removalCurve,
+      );
+      const temp = opponentDraftTemperature(
+        level,
+        layerCount,
+        OPPONENTS.coherentDraft.temperatureCurve,
+      );
       expect(distinct).toBeGreaterThanOrEqual(prevDistinct);
       expect(budget).toBeGreaterThanOrEqual(prevBudget);
       expect(removals).toBeGreaterThanOrEqual(prevRemovals);
@@ -325,21 +345,48 @@ describe("opponent deck pure helpers", () => {
       prevTemp = temp;
     }
     // A later battle's deck is strictly wider than the earliest battle's.
-    expect(opponentDistinctCardCount(layerCount - 1, layerCount)).toBeGreaterThan(
-      opponentDistinctCardCount(0, layerCount),
+    expect(
+      opponentDistinctCardCount(
+        layerCount - 1,
+        layerCount,
+        OPPONENTS.coherentDraft.distinctCardCurve,
+      ),
+    ).toBeGreaterThan(
+      opponentDistinctCardCount(
+        0,
+        layerCount,
+        OPPONENTS.coherentDraft.distinctCardCurve,
+      ),
     );
+  });
+
+  it("interpolates non-default authored curves", () => {
+    const distinct = { first: 8, last: 20 };
+    const removals = { first: 1, last: 5 };
+    const temperature = { first: 0.6, last: 0.2 };
+
+    expect(opponentDistinctCardCount(2, 5, distinct)).toBe(14);
+    expect(opponentRemovalCount(2, 5, removals)).toBe(3);
+    expect(opponentPickBudget(2, 5, distinct, removals)).toBe(17);
+    expect(opponentDraftTemperature(2, 5, temperature)).toBeCloseTo(0.4);
   });
 });
 
 describe("buildOpponentDreamsigns", () => {
-  it("returns no dreamsign before the midpoint and exactly one from the midpoint on", () => {
+  it("returns no dreamsign before the configured layer and exactly one from it onward", () => {
     const layerCount = 7;
+    const dreamsignsFromLayer = 3;
     const templates = makeDreamsignTemplates(5);
     const seed = deriveBattleSeed("dreamsign-seed");
     for (let level = 0; level < layerCount; level += 1) {
       const rng = createBattleRngStreams(seed).enemyDescriptor;
-      const signs = buildOpponentDreamsigns(level, layerCount, templates, rng);
-      if (level < runMidpointCompletionLevel(layerCount)) {
+      const signs = buildOpponentDreamsigns(
+        level,
+        dreamsignsFromLayer,
+        templates,
+        rng,
+      );
+      if (level < dreamsignsFromLayer) {
         expect(signs).toHaveLength(0);
       } else {
         expect(signs).toHaveLength(1);
@@ -444,7 +491,9 @@ describe("createBattleInit opponent invariants", () => {
   });
 
   it("is deterministic in the seed and changes with the seed", () => {
-    const base = makeInput({ state: { ...makeInput().state, completionLevel: 4 } });
+    const base = makeInput({
+      state: { ...makeInput().state, completionLevel: 4 },
+    });
     const a1 = createBattleInit({ ...base, seedOverride: 123 });
     const a2 = createBattleInit({ ...base, seedOverride: 123 });
     const b = createBattleInit({ ...base, seedOverride: 999 });
@@ -467,9 +516,9 @@ describe("createBattleInit opponent invariants", () => {
     expect(entry?.builtFromSimulation).toBe(false);
   });
 
-  it("carries no dreamsign before the midpoint and exactly one from the midpoint on", () => {
+  it("carries no dreamsign before the configured layer and exactly one from it onward", () => {
     const layerCount = 7;
-    const midpoint = runMidpointCompletionLevel(layerCount);
+    const dreamsignsFromLayer = 3;
     const templates = makeDreamsignTemplates(5);
     for (let level = 0; level < layerCount; level += 1) {
       const init = createBattleInit(
@@ -478,7 +527,7 @@ describe("createBattleInit opponent invariants", () => {
           dreamsignTemplates: templates,
         }),
       );
-      if (level < midpoint) {
+      if (level < dreamsignsFromLayer) {
         expect(init.enemyDescriptor.dreamsigns).toHaveLength(0);
       } else {
         expect(init.enemyDescriptor.dreamsigns).toHaveLength(1);
@@ -521,6 +570,7 @@ describe("createBattleInit opponent invariants", () => {
       };
 
       const common = {
+        opponentsData: OPPONENTS,
         battleEntryKey: "site-1::0::affiliated-node",
         site: baseState.atlas.nodes["dreamscape-2"].sites[0],
         cardDatabase: db,

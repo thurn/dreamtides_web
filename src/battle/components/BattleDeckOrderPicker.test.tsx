@@ -3,7 +3,7 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { createBattleInit } from "../integration/create-battle-init";
+import { createTestBattleInit } from "../../testing/create-battle-init";
 import { createInitialBattleState } from "../state/create-initial-state";
 import {
   makeBattleTestCardDatabase,
@@ -159,7 +159,7 @@ function pressReorderKey(
 }
 
 function createTestBattle() {
-  const battleInit = createBattleInit({
+  const battleInit = createTestBattleInit({
     battleEntryKey: "site-7::2::dreamscape-2",
     site: makeBattleTestSite(),
     state: makeBattleTestState(),

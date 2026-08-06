@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { economyFixture } from "../testing/economy-fixture";
+import { opponentsFixture } from "../testing/opponents-fixture";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
@@ -68,6 +69,7 @@ function makeJourneyContent(
     guides: [],
     atlasData: MINIMAL_ATLAS_DATA,
     economyData: economyFixture(),
+    opponentsData: opponentsFixture(),
     apollyonIncarnations: incarnations,
     poolContext: makeTestPoolContext(["dreamsign-1", "dreamsign-2"]),
   };
@@ -196,14 +198,16 @@ describe('the "random-site-atlas" QA scene', () => {
         dreamAvatarIds: [],
       },
     ];
-    content.guides = [{
-      id: "maddox",
-      name: "Maddox",
-      homeDreamscapeId: "rust-expanse-test",
-      siteType: "RandomSite",
-      dialog: ["Pick a road."],
-      homeSpecialty: "Choose one of three sites.",
-    }];
+    content.guides = [
+      {
+        id: "maddox",
+        name: "Maddox",
+        homeDreamscapeId: "rust-expanse-test",
+        siteType: "RandomSite",
+        dialog: ["Pick a road."],
+        homeSpecialty: "Choose one of three sites.",
+      },
+    ];
 
     const state = buildQaScene("random-site-atlas", content);
 
@@ -214,7 +218,9 @@ describe('the "random-site-atlas" QA scene', () => {
     );
     expect(maddoxNode?.state).toBe("available");
     expect(maddoxNode?.enhancedSiteType).toBe("RandomSite");
-    const randomSite = maddoxNode?.sites.find((site) => site.type === "RandomSite");
+    const randomSite = maddoxNode?.sites.find(
+      (site) => site.type === "RandomSite",
+    );
     expect(randomSite?.isEnhanced).toBe(true);
     expect(randomSite?.randomSite?.mode).toBe("homeChoice");
   });
@@ -371,9 +377,7 @@ describe("the battle layer QA scenes", () => {
 
 describe("site QA scenes", () => {
   it("registers direct QA jumps for gameplay site screens", () => {
-    const expectedSites = [
-      ["draft", "Draft"],
-    ] as const;
+    const expectedSites = [["draft", "Draft"]] as const;
 
     for (const [sceneId, siteType] of expectedSites) {
       const state = buildQaScene(sceneId, makeJourneyContent());
@@ -474,11 +478,13 @@ describe('the "exploration" QA scene', () => {
 
   it("holds a UUID-backed Dreamsign so purge follow-ups are exercisable", () => {
     const { content, encounterCardId } = explorationContent();
-    content.dreamsignTemplates = [{
-      id: "exploration-qa-dreamsign-id",
-      name: "Exploration QA Dreamsign",
-      effectDescription: "A QA effect.",
-    }];
+    content.dreamsignTemplates = [
+      {
+        id: "exploration-qa-dreamsign-id",
+        name: "Exploration QA Dreamsign",
+        effectDescription: "A QA effect.",
+      },
+    ];
 
     const state = buildQaScene("exploration", content, {
       explorationCardId: encounterCardId,
