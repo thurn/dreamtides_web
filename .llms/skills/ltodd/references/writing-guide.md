@@ -14,7 +14,7 @@ navigation contract.
 - [Chapter organization](#chapter-organization)
 - [Discovery and cross-references](#discovery-and-cross-references)
 - [Worked examples](#worked-examples)
-- [Image briefs](#image-briefs)
+- [Prototype images](#prototype-images)
 - [Completion standard](#completion-standard)
 
 ## Canon and scope
@@ -189,8 +189,8 @@ patterns in `content-patterns.md` as adaptable examples.
 
 Keep every physical line at 80 columns or fewer. An unbreakable external URL in
 a reference definition is the sole exception. Keep every chapter, including
-blank lines and image briefs, at 500 lines or fewer. The line cap applies to
-`glossary.md`; `index.md` is the book catalog rather than a chapter.
+blank lines and published images, at 500 lines or fewer. The line cap applies
+to `glossary.md`; `index.md` is the book catalog rather than a chapter.
 
 ## Discovery and cross-references
 
@@ -226,19 +226,34 @@ minimum initial conditions, walk through the meaningful change, and name the
 observable result. Keep examples canonical; do not introduce a hypothetical
 variant of the design.
 
-## Image briefs
+## Prototype images
 
-Insert an image brief near the prose it will support. Add one wherever a visual
-state, spatial relationship, responsive branch, or animation key moment would
-materially improve implementation confidence. Use no quota.
+Include a live prototype screenshot wherever a visual state, spatial
+relationship, responsive branch, or animation key moment materially improves
+implementation confidence. Use no quota. Capture each image while researching
+the chapter so its state, framing, and visible relationships can be checked
+against the surrounding prose.
 
-Keep the prose independently complete. Give the brief enough information for a
-later author to stage and capture the exact evidence: purpose, game state,
-framing, important visible details, alt text, and caption. Follow the exact
-syntax in `content-patterns.md` so the checker can validate it.
+Every image shows canonical player-facing presentation at a deliberate desktop
+or narrow viewport. Exclude debug controls, browser chrome, annotations,
+pointer highlights, and incidental loading or error states. Capture at 2x device
+scale, verify the dimensions, inspect the rendered image, and confirm the
+prototype error buffer is empty before publishing it.
 
-Image binaries remain outside version control. Replace a brief only after its
-image has a durable external URL, useful alt text, and a concise caption.
+Publish the inspected binary with the skill's `publish-image.mjs` helper. It
+stores the image in the project's public Google Cloud Storage bucket beneath
+the chapter's content-addressed `ltodd/<part>/<chapter>/` namespace and prints
+the required reference-style Markdown. Keep binaries outside version control.
+
+Place the image beside the prose it supports, followed immediately by a concise
+italic caption. Give the image useful alt text that describes the visible
+evidence. Keep its generated URL reference in the same chapter. The image
+supports the prose; it never carries a requirement that the prose omits.
+
+Every committed image link resolves to the project's public bucket. Do not
+commit image-plan comments, local file paths, invented URLs, expiring signed
+URLs, or output from the publisher's dry-run mode. When a suitable canonical
+capture is unavailable, omit the image and report the blocker outside the book.
 
 ## Completion standard
 
@@ -256,6 +271,6 @@ Before finishing an LToDD change, confirm that:
 - TOML references describe stable interfaces without copying current values;
 - no specific authored content, excluded system, or web implementation leaks
   into the chapter;
-- every worked example and image brief adds distinct information;
+- every worked example and prototype image adds distinct information;
 - no TODO, alternative, uncertainty, or speculative claim remains; and
 - the formatter and checker pass after all warnings are reviewed.

@@ -29,6 +29,7 @@
     "cumulus-metadata": "node scripts/generate-cumulus-metadata.mjs",
     "cumulus-docs": "node scripts/generate-cumulus-docs.mjs",
     "upload-assets": "node scripts/upload-assets-to-storage.mjs",
+    "publish-ltodd-image": "node .llms/skills/ltodd/scripts/publish-image.mjs",
     "send-screenshots": "node scripts/send-screenshots-to-discord.mjs",
     "device-screenshots": "node scripts/device-screenshots.mjs",
     "screenshots:desktop": "node scripts/desktop-screenshots.mjs",

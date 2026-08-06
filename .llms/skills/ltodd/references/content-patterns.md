@@ -1,8 +1,9 @@
 # LToDD Content Patterns
 
 Read this reference when planning a new chapter, reorganizing a chapter, or
-adding an image brief. The patterns illustrate useful shapes for different
-subjects. They are not templates, required headings, or reusable game content.
+publishing a prototype image. The patterns illustrate useful shapes for
+different subjects. They are not templates, required headings, or reusable game
+content.
 
 ## Contents
 
@@ -13,7 +14,7 @@ subjects. They are not templates, required headings, or reusable game content.
 - [Opening scope paragraphs](#opening-scope-paragraphs)
 - [Index catalog entries](#index-catalog-entries)
 - [Glossary entries](#glossary-entries)
-- [Image briefs](#image-briefs)
+- [Prototype images](#prototype-images)
 
 ## Choosing a shape
 
@@ -125,26 +126,26 @@ Prefer definitions that distinguish nearby concepts and state their gameplay
 role. Avoid source synonyms, abbreviations that players never see, and copied
 catalog entries.
 
-## Image briefs
+## Prototype images
 
-Place a brief exactly where the later image should appear. Use this syntax:
+Place a published image exactly where its evidence supports the prose. Use the
+reference-style Markdown printed by
+`.llms/skills/ltodd/scripts/publish-image.mjs`:
 
 ```markdown
-<!-- ltodd-image
-Purpose: Why this image materially improves implementation confidence.
-State: The exact game state and action needed to stage the image.
-Framing: Viewport, crop, and spatial focus.
-Details: The visible relationships or motion key moment that must be clear.
-Alt text: Concise replacement text describing the evidence in the image.
-Caption: Concise context that complements rather than repeats the prose.
--->
+![One destination awaiting the player's choice][img-4df53c0d8f1a]
+
+_The available destination holds visual focus before commitment._
+
+[img-4df53c0d8f1a]: https://storage.googleapis.com/redacted-firebase-project.firebasestorage.app/ltodd/sites/site_arrival/destination-choice-4df53c0d8f1a.png
 ```
 
-Keep every field on one physical line and within 80 columns. Use multiple briefs
-instead of overloading one field with several states. The checker rejects
-missing, reordered, empty, duplicated, or unknown fields.
+The publisher supplies the content hash in the reference label and URL. Keep
+the image and italic caption together. The reference definition may live at the
+end of the chapter when that makes the prose easier to scan. Use separate images
+for materially different states or viewports rather than composing a collage.
 
-When durable image hosting is available, replace the complete comment with a
-Markdown image using the proposed alt text and stable external URL. Put the
-caption immediately below it. Keep the surrounding prose unchanged unless the
-image review exposes a factual error.
+Alt text describes the visible evidence in 10-59 characters. The caption states
+why that evidence matters in context without repeating the alt text. Review the
+surrounding prose after inspecting the capture and correct any factual mismatch
+the image reveals.

@@ -7,7 +7,12 @@ import { fileURLToPath } from "node:url";
 
 import { test } from "vitest";
 
+import { buildImagePublication } from "../.llms/skills/ltodd/scripts/ltodd-image-publisher-lib.mjs";
 import { validateBook } from "../.llms/skills/ltodd/scripts/ltodd-markdown-lib.mjs";
+import {
+  uploadIfAbsent,
+  verifyPublicImage,
+} from "../.llms/skills/ltodd/scripts/publish-image.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -16,6 +21,10 @@ const repositoryRoot = path.resolve(
 const cliPath = path.join(
   repositoryRoot,
   ".llms/skills/ltodd/scripts/format-markdown.mjs",
+);
+const publisherCliPath = path.join(
+  repositoryRoot,
+  ".llms/skills/ltodd/scripts/publish-image.mjs",
 );
 
 function validFiles() {
@@ -75,14 +84,11 @@ function validFiles() {
       "the action commits the journey before its result becomes visible.",
       "Read the [Glossary](../glossary.md) for canonical journey terminology.",
       "",
-      "<!-- ltodd-image",
-      "Purpose: Show the relationship between the choice and its destination.",
-      "State: Open the journey at one available destination before selection.",
-      "Framing: Capture the complete play area at a desktop viewport.",
-      "Details: Keep the choice, destination, and journey status visible.",
-      "Alt text: One available choice beside its journey destination.",
-      "Caption: The journey presents one commitment before resolution.",
-      "-->",
+      "![One available choice beside its destination][img-0123456789ab]",
+      "",
+      "_The journey presents one commitment before resolution._",
+      "",
+      "[img-0123456789ab]: https://storage.googleapis.com/redacted-firebase-project.firebasestorage.app/ltodd/journey/journey_flow/available-choice-0123456789ab.png",
       "",
     ].join("\n"),
   };
@@ -223,7 +229,7 @@ test("resolves chapter links relative to their part directory", async () => {
   });
 });
 
-test("rejects unresolved prose, fenced code, and malformed image briefs", async () => {
+test("rejects unresolved prose, fenced code, and image-plan comments", async () => {
   const files = validFiles();
   files["journey/journey_flow.md"] = [
     "# Journey Flow",
@@ -248,9 +254,169 @@ test("rejects unresolved prose, fenced code, and malformed image briefs", async 
     );
     assert.ok(result.errors.some((error) => error.includes("fenced code")));
     assert.ok(
-      result.errors.some((error) => error.includes("must contain 6 fields")),
+      result.errors.some((error) =>
+        error.includes("image-plan comments are not allowed"),
+      ),
     );
   });
+});
+
+test("requires published images to use their chapter namespace and caption", async () => {
+  const files = validFiles();
+  files["journey/journey_flow.md"] = files["journey/journey_flow.md"]
+    .replace(
+      [
+        "![One available choice beside its destination][img-0123456789ab]",
+        "",
+        "_The journey presents one commitment before resolution._",
+      ].join("\n"),
+      "![One available choice beside its destination][img-0123456789ab]",
+    )
+    .replace("/ltodd/journey/journey_flow/", "/ltodd/sites/site_arrival/");
+
+  await withBook(files, async (bookDirectory) => {
+    const result = await validateBook(bookDirectory);
+    assert.ok(result.errors.some((error) => error.includes("italic caption")));
+    assert.ok(
+      result.errors.some((error) => error.includes("chapter namespace")),
+    );
+  });
+});
+
+test("builds content-addressed Markdown for a validated screenshot", async () => {
+  const temporaryRoot = await mkdtemp(path.join(tmpdir(), "ltodd-image-"));
+  const imagePath = path.join(temporaryRoot, "choice.png");
+  const onePixelPng = Buffer.from(
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
+    "base64",
+  );
+  await writeFile(imagePath, onePixelPng);
+
+  try {
+    const publication = await buildImagePublication({
+      alt: "One available destination before commitment",
+      caption: "The destination holds focus before the player commits.",
+      chapter: "journey_flow",
+      file: imagePath,
+      part: "journey",
+      slug: "available-destination",
+    });
+    assert.match(
+      publication.objectName,
+      /^ltodd\/journey\/journey_flow\/available-destination-[0-9a-f]{12}\.png$/,
+    );
+    assert.ok(publication.markdown.includes(`![One available destination`));
+    assert.ok(publication.markdown.includes(publication.url));
+
+    const dryRun = spawnSync(
+      process.execPath,
+      [
+        publisherCliPath,
+        "--dry-run",
+        "--file",
+        imagePath,
+        "--part",
+        "journey",
+        "--chapter",
+        "journey_flow",
+        "--slug",
+        "available-destination",
+        "--alt",
+        "One available destination before commitment",
+        "--caption",
+        "The destination holds focus before the player commits.",
+      ],
+      { encoding: "utf8" },
+    );
+    assert.equal(dryRun.status, 0, `${dryRun.stdout}\n${dryRun.stderr}`);
+    assert.ok(dryRun.stdout.includes("Dry run only"));
+    assert.ok(dryRun.stdout.includes(publication.url));
+  } finally {
+    await rm(temporaryRoot, { recursive: true });
+  }
+});
+
+test("publishes without overwriting existing content-addressed objects", () => {
+  const publication = {
+    absoluteFile: "/tmp/ltodd-choice.png",
+    contentType: "image/png",
+    gcsUri: "gs://example/ltodd/journey/journey_flow/choice-abc.png",
+  };
+
+  const existingCalls = [];
+  const existing = uploadIfAbsent(publication, (argumentsList, options) => {
+    existingCalls.push({ argumentsList, options });
+    return true;
+  });
+  assert.equal(existing, "existing");
+  assert.equal(existingCalls.length, 1);
+  assert.deepEqual(existingCalls[0].argumentsList.slice(0, 3), [
+    "storage",
+    "objects",
+    "describe",
+  ]);
+
+  const uploadCalls = [];
+  const uploadOutcomes = [false, true];
+  const uploaded = uploadIfAbsent(publication, (argumentsList, options) => {
+    uploadCalls.push({ argumentsList, options });
+    return uploadOutcomes.shift();
+  });
+  assert.equal(uploaded, "uploaded");
+  assert.ok(uploadCalls[1].argumentsList.includes("--if-generation-match=0"));
+  assert.ok(
+    uploadCalls[1].argumentsList.includes(
+      "--cache-control=public,max-age=31536000,immutable",
+    ),
+  );
+
+  const raceOutcomes = [false, false, true];
+  assert.equal(
+    uploadIfAbsent(publication, () => raceOutcomes.shift()),
+    "existing",
+  );
+
+  const failureOutcomes = [false, false, false];
+  assert.throws(
+    () => uploadIfAbsent(publication, () => failureOutcomes.shift()),
+    /upload failed/,
+  );
+});
+
+test("verifies that a published image is publicly readable", async () => {
+  const publication = {
+    contentType: "image/png",
+    url: "https://storage.googleapis.com/example/ltodd/image.png",
+  };
+  let requested;
+  await verifyPublicImage(publication, async (url, options) => {
+    requested = { options, url };
+    return {
+      headers: { get: () => "image/png" },
+      ok: true,
+      status: 200,
+    };
+  });
+  assert.equal(requested.url, publication.url);
+  assert.equal(requested.options.method, "HEAD");
+  assert.ok(requested.options.signal instanceof AbortSignal);
+
+  await assert.rejects(
+    verifyPublicImage(publication, async () => ({
+      headers: { get: () => "application/xml" },
+      ok: false,
+      status: 403,
+    })),
+    /not publicly readable/,
+  );
+  await assert.rejects(
+    verifyPublicImage(publication, async () => ({
+      headers: { get: () => "text/html" },
+      ok: true,
+      status: 200,
+    })),
+    /unexpected content type/,
+  );
 });
 
 test("warns about implementation leakage without failing validation", async () => {
@@ -306,7 +472,11 @@ test("write mode wraps prose and produces a checkable book", async () => {
       formatted
         .trimEnd()
         .split("\n")
-        .every((line) => [...line].length <= 80),
+        .every(
+          (line) =>
+            [...line].length <= 80 ||
+            /^(?:\[[^\]]+\]:\s*)?https?:\/\/\S+$/.test(line.trim()),
+        ),
     );
 
     const check = spawnSync(

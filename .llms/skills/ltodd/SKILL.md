@@ -28,8 +28,8 @@ Read [references/writing-guide.md](references/writing-guide.md) completely
 before researching or editing LToDD.
 
 Read [references/content-patterns.md](references/content-patterns.md) before
-creating a chapter or substantially reorganizing one. Use its patterns as
-examples, not templates.
+creating a chapter, substantially reorganizing one, or publishing a chapter
+image. Use its patterns as examples, not templates.
 
 When the subject includes presentation or interaction, read the project-local
 `.llms/skills/cumulus/SKILL.md` and only the Cumulus references relevant to the
@@ -124,14 +124,80 @@ consequences. Specify enough behavioral, algorithmic, state, presentation, and
 motion detail for an expert unfamiliar with this repository to implement the
 system in a non-web client.
 
-Do not leave TODOs, alternatives, uncertainty, or speculative explanations in a
-chapter. Inline image briefs are the sole intentional placeholder.
+Do not leave TODOs, alternatives, uncertainty, speculative explanations, or
+image placeholders in a chapter.
 
 If a chapter approaches the 500-line limit, remove bloat first. Split it only
 when its genuine subject contains multiple coherent scopes. Update the index and
 every affected link in the same change.
 
-### 6. Format and validate
+### 6. Capture and publish prototype images
+
+Capture live prototype evidence while the relevant state is available during
+research. An image belongs in the book only when it materially improves
+implementation confidence about a visual state, spatial relationship,
+responsive branch, or motion key moment. The prose remains independently
+complete.
+
+Follow `docs/journey_prototype/qa_tooling.md` to start the prototype on a
+non-default port and manage an isolated `agent-browser` session. Reach the
+canonical state through the normal player workflow. A registered `?goto=` scene
+may stage a difficult state, but the captured frame must contain only canonical
+player-facing presentation. Exclude debug controls, annotations, browser chrome,
+pointer highlights, and authoring tools.
+
+Before each capture:
+
+1. Set the intended desktop or narrow viewport at 2x device scale.
+2. Assert `location.href`, `window.innerWidth`, and the visible game state.
+3. Confirm `window.__caps` exists and contains no render errors, unhandled
+   rejections, or console errors.
+4. Capture the full viewport or a deliberately selected game region to a PNG or
+   JPEG outside the repository, such as `/tmp/ltodd-<subject>.png`.
+5. Check the pixel dimensions with `file`, inspect the image visually, and
+   recapture it if important content is clipped, obscured, illegible, or in an
+   unintended transient state.
+
+A representative desktop capture uses these commands after the state is staged:
+
+```bash
+/opt/homebrew/bin/agent-browser --session ltodd-<subject> \
+  set viewport 1440 900 2
+/opt/homebrew/bin/agent-browser --session ltodd-<subject> \
+  eval '({url: location.href, width: innerWidth, errors: window.__caps})'
+/opt/homebrew/bin/agent-browser --session ltodd-<subject> \
+  screenshot /tmp/ltodd-<subject>.png
+file /tmp/ltodd-<subject>.png
+```
+
+Use `npx agent-browser` when the Homebrew binary is unavailable. Use a unique
+session name for each authoring run and close that exact session after capture.
+
+Publish the inspected image with the helper from the repository root:
+
+```bash
+npm run publish-ltodd-image -- \
+  --file /tmp/ltodd-destination-choice.png \
+  --part sites --chapter site_arrival --slug destination-choice \
+  --alt "One destination awaiting the player's choice" \
+  --caption "The available destination holds visual focus before commitment."
+```
+
+The helper validates the image, gives its bytes a content-addressed name under
+`ltodd/<part>/<chapter>/`, uploads it to the project's public Google Cloud
+Storage bucket with immutable caching, verifies the public response, and prints
+reference-style Markdown. Paste that Markdown beside the prose it supports.
+Keep the generated URL reference in the same chapter. Never add the local image
+binary to Git, overwrite a published object, invent a URL, or use `--dry-run`
+output in the book.
+
+If `gcloud` cannot access the bucket, run `gcloud auth login` and select the
+`redacted-firebase-project` project. If a suitable canonical state cannot be
+captured, omit the image and report the blocker rather than leaving a
+placeholder. Close the isolated browser session and stop only the development
+server started for the capture after the needed images are published.
+
+### 7. Format and validate
 
 Run the formatter, then the checker from the repository root:
 
@@ -146,4 +212,5 @@ diff for factual accuracy, local completeness, information density, link
 quality, and accidental changes outside the requested design.
 
 Finish only when the affected rules are consistent across the corpus, the index
-and glossary are current, no material question remains, and the checker passes.
+and glossary are current, every included image is live and useful, no material
+question remains, and the checker passes.

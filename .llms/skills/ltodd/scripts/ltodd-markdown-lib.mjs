@@ -1,16 +1,16 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
-const NAME_SEGMENT = /^[a-z0-9]+(?:_[a-z0-9]+)*$/;
+import {
+  BOOK_SEGMENT_PATTERN,
+  DEFAULT_BUCKET,
+  isUsefulAltText,
+  PUBLIC_ORIGIN,
+} from "./ltodd-image-publisher-lib.mjs";
+
+const NAME_SEGMENT = BOOK_SEGMENT_PATTERN;
 const CHAPTER_NAME = /^[a-z0-9]+(?:_[a-z0-9]+)*\.md$/;
-const IMAGE_FIELDS = [
-  "Purpose",
-  "State",
-  "Framing",
-  "Details",
-  "Alt text",
-  "Caption",
-];
+const IMAGE_ORIGIN = `${PUBLIC_ORIGIN}/${DEFAULT_BUCKET}`;
 const LEAKAGE_PATTERNS = [
   [/(?:^|\W)draft_records(?:_adapted)?(?:\W|$)/i, "draft-record source"],
   [/\bIDF\b/, "IDF"],
@@ -59,54 +59,133 @@ function parseTitle(lines) {
   return lines[first].match(/^# (.+)$/)?.[1];
 }
 
-function validateImageBriefs(relativePath, lines, errors) {
-  for (let index = 0; index < lines.length; index += 1) {
-    if (lines[index].trim() !== "<!-- ltodd-image") {
-      continue;
+function validatePublishedImages(relativePath, lines, errors) {
+  const definitions = new Map();
+  for (const [index, line] of lines.entries()) {
+    const definition = line.match(/^\[([^\]]+)\]:(?:\s+(\S+))?$/);
+    if (definition) {
+      const continuation = lines[index + 1]?.match(/^\s+(https?:\/\/\S+)$/);
+      const url = definition[2] ?? continuation?.[1];
+      if (url) {
+        definitions.set(definition[1], {
+          line: definition[2] ? index + 1 : index + 2,
+          url,
+        });
+      }
     }
-
-    const startLine = index + 1;
-    const body = [];
-    index += 1;
-    while (index < lines.length && lines[index].trim() !== "-->") {
-      body.push(lines[index].trim());
-      index += 1;
-    }
-
-    if (index === lines.length) {
-      errors.push(
-        diagnostic(relativePath, startLine, "image brief is missing '-->'"),
-      );
-      break;
-    }
-
-    if (body.length !== IMAGE_FIELDS.length) {
+    if (line.includes("<!-- ltodd-image")) {
       errors.push(
         diagnostic(
           relativePath,
-          startLine,
-          `image brief must contain ${IMAGE_FIELDS.length} fields in order`,
+          index + 1,
+          "image-plan comments are not allowed; publish a live prototype image",
+        ),
+      );
+    }
+  }
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    if (!line.includes("![")) {
+      continue;
+    }
+
+    const image = line.match(/^!\[([^\]]*)\]\[([^\]]+)\]$/);
+    if (!image) {
+      errors.push(
+        diagnostic(
+          relativePath,
+          index + 1,
+          "use one reference-style published image on its own line",
         ),
       );
       continue;
     }
 
-    for (
-      let fieldIndex = 0;
-      fieldIndex < IMAGE_FIELDS.length;
-      fieldIndex += 1
+    const [, altText, reference] = image;
+    if (!isUsefulAltText(altText)) {
+      errors.push(
+        diagnostic(
+          relativePath,
+          index + 1,
+          "image alt text must describe visible evidence in 10-59 characters",
+        ),
+      );
+    }
+
+    const captionIndex = firstNonemptyLine(lines, index + 1);
+    if (
+      captionIndex === -1 ||
+      !/^(?:\*\S(?:.*\S)?\*|_\S(?:.*\S)?_)$/.test(lines[captionIndex].trim())
     ) {
-      const field = IMAGE_FIELDS[fieldIndex];
-      const value = body[fieldIndex];
-      if (!value.startsWith(`${field}: `) || value === `${field}: `) {
-        errors.push(
-          diagnostic(
-            relativePath,
-            startLine + fieldIndex + 1,
-            `expected non-empty '${field}:' image field`,
-          ),
-        );
-      }
+      errors.push(
+        diagnostic(
+          relativePath,
+          index + 1,
+          "place one concise italic caption immediately after the image",
+        ),
+      );
+    }
+
+    const definition = definitions.get(reference);
+    if (!definition) {
+      errors.push(
+        diagnostic(
+          relativePath,
+          index + 1,
+          `image reference '${reference}' has no URL definition`,
+        ),
+      );
+      continue;
+    }
+
+    const pathParts = relativePath.split("/");
+    if (pathParts.length !== 2) {
+      errors.push(
+        diagnostic(
+          relativePath,
+          index + 1,
+          "prototype images belong in ordinary part chapters",
+        ),
+      );
+      continue;
+    }
+    const part = pathParts[0];
+    const chapter = path.basename(pathParts[1], ".md");
+    const prefix = `${IMAGE_ORIGIN}/ltodd/${part}/${chapter}/`;
+    if (!definition.url.startsWith(prefix)) {
+      errors.push(
+        diagnostic(
+          relativePath,
+          definition.line,
+          `image URL must use the chapter namespace ${prefix}`,
+        ),
+      );
+      continue;
+    }
+
+    const objectName = definition.url.slice(prefix.length);
+    const objectMatch = objectName.match(
+      /^[a-z0-9]+(?:-[a-z0-9]+)*-([0-9a-f]{12})\.(?:png|jpg|webp)$/,
+    );
+    if (!objectMatch) {
+      errors.push(
+        diagnostic(
+          relativePath,
+          definition.line,
+          "image URL must use a content-addressed publisher filename",
+        ),
+      );
+      continue;
+    }
+    if (reference !== `img-${objectMatch[1]}`) {
+      errors.push(
+        diagnostic(
+          relativePath,
+          index + 1,
+          "image reference label must match the published content hash",
+        ),
+      );
     }
   }
 }
@@ -214,7 +293,7 @@ function validateMarkdownFile(relativePath, source, errors, warnings) {
   }
 
   validateOpeningParagraph(relativePath, lines, errors);
-  validateImageBriefs(relativePath, lines, errors);
+  validatePublishedImages(relativePath, lines, errors);
 
   return { lines, title: parseTitle(lines) };
 }
