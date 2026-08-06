@@ -50,7 +50,7 @@ desktop and narrow compositions, safe areas, journey chrome, overlays, layer
 ordering, transitions, and screen-level motion. Gameplay chapters provide the
 consequences, state-dependent meaning, and particular arrangement.
 
-## Part IV: Dream Journeys, the Dream Atlas, and the Tutorial
+## Part IV: Dream Journeys and the Dream Atlas
 
 Directory: `/journey`
 
@@ -61,9 +61,8 @@ inspection, completion depth, terminal outcomes, and starting again. The Dream
 Atlas chapters define graph structure, layers, node generation, revelation,
 reachability, route commitment, Dreamscape selection, repeat avoidance, Dream
 Guides, affiliations, Site composition and enhancement, local navigation, the
-final boss destination, and map presentation. Tutorial chapters define the
-loading primer, cinematic lesson, guided actions, contextual guidance, tutorial
-Battle, transition into a guided journey, and the pacing of instruction.
+final boss destination, and map presentation. Destination parts define the
+activities entered along the route.
 
 ## Part V: Draft Pools, Tides, and Building the Deck
 
@@ -80,7 +79,7 @@ temporary and permanent modifications, and deck inspection. Authored Tides are
 canonical inputs; their historical derivation from play records is outside the
 book.
 
-## Part VI: The Journey Economy, Dream Sites, and Gamble
+## Part VI: The Journey Economy and Dream Sites
 
 Directory: `/sites`
 
@@ -91,10 +90,6 @@ capacity economics, and modifiers that alter later rewards or costs. Site
 chapters define availability, entry, prepared randomness, enhancement,
 completion, return to the Dreamscape, Guide hosting, inline rewards, Card and
 Dreamsign markets, Dreamsign Revelation, Random Site, and destination handoffs.
-Gamble chapters define the shared wager, commitment, reveal, and settlement
-model; its chance games; enhanced behavior; repeated rounds and cashing out;
-Essence costs and payouts; Dreamsign awards and replacement; durable outcomes;
-and reveal choreography.
 
 ## Part VII: The Augury and Exploration Sites
 
@@ -111,7 +106,18 @@ families, future Site and Battle modifiers, atomic resolution, persisted
 responses and outcomes, and transition and reward choreography. The encounter
 catalog supplies the individual Exploration scenes and actions.
 
-## Part VIII: Battle Setup, Participants, and Opposition
+## Part VIII: The Gamble Site
+
+Directory: `/gamble`
+
+Chance games that exchange committed hidden outcomes for escalating risk and
+reward. Chapters define the shared wager, commitment, reveal, and settlement
+model; the playing Card deck; Three-Gate Wager; Tidemark Ladder Climb; Starway
+Stairs; enhanced behavior; repeated rounds and cashing out; Essence costs and
+payouts; Dreamsign awards and replacement; durable outcomes; and reveal
+choreography.
+
+## Part IX: Battle Setup, Participants, and Opposition
 
 Directory: `/opposition`
 
@@ -122,7 +128,7 @@ preview that establishes the coming contest. Opponent chapters define package
 selection, deck coherence, difficulty, decision priorities, legal automated
 actions, and the behavior that makes an opposing strategy legible.
 
-## Part IX: Battle Rules, Timing, and Resolution
+## Part X: Battle Rules, Timing, and Resolution
 
 Directory: `/battle`
 
@@ -134,7 +140,7 @@ state transitions, automatic consequences, and victory or defeat. Resolution
 order, randomness, persistence, and meaningful edge cases appear beside the
 rules they govern.
 
-## Part X: Battle Presentation, Interaction, and Outcomes
+## Part XI: Battle Presentation, Interaction, and Outcomes
 
 Directory: `/outcomes`
 
@@ -144,6 +150,18 @@ targeting feedback, available-action communication, responsive layouts,
 overlays, inspection, logs, tutorial guidance, announcements, motion, and
 accessible interaction. Outcome chapters define result presentation, rewards,
 durable Battle consequences, and the handoff into the next journey state.
+
+## Part XII: The Tutorial Journey and Teaching Experience
+
+Directory: `/tutorial`
+
+The teaching path from the main menu into a guided journey: the intentional
+loading primer, cinematic lesson, guided actions, tutorial Battle, transition
+into the tutorial journey, first encounters with journey systems, contextual
+Card guidance, and the presentation and pacing of instruction. Tutorial chapters
+define how guidance is staged, timed, advanced, and adapted to the player's
+current action while the primary gameplay parts remain authoritative for the
+rules being taught.
 
 ## Book-Level Reference
 
