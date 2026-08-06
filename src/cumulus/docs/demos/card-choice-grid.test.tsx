@@ -42,7 +42,7 @@ vi.mock("../../components/card/CardChoiceGrid", () => ({
   }: {
     cards: readonly {
       entryId: string;
-      selected?: boolean;
+      selection?: string;
       operation?: string;
     }[];
     columns: string;
@@ -53,7 +53,7 @@ vi.mock("../../components/card/CardChoiceGrid", () => ({
         <button
           key={entry.entryId}
           data-entry-id={entry.entryId}
-          data-selected={entry.selected || undefined}
+          data-selected={entry.selection === undefined ? undefined : "true"}
           data-operation={entry.operation}
           onClick={() => onCardPress?.(entry.entryId)}
         />
