@@ -70,7 +70,7 @@ const partRules = [
     patterns: [/gamble/i, /gravok-wager|starway-stairs|tidemark-ladder-climb/i],
   },
   {
-    directory: "site_encounters",
+    directory: "exploration_and_augury_sites",
     patterns: [
       /augury|exploration/i,
       /^src\/journey_v2\//,
@@ -281,6 +281,17 @@ function formatInteger(value) {
 }
 
 function printSummary(parts, records) {
+  const partWidth = 6;
+  const directoryWidth =
+    Math.max(
+      "Directory".length,
+      ...parts.map((part) => part.directory.length + 1),
+    ) + 2;
+  const filesWidth = 8;
+  const linesWidth = 12;
+  const shareWidth = 9;
+  const tableWidth =
+    partWidth + directoryWidth + filesWidth + linesWidth + shareWidth;
   const includedRecords = records.filter((record) => record.kind === "part");
   const includedLines = includedRecords.reduce(
     (total, record) => total + record.lines,
@@ -299,19 +310,19 @@ function printSummary(parts, records) {
     "Estimated design-bearing production source by LToDD part\n",
   );
   process.stdout.write(
-    `${"Part".padEnd(6)}${"Directory".padEnd(24)}${"Files".padStart(8)}${"Lines".padStart(12)}${"Share".padStart(9)}\n`,
+    `${"Part".padEnd(partWidth)}${"Directory".padEnd(directoryWidth)}${"Files".padStart(filesWidth)}${"Lines".padStart(linesWidth)}${"Share".padStart(shareWidth)}\n`,
   );
-  process.stdout.write(`${"-".repeat(59)}\n`);
+  process.stdout.write(`${"-".repeat(tableWidth)}\n`);
   for (const part of parts) {
     const total = totals.get(part.directory);
     const share = includedLines === 0 ? 0 : (total.lines / includedLines) * 100;
     process.stdout.write(
-      `${part.numeral.padEnd(6)}${`/${part.directory}`.padEnd(24)}${String(total.files).padStart(8)}${formatInteger(total.lines).padStart(12)}${`${share.toFixed(1)}%`.padStart(9)}\n`,
+      `${part.numeral.padEnd(partWidth)}${`/${part.directory}`.padEnd(directoryWidth)}${String(total.files).padStart(filesWidth)}${formatInteger(total.lines).padStart(linesWidth)}${`${share.toFixed(1)}%`.padStart(shareWidth)}\n`,
     );
   }
-  process.stdout.write(`${"-".repeat(59)}\n`);
+  process.stdout.write(`${"-".repeat(tableWidth)}\n`);
   process.stdout.write(
-    `${"Total".padEnd(30)}${String(includedRecords.length).padStart(8)}${formatInteger(includedLines).padStart(12)}\n`,
+    `${"Total".padEnd(partWidth + directoryWidth)}${String(includedRecords.length).padStart(filesWidth)}${formatInteger(includedLines).padStart(linesWidth)}\n`,
   );
 
   for (const kind of ["unassigned", "excluded"]) {

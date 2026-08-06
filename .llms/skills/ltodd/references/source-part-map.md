@@ -160,7 +160,7 @@ The deck mutation performed by Purge, Duplication, or Transfiguration belongs in
 `/draft_deckbuilding`. Augury, Exploration, and Gamble continue in their own
 parts after the shared Site handoff.
 
-## `/site_encounters` — Augury and Exploration
+## `/exploration_and_augury_sites` — Augury and Exploration
 
 Start with the adaptive-offer system under `src/journey_v2/`, reward-selection
 logic, authored Exploration data, the gameplay provider that resolves

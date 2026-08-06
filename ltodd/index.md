@@ -93,7 +93,7 @@ Dreamsign markets, Dreamsign Revelation, Random Site, and destination handoffs.
 
 ## Part VII: The Augury and Exploration Sites
 
-Directory: `/site_encounters`
+Directory: `/exploration_and_augury_sites`
 
 The two choice-driven destinations that transform the current journey into
 persistent consequences. Augury chapters define the journey snapshot used for
