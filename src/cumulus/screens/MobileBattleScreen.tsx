@@ -3529,14 +3529,9 @@ function CardPickerGallery({
           heightMode="fill"
           testId="battle-card-picker-gallery-panel"
           footerActions={
-            optionalWithCandidates ? [skipAction, submitAction] : undefined
-          }
-          footerAction={
             optionalWithCandidates
-              ? undefined
-              : cardPicker.optional
-                ? skipAction
-                : submitAction
+              ? [skipAction, submitAction]
+              : [cardPicker.optional ? skipAction : submitAction]
           }
           onCardPress={onPickerCardToggle}
         />

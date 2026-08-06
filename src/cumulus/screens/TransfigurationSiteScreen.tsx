@@ -386,13 +386,15 @@ export function TransfigurationPickerPanel({
             }
           : undefined
       }
-      footerAction={
+      footerActions={
         desktop && !enhanced
-          ? {
-              label: "Decline Offer",
-              onPress: onClose,
-              testId: "cumulus-transfiguration-decline",
-            }
+          ? [
+              {
+                label: "Decline Offer",
+                onPress: onClose,
+                testId: "cumulus-transfiguration-decline",
+              },
+            ]
           : undefined
       }
       cards={candidates.map((candidate) => ({

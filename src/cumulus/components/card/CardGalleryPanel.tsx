@@ -22,7 +22,11 @@ import type { Glyph } from "../../primitives/glyph";
 import { GLYPHS } from "../../primitives/glyph";
 import { DOUBLE_TAP_WINDOW_MS } from "../../primitives/pointer-gesture";
 import { token } from "../../primitives/tokens";
-import { GlassButton, type GlassButtonVariant } from "../controls/GlassButton";
+import {
+  GlassButton,
+  type GlassButtonAction,
+  type GlassButtonVariant,
+} from "../controls/GlassButton";
 import {
   SegmentedControl,
   type SegmentedOption,
@@ -61,21 +65,10 @@ export type CardGalleryAccessory =
 export type CardGalleryFooterVariant = Exclude<GlassButtonVariant, "danger">;
 
 /** A centered labeled action rendered below the card grid. */
-export interface CardGalleryFooterAction {
-  /** Resolved button label. */
-  label: string;
-  /** Fires when the footer action is activated. */
-  onPress: () => void;
-  /** Optional leading glyph. */
-  glyph?: Glyph;
-  /** Optional numerical essence cost. */
-  essenceCost?: number | null;
-  /** Detach interaction and visually recede the action. */
-  disabled?: boolean;
+export interface CardGalleryFooterAction
+  extends Omit<GlassButtonAction, "variant"> {
   /** Semantic surface treatment for the action. */
   variant?: CardGalleryFooterVariant;
-  /** A `data-testid` for selecting the footer action in tests. */
-  testId?: string;
 }
 
 /** Controlled search field shown in the gallery's browser toolbar. */
@@ -156,10 +149,10 @@ export interface CardGalleryPanelProps {
   subtitle?: string;
   /** Optional trailing header action. */
   rightAccessory?: CardGalleryAccessory;
-  /** Optional centered GlassButton rendered below the card grid. */
-  footerAction?: CardGalleryFooterAction;
-  /** Optional equal-width pair of GlassButtons rendered below the card grid. */
-  footerActions?: readonly [CardGalleryFooterAction, CardGalleryFooterAction];
+  /** Optional one-or-two-action GlassButton footer below the card grid. */
+  footerActions?:
+    | readonly [CardGalleryFooterAction]
+    | readonly [CardGalleryFooterAction, CardGalleryFooterAction];
   /** Optional structured search, sort, and filter toolbar above the card grid. */
   toolbar?: CardGalleryToolbar;
   /** Resolved cards rendered in order. */
@@ -504,12 +497,22 @@ function useGalleryMeasure({
   return { rootRef, bodyRef, measure };
 }
 
+function cardGalleryFooterButton(
+  action: CardGalleryFooterAction,
+  placement: GlassControlPlacement,
+  key?: string,
+): ReactElement {
+  const glyph: Glyph | undefined = action.glyph;
+  return (
+    <GlassButton key={key} {...action} glyph={glyph} placement={placement} />
+  );
+}
+
 /** Shared card-gallery surface with a header accessory and scrolling grid. */
 export function CardGalleryPanel({
   title,
   subtitle,
   rightAccessory,
-  footerAction,
   footerActions,
   toolbar,
   cards,
@@ -606,7 +609,7 @@ export function CardGalleryPanel({
   const bodyHeight = `calc(((${cardHeight} + ${String(rowSupplementPx)}px) * ${String(visibleRows)}) + (${galleryRowGap} * ${String(visibleGapSlots)}) + (${galleryPadding} * 2) + ${String(trailingReservePx)}px)`;
   const panelWidth = `calc((${cardWidth} * ${String(columnCount)}) + (${galleryColumnGap} * ${String(Math.max(0, columnCount - 1))}) + (${galleryPadding} * 2))`;
   const footerNode =
-    footerAction !== undefined || footerActions !== undefined ? (
+    footerActions !== undefined ? (
       <div
         style={{
           display: "grid",
@@ -617,7 +620,7 @@ export function CardGalleryPanel({
           paddingLeft: galleryPadding,
         }}
       >
-        {footerActions !== undefined ? (
+        {footerActions.length === 2 ? (
           <div
             data-gallery-footer-actions=""
             style={{
@@ -627,32 +630,17 @@ export function CardGalleryPanel({
               width: "min(100%, 360px)",
             }}
           >
-            {footerActions.map((action) => (
-              <GlassButton
-                key={action.testId ?? action.label}
-                placement={accessoryPlacement}
-                label={action.label}
-                glyph={action.glyph}
-                essenceCost={action.essenceCost}
-                disabled={action.disabled}
-                variant={action.variant}
-                testId={action.testId}
-                onPress={action.onPress}
-              />
-            ))}
+            {footerActions.map((action) =>
+              cardGalleryFooterButton(
+                action,
+                accessoryPlacement,
+                action.testId ?? action.label,
+              ),
+            )}
           </div>
-        ) : footerAction !== undefined ? (
-          <GlassButton
-            placement={accessoryPlacement}
-            label={footerAction.label}
-            glyph={footerAction.glyph}
-            essenceCost={footerAction.essenceCost}
-            disabled={footerAction.disabled}
-            variant={footerAction.variant}
-            testId={footerAction.testId}
-            onPress={footerAction.onPress}
-          />
-        ) : null}
+        ) : (
+          cardGalleryFooterButton(footerActions[0], accessoryPlacement)
+        )}
       </div>
     ) : undefined;
 

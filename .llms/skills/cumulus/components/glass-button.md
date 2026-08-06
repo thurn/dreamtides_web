@@ -20,15 +20,15 @@ The labeled glass action — a bold text label with optional Essence cost or non
 | `onPress` | `() => void` | yes | — | Fires when the button is activated (no-op while disabled). |
 | `glyph` | `Glyph` | no | — | Optional leading glyph painted as a `StandaloneGlyph` before the label. |
 | `essenceCost` | `number \| null` | no | `null` | Optional numerical essence cost rendered after a centered dot. |
+| `variant` | `GlassButtonVariant` = `"accent" \| "danger" \| "default"` | no | `default` | Strict surface treatment: accent for primary/commit actions, default for secondary actions, or danger for destructive actions. |
+| `disabled` | `boolean` | no | `false` | Dims the control, detaches click / press feedback, and marks it `aria-disabled`. |
+| `testId` | `string` | no | — | A `data-testid` for selecting the button in tests. |
 | `essenceValue` | `number \| null` | no | `null` | Optional non-cost Essence value rendered directly after the label. |
 | `size` | `GlassButtonSize` = `"compact" \| "standard" \| "prominent"` | no | `standard` | Prominent primary-action sizing, standard label spacing, or compact spacing for narrow parallel actions. |
 | `widthReservations` | `readonly GlassButtonWidthReservation[]` | no | `[]` | Possible dynamic label/essence-cost states. The button reserves the widest state while rendering only the current one, preventing surrounding layout shift. |
-| `variant` | `GlassButtonVariant` = `"accent" \| "danger" \| "default"` | no | `default` | Strict surface treatment: accent for primary/commit actions, default for secondary actions, or danger for destructive actions. |
 | `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the control. `onMedia` uses the full liquid-glass recipe; `onGlass` uses a lighter tonal lens so an existing glass tint is not compounded. Defaults to `onMedia`. |
-| `disabled` | `boolean` | no | `false` | Dims the control, detaches click / press feedback, and marks it `aria-disabled`. |
 | `pressed` | `boolean` | no | — | Toggle state for controls whose action switches a persistent local mode. |
 | `accessibilityLabel` | `string` | no | — | Accessible name when the visible label alone does not distinguish siblings. |
-| `testId` | `string` | no | — | A `data-testid` for selecting the button in tests. |
 
 ## Usage
 

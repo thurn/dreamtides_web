@@ -3980,18 +3980,20 @@ export function ExplorationSiteScreen({
             <CardGalleryPanel
               title={activeAction.followup.title}
               subtitle={activeAction.followup.subtitle}
-              footerAction={{
-                label:
-                  activeAction.followup.mode === "purge-and-copy" && purgeEntryId === null
-                    ? "Choose a card to purge"
-                    : activeAction.followup.mode === "purge-and-copy" && selectedIds.length === 0
-                      ? "Choose a card to copy"
-                      : "Confirm Choice",
-                onPress: commitFollowup,
-                disabled: !canCommitFollowup,
-                variant: "accent",
-                testId: "cumulus-exploration-followup-confirm",
-              }}
+              footerActions={[
+                {
+                  label:
+                    activeAction.followup.mode === "purge-and-copy" && purgeEntryId === null
+                      ? "Choose a card to purge"
+                      : activeAction.followup.mode === "purge-and-copy" && selectedIds.length === 0
+                        ? "Choose a card to copy"
+                        : "Confirm Choice",
+                  onPress: commitFollowup,
+                  disabled: !canCommitFollowup,
+                  variant: "accent",
+                  testId: "cumulus-exploration-followup-confirm",
+                },
+              ]}
               cards={activeAction.followup.cards.map((card) => ({
                 entryId: card.entryId,
                 model: card.model,

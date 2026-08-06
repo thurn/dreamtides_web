@@ -16,6 +16,8 @@ A floating gallery hugs its header, toolbar, rendered card rows, and footer; bla
 
 The component derives material from frame geometry: floating is rounded glass and full-bleed is the edge-to-edge standard alpha scrim. It owns the header, optional mode/search/sort/filter toolbar, accessory slot, internal scroll, fixed grid modes, optional captions and footer actions, and mobile press-preview sizing with whole-card touch-circle clearance. Callers provide resolved card models keyed by entry id or UUID.
 
+footerActions accepts exactly one centered action or two equal-width actions. Each entry uses the core GlassButton action contract while the gallery owns placement and footer layout.
+
 ## Props
 
 | Prop | Type | Required | Default | Description |
@@ -23,8 +25,7 @@ The component derives material from frame geometry: floating is rounded glass an
 | `title` | `string` | yes | — | Header title, rendered as an `<h2>`. |
 | `subtitle` | `string` | no | — | Optional intro line under the title. |
 | `rightAccessory` | `CardGalleryAccessory` | no | — | Optional trailing header action. |
-| `footerAction` | `CardGalleryFooterAction` | no | — | Optional centered GlassButton rendered below the card grid. |
-| `footerActions` | `readonly [CardGalleryFooterAction, CardGalleryFooterAction]` | no | — | Optional equal-width pair of GlassButtons rendered below the card grid. |
+| `footerActions` | `readonly [CardGalleryFooterAction] \| readonly [CardGalleryFooterAction, CardGalleryFooterAction]` | no | — | Optional one-or-two-action GlassButton footer below the card grid. |
 | `toolbar` | `CardGalleryToolbar` | no | — | Optional structured search, sort, and filter toolbar above the card grid. |
 | `cards` | `readonly CardChoiceGridCardView[]` | yes | — | Resolved cards rendered in order. |
 | `emptyLabel` | `string` | no | `No cards.` | Empty-state copy shown when `cards` is empty. |
@@ -60,18 +61,6 @@ The component derives material from frame geometry: floating is rounded glass an
 | --- | --- | --- | --- |
 | `kind` | `"iconButton"` | no |  |
 | `button` | `GlassPanelIconButtonProps` | no | Props forwarded to the icon control; placement is panel-owned. |
-
-### `footerAction`: the `CardGalleryFooterAction` model
-
-| Field | Type | Optional | Description |
-| --- | --- | --- | --- |
-| `label` | `string` | no | Resolved button label. |
-| `onPress` | `() => void` | no | Fires when the footer action is activated. |
-| `glyph` | `Glyph` | yes | Optional leading glyph. |
-| `essenceCost` | `number \| null` | yes | Optional numerical essence cost. |
-| `disabled` | `boolean` | yes | Detach interaction and visually recede the action. |
-| `variant` | `CardGalleryFooterVariant` | yes | Semantic surface treatment for the action. |
-| `testId` | `string` | yes | A `data-testid` for selecting the footer action in tests. |
 
 ### `toolbar`: the `CardGalleryToolbar` model
 
@@ -118,7 +107,7 @@ import { CardGalleryPanel } from "src/cumulus/components/card/CardGalleryPanel";
   frame="floating"
   spacing="medium"
   onCardPress={toggleCard}
-  footerAction={{ label: "Decline Offer", onPress: decline }}
+  footerActions={[{ label: "Decline Offer", onPress: decline }]}
   endAction={{
     entryId: "restock",
     glyph: GLYPHS.refresh,

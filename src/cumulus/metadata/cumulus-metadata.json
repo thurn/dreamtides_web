@@ -667,67 +667,12 @@
       }
     },
     {
-      "name": "footerAction",
-      "tsType": "CardGalleryFooterAction",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional centered GlassButton rendered below the card grid.",
-      "nested": {
-        "name": "CardGalleryFooterAction",
-        "fields": [
-          {
-            "name": "label",
-            "tsType": "string",
-            "optional": false,
-            "description": "Resolved button label."
-          },
-          {
-            "name": "onPress",
-            "tsType": "() => void",
-            "optional": false,
-            "description": "Fires when the footer action is activated."
-          },
-          {
-            "name": "glyph",
-            "tsType": "Glyph",
-            "optional": true,
-            "description": "Optional leading glyph."
-          },
-          {
-            "name": "essenceCost",
-            "tsType": "number | null",
-            "optional": true,
-            "description": "Optional numerical essence cost."
-          },
-          {
-            "name": "disabled",
-            "tsType": "boolean",
-            "optional": true,
-            "description": "Detach interaction and visually recede the action."
-          },
-          {
-            "name": "variant",
-            "tsType": "CardGalleryFooterVariant",
-            "optional": true,
-            "description": "Semantic surface treatment for the action."
-          },
-          {
-            "name": "testId",
-            "tsType": "string",
-            "optional": true,
-            "description": "A `data-testid` for selecting the footer action in tests."
-          }
-        ]
-      }
-    },
-    {
       "name": "footerActions",
-      "tsType": "readonly [CardGalleryFooterAction, CardGalleryFooterAction]",
+      "tsType": "readonly [CardGalleryFooterAction] | readonly [CardGalleryFooterAction, CardGalleryFooterAction]",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Optional equal-width pair of GlassButtons rendered below the card grid."
+      "description": "Optional one-or-two-action GlassButton footer below the card grid."
     },
     {
       "name": "toolbar",
@@ -2405,6 +2350,34 @@
       "description": "Optional numerical essence cost rendered after a centered dot."
     },
     {
+      "name": "variant",
+      "tsType": "GlassButtonVariant",
+      "unionMembers": [
+        "accent",
+        "danger",
+        "default"
+      ],
+      "required": false,
+      "defaultValue": "default",
+      "description": "Strict surface treatment: accent for primary/commit actions, default for\nsecondary actions, or danger for destructive actions."
+    },
+    {
+      "name": "disabled",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Dims the control, detaches click / press feedback, and marks it `aria-disabled`."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "A `data-testid` for selecting the button in tests."
+    },
+    {
       "name": "essenceValue",
       "tsType": "number | null",
       "unionMembers": [],
@@ -2433,18 +2406,6 @@
       "description": "Possible dynamic label/essence-cost states. The button reserves the widest\nstate while rendering only the current one, preventing surrounding layout\nshift."
     },
     {
-      "name": "variant",
-      "tsType": "GlassButtonVariant",
-      "unionMembers": [
-        "accent",
-        "danger",
-        "default"
-      ],
-      "required": false,
-      "defaultValue": "default",
-      "description": "Strict surface treatment: accent for primary/commit actions, default for\nsecondary actions, or danger for destructive actions."
-    },
-    {
       "name": "placement",
       "tsType": "GlassControlPlacement",
       "unionMembers": [
@@ -2454,14 +2415,6 @@
       "required": false,
       "defaultValue": "onMedia",
       "description": "Surface beneath the control. `onMedia` uses the full liquid-glass recipe;\n`onGlass` uses a lighter tonal lens so an existing glass tint is not\ncompounded. Defaults to `onMedia`."
-    },
-    {
-      "name": "disabled",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "false",
-      "description": "Dims the control, detaches click / press feedback, and marks it `aria-disabled`."
     },
     {
       "name": "pressed",
@@ -2478,14 +2431,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Accessible name when the visible label alone does not distinguish siblings."
-    },
-    {
-      "name": "testId",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "A `data-testid` for selecting the button in tests."
     }
   ],
   "GlassDialog": [

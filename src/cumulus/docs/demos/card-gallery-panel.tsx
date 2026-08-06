@@ -141,6 +141,7 @@ export const cardGalleryPanelDemo: CumulusComponent = {
   details: [
     'A floating gallery hugs its header, toolbar, rendered card rows, and footer; blank glass inserted to fill a stage is not allowed. heightMode="fill" reserves only a transparent caller-owned fitting wrapper, vertically centers the content-sized glass within it, and never stretches the glass.',
     "The component derives material from frame geometry: floating is rounded glass and full-bleed is the edge-to-edge standard alpha scrim. It owns the header, optional mode/search/sort/filter toolbar, accessory slot, internal scroll, fixed grid modes, optional captions and footer actions, and mobile press-preview sizing with whole-card touch-circle clearance. Callers provide resolved card models keyed by entry id or UUID.",
+    "footerActions accepts exactly one centered action or two equal-width actions. Each entry uses the core GlassButton action contract while the gallery owns placement and footer layout.",
   ],
   group: "Components",
   docName: "CardGalleryPanel",
@@ -168,7 +169,7 @@ export const cardGalleryPanelDemo: CumulusComponent = {
   frame="floating"
   spacing="medium"
   onCardPress={toggleCard}
-  footerAction={{ label: "Decline Offer", onPress: decline }}
+  footerActions={[{ label: "Decline Offer", onPress: decline }]}
   endAction={{
     entryId: "restock",
     glyph: GLYPHS.refresh,

@@ -128,6 +128,23 @@ describe("CardGalleryPanel", () => {
     act(() => root.unmount()); container.remove();
   });
 
+  it("renders one centered footer action without paired-action layout", () => {
+    const decline = vi.fn();
+    const container = document.createElement("div"); document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<CumulusRoot><CardGalleryPanel
+      title="Transfiguration"
+      cards={[]}
+      footerActions={[
+        { label: "Decline Offer", onPress: decline, testId: "decline" },
+      ]}
+    /></CumulusRoot>));
+    expect(container.querySelector("[data-gallery-footer-actions]")).toBeNull();
+    act(() => (container.querySelector('[data-testid="decline"]') as HTMLButtonElement).click());
+    expect(decline).toHaveBeenCalledOnce();
+    act(() => root.unmount()); container.remove();
+  });
+
   it("renders an equal-width footer action pair and a decorative stacked copy", () => {
     const decline = vi.fn(); const confirm = vi.fn();
     const container = document.createElement("div"); document.body.append(container);

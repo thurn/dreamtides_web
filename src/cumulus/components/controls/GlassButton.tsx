@@ -50,6 +50,25 @@ export interface GlassButtonWidthReservation {
   essenceCost?: number | null;
 }
 
+/** Core GlassButton props shared by structured action models. */
+export interface GlassButtonAction {
+  /** The button's text, centered by the component at every rendered width. */
+  label: string;
+  /** Fires when the button is activated (no-op while disabled). */
+  onPress: () => void;
+  /** Optional leading glyph painted as a `StandaloneGlyph` before the label. */
+  glyph?: Glyph;
+  /** Optional numerical essence cost rendered after a centered dot. */
+  essenceCost?: number | null;
+  /** Strict surface treatment: accent for primary/commit actions, default for
+   * secondary actions, or danger for destructive actions. */
+  variant?: GlassButtonVariant;
+  /** Dims the control, detaches click / press feedback, and marks it `aria-disabled`. */
+  disabled?: boolean;
+  /** A `data-testid` for selecting the button in tests. */
+  testId?: string;
+}
+
 /**
  * Danger treatment for destructive actions: the accent soft-wash material in
  * red, preserving the same glass body, wash strength, rim, and shadow geometry.
@@ -77,15 +96,7 @@ const dangerChromeOnGlass: React.CSSProperties = {
     "inset 0 1px 0 rgba(255,255,255,0.32), inset 0 -10px 22px color-mix(in srgb, var(--danger) 10%, transparent), 0 8px 22px color-mix(in srgb, var(--danger) 22%, transparent)",
 };
 
-export interface GlassButtonProps {
-  /** The button's text, centered by the component at every rendered width. */
-  label: string;
-  /** Fires when the button is activated (no-op while disabled). */
-  onPress: () => void;
-  /** Optional leading glyph painted as a `StandaloneGlyph` before the label. */
-  glyph?: Glyph;
-  /** Optional numerical essence cost rendered after a centered dot. */
-  essenceCost?: number | null;
+interface GlassButtonOptions {
   /** Optional non-cost Essence value rendered directly after the label. */
   essenceValue?: number | null;
   /** Prominent primary-action sizing, standard label spacing, or compact
@@ -97,24 +108,21 @@ export interface GlassButtonProps {
    * shift.
    */
   widthReservations?: readonly GlassButtonWidthReservation[];
-  /** Strict surface treatment: accent for primary/commit actions, default for
-   * secondary actions, or danger for destructive actions. */
-  variant?: GlassButtonVariant;
   /**
    * Surface beneath the control. `onMedia` uses the full liquid-glass recipe;
    * `onGlass` uses a lighter tonal lens so an existing glass tint is not
    * compounded. Defaults to `onMedia`.
    */
   placement?: GlassControlPlacement;
-  /** Dims the control, detaches click / press feedback, and marks it `aria-disabled`. */
-  disabled?: boolean;
   /** Toggle state for controls whose action switches a persistent local mode. */
   pressed?: boolean;
   /** Accessible name when the visible label alone does not distinguish siblings. */
   accessibilityLabel?: string;
-  /** A `data-testid` for selecting the button in tests. */
-  testId?: string;
 }
+
+export interface GlassButtonProps
+  extends GlassButtonAction,
+    GlassButtonOptions {}
 
 /**
  * GlassButton — a `controlChrome().trigger` glass surface carrying a text
