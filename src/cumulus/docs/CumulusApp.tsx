@@ -11,8 +11,8 @@ import "../primitives/legibility.css";
 import "../assets/phosphor.css";
 
 import type { CSSProperties } from "react";
-import { useLayoutEffect, useRef } from "react";
 import { useCumulusRoute } from "./route";
+import { useOverviewScrollRestoration } from "./use-overview-scroll-restoration";
 import { CUMULUS_COMPONENTS, type CumulusComponent } from "./registry";
 import { getComponent } from "./registry";
 import { getMockup } from "./mockups/registry";
@@ -227,30 +227,7 @@ function MockupView({ id }: { id: string }) {
 
 export default function CumulusApp() {
   const route = useCumulusRoute();
-
-  // Preserve the overview's scroll position across navigations. The overview
-  // gallery is tall; component and mockup pages are short, so leaving the
-  // overview clamps `window.scrollY` to 0 and returning would otherwise snap
-  // to the top. While the overview is shown we record the latest scroll offset,
-  // and on re-entry we restore it so "← Overview" lands the reader back where
-  // they were. Opening a component / mockup page always lands at the TOP: the
-  // reader asked for that page, so it must start at its header, never inherit
-  // the overview's (or a previous component's) scroll offset. Keyed on
-  // `route.id` too so a direct component→component hop also re-tops.
-  const overviewScrollRef = useRef(0);
-  const routeId = "id" in route ? route.id : null;
-  useLayoutEffect(() => {
-    if (route.view !== "overview") {
-      window.scrollTo(0, 0);
-      return undefined;
-    }
-    window.scrollTo(0, overviewScrollRef.current);
-    const onScroll = () => {
-      overviewScrollRef.current = window.scrollY;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [route.view, routeId]);
+  useOverviewScrollRestoration(route);
 
   // The mockup view renders full-bleed, so it bypasses the centered, max-width
   // content column that the overview and component pages sit inside.
