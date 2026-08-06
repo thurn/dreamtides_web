@@ -1,6 +1,10 @@
 import { asCardId, asCardName, type CardId } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { Dreamsign, TransfigurationType } from "../types/journey";
+import type {
+  RewardMechanicId,
+  RewardSelectionPolicyId,
+} from "../reward-selection/types";
 
 const EXPLORATION_DATA_PATH = "/exploration-data.json";
 
@@ -52,7 +56,9 @@ export type ExplorationEffectKind =
   | "next-battle-starting-energy"
   | "next-battle-smaller-hand-and-cost-discount"
   | "choose-dream-avatar"
-  | "purge-duplicates-and-grant-reclaim";
+  | "purge-duplicates-and-grant-reclaim"
+  | "transfigured-card-draft"
+  | "add-site";
 
 const TRANSFIGURATION_EXPLORATION_EFFECT_KINDS: ReadonlySet<ExplorationEffectKind> =
   new Set(["transfigure-selected", "transfigure-fixed-selected"]);
@@ -74,6 +80,9 @@ export interface ExplorationActionContent {
   /** Special selections compiled from the authored template syntax. */
   specialVariables?: readonly ExplorationSpecialVariable[];
   effectKind: ExplorationEffectKind;
+  /** Compiled site-neutral mechanic and its non-player-facing selection policy. */
+  canonicalMechanicId?: RewardMechanicId;
+  selectionPolicyId?: RewardSelectionPolicyId;
   predicate?: ExplorationPredicate;
   count?: number;
   cardId?: CardId;

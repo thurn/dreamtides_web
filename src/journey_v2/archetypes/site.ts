@@ -1,8 +1,8 @@
-import { weightedSample, type MerchantRng } from "../signals/rng";
-import { assembleOfferTrace } from "../trace/buildTrace";
+import type { MerchantRng } from "../signals/rng";
 import type { SiteType } from "../../types/journey";
 import type { MerchantContext } from "../types";
 import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
+import { selectionMetadata, selectMerchantReward } from "./sharedSelection";
 
 /**
  * Site types the merchant can place on the current dreamscape.
@@ -14,10 +14,8 @@ import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
 export const MERCHANT_PLACEABLE_SITE_TYPES: readonly SiteType[] = [
   "Shop",
   "Purge",
-  "Essence",
   "Transfiguration",
   "Duplication",
-  "Reward",
 ] as const;
 
 /**
@@ -26,10 +24,8 @@ export const MERCHANT_PLACEABLE_SITE_TYPES: readonly SiteType[] = [
 const SITE_TYPE_LABELS: Record<string, string> = {
   Shop: "Shop",
   Purge: "Purge Site",
-  Essence: "Essence Site",
   Transfiguration: "Transfiguration Site",
   Duplication: "Duplication Site",
-  Reward: "Reward Site",
 };
 
 function siteTypeLabel(siteType: SiteType): string {
@@ -55,13 +51,18 @@ export const addSiteBuilder: MerchantArchetypeBuilder = {
     // Always eligible — the merchant can always place a new site.
     return true;
   },
-  build(_context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
-    const siteType = weightedSample(
-      MERCHANT_PLACEABLE_SITE_TYPES,
-      () => 1,
-      rng,
-    );
-    if (siteType === null) return null;
+  build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+    const selection = selectMerchantReward({
+      context,
+      archetypeId: "add_site",
+      mechanicId: "add-site",
+      policyId: "site-uniform",
+      request: {
+        constraints: { allowedSiteTypes: MERCHANT_PLACEABLE_SITE_TYPES },
+      },
+    });
+    const siteType = selection?.bindings.siteTypes[0];
+    if (selection === null || siteType === undefined) return null;
 
     const label = siteTypeLabel(siteType);
 
@@ -76,21 +77,7 @@ export const addSiteBuilder: MerchantArchetypeBuilder = {
         siteType,
       },
       targetKey: siteType,
-      // Uniform pick over the placeable site types.
-      trace: assembleOfferTrace({
-        decision: "uniform",
-        keyKind: "siteType",
-        candidates: MERCHANT_PLACEABLE_SITE_TYPES.map((type) => ({
-          key: type,
-          displayName: siteTypeLabel(type),
-          score: 1,
-        })),
-        selectedKeys: [siteType],
-        selectedCount: 1,
-        bandFraction: 1,
-        bandMinimum: MERCHANT_PLACEABLE_SITE_TYPES.length,
-        notes: ["uniform"],
-      }),
+      ...selectionMetadata(selection),
     };
   },
 };

@@ -117,6 +117,11 @@ function contentFixture(
 }
 
 function journeyFixture(content: JourneyContent): JourneyState {
+  const event = content.cardDatabase.get(101);
+  const spiritAnimal = content.cardDatabase.get(130);
+  if (event === undefined || spiritAnimal === undefined) {
+    throw new Error("Expected synthetic deck fixture cards");
+  }
   return {
     ...createDefaultState(),
     seed: "exploration-provider-test",
@@ -124,8 +129,8 @@ function journeyFixture(content: JourneyContent): JourneyState {
     activeSiteId: site.id,
     essence: 100,
     maxDreamsigns: 12,
-    deck: [...content.cardDatabase.values()]
-      .filter((entry) => entry.cardNumber >= 101)
+    deck: Array.from({ length: 8 }, (_, index) =>
+      index % 2 === 0 ? event : spiritAnimal)
       .map((entry, index) => ({
         entryId: `entry-${String(index)}`,
         cardNumber: entry.cardNumber,
@@ -163,10 +168,17 @@ function resolve(
   actionId: string,
   selection: Record<string, unknown> = {},
 ): JourneyState {
+  const runtime = journey.siteRuntime[site.id];
   const result = resolveExplorationChoice({
     journey,
     site,
-    payload: { actionId, selection },
+    payload: {
+      actionId,
+      selection,
+      ...(runtime?.kind === "exploration" && runtime.selectionRulesVersion !== undefined
+        ? { selectionRulesVersion: runtime.selectionRulesVersion }
+        : {}),
+    },
     seq: 91,
     content,
   });
@@ -478,7 +490,19 @@ describe("Exploration provider", () => {
       .toContain(CHARM_POUCH_ID);
     expect(gained.remainingDreamsignPool).not.toContain(CHARM_POUCH_ID);
 
-    const purgeState = buildState(content, {
+    const alternateDreamsignId = "3D4EB3EE-0931-45ED-8365-69F18096EAD5";
+    const purgeContent = {
+      ...content,
+      dreamsignTemplates: [
+        ...content.dreamsignTemplates,
+        {
+          id: alternateDreamsignId,
+          name: "Alternate Sign",
+          effectDescription: "Another fixture effect.",
+        },
+      ],
+    };
+    const purgeState = buildState(purgeContent, {
       ...journeyFixture(content),
       dreamsigns: [{
         id: CHARM_POUCH_ID,
@@ -486,8 +510,9 @@ describe("Exploration provider", () => {
         effectDescription: "A fixture effect.",
         isNegative: false,
       }],
+      remainingDreamsignPool: [alternateDreamsignId],
     });
-    const purged = resolve(content, purgeState.journey, purgeDreamsignAction.id, {
+    const purged = resolve(purgeContent, purgeState.journey, purgeDreamsignAction.id, {
       dreamsignId: CHARM_POUCH_ID,
     });
     expect(purged.dreamsigns).toEqual([]);
@@ -741,6 +766,9 @@ describe("Exploration provider", () => {
     }
     const copiedCardId = content.cardDatabase.get(copied.cardNumber)?.id;
     if (copiedCardId === undefined) throw new Error("Expected copied card UUID");
+    const copiesBefore = state.journey.deck.filter(
+      (entry) => entry.cardNumber === copied.cardNumber,
+    ).length;
 
     const result = resolve(content, state.journey, purgeAndCopy.id, {
       purgeEntryId: purged.entryId,
@@ -748,7 +776,8 @@ describe("Exploration provider", () => {
     });
 
     expect(result.deck.some((entry) => entry.entryId === purged.entryId)).toBe(false);
-    expect(result.deck.filter((entry) => entry.cardNumber === copied.cardNumber)).toHaveLength(2);
+    expect(result.deck.filter((entry) => entry.cardNumber === copied.cardNumber))
+      .toHaveLength(copiesBefore + 1);
     expect(result.siteRuntime[site.id]).toMatchObject({
       kind: "exploration",
       resolution: {
@@ -932,7 +961,17 @@ describe("Exploration provider", () => {
       effectText: "Purge duplicates and grant reclaim",
       effectKind: "purge-duplicates-and-grant-reclaim",
     };
-    const content = contentFixture([chooseAvatar, uniqueDeck]);
+    const baseContent = contentFixture([chooseAvatar, uniqueDeck]);
+    const avatarTemplate = baseContent.dreamAvatars[0];
+    if (avatarTemplate === undefined) throw new Error("Expected a Dream Avatar");
+    const content: JourneyContent = {
+      ...baseContent,
+      dreamAvatars: Array.from({ length: 32 }, (_, index) => ({
+        ...avatarTemplate,
+        id: `dream-avatar-${String(index)}`,
+        name: `Dream Avatar ${String(index)}`,
+      })),
+    };
     const initialAvatar = content.dreamAvatars[0];
     if (initialAvatar === undefined) throw new Error("Expected a Dream Avatar");
     const avatarState = buildState(content, {
@@ -1001,6 +1040,71 @@ describe("Exploration provider", () => {
         duplicateSource.entryId,
         duplicateTarget.entryId,
       ]),
+    );
+  });
+
+  it("persists every generated replacement trace in one action signature", () => {
+    const replaceAction: ExplorationActionContent = {
+      id: "generated-replacement",
+      label: "Change course",
+      effectText: "Replace a chosen character",
+      effectKind: "replace-selected",
+      predicate: "character",
+    };
+    const otherAction: ExplorationActionContent = {
+      id: "gain-fixed",
+      label: "Take the relic",
+      effectText: "Gain a fixed card",
+      effectKind: "gain-card",
+      cardId: asCardId(SOURCE_CARD_ID),
+    };
+    const content = contentFixture([replaceAction, otherAction]);
+    const { runtime } = buildState(content);
+    const offer = runtime.actionOffers.find((candidate) =>
+      candidate.actionId === replaceAction.id);
+    expect(offer?.selectionSignature).toMatch(/^[0-9a-f]{64}$/u);
+    expect(offer?.selectionTraces?.length).toBeGreaterThan(0);
+    expect(offer?.selectionTraces).toHaveLength(
+      Object.keys(offer?.replacementCardIdByEntryId ?? {}).length,
+    );
+  });
+
+  it("prepares transfigured drafts and disclosed add-site rewards", () => {
+    const transfiguredDraft: ExplorationActionContent = {
+      id: "transfigured-draft",
+      label: "Follow the bright current",
+      effectText: "Draft a transfigured Character from 4 choices.",
+      effectKind: "transfigured-card-draft",
+      predicate: "character",
+      offerCount: 4,
+    };
+    const addSite: ExplorationActionContent = {
+      id: "add-site",
+      label: "Chart a new path",
+      effectText: "Add a disclosed site to the current Dreamscape.",
+      effectKind: "add-site",
+    };
+    const content = contentFixture([transfiguredDraft, addSite]);
+    const state = buildState(content);
+    const draftOffer = state.runtime.actionOffers[0];
+    const siteOffer = state.runtime.actionOffers[1];
+    expect(draftOffer?.offeredCardIds).toHaveLength(4);
+    expect(Object.keys(draftOffer?.transfigurationByCardId ?? {})).toHaveLength(4);
+    expect(["Shop", "Purge", "Transfiguration", "Duplication"])
+      .toContain(siteOffer?.offeredSiteType);
+
+    const selectedCardId = draftOffer?.offeredCardIds[0];
+    if (selectedCardId === undefined) throw new Error("Expected a transfigured card offer");
+    const resolved = resolve(content, state.journey, transfiguredDraft.id, {
+      cardIds: [selectedCardId],
+    });
+    const resolution = resolved.siteRuntime[site.id];
+    const gainedEntryId = resolution?.kind === "exploration"
+      ? resolution.resolution?.gainedEntryIds?.[0]
+      : undefined;
+    const gainedEntry = resolved.deck.find((entry) => entry.entryId === gainedEntryId);
+    expect(gainedEntry?.transfiguration).toBe(
+      draftOffer?.transfigurationByCardId?.[selectedCardId],
     );
   });
 

@@ -46,6 +46,8 @@ const ACTION_FIELD_ORDER = [
   "template-variables",
   "selection",
   "effect-kind",
+  "canonical-mechanic-id",
+  "selection-policy-id",
   "predicate",
   "count",
   "card-id",
@@ -64,6 +66,8 @@ const ACTION_FIELD_ORDER = [
   "transfiguration",
 ];
 const CONFIG_KEY_TO_TOML = {
+  canonicalMechanicId: "canonical-mechanic-id",
+  selectionPolicyId: "selection-policy-id",
   predicate: "predicate",
   count: "count",
   cardId: "card-id",
@@ -388,7 +392,28 @@ export function normalizeExplorationAction(rawAction, context) {
     label: requiredString(raw.label, "action label").trim(),
     effectKind,
     templateId,
+    ...(definition.canonicalMechanicId === undefined
+      ? {}
+      : { canonicalMechanicId: definition.canonicalMechanicId }),
+    ...(definition.defaultSelectionPolicyId === undefined
+      ? {}
+      : {
+          selectionPolicyId:
+            raw.canonicalMechanicId === definition.canonicalMechanicId &&
+            typeof raw.selectionPolicyId === "string"
+              ? raw.selectionPolicyId
+              : definition.defaultSelectionPolicyId,
+        }),
   };
+  if (
+    action.selectionPolicyId !== undefined &&
+    !definition.allowedSelectionPolicyIds.includes(action.selectionPolicyId)
+  ) {
+    throw editorError(
+      "INVALID_EFFECT_FIELD",
+      `Selection policy ${action.selectionPolicyId} is not supported by ${effectKind}.`,
+    );
+  }
   for (const field of definition.fields) {
     const value = normalizeField(field, raw[field.key], context);
     if (value !== undefined) action[field.key] = value;

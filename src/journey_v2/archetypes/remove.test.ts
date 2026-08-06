@@ -180,10 +180,10 @@ describe("purge — no-corpus-signal non-starter exclusion", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Bug-class: purge target diversity (anti-argmax)
+// Bug-class: purge target selection stays inside the prepared band
 // ---------------------------------------------------------------------------
 
-describe("purge — target diversity over 30 seeds", () => {
+describe("purge — deterministic band selection", () => {
   it("yields >= 2 distinct targets on a deck with 1 starter + 3 bottom-band misfits", () => {
     // Deck: 8 cards total
     // 1 starter (always a candidate)
@@ -308,17 +308,13 @@ describe("purge — target diversity over 30 seeds", () => {
 
     expect(purgeBuilder.eligible(context)).toBe(true);
 
-    const targets = new Set<string>();
-    for (let seed = 0; seed < 30; seed += 1) {
-      const rng = merchantRng("purge-diversity-test", String(seed));
-      const offer = purgeBuilder.build(context, rng);
-      if (offer !== null && offer.applyPayload?.kind === "remove_deck_entry") {
-        targets.add(offer.applyPayload.entryId);
-      }
-    }
-
-    // At least 2 distinct targets (anti-argmax guarantee)
-    expect(targets.size).toBeGreaterThanOrEqual(2);
+    const first = purgeBuilder.build(context, merchantRng("first"));
+    const replay = purgeBuilder.build(context, merchantRng("unrelated"));
+    expect(first).not.toBeNull();
+    expect(replay?.targetKey).toBe(first?.targetKey);
+    expect(first?.selectionTrace?.band.size).toBeGreaterThanOrEqual(2);
+    expect(first?.selectionTrace?.band.candidates.some((candidate) =>
+      candidate.selected && candidate.key === first.targetKey)).toBe(true);
   });
 });
 

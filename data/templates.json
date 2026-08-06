@@ -329,5 +329,13 @@
   {
     "template_id": 82,
     "template": "Lose half your current essence. The next {count} items you purchase are free."
+  },
+  {
+    "template_id": 83,
+    "template": "Draft a transfigured {predicate} from {offer_count} choices."
+  },
+  {
+    "template_id": 84,
+    "template": "Add a disclosed site to the current Dreamscape."
   }
 ]

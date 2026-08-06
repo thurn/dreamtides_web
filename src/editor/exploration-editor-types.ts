@@ -5,6 +5,10 @@ import type {
   ExplorationPredicate,
 } from "../data/exploration";
 import type {
+  RewardMechanicId,
+  RewardSelectionPolicyId,
+} from "../reward-selection";
+import type {
   EncounterRenderedTemplatePart,
   EncounterRuntimeCardSelection,
   EncounterTemplateHealth,
@@ -36,6 +40,9 @@ export interface ExplorationEditorEffectDefinition {
   label: string;
   templateIds: number[];
   fields: ExplorationEditorFieldDefinition[];
+  canonicalMechanicId?: RewardMechanicId;
+  defaultSelectionPolicyId?: RewardSelectionPolicyId;
+  allowedSelectionPolicyIds?: RewardSelectionPolicyId[];
 }
 
 export interface ExplorationEditorTemplate {
@@ -55,6 +62,8 @@ export interface ExplorationEditorAction {
   templateVariables: Record<string, unknown>;
   selection?: Record<string, { predicate: string }>;
   effectKind: ExplorationEffectKind;
+  canonicalMechanicId?: RewardMechanicId;
+  selectionPolicyId?: RewardSelectionPolicyId;
   predicate?: ExplorationPredicate;
   count?: number;
   cardId?: string;

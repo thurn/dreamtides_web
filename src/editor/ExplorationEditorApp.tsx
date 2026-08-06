@@ -678,6 +678,27 @@ function ExplorationEditorRow({
               .map((field) => controlFor(slot, action, field))}
           </div>
         )}
+        {definition.canonicalMechanicId !== undefined &&
+          definition.allowedSelectionPolicyIds !== undefined && (
+          <details className="exploration-editor-selection-policy">
+            <summary>Advanced selection behavior</summary>
+            <p>Controls candidate preparation for this mechanic.</p>
+            <label className="exploration-editor-select-field">
+              <span>Selection policy</span>
+              <Select
+                full
+                size="sm"
+                ariaLabel={`Selection policy for ${action.label}`}
+                options={definition.allowedSelectionPolicyIds.map((policyId) => ({
+                  value: policyId,
+                  label: policyId,
+                }))}
+                value={action.selectionPolicyId ?? definition.defaultSelectionPolicyId ?? ""}
+                onChange={(value) => updateField(slot, "selectionPolicyId", value)}
+              />
+            </label>
+          </details>
+        )}
         <span
           aria-live="polite"
           className="exploration-editor-action-status"

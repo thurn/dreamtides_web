@@ -6,6 +6,11 @@ import type {
   MerchantGameObject,
 } from "../types";
 import type { MerchantOfferTrace } from "../trace/types";
+import type {
+  RewardMechanicId,
+  RewardSelectionPolicyId,
+  RewardSelectionTrace,
+} from "../../reward-selection/types";
 
 /** The 17 offer archetypes across the 6 families. */
 export type MerchantArchetypeId =
@@ -127,6 +132,12 @@ export interface MerchantOfferDraft {
    * Optional so a builder can omit it; the encounter still forms without it.
    */
   trace?: MerchantOfferTrace;
+  mechanicId?: RewardMechanicId;
+  policyId?: RewardSelectionPolicyId;
+  selectionKey?: string;
+  selectionRulesVersion?: string;
+  selectionContentRevision?: string;
+  selectionTrace?: RewardSelectionTrace;
 }
 
 /**

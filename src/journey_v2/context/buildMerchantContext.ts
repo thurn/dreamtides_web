@@ -7,6 +7,7 @@ import type {
   MerchantCatalogCard,
   MerchantDeckCard,
 } from "../types";
+import { buildRewardSelectionContext } from "../../reward-selection";
 
 interface BuildMerchantContextInput {
   journeyState: JourneyState;
@@ -187,5 +188,10 @@ export function buildMerchantContext({
     dreamsignProfiles: journeyContent.dreamsignProfiles,
     cardDatabase: journeyContent.cardDatabase,
     dreamsignTemplates: journeyContent.dreamsignTemplates,
+    rewardSelection: buildRewardSelectionContext({
+      journeyState,
+      journeyContent,
+      site,
+    }),
   };
 }

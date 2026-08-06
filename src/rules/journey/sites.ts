@@ -48,6 +48,7 @@ import {
   isRandomSiteDestinationType,
   materializeRandomSite,
 } from "../../random-site/random-site";
+import { SELECTION_RULES_VERSION } from "../../reward-selection";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (OPEN_SITE generation for content-coupled site types)
@@ -95,6 +96,7 @@ export interface SiteContentProvider {
     journey: JourneyState;
     site: SiteState;
     rng: (drawIndex: number) => number;
+    selectionRulesVersion?: string;
     /** Optional URL-selected Gamble game written into the OPEN_SITE intent. */
     gambleGameId?: GambleGameId;
   }): SiteOpenResult | null;
@@ -337,6 +339,7 @@ export function openSite(
   const site = findSite(journey, siteId);
   if (site === null) return null;
   const rawGambleGameId = payload.gambleGameId;
+  const rawSelectionRulesVersion = asString(payload.selectionRulesVersion);
   if (
     rawGambleGameId !== undefined &&
     rawGambleGameId !== "gravok-three-gate-wager" &&
@@ -377,9 +380,19 @@ export function openSite(
       });
     }
     case "Augury": {
-      // The augury encounter is generated at render time from the runtime's
-      // nonce / forced archetype (see `buildMerchantContext`), so OPEN_SITE only
-      // seeds a fresh, un-completed runtime.
+      if (
+        rawSelectionRulesVersion === SELECTION_RULES_VERSION &&
+        contentProvider !== null
+      ) {
+        const result = contentProvider.openSite({
+          journey,
+          site,
+          rng: ctx.rng,
+          selectionRulesVersion: rawSelectionRulesVersion,
+        });
+        if (result === null) return null;
+        return withRuntime(journey, siteId, result.runtime);
+      }
       return withRuntime(journey, siteId, {
         kind: "augury",
         completed: false,
@@ -399,6 +412,9 @@ export function openSite(
         journey,
         site,
         rng: ctx.rng,
+        ...(rawSelectionRulesVersion === null
+          ? {}
+          : { selectionRulesVersion: rawSelectionRulesVersion }),
         ...(rawGambleGameId === undefined
           ? {}
           : { gambleGameId: rawGambleGameId }),

@@ -24,6 +24,11 @@ import type {
   MerchantGameObject,
 } from "../types";
 import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
+import {
+  selectionMetadata,
+  selectMerchantCount,
+  selectMerchantReward,
+} from "./sharedSelection";
 
 /**
  * Assembles the `entry_modification` trace shared by the improve family: an
@@ -228,18 +233,23 @@ export const transfigureBuilder: MerchantArchetypeBuilder = {
   eligible(context: MerchantContext): boolean {
     return transfigureCandidatePairs(context).length > 0;
   },
-  build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
+  build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
     const pairs = transfigureCandidatePairs(context);
     if (pairs.length === 0) return null;
-
-    const deck = context.deckCards.map((deckCard) => deckCard.card);
-    const blend = MERCHANT_TUNING.transfigureBlend;
-    const scoreFor = (pair: TransfigureCandidatePair): number =>
-      blend.benefit * pair.benefit +
-      blend.centrality * centrality(pair.deckCard.card, deck, context.fitModel);
-    const sampled = bandSample(pairs, scoreFor, 1, rng);
-    const target = sampled[0];
-    if (target === undefined) return null;
+    const selection = selectMerchantReward({
+      context,
+      archetypeId: "transfigure",
+      mechanicId: "transfigure-deck-entry",
+      policyId: "transfiguration-value",
+    });
+    const binding = selection?.bindings.transfigurations[0];
+    const target = binding === undefined
+      ? undefined
+      : pairs.find((pair) =>
+          pair.entryId === binding.entryId &&
+          pair.transfiguration === binding.transfiguration,
+        );
+    if (selection === null || target === undefined) return null;
 
     return {
       archetypeId: "transfigure",
@@ -249,23 +259,7 @@ export const transfigureBuilder: MerchantArchetypeBuilder = {
       gameObjects: [transfigurePreviewObject(target)],
       applyPayload: transfigurePayload(target),
       targetKey: `${target.entryId}:${target.transfiguration}`,
-      trace: entryModificationTrace({
-        candidates: pairs.map((pair) => ({
-          key: `${pair.entryId}:${pair.transfiguration}`,
-          displayName: `${pair.deckCard.displayName}: ${pair.transfiguration}`,
-          cardUuid: pair.deckCard.cardUuid,
-          cardNumber: pair.deckCard.cardNumber,
-          entryId: pair.entryId,
-          score: scoreFor(pair),
-          components: {
-            benefit: pair.benefit,
-            centrality: centrality(pair.deckCard.card, deck, context.fitModel),
-          },
-        })),
-        selectedKeys: [`${target.entryId}:${target.transfiguration}`],
-        bandFraction: MERCHANT_TUNING.bandFraction,
-        blend,
-      }),
+      ...selectionMetadata(selection),
     };
   },
 };
@@ -311,29 +305,39 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
   eligible(context: MerchantContext): boolean {
     return transfigurableStarters(context).length > 0;
   },
-  build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
+  build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
     const starters = transfigurableStarters(context);
     if (starters.length === 0) return null;
 
-    // Sample 1–2 entries uniformly (a flat band over the whole list).
-    const desired = starters.length >= 2 && rng() < 0.5 ? 2 : 1;
-    const sampledStarters = bandSample(starters, () => 0, desired, rng, {
-      bandFraction: 1,
-      bandMinimum: starters.length,
+    const desired = selectMerchantCount({
+      context,
+      archetypeId: "starter_transfigure",
+      mechanicId: "transfigure-deck-entry",
+      policyId: "uniform",
+      minimum: 1,
+      maximum: Math.min(2, starters.length),
     });
-    if (sampledStarters.length === 0) return null;
+    const selection = selectMerchantReward({
+      context,
+      archetypeId: "starter_transfigure",
+      mechanicId: "transfigure-deck-entry",
+      policyId: "uniform",
+      request: {
+        count: desired,
+        upTo: true,
+        constraints: { starterOnly: true, distinctDeckEntries: true },
+      },
+    });
+    if (selection === null) return null;
 
     const children: MerchantApplyPayload[] = [];
     const gameObjects: MerchantGameObject[] = [];
-    const selectedEntryIds: string[] = [];
-    const selectedNotes: string[] = [];
-    for (const deckCard of sampledStarters) {
-      const options = positiveBenefitTransfigurations(deckCard.card);
-      const chosen = bandSample(options, () => 0, 1, rng, {
-        bandFraction: 1,
-        bandMinimum: options.length,
-      })[0];
-      if (chosen === undefined) continue;
+    for (const binding of selection.bindings.transfigurations) {
+      const deckCard = binding.entryId === undefined
+        ? undefined
+        : context.deckEntryById.get(binding.entryId);
+      const chosen = binding.transfiguration;
+      if (deckCard === undefined) continue;
       const preview = applyTransfigurationToCard(deckCard.card, chosen);
       const pair: TransfigureCandidatePair = {
         deckCard,
@@ -344,33 +348,10 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
       };
       children.push(transfigurePayload(pair));
       gameObjects.push(transfigurePreviewObject(pair));
-      selectedEntryIds.push(deckCard.entryId);
-      selectedNotes.push(`${deckCard.entryId}:${chosen}`);
     }
     if (children.length === 0) return null;
 
     const payload: MerchantApplyPayload = { kind: "composite", children };
-
-    // Uniform pick of 1-2 starters; the chosen transfiguration per starter is
-    // also uniform. Trace the starter selection keyed by entry id, with the
-    // chosen transfigurations recorded as notes.
-    const trace = assembleOfferTrace({
-      decision: "entry_modification",
-      keyKind: "entryId",
-      candidates: starters.map((starter) => ({
-        key: starter.entryId,
-        displayName: starter.displayName,
-        cardUuid: starter.cardUuid,
-        cardNumber: starter.cardNumber,
-        entryId: starter.entryId,
-        score: 0,
-      })),
-      selectedKeys: selectedEntryIds,
-      selectedCount: selectedEntryIds.length,
-      bandFraction: 1,
-      bandMinimum: starters.length,
-      notes: ["uniform", `desired=${String(desired)}`, ...selectedNotes],
-    });
 
     return {
       archetypeId: "starter_transfigure",
@@ -386,7 +367,7 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
             : "",
         )
         .join(","),
-      trace,
+      ...selectionMetadata(selection),
     };
   },
 };

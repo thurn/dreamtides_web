@@ -27,7 +27,7 @@ const field = (key, label, control, options = {}) => ({
   ...options,
 });
 
-export const EXPLORATION_EFFECT_DEFINITIONS = [
+const RAW_EXPLORATION_EFFECT_DEFINITIONS = [
   { kind: "purge-and-copy", label: "Purge and copy", templateIds: [61], fields: [] },
   {
     kind: "gain-dreamsign",
@@ -278,7 +278,56 @@ export const EXPLORATION_EFFECT_DEFINITIONS = [
     templateIds: [79],
     fields: [],
   },
+  {
+    kind: "transfigured-card-draft",
+    label: "Draft a transfigured card",
+    templateIds: [83],
+    fields: [
+      field("predicate", "Card predicate", "predicate", { defaultValue: "character" }),
+      field("offerCount", "Offer count", "number", { defaultValue: 4, min: 1 }),
+    ],
+  },
+  { kind: "add-site", label: "Add a disclosed site", templateIds: [84], fields: [] },
 ];
+
+const COMMON_SELECTION_BY_EFFECT_KIND = {
+  "gain-card": ["gain-card", "fixed", ["fixed"]],
+  "gain-offered-card": ["gain-card", "card-fit-quality", ["uniform", "card-fit", "card-fit-quality"]],
+  "gain-random-cards": ["gain-card", "card-bundle", ["uniform", "card-fit", "card-fit-quality", "card-bundle"]],
+  "draft-card": ["catalog-card-chooser", "card-fit", ["uniform", "card-fit", "card-fit-quality"]],
+  "take-cards": ["catalog-card-chooser", "card-fit", ["uniform", "card-fit", "card-fit-quality"]],
+  "choose-pack": ["pack-chooser", "card-bundle", ["uniform", "card-fit", "card-bundle"]],
+  "gain-dreamsign": ["gain-dreamsign", "fixed", ["fixed"]],
+  "gain-random-dreamsign": ["gain-dreamsign", "dreamsign-match", ["uniform", "dreamsign-match"]],
+  "transfigure-selected": ["transfigure-deck-entry", "transfiguration-value", ["uniform", "transfiguration-value"]],
+  "transfigure-fixed-selected": ["transfigure-deck-entry", "transfiguration-value", ["uniform", "transfiguration-value"]],
+  "purge-selected": ["purge-deck-entry", "purge-misfit", ["uniform", "purge-misfit"]],
+  "purge-for-essence": ["purge-deck-entry", "purge-misfit", ["uniform", "purge-misfit"]],
+  "replace-selected": ["replace-deck-entry", "card-fit-quality", ["uniform", "card-fit-quality"]],
+  "replace-selected-with-card": ["replace-deck-entry", "card-fit-quality", ["uniform", "card-fit-quality"]],
+  "copy-selected-card": ["duplicate-deck-entry", "duplicate-value", ["uniform", "duplicate-value"]],
+  "copy-selected-cards": ["duplicate-deck-entry", "duplicate-value", ["uniform", "duplicate-value"]],
+  "copy-offered-deck-card": ["duplicate-deck-entry", "duplicate-value", ["uniform", "duplicate-value"]],
+  "purge-and-copy": ["duplicate-deck-entry", "duplicate-value", ["uniform", "duplicate-value"]],
+  "change-subtype-selected": ["change-entry-subtype", "deck-entry-centrality", ["uniform", "deck-entry-centrality"]],
+  "choose-dream-avatar": ["choose-dream-avatar", "uniform", ["uniform"]],
+  "transfigured-card-draft": ["transfigured-card-chooser", "card-fit", ["uniform", "card-fit", "card-fit-quality"]],
+  "add-site": ["add-site", "site-uniform", ["site-uniform"]],
+};
+
+export const EXPLORATION_EFFECT_DEFINITIONS = RAW_EXPLORATION_EFFECT_DEFINITIONS.map(
+  (definition) => {
+    const selection = COMMON_SELECTION_BY_EFFECT_KIND[definition.kind];
+    return selection === undefined
+      ? definition
+      : {
+          ...definition,
+          canonicalMechanicId: selection[0],
+          defaultSelectionPolicyId: selection[1],
+          allowedSelectionPolicyIds: selection[2],
+        };
+  },
+);
 
 export const EXPLORATION_EFFECT_DEFINITION_BY_KIND = new Map(
   EXPLORATION_EFFECT_DEFINITIONS.map((definition) => [definition.kind, definition]),

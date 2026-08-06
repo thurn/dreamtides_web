@@ -54,6 +54,8 @@ import {
   resolveMerchantDecline,
   resolveMerchantOffer,
 } from "../../journey_v2/encounter/resolveMerchantOffer";
+import { generateMerchantEncounter } from "../../journey_v2/encounter/generateMerchantEncounter";
+import { buildMerchantContext } from "../../journey_v2/context/buildMerchantContext";
 import type { MerchantChoice } from "../../journey_v2/types";
 import type { MerchantArchetypeId } from "../../journey_v2/archetypes/types";
 import { mintEntryId } from "../../rules/journey/deck";
@@ -68,6 +70,10 @@ import {
   buildExplorationRuntime,
   resolveExplorationChoice,
 } from "./exploration-provider";
+import {
+  buildRewardSelectionContext,
+  SELECTION_RULES_VERSION,
+} from "../../reward-selection";
 
 function asString(value: unknown): string | null {
   return typeof value === "string" ? value : null;
@@ -410,9 +416,42 @@ export function createSiteContentProvider(
   return {
     randomSiteDestinations: content.atlasData.randomSite.destinations,
     randomSiteGuideId: content.atlasData.randomSite.guideId,
-    openSite: ({ journey, site, rng, gambleGameId }): SiteOpenResult | null => {
+    openSite: ({
+      journey,
+      site,
+      rng,
+      gambleGameId,
+      selectionRulesVersion,
+    }): SiteOpenResult | null => {
       const stream = streamFromKeyed(rng);
       switch (site.type) {
+        case "Augury": {
+          if (selectionRulesVersion !== SELECTION_RULES_VERSION) return null;
+          const merchantContext = buildMerchantContext({
+            journeyState: journey,
+            journeyContent: content,
+            site,
+          });
+          const generated = generateMerchantEncounter(merchantContext);
+          const selectionContext = buildRewardSelectionContext({
+            journeyState: journey,
+            journeyContent: content,
+            site,
+          });
+          return {
+            runtime: {
+              kind: "augury",
+              completed: false,
+              selectionRulesVersion: SELECTION_RULES_VERSION,
+              selectionContentRevision: selectionContext.selectionContentRevision,
+              encounter: {
+                ...generated,
+                selectionRulesVersion: SELECTION_RULES_VERSION,
+                selectionContentRevision: selectionContext.selectionContentRevision,
+              },
+            },
+          };
+        }
         case "Reward": {
           const generated = generateRewardSiteData({
             dreamsignTemplates: content.dreamsignTemplates,
@@ -592,6 +631,7 @@ export function createSiteContentProvider(
     resolveMerchant: ({ journey, site, action, payload, seq }): JourneyState | null => {
       const encounterSignature = asString(payload.encounterSignature);
       const offerId = asString(payload.offerId);
+      const selectionRulesVersion = asString(payload.selectionRulesVersion);
       if (encounterSignature === null || offerId === null) return null;
       const choice = coerceMerchantChoice(payload.choice);
 
@@ -600,7 +640,12 @@ export function createSiteContentProvider(
           state: journey,
           journeyContent: content,
           site,
-          request: { encounterSignature, offerId, ...(choice ? { choice } : {}) },
+          request: {
+            encounterSignature,
+            offerId,
+            ...(selectionRulesVersion === null ? {} : { selectionRulesVersion }),
+            ...(choice ? { choice } : {}),
+          },
         });
         return result.ok ? result.state : null;
       }
@@ -615,6 +660,7 @@ export function createSiteContentProvider(
           encounterSignature,
           offerId,
           archetypeId: archetypeId as MerchantArchetypeId,
+          ...(selectionRulesVersion === null ? {} : { selectionRulesVersion }),
           ...(choice ? { choice } : {}),
         },
         // Mint any new deck entry through the SAME seq-keyed scheme every

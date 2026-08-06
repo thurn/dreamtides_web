@@ -195,12 +195,25 @@ function freeTransfigurationCandidates(
 function offeredCards(
   ids: readonly string[],
   content: JourneyContent,
+  transfigurationByCardId?: Readonly<Record<string, TransfigurationType>>,
 ): readonly ExplorationCardChoiceView[] {
   return ids.flatMap((id) => {
     const card = cardById(content, id);
-    return card === null
-      ? []
-      : [{ entryId: card.id, model: modelForCard(card), isBane: false }];
+    if (card === null) return [];
+    const transfiguration = transfigurationByCardId?.[card.id];
+    if (transfiguration === undefined) {
+      return [{ entryId: card.id, model: modelForCard(card), isBane: false }];
+    }
+    const preview = buildTransfigurationDisplay(card, transfiguration);
+    return [{
+      entryId: card.id,
+      model: {
+        cardId: card.id,
+        displaySnapshot: preview.card,
+        transfiguration: preview.display,
+      },
+      isBane: false,
+    }];
   });
 }
 
@@ -379,7 +392,18 @@ function followupForAction(
         1,
         "cardIds",
       );
+    case "transfigured-card-draft":
+      return deckFollowup(
+        action.label,
+        "Choose one offered transfigured card.",
+        offeredCards(offer.offeredCardIds, content, offer.transfigurationByCardId),
+        "single",
+        undefined,
+        1,
+        "cardIds",
+      );
     case "gain-offered-card":
+    case "add-site":
       return { kind: "none" };
     case "take-cards": {
       const cards = offeredCards(offer.offeredCardIds, content);
@@ -697,6 +721,8 @@ function actionView(
           ? (offer.offeredDeckEntryIds?.length ?? 0) > 0
           : action.effectKind === "choose-dream-avatar"
             ? (offer.offeredDreamAvatarIds?.length ?? 0) > 0
+            : action.effectKind === "add-site"
+              ? offer.offeredSiteType !== undefined
             : requiresDeckCardTarget
               ? deckCardTarget !== null
               : true;
@@ -719,6 +745,9 @@ function actionView(
     ),
     action,
   );
+  const disclosedEffect = action.effectKind === "add-site" && offer.offeredSiteType !== undefined
+    ? { effectText: `${effect.effectText} ${offer.offeredSiteType}.` }
+    : effect;
   return {
     id: action.id,
     effectKind: action.effectKind,
@@ -755,7 +784,7 @@ function actionView(
         : { transfiguration: action.transfiguration }),
     },
     label: action.label,
-    ...effect,
+    ...disclosedEffect,
     followup,
     ...(action.effectKind === "gain-offered-card" &&
     offer.offeredCardIds[0] !== undefined

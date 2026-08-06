@@ -112,7 +112,10 @@ function rollSlot(
     const builder = weightedSample(pool, weightFor, rng);
     if (builder === null) return { result: null, attempts };
     const buildRng = merchantRng(...saltParts, "target", builder.archetypeId);
-    const draft = builder.build(context, buildRng);
+    const draft = builder.build(
+      { ...context, selectionKey: saltParts.slice(2).join(":") },
+      buildRng,
+    );
     attempts.push({ archetypeId: builder.archetypeId, built: draft !== null });
     if (draft !== null) {
       return { result: { builder, draft }, attempts };
@@ -145,7 +148,10 @@ function forceSlot(
       builder.archetypeId,
       String(attempt),
     );
-    const draft = builder.build(context, buildRng);
+    const draft = builder.build(
+      { ...context, selectionKey: saltParts.slice(2).join(":") },
+      buildRng,
+    );
     attempts.push({ archetypeId: builder.archetypeId, built: draft !== null });
     if (draft !== null) {
       return { result: { builder, draft }, attempts };
@@ -214,6 +220,18 @@ function draftToOffer(
       ? {}
       : { choiceRequest: draft.choiceRequest }),
     ...(draft.trace === undefined ? {} : { trace: draft.trace }),
+    ...(draft.mechanicId === undefined ? {} : { mechanicId: draft.mechanicId }),
+    ...(draft.policyId === undefined ? {} : { policyId: draft.policyId }),
+    ...(draft.selectionKey === undefined ? {} : { selectionKey: draft.selectionKey }),
+    ...(draft.selectionRulesVersion === undefined
+      ? {}
+      : { selectionRulesVersion: draft.selectionRulesVersion }),
+    ...(draft.selectionContentRevision === undefined
+      ? {}
+      : { selectionContentRevision: draft.selectionContentRevision }),
+    ...(draft.selectionTrace === undefined
+      ? {}
+      : { selectionTrace: draft.selectionTrace }),
   };
 }
 

@@ -110,13 +110,21 @@ function findCurrentOffer(input: {
   request: MerchantAcceptRequest;
 }): MerchantOffer | MerchantResolveFailureReason {
   const { state, journeyContent, site, request } = input;
-  let encounter;
-  try {
-    encounter = generateMerchantEncounter(
-      buildMerchantContext({ journeyState: state, journeyContent, site }),
-    );
-  } catch {
-    return "encounter_unavailable";
+  const runtime = state.siteRuntime[site.id];
+  let encounter = runtime?.kind === "augury" ? runtime.encounter : undefined;
+  if (runtime?.kind === "augury" && runtime.selectionRulesVersion !== undefined) {
+    if (request.selectionRulesVersion !== runtime.selectionRulesVersion) {
+      return "stale_encounter";
+    }
+    if (encounter === undefined) return "encounter_unavailable";
+  } else {
+    try {
+      encounter = generateMerchantEncounter(
+        buildMerchantContext({ journeyState: state, journeyContent, site }),
+      );
+    } catch {
+      return "encounter_unavailable";
+    }
   }
   if (encounter.encounterSignature !== request.encounterSignature) {
     return "stale_encounter";
@@ -191,9 +199,19 @@ export function resolveMerchantDecline({
   request,
 }: ResolveMerchantDeclineInput): ResolveMerchantDeclineResult {
   try {
-    const encounter = generateMerchantEncounter(
-      buildMerchantContext({ journeyState: state, journeyContent, site }),
-    );
+    const runtime = state.siteRuntime[site.id];
+    if (
+      runtime?.kind === "augury" &&
+      runtime.selectionRulesVersion !== undefined &&
+      request.selectionRulesVersion !== runtime.selectionRulesVersion
+    ) {
+      return { ok: false, reason: "stale_encounter", state };
+    }
+    const encounter = runtime?.kind === "augury" && runtime.encounter !== undefined
+      ? runtime.encounter
+      : generateMerchantEncounter(
+          buildMerchantContext({ journeyState: state, journeyContent, site }),
+        );
     if (encounter.encounterSignature !== request.encounterSignature) {
       return { ok: false, reason: "stale_encounter", state };
     }

@@ -30,6 +30,7 @@ import {
   collectAtlasAssetSources,
   compileAtlasData,
 } from "./atlas-data.mjs";
+import { EXPLORATION_EFFECT_DEFINITION_BY_KIND } from "./exploration-editor-schema.mjs";
 
 // Re-exported for `setup-assets.test.mjs`, which exercises the JSONC comment
 // stripper alongside the asset-build helpers defined here.
@@ -665,6 +666,8 @@ const EXPLORATION_EFFECT_KINDS = new Set([
   "next-battle-smaller-hand-and-cost-discount",
   "choose-dream-avatar",
   "purge-duplicates-and-grant-reclaim",
+  "transfigured-card-draft",
+  "add-site",
 ]);
 
 function transformTomlRecord(record) {
@@ -709,11 +712,21 @@ export function transformExplorationData(source) {
     return {
       ...encounter,
       action: (encounter.action ?? []).map((action) => {
+        const definition = EXPLORATION_EFFECT_DEFINITION_BY_KIND.get(action.effectKind);
         const specialVariables = [
           ...new Set(action.effectText?.match(/\$[A-Z][A-Z0-9_]*/gu) ?? []),
         ];
         return {
           ...action,
+          ...(definition?.canonicalMechanicId === undefined
+            ? {}
+            : { canonicalMechanicId: definition.canonicalMechanicId }),
+          ...(definition?.defaultSelectionPolicyId === undefined
+            ? {}
+            : {
+                selectionPolicyId:
+                  action.selectionPolicyId ?? definition.defaultSelectionPolicyId,
+              }),
           ...(specialVariables.length === 0 ? {} : { specialVariables }),
         };
       }),
@@ -748,13 +761,22 @@ export function transformExplorationData(source) {
           `exploration.toml: action ${action.id} has unknown effect-kind ${String(action.effectKind)}`,
         );
       }
+      const definition = EXPLORATION_EFFECT_DEFINITION_BY_KIND.get(action.effectKind);
+      if (
+        definition?.allowedSelectionPolicyIds !== undefined &&
+        !definition.allowedSelectionPolicyIds.includes(action.selectionPolicyId)
+      ) {
+        throw new Error(
+          `exploration.toml: action ${action.id} has unsupported selection-policy-id ${String(action.selectionPolicyId)}`,
+        );
+      }
       for (const key of ["label", "effectText"]) {
         if (typeof action[key] !== "string" || action[key].trim() === "") {
           throw new Error(`exploration.toml: action ${action.id} requires ${key}`);
         }
       }
       if (
-        ["gain-offered-card", "draft-card", "take-cards"].includes(
+        ["gain-offered-card", "draft-card", "take-cards", "transfigured-card-draft"].includes(
           action.effectKind,
         ) &&
         (typeof action.predicate !== "string" || action.predicate.length === 0)
@@ -776,7 +798,7 @@ export function transformExplorationData(source) {
         );
       }
       if (
-        ["draft-card", "take-cards"].includes(action.effectKind) &&
+        ["draft-card", "take-cards", "transfigured-card-draft"].includes(action.effectKind) &&
         (typeof action.offerCount !== "number" ||
           !Number.isInteger(action.offerCount) ||
           action.offerCount <= 0)

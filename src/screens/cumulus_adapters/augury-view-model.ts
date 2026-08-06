@@ -819,7 +819,15 @@ export function buildAugurySiteModel(params: {
       journeyContent: params.journeyContent,
       site: params.site,
     });
-    const { encounter, debug } = generateMerchantEncounterWithDebug(context);
+    const runtime = params.state.siteRuntime[params.site.id];
+    const persistedEncounter =
+      runtime?.kind === "augury" ? runtime.encounter : undefined;
+    const generated = persistedEncounter === undefined
+      ? generateMerchantEncounterWithDebug(context)
+      : null;
+    const encounter = persistedEncounter ?? generated?.encounter;
+    if (encounter === undefined) throw new Error("Augury encounter is unavailable");
+    const debug = generated?.debug ?? null;
     return {
       view: {
         ...baseView,
@@ -880,6 +888,9 @@ export function buildAuguryAcceptRequest(
     encounterSignature: encounter.encounterSignature,
     offerId,
     archetypeId: offer.archetypeId,
+    ...(encounter.selectionRulesVersion === undefined
+      ? {}
+      : { selectionRulesVersion: encounter.selectionRulesVersion }),
     ...(candidates.length === 0 ? {} : { choice: { choiceId: choiceId! } }),
   };
 }
@@ -893,6 +904,9 @@ export function buildAuguryDeclineRequest(
     : {
         encounterSignature: encounter.encounterSignature,
         offerId: offer.offerId,
+        ...(encounter.selectionRulesVersion === undefined
+          ? {}
+          : { selectionRulesVersion: encounter.selectionRulesVersion }),
       };
 }
 
@@ -970,6 +984,12 @@ export function buildAuguryLogEntries(
         deckSize: deckSnapshot?.size,
         deckHash: deckSnapshot?.hash,
         trace: offer.trace ?? null,
+        mechanicId: offer.mechanicId ?? null,
+        policyId: offer.policyId ?? null,
+        selectionKey: offer.selectionKey ?? null,
+        selectionRulesVersion: offer.selectionRulesVersion ?? null,
+        selectionContentRevision: offer.selectionContentRevision ?? null,
+        selectionTrace: offer.selectionTrace ?? null,
       },
     });
   }

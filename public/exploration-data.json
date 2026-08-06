@@ -19,6 +19,8 @@
           },
           "effectKind": "gain-offered-card",
           "predicate": "cheap-character",
+          "canonicalMechanicId": "gain-card",
+          "selectionPolicyId": "card-fit-quality",
           "specialVariables": [
             "$OFFERED_CARD"
           ]
@@ -30,7 +32,9 @@
           "templateId": 17,
           "templateVariables": {},
           "effectKind": "transfigure-selected",
-          "count": 1
+          "count": 1,
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value"
         }
       ]
     },
@@ -49,7 +53,9 @@
           },
           "effectKind": "gain-random-cards",
           "predicate": "survivor",
-          "count": 2
+          "count": 2,
+          "canonicalMechanicId": "gain-card",
+          "selectionPolicyId": "card-bundle"
         },
         {
           "id": "738a5af0-f848-4d48-bceb-9a43c9b11066:pair-1:template-14",
@@ -63,7 +69,9 @@
           "effectKind": "draft-card",
           "predicate": "survivor",
           "count": 1,
-          "offerCount": 4
+          "offerCount": 4,
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit"
         }
       ]
     },
@@ -83,7 +91,9 @@
           "effectKind": "draft-card",
           "predicate": "spirit-animal",
           "count": 1,
-          "offerCount": 4
+          "offerCount": 4,
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit"
         },
         {
           "id": "401bb341-8385-41e9-8f6f-7b48e9ce174d:pair-1:template-58",
@@ -95,7 +105,9 @@
           },
           "effectKind": "change-subtype-selected",
           "predicate": "character",
-          "subtype": "Spirit Animal"
+          "subtype": "Spirit Animal",
+          "canonicalMechanicId": "change-entry-subtype",
+          "selectionPolicyId": "deck-entry-centrality"
         }
       ]
     },
@@ -115,7 +127,9 @@
             }
           },
           "effectKind": "gain-card",
-          "cardId": "e26e0ac8-d6c9-4b0c-8672-4f73651f2586"
+          "cardId": "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
+          "canonicalMechanicId": "gain-card",
+          "selectionPolicyId": "fixed"
         },
         {
           "id": "8b5eb29c-146f-46fb-9407-55004128fba7:pair-1:template-14",
@@ -129,7 +143,9 @@
           "effectKind": "draft-card",
           "predicate": "cheap-character",
           "count": 1,
-          "offerCount": 4
+          "offerCount": 4,
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit"
         }
       ]
     },
@@ -149,7 +165,9 @@
             }
           },
           "effectKind": "gain-card",
-          "cardId": "87aba308-00b4-40d8-a46f-4e6f58a664a8"
+          "cardId": "87aba308-00b4-40d8-a46f-4e6f58a664a8",
+          "canonicalMechanicId": "gain-card",
+          "selectionPolicyId": "fixed"
         },
         {
           "id": "954e8d50-d494-4fb2-b4c7-74979083b774:pair-1:template-58",
@@ -161,7 +179,9 @@
           },
           "effectKind": "change-subtype-selected",
           "predicate": "character",
-          "subtype": "Outsider"
+          "subtype": "Outsider",
+          "canonicalMechanicId": "change-entry-subtype",
+          "selectionPolicyId": "deck-entry-centrality"
         }
       ]
     },
@@ -181,7 +201,9 @@
           "effectKind": "draft-card",
           "predicate": "spirit-animal",
           "count": 1,
-          "offerCount": 4
+          "offerCount": 4,
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit"
         },
         {
           "id": "b8ecc46d-bd92-4826-a416-7ce177e69cbf:pair-1:template-13",
@@ -194,7 +216,9 @@
           },
           "effectKind": "gain-random-cards",
           "predicate": "spirit-animal",
-          "count": 2
+          "count": 2,
+          "canonicalMechanicId": "gain-card",
+          "selectionPolicyId": "card-bundle"
         }
       ]
     },
@@ -214,7 +238,9 @@
             }
           },
           "effectKind": "gain-card",
-          "cardId": "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5"
+          "cardId": "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5",
+          "canonicalMechanicId": "gain-card",
+          "selectionPolicyId": "fixed"
         },
         {
           "id": "e2f542eb-090f-4a22-a42c-a120eb6caaa3:pair-1:template-14",
@@ -228,7 +254,9 @@
           "effectKind": "draft-card",
           "predicate": "spirit-animal",
           "count": 1,
-          "offerCount": 4
+          "offerCount": 4,
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit"
         }
       ]
     },
@@ -248,7 +276,9 @@
             }
           },
           "effectKind": "gain-dreamsign",
-          "dreamsignId": "2D4EB3EE-0931-45ED-8365-69F18096EAD5"
+          "dreamsignId": "2D4EB3EE-0931-45ED-8365-69F18096EAD5",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "fixed"
         },
         {
           "id": "46783333-78f9-4146-a8ec-0d1b81e1bf2f:pair-1:template-59",
@@ -282,7 +312,9 @@
           "effectKind": "choose-pack",
           "predicate": "warrior",
           "packCount": 2,
-          "packSize": 3
+          "packSize": 3,
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle"
         },
         {
           "id": "886c9d49-b25f-4ddd-97f0-2ec4b42eda89:pair-5:template-64",
@@ -341,7 +373,9 @@
           "effectKind": "choose-pack",
           "predicate": "warrior",
           "packCount": 2,
-          "packSize": 3
+          "packSize": 3,
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle"
         },
         {
           "id": "764b62f6-6af9-40ad-8d1f-653cc1a11030:pair-5:template-65",
@@ -368,7 +402,9 @@
           "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
           "templateId": 61,
           "templateVariables": {},
-          "effectKind": "purge-and-copy"
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value"
         },
         {
           "id": "e26e0ac8-d6c9-4b0c-8672-4f73651f2586:pair-1:template-19",
@@ -386,6 +422,8 @@
           "effectKind": "transfigure-fixed-selected",
           "predicate": "event",
           "transfiguration": "Inspired",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
           "specialVariables": [
             "$DECK_CARD"
           ]
@@ -409,7 +447,9 @@
           "effectKind": "draft-card",
           "predicate": "survivor",
           "count": 2,
-          "offerCount": 4
+          "offerCount": 4,
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit"
         },
         {
           "id": "123baf70-305a-4583-bdba-a10b5153fbeb:pair-1:template-19",
@@ -427,6 +467,8 @@
           "effectKind": "transfigure-fixed-selected",
           "predicate": "survivor",
           "transfiguration": "Kindled",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
           "specialVariables": [
             "$DECK_CARD"
           ]
@@ -443,7 +485,9 @@
           "effectText": "Gain a random dreamsign",
           "templateId": 28,
           "templateVariables": {},
-          "effectKind": "gain-random-dreamsign"
+          "effectKind": "gain-random-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "dreamsign-match"
         },
         {
           "id": "e455225f-c444-44a2-8796-805cae2b755f:pair-3:template-62",
@@ -478,6 +522,8 @@
           "effectKind": "change-subtype-selected",
           "predicate": "cheap-character",
           "subtype": "Survivor",
+          "canonicalMechanicId": "change-entry-subtype",
+          "selectionPolicyId": "deck-entry-centrality",
           "specialVariables": [
             "$DECK_CARD"
           ]
@@ -492,7 +538,9 @@
           },
           "effectKind": "gain-random-cards",
           "predicate": "survivor",
-          "count": 1
+          "count": 1,
+          "canonicalMechanicId": "gain-card",
+          "selectionPolicyId": "card-bundle"
         }
       ]
     },
@@ -516,6 +564,8 @@
           "effectKind": "copy-selected-card",
           "predicate": "cheap-character",
           "count": 2,
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
           "specialVariables": [
             "$DECK_CARD"
           ]
@@ -527,7 +577,9 @@
           "templateId": 55,
           "templateVariables": {},
           "effectKind": "copy-offered-deck-card",
-          "offerCount": 4
+          "offerCount": 4,
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value"
         }
       ]
     },
@@ -547,7 +599,9 @@
             }
           },
           "effectKind": "gain-dreamsign",
-          "dreamsignId": "EB55B141-82F8-4BA4-B319-420F762E9EE4"
+          "dreamsignId": "EB55B141-82F8-4BA4-B319-420F762E9EE4",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "fixed"
         },
         {
           "id": "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034:pair-1:template-38",
@@ -601,7 +655,9 @@
           "templateId": 57,
           "templateVariables": {},
           "effectKind": "choose-dream-avatar",
-          "offerCount": 3
+          "offerCount": 3,
+          "canonicalMechanicId": "choose-dream-avatar",
+          "selectionPolicyId": "uniform"
         },
         {
           "id": "b1d36337-5668-4f1d-b155-2d07fc00f872:pair-1:template-79",
@@ -633,6 +689,8 @@
           "effectKind": "gain-offered-card",
           "predicate": "spirit-animal",
           "count": 3,
+          "canonicalMechanicId": "gain-card",
+          "selectionPolicyId": "card-fit-quality",
           "specialVariables": [
             "$OFFERED_CARD"
           ]
@@ -648,7 +706,9 @@
           },
           "effectKind": "take-cards",
           "predicate": "spirit-animal",
-          "offerCount": 4
+          "offerCount": 4,
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit"
         }
       ]
     },
@@ -669,7 +729,9 @@
           "effectKind": "draft-card",
           "predicate": "cheap-character",
           "count": 2,
-          "offerCount": 4
+          "offerCount": 4,
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit"
         },
         {
           "id": "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e:pair-1:template-16",
@@ -682,7 +744,9 @@
           },
           "effectKind": "take-cards",
           "predicate": "cheap-character",
-          "offerCount": 4
+          "offerCount": 4,
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit"
         }
       ]
     },
@@ -701,7 +765,9 @@
           },
           "effectKind": "take-cards",
           "predicate": "cheap-character",
-          "offerCount": 4
+          "offerCount": 4,
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit"
         },
         {
           "id": "2ce84a16-1295-4738-9e2d-1f57590b2269:pair-3:template-12",
@@ -719,6 +785,8 @@
           "effectKind": "gain-offered-card",
           "predicate": "cheap-character",
           "count": 2,
+          "canonicalMechanicId": "gain-card",
+          "selectionPolicyId": "card-fit-quality",
           "specialVariables": [
             "$OFFERED_CARD"
           ]
@@ -741,7 +809,9 @@
             }
           },
           "effectKind": "replace-selected-with-card",
-          "cardId": "1658d9a0-c3b0-4eb7-babc-4933acf362c4"
+          "cardId": "1658d9a0-c3b0-4eb7-babc-4933acf362c4",
+          "canonicalMechanicId": "replace-deck-entry",
+          "selectionPolicyId": "card-fit-quality"
         },
         {
           "id": "9d14885c-a757-40cc-b43e-87dbec7ec379:pair-1:template-16",
@@ -754,7 +824,9 @@
           },
           "effectKind": "take-cards",
           "predicate": "event",
-          "offerCount": 4
+          "offerCount": 4,
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit"
         }
       ]
     },
@@ -771,7 +843,9 @@
             "transfiguration": "Empowered"
           },
           "effectKind": "transfigure-fixed-selected",
-          "transfiguration": "Empowered"
+          "transfiguration": "Empowered",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value"
         },
         {
           "id": "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2:pair-4:template-37",
@@ -794,7 +868,9 @@
           "templateId": 17,
           "templateVariables": {},
           "effectKind": "transfigure-selected",
-          "count": 1
+          "count": 1,
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value"
         },
         {
           "id": "1dc8f23e-58bd-47e5-9510-b48315fba1df:pair-3:template-37",
@@ -819,7 +895,9 @@
             "count": 2
           },
           "effectKind": "copy-selected-cards",
-          "count": 2
+          "count": 2,
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value"
         },
         {
           "id": "7ad10754-690c-45fa-abe6-28944da6eef6:pair-1:template-50",
@@ -830,7 +908,9 @@
             "count": 2
           },
           "effectKind": "copy-selected-card",
-          "count": 2
+          "count": 2,
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value"
         }
       ]
     },
@@ -902,7 +982,9 @@
             "essence_per_spark": 20
           },
           "effectKind": "purge-for-essence",
-          "essencePerSpark": 20
+          "essencePerSpark": 20,
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "purge-misfit"
         },
         {
           "id": "77f31db4-0397-49a7-8886-f5459ee960e9:pair-1:template-61",
@@ -910,7 +992,9 @@
           "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
           "templateId": 61,
           "templateVariables": {},
-          "effectKind": "purge-and-copy"
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value"
         }
       ]
     }

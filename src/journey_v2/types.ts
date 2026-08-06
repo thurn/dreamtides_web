@@ -16,6 +16,12 @@ import type {
   MerchantOfferFamily,
 } from "./archetypes/types";
 import type { MerchantOfferTrace } from "./trace/types";
+import type {
+  RewardMechanicId,
+  RewardSelectionContext,
+  RewardSelectionPolicyId,
+  RewardSelectionTrace,
+} from "../reward-selection/types";
 
 export interface MerchantGameObjectBadge {
   label: string;
@@ -59,6 +65,8 @@ export interface MerchantContext {
   atlasData: AtlasData;
   journeySeed: string;
   site: SiteState;
+  /** Canonical Augury slot scope injected by encounter generation. */
+  selectionKey?: string;
   /**
    * Debug reroll counter for this site. Mixed into the encounter RNG salt so a
    * non-zero value produces a fresh encounter from the same journey parameters
@@ -102,6 +110,8 @@ export interface MerchantContext {
   dreamsignProfiles?: ReadonlyMap<string, DreamsignProfile>;
   cardDatabase: JourneyContent["cardDatabase"];
   dreamsignTemplates: readonly DreamsignTemplate[];
+  /** Site-neutral projection consumed by the shared selection core. */
+  rewardSelection: RewardSelectionContext;
 }
 
 type MerchantTransfigurationPayload = Extract<
@@ -155,6 +165,12 @@ export interface MerchantOffer {
   choiceRequest?: MerchantChoiceRequest;
   /** Pure explanation of how this offer's target(s) were chosen; logged per offer. */
   trace?: MerchantOfferTrace;
+  mechanicId?: RewardMechanicId;
+  policyId?: RewardSelectionPolicyId;
+  selectionKey?: string;
+  selectionRulesVersion?: string;
+  selectionContentRevision?: string;
+  selectionTrace?: RewardSelectionTrace;
 }
 
 /** A single merchant line hinting at one seeded-chosen offer. */
@@ -166,6 +182,8 @@ export interface MerchantDialogueLine {
 export interface MerchantEncounter {
   encounterSignature: string;
   siteId: string;
+  selectionRulesVersion?: string;
+  selectionContentRevision?: string;
   offers: readonly MerchantOffer[];
   dialogue: MerchantDialogueLine;
   /** Short reaction shown after the player accepts. */
@@ -176,6 +194,7 @@ export interface MerchantAcceptRequest {
   encounterSignature: string;
   offerId: string;
   archetypeId: MerchantArchetypeId;
+  selectionRulesVersion?: string;
   choice?: MerchantChoice;
 }
 
@@ -191,6 +210,7 @@ export type MerchantOfferActionResult =
 export interface MerchantDeclineRequest {
   encounterSignature: string;
   offerId: string;
+  selectionRulesVersion?: string;
   choice?: MerchantChoice;
 }
 

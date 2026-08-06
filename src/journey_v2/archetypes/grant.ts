@@ -1,8 +1,6 @@
 import { fitScores } from "../signals/fit";
 import { qualityOf } from "../signals/corpus";
 import {
-  bandSample,
-  merchantRng,
   weightedSample,
   type MerchantRng,
 } from "../signals/rng";
@@ -28,6 +26,11 @@ import type { MerchantOfferTrace } from "../trace/types";
 import { buildCategoryUniverse, type MerchantCategory } from "./categories";
 import { merchantTransfigurations, transfigurationBenefit } from "./improve";
 import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
+import {
+  selectionMetadata,
+  selectMerchantCount,
+  selectMerchantReward,
+} from "./sharedSelection";
 
 /** A scored grant pool plus the per-card components and cold-start branch flag. */
 interface ScoredGrantPool {
@@ -41,7 +44,7 @@ interface ScoredGrantPool {
  * UUID, with each candidate's quality/fit components and the cold-start fallback
  * flag. Bounds large pools to the selected cards plus top runners-up.
  */
-function grantScoredTrace(params: {
+export function grantScoredTrace(params: {
   pool: readonly MerchantCatalogCard[];
   scoreByUuid: ReadonlyMap<string, number>;
   componentsByUuid?: ReadonlyMap<string, Readonly<Record<string, number>>>;
@@ -93,6 +96,18 @@ export function singleComponentByUuid(
 
 function catalogGameObject(card: MerchantCatalogCard): MerchantCatalogCard {
   return card;
+}
+
+function selectedCatalogCards(
+  context: MerchantContext,
+  cardUuids: readonly string[],
+): MerchantCatalogCard[] {
+  return cardUuids.flatMap((cardUuid) => {
+    const card = context.candidateGrantCards.find(
+      (candidate) => candidate.cardUuid === cardUuid,
+    );
+    return card === undefined ? [] : [card];
+  });
 }
 
 /**
@@ -212,7 +227,7 @@ function bandSizeFor(poolSize: number, bandFraction: number): number {
  * Band-sample 1 with the tight `strongBandFraction`. Always eligible (a fresh
  * deck still has a pool to draw from). Face-up.
  */
-function strongScoreByUuid(
+export function strongScoreByUuid(
   context: MerchantContext,
   pool: readonly MerchantCatalogCard[],
 ): ScoredGrantPool {
@@ -257,40 +272,26 @@ export const strongCardBuilder: MerchantArchetypeBuilder = {
   eligible(context: MerchantContext): boolean {
     return grantCandidatePool(context).length > 0;
   },
-  build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
-    const pool = grantCandidatePool(context);
-    const scored = strongScoreByUuid(context, pool);
-    const sampled = bandSample(
-      pool,
-      (card) => scored.scoreByUuid.get(card.cardUuid) ?? 0,
-      1,
-      rng,
-      { bandFraction: MERCHANT_TUNING.strongBandFraction },
-    );
-    const target = sampled[0];
-    if (target === undefined) return null;
+  build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+    const selection = selectMerchantReward({
+      context,
+      archetypeId: "strong_card",
+      mechanicId: "gain-card",
+      policyId: "card-fit-quality",
+      request: { constraints: { excludeOwned: true } },
+    });
+    const target = selectedCatalogCards(context, selection?.bindings.cardUuids ?? [])[0];
+    if (selection === null || target === undefined) return null;
 
     return {
       archetypeId: "strong_card",
       family: "grant",
       title: `Receive ${target.displayName}`,
-      summary: "A powerful card, chosen with your deck in mind.",
+      summary: "A powerful card.",
       gameObjects: [catalogGameObject(target)],
       applyPayload: addCatalogCardPayload(target),
       targetKey: target.cardUuid,
-      trace: grantScoredTrace({
-        pool,
-        draftPoolCardUuids: context.draftPoolCardUuids,
-        scoreByUuid: scored.scoreByUuid,
-        componentsByUuid: scored.componentsByUuid,
-        selectedUuids: [target.cardUuid],
-        selectedCount: 1,
-        bandFraction: MERCHANT_TUNING.strongBandFraction,
-        coldStartQualityFallback: scored.coldStartQualityFallback,
-        blend: scored.coldStartQualityFallback
-          ? undefined
-          : MERCHANT_TUNING.strongBlend,
-      }),
+      ...selectionMetadata(selection),
     };
   },
 };
@@ -312,35 +313,26 @@ export const fitCardGrantBuilder: MerchantArchetypeBuilder = {
       grantCandidatePool(context).length > 0
     );
   },
-  build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
-    const pool = grantCandidatePool(context);
-    const fitByUuid = fitValueByUuid(context, pool);
-    const sampled = bandSample(
-      pool,
-      (card) => fitByUuid.get(card.cardUuid) ?? 0,
-      1,
-      rng,
-    );
-    const target = sampled[0];
-    if (target === undefined) return null;
+  build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+    const selection = selectMerchantReward({
+      context,
+      archetypeId: "fit_card_grant",
+      mechanicId: "gain-card",
+      policyId: "card-fit",
+      request: { constraints: { excludeOwned: true } },
+    });
+    const target = selectedCatalogCards(context, selection?.bindings.cardUuids ?? [])[0];
+    if (selection === null || target === undefined) return null;
 
     return {
       archetypeId: "fit_card_grant",
       family: "grant",
       title: `Receive ${target.displayName}`,
-      summary: "A card chosen to fit your deck.",
+      summary: "Add this card to your deck.",
       gameObjects: [catalogGameObject(target)],
       applyPayload: addCatalogCardPayload(target),
       targetKey: target.cardUuid,
-      trace: grantScoredTrace({
-        pool,
-        draftPoolCardUuids: context.draftPoolCardUuids,
-        scoreByUuid: fitByUuid,
-        componentsByUuid: singleComponentByUuid(pool, "fit", fitByUuid),
-        selectedUuids: [target.cardUuid],
-        selectedCount: 1,
-        bandFraction: MERCHANT_TUNING.bandFraction,
-      }),
+      ...selectionMetadata(selection),
     };
   },
 };
@@ -360,46 +352,38 @@ export const fitCardDraftBuilder: MerchantArchetypeBuilder = {
     const pool = grantCandidatePool(context);
     return bandSizeFor(pool.length, MERCHANT_TUNING.bandFraction) >= 4;
   },
-  build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
-    const pool = grantCandidatePool(context);
-    const fitByUuid = fitValueByUuid(context, pool);
-    const sampled = bandSample(
-      pool,
-      (card) => fitByUuid.get(card.cardUuid) ?? 0,
-      4,
-      rng,
-    );
-    if (sampled.length < 4) return null;
+  build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+    const selection = selectMerchantReward({
+      context,
+      archetypeId: "fit_card_draft",
+      mechanicId: "catalog-card-chooser",
+      policyId: "card-fit",
+      request: { count: 4, constraints: { excludeOwned: true } },
+    });
+    const sampled = selectedCatalogCards(context, selection?.bindings.cardUuids ?? []);
+    if (selection === null || sampled.length < 4) return null;
 
     const candidates = sampled.map((card) =>
       catalogChoiceCandidate(
         card,
         addCatalogCardPayload(card),
-        "Chosen to fit your deck.",
+        "Add this card to your deck.",
       ),
     );
 
     return {
       archetypeId: "fit_card_draft",
       family: "grant",
-      title: "Draft a card chosen for your deck",
-      summary: "Four cards picked to fit your deck — choose one to keep.",
+      title: "Draft a card",
+      summary: "Choose one of four cards to keep.",
       gameObjects: [],
       choiceRequest: {
         choiceType: "catalogCard",
-        prompt: "Pick 1 of these cards chosen to fit your deck",
+        prompt: "Pick 1 of these cards",
         candidates,
       },
       targetKey: sampled.map((card) => card.cardUuid).join(","),
-      trace: grantScoredTrace({
-        pool,
-        draftPoolCardUuids: context.draftPoolCardUuids,
-        scoreByUuid: fitByUuid,
-        componentsByUuid: singleComponentByUuid(pool, "fit", fitByUuid),
-        selectedUuids: sampled.map((card) => card.cardUuid),
-        selectedCount: sampled.length,
-        bandFraction: MERCHANT_TUNING.bandFraction,
-      }),
+      ...selectionMetadata(selection),
     };
   },
 };
@@ -415,7 +399,7 @@ export const fitCardDraftBuilder: MerchantArchetypeBuilder = {
  * candidate's payload is a composite of two `add_catalog_card` children, so the
  * accepted card enters the deck twice. Eligible when the band holds >= 4 cards.
  */
-function copiesScoreByUuid(
+export function copiesScoreByUuid(
   context: MerchantContext,
   pool: readonly MerchantCatalogCard[],
 ): ScoredGrantPool {
@@ -454,16 +438,20 @@ export const copiesDraftBuilder: MerchantArchetypeBuilder = {
     const pool = grantCandidatePool(context);
     return bandSizeFor(pool.length, MERCHANT_TUNING.bandFraction) >= 4;
   },
-  build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
-    const pool = grantCandidatePool(context);
-    const scored = copiesScoreByUuid(context, pool);
-    const sampled = bandSample(
-      pool,
-      (card) => scored.scoreByUuid.get(card.cardUuid) ?? 0,
-      4,
-      rng,
-    );
-    if (sampled.length < 4) return null;
+  build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+    const selection = selectMerchantReward({
+      context,
+      archetypeId: "copies_draft",
+      mechanicId: "catalog-card-chooser",
+      policyId: "card-fit-quality",
+      request: {
+        count: 4,
+        constraints: { excludeOwned: true },
+        cardFitQualityBlend: MERCHANT_TUNING.copiesBlend,
+      },
+    });
+    const sampled = selectedCatalogCards(context, selection?.bindings.cardUuids ?? []);
+    if (selection === null || sampled.length < 4) return null;
 
     const candidates = sampled.map((card) =>
       catalogChoiceCandidate(
@@ -472,7 +460,7 @@ export const copiesDraftBuilder: MerchantArchetypeBuilder = {
           kind: "composite",
           children: [addCatalogCardPayload(card), addCatalogCardPayload(card)],
         },
-        "Chosen for your deck — you receive 2 copies.",
+        "You receive 2 copies.",
       ),
     );
 
@@ -480,8 +468,7 @@ export const copiesDraftBuilder: MerchantArchetypeBuilder = {
       archetypeId: "copies_draft",
       family: "grant",
       title: "Draft a card, doubled",
-      summary:
-        "Four strong fits for your deck — keep two copies of your pick.",
+      summary: "Choose one of four cards and keep two copies.",
       gameObjects: [],
       choiceRequest: {
         choiceType: "catalogCard",
@@ -489,19 +476,7 @@ export const copiesDraftBuilder: MerchantArchetypeBuilder = {
         candidates,
       },
       targetKey: sampled.map((card) => card.cardUuid).join(","),
-      trace: grantScoredTrace({
-        pool,
-        draftPoolCardUuids: context.draftPoolCardUuids,
-        scoreByUuid: scored.scoreByUuid,
-        componentsByUuid: scored.componentsByUuid,
-        selectedUuids: sampled.map((card) => card.cardUuid),
-        selectedCount: sampled.length,
-        bandFraction: MERCHANT_TUNING.bandFraction,
-        coldStartQualityFallback: scored.coldStartQualityFallback,
-        blend: scored.coldStartQualityFallback
-          ? undefined
-          : MERCHANT_TUNING.copiesBlend,
-      }),
+      ...selectionMetadata(selection),
     };
   },
 };
@@ -527,7 +502,7 @@ function qualityValueByUuid(
  * fit to be meaningful" signal (deck < `minDeckForFit`). Used by `card_bundle`
  * and `transfigured_draft`.
  */
-function fitOrQualityByUuid(
+export function fitOrQualityByUuid(
   context: MerchantContext,
   candidates: readonly MerchantCatalogCard[],
 ): Map<string, number> {
@@ -599,20 +574,28 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
     if (category === null) return null;
 
     const pool = categoryCandidatePool(context, category);
-    const fitByUuid = fitValueByUuid(context, pool);
-    const sampled = bandSample(
-      pool,
-      (card) => fitByUuid.get(card.cardUuid) ?? 0,
-      MERCHANT_TUNING.categoryDraftSize,
-      rng,
-    );
+    const selection = selectMerchantReward({
+      context,
+      archetypeId: "category_draft_known",
+      mechanicId: "catalog-card-chooser",
+      policyId: "card-fit",
+      request: {
+        count: MERCHANT_TUNING.categoryDraftSize,
+        constraints: {
+          allowedCardUuids: pool.map((card) => card.cardUuid),
+          excludeOwned: true,
+        },
+      },
+    });
+    const sampled = selectedCatalogCards(context, selection?.bindings.cardUuids ?? []);
+    if (selection === null) return null;
     if (sampled.length < MERCHANT_TUNING.categoryDraftSize) return null;
 
     const candidates = sampled.map((card) =>
       catalogChoiceCandidate(
         card,
         addCatalogCardPayload(card),
-        `A ${category.label}, chosen for your deck.`,
+        `A ${category.label} card.`,
       ),
     );
 
@@ -620,7 +603,7 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
       archetypeId: "category_draft_known",
       family: "grant",
       title: `Draft ${indefiniteArticle(category.label)} ${category.label}`,
-      summary: `Four ${category.label} cards picked for your deck — choose one.`,
+      summary: `Choose one of four ${category.label} cards.`,
       gameObjects: [],
       choiceRequest: {
         choiceType: "catalogCard",
@@ -628,39 +611,7 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
         candidates,
       },
       targetKey: `${category.id}:${sampled.map((card) => card.cardUuid).join(",")}`,
-      trace: grantScoredTrace({
-        pool,
-        draftPoolCardUuids: context.draftPoolCardUuids,
-        scoreByUuid: fitByUuid,
-        componentsByUuid: singleComponentByUuid(pool, "fit", fitByUuid),
-        selectedUuids: sampled.map((card) => card.cardUuid),
-        selectedCount: sampled.length,
-        bandFraction: MERCHANT_TUNING.bandFraction,
-        notes: [
-          // Every candidate is drawn from the player's resolved draft pool; each
-          // trace candidate also carries `inDraftPool` (always true here).
-          "candidateSource=draftPool",
-          `draftPoolSize=${String(context.draftPoolCardUuids.size)}`,
-          `category=${category.id}`,
-          `categoryDeckAffine=${String(category.deckAffine)}`,
-          `categoryWeight=${String(
-            category.deckAffine
-              ? MERCHANT_TUNING.categoryAffineWeight
-              : 1 - MERCHANT_TUNING.categoryAffineWeight,
-          )}`,
-          `offerableCategories=${String(categories.length)}`,
-          // Why this category and not another: every offerable category with its
-          // draft-pool depth (`*` marks deck-affine categories, weighted higher).
-          `offerableCategoryPool=${categories
-            .map(
-              (candidate) =>
-                `${candidate.id}:${String(
-                  categoryCandidatePool(context, candidate).length,
-                )}${candidate.deckAffine ? "*" : ""}`,
-            )
-            .join("|")}`,
-        ],
-      }),
+      ...selectionMetadata(selection),
     };
   },
 };
@@ -676,7 +627,7 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
  * bundle cards are granted on accept via a composite payload. Face-up. Always
  * eligible (a non-empty grant pool yields at least the seed).
  */
-function cooccurByUuid(
+export function cooccurByUuid(
   context: MerchantContext,
   candidates: readonly MerchantCatalogCard[],
   partnerCards: readonly CardData[],
@@ -704,56 +655,24 @@ export const cardBundleBuilder: MerchantArchetypeBuilder = {
   eligible(context: MerchantContext): boolean {
     return grantCandidatePool(context).length > 0;
   },
-  build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
-    const pool = grantCandidatePool(context);
-    if (pool.length === 0) return null;
-
-    const coldStart = context.deckCards.length < MERCHANT_TUNING.minDeckForFit;
-    const seedSignal = fitOrQualityByUuid(context, pool);
-    const seedSampled = bandSample(
-      pool,
-      (card) => seedSignal.get(card.cardUuid) ?? 0,
-      1,
-      rng,
-    );
-    const seed = seedSampled[0];
-    if (seed === undefined) return null;
-
-    // Seeded 2 or 3 total cards.
-    const bundleSize = 1 + (rng() < 0.5 ? 1 : 2);
-    const bundle: MerchantCatalogCard[] = [seed];
-    const chosen = new Set<string>([seed.cardUuid]);
-    const fitByUuid = fitValueByUuid(context, pool);
-
-    let step = 0;
-    while (bundle.length < bundleSize) {
-      const remaining = pool.filter((card) => !chosen.has(card.cardUuid));
-      if (remaining.length === 0) break;
-      const cooccurSeed = cooccurByUuid(context, remaining, [seed.card]);
-      const cooccurBundle = cooccurByUuid(
-        context,
-        remaining,
-        bundle.map((card) => card.card),
-      );
-      const blend = MERCHANT_TUNING.bundleBlend;
-      const stepRng = merchantRng(seed.cardUuid, "bundle-grow", String(step));
-      // Top-5 by the blended grow score, sampled within (bandMinimum = 5).
-      const grown = bandSample(
-        remaining,
-        (card) =>
-          blend.seed * (cooccurSeed.get(card.cardUuid) ?? 0) +
-          blend.bundle * (cooccurBundle.get(card.cardUuid) ?? 0) +
-          blend.fit * (fitByUuid.get(card.cardUuid) ?? 0),
-        1,
-        stepRng,
-        { bandFraction: 0, bandMinimum: 5 },
-      );
-      const next = grown[0];
-      if (next === undefined) break;
-      bundle.push(next);
-      chosen.add(next.cardUuid);
-      step += 1;
-    }
+  build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+    const bundleSize = selectMerchantCount({
+      context,
+      archetypeId: "card_bundle",
+      mechanicId: "gain-card",
+      policyId: "card-bundle",
+      minimum: 2,
+      maximum: 3,
+    });
+    const selection = selectMerchantReward({
+      context,
+      archetypeId: "card_bundle",
+      mechanicId: "gain-card",
+      policyId: "card-bundle",
+      request: { count: bundleSize, upTo: true, constraints: { excludeOwned: true } },
+    });
+    const bundle = selectedCatalogCards(context, selection?.bindings.cardUuids ?? []);
+    if (selection === null || bundle.length === 0) return null;
 
     const payload: MerchantApplyPayload = {
       kind: "composite",
@@ -764,38 +683,11 @@ export const cardBundleBuilder: MerchantArchetypeBuilder = {
       archetypeId: "card_bundle",
       family: "grant",
       title: `Gain ${String(bundle.length)} cards that work together`,
-      summary: `A ${String(bundle.length)}-card bundle chosen to work together and with your deck.`,
+      summary: `Receive this ${String(bundle.length)}-card bundle.`,
       gameObjects: bundle.map((card) => catalogGameObject(card)),
       applyPayload: payload,
       targetKey: bundle.map((card) => card.cardUuid).join(","),
-      // The trace explains the SEED pick (scored over the grant pool by
-      // fit/quality). The grown cards are sampled by a separate co-occurrence
-      // blend against the seed/bundle, recorded here as notes since they came
-      // from a different band per grow step.
-      trace: grantScoredTrace({
-        pool,
-        draftPoolCardUuids: context.draftPoolCardUuids,
-        scoreByUuid: seedSignal,
-        componentsByUuid: singleComponentByUuid(
-          pool,
-          coldStart ? "quality" : "fit",
-          seedSignal,
-        ),
-        selectedUuids: [seed.cardUuid],
-        selectedCount: 1,
-        bandFraction: MERCHANT_TUNING.bandFraction,
-        coldStartQualityFallback: coldStart,
-        blend: MERCHANT_TUNING.bundleBlend,
-        notes: [
-          `bundleSize=${String(bundle.length)}`,
-          `seed=${seed.cardUuid}`,
-          `grown=${bundle
-            .slice(1)
-            .map((card) => card.cardUuid)
-            .join(",")}`,
-          "growScore=bundleBlend over (cooccurSeed, cooccurBundle, fit)",
-        ],
-      }),
+      ...selectionMetadata(selection),
     };
   },
 };
@@ -818,7 +710,7 @@ interface TransfiguredChoice {
   display: CardTransfigurationDisplay;
 }
 
-function bestTransfiguration(card: CardData): TransfigurationType | null {
+export function bestTransfiguration(card: CardData): TransfigurationType | null {
   const eligible = merchantTransfigurations(card);
   let best: TransfigurationType | null = null;
   let bestBenefit = -Infinity;
@@ -848,22 +740,23 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
     const pool = transfigurableCandidates(context);
     return bandSizeFor(pool.length, MERCHANT_TUNING.bandFraction) >= 4;
   },
-  build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
-    const pool = transfigurableCandidates(context);
-    const coldStart = context.deckCards.length < MERCHANT_TUNING.minDeckForFit;
-    const signal = fitOrQualityByUuid(context, pool);
-    const sampled = bandSample(
-      pool,
-      (card) => signal.get(card.cardUuid) ?? 0,
-      4,
-      rng,
+  build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+    const selection = selectMerchantReward({
+      context,
+      archetypeId: "transfigured_draft",
+      mechanicId: "transfigured-card-chooser",
+      policyId: "card-fit",
+      request: { count: 4, constraints: { excludeOwned: true } },
+    });
+    if (selection === null) return null;
+    const chosenForms = new Map(
+      selection.bindings.transfigurations.map((entry) => [entry.cardUuid, entry.transfiguration]),
     );
-    if (sampled.length < 4) return null;
-
+    const sampled = selectedCatalogCards(context, selection.bindings.cardUuids);
     const choices: TransfiguredChoice[] = [];
     for (const card of sampled) {
-      const transfiguration = bestTransfiguration(card.card);
-      if (transfiguration === null) continue;
+      const transfiguration = chosenForms.get(card.cardUuid);
+      if (transfiguration === undefined) continue;
       const built = buildTransfigurationDisplay(card.card, transfiguration);
       choices.push({
         card,
@@ -877,7 +770,7 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
     const candidates: MerchantChoiceCandidate[] = choices.map((choice) => ({
       choiceId: choice.card.cardUuid,
       title: `${choice.card.displayName} (${choice.transfiguration})`,
-      summary: `Arrives already ${choice.transfiguration} — chosen for your deck.`,
+      summary: `Arrives already ${choice.transfiguration}.`,
       gameObjects: [
         {
           ...catalogGameObject(choice.card),
@@ -900,8 +793,7 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
       archetypeId: "transfigured_draft",
       family: "grant",
       title: "Draft a transfigured card",
-      summary:
-        "Four cards picked for your deck, each arriving already transfigured — choose one.",
+      summary: "Choose one of four cards that arrive already transfigured.",
       gameObjects: [],
       choiceRequest: {
         choiceType: "catalogCard",
@@ -911,23 +803,7 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
       targetKey: choices
         .map((choice) => `${choice.card.cardUuid}:${choice.transfiguration}`)
         .join(","),
-      trace: grantScoredTrace({
-        pool,
-        draftPoolCardUuids: context.draftPoolCardUuids,
-        scoreByUuid: signal,
-        componentsByUuid: singleComponentByUuid(
-          pool,
-          coldStart ? "quality" : "fit",
-          signal,
-        ),
-        selectedUuids: choices.map((choice) => choice.card.cardUuid),
-        selectedCount: choices.length,
-        bandFraction: MERCHANT_TUNING.bandFraction,
-        coldStartQualityFallback: coldStart,
-        notes: choices.map(
-          (choice) => `${choice.card.cardUuid}:${choice.transfiguration}`,
-        ),
-      }),
+      ...selectionMetadata(selection),
     };
   },
 };

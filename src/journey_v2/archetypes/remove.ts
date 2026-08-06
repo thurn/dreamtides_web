@@ -18,6 +18,7 @@ import type { FitModel } from "../../draft/replay/fit-model";
 import type { CardData } from "../../types/cards";
 import { grantCandidatePool, singleComponentByUuid } from "./grant";
 import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
+import { selectionMetadata, selectMerchantReward } from "./sharedSelection";
 
 // ---------------------------------------------------------------------------
 // Internal helpers
@@ -168,7 +169,7 @@ export function purgeCandidates(
 }
 
 /** Assembles the `deck_entry_rank` trace for a purge selection. */
-function purgeTrace(
+export function purgeTrace(
   selection: PurgeSelection,
   selectedEntryIds: readonly string[],
   extraNotes: readonly string[] = [],
@@ -234,34 +235,37 @@ export const purgeBuilder: MerchantArchetypeBuilder = {
     return purgeCandidates(context).length > 0;
   },
 
-  build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
-    const selection = purgeSelection(context);
-    const candidates = selection.candidates;
-    if (candidates.length === 0) return null;
-
-    const sampled = bandSample(candidates, (entry) => entry.misfitScore, 1, rng);
-    const target = sampled[0];
-    if (target === undefined) return null;
+  build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+    const selection = selectMerchantReward({
+      context,
+      archetypeId: "purge",
+      mechanicId: "purge-deck-entry",
+      policyId: "purge-misfit",
+      request: { constraints: { allowStarters: true } },
+    });
+    const entryId = selection?.bindings.deckEntryIds[0];
+    const target = entryId === undefined ? undefined : context.deckEntryById.get(entryId);
+    if (selection === null || target === undefined) return null;
 
     return {
       archetypeId: "purge",
       family: "remove",
-      title: `Remove ${target.deckCard.displayName}`,
-      summary: "Remove a weak card from your deck.",
+      title: `Remove ${target.displayName}`,
+      summary: "Remove this card from your deck.",
       gameObjects: [
         {
           objectType: "deckCard",
           entryId: target.entryId,
-          cardUuid: target.deckCard.cardUuid,
-          cardNumber: target.deckCard.cardNumber,
-          deckEntry: target.deckCard.deckEntry,
-          card: target.deckCard.card,
-          displayName: target.deckCard.displayName,
+          cardUuid: target.cardUuid,
+          cardNumber: target.cardNumber,
+          deckEntry: target.deckEntry,
+          card: target.card,
+          displayName: target.displayName,
         },
       ],
-      applyPayload: removeDeckEntryPayload(target.deckCard),
+      applyPayload: removeDeckEntryPayload(target),
       targetKey: target.entryId,
-      trace: purgeTrace(selection, [target.entryId]),
+      ...selectionMetadata(selection),
     };
   },
 };
@@ -350,7 +354,7 @@ export const purgeReplaceBuilder: MerchantArchetypeBuilder = {
       archetypeId: "purge_replace",
       family: "remove",
       title: `Remove ${purgeTarget.deckCard.displayName} and draft a replacement`,
-      summary: "Remove a weak card and pick one of four replacements.",
+      summary: "Remove a card and pick one of four replacements.",
       gameObjects: [
         {
           objectType: "deckCard",

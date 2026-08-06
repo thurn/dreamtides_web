@@ -3,6 +3,12 @@ import type {
   ResolvedDreamAvatarPackage,
 } from "./content";
 import type { CardData, CardType } from "./cards";
+import type {
+  RewardMechanicId,
+  RewardSelectionPolicyId,
+  RewardSelectionTrace,
+} from "../reward-selection/types";
+import type { MerchantEncounter } from "../journey_v2/types";
 import type { DraftState } from "./draft";
 import type { LayerName } from "./layer-name";
 import type {
@@ -365,6 +371,10 @@ export type CardChoiceSiteRuntime = {
 export interface AugurySiteRuntime {
   kind: "augury";
   completed: boolean;
+  /** Shared-version runtimes persist their complete prepared encounter. */
+  selectionRulesVersion?: string;
+  selectionContentRevision?: string;
+  encounter?: MerchantEncounter;
   /**
    * Debug reroll counter. Incremented by `rerollAugury` to regenerate the
    * encounter from the same journey parameters. Mixed into the encounter RNG salt
@@ -417,6 +427,16 @@ export interface GravokWagerSiteRuntime {
 /** Deterministic follow-up offers prepared when an Exploration site opens. */
 export interface ExplorationActionOfferRuntime {
   actionId: string;
+  /** Canonical internal mechanic and policy; omitted on legacy runtimes. */
+  canonicalMechanicId?: RewardMechanicId;
+  selectionPolicyId?: RewardSelectionPolicyId;
+  selectionRulesVersion?: string;
+  selectionContentRevision?: string;
+  selectionKey?: string;
+  selectionSignature?: string;
+  selectionTrace?: RewardSelectionTrace;
+  /** Every trace when one action prepares independent targets per deck entry. */
+  selectionTraces?: RewardSelectionTrace[];
   offeredCardIds: string[];
   offeredDreamsignIds?: string[];
   /** Randomly minted concrete deck-entry UUIDs for deck-card effects. */
@@ -426,11 +446,16 @@ export interface ExplorationActionOfferRuntime {
   packCardIds: string[][];
   replacementCardIdByEntryId: Record<string, string>;
   transfigurationByEntryId: Record<string, TransfigurationType>;
+  transfigurationByCardId?: Record<string, TransfigurationType>;
+  offeredSiteType?: SiteType;
 }
 
 /** Persisted result shown with the authored response before leaving the site. */
 export interface ExplorationResolution {
   actionId: string;
+  selectionRulesVersion?: string;
+  encounterSignature?: string;
+  selectionSignature?: string;
   /** Validated UUID-only player intent persisted for replay and diagnostics. */
   selection?: Record<string, string | string[] | number>;
   gainedCardIds: string[];
@@ -469,6 +494,9 @@ export interface ExplorationResolution {
 /** Shared, replayable runtime for one Exploration encounter. */
 export interface ExplorationSiteRuntime {
   kind: "exploration";
+  selectionRulesVersion?: string;
+  selectionContentRevision?: string;
+  encounterSignature?: string;
   encounterCardId: string;
   actionOffers: ExplorationActionOfferRuntime[];
   resolution: ExplorationResolution | null;

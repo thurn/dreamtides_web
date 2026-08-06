@@ -26,6 +26,7 @@ import type { EventDraft } from "../eventlog/client";
 import type { BeginTutorialOptions, TutorialAction } from "../types/tutorial";
 import type { GambleGameId, GravokGateId } from "../types/gamble";
 import type { RandomSiteDestinationType, SiteType } from "../types/journey";
+import { SELECTION_RULES_VERSION } from "../reward-selection";
 
 /**
  * Appends a stamped event, resolving to its committed seq. In production this
@@ -460,7 +461,9 @@ export function makeActions(append: AppendFn): CoopActions {
     openSite: (siteId, runId, siteType, gambleGameId) =>
       emit(
         "OPEN_SITE",
-        gambleGameId === undefined ? { siteId } : { siteId, gambleGameId },
+        gambleGameId === undefined
+          ? { siteId, selectionRulesVersion: SELECTION_RULES_VERSION }
+          : { siteId, gambleGameId, selectionRulesVersion: SELECTION_RULES_VERSION },
         gambleGameId === undefined
           ? siteIntentKey(`open-site:${siteType ?? "unknown"}`, siteId, runId)
           : `${siteIntentKey(`open-site:${siteType ?? "unknown"}`, siteId, runId)}:${gambleGameId}`,
@@ -471,6 +474,7 @@ export function makeActions(append: AppendFn): CoopActions {
       emit("RESOLVE_EXPLORATION_CHOICE", {
         siteId,
         actionId,
+        selectionRulesVersion: SELECTION_RULES_VERSION,
         ...(selection === undefined ? {} : { selection }),
       }),
     completeAugury: (siteId) => emit("COMPLETE_AUGURY", { siteId }),

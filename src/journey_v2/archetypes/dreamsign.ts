@@ -11,6 +11,7 @@ import type { CardData } from "../../types/cards";
 import type { DreamsignTemplate } from "../../types/content";
 import type { MerchantContext, MerchantChoiceCandidate, MerchantGameObject } from "../types";
 import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
+import { selectionMetadata, selectMerchantReward } from "./sharedSelection";
 
 function deckCardData(context: MerchantContext): readonly CardData[] {
   return context.deckCards.map((deckCard) => deckCard.card);
@@ -140,28 +141,24 @@ export const dreamsignBuilder: MerchantArchetypeBuilder = {
   eligible(context: MerchantContext): boolean {
     return context.candidateDreamsigns.length > 0;
   },
-  build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
-    const deck = deckCardData(context);
-    const profiles = context.dreamsignProfiles;
-    // A single "suited" offer should be one of the best-matched signs, not a
-    // uniform draw from a loose band — sample a tight band over the suited pool.
-    const { pool, tier } = suitedDreamsignPool(context, deck, 1);
-    const bandMinimum = 2;
-    const sampled = bandSample(
-      pool,
-      (template) => dreamsignMatchScore(profiles?.get(template.id), deck),
-      1,
-      rng,
-      { bandFraction: MERCHANT_TUNING.dreamsignBandFraction, bandMinimum },
-    );
-    const target = sampled[0];
-    if (target === undefined) return null;
+  build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+    const selection = selectMerchantReward({
+      context,
+      archetypeId: "dreamsign",
+      mechanicId: "gain-dreamsign",
+      policyId: "dreamsign-match",
+    });
+    const dreamsignId = selection?.bindings.dreamsignIds[0];
+    const target = dreamsignId === undefined
+      ? undefined
+      : context.dreamsignTemplates.find((template) => template.id === dreamsignId);
+    if (selection === null || target === undefined) return null;
 
     return {
       archetypeId: "dreamsign",
       family: "dreamsign",
       title: `Gain the ${target.name} dreamsign`,
-      summary: "A dreamsign suited to your deck.",
+      summary: "Add this dreamsign to your collection.",
       gameObjects: [dreamsignGameObject(target)],
       applyPayload: {
         kind: "add_dreamsign",
@@ -169,16 +166,7 @@ export const dreamsignBuilder: MerchantArchetypeBuilder = {
         dreamsignTemplate: target,
       },
       targetKey: target.id,
-      trace: buildDreamsignTrace({
-        pool,
-        tier,
-        context,
-        deck,
-        selectedIds: [target.id],
-        selectedCount: 1,
-        bandFraction: MERCHANT_TUNING.dreamsignBandFraction,
-        bandMinimum,
-      }),
+      ...selectionMetadata(selection),
     };
   },
 };
@@ -247,7 +235,7 @@ export const dreamsignDraftBuilder: MerchantArchetypeBuilder = {
       (template): MerchantChoiceCandidate => ({
         choiceId: template.id,
         title: template.name,
-        summary: "A dreamsign suited to your deck.",
+        summary: "Add this dreamsign to your collection.",
         gameObjects: [dreamsignGameObject(template)],
         applyPayload: {
           kind: "add_dreamsign",
@@ -265,7 +253,7 @@ export const dreamsignDraftBuilder: MerchantArchetypeBuilder = {
       archetypeId: "dreamsign_draft",
       family: "dreamsign",
       title: `Pick a dreamsign (1 of ${String(sampled.length)})`,
-      summary: "Choose a dreamsign suited to your deck.",
+      summary: "Choose a dreamsign for your collection.",
       gameObjects: sampled.map(dreamsignGameObject),
       choiceRequest: {
         choiceType: "dreamsign",

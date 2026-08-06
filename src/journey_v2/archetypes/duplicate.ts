@@ -1,6 +1,6 @@
 import { fitLooByEntry } from "../signals/fit";
 import { qualityOf } from "../signals/corpus";
-import { bandSample, type MerchantRng } from "../signals/rng";
+import type { MerchantRng } from "../signals/rng";
 import { MERCHANT_TUNING } from "../tuning";
 import {
   assembleOfferTrace,
@@ -14,6 +14,7 @@ import type {
   MerchantDeckCard,
 } from "../types";
 import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
+import { selectionMetadata, selectMerchantReward } from "./sharedSelection";
 
 // ---------------------------------------------------------------------------
 // Candidate selection
@@ -71,7 +72,7 @@ function duplicateCandidates(context: MerchantContext): readonly DuplicateCandid
 }
 
 /** Assembles the `deck_entry_rank` trace for the duplicate candidate set. */
-function duplicateTrace(
+export function duplicateTrace(
   candidates: readonly DuplicateCandidate[],
   selectedEntryIds: readonly string[],
 ): MerchantOfferTrace {
@@ -129,17 +130,19 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
     return duplicateCandidates(context).length > 0;
   },
 
-  build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
-    const candidates = duplicateCandidates(context);
-    if (candidates.length === 0) return null;
-
-    // Band-sample up to 3.
-    const sampled = bandSample(
-      candidates,
-      (entry) => entry.signal,
-      3,
-      rng,
-    );
+  build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+    const selection = selectMerchantReward({
+      context,
+      archetypeId: "duplicate",
+      mechanicId: "duplicate-deck-entry",
+      policyId: "duplicate-value",
+      request: { count: 3, upTo: true },
+    });
+    if (selection === null) return null;
+    const sampled = selection.bindings.deckEntryIds.flatMap((entryId) => {
+      const deckCard = context.deckEntryById.get(entryId);
+      return deckCard === undefined ? [] : [{ entryId, deckCard }];
+    });
     if (sampled.length === 0) return null;
 
     // Build payloads.
@@ -171,7 +174,7 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
         ],
         applyPayload: duplicatePayload(target.deckCard),
         targetKey: target.entryId,
-        trace: duplicateTrace(candidates, [target.entryId]),
+        ...selectionMetadata(selection),
       };
     }
 
@@ -206,10 +209,7 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
         candidates: choiceCandidates,
       },
       targetKey: sampled.map((e) => e.entryId).join(","),
-      trace: duplicateTrace(
-        candidates,
-        sampled.map((e) => e.entryId),
-      ),
+      ...selectionMetadata(selection),
     };
   },
 };
