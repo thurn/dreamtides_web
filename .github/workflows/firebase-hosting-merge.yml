@@ -21,11 +21,12 @@ on:
       - master
 
 # Serialize live deploys so two master pushes landing close together don't race
-# each other on the same hosting channel. `cancel-in-progress: false` keeps every
-# commit's deploy queued rather than dropping intermediate ones.
+# each other on the same hosting channel. Only the newest master snapshot should
+# reach production; superseded runs must release the slot instead of deploying
+# stale code after a newer snapshot.
 concurrency:
   group: firebase-hosting-live
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build_and_deploy:

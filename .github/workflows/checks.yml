@@ -13,6 +13,13 @@ on:
   pull_request:
   workflow_dispatch:
 
+# Validation is only actionable for the newest version of a branch or pull
+# request. Superseded runs otherwise consume hosted-runner capacity and can
+# leave the current commit waiting behind stale work during an Actions outage.
+concurrency:
+  group: checks-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   checks:
     runs-on: ubuntu-latest
