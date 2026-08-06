@@ -103,7 +103,9 @@ export function CharacterDialogue({
         display: "grid",
         gridTemplateColumns: `${String(portraitSize)}px minmax(0, 1fr)`,
         alignItems: "center",
-        columnGap: token("--space-s"),
+        // Leaves the SpeechBubble pointer aimed at the portrait without
+        // painting over the portrait frame at either authored bubble scale.
+        columnGap: token("--space-2xl"),
         width: "100%",
         maxWidth,
         margin: 0,

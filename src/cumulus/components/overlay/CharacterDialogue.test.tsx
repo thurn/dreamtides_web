@@ -78,6 +78,7 @@ describe("CharacterDialogue", () => {
     expect(dialogue?.getAttribute("aria-hidden")).toBe("false");
     expect(dialogue?.style.opacity).toBe("0");
     expect(dialogue?.style.gridTemplateColumns).toBe("64px minmax(0, 1fr)");
+    expect(dialogue?.style.columnGap).toBe("var(--space-2xl)");
     expect(dialogue?.style.maxWidth).toBe("300px");
     expect(bubble?.style.padding).toBe(
       "var(--space-m) var(--space-m) var(--space-m) calc(14px + var(--space-m))",
@@ -127,12 +128,20 @@ describe("CharacterDialogue", () => {
     const bubblePath = container.querySelector<SVGPathElement>(
       "[data-character-dialogue] clipPath path",
     );
+    const bubbleRim = container.querySelector<SVGPathElement>(
+      "[data-character-dialogue] [data-speech-bubble-rim]",
+    );
     expect(dialogue?.dataset.characterDialogueSize).toBe("prominent");
     expect(dialogue?.style.gridTemplateColumns).toBe("150px minmax(0, 1fr)");
     expect(dialogue?.style.maxWidth).toBe("700px");
     expect(bubble?.dataset.speechBubbleSize).toBe("prominent");
     expect(bubble?.style.zoom).toBe("1.25");
     expect(bubblePath?.getAttribute("d")).toContain("L 0 31");
+    expect(bubbleRim?.getAttribute("d")).toBe(
+      bubblePath?.getAttribute("d"),
+    );
+    expect(bubbleRim?.getAttribute("stroke")).toBe("var(--glass-rim)");
+    expect(bubbleRim?.getAttribute("stroke-width")).toBe("2");
     const highlight = bubble?.querySelector<HTMLElement>(
       '[data-tutorial-instruction-highlight="yellow"]',
     );

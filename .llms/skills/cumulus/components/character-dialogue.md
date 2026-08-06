@@ -10,7 +10,7 @@ Real consumers: **8** (imports outside `src/cumulus/docs/` and tests).
 
 A character portrait in the canonical round frame, paired with SpeechBubble and presented as one fadeable guide-dialogue object in compact, wide, or prominent scale.
 
-> **Guidance:** Use it for character-led scene dialogue. The component owns its named portrait and bubble scales, centered pointer, crop, frame, pairing layout, and fade transition; callers provide typed art, accessible portrait copy, the speaker name, the spoken line, and visibility.
+> **Guidance:** Use it for character-led scene dialogue. The component owns its named portrait and bubble scales, centered pointer with clear portrait-frame separation, crop, frame, pairing layout, and fade transition; callers provide typed art, accessible portrait copy, the speaker name, the spoken line, and visibility.
 
 ## Props
 

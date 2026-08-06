@@ -117,6 +117,8 @@ export function SpeechBubble({
     position: "relative",
     ...glassSurfaceStyle({ radius: null }),
     background: SPEECH_GLASS_BACKGROUND,
+    // The clipped SVG path owns the visible rim; a CSS border would trace the
+    // rectangular border box instead of the bubble and pointer silhouette.
     border: "none",
     boxSizing: "border-box",
     ...pointerLayout,
@@ -139,15 +141,28 @@ export function SpeechBubble({
       {path !== null && (
         <svg
           aria-hidden="true"
-          width="0"
-          height="0"
-          style={{ position: "absolute" }}
+          width="100%"
+          height="100%"
+          style={{
+            position: "absolute",
+            inset: 0,
+            display: "block",
+            pointerEvents: "none",
+          }}
         >
           <defs>
             <clipPath id={clipId} clipPathUnits="userSpaceOnUse">
               <path d={path} />
             </clipPath>
           </defs>
+          <path
+            d={path}
+            data-speech-bubble-rim=""
+            fill="none"
+            stroke={token("--glass-rim")}
+            strokeWidth={2}
+            vectorEffect="non-scaling-stroke"
+          />
         </svg>
       )}
       <div
