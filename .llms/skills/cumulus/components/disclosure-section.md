@@ -8,7 +8,9 @@ Components · Live demo & interactive props: `/cumulus#/disclosure-section`
 
 Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
 
-A controlled Cumulus section for progressively revealing dense secondary information.
+A controlled, surface-aware Cumulus section for progressively revealing dense secondary information.
+
+> **Guidance:** Use the default on scene media and dark standalone surfaces. Set placement to onGlass inside GlassPanel, GlassDialog, or DeveloperRail so the section uses its lighter nested-glass treatment.
 
 ## Props
 
@@ -19,10 +21,19 @@ A controlled Cumulus section for progressively revealing dense secondary informa
 | `expanded` | `boolean` | yes | — | Controlled open state. |
 | `onExpandedChange` | `(expanded: boolean) => void` | yes | — | Reports the requested open state. |
 | `children` | `ReactNode` | yes | — | Content revealed beneath the trigger. |
+| `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the section. `onMedia` gives the section its own liquid glass boundary; `onGlass` uses a lighter tonal lens inside an existing glass panel or dialog. Defaults to `onMedia`. |
 | `testId` | `string` | no | — | Stable test id for the section. |
 
 ## Usage
 
+### Variant 1
+
 ```tsx
 <DisclosureSection title="AI Analysis" expanded={open} onExpandedChange={setOpen}>…</DisclosureSection>
+```
+
+### Variant 2
+
+```tsx
+<DisclosureSection title="AI Analysis" expanded={open} onExpandedChange={setOpen} placement="onGlass">…</DisclosureSection>
 ```

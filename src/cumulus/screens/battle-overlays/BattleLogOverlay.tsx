@@ -144,6 +144,7 @@ export function BattleLogOverlay({
                   title={`Turn ${turnKey}`}
                   summary={`${String(turn.entries.length)} entries`}
                   expanded={isTurnExpanded}
+                  placement="onGlass"
                   onExpandedChange={(expanded) =>
                     setExpandedTurns((current) => ({
                       ...current,
@@ -167,6 +168,7 @@ export function BattleLogOverlay({
                           title={entry.title}
                           summary={entry.kind}
                           expanded={isExpanded}
+                          placement="onGlass"
                           onExpandedChange={(expanded) =>
                             setExpandedEntries((current) => ({
                               ...current,
@@ -217,6 +219,7 @@ export function BattleLogOverlay({
             title="Raw Events"
             summary={`${String(rawEntries.length)} captured`}
             expanded={expandedRaw}
+            placement="onGlass"
             onExpandedChange={setExpandedRaw}
             testId="battle-log-raw-events"
           >

@@ -1,5 +1,7 @@
 import type { ReactElement, ReactNode } from "react";
+import { glassContentControlSurface } from "../../internal/control-treatment";
 import { Pressable } from "../../primitives/Pressable";
+import type { GlassControlPlacement } from "../../primitives/control-placement";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { StandaloneGlyph } from "./StandaloneGlyph";
@@ -15,6 +17,12 @@ export interface DisclosureSectionProps {
   onExpandedChange: (expanded: boolean) => void;
   /** Content revealed beneath the trigger. */
   children: ReactNode;
+  /**
+   * Surface beneath the section. `onMedia` gives the section its own liquid
+   * glass boundary; `onGlass` uses a lighter tonal lens inside an existing
+   * glass panel or dialog. Defaults to `onMedia`.
+   */
+  placement?: GlassControlPlacement;
   /** Stable test id for the section. */
   testId?: string;
 }
@@ -26,15 +34,17 @@ export function DisclosureSection({
   expanded,
   onExpandedChange,
   children,
+  placement = "onMedia",
   testId,
 }: DisclosureSectionProps): ReactElement {
   return (
     <section
       data-testid={testId}
       data-disclosure-expanded={expanded ? "true" : "false"}
+      data-glass-placement={placement}
       style={{
+        ...glassContentControlSurface(placement),
         padding: token("--space-l"),
-        borderTop: `1px solid ${token("--border-soft")}`,
       }}
     >
       <Pressable

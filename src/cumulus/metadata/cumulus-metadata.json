@@ -1036,6 +1036,17 @@
       "required": true,
       "defaultValue": null,
       "description": "Returns the complete top-to-bottom sequence of card ids after a move."
+    },
+    {
+      "name": "placement",
+      "tsType": "GlassControlPlacement",
+      "unionMembers": [
+        "onMedia",
+        "onGlass"
+      ],
+      "required": false,
+      "defaultValue": "onMedia",
+      "description": "Surface beneath the editor. `onMedia` gives the editor its own liquid glass\nboundary; `onGlass` uses a lighter tonal lens inside an existing glass\npanel or dialog. Defaults to `onMedia`."
     }
   ],
   "CardPile": [
@@ -1932,6 +1943,17 @@
       "required": true,
       "defaultValue": null,
       "description": "Content revealed beneath the trigger."
+    },
+    {
+      "name": "placement",
+      "tsType": "GlassControlPlacement",
+      "unionMembers": [
+        "onMedia",
+        "onGlass"
+      ],
+      "required": false,
+      "defaultValue": "onMedia",
+      "description": "Surface beneath the section. `onMedia` gives the section its own liquid\nglass boundary; `onGlass` uses a lighter tonal lens inside an existing\nglass panel or dialog. Defaults to `onMedia`."
     },
     {
       "name": "testId",

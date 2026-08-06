@@ -303,9 +303,11 @@ blurred glass stay white or warm near-white.
 
 Grouped content sits directly inside GlassPanel, GlassDialog, InfoCard, or
 another liquid-glass surface. It uses spacing wrappers, subtle dividers, and
-glass text tokens; nested controls use their named `onGlass` treatment.
-Tangible game objects such as `GameCard` may rest there as distinct objects
-without an additional container behind them.
+glass text tokens. Bounded content controls such as `DisclosureSection` and
+`CardOrderEditor` use their named `onGlass` treatment when their boundary
+communicates the interaction or collection. Tangible game objects such as
+`GameCard` may rest there as distinct objects without an additional container
+behind them.
 
 ### Token groups documented in the Tokens section
 

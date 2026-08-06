@@ -74,6 +74,20 @@ export function glassTrack(
 }
 
 /**
+ * A bounded content-control surface, such as a disclosure section or ordered
+ * list. It uses the same placement-aware material as the control suite while
+ * owning the larger panel radius expected for grouped content.
+ */
+export function glassContentControlSurface(
+  placement: GlassControlPlacement = "onMedia",
+): CSSProperties {
+  return {
+    ...glassTrack(placement),
+    borderRadius: token("--radius-panel"),
+  };
+}
+
+/**
  * Purple soft-wash treatment shared by accent glass controls. The surface
  * beneath the control chooses the matching media or nested-glass recipe while
  * preserving the base material's fill, blur, rim, and shadow geometry.

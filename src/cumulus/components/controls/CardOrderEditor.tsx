@@ -1,4 +1,6 @@
 import type { ReactElement } from "react";
+import { glassContentControlSurface } from "../../internal/control-treatment";
+import type { GlassControlPlacement } from "../../primitives/control-placement";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { IconButton } from "./IconButton";
@@ -19,6 +21,12 @@ export interface CardOrderEditorProps {
   label: string;
   /** Returns the complete top-to-bottom sequence of card ids after a move. */
   onOrderChange: (orderedIds: readonly string[]) => void;
+  /**
+   * Surface beneath the editor. `onMedia` gives the editor its own liquid glass
+   * boundary; `onGlass` uses a lighter tonal lens inside an existing glass
+   * panel or dialog. Defaults to `onMedia`.
+   */
+  placement?: GlassControlPlacement;
 }
 
 /** A structured, identity-safe top-to-bottom card ordering control. */
@@ -26,6 +34,7 @@ export function CardOrderEditor({
   items,
   label,
   onOrderChange,
+  placement = "onMedia",
 }: CardOrderEditorProps): ReactElement {
   const move = (from: number, to: number): void => {
     const ids = items.map((item) => item.id);
@@ -38,9 +47,12 @@ export function CardOrderEditor({
     <div
       role="list"
       aria-label={label}
+      data-glass-placement={placement}
       style={{
+        ...glassContentControlSurface(placement),
         display: "grid",
-        borderTop: `1px solid ${token("--border-soft")}`,
+        paddingInline: token("--space-l"),
+        overflow: "hidden",
       }}
     >
       {items.map((item, index) => (

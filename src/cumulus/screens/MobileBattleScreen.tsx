@@ -4580,6 +4580,7 @@ function BattleInspectorContent({
         title="View & Visibility"
         summary="Pool and hidden hands"
         expanded={visibilityOpen}
+        placement="onGlass"
         onExpandedChange={setVisibilityOpen}
       >
         <div style={{ ...actionGrid, marginTop: token("--space-s") }}>
@@ -4610,6 +4611,7 @@ function BattleInspectorContent({
           title="AI Analysis"
           summary={inspector.ai.kind}
           expanded={aiOpen}
+          placement="onGlass"
           onExpandedChange={setAiOpen}
         >
           <div
@@ -4639,6 +4641,7 @@ function BattleInspectorContent({
         title="End Battle"
         summary="Outcomes and local reset"
         expanded={endBattleOpen}
+        placement="onGlass"
         onExpandedChange={setEndBattleOpen}
       >
         <div style={{ ...actionGrid, marginTop: token("--space-s") }}>

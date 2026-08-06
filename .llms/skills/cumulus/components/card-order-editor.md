@@ -8,7 +8,9 @@ Components · Live demo & interactive props: `/cumulus#/card-order-editor`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-An identity-safe top-to-bottom card ordering control for the battle deck-order workflow.
+A surface-aware, identity-safe top-to-bottom card ordering control for the battle deck-order workflow.
+
+> **Guidance:** Use the default on scene media and dark standalone surfaces. Set placement to onGlass inside GlassPanel, GlassDialog, or DeveloperRail so the editor uses its lighter nested-glass treatment.
 
 ## Props
 
@@ -17,9 +19,18 @@ An identity-safe top-to-bottom card ordering control for the battle deck-order w
 | `items` | `readonly CardOrderEditorItem[]` | yes | — | Ordered cards, from top to bottom. |
 | `label` | `string` | yes | — | Accessible name for the ordered collection. |
 | `onOrderChange` | `(orderedIds: readonly string[]) => void` | yes | — | Returns the complete top-to-bottom sequence of card ids after a move. |
+| `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the editor. `onMedia` gives the editor its own liquid glass boundary; `onGlass` uses a lighter tonal lens inside an existing glass panel or dialog. Defaults to `onMedia`. |
 
 ## Usage
 
+### Variant 1
+
 ```tsx
 <CardOrderEditor label="Deck order" items={cards} onOrderChange={setOrderedCardIds} />
+```
+
+### Variant 2
+
+```tsx
+<CardOrderEditor label="Deck order" items={cards} onOrderChange={setOrderedCardIds} placement="onGlass" />
 ```

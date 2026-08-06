@@ -37,11 +37,16 @@ Who wears it:
 - **the glass controls and glass icon buttons** — `glassTrack()` and
   `glassIconButtonChrome()` in `control-treatment.ts`, which route through the
   same recipe (via `glassSurfaceStyle({ radius: null })`) so a control track and
-  a popover shell read as the same material.
+  a popover shell read as the same material;
+- **bounded content controls** — `DisclosureSection` and `CardOrderEditor` use
+  the full recipe when they stand alone and the nested tonal-lens recipe inside
+  an existing glass surface.
 
 Choose glass only for a surface that floats over the scene and should let the
 scene show through. A surface that does not sit over painterly art has no glass
-to refract, so it uses a solid material instead (see "Not glass").
+to refract, so it uses a solid material instead (see "Not glass"). The Cumulus
+catalog's dark diagnostic stages render placement-aware controls with their
+`onMedia` recipe so each component's boundary remains independently reviewable.
 
 ## Text on glass
 
@@ -60,9 +65,10 @@ contrast rather than reusing the darker accent family.
 
 ## Controls on glass
 
-GlassButton and IconButton name the surface beneath them with their strict
-`placement` prop. `onMedia` uses the complete liquid-glass recipe because the
-control itself is responsible for tinting and blurring the live scene.
+GlassButton, IconButton, DisclosureSection, and CardOrderEditor name the surface
+beneath them with their strict `placement` prop. `onMedia` uses the complete
+liquid-glass recipe because the control itself is responsible for tinting and
+blurring the live scene.
 `onGlass` is a nested tonal lens: the parent surface supplies the scene tint
 and blur, while the control adds a low-alpha neutral fill, a brighter rim and
 specular edge, and a tighter shadow. This keeps the inherited scene color
@@ -77,9 +83,11 @@ them with `placement="onMedia"`.
 
 Lay grouped content directly on GlassPanel, GlassDialog, InfoCard, or another
 liquid-glass surface with glass text tokens, spacing wrappers, and subtle
-dividers. Nested controls use their named `onGlass` treatment. Tangible game
-objects such as `GameCard` remain distinct objects and may sit directly on the
-glass without another container behind them.
+dividers. Nested bounded controls such as DisclosureSection and CardOrderEditor
+use their named `onGlass` treatment when their own boundary communicates the
+interaction or collection. Tangible game objects such as `GameCard` remain
+distinct objects and may sit directly on the glass without another container
+behind them.
 
 ## `--glass-fill-popover`: the warmer reveal tint
 

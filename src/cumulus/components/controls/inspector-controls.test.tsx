@@ -45,6 +45,15 @@ describe("inspector Cumulus controls", () => {
     act(() => root.unmount());
   });
 
+  it("owns placement-aware DisclosureSection surface chrome", () => {
+    const { container, root } = mount(<DisclosureSection title="Details" expanded={false} onExpandedChange={vi.fn()} placement="onGlass"><span>Hidden body</span></DisclosureSection>);
+    const section = container.querySelector<HTMLElement>("section");
+    expect(section?.dataset.glassPlacement).toBe("onGlass");
+    expect(section?.style.background).toContain("var(--glass-on-glass-fill)");
+    expect(section?.style.border).toContain("var(--glass-on-glass-rim)");
+    act(() => root.unmount());
+  });
+
   it("labels TextField and reports changes", () => {
     const onChange = vi.fn();
     const { container, root } = mount(<TextField label="Search cards" kind="search" value="moth" onChange={onChange} />);
@@ -63,6 +72,15 @@ describe("inspector Cumulus controls", () => {
     const { container, root } = mount(<CardOrderEditor label="Deck order" items={[{ id: "instance-a", label: "A" }, { id: "instance-b", label: "B" }]} onOrderChange={onOrderChange} />);
     act(() => (container.querySelector('button[aria-label="Move B up"]') as HTMLButtonElement).click());
     expect(onOrderChange).toHaveBeenCalledWith(["instance-b", "instance-a"]);
+    act(() => root.unmount());
+  });
+
+  it("owns standalone CardOrderEditor surface chrome by default", () => {
+    const { container, root } = mount(<CardOrderEditor label="Deck order" items={[{ id: "instance-a", label: "A" }]} onOrderChange={vi.fn()} />);
+    const editor = container.querySelector<HTMLElement>('[role="list"]');
+    expect(editor?.dataset.glassPlacement).toBe("onMedia");
+    expect(editor?.style.background).toContain("var(--glass-fill)");
+    expect(editor?.style.border).toContain("var(--glass-rim)");
     act(() => root.unmount());
   });
 });

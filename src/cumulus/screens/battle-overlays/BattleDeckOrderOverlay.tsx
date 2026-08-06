@@ -73,6 +73,7 @@ export function BattleDeckOrderOverlay({
         <CardOrderEditor
           label={label}
           items={items}
+          placement="onGlass"
           onOrderChange={setDraftOrder}
         />
         <div
