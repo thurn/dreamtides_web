@@ -226,10 +226,18 @@ export const EXPLORATION_EFFECT_DEFINITIONS = [
   {
     kind: "copy-selected-card",
     label: "Copy a selected deck card",
-    templateIds: [49],
+    templateIds: [49, 50],
     fields: [
       field("predicate", "Card predicate", "predicate", { optional: true }),
       field("count", "Copies", "number", { defaultValue: 1, min: 1 }),
+    ],
+  },
+  {
+    kind: "copy-selected-cards",
+    label: "Copy selected deck cards",
+    templateIds: [51],
+    fields: [
+      field("count", "Cards to copy", "number", { defaultValue: 2, min: 1 }),
     ],
   },
   {
@@ -251,6 +259,12 @@ export const EXPLORATION_EFFECT_DEFINITIONS = [
     fields: [field("count", "Additional energy", "number", {
       defaultValue: 1, min: 1, resource: "energy",
     })],
+  },
+  {
+    kind: "next-battle-smaller-hand-and-cost-discount",
+    label: "Reduce next opening hand and card costs",
+    templateIds: [81],
+    fields: [],
   },
   {
     kind: "choose-dream-avatar",

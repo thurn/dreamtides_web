@@ -129,6 +129,39 @@ describe("transformExplorationData", () => {
     );
   });
 
+  it("rejects a non-positive spark-priced purge reward", () => {
+    const source = syntheticExplorationSource();
+    source.encounter[0].action[0] = {
+      ...source.encounter[0].action[0],
+      "effect-kind": "purge-for-essence",
+      "essence-per-spark": 0,
+    };
+
+    expect(() => transformExplorationData(source)).toThrow(
+      /requires positive essence-per-spark/,
+    );
+  });
+
+  it("compiles multi-copy, spark-priced purge, and compound battle effects", () => {
+    const source = syntheticExplorationSource();
+    source.encounter[0].action[0] = {
+      ...source.encounter[0].action[0],
+      "effect-kind": "copy-selected-cards",
+      count: 2,
+    };
+    source.encounter[0].action[1] = {
+      ...source.encounter[0].action[1],
+      "effect-kind": "purge-for-essence",
+      "essence-per-spark": 20,
+    };
+    source.encounter[1].action[0] = {
+      ...source.encounter[1].action[0],
+      "effect-kind": "next-battle-smaller-hand-and-cost-discount",
+    };
+
+    expect(() => transformExplorationData(source)).not.toThrow();
+  });
+
   it("requires a concrete subtype for selected subtype changes", () => {
     const source = syntheticExplorationSource();
     source.encounter[0].action[0] = {

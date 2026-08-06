@@ -314,6 +314,15 @@ function followupForAction(
         "single",
         "copy",
       );
+    case "copy-selected-cards":
+      return deckFollowup(
+        action.label,
+        `Choose ${String(action.count ?? 2)} cards to copy.`,
+        deckCards,
+        "exact",
+        "copy",
+        action.count ?? 2,
+      );
     case "copy-offered-deck-card":
       return deckFollowup(
         action.label,
@@ -441,6 +450,7 @@ function followupForAction(
     case "reduce-cost-all-and-gain-nightmares":
     case "next-battle-opening-hand":
     case "next-battle-starting-energy":
+    case "next-battle-smaller-hand-and-cost-discount":
     case "purge-duplicates-and-grant-reclaim":
     case "transfigure-next-draft-or-shop":
       return { kind: "none" };
@@ -779,6 +789,32 @@ function rewardForResolution(
       .join("the affected card") ??
     "Exploration effect resolved";
   if (
+    resolvedAction?.effectKind === "copy-selected-cards"
+  ) {
+    const sources = resolution.affectedEntryIds.flatMap((entryId) => {
+      const entry = state.deck.find((candidate) => candidate.entryId === entryId);
+      if (entry === undefined) return [];
+      const source = deckCardChoice(entry, content);
+      return source === null ? [] : [source];
+    });
+    const copies = (resolution.gainedEntryIds ?? []).flatMap((entryId) => {
+      const entry = state.deck.find((candidate) => candidate.entryId === entryId);
+      if (entry === undefined) return [];
+      const copy = deckCardChoice(entry, content);
+      return copy === null ? [] : [copy];
+    });
+    if (sources.length > 0 && sources.length === copies.length) {
+      return {
+        kind: "card-copies-multiple",
+        pairs: sources.map((source, index) => ({
+          source,
+          copy: copies[index],
+        })),
+        count: copies.length,
+      };
+    }
+  }
+  if (
     resolvedAction?.effectKind === "copy-selected-card" ||
     resolvedAction?.effectKind === "copy-offered-deck-card"
   ) {
@@ -809,11 +845,27 @@ function rewardForResolution(
     resolvedAction?.effectKind === "next-battle-starting-energy"
   ) {
     const modifier = resolution.battleModifier;
-    if (modifier !== undefined) {
+    if (
+      modifier !== undefined &&
+      modifier.kind !== "smaller-hand-and-cost-discount"
+    ) {
       return {
         kind: "battle-modifier",
         modifier: modifier.kind,
         amount: modifier.amount,
+        battlesRemaining: modifier.battlesRemaining,
+      };
+    }
+  }
+  if (
+    resolvedAction?.effectKind === "next-battle-smaller-hand-and-cost-discount"
+  ) {
+    const modifier = resolution.battleModifier;
+    if (modifier?.kind === "smaller-hand-and-cost-discount") {
+      return {
+        kind: "smaller-hand-and-cost-discount",
+        openingHandDelta: modifier.openingHandDelta,
+        energyCostReduction: modifier.energyCostReduction,
         battlesRemaining: modifier.battlesRemaining,
       };
     }
@@ -883,6 +935,21 @@ function rewardForResolution(
       return {
         kind: "purged-dreamsign-essence",
         dreamsign: purgedDreamsign,
+        totalEssence: resolution.essenceGained,
+      };
+    }
+  }
+  if (resolvedAction?.effectKind === "purge-for-essence") {
+    const purgedEntry = resolution.purgedEntrySnapshots?.[0];
+    const card =
+      purgedEntry === undefined ? null : deckCardChoice(purgedEntry, content);
+    if (card !== null) {
+      return {
+        kind: "purged-card-essence",
+        card,
+        spark: Math.max(0, card.model.displaySnapshot.spark ?? 0),
+        essencePerSpark:
+          resolvedAction.essencePerSpark ?? EXPLORATION_ESSENCE_PER_SPARK,
         totalEssence: resolution.essenceGained,
       };
     }
@@ -995,7 +1062,8 @@ function rewardForResolution(
       ? "card-replacement"
       : resolvedAction?.effectKind === "gain-offered-card" ||
           resolvedAction?.effectKind === "draft-card" ||
-          resolvedAction?.effectKind === "take-cards"
+          resolvedAction?.effectKind === "take-cards" ||
+          resolvedAction?.effectKind === "copy-selected-cards"
         ? "card-acquisition"
         : "objects";
   return cards.length === 0 &&

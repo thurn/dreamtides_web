@@ -398,6 +398,7 @@ function baseResolution(actionId: string): ExplorationResolution {
     gainedDreamsignIds: [],
     purgedCardIds: [],
     purgedEntryIds: [],
+    purgedEntrySnapshots: [],
     purgedDreamsignIds: [],
     affectedEntryIds: [],
     essenceGained: 0,
@@ -529,6 +530,23 @@ export function resolveExplorationChoice(input: {
       result.selection = { entryIds };
       break;
     }
+    case "copy-selected-cards": {
+      const entryIds = stringArray(selection.entryIds);
+      const count = action.count ?? 2;
+      if (
+        entryIds === null ||
+        !Number.isInteger(count) ||
+        count <= 0 ||
+        entryIds.length !== count
+      ) {
+        return null;
+      }
+      for (const entryId of entryIds) {
+        if (!duplicateEntry(entryId, 1)) return null;
+      }
+      result.selection = { entryIds };
+      break;
+    }
     case "copy-offered-deck-card": {
       const entryIds = stringArray(selection.entryIds);
       if (
@@ -582,6 +600,28 @@ export function resolveExplorationChoice(input: {
       result.battleModifier = {
         kind: "starting-energy",
         amount: count,
+        battlesRemaining: 1,
+      };
+      break;
+    }
+    case "next-battle-smaller-hand-and-cost-discount": {
+      next = {
+        ...next,
+        battleModifiers: [
+          ...next.battleModifiers,
+          {
+            kind: "smaller_hand_and_cost_discount",
+            openingHandDelta: -1,
+            energyCostReduction: 1,
+            battlesRemaining: 1,
+            source: `exploration:${site.id}:${action.id}`,
+          },
+        ],
+      };
+      result.battleModifier = {
+        kind: "smaller-hand-and-cost-discount",
+        openingHandDelta: -1,
+        energyCostReduction: 1,
         battlesRemaining: 1,
       };
       break;
@@ -860,6 +900,7 @@ export function resolveExplorationChoice(input: {
       ) return null;
       result.purgedCardIds.push(selected.card.id);
       result.purgedEntryIds?.push(entryIds[0]);
+      result.purgedEntrySnapshots?.push(selected.entry);
       result.essenceGained = essenceGained;
       result.selection = { entryIds };
       break;

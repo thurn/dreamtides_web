@@ -147,9 +147,30 @@ export type ExplorationRewardView =
       readonly count: number;
     }
   | {
+      readonly kind: "card-copies-multiple";
+      readonly pairs: readonly {
+        readonly source: ExplorationCardChoiceView;
+        readonly copy: ExplorationCardChoiceView;
+      }[];
+      readonly count: number;
+    }
+  | {
+      readonly kind: "purged-card-essence";
+      readonly card: ExplorationCardChoiceView;
+      readonly spark: number;
+      readonly essencePerSpark: number;
+      readonly totalEssence: number;
+    }
+  | {
       readonly kind: "battle-modifier";
       readonly modifier: "opening-hand" | "starting-energy";
       readonly amount: number;
+      readonly battlesRemaining: number;
+    }
+  | {
+      readonly kind: "smaller-hand-and-cost-discount";
+      readonly openingHandDelta: -1;
+      readonly energyCostReduction: 1;
       readonly battlesRemaining: number;
     }
   | {
@@ -910,6 +931,16 @@ function explorationRewardIdentity(
         reward.dreamsign.id ?? "missing",
         reward.totalEssence,
       ].join("|");
+    case "purged-card-essence":
+      return [
+        actionId,
+        reward.kind,
+        reward.card.entryId,
+        reward.card.model.cardId,
+        reward.spark,
+        reward.essencePerSpark,
+        reward.totalEssence,
+      ].join("|");
     case "card-copies":
       return [
         actionId,
@@ -917,8 +948,24 @@ function explorationRewardIdentity(
         reward.sourceEntryId,
         ...reward.cards.map((card) => card.entryId),
       ].join("|");
+    case "card-copies-multiple":
+      return [
+        actionId,
+        reward.kind,
+        ...reward.pairs.flatMap((pair) => [
+          `source:${pair.source.entryId}`,
+          `copy:${pair.copy.entryId}`,
+        ]),
+      ].join("|");
     case "battle-modifier":
       return [actionId, reward.kind, reward.modifier, reward.amount].join("|");
+    case "smaller-hand-and-cost-discount":
+      return [
+        actionId,
+        reward.kind,
+        reward.openingHandDelta,
+        reward.energyCostReduction,
+      ].join("|");
     case "dream-avatar":
       return [actionId, reward.kind, reward.current.id].join("|");
     case "site-offer-modifier":
@@ -1012,6 +1059,15 @@ function cardCopyFanPose(
   };
 }
 
+function cardCopyEmergenceDelaySeconds(
+  index: number,
+  role: "original" | "copy",
+  reduceMotion: boolean,
+): number {
+  if (reduceMotion || role === "original") return 0;
+  return Math.max(0, index - 1) * REWARD_STAGGER_SECONDS;
+}
+
 function useCardTrajectory(
   targetRef: RefObject<HTMLDivElement | null>,
   cardId: string,
@@ -1097,6 +1153,9 @@ export function ExplorationSiteScreen({
   const [dreamsignPurgeRewardPhase, setDreamsignPurgeRewardPhase] = useState<
     "purging" | "announcement"
   >("purging");
+  const [cardPurgeRewardPhase, setCardPurgeRewardPhase] = useState<
+    "purging" | "announcement"
+  >("purging");
   const [deckModificationPresented, setDeckModificationPresented] =
     useState(false);
   const [purgedCardsPresented, setPurgedCardsPresented] = useState(false);
@@ -1127,17 +1186,38 @@ export function ExplorationSiteScreen({
     effectReward?.kind === "essence" ? effectReward : null;
   const dreamsignPurgeReward =
     effectReward?.kind === "purged-dreamsign-essence" ? effectReward : null;
+  const cardPurgeReward =
+    effectReward?.kind === "purged-card-essence" ? effectReward : null;
   const cardCopiesReward =
-    effectReward?.kind === "card-copies" ? effectReward : null;
+    effectReward?.kind === "card-copies" ||
+    effectReward?.kind === "card-copies-multiple"
+      ? effectReward
+      : null;
   const cardCopyItems = useMemo(
-    () =>
-      cardCopiesReward === null
-        ? []
-        : [cardCopiesReward.source, ...cardCopiesReward.cards],
+    () => {
+      if (cardCopiesReward === null) return [];
+      if (cardCopiesReward.kind === "card-copies") {
+        return [
+          { card: cardCopiesReward.source, role: "original" as const },
+          ...cardCopiesReward.cards.map((card) => ({
+            card,
+            role: "copy" as const,
+          })),
+        ];
+      }
+      return cardCopiesReward.pairs.flatMap((pair) => [
+        { card: pair.source, role: "original" as const },
+        { card: pair.copy, role: "copy" as const },
+      ]);
+    },
     [cardCopiesReward],
   );
   const battleModifierReward =
     effectReward?.kind === "battle-modifier" ? effectReward : null;
+  const smallerHandDiscountReward =
+    effectReward?.kind === "smaller-hand-and-cost-discount"
+      ? effectReward
+      : null;
   const dreamAvatarReward =
     effectReward?.kind === "dream-avatar" ? effectReward : null;
   const siteOfferModifierReward =
@@ -1199,6 +1279,7 @@ export function ExplorationSiteScreen({
     setCardCopyTrajectories(null);
     setEssenceRewardPhase("cards");
     setDreamsignPurgeRewardPhase("purging");
+    setCardPurgeRewardPhase("purging");
     setDeckModificationPresented(false);
     setPurgedCardsPresented(false);
     setTransfigurationRevealed(false);
@@ -1559,8 +1640,29 @@ export function ExplorationSiteScreen({
 
   useEffect(() => {
     if (
+      cardPurgeReward === null ||
+      frameBreakPhase !== "open" ||
+      cardPurgeRewardPhase !== "announcement"
+    ) {
+      return;
+    }
+    const timer = window.setTimeout(
+      completeExit,
+      RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
+    );
+    return () => window.clearTimeout(timer);
+  }, [
+    cardPurgeReward,
+    cardPurgeRewardPhase,
+    completeExit,
+    frameBreakPhase,
+  ]);
+
+  useEffect(() => {
+    if (
       frameBreakPhase !== "open" ||
       (battleModifierReward === null &&
+        smallerHandDiscountReward === null &&
         dreamAvatarReward === null &&
         siteOfferModifierReward === null &&
         !emptyObjectOutcome)
@@ -1579,6 +1681,7 @@ export function ExplorationSiteScreen({
     emptyObjectOutcome,
     frameBreakPhase,
     siteOfferModifierReward,
+    smallerHandDiscountReward,
   ]);
 
   useEffect(() => {
@@ -1605,18 +1708,25 @@ export function ExplorationSiteScreen({
     ) {
       return;
     }
+    const lastEmergenceDelay = Math.max(
+      0,
+      ...cardCopyItems.map((item, index) =>
+        cardCopyEmergenceDelaySeconds(index, item.role, reduceMotion),
+      ),
+    );
     const delay = reduceMotion
       ? REWARD_READING_SECONDS
       : CARD_COPY_EMERGE_SECONDS +
         CARD_COPY_READING_SECONDS +
-        Math.max(0, cardCopiesReward.cards.length - 1) * REWARD_STAGGER_SECONDS;
+        lastEmergenceDelay;
     const timer = window.setTimeout(() => {
       if (reduceMotion) {
         completeExit();
         return;
       }
       const trajectories = new Map<string, RewardTrajectory>();
-      for (const card of cardCopyItems) {
+      for (const item of cardCopyItems) {
+        const card = item.card;
         const sourceRect = cardCopyRefs.current
           .get(card.entryId)
           ?.getBoundingClientRect();
@@ -2452,8 +2562,19 @@ export function ExplorationSiteScreen({
         cardCopiesReward !== null &&
         cardCopyTrajectories === null && (
           <motion.section
-            data-exploration-outcome="card-copies"
-            data-exploration-source-entry-id={cardCopiesReward.sourceEntryId}
+            data-exploration-outcome={cardCopiesReward.kind}
+            data-exploration-source-entry-id={
+              cardCopiesReward.kind === "card-copies"
+                ? cardCopiesReward.sourceEntryId
+                : undefined
+            }
+            data-exploration-source-entry-ids={
+              cardCopiesReward.kind === "card-copies-multiple"
+                ? cardCopiesReward.pairs
+                    .map((pair) => pair.source.entryId)
+                    .join(",")
+                : undefined
+            }
             data-exploration-copy-count={cardCopiesReward.count}
             data-exploration-card-copies-phase={cardCopiesPhase}
             role="status"
@@ -2484,8 +2605,9 @@ export function ExplorationSiteScreen({
                 aspectRatio: CARD_ASPECT_RATIO,
               }}
             >
-              {cardCopyItems.map((card, index) => {
-                const isSource = index === 0;
+              {cardCopyItems.map((item, index) => {
+                const { card, role } = item;
+                const isSource = role === "original";
                 const fanPose = cardCopyFanPose(
                   index,
                   cardCopyItems.length,
@@ -2519,10 +2641,11 @@ export function ExplorationSiteScreen({
                       opacity: isSource || copiesVisible ? 1 : 0,
                     }}
                     transition={{
-                      delay:
-                        reduceMotion || isSource
-                          ? 0
-                          : (index - 1) * REWARD_STAGGER_SECONDS,
+                      delay: cardCopyEmergenceDelaySeconds(
+                        index,
+                        role,
+                        reduceMotion,
+                      ),
                       duration: reduceMotion ? 0 : CARD_COPY_EMERGE_SECONDS,
                       ease: DREAM_EASE,
                     }}
@@ -2549,7 +2672,8 @@ export function ExplorationSiteScreen({
         frameBreakPhase === "open" &&
         cardCopiesReward !== null &&
         cardCopyTrajectories !== null &&
-        cardCopyItems.map((card) => {
+        cardCopyItems.map((item) => {
+          const { card, role } = item;
           const copyTrajectory = cardCopyTrajectories.get(card.entryId);
           if (copyTrajectory === undefined) return null;
           const scale = Math.min(
@@ -2560,11 +2684,7 @@ export function ExplorationSiteScreen({
             <motion.div
               key={card.entryId}
               data-exploration-card-copy-flight=""
-              data-exploration-card-copy-role={
-                card.entryId === cardCopiesReward.sourceEntryId
-                  ? "original"
-                  : "copy"
-              }
+              data-exploration-card-copy-role={role}
               data-exploration-deck-entry-id={card.entryId}
               data-exploration-destination={copyTrajectory.destinationKind}
               initial={{
@@ -2626,6 +2746,42 @@ export function ExplorationSiteScreen({
               size={isDesktop ? "compact" : "mini"}
               duration="extended"
               announcementId={`exploration-battle-modifier:${battleModifierReward.modifier}:${view.resolvedActionId ?? "resolved"}`}
+            />
+          </section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
+        smallerHandDiscountReward !== null && (
+          <section
+            data-exploration-outcome="smaller-hand-and-cost-discount"
+            data-exploration-opening-hand-delta={
+              smallerHandDiscountReward.openingHandDelta
+            }
+            data-exploration-energy-cost-reduction={
+              smallerHandDiscountReward.energyCostReduction
+            }
+            data-exploration-battles-remaining={
+              smallerHandDiscountReward.battlesRemaining
+            }
+            role="status"
+            aria-label="One fewer opening card and cards cost one energy less in the next battle"
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: FRAME_BREAK_EXIT_LAYER + 1,
+              display: "grid",
+              placeItems: "center",
+              pointerEvents: "none",
+            }}
+          >
+            <RadialAnnouncement
+              headline="−1 Card"
+              detail="Next Battle · Cards −1●"
+              tone="reward"
+              size={isDesktop ? "compact" : "mini"}
+              duration="extended"
+              announcementId={`exploration-smaller-hand-cost-discount:${view.resolvedActionId ?? "resolved"}`}
             />
           </section>
         )}
@@ -3012,6 +3168,100 @@ export function ExplorationSiteScreen({
               announcementId={`exploration-deck-modification:${deckModification.kind}:${view.resolvedActionId ?? "resolved"}`}
             />
           </motion.section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
+        cardPurgeReward !== null &&
+        cardPurgeRewardPhase === "purging" && (
+          <section
+            data-exploration-outcome="purged-card-essence"
+            data-exploration-purged-card-phase="purging"
+            data-exploration-deck-entry-id={cardPurgeReward.card.entryId}
+            data-card-id={cardPurgeReward.card.model.cardId}
+            data-exploration-purged-card-spark={cardPurgeReward.spark}
+            data-exploration-essence-per-spark={
+              cardPurgeReward.essencePerSpark
+            }
+            data-exploration-essence-gained={cardPurgeReward.totalEssence}
+            role="status"
+            aria-label={`Purging ${cardPurgeReward.card.model.displaySnapshot.name} for ${String(cardPurgeReward.totalEssence)} Essence`}
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: FRAME_BREAK_EXIT_LAYER + 2,
+              display: "grid",
+              placeItems: "center",
+              pointerEvents: "none",
+            }}
+          >
+            <motion.div
+              data-exploration-purged-card=""
+              initial={{ opacity: 1, scale: 1, rotate: 0 }}
+              animate={
+                reduceMotion
+                  ? { opacity: 0 }
+                  : {
+                      opacity: [1, 1, 0],
+                      scale: [1, 1.04, 0.24],
+                      rotate: [0, -2, 8],
+                    }
+              }
+              transition={{
+                duration: reduceMotion ? 0 : DREAMSIGN_PURGE_SECONDS,
+                times: [0, 0.5, 1],
+                ease: DREAM_EASE,
+              }}
+              onAnimationComplete={() =>
+                setCardPurgeRewardPhase("announcement")
+              }
+              style={{
+                width: isDesktop
+                  ? DESKTOP_REWARD_CARD_WIDTH
+                  : MOBILE_ESSENCE_CARD_WIDTH,
+                aspectRatio: CARD_ASPECT_RATIO,
+              }}
+            >
+              <GameCard
+                model={cardPurgeReward.card.model}
+                selected
+                selectionColor="danger"
+                testId="cumulus-exploration-purged-card"
+              />
+            </motion.div>
+          </section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        cardPurgeReward !== null &&
+        cardPurgeRewardPhase === "announcement" && (
+          <div
+            data-exploration-outcome="purged-card-essence"
+            data-exploration-purged-card-phase="announcement"
+            data-exploration-deck-entry-id={cardPurgeReward.card.entryId}
+            data-card-id={cardPurgeReward.card.model.cardId}
+            data-exploration-purged-card-spark={cardPurgeReward.spark}
+            data-exploration-essence-per-spark={
+              cardPurgeReward.essencePerSpark
+            }
+            data-exploration-essence-gained={cardPurgeReward.totalEssence}
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: FRAME_BREAK_EXIT_LAYER + 2,
+              pointerEvents: "none",
+            }}
+          >
+            <RadialAnnouncement
+              announcementId={`exploration:${view.siteId}:${view.resolvedActionId ?? "purged-card-essence"}`}
+              headline="Essence Gained"
+              detail={`${String(cardPurgeReward.essencePerSpark)} × ${String(cardPurgeReward.spark)} ✦`}
+              essenceGained={cardPurgeReward.totalEssence}
+              tone="reward"
+              size={isDesktop ? "standard" : "compact"}
+              duration="extended"
+            />
+          </div>
         )}
       {frameBreakGeometry !== null &&
         frameBreakPhase === "open" &&

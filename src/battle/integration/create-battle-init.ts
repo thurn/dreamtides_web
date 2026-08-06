@@ -16,6 +16,7 @@ import type { DraftRecord } from "../../data/cards-v2-database";
 import type { FitModel } from "../../draft/replay/fit-model";
 import { DEFAULT_POOL_VARIANT } from "../../draft/pool/types";
 import {
+  applyCardKeywordModification,
   applyCardSparkBonus,
   applyCardStatOverride,
   applyDeckEntryCardModification,
@@ -203,6 +204,7 @@ function applyBattleRewardModifiers(
       case "temporary_nightmare_grant":
       case "opening_hand_bonus":
       case "starting_energy_bonus":
+      case "smaller_hand_and_cost_discount":
         break;
     }
 
@@ -236,6 +238,14 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
       isBane: entry.isBane,
     })),
   );
+  const playerBattleEnergyCostReduction = state.battleModifiers.reduce(
+    (total, modifier) =>
+      modifier.kind === "smaller_hand_and_cost_discount" &&
+      modifier.battlesRemaining > 0
+        ? total + modifier.energyCostReduction
+        : total,
+    0,
+  );
   // The journey deck is padded up to the minimum battle deck size before being
   // shuffled into the battle draw order. `journeyDeckEntries` above still
   // mirrors the unpadded journey deck.
@@ -247,7 +257,9 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
       if (card === undefined) {
         throw new Error(`Missing card data for journey deck entry #${String(entry.cardNumber)}`);
       }
-      return freezeBattleDeckCardDefinition(normalizePlayerDeckCard(entry, card));
+      return freezeBattleDeckCardDefinition(
+        normalizePlayerDeckCard(entry, card, playerBattleEnergyCostReduction),
+      );
     });
   // The opponent is built by emulating its DreamAvatar's journey to the
   // equivalent run depth (journeys doc "Battle"): a deterministic opponent
@@ -443,11 +455,14 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     100 + completionLevelAtStart * 50,
     state.battleModifiers,
   );
-  const openingHandBonus = state.battleModifiers.reduce(
+  const openingHandAdjustment = state.battleModifiers.reduce(
     (total, modifier) =>
       modifier.kind === "opening_hand_bonus" && modifier.battlesRemaining > 0
         ? total + modifier.count
-        : total,
+        : modifier.kind === "smaller_hand_and_cost_discount" &&
+            modifier.battlesRemaining > 0
+          ? total + modifier.openingHandDelta
+          : total,
     0,
   );
   const playerStartingEnergy = state.battleModifiers.reduce(
@@ -480,7 +495,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     completionLevelAtStart,
     isFinalBoss: completionLevelAtStart === 6,
     essenceReward,
-    openingHandSize: 5 + openingHandBonus,
+    openingHandSize: Math.max(0, 5 + openingHandAdjustment),
     enemyOpeningHandSize: 5,
     playerStartingEnergy,
     // The opening dreamscape (completion level 0) is a shorter, gentler
@@ -795,11 +810,17 @@ function cloneBattleDeckCardDefinition(
 function normalizePlayerDeckCard(
   entry: JourneyState["deck"][number],
   card: CardData,
+  battleEnergyCostReduction = 0,
 ): BattleDeckCardDefinition {
   // Resolve the deck entry so the battle card carries the modified cost, spark,
   // and rules text (transfiguration, type/keyword changes, persistent spark,
   // then debug stat overrides) rather than the printed base values.
-  const effectiveCard = resolveDeckEntryCard(card, entry);
+  const effectiveCard = applyCardKeywordModification(
+    resolveDeckEntryCard(card, entry),
+    battleEnergyCostReduction > 0
+      ? { energyCostReduction: battleEnergyCostReduction }
+      : undefined,
+  );
   const transfigurationDisplay = (() => {
     if (entry.transfiguration === null) return undefined;
     const transfigured = buildTransfigurationDisplay(card, entry.transfiguration);

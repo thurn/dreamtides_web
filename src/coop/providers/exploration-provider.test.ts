@@ -613,6 +613,111 @@ describe("Exploration provider", () => {
     ).toBeNull();
   });
 
+  it("copies each of two UUID-selected deck entries atomically", () => {
+    const copyTwo: ExplorationActionContent = {
+      id: "copy-two-selected",
+      label: "Separate the fragments",
+      effectText: "Gain one copy of each of 2 chosen cards",
+      effectKind: "copy-selected-cards",
+      count: 2,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([copyTwo, fallback]);
+    const state = buildState(content);
+    const selectedEntryIds = state.journey.deck
+      .slice(1, 3)
+      .map((entry) => entry.entryId);
+    const result = resolve(content, state.journey, copyTwo.id, {
+      entryIds: selectedEntryIds,
+    });
+    const replayed = resolve(content, state.journey, copyTwo.id, {
+      entryIds: selectedEntryIds,
+    });
+
+    expect(result.deck).toHaveLength(state.journey.deck.length + 2);
+    expect(replayed).toEqual(result);
+    expect(result.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        selection: { entryIds: selectedEntryIds },
+        affectedEntryIds: selectedEntryIds,
+        gainedEntryIds: ["deck-91-0", "deck-91-1"],
+      },
+    });
+    expect(
+      resolveExplorationChoice({
+        journey: state.journey,
+        site,
+        payload: {
+          actionId: copyTwo.id,
+          selection: { entryIds: [selectedEntryIds[0], "foreign-entry"] },
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+    expect(
+      resolveExplorationChoice({
+        journey: state.journey,
+        site,
+        payload: {
+          actionId: copyTwo.id,
+          selection: { entryIds: [selectedEntryIds[0], selectedEntryIds[0]] },
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+  });
+
+  it("persists the exact modified card purged for its spark value", () => {
+    const purgeForEssence: ExplorationActionContent = {
+      id: "purge-for-essence",
+      label: "Yield",
+      effectText: "Purge a chosen card and gain 20 essence for each ✦ it had",
+      effectKind: "purge-for-essence",
+      essencePerSpark: 20,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([purgeForEssence, fallback]);
+    const journey = journeyFixture(content);
+    const target = journey.deck[1];
+    if (target === undefined) throw new Error("Expected a Character deck entry");
+    const modifiedTarget = { ...target, sparkBonus: 3 };
+    const state = buildState(content, {
+      ...journey,
+      deck: journey.deck.map((entry) =>
+        entry.entryId === target.entryId ? modifiedTarget : entry),
+    });
+    const result = resolve(content, state.journey, purgeForEssence.id, {
+      entryIds: [target.entryId],
+    });
+
+    expect(result.essence).toBe(state.journey.essence + 100);
+    expect(result.deck.some((entry) => entry.entryId === target.entryId)).toBe(false);
+    expect(result.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        selection: { entryIds: [target.entryId] },
+        purgedEntryIds: [target.entryId],
+        purgedEntrySnapshots: [modifiedTarget],
+        essenceGained: 100,
+      },
+    });
+  });
+
   it("mints a non-matching subtype target for $DECK_CARD and rejects another eligible card", () => {
     const subtypeAction: ExplorationActionContent = {
       id: "become-survivor",
@@ -724,6 +829,45 @@ describe("Exploration provider", () => {
       kind: "starting_energy_bonus",
       count: 2,
       battlesRemaining: 1,
+    });
+  });
+
+  it("persists the compound smaller-hand and cost-discount modifier", () => {
+    const compound: ExplorationActionContent = {
+      id: "smaller-hand-discount",
+      label: "Enter the blue radiance",
+      effectText:
+        "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+      effectKind: "next-battle-smaller-hand-and-cost-discount",
+    };
+    const fallback: ExplorationActionContent = {
+      id: "fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([compound, fallback]);
+    const state = buildState(content);
+    const result = resolve(content, state.journey, compound.id);
+
+    expect(result.battleModifiers[result.battleModifiers.length - 1]).toEqual({
+      kind: "smaller_hand_and_cost_discount",
+      openingHandDelta: -1,
+      energyCostReduction: 1,
+      battlesRemaining: 1,
+      source: `exploration:${site.id}:${compound.id}`,
+    });
+    expect(result.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        battleModifier: {
+          kind: "smaller-hand-and-cost-discount",
+          openingHandDelta: -1,
+          energyCostReduction: 1,
+          battlesRemaining: 1,
+        },
+      },
     });
   });
 

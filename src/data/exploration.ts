@@ -46,9 +46,11 @@ export type ExplorationEffectKind =
   | "make-fast-all"
   | "reduce-cost-all-and-gain-nightmares"
   | "copy-selected-card"
+  | "copy-selected-cards"
   | "copy-offered-deck-card"
   | "next-battle-opening-hand"
   | "next-battle-starting-energy"
+  | "next-battle-smaller-hand-and-cost-discount"
   | "choose-dream-avatar"
   | "purge-duplicates-and-grant-reclaim";
 

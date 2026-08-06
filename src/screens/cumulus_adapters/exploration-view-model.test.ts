@@ -1650,6 +1650,80 @@ describe("exploration-view-model", () => {
       },
     });
 
+    const copiedMultiple = build(
+      {
+        id: "copy-multiple",
+        label: "Copy two",
+        effectText: "Gain one copy of each of 2 chosen cards",
+        effectKind: "copy-selected-cards",
+        count: 2,
+      },
+      {
+        ...emptyResolution("copy-multiple"),
+        selection: { entryIds: ["source-entry", "survivor-entry"] },
+        gainedCardIds: [source.id, survivor.id],
+        gainedEntryIds: ["copy-a", "copy-b"],
+        affectedEntryIds: ["source-entry", "survivor-entry"],
+      },
+    );
+    expect(copiedMultiple).toMatchObject({
+      outcomeKind: "card-copies-multiple",
+      reward: {
+        kind: "card-copies-multiple",
+        count: 2,
+        pairs: [
+          { source: { entryId: "source-entry" }, copy: { entryId: "copy-a" } },
+          { source: { entryId: "survivor-entry" }, copy: { entryId: "copy-b" } },
+        ],
+      },
+    });
+    expect(copiedMultiple?.actions[0]).toMatchObject({
+      followup: {
+        kind: "cards",
+        mode: "exact",
+        selectionKey: "entryIds",
+        selectionOperation: "copy",
+        min: 2,
+        max: 2,
+      },
+    });
+
+    const purgedForEssence = build(
+      {
+        id: "purge-for-essence",
+        label: "Yield",
+        effectText: "Purge a chosen card and gain 20 essence for each ✦ it had",
+        effectKind: "purge-for-essence",
+        essencePerSpark: 20,
+      },
+      {
+        ...emptyResolution("purge-for-essence"),
+        selection: { entryIds: ["source-entry"] },
+        purgedCardIds: [source.id],
+        purgedEntryIds: ["source-entry"],
+        purgedEntrySnapshots: [
+          {
+            entryId: "source-entry",
+            cardNumber: source.cardNumber,
+            transfiguration: null,
+            sparkBonus: 3,
+            isBane: false,
+          },
+        ],
+        essenceGained: 100,
+      },
+    );
+    expect(purgedForEssence).toMatchObject({
+      outcomeKind: "purged-card-essence",
+      reward: {
+        kind: "purged-card-essence",
+        card: { entryId: "source-entry", model: { cardId: source.id } },
+        spark: 5,
+        essencePerSpark: 20,
+        totalEssence: 100,
+      },
+    });
+
     const modifier = build(
       {
         id: "energy",
@@ -1670,6 +1744,34 @@ describe("exploration-view-model", () => {
     expect(modifier).toMatchObject({
       outcomeKind: "battle-modifier",
       reward: { kind: "battle-modifier", modifier: "starting-energy", amount: 2 },
+    });
+
+    const compoundModifier = build(
+      {
+        id: "compound-modifier",
+        label: "Enter the radiance",
+        effectText:
+          "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+        effectKind: "next-battle-smaller-hand-and-cost-discount",
+      },
+      {
+        ...emptyResolution("compound-modifier"),
+        battleModifier: {
+          kind: "smaller-hand-and-cost-discount",
+          openingHandDelta: -1,
+          energyCostReduction: 1,
+          battlesRemaining: 1,
+        },
+      },
+    );
+    expect(compoundModifier).toMatchObject({
+      outcomeKind: "smaller-hand-and-cost-discount",
+      reward: {
+        kind: "smaller-hand-and-cost-discount",
+        openingHandDelta: -1,
+        energyCostReduction: 1,
+        battlesRemaining: 1,
+      },
     });
 
     const reclaim = build(

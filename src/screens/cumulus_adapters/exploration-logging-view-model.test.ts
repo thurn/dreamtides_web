@@ -147,4 +147,66 @@ describe("exploration logging view model", () => {
       siteOfferModifier: modifier,
     });
   });
+
+  it("records compound battle mechanics and exact pre-purge entry state", () => {
+    const actionId = "purge-spark";
+    const purgedEntry = {
+      entryId: "purged-entry",
+      cardNumber: 17,
+      transfiguration: null,
+      sparkBonus: 3,
+      isBane: false,
+    } as const;
+    const view = {
+      actions: [
+        {
+          id: actionId,
+          effectKind: "purge-for-essence",
+          mechanics: {
+            effectKind: "purge-for-essence",
+            templateId: 60,
+            essencePerSpark: 20,
+          },
+        },
+      ],
+      outcomeKind: "purged-card-essence",
+    } as unknown as ExplorationSiteView;
+    const runtime: ExplorationSiteRuntime = {
+      kind: "exploration",
+      encounterCardId: "encounter-card-uuid",
+      actionOffers: [
+        {
+          actionId,
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+      ],
+      resolution: {
+        actionId,
+        selection: { entryIds: [purgedEntry.entryId] },
+        gainedCardIds: [],
+        gainedDreamsignIds: [],
+        purgedCardIds: ["purged-card-uuid"],
+        purgedEntryIds: [purgedEntry.entryId],
+        purgedEntrySnapshots: [purgedEntry],
+        affectedEntryIds: [],
+        essenceGained: 100,
+      },
+    };
+
+    expect(buildExplorationResolutionLog(view, runtime)).toMatchObject({
+      authoredMechanics: { templateId: 60, essencePerSpark: 20 },
+      selection: { entryIds: [purgedEntry.entryId] },
+      purgedEntrySnapshots: [purgedEntry],
+      essenceGained: 100,
+      outcomeKind: "purged-card-essence",
+    });
+    expect(buildExplorationCompletionLog(view, runtime)).toMatchObject({
+      purgedEntrySnapshots: [purgedEntry],
+      essenceGained: 100,
+      outcomeKind: "purged-card-essence",
+    });
+  });
 });

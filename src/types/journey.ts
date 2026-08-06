@@ -485,6 +485,8 @@ export interface ExplorationResolution {
   purgedCardIds: string[];
   /** Concrete deck-entry UUIDs removed by this resolution. */
   purgedEntryIds?: string[];
+  /** Exact pre-resolution deck entries needed to replay and present purges. */
+  purgedEntrySnapshots?: DeckEntry[];
   purgedDreamsignIds?: string[];
   affectedEntryIds: string[];
   essenceGained: number;
@@ -496,6 +498,11 @@ export interface ExplorationResolution {
   battleModifier?: {
     kind: "opening-hand" | "starting-energy";
     amount: number;
+    battlesRemaining: number;
+  } | {
+    kind: "smaller-hand-and-cost-discount";
+    openingHandDelta: -1;
+    energyCostReduction: 1;
     battlesRemaining: number;
   };
   previousDreamAvatarId?: string;
@@ -638,6 +645,13 @@ export type BattleModifier =
   | {
       kind: "starting_energy_bonus";
       count: number;
+      battlesRemaining: number;
+      source: string;
+    }
+  | {
+      kind: "smaller_hand_and_cost_discount";
+      openingHandDelta: -1;
+      energyCostReduction: 1;
       battlesRemaining: number;
       source: string;
     };

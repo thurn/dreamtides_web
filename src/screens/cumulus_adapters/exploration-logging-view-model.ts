@@ -61,6 +61,7 @@ export function buildExplorationCompletionLog(
     purgedDreamsignIds: resolution.purgedDreamsignIds ?? [],
     purgedCardIds: resolution.purgedCardIds,
     purgedEntryIds: resolution.purgedEntryIds ?? [],
+    purgedEntrySnapshots: resolution.purgedEntrySnapshots ?? [],
     gainedEntryIds: resolution.gainedEntryIds ?? [],
     affectedEntryIds: resolution.affectedEntryIds,
     selection: resolution.selection ?? {},

@@ -782,6 +782,137 @@
           "effectKind": "transfigure-next-draft-or-shop"
         }
       ]
+    },
+    {
+      "cardId": "1dc8f23e-58bd-47e5-9510-b48315fba1df",
+      "prose": "A dark-coated explorer holds a bright lantern as wind whips his hair.",
+      "action": [
+        {
+          "id": "1dc8f23e-58bd-47e5-9510-b48315fba1df:pair-3:template-17",
+          "label": "Touch the lantern",
+          "effectText": "Apply a transfiguration to a chosen card",
+          "templateId": 17,
+          "templateVariables": {},
+          "effectKind": "transfigure-selected",
+          "count": 1
+        },
+        {
+          "id": "1dc8f23e-58bd-47e5-9510-b48315fba1df:pair-3:template-37",
+          "label": "Follow his light onward",
+          "effectText": "The next draft or shop site you visit will contain transfigured cards",
+          "templateId": 37,
+          "templateVariables": {},
+          "effectKind": "transfigure-next-draft-or-shop"
+        }
+      ]
+    },
+    {
+      "cardId": "7ad10754-690c-45fa-abe6-28944da6eef6",
+      "prose": "A rigid figure fractures into dark pieces beside a molten fissure.",
+      "action": [
+        {
+          "id": "7ad10754-690c-45fa-abe6-28944da6eef6:pair-1:template-51",
+          "label": "Separate the drifting fragments",
+          "effectText": "Gain one copy of each of 2 chosen cards",
+          "templateId": 51,
+          "templateVariables": {
+            "count": 2
+          },
+          "effectKind": "copy-selected-cards",
+          "count": 2
+        },
+        {
+          "id": "7ad10754-690c-45fa-abe6-28944da6eef6:pair-1:template-50",
+          "label": "Fuse the glowing fragments",
+          "effectText": "Gain 2 copies of a chosen card",
+          "templateId": 50,
+          "templateVariables": {
+            "count": 2
+          },
+          "effectKind": "copy-selected-card",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "7dd2214f-8d16-453a-9f28-62712e64eae1",
+      "prose": "A black firefly hovers, amber abdomen blazing.",
+      "action": [
+        {
+          "id": "7dd2214f-8d16-453a-9f28-62712e64eae1:pair-4:template-39",
+          "label": "Rest in its radiance",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "templateId": 39,
+          "templateVariables": {
+            "count": 2
+          },
+          "effectKind": "next-battle-starting-energy",
+          "count": 2
+        },
+        {
+          "id": "7dd2214f-8d16-453a-9f28-62712e64eae1:pair-4:template-59",
+          "label": "Gather its amber light",
+          "effectText": "Gain 15 essence for each Spirit Animal card in your deck",
+          "templateId": 59,
+          "templateVariables": {
+            "essence_per_card": 15,
+            "predicate": "Spirit Animal"
+          },
+          "effectKind": "gain-essence-per-card",
+          "predicate": "spirit-animal",
+          "essencePerCard": 15
+        }
+      ]
+    },
+    {
+      "cardId": "5b2b2188-b9f0-4b3b-9185-26a820d343c7",
+      "prose": "A suited astronaut crosses glassy water as blue canyon light spills ahead.",
+      "action": [
+        {
+          "id": "5b2b2188-b9f0-4b3b-9185-26a820d343c7:pair-2:template-39",
+          "label": "Follow the canyon light",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "templateId": 39,
+          "templateVariables": {
+            "count": 2
+          },
+          "effectKind": "next-battle-starting-energy",
+          "count": 2
+        },
+        {
+          "id": "5b2b2188-b9f0-4b3b-9185-26a820d343c7:pair-2:template-81",
+          "label": "Enter the blue radiance",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "templateId": 81,
+          "templateVariables": {},
+          "effectKind": "next-battle-smaller-hand-and-cost-discount"
+        }
+      ]
+    },
+    {
+      "cardId": "77f31db4-0397-49a7-8886-f5459ee960e9",
+      "prose": "An armored warrior sweeps a glowing scythe through wind-driven sand.",
+      "action": [
+        {
+          "id": "77f31db4-0397-49a7-8886-f5459ee960e9:pair-1:template-60",
+          "label": "Yield",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "templateId": 60,
+          "templateVariables": {
+            "essence_per_spark": 20
+          },
+          "effectKind": "purge-for-essence",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "77f31db4-0397-49a7-8886-f5459ee960e9:pair-1:template-61",
+          "label": "Barter",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "templateId": 61,
+          "templateVariables": {},
+          "effectKind": "purge-and-copy"
+        }
+      ]
     }
   ]
 }

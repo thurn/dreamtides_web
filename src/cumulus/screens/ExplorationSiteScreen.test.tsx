@@ -332,6 +332,54 @@ function cardCopiesRewardView(): ExplorationSiteView {
   };
 }
 
+function multipleCardCopiesRewardView(): ExplorationSiteView {
+  const base = view(true);
+  const secondCard = {
+    ...base.card,
+    cardId: asCardId("00000000-0000-4000-8000-000000000018"),
+    displaySnapshot: {
+      ...base.card.displaySnapshot,
+      id: asCardId("00000000-0000-4000-8000-000000000018"),
+      name: asCardName("Second Copy Fixture"),
+      cardNumber: 18,
+      imageNumber: 18,
+    },
+  };
+  return {
+    ...base,
+    outcomeKind: "card-copies-multiple",
+    reward: {
+      kind: "card-copies-multiple",
+      count: 2,
+      pairs: [
+        {
+          source: { entryId: "source-entry-a", model: base.card, isBane: false },
+          copy: { entryId: "copy-entry-a", model: base.card, isBane: false },
+        },
+        {
+          source: { entryId: "source-entry-b", model: secondCard, isBane: false },
+          copy: { entryId: "copy-entry-b", model: secondCard, isBane: false },
+        },
+      ],
+    },
+  };
+}
+
+function purgedCardEssenceRewardView(): ExplorationSiteView {
+  const base = view(true);
+  return {
+    ...base,
+    outcomeKind: "purged-card-essence",
+    reward: {
+      kind: "purged-card-essence",
+      card: { entryId: "purged-entry", model: base.card, isBane: false },
+      spark: 2,
+      essencePerSpark: 20,
+      totalEssence: 40,
+    },
+  };
+}
+
 function battleModifierRewardView(): ExplorationSiteView {
   return {
     ...view(true),
@@ -340,6 +388,19 @@ function battleModifierRewardView(): ExplorationSiteView {
       kind: "battle-modifier",
       modifier: "starting-energy",
       amount: 2,
+      battlesRemaining: 1,
+    },
+  };
+}
+
+function smallerHandDiscountRewardView(): ExplorationSiteView {
+  return {
+    ...view(true),
+    outcomeKind: "smaller-hand-and-cost-discount",
+    reward: {
+      kind: "smaller-hand-and-cost-discount",
+      openingHandDelta: -1,
+      energyCostReduction: 1,
       battlesRemaining: 1,
     },
   };
@@ -1591,6 +1652,86 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
+  it("submits exactly two UUID-selected cards for the multi-copy follow-up", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const base = view();
+    const followupView: ExplorationSiteView = {
+      ...base,
+      actions: [
+        {
+          ...base.actions[0],
+          effectKind: "copy-selected-cards",
+          followup: {
+            kind: "cards",
+            title: "Copy two",
+            subtitle: "Choose two cards to copy.",
+            cards: ["entry-a", "entry-b", "entry-c"].map((entryId) => ({
+              entryId,
+              model: base.card,
+              isBane: false,
+            })),
+            mode: "exact",
+            selectionKey: "entryIds",
+            selectionOperation: "copy",
+            min: 2,
+            max: 2,
+          },
+        },
+        base.actions[1],
+      ],
+    };
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={followupView}
+        onChannel={vi.fn()}
+        onResolve={onResolve}
+        onExit={vi.fn()}
+      />,
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+    for (const entryId of ["entry-a", "entry-b"]) {
+      act(() =>
+        container
+          .querySelector<HTMLElement>(
+            `[data-testid="cumulus-exploration-card-${entryId}"]`,
+          )
+          ?.click(),
+      );
+    }
+    expect(
+      container.querySelectorAll('[data-card-choice-operation="copy"]'),
+    ).toHaveLength(2);
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-followup-confirm"]',
+        )
+        ?.click(),
+    );
+
+    expect(onResolve).toHaveBeenCalledWith("choice-a", {
+      entryIds: ["entry-a", "entry-b"],
+    });
+    act(() => root.unmount());
+  });
+
   it("returns immediately after a choice without a tangible reward", () => {
     window.requestAnimationFrame = (callback) => {
       callback(0);
@@ -1988,6 +2129,9 @@ describe("ExplorationSiteScreen", () => {
     ).toContain("var(--spark)");
     expect(onExit).not.toHaveBeenCalled();
 
+    act(() => {
+      vi.advanceTimersByTime(1_000);
+    });
     act(() => {
       vi.advanceTimersByTime(10_000);
     });
@@ -2456,6 +2600,56 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
+  it("dissolves the exact purged card before announcing its spark-priced Essence", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = false;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={purgedCardEssenceRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    const purgeOutcome = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="purged-card-essence"][data-exploration-purged-card-phase="purging"]',
+    );
+    expect(purgeOutcome?.dataset.explorationDeckEntryId).toBe("purged-entry");
+    expect(purgeOutcome?.dataset.cardId).toBe(view().card.cardId);
+    expect(purgeOutcome?.dataset.explorationPurgedCardSpark).toBe("2");
+    expect(purgeOutcome?.dataset.explorationEssencePerSpark).toBe("20");
+    expect(purgeOutcome?.dataset.explorationEssenceGained).toBe("40");
+    expect(
+      container.querySelector(
+        '[data-testid="cumulus-exploration-purged-card"]',
+      ),
+    ).not.toBeNull();
+    expect(onExit).not.toHaveBeenCalled();
+
+    act(() => {
+      container
+        .querySelector("[data-exploration-purged-card]")
+        ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+    });
+    const announcement = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="purged-card-essence"][data-exploration-purged-card-phase="announcement"]',
+    );
+    expect(announcement?.dataset.explorationPurgedCardSpark).toBe("2");
+    expect(announcement?.dataset.explorationEssencePerSpark).toBe("20");
+    expect(announcement?.dataset.explorationEssenceGained).toBe("40");
+
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
   it("stages a face-down-to-face-up travel from the bottom-right deck anchor", () => {
     reducedMotionPreference.value = false;
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
@@ -2579,6 +2773,58 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
+  it("presents two source-to-copy pairs as a dedicated multi-copy outcome", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = false;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={multipleCardCopiesRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    const outcome = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="card-copies-multiple"]',
+    );
+    expect(outcome?.dataset.explorationSourceEntryIds).toBe(
+      "source-entry-a,source-entry-b",
+    );
+    expect(outcome?.dataset.explorationCopyCount).toBe("2");
+    expect(
+      [...container.querySelectorAll('[data-exploration-card-copy-role="original"]')]
+        .map((element) => element.getAttribute("data-exploration-deck-entry-id")),
+    ).toEqual(["source-entry-a", "source-entry-b"]);
+    expect(
+      [...container.querySelectorAll('[data-exploration-card-copy-role="copy"]')]
+        .map((element) => element.getAttribute("data-exploration-deck-entry-id")),
+    ).toEqual(["copy-entry-a", "copy-entry-b"]);
+    expect(onExit).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(1_000);
+    });
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    const flights = container.querySelectorAll(
+      "[data-exploration-card-copy-flight]",
+    );
+    expect(flights).toHaveLength(4);
+    act(() => {
+      for (const flight of flights) {
+        flight.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+      }
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
   it("presents the persisted next-battle modifier with its exact amount", () => {
     vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
@@ -2599,6 +2845,37 @@ describe("ExplorationSiteScreen", () => {
     expect(outcome?.dataset.explorationBattleModifierAmount).toBe("2");
     expect(outcome?.dataset.explorationBattlesRemaining).toBe("1");
     expect(outcome?.textContent).toContain("Next Battle");
+    act(() => root.unmount());
+  });
+
+  it("presents the exact compound next-battle modifier under reduced motion", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = true;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={smallerHandDiscountRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    const outcome = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="smaller-hand-and-cost-discount"]',
+    );
+    expect(outcome?.dataset.explorationOpeningHandDelta).toBe("-1");
+    expect(outcome?.dataset.explorationEnergyCostReduction).toBe("1");
+    expect(outcome?.dataset.explorationBattlesRemaining).toBe("1");
+    expect(onExit).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    expect(onExit).toHaveBeenCalledOnce();
     act(() => root.unmount());
   });
 

@@ -664,9 +664,11 @@ const EXPLORATION_EFFECT_KINDS = new Set([
   "make-fast-all",
   "reduce-cost-all-and-gain-nightmares",
   "copy-selected-card",
+  "copy-selected-cards",
   "copy-offered-deck-card",
   "next-battle-opening-hand",
   "next-battle-starting-energy",
+  "next-battle-smaller-hand-and-cost-discount",
   "choose-dream-avatar",
   "purge-duplicates-and-grant-reclaim",
 ]);
@@ -844,6 +846,7 @@ export function transformExplorationData(source) {
       if (
         [
           "copy-selected-card",
+          "copy-selected-cards",
           "next-battle-opening-hand",
           "next-battle-starting-energy",
         ].includes(action.effectKind) &&
@@ -851,6 +854,16 @@ export function transformExplorationData(source) {
       ) {
         throw new Error(
           `exploration.toml: action ${action.id} requires a positive whole-number count`,
+        );
+      }
+      if (
+        action.effectKind === "purge-for-essence" &&
+        (typeof action.essencePerSpark !== "number" ||
+          !Number.isFinite(action.essencePerSpark) ||
+          action.essencePerSpark <= 0)
+      ) {
+        throw new Error(
+          `exploration.toml: action ${action.id} requires positive essence-per-spark`,
         );
       }
       if (

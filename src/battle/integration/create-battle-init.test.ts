@@ -214,6 +214,39 @@ describe("createBattleInit", () => {
     expect(init.playerStartingEnergy).toBe(3);
   });
 
+  it("applies the next-battle smaller-hand discount only to the player deck", () => {
+    const baseInput = makeBaseInput();
+    const baseline = createBattleInit(baseInput);
+    const discounted = createBattleInit({
+      ...baseInput,
+      state: {
+        ...baseInput.state,
+        battleModifiers: [
+          {
+            kind: "smaller_hand_and_cost_discount",
+            openingHandDelta: -1,
+            energyCostReduction: 1,
+            battlesRemaining: 1,
+            source: "exploration:test:discount",
+          },
+        ],
+      },
+    });
+
+    expect(discounted.openingHandSize).toBe(4);
+    expect(discounted.enemyOpeningHandSize).toBe(5);
+    expect(discounted.enemyDeckDefinition).toEqual(baseline.enemyDeckDefinition);
+    expect(discounted.playerDeckOrder).toHaveLength(
+      baseline.playerDeckOrder.length,
+    );
+    discounted.playerDeckOrder.forEach((card, index) => {
+      const original = baseline.playerDeckOrder[index];
+      if (original === undefined) throw new Error("Expected a baseline card");
+      expect(card.sourceDeckEntryId).toBe(original.sourceDeckEntryId);
+      expect(card.energyCost).toBe(Math.max(0, original.energyCost - 1));
+    });
+  });
+
   describe("seed determinism (B-10)", () => {
     it("same seed produces identical enemy descriptor and deck orders", () => {
       const input = makeBaseInput();
