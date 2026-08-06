@@ -186,7 +186,6 @@ export function IntroSection(): ReactElement {
             There is no rung for an ad hoc scrim, wash, or vignette painted over
             scene art to fake legibility.
           </p>
-          <GlassPanelExample />
         </Principle>
 
         <Principle title="The Popup Rule">
@@ -250,6 +249,7 @@ export function IntroSection(): ReactElement {
             prop into an open value is not. When in doubt, look at how the other
             screens solve it and match them rather than inventing a knob.
           </p>
+
           <p style={bodyStyle}>
             The knobs that keep trying to sneak back in are worth naming,
             because each looks harmless in isolation: a numeric{" "}
