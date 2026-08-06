@@ -1,0 +1,9 @@
+interface:
+  display_name: "Living Tome of Dreamtides Design"
+  short_description: "Author canonical Dreamtides design chapters"
+  default_prompt:
+    "Use $ltodd to author or revise the canonical Dreamtides design chapters for
+    this change."
+
+policy:
+  allow_implicit_invocation: false
