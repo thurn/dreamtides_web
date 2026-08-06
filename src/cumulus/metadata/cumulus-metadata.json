@@ -2403,7 +2403,6 @@
       "description": "Optional stable selector for the semantic source."
     }
   ],
-  "EssenceGlyph": [],
   "EssenceValue": [
     {
       "name": "amount",

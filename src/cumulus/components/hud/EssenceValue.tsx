@@ -9,9 +9,8 @@
 // styling that container, never the value itself. (For a sized, self-contained
 // economy chip on its own surface, reach for ResourceChip instead.)
 //
-// `EssenceGlyph` is the bare currency mark on its own, inheriting the
-// surrounding text color and size — for the handful of surfaces that lay out the
-// glyph and its number by hand.
+// Its private glyph helper inherits the surrounding text color and size so the
+// complete value remains one canonical rendering.
 
 import { token } from "../../primitives/tokens";
 import { GLYPHS } from "../../primitives/glyph";
@@ -24,7 +23,7 @@ const ESSENCE_ICON_CLASS = GLYPHS.essence;
  * The essence currency glyph on its own, inheriting the surrounding text color
  * (so it tints with the value it follows) and size.
  */
-export function EssenceGlyph() {
+function EssenceGlyph() {
   return <InlineGlyph glyph={ESSENCE_ICON_CLASS} />;
 }
 

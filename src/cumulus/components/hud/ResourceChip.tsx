@@ -4,7 +4,7 @@
 // sparkle for spark, a violet crypto-mark for essence, a neutral points mark, and a brain
 // for memory counters. The kind→glyph/color table lives in the shared
 // `economy-spec` module (imported below). Flowing essence amounts use
-// `EssenceValue`, while standalone essence marks use `EssenceGlyph`.
+// `EssenceValue`; standalone economy marks use `ResourceChip` without a value.
 //
 // The value and its mark are paired TIGHT (see the parent design system's
 // rules): the default `spacing` is "tight" (a 0px gap) so a value reads as one
