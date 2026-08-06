@@ -203,7 +203,7 @@ export function planTutorialBattleController(
   }
 
   if (board.activeSide === "player") {
-    if (board.phase === "day") {
+    if (board.phase === "day" || board.phase === "night") {
       return { status: "driver", driverClientId: controllerClientId, isCurrentClientDriver: true, isDriverPresent: true, requiresHumanDecision: true, intent: null };
     }
     const aiBlockingAlreadyProcessed =
@@ -225,6 +225,14 @@ export function planTutorialBattleController(
           reason: "enemy-block-player-challenge",
         },
       };
+    }
+    if (board.phase === "dusk") {
+      return commandPlan(
+        { id: "DEBUG_EDIT", edit: { kind: "SET_PHASE", phase: "night" }, sourceSurface: "auto-system" },
+        `${key}:night`,
+        "advance-player-dusk",
+        controllerClientId,
+      );
     }
     return handoffPlan(input.state, "advance-player-no-choice-phase");
   }

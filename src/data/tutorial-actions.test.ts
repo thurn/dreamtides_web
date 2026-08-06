@@ -943,6 +943,24 @@ describe("parseTutorialActions", () => {
       match: { kind: "any" },
     }]);
   });
+
+  it("parses a player Night phase concept trigger", () => {
+    expect(
+      parseTutorialTriggers([{
+        id: "player-night-phase",
+        on: ["player-night-phase"],
+        duration: 6,
+        bubbleWidth: 500,
+        match: { kind: "any" },
+        text: "Night guidance with ❖ timing marks.",
+      }]),
+    ).toMatchObject([{
+      id: "player-night-phase",
+      on: ["player-night-phase"],
+      duration: 6,
+      match: { kind: "any" },
+    }]);
+  });
 });
 
 describe("parseTutorialDreamscapeConfiguration", () => {

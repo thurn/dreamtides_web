@@ -92,6 +92,7 @@ export type TutorialTriggerEvent =
   | "dreamwell-resolve"
   | "figment-created"
   | "opponent-reposition-opportunity"
+  | "player-night-phase"
   | "transfiguration-seen";
 
 /** Stable semantic condition authored for a supplemental tutorial. */

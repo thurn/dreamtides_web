@@ -611,6 +611,7 @@ const TUTORIAL_TRIGGER_EVENTS: ReadonlySet<TutorialTriggerEvent> = new Set([
   "dreamwell-resolve",
   "figment-created",
   "opponent-reposition-opportunity",
+  "player-night-phase",
   "transfiguration-seen",
 ]);
 
@@ -727,6 +728,7 @@ export function parseTutorialTriggers(
         (record.on[0] !== "challenge-resolved" &&
           record.on[0] !== "figment-created" &&
           record.on[0] !== "opponent-reposition-opportunity" &&
+          record.on[0] !== "player-night-phase" &&
           record.on[0] !== "transfiguration-seen"))
     ) {
       throw new Error(

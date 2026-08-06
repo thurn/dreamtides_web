@@ -490,6 +490,66 @@ describe("tutorial battle lifecycle", () => {
     expect(continued.state.battle?.board.phase).toBe("dusk");
   });
 
+  it("opens six-second guidance when the player's post-script Night begins", () => {
+    const tutorialContent = content();
+    tutorialContent.tutorialTriggers = [{
+      id: "player-night-phase",
+      on: ["player-night-phase"],
+      priority: 10,
+      speaker: "mira",
+      duration: 6,
+      horizontalOffset: 0,
+      verticalOffset: 0,
+      bubbleWidth: 500,
+      match: { kind: "any" },
+      text: "Night guidance with ❖ timing marks.",
+    }];
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(tutorialContent),
+    );
+    const started = begin().state;
+    const ready = {
+      ...started,
+      battle: {
+        ...started.battle!,
+        board: {
+          ...started.battle!.board,
+          activeSide: "player" as const,
+          phase: "dusk" as const,
+        },
+      },
+    };
+
+    const opened = reduceTutorial(
+      ready,
+      "BATTLE_COMMAND",
+      {
+        command: {
+          id: "DEBUG_EDIT",
+          edit: { kind: "SET_PHASE", phase: "night" },
+          sourceSurface: "auto-system",
+        },
+      },
+      "tutorial-ai:client-a",
+    );
+
+    expect(opened.outcome).toBe("applied");
+    expect(opened.state.battle?.board).toMatchObject({
+      activeSide: "player",
+      phase: "night",
+      turnNumber: 4,
+    });
+    expect(opened.state.battle?.tutorialPresentation).toMatchObject({
+      kind: "tutorial-guidance",
+      source: { kind: "battle", activeSide: "player", turnNumber: 4 },
+      messages: [{ triggerId: "player-night-phase", duration: 6 }],
+      continuation: { kind: "commands", commands: [] },
+    });
+    expect(opened.state.tutorialTriggerIdsSeen).toEqual([
+      "player-night-phase",
+    ]);
+  });
+
   it("accepts only the terminal tutorial cursor once and builds the canonical handoff", () => {
     registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
     const result = begin();
@@ -709,13 +769,29 @@ describe("tutorial battle lifecycle", () => {
       step += 1
     ) {
       state = completePresentations(state);
-      state = applyCommand(state);
+      state =
+        state.battle?.board.activeSide === "player" &&
+        state.battle.board.phase === "night"
+          ? reduceTutorial(
+              state,
+              "BATTLE_COMMAND",
+              {
+                command: {
+                  id: "DEBUG_EDIT",
+                  edit: { kind: "SET_PHASE", phase: "challenge" },
+                  sourceSurface: "tutorial-player",
+                },
+              },
+              "client-a",
+            ).state
+          : applyCommand(state);
     }
     expect(state.battle?.board).toMatchObject({
       activeSide: "enemy",
       phase: "dreamwell",
       turnNumber: 4,
     });
+    state = applyCommand(state);
     expect(plan(state).intent?.kind).toBe("complete-presentation");
     state = completePresentations(state);
     for (let step = 0; step < 3 && state.battle?.board.phase !== "day"; step += 1) {

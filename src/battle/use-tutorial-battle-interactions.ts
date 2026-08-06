@@ -607,8 +607,19 @@ export function useTutorialBattleInteractions(
     onPreviousPhase: () => {},
     onNextPhase: () => {
       if (!canAct || board === null) return;
-      const phase = board.activeSide === "enemy" && board.phase === "dusk" ? "night" : "dusk";
-      logIntent(phase === "night" ? "done-blocking" : "end-turn");
+      const phase =
+        board.activeSide === "enemy" && board.phase === "dusk"
+          ? "night"
+          : board.activeSide === "player" && board.phase === "night"
+            ? "challenge"
+            : "dusk";
+      logIntent(
+        phase === "night"
+          ? "done-blocking"
+          : phase === "challenge"
+            ? "start-challenge"
+            : "end-turn",
+      );
       void actions.battleCommand({
         id: "DEBUG_EDIT",
         edit: { kind: "SET_PHASE", phase },

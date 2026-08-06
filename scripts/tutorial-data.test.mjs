@@ -721,4 +721,22 @@ describe("tutorial data", () => {
       match: { kind: "any" },
     }]);
   });
+
+  it("normalizes a player Night phase concept trigger", () => {
+    expect(
+      validateTutorialTriggers([{
+        id: "player-night-phase",
+        on: ["player-night-phase"],
+        duration: 6,
+        bubbleWidth: 500,
+        match: { kind: "any" },
+        text: "Night guidance with ❖ timing marks.",
+      }]),
+    ).toMatchObject([{
+      id: "player-night-phase",
+      on: ["player-night-phase"],
+      duration: 6,
+      match: { kind: "any" },
+    }]);
+  });
 });

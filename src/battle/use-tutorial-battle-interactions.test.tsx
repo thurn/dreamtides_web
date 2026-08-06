@@ -271,6 +271,26 @@ afterEach(() => {
 });
 
 describe("useTutorialBattleInteractions", () => {
+  it("starts Challenge when the player finishes Night", () => {
+    mocks.state = state();
+    if (mocks.state.battle === null) throw new Error("fixture requires a battle");
+    mocks.state.battle.board.phase = "night";
+    const root = mount();
+
+    act(() => latest?.interactions.onNextPhase());
+
+    expect(mocks.battleCommand).toHaveBeenCalledWith(
+      {
+        id: "DEBUG_EDIT",
+        edit: { kind: "SET_PHASE", phase: "challenge" },
+        sourceSurface: "tutorial-player",
+      },
+      "tutorial-battle:tutorial-battle-uuid:human-phase:3:player:challenge",
+    );
+
+    act(() => root.unmount());
+  });
+
   it("keeps a hand drag above the board and resolves its table drop as a play", () => {
     mocks.state = state();
     const root = mount();

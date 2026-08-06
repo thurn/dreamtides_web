@@ -403,15 +403,31 @@ describe("MobileBattleScreen", () => {
       phaseNavigation: "tutorial",
     });
 
-    expect(
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="tutorial-end-turn"]',
-      )?.textContent,
-    ).toBe("Start Challenge");
+    const startChallengeLabel = container.querySelector<HTMLButtonElement>(
+      '[data-testid="tutorial-end-turn"]',
+    )?.textContent;
+    expect(startChallengeLabel).toBe("Start Challenge");
     expect(
       container.querySelector<HTMLElement>("[data-battle-phase-next]")?.style
         .width,
     ).toBe("max-content");
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <MobileBattleScreen
+            view={{ ...baseView, activeSide: "player", phase: "night" }}
+            interactions={interactions}
+            phaseNavigation="tutorial"
+          />
+        </CumulusRoot>,
+      );
+    });
+    expect(
+      container.querySelector<HTMLButtonElement>(
+        '[data-testid="tutorial-end-turn"]',
+      )?.textContent,
+    ).toBe(startChallengeLabel);
 
     act(() => root.unmount());
   });

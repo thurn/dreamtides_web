@@ -349,6 +349,15 @@ match = { kind = "any" }
 text = "During your [purple]Dusk[/purple] phase, the opposing player may reposition their characters."
 
 [[triggers]]
+id = "player-night-phase"
+on = [ "player-night-phase" ]
+priority = 10
+duration = 6
+bubbleWidth = 500
+match = { kind = "any" }
+text = "During your [purple]Night[/purple] phase, you can play ❖ fast cards and activate ❖ fast abilities"
+
+[[triggers]]
 id = "flashpoint-no-valid-targets"
 on = [ "card-no-valid-targets" ]
 priority = 10

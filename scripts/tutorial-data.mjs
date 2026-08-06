@@ -40,6 +40,7 @@ const TUTORIAL_TRIGGER_EVENTS = new Set([
   "dreamwell-resolve",
   "figment-created",
   "opponent-reposition-opportunity",
+  "player-night-phase",
   "transfiguration-seen",
 ]);
 const GLOSSARY_IDS = new Set(
@@ -773,6 +774,7 @@ export function validateTutorialTriggers(value) {
         (candidate.on[0] !== "challenge-resolved" &&
           candidate.on[0] !== "figment-created" &&
           candidate.on[0] !== "opponent-reposition-opportunity" &&
+          candidate.on[0] !== "player-night-phase" &&
           candidate.on[0] !== "transfiguration-seen"))
     ) {
       throw invalid(

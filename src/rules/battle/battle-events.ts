@@ -1134,6 +1134,30 @@ function battleCommandInternal(
   }
   const completed = driveChallengeCursor(current, ctx.seq, random, nowMs);
   if (!suppressGuidance) {
+    const openedPlayerNightPhase =
+      command.id === "DEBUG_EDIT" &&
+      command.edit.kind === "SET_PHASE" &&
+      command.edit.phase === "night" &&
+      battle.board.activeSide === "player" &&
+      battle.board.phase === "dusk" &&
+      completed.board.activeSide === "player" &&
+      completed.board.phase === "night";
+    if (openedPlayerNightPhase) {
+      const guidance = openTutorialGuidance(
+        { ...state, battle: completed },
+        completed,
+        "player-night-phase",
+        {
+          kind: "battle",
+          activeSide: completed.board.activeSide,
+          turnNumber: completed.board.turnNumber,
+        },
+        "",
+        undefined,
+        { kind: "commands", commands: [] },
+      );
+      if (guidance !== null) return guidance;
+    }
     const openedOpponentRepositionOpportunity =
       command.id === "DEBUG_EDIT" &&
       command.edit.kind === "SET_PHASE" &&
@@ -1287,6 +1311,7 @@ function tutorialCommandIsAuthorized(
   const edit = command.edit;
   if (edit.kind === "SET_PHASE") {
     return (battle.board.activeSide === "player" && battle.board.phase === "day" && edit.phase === "dusk") ||
+      (battle.board.activeSide === "player" && battle.board.phase === "night" && edit.phase === "challenge") ||
       (battle.board.activeSide === "enemy" && battle.board.phase === "dusk" && edit.phase === "night");
   }
   if (edit.kind === "SWAP_BATTLEFIELD_SLOTS") {

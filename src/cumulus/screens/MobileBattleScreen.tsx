@@ -5255,7 +5255,8 @@ export function MobileBattleScreen({
           phaseNavigation={phaseNavigation}
           perspective={view.perspective}
           tutorialNextLabel={
-            view.activeSide === "enemy" && view.phase === "dusk"
+            (view.activeSide === "enemy" && view.phase === "dusk") ||
+            (view.activeSide === "player" && view.phase === "night")
               ? "Start Challenge"
               : "End Turn"
           }

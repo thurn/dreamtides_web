@@ -192,6 +192,11 @@ away from the offer retires it. Eligibility begins after the starting-deck popup
 has been dismissed. The room fold owns both the consumed offer identity and the
 active presentation, keeping reloads and connected clients aligned.
 
+Battle concept triggers also mark authored phase edges. The standalone tutorial
+opens a six-second Mira explanation when the post-script player turn enters
+Night, then leaves Night under player control for fast cards and abilities before
+Challenge begins.
+
 Transfiguration guidance uses the same shared first-occurrence history. It
 appears when a usable Transfiguration site opens or when a visible Augury
 or Exploration reward offers to transfigure cards, whichever happens first.

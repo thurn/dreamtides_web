@@ -168,14 +168,18 @@ describe("tutorial battle controller", () => {
     expect(plan(state, OBSERVER).status).toBe("driver");
   });
 
-  it("stops at player Day and advances player Dusk through enemy blocking", () => {
+  it("stops at player Day and Night while advancing player Dusk through enemy blocking", () => {
     expect(plan(stateFor()).requiresHumanDecision).toBe(true);
     expect(plan(stateFor({ phase: "dusk" })).intent).toMatchObject({ kind: "battle-ai-block" });
     expect(plan(stateFor({ phase: "dusk" }, {
       aiBlockingTurn: { activeSide: "player", turnNumber: 4 },
     })).intent).toMatchObject({
       kind: "battle-command",
-      command: { edit: { kind: "SET_BATTLE_FLOW", activeSide: "enemy", phase: "dreamwell", turnNumber: 4 } },
+      command: { edit: { kind: "SET_PHASE", phase: "night" } },
+    });
+    expect(plan(stateFor({ phase: "night" }))).toMatchObject({
+      requiresHumanDecision: true,
+      intent: null,
     });
   });
 
