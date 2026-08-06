@@ -34,7 +34,6 @@ import {
   buildFitModel,
   DEFAULT_TUNING,
 } from "./draft-replay-experiment.mjs";
-import { buildCardMaps } from "./setup-assets.mjs";
 import { compileOpponentsData } from "./opponents-data.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -103,7 +102,7 @@ function createSeededRng(seed) {
 }
 
 // ---------------------------------------------------------------------------
-// Fit scoring in name space (mirrors fit-model.ts scoreCandidatesForDeck).
+// Fit scoring in UUID space (mirrors fit-model.ts scoreCandidatesForDeck).
 // ---------------------------------------------------------------------------
 
 function idfCosine(a, b, idfOf) {
@@ -145,10 +144,10 @@ function scoreNeighborCF(candidates, deckSet, model, tuning) {
   let sumSim = 0;
   for (const nb of neighbors) sumSim += nb.sim;
   const denom = Math.max(sumSim, 1e-9);
-  for (const name of candidates) {
+  for (const id of candidates) {
     let acc = 0;
-    for (const nb of neighbors) if (decks[nb.i].cards.has(name)) acc += nb.sim;
-    scores.set(name, (acc / denom) * (idf.get(name) ?? 0));
+    for (const nb of neighbors) if (decks[nb.i].cards.has(id)) acc += nb.sim;
+    scores.set(id, (acc / denom) * (idf.get(id) ?? 0));
   }
   return scores;
 }
@@ -158,15 +157,15 @@ function scoreCooccur(candidates, deckSet, model) {
   const scores = new Map();
   if (deckSet.size === 0) return scores;
   const sizeDenom = Math.max(deckSet.size, 1);
-  for (const name of candidates) {
+  for (const id of candidates) {
     let acc = 0;
-    for (const d of deckSet) acc += coocNorm.get(d)?.get(name) ?? 0;
-    scores.set(name, acc / sizeDenom);
+    for (const d of deckSet) acc += coocNorm.get(d)?.get(id) ?? 0;
+    scores.set(id, acc / sizeDenom);
   }
   return scores;
 }
 
-/** Map candidate name -> blended fit, given the deck so far (a name set). */
+/** Map candidate UUID -> blended fit, given the deck so far (a UUID set). */
 function scoreFit(candidates, deckSet, model, tuning) {
   const nf = scoreNeighborCF(candidates, deckSet, model, tuning);
   const co = scoreCooccur(candidates, deckSet, model);
@@ -214,29 +213,29 @@ function nearestNeighbor(deckSet, model, knn) {
   return sum / k;
 }
 
-function meanPairwiseCooccur(names, model) {
-  if (names.length < 2) return 0;
+function meanPairwiseCooccur(ids, model) {
+  if (ids.length < 2) return 0;
   let sum = 0;
   let pairs = 0;
-  for (let i = 0; i < names.length; i += 1) {
-    const row = model.coocNorm.get(names[i]);
-    for (let j = i + 1; j < names.length; j += 1) {
-      sum += row?.get(names[j]) ?? 0;
+  for (let i = 0; i < ids.length; i += 1) {
+    const row = model.coocNorm.get(ids[i]);
+    for (let j = i + 1; j < ids.length; j += 1) {
+      sum += row?.get(ids[j]) ?? 0;
       pairs += 1;
     }
   }
   return pairs === 0 ? 0 : sum / pairs;
 }
 
-function selfConsistency(names, model, tuning) {
+function selfConsistency(ids, model, tuning) {
   const universe = [...model.prior.keys()];
-  if (universe.length === 0 || names.length === 0) return 0;
-  const numberOf = (name) => model.numberOf.get(name) ?? -1;
-  const inDeck = new Set(names);
+  if (universe.length === 0 || ids.length === 0) return 0;
+  const numberOf = (id) => model.numberOf.get(id) ?? -1;
+  const inDeck = new Set(ids);
   let testable = 0;
   let hits = 0;
-  for (const held of names) {
-    const rest = new Set(names.filter((c) => c !== held));
+  for (const held of ids) {
+    const rest = new Set(ids.filter((c) => c !== held));
     if (rest.size === 0) continue;
     const heldNum = numberOf(held);
     const distractors = universe
@@ -260,12 +259,12 @@ function selfConsistency(names, model, tuning) {
   return testable === 0 ? 0 : hits / testable;
 }
 
-function scoreCoherence(deckNames, model, tuning = COHERENCE_TUNING) {
-  const names = [...new Set(deckNames.filter((n) => model.numberOf.has(n)))];
-  const set = new Set(names);
+function scoreCoherence(deckIds, model, tuning = COHERENCE_TUNING) {
+  const ids = [...new Set(deckIds.filter((id) => model.numberOf.has(id)))];
+  const set = new Set(ids);
   const nn = nearestNeighbor(set, model, tuning.knn);
-  const co = meanPairwiseCooccur(names, model);
-  const self = selfConsistency(names, model, tuning);
+  const co = meanPairwiseCooccur(ids, model);
+  const self = selfConsistency(ids, model, tuning);
   return {
     score: tuning.wNeighbor * nn + tuning.wCooccur * co + tuning.wSelf * self,
     nearestNeighbor: nn,
@@ -387,7 +386,7 @@ function buildPackSource(records, seed) {
   }
   const packs = [];
   for (let i = 0; i < take; i += 1) {
-    for (const pack of records[indices[i]].packs) {
+    for (const pack of records[indices[i]].packIds) {
       const distinct = [...new Set(pack)];
       if (distinct.length > 0) packs.push(distinct);
     }
@@ -395,7 +394,7 @@ function buildPackSource(records, seed) {
   return packs;
 }
 
-/** Best-of-N coherent draft for a battle. `affinity` (name->0..1) and
+/** Best-of-N coherent draft for a battle. `affinity` (UUID->0..1) and
  * `biasStrength` are null/0 for a neutral build. Returns the winner's kept deck
  * plus the kept-fit power proxy term. */
 function buildOpponentDeck(
@@ -456,9 +455,9 @@ function buildOpponentDeck(
 // Affiliation fit (mirrors affiliation-weights.ts).
 // ---------------------------------------------------------------------------
 
-function buildAffinityByName(model, probeNames) {
+function buildAffinityById(model, probeIds) {
   const idfOf = (c) => model.idf.get(c) ?? 0;
-  const probe = new Set(probeNames.filter((n) => idfOf(n) > 0));
+  const probe = new Set(probeIds.filter((id) => idfOf(id) > 0));
   if (probe.size === 0) return null;
   let psq = 0;
   for (const c of probe) psq += idfOf(c) ** 2;
@@ -479,8 +478,8 @@ function buildAffinityByName(model, probeNames) {
   return affinity;
 }
 
-function deckAffinityFit(names, affinity) {
-  const distinct = [...new Set(names)];
+function deckAffinityFit(ids, affinity) {
+  const distinct = [...new Set(ids)];
   if (distinct.length === 0) return 0;
   let sum = 0;
   for (const c of distinct) sum += affinity.get(c) ?? 0;
@@ -498,8 +497,8 @@ function deckAffinityFit(names, affinity) {
 const ORPHAN_TOP_PARTNERS = 8;
 const ORPHAN_MIN_PRESENT_FRAC = 0.25;
 
-function orphanRate(names, model) {
-  const distinct = [...new Set(names)].filter((n) => model.coocNorm.has(n));
+function orphanRate(ids, model) {
+  const distinct = [...new Set(ids)].filter((id) => model.coocNorm.has(id));
   if (distinct.length === 0) return 0;
   const inDeck = new Set(distinct);
   let payoffs = 0;
@@ -591,7 +590,7 @@ function run() {
 
   const { records, numberOf } = loadCorpus();
   const model = buildFitModel(
-    records.map((r) => r.mainboard),
+    records.map((r) => r.mainboardIds),
     DEFAULT_TUNING,
   );
   model.numberOf = numberOf;
@@ -624,7 +623,7 @@ function run() {
   // Reference populations, size-matched to the generated mid-run deck size.
   const refSize = distinctTarget(Math.floor(LAYER_COUNT / 2));
   const realCorpus = records
-    .map((r) => [...new Set(r.mainboard)])
+    .map((r) => [...new Set(r.mainboardIds)])
     .filter(
       (d) =>
         d.length >= DEFAULT_TUNING.minDeckSize &&
@@ -695,15 +694,13 @@ function run() {
   // Affiliation fit: build affiliated decks per affiliation, compare to neutral.
   const affiliationsToml =
     parse(readText("data/tabula/affiliations.toml")).affiliations ?? [];
-  const cardsV2 = authoredCards;
-  const { idToName } = buildCardMaps(cardsV2);
   const affLevel = Math.floor(LAYER_COUNT / 2);
   const affiliationResults = [];
   for (const aff of affiliationsToml) {
-    const probeNames = (aff["signature-cards"] ?? [])
-      .map((id) => idToName.get(id))
-      .filter((n) => n !== undefined);
-    const affinity = buildAffinityByName(model, probeNames);
+    const probeIds = (aff["signature-cards"] ?? [])
+      .filter((id) => typeof id === "string")
+      .map((id) => id.toLowerCase());
+    const affinity = buildAffinityById(model, probeIds);
     if (!affinity) continue;
     const bias = aff["opponent-bias-strength"] ?? 0;
     const ownFits = [];

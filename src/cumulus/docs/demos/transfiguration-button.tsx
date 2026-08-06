@@ -30,10 +30,13 @@ function TransfigurationButtonDemo() {
   ];
   return (
     <div
+      data-transfiguration-button-demo=""
       style={{
-        width: 560,
+        width: "100%",
+        maxWidth: 560,
         display: "grid",
-        gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+        gridTemplateColumns:
+          "repeat(auto-fit, minmax(min(240px, 100%), 1fr))",
         gap: token("--space-l"),
       }}
     >
