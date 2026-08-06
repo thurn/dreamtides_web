@@ -3187,6 +3187,14 @@
       "description": "The glyph painted centered in the disc (e.g. `GLYPHS.close`)."
     },
     {
+      "name": "overlayGlyph",
+      "tsType": "Glyph",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional smaller glyph superimposed at the center of the primary glyph."
+    },
+    {
       "name": "size",
       "tsType": "IconButtonSize",
       "unionMembers": [

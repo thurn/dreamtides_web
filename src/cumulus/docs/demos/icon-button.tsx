@@ -95,6 +95,16 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
   onPress={advancePhase}
 />`,
     },
+    {
+      label: "Centered overlay",
+      note: "Use `overlayGlyph` for one smaller semantic mark superimposed within the primary glyph.",
+      code: `<IconButton
+  glyph={GLYPHS.refresh}
+  overlayGlyph={GLYPHS.bug}
+  label="Reroll offers"
+  onPress={rerollOffers}
+/>`,
+    },
   ],
   demo: {
     defaultArgs: {

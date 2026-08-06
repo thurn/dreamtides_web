@@ -27,6 +27,7 @@ import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
 import { GLYPHS } from "../primitives/glyph";
 import {
+  debugRerollCornerStyle,
   MENU_BUTTON_PX,
   MENU_EDGE_INSET_DESKTOP_PX,
   MENU_EDGE_INSET_MOBILE_PX,
@@ -97,21 +98,6 @@ function topSafeOpFor(isDesktop: boolean): string {
   );
 }
 
-function rerollCornerStyle(isDesktop: boolean): {
-  top: string;
-  right: string;
-} {
-  const edgeInset = isDesktop
-    ? MENU_EDGE_INSET_DESKTOP_PX
-    : MENU_EDGE_INSET_MOBILE_PX;
-  return {
-    top: `max(var(--safe-area-inset-top), ${String(edgeInset)}px)`,
-    right: isDesktop
-      ? `calc(max(var(--safe-area-inset-right), ${String(edgeInset)}px) + ${String(MENU_BUTTON_PX)}px + ${token("--space-3")})`
-      : `max(var(--safe-area-inset-right), ${String(edgeInset)}px)`,
-  };
-}
-
 function offerCellWidthFor(params: {
   columns: number;
   rows: number;
@@ -155,7 +141,7 @@ export function DraftScreen({
     : MOBILE_OFFER_GRID_GAP;
   const topSafeOp = topSafeOpFor(isDesktop);
   const topSafe = `calc(${topSafeOp})`;
-  const rerollCorner = rerollCornerStyle(isDesktop);
+  const rerollCorner = debugRerollCornerStyle(isDesktop);
   const offerCellWidth = offerCellWidthFor({
     columns: offerColumns,
     rows: offerRows,

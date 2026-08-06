@@ -14,6 +14,7 @@ import {
 } from "../components/card/CardChoiceGrid";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlowIcon } from "../components/controls/GlowIcon";
+import { IconButton } from "../components/controls/IconButton";
 import type { OfferTileModel } from "../components/controls/OfferTile";
 import {
   OfferTile,
@@ -33,6 +34,8 @@ import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { Dreamsign as DreamsignData } from "../../types/journey";
 import { GuideGallerySiteLayout } from "./GuideGallerySiteLayout";
+import { debugRerollCornerStyle } from "./chrome-geometry";
+import { useIsDesktop } from "./use-is-desktop";
 
 export interface AuguryGuideView {
   id: string;
@@ -91,6 +94,8 @@ export type AuguryChoiceResult = { ok: true } | { ok: false; message: string };
 
 export interface AugurySiteScreenProps {
   view: AugurySiteView;
+  /** Requests a shared debug reroll of both Augury offers. */
+  onReroll?: () => void;
   onInspectOffer?: (offerId: string) => void;
   onChoose: (offerId: string, choiceId: string | null) => AuguryChoiceResult;
   onClose: () => void;
@@ -123,11 +128,13 @@ function requiresWideDesktopDetail(
 
 export function AugurySiteScreen({
   view,
+  onReroll,
   onInspectOffer,
   onChoose,
   onClose,
 }: AugurySiteScreenProps) {
   const reduceMotion = useReducedMotion();
+  const isDesktop = useIsDesktop();
   const [selectedChoices, setSelectedChoices] = useState<ReadonlyMap<string, string>>(new Map());
   const [inspectedOfferId, setInspectedOfferId] = useState<string | null>(null);
   const [committingOfferId, setCommittingOfferId] = useState<string | null>(null);
@@ -299,7 +306,29 @@ export function AugurySiteScreen({
             )}
         </section>
       )}
-    />
+    >
+      {onReroll !== undefined && (
+        <div
+          data-augury-reroll-control=""
+          onPointerDown={(event) => {
+            event.stopPropagation();
+          }}
+          style={{
+            position: "absolute",
+            ...debugRerollCornerStyle(isDesktop),
+            zIndex: 30,
+          }}
+        >
+          <IconButton
+            glyph={GLYPHS.refresh}
+            overlayGlyph={GLYPHS.bug}
+            label="Reroll Augury offers"
+            onPress={onReroll}
+            testId="reroll-augury-offers"
+          />
+        </div>
+      )}
+    </GuideGallerySiteLayout>
   );
 }
 

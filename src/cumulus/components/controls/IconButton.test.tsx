@@ -64,6 +64,25 @@ describe("IconButton", () => {
     });
   });
 
+  it("superimposes a smaller filled overlay glyph within the primary glyph", () => {
+    const { container, root } = mount(
+      <IconButton
+        glyph={GLYPHS.refresh}
+        overlayGlyph={GLYPHS.bug}
+        label="Reroll offers"
+        onPress={() => {}}
+      />,
+    );
+
+    const stack = container.querySelector("[data-icon-button-glyph-stack]");
+    expect(stack?.querySelector("i.bxf.bx-refresh-cw")).not.toBeNull();
+    expect(stack?.querySelector("i.bxf.bx-bug")).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders `sm` as a 40px disc with a 22px glyph font", () => {
     const { container, root } = mount(
       <IconButton

@@ -94,6 +94,11 @@ export function AugurySiteScreenAdapter({ siteId }: { siteId: string }) {
     else mutations.declineDreamMerchant(site.id, request);
   }, [mutations, result, site]);
 
+  const handleReroll = useCallback(() => {
+    if (site === null) return;
+    mutations.rerollAugury?.(site.id);
+  }, [mutations, site]);
+
   const handleInspect = useCallback((offerId: string) => {
     const offer = result?.encounter?.offers.find(
       (candidate) => candidate.offerId === offerId,
@@ -113,6 +118,7 @@ export function AugurySiteScreenAdapter({ siteId }: { siteId: string }) {
     <AugurySiteScreen
       key={result.view.encounterSignature ?? result.view.siteId}
       view={result.view}
+      onReroll={handleReroll}
       onInspectOffer={handleInspect}
       onChoose={handleChoose}
       onClose={handleClose}

@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/icon-button`
 
-Real consumers: **19** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **20** (imports outside `src/cumulus/docs/` and tests).
 
 The compact glyph-only glass disc — neutral or purple accent liquid glass, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls.
 
@@ -17,6 +17,7 @@ The compact glyph-only glass disc — neutral or purple accent liquid glass, wit
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `glyph` | `Glyph` | yes | — | The glyph painted centered in the disc (e.g. `GLYPHS.close`). |
+| `overlayGlyph` | `Glyph` | no | — | Optional smaller glyph superimposed at the center of the primary glyph. |
 | `size` | `IconButtonSize` = `"sm" \| "md"` | no | `md` | Disc size — `sm` (40/22) or `md` (48/26). Defaults to `md`. |
 | `label` | `string` | yes | — | The disc's accessible name (`aria-label`); the disc shows only its glyph. |
 | `variant` | `IconButtonVariant` = `"default" \| "accent"` | no | `default` | Strict neutral or purple accent glass surface treatment. |
@@ -76,5 +77,18 @@ Use `variant="accent"` for the primary action in a paired glass-icon cluster.
   glyph={GLYPHS.arrowRight}
   label="Next phase"
   onPress={advancePhase}
+/>
+```
+
+### Centered overlay
+
+Use `overlayGlyph` for one smaller semantic mark superimposed within the primary glyph.
+
+```tsx
+<IconButton
+  glyph={GLYPHS.refresh}
+  overlayGlyph={GLYPHS.bug}
+  label="Reroll offers"
+  onPress={rerollOffers}
 />
 ```

@@ -173,6 +173,26 @@ afterEach(() => {
 });
 
 describe("AugurySiteScreen", () => {
+  it("renders the filled refresh-and-bug debug control and reports rerolls", () => {
+    const onReroll = vi.fn();
+    const container = mount(
+      <AugurySiteScreen
+        view={view()}
+        onReroll={onReroll}
+        onChoose={() => ({ ok: true })}
+        onClose={() => undefined}
+      />,
+    );
+
+    const reroll = container.querySelector(
+      '[data-testid="reroll-augury-offers"]',
+    );
+    expect(reroll?.querySelector("i.bxf.bx-refresh-cw")).not.toBeNull();
+    expect(reroll?.querySelector("i.bxf.bx-bug")).not.toBeNull();
+    click(reroll);
+    expect(onReroll).toHaveBeenCalledOnce();
+  });
+
   it("stages two offer tiles with Aldric's instruction and decline action", () => {
     const container = mount(
       <AugurySiteScreen view={view()} onChoose={() => ({ ok: true })} onClose={() => undefined} />,

@@ -28,3 +28,19 @@ export const MENU_EDGE_INSET_DESKTOP_PX = 22;
 
 /** The shared top edge for debug reroll controls on journey scene art. */
 export const DEBUG_REROLL_TOP = `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${token("--space-5")})`;
+
+/** Positions a debug reroll beside desktop menu chrome or opposite it on mobile. */
+export function debugRerollCornerStyle(isDesktop: boolean): {
+  top: string;
+  right: string;
+} {
+  const edgeInset = isDesktop
+    ? MENU_EDGE_INSET_DESKTOP_PX
+    : MENU_EDGE_INSET_MOBILE_PX;
+  return {
+    top: `max(var(--safe-area-inset-top), ${String(edgeInset)}px)`,
+    right: isDesktop
+      ? `calc(max(var(--safe-area-inset-right), ${String(edgeInset)}px) + ${String(MENU_BUTTON_PX)}px + ${token("--space-3")})`
+      : `max(var(--safe-area-inset-right), ${String(edgeInset)}px)`,
+  };
+}

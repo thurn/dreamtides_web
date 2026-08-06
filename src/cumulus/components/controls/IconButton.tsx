@@ -37,6 +37,8 @@ interface IconButtonSizeSpec {
   disc: number;
   /** Glyph font size, in px. */
   glyph: number;
+  /** Center-overlay glyph font size, in px. */
+  overlayGlyph: number;
 }
 
 /**
@@ -44,13 +46,15 @@ interface IconButtonSizeSpec {
  * deck-viewer close control and dreamscape menu button use — no other sizes.
  */
 const ICON_BUTTON_SIZES: Record<IconButtonSize, IconButtonSizeSpec> = {
-  sm: { disc: 40, glyph: 22 },
-  md: { disc: 48, glyph: 26 },
+  sm: { disc: 40, glyph: 22, overlayGlyph: 11 },
+  md: { disc: 48, glyph: 26, overlayGlyph: 13 },
 };
 
 export interface IconButtonProps {
   /** The glyph painted centered in the disc (e.g. `GLYPHS.close`). */
   glyph: Glyph;
+  /** Optional smaller glyph superimposed at the center of the primary glyph. */
+  overlayGlyph?: Glyph;
   /** Disc size — `sm` (40/22) or `md` (48/26). Defaults to `md`. */
   size?: IconButtonSize;
   /** The disc's accessible name (`aria-label`); the disc shows only its glyph. */
@@ -86,6 +90,7 @@ export interface IconButtonProps {
  */
 export function IconButton({
   glyph,
+  overlayGlyph,
   size = "md",
   label,
   variant = "default",
@@ -123,7 +128,31 @@ export function IconButton({
         ...(variant === "accent" ? glassAccentChrome(placement) : {}),
       }}
     >
-      <GlowIcon iconClass={glyph} color="text-primary" size="1em" />
+      <span
+        data-icon-button-glyph-stack={overlayGlyph === undefined ? undefined : ""}
+        style={{
+          position: "relative",
+          display: "grid",
+          placeItems: "center",
+          width: "1em",
+          height: "1em",
+        }}
+      >
+        <GlowIcon iconClass={glyph} color="text-primary" size="1em" />
+        {overlayGlyph !== undefined && (
+          <span
+            style={{
+              position: "absolute",
+              inset: 0,
+              display: "grid",
+              placeItems: "center",
+              fontSize: spec.overlayGlyph,
+            }}
+          >
+            <GlowIcon iconClass={overlayGlyph} color="text-primary" size="1em" />
+          </span>
+        )}
+      </span>
     </Pressable>
   );
 }
