@@ -10,7 +10,7 @@ makes with the casino’s otherworldly character.
 | **Gravok’s Three-Gate Wager** | Choose one of three rank thresholds before each draw. |
 | **Tidemark Ladder Climb** | Buy increasingly favorable attempts at one strong Dreamsign. |
 | **Starway Stairs** | Bank an Essence prize or risk it on the next tier. |
-| **Four-Suit Reprise** | Risk one deck card, then accept its suit outcome or pay to draw again. |
+| **Four-Suit Reprise** | Risk up to three different deck cards on one suit draw apiece. |
 | **Twenty-One** | Hit or stand to finish from 17 through 21 without busting. |
 
 ## Casino-wide rules
@@ -184,32 +184,33 @@ unchanged.
 ## 4. Four-Suit Reprise
 
 Four-Suit Reprise asks the player to select one eligible card from their deck,
-then lets a suit determine its fate. The selected entry is locked by entry id
-and card UUID. It must be a non-Nightmare card with an eligible Transfiguration so
-all four outcomes can resolve.
+pay for one draw, and let the suit determine that card's fate. The selected
+entry is locked by entry id and card UUID. It must be a non-Nightmare card with
+an eligible Transfiguration so all four outcomes can resolve.
 
-Each draw costs 25 Essence. After seeing a provisional result, the player may
-accept it or pay for another draw. They may draw again up to three times, for a
-maximum of four draws and 100 Essence. Each new draw replaces the previous
-result; only the accepted or fourth result is applied. Reassemble and reshuffle
-before every draw so the four outcomes remain equally likely.
+Each draw costs 25 Essence and resolves its outcome. After the result, the
+player may leave or play again with a different eligible card UUID and deck
+entry. A visit permits up to three paid rounds using three different cards.
+Reassemble and reshuffle before every draw so the four outcomes remain equally
+likely.
 
 | Suit | Chance | Final effect on the selected entry |
 | --- | ---: | --- |
-| Hearts | 13 / 52 = 25% | Leave it unchanged. |
-| Diamonds | 13 / 52 = 25% | Add one exact duplicate. |
-| Clubs | 13 / 52 = 25% | Apply its deterministic best eligible Transfiguration. |
-| Spades | 13 / 52 = 25% | Purge it. |
+| Spades | 13 / 52 = 25% | Apply an eligible Transfiguration of the player's choice for free. |
+| Diamonds | 13 / 52 = 25% | Leave it unchanged and gain 50 Essence. |
+| Hearts | 13 / 52 = 25% | Duplicate it. |
+| Clubs | 13 / 52 = 25% | Purge it. |
 
-Before the first draw, the UI previews the exact duplicate and
-Transfiguration. After each of the first three draws, the controls are
-`Accept [outcome]` and `Draw Again — 25 Essence`. The player can leave only
-before the first draw; once play begins, they must accept a result or spend a
-replay. The fourth draw resolves immediately.
+Before every draw, the UI previews all four suit outcomes, their exact 25%
+chances, the selected card, and the draw cost. A Spades result opens the shared
+Transfiguration form chooser with every eligible form priced at 0 Essence.
+After a resolved round, the controls are `Play Again` and `Leave` while an
+unused eligible card and a round remain; playing again returns every connected
+player to the card choice.
 
 ### Farpoint Station
 
-Every draw costs 15 Essence, for a maximum total of 60 Essence. The suit
+Every draw costs 15 Essence, for a maximum total of 45 Essence. The suit
 outcomes, replay limit, and odds are unchanged.
 
 ## 5. Twenty-One
@@ -248,7 +249,7 @@ cash out, hit, stand, accept, or leave. React state controls presentation only.
 
 Each active game records the site id, ordinary or Farpoint rules, locked reward
 and target ids, deterministic shuffle commitment, revealed playing cards,
-deck cursor, payments, current bank or provisional outcome, decisions
+deck cursor, payments, current bank or pending card-effect choice, decisions
 remaining, and terminal state. Replaying the room log must reproduce every
 draw, displayed probability, payment, and reward without `Math.random`.
 
@@ -261,7 +262,7 @@ Logs must make a production game reconstructable. Record:
 - the selected deck entry id and card UUID for Four-Suit Reprise;
 - every displayed odds numerator and denominator;
 - each payment, revealed playing card, player decision, bank change, and
-  provisional suit outcome;
+  revealed suit outcome;
 - the final reward or card effect and terminal reason.
 
 ## Recommended implementation order
@@ -271,7 +272,7 @@ Logs must make a production game reconstructable. Record:
    changes, co-op replay, and Gamble logging with one draw.
 2. **Tidemark Ladder Climb** and **Starway Stairs** add repeated
    decisions, stop conditions, and cumulative costs or banks.
-3. **Four-Suit Reprise** adds locked deck targets, provisional outcomes, and
-   repeated draws.
+3. **Four-Suit Reprise** adds locked deck targets, suit-driven card effects,
+   and repeated rounds.
 4. **Twenty-One** adds a persistent hand, Ace valuation, and dynamic remaining
    deck counts.

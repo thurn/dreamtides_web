@@ -97,7 +97,8 @@ export interface EventPayloads {
     gambleGameId?:
       | "gravok-three-gate-wager"
       | "tidemark-ladder-climb"
-      | "starway-stairs";
+      | "starway-stairs"
+      | "four-suit-reprise";
   };
   CHOOSE_RANDOM_SITE: { siteId: string; siteType: string };
   RESOLVE_EXPLORATION_CHOICE: {
@@ -143,6 +144,20 @@ export interface EventPayloads {
   };
   CASH_OUT_STARWAY_STAIRS: { siteId: string; shuffleCommitment: string };
   PLAY_AGAIN_STARWAY_STAIRS: {
+    siteId: string;
+    previousShuffleCommitment: string;
+  };
+  DRAW_FOUR_SUIT_REPRISE: { siteId: string; entryId: string };
+  SETTLE_FOUR_SUIT_REPRISE: {
+    siteId: string;
+    shuffleCommitment: string;
+  };
+  CHOOSE_FOUR_SUIT_REPRISE_TRANSFIGURATION: {
+    siteId: string;
+    shuffleCommitment: string;
+    type: string;
+  };
+  PLAY_AGAIN_FOUR_SUIT_REPRISE: {
     siteId: string;
     previousShuffleCommitment: string;
   };
@@ -346,6 +361,10 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   SETTLE_STARWAY_STAIRS: true,
   CASH_OUT_STARWAY_STAIRS: true,
   PLAY_AGAIN_STARWAY_STAIRS: true,
+  DRAW_FOUR_SUIT_REPRISE: true,
+  SETTLE_FOUR_SUIT_REPRISE: true,
+  CHOOSE_FOUR_SUIT_REPRISE_TRANSFIGURATION: true,
+  PLAY_AGAIN_FOUR_SUIT_REPRISE: true,
   ACCEPT_MERCHANT_OFFER: true,
   DECLINE_MERCHANT: true,
   BUY_SHOP_SLOT: true,

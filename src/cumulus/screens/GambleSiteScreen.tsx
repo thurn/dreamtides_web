@@ -7,9 +7,14 @@ import {
 } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { requireDreamsignId } from "../../data/dreamsigns";
-import type { GravokGateId } from "../../types/gamble";
-import type { StarwayStairsTierNumber } from "../../types/gamble";
-import type { Dreamsign as DreamsignData } from "../../types/journey";
+import { GameCard, type GameCardModel } from "../components/card/CardView";
+import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
+import type { GravokGateId, StarwayStairsTierNumber } from "../../types/gamble";
+import type {
+  Dreamsign as DreamsignData,
+  TransfigurationType,
+} from "../../types/journey";
+import type { FourSuitRepriseOutcome } from "../../data/four-suit-reprise";
 import {
   PLAYING_CARD_FLIP_DURATION_MS,
   WagerPrizeCard,
@@ -31,6 +36,10 @@ import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
+import {
+  TransfigurationDetailPanel,
+  type TransfigurationCandidateView,
+} from "./TransfigurationSiteScreen";
 
 export interface GambleGateView {
   /** Stable gate id used by the wager intent. */
@@ -178,10 +187,47 @@ export interface StarwayStairsSiteView {
   prizeAwarded: number;
 }
 
+export interface FourSuitRepriseCardView {
+  entryId: string;
+  cardId: string;
+  model: GameCardModel;
+}
+
+export interface FourSuitRepriseResultView {
+  id: string;
+  roundNumber: 1 | 2 | 3;
+  card: { rank: PlayingCardRank; suit: PlayingCardSuit };
+  outcome: FourSuitRepriseOutcome;
+  resultRevealed: boolean;
+  resultSettled: boolean;
+  essenceGained: number;
+  target: FourSuitRepriseCardView;
+  transfigurationCandidate: TransfigurationCandidateView;
+  chosenTransfiguration: TransfigurationType | null;
+}
+
+export interface FourSuitRepriseSiteView {
+  gameId: "four-suit-reprise";
+  siteId: string;
+  scene: ArtRef | null;
+  isFarpoint: boolean;
+  runtimeReady: boolean;
+  drawCost: number;
+  canAffordDraw: boolean;
+  roundNumber: 1 | 2 | 3;
+  maxRounds: 3;
+  phase: "choose" | "result";
+  cards: readonly FourSuitRepriseCardView[];
+  guide: GuideGalleryGuideView;
+  result: FourSuitRepriseResultView | null;
+  canPlayAgain: boolean;
+}
+
 export type GambleSiteView =
   | GravokWagerSiteView
   | LadderClimbSiteView
-  | StarwayStairsSiteView;
+  | StarwayStairsSiteView
+  | FourSuitRepriseSiteView;
 
 export interface GambleSiteScreenProps {
   /** View-model rendered by the pure screen. */
@@ -206,6 +252,14 @@ export interface GambleSiteScreenProps {
   onCashOutStarway?: () => void;
   /** Prepare another Starway Stairs round after a terminal result. */
   onPlayAgainStarway?: () => void;
+  /** Draw one suit against the selected Four-Suit Reprise target. */
+  onDrawFourSuit?: (entryId: string) => void;
+  /** Settle the visible Four-Suit Reprise result. */
+  onFourSuitOutcomeShown?: () => void;
+  /** Apply the free chosen form after a Spades result. */
+  onChooseFourSuitTransfiguration?: (type: TransfigurationType) => void;
+  /** Advance the shared visit to another distinct-card round. */
+  onPlayAgainFourSuit?: () => void;
   /** Replace one UUID-identified held Dreamsign after a jackpot win. */
   onReplaceDreamsign: (dreamsignId: string) => void;
 }
@@ -221,6 +275,10 @@ const LADDER_DREAMSIGN_TRAVEL_SECONDS =
 const LADDER_DREAMSIGN_DESKTOP_SIZE = 240;
 const LADDER_DREAMSIGN_MOBILE_SIZE = 180;
 const DREAM_EASE = [0.22, 0.61, 0.36, 1] as const;
+
+function titleCaseSuit(suit: PlayingCardSuit): string {
+  return `${suit.charAt(0).toUpperCase()}${suit.slice(1)}`;
+}
 
 interface LadderDreamsignTrajectory {
   readonly source: DOMRect;
@@ -615,8 +673,24 @@ export function GambleSiteScreen({
   onStarwayOutcomeShown = () => undefined,
   onCashOutStarway = () => undefined,
   onPlayAgainStarway = () => undefined,
+  onDrawFourSuit = () => undefined,
+  onFourSuitOutcomeShown = () => undefined,
+  onChooseFourSuitTransfiguration = () => undefined,
+  onPlayAgainFourSuit = () => undefined,
   onReplaceDreamsign,
 }: GambleSiteScreenProps) {
+  if (view.gameId === "four-suit-reprise") {
+    return (
+      <FourSuitRepriseScreen
+        view={view}
+        onDraw={onDrawFourSuit}
+        onLeave={onLeave}
+        onOutcomeShown={onFourSuitOutcomeShown}
+        onChooseTransfiguration={onChooseFourSuitTransfiguration}
+        onPlayAgain={onPlayAgainFourSuit}
+      />
+    );
+  }
   if (view.gameId === "starway-stairs") {
     return (
       <StarwayStairsScreen
@@ -659,10 +733,14 @@ function GravokWagerScreen({
   onOutcomeShown,
   onPlayAgain,
   onReplaceDreamsign,
-}: Omit<
-  GambleSiteScreenProps,
-  "view" | "onDrawLadder" | "onLadderOutcomeShown"
-> & { view: GravokWagerSiteView }) {
+}: {
+  view: GravokWagerSiteView;
+  onChooseGate: (gateId: GravokGateId) => void;
+  onLeave: () => void;
+  onOutcomeShown: () => void;
+  onPlayAgain: () => void;
+  onReplaceDreamsign: (dreamsignId: string) => void;
+}) {
   const reduceMotion = useReducedMotion() === true;
   const [revealStarted, setRevealStarted] = useState(false);
   const [outcomeVisible, setOutcomeVisible] = useState(false);
@@ -1613,6 +1691,391 @@ function StarwayStairsScreen({
                     onPress={onLeave}
                   />
                 ) : null}
+            </div>
+          </main>
+        );
+      }}
+    />
+  );
+}
+
+function FourSuitRepriseScreen({
+  view,
+  onDraw,
+  onLeave,
+  onOutcomeShown,
+  onChooseTransfiguration,
+  onPlayAgain,
+}: {
+  view: FourSuitRepriseSiteView;
+  onDraw: (entryId: string) => void;
+  onLeave: () => void;
+  onOutcomeShown: () => void;
+  onChooseTransfiguration: (type: TransfigurationType) => void;
+  onPlayAgain: () => void;
+}) {
+  const reduceMotion = useReducedMotion() === true;
+  const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
+  const [revealedResultId, setRevealedResultId] = useState<string | null>(null);
+  const [outcomeResultId, setOutcomeResultId] = useState<string | null>(null);
+  const [actionsVisible, setActionsVisible] = useState(false);
+  const [transfigurationVisible, setTransfigurationVisible] = useState(false);
+  const [selectedFormType, setSelectedFormType] =
+    useState<TransfigurationType | null>(null);
+  const [decisionPending, setDecisionPending] = useState(false);
+  const settledResultIdRef = useRef<string | undefined>(undefined);
+  const onOutcomeShownRef = useRef(onOutcomeShown);
+  const resultId = view.result?.id;
+
+  useEffect(() => {
+    onOutcomeShownRef.current = onOutcomeShown;
+  }, [onOutcomeShown]);
+
+  useEffect(() => {
+    if (view.phase !== "choose") return;
+    setSelectedEntryId(null);
+    setDecisionPending(false);
+    setActionsVisible(false);
+    setTransfigurationVisible(false);
+    setSelectedFormType(null);
+  }, [view.phase, view.roundNumber]);
+
+  useEffect(() => {
+    setActionsVisible(false);
+    setTransfigurationVisible(false);
+    setSelectedFormType(null);
+    setDecisionPending(false);
+    if (resultId === undefined) {
+      setRevealedResultId(null);
+      setOutcomeResultId(null);
+      return;
+    }
+    const revealDelay = reduceMotion
+      ? REDUCED_MOTION_DELAY_MS
+      : BET_SETTLE_DELAY_MS;
+    const outcomeDelay = reduceMotion
+      ? REDUCED_MOTION_DELAY_MS
+      : BET_SETTLE_DELAY_MS + PLAYING_CARD_FLIP_DURATION_MS;
+    const revealTimeout = window.setTimeout(
+      () => setRevealedResultId(resultId),
+      revealDelay,
+    );
+    const outcomeTimeout = window.setTimeout(() => {
+      setOutcomeResultId(resultId);
+      if (settledResultIdRef.current !== resultId) {
+        settledResultIdRef.current = resultId;
+        onOutcomeShownRef.current();
+      }
+    }, outcomeDelay);
+    return () => {
+      window.clearTimeout(revealTimeout);
+      window.clearTimeout(outcomeTimeout);
+    };
+  }, [reduceMotion, resultId]);
+
+  useEffect(() => {
+    const result = view.result;
+    if (
+      result === null ||
+      !result.resultRevealed ||
+      outcomeResultId !== result.id
+    ) {
+      return;
+    }
+    const timeout = window.setTimeout(() => {
+      setOutcomeResultId(null);
+      if (result.outcome === "transfiguration" && !result.resultSettled) {
+        setTransfigurationVisible(true);
+      } else {
+        setActionsVisible(true);
+      }
+    }, RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS);
+    return () => window.clearTimeout(timeout);
+  }, [outcomeResultId, view.result]);
+
+  useEffect(() => {
+    if (!transfigurationVisible || view.result?.resultSettled !== true) return;
+    setTransfigurationVisible(false);
+    setActionsVisible(true);
+  }, [transfigurationVisible, view.result]);
+
+  return (
+    <GuideGallerySiteLayout
+      siteId={view.siteId}
+      scene={view.scene}
+      guide={view.guide}
+      mobileComposition="dialog"
+      screenTestId="cumulus-gamble-site-screen"
+      guideArtTestId="cumulus-gamble-guide-art"
+      speechAnchorTestId="cumulus-gamble-speech-anchor"
+      speechBubbleTestId="cumulus-gamble-speech-bubble"
+      renderGallery={(layout) => {
+        const selectedCard = view.cards.find(
+          (card) => card.entryId === selectedEntryId,
+        ) ?? null;
+        if (view.phase === "choose" && selectedCard === null) {
+          return (
+            <section
+              data-four-suit-picker=""
+              data-four-suit-layout={layout}
+              style={{
+                position: "relative",
+                zIndex: 10,
+                minHeight: 0,
+                height: "100%",
+                maxHeight: "100%",
+                width: layout === "desktop"
+                  ? "100%"
+                  : `calc(100vw - (${token("--space-s")} * 2))`,
+                boxSizing: "border-box",
+                pointerEvents: "auto",
+                display: "grid",
+                alignItems: "center",
+              }}
+            >
+              <CardGalleryPanel
+                title="Four-Suit Reprise"
+                subtitle={`Round ${String(view.roundNumber)} of ${String(view.maxRounds)} · Choose a card to wager`}
+                footerAction={{
+                  label: "Leave",
+                  onPress: onLeave,
+                  testId: "gamble-four-suit-leave",
+                }}
+                cards={view.cards.map((card) => ({
+                  entryId: card.entryId,
+                  model: card.model,
+                  testId: `gamble-four-suit-card-${card.entryId}`,
+                }))}
+                emptyLabel="No eligible cards remain."
+                columns={layout === "desktop" ? "five" : "four"}
+                cardSize="standard"
+                frame="floating"
+                spacing={layout === "desktop" ? "regular" : "medium"}
+                widthMode="fill"
+                testId="gamble-four-suit-card-gallery"
+                onCardPress={setSelectedEntryId}
+              />
+            </section>
+          );
+        }
+
+        if (transfigurationVisible && view.result !== null) {
+          return (
+            <div
+              data-four-suit-transfiguration=""
+              style={{
+                position: "relative",
+                zIndex: 10,
+                width: "100%",
+                maxWidth: DESKTOP_GAMBLE_REGION_MAX_WIDTH,
+                minHeight: 0,
+                pointerEvents: "auto",
+              }}
+            >
+              <TransfigurationDetailPanel
+                layout={layout}
+                candidate={view.result.transfigurationCandidate}
+                selectedFormType={selectedFormType}
+                confirming={decisionPending}
+                alreadyAccepted={false}
+                onSelectForm={(type) =>
+                  setSelectedFormType((current) =>
+                    current === type ? null : type,
+                  )
+                }
+                onConfirm={(form) => {
+                  setDecisionPending(true);
+                  onChooseTransfiguration(form.type);
+                }}
+              />
+            </div>
+          );
+        }
+
+        const target = view.result?.target ?? selectedCard;
+        const drawnCard = view.result?.card ?? null;
+        const outcomeVisible =
+          view.result !== null && outcomeResultId === view.result.id;
+        return (
+          <main
+            data-gamble-wager-region=""
+            data-gamble-game={view.gameId}
+            data-gamble-layout={layout}
+            data-gamble-farpoint={view.isFarpoint ? "true" : "false"}
+            style={{
+              position: "relative",
+              zIndex: 10,
+              width: "100%",
+              maxWidth: layout === "desktop"
+                ? DESKTOP_GAMBLE_REGION_MAX_WIDTH
+                : undefined,
+              height: "100%",
+              minHeight: 0,
+              justifySelf: "center",
+              alignSelf: "center",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: layout === "desktop"
+                ? token("--space-s")
+                : token("--space-xs"),
+              boxSizing: "border-box",
+              padding: layout === "desktop"
+                ? token("--space-l")
+                : token("--space-xs"),
+              pointerEvents: "auto",
+            }}
+          >
+            <section
+              aria-label="Four-Suit Reprise wager"
+              data-four-suit-stage=""
+              style={{
+                position: "relative",
+                width: "100%",
+                display: "grid",
+                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                gap: layout === "desktop"
+                  ? token("--space-l")
+                  : token("--space-s"),
+                alignItems: "center",
+                justifyItems: "center",
+              }}
+            >
+              {target !== null && (
+                <div
+                  data-four-suit-target={target.entryId}
+                  style={{
+                    width: layout === "desktop" ? 164 : 104,
+                    minWidth: 0,
+                  }}
+                >
+                  <GameCard model={target.model} />
+                </div>
+              )}
+              <div data-four-suit-prize="">
+                <WagerPrizeCard
+                  prizeId="four-suit-reprise"
+                  targetLabel="a Suit"
+                  size="wager"
+                  drawnCard={drawnCard}
+                  revealDrawnCard={
+                    view.result !== null && revealedResultId === view.result.id
+                  }
+                />
+              </div>
+              {outcomeVisible && view.result !== null && (
+                <div
+                  data-four-suit-outcome=""
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    display: "grid",
+                    placeItems: "center",
+                    pointerEvents: "none",
+                    zIndex: 2,
+                  }}
+                >
+                  <RadialAnnouncement
+                    announcementId={view.result.id}
+                    headline={titleCaseSuit(view.result.card.suit)}
+                    detail={
+                      view.result.outcome === "transfiguration"
+                        ? "Transfigure"
+                        : view.result.outcome === "essence"
+                          ? "Unchanged"
+                          : view.result.outcome === "duplication"
+                            ? "Duplicated"
+                            : "Purged"
+                    }
+                    essenceGained={
+                      view.result.essenceGained > 0
+                        ? view.result.essenceGained
+                        : undefined
+                    }
+                    tone={
+                      view.result.outcome === "purge" ? "danger" : "reward"
+                    }
+                    size={layout === "mobile" ? "mini" : "wager"}
+                    duration="extended"
+                  />
+                </div>
+              )}
+            </section>
+
+            <div
+              data-four-suit-actions=""
+              style={{
+                minHeight: token("--touch-min"),
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: token("--space-xs"),
+                visibility:
+                  view.phase === "choose" || actionsVisible
+                    ? "visible"
+                    : "hidden",
+                pointerEvents:
+                  view.phase === "choose" || actionsVisible ? "auto" : "none",
+              }}
+            >
+              {view.phase === "choose" && selectedCard !== null ? (
+                <>
+                  <GlassButton
+                    label="Choose Again"
+                    size={layout === "mobile" ? "compact" : "standard"}
+                    disabled={decisionPending}
+                    testId="gamble-four-suit-choose-again"
+                    onPress={() => setSelectedEntryId(null)}
+                  />
+                  <GlassButton
+                    label="Draw"
+                    accessibilityLabel={`Draw for ${String(view.drawCost)} Essence`}
+                    essenceCost={view.drawCost}
+                    size={layout === "mobile" ? "compact" : "standard"}
+                    variant="accent"
+                    disabled={
+                      decisionPending ||
+                      !view.runtimeReady ||
+                      !view.canAffordDraw
+                    }
+                    testId="gamble-four-suit-draw"
+                    onPress={() => {
+                      setDecisionPending(true);
+                      onDraw(selectedCard.entryId);
+                    }}
+                  />
+                  <GlassButton
+                    label="Leave"
+                    size={layout === "mobile" ? "compact" : "standard"}
+                    disabled={decisionPending}
+                    testId="gamble-four-suit-leave-selected"
+                    onPress={onLeave}
+                  />
+                </>
+              ) : actionsVisible ? (
+                <>
+                  {view.canPlayAgain && (
+                    <GlassButton
+                      label="Play Again"
+                      size={layout === "mobile" ? "compact" : "standard"}
+                      variant="accent"
+                      disabled={decisionPending}
+                      testId="gamble-four-suit-play-again"
+                      onPress={() => {
+                        setDecisionPending(true);
+                        onPlayAgain();
+                      }}
+                    />
+                  )}
+                  <GlassButton
+                    label="Leave"
+                    size={layout === "mobile" ? "compact" : "standard"}
+                    testId="gamble-four-suit-leave-after-result"
+                    onPress={onLeave}
+                  />
+                </>
+              ) : null}
             </div>
           </main>
         );

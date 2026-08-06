@@ -4568,7 +4568,7 @@
   "WagerPrizeCard": [
     {
       "name": "prizeId",
-      "tsType": "WagerPrizeCardId",
+      "tsType": "\"six\" | \"nine\" | \"jack\" | \"ladder-climb\" | \"starway-1\" | \"starway-2\" | \"starway-3\" | \"four-suit-reprise\"",
       "unionMembers": [
         "six",
         "nine",
@@ -4576,7 +4576,8 @@
         "ladder-climb",
         "starway-1",
         "starway-2",
-        "starway-3"
+        "starway-3",
+        "four-suit-reprise"
       ],
       "required": true,
       "defaultValue": null,
@@ -4588,7 +4589,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Inclusive rank range shown as authored compact notation."
+      "description": "Draw condition shown as authored compact notation."
     },
     {
       "name": "size",
@@ -4641,7 +4642,7 @@
       "name": "essenceReward",
       "tsType": "number",
       "unionMembers": [],
-      "required": true,
+      "required": false,
       "defaultValue": null,
       "description": "Essence awarded on a win."
     },
@@ -4649,7 +4650,7 @@
       "name": "rewardDreamsign",
       "tsType": "Dreamsign | null",
       "unionMembers": [],
-      "required": true,
+      "required": false,
       "defaultValue": null,
       "description": "Dreamsign appended to the Essence reward, when present."
     }

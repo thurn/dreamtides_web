@@ -41,6 +41,9 @@ describe("parseRuntimeConfig", () => {
       expect(
         parseRuntimeConfig("?gambleGame=starway-stairs").gambleGameId,
       ).toBe("starway-stairs");
+      expect(
+        parseRuntimeConfig("?gambleGame=four-suit-reprise").gambleGameId,
+      ).toBe("four-suit-reprise");
     });
 
     it("uses random selection for absent or unrecognized values", () => {

@@ -9,12 +9,16 @@ import type {
 import { LayerName } from "../../types/layer-name";
 import type {
   Dreamsign,
+  FourSuitRepriseSiteRuntime,
+  FourSuitRepriseTarget,
   GravokWagerSiteRuntime,
   JourneyState,
   SiteState,
   StarwayStairsSiteRuntime,
   TidemarkLadderClimbSiteRuntime,
 } from "../../types/journey";
+import type { CardData } from "../../types/cards";
+import { asCardId, asCardName } from "../../types/card-identity";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
 import {
@@ -126,6 +130,10 @@ function apply(
     | "SETTLE_STARWAY_STAIRS"
     | "CASH_OUT_STARWAY_STAIRS"
     | "PLAY_AGAIN_STARWAY_STAIRS"
+    | "DRAW_FOUR_SUIT_REPRISE"
+    | "SETTLE_FOUR_SUIT_REPRISE"
+    | "CHOOSE_FOUR_SUIT_REPRISE_TRANSFIGURATION"
+    | "PLAY_AGAIN_FOUR_SUIT_REPRISE"
     | "COMPLETE_SITE",
   payload: Record<string, unknown>,
 ) {
@@ -885,5 +893,266 @@ describe("Starway Stairs", () => {
     );
     expect(thirdRetry.outcome).toBe("bounced");
     expect(thirdRetry.state).toEqual(thirdRound.state);
+  });
+});
+
+function fourSuitCard(index: number): CardData {
+  return {
+    name: asCardName(`Fixture Card ${String(index)}`),
+    id: asCardId(`fixture-card-${String(index)}`),
+    cardNumber: index,
+    cardType: "Character",
+    subtype: "",
+    isStarter: false,
+    energyCost: 3,
+    spark: 2,
+    isFast: false,
+    renderedText: "Gain 2 spark.",
+    imageNumber: index,
+    artOwned: false,
+  };
+}
+
+function fourSuitTarget(index: number, entryId = `deck-${String(index)}`): FourSuitRepriseTarget {
+  const card = fourSuitCard(index);
+  return {
+    entryId,
+    cardId: card.id,
+    cardNumber: card.cardNumber,
+    cardSnapshot: card,
+    transfigurationOffers: [{
+      entryId,
+      type: "Empowered",
+      effectDescription: "Fixture form.",
+      effectDetails: {},
+      previewCard: { ...card, energyCost: 2 },
+      essenceCost: 0,
+    }],
+  };
+}
+
+function fourSuitRuntime(
+  cards: readonly StandardPlayingCard[],
+  overrides: Partial<FourSuitRepriseSiteRuntime> = {},
+): FourSuitRepriseSiteRuntime {
+  return {
+    kind: "gamble",
+    gameId: "four-suit-reprise",
+    rulesVersion: "fixture-four-suit-rules",
+    isFarpoint: false,
+    drawCost: 25,
+    shuffleCommitments: ["round-1", "round-2", "round-3"],
+    committedCards: [...cards],
+    targets: [fourSuitTarget(1), fourSuitTarget(2), fourSuitTarget(3)],
+    rounds: [],
+    phase: "choose",
+    ...overrides,
+  };
+}
+
+function fourSuitStateWith(
+  cards: readonly StandardPlayingCard[],
+  runtimeOverrides: Partial<FourSuitRepriseSiteRuntime> = {},
+): FoldState {
+  const targets = runtimeOverrides.targets ?? [
+    fourSuitTarget(1),
+    fourSuitTarget(2),
+    fourSuitTarget(3),
+  ];
+  const base = stateWith("2", {
+    deck: targets.map((target) => ({
+      entryId: target.entryId,
+      cardNumber: target.cardNumber,
+      transfiguration: null,
+      isBane: false,
+    })),
+  });
+  return {
+    ...base,
+    journey: {
+      ...base.journey,
+      siteRuntime: {
+        [SITE_ID]: fourSuitRuntime(cards, { ...runtimeOverrides, targets }),
+      },
+    },
+  };
+}
+
+function drawFourSuit(state: FoldState, entryId: string) {
+  return apply(state, "DRAW_FOUR_SUIT_REPRISE", { siteId: SITE_ID, entryId });
+}
+
+function settleFourSuit(state: FoldState) {
+  const siteRuntime = state.journey.siteRuntime[SITE_ID];
+  if (
+    siteRuntime?.kind !== "gamble" ||
+    siteRuntime.gameId !== "four-suit-reprise"
+  ) {
+    throw new Error("expected Four-Suit Reprise runtime");
+  }
+  const round = siteRuntime.rounds[siteRuntime.rounds.length - 1];
+  if (round === undefined) throw new Error("expected Four-Suit Reprise round");
+  return apply(state, "SETTLE_FOUR_SUIT_REPRISE", {
+    siteId: SITE_ID,
+    shuffleCommitment: round.shuffleCommitment,
+  });
+}
+
+describe("Four-Suit Reprise", () => {
+  const followupCards: readonly StandardPlayingCard[] = [
+    { rank: "4", suit: "diamonds" },
+    { rank: "7", suit: "hearts" },
+    { rank: "Q", suit: "clubs" },
+  ];
+
+  it("charges one draw and grants Diamonds while leaving the target unchanged", () => {
+    const drawn = drawFourSuit(fourSuitStateWith(followupCards), "deck-1");
+    expect(drawn.outcome).toBe("applied");
+    expect(drawn.state.journey.essence).toBe(175);
+    expect(drawn.state.journey.deck).toHaveLength(3);
+    expect(
+      apply(drawn.state, "COMPLETE_SITE", { siteId: SITE_ID }).outcome,
+    ).toBe("bounced");
+
+    const settled = settleFourSuit(drawn.state);
+    expect(settled.outcome).toBe("applied");
+    expect(settled.state.journey.essence).toBe(225);
+    expect(settled.state.journey.deck).toHaveLength(3);
+    expect(settled.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      phase: "result",
+      rounds: [{
+        targetEntryId: "deck-1",
+        targetCardId: "fixture-card-1",
+        outcome: "essence",
+        resultRevealed: true,
+        resultSettled: true,
+        essenceGained: 50,
+      }],
+    });
+  });
+
+  it("duplicates on Hearts and purges on Clubs", () => {
+    const heartsState = fourSuitStateWith([
+      { rank: "7", suit: "hearts" },
+      followupCards[1],
+      followupCards[2],
+    ]);
+    const duplicated = settleFourSuit(
+      drawFourSuit(heartsState, "deck-1").state,
+    );
+    expect(duplicated.state.journey.deck).toHaveLength(4);
+    expect(duplicated.state.journey.deck[3]).toMatchObject({
+      cardNumber: 1,
+      transfiguration: null,
+      isBane: false,
+    });
+    expect(duplicated.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      rounds: [{ outcome: "duplication", resultSettled: true }],
+    });
+
+    const clubsState = fourSuitStateWith([
+      { rank: "Q", suit: "clubs" },
+      followupCards[1],
+      followupCards[2],
+    ]);
+    const purged = settleFourSuit(
+      drawFourSuit(clubsState, "deck-1").state,
+    );
+    expect(purged.state.journey.deck.map((entry) => entry.entryId)).toEqual([
+      "deck-2",
+      "deck-3",
+    ]);
+    expect(purged.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      rounds: [{ outcome: "purge", resultSettled: true }],
+    });
+  });
+
+  it("requires a free chosen Transfiguration after Spades", () => {
+    const drawn = drawFourSuit(
+      fourSuitStateWith([
+        { rank: "A", suit: "spades" },
+        followupCards[1],
+        followupCards[2],
+      ]),
+      "deck-1",
+    );
+    const revealed = settleFourSuit(drawn.state);
+    expect(revealed.outcome).toBe("applied");
+    expect(revealed.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      rounds: [{
+        outcome: "transfiguration",
+        resultRevealed: true,
+        resultSettled: false,
+      }],
+    });
+    expect(
+      apply(revealed.state, "COMPLETE_SITE", { siteId: SITE_ID }).outcome,
+    ).toBe("bounced");
+
+    const chosen = apply(
+      revealed.state,
+      "CHOOSE_FOUR_SUIT_REPRISE_TRANSFIGURATION",
+      {
+        siteId: SITE_ID,
+        shuffleCommitment: "round-1",
+        type: "Empowered",
+      },
+    );
+    expect(chosen.outcome).toBe("applied");
+    expect(chosen.state.journey.deck[0]?.transfiguration).toBe("Empowered");
+    expect(chosen.state.journey.essence).toBe(175);
+    expect(chosen.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      rounds: [{
+        resultSettled: true,
+        chosenTransfiguration: "Empowered",
+      }],
+    });
+  });
+
+  it("uses different card UUIDs across no more than three paid rounds", () => {
+    const duplicateCardTarget = fourSuitTarget(1, "deck-1-copy");
+    const targets = [
+      fourSuitTarget(1),
+      duplicateCardTarget,
+      fourSuitTarget(2),
+      fourSuitTarget(3),
+      fourSuitTarget(4),
+    ];
+    let state = settleFourSuit(
+      drawFourSuit(fourSuitStateWith(followupCards, { targets }), "deck-1").state,
+    ).state;
+    let replay = apply(state, "PLAY_AGAIN_FOUR_SUIT_REPRISE", {
+      siteId: SITE_ID,
+      previousShuffleCommitment: "round-1",
+    });
+    expect(replay.outcome).toBe("applied");
+    expect(drawFourSuit(replay.state, "deck-1-copy").outcome).toBe("bounced");
+
+    state = settleFourSuit(drawFourSuit(replay.state, "deck-2").state).state;
+    replay = apply(state, "PLAY_AGAIN_FOUR_SUIT_REPRISE", {
+      siteId: SITE_ID,
+      previousShuffleCommitment: "round-2",
+    });
+    expect(replay.outcome).toBe("applied");
+    state = settleFourSuit(drawFourSuit(replay.state, "deck-3").state).state;
+
+    const fourthRound = apply(state, "PLAY_AGAIN_FOUR_SUIT_REPRISE", {
+      siteId: SITE_ID,
+      previousShuffleCommitment: "round-3",
+    });
+    expect(fourthRound.outcome).toBe("bounced");
+    expect(state.journey.essence).toBe(175);
+    expect(state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      rounds: [{ roundNumber: 1 }, { roundNumber: 2 }, { roundNumber: 3 }],
+    });
+  });
+
+  it("uses the Farpoint draw cost", () => {
+    const drawn = drawFourSuit(
+      fourSuitStateWith(followupCards, { isFarpoint: true, drawCost: 15 }),
+      "deck-1",
+    );
+    expect(drawn.outcome).toBe("applied");
+    expect(drawn.state.journey.essence).toBe(185);
   });
 });

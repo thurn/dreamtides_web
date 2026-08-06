@@ -11,6 +11,7 @@ import type {
   CardChoiceSiteRuntime,
   CardChoiceTransfigurationOffer,
   DeckEntry,
+  FourSuitRepriseSiteRuntime,
   GambleSiteRuntime,
   StarwayStairsSiteRuntime,
   TidemarkLadderClimbSiteRuntime,
@@ -37,6 +38,11 @@ import {
   STARWAY_STAIRS_TIERS,
   starwayStairsWagerAmount,
 } from "../../data/starway-stairs";
+import {
+  FOUR_SUIT_REPRISE_MAX_ROUNDS,
+  FOUR_SUIT_REPRISE_RULES_VERSION,
+  fourSuitRepriseDrawCost,
+} from "../../data/four-suit-reprise";
 import { createDreamsign } from "../../data/dreamsigns";
 import { generateRewardSiteData } from "../../rewards/reward-generator";
 import { drawDreamsignOptions } from "../../dreamsign/dreamsign-pool";
@@ -75,6 +81,7 @@ import {
   buildRewardSelectionContext,
   SELECTION_RULES_VERSION,
 } from "../../reward-selection";
+import { resolveDeckEntryCard } from "../../card-type-change";
 
 function asString(value: unknown): string | null {
   return typeof value === "string" ? value : null;
@@ -284,6 +291,57 @@ function buildStarwayStairsRuntime(
   };
 }
 
+function buildFourSuitRepriseRuntime(
+  journey: JourneyState,
+  site: SiteState,
+  content: JourneyContent,
+  rng: () => number,
+): FourSuitRepriseSiteRuntime | null {
+  const targets = journey.deck.flatMap((entry) => {
+    if (entry.isBane || entry.transfiguration !== null) return [];
+    const baseCard = content.cardDatabase.get(entry.cardNumber);
+    if (baseCard === undefined) return [];
+    const cardSnapshot = resolveDeckEntryCard(baseCard, entry);
+    const forms = offeredTransfigurationForms(cardSnapshot, null);
+    if (forms.length === 0) return [];
+    return [{
+      entryId: entry.entryId,
+      cardId: baseCard.id,
+      cardNumber: entry.cardNumber,
+      cardSnapshot,
+      transfigurationOffers: forms.map((offer) => ({
+        entryId: entry.entryId,
+        type: offer.type,
+        effectDescription: offer.description,
+        effectDetails: transfigurationEffectDetails(offer, cardSnapshot),
+        previewCard: offer.previewCard,
+        essenceCost: 0,
+      })),
+    }];
+  });
+  if (targets.length === 0) return null;
+
+  const commitments = Array.from(
+    { length: FOUR_SUIT_REPRISE_MAX_ROUNDS },
+    () => ({
+      shuffleCommitment: gambleShuffleCommitment(rng),
+      card: gambleCommittedCard(rng),
+    }),
+  );
+  return {
+    kind: "gamble",
+    gameId: "four-suit-reprise",
+    rulesVersion: FOUR_SUIT_REPRISE_RULES_VERSION,
+    isFarpoint: site.isEnhanced,
+    drawCost: fourSuitRepriseDrawCost(site.isEnhanced),
+    shuffleCommitments: commitments.map((entry) => entry.shuffleCommitment),
+    committedCards: commitments.map((entry) => entry.card),
+    targets,
+    rounds: [],
+    phase: "choose",
+  };
+}
+
 function buildGambleRuntime(
   journey: JourneyState,
   site: SiteState,
@@ -293,11 +351,12 @@ function buildGambleRuntime(
 ): GambleSiteRuntime {
   const gameId =
     requestedGameId ??
-    (rng() < 1 / 3
-      ? "gravok-three-gate-wager"
-      : rng() < 0.5
-        ? "tidemark-ladder-climb"
-        : "starway-stairs");
+    ([
+      "gravok-three-gate-wager",
+      "tidemark-ladder-climb",
+      "starway-stairs",
+      "four-suit-reprise",
+    ] as const)[Math.floor(rng() * 4)];
   if (gameId === "tidemark-ladder-climb") {
     const ladderRuntime = buildTidemarkLadderClimbRuntime(
       journey,
@@ -309,6 +368,10 @@ function buildGambleRuntime(
   }
   if (gameId === "starway-stairs") {
     return buildStarwayStairsRuntime(site, content, rng);
+  }
+  if (gameId === "four-suit-reprise") {
+    return buildFourSuitRepriseRuntime(journey, site, content, rng) ??
+      buildGravokWagerRuntime(journey, site, content, rng);
   }
   return buildGravokWagerRuntime(journey, site, content, rng);
 }

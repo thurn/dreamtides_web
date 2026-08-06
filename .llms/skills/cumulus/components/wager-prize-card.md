@@ -18,15 +18,15 @@ When a Dreamsign is present, the entire prize face is its hover and press reveal
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `prizeId` | `WagerPrizeCardId` = `"six" \| "nine" \| "jack" \| "ladder-climb" \| "starway-1" \| "starway-2" \| "starway-3"` | yes | — | Stable Gamble choice represented by this prize object. |
-| `targetLabel` | `string` | yes | — | Inclusive rank range shown as authored compact notation. |
+| `prizeId` | `"six" \| "nine" \| "jack" \| "ladder-climb" \| "starway-1" \| "starway-2" \| "starway-3" \| "four-suit-reprise"` | yes | — | Stable Gamble choice represented by this prize object. |
+| `targetLabel` | `string` | yes | — | Draw condition shown as authored compact notation. |
 | `size` | `WagerPrizeCardSize` = `"wagerCompact" \| "wager"` | no | — | Named desktop or mobile square size. Defaults to `wager`. |
 | `drawnCard` | `{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } \| null` | yes | — | Committed card shown on the reverse face after a bet. |
 | `revealDrawnCard` | `boolean` | no | — | Turn the prize face over to its committed card. |
 | `dreamsignTestId` | `string` | no | — | Optional stable selector for the prize Dreamsign name. |
 | `emphasis` | `WagerPrizeCardEmphasis` = `"standard" \| "current" \| "muted"` | no | — | Accent current tier, foreground-muted alternative, or standard priority. |
-| `essenceReward` | `number` | yes | — | Essence awarded on a win. |
-| `rewardDreamsign` | `Dreamsign \| null` | yes | — | Dreamsign appended to the Essence reward, when present. |
+| `essenceReward` | `number` | no | — | Essence awarded on a win. |
+| `rewardDreamsign` | `Dreamsign \| null` | no | — | Dreamsign appended to the Essence reward, when present. |
 
 ## Usage
 
@@ -53,6 +53,17 @@ When a Dreamsign is present, the entire prize face is its hover and press reveal
   rewardDreamsign={dreamsign}
   drawnCard={{ rank: "Q", suit: "hearts" }}
   revealDrawnCard
+/>
+
+```
+
+### Four-Suit Reprise
+
+```tsx
+<WagerPrizeCard
+  prizeId="four-suit-reprise"
+  targetLabel="a Suit"
+  drawnCard={{ rank: "Q", suit: "spades" }}
 />
 
 ```

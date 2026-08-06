@@ -2,10 +2,13 @@ import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import type {
   GambleGateView,
   GambleSiteView,
+  FourSuitRepriseCardView,
+  FourSuitRepriseSiteView,
   GravokWagerSiteView,
   LadderClimbSiteView,
   StarwayStairsSiteView,
 } from "../../cumulus/screens/GambleSiteScreen";
+import type { TransfigurationCandidateView } from "../../cumulus/screens/TransfigurationSiteScreen";
 import {
   GRAVOK_GATE_RULES,
   GRAVOK_WAGER_MAX_RETRIES,
@@ -24,11 +27,18 @@ import {
   starwayStairsDrawTargetLabel,
   starwayStairsEssenceReward,
 } from "../../data/starway-stairs";
+import {
+  eligibleFourSuitRepriseTargets,
+  FOUR_SUIT_REPRISE_MAX_ROUNDS,
+} from "../../data/four-suit-reprise";
+import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import { guideForSiteType } from "../../data/dreamscapes";
 import type { DreamGuideContent } from "../../types/content";
 import type { AtlasData } from "../../types/atlas-data";
 import type {
   DreamscapeNode,
+  FourSuitRepriseSiteRuntime,
+  FourSuitRepriseTarget,
   GambleSiteRuntime,
   GravokWagerSiteRuntime,
   JourneyState,
@@ -44,6 +54,8 @@ export const GRAVOK_WAGER_GUIDE_LINE =
   "The game's called Three Gates. Place your bet on the next card drawn!";
 export const STARWAY_STAIRS_GUIDE_LINE =
   "Starway Stairs is the game. Keep betting to see how high you can go!";
+export const FOUR_SUIT_REPRISE_GUIDE_LINE =
+  "Four-Suit Reprise is the game. Choose one card; the suit decides what becomes of it.";
 
 /** The next gate in display order supplies the non-selected reveal object. */
 export function gravokRevealGateId(selectedGateId: GravokGateId): GravokGateId {
@@ -315,6 +327,142 @@ function buildStarwayStairsSiteView(params: {
   };
 }
 
+function buildFourSuitTransfigurationCandidate(
+  target: FourSuitRepriseTarget,
+): TransfigurationCandidateView {
+  return {
+    entryId: target.entryId,
+    model: {
+      cardId: target.cardSnapshot.id,
+      displaySnapshot: target.cardSnapshot,
+    },
+    availability: "available",
+    reforgedType: null,
+    forms: target.transfigurationOffers.map((offer) => {
+      const preview = buildTransfigurationDisplay(
+        target.cardSnapshot,
+        offer.type,
+      );
+      return {
+        type: offer.type,
+        description: offer.effectDescription,
+        effectDetails: offer.effectDetails,
+        essenceCost: 0,
+        affordable: true,
+        previewModel: {
+          cardId: target.cardSnapshot.id,
+          displaySnapshot: preview.card,
+          transfiguration: preview.display,
+        },
+      };
+    }),
+  };
+}
+
+function fourSuitCardView(
+  target: FourSuitRepriseTarget,
+): FourSuitRepriseCardView {
+  return {
+    entryId: target.entryId,
+    cardId: target.cardId,
+    model: {
+      cardId: target.cardSnapshot.id,
+      displaySnapshot: target.cardSnapshot,
+    },
+  };
+}
+
+function buildFourSuitRepriseSiteView(params: {
+  state: JourneyState;
+  sceneNode: DreamscapeNode | null;
+  site: SiteState & { type: "Gamble" };
+  guide: DreamGuideContent | null;
+  atlasData: AtlasData;
+  runtime: FourSuitRepriseSiteRuntime;
+}): FourSuitRepriseSiteView {
+  const { runtime } = params;
+  const latestRound = runtime.rounds[runtime.rounds.length - 1] ?? null;
+  const availableTargets = eligibleFourSuitRepriseTargets({
+    targets: runtime.targets,
+    deck: params.state.deck,
+    usedCardIds: runtime.rounds.map((round) => round.targetCardId),
+  });
+  const target = latestRound === null
+    ? null
+    : runtime.targets.find(
+        (candidate) => candidate.entryId === latestRound.targetEntryId,
+      ) ?? null;
+  const chosenPreview =
+    target === null || latestRound?.chosenTransfiguration === undefined
+      ? null
+      : buildTransfigurationDisplay(
+          target.cardSnapshot,
+          latestRound.chosenTransfiguration,
+        );
+  const resultTarget = target === null
+    ? null
+    : {
+        ...fourSuitCardView(target),
+        model: chosenPreview === null
+          ? fourSuitCardView(target).model
+          : {
+              cardId: target.cardSnapshot.id,
+              displaySnapshot: chosenPreview.card,
+              transfiguration: chosenPreview.display,
+            },
+      };
+  const cards = availableTargets.map(fourSuitCardView);
+  const roundNumber = (
+    runtime.phase === "choose"
+      ? Math.min(runtime.rounds.length + 1, FOUR_SUIT_REPRISE_MAX_ROUNDS)
+      : latestRound?.roundNumber ?? 1
+  ) as 1 | 2 | 3;
+
+  return {
+    gameId: "four-suit-reprise",
+    siteId: params.site.id,
+    ...commonGambleView({
+      sceneNode: params.sceneNode,
+      guide: params.guide,
+      guideLine: FOUR_SUIT_REPRISE_GUIDE_LINE,
+      randomSiteGuideLine: params.site.randomSite?.materialized === true
+        ? params.atlasData.randomSite.guideLine
+        : null,
+    }),
+    isFarpoint: runtime.isFarpoint,
+    runtimeReady: true,
+    drawCost: runtime.drawCost,
+    canAffordDraw: params.state.essence >= runtime.drawCost,
+    roundNumber,
+    maxRounds: FOUR_SUIT_REPRISE_MAX_ROUNDS,
+    phase: runtime.phase,
+    cards,
+    result:
+      latestRound === null || target === null || resultTarget === null
+        ? null
+        : {
+            id: `${params.site.id}:${latestRound.shuffleCommitment}:${latestRound.targetEntryId}`,
+            roundNumber: latestRound.roundNumber,
+            card: latestRound.card,
+            outcome: latestRound.outcome,
+            resultRevealed: latestRound.resultRevealed,
+            resultSettled: latestRound.resultSettled,
+            essenceGained: latestRound.essenceGained,
+            target: resultTarget,
+            transfigurationCandidate:
+              buildFourSuitTransfigurationCandidate(target),
+            chosenTransfiguration:
+              latestRound.chosenTransfiguration ?? null,
+          },
+    canPlayAgain:
+      runtime.phase === "result" &&
+      latestRound?.resultSettled === true &&
+      runtime.rounds.length < FOUR_SUIT_REPRISE_MAX_ROUNDS &&
+      cards.length > 0 &&
+      params.state.essence >= runtime.drawCost,
+  };
+}
+
 /** Build the selected Gamble game's view without exposing future outcomes. */
 export function buildGambleSiteView(params: {
   state: JourneyState;
@@ -333,6 +481,9 @@ export function buildGambleSiteView(params: {
   }
   if (runtime.gameId === "starway-stairs") {
     return buildStarwayStairsSiteView({ ...params, runtime });
+  }
+  if (runtime.gameId === "four-suit-reprise") {
+    return buildFourSuitRepriseSiteView({ ...params, runtime });
   }
   return buildGravokWagerSiteView({ ...params, runtime });
 }

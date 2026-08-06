@@ -34,7 +34,8 @@ export type GravokGateId = "six" | "nine" | "jack";
 export type GambleGameId =
   | "gravok-three-gate-wager"
   | "tidemark-ladder-climb"
-  | "starway-stairs";
+  | "starway-stairs"
+  | "four-suit-reprise";
 
 /** One-based attempt number in Tidemark Ladder Climb. */
 export type TidemarkLadderClimbAttemptNumber = 1 | 2 | 3 | 4;

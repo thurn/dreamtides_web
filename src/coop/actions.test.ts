@@ -136,6 +136,14 @@ function captureAllDrafts(): EventDraft[] {
   void actions.settleStarwayStairs("site-1", "commitment-1");
   void actions.cashOutStarwayStairs("site-1", "commitment-1");
   void actions.playAgainStarwayStairs("site-1", "commitment-1");
+  void actions.drawFourSuitReprise("site-1", "entry-1");
+  void actions.settleFourSuitReprise("site-1", "commitment-1");
+  void actions.chooseFourSuitRepriseTransfiguration(
+    "site-1",
+    "commitment-1",
+    "Empowered",
+  );
+  void actions.playAgainFourSuitReprise("site-1", "commitment-1");
   void actions.acceptMerchantOffer("site-1");
   void actions.declineMerchant("site-1");
   void actions.buyShopSlot("site-1", 0);

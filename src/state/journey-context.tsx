@@ -94,6 +94,21 @@ export interface JourneyMutations {
     siteId: string,
     previousShuffleCommitment: string,
   ) => void;
+  /** Pay for one Four-Suit Reprise draw against the selected deck entry. */
+  drawFourSuitReprise: (siteId: string, entryId: string) => void;
+  /** Reveal and apply the current Four-Suit Reprise outcome. */
+  settleFourSuitReprise: (siteId: string, shuffleCommitment: string) => void;
+  /** Apply the player's free chosen form after a Spades result. */
+  chooseFourSuitRepriseTransfiguration: (
+    siteId: string,
+    shuffleCommitment: string,
+    type: TransfigurationType,
+  ) => void;
+  /** Move the shared visit into its next distinct-card choice. */
+  playAgainFourSuitReprise: (
+    siteId: string,
+    previousShuffleCommitment: string,
+  ) => void;
   ensureRewardSiteRuntime: (siteId: string) => void;
   /**
    * Accepts the Dreamsign Reward at the given site. When the player is at the

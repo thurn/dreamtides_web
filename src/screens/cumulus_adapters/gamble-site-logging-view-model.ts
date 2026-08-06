@@ -8,6 +8,11 @@ import {
   starwayStairsEssenceReward,
   starwayStairsTierRule,
 } from "../../data/starway-stairs";
+import {
+  FOUR_SUIT_REPRISE_OUTCOMES,
+  FOUR_SUIT_REPRISE_ODDS_DENOMINATOR,
+  FOUR_SUIT_REPRISE_ODDS_NUMERATOR,
+} from "../../data/four-suit-reprise";
 import { logEventOnce } from "../../logging";
 import type { GambleSiteRuntime, SiteState } from "../../types/journey";
 import type { EconomyData } from "../../types/economy-data";
@@ -27,6 +32,52 @@ export function logGamblePrepared(
   view: GambleSiteView,
   economyData: EconomyData,
 ): void {
+  if (
+    runtime.gameId === "four-suit-reprise" &&
+    view.gameId === "four-suit-reprise"
+  ) {
+    logEventOnce(
+      `Gamble:${siteId}:prepared:${runtime.shuffleCommitments.join(":")}`,
+      "gamble_game_prepared",
+      {
+        siteId,
+        gameId: runtime.gameId,
+        rulesVersion: runtime.rulesVersion,
+        isFarpoint: runtime.isFarpoint,
+        drawCost: runtime.drawCost,
+        maxRounds: runtime.shuffleCommitments.length,
+        shuffleCommitments: runtime.shuffleCommitments,
+        targetCandidates: runtime.targets.map((target) => ({
+          entryId: target.entryId,
+          cardId: target.cardId,
+          transfigurationTypes: target.transfigurationOffers.map(
+            (offer) => offer.type,
+          ),
+        })),
+        outcomes: FOUR_SUIT_REPRISE_OUTCOMES.map((rule) => ({
+          suit: rule.suit,
+          outcome: rule.outcome,
+        })),
+        oddsNumerator: FOUR_SUIT_REPRISE_ODDS_NUMERATOR,
+        oddsDenominator: FOUR_SUIT_REPRISE_ODDS_DENOMINATOR,
+      },
+    );
+    if (runtime.phase === "choose" && runtime.rounds.length > 0) {
+      const previous = runtime.rounds[runtime.rounds.length - 1];
+      logEventOnce(
+        `Gamble:${siteId}:four-suit-play-again:${previous?.shuffleCommitment ?? "unknown"}`,
+        "gamble_game_prepared",
+        {
+          siteId,
+          gameId: runtime.gameId,
+          playerDecision: "play_again",
+          completedRounds: runtime.rounds.length,
+          remainingTargetCardIds: view.cards.map((card) => card.cardId),
+        },
+      );
+    }
+    return;
+  }
   if (
     runtime.gameId === "gravok-three-gate-wager" &&
     view.gameId === "gravok-three-gate-wager"
@@ -124,6 +175,28 @@ export function logGambleResolved(
   view: GambleSiteView,
   economyData: EconomyData,
 ): void {
+  if (runtime.gameId === "four-suit-reprise") {
+    const result = runtime.rounds[runtime.rounds.length - 1];
+    if (result === undefined) return;
+    logEventOnce(
+      `Gamble:${siteId}:four-suit-result:${result.shuffleCommitment}`,
+      "gamble_wager_resolved",
+      {
+        siteId,
+        gameId: runtime.gameId,
+        rulesVersion: runtime.rulesVersion,
+        roundNumber: result.roundNumber,
+        payment: result.costPaid,
+        selectedEntryId: result.targetEntryId,
+        selectedCardId: result.targetCardId,
+        revealedCard: result.card,
+        resolvedSuitOutcome: result.outcome,
+        oddsNumerator: FOUR_SUIT_REPRISE_ODDS_NUMERATOR,
+        oddsDenominator: FOUR_SUIT_REPRISE_ODDS_DENOMINATOR,
+      },
+    );
+    return;
+  }
   if (
     runtime.gameId === "gravok-three-gate-wager" &&
     view.gameId === "gravok-three-gate-wager"
@@ -214,6 +287,32 @@ export function logGambleSettled(
   view: GambleSiteView,
   economyData: EconomyData,
 ): void {
+  if (runtime.gameId === "four-suit-reprise") {
+    const result = runtime.rounds[runtime.rounds.length - 1];
+    if (result === undefined || !result.resultSettled) return;
+    logEventOnce(
+      `Gamble:${siteId}:four-suit-settled:${result.shuffleCommitment}`,
+      "gamble_wager_settled",
+      {
+        siteId,
+        gameId: runtime.gameId,
+        roundNumber: result.roundNumber,
+        payment: result.costPaid,
+        selectedEntryId: result.targetEntryId,
+        selectedCardId: result.targetCardId,
+        revealedCard: result.card,
+        finalEffect: result.outcome,
+        essenceGained: result.essenceGained,
+        duplicatedEntryId: result.duplicatedEntryId ?? null,
+        chosenTransfiguration: result.chosenTransfiguration ?? null,
+        terminalReason:
+          runtime.rounds.length >= runtime.shuffleCommitments.length
+            ? "round_limit"
+            : "round_settled",
+      },
+    );
+    return;
+  }
   if (runtime.gameId === "gravok-three-gate-wager") {
     if (runtime.result?.essenceSettled !== true) return;
     logEventOnce(
@@ -253,7 +352,10 @@ export function logGambleSettled(
     return;
   }
 
-  if (runtime.result?.resultSettled !== true) return;
+  if (
+    runtime.gameId !== "tidemark-ladder-climb" ||
+    runtime.result?.resultSettled !== true
+  ) return;
   logEventOnce(
     `Gamble:${siteId}:ladder-settled:${runtime.shuffleCommitments[runtime.result.attemptNumber - 1] ?? "unknown"}`,
     "gamble_wager_settled",

@@ -1,10 +1,22 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { artRef } from "../../cumulus/primitives/art";
+import type {
+  FourSuitRepriseSiteView,
+  LadderClimbSiteView,
+} from "../../cumulus/screens/GambleSiteScreen";
 import { getLogEntries, resetLog } from "../../logging";
-import type { TidemarkLadderClimbSiteRuntime } from "../../types/journey";
-import type { LadderClimbSiteView } from "../../cumulus/screens/GambleSiteScreen";
-import { logGambleSettled } from "./gamble-site-logging-view-model";
 import { economyFixture } from "../../testing/economy-fixture";
+import { asCardId, asCardName } from "../../types/card-identity";
+import type { CardData } from "../../types/cards";
+import type {
+  FourSuitRepriseSiteRuntime,
+  TidemarkLadderClimbSiteRuntime,
+} from "../../types/journey";
+import {
+  logGamblePrepared,
+  logGambleResolved,
+  logGambleSettled,
+} from "./gamble-site-logging-view-model";
 
 const REWARD_DREAMSIGN = {
   id: "00000000-0000-4000-8000-000000000025",
@@ -86,6 +98,98 @@ describe("gamble-site-logging-view-model", () => {
       netEssenceChange: 25,
       dreamsignId: REWARD_DREAMSIGN.id,
       dreamsignAwarded: true,
+    });
+  });
+
+  it("records enough Four-Suit data to reconstruct the paid deck mutation", () => {
+    const card: CardData = {
+      name: asCardName("Fixture Card"),
+      id: asCardId("00000000-0000-4000-8000-000000000101"),
+      cardNumber: 101,
+      cardType: "Character",
+      subtype: "",
+      isStarter: false,
+      energyCost: 2,
+      spark: 2,
+      isFast: false,
+      renderedText: "Materialized: Gain 1 Essence.",
+      imageNumber: 101,
+      artOwned: true,
+    };
+    const runtime: FourSuitRepriseSiteRuntime = {
+      kind: "gamble",
+      gameId: "four-suit-reprise",
+      rulesVersion: "fixture-four-suit-rules",
+      isFarpoint: false,
+      drawCost: 25,
+      shuffleCommitments: ["round-1", "round-2", "round-3"],
+      committedCards: [
+        { rank: "7", suit: "hearts" },
+        { rank: "4", suit: "diamonds" },
+        { rank: "Q", suit: "clubs" },
+      ],
+      targets: [{
+        entryId: "entry-101",
+        cardId: card.id,
+        cardNumber: card.cardNumber,
+        cardSnapshot: card,
+        transfigurationOffers: [{
+          entryId: "entry-101",
+          type: "Empowered",
+          effectDescription: "Fixture form.",
+          effectDetails: { fixture: true },
+          previewCard: { ...card, energyCost: 1 },
+          essenceCost: 0,
+        }],
+      }],
+      rounds: [{
+        roundNumber: 1,
+        shuffleCommitment: "round-1",
+        card: { rank: "7", suit: "hearts" },
+        targetEntryId: "entry-101",
+        targetCardId: card.id,
+        costPaid: 25,
+        outcome: "duplication",
+        resultRevealed: true,
+        resultSettled: true,
+        essenceGained: 0,
+        duplicatedEntryId: "duplicate-101",
+      }],
+      phase: "result",
+    };
+    const view = {
+      gameId: "four-suit-reprise",
+      cards: [],
+    } as unknown as FourSuitRepriseSiteView;
+
+    logGamblePrepared("fixture-site", runtime, view, economyFixture());
+    logGambleResolved("fixture-site", runtime, view, economyFixture());
+    logGambleSettled("fixture-site", runtime, view, economyFixture());
+
+    expect(getLogEntries()).toHaveLength(3);
+    expect(getLogEntries()[0]).toMatchObject({
+      event: "gamble_game_prepared",
+      gameId: "four-suit-reprise",
+      drawCost: 25,
+      outcomes: [
+        { suit: "spades", outcome: "transfiguration" },
+        { suit: "diamonds", outcome: "essence" },
+        { suit: "hearts", outcome: "duplication" },
+        { suit: "clubs", outcome: "purge" },
+      ],
+    });
+    expect(getLogEntries()[1]).toMatchObject({
+      event: "gamble_wager_resolved",
+      roundNumber: 1,
+      payment: 25,
+      selectedEntryId: "entry-101",
+      selectedCardId: card.id,
+      resolvedSuitOutcome: "duplication",
+    });
+    expect(getLogEntries()[2]).toMatchObject({
+      event: "gamble_wager_settled",
+      finalEffect: "duplication",
+      duplicatedEntryId: "duplicate-101",
     });
   });
 });

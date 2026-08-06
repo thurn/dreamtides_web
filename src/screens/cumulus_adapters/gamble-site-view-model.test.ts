@@ -4,11 +4,15 @@ import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
 import { economyFixture } from "../../testing/economy-fixture";
 import type { DreamGuideContent } from "../../types/content";
 import type {
+  FourSuitRepriseSiteRuntime,
+  FourSuitRepriseTarget,
   GravokWagerSiteRuntime,
   SiteState,
   StarwayStairsSiteRuntime,
   TidemarkLadderClimbSiteRuntime,
 } from "../../types/journey";
+import type { CardData } from "../../types/cards";
+import { asCardId, asCardName } from "../../types/card-identity";
 import type {
   GambleSiteView,
   GravokWagerSiteView,
@@ -620,5 +624,145 @@ describe("gamble-site-view-model — Starway Stairs", () => {
     expect(view.terminalReason).toBe("top");
     expect(view.prizeAwarded).toBe(300);
     expect(view.canPlayAgain).toBe(false);
+  });
+});
+
+function fourSuitCard(index: number): CardData {
+  return {
+    name: asCardName(`Four Suit Fixture ${String(index)}`),
+    id: asCardId(
+      `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
+    ),
+    cardNumber: index,
+    cardType: "Character",
+    subtype: "",
+    isStarter: false,
+    energyCost: 2,
+    spark: 2,
+    isFast: false,
+    renderedText: "Materialized: Gain 1 Essence.",
+    imageNumber: index,
+    artOwned: true,
+  };
+}
+
+function fourSuitTarget(
+  index: number,
+  entryId = `four-suit-entry-${String(index)}`,
+): FourSuitRepriseTarget {
+  const card = fourSuitCard(index);
+  return {
+    entryId,
+    cardId: card.id,
+    cardNumber: card.cardNumber,
+    cardSnapshot: card,
+    transfigurationOffers: [{
+      entryId,
+      type: "Empowered",
+      effectDescription: "Fixture form.",
+      effectDetails: { fixture: true },
+      previewCard: { ...card, energyCost: 1 },
+      essenceCost: 0,
+    }],
+  };
+}
+
+describe("gamble-site-view-model — Four-Suit Reprise", () => {
+  it("maps free forms and removes every used card UUID from later rounds", () => {
+    const target = fourSuitTarget(1);
+    const sameCardCopy = {
+      ...fourSuitTarget(1, "four-suit-entry-1-copy"),
+      cardId: target.cardId,
+      cardSnapshot: target.cardSnapshot,
+    };
+    const nextTarget = fourSuitTarget(2);
+    const runtime: FourSuitRepriseSiteRuntime = {
+      kind: "gamble",
+      gameId: "four-suit-reprise",
+      rulesVersion: "fixture-four-suit-rules",
+      isFarpoint: false,
+      drawCost: 25,
+      shuffleCommitments: ["round-1", "round-2", "round-3"],
+      committedCards: [
+        { rank: "4", suit: "diamonds" },
+        { rank: "7", suit: "hearts" },
+        { rank: "Q", suit: "clubs" },
+      ],
+      targets: [target, sameCardCopy, nextTarget],
+      rounds: [{
+        roundNumber: 1,
+        shuffleCommitment: "round-1",
+        card: { rank: "4", suit: "diamonds" },
+        targetEntryId: target.entryId,
+        targetCardId: target.cardId,
+        costPaid: 25,
+        outcome: "essence",
+        resultRevealed: true,
+        resultSettled: true,
+        essenceGained: 50,
+      }],
+      phase: "result",
+    };
+    const view = buildGambleSiteView({
+      state: {
+        ...createDefaultState(),
+        essence: 25,
+        deck: runtime.targets.map((candidate) => ({
+          entryId: candidate.entryId,
+          cardNumber: candidate.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        })),
+        siteRuntime: { [GAMBLE_SITE.id]: runtime },
+      },
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+    });
+
+    expect(view?.gameId).toBe("four-suit-reprise");
+    if (view?.gameId !== "four-suit-reprise") {
+      throw new Error("expected Four-Suit Reprise view");
+    }
+    expect(view.cards.map((card) => card.cardId)).toEqual([
+      nextTarget.cardId,
+    ]);
+    expect(view.result?.target.entryId).toBe(target.entryId);
+    expect(
+      view.result?.transfigurationCandidate.forms.map((form) => ({
+        type: form.type,
+        essenceCost: form.essenceCost,
+        affordable: form.affordable,
+      })),
+    ).toEqual([{
+      type: "Empowered",
+      essenceCost: 0,
+      affordable: true,
+    }]);
+    expect(view.canPlayAgain).toBe(true);
+
+    const replayView = buildGambleSiteView({
+      state: {
+        ...createDefaultState(),
+        essence: 25,
+        deck: runtime.targets.map((candidate) => ({
+          entryId: candidate.entryId,
+          cardNumber: candidate.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        })),
+        siteRuntime: {
+          [GAMBLE_SITE.id]: { ...runtime, phase: "choose" },
+        },
+      },
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+    });
+    expect(replayView?.gameId).toBe("four-suit-reprise");
+    if (replayView?.gameId !== "four-suit-reprise") {
+      throw new Error("expected Four-Suit Reprise replay view");
+    }
+    expect(replayView.roundNumber).toBe(2);
   });
 });

@@ -339,10 +339,15 @@ describe("registerGameProviders (real content providers)", () => {
           expect(gambleRuntime.committedCards).toHaveLength(4);
           expect(gambleRuntime.strongPoolSize).toBeGreaterThan(0);
           expect(gambleRuntime.rewardDreamsign?.id).toBeDefined();
-        } else {
+        } else if (gambleRuntime.gameId === "starway-stairs") {
           expect(gambleRuntime.shuffleCommitments).toHaveLength(3);
           expect(gambleRuntime.committedCards).toHaveLength(3);
           expect(gambleRuntime.results).toEqual([]);
+        } else {
+          expect(gambleRuntime.shuffleCommitments).toHaveLength(3);
+          expect(gambleRuntime.committedCards).toHaveLength(3);
+          expect(gambleRuntime.targets.length).toBeGreaterThan(0);
+          expect(gambleRuntime.rounds).toEqual([]);
         }
       }
     }
@@ -663,13 +668,18 @@ describe("createSiteContentProvider — Gamble", () => {
       site,
       rng: () => 0,
     });
-    const randomLadderRolls = [0.5, 0];
+    const randomLadderRolls = [0.3, 0];
     const randomLadder = provider.openSite({
       journey,
       site,
       rng: () => randomLadderRolls.shift() ?? 0,
     });
     const randomStarway = provider.openSite({
+      journey,
+      site,
+      rng: () => 0.6,
+    });
+    const randomFourSuit = provider.openSite({
       journey,
       site,
       rng: () => 0.999,
@@ -692,6 +702,12 @@ describe("createSiteContentProvider — Gamble", () => {
       rng: () => 0,
       gambleGameId: "starway-stairs",
     });
+    const forcedFourSuit = provider.openSite({
+      journey,
+      site,
+      rng: () => 0,
+      gambleGameId: "four-suit-reprise",
+    });
     const farpointThreeGate = provider.openSite({
       journey,
       site: farpointSite,
@@ -703,6 +719,12 @@ describe("createSiteContentProvider — Gamble", () => {
       site: farpointSite,
       rng: () => 0,
       gambleGameId: "starway-stairs",
+    });
+    const farpointFourSuit = provider.openSite({
+      journey,
+      site: farpointSite,
+      rng: () => 0,
+      gambleGameId: "four-suit-reprise",
     });
 
     expect(randomThreeGate?.runtime).toMatchObject({
@@ -718,6 +740,11 @@ describe("createSiteContentProvider — Gamble", () => {
       gameId: "starway-stairs",
       wagerAmount: 30,
     });
+    expect(randomFourSuit?.runtime).toMatchObject({
+      kind: "gamble",
+      gameId: "four-suit-reprise",
+      drawCost: 25,
+    });
     expect(forcedThreeGate?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "gravok-three-gate-wager",
@@ -732,6 +759,12 @@ describe("createSiteContentProvider — Gamble", () => {
       gameId: "starway-stairs",
       wagerAmount: 30,
     });
+    expect(forcedFourSuit?.runtime).toMatchObject({
+      kind: "gamble",
+      gameId: "four-suit-reprise",
+      drawCost: 25,
+      phase: "choose",
+    });
     expect(farpointThreeGate?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "gravok-three-gate-wager",
@@ -742,6 +775,29 @@ describe("createSiteContentProvider — Gamble", () => {
       gameId: "starway-stairs",
       wagerAmount: 20,
     });
+    expect(farpointFourSuit?.runtime).toMatchObject({
+      kind: "gamble",
+      gameId: "four-suit-reprise",
+      drawCost: 15,
+    });
+    if (
+      forcedFourSuit?.runtime.kind === "gamble" &&
+      forcedFourSuit.runtime.gameId === "four-suit-reprise"
+    ) {
+      expect(forcedFourSuit.runtime.targets.length).toBeGreaterThan(0);
+      expect(
+        forcedFourSuit.runtime.targets.every((target) =>
+          target.transfigurationOffers.every(
+            (offer) => offer.essenceCost === 0,
+          )
+        ),
+      ).toBe(true);
+      expect(
+        new Set(
+          forcedFourSuit.runtime.targets.map((target) => target.entryId),
+        ).size,
+      ).toBe(forcedFourSuit.runtime.targets.length);
+    }
   });
 
   it("selects the Ladder Climb reward uniformly from the strongest 50", () => {

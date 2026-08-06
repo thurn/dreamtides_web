@@ -180,7 +180,7 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `random-site`                   | A materialized enhanced destination hosted by Random Site's configured presenting guide                                                                                                                       |
 | `random-site-home`              | Random Site's configured home behavior with its persisted destination choices                                                                                                                                |
 | `random-site-atlas`             | The first Dream Atlas frontier containing the configured Random Site owner's dreamscape, badge, and reveal cards                                                                                             |
-| `gamble`                        | Gamble site; the game is selected randomly or fixed with `?gambleGame=three-gate`, `?gambleGame=ladder-climb`, or `?gambleGame=starway-stairs`                                                               |
+| `gamble`                        | Gamble site; the game is selected randomly or fixed with `?gambleGame=three-gate`, `?gambleGame=ladder-climb`, `?gambleGame=starway-stairs`, or `?gambleGame=four-suit-reprise`                              |
 | `gamble-enhanced`               | Farpoint Gamble site with the selected game’s discounted cost rule                                                                                                                                              |
 | `exploration`                   | Exploration card-channeling site                                                                                                                                                                               |
 | `exploration-enhanced`          | Exploration card-channeling site, enhanced                                                                                                                                                                     |
@@ -197,7 +197,8 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 with `?seed=` for a fixed RNG seed, or `?algo=` to select a draft-pool strategy
 for the bootstrapped run. Use `?goto=gamble&gambleGame=ladder-climb` for a
 stable Ladder Climb QA entry point, or `?goto=gamble&gambleGame=starway-stairs`
-for Starway Stairs.
+for Starway Stairs. Use `?goto=gamble&gambleGame=four-suit-reprise` for a
+stable Four-Suit Reprise entry point.
 
 ## Adding a scene
 

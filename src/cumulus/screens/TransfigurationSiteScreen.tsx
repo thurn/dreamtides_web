@@ -440,7 +440,7 @@ export function TransfigurationDetailPanel({
   readonly selectedFormType: TransfigurationType | null;
   readonly confirming: boolean;
   readonly alreadyAccepted: boolean;
-  readonly onBack: () => void;
+  readonly onBack?: () => void;
   readonly onSelectForm: (type: TransfigurationType) => void;
   readonly onConfirm: (form: TransfigurationFormView) => void;
 }) {
@@ -485,13 +485,15 @@ export function TransfigurationDetailPanel({
               paddingLeft: mobile ? token("--space-s") : token("--space-2xl"),
             }}
           >
-            <GlassButton
-              placement="onGlass"
-              label="Choose Again"
-              disabled={confirming}
-              onPress={onBack}
-              testId="cumulus-transfiguration-choose-again"
-            />
+            {onBack !== undefined && (
+              <GlassButton
+                placement="onGlass"
+                label="Choose Again"
+                disabled={confirming}
+                onPress={onBack}
+                testId="cumulus-transfiguration-choose-again"
+              />
+            )}
             <GlassButton
               placement="onGlass"
               variant="accent"

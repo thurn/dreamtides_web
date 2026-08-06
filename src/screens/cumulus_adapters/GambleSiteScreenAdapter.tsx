@@ -3,11 +3,8 @@ import { GambleSiteScreen } from "../../cumulus/screens/GambleSiteScreen";
 import { useJourney } from "../../state/journey-context";
 import type { GambleGameId } from "../../types/gamble";
 import {
-  logGamblePrepared,
-  logGambleReplacement,
-  logGambleResolved,
-  logGambleSettled,
-  logGambleSiteEntered,
+  logGamblePrepared, logGambleReplacement, logGambleResolved,
+  logGambleSettled, logGambleSiteEntered,
 } from "./gamble-site-logging-view-model";
 import { buildGambleSiteView, resolveGambleGuide } from "./gamble-site-view-model";
 
@@ -54,40 +51,34 @@ export function GambleSiteScreenAdapter({
     logGambleSettled(siteId, runtime, view, journeyContent.economyData);
   }, [runtime, siteId, view, journeyContent.economyData]);
 
-  const settleGravok = useCallback(() => {
-    if (runtime?.gameId !== "gravok-three-gate-wager") return;
-    mutations.settleGravokWager(siteId, runtime.shuffleCommitment);
+  const settleOutcome = useCallback(() => {
+    if (runtime?.gameId === "gravok-three-gate-wager") {
+      mutations.settleGravokWager(siteId, runtime.shuffleCommitment);
+    } else if (runtime?.gameId === "tidemark-ladder-climb" && runtime.result !== null) {
+      const commitment = runtime.shuffleCommitments[runtime.result.attemptNumber - 1];
+      if (commitment !== undefined) mutations.settleTidemarkLadderClimb(siteId, commitment);
+    } else if (runtime?.gameId === "starway-stairs") {
+      const result = runtime.results[runtime.results.length - 1];
+      const commitment = result === undefined ? undefined : runtime.shuffleCommitments[result.tierNumber - 1];
+      if (commitment !== undefined) mutations.settleStarwayStairs(siteId, commitment);
+    } else if (runtime?.gameId === "four-suit-reprise") {
+      const commitment = runtime.rounds[runtime.rounds.length - 1]?.shuffleCommitment;
+      if (commitment !== undefined) mutations.settleFourSuitReprise(siteId, commitment);
+    }
   }, [mutations, runtime, siteId]);
   const playAgain = useCallback(() => {
-    if (runtime?.gameId !== "gravok-three-gate-wager") return;
-    mutations.playAgainGravokWager(siteId, runtime.shuffleCommitment);
-  }, [mutations, runtime, siteId]);
-  const settleLadder = useCallback(() => {
-    if (
-      runtime?.gameId !== "tidemark-ladder-climb" ||
-      runtime.result === null
-    ) return;
-    const commitment =
-      runtime.shuffleCommitments[runtime.result.attemptNumber - 1];
-    if (commitment === undefined) return;
-    mutations.settleTidemarkLadderClimb(siteId, commitment);
-  }, [mutations, runtime, siteId]);
-  const settleStarway = useCallback(() => {
-    if (runtime?.gameId !== "starway-stairs") return;
-    const result = runtime.results[runtime.results.length - 1];
-    if (result === undefined) return;
-    const commitment = runtime.shuffleCommitments[result.tierNumber - 1];
-    if (commitment === undefined) return;
-    mutations.settleStarwayStairs(siteId, commitment);
-  }, [mutations, runtime, siteId]);
-  const playAgainStarway = useCallback(() => {
-    if (runtime?.gameId !== "starway-stairs") return;
-    const commitment = runtime.shuffleCommitments[0];
-    if (commitment === undefined) return;
-    mutations.playAgainStarwayStairs(siteId, commitment);
+    if (runtime?.gameId === "gravok-three-gate-wager") {
+      mutations.playAgainGravokWager(siteId, runtime.shuffleCommitment);
+    } else if (runtime?.gameId === "starway-stairs") {
+      const commitment = runtime.shuffleCommitments[0];
+      if (commitment !== undefined) mutations.playAgainStarwayStairs(siteId, commitment);
+    } else if (runtime?.gameId === "four-suit-reprise") {
+      const commitment = runtime.rounds[runtime.rounds.length - 1]?.shuffleCommitment;
+      if (commitment !== undefined) mutations.playAgainFourSuitReprise(siteId, commitment);
+    }
   }, [mutations, runtime, siteId]);
   const replaceDreamsign = useCallback((dreamsignId: string) => {
-    if (runtime === null || runtime.gameId === "starway-stairs") return;
+    if (runtime?.gameId !== "gravok-three-gate-wager" && runtime?.gameId !== "tidemark-ladder-climb") return;
     logGambleReplacement(siteId, runtime.gameId, dreamsignId, runtime.rewardDreamsign?.id);
     if (runtime.gameId === "tidemark-ladder-climb") {
       mutations.replaceTidemarkLadderClimbDreamsign(siteId, dreamsignId);
@@ -102,13 +93,13 @@ export function GambleSiteScreenAdapter({
       view={view}
       onChooseGate={(gateId) => mutations.placeGravokWager(siteId, gateId)}
       onLeave={() => mutations.completeSite(siteId, runtime?.gameId ?? "gamble")}
-      onOutcomeShown={settleGravok}
+      onOutcomeShown={settleOutcome}
       onPlayAgain={playAgain}
       onDrawLadder={() => mutations.drawTidemarkLadderClimb(siteId)}
-      onLadderOutcomeShown={settleLadder}
+      onLadderOutcomeShown={settleOutcome}
       onDrawStarway={() => mutations.drawStarwayStairs(siteId)}
-      onStarwayOutcomeShown={settleStarway}
-      onPlayAgainStarway={playAgainStarway}
+      onStarwayOutcomeShown={settleOutcome}
+      onPlayAgainStarway={playAgain}
       onCashOutStarway={() => {
         if (runtime?.gameId !== "starway-stairs") return;
         const result = runtime.results[runtime.results.length - 1];
@@ -118,6 +109,15 @@ export function GambleSiteScreenAdapter({
           mutations.cashOutStarwayStairs(siteId, commitment);
         }
       }}
+      onDrawFourSuit={(entryId) => mutations.drawFourSuitReprise(siteId, entryId)}
+      onFourSuitOutcomeShown={settleOutcome}
+      onChooseFourSuitTransfiguration={(type) => {
+        if (runtime?.gameId !== "four-suit-reprise") return;
+        const commitment = runtime.rounds[runtime.rounds.length - 1]?.shuffleCommitment;
+        if (commitment !== undefined)
+          mutations.chooseFourSuitRepriseTransfiguration(siteId, commitment, type);
+      }}
+      onPlayAgainFourSuit={playAgain}
       onReplaceDreamsign={replaceDreamsign}
     />
   );

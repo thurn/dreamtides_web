@@ -562,6 +562,23 @@ export function routeDomain(
         state,
         gamble.playAgainStarwayStairs(journey, payload, ctx),
       );
+    case "DRAW_FOUR_SUIT_REPRISE":
+      return journeyCase(state, gamble.drawFourSuitReprise(journey, payload));
+    case "SETTLE_FOUR_SUIT_REPRISE":
+      return journeyCase(
+        state,
+        gamble.settleFourSuitReprise(journey, payload, ctx),
+      );
+    case "CHOOSE_FOUR_SUIT_REPRISE_TRANSFIGURATION":
+      return journeyCase(
+        state,
+        gamble.chooseFourSuitRepriseTransfiguration(journey, payload),
+      );
+    case "PLAY_AGAIN_FOUR_SUIT_REPRISE":
+      return journeyCase(
+        state,
+        gamble.playAgainFourSuitReprise(journey, payload),
+      );
 
     // --- shop, merchant & modifiers ---
     case "BUY_SHOP_SLOT":

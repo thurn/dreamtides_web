@@ -60,6 +60,15 @@ export const wagerPrizeCardDemo: CumulusComponent = {
 />
 `,
     },
+    {
+      label: "Four-Suit Reprise",
+      code: `<WagerPrizeCard
+  prizeId="four-suit-reprise"
+  targetLabel="a Suit"
+  drawnCard={{ rank: "Q", suit: "spades" }}
+/>
+`,
+    },
   ],
   demo: { defaultArgs: { revealed: false } },
 };

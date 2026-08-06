@@ -9,6 +9,7 @@ import type {
   RewardSelectionTrace,
 } from "../reward-selection/types";
 import type { MerchantEncounter } from "../journey_v2/types";
+import type { FourSuitRepriseOutcome } from "../data/four-suit-reprise";
 import type { DraftState } from "./draft";
 import type { LayerName } from "./layer-name";
 import type {
@@ -572,11 +573,54 @@ export interface StarwayStairsSiteRuntime {
   prizeAwarded: number;
 }
 
+/** One deck card prepared as a legal Four-Suit Reprise target. */
+export interface FourSuitRepriseTarget {
+  entryId: string;
+  cardId: string;
+  cardNumber: number;
+  /** Exact card face locked when the site opens, retained after a purge. */
+  cardSnapshot: CardData;
+  /** Every legal free form if this target draws Spades. */
+  transfigurationOffers: CardChoiceTransfigurationOffer[];
+}
+
+/** One paid, one-shot suit result in Four-Suit Reprise. */
+export interface FourSuitRepriseRound {
+  roundNumber: 1 | 2 | 3;
+  shuffleCommitment: string;
+  card: StandardPlayingCard;
+  targetEntryId: string;
+  targetCardId: string;
+  costPaid: number;
+  outcome: FourSuitRepriseOutcome;
+  resultRevealed: boolean;
+  resultSettled: boolean;
+  essenceGained: number;
+  duplicatedEntryId?: string;
+  chosenTransfiguration?: TransfigurationType;
+}
+
+/** Shared, replayable runtime for one Four-Suit Reprise visit. */
+export interface FourSuitRepriseSiteRuntime {
+  kind: "gamble";
+  gameId: "four-suit-reprise";
+  rulesVersion: string;
+  isFarpoint: boolean;
+  drawCost: number;
+  /** One independent full-deck commitment for each possible round. */
+  shuffleCommitments: string[];
+  committedCards: StandardPlayingCard[];
+  targets: FourSuitRepriseTarget[];
+  rounds: FourSuitRepriseRound[];
+  phase: "choose" | "result";
+}
+
 /** Every game runtime currently available at a Gamble site. */
 export type GambleSiteRuntime =
   | GravokWagerSiteRuntime
   | TidemarkLadderClimbSiteRuntime
-  | StarwayStairsSiteRuntime;
+  | StarwayStairsSiteRuntime
+  | FourSuitRepriseSiteRuntime;
 
 /** Stable Gamble game id, re-exported beside its persisted runtime union. */
 export type GambleSiteGameId = GambleGameId;

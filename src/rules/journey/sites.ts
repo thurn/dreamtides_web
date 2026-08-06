@@ -344,7 +344,8 @@ export function openSite(
     rawGambleGameId !== undefined &&
     rawGambleGameId !== "gravok-three-gate-wager" &&
     rawGambleGameId !== "tidemark-ladder-climb" &&
-    rawGambleGameId !== "starway-stairs"
+    rawGambleGameId !== "starway-stairs" &&
+    rawGambleGameId !== "four-suit-reprise"
   ) {
     return null;
   }
@@ -934,6 +935,15 @@ export function completeSite(
       if (
         latestResult?.resultSettled === false ||
         (runtime.results.length > 0 && runtime.terminalReason === null)
+      ) {
+        return null;
+      }
+    }
+    if (runtime.gameId === "four-suit-reprise") {
+      const latestRound = runtime.rounds[runtime.rounds.length - 1];
+      if (
+        runtime.phase === "result" &&
+        (latestRound === undefined || !latestRound.resultSettled)
       ) {
         return null;
       }

@@ -347,6 +347,36 @@ export function CoopJourneyProvider({
             stateRef.current.runId ?? undefined,
           ),
         ),
+      drawFourSuitReprise: (siteId, entryId) =>
+        dispatch(actions.drawFourSuitReprise(siteId, entryId)),
+      settleFourSuitReprise: (siteId, shuffleCommitment) =>
+        dispatch(
+          actions.settleFourSuitReprise(
+            siteId,
+            shuffleCommitment,
+            stateRef.current.runId ?? undefined,
+          ),
+        ),
+      chooseFourSuitRepriseTransfiguration: (
+        siteId,
+        shuffleCommitment,
+        type,
+      ) =>
+        dispatch(
+          actions.chooseFourSuitRepriseTransfiguration(
+            siteId,
+            shuffleCommitment,
+            type,
+          ),
+        ),
+      playAgainFourSuitReprise: (siteId, previousShuffleCommitment) =>
+        dispatch(
+          actions.playAgainFourSuitReprise(
+            siteId,
+            previousShuffleCommitment,
+            stateRef.current.runId ?? undefined,
+          ),
+        ),
       acceptRewardSite: (siteId, purgeIndex) => {
         // ACCEPT_REWARD's reducer reads `purgeIndex` (the at-cap Dreamsign
         // replace slot), which the typed facade does not carry.

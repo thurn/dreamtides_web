@@ -25,7 +25,11 @@
 import type { EventDraft } from "../eventlog/client";
 import type { BeginTutorialOptions, TutorialAction } from "../types/tutorial";
 import type { GambleGameId, GravokGateId } from "../types/gamble";
-import type { RandomSiteDestinationType, SiteType } from "../types/journey";
+import type {
+  RandomSiteDestinationType,
+  SiteType,
+  TransfigurationType,
+} from "../types/journey";
 import { SELECTION_RULES_VERSION } from "../reward-selection";
 
 /**
@@ -198,6 +202,22 @@ export interface CoopActions {
     shuffleCommitment: string,
   ) => Promise<number>;
   playAgainStarwayStairs: (
+    siteId: string,
+    previousShuffleCommitment: string,
+    runId?: string,
+  ) => Promise<number>;
+  drawFourSuitReprise: (siteId: string, entryId: string) => Promise<number>;
+  settleFourSuitReprise: (
+    siteId: string,
+    shuffleCommitment: string,
+    runId?: string,
+  ) => Promise<number>;
+  chooseFourSuitRepriseTransfiguration: (
+    siteId: string,
+    shuffleCommitment: string,
+    type: TransfigurationType,
+  ) => Promise<number>;
+  playAgainFourSuitReprise: (
     siteId: string,
     previousShuffleCommitment: string,
     runId?: string,
@@ -557,6 +577,34 @@ export function makeActions(
         "PLAY_AGAIN_STARWAY_STAIRS",
         { siteId, previousShuffleCommitment },
         `${siteIntentKey("play-again-starway-stairs", siteId, runId)}:${previousShuffleCommitment}`,
+      ),
+    drawFourSuitReprise: (siteId, entryId) =>
+      emit("DRAW_FOUR_SUIT_REPRISE", { siteId, entryId }),
+    settleFourSuitReprise: (siteId, shuffleCommitment, runId) =>
+      emit(
+        "SETTLE_FOUR_SUIT_REPRISE",
+        { siteId, shuffleCommitment },
+        `${siteIntentKey("settle-four-suit-reprise", siteId, runId)}:${shuffleCommitment}`,
+      ),
+    chooseFourSuitRepriseTransfiguration: (
+      siteId,
+      shuffleCommitment,
+      type,
+    ) =>
+      emit("CHOOSE_FOUR_SUIT_REPRISE_TRANSFIGURATION", {
+        siteId,
+        shuffleCommitment,
+        type,
+      }),
+    playAgainFourSuitReprise: (
+      siteId,
+      previousShuffleCommitment,
+      runId,
+    ) =>
+      emit(
+        "PLAY_AGAIN_FOUR_SUIT_REPRISE",
+        { siteId, previousShuffleCommitment },
+        `${siteIntentKey("play-again-four-suit-reprise", siteId, runId)}:${previousShuffleCommitment}`,
       ),
 
     // --- merchant & shop ---

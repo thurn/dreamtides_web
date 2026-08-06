@@ -18,17 +18,28 @@ import {
   nextStarwayStairsTierNumber,
   starwayStairsEssenceReward,
 } from "../../data/starway-stairs";
+import {
+  FOUR_SUIT_REPRISE_ESSENCE_REWARD,
+  FOUR_SUIT_REPRISE_MAX_ROUNDS,
+  eligibleFourSuitRepriseTargets,
+  fourSuitRepriseOutcomeForSuit,
+} from "../../data/four-suit-reprise";
 import type {
   GravokGateId,
 } from "../../types/gamble";
 import type {
+  DeckEntry,
+  FourSuitRepriseRound,
+  FourSuitRepriseSiteRuntime,
   GambleSiteRuntime,
   GravokWagerSiteRuntime,
   JourneyState,
   StarwayStairsSiteRuntime,
   TidemarkLadderClimbSiteRuntime,
+  TransfigurationType,
 } from "../../types/journey";
 import type { EventContext } from "../../eventlog/types";
+import { mintEntryId } from "./deck";
 import { findSite, getSiteContentProvider } from "./sites";
 
 const GATE_IDS: ReadonlySet<string> = new Set(["six", "nine", "jack"]);
@@ -90,6 +101,29 @@ function starwayRuntimeFor(
 ): StarwayStairsSiteRuntime | null {
   const runtime = runtimeFor(journey, siteId);
   return runtime?.gameId === "starway-stairs" ? runtime : null;
+}
+
+function fourSuitRuntimeFor(
+  journey: JourneyState,
+  siteId: string,
+): FourSuitRepriseSiteRuntime | null {
+  const runtime = runtimeFor(journey, siteId);
+  return runtime?.gameId === "four-suit-reprise" ? runtime : null;
+}
+
+function latestFourSuitRound(runtime: FourSuitRepriseSiteRuntime) {
+  return runtime.rounds[runtime.rounds.length - 1] ?? null;
+}
+
+function remainingFourSuitTargets(
+  journey: JourneyState,
+  runtime: FourSuitRepriseSiteRuntime,
+) {
+  return eligibleFourSuitRepriseTargets({
+    targets: runtime.targets,
+    deck: journey.deck,
+    usedCardIds: runtime.rounds.map((round) => round.targetCardId),
+  });
 }
 
 /**
@@ -595,4 +629,241 @@ export function playAgainStarwayStairs(
     ...generated.runtime,
     roundNumber: runtime.roundNumber + 1,
   });
+}
+
+/** Pay for one one-shot round and lock a UUID-backed deck target. */
+export function drawFourSuitReprise(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  const entryId = asString(payload.entryId);
+  if (siteId === null || entryId === null) return null;
+
+  const runtime = fourSuitRuntimeFor(journey, siteId);
+  if (
+    runtime === null ||
+    runtime.phase !== "choose" ||
+    runtime.rounds.length >= FOUR_SUIT_REPRISE_MAX_ROUNDS ||
+    journey.essence < runtime.drawCost
+  ) {
+    return null;
+  }
+  const target = remainingFourSuitTargets(journey, runtime).find(
+    (candidate) => candidate.entryId === entryId,
+  );
+  const deckEntry = journey.deck.find(
+    (candidate) => candidate.entryId === entryId,
+  );
+  if (
+    target === undefined ||
+    deckEntry === undefined ||
+    deckEntry.cardNumber !== target.cardNumber ||
+    deckEntry.isBane ||
+    deckEntry.transfiguration !== null
+  ) {
+    return null;
+  }
+
+  const roundIndex = runtime.rounds.length;
+  const card = runtime.committedCards[roundIndex];
+  const shuffleCommitment = runtime.shuffleCommitments[roundIndex];
+  if (card === undefined || shuffleCommitment === undefined) return null;
+  const roundNumber = (roundIndex + 1) as 1 | 2 | 3;
+  return withRuntime(
+    { ...journey, essence: journey.essence - runtime.drawCost },
+    siteId,
+    {
+      ...runtime,
+      phase: "result",
+      rounds: [
+        ...runtime.rounds,
+        {
+          roundNumber,
+          shuffleCommitment,
+          card,
+          targetEntryId: target.entryId,
+          targetCardId: target.cardId,
+          costPaid: runtime.drawCost,
+          outcome: fourSuitRepriseOutcomeForSuit(card.suit),
+          resultRevealed: false,
+          resultSettled: false,
+          essenceGained: 0,
+        },
+      ],
+    },
+  );
+}
+
+/** Reveal the locked suit and atomically apply every non-Spades outcome. */
+export function settleFourSuitReprise(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  const shuffleCommitment = asString(payload.shuffleCommitment);
+  if (siteId === null || shuffleCommitment === null) return null;
+
+  const runtime = fourSuitRuntimeFor(journey, siteId);
+  const round = runtime === null ? null : latestFourSuitRound(runtime);
+  if (
+    runtime === null ||
+    runtime.phase !== "result" ||
+    round === null ||
+    round.shuffleCommitment !== shuffleCommitment ||
+    round.resultRevealed
+  ) {
+    return null;
+  }
+  const target = runtime.targets.find(
+    (candidate) => candidate.entryId === round.targetEntryId,
+  );
+  const targetEntry = journey.deck.find(
+    (candidate) => candidate.entryId === round.targetEntryId,
+  );
+  if (
+    target === undefined ||
+    targetEntry === undefined ||
+    targetEntry.cardNumber !== target.cardNumber ||
+    targetEntry.isBane ||
+    targetEntry.transfiguration !== null
+  ) return null;
+
+  let nextJourney = journey;
+  let nextRound: FourSuitRepriseRound = { ...round, resultRevealed: true };
+  if (round.outcome === "essence") {
+    nextJourney = {
+      ...journey,
+      essence: journey.essence + FOUR_SUIT_REPRISE_ESSENCE_REWARD,
+    };
+    nextRound = {
+      ...nextRound,
+      resultSettled: true,
+      essenceGained: FOUR_SUIT_REPRISE_ESSENCE_REWARD,
+    };
+  } else if (round.outcome === "duplication") {
+    const duplicatedEntryId = mintEntryId(journey.deck, ctx.seq, 0);
+    const copy: DeckEntry = {
+      entryId: duplicatedEntryId,
+      cardNumber: target.cardNumber,
+      transfiguration: null,
+      isBane: false,
+    };
+    nextJourney = { ...journey, deck: [...journey.deck, copy] };
+    nextRound = { ...nextRound, resultSettled: true, duplicatedEntryId };
+  } else if (round.outcome === "purge") {
+    nextJourney = {
+      ...journey,
+      deck: journey.deck.filter(
+        (candidate) => candidate.entryId !== round.targetEntryId,
+      ),
+    };
+    nextRound = { ...nextRound, resultSettled: true };
+  }
+
+  return withRuntime(nextJourney, siteId, {
+    ...runtime,
+    rounds: runtime.rounds.map((candidate, index) =>
+      index === runtime.rounds.length - 1 ? nextRound : candidate,
+    ),
+  });
+}
+
+/** Apply the player's free chosen form after a Spades reveal. */
+export function chooseFourSuitRepriseTransfiguration(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  const shuffleCommitment = asString(payload.shuffleCommitment);
+  const type = asString(payload.type) as TransfigurationType | null;
+  if (siteId === null || shuffleCommitment === null || type === null) {
+    return null;
+  }
+
+  const runtime = fourSuitRuntimeFor(journey, siteId);
+  const round = runtime === null ? null : latestFourSuitRound(runtime);
+  if (
+    runtime === null ||
+    runtime.phase !== "result" ||
+    round === null ||
+    round.shuffleCommitment !== shuffleCommitment ||
+    round.outcome !== "transfiguration" ||
+    !round.resultRevealed ||
+    round.resultSettled
+  ) {
+    return null;
+  }
+  const target = runtime.targets.find(
+    (candidate) => candidate.entryId === round.targetEntryId,
+  );
+  const offer = target?.transfigurationOffers.find(
+    (candidate) => candidate.type === type,
+  );
+  const targetEntry = journey.deck.find(
+    (candidate) => candidate.entryId === round.targetEntryId,
+  );
+  if (
+    target === undefined ||
+    offer === undefined ||
+    offer.essenceCost !== 0 ||
+    targetEntry === undefined ||
+    targetEntry.cardNumber !== target.cardNumber ||
+    targetEntry.isBane ||
+    targetEntry.transfiguration !== null
+  ) {
+    return null;
+  }
+
+  return withRuntime(
+    {
+      ...journey,
+      deck: journey.deck.map((entry) =>
+        entry.entryId === targetEntry.entryId
+          ? { ...entry, transfiguration: offer.type }
+          : entry,
+      ),
+    },
+    siteId,
+    {
+      ...runtime,
+      rounds: runtime.rounds.map((candidate, index) =>
+        index === runtime.rounds.length - 1
+          ? {
+              ...candidate,
+              resultSettled: true,
+              chosenTransfiguration: offer.type,
+            }
+          : candidate,
+      ),
+    },
+  );
+}
+
+/** Advance every client to a new card choice after a settled round. */
+export function playAgainFourSuitReprise(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  const previousShuffleCommitment = asString(
+    payload.previousShuffleCommitment,
+  );
+  if (siteId === null || previousShuffleCommitment === null) return null;
+
+  const runtime = fourSuitRuntimeFor(journey, siteId);
+  const round = runtime === null ? null : latestFourSuitRound(runtime);
+  if (
+    runtime === null ||
+    runtime.phase !== "result" ||
+    round === null ||
+    round.shuffleCommitment !== previousShuffleCommitment ||
+    !round.resultSettled ||
+    runtime.rounds.length >= FOUR_SUIT_REPRISE_MAX_ROUNDS ||
+    remainingFourSuitTargets(journey, runtime).length === 0
+  ) {
+    return null;
+  }
+  return withRuntime(journey, siteId, { ...runtime, phase: "choose" });
 }
