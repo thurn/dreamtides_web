@@ -7,12 +7,11 @@
 //
 // Dogfoods Cumulus tokens for all of its own chrome (type scale, color, spacing,
 // radius) via `token(...)` — no raw hex/px that has a token equivalent — and
-// renders one live `GlassPanel` as a worked example of legibility-ladder rung
-// two, rather than only describing it.
+// keeps long-form guidance in a readable prose measure with explicit paragraph
+// rhythm.
 
 import type { CSSProperties, ReactElement } from "react";
 import { token } from "../primitives/tokens";
-import { GlassPanel } from "../components/overlay/GlassPanel";
 
 const eyebrowStyle: CSSProperties = {
   font: token("--t-eyebrow"),
@@ -48,6 +47,12 @@ const bodyStyle: CSSProperties = {
   maxWidth: "68ch",
 };
 
+const principleBodyStyle: CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  gap: token("--space-6"),
+};
+
 const principleListStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
@@ -66,49 +71,10 @@ function Principle({ title, children }: PrincipleProps): ReactElement {
   return (
     <section>
       <h3 style={principleTitleStyle}>{title}</h3>
-      {children}
+      <div data-cumulus-doc-principle-body="" style={principleBodyStyle}>
+        {children}
+      </div>
     </section>
-  );
-}
-
-const exampleWrapStyle: CSSProperties = {
-  marginTop: token("--space-5"),
-  maxWidth: "320px",
-};
-
-const exampleEyebrowStyle: CSSProperties = {
-  font: token("--t-eyebrow"),
-  letterSpacing: token("--tracking-eyebrow"),
-  textTransform: "uppercase",
-  color: token("--text-on-glass-muted"),
-  margin: `0 0 ${token("--space-2")}`,
-};
-
-const exampleBodyStyle: CSSProperties = {
-  font: token("--t-body-sm"),
-  color: token("--text-on-glass-muted"),
-  margin: 0,
-};
-
-/**
- * A worked example of legibility-ladder rung two: a live `GlassPanel`
- * collecting several related values into one material surface, rather than the
- * page describing the pattern in the abstract.
- */
-function GlassPanelExample(): ReactElement {
-  return (
-    <div style={exampleWrapStyle}>
-      <GlassPanel>
-        <div style={{ padding: token("--space-6") }}>
-          <p style={exampleEyebrowStyle}>DreamAvatar</p>
-          <p style={exampleBodyStyle}>
-            Essence, Spark, and the docked dreamsigns for the current run,
-            grouped into one pane because they belong together — not to give a
-            lone label something to sit on.
-          </p>
-        </div>
-      </GlassPanel>
-    </div>
   );
 }
 
@@ -117,8 +83,7 @@ function GlassPanelExample(): ReactElement {
  * Condensed prose covering material continuity, always-in-motion, the
  * legibility ladder, the popup rule, and the content voice — the governing
  * principles every Cumulus component is built against. Pure prose content;
- * dogfoods Cumulus tokens for its own chrome, including one live `GlassPanel`
- * worked example.
+ * dogfoods Cumulus tokens for its own chrome.
  */
 export function IntroSection(): ReactElement {
   return (
@@ -227,14 +192,20 @@ export function IntroSection(): ReactElement {
             <code>style</code> object, an arbitrary corner radius, padding,
             color, filter, or any other free-form token override. Those escape
             hatches let a caller silently drift from the system, so they simply
-            do not exist. A value that is not free-form text is a <em>named</em>{" "}
-            value, not a string: a color is a <code>CumulusColor</code> (a
-            palette role, or a <code>#hex</code> literal for a genuinely
-            data-driven one), a glyph is a <code>Glyph</code> from the icon
-            registry, a piece of art is an <code>ArtRef</code> the component
-            resolves itself, and a media filter or crop is a named union. So a
-            prop that is really a color, icon, or image can never be an
-            arbitrary CSS string, class, or URL.{" "}
+            do not exist.
+          </p>
+
+          <p style={bodyStyle}>
+            A value that is not free-form text is a <em>named</em> value, not a
+            string: a color is a <code>CumulusColor</code> (a palette role, or a{" "}
+            <code>#hex</code> literal for a genuinely data-driven one), a glyph
+            is a <code>Glyph</code> from the icon registry, a piece of art is an{" "}
+            <code>ArtRef</code> the component resolves itself, and a media
+            filter or crop is a named union. So a prop that is really a color,
+            icon, or image can never be an arbitrary CSS string, class, or URL.
+          </p>
+
+          <p style={bodyStyle}>
             <strong>
               Adding arbitrary token customization to a component is never
               acceptable
@@ -242,12 +213,15 @@ export function IntroSection(): ReactElement {
             — not a one-off color, not &ldquo;just this once&rdquo; padding.
             When a screen needs to size or position a component it wraps it in
             its own element: layout is the caller&rsquo;s concern, the
-            component&rsquo;s fixed appearance is the system&rsquo;s. Adding a
-            new <em>strict</em>
-            prop — one more enumerated variant — is fine when you are confident
-            no existing variant can express what you need; widening an existing
-            prop into an open value is not. When in doubt, look at how the other
-            screens solve it and match them rather than inventing a knob.
+            component&rsquo;s fixed appearance is the system&rsquo;s.
+          </p>
+
+          <p style={bodyStyle}>
+            Adding a new <em>strict</em> prop — one more enumerated variant — is
+            fine when you are confident no existing variant can express what you
+            need; widening an existing prop into an open value is not. When in
+            doubt, look at how the other screens solve it and match them rather
+            than inventing a knob.
           </p>
 
           <p style={bodyStyle}>
@@ -257,16 +231,20 @@ export function IntroSection(): ReactElement {
             <code>gap</code>, or <code>threshold</code>; a per-instance{" "}
             <code>accent</code> or <code>color</code> so &ldquo;this one
             node&rdquo; can be a different hue; a decorative badge or wash
-            toggle. Every one of these is a &ldquo;no.&rdquo; A pixel
-            measurement is layout — the caller wraps and sizes its own element.
-            A per-instance color is the design system drifting one call site at
-            a time; a component reads the same everywhere, and the handful of
-            states that legitimately differ (a battle node looming larger, a
-            locked node dimmed) are decided <em>inside</em> the component from
-            its semantic model, never handed in as a raw value. If you find
-            yourself reaching for one of these, the component is being asked to
-            do the caller&rsquo;s job — stop and wrap it instead.
+            toggle. Every one of these is a &ldquo;no.&rdquo;
           </p>
+
+          <p style={bodyStyle}>
+            A pixel measurement is layout — the caller wraps and sizes its own
+            element. A per-instance color is the design system drifting one call
+            site at a time; a component reads the same everywhere, and the
+            handful of states that legitimately differ (a battle node looming
+            larger, a locked node dimmed) are decided <em>inside</em> the
+            component from its semantic model, never handed in as a raw value.
+            If you find yourself reaching for one of these, the component is
+            being asked to do the caller&rsquo;s job — stop and wrap it instead.
+          </p>
+
           <p style={bodyStyle}>
             This is enforced, not just documented: the{" "}
             <code>no-escape-hatch-props</code> ESLint rule errors when a
