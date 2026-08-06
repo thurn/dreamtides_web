@@ -617,7 +617,7 @@ function DeckTile({ cardView }: { cardView: DeckCardView }) {
     // column width; the ring (if any) traces that box.
     width: "100%",
     aspectRatio: String(CARD_ASPECT_RATIO_VALUE),
-    borderRadius: token("--radius-card"),
+    borderRadius: token("--radius-panel"),
     boxShadow: cardView.isBane ? `0 0 0 2px ${token("--danger")}` : undefined,
   };
   return (

@@ -2154,7 +2154,7 @@ function BattleCardStatusIndicators({
             bottom: "4%",
             width: BATTLE_CARD_STATUS_BADGE_SIZE,
             paddingInline: 0,
-            borderRadius: token("--radius-status-badge"),
+            borderRadius: token("--radius-compact"),
             background: token("--surface-status-badge"),
             color: token("--text-on-accent"),
           }}

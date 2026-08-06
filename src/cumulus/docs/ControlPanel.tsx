@@ -31,7 +31,7 @@ const inputStyle: React.CSSProperties = {
   color: token("--text-primary"),
   background: token("--surface-chrome"),
   border: `1px solid ${token("--border-mid")}`,
-  borderRadius: token("--radius-inset"),
+  borderRadius: token("--radius-compact"),
   padding: `${token("--space-2")} ${token("--space-4")}`,
 };
 

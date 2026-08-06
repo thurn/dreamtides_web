@@ -340,7 +340,7 @@ export function Select({
               // The menu wears the same liquid glass as the trigger, so the open
               // control reads as one continuous glass surface.
               ...glassTrack(),
-              borderRadius: token("--radius-popover"),
+              borderRadius: token("--radius-compact"),
             }}
           >
             {options.map((option) => (

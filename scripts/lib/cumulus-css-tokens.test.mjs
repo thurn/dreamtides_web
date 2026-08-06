@@ -1,5 +1,5 @@
 // Tests for the pure CSS custom-property parser shared by the cumulus tokens.ts
-// generator (scripts/generate-cumulus-tokens.mjs) and the Primitives-section
+// generator (scripts/generate-cumulus-tokens.mjs) and the Design Tokens section
 // token doc. Fixtures below are small and self-contained by design: they pin
 // the parsing contract without depending on the real, ever-changing contents
 // of src/cumulus/primitives/cumulus-tokens.css.

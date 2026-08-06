@@ -114,7 +114,7 @@ export interface GlassPanelProps {
 const FLOATING_ACCESSORY_PX = 48;
 
 function radiusToken(radius: GlassPanelRadius): string {
-  if (radius === "popover") return token("--radius-popover");
+  if (radius === "popover") return token("--radius-compact");
   if (radius === "control") return token("--radius-control");
   return token("--radius-panel");
 }

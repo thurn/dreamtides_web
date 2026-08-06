@@ -289,7 +289,7 @@ describe("PurgeSiteScreen", () => {
     expect(cardRegion?.style.width).toBe("calc(100vw - (var(--space-4) * 2))");
     expect(cardRegion?.style.minHeight).toBe("0px");
     expect(surface?.style.background).toContain("var(--glass-fill-popover)");
-    expect(surface?.style.borderRadius).toBe("var(--radius-popover)");
+    expect(surface?.style.borderRadius).toBe("var(--radius-compact)");
     expect(gallery?.dataset.galleryFrame).toBe("floating");
     expect(gallery?.dataset.galleryColumns).toBe("4");
     expect(gallery?.dataset.gallerySpacing).toBe("medium");
@@ -396,7 +396,7 @@ describe("PurgeSiteScreen", () => {
     expect(cardRegion?.style.display).toBe("grid");
     expect(cardRegion?.style.alignItems).toBe("center");
     expect(surface?.style.background).toContain("var(--glass-fill-popover)");
-    expect(surface?.style.borderRadius).toBe("var(--radius-popover)");
+    expect(surface?.style.borderRadius).toBe("var(--radius-compact)");
     expect(gallery?.dataset.galleryFrame).toBe("floating");
     expect(gallery?.dataset.galleryColumns).toBe("5");
     expect(surface?.style.borderLeft).not.toContain("var(--border-soft)");

@@ -121,7 +121,7 @@ export function controlChrome(
     triggerGlyphColor: "text-primary",
     trackPadding: 4,
     segmentGap: 2,
-    segmentRadius: token("--radius-inset"),
+    segmentRadius: token("--radius-compact"),
     segmentBase: {},
     // A neutral frosted well — this surface reads as glass, not brand. The fill
     // is a translucent white raised on the glass track (a bespoke glass literal,

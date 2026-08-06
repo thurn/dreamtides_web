@@ -228,9 +228,10 @@ and returns the `var(--space-6)` string for inline styles. In CSS, write
 **One public vocabulary.** Every token is available to UI code and names a
 visual role or a sanctioned scale. Role tokens such as `--surface-card`,
 `--text-secondary`, and `--radius-control` say what a value is for. Scale
-families such as `--space-*`, `--t-*`, `--dur-*`, and `--shadow-*` provide the
-approved steps for layout, typography, motion, and elevation. Each declaration
-owns its resolved value directly in `cumulus-tokens.css`.
+families such as `--space-*`, `--radius-*`, `--t-*`, `--dur-*`, and
+`--shadow-*` provide the approved steps for layout, corner shape, typography,
+motion, and elevation. Each declaration owns its resolved value directly in
+`cumulus-tokens.css`.
 
 **When you use tokens directly.** Mostly in rung-2 layout wrappers (see the
 customization ladder): the wrapper you put around a Cumulus component to size,

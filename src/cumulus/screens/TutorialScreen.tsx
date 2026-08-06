@@ -1590,7 +1590,7 @@ function TutorialChallengeAnimation({
                 width: moteSize,
                 height: moteSize,
                 borderRadius: token(
-                  index % 4 === 0 ? "--radius-inset" : "--radius-pill",
+                  index % 4 === 0 ? "--radius-compact" : "--radius-pill",
                 ),
                 background: token("--tutorial-dissolve-fragment"),
                 boxShadow: token("--shadow-md"),

@@ -273,9 +273,9 @@ adopts these values verbatim.
 Every token in the sheet is part of the vocabulary UI code may reference. A
 role token describes what a value is for: `--surface-card`, `--text-primary`,
 `--accent`, `--radius-control`, and `--font-ui`. Sanctioned scales cover spacing
-(`--space-*`), type (`--t-*`), motion, and elevation. Each declaration owns its
-resolved CSS value directly, making the token contract readable without a
-second lookup layer.
+(`--space-*`), corner radius (`--radius-*`), type (`--t-*`), motion, and
+elevation. Each declaration owns its resolved CSS value directly, making the
+token contract readable without a second lookup layer.
 
 Choose tokens by role rather than by resolved value. Use `--text-secondary`
 because the text is secondary and `--radius-control` because the object is a
@@ -315,8 +315,9 @@ and name-prefix family.
 - **Typography** — the type scale (`--t-*`) and font roles (`--font-ui` = Inter,
   `--font-title` = EB Garamond, `--font-rules-text` = Fira Sans Condensed,
   `--font-numeral` = Anton, `--font-meta` = JetBrains Mono).
-- **Corner radius** — semantic roles `--radius-inset / -control / -card / -panel
-/ -sheet / -hero / -pill / -popover`.
+- **Corner radius** — five canonical roles: `--radius-compact` (8px),
+  `--radius-control` (14px), `--radius-panel` (18px), `--radius-large` (24px),
+  and `--radius-pill` (fully round).
 - **Spacing** — the `--space-*` scale + touch-floor tokens (`--safe-*`, 44pt
   floor), used directly.
 - **Iconography** — Boxicons v3.0.8 **filled** (`bxf bx-*`) is the set, already

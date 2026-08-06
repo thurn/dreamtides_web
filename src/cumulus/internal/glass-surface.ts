@@ -24,7 +24,7 @@ import { token } from "../primitives/tokens";
 export interface GlassSurfaceOptions {
   /**
    * The corner radius (token string) of the glass surface. Defaults to
-   * `token("--radius-popover")`. Pass `null` to omit `borderRadius` entirely so
+   * `token("--radius-compact")`. Pass `null` to omit `borderRadius` entirely so
    * a caller (a control track, a glass icon button) can supply its own.
    */
   radius?: string | null;
@@ -41,7 +41,7 @@ export interface GlassSurfaceOptions {
 export function glassSurfaceStyle(
   options: GlassSurfaceOptions = {},
 ): React.CSSProperties {
-  const { radius = token("--radius-popover") } = options;
+  const { radius = token("--radius-compact") } = options;
   const blurBackdrop = `blur(${token("--glass-blur")}) saturate(1.5)`;
   return {
     // Deep chrome tint at reduced alpha so the backdrop blur reads as glass —

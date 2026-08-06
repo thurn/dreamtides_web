@@ -98,7 +98,7 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
         overflow: "hidden",
         containerType: "inline-size",
         border: `${token("--space-1")} solid ${token("--border-mid")}`,
-        borderRadius: token("--radius-card"),
+        borderRadius: token("--radius-panel"),
         background: token("--surface-card"),
         boxShadow: token("--shadow-card"),
         color: token("--text-on-card"),

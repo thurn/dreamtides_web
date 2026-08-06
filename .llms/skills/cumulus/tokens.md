@@ -87,19 +87,15 @@ Hairlines and dividers.
 
 ## Radius
 
-Corner radii by surface role (control, card, panel, sheet, …).
+Five canonical corner radii, from compact surfaces to fully round geometry.
 
 | Token | Value | Notes |
 | --- | --- | --- |
-| `--radius-inset` | `10px` | small nested chips / swatches |
-| `--radius-status-badge` | `6px` | compact in-card status squares |
+| `--radius-compact` | `8px` | popovers, insets, compact status surfaces |
 | `--radius-control` | `14px` | buttons, chips, inputs, menus |
-| `--radius-card` | `16px` | the game card |
-| `--radius-panel` | `18px` | cards, tiles, group panels |
-| `--radius-sheet` | `24px` | bottom sheets, large surfaces |
-| `--radius-hero` | `30px` | hero banners / panels |
-| `--radius-pill` | `999px` | pills, fully-round buttons |
-| `--radius-popover` | `8px` | InfoCard / press-reveal popover |
+| `--radius-panel` | `18px` | cards, tiles, panels |
+| `--radius-large` | `24px` | sheets, hero banners, large surfaces |
+| `--radius-pill` | `999px` | pills, discs, circles |
 
 ## Type scale & fonts
 

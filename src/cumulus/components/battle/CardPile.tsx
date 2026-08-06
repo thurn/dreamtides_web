@@ -108,7 +108,7 @@ function EmptyPileOutline({ label }: { readonly label?: string }) {
         inset: 0,
         boxSizing: "border-box",
         border: token("--battlefield-slot-border"),
-        borderRadius: token("--radius-card"),
+        borderRadius: token("--radius-panel"),
         pointerEvents: "none",
       }}
     >

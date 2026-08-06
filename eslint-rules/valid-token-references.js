@@ -15,7 +15,7 @@ import { isUniversalUiFile } from "./ui-boundary-roles.js";
  * authoring time.
  *
  * SCOPE. All of the Cumulus tier: every file under `src/cumulus/` EXCEPT the
- * primitive layer (`src/cumulus/primitives/`, which DEFINES the tokens) and the
+ * token-definition directory (`src/cumulus/primitives/`) and the
  * doc site (`src/cumulus/docs/`, whose specimens intentionally print token names
  * that may not all resolve), plus the adapter/builder layer in
  * `src/screens/cumulus_adapters/`. Component ownership is included: a `var(--x)`
@@ -42,7 +42,7 @@ const EXEMPT_PREFIXES = [
 
 /**
  * Repo-relative POSIX dir prefixes under `src/cumulus/` that {@link isCumulusOwnedFile}
- * excludes from token-ownership: the primitive layer defines the tokens, and
+ * excludes from token ownership: the primitives directory defines the tokens, and
  * the doc site prints specimen names that need not all resolve.
  */
 const OWNERSHIP_EXEMPT_PREFIXES = ["src/cumulus/primitives/", "src/cumulus/docs/"];

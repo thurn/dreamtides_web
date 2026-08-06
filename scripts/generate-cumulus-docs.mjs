@@ -491,7 +491,7 @@ export const TOKEN_GROUPS = [
   },
   {
     title: "Radius",
-    note: "Corner radii by surface role (control, card, panel, sheet, …).",
+    note: "Five canonical corner radii, from compact surfaces to fully round geometry.",
     prefixes: ["radius-"],
   },
   {
@@ -542,7 +542,7 @@ function tokenGroupFor(name) {
       // A bare family name matches itself and any hyphenated descendant
       // ("accent" covers --accent and --accent-strong); a prefix written with
       // a trailing hyphen matches descendants only ("radius-" covers
-      // --radius-card but not a bare --radius).
+      // --radius-panel but not a bare --radius).
       const family = prefix.replace(/-$/, "");
       if (name === prefix || name.startsWith(`${family}-`)) {
         return group.title;

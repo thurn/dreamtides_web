@@ -331,7 +331,7 @@ function QsbDreamsignWindow({
           padding: "20px 20px 24px",
           background: token("--surface-chrome-strong"),
           border: `1px solid ${token("--border-soft")}`,
-          borderRadius: token("--radius-hero"),
+          borderRadius: token("--radius-large"),
           boxShadow: token("--shadow-lg"),
         }}
       >

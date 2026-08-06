@@ -156,7 +156,7 @@ function frameStyle(variant: FramedVariant): CSSProperties {
     case "thumb":
       return {
         overflow: "hidden",
-        borderRadius: token("--radius-inset"),
+        borderRadius: token("--radius-compact"),
         aspectRatio: "1 / 1",
         ...framedPortraitBackdrop(),
         border: `1px solid ${token("--border-mid")}`,

@@ -92,7 +92,7 @@ const SCREEN = "src/cumulus/screens/HomeScreen.tsx";
 ruleTester.run("no-hardcoded-values", rule, {
   valid: [
     {
-      name: "a semantic token reference is fine",
+      name: "a design token reference is fine",
       filename: SCREEN,
       code: `const s = { color: "var(--accent)", background: "var(--surface-card)" };`,
     },

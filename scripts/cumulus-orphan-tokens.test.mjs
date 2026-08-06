@@ -151,7 +151,7 @@ function isRead(name, text) {
 
 /**
  * PURE core: scan every non-excluded TS/TSX/CSS file under src/ and return
- * the sorted list of semantic token names (declared in cumulus-tokens.css)
+ * the sorted list of design token names (declared in cumulus-tokens.css)
  * that have no read anywhere in that file set.
  */
 export function findOrphanTokens() {

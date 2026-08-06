@@ -330,7 +330,7 @@ export function CardChoiceGrid({
           zIndex: card.stackedCopy === true ? 1 : undefined,
           display: "block",
           width: "100%",
-          borderRadius: token("--radius-card"),
+          borderRadius: token("--radius-panel"),
           opacity: disabled ? 0.42 : 1,
           boxShadow:
             card.emphasis === "danger"

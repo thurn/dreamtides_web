@@ -349,7 +349,7 @@ function DeckTile({
         position: "relative",
         display: "block",
         width: "100%",
-        borderRadius: token("--radius-card"),
+        borderRadius: token("--radius-panel"),
         // Nightmare wears a danger ring so the penalty card is legible even at
         // tile size, without inventing a new glyph.
         boxShadow: cardView.isBane ? `0 0 0 2px ${token("--danger")}` : "none",

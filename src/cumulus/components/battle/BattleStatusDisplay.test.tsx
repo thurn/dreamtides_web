@@ -137,7 +137,7 @@ describe("BattleStatusDisplay", () => {
     );
     expect(placeholder?.style.width).toBe("100%");
     expect(placeholder?.style.height).toBe("var(--touch-min)");
-    expect(placeholder?.style.borderRadius).toBe("var(--radius-inset)");
+    expect(placeholder?.style.borderRadius).toBe("var(--radius-compact)");
     expect(placeholder?.style.background).toBe("var(--surface-placeholder)");
     expect(container.querySelector("img")).toBeNull();
 

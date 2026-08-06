@@ -2,7 +2,7 @@
 // (src/cumulus/primitives/cumulus-tokens.css). Shared by two consumers:
 //   - scripts/generate-cumulus-tokens.mjs, which turns the result into a typed
 //     tokens.ts (deduping repeated names last-wins itself).
-//   - the Primitives-section token doc, which groups entries by their
+//   - the Design Tokens section, which groups entries by their
 //     `@kind` marker to render specimens.
 //
 // Kept deliberately dumb: this module knows nothing about cumulus-tokens.css's

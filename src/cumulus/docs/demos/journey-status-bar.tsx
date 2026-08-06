@@ -32,7 +32,7 @@ function JourneyStatusBarDemo(args: Omit<JourneyStatusBarProps, "stageRef">) {
         width: 390,
         height: 300,
         overflow: "hidden",
-        borderRadius: token("--radius-sheet"),
+        borderRadius: token("--radius-large"),
         // A dark, scene-like backdrop so the transparent HUD sits on "art"
         // and the .hud-outline glyph dilation is visibly earning its keep.
         background:

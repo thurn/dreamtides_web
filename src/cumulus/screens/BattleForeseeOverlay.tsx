@@ -335,7 +335,7 @@ export function BattleForeseeOverlay({
     display: "grid",
     placeItems: "center",
     border: `1px solid ${token("--border-strong")}`,
-    borderRadius: token("--radius-card"),
+    borderRadius: token("--radius-panel"),
     color: token("--text-on-glass"),
     font: token("--t-title-sm"),
   } as const;

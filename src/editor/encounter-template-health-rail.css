@@ -66,7 +66,7 @@
   padding: var(--space-3);
   border: 1px solid var(--border-soft);
   border-top: 3px solid var(--energy);
-  border-radius: var(--radius-inset);
+  border-radius: var(--radius-compact);
   background: color-mix(in srgb, var(--surface-raised) 60%, transparent);
 }
 
@@ -202,7 +202,7 @@
   padding: var(--space-3);
   border: 1px solid var(--border-soft);
   border-left: 3px solid var(--border-mid);
-  border-radius: var(--radius-inset);
+  border-radius: var(--radius-compact);
   background: color-mix(in srgb, var(--surface-raised) 56%, transparent);
 }
 

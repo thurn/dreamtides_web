@@ -27,4 +27,4 @@ content to the card art window.
 
 This module converts authored colors into the CSS forms used by Cumulus and
 derives translucent treatments from them. Use it for runtime color values;
-fixed design-system colors belong in semantic tokens.
+fixed design-system colors belong in named design tokens.

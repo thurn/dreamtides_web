@@ -10,7 +10,7 @@ import { isStrictCompositionFile } from "./ui-boundary-roles.js";
  * tokens; a raw `#a855f7`, `rgb(...)`,
  * or `hsl(...)` literal hardcodes a value the design system can no longer
  * control. This rule flags such literals and — via the reverse index in
- * {@link colorTokenFor} — names the semantic token that already carries the
+ * {@link colorTokenFor} — names the design token that already carries the
  * color, autofixing when the whole string is a single color.
  *
  * SCOPE. The rule fires only on the composition / product-UI tier: files under
@@ -66,9 +66,9 @@ const rule = {
     schema: [],
     messages: {
       hardcodedColorWithToken:
-        "'{{value}}' is a hardcoded color. Use the semantic token {{token}} (var({{token}})) — product UI builds from tokens, not raw color values.",
+        "'{{value}}' is a hardcoded color. Use the design token {{token}} (var({{token}})) — product UI builds from tokens, not raw color values.",
       hardcodedColorNoToken:
-        "'{{value}}' is a hardcoded color with no matching Cumulus token. Add a semantic token for it in src/cumulus/primitives/cumulus-tokens.css, or use the nearest existing token — product UI builds from tokens, not raw color values.",
+        "'{{value}}' is a hardcoded color with no matching Cumulus token. Add a named design token for it in src/cumulus/primitives/cumulus-tokens.css, or use the nearest existing token — product UI builds from tokens, not raw color values.",
     },
   },
 

@@ -157,7 +157,7 @@ export function knownTokenNames() {
 }
 
 /**
- * The semantic token whose value equals `literal`, or null if none matches.
+ * The design token whose value equals `literal`, or null if none matches.
  * Primitive/bridge tokens are only ever returned when no cleaner role token
  * shares the color (they lose the {@link semanticRank} tie-break otherwise).
  */

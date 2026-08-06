@@ -66,7 +66,7 @@ function DreamsignDemo({ sizePx = 72, variant = "hud" }: DreamsignDemoArgs) {
         justifyContent: "center",
         gap: 18,
         overflow: "hidden",
-        borderRadius: token("--radius-sheet"),
+        borderRadius: token("--radius-large"),
         // A dark, scene-like backdrop so the tiles + reveal sit over "art".
         background:
           "radial-gradient(120% 90% at 30% 20%, #3a2a55 0%, #1a1230 45%, #0a0612 100%)",

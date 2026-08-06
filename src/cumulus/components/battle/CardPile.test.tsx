@@ -265,7 +265,7 @@ describe("CardPile", () => {
       `${String(CARD_ASPECT_H)} / ${String(CARD_ASPECT_W)}`,
     );
     expect(outline?.style.border).toBe("var(--battlefield-slot-border)");
-    expect(outline?.style.borderRadius).toBe("var(--radius-card)");
+    expect(outline?.style.borderRadius).toBe("var(--radius-panel)");
     const label = outline?.querySelector<HTMLElement>(
       "[data-card-pile-empty-label]",
     );

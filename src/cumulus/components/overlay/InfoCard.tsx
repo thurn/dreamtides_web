@@ -3,7 +3,7 @@
 // The shell is fixed and shared (a liquid-glass pane, not a scrim):
 //   - no colored border, no arrow / caret pointing back at the origin
 //   - one glass material       — the shared glassSurfaceStyle chrome recipe
-//   - one corner radius         — --radius-popover
+//   - one corner radius         — --radius-compact
 //   - one shadow/rim treatment  — glassSurfaceStyle's layered glass edge
 //   - one type scale            — headline (serif) / body (rules) / meta (mono)
 // Only the MEDIA treatment varies by content, via `variant`:
@@ -564,7 +564,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
           style={{
             position: "absolute",
             inset: 0,
-            borderRadius: token("--radius-popover"),
+            borderRadius: token("--radius-compact"),
             overflow: "hidden",
             // Lift the hero image off the scene, plus the faithfully-copied
             // inset hairline highlight shared by the other media frames.
@@ -674,7 +674,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
           style={{
             position: "absolute",
             inset: 0,
-            borderRadius: token("--radius-popover"),
+            borderRadius: token("--radius-compact"),
             overflow: "hidden",
             boxShadow: `${token("--shadow-lg")}, inset 0 0 0 1px rgba(255,255,255,0.08)`,
           }}

@@ -534,7 +534,7 @@ function CommandRow({
         appearance: "none",
         border: active ? `1px solid ${token("--border-accent")}` : "1px solid transparent",
         background: active ? token("--accent-tint") : "transparent",
-        borderRadius: token("--radius-inset"),
+        borderRadius: token("--radius-compact"),
         minHeight: token("--touch-min"),
         padding: token("--space-4"),
         display: "grid",

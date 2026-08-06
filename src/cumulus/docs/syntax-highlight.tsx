@@ -8,7 +8,7 @@
 //
 // It lives in docs/ (the doc-site harness, not product UI), so the literal
 // syntax-theme colors below are intentional: a code theme is its own palette,
-// not part of the semantic token system the components build from.
+// not part of the design token system the components build from.
 
 import { type ReactNode } from "react";
 

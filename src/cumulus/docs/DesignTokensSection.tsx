@@ -409,7 +409,7 @@ function FamilyGrid({
 const colorSwatchStyle: CSSProperties = {
   width: "100%",
   height: "56px",
-  borderRadius: token("--radius-inset"),
+  borderRadius: token("--radius-compact"),
   border: `1px solid ${token("--border-mid")}`,
   boxShadow: token("--shadow-sm"),
 };
@@ -792,9 +792,9 @@ function TokenGuidance(): ReactElement {
       <strong style={{ color: token("--text-primary") }}>Choose tokens by role.</strong>{" "}
       Use <code style={codeTokenStyle}>--surface-card</code> because the element is a card surface,{" "}
       <code style={codeTokenStyle}>--radius-control</code> because it is a control, and{" "}
-      <code style={codeTokenStyle}>--font-ui</code> because it speaks in the UI voice. The spacing, type, motion,
-      and elevation families are sanctioned scales used directly by product code. If the vocabulary lacks the
-      role you need, add a named token here rather than writing an incidental value at the call site.
+      <code style={codeTokenStyle}>--font-ui</code> because it speaks in the UI voice. The spacing, radius, type,
+      motion, and elevation families are sanctioned scales used directly by product code. If the vocabulary
+      lacks the role you need, add a named token here rather than writing an incidental value at the call site.
     </p>
   );
 }
@@ -826,7 +826,7 @@ function TokenGallery({ buckets }: { buckets: Buckets }): ReactElement {
       )}
 
       {buckets.radius.length > 0 && (
-        <TokenGroup id={idFor("radius")} title={BUCKET_TITLES.radius} description="Corner radii, from the tightest inset to a fully round pill.">
+        <TokenGroup id={idFor("radius")} title={BUCKET_TITLES.radius} description="Five canonical corner radii, from compact surfaces to fully round pills and circles.">
           <FamilyGrid entries={buckets.radius} renderSpecimen={RadiusSpecimen} />
         </TokenGroup>
       )}

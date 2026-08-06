@@ -109,7 +109,7 @@ export function BattleStatusDisplay({
             style={{
               width: "100%",
               height: token("--touch-min"),
-              borderRadius: token("--radius-inset"),
+              borderRadius: token("--radius-compact"),
               background: token("--surface-placeholder"),
             }}
           />

@@ -163,7 +163,7 @@ const rule = {
       rawSpacingOffScale:
         "'{{value}}' is a raw length off the --space-* scale. Snap it to the nearest step (see the Space section of the token reference) — off-scale one-off spacing is exactly the drift the scale exists to prevent.",
       rawRadius:
-        "'{{value}}' hardcodes a corner radius. Use a --radius-* role token (--radius-control, --radius-panel, --radius-card, …) so surfaces round consistently.",
+        "'{{value}}' hardcodes a corner radius. Use one of the five --radius-* tokens (--radius-compact, --radius-control, --radius-panel, --radius-large, --radius-pill) so surfaces round consistently.",
     },
   },
 

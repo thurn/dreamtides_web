@@ -168,17 +168,13 @@
   --scrim-gallery: rgba(0, 0, 0, 0.80);  /* full-screen card gallery */
   --scrim-strong: rgba(5, 3, 10, 0.90);   /* full-screen focus (held zoom) */
 
-  /* ---- Corner radius, by role. UI code sizes corners by what the
-     element IS, not by a scale step. ---- */
-  --radius-inset: 10px;       /* small nested chips / swatches */
-  --radius-status-badge: 6px;/* compact in-card status squares */
-  --radius-control: 14px;     /* buttons, chips, inputs, menus */
-  --radius-card: 16px;      /* the game card */
-  --radius-panel: 18px;       /* cards, tiles, group panels */
-  --radius-sheet: 24px;       /* bottom sheets, large surfaces */
-  --radius-hero: 30px;       /* hero banners / panels */
-  --radius-pill: 999px;      /* pills, fully-round buttons */
-  --radius-popover: 8px;/* InfoCard / press-reveal popover */
+  /* ---- Five canonical corner radii. Choose the smallest role that fits
+     the surface; reserve the pill radius for fully round geometry. ---- */
+  --radius-compact: 8px;  /* popovers, insets, compact status surfaces */
+  --radius-control: 14px; /* buttons, chips, inputs, menus */
+  --radius-panel: 18px;   /* cards, tiles, panels */
+  --radius-large: 24px;   /* sheets, hero banners, large surfaces */
+  --radius-pill: 999px;   /* pills, discs, circles */
 
   /* ---- Font, by role. The type scale (--t-*) below bundles size +
      weight + face; these bare faces are for the cases that need only a

@@ -204,7 +204,7 @@ export function DreamsignGalleryPanel({
         flexDirection: "column",
         overflow: "hidden",
         pointerEvents: "auto",
-        borderRadius: token("--radius-popover"),
+        borderRadius: token("--radius-compact"),
         background: `${token("--glass-sheen")}, ${token("--glass-fill-popover")}`,
       }}
     >

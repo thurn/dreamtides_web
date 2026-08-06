@@ -687,7 +687,7 @@ describe("MobileBattleScreen", () => {
     );
     expect(storedTimeBadge?.style.border).toContain("var(--text-on-accent)");
     expect(storedTimeBadge?.style.borderRadius).toBe(
-      "var(--radius-status-badge)",
+      "var(--radius-compact)",
     );
     expect(
       battlefield?.querySelector('[data-battle-card-status="automated"]'),
