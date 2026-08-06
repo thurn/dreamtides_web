@@ -1371,7 +1371,9 @@ describe("ExplorationSiteScreen", () => {
     const form = container.querySelector<HTMLButtonElement>(
       '[data-testid="cumulus-transfiguration-form-Empowered"]',
     );
-    expect(form?.textContent).toBe("EmpoweredFree");
+    expect(
+      form?.querySelector("[data-transfiguration-button-price]"),
+    ).toBeNull();
     expect(form?.getAttribute("aria-disabled")).toBeNull();
     act(() => form?.click());
     act(() =>

@@ -4,7 +4,7 @@ import type {
 
 export const FOUR_SUIT_REPRISE_RULES_VERSION = "four-suit-reprise-v1";
 export const FOUR_SUIT_REPRISE_MAX_ROUNDS = 3;
-export const FOUR_SUIT_REPRISE_ESSENCE_REWARD = 50;
+export const FOUR_SUIT_REPRISE_ESSENCE_REWARD = 100;
 export const FOUR_SUIT_REPRISE_ODDS_NUMERATOR = 13;
 export const FOUR_SUIT_REPRISE_ODDS_DENOMINATOR = 52;
 
@@ -36,8 +36,8 @@ interface FourSuitRepriseDeckEntryState {
 
 /** Stable suit order and exact outcome mapping shown by the wager object. */
 export const FOUR_SUIT_REPRISE_OUTCOMES: readonly FourSuitRepriseOutcomeRule[] = [
-  { suit: "spades", outcome: "transfiguration", label: "Transfigure for free" },
-  { suit: "diamonds", outcome: "essence", label: "Unchanged + 50 Essence" },
+  { suit: "spades", outcome: "transfiguration", label: "Transfigure" },
+  { suit: "diamonds", outcome: "essence", label: "Unchanged + 100 Essence" },
   { suit: "hearts", outcome: "duplication", label: "Duplicate" },
   { suit: "clubs", outcome: "purge", label: "Purge" },
 ];

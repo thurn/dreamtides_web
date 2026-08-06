@@ -8,16 +8,16 @@ Components · Live demo & interactive props: `/cumulus#/transfiguration-button`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The canonical forge-form choice: compact and price-bearing controls with shared glyph, color, state, and accessibility behavior.
+The canonical forge-form choice: compact and optionally priced controls with shared glyph, color, state, and accessibility behavior.
 
-> **Guidance:** Use the compact variant for space-constrained lists and the priced variant when each choice carries a visible essence quote.
+> **Guidance:** Use the compact variant for space-constrained lists and the priced variant when choices may carry an essence quote; zero-cost choices omit the price.
 
 ## Props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `form` | `TransfigurationButtonModel` | yes | — | Structured offered-form data; the component owns its canonical glyph and color. |
-| `variant` | `TransfigurationButtonVariant` = `"compact" \| "priced"` | yes | — | Compact name-only choice or a wider choice with a visible essence price. |
+| `variant` | `TransfigurationButtonVariant` = `"compact" \| "priced"` | yes | — | Compact name-only choice or a wider choice that shows positive essence prices. |
 | `selected` | `boolean` | yes | — | Whether this form is the active radio choice. |
 | `disabled` | `boolean` | no | `false` | Prevent activation while a transfiguration commit is in flight. |
 | `onPress` | `(type: TransfigurationType) => void` | yes | — | Select the form after a press. |

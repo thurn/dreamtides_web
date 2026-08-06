@@ -699,7 +699,7 @@ describe("gamble-site-view-model — Four-Suit Reprise", () => {
         outcome: "essence",
         resultRevealed: true,
         resultSettled: true,
-        essenceGained: 50,
+        essenceGained: 100,
       }],
       phase: "result",
     };

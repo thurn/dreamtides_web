@@ -4588,7 +4588,7 @@
       ],
       "required": true,
       "defaultValue": null,
-      "description": "Compact name-only choice or a wider choice with a visible essence price."
+      "description": "Compact name-only choice or a wider choice that shows positive essence prices."
     },
     {
       "name": "selected",

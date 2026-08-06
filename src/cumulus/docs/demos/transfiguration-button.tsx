@@ -9,6 +9,12 @@ import type { CumulusComponent } from "../registry";
 
 const DEMO_FORMS = [
   {
+    type: "Inspired" as const,
+    description: "Give this event Fleeting.",
+    essenceCost: 0,
+    affordable: true,
+  },
+  {
     type: "Empowered" as const,
     description: "Reduce this card's energy cost.",
     essenceCost: 40,
@@ -68,9 +74,9 @@ export const transfigurationButtonDemo: CumulusComponent = {
   id: "transfiguration-button",
   title: "Transfiguration Button",
   blurb:
-    "The canonical forge-form choice: compact and price-bearing controls with shared glyph, color, state, and accessibility behavior.",
+    "The canonical forge-form choice: compact and optionally priced controls with shared glyph, color, state, and accessibility behavior.",
   callout:
-    "Use the compact variant for space-constrained lists and the priced variant when each choice carries a visible essence quote.",
+    "Use the compact variant for space-constrained lists and the priced variant when choices may carry an essence quote; zero-cost choices omit the price.",
   group: "Components",
   docName: "TransfigurationButton",
   Component: TransfigurationButtonDemo,

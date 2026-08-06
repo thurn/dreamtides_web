@@ -1016,7 +1016,7 @@ describe("Four-Suit Reprise", () => {
 
     const settled = settleFourSuit(drawn.state);
     expect(settled.outcome).toBe("applied");
-    expect(settled.state.journey.essence).toBe(225);
+    expect(settled.state.journey.essence).toBe(275);
     expect(settled.state.journey.deck).toHaveLength(3);
     expect(settled.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       phase: "result",
@@ -1026,7 +1026,7 @@ describe("Four-Suit Reprise", () => {
         outcome: "essence",
         resultRevealed: true,
         resultSettled: true,
-        essenceGained: 50,
+        essenceGained: 100,
       }],
     });
   });
@@ -1141,7 +1141,7 @@ describe("Four-Suit Reprise", () => {
       previousShuffleCommitment: "round-3",
     });
     expect(fourthRound.outcome).toBe("bounced");
-    expect(state.journey.essence).toBe(175);
+    expect(state.journey.essence).toBe(225);
     expect(state.journey.siteRuntime[SITE_ID]).toMatchObject({
       rounds: [{ roundNumber: 1 }, { roundNumber: 2 }, { roundNumber: 3 }],
     });

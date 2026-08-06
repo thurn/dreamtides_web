@@ -88,10 +88,12 @@ describe("TransfigurationButton", () => {
     const button = container.querySelector<HTMLButtonElement>("button");
     expect(button?.dataset.transfigurationButtonVariant).toBe("priced");
     expect(button?.style.gridTemplateColumns).toBe(
-      "auto minmax(0, 1fr) auto",
+      "auto minmax(0, 1fr)",
     );
     expect(button?.style.padding).toBe("var(--space-xs)");
-    expect(button?.textContent).toBe("EmpoweredFree");
+    expect(
+      button?.querySelector("[data-transfiguration-button-price]"),
+    ).toBeNull();
     expect(button?.getAttribute("aria-label")).toBe("Empowered, free");
     expect(button?.getAttribute("aria-disabled")).toBe("true");
 

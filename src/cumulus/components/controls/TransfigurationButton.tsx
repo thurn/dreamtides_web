@@ -35,13 +35,13 @@ export interface TransfigurationButtonModel {
   affordable: boolean;
 }
 
-/** Strict visual treatments for compact and price-bearing form lists. */
+/** Strict visual treatments for compact and optionally priced form lists. */
 export type TransfigurationButtonVariant = "compact" | "priced";
 
 export interface TransfigurationButtonProps {
   /** Structured offered-form data; the component owns its canonical glyph and color. */
   form: TransfigurationButtonModel;
-  /** Compact name-only choice or a wider choice with a visible essence price. */
+  /** Compact name-only choice or a wider choice that shows positive essence prices. */
   variant: TransfigurationButtonVariant;
   /** Whether this form is the active radio choice. */
   selected: boolean;
@@ -69,6 +69,7 @@ export function TransfigurationButton({
   const glyph = TRANSFIGURATION_FORM_GLYPHS[form.type];
   const accent = TRANSFIGURATION_COLORS[form.type];
   const compact = variant === "compact";
+  const showPrice = !compact && form.essenceCost > 0;
 
   return (
     <Pressable
@@ -93,7 +94,9 @@ export function TransfigurationButton({
         display: compact ? "flex" : "grid",
         gridTemplateColumns: compact
           ? undefined
-          : "auto minmax(0, 1fr) auto",
+          : showPrice
+            ? "auto minmax(0, 1fr) auto"
+            : "auto minmax(0, 1fr)",
         alignItems: "center",
         justifyContent: compact ? "center" : undefined,
         textAlign: compact ? "center" : "left",
@@ -135,19 +138,16 @@ export function TransfigurationButton({
       >
         {form.type}
       </strong>
-      {!compact && (
+      {showPrice && (
         <span
+          data-transfiguration-button-price=""
           style={{
             font: token("--t-button"),
             color: token("--text-on-glass"),
             whiteSpace: "nowrap",
           }}
         >
-          {form.essenceCost === 0 ? (
-            "Free"
-          ) : (
-            <EssenceValue amount={form.essenceCost} tone="inherit" />
-          )}
+          <EssenceValue amount={form.essenceCost} tone="inherit" />
         </span>
       )}
     </Pressable>

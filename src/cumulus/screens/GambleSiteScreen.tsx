@@ -21,6 +21,7 @@ import {
 } from "../../data/four-suit-reprise";
 import {
   PlayingCard,
+  PLAYING_CARD_DESIGN,
   PlayingCardSuitMark,
   PLAYING_CARD_FLIP_DURATION_MS,
   WagerPrizeCard,
@@ -2192,6 +2193,15 @@ function FourSuitRepriseScreen({
         const outcomeVisible =
           activeResult !== null && outcomeResultId === activeResult.id;
         const showReselect = view.phase === "choose" && selectedCard !== null;
+        const drawCardWidth = PLAYING_CARD_DESIGN.sizes[
+          layout === "desktop" ? "wager" : "wagerCompact"
+        ].square;
+        const stageGridTemplateColumns = layout === "desktop"
+          ? `${String(FOUR_SUIT_TARGET_WIDTH.desktop)}px ${String(drawCardWidth)}px ${String(FOUR_SUIT_REWARD_PANEL_WIDTH.desktop)}px`
+          : `${String(FOUR_SUIT_TARGET_WIDTH.mobile)}px ${String(drawCardWidth)}px`;
+        const stageColumnGap = layout === "desktop"
+          ? token("--space-3xl")
+          : token("--space-xl");
         return (
           <main
             data-gamble-wager-region=""
@@ -2228,77 +2238,56 @@ function FourSuitRepriseScreen({
               data-four-suit-stage=""
               style={{
                 position: "relative",
-                width: "100%",
+                width: "max-content",
                 display: "grid",
-                gridTemplateColumns: layout === "desktop"
-                  ? `${String(FOUR_SUIT_TARGET_WIDTH.desktop)}px max-content minmax(0, ${String(FOUR_SUIT_REWARD_PANEL_WIDTH.desktop)}px)`
-                  : `${String(FOUR_SUIT_TARGET_WIDTH.mobile)}px max-content`,
+                gridTemplateColumns: stageGridTemplateColumns,
                 gridTemplateAreas: layout === "desktop"
-                  ? showReselect
-                    ? '"target draw rewards" "reselect . ."'
-                    : '"target draw rewards"'
-                  : showReselect
-                    ? '"target draw" "reselect ." "rewards rewards"'
-                    : '"target draw" "rewards rewards"',
-                columnGap: layout === "desktop"
-                  ? token("--space-3xl")
-                  : token("--space-xl"),
-                rowGap: showReselect
-                  ? token("--space-xs")
-                  : layout === "desktop"
-                    ? undefined
-                    : token("--space-xl"),
+                  ? '"target draw rewards"'
+                  : '"target draw" "rewards rewards"',
+                columnGap: stageColumnGap,
+                rowGap: layout === "desktop" ? undefined : token("--space-xl"),
                 alignItems: "center",
                 justifyItems: "center",
                 justifyContent: "center",
               }}
             >
-              {target !== null && cardOutcomePhase !== "complete" && (
+              {target !== null && (
                 <div
-                  data-four-suit-target={target.entryId}
-                  data-four-suit-target-presentation={cardOutcomePhase}
+                  data-four-suit-target-slot=""
                   style={{
                     position: "relative",
                     gridArea: "target",
                     width: FOUR_SUIT_TARGET_WIDTH[layout],
+                    height:
+                      FOUR_SUIT_TARGET_WIDTH[layout] /
+                      CARD_ASPECT_RATIO_VALUE,
                     minWidth: 0,
                   }}
                 >
-                  {activeResult !== null &&
-                  cardOutcomePhase === "animating" ? (
-                    <FourSuitOutcomeCard
-                      result={activeResult}
-                      layout={layout}
-                      reduceMotion={reduceMotion}
-                    />
-                  ) : (
-                    <GameCard
-                      model={
-                        activeResult?.outcome === "transfiguration"
-                          ? activeResult.transfigurationCandidate.model
-                          : target.model
-                      }
-                    />
+                  {cardOutcomePhase !== "complete" && (
+                    <div
+                      data-four-suit-target={target.entryId}
+                      data-four-suit-target-presentation={cardOutcomePhase}
+                      style={{ position: "absolute", inset: 0 }}
+                    >
+                      {activeResult !== null &&
+                      cardOutcomePhase === "animating" ? (
+                        <FourSuitOutcomeCard
+                          result={activeResult}
+                          layout={layout}
+                          reduceMotion={reduceMotion}
+                        />
+                      ) : (
+                        <GameCard
+                          model={
+                            activeResult?.outcome === "transfiguration"
+                              ? activeResult.transfigurationCandidate.model
+                              : target.model
+                          }
+                        />
+                      )}
+                    </div>
                   )}
-                </div>
-              )}
-              {showReselect && (
-                <div
-                  data-four-suit-reselect=""
-                  style={{
-                    gridArea: "reselect",
-                    justifySelf: "start",
-                    transform: "translateX(-50%)",
-                  }}
-                >
-                  <IconButton
-                    glyph={GLYPHS.refreshCcw}
-                    label="Choose another card"
-                    size="sm"
-                    disabled={decisionPending}
-                    testId="gamble-four-suit-choose-again"
-                    onPress={() => setSelectedEntryId(null)}
-                  />
                 </div>
               )}
               <div
@@ -2420,10 +2409,11 @@ function FourSuitRepriseScreen({
               data-four-suit-actions=""
               style={{
                 minHeight: token("--touch-min"),
-                display: "flex",
+                width: "max-content",
+                display: "grid",
+                gridTemplateColumns: stageGridTemplateColumns,
+                columnGap: stageColumnGap,
                 alignItems: "center",
-                justifyContent: "center",
-                gap: token("--space-s"),
                 visibility:
                   view.phase === "choose" || actionsVisible
                     ? "visible"
@@ -2432,56 +2422,82 @@ function FourSuitRepriseScreen({
                   view.phase === "choose" || actionsVisible ? "auto" : "none",
               }}
             >
-              {view.phase === "choose" && selectedCard !== null ? (
-                <>
-                  <GlassButton
-                    label="Draw"
-                    accessibilityLabel={`Draw for ${String(view.drawCost)} Essence`}
-                    essenceCost={view.drawCost}
-                    size={layout === "mobile" ? "compact" : "standard"}
-                    variant="accent"
-                    disabled={
-                      decisionPending ||
-                      !view.runtimeReady ||
-                      !view.canAffordDraw
-                    }
-                    testId="gamble-four-suit-draw"
-                    onPress={() => {
-                      setDecisionPending(true);
-                      onDraw(selectedCard.entryId);
-                    }}
-                  />
-                  <GlassButton
-                    label="Leave"
-                    size={layout === "mobile" ? "compact" : "standard"}
+              {showReselect && (
+                <div
+                  data-four-suit-reselect=""
+                  style={{ gridColumn: "1", justifySelf: "start" }}
+                >
+                  <IconButton
+                    glyph={GLYPHS.refreshCcw}
+                    label="Choose another card"
+                    size="sm"
                     disabled={decisionPending}
-                    testId="gamble-four-suit-leave-selected"
-                    onPress={onLeave}
+                    testId="gamble-four-suit-choose-again"
+                    onPress={() => setSelectedEntryId(null)}
                   />
-                </>
-              ) : actionsVisible ? (
-                <>
-                  {view.canPlayAgain && !decisionPending && (
+                </div>
+              )}
+              <div
+                data-four-suit-primary-actions=""
+                style={{
+                  gridColumn: layout === "desktop" ? "2 / 4" : "2",
+                  justifySelf: layout === "desktop" ? "center" : "start",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: token("--space-s"),
+                }}
+              >
+                {view.phase === "choose" && selectedCard !== null ? (
+                  <>
                     <GlassButton
-                      label="Play Again"
+                      label="Draw"
+                      accessibilityLabel={`Draw for ${String(view.drawCost)} Essence`}
+                      essenceCost={view.drawCost}
                       size={layout === "mobile" ? "compact" : "standard"}
                       variant="accent"
-                      disabled={decisionPending}
-                      testId="gamble-four-suit-play-again"
+                      disabled={
+                        decisionPending ||
+                        !view.runtimeReady ||
+                        !view.canAffordDraw
+                      }
+                      testId="gamble-four-suit-draw"
                       onPress={() => {
                         setDecisionPending(true);
-                        onPlayAgain();
+                        onDraw(selectedCard.entryId);
                       }}
                     />
-                  )}
-                  <GlassButton
-                    label="Leave"
-                    size={layout === "mobile" ? "compact" : "standard"}
-                    testId="gamble-four-suit-leave-after-result"
-                    onPress={onLeave}
-                  />
-                </>
-              ) : null}
+                    <GlassButton
+                      label="Leave"
+                      size={layout === "mobile" ? "compact" : "standard"}
+                      disabled={decisionPending}
+                      testId="gamble-four-suit-leave-selected"
+                      onPress={onLeave}
+                    />
+                  </>
+                ) : actionsVisible ? (
+                  <>
+                    {view.canPlayAgain && !decisionPending && (
+                      <GlassButton
+                        label="Play Again"
+                        size={layout === "mobile" ? "compact" : "standard"}
+                        variant="accent"
+                        disabled={decisionPending}
+                        testId="gamble-four-suit-play-again"
+                        onPress={() => {
+                          setDecisionPending(true);
+                          onPlayAgain();
+                        }}
+                      />
+                    )}
+                    <GlassButton
+                      label="Leave"
+                      size={layout === "mobile" ? "compact" : "standard"}
+                      testId="gamble-four-suit-leave-after-result"
+                      onPress={onLeave}
+                    />
+                  </>
+                ) : null}
+              </div>
             </div>
           </main>
         );

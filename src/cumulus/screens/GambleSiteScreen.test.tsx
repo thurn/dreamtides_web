@@ -1305,7 +1305,7 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       container.querySelector(
         '[data-four-suit-actions] [data-testid="gamble-four-suit-choose-again"]',
       ),
-    ).toBeNull();
+    ).toBe(reselect);
     expect(
       container.querySelector(
         '[data-four-suit-reselect] [data-testid="gamble-four-suit-choose-again"]',
@@ -1313,8 +1313,12 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     ).toBe(reselect);
     expect(
       container.querySelector<HTMLElement>("[data-four-suit-reselect]")?.style
-        .gridArea,
-    ).toBe("reselect");
+        .gridColumn,
+    ).toBe("1");
+    expect(
+      container.querySelector<HTMLElement>("[data-four-suit-stage]")?.style
+        .gridTemplateAreas,
+    ).toBe('"target draw rewards"');
     act(() => reselect?.click());
     expect(container.querySelector("[data-four-suit-picker]")).not.toBeNull();
     act(() => {
@@ -1446,6 +1450,7 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     ).toHaveLength(2);
     void act(() => vi.advanceTimersByTime(2_600));
     expect(container.querySelector("[data-four-suit-target]")).toBeNull();
+    expect(container.querySelector("[data-four-suit-target-slot]")).not.toBeNull();
     const replay = container.querySelector<HTMLButtonElement>(
       '[data-testid="gamble-four-suit-play-again"]',
     );
@@ -1456,7 +1461,7 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
   });
 
   it.each([
-    ["essence", "diamonds", 50],
+    ["essence", "diamonds", 100],
     ["duplication", "hearts", 0],
     ["purge", "clubs", 0],
   ] as const)(
@@ -1500,6 +1505,7 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       }
       void act(() => vi.advanceTimersByTime(2_600));
       expect(container.querySelector("[data-four-suit-target]")).toBeNull();
+      expect(container.querySelector("[data-four-suit-target-slot]")).not.toBeNull();
 
       act(() => root.unmount());
     },
