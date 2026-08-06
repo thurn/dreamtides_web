@@ -60,13 +60,6 @@ export const pressableDemo: CumulusComponent = {
   <span className="my-target">Reveal on press</span>
 </Pressable>`,
     },
-    {
-      label: "Readable rules-copy reveal",
-      note: "Ability text is the strict exception: use `stationary` so holding it to read keyword definitions never shrinks the copy beneath the finger.",
-      code: `<Pressable as="span" pressFeedback="stationary">
-  <RulesText text={abilityText} />
-</Pressable>`,
-    },
   ],
   demo: {
     defaultArgs: {

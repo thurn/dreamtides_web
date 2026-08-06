@@ -1679,35 +1679,6 @@
       "description": "Stable test id for the section."
     }
   ],
-  "DreamAvatarAbilityText": [
-    {
-      "name": "dreamAvatarId",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Stable DreamAvatar UUID that owns this ability."
-    },
-    {
-      "name": "text",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Complete rendered rules text for the DreamAvatar ability."
-    },
-    {
-      "name": "presentation",
-      "tsType": "\"natural\" | \"selectionCard\"",
-      "unionMembers": [
-        "natural",
-        "selectionCard"
-      ],
-      "required": false,
-      "defaultValue": "natural",
-      "description": "Natural copy for flowing layouts, or the two-line aligned selection-card\ntreatment used by the desktop DreamAvatar offer triptych."
-    }
-  ],
   "DreamAvatarPortrait": [
     {
       "name": "dreamAvatar",
@@ -3439,6 +3410,7 @@
       "unionMembers": [
         "symbol",
         "object",
+        "source",
         "map",
         "filter",
         "text",
@@ -3539,7 +3511,6 @@
         "script",
         "section",
         "select",
-        "source",
         "span",
         "strong",
         "summary",
@@ -3814,6 +3785,63 @@
       "required": true,
       "defaultValue": null,
       "description": "The rules text to render."
+    },
+    {
+      "name": "owner",
+      "tsType": "RulesTextOwner",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Semantic owner required for context-sensitive glossary definitions.",
+      "nested": {
+        "name": "RulesTextOwner",
+        "fields": [
+          {
+            "name": "kind",
+            "tsType": "RulesTextGlossaryOwner",
+            "optional": false,
+            "description": "Object type used to contextualize glossary definitions."
+          },
+          {
+            "name": "id",
+            "tsType": "string",
+            "optional": false,
+            "description": "Stable UUID or domain id for this exact rules-text owner."
+          }
+        ]
+      }
+    },
+    {
+      "name": "glossaryInteraction",
+      "tsType": "\"source\" | \"delegated\"",
+      "unionMembers": [
+        "source",
+        "delegated"
+      ],
+      "required": false,
+      "defaultValue": "source",
+      "description": "`source` makes the complete text block one glossary reveal target.\n`delegated` renders passive copy inside an entity that owns the reveal."
+    },
+    {
+      "name": "transfigurationColor",
+      "tsType": "CumulusColor",
+      "unionMembers": [
+        "danger",
+        "accent",
+        "accent-bright",
+        "essence",
+        "energy",
+        "spark",
+        "positive",
+        "selected",
+        "text-primary",
+        "text-secondary",
+        "text-on-accent",
+        "white"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "Semantic tint for text enclosed by transfiguration markers."
     }
   ],
   "SegmentedControl": [

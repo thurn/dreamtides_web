@@ -6,7 +6,7 @@
 
 Primitives · Live demo & interactive props: `/cumulus#/pressable`
 
-Real consumers: **32** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **33** (imports outside `src/cumulus/docs/` and tests).
 
 The one press-feedback primitive. Interactive surfaces measure their rendered box for proportional hover and press movement; readable rules-copy reveals use the strict stationary variant.
 
@@ -16,7 +16,7 @@ The one press-feedback primitive. Interactive surfaces measure their rendered bo
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `as` | `ElementType<any, keyof IntrinsicElements>` = `"symbol" \| "object" \| "map" \| "filter" \| "text" \| "search" \| "mark" \| "h1" \| "h2" \| "big" \| "link" \| "small" \| "sub" \| "sup" \| "image" \| "center" \| "figure" \| "meta" \| "slot" \| "style" \| "title" \| "a" \| "abbr" \| "address" \| "area" \| "article" \| "aside" \| "audio" \| "b" \| "base" \| "bdi" \| "bdo" \| "blockquote" \| "body" \| "br" \| "button" \| "canvas" \| "caption" \| "cite" \| "code" \| "col" \| "colgroup" \| "data" \| "datalist" \| "dd" \| "del" \| "details" \| "dfn" \| "dialog" \| "div" \| "dl" \| "dt" \| "em" \| "embed" \| "fieldset" \| "figcaption" \| "footer" \| "form" \| "h3" \| "h4" \| "h5" \| "h6" \| "head" \| "header" \| "hgroup" \| "hr" \| "html" \| "i" \| "iframe" \| "img" \| "input" \| "ins" \| "kbd" \| "keygen" \| "label" \| "legend" \| "li" \| "main" \| "menu" \| "menuitem" \| "meter" \| "nav" \| "noindex" \| "noscript" \| "ol" \| "optgroup" \| "option" \| "output" \| "p" \| "param" \| "picture" \| "pre" \| "progress" \| "q" \| "rp" \| "rt" \| "ruby" \| "s" \| "samp" \| "script" \| "section" \| "select" \| "source" \| "span" \| "strong" \| "summary" \| "table" \| "template" \| "tbody" \| "td" \| "textarea" \| "tfoot" \| "th" \| "thead" \| "time" \| "tr" \| "track" \| "u" \| "ul" \| "var" \| "video" \| "wbr" \| "webview" \| "svg" \| "animate" \| "animateMotion" \| "animateTransform" \| "circle" \| "clipPath" \| "defs" \| "desc" \| "ellipse" \| "feBlend" \| "feColorMatrix" \| "feComponentTransfer" \| "feComposite" \| "feConvolveMatrix" \| "feDiffuseLighting" \| "feDisplacementMap" \| "feDistantLight" \| "feDropShadow" \| "feFlood" \| "feFuncA" \| "feFuncB" \| "feFuncG" \| "feFuncR" \| "feGaussianBlur" \| "feImage" \| "feMerge" \| "feMergeNode" \| "feMorphology" \| "feOffset" \| "fePointLight" \| "feSpecularLighting" \| "feSpotLight" \| "feTile" \| "feTurbulence" \| "foreignObject" \| "g" \| "line" \| "linearGradient" \| "marker" \| "mask" \| "metadata" \| "mpath" \| "path" \| "pattern" \| "polygon" \| "polyline" \| "radialGradient" \| "rect" \| "set" \| "stop" \| "switch" \| "textPath" \| "tspan" \| "use" \| "view"` | no | `button` | Chooses the underlying HTML element or React component that receives the Pressable behavior. This changes the rendered element's native semantics and behavior, but not the hover or press feedback. Keep the default `button` for actions; use another element only when its semantics fit the surface, such as `span` for inline, non-action information reveals. Default `button`. |
+| `as` | `ElementType<any, keyof IntrinsicElements>` = `"symbol" \| "object" \| "source" \| "map" \| "filter" \| "text" \| "search" \| "mark" \| "h1" \| "h2" \| "big" \| "link" \| "small" \| "sub" \| "sup" \| "image" \| "center" \| "figure" \| "meta" \| "slot" \| "style" \| "title" \| "a" \| "abbr" \| "address" \| "area" \| "article" \| "aside" \| "audio" \| "b" \| "base" \| "bdi" \| "bdo" \| "blockquote" \| "body" \| "br" \| "button" \| "canvas" \| "caption" \| "cite" \| "code" \| "col" \| "colgroup" \| "data" \| "datalist" \| "dd" \| "del" \| "details" \| "dfn" \| "dialog" \| "div" \| "dl" \| "dt" \| "em" \| "embed" \| "fieldset" \| "figcaption" \| "footer" \| "form" \| "h3" \| "h4" \| "h5" \| "h6" \| "head" \| "header" \| "hgroup" \| "hr" \| "html" \| "i" \| "iframe" \| "img" \| "input" \| "ins" \| "kbd" \| "keygen" \| "label" \| "legend" \| "li" \| "main" \| "menu" \| "menuitem" \| "meter" \| "nav" \| "noindex" \| "noscript" \| "ol" \| "optgroup" \| "option" \| "output" \| "p" \| "param" \| "picture" \| "pre" \| "progress" \| "q" \| "rp" \| "rt" \| "ruby" \| "s" \| "samp" \| "script" \| "section" \| "select" \| "span" \| "strong" \| "summary" \| "table" \| "template" \| "tbody" \| "td" \| "textarea" \| "tfoot" \| "th" \| "thead" \| "time" \| "tr" \| "track" \| "u" \| "ul" \| "var" \| "video" \| "wbr" \| "webview" \| "svg" \| "animate" \| "animateMotion" \| "animateTransform" \| "circle" \| "clipPath" \| "defs" \| "desc" \| "ellipse" \| "feBlend" \| "feColorMatrix" \| "feComponentTransfer" \| "feComposite" \| "feConvolveMatrix" \| "feDiffuseLighting" \| "feDisplacementMap" \| "feDistantLight" \| "feDropShadow" \| "feFlood" \| "feFuncA" \| "feFuncB" \| "feFuncG" \| "feFuncR" \| "feGaussianBlur" \| "feImage" \| "feMerge" \| "feMergeNode" \| "feMorphology" \| "feOffset" \| "fePointLight" \| "feSpecularLighting" \| "feSpotLight" \| "feTile" \| "feTurbulence" \| "foreignObject" \| "g" \| "line" \| "linearGradient" \| "marker" \| "mask" \| "metadata" \| "mpath" \| "path" \| "pattern" \| "polygon" \| "polyline" \| "radialGradient" \| "rect" \| "set" \| "stop" \| "switch" \| "textPath" \| "tspan" \| "use" \| "view"` | no | `button` | Chooses the underlying HTML element or React component that receives the Pressable behavior. This changes the rendered element's native semantics and behavior, but not the hover or press feedback. Keep the default `button` for actions; use another element only when its semantics fit the surface, such as `span` for inline, non-action information reveals. Default `button`. |
 | `disabled` | `boolean` | no | `false` | Disables press feedback and pointer handlers, and shows the default cursor. |
 | `pressFeedback` | `"scale" \| "stationary"` | no | `scale` | Press motion. `scale` is the global control treatment; `stationary` is reserved for readable rules-copy reveal surfaces. Default `scale`. |
 | `hoverFeedback` | `"scale" \| "stationary"` | no | `scale` | Hover motion. `stationary` keeps a source fixed while a separate reading copy is shown. Default `scale`. |
@@ -54,15 +54,5 @@ Wrap a surface you press to reveal information but cannot act on (a tide disc, a
 ```tsx
 <Pressable as="span">
   <span className="my-target">Reveal on press</span>
-</Pressable>
-```
-
-### Readable rules-copy reveal
-
-Ability text is the strict exception: use `stationary` so holding it to read keyword definitions never shrinks the copy beneath the finger.
-
-```tsx
-<Pressable as="span" pressFeedback="stationary">
-  <RulesText text={abilityText} />
 </Pressable>
 ```

@@ -148,6 +148,26 @@ describe("selectRevealPlacement", () => {
     );
   });
 
+  it("aligns a tall desktop source definition below a source near the viewport top", () => {
+    const sourceRect = { x: 400, y: 80, width: 300, height: 40 };
+    const result = selectRevealPlacement({
+      ...base,
+      viewport: { ...viewport, layout: "desktop", width: 1200, height: 900, safeArea: { top: 0, right: 0, bottom: 0, left: 0 } },
+      reason: "hover",
+      touchPoint: undefined,
+      primaryKind: "source",
+      sourceRect,
+      primarySize: { width: 300, height: 40 },
+      secondarySizes: [{ width: 248, height: 208 }],
+    });
+
+    expect(result.family).toBe("desktop-source-in-place");
+    expect(result.primaryRect).toEqual(sourceRect);
+    expect(result.secondaryRects).toHaveLength(1);
+    expect(result.secondaryRects[0]?.y).toBe(sourceRect.y);
+    expect(result.secondaryRects[0]?.y + result.secondaryRects[0]?.height).toBeLessThanOrEqual(900);
+  });
+
   it("places small tangible previews horizontally beyond the glossary stack", () => {
     const result = selectRevealPlacement({
       ...base,

@@ -67,7 +67,7 @@ export function dreamsignRevealSpec(
             body: effect ? richText.rules(effect) : undefined,
           },
     },
-    secondaries: rulesTextDefinitionCards(effect),
+    secondaries: rulesTextDefinitionCards(effect, "dreamsign"),
   };
 }
 

@@ -87,7 +87,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 <!-- BEGIN GENERATED COMPONENT INDEX (npm run cumulus-docs) -->
 | Component | Group | Consumers | Reference | What it is |
 | --- | --- | --- | --- | --- |
-| Pressable | Primitives | 32 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
+| Pressable | Primitives | 33 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
 | Essence Value | Components | 12 | [components/essence-value.md](components/essence-value.md) | The canonical Essence amount: a tight inline value for player-facing currency text, with a named solid reward badge for values placed over art. |
 | Icon Button | Components | 19 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
 | Main Menu Button | Components | 1 | [components/main-menu-button.md](components/main-menu-button.md) | The text-first action for the Dreamtides main menu: outlined white at rest, showing the shared Cumulus liquid-glass material on hover or focus. |
@@ -120,11 +120,10 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | Coop Presence Status | Components | 1 | [components/coop-presence-status.md](components/coop-presence-status.md) | The compact, non-interactive app chrome that reports connected room participants from an explicit view-model count. |
 | Battle Status Display | Components | 1 | [components/battle-status-display.md](components/battle-status-display.md) | The glass status card for one battle participant: centered current and maximum energy at left, a head-focused DreamAvatar portrait or loading placeholder at center, and centered current and target points at right. |
 | Dreamwell Card | Components | 5 | [components/dreamwell-card.md](components/dreamwell-card.md) | The static landscape card drawn from the Dreamwell: UUID-keyed art, energy grant, name, and complete rules text in one readable object. |
-| DreamAvatar Ability Text | Components | 2 | [components/dream-avatar-ability-text.md](components/dream-avatar-ability-text.md) | The complete DreamAvatar rules-text source: hovering, focusing, or touch-holding anywhere in the ability reveals one compact title-free card containing every defined term in rules-text occurrence order, using DreamAvatar-specific exhaust guidance. |
 | DreamAvatar Portrait | Components | 18 | [components/dream-avatar-portrait.md](components/dream-avatar-portrait.md) | The shared framed and stage-filling DreamAvatar art surface: the transparent full-body cutout in one of six fixed framings. |
 | Entity Reference | Components | 3 | [components/entity-reference.md](components/entity-reference.md) | An inline, underlined card or Dreamsign name that reveals the canonical full entity on hover, keyboard focus, or touch hold through the shared coordinator. |
-| Rich Text | Components | 14 | [components/rich-text.md](components/rich-text.md) | The design system's model for formatted copy. |
-| Rules Text | Components | 17 | [components/rules-text.md](components/rules-text.md) | Renders Dreamtides rules copy from card data — resource pips, Unicode trigger markers, and glossary keywords styled in place — with definition cards adapted to the exact rules sentence. |
+| Rich Text | Components | 13 | [components/rich-text.md](components/rich-text.md) | The design system's model for formatted copy. |
+| Rules Text | Components | 17 | [components/rules-text.md](components/rules-text.md) | The canonical Dreamtides rules-copy source: resource symbols and keywords render in place, while hovering, focusing, or touch-holding anywhere in the complete block reveals one contextual glossary card. |
 | Game Card | Components | 31 | [components/game-card.md](components/game-card.md) | The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name. |
 | Card Back | Components | 4 | [components/card-back.md](components/card-back.md) | The canonical face-down Dreamtides card object: the shipped card-back sprite on the shared 5:7 card geometry, with fixed crop, edge, and elevation. |
 | Card Pile | Components | 1 | [components/card-pile.md](components/card-pile.md) | A physical deck or void stack built from structured, topmost-first card instances. |

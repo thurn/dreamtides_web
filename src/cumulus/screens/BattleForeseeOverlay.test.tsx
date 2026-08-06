@@ -9,6 +9,7 @@ import {
   BattleForeseeOverlay,
   type BattleForeseeView,
 } from "./BattleForeseeOverlay";
+import { CumulusRoot } from "../CumulusRoot";
 
 vi.mock("../components/card/CardView", () => ({
   GameCard: ({ model }: { model: { displaySnapshot: CardData } }) => (
@@ -61,7 +62,7 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
-  act(() => root.render(element));
+  act(() => root.render(<CumulusRoot>{element}</CumulusRoot>));
   return { container, root };
 }
 

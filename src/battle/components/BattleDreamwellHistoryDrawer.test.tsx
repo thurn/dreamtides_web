@@ -5,6 +5,7 @@ import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it } from "vitest";
 import type { DreamwellCardDefinition } from "../types";
 import { BattleDreamwellHistoryDrawer } from "./BattleDreamwellHistoryDrawer";
+import { CumulusRoot } from "../../cumulus/CumulusRoot";
 
 beforeEach(() => {
   (
@@ -32,12 +33,14 @@ describe("BattleDreamwellHistoryDrawer", () => {
 
     act(() => {
       root.render(
-        <BattleDreamwellHistoryDrawer
-          dreamwellDeck={[CARD, { ...CARD, order: 1 }]}
-          dreamwellDeckIndex={2}
-          isOpen
-          onClose={() => undefined}
-        />,
+        <CumulusRoot>
+          <BattleDreamwellHistoryDrawer
+            dreamwellDeck={[CARD, { ...CARD, order: 1 }]}
+            dreamwellDeckIndex={2}
+            isOpen
+            onClose={() => undefined}
+          />
+        </CumulusRoot>,
       );
     });
 

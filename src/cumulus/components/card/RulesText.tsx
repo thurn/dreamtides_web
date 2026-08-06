@@ -18,11 +18,11 @@ import {
 import { InlineGlyph } from "../typography/InlineGlyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
-import { GlossaryTerm } from "./GlossaryTerm";
-import {
-  contextualizeGlossaryEntry,
-  type RulesTextGlossaryOwner,
-} from "../../../data/glossary-terms";
+import type { RulesTextGlossaryOwner } from "../../../data/glossary-terms";
+import { rulesTextDefinitionCards } from "./rules-text-reveal";
+import { useRevealSource } from "../../internal/reveal/context";
+import { revealEntityId } from "../../internal/reveal/identity";
+import { Pressable } from "../../primitives/Pressable";
 
 /**
  * Renders rules text with:
@@ -34,15 +34,17 @@ import {
  *     filled marks (star-circle, moon, brain)
  *   - the trigger marker `▸` rendered as authored Unicode in the surrounding
  *     font and color
- *   - glossary terms rendered as plain prose by default, with a curated set
+ *   - glossary terms rendered as plain prose, with a curated set
  *     of keyword effects and action verbs (`dissolve`, `banish`, `prevent`,
  *     `foresee`, `veil`, `vengeful`, `reclaim`, …) emphasized in the spark
  *     amber so the eye catches them (see `HIGHLIGHTED_TERMS`). The
  *     plain-language definitions travel with named entity reveal specifications
  *     through the shared reveal coordinator.
  *
- * Shared rules-text renderer for card, DreamAvatar, Dreamsign, battle, editor,
- * and reward surfaces. New surfaces call this rather than duplicate the JSX.
+ * `RulesText` is the canonical block component for card, DreamAvatar,
+ * Dreamsign, battle, editor, and reward surfaces. The lower render helpers are
+ * passive formatters for structured-copy components whose outer entity owns
+ * glossary interaction.
  */
 
 /**
@@ -161,18 +163,30 @@ export function isHighlightedRulesTextTerm(word: string): boolean {
   return HIGHLIGHTED_TERMS.has(word.toLowerCase());
 }
 
-interface RulesTextProps {
+/** Semantic game object whose authored rules text is being rendered. */
+export interface RulesTextOwner {
+  /** Object type used to contextualize glossary definitions. */
+  readonly kind: RulesTextGlossaryOwner;
+  /** Stable UUID or domain id for this exact rules-text owner. */
+  readonly id: string;
+}
+
+export interface RulesTextProps {
   /** The rules text to render. */
-  text: string;
+  readonly text: string;
+  /** Semantic owner required for context-sensitive glossary definitions. */
+  readonly owner: RulesTextOwner;
+  /**
+   * `source` makes the complete text block one glossary reveal target.
+   * `delegated` renders passive copy inside an entity that owns the reveal.
+   * @default "source"
+   */
+  readonly glossaryInteraction?: "source" | "delegated";
+  /** Semantic tint for text enclosed by transfiguration markers. */
+  readonly transfigurationColor?: CumulusColor;
 }
 
 interface RenderRulesTextOptions {
-  /** Inline terms own reveal semantics on readable source copy. */
-  interactiveTerms?: boolean;
-  /** Complete source copy used to contextualize matched glossary terms. */
-  glossarySourceText?: string;
-  /** Semantic owner used for owner-specific glossary definitions. */
-  glossaryOwner?: RulesTextGlossaryOwner;
   /**
    * When set, runs of text wrapped in transfigure markers (see
    * `TRANSFIGURE_MARK_START` / `TRANSFIGURE_MARK_END`) are painted in this color
@@ -269,7 +283,7 @@ function renderSegment(
     // card in its hover-help panel rather than as per-word tooltips. A curated
     // set of keyword effects and action verbs carries a spark-amber emphasis so
     // the eye still catches them.
-    return options.interactiveTerms !== true ? (
+    return (
       <span
         key={key}
         style={
@@ -280,17 +294,6 @@ function renderSegment(
       >
         {segment.word}
       </span>
-    ) : (
-      <GlossaryTerm
-        key={key}
-        entry={contextualizeGlossaryEntry(
-          segment.entry,
-          options.glossarySourceText ?? segment.word,
-          options.glossaryOwner,
-        )}
-        emphasized={isHighlightedRulesTextTerm(segment.word)}
-        text={segment.word}
-      />
     );
   }
   if (segment.kind === "bolt") {
@@ -363,20 +366,6 @@ function renderSegment(
   }
   const iconSpec = SYMBOL_ICON_CLASSES[segment.symbol];
   if (iconSpec !== undefined) {
-    if (options.interactiveTerms === true && segment.entry !== undefined) {
-      return (
-        <GlossaryTerm
-          key={key}
-          entry={contextualizeGlossaryEntry(
-            segment.entry,
-            options.glossarySourceText ?? segment.char,
-            options.glossaryOwner,
-          )}
-          text={segment.char}
-          glyph={iconSpec.className}
-        />
-      );
-    }
     return (
       <span key={key} style={{ color: iconSpec.color }}>
         <InlineGlyph glyph={iconSpec.className} label={iconSpec.label} />
@@ -433,16 +422,12 @@ export function renderRulesText(
   text: string,
   options: RenderRulesTextOptions = {},
 ): ReactNode[] {
-  const contextualOptions = {
-    ...options,
-    glossarySourceText: options.glossarySourceText ?? text,
-  };
   const paragraphs = splitRulesTextIntoParagraphs(text);
   return paragraphs.map((paragraph, p) => {
     const style: CSSProperties = p === 0 ? {} : { marginTop: PARAGRAPH_GAP };
     return (
       <div key={p} data-rules-text-paragraph="" style={style}>
-        {renderParagraph(paragraph, p, contextualOptions)}
+        {renderParagraph(paragraph, p, options)}
       </div>
     );
   });
@@ -496,15 +481,10 @@ function renderParagraph(
  * authored paragraphs are joined with a space because the caller owns the
  * surrounding block layout.
  */
-export function renderRulesTextInline(
-  text: string,
-): ReactNode[] {
+export function renderRulesTextInline(text: string): ReactNode[] {
   return splitRulesTextIntoParagraphs(text).flatMap((paragraph, index) => [
     ...(index === 0 ? [] : [<span key={`separator-${String(index)}`}> </span>]),
-    ...renderParagraph(paragraph, index, {
-      interactiveTerms: false,
-      glossarySourceText: text,
-    }),
+    ...renderParagraph(paragraph, index, {}),
   ]);
 }
 
@@ -513,12 +493,74 @@ export function renderRulesTextInline(
  * Trigger markers normalize to the compact authored form (`▸Dawn`).
  */
 export function renderRulesSymbolsInline(text: string): ReactNode[] {
-  return tokenizeRulesSymbols(stripMarkers(text)).map(
-    (segment, segmentIndex) =>
-      renderSegment(segment, segmentIndex, {
-        interactiveTerms: false,
-        glossarySourceText: text,
-      }),
+  return tokenizeRulesSymbols(stripMarkers(text)).map((segment, segmentIndex) =>
+    renderSegment(segment, segmentIndex, {}),
+  );
+}
+
+function rulesTextEntityType(owner: RulesTextOwner): string {
+  switch (owner.kind) {
+    case "card":
+      return "card-rules-text";
+    case "dreamAvatar":
+      return "dream-avatar-rules-text";
+    case "dreamsign":
+      return "dreamsign-rules-text";
+  }
+}
+
+function rulesTextAriaLabel(owner: RulesTextOwner, text: string): string {
+  switch (owner.kind) {
+    case "card":
+      return `Card rules: ${text}`;
+    case "dreamAvatar":
+      return `Avatar ability: ${text}`;
+    case "dreamsign":
+      return `Dreamsign ability: ${text}`;
+  }
+}
+
+function RulesTextSource({
+  text,
+  owner,
+  content,
+}: {
+  readonly text: string;
+  readonly owner: RulesTextOwner;
+  readonly content: ReactNode;
+}) {
+  const entityType = rulesTextEntityType(owner);
+  const binding = useRevealSource({
+    identity: {
+      entityType,
+      entityId: revealEntityId(entityType, owner.id),
+    },
+    spec: {
+      primary: { kind: "source", description: text },
+      secondaries: rulesTextDefinitionCards(text, owner.kind),
+    },
+    feedback: "stationary",
+  });
+  return (
+    <Pressable
+      as="div"
+      ref={binding.ref}
+      {...binding.sourceProps}
+      hoverFeedback="stationary"
+      pressFeedback="stationary"
+      tabIndex={0}
+      aria-label={rulesTextAriaLabel(owner, text)}
+      data-rules-text-source={owner.id}
+      data-rules-text-owner={owner.kind}
+      style={{
+        ...binding.sourceProps.style,
+        display: "block",
+        width: "100%",
+        cursor: "default",
+      }}
+    >
+      {content}
+    </Pressable>
   );
 }
 
@@ -529,6 +571,18 @@ export function renderRulesSymbolsInline(text: string): ReactNode[] {
  * `dreamAvatar.renderedText`, or `dreamsign.effectDescription` raw — the
  * tokenizer handles the symbol substitution and glossary-term emphasis.
  */
-export function RulesText({ text }: RulesTextProps) {
-  return <>{renderRulesText(text, { interactiveTerms: true })}</>;
+export function RulesText({
+  text,
+  owner,
+  glossaryInteraction = "source",
+  transfigurationColor,
+}: RulesTextProps) {
+  const content = renderRulesText(text, {
+    highlightColor: transfigurationColor,
+  });
+  const hasDefinitions = rulesTextDefinitionCards(text, owner.kind).length > 0;
+  if (glossaryInteraction === "delegated" || !hasDefinitions) {
+    return <>{content}</>;
+  }
+  return <RulesTextSource text={text} owner={owner} content={content} />;
 }

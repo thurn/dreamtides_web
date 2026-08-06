@@ -24,7 +24,6 @@ import { cardStatOrbDemo } from "./demos/card-stat-orb";
 import { characterDialogueDemo } from "./demos/character-dialogue";
 import { coopPresenceStatusDemo } from "./demos/coop-presence-status";
 import { commandMenuDemo } from "./demos/command-menu";
-import { dreamAvatarAbilityTextDemo } from "./demos/dream-avatar-ability-text";
 import { dreamAvatarPortraitDemo } from "./demos/dream-avatar-portrait";
 import { dreamwellCardDemo } from "./demos/dreamwell-card";
 import { dreamsignDemo } from "./demos/dreamsign";
@@ -196,7 +195,6 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   coopPresenceStatusDemo,
   battleStatusDisplayDemo,
   dreamwellCardDemo,
-  dreamAvatarAbilityTextDemo,
   dreamAvatarPortraitDemo,
   entityReferenceDemo,
   richTextDemo,

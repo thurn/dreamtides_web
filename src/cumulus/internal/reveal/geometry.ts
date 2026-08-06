@@ -427,9 +427,18 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
     const secondaryX = useRight ? rightX : leftX;
     const anchorBottom = Math.min(safeBottom, sourceRect.y + sourceRect.height);
     const count = canUseRight || canUseLeft
-      ? fitSecondaryPrefix(secondarySizes, anchorBottom - safeTop)
+      ? fitSecondaryPrefix(secondarySizes, safeBottom - safeTop)
       : 0;
-    const secondaryY = anchorBottom - stackHeight(secondarySizes, count);
+    const secondaryHeight = stackHeight(secondarySizes, count);
+    const bottomAlignedY = anchorBottom - secondaryHeight;
+    const secondaryY =
+      bottomAlignedY >= safeTop
+        ? bottomAlignedY
+        : clamp(
+            sourceRect.y,
+            safeTop,
+            Math.max(safeTop, safeBottom - secondaryHeight),
+          );
     return result(input, {
       family: "desktop-source-in-place",
       orientation,

@@ -327,7 +327,10 @@ function BattleStartPanel({
             <PanelSection label="Ability" density={density}>
               <div style={{ font: token("--t-rules") }}>
                 {view.dreamAvatar.abilityActive ? (
-                  <RulesText text={view.dreamAvatar.ability} />
+                  <RulesText
+                    text={view.dreamAvatar.ability}
+                    owner={{ kind: "dreamAvatar", id: view.dreamAvatar.id }}
+                  />
                 ) : (
                   <span style={{ color: token("--text-on-glass-muted") }}>
                     Opponent avatar ability is not active.

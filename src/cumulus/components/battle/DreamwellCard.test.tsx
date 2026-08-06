@@ -4,6 +4,7 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it } from "vitest";
 import { asCardId } from "../../../types/card-identity";
+import { CumulusRoot } from "../../CumulusRoot";
 import { DreamwellCard, type DreamwellCardModel } from "./DreamwellCard";
 
 beforeEach(() => {
@@ -34,7 +35,11 @@ describe("DreamwellCard", () => {
     const root = createRoot(container);
 
     act(() => {
-      root.render(<DreamwellCard model={MODEL} testId="dreamwell" />);
+      root.render(
+        <CumulusRoot>
+          <DreamwellCard model={MODEL} testId="dreamwell" />
+        </CumulusRoot>,
+      );
     });
 
     const card = container.querySelector<HTMLElement>("[data-dreamwell-card]");
@@ -60,6 +65,37 @@ describe("DreamwellCard", () => {
     );
     expect(container.querySelector("button")).toBeNull();
     expect(container.querySelector("[data-battle-card-motion]")).toBeNull();
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("delegates glossary interaction to the complete Dreamwell entity", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    const model: DreamwellCardModel = {
+      ...MODEL,
+      displaySnapshot: {
+        ...MODEL.displaySnapshot,
+        renderedText: "Reclaim this card.",
+      },
+    };
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <DreamwellCard model={model} />
+        </CumulusRoot>,
+      );
+    });
+
+    const card = container.querySelector<HTMLElement>("[data-dreamwell-card]");
+    expect(card?.dataset.revealEntityType).toBe("dreamwell-card");
+    expect(card?.dataset.revealEntityId).toBe(MODEL.cardId);
+    expect(card?.getAttribute("tabindex")).toBe("0");
+    expect(card?.querySelector("[data-rules-text-source]")).toBeNull();
+    expect(card?.querySelector("[data-glossary-term]")).toBeNull();
 
     act(() => root.unmount());
     container.remove();

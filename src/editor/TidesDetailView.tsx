@@ -96,7 +96,10 @@ function FeaturedSource({
             {dreamAvatar.title}
           </div>
           <div style={{ fontSize: "0.9rem", lineHeight: 1.4, maxWidth: 460 }}>
-            <RulesText text={dreamAvatar.renderedText} />
+            <RulesText
+              text={dreamAvatar.renderedText}
+              owner={{ kind: "dreamAvatar", id: dreamAvatar.id }}
+            />
           </div>
         </div>
       </div>

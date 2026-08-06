@@ -211,7 +211,10 @@ export default function EditableDreamAvatar({
           onCommit={(value) => onFieldCommit(dreamAvatar, "rendered-text", value)}
         >
           <div style={abilityStyle}>
-            <RulesText text={dreamAvatar["rendered-text"]} />
+            <RulesText
+              text={dreamAvatar["rendered-text"]}
+              owner={{ kind: "dreamAvatar", id: dreamAvatar.id }}
+            />
           </div>
         </EditableField>
 

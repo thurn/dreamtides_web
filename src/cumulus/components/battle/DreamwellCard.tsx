@@ -8,7 +8,10 @@ import type { CardId } from "../../../types/card-identity";
 import type { ArtCrop } from "../../../types/cards";
 import { token } from "../../primitives/tokens";
 import { CardStatOrb } from "../card/CardStatOrb";
-import { renderRulesText } from "../card/RulesText";
+import { RulesText } from "../card/RulesText";
+import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
+import { useRevealSource } from "../../internal/reveal/context";
+import { Pressable } from "../../primitives/Pressable";
 import "./dreamwell-card.css";
 
 /** The complete resolved display data for one Dreamwell card. */
@@ -83,10 +86,29 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
     ? cardImageUrl(card.imageNumber)
     : cardIdenticonUri(model.cardId);
   const rules = card.renderedText.trim();
+  const definitions = rulesTextDefinitionCards(rules, "card");
+  const binding = useRevealSource({
+    identity: { entityType: "dreamwell-card", entityId: model.cardId },
+    spec: {
+      primary: {
+        kind: "source",
+        description: [card.name, rules].filter(Boolean).join(". "),
+      },
+      secondaries: definitions,
+    },
+    feedback: "stationary",
+  });
+  const hasDefinitions = definitions.length > 0;
 
   return (
-    <article
+    <Pressable
+      as="article"
+      ref={hasDefinitions ? binding.ref : undefined}
+      {...(hasDefinitions ? binding.sourceProps : {})}
+      hoverFeedback="stationary"
+      pressFeedback="stationary"
       role="group"
+      tabIndex={hasDefinitions ? 0 : undefined}
       aria-label={`${card.name}: adds ${String(card.energyAdded)} energy`}
       data-cumulus-dreamwell-card=""
       data-dreamwell-card={model.cardId}
@@ -175,10 +197,14 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
               font: token("--t-rules"),
             }}
           >
-            {renderRulesText(rules)}
+            <RulesText
+              text={rules}
+              owner={{ kind: "card", id: model.cardId }}
+              glossaryInteraction="delegated"
+            />
           </div>
         )}
       </div>
-    </article>
+    </Pressable>
   );
 }

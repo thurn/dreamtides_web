@@ -130,7 +130,10 @@ export function RulesTextMockup() {
                     {resolved.featured.name}
                   </h2>
                   <div style={{ font: token("--t-rules") }}>
-                    <RulesText text={resolved.featured.renderedText} />
+                    <RulesText
+                      text={resolved.featured.renderedText}
+                      owner={{ kind: "card", id: resolved.featured.id }}
+                    />
                   </div>
                 </div>
               )}
@@ -154,7 +157,10 @@ export function RulesTextMockup() {
                         {card.name}
                       </div>
                       <div style={{ font: token("--t-rules") }}>
-                        <RulesText text={card.renderedText} />
+                        <RulesText
+                          text={card.renderedText}
+                          owner={{ kind: "card", id: card.id }}
+                        />
                       </div>
                     </div>
                   ))}

@@ -32,7 +32,7 @@ import { renderCardChangeBadge } from "./card-change-badge";
 import { TRANSFIGURATION_ICONS } from "../../../runtime/transfiguration-display";
 import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
 import { TRANSFIGURE_MARK_START } from "../../../runtime/transfigure-markers";
-import { renderRulesText } from "./RulesText";
+import { RulesText } from "./RulesText";
 import { useFitText } from "../controls/useFitText";
 import { DESKTOP_MIN_WIDTH } from "../../screens/use-is-desktop";
 import { Pressable } from "../../primitives/Pressable";
@@ -1085,10 +1085,12 @@ function GameCardSurface(props: GameCardSurfaceProps) {
         textShadow: "var(--cv-rules-text-shadow)",
       }}
     >
-      {renderRulesText(transfiguration?.markedText ?? card.renderedText, {
-        highlightColor: transfiguration?.color,
-        interactiveTerms: false,
-      })}
+      <RulesText
+        text={transfiguration?.markedText ?? card.renderedText}
+        owner={{ kind: "card", id: card.id }}
+        glossaryInteraction="delegated"
+        transfigurationColor={transfiguration?.color}
+      />
     </div>
   ) : null;
 

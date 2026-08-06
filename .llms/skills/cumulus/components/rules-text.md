@@ -8,20 +8,33 @@ Components · Live demo & interactive props: `/cumulus#/rules-text`
 
 Real consumers: **17** (imports outside `src/cumulus/docs/` and tests).
 
-Renders Dreamtides rules copy from card data — resource pips, Unicode trigger markers, and glossary keywords styled in place — with definition cards adapted to the exact rules sentence.
+The canonical Dreamtides rules-copy source: resource symbols and keywords render in place, while hovering, focusing, or touch-holding anywhere in the complete block reveals one contextual glossary card.
 
 ## Props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `text` | `string` | yes | — | The rules text to render. |
+| `owner` | `RulesTextOwner` | yes | — | Semantic owner required for context-sensitive glossary definitions. |
+| `glossaryInteraction` | `"source" \| "delegated"` | no | `source` | `source` makes the complete text block one glossary reveal target. `delegated` renders passive copy inside an entity that owns the reveal. |
+| `transfigurationColor` | `CumulusColor` = `"danger" \| "accent" \| "accent-bright" \| "essence" \| "energy" \| "spark" \| "positive" \| "selected" \| "text-primary" \| "text-secondary" \| "text-on-accent" \| "white"` | no | — | Semantic tint for text enclosed by transfiguration markers. |
+
+### `owner`: the `RulesTextOwner` model
+
+| Field | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `kind` | `RulesTextGlossaryOwner` | no | Object type used to contextualize glossary definitions. |
+| `id` | `string` | no | Stable UUID or domain id for this exact rules-text owner. |
 
 ## Usage
 
-Renders authored rules-text markup: energy / spark glyphs become inline pips, `⧗` becomes the memory brain, `▸` remains compact Unicode text in the surrounding font and color, `❖` becomes a bolt icon, and the curated keyword set is emphasized. Numeric Foresee, Erode, and Reclaim definitions reflect the exact count or energy cost and use singular grammar where appropriate; granted Reclaim refers to its target card. Pass the card's rendered-text string as `text`.
+Pass the complete authored rules text plus its semantic owner. The whole block is one stationary glossary source; entities such as GameCard and Dreamsign use the delegated interaction so hovering anywhere on the entity remains the trigger.
 
 ```tsx
 import { RulesText } from "src/cumulus/components/card/RulesText";
 
-<RulesText text={"Support – Supported allies have +2✦."} />
+<RulesText
+  text={card.renderedText}
+  owner={{ kind: "card", id: card.id }}
+/>
 ```

@@ -70,17 +70,47 @@ describe("GlossaryTerm", () => {
     expect(description?.textContent).toContain(entry.definition);
   });
 
-  it("makes recognized RulesText terms stationary semantic sources while preserving rich marks", () => {
+  it("makes the complete RulesText block one stationary source while preserving rich marks", () => {
     const entry = FIXTURE;
     const { container } = mount(
-      <RulesText text={`${entry.term} 2● and 3✦.`} />,
+      <RulesText
+        text={`${entry.term} 2● and 3✦.`}
+        owner={{ kind: "card", id: "11111111-1111-4111-8111-111111111111" }}
+      />,
     );
-    const term = container.querySelector<HTMLElement>("[data-glossary-term]");
-    expect(term?.textContent).toBe(entry.term);
-    expect(term?.dataset.revealFeedback).toBe("stationary");
-    expect(term?.style.cursor).toBe("default");
+    const source = container.querySelector<HTMLElement>(
+      "[data-rules-text-source]",
+    );
+    expect(container.querySelector("[data-glossary-term]")).toBeNull();
+    expect(source?.textContent).toContain(entry.term);
+    expect(source?.dataset.revealFeedback).toBe("stationary");
+    expect(source?.style.cursor).toBe("default");
+    expect(container.querySelectorAll("[data-rules-text-source]")).toHaveLength(
+      1,
+    );
     expect(container.querySelector('[aria-label="energy"]')).not.toBeNull();
     expect(container.querySelector('[aria-label="spark"]')).not.toBeNull();
+
+    act(() => source?.focus());
+    expect(source?.dataset.revealActive).toBe("true");
+    const description = document.getElementById(
+      source?.getAttribute("aria-describedby") ?? "",
+    );
+    expect(description?.textContent).toContain(entry.definition);
+  });
+
+  it("renders passive RulesText copy when glossary interaction belongs to an outer entity", () => {
+    const { container } = mount(
+      <RulesText
+        text={`${FIXTURE.term} 2●.`}
+        owner={{ kind: "card", id: "11111111-1111-4111-8111-111111111111" }}
+        glossaryInteraction="delegated"
+      />,
+    );
+
+    expect(container.querySelector("[data-rules-text-source]")).toBeNull();
+    expect(container.querySelector("[data-glossary-term]")).toBeNull();
+    expect(container.querySelector('[aria-label="energy"]')).not.toBeNull();
   });
 });
 const FIXTURE = vi.hoisted(() => ({

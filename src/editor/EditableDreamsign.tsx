@@ -275,7 +275,10 @@ export default function EditableDreamsign({
           onCommit={(value) => onFieldCommit(dreamsign, "rendered-text", value)}
         >
           <div style={effectStyle}>
-            <RulesText text={dreamsign["rendered-text"]} />
+            <RulesText
+              text={dreamsign["rendered-text"]}
+              owner={{ kind: "dreamsign", id: dreamsign.id }}
+            />
           </div>
         </EditableField>
 

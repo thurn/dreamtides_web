@@ -2,7 +2,7 @@
 // carousel, one DreamAvatar per page, with the full-body character cutout
 // standing on an ambient backdrop behind a liquid-glass console. It shares
 // the view types and console primitives with the desktop triptych via
-// `journey-start-shared`, and both layouts use the same named DreamAvatar ability
+// `journey-start-shared`, and both layouts compose the canonical RulesText
 // source; `JourneyStartScreen` picks between the two by viewport.
 // PURE: renders from a view-model and reports the chosen DreamAvatar via `onPick`.
 
@@ -16,6 +16,7 @@ import { token } from "../primitives/tokens";
 import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
 import {
   ConsoleDivider,
+  JourneyStartAbilityCopy,
   JourneyStartGuideDialogue,
   OnMediaEyebrow,
   JourneyStartRerollControl,
@@ -23,7 +24,6 @@ import {
   type DreamAvatarOfferView,
   type JourneyStartScreenProps,
 } from "./journey-start-shared";
-import { DreamAvatarAbilityText } from "../components/hud/DreamAvatarAbilityText";
 
 /** Invisible touch slop padded around each mobile tide disc so it is easier to
  * press; the disc row reabsorbs it with negative margins so the visual layout
@@ -48,10 +48,7 @@ function DreamAvatarConsole({
           flexDirection: "column",
         }}
       >
-        <DreamAvatarAbilityText
-          dreamAvatarId={dreamAvatar.id}
-          text={dreamAvatar.renderedText}
-        />
+        <JourneyStartAbilityCopy dreamAvatar={dreamAvatar} />
 
         {/* An even --space-l rhythm around the divider, matching the desktop
             panel: one step above and one below. */}

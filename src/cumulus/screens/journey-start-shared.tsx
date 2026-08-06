@@ -1,10 +1,11 @@
 // Shared core for the Cumulus DreamAvatar-select screen. Both the mobile carousel
 // (`journey-start-mobile`) and the desktop triptych (`journey-start-desktop`) render
 // from these view types and reuse the essence/tide interaction primitives and
-// console hairline, while both compose the named DreamAvatarAbilityText source.
+// console hairline, while both compose the canonical RulesText source.
 // PURE: no state ownership; the adapter owns the offer, the seed, and startJourney.
 
 import { useEffect } from "react";
+import { RulesText } from "../components/card/RulesText";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { IconButton } from "../components/controls/IconButton";
 import { TideDisc } from "../components/hud/TideDisc";
@@ -18,6 +19,29 @@ import { GLOSSARY_IDS } from "../../data/glossary";
 import { DEBUG_REROLL_TOP } from "./chrome-geometry";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
+
+/** Canonical rules copy in the Journey Start console's inherited type voice. */
+export function JourneyStartAbilityCopy({
+  dreamAvatar,
+}: {
+  readonly dreamAvatar: Pick<DreamAvatarOfferView, "id" | "renderedText">;
+}) {
+  return (
+    <div
+      style={{
+        font: token("--t-rules"),
+        color: token("--text-primary"),
+        lineHeight: 1.36,
+        cursor: "default",
+      }}
+    >
+      <RulesText
+        text={dreamAvatar.renderedText}
+        owner={{ kind: "dreamAvatar", id: dreamAvatar.id }}
+      />
+    </div>
+  );
+}
 
 /** One tide shown on a DreamAvatar, already resolved to display copy. Both the
  * desktop triptych and the mobile carousel render their tide discs (and each

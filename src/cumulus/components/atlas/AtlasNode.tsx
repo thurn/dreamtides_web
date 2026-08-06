@@ -2,6 +2,7 @@ import * as React from "react";
 import type { CSSProperties } from "react";
 import type { DreamscapeNode } from "../../../types/journey";
 import { richText } from "../card/rich-text";
+import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
 import type { RevealInfoCardModel, RevealSpec } from "../../internal/reveal/model";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
@@ -105,7 +106,12 @@ function dreamsignCard(dreamsign: AtlasNodeDreamsign): RevealInfoCardModel {
 /** Derives the private reveal protocol from Atlas semantics. */
 function atlasNodeRevealSpec(model: AtlasNodeModel): RevealSpec {
   const secondaries: RevealInfoCardModel[] = [];
-  if (model.dreamsign !== null) secondaries.push(dreamsignCard(model.dreamsign));
+  if (model.dreamsign !== null) {
+    secondaries.push(
+      dreamsignCard(model.dreamsign),
+      ...rulesTextDefinitionCards(model.dreamsign.rulesText, "dreamsign"),
+    );
+  }
   if (model.site !== null) {
     secondaries.push({
       variant: "icon",

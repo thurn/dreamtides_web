@@ -6,17 +6,18 @@
 // and a full-width purple accent GlassButton). All columns render at exactly
 // the same size. It shares the view types and console primitives with the mobile
 // carousel via `journey-start-shared`, and both layouts use the same named
-// DreamAvatar ability source; `JourneyStartScreen` picks by viewport.
+// canonical RulesText source; `JourneyStartScreen` picks by viewport.
 // PURE: renders from a view-model and reports the chosen DreamAvatar via `onPick`.
 
+import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { Motes } from "../components/hud/Motes";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { token } from "../primitives/tokens";
 import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
-import { DreamAvatarAbilityText } from "../components/hud/DreamAvatarAbilityText";
 import {
   ConsoleDivider,
+  JourneyStartAbilityCopy,
   JourneyStartGuideDialogue,
   JourneyStartRerollControl,
   TidesEssenceBlock,
@@ -31,6 +32,66 @@ const COLUMN_W = 400; // the figure stage's width
 const PORTRAIT_H = 715; // the standing figure's stage height
 const CARD_W = 320; // console-card width (narrower than the column, centered)
 const CARD_OVERLAP = 275; // how far the panel's center rides up over the figure
+
+/** The smallest aligned ability-text scale. Longer copy grows vertically. */
+const ABILITY_MIN_SCALE = 0.9;
+
+/** Two lines of the rules voice in the desktop DreamAvatar selection card. */
+const ALIGNED_ABILITY_MIN_HEIGHT = 40;
+
+/**
+ * Keeps short desktop abilities centered in a two-line floor while allowing
+ * longer copy to grow. The transform scales glyphs and text together.
+ */
+function AlignedAbilityBox({ children }: { readonly children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [{ scale, boxHeight }, setFit] = useState({
+    scale: 1,
+    boxHeight: ALIGNED_ABILITY_MIN_HEIGHT,
+  });
+
+  useLayoutEffect(() => {
+    const element = ref.current;
+    if (element === null) return;
+    const natural = element.offsetHeight;
+    const nextScale =
+      natural > ALIGNED_ABILITY_MIN_HEIGHT
+        ? Math.max(
+            ABILITY_MIN_SCALE,
+            ALIGNED_ABILITY_MIN_HEIGHT / natural,
+          )
+        : 1;
+    setFit({
+      scale: nextScale,
+      boxHeight: Math.max(
+        ALIGNED_ABILITY_MIN_HEIGHT,
+        Math.round(natural * nextScale),
+      ),
+    });
+  }, [children]);
+
+  return (
+    <div
+      style={{
+        height: boxHeight,
+        display: "flex",
+        alignItems: "center",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        ref={ref}
+        style={{
+          width: "100%",
+          transform: scale < 1 ? `scale(${String(scale)})` : undefined,
+          transformOrigin: "left center",
+        }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
 
 /** The desktop screen's small purple eyebrow title, pinned near the top of the
  * screen — the mobile ScreenHeader's uppercase accent treatment, in flow. */
@@ -128,11 +189,9 @@ function DreamAvatarCard({
             flexDirection: "column",
           }}
         >
-          <DreamAvatarAbilityText
-            dreamAvatarId={dreamAvatar.id}
-            text={dreamAvatar.renderedText}
-            presentation="selectionCard"
-          />
+          <AlignedAbilityBox>
+            <JourneyStartAbilityCopy dreamAvatar={dreamAvatar} />
+          </AlignedAbilityBox>
 
           <div style={{ marginTop: token("--space-l") }}>
             <ConsoleDivider flush />

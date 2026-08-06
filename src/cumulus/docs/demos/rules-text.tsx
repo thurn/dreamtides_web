@@ -3,8 +3,8 @@
 // rules-text markup: energy/spark glyphs become inline pips, `▸` remains
 // compact Unicode text, `❖` becomes a bolt icon, and the curated keyword set
 // (support, reclaim, banish, …) is emphasized in spark amber. The
-// memory source symbol renders as its filled brain and carries the Memory
-// glossary reveal.
+// memory source symbol renders as its filled brain. The complete block is the
+// one reveal source for every contextual glossary definition it contains.
 //
 // RulesText's `text` prop is required, which the registry's
 // `ComponentType<Record<string, unknown>>` signature can't satisfy directly. A
@@ -26,29 +26,35 @@ const SAMPLE_RULES_TEXT = [
   "",
   "▸Dawn: Store 1⧗. Gain 2⍟.",
 ].join("\n");
+const SAMPLE_CARD_ID = "11111111-1111-4111-8111-111111111111";
 
 interface RulesTextDemoArgs {
   text?: string;
 }
 
 function RulesTextDemo({ text = SAMPLE_RULES_TEXT }: RulesTextDemoArgs) {
-  return <RulesText text={text} />;
+  return (
+    <RulesText text={text} owner={{ kind: "card", id: SAMPLE_CARD_ID }} />
+  );
 }
 
 export const rulesTextDemo: CumulusComponent = {
   id: "rules-text",
   title: "Rules Text",
   blurb:
-    "Renders Dreamtides rules copy from card data — resource pips, Unicode trigger markers, and glossary keywords styled in place — with definition cards adapted to the exact rules sentence.",
+    "The canonical Dreamtides rules-copy source: resource symbols and keywords render in place, while hovering, focusing, or touch-holding anywhere in the complete block reveals one contextual glossary card.",
   group: "Components",
   docName: "RulesText",
   Component: RulesTextDemo,
   usage: [
     {
-      note: "Renders authored rules-text markup: energy / spark glyphs become inline pips, `⧗` becomes the memory brain, `▸` remains compact Unicode text in the surrounding font and color, `❖` becomes a bolt icon, and the curated keyword set is emphasized. Numeric Foresee, Erode, and Reclaim definitions reflect the exact count or energy cost and use singular grammar where appropriate; granted Reclaim refers to its target card. Pass the card's rendered-text string as `text`.",
+      note: "Pass the complete authored rules text plus its semantic owner. The whole block is one stationary glossary source; entities such as GameCard and Dreamsign use the delegated interaction so hovering anywhere on the entity remains the trigger.",
       code: `import { RulesText } from "src/cumulus/components/card/RulesText";
 
-<RulesText text={"Support – Supported allies have +2✦."} />`,
+<RulesText
+  text={card.renderedText}
+  owner={{ kind: "card", id: card.id }}
+/>`,
     },
   ],
   demo: {

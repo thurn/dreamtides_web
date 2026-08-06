@@ -523,7 +523,10 @@ export default function DreamAvatarDetailView({
               maxWidth: 720,
             }}
           >
-            <RulesText text={dreamAvatar["rendered-text"]} />
+            <RulesText
+              text={dreamAvatar["rendered-text"]}
+              owner={{ kind: "dreamAvatar", id: dreamAvatar.id }}
+            />
           </div>
           <div
             style={{

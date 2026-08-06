@@ -6,7 +6,7 @@ const STRONG_MECHANICAL_PROPS = new Set(["anchorRect", "portalTarget", "revealSi
 const CONTROLLED_PROPS = new Set(["open", "shown", "isOpen", "isShown", "revealOpen", "revealShown"]);
 const INTERACTION_ESCAPE_PROPS = new Set(["onMouseEnter", "onMouseMove", "onMouseLeave", "onPointerEnter", "onPointerMove", "onPointerLeave", "onPointerDown", "onPointerUp", "onPointerCancel", "onMouseDown", "onMouseUp", "onTouchStart", "onTouchMove", "onTouchEnd"]);
 const CONTENT_PROPS = new Set(["content", "children", "card", "reveal", "renderedContent"]);
-const NAMED_REVEAL_COMPONENTS = new Set(["GameCard", "EntityReference", "InfoCard", "AtlasNode", "GlossaryTerm", "BattleGameCard", "Dreamsign", "WagerPrizeCard", "DreamAvatarPortrait", "DreamAvatarAbilityText", "TideDisc", "TidesInfoLabel", "EssenceValue", "CardStatOrb", "JourneyStatusBar", "SiteNode", "TransfigurationButton", "OfferTile"]);
+const NAMED_REVEAL_COMPONENTS = new Set(["GameCard", "EntityReference", "InfoCard", "AtlasNode", "GlossaryTerm", "RulesText", "BattleGameCard", "DreamwellCard", "Dreamsign", "WagerPrizeCard", "DreamAvatarPortrait", "TideDisc", "TidesInfoLabel", "EssenceValue", "CardStatOrb", "JourneyStatusBar", "SiteNode", "TransfigurationButton", "OfferTile"]);
 const GENERIC_REVEAL_WRAPPERS = new Set(["HoverPopover", "RevealPopover", "EntityReveal", "GenericReveal", "RevealWrapper", "EntityRevealWrapper"]);
 
 const CONTEXT_COMPONENTS = [
@@ -19,11 +19,12 @@ const CONTEXT_COMPONENTS = [
   "src/cumulus/components/card/CardView.tsx",
   "src/cumulus/components/card/GlossaryTerm.tsx",
   "src/cumulus/components/card/PlayingCard.tsx",
+  "src/cumulus/components/card/RulesText.tsx",
+  "src/cumulus/components/battle/DreamwellCard.tsx",
   "src/cumulus/components/controls/OfferTile.tsx",
   "src/cumulus/components/controls/TransfigurationButton.tsx",
   "src/cumulus/components/dreamscape/SiteNode.tsx",
   "src/cumulus/components/hud/DreamAvatarPortrait.tsx",
-  "src/cumulus/components/hud/DreamAvatarAbilityText.tsx",
   "src/cumulus/components/hud/Dreamsign.tsx",
   "src/cumulus/components/hud/JourneyStatusBar.tsx",
   "src/cumulus/components/hud/EssenceValue.tsx",

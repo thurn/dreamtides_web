@@ -6,8 +6,12 @@ import { createRoot, type Root } from "react-dom/client";
 import { CumulusRoot } from "../../CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { ENERGY_ICON_COLOR } from "../controls/StandaloneGlyph";
-import { GLOSSARY_IDS, requireGlossaryEntry } from "../../../data/glossary";
 import { RulesText } from "./RulesText";
+
+const CARD_OWNER = {
+  kind: "card",
+  id: "11111111-1111-4111-8111-111111111111",
+} as const;
 
 function mount(element: ReactElement): {
   container: HTMLDivElement;
@@ -36,7 +40,9 @@ afterEach(() => {
 
 describe("RulesText", () => {
   it("renders recognized glossary terms as plain text without an underline", () => {
-    const { container, root } = mount(<RulesText text="Reclaim this card." />);
+    const { container, root } = mount(
+      <RulesText text="Reclaim this card." owner={CARD_OWNER} />,
+    );
 
     // The "Reclaim" word renders as plain prose; its definition surfaces in the
     // card's hover-help panel rather than as a per-word underline/tooltip.
@@ -55,7 +61,9 @@ describe("RulesText", () => {
   });
 
   it("renders the energy glyph as the boxicons fire-alt icon", () => {
-    const { container, root } = mount(<RulesText text="Pay ●3." />);
+    const { container, root } = mount(
+      <RulesText text="Pay ●3." owner={CARD_OWNER} />,
+    );
 
     const flame = container.querySelector("i.bxf.bx-fire-alt");
     expect(flame).not.toBeNull();
@@ -74,7 +82,7 @@ describe("RulesText", () => {
   // constant as the fallback everywhere else, so the two cannot drift apart.
   it("colors the inline energy flame with ENERGY_ICON_COLOR", () => {
     const { container, root } = mount(
-      <RulesText text="Pay ●2 to draw a card." />,
+      <RulesText text="Pay ●2 to draw a card." owner={CARD_OWNER} />,
     );
 
     const flame = container.querySelector<HTMLElement>("i.bxf.bx-fire-alt");
@@ -103,12 +111,14 @@ describe("RulesText", () => {
   // literal diamond character.
   it("renders the fast marker ❖ as one boxicons bolt icon", () => {
     const { container, root } = mount(
-      <RulesText text="❖ – 1●: Move this character." />,
+      <RulesText text="❖ – 1●: Move this character." owner={CARD_OWNER} />,
     );
 
     const bolts = container.querySelectorAll("i.bxf.bx-bolt");
     expect(bolts).toHaveLength(1);
-    expect(container.textContent).not.toContain("❖");
+    expect(
+      container.querySelector("[data-rules-text-paragraph]")?.textContent,
+    ).not.toContain("❖");
 
     act(() => {
       root.unmount();
@@ -119,12 +129,17 @@ describe("RulesText", () => {
   // double-bolt interrupt chip in the title bar.
   it("renders the interrupt marker ❖❖ as two bolt icons", () => {
     const { container, root } = mount(
-      <RulesText text="❖❖ – Abandon an ally: Effect." />,
+      <RulesText
+        text="❖❖ – Abandon an ally: Effect."
+        owner={CARD_OWNER}
+      />,
     );
 
     const bolts = container.querySelectorAll("i.bxf.bx-bolt");
     expect(bolts).toHaveLength(2);
-    expect(container.textContent).not.toContain("❖");
+    expect(
+      container.querySelector("[data-rules-text-paragraph]")?.textContent,
+    ).not.toContain("❖");
 
     act(() => {
       root.unmount();
@@ -132,7 +147,9 @@ describe("RulesText", () => {
   });
 
   it("does not wrap unknown words", () => {
-    const { container, root } = mount(<RulesText text="Deal 3 damage." />);
+    const { container, root } = mount(
+      <RulesText text="Deal 3 damage." owner={CARD_OWNER} />,
+    );
 
     const triggerSpans = Array.from(container.querySelectorAll("span")).filter(
       (s) => s.getAttribute("style")?.includes("text-decoration") === true,
@@ -146,7 +163,7 @@ describe("RulesText", () => {
 
   it("keeps the trigger keyword on one line and renders it as plain text", () => {
     const { container, root } = mount(
-      <RulesText text="▸ Judgment: Draw a card." />,
+      <RulesText text="▸ Judgment: Draw a card." owner={CARD_OWNER} />,
     );
 
     // The Judgment keyword renders as plain prose (no per-word underline).
@@ -174,7 +191,7 @@ describe("RulesText", () => {
 
   it("renders ▸ as compact Unicode text that inherits the surrounding style", () => {
     const { container, root } = mount(
-      <RulesText text="▸ Judgment: Draw a card." />,
+      <RulesText text="▸ Judgment: Draw a card." owner={CARD_OWNER} />,
     );
 
     expect(container.querySelector("i.bxf.bx-caret-right")).toBeNull();
@@ -195,7 +212,7 @@ describe("RulesText", () => {
   // icon-font mark rather than printing the literal character.
   it("renders points ⍟, lunar ☾, and memory ⧗ as filled marks", () => {
     const { container, root } = mount(
-      <RulesText text="Gain 2⍟. ☾: Store 1⧗." />,
+      <RulesText text="Gain 2⍟. ☾: Store 1⧗." owner={CARD_OWNER} />,
     );
 
     expect(container.querySelector("i.bxf.bx-star-circle")).not.toBeNull();
@@ -208,14 +225,10 @@ describe("RulesText", () => {
     expect(renderedRules?.textContent).not.toContain("☾");
     expect(renderedRules?.textContent).not.toContain("⧗");
 
-    const pointsEntry = requireGlossaryEntry(GLOSSARY_IDS.points);
-    expect(
-      container.querySelector(`[data-glossary-term="${pointsEntry.term}"]`),
-    ).toContain(container.querySelector("i.bxf.bx-star-circle"));
-    const memoryEntry = requireGlossaryEntry(GLOSSARY_IDS.memory);
-    expect(
-      container.querySelector(`[data-glossary-term="${memoryEntry.term}"]`),
-    ).toContain(container.querySelector("i.bxf.bx-brain"));
+    expect(container.querySelectorAll("[data-glossary-term]")).toHaveLength(0);
+    expect(container.querySelectorAll("[data-rules-text-source]")).toHaveLength(
+      1,
+    );
 
     act(() => {
       root.unmount();
@@ -231,6 +244,7 @@ describe("RulesText", () => {
         text={
           "▸ Materialized: Banish an enemy until this character leaves play.\n\nAbandon this character: Foresee 2."
         }
+        owner={CARD_OWNER}
       />,
     );
 
@@ -251,7 +265,7 @@ describe("RulesText", () => {
   // font size (small card vs. large card).
   it("applies a top-margin to non-first ability paragraphs", () => {
     const { container, root } = mount(
-      <RulesText text={"Ability one.\n\nAbility two."} />,
+      <RulesText text={"Ability one.\n\nAbility two."} owner={CARD_OWNER} />,
     );
 
     const paragraphs = container.querySelectorAll(
@@ -276,7 +290,10 @@ describe("RulesText", () => {
   // Single-ability cards keep one paragraph and no inter-ability gap.
   it("renders a single ability as one paragraph with no extra spacing", () => {
     const { container, root } = mount(
-      <RulesText text="▸ Materialized: Foresee 1." />,
+      <RulesText
+        text="▸ Materialized: Foresee 1."
+        owner={CARD_OWNER}
+      />,
     );
 
     const paragraphs = container.querySelectorAll(

@@ -13,7 +13,7 @@ import {
 } from "../data/card-database";
 import type { ArtCrop } from "../types/cards";
 import { CardStatOrb } from "../cumulus/components/card/CardStatOrb";
-import { renderRulesText } from "../cumulus/components/card/RulesText";
+import { RulesText } from "../cumulus/components/card/RulesText";
 
 /**
  * Optional render overrides for the Dreamwell card's editable regions. Each slot
@@ -585,7 +585,12 @@ export function DreamwellEditorPreview({
           ? (() => {
               const rulesNode =
                 renderedText.trim() !== ""
-                  ? renderRulesText(renderedText)
+                  ? (
+                      <RulesText
+                        text={renderedText}
+                        owner={{ kind: "card", id: card.id }}
+                      />
+                    )
                   : null;
               return slots?.rulesText ? slots.rulesText(rulesNode) : rulesNode;
             })()

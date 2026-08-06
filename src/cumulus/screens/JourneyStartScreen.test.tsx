@@ -319,11 +319,10 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     );
 
     const source = container.querySelector<HTMLElement>(
-      `[data-dream-avatar-ability="${dreamAvatar.id}"]`,
+      `[data-rules-text-source="${dreamAvatar.id}"]`,
     );
-    expect(source?.getAttribute("aria-label")).toBe(
-      `Avatar ability: ${ability}`,
-    );
+    expect(source?.dataset.rulesTextOwner).toBe("dreamAvatar");
+    expect(source?.getAttribute("aria-describedby")).toBeTruthy();
     expect(source?.dataset.revealPrimaryVariant).toBe("source");
     expect(source?.dataset.revealSecondaryTitles).toBe("");
     expect(source?.querySelector("[data-glossary-term]")).toBeNull();

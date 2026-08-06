@@ -4,7 +4,6 @@ import {
   type RulesTextGlossaryOwner,
 } from "../../../data/glossary-terms";
 import type { InfoCardProps, InfoCardTextProps } from "../overlay/InfoCard";
-import { richText } from "./rich-text";
 
 /**
  * Build the compact glossary card shared by semantic rules-text sources. Each
@@ -24,14 +23,15 @@ export function glossaryDefinitionsCardModel(
   }
   return {
     variant: "text",
-    body: richText.definitions(
-      visibleEntries.map((entry) => ({
+    body: {
+      kind: "definitions",
+      entries: visibleEntries.map((entry) => ({
         term: entry.term,
         definition: entry.definition,
         symbol: entry.definitionSymbol,
         termPresentation: entry.termPresentation,
       })),
-    ),
+    },
   };
 }
 

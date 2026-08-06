@@ -744,7 +744,10 @@ function ExplorationEditorRow({
                 </a>
               </div>
               <div className="exploration-editor-card-ability">
-                <RulesText text={encounter.cardAbilityText} />
+                <RulesText
+                  text={encounter.cardAbilityText}
+                  owner={{ kind: "card", id: encounter.cardId }}
+                />
               </div>
             </header>
             <div className="exploration-editor-prose-copy">

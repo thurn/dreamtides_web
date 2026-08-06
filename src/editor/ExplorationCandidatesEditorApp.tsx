@@ -627,7 +627,10 @@ function ExplorationCandidatesEditorRow({
             <header className="exploration-candidates-editor-copy-header">
               <h2>{group.cardName}</h2>
               <div className="exploration-candidates-editor-card-ability">
-                <RulesText text={group.cardAbilityText} />
+                <RulesText
+                  text={group.cardAbilityText}
+                  owner={{ kind: "card", id: group.cardId }}
+                />
               </div>
             </header>
             <div className="exploration-candidates-editor-prose">
