@@ -30,11 +30,16 @@ afterEach(() => {
 });
 
 describe("Cumulus UI-system documentation", () => {
-  it("registers the entity-reveal contract separately from components", () => {
+  it("registers UI-system contracts separately from components", () => {
     const system = getUISystem("entity-reveals");
     expect(system).toBeDefined();
     expect(system?.Preview).toBeTypeOf("function");
     expect(system?.Docs).toBeTypeOf("function");
+
+    const hostSystem = getUISystem("journey-screen-host-chrome");
+    expect(hostSystem).toBeDefined();
+    expect(hostSystem?.Preview).toBeTypeOf("function");
+    expect(hostSystem?.Docs).toBeTypeOf("function");
   });
 
   it("resolves every component backlink through the UI-system registry", () => {
@@ -61,6 +66,37 @@ describe("Cumulus UI-system documentation", () => {
         .querySelector('[data-system-related-component="info-card"]')
         ?.getAttribute("href"),
     ).toBe("#/info-card");
+
+    act(() => root.unmount());
+  });
+
+  it("renders the journey host contract with its route dispositions", () => {
+    const { root, container } = mount(
+      <SystemPage id="journey-screen-host-chrome" />,
+    );
+
+    expect(
+      container.querySelector(
+        '[data-cumulus-system-page="journey-screen-host-chrome"]',
+      ),
+    ).not.toBeNull();
+    expect(
+      container.querySelector("[data-journey-screen-host-route-policies]"),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-route-policy="journey-start"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-route-policy="playable-battle"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-route-policy="inline-site"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector(
+        '[data-system-related-component="journey-status-bar"]',
+      )?.getAttribute("href"),
+    ).toBe("#/journey-status-bar");
 
     act(() => root.unmount());
   });

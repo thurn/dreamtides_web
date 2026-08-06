@@ -103,6 +103,7 @@ export const commandMenuDemo: CumulusComponent = {
   details: [
     "Use Select for value choice, DisclosureSection for reading flow, and InfoCard for entity reveals.",
   ],
+  relatedSystems: ["journey-screen-host-chrome"],
   group: "Components",
   docName: "CommandMenu",
   Component: CommandMenuDemo,

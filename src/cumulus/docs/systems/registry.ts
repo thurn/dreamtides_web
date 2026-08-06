@@ -3,6 +3,10 @@ import {
   EntityRevealCoordinatorDocs,
   EntityRevealCoordinatorPreview,
 } from "./entity-reveal-coordinator";
+import {
+  JourneyScreenHostChromeDocs,
+  JourneyScreenHostChromePreview,
+} from "./journey-screen-host-chrome";
 
 /**
  * A cross-component behavioral contract documented by Cumulus. UI systems own
@@ -30,6 +34,14 @@ export const CUMULUS_UI_SYSTEMS = [
       "The application-wide interaction and placement system for semantic entity reveals. It coordinates named sources, input modality, measurement, safe bounds, portal rendering, ordered secondary cards, dismissal, and diagnostics while strict surfaces such as InfoCard own their visual content.",
     Preview: EntityRevealCoordinatorPreview,
     Docs: EntityRevealCoordinatorDocs,
+  },
+  {
+    id: "journey-screen-host-chrome",
+    title: "Journey Screen Host & Chrome",
+    blurb:
+      "The application-host contract by which ScreenRouter combines screenFor and siteDispositionFor with CumulusJourneyChrome. It coordinates screen adapters, HUD and utility chrome, presence, tutorial guidance, route transitions, error containment, and explicit exceptions.",
+    Preview: JourneyScreenHostChromePreview,
+    Docs: JourneyScreenHostChromeDocs,
   },
 ] as const satisfies readonly CumulusUISystem[];
 

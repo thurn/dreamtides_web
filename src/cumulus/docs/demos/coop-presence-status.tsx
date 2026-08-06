@@ -16,6 +16,7 @@ export const coopPresenceStatusDemo: CumulusComponent = {
   title: "Coop Presence Status",
   blurb: "The compact, non-interactive app chrome that reports connected room participants from an explicit view-model count.",
   callout: "Supply visibility from app chrome state rather than hiding the status with injected presentation rules.",
+  relatedSystems: ["journey-screen-host-chrome"],
   group: "Components",
   docName: "CoopPresenceStatus",
   Component: CoopPresenceStatusDemo,
