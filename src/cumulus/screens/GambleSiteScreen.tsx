@@ -14,8 +14,15 @@ import type {
   Dreamsign as DreamsignData,
   TransfigurationType,
 } from "../../types/journey";
-import type { FourSuitRepriseOutcome } from "../../data/four-suit-reprise";
 import {
+  FOUR_SUIT_REPRISE_ESSENCE_REWARD,
+  FOUR_SUIT_REPRISE_ODDS_DENOMINATOR,
+  FOUR_SUIT_REPRISE_ODDS_NUMERATOR,
+  FOUR_SUIT_REPRISE_OUTCOMES,
+  type FourSuitRepriseOutcome,
+} from "../../data/four-suit-reprise";
+import {
+  PLAYING_CARD_DESIGN,
   PLAYING_CARD_FLIP_DURATION_MS,
   WagerPrizeCard,
   type PlayingCardRank,
@@ -23,6 +30,8 @@ import {
 } from "../components/card/PlayingCard";
 import { GlassButton } from "../components/controls/GlassButton";
 import { Dreamsign } from "../components/hud/Dreamsign";
+import { EssenceValue } from "../components/hud/EssenceValue";
+import { GlassPanel } from "../components/overlay/GlassPanel";
 import {
   RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
   RadialAnnouncement,
@@ -275,9 +284,71 @@ const LADDER_DREAMSIGN_TRAVEL_SECONDS =
 const LADDER_DREAMSIGN_DESKTOP_SIZE = 240;
 const LADDER_DREAMSIGN_MOBILE_SIZE = 180;
 const DREAM_EASE = [0.22, 0.61, 0.36, 1] as const;
+const FOUR_SUIT_SYMBOLS: Readonly<Record<PlayingCardSuit, string>> = {
+  clubs: "♣",
+  diamonds: "♦",
+  hearts: "♥",
+  spades: "♠",
+};
 
 function titleCaseSuit(suit: PlayingCardSuit): string {
   return `${suit.charAt(0).toUpperCase()}${suit.slice(1)}`;
+}
+
+function FourSuitDrawnCardIndex({
+  rank,
+  suit,
+  layout,
+}: {
+  rank: PlayingCardRank;
+  suit: PlayingCardSuit;
+  layout: "mobile" | "desktop";
+}) {
+  const size = layout === "desktop" ? "wager" : "wagerCompact";
+  const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
+  const suitOptics = PLAYING_CARD_DESIGN.suitOptics[suit];
+  const redSuit = suit === "diamonds" || suit === "hearts";
+  const foreground = redSuit
+    ? PLAYING_CARD_DESIGN.colors.red
+    : PLAYING_CARD_DESIGN.colors.black;
+  const characterOutlineWidth = redSuit
+    ? sizeSpec.redCharacterOutlineWidth
+    : sizeSpec.blackCharacterOutlineWidth;
+
+  return (
+    <span
+      data-playing-card-index=""
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: sizeSpec.rankSuitGap,
+        color: foreground,
+        fontFamily: PLAYING_CARD_DESIGN.fontFamily,
+        fontSize: sizeSpec.fontSize,
+        fontWeight: 900,
+        lineHeight: 1,
+        letterSpacing: "-0.025em",
+        whiteSpace: "nowrap",
+        WebkitTextStroke: `${String(characterOutlineWidth)}px ${PLAYING_CARD_DESIGN.colors.characterOutline}`,
+        paintOrder: "stroke fill",
+      }}
+    >
+      <span data-playing-card-rank-glyph="">{rank}</span>
+      <span
+        data-playing-card-suit-glyph=""
+        style={{
+          position: "relative",
+          top: sizeSpec.fontSize * suitOptics.verticalOffsetEm,
+          display: "inline-block",
+          fontSize: sizeSpec.fontSize * suitOptics.scale,
+          lineHeight: 1,
+        }}
+      >
+        {FOUR_SUIT_SYMBOLS[suit]}
+      </span>
+    </span>
+  );
 }
 
 interface LadderDreamsignTrajectory {
@@ -1894,6 +1965,8 @@ function FourSuitRepriseScreen({
 
         const target = view.result?.target ?? selectedCard;
         const drawnCard = view.result?.card ?? null;
+        const drawnCardVisible =
+          view.result !== null && revealedResultId === view.result.id;
         const outcomeVisible =
           view.result !== null && outcomeResultId === view.result.id;
         return (
@@ -1934,12 +2007,15 @@ function FourSuitRepriseScreen({
                 position: "relative",
                 width: "100%",
                 display: "grid",
-                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                gridTemplateColumns: layout === "desktop"
+                  ? "164px minmax(0, 340px)"
+                  : "104px minmax(0, 232px)",
                 gap: layout === "desktop"
                   ? token("--space-l")
                   : token("--space-s"),
                 alignItems: "center",
                 justifyItems: "center",
+                justifyContent: "center",
               }}
             >
               {target !== null && (
@@ -1953,20 +2029,104 @@ function FourSuitRepriseScreen({
                   <GameCard model={target.model} />
                 </div>
               )}
-              <div data-four-suit-prize="">
-                <WagerPrizeCard
-                  prizeId="four-suit-reprise"
-                  targetLabel="a Suit"
-                  size="wager"
-                  drawnCard={drawnCard}
-                  revealDrawnCard={
-                    view.result !== null && revealedResultId === view.result.id
-                  }
-                />
+              <div
+                data-four-suit-prize=""
+                style={{ width: "100%", minWidth: 0 }}
+              >
+                <GlassPanel
+                  title="Four-Suit Reprise"
+                  headerSpacing="compact"
+                  testId="gamble-four-suit-outcome-panel"
+                >
+                  {drawnCardVisible && drawnCard !== null ? (
+                    <motion.div
+                      role="img"
+                      aria-label={`${drawnCard.rank} of ${drawnCard.suit}`}
+                      data-four-suit-drawn-card={`${drawnCard.rank}-${drawnCard.suit}`}
+                      initial={reduceMotion
+                        ? false
+                        : { rotateY: -90, opacity: 0 }}
+                      animate={{ rotateY: 0, opacity: 1 }}
+                      transition={reduceMotion
+                        ? { duration: 0 }
+                        : {
+                            duration: PLAYING_CARD_FLIP_DURATION_MS / 1_000,
+                            ease: DREAM_EASE,
+                          }}
+                      style={{
+                        display: "grid",
+                        placeItems: "center",
+                        padding: layout === "desktop"
+                          ? token("--space-l")
+                          : token("--space-m"),
+                        transformPerspective: 1_000,
+                      }}
+                    >
+                      <FourSuitDrawnCardIndex
+                        rank={drawnCard.rank}
+                        suit={drawnCard.suit}
+                        layout={layout}
+                      />
+                    </motion.div>
+                  ) : (
+                    <div
+                      data-four-suit-outcomes=""
+                      style={{
+                        display: "grid",
+                        gap: token("--space-s"),
+                        padding: layout === "desktop"
+                          ? token("--space-m")
+                          : token("--space-s"),
+                      }}
+                    >
+                      {FOUR_SUIT_REPRISE_OUTCOMES.map((outcome) => (
+                        <div
+                          key={outcome.suit}
+                          data-four-suit-outcome={outcome.suit}
+                          style={{
+                            display: "grid",
+                            gridTemplateColumns: "1.25em minmax(0, 1fr) auto",
+                            alignItems: "center",
+                            gap: layout === "desktop"
+                              ? token("--space-s")
+                              : token("--space-xs"),
+                            font: layout === "desktop"
+                              ? token("--t-body")
+                              : token("--t-body-sm"),
+                          }}
+                        >
+                          <span aria-hidden="true">
+                            {FOUR_SUIT_SYMBOLS[outcome.suit]}
+                          </span>
+                          <span>
+                            {outcome.outcome === "essence" ? (
+                              <>
+                                Unchanged +{" "}
+                                <EssenceValue
+                                  amount={FOUR_SUIT_REPRISE_ESSENCE_REWARD}
+                                  tone="inherit"
+                                />
+                              </>
+                            ) : outcome.label}
+                          </span>
+                          <span
+                            data-four-suit-chance=""
+                            style={{ color: token("--text-on-glass-muted") }}
+                          >
+                            {`${String(
+                              (FOUR_SUIT_REPRISE_ODDS_NUMERATOR /
+                                FOUR_SUIT_REPRISE_ODDS_DENOMINATOR) * 100,
+                            )}%`}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </GlassPanel>
               </div>
               {outcomeVisible && view.result !== null && (
                 <div
-                  data-four-suit-outcome=""
+                  data-four-suit-announcement=""
                   style={{
                     position: "absolute",
                     inset: 0,

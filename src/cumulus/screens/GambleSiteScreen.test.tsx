@@ -1226,7 +1226,7 @@ describe("GambleSiteScreen — Starway Stairs", () => {
 });
 
 describe("GambleSiteScreen — Four-Suit Reprise", () => {
-  it("shows the canonical suit object before committing a selected card", () => {
+  it("shows the suit outcomes in a glass panel before committing a selected card", () => {
     const onDraw = vi.fn();
     const { container, root } = mount(
       <GambleSiteScreen
@@ -1254,6 +1254,13 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     expect(
       container.querySelector('[data-four-suit-target="four-suit-entry-1"]'),
     ).not.toBeNull();
+    const outcomePanel = container.querySelector(
+      '[data-testid="gamble-four-suit-outcome-panel"]',
+    );
+    expect(outcomePanel?.getAttribute("data-glass-panel-frame")).toBe(
+      "floating",
+    );
+    expect(outcomePanel?.querySelector("[data-wager-prize-card]")).toBeNull();
     expect(container.querySelectorAll("[data-four-suit-outcome]")).toHaveLength(4);
     expect(
       Array.from(
@@ -1294,6 +1301,9 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
 
     void act(() => vi.advanceTimersByTime(1_000));
     expect(onOutcomeShown).toHaveBeenCalledOnce();
+    expect(
+      container.querySelector('[data-four-suit-drawn-card="A-spades"]'),
+    ).not.toBeNull();
     const revealedView = fourSuitResultView({ resultRevealed: true });
     act(() => {
       root.render(
