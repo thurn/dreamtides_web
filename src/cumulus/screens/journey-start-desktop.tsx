@@ -1,7 +1,7 @@
 // The desktop (wide-viewport) DreamAvatar-select layout: a small purple eyebrow
 // title near the top of a shared background, then the offered DreamAvatars side
 // by side — each the standing full-body cutout over a soft glow, the name
-// floating above the head, and a locked-size console card riding up over the
+// floating above the head, and a liquid-glass console panel riding up over the
 // legs (ability text, a row of hover-only tide discs + starting-essence chip,
 // and a full-width purple accent GlassButton). All columns render at exactly
 // the same size. It shares the view types and console primitives with the mobile
@@ -10,8 +10,8 @@
 // PURE: renders from a view-model and reports the chosen DreamAvatar via `onPick`.
 
 import { Motes } from "../components/hud/Motes";
-import { GroupPanel } from "../components/controls/GroupPanel";
 import { GlassButton } from "../components/controls/GlassButton";
+import { GlassPanel } from "../components/overlay/GlassPanel";
 import { token } from "../primitives/tokens";
 import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
 import { DreamAvatarAbilityText } from "../components/hud/DreamAvatarAbilityText";
@@ -26,11 +26,11 @@ import {
 
 /** Desktop column metrics. Box measures are content-driven layout, so these are
  * caller numbers. Each column is a fixed-width figure stage with a narrower,
- * center-aligned console card riding up over the legs. */
+ * center-aligned console panel riding up over the legs. */
 const COLUMN_W = 400; // the figure stage's width
 const PORTRAIT_H = 715; // the standing figure's stage height
 const CARD_W = 320; // console-card width (narrower than the column, centered)
-const CARD_OVERLAP = 275; // how far the card's center rides up over the figure
+const CARD_OVERLAP = 275; // how far the panel's center rides up over the figure
 
 /** The desktop screen's small purple eyebrow title, pinned near the top of the
  * screen — the mobile ScreenHeader's uppercase accent treatment, in flow. */
@@ -92,14 +92,13 @@ function PortraitName({ dreamAvatar }: { dreamAvatar: DreamAvatarOfferView }) {
   );
 }
 
-/** The console card for one DreamAvatar. It is narrower than its column and
+/** The console panel for one DreamAvatar. It is narrower than its column and
  * center-aligned under the figure, riding up over the legs; its interior is an
  * even --space-6 rhythm stack — padding, then the ability text, divider, tides
  * row, and Choose button each separated by one step. The ability region takes
- * its natural height, and the card is pulled up by half its own height
- * (`translateY(-50%)`) so cards of different heights share one vertical center
- * line, positioned by {@link CARD_OVERLAP}. Spreading GroupPanel's card surface
- * onto our own node is the sanctioned rung-2 way to size the pane. */
+ * its natural height. A fixed alignment zone centers panels of different
+ * heights on one line without transforming the glass or its ancestors, which
+ * preserves backdrop blur. */
 function DreamAvatarCard({
   dreamAvatar,
   onChoose,
@@ -111,56 +110,61 @@ function DreamAvatarCard({
     <div
       data-dream-avatar-column={dreamAvatar.id}
       style={{
-        ...GroupPanel.style(),
         position: "relative",
         zIndex: 1,
-        // Narrower than its column (the figure stage keeps the full column
-        // width); centering it leaves the portrait framing intact.
         width: CARD_W,
         alignSelf: "center",
-        marginTop: -CARD_OVERLAP,
-        // Pull the card up by half its own height so its vertical CENTER lands
-        // on the flow anchor (the same line for every column), center-aligning
-        // cards that differ in height.
-        transform: "translateY(-50%)",
-        // The vertical rhythm: one --space-6 of padding on every side and the
-        // same step above each stacked child (applied as margins so the layout
-        // reads as an even stack).
-        padding: token("--space-6"),
+        height: CARD_OVERLAP * 2,
+        marginTop: -CARD_OVERLAP * 2,
         display: "flex",
-        flexDirection: "column",
+        alignItems: "center",
       }}
     >
-      <DreamAvatarAbilityText
-        dreamAvatarId={dreamAvatar.id}
-        text={dreamAvatar.renderedText}
-        presentation="selectionCard"
-      />
+      <GlassPanel testId={`dream-avatar-glass-panel-${dreamAvatar.id}`}>
+        <div
+          style={{
+            padding: token("--space-6"),
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <DreamAvatarAbilityText
+            dreamAvatarId={dreamAvatar.id}
+            text={dreamAvatar.renderedText}
+            presentation="selectionCard"
+          />
 
-      <div style={{ marginTop: token("--space-6") }}>
-        <ConsoleDivider flush />
-      </div>
+          <div style={{ marginTop: token("--space-6") }}>
+            <ConsoleDivider flush />
+          </div>
 
-      {/* Tides cluster: the "Tides:" caption + starting-essence on one row, the
-          tide discs stacked below the caption at the larger 'lg' size — the same
-          shared arrangement the mobile carousel renders. */}
-      <div style={{ marginTop: token("--space-6") }}>
-        <TidesEssenceBlock dreamAvatar={dreamAvatar} />
-      </div>
+          {/* Tides cluster: the "Tides:" caption + starting-essence on one row,
+              the tide discs stacked below the caption at the larger 'lg' size —
+              the same shared arrangement the mobile carousel renders. */}
+          <div style={{ marginTop: token("--space-6") }}>
+            <TidesEssenceBlock dreamAvatar={dreamAvatar} />
+          </div>
 
-      <div
-        data-choose-dream-avatar={dreamAvatar.id}
-        style={{ marginTop: token("--space-6"), display: "grid" }}
-      >
-        <GlassButton label="Choose" variant="accent" onPress={onChoose} />
-      </div>
+          <div
+            data-choose-dream-avatar={dreamAvatar.id}
+            style={{ marginTop: token("--space-6"), display: "grid" }}
+          >
+            <GlassButton
+              label="Choose"
+              variant="accent"
+              placement="onGlass"
+              onPress={onChoose}
+            />
+          </div>
+        </div>
+      </GlassPanel>
     </div>
   );
 }
 
 /** One desktop DreamAvatar column: a fixed-width stack of the portrait stage
  * (the standing cutout with the name floating above the head) and the console
- * card, which rides up over the legs and takes its natural height. */
+ * panel, which rides up over the legs and takes its natural height. */
 function DreamAvatarColumn({
   dreamAvatar,
   onChoose,

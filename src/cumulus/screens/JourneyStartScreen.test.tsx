@@ -83,7 +83,7 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
 }
 
 describe("Cumulus JourneyStartScreen (carousel)", () => {
-  it("renders a page with identity, essence, and a Choose action per DreamAvatar", () => {
+  it("renders every portrait page and a glass console for the active DreamAvatar", () => {
     const { container, root } = mount(
       <JourneyStartScreen
         dreamAvatars={OFFERED}
@@ -100,19 +100,22 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
       expect(
         container.querySelector(`[data-dream-avatar-page="${dc.id}"]`),
       ).not.toBeNull();
-      expect(
-        container.querySelector(`[data-choose-dream-avatar="${dc.id}"]`),
-      ).not.toBeNull();
-      expect(
-        container.querySelector(
-          `[data-choose-dream-avatar="${dc.id}"] [data-glass-variant="accent"]`,
-        ),
-      ).not.toBeNull();
-      const essence = container.querySelector(
-        `[data-starting-essence-value="${dc.id}"]`,
-      );
-      expect(essence?.textContent).toContain(String(dc.startingEssence));
     }
+    expect(container.querySelectorAll("[data-glass-panel-frame]")).toHaveLength(
+      1,
+    );
+    expect(
+      container.querySelector('[data-dream-avatar-console="caller-1"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector(
+        '[data-choose-dream-avatar="caller-1"] [data-glass-placement="onGlass"]',
+      ),
+    ).not.toBeNull();
+    const essence = container.querySelector(
+      '[data-starting-essence-value="caller-1"]',
+    );
+    expect(essence?.textContent).toContain(String(OFFERED[0].startingEssence));
 
     act(() => {
       root.unmount();
@@ -133,14 +136,21 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
       container.querySelector(`[data-dream-avatar-tides="caller-1"]`),
     ).toBeNull();
 
-    // caller-2 has two tides → cluster with two collapsed discs.
+    const next = container.querySelector<HTMLButtonElement>(
+      '[aria-label="Next"]',
+    );
+    act(() => {
+      next?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    // caller-2 has two tides → its active console shows two collapsed discs.
     const cluster = container.querySelector(
       `[data-dream-avatar-tides="caller-2"]`,
     );
     expect(cluster).not.toBeNull();
     expect(cluster?.querySelectorAll("[data-tide-disc]")).toHaveLength(2);
     const label = container.querySelector<HTMLElement>(
-      '[data-dream-avatar-page="caller-2"] [data-tides-info-label]',
+      '[data-dream-avatar-console="caller-2"] [data-tides-info-label]',
     );
     expect(label?.getAttribute("aria-label")).toBe("Tides information");
     expect(label?.querySelector("i")?.className).toBe("bxf bx-info-circle");
@@ -161,6 +171,13 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
         onReroll={vi.fn()}
       />,
     );
+
+    const next = container.querySelector<HTMLButtonElement>(
+      '[aria-label="Next"]',
+    );
+    act(() => {
+      next?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
 
     const button = container.querySelector<HTMLButtonElement>(
       `[data-choose-dream-avatar="caller-2"] button`,
@@ -363,11 +380,24 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
           `[data-choose-dream-avatar="${dc.id}"] [data-glass-variant="accent"]`,
         ),
       ).not.toBeNull();
+      expect(
+        container.querySelector(
+          `[data-choose-dream-avatar="${dc.id}"] [data-glass-placement="onGlass"]`,
+        ),
+      ).not.toBeNull();
+      expect(
+        container.querySelector(
+          `[data-testid="dream-avatar-glass-panel-${dc.id}"][data-glass-panel-height-contract="content"]`,
+        ),
+      ).not.toBeNull();
       const essence = container.querySelector(
         `[data-starting-essence-value="${dc.id}"]`,
       );
       expect(essence?.textContent).toContain(String(dc.startingEssence));
     }
+    expect(container.querySelectorAll("[data-glass-panel-frame]")).toHaveLength(
+      OFFERED.length,
+    );
 
     act(() => {
       root.unmount();

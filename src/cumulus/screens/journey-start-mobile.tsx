@@ -1,6 +1,6 @@
 // The mobile (narrow-viewport) DreamAvatar-select layout: a full-bleed swipe
 // carousel, one DreamAvatar per page, with the full-body character cutout
-// standing on an ambient backdrop behind a flat GroupPanel console. It shares
+// standing on an ambient backdrop behind a liquid-glass console. It shares
 // the view types and console primitives with the desktop triptych via
 // `journey-start-shared`, and both layouts use the same named DreamAvatar ability
 // source; `JourneyStartScreen` picks between the two by viewport.
@@ -8,9 +8,9 @@
 
 import { useRef, useState } from "react";
 import { Motes } from "../components/hud/Motes";
-import { GroupPanel } from "../components/controls/GroupPanel";
 import { GlassButton } from "../components/controls/GlassButton";
 import { IconButton } from "../components/controls/IconButton";
+import { GlassPanel } from "../components/overlay/GlassPanel";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
@@ -30,7 +30,7 @@ import { DreamAvatarAbilityText } from "../components/hud/DreamAvatarAbilityText
  * is unchanged. A spacing step, so the token is right. */
 const TIDE_HIT_SLOP = token("--space-2");
 
-/** The mobile carousel's flat console beneath a portrait: ability text, a
+/** The mobile carousel's glass console beneath a portrait: ability text, a
  * hairline, the tides cluster + starting essence, and the Choose action. */
 function DreamAvatarConsole({
   dreamAvatar,
@@ -40,34 +40,45 @@ function DreamAvatarConsole({
   onChoose: () => void;
 }) {
   return (
-    <GroupPanel>
-      <DreamAvatarAbilityText
-        dreamAvatarId={dreamAvatar.id}
-        text={dreamAvatar.renderedText}
-      />
-
-      {/* An even --space-6 rhythm around the divider, matching the desktop card:
-          one step above (equal to the GroupPanel's own --space-6 top padding, so
-          the ability text has balanced space above and below it) and one step
-          below. This lands the ability-baseline→divider and divider→tides-caption
-          visual gaps within a sub-pixel of each other (the residual is the two
-          fonts' differing built-in leading, which token-scale margins cannot
-          split finer). */}
-      <div style={{ marginTop: token("--space-6") }}>
-        <ConsoleDivider flush />
-      </div>
-
-      <div style={{ marginTop: token("--space-6") }}>
-        <TidesEssenceBlock dreamAvatar={dreamAvatar} hitSlop={TIDE_HIT_SLOP} />
-      </div>
-
+    <GlassPanel testId={`dream-avatar-glass-panel-${dreamAvatar.id}`}>
       <div
-        data-choose-dream-avatar={dreamAvatar.id}
-        style={{ marginTop: token("--space-6"), display: "grid" }}
+        style={{
+          padding: token("--space-6"),
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
-        <GlassButton label="Choose" variant="accent" onPress={onChoose} />
+        <DreamAvatarAbilityText
+          dreamAvatarId={dreamAvatar.id}
+          text={dreamAvatar.renderedText}
+        />
+
+        {/* An even --space-6 rhythm around the divider, matching the desktop
+            panel: one step above and one below. */}
+        <div style={{ marginTop: token("--space-6") }}>
+          <ConsoleDivider flush />
+        </div>
+
+        <div style={{ marginTop: token("--space-6") }}>
+          <TidesEssenceBlock
+            dreamAvatar={dreamAvatar}
+            hitSlop={TIDE_HIT_SLOP}
+          />
+        </div>
+
+        <div
+          data-choose-dream-avatar={dreamAvatar.id}
+          style={{ marginTop: token("--space-6"), display: "grid" }}
+        >
+          <GlassButton
+            label="Choose"
+            variant="accent"
+            placement="onGlass"
+            onPress={onChoose}
+          />
+        </div>
       </div>
-    </GroupPanel>
+    </GlassPanel>
   );
 }
 
@@ -168,18 +179,17 @@ function EdgeChevron({
   );
 }
 
-/** One mobile carousel page: portrait + title + console, sized to a fraction of
- * the swipe track and animated in as it becomes active. */
+/** One mobile carousel page: portrait + title, sized to a fraction of the swipe
+ * track. The glass console stays outside this transformed track so it can blur
+ * the live scene. */
 function DreamAvatarPage({
   dreamAvatar,
   active,
   count,
-  onChoose,
 }: {
   dreamAvatar: DreamAvatarOfferView;
   active: boolean;
   count: number;
-  onChoose: () => void;
 }) {
   return (
     <div
@@ -195,25 +205,6 @@ function DreamAvatarPage({
       <Motes on={active} tint="warm" zIndex={1} />
 
       <DreamAvatarTitle dreamAvatar={dreamAvatar} />
-
-      {/* Console */}
-      <div
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: 4,
-          padding: `0 ${token("--gutter")} calc(${token("--safe-bottom")} + ${token("--space-5")})`,
-          // The console slides up into place as its page becomes active — a
-          // transform-only reveal, no opacity fade, so the flat card simply
-          // rises into view without cross-fading over the portrait behind it.
-          transform: active ? "translateY(0)" : "translateY(16px)",
-          transition: `transform ${token("--dur-base")} ${token("--ease-out")}`,
-        }}
-      >
-        <DreamAvatarConsole dreamAvatar={dreamAvatar} onChoose={onChoose} />
-      </div>
     </div>
   );
 }
@@ -234,6 +225,7 @@ export function CarouselSelect({
     x0: 0,
   });
   const count = dreamAvatars.length;
+  const activeDreamAvatar = dreamAvatars[index];
 
   const clamp = (next: number): number =>
     Math.max(0, Math.min(count - 1, next));
@@ -303,12 +295,33 @@ export function CarouselSelect({
             dreamAvatar={dreamAvatar}
             active={i === index}
             count={count}
-            onChoose={() => {
-              onPick(dreamAvatar.id);
-            }}
           />
         ))}
       </div>
+
+      {activeDreamAvatar !== undefined && (
+        <div
+          data-dream-avatar-console={activeDreamAvatar.id}
+          onPointerDown={(event) => {
+            event.stopPropagation();
+          }}
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 4,
+            padding: `0 ${token("--gutter")} calc(${token("--safe-bottom")} + ${token("--space-5")})`,
+          }}
+        >
+          <DreamAvatarConsole
+            dreamAvatar={activeDreamAvatar}
+            onChoose={() => {
+              onPick(activeDreamAvatar.id);
+            }}
+          />
+        </div>
+      )}
 
       {index > 0 && (
         <EdgeChevron dir="left" onClick={() => setIndex(clamp(index - 1))} />
