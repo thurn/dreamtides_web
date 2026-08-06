@@ -41,15 +41,10 @@ export type ColorRole =
   | "accent-strong"
   | "essence"
   | "energy"
-  | "energy-bright"
   | "spark"
-  | "points"
   | "danger"
   | "positive"
   | "selected"
-  | "sale"
-  | "gold"
-  | "gold-light"
   | "text-primary"
   | "text-secondary"
   | "text-muted"
@@ -64,15 +59,10 @@ const COLOR_ROLE_TOKENS: Record<ColorRole, string> = {
   "accent-strong": token("--accent-strong"),
   essence: token("--essence"),
   energy: token("--energy"),
-  "energy-bright": token("--energy-bright"),
   spark: token("--spark"),
-  points: token("--points"),
   danger: token("--danger"),
   positive: token("--positive"),
   selected: token("--selected"),
-  sale: token("--sale"),
-  gold: token("--gold"),
-  "gold-light": token("--color-gold-light"),
   "text-primary": token("--text-primary"),
   "text-secondary": token("--text-secondary"),
   "text-muted": token("--text-muted"),

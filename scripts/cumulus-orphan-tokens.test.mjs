@@ -13,11 +13,8 @@
 // and fails the build the moment a NEW orphan appears, so it has to be
 // either wired up or deliberately baselined.
 //
-// BASELINE is the known, already-reviewed set of orphans that predate this
-// test. The design-system revisions program's Phase 1 prunes the audit's §4
-// dead-token set (--card-aspect, the --cat-* family, --space-0,
-// --tide-earthy, --control-h/-sm, the four dead --glow-*, ...) from both
-// cumulus-tokens.css and this list as it verifies each one is truly unused.
+// BASELINE contains deliberately complete non-color scales and reserved layout
+// roles. Palette roles are expected to have a live reader.
 
 import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join, relative, resolve, sep } from "node:path";
@@ -50,37 +47,15 @@ const DOCS_PREFIX = "src/cumulus/docs/";
 // argument that is not a plain string literal (DesktopDeckViewer.tsx line ~302)
 // resolves to `--text-on-accent`/`--text-secondary`, neither of which is here.
 // Each remaining entry is therefore RETAINED on one of two grounds, stated
-// inline: (a) it is a member of a sanctioned, deliberately-complete design
-// scale (spacing / type / radius / elevation / motion / gradient / surface /
-// device-frame), reserved so UI code can pick a step by role; or (b) it is a
-// PRODUCTION-BRIDGE re-export (--dt-* / --color-*) that pins a shared
-// production token name so an element (above all the game card) resolves
-// identically in the desktop/production system.
+// inline: it is a member of a sanctioned, deliberately-complete design scale
+// (spacing / type / radius / elevation / motion / device-frame), reserved so
+// UI code can pick a step by role.
 export const BASELINE = [
-  // Semantic roles — reserved for a specific use, no current Cumulus reader.
-  "--surface-chip", // reserved surface: chip fill
-  // Production bridge (--color-* global re-exports).
-  "--color-essence-glow-strong",
-  "--color-primary",
   // Device-frame layout constants (the iPhone canvas the kit designs against).
   "--device-h",
   "--device-w",
   "--sheet-grab", // reserved layout constant: bottom-sheet drag-handle width
   "--gutter-tight", // reserved screen gutter for dense grids
-  // Production bridge (--dt-* atlas/shared re-exports). --dt-line additionally
-  // feeds the live canonical --line token inside cumulus-tokens.css.
-  "--dt-bg-1",
-  "--dt-bg-2",
-  "--dt-border",
-  "--dt-energy",
-  "--dt-energy-border",
-  "--dt-line", // consumed by --line (a live-read canonical token) in the CSS
-  "--dt-player",
-  "--dt-primary",
-  "--dt-primary-light",
-  "--dt-spark",
-  "--dt-spark-border",
-  "--dt-surface-light",
   // Motion scale members.
   "--stagger-travel",
   // Font roles / canonical face layer (the sanctioned type-face vocabulary).
@@ -90,10 +65,6 @@ export const BASELINE = [
   "--font-rules-canon",
   "--font-sans-canon",
   "--font-serif-canon",
-  // Object-material gradients (energy orb, wordmark, reward gold).
-  "--gradient-accent",
-  "--gradient-energy",
-  "--gradient-gold",
   // Elevation / inset shadow scale members.
   "--inset-press",
   "--shadow-sheet",

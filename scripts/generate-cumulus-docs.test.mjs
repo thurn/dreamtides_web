@@ -309,7 +309,7 @@ describe("renderTokensMarkdown", () => {
     { name: "accent-strong", value: "var(--primitive-violet-600)" },
     { name: "space-6", value: "16px" },
     { name: "t-body", value: "400 15px/1.55 var(--font-ui)" },
-    { name: "dt-surface", value: "var(--surface-card)" },
+    { name: "reward", value: "var(--primitive-gold-600)" },
     { name: "zz-unclassified", value: "1px" },
   ];
 
@@ -325,8 +325,8 @@ describe("renderTokensMarkdown", () => {
     expect(markdown.indexOf("| `--space-6` |")).toBeGreaterThan(
       markdown.indexOf("## Spacing & layout"),
     );
-    expect(markdown.indexOf("| `--dt-surface` |")).toBeGreaterThan(
-      markdown.indexOf("## Production bridge"),
+    expect(markdown.indexOf("| `--reward` |")).toBeGreaterThan(
+      markdown.indexOf("## Color roles"),
     );
   });
 

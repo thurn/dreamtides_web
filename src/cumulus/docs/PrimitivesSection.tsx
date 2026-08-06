@@ -499,7 +499,7 @@ function RadiusSpecimen(name: string, entry: TokenEntry): ReactElement {
         style={{
           width: "100%",
           height: "56px",
-          background: token("--surface-chip"),
+          background: token("--surface-raised"),
           border: `1px solid ${token("--border-soft")}`,
           borderRadius: `var(${name})`,
         }}
@@ -572,7 +572,7 @@ const motionTrackStyle: CSSProperties = {
   position: "relative",
   width: "100%",
   height: token("--space-8"),
-  background: token("--surface-chip"),
+  background: token("--surface-raised"),
   borderRadius: token("--radius-pill"),
   overflow: "hidden",
 };

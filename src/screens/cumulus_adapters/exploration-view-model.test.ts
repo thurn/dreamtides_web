@@ -388,7 +388,7 @@ describe("exploration-view-model", () => {
       deckModification: {
         kind: "fast",
         headline: "Fast",
-        selectionColor: "energy-bright",
+        selectionColor: "accent-bright",
         cards: [
           {
             entryId: "entry-character",

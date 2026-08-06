@@ -87,7 +87,7 @@ export const BATTLEFIELD_CARD_EXHAUSTED_FILTER =
   "grayscale(0.5) brightness(0.62)";
 const POINTER_DROP_COMMIT_HOLD_MS = motionTimeSeconds("--dur-slow") * 1_000;
 const CARD_PICKER_HIGHLIGHT_COLOR: CumulusColor = "accent-bright";
-const CARD_PICKER_SELECTION_COLOR: CumulusColor = "gold-light";
+const CARD_PICKER_SELECTION_COLOR: CumulusColor = "selected";
 
 /** One physical face-up card instance rendered by the battle board. */
 export interface MobileBattleCardView {
@@ -2079,7 +2079,7 @@ function BattleCardPointsOverlay({
           }}
         />
         <span data-battle-card-points-value="">{overlay.points}</span>
-        <GlowIcon iconClass={GLYPHS.points} color="points" size="1em" shadow />
+        <GlowIcon iconClass={GLYPHS.points} color="text-primary" size="1em" shadow />
       </motion.div>
     </div>
   );
@@ -2790,7 +2790,7 @@ function Rank({
                     candidate === null
                       ? interactions?.targetSelectionCardId === slot.card.id ||
                         interactions?.targetableCardIds?.includes(slot.card.id)
-                        ? { selected: true, color: "gold-light" }
+                        ? { selected: true, color: "accent-bright" }
                         : undefined
                       : {
                           selected: isPickerSelected || isPickerHighlighted,
@@ -3266,7 +3266,7 @@ function TargetingCardStage({
         card={card}
         zone="targeting-stage"
         showRulesText
-        selection={{ selected: true, color: "gold-light" }}
+        selection={{ selected: true, color: "selected" }}
       />
     </div>
   );

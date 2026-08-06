@@ -1,7 +1,7 @@
 // ResourceChip — the sized, self-contained inline "value + mark" pairing for
 // the game's economy (energy, spark, essence, points, memory counters): a blue droplet
 // for energy, a gold
-// sparkle for spark, a violet crypto-mark for essence/points, and a brain
+// sparkle for spark, a violet crypto-mark for essence, a neutral points mark, and a brain
 // for memory counters. The kind→glyph/color table lives in the shared
 // `economy-spec` module (imported below). Flowing essence amounts use
 // `EssenceValue`, while standalone essence marks use `EssenceGlyph`.
@@ -17,8 +17,8 @@
 // inherits the surrounding type); `ResourceChip` is for a sized, self-contained
 // economy value — optionally on its own chip surface.
 //
-// Colors are token-driven (the `--energy` / `--spark` / `--essence` /
-// `--points` / `--accent-bright` resource-role tokens via `economy-spec`),
+// Colors are token-driven (the `--energy` / `--spark` / `--essence` resource
+// roles, neutral `--text-primary` points, and `--accent-bright` counters via `economy-spec`),
 // never a raw hex, so a future token rename/reband propagates automatically.
 //
 // Ported from the Claude Design "Dreamtides Mobile" project

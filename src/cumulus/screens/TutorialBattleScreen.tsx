@@ -653,7 +653,7 @@ function TutorialVictorySurface({
               width: token("--space-6"),
               height: token("--space-6"),
               borderRadius: token("--radius-pill"),
-              background: token("--gold"),
+              background: token("--reward"),
               boxShadow: token("--glow-accent-soft"),
             }}
           />
@@ -664,7 +664,7 @@ function TutorialVictorySurface({
             position: "absolute",
             inset: token("--space-12"),
             border: `${token("--space-1")} solid ${token("--border-soft")}`,
-            borderLeftColor: token("--gold"),
+            borderLeftColor: token("--reward"),
             borderRightColor: "transparent",
             borderRadius: token("--radius-pill"),
             animation: `tutorial-victory-counter-orbit calc(${token("--dur-slow")} * 16) linear infinite`,
@@ -691,7 +691,7 @@ function TutorialVictorySurface({
             style={{
               width: "42%",
               aspectRatio: "1",
-              background: token("--gold"),
+              background: token("--reward"),
               clipPath:
                 "polygon(50% 0%, 56% 44%, 100% 50%, 56% 56%, 50% 100%, 44% 56%, 0% 50%, 44% 44%)",
               boxShadow: token("--glow-accent-soft"),

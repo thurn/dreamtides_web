@@ -327,10 +327,9 @@ a **Primitives** tier below it, each grouped by kind and name-prefix family.
   `--tide-earthy`, `--scrim`, …) over the primitive ramps (void / plum / violet /
   gold / energy / spark / ember / sap / …). The Dream Atlas material is the
   `--atlas-*` semantic family: journey field, edges, node halos, and badges all
-  resolve through it. Atlas components consume that family directly. The
-  Shared Canonical Layer (`--text`, `--surface`, `--line`, `--gold`) and the
-  production bridge (`--dt-*`, `--color-*`, `--cv-*`) are compatibility
-  re-exports and do not own component-local palettes.
+  resolve through it. Atlas components consume that family directly. CardView's
+  component-owned `--cv-*` variables carry its frame geometry and material as
+  one local rendering contract.
 - **Typography** — the type scale (`--t-*`) and font roles (`--font-ui` = Inter,
   `--font-title` = EB Garamond, `--font-rules-text` = Fira Sans Condensed,
   `--font-numeral` = Anton, `--font-meta` = JetBrains Mono) over the primitive

@@ -262,11 +262,11 @@
   height: calc(var(--atlas-node-size) * 0.27 * var(--atlas-badge-scale, 1));
   border-radius: 50%;
   background: var(--badge-disc-gradient);
-  border: 1px solid var(--atlas-badge-border);
+  border: 1px solid var(--border-accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--atlas-badge-accent);
+  color: var(--accent);
   box-shadow: 0 2px 7px var(--atlas-badge-shadow);
 }
 .dream-atlas .site-badge-glyph {

@@ -739,7 +739,7 @@ function OperationMark({
         : tone === "spark"
           ? token("--spark")
           : tone === "duplicate"
-            ? token("--energy-bright")
+            ? token("--text-on-glass-muted")
             : token("--text-on-glass");
   return (
     <span

@@ -4,9 +4,8 @@
 //
 // Each mark's glyph is a named `GLYPHS.<kind>` value, never a re-typed class
 // string, so an icon-font rename in the glyph vocabulary propagates here
-// automatically. Each color is the currency's role token (`--essence`,
-// `--energy`, `--spark`, `--points`, and `--accent-bright` for memory
-// counters), never a raw hex, so a token reband propagates too.
+// automatically. Economy resources use their named role tokens; points use
+// neutral primary text because score has no palette hue of its own.
 //
 // ResourceChip paints each mark in `mark.color` so every HUD economy value uses
 // its semantic role color.
@@ -34,6 +33,6 @@ export const ECONOMY_MARKS: Record<EconomyKind, EconomyMark> = {
   essence: { glyph: GLYPHS.essence, color: token("--essence") },
   energy: { glyph: GLYPHS.energy, color: token("--energy") },
   spark: { glyph: GLYPHS.spark, color: token("--spark") },
-  points: { glyph: GLYPHS.points, color: token("--points") },
+  points: { glyph: GLYPHS.points, color: token("--text-primary") },
   counter: { glyph: GLYPHS.counter, color: token("--accent-bright") },
 };

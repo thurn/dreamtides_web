@@ -295,7 +295,7 @@ export function ConsoleDivider({ flush = false }: { flush?: boolean }) {
       style={{
         height: 1,
         marginTop: flush ? 0 : token("--space-4"),
-        background: `linear-gradient(90deg, transparent, ${token("--line-strong")} 18%, ${token("--line-strong")} 82%, transparent)`,
+        background: `linear-gradient(90deg, transparent, ${token("--border-accent")} 18%, ${token("--border-accent")} 82%, transparent)`,
       }}
     />
   );

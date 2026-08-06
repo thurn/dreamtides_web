@@ -107,7 +107,7 @@ const GLOSSARY_DEFINITION_DIVIDER_STYLE = {
   width: "100%",
   height: "1px",
   margin: `${token("--space-4")} auto`,
-  background: token("--border-glossary-definition"),
+  background: token("--border-strong"),
 } as const;
 
 function renderDefinitionText(

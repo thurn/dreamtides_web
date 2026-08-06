@@ -299,7 +299,7 @@ function AnnotatedLoadingCard({
           left: 0,
           zIndex: 8,
           margin: 0,
-          color: token("--text-loading"),
+          color: token("--text-on-accent"),
           font: token(isDesktop ? "--t-title-sm" : "--t-lead"),
           textAlign: "center",
           pointerEvents: "none",
@@ -443,7 +443,7 @@ export function LoadingScreen({
         height: "100dvh",
         overflow: "hidden",
         background: token("--bg-loading"),
-        color: token("--text-loading"),
+        color: token("--text-on-accent"),
       }}
     >
       <span
@@ -471,7 +471,7 @@ export function LoadingScreen({
           left: 0,
           zIndex: 10,
           margin: 0,
-          color: token("--text-loading"),
+          color: token("--text-on-accent"),
           font: token(isDesktop ? "--t-title" : "--t-title-sm"),
           textAlign: "center",
         }}
@@ -558,7 +558,7 @@ export function LoadingScreen({
               display: "flex",
               alignItems: "center",
               gap: token("--space-3"),
-              color: token("--text-loading"),
+              color: token("--text-on-accent"),
               font: token("--t-title"),
             }}
           >

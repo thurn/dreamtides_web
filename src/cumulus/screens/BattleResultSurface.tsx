@@ -193,7 +193,7 @@ function VictoryReward({
             style={{
               margin: 0,
               font: token("--t-display"),
-              color: token("--gold"),
+              color: token("--reward"),
             }}
           >
             Victory!

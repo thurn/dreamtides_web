@@ -1027,7 +1027,7 @@ function rewardForResolution(
           kind: "fast" as const,
           headline: "Fast",
           announcement: resolvedEffectText,
-          selectionColor: "energy-bright" as const,
+          selectionColor: "accent-bright" as const,
           cards,
         };
       case "reduce-cost-all-and-gain-nightmares":

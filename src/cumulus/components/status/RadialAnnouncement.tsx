@@ -114,7 +114,7 @@ export interface RadialAnnouncementProps {
 }
 
 function toneColor(tone: RadialAnnouncementTone): string {
-  if (tone === "reward") return token("--gold");
+  if (tone === "reward") return token("--reward");
   if (tone === "danger") return token("--danger");
   return token("--accent-bright");
 }

@@ -268,10 +268,8 @@ scene art, so the tutorial role resolves to a pale lavender lifted for contrast.
 The `no-purple-text-on-glass` ESLint rule enforces this in files that import the
 shared glass recipes.
 
-The `--dt-*` / `--color-*` / `--cv-*` families are a production bridge: the
-same values re-exported under the production codebase's token names so shared
-elements (above all the game card) resolve identically in either system. In
-new Cumulus code prefer the semantic names.
+CardView's component-owned `--cv-*` variables keep its frame geometry and
+material together. Product and screen code use the semantic Cumulus names.
 
 ## Structured models, not arbitrary ReactNode
 

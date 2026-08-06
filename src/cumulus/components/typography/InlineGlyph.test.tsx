@@ -6,7 +6,7 @@ import { InlineGlyph } from "./InlineGlyph";
 describe("InlineGlyph", () => {
   it("centers a square em box on the surrounding font's capital height", () => {
     const markup = renderToStaticMarkup(
-      <InlineGlyph glyph={GLYPHS.points} color="points" label="points" />,
+      <InlineGlyph glyph={GLYPHS.points} color="text-primary" label="points" />,
     );
 
     expect(markup).toMatch(/^<span /);

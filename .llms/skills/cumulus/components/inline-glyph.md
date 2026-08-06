@@ -17,7 +17,7 @@ The Boxicons renderer for flowing text: a one-em square whose midpoint follows t
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `glyph` | `Glyph` | yes | — | Named Boxicons glyph from the shared Cumulus glyph vocabulary. |
-| `color` | `CumulusColor` = `"danger" \| "accent" \| "accent-bright" \| "accent-strong" \| "essence" \| "energy" \| "energy-bright" \| "spark" \| "points" \| "positive" \| "selected" \| "sale" \| "gold" \| "gold-light" \| "text-primary" \| "text-secondary" \| "text-muted" \| "text-faint" \| "text-on-accent" \| "white"` | no | — | Optional semantic fill color. Omit to inherit the surrounding text color. |
+| `color` | `CumulusColor` = `"danger" \| "accent" \| "accent-bright" \| "accent-strong" \| "essence" \| "energy" \| "spark" \| "positive" \| "selected" \| "text-primary" \| "text-secondary" \| "text-muted" \| "text-faint" \| "text-on-accent" \| "white"` | no | — | Optional semantic fill color. Omit to inherit the surrounding text color. |
 | `label` | `string` | no | — | Accessible meaning. Omit only when surrounding copy already names the glyph. |
 
 ## Usage
@@ -29,6 +29,6 @@ import { InlineGlyph } from "src/cumulus/components/typography/InlineGlyph";
 import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 <span>
-  Score 10<InlineGlyph glyph={GLYPHS.points} color="points" label="points" />.
+  Score 10<InlineGlyph glyph={GLYPHS.points} color="text-primary" label="points" />.
 </span>
 ```

@@ -65,7 +65,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 const score = richText.inline(
   richText.plain("Score 10"),
-  richText.glyph(GLYPHS.points, "points", "points"),
+  richText.glyph(GLYPHS.points, "points", "text-primary"),
   richText.plain("."),
 );
 ```

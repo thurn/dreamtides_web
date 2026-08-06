@@ -20,7 +20,6 @@ App backdrops, panes, and scrims, by role.
 | `--surface-card` | `var(--primitive-plum-700)` |  |
 | `--surface-raised` | `var(--primitive-plum-600)` |  |
 | `--surface-hover` | `var(--primitive-plum-500)` |  |
-| `--surface-chip` | `var(--primitive-plum-400)` |  |
 | `--surface-chrome` | `#191423` | solid raised chrome (HUD/popovers/windows) |
 | `--surface-chrome-strong` | `#120e1c` | solid, deeper chrome for windows |
 | `--surface-status-badge` | `var(--primitive-line-black)` | high-contrast in-card status mark |
@@ -39,13 +38,12 @@ Text color roles and letter-spacing. Pick by role (primary/secondary/muted), nev
 | `--text-primary` | `var(--primitive-ink-100)` |  |
 | `--text-secondary` | `var(--primitive-ink-300)` |  |
 | `--text-muted` | `var(--primitive-ink-400)` |  |
-| `--text-faint` | `var(--primitive-ink-500)` | #bba994 warm muted |
+| `--text-faint` | `var(--primitive-ink-500)` |  |
 | `--text-on-accent` | `#ffffff` |  |
 | `--text-on-card` | `#f6f6f5` | card name on dark card chrome (parent value) |
 | `--text-on-glass` | `var(--primitive-ink-100)` | high-contrast text on blurred glass; never violet/accent |
 | `--text-on-glass-muted` | `var(--primitive-ink-300)` | secondary text on blurred glass |
 | `--text-tutorial-highlight` | `var(--primitive-violet-100)` | high-contrast lavender emphasis in tutorial glass copy |
-| `--text-loading` | `var(--text-on-accent)` | white copy on the true-black loading stage |
 | `--tracking-eyebrow` | `0.14em` |  |
 | `--tracking-wordmark` | `0.01em` |  |
 | `--text-outline-media` | `1.7px 0 0 #000, 1.6px 0.7px 0 #000, 1.2px 1.2px 0 #000, 0.7px 1.6px 0 #000, 0 1.7px 0 #000, -0.7px 1.6px 0 #000, -1.2px 1.2px 0 #000, -1.6px 0.7px 0 #000, -1.7px 0 0 #000, -1.6px -0.7px 0 #000, -1.2px -1.2px 0 #000, -0.7px -1.6px 0 #000, 0 -1.7px 0 #000, 0.7px -1.6px 0 #000, 1.2px -1.2px 0 #000, 1.6px -0.7px 0 #000, 0 2px 6px rgba(0, 0, 0, 0.7)` |  |
@@ -62,18 +60,13 @@ Accent and game-semantic colors (resources, states, categories). A color prop on
 | `--accent-bright` | `var(--primitive-violet-300)` |  |
 | `--accent-tint` | `rgba(168, 85, 247, 0.16)` | low-alpha fill behind accents |
 | `--energy` | `var(--primitive-energy-400)` | blue droplet (bxf bx-fire-alt) |
-| `--energy-bright` | `var(--primitive-energy-300)` | lifted energy highlight |
 | `--spark` | `var(--primitive-spark-500)` | gold sparkle (bxf bx-sparkles) |
 | `--essence` | `var(--primitive-violet-400)` | violet, unified with accent (bxf bx-crypto) |
-| `--points` | `var(--essence)` | points share the essence hue |
 | `--danger` | `var(--primitive-ember-500)` |  |
-| `--positive` | `var(--primitive-sap-400)` | player / grant green (parent --dt-player) |
-| `--sale` | `var(--primitive-coral-400)` |  |
+| `--positive` | `var(--primitive-sap-400)` | player / grant green |
 | `--selected` | `var(--primitive-orange-500)` | default card selection ring |
-| `--gold` | `var(--primitive-gold-600)` | #d4a017 reward / completed / victory |
-| `--gradient-accent` | `linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)` |  |
-| `--gradient-gold` | `linear-gradient(135deg, #ffd34d 0%, #e0a82a 100%)` |  |
-| `--gradient-energy` | `linear-gradient(160deg, #38bdf8 0%, #0ea5e9 100%)` |  |
+| `--reward` | `var(--primitive-gold-600)` | victory and earned-reward moments |
+| `--portrait-warmth` | `var(--primitive-gold-600)` | warm ambient light in DreamAvatar portrait stages |
 | `--mote-warm` | `rgba(255, 238, 200, 0.55)` |  |
 | `--mote-warm-glow` | `rgba(255, 224, 160, 0.7)` |  |
 | `--mote-violet` | `rgba(216, 180, 254, 0.6)` |  |
@@ -90,10 +83,8 @@ Hairlines and dividers.
 | `--border-soft` | `var(--primitive-line-soft)` |  |
 | `--border-mid` | `var(--primitive-line-mid)` |  |
 | `--border-strong` | `var(--primitive-line-strong)` |  |
-| `--border-glossary-definition` | `var(--primitive-line-glossary-definition)` |  |
 | `--border-accent` | `var(--primitive-line-violet)` |  |
 | `--border-accent-glass` | `color-mix(in srgb, var(--accent-bright) 62%, white 38%)` |  |
-| `--line-strong` | `var(--atlas-badge-border)` | rgba(168,85,247,.42) |
 
 ## Radius
 
@@ -228,30 +219,6 @@ The hardware-inset channel plus the static design floors that reserve chrome. Ap
 | `--safe-top` | `59px` | design floor: minimum chrome reservation for the status bar + Dynamic Island region. Equals the derived iPhone-16 top inset (11+37+11 in scripts/screenshot-devices.mjs) but is independent of it — this is a static reservation, not the hardware-inset channel (--safe-area-inset-top). |
 | `--safe-bottom` | `34px` | home indicator inset |
 
-## Production bridge
-
-Re-exports under the production codebase's --dt-* and --color-* token names. GameCard's --cv-* frame variables live in components/card/CardView.css so every card rendering context loads its complete presentation closure. In new Cumulus code prefer the semantic names above.
-
-| Token | Value | Notes |
-| --- | --- | --- |
-| `--dt-bg-1` | `var(--primitive-void-700)` |  |
-| `--dt-bg-2` | `var(--primitive-plum-700)` |  |
-| `--dt-surface-light` | `var(--primitive-plum-500)` |  |
-| `--dt-border` | `rgba(168, 85, 247, 0.22)` |  |
-| `--dt-line` | `rgba(168, 85, 247, 0.18)` |  |
-| `--dt-primary` | `var(--primitive-violet-600)` | #7c3aed |
-| `--dt-primary-light` | `var(--primitive-violet-400)` |  |
-| `--dt-energy` | `var(--primitive-violet-300)` | atlas reuses #c084fc here |
-| `--dt-energy-border` | `var(--primitive-energy-600)` |  |
-| `--dt-spark` | `var(--primitive-spark-500)` | #f3c33f |
-| `--dt-spark-border` | `var(--primitive-spark-600)` |  |
-| `--dt-player` | `var(--primitive-sap-400)` |  |
-| `--color-bg` | `#0a0612` |  |
-| `--color-primary` | `#7c3aed` |  |
-| `--color-gold-light` | `#fbbf24` |  |
-| `--color-essence-glow-strong` | `rgba(168, 85, 247, 0.5)` |  |
-| `--color-text` | `#e2e8f0` |  |
-
 ## Other
 
 | Token | Value | Notes |
@@ -284,8 +251,6 @@ Re-exports under the production codebase's --dt-* and --color-* token names. Gam
 | `--atlas-node-boss-glow` | `rgba(239, 68, 68, 0.5)` |  |
 | `--atlas-node-active-glow` | `rgba(168, 85, 247, 0.85)` |  |
 | `--atlas-node-unrevealed-face` | `radial-gradient(closest-side, #4a4658, #322e40)` |  |
-| `--atlas-badge-border` | `rgba(168, 85, 247, 0.42)` |  |
-| `--atlas-badge-accent` | `var(--primitive-violet-400)` |  |
 | `--atlas-badge-shadow` | `rgba(0, 0, 0, 0.55)` |  |
 | `--atlas-boss-badge-background` | `radial-gradient(closest-side, var(--primitive-ember-500), #7f1d1d)` |  |
 | `--atlas-boss-badge-border` | `var(--primitive-void-800)` |  |

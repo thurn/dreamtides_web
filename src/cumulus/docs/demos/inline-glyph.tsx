@@ -41,14 +41,14 @@ export const inlineGlyphDemo: CumulusComponent = {
 import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 <span>
-  Score 10<InlineGlyph glyph={GLYPHS.points} color="points" label="points" />.
+  Score 10<InlineGlyph glyph={GLYPHS.points} color="text-primary" label="points" />.
 </span>`,
     },
   ],
   demo: {
     defaultArgs: {
       glyph: GLYPHS.points,
-      color: "points",
+      color: "text-primary",
       label: "points",
     },
   },

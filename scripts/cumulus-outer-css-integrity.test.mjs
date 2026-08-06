@@ -11,7 +11,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC_ROOT = resolve(ROOT, "src");
 const TOKEN_SOURCE = readFileSync(resolve(ROOT, "src/cumulus/primitives/cumulus-tokens.css"), "utf8");
 const KNOWN_TOKENS = new Set([...TOKEN_SOURCE.matchAll(/(--[\w-]+)\s*:/g)].map((match) => match[1]));
-const COMPONENT_LOCAL_PREFIXES = ["--cv-", "--draft-", "--dt-", "--hover-zoom-"];
+const COMPONENT_LOCAL_PREFIXES = ["--cv-", "--draft-", "--hover-zoom-"];
 const GAME_CARD_CSS = "src/cumulus/components/card/CardView.css";
 const GAME_CARD_COMPONENT = "src/cumulus/components/card/CardView.tsx";
 const GAME_CARD_OWNED_CSS = /\.card-view\b|\.card-rarity-legendary__shimmer\b|\.hover-zoom-card__gentle-copy\b|--cv-[\w-]+\s*:/;
@@ -35,7 +35,7 @@ function counted(rule, source) {
   return (source.match(patterns[rule]) ?? []).length;
 }
 
-function appShellColorBridgeCount(file, source) {
+function appShellRootPaletteCount(file, source) {
   if (file !== "src/index.css") return 0;
   const root = source.match(/:root\s*\{([\s\S]*?)\}/)?.[1] ?? "";
   return counted("raw-color", source) - counted("raw-color", root);
@@ -47,16 +47,21 @@ describe("outer CSS integrity", () => {
     for (const [file, role] of Object.entries(OUTER_UI_FILE_ROLES)) {
       if (!file.endsWith(".css") || role === OUTER_UI_ROLES.VENDOR_ASSET) continue;
       const source = readFileSync(resolve(ROOT, file), "utf8");
+      const locallyDeclared = new Set(
+        [...source.matchAll(/(--[\w-]+)\s*:/g)].map((match) => match[1]),
+      );
       const unknown = [...source.matchAll(/var\(\s*(--[\w-]+)/g)]
         .map((match) => match[1])
         .filter((name) =>
-          !KNOWN_TOKENS.has(name) && !COMPONENT_LOCAL_PREFIXES.some((prefix) => name.startsWith(prefix)),
+          !KNOWN_TOKENS.has(name) &&
+          !locallyDeclared.has(name) &&
+          !COMPONENT_LOCAL_PREFIXES.some((prefix) => name.startsWith(prefix)),
         );
       if (unknown.length > 0) actual.push({ file, rule: "unknown-token", count: unknown.length });
       if (role === OUTER_UI_ROLES.OPERATOR_TOOL) continue;
       for (const rule of ["raw-color", "raw-length", "raw-radius", "inline-glass", "cumulus-card-selector"]) {
         if (rule === "raw-color" && file === "src/index.css") {
-          const count = appShellColorBridgeCount(file, source);
+          const count = appShellRootPaletteCount(file, source);
           if (count > 0) actual.push({ file, rule, count });
           continue;
         }

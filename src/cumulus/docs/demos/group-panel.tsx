@@ -49,7 +49,7 @@ export const groupPanelDemo: CumulusComponent = {
               height: 1,
               margin: "14px 0 0",
               background:
-                "linear-gradient(90deg, transparent, var(--line-strong) 18%, var(--line-strong) 82%, transparent)",
+                "linear-gradient(90deg, transparent, var(--border-accent) 18%, var(--border-accent) 82%, transparent)",
             }}
           />
           <div

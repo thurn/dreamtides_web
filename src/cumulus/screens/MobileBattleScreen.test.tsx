@@ -776,13 +776,13 @@ describe("MobileBattleScreen", () => {
     expect(filteredBody?.style.filter).toContain("grayscale");
     expect(filteredBody?.contains(selectionRing ?? null)).toBe(false);
     expect(selectionRing?.style.boxShadow).toContain(
-      resolveColor("gold-light"),
+      resolveColor("accent-bright"),
     );
     expect(selectionRing?.style.boxShadow).toContain("3px");
     expect(selectionRing?.style.boxShadow).toContain("12px");
     expect(
       target?.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
-    ).not.toContain(resolveColor("gold-light"));
+    ).not.toContain(resolveColor("accent-bright"));
 
     act(() => root.unmount());
   });
@@ -2575,13 +2575,13 @@ describe("MobileBattleScreen", () => {
     expect(submit()?.getAttribute("aria-disabled")).toBe("true");
     handCards().forEach((_card, index) => {
       expect(cardShadow(index)).not.toContain("var(--positive)");
-      expect(cardShadow(index)).not.toContain("var(--color-gold-light)");
+      expect(cardShadow(index)).not.toContain("var(--selected)");
     });
 
     act(() => handCards()[0]?.click());
 
-    expect(cardShadow(0)).toContain("var(--color-gold-light)");
-    expect(cardShadow(1)).not.toContain("var(--color-gold-light)");
+    expect(cardShadow(0)).toContain("var(--selected)");
+    expect(cardShadow(1)).not.toContain("var(--selected)");
     expect(submit()?.getAttribute("aria-disabled")).toBe("true");
     expect(onCardPickerSelectionChange).toHaveBeenLastCalledWith([
       candidateIds[0],
@@ -2593,8 +2593,8 @@ describe("MobileBattleScreen", () => {
 
     act(() => handCards()[1]?.click());
 
-    expect(cardShadow(0)).toContain("var(--color-gold-light)");
-    expect(cardShadow(1)).toContain("var(--color-gold-light)");
+    expect(cardShadow(0)).toContain("var(--selected)");
+    expect(cardShadow(1)).toContain("var(--selected)");
     expect(submit()?.getAttribute("aria-disabled")).toBeNull();
     expect(
       container.querySelector("[data-battle-card-picker-progress]")
@@ -2784,7 +2784,7 @@ describe("MobileBattleScreen", () => {
 
     expect(
       candidate?.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
-    ).toContain("var(--color-gold-light)");
+    ).toContain("var(--selected)");
     act(() => {
       container
         .querySelector<HTMLButtonElement>(
@@ -3029,7 +3029,7 @@ describe("MobileBattleScreen", () => {
     ).toContain(resolveColor("accent-bright"));
     expect(
       candidate?.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
-    ).not.toContain(resolveColor("gold-light"));
+    ).not.toContain(resolveColor("selected"));
 
     act(() => {
       candidate
@@ -3039,7 +3039,7 @@ describe("MobileBattleScreen", () => {
 
     expect(
       candidate?.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
-    ).toContain(resolveColor("gold-light"));
+    ).toContain(resolveColor("selected"));
     expect(
       candidate?.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
     ).not.toContain(resolveColor("accent-bright"));

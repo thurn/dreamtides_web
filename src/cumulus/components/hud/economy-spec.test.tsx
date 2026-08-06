@@ -55,7 +55,7 @@ describe("ECONOMY_MARKS", () => {
     expect(ECONOMY_MARKS.essence.color).toContain("--essence");
     expect(ECONOMY_MARKS.energy.color).toContain("--energy");
     expect(ECONOMY_MARKS.spark.color).toContain("--spark");
-    expect(ECONOMY_MARKS.points.color).toContain("--points");
+    expect(ECONOMY_MARKS.points.color).toContain("--text-primary");
     expect(ECONOMY_MARKS.counter.color).toContain("--accent-bright");
   });
 });
@@ -129,7 +129,7 @@ describe("ResourceChip", () => {
       "[data-resource-chip]",
     );
     expect(defaultChip?.style.color).toBe("var(--text-primary)");
-    expect(defaultChip?.querySelector("i")?.style.color).toContain("--points");
+    expect(defaultChip?.querySelector("i")?.style.color).toContain("--text-primary");
     act(() => {
       defaultPoints.root.unmount();
     });

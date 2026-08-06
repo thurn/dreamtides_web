@@ -7,7 +7,7 @@ import path from "node:path";
  * The glass surface samples whatever scene art sits behind it, so purple text
  * fails on bright painterly backdrops. Glass text must resolve through
  * --text-on-glass / --text-on-glass-muted (or another high-contrast text token),
- * never the accent / essence / points / violet bridge roles.
+ * never the accent or essence roles.
  */
 
 const GLASS_RECIPE_IMPORTS = new Set([
@@ -21,15 +21,6 @@ const BANNED_TEXT_TOKENS = new Set([
   "--accent-bright",
   "--accent-strong",
   "--essence",
-  "--points",
-  "--dt-primary",
-  "--dt-primary-light",
-  "--dt-accent-strong",
-  "--dt-essence",
-  "--dt-energy",
-  "--color-primary",
-  "--color-primary-light",
-  "--color-essence",
 ]);
 
 /** Convert an OS path to a repo-relative POSIX path against ESLint's cwd. */
@@ -84,7 +75,7 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Ban accent/essence/points violet text tokens in Cumulus files that use blurred glass recipes; use --text-on-glass instead.",
+        "Ban accent and essence text tokens in Cumulus files that use blurred glass recipes; use --text-on-glass instead.",
     },
     schema: [],
     messages: {

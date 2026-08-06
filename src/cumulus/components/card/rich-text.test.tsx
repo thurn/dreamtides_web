@@ -25,7 +25,7 @@ describe("RichText", () => {
       <RichTextView
         value={richText.inline(
           richText.plain("Score 10"),
-          richText.glyph(GLYPHS.points, "points", "points"),
+          richText.glyph(GLYPHS.points, "points", "text-primary"),
           richText.plain("."),
         )}
       />,
@@ -68,7 +68,7 @@ describe("RichText", () => {
     expect(markup).toContain(": The Nightmare card, a penalty card forced into your deck.");
     expect(markup.match(/data-definition-divider=""/g)).toHaveLength(1);
     expect(markup).toContain(
-      "margin:var(--space-4) auto;background:var(--border-glossary-definition)",
+      "margin:var(--space-4) auto;background:var(--border-strong)",
     );
     expect(markup).not.toContain("--cv-rules-highlight-color");
     expect(markup).not.toContain("data-rules-text-paragraph");

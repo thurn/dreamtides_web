@@ -124,7 +124,7 @@ export function dreamAvatarRevealSpec(dreamAvatar: DreamAvatarVisual, abilityTex
 /** The tinted radial scene the transparent cutout stands on. Shared with the
  * monogram fallback so a portrait reads the same whether the art loads. */
 function portraitBackdrop(): string {
-  return `radial-gradient(circle at 50% 20%, color-mix(in srgb, ${token("--gold")} 24%, transparent) 0%, color-mix(in srgb, ${token("--accent")} 24%, transparent) 38%, ${token("--bg-sunken")} 100%)`;
+  return `radial-gradient(circle at 50% 20%, color-mix(in srgb, ${token("--portrait-warmth")} 24%, transparent) 0%, color-mix(in srgb, ${token("--accent")} 24%, transparent) 38%, ${token("--bg-sunken")} 100%)`;
 }
 
 /** Opaque light-gray field used by every self-framing portrait. */
@@ -257,7 +257,7 @@ function DreamAvatarPortraitSurface({
         style={{
           position: "absolute",
           inset: 0,
-          background: `radial-gradient(72% 56% at 50% 62%, color-mix(in srgb, ${token("--accent")} 26%, transparent) 0%, color-mix(in srgb, ${token("--gold")} 10%, transparent) 46%, transparent 72%)`,
+          background: `radial-gradient(72% 56% at 50% 62%, color-mix(in srgb, ${token("--accent")} 26%, transparent) 0%, color-mix(in srgb, ${token("--portrait-warmth")} 10%, transparent) 46%, transparent 72%)`,
           pointerEvents: "none",
         }}
       />
@@ -381,7 +381,7 @@ function DreamAvatarPortraitSurface({
         style={{
           position: "absolute",
           inset: 0,
-          background: `radial-gradient(120% 85% at 50% 24%, color-mix(in srgb, ${token("--gold")} 16%, transparent) 0%, color-mix(in srgb, ${token("--accent")} 22%, transparent) 46%, ${token("--bg-sunken")} 100%)`,
+          background: `radial-gradient(120% 85% at 50% 24%, color-mix(in srgb, ${token("--portrait-warmth")} 16%, transparent) 0%, color-mix(in srgb, ${token("--accent")} 22%, transparent) 46%, ${token("--bg-sunken")} 100%)`,
         }}
       />
     );

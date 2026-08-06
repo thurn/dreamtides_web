@@ -204,7 +204,7 @@ function SummaryStat({ stat }: { readonly stat: JourneyCompleteStatView }) {
         style={{
           margin: 0,
           font: token("--t-title-sm"),
-          color: stat.kind === "essence" ? token("--essence") : token("--gold"),
+          color: stat.kind === "essence" ? token("--essence") : token("--text-primary"),
         }}
       >
         {stat.kind === "essence" ? (

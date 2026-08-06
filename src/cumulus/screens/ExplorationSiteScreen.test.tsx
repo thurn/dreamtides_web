@@ -264,7 +264,7 @@ function deckModificationRewardView(
           kind === "spark"
             ? "All characters in your deck gain +1✦"
             : "All cards in your deck become ❖ (fast)",
-        selectionColor: kind === "spark" ? "spark" : "energy-bright",
+        selectionColor: kind === "spark" ? "spark" : "accent-bright",
         cards: [
           { entryId: "deck-entry-a", model: first, isBane: false },
           { entryId: "deck-entry-b", model: second, isBane: false },

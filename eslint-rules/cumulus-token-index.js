@@ -17,9 +17,9 @@ import { fileURLToPath } from "node:url";
  * When several tokens share one color (e.g. `--accent`, `--essence`, and the
  * `--primitive-violet-400` they both alias all resolve to `#a855f7`), the SUGGESTED
  * token is the most semantic one: a clean role name (`--accent`) is preferred
- * over a compatibility-bridge alias (`--dt-*`, `--color-*`) and over the raw
- * `--primitive-*` it resolves through. That keeps product UI pointed at the
- * re-skinnable semantic layer.
+ * over a component-local alias (`--cv-*`) and over the raw `--primitive-*` it
+ * resolves through. That keeps product UI pointed at the re-skinnable semantic
+ * layer.
  *
  * The parse happens once at module load. If the stylesheet can't be read the
  * index is simply empty and the rule degrades to reporting the literal with no
@@ -70,8 +70,8 @@ function semanticRank(name) {
   if (name.startsWith("--primitive-")) {
     return 3; // raw material
   }
-  if (name.startsWith("--dt-") || name.startsWith("--color-") || name.startsWith("--cv-")) {
-    return 2; // production-bridge / legacy aliases
+  if (name.startsWith("--cv-")) {
+    return 2; // component-local card-view aliases
   }
   return 0; // clean semantic role name
 }
