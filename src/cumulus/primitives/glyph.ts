@@ -138,7 +138,7 @@ export const GLYPHS = {
   /** A left sidebar — the Tutorial Editor disclosure trigger. */
   sidebarLeft: g("bx bx-dock-left"),
   /** Six-dot grip used to drag authored sequence rows. */
-  dragHandle: g("bx bx-dots-vertical-rounded"),
+  dragHandle: g("fa-solid fa-grip-vertical"),
   /** Trash can used for destructive authoring-row removal. */
   trash: g("bx bx-trash"),
   /** Play triangle used to replay an authored sequence. */

@@ -71,6 +71,7 @@ describe("inspector Cumulus controls", () => {
     const onOrderChange = vi.fn();
     const { container, root } = mount(<CardOrderEditor label="Deck order" items={[{ id: "instance-a", label: "A" }, { id: "instance-b", label: "B" }]} onOrderChange={onOrderChange} />);
     const handle = container.querySelector<HTMLButtonElement>('[data-card-order-drag-handle="instance-b"]');
+    expect(handle?.querySelector("i.fa-grip-vertical")).not.toBeNull();
     act(() => {
       handle?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true }));
     });
