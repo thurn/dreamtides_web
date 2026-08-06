@@ -106,7 +106,7 @@ That implementation term does not cross the component API boundary.
 | --- | --- | --- | --- | --- |
 | Pressable | Primitives | 32 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
 | Essence Value | Components | 13 | [components/essence-value.md](components/essence-value.md) | The canonical Essence amount: a tight inline value for player-facing currency text, with a named solid reward badge for values placed over art. |
-| Icon Button | Components | 19 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
+| Icon Button | Components | 20 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
 | Main Menu Button | Components | 1 | [components/main-menu-button.md](components/main-menu-button.md) | The text-first action for the Dreamtides main menu: outlined white at rest, showing the shared Cumulus liquid-glass material on hover or focus. |
 | Glass Button | Components | 32 | [components/glass-button.md](components/glass-button.md) | The labeled glass action — a bold text label with optional Essence cost or non-cost value on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface. |
 | Offer Tile | Components | 2 | [components/offer-tile.md](components/offer-tile.md) | The circular symbolic Augury offer button in named 300×300 desktop and 240×240 mobile sizes: UUID-backed full-bleed card art, Dreamsigns and site glyphs over authored full-art fields, and centered operation marks inside the gold-and-feather frame. |
@@ -155,7 +155,7 @@ That implementation term does not cross the component API boundary.
 | Dreamsign | Components | 12 | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
 | Dreamsign Gallery Panel | Components | 1 | [components/dreamsign-gallery-panel.md](components/dreamsign-gallery-panel.md) | The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art, essence captions, a close disc, and one bare-glyph end action. |
 | Site Node | Components | 3 | [components/site-node.md](components/site-node.md) | The dreamscape site disc: a floating circular node carrying a glyph and accent ring. |
-| Wager Prize Card | Components | 1 | [components/wager-prize-card.md](components/wager-prize-card.md) | The shared Gamble prize object: one playing-card superellipse with a draw target, an Essence reward with an optional Dreamsign, an optional whole-face Dreamsign reveal, and a committed-card reverse face. |
+| Wager Prize Card | Components | 1 | [components/wager-prize-card.md](components/wager-prize-card.md) | The shared Gamble draw object: a playing-card superellipse with either a reward face or Four-Suit Reprise's concealed suit grid, plus a committed-card reverse face. |
 <!-- END GENERATED COMPONENT INDEX -->
 
 ## Customization: step back before adding any knob

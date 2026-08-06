@@ -94,6 +94,57 @@ describe("WagerPrizeCard", () => {
     act(() => root.unmount());
   });
 
+  it("renders the four suits on a concealed draw card and flips to its result", () => {
+    const host = document.createElement("div");
+    document.body.append(host);
+    const root = createRoot(host);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <WagerPrizeCard
+            prizeId="four-suit-reprise"
+            targetLabel="a suit"
+            size="wagerCompact"
+            drawnCard={{ rank: "7", suit: "clubs" }}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    const prize = host.querySelector<HTMLElement>(
+      '[data-wager-prize-card="four-suit-reprise"]',
+    );
+    expect(prize?.dataset.wagerPrizeCardState).toBe("prize");
+    expect(
+      Array.from(
+        prize?.querySelectorAll<HTMLElement>(
+          "[data-four-suit-playing-card-symbol]",
+        ) ?? [],
+        (element) => element.dataset.fourSuitPlayingCardSymbol,
+      ),
+    ).toEqual(["spades", "hearts", "diamonds", "clubs"]);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <WagerPrizeCard
+            prizeId="four-suit-reprise"
+            targetLabel="a suit"
+            size="wagerCompact"
+            drawnCard={{ rank: "7", suit: "clubs" }}
+            revealDrawnCard
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    expect(prize?.dataset.wagerPrizeCardState).toBe("drawn");
+    expect(prize?.dataset.playingCard).toBe("7-clubs");
+
+    act(() => root.unmount());
+  });
+
   it("renders and emphasizes a Starway Stairs prize", () => {
     const host = document.createElement("div");
     document.body.append(host);

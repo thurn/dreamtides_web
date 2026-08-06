@@ -1261,6 +1261,14 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       "floating",
     );
     expect(outcomePanel?.querySelector("[data-wager-prize-card]")).toBeNull();
+    expect(
+      container.querySelector(
+        '[data-four-suit-draw-card] [data-wager-prize-card="four-suit-reprise"]',
+      ),
+    ).not.toBeNull();
+    expect(
+      container.querySelectorAll("[data-four-suit-playing-card-symbol]"),
+    ).toHaveLength(4);
     expect(container.querySelectorAll("[data-four-suit-outcome]")).toHaveLength(4);
     expect(
       Array.from(
@@ -1268,7 +1276,23 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
         (element) => element.dataset.fourSuitOutcome,
       ),
     ).toEqual(["spades", "diamonds", "hearts", "clubs"]);
-    expect(container.querySelectorAll("[data-four-suit-chance]")).toHaveLength(4);
+    expect(container.querySelector("[data-four-suit-chance]")).toBeNull();
+    const reselect = container.querySelector<HTMLButtonElement>(
+      '[data-testid="gamble-four-suit-choose-again"]',
+    );
+    expect(reselect?.querySelector("i.bx-arrow-left")).not.toBeNull();
+    expect(
+      container.querySelector(
+        '[data-four-suit-actions] [data-testid="gamble-four-suit-choose-again"]',
+      ),
+    ).toBeNull();
+    act(() => reselect?.click());
+    expect(container.querySelector("[data-four-suit-picker]")).not.toBeNull();
+    act(() => {
+      container.querySelector<HTMLButtonElement>(
+        '[data-testid="gamble-four-suit-card-four-suit-entry-1"]',
+      )?.click();
+    });
     const draw = container.querySelector<HTMLButtonElement>(
       '[data-testid="gamble-four-suit-draw"]',
     );
@@ -1302,8 +1326,11 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     void act(() => vi.advanceTimersByTime(1_000));
     expect(onOutcomeShown).toHaveBeenCalledOnce();
     expect(
-      container.querySelector('[data-four-suit-drawn-card="A-spades"]'),
+      container.querySelector(
+        '[data-wager-prize-card="four-suit-reprise"][data-wager-prize-card-state="drawn"]',
+      ),
     ).not.toBeNull();
+    expect(container.querySelectorAll("[data-four-suit-outcome]")).toHaveLength(4);
     const revealedView = fourSuitResultView({ resultRevealed: true });
     act(() => {
       root.render(

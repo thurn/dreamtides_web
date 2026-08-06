@@ -29,6 +29,7 @@ export const PLAYING_CARD_DESIGN = {
     wagerCompact: {
       square: 116,
       fontSize: 46,
+      suitGridFontSize: 34,
       rankSuitGap: token("--space-xxs"),
       redCharacterOutlineWidth: 5,
       blackCharacterOutlineWidth: 5,
@@ -36,6 +37,7 @@ export const PLAYING_CARD_DESIGN = {
     wager: {
       square: 188,
       fontSize: 76,
+      suitGridFontSize: 54,
       rankSuitGap: token("--space-xxs"),
       redCharacterOutlineWidth: 5,
       blackCharacterOutlineWidth: 5,
@@ -83,7 +85,8 @@ export type WagerPrizeCardId =
   | "ladder-climb"
   | "starway-1"
   | "starway-2"
-  | "starway-3";
+  | "starway-3"
+  | "four-suit-reprise";
 
 /** Named square sizes reserved for Gamble prize cards. */
 export type WagerPrizeCardSize = "wagerCompact" | "wager";
@@ -99,6 +102,12 @@ const SUIT_SYMBOLS: Record<PlayingCardSuit, string> = {
 };
 
 const RED_SUITS: ReadonlySet<PlayingCardSuit> = new Set(["diamonds", "hearts"]);
+const FOUR_SUIT_FACE_ORDER: readonly PlayingCardSuit[] = [
+  "spades",
+  "hearts",
+  "diamonds",
+  "clubs",
+];
 
 function superellipsePoint(
   index: number,
@@ -263,7 +272,7 @@ function PlayingCardIndex({
 interface WagerPrizeCardBaseProps {
   /** Stable Gamble choice represented by this prize object. */
   prizeId: WagerPrizeCardId;
-  /** Inclusive rank range shown as authored compact notation. */
+  /** Draw condition shown as authored compact notation. */
   targetLabel: string;
   /** Named desktop or mobile square size. Defaults to `wager`. */
   size?: WagerPrizeCardSize;
@@ -280,13 +289,24 @@ interface WagerPrizeCardBaseProps {
   emphasis?: WagerPrizeCardEmphasis;
 }
 
-/** A prize always carries Essence and may append a Dreamsign. */
-export type WagerPrizeCardProps = WagerPrizeCardBaseProps & {
+type StandardWagerPrizeCardProps = WagerPrizeCardBaseProps & {
+  prizeId: Exclude<WagerPrizeCardId, "four-suit-reprise">;
   /** Essence awarded on a win. */
   essenceReward: number;
   /** Dreamsign appended to the Essence reward, when present. */
   rewardDreamsign: DreamsignData | null;
 };
+
+type FourSuitWagerPrizeCardProps = WagerPrizeCardBaseProps & {
+  prizeId: "four-suit-reprise";
+  essenceReward?: never;
+  rewardDreamsign?: never;
+};
+
+/** A standard reward face or Four-Suit Reprise's concealed suit face. */
+export type WagerPrizeCardProps =
+  | StandardWagerPrizeCardProps
+  | FourSuitWagerPrizeCardProps;
 
 /**
  * A Gamble prize on the PlayingCard superellipse. Its reward copy stays one
@@ -296,6 +316,9 @@ export type WagerPrizeCardProps = WagerPrizeCardBaseProps & {
 export function WagerPrizeCard(
   props: WagerPrizeCardProps,
 ): ReactElement {
+  if (props.prizeId === "four-suit-reprise") {
+    return <WagerPrizeCardObject {...props} />;
+  }
   if (props.rewardDreamsign !== null) {
     return (
       <DreamsignWagerPrizeCard
@@ -308,7 +331,7 @@ export function WagerPrizeCard(
 }
 
 function DreamsignWagerPrizeCard(
-  props: WagerPrizeCardProps & { rewardDreamsign: DreamsignData },
+  props: StandardWagerPrizeCardProps & { rewardDreamsign: DreamsignData },
 ): ReactElement {
   const dreamsignId = requireDreamsignId(
     props.rewardDreamsign,
@@ -332,29 +355,75 @@ function DreamsignWagerPrizeCard(
 function WagerPrizeCardObject({
   prizeId,
   targetLabel,
-  essenceReward,
-  rewardDreamsign,
   size = "wager",
   drawnCard,
   revealDrawnCard = false,
   dreamsignTestId,
   emphasis = "standard",
   revealBinding,
+  ...prize
 }: WagerPrizeCardProps & {
   revealBinding?: WagerRevealSourceBinding;
 }): ReactElement {
   const reduceMotion = useReducedMotion() === true;
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const showingDrawnCard = revealDrawnCard && drawnCard !== null;
-  const rewardLabel = `${String(essenceReward)} Essence${
-    rewardDreamsign === null ? "" : ` and ${rewardDreamsign.name}`
-  }`;
-  const prizeLabel = `Draw ${targetLabel}. Win ${rewardLabel}.`;
+  const standardPrize = prizeId === "four-suit-reprise"
+    ? null
+    : prize as Omit<StandardWagerPrizeCardProps, keyof WagerPrizeCardBaseProps>;
+  const essenceReward = standardPrize?.essenceReward;
+  const rewardDreamsign = standardPrize?.rewardDreamsign ?? null;
+  const rewardLabel = standardPrize === null
+    ? null
+    : `${String(standardPrize.essenceReward)} Essence${
+        rewardDreamsign === null ? "" : ` and ${rewardDreamsign.name}`
+      }`;
+  const prizeLabel = prizeId === "four-suit-reprise"
+    ? "Face-down four-suit draw card"
+    : `Draw ${targetLabel}. Win ${rewardLabel ?? ""}.`;
   const drawnCardLabel =
     drawnCard === null
       ? prizeLabel
       : frontAriaLabel(drawnCard.rank, drawnCard.suit);
-  const prizeFaceContent = (
+  const prizeFaceContent = prizeId === "four-suit-reprise" ? (
+    <>
+      <div
+        data-four-suit-playing-card-face=""
+        style={{
+          position: "relative",
+          zIndex: 1,
+          width: "58%",
+          aspectRatio: "1",
+          display: "grid",
+          gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+          gridTemplateRows: "repeat(2, minmax(0, 1fr))",
+          placeItems: "center",
+          fontFamily: PLAYING_CARD_DESIGN.fontFamily,
+          fontSize: sizeSpec.suitGridFontSize,
+          fontWeight: 900,
+          lineHeight: 1,
+        }}
+      >
+        {FOUR_SUIT_FACE_ORDER.map((suit) => (
+          <span
+            key={suit}
+            aria-hidden="true"
+            data-four-suit-playing-card-symbol={suit}
+            style={{
+              color: RED_SUITS.has(suit)
+                ? PLAYING_CARD_DESIGN.colors.red
+                : PLAYING_CARD_DESIGN.colors.black,
+            }}
+          >
+            {SUIT_SYMBOLS[suit]}
+          </span>
+        ))}
+      </div>
+      <PlayingCardRim
+        emphasis={emphasis === "current" ? "current" : "standard"}
+      />
+    </>
+  ) : (
     <>
       <div
         data-wager-prize-copy=""
@@ -398,7 +467,7 @@ function WagerPrizeCardObject({
               size === "wager" ? token("--t-body") : token("--t-body-sm"),
           }}
         >
-          Win <EssenceValue amount={essenceReward} tone="inherit" />
+          Win <EssenceValue amount={essenceReward ?? 0} tone="inherit" />
           {rewardDreamsign !== null && " and "}
           {rewardDreamsign !== null && (
             <span
