@@ -3720,7 +3720,7 @@
       "prose": "A dark-coated explorer holds a bright lantern as wind whips his hair.",
       "actions": [
         {
-          "label": "Touch his lanternlight",
+          "label": "Touch the lantern",
           "template_id": 17,
           "variables": {}
         },
@@ -3862,7 +3862,7 @@
       "prose": "A rigid figure fractures into dark pieces beside a molten fissure.",
       "actions": [
         {
-          "label": "Temper scattered pieces",
+          "label": "Gather the scattered pieces",
           "template_id": 20,
           "variables": {
             "count": 2,
@@ -3870,7 +3870,7 @@
           }
         },
         {
-          "label": "Cast pieces into fissure",
+          "label": "Cast the pieces into the fissure",
           "template_id": 25,
           "variables": {}
         }
@@ -3885,8 +3885,7 @@
       "rank": 1,
       "ranking_rationale": "Visible fracture and molten stone make both transformation chains exceptionally direct while strengthening an awakened character plan.",
       "selected": {
-        "prose": true,
-        "actions": true
+        "prose": true
       }
     },
     {
@@ -3894,14 +3893,14 @@
       "prose": "A dark figure sheds glowing fragments above a lava-split outcrop.",
       "actions": [
         {
-          "label": "Separate drifting fragments",
+          "label": "Separate the drifting fragments",
           "template_id": 51,
           "variables": {
             "count": 2
           }
         },
         {
-          "label": "Fuse glowing fragments",
+          "label": "Fuse the glowing fragments",
           "template_id": 50,
           "variables": {
             "count": 2
@@ -3916,7 +3915,10 @@
         "overall": 9
       },
       "rank": 2,
-      "ranking_rationale": "A precise fragmenting silhouette supports two distinct duplication choices with strong deck-building flexibility."
+      "ranking_rationale": "A precise fragmenting silhouette supports two distinct duplication choices with strong deck-building flexibility.",
+      "selected": {
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-5",
@@ -4007,7 +4009,7 @@
   "7dd2214f-8d16-453a-9f28-62712e64eae1": [
     {
       "template_pair_id": "pair-4",
-      "prose": "A black firefly hovers beside a ribbed leaf, amber abdomen blazing.",
+      "prose": "A black firefly hovers, amber abdomen blazing.",
       "actions": [
         {
           "label": "Rest in its radiance",
@@ -4158,14 +4160,14 @@
       "prose": "A suited astronaut crosses glassy water as blue canyon light spills ahead.",
       "actions": [
         {
-          "label": "Follow canyon light",
+          "label": "Follow the canyon light",
           "template_id": 39,
           "variables": {
             "count": 2
           }
         },
         {
-          "label": "Enter blue radiance",
+          "label": "Enter the blue radiance",
           "template_id": 81,
           "variables": {}
         }
@@ -4305,14 +4307,14 @@
       "prose": "An armored warrior sweeps a glowing scythe through wind-driven sand.",
       "actions": [
         {
-          "label": "Yield to glowing edge",
+          "label": "Yield",
           "template_id": 60,
           "variables": {
             "essence_per_spark": 20
           }
         },
         {
-          "label": "Barter beside warrior",
+          "label": "Barter",
           "template_id": 61,
           "variables": {}
         }
