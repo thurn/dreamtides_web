@@ -91,7 +91,11 @@ export interface GlassPanelProps {
   headerSpacing?: GlassPanelHeaderSpacing;
   /** Draw the standard divider below the header. Defaults to `true`. */
   headerDivider?: boolean;
-  /** Optional structured action at the trailing edge of the header. */
+  /**
+   * Optional structured action at the trailing edge of the header. On desktop,
+   * prefer an intent-labeled `glassButton`, such as “Leave” on a shop screen;
+   * a generic X `iconButton` is discouraged for panel navigation.
+   */
   rightAccessory?: GlassPanelAccessory;
   /** Float the accessory beside an injected display cutout when present. */
   cutoutAwareAccessory?: boolean;

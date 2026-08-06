@@ -2920,7 +2920,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Optional structured action at the trailing edge of the header.",
+      "description": "Optional structured action at the trailing edge of the header. On desktop,\nprefer an intent-labeled `glassButton`, such as “Leave” on a shop screen;\na generic X `iconButton` is discouraged for panel navigation.",
       "nested": {
         "name": "GlassPanelAccessory",
         "fields": [
