@@ -424,6 +424,43 @@ radius) but stays deliberately restrained so the components are the focus.
 | **SiteNode**                 | `components/` | UUID-backed site source deriving its icon InfoCard and activation availability                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | **Atlas Node / Edge / Defs** | `components/` | AtlasNode owns its placed source, strict scene primary, Dreamsign/site/affiliation secondaries, and activation; edges and shared SVG definitions compose the map                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
+### OfferTile content and composition
+
+`OfferTile` represents Augury choices through a strict symbolic model. Fixed-target
+variants show their affected objects, while chooser variants show every choice.
+The model derives descriptions centrally and describes the action without naming
+specific cards, Dreamsigns, sites, categories, forms, keywords, or subtypes.
+Quantities that change the action remain spelled as words. Descriptions omit
+card-fit scoring, offer-generation rationale, and repeated Dreamsign rules text
+from the InfoCard.
+
+Augury uses a specific InfoCard placement: each offer's body-only InfoCard centers
+above that offer so the two visions remain visually paired with their explanations.
+This exception belongs to Augury and is not a reusable placement pattern for other
+Cumulus surfaces.
+
+The symbolic composition follows these rules:
+
+- Card art fills the opening as one full field, a left/right split, three vertical
+  bands, or a two-by-two grid. Each field applies the card's authored pan and zoom
+  within its panel, preserves the original image aspect ratio, and excludes the
+  source watermark strip.
+- Every required operation mark uses one small disc whose bottom edge sits 16px
+  above the inner frame border.
+- A five-card trade centers its outgoing card art as a rounded square over the four
+  incoming panels.
+- Dreamsign gifts and drafts use fixed, overscanned card-art backgrounds. Gifts
+  center one large Dreamsign; two-, three-, and four-choice drafts use authored
+  line, triangle, and square arrangements with open shadow clearance inside the
+  circular opening.
+- Add-site offers center the established site glyph disc over their own fixed,
+  overscanned card-art field.
+
+Every composition stays inside the measured circular opening of the
+gold-and-feather frame. Inner objects stay decorative, the complete tile owns
+interaction and its body-only InfoCard, and each complete framed tile drifts on
+its own stable phase.
+
 ### Interaction model (input-adaptive reveal)
 
 One coordinator contract is expressed through whichever gesture is native to
