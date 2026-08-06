@@ -44,6 +44,10 @@ export const TIDEMARK_LADDER_CLIMB_GUIDE_LINE =
 export const STARWAY_STAIRS_GUIDE_LINE =
   "Starway Stairs is the game. Keep betting to see how high you can go!";
 
+const GRAVOK_LARGEST_ESSENCE_PRIZE = Math.max(
+  ...GRAVOK_GATE_RULES.map((gate) => gate.essenceReward),
+);
+
 /** The next gate in display order supplies the non-selected reveal object. */
 export function gravokRevealGateId(selectedGateId: GravokGateId): GravokGateId {
   const selectedIndex = GRAVOK_GATE_RULES.findIndex(
@@ -119,6 +123,9 @@ function buildGravokWagerSiteView(params: {
     result?.won === true && result.gateId === "jack"
       ? runtime.rewardDreamsign
       : null;
+  const wonLargestPrize =
+    result?.won === true &&
+    result.essenceGained === GRAVOK_LARGEST_ESSENCE_PRIZE;
 
   return {
     gameId: "gravok-three-gate-wager",
@@ -132,7 +139,10 @@ function buildGravokWagerSiteView(params: {
     runtimeReady: true,
     wagerCost: runtime.wagerCost,
     canAfford: params.state.essence >= runtime.wagerCost,
-    canPlayAgain: (runtime.roundNumber ?? 1) <= GRAVOK_WAGER_MAX_RETRIES,
+    canPlayAgain:
+      result !== null &&
+      !wonLargestPrize &&
+      (runtime.roundNumber ?? 1) <= GRAVOK_WAGER_MAX_RETRIES,
     card: {
       rank: result?.card.rank ?? "A",
       suit: result?.card.suit ?? "spades",
@@ -254,7 +264,9 @@ function buildStarwayStairsSiteView(params: {
     runtimeReady: true,
     wagerAmount: runtime.wagerAmount,
     canAffordWager: params.state.essence >= runtime.wagerAmount,
-    canPlayAgain: runtime.roundNumber <= STARWAY_STAIRS_MAX_RETRIES,
+    canPlayAgain:
+      runtime.terminalReason === "bust" &&
+      runtime.roundNumber <= STARWAY_STAIRS_MAX_RETRIES,
     tiers: STARWAY_STAIRS_TIERS.map((tier) => {
       const result = runtime.results.find(
         (entry) => entry.tierNumber === tier.tierNumber,

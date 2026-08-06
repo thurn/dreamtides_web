@@ -109,17 +109,30 @@ describe("gamble-site-view-model", () => {
 
     expect(view.runtimeReady).toBe(true);
     expect(view.canAfford).toBe(true);
-    expect(view.canPlayAgain).toBe(true);
+    expect(view.canPlayAgain).toBe(false);
     expect(view.card).toEqual({ rank: "A", suit: "spades" });
     expect(view.guide.line).toBe(GRAVOK_WAGER_GUIDE_LINE);
     expect(view.result).toBeNull();
   });
 
   it("offers no further replay after two retries", () => {
+    const resultRuntime: GravokWagerSiteRuntime = {
+      ...RUNTIME,
+      roundNumber: 3,
+      result: {
+        gateId: "jack",
+        card: { rank: "2", suit: "clubs" },
+        won: false,
+        essenceGained: 0,
+        essenceSettled: true,
+        dreamsignAwarded: false,
+        pendingDreamsignReplacement: false,
+      },
+    };
     const state = {
       ...createDefaultState(),
       siteRuntime: {
-        [GAMBLE_SITE.id]: { ...RUNTIME, roundNumber: 3 },
+        [GAMBLE_SITE.id]: resultRuntime,
       },
     };
 
@@ -132,6 +145,34 @@ describe("gamble-site-view-model", () => {
     expectGravokView(view);
 
     expect(view.canPlayAgain).toBe(false);
+  });
+
+  it("allows replay after a smaller win", () => {
+    const view = buildGambleSiteView({
+      state: {
+        ...createDefaultState(),
+        siteRuntime: {
+          [GAMBLE_SITE.id]: {
+            ...RUNTIME,
+            result: {
+              gateId: "nine",
+              card: { rank: "Q", suit: "diamonds" },
+              won: true,
+              essenceGained: 150,
+              essenceSettled: true,
+              dreamsignAwarded: false,
+              pendingDreamsignReplacement: false,
+            },
+          },
+        },
+      },
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+    });
+    expectGravokView(view);
+
+    expect(view.canPlayAgain).toBe(true);
   });
 
   it("maps a jackpot result and its at-cap replacement by UUID", () => {
@@ -183,6 +224,7 @@ describe("gamble-site-view-model", () => {
       currentDreamsigns: [{ id: "held-sign" }],
       maxDreamsigns: 1,
     });
+    expect(view.canPlayAgain).toBe(false);
   });
 
   it("resolves the resident Gamble guide without production copy assertions", () => {
@@ -421,7 +463,7 @@ describe("gamble-site-view-model — Starway Stairs", () => {
       },
     ]);
     expect(view.canAffordWager).toBe(true);
-    expect(view.canPlayAgain).toBe(true);
+    expect(view.canPlayAgain).toBe(false);
     expect(view.cashOutReward).toBeNull();
   });
 
@@ -459,6 +501,70 @@ describe("gamble-site-view-model — Starway Stairs", () => {
       "current",
       "future",
     ]);
+    expect(view.canPlayAgain).toBe(false);
+  });
+
+  it("allows another round after a bust", () => {
+    const view = buildGambleSiteView({
+      state: {
+        ...createDefaultState(),
+        siteRuntime: {
+          [GAMBLE_SITE.id]: {
+            ...STARWAY_RUNTIME,
+            results: [
+              {
+                tierNumber: 1,
+                card: { rank: "2", suit: "spades" },
+                busted: true,
+                resultSettled: true,
+              },
+            ],
+            terminalReason: "bust",
+          },
+        },
+      },
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+    });
+
+    expect(view?.gameId).toBe("starway-stairs");
+    if (view?.gameId !== "starway-stairs") {
+      throw new Error("expected Starway Stairs view");
+    }
+    expect(view.canPlayAgain).toBe(true);
+  });
+
+  it("does not replay after taking a prize", () => {
+    const view = buildGambleSiteView({
+      state: {
+        ...createDefaultState(),
+        siteRuntime: {
+          [GAMBLE_SITE.id]: {
+            ...STARWAY_RUNTIME,
+            results: [
+              {
+                tierNumber: 1,
+                card: { rank: "3", suit: "clubs" },
+                busted: false,
+                resultSettled: true,
+              },
+            ],
+            terminalReason: "cashed-out",
+            prizeAwarded: 60,
+          },
+        },
+      },
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+    });
+
+    expect(view?.gameId).toBe("starway-stairs");
+    if (view?.gameId !== "starway-stairs") {
+      throw new Error("expected Starway Stairs view");
+    }
+    expect(view.canPlayAgain).toBe(false);
   });
 
   it("maps a terminal top win without another current tier", () => {
@@ -488,7 +594,7 @@ describe("gamble-site-view-model — Starway Stairs", () => {
         siteRuntime: {
           [GAMBLE_SITE.id]: {
             ...STARWAY_RUNTIME,
-            roundNumber: 3,
+            roundNumber: 1,
             results,
             terminalReason: "top",
             prizeAwarded: 300,

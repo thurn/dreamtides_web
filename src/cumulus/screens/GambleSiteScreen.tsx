@@ -86,7 +86,7 @@ export interface GravokWagerSiteView {
   wagerCost: number;
   /** Whether the player can pay the wager cost. */
   canAfford: boolean;
-  /** Whether another wager remains within this visit's retry limit. */
+  /** Whether this resolved outcome may start another wager. */
   canPlayAgain: boolean;
   /** Committed card kept concealed until the result choreography begins. */
   card: {
@@ -165,6 +165,7 @@ export interface StarwayStairsSiteView {
   runtimeReady: boolean;
   wagerAmount: number;
   canAffordWager: boolean;
+  /** Whether this terminal outcome may start another round. */
   canPlayAgain: boolean;
   tiers: readonly StarwayStairsTierView[];
   currentTierNumber: StarwayStairsTierNumber | null;

@@ -93,11 +93,11 @@ ranks, exact chance, and complete reward.
 | `Jack Gate` | ranks J–A | 16 / 52 = 30.77% | 200 Essence and the displayed random Dreamsign |
 
 The result shows the drawn card, the chosen gate, and whether the rank crossed
-the threshold. After the result and any required Dreamsign replacement, the
-controls are `Play Again` and `Leave`. Playing again prepares a new random
-Dreamsign reward and reassembles and reshuffles all 52 cards before the next
-wager. The player may retry twice, for a maximum of three wagers during
-the visit.
+the threshold. After a loss or a win from either of the two smaller gates, the
+controls are `Play Again` and `Leave`. Winning the Jack Gate's largest prize
+offers only `Leave`. Playing again prepares a new random Dreamsign reward and
+reassembles and reshuffles all 52 cards before the next wager. The player may
+retry twice, for a maximum of three wagers during the visit.
 
 ### Farpoint Station
 
@@ -139,9 +139,10 @@ Starway Stairs is a three-tier push-your-luck game. Each tier draw costs 10
 Essence. A safe draw earns the prize for that tier. After the first or second
 safe draw, the player may take that prize or risk it on the next tier. A bust
 loses the unclaimed prize and ends the game. The third safe draw pays
-automatically. A terminal round offers `Play Again` beside `Leave` while a
-retry remains. The player may retry twice, for a maximum of three independent
-rounds during one visit. A complete three-tier climb costs 30 Essence.
+automatically. A bust offers `Play Again` beside `Leave` while a retry remains.
+Taking a prize or reaching the top offers only `Leave`. The player may retry
+twice, for a maximum of three independent rounds during one visit. A complete
+three-tier climb costs 30 Essence.
 
 The UI lists all three tier squircles before play, each showing the minimum
 safe draw (`Draw 3+`, `Draw 5+`, or `Draw 8+`) and prize. The current tier uses
