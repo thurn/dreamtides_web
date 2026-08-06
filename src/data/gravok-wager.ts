@@ -5,9 +5,16 @@ import type {
   StandardPlayingCardSuit,
 } from "../types/gamble";
 
-export const GRAVOK_WAGER_RULES_VERSION = "three-gate-v1";
-export const GRAVOK_WAGER_COST = 50;
+export const GRAVOK_WAGER_RULES_VERSION = "three-gate-v2";
+export const GRAVOK_WAGER_ORDINARY_COST = 50;
+export const GRAVOK_WAGER_FARPOINT_COST = 45;
 export const GRAVOK_WAGER_MAX_RETRIES = 2;
+
+export function gravokWagerCost(isFarpoint: boolean): number {
+  return isFarpoint
+    ? GRAVOK_WAGER_FARPOINT_COST
+    : GRAVOK_WAGER_ORDINARY_COST;
+}
 
 export interface GravokGateRule {
   id: GravokGateId;

@@ -287,7 +287,7 @@ describe("gamble-site-view-model — Ladder Climb", () => {
     expect(view.nextDraw).toEqual({
       attemptNumber: 1,
       targetRank: "Q",
-      cost: 15,
+      cost: 0,
       canAfford: true,
       available: true,
     });
@@ -300,13 +300,13 @@ describe("gamble-site-view-model — Ladder Climb", () => {
     const runtime: TidemarkLadderClimbSiteRuntime = {
       ...LADDER_RUNTIME,
       revealedCards: [LADDER_RUNTIME.committedCards[0]],
-      cumulativeCost: 15,
+      cumulativeCost: 0,
       result: {
         attemptNumber: 1,
         card: LADDER_RUNTIME.committedCards[0],
         won: false,
-        costPaid: 15,
-        cumulativeCost: 15,
+        costPaid: 0,
+        cumulativeCost: 0,
         resultSettled: true,
         dreamsignAwarded: false,
         pendingDreamsignReplacement: false,
@@ -315,7 +315,7 @@ describe("gamble-site-view-model — Ladder Climb", () => {
     const view = buildGambleSiteView({
       state: {
         ...createDefaultState(),
-        essence: 20,
+        essence: 4,
         siteRuntime: { [GAMBLE_SITE.id]: runtime },
       },
       sceneNode: null,
@@ -330,7 +330,7 @@ describe("gamble-site-view-model — Ladder Climb", () => {
     expect(view.nextDraw).toEqual({
       attemptNumber: 2,
       targetRank: "10",
-      cost: 25,
+      cost: 5,
       canAfford: false,
       available: true,
     });
@@ -347,8 +347,8 @@ describe("gamble-site-view-model — Ladder Climb", () => {
       attemptNumber: 1 as const,
       card: { rank: "Q" as const, suit: "hearts" as const },
       won: true,
-      costPaid: 15,
-      cumulativeCost: 15,
+      costPaid: 0,
+      cumulativeCost: 0,
       resultSettled: false,
       dreamsignAwarded: false,
       pendingDreamsignReplacement: false,
@@ -360,7 +360,7 @@ describe("gamble-site-view-model — Ladder Climb", () => {
           [GAMBLE_SITE.id]: {
             ...LADDER_RUNTIME,
             revealedCards: [winningResult.card],
-            cumulativeCost: 15,
+            cumulativeCost: 0,
             result: { ...winningResult, resultSettled },
           },
         },
@@ -402,7 +402,7 @@ describe("gamble-site-view-model — Ladder Climb", () => {
     if (view?.gameId !== "tidemark-ladder-climb") {
       throw new Error("expected Ladder Climb view");
     }
-    expect(view.nextDraw?.cost).toBe(10);
+    expect(view.nextDraw?.cost).toBe(0);
   });
 });
 
@@ -412,7 +412,7 @@ const STARWAY_RUNTIME: StarwayStairsSiteRuntime = {
   rulesVersion: "fixture-starway-rules",
   roundNumber: 1,
   isFarpoint: false,
-  wagerAmount: 10,
+  wagerAmount: 30,
   shuffleCommitments: ["tier-1", "tier-2", "tier-3"],
   committedCards: [
     { rank: "3", suit: "clubs" },
@@ -429,7 +429,7 @@ describe("gamble-site-view-model — Starway Stairs", () => {
     const view = buildGambleSiteView({
       state: {
         ...createDefaultState(),
-        essence: 10,
+        essence: 30,
         siteRuntime: { [GAMBLE_SITE.id]: STARWAY_RUNTIME },
       },
       sceneNode: null,

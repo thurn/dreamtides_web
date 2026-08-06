@@ -623,6 +623,11 @@ describe("createSiteContentProvider — Gamble", () => {
   it("chooses either game randomly unless a game is forced", () => {
     const fixture = makeMerchantFixture();
     const site = makeMerchantTestSite({ id: "gamble-site", type: "Gamble" });
+    const farpointSite = makeMerchantTestSite({
+      id: "farpoint-gamble-site",
+      type: "Gamble",
+      isEnhanced: true,
+    });
     const journey = {
       ...fixture.journey,
       remainingDreamsignPool: fixture.content.dreamsignTemplates.map(
@@ -665,6 +670,18 @@ describe("createSiteContentProvider — Gamble", () => {
       rng: () => 0,
       gambleGameId: "starway-stairs",
     });
+    const farpointThreeGate = provider.openSite({
+      journey,
+      site: farpointSite,
+      rng: () => 0,
+      gambleGameId: "gravok-three-gate-wager",
+    });
+    const farpointStarway = provider.openSite({
+      journey,
+      site: farpointSite,
+      rng: () => 0,
+      gambleGameId: "starway-stairs",
+    });
 
     expect(randomThreeGate?.runtime).toMatchObject({
       kind: "gamble",
@@ -677,11 +694,12 @@ describe("createSiteContentProvider — Gamble", () => {
     expect(randomStarway?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "starway-stairs",
-      wagerAmount: 10,
+      wagerAmount: 30,
     });
     expect(forcedThreeGate?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "gravok-three-gate-wager",
+      wagerCost: 50,
     });
     expect(forcedLadder?.runtime).toMatchObject({
       kind: "gamble",
@@ -690,6 +708,17 @@ describe("createSiteContentProvider — Gamble", () => {
     expect(forcedStarway?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "starway-stairs",
+      wagerAmount: 30,
+    });
+    expect(farpointThreeGate?.runtime).toMatchObject({
+      kind: "gamble",
+      gameId: "gravok-three-gate-wager",
+      wagerCost: 45,
+    });
+    expect(farpointStarway?.runtime).toMatchObject({
+      kind: "gamble",
+      gameId: "starway-stairs",
+      wagerAmount: 20,
     });
   });
 

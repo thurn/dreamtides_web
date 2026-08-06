@@ -232,18 +232,18 @@ describe("Gravok's Three-Gate Wager", () => {
     expect(settleWager(out.state).state.journey.essence).toBe(350);
   });
 
-  it("applies Farpoint's free cost without changing thresholds or payouts", () => {
+  it("applies Farpoint's reduced cost without changing thresholds or payouts", () => {
     const out = wager(
-      stateWith("9", {}, { isFarpoint: true, wagerCost: 0 }),
+      stateWith("9", {}, { isFarpoint: true, wagerCost: 45 }),
       "nine",
     );
 
     expect(out.outcome).toBe("applied");
-    expect(out.state.journey.essence).toBe(200);
+    expect(out.state.journey.essence).toBe(155);
     expect(out.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       result: { gateId: "nine", won: true, essenceGained: 150 },
     });
-    expect(settleWager(out.state).state.journey.essence).toBe(350);
+    expect(settleWager(out.state).state.journey.essence).toBe(305);
   });
 
   it("bounces an unaffordable wager and an unavailable jackpot", () => {
@@ -465,7 +465,7 @@ describe("Tidemark Ladder Climb", () => {
     { rank: "5", suit: "spades" },
   ];
 
-  it("charges attempt one and grants its hidden Dreamsign only at settlement", () => {
+  it("draws attempt one for free and grants its hidden Dreamsign only at settlement", () => {
     const drawn = drawLadder(
       ladderStateWith([
         { rank: "Q", suit: "clubs" },
@@ -474,15 +474,15 @@ describe("Tidemark Ladder Climb", () => {
     );
 
     expect(drawn.outcome).toBe("applied");
-    expect(drawn.state.journey.essence).toBe(185);
+    expect(drawn.state.journey.essence).toBe(200);
     expect(drawn.state.journey.dreamsigns).toEqual([]);
     expect(drawn.state.journey.siteRuntime[SITE_ID]).toMatchObject({
-      cumulativeCost: 15,
+      cumulativeCost: 0,
       revealedCards: [{ rank: "Q", suit: "clubs" }],
       result: {
         attemptNumber: 1,
         won: true,
-        costPaid: 15,
+        costPaid: 0,
         resultSettled: false,
       },
     });
@@ -492,7 +492,7 @@ describe("Tidemark Ladder Climb", () => {
 
     const settled = settleLadder(drawn.state);
     expect(settled.outcome).toBe("applied");
-    expect(settled.state.journey.essence).toBe(210);
+    expect(settled.state.journey.essence).toBe(225);
     expect(settled.state.journey.dreamsigns.map((sign) => sign.id)).toEqual([
       "reward-sign",
     ]);
@@ -512,7 +512,7 @@ describe("Tidemark Ladder Climb", () => {
     ).toBe("applied");
   });
 
-  it("unlocks broader attempts one at a time with Farpoint's reduced costs", () => {
+  it("unlocks broader attempts one at a time for free at Farpoint", () => {
     const start = ladderStateWith(
       [
         { rank: "J", suit: "clubs" },
@@ -523,22 +523,22 @@ describe("Tidemark Ladder Climb", () => {
       { isFarpoint: true },
     );
     const first = drawLadder(start);
-    expect(first.state.journey.essence).toBe(190);
+    expect(first.state.journey.essence).toBe(200);
     expect(first.state.journey.siteRuntime[SITE_ID]).toMatchObject({
-      result: { attemptNumber: 1, won: false, costPaid: 10 },
+      result: { attemptNumber: 1, won: false, costPaid: 0 },
     });
     expect(drawLadder(first.state).outcome).toBe("bounced");
 
     const firstSettled = settleLadder(first.state);
     const second = drawLadder(firstSettled.state);
-    expect(second.state.journey.essence).toBe(170);
+    expect(second.state.journey.essence).toBe(200);
     expect(second.state.journey.siteRuntime[SITE_ID]).toMatchObject({
-      cumulativeCost: 30,
-      result: { attemptNumber: 2, won: true, costPaid: 20 },
+      cumulativeCost: 0,
+      result: { attemptNumber: 2, won: true, costPaid: 0 },
     });
   });
 
-  it("charges 140 Essence across four misses and stops after the last draw", () => {
+  it("charges 30 Essence across four misses and stops after the last draw", () => {
     let current = ladderStateWith(missCards);
     for (let attempt = 1; attempt <= 4; attempt += 1) {
       const drawn = drawLadder(current);
@@ -549,22 +549,23 @@ describe("Tidemark Ladder Climb", () => {
       current = settleLadder(drawn.state).state;
     }
 
-    expect(current.journey.essence).toBe(60);
+    expect(current.journey.essence).toBe(170);
     expect(current.journey.dreamsigns).toEqual([]);
     expect(current.journey.siteRuntime[SITE_ID]).toMatchObject({
-      cumulativeCost: 140,
+      cumulativeCost: 30,
       revealedCards: missCards,
     });
     expect(drawLadder(current).outcome).toBe("bounced");
   });
 
   it("bounces unaffordable attempts without charging Essence", () => {
-    const poor = drawLadder(
-      ladderStateWith(missCards, { essence: 14 }),
+    const first = settleLadder(
+      drawLadder(ladderStateWith(missCards, { essence: 4 })).state,
     );
+    const poor = drawLadder(first.state);
 
     expect(poor.outcome).toBe("bounced");
-    expect(poor.state.journey.essence).toBe(14);
+    expect(poor.state.journey.essence).toBe(4);
   });
 
   it("holds a win at the cap until UUID replacement settles", () => {
@@ -581,7 +582,7 @@ describe("Tidemark Ladder Climb", () => {
       ),
     );
     const settled = settleLadder(drawn.state);
-    expect(settled.state.journey.essence).toBe(210);
+    expect(settled.state.journey.essence).toBe(225);
     expect(settled.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       result: {
         resultSettled: true,
@@ -599,7 +600,7 @@ describe("Tidemark Ladder Climb", () => {
       { siteId: SITE_ID, replacedDreamsignId: "held-sign" },
     );
     expect(replaced.outcome).toBe("applied");
-    expect(replaced.state.journey.essence).toBe(210);
+    expect(replaced.state.journey.essence).toBe(225);
     expect(replaced.state.journey.dreamsigns.map((sign) => sign.id)).toEqual([
       "reward-sign",
     ]);
@@ -623,7 +624,7 @@ function starwayRuntime(
     rulesVersion: "fixture-starway-rules",
     roundNumber: 1,
     isFarpoint: false,
-    wagerAmount: 10,
+    wagerAmount: 30,
     shuffleCommitments: ["tier-1", "tier-2", "tier-3"],
     committedCards: [...cards],
     results: [],
@@ -681,11 +682,11 @@ describe("Starway Stairs", () => {
   it("charges the first tier and banks a settled safe prize", () => {
     const firstDraw = drawStarway(starwayStateWith(safeCards));
     expect(firstDraw.outcome).toBe("applied");
-    expect(firstDraw.state.journey.essence).toBe(190);
+    expect(firstDraw.state.journey.essence).toBe(170);
 
     const firstSettled = settleStarway(firstDraw.state);
     expect(firstSettled.outcome).toBe("applied");
-    expect(firstSettled.state.journey.essence).toBe(190);
+    expect(firstSettled.state.journey.essence).toBe(170);
     expect(firstSettled.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       results: [{ tierNumber: 1, busted: false, resultSettled: true }],
       terminalReason: null,
@@ -696,7 +697,7 @@ describe("Starway Stairs", () => {
       shuffleCommitment: "tier-1",
     });
     expect(cashedOut.outcome).toBe("applied");
-    expect(cashedOut.state.journey.essence).toBe(250);
+    expect(cashedOut.state.journey.essence).toBe(230);
     expect(cashedOut.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       terminalReason: "cashed-out",
       prizeAwarded: 60,
@@ -714,11 +715,11 @@ describe("Starway Stairs", () => {
       ).state,
     );
     const secondDraw = drawStarway(firstSettled.state);
-    expect(secondDraw.state.journey.essence).toBe(180);
+    expect(secondDraw.state.journey.essence).toBe(140);
     const busted = settleStarway(secondDraw.state);
 
     expect(busted.outcome).toBe("applied");
-    expect(busted.state.journey.essence).toBe(180);
+    expect(busted.state.journey.essence).toBe(140);
     expect(busted.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       terminalReason: "bust",
       prizeAwarded: 0,
@@ -733,23 +734,23 @@ describe("Starway Stairs", () => {
     let state = starwayStateWith(safeCards);
     for (let tier = 0; tier < 3; tier += 1) {
       const drawn = drawStarway(state);
-      expect(drawn.state.journey.essence).toBe(190 - tier * 10);
+      expect(drawn.state.journey.essence).toBe(170 - tier * 30);
       state = settleStarway(drawn.state).state;
     }
 
-    expect(state.journey.essence).toBe(470);
+    expect(state.journey.essence).toBe(410);
     expect(state.journey.siteRuntime[SITE_ID]).toMatchObject({
       terminalReason: "top",
       prizeAwarded: 300,
     });
   });
 
-  it("starts for free at Farpoint Station", () => {
+  it("charges the reduced tier wager at Farpoint Station", () => {
     const drawn = drawStarway(
-      starwayStateWith(safeCards, {}, { isFarpoint: true, wagerAmount: 0 }),
+      starwayStateWith(safeCards, {}, { isFarpoint: true, wagerAmount: 20 }),
     );
     expect(drawn.outcome).toBe("applied");
-    expect(drawn.state.journey.essence).toBe(200);
+    expect(drawn.state.journey.essence).toBe(180);
   });
 
   it("blocks leaving while a safe result awaits a cash-out or climb", () => {
@@ -760,7 +761,7 @@ describe("Starway Stairs", () => {
 
   it("requires enough Essence before every climb", () => {
     const firstSettled = settleStarway(
-      drawStarway(starwayStateWith(safeCards, { essence: 10 })).state,
+      drawStarway(starwayStateWith(safeCards, { essence: 30 })).state,
     );
     expect(firstSettled.state.journey.essence).toBe(0);
 
@@ -779,7 +780,7 @@ describe("Starway Stairs", () => {
       shuffleCommitment: "tier-1",
     });
     expect(staleCashOut.outcome).toBe("bounced");
-    expect(staleCashOut.state.journey.essence).toBe(180);
+    expect(staleCashOut.state.journey.essence).toBe(140);
     expect(staleCashOut.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       terminalReason: null,
       prizeAwarded: 0,
@@ -809,7 +810,7 @@ describe("Starway Stairs", () => {
       previousShuffleCommitment: "tier-1",
     });
     expect(replayed.outcome).toBe("applied");
-    expect(replayed.state.journey.essence).toBe(190);
+    expect(replayed.state.journey.essence).toBe(170);
     expect(replayed.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       roundNumber: 2,
       shuffleCommitments: ["next-1", "next-2", "next-3"],
@@ -819,7 +820,7 @@ describe("Starway Stairs", () => {
 
     const nextBet = drawStarway(replayed.state);
     expect(nextBet.outcome).toBe("applied");
-    expect(nextBet.state.journey.essence).toBe(180);
+    expect(nextBet.state.journey.essence).toBe(140);
 
     const staleReplay = apply(replayed.state, "PLAY_AGAIN_STARWAY_STAIRS", {
       siteId: SITE_ID,

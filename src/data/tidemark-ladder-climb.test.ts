@@ -26,10 +26,10 @@ describe("Tidemark Ladder Climb rules", () => {
     expect(rankWinsTidemarkLadderClimbAttempt("5", 4)).toBe(false);
     expect([1, 2, 3, 4].map((attempt) =>
       tidemarkLadderClimbAttemptCost(attempt as 1 | 2 | 3 | 4, false),
-    )).toEqual([15, 25, 40, 60]);
+    )).toEqual([0, 5, 10, 15]);
     expect([1, 2, 3, 4].map((attempt) =>
       tidemarkLadderClimbAttemptCost(attempt as 1 | 2 | 3 | 4, true),
-    )).toEqual([10, 20, 30, 45]);
+    )).toEqual([0, 0, 0, 0]);
   });
 
   it("owns the shared next-attempt eligibility contract", () => {
@@ -38,8 +38,8 @@ describe("Tidemark Ladder Climb rules", () => {
       attemptNumber: 1,
       card,
       won: false,
-      costPaid: 15,
-      cumulativeCost: 15,
+      costPaid: 0,
+      cumulativeCost: 0,
       resultSettled: true,
       dreamsignAwarded: false,
       pendingDreamsignReplacement: false,
@@ -72,7 +72,7 @@ describe("Tidemark Ladder Climb rules", () => {
         result: {
           ...settledMiss,
           attemptNumber: 4,
-          cumulativeCost: 140,
+          cumulativeCost: 30,
         },
       }),
     ).toBeNull();

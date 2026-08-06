@@ -23,9 +23,9 @@ import type {
 import type { GambleGameId } from "../../types/gamble";
 import type { CardData } from "../../types/cards";
 import {
-  GRAVOK_WAGER_COST,
   GRAVOK_WAGER_RULES_VERSION,
   STANDARD_PLAYING_CARD_DECK,
+  gravokWagerCost,
 } from "../../data/gravok-wager";
 import {
   scoreTidemarkLadderClimbDreamsignCandidates,
@@ -35,7 +35,7 @@ import {
 import {
   STARWAY_STAIRS_RULES_VERSION,
   STARWAY_STAIRS_TIERS,
-  STARWAY_STAIRS_WAGER_AMOUNT,
+  starwayStairsWagerAmount,
 } from "../../data/starway-stairs";
 import { createDreamsign } from "../../data/dreamsigns";
 import { generateRewardSiteData } from "../../rewards/reward-generator";
@@ -188,7 +188,7 @@ function buildGravokWagerRuntime(
     rulesVersion: GRAVOK_WAGER_RULES_VERSION,
     roundNumber: 1,
     isFarpoint: site.isEnhanced,
-    wagerCost: site.isEnhanced ? 0 : GRAVOK_WAGER_COST,
+    wagerCost: gravokWagerCost(site.isEnhanced),
     shuffleCommitment,
     committedCard,
     dreamsignCandidateIds,
@@ -267,7 +267,7 @@ function buildStarwayStairsRuntime(
     rulesVersion: STARWAY_STAIRS_RULES_VERSION,
     roundNumber: 1,
     isFarpoint: site.isEnhanced,
-    wagerAmount: site.isEnhanced ? 0 : STARWAY_STAIRS_WAGER_AMOUNT,
+    wagerAmount: starwayStairsWagerAmount(site.isEnhanced),
     shuffleCommitments: commitments.map((entry) => entry.shuffleCommitment),
     committedCards: commitments.map((entry) => entry.card),
     results: [],

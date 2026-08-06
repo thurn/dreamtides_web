@@ -4,10 +4,13 @@ import {
   STARWAY_STAIRS_TIERS,
   starwayStairsBustRangeLabel,
   starwayStairsDrawTargetLabel,
+  starwayStairsWagerAmount,
 } from "./starway-stairs";
 
 describe("Starway Stairs rules", () => {
   it("defines the three escalating bust ranges and rewards", () => {
+    expect(starwayStairsWagerAmount(false)).toBe(30);
+    expect(starwayStairsWagerAmount(true)).toBe(20);
     expect(
       STARWAY_STAIRS_TIERS.map((tier) => ({
         tierNumber: tier.tierNumber,

@@ -82,7 +82,7 @@ const STARWAY_VIEW: StarwayStairsSiteView = {
   scene: null,
   isFarpoint: false,
   runtimeReady: true,
-  wagerAmount: 10,
+  wagerAmount: 30,
   canAffordWager: true,
   canPlayAgain: true,
   tiers: [
@@ -508,7 +508,7 @@ const LADDER_VIEW: LadderClimbSiteView = {
   nextDraw: {
     attemptNumber: 1,
     targetRank: "Q",
-    cost: 15,
+    cost: 0,
     canAfford: true,
     available: true,
   },
@@ -702,7 +702,7 @@ describe("GambleSiteScreen — Ladder Climb", () => {
               nextDraw: {
                 attemptNumber: 2,
                 targetRank: "10",
-                cost: 25,
+                cost: 5,
                 canAfford: true,
                 available: true,
               },

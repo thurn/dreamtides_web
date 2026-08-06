@@ -67,14 +67,26 @@ flow.
 
 | Game | Ordinary cost | Farpoint Station’s only change |
 | --- | --- | --- |
-| Gravok’s Three-Gate Wager | Each wager costs 50 Essence. | The wager costs 0 Essence. |
-| Tidemark Ladder Climb | Attempts cost 15/25/40/60 Essence. | Attempts cost 10/20/30/45 Essence. |
-| Starway Stairs | Each tier draw costs 10 Essence. | Each tier draw costs 0 Essence. |
+| Gravok’s Three-Gate Wager | Each wager costs 50 Essence. | Each wager costs 45 Essence. |
+| Tidemark Ladder Climb | Attempts cost 0/5/10/15 Essence. | Every attempt is free. |
+| Starway Stairs | Each tier draw costs 30 Essence. | Each tier draw costs 20 Essence. |
 | Four-Suit Reprise | Each draw costs 25 Essence. | Each draw costs 15 Essence. |
 | Twenty-One | The deal costs 50 Essence; each hit costs 10 Essence. | Hits cost 0 Essence. |
 
 All odds, rewards, thresholds, outcome mappings, and limits are identical at
 ordinary and Farpoint Station sites.
+
+### Balance reference
+
+Assuming ordinary Dreamsigns are worth 50 Essence, Farpoint strong Dreamsigns
+are worth 100 Essence, sufficient bankroll, and optimal use of every available
+replay, the net values are:
+
+| Game | Ordinary EV | Farpoint EV |
+| --- | ---: | ---: |
+| Gravok’s Three-Gate Wager | +65.38 Essence | +104.29 Essence |
+| Tidemark Ladder Climb | +58.10 Essence | +116.60 Essence |
+| Starway Stairs | +73.68 Essence | +124.03 Essence |
 
 ## 1. Gravok’s Three-Gate Wager
 
@@ -101,7 +113,7 @@ retry twice, for a maximum of three wagers during the visit.
 
 ### Farpoint Station
 
-The chosen wager costs 0 Essence. The thresholds, odds, and rewards are
+The chosen wager costs 45 Essence. The thresholds, odds, and rewards are
 unchanged.
 
 ## 2. Tidemark Ladder Climb
@@ -115,14 +127,14 @@ or missing all four attempts grants nothing.
 The prize card displays `Draw Q–A` above `Win [Dreamsign name]` before the
 first draw. Hovering, focusing, or touch-holding the prize reveals the displayed
 Dreamsign. After a miss settles, the same prize card advances to the next rank
-target and the controls offer the next paid draw or `Leave`.
+target and the controls offer the next draw or `Leave`.
 
 | Attempt | Cost | Cumulative cost | Winning ranks | Chance |
 | --- | ---: | ---: | --- | ---: |
-| 1 | 15 Essence | 15 Essence | Q–A | 12 / 52 = 23.08% |
-| 2 | 25 Essence | 40 Essence | 10–A | 20 / 52 = 38.46% |
-| 3 | 40 Essence | 80 Essence | 8–A | 28 / 52 = 53.85% |
-| 4 | 60 Essence | 140 Essence | 6–A | 36 / 52 = 69.23% |
+| 1 | 0 Essence | 0 Essence | Q–A | 12 / 52 = 23.08% |
+| 2 | 5 Essence | 5 Essence | 10–A | 20 / 52 = 38.46% |
+| 3 | 10 Essence | 15 Essence | 8–A | 28 / 52 = 53.85% |
+| 4 | 15 Essence | 30 Essence | 6–A | 36 / 52 = 69.23% |
 
 Reassemble and reshuffle before every attempt, so every listed chance uses a
 full deck. Buying all four attempts produces a 93.28% chance of winning at
@@ -130,19 +142,18 @@ least once.
 
 ### Farpoint Station
 
-The four attempts cost 10, 20, 30, and 45 Essence, for a maximum total of 105
-Essence. The odds and Dreamsign reward are unchanged.
+All four attempts are free. The odds and rewards are unchanged.
 
 ## 3. Starway Stairs
 
-Starway Stairs is a three-tier push-your-luck game. Each tier draw costs 10
+Starway Stairs is a three-tier push-your-luck game. Each tier draw costs 30
 Essence. A safe draw earns the prize for that tier. After the first or second
 safe draw, the player may take that prize or risk it on the next tier. A bust
 loses the unclaimed prize and ends the game. The third safe draw pays
 automatically. A bust offers `Play Again` beside `Leave` while a retry remains.
 Taking a prize or reaching the top offers only `Leave`. The player may retry
 twice, for a maximum of three independent rounds during one visit. A complete
-three-tier climb costs 30 Essence.
+three-tier climb costs 90 Essence.
 
 The UI lists all three tier squircles before play, each showing the minimum
 safe draw (`Draw 3+`, `Draw 5+`, or `Draw 8+`) and prize. The current tier uses
@@ -167,7 +178,7 @@ unclaimed prize.
 
 ### Farpoint Station
 
-Every tier draw costs 0 Essence. The bust ranges, odds, and prizes are
+Every tier draw costs 20 Essence. The bust ranges, odds, and prizes are
 unchanged.
 
 ## 4. Four-Suit Reprise

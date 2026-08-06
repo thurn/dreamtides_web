@@ -5,9 +5,16 @@ import type {
 import type { StarwayStairsSiteRuntime } from "../types/journey";
 import { STANDARD_PLAYING_CARD_RANKS } from "./gravok-wager";
 
-export const STARWAY_STAIRS_RULES_VERSION = "starway-stairs-v3";
-export const STARWAY_STAIRS_WAGER_AMOUNT = 10;
+export const STARWAY_STAIRS_RULES_VERSION = "starway-stairs-v4";
+export const STARWAY_STAIRS_ORDINARY_WAGER_AMOUNT = 30;
+export const STARWAY_STAIRS_FARPOINT_WAGER_AMOUNT = 20;
 export const STARWAY_STAIRS_MAX_RETRIES = 2;
+
+export function starwayStairsWagerAmount(isFarpoint: boolean): number {
+  return isFarpoint
+    ? STARWAY_STAIRS_FARPOINT_WAGER_AMOUNT
+    : STARWAY_STAIRS_ORDINARY_WAGER_AMOUNT;
+}
 
 export interface StarwayStairsTierRule {
   tierNumber: StarwayStairsTierNumber;
