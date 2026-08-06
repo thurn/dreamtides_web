@@ -257,8 +257,14 @@ describe("ExplorationEditorApp", () => {
     expect(container.textContent).toContain("Gain essence");
     expect(container.textContent).not.toContain("Draw a card");
 
-    const hidden = [...container.querySelectorAll<HTMLButtonElement>("[role='tab']")]
-      .find((button) => button.textContent === "Hidden (1)")!;
+    const unused = container.querySelector<HTMLButtonElement>("[data-testid='template-health-filter-unused']")!;
+    act(() => unused.click());
+    expect(unused.getAttribute("aria-pressed")).toBe("true");
+    expect(container.querySelector("[data-template-health-filter='unused']")).not.toBeNull();
+    expect([...container.querySelectorAll<HTMLElement>(".encounter-template-health-entry")]
+      .map((entry) => entry.dataset.templateId)).toEqual(["1"]);
+
+    const hidden = container.querySelector<HTMLButtonElement>("[data-testid='template-health-filter-hidden']")!;
     act(() => hidden.click());
     expect(container.textContent).toContain("Draw a card");
     expect(container.textContent).toContain("Unique effect: hidden after 1 production use.");

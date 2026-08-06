@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { GlassButton } from "../cumulus/components/controls/GlassButton";
-import { SegmentedControl } from "../cumulus/components/controls/SegmentedControl";
 import { DeveloperRail } from "../cumulus/components/overlay/DeveloperRail";
 import { GLYPHS } from "../cumulus/primitives/glyph";
 import type {
@@ -12,7 +11,7 @@ import "./encounter-template-health-rail.css";
 
 export const TEMPLATE_HEALTH_RAIL_ID = "encounter-template-health";
 
-type TemplateHealthFilter = "selectable" | "hidden" | "all";
+type TemplateHealthFilter = "selectable" | "unused" | "hidden" | "all";
 type TemplateHealthLoadState = "idle" | "loading" | "ready" | "error";
 
 const STATUS_LABELS: Record<EncounterTemplateHealthStatus, string> = {
@@ -48,10 +47,11 @@ function entriesFor(
 ): EncounterTemplateHealthEntry[] {
   const filtered = health.templates.filter((entry) => {
     if (filter === "selectable") return isSelectable(entry);
+    if (filter === "unused") return entry.status === "unused";
     if (filter === "hidden") return !isSelectable(entry);
     return true;
   });
-  if (filter === "selectable") {
+  if (filter === "selectable" || filter === "unused") {
     return filtered.sort((left, right) =>
       left.usageCount - right.usageCount || left.templateId - right.templateId);
   }
@@ -122,8 +122,7 @@ export function EncounterTemplateHealthRail({
     ? isLoading ? "Reading current template balance…" : "Template balance unavailable"
     : `${String(health.recordedTemplateUses)} uses across ${String(health.productionEncounters)} production encounters${isLoading ? " · refreshing…" : ""}`;
 
-  function chooseFilter(next: string) {
-    const selected = next as TemplateHealthFilter;
+  function chooseFilter(selected: TemplateHealthFilter) {
     setFilter(selected);
     onFilterChange(selected);
   }
@@ -212,21 +211,36 @@ export function EncounterTemplateHealthRail({
             </dl>
           </section>
 
-          <SegmentedControl
-            options={[
-              { value: "selectable", label: `Selectable (${String(selectableCount(health))})` },
-              { value: "hidden", label: `Hidden (${String(countStatus(health, "hidden"))})` },
-              { value: "all", label: `All (${String(health.catalogTemplateCount)})` },
-            ]}
-            value={filter}
-            onChange={chooseFilter}
-            size="sm"
-            full
-          />
+          <div
+            className="encounter-template-health-filters"
+            role="group"
+            aria-label="Filter templates"
+          >
+            {([
+              ["selectable", `Selectable (${String(selectableCount(health))})`],
+              ["unused", `Unused (${String(countStatus(health, "unused"))})`],
+              ["hidden", `Hidden (${String(countStatus(health, "hidden"))})`],
+              ["all", `All (${String(health.catalogTemplateCount)})`],
+            ] as const).map(([value, label]) => (
+              <GlassButton
+                key={value}
+                label={label}
+                placement="onGlass"
+                size="compact"
+                pressed={filter === value}
+                testId={`template-health-filter-${value}`}
+                onPress={() => chooseFilter(value)}
+              />
+            ))}
+          </div>
 
-          <section className="encounter-template-health-results" aria-live="polite">
+          <section
+            className="encounter-template-health-results"
+            data-template-health-filter={filter}
+            aria-live="polite"
+          >
             <div className="encounter-template-health-results-heading">
-              <h2>{filter === "selectable" ? "Selectable templates" : filter === "hidden" ? "Hidden templates" : "All templates"}</h2>
+              <h2>{filter === "selectable" ? "Selectable templates" : filter === "unused" ? "Unused templates" : filter === "hidden" ? "Hidden templates" : "All templates"}</h2>
               <span>{entries.length}</span>
             </div>
             <div className="encounter-template-health-list">

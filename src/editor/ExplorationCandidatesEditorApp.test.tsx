@@ -283,15 +283,20 @@ describe("ExplorationCandidatesEditorApp", () => {
     expect(container.textContent).toContain("Purge a card");
     expect(container.textContent).not.toContain("Draw a card");
 
-    const hidden = [...container.querySelectorAll<HTMLButtonElement>("[role='tab']")]
-      .find((button) => button.textContent === "Hidden (1)")!;
+    const unused = container.querySelector<HTMLButtonElement>("[data-testid='template-health-filter-unused']")!;
+    act(() => unused.click());
+    expect(unused.getAttribute("aria-pressed")).toBe("true");
+    expect(container.querySelector("[data-template-health-filter='unused']")).not.toBeNull();
+    expect([...container.querySelectorAll<HTMLElement>(".encounter-template-health-entry")]
+      .map((entry) => entry.dataset.templateId)).toEqual(["1"]);
+
+    const hidden = container.querySelector<HTMLButtonElement>("[data-testid='template-health-filter-hidden']")!;
     act(() => hidden.click());
     expect(container.textContent).toContain("Draw a card");
     expect(container.textContent).toContain("Unique effect: hidden after 1 production use.");
     expect(container.textContent).not.toContain("Gain a dreamsign");
 
-    const all = [...container.querySelectorAll<HTMLButtonElement>("[role='tab']")]
-      .find((button) => button.textContent === "All (70)")!;
+    const all = container.querySelector<HTMLButtonElement>("[data-testid='template-health-filter-all']")!;
     act(() => all.click());
     expect(container.textContent).toContain("Draw a card");
     expect(container.textContent).toContain("Gain a dreamsign");
