@@ -7,13 +7,17 @@ import {
 } from "react";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
-import type { CumulusColor } from "../../primitives/color";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import { StandaloneGlyph } from "../controls/StandaloneGlyph";
 import { EssenceValue } from "../hud/EssenceValue";
-import { CardView, GameCard, type GameCardModel } from "./CardView";
+import {
+  CardView,
+  GameCard,
+  type GameCardModel,
+  type GameCardSelection,
+} from "./CardView";
 import { GalleryActionCard } from "./GalleryActionCard";
 
 /** A small line rendered directly below a card-choice tile. */
@@ -65,12 +69,10 @@ export interface CardChoiceGridCardView {
   model: GameCardModel;
   /** Optional test id on the GameCard. */
   testId?: string;
-  /** Draw the card's selection ring. */
-  selected?: boolean;
+  /** Semantic reason to draw the card's selection ring. */
+  selection?: GameCardSelection;
   /** Detach card interaction and dim the tile. */
   disabled?: boolean;
-  /** Selection-ring color. */
-  selectionColor?: CumulusColor;
   /** Optional danger outline for purge targets. */
   emphasis?: "danger";
   /** Small uncontained line rendered below the card. */
@@ -385,11 +387,10 @@ export function CardChoiceGrid({
               <div style={{ position: "relative", zIndex: 1 }}>
                 <GameCard
                   model={card.model}
-                  selected={card.selected}
-                  selectionColor={card.selectionColor}
+                  selection={card.selection}
                   unavailable={disabled}
                   testId={card.testId}
-                  onActivate={
+                  onPress={
                     onCardPress === undefined
                       ? undefined
                       : () => onCardPress(card.entryId)

@@ -47,8 +47,8 @@ function CardGalleryPanelDemo() {
               entryId: `demo-${String(index)}`,
               model: { cardId: card.id, displaySnapshot: card },
               caption: { kind: "essence" as const, amount: 100 },
-              selected: selected === `demo-${String(index)}`,
-              selectionColor: "danger",
+              selection:
+                selected === `demo-${String(index)}` ? "danger" : undefined,
             })),
         );
       })

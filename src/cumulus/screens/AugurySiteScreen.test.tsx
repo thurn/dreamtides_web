@@ -22,24 +22,21 @@ vi.mock("../components/card/CardView", async () => {
     ),
     GameCard: ({
       model,
-      onActivate,
-      selected,
-      selectionColor,
+      onPress,
+      selection,
       testId,
     }: {
       model: { cardId: string };
-      onActivate?: () => void;
-      selected?: boolean;
-      selectionColor?: string;
+      onPress?: () => void;
+      selection?: string;
       testId?: string;
     }) => (
       <Pressable
         as="button"
         data-testid={testId}
         data-card-id={model.cardId}
-        data-selected={selected ? "true" : "false"}
-        data-selection-color={selectionColor}
-        onClick={onActivate}
+        data-selection={selection}
+        onClick={onPress}
       />
     ),
   };
@@ -321,13 +318,13 @@ describe("AugurySiteScreen", () => {
     expect(
       container
         .querySelector('[data-testid="cumulus-augury-choice-choice-1"]')
-        ?.getAttribute("data-selection-color"),
-    ).toBe("accent-bright");
+        ?.getAttribute("data-selection"),
+    ).toBe("highlighted");
     click(confirm);
     expect(onChoose).toHaveBeenCalledWith("A", "choice-1");
   });
 
-  it("marks a doubled card choice with a bright-purple selection and 2x badge", () => {
+  it("marks a doubled card choice with the highlighted selection and 2x badge", () => {
     const doubledView = view();
     const first = doubledView.offers[0];
     if (first?.visual.kind !== "cardChoices") {
@@ -353,8 +350,8 @@ describe("AugurySiteScreen", () => {
     expect(
       container
         .querySelector('[data-testid="cumulus-augury-choice-choice-2"]')
-        ?.getAttribute("data-selection-color"),
-    ).toBe("accent-bright");
+        ?.getAttribute("data-selection"),
+    ).toBe("highlighted");
     expect(
       container.querySelector("[data-card-choice-quantity-badge]")?.textContent,
     ).toBe("2x");
@@ -588,8 +585,8 @@ describe("AugurySiteScreen", () => {
     expect(
       container
         .querySelector('[data-testid="cumulus-augury-choice-choice-1"]')
-        ?.getAttribute("data-selected"),
-    ).toBe("false");
+        ?.getAttribute("data-selection"),
+    ).toBeNull();
     expect(
       container
         .querySelector('[data-testid="cumulus-augury-confirm-A"]')

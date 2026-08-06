@@ -49,8 +49,8 @@ export interface CardPileProps {
   readonly emptyState?: CardPileEmptyState;
   /** Visible copy centered inside an empty outlined pile. */
   readonly emptyLabel?: string;
-  /** Activates the pile as one zone control. */
-  readonly onActivate?: () => void;
+  /** Primary press action for the pile as one zone control. */
+  readonly onPress?: () => void;
   /** Optional stable test id for the pile as a whole. */
   readonly testId?: string;
 }
@@ -125,7 +125,7 @@ export function CardPile({
   label,
   emptyState = "hidden",
   emptyLabel,
-  onActivate,
+  onPress,
   testId,
 }: CardPileProps) {
   const visibleCards = cards.slice(0, CARD_PILE_VISIBLE_LAYER_CAP);
@@ -204,12 +204,12 @@ export function CardPile({
     "data-testid": testId,
   } as const;
 
-  if (onActivate !== undefined) {
+  if (onPress !== undefined) {
     return (
       <Pressable
         as="button"
         {...sharedProps}
-        onClick={onActivate}
+        onClick={onPress}
         style={{
           ...rootStyle,
           display: "block",

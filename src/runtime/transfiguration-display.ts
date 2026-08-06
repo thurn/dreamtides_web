@@ -2,7 +2,8 @@
 // transfiguration game logic. These are the pure, non-UI presentation values a
 // transfiguration attaches to a card: the per-type accent colors, the lighter
 // tints painted onto the card itself, the Boxicons glyph classes shown in the
-// name bar, and the descriptor a CardView consumes to paint a transfigured card.
+// name bar, and the semantic descriptor CardView consumes to paint a
+// transfigured card.
 //
 // They live here (an allowlisted `src/runtime/` module) rather than in
 // `src/transfiguration/transfiguration-logic.ts` so the Cumulus UI library can
@@ -12,8 +13,7 @@
 
 import type { TransfigurationType } from "../types/journey";
 
-/** Color hex value for each transfiguration type. The `#${string}` type matches
- * Cumulus's `HexColor`, so these feed a strict `CumulusColor` prop directly. */
+/** Saturated selection-ring color owned by each transfiguration type. */
 export const TRANSFIGURATION_COLORS: Readonly<
   Record<TransfigurationType, `#${string}`>
 > = {
@@ -75,22 +75,18 @@ export const TRANSFIGURATION_ICONS: Readonly<
 };
 
 /**
- * Everything a CardView needs to paint a card as transfigured: the tint color,
- * the rules text with its changed spans wrapped in transfigure markers, and
- * flags for which corner stats changed. Computed by
- * `buildTransfigurationDisplay`.
+ * Semantic description of the transfiguration changes CardView must paint. The
+ * renderer derives every color and glyph from `type`; callers cannot customize
+ * transfiguration appearance per card. Computed by `buildTransfigurationDisplay`.
  */
 export interface CardTransfigurationDisplay {
-  type: TransfigurationType;
-  /** Light tint for the name gem and changed text. A
-   * `#${string}` hex, matching Cumulus's `HexColor`. */
-  color: `#${string}`;
+  readonly type: TransfigurationType;
   /** Rules text with the changed/added spans wrapped in transfigure markers. */
-  markedText: string;
+  readonly markedText: string;
   /** True when the energy cost changed (Empowered); badges the energy orb. */
-  energyChanged: boolean;
+  readonly energyChanged: boolean;
   /** True when the spark changed (Kindled); badges the spark orb. */
-  sparkChanged: boolean;
+  readonly sparkChanged: boolean;
   /** True when the card gained Fast (Hastened); tints the speed bolt. */
-  fastChanged: boolean;
+  readonly fastChanged: boolean;
 }

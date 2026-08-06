@@ -14,7 +14,6 @@ import {
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import type { ArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
-import { TRANSFIGURATION_COLORS } from "../../runtime/transfiguration-display";
 import type { TransfigurationType } from "../../types/journey";
 import {
   GuideGallerySiteLayout,
@@ -546,12 +545,7 @@ export function TransfigurationDetailPanel({
           >
             <GameCard
               model={activeForm?.previewModel ?? candidate.model}
-              selected={activeForm !== null}
-              selectionColor={
-                activeForm === null
-                  ? undefined
-                  : TRANSFIGURATION_COLORS[activeForm.type]
-              }
+              selection={activeForm === null ? undefined : "transfigured"}
             />
           </div>
 
@@ -595,7 +589,7 @@ export function TransfigurationDetailPanel({
                     variant={mobile ? "compact" : "priced"}
                     selected={selected}
                     disabled={confirming}
-                    onActivate={onSelectForm}
+                    onPress={onSelectForm}
                     testId={`cumulus-transfiguration-form-${form.type}`}
                   />
                 );

@@ -5,7 +5,6 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
-import { TRANSFIGURATION_TINT_COLORS } from "../../runtime/transfiguration-display";
 import { CumulusRoot } from "../CumulusRoot";
 import {
   ENERGY_ICON_COLOR,
@@ -217,7 +216,6 @@ function transfigurationRewardView(): ExplorationSiteView {
         },
         transfiguration: {
           type: "Kindled",
-          color: TRANSFIGURATION_TINT_COLORS.Kindled,
           markedText: base.card.displaySnapshot.renderedText,
           energyChanged: false,
           sparkChanged: true,
@@ -263,7 +261,6 @@ function deckModificationRewardView(
           kind === "spark"
             ? "All characters in your deck gain +1✦"
             : "All cards in your deck become ❖ (fast)",
-        selectionColor: kind === "spark" ? "spark" : "accent-bright",
         cards: [
           { entryId: "deck-entry-a", model: first, isBane: false },
           { entryId: "deck-entry-b", model: second, isBane: false },
@@ -973,7 +970,6 @@ describe("ExplorationSiteScreen", () => {
                 },
                 transfiguration: {
                   type: "Inspired",
-                  color: TRANSFIGURATION_TINT_COLORS.Inspired,
                   markedText: `${referencedCard.renderedText} Draw a card.`,
                   energyChanged: false,
                   sparkChanged: false,
@@ -1322,7 +1318,6 @@ describe("ExplorationSiteScreen", () => {
                       displaySnapshot: transformed,
                       transfiguration: {
                         type: "Empowered",
-                        color: TRANSFIGURATION_TINT_COLORS.Empowered,
                         markedText: transformed.renderedText,
                         energyChanged: true,
                         sparkChanged: false,
@@ -2324,7 +2319,6 @@ describe("ExplorationSiteScreen", () => {
       ...baseDeckModification,
       kind: "energy-cost" as const,
       headline: "−1 ●",
-      selectionColor: "energy" as const,
     };
     const composite: ExplorationSiteView = {
       ...modified,
@@ -2403,7 +2397,6 @@ describe("ExplorationSiteScreen", () => {
           headline: "Reclaim",
           announcement:
             "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
-          selectionColor: "positive",
           cards: survivorCards,
           reclaimCostByEntryId: {
             "deck-entry-a": 2,

@@ -20,7 +20,7 @@ The canonical forge-form choice: compact and price-bearing controls with shared 
 | `variant` | `TransfigurationButtonVariant` = `"compact" \| "priced"` | yes | — | Compact name-only choice or a wider choice with a visible essence price. |
 | `selected` | `boolean` | yes | — | Whether this form is the active radio choice. |
 | `disabled` | `boolean` | no | `false` | Prevent activation while a transfiguration commit is in flight. |
-| `onActivate` | `(type: TransfigurationType) => void` | yes | — | Select the activated form after a quick activation. |
+| `onPress` | `(type: TransfigurationType) => void` | yes | — | Select the form after a press. |
 | `testId` | `string` | no | — | Optional stable test id for the semantic source. |
 
 ### `form`: the `TransfigurationButtonModel` model
@@ -45,6 +45,6 @@ import { TransfigurationButton } from "src/cumulus/components/controls/Transfigu
   form={form}
   variant="priced"
   selected={selectedType === form.type}
-  onActivate={selectForm}
+  onPress={selectForm}
 />
 ```

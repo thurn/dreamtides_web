@@ -15,7 +15,7 @@ One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engin
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `model` | `AtlasNodeModel` | yes | — | Placed face plus UUID-backed semantic Atlas reveal data. |
-| `onActivate` | `(nodeId: string) => void` | yes | — | Enter the node's dreamscape. Available nodes invoke this with their UUID. |
+| `onPress` | `(nodeId: string) => void` | yes | — | Enter the node's dreamscape. Available nodes invoke this with their UUID. |
 
 ### `model`: the `AtlasNodeModel` model
 
@@ -51,7 +51,7 @@ import { AtlasNode } from "src/cumulus/components/atlas/AtlasNode";
       <AtlasNode
         key={model.node.id}
         model={model}
-        onActivate={(id) => enterDreamscape(id)}
+        onPress={(id) => enterDreamscape(id)}
       />
     ))}
   </div>

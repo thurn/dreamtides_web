@@ -52,7 +52,7 @@ function TransfigurationButtonDemo() {
               form={form}
               variant={variant}
               selected={selected === form.type}
-              onActivate={setSelected}
+              onPress={setSelected}
             />
           ))}
         </div>
@@ -81,7 +81,7 @@ export const transfigurationButtonDemo: CumulusComponent = {
   form={form}
   variant="priced"
   selected={selectedType === form.type}
-  onActivate={selectForm}
+  onPress={selectForm}
 />`,
     },
   ],

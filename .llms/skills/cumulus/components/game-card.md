@@ -12,9 +12,11 @@ The playable card object — art, cost, stats, and rules text — rendered at an
 
 > **Guidance:** GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator.
 
+The display snapshot is the already-resolved card the player should read in this exact state, including transfigurations, effective battle stats, journey overrides, or generated-card identity; the same snapshot renders both the source and its full reveal.
+
 CardView.css owns the complete card frame, rarity, figment, event, and responsive typography treatment, including canonical fallbacks that keep those treatments intact outside a Cumulus token scope; every figment uses the same "<Identity> Figment" title bar and authored art crop. Transfiguration changes use the shared hammer-in-circle marker on changed stats and in the rules panel whenever marked rules text is present.
 
-The card-aspect.ts contract is the source for full-card, battlefield, art-region, corner-radius, and draft-offer geometry across renderers. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, exhausted status, focus, press, activation, and drag dismissal are automatic.
+The card-aspect.ts contract is the source for full-card, battlefield, art-region, corner-radius, and draft-offer geometry across renderers. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, exhausted status, focus, press, and drag dismissal are automatic.
 
 On desktop, rules that explicitly materialize an authored figment add a small UUID-backed card with a violet glowing border beyond the definition stack; that adjacent figment keeps its card size and enlarges only its rules text by 50 percent. A figment's own reading copy stays unoutlined. Touch layouts keep the compact reading pair.
 
@@ -23,10 +25,9 @@ On desktop, rules that explicitly materialize an authored figment add a small UU
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `model` | `GameCardModel` | yes | — | Canonical card semantics and resolved display snapshot. |
-| `onActivate` | `(() => void)` | no | — | Player action invoked by a quick activation. |
+| `onPress` | `(() => void)` | no | — | Primary player action invoked by a click, keyboard press, or quick tap. |
 | `unavailable` | `boolean` | no | `false` | Whether the action is unavailable while the card remains informative. |
-| `selected` | `boolean` | no | `false` | Draw the semantic selection state. |
-| `selectionColor` | `CumulusColor` = `"danger" \| "accent" \| "accent-bright" \| "essence" \| "energy" \| "spark" \| "positive" \| "selected" \| "text-primary" \| "text-secondary" \| "text-on-accent" \| "white"` | no | — | Selection-ring color. Defaults to the shared selected role. |
+| `selection` | `GameCardSelection` = `"danger" \| "selected" \| "highlighted" \| "playable" \| "reward" \| "copied" \| "changed" \| "spark-changed" \| "energy-changed" \| "transfigured" \| "figment"` | no | — | Semantic reason this card carries the canonical selection ring. |
 | `hideRulesText` | `boolean` | no | `false` | Hide source rules on dense surfaces; the reveal stays complete. |
 | `exhausted` | `boolean` | no | `false` | Whether this card is currently exhausted in battle. |
 | `presentation` | `GameCardPresentation` = `"full" \| "battlefield"` | no | `full` | Visual treatment for the source card. `"battlefield"` uses a rounded square frame that widens the art viewport at its existing vertical scale, showing only art and an enlarged top-right spark value while preserving the complete reveal. |
@@ -38,14 +39,14 @@ On desktop, rules that explicitly materialize an authored figment add a small UU
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `cardId` | `CardId` | no | Stable catalog UUID used for reveal identity and diagnostics. |
-| `displaySnapshot` | `Readonly<CardData>` | no | Complete resolved display data whose `id` matches `cardId`. |
-| `transfiguration` | `CardTransfigurationDisplay` | yes | Optional presentation of a transfigured card. |
+| `displaySnapshot` | `Readonly<CardData>` | no | Complete, already-resolved card data for this exact rendered state. This is a display snapshot rather than a catalog reference: adapters must apply transfigurations, battle-effective stats, journey overrides, generated-card identity, and any other state that changes what the player reads before constructing the model. GameCard renders this value in place and reuses the same value for its reading reveal, so the compact source and full reveal cannot disagree. Its `id` must equal `cardId`. `FrozenCardData` provides shallow compile-time readonly fields. It does not freeze the object at runtime; callers should replace the snapshot whenever effective display state changes rather than mutating it in place. |
+| `transfiguration` | `CardTransfigurationDisplay` | yes | Semantic description of an applied transfiguration. The renderer derives its canonical glyphs and colors from the descriptor's strict `type`. |
 
 ## Usage
 
 ### Render a card
 
-Give it a resolved `CardData` (loaded by UUID from the card database — never by name). Size the wrapper; GameCard fills its width and applies the mobile typography treatment automatically.
+Resolve the exact card the player should read before rendering. A catalog card may pass through unchanged; a transfigured, generated, overridden, or in-battle card supplies a new snapshot containing its effective display values. The snapshot id must match cardId, is shallow-readonly at compile time, and is reused for the full reveal. Replace it instead of mutating it when display state changes. Size the wrapper; GameCard fills its width automatically.
 
 ```tsx
 import { GameCard } from "src/cumulus/components/card/CardView";
@@ -57,13 +58,12 @@ import { GameCard } from "src/cumulus/components/card/CardView";
 
 ### Selected in a picker
 
-Draw the selection ring with `selected`; `hideRulesText` gives the dense identity-only surface used in tight lists.
+Choose the semantic reason for the selection ring; GameCard owns its color. `hideRulesText` gives the dense identity-only surface used in tight lists.
 
 ```tsx
 <GameCard
   model={{ cardId: card.id, displaySnapshot: card }}
-  selected
-  selectionColor="#f97316"
+  selection="highlighted"
   hideRulesText
 />
 ```

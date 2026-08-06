@@ -203,6 +203,14 @@ export function IntroSection(): ReactElement {
           </p>
 
           <p style={bodyStyle}>
+            A component&rsquo;s primary user action is always named{" "}
+            <code>onPress</code>, covering mouse, keyboard, touch, and any
+            input-adaptive gesture handling it owns. Item-specific callbacks
+            keep that suffix, such as <code>onCardPress</code>. Controlled
+            values use state-oriented callbacks such as <code>onChange</code>.
+          </p>
+
+          <p style={bodyStyle}>
             A value that is not free-form text is a <em>named</em> value, not a
             string: a color is a <code>CumulusColor</code> (a palette role, or a{" "}
             <code>#hex</code> literal for a genuinely data-driven one), a glyph

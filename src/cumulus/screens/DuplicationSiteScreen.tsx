@@ -136,12 +136,12 @@ export function DuplicationSiteScreen({
                 entryId: card.entryId,
                 model: card.model,
                 testId: `cumulus-duplication-card-${card.entryId}`,
-                selected: selectedEntryId === card.entryId,
+                selection:
+                  selectedEntryId === card.entryId ? "copied" : undefined,
                 stackedCopy: selectedEntryId === card.entryId,
                 stackedCopyDirection:
                   (index + 1) % columnCount === 0 ? "left" : "right",
                 disabled: locked,
-                selectionColor: "accent",
               }))}
               emptyLabel={
                 view.ready ? "No cards available to copy." : "Gathering possibilities…"

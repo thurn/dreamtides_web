@@ -188,7 +188,7 @@ export function AtlasMap({
             <AtlasNode
               key={model.node.id}
               model={model}
-              onActivate={onEnterNode}
+              onPress={onEnterNode}
             />
           ))}
         </div>

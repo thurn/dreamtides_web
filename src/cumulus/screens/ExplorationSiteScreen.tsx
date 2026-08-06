@@ -50,7 +50,6 @@ import {
   RadialAnnouncement,
 } from "../components/status/RadialAnnouncement";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
-import type { CumulusColor } from "../primitives/color";
 import { GLYPHS } from "../primitives/glyph";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { Pressable } from "../primitives/Pressable";
@@ -210,8 +209,6 @@ export interface ExplorationDeckModificationView {
   readonly headline: string;
   /** Complete authored effect copy exposed to assistive technology. */
   readonly announcement: string;
-  /** Semantic selection-ring color shared by every affected card. */
-  readonly selectionColor: CumulusColor;
   /** Exact post-resolution snapshots of the affected deck entries. */
   readonly cards: readonly ExplorationCardChoiceView[];
   /** Exact Reclaim cost by deck-entry UUID for the Reclaim outcome. */
@@ -1238,8 +1235,7 @@ function PurgedCardPresentation({
     >
       <GameCard
         model={card.model}
-        selected
-        selectionColor="danger"
+        selection="danger"
         testId={`cumulus-exploration-purged-card-${String(index)}`}
       />
       <motion.span
@@ -2738,8 +2734,7 @@ export function ExplorationSiteScreen({
               >
                 <GameCard
                   model={transfigurationReward.after}
-                  selected
-                  selectionColor={transfigurationReward.after.transfiguration.color}
+                  selection="transfigured"
                   testId="cumulus-exploration-transfigured-card"
                 />
               </div>
@@ -2791,8 +2786,7 @@ export function ExplorationSiteScreen({
         >
           <GameCard
             model={transfigurationReward.after}
-            selected
-            selectionColor={transfigurationReward.after.transfiguration.color}
+            selection="transfigured"
           />
         </motion.div>
       )}
@@ -2954,8 +2948,7 @@ export function ExplorationSiteScreen({
                   >
                     <GameCard
                       model={card.model}
-                      selected
-                      selectionColor="positive"
+                      selection="reward"
                       testId={`cumulus-exploration-card-copy-${card.entryId}`}
                     />
                   </motion.div>
@@ -3019,7 +3012,7 @@ export function ExplorationSiteScreen({
                 pointerEvents: "none",
               }}
             >
-              <GameCard model={card.model} selected selectionColor="positive" />
+              <GameCard model={card.model} selection="reward" />
             </motion.div>
           );
         })}
@@ -3391,8 +3384,15 @@ export function ExplorationSiteScreen({
                 >
                   <GameCard
                     model={card.model}
-                    selected
-                    selectionColor={deckModification.selectionColor}
+                    selection={
+                      deckModification.kind === "spark"
+                        ? "spark-changed"
+                        : deckModification.kind === "energy-cost"
+                          ? "energy-changed"
+                          : deckModification.kind === "reclaim"
+                            ? "reward"
+                            : "changed"
+                    }
                     hideRulesText
                     testId={`cumulus-exploration-deck-modification-card-${card.entryId}`}
                   />
@@ -3466,8 +3466,7 @@ export function ExplorationSiteScreen({
             >
               <GameCard
                 model={cardPurgeReward.card.model}
-                selected
-                selectionColor="danger"
+                selection="danger"
                 testId="cumulus-exploration-purged-card"
               />
             </motion.div>
@@ -3956,8 +3955,9 @@ export function ExplorationSiteScreen({
                     cards={activeAction.followup.cards.map((card) => ({
                       entryId: card.entryId,
                       model: card.model,
-                      selected: selectedIds.includes(card.entryId),
-                      selectionColor: "accent-bright",
+                      selection: selectedIds.includes(card.entryId)
+                        ? "highlighted"
+                        : undefined,
                       testId: `cumulus-exploration-card-${card.entryId}`,
                     }))}
                     columns={cardChoiceColumns(
@@ -3995,9 +3995,12 @@ export function ExplorationSiteScreen({
               cards={activeAction.followup.cards.map((card) => ({
                 entryId: card.entryId,
                 model: card.model,
-                selected:
-                  card.entryId === purgeEntryId || selectedIds.includes(card.entryId),
-                selectionColor: card.entryId === purgeEntryId ? "danger" : "selected",
+                selection:
+                  card.entryId === purgeEntryId
+                    ? "danger"
+                    : selectedIds.includes(card.entryId)
+                      ? "selected"
+                      : undefined,
                 emphasis: card.isBane ? "danger" : undefined,
                 operation: selectedCardOperation(
                   card.entryId,
@@ -4193,7 +4196,7 @@ export function ExplorationSiteScreen({
                           id: dreamAvatar.id,
                           ability: dreamAvatar.renderedText,
                         }}
-                        onActivate={() =>
+                        onPress={() =>
                           onResolve(activeAction.id, {
                             dreamAvatarId: dreamAvatar.id,
                           })

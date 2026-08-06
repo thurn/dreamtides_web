@@ -136,11 +136,11 @@ export interface AtlasNodeProps {
   /** Placed face plus UUID-backed semantic Atlas reveal data. */
   model: AtlasNodeModel;
   /** Enter the node's dreamscape. Available nodes invoke this with their UUID. */
-  onActivate: (nodeId: string) => void;
+  onPress: (nodeId: string) => void;
 }
 
 /** One self-revealing, focusable Dream Atlas node. */
-export function AtlasNode({ model, onActivate }: AtlasNodeProps): React.ReactElement {
+export function AtlasNode({ model, onPress }: AtlasNodeProps): React.ReactElement {
   const { node, isStarter, isBoss } = model;
   const isAvailable = node.state === "available";
   const binding = useRevealSource({
@@ -149,7 +149,7 @@ export function AtlasNode({ model, onActivate }: AtlasNodeProps): React.ReactEle
       entityId: revealEntityId("atlas-node", node.id),
     },
     spec: atlasNodeRevealSpec(model),
-    onActivate: isAvailable ? () => onActivate(node.id) : undefined,
+    onActivate: isAvailable ? () => onPress(node.id) : undefined,
   });
   const suppressCompatibilityClick = React.useRef(false);
   const pointerDown = binding.sourceProps.onPointerDown;
@@ -217,14 +217,14 @@ export function AtlasNode({ model, onActivate }: AtlasNodeProps): React.ReactEle
         if (!isAvailable) return;
         if (event.detail === 0) {
           suppressCompatibilityClick.current = false;
-          onActivate(node.id);
+          onPress(node.id);
           return;
         }
         if (suppressCompatibilityClick.current) {
           suppressCompatibilityClick.current = false;
           return;
         }
-        onActivate(node.id);
+        onPress(node.id);
       }}
     >
       {isAvailable && (

@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
-import { TRANSFIGURATION_TINT_COLORS } from "../../runtime/transfiguration-display";
 import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
 import type {
   MerchantChoiceCandidate,
@@ -285,7 +284,6 @@ describe("augury view model", () => {
     };
     const transfiguration = {
       type: "Empowered" as const,
-      color: TRANSFIGURATION_TINT_COLORS.Empowered,
       markedText: "Changed fixture text.",
       energyChanged: true,
       sparkChanged: false,

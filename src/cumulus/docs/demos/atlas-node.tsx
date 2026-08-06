@@ -61,7 +61,7 @@ function AtlasNodeDemo({ mobileSizing = false }: AtlasNodeDemoArgs) {
           <AtlasNode
             key={item.node.id}
             model={item}
-            onActivate={() => undefined}
+            onPress={() => undefined}
           />
         ))}
       </div>
@@ -88,7 +88,7 @@ export const atlasNodeDemo: CumulusComponent = {
       <AtlasNode
         key={model.node.id}
         model={model}
-        onActivate={(id) => enterDreamscape(id)}
+        onPress={(id) => enterDreamscape(id)}
       />
     ))}
   </div>

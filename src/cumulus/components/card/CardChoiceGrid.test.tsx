@@ -10,22 +10,19 @@ vi.mock("./CardView", () => ({
   CardView: () => <div />,
   GameCard: ({
     model,
-    onActivate,
-    selected,
-    selectionColor,
+    onPress,
+    selection,
     testId,
   }: {
     model: { displaySnapshot: { name: string } };
-    onActivate?: () => void;
-    selected?: boolean;
-    selectionColor?: string;
+    onPress?: () => void;
+    selection?: string;
     testId?: string;
   }) => (
     <button
       data-testid={testId}
-      data-selected={String(selected)}
-      data-selection-color={selectionColor}
-      onClick={onActivate}
+      data-selection={selection}
+      onClick={onPress}
     >
       {model.displaySnapshot.name}
     </button>
@@ -74,8 +71,7 @@ describe("CardChoiceGrid", () => {
               entryId: "choice-b",
               model: model("B"),
               testId: "choice-b",
-              selected: true,
-              selectionColor: "accent-bright",
+              selection: "highlighted",
               quantityBadge: "2x",
               operation: "copy",
             },

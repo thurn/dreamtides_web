@@ -114,6 +114,28 @@ describe("Cumulus strict-API contract (resolved surface)", () => {
     expect(propNames).not.toContain("large");
   });
 
+  it("component primary-action props use the onPress convention", () => {
+    const offenders = [];
+    for (const [component, props] of Object.entries(surface)) {
+      for (const prop of props ?? []) {
+        if (prop.name === "onClick" || prop.name === "onActivate") {
+          offenders.push(`${component}.${prop.name}`);
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("GameCard exposes semantic selection rather than caller-selected color", () => {
+    const props = surface.GameCard ?? [];
+    const propNames = props.map((prop) => prop.name);
+    expect(propNames).not.toContain("selectionColor");
+    expect(propNames).not.toContain("color");
+    expect(props.find((prop) => prop.name === "selection")?.tsType).toBe(
+      "GameCardSelection",
+    );
+  });
+
   it("only container components take `children` or a raw ReactNode slot", () => {
     // The AST rule catches this on the source; this asserts on the RESOLVED
     // surface, so a node slot that leaks in through an extended/aliased type

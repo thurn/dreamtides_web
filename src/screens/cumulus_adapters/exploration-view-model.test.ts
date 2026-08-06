@@ -279,7 +279,6 @@ describe("exploration-view-model", () => {
         kind: "spark",
         headline: "+1 ✦",
         announcement: "All characters in your deck gain +1✦",
-        selectionColor: "spark",
         cards: [
           {
             entryId: "entry-character",
@@ -388,7 +387,6 @@ describe("exploration-view-model", () => {
       deckModification: {
         kind: "fast",
         headline: "Fast",
-        selectionColor: "accent-bright",
         cards: [
           {
             entryId: "entry-character",
@@ -439,7 +437,6 @@ describe("exploration-view-model", () => {
       deckModification: {
         kind: "energy-cost",
         headline: "−1 ●",
-        selectionColor: "energy",
         cards: [
           {
             entryId: "entry-character",

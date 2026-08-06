@@ -22,7 +22,7 @@ Face-up entries can reveal their card or remain inactive beneath one pile-level 
 | `label` | `string` | yes | — | Accessible name for the card zone represented by this pile. |
 | `emptyState` | `CardPileEmptyState` = `"hidden" \| "outlined"` | no | `hidden` | Treatment shown when the pile has no cards. Defaults to `hidden`. |
 | `emptyLabel` | `string` | no | — | Visible copy centered inside an empty outlined pile. |
-| `onActivate` | `(() => void)` | no | — | Activates the pile as one zone control. |
+| `onPress` | `(() => void)` | no | — | Primary press action for the pile as one zone control. |
 | `testId` | `string` | no | — | Optional stable test id for the pile as a whole. |
 
 ## Usage
@@ -52,7 +52,7 @@ Inactive face-up layers keep the pile clickable as one zone control without reve
     model: card.gameCard,
   }))}
   label="Enemy void"
-  onActivate={openEnemyVoid}
+  onPress={openEnemyVoid}
 />
 ```
 

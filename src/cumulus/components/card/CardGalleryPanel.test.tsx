@@ -11,10 +11,10 @@ import { CardGalleryPanel } from "./CardGalleryPanel";
 
 vi.mock("./CardView", () => ({
   CardView: ({ card }: { card: { name: string } }) => <div data-testid="card-view-copy">{card.name}</div>,
-  GameCard: ({ model, onActivate, testId, unavailable }: {
-    model: { displaySnapshot: { name: string } }; onActivate?: () => void;
+  GameCard: ({ model, onPress, testId, unavailable }: {
+    model: { displaySnapshot: { name: string } }; onPress?: () => void;
     testId?: string; unavailable?: boolean;
-  }) => <button data-testid={testId} data-unavailable={String(unavailable)} onClick={unavailable ? undefined : onActivate}>{model.displaySnapshot.name}</button>,
+  }) => <button data-testid={testId} data-unavailable={String(unavailable)} onClick={unavailable ? undefined : onPress}>{model.displaySnapshot.name}</button>,
 }));
 
 function model(name: string) {

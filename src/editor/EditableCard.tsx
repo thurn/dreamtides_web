@@ -549,7 +549,7 @@ export default function EditableCard({
                   ),
                 }
           }
-          onClick={() => onOpenArtEditor(card)}
+          onPress={() => onOpenArtEditor(card)}
           onRulesFontSizeChange={handleRulesFontSize}
           eagerRulesFit={eagerRulesFit}
           glossaryInfoOnHover={shouldShowGlossaryInfoOnHover}

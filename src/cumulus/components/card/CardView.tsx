@@ -30,6 +30,7 @@ import { type CumulusColor, resolveColor } from "../../primitives/color";
 import { CardStatOrb } from "./CardStatOrb";
 import { renderCardChangeBadge } from "./card-change-badge";
 import {
+  TRANSFIGURATION_COLORS,
   TRANSFIGURATION_ICONS,
   TRANSFIGURATION_TINT_COLORS,
 } from "../../../runtime/transfiguration-display";
@@ -54,18 +55,52 @@ export {
   minArtScale,
 } from "./card-art-crop";
 
-/**
- * Default chrome accent used for the selection ring fallback. The card's type
- * is conveyed by the text-box accent (neutral black chrome for characters, a
- * purple accent for events) rather than a colored border.
- */
-const SELECTION_DEFAULT_COLOR: CumulusColor = "selected";
+/** Semantic reason a GameCard carries a selection ring. */
+export type GameCardSelection =
+  | "selected"
+  | "highlighted"
+  | "danger"
+  | "playable"
+  | "reward"
+  | "copied"
+  | "changed"
+  | "spark-changed"
+  | "energy-changed"
+  | "transfigured"
+  | "figment";
+
+const GAME_CARD_SELECTION_COLORS = {
+  selected: "selected",
+  highlighted: "accent-bright",
+  danger: "danger",
+  playable: "positive",
+  reward: "positive",
+  copied: "accent",
+  changed: "accent-bright",
+  "spark-changed": "spark",
+  "energy-changed": "energy",
+  figment: "accent-bright",
+} as const satisfies Record<Exclude<GameCardSelection, "transfigured">, CumulusColor>;
+
+function gameCardSelectionColor(
+  selection: GameCardSelection,
+  transfiguration?: CardTransfigurationDisplay,
+): CumulusColor {
+  return selection === "transfigured"
+    ? transfiguration === undefined
+      ? "selected"
+      : TRANSFIGURATION_COLORS[transfiguration.type]
+    : GAME_CARD_SELECTION_COLORS[selection];
+}
 
 /** Canonical selection-ring shadows shared by card surfaces and unfiltered overlays. */
 export function cardSelectionShadowLayers(
-  color: CumulusColor,
+  selection: GameCardSelection,
+  transfiguration?: CardTransfigurationDisplay,
 ): readonly [string, string] {
-  const selectionCss = resolveColor(color);
+  const selectionCss = resolveColor(
+    gameCardSelectionColor(selection, transfiguration),
+  );
   return [
     `0 0 0 3px ${selectionCss}`,
     `0 0 12px ${selectionCss}`,
@@ -654,10 +689,10 @@ export type GameCardPresentation = "full" | "battlefield";
 /** Props for the shared CardView component. */
 export interface CardViewProps {
   card: CardData | FrozenCardData;
-  onClick?: () => void;
-  selected?: boolean;
-  /** The selection-ring {@link CumulusColor}. Default the `"selected"` role. */
-  selectionColor?: CumulusColor;
+  /** Primary press action for editor and inspector card surfaces. */
+  onPress?: () => void;
+  /** Semantic reason this card carries the canonical selection ring. */
+  selection?: GameCardSelection;
   /**
    * When set, paints the card as transfigured: a small colored gem follows the
    * name, changed corner stats gain their Empowered/Kindled shape badges, and
@@ -739,9 +774,8 @@ interface GameCardSurfaceProps extends CardViewProps {
 function GameCardSurface(props: GameCardSurfaceProps) {
   const {
     card: sourceCard,
-    onClick,
-    selected = false,
-    selectionColor = SELECTION_DEFAULT_COLOR,
+    onPress,
+    selection,
     transfiguration,
     large = false,
     figment = false,
@@ -840,11 +874,13 @@ function GameCardSurface(props: GameCardSurfaceProps) {
   // Selection ring, stacked as box-shadows so it composes with the rounded
   // corners.
   const shadowLayers: string[] = ["0 4px 14px rgba(0, 0, 0, 0.55)"];
-  if (selected) {
-    shadowLayers.unshift(...cardSelectionShadowLayers(selectionColor));
+  if (selection !== undefined) {
+    shadowLayers.unshift(
+      ...cardSelectionShadowLayers(selection, transfiguration),
+    );
   }
 
-  const isInteractive = onClick !== undefined;
+  const isInteractive = onPress !== undefined;
   const respondsToPointer = isInteractive;
   // Heuristic: if the rules text is already readable without zoom, use only a
   // minor in-place hover zoom for emphasis, about 5%, instead of opening the
@@ -1260,14 +1296,14 @@ function GameCardSurface(props: GameCardSurfaceProps) {
           boxShadow: shadowLayers.join(", "),
         } as CSSProperties
       }
-      onClick={onClick}
+      onClick={onPress}
       {...(isInteractive
         ? {
             role: "button" as const,
             tabIndex: 0,
             onKeyDown: (e: React.KeyboardEvent) => {
               if (e.key === "Enter" || e.key === " ") {
-                onClick();
+                onPress();
               }
             },
           }
@@ -1561,9 +1597,24 @@ function GameCardSurface(props: GameCardSurfaceProps) {
 export interface GameCardModel {
   /** Stable catalog UUID used for reveal identity and diagnostics. */
   readonly cardId: CardId;
-  /** Complete resolved display data whose `id` matches `cardId`. */
+  /**
+   * Complete, already-resolved card data for this exact rendered state. This is
+   * a display snapshot rather than a catalog reference: adapters must apply
+   * transfigurations, battle-effective stats, journey overrides, generated-card
+   * identity, and any other state that changes what the player reads before
+   * constructing the model. GameCard renders this value in place and reuses the
+   * same value for its reading reveal, so the compact source and full reveal
+   * cannot disagree. Its `id` must equal `cardId`.
+   *
+   * `FrozenCardData` provides shallow compile-time readonly fields. It does not
+   * freeze the object at runtime; callers should replace the snapshot whenever
+   * effective display state changes rather than mutating it in place.
+   */
   readonly displaySnapshot: FrozenCardData;
-  /** Optional presentation of a transfigured card. */
+  /**
+   * Semantic description of an applied transfiguration. The renderer derives
+   * its canonical glyphs and colors from the descriptor's strict `type`.
+   */
   readonly transfiguration?: CardTransfigurationDisplay;
 }
 
@@ -1571,14 +1622,12 @@ export interface GameCardModel {
 export interface GameCardProps {
   /** Canonical card semantics and resolved display snapshot. */
   readonly model: GameCardModel;
-  /** Player action invoked by a quick activation. */
-  readonly onActivate?: () => void;
+  /** Primary player action invoked by a click, keyboard press, or quick tap. */
+  readonly onPress?: () => void;
   /** Whether the action is unavailable while the card remains informative. */
   readonly unavailable?: boolean;
-  /** Draw the semantic selection state. */
-  readonly selected?: boolean;
-  /** Selection-ring color. Defaults to the shared selected role. */
-  readonly selectionColor?: CumulusColor;
+  /** Semantic reason this card carries the canonical selection ring. */
+  readonly selection?: GameCardSelection;
   /** Hide source rules on dense surfaces; the reveal stays complete. */
   readonly hideRulesText?: boolean;
   /** Whether this card is currently exhausted in battle. */
@@ -1597,10 +1646,8 @@ export interface GameCardProps {
 }
 
 export interface GameCardRevealOptions {
-  /** Whether the reading copy carries the source selection ring. */
-  readonly selected?: boolean;
-  /** Named selection-ring color inherited from the source. */
-  readonly selectionColor?: CumulusColor;
+  /** Semantic selection state inherited by the reading copy. */
+  readonly selection?: GameCardSelection;
   /** Whether the source currently carries the Exhausted glossary state. */
   readonly exhausted?: boolean;
   /** Whether the reading copy uses the canonical Figment presentation. */
@@ -1611,8 +1658,7 @@ export interface GameCardRevealOptions {
 export function gameCardRevealSpec(
   model: GameCardModel,
   {
-    selected = false,
-    selectionColor,
+    selection,
     exhausted = false,
     figment = false,
   }: GameCardRevealOptions = {},
@@ -1641,8 +1687,7 @@ export function gameCardRevealSpec(
     cardId: preview.card.id,
     displaySnapshot: preview.card,
     figment: true,
-    selected: true,
-    selectionColor: "accent-bright" as const,
+    selection: "figment" as const,
     rulesTextPresentation: "adjacent-figment" as const,
   }));
   return {
@@ -1653,7 +1698,7 @@ export function gameCardRevealSpec(
       ...(model.transfiguration === undefined
         ? {}
         : { transfiguration: model.transfiguration }),
-      ...(selected ? { selected: true, selectionColor } : {}),
+      ...(selection === undefined ? {} : { selection }),
       ...(figment ? { figment: true } : {}),
     },
     secondaries: [
@@ -1672,17 +1717,17 @@ export function gameCardRevealSpec(
 /**
  * Player-facing card entity. It derives its complete reading copy and glossary
  * secondaries from semantic card data and registers them with the root reveal
- * coordinator. Callers provide meaning and activation only. Desktop layouts
- * showing two or three cards should size their wrappers to at least 240px when
- * space permits, keeping the complete source in place during reveal. Dense
- * collections may render smaller cards and rely on the reading copy.
+ * coordinator. Callers provide meaning and the primary press action only.
+ * Desktop layouts showing two or three cards should size their wrappers to at
+ * least 240px when space permits, keeping the complete source in place during
+ * reveal. Dense collections may render smaller cards and rely on the reading
+ * copy.
  */
 export function GameCard({
   model,
-  onActivate,
+  onPress,
   unavailable = false,
-  selected = false,
-  selectionColor,
+  selection,
   hideRulesText = false,
   exhausted = false,
   presentation = "full",
@@ -1702,15 +1747,14 @@ export function GameCard({
   const binding = useRevealSource({
     identity: { entityType: "game-card", entityId: model.cardId },
     spec: gameCardRevealSpec(model, {
-      selected,
-      selectionColor,
+      selection,
       exhausted,
       figment,
     }),
-    onActivate: unavailable ? undefined : onActivate,
+    onActivate: unavailable ? undefined : onPress,
   });
   const pointerDown = binding.sourceProps.onPointerDown;
-  const interactive = onActivate !== undefined;
+  const interactive = onPress !== undefined;
   return (
     <Pressable
       as="div"
@@ -1734,12 +1778,12 @@ export function GameCard({
         pointerDown?.(event);
       }}
       onClick={() => {
-        if (!unavailable && lastPointerType.current !== "touch") onActivate?.();
+        if (!unavailable && lastPointerType.current !== "touch") onPress?.();
       }}
       onKeyDown={(event) => {
         if (!unavailable && (event.key === "Enter" || event.key === " ")) {
           event.preventDefault();
-          onActivate?.();
+          onPress?.();
         }
       }}
       style={{
@@ -1755,8 +1799,7 @@ export function GameCard({
       <GameCardSurface
         card={displaySnapshot}
         transfiguration={model.transfiguration}
-        selected={selected}
-        selectionColor={selectionColor}
+        selection={selection}
         hideRulesText={hideRulesText}
         presentation={presentation}
         figment={figment}

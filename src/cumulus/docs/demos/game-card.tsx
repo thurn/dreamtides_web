@@ -20,7 +20,6 @@ import { useEffect, useState } from "react";
 import type { CardData } from "../../../types/cards";
 import { loadCardDatabase } from "../../../data/card-database";
 import { loadFigmentDatabase } from "../../../data/figment-database";
-import { TRANSFIGURATION_TINT_COLORS } from "../../../runtime/transfiguration-display";
 import {
   TRANSFIGURE_MARK_END,
   TRANSFIGURE_MARK_START,
@@ -29,8 +28,8 @@ import {
   GameCard,
   type GameCardModel,
   type GameCardPresentation,
+  type GameCardSelection,
 } from "../../components/card/CardView";
-import { type CumulusColor } from "../../primitives/color";
 import type { CumulusComponent } from "../registry";
 
 /**
@@ -54,10 +53,8 @@ const CURATED_CARD_IDS = [
 ] as const;
 
 interface GameCardDemoArgs {
-  /** Draw the selection ring. */
-  selected?: boolean;
-  /** Selection ring color. */
-  selectionColor?: CumulusColor;
+  /** Semantic reason to draw the selection ring. */
+  selection?: GameCardSelection;
   /** Dense/compact surface: hide the rules text, keep identity + stats. */
   hideRulesText?: boolean;
   /** Include the glossary-backed exhausted status in the reveal stack. */
@@ -87,7 +84,6 @@ function amplifiedDemoModel(card: CardData): GameCardModel {
     displaySnapshot: { ...card, renderedText },
     transfiguration: {
       type: "Amplified",
-      color: TRANSFIGURATION_TINT_COLORS.Amplified,
       markedText: `${before}${TRANSFIGURE_MARK_START}${amplifiedNumber}${TRANSFIGURE_MARK_END}${after}`,
       energyChanged: false,
       sparkChanged: false,
@@ -97,8 +93,7 @@ function amplifiedDemoModel(card: CardData): GameCardModel {
 }
 
 function GameCardDemo({
-  selected = false,
-  selectionColor,
+  selection,
   hideRulesText = false,
   exhausted = false,
   figment = false,
@@ -167,8 +162,7 @@ function GameCardDemo({
                 ? amplifiedDemoModel(card)
                 : { cardId: card.id, displaySnapshot: card }
             }
-            selected={selected}
-            selectionColor={selectionColor}
+            selection={selection}
             hideRulesText={hideRulesText}
             exhausted={exhausted}
             figment={figment}
@@ -188,8 +182,9 @@ export const gameCardDemo: CumulusComponent = {
   callout:
     "GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator.",
   details: [
+    "The display snapshot is the already-resolved card the player should read in this exact state, including transfigurations, effective battle stats, journey overrides, or generated-card identity; the same snapshot renders both the source and its full reveal.",
     'CardView.css owns the complete card frame, rarity, figment, event, and responsive typography treatment, including canonical fallbacks that keep those treatments intact outside a Cumulus token scope; every figment uses the same "<Identity> Figment" title bar and authored art crop. Transfiguration changes use the shared hammer-in-circle marker on changed stats and in the rules panel whenever marked rules text is present.',
-    "The card-aspect.ts contract is the source for full-card, battlefield, art-region, corner-radius, and draft-offer geometry across renderers. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, exhausted status, focus, press, activation, and drag dismissal are automatic.",
+    "The card-aspect.ts contract is the source for full-card, battlefield, art-region, corner-radius, and draft-offer geometry across renderers. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, exhausted status, focus, press, and drag dismissal are automatic.",
     "On desktop, rules that explicitly materialize an authored figment add a small UUID-backed card with a violet glowing border beyond the definition stack; that adjacent figment keeps its card size and enlarges only its rules text by 50 percent. A figment's own reading copy stays unoutlined. Touch layouts keep the compact reading pair.",
   ],
   group: "Components",
@@ -198,7 +193,7 @@ export const gameCardDemo: CumulusComponent = {
   usage: [
     {
       label: "Render a card",
-      note: "Give it a resolved `CardData` (loaded by UUID from the card database — never by name). Size the wrapper; GameCard fills its width and applies the mobile typography treatment automatically.",
+      note: "Resolve the exact card the player should read before rendering. A catalog card may pass through unchanged; a transfigured, generated, overridden, or in-battle card supplies a new snapshot containing its effective display values. The snapshot id must match cardId, is shallow-readonly at compile time, and is reused for the full reveal. Replace it instead of mutating it when display state changes. Size the wrapper; GameCard fills its width automatically.",
       code: `import { GameCard } from "src/cumulus/components/card/CardView";
 
 <div style={{ width: 240 }}>
@@ -207,11 +202,10 @@ export const gameCardDemo: CumulusComponent = {
     },
     {
       label: "Selected in a picker",
-      note: "Draw the selection ring with `selected`; `hideRulesText` gives the dense identity-only surface used in tight lists.",
+      note: "Choose the semantic reason for the selection ring; GameCard owns its color. `hideRulesText` gives the dense identity-only surface used in tight lists.",
       code: `<GameCard
   model={{ cardId: card.id, displaySnapshot: card }}
-  selected
-  selectionColor="#f97316"
+  selection="highlighted"
   hideRulesText
 />`,
     },
@@ -227,7 +221,7 @@ export const gameCardDemo: CumulusComponent = {
   ],
   demo: {
     defaultArgs: {
-      selected: false,
+      selection: undefined,
       hideRulesText: false,
       exhausted: false,
       figment: false,

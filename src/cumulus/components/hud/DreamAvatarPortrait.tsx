@@ -65,8 +65,8 @@ export interface DreamAvatarPortraitProps {
   variant?: DreamAvatarPortraitVariant;
   /** Semantic DreamAvatar profile represented by this portrait. Omit for decorative art. */
   profile?: { id: string; ability: string };
-  /** Optional activation for selectable profile portraits. */
-  onActivate?: () => void;
+  /** Optional primary press action for selectable profile portraits. */
+  onPress?: () => void;
   /** Keeps the profile readable while suppressing activation. */
   unavailable?: boolean;
 }
@@ -174,7 +174,7 @@ export function dreamAvatarCutoutSrc(imageNumber: string): string {
 function DreamAvatarPortraitSurface({
   dreamAvatar,
   variant = "panel",
-}: Omit<DreamAvatarPortraitProps, "profile" | "onActivate" | "unavailable">) {
+}: Omit<DreamAvatarPortraitProps, "profile" | "onPress" | "unavailable">) {
   const [broken, setBroken] = useState(false);
   const alt = `${dreamAvatar.name}, ${dreamAvatar.title}`;
   const focus = dreamAvatarPortraitFocus(dreamAvatar);
@@ -208,26 +208,26 @@ function DreamAvatarPortraitSurface({
 }
 
 /** DreamAvatar art, optionally promoted to a self-revealing semantic profile. */
-export function DreamAvatarPortrait({ profile, onActivate, unavailable = false, ...visual }: DreamAvatarPortraitProps) {
+export function DreamAvatarPortrait({ profile, onPress, unavailable = false, ...visual }: DreamAvatarPortraitProps) {
   if (profile === undefined) return <DreamAvatarPortraitSurface {...visual} />;
-  return <DreamAvatarProfilePortrait visual={visual} profile={profile} onActivate={onActivate} unavailable={unavailable} />;
+  return <DreamAvatarProfilePortrait visual={visual} profile={profile} onPress={onPress} unavailable={unavailable} />;
 }
 
-function DreamAvatarProfilePortrait({ visual, profile, onActivate, unavailable }: {
-  visual: Omit<DreamAvatarPortraitProps, "profile" | "onActivate" | "unavailable">;
+function DreamAvatarProfilePortrait({ visual, profile, onPress, unavailable }: {
+  visual: Omit<DreamAvatarPortraitProps, "profile" | "onPress" | "unavailable">;
   profile: NonNullable<DreamAvatarPortraitProps["profile"]>;
-  onActivate?: () => void;
+  onPress?: () => void;
   unavailable: boolean;
 }) {
   const binding = useRevealSource({
     identity: { entityType: "dreamAvatar", entityId: revealEntityId("dreamAvatar", profile.id) },
     spec: dreamAvatarRevealSpec(visual.dreamAvatar, profile.ability),
-    onActivate: unavailable ? undefined : onActivate,
+    onActivate: unavailable ? undefined : onPress,
   });
   const lastPointerType = useRef<string | null>(null);
   const pointerDown = binding.sourceProps.onPointerDown;
   return (
-    <Pressable as="span" ref={binding.ref} {...binding.sourceProps} role={onActivate === undefined ? undefined : "button"} tabIndex={0} aria-disabled={unavailable || undefined} data-dream-avatar-source={profile.id} onPointerDown={(event) => { lastPointerType.current = event.pointerType; pointerDown?.(event); }} onClick={() => { if (!unavailable && lastPointerType.current !== "touch") onActivate?.(); }} onKeyDown={(event) => { if (!unavailable && onActivate !== undefined && (event.key === "Enter" || event.key === " ")) { event.preventDefault(); onActivate(); } }} style={{ ...binding.sourceProps.style, display: "flex", width: "100%" }}>
+    <Pressable as="span" ref={binding.ref} {...binding.sourceProps} role={onPress === undefined ? undefined : "button"} tabIndex={0} aria-disabled={unavailable || undefined} data-dream-avatar-source={profile.id} onPointerDown={(event) => { lastPointerType.current = event.pointerType; pointerDown?.(event); }} onClick={() => { if (!unavailable && lastPointerType.current !== "touch") onPress?.(); }} onKeyDown={(event) => { if (!unavailable && onPress !== undefined && (event.key === "Enter" || event.key === " ")) { event.preventDefault(); onPress(); } }} style={{ ...binding.sourceProps.style, display: "flex", width: "100%" }}>
       <DreamAvatarPortraitSurface {...visual} />
     </Pressable>
   );

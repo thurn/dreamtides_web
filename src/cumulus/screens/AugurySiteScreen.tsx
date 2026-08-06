@@ -524,8 +524,8 @@ function CardChoices({ offerId, choices, layout, fit = "choice", columns = cardG
       cards={choices.map((choice) => ({
         entryId: choice.id,
         model: choice.card.model,
-        selected: selectedChoiceId === choice.id,
-        selectionColor: "accent-bright",
+        selection:
+          selectedChoiceId === choice.id ? "highlighted" : undefined,
         quantityBadge: selectedChoiceId === choice.id ? selectedBadge : undefined,
         testId: `cumulus-augury-choice-${choice.id}`,
       }))}
@@ -542,8 +542,7 @@ function CardRow({ cards, layout, fit = "choice", tone = "default" }: { cards: r
       cards={cards.map((card) => ({
         entryId: card.id,
         model: card.model,
-        selected: tone === "danger",
-        selectionColor: tone === "danger" ? "danger" : undefined,
+        selection: tone === "danger" ? "danger" : undefined,
       }))}
       columns={cardGridColumns(cards.length, layout)}
       layout={{ kind: "site", viewport: layout, fit }}
@@ -551,10 +550,10 @@ function CardRow({ cards, layout, fit = "choice", tone = "default" }: { cards: r
   );
 }
 
-function CardTile({ card, width, selected = false, muted = false, danger = false, onActivate, testId }: { card: AuguryCardView; width: CardTileWidth; selected?: boolean; muted?: boolean; danger?: boolean; onActivate?: () => void; testId?: string }) {
+function CardTile({ card, width, selected = false, muted = false, danger = false, onPress, testId }: { card: AuguryCardView; width: CardTileWidth; selected?: boolean; muted?: boolean; danger?: boolean; onPress?: () => void; testId?: string }) {
   return (
     <div style={{ position: "relative", width }}>
-      <GameCard model={card.model} onActivate={onActivate} unavailable={muted} selected={selected || danger} selectionColor={danger ? "danger" : "accent-bright"} testId={testId} />
+      <GameCard model={card.model} onPress={onPress} unavailable={muted} selection={danger ? "danger" : selected ? "highlighted" : undefined} testId={testId} />
     </div>
   );
 }

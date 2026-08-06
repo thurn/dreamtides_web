@@ -51,7 +51,7 @@ function CardPileDemo() {
             { face: "up", id: "demo-void-bottom", model: DEMO_CARD },
           ]}
           label="Face-up void"
-          onActivate={() => undefined}
+          onPress={() => undefined}
         />
       </div>
       <div style={{ width }}>
@@ -60,7 +60,7 @@ function CardPileDemo() {
           label="Empty void"
           emptyState="outlined"
           emptyLabel="Void"
-          onActivate={() => undefined}
+          onPress={() => undefined}
         />
       </div>
     </div>
@@ -101,7 +101,7 @@ export const cardPileDemo: CumulusComponent = {
     model: card.gameCard,
   }))}
   label="Enemy void"
-  onActivate={openEnemyVoid}
+  onPress={openEnemyVoid}
 />`,
     },
     {

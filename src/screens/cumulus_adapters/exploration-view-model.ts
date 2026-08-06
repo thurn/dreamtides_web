@@ -1047,7 +1047,6 @@ function rewardForResolution(
           kind: "spark" as const,
           headline: `+${String(resolvedAction.sparkBonus ?? 1)} ✦`,
           announcement: resolvedEffectText,
-          selectionColor: "spark" as const,
           cards,
         };
       case "make-fast-all":
@@ -1055,7 +1054,6 @@ function rewardForResolution(
           kind: "fast" as const,
           headline: "Fast",
           announcement: resolvedEffectText,
-          selectionColor: "accent-bright" as const,
           cards,
         };
       case "reduce-cost-all-and-gain-nightmares":
@@ -1063,7 +1061,6 @@ function rewardForResolution(
           kind: "energy-cost" as const,
           headline: `−${String(resolvedAction.energyCostReduction ?? 0)} ●`,
           announcement: resolvedEffectText,
-          selectionColor: "energy" as const,
           cards,
         };
       case "change-subtype-all":
@@ -1072,7 +1069,6 @@ function rewardForResolution(
           kind: "subtype" as const,
           headline: resolution.chosenSubtype ?? "Subtype",
           announcement: resolvedEffectText,
-          selectionColor: "accent-bright" as const,
           cards,
         };
       case "purge-duplicates-and-grant-reclaim":
@@ -1080,7 +1076,6 @@ function rewardForResolution(
           kind: "reclaim" as const,
           headline: "Reclaim",
           announcement: resolvedEffectText,
-          selectionColor: "positive" as const,
           cards,
           reclaimCostByEntryId: resolution.reclaimCostByEntryId ?? {},
         };

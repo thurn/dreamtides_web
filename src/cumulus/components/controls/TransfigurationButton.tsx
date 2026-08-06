@@ -47,14 +47,14 @@ export interface TransfigurationButtonProps {
   selected: boolean;
   /** Prevent activation while a transfiguration commit is in flight. */
   disabled?: boolean;
-  /** Select the activated form after a quick activation. */
-  onActivate: (type: TransfigurationType) => void;
+  /** Select the form after a press. */
+  onPress: (type: TransfigurationType) => void;
   /** Optional stable test id for the semantic source. */
   testId?: string;
 }
 
 /**
- * Canonical forge-form choice. A quick activation selects the form and updates
+ * Canonical forge-form choice. A press selects the form and updates
  * the adjacent card preview.
  */
 export function TransfigurationButton({
@@ -62,7 +62,7 @@ export function TransfigurationButton({
   variant,
   selected,
   disabled = false,
-  onActivate,
+  onPress,
   testId,
 }: TransfigurationButtonProps) {
   const canSelect = form.affordable && !disabled;
@@ -84,7 +84,7 @@ export function TransfigurationButton({
       }`}
       disabled={!canSelect}
       data-testid={testId}
-      onClick={canSelect ? () => onActivate(form.type) : undefined}
+      onClick={canSelect ? () => onPress(form.type) : undefined}
       style={{
         height: compact ? token("--touch-min") : undefined,
         width: "100%",

@@ -742,7 +742,6 @@ describe("GameCard reveal contract", () => {
           displaySnapshot,
           transfiguration: {
             type: "Empowered",
-            color: "#20d6a2",
             markedText: displaySnapshot.renderedText,
             energyChanged: true,
             sparkChanged: false,
@@ -778,7 +777,7 @@ describe("GameCard reveal contract", () => {
 
   it("carries the selected source ring onto the reading copy", async () => {
     const { container, root } = mount(
-      <GameCard model={model()} selected selectionColor="accent" />,
+      <GameCard model={model()} selection="copied" />,
     );
     const source = container.querySelector<HTMLElement>("[data-game-card-source]");
     act(() => {
@@ -849,7 +848,7 @@ describe("GameCard reveal contract", () => {
 
   it("keeps informative unavailable cards focusable while suppressing activation", async () => {
     const activate = vi.fn();
-    const { container, root } = mount(<GameCard model={model()} unavailable onActivate={activate} />);
+    const { container, root } = mount(<GameCard model={model()} unavailable onPress={activate} />);
     const source = container.querySelector<HTMLElement>("[data-game-card-source]");
     expect(source?.tabIndex).toBe(0);
     act(() => source?.focus());
@@ -865,7 +864,7 @@ describe("GameCard reveal contract", () => {
   it("fires quick activation, suppresses a hold, and dismisses on drag recognition", () => {
     vi.useFakeTimers();
     const activate = vi.fn();
-    const { container, root } = mount(<GameCard model={model()} onActivate={activate} />);
+    const { container, root } = mount(<GameCard model={model()} onPress={activate} />);
     const source = container.querySelector<HTMLElement>("[data-game-card-source]");
     act(() => { source?.dispatchEvent(pointer("pointerdown", { pointerType: "touch", pointerId: 4, clientX: 100, clientY: 200 })); });
     act(() => { source?.dispatchEvent(pointer("pointerup", { pointerType: "touch", pointerId: 4, clientX: 100, clientY: 200 })); });

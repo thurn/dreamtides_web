@@ -2,8 +2,8 @@ import type { FrozenCardData } from "../../../types/cards";
 import type { CardId } from "../../../types/card-identity";
 import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
 import type { InfoCardProps, InfoCardVariant } from "../../components/overlay/InfoCard";
+import type { GameCardSelection } from "../../components/card/CardView";
 import type { Glyph } from "../../primitives/glyph";
-import type { CumulusColor } from "../../primitives/color";
 
 export interface RevealSourceIdentity {
   readonly entityType: string;
@@ -30,10 +30,8 @@ export interface RevealGameCard {
   readonly displaySnapshot: FrozenCardData;
   /** Optional applied transfiguration rendered on the reading copy. */
   readonly transfiguration?: CardTransfigurationDisplay;
-  /** Whether the reading copy carries the source card's selection ring. */
-  readonly selected?: boolean;
-  /** Selection-ring color inherited from the source card. */
-  readonly selectionColor?: CumulusColor;
+  /** Semantic selection state inherited from the source card. */
+  readonly selection?: GameCardSelection;
   /** Render the reading copy with the authored figment frame. */
   readonly figment?: boolean;
   /** Use the legible rules treatment reserved for an adjacent figment preview. */

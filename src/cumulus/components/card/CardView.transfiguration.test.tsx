@@ -11,7 +11,7 @@ import {
   TRANSFIGURE_MARK_END,
   TRANSFIGURE_MARK_START,
 } from "../../../runtime/transfigure-markers";
-import { CardView } from "./CardView";
+import { CardView, type GameCardSelection } from "./CardView";
 
 const CARD_ID = asCardId("11111111-1111-4111-8111-111111111111");
 
@@ -36,7 +36,6 @@ function card(overrides: Partial<CardData> = {}): CardData {
 function display(markedText: string): CardTransfigurationDisplay {
   return {
     type: "Amplified",
-    color: "#ffffff",
     markedText,
     energyChanged: false,
     sparkChanged: false,
@@ -44,14 +43,21 @@ function display(markedText: string): CardTransfigurationDisplay {
   };
 }
 
-function mount(transfiguration: CardTransfigurationDisplay) {
+function mount(
+  transfiguration: CardTransfigurationDisplay,
+  selection?: GameCardSelection,
+) {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
     root.render(
       <CumulusRoot>
-        <CardView card={card()} transfiguration={transfiguration} />
+        <CardView
+          card={card()}
+          transfiguration={transfiguration}
+          selection={selection}
+        />
       </CumulusRoot>,
     );
   });
@@ -71,6 +77,20 @@ afterEach(() => {
 });
 
 describe("CardView transfiguration rules marker", () => {
+  it("derives the selection ring from the semantic transfiguration type", () => {
+    const { container, root } = mount(
+      display(card().renderedText),
+      "transfigured",
+    );
+
+    expect(
+      container.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
+    ).toContain("#f59e0b");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("derives the canonical tint from the transfiguration type", () => {
     const { container, root } = mount(
       display(

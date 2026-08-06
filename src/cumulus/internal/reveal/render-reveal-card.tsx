@@ -34,8 +34,7 @@ function renderGameCard(card: RevealGameCard): ReactElement {
     <RevealGameCard
       card={card.displaySnapshot}
       transfiguration={card.transfiguration}
-      selected={card.selected}
-      selectionColor={card.selectionColor}
+      selection={card.selection}
       figment={card.figment}
       rulesTextPresentation={card.rulesTextPresentation}
       eagerRulesFit

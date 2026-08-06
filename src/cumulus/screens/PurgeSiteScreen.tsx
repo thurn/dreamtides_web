@@ -220,9 +220,8 @@ function PurgeGallery({
             entryId: card.entryId,
             model: card.model,
             testId: `cumulus-purge-card-${card.entryId}`,
-            selected,
+            selection: selected ? "danger" : undefined,
             disabled,
-            selectionColor: "danger",
             emphasis: card.purgeCostKind === "free" ? "danger" : undefined,
           };
         })}

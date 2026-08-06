@@ -304,7 +304,7 @@ export function DraftScreen({
                 >
                   <GameCard
                     model={model}
-                    onActivate={
+                    onPress={
                       pendingPick === null
                         ? () => {
                             handlePick(card.cardNumber);

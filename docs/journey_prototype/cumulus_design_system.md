@@ -439,11 +439,28 @@ radius) but stays deliberately restrained so the components are the focus.
 | **Motes**                    | `components/` | Import from Claude Design (atmospheric particle layer; `warm`/`violet`/`dreamscape` tint; sanctioned particle opacity animation)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | **JourneyStatusBar**         | `components/` | Import from Claude Design (the transparent bottom HUD)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | **GlassPanel**               | `components/` | The content-sized persistent title/body/footer container over scene or atmospheric backgrounds. Its liquid-glass recipe (`backdrop-filter` blur/saturate + specular gradient + inset rim/wash + drop shadow) lives in `glassSurfaceStyle` (`src/cumulus/internal/glass-surface.ts`), shared by GlassPanel, InfoCard, GlassDialog, IconButton, GlassButton, and SpeechBubble. Floating panels always hug their rendered slots and cannot consume decorative height; edge rails and full-bleed gallery frames own their bounded height through the frame contract. CardGalleryPanel composes it. The deck viewer and GlassPanel's full-bleed gallery frame use the 80%-black `--scrim-gallery` alpha overlay; floating GlassPanels use glass. |
-| **GameCard**                 | `components/` | UUID-backed card source deriving its reading copy and ordered glossary secondaries; activation remains available independently of reading                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| **GameCard**                 | `components/` | UUID-backed card source deriving its reading copy and ordered glossary secondaries; its press action remains available independently of reading                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | **RulesText**                | `components/` | Canonical rules renderer with inline named `GlossaryTerm` sources and resource glyphs                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | **Dreamsign**                | `components/` | UUID-backed collectible source deriving object/text primary content and glossary secondaries                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | **SiteNode**                 | `components/` | UUID-backed site source deriving its icon InfoCard and activation availability                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| **Atlas Node / Edge / Defs** | `components/` | AtlasNode owns its placed source, strict scene primary, Dreamsign/site/affiliation secondaries, and activation; edges and shared SVG definitions compose the map                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| **Atlas Node / Edge / Defs** | `components/` | AtlasNode owns its placed source, strict scene primary, Dreamsign/site/affiliation secondaries, and press action; edges and shared SVG definitions compose the map                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+
+### GameCard resolved display snapshots
+
+`GameCardModel.displaySnapshot` is the complete card the player should read in
+the exact state being rendered. It is not an instruction for `GameCard` to look
+up a catalog entry. A plain catalog card can supply its catalog `CardData`
+unchanged; an adapter for a transfigured card, generated figment, battle
+instance, or journey override resolves those effects first and supplies a new
+snapshot containing the effective name, art, costs, Spark, timing, and rules
+text.
+
+`GameCard` uses the same snapshot for the visible source and the full reading
+reveal, preventing compact and expanded presentations from disagreeing. The
+model's canonical `cardId` and `displaySnapshot.id` must match. The
+`FrozenCardData` type makes top-level fields shallow-readonly at compile time;
+it does not freeze arbitrary objects at runtime. State changes produce a new
+snapshot rather than mutating the existing value.
 
 ### OfferTile content and composition
 
@@ -498,6 +515,19 @@ mechanics:
   a priority prefix of ordered secondaries. Visual-viewport, safe-area,
   truncation, press-in-place, accessibility, portal ownership, and diagnostics
   belong to `CumulusRoot`.
+
+### Interaction callback naming
+
+Exported Cumulus components expose their primary user action as `onPress`. This
+single name covers mouse, keyboard, touch, and the component's input-adaptive
+gesture handling. Item-specific callbacks preserve the same suffix, such as
+`onCardPress` or `onNodePress`; controlled values use state-oriented callbacks
+such as `onChange` and `onExpandedChange`. `onClick` and `onActivate` are
+implementation details and are not public component props.
+
+The reveal coordinator uses activation internally to classify whether a quick
+press fires the supplied action or a hold remains read-only. Components keep
+that state-machine vocabulary behind their `onPress` API.
 
 ### Demo & mockup content
 

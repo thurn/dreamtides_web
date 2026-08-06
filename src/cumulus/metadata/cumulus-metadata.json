@@ -341,7 +341,7 @@
       }
     },
     {
-      "name": "onActivate",
+      "name": "onPress",
       "tsType": "(nodeId: string) => void",
       "unionMembers": [],
       "required": true,
@@ -1053,12 +1053,12 @@
       "description": "Visible copy centered inside an empty outlined pile."
     },
     {
-      "name": "onActivate",
+      "name": "onPress",
       "tsType": "(() => void)",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Activates the pile as one zone control."
+      "description": "Primary press action for the pile as one zone control."
     },
     {
       "name": "testId",
@@ -1144,41 +1144,32 @@
       "description": ""
     },
     {
-      "name": "onClick",
+      "name": "onPress",
       "tsType": "(() => void)",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": ""
+      "description": "Primary press action for editor and inspector card surfaces."
     },
     {
-      "name": "selected",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
-      "name": "selectionColor",
-      "tsType": "CumulusColor",
+      "name": "selection",
+      "tsType": "GameCardSelection",
       "unionMembers": [
         "danger",
-        "accent",
-        "accent-bright",
-        "essence",
-        "energy",
-        "spark",
-        "positive",
         "selected",
-        "text-primary",
-        "text-secondary",
-        "text-on-accent",
-        "white"
+        "highlighted",
+        "playable",
+        "reward",
+        "copied",
+        "changed",
+        "spark-changed",
+        "energy-changed",
+        "transfigured",
+        "figment"
       ],
       "required": false,
       "defaultValue": null,
-      "description": "The selection-ring {@link CumulusColor}. Default the `\"selected\"` role."
+      "description": "Semantic reason this card carries the canonical selection ring."
     },
     {
       "name": "transfiguration",
@@ -1195,12 +1186,6 @@
             "tsType": "TransfigurationType",
             "optional": false,
             "description": ""
-          },
-          {
-            "name": "color",
-            "tsType": "`#${string}`",
-            "optional": false,
-            "description": "Light tint for the name gem and changed text. A\n`#${string}` hex, matching Cumulus's `HexColor`."
           },
           {
             "name": "markedText",
@@ -1737,12 +1722,12 @@
       "description": "Semantic DreamAvatar profile represented by this portrait. Omit for decorative art."
     },
     {
-      "name": "onActivate",
+      "name": "onPress",
       "tsType": "(() => void)",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Optional activation for selectable profile portraits."
+      "description": "Optional primary press action for selectable profile portraits."
     },
     {
       "name": "unavailable",
@@ -2296,24 +2281,24 @@
             "name": "displaySnapshot",
             "tsType": "Readonly<CardData>",
             "optional": false,
-            "description": "Complete resolved display data whose `id` matches `cardId`."
+            "description": "Complete, already-resolved card data for this exact rendered state. This is\na display snapshot rather than a catalog reference: adapters must apply\ntransfigurations, battle-effective stats, journey overrides, generated-card\nidentity, and any other state that changes what the player reads before\nconstructing the model. GameCard renders this value in place and reuses the\nsame value for its reading reveal, so the compact source and full reveal\ncannot disagree. Its `id` must equal `cardId`.\n\n`FrozenCardData` provides shallow compile-time readonly fields. It does not\nfreeze the object at runtime; callers should replace the snapshot whenever\neffective display state changes rather than mutating it in place."
           },
           {
             "name": "transfiguration",
             "tsType": "CardTransfigurationDisplay",
             "optional": true,
-            "description": "Optional presentation of a transfigured card."
+            "description": "Semantic description of an applied transfiguration. The renderer derives\nits canonical glyphs and colors from the descriptor's strict `type`."
           }
         ]
       }
     },
     {
-      "name": "onActivate",
+      "name": "onPress",
       "tsType": "(() => void)",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Player action invoked by a quick activation."
+      "description": "Primary player action invoked by a click, keyboard press, or quick tap."
     },
     {
       "name": "unavailable",
@@ -2324,33 +2309,24 @@
       "description": "Whether the action is unavailable while the card remains informative."
     },
     {
-      "name": "selected",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "false",
-      "description": "Draw the semantic selection state."
-    },
-    {
-      "name": "selectionColor",
-      "tsType": "CumulusColor",
+      "name": "selection",
+      "tsType": "GameCardSelection",
       "unionMembers": [
         "danger",
-        "accent",
-        "accent-bright",
-        "essence",
-        "energy",
-        "spark",
-        "positive",
         "selected",
-        "text-primary",
-        "text-secondary",
-        "text-on-accent",
-        "white"
+        "highlighted",
+        "playable",
+        "reward",
+        "copied",
+        "changed",
+        "spark-changed",
+        "energy-changed",
+        "transfigured",
+        "figment"
       ],
       "required": false,
       "defaultValue": null,
-      "description": "Selection-ring color. Defaults to the shared selected role."
+      "description": "Semantic reason this card carries the canonical selection ring."
     },
     {
       "name": "hideRulesText",
@@ -4142,11 +4118,11 @@
     },
     {
       "name": "presentation",
-      "tsType": "\"choice\" | \"scene\" | \"reward\"",
+      "tsType": "\"choice\" | \"reward\" | \"scene\"",
       "unionMembers": [
         "choice",
-        "scene",
-        "reward"
+        "reward",
+        "scene"
       ],
       "required": false,
       "defaultValue": "scene",
@@ -4527,12 +4503,12 @@
       "description": "Prevent activation while a transfiguration commit is in flight."
     },
     {
-      "name": "onActivate",
+      "name": "onPress",
       "tsType": "(type: TransfigurationType) => void",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Select the activated form after a quick activation."
+      "description": "Select the form after a press."
     },
     {
       "name": "testId",

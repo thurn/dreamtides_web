@@ -140,7 +140,7 @@ export function GameCardMockup() {
                 key={`hand-${String(index)}`}
                 style={{ width: "clamp(96px, 15vw, 156px)", flex: "0 0 auto" }}
               >
-                <GameCard model={{ cardId: card.id, displaySnapshot: card }} selected={index === 0} />
+                <GameCard model={{ cardId: card.id, displaySnapshot: card }} selection={index === 0 ? "selected" : undefined} />
               </div>
             ))}
           </div>

@@ -85,6 +85,20 @@ this chrome. Registration applies it automatically, and the screen-chrome
 contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 `src/cumulus/screens/`.
 
+## Interaction callback names
+
+Exported Cumulus component APIs name their primary user action `onPress`. The
+name covers mouse clicks, keyboard activation, touch taps, and any input-adaptive
+press handling the component owns; public props never expose `onClick` or
+`onActivate` for that action. When a component reports the identity of the
+pressed item, keep the convention in the specific callback name (`onCardPress`,
+`onNodePress`, and so on). Controlled-value callbacks retain their established
+state names such as `onChange` and `onExpandedChange`.
+
+The entity-reveal coordinator may use “activation” internally for the gesture
+state-machine outcome that distinguishes a quick press from a hold-to-read.
+That implementation term does not cross the component API boundary.
+
 ## Component index
 
 <!-- BEGIN GENERATED COMPONENT INDEX (npm run cumulus-docs) -->

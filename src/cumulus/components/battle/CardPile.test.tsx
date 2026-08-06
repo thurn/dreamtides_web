@@ -206,7 +206,7 @@ describe("CardPile", () => {
         <CardPile
           cards={[{ face: "up", id: "void-top", model: MODEL }]}
           label="Player void"
-          onActivate={onActivate}
+          onPress={onActivate}
         />,
       );
     });

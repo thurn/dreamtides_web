@@ -182,7 +182,7 @@ export default function EditableFigment({
           card={visibleCard}
           large={size === "large"}
           figment
-          onClick={() => onOpenArtEditor(figment)}
+          onPress={() => onOpenArtEditor(figment)}
         />
       </article>
     );

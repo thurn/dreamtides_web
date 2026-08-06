@@ -5,7 +5,6 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
-import { TRANSFIGURATION_TINT_COLORS } from "../../runtime/transfiguration-display";
 import { artRef } from "../primitives/art";
 import { CumulusRoot } from "../CumulusRoot";
 import {
@@ -50,7 +49,6 @@ function candidate(index: number): TransfigurationCandidateView {
           displaySnapshot: { ...card, energyCost: 1 },
           transfiguration: {
             type: "Empowered",
-            color: TRANSFIGURATION_TINT_COLORS.Empowered,
             markedText: card.renderedText,
             energyChanged: true,
             sparkChanged: false,
@@ -69,7 +67,6 @@ function candidate(index: number): TransfigurationCandidateView {
           displaySnapshot: { ...card, spark: 4 },
           transfiguration: {
             type: "Kindled",
-            color: TRANSFIGURATION_TINT_COLORS.Kindled,
             markedText: card.renderedText,
             energyChanged: false,
             sparkChanged: true,
@@ -115,7 +112,6 @@ function enhancedView(): TransfigurationSiteView {
           displaySnapshot: reforgedCard,
           transfiguration: {
             type: "Kindled",
-            color: TRANSFIGURATION_TINT_COLORS.Kindled,
             markedText: reforgedCard.renderedText,
             energyChanged: false,
             sparkChanged: true,

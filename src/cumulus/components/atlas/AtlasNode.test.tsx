@@ -134,7 +134,7 @@ function renderNode(value: AtlasNodeModel, onActivate = vi.fn()) {
     root.render(
       <CumulusRoot>
         <div className="dream-atlas">
-          <AtlasNode model={value} onActivate={onActivate} />
+          <AtlasNode model={value} onPress={onActivate} />
         </div>
       </CumulusRoot>,
     );

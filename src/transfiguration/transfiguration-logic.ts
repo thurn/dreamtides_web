@@ -102,7 +102,6 @@ export function buildTransfigurationDisplay(
     card,
     display: {
       type,
-      color: TRANSFIGURATION_TINT_COLORS[type],
       markedText,
       energyChanged,
       sparkChanged,

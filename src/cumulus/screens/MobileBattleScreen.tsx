@@ -11,6 +11,7 @@ import {
   GameCard,
   cardSelectionShadowLayers,
   type GameCardModel,
+  type GameCardSelection,
 } from "../components/card/CardView";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
 import { renderRulesSymbolsInline } from "../components/card/RulesText";
@@ -55,7 +56,6 @@ import {
   LONG_PRESS_THRESHOLD_MS,
   POINTER_MOVEMENT_SLOP_PX,
 } from "../primitives/pointer-gesture";
-import type { CumulusColor } from "../primitives/color";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
@@ -84,8 +84,8 @@ import battleBackgroundUrl from "../assets/battle-background.png";
 export const BATTLEFIELD_CARD_EXHAUSTED_FILTER =
   "grayscale(0.5) brightness(0.62)";
 const POINTER_DROP_COMMIT_HOLD_MS = motionTimeSeconds("--dur-slow") * 1_000;
-const CARD_PICKER_HIGHLIGHT_COLOR: CumulusColor = "accent-bright";
-const CARD_PICKER_SELECTION_COLOR: CumulusColor = "selected";
+const CARD_PICKER_HIGHLIGHT_SELECTION: GameCardSelection = "highlighted";
+const CARD_PICKER_SELECTION: GameCardSelection = "selected";
 
 /** One physical face-up card instance rendered by the battle board. */
 export interface MobileBattleCardView {
@@ -1040,9 +1040,9 @@ function FarHand({
                     : {
                         selected:
                           selectedPickerCardIds.includes(cardId) || highlighted,
-                        color: selectedPickerCardIds.includes(cardId)
-                          ? CARD_PICKER_SELECTION_COLOR
-                          : CARD_PICKER_HIGHLIGHT_COLOR,
+                        kind: selectedPickerCardIds.includes(cardId)
+                          ? CARD_PICKER_SELECTION
+                          : CARD_PICKER_HIGHLIGHT_SELECTION,
                       }
                 }
                 interaction={
@@ -1198,7 +1198,7 @@ function SideZones({
           <CardPile
             cards={deck}
             label={`${position === "near" ? "Your" : "Opponent"} deck`}
-            onActivate={
+            onPress={
               interactions?.onZoneOpen === undefined
                 ? undefined
                 : () => interactions.onZoneOpen?.({ owner, zone: "deck" })
@@ -1299,7 +1299,7 @@ function SideZones({
             label={`${position === "near" ? "Your" : "Opponent"} void`}
             emptyState="outlined"
             emptyLabel={zoneLabels === "voids" ? "Void" : undefined}
-            onActivate={
+            onPress={
               interactions?.onZoneOpen === undefined
                 ? undefined
                 : () => interactions.onZoneOpen?.({ owner, zone: "void" })
@@ -1557,7 +1557,7 @@ function FaceUpCard({
   readonly cardOverlay?: MobileBattleCardOverlayView | null;
   readonly selection?: {
     readonly selected: boolean;
-    readonly color: CumulusColor;
+    readonly kind: GameCardSelection;
   };
   readonly interaction?: {
     readonly draggable: boolean;
@@ -1861,11 +1861,12 @@ function FaceUpCard({
       >
         <GameCard
           model={card.model}
-          selected={
+          selection={
             selectionAboveExhaustion === null &&
             (selection?.selected ?? card.showPlayableOutline)
+              ? (selection?.kind ?? "playable")
+              : undefined
           }
-          selectionColor={selection?.color ?? "positive"}
           hideRulesText={!showRulesText}
           exhausted={card.exhausted}
           presentation={showRulesText ? "full" : "battlefield"}
@@ -1891,7 +1892,7 @@ function FaceUpCard({
               ? CARD_CORNER_RADIUS
               : BATTLEFIELD_CARD_CORNER_RADIUS,
             boxShadow: cardSelectionShadowLayers(
-              selectionAboveExhaustion.color,
+              selectionAboveExhaustion.kind,
             ).join(", "),
             pointerEvents: "none",
           }}
@@ -2602,13 +2603,13 @@ function Rank({
                     candidate === null
                       ? interactions?.targetSelectionCardId === slot.card.id ||
                         interactions?.targetableCardIds?.includes(slot.card.id)
-                        ? { selected: true, color: "accent-bright" }
+                        ? { selected: true, kind: "highlighted" }
                         : undefined
                       : {
                           selected: isPickerSelected || isPickerHighlighted,
-                          color: isPickerSelected
-                            ? CARD_PICKER_SELECTION_COLOR
-                            : CARD_PICKER_HIGHLIGHT_COLOR,
+                          kind: isPickerSelected
+                            ? CARD_PICKER_SELECTION
+                            : CARD_PICKER_HIGHLIGHT_SELECTION,
                         }
                   }
                   interaction={
@@ -2906,9 +2907,9 @@ function NearHand({
                 ? undefined
                 : {
                     selected: isPickerSelected || isPickerHighlighted,
-                    color: isPickerSelected
-                      ? CARD_PICKER_SELECTION_COLOR
-                      : CARD_PICKER_HIGHLIGHT_COLOR,
+                    kind: isPickerSelected
+                      ? CARD_PICKER_SELECTION
+                      : CARD_PICKER_HIGHLIGHT_SELECTION,
                   }
             }
             interaction={
@@ -3078,7 +3079,7 @@ function TargetingCardStage({
         card={card}
         zone="targeting-stage"
         showRulesText
-        selection={{ selected: true, color: "selected" }}
+        selection={{ selected: true, kind: "selected" }}
       />
     </div>
   );
@@ -3506,10 +3507,11 @@ function CardPickerGallery({
             return {
               entryId: candidate.instanceId,
               model: candidate.card.model,
-              selected: selected || candidate.highlighted,
-              selectionColor: selected
-                ? CARD_PICKER_SELECTION_COLOR
-                : CARD_PICKER_HIGHLIGHT_COLOR,
+              selection: selected
+                ? CARD_PICKER_SELECTION
+                : candidate.highlighted
+                  ? CARD_PICKER_HIGHLIGHT_SELECTION
+                  : undefined,
               caption: {
                 kind: "text" as const,
                 text: pickerZoneCaption(candidate, perspective),

@@ -99,8 +99,8 @@ export interface CardData {
 }
 
 /**
- * A `CardData` value whose top-level fields are frozen at runtime. Consumers
- * that receive a frozen value get compile-time feedback if they try to mutate
- * it (bug-030).
+ * A `CardData` view whose top-level fields are readonly at compile time.
+ * Producers may additionally freeze particular values at runtime, but this
+ * shallow type alias does not perform or guarantee runtime freezing.
  */
 export type FrozenCardData = Readonly<CardData>;

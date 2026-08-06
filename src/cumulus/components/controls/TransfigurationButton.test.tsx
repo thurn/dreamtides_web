@@ -47,7 +47,7 @@ describe("TransfigurationButton", () => {
           form={empowered}
           variant="compact"
           selected={false}
-          onActivate={onActivate}
+          onPress={onActivate}
         />,
       );
     });
@@ -80,7 +80,7 @@ describe("TransfigurationButton", () => {
           form={{ ...empowered, essenceCost: 0, affordable: false }}
           variant="priced"
           selected
-          onActivate={onActivate}
+          onPress={onActivate}
         />,
       );
     });
