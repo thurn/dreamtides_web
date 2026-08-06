@@ -158,7 +158,12 @@ function usePrefersReducedMotion(): boolean {
 }
 
 export interface PressableProps extends React.HTMLAttributes<HTMLElement> {
-  /** Element or component to render. Default 'button'. */
+  /** Chooses the underlying HTML element or React component that receives the
+   * Pressable behavior. This changes the rendered element's native semantics
+   * and behavior, but not the hover or press feedback. Keep the default
+   * `button` for actions; use another element only when its semantics fit the
+   * surface, such as `span` for inline, non-action information reveals.
+   * Default `button`. */
   as?: React.ElementType;
   /** Disables press feedback and pointer handlers, and shows the default cursor. */
   disabled?: boolean;

@@ -4178,7 +4178,7 @@
       ],
       "required": false,
       "defaultValue": "button",
-      "description": "Element or component to render. Default 'button'."
+      "description": "Chooses the underlying HTML element or React component that receives the\nPressable behavior. This changes the rendered element's native semantics\nand behavior, but not the hover or press feedback. Keep the default\n`button` for actions; use another element only when its semantics fit the\nsurface, such as `span` for inline, non-action information reveals.\nDefault `button`."
     },
     {
       "name": "disabled",

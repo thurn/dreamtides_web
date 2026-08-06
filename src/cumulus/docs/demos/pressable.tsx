@@ -38,8 +38,8 @@ export const pressableDemo: CumulusComponent = {
   Component: Pressable,
   usage: [
     {
-      label: "Wrap any element",
-      note: "Pressable measures the wrapped element so wide rows and compact controls move by a comparable physical distance. Mouse and pen hover upward, every primary press moves downward, and touch never hovers.",
+      label: "Choose the rendered element",
+      note: "`as` controls the actual HTML element in the DOM, not the visual feedback. Keep the default `button` for actions because the browser supplies button semantics and keyboard activation. Use another element only when its native meaning fits the surface — for example, `span` for inline information that is revealed on press but is not an action. Pressable measures whichever element it renders so wide rows and compact controls move by a comparable physical distance.",
       code: `import { Pressable } from "src/cumulus/primitives/Pressable";
 
 <Pressable as="button" onClick={handleActivate}>
