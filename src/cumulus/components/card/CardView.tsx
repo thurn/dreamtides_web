@@ -29,10 +29,13 @@ import { glyph, GLYPHS } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
 import { CardStatOrb } from "./CardStatOrb";
 import { renderCardChangeBadge } from "./card-change-badge";
-import { TRANSFIGURATION_ICONS } from "../../../runtime/transfiguration-display";
+import {
+  TRANSFIGURATION_ICONS,
+  TRANSFIGURATION_TINT_COLORS,
+} from "../../../runtime/transfiguration-display";
 import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
 import { TRANSFIGURE_MARK_START } from "../../../runtime/transfigure-markers";
-import { RulesText } from "./RulesText";
+import { renderRulesText } from "./RulesText";
 import { useFitText } from "../controls/useFitText";
 import { DESKTOP_MIN_WIDTH } from "../../screens/use-is-desktop";
 import { Pressable } from "../../primitives/Pressable";
@@ -864,6 +867,10 @@ function GameCardSurface(props: GameCardSurfaceProps) {
     card.renderedText.trim() !== "";
   const rulesTextChanged =
     transfiguration?.markedText.includes(TRANSFIGURE_MARK_START) === true;
+  const transfigurationTint =
+    transfiguration === undefined
+      ? undefined
+      : TRANSFIGURATION_TINT_COLORS[transfiguration.type];
   const slotContext: CardViewSlotContext = {
     card,
     large,
@@ -933,7 +940,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
       style={{
         color:
           transfiguration?.fastChanged === true
-            ? transfiguration.color
+            ? transfigurationTint
             : "#ffffff",
       }}
     >
@@ -1011,8 +1018,8 @@ function GameCardSurface(props: GameCardSurfaceProps) {
             // against any art behind the name bar.
             fontSize: "1.05em",
             lineHeight: 1,
-            color: transfiguration.color,
-            textShadow: `0 0 0.3em ${transfiguration.color}, 0 1px 1px rgba(0, 0, 0, 0.7)`,
+            color: transfigurationTint,
+            textShadow: `0 0 0.3em ${transfigurationTint}, 0 1px 1px rgba(0, 0, 0, 0.7)`,
           }}
         />
       ) : null}
@@ -1085,12 +1092,9 @@ function GameCardSurface(props: GameCardSurfaceProps) {
         textShadow: "var(--cv-rules-text-shadow)",
       }}
     >
-      <RulesText
-        text={transfiguration?.markedText ?? card.renderedText}
-        owner={{ kind: "card", id: card.id }}
-        glossaryInteraction="delegated"
-        transfigurationColor={transfiguration?.color}
-      />
+      {renderRulesText(transfiguration?.markedText ?? card.renderedText, {
+        highlightColor: transfigurationTint,
+      })}
     </div>
   ) : null;
 

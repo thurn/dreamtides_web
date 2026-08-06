@@ -3860,27 +3860,6 @@
       "required": false,
       "defaultValue": "source",
       "description": "`source` makes the complete text block one glossary reveal target.\n`delegated` renders passive copy inside an entity that owns the reveal."
-    },
-    {
-      "name": "transfigurationColor",
-      "tsType": "CumulusColor",
-      "unionMembers": [
-        "danger",
-        "accent",
-        "accent-bright",
-        "essence",
-        "energy",
-        "spark",
-        "positive",
-        "selected",
-        "text-primary",
-        "text-secondary",
-        "text-on-accent",
-        "white"
-      ],
-      "required": false,
-      "defaultValue": null,
-      "description": "Semantic tint for text enclosed by transfiguration markers."
     }
   ],
   "SegmentedControl": [

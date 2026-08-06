@@ -182,8 +182,6 @@ export interface RulesTextProps {
    * @default "source"
    */
   readonly glossaryInteraction?: "source" | "delegated";
-  /** Semantic tint for text enclosed by transfiguration markers. */
-  readonly transfigurationColor?: CumulusColor;
 }
 
 interface RenderRulesTextOptions {
@@ -575,11 +573,8 @@ export function RulesText({
   text,
   owner,
   glossaryInteraction = "source",
-  transfigurationColor,
 }: RulesTextProps) {
-  const content = renderRulesText(text, {
-    highlightColor: transfigurationColor,
-  });
+  const content = renderRulesText(text);
   const hasDefinitions = rulesTextDefinitionCards(text, owner.kind).length > 0;
   if (glossaryInteraction === "delegated" || !hasDefinitions) {
     return <>{content}</>;

@@ -36,7 +36,7 @@ function card(overrides: Partial<CardData> = {}): CardData {
 function display(markedText: string): CardTransfigurationDisplay {
   return {
     type: "Amplified",
-    color: "#fcd34d",
+    color: "#ffffff",
     markedText,
     energyChanged: false,
     sparkChanged: false,
@@ -71,6 +71,22 @@ afterEach(() => {
 });
 
 describe("CardView transfiguration rules marker", () => {
+  it("derives the canonical tint from the transfiguration type", () => {
+    const { container, root } = mount(
+      display(
+        `Draw ${TRANSFIGURE_MARK_START}two${TRANSFIGURE_MARK_END} cards.`,
+      ),
+    );
+    const changedText = Array.from(container.querySelectorAll("span")).find(
+      (span) => span.style.fontWeight === "600",
+    );
+
+    expect(changedText?.style.color).toBe("rgb(252, 211, 77)");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("offsets the shared hammer badge inward from the rules box corner when marked text changes", () => {
     const { container, root } = mount(
       display(

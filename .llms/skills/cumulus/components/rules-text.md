@@ -17,7 +17,6 @@ The canonical Dreamtides rules-copy source: resource symbols and keywords render
 | `text` | `string` | yes | — | The rules text to render. |
 | `owner` | `RulesTextOwner` | yes | — | Semantic owner required for context-sensitive glossary definitions. |
 | `glossaryInteraction` | `"source" \| "delegated"` | no | `source` | `source` makes the complete text block one glossary reveal target. `delegated` renders passive copy inside an entity that owns the reveal. |
-| `transfigurationColor` | `CumulusColor` = `"danger" \| "accent" \| "accent-bright" \| "essence" \| "energy" \| "spark" \| "positive" \| "selected" \| "text-primary" \| "text-secondary" \| "text-on-accent" \| "white"` | no | — | Semantic tint for text enclosed by transfiguration markers. |
 
 ### `owner`: the `RulesTextOwner` model
 
