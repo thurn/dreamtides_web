@@ -221,7 +221,7 @@ export const gameCardDemo: CumulusComponent = {
   ],
   demo: {
     defaultArgs: {
-      selection: undefined,
+      selection: "selected",
       hideRulesText: false,
       exhausted: false,
       figment: false,
