@@ -99,7 +99,6 @@ function makeState(): JourneyState {
     indexInLayer: 0,
     dreamscapeId: "winterwake",
     biomeName: "Winterwake",
-    biomeColor: "test-biome-color",
     sites: [site],
     position: { x: 0, y: 0 },
     state: "available",

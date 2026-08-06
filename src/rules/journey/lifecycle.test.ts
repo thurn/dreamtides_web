@@ -173,7 +173,6 @@ function deterministicProvider(
               indexInLayer: 0,
               dreamscapeId: "dreamscape-start",
               biomeName: "Starting Dreamscape",
-              biomeColor: "#000000",
               sites: [],
               position: { x: 0, y: 0 },
               state: "available",
@@ -906,7 +905,6 @@ function withAtlasSite(
           indexInLayer: 0,
           dreamscapeId: null,
           biomeName: "",
-          biomeColor: "",
           sites: [
             {
               id: siteId,

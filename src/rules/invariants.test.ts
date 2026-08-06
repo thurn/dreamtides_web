@@ -33,7 +33,6 @@ function node(
     indexInLayer: 0,
     dreamscapeId,
     biomeName: dreamscapeId === null ? "" : id,
-    biomeColor: dreamscapeId === null ? "" : "#123456",
     sites: [],
     position: { x: 0, y: 0 },
     state,

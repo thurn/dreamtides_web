@@ -92,11 +92,17 @@ export interface ContentConfig {
   poolVariant: string;
   draftMode: string;
   fresh20PackSize: number | null;
+  /** Atlas generation/reducer content pinned independently of URL settings. */
+  atlasFoldHash?: string;
+}
+
+export interface PinnedContentConfig extends ContentConfig {
+  atlasFoldHash: string;
 }
 
 /** A current room genesis whose fold-relevant content settings are pinned. */
 export interface PinnedGenesis extends Genesis {
-  contentConfig: ContentConfig;
+  contentConfig: PinnedContentConfig;
 }
 
 /**

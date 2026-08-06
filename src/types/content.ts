@@ -69,7 +69,6 @@ export interface DreamscapeContent {
   guideId: string | null;
   signatureSite: SiteType;
   affiliationId: string | null;
-  siteIcon: string;
   isStarter: boolean;
   fixedSites?: SiteType[];
   dreamAvatarIds: string[];
@@ -111,6 +110,7 @@ export interface ApollyonIncarnationContent {
 export interface AffiliationContent {
   id: string;
   name: string;
+  atlasCardTheme: string;
   signatureCards: string[];
   weightStrength: number;
   opponentBiasStrength: number;

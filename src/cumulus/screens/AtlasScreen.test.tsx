@@ -172,7 +172,6 @@ function makeNode(
     indexInLayer: 0,
     dreamscapeId: null,
     biomeName: "",
-    biomeColor: "",
     sites: [],
     position: { x: 0, y: 0 },
     state,
@@ -213,8 +212,8 @@ function residentModel(): Pick<AtlasNodeModel, "primary" | "dreamsign" | "site" 
     },
     affiliation: {
       id: "00000000-0000-4000-8000-000000000073",
-      name: "Abandon",
-      cardTheme: "Abandon",
+      title: "Fixture affiliation",
+      body: "Fixture cards are more likely here.",
     },
   };
 }
@@ -238,6 +237,7 @@ function nodeItem(
       isBoss: extra.isBoss ?? false,
       isReachable: true,
       iconRef: null,
+      unrevealedFrameRef: artRef.atlasAsset("fixture-frame.png"),
       siteBadgeGlyph: null,
       knownDreamsignRef: null,
     primary: extra.semantic?.primary ?? emptyPrimary(),
@@ -481,8 +481,9 @@ describe("Cumulus AtlasScreen", () => {
       get: () => 844,
     });
     const view = makeView();
+    const resident = residentModel();
     view.nodes[1] = nodeItem("frontier", "available", LayerName.Two, {
-      semantic: residentModel(),
+      semantic: resident,
     });
     const { container, root } = mount(
       <AtlasScreen view={view} onEnterNode={vi.fn()} />,
@@ -500,16 +501,12 @@ describe("Cumulus AtlasScreen", () => {
       );
     });
 
-    expect(document.body.textContent).toContain("Aldric, the Seer");
-    expect(document.body.textContent).toContain("Augury");
-    expect(document.body.textContent).toContain(
-      "Study a curated vision of what waits ahead.",
-    );
-    expect(document.body.textContent).toContain("Affiliation: Abandon");
-    expect(document.body.textContent).toContain(
-      "Abandon cards are more likely here.",
-    );
-    expect(document.body.textContent).toContain("The Glass Orchard");
+    expect(document.body.textContent).toContain(resident.primary.guideName);
+    expect(document.body.textContent).toContain(resident.site?.name);
+    expect(document.body.textContent).toContain(resident.site?.blurb);
+    expect(document.body.textContent).toContain(resident.affiliation?.title);
+    expect(document.body.textContent).toContain(resident.affiliation?.body);
+    expect(document.body.textContent).toContain(resident.primary.placeName);
 
     act(() => {
       root.unmount();

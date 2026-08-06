@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { TRANSFIGURATION_TINT_COLORS } from "../../runtime/transfiguration-display";
+import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
 import type {
   MerchantChoiceCandidate,
   MerchantContext,
@@ -143,6 +144,7 @@ function mappedDeckObject(index: number, entryId: string): MerchantDeckCard {
 const deckObject = mappedDeckObject(0, "entry-fixture");
 
 const mappingContext = {
+  atlasData: MINIMAL_ATLAS_DATA,
   candidateGrantCards: mappingCards
     .slice(0, 4)
     .map((_unused, index) => catalogObject(index)),

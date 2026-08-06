@@ -11,6 +11,7 @@ import type {
   ContentConfig,
   Genesis,
   LogNode,
+  PinnedContentConfig,
   PinnedGenesis,
 } from "../eventlog/types";
 import {
@@ -93,6 +94,8 @@ interface RoomGateProps {
   gameId: string | null;
   /** This client's runtime config; its content slice is pinned into a new room's genesis. */
   runtimeConfig: RuntimeConfig;
+  /** Hash of Atlas sections which influence deterministic folding. */
+  atlasFoldHash: string;
   /** Scene stamped into genesis only when this mount creates a fresh room. */
   frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting" | "journey">;
   children: (context: RoomReadyContext) => ReactNode;
@@ -127,7 +130,7 @@ function freshSeed(): string {
  * client's config so every joiner folds the same content.
  */
 export function createFreshGenesis(
-  contentConfig: ContentConfig,
+  contentConfig: PinnedContentConfig,
   frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting" | "journey">,
 ): PinnedGenesis {
   return {
@@ -157,7 +160,7 @@ const CREATE_ROOM_MAX_ATTEMPTS = 3;
  */
 export async function createAndNavigateToRoom(
   db: Database,
-  contentConfig: ContentConfig,
+  contentConfig: PinnedContentConfig,
   frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting" | "journey">,
 ): Promise<string> {
   for (let attempt = 0; attempt < CREATE_ROOM_MAX_ATTEMPTS; attempt++) {
@@ -208,7 +211,10 @@ export function gateStatusFor(
 function hasPinnedContentConfig(
   genesis: Genesis,
 ): genesis is PinnedGenesis {
-  return genesis.contentConfig !== undefined;
+  return (
+    genesis.contentConfig !== undefined &&
+    typeof genesis.contentConfig.atlasFoldHash === "string"
+  );
 }
 
 function navigateToRoom(roomId: string): void {
@@ -231,13 +237,14 @@ export function RoomGate({
   db,
   gameId,
   runtimeConfig,
+  atlasFoldHash,
   frontDoorEntry,
   children,
 }: RoomGateProps): ReactNode {
   const clientId = useMemo(() => roomScopedClientId(gameId), [gameId]);
   const localContentConfig = useMemo(
-    () => contentConfigFromRuntime(runtimeConfig),
-    [runtimeConfig],
+    () => contentConfigFromRuntime(runtimeConfig, atlasFoldHash),
+    [atlasFoldHash, runtimeConfig],
   );
   const autoCreateFiredRef = useRef(false);
   const [activeRoomId, setActiveRoomId] = useState<string | null>(gameId);
@@ -446,6 +453,7 @@ export function RoomGate({
           gateState.genesis.contentConfig
         }
         localContentConfig={localContentConfig}
+        onStartNewGame={() => void handleCreateGame()}
       />
     );
   }

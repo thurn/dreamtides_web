@@ -44,7 +44,7 @@ export interface JourneyMutations {
   ) => void;
   /** Materialize the shared encounter and every randomized follow-up offer. */
   ensureExplorationSiteRuntime: (siteId: string) => void;
-  /** Materialize Maddox's three persisted home-site choices. */
+  /** Materialize Random Site's configured persisted home choices. */
   ensureRandomSiteRuntime: (siteId: string) => void;
   /** Choose one offered destination; the event log makes first valid choice win. */
   chooseRandomSite: (

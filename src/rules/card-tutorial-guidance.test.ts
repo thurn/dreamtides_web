@@ -123,7 +123,6 @@ function siteState(
             indexInLayer: 0,
             dreamscapeId: "fixture",
             biomeName: "Fixture",
-            biomeColor: "violet",
             sites: [
               {
                 id: siteId,

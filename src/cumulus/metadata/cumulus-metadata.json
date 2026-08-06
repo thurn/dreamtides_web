@@ -122,6 +122,12 @@
             "description": ""
           },
           {
+            "name": "unrevealedFrameRef",
+            "tsType": "ArtRef",
+            "optional": false,
+            "description": ""
+          },
+          {
             "name": "siteBadgeGlyph",
             "tsType": "Glyph | null",
             "optional": false,
@@ -280,6 +286,12 @@
           {
             "name": "iconRef",
             "tsType": "ArtRef | null",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "unrevealedFrameRef",
+            "tsType": "ArtRef",
             "optional": false,
             "description": ""
           },

@@ -34,6 +34,7 @@ The Dream Atlas map surface — the run graph of dreamscape nodes and their conn
 | `isBoss` | `boolean` | no |  |
 | `isReachable` | `boolean` | no |  |
 | `iconRef` | `ArtRef \| null` | no |  |
+| `unrevealedFrameRef` | `ArtRef` | no |  |
 | `siteBadgeGlyph` | `Glyph \| null` | no |  |
 | `knownDreamsignRef` | `ArtRef \| null` | no |  |
 | `badgeScale` | `number` | yes |  |

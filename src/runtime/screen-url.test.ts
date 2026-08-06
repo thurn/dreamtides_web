@@ -26,7 +26,6 @@ function makeNode(
     indexInLayer: 0,
     dreamscapeId: "biome-1",
     biomeName,
-    biomeColor: "#000000",
     sites,
     position: { x: 0, y: 0 },
     state: "available",

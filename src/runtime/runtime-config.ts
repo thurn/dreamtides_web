@@ -1,7 +1,7 @@
 import { DEFAULT_POOL_VARIANT, resolvePoolVariant } from "../draft/pool";
 import type { PoolVariant } from "../draft/pool";
 import { normalizeRoomId } from "../eventlog/room";
-import type { ContentConfig } from "../eventlog/types";
+import type { ContentConfig, PinnedContentConfig } from "../eventlog/types";
 import { asCardId, isCardId, type CardId } from "../types/card-identity";
 import type { GambleGameId } from "../types/gamble";
 
@@ -97,11 +97,15 @@ export type DatabaseMode = "emulator" | "realtime";
  * fold — and join — the same room. Absent optional fields fall back to the
  * same defaults `parseRuntimeConfig` applies.
  */
-export function contentConfigFromRuntime(config: RuntimeConfig): ContentConfig {
+export function contentConfigFromRuntime(
+  config: RuntimeConfig,
+  atlasFoldHash: string,
+): PinnedContentConfig {
   return {
     poolVariant: config.poolVariant ?? DEFAULT_POOL_VARIANT,
     draftMode: config.draftMode ?? "pool",
     fresh20PackSize: config.fresh20PackSize ?? null,
+    atlasFoldHash,
   };
 }
 
@@ -113,7 +117,8 @@ export function contentConfigsEqual(
   return (
     a.poolVariant === b.poolVariant &&
     a.draftMode === b.draftMode &&
-    a.fresh20PackSize === b.fresh20PackSize
+    a.fresh20PackSize === b.fresh20PackSize &&
+    a.atlasFoldHash === b.atlasFoldHash
   );
 }
 

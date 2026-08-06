@@ -11,6 +11,7 @@ interface ConfigGateScreenProps {
   roomContentConfig: ContentConfig | undefined;
   /** This client's local content config, shown alongside the room's for context. */
   localContentConfig: ContentConfig;
+  onStartNewGame: () => void;
 }
 
 /**
@@ -20,17 +21,20 @@ interface ConfigGateScreenProps {
 export function ConfigGateScreen({
   roomContentConfig,
   localContentConfig,
+  onStartNewGame,
 }: ConfigGateScreenProps): ReactNode {
-  const canAdopt = roomContentConfig !== undefined;
+  const canAdopt =
+    roomContentConfig?.atlasFoldHash !== undefined &&
+    roomContentConfig.atlasFoldHash === localContentConfig.atlasFoldHash;
 
   const handleUseRoomSettings = useCallback(() => {
-    if (roomContentConfig === undefined) return;
+    if (!canAdopt || roomContentConfig === undefined) return;
     const nextSearch = applyContentConfigToSearch(
       window.location.search,
       roomContentConfig,
     );
     window.location.search = nextSearch;
-  }, [roomContentConfig]);
+  }, [canAdopt, roomContentConfig]);
 
   return (
     <ApplicationStateScreen
@@ -51,6 +55,11 @@ export function ConfigGateScreen({
           : {
               detail:
                 "This game needs settings this build cannot adopt.",
+              actions: [{
+                id: "primary",
+                label: "Start a New Game",
+                onPress: onStartNewGame,
+              }],
             }),
       }}
     />
@@ -80,6 +89,7 @@ function describeConfig(
       { label: "Pool", value: "Unavailable" },
       { label: "Draft", value: "Unavailable" },
       { label: "Pack Size", value: "Unavailable" },
+      { label: "Atlas Rules", value: "Unavailable" },
     ];
   }
   return [
@@ -88,6 +98,10 @@ function describeConfig(
     {
       label: "Pack Size",
       value: config.fresh20PackSize === null ? "Default" : String(config.fresh20PackSize),
+    },
+    {
+      label: "Atlas Rules",
+      value: config.atlasFoldHash?.slice(0, 12) ?? "Unavailable",
     },
   ];
 }

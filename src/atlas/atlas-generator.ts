@@ -1,5 +1,5 @@
 import type {
-  AtlasConfig,
+  AtlasData,
   DreamAtlas,
   DreamscapeModifier,
   DreamscapeNode,
@@ -17,13 +17,10 @@ import {
   layerOrdinal,
 } from "../types/layer-name";
 import { otherGuideSignatureSites } from "../data/dreamscapes";
-import { GLOSSARY_IDS, requireGlossaryEntry } from "../data/glossary";
 import { draftSiteData } from "../draft/draft-site-config";
 import { logEvent } from "../logging";
-import {
-  RANDOM_SITE_DESTINATIONS,
-} from "../random-site/random-site";
 import type { RandomSiteDestinationType } from "../types/journey";
+import { atlasLayerData } from "../types/atlas-data";
 
 /** Parameters for site generation that require external data. */
 export interface SiteGenerationContext {
@@ -39,12 +36,12 @@ export interface SiteGenerationContext {
  * External data the 7-layer Atlas generator needs: the dreamscape definitions it
  * assigns to nodes, the generation tuning, and the run's dreamsign pool the
  * known-dreamsign placement draws from. Sourced from the compiled TOML bundles
- * (`public/{dreamscapes,atlas-config}-data.json`) and threaded through the journey
+ * (`public/dreamscapes-data.json` and `public/atlas-data.json`) and threaded through the journey
  * content so generation stays synchronous inside reducers.
  */
 export interface AtlasBuildContext {
   dreamscapes: readonly DreamscapeContent[];
-  atlasConfig: AtlasConfig;
+  atlasData: AtlasData;
   /** Dreamsign ids eligible to be granted as pre-revealed known dreamsigns. */
   dreamsignPoolIds: readonly string[];
   /**
@@ -260,75 +257,34 @@ function applySiteAppearanceBoosts(
 }
 
 /**
- * Mandatory draft count for a dreamscape on the given atlas layer. The early
- * layers (I–II) seed the deck with two drafts, the middle layers (III–IV) offer
- * one, and the late layers (V–VII) offer none (the deck is built; later layers
- * favour engine and payoff sites). {@link LayerName.One} is the starter and uses
- * its fixed site list instead.
- */
-function draftCountForLayer(layer: LayerName): number {
-  const ordinal = layerOrdinal(layer);
-  if (ordinal <= 1) {
-    return 2;
-  }
-  if (ordinal <= 3) {
-    return 1;
-  }
-  return 0;
-}
-
-/**
- * Whether Purge is a *mandatory* site for a dreamscape on the given atlas layer.
- * Purge is guaranteed in the early layers so deck-thinning is always available
- * while the deck is still forming; from the later layers it is not guaranteed
- * but can still appear in the random fill. The starter ({@link LayerName.One})
- * carries its own Purge in its fixed site list, so mandatory placement covers
- * Layers II and III.
- */
-function purgeMandatoryForLayer(layer: LayerName): boolean {
-  return layer === LayerName.Two || layer === LayerName.Three;
-}
-
-/**
- * Whether Augury is a *mandatory* site for a dreamscape on the given atlas
- * layer. An Augury is guaranteed somewhere in {@link LayerName.Two} so the
- * player always meets the seer once early in the run; in other layers it can
- * still appear through the random fill. The mandatory Augury is a plain
- * fill-style site (not the enhanced signature site).
- */
-function auguryMandatoryForLayer(layer: LayerName): boolean {
-  return layer === LayerName.Two;
-}
-
-/**
- * The base weighted fill pool for a dreamscape whose own enhanced site is
- * `homeSite`, on the given atlas layer. The fill draws from the other
- * dreamscapes' signature sites plus a generic Essence site. Transfiguration and
- * Duplication — the late-game card-shaping sites — are weighted up in the later
- * layers so deck refinement shows up once the deck is built. Nightmare removal is
- * handled at the Purge site, which appears in the mandatory early-layer slots.
+ * Resolves the authored base fill profile for a layer. Other guides' signature
+ * sites receive the profile default; explicit site weights both override a
+ * signature weight and add generic candidates such as Essence.
  */
 function buildFillPool(
   layer: LayerName,
   homeSite: SiteType,
   dreamscapes: readonly DreamscapeContent[],
+  atlasData: AtlasData,
 ): Array<[SiteType, number]> {
-  const lateGame = layerOrdinal(layer) >= 4;
-  const pool: Array<[SiteType, number]> = [];
+  const layerData = atlasLayerData(atlasData, layer);
+  const profile = layerData.fillProfile === null
+    ? null
+    : atlasData.fillProfiles[layerData.fillProfile];
+  if (profile === null || profile === undefined) return [];
+  const weights = new Map<SiteType, number>();
 
   for (const siteType of otherGuideSignatureSites(dreamscapes, homeSite)) {
-    let weight = 3;
-    if (siteType === "Transfiguration" || siteType === "Duplication") {
-      // The card-shaping sites become more common in the later layers.
-      weight = lateGame ? 5 : 1;
-    }
-    pool.push([siteType, weight]);
+    weights.set(
+      siteType,
+      profile.siteWeights[siteType] ?? profile.signatureSiteWeight,
+    );
   }
-
-  // A generic Essence site is always an eligible fill option.
-  pool.push(["Essence", 3]);
-
-  return pool;
+  for (const [siteType, weight] of Object.entries(profile.siteWeights)) {
+    weights.set(siteType as SiteType, weight);
+  }
+  weights.delete(homeSite);
+  return [...weights.entries()].filter(([, weight]) => weight > 0);
 }
 
 /**
@@ -342,9 +298,10 @@ export function additionalSiteTypesForLevel(
   homeSite: SiteType,
   dreamscapes: readonly DreamscapeContent[],
   context: SiteGenerationContext,
+  atlasData: AtlasData,
 ): SiteType[] {
   return applySiteRemovalModifiers(
-    buildFillPool(layer, homeSite, dreamscapes),
+    buildFillPool(layer, homeSite, dreamscapes, atlasData),
     context.dreamscapeModifiers,
   ).map(([siteType]) => siteType);
 }
@@ -357,6 +314,8 @@ export interface SiteCompositionInput {
   dreamscape: DreamscapeContent | null;
   /** Every dreamscape definition, used to source the fill pool. */
   dreamscapes: readonly DreamscapeContent[];
+  /** Authored Atlas rules used for this composition. */
+  atlasData: AtlasData;
   /** Site-generation tuning (active dreamscape modifiers). */
   context: SiteGenerationContext;
   /**
@@ -364,6 +323,8 @@ export interface SiteCompositionInput {
    * fill slot becomes a Dreamsign Reward site granting that dreamsign on visit.
    */
   hasKnownDreamsign?: boolean;
+  /** Deterministic random source for direct composition tests and tools. */
+  rng?: () => number;
 }
 
 /** The result of composing a dreamscape's sites. */
@@ -385,11 +346,12 @@ function makeSite(type: SiteType, isEnhanced: boolean): SiteState {
 }
 
 function randomSiteCandidates(
+  atlasData: AtlasData,
   usedTypes: ReadonlySet<SiteType>,
   modifiers: readonly DreamscapeModifier[] = [],
 ): RandomSiteDestinationType[] {
   const removed = removedSiteTypesFromModifiers(modifiers);
-  return RANDOM_SITE_DESTINATIONS.filter(
+  return atlasData.randomSite.destinations.filter(
     (type) => !usedTypes.has(type) && !removed.has(type),
   );
 }
@@ -397,16 +359,22 @@ function randomSiteCandidates(
 function makeRandomSite(
   mode: "single" | "homeChoice",
   candidates: RandomSiteDestinationType[],
+  homeChoiceCount: number,
+  awayChoiceCount: number,
+  guideId: string | null,
 ): SiteState {
-  if (mode === "homeChoice" && candidates.length < 3) {
-    throw new Error("Random Site home choice requires at least three eligible destinations.");
+  if (mode === "homeChoice" && candidates.length < homeChoiceCount) {
+    throw new Error(
+      `Random Site home choice requires at least ${String(homeChoiceCount)} eligible destinations.`,
+    );
   }
   const destinationSiteType =
-    mode === "single" && candidates.length > 0
+    mode === "single" && awayChoiceCount === 1 && candidates.length > 0
       ? candidates[randomInt(0, candidates.length - 1)]
       : undefined;
   return {
     ...makeSite("RandomSite", true),
+    ...(guideId === null ? {} : { guideIdOverride: guideId }),
     randomSite: {
       mode,
       candidateSiteTypes: candidates,
@@ -424,11 +392,10 @@ function makeRandomSite(
  * site list with no enhancement and no fill. Every other dreamscape is built
  * from:
  *
- * - **Mandatory** sites: the home guide's signature site, marked enhanced; a
- *   Purge in the early layers (see {@link purgeMandatoryForLayer}); Draft sites
- *   per {@link draftCountForLayer}; and a Battle, placed last.
- * - **Fill** sites drawn from the other dreamscapes' signature sites plus
- *   Essence (see {@link buildFillPool}), sampled without replacement so every
+ * - **Mandatory** sites: the home guide's signature site, marked enhanced;
+ *   authored per-layer site counts; and a structural Battle, placed last.
+ * - **Fill** sites drawn from the layer's configured profile (including other
+ *   dreamscapes' signature sites), sampled without replacement so every
  *   non-Draft type appears at most once. A known-dreamsign carrier consumes one
  *   fill slot with a Dreamsign Reward site.
  *
@@ -438,7 +405,20 @@ export function generateSiteComposition(
   input: SiteCompositionInput,
   logEvents = false,
 ): SiteCompositionResult {
-  const { layer, dreamscape, dreamscapes, context, hasKnownDreamsign } = input;
+  const previousAtlasRandom = atlasRandom;
+  atlasRandom = input.rng ?? atlasRandom;
+  try {
+    return generateSiteCompositionInternal(input, logEvents);
+  } finally {
+    atlasRandom = previousAtlasRandom;
+  }
+}
+
+function generateSiteCompositionInternal(
+  input: SiteCompositionInput,
+  logEvents: boolean,
+): SiteCompositionResult {
+  const { layer, dreamscape, dreamscapes, atlasData, context, hasKnownDreamsign } = input;
 
   // Starter dreamscape: fixed list, no enhancement, no fill.
   if (dreamscape?.isStarter === true && dreamscape.fixedSites !== undefined) {
@@ -456,6 +436,8 @@ export function generateSiteComposition(
   }
 
   const homeSite = dreamscape?.signatureSite ?? null;
+  const layerData = atlasLayerData(atlasData, layer);
+  const randomSiteGuideId = atlasData.randomSite.guideId;
   // Types already placed, so fill never duplicates a non-Draft type.
   const usedTypes = new Set<SiteType>();
   // Non-battle sites, in visit order. Battle is appended last at the end.
@@ -469,28 +451,21 @@ export function generateSiteComposition(
     enhancedSiteType = homeSite;
   }
 
-  // --- Mandatory: Draft sites per the layer table. ---
-  const draftCount = draftCountForLayer(layer);
-  for (let i = 0; i < draftCount; i++) {
-    preBattle.push(makeSite("Draft", false));
-  }
-
-  // --- Mandatory: Purge in the early layers. ---
-  if (purgeMandatoryForLayer(layer) && !usedTypes.has("Purge")) {
-    preBattle.push(makeSite("Purge", false));
-    usedTypes.add("Purge");
-  }
-
-  // --- Mandatory: Augury in Layer II. ---
-  if (auguryMandatoryForLayer(layer) && !usedTypes.has("Augury")) {
-    preBattle.push(makeSite("Augury", false));
-    usedTypes.add("Augury");
+  // --- Mandatory sites authored per layer. Draft may repeat; other types do not. ---
+  for (const [mandatoryType, count] of Object.entries(layerData.mandatorySites)) {
+    const siteType = mandatoryType as SiteType;
+    for (let index = 0; index < count; index += 1) {
+      if (siteType !== "Draft" && usedTypes.has(siteType)) break;
+      preBattle.push(makeSite(siteType, false));
+      if (siteType !== "Draft") usedTypes.add(siteType);
+    }
   }
 
   // --- Known-dreamsign carrier: one fill slot becomes a Dreamsign Reward. ---
-  if (hasKnownDreamsign === true && !usedTypes.has("Reward")) {
-    preBattle.push(makeSite("Reward", false));
-    usedTypes.add("Reward");
+  const knownDreamsignSite = atlasData.siteComposition.knownDreamsignSite;
+  if (hasKnownDreamsign === true && !usedTypes.has(knownDreamsignSite)) {
+    preBattle.push(makeSite(knownDreamsignSite, false));
+    usedTypes.add(knownDreamsignSite);
   }
 
   // --- Fill from the weighted pool until total sites reach 3-6. ---
@@ -499,7 +474,7 @@ export function generateSiteComposition(
   // site keeps every guide site in the pool when the node has no dreamscape.
   const fillPool = applySiteAppearanceBoosts(
     applySiteRemovalModifiers(
-      buildFillPool(layer, homeSite ?? "Battle", dreamscapes),
+      buildFillPool(layer, homeSite ?? "Battle", dreamscapes, atlasData),
       context.dreamscapeModifiers,
     ),
     context.dreamscapeModifiers,
@@ -512,8 +487,12 @@ export function generateSiteComposition(
     type,
     weight,
   }));
-  const minPreBattle = 2;
-  const maxPreBattle = 5;
+  const siteCount = layerData.siteCount;
+  if (siteCount === null) {
+    throw new Error(`Atlas layer ${layer} has no non-starter site-count rules.`);
+  }
+  const minPreBattle = Math.max(0, siteCount.min - 1);
+  const maxPreBattle = Math.max(0, siteCount.max - 1);
   const minFill = Math.max(0, minPreBattle - preBattle.length);
   const maxFill = Math.max(minFill, maxPreBattle - preBattle.length);
   const fillCount = Math.min(randomInt(minFill, maxFill), remainingPool.length);
@@ -524,7 +503,8 @@ export function generateSiteComposition(
         const prospective = new Set(usedTypes);
         prospective.add(remainingPool[index][0]);
         if (
-          randomSiteCandidates(prospective, context.dreamscapeModifiers).length < 3
+          randomSiteCandidates(atlasData, prospective, context.dreamscapeModifiers).length <
+            atlasData.randomSite.homeChoiceCount
         ) {
           remainingPool.splice(index, 1);
         }
@@ -534,10 +514,17 @@ export function generateSiteComposition(
     const siteType = weightedPick(remainingPool);
     if (siteType === "RandomSite") {
       const candidates = randomSiteCandidates(
+        atlasData,
         usedTypes,
         context.dreamscapeModifiers,
       );
-      const randomSite = makeRandomSite("single", candidates);
+      const randomSite = makeRandomSite(
+        "single",
+        candidates,
+        atlasData.randomSite.homeChoiceCount,
+        atlasData.randomSite.awayChoiceCount,
+        randomSiteGuideId,
+      );
       preBattle.push(randomSite);
       if (randomSite.randomSite?.destinationSiteType !== undefined) {
         usedTypes.add(randomSite.randomSite.destinationSiteType);
@@ -566,12 +553,19 @@ export function generateSiteComposition(
         .filter((type) => type !== "RandomSite"),
     );
     const candidates = randomSiteCandidates(
+      atlasData,
       occupiedGuideTypes,
       context.dreamscapeModifiers,
     );
     const homeIndex = preBattle.findIndex((site) => site.type === "RandomSite");
     if (homeIndex >= 0) {
-      preBattle[homeIndex] = makeRandomSite("homeChoice", candidates);
+      preBattle[homeIndex] = makeRandomSite(
+        "homeChoice",
+        candidates,
+        atlasData.randomSite.homeChoiceCount,
+        atlasData.randomSite.awayChoiceCount,
+        randomSiteGuideId,
+      );
     }
   }
 
@@ -585,9 +579,7 @@ export function generateSiteComposition(
       isStarter: false,
       homeSite,
       enhancedSiteType,
-      draftCount,
-      purgeMandatory: purgeMandatoryForLayer(layer),
-      auguryMandatory: auguryMandatoryForLayer(layer),
+      mandatorySites: layerData.mandatorySites,
       hasKnownDreamsign: hasKnownDreamsign === true,
       fillWeights: fillDistribution,
       fillChosen: chosenFill,
@@ -606,31 +598,9 @@ export function generateSiteComposition(
   return { sites, enhancedSiteType };
 }
 
-/** Default accent colour for a node before a dreamscape is assigned. */
-const UNREVEALED_NODE_COLOR = "#2d2040";
-
-/**
- * Aesthetic accent colours cycled across dreamscapes for visual variety on the
- * Atlas. The dreamscape's identity comes from its `DreamscapeContent`; this is
- * purely flavour applied at reveal time, derived deterministically from the
- * dreamscape id so a given dreamscape always renders the same colour.
- */
-const ACCENT_COLORS: readonly string[] = [
-  "#34d399",
-  "#c084fc",
-  "#f87171",
-  "#38bdf8",
-  "#a78bfa",
-  "#2dd4bf",
-  "#fb923c",
-  "#22d3ee",
-  "#f472b6",
-  "#facc15",
-];
-
 /**
  * FNV-1a hash of a string. Used to derive deterministic per-node and
- * per-dreamscape selections (accent colour, atlas preview site).
+ * per-node Atlas preview selections.
  */
 function fnv1aHash(value: string): number {
   const HASH_OFFSET_BASIS = 2166136261;
@@ -641,11 +611,6 @@ function fnv1aHash(value: string): number {
     hash = Math.imul(hash, HASH_PRIME) >>> 0;
   }
   return hash;
-}
-
-/** Deterministic accent colour for a dreamscape, by its id. */
-function accentColorForDreamscape(dreamscapeId: string): string {
-  return ACCENT_COLORS[fnv1aHash(dreamscapeId) % ACCENT_COLORS.length];
 }
 
 /**
@@ -683,8 +648,10 @@ interface AtlasState {
 }
 
 /** Rolls each layer's width from its spec. Layers I and VII are always width 1. */
-function rollLayerWidths(config: AtlasConfig): number[] {
-  return config.layerSpecs.map((spec) => randomInt(spec.min, spec.max));
+function rollLayerWidths(config: AtlasData): number[] {
+  return config.layers.map((layer) =>
+    randomInt(layer.nodeCount.min, layer.nodeCount.max),
+  );
 }
 
 /**
@@ -784,24 +751,29 @@ function drawDreamscapeForNode(
   node: DreamscapeNode,
 ): DreamscapeContent {
   const nonStarter = state.context.dreamscapes.filter((d) => !d.isStarter);
-  const connectedIds = [...node.forwardIds, ...node.backwardIds];
-  const ineligibleDreamscapeIds = new Set(
-    connectedIds
-      .map((id) => state.atlas.nodes[id]?.dreamscapeId)
-      .filter((id): id is string => id !== null && id !== undefined),
-  );
+  const selection = state.context.atlasData.dreamscapeSelection;
+  const ineligibleDreamscapeIds = new Set<string>();
+  if (selection.excludeConnectedRepeats) {
+    const connectedIds = [...node.forwardIds, ...node.backwardIds];
+    for (const id of connectedIds) {
+      const dreamscapeId = state.atlas.nodes[id]?.dreamscapeId;
+      if (dreamscapeId !== null && dreamscapeId !== undefined) {
+        ineligibleDreamscapeIds.add(dreamscapeId);
+      }
+    }
+  }
 
   // No two nodes in the same layer may carry the same dreamscape. Same-layer
   // siblings are not necessarily connected to one another, so exclude every
   // already-assigned same-layer dreamscape explicitly, not just connected ones.
-  const sameLayerIds = state.atlas.layers[layerOrdinal(node.layer)] ?? [];
-  for (const siblingId of sameLayerIds) {
-    if (siblingId === node.id) {
-      continue;
-    }
-    const siblingDreamscapeId = state.atlas.nodes[siblingId]?.dreamscapeId;
-    if (siblingDreamscapeId !== null && siblingDreamscapeId !== undefined) {
-      ineligibleDreamscapeIds.add(siblingDreamscapeId);
+  if (selection.excludeSameLayerRepeats) {
+    const sameLayerIds = state.atlas.layers[layerOrdinal(node.layer)] ?? [];
+    for (const siblingId of sameLayerIds) {
+      if (siblingId === node.id) continue;
+      const siblingDreamscapeId = state.atlas.nodes[siblingId]?.dreamscapeId;
+      if (siblingDreamscapeId !== null && siblingDreamscapeId !== undefined) {
+        ineligibleDreamscapeIds.add(siblingDreamscapeId);
+      }
     }
   }
 
@@ -811,26 +783,42 @@ function drawDreamscapeForNode(
   const candidates = eligible.length > 0 ? eligible : nonStarter;
   const weighted = candidates.map((d): [DreamscapeContent, number] => [
       d,
-      state.dreamscapeWeights.get(d.id) ?? 1,
+      state.dreamscapeWeights.get(d.id) ?? selection.baseWeight,
   ]);
-  return weightedPick(weighted);
+  const selected = weightedPick(weighted);
+  if (state.logEvents) {
+    logEvent("atlas_dreamscape_selected", {
+      nodeId: node.id,
+      layer: node.layer,
+      excludedDreamscapeIds: [...ineligibleDreamscapeIds],
+      exhaustionFallbackUsed: eligible.length === 0,
+      candidates: weighted.map(([dreamscape, weight]) => ({
+        dreamscapeId: dreamscape.id,
+        weight,
+      })),
+      selectedDreamscapeId: selected.id,
+    });
+  }
+  return selected;
 }
 
 /** Reduces a placed dreamscape's draw weight, keeping it strictly positive. */
 function discourageRepeat(state: AtlasState, dreamscapeId: string): void {
   const strength = Math.max(
     1,
-    state.context.atlasConfig.repeatDiscourageStrength,
+    state.context.atlasData.dreamscapeSelection.repeatDiscourageStrength,
   );
-  const current = state.dreamscapeWeights.get(dreamscapeId) ?? 1;
+  const current =
+    state.dreamscapeWeights.get(dreamscapeId) ??
+    state.context.atlasData.dreamscapeSelection.baseWeight;
   state.dreamscapeWeights.set(dreamscapeId, current / strength);
 }
 
 /**
  * Assigns a dreamscape to a node and builds its sites. The {@link LayerName.One}
- * node always receives the starter dreamscape; the {@link LayerName.Seven} node
- * and every interior node draw from the non-starter dreamscapes. Idempotent: a
- * node that already carries a dreamscape is returned unchanged.
+ * node always receives the starter dreamscape; the configured boss node is the
+ * special Limbo place; every interior node draws from non-starter dreamscapes.
+ * Idempotent: a node that already carries a dreamscape is returned unchanged.
  */
 function revealNodeDreamscape(state: AtlasState, nodeId: string): void {
   const node = state.atlas.nodes[nodeId];
@@ -844,10 +832,14 @@ function revealNodeDreamscape(state: AtlasState, nodeId: string): void {
     return;
   }
 
-  const isFirstDreamscape = node.layer === LayerName.One;
+  const layerRule = atlasLayerData(state.context.atlasData, node.layer);
+  const isFirstDreamscape = layerRule.role === "starter";
+  const isBoss = layerRule.role === "boss";
   const starter = state.context.dreamscapes.find((d) => d.isStarter);
   let dreamscape: DreamscapeContent | null;
-  if (isFirstDreamscape && starter !== undefined) {
+  if (isBoss) {
+    dreamscape = null;
+  } else if (isFirstDreamscape && starter !== undefined) {
     dreamscape = starter;
   } else if (state.context.dreamscapes.some((d) => !d.isStarter)) {
     dreamscape = drawDreamscapeForNode(state, node);
@@ -866,6 +858,7 @@ function revealNodeDreamscape(state: AtlasState, nodeId: string): void {
       layer: node.layer,
       dreamscape,
       dreamscapes: state.context.dreamscapes,
+      atlasData: state.context.atlasData,
       context: state.siteContext,
       hasKnownDreamsign: (node.knownDreamsignId ?? null) !== null,
     },
@@ -874,12 +867,12 @@ function revealNodeDreamscape(state: AtlasState, nodeId: string): void {
 
   state.atlas.nodes[nodeId] = {
     ...node,
-    dreamscapeId: dreamscape?.id ?? null,
-    biomeName: dreamscape?.name ?? "",
-    biomeColor:
-      dreamscape === null
-        ? UNREVEALED_NODE_COLOR
-        : accentColorForDreamscape(dreamscape.id),
+    dreamscapeId: isBoss
+      ? state.context.atlasData.boss.dreamscapeId
+      : (dreamscape?.id ?? null),
+    biomeName: isBoss
+      ? state.context.atlasData.boss.place
+      : (dreamscape?.name ?? ""),
     sites,
     enhancedSiteType,
   };
@@ -889,15 +882,21 @@ function revealNodeDreamscape(state: AtlasState, nodeId: string): void {
       nodeId,
       layer: node.layer,
       indexInLayer: node.indexInLayer,
-      dreamscapeId: dreamscape?.id ?? null,
-      dreamscapeName: dreamscape?.name ?? null,
+      dreamscapeId: isBoss
+        ? state.context.atlasData.boss.dreamscapeId
+        : (dreamscape?.id ?? null),
+      dreamscapeName: isBoss
+        ? state.context.atlasData.boss.place
+        : (dreamscape?.name ?? null),
+      nodeRole: layerRule.role,
       signatureSite: dreamscape?.signatureSite ?? null,
       enhancedSiteType,
       siteTypes: sites.map((s) => s.type),
       remainingWeight:
         dreamscape === null
           ? null
-          : (state.dreamscapeWeights.get(dreamscape.id) ?? 1),
+          : (state.dreamscapeWeights.get(dreamscape.id) ??
+            state.context.atlasData.dreamscapeSelection.baseWeight),
     });
   }
 }
@@ -933,16 +932,14 @@ function placeKnownDreamsigns(
   state: AtlasState,
   startRevealedNodeIds: ReadonlySet<string>,
 ): void {
-  const cfg = state.context.atlasConfig.knownDreamsign;
+  const cfg = state.context.atlasData.knownDreamsign;
   if (cfg.maxPerAtlas <= 0 || state.remainingDreamsignIds.length === 0) {
     return;
   }
 
-  // `eligible-layers` in the config lists 1-based, player-facing layer numbers
-  // (`3` = Layer III); convert each to the 0-based ordinal used to index the
-  // `layers` array, dropping any that fall outside the generated layers.
+  // Convert authored layer names to the ordinals used by the persisted arrays.
   const eligibleOrdinals = cfg.eligibleLayers
-    .map((displayNumber) => displayNumber - 1)
+    .map((layer) => layerOrdinal(layer))
     .filter((ordinal) => ordinal >= 0 && ordinal < state.atlas.layers.length);
 
   // Candidate nodes, biased toward earlier layers and toward the start-reveal
@@ -1035,7 +1032,7 @@ function generateInitialAtlasInternal(
   resetAtlasGenerator();
   const logEvents = options.logEvents !== false;
 
-  const widths = rollLayerWidths(build.atlasConfig);
+  const widths = rollLayerWidths(build.atlasData);
   const layers: string[][] = [];
   const nodes: Record<string, DreamscapeNode> = {};
 
@@ -1044,7 +1041,7 @@ function generateInitialAtlasInternal(
     if (layerName === undefined) {
       throw new Error(
         `Atlas layer ordinal ${String(ordinal)} has no LayerName; ` +
-          `atlas-config layer-specs must define at most ${String(LAYER_COUNT)} layers.`,
+          `atlas-data layer-specs must define at most ${String(LAYER_COUNT)} layers.`,
       );
     }
     const layerIds: string[] = [];
@@ -1056,7 +1053,6 @@ function generateInitialAtlasInternal(
         indexInLayer,
         dreamscapeId: null,
         biomeName: "",
-        biomeColor: UNREVEALED_NODE_COLOR,
         sites: [],
         position: nodePosition(ordinal, indexInLayer, widths[ordinal]),
         state: "unrevealed",
@@ -1077,7 +1073,7 @@ function generateInitialAtlasInternal(
     wireLayerConnections(
       fromNodes,
       toNodes,
-      build.atlasConfig.connectionAverage,
+      build.atlasData.graph.connectionAverage,
     );
   }
 
@@ -1094,7 +1090,10 @@ function generateInitialAtlasInternal(
   const dreamscapeWeights = new Map<string, number>();
   for (const dreamscape of build.dreamscapes) {
     if (!dreamscape.isStarter) {
-      dreamscapeWeights.set(dreamscape.id, 1);
+      dreamscapeWeights.set(
+        dreamscape.id,
+        build.atlasData.dreamscapeSelection.baseWeight,
+      );
     }
   }
 
@@ -1119,7 +1118,7 @@ function generateInitialAtlasInternal(
   };
 
   if (logEvents) {
-    const cfg = build.atlasConfig;
+    const cfg = build.atlasData;
     // Wired forward connections, the load-bearing random output of the extra-edge
     // phase. Logged both as a per-node map (forwardIds) and a flat per-gap edge
     // list ([fromLayer, fromIndex] -> [toLayer, toIndex]) so the exact graph can
@@ -1149,7 +1148,7 @@ function generateInitialAtlasInternal(
     }
     logEvent("atlas_generated", {
       layerWidths: widths,
-      connectionAverage: cfg.connectionAverage,
+      connectionAverage: cfg.graph.connectionAverage,
       startingNodeId,
       bossNodeId,
       // The Apollyon guise chosen for the boss node, plus the pool it was drawn
@@ -1161,14 +1160,13 @@ function generateInitialAtlasInternal(
       // Effective TOML tuning that drove every random draw, captured because the
       // production tuning is subject to change and a later log read needs to know
       // which tuning produced this atlas.
-      atlasConfig: {
-        repeatDiscourageStrength: cfg.repeatDiscourageStrength,
-        connectionAverage: cfg.connectionAverage,
-        bonusReveal: {
-          min: cfg.bonusReveal.min,
-          max: cfg.bonusReveal.max,
-          mode: cfg.bonusReveal.mode,
-        },
+      atlasData: {
+        contentHash: cfg.contentHash,
+        foldHash: cfg.foldHash,
+        layers: cfg.layers,
+        graph: cfg.graph,
+        dreamscapeSelection: cfg.dreamscapeSelection,
+        fillProfiles: cfg.fillProfiles,
         knownDreamsign: {
           maxPerAtlas: cfg.knownDreamsign.maxPerAtlas,
           eligibleLayers: [...cfg.knownDreamsign.eligibleLayers],
@@ -1182,12 +1180,13 @@ function generateInitialAtlasInternal(
   // Bonus reveals: a bell-curve count of nodes from the deepest two interior
   // layers (Layers V and VI, ordinals 4 and 5) revealed at the start of the run.
   const bonusCount = triangularInt(
-    build.atlasConfig.bonusReveal.min,
-    build.atlasConfig.bonusReveal.max,
-    build.atlasConfig.bonusReveal.mode,
+    build.atlasData.graph.bonusReveal.min,
+    build.atlasData.graph.bonusReveal.max,
+    build.atlasData.graph.bonusReveal.mode,
   );
   const bonusPool: string[] = [];
-  for (const ordinal of [4, 5]) {
+  for (const eligibleLayer of build.atlasData.graph.bonusReveal.eligibleLayers) {
+    const ordinal = layerOrdinal(eligibleLayer);
     if (ordinal < layers.length - 1) {
       bonusPool.push(...layers[ordinal]);
     }
@@ -1281,7 +1280,10 @@ function advanceAtlasInternal(
   const dreamscapeWeights = new Map<string, number>();
   for (const dreamscape of build.dreamscapes) {
     if (!dreamscape.isStarter) {
-      dreamscapeWeights.set(dreamscape.id, 1);
+      dreamscapeWeights.set(
+        dreamscape.id,
+        build.atlasData.dreamscapeSelection.baseWeight,
+      );
     }
   }
   for (const node of Object.values(atlas.nodes)) {
@@ -1291,8 +1293,12 @@ function advanceAtlasInternal(
     ) {
       dreamscapeWeights.set(
         node.dreamscapeId,
-        (dreamscapeWeights.get(node.dreamscapeId) ?? 1) /
-          Math.max(1, build.atlasConfig.repeatDiscourageStrength),
+        (dreamscapeWeights.get(node.dreamscapeId) ??
+          build.atlasData.dreamscapeSelection.baseWeight) /
+          Math.max(
+            1,
+            build.atlasData.dreamscapeSelection.repeatDiscourageStrength,
+          ),
       );
     }
   }
@@ -1347,9 +1353,11 @@ function advanceAtlasInternal(
     setNodeState(state, targetId, "available");
   }
 
-  // Reveal the layer two ahead of the completed layer.
+  // Reveal the configured number of layers ahead of the completed layer.
   const nextLayers = Array.isArray(nextAtlas.layers) ? nextAtlas.layers : [];
-  const revealOrdinal = layerOrdinal(completedNode.layer) + 2;
+  const revealOrdinal =
+    layerOrdinal(completedNode.layer) +
+    build.atlasData.graph.revealLookaheadLayers;
   if (revealOrdinal < nextLayers.length) {
     const revealLayerNodes = nextLayers[revealOrdinal];
     for (const nodeId of Array.isArray(revealLayerNodes)
@@ -1518,160 +1526,6 @@ export function regenerateAtlasForProgress(
 }
 
 /**
- * Boxicons class name shown for the starting dreamscape on the atlas. The start
- * gets its own flag glyph rather than a site icon because it is special: it is
- * where the player's journey begins and it never has an enhanced site.
- */
-export const STARTING_DREAMSCAPE_ICON_CLASS = "bx bx-flag";
-
-/**
- * Metadata for each site type. `icon` is a Boxicons (v3) class name following
- * the suggestions in `docs/journeys/journeys.md`; icons are rendered with the
- * vendored Boxicons webfont rather than emoji so they stay visually consistent
- * with the rest of the UI.
- */
-const SITE_TYPE_META: Record<
-  SiteType,
-  {
-    icon: string;
-    glossaryId: string;
-  }
-> = {
-  Battle: {
-    icon: "bxf bx-sword-alt",
-    glossaryId: GLOSSARY_IDS.sites.Battle,
-  },
-  Draft: {
-    icon: "bxf bx-rectangle-vertical",
-    glossaryId: GLOSSARY_IDS.sites.Draft,
-  },
-  Shop: {
-    icon: "bxf bx-store-alt-2",
-    glossaryId: GLOSSARY_IDS.sites.Shop,
-  },
-  Purge: {
-    icon: "bxf bx-hot",
-    glossaryId: GLOSSARY_IDS.sites.Purge,
-  },
-  Essence: {
-    icon: "bxf bx-diamond-alt",
-    glossaryId: GLOSSARY_IDS.sites.Essence,
-  },
-  Transfiguration: {
-    icon: "fa-solid fa-hammer",
-    glossaryId: GLOSSARY_IDS.sites.Transfiguration,
-  },
-  Duplication: {
-    icon: "bxf bx-copy",
-    glossaryId: GLOSSARY_IDS.sites.Duplication,
-  },
-  Reward: {
-    icon: "bxf bx-treasure-chest",
-    glossaryId: GLOSSARY_IDS.sites.Reward,
-  },
-  Augury: {
-    icon: "bxf bx-eye",
-    glossaryId: GLOSSARY_IDS.sites.Augury,
-  },
-  DreamsignMarket: {
-    icon: "bxf bx-pyramid",
-    glossaryId: GLOSSARY_IDS.sites.DreamsignMarket,
-  },
-  DreamsignRevelation: {
-    icon: "bxf bx-meteor",
-    glossaryId: GLOSSARY_IDS.sites.DreamsignRevelation,
-  },
-  RandomSite: {
-    icon: "fa-solid fa-question",
-    glossaryId: GLOSSARY_IDS.sites.RandomSite,
-  },
-  Gamble: {
-    icon: "bxf bx-coin",
-    glossaryId: GLOSSARY_IDS.sites.Gamble,
-  },
-  Exploration: {
-    icon: "bxf bx-compass",
-    glossaryId: GLOSSARY_IDS.sites.Exploration,
-  },
-};
-
-/**
- * The canonical list of every {@link SiteType}, derived from the single
- * `SITE_TYPE_META` source of truth. Used by the screen-router dispatch
- * completeness tests so a newly added site type is automatically exercised.
- */
-export const ALL_SITE_TYPES: readonly SiteType[] = Object.keys(
-  SITE_TYPE_META,
-) as SiteType[];
-
-/**
- * Neutral metadata used when a node carries a site type that is not in the
- * current {@link SITE_TYPE_META} table. A persisted save from an earlier build
- * can reference a site type string that the current build does not define; the
- * atlas and dreamscape renderers look these values up by `site.type`, so a
- * missing entry would throw while reading `.icon`/`.name`. Falling back to this
- * placeholder keeps those screens rendering a safe neutral marker instead of
- * white-screening for a player or QA loading an old save.
- */
-const FALLBACK_SITE_TYPE_META = {
-  icon: "bx bx-help-circle",
-  name: "Unknown Site",
-  description: "An unfamiliar site from an earlier dream.",
-} as const;
-
-/**
- * Resolves the metadata for `siteType`, returning a neutral placeholder for any
- * value absent from {@link SITE_TYPE_META}. The cast on the lookup is required
- * because callers may pass a legacy site-type string that is not assignable to
- * the current {@link SiteType} union.
- */
-function siteTypeMeta(siteType: SiteType): {
-  icon: string;
-  glossaryId: string;
-} | null {
-  return (SITE_TYPE_META as Record<string, (typeof SITE_TYPE_META)[SiteType]>)[
-    siteType
-  ] ?? null;
-}
-
-/** Returns the Boxicons class name for the given site type. */
-export function siteTypeIcon(siteType: SiteType): string {
-  return siteTypeMeta(siteType)?.icon ?? FALLBACK_SITE_TYPE_META.icon;
-}
-
-/** Returns the display name for the given site type. */
-export function siteTypeName(siteType: SiteType): string {
-  const meta = siteTypeMeta(siteType);
-  return meta === null
-    ? FALLBACK_SITE_TYPE_META.name
-    : requireGlossaryEntry(meta.glossaryId).term;
-}
-
-/** Returns a one-line description for the given site type. */
-export function siteTypeDescription(siteType: SiteType): string {
-  const meta = siteTypeMeta(siteType);
-  return meta === null
-    ? FALLBACK_SITE_TYPE_META.description
-    : requireGlossaryEntry(meta.glossaryId).definition;
-}
-
-/**
- * Returns the preview site types for a node tooltip.
- * Shows 2-3 non-draft, non-battle site icons.
- */
-export function previewSiteTypes(node: DreamscapeNode): SiteType[] {
-  const excluded: Set<SiteType> = new Set(["Battle", "Draft"]);
-  // A persisted node can lack a `sites` array entirely (RTDB drops empty arrays
-  // on write); treat that as no previewable sites rather than throwing while the
-  // atlas renders, matching `revealedAtlasSite`.
-  const sites = Array.isArray(node.sites) ? node.sites : [];
-  return sites
-    .filter((s) => !excluded.has(s.type))
-    .map((s) => s.type)
-    .slice(0, 3);
-}
-
-/**
  * Returns the single site to reveal on the Atlas screen for the given
  * dreamscape node. Selection rules:
  *
@@ -1709,16 +1563,6 @@ export function revealedAtlasSite(node: DreamscapeNode): SiteState | null {
 
   const index = fnv1aHash(node.id) % candidates.length;
   return candidates[index];
-}
-
-/**
- * Returns a reward preview label for atlas tooltip display, or null if not a
- * reward site. Reward sites already show "Reward" as their primary label via
- * `siteTypeName`, so returning a value here would duplicate the copy. Returning
- * null leaves the subtitle absent rather than repeating the title.
- */
-export function rewardPreviewLabel(_site: SiteState): string | null {
-  return null;
 }
 
 /**

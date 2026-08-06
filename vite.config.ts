@@ -454,7 +454,7 @@ function dreamwellDataHotReloadPlugin(): Plugin {
  * a running battle/journey app when one is edited. The configs covered are the
  * single-TOML-to-single-JSON catalogs registered in scripts/config-data.mjs
  * (`dreamscapes.toml`, `dream_guides.toml`, `affiliations.toml`,
- * `atlas_config.toml`, `apollyon_incarnations.toml`, `dreamsign_profiles.toml`).
+ * `atlas.toml`, `apollyon_incarnations.toml`, `dreamsign_profiles.toml`).
  *
  * The dev watcher ignores `data/tabula/` (see `server.watch.ignored`), so a TOML
  * save normally has no effect on the page. This plugin watches the directory
@@ -945,7 +945,7 @@ export default defineConfig({
         // that closes the open card editor mid-edit.
         path.resolve(path.join(__dirname, "public", "dreamwell-data.json")),
         ...generatedCardDataWatchPaths,
-        // The simple Dream Atlas config catalogs (atlas_config, dreamscapes,
+        // The Dream Atlas content catalogs (atlas, dreamscapes,
         // dream_guides, affiliations, apollyon_incarnations, dreamsign_profiles)
         // are regenerated under public/ on every matching TOML save by
         // configDataHotReloadPlugin, which sends a targeted config-data:changed

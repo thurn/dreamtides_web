@@ -5,21 +5,16 @@ import {
   generateSiteComposition,
   generateInitialAtlas,
   edgesCross,
-  previewSiteTypes,
   regenerateAtlasForProgress,
   revealedAtlasSite,
-  rewardPreviewLabel,
   resetAtlasGenerator,
-  siteTypeDescription,
-  siteTypeIcon,
-  ALL_SITE_TYPES,
   type AtlasBuildContext,
   type SiteGenerationContext,
 } from "./atlas-generator";
 import {
-  loadTestAtlasConfig,
-  loadTestDreamscapes,
+  makeSyntheticAtlasData,
   makeTestAtlasNode,
+  SYNTHETIC_ATLAS_DREAMSCAPES,
 } from "../__test-helpers__/atlas-fixtures";
 import type {
   AtlasNodeState,
@@ -42,8 +37,8 @@ function defaultContext(
   };
 }
 
-const TEST_DREAMSCAPES = loadTestDreamscapes();
-const TEST_ATLAS_CONFIG = loadTestAtlasConfig();
+const TEST_DREAMSCAPES = SYNTHETIC_ATLAS_DREAMSCAPES;
+const TEST_ATLAS_DATA = makeSyntheticAtlasData();
 // Dreamsign ids the known-dreamsign placement can draw from; arbitrary unique
 // strings so the tests do not depend on any real dreamsign data.
 const TEST_DREAMSIGN_POOL = Array.from(
@@ -51,27 +46,34 @@ const TEST_DREAMSIGN_POOL = Array.from(
   (_, i) => `test-dreamsign-${String(i)}`,
 );
 
+let fixtureRandomState = 1;
+
+function nextFixtureRandom(): number {
+  fixtureRandomState = (fixtureRandomState * 1664525 + 1013904223) >>> 0;
+  return fixtureRandomState / 0x100000000;
+}
+
 function buildContext(
   overrides?: Partial<AtlasBuildContext>,
 ): AtlasBuildContext {
   return {
     dreamscapes: TEST_DREAMSCAPES,
-    atlasConfig: TEST_ATLAS_CONFIG,
+    atlasData: TEST_ATLAS_DATA,
     dreamsignPoolIds: TEST_DREAMSIGN_POOL,
     ...overrides,
   };
 }
 
 beforeEach(() => {
-  resetAtlasGenerator();
   vi.restoreAllMocks();
+  fixtureRandomState = 1;
+  vi.spyOn(Math, "random").mockImplementation(nextFixtureRandom);
+  resetAtlasGenerator();
   vi.spyOn(console, "log").mockImplementation(() => {});
 });
 
 // ---------------------------------------------------------------------------
-// Site composition fixtures derived from the live dreamscape data, so the tests
-// never hardcode dreamscape names, signature sites, or layer counts that an
-// authoring edit could invalidate.
+// Synthetic site-composition fixtures exercise the stable AtlasData contract.
 // ---------------------------------------------------------------------------
 
 const STARTER_DREAMSCAPE = (() => {
@@ -86,20 +88,18 @@ const NON_STARTER_DREAMSCAPES = TEST_DREAMSCAPES.filter((d) => !d.isStarter);
 
 /** Layers a non-starter dreamscape can occupy: 0-indexed atlas layers 1..6. */
 const NON_STARTER_LAYERS = Array.from(
-  { length: TEST_ATLAS_CONFIG.layerSpecs.length - 1 },
+  { length: TEST_ATLAS_DATA.layers.length - 1 },
   (_, i) => i + 1,
 );
 
 /** Expected mandatory draft count for a 0-indexed atlas layer (doc table). */
 function expectedDraftCount(layer: number): number {
-  if (layer <= 1) return 2;
-  if (layer <= 3) return 1;
-  return 0;
+  return TEST_ATLAS_DATA.layers[layer]?.mandatorySites.Draft ?? 0;
 }
 
 /** Layers where Purge is mandatory (0-indexed 1 and 2; doc layers 2 and 3). */
 function expectsMandatoryPurge(layer: number): boolean {
-  return layer === 1 || layer === 2;
+  return (TEST_ATLAS_DATA.layers[layer]?.mandatorySites.Purge ?? 0) > 0;
 }
 
 function composeFor(
@@ -114,8 +114,10 @@ function composeFor(
     layer: layerAtOrdinal(layer) ?? LayerName.One,
     dreamscape,
     dreamscapes: TEST_DREAMSCAPES,
+    atlasData: TEST_ATLAS_DATA,
     context: defaultContext(),
     hasKnownDreamsign: overrides?.hasKnownDreamsign,
+    rng: nextFixtureRandom,
   }).sites;
 }
 
@@ -128,7 +130,7 @@ function counts(sites: SiteState[]): Partial<Record<SiteType, number>> {
 }
 
 describe("generateSiteComposition", () => {
-  it("builds Maddox's home Random Site with a distinct eligible candidate pool", () => {
+  it("builds the presenting guide's home Random Site with a distinct eligible candidate pool", () => {
     const home = NON_STARTER_DREAMSCAPES.find(
       (dreamscape) => dreamscape.signatureSite === "RandomSite",
     );
@@ -147,7 +149,7 @@ describe("generateSiteComposition", () => {
     }
   });
 
-  it("excludes hard-removed destinations from Maddox's candidate pool", () => {
+  it("excludes hard-removed destinations from the Random Site candidate pool", () => {
     const home = NON_STARTER_DREAMSCAPES.find(
       (dreamscape) => dreamscape.signatureSite === "RandomSite",
     );
@@ -156,6 +158,7 @@ describe("generateSiteComposition", () => {
       layer: LayerName.Five,
       dreamscape: home,
       dreamscapes: TEST_DREAMSCAPES,
+      atlasData: TEST_ATLAS_DATA,
       context: {
         dreamscapeModifiers: [{
           kind: "remove_shop_sites",
@@ -163,6 +166,7 @@ describe("generateSiteComposition", () => {
           source: "fixture",
         }],
       },
+      rng: nextFixtureRandom,
     });
     const randomSite = result.sites.find((site) => site.type === "RandomSite");
     expect(randomSite?.randomSite?.candidateSiteTypes).not.toContain("Shop");
@@ -201,7 +205,7 @@ describe("generateSiteComposition", () => {
           );
           expect(signature).toHaveLength(1);
           expect(signature[0].isEnhanced).toBe(true);
-          // Maddox's hidden destination is also enhanced when Random Site fills
+          // The presenting guide's hidden destination is also enhanced when Random Site fills
           // a different guide's dreamscape.
           expect(sites.filter((s) => s.isEnhanced)).toHaveLength(
             1 + (sites.some((site) => site.type === "RandomSite" && site !== signature[0]) ? 1 : 0),
@@ -312,29 +316,44 @@ describe("generateSiteComposition", () => {
     }
   });
 
-  it("weights Transfiguration and Duplication up in later layers", () => {
-    // Statistical: over many late-layer draws, the card-shaping sites appear more
-    // often than in early layers. Pick a dreamscape whose own signature site is
-    // neither, so both stay in its fill pool.
-    const dreamscape = NON_STARTER_DREAMSCAPES.find(
-      (d) =>
-        d.signatureSite !== "Transfiguration" &&
-        d.signatureSite !== "Duplication",
-    );
-    expect(dreamscape).toBeDefined();
-    const cardShaping = new Set<SiteType>(["Transfiguration", "Duplication"]);
-    function rate(layer: number): number {
-      let hits = 0;
-      const trials = 400;
-      for (let i = 0; i < trials; i++) {
-        const sites = composeFor(dreamscape!, layer);
-        if (sites.some((s) => cardShaping.has(s.type))) {
-          hits += 1;
-        }
-      }
-      return hits / trials;
+  it("uses the selected fill profile's exact weights", () => {
+    const weightedProfiles = {
+      early: {
+        id: "early",
+        signatureSiteWeight: 0,
+        siteWeights: { Transfiguration: 1, Duplication: 10 },
+      },
+      late: {
+        id: "late",
+        signatureSiteWeight: 0,
+        siteWeights: { Transfiguration: 10, Duplication: 1 },
+      },
+    };
+
+    function bossFill(fillProfile: "early" | "late"): SiteType {
+      const atlasData = makeSyntheticAtlasData();
+      atlasData.fillProfiles = weightedProfiles;
+      atlasData.layers = atlasData.layers.map((layer) =>
+        layer.role === "boss"
+          ? {
+              ...layer,
+              fillProfile,
+              siteCount: { min: 2, max: 2 },
+            }
+          : layer,
+      );
+      resetAtlasGenerator();
+      const atlas = generateInitialAtlas(
+        0,
+        defaultContext(),
+        buildContext({ atlasData }),
+        { logEvents: false, rng: () => 0.6 },
+      );
+      return atlas.nodes[atlas.bossNodeId].sites[0].type;
     }
-    expect(rate(5)).toBeGreaterThan(rate(2));
+
+    expect(bossFill("early")).toBe("Duplication");
+    expect(bossFill("late")).toBe("Transfiguration");
   });
 
   it("leaves Draft site data attached and other sites unresolved", () => {
@@ -365,8 +384,10 @@ describe("generateSiteComposition", () => {
         layer: LayerName.One,
         dreamscape: STARTER_DREAMSCAPE,
         dreamscapes: TEST_DREAMSCAPES,
+        atlasData: TEST_ATLAS_DATA,
         context: defaultContext(),
         hasKnownDreamsign: false,
+        rng: nextFixtureRandom,
       });
       expect(sites.map((s) => s.type)).toEqual(STARTER_DREAMSCAPE.fixedSites);
       expect(sites.some((s) => s.isEnhanced)).toBe(false);
@@ -411,7 +432,7 @@ describe("generateInitialAtlas structural invariants", () => {
       expect(atlas.layers[0]).toHaveLength(1);
       expect(atlas.layers[6]).toHaveLength(1);
       for (let layer = 0; layer < 7; layer++) {
-        const spec = TEST_ATLAS_CONFIG.layerSpecs[layer];
+        const spec = TEST_ATLAS_DATA.layers[layer].nodeCount;
         expect(atlas.layers[layer].length).toBeGreaterThanOrEqual(spec.min);
         expect(atlas.layers[layer].length).toBeLessThanOrEqual(spec.max);
       }
@@ -487,13 +508,13 @@ describe("generateInitialAtlas structural invariants", () => {
 
   it("places at most 2 known dreamsigns, only in eligible layers, with unique pool ids", () => {
     const eligibleLayers = new Set(
-      TEST_ATLAS_CONFIG.knownDreamsign.eligibleLayers.map((l) => l - 1),
+      TEST_ATLAS_DATA.knownDreamsign.eligibleLayers.map(layerOrdinal),
     );
     for (let iter = 0; iter < 60; iter++) {
       const atlas = freshAtlas();
       const carriers = atlas.knownDreamsignCarrierIds;
       expect(carriers.length).toBeLessThanOrEqual(
-        TEST_ATLAS_CONFIG.knownDreamsign.maxPerAtlas,
+        TEST_ATLAS_DATA.knownDreamsign.maxPerAtlas,
       );
       const grantedIds = new Set<string>();
       for (const carrierId of carriers) {
@@ -514,20 +535,20 @@ describe("generateInitialAtlas structural invariants", () => {
   });
 
   it("draws known dreamsigns from random positions in the available pool", () => {
-    const atlasConfig = {
-      ...TEST_ATLAS_CONFIG,
+    const atlasData = {
+      ...TEST_ATLAS_DATA,
       knownDreamsign: {
-        ...TEST_ATLAS_CONFIG.knownDreamsign,
+        ...TEST_ATLAS_DATA.knownDreamsign,
         maxPerAtlas: 1,
         placementProbability: 1,
       },
     };
 
-    vi.spyOn(Math, "random").mockReturnValue(0);
+    vi.mocked(Math.random).mockReturnValue(0);
     const firstDraw = generateInitialAtlas(
       0,
       defaultContext(),
-      buildContext({ atlasConfig }),
+      buildContext({ atlasData }),
       { logEvents: false },
     );
     const firstCarrier = firstDraw.knownDreamsignCarrierIds[0];
@@ -539,7 +560,7 @@ describe("generateInitialAtlas structural invariants", () => {
     const lastDraw = generateInitialAtlas(
       0,
       defaultContext(),
-      buildContext({ atlasConfig }),
+      buildContext({ atlasData }),
       { logEvents: false },
     );
     const lastCarrier = lastDraw.knownDreamsignCarrierIds[0];
@@ -560,21 +581,23 @@ describe("generateInitialAtlas structural invariants", () => {
       // Boss plus 0-2 bonus reveals.
       const bonusCount = revealedLocked.length - 1;
       expect(bonusCount).toBeGreaterThanOrEqual(
-        TEST_ATLAS_CONFIG.bonusReveal.min,
+        TEST_ATLAS_DATA.graph.bonusReveal.min,
       );
-      expect(bonusCount).toBeLessThanOrEqual(TEST_ATLAS_CONFIG.bonusReveal.max);
+      expect(bonusCount).toBeLessThanOrEqual(TEST_ATLAS_DATA.graph.bonusReveal.max);
     }
   });
 
-  it("assigns the starter dreamscape to layer 0 and a non-starter to the boss", () => {
+  it("assigns the starter dreamscape to layer I and configured Limbo to the boss", () => {
     const starter = TEST_DREAMSCAPES.find((d) => d.isStarter);
     expect(starter).toBeDefined();
     for (let iter = 0; iter < 30; iter++) {
       const atlas = freshAtlas();
       expect(atlas.nodes[atlas.startingNodeId].dreamscapeId).toBe(starter?.id);
       const boss = atlas.nodes[atlas.bossNodeId];
-      expect(boss.dreamscapeId).not.toBe(starter?.id);
-      expect(boss.dreamscapeId).not.toBeNull();
+      expect(boss.dreamscapeId).toBe(TEST_ATLAS_DATA.boss.dreamscapeId);
+      expect(boss.biomeName).toBe(TEST_ATLAS_DATA.boss.place);
+      expect(boss.enhancedSiteType).toBeNull();
+      expect(boss.sites[boss.sites.length - 1]?.type).toBe("Battle");
     }
   });
 
@@ -595,7 +618,7 @@ describe("generateInitialAtlas structural invariants", () => {
       // nodes the way consumers do: completing the starter makes its forward
       // targets available, which reveals their dreamscapes.
       const layer1 = atlas.layers[1];
-      const layer1Spec = TEST_ATLAS_CONFIG.layerSpecs[1];
+      const layer1Spec = TEST_ATLAS_DATA.layers[1].nodeCount;
       expect(layer1Spec.min).toBeGreaterThanOrEqual(2);
       expect(layer1.length).toBeGreaterThanOrEqual(layer1Spec.min);
       expect(layer1.length).toBeLessThanOrEqual(layer1Spec.max);
@@ -1162,30 +1185,6 @@ describe("edgesCross", () => {
   });
 });
 
-describe("previewSiteTypes", () => {
-  it("excludes Battle and Draft", () => {
-    const node = makeTestAtlasNode("test", [
-      { id: "s1", type: "Draft", isEnhanced: false, isVisited: false },
-      { id: "s2", type: "Battle", isEnhanced: false, isVisited: false },
-      { id: "s4", type: "Shop", isEnhanced: false, isVisited: false },
-      { id: "s5", type: "Essence", isEnhanced: false, isVisited: false },
-    ]);
-    const preview = previewSiteTypes(node);
-    expect(preview).toEqual(["Shop", "Essence"]);
-  });
-
-  it("returns at most 3 site types", () => {
-    const node = makeTestAtlasNode("test", [
-      { id: "s1", type: "Shop", isEnhanced: false, isVisited: false },
-      { id: "s2", type: "Essence", isEnhanced: false, isVisited: false },
-      { id: "s3", type: "Purge", isEnhanced: false, isVisited: false },
-      { id: "s4", type: "Augury", isEnhanced: false, isVisited: false },
-    ]);
-    const preview = previewSiteTypes(node);
-    expect(preview.length).toBeLessThanOrEqual(3);
-  });
-});
-
 describe("revealedAtlasSite", () => {
   function makeSite(id: string, type: SiteType, isEnhanced = false): SiteState {
     return { id, type, isEnhanced, isVisited: false };
@@ -1314,42 +1313,6 @@ describe("revealedAtlasSite", () => {
   });
 });
 
-describe("siteTypeDescription", () => {
-  it("uses the authored Purge hover-card copy", () => {
-    expect(siteTypeDescription("Purge")).toBe(
-      "Remove any number of cards from your deck",
-    );
-  });
-
-  it("returns a non-empty string for every site type", () => {
-    for (const t of ALL_SITE_TYPES) {
-      const desc = siteTypeDescription(t);
-      expect(typeof desc).toBe("string");
-      expect(desc.length).toBeGreaterThan(0);
-    }
-  });
-});
-
-describe("siteTypeIcon", () => {
-  it("uses the filled compass for Exploration", () => {
-    expect(siteTypeIcon("Exploration")).toBe("bxf bx-compass");
-  });
-
-  it("returns an icon class (not an emoji) for every site type", () => {
-    // Site icons are Boxicons 3 filled (`bxf bx-*`); Transfiguration is the
-    // lone Font Awesome exception because Boxicons has no hammer glyph.
-    for (const t of ALL_SITE_TYPES) {
-      const icon = siteTypeIcon(t);
-      expect(icon).toMatch(/^(bxf? bx-[a-z0-9-]+|fa-solid fa-[a-z0-9-]+)$/);
-    }
-  });
-
-  it("assigns a distinct icon to every site type", () => {
-    const icons = ALL_SITE_TYPES.map((t) => siteTypeIcon(t));
-    expect(new Set(icons).size).toBe(icons.length);
-  });
-});
-
 describe("additionalSiteTypesForLevel", () => {
   it("returns the fill candidate site types for a dreamscape layer", () => {
     const dreamscape = NON_STARTER_DREAMSCAPES[0];
@@ -1358,6 +1321,7 @@ describe("additionalSiteTypesForLevel", () => {
       dreamscape.signatureSite,
       TEST_DREAMSCAPES,
       defaultContext(),
+      TEST_ATLAS_DATA,
     );
     // Essence is always an eligible fill option.
     expect(types).toContain("Essence");
@@ -1371,27 +1335,5 @@ describe("additionalSiteTypesForLevel", () => {
     if (otherSignature !== undefined) {
       expect(types).toContain(otherSignature);
     }
-  });
-});
-
-describe("rewardPreviewLabel", () => {
-  it("returns null for reward sites so the caller does not duplicate 'Reward'", () => {
-    const site: SiteState = {
-      id: "s1",
-      type: "Reward",
-      isEnhanced: false,
-      isVisited: false,
-    };
-    expect(rewardPreviewLabel(site)).toBeNull();
-  });
-
-  it("returns null for non-reward sites", () => {
-    const site: SiteState = {
-      id: "s2",
-      type: "Shop",
-      isEnhanced: false,
-      isVisited: false,
-    };
-    expect(rewardPreviewLabel(site)).toBeNull();
   });
 });

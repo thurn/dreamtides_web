@@ -12,7 +12,6 @@
 #   signature-site  The SiteType this dreamscape is known for; its guide enhances
 #                   this site type in the dreamscape they call home.
 #   affiliation-id  Thematic affiliation id steering content (omitted for starter).
-#   site-icon       Icon reference for the dreamscape marker on the Atlas.
 #   is-starter      Present and true only on the run's opening dreamscape.
 #   fixed-sites     Ordered SiteType list the starter always presents.
 #   dream-avatar-ids The 3-4 resident DreamAvatars of this region, by id (omitted
@@ -32,7 +31,6 @@ id = "firstlight_meadow"
 name = "Firstlight Meadow"
 aesthetic = "A tranquil meadow at sunrise."
 signature-site = "Draft"
-site-icon = "game-icons.net/sbed/flag"
 is-starter = true
 fixed-sites = ["Draft", "Draft", "DreamsignRevelation", "Purge", "Battle"]
 
@@ -43,7 +41,6 @@ aesthetic = "A cozy fantasy village of anthropomorphic animals."
 guide-id = "tobias_tanglefur"
 signature-site = "Shop"
 affiliation-id = "spirit_animals"
-site-icon = "game-icons.net/sbed/shop"
 # Spirit-animal payoffs: Grath rewards allied spirit animals directly; Radulf
 # and Demetrios are the go-wide character builders whose signature decks lean on
 # spirit-animal bodies (Starrunner, Sunshadow Eagle, Moonbound Wolf).
@@ -60,7 +57,6 @@ aesthetic = "An ancient Egyptian realm of sun-baked stone and gold."
 guide-id = "amunet_the_tomb_keeper"
 signature-site = "DreamsignMarket"
 affiliation-id = "erode_void"
-site-icon = "game-icons.net/sbed/great-pyramid"
 # The Void: the deepest reclaim/void-matters pool. Seld Rakor, Seraveth, and
 # Vaela all key off cards in the void; Vethran's cost-X Discover rounds out the
 # region's grindy value plan. One of two four-avatar regions.
@@ -78,7 +74,6 @@ aesthetic = "A snowy viking village beneath frozen cliffs."
 guide-id = "sigrun"
 signature-site = "DreamsignRevelation"
 affiliation-id = "removal"
-site-icon = "game-icons.net/sbed/fire"
 # Tempo: proactive, fast-starting plans. Yveth Coravel bounces to reuse and
 # undercut; Drusus Calvus spends his opening turn pulling ahead on energy. Edran
 # is a deliberate, slightly unintuitive placement here — his outsider-figment
@@ -96,7 +91,6 @@ aesthetic = "A dwarven fortress of anvils and glowing forges."
 guide-id = "durgan_forgehammer"
 signature-site = "Transfiguration"
 affiliation-id = "storm_events"
-site-icon = "game-icons.net/sbed/anvil-impact"
 # Events: every resident is an event-cast payoff. Kasane copies events, Rael
 # foresees off a second event, and Ovanel refills events after playing one.
 dream-avatar-ids = [
@@ -112,7 +106,6 @@ aesthetic = "A rural town in the grip of a zombie apocalypse."
 guide-id = "deacon_holt"
 signature-site = "Duplication"
 affiliation-id = "inexpensive_characters"
-site-icon = "stack.svg"
 # Characters: flood the board and reward each body. Korrax buffs an ally every
 # night, Kaleth awakens allies, and Senemhet turns a wide board's energy into
 # more characters.
@@ -129,7 +122,6 @@ aesthetic = "A samurai-era Japanese kingdom of paper lanterns and steel."
 guide-id = "master_takeshi"
 signature-site = "Purge"
 affiliation-id = "warriors"
-site-icon = "game-icons.net/sbed/small-fire"
 # Warriors: the whole warrior tribe lives here. Gunnar Deepforge copies the last
 # warrior played, Tensho discounts the first warrior drawn, and Valdren reclaims
 # warriors from the void.
@@ -146,7 +138,6 @@ aesthetic = "An enchanted forest of ancient trees and drifting lights."
 guide-id = "aldric_the_seer"
 signature-site = "Augury"
 affiliation-id = "abandon_sacrifice"
-site-icon = "game-icons.net/sbed/crystal-ball"
 # Abandon: sacrifice your own allies for value. Ossian abandons to draw, Caedryn
 # abandons to materialize a bigger body, and Kragg discounts the next character
 # after abandoning.
@@ -163,7 +154,6 @@ aesthetic = "A Mad-Max post-apocalyptic wasteland of scrap and dust."
 guide-id = "maddox"
 signature-site = "RandomSite"
 affiliation-id = "survivors"
-site-icon = "?"
 # Survivors: grind-it-out attrition in the wasteland. Kell Tarn's signature deck
 # is built on survivor bodies (Wreckland Maverick); Karev Soltis punishes the
 # opponent's scoring, and Calloway Flint is the scavenging raider admiral.
@@ -180,7 +170,6 @@ aesthetic = "A sci-fi outpost clinging to a distant planet."
 guide-id = "gravok"
 signature-site = "Gamble"
 affiliation-id = "figments"
-site-icon = "game-icons.net/sbed/two-coins"
 # Figments: token-makers and figment payoffs. Serenath Veyl rewards
 # materializing a figment and Kael Voss discards to materialize a survivor
 # figment; Threxan fills the third slot, his turn-one card draw a clean fit for
@@ -198,7 +187,6 @@ aesthetic = "A neon-drenched cyberpunk city of rain and chrome."
 guide-id = "layaway"
 signature-site = "Exploration"
 affiliation-id = "discard"
-site-icon = "game-icons.net/sbed/sands-of-time"
 # Discard: turn discarding into advantage. Vrakmoth and Corvath both convert a
 # discard into a card or reclaim, Tessa loots (draw-then-discard), and Zeva
 # discards to reclaim an event. The second four-avatar region.

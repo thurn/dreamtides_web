@@ -18,9 +18,6 @@
 import {
   reachableAtlasNodeIds,
   revealedAtlasSite,
-  siteTypeDescription,
-  siteTypeIcon,
-  siteTypeName,
 } from "../../atlas/atlas-generator";
 import {
   ATLAS_ANCHOR_NODE_SIZE_DESKTOP,
@@ -30,8 +27,6 @@ import {
   ATLAS_NODE_SIZE_MOBILE,
   ATLAS_STAGE_HEIGHT,
   ATLAS_STAGE_WIDTH,
-  BOSS_DISPLAY,
-  BOSS_DREAMSCAPE_ID,
 } from "../../cumulus/components/atlas/atlas-display";
 import type { AtlasEdgeKind } from "../../cumulus/components/atlas/AtlasEdge";
 import type {
@@ -48,6 +43,12 @@ import { artRef } from "../../cumulus/primitives/art";
 import { glyph } from "../../cumulus/primitives/glyph";
 import type { AtlasView } from "../../cumulus/screens/AtlasScreen";
 import type { JourneyContent } from "../../data/journey-content";
+import {
+  atlasTemplate,
+  siteTypeDescription,
+  siteTypeIcon,
+  siteTypeName,
+} from "../../data/atlas-data";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 import type {
   DreamAtlas,
@@ -329,12 +330,6 @@ export function buildAtlasMapEdges(
   return edges;
 }
 
-/** The compact "unseen dream" body shown for an unrevealed / unreachable node. */
-const UNSEEN_DREAM_BODY =
-  "This dreamscape is revealed only as you draw near. Travel onward to learn what waits here.";
-/** The body shown for the starting dreamscape (a revealed dreamscape with no guide). */
-const STARTER_BODY = "A quiet place where every dream journey begins.";
-
 /** Resolves a node's pre-revealed known-dreamsign card, or null when it has none. */
 function buildDreamsignCard(
   node: DreamscapeNode,
@@ -368,36 +363,32 @@ function buildDreamsignCard(
 function buildSignatureSiteCard(
   dreamscape: NonNullable<JourneyContent["dreamscapes"][number]>,
   siteId: string,
+  journeyContent: JourneyContent,
 ): AtlasNodeSite {
   return {
     id: siteId,
-    name: siteTypeName(dreamscape.signatureSite),
-    blurb: siteTypeDescription(dreamscape.signatureSite),
-    icon: glyph(siteTypeIcon(dreamscape.signatureSite)),
+    name: siteTypeName(journeyContent.atlasData, dreamscape.signatureSite),
+    blurb: siteTypeDescription(journeyContent.atlasData, dreamscape.signatureSite),
+    icon: glyph(siteTypeIcon(journeyContent.atlasData, dreamscape.signatureSite)),
   };
-}
-
-/** Resolves the affiliation explanatory InfoCard payload. */
-function affiliationCardTheme(name: string): string {
-  const normalized = name.trim().toLowerCase();
-  const withoutArticle = normalized.startsWith("the ")
-    ? normalized.slice("the ".length)
-    : normalized;
-  const singular = withoutArticle.endsWith("s")
-    ? withoutArticle.slice(0, -1)
-    : withoutArticle;
-  return singular.charAt(0).toUpperCase() + singular.slice(1);
 }
 
 /** Resolves the affiliation explanatory InfoCard payload. */
 function buildAffiliationCard(
   affiliation: JourneyContent["affiliations"][number] | null,
+  journeyContent: JourneyContent,
 ): AtlasNodeAffiliation | null {
   return affiliation !== null
     ? {
         id: affiliation.id,
-        name: affiliation.name,
-        cardTheme: affiliationCardTheme(affiliation.name),
+        title: atlasTemplate(
+          journeyContent.atlasData.presentation.affiliationTitleTemplate,
+          { name: affiliation.name, "card-theme": affiliation.atlasCardTheme },
+        ),
+        body: atlasTemplate(
+          journeyContent.atlasData.presentation.affiliationBodyTemplate,
+          { name: affiliation.name, "card-theme": affiliation.atlasCardTheme },
+        ),
       }
     : null;
 }
@@ -430,6 +421,7 @@ function buildNodeCard(
   const dreamsign = buildDreamsignCard(node, journeyContent, isReachable);
 
   if (geo.isBoss) {
+    const { boss } = journeyContent.atlasData;
     const bossIncarnation =
       atlas.bossIncarnationId != null
         ? ((journeyContent.apollyonIncarnations ?? []).find(
@@ -438,18 +430,18 @@ function buildNodeCard(
         : null;
     return {
       primary: {
-        sceneArt: artRef.dreamscapeScene(BOSS_DREAMSCAPE_ID),
+        sceneArt: artRef.dreamscapeScene(boss.sceneArtId),
         // The boss stands over the Limbo scene as its prominent figure.
-        figureArt: artRef.dreamGuide(BOSS_DISPLAY.guideId),
+        figureArt: artRef.dreamGuide(boss.figureArtId),
         // Title with the run's chosen Apollyon incarnation (its full name, e.g.
         // "Apollyon, the World's End"), falling back to the default epithet when
         // no incarnation was assigned.
-        title: bossIncarnation?.title ?? BOSS_DISPLAY.title,
-        body: bossIncarnation?.description ?? BOSS_DISPLAY.intro,
+        title: bossIncarnation?.title ?? boss.fallbackTitle,
+        body: bossIncarnation?.description ?? boss.fallbackIntroduction,
         // The desktop hover card presents Limbo as the place with the chosen
         // incarnation as the guide-line; the boss has no site or affiliation.
-        placeName: BOSS_DISPLAY.place,
-        guideName: bossIncarnation?.title ?? BOSS_DISPLAY.title,
+        placeName: boss.place,
+        guideName: bossIncarnation?.title ?? boss.name,
       },
       dreamsign,
       site: null,
@@ -470,8 +462,8 @@ function buildNodeCard(
       primary: {
         sceneArt: null,
         figureArt: null,
-        title: "An Unseen Dream",
-        body: UNSEEN_DREAM_BODY,
+        title: journeyContent.atlasData.presentation.unseenTitle,
+        body: journeyContent.atlasData.presentation.unseenBody,
         // A still-unseen dream can carry a pre-revealed known dreamsign (its badge
         // already shows on the node); pressing it reveals that dreamsign's own
         // companion card beneath the "unseen dream" text. Unreachable nodes hide
@@ -502,7 +494,7 @@ function buildNodeCard(
   const revealedSite = revealedAtlasSite(node);
   const site =
     guide != null && revealedSite !== null
-      ? buildSignatureSiteCard(dreamscape, revealedSite.id)
+      ? buildSignatureSiteCard(dreamscape, revealedSite.id, journeyContent)
       : null;
 
   // Show the dreamscape scene as the full-bleed hero, with the resident guide's
@@ -514,7 +506,7 @@ function buildNodeCard(
       sceneArt: artRef.dreamscapeScene(dreamscape.id),
       figureArt: guide != null ? artRef.dreamGuide(guide.id) : null,
       title: guide?.name ?? dreamscape.name,
-      body: guide?.homeSpecialty ?? STARTER_BODY,
+      body: guide?.homeSpecialty ?? journeyContent.atlasData.presentation.starterBody,
       // The large desktop hover card presents the place, its resident guide, the
       // signature site, and the dreamscape's affiliation as distinct fields.
       placeName: dreamscape.name,
@@ -522,7 +514,7 @@ function buildNodeCard(
     },
     dreamsign,
     site,
-    affiliation: buildAffiliationCard(affiliation),
+    affiliation: buildAffiliationCard(affiliation, journeyContent),
   };
 }
 
@@ -557,8 +549,9 @@ export function buildAtlasMapNodes(
 
     // The node face: the boss is always the icon; a revealed dreamscape shows
     // its circular icon; an unrevealed node shows the empty round frame.
-    const iconRef =
-      geo.isBoss || dreamscape === null
+    const iconRef = geo.isBoss
+      ? artRef.dreamscapeIcon(journeyContent.atlasData.boss.iconArtId)
+      : dreamscape === null
         ? null
         : artRef.dreamscapeIcon(dreamscape.id);
 
@@ -571,7 +564,7 @@ export function buildAtlasMapNodes(
       dreamscape === null ||
       revealedSite === null
         ? null
-        : glyph(siteTypeIcon(dreamscape.signatureSite));
+        : glyph(siteTypeIcon(journeyContent.atlasData, dreamscape.signatureSite));
 
     const dreamsignTemplate =
       isReachable && node.knownDreamsignId !== null
@@ -593,6 +586,9 @@ export function buildAtlasMapNodes(
       isBoss: geo.isBoss,
       isReachable,
       iconRef,
+      unrevealedFrameRef: artRef.atlasAsset(
+        journeyContent.atlasData.assets.unrevealedFrameKey,
+      ),
       siteBadgeGlyph,
       knownDreamsignRef,
       badgeScale: profile.badgeScale,

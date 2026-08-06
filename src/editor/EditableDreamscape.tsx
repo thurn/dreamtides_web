@@ -5,8 +5,6 @@ import {
   dreamscapeSceneUrl,
   guidePortraitUrl,
 } from "../cumulus/components/atlas/atlas-display";
-import { siteTypeIcon } from "../atlas/atlas-generator";
-import type { SiteType } from "../types/journey";
 import DreamscapeResidents, {
   type ResidentAssignmentStatus,
 } from "./DreamscapeResidents";
@@ -181,8 +179,8 @@ function MetaSelect({
 /**
  * One dreamscape in the editor grid. The scene art and circular node icon are
  * the same assets the Dream Atlas renders, resolved from the dreamscape id. The
- * name, aesthetic, and site-icon reference are inline {@link EditableField}
- * editors (double-click to edit); the signature site, resident Dream Guide, and
+ * name and aesthetic are inline {@link EditableField} editors (double-click to
+ * edit); the signature site, resident Dream Guide, and
  * affiliation are catalog dropdowns that save the moment a new value is picked.
  */
 export default function EditableDreamscape({
@@ -209,11 +207,9 @@ export default function EditableDreamscape({
 
   const nameEntry = saveEntryFor("name");
   const aestheticEntry = saveEntryFor("aesthetic");
-  const siteIconEntry = saveEntryFor("site-icon");
 
   const visibleName = String(nameEntry?.draftValue ?? record.name);
   const visibleAesthetic = String(aestheticEntry?.draftValue ?? record.aesthetic);
-  const visibleSiteIcon = String(siteIconEntry?.draftValue ?? record["site-icon"]);
 
   const guideId = record["guide-id"];
   const guide = guideId === null ? null : guides.find((entry) => entry.id === guideId) ?? null;
@@ -391,15 +387,6 @@ export default function EditableDreamscape({
           placeholder="Select a site type"
           options={siteTypes.map((siteType) => ({ value: siteType, label: siteType }))}
           saveEntry={saveEntryFor("signature-site")}
-          leading={
-            signatureSite !== "" ? (
-              <i
-                className={siteTypeIcon(signatureSite as SiteType)}
-                aria-hidden="true"
-                style={{ fontSize: "1.1rem", color: "#8edbd1", width: "1.2rem" }}
-              />
-            ) : null
-          }
           onChange={(next) => onFieldSave(record, "signature-site", next)}
         />
 
@@ -438,43 +425,6 @@ export default function EditableDreamscape({
           saveEntry={saveEntryFor("affiliation-id")}
           onChange={(next) => onFieldSave(record, "affiliation-id", next)}
         />
-
-        <div>
-          <span
-            style={{
-              display: "block",
-              fontSize: "0.66rem",
-              letterSpacing: "0.04em",
-              textTransform: "uppercase",
-              color: "#7f8d88",
-              fontWeight: 700,
-              marginBottom: "3px",
-            }}
-          >
-            Site Icon
-          </span>
-          <EditableField {...fieldProps("site-icon", record["site-icon"], siteIconEntry)}>
-            <code
-              title="Double-click to edit the Atlas marker icon reference"
-              style={{
-                display: "inline-block",
-                maxWidth: "100%",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-                fontSize: "0.76rem",
-                color: "#c9d3cf",
-                background: "#0b1517",
-                border: "1px solid rgba(142, 219, 209, 0.2)",
-                borderRadius: "5px",
-                padding: "4px 7px",
-                cursor: "text",
-              }}
-            >
-              {visibleSiteIcon}
-            </code>
-          </EditableField>
-        </div>
 
         {record.isStarter && record.fixedSites.length > 0 ? (
           <div>

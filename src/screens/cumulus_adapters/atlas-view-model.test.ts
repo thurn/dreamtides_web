@@ -6,7 +6,7 @@ import type {
   JourneyState,
 } from "../../types/journey";
 import type { JourneyContent } from "../../data/journey-content";
-import { MINIMAL_ATLAS_CONFIG } from "../../__test-helpers__/atlas-fixtures";
+import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
 import {
   ATLAS_LAYOUT_DESKTOP,
   ATLAS_LAYOUT_MOBILE,
@@ -33,7 +33,7 @@ const EMPTY_CONTENT: JourneyContent = {
   dreamscapes: [],
   affiliations: [],
   guides: [],
-  atlasConfig: MINIMAL_ATLAS_CONFIG,
+  atlasData: MINIMAL_ATLAS_DATA,
 };
 
 function makeNode(
@@ -48,7 +48,6 @@ function makeNode(
     indexInLayer: 0,
     dreamscapeId: null,
     biomeName: "",
-    biomeColor: "",
     sites: [],
     position,
     state: "unrevealed",
@@ -342,11 +341,26 @@ describe("atlasEdgeKind", () => {
 
 describe("buildAtlasMapNodes", () => {
   it("produces one item per positioned node, carrying its face and reveal card", () => {
-    const items = buildAtlasMapNodes(makeVerticalAtlas(), EMPTY_CONTENT);
+    const content: JourneyContent = {
+      ...EMPTY_CONTENT,
+      atlasData: {
+        ...MINIMAL_ATLAS_DATA,
+        boss: {
+          ...MINIMAL_ATLAS_DATA.boss,
+          place: "Synthetic boss place",
+          sceneArtId: "synthetic-boss-scene",
+        },
+      },
+    };
+    const items = buildAtlasMapNodes(makeVerticalAtlas(), content);
     expect(items).toHaveLength(3);
     const boss = items.find((item) => item.node.id === "boss");
     expect(boss?.isBoss).toBe(true);
-    expect(boss?.primary.placeName).toBe("Limbo");
+    expect(boss?.primary.placeName).toBe("Synthetic boss place");
+    expect(boss?.primary.sceneArt).toEqual({
+      kind: "dreamscape-scene",
+      dreamscapeId: "synthetic-boss-scene",
+    });
     // An available (revealed) node's card is not the unrevealed variant, even
     // with no dreamscape content resolved.
     const middle = items.find((item) => item.node.id === "middle");
@@ -385,6 +399,21 @@ describe("buildAtlasMapNodes", () => {
     ];
     const content: JourneyContent = {
       ...EMPTY_CONTENT,
+      atlasData: {
+        ...MINIMAL_ATLAS_DATA,
+        siteTypes: {
+          ...MINIMAL_ATLAS_DATA.siteTypes,
+          Augury: {
+            ...MINIMAL_ATLAS_DATA.siteTypes.Augury,
+            icon: "fixture-atlas-icon",
+          },
+        },
+        presentation: {
+          ...MINIMAL_ATLAS_DATA.presentation,
+          affiliationTitleTemplate: "Fixture title {name}",
+          affiliationBodyTemplate: "Fixture body {card-theme}",
+        },
+      },
       dreamscapes: [
         {
           id: "wilderveil",
@@ -393,7 +422,6 @@ describe("buildAtlasMapNodes", () => {
           guideId: "aldric",
           signatureSite: "Augury",
           affiliationId: "figments",
-          siteIcon: "augury",
           isStarter: false,
           dreamAvatarIds: [],
         },
@@ -412,6 +440,7 @@ describe("buildAtlasMapNodes", () => {
         {
           id: "figments",
           name: "Figments",
+          atlasCardTheme: "Figment",
           signatureCards: [],
           weightStrength: 1,
           opponentBiasStrength: 1,
@@ -426,11 +455,11 @@ describe("buildAtlasMapNodes", () => {
       name: "Augury",
     });
     expect(middle?.site?.blurb.length).toBeGreaterThan(0);
-    expect(middle?.site?.icon).toContain("bx");
+    expect(middle?.site?.icon).toBe("fixture-atlas-icon");
     expect(middle?.affiliation).toEqual({
       id: "figments",
-      name: "Figments",
-      cardTheme: "Figment",
+      title: "Fixture title Figments",
+      body: "Fixture body Figment",
     });
   });
 });

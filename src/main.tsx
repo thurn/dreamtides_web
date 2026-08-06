@@ -128,7 +128,7 @@ if (pathname === "/editor" || pathname === "/cards") {
   // emit targeted custom HMR events instead of a full reload, so that saving in
   // the card or figment editor never reloads the editor page. The running
   // battle/journey app opts in here: it reloads to pick up edited card, figment,
-  // or Dream Atlas config data (the catalogs are re-fetched and rehydrated on
+  // or Dream Atlas data (the catalogs are re-fetched and rehydrated on
   // load). The editor routes above never register these handlers, so an editor
   // save leaves the page — and any open art editor — untouched.
   if (import.meta.hot) {

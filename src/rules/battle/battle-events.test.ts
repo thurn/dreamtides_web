@@ -233,7 +233,6 @@ function journeyAtlas(): DreamAtlas {
         indexInLayer: 0,
         dreamscapeId: "dreamscape-one",
         biomeName: "One",
-        biomeColor: "#111111",
         sites: [
           {
             id: SITE_ID,
@@ -255,7 +254,6 @@ function journeyAtlas(): DreamAtlas {
         indexInLayer: 0,
         dreamscapeId: null,
         biomeName: "",
-        biomeColor: "",
         sites: [],
         position: { x: 1, y: 0 },
         state: "unrevealed",

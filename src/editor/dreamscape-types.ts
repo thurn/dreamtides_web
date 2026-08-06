@@ -14,7 +14,6 @@ export interface EditorDreamscapeRecord {
   "signature-site": string;
   "guide-id": string | null;
   "affiliation-id": string | null;
-  "site-icon": string;
   isStarter: boolean;
   fixedSites: string[];
   /** UUIDs of the DreamAvatars resident in this region (3-4 for non-starters). */
@@ -84,8 +83,7 @@ export type EditableDreamscapeField =
   | "aesthetic"
   | "signature-site"
   | "guide-id"
-  | "affiliation-id"
-  | "site-icon";
+  | "affiliation-id";
 
 export interface SaveEditorDreamscapeFieldRequest {
   id: string;

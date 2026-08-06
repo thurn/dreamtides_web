@@ -408,6 +408,8 @@ export function createSiteContentProvider(
   };
 
   return {
+    randomSiteDestinations: content.atlasData.randomSite.destinations,
+    randomSiteGuideId: content.atlasData.randomSite.guideId,
     openSite: ({ journey, site, rng, gambleGameId }): SiteOpenResult | null => {
       const stream = streamFromKeyed(rng);
       switch (site.type) {

@@ -54,7 +54,7 @@ export function createQaJourneyFoundation(
     {},
     {
       dreamscapes: journeyContent.dreamscapes,
-      atlasConfig: journeyContent.atlasConfig,
+      atlasData: journeyContent.atlasData,
       dreamsignPoolIds: resolvedPackage.dreamsignPoolIds,
       apollyonIncarnations: journeyContent.apollyonIncarnations,
     },

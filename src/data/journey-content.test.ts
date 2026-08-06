@@ -14,6 +14,7 @@ import {
   selectReplayRecordIndex,
 } from "../draft/replay/draft-records";
 import { asCardId, asCardName } from "../types/card-identity";
+import { MINIMAL_ATLAS_DATA } from "../__test-helpers__/atlas-fixtures";
 
 function makeCard(cardNumber: number): CardData {
   return {
@@ -202,22 +203,10 @@ describe("loadJourneyContent", () => {
         if (path === "/apollyon-incarnations-data.json") {
           return Promise.resolve({ ok: true, json: () => Promise.resolve([]) });
         }
-        if (path === "/atlas-config-data.json") {
+        if (path === "/atlas-data.json") {
           return Promise.resolve({
             ok: true,
-            json: () =>
-              Promise.resolve({
-                layerSpecs: [],
-                connectionAverage: 2,
-                bonusReveal: { min: 0, max: 2, mode: 1 },
-                repeatDiscourageStrength: 2,
-                knownDreamsign: {
-                  maxPerAtlas: 2,
-                  eligibleLayers: [3, 4, 5, 6],
-                  placementProbability: 0.5,
-                  earlyRevealBias: 1,
-                },
-              }),
+            json: () => Promise.resolve(MINIMAL_ATLAS_DATA),
           });
         }
         // Any other asset the loader requests is an optional, variant-specific

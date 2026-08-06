@@ -1,18 +1,18 @@
 import { assetUrl } from "../../../runtime/asset-url";
-import { GLYPHS } from "../../primitives/glyph";
 
 /**
  * Visual presentation data for the redesigned Dream Atlas screen. The Atlas
  * renders the run graph as circular dreamscape-icon nodes in an ornate frame,
  * with rich hover-preview cards (scene art + resident Dream Guide). The art
- * resolves directly from ids; this module centralises the id -> URL mapping and
- * the fixed Layer-VII boss (Limbo) copy.
+ * resolves directly from ids; this module centralises the generic id-to-URL
+ * mapping and renderer geometry. Authored boss and frame data arrives through
+ * the Atlas view model.
  *
  * Assets are produced by `scripts/setup-assets.mjs` and served from `public/`:
  *   - `/dreamscapes/<id>.png`       rectangular scene art (hover-card header)
  *   - `/dreamscape-icons/<id>.png`  circular node icon
  *   - `/dream-guides/<guideId>.png` Dream Guide character render
- *   - `/atlas/Round_frame_main.png` ornate frame for unrevealed nodes
+ *   - `/atlas/<asset-key>`           Atlas-specific authored assets
  */
 
 /** Rectangular scene art for a dreamscape, shown in the hover-preview header. */
@@ -34,9 +34,6 @@ export function guidePortraitUrl(guideId: string): string {
 export function dreamsignIconUrl(imageName: string): string {
   return assetUrl(`/dreamsigns/${imageName}`);
 }
-
-/** Ornate round frame used as the face of an unrevealed atlas node. */
-export const ROUND_FRAME_URL = assetUrl("/atlas/Round_frame_main.png");
 
 /**
  * Node diameters (stage pixels) for the atlas layout, in one in-Cumulus home so
@@ -74,34 +71,3 @@ export const ATLAS_BADGE_SCALE_MOBILE = 1.5;
  */
 export const ATLAS_STAGE_WIDTH = 1080;
 export const ATLAS_STAGE_HEIGHT = 1920;
-
-/** Boxicons class used for the "Card Affiliation" row in the preview card. */
-export const AFFILIATION_ROW_ICON_CLASS = GLYPHS.affiliationRow;
-
-/** Font Awesome flag glyph the starting dreamscape shows as its site mark. */
-export const STARTER_FLAG_ICON_CLASS = "fa-solid fa-flag";
-
-/**
- * The dreamscape id the atlas always presents the boss node as (Limbo), used to
- * resolve its scene art through {@link artRef.dreamscapeScene}.
- */
-export const BOSS_DREAMSCAPE_ID = "limbo";
-
-/**
- * The Layer-VII boss dream. The atlas always presents the boss node as Limbo,
- * guarded by Apollyon, independent of which dreamscape the generator assigned
- * the boss node for its battle. Copy is player-facing flavour for the boss
- * hover card.
- */
-export const BOSS_DISPLAY = {
-  place: "Limbo",
-  name: "Apollyon",
-  title: "Apollyon, the Doom of Humanity",
-  /** The Dream Guide id resolving Apollyon's character render (`/dream-guides/apollyon.png`). */
-  guideId: "apollyon",
-  sceneUrl: assetUrl("/dreamscapes/limbo.png"),
-  iconUrl: assetUrl("/dreamscape-icons/limbo.png"),
-  figureUrl: assetUrl("/dream-guides/apollyon.png"),
-  intro:
-    "An avatar of annihilating power — his own deck, dreamsigns, and abilities bend the dream toward ruin.",
-} as const;

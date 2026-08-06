@@ -93,7 +93,6 @@ function makeFixture(overrides: { seed?: string } = {}): {
           indexInLayer: 0,
           dreamscapeId: "test_dreamscape",
           biomeName: "Fixture",
-          biomeColor: "#123456",
           sites: [site],
           position: { x: 0, y: 0 },
           state: "available",

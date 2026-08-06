@@ -244,7 +244,6 @@ function shopNode(): DreamscapeNode {
     indexInLayer: 0,
     dreamscapeId: null,
     biomeName: "",
-    biomeColor: "",
     sites: [
       { id: SHOP_SITE_ID, type: "Shop", isEnhanced: false, isVisited: false },
     ],

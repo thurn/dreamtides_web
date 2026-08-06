@@ -9,12 +9,7 @@ import { type ArtRef, resolveArtRef } from "../../primitives/art";
 import { type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import type { InfoCardProps } from "../overlay/InfoCard";
-import { BOSS_DISPLAY, ROUND_FRAME_URL } from "./atlas-display";
 import "./atlas.css";
-
-// The frame is a cross-origin CSS mask in production. Keep its cache key
-// versioned so response-header or source-art changes can take effect immediately.
-const ROUND_FRAME_MASK_URL = `${ROUND_FRAME_URL}?v=1`;
 
 /** Atlas-primary display data. The component selects the strict InfoCard variant. */
 export interface AtlasNodePrimary {
@@ -65,8 +60,8 @@ export interface AtlasNodeSite {
 /** A UUID-backed affiliation related to an Atlas node. */
 export interface AtlasNodeAffiliation {
   id: string;
-  name: string;
-  cardTheme: string;
+  title: string;
+  body: string;
 }
 
 /**
@@ -85,6 +80,7 @@ export interface AtlasNodeModel {
   isBoss: boolean;
   isReachable: boolean;
   iconRef: ArtRef | null;
+  unrevealedFrameRef: ArtRef;
   siteBadgeGlyph: Glyph | null;
   knownDreamsignRef: ArtRef | null;
   badgeScale?: number;
@@ -121,8 +117,8 @@ function atlasNodeRevealSpec(model: AtlasNodeModel): RevealSpec {
   if (model.affiliation !== null) {
     secondaries.push({
       variant: "text",
-      title: `Affiliation: ${model.affiliation.name}`,
-      body: richText.plain(`${model.affiliation.cardTheme} cards are more likely here.`),
+      title: model.affiliation.title,
+      body: richText.plain(model.affiliation.body),
     });
   }
   return {
@@ -155,13 +151,12 @@ export function AtlasNode({ model, onActivate }: AtlasNodeProps): React.ReactEle
   const active = binding.sourceProps["data-reveal-active"] === "true";
   const isCompleted = node.state === "completed";
 
-  const face = isBoss ? (
-    <img className="frame-img" src={BOSS_DISPLAY.iconUrl} alt={BOSS_DISPLAY.place} draggable={false} />
-  ) : model.iconRef !== null ? (
+  const frameUrl = resolveArtRef(model.unrevealedFrameRef);
+  const face = model.iconRef !== null ? (
     <img className="frame-img" src={resolveArtRef(model.iconRef)} alt={node.biomeName} draggable={false} />
   ) : (
     <div className="unrevealed-face">
-      <img className="frame-img" src={ROUND_FRAME_URL} alt="" draggable={false} />
+      <img className="frame-img" src={frameUrl} alt="" draggable={false} />
     </div>
   );
 
@@ -171,7 +166,7 @@ export function AtlasNode({ model, onActivate }: AtlasNodeProps): React.ReactEle
     (isBoss ? " node-boss" : "") +
     (isStarter ? " node-start" : "");
   const ariaLabel =
-    `${node.biomeName === "" ? (isBoss ? BOSS_DISPLAY.place : "Unrevealed dreamscape") : node.biomeName} - ${node.state}` +
+    `${node.biomeName === "" ? "Unrevealed dreamscape" : node.biomeName} - ${node.state}` +
     (isStarter ? " - starting dreamscape" : "") +
     (isBoss ? " - final boss" : "") +
     (model.knownDreamsignRef !== null ? " - known dreamsign here" : "");
@@ -190,8 +185,8 @@ export function AtlasNode({ model, onActivate }: AtlasNodeProps): React.ReactEle
     ...binding.sourceProps.style,
   } as CSSProperties;
   const selectableHighlightStyle = {
-    maskImage: `url("${ROUND_FRAME_MASK_URL}")`,
-    WebkitMaskImage: `url("${ROUND_FRAME_MASK_URL}")`,
+    maskImage: `url("${frameUrl}?v=1")`,
+    WebkitMaskImage: `url("${frameUrl}?v=1")`,
   } as CSSProperties;
 
   return (

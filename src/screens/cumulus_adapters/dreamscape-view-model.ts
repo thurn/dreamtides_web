@@ -8,7 +8,7 @@ import {
   siteTypeDescription,
   siteTypeIcon,
   siteTypeName,
-} from "../../atlas/atlas-generator";
+} from "../../data/atlas-data";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import { draftSitePickCount } from "../../draft/draft-site-config";
 import {
@@ -34,6 +34,7 @@ import type {
   DreamscapeNode,
   JourneyState,
 } from "../../types/journey";
+import type { AtlasData } from "../../types/atlas-data";
 import type { TutorialDreamscapeConfiguration } from "../../types/tutorial";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 
@@ -115,6 +116,7 @@ export function battleLabel(completionLevel: number): string {
 export function buildSiteModels(
   node: DreamscapeNode,
   completionLevel: number,
+  atlasData: AtlasData,
 ): DreamscapeSiteModel[] {
   const allNonBattleVisited = node.sites
     .filter((site) => site.type !== "Battle")
@@ -128,7 +130,7 @@ export function buildSiteModels(
       ? battleLabel(completionLevel)
       : site.type === "Draft"
         ? `Draft ${String(draftSitePickCount(site))}x`
-        : siteTypeName(site.type);
+        : siteTypeName(atlasData, site.type);
     return {
       site,
       pos: positions[index] ?? FALLBACK_POS,
@@ -137,8 +139,8 @@ export function buildSiteModels(
       isLocked,
       isInteractive,
       label,
-      blurb: siteTypeDescription(site.type),
-      icon: glyph(siteTypeIcon(site.type)),
+      blurb: siteTypeDescription(atlasData, site.type),
+      icon: glyph(siteTypeIcon(atlasData, site.type)),
     };
   });
 }
@@ -222,6 +224,7 @@ export function dreamscapeTitle(node: DreamscapeNode): string {
 export function buildDreamscapeView(
   node: DreamscapeNode,
   state: JourneyState,
+  atlasData: AtlasData,
   replacementSiteId: string | null = null,
   tutorialConfiguration?: TutorialDreamscapeConfiguration,
 ): DreamscapeView {
@@ -251,7 +254,7 @@ export function buildDreamscapeView(
   return {
     scene: dreamscapeSceneRef(node),
     title: dreamscapeTitle(node),
-    sites: buildSiteModels(node, state.completionLevel),
+    sites: buildSiteModels(node, state.completionLevel, atlasData),
     inlineRewards,
     replacement: buildDreamsignReplacementView(state, replacementSiteId),
     guideDialogue: buildDreamscapeGuideDialogue(

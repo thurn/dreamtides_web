@@ -8,7 +8,7 @@ import {
   loadDreamGuides,
   loadDreamscapes,
 } from "./dreamscapes";
-import { loadAtlasConfig } from "./atlas-config";
+import { loadAtlasData } from "./atlas-data";
 import { generateSiteComposition } from "../atlas/atlas-generator";
 import { LayerName } from "../types/layer-name";
 import type { DreamscapeContent } from "../types/content";
@@ -39,7 +39,7 @@ beforeAll(() => {
     "dreamscapes-data.json",
     "dream-guides-data.json",
     "affiliations-data.json",
-    "atlas-config-data.json",
+    "atlas-data.json",
     "cards_v2-data.json",
   ]) {
     const path = join(PUBLIC_DIR, filename);
@@ -156,9 +156,10 @@ describe("dreamscape content referential integrity", () => {
   });
 
   it("a guide's signature site is enhanced in its home dreamscape and unenhanced elsewhere", async () => {
-    const [dreamscapes, guides] = await Promise.all([
+    const [dreamscapes, guides, atlasData] = await Promise.all([
       loadDreamscapes(),
       loadDreamGuides(),
+      loadAtlasData(),
     ]);
     const context = { dreamscapeModifiers: [] };
     const homeOf = (siteType: string): DreamscapeContent | undefined =>
@@ -175,6 +176,7 @@ describe("dreamscape content referential integrity", () => {
         layer: LayerName.Four,
         dreamscape: home,
         dreamscapes,
+        atlasData,
         context,
       });
       expect(homeComposition.enhancedSiteType).toBe(guide.siteType);
@@ -196,6 +198,7 @@ describe("dreamscape content referential integrity", () => {
         layer: LayerName.Four,
         dreamscape: elsewhere,
         dreamscapes,
+        atlasData,
         context,
       });
       expect(elsewhereComposition.enhancedSiteType).not.toBe(guide.siteType);
@@ -207,23 +210,26 @@ describe("dreamscape content referential integrity", () => {
     }
   });
 
-  it("resolves Maddox as host for every materialized Random Site destination", async () => {
-    const guides = await loadDreamGuides();
-    const destinationTypes = [
-      "Shop", "DreamsignMarket", "DreamsignRevelation", "Transfiguration",
-      "Duplication", "Purge", "Augury", "Gamble", "Exploration",
-    ] as const;
-    for (const type of destinationTypes) {
-      expect(guideForSite(guides, { type, guideIdOverride: "maddox" })?.id).toBe("maddox");
+  it("resolves the Random Site owner as host for every configured destination", async () => {
+    const [guides, dreamscapes, atlasData] = await Promise.all([
+      loadDreamGuides(),
+      loadDreamscapes(),
+      loadAtlasData(),
+    ]);
+    const owner = dreamscapes.find((entry) => entry.signatureSite === "RandomSite");
+    expect(owner?.guideId).not.toBeNull();
+    for (const type of atlasData.randomSite.destinations) {
+      expect(guideForSite(guides, { type, guideIdOverride: owner?.guideId ?? undefined })?.id)
+        .toBe(owner?.guideId);
     }
   });
 
-  it("loads the atlas config with a layer spec per layer", async () => {
-    const config = await loadAtlasConfig();
-    expect(config.layerSpecs.length).toBeGreaterThan(0);
-    for (const spec of config.layerSpecs) {
-      expect(spec.min).toBeLessThanOrEqual(spec.max);
+  it("loads Atlas data with a node-count range per layer", async () => {
+    const atlasData = await loadAtlasData();
+    expect(atlasData.layers.length).toBeGreaterThan(0);
+    for (const layer of atlasData.layers) {
+      expect(layer.nodeCount.min).toBeLessThanOrEqual(layer.nodeCount.max);
     }
-    expect(config.knownDreamsign.maxPerAtlas).toBeGreaterThanOrEqual(0);
+    expect(atlasData.knownDreamsign.maxPerAtlas).toBeGreaterThanOrEqual(0);
   });
 });

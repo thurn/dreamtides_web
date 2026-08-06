@@ -82,6 +82,7 @@ function makeAffiliation(
   return {
     id,
     name: `affiliation ${id}`,
+    atlasCardTheme: "Fixture",
     signatureCards,
     weightStrength: 1,
     opponentBiasStrength: 1,

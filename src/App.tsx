@@ -759,6 +759,7 @@ export default function App({
       db={database}
       gameId={runtimeConfig.gameId}
       runtimeConfig={runtimeConfig}
+      atlasFoldHash={journeyContent.atlasData.foldHash}
       frontDoorEntry={frontDoorEntry}
     >
       {(context) => (

@@ -141,7 +141,6 @@ export function makeBattleTestState(): Pick<
           indexInLayer: 0,
           dreamscapeId: "test_dreamscape",
           biomeName: "Test Biome",
-          biomeColor: "#112233",
           sites: [makeBattleTestSite()],
           position: { x: 0, y: 0 },
           state: "available",

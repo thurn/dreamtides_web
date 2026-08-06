@@ -19,10 +19,16 @@ export function RandomSiteScreenAdapter({ siteId }: { siteId: string }) {
   const runtime = runtimeCandidate?.kind === "randomSite" ? runtimeCandidate : null;
   const guide = site === null ? null : guideForSite(journeyContent.guides, site);
   const view = useMemo(
-    () => site === null || runtime === null
+    () => site === null || runtime === null || guide === null
       ? null
-      : buildRandomSiteView({ sceneNode: node, site, runtime, guide }),
-    [guide, node, runtime, site],
+      : buildRandomSiteView({
+          sceneNode: node,
+          site,
+          runtime,
+          guide,
+          atlasData: journeyContent.atlasData,
+        }),
+    [guide, journeyContent.atlasData, node, runtime, site],
   );
 
   useEffect(() => {

@@ -2,6 +2,7 @@
   {
     "id": "spirit_animals",
     "name": "Spirit Animals",
+    "atlasCardTheme": "Spirit Animal",
     "signatureCards": [
       "9b9c2743-75b3-499d-b5fb-c3429c92d420",
       "401bb341-8385-41e9-8f6f-7b48e9ce174d",
@@ -15,6 +16,7 @@
   {
     "id": "erode_void",
     "name": "The Void",
+    "atlasCardTheme": "Void",
     "signatureCards": [
       "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1",
       "25d00336-5ad7-433b-8ced-71720a9f074a",
@@ -28,6 +30,7 @@
   {
     "id": "removal",
     "name": "Tempo",
+    "atlasCardTheme": "Tempo",
     "signatureCards": [
       "954e8d50-d494-4fb2-b4c7-74979083b774",
       "4f29a241-9265-4669-a189-5a2a91923e12",
@@ -43,6 +46,7 @@
   {
     "id": "storm_events",
     "name": "Events",
+    "atlasCardTheme": "Event",
     "signatureCards": [
       "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
       "967c714f-40c5-4a77-8e22-40691a2755d4",
@@ -56,6 +60,7 @@
   {
     "id": "inexpensive_characters",
     "name": "Characters",
+    "atlasCardTheme": "Character",
     "signatureCards": [
       "9b9c2743-75b3-499d-b5fb-c3429c92d420",
       "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49",
@@ -69,6 +74,7 @@
   {
     "id": "warriors",
     "name": "Warriors",
+    "atlasCardTheme": "Warrior",
     "signatureCards": [
       "724a1362-3f0f-4b77-b14e-22c0b877349a",
       "1ce0f0f2-4b1a-483d-b93b-74c36e946a08",
@@ -82,6 +88,7 @@
   {
     "id": "abandon_sacrifice",
     "name": "Abandon",
+    "atlasCardTheme": "Abandon",
     "signatureCards": [
       "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005",
       "a9b5afaa-e149-4bf4-9007-077e8e9f12e6",
@@ -95,6 +102,7 @@
   {
     "id": "survivors",
     "name": "Survivors",
+    "atlasCardTheme": "Survivor",
     "signatureCards": [
       "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1",
       "f3985df4-0867-4fd6-8312-6b358dc26883",
@@ -107,6 +115,7 @@
   {
     "id": "figments",
     "name": "Figments",
+    "atlasCardTheme": "Figment",
     "signatureCards": [
       "f4082c01-fdc8-4583-afdb-76bac980b3bf",
       "89c0d03c-2199-415a-bc66-89e451034328",
@@ -119,6 +128,7 @@
   {
     "id": "discard",
     "name": "Discard",
+    "atlasCardTheme": "Discard",
     "signatureCards": [
       "68978d92-aa8b-4873-bb0b-6e52f12b0849",
       "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4",

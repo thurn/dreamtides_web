@@ -218,6 +218,7 @@ function makeAffiliationContent(db: ReadonlyMap<number, CardData>): {
     {
       id: "alpha_affiliation",
       name: "Alpha Affiliation",
+      atlasCardTheme: "Alpha",
       signatureCards: alphaSignatureUuids,
       weightStrength: 4,
       opponentBiasStrength: 8,
@@ -231,7 +232,6 @@ function makeAffiliationContent(db: ReadonlyMap<number, CardData>): {
       guideId: null,
       signatureSite: "Battle",
       affiliationId: "alpha_affiliation",
-      siteIcon: "",
       isStarter: false,
       dreamAvatarIds: [],
     },

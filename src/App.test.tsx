@@ -2,7 +2,7 @@
 
 import { act } from "react";
 import {
-  MINIMAL_ATLAS_CONFIG,
+  MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
 } from "./__test-helpers__/atlas-fixtures";
 import type { ReactElement, ReactNode } from "react";
@@ -363,7 +363,7 @@ function makeJourneyContent(): JourneyContent {
     dreamscapes: MINIMAL_DREAMSCAPES,
     affiliations: [],
     guides: [],
-    atlasConfig: MINIMAL_ATLAS_CONFIG,
+    atlasData: MINIMAL_ATLAS_DATA,
   };
 }
 
@@ -381,7 +381,7 @@ function setJourneyState(state: JourneyState): void {
       dreamscapes: MINIMAL_DREAMSCAPES,
       affiliations: [],
       guides: [],
-      atlasConfig: MINIMAL_ATLAS_CONFIG,
+      atlasData: MINIMAL_ATLAS_DATA,
     },
   });
 }
@@ -668,7 +668,7 @@ describe("JourneyApp", () => {
         dreamscapes: MINIMAL_DREAMSCAPES,
         affiliations: [],
         guides: [],
-        atlasConfig: MINIMAL_ATLAS_CONFIG,
+        atlasData: MINIMAL_ATLAS_DATA,
       },
     });
 
@@ -782,7 +782,6 @@ describe("JourneyApp", () => {
               indexInLayer: 0,
               dreamscapeId: "test_dreamscape",
               biomeName: "Test Dreamscape",
-              biomeColor: "#112233",
               sites: [
                 {
                   id: "site-1",
@@ -843,7 +842,6 @@ describe("JourneyApp", () => {
               indexInLayer: 0,
               dreamscapeId: "test_dreamscape",
               biomeName: "Test Dreamscape",
-              biomeColor: "#112233",
               sites: [
                 {
                   id: "site-1",

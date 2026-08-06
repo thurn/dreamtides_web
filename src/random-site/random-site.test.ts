@@ -1,15 +1,45 @@
 import { describe, expect, it } from "vitest";
-import { isRandomSiteMetadata } from "./random-site";
+import type { SiteState } from "../types/journey";
+import { isRandomSiteMetadata, materializeRandomSite } from "./random-site";
 
 describe("Random Site metadata", () => {
-  it("requires three distinct candidates for a home choice", () => {
+  it("requires at least two distinct routed candidates for a home choice", () => {
     expect(isRandomSiteMetadata({
       mode: "homeChoice",
-      candidateSiteTypes: ["Shop", "Purge"],
+      candidateSiteTypes: ["Shop"],
     })).toBe(false);
     expect(isRandomSiteMetadata({
       mode: "homeChoice",
-      candidateSiteTypes: ["Shop", "Purge", "Augury"],
+      candidateSiteTypes: ["Shop", "Purge"],
     })).toBe(true);
+    expect(isRandomSiteMetadata({
+      mode: "homeChoice",
+      candidateSiteTypes: ["Shop", "Essence"],
+    })).toBe(false);
+    expect(isRandomSiteMetadata({
+      mode: "single",
+      candidateSiteTypes: ["Reward"],
+      destinationSiteType: "Reward",
+    })).toBe(false);
+  });
+
+  it("applies the configured presenting guide when legacy metadata omits one", () => {
+    const site: SiteState = {
+      id: "fixture-random-site",
+      type: "RandomSite",
+      isEnhanced: true,
+      isVisited: false,
+      randomSite: {
+        mode: "single",
+        candidateSiteTypes: ["Exploration"],
+        destinationSiteType: "Exploration",
+      },
+    };
+    expect(
+      materializeRandomSite(site, "Exploration", "fixture-random-guide"),
+    ).toMatchObject({
+      type: "Exploration",
+      guideIdOverride: "fixture-random-guide",
+    });
   });
 });

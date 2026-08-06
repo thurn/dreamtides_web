@@ -14,6 +14,7 @@ import { LayerName } from "../../types/layer-name";
 import type { DreamscapeScreenProps } from "../../cumulus/screens/DreamscapeScreen";
 import { logEvent, logEventOnce } from "../../logging";
 import { DreamscapeScreenAdapter } from "./DreamscapeScreenAdapter";
+import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
 
 const screenMock = vi.hoisted(() =>
   vi.fn<(props: DreamscapeScreenProps) => void>(),
@@ -49,7 +50,6 @@ function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
     indexInLayer: 0,
     dreamscapeId: "ember_wood",
     biomeName: "Ember Wood",
-    biomeColor: "",
     sites: [
       {
         id: "s-essence",
@@ -110,12 +110,15 @@ function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
 function setJourneyContext(
   mutations: JourneyMutations,
   state: JourneyState = makeState(),
-  journeyContent: JourneyContent = {} as JourneyContent,
+  journeyContent: Partial<JourneyContent> = {},
 ): void {
   vi.mocked(useJourney).mockReturnValue({
     state,
     mutations,
-    journeyContent,
+    journeyContent: {
+      atlasData: MINIMAL_ATLAS_DATA,
+      ...journeyContent,
+    },
   } as JourneyContextValue);
 }
 
@@ -148,7 +151,7 @@ describe("DreamscapeScreenAdapter", () => {
             text: "Visit [purple]Dream Sites[/purple].",
           },
         },
-      } as JourneyContent,
+      },
     );
     const container = document.createElement("div");
     const root = createRoot(container);

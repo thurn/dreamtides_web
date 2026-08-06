@@ -312,27 +312,34 @@ describe("removeUiParamFromSearch", () => {
 });
 
 describe("contentConfigFromRuntime", () => {
+  const atlasFoldHash = "fixture-atlas-fold-hash";
+
   it("extracts the fold-relevant slice with defaults for absent optionals", () => {
-    expect(contentConfigFromRuntime(parseRuntimeConfig(""))).toEqual({
+    expect(contentConfigFromRuntime(parseRuntimeConfig(""), atlasFoldHash)).toEqual({
       poolVariant: DEFAULT_POOL_VARIANT,
       draftMode: "pool",
       fresh20PackSize: null,
+      atlasFoldHash,
     });
   });
 
   it("reflects the fresh20 draft mode, pack size, and current journey", () => {
     expect(
-      contentConfigFromRuntime(parseRuntimeConfig("?algo=fresh20&packsize=15")),
+      contentConfigFromRuntime(
+        parseRuntimeConfig("?algo=fresh20&packsize=15"),
+        atlasFoldHash,
+      ),
     ).toEqual({
       poolVariant: DEFAULT_POOL_VARIANT,
       draftMode: "fresh20",
       fresh20PackSize: 15,
+      atlasFoldHash,
     });
   });
 
   it("reflects a named pool variant", () => {
     expect(
-      contentConfigFromRuntime(parseRuntimeConfig("?algo=idf2")).poolVariant,
+      contentConfigFromRuntime(parseRuntimeConfig("?algo=idf2"), atlasFoldHash).poolVariant,
     ).toBe("idf2");
   });
 });
@@ -342,6 +349,7 @@ describe("contentConfigsEqual", () => {
     poolVariant: "tides4",
     draftMode: "pool",
     fresh20PackSize: null,
+    atlasFoldHash: "fixture-atlas-fold-hash",
   };
 
   it("is true for field-wise equal configs", () => {
@@ -358,6 +366,9 @@ describe("contentConfigsEqual", () => {
     expect(contentConfigsEqual(base, { ...base, fresh20PackSize: 20 })).toBe(
       false,
     );
+    expect(contentConfigsEqual(base, { ...base, atlasFoldHash: "different" })).toBe(
+      false,
+    );
   });
 });
 
@@ -368,26 +379,33 @@ describe("applyContentConfigToSearch", () => {
         poolVariant: "idf2",
         draftMode: "pool",
         fresh20PackSize: null,
+        atlasFoldHash: "fixture-atlas-fold-hash",
       },
       {
         poolVariant: DEFAULT_POOL_VARIANT,
         draftMode: "replay",
         fresh20PackSize: null,
+        atlasFoldHash: "fixture-atlas-fold-hash",
       },
       {
         poolVariant: DEFAULT_POOL_VARIANT,
         draftMode: "fresh20",
         fresh20PackSize: 12,
+        atlasFoldHash: "fixture-atlas-fold-hash",
       },
       {
         poolVariant: DEFAULT_POOL_VARIANT,
         draftMode: "fresh20",
         fresh20PackSize: null,
+        atlasFoldHash: "fixture-atlas-fold-hash",
       },
     ];
     for (const config of configs) {
       const search = applyContentConfigToSearch("", config);
-      expect(contentConfigFromRuntime(parseRuntimeConfig(search))).toEqual(
+      expect(contentConfigFromRuntime(
+        parseRuntimeConfig(search),
+        config.atlasFoldHash ?? "fixture-atlas-fold-hash",
+      )).toEqual(
         config,
       );
     }

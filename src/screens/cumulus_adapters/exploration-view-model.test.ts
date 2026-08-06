@@ -12,6 +12,7 @@ import type {
   SiteState,
 } from "../../types/journey";
 import { createDefaultState } from "../../state/journey-context";
+import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
 import {
   buildExplorationActionEffect,
   buildExplorationSiteView,
@@ -111,7 +112,7 @@ describe("exploration-view-model", () => {
       dreamscapes: [],
       affiliations: [],
       guides: [guide],
-      atlasConfig: { completionLevels: [] },
+      atlasData: MINIMAL_ATLAS_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -235,7 +236,7 @@ describe("exploration-view-model", () => {
       dreamscapes: [],
       affiliations: [],
       guides: [guide],
-      atlasConfig: { completionLevels: [] },
+      atlasData: MINIMAL_ATLAS_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -318,7 +319,7 @@ describe("exploration-view-model", () => {
       dreamscapes: [],
       affiliations: [],
       guides: [guide],
-      atlasConfig: { completionLevels: [] },
+      atlasData: MINIMAL_ATLAS_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -511,7 +512,7 @@ describe("exploration-view-model", () => {
       dreamscapes: [],
       affiliations: [],
       guides: [guide],
-      atlasConfig: { completionLevels: [] },
+      atlasData: MINIMAL_ATLAS_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -618,7 +619,7 @@ describe("exploration-view-model", () => {
       dreamscapes: [],
       affiliations: [],
       guides: [guide],
-      atlasConfig: { completionLevels: [] },
+      atlasData: MINIMAL_ATLAS_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -737,7 +738,7 @@ describe("exploration-view-model", () => {
       dreamscapes: [],
       affiliations: [],
       guides: [guide],
-      atlasConfig: { completionLevels: [] },
+      atlasData: MINIMAL_ATLAS_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -880,7 +881,7 @@ describe("exploration-view-model", () => {
       dreamscapes: [],
       affiliations: [],
       guides: [guide],
-      atlasConfig: { completionLevels: [] },
+      atlasData: MINIMAL_ATLAS_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -982,7 +983,7 @@ describe("exploration-view-model", () => {
       dreamscapes: [],
       affiliations: [],
       guides: [guide],
-      atlasConfig: { completionLevels: [] },
+      atlasData: MINIMAL_ATLAS_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -1102,7 +1103,7 @@ describe("exploration-view-model", () => {
       dreamscapes: [],
       affiliations: [],
       guides: [guide],
-      atlasConfig: { completionLevels: [] },
+      atlasData: MINIMAL_ATLAS_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -1202,7 +1203,7 @@ describe("exploration-view-model", () => {
       dreamscapes: [],
       affiliations: [],
       guides: [guide],
-      atlasConfig: { completionLevels: [] },
+      atlasData: MINIMAL_ATLAS_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -1286,7 +1287,7 @@ describe("exploration-view-model", () => {
       dreamscapes: [],
       affiliations: [],
       guides: [],
-      atlasConfig: { completionLevels: [] },
+      atlasData: MINIMAL_ATLAS_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -1410,7 +1411,7 @@ describe("exploration-view-model", () => {
       dreamscapes: [],
       affiliations: [],
       guides: [guide],
-      atlasConfig: { completionLevels: [] },
+      atlasData: MINIMAL_ATLAS_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [heldDreamsign],
@@ -1572,7 +1573,7 @@ describe("exploration-view-model", () => {
         dreamscapes: [],
         affiliations: [],
         guides: [guide],
-        atlasConfig: { completionLevels: [] },
+        atlasData: MINIMAL_ATLAS_DATA,
         exploration: {
           customCards: [],
           customDreamsigns: [],

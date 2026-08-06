@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactElement } from "react";
-import { siteTypeIcon } from "../atlas/atlas-generator";
 import { loadCardDatabase } from "../data/card-database";
+import { loadAtlasData, siteTypeIcon } from "../data/atlas-data";
 import {
   OfferTile,
   type OfferTileCard,
@@ -17,6 +17,7 @@ import { MERCHANT_ARCHETYPE_BUILDERS } from "../journey_v2/archetypes/registry";
 import type { MerchantArchetypeId } from "../journey_v2/archetypes/types";
 import { asCardId, asCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
+import type { AtlasData } from "../types/atlas-data";
 
 const fixtureCard = (cardId: string, imageNumber: number): OfferTileCard => {
   const id = asCardId(cardId);
@@ -101,9 +102,10 @@ const DREAMSIGNS: OfferTileDreamsignChoices = [
 ];
 
 /** One maximal, production-shaped UUID-backed specimen per canonical archetype. */
-export const OFFER_TILE_DEBUG_MODELS: Readonly<
+export function buildOfferTileDebugModels(atlasData: AtlasData): Readonly<
   Record<MerchantArchetypeId, OfferTileModel>
-> = {
+> {
+  return {
   fit_card_grant: {
     id: "debug:fit_card_grant",
     kind: "card-gift",
@@ -196,10 +198,11 @@ export const OFFER_TILE_DEBUG_MODELS: Readonly<
     site: {
       id: "Duplication",
       name: "Duplication",
-      glyph: glyph(siteTypeIcon("Duplication")),
+      glyph: glyph(siteTypeIcon(atlasData, "Duplication")),
     },
   },
-};
+  };
+}
 
 /** Debug-only explanation of the maximal live offer shape each tile represents. */
 export const OFFER_TILE_DEBUG_NOTES: Readonly<
@@ -294,6 +297,7 @@ export default function OffersDebugApp(): ReactElement {
     null,
   );
   const [cardLoadError, setCardLoadError] = useState<string | null>(null);
+  const [atlasData, setAtlasData] = useState<AtlasData | null>(null);
   useEffect(() => {
     let cancelled = false;
     loadCardDatabase()
@@ -316,9 +320,27 @@ export default function OffersDebugApp(): ReactElement {
       cancelled = true;
     };
   }, []);
-  const models = OFFER_TILE_DEBUG_ARCHETYPE_IDS.map((archetypeId) =>
-    hydrateOfferCards(OFFER_TILE_DEBUG_MODELS[archetypeId], cardsById),
-  );
+  useEffect(() => {
+    let cancelled = false;
+    loadAtlasData()
+      .then((loadedAtlasData) => {
+        if (!cancelled) setAtlasData(loadedAtlasData);
+      })
+      .catch((cause: unknown) => {
+        if (!cancelled) {
+          setCardLoadError(cause instanceof Error ? cause.message : String(cause));
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  const debugModels = atlasData === null ? null : buildOfferTileDebugModels(atlasData);
+  const models = debugModels === null
+    ? []
+    : OFFER_TILE_DEBUG_ARCHETYPE_IDS.map((archetypeId) =>
+        hydrateOfferCards(debugModels[archetypeId], cardsById),
+      );
   const selected =
     lastPressed === null
       ? null
@@ -406,10 +428,8 @@ export default function OffersDebugApp(): ReactElement {
           }}
         >
           {OFFER_TILE_DEBUG_ARCHETYPE_IDS.map((archetypeId) => {
-            const model = hydrateOfferCards(
-              OFFER_TILE_DEBUG_MODELS[archetypeId],
-              cardsById,
-            );
+            if (debugModels === null) return null;
+            const model = hydrateOfferCards(debugModels[archetypeId], cardsById);
             return (
               <figure
                 key={archetypeId}

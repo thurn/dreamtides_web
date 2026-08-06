@@ -166,6 +166,7 @@ export function buildMerchantContext({
       : undefined;
 
   return {
+    atlasData: journeyContent.atlasData,
     journeySeed: journeyState.seed,
     site,
     rerollNonce,

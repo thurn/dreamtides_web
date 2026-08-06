@@ -26,7 +26,7 @@ function decodeContentConfig(
 ): ContentConfig | undefined | null {
   if (value === undefined) return undefined;
   if (!isRecord(value)) return null;
-  const { poolVariant, draftMode, fresh20PackSize } = value;
+  const { poolVariant, draftMode, fresh20PackSize, atlasFoldHash } = value;
   if (
     typeof poolVariant !== "string" ||
     typeof draftMode !== "string" ||
@@ -34,11 +34,17 @@ function decodeContentConfig(
       fresh20PackSize === null ||
       (typeof fresh20PackSize === "number" &&
         Number.isFinite(fresh20PackSize))
-    )
+    ) ||
+    !(atlasFoldHash === undefined || typeof atlasFoldHash === "string")
   ) {
     return null;
   }
-  return { poolVariant, draftMode, fresh20PackSize };
+  return {
+    poolVariant,
+    draftMode,
+    fresh20PackSize,
+    ...(atlasFoldHash === undefined ? {} : { atlasFoldHash }),
+  };
 }
 
 /** Parse and validate the JSON-encoded room genesis stored by RTDB. */

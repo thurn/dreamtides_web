@@ -27,11 +27,12 @@ import { normalizePersistedNightmareJourney } from "../nightmare-migration";
 import { cloneBattleMutableState } from "../../battle/state/create-initial-state";
 import { FRONT_RANK_SLOTS } from "../../battle/types";
 import { isTutorialBattleAiActionOverrides } from "../../types/tutorial-ai-action-overrides";
-import { canVisitSite } from "./sites";
+import { canVisitSite, getSiteContentProvider } from "./sites";
 import {
   isRandomSiteMetadata,
   materializeRandomSite,
 } from "../../random-site/random-site";
+import { SITE_TYPES } from "../../types/site-type";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (SELECT_DREAM_AVATAR / START_JOURNEY)
@@ -186,6 +187,7 @@ export function enterSite(
     const materialized = materializeRandomSite(
       site,
       site.randomSite.destinationSiteType,
+      getSiteContentProvider()?.randomSiteGuideId,
     );
     return {
       ...journey,
@@ -494,11 +496,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
-const CURRENT_SITE_TYPES: ReadonlySet<string> = new Set<SiteType>([
-  "Battle", "Draft", "Shop", "Purge", "Essence", "Transfiguration",
-  "Duplication", "Reward", "Augury", "DreamsignMarket",
-  "DreamsignRevelation", "RandomSite", "Gamble", "Exploration",
-]);
+const CURRENT_SITE_TYPES: ReadonlySet<string> = new Set<SiteType>(SITE_TYPES);
 
 function hasValidAtlasSites(atlas: Record<string, unknown>): boolean {
   if (!isRecord(atlas.nodes)) return false;

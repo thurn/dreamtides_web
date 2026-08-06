@@ -26,17 +26,18 @@ const CARD: CardData = {
 const ATLAS_MODEL: AtlasNodeModel = {
   node: {
     id: ATLAS_NODE_ID, layer: LayerName.Two, indexInLayer: 0,
-    dreamscapeId: "conformance-veil", biomeName: "Conformance Veil", biomeColor: "violet",
+    dreamscapeId: "conformance-veil", biomeName: "Conformance Veil",
     sites: [], position: { x: 0, y: 0 }, state: "available", enhancedSiteType: null,
     forwardIds: [], backwardIds: [], knownDreamsignId: "44444444-4444-4444-8444-444444444444",
   },
   left: 92, top: 92, size: 112, isStarter: false, isBoss: false, isReachable: true,
   iconRef: artRef.dreamscapeIcon("wilderveil"), siteBadgeGlyph: GLYPHS.water,
+  unrevealedFrameRef: artRef.atlasAsset("fixture-frame.png"),
   knownDreamsignRef: artRef.dreamsign("runes.png"),
   primary: { sceneArt: artRef.dreamscapeScene("wilderveil"), figureArt: null, placeName: "Conformance Veil", guideName: null, title: "Conformance Veil", body: "A fixed Atlas fixture." },
   dreamsign: { id: "44444444-4444-4444-8444-444444444444", name: "Measured Sign", art: null, rulesText: "The first vision is fixed." },
   site: { id: "55555555-5555-4555-8555-555555555555", name: "Measured Site", blurb: "A fixed semantic site.", icon: GLYPHS.water },
-  affiliation: { id: "66666666-6666-4666-8666-666666666666", name: "Guides", cardTheme: "Guide" },
+  affiliation: { id: "66666666-6666-4666-8666-666666666666", title: "Fixture affiliation", body: "Fixture cards are more likely here." },
 };
 
 const BATTLE_CARD: CardData = {

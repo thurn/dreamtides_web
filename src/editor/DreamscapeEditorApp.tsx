@@ -79,8 +79,6 @@ function confirmedFieldValue(
       return record["guide-id"] ?? "";
     case "affiliation-id":
       return record["affiliation-id"] ?? "";
-    case "site-icon":
-      return record["site-icon"];
   }
 }
 
@@ -94,9 +92,6 @@ function validateFieldSave(
   }
   if (field === "aesthetic" && text.length === 0) {
     return { ok: false, message: "Aesthetic cannot be blank." };
-  }
-  if (field === "site-icon" && text.length === 0) {
-    return { ok: false, message: "Site icon cannot be blank." };
   }
   if (
     (field === "signature-site" || field === "guide-id" || field === "affiliation-id") &&

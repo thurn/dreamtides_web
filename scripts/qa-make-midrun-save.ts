@@ -8,14 +8,14 @@ import {
 } from "../src/atlas/atlas-generator";
 import {
   loadTestDreamscapes,
-  loadTestAtlasConfig,
+  loadTestAtlasData,
 } from "../src/__test-helpers__/atlas-fixtures";
 
 const dreamscapes = loadTestDreamscapes();
-const atlasConfig = loadTestAtlasConfig();
+const atlasData = loadTestAtlasData();
 const build = {
   dreamscapes,
-  atlasConfig,
+  atlasData,
   dreamsignPoolIds: Array.from({ length: 8 }, (_, i) => `qa-ds-${String(i)}`),
 };
 

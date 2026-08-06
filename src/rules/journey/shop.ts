@@ -39,28 +39,14 @@ import type {
 } from "../../types/journey";
 import { mintEntryId } from "./deck";
 import { findSite, getSiteContentProvider } from "./sites";
-import { RANDOM_SITE_DESTINATIONS } from "../../random-site/random-site";
+import { isRandomSiteDestinationType } from "../../random-site/random-site";
+import { SITE_TYPES as SITE_TYPE_VALUES } from "../../types/site-type";
 
 // ---------------------------------------------------------------------------
 // Shared helpers
 // ---------------------------------------------------------------------------
 
-const SITE_TYPES: ReadonlySet<SiteType> = new Set<SiteType>([
-  "Battle",
-  "Draft",
-  "Shop",
-  "Purge",
-  "Essence",
-  "Transfiguration",
-  "Duplication",
-  "Reward",
-  "Augury",
-  "DreamsignMarket",
-  "DreamsignRevelation",
-  "RandomSite",
-  "Gamble",
-  "Exploration",
-]);
+const SITE_TYPES: ReadonlySet<SiteType> = new Set(SITE_TYPE_VALUES);
 
 function asString(value: unknown): string | null {
   return typeof value === "string" ? value : null;
@@ -139,14 +125,24 @@ function debugSite(
     return { id, type, isEnhanced: false, isVisited: false };
   }
   const visible = new Set(siblingSites.map((site) => site.type));
+  const provider = getSiteContentProvider();
+  const authoredDestinations = provider?.randomSiteDestinations;
+  const destinations = authoredDestinations ?? SITE_TYPE_VALUES.filter(
+    isRandomSiteDestinationType,
+  );
   const destinationSiteType =
-    RANDOM_SITE_DESTINATIONS.find((candidate) => !visible.has(candidate)) ??
-    "Exploration";
+    destinations.find((candidate) => !visible.has(candidate)) ?? destinations[0];
+  if (destinationSiteType === undefined) {
+    throw new Error("Random Site has no configured destinations.");
+  }
   return {
     id,
     type,
     isEnhanced: true,
     isVisited: false,
+    ...(provider?.randomSiteGuideId === undefined
+      ? {}
+      : { guideIdOverride: provider.randomSiteGuideId }),
     randomSite: {
       mode: "single",
       candidateSiteTypes: [destinationSiteType],

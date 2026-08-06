@@ -26,6 +26,7 @@ import {
   validateTutorialBattleConfiguration,
   validateTutorialTriggers,
 } from "./tutorial-data.mjs";
+import { compileAtlasData } from "./atlas-data.mjs";
 
 // Re-exported for `setup-assets.test.mjs`, which exercises the JSONC comment
 // stripper alongside the asset-build helpers defined here.
@@ -86,9 +87,9 @@ const TUTORIAL_DIALOGUE_FRAME_ART_PATH = join(
 // (`<id>.png`, the hover-card art) and a circular node icon (`<id>_icon.png`).
 // Dream-guide character renders (one per guide, plus the boss `apollyon.png`)
 // and the ornate round frame used for unrevealed nodes round out the set.
-const DREAMSCAPE_SCENE_ART_DIR = join(homedir(), "Documents", "synty", "dreamscape_images");
-const DREAMSCAPE_ICON_ART_DIR = join(homedir(), "Documents", "synty", "dreamscape_icons");
-const DREAM_GUIDE_ART_DIR = join(homedir(), "Documents", "synty", "dream_guides");
+export const DREAMSCAPE_SCENE_ART_DIR = join(homedir(), "Documents", "synty", "dreamscape_images");
+export const DREAMSCAPE_ICON_ART_DIR = join(homedir(), "Documents", "synty", "dreamscape_icons");
+export const DREAM_GUIDE_ART_DIR = join(homedir(), "Documents", "synty", "dream_guides");
 
 /**
  * Maps each Dream Guide id to the basename of its character render in
@@ -109,16 +110,6 @@ const GUIDE_PORTRAIT_SOURCE_BY_ID = {
   layaway: "layaway.png",
 };
 
-/**
- * The Layer-VII final dream. Visually the atlas always presents the boss node
- * as Limbo guarded by Apollyon, independent of whichever dreamscape the
- * generator assigns the boss node for its battle. The scene/icon reuse the
- * Limbo dreamscape art and the figure is Apollyon's character render.
- */
-const BOSS_SCENE_SOURCE = "limbo.png";
-const BOSS_ICON_SOURCE = "limbo_icon.png";
-const BOSS_FIGURE_SOURCE = "apollyon.png";
-const ROUND_FRAME_SOURCE = "Round_frame_main.png";
 const CARD_FRAME_ART_DIR = join(
   homedir(),
   "dreamtides",
@@ -1107,29 +1098,6 @@ export function transformAffiliation(affiliation) {
 }
 
 /**
- * Convert the parsed atlas_config TOML object to its runtime JSON
- * representation. Top-level keys are renamed kebab->camel; nested objects
- * (tables) have their inner keys renamed kebab->camel as well; arrays pass
- * through unchanged.
- */
-export function transformAtlasConfig(config) {
-  const result = {};
-  for (const [key, value] of Object.entries(config)) {
-    const camelKey = kebabToCamel(key);
-    if (value !== null && typeof value === "object" && !Array.isArray(value)) {
-      const nested = {};
-      for (const [nestedKey, nestedValue] of Object.entries(value)) {
-        nested[kebabToCamel(nestedKey)] = nestedValue;
-      }
-      result[camelKey] = nested;
-    } else {
-      result[camelKey] = value;
-    }
-  }
-  return result;
-}
-
-/**
  * Parse `cards.toml` and write both runtime card JSON catalogs — the
  * Special-filtered `card-data.json` the journey/battle runtime fetches, and the
  * unfiltered `cards_v2-data.json` that `cards-v2-database.ts` fetches with the
@@ -1329,7 +1297,8 @@ export function setupAssets({
   dreamGuidesTomlPath = join(DATA_DIR, "tabula", "dream_guides.toml"),
   explorationTomlPath = join(DATA_DIR, "tabula", "exploration.toml"),
   affiliationsTomlPath = join(DATA_DIR, "tabula", "affiliations.toml"),
-  atlasConfigTomlPath = join(DATA_DIR, "tabula", "atlas_config.toml"),
+  atlasTomlPath = join(DATA_DIR, "tabula", "atlas.toml"),
+  glossaryTomlPath = join(DATA_DIR, "tabula", "glossary.toml"),
   apollyonIncarnationsTomlPath = join(
     DATA_DIR,
     "tabula",
@@ -1393,7 +1362,7 @@ export function setupAssets({
   const dreamGuidesJsonPath = join(publicDir, "dream-guides-data.json");
   const explorationJsonPath = join(publicDir, "exploration-data.json");
   const affiliationsJsonPath = join(publicDir, "affiliations-data.json");
-  const atlasConfigJsonPath = join(publicDir, "atlas-config-data.json");
+  const atlasJsonPath = join(publicDir, "atlas-data.json");
   const apollyonIncarnationsJsonPath = join(
     publicDir,
     "apollyon-incarnations-data.json",
@@ -1898,17 +1867,30 @@ export function setupAssets({
   );
   console.log(`Wrote ${jsonAffiliations.length} affiliations to affiliations-data.json`);
 
-  // Atlas generation tuning: a single TOML table written as the kebab->camel
-  // JSON the runtime loader fetches at /atlas-config-data.json.
-  console.log("Parsing atlas_config.toml...");
-  const atlasConfigTomlContent = readFileSync(atlasConfigTomlPath, "utf8");
-  const parsedAtlasConfig = parse(atlasConfigTomlContent);
-  const jsonAtlasConfig = transformAtlasConfig(parsedAtlasConfig);
+  // Dream Atlas rules, content, and presentation data. Compile the TOML through
+  // the same strict normalizer used by targeted dev hot reload.
+  console.log("Parsing atlas.toml...");
+  const atlasTomlContent = readFileSync(atlasTomlPath, "utf8");
+  const parsedAtlas = parse(atlasTomlContent);
+  const parsedGlossary = parse(readFileSync(glossaryTomlPath, "utf8"));
+  const jsonAtlasData = compileAtlasData(parsedAtlas, {
+    dreamscapes: allDreamscapes,
+    affiliations: allAffiliations,
+    glossaryIds: Array.isArray(parsedGlossary.entries)
+      ? parsedGlossary.entries.map((entry) => entry.id)
+      : [],
+    assetSources: {
+      bossScenes: new Set(readdirSync(dreamscapeSceneArtDir)),
+      bossIcons: new Set(readdirSync(dreamscapeIconArtDir)),
+      bossFigures: new Set(readdirSync(dreamGuideArtDir)),
+      frames: new Set(readdirSync(dreamscapeIconArtDir)),
+    },
+  });
   writeFileSync(
-    atlasConfigJsonPath,
-    JSON.stringify(jsonAtlasConfig, null, 2) + "\n",
+    atlasJsonPath,
+    JSON.stringify(jsonAtlasData, null, 2) + "\n",
   );
-  console.log("Wrote atlas config to atlas-config-data.json");
+  console.log("Wrote Atlas data to atlas-data.json");
 
   // Apollyon incarnations: the final DreamAvatar's ten guises. Parse the TOML
   // and write the kebab->camel JSON the runtime loader fetches at
@@ -2335,7 +2317,7 @@ export function setupAssets({
   // are symlinked into `public/dreamscapes/<id>.png` and
   // `public/dreamscape-icons/<id>.png` so the atlas resolves both directly from
   // a node's dreamscape id. The Layer-VII final dream (Limbo / Apollyon) is
-  // linked under the fixed `limbo` / `apollyon` keys the atlas reads. Missing
+  // linked under the authored boss keys the atlas reads. Missing
   // source files warn-and-continue like the other art directories so a fresh
   // checkout without the synty art still builds.
   recreateDir(dreamscapesArtDir);
@@ -2366,15 +2348,25 @@ export function setupAssets({
       `${dreamscape.id}.png`,
     );
   }
-  // The final-dream (Limbo) scene + node icon, keyed `limbo` for the atlas.
-  linkDreamscapeImage(dreamscapeSceneArtDir, BOSS_SCENE_SOURCE, dreamscapesArtDir, "limbo.png");
-  linkDreamscapeImage(dreamscapeIconArtDir, BOSS_ICON_SOURCE, dreamscapeIconsDir, "limbo.png");
+  // The final-dream scene + node icon, keyed by the Atlas boss art ids.
+  linkDreamscapeImage(
+    dreamscapeSceneArtDir,
+    jsonAtlasData.assets.bossSceneSource,
+    dreamscapesArtDir,
+    `${jsonAtlasData.boss.sceneArtId}.png`,
+  );
+  linkDreamscapeImage(
+    dreamscapeIconArtDir,
+    jsonAtlasData.assets.bossIconSource,
+    dreamscapeIconsDir,
+    `${jsonAtlasData.boss.iconArtId}.png`,
+  );
   console.log(
     `Linked ${linkedDreamscapeArt} dreamscape scene/icon images (${missingDreamscapeArt} missing)`,
   );
 
   // Dream Guide character renders, one per guide keyed by guide id, plus the
-  // boss figure Apollyon under the fixed `apollyon` key.
+  // boss figure under the authored figure-art key.
   recreateDir(dreamGuidesDir);
   let linkedGuideArt = 0;
   let missingGuideArt = 0;
@@ -2391,16 +2383,25 @@ export function setupAssets({
   for (const [guideId, sourceFile] of Object.entries(GUIDE_PORTRAIT_SOURCE_BY_ID)) {
     linkGuidePortrait(sourceFile, `${guideId}.png`);
   }
-  linkGuidePortrait(BOSS_FIGURE_SOURCE, "apollyon.png");
+  linkGuidePortrait(
+    jsonAtlasData.assets.bossFigureSource,
+    `${jsonAtlasData.boss.figureArtId}.png`,
+  );
   console.log(
     `Linked ${linkedGuideArt} dream guide portraits (${missingGuideArt} missing)`,
   );
 
   // The ornate round frame used for unrevealed atlas nodes.
   recreateDir(atlasArtDir);
-  const roundFrameSource = join(dreamscapeIconArtDir, ROUND_FRAME_SOURCE);
+  const roundFrameSource = join(
+    dreamscapeIconArtDir,
+    jsonAtlasData.assets.unrevealedFrameSource,
+  );
   if (existsSync(roundFrameSource)) {
-    symlinkSync(roundFrameSource, join(atlasArtDir, ROUND_FRAME_SOURCE));
+    symlinkSync(
+      roundFrameSource,
+      join(atlasArtDir, jsonAtlasData.assets.unrevealedFrameKey),
+    );
     console.log("Linked atlas round frame image");
   } else {
     console.warn(`  Warning: missing atlas round frame ${roundFrameSource}`);

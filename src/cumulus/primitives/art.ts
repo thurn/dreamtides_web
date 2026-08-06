@@ -64,6 +64,11 @@ export type ArtRef =
       readonly guideId: string;
     }
   | {
+      /** An Atlas-specific asset emitted under the hosted `/atlas/` prefix. */
+      readonly kind: "atlas-asset";
+      readonly assetKey: string;
+    }
+  | {
       /** Licensed full-resolution art used by the Exploration prototype. */
       readonly kind: "exploration-card";
       readonly imageNumber: number;
@@ -92,6 +97,8 @@ export function resolveArtRef(ref: ArtRef): string {
       return assetUrl(`/dreamscapes/${ref.dreamscapeId}.png`);
     case "dream-guide":
       return assetUrl(`/dream-guides/${ref.guideId}.png`);
+    case "atlas-asset":
+      return assetUrl(`/atlas/${ref.assetKey}`);
     case "exploration-card":
       return assetUrl(`/exploration/${String(ref.imageNumber)}.jpg`);
     case "exploration-candidates-editor-card":
@@ -127,6 +134,10 @@ export const artRef = {
   dreamGuide: (guideId: string): ArtRef => ({
     kind: "dream-guide",
     guideId,
+  }),
+  atlasAsset: (assetKey: string): ArtRef => ({
+    kind: "atlas-asset",
+    assetKey,
   }),
   explorationCard: (imageNumber: number): ArtRef => ({
     kind: "exploration-card",

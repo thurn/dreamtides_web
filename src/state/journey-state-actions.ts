@@ -488,7 +488,7 @@ export function startJourneyFromDreamAvatar({
     {},
     {
       dreamscapes: journeyContent.dreamscapes,
-      atlasConfig: journeyContent.atlasConfig,
+      atlasData: journeyContent.atlasData,
       dreamsignPoolIds: atlasDreamsignPoolIds,
       apollyonIncarnations: journeyContent.apollyonIncarnations,
     },

@@ -12,6 +12,10 @@ import type {
   StarwayStairsTierNumber,
   TidemarkLadderClimbAttemptNumber,
 } from "./gamble";
+import type { RandomSiteDestinationType, SiteType } from "./site-type";
+export type { SiteType } from "./site-type";
+export type { RandomSiteDestinationType } from "./site-type";
+export type { AtlasData } from "./atlas-data";
 
 /** Badge applied to a card via a Transfiguration site. */
 export type TransfigurationType =
@@ -50,23 +54,6 @@ export interface DeckEntryCardModification {
   keywords?: CardKeywordModification | null;
 }
 
-/** All site types available in dreamscapes. */
-export type SiteType =
-  | "Battle"
-  | "Draft"
-  | "Shop"
-  | "Purge"
-  | "Essence"
-  | "Transfiguration"
-  | "Duplication"
-  | "Reward"
-  | "Augury"
-  | "DreamsignMarket"
-  | "DreamsignRevelation"
-  | "RandomSite"
-  | "Gamble"
-  | "Exploration";
-
 /**
  * Lifecycle state of one Dream Atlas node in the v2 atlas model. A node starts
  * `unrevealed`, becomes `revealedLocked` when shown but not yet reachable,
@@ -83,26 +70,6 @@ export type AtlasNodeState =
   | "available"
   | "completed"
   | "forgone";
-
-/** One layer's inclusive node-count range in the 7-layer Dream Atlas. */
-export interface AtlasLayerSpec {
-  min: number;
-  max: number;
-}
-
-/** Generation tuning for the v2 Dream Atlas, sourced from atlas_config.toml. */
-export interface AtlasConfig {
-  layerSpecs: AtlasLayerSpec[];
-  connectionAverage: number;
-  bonusReveal: { min: number; max: number; mode: number };
-  repeatDiscourageStrength: number;
-  knownDreamsign: {
-    maxPerAtlas: number;
-    eligibleLayers: number[];
-    placementProbability: number;
-    earlyRevealBias: number;
-  };
-}
 
 /** An entry in the player's deck. Duplicates are possible. */
 export interface DeckEntry {
@@ -187,19 +154,8 @@ export interface SiteState {
   data?: Record<string, unknown>;
 }
 
-export type RandomSiteDestinationType =
-  | "Shop"
-  | "DreamsignMarket"
-  | "DreamsignRevelation"
-  | "Transfiguration"
-  | "Duplication"
-  | "Purge"
-  | "Augury"
-  | "Gamble"
-  | "Exploration";
-
 export interface RandomSiteMetadata {
-  /** One hidden destination outside Maddox's home; three choices at home. */
+  /** One hidden destination away from Random Site's home; configured choices at home. */
   mode: "single" | "homeChoice";
   candidateSiteTypes: RandomSiteDestinationType[];
   destinationSiteType?: RandomSiteDestinationType;
@@ -227,8 +183,6 @@ export interface DreamscapeNode {
   dreamscapeId: string | null;
   /** Display name of the assigned dreamscape (`""` while unrevealed). */
   biomeName: string;
-  /** Accent colour shown for the dreamscape on the Atlas. */
-  biomeColor: string;
   sites: SiteState[];
   position: { x: number; y: number };
   state: AtlasNodeState;
@@ -600,7 +554,7 @@ export type GambleSiteRuntime =
 /** Stable Gamble game id, re-exported beside its persisted runtime union. */
 export type GambleSiteGameId = GambleGameId;
 
-/** Shared, replayable three-destination offer at Maddox's home Random Site. */
+/** Shared, replayable configured destination offer at Random Site's home. */
 export interface RandomSiteRuntime {
   kind: "randomSite";
   offeredSiteTypes: RandomSiteDestinationType[];

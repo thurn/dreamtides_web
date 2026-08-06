@@ -28,7 +28,6 @@ function makeDreamscapeState(overrides: Partial<JourneyState> = {}): JourneyStat
           indexInLayer: 0,
           dreamscapeId: "test_dreamscape",
           biomeName: "Fixture Biome",
-          biomeColor: "#aabbcc",
           sites: [
             {
               id: "site-1",
@@ -56,7 +55,6 @@ function makeDreamscapeState(overrides: Partial<JourneyState> = {}): JourneyStat
           indexInLayer: 0,
           dreamscapeId: "test_dreamscape",
           biomeName: "Other Biome",
-          biomeColor: "#112233",
           sites: [
             {
               id: "site-10",

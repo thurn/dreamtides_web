@@ -25,6 +25,7 @@ Vite. The setup script is idempotent and:
 3. Symlinks `public/cards/{cardNumber}.webp` into the local image cache at
    `~/Library/Caches/io.github.dreamtides.tv/image_cache/`.
 4. Copies the tide PNGs into `public/tides/`.
+5. Compiles `data/tabula/atlas.toml` into validated `public/atlas-data.json`.
 
 The generated `public/cards/`, `public/tides/`, `public/card-data.json`, and
 `public/dream-avatars-v2-data.json` paths are gitignored.
@@ -90,6 +91,11 @@ The important ownership boundaries are:
 - `src/App.tsx` loads content and mounts one `RoomGate`, `CoopProvider`,
   `CoopJourneyProvider`, and shared experience router for main, loading,
   tutorial, live battle, victory, and journey.
+
+Atlas generation rules, site metadata, boss content, presentation copy, and
+asset references are authored in `data/tabula/atlas.toml`. See
+[Dream Atlas Data](atlas_data.md) for the schema, validation rules, hashing, and
+Layer VII Limbo semantics.
 
 `LogClient` keeps a confirmed fold and an ordered pending-intent queue. A local
 intent is optimistically folded for immediate feedback, then reconciled by its

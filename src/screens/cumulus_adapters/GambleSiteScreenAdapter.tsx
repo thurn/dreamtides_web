@@ -30,8 +30,14 @@ export function GambleSiteScreenAdapter({
   const view = useMemo(
     () => site === null
       ? null
-      : buildGambleSiteView({ state, sceneNode: node, site, guide }),
-    [guide, node, site, state],
+      : buildGambleSiteView({
+          state,
+          sceneNode: node,
+          site,
+          guide,
+          atlasData: journeyContent.atlasData,
+        }),
+    [guide, journeyContent.atlasData, node, site, state],
   );
 
   useEffect(() => {

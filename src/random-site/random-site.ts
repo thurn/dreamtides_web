@@ -1,30 +1,17 @@
-import type {
-  RandomSiteDestinationType,
-  RandomSiteMetadata,
-  SiteState,
-  SiteType,
+import {
+  type RandomSiteDestinationType,
+  type RandomSiteMetadata,
+  type SiteState,
 } from "../types/journey";
+import { RANDOM_SITE_DESTINATION_TYPES } from "../types/site-type";
 
-export const MADDOX_GUIDE_ID = "maddox";
-
-export const RANDOM_SITE_DESTINATIONS: readonly RandomSiteDestinationType[] = [
-  "Shop",
-  "DreamsignMarket",
-  "DreamsignRevelation",
-  "Transfiguration",
-  "Duplication",
-  "Purge",
-  "Augury",
-  "Gamble",
-  "Exploration",
-];
-
-const RANDOM_SITE_DESTINATION_SET = new Set<SiteType>(RANDOM_SITE_DESTINATIONS);
+const RANDOM_SITE_DESTINATION_SET: ReadonlySet<string> =
+  new Set(RANDOM_SITE_DESTINATION_TYPES);
 
 export function isRandomSiteDestinationType(
   value: unknown,
 ): value is RandomSiteDestinationType {
-  return typeof value === "string" && RANDOM_SITE_DESTINATION_SET.has(value as SiteType);
+  return typeof value === "string" && RANDOM_SITE_DESTINATION_SET.has(value);
 }
 
 export function isRandomSiteMetadata(value: unknown): value is RandomSiteMetadata {
@@ -44,7 +31,7 @@ export function isRandomSiteMetadata(value: unknown): value is RandomSiteMetadat
       metadata.candidateSiteTypes.includes(metadata.destinationSiteType)
     );
   }
-  return metadata.candidateSiteTypes.length >= 3 &&
+  return metadata.candidateSiteTypes.length >= 2 &&
     (metadata.destinationSiteType === undefined ||
       isRandomSiteDestinationType(metadata.destinationSiteType));
 }
@@ -52,12 +39,15 @@ export function isRandomSiteMetadata(value: unknown): value is RandomSiteMetadat
 export function materializeRandomSite(
   site: SiteState,
   destinationSiteType: RandomSiteDestinationType,
+  presentingGuideId?: string,
 ): SiteState {
   return {
     ...site,
     type: destinationSiteType,
     isEnhanced: true,
-    guideIdOverride: MADDOX_GUIDE_ID,
+    ...(site.guideIdOverride === undefined && presentingGuideId !== undefined
+      ? { guideIdOverride: presentingGuideId }
+      : {}),
     randomSite: {
       ...(site.randomSite ?? {
         mode: "single",

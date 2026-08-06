@@ -4,6 +4,9 @@ import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
 import { patchTomlRecord } from "./card-editor-data.mjs";
 import { transformDreamscape } from "./setup-assets.mjs";
+import { SITE_TYPES } from "../src/types/site-type.ts";
+
+export { SITE_TYPES };
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 export const DEFAULT_DREAMSCAPE_TOML_PATH = join("data", "tabula", "dreamscapes.toml");
@@ -23,33 +26,10 @@ export const MIN_DREAM_AVATARS_PER_REGION = 3;
 export const MAX_DREAM_AVATARS_PER_REGION = 4;
 
 /**
- * The SiteType enum (see `src/types/journey.ts`). A dreamscape's `signature-site`
- * is the one site type its resident Dream Guide enhances at home, so the editor
- * constrains edits to this fixed set. Kept in sync with the TS enum by hand;
- * SiteType is source code, not authored game-design data.
- */
-export const SITE_TYPES = [
-  "Battle",
-  "Draft",
-  "Shop",
-  "Purge",
-  "Essence",
-  "Transfiguration",
-  "Duplication",
-  "Reward",
-  "Augury",
-  "DreamsignMarket",
-  "DreamsignRevelation",
-  "RandomSite",
-  "Gamble",
-  "Exploration",
-];
-
-/**
  * Dreamscape fields the editor can save. `name` and `aesthetic` are free text;
  * `signature-site` is a SiteType; `guide-id` and `affiliation-id` reference the
- * Dream Guide and affiliation catalogs; `site-icon` is the Atlas marker icon
- * reference. Identity (`id`) and the starter-only `is-starter` / `fixed-sites`
+ * Dream Guide and affiliation catalogs. Identity (`id`) and the starter-only
+ * `is-starter` / `fixed-sites`
  * are left untouched.
  */
 export const EDITABLE_DREAMSCAPE_FIELDS = new Set([
@@ -58,7 +38,6 @@ export const EDITABLE_DREAMSCAPE_FIELDS = new Set([
   "signature-site",
   "guide-id",
   "affiliation-id",
-  "site-icon",
 ]);
 
 // `guide-id` and `affiliation-id` are absent on the starter dreamscape, so the
@@ -100,7 +79,6 @@ function editorRecordFromDreamscape(dreamscape, index) {
       typeof dreamscape["affiliation-id"] === "string"
         ? dreamscape["affiliation-id"]
         : null,
-    "site-icon": typeof dreamscape["site-icon"] === "string" ? dreamscape["site-icon"] : "",
     isStarter: dreamscape["is-starter"] === true,
     fixedSites: Array.isArray(dreamscape["fixed-sites"])
       ? dreamscape["fixed-sites"].filter((entry) => typeof entry === "string")
@@ -188,16 +166,6 @@ export function makeValidateDreamscapeEdit({ guideIds, affiliationIds }) {
       const value = rawValue.trim();
       return value.length === 0
         ? validationFailure(field, "Aesthetic cannot be blank.", rawValue)
-        : validationSuccess(field, value);
-    }
-
-    if (field === "site-icon") {
-      if (typeof rawValue !== "string") {
-        return validationFailure(field, "Site icon must be text.", rawValue);
-      }
-      const value = rawValue.trim();
-      return value.length === 0
-        ? validationFailure(field, "Site icon cannot be blank.", rawValue)
         : validationSuccess(field, value);
     }
 

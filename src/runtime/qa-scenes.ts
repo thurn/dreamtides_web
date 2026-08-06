@@ -7,7 +7,6 @@ import { createDreamsign } from "../data/dreamsigns";
 import { TUTORIAL_DREAM_AVATAR_ID } from "../data/tutorial-cards";
 import { createQaJourneyFoundation } from "./qa-journey-foundation";
 import { buildExplorationRuntime } from "../coop/providers/exploration-provider";
-import { MADDOX_GUIDE_ID } from "../random-site/random-site";
 
 export interface QaSceneBuildOptions {
   /** Exact authored encounter source-card UUID for Exploration QA scenes. */
@@ -131,7 +130,7 @@ function atlasLayerSceneState(layer: number): QaScene["build"] {
       context,
       {
         dreamscapes: journeyContent.dreamscapes,
-        atlasConfig: journeyContent.atlasConfig,
+        atlasData: journeyContent.atlasData,
         dreamsignPoolIds: foundation.state.remainingDreamsignPool,
         apollyonIncarnations: journeyContent.apollyonIncarnations,
       },
@@ -169,17 +168,17 @@ const ATLAS_SCENE: QaScene = {
   build: atlasLayerSceneState(1),
 };
 
-/** The first Atlas frontier with Maddox's home dreamscape available to inspect. */
+/** The first Atlas frontier with Random Site's home dreamscape available. */
 const RANDOM_SITE_ATLAS_SCENE: QaScene = {
   id: "random-site-atlas",
-  label: "Dream Atlas (Maddox Random Site)",
+  label: "Dream Atlas (Random Site Home)",
   description:
-    "The first Atlas frontier with The Rust Expanse available, including its " +
-    "Random Site badge and Maddox reveal cards.",
+    "The first Atlas frontier with Random Site's authored home available, " +
+    "including its badge and reveal cards.",
   build: (journeyContent) => {
     const state = ATLAS_SCENE.build(journeyContent);
     const dreamscape = journeyContent.dreamscapes.find(
-      (candidate) => candidate.guideId === MADDOX_GUIDE_ID,
+      (candidate) => candidate.signatureSite === "RandomSite",
     );
     if (state === null || dreamscape === undefined) return null;
 
@@ -201,7 +200,7 @@ const RANDOM_SITE_ATLAS_SCENE: QaScene = {
       isVisited: false,
       randomSite: {
         mode: "homeChoice",
-        candidateSiteTypes: ["Shop", "Purge", "Augury", "Gamble", "Exploration"],
+        candidateSiteTypes: [...journeyContent.atlasData.randomSite.destinations],
       },
     };
     const node = {
@@ -279,7 +278,7 @@ function battleLayerSceneState(displayLayer: number): QaScene["build"] {
             {},
             {
               dreamscapes: journeyContent.dreamscapes,
-              atlasConfig: journeyContent.atlasConfig,
+              atlasData: journeyContent.atlasData,
               dreamsignPoolIds: foundation.state.remainingDreamsignPool,
               apollyonIncarnations: journeyContent.apollyonIncarnations,
             },
@@ -766,7 +765,7 @@ const JOURNEY_COMPLETE_SCENE: QaScene = {
       {},
       {
         dreamscapes: journeyContent.dreamscapes,
-        atlasConfig: journeyContent.atlasConfig,
+        atlasData: journeyContent.atlasData,
         dreamsignPoolIds: foundation.state.remainingDreamsignPool,
         apollyonIncarnations: journeyContent.apollyonIncarnations,
       },
@@ -855,10 +854,13 @@ function randomSiteScene(mode: "single" | "homeChoice"): QaScene {
     id: mode === "single" ? "random-site" : "random-site-home",
     label: mode === "single" ? "Random Site (Hosted Shop)" : "Random Site (Home Choice)",
     description: mode === "single"
-      ? "A deterministic enhanced Shop hosted by Maddox after its hidden Random Site destination materializes."
-      : "Maddox's home Random Site with three persisted destinations ready to be offered.",
+      ? "A configured enhanced destination hosted by Random Site's presenting guide."
+      : "Random Site's home choice with configured persisted destinations ready to be offered.",
     build: (journeyContent) => {
-      const state = parkOnSite(mode === "single" ? "Shop" : "RandomSite", true)(journeyContent);
+      const destination = journeyContent.atlasData.randomSite.destinations[0];
+      const guideId = journeyContent.atlasData.randomSite.guideId;
+      if (destination === undefined || typeof guideId !== "string") return null;
+      const state = parkOnSite(mode === "single" ? destination : "RandomSite", true)(journeyContent);
       if (state === null || state.currentDreamscape === null || state.activeSiteId === null) return null;
       const node = state.atlas.nodes[state.currentDreamscape];
       const sites = node.sites.map((site) => site.id !== state.activeSiteId
@@ -866,12 +868,12 @@ function randomSiteScene(mode: "single" | "homeChoice"): QaScene {
         : mode === "single"
           ? {
               ...site,
-              type: "Shop" as const,
-              guideIdOverride: "maddox",
+              type: destination,
+              guideIdOverride: guideId,
               randomSite: {
                 mode: "single" as const,
-                candidateSiteTypes: ["Shop" as const],
-                destinationSiteType: "Shop" as const,
+                candidateSiteTypes: [destination],
+                destinationSiteType: destination,
                 materialized: true,
               },
             }
@@ -880,13 +882,7 @@ function randomSiteScene(mode: "single" | "homeChoice"): QaScene {
               type: "RandomSite" as const,
               randomSite: {
                 mode: "homeChoice" as const,
-                candidateSiteTypes: [
-                  "Shop" as const,
-                  "Purge" as const,
-                  "Augury" as const,
-                  "Gamble" as const,
-                  "Exploration" as const,
-                ],
+                candidateSiteTypes: [...journeyContent.atlasData.randomSite.destinations],
               },
             });
       return {

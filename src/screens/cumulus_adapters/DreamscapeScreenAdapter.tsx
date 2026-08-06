@@ -27,10 +27,12 @@ export function DreamscapeScreenAdapter() {
       : buildDreamscapeView(
           node,
           state,
+          journeyContent.atlasData,
           replacementSiteId,
           journeyContent.tutorialDreamscape,
         ),
     [
+      journeyContent.atlasData,
       journeyContent.tutorialDreamscape,
       node,
       replacementSiteId,

@@ -34,7 +34,7 @@ const fake = vi.hoisted(() => {
     seed: "s",
     reducerVersion: "v",
     createdAt: 0,
-    contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null },
+    contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null, atlasFoldHash: "fixture-atlas-fold-hash" },
   };
   const committed: FakeEvent[] = [];
   let subscriber: ((node: unknown) => void) | null = null;

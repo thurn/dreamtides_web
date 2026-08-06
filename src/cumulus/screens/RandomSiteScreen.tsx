@@ -88,7 +88,7 @@ export function RandomSiteScreen({
                   type: choice.siteType,
                   isEnhanced: true,
                   isVisited: false,
-                  guideIdOverride: "maddox",
+                  guideIdOverride: view.guide.id,
                 };
                 const model: DreamscapeSiteModel = {
                   site: choiceSite,

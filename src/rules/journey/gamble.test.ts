@@ -93,7 +93,6 @@ function stateWith(
             indexInLayer: 0,
             dreamscapeId: "fixture-dreamscape",
             biomeName: "Fixture",
-            biomeColor: "#ffffff",
             sites: [site],
             position: { x: 0, y: 0 },
             state: "available",

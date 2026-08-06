@@ -12,7 +12,6 @@ function node(id: string): DreamscapeNode {
     indexInLayer: 0,
     dreamscapeId: null,
     biomeName: "",
-    biomeColor: "",
     sites: [],
     position: { x: 0, y: 0 },
     state: "available",
@@ -32,6 +31,7 @@ function item(id: string, overrides: Partial<AtlasMapNode>): AtlasMapNode {
       isStarter: false,
       isBoss: false,
       iconRef: null,
+      unrevealedFrameRef: artRef.atlasAsset("fixture-frame.png"),
       siteBadgeGlyph: null,
       knownDreamsignRef: null,
     primary: {

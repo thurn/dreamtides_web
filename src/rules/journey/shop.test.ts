@@ -92,7 +92,6 @@ function makeNode(sites: SiteState[]): DreamscapeNode {
     indexInLayer: 0,
     dreamscapeId: "d1",
     biomeName: "Biome",
-    biomeColor: "#fff",
     sites,
     position: { x: 0, y: 0 },
     state: "available",
@@ -583,6 +582,29 @@ describe("atlas edits", () => {
     expect(node.sites).toHaveLength(2);
     expect(node.sites[1].type).toBe("Essence");
     expect(node.sites[1].isVisited).toBe(false);
+  });
+
+  it("uses configured Random Site destinations and presenting guide for Atlas edits", () => {
+    registerSiteContentProvider({
+      randomSiteDestinations: ["Exploration"],
+      randomSiteGuideId: "fixture-random-guide",
+      openSite: () => null,
+    });
+    const state = shopState([cardSlot()]);
+    const result = reduce(state, "ADD_SITE_TO_DREAMSCAPE", {
+      nodeId: NODE_ID,
+      siteType: "RandomSite",
+    });
+    expect(result.outcome).toBe("applied");
+    expect(result.state.journey.atlas.nodes[NODE_ID].sites[1]).toMatchObject({
+      type: "RandomSite",
+      guideIdOverride: "fixture-random-guide",
+      randomSite: {
+        mode: "single",
+        candidateSiteTypes: ["Exploration"],
+        destinationSiteType: "Exploration",
+      },
+    });
   });
 
   it("ADD_SITE_TO_DREAMSCAPE bounces an unknown node", () => {

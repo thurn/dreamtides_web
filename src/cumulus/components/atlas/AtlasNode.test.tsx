@@ -54,7 +54,6 @@ function model(
       indexInLayer: 0,
       dreamscapeId: "wilderveil",
       biomeName: "Wilderveil",
-      biomeColor: "violet",
       sites: [],
       position: { x: 1, y: 0 },
       state,
@@ -70,6 +69,7 @@ function model(
     isBoss: false,
     isReachable: true,
     iconRef: artRef.dreamscapeIcon("wilderveil"),
+    unrevealedFrameRef: artRef.atlasAsset("fixture-frame.png"),
     siteBadgeGlyph: GLYPHS.water,
     knownDreamsignRef: artRef.dreamsign("known.png"),
     primary: {
@@ -94,8 +94,8 @@ function model(
     },
     affiliation: {
       id: AFFILIATION_ID,
-      name: "Figments",
-      cardTheme: "Figment",
+      title: "Fixture affiliation",
+      body: "Fixture cards are more likely here.",
     },
     ...overrides,
   };
@@ -165,7 +165,8 @@ function pointer(
 
 describe("AtlasNode semantic reveal contract", () => {
   it("derives the Atlas primary and Dreamsign, site, affiliation secondaries in priority order", () => {
-    const { source } = renderNode(model("available"));
+    const value = model("available");
+    const { source } = renderNode(value);
 
     expect(source.dataset.atlasNodeId).toBe(NODE_ID);
     expect(source.dataset.revealEntityType).toBe("atlas-node");
@@ -174,7 +175,7 @@ describe("AtlasNode semantic reveal contract", () => {
     expect(source.dataset.revealSecondaryTitles?.split("\u001f")).toEqual([
       "Known Sign",
       "Augury",
-      "Affiliation: Figments",
+      value.affiliation?.title,
     ]);
     expect(source.dataset.revealFeedback).toBe("measured");
     const description = document.getElementById(
@@ -183,7 +184,7 @@ describe("AtlasNode semantic reveal contract", () => {
     expect(description?.textContent).toContain("Wilderveil");
     expect(description?.textContent).toContain("Known Sign");
     expect(description?.textContent).toContain("Augury");
-    expect(description?.textContent).toContain("Affiliation: Figments");
+    expect(description?.textContent).toContain(value.affiliation?.title);
   });
 
   it("keeps reveal protocol derivation private to the named component", async () => {
@@ -245,16 +246,16 @@ describe("AtlasNode semantic reveal contract", () => {
     expect(highlight).not.toBeNull();
     expect(highlight?.getAttribute("aria-hidden")).toBe("true");
     expect(baseHighlight?.style.maskImage).toContain(
-      "/atlas/Round_frame_main.png?v=1",
+      "/atlas/fixture-frame.png?v=1",
     );
     expect(baseHighlight?.style.webkitMaskImage).toContain(
-      "/atlas/Round_frame_main.png?v=1",
+      "/atlas/fixture-frame.png?v=1",
     );
     expect(pulseHighlight?.style.maskImage).toContain(
-      "/atlas/Round_frame_main.png?v=1",
+      "/atlas/fixture-frame.png?v=1",
     );
     expect(pulseHighlight?.style.webkitMaskImage).toContain(
-      "/atlas/Round_frame_main.png?v=1",
+      "/atlas/fixture-frame.png?v=1",
     );
     expect(highlight?.getAttribute("data-ambient-paused")).toBe("false");
     act(() => available.source.click());

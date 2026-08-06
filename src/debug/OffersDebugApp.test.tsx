@@ -6,11 +6,14 @@ import { describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { offerTileDescription } from "../cumulus/components/controls/offer-tile-descriptions";
 import { MERCHANT_ARCHETYPE_BUILDERS } from "../journey_v2/archetypes/registry";
+import { MINIMAL_ATLAS_DATA } from "../__test-helpers__/atlas-fixtures";
 import OffersDebugApp, {
+  buildOfferTileDebugModels,
   OFFER_TILE_DEBUG_ARCHETYPE_IDS,
-  OFFER_TILE_DEBUG_MODELS,
   OFFER_TILE_DEBUG_NOTES,
 } from "./OffersDebugApp";
+
+const OFFER_TILE_DEBUG_MODELS = buildOfferTileDebugModels(MINIMAL_ATLAS_DATA);
 
 vi.mock("../data/card-database", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../data/card-database")>();
@@ -20,8 +23,16 @@ vi.mock("../data/card-database", async (importOriginal) => {
   };
 });
 
+vi.mock("../data/atlas-data", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../data/atlas-data")>();
+  return {
+    ...actual,
+    loadAtlasData: vi.fn(() => Promise.resolve(MINIMAL_ATLAS_DATA)),
+  };
+});
+
 describe("OffersDebugApp", () => {
-  it("shows one OfferTile for every distinct Augury UI presentation", () => {
+  it("shows one OfferTile for every distinct Augury UI presentation", async () => {
     (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean })
       .IS_REACT_ACT_ENVIRONMENT = true;
     const container = document.createElement("div");
@@ -34,6 +45,9 @@ describe("OffersDebugApp", () => {
           <OffersDebugApp />
         </CumulusRoot>,
       );
+    });
+    await act(async () => {
+      await Promise.resolve();
     });
 
     const tiles = container.querySelectorAll("[data-offer-tile]");

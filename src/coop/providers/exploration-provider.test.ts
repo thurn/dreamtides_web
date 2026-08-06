@@ -112,7 +112,7 @@ function contentFixture(
     dreamscapes: [],
     affiliations: [],
     guides: [],
-    atlasConfig: {},
+    atlasData: {},
   } as unknown as JourneyContent;
 }
 

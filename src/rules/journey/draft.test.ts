@@ -123,7 +123,6 @@ function makeNode(sites: SiteState[]): DreamscapeNode {
     indexInLayer: 0,
     dreamscapeId: "d1",
     biomeName: "Biome",
-    biomeColor: "#fff",
     sites,
     position: { x: 0, y: 0 },
     state: "available",

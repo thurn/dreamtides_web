@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createDefaultState } from "../../state/journey-context";
+import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
 import type { DreamGuideContent } from "../../types/content";
 import type {
   GravokWagerSiteRuntime,
@@ -13,12 +14,16 @@ import type {
 } from "../../cumulus/screens/GambleSiteScreen";
 import {
   buildGambleGateViews,
-  buildGambleSiteView,
+  buildGambleSiteView as buildGambleSiteViewImpl,
   gravokRevealGateId,
   GRAVOK_WAGER_GUIDE_LINE,
   resolveGambleGuide,
   STARWAY_STAIRS_GUIDE_LINE,
 } from "./gamble-site-view-model";
+
+const buildGambleSiteView = (
+  params: Omit<Parameters<typeof buildGambleSiteViewImpl>[0], "atlasData">,
+) => buildGambleSiteViewImpl({ ...params, atlasData: MINIMAL_ATLAS_DATA });
 
 const GAMBLE_SITE: SiteState & { type: "Gamble" } = {
   id: "fixture-gamble-site",

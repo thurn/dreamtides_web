@@ -121,7 +121,7 @@ function SiteRoute({
   runtimeConfig: RuntimeConfig;
   cumulusChromeHandlers?: CumulusJourneyChromeHandlers;
 }) {
-  const { state, cardDatabase } = useJourney();
+  const { state, cardDatabase, journeyContent } = useJourney();
   const activeNode =
     state.currentDreamscape === null
       ? undefined
@@ -139,11 +139,11 @@ function SiteRoute({
     logEventOnce(`random-site:${site.id}:hosted:${site.type}`, "random_site_entered", {
       siteId: site.id,
       siteType: site.type,
-      guideId: site.guideIdOverride ?? "maddox",
+      guideId: site.guideIdOverride ?? journeyContent.atlasData.randomSite.guideId,
       isEnhanced: site.isEnhanced,
       sourceMode: site.randomSite.mode,
     });
-  }, [site]);
+  }, [journeyContent.atlasData.randomSite.guideId, site]);
 
   if (site === undefined) {
     throw new Error(

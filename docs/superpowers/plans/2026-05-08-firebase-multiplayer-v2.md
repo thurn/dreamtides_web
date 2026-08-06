@@ -1677,7 +1677,6 @@ describe("journey-state-actions", () => {
           "dreamscape-1": {
             id: "dreamscape-1",
             biomeName: "Biome",
-            biomeColor: "#fff",
             position: { x: 0, y: 0 },
             status: "available",
             enhancedSiteType: null,
@@ -2434,7 +2433,6 @@ const roomWithSite: MultiplayerRoom = {
         "dreamscape-1": {
           id: "dreamscape-1",
           biomeName: "Biome",
-          biomeColor: "#fff",
           position: { x: 0, y: 0 },
           status: "available",
           enhancedSiteType: null,

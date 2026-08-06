@@ -2,7 +2,7 @@ import {
   siteTypeDescription,
   siteTypeIcon,
   siteTypeName,
-} from "../../atlas/atlas-generator";
+} from "../../data/atlas-data";
 import { buildCardSourceDebugState } from "../../debug/card-source-debug";
 import { guideForSiteType } from "../../data/dreamscapes";
 import type { JourneyContent } from "../../data/journey-content";
@@ -30,6 +30,7 @@ import type { CardData } from "../../types/cards";
 import { asCardId } from "../../types/card-identity";
 import { resolveDeckEntryCard } from "../../card-type-change";
 import type { DreamGuideContent } from "../../types/content";
+import type { AtlasData } from "../../types/atlas-data";
 import type {
   CardSourceDebugState,
   DreamscapeNode,
@@ -249,7 +250,10 @@ export function buildAuguryOfferSubtitle(
   }
 }
 
-function sitePreviewModel(siteType: SiteState["type"]): DreamscapeSiteModel {
+function sitePreviewModel(
+  siteType: SiteState["type"],
+  atlasData: AtlasData,
+): DreamscapeSiteModel {
   return {
     site: {
       id: `augury-preview:${siteType}`,
@@ -262,9 +266,9 @@ function sitePreviewModel(siteType: SiteState["type"]): DreamscapeSiteModel {
     isBattle: siteType === "Battle",
     isLocked: false,
     isInteractive: false,
-    label: siteTypeName(siteType),
-    blurb: siteTypeDescription(siteType),
-    icon: glyph(siteTypeIcon(siteType)),
+    label: siteTypeName(atlasData, siteType),
+    blurb: siteTypeDescription(atlasData, siteType),
+    icon: glyph(siteTypeIcon(atlasData, siteType)),
   };
 }
 
@@ -601,8 +605,8 @@ export function buildAuguryOfferTileModel(
         kind: "add-site",
         site: {
           id: payload.siteType,
-          name: siteTypeName(payload.siteType),
-          glyph: glyph(siteTypeIcon(payload.siteType)),
+          name: siteTypeName(context.atlasData, payload.siteType),
+          glyph: glyph(siteTypeIcon(context.atlasData, payload.siteType)),
         },
       };
     }
@@ -652,6 +656,7 @@ function dreamsignChoices(
 function buildOfferVisual(
   offer: MerchantOffer,
   context: Pick<MerchantContext, "deckEntryById">,
+  atlasData: AtlasData,
 ): AuguryOfferVisualView {
   const presentation = resolveOfferPresentation(offer);
   switch (presentation.kind) {
@@ -733,7 +738,7 @@ function buildOfferVisual(
     case "addSite":
       return {
         kind: "site",
-        model: sitePreviewModel(presentation.siteType),
+        model: sitePreviewModel(presentation.siteType, atlasData),
       };
     case "fallback":
       return {
@@ -770,7 +775,7 @@ export function buildAuguryOfferViews(
       subtitle: buildAuguryOfferSubtitle(tile),
       requiresSelection: (offer.choiceRequest?.candidates.length ?? 0) > 0,
       tile,
-      visual: buildOfferVisual(offer, context),
+      visual: buildOfferVisual(offer, context, context.atlasData),
     };
   });
 }

@@ -28,6 +28,7 @@
 import type { EventContext } from "../../eventlog/types";
 import type { DraftState } from "../../types/draft";
 import type { GambleGameId } from "../../types/gamble";
+import type { RandomSiteDestinationType } from "../../types/journey";
 import type {
   DeckEntry,
   AugurySiteRuntime,
@@ -82,6 +83,10 @@ export interface SiteOpenResult {
  * Augury are generated purely in-reducer and never need it.
  */
 export interface SiteContentProvider {
+  /** Authored Random Site destination catalog used by debug Atlas edits. */
+  randomSiteDestinations?: readonly RandomSiteDestinationType[];
+  /** Guide derived from the unique Random Site signature-site owner. */
+  randomSiteGuideId?: string;
   /**
    * Generate the runtime for `site` (of a content-coupled type) deterministically
    * from `(journey, site, rng)`, or `null` to bounce. Must not mutate `journey`.
@@ -417,7 +422,7 @@ export function openSite(
   }
 }
 
-/** Select and materialize one of Maddox's persisted home-site destinations. */
+/** Select and materialize one of Random Site's persisted home destinations. */
 export function chooseRandomSite(
   journey: JourneyState,
   payload: Record<string, unknown>,
@@ -448,7 +453,7 @@ export function chooseRandomSite(
     ...owner,
     sites: owner.sites.map((candidate) =>
       candidate.id === siteId
-        ? materializeRandomSite(candidate, siteType)
+        ? materializeRandomSite(candidate, siteType, contentProvider?.randomSiteGuideId)
         : candidate,
     ),
   };

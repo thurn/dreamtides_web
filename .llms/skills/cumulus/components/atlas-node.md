@@ -29,6 +29,7 @@ One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engin
 | `isBoss` | `boolean` | no |  |
 | `isReachable` | `boolean` | no |  |
 | `iconRef` | `ArtRef \| null` | no |  |
+| `unrevealedFrameRef` | `ArtRef` | no |  |
 | `siteBadgeGlyph` | `Glyph \| null` | no |  |
 | `knownDreamsignRef` | `ArtRef \| null` | no |  |
 | `badgeScale` | `number` | yes |  |

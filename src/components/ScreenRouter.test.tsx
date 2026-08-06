@@ -186,7 +186,7 @@ function merchantContent() {
   for (const [index, c] of cards.entries()) {
     corpus[c.id] = { quality: 0.1 + (index % 10) / 10 };
   }
-  return makeMerchantTestContent({
+  const content = makeMerchantTestContent({
     cards,
     dreamsignTemplates: [
       makeMerchantTestDreamsignTemplate({
@@ -201,6 +201,17 @@ function merchantContent() {
     merchantCorpus: makeMerchantTestCorpus({ cards: corpus }),
     dreamsignProfiles: new Map(),
   });
+  return {
+    ...content,
+    guides: [{
+      id: content.atlasData.randomSite.guideId,
+      name: "Fixture Random Site Guide",
+      homeDreamscapeId: "fixture-random-site-home",
+      siteType: "RandomSite" as const,
+      dialog: [],
+      homeSpecialty: "Fixture specialty",
+    }],
+  };
 }
 
 function makeMutations(): JourneyMutations {
@@ -315,7 +326,6 @@ function makeStateFor(site: SiteState): JourneyState {
           indexInLayer: 0,
           dreamscapeId: "test_dreamscape",
           biomeName: "Router Dreamscape",
-          biomeColor: "#7c3aed",
           position: { x: 0, y: 0 },
           state: "available",
           enhancedSiteType: null,
@@ -892,7 +902,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
     ).toBe(site.id);
   });
 
-  it("routes RandomSite to Maddox's mandatory three-choice screen", () => {
+  it("routes RandomSite to the configured guide's choice screen", () => {
       motionPreference.reduced = true;
       const site: SiteState = {
         ...makeSite("RandomSite"),

@@ -14,6 +14,7 @@ import { resetLog } from "../logging";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 
 const REDUCER_VERSION = "dreamtides-coop-v13";
+const ATLAS_FOLD_HASH = "fixture-atlas-fold-hash";
 
 // Captured subscriber so a test can hand RoomGate a chosen log node.
 let deliverNode: ((node: LogNode) => void) | null = null;
@@ -100,7 +101,12 @@ function mount(config: RuntimeConfig): void {
   root = createRoot(container);
   act(() => {
     root?.render(
-      <RoomGate db={{} as never} gameId={config.gameId} runtimeConfig={config}>
+      <RoomGate
+        db={{} as never}
+        gameId={config.gameId}
+        runtimeConfig={config}
+        atlasFoldHash={ATLAS_FOLD_HASH}
+      >
         {() => <div data-room-children="true">room children</div>}
       </RoomGate>,
     );
@@ -136,9 +142,11 @@ describe("RoomGate content-config gate", () => {
       poolVariant: "tides4",
       draftMode: "pool",
       fresh20PackSize: null,
+      atlasFoldHash: ATLAS_FOLD_HASH,
     });
 
     expect(genesis.reducerVersion).toBe(REDUCER_VERSION);
+    expect(genesis.contentConfig.atlasFoldHash).toBe(ATLAS_FOLD_HASH);
   });
 
   it("renders the config gate when genesis.contentConfig differs from the local runtime config", async () => {
@@ -153,6 +161,7 @@ describe("RoomGate content-config gate", () => {
             poolVariant: "idf3",
             draftMode: "pool",
             fresh20PackSize: null,
+            atlasFoldHash: ATLAS_FOLD_HASH,
           }),
         ),
       );
@@ -161,6 +170,7 @@ describe("RoomGate content-config gate", () => {
 
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
     expect(container.querySelector("[data-room-children]")).toBeNull();
+    expect(container.textContent).toContain("Use This Game’s Settings");
   });
 
   it("mounts children when contentConfig matches", async () => {
@@ -175,6 +185,7 @@ describe("RoomGate content-config gate", () => {
             poolVariant: "tides4",
             draftMode: "pool",
             fresh20PackSize: null,
+            atlasFoldHash: ATLAS_FOLD_HASH,
           }),
         ),
       );
@@ -201,6 +212,51 @@ describe("RoomGate content-config gate", () => {
 
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
     expect(container.querySelector("[data-room-children]")).toBeNull();
+    expect(container.textContent).toContain("Start a New Game");
+  });
+
+  it("does not adopt a room whose Atlas fold hash differs", async () => {
+    mount(runtimeConfig());
+    await flush();
+
+    act(() => {
+      deliverNode?.(
+        nodeWith(
+          genesisWith({
+            poolVariant: "tides4",
+            draftMode: "pool",
+            fresh20PackSize: null,
+            atlasFoldHash: "different-atlas-fold-hash",
+          }),
+        ),
+      );
+    });
+    await flush();
+
+    expect(container.querySelector("[data-config-gate]")).not.toBeNull();
+    expect(container.textContent).toContain("Start a New Game");
+    expect(container.textContent).not.toContain("Use This Game’s Settings");
+  });
+
+  it("gates a current-version genesis whose content config predates Atlas hashes", async () => {
+    mount(runtimeConfig());
+    await flush();
+
+    act(() => {
+      deliverNode?.(
+        nodeWith(
+          genesisWith({
+            poolVariant: "tides4",
+            draftMode: "pool",
+            fresh20PackSize: null,
+          }),
+        ),
+      );
+    });
+    await flush();
+
+    expect(container.querySelector("[data-config-gate]")).not.toBeNull();
+    expect(container.textContent).toContain("Start a New Game");
   });
 
   it("renders the version gate for a prior reducer build", async () => {
@@ -214,6 +270,7 @@ describe("RoomGate content-config gate", () => {
             poolVariant: "tides4",
             draftMode: "pool",
             fresh20PackSize: null,
+            atlasFoldHash: ATLAS_FOLD_HASH,
           }),
           reducerVersion: "0dfbc840a6a3-6d94b82e9b7a",
         }),
@@ -236,6 +293,7 @@ describe("RoomGate content-config gate", () => {
             poolVariant: "tides4",
             draftMode: "pool",
             fresh20PackSize: null,
+            atlasFoldHash: ATLAS_FOLD_HASH,
           }),
           reducerVersion: "incompatible-rules-v2",
         }),

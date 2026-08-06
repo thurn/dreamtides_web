@@ -26,6 +26,7 @@ import {
 } from "../../data/starway-stairs";
 import { guideForSiteType } from "../../data/dreamscapes";
 import type { DreamGuideContent } from "../../types/content";
+import type { AtlasData } from "../../types/atlas-data";
 import type {
   DreamscapeNode,
   GambleSiteRuntime,
@@ -93,12 +94,10 @@ function commonGambleView(params: {
   sceneNode: DreamscapeNode | null;
   guide: DreamGuideContent | null;
   guideLine: string;
+  randomSiteGuideLine: string | null;
 }): { scene: ArtRef | null; guide: GravokWagerSiteView["guide"] } {
   const guideId = params.guide?.id ?? "gravok";
-  const guideLine =
-    params.guide?.id === "maddox"
-      ? (params.guide.dialog[0] ?? "Let’s see where this road takes us.")
-      : params.guideLine;
+  const guideLine = params.randomSiteGuideLine ?? params.guideLine;
   return {
     scene:
       params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode),
@@ -116,6 +115,7 @@ function buildGravokWagerSiteView(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent | null;
+  atlasData: AtlasData;
   runtime: GravokWagerSiteRuntime;
 }): GravokWagerSiteView {
   const { runtime } = params;
@@ -135,6 +135,9 @@ function buildGravokWagerSiteView(params: {
       sceneNode: params.sceneNode,
       guide: params.guide,
       guideLine: GRAVOK_WAGER_GUIDE_LINE,
+      randomSiteGuideLine: params.site.randomSite?.materialized === true
+        ? params.atlasData.randomSite.guideLine
+        : null,
     }),
     isFarpoint: runtime.isFarpoint,
     runtimeReady: true,
@@ -179,6 +182,7 @@ function buildLadderClimbSiteView(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent | null;
+  atlasData: AtlasData;
   runtime: TidemarkLadderClimbSiteRuntime;
 }): LadderClimbSiteView {
   const { runtime } = params;
@@ -196,6 +200,9 @@ function buildLadderClimbSiteView(params: {
       sceneNode: params.sceneNode,
       guide: params.guide,
       guideLine: TIDEMARK_LADDER_CLIMB_GUIDE_LINE,
+      randomSiteGuideLine: params.site.randomSite?.materialized === true
+        ? params.atlasData.randomSite.guideLine
+        : null,
     }),
     isFarpoint: runtime.isFarpoint,
     runtimeReady: true,
@@ -312,6 +319,7 @@ export function buildGambleSiteView(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent | null;
+  atlasData: AtlasData;
 }): GambleSiteView | null {
   const runtimeCandidate = params.state.siteRuntime[params.site.id];
   const runtime: GambleSiteRuntime | null =

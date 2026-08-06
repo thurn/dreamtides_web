@@ -1,13 +1,13 @@
 import { useCallback, useState, type ReactNode } from "react";
 import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScreen";
 import type { Database } from "firebase/database";
-import type { ContentConfig } from "../eventlog/types";
+import type { PinnedContentConfig } from "../eventlog/types";
 import { createAndNavigateToRoom } from "./RoomGate";
 
 interface VersionGateScreenProps {
   db: Database;
   /** Content config pinned into the fresh room this screen creates. */
-  contentConfig: ContentConfig;
+  contentConfig: PinnedContentConfig;
 }
 
 /** Controller for the terminal reducer-version gate. */

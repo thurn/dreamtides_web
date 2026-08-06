@@ -50,8 +50,8 @@ Integration tests against the real journey state-action / generator interface, m
 This task is **additive**: it adds new TOML, loaders, types, and `SiteType` members, but removes nothing (no `Cleanse`/`omens`/`DreamJourney` removal, no `DreamAtlas` reshape). That keeps every existing consumer compiling. The destructive switches happen in Tasks 2 and 5.
 
 **Files:**
-- Create: `data/tabula/dreamscapes.toml`, `data/tabula/dream_guides.toml`, `data/tabula/affiliations.toml`, `data/tabula/atlas_config.toml`
-- Create: `src/data/dreamscapes.ts` (loader + types re-export), `src/data/atlas-config.ts` (loader)
+- Create: `data/tabula/dreamscapes.toml`, `data/tabula/dream_guides.toml`, `data/tabula/affiliations.toml`, `data/tabula/atlas.toml`
+- Create: `src/data/dreamscapes.ts` (loader + types re-export), `src/data/atlas-data.ts` (loader)
 - Modify: `scripts/setup-assets.mjs` (parse + transform + write the four new files; add params to `setupAssets({...})` mirroring `dreamsignTomlPath`)
 - Modify: `src/types/journey.ts` (add `SiteType` members; add new content + atlas-v2 types as *new* interfaces)
 - Modify: `src/types/content.ts` if dreamscape/guide/affiliation content types belong with other content types (follow existing placement)
@@ -60,10 +60,10 @@ This task is **additive**: it adds new TOML, loaders, types, and `SiteType` memb
 - [ ] **Step 1: Author the four TOML files.**
 
 Author placeholder-but-real content:
-- `dreamscapes.toml`: 11 `[[dreamscapes]]` entries from the doc's dreamscape list (Firstlight Meadow + the 10 named ones). Fields per the spec §5: `id`, `name`, `aesthetic`, `guide-id` (omit/empty for Firstlight), `signature-site`, `affiliation-id` (omit/empty for Firstlight), `site-icon`. Firstlight carries `is-starter = true` and a `fixed-sites` list (`["Draft","Draft","DreamsignRevelation","Purge","Battle"]`).
+- `dreamscapes.toml`: 11 `[[dreamscapes]]` entries from the doc's dreamscape list (Firstlight Meadow + the 10 named ones). Fields per the spec §5: `id`, `name`, `aesthetic`, `guide-id` (omit/empty for Firstlight), `signature-site`, `affiliation-id` (omit/empty for Firstlight). Firstlight carries `is-starter = true` and a `fixed-sites` list (`["Draft","Draft","DreamsignRevelation","Purge","Battle"]`).
 - `dream_guides.toml`: 10 `[[guides]]` from the doc's Home Specialties table — `id`, `name`, `home-dreamscape-id`, `site-type`, `dialog` (one or two placeholder lines), `home-specialty` (a free-form description string sourced from the doc's enhancement column).
 - `affiliations.toml`: one `[[affiliations]]` per distinct affiliation in the doc — `id`, `name`, `signature-cards` (a small curated list of 3–8 real card UUIDs from `data/tabula/cards.toml` that fit the affiliation theme), `weight-strength` (default e.g. `2.0`), `opponent-bias-strength` (default e.g. `2.0`).
-- `atlas_config.toml`: `layer-specs` (array of 7 entries, each `{min, max}` width: `1,2,3,{3,4},{3,5},{3,5},1`), `connection-average = 2.0`, `bonus-reveal = {min=0, max=2, mode=1}`, `repeat-discourage-strength`, and `[known-dreamsign] max-per-atlas = 2, eligible-layers = [3,4,5,6], placement-probability, early-reveal-bias`.
+- `atlas.toml`: `layer-specs` (array of 7 entries, each `{min, max}` width: `1,2,3,{3,4},{3,5},{3,5},1`), `connection-average = 2.0`, `bonus-reveal = {min=0, max=2, mode=1}`, `repeat-discourage-strength`, and `[known-dreamsign] max-per-atlas = 2, eligible-layers = [3,4,5,6], placement-probability, early-reveal-bias`.
 
 Affiliation→signature-card curation: pick UUIDs by reading `data/tabula/cards.toml` for cards matching the theme (e.g. Warriors → cards whose text/subtype fit warriors). These are placeholder curations; the IDF math (Task 4) is what must be real.
 
@@ -77,11 +77,11 @@ This is a referential-integrity test, not a table-mirror: it catches dangling gu
 
 - [ ] **Step 4: Extend the asset pipeline.**
 
-In `scripts/setup-assets.mjs`: add `dreamscapesTomlPath`, `dreamGuidesTomlPath`, `affiliationsTomlPath`, `atlasConfigTomlPath` params to `setupAssets({...})` (mirror `dreamsignTomlPath`), add `transformDreamscape`/`transformGuide`/`transformAffiliation`/`transformAtlasConfig` functions (kebab→camel via the existing `kebabToCamel`), and `writeFileSync` JSON bundles to `public/` (`dreamscapes-data.json`, `dream-guides-data.json`, `affiliations-data.json`, `atlas-config-data.json`). Follow the existing dreamsign write path exactly.
+In `scripts/setup-assets.mjs`: add `dreamscapesTomlPath`, `dreamGuidesTomlPath`, `affiliationsTomlPath`, `atlasDataTomlPath` params to `setupAssets({...})` (mirror `dreamsignTomlPath`), add `transformDreamscape`/`transformGuide`/`transformAffiliation`/`transformAtlasData` functions (kebab→camel via the existing `kebabToCamel`), and `writeFileSync` JSON bundles to `public/` (`dreamscapes-data.json`, `dream-guides-data.json`, `affiliations-data.json`, `atlas-data.json`). Follow the existing dreamsign write path exactly.
 
 - [ ] **Step 5: Add loaders.**
 
-In `src/data/dreamscapes.ts` and `src/data/atlas-config.ts`, add async `loadDreamscapes()`, `loadDreamGuides()`, `loadAffiliations()`, `loadAtlasConfig()` that `fetch()` the JSON and return typed data, mirroring `loadDreamsignTemplates()`.
+In `src/data/dreamscapes.ts` and `src/data/atlas-data.ts`, add async `loadDreamscapes()`, `loadDreamGuides()`, `loadAffiliations()`, `loadAtlasData()` that `fetch()` the JSON and return typed data, mirroring `loadDreamsignTemplates()`.
 
 - [ ] **Step 6: Add the shared types (additive).**
 
@@ -112,7 +112,6 @@ export interface DreamscapeContent {
   guideId: string | null;
   signatureSite: SiteType;
   affiliationId: string | null;
-  siteIcon: string;
   isStarter: boolean;
   fixedSites?: SiteType[];
 }
@@ -135,7 +134,7 @@ export interface AffiliationContent {
 }
 
 export interface AtlasLayerSpec { min: number; max: number; }
-export interface AtlasConfig {
+export interface AtlasData {
   layerSpecs: AtlasLayerSpec[];
   connectionAverage: number;
   bonusReveal: { min: number; max: number; mode: number };
@@ -156,8 +155,8 @@ export interface AtlasConfig {
 - [ ] **Step 10: Commit.**
 
 ```bash
-git add data/tabula scripts/setup-assets.mjs src/data/dreamscapes.ts src/data/atlas-config.ts src/types/journey.ts src/data/dreamscapes.test.ts public
-git commit -m "feat(journeys): add dreamscape/guide/affiliation/atlas-config data + types"
+git add data/tabula scripts/setup-assets.mjs src/data/dreamscapes.ts src/data/atlas-data.ts src/types/journey.ts src/data/dreamscapes.test.ts public
+git commit -m "feat(journeys): add dreamscape/guide/affiliation/atlas-data data + types"
 ```
 
 ---
@@ -189,7 +188,6 @@ export interface DreamscapeNode {
   indexInLayer: number;
   dreamscapeId: string | null;  // null while unrevealed
   biomeName: string;        // display name once revealed ("" while unrevealed)
-  biomeColor: string;
   sites: SiteState[];
   position: { x: number; y: number };
   state: AtlasNodeState;
@@ -214,7 +212,7 @@ export interface DreamAtlas {
 - [ ] **Step 2: Write the failing generator invariant tests.**
 
 Rewrite `src/atlas/atlas-generator.test.ts` to assert, over 50+ generated atlases (loop + `resetAtlasGenerator()` each iteration), the **structural invariants** from the spec — each catches a distinct generation bug:
-- **Layer shape:** exactly 7 layers; layer 0 width 1 (starter), layer 6 width 1 (boss); widths within `atlas_config` ranges. *(Catches off-by-one / wrong layer count.)*
+- **Layer shape:** exactly 7 layers; layer 0 width 1 (starter), layer 6 width 1 (boss); widths within `atlas` ranges. *(Catches off-by-one / wrong layer count.)*
 - **Reachability:** every node (except boss) has ≥1 forward edge and every node (except starter) has ≥1 backward edge; the boss is reachable from the start via forward edges. *(Catches orphans/dead-ends from the backbone rule.)*
 - **Non-crossing:** for any two forward edges within a layer gap, they do not cross given node ordering by `indexInLayer`. *(Catches the no-cross constraint — the core geometric rule. Encode the standard interval-crossing predicate: edges (a→b),(c→d) cross iff (a<c and b>d) or (a>c and b<d).)*
 - **Non-adjacency:** no revealed node shares its `dreamscapeId` with a directly connected node. *(Catches the adjacency-rejection redraw.)*
@@ -228,7 +226,7 @@ Use live data via the test helpers; do not assert specific dreamscape names.
 - [ ] **Step 4: Rewrite the generator.**
 
 Rewrite `src/atlas/atlas-generator.ts`:
-- `generateInitialAtlas(...)`: roll layer widths from `AtlasConfig.layerSpecs`; create nodes per column with computed `position` (x by layer, y spread within column); wire non-crossing forward connections (monotonic backbone guaranteeing reachability, then add random non-crossing edges toward `connectionAverage`); place ≤2 known-dreamsign carriers (layers 3–6, biased so one lands among the start-reveal set); set initial `state` per node (starter `available`, boss + start-reveals `revealedLocked`/`revealed`, rest `unrevealed`).
+- `generateInitialAtlas(...)`: roll layer widths from `AtlasData.layerSpecs`; create nodes per column with computed `position` (x by layer, y spread within column); wire non-crossing forward connections (monotonic backbone guaranteeing reachability, then add random non-crossing edges toward `connectionAverage`); place ≤2 known-dreamsign carriers (layers 3–6, biased so one lands among the start-reveal set); set initial `state` per node (starter `available`, boss + start-reveals `revealedLocked`/`revealed`, rest `unrevealed`).
 - Dreamscape assignment is **lazy at reveal** (a `revealNodeDreamscape(node)` helper does the weighted draw with the repeat-discourage weight + adjacency rejection). Layer 0 is always the starter dreamscape; layer 6 always the boss.
 - Replace `generateNewNodes`/`regenerateAtlasForProgress` semantics with reveal-by-layer: completing layer 1 reveals layers 2–3; completing layer N reveals layer N+2.
 - Reconstruction logging via `logEvent` (spec §8): layer widths, each node assignment with the draw weights, connection set, reveal events, known-dreamsign placement.
@@ -273,7 +271,7 @@ Assert over many generations per layer (catches each composition rule):
 - A known-dreamsign carrier node contains exactly one `DreamsignReward`/`Reward` fill site. *(Catches carrier→reward wiring.)*
 - Firstlight Meadow yields exactly its fixed list, no enhancement, no fill. *(Catches the starter special-case.)*
 
-Derive the per-layer expectations from `atlas-config`/doc constants loaded at test time, not hardcoded magic numbers where avoidable.
+Derive the per-layer expectations from `atlas-data`/doc constants loaded at test time, not hardcoded magic numbers where avoidable.
 
 - [ ] **Step 2: Run; verify failure.** Expected: FAIL.
 

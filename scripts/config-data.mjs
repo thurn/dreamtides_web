@@ -1,26 +1,30 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
 import {
   transformAffiliation,
-  transformAtlasConfig,
   transformDreamscape,
   transformDreamsignProfile,
   transformGuide,
   transformIncarnation,
+  DREAMSCAPE_SCENE_ART_DIR,
+  DREAMSCAPE_ICON_ART_DIR,
+  DREAM_GUIDE_ART_DIR,
 } from "./setup-assets.mjs";
+import { compileAtlasData } from "./atlas-data.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 /**
- * The "simple" Dream Atlas config TOMLs: each one parses to a single JSON
+ * The hot-reloadable Dream Atlas content TOMLs: each one parses to a single JSON
  * catalog the runtime fetches, with no image work, card-id cross-validation, or
  * other build steps in between. `setup-assets.mjs` regenerates these as part of
  * the full asset build; this registry lets the dev server regenerate one of them
  * on its own when only that TOML is edited (see `configDataHotReloadPlugin` in
  * vite.config.ts), so a config edit reaches the running app without a server
- * restart or a full `setup-assets` run.
+ * restart or a full `setup-assets` run. Atlas itself uses its shared strict
+ * compiler while the smaller catalogs use their exported transforms.
  *
  * Each entry transforms with the same exported function `setup-assets.mjs` uses,
  * and writes with the same `JSON.stringify(x, null, 2) + "\n"` formatting, so the
@@ -50,10 +54,10 @@ export const SIMPLE_CONFIGS = [
     transform: transformAffiliation,
   },
   {
-    tomlFile: "atlas_config.toml",
-    jsonFile: "atlas-config-data.json",
+    tomlFile: "atlas.toml",
+    jsonFile: "atlas-data.json",
     arrayKey: null,
-    transform: transformAtlasConfig,
+    transform: null,
   },
   {
     tomlFile: "apollyon_incarnations.toml",
@@ -111,7 +115,29 @@ export function regenerateConfigData(tomlBasename, { rootDir = ROOT } = {}) {
   const parsed = parse(readFileSync(tomlPath, "utf8"));
 
   let result;
-  if (config.arrayKey === null) {
+  if (config.tomlFile === "atlas.toml") {
+    const tabulaDir = join(rootDir, "data", "tabula");
+    const dreamscapes = parse(
+      readFileSync(join(tabulaDir, "dreamscapes.toml"), "utf8"),
+    ).dreamscapes;
+    const affiliations = parse(
+      readFileSync(join(tabulaDir, "affiliations.toml"), "utf8"),
+    ).affiliations;
+    const glossary = parse(
+      readFileSync(join(tabulaDir, "glossary.toml"), "utf8"),
+    ).entries;
+    result = compileAtlasData(parsed, {
+      dreamscapes: Array.isArray(dreamscapes) ? dreamscapes : [],
+      affiliations: Array.isArray(affiliations) ? affiliations : [],
+      glossaryIds: Array.isArray(glossary) ? glossary.map((entry) => entry.id) : [],
+      assetSources: {
+        bossScenes: new Set(readdirSync(DREAMSCAPE_SCENE_ART_DIR)),
+        bossIcons: new Set(readdirSync(DREAMSCAPE_ICON_ART_DIR)),
+        bossFigures: new Set(readdirSync(DREAM_GUIDE_ART_DIR)),
+        frames: new Set(readdirSync(DREAMSCAPE_ICON_ART_DIR)),
+      },
+    });
+  } else if (config.arrayKey === null) {
     result = config.transform(parsed);
   } else {
     const records = parsed[config.arrayKey];

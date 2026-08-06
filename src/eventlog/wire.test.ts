@@ -15,6 +15,7 @@ const GENESIS: Genesis = {
     poolVariant: "tides4",
     draftMode: "pool",
     fresh20PackSize: null,
+    atlasFoldHash: "fixture-atlas-fold-hash",
   },
 };
 
@@ -97,6 +98,26 @@ describe("RTDB log wire decoding", () => {
       reducerVersion: "v1",
       createdAt: 0,
     });
+  });
+
+  it("decodes legacy content settings without an Atlas hash for compatibility gating", () => {
+    const legacy = {
+      ...GENESIS,
+      contentConfig: {
+        poolVariant: "tides4",
+        draftMode: "pool",
+        fresh20PackSize: null,
+      },
+    };
+    expect(decodeGenesis(JSON.stringify(legacy))).toEqual(legacy);
+  });
+
+  it("rejects a malformed Atlas hash field", () => {
+    const malformed = {
+      ...GENESIS,
+      contentConfig: { ...GENESIS.contentConfig, atlasFoldHash: 42 },
+    };
+    expect(decodeGenesis(JSON.stringify(malformed))).toBeNull();
   });
 
   it("rejects invalid envelope counters and missing compacted snapshots", () => {

@@ -27,7 +27,6 @@ id = "starter_field"
 name = "Starter Field"
 aesthetic = "A calm opening."
 signature-site = "Draft"
-site-icon = "icons/flag.svg"
 is-starter = true
 fixed-sites = ["Draft", "Battle"]
 
@@ -38,7 +37,6 @@ aesthetic = "A stormy coast."
 guide-id = "guide_one"
 signature-site = "Shop"
 affiliation-id = "affil_one"
-site-icon = "icons/shop.svg"
 `;
 }
 
@@ -85,7 +83,6 @@ describe("makeValidateDreamscapeEdit", () => {
     expect(validateEdit("guide-id", "ghost_guide").ok).toBe(false);
     expect(validateEdit("affiliation-id", "ghost_affil").ok).toBe(false);
     expect(validateEdit("name", "   ").ok).toBe(false);
-    expect(validateEdit("site-icon", "").ok).toBe(false);
   });
 
   it("rejects fields that are not editable", () => {

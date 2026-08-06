@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
-  MINIMAL_ATLAS_CONFIG,
+  MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
 } from "../__test-helpers__/atlas-fixtures";
 import type { CardData } from "../types/cards";
@@ -65,7 +65,7 @@ function makeJourneyContent(
     dreamscapes: MINIMAL_DREAMSCAPES,
     affiliations: [],
     guides: [],
-    atlasConfig: MINIMAL_ATLAS_CONFIG,
+    atlasData: MINIMAL_ATLAS_DATA,
     apollyonIncarnations: incarnations,
     poolContext: makeTestPoolContext(["dreamsign-1", "dreamsign-2"]),
   };
@@ -190,7 +190,6 @@ describe('the "random-site-atlas" QA scene', () => {
         guideId: "maddox",
         signatureSite: "RandomSite",
         affiliationId: null,
-        siteIcon: "?",
         isStarter: false,
         dreamAvatarIds: [],
       },

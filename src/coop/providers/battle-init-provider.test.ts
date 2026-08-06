@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import {
-  MINIMAL_ATLAS_CONFIG,
+  MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
 } from "../../__test-helpers__/atlas-fixtures";
 import {
@@ -27,7 +27,7 @@ function makeContent(): JourneyContent {
     dreamscapes: MINIMAL_DREAMSCAPES,
     affiliations: [],
     guides: [],
-    atlasConfig: MINIMAL_ATLAS_CONFIG,
+    atlasData: MINIMAL_ATLAS_DATA,
   };
 }
 

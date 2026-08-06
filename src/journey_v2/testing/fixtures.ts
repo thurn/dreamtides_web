@@ -1,6 +1,6 @@
 import { asCardName } from "../../types/card-identity";
 import type { FitModel } from "../../draft/replay/fit-model";
-import { MINIMAL_ATLAS_CONFIG, MINIMAL_DREAMSCAPES } from "../../__test-helpers__/atlas-fixtures";
+import { MINIMAL_ATLAS_DATA, MINIMAL_DREAMSCAPES } from "../../__test-helpers__/atlas-fixtures";
 import type {
   MerchantCorpus,
   MerchantCorpusCard,
@@ -152,7 +152,7 @@ export function makeMerchantTestContent({
     dreamsignTemplates,
     dreamscapes: MINIMAL_DREAMSCAPES,
     affiliations: [], guides: [],
-    atlasConfig: MINIMAL_ATLAS_CONFIG,
+    atlasData: MINIMAL_ATLAS_DATA,
     fitModel,
     merchantCorpus,
     dreamsignProfiles,

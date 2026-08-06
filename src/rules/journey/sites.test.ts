@@ -110,7 +110,6 @@ function makeNode(sites: SiteState[]): DreamscapeNode {
     indexInLayer: 0,
     dreamscapeId: "d1",
     biomeName: "Biome",
-    biomeColor: "#fff",
     sites,
     position: { x: 0, y: 0 },
     state: "available",
@@ -262,6 +261,7 @@ describe("Random Site", () => {
   function homeRandomSite(): SiteState {
     return {
       ...makeSite("RandomSite", true),
+      guideIdOverride: "fixture-random-guide",
       randomSite: {
         mode: "homeChoice",
         candidateSiteTypes: ["Shop", "Purge", "Augury", "Gamble", "Exploration"],
@@ -285,7 +285,7 @@ describe("Random Site", () => {
     expect(new Set(runtime.offeredSiteTypes).size).toBe(3);
   });
 
-  it("materializes the first valid home choice as an enhanced Maddox-hosted site", () => {
+  it("preserves the configured presenting guide when materializing a home choice", () => {
     const opened = reduce(stateWithSites([homeRandomSite()]), "OPEN_SITE", {
       siteId: SITE_ID,
     });
@@ -302,7 +302,7 @@ describe("Random Site", () => {
       id: SITE_ID,
       type: selected,
       isEnhanced: true,
-      guideIdOverride: "maddox",
+      guideIdOverride: "fixture-random-guide",
       randomSite: { mode: "homeChoice", destinationSiteType: selected, materialized: true },
     });
     expect(chosen.state.journey.siteRuntime[SITE_ID]).toBeUndefined();
@@ -317,6 +317,7 @@ describe("Random Site", () => {
   it("materializes a persisted single destination when entered", () => {
     const wrapper: SiteState = {
       ...makeSite("RandomSite", true),
+      guideIdOverride: "fixture-random-guide",
       randomSite: {
         mode: "single",
         candidateSiteTypes: ["Exploration"],
@@ -333,7 +334,7 @@ describe("Random Site", () => {
       id: SITE_ID,
       type: "Exploration",
       isEnhanced: true,
-      guideIdOverride: "maddox",
+      guideIdOverride: "fixture-random-guide",
     });
   });
 

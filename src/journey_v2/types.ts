@@ -6,6 +6,7 @@ import type { CardTransfigurationDisplay } from "../transfiguration/transfigurat
 import type { CardData } from "../types/cards";
 import type { DreamsignTemplate } from "../types/content";
 import type { JourneyRewardEffect } from "../rules/journey/reward-effects";
+import type { AtlasData } from "../types/atlas-data";
 import type {
   DeckEntry,
   SiteState,
@@ -55,6 +56,7 @@ export interface MerchantCatalogCard extends MerchantCardIdentity {
 }
 
 export interface MerchantContext {
+  atlasData: AtlasData;
   journeySeed: string;
   site: SiteState;
   /**

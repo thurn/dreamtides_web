@@ -5,7 +5,6 @@ import type {
   DreamscapeContent,
 } from "../types/content";
 import type { SiteState, SiteType } from "../types/journey";
-import { MADDOX_GUIDE_ID } from "../random-site/random-site";
 
 // Re-export the content types so callers can import dreamscape/guide/affiliation
 // shapes alongside their loaders from one module.
@@ -135,9 +134,6 @@ export function guideForSite(
 ): DreamGuideContent | null {
   if (site.guideIdOverride !== undefined) {
     return guides.find((guide) => guide.id === site.guideIdOverride) ?? null;
-  }
-  if (site.type === "RandomSite") {
-    return guides.find((guide) => guide.id === MADDOX_GUIDE_ID) ?? null;
   }
   return guideForSiteType(guides, site.type);
 }

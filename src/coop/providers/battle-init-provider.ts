@@ -184,7 +184,7 @@ export function createBattleCompletionProvider(
           : { dreamscapeModifiers: journey.dreamscapeModifiers },
         {
           dreamscapes: content.dreamscapes,
-          atlasConfig: content.atlasConfig,
+          atlasData: content.atlasData,
           dreamsignPoolIds: journey.remainingDreamsignPool,
           apollyonIncarnations: content.apollyonIncarnations,
         },

@@ -18,7 +18,7 @@
 //       task exists to prevent.
 //
 // Data-resilient per AGENTS.md: the JourneyContent is built from the shared
-// __test-helpers__ (live compiled dreamscape / atlas-config bundles) plus a
+// __test-helpers__ (live compiled dreamscape / atlas-data bundles) plus a
 // hand-authored card/dreamsign corpus. Site ids and the dreamAvatar id are
 // RESOLVED from the folded state / content, never hardcoded, and the assertions
 // are over OUTCOMES and HASHES, never TOML content — so a data edit cannot
@@ -41,7 +41,7 @@ import { asCardId, asCardName } from "../../types/card-identity";
 import { STARTER_CARD_NUMBERS } from "../../data/starter-cards";
 import {
   loadTestAffiliations,
-  loadTestAtlasConfig,
+  loadTestAtlasData,
   loadTestDreamGuides,
   loadTestDreamscapes,
 } from "../../__test-helpers__/atlas-fixtures";
@@ -142,7 +142,7 @@ function makeJourneyContent(): JourneyContent {
     dreamscapes: loadTestDreamscapes(),
     affiliations: loadTestAffiliations(),
     guides: loadTestDreamGuides(),
-    atlasConfig: loadTestAtlasConfig(),
+    atlasData: loadTestAtlasData(),
     poolContext: makeTestPoolContext(dreamsignIds),
   };
 }
@@ -599,7 +599,6 @@ function makeMerchantFixture(): {
           indexInLayer: 0,
           dreamscapeId: "test_dreamscape",
           biomeName: "Fixture",
-          biomeColor: "#123456",
           sites: [site],
           position: { x: 0, y: 0 },
           state: "available",

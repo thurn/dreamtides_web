@@ -9,7 +9,7 @@
 // FRESH id up to 3 times before giving up.
 
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { ContentConfig } from "../eventlog/types";
+import type { PinnedContentConfig } from "../eventlog/types";
 
 const ids: string[] = [];
 let attempt = 0;
@@ -35,10 +35,11 @@ const { createAndNavigateToRoom } = await import("./RoomGate");
 const { createRoomEvictingStale, RoomExistsError } =
   await import("../eventlog/room");
 
-const CONTENT_CONFIG: ContentConfig = {
+const CONTENT_CONFIG: PinnedContentConfig = {
   poolVariant: "tides4",
   draftMode: "pool",
   fresh20PackSize: null,
+  atlasFoldHash: "fixture-atlas-fold-hash",
 };
 
 const db = {} as Parameters<typeof createAndNavigateToRoom>[0];

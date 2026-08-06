@@ -56,14 +56,14 @@ import {
   loadDreamGuides,
   loadDreamscapes,
 } from "./dreamscapes";
-import { loadAtlasConfig } from "./atlas-config";
+import { loadAtlasData } from "./atlas-data";
 import type {
   AffiliationContent,
   ApollyonIncarnationContent,
   DreamGuideContent,
   DreamscapeContent,
 } from "../types/content";
-import type { AtlasConfig } from "../types/journey";
+import type { AtlasData } from "../types/journey";
 import { STARTER_CARD_NUMBERS } from "./starter-cards";
 import { buildFitModel, type FitModel } from "../draft/replay/fit-model";
 import {
@@ -134,9 +134,9 @@ export interface JourneyContent {
    */
   guides: readonly DreamGuideContent[];
   /**
-   * Dream Atlas generation tuning, loaded from `public/atlas-config-data.json`.
+   * Dream Atlas generation tuning, loaded from `public/atlas-data.json`.
    */
-  atlasConfig: AtlasConfig;
+  atlasData: AtlasData;
   /**
    * Apollyon's ten incarnations, loaded from
    * `public/apollyon-incarnations-data.json`. Atlas generation picks one per run
@@ -809,7 +809,7 @@ export async function loadJourneyContent(
     dreamscapes,
     affiliations,
     guides,
-    atlasConfig,
+    atlasData,
     apollyonIncarnations,
     _figmentCatalog,
   ] = await Promise.all([
@@ -866,7 +866,7 @@ export async function loadJourneyContent(
     // Dream Guides are small and always loaded so guide-bearing site screens can
     // present the resident guide and their home specialty.
     loadDreamGuides(),
-    loadAtlasConfig(),
+    loadAtlasData(),
     // Apollyon's incarnations are small and always loaded so the Atlas can
     // present a per-run guise for the boss node.
     loadApollyonIncarnations(),
@@ -970,7 +970,7 @@ export async function loadJourneyContent(
     dreamscapes,
     affiliations,
     guides,
-    atlasConfig,
+    atlasData,
     apollyonIncarnations,
     poolContext,
     draftMode,

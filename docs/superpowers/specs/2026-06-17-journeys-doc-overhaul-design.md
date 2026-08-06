@@ -101,7 +101,7 @@ load through `fetch()` like existing assets.
 
 - `data/tabula/dreamscapes.toml` — 11 dreamscapes. Fields: `id`, `name`,
   `aesthetic`, `guide-id` (null for Firstlight), `signature-site`,
-  `affiliation-id` (null for Firstlight), `site-icon`. Firstlight Meadow is
+  `affiliation-id` (null for Firstlight). Firstlight Meadow is
   flagged as the fixed starter with an explicit fixed-site list.
 - `data/tabula/dream_guides.toml` — 10 guides. Fields: `id`, `name`,
   `home-dreamscape-id`, `site-type`, `dialog` (per-event lines),
@@ -109,7 +109,7 @@ load through `fetch()` like existing assets.
 - `data/tabula/affiliations.toml` — affiliations. Fields: `id`, `name`,
   `signature-cards` (UUID list — small curated sets authored so the IDF math is
   real), `weight-strength` (reweighting strength), `opponent-bias-strength`.
-- `data/tabula/atlas_config.toml` — `layer-specs` (per-layer width or width
+- `data/tabula/atlas.toml` — `layer-specs` (per-layer width or width
   range), `connection-average`, `bonus-reveal-distribution` (0–2 weights),
   `repeat-discourage-strength`, `known-dreamsign` config (`max-per-atlas` = 2,
   `eligible-layers` = 3–6, `placement-probability`, early-reveal bias).
@@ -132,7 +132,7 @@ acceptance criteria.
 **T0.1 — Data + types foundation.**
 - Author all new TOML files (§5) with placeholder-but-real content for 11
   dreamscapes, 10 guides, affiliations (curated UUID signature sets),
-  atlas_config.
+  atlas.
 - Extend `scripts/setup-assets.mjs` to compile them and add loaders mirroring
   existing `load*` helpers.
 - Extend `src/types/journey.ts` and `src/types/content.ts` with all new shared
@@ -154,7 +154,7 @@ acceptance criteria.
 
 **T1.1 — Atlas generator rewrite.**
 - Rewrite `src/atlas/atlas-generator.ts` to the fixed 7-layer model: roll layer
-  widths from `atlas_config`, place nodes per column, wire non-crossing forward
+  widths from `atlas`, place nodes per column, wire non-crossing forward
   connections (monotonic backbone guaranteeing ≥1 forward and ≥1 backward edge
   per node, then random extra edges toward the average), assign named
   dreamscapes by weighted draw with adjacency-rejection (lazy per reveal),
