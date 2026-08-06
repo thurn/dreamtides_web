@@ -39,6 +39,7 @@ export const widgetDemo: CumulusComponent = {
   blurb:
     "A fixture widget. It exists only for tests.",
   callout: "Prefer a real component.",
+  propsNote: "Required fields depend on the selected variant.",
   group: "Primitives",
   docName: "Widget",
   Component: Widget,
@@ -81,13 +82,14 @@ describe("extractRegistryOrder", () => {
 });
 
 describe("extractDemoDoc", () => {
-  it("extracts id, title, blurb, callout, group, docName, and usage", () => {
+  it("extracts id, title, blurb, guidance, props notes, group, docName, and usage", () => {
     const doc = extractDemoDoc(DEMO_FIXTURE, "fixture.tsx", "widgetDemo");
     expect(doc).toEqual({
       id: "widget",
       title: "Widget",
       blurb: "A fixture widget. It exists only for tests.",
       callout: "Prefer a real component.",
+      propsNote: "Required fields depend on the selected variant.",
       group: "Primitives",
       docName: "Widget",
       usage: [
@@ -173,6 +175,7 @@ describe("renderComponentMarkdown", () => {
     expect(markdown).toContain("A fixture widget.");
     expect(markdown).toContain("Real consumers: **3**");
     expect(markdown).toContain("> **Guidance:** Prefer a real component.");
+    expect(markdown).toContain("Required fields depend on the selected variant.");
     // Pipes inside type/description cells are escaped so the table row holds.
     expect(markdown).toContain('`"plain" \\| "fancy"`');
     expect(markdown).toContain("Which widget \\| treatment to draw.");

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 export type CumulusRoute =
   | { view: "overview" }
+  | { view: "system"; id: string }
   | { view: "component"; id: string }
   | { view: "mockup"; id: string };
 
@@ -16,6 +17,7 @@ export type CumulusRoute =
  *
  * Accepted shapes:
  *   - "", "#", "#/"            -> overview
+ *   - "#/systems/<id>"          -> UI system <id>
  *   - "#/<id>"                 -> component <id>
  *   - "#/<id>/mockup"          -> mockup <id>
  *   - "#/<id>/<anything else>" -> component <id> (unknown segment ignored
@@ -36,6 +38,9 @@ export function parseCumulusRoute(hash: string): CumulusRoute {
   }
 
   const [id, second] = segments;
+  if (id === "systems" && second !== undefined) {
+    return { view: "system", id: second };
+  }
   if (second === "mockup") {
     return { view: "mockup", id };
   }

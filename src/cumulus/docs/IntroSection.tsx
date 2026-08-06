@@ -157,11 +157,18 @@ export function IntroSection(): ReactElement {
           <p style={bodyStyle}>
             Every reveal-on-interaction popup — a tide description, the
             DreamAvatar profile, a dreamsign&rsquo;s ability text, a site
-            description, essence — renders through the single{" "}
-            <strong>InfoCard</strong> engine, so the vocabulary and timing
-            cannot diverge by screen or by input. The card is anchored to the
-            pointer or trigger, never centered, and there is no close button and
-            no scrim. The reveal is a single contract expressed through
+            description, essence — participates in the single{" "}
+            <a
+              href="#/systems/entity-reveals"
+              style={{ color: token("--accent-bright") }}
+            >
+              Entity Reveal Coordinator
+            </a>{", "}
+            so interaction and placement cannot diverge by screen or input.
+            Strict visual content renders through <strong>InfoCard</strong> or
+            another named reveal surface. The card is anchored to the pointer or
+            trigger, never centered, and there is no close button and no scrim.
+            The reveal is a single contract expressed through
             whichever gesture is native to the device, and neither input is the
             primary one. On a fine pointer — a mouse or trackpad — hovering a
             trigger reveals the card; a press does not reveal, it only gives the

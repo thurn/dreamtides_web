@@ -1,11 +1,9 @@
 // Standalone documentation endpoint for the Cumulus design system, reachable at
 // `/cumulus` (see the route branch in `src/main.tsx`). Switches on the hash route
-// (see route.ts) between the overview gallery — which embeds each component's
-// live, interactive mockup inline and links out to its docs page and its
-// full-screen mockup — a component's doc page, and a component's full-screen
-// mockup: a realistic full-bleed scene composing the component with real
-// content. The chrome is styled lightly with Cumulus tokens — dogfooding the
-// design system it documents.
+// (see route.ts) between the overview, first-class cross-component UI-system
+// contracts, component reference pages, and full-screen component mockups. The
+// chrome is styled lightly with Cumulus tokens — dogfooding the design system it
+// documents.
 import "../primitives/cumulus-tokens.css";
 import "../primitives/legibility.css";
 import "../assets/phosphor.css";
@@ -18,6 +16,12 @@ import { getComponent } from "./registry";
 import { getMockup } from "./mockups/registry";
 import { ComponentPage } from "./ComponentPage";
 import { ComponentShowcase } from "./ComponentShowcase";
+import { SystemPage } from "./SystemPage";
+import { SystemShowcase } from "./SystemShowcase";
+import {
+  CUMULUS_UI_SYSTEMS,
+  type CumulusUISystem,
+} from "./systems/registry";
 import { IntroSection } from "./IntroSection";
 import { DesignTokensSection, TOKEN_TOC_ENTRIES } from "./DesignTokensSection";
 import { TableOfContents, type TocEntry } from "./TableOfContents";
@@ -65,11 +69,18 @@ function componentAnchorId(id: string): string {
   return `cumulus-toc-component-${id}`;
 }
 
+const UI_SYSTEMS_ANCHOR_ID = "cumulus-toc-ui-systems";
+
+function systemAnchorId(id: string): string {
+  return `cumulus-toc-system-${id}`;
+}
+
 /** Builds the table-of-contents entries in the exact top-to-bottom order the
- * overview renders its sections: the two prose sections, then each component
- * group with its components nested one rung in. */
+ * overview renders its sections: prose, UI systems, then each component group
+ * with its components nested one rung in. */
 function buildTocEntries(
   groups: { group: string; entries: CumulusComponent[] }[],
+  systems: readonly CumulusUISystem[],
 ): TocEntry[] {
   const entries: TocEntry[] = [
     { id: "cumulus-toc-philosophy", label: "Design Philosophy", depth: 0 },
@@ -77,6 +88,12 @@ function buildTocEntries(
     // The token section's categories (Color, Typography, ...) nest one rung in,
     // derived from the section itself so they can't drift from its headings.
     ...TOKEN_TOC_ENTRIES.map((entry) => ({ ...entry, depth: 1 as const })),
+    { id: UI_SYSTEMS_ANCHOR_ID, label: "UI Systems", depth: 0 },
+    ...systems.map((system) => ({
+      id: systemAnchorId(system.id),
+      label: system.title,
+      depth: 1 as const,
+    })),
   ];
   for (const { group, entries: components } of groups) {
     entries.push({ id: groupAnchorId(group), label: group, depth: 0 });
@@ -93,7 +110,7 @@ function buildTocEntries(
 
 function Overview() {
   const groups = groupComponents(CUMULUS_COMPONENTS);
-  const tocEntries = buildTocEntries(groups);
+  const tocEntries = buildTocEntries(groups, CUMULUS_UI_SYSTEMS);
   return (
     <div>
       <TableOfContents entries={tocEntries} />
@@ -117,6 +134,46 @@ function Overview() {
       <IntroSection />
 
       <DesignTokensSection />
+
+      <section
+        id={UI_SYSTEMS_ANCHOR_ID}
+        data-cumulus-ui-systems=""
+        style={{ marginBottom: token("--space-4xl") }}
+      >
+        <h2
+          style={{
+            margin: `0 0 ${token("--space-s")}`,
+            color: token("--text-muted"),
+            font: token("--t-eyebrow"),
+            letterSpacing: token("--tracking-eyebrow"),
+            textTransform: "uppercase",
+          }}
+        >
+          UI Systems
+        </h2>
+        <p
+          style={{
+            maxWidth: "68ch",
+            margin: `0 0 ${token("--space-2xl")}`,
+            color: token("--text-secondary"),
+            font: token("--t-body"),
+          }}
+        >
+          Cross-component behavior belongs here when it has its own lifecycle,
+          coordination, placement, or invariants. System pages document the
+          contract among components and the application host; component pages
+          continue to document visual roles and typed props.
+        </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: token("--space-2xl") }}>
+          {CUMULUS_UI_SYSTEMS.map((system) => (
+            <SystemShowcase
+              key={system.id}
+              system={system}
+              anchorId={systemAnchorId(system.id)}
+            />
+          ))}
+        </div>
+      </section>
 
       {groups.length === 0 ? (
         <p style={{ color: token("--text-muted"), font: token("--t-body") }}>
@@ -251,6 +308,7 @@ export default function CumulusApp() {
           // leak onto the new component.
           <ComponentPage key={route.id} id={route.id} />
         )}
+        {route.view === "system" && <SystemPage key={route.id} id={route.id} />}
       </div>
     </div>
   );

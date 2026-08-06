@@ -27,6 +27,10 @@ component past its typed surface is not an available move at all (see
   liquid-glass material (who wears it, its `--glass-*` tokens, the
   `--glass-fill-popover` reveal tint, and the blur-preservation constraint) and
   the solid alternatives that are deliberately _not_ glass.
+- **UI systems** (hand-written, live): `src/cumulus/docs/systems/` —
+  cross-component behavior with its own lifecycle, coordination, placement, or
+  invariants. Live routes use `/cumulus#/systems/<id>`; start with the
+  [Entity Reveal Coordinator](../../../src/cumulus/docs/systems/entity-reveal-coordinator.tsx).
 - **Live doc site**: `/cumulus` on the dev server (e.g.
   `http://localhost:5173/cumulus`), with `/cumulus#/<id>` per component —
   interactive demos and the same props tables, useful during browser QA.
@@ -40,10 +44,14 @@ The reference files and the index are projections of the component sources
 `src/cumulus/docs/demos/`). Regenerate with `npm run cumulus-docs` (included in
 `npm run regenerate-assets`); edit the sources, never the generated files.
 
-Component documentation describes reusable roles, integration contracts, and
-constraints. Never designate a particular product screen as a component's
-owner or product owner: those claims become stale as compositions change. A
-screen may appear as a nonexclusive usage example when that context is useful.
+Component documentation describes reusable visual roles, typed props, and
+component-local constraints. UI-system documentation describes contracts that
+coordinate several components or the application host. Component pages link to
+their governing systems so interaction and placement rules are documented once
+at the correct architectural level. Never designate a particular product screen
+as a component's owner or product owner: those claims become stale as
+compositions change. A screen may appear as a nonexclusive usage example when
+that context is useful.
 
 ## Requested content only
 

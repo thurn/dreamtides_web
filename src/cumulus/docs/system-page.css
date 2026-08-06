@@ -1,0 +1,62 @@
+.cumulus-system-showcase {
+  grid-template-columns: minmax(0, 0.8fr) minmax(280px, 1.2fr);
+}
+
+.cumulus-system-flow {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-s);
+  align-items: stretch;
+}
+
+.cumulus-system-flow__arrow {
+  position: absolute;
+  right: calc(var(--space-s) * -1);
+  top: 50%;
+  z-index: 1;
+  transform: translate(50%, -50%);
+}
+
+.cumulus-entity-reveal-demo-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 240px;
+}
+
+.cumulus-system-responsibilities {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.42fr) minmax(0, 1fr);
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius-control);
+  background: var(--border-mid);
+}
+
+@media (max-width: 719px) {
+  .cumulus-system-showcase {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cumulus-system-flow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cumulus-system-flow__arrow {
+    right: 50%;
+    top: auto;
+    bottom: calc(var(--space-s) * -1);
+    transform: translate(50%, 50%) rotate(90deg);
+  }
+
+  .cumulus-entity-reveal-demo-row {
+    flex-direction: column;
+    justify-content: center;
+    min-height: 440px;
+  }
+
+  .cumulus-system-responsibilities {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

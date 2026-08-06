@@ -1,6 +1,7 @@
 // TableOfContents — the floating left-hand rail on the /cumulus overview. Lists
-// the overview's top-level sections (Design Philosophy, Design Tokens) and, one
-// rung in, each component's showcase, and keeps the entry the reader is
+// the overview's top-level sections (Design Philosophy, Design Tokens, UI
+// Systems, component groups) and, one rung in, each system or component, and
+// keeps the entry the reader is
 // currently scrolled to highlighted. The rail only appears when the viewport is
 // wide enough for it to float in the gutter beside the centered content column
 // without overlapping it — the width breakpoint lives in table-of-contents.css.

@@ -14,6 +14,7 @@ import { DemoStage } from "./DemoStage";
 import { ControlPanel } from "./ControlPanel";
 import { PropsTable } from "./PropsTable";
 import { UsageSection } from "./UsageSection";
+import { getUISystem } from "./systems/registry";
 
 const sectionHeadingStyle: React.CSSProperties = {
   font: token("--t-eyebrow"),
@@ -148,6 +149,35 @@ export function ComponentPage({ id }: { id: string }) {
           {entry.blurb}
         </p>
         {entry.callout != null && <Callout text={entry.callout} />}
+        {entry.relatedSystems !== undefined && entry.relatedSystems.length > 0 && (
+          <div
+            data-cumulus-related-systems=""
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: token("--space-xs"),
+              flexWrap: "wrap",
+              marginTop: token("--space-m"),
+              font: token("--t-body-sm"),
+              color: token("--text-muted"),
+            }}
+          >
+            <span>Related UI system:</span>
+            {entry.relatedSystems.map((systemId) => {
+              const system = getUISystem(systemId);
+              return system === undefined ? null : (
+                <a
+                  key={systemId}
+                  data-related-system={systemId}
+                  href={`#/systems/${systemId}`}
+                  style={{ color: token("--accent-bright") }}
+                >
+                  {system.title} →
+                </a>
+              );
+            })}
+          </div>
+        )}
       </header>
 
       <div className="cumulus-component-page__layout">
@@ -185,6 +215,19 @@ export function ComponentPage({ id }: { id: string }) {
 
       <section>
         <h2 style={sectionHeadingStyle}>Props</h2>
+        {entry.propsNote !== undefined && (
+          <p
+            data-cumulus-props-note=""
+            style={{
+              maxWidth: "72ch",
+              margin: `0 0 ${token("--space-m")}`,
+              font: token("--t-body-sm"),
+              color: token("--text-secondary"),
+            }}
+          >
+            {entry.propsNote}
+          </p>
+        )}
         <PropsTable docName={entry.docName} />
       </section>
     </div>

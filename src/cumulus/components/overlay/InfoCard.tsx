@@ -108,9 +108,9 @@ export function infoCardWidth(
 }
 
 /**
- * The internal typography multiplier for the same viewport: mobile-sized cards
- * use the shared mobile text scale, while native-width cards use the token
- * type scale. PURE.
+ * The shared typography multiplier for the same viewport. It changes at the
+ * standard 248px card's width cutoff, independently of the wider atlasReveal
+ * geometry and the reveal coordinator's input-layout breakpoint. PURE.
  */
 export function infoCardTextScale(
   viewportWidth: number,
@@ -882,12 +882,12 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
  * varies (object / fullBleed / atlasReveal / icon / tide / text) on one fixed
  * liquid-glass shell (no caret, shared card type scale).
  *
- * Wraps the variant body in the ONE viewport-driven mobile layout rule (see
- * {@link infoCardWidth}): on a phone every info card lays out at the same
- * fraction of the screen; on desktop it renders at native size. The internal
- * type scale is a separate shared mobile multiplier so title, epithet, meta,
- * and body text keep their proportions while the glass text blocks naturally
- * grow or shrink from the text they contain.
+ * Wraps the variant body in the viewport-driven width rule (see
+ * {@link infoCardWidth}): every variant lays out at the same fraction of the
+ * screen until reaching its own native width. The internal type scale changes
+ * at the standard-card cutoff, so title, epithet, meta, and body text keep
+ * their proportions while the glass text blocks naturally grow or shrink from
+ * the text they contain.
  *
  */
 export function InfoCard(props: InfoCardProps): React.ReactElement {

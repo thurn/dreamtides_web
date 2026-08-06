@@ -9,6 +9,7 @@
 // while it is.
 
 import type { ComponentType } from "react";
+import type { CumulusUISystemId } from "./systems/registry";
 import { atlasEdgeDemo } from "./demos/atlas-edge";
 import { atlasMapDemo } from "./demos/atlas-map";
 import { atlasNodeDemo } from "./demos/atlas-node";
@@ -104,6 +105,14 @@ export interface CumulusComponent {
    * enough.
    */
   callout?: string;
+  /**
+   * Optional clarification shown immediately above the generated props table.
+   * Use this for contracts the flattened docgen table cannot express, such as
+   * variant-conditional requirements in a discriminated union.
+   */
+  propsNote?: string;
+  /** UI-system ids whose cross-component contract governs this component. */
+  relatedSystems?: readonly CumulusUISystemId[];
   /**
    * The sanctioned escape from the ghost-components integrity check — set to
    * "incubating" for a component that is documented deliberately ahead of its

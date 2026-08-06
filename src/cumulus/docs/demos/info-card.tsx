@@ -30,9 +30,12 @@ export const infoCardDemo: CumulusComponent = {
   id: "info-card",
   title: "Info Card",
   blurb:
-    "The strict information-card presentation. Its media treatment varies by content — object, full-bleed, atlas reveal, icon, tide, or text — over a single fixed liquid-glass shell; named semantic sources register cards with the root reveal coordinator. On a narrow viewport a card lays out at 45% of screen width capped at its native 248px, so below ~551px (248 ÷ 0.45) it begins scaling down — an intentional content-driven cutoff, distinct from the 900px desktop/mobile breakpoint.",
+    "The strict information-card presentation. Its media treatment varies by content — object, full-bleed, atlas reveal, icon, tide, or text — over a single fixed liquid-glass shell. Standard variants have a native width of 248px and begin geometry scaling below ~551px; atlasReveal has a native width of 360px and begins geometry scaling below 800px. Both cutoffs are distinct from the Entity Reveal Coordinator's 900px input-layout breakpoint.",
   callout:
-    "InfoCard supplies strict visual content variants. Named semantic components register that content with the root coordinator, which normally places desktop hover reveals beside their target on the left or right and owns mobile safe-area bounds and touch clearance. Augury OfferTile is the single one-off exception to that desktop rule: its body-only InfoCard centers above its respective offer so the two choices remain visually legible. This exception is specific to Augury and is not a reusable placement pattern for other Cumulus surfaces.",
+    "InfoCard supplies the visual content; the Entity Reveal Coordinator owns popup interaction, measurement, portal rendering, and placement. Product screens use named semantic sources rather than positioning InfoCard directly. Augury OfferTile is the single one-off desktop placement exception: its body-only InfoCard centers above its respective offer.",
+  propsNote:
+    "InfoCardProps is a discriminated union. The flattened table combines every variant: image is required only for object, fullBleed, and atlasReveal; glyph only for icon; and tide only for tide. Omit variant, or pass text, for the text member.",
+  relatedSystems: ["entity-reveals"],
   group: "Components",
   docName: "InfoCard",
   Component: InfoCard,
@@ -134,11 +137,11 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
     },
     {
       label: "Mobile scale",
-      note: "Standard info cards are 248px wide at native; the scene-led atlasReveal variant is 360px. On a narrow viewport each lays out at 45% of the viewport width, capped at its native width, so desktop keeps the authored geometry. Mobile-sized cards use a 0.86 internal type scale, preserving a 12px body voice; copy wraps into natural height while the 45% width stays fixed. Placement consumers read the same variant width through `infoCardNativeWidth`.",
+      note: "Standard info cards are 248px wide at native; the scene-led atlasReveal variant is 360px. Each lays out at 45% of the viewport width until reaching its native cap. The shared 0.86 type scale applies below the standard-card cutoff (~551px), independently of variant geometry and the coordinator's 900px input-layout breakpoint. Placement reads the same native variant width through `infoCardNativeWidth`.",
       code: `import { infoCardNativeWidth, infoCardWidth, infoCardTextScale, INFO_CARD_WIDTH } from "src/cumulus/components/overlay/InfoCard";
 const w = infoCardWidth(window.innerWidth);         // min(248, 0.45 * vw)
 const atlasW = infoCardNativeWidth("atlasReveal"); // 360
-const scale = infoCardTextScale(window.innerWidth); // 1 on desktop, 0.86 on mobile`,
+const scale = infoCardTextScale(window.innerWidth); // 0.86 below ~551px; otherwise 1`,
     },
   ],
   demo: {

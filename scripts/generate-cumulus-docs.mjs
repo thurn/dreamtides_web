@@ -167,8 +167,8 @@ export function extractRegistryOrder(sourceText, fileName = "registry.ts") {
 
 /**
  * PURE core: extract the doc-relevant fields of a demo file's CumulusComponent
- * object literal — id, title, blurb, callout?, group, docName, usage[] — from
- * source text. When `exportName` is given, that exported const is required;
+ * object literal — id, title, blurb, callout?, propsNote?, group, docName,
+ * usage[] — from source text. When `exportName` is given, that exported const is required;
  * otherwise the first exported const initialized to an object literal with an
  * `id` property is used (test convenience).
  */
@@ -263,7 +263,9 @@ export function extractDemoDoc(sourceText, fileName, exportName) {
 
   const blurbContext = `${fileName} field "blurb"`;
   const calloutContext = `${fileName} field "callout"`;
+  const propsNoteContext = `${fileName} field "propsNote"`;
   const callout = optionalString("callout");
+  const propsNote = optionalString("propsNote");
   return {
     id: requiredString("id"),
     title: requiredString("title"),
@@ -272,6 +274,10 @@ export function extractDemoDoc(sourceText, fileName, exportName) {
       callout === undefined
         ? undefined
         : documentationString(callout, calloutContext),
+    propsNote:
+      propsNote === undefined
+        ? undefined
+        : documentationString(propsNote, propsNoteContext),
     group: requiredString("group"),
     docName: requiredString("docName"),
     usage,
@@ -360,6 +366,10 @@ export function renderComponentMarkdown(doc, props, consumerCount) {
   lines.push("");
   lines.push("## Props");
   lines.push("");
+  if (doc.propsNote) {
+    lines.push(doc.propsNote);
+    lines.push("");
+  }
   if (!props || props.length === 0) {
     lines.push("This component takes no props.");
   } else {

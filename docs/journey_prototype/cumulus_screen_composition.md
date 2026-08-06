@@ -84,6 +84,10 @@ placement. Parent screen stacking contexts do not participate in reveal layout.
 
 ## Reveal Surfaces
 
+The live Cumulus reference documents this cross-component contract on the
+`/cumulus#/systems/entity-reveals` UI-system page. Component references link to
+that page when their behavior participates in the coordinator.
+
 Screens render named semantic sources such as `GameCard`, `AtlasNode`,
 `Dreamsign`, `DreamAvatarPortrait`, `TideDisc`, `EssenceValue`, `SiteNode`, and
 `GlossaryTerm`. Each component derives one strict primary plus ordered

@@ -20,6 +20,20 @@ describe("parseCumulusRoute", () => {
     });
   });
 
+  it("keeps UI systems in their own route namespace", () => {
+    expect(parseCumulusRoute("#/systems/entity-reveals")).toEqual({
+      view: "system",
+      id: "entity-reveals",
+    });
+  });
+
+  it("canonicalizes UI system ids", () => {
+    expect(parseCumulusRoute("#/SYSTEMS/Entity-Reveals")).toEqual({
+      view: "system",
+      id: "entity-reveals",
+    });
+  });
+
   it("parses a /mockup suffix as a mockup route for that id", () => {
     expect(parseCumulusRoute("#/button/mockup")).toEqual({
       view: "mockup",
