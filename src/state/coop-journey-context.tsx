@@ -332,6 +332,18 @@ export function CoopJourneyProvider({
             replacedDreamsignId,
           ),
         ),
+      drawStarwayStairs: (siteId) =>
+        dispatch(actions.drawStarwayStairs(siteId)),
+      settleStarwayStairs: (siteId, shuffleCommitment) =>
+        dispatch(
+          actions.settleStarwayStairs(
+            siteId,
+            shuffleCommitment,
+            stateRef.current.runId ?? undefined,
+          ),
+        ),
+      cashOutStarwayStairs: (siteId, shuffleCommitment) =>
+        dispatch(actions.cashOutStarwayStairs(siteId, shuffleCommitment)),
       acceptRewardSite: (siteId, purgeIndex) => {
         // ACCEPT_REWARD's reducer reads `purgeIndex` (the at-cap Dreamsign
         // replace slot), which the typed facade does not carry.

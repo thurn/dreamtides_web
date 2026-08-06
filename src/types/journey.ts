@@ -9,6 +9,7 @@ import type {
   GambleGameId,
   GravokGateId,
   StandardPlayingCard,
+  StarwayStairsTierNumber,
   TidemarkLadderClimbAttemptNumber,
 } from "./gamble";
 
@@ -560,10 +561,38 @@ export interface TidemarkLadderClimbSiteRuntime {
   result: TidemarkLadderClimbResult | null;
 }
 
+/** One revealed tier result in Starway Stairs. */
+export interface StarwayStairsResult {
+  tierNumber: StarwayStairsTierNumber;
+  card: StandardPlayingCard;
+  busted: boolean;
+  /** False until the result announcement reaches its outcome moment. */
+  resultSettled: boolean;
+}
+
+/** How a Starway Stairs visit reached its terminal state. */
+export type StarwayStairsTerminalReason = "bust" | "cashed-out" | "top";
+
+/** Shared, replayable runtime for one Starway Stairs encounter. */
+export interface StarwayStairsSiteRuntime {
+  kind: "gamble";
+  gameId: "starway-stairs";
+  rulesVersion: string;
+  isFarpoint: boolean;
+  entryCost: number;
+  /** One independent full-deck commitment for each tier. */
+  shuffleCommitments: string[];
+  committedCards: StandardPlayingCard[];
+  results: StarwayStairsResult[];
+  terminalReason: StarwayStairsTerminalReason | null;
+  prizeAwarded: number;
+}
+
 /** Every game runtime currently available at a Gamble site. */
 export type GambleSiteRuntime =
   | GravokWagerSiteRuntime
-  | TidemarkLadderClimbSiteRuntime;
+  | TidemarkLadderClimbSiteRuntime
+  | StarwayStairsSiteRuntime;
 
 /** Stable Gamble game id, re-exported beside its persisted runtime union. */
 export type GambleSiteGameId = GambleGameId;

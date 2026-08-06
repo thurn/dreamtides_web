@@ -187,6 +187,16 @@ export interface CoopActions {
     siteId: string,
     replacedDreamsignId: string,
   ) => Promise<number>;
+  drawStarwayStairs: (siteId: string) => Promise<number>;
+  settleStarwayStairs: (
+    siteId: string,
+    shuffleCommitment: string,
+    runId?: string,
+  ) => Promise<number>;
+  cashOutStarwayStairs: (
+    siteId: string,
+    shuffleCommitment: string,
+  ) => Promise<number>;
 
   // --- merchant & shop ---
   acceptMerchantOffer: (siteId: string, offer?: unknown) => Promise<number>;
@@ -518,6 +528,16 @@ export function makeActions(append: AppendFn): CoopActions {
         siteId,
         replacedDreamsignId,
       }),
+    drawStarwayStairs: (siteId) =>
+      emit("DRAW_STARWAY_STAIRS", { siteId }),
+    settleStarwayStairs: (siteId, shuffleCommitment, runId) =>
+      emit(
+        "SETTLE_STARWAY_STAIRS",
+        { siteId, shuffleCommitment },
+        `${siteIntentKey("settle-starway-stairs", siteId, runId)}:${shuffleCommitment}`,
+      ),
+    cashOutStarwayStairs: (siteId, shuffleCommitment) =>
+      emit("CASH_OUT_STARWAY_STAIRS", { siteId, shuffleCommitment }),
 
     // --- merchant & shop ---
     acceptMerchantOffer: (siteId, offer) =>

@@ -133,6 +133,9 @@ function captureAllDrafts(): EventDraft[] {
   void actions.drawTidemarkLadderClimb("site-1");
   void actions.settleTidemarkLadderClimb("site-1", "commitment-1");
   void actions.replaceTidemarkLadderClimbDreamsign("site-1", "ds-1");
+  void actions.drawStarwayStairs("site-1");
+  void actions.settleStarwayStairs("site-1", "commitment-1");
+  void actions.cashOutStarwayStairs("site-1", "commitment-1");
   void actions.acceptMerchantOffer("site-1");
   void actions.declineMerchant("site-1");
   void actions.buyShopSlot("site-1", 0);
@@ -242,6 +245,11 @@ describe("coop actions facade", () => {
       "commitment-1",
       "journey:12",
     );
+    void actions.settleStarwayStairs(
+      "site-7",
+      "commitment-2",
+      "journey:12",
+    );
     void actions.battleCommand(
       { id: "DEBUG_EDIT" },
       "battle:b-1:dreamwell:player:2",
@@ -258,6 +266,7 @@ describe("coop actions facade", () => {
       "complete-site:journey:12:site-7",
       "settle-gravok-wager:journey:12:site-7:commitment-1",
       "play-again-gravok-wager:journey:12:site-7:commitment-1",
+      "settle-starway-stairs:journey:12:site-7:commitment-2",
       "battle:b-1:dreamwell:player:2",
       "tutorial-battle:event:9:begin",
       "tutorial-battle:tutorial-battle:event:9:0:restart",

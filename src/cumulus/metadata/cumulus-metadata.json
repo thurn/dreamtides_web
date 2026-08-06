@@ -5163,7 +5163,10 @@
         "six",
         "nine",
         "jack",
-        "ladder-climb"
+        "ladder-climb",
+        "starway-1",
+        "starway-2",
+        "starway-3"
       ],
       "required": true,
       "defaultValue": null,
@@ -5211,6 +5214,17 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional stable selector for the prize Dreamsign name."
+    },
+    {
+      "name": "presentation",
+      "tsType": "WagerPrizeCardPresentation",
+      "unionMembers": [
+        "draw-target",
+        "bust-odds"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "Named semantic copy treatment. Defaults to `draw-target`."
     },
     {
       "name": "essenceReward",

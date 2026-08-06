@@ -9,7 +9,7 @@ makes with the casino’s otherworldly character.
 | --- | --- |
 | **Gravok’s Three-Gate Wager** | Choose one of three rank thresholds before each draw. |
 | **Tidemark Ladder Climb** | Buy increasingly favorable attempts at one strong Dreamsign. |
-| **Gravok’s Cash-Out Climb** | Bank an Essence prize or risk it on the next rung. |
+| **Starway Stairs** | Bank an Essence prize or risk it on the next tier. |
 | **Four-Suit Reprise** | Risk one deck card, then accept its suit outcome or pay to draw again. |
 | **Twenty-One** | Hit or stand to finish from 17 through 21 without busting. |
 
@@ -69,7 +69,7 @@ flow.
 | --- | --- | --- |
 | Gravok’s Three-Gate Wager | Each wager costs 50 Essence. | The wager costs 0 Essence. |
 | Tidemark Ladder Climb | Attempts cost 15/25/40/60 Essence. | Attempts cost 10/20/30/45 Essence. |
-| Gravok’s Cash-Out Climb | Starting the climb costs 10 Essence. | Starting the climb costs 0 Essence. |
+| Starway Stairs | Starting the climb costs 10 Essence. | Starting the climb costs 0 Essence. |
 | Four-Suit Reprise | Each draw costs 25 Essence. | Each draw costs 15 Essence. |
 | Twenty-One | The deal costs 50 Essence; each hit costs 10 Essence. | Hits cost 0 Essence. |
 
@@ -133,19 +133,20 @@ least once.
 The four attempts cost 10, 20, 30, and 45 Essence, for a maximum total of 105
 Essence. The odds and Dreamsign reward are unchanged.
 
-## 3. Gravok’s Cash-Out Climb
+## 3. Starway Stairs
 
-Gravok’s Cash-Out Climb is a three-round push-your-luck game. Starting costs 10
-Essence. A safe draw earns the prize for that rung. After the first or second
-safe draw, the player may take that prize or risk it on the next rung. A bust
+Starway Stairs is a three-tier push-your-luck game. Starting costs 10 Essence.
+A safe draw earns the prize for that tier. After the first or second safe draw,
+the player may take that prize or risk it on the next tier. A bust
 loses the unclaimed prize and ends the game. The third safe draw pays
 automatically.
 
-The UI lists all three rungs before play. After a safe draw, the controls show
-`Take [current prize]` and `Climb — [next bust chance]`. A climb button states
-that the current prize will be lost on a bust.
+The UI lists all three tier squircles before play, each showing its bust chance
+and reward. Only the current tier carries its Start or Climb button. After a
+safe draw, a separate `Take [current prize]` action lets the player bank the
+reward instead of climbing.
 
-| Rung | Ranks that bust | Bust chance | Prize after a safe draw |
+| Tier | Ranks that bust | Bust chance | Prize after a safe draw |
 | --- | --- | ---: | ---: |
 | 1 | Twos | 4 / 52 = 7.69% | 60 Essence |
 | 2 | ranks 2–4 | 12 / 52 = 23.08% | 140 Essence |
@@ -248,7 +249,7 @@ Logs must make a production game reconstructable. Record:
 1. **Gravok’s Three-Gate Wager** establishes deterministic shuffling, exact
    odds, Essence costs and payouts, Dreamsign preparation, Farpoint cost
    changes, co-op replay, and Gamble logging with one draw.
-2. **Tidemark Ladder Climb** and **Gravok’s Cash-Out Climb** add repeated
+2. **Tidemark Ladder Climb** and **Starway Stairs** add repeated
    decisions, stop conditions, and cumulative costs or banks.
 3. **Four-Suit Reprise** adds locked deck targets, provisional outcomes, and
    repeated draws.

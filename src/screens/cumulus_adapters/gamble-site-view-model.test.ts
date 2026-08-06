@@ -4,6 +4,7 @@ import type { DreamGuideContent } from "../../types/content";
 import type {
   GravokWagerSiteRuntime,
   SiteState,
+  StarwayStairsSiteRuntime,
   TidemarkLadderClimbSiteRuntime,
 } from "../../types/journey";
 import type {
@@ -16,6 +17,7 @@ import {
   gravokRevealGateId,
   GRAVOK_WAGER_GUIDE_LINE,
   resolveGambleGuide,
+  STARWAY_STAIRS_GUIDE_LINE,
 } from "./gamble-site-view-model";
 
 const GAMBLE_SITE: SiteState & { type: "Gamble" } = {
@@ -358,5 +360,150 @@ describe("gamble-site-view-model — Ladder Climb", () => {
       throw new Error("expected Ladder Climb view");
     }
     expect(view.nextDraw?.cost).toBe(10);
+  });
+});
+
+const STARWAY_RUNTIME: StarwayStairsSiteRuntime = {
+  kind: "gamble",
+  gameId: "starway-stairs",
+  rulesVersion: "fixture-starway-rules",
+  isFarpoint: false,
+  entryCost: 10,
+  shuffleCommitments: ["tier-1", "tier-2", "tier-3"],
+  committedCards: [
+    { rank: "3", suit: "clubs" },
+    { rank: "5", suit: "diamonds" },
+    { rank: "8", suit: "hearts" },
+  ],
+  results: [],
+  terminalReason: null,
+  prizeAwarded: 0,
+};
+
+describe("gamble-site-view-model — Starway Stairs", () => {
+  it("maps all tier odds and rewards with only tier one current", () => {
+    const view = buildGambleSiteView({
+      state: {
+        ...createDefaultState(),
+        essence: 10,
+        siteRuntime: { [GAMBLE_SITE.id]: STARWAY_RUNTIME },
+      },
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+    });
+
+    expect(view?.gameId).toBe("starway-stairs");
+    if (view?.gameId !== "starway-stairs") {
+      throw new Error("expected Starway Stairs view");
+    }
+    expect(view.guide.line).toBe(STARWAY_STAIRS_GUIDE_LINE);
+    expect(view.currentTierNumber).toBe(1);
+    expect(view.tiers).toMatchObject([
+      {
+        tierNumber: 1,
+        bustChanceLabel: "7.69%",
+        essenceReward: 60,
+        state: "current",
+      },
+      {
+        tierNumber: 2,
+        bustChanceLabel: "23.08%",
+        essenceReward: 140,
+        state: "future",
+      },
+      {
+        tierNumber: 3,
+        bustChanceLabel: "46.15%",
+        essenceReward: 300,
+        state: "future",
+      },
+    ]);
+    expect(view.canAffordEntry).toBe(true);
+    expect(view.cashOutReward).toBeNull();
+  });
+
+  it("advances the current tier and offers the latest safe prize", () => {
+    const view = buildGambleSiteView({
+      state: {
+        ...createDefaultState(),
+        siteRuntime: {
+          [GAMBLE_SITE.id]: {
+            ...STARWAY_RUNTIME,
+            results: [
+              {
+                tierNumber: 1,
+                card: { rank: "3", suit: "clubs" },
+                busted: false,
+                resultSettled: true,
+              },
+            ],
+          },
+        },
+      },
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+    });
+
+    expect(view?.gameId).toBe("starway-stairs");
+    if (view?.gameId !== "starway-stairs") {
+      throw new Error("expected Starway Stairs view");
+    }
+    expect(view.currentTierNumber).toBe(2);
+    expect(view.cashOutReward).toBe(60);
+    expect(view.tiers.map((tier) => tier.state)).toEqual([
+      "safe",
+      "current",
+      "future",
+    ]);
+  });
+
+  it("maps a terminal top win without another current tier", () => {
+    const results: StarwayStairsSiteRuntime["results"] = [
+      {
+        tierNumber: 1,
+        card: { rank: "3", suit: "clubs" },
+        busted: false,
+        resultSettled: true,
+      },
+      {
+        tierNumber: 2,
+        card: { rank: "5", suit: "diamonds" },
+        busted: false,
+        resultSettled: true,
+      },
+      {
+        tierNumber: 3,
+        card: { rank: "8", suit: "hearts" },
+        busted: false,
+        resultSettled: true,
+      },
+    ];
+    const view = buildGambleSiteView({
+      state: {
+        ...createDefaultState(),
+        siteRuntime: {
+          [GAMBLE_SITE.id]: {
+            ...STARWAY_RUNTIME,
+            results,
+            terminalReason: "top",
+            prizeAwarded: 300,
+          },
+        },
+      },
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+    });
+
+    expect(view?.gameId).toBe("starway-stairs");
+    if (view?.gameId !== "starway-stairs") {
+      throw new Error("expected Starway Stairs view");
+    }
+    expect(view.currentTierNumber).toBeNull();
+    expect(view.cashOutReward).toBeNull();
+    expect(view.terminalReason).toBe("top");
+    expect(view.prizeAwarded).toBe(300);
   });
 });

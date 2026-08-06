@@ -8,6 +8,7 @@ import {
 import { motion, useReducedMotion } from "framer-motion";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import type { GravokGateId } from "../../types/gamble";
+import type { StarwayStairsTierNumber } from "../../types/gamble";
 import type { Dreamsign as DreamsignData } from "../../types/journey";
 import {
   PLAYING_CARD_FLIP_DURATION_MS,
@@ -140,7 +141,45 @@ export interface LadderClimbSiteView {
   replacement: DreamsignReplacementView | null;
 }
 
-export type GambleSiteView = GravokWagerSiteView | LadderClimbSiteView;
+export interface StarwayStairsTierView {
+  tierNumber: StarwayStairsTierNumber;
+  bustChanceLabel: string;
+  bustOddsNumerator: number;
+  oddsDenominator: number;
+  essenceReward: number;
+  state: "future" | "current" | "safe" | "bust";
+  card: { rank: PlayingCardRank; suit: PlayingCardSuit } | null;
+}
+
+export interface StarwayStairsResultView {
+  id: string;
+  tierNumber: StarwayStairsTierNumber;
+  busted: boolean;
+  resultSettled: boolean;
+  prizeAtRisk: number;
+}
+
+export interface StarwayStairsSiteView {
+  gameId: "starway-stairs";
+  siteId: string;
+  scene: ArtRef | null;
+  isFarpoint: boolean;
+  runtimeReady: boolean;
+  entryCost: number;
+  canAffordEntry: boolean;
+  tiers: readonly StarwayStairsTierView[];
+  currentTierNumber: StarwayStairsTierNumber | null;
+  guide: GuideGalleryGuideView;
+  result: StarwayStairsResultView | null;
+  cashOutReward: number | null;
+  terminalReason: "bust" | "cashed-out" | "top" | null;
+  prizeAwarded: number;
+}
+
+export type GambleSiteView =
+  | GravokWagerSiteView
+  | LadderClimbSiteView
+  | StarwayStairsSiteView;
 
 export interface GambleSiteScreenProps {
   /** View-model rendered by the pure screen. */
@@ -157,6 +196,12 @@ export interface GambleSiteScreenProps {
   onDrawLadder: () => void;
   /** Settle a Ladder Climb result when its outcome appears. */
   onLadderOutcomeShown: () => void;
+  /** Reveal the current Starway Stairs tier. */
+  onDrawStarway?: () => void;
+  /** Settle a Starway Stairs result when its outcome appears. */
+  onStarwayOutcomeShown?: () => void;
+  /** Bank the latest safe Starway Stairs prize. */
+  onCashOutStarway?: () => void;
   /** Replace one UUID-identified held Dreamsign after a jackpot win. */
   onReplaceDreamsign: (dreamsignId: string) => void;
 }
@@ -563,8 +608,22 @@ export function GambleSiteScreen({
   onPlayAgain,
   onDrawLadder,
   onLadderOutcomeShown,
+  onDrawStarway = () => undefined,
+  onStarwayOutcomeShown = () => undefined,
+  onCashOutStarway = () => undefined,
   onReplaceDreamsign,
 }: GambleSiteScreenProps) {
+  if (view.gameId === "starway-stairs") {
+    return (
+      <StarwayStairsScreen
+        view={view}
+        onDraw={onDrawStarway}
+        onLeave={onLeave}
+        onOutcomeShown={onStarwayOutcomeShown}
+        onCashOut={onCashOutStarway}
+      />
+    );
+  }
   if (view.gameId === "tidemark-ladder-climb") {
     return (
       <LadderClimbScreen
@@ -1231,5 +1290,290 @@ function LadderClimbScreen({
         />
       )}
     </GuideGallerySiteLayout>
+  );
+}
+
+function StarwayStairsScreen({
+  view,
+  onDraw,
+  onLeave,
+  onOutcomeShown,
+  onCashOut,
+}: {
+  view: StarwayStairsSiteView;
+  onDraw: () => void;
+  onLeave: () => void;
+  onOutcomeShown: () => void;
+  onCashOut: () => void;
+}) {
+  const reduceMotion = useReducedMotion() === true;
+  const [revealedResultId, setRevealedResultId] = useState<string | null>(null);
+  const [outcomeResultId, setOutcomeResultId] = useState<string | null>(null);
+  const [actionsVisible, setActionsVisible] = useState(view.result === null);
+  const [decisionPending, setDecisionPending] = useState(false);
+  const settledResultIdRef = useRef<string | undefined>(undefined);
+  const onOutcomeShownRef = useRef(onOutcomeShown);
+  const resultId = view.result?.id;
+
+  useEffect(() => {
+    onOutcomeShownRef.current = onOutcomeShown;
+  }, [onOutcomeShown]);
+
+  useEffect(() => {
+    setDecisionPending(false);
+  }, [resultId, view.currentTierNumber, view.terminalReason]);
+
+  useEffect(() => {
+    if (resultId === undefined) {
+      setRevealedResultId(null);
+      setOutcomeResultId(null);
+      setActionsVisible(true);
+      return;
+    }
+    setActionsVisible(false);
+    const revealDelay = reduceMotion
+      ? REDUCED_MOTION_DELAY_MS
+      : BET_SETTLE_DELAY_MS;
+    const outcomeDelay = reduceMotion
+      ? REDUCED_MOTION_DELAY_MS
+      : BET_SETTLE_DELAY_MS + PLAYING_CARD_FLIP_DURATION_MS;
+    const revealTimeout = window.setTimeout(
+      () => setRevealedResultId(resultId),
+      revealDelay,
+    );
+    const outcomeTimeout = window.setTimeout(() => {
+      setOutcomeResultId(resultId);
+      if (settledResultIdRef.current !== resultId) {
+        settledResultIdRef.current = resultId;
+        onOutcomeShownRef.current();
+      }
+    }, outcomeDelay);
+    return () => {
+      window.clearTimeout(revealTimeout);
+      window.clearTimeout(outcomeTimeout);
+    };
+  }, [reduceMotion, resultId]);
+
+  useEffect(() => {
+    if (
+      view.result === null ||
+      !view.result.resultSettled ||
+      outcomeResultId !== view.result.id
+    ) {
+      return;
+    }
+    const timeout = window.setTimeout(() => {
+      setOutcomeResultId(null);
+      setActionsVisible(true);
+    }, RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS);
+    return () => window.clearTimeout(timeout);
+  }, [outcomeResultId, view.result]);
+
+  return (
+    <GuideGallerySiteLayout
+      siteId={view.siteId}
+      scene={view.scene}
+      guide={view.guide}
+      mobileComposition="dialog"
+      screenTestId="cumulus-gamble-site-screen"
+      guideArtTestId="cumulus-gamble-guide-art"
+      speechAnchorTestId="cumulus-gamble-speech-anchor"
+      speechBubbleTestId="cumulus-gamble-speech-bubble"
+      renderGallery={(layout) => {
+        const outcomeVisible =
+          view.result !== null && outcomeResultId === view.result.id;
+        return (
+          <main
+            data-gamble-wager-region=""
+            data-gamble-game={view.gameId}
+            data-gamble-layout={layout}
+            data-gamble-farpoint={view.isFarpoint ? "true" : "false"}
+            style={{
+              position: "relative",
+              zIndex: 10,
+              width: "100%",
+              maxWidth:
+                layout === "desktop"
+                  ? DESKTOP_GAMBLE_REGION_MAX_WIDTH
+                  : undefined,
+              height: "100%",
+              minHeight: 0,
+              justifySelf: "center",
+              alignSelf: "center",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap:
+                layout === "desktop"
+                  ? token("--space-4")
+                  : token("--space-2"),
+              boxSizing: "border-box",
+              padding:
+                layout === "desktop"
+                  ? token("--space-6")
+                  : token("--space-2"),
+              pointerEvents: "auto",
+            }}
+          >
+            <section
+              aria-label="Starway Stairs tiers"
+              data-starway-stairs-tiers=""
+              style={{
+                position: "relative",
+                width: "100%",
+                display: "grid",
+                gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                gap:
+                  layout === "desktop"
+                    ? token("--space-4")
+                    : token("--space-2"),
+                alignItems: "start",
+                justifyItems: "center",
+              }}
+            >
+              {view.tiers.map((tier) => {
+                const isLatestResult =
+                  view.result?.tierNumber === tier.tierNumber;
+                const revealDrawnCard = tier.card !== null &&
+                  (!isLatestResult || revealedResultId === view.result?.id);
+                const isCurrent =
+                  view.currentTierNumber === tier.tierNumber;
+                return (
+                  <div
+                    key={tier.tierNumber}
+                    data-starway-tier={tier.tierNumber}
+                    data-starway-tier-state={tier.state}
+                    style={{
+                      width: "100%",
+                      minWidth: 0,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap:
+                        layout === "desktop"
+                          ? token("--space-4")
+                          : token("--space-2"),
+                      opacity: tier.state === "future" ? 0.9 : 1,
+                    }}
+                  >
+                    <WagerPrizeCard
+                      prizeId={`starway-${String(tier.tierNumber)}` as
+                        | "starway-1"
+                        | "starway-2"
+                        | "starway-3"}
+                      presentation="bust-odds"
+                      targetLabel={tier.bustChanceLabel}
+                      essenceReward={tier.essenceReward}
+                      rewardDreamsign={null}
+                      size={
+                        layout === "desktop" ? "wager" : "wagerCompact"
+                      }
+                      drawnCard={tier.card}
+                      revealDrawnCard={revealDrawnCard}
+                    />
+                    {actionsVisible && isCurrent && (
+                      <div data-starway-tier-button={tier.tierNumber}>
+                        <GlassButton
+                          label={tier.tierNumber === 1 ? "Start" : "Climb"}
+                          accessibilityLabel={
+                            tier.tierNumber === 1
+                              ? `Start Starway Stairs for ${String(view.entryCost)} Essence`
+                              : `Climb to tier ${String(tier.tierNumber)}`
+                          }
+                          essenceCost={
+                            tier.tierNumber === 1 ? view.entryCost : null
+                          }
+                          essenceCostStyle="separated"
+                          size={layout === "mobile" ? "compact" : "standard"}
+                          variant="accent"
+                          disabled={
+                            decisionPending ||
+                            !view.runtimeReady ||
+                            (tier.tierNumber === 1 && !view.canAffordEntry)
+                          }
+                          testId={`gamble-starway-tier-${String(tier.tierNumber)}`}
+                          onPress={() => {
+                            setDecisionPending(true);
+                            onDraw();
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+              {outcomeVisible && view.result !== null && (
+                <div
+                  data-starway-outcome=""
+                  style={{
+                    position: "relative",
+                    gridColumn: view.result.tierNumber,
+                    gridRow: 1,
+                    width: "100%",
+                    height: "100%",
+                    pointerEvents: "none",
+                  }}
+                >
+                  <RadialAnnouncement
+                    announcementId={view.result.id}
+                    headline={view.result.busted ? "Bust!" : "Safe!"}
+                    detail={
+                      view.result.busted
+                        ? undefined
+                        : `${String(view.result.prizeAtRisk)} Essence at stake`
+                    }
+                    essenceGained={
+                      !view.result.busted && view.result.tierNumber === 3
+                        ? view.result.prizeAtRisk
+                        : undefined
+                    }
+                    tone={view.result.busted ? "danger" : "reward"}
+                    size={layout === "mobile" ? "mini" : "wager"}
+                    duration="extended"
+                  />
+                </div>
+              )}
+            </section>
+
+            {actionsVisible && (
+              <div
+                data-starway-actions=""
+                style={{
+                  minHeight: token("--touch-min"),
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {view.cashOutReward !== null ? (
+                  <GlassButton
+                    label={`Take ${String(view.cashOutReward)} Essence`}
+                    disabled={decisionPending}
+                    testId="gamble-starway-cash-out"
+                    onPress={() => {
+                      setDecisionPending(true);
+                      onCashOut();
+                    }}
+                  />
+                ) : view.terminalReason !== null ? (
+                  <GlassButton
+                    label="Leave"
+                    testId="gamble-starway-leave-after-result"
+                    onPress={onLeave}
+                  />
+                ) : view.result === null ? (
+                  <GlassButton
+                    label="Leave"
+                    testId="gamble-starway-leave"
+                    onPress={onLeave}
+                  />
+                ) : null}
+              </div>
+            )}
+          </main>
+        );
+      }}
+    />
   );
 }

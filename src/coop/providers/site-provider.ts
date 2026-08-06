@@ -12,6 +12,7 @@ import type {
   CardChoiceTransfigurationOffer,
   DeckEntry,
   GambleSiteRuntime,
+  StarwayStairsSiteRuntime,
   TidemarkLadderClimbSiteRuntime,
   RewardSiteRuntime,
   SiteRuntimeState,
@@ -31,6 +32,11 @@ import {
   TIDEMARK_LADDER_CLIMB_RULES_VERSION,
   TIDEMARK_STRONG_POOL_LIMIT,
 } from "../../data/tidemark-ladder-climb";
+import {
+  STARWAY_STAIRS_ENTRY_COST,
+  STARWAY_STAIRS_RULES_VERSION,
+  STARWAY_STAIRS_TIERS,
+} from "../../data/starway-stairs";
 import { createDreamsign } from "../../data/dreamsigns";
 import { generateRewardSiteData } from "../../rewards/reward-generator";
 import { drawDreamsignOptions } from "../../dreamsign/dreamsign-pool";
@@ -247,6 +253,28 @@ function buildTidemarkLadderClimbRuntime(
   };
 }
 
+function buildStarwayStairsRuntime(
+  site: SiteState,
+  rng: () => number,
+): StarwayStairsSiteRuntime {
+  const commitments = STARWAY_STAIRS_TIERS.map(() => ({
+    shuffleCommitment: gambleShuffleCommitment(rng),
+    card: gambleCommittedCard(rng),
+  }));
+  return {
+    kind: "gamble",
+    gameId: "starway-stairs",
+    rulesVersion: STARWAY_STAIRS_RULES_VERSION,
+    isFarpoint: site.isEnhanced,
+    entryCost: site.isEnhanced ? 0 : STARWAY_STAIRS_ENTRY_COST,
+    shuffleCommitments: commitments.map((entry) => entry.shuffleCommitment),
+    committedCards: commitments.map((entry) => entry.card),
+    results: [],
+    terminalReason: null,
+    prizeAwarded: 0,
+  };
+}
+
 function buildGambleRuntime(
   journey: JourneyState,
   site: SiteState,
@@ -256,9 +284,11 @@ function buildGambleRuntime(
 ): GambleSiteRuntime {
   const gameId =
     requestedGameId ??
-    (rng() < 0.5
+    (rng() < 1 / 3
       ? "gravok-three-gate-wager"
-      : "tidemark-ladder-climb");
+      : rng() < 0.5
+        ? "tidemark-ladder-climb"
+        : "starway-stairs");
   if (gameId === "tidemark-ladder-climb") {
     const ladderRuntime = buildTidemarkLadderClimbRuntime(
       journey,
@@ -267,6 +297,9 @@ function buildGambleRuntime(
       rng,
     );
     return ladderRuntime ?? buildGravokWagerRuntime(journey, site, content, rng);
+  }
+  if (gameId === "starway-stairs") {
+    return buildStarwayStairsRuntime(site, rng);
   }
   return buildGravokWagerRuntime(journey, site, content, rng);
 }

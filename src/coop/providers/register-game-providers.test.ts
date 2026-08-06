@@ -309,7 +309,7 @@ describe("registerGameProviders (real content providers)", () => {
     expect(gambleSiteId).toBeDefined();
     if (gambleSiteId !== undefined) {
       const gambleRuntime = first.finalState.journey.siteRuntime[gambleSiteId];
-      expect(gambleRuntime).toMatchObject({ kind: "gamble", result: null });
+      expect(gambleRuntime).toMatchObject({ kind: "gamble" });
       if (gambleRuntime?.kind === "gamble") {
         if (gambleRuntime.gameId === "gravok-three-gate-wager") {
           expect(gambleRuntime.wagerCost).toBe(50);
@@ -317,12 +317,17 @@ describe("registerGameProviders (real content providers)", () => {
           expect(gambleRuntime.dreamsignCandidateIds).toContain(
             gambleRuntime.rewardDreamsign?.id,
           );
-        } else {
+          expect(gambleRuntime.rewardDreamsign?.id).toBeDefined();
+        } else if (gambleRuntime.gameId === "tidemark-ladder-climb") {
           expect(gambleRuntime.shuffleCommitments).toHaveLength(4);
           expect(gambleRuntime.committedCards).toHaveLength(4);
           expect(gambleRuntime.strongPoolSize).toBeGreaterThan(0);
+          expect(gambleRuntime.rewardDreamsign?.id).toBeDefined();
+        } else {
+          expect(gambleRuntime.shuffleCommitments).toHaveLength(3);
+          expect(gambleRuntime.committedCards).toHaveLength(3);
+          expect(gambleRuntime.results).toEqual([]);
         }
-        expect(gambleRuntime.rewardDreamsign?.id).toBeDefined();
       }
     }
 
@@ -631,7 +636,13 @@ describe("createSiteContentProvider — Gamble", () => {
       site,
       rng: () => 0,
     });
+    const randomLadderRolls = [0.5, 0];
     const randomLadder = provider.openSite({
+      journey,
+      site,
+      rng: () => randomLadderRolls.shift() ?? 0,
+    });
+    const randomStarway = provider.openSite({
       journey,
       site,
       rng: () => 0.999,
@@ -648,6 +659,12 @@ describe("createSiteContentProvider — Gamble", () => {
       rng: () => 0,
       gambleGameId: "tidemark-ladder-climb",
     });
+    const forcedStarway = provider.openSite({
+      journey,
+      site,
+      rng: () => 0,
+      gambleGameId: "starway-stairs",
+    });
 
     expect(randomThreeGate?.runtime).toMatchObject({
       kind: "gamble",
@@ -657,6 +674,11 @@ describe("createSiteContentProvider — Gamble", () => {
       kind: "gamble",
       gameId: "tidemark-ladder-climb",
     });
+    expect(randomStarway?.runtime).toMatchObject({
+      kind: "gamble",
+      gameId: "starway-stairs",
+      entryCost: 10,
+    });
     expect(forcedThreeGate?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "gravok-three-gate-wager",
@@ -664,6 +686,10 @@ describe("createSiteContentProvider — Gamble", () => {
     expect(forcedLadder?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "tidemark-ladder-climb",
+    });
+    expect(forcedStarway?.runtime).toMatchObject({
+      kind: "gamble",
+      gameId: "starway-stairs",
     });
   });
 

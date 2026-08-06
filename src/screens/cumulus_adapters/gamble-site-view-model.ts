@@ -4,6 +4,7 @@ import type {
   GambleSiteView,
   GravokWagerSiteView,
   LadderClimbSiteView,
+  StarwayStairsSiteView,
 } from "../../cumulus/screens/GambleSiteScreen";
 import {
   GRAVOK_GATE_RULES,
@@ -15,6 +16,12 @@ import {
   tidemarkLadderClimbAttemptCost,
   tidemarkLadderClimbAttemptRule,
 } from "../../data/tidemark-ladder-climb";
+import {
+  nextStarwayStairsTierNumber,
+  STARWAY_STAIRS_TIERS,
+  starwayStairsBustChanceLabel,
+  starwayStairsTierRule,
+} from "../../data/starway-stairs";
 import { guideForSiteType } from "../../data/dreamscapes";
 import type { DreamGuideContent } from "../../types/content";
 import type {
@@ -23,6 +30,7 @@ import type {
   GravokWagerSiteRuntime,
   JourneyState,
   SiteState,
+  StarwayStairsSiteRuntime,
   TidemarkLadderClimbSiteRuntime,
 } from "../../types/journey";
 import type { GravokGateId } from "../../types/gamble";
@@ -32,6 +40,8 @@ export const GRAVOK_WAGER_GUIDE_LINE =
   "The game's called Three Gates. Place your bet on the next card drawn!";
 export const TIDEMARK_LADDER_CLIMB_GUIDE_LINE =
   "The game's Ladder Climb. Match or beat the target to win a Dreamsign. Try again with better odds if you miss!";
+export const STARWAY_STAIRS_GUIDE_LINE =
+  "Starway Stairs is the game. Keep betting to see how high you can go!";
 
 /** The next gate in display order supplies the non-selected reveal object. */
 export function gravokRevealGateId(selectedGateId: GravokGateId): GravokGateId {
@@ -212,6 +222,76 @@ function buildLadderClimbSiteView(params: {
   };
 }
 
+function buildStarwayStairsSiteView(params: {
+  state: JourneyState;
+  sceneNode: DreamscapeNode | null;
+  site: SiteState & { type: "Gamble" };
+  guide: DreamGuideContent | null;
+  runtime: StarwayStairsSiteRuntime;
+}): StarwayStairsSiteView {
+  const { runtime } = params;
+  const latestResult = runtime.results[runtime.results.length - 1] ?? null;
+  const currentTierNumber = nextStarwayStairsTierNumber(runtime);
+  const cashOutReward =
+    latestResult !== null &&
+    latestResult.resultSettled &&
+    !latestResult.busted &&
+    latestResult.tierNumber < STARWAY_STAIRS_TIERS.length &&
+    runtime.terminalReason === null
+      ? starwayStairsTierRule(latestResult.tierNumber).essenceReward
+      : null;
+
+  return {
+    gameId: "starway-stairs",
+    siteId: params.site.id,
+    ...commonGambleView({
+      sceneNode: params.sceneNode,
+      guide: params.guide,
+      guideLine: STARWAY_STAIRS_GUIDE_LINE,
+    }),
+    isFarpoint: runtime.isFarpoint,
+    runtimeReady: true,
+    entryCost: runtime.entryCost,
+    canAffordEntry: params.state.essence >= runtime.entryCost,
+    tiers: STARWAY_STAIRS_TIERS.map((tier) => {
+      const result = runtime.results.find(
+        (entry) => entry.tierNumber === tier.tierNumber,
+      );
+      return {
+        tierNumber: tier.tierNumber,
+        bustChanceLabel: starwayStairsBustChanceLabel(tier),
+        bustOddsNumerator: tier.bustOddsNumerator,
+        oddsDenominator: tier.oddsDenominator,
+        essenceReward: tier.essenceReward,
+        state:
+          result !== undefined
+            ? result.busted
+              ? "bust" as const
+              : "safe" as const
+            : currentTierNumber === tier.tierNumber
+              ? "current" as const
+              : "future" as const,
+        card: result?.card ?? null,
+      };
+    }),
+    currentTierNumber,
+    result:
+      latestResult === null
+        ? null
+        : {
+            id: `${params.site.id}:${runtime.shuffleCommitments[latestResult.tierNumber - 1] ?? "unprepared"}:${String(latestResult.tierNumber)}`,
+            tierNumber: latestResult.tierNumber,
+            busted: latestResult.busted,
+            resultSettled: latestResult.resultSettled,
+            prizeAtRisk: starwayStairsTierRule(latestResult.tierNumber)
+              .essenceReward,
+          },
+    cashOutReward,
+    terminalReason: runtime.terminalReason,
+    prizeAwarded: runtime.prizeAwarded,
+  };
+}
+
 /** Build the selected Gamble game's view without exposing future outcomes. */
 export function buildGambleSiteView(params: {
   state: JourneyState;
@@ -223,7 +303,11 @@ export function buildGambleSiteView(params: {
   const runtime: GambleSiteRuntime | null =
     runtimeCandidate?.kind === "gamble" ? runtimeCandidate : null;
   if (runtime === null) return null;
-  return runtime.gameId === "tidemark-ladder-climb"
-    ? buildLadderClimbSiteView({ ...params, runtime })
-    : buildGravokWagerSiteView({ ...params, runtime });
+  if (runtime.gameId === "tidemark-ladder-climb") {
+    return buildLadderClimbSiteView({ ...params, runtime });
+  }
+  if (runtime.gameId === "starway-stairs") {
+    return buildStarwayStairsSiteView({ ...params, runtime });
+  }
+  return buildGravokWagerSiteView({ ...params, runtime });
 }

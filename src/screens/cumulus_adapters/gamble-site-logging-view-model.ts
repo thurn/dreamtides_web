@@ -3,6 +3,10 @@ import {
   TIDEMARK_LADDER_CLIMB_ATTEMPTS,
   tidemarkLadderClimbAttemptCost,
 } from "../../data/tidemark-ladder-climb";
+import {
+  STARWAY_STAIRS_TIERS,
+  starwayStairsTierRule,
+} from "../../data/starway-stairs";
 import { logEventOnce } from "../../logging";
 import type { GambleSiteRuntime, SiteState } from "../../types/journey";
 
@@ -45,6 +49,32 @@ export function logGamblePrepared(
           oddsNumerator: gate.oddsNumerator,
           oddsDenominator: gate.oddsDenominator,
           rewardEssence: gate.essenceReward,
+        })),
+      },
+    );
+    return;
+  }
+
+  if (
+    runtime.gameId === "starway-stairs" &&
+    view.gameId === "starway-stairs"
+  ) {
+    logEventOnce(
+      `Gamble:${siteId}:prepared:${runtime.shuffleCommitments.join(":")}`,
+      "gamble_game_prepared",
+      {
+        siteId,
+        gameId: runtime.gameId,
+        rulesVersion: runtime.rulesVersion,
+        isFarpoint: runtime.isFarpoint,
+        entryCost: runtime.entryCost,
+        shuffleCommitments: runtime.shuffleCommitments,
+        tiers: STARWAY_STAIRS_TIERS.map((tier) => ({
+          tierNumber: tier.tierNumber,
+          bustOddsNumerator: tier.bustOddsNumerator,
+          oddsDenominator: tier.oddsDenominator,
+          highestBustRank: tier.highestBustRank,
+          rewardEssence: tier.essenceReward,
         })),
       },
     );
@@ -116,6 +146,29 @@ export function logGambleResolved(
     return;
   }
 
+  if (runtime.gameId === "starway-stairs") {
+    const result = runtime.results[runtime.results.length - 1];
+    if (result === undefined) return;
+    const tier = starwayStairsTierRule(result.tierNumber);
+    logEventOnce(
+      `Gamble:${siteId}:starway-result:${runtime.shuffleCommitments[result.tierNumber - 1] ?? "unknown"}`,
+      "gamble_wager_resolved",
+      {
+        siteId,
+        gameId: runtime.gameId,
+        tierNumber: result.tierNumber,
+        bustOddsNumerator: tier.bustOddsNumerator,
+        oddsDenominator: tier.oddsDenominator,
+        highestBustRank: tier.highestBustRank,
+        payment: result.tierNumber === 1 ? runtime.entryCost : 0,
+        revealedCard: result.card,
+        busted: result.busted,
+        prizeAtRisk: tier.essenceReward,
+      },
+    );
+    return;
+  }
+
   if (runtime.gameId !== "tidemark-ladder-climb") return;
   const result = runtime.result;
   if (result === null) return;
@@ -162,6 +215,26 @@ export function logGambleSettled(
         essenceGained: runtime.result.essenceGained,
         essenceChangeAtSettlement: runtime.result.essenceGained,
         netEssenceChange: runtime.result.essenceGained - runtime.wagerCost,
+      },
+    );
+    return;
+  }
+
+  if (runtime.gameId === "starway-stairs") {
+    const result = runtime.results[runtime.results.length - 1];
+    if (result === undefined || !result.resultSettled) return;
+    logEventOnce(
+      `Gamble:${siteId}:starway-settled:${runtime.shuffleCommitments[result.tierNumber - 1] ?? "unknown"}:${runtime.terminalReason ?? "continue"}`,
+      "gamble_wager_settled",
+      {
+        siteId,
+        gameId: runtime.gameId,
+        tierNumber: result.tierNumber,
+        busted: result.busted,
+        terminalReason: runtime.terminalReason,
+        prizeAtRisk: starwayStairsTierRule(result.tierNumber).essenceReward,
+        prizeAwarded: runtime.prizeAwarded,
+        entryCost: result.tierNumber === 1 ? runtime.entryCost : 0,
       },
     );
     return;

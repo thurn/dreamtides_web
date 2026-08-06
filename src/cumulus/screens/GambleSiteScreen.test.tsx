@@ -10,6 +10,7 @@ import {
   GambleSiteScreen,
   type GravokWagerSiteView,
   type LadderClimbSiteView,
+  type StarwayStairsSiteView,
 } from "./GambleSiteScreen";
 
 const JACKPOT_DREAMSIGN = {
@@ -73,6 +74,56 @@ const VIEW: GravokWagerSiteView = {
   },
   result: null,
   replacement: null,
+};
+
+const STARWAY_VIEW: StarwayStairsSiteView = {
+  gameId: "starway-stairs",
+  siteId: "fixture-gamble-site",
+  scene: null,
+  isFarpoint: false,
+  runtimeReady: true,
+  entryCost: 10,
+  canAffordEntry: true,
+  tiers: [
+    {
+      tierNumber: 1,
+      bustChanceLabel: "7.69%",
+      bustOddsNumerator: 4,
+      oddsDenominator: 52,
+      essenceReward: 60,
+      state: "current",
+      card: null,
+    },
+    {
+      tierNumber: 2,
+      bustChanceLabel: "23.08%",
+      bustOddsNumerator: 12,
+      oddsDenominator: 52,
+      essenceReward: 140,
+      state: "future",
+      card: null,
+    },
+    {
+      tierNumber: 3,
+      bustChanceLabel: "46.15%",
+      bustOddsNumerator: 24,
+      oddsDenominator: 52,
+      essenceReward: 300,
+      state: "future",
+      card: null,
+    },
+  ],
+  currentTierNumber: 1,
+  guide: {
+    id: "gravok",
+    name: "Gravok",
+    line: "Starway Stairs is the game. Keep betting to see how high you can go!",
+    art: artRef.dreamGuide("gravok"),
+  },
+  result: null,
+  cashOutReward: null,
+  terminalReason: null,
+  prizeAwarded: 0,
 };
 
 function stubMatchMedia(): void {
@@ -802,5 +853,168 @@ describe("GambleSiteScreen — Ladder Climb", () => {
 
     act(() => root.unmount());
     expect(hudTarget.style.visibility).toBe("");
+  });
+});
+
+describe("GambleSiteScreen — Starway Stairs", () => {
+  it("shows three odds-and-reward squircles with an action only under the current tier", () => {
+    const onDrawStarway = vi.fn();
+    const { container, root } = mount(
+      <GambleSiteScreen
+        view={STARWAY_VIEW}
+        onChooseGate={() => undefined}
+        onLeave={() => undefined}
+        onOutcomeShown={() => undefined}
+        onPlayAgain={() => undefined}
+        onDrawLadder={() => undefined}
+        onLadderOutcomeShown={() => undefined}
+        onDrawStarway={onDrawStarway}
+        onStarwayOutcomeShown={() => undefined}
+        onCashOutStarway={() => undefined}
+        onReplaceDreamsign={() => undefined}
+      />,
+    );
+
+    expect(container.querySelectorAll("[data-starway-tier]")).toHaveLength(3);
+    expect(container.querySelectorAll("[data-wager-prize-card]")).toHaveLength(3);
+    expect(container.querySelectorAll("[data-starway-tier-button]")).toHaveLength(1);
+    expect(container.querySelector("[data-starway-tier='1']")?.textContent)
+      .toContain("7.69% BustSafe: 60");
+    expect(container.querySelector("[data-starway-tier='2']")?.textContent)
+      .toContain("23.08% BustSafe: 140");
+    expect(container.querySelector("[data-starway-tier='3']")?.textContent)
+      .toContain("46.15% BustSafe: 300");
+    expect(container.textContent).toContain(
+      "Starway Stairs is the game. Keep betting to see how high you can go!",
+    );
+
+    const start = container.querySelector<HTMLButtonElement>(
+      '[data-testid="gamble-starway-tier-1"]',
+    );
+    expect(start?.textContent).toBe("Start · 10");
+    act(() => start?.click());
+    expect(onDrawStarway).toHaveBeenCalledOnce();
+
+    act(() => root.unmount());
+  });
+
+  it("reveals a safe card, then advances the tier and offers cash-out", () => {
+    vi.useFakeTimers();
+    const onOutcomeShown = vi.fn();
+    const onCashOut = vi.fn();
+    const safeView: StarwayStairsSiteView = {
+      ...STARWAY_VIEW,
+      tiers: STARWAY_VIEW.tiers.map((tier) =>
+        tier.tierNumber === 1
+          ? {
+              ...tier,
+              state: "safe" as const,
+              card: { rank: "3" as const, suit: "clubs" as const },
+            }
+          : tier.tierNumber === 2
+            ? { ...tier, state: "current" as const }
+            : tier,
+      ),
+      currentTierNumber: 2,
+      result: {
+        id: "starway-tier-1",
+        tierNumber: 1,
+        busted: false,
+        resultSettled: true,
+        prizeAtRisk: 60,
+      },
+      cashOutReward: 60,
+    };
+    const { container, root } = mount(
+      <GambleSiteScreen
+        view={safeView}
+        onChooseGate={() => undefined}
+        onLeave={() => undefined}
+        onOutcomeShown={() => undefined}
+        onPlayAgain={() => undefined}
+        onDrawLadder={() => undefined}
+        onLadderOutcomeShown={() => undefined}
+        onDrawStarway={() => undefined}
+        onStarwayOutcomeShown={onOutcomeShown}
+        onCashOutStarway={onCashOut}
+        onReplaceDreamsign={() => undefined}
+      />,
+    );
+
+    void act(() => vi.advanceTimersByTime(1_000));
+    expect(onOutcomeShown).toHaveBeenCalledOnce();
+    expect(
+      container.querySelector('[data-starway-tier="1"] [data-playing-card="3-clubs"]'),
+    ).not.toBeNull();
+    void act(() => vi.advanceTimersByTime(4_000));
+    expect(container.querySelectorAll("[data-starway-tier-button]")).toHaveLength(1);
+    expect(
+      container.querySelector('[data-starway-tier-button="2"]'),
+    ).not.toBeNull();
+    const cashOut = container.querySelector<HTMLButtonElement>(
+      '[data-testid="gamble-starway-cash-out"]',
+    );
+    expect(cashOut?.textContent).toBe("Take 60 Essence");
+    act(() => cashOut?.click());
+    expect(onCashOut).toHaveBeenCalledOnce();
+    expect(cashOut?.getAttribute("aria-disabled")).toBe("true");
+    expect(
+      container
+        .querySelector('[data-testid="gamble-starway-tier-2"]')
+        ?.getAttribute("aria-disabled"),
+    ).toBe("true");
+
+    act(() => root.unmount());
+  });
+
+  it("shows only Leave after a terminal bust", () => {
+    vi.useFakeTimers();
+    const bustedView: StarwayStairsSiteView = {
+      ...STARWAY_VIEW,
+      tiers: STARWAY_VIEW.tiers.map((tier) =>
+        tier.tierNumber === 1
+          ? {
+              ...tier,
+              state: "bust" as const,
+              card: { rank: "2" as const, suit: "spades" as const },
+            }
+          : tier,
+      ),
+      currentTierNumber: null,
+      result: {
+        id: "starway-tier-1-bust",
+        tierNumber: 1,
+        busted: true,
+        resultSettled: true,
+        prizeAtRisk: 60,
+      },
+      terminalReason: "bust",
+    };
+    const { container, root } = mount(
+      <GambleSiteScreen
+        view={bustedView}
+        onChooseGate={() => undefined}
+        onLeave={() => undefined}
+        onOutcomeShown={() => undefined}
+        onPlayAgain={() => undefined}
+        onDrawLadder={() => undefined}
+        onLadderOutcomeShown={() => undefined}
+        onDrawStarway={() => undefined}
+        onStarwayOutcomeShown={() => undefined}
+        onCashOutStarway={() => undefined}
+        onReplaceDreamsign={() => undefined}
+      />,
+    );
+
+    void act(() => vi.advanceTimersByTime(1_000));
+    void act(() => vi.advanceTimersByTime(4_000));
+    expect(container.querySelectorAll("[data-starway-tier-button]")).toHaveLength(0);
+    expect(
+      container.querySelector('[data-testid="gamble-starway-leave-after-result"]'),
+    ).toBeInstanceOf(HTMLButtonElement);
+    expect(container.querySelector('[data-testid="gamble-starway-cash-out"]'))
+      .toBeNull();
+
+    act(() => root.unmount());
   });
 });

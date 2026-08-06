@@ -96,7 +96,8 @@ export interface EventPayloads {
     siteId: string;
     gambleGameId?:
       | "gravok-three-gate-wager"
-      | "tidemark-ladder-climb";
+      | "tidemark-ladder-climb"
+      | "starway-stairs";
   };
   CHOOSE_RANDOM_SITE: { siteId: string; siteType: string };
   RESOLVE_EXPLORATION_CHOICE: {
@@ -134,6 +135,12 @@ export interface EventPayloads {
     siteId: string;
     replacedDreamsignId: string;
   };
+  DRAW_STARWAY_STAIRS: { siteId: string };
+  SETTLE_STARWAY_STAIRS: {
+    siteId: string;
+    shuffleCommitment: string;
+  };
+  CASH_OUT_STARWAY_STAIRS: { siteId: string; shuffleCommitment: string };
 
   // --- merchant & shop ---
   ACCEPT_MERCHANT_OFFER: { siteId: string; offer?: unknown };
@@ -331,6 +338,9 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   DRAW_TIDEMARK_LADDER_CLIMB: true,
   SETTLE_TIDEMARK_LADDER_CLIMB: true,
   REPLACE_TIDEMARK_LADDER_CLIMB_DREAMSIGN: true,
+  DRAW_STARWAY_STAIRS: true,
+  SETTLE_STARWAY_STAIRS: true,
+  CASH_OUT_STARWAY_STAIRS: true,
   ACCEPT_MERCHANT_OFFER: true,
   DECLINE_MERCHANT: true,
   BUY_SHOP_SLOT: true,

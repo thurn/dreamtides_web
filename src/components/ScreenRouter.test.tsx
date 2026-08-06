@@ -221,6 +221,9 @@ function makeMutations(): JourneyMutations {
     drawTidemarkLadderClimb: vi.fn(),
     settleTidemarkLadderClimb: vi.fn(),
     replaceTidemarkLadderClimbDreamsign: vi.fn(),
+    drawStarwayStairs: vi.fn(),
+    settleStarwayStairs: vi.fn(),
+    cashOutStarwayStairs: vi.fn(),
     ensureRewardSiteRuntime: vi.fn(),
     acceptRewardSite: vi.fn(),
     ensureDreamsignOfferRuntime: vi.fn(),
@@ -990,6 +993,28 @@ describe("ScreenRouter site-dispatch completeness", () => {
       "tidemark-ladder-climb",
     );
     expect(container.querySelector("[data-gamble-gates]")).toBeNull();
+  });
+
+  it("passes a forced Starway Stairs URL choice into Gamble initialization", () => {
+    const site = makeSite("Gamble");
+    const mutations = makeMutations();
+    renderWithJourney({
+      state: makeStateFor(site),
+      journeyContent: merchantContent(),
+      mutations,
+      children: (
+        <ScreenRouter
+          runtimeConfig={parseRuntimeConfig(
+            "?gambleGame=starway-stairs",
+          )}
+        />
+      ),
+    });
+
+    expect(mutations.ensureGambleSiteRuntime).toHaveBeenCalledWith(
+      site.id,
+      "starway-stairs",
+    );
   });
 
   it("routes Exploration to its fullscreen frame-break prototype", () => {

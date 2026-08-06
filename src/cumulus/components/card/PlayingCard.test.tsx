@@ -215,4 +215,35 @@ describe("PlayingCard", () => {
 
     act(() => root.unmount());
   });
+
+  it("renders Starway Stairs bust odds and a safe-draw reward", () => {
+    const host = document.createElement("div");
+    document.body.append(host);
+    const root = createRoot(host);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <WagerPrizeCard
+            prizeId="starway-1"
+            presentation="bust-odds"
+            targetLabel="7.69%"
+            essenceReward={60}
+            rewardDreamsign={null}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    const prize = host.querySelector<HTMLElement>("[data-wager-prize-card]");
+    expect(prize?.getAttribute("aria-label")).toBe(
+      "7.69% bust chance. Safe draw pays 60 Essence.",
+    );
+    expect(prize?.querySelector("[data-wager-prize-title]")?.textContent)
+      .toBe("7.69% Bust");
+    expect(prize?.querySelector("[data-wager-prize-description]")?.textContent)
+      .toBe("Safe: 60");
+
+    act(() => root.unmount());
+  });
 });

@@ -29,13 +29,16 @@ describe("parseRuntimeConfig", () => {
   });
 
   describe("gambleGameId", () => {
-    it("forces either implemented Gamble game by its URL value", () => {
+    it("forces any implemented Gamble game by its URL value", () => {
       expect(parseRuntimeConfig("?gambleGame=three-gate").gambleGameId).toBe(
         "gravok-three-gate-wager",
       );
       expect(
         parseRuntimeConfig("?gambleGame=ladder-climb").gambleGameId,
       ).toBe("tidemark-ladder-climb");
+      expect(
+        parseRuntimeConfig("?gambleGame=starway-stairs").gambleGameId,
+      ).toBe("starway-stairs");
     });
 
     it("uses random selection for absent or unrecognized values", () => {

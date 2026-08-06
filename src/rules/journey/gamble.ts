@@ -10,11 +10,20 @@ import {
   rankWinsTidemarkLadderClimbAttempt,
   tidemarkLadderClimbAttemptCost,
 } from "../../data/tidemark-ladder-climb";
-import type { GravokGateId } from "../../types/gamble";
+import {
+  rankBustsStarwayStairsTier,
+  STARWAY_STAIRS_TIERS,
+  nextStarwayStairsTierNumber,
+  starwayStairsTierRule,
+} from "../../data/starway-stairs";
+import type {
+  GravokGateId,
+} from "../../types/gamble";
 import type {
   GambleSiteRuntime,
   GravokWagerSiteRuntime,
   JourneyState,
+  StarwayStairsSiteRuntime,
   TidemarkLadderClimbSiteRuntime,
 } from "../../types/journey";
 import type { EventContext } from "../../eventlog/types";
@@ -71,6 +80,14 @@ function tidemarkRuntimeFor(
 ): TidemarkLadderClimbSiteRuntime | null {
   const runtime = runtimeFor(journey, siteId);
   return runtime?.gameId === "tidemark-ladder-climb" ? runtime : null;
+}
+
+function starwayRuntimeFor(
+  journey: JourneyState,
+  siteId: string,
+): StarwayStairsSiteRuntime | null {
+  const runtime = runtimeFor(journey, siteId);
+  return runtime?.gameId === "starway-stairs" ? runtime : null;
 }
 
 /**
@@ -414,5 +431,107 @@ export function replaceTidemarkLadderClimbDreamsign(
         replacedDreamsignId,
       },
     },
+  );
+}
+
+/** Pay the entry fee, when applicable, and reveal the current Starway tier. */
+export function drawStarwayStairs(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  if (siteId === null) return null;
+  const runtime = starwayRuntimeFor(journey, siteId);
+  if (runtime === null) return null;
+
+  const tierNumber = nextStarwayStairsTierNumber(runtime);
+  if (tierNumber === null) return null;
+  const card = runtime.committedCards[tierNumber - 1];
+  const commitment = runtime.shuffleCommitments[tierNumber - 1];
+  if (card === undefined || commitment === undefined) return null;
+
+  const cost = tierNumber === 1 ? runtime.entryCost : 0;
+  if (journey.essence < cost) return null;
+  const busted = rankBustsStarwayStairsTier(card.rank, tierNumber);
+  return withRuntime(
+    { ...journey, essence: journey.essence - cost },
+    siteId,
+    {
+      ...runtime,
+      results: [
+        ...runtime.results,
+        { tierNumber, card, busted, resultSettled: false },
+      ],
+    },
+  );
+}
+
+/** Settle the visible Starway result, including a bust or automatic top prize. */
+export function settleStarwayStairs(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  const shuffleCommitment = asString(payload.shuffleCommitment);
+  if (siteId === null || shuffleCommitment === null) return null;
+  const runtime = starwayRuntimeFor(journey, siteId);
+  const result = runtime?.results[runtime.results.length - 1];
+  if (
+    runtime === null ||
+    result === undefined ||
+    result.resultSettled ||
+    runtime.shuffleCommitments[result.tierNumber - 1] !== shuffleCommitment
+  ) {
+    return null;
+  }
+
+  const reachedTop =
+    !result.busted && result.tierNumber === STARWAY_STAIRS_TIERS.length;
+  const prizeAwarded = reachedTop
+    ? starwayStairsTierRule(result.tierNumber).essenceReward
+    : 0;
+  const nextResults = runtime.results.map((entry, index) =>
+    index === runtime.results.length - 1
+      ? { ...entry, resultSettled: true }
+      : entry,
+  );
+  return withRuntime(
+    { ...journey, essence: journey.essence + prizeAwarded },
+    siteId,
+    {
+      ...runtime,
+      results: nextResults,
+      terminalReason: result.busted ? "bust" : reachedTop ? "top" : null,
+      prizeAwarded,
+    },
+  );
+}
+
+/** Bank the latest safe tier's prize and end the Starway Stairs game. */
+export function cashOutStarwayStairs(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  const shuffleCommitment = asString(payload.shuffleCommitment);
+  if (siteId === null || shuffleCommitment === null) return null;
+  const runtime = starwayRuntimeFor(journey, siteId);
+  const result = runtime?.results[runtime.results.length - 1];
+  if (
+    runtime === null ||
+    result === undefined ||
+    result.busted ||
+    !result.resultSettled ||
+    result.tierNumber >= STARWAY_STAIRS_TIERS.length ||
+    runtime.terminalReason !== null ||
+    runtime.shuffleCommitments[result.tierNumber - 1] !== shuffleCommitment
+  ) {
+    return null;
+  }
+  const prizeAwarded = starwayStairsTierRule(result.tierNumber).essenceReward;
+  return withRuntime(
+    { ...journey, essence: journey.essence + prizeAwarded },
+    siteId,
+    { ...runtime, terminalReason: "cashed-out", prizeAwarded },
   );
 }

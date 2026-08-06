@@ -560,6 +560,12 @@ export function routeDomain(
         state,
         gamble.replaceTidemarkLadderClimbDreamsign(journey, payload),
       );
+    case "DRAW_STARWAY_STAIRS":
+      return journeyCase(state, gamble.drawStarwayStairs(journey, payload));
+    case "SETTLE_STARWAY_STAIRS":
+      return journeyCase(state, gamble.settleStarwayStairs(journey, payload));
+    case "CASH_OUT_STARWAY_STAIRS":
+      return journeyCase(state, gamble.cashOutStarwayStairs(journey, payload));
 
     // --- shop, merchant & modifiers ---
     case "BUY_SHOP_SLOT":

@@ -83,6 +83,12 @@ export interface JourneyMutations {
     siteId: string,
     replacedDreamsignId: string,
   ) => void;
+  /** Reveal the current Starway Stairs tier. */
+  drawStarwayStairs: (siteId: string) => void;
+  /** Settle the current Starway Stairs result after its card reveal. */
+  settleStarwayStairs: (siteId: string, shuffleCommitment: string) => void;
+  /** Bank the latest safe Starway Stairs prize. */
+  cashOutStarwayStairs: (siteId: string, shuffleCommitment: string) => void;
   ensureRewardSiteRuntime: (siteId: string) => void;
   /**
    * Accepts the Dreamsign Reward at the given site. When the player is at the

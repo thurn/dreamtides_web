@@ -335,7 +335,8 @@ export function openSite(
   if (
     rawGambleGameId !== undefined &&
     rawGambleGameId !== "gravok-three-gate-wager" &&
-    rawGambleGameId !== "tidemark-ladder-climb"
+    rawGambleGameId !== "tidemark-ladder-climb" &&
+    rawGambleGameId !== "starway-stairs"
   ) {
     return null;
   }
@@ -904,6 +905,15 @@ export function completeSite(
         runtime.result?.pendingDreamsignReplacement === true)
     ) {
       return null;
+    }
+    if (runtime.gameId === "starway-stairs") {
+      const latestResult = runtime.results[runtime.results.length - 1];
+      if (
+        latestResult?.resultSettled === false ||
+        (runtime.results.length > 0 && runtime.terminalReason === null)
+      ) {
+        return null;
+      }
     }
   }
   if (runtime?.kind === "exploration" && runtime.resolution === null) {

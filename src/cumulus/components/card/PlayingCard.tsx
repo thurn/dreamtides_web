@@ -97,10 +97,18 @@ export type PlayingCardVariant =
   "rank-and-suit" | "rank-display" | "suit-display" | "rank-target";
 
 /** Stable Gamble prize identities rendered by the shared wager object. */
-export type WagerPrizeCardId = GravokGateId | "ladder-climb";
+export type WagerPrizeCardId =
+  | GravokGateId
+  | "ladder-climb"
+  | "starway-1"
+  | "starway-2"
+  | "starway-3";
 
 /** Named square sizes reserved for Gamble prize cards. */
 export type WagerPrizeCardSize = "wagerCompact" | "wager";
+
+/** Named copy treatment for a Gamble prize card. */
+export type WagerPrizeCardPresentation = "draw-target" | "bust-odds";
 
 const SUIT_SYMBOLS: Record<PlayingCardSuit, string> = {
   clubs: "♣",
@@ -362,6 +370,8 @@ interface WagerPrizeCardBaseProps {
   revealDrawnCard?: boolean;
   /** Optional stable selector for the prize Dreamsign name. */
   dreamsignTestId?: string;
+  /** Named semantic copy treatment. Defaults to `draw-target`. */
+  presentation?: WagerPrizeCardPresentation;
 }
 
 /** A prize always carries Essence, a Dreamsign, or both. */
@@ -431,6 +441,7 @@ function WagerPrizeCardObject({
   drawnCard = null,
   revealDrawnCard = false,
   dreamsignTestId,
+  presentation = "draw-target",
   revealBinding,
 }: WagerPrizeCardProps & {
   revealBinding?: WagerRevealSourceBinding;
@@ -443,7 +454,9 @@ function WagerPrizeCardObject({
     : `${String(essenceReward)} Essence${
         rewardDreamsign === null ? "" : ` and ${rewardDreamsign.name}`
       }`;
-  const prizeLabel = `Draw ${targetLabel}. Win ${rewardLabel}.`;
+  const prizeLabel = presentation === "bust-odds"
+    ? `${targetLabel} bust chance. Safe draw pays ${rewardLabel}.`
+    : `Draw ${targetLabel}. Win ${rewardLabel}.`;
   const drawnCardLabel =
     drawnCard === null
       ? prizeLabel
@@ -473,10 +486,17 @@ function WagerPrizeCardObject({
           style={{
             margin: 0,
             font:
-              size === "wager" ? token("--t-title") : token("--t-title-sm"),
+              size === "wager"
+                ? token("--t-title")
+                : presentation === "bust-odds"
+                  ? token("--t-tutorial-dialogue")
+                  : token("--t-title-sm"),
+            whiteSpace: presentation === "bust-odds" ? "nowrap" : undefined,
           }}
         >
-          Draw {targetLabel}
+          {presentation === "bust-odds"
+            ? `${targetLabel} Bust`
+            : `Draw ${targetLabel}`}
         </h2>
         <p
           data-wager-prize-description=""
@@ -486,7 +506,7 @@ function WagerPrizeCardObject({
               size === "wager" ? token("--t-body") : token("--t-body-sm"),
           }}
         >
-          Win{" "}
+          {presentation === "bust-odds" ? "Safe: " : "Win "}
           {essenceReward !== null && (
             <EssenceValue amount={essenceReward} tone="inherit" />
           )}
