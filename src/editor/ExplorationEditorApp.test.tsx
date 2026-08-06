@@ -8,6 +8,7 @@ import { asCardId, asCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { Dreamsign } from "../types/journey";
 import ExplorationEditorApp from "./ExplorationEditorApp";
+import type { EncounterTemplateHealth } from "./exploration-candidates-editor-types";
 import type {
   ExplorationEditorClient,
   ExplorationEditorLoadResult,
@@ -162,6 +163,22 @@ const SERVER_DATA: ExplorationEditorServerData = {
   subtypes: ["Guide"],
 };
 
+const TEMPLATE_HEALTH: EncounterTemplateHealth = {
+  productionEncounters: 9,
+  recordedTemplateUses: 18,
+  catalogTemplateCount: 4,
+  meanUsesPerTemplate: 4.5,
+  softWarningThreshold: 2,
+  omissionThreshold: 3,
+  guidance: "Prefer fewer prior production uses.",
+  templates: [
+    { templateId: 14, template: "Draw a card", usageCount: 9, status: "hidden", reasons: ["production"] },
+    { templateId: 37, template: "Gain a dreamsign", usageCount: 2, status: "warning", reasons: ["production"] },
+    { templateId: 1, template: "Gain essence", usageCount: 0, status: "unused", reasons: [] },
+    { templateId: 2, template: "Purge a card", usageCount: 1, status: "available", reasons: [] },
+  ],
+};
+
 function loadResult(): ExplorationEditorLoadResult {
   return {
     ...structuredClone(SERVER_DATA),
@@ -173,6 +190,7 @@ function loadResult(): ExplorationEditorLoadResult {
 function client(overrides: Partial<ExplorationEditorClient> = {}): ExplorationEditorClient {
   return {
     load: vi.fn().mockResolvedValue(loadResult()),
+    loadTemplateHealth: vi.fn().mockResolvedValue(structuredClone(TEMPLATE_HEALTH)),
     saveProse: vi.fn(),
     saveAction: vi.fn(),
     saveTemplate: vi.fn(),
@@ -214,6 +232,37 @@ afterEach(() => {
 });
 
 describe("ExplorationEditorApp", () => {
+  it("opens the production template health rail and filters its template statuses", async () => {
+    const loadTemplateHealth = vi.fn().mockResolvedValue(structuredClone(TEMPLATE_HEALTH));
+    const { container, root } = await renderLoaded(client({ loadTemplateHealth }));
+    expect(loadTemplateHealth).not.toHaveBeenCalled();
+
+    await act(async () => {
+      container.querySelector<HTMLButtonElement>("[data-testid='template-health-trigger']")!.click();
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+
+    expect(loadTemplateHealth).toHaveBeenCalledOnce();
+    expect(container.querySelector(".exploration-editor-layout")?.getAttribute("data-template-health-open"))
+      .toBe("true");
+    expect(container.textContent).toContain("Production diversity");
+    expect(container.textContent).toContain("Draw a card");
+    expect(container.textContent).toContain("Gain a dreamsign");
+    expect(container.textContent).not.toContain("Gain essence");
+
+    const unused = [...container.querySelectorAll<HTMLButtonElement>("[role='tab']")]
+      .find((button) => button.textContent === "Unused")!;
+    act(() => unused.click());
+    expect(container.textContent).toContain("Gain essence");
+    expect(container.textContent).toContain("Never used");
+    expect(container.textContent).not.toContain("Draw a card");
+
+    act(() => container.querySelector<HTMLButtonElement>("[aria-label='Close template health']")!.click());
+    expect(container.querySelector("[data-testid='encounter-template-health-rail']")).toBeNull();
+    act(() => root.unmount());
+  });
+
   it("renders the last TOML encounter first", async () => {
     const loaded = loadResult();
     loaded.encounters.push({

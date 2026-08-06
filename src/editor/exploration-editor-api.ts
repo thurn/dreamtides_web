@@ -4,6 +4,7 @@ import type {
   ExplorationEditorLoadResult,
   ExplorationEditorServerData,
 } from "./exploration-editor-types";
+import type { EncounterTemplateHealth } from "./exploration-candidates-editor-types";
 
 async function readResponse<T>(response: Response): Promise<T> {
   const text = await response.text();
@@ -39,6 +40,15 @@ export const explorationEditorClient: ExplorationEditorClient = {
       signal,
     });
     return readResponse<ExplorationEditorLoadResult>(response);
+  },
+
+  async loadTemplateHealth(signal) {
+    const response = await fetch("/api/editor/exploration_candidates/template-health", {
+      headers: { Accept: "application/json" },
+      signal,
+    });
+    const body = await readResponse<{ templateHealth: EncounterTemplateHealth }>(response);
+    return body.templateHealth;
   },
 
   saveProse(request) {

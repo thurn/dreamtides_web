@@ -7,6 +7,7 @@ import type {
 import type {
   EncounterRenderedTemplatePart,
   EncounterRuntimeCardSelection,
+  EncounterTemplateHealth,
 } from "./exploration-candidates-editor-types";
 
 export type ExplorationEditorControl =
@@ -98,6 +99,7 @@ export interface ExplorationEditorLoadResult extends ExplorationEditorServerData
 
 export interface ExplorationEditorClient {
   load(signal?: AbortSignal): Promise<ExplorationEditorLoadResult>;
+  loadTemplateHealth(signal?: AbortSignal): Promise<EncounterTemplateHealth>;
   saveProse(request: {
     cardId: string;
     value: string;

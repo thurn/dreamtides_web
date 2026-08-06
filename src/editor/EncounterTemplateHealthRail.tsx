@@ -8,6 +8,7 @@ import type {
   EncounterTemplateHealthEntry,
   EncounterTemplateHealthStatus,
 } from "./exploration-candidates-editor-types";
+import "./encounter-template-health-rail.css";
 
 export const TEMPLATE_HEALTH_RAIL_ID = "encounter-template-health";
 

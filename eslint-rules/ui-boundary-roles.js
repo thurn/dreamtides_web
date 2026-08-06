@@ -25,6 +25,7 @@ const fileRoles = {
   "src/index.css": OUTER_UI_ROLES.APP_SHELL,
   "src/editor/card-editor.css": OUTER_UI_ROLES.OPERATOR_TOOL,
   "src/editor/editable-figment.css": OUTER_UI_ROLES.OPERATOR_TOOL,
+  "src/editor/encounter-template-health-rail.css": OUTER_UI_ROLES.OPERATOR_TOOL,
   "src/editor/exploration-candidates-editor.css": OUTER_UI_ROLES.OPERATOR_TOOL,
   "src/editor/exploration-editor.css": OUTER_UI_ROLES.OPERATOR_TOOL,
   "src/editor/glossary-editor.css": OUTER_UI_ROLES.OPERATOR_TOOL,
