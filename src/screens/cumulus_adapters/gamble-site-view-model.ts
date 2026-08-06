@@ -31,7 +31,7 @@ import { dreamscapeSceneRef } from "./dreamscape-view-model";
 export const GRAVOK_WAGER_GUIDE_LINE =
   "The game's called Three Gates. Place your bet on the next card drawn!";
 export const TIDEMARK_PROGRESSIVE_GUIDE_LINE =
-  "The game's Ladder Climb. Match or beat the target to win a Dreamsign. Try again if you miss!";
+  "The game's Ladder Climb. Match or beat the target to win a Dreamsign. Try again with better odds if you miss!";
 
 /** The next gate in display order supplies the non-selected reveal object. */
 export function gravokRevealGateId(selectedGateId: GravokGateId): GravokGateId {
@@ -79,9 +79,10 @@ function commonGambleView(params: {
   guideLine: string;
 }): { scene: ArtRef | null; guide: GravokWagerSiteView["guide"] } {
   const guideId = params.guide?.id ?? "gravok";
-  const guideLine = params.guide?.id === "maddox"
-    ? params.guide.dialog[0] ?? "Let’s see where this road takes us."
-    : params.guideLine;
+  const guideLine =
+    params.guide?.id === "maddox"
+      ? (params.guide.dialog[0] ?? "Let’s see where this road takes us.")
+      : params.guideLine;
   return {
     scene:
       params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode),
