@@ -5,11 +5,11 @@
 //   - one glass material       — the shared glassSurfaceStyle chrome recipe
 //   - one corner radius         — --radius-compact
 //   - one shadow/rim treatment  — glassSurfaceStyle's layered glass edge
-//   - one type scale            — headline (serif) / body (rules) / meta (mono)
+//   - one type scale            — headline (serif) / body (rules)
 // Only the MEDIA treatment varies by content, via `variant`:
 //   - object      — a centered contained transparent object
 //   - fullBleed   — a square hero image with a glass text card laid on TOP of it:
-//                   the image IS the card, with meta / name / epithet / body
+//                   the image IS the card, with name / epithet / body
 //                   revealed on the shared glass, floating over the lower image
 //   - atlasReveal — the large desktop Dream Atlas reveal: scene hero, prominent
 //                   right-side figure, and place / guide / bonus glass panel
@@ -88,7 +88,7 @@ const MOBILE_WIDTH_FRACTION = 0.45;
 // a 12px floor for the 14px body voice. The larger copy wraps into natural
 // height inside the fixed 45%-viewport width, giving every reveal more readable
 // vertical room without widening it. Tune this one constant to adjust title,
-// epithet, meta, and body text proportionally.
+// epithet and body text proportionally.
 const MOBILE_TEXT_SCALE = 0.86;
 
 /**
@@ -294,8 +294,8 @@ export interface InfoCardObjectProps extends InfoCardCommonProps {
 /**
  * fullBleed variant — a square hero image with a glass text card laid on TOP of
  * it: the image fills the whole card (rounded corners), and the shared
- * liquid-glass text card floats over its lower portion carrying the meta / name
- * / epithet / body. It is literally "an image, with a text info card placed on
+ * liquid-glass text card floats over its lower portion carrying the name,
+ * epithet, and body. It is literally "an image, with a text info card placed on
  * top of it". Built for the Dream Avatar profile reveal and the atlas node
  * reveals. The image IS its media, so `image` is required.
  */
@@ -314,8 +314,6 @@ export interface InfoCardFullBleedProps extends InfoCardCommonProps {
    * scene-only hero. An {@link ArtRef}, resolved by the component.
    */
   figure?: ArtRef;
-  /** Small mono/uppercase overline above the title; rules symbols render as icons. */
-  meta?: string;
   /**
    * An epithet under the name — a smaller serif line in white, mirroring the
    * Dream Avatar-select name/epithet pairing. Resolve before display; rules
@@ -375,8 +373,6 @@ export interface InfoCardTideProps extends InfoCardCommonProps {
 export interface InfoCardTextProps extends InfoCardCommonProps {
   /** Which media treatment. Omit — or pass 'text' — for the text variant. */
   variant?: "text";
-  /** Small mono/uppercase overline above the title; rules symbols render as icons. */
-  meta?: string;
   /** A small leading {@link Glyph}. */
   leadGlyph?: Glyph;
   /**
@@ -506,14 +502,8 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
       imageCrop = "center",
       imageFilter,
       figure,
-      meta,
       subtitle,
     } = props;
-    const Meta = meta ? (
-      <div style={{ ...tMeta, marginBottom: token("--space-s") }}>
-        {renderRulesSymbolsInline(meta)}
-      </div>
-    ) : null;
     return (
       <div
         style={{
@@ -596,7 +586,6 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
             overflowWrap: "break-word",
           }}
         >
-          {Meta}
           <div
             style={{ ...tHeadline, marginBottom: subtitle ? token("--space-xxs") : body ? token("--space-s") : 0 }}
           >
@@ -833,18 +822,12 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
 
   /* --- text: optional small lead glyph + title, an optional epithet under the
      name, description below --- */
-  const { meta, leadGlyph, subtitle } = props;
+  const { leadGlyph, subtitle } = props;
   const hasHeadline = title !== undefined || leadGlyph !== undefined;
-  const Meta = meta ? (
-    <div style={{ ...tMeta, marginBottom: token("--space-s") }}>
-      {renderRulesSymbolsInline(meta)}
-    </div>
-  ) : null;
   return (
     <div
       style={{ ...shell, padding: `${geometrySpace(PADY)} ${geometrySpace(PADX)}` }}
     >
-      {Meta}
       {hasHeadline && (
         <div
           style={{
@@ -885,7 +868,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
  * Wraps the variant body in the viewport-driven width rule (see
  * {@link infoCardWidth}): every variant lays out at the same fraction of the
  * screen until reaching its own native width. The internal type scale changes
- * at the standard-card cutoff, so title, epithet, meta, and body text keep
+ * at the standard-card cutoff, so title, epithet, and body text keep
  * their proportions while the glass text blocks naturally grow or shrink from
  * the text they contain.
  *

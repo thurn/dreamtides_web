@@ -28,7 +28,6 @@ InfoCardProps is a discriminated union. The flattened table combines every varia
 | `slots` | `InfoCardSlots` | no | — | Optional wrappers for the rendered headline and body content. |
 | `imageCrop` | `ImageCrop` = `"top" \| "center"` | no | — | How the hero image is cropped. Default `"center"`. |
 | `figure` | `ArtRef` | no | — | An optional foreground character render (a transparent full-body cutout — a Dream Guide, the boss) laid centered and prominent OVER the hero image, standing above the glass text card. Its own subject of the card; omit for a scene-only hero. An {@link ArtRef}, resolved by the component. Optional transparent full-body figure standing on the card's right side. |
-| `meta` | `string` | no | — | Small mono/uppercase overline above the title; rules symbols render as icons. |
 | `subtitle` | `string` | no | — | An epithet under the name — a smaller serif line in white, mirroring the Dream Avatar-select name/epithet pairing. Resolve before display; rules symbols render as icons. The resident guide / boss title; rules symbols render as icons. An epithet under the name — a smaller serif subtitle in white, mirroring the Dream Avatar-select name/epithet pairing. Resolve before display; rules symbols render as icons. |
 | `glyph` | `Glyph` | yes | — | The {@link Glyph} the disc renders. Required. |
 | `tide` | `Tide` = `"shadow" \| "ember" \| "valor" \| "vision" \| "wild"` | yes | — | Which of the five tides. Fixes the disc color/mark and the alignment label. |
@@ -51,7 +50,7 @@ InfoCardProps is a discriminated union. The flattened table combines every varia
 
 ### Text variant
 
-The default: a `meta` overline, `title`, a `RichText` `body`, and an optional small `leadGlyph` from the named `GLYPHS` vocabulary.
+The default: a `title`, a `RichText` `body`, and an optional small `leadGlyph` from the named `GLYPHS` vocabulary.
 
 ```tsx
 import { InfoCard } from "src/cumulus/components/overlay/InfoCard";
@@ -60,7 +59,6 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 <InfoCard
   variant="text"
-  meta="Tide"
   title="Singular Storm"
   body={richText.plain("A rising tide that floods the board with essence.")}
   leadGlyph={GLYPHS.water}
@@ -115,7 +113,7 @@ A media object with `image` (an `ArtRef`); set `frame` for a framed portrait, om
 
 ### Full-bleed variant
 
-A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the meta / name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Pass an optional `figure` (a transparent character render) to stand a subject centered and prominent over the hero, above the glass card. Used for the Dream Avatar profile reveal and the compact atlas node reveals.
+A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Pass an optional `figure` (a transparent character render) to stand a subject centered and prominent over the hero, above the glass card. Used for the Dream Avatar profile reveal and the compact atlas node reveals.
 
 ```tsx
 <InfoCard

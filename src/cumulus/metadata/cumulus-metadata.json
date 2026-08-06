@@ -2943,14 +2943,6 @@
       "description": "An optional foreground character render (a transparent full-body cutout —\na Dream Guide, the boss) laid centered and prominent OVER the hero image,\nstanding above the glass text card. Its own subject of the card; omit for a\nscene-only hero. An {@link ArtRef}, resolved by the component.\nOptional transparent full-body figure standing on the card's right side."
     },
     {
-      "name": "meta",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Small mono/uppercase overline above the title; rules symbols render as icons."
-    },
-    {
       "name": "subtitle",
       "tsType": "string",
       "unionMembers": [],
@@ -3436,7 +3428,6 @@
         "image",
         "center",
         "figure",
-        "meta",
         "slot",
         "style",
         "title",
@@ -3499,6 +3490,7 @@
         "main",
         "menu",
         "menuitem",
+        "meta",
         "meter",
         "nav",
         "noindex",

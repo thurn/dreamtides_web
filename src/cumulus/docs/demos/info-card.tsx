@@ -1,6 +1,6 @@
 // Registry demo entry for InfoCard — see tide-pill.tsx for the recipe this
 // follows. `variant` is a string-literal union (select control); `title`,
-// `meta` and `subtitle` are strings (text controls) seeded from defaultArgs;
+// `title` and `subtitle` are strings (text controls) seeded from defaultArgs;
 // `leadGlyph` is a named `Glyph`. `body` is a `RichText` model value with no
 // generated control, so it is seeded via sampleContent.
 //
@@ -45,14 +45,13 @@ export const infoCardDemo: CumulusComponent = {
   usage: [
     {
       label: "Text variant",
-      note: "The default: a `meta` overline, `title`, a `RichText` `body`, and an optional small `leadGlyph` from the named `GLYPHS` vocabulary.",
+      note: "The default: a `title`, a `RichText` `body`, and an optional small `leadGlyph` from the named `GLYPHS` vocabulary.",
       code: `import { InfoCard } from "src/cumulus/components/overlay/InfoCard";
 import { richText } from "src/cumulus/components/card/rich-text";
 import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 <InfoCard
   variant="text"
-  meta="Tide"
   title="Singular Storm"
   body={richText.plain("A rising tide that floods the board with essence.")}
   leadGlyph={GLYPHS.water}
@@ -97,7 +96,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
     },
     {
       label: "Full-bleed variant",
-      note: "A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the meta / name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Pass an optional `figure` (a transparent character render) to stand a subject centered and prominent over the hero, above the glass card. Used for the Dream Avatar profile reveal and the compact atlas node reveals.",
+      note: "A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Pass an optional `figure` (a transparent character render) to stand a subject centered and prominent over the hero, above the glass card. Used for the Dream Avatar profile reveal and the compact atlas node reveals.",
       code: `<InfoCard
   variant="fullBleed"
   image={artRef.dreamscapeScene("firstlight_meadow")}
@@ -150,7 +149,6 @@ const scale = infoCardTextScale(window.innerWidth); // 0.86 below ~551px; otherw
   demo: {
     defaultArgs: {
       variant: "text",
-      meta: "Tide",
       title: "Singular Storm",
       leadGlyph: GLYPHS.water,
       // Real media so switching `variant` to object / fullBleed / icon renders

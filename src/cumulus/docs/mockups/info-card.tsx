@@ -184,7 +184,6 @@ export function InfoCardMockup() {
           card={
             <InfoCard
               variant="text"
-              meta="Resource"
               title="Essence"
               body={richText.plain(
                 "The dream's currency — spent to draft cards and buy from merchants.",

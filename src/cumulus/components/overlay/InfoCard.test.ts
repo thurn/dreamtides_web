@@ -133,8 +133,7 @@ describe("InfoCard shell treatment", () => {
       React.createElement(InfoCard, {
         variant: "text",
         title: "Costs 2● and grants 1✦",
-        meta: "Gain ⍏3 and 4⍟",
-        subtitle: "Pay ☾ and store 1⧗",
+        subtitle: "Gain ⍏3, 4⍟, pay ☾, and store 1⧗",
         body: richText.stack(
           richText.plain("▸Dawn"),
           richText.underline("❖ Fast"),
@@ -175,8 +174,7 @@ describe("InfoCard shell treatment", () => {
       React.createElement(InfoCard, {
         variant: "fullBleed",
         image: artRef.dreamscapeScene("wilderveil"),
-        title: "Gain 1●",
-        meta: "Score 2⍟",
+        title: "Gain 1● and score 2⍟",
         subtitle: "Store 1⧗",
         body: richText.plain("Pay ☾."),
       }),

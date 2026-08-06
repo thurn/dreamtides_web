@@ -230,17 +230,17 @@ describe("Cumulus reveal coordinator root", () => {
   it("describes every strict InfoCard variant and preserves secondary order", () => {
     const variants: RevealSpec["secondaries"] = [
       { variant: "object", image: artRef.dreamsign("a.png"), title: "Object Title", body: { kind: "plain", text: "Object Body" } },
-      { variant: "fullBleed", image: artRef.dreamscapeScene("scene"), meta: "Profile", title: "Full Title", subtitle: "Full Subtitle", body: { kind: "plain", text: "Full Body" } },
+      { variant: "fullBleed", image: artRef.dreamscapeScene("scene"), title: "Full Title", subtitle: "Full Subtitle", body: { kind: "plain", text: "Full Body" } },
       { variant: "atlasReveal", image: artRef.dreamscapeScene("atlas"), title: "Atlas Title", subtitle: "Atlas Guide", body: { kind: "plain", text: "Atlas Body" } },
       { variant: "icon", glyph: GLYPHS.info, title: "Icon Title", body: { kind: "plain", text: "Icon Body" } },
       { variant: "tide", tide: "valor", title: "Tide Title", body: { kind: "plain", text: "Tide Body" } },
-      { variant: "text", meta: "Keyword", title: "Text Title", subtitle: "Text Subtitle", body: { kind: "plain", text: "Text Body" } },
+      { variant: "text", title: "Text Title", subtitle: "Text Subtitle", body: { kind: "plain", text: "Text Body" } },
     ];
     const spec: RevealSpec = { primary: { kind: "infoCard", card: variants[0] }, secondaries: variants.slice(1) };
     const { container } = mount(<CumulusRoot><Source id={UUID_A} spec={spec} /></CumulusRoot>);
     const button = container.querySelector("button")!;
     const text = document.getElementById(button.getAttribute("aria-describedby")!)?.textContent ?? "";
-    for (const expected of ["Object Title", "Object Body", "Profile", "Full Subtitle", "Atlas Guide", "Icon Title", "Valor", "Tide Title", "Keyword", "Text Subtitle"]) expect(text).toContain(expected);
+    for (const expected of ["Object Title", "Object Body", "Full Subtitle", "Atlas Guide", "Icon Title", "Valor", "Tide Title", "Text Subtitle"]) expect(text).toContain(expected);
     expect(text.indexOf("Full Title")).toBeLessThan(text.indexOf("Atlas Title"));
     expect(text.indexOf("Atlas Title")).toBeLessThan(text.indexOf("Icon Title"));
   });

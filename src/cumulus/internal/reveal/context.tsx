@@ -39,7 +39,6 @@ function richTextDescription(value: RichText | undefined): string {
 
 function infoCardDescription(card: RevealInfoCardModel): string {
   return [
-    "meta" in card ? card.meta : undefined,
     card.title,
     "subtitle" in card ? card.subtitle : undefined,
     card.variant === "tide" ? `${tideAlignmentLabel(card.tide)} tide alignment` : undefined,
