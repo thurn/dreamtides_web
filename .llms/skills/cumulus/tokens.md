@@ -92,6 +92,7 @@ Hairlines and dividers.
 | `--border-strong` | `var(--primitive-line-strong)` |  |
 | `--border-glossary-definition` | `var(--primitive-line-glossary-definition)` |  |
 | `--border-accent` | `var(--primitive-line-violet)` |  |
+| `--border-accent-glass` | `color-mix(in srgb, var(--accent-bright) 62%, white 38%)` |  |
 | `--line-strong` | `var(--atlas-badge-border)` | rgba(168,85,247,.42) |
 
 ## Radius

@@ -276,6 +276,7 @@
   --border-strong: var(--primitive-line-strong);
   --border-glossary-definition: var(--primitive-line-glossary-definition);
   --border-accent: var(--primitive-line-violet);
+  --border-accent-glass: color-mix(in srgb, var(--accent-bright) 62%, white 38%);
   --battlefield-slot-border: 2px dotted var(--primitive-line-battlefield);
 
   /* ---- Scrims (full-surface darkening behind a focused element) ---- */

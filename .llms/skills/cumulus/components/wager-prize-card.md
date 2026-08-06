@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/wager-prize-card`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The shared Gamble prize object: one PlayingCard superellipse with a draw target or bust range, a single Essence and/or Dreamsign reward sentence, an optional whole-face Dreamsign reveal, and a committed-card reverse face.
+The shared Gamble prize object: one PlayingCard superellipse with a draw target or minimum draw, a single Essence and/or Dreamsign reward sentence, an optional whole-face Dreamsign reveal, and a committed-card reverse face.
 
 > **Guidance:** Keep the reward in one sentence. When a Dreamsign is present, the entire prize face is its hover and press reveal source.
 
@@ -22,8 +22,8 @@ The shared Gamble prize object: one PlayingCard superellipse with a draw target 
 | `drawnCard` | `{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } \| null` | no | — | Committed card shown on the reverse face after a bet. |
 | `revealDrawnCard` | `boolean` | no | — | Turn the prize face over to its committed card. |
 | `dreamsignTestId` | `string` | no | — | Optional stable selector for the prize Dreamsign name. |
-| `presentation` | `WagerPrizeCardPresentation` = `"draw-target" \| "bust-range"` | no | — | Named semantic copy treatment. Defaults to `draw-target`. |
-| `emphasis` | `WagerPrizeCardEmphasis` = `"standard" \| "current" \| "muted"` | no | — | Current-tier accent, muted alternative, or standard priority. |
+| `presentation` | `WagerPrizeCardPresentation` = `"draw-target" \| "draw-minimum"` | no | — | Named semantic copy treatment. Defaults to `draw-target`. |
+| `emphasis` | `WagerPrizeCardEmphasis` = `"standard" \| "current" \| "muted"` | no | — | Accent current tier, foreground-muted alternative, or standard priority. |
 | `essenceReward` | `number \| null` | yes | — | Essence awarded on a win. Null selects a Dreamsign-only prize. |
 | `rewardDreamsign` | `Dreamsign \| null` | yes | — | Dreamsign appended to the Essence reward, when present. Dreamsign used as the complete reward. |
 
@@ -53,13 +53,13 @@ The shared Gamble prize object: one PlayingCard superellipse with a draw target 
 
 ```
 
-### Bust range
+### Minimum draw
 
 ```tsx
 <WagerPrizeCard
   prizeId="starway-1"
-  presentation="bust-range"
-  targetLabel="2"
+  presentation="draw-minimum"
+  targetLabel="3+"
   essenceReward={60}
   rewardDreamsign={null}
   emphasis="current"

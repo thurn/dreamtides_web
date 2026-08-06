@@ -144,12 +144,16 @@ retry remains. The player may retry twice, for a maximum of three independent
 rounds during one visit; each round charges its own starting cost when `Bet`
 is pressed.
 
-The UI lists all three tier squircles before play, each showing `Bust on`
-followed by its inclusive bust rank range and prize. The current tier has a
-purple border and the other tiers are muted. These wager objects reserve fixed
-grid positions throughout every draw and result announcement. The centered
-action row beneath the cards presents `Bet` and `Leave` before play, then
-`Climb` and `Take [current prize]` after a safe draw.
+The UI lists all three tier squircles before play, each showing the minimum
+safe draw (`Draw 3+`, `Draw 5+`, or `Draw 8+`) and prize. The current tier uses
+the same purple soft-wash and bright rim as an accent button. Other tiers mute
+their foreground content while retaining the full-strength glass background.
+During a draw, the previous tier keeps its accent until the complete result
+animation finishes. These wager objects reserve fixed grid positions throughout
+every draw and result announcement. The centered action row beneath the cards
+presents `Bet` and `Leave` before play, then `Climb` and `Take [current prize]`
+after a safe draw. Wager and prize values use the Essence glyph directly beside
+the number without cost punctuation.
 
 | Tier | Ranks that bust | Bust chance | Prize after a safe draw |
 | --- | --- | ---: | ---: |

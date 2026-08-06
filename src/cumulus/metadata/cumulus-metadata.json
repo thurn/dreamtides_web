@@ -2621,6 +2621,14 @@
       "description": "Optional numerical essence cost rendered in parentheses after the label:\n`Transfigure (20◆)`."
     },
     {
+      "name": "essenceValue",
+      "tsType": "number | null",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "null",
+      "description": "Optional non-cost Essence value rendered directly after the label."
+    },
+    {
       "name": "essenceCostStyle",
       "tsType": "GlassButtonEssenceCostStyle",
       "unionMembers": [
@@ -5220,7 +5228,7 @@
       "tsType": "WagerPrizeCardPresentation",
       "unionMembers": [
         "draw-target",
-        "bust-range"
+        "draw-minimum"
       ],
       "required": false,
       "defaultValue": null,
@@ -5236,7 +5244,7 @@
       ],
       "required": false,
       "defaultValue": null,
-      "description": "Current-tier accent, muted alternative, or standard priority."
+      "description": "Accent current tier, foreground-muted alternative, or standard priority."
     },
     {
       "name": "essenceReward",

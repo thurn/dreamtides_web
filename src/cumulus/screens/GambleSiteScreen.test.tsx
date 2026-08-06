@@ -88,21 +88,21 @@ const STARWAY_VIEW: StarwayStairsSiteView = {
   tiers: [
     {
       tierNumber: 1,
-      bustRangeLabel: "2",
+      drawTargetLabel: "3+",
       essenceReward: 60,
       state: "current",
       card: null,
     },
     {
       tierNumber: 2,
-      bustRangeLabel: "2-4",
+      drawTargetLabel: "5+",
       essenceReward: 140,
       state: "future",
       card: null,
     },
     {
       tierNumber: 3,
-      bustRangeLabel: "2-7",
+      drawTargetLabel: "8+",
       essenceReward: 300,
       state: "future",
       card: null,
@@ -852,7 +852,7 @@ describe("GambleSiteScreen — Ladder Climb", () => {
 });
 
 describe("GambleSiteScreen — Starway Stairs", () => {
-  it("shows three bust-range prize squircles above centered Bet and Leave actions", () => {
+  it("shows three minimum-draw prize squircles above centered Bet and Leave actions", () => {
     const onDrawStarway = vi.fn();
     const { container, root } = mount(
       <GambleSiteScreen
@@ -886,7 +886,12 @@ describe("GambleSiteScreen — Starway Stairs", () => {
       '[data-testid="gamble-starway-leave"]',
     );
     const actions = container.querySelector<HTMLElement>("[data-starway-actions]");
-    expect(bet?.textContent).toBe("Bet · 10");
+    expect(bet?.textContent).not.toContain("·");
+    expect(
+      bet?.querySelector("[data-glass-button-essence-value]"),
+    ).not.toBeNull();
+    expect(bet?.querySelector("[data-glass-button-essence-cost]"))
+      .toBeNull();
     expect(leave?.textContent).toBe("Leave");
     expect(bet?.parentElement?.parentElement).toBe(actions);
     expect(leave?.parentElement).toBe(actions);
@@ -959,6 +964,12 @@ describe("GambleSiteScreen — Starway Stairs", () => {
     expect(
       container.querySelector('[data-starway-tier="1"] [data-playing-card="3-clubs"]'),
     ).not.toBeNull();
+    expect(
+      container.querySelector('[data-starway-tier="1"] [data-wager-prize-card-emphasis="current"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-starway-tier="2"] [data-wager-prize-card-emphasis="muted"]'),
+    ).not.toBeNull();
     void act(() => vi.advanceTimersByTime(4_000));
     expect(container.querySelectorAll("[data-starway-tier-button]")).toHaveLength(1);
     expect(
@@ -967,8 +978,17 @@ describe("GambleSiteScreen — Starway Stairs", () => {
     const cashOut = container.querySelector<HTMLButtonElement>(
       '[data-testid="gamble-starway-cash-out"]',
     );
-    expect(cashOut?.textContent).toBe("Take · 60");
+    expect(cashOut?.textContent).not.toContain("·");
     expect(cashOut?.textContent).not.toContain("Essence");
+    expect(
+      cashOut?.querySelector("[data-glass-button-essence-value]"),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-starway-tier="1"] [data-wager-prize-card-emphasis="muted"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-starway-tier="2"] [data-wager-prize-card-emphasis="current"]'),
+    ).not.toBeNull();
     act(() => cashOut?.click());
     expect(onCashOut).toHaveBeenCalledOnce();
     expect(cashOut?.getAttribute("aria-disabled")).toBe("true");

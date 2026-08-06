@@ -11,7 +11,8 @@
 // sits beside. Neutral glass serves secondary actions; the purple accent
 // recipe lets a primary action retain the same material language. A
 // text `label` (a resolved string, never caller markup) sits in the control
-// font; an optional leading `glyph` paints a `GlowIcon` before it. Prominent
+// font; an optional leading `glyph` paints a `GlowIcon` before it. Essence can
+// be presented either as a punctuated cost or as a plain action value. Prominent
 // primary actions can opt into the larger 56px treatment. Press/hover
 // feedback routes through the one shared `Pressable` primitive (scale-down on
 // press, up on hover); `disabled` dims the full control, marks it
@@ -91,6 +92,8 @@ export interface GlassButtonProps {
    * `Transfigure (20◆)`.
    */
   essenceCost?: number | null;
+  /** Optional non-cost Essence value rendered directly after the label. */
+  essenceValue?: number | null;
   /** Parenthesized cost, or a centered-dot-separated wager price. */
   essenceCostStyle?: GlassButtonEssenceCostStyle;
   /** Prominent primary-action sizing, standard label spacing, or compact
@@ -132,6 +135,7 @@ export function GlassButton({
   onPress,
   glyph,
   essenceCost = null,
+  essenceValue = null,
   essenceCostStyle = "parenthetical",
   size = "standard",
   widthReservations = [],
@@ -199,6 +203,7 @@ export function GlassButton({
         <GlassButtonContent
           label={label}
           essenceCost={essenceCost}
+          essenceValue={essenceValue}
           essenceCostStyle={essenceCostStyle}
         />
         {widthReservations.map((reservation, index) => (
@@ -217,6 +222,7 @@ export function GlassButton({
             <GlassButtonContent
               label={reservation.label}
               essenceCost={reservation.essenceCost ?? null}
+              essenceValue={null}
               essenceCostStyle={essenceCostStyle}
             />
           </span>
@@ -240,10 +246,12 @@ function resolveVariantChrome(
 function GlassButtonContent({
   label,
   essenceCost,
+  essenceValue,
   essenceCostStyle,
 }: {
   readonly label: string;
   readonly essenceCost: number | null;
+  readonly essenceValue: number | null;
   readonly essenceCostStyle: GlassButtonEssenceCostStyle;
 }): ReactElement {
   return (
@@ -275,6 +283,14 @@ function GlassButtonContent({
               )
             </span>
           )}
+        </span>
+      )}
+      {essenceValue !== null && (
+        <span
+          data-glass-button-essence-value=""
+          style={{ marginLeft: token("--space-2") }}
+        >
+          <EssenceValue amount={essenceValue} tone="inherit" />
         </span>
       )}
     </span>

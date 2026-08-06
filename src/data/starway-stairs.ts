@@ -55,6 +55,18 @@ export function starwayStairsBustRangeLabel(
   return tier.highestBustRank === "2" ? "2" : `2-${tier.highestBustRank}`;
 }
 
+/** Compact minimum safe draw shown on a Starway tier prize. */
+export function starwayStairsDrawTargetLabel(
+  tier: StarwayStairsTierRule,
+): string {
+  const bustIndex = STANDARD_PLAYING_CARD_RANKS.indexOf(tier.highestBustRank);
+  const minimumSafeRank = STANDARD_PLAYING_CARD_RANKS[bustIndex + 1];
+  if (minimumSafeRank === undefined) {
+    throw new Error(`Starway tier ${String(tier.tierNumber)} has no safe rank`);
+  }
+  return `${minimumSafeRank}+`;
+}
+
 /** Whether the drawn rank busts the specified tier. */
 export function rankBustsStarwayStairsTier(
   rank: StandardPlayingCardRank,

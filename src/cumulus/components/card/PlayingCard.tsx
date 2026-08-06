@@ -9,6 +9,7 @@ import type {
 } from "../../../types/gamble";
 import type { Dreamsign as DreamsignData } from "../../../types/journey";
 import { requireDreamsignId } from "../../../data/dreamsigns";
+import { glassAccentChrome } from "../../internal/control-treatment";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
@@ -108,7 +109,7 @@ export type WagerPrizeCardId =
 export type WagerPrizeCardSize = "wagerCompact" | "wager";
 
 /** Named copy treatment for a Gamble prize card. */
-export type WagerPrizeCardPresentation = "draw-target" | "bust-range";
+export type WagerPrizeCardPresentation = "draw-target" | "draw-minimum";
 
 /** Semantic visual priority for a wager prize within a multi-tier choice. */
 export type WagerPrizeCardEmphasis = "standard" | "current" | "muted";
@@ -201,10 +202,10 @@ function PlayingCardRim({
         fill="none"
         stroke={
           emphasis === "current"
-            ? token("--border-accent")
+            ? token("--border-accent-glass")
             : token("--glass-rim")
         }
-        strokeWidth={emphasis === "current" ? "3" : "1"}
+        strokeWidth={emphasis === "current" ? "5" : "1"}
         vectorEffect="non-scaling-stroke"
       />
     </svg>
@@ -383,7 +384,7 @@ interface WagerPrizeCardBaseProps {
   dreamsignTestId?: string;
   /** Named semantic copy treatment. Defaults to `draw-target`. */
   presentation?: WagerPrizeCardPresentation;
-  /** Current-tier accent, muted alternative, or standard priority. */
+  /** Accent current tier, foreground-muted alternative, or standard priority. */
   emphasis?: WagerPrizeCardEmphasis;
 }
 
@@ -468,8 +469,8 @@ function WagerPrizeCardObject({
     : `${String(essenceReward)} Essence${
         rewardDreamsign === null ? "" : ` and ${rewardDreamsign.name}`
       }`;
-  const prizeLabel = presentation === "bust-range"
-    ? `Bust on ranks ${targetLabel}. Prize ${rewardLabel}.`
+  const prizeLabel = presentation === "draw-minimum"
+    ? `Draw ${targetLabel}. Prize ${rewardLabel}.`
     : `Draw ${targetLabel}. Win ${rewardLabel}.`;
   const drawnCardLabel =
     drawnCard === null
@@ -492,7 +493,13 @@ function WagerPrizeCardObject({
           justifyContent: "center",
           gap: size === "wager" ? token("--space-3") : token("--space-2"),
           textAlign: "center",
-          color: token("--text-on-glass"),
+          color:
+            emphasis === "muted"
+              ? token("--text-on-glass-muted")
+              : token("--text-on-glass"),
+          transition: reduceMotion
+            ? undefined
+            : `color ${token("--dur-fast")} ${token("--ease-out")}`,
         }}
       >
         <h2
@@ -502,15 +509,13 @@ function WagerPrizeCardObject({
             font:
               size === "wager"
                 ? token("--t-title")
-                : presentation === "bust-range"
+                : presentation === "draw-minimum"
                   ? token("--t-tutorial-dialogue")
                   : token("--t-title-sm"),
-            whiteSpace: presentation === "bust-range" ? "nowrap" : undefined,
+            whiteSpace: presentation === "draw-minimum" ? "nowrap" : undefined,
           }}
         >
-          {presentation === "bust-range"
-            ? `Bust on ${targetLabel}`
-            : `Draw ${targetLabel}`}
+          {`Draw ${targetLabel}`}
         </h2>
         <p
           data-wager-prize-description=""
@@ -520,7 +525,7 @@ function WagerPrizeCardObject({
               size === "wager" ? token("--t-body") : token("--t-body-sm"),
           }}
         >
-          {presentation === "bust-range" ? "Prize: " : "Win "}
+          {presentation === "draw-minimum" ? "Prize: " : "Win "}
           {essenceReward !== null && (
             <EssenceValue amount={essenceReward} tone="inherit" />
           )}
@@ -547,6 +552,9 @@ function WagerPrizeCardObject({
   );
   const prizeFaceStyle: CSSProperties = {
     ...CARD_FACE_STYLE,
+    ...(emphasis === "current"
+      ? { ...glassAccentChrome("onMedia"), border: 0 }
+      : {}),
     ...revealBinding?.sourceProps.style,
     display: "grid",
     placeItems: "center",
@@ -561,6 +569,8 @@ function WagerPrizeCardObject({
       data-wager-prize-card-state={showingDrawnCard ? "drawn" : "prize"}
       data-wager-prize-card-size={size}
       data-wager-prize-card-emphasis={emphasis}
+      data-wager-prize-presentation={presentation}
+      data-wager-prize-target={targetLabel}
       data-wager-prize-drawn-card={
         drawnCard === null ? undefined : `${drawnCard.rank}-${drawnCard.suit}`
       }
@@ -576,14 +586,6 @@ function WagerPrizeCardObject({
         height: sizeSpec.square,
         flex: "0 0 auto",
         perspective: PLAYING_CARD_DESIGN.flip.perspective,
-        filter:
-          emphasis === "muted"
-            ? "grayscale(0.4)"
-            : undefined,
-        opacity: emphasis === "muted" ? 0.78 : 1,
-        transition: reduceMotion
-          ? undefined
-          : `filter ${token("--dur-fast")} ${token("--ease-out")}, opacity ${token("--dur-fast")} ${token("--ease-out")}`,
       }}
     >
       <motion.div
@@ -636,18 +638,33 @@ function WagerPrizeCardObject({
           data-wager-drawn-card-face=""
           style={{
             ...CARD_FACE_STYLE,
+            ...(emphasis === "current"
+              ? { ...glassAccentChrome("onMedia"), border: 0 }
+              : {}),
             display: "grid",
             placeItems: "center",
             transform: "rotateY(180deg)",
           }}
         >
           {drawnCard !== null && (
-            <PlayingCardIndex
-              rank={drawnCard.rank}
-              suit={drawnCard.suit}
-              size={size}
-              variant="rank-and-suit"
-            />
+            <div
+              data-wager-drawn-card-content=""
+              style={{
+                display: "grid",
+                placeItems: "center",
+                filter: emphasis === "muted" ? "grayscale(1)" : undefined,
+                transition: reduceMotion
+                  ? undefined
+                  : `filter ${token("--dur-fast")} ${token("--ease-out")}`,
+              }}
+            >
+              <PlayingCardIndex
+                rank={drawnCard.rank}
+                suit={drawnCard.suit}
+                size={size}
+                variant="rank-and-suit"
+              />
+            </div>
           )}
           <PlayingCardRim
             emphasis={emphasis === "current" ? "current" : "standard"}

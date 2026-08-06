@@ -160,6 +160,23 @@ describe("GlassButton", () => {
     act(() => root.unmount());
   });
 
+  it("renders a non-cost Essence value without punctuation", () => {
+    const { container, root } = mount(
+      <GlassButton label="Take" essenceValue={60} onPress={() => {}} />,
+    );
+
+    expect(
+      container.querySelector("[data-glass-button-essence-value]"),
+    ).not.toBeNull();
+    expect(
+      container.querySelector("[data-glass-button-essence-cost]"),
+    ).toBeNull();
+    expect(container.querySelector("button")?.textContent).not.toContain("·");
+    expect(container.querySelector("button")?.textContent).not.toContain("(");
+
+    act(() => root.unmount());
+  });
+
   it("keeps every dynamic width reservation in one hidden sizing grid", () => {
     const reservations = [
       { label: "Decline", essenceCost: null },

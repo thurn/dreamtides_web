@@ -94,8 +94,7 @@ export function glassAccentChrome(
   return {
     background:
       "linear-gradient(180deg, color-mix(in srgb, var(--accent-bright) 20%, transparent), color-mix(in srgb, var(--accent-strong) 10%, transparent)), var(--glass-sheen), var(--glass-fill)",
-    border:
-      "1px solid color-mix(in srgb, var(--accent-bright) 62%, white 38%)",
+    border: `1px solid ${token("--border-accent-glass")}`,
     boxShadow:
       "inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -12px 26px color-mix(in srgb, var(--accent-strong) 12%, transparent), 0 10px 26px color-mix(in srgb, var(--accent) 26%, transparent)",
   };

@@ -216,7 +216,7 @@ describe("PlayingCard", () => {
     act(() => root.unmount());
   });
 
-  it("renders a Starway Stairs bust range and prize", () => {
+  it("renders and emphasizes a Starway Stairs minimum draw prize", () => {
     const host = document.createElement("div");
     document.body.append(host);
     const root = createRoot(host);
@@ -226,8 +226,8 @@ describe("PlayingCard", () => {
         <CumulusRoot>
           <WagerPrizeCard
             prizeId="starway-1"
-            presentation="bust-range"
-            targetLabel="2"
+            presentation="draw-minimum"
+            targetLabel="3+"
             essenceReward={60}
             rewardDreamsign={null}
             emphasis="current"
@@ -237,16 +237,46 @@ describe("PlayingCard", () => {
     });
 
     const prize = host.querySelector<HTMLElement>("[data-wager-prize-card]");
-    expect(prize?.getAttribute("aria-label")).toBe(
-      "Bust on ranks 2. Prize 60 Essence.",
-    );
-    expect(prize?.querySelector("[data-wager-prize-title]")?.textContent)
-      .toBe("Bust on 2");
-    expect(prize?.querySelector("[data-wager-prize-description]")?.textContent)
-      .toBe("Prize: 60");
+    expect(prize?.dataset.wagerPrizePresentation).toBe("draw-minimum");
+    expect(prize?.dataset.wagerPrizeTarget).toBe("3+");
     expect(prize?.dataset.wagerPrizeCardEmphasis).toBe("current");
     expect(prize?.querySelector("path")?.getAttribute("stroke"))
-      .toBe("var(--border-accent)");
+      .toBe("var(--border-accent-glass)");
+    expect(prize?.querySelector("path")?.getAttribute("stroke-width"))
+      .toBe("5");
+    expect(
+      prize?.querySelector<HTMLElement>("[data-wager-prize-face]")?.style
+        .background,
+    ).toContain("var(--accent-bright)");
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <WagerPrizeCard
+            prizeId="starway-1"
+            presentation="draw-minimum"
+            targetLabel="3+"
+            essenceReward={60}
+            rewardDreamsign={null}
+            drawnCard={{ rank: "3", suit: "clubs" }}
+            revealDrawnCard
+            emphasis="muted"
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    const mutedPrize = host.querySelector<HTMLElement>("[data-wager-prize-card]");
+    expect(mutedPrize?.style.opacity).toBe("");
+    expect(mutedPrize?.style.filter).toBe("");
+    expect(
+      mutedPrize?.querySelector<HTMLElement>("[data-wager-prize-copy]")?.style
+        .color,
+    ).toBe("var(--text-on-glass-muted)");
+    expect(
+      mutedPrize?.querySelector<HTMLElement>("[data-wager-drawn-card-content]")
+        ?.style.filter,
+    ).toBe("grayscale(1)");
 
     act(() => root.unmount());
   });

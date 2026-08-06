@@ -169,6 +169,7 @@ export const TOKENS = {
   "--border-strong": { var: "var(--border-strong)", value: "var(--primitive-line-strong)" },
   "--border-glossary-definition": { var: "var(--border-glossary-definition)", value: "var(--primitive-line-glossary-definition)" },
   "--border-accent": { var: "var(--border-accent)", value: "var(--primitive-line-violet)" },
+  "--border-accent-glass": { var: "var(--border-accent-glass)", value: "color-mix(in srgb, var(--accent-bright) 62%, white 38%)" },
   "--battlefield-slot-border": { var: "var(--battlefield-slot-border)", value: "2px dotted var(--primitive-line-battlefield)" },
   "--scrim": { var: "var(--scrim)", value: "var(--primitive-scrim-700)" },
   "--scrim-gallery": { var: "var(--scrim-gallery)", value: "var(--primitive-scrim-800)" },

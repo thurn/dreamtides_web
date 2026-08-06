@@ -3,6 +3,7 @@ import {
   rankBustsStarwayStairsTier,
   STARWAY_STAIRS_TIERS,
   starwayStairsBustRangeLabel,
+  starwayStairsDrawTargetLabel,
 } from "./starway-stairs";
 
 describe("Starway Stairs rules", () => {
@@ -11,12 +12,13 @@ describe("Starway Stairs rules", () => {
       STARWAY_STAIRS_TIERS.map((tier) => ({
         tierNumber: tier.tierNumber,
         bustRange: starwayStairsBustRangeLabel(tier),
+        drawTarget: starwayStairsDrawTargetLabel(tier),
         reward: tier.essenceReward,
       })),
     ).toEqual([
-      { tierNumber: 1, bustRange: "2", reward: 60 },
-      { tierNumber: 2, bustRange: "2-4", reward: 140 },
-      { tierNumber: 3, bustRange: "2-7", reward: 300 },
+      { tierNumber: 1, bustRange: "2", drawTarget: "3+", reward: 60 },
+      { tierNumber: 2, bustRange: "2-4", drawTarget: "5+", reward: 140 },
+      { tierNumber: 3, bustRange: "2-7", drawTarget: "8+", reward: 300 },
     ]);
   });
 

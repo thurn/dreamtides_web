@@ -143,7 +143,7 @@ export interface LadderClimbSiteView {
 
 export interface StarwayStairsTierView {
   tierNumber: StarwayStairsTierNumber;
-  bustRangeLabel: string;
+  drawTargetLabel: string;
   essenceReward: number;
   state: "future" | "current" | "safe" | "bust";
   card: { rank: PlayingCardRank; suit: PlayingCardSuit } | null;
@@ -1316,9 +1316,15 @@ function StarwayStairsScreen({
   const [outcomeResultId, setOutcomeResultId] = useState<string | null>(null);
   const [actionsVisible, setActionsVisible] = useState(view.result === null);
   const [decisionPending, setDecisionPending] = useState(false);
+  const [emphasisTierNumber, setEmphasisTierNumber] =
+    useState<StarwayStairsTierNumber | null>(
+      view.result?.tierNumber ?? view.currentTierNumber,
+    );
   const settledResultIdRef = useRef<string | undefined>(undefined);
   const onOutcomeShownRef = useRef(onOutcomeShown);
   const resultId = view.result?.id;
+  const emphasisTierForResult =
+    view.result?.tierNumber ?? view.currentTierNumber;
   const currentTier = view.tiers.find(
     (tier) => tier.tierNumber === view.currentTierNumber,
   ) ?? null;
@@ -1336,8 +1342,10 @@ function StarwayStairsScreen({
       setRevealedResultId(null);
       setOutcomeResultId(null);
       setActionsVisible(true);
+      setEmphasisTierNumber(emphasisTierForResult);
       return;
     }
+    setEmphasisTierNumber(emphasisTierForResult);
     setActionsVisible(false);
     const revealDelay = reduceMotion
       ? REDUCED_MOTION_DELAY_MS
@@ -1360,7 +1368,7 @@ function StarwayStairsScreen({
       window.clearTimeout(revealTimeout);
       window.clearTimeout(outcomeTimeout);
     };
-  }, [reduceMotion, resultId]);
+  }, [emphasisTierForResult, reduceMotion, resultId]);
 
   useEffect(() => {
     if (
@@ -1372,10 +1380,11 @@ function StarwayStairsScreen({
     }
     const timeout = window.setTimeout(() => {
       setOutcomeResultId(null);
+      setEmphasisTierNumber(view.currentTierNumber);
       setActionsVisible(true);
     }, RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS);
     return () => window.clearTimeout(timeout);
-  }, [outcomeResultId, view.result]);
+  }, [outcomeResultId, view.currentTierNumber, view.result]);
 
   return (
     <GuideGallerySiteLayout
@@ -1470,8 +1479,8 @@ function StarwayStairsScreen({
                         | "starway-1"
                         | "starway-2"
                         | "starway-3"}
-                      presentation="bust-range"
-                      targetLabel={tier.bustRangeLabel}
+                      presentation="draw-minimum"
+                      targetLabel={tier.drawTargetLabel}
                       essenceReward={tier.essenceReward}
                       rewardDreamsign={null}
                       size={
@@ -1480,7 +1489,9 @@ function StarwayStairsScreen({
                       drawnCard={tier.card}
                       revealDrawnCard={revealDrawnCard}
                       emphasis={
-                        tier.state === "current" ? "current" : "muted"
+                        tier.tierNumber === emphasisTierNumber
+                          ? "current"
+                          : "muted"
                       }
                     />
                     {outcomeVisible && isLatestResult && view.result !== null && (
@@ -1541,10 +1552,9 @@ function StarwayStairsScreen({
                           ? `Bet ${String(view.entryCost)} Essence on Starway Stairs`
                           : `Climb to tier ${String(currentTier.tierNumber)}`
                       }
-                      essenceCost={
+                      essenceValue={
                         currentTier.tierNumber === 1 ? view.entryCost : null
                       }
-                      essenceCostStyle="separated"
                       size={layout === "mobile" ? "compact" : "standard"}
                       variant="accent"
                       disabled={
@@ -1564,13 +1574,13 @@ function StarwayStairsScreen({
                   <GlassButton
                     label="Take"
                     accessibilityLabel={`Take ${String(view.cashOutReward)} Essence`}
-                    essenceCost={view.cashOutReward}
-                    essenceCostStyle="separated"
+                    essenceValue={view.cashOutReward}
                     size={layout === "mobile" ? "compact" : "standard"}
                     disabled={decisionPending}
                     testId="gamble-starway-cash-out"
                     onPress={() => {
                       setDecisionPending(true);
+                      setEmphasisTierNumber(null);
                       onCashOut();
                     }}
                   />

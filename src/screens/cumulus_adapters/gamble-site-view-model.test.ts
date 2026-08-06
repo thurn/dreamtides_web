@@ -403,19 +403,19 @@ describe("gamble-site-view-model — Starway Stairs", () => {
     expect(view.tiers).toMatchObject([
       {
         tierNumber: 1,
-        bustRangeLabel: "2",
+        drawTargetLabel: "3+",
         essenceReward: 60,
         state: "current",
       },
       {
         tierNumber: 2,
-        bustRangeLabel: "2-4",
+        drawTargetLabel: "5+",
         essenceReward: 140,
         state: "future",
       },
       {
         tierNumber: 3,
-        bustRangeLabel: "2-7",
+        drawTargetLabel: "8+",
         essenceReward: 300,
         state: "future",
       },

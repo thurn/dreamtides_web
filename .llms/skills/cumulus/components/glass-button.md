@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/glass-button`
 
 Real consumers: **32** (imports outside `src/cumulus/docs/` and tests).
 
-The labeled glass action — a bold text label with optional numerical essence cost on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface.
+The labeled glass action — a bold text label with optional Essence cost or non-cost value on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface.
 
 > **Guidance:** Use purple accent glass for primary and commit actions, neutral glass for secondary actions, and danger glass for destructive actions.
 
@@ -20,6 +20,7 @@ The labeled glass action — a bold text label with optional numerical essence c
 | `onPress` | `() => void` | yes | — | Fires when the button is activated (no-op while disabled). |
 | `glyph` | `Glyph` | no | — | Optional leading glyph painted as a `GlowIcon` before the label. |
 | `essenceCost` | `number \| null` | no | `null` | Optional numerical essence cost rendered in parentheses after the label: `Transfigure (20◆)`. |
+| `essenceValue` | `number \| null` | no | `null` | Optional non-cost Essence value rendered directly after the label. |
 | `essenceCostStyle` | `GlassButtonEssenceCostStyle` = `"parenthetical" \| "separated"` | no | `parenthetical` | Parenthesized cost, or a centered-dot-separated wager price. |
 | `size` | `GlassButtonSize` = `"compact" \| "standard" \| "prominent"` | no | `standard` | Prominent primary-action sizing, standard label spacing, or compact spacing for narrow parallel actions. |
 | `widthReservations` | `readonly GlassButtonWidthReservation[]` | no | `[]` | Possible dynamic label/essence-cost states. The button reserves the widest state while rendering only the current one, preventing surrounding layout shift. |
@@ -135,6 +136,18 @@ Use the centered-dot cost treatment for parallel wager choices whose price is pa
   essenceCostStyle="separated"
   variant="accent"
   onPress={chooseGate}
+/>
+```
+
+### Essence value
+
+Use the plain Essence value treatment when the amount describes the action rather than a cost; it carries no punctuation.
+
+```tsx
+<GlassButton
+  label="Take"
+  essenceValue={60}
+  onPress={takePrize}
 />
 ```
 

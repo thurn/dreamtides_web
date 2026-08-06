@@ -20,7 +20,7 @@ import {
   nextStarwayStairsTierNumber,
   STARWAY_STAIRS_MAX_RETRIES,
   STARWAY_STAIRS_TIERS,
-  starwayStairsBustRangeLabel,
+  starwayStairsDrawTargetLabel,
   starwayStairsTierRule,
 } from "../../data/starway-stairs";
 import { guideForSiteType } from "../../data/dreamscapes";
@@ -261,7 +261,7 @@ function buildStarwayStairsSiteView(params: {
       );
       return {
         tierNumber: tier.tierNumber,
-        bustRangeLabel: starwayStairsBustRangeLabel(tier),
+        drawTargetLabel: starwayStairsDrawTargetLabel(tier),
         essenceReward: tier.essenceReward,
         state:
           result !== undefined

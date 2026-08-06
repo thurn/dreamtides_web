@@ -61,7 +61,7 @@ export const glassButtonDemo: CumulusComponent = {
   id: "glass-button",
   title: "Glass Button",
   blurb:
-    "The labeled glass action — a bold text label with optional numerical essence cost on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface.",
+    "The labeled glass action — a bold text label with optional Essence cost or non-cost value on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface.",
   callout:
     "Use purple accent glass for primary and commit actions, neutral glass for secondary actions, and danger glass for destructive actions.",
   group: "Components",
@@ -147,6 +147,15 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
   essenceCostStyle="separated"
   variant="accent"
   onPress={chooseGate}
+/>`,
+    },
+    {
+      label: "Essence value",
+      note: "Use the plain Essence value treatment when the amount describes the action rather than a cost; it carries no punctuation.",
+      code: `<GlassButton
+  label="Take"
+  essenceValue={60}
+  onPress={takePrize}
 />`,
     },
     {
