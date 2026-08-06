@@ -141,10 +141,10 @@ the player may take that prize or risk it on the next tier. A bust
 loses the unclaimed prize and ends the game. The third safe draw pays
 automatically.
 
-The UI lists all three tier squircles before play, each showing its bust chance
-and reward. Only the current tier carries its Start or Climb button. After a
-safe draw, a separate `Take [current prize]` action lets the player bank the
-reward instead of climbing.
+The UI lists all three tier squircles before play, each showing its inclusive
+bust rank range and prize. The centered action row beneath the cards presents
+`Bet` and `Leave` before play, then `Climb` and `Take [current prize]` after a
+safe draw.
 
 | Tier | Ranks that bust | Bust chance | Prize after a safe draw |
 | --- | --- | ---: | ---: |

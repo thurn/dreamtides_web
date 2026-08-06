@@ -2,21 +2,21 @@ import { describe, expect, it } from "vitest";
 import {
   rankBustsStarwayStairsTier,
   STARWAY_STAIRS_TIERS,
-  starwayStairsBustChanceLabel,
+  starwayStairsBustRangeLabel,
 } from "./starway-stairs";
 
 describe("Starway Stairs rules", () => {
-  it("defines the three escalating bust chances and rewards", () => {
+  it("defines the three escalating bust ranges and rewards", () => {
     expect(
       STARWAY_STAIRS_TIERS.map((tier) => ({
         tierNumber: tier.tierNumber,
-        bustChance: starwayStairsBustChanceLabel(tier),
+        bustRange: starwayStairsBustRangeLabel(tier),
         reward: tier.essenceReward,
       })),
     ).toEqual([
-      { tierNumber: 1, bustChance: "7.69%", reward: 60 },
-      { tierNumber: 2, bustChance: "23.08%", reward: 140 },
-      { tierNumber: 3, bustChance: "46.15%", reward: 300 },
+      { tierNumber: 1, bustRange: "2", reward: 60 },
+      { tierNumber: 2, bustRange: "2-4", reward: 140 },
+      { tierNumber: 3, bustRange: "2-7", reward: 300 },
     ]);
   });
 

@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/wager-prize-card`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The shared Gamble prize object: one PlayingCard superellipse with a draw target or bust chance, a single Essence and/or Dreamsign reward sentence, an optional whole-face Dreamsign reveal, and a committed-card reverse face.
+The shared Gamble prize object: one PlayingCard superellipse with a draw target or bust range, a single Essence and/or Dreamsign reward sentence, an optional whole-face Dreamsign reveal, and a committed-card reverse face.
 
 > **Guidance:** Keep the reward in one sentence. When a Dreamsign is present, the entire prize face is its hover and press reveal source.
 
@@ -17,12 +17,12 @@ The shared Gamble prize object: one PlayingCard superellipse with a draw target 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `prizeId` | `WagerPrizeCardId` = `"six" \| "nine" \| "jack" \| "ladder-climb" \| "starway-1" \| "starway-2" \| "starway-3"` | yes | — | Stable Gamble choice represented by this prize object. |
-| `targetLabel` | `string` | yes | — | Inclusive winning rank range shown as authored compact notation. |
+| `targetLabel` | `string` | yes | — | Inclusive rank range shown as authored compact notation. |
 | `size` | `WagerPrizeCardSize` = `"wagerCompact" \| "wager"` | no | — | Named desktop or mobile square size. Defaults to `wager`. |
 | `drawnCard` | `{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } \| null` | no | — | Committed card shown on the reverse face after a bet. |
 | `revealDrawnCard` | `boolean` | no | — | Turn the prize face over to its committed card. |
 | `dreamsignTestId` | `string` | no | — | Optional stable selector for the prize Dreamsign name. |
-| `presentation` | `WagerPrizeCardPresentation` = `"draw-target" \| "bust-odds"` | no | — | Named semantic copy treatment. Defaults to `draw-target`. |
+| `presentation` | `WagerPrizeCardPresentation` = `"draw-target" \| "bust-range"` | no | — | Named semantic copy treatment. Defaults to `draw-target`. |
 | `essenceReward` | `number \| null` | yes | — | Essence awarded on a win. Null selects a Dreamsign-only prize. |
 | `rewardDreamsign` | `Dreamsign \| null` | yes | — | Dreamsign appended to the Essence reward, when present. Dreamsign used as the complete reward. |
 
@@ -52,13 +52,13 @@ The shared Gamble prize object: one PlayingCard superellipse with a draw target 
 
 ```
 
-### Bust odds
+### Bust range
 
 ```tsx
 <WagerPrizeCard
   prizeId="starway-1"
-  presentation="bust-odds"
-  targetLabel="7.69%"
+  presentation="bust-range"
+  targetLabel="2"
   essenceReward={60}
   rewardDreamsign={null}
 />

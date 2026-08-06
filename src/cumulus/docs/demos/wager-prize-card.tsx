@@ -33,7 +33,7 @@ export const wagerPrizeCardDemo: CumulusComponent = {
   id: "wager-prize-card",
   title: "Wager Prize Card",
   blurb:
-    "The shared Gamble prize object: one PlayingCard superellipse with a draw target or bust chance, a single Essence and/or Dreamsign reward sentence, an optional whole-face Dreamsign reveal, and a committed-card reverse face.",
+    "The shared Gamble prize object: one PlayingCard superellipse with a draw target or bust range, a single Essence and/or Dreamsign reward sentence, an optional whole-face Dreamsign reveal, and a committed-card reverse face.",
   callout:
     "Keep the reward in one sentence. When a Dreamsign is present, the entire prize face is its hover and press reveal source.",
   group: "Components",
@@ -61,11 +61,11 @@ export const wagerPrizeCardDemo: CumulusComponent = {
 `,
     },
     {
-      label: "Bust odds",
+      label: "Bust range",
       code: `<WagerPrizeCard
   prizeId="starway-1"
-  presentation="bust-odds"
-  targetLabel="7.69%"
+  presentation="bust-range"
+  targetLabel="2"
   essenceReward={60}
   rewardDreamsign={null}
 />

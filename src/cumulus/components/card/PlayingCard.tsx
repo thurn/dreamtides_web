@@ -108,7 +108,7 @@ export type WagerPrizeCardId =
 export type WagerPrizeCardSize = "wagerCompact" | "wager";
 
 /** Named copy treatment for a Gamble prize card. */
-export type WagerPrizeCardPresentation = "draw-target" | "bust-odds";
+export type WagerPrizeCardPresentation = "draw-target" | "bust-range";
 
 const SUIT_SYMBOLS: Record<PlayingCardSuit, string> = {
   clubs: "♣",
@@ -357,7 +357,7 @@ export function PlayingCard({
 interface WagerPrizeCardBaseProps {
   /** Stable Gamble choice represented by this prize object. */
   prizeId: WagerPrizeCardId;
-  /** Inclusive winning rank range shown as authored compact notation. */
+  /** Inclusive rank range shown as authored compact notation. */
   targetLabel: string;
   /** Named desktop or mobile square size. Defaults to `wager`. */
   size?: WagerPrizeCardSize;
@@ -454,8 +454,8 @@ function WagerPrizeCardObject({
     : `${String(essenceReward)} Essence${
         rewardDreamsign === null ? "" : ` and ${rewardDreamsign.name}`
       }`;
-  const prizeLabel = presentation === "bust-odds"
-    ? `${targetLabel} bust chance. Safe draw pays ${rewardLabel}.`
+  const prizeLabel = presentation === "bust-range"
+    ? `Ranks ${targetLabel} bust. Prize ${rewardLabel}.`
     : `Draw ${targetLabel}. Win ${rewardLabel}.`;
   const drawnCardLabel =
     drawnCard === null
@@ -488,14 +488,14 @@ function WagerPrizeCardObject({
             font:
               size === "wager"
                 ? token("--t-title")
-                : presentation === "bust-odds"
+                : presentation === "bust-range"
                   ? token("--t-tutorial-dialogue")
                   : token("--t-title-sm"),
-            whiteSpace: presentation === "bust-odds" ? "nowrap" : undefined,
+            whiteSpace: presentation === "bust-range" ? "nowrap" : undefined,
           }}
         >
-          {presentation === "bust-odds"
-            ? `${targetLabel} Bust`
+          {presentation === "bust-range"
+            ? `Bust ${targetLabel}`
             : `Draw ${targetLabel}`}
         </h2>
         <p
@@ -506,7 +506,7 @@ function WagerPrizeCardObject({
               size === "wager" ? token("--t-body") : token("--t-body-sm"),
           }}
         >
-          {presentation === "bust-odds" ? "Safe: " : "Win "}
+          {presentation === "bust-range" ? "Prize: " : "Win "}
           {essenceReward !== null && (
             <EssenceValue amount={essenceReward} tone="inherit" />
           )}

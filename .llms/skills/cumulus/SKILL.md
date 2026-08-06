@@ -131,7 +131,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | Dreamsign | Components | 13 | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
 | Dreamsign Gallery Panel | Components | 1 | [components/dreamsign-gallery-panel.md](components/dreamsign-gallery-panel.md) | The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art, essence captions, a close disc, and one bare-glyph end action. |
 | Site Node | Components | 3 | [components/site-node.md](components/site-node.md) | The dreamscape site disc: a floating circular node carrying a glyph and accent ring. |
-| Wager Prize Card | Components | 1 | [components/wager-prize-card.md](components/wager-prize-card.md) | The shared Gamble prize object: one PlayingCard superellipse with a draw target or bust chance, a single Essence and/or Dreamsign reward sentence, an optional whole-face Dreamsign reveal, and a committed-card reverse face. |
+| Wager Prize Card | Components | 1 | [components/wager-prize-card.md](components/wager-prize-card.md) | The shared Gamble prize object: one PlayingCard superellipse with a draw target or bust range, a single Essence and/or Dreamsign reward sentence, an optional whole-face Dreamsign reveal, and a committed-card reverse face. |
 <!-- END GENERATED COMPONENT INDEX -->
 
 ## Customization: step back before adding any knob

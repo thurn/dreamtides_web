@@ -5178,7 +5178,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Inclusive winning rank range shown as authored compact notation."
+      "description": "Inclusive rank range shown as authored compact notation."
     },
     {
       "name": "size",
@@ -5220,7 +5220,7 @@
       "tsType": "WagerPrizeCardPresentation",
       "unionMembers": [
         "draw-target",
-        "bust-odds"
+        "bust-range"
       ],
       "required": false,
       "defaultValue": null,

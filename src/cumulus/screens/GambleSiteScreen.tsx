@@ -143,9 +143,7 @@ export interface LadderClimbSiteView {
 
 export interface StarwayStairsTierView {
   tierNumber: StarwayStairsTierNumber;
-  bustChanceLabel: string;
-  bustOddsNumerator: number;
-  oddsDenominator: number;
+  bustRangeLabel: string;
   essenceReward: number;
   state: "future" | "current" | "safe" | "bust";
   card: { rank: PlayingCardRank; suit: PlayingCardSuit } | null;
@@ -1314,6 +1312,9 @@ function StarwayStairsScreen({
   const settledResultIdRef = useRef<string | undefined>(undefined);
   const onOutcomeShownRef = useRef(onOutcomeShown);
   const resultId = view.result?.id;
+  const currentTier = view.tiers.find(
+    (tier) => tier.tierNumber === view.currentTierNumber,
+  ) ?? null;
 
   useEffect(() => {
     onOutcomeShownRef.current = onOutcomeShown;
@@ -1437,8 +1438,6 @@ function StarwayStairsScreen({
                   view.result?.tierNumber === tier.tierNumber;
                 const revealDrawnCard = tier.card !== null &&
                   (!isLatestResult || revealedResultId === view.result?.id);
-                const isCurrent =
-                  view.currentTierNumber === tier.tierNumber;
                 return (
                   <div
                     key={tier.tierNumber}
@@ -1462,8 +1461,8 @@ function StarwayStairsScreen({
                         | "starway-1"
                         | "starway-2"
                         | "starway-3"}
-                      presentation="bust-odds"
-                      targetLabel={tier.bustChanceLabel}
+                      presentation="bust-range"
+                      targetLabel={tier.bustRangeLabel}
                       essenceReward={tier.essenceReward}
                       rewardDreamsign={null}
                       size={
@@ -1472,34 +1471,6 @@ function StarwayStairsScreen({
                       drawnCard={tier.card}
                       revealDrawnCard={revealDrawnCard}
                     />
-                    {actionsVisible && isCurrent && (
-                      <div data-starway-tier-button={tier.tierNumber}>
-                        <GlassButton
-                          label={tier.tierNumber === 1 ? "Start" : "Climb"}
-                          accessibilityLabel={
-                            tier.tierNumber === 1
-                              ? `Start Starway Stairs for ${String(view.entryCost)} Essence`
-                              : `Climb to tier ${String(tier.tierNumber)}`
-                          }
-                          essenceCost={
-                            tier.tierNumber === 1 ? view.entryCost : null
-                          }
-                          essenceCostStyle="separated"
-                          size={layout === "mobile" ? "compact" : "standard"}
-                          variant="accent"
-                          disabled={
-                            decisionPending ||
-                            !view.runtimeReady ||
-                            (tier.tierNumber === 1 && !view.canAffordEntry)
-                          }
-                          testId={`gamble-starway-tier-${String(tier.tierNumber)}`}
-                          onPress={() => {
-                            setDecisionPending(true);
-                            onDraw();
-                          }}
-                        />
-                      </div>
-                    )}
                   </div>
                 );
               })}
@@ -1518,11 +1489,7 @@ function StarwayStairsScreen({
                   <RadialAnnouncement
                     announcementId={view.result.id}
                     headline={view.result.busted ? "Bust!" : "Safe!"}
-                    detail={
-                      view.result.busted
-                        ? undefined
-                        : `${String(view.result.prizeAtRisk)} Essence at stake`
-                    }
+                    detail={view.result.busted ? undefined : "Prize at stake"}
                     essenceGained={
                       !view.result.busted && view.result.tierNumber === 3
                         ? view.result.prizeAtRisk
@@ -1544,11 +1511,45 @@ function StarwayStairsScreen({
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  gap: token("--space-3"),
+                  flexWrap: "nowrap",
                 }}
               >
-                {view.cashOutReward !== null ? (
+                {currentTier !== null && (
+                  <div data-starway-tier-button={currentTier.tierNumber}>
+                    <GlassButton
+                      label={currentTier.tierNumber === 1 ? "Bet" : "Climb"}
+                      accessibilityLabel={
+                        currentTier.tierNumber === 1
+                          ? `Bet ${String(view.entryCost)} Essence on Starway Stairs`
+                          : `Climb to tier ${String(currentTier.tierNumber)}`
+                      }
+                      essenceCost={
+                        currentTier.tierNumber === 1 ? view.entryCost : null
+                      }
+                      essenceCostStyle="separated"
+                      size={layout === "mobile" ? "compact" : "standard"}
+                      variant="accent"
+                      disabled={
+                        decisionPending ||
+                        !view.runtimeReady ||
+                        (currentTier.tierNumber === 1 && !view.canAffordEntry)
+                      }
+                      testId={`gamble-starway-tier-${String(currentTier.tierNumber)}`}
+                      onPress={() => {
+                        setDecisionPending(true);
+                        onDraw();
+                      }}
+                    />
+                  </div>
+                )}
+                {view.cashOutReward !== null && (
                   <GlassButton
-                    label={`Take ${String(view.cashOutReward)} Essence`}
+                    label="Take"
+                    accessibilityLabel={`Take ${String(view.cashOutReward)} Essence`}
+                    essenceCost={view.cashOutReward}
+                    essenceCostStyle="separated"
+                    size={layout === "mobile" ? "compact" : "standard"}
                     disabled={decisionPending}
                     testId="gamble-starway-cash-out"
                     onPress={() => {
@@ -1556,15 +1557,17 @@ function StarwayStairsScreen({
                       onCashOut();
                     }}
                   />
-                ) : view.terminalReason !== null ? (
+                )}
+                {view.terminalReason !== null ? (
                   <GlassButton
                     label="Leave"
                     testId="gamble-starway-leave-after-result"
                     onPress={onLeave}
                   />
-                ) : view.result === null ? (
+                ) : view.result === null && currentTier?.tierNumber === 1 ? (
                   <GlassButton
                     label="Leave"
+                    size={layout === "mobile" ? "compact" : "standard"}
                     testId="gamble-starway-leave"
                     onPress={onLeave}
                   />

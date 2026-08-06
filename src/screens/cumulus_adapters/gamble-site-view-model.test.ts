@@ -381,7 +381,7 @@ const STARWAY_RUNTIME: StarwayStairsSiteRuntime = {
 };
 
 describe("gamble-site-view-model — Starway Stairs", () => {
-  it("maps all tier odds and rewards with only tier one current", () => {
+  it("maps all tier bust ranges and rewards with only tier one current", () => {
     const view = buildGambleSiteView({
       state: {
         ...createDefaultState(),
@@ -402,19 +402,19 @@ describe("gamble-site-view-model — Starway Stairs", () => {
     expect(view.tiers).toMatchObject([
       {
         tierNumber: 1,
-        bustChanceLabel: "7.69%",
+        bustRangeLabel: "2",
         essenceReward: 60,
         state: "current",
       },
       {
         tierNumber: 2,
-        bustChanceLabel: "23.08%",
+        bustRangeLabel: "2-4",
         essenceReward: 140,
         state: "future",
       },
       {
         tierNumber: 3,
-        bustChanceLabel: "46.15%",
+        bustRangeLabel: "2-7",
         essenceReward: 300,
         state: "future",
       },

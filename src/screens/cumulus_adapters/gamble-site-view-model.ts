@@ -19,7 +19,7 @@ import {
 import {
   nextStarwayStairsTierNumber,
   STARWAY_STAIRS_TIERS,
-  starwayStairsBustChanceLabel,
+  starwayStairsBustRangeLabel,
   starwayStairsTierRule,
 } from "../../data/starway-stairs";
 import { guideForSiteType } from "../../data/dreamscapes";
@@ -259,9 +259,7 @@ function buildStarwayStairsSiteView(params: {
       );
       return {
         tierNumber: tier.tierNumber,
-        bustChanceLabel: starwayStairsBustChanceLabel(tier),
-        bustOddsNumerator: tier.bustOddsNumerator,
-        oddsDenominator: tier.oddsDenominator,
+        bustRangeLabel: starwayStairsBustRangeLabel(tier),
         essenceReward: tier.essenceReward,
         state:
           result !== undefined

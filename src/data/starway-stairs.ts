@@ -47,11 +47,11 @@ export function starwayStairsTierRule(
   return STARWAY_STAIRS_TIERS[tierNumber - 1];
 }
 
-/** Format a tier's authoritative bust fraction as a two-decimal percentage. */
-export function starwayStairsBustChanceLabel(
+/** Format the inclusive low-rank bust range shown on a Starway tier. */
+export function starwayStairsBustRangeLabel(
   tier: StarwayStairsTierRule,
 ): string {
-  return `${((tier.bustOddsNumerator / tier.oddsDenominator) * 100).toFixed(2)}%`;
+  return tier.highestBustRank === "2" ? "2" : `2-${tier.highestBustRank}`;
 }
 
 /** Whether the drawn rank busts the specified tier. */
