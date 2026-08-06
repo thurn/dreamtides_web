@@ -4,6 +4,14 @@ import { MERCHANT_ARCHETYPE_BUILDERS } from "./registry";
 import { MERCHANT_ARCHETYPE_FAMILIES } from "./types";
 
 describe("merchant archetype registry", () => {
+  it("excludes retired Augury offer types", () => {
+    const ids = MERCHANT_ARCHETYPE_BUILDERS.map((builder) => builder.archetypeId);
+    expect(ids).not.toContain("keyword_mod");
+    expect(ids).not.toContain("tribal_change");
+    expect(ids).not.toContain("purge_replace");
+    expect(ids).not.toContain("dreamsign_draft");
+  });
+
   it("registers each archetype id at most once", () => {
     const ids = MERCHANT_ARCHETYPE_BUILDERS.map((builder) => builder.archetypeId);
     expect(new Set(ids).size).toBe(ids.length);

@@ -38,8 +38,8 @@ describe("OffersDebugApp", () => {
 
     const tiles = container.querySelectorAll("[data-offer-tile]");
     expect(tiles).toHaveLength(OFFER_TILE_DEBUG_ARCHETYPE_IDS.length);
-    expect(MERCHANT_ARCHETYPE_BUILDERS).toHaveLength(17);
-    expect(OFFER_TILE_DEBUG_ARCHETYPE_IDS).toHaveLength(16);
+    expect(MERCHANT_ARCHETYPE_BUILDERS).toHaveLength(13);
+    expect(OFFER_TILE_DEBUG_ARCHETYPE_IDS).toHaveLength(12);
     expect(OFFER_TILE_DEBUG_ARCHETYPE_IDS).not.toContain("strong_card");
     expect(OFFER_TILE_DEBUG_ARCHETYPE_IDS).toContain("category_draft_known");
     const motionDelays = [...tiles].map(
@@ -65,7 +65,6 @@ describe("OffersDebugApp", () => {
       );
     }
 
-    const trade = OFFER_TILE_DEBUG_MODELS.purge_replace;
     const fitCardGift = OFFER_TILE_DEBUG_MODELS.fit_card_grant;
     const strongCardGift = OFFER_TILE_DEBUG_MODELS.strong_card;
     const copiesDraft = OFFER_TILE_DEBUG_MODELS.copies_draft;
@@ -73,10 +72,7 @@ describe("OffersDebugApp", () => {
     const cardBundle = OFFER_TILE_DEBUG_MODELS.card_bundle;
     const transfigure = OFFER_TILE_DEBUG_MODELS.transfigure;
     const duplicate = OFFER_TILE_DEBUG_MODELS.duplicate;
-    const dreamsignDraft = OFFER_TILE_DEBUG_MODELS.dreamsign_draft;
     const starters = OFFER_TILE_DEBUG_MODELS.starter_transfigure;
-    const keyword = OFFER_TILE_DEBUG_MODELS.keyword_mod;
-    const characterType = OFFER_TILE_DEBUG_MODELS.tribal_change;
     expect(fitCardGift.kind).toBe("card-gift");
     expect(strongCardGift.kind).toBe("card-gift");
     expect(offerTileDescription(fitCardGift)).toContain("to your deck.");
@@ -93,34 +89,15 @@ describe("OffersDebugApp", () => {
     expect(offerTileDescription(transfigure)).toBe(
       "Transfigure a card in your deck.",
     );
-    expect(trade.kind).toBe("trade-card");
-    expect(trade.kind === "trade-card" ? trade.incoming : []).toHaveLength(4);
     expect(duplicate.kind).toBe("duplicate-card");
     expect(duplicate.kind === "duplicate-card" ? duplicate.cards : []).toHaveLength(3);
     expect(offerTileDescription(duplicate)).toBe(
       "Choose one of three cards in your deck to duplicate.",
     );
-    expect(dreamsignDraft.kind).toBe("dreamsign-draft");
-    expect(
-      dreamsignDraft.kind === "dreamsign-draft" ? dreamsignDraft.dreamsigns : [],
-    ).toHaveLength(4);
     expect(starters.kind).toBe("transfigure-starters");
     expect(starters.kind === "transfigure-starters" ? starters.cards : []).toHaveLength(2);
     expect(offerTileDescription(starters)).toBe(
       "Transfigure two starter cards.",
-    );
-    expect(keyword.kind).toBe("keyword-modification");
-    expect(
-      keyword.kind === "keyword-modification" ? keyword.card.cardId : null,
-    ).toBe("2931e20b-1a80-4ddd-8944-20e68d182886");
-    expect(offerTileDescription(keyword)).toBe(
-      "Reduce the Reclaim cost of a card.",
-    );
-    expect(offerTileDescription(characterType)).toBe(
-      "Change the subtype of a card.",
-    );
-    expect(offerTileDescription(dreamsignDraft)).toBe(
-      "Choose a dreamsign to gain.",
     );
     for (const model of Object.values(OFFER_TILE_DEBUG_MODELS)) {
       const description = offerTileDescription(model);

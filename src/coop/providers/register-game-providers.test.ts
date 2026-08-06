@@ -783,24 +783,39 @@ describe("registerGameProviders — merchant resolution", () => {
     // An offer whose payload actually mints a fresh deck entry (a card
     // grant), so this exercises the id the resolution path stamps — not
     // just that the resolution applies.
-    // This corpus's deterministic encounter offers a "duplicate_deck_entry"
-    // choice (no direct-payload offer mints a fresh entry here) — resolving
-    // one of its candidates exercises the id the resolution path stamps.
-    const offer = encounter.offers.find((o) =>
+    const mintJourney: JourneyState = {
+      ...fixture.journey,
+      siteRuntime: {
+        ...fixture.journey.siteRuntime,
+        [MERCHANT_SITE_ID]: {
+          kind: "augury",
+          completed: false,
+          forcedArchetypeId: "fit_card_draft",
+        },
+      },
+    };
+    const mintEncounter = generateMerchantEncounter(
+      buildMerchantContext({
+        journeyState: mintJourney,
+        journeyContent: fixture.content,
+        site: fixture.site,
+      }),
+    );
+    const offer = mintEncounter.offers.find((o) =>
       o.choiceRequest?.candidates.some(
-        (candidate) => candidate.applyPayload.kind === "duplicate_deck_entry",
+        (candidate) => candidate.applyPayload.kind === "add_catalog_card",
       ),
     );
     expect(offer).toBeDefined();
     if (offer === undefined || offer.choiceRequest === undefined) return;
     const candidate = offer.choiceRequest.candidates.find(
-      (c) => c.applyPayload.kind === "duplicate_deck_entry",
+      (c) => c.applyPayload.kind === "add_catalog_card",
     );
     expect(candidate).toBeDefined();
     if (candidate === undefined) return;
 
     const events: SeqEvent[] = [
-      loadState(),
+      ev(1, "LOAD_STATE", { snapshot: mintJourney }),
       ev(2, "ACCEPT_MERCHANT_OFFER", {
         siteId: MERCHANT_SITE_ID,
         encounterSignature: offer.encounterSignature,
@@ -815,7 +830,7 @@ describe("registerGameProviders — merchant resolution", () => {
       result.outcomes.find((o) => o.seq === 2)?.error?.message,
     ).toBe("applied");
 
-    const beforeIds = new Set(fixture.journey.deck.map((entry) => entry.entryId));
+    const beforeIds = new Set(mintJourney.deck.map((entry) => entry.entryId));
     const newEntries = result.finalState.journey.deck.filter(
       (entry) => !beforeIds.has(entry.entryId),
     );
