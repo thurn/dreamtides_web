@@ -620,6 +620,25 @@ describe("RESET_JOURNEY", () => {
       hashState(genesisFoldState(GENESIS).journey),
     );
   });
+
+  it("restores the economy defaults carried by the fold context", () => {
+    const contentConfig = {
+      ...GENESIS.contentConfig!,
+      economyFoldHash: "synthetic-economy",
+      defaultStartingEssence: 137,
+      dreamsignCap: 9,
+    };
+    const initial = genesisFoldState({ ...GENESIS, contentConfig });
+    const changed = {
+      ...initial,
+      journey: { ...initial.journey, essence: 1, maxDreamsigns: 2 },
+    };
+
+    const reset = apply(changed, "RESET_JOURNEY", {}, ctx({ contentConfig }));
+
+    expect(reset.journey.essence).toBe(137);
+    expect(reset.journey.maxDreamsigns).toBe(9);
+  });
 });
 
 describe("LOAD_STATE", () => {

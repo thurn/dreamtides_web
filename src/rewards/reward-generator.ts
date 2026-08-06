@@ -1,5 +1,6 @@
 import type { DreamsignTemplate } from "../types/content";
 import type { Dreamsign } from "../types/journey";
+import type { EconomyData } from "../types/economy-data";
 import {
   readDreamsignPool,
   resolveDreamsignTemplates,
@@ -21,6 +22,7 @@ export type RewardSiteData =
     };
 
 export interface RewardGenerationOptions {
+  economy: EconomyData["siteRewards"]["reward"];
   dreamsignTemplates: readonly DreamsignTemplate[];
   remainingDreamsignPoolIds: readonly string[];
   /**
@@ -43,6 +45,7 @@ export interface RewardGenerationResult {
 }
 
 export function generateRewardSiteData({
+  economy,
   dreamsignTemplates,
   remainingDreamsignPoolIds,
   regenerationPoolIds,
@@ -91,7 +94,7 @@ export function generateRewardSiteData({
   return {
     reward: {
       rewardType: "essence",
-      essenceAmount: randomInt(rng, 150, 350),
+      essenceAmount: randomInt(rng, economy.fallbackEssence.min, economy.fallbackEssence.max),
     },
     remainingDreamsignPoolIds: [...availableIds],
     spentDreamsignPoolIds: [],

@@ -4,7 +4,6 @@ import { loadDreamsignProfiles, type DreamsignProfile } from "./dreamsign-profil
 import { loadDreamsignSignatures, type DreamsignSignature } from "./dreamsign-signatures";
 import { logEvent } from "../logging";
 import {
-  DEFAULT_STARTING_ESSENCE,
   type DreamAvatarContent,
   type DreamsignTemplate,
   type Idf3CardProvenance,
@@ -57,6 +56,8 @@ import {
   loadDreamscapes,
 } from "./dreamscapes";
 import { loadAtlasData } from "./atlas-data";
+import { loadEconomyData } from "./economy-data";
+import type { EconomyData } from "../types/economy-data";
 import type {
   AffiliationContent,
   ApollyonIncarnationContent,
@@ -137,6 +138,8 @@ export interface JourneyContent {
    * Dream Atlas generation tuning, loaded from `public/atlas-data.json`.
    */
   atlasData: AtlasData;
+  /** Validated direct economy tuning loaded before room folding begins. */
+  economyData: EconomyData;
   /**
    * Apollyon's ten incarnations, loaded from
    * `public/apollyon-incarnations-data.json`. Atlas generation picks one per run
@@ -810,6 +813,7 @@ export async function loadJourneyContent(
     affiliations,
     guides,
     atlasData,
+    economyData,
     apollyonIncarnations,
     _figmentCatalog,
   ] = await Promise.all([
@@ -867,6 +871,7 @@ export async function loadJourneyContent(
     // present the resident guide and their home specialty.
     loadDreamGuides(),
     loadAtlasData(),
+    loadEconomyData(),
     // Apollyon's incarnations are small and always loaded so the Atlas can
     // present a per-run guise for the boss node.
     loadApollyonIncarnations(),
@@ -894,7 +899,7 @@ export async function loadJourneyContent(
     renderedText: dc.renderedText,
     imageNumber: dc.imageNumber,
     portraitFocus: dc.portraitFocus,
-    startingEssence: dc.startingEssence || DEFAULT_STARTING_ESSENCE,
+    startingEssence: dc.startingEssence ?? economyData.journey.defaultStartingEssence,
     signatureCards: [...(dc.signatureCards ?? [])],
     signatureCardIds: [...(dc.signatureCardIds ?? [])],
   }));
@@ -971,6 +976,7 @@ export async function loadJourneyContent(
     affiliations,
     guides,
     atlasData,
+    economyData,
     apollyonIncarnations,
     poolContext,
     draftMode,

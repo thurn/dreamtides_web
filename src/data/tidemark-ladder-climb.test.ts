@@ -9,13 +9,20 @@ import {
   nextTidemarkLadderClimbAttemptNumber,
   rankWinsTidemarkLadderClimbAttempt,
   scoreTidemarkLadderClimbDreamsignCandidates,
-  TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD,
   tidemarkLadderClimbAttemptCost,
 } from "./tidemark-ladder-climb";
 
 describe("Tidemark Ladder Climb rules", () => {
+  const economy = {
+    winEssence: 37,
+    attempts: [2, 7, 13, 23].map((standardCost, index) => ({
+      attempt: (index + 1) as 1 | 2 | 3 | 4,
+      standardCost,
+      enhancedCost: 1,
+    })),
+  };
   it("uses the four inclusive thresholds and Farpoint-only cost schedule", () => {
-    expect(TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD).toBe(25);
+    expect(economy.winEssence).toBe(37);
     expect(rankWinsTidemarkLadderClimbAttempt("Q", 1)).toBe(true);
     expect(rankWinsTidemarkLadderClimbAttempt("J", 1)).toBe(false);
     expect(rankWinsTidemarkLadderClimbAttempt("10", 2)).toBe(true);
@@ -25,11 +32,11 @@ describe("Tidemark Ladder Climb rules", () => {
     expect(rankWinsTidemarkLadderClimbAttempt("6", 4)).toBe(true);
     expect(rankWinsTidemarkLadderClimbAttempt("5", 4)).toBe(false);
     expect([1, 2, 3, 4].map((attempt) =>
-      tidemarkLadderClimbAttemptCost(attempt as 1 | 2 | 3 | 4, false),
-    )).toEqual([0, 5, 10, 15]);
+      tidemarkLadderClimbAttemptCost(economy, attempt as 1 | 2 | 3 | 4, false),
+    )).toEqual([2, 7, 13, 23]);
     expect([1, 2, 3, 4].map((attempt) =>
-      tidemarkLadderClimbAttemptCost(attempt as 1 | 2 | 3 | 4, true),
-    )).toEqual([0, 0, 0, 0]);
+      tidemarkLadderClimbAttemptCost(economy, attempt as 1 | 2 | 3 | 4, true),
+    )).toEqual([1, 1, 1, 1]);
   });
 
   it("owns the shared next-attempt eligibility contract", () => {

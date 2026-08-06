@@ -66,7 +66,7 @@ const DREAM_AVATAR_SELECT_SCENE: QaScene = {
     "The choose-your-avatar screen a run opens on, parked directly on " +
     "journeyStart for UI QA without creating a game from the lobby.",
   landsOnJourneyStart: true,
-  build: () => createDefaultState(),
+  build: (journeyContent) => createDefaultState(journeyContent.economyData.journey),
 };
 
 export { TUTORIAL_DREAM_AVATAR_ID };
@@ -87,7 +87,7 @@ const TUTORIAL_DREAM_AVATAR_SELECT_SCENE: QaScene = {
     );
     if (tutorialDreamAvatar === undefined) return null;
     return {
-      ...createDefaultState(),
+      ...createDefaultState(journeyContent.economyData.journey),
       screen: {
         type: "journeyStart",
         tutorialDreamAvatarId: tutorialDreamAvatar.id,

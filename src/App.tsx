@@ -760,6 +760,7 @@ export default function App({
       gameId={runtimeConfig.gameId}
       runtimeConfig={runtimeConfig}
       atlasFoldHash={journeyContent.atlasData.foldHash}
+      economyData={journeyContent.economyData}
       frontDoorEntry={frontDoorEntry}
     >
       {(context) => (

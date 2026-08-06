@@ -432,7 +432,7 @@ export function routeDomain(
         battleEvents.restartTutorialBattle(state, payload, ctx, event.actor),
       );
     case "EXIT_TUTORIAL_BATTLE":
-      return foldCase(state, battleEvents.exitTutorialBattle(state, payload, event.actor));
+      return foldCase(state, battleEvents.exitTutorialBattle(state, payload, ctx, event.actor));
     case "OPEN_CARD_TUTORIAL_GUIDANCE":
       return foldCase(
         state,
@@ -654,7 +654,7 @@ export function routeDomain(
 
     // --- whole-fold cases (touch the battle slice) ---
     case "RESET_JOURNEY":
-      return foldCase(state, lifecycle.resetJourney(state));
+      return foldCase(state, lifecycle.resetJourney(state, ctx));
     case "LOAD_STATE":
       return foldCase(state, lifecycle.loadState(state, payload, ctx));
 

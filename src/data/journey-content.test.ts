@@ -7,7 +7,7 @@ import {
 import type { CardData } from "../types/cards";
 import type { DraftRecord, KnownGoodDecklist } from "./cards-v2-database";
 import type { DreamAvatarContent } from "../types/content";
-import { DEFAULT_STARTING_ESSENCE } from "../types/content";
+import { economyFixture } from "../testing/economy-fixture";
 import type { FitModel } from "../draft/replay/fit-model";
 import {
   selectRecordIndex,
@@ -207,6 +207,12 @@ describe("loadJourneyContent", () => {
           return Promise.resolve({
             ok: true,
             json: () => Promise.resolve(MINIMAL_ATLAS_DATA),
+          });
+        }
+        if (path === "/economy-data.json") {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve(economyFixture()),
           });
         }
         // Any other asset the loader requests is an optional, variant-specific
@@ -471,8 +477,37 @@ describe("loadJourneyContent", () => {
     const content = await loadJourneyContent();
 
     expect(content.dreamAvatars.map((dc) => dc.id)).toEqual(["dc-a", "dc-b"]);
-    // A zero startingEssence falls back to the default rather than being dropped.
-    expect(content.dreamAvatars[0].startingEssence).toBe(DEFAULT_STARTING_ESSENCE);
+    expect(content.dreamAvatars[0].startingEssence).toBe(0);
+  });
+
+  it("fills an omitted DreamAvatar starting essence from economy data", async () => {
+    const cards = [makeCard(1), makeCard(2)];
+    const economy = economyFixture();
+    economy.journey.defaultStartingEssence = 137;
+    const dreamAvatars = [{
+      id: "dc-defaulted",
+      name: "Defaulted",
+      title: "D",
+      renderedText: "",
+      imageNumber: "0001",
+      signatureCards: ["Card 1"],
+    }];
+    stubFetch({ cards, dreamAvatars, dreamsigns: [], decklists: [["Card 1"]] });
+    const catalogFetch = vi.mocked(fetch).getMockImplementation()!;
+    vi.mocked(fetch).mockImplementation((input: string | URL | Request) => {
+      const path = typeof input === "string"
+        ? input
+        : input instanceof URL
+          ? input.href
+          : input.url;
+      return path === "/economy-data.json"
+        ? Promise.resolve({ ok: true, json: () => Promise.resolve(economy) } as Response)
+        : catalogFetch(input);
+    });
+
+    const content = await loadJourneyContent();
+
+    expect(content.dreamAvatars[0].startingEssence).toBe(137);
   });
 
   it("populates draftMode, draftRecords, and fitModel in replay mode", async () => {

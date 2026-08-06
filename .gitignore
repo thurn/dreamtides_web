@@ -35,6 +35,7 @@ public/figments-data.json
 public/tutorial-data.json
 public/merchant-corpus-data.json
 public/atlas-data.json
+public/economy-data.json
 logs/
 .env
 .env.local

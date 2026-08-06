@@ -8,6 +8,7 @@ import {
 } from "../../shop/shop-generator";
 import { rerollCost } from "../../shop/shop-pricing";
 import type { DreamGuideContent } from "../../types/content";
+import type { EconomyData } from "../../types/economy-data";
 import type {
   DreamscapeNode,
   Dreamsign,
@@ -81,18 +82,19 @@ export function buildDreamsignBazaarOffers(
   return offers;
 }
 
-/** Build the one-use restock action for this visit. */
+/** Build the configured restock action for this visit. */
 export function buildDreamsignBazaarRestock(
+  config: EconomyData["shop"]["reroll"],
   runtime: ShopSiteRuntime,
   site: SiteState,
   essence: number,
 ): DreamsignBazaarRestockView {
-  const price = rerollCost(0, site.isEnhanced);
+  const price = rerollCost(config, runtime.rerollCount, site.isEnhanced);
   return {
     entryId: `shop-restock-${site.id}`,
     price,
     state:
-      runtime.rerollCount > 0
+      runtime.rerollCount >= config.maxPerVisit
         ? "used"
         : price <= essence
           ? "available"
@@ -123,6 +125,7 @@ export function buildDreamsignBazaarSiteView(params: {
   guide: DreamGuideContent | null;
   guideLine: string | null;
   pendingDreamsign: Dreamsign | null;
+  economyData: EconomyData;
 }): DreamsignBazaarSiteView {
   const priceModifiers: ShopPriceModifiers = {
     essenceDiscountPercent: params.state.shopModifiers.essenceDiscountPercent,
@@ -139,6 +142,7 @@ export function buildDreamsignBazaarSiteView(params: {
       priceModifiers,
     ),
     restock: buildDreamsignBazaarRestock(
+      params.economyData.shop.reroll,
       params.runtime,
       params.site,
       params.state.essence,

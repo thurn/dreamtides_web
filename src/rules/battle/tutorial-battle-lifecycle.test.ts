@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
+import { economyFixture } from "../../testing/economy-fixture";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { JourneyContent } from "../../data/journey-content";
@@ -157,6 +158,7 @@ function content(): JourneyContent {
     affiliations: [],
     guides: [],
     atlasData: MINIMAL_ATLAS_DATA,
+    economyData: economyFixture(),
   };
 }
 

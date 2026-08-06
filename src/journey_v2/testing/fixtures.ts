@@ -1,4 +1,5 @@
 import { asCardName } from "../../types/card-identity";
+import { economyFixture } from "../../testing/economy-fixture";
 import type { FitModel } from "../../draft/replay/fit-model";
 import { MINIMAL_ATLAS_DATA, MINIMAL_DREAMSCAPES } from "../../__test-helpers__/atlas-fixtures";
 import type {
@@ -153,6 +154,7 @@ export function makeMerchantTestContent({
     dreamscapes: MINIMAL_DREAMSCAPES,
     affiliations: [], guides: [],
     atlasData: MINIMAL_ATLAS_DATA,
+    economyData: economyFixture(),
     fitModel,
     merchantCorpus,
     dreamsignProfiles,

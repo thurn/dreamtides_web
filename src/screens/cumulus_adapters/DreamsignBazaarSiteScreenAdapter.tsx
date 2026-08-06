@@ -40,8 +40,9 @@ export function DreamsignBazaarSiteScreenAdapter({ siteId }: { siteId: string })
       guide,
       guideLine: guideLineRef.current ?? null,
       pendingDreamsign,
+      economyData: journeyContent.economyData,
     }),
-    [state, node, site, shopRuntime, guide, pendingDreamsign],
+    [state, node, site, shopRuntime, guide, pendingDreamsign, journeyContent.economyData],
   );
 
   useEffect(() => {

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createDefaultState } from "../../state/journey-context";
 import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
+import { economyFixture } from "../../testing/economy-fixture";
 import type { DreamGuideContent } from "../../types/content";
 import type {
   GravokWagerSiteRuntime,
@@ -22,8 +23,8 @@ import {
 } from "./gamble-site-view-model";
 
 const buildGambleSiteView = (
-  params: Omit<Parameters<typeof buildGambleSiteViewImpl>[0], "atlasData">,
-) => buildGambleSiteViewImpl({ ...params, atlasData: MINIMAL_ATLAS_DATA });
+  params: Omit<Parameters<typeof buildGambleSiteViewImpl>[0], "atlasData" | "economyData">,
+) => buildGambleSiteViewImpl({ ...params, atlasData: MINIMAL_ATLAS_DATA, economyData: economyFixture() });
 
 const GAMBLE_SITE: SiteState & { type: "Gamble" } = {
   id: "fixture-gamble-site",
@@ -68,7 +69,7 @@ describe("gamble-site-view-model", () => {
   });
 
   it("maps all exact gate targets, odds, rewards, and the locked jackpot", () => {
-    const gates = buildGambleGateViews(RUNTIME, 12);
+    const gates = buildGambleGateViews(economyFixture().gamble.threeGate, RUNTIME, 12);
 
     expect(gates).toMatchObject([
       {

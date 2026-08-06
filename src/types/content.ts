@@ -6,8 +6,6 @@
 import type { PoolVariant } from "../draft/pool/types.ts";
 import type { SiteType } from "./journey.ts";
 
-export const DEFAULT_STARTING_ESSENCE = 200;
-
 /** Normalized point locating a DreamAvatar's head in its portrait artwork. */
 export interface DreamAvatarPortraitFocus {
   /** Horizontal position from the artwork's left edge, in the range 0..1. */
@@ -26,7 +24,7 @@ export interface DreamAvatarContent {
   portraitFocus?: DreamAvatarPortraitFocus;
   /**
    * Per-DreamAvatar starting essence, compensating for differences in opening
-   * power and engine ramp speed. Defaults to `DEFAULT_STARTING_ESSENCE` when
+   * power and engine ramp speed. The economy catalog supplies the default when
    * omitted from source data.
    */
   startingEssence: number;

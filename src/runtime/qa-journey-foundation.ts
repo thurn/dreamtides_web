@@ -68,8 +68,8 @@ export function createQaJourneyFoundation(
   const state: JourneyState = {
     runId: null,
     seed,
-    essence: 200,
-    maxDreamsigns: 12,
+    essence: dreamAvatar.startingEssence,
+    maxDreamsigns: journeyContent.economyData.journey.dreamsignCap,
     deck: STARTER_CARD_NUMBERS.map((cardNumber, index) => ({
       entryId: `deck-${String(index + 1)}`,
       cardNumber,

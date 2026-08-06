@@ -4,10 +4,10 @@ import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
 import { patchTomlRecord } from "./card-editor-data.mjs";
 import {
-  DEFAULT_STARTING_ESSENCE,
   stripJsonComments,
   transformDreamAvatar,
 } from "./setup-assets.mjs";
+import { compileEconomyData } from "./economy-data.mjs";
 import { DREAM_AVATAR_ARCHETYPES_BY_ID } from "../src/data/dream-avatars-v2-database.ts";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -17,6 +17,7 @@ export const DEFAULT_DREAM_AVATAR_TOML_PATH = join(
   "dream_avatars.toml",
 );
 export const TIDES4_SOURCE_PATH = join("data", "tides4.jsonc");
+export const DEFAULT_ECONOMY_TOML_PATH = join("data", "tabula", "economy.toml");
 const DREAM_AVATAR_JSON_PATH = join("public", "dream-avatars-v2-data.json");
 const TIDES4_JSON_PATH = join("public", "tides4-data.json");
 
@@ -89,7 +90,7 @@ function tidePoolFor(tides4, dreamAvatarId) {
   };
 }
 
-function editorRecordFromDreamAvatar(dreamAvatar, index, tides4) {
+function editorRecordFromDreamAvatar(dreamAvatar, index, tides4, defaultStartingEssence) {
   return {
     id: dreamAvatar.id,
     name: dreamAvatar.name,
@@ -99,7 +100,7 @@ function editorRecordFromDreamAvatar(dreamAvatar, index, tides4) {
     startingEssence:
       typeof dreamAvatar["starting-essence"] === "number"
         ? dreamAvatar["starting-essence"]
-        : DEFAULT_STARTING_ESSENCE,
+        : defaultStartingEssence,
     tidePool: tidePoolFor(tides4, dreamAvatar.id),
     sourceIndex: index,
     source: dreamAvatar,
@@ -110,10 +111,17 @@ export function readEditorDreamAvatars({
   rootDir = ROOT,
   dreamAvatarTomlPath = DEFAULT_DREAM_AVATAR_TOML_PATH,
   tides4Path = TIDES4_SOURCE_PATH,
+  economyTomlPath = DEFAULT_ECONOMY_TOML_PATH,
 } = {}) {
   const tides4 = readTides4(rootDir, tides4Path);
+  const economy = compileEconomyData(parse(readFileSync(join(rootDir, economyTomlPath), "utf8")));
   return readSourceDreamAvatars(rootDir, dreamAvatarTomlPath).map((dreamAvatar, index) =>
-    editorRecordFromDreamAvatar(dreamAvatar, index, tides4),
+    editorRecordFromDreamAvatar(
+      dreamAvatar,
+      index,
+      tides4,
+      economy.journey.defaultStartingEssence,
+    ),
   );
 }
 

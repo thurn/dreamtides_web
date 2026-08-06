@@ -16,7 +16,9 @@ export function DreamsignRevelationScreenAdapter({ siteId }: { siteId: string })
   const runtime = state.siteRuntime[siteId];
   const offerRuntime = runtime?.kind === "dreamsignOffer" ? runtime : null;
   const options = offerRuntime?.offeredDreamsigns ?? null;
-  const optionCount = site?.isEnhanced === true ? 4 : 3;
+  const optionCount = site?.isEnhanced === true
+    ? journeyContent.economyData.siteRewards.dreamsignRevelation.enhancedOfferCount
+    : journeyContent.economyData.siteRewards.dreamsignRevelation.standardOfferCount;
   const remainingDreamsignPoolKey = state.remainingDreamsignPool.join("\u0000");
   const guide = resolveDreamsignRevelationGuide(journeyContent.guides, site?.guideIdOverride);
   const guideLine = useMemo(

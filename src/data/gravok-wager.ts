@@ -4,16 +4,13 @@ import type {
   StandardPlayingCardRank,
   StandardPlayingCardSuit,
 } from "../types/gamble";
+import type { EconomyData } from "../types/economy-data";
 
 export const GRAVOK_WAGER_RULES_VERSION = "three-gate-v2";
-export const GRAVOK_WAGER_ORDINARY_COST = 50;
-export const GRAVOK_WAGER_FARPOINT_COST = 45;
 export const GRAVOK_WAGER_MAX_RETRIES = 2;
 
-export function gravokWagerCost(isFarpoint: boolean): number {
-  return isFarpoint
-    ? GRAVOK_WAGER_FARPOINT_COST
-    : GRAVOK_WAGER_ORDINARY_COST;
+export function gravokWagerCost(config: EconomyData["gamble"]["threeGate"], isFarpoint: boolean): number {
+  return isFarpoint ? config.enhancedWager : config.standardWager;
 }
 
 export interface GravokGateRule {
@@ -22,7 +19,6 @@ export interface GravokGateRule {
   threshold: StandardPlayingCardRank;
   oddsNumerator: number;
   oddsDenominator: number;
-  essenceReward: number;
   awardsDreamsign: boolean;
 }
 
@@ -34,7 +30,6 @@ export const GRAVOK_GATE_RULES: readonly GravokGateRule[] = [
     threshold: "6",
     oddsNumerator: 36,
     oddsDenominator: 52,
-    essenceReward: 100,
     awardsDreamsign: false,
   },
   {
@@ -43,7 +38,6 @@ export const GRAVOK_GATE_RULES: readonly GravokGateRule[] = [
     threshold: "9",
     oddsNumerator: 24,
     oddsDenominator: 52,
-    essenceReward: 150,
     awardsDreamsign: false,
   },
   {
@@ -52,7 +46,6 @@ export const GRAVOK_GATE_RULES: readonly GravokGateRule[] = [
     threshold: "J",
     oddsNumerator: 16,
     oddsDenominator: 52,
-    essenceReward: 200,
     awardsDreamsign: true,
   },
 ];
@@ -88,6 +81,13 @@ export const STANDARD_PLAYING_CARD_DECK: readonly StandardPlayingCard[] =
 
 export function gravokGateRule(gateId: GravokGateId): GravokGateRule {
   return GRAVOK_GATE_RULES.find((gate) => gate.id === gateId)!;
+}
+
+export function gravokGateEssenceReward(
+  config: EconomyData["gamble"]["threeGate"],
+  gateId: GravokGateId,
+): number {
+  return config.rewards[gateId];
 }
 
 /** Format a gate's authoritative fraction as the two-decimal UI percentage. */

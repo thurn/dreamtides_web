@@ -30,6 +30,7 @@ import {
   collectAtlasAssetSources,
   compileAtlasData,
 } from "./atlas-data.mjs";
+import { compileEconomyData } from "./economy-data.mjs";
 import { EXPLORATION_EFFECT_DEFINITION_BY_KIND } from "./exploration-editor-schema.mjs";
 
 // Re-exported for `setup-assets.test.mjs`, which exercises the JSONC comment
@@ -579,13 +580,6 @@ export function validateDreamAvatarMapping(dreamscapes, dreamAvatarIds) {
 }
 
 /**
- * Default starting essence used when a DreamAvatar TOML record omits a
- * `starting-essence` value. Mirrors `DEFAULT_STARTING_ESSENCE` in
- * `src/types/content.ts`.
- */
-export const DEFAULT_STARTING_ESSENCE = 200;
-
-/**
  * Convert a TOML Dreamwell record to its JSON representation with camelCase keys.
  * Dreamwell cards are the shared cards drawn one per turn during the Dreamwell
  * phase (see docs/battle_rules/battle_rules.md). The transform is a plain
@@ -604,16 +598,13 @@ export function transformDreamwell(dreamwell) {
 
 /**
  * Convert a TOML DreamAvatar record to its JSON representation with camelCase keys.
- * Records without a `starting-essence` value are filled in with
- * `DEFAULT_STARTING_ESSENCE` so the runtime always sees a number.
+ * Omitted `starting-essence` values remain omitted until both this catalog and
+ * economy data have loaded, when the runtime applies the authored default.
  */
 export function transformDreamAvatar(dreamAvatar) {
   const result = {};
   for (const [key, value] of Object.entries(dreamAvatar)) {
     result[kebabToCamel(key)] = value;
-  }
-  if (typeof result.startingEssence !== "number") {
-    result.startingEssence = DEFAULT_STARTING_ESSENCE;
   }
   return result;
 }
@@ -1323,6 +1314,7 @@ export function setupAssets({
   explorationTomlPath = join(DATA_DIR, "tabula", "exploration.toml"),
   affiliationsTomlPath = join(DATA_DIR, "tabula", "affiliations.toml"),
   atlasTomlPath = join(DATA_DIR, "tabula", "atlas.toml"),
+  economyTomlPath = join(DATA_DIR, "tabula", "economy.toml"),
   glossaryTomlPath = join(DATA_DIR, "tabula", "glossary.toml"),
   apollyonIncarnationsTomlPath = join(
     DATA_DIR,
@@ -1388,6 +1380,7 @@ export function setupAssets({
   const explorationJsonPath = join(publicDir, "exploration-data.json");
   const affiliationsJsonPath = join(publicDir, "affiliations-data.json");
   const atlasJsonPath = join(publicDir, "atlas-data.json");
+  const economyJsonPath = join(publicDir, "economy-data.json");
   const apollyonIncarnationsJsonPath = join(
     publicDir,
     "apollyon-incarnations-data.json",
@@ -1919,6 +1912,16 @@ export function setupAssets({
     JSON.stringify(jsonAtlasData, null, 2) + "\n",
   );
   console.log("Wrote Atlas data to atlas-data.json");
+
+  console.log("Parsing economy.toml...");
+  const jsonEconomyData = compileEconomyData(
+    parse(readFileSync(economyTomlPath, "utf8")),
+  );
+  writeFileSync(
+    economyJsonPath,
+    JSON.stringify(jsonEconomyData, null, 2) + "\n",
+  );
+  console.log("Wrote Economy data to economy-data.json");
 
   // Apollyon incarnations: the final DreamAvatar's ten guises. Parse the TOML
   // and write the kebab->camel JSON the runtime loader fetches at

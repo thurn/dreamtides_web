@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
+import { economyFixture } from "../../testing/economy-fixture";
 
 import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import type { EventContext, GameEvent } from "../../eventlog/types";
@@ -159,6 +160,7 @@ function shopState(
 
 /** A provider that regenerates a shop with a single deterministic card slot. */
 const rerollProvider: SiteContentProvider = {
+  economyData: economyFixture(),
   openSite() {
     return null;
   },
@@ -337,6 +339,26 @@ describe("REROLL_SHOP", () => {
     });
     const result = reduce(state, "REROLL_SHOP", { siteId: SITE_ID });
     expect(result.outcome).toBe("bounced");
+  });
+
+  it("honors an injected multi-reroll visit limit", () => {
+    const economy = economyFixture();
+    economy.shop.reroll.maxPerVisit = 2;
+    registerSiteContentProvider({ ...rerollProvider, economyData: economy });
+    const state = shopState([cardSlot()], {
+      essence: 300,
+      shopModifiers: { freeRerolls: 0, essenceDiscountPercent: 0 },
+    });
+
+    const first = reduce(state, "REROLL_SHOP", { siteId: SITE_ID });
+    const second = reduce(first.state, "REROLL_SHOP", { siteId: SITE_ID });
+    const third = reduce(second.state, "REROLL_SHOP", { siteId: SITE_ID });
+
+    expect(first.outcome).toBe("applied");
+    expect(second.outcome).toBe("applied");
+    expect(third.outcome).toBe("bounced");
+    expect(second.state.journey.essence).toBe(200);
+    expect((second.state.journey.siteRuntime[SITE_ID] as ShopSiteRuntime).rerollCount).toBe(2);
   });
 });
 

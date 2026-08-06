@@ -25,6 +25,7 @@
 // active automation runner.
 
 import type { ResolvedDreamAvatarPackage } from "../../types/content";
+import { economyFixture } from "../../testing/economy-fixture";
 import type { PoolDraftState } from "../../types/draft";
 import type {
   BattleCardInstance,
@@ -313,6 +314,7 @@ function draftProvider(): DraftContentProvider {
 
 function siteProvider(): SiteContentProvider {
   return {
+    economyData: economyFixture(),
     openSite: ({ site }) => {
       if (site.type !== "Shop") return null;
       const slot: RuntimeShopSlot = {

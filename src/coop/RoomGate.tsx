@@ -14,6 +14,7 @@ import type {
   PinnedContentConfig,
   PinnedGenesis,
 } from "../eventlog/types";
+import type { EconomyData } from "../types/economy-data";
 import {
   createRoomEvictingStale,
   generateRoomId,
@@ -96,6 +97,8 @@ interface RoomGateProps {
   runtimeConfig: RuntimeConfig;
   /** Hash of Atlas sections which influence deterministic folding. */
   atlasFoldHash: string;
+  /** Validated economy content and journey defaults pinned into room genesis. */
+  economyData: EconomyData;
   /** Scene stamped into genesis only when this mount creates a fresh room. */
   frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting" | "journey">;
   children: (context: RoomReadyContext) => ReactNode;
@@ -213,7 +216,10 @@ function hasPinnedContentConfig(
 ): genesis is PinnedGenesis {
   return (
     genesis.contentConfig !== undefined &&
-    typeof genesis.contentConfig.atlasFoldHash === "string"
+    typeof genesis.contentConfig.atlasFoldHash === "string" &&
+    typeof genesis.contentConfig.economyFoldHash === "string" &&
+    typeof genesis.contentConfig.defaultStartingEssence === "number" &&
+    typeof genesis.contentConfig.dreamsignCap === "number"
   );
 }
 
@@ -238,13 +244,14 @@ export function RoomGate({
   gameId,
   runtimeConfig,
   atlasFoldHash,
+  economyData,
   frontDoorEntry,
   children,
 }: RoomGateProps): ReactNode {
   const clientId = useMemo(() => roomScopedClientId(gameId), [gameId]);
   const localContentConfig = useMemo(
-    () => contentConfigFromRuntime(runtimeConfig, atlasFoldHash),
-    [atlasFoldHash, runtimeConfig],
+    () => contentConfigFromRuntime(runtimeConfig, atlasFoldHash, economyData),
+    [atlasFoldHash, economyData, runtimeConfig],
   );
   const autoCreateFiredRef = useRef(false);
   const [activeRoomId, setActiveRoomId] = useState<string | null>(gameId);
@@ -422,6 +429,10 @@ export function RoomGate({
       clientReducerVersion: CURRENT_REDUCER_VERSION,
       compatibility: classifyReducerVersion(readyReducerVersion),
       roomReducerVersion: readyReducerVersion,
+      atlasFoldHash: localContentConfig.atlasFoldHash,
+      economyFoldHash: localContentConfig.economyFoldHash,
+      defaultStartingEssence: localContentConfig.defaultStartingEssence,
+      dreamsignCap: localContentConfig.dreamsignCap,
     });
 
     const handleVisibilityChange = (): void => {
@@ -436,7 +447,7 @@ export function RoomGate({
       void handle.dispose();
       setLogSinkHandle(null);
     };
-  }, [db, readyRoomId, readyReducerVersion, clientId]);
+  }, [db, readyRoomId, readyReducerVersion, clientId, localContentConfig]);
 
   if (gateState.status === "versionGate") {
     return <VersionGateScreen db={db} contentConfig={localContentConfig} />;

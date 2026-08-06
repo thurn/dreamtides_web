@@ -393,19 +393,15 @@ export function startJourney(
  * genesis, so a forgotten field on reset is caught by the reset-completeness
  * hash test.
  */
-export function resetJourney(state: FoldState): FoldState {
-  // `genesisFoldState` derives the fold from `genesis.seed` alone; the other
-  // genesis fields (reducerVersion / createdAt / contentConfig) are pinned at
-  // room creation and are not read here, so placeholders satisfy the type.
+export function resetJourney(state: FoldState, ctx: EventContext): FoldState {
+  // Reset rebuilds the initial journey from the room seed and the immutable
+  // content configuration carried by the fold context. Reducer version and
+  // creation time do not participate in journey initialization.
   const reset = genesisFoldState({
     seed: state.journey.seed,
     reducerVersion: "",
     createdAt: 0,
-    contentConfig: {
-      poolVariant: "",
-      draftMode: "pool",
-      fresh20PackSize: null,
-    },
+    contentConfig: ctx.contentConfig,
   });
   return {
     ...reset,

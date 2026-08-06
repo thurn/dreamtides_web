@@ -9,11 +9,11 @@ import type {
 import {
   GRAVOK_GATE_RULES,
   GRAVOK_WAGER_MAX_RETRIES,
+  gravokGateEssenceReward,
   gravokGateChanceLabel,
 } from "../../data/gravok-wager";
 import {
   nextTidemarkLadderClimbAttemptNumber,
-  TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD,
   tidemarkLadderClimbAttemptCost,
   tidemarkLadderClimbAttemptRule,
 } from "../../data/tidemark-ladder-climb";
@@ -22,7 +22,7 @@ import {
   STARWAY_STAIRS_MAX_RETRIES,
   STARWAY_STAIRS_TIERS,
   starwayStairsDrawTargetLabel,
-  starwayStairsTierRule,
+  starwayStairsEssenceReward,
 } from "../../data/starway-stairs";
 import { guideForSiteType } from "../../data/dreamscapes";
 import type { DreamGuideContent } from "../../types/content";
@@ -37,18 +37,13 @@ import type {
   TidemarkLadderClimbSiteRuntime,
 } from "../../types/journey";
 import type { GravokGateId } from "../../types/gamble";
+import type { EconomyData } from "../../types/economy-data";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
 export const GRAVOK_WAGER_GUIDE_LINE =
   "The game's called Three Gates. Place your bet on the next card drawn!";
-export const TIDEMARK_LADDER_CLIMB_GUIDE_LINE =
-  `The game's Ladder Climb. Match or beat the target to win ${TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD} Essence and a Dreamsign. Try again with better odds if you miss!`;
 export const STARWAY_STAIRS_GUIDE_LINE =
   "Starway Stairs is the game. Keep betting to see how high you can go!";
-
-const GRAVOK_LARGEST_ESSENCE_PRIZE = Math.max(
-  ...GRAVOK_GATE_RULES.map((gate) => gate.essenceReward),
-);
 
 /** The next gate in display order supplies the non-selected reveal object. */
 export function gravokRevealGateId(selectedGateId: GravokGateId): GravokGateId {
@@ -68,6 +63,7 @@ export function resolveGambleGuide(
 
 /** Map the authoritative rules table and locked jackpot into three choices. */
 export function buildGambleGateViews(
+  economy: EconomyData["gamble"]["threeGate"],
   runtime: GravokWagerSiteRuntime | null,
   maxDreamsigns: number,
 ): readonly GambleGateView[] {
@@ -78,7 +74,7 @@ export function buildGambleGateViews(
     chanceLabel: gravokGateChanceLabel(gate),
     oddsNumerator: gate.oddsNumerator,
     oddsDenominator: gate.oddsDenominator,
-    essenceReward: gate.essenceReward,
+    essenceReward: gravokGateEssenceReward(economy, gate.id),
     rewardDreamsign: gate.awardsDreamsign
       ? (runtime?.rewardDreamsign ?? null)
       : null,
@@ -117,6 +113,7 @@ function buildGravokWagerSiteView(params: {
   guide: DreamGuideContent | null;
   atlasData: AtlasData;
   runtime: GravokWagerSiteRuntime;
+  economyData: EconomyData;
 }): GravokWagerSiteView {
   const { runtime } = params;
   const result = runtime.result;
@@ -126,7 +123,7 @@ function buildGravokWagerSiteView(params: {
       : null;
   const wonLargestPrize =
     result?.won === true &&
-    result.essenceGained === GRAVOK_LARGEST_ESSENCE_PRIZE;
+    result.essenceGained === Math.max(...Object.values(params.economyData.gamble.threeGate.rewards));
 
   return {
     gameId: "gravok-three-gate-wager",
@@ -151,7 +148,7 @@ function buildGravokWagerSiteView(params: {
       rank: result?.card.rank ?? "A",
       suit: result?.card.suit ?? "spades",
     },
-    gates: buildGambleGateViews(runtime, params.state.maxDreamsigns),
+    gates: buildGambleGateViews(params.economyData.gamble.threeGate, runtime, params.state.maxDreamsigns),
     result:
       result === null
         ? null
@@ -184,6 +181,7 @@ function buildLadderClimbSiteView(params: {
   guide: DreamGuideContent | null;
   atlasData: AtlasData;
   runtime: TidemarkLadderClimbSiteRuntime;
+  economyData: EconomyData;
 }): LadderClimbSiteView {
   const { runtime } = params;
   const result = runtime.result;
@@ -191,7 +189,7 @@ function buildLadderClimbSiteView(params: {
   const nextCost =
     nextAttempt === null
       ? null
-      : tidemarkLadderClimbAttemptCost(nextAttempt, runtime.isFarpoint);
+      : tidemarkLadderClimbAttemptCost(params.economyData.gamble.ladderClimb, nextAttempt, runtime.isFarpoint);
 
   return {
     gameId: "tidemark-ladder-climb",
@@ -199,14 +197,14 @@ function buildLadderClimbSiteView(params: {
     ...commonGambleView({
       sceneNode: params.sceneNode,
       guide: params.guide,
-      guideLine: TIDEMARK_LADDER_CLIMB_GUIDE_LINE,
+      guideLine: `The game's Ladder Climb. Match or beat the target to win ${String(params.economyData.gamble.ladderClimb.winEssence)} Essence and a Dreamsign. Try again with better odds if you miss!`,
       randomSiteGuideLine: params.site.randomSite?.materialized === true
         ? params.atlasData.randomSite.guideLine
         : null,
     }),
     isFarpoint: runtime.isFarpoint,
     runtimeReady: true,
-    essenceReward: TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD,
+    essenceReward: params.economyData.gamble.ladderClimb.winEssence,
     rewardDreamsign: runtime.rewardDreamsign,
     nextDraw:
       nextAttempt === null || nextCost === null
@@ -249,6 +247,7 @@ function buildStarwayStairsSiteView(params: {
   guide: DreamGuideContent | null;
   atlasData: AtlasData;
   runtime: StarwayStairsSiteRuntime;
+  economyData: EconomyData;
 }): StarwayStairsSiteView {
   const { runtime } = params;
   const latestResult = runtime.results[runtime.results.length - 1] ?? null;
@@ -259,7 +258,7 @@ function buildStarwayStairsSiteView(params: {
     !latestResult.busted &&
     latestResult.tierNumber < STARWAY_STAIRS_TIERS.length &&
     runtime.terminalReason === null
-      ? starwayStairsTierRule(latestResult.tierNumber).essenceReward
+      ? starwayStairsEssenceReward(params.economyData.gamble.starwayStairs, latestResult.tierNumber)
       : null;
 
   return {
@@ -287,7 +286,7 @@ function buildStarwayStairsSiteView(params: {
       return {
         tierNumber: tier.tierNumber,
         drawTargetLabel: starwayStairsDrawTargetLabel(tier),
-        essenceReward: tier.essenceReward,
+        essenceReward: starwayStairsEssenceReward(params.economyData.gamble.starwayStairs, tier.tierNumber),
         state:
           result !== undefined
             ? result.busted
@@ -308,8 +307,7 @@ function buildStarwayStairsSiteView(params: {
             tierNumber: latestResult.tierNumber,
             busted: latestResult.busted,
             resultSettled: latestResult.resultSettled,
-            prizeAtRisk: starwayStairsTierRule(latestResult.tierNumber)
-              .essenceReward,
+            prizeAtRisk: starwayStairsEssenceReward(params.economyData.gamble.starwayStairs, latestResult.tierNumber),
           },
     cashOutReward,
     terminalReason: runtime.terminalReason,
@@ -324,6 +322,7 @@ export function buildGambleSiteView(params: {
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent | null;
   atlasData: AtlasData;
+  economyData: EconomyData;
 }): GambleSiteView | null {
   const runtimeCandidate = params.state.siteRuntime[params.site.id];
   const runtime: GambleSiteRuntime | null =

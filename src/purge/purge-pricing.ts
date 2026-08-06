@@ -7,28 +7,12 @@
  * stays cheap while emptying a large part of the deck in a single visit is
  * expensive.
  *
- * Marginal cost of the Nth card purged in a visit is `30 + 5 * N * (N + 1)`:
- *
- * | Card # | Marginal | Cumulative |
- * | ------ | -------- | ---------- |
- * |   1    |    40    |     40     |
- * |   2    |    60    |    100     |
- * |   3    |    90    |    190     |
- * |   4    |   130    |    320     |
- * |   5    |   180    |    500     |
- * |   6    |   240    |    740     |
- *
- * A single-card trim stays cheap (40 essence), while the cost climbs steeply
- * once a visit removes several cards: three cards in one visit cost 190, more
- * than four times a single trim, so emptying a large part of the deck at once
- * requires arriving with a deep essence reserve.
+ * Economy data supplies the ordered marginal-cost table and the enhanced-site
+ * discount. The algorithm sums the first N entries and combines authored and
+ * run-scoped discounts. The table length is also the paid-purge visit cap.
  */
 
-/** Soft cap on how many cards may be purged in a single visit. */
-export const MAX_PURGE_PER_VISIT = 6;
-
-/** Discount applied to the whole visit at an enhanced Purge site, in percent. */
-export const PURGE_ENHANCED_DISCOUNT_PERCENT = 30;
+import type { EconomyData } from "../types/economy-data";
 
 /** Discounts that reduce purge prices for a visit. */
 export interface PurgePriceModifiers {
@@ -42,16 +26,17 @@ export interface PurgePriceModifiers {
  * Marginal, pre-discount essence cost of the `cardIndex`-th card purged in a
  * visit. `cardIndex` is 1-based: the first card purged is index 1.
  */
-export function purgeMarginalCost(cardIndex: number): number {
+export function purgeMarginalCost(config: EconomyData["purge"], cardIndex: number): number {
   if (cardIndex <= 0) return 0;
-  return 30 + 5 * cardIndex * (cardIndex + 1);
+  return config.marginalCosts[cardIndex - 1] ?? Infinity;
 }
 
 /** Total discount percent applied to purge prices for a visit, clamped 0-100. */
 export function purgeDiscountPercent(
+  config: EconomyData["purge"],
   modifiers: PurgePriceModifiers = {},
 ): number {
-  const enhanced = modifiers.isEnhanced ? PURGE_ENHANCED_DISCOUNT_PERCENT : 0;
+  const enhanced = modifiers.isEnhanced ? config.enhancedDiscountPercent : 0;
   const essence = Math.max(0, modifiers.essenceDiscountPercent ?? 0);
   return Math.min(100, enhanced + essence);
 }
@@ -61,11 +46,12 @@ export function purgeDiscountPercent(
  * `cardIndex` is 1-based.
  */
 export function purgeCardPrice(
+  config: EconomyData["purge"],
   cardIndex: number,
   modifiers: PurgePriceModifiers = {},
 ): number {
-  const raw = purgeMarginalCost(cardIndex);
-  const discount = purgeDiscountPercent(modifiers);
+  const raw = purgeMarginalCost(config, cardIndex);
+  const discount = purgeDiscountPercent(config, modifiers);
   if (discount === 0) return raw;
   return Math.round(raw * (1 - discount / 100));
 }
@@ -75,12 +61,13 @@ export function purgeCardPrice(
  * discounts.
  */
 export function purgeVisitCost(
+  config: EconomyData["purge"],
   count: number,
   modifiers: PurgePriceModifiers = {},
 ): number {
   let total = 0;
   for (let i = 1; i <= count; i += 1) {
-    total += purgeCardPrice(i, modifiers);
+    total += purgeCardPrice(config, i, modifiers);
   }
   return total;
 }
@@ -91,13 +78,14 @@ export function purgeVisitCost(
  * player cannot commit to a purge they cannot afford.
  */
 export function maxAffordablePurgeCount(
+  config: EconomyData["purge"],
   essence: number,
   maxCards: number,
   modifiers: PurgePriceModifiers = {},
 ): number {
   let total = 0;
   for (let i = 1; i <= maxCards; i += 1) {
-    total += purgeCardPrice(i, modifiers);
+    total += purgeCardPrice(config, i, modifiers);
     if (total > essence) return i - 1;
   }
   return maxCards;

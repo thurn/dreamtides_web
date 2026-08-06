@@ -12,9 +12,16 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Genesis, LogNode } from "../eventlog/types";
 import { resetLog } from "../logging";
 import type { RuntimeConfig } from "../runtime/runtime-config";
+import { economyFixture } from "../testing/economy-fixture";
 
 const REDUCER_VERSION = "dreamtides-coop-v14";
 const ATLAS_FOLD_HASH = "fixture-atlas-fold-hash";
+const ECONOMY = economyFixture();
+const PINNED_ECONOMY = {
+  economyFoldHash: ECONOMY.foldHash,
+  defaultStartingEssence: ECONOMY.journey.defaultStartingEssence,
+  dreamsignCap: ECONOMY.journey.dreamsignCap,
+};
 
 // Captured subscriber so a test can hand RoomGate a chosen log node.
 let deliverNode: ((node: LogNode) => void) | null = null;
@@ -106,6 +113,7 @@ function mount(config: RuntimeConfig): void {
         gameId={config.gameId}
         runtimeConfig={config}
         atlasFoldHash={ATLAS_FOLD_HASH}
+        economyData={ECONOMY}
       >
         {() => <div data-room-children="true">room children</div>}
       </RoomGate>,
@@ -143,6 +151,7 @@ describe("RoomGate content-config gate", () => {
       draftMode: "pool",
       fresh20PackSize: null,
       atlasFoldHash: ATLAS_FOLD_HASH,
+      ...PINNED_ECONOMY,
     });
 
     expect(genesis.reducerVersion).toBe(REDUCER_VERSION);
@@ -162,6 +171,7 @@ describe("RoomGate content-config gate", () => {
             draftMode: "pool",
             fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
+            ...PINNED_ECONOMY,
           }),
         ),
       );
@@ -186,6 +196,7 @@ describe("RoomGate content-config gate", () => {
             draftMode: "pool",
             fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
+            ...PINNED_ECONOMY,
           }),
         ),
       );
@@ -227,6 +238,32 @@ describe("RoomGate content-config gate", () => {
             draftMode: "pool",
             fresh20PackSize: null,
             atlasFoldHash: "different-atlas-fold-hash",
+            ...PINNED_ECONOMY,
+          }),
+        ),
+      );
+    });
+    await flush();
+
+    expect(container.querySelector("[data-config-gate]")).not.toBeNull();
+    expect(container.textContent).toContain("Start a New Game");
+    expect(container.textContent).not.toContain("Use This Game’s Settings");
+  });
+
+  it("does not adopt a room whose economy fold hash differs", async () => {
+    mount(runtimeConfig());
+    await flush();
+
+    act(() => {
+      deliverNode?.(
+        nodeWith(
+          genesisWith({
+            poolVariant: "tides4",
+            draftMode: "pool",
+            fresh20PackSize: null,
+            atlasFoldHash: ATLAS_FOLD_HASH,
+            ...PINNED_ECONOMY,
+            economyFoldHash: "different-economy-fold-hash",
           }),
         ),
       );
@@ -271,6 +308,7 @@ describe("RoomGate content-config gate", () => {
             draftMode: "pool",
             fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
+            ...PINNED_ECONOMY,
           }),
           reducerVersion: "0dfbc840a6a3-6d94b82e9b7a",
         }),
@@ -294,6 +332,7 @@ describe("RoomGate content-config gate", () => {
             draftMode: "pool",
             fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
+            ...PINNED_ECONOMY,
           }),
           reducerVersion: "incompatible-rules-v2",
         }),

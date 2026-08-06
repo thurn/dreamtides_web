@@ -94,10 +94,17 @@ export interface ContentConfig {
   fresh20PackSize: number | null;
   /** Atlas generation/reducer content pinned independently of URL settings. */
   atlasFoldHash?: string;
+  /** Economy coefficients and genesis defaults pinned independently of URL settings. */
+  economyFoldHash?: string;
+  defaultStartingEssence?: number;
+  dreamsignCap?: number;
 }
 
 export interface PinnedContentConfig extends ContentConfig {
   atlasFoldHash: string;
+  economyFoldHash: string;
+  defaultStartingEssence: number;
+  dreamsignCap: number;
 }
 
 /** A current room genesis whose fold-relevant content settings are pinned. */
@@ -208,6 +215,8 @@ export interface ReducerResult<S> {
  * an event deterministically.
  */
 export interface EventContext {
+  /** Immutable fold-relevant content configuration from room genesis. */
+  contentConfig?: ContentConfig;
   /** The seq being assigned to this event. */
   seq: number;
   /**

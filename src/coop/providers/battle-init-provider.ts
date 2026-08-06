@@ -113,6 +113,7 @@ function buildBattleInit(
     dreamsignTemplates: content.dreamsignTemplates,
     poolContext: content.poolContext,
     knownGoodDecklists: content.knownGoodDecklists,
+    economyData: content.economyData,
     dreamsignSignatures: content.dreamsignSignatures,
     fitModel: content.fitModel,
     draftRecords: content.draftRecords,

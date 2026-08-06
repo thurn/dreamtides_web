@@ -11,15 +11,13 @@ import type {
   TidemarkLadderClimbSiteRuntime,
 } from "../types/journey";
 import { STANDARD_PLAYING_CARD_RANKS } from "./gravok-wager";
+import type { EconomyData } from "../types/economy-data";
 
 export const TIDEMARK_LADDER_CLIMB_RULES_VERSION = "tidemark-ladder-climb-v2";
 export const TIDEMARK_STRONG_POOL_LIMIT = 50;
-export const TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD = 25;
 
 export interface TidemarkLadderClimbAttemptRule {
   attemptNumber: TidemarkLadderClimbAttemptNumber;
-  ordinaryCost: number;
-  farpointCost: number;
   threshold: StandardPlayingCardRank;
   oddsNumerator: number;
   oddsDenominator: number;
@@ -29,32 +27,24 @@ export interface TidemarkLadderClimbAttemptRule {
 export const TIDEMARK_LADDER_CLIMB_ATTEMPTS: readonly TidemarkLadderClimbAttemptRule[] = [
   {
     attemptNumber: 1,
-    ordinaryCost: 0,
-    farpointCost: 0,
     threshold: "Q",
     oddsNumerator: 12,
     oddsDenominator: 52,
   },
   {
     attemptNumber: 2,
-    ordinaryCost: 5,
-    farpointCost: 0,
     threshold: "10",
     oddsNumerator: 20,
     oddsDenominator: 52,
   },
   {
     attemptNumber: 3,
-    ordinaryCost: 10,
-    farpointCost: 0,
     threshold: "8",
     oddsNumerator: 28,
     oddsDenominator: 52,
   },
   {
     attemptNumber: 4,
-    ordinaryCost: 15,
-    farpointCost: 0,
     threshold: "6",
     oddsNumerator: 36,
     oddsDenominator: 52,
@@ -68,11 +58,12 @@ export function tidemarkLadderClimbAttemptRule(
 }
 
 export function tidemarkLadderClimbAttemptCost(
+  config: EconomyData["gamble"]["ladderClimb"],
   attemptNumber: TidemarkLadderClimbAttemptNumber,
   isFarpoint: boolean,
 ): number {
-  const rule = tidemarkLadderClimbAttemptRule(attemptNumber);
-  return isFarpoint ? rule.farpointCost : rule.ordinaryCost;
+  const rule = config.attempts[attemptNumber - 1];
+  return isFarpoint ? rule.enhancedCost : rule.standardCost;
 }
 
 /** The next attempt the current result state permits, if play may continue. */

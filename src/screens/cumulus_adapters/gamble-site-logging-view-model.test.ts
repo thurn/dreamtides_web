@@ -4,6 +4,7 @@ import { getLogEntries, resetLog } from "../../logging";
 import type { TidemarkLadderClimbSiteRuntime } from "../../types/journey";
 import type { LadderClimbSiteView } from "../../cumulus/screens/GambleSiteScreen";
 import { logGambleSettled } from "./gamble-site-logging-view-model";
+import { economyFixture } from "../../testing/economy-fixture";
 
 const REWARD_DREAMSIGN = {
   id: "00000000-0000-4000-8000-000000000025",
@@ -73,7 +74,7 @@ describe("gamble-site-logging-view-model", () => {
   });
 
   it("records the Ladder Climb Essence payout and net settlement", () => {
-    logGambleSettled("fixture-site", RUNTIME, VIEW);
+    logGambleSettled("fixture-site", RUNTIME, VIEW, economyFixture());
 
     expect(getLogEntries()).toHaveLength(1);
     expect(getLogEntries()[0]).toMatchObject({

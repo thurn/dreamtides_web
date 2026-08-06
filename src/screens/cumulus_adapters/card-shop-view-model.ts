@@ -8,6 +8,7 @@ import {
 } from "../../shop/shop-generator";
 import { rerollCost } from "../../shop/shop-pricing";
 import type { CardData } from "../../types/cards";
+import type { EconomyData } from "../../types/economy-data";
 import type {
   DreamGuideContent,
   ResolvedDreamAvatarPackage,
@@ -93,18 +94,19 @@ export function buildCardShopOffers(
   return offers;
 }
 
-/** Build the one-use restock action for this visit. */
+/** Build the configured restock action for this visit. */
 export function buildCardShopRestock(
+  config: EconomyData["shop"]["reroll"],
   runtime: ShopSiteRuntime,
   site: SiteState,
   essence: number,
 ): CardShopRestockView {
-  const price = rerollCost(0, site.isEnhanced);
+  const price = rerollCost(config, runtime.rerollCount, site.isEnhanced);
   return {
     entryId: `shop-restock-${site.id}`,
     price,
     state:
-      runtime.rerollCount > 0
+      runtime.rerollCount >= config.maxPerVisit
         ? "used"
         : price <= essence
           ? "available"
@@ -156,6 +158,7 @@ export function buildCardShopSiteView(params: {
   cardDatabase: ReadonlyMap<number, CardData>;
   guide: DreamGuideContent | null;
   guideLine: string | null;
+  economyData: EconomyData;
 }): CardShopSiteView {
   const priceModifiers: ShopPriceModifiers = {
     essenceDiscountPercent: params.state.shopModifiers.essenceDiscountPercent,
@@ -173,6 +176,7 @@ export function buildCardShopSiteView(params: {
       priceModifiers,
     ),
     restock: buildCardShopRestock(
+      params.economyData.shop.reroll,
       params.runtime,
       params.site,
       params.state.essence,

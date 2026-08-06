@@ -160,6 +160,7 @@ export function foldEvents<S>(
     const intervening = computeIntervening(applied, event.basedOnSeq, seq, coveredFromSeq);
     const ctx: EventContext = {
       seq,
+      contentConfig: genesis.contentConfig,
       rng: eventRng(genesis.seed, seq),
       intervening,
       timestamp: event.clientTimestamp,

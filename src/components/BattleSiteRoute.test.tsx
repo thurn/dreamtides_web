@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import { StrictMode, act, type ReactElement } from "react";
+import { economyFixture } from "../testing/economy-fixture";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
@@ -177,6 +178,7 @@ function setJourneyState(
       affiliations: [],
       guides: [],
       atlasData: MINIMAL_ATLAS_DATA,
+      economyData: economyFixture(),
     },
   });
 }

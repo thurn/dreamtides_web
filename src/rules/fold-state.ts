@@ -88,11 +88,15 @@ export function genesisFoldState(genesis: Genesis): FoldState {
 }
 
 function genesisJourneyState(genesis: Genesis): JourneyState {
+  // These literals are compatibility defaults for historical rooms whose
+  // genesis predates economy pinning.
+  const defaultStartingEssence = genesis.contentConfig?.defaultStartingEssence ?? 200;
+  const dreamsignCap = genesis.contentConfig?.dreamsignCap ?? 12;
   return {
     runId: null,
     seed: genesis.seed,
-    essence: 200,
-    maxDreamsigns: 12,
+    essence: defaultStartingEssence,
+    maxDreamsigns: dreamsignCap,
     deck: [],
     dreamAvatar: null,
     resolvedPackage: null,

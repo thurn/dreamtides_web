@@ -15,7 +15,7 @@ export interface DraftDreamAvatar {
   imageNumber: string;
   /** Authored head position shared by full-body and square portrait crops. */
   portraitFocus?: DreamAvatarPortraitFocus;
-  startingEssence: number;
+  startingEssence?: number;
   /**
    * Draft archetypes this avatar is suited to, sourced from
    * {@link DREAM_AVATAR_ARCHETYPES_BY_ID} and merged into the data by

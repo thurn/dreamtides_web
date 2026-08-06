@@ -1,15 +1,16 @@
 import type { GambleSiteView } from "../../cumulus/screens/GambleSiteScreen";
 import {
   TIDEMARK_LADDER_CLIMB_ATTEMPTS,
-  TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD,
   tidemarkLadderClimbAttemptCost,
 } from "../../data/tidemark-ladder-climb";
 import {
   STARWAY_STAIRS_TIERS,
+  starwayStairsEssenceReward,
   starwayStairsTierRule,
 } from "../../data/starway-stairs";
 import { logEventOnce } from "../../logging";
 import type { GambleSiteRuntime, SiteState } from "../../types/journey";
+import type { EconomyData } from "../../types/economy-data";
 
 /** Record one Gamble visit without coupling logging payloads to the adapter. */
 export function logGambleSiteEntered(site: SiteState & { type: "Gamble" }): void {
@@ -24,6 +25,7 @@ export function logGamblePrepared(
   siteId: string,
   runtime: GambleSiteRuntime,
   view: GambleSiteView,
+  economyData: EconomyData,
 ): void {
   if (
     runtime.gameId === "gravok-three-gate-wager" &&
@@ -77,7 +79,7 @@ export function logGamblePrepared(
           bustOddsNumerator: tier.bustOddsNumerator,
           oddsDenominator: tier.oddsDenominator,
           highestBustRank: tier.highestBustRank,
-          rewardEssence: tier.essenceReward,
+          rewardEssence: starwayStairsEssenceReward(economyData.gamble.starwayStairs, tier.tierNumber),
         })),
       },
     );
@@ -103,10 +105,10 @@ export function logGamblePrepared(
       strongPoolSize: runtime.strongPoolSize,
       strongPoolCutoffScore: runtime.strongPoolCutoffScore,
       selectedDreamsignId: runtime.rewardDreamsign?.id ?? null,
-      rewardEssence: TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD,
+      rewardEssence: economyData.gamble.ladderClimb.winEssence,
       attempts: TIDEMARK_LADDER_CLIMB_ATTEMPTS.map((attempt) => ({
         attemptNumber: attempt.attemptNumber,
-        cost: tidemarkLadderClimbAttemptCost(attempt.attemptNumber, runtime.isFarpoint),
+        cost: tidemarkLadderClimbAttemptCost(economyData.gamble.ladderClimb, attempt.attemptNumber, runtime.isFarpoint),
         oddsNumerator: attempt.oddsNumerator,
         oddsDenominator: attempt.oddsDenominator,
         threshold: attempt.threshold,
@@ -120,6 +122,7 @@ export function logGambleResolved(
   siteId: string,
   runtime: GambleSiteRuntime,
   view: GambleSiteView,
+  economyData: EconomyData,
 ): void {
   if (
     runtime.gameId === "gravok-three-gate-wager" &&
@@ -168,7 +171,7 @@ export function logGambleResolved(
         payment: runtime.wagerAmount,
         revealedCard: result.card,
         busted: result.busted,
-        prizeAtRisk: tier.essenceReward,
+        prizeAtRisk: starwayStairsEssenceReward(economyData.gamble.starwayStairs, result.tierNumber),
       },
     );
     return;
@@ -193,7 +196,7 @@ export function logGambleResolved(
       revealedCard: result.card,
       won: result.won,
       essenceGained: result.won
-        ? TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD
+        ? economyData.gamble.ladderClimb.winEssence
         : 0,
       terminalReason: result.won
         ? "won"
@@ -209,6 +212,7 @@ export function logGambleSettled(
   siteId: string,
   runtime: GambleSiteRuntime,
   view: GambleSiteView,
+  economyData: EconomyData,
 ): void {
   if (runtime.gameId === "gravok-three-gate-wager") {
     if (runtime.result?.essenceSettled !== true) return;
@@ -241,7 +245,7 @@ export function logGambleSettled(
         tierNumber: result.tierNumber,
         busted: result.busted,
         terminalReason: runtime.terminalReason,
-        prizeAtRisk: starwayStairsTierRule(result.tierNumber).essenceReward,
+        prizeAtRisk: starwayStairsEssenceReward(economyData.gamble.starwayStairs, result.tierNumber),
         prizeAwarded: runtime.prizeAwarded,
         payment: runtime.wagerAmount,
       },
@@ -259,13 +263,13 @@ export function logGambleSettled(
       attemptNumber: runtime.result.attemptNumber,
       cumulativeCost: runtime.result.cumulativeCost,
       essenceGained: runtime.result.won
-        ? TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD
+        ? economyData.gamble.ladderClimb.winEssence
         : 0,
       essenceChangeAtSettlement: runtime.result.won
-        ? TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD
+        ? economyData.gamble.ladderClimb.winEssence
         : 0,
       netEssenceChange:
-        (runtime.result.won ? TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD : 0) -
+        (runtime.result.won ? economyData.gamble.ladderClimb.winEssence : 0) -
         runtime.result.cumulativeCost,
       dreamsignId: runtime.result.won
         ? runtime.rewardDreamsign?.id ?? null

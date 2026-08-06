@@ -195,7 +195,7 @@ function buildGravokWagerRuntime(
     rulesVersion: GRAVOK_WAGER_RULES_VERSION,
     roundNumber: 1,
     isFarpoint: site.isEnhanced,
-    wagerCost: gravokWagerCost(site.isEnhanced),
+    wagerCost: gravokWagerCost(content.economyData.gamble.threeGate, site.isEnhanced),
     shuffleCommitment,
     committedCard,
     dreamsignCandidateIds,
@@ -262,6 +262,7 @@ function buildTidemarkLadderClimbRuntime(
 
 function buildStarwayStairsRuntime(
   site: SiteState,
+  content: JourneyContent,
   rng: () => number,
 ): StarwayStairsSiteRuntime {
   const commitments = STARWAY_STAIRS_TIERS.map(() => ({
@@ -274,7 +275,7 @@ function buildStarwayStairsRuntime(
     rulesVersion: STARWAY_STAIRS_RULES_VERSION,
     roundNumber: 1,
     isFarpoint: site.isEnhanced,
-    wagerAmount: starwayStairsWagerAmount(site.isEnhanced),
+    wagerAmount: starwayStairsWagerAmount(content.economyData.gamble.starwayStairs, site.isEnhanced),
     shuffleCommitments: commitments.map((entry) => entry.shuffleCommitment),
     committedCards: commitments.map((entry) => entry.card),
     results: [],
@@ -307,7 +308,7 @@ function buildGambleRuntime(
     return ladderRuntime ?? buildGravokWagerRuntime(journey, site, content, rng);
   }
   if (gameId === "starway-stairs") {
-    return buildStarwayStairsRuntime(site, rng);
+    return buildStarwayStairsRuntime(site, content, rng);
   }
   return buildGravokWagerRuntime(journey, site, content, rng);
 }
@@ -350,6 +351,7 @@ function buildCardChoiceRuntime(
   cardDatabase: Map<number, CardData>,
   kind: "transfiguration" | "duplication",
   rng: () => number,
+  economy: JourneyContent["economyData"]["transfiguration"],
 ): CardChoiceSiteRuntime {
   const entryIds = selectCardChoiceEntryIds(
     journey.deck,
@@ -378,6 +380,7 @@ function buildCardChoiceRuntime(
         effectDetails: transfigurationEffectDetails(offer, card),
         previewCard: offer.previewCard,
         essenceCost: transfigurationEssenceCost(
+          economy,
           journey.seed,
           site.id,
           entryId,
@@ -415,6 +418,7 @@ export function createSiteContentProvider(
   };
 
   return {
+    economyData: content.economyData,
     randomSiteDestinations: content.atlasData.randomSite.destinations,
     randomSiteGuideId: content.atlasData.randomSite.guideId,
     openSite: ({
@@ -455,6 +459,7 @@ export function createSiteContentProvider(
         }
         case "Reward": {
           const generated = generateRewardSiteData({
+            economy: content.economyData.siteRewards.reward,
             dreamsignTemplates: content.dreamsignTemplates,
             remainingDreamsignPoolIds: journey.remainingDreamsignPool,
             regenerationPoolIds: dreamsignRegenerationPoolIds(journey),
@@ -477,7 +482,9 @@ export function createSiteContentProvider(
           };
         }
         case "DreamsignRevelation": {
-          const optionCount = site.isEnhanced ? 4 : 3;
+          const optionCount = site.isEnhanced
+            ? content.economyData.siteRewards.dreamsignRevelation.enhancedOfferCount
+            : content.economyData.siteRewards.dreamsignRevelation.standardOfferCount;
           const draw = drawDreamsignOptions(
             journey.remainingDreamsignPool,
             content.dreamsignTemplates,
@@ -497,13 +504,23 @@ export function createSiteContentProvider(
         case "Shop":
         case "DreamsignMarket": {
           const isMarket = site.type === "DreamsignMarket";
+          const stock = isMarket
+            ? content.economyData.shop.stock.dreamsignMarket
+            : site.isEnhanced
+              ? content.economyData.shop.stock.specialtyShop
+              : content.economyData.shop.stock.cardShop;
           const generated = generateShopInventory({
+            economy: content.economyData.shop,
             cardDatabase: content.cardDatabase,
             draftState: isMarket ? null : shopSourceDraftState(journey),
             remainingDreamsignPoolIds: journey.remainingDreamsignPool,
             dreamsignTemplates: content.dreamsignTemplates,
             dreamsignRegenerationPoolIds: dreamsignRegenerationPoolIds(journey),
-            ...(isMarket ? { cardCount: 0, dreamsignCount: 3 } : {}),
+            cardCount: stock.cardSlots,
+            dreamsignCount: stock.dreamsignSlots,
+            ...(site.isEnhanced && !isMarket
+              ? { starterDecklistCardNumbers: journey.resolvedPackage?.starterDecklistCardNumbers ?? [] }
+              : {}),
             rng: stream,
           });
           const baseSlots = shopSlotsToRuntime(generated.slots);
@@ -561,6 +578,7 @@ export function createSiteContentProvider(
             content.cardDatabase,
             kind,
             stream,
+            content.economyData.transfiguration,
           );
           return { runtime };
         }
@@ -594,13 +612,23 @@ export function createSiteContentProvider(
     rerollShop: ({ journey, site, rng }): ShopRerollResult | null => {
       const stream = streamFromKeyed(rng);
       const isMarket = site.type === "DreamsignMarket";
+      const stock = isMarket
+        ? content.economyData.shop.stock.dreamsignMarket
+        : site.isEnhanced
+          ? content.economyData.shop.stock.specialtyShop
+          : content.economyData.shop.stock.cardShop;
       const generated = generateShopInventory({
+        economy: content.economyData.shop,
         cardDatabase: content.cardDatabase,
         draftState: isMarket ? null : shopSourceDraftState(journey),
         remainingDreamsignPoolIds: journey.remainingDreamsignPool,
         dreamsignTemplates: content.dreamsignTemplates,
         dreamsignRegenerationPoolIds: dreamsignRegenerationPoolIds(journey),
-        ...(isMarket ? { cardCount: 0, dreamsignCount: 3 } : {}),
+        cardCount: stock.cardSlots,
+        dreamsignCount: stock.dreamsignSlots,
+        ...(site.isEnhanced && !isMarket
+          ? { starterDecklistCardNumbers: journey.resolvedPackage?.starterDecklistCardNumbers ?? [] }
+          : {}),
         rng: stream,
       });
       // Task-15 trap: deck-fit runs keep the live draft state, and a card-less

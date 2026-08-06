@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
+import { economyFixture } from "./testing/economy-fixture";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
@@ -364,6 +365,7 @@ function makeJourneyContent(): JourneyContent {
     affiliations: [],
     guides: [],
     atlasData: MINIMAL_ATLAS_DATA,
+    economyData: economyFixture(),
   };
 }
 
@@ -382,6 +384,7 @@ function setJourneyState(state: JourneyState): void {
       affiliations: [],
       guides: [],
       atlasData: MINIMAL_ATLAS_DATA,
+      economyData: economyFixture(),
     },
   });
 }
@@ -669,6 +672,7 @@ describe("JourneyApp", () => {
         affiliations: [],
         guides: [],
         atlasData: MINIMAL_ATLAS_DATA,
+        economyData: economyFixture(),
       },
     });
 

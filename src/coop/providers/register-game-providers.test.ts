@@ -4,6 +4,7 @@
 // the ACTUAL generators via `registerGameProviders(content)` and folds a full
 // content-coupled event chain through the canonical game engine config, so the
 // previously-bouncing provider-backed events APPLY:
+import { economyFixture } from "../../testing/economy-fixture";
 //
 //   START_JOURNEY -> SELECT_DREAM_AVATAR -> OPEN_SITE (every content-coupled site
 //   type) -> REROLL_SHOP -> BEGIN_BATTLE
@@ -143,6 +144,7 @@ function makeJourneyContent(): JourneyContent {
     affiliations: loadTestAffiliations(),
     guides: loadTestDreamGuides(),
     atlasData: loadTestAtlasData(),
+    economyData: economyFixture(),
     poolContext: makeTestPoolContext(dreamsignIds),
   };
 }

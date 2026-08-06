@@ -25,7 +25,9 @@ export function ConfigGateScreen({
 }: ConfigGateScreenProps): ReactNode {
   const canAdopt =
     roomContentConfig?.atlasFoldHash !== undefined &&
-    roomContentConfig.atlasFoldHash === localContentConfig.atlasFoldHash;
+    roomContentConfig.atlasFoldHash === localContentConfig.atlasFoldHash &&
+    roomContentConfig.economyFoldHash !== undefined &&
+    roomContentConfig.economyFoldHash === localContentConfig.economyFoldHash;
 
   const handleUseRoomSettings = useCallback(() => {
     if (!canAdopt || roomContentConfig === undefined) return;
@@ -90,6 +92,7 @@ function describeConfig(
       { label: "Draft", value: "Unavailable" },
       { label: "Pack Size", value: "Unavailable" },
       { label: "Atlas Rules", value: "Unavailable" },
+      { label: "Economy Rules", value: "Unavailable" },
     ];
   }
   return [
@@ -102,6 +105,10 @@ function describeConfig(
     {
       label: "Atlas Rules",
       value: config.atlasFoldHash?.slice(0, 12) ?? "Unavailable",
+    },
+    {
+      label: "Economy Rules",
+      value: config.economyFoldHash?.slice(0, 12) ?? "Unavailable",
     },
   ];
 }

@@ -8,9 +8,6 @@ import type {
 
 const EXPLORATION_DATA_PATH = "/exploration-data.json";
 
-/** Default reward for effects that trade a card's spark for essence. */
-export const EXPLORATION_ESSENCE_PER_SPARK = 40;
-
 export type ExplorationPredicate =
   | "character"
   | "event"

@@ -2,7 +2,6 @@ import { resolveDeckEntryCard } from "../../card-type-change";
 import { createDreamsign } from "../../data/dreamsigns";
 import { toJourneyDreamAvatar } from "../../data/dream-avatar-selection";
 import {
-  EXPLORATION_ESSENCE_PER_SPARK,
   explorationActionUsesSpecialVariable,
   explorationEncounterForCard,
   type ExplorationActionContent,
@@ -1331,7 +1330,7 @@ export function resolveExplorationChoice(input: {
       if (selected === null) return null;
       const essenceGained =
         Math.max(0, selected.card.spark ?? 0) *
-        (action.essencePerSpark ?? EXPLORATION_ESSENCE_PER_SPARK);
+        (action.essencePerSpark ?? input.content.economyData.exploration.defaultEssencePerSpark);
       const target = deckTarget(next, content, entryIds[0]);
       if (
         target === null ||

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createDefaultState } from "../../state/journey-context";
+import { economyFixture } from "../../testing/economy-fixture";
 import type { Dreamsign, ShopSiteRuntime, SiteState } from "../../types/journey";
 import {
   buildDreamsignBazaarOffers,
@@ -104,17 +105,25 @@ describe("buildDreamsignBazaarOffers", () => {
 
 describe("buildDreamsignBazaarRestock", () => {
   it("prices a normal restock, makes an enhanced one free, and marks a used one", () => {
-    expect(buildDreamsignBazaarRestock(runtime(), site, 100)).toMatchObject({
+    expect(buildDreamsignBazaarRestock(economyFixture().shop.reroll, runtime(), site, 100)).toMatchObject({
       price: 50,
       state: "available",
     });
     expect(
-      buildDreamsignBazaarRestock(runtime(), { ...site, isEnhanced: true }, 0),
+      buildDreamsignBazaarRestock(economyFixture().shop.reroll, runtime(), { ...site, isEnhanced: true }, 0),
     ).toMatchObject({ price: 0, state: "available" });
     expect(
-      buildDreamsignBazaarRestock({ ...runtime(), rerollCount: 1 }, site, 100)
+      buildDreamsignBazaarRestock(economyFixture().shop.reroll, { ...runtime(), rerollCount: 1 }, site, 100)
         .state,
     ).toBe("used");
+  });
+
+  it("keeps restock available until an injected visit limit is reached", () => {
+    const config = { ...economyFixture().shop.reroll, maxPerVisit: 2 };
+    expect(buildDreamsignBazaarRestock(config, { ...runtime(), rerollCount: 1 }, site, 100).state)
+      .toBe("available");
+    expect(buildDreamsignBazaarRestock(config, { ...runtime(), rerollCount: 2 }, site, 100).state)
+      .toBe("used");
   });
 });
 
@@ -142,6 +151,7 @@ describe("buildDreamsignBazaarSiteView", () => {
       },
       guideLine: "A chosen greeting.",
       pendingDreamsign,
+      economyData: economyFixture(),
     });
 
     expect(view.siteId).toBe("dreamsign-bazaar-site");

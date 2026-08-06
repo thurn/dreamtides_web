@@ -1,6 +1,7 @@
 // Pure reducer cases for Gravok's Three-Gate Wager.
 
 import {
+  gravokGateEssenceReward,
   gravokGateRule,
   GRAVOK_WAGER_MAX_RETRIES,
   rankWinsGravokGate,
@@ -8,7 +9,6 @@ import {
 import {
   nextTidemarkLadderClimbAttemptNumber,
   rankWinsTidemarkLadderClimbAttempt,
-  TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD,
   tidemarkLadderClimbAttemptCost,
 } from "../../data/tidemark-ladder-climb";
 import {
@@ -16,7 +16,7 @@ import {
   STARWAY_STAIRS_MAX_RETRIES,
   STARWAY_STAIRS_TIERS,
   nextStarwayStairsTierNumber,
-  starwayStairsTierRule,
+  starwayStairsEssenceReward,
 } from "../../data/starway-stairs";
 import type {
   GravokGateId,
@@ -113,6 +113,8 @@ export function placeGravokWager(
   const gateId = rawGateId as GravokGateId;
   const runtime = gravokRuntimeFor(journey, siteId);
   if (runtime === null || runtime.result !== null) return null;
+  const economy = getSiteContentProvider()?.economyData?.gamble.threeGate;
+  if (economy === undefined) return null;
   if (journey.essence < runtime.wagerCost) return null;
 
   const gate = gravokGateRule(gateId);
@@ -124,7 +126,7 @@ export function placeGravokWager(
   }
 
   const won = rankWinsGravokGate(runtime.committedCard.rank, gateId);
-  const essenceGained = won ? gate.essenceReward : 0;
+  const essenceGained = won ? gravokGateEssenceReward(economy, gateId) : 0;
   const winsDreamsign = won && gate.awardsDreamsign;
   const needsReplacement =
     winsDreamsign && journey.dreamsigns.length >= journey.maxDreamsigns;
@@ -303,6 +305,8 @@ export function drawTidemarkLadderClimb(
 
   const runtime = tidemarkRuntimeFor(journey, siteId);
   if (runtime === null) return null;
+  const economy = getSiteContentProvider()?.economyData?.gamble.ladderClimb;
+  if (economy === undefined) return null;
   if (journey.maxDreamsigns === 0) return null;
 
   const attemptNumber = nextTidemarkLadderClimbAttemptNumber(runtime);
@@ -311,7 +315,7 @@ export function drawTidemarkLadderClimb(
   const shuffleCommitment = runtime.shuffleCommitments[attemptNumber - 1];
   if (card === undefined || shuffleCommitment === undefined) return null;
 
-  const costPaid = tidemarkLadderClimbAttemptCost(attemptNumber, runtime.isFarpoint);
+  const costPaid = tidemarkLadderClimbAttemptCost(economy, attemptNumber, runtime.isFarpoint);
   if (journey.essence < costPaid) return null;
   const cumulativeCost = runtime.cumulativeCost + costPaid;
   const won = rankWinsTidemarkLadderClimbAttempt(card.rank, attemptNumber);
@@ -351,8 +355,9 @@ export function settleTidemarkLadderClimb(
 
   const runtime = tidemarkRuntimeFor(journey, siteId);
   const result = runtime?.result ?? null;
+  const economy = getSiteContentProvider()?.economyData?.gamble.ladderClimb;
   if (
-    runtime === null ||
+    runtime === null || economy === undefined ||
     result === null ||
     result.resultSettled ||
     runtime.shuffleCommitments[result.attemptNumber - 1] !== shuffleCommitment
@@ -381,7 +386,7 @@ export function settleTidemarkLadderClimb(
   return withRuntime(
     {
       ...journey,
-      essence: journey.essence + TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD,
+      essence: journey.essence + economy.winEssence,
       dreamsigns,
       remainingDreamsignPool,
     },
@@ -482,8 +487,9 @@ export function settleStarwayStairs(
   if (siteId === null || shuffleCommitment === null) return null;
   const runtime = starwayRuntimeFor(journey, siteId);
   const result = runtime?.results[runtime.results.length - 1];
+  const economy = getSiteContentProvider()?.economyData?.gamble.starwayStairs;
   if (
-    runtime === null ||
+    runtime === null || economy === undefined ||
     result === undefined ||
     result.resultSettled ||
     runtime.shuffleCommitments[result.tierNumber - 1] !== shuffleCommitment
@@ -494,7 +500,7 @@ export function settleStarwayStairs(
   const reachedTop =
     !result.busted && result.tierNumber === STARWAY_STAIRS_TIERS.length;
   const prizeAwarded = reachedTop
-    ? starwayStairsTierRule(result.tierNumber).essenceReward
+    ? starwayStairsEssenceReward(economy, result.tierNumber)
     : 0;
   const nextResults = runtime.results.map((entry, index) =>
     index === runtime.results.length - 1
@@ -523,8 +529,9 @@ export function cashOutStarwayStairs(
   if (siteId === null || shuffleCommitment === null) return null;
   const runtime = starwayRuntimeFor(journey, siteId);
   const result = runtime?.results[runtime.results.length - 1];
+  const economy = getSiteContentProvider()?.economyData?.gamble.starwayStairs;
   if (
-    runtime === null ||
+    runtime === null || economy === undefined ||
     result === undefined ||
     result.busted ||
     !result.resultSettled ||
@@ -534,7 +541,7 @@ export function cashOutStarwayStairs(
   ) {
     return null;
   }
-  const prizeAwarded = starwayStairsTierRule(result.tierNumber).essenceReward;
+  const prizeAwarded = starwayStairsEssenceReward(economy, result.tierNumber);
   return withRuntime(
     { ...journey, essence: journey.essence + prizeAwarded },
     siteId,

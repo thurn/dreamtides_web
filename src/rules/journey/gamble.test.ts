@@ -1,4 +1,5 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { economyFixture } from "../../testing/economy-fixture";
 import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
 import type {
   GravokGateId,
@@ -39,6 +40,7 @@ const REWARD_DREAMSIGN: Dreamsign = {
   effectDescription: "Fixture effect.",
   isNegative: false,
 };
+const ECONOMY = economyFixture();
 
 function runtime(
   rank: StandardPlayingCardRank,
@@ -146,6 +148,9 @@ function apply(
 
 afterEach(() => {
   registerSiteContentProvider(null);
+});
+beforeEach(() => {
+  registerSiteContentProvider({ economyData: ECONOMY, openSite: () => null });
 });
 
 function wager(state: FoldState, gateId: GravokGateId) {
@@ -323,6 +328,7 @@ describe("Gravok's Three-Gate Wager", () => {
 
   it("prepares a fresh full-deck commitment when the player plays again", () => {
     const provider: SiteContentProvider = {
+      economyData: ECONOMY,
       openSite: () => ({
         runtime: runtime("K", {
           shuffleCommitment: "next-commitment",
@@ -363,6 +369,7 @@ describe("Gravok's Three-Gate Wager", () => {
 
   it("allows two retries and bounces a third", () => {
     const provider: SiteContentProvider = {
+      economyData: ECONOMY,
       openSite: () => ({
         runtime: runtime("K", {
           shuffleCommitment: "final-commitment",
@@ -788,6 +795,7 @@ describe("Starway Stairs", () => {
 
   it("prepares an independent round and charges its first wager only when betting", () => {
     registerSiteContentProvider({
+      economyData: ECONOMY,
       openSite: () => ({
         runtime: starwayRuntime(safeCards, {
           shuffleCommitments: ["next-1", "next-2", "next-3"],
@@ -830,6 +838,7 @@ describe("Starway Stairs", () => {
 
   it("allows two retries and bounces a third Starway round", () => {
     registerSiteContentProvider({
+      economyData: ECONOMY,
       openSite: () => ({
         runtime: starwayRuntime(
           [

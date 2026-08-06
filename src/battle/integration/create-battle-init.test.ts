@@ -14,6 +14,7 @@ import type { CardKeywordModification, CardTypeChange } from "../../types/journe
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
 import { TRANSFIGURE_MARK_END, TRANSFIGURE_MARK_START } from "../../runtime/transfigure-markers";
+import { economyFixture } from "../../testing/economy-fixture";
 
 // The padded minimum battle deck size; the enemy deck is padded up to this.
 const MIN_BATTLE_DECK_SIZE = 25;
@@ -366,6 +367,29 @@ describe("createBattleInit", () => {
   });
 
   describe("essenceReward", () => {
+    it("uses an injected battle reward curve and its authored floor", () => {
+      const economy = economyFixture();
+      economy.battleReward = {
+        baseEssence: 43,
+        essencePerCompletionLevel: 17,
+        minimumEssence: 11,
+      };
+      const state = {
+        ...makeBattleTestState(),
+        completionLevel: 3,
+        battleModifiers: [{
+          kind: "reward_reduction_flat" as const,
+          amount: 200,
+          battlesRemaining: 1,
+          source: "journey:test",
+        }],
+      };
+
+      const init = createBattleInit({ ...makeBaseInput(), state, economyData: economy });
+
+      expect(init.essenceReward).toBe(11);
+    });
+
     it("threads completionLevelAtStart into the documented essenceReward formula", () => {
       const baseState = makeBattleTestState();
       const expectations = [

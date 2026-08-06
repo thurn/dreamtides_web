@@ -1,5 +1,3 @@
-// Adapter for Tobias Tanglefur's Cumulus Card Shop. Wiring only.
-
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";
@@ -42,6 +40,7 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
             cardDatabase: journeyContent.cardDatabase,
             guide,
             guideLine: guideLineRef.current ?? null,
+            economyData: journeyContent.economyData,
           }),
     [
       state.essence,
@@ -53,6 +52,7 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
       site,
       shopRuntime,
       journeyContent.cardDatabase,
+      journeyContent.economyData,
       guide,
     ],
   );
@@ -102,10 +102,7 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
   }, [guide, site]);
 
   const handleBuy = useCallback(
-    (slotIndex: number) => {
-      if (site === null) return;
-      mutations.buyShopSlot(site.id, slotIndex);
-    },
+    (slotIndex: number) => site !== null && mutations.buyShopSlot(site.id, slotIndex),
     [mutations, site],
   );
   const handleRestock = useCallback(() => {

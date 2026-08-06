@@ -3,6 +3,7 @@ import { createDefaultState } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { artRef } from "../../cumulus/primitives/art";
+import { economyFixture } from "../../testing/economy-fixture";
 import type { ShopSiteRuntime, SiteState } from "../../types/journey";
 import {
   buildCardShopOffers,
@@ -150,19 +151,27 @@ describe("buildCardShopOffers", () => {
 
 describe("buildCardShopRestock", () => {
   it("prices a normal restock and makes an enhanced restock free", () => {
-    expect(buildCardShopRestock(runtime(), site, 100)).toMatchObject({
+    expect(buildCardShopRestock(economyFixture().shop.reroll, runtime(), site, 100)).toMatchObject({
       price: 50,
       state: "available",
     });
     expect(
-      buildCardShopRestock(runtime(), { ...site, isEnhanced: true }, 0),
+      buildCardShopRestock(economyFixture().shop.reroll, runtime(), { ...site, isEnhanced: true }, 0),
     ).toMatchObject({ price: 0, state: "available" });
   });
 
   it("marks the one-use action spent after a restock", () => {
     expect(
-      buildCardShopRestock({ ...runtime(), rerollCount: 1 }, site, 100).state,
+      buildCardShopRestock(economyFixture().shop.reroll, { ...runtime(), rerollCount: 1 }, site, 100).state,
     ).toBe("used");
+  });
+
+  it("keeps restock available until an injected visit limit is reached", () => {
+    const config = { ...economyFixture().shop.reroll, maxPerVisit: 2 };
+    expect(buildCardShopRestock(config, { ...runtime(), rerollCount: 1 }, site, 100).state)
+      .toBe("available");
+    expect(buildCardShopRestock(config, { ...runtime(), rerollCount: 2 }, site, 100).state)
+      .toBe("used");
   });
 });
 
@@ -184,6 +193,7 @@ describe("buildCardShopSiteView", () => {
         homeSpecialty: "Fixture specialty.",
       },
       guideLine: "A chosen greeting.",
+      economyData: economyFixture(),
     });
 
     expect(view.siteId).toBe("shop-site");

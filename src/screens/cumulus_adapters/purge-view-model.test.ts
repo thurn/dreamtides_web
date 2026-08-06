@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { createDefaultState } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
+import { economyFixture } from "../../testing/economy-fixture";
 import type { DeckEntry, SiteState } from "../../types/journey";
 import {
   buildPurgeCardViews,
@@ -113,6 +114,7 @@ describe("buildPurgeSiteView", () => {
       ),
       guide: null,
       guideLine: null,
+      economyData: economyFixture(),
     });
 
     expect(view.maxPaidSelections).toBe(0);
@@ -126,7 +128,7 @@ describe("buildPurgeSiteView", () => {
   });
 
   it("builds a cost ladder from zero through the visit cap", () => {
-    const costs = buildPurgeVisitCosts({
+    const costs = buildPurgeVisitCosts(economyFixture().purge, {
       isEnhanced: false,
       essenceDiscountPercent: 0,
     });

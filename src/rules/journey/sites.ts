@@ -26,6 +26,7 @@
 //     legacy `Math.random` the ensure* family used).
 
 import type { EventContext } from "../../eventlog/types";
+import type { EconomyData } from "../../types/economy-data";
 import type { DraftState } from "../../types/draft";
 import type { GambleGameId } from "../../types/gamble";
 import type { RandomSiteDestinationType } from "../../types/journey";
@@ -40,10 +41,7 @@ import type {
   TransfiguredSiteOfferModifier,
 } from "../../types/journey";
 import { mintEntryId } from "./deck";
-import {
-  MAX_PURGE_PER_VISIT,
-  purgeVisitCost,
-} from "../../purge/purge-pricing";
+import { purgeVisitCost } from "../../purge/purge-pricing";
 import {
   isRandomSiteDestinationType,
   materializeRandomSite,
@@ -84,6 +82,8 @@ export interface SiteOpenResult {
  * Augury are generated purely in-reducer and never need it.
  */
 export interface SiteContentProvider {
+  /** Immutable validated economy data captured with the provider registration. */
+  economyData?: EconomyData;
   /** Authored Random Site destination catalog used by debug Atlas edits. */
   randomSiteDestinations?: readonly RandomSiteDestinationType[];
   /** Guide derived from the unique Random Site signature-site owner. */
@@ -370,9 +370,10 @@ export function openSite(
       });
     }
     case "Essence": {
-      const amount = site.isEnhanced
-        ? randomIntInRange(ctx.rng, 0, 400, 600)
-        : randomIntInRange(ctx.rng, 0, 200, 300);
+      const economy = contentProvider?.economyData?.siteRewards.essence;
+      if (economy === undefined) return null;
+      const rewardRange = site.isEnhanced ? economy.enhanced : economy.standard;
+      const amount = randomIntInRange(ctx.rng, 0, rewardRange.min, rewardRange.max);
       return withRuntime(journey, siteId, {
         kind: "essence",
         amount,
@@ -582,13 +583,14 @@ export function acceptEssence(
   if (existing?.accepted) return null;
   const site = findSite(journey, siteId);
   if (site?.type !== "Essence") return null;
+  const economy = contentProvider?.economyData?.siteRewards.essence;
+  if (economy === undefined) return null;
+  const rewardRange = site.isEnhanced ? economy.enhanced : economy.standard;
   const runtime =
     existing ??
     ({
       kind: "essence" as const,
-      amount: site.isEnhanced
-        ? randomIntInRange(ctx.rng, 0, 400, 600)
-        : randomIntInRange(ctx.rng, 0, 200, 300),
+      amount: randomIntInRange(ctx.rng, 0, rewardRange.min, rewardRange.max),
       accepted: false,
     } satisfies SiteRuntimeState);
   const next = withRuntime(
@@ -986,8 +988,9 @@ export function purgeDeckCards(
     return null;
   }
   const paidCount = removed.filter((entry) => !entry.isBane).length;
-  if (paidCount > MAX_PURGE_PER_VISIT) return null;
-  const cost = purgeVisitCost(paidCount, {
+  const purgeConfig = contentProvider?.economyData?.purge;
+  if (purgeConfig === undefined || paidCount > purgeConfig.marginalCosts.length) return null;
+  const cost = purgeVisitCost(purgeConfig, paidCount, {
     isEnhanced: site.isEnhanced,
     essenceDiscountPercent: journey.shopModifiers.essenceDiscountPercent,
   });

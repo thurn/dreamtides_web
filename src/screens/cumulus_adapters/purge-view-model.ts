@@ -2,12 +2,12 @@
 
 import { guideForSiteType } from "../../data/dreamscapes";
 import {
-  MAX_PURGE_PER_VISIT,
   maxAffordablePurgeCount,
   purgeVisitCost,
   type PurgePriceModifiers,
 } from "../../purge/purge-pricing";
 import type { CardData } from "../../types/cards";
+import type { EconomyData } from "../../types/economy-data";
 import type {
   DeckEntry,
   DreamscapeNode,
@@ -70,10 +70,13 @@ export function buildPurgeCardViews(
 }
 
 /** Build the visit-cost ladder for selected paid-card counts. */
-export function buildPurgeVisitCosts(modifiers: PurgePriceModifiers): number[] {
+export function buildPurgeVisitCosts(
+  config: EconomyData["purge"],
+  modifiers: PurgePriceModifiers,
+): number[] {
   const costs: number[] = [];
-  for (let count = 0; count <= MAX_PURGE_PER_VISIT; count += 1) {
-    costs.push(purgeVisitCost(count, modifiers));
+  for (let count = 0; count <= config.marginalCosts.length; count += 1) {
+    costs.push(purgeVisitCost(config, count, modifiers));
   }
   return costs;
 }
@@ -87,6 +90,7 @@ export function buildPurgeSiteView(params: {
   guide: DreamGuideContent | null;
   guideLine: string | null;
   tutorialConfiguration?: TutorialSiteConfiguration;
+  economyData: EconomyData;
 }): PurgeSiteView {
   const modifiers: PurgePriceModifiers = {
     isEnhanced: params.site.isEnhanced,
@@ -97,8 +101,9 @@ export function buildPurgeSiteView(params: {
   ).length;
   const maxPaidSelections = Math.min(
     maxAffordablePurgeCount(
+      params.economyData.purge,
       params.state.essence,
-      MAX_PURGE_PER_VISIT,
+      params.economyData.purge.marginalCosts.length,
       modifiers,
     ),
     paidCardCount,
@@ -116,7 +121,7 @@ export function buildPurgeSiteView(params: {
       params.tutorialConfiguration,
     ),
     cards: buildPurgeCardViews(params.state.deck, params.cardDatabase),
-    visitCosts: buildPurgeVisitCosts(modifiers),
+    visitCosts: buildPurgeVisitCosts(params.economyData.purge, modifiers),
     maxPaidSelections,
   };
 }

@@ -542,6 +542,7 @@ export function startJourneyFromDreamAvatar({
     seed,
     isTutorialJourney,
     essence: dreamAvatar.startingEssence,
+    maxDreamsigns: journeyContent.economyData.journey.dreamsignCap,
     deck,
     dreamAvatar: toJourneyDreamAvatar(dreamAvatar),
     resolvedPackage,

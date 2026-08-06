@@ -15,6 +15,7 @@ import type { DreamGuideContent } from "../../types/content";
 import type { DreamscapeNode, Dreamsign, JourneyState } from "../../types/journey";
 import type { TutorialSiteConfiguration } from "../../types/tutorial";
 import { LayerName } from "../../types/layer-name";
+import { economyFixture } from "../../testing/economy-fixture";
 
 const screenMock = vi.hoisted(() => vi.fn());
 const loggingMock = vi.hoisted(() => {
@@ -149,6 +150,7 @@ function setJourneyContext(
     } as unknown as JourneyMutations,
     journeyContent: {
       guides: [GUIDE],
+      economyData: economyFixture(),
       tutorialDreamsignRevelation: tutorialConfiguration,
     } as unknown as JourneyContent,
   } as JourneyContextValue);

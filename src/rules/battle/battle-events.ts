@@ -369,6 +369,7 @@ export function restartTutorialBattle(
 export function exitTutorialBattle(
   state: FoldState,
   payload: Record<string, unknown>,
+  ctx: EventContext,
   actor: string,
 ): FoldState | null {
   const battleId = payload.battleId;
@@ -382,7 +383,7 @@ export function exitTutorialBattle(
   ) {
     return null;
   }
-  const reset = resetJourney(state);
+  const reset = resetJourney(state, ctx);
   return {
     ...reset,
     frontDoor: { phase: "journey", journeyId: null, tutorial: null },

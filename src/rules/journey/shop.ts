@@ -242,8 +242,8 @@ export function buyShopSlot(
 // ---------------------------------------------------------------------------
 
 /**
- * `REROLL_SHOP { siteId }` — restock a
- * shop's slots once. The pure reducer owns the money math: it consumes a free
+ * `REROLL_SHOP { siteId }` — restock a shop within its authored visit limit.
+ * The pure reducer owns the money math: it consumes a free
  * reroll (`shopModifiers.freeRerolls`) BEFORE charging essence, so a player
  * with a free reroll pays nothing and keeps their essence; only when no free
  * reroll remains does the paid path charge the canonical price derived from the
@@ -252,7 +252,7 @@ export function buyShopSlot(
  * registered {@link SiteContentProvider}'s `rerollShop`, handed `ctx.rng`.
  *
  * Bounces on a malformed payload, an unknown / already-visited site, a non-shop
- * runtime, an already-rerolled shop (`rerollCount > 0`), a paid reroll the
+ * runtime, a shop at its configured reroll limit, a paid reroll the
  * player cannot afford (essence unchanged), or when no provider is registered
  * (or its `rerollShop` returns null / is absent).
  */
@@ -267,18 +267,20 @@ export function rerollShop(
 
   const runtime = journey.siteRuntime[siteId];
   if (runtime === undefined || runtime.kind !== "shop") return null;
-  if (runtime.rerollCount > 0) return null;
 
   const site = findSite(journey, siteId);
   if (site === null) return null;
 
+  const provider = getSiteContentProvider();
+  const rerollConfig = provider?.economyData?.shop.reroll;
+  if (rerollConfig === undefined) return null;
+  if (runtime.rerollCount >= rerollConfig.maxPerVisit) return null;
   const useFreeReroll = journey.shopModifiers.freeRerolls > 0;
   const cost = useFreeReroll
     ? 0
-    : rerollCost(runtime.rerollCount, site.isEnhanced);
+    : rerollCost(rerollConfig, runtime.rerollCount, site.isEnhanced);
   if (!useFreeReroll && cost > journey.essence) return null;
 
-  const provider = getSiteContentProvider();
   const generated = provider?.rerollShop?.({ journey, site, rng: ctx.rng });
   if (generated === undefined || generated === null) return null;
 

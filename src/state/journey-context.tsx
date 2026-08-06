@@ -413,12 +413,19 @@ export function JourneyContextProvider({
   );
 }
 
-export function createDefaultState(): JourneyState {
+export function createDefaultState(
+  economy: { defaultStartingEssence: number; dreamsignCap: number } = {
+    // Compatibility for historical fixtures which construct state without
+    // loading the economy catalog.
+    defaultStartingEssence: 200,
+    dreamsignCap: 12,
+  },
+): JourneyState {
   return {
     runId: null,
     seed: "default",
-    essence: 200,
-    maxDreamsigns: 12,
+    essence: economy.defaultStartingEssence,
+    maxDreamsigns: economy.dreamsignCap,
     deck: [],
     dreamAvatar: null,
     resolvedPackage: null,

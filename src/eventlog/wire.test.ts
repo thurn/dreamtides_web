@@ -16,6 +16,9 @@ const GENESIS: Genesis = {
     draftMode: "pool",
     fresh20PackSize: null,
     atlasFoldHash: "fixture-atlas-fold-hash",
+    economyFoldHash: "fixture-economy-fold-hash",
+    defaultStartingEssence: 137,
+    dreamsignCap: 9,
   },
 };
 
@@ -116,6 +119,18 @@ describe("RTDB log wire decoding", () => {
     const malformed = {
       ...GENESIS,
       contentConfig: { ...GENESIS.contentConfig, atlasFoldHash: 42 },
+    };
+    expect(decodeGenesis(JSON.stringify(malformed))).toBeNull();
+  });
+
+  it.each([
+    ["economyFoldHash", 42],
+    ["defaultStartingEssence", -1],
+    ["dreamsignCap", 1.5],
+  ])("rejects a malformed %s field", (field, value) => {
+    const malformed = {
+      ...GENESIS,
+      contentConfig: { ...GENESIS.contentConfig, [field]: value },
     };
     expect(decodeGenesis(JSON.stringify(malformed))).toBeNull();
   });

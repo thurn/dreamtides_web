@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { economyFixture } from "../testing/economy-fixture";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
@@ -66,6 +67,7 @@ function makeJourneyContent(
     affiliations: [],
     guides: [],
     atlasData: MINIMAL_ATLAS_DATA,
+    economyData: economyFixture(),
     apollyonIncarnations: incarnations,
     poolContext: makeTestPoolContext(["dreamsign-1", "dreamsign-2"]),
   };

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { GameEvent, EventContext, Genesis } from "../eventlog/types";
 import { foldEvents } from "../eventlog/fold";
+import { hashState } from "../eventlog/hash";
 import type {
   BattleCardInstance,
   BattleMutableState,
@@ -579,6 +580,45 @@ describe("genesisFoldState", () => {
     expect(fold.battle).toBeNull();
     expect(fold.journey.seed).toBe(GENESIS.seed);
     expect(typeof fold.journey.essence).toBe("number");
+  });
+
+  it("uses economy defaults pinned in genesis", () => {
+    const fold = genesisFoldState({
+      ...GENESIS,
+      contentConfig: {
+        poolVariant: "test",
+        draftMode: "pool",
+        fresh20PackSize: null,
+        economyFoldHash: "synthetic-economy",
+        defaultStartingEssence: 137,
+        dreamsignCap: 9,
+      },
+    });
+
+    expect(fold.journey.essence).toBe(137);
+    expect(fold.journey.maxDreamsigns).toBe(9);
+  });
+
+  it("folds the same economy config, seed, and events to the same state hash", () => {
+    const genesis: Genesis = {
+      ...GENESIS,
+      contentConfig: {
+        poolVariant: "test",
+        draftMode: "pool",
+        fresh20PackSize: null,
+        atlasFoldHash: "synthetic-atlas",
+        economyFoldHash: "synthetic-economy",
+        defaultStartingEssence: 137,
+        dreamsignCap: 9,
+      },
+    };
+    const base = { seq: 0, state: genesisFoldState(genesis) };
+    const events = [{ seq: 1, event: adjustEssence(7) }];
+
+    const first = foldEvents(GAME_ENGINE_CONFIG, genesis, base, events, { devMode: true });
+    const second = foldEvents(GAME_ENGINE_CONFIG, genesis, base, events, { devMode: true });
+
+    expect(hashState(first.state)).toBe(hashState(second.state));
   });
 });
 

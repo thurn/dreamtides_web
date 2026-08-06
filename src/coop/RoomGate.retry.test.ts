@@ -40,6 +40,9 @@ const CONTENT_CONFIG: PinnedContentConfig = {
   draftMode: "pool",
   fresh20PackSize: null,
   atlasFoldHash: "fixture-atlas-fold-hash",
+  economyFoldHash: "a".repeat(64),
+  defaultStartingEssence: 17,
+  dreamsignCap: 4,
 };
 
 const db = {} as Parameters<typeof createAndNavigateToRoom>[0];

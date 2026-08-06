@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { economyFixture } from "../../testing/economy-fixture";
 import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
 import { resolveDeckEntryCard } from "../../card-type-change";
 import type {
@@ -117,6 +118,7 @@ function contentFixture(
     affiliations: [],
     guides: [],
     atlasData: MINIMAL_ATLAS_DATA,
+    economyData: economyFixture(),
   };
 }
 

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool";
 import type { ContentConfig } from "../eventlog/types";
+import { economyFixture } from "../testing/economy-fixture";
 import {
   applyContentConfigToSearch,
   contentConfigFromRuntime,
@@ -313,13 +314,17 @@ describe("removeUiParamFromSearch", () => {
 
 describe("contentConfigFromRuntime", () => {
   const atlasFoldHash = "fixture-atlas-fold-hash";
+  const economyData = economyFixture();
 
   it("extracts the fold-relevant slice with defaults for absent optionals", () => {
-    expect(contentConfigFromRuntime(parseRuntimeConfig(""), atlasFoldHash)).toEqual({
+    expect(contentConfigFromRuntime(parseRuntimeConfig(""), atlasFoldHash, economyData)).toEqual({
       poolVariant: DEFAULT_POOL_VARIANT,
       draftMode: "pool",
       fresh20PackSize: null,
       atlasFoldHash,
+      economyFoldHash: economyData.foldHash,
+      defaultStartingEssence: economyData.journey.defaultStartingEssence,
+      dreamsignCap: economyData.journey.dreamsignCap,
     });
   });
 
@@ -328,28 +333,36 @@ describe("contentConfigFromRuntime", () => {
       contentConfigFromRuntime(
         parseRuntimeConfig("?algo=fresh20&packsize=15"),
         atlasFoldHash,
+        economyData,
       ),
     ).toEqual({
       poolVariant: DEFAULT_POOL_VARIANT,
       draftMode: "fresh20",
       fresh20PackSize: 15,
       atlasFoldHash,
+      economyFoldHash: economyData.foldHash,
+      defaultStartingEssence: economyData.journey.defaultStartingEssence,
+      dreamsignCap: economyData.journey.dreamsignCap,
     });
   });
 
   it("reflects a named pool variant", () => {
     expect(
-      contentConfigFromRuntime(parseRuntimeConfig("?algo=idf2"), atlasFoldHash).poolVariant,
+      contentConfigFromRuntime(parseRuntimeConfig("?algo=idf2"), atlasFoldHash, economyData).poolVariant,
     ).toBe("idf2");
   });
 });
 
 describe("contentConfigsEqual", () => {
+  const economyData = economyFixture();
   const base: ContentConfig = {
     poolVariant: "tides4",
     draftMode: "pool",
     fresh20PackSize: null,
     atlasFoldHash: "fixture-atlas-fold-hash",
+    economyFoldHash: economyData.foldHash,
+    defaultStartingEssence: economyData.journey.defaultStartingEssence,
+    dreamsignCap: economyData.journey.dreamsignCap,
   };
 
   it("is true for field-wise equal configs", () => {
@@ -369,35 +382,48 @@ describe("contentConfigsEqual", () => {
     expect(contentConfigsEqual(base, { ...base, atlasFoldHash: "different" })).toBe(
       false,
     );
+    expect(contentConfigsEqual(base, { ...base, economyFoldHash: "different" })).toBe(false);
+    expect(contentConfigsEqual(base, { ...base, defaultStartingEssence: 999 })).toBe(false);
+    expect(contentConfigsEqual(base, { ...base, dreamsignCap: 999 })).toBe(false);
   });
 });
 
 describe("applyContentConfigToSearch", () => {
   it("round-trips: reparsing the result yields the same content slice", () => {
+    const economyData = economyFixture();
+    const pinnedEconomy = {
+      economyFoldHash: economyData.foldHash,
+      defaultStartingEssence: economyData.journey.defaultStartingEssence,
+      dreamsignCap: economyData.journey.dreamsignCap,
+    };
     const configs: ContentConfig[] = [
       {
         poolVariant: "idf2",
         draftMode: "pool",
         fresh20PackSize: null,
         atlasFoldHash: "fixture-atlas-fold-hash",
+        ...pinnedEconomy,
       },
       {
         poolVariant: DEFAULT_POOL_VARIANT,
         draftMode: "replay",
         fresh20PackSize: null,
         atlasFoldHash: "fixture-atlas-fold-hash",
+        ...pinnedEconomy,
       },
       {
         poolVariant: DEFAULT_POOL_VARIANT,
         draftMode: "fresh20",
         fresh20PackSize: 12,
         atlasFoldHash: "fixture-atlas-fold-hash",
+        ...pinnedEconomy,
       },
       {
         poolVariant: DEFAULT_POOL_VARIANT,
         draftMode: "fresh20",
         fresh20PackSize: null,
         atlasFoldHash: "fixture-atlas-fold-hash",
+        ...pinnedEconomy,
       },
     ];
     for (const config of configs) {
@@ -405,6 +431,7 @@ describe("applyContentConfigToSearch", () => {
       expect(contentConfigFromRuntime(
         parseRuntimeConfig(search),
         config.atlasFoldHash ?? "fixture-atlas-fold-hash",
+        { ...economyData, foldHash: config.economyFoldHash ?? economyData.foldHash },
       )).toEqual(
         config,
       );

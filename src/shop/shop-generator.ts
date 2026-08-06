@@ -2,27 +2,11 @@ import type { CardData } from "../types/cards";
 import type { DreamsignTemplate, ResolvedDreamAvatarPackage } from "../types/content";
 import type { DraftState, PoolDraftState } from "../types/draft";
 import type { Dreamsign, RuntimeShopSlot } from "../types/journey";
+import type { EconomyData, EconomyWeightedValue } from "../types/economy-data";
 
 import { drawAndSpendUniqueCards } from "../draft/draft-engine";
 import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
 import { logAffiliationDraw } from "../affiliations/affiliation-weights";
-
-/** Fixed price for standard card items. */
-export const STANDARD_CARD_PRICE = 100;
-
-/** Fixed price for specialty-shop card items. */
-export const SPECIALTY_CARD_PRICE = 200;
-
-/** Fixed price for dreamsign items, paid in essence. */
-const DREAMSIGN_ESSENCE_PRICE = 50;
-
-/**
- * Standard Card Shop composition: 5 cards to purchase and no dreamsigns.
- * Dreamsigns are sold exclusively at the Dreamsign Market, which overrides
- * these counts to 0 cards and 3 dreamsigns.
- */
-const STANDARD_CARD_COUNT = 5;
-const STANDARD_DREAMSIGN_COUNT = 0;
 
 /** The types of items that can appear in a shop slot. */
 export type ShopItemType = "card" | "dreamsign";
@@ -47,6 +31,7 @@ type ShopPricedSlot = Pick<
 > & Partial<Pick<ShopSlot, "card" | "dreamsign" | "purchased">>;
 
 export interface ShopGenerationOptions {
+  economy: EconomyData["shop"];
   cardDatabase: ReadonlyMap<number, CardData>;
   /**
    * The run draft state. Shop cards are drawn from — and spent against — the
@@ -88,6 +73,17 @@ export interface ShopGenerationOptions {
    * the same `OPEN_SITE` / `REROLL_SHOP` roll a byte-identical inventory.
    */
   rng?: () => number;
+}
+
+function weightedValue(entries: readonly EconomyWeightedValue[], rng: () => number): number {
+  const total = entries.reduce((sum, entry) => sum + entry.weight, 0);
+  const target = rng() * total;
+  let cumulative = 0;
+  for (const entry of entries) {
+    cumulative += entry.weight;
+    if (target < cumulative) return entry.value;
+  }
+  return entries[entries.length - 1].value;
 }
 
 export interface ShopInventoryResult {
@@ -294,21 +290,22 @@ export function generateShopInventory(
   options: ShopGenerationOptions,
 ): ShopInventoryResult {
   const {
+    economy,
     cardDatabase,
     draftState,
     remainingDreamsignPoolIds = [],
     dreamsignTemplates = [],
     dreamsignRegenerationPoolIds,
     starterDecklistCardNumbers = [],
-    cardCount = STANDARD_CARD_COUNT,
-    dreamsignCount = STANDARD_DREAMSIGN_COUNT,
+    cardCount = economy.stock.cardShop.cardSlots,
+    dreamsignCount = economy.stock.cardShop.dreamsignSlots,
     affiliationNumberWeights,
     affiliationId,
     rng = Math.random,
   } = options;
 
   const isSpecialty = starterDecklistCardNumbers.length > 0;
-  const cardPrice = isSpecialty ? SPECIALTY_CARD_PRICE : STANDARD_CARD_PRICE;
+  const cardPrice = isSpecialty ? economy.prices.specialtyCard : economy.prices.standardCard;
 
   const nextDraftState =
     draftState === null ? null : structuredClone(draftState);
@@ -417,7 +414,7 @@ export function generateShopInventory(
         itemType: "dreamsign",
         card: null,
         dreamsign,
-        basePrice: DREAMSIGN_ESSENCE_PRICE,
+        basePrice: economy.prices.dreamsign,
         discountPercent: 0,
         purchased: false,
       });
@@ -428,12 +425,11 @@ export function generateShopInventory(
     );
   }
 
-  // --- Discounts: 1-2 random slots between 30% and 90% off. ---
-  const discountCount = rng() < 0.5 ? 1 : 2;
+  const discountCount = weightedValue(economy.discounts.slotCounts, rng);
   const indices = shuffledIndices(slots.length, rng);
   for (let d = 0; d < discountCount && d < indices.length; d += 1) {
     const idx = indices[d];
-    const discount = 30 + Math.floor(rng() * 7) * 10;
+    const discount = weightedValue(economy.discounts.percentages, rng);
     slots[idx] = { ...slots[idx], discountPercent: discount };
   }
 

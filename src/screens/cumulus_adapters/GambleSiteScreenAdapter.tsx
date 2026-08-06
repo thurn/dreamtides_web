@@ -36,8 +36,9 @@ export function GambleSiteScreenAdapter({
           site,
           guide,
           atlasData: journeyContent.atlasData,
+          economyData: journeyContent.economyData,
         }),
-    [guide, journeyContent.atlasData, node, site, state],
+    [guide, journeyContent.atlasData, journeyContent.economyData, node, site, state],
   );
 
   useEffect(() => {
@@ -48,10 +49,10 @@ export function GambleSiteScreenAdapter({
 
   useEffect(() => {
     if (runtime === null || view === null) return;
-    logGamblePrepared(siteId, runtime, view);
-    logGambleResolved(siteId, runtime, view);
-    logGambleSettled(siteId, runtime, view);
-  }, [runtime, siteId, view]);
+    logGamblePrepared(siteId, runtime, view, journeyContent.economyData);
+    logGambleResolved(siteId, runtime, view, journeyContent.economyData);
+    logGambleSettled(siteId, runtime, view, journeyContent.economyData);
+  }, [runtime, siteId, view, journeyContent.economyData]);
 
   const settleGravok = useCallback(() => {
     if (runtime?.gameId !== "gravok-three-gate-wager") return;

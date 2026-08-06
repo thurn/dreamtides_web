@@ -1,6 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { DreamsignTemplate } from "../types/content";
-import { generateRewardSiteData } from "./reward-generator";
+import {
+  generateRewardSiteData as generateRewardSiteDataRaw,
+  type RewardGenerationOptions,
+} from "./reward-generator";
+
+const ECONOMY = { fallbackEssence: { min: 17, max: 29 } };
+function generateRewardSiteData(options: Omit<RewardGenerationOptions, "economy">) {
+  return generateRewardSiteDataRaw({ ...options, economy: ECONOMY });
+}
 
 const DREAMSIGN_TEMPLATES: DreamsignTemplate[] = [
   {

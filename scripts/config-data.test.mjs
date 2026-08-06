@@ -21,6 +21,7 @@ const REQUIRED_TABULA_FILES = [
   "atlas.toml",
   "dream_guides.toml",
   "dreamscapes.toml",
+  "economy.toml",
   "glossary.toml",
 ];
 
@@ -62,6 +63,20 @@ afterEach(() => {
 });
 
 describe("regenerateConfigData Atlas dependencies", () => {
+  it("hot-regenerates economy JSON and changes its fold hash after an edit", () => {
+    const rootDir = makeFixtureRoot();
+    regenerateConfigData("economy.toml", { rootDir });
+    const jsonPath = join(rootDir, "public", "economy-data.json");
+    const before = JSON.parse(readFileSync(jsonPath, "utf8"));
+    const sourcePath = join(rootDir, "data", "tabula", "economy.toml");
+    const source = readFileSync(sourcePath, "utf8");
+    writeFileSync(sourcePath, source.replace("standard-card = 100", "standard-card = 101"));
+    regenerateConfigData("economy.toml", { rootDir });
+    const after = JSON.parse(readFileSync(jsonPath, "utf8"));
+    expect(after.shop.prices.standardCard).toBe(101);
+    expect(after.foldHash).not.toBe(before.foldHash);
+  });
+
   it("compiles without external art and refreshes the fold hash after a dreamscape edit", () => {
     const rootDir = makeFixtureRoot();
     const options = {

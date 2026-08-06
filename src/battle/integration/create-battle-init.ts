@@ -55,6 +55,7 @@ import type {
 } from "../types";
 import type { DreamwellCard } from "../../data/dreamwell-database";
 import type { TutorialTriggerDefinition } from "../../types/tutorial";
+import type { EconomyData } from "../../types/economy-data";
 
 /**
  * Minimum journey deck size for a battle. A deck below this is padded with
@@ -84,6 +85,8 @@ function padBattleDeck(
 }
 
 export interface CreateBattleInitInput {
+  /** Direct battle payout tuning. Omitted only by historical engine fixtures. */
+  economyData?: EconomyData;
   battleEntryKey: string;
   /** Run-scoped identity for logs and automatic intent keys. */
   battleInstanceId?: string;
@@ -451,9 +454,17 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   ).map((definition) => Object.freeze(definition));
   const dreamAvatarSummary = freezeBattleDreamAvatarSummary(state.dreamAvatar);
   const dreamsignSummaries = state.dreamsigns.map(freezeBattleDreamsignSummary);
-  const essenceReward = applyBattleRewardModifiers(
-    100 + completionLevelAtStart * 50,
-    state.battleModifiers,
+  const battleReward = input.economyData?.battleReward ?? {
+    baseEssence: 100,
+    essencePerCompletionLevel: 50,
+    minimumEssence: 0,
+  };
+  const essenceReward = Math.max(
+    battleReward.minimumEssence,
+    applyBattleRewardModifiers(
+      battleReward.baseEssence + completionLevelAtStart * battleReward.essencePerCompletionLevel,
+      state.battleModifiers,
+    ),
   );
   const openingHandAdjustment = state.battleModifiers.reduce(
     (total, modifier) =>

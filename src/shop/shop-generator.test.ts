@@ -4,16 +4,21 @@ import type { CardData } from "../types/cards";
 import type { DreamsignTemplate, ResolvedDreamAvatarPackage } from "../types/content";
 import type { PoolDraftState, ReplayDraftState } from "../types/draft";
 import {
-  generateShopInventory,
+  generateShopInventory as generateShopInventoryRaw,
   effectivePrice,
   replayShopDraftState,
   runtimeSlotsToShopSlots,
   shopSlotsToRuntime,
-  STANDARD_CARD_PRICE,
-  SPECIALTY_CARD_PRICE,
+  type ShopGenerationOptions,
 } from "./shop-generator";
 import { rerollCost } from "./shop-pricing";
 import { asCardId, asCardName } from "../types/card-identity";
+import { economyFixture } from "../testing/economy-fixture";
+
+const ECONOMY = economyFixture();
+function generateShopInventory(options: Omit<ShopGenerationOptions, "economy">) {
+  return generateShopInventoryRaw({ ...options, economy: ECONOMY.shop });
+}
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
@@ -168,11 +173,11 @@ describe("effectivePrice", () => {
 
 describe("rerollCost", () => {
   it("costs essence for a regular shop", () => {
-    expect(rerollCost(0, false)).toBeGreaterThan(0);
+    expect(rerollCost(ECONOMY.shop.reroll, 0, false)).toBeGreaterThan(0);
   });
 
   it("is free for an enhanced shop", () => {
-    expect(rerollCost(0, true)).toBe(0);
+    expect(rerollCost(ECONOMY.shop.reroll, 0, true)).toBe(0);
   });
 });
 
@@ -234,6 +239,24 @@ describe("generateShopInventory", () => {
     makeCard({ cardNumber: 4 }),
     makeCard({ cardNumber: 5 }),
   ]);
+
+  it("samples the injected weighted discount distributions", () => {
+    const economy = structuredClone(ECONOMY.shop);
+    economy.discounts.slotCounts = [{ value: 3, weight: 1 }];
+    economy.discounts.percentages = [{ value: 77, weight: 1 }];
+    const result = generateShopInventoryRaw({
+      economy,
+      cardDatabase: db,
+      draftState: makeDraftState({ 1: 1, 2: 1, 3: 1 }),
+      remainingDreamsignPoolIds: [],
+      dreamsignTemplates: DREAMSIGN_TEMPLATES,
+      cardCount: 3,
+      rng: () => 0,
+    });
+
+    expect(result.slots).toHaveLength(3);
+    expect(result.slots.map((slot) => slot.discountPercent)).toEqual([77, 77, 77]);
+  });
 
   it("generates a Card Shop of card slots with no dreamsigns by default", () => {
     const result = generateShopInventory({
@@ -434,7 +457,7 @@ describe("generateShopInventory", () => {
     });
     for (const slot of result.slots) {
       if (slot.itemType === "card") {
-        expect(slot.basePrice).toBe(SPECIALTY_CARD_PRICE);
+        expect(slot.basePrice).toBe(ECONOMY.shop.prices.specialtyCard);
       }
     }
   });
@@ -449,7 +472,7 @@ describe("generateShopInventory", () => {
     });
     const cardSlots = result.slots.filter((slot) => slot.itemType === "card");
     for (const slot of cardSlots) {
-      expect(slot.basePrice).toBe(STANDARD_CARD_PRICE);
+      expect(slot.basePrice).toBe(ECONOMY.shop.prices.standardCard);
     }
     // The regular shop spends drawn cards from the draft multiset.
     expect(
@@ -567,7 +590,7 @@ describe("replayShopDraftState", () => {
     const cardSlots = result.slots.filter((slot) => slot.itemType === "card");
     expect(cardSlots.length).toBeGreaterThan(0);
     for (const slot of cardSlots) {
-      expect(slot.basePrice).toBe(STANDARD_CARD_PRICE);
+      expect(slot.basePrice).toBe(ECONOMY.shop.prices.standardCard);
     }
   });
 });

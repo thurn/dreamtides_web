@@ -2,6 +2,7 @@ import { DEFAULT_POOL_VARIANT, resolvePoolVariant } from "../draft/pool";
 import type { PoolVariant } from "../draft/pool";
 import { normalizeRoomId } from "../eventlog/room";
 import type { ContentConfig, PinnedContentConfig } from "../eventlog/types";
+import type { EconomyData } from "../types/economy-data";
 import { asCardId, isCardId, type CardId } from "../types/card-identity";
 import type { GambleGameId } from "../types/gamble";
 
@@ -100,12 +101,16 @@ export type DatabaseMode = "emulator" | "realtime";
 export function contentConfigFromRuntime(
   config: RuntimeConfig,
   atlasFoldHash: string,
+  economyData: EconomyData,
 ): PinnedContentConfig {
   return {
     poolVariant: config.poolVariant ?? DEFAULT_POOL_VARIANT,
     draftMode: config.draftMode ?? "pool",
     fresh20PackSize: config.fresh20PackSize ?? null,
     atlasFoldHash,
+    economyFoldHash: economyData.foldHash,
+    defaultStartingEssence: economyData.journey.defaultStartingEssence,
+    dreamsignCap: economyData.journey.dreamsignCap,
   };
 }
 
@@ -118,7 +123,10 @@ export function contentConfigsEqual(
     a.poolVariant === b.poolVariant &&
     a.draftMode === b.draftMode &&
     a.fresh20PackSize === b.fresh20PackSize &&
-    a.atlasFoldHash === b.atlasFoldHash
+    a.atlasFoldHash === b.atlasFoldHash &&
+    a.economyFoldHash === b.economyFoldHash &&
+    a.defaultStartingEssence === b.defaultStartingEssence &&
+    a.dreamsignCap === b.dreamsignCap
   );
 }
 

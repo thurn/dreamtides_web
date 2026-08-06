@@ -14,7 +14,6 @@ import type {
 } from "../../cumulus/screens/ExplorationSiteScreen";
 import type { TransfigurationCandidateView } from "../../cumulus/screens/TransfigurationSiteScreen";
 import {
-  EXPLORATION_ESSENCE_PER_SPARK,
   explorationActionUsesSpecialVariable,
   explorationEncounterForCard,
   type ExplorationActionContent,
@@ -304,7 +303,7 @@ function followupForAction(
     case "purge-for-essence":
       return deckFollowup(
         "Trade Away a Figure",
-        `Choose a card to purge for ${String(action.essencePerSpark ?? EXPLORATION_ESSENCE_PER_SPARK)} essence per ✦.`,
+        `Choose a card to purge for ${String(action.essencePerSpark ?? content.economyData.exploration.defaultEssencePerSpark)} essence per ✦.`,
         eligibleDeckCards(state, content),
         "single",
         "purge",
@@ -1010,7 +1009,7 @@ function rewardForResolution(
         card,
         spark: Math.max(0, card.model.displaySnapshot.spark ?? 0),
         essencePerSpark:
-          resolvedAction.essencePerSpark ?? EXPLORATION_ESSENCE_PER_SPARK,
+          resolvedAction.essencePerSpark ?? content.economyData.exploration.defaultEssencePerSpark,
         totalEssence: resolution.essenceGained,
       };
     }

@@ -1,4 +1,5 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { economyFixture } from "../../testing/economy-fixture";
 
 import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
 import { LayerName } from "../../types/layer-name";
@@ -158,6 +159,7 @@ function siteState(type: SiteType, overrides: Partial<JourneyState> = {}): FoldS
  * augury) are generated purely in-reducer and never reach this provider.
  */
 const fakeProvider: SiteContentProvider = {
+  economyData: economyFixture(),
   openSite({ site, rng }) {
     const draw = Math.floor(rng(0) * 1_000_000);
     switch (site.type) {
@@ -382,6 +384,7 @@ describe("OPEN_SITE generation determinism", () => {
   }
 
   it("Essence: pure in-reducer generation is deterministic in seed+seq", () => {
+    registerSiteContentProvider(fakeProvider);
     const a = reduce(siteState("Essence"), "OPEN_SITE", { siteId: SITE_ID });
     const b = reduce(siteState("Essence"), "OPEN_SITE", { siteId: SITE_ID });
     expect(a.outcome).toBe("applied");
@@ -391,6 +394,7 @@ describe("OPEN_SITE generation determinism", () => {
   });
 
   it("Essence: enhanced site draws a larger band than a normal site", () => {
+    registerSiteContentProvider(fakeProvider);
     const normal = reduce(siteState("Essence"), "OPEN_SITE", {
       siteId: SITE_ID,
     });
@@ -438,6 +442,7 @@ describe("OPEN_SITE generation determinism", () => {
 // ---------------------------------------------------------------------------
 
 describe("OPEN_SITE idempotence", () => {
+  beforeEach(() => registerSiteContentProvider(fakeProvider));
   it("allows an observer to commit the displayed site's deterministic bootstrap", () => {
     const hosted = {
       ...siteState("Essence"),
@@ -518,6 +523,7 @@ describe("OPEN_SITE idempotence", () => {
 // ---------------------------------------------------------------------------
 
 describe("ACCEPT_ESSENCE", () => {
+  beforeEach(() => registerSiteContentProvider(fakeProvider));
   function opened(): FoldState {
     return reduce(siteState("Essence", { essence: 0 }), "OPEN_SITE", {
       siteId: SITE_ID,
@@ -977,6 +983,7 @@ describe("COMPLETE_SITE", () => {
 // ---------------------------------------------------------------------------
 
 describe("PURGE_DECK_CARDS full behavior", () => {
+  beforeEach(() => registerSiteContentProvider(fakeProvider));
   function purgeState(): FoldState {
     return stateWithSites([makeSite("Purge")], {
       essence: 500,

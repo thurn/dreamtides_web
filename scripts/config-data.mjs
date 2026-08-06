@@ -16,6 +16,7 @@ import {
   collectAtlasAssetSources,
   compileAtlasData,
 } from "./atlas-data.mjs";
+import { compileEconomyData } from "./economy-data.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const ATLAS_DEPENDENCY_TOMLS = new Set([
@@ -54,14 +55,14 @@ function compileAtlasAtRoot(rootDir, atlasAssetSourceDirs) {
 }
 
 /**
- * The hot-reloadable Dream Atlas content TOMLs: each one parses to a single JSON
+ * The hot-reloadable journey configuration TOMLs: each one parses to a single JSON
  * catalog the runtime fetches, with no image work, card-id cross-validation, or
  * other build steps in between. `setup-assets.mjs` regenerates these as part of
  * the full asset build; this registry lets the dev server regenerate one of them
  * on its own when only that TOML is edited (see `configDataHotReloadPlugin` in
  * vite.config.ts), so a config edit reaches the running app without a server
- * restart or a full `setup-assets` run. Atlas itself uses its shared strict
- * compiler while the smaller catalogs use their exported transforms.
+ * restart or a full `setup-assets` run. Atlas and economy use their shared
+ * strict compilers while the smaller catalogs use their exported transforms.
  *
  * Each entry transforms with the same exported function `setup-assets.mjs` uses,
  * and writes with the same `JSON.stringify(x, null, 2) + "\n"` formatting, so the
@@ -96,6 +97,12 @@ export const SIMPLE_CONFIGS = [
     jsonFile: "atlas-data.json",
     arrayKey: null,
     transform: null,
+  },
+  {
+    tomlFile: "economy.toml",
+    jsonFile: "economy-data.json",
+    arrayKey: null,
+    transform: compileEconomyData,
   },
   {
     tomlFile: "apollyon_incarnations.toml",

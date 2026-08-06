@@ -4,16 +4,13 @@ import type {
 } from "../types/gamble";
 import type { StarwayStairsSiteRuntime } from "../types/journey";
 import { STANDARD_PLAYING_CARD_RANKS } from "./gravok-wager";
+import type { EconomyData } from "../types/economy-data";
 
 export const STARWAY_STAIRS_RULES_VERSION = "starway-stairs-v4";
-export const STARWAY_STAIRS_ORDINARY_WAGER_AMOUNT = 30;
-export const STARWAY_STAIRS_FARPOINT_WAGER_AMOUNT = 20;
 export const STARWAY_STAIRS_MAX_RETRIES = 2;
 
-export function starwayStairsWagerAmount(isFarpoint: boolean): number {
-  return isFarpoint
-    ? STARWAY_STAIRS_FARPOINT_WAGER_AMOUNT
-    : STARWAY_STAIRS_ORDINARY_WAGER_AMOUNT;
+export function starwayStairsWagerAmount(config: EconomyData["gamble"]["starwayStairs"], isFarpoint: boolean): number {
+  return isFarpoint ? config.enhancedWager : config.standardWager;
 }
 
 export interface StarwayStairsTierRule {
@@ -21,7 +18,6 @@ export interface StarwayStairsTierRule {
   highestBustRank: StandardPlayingCardRank;
   bustOddsNumerator: number;
   oddsDenominator: number;
-  essenceReward: number;
 }
 
 /** Stable bust ranges and rewards for the three Starway Stairs tiers. */
@@ -31,21 +27,18 @@ export const STARWAY_STAIRS_TIERS: readonly StarwayStairsTierRule[] = [
     highestBustRank: "2",
     bustOddsNumerator: 4,
     oddsDenominator: 52,
-    essenceReward: 60,
   },
   {
     tierNumber: 2,
     highestBustRank: "4",
     bustOddsNumerator: 12,
     oddsDenominator: 52,
-    essenceReward: 140,
   },
   {
     tierNumber: 3,
     highestBustRank: "7",
     bustOddsNumerator: 24,
     oddsDenominator: 52,
-    essenceReward: 300,
   },
 ];
 
@@ -53,6 +46,13 @@ export function starwayStairsTierRule(
   tierNumber: StarwayStairsTierNumber,
 ): StarwayStairsTierRule {
   return STARWAY_STAIRS_TIERS[tierNumber - 1];
+}
+
+export function starwayStairsEssenceReward(
+  config: EconomyData["gamble"]["starwayStairs"],
+  tierNumber: StarwayStairsTierNumber,
+): number {
+  return config.tiers[tierNumber - 1].essenceReward;
 }
 
 /** Format the inclusive low-rank bust range shown on a Starway tier. */

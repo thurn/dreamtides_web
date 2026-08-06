@@ -21,12 +21,24 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+function isNonNegativeSafeInteger(value: unknown): value is number {
+  return typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
+}
+
 function decodeContentConfig(
   value: unknown,
 ): ContentConfig | undefined | null {
   if (value === undefined) return undefined;
   if (!isRecord(value)) return null;
-  const { poolVariant, draftMode, fresh20PackSize, atlasFoldHash } = value;
+  const {
+    poolVariant,
+    draftMode,
+    fresh20PackSize,
+    atlasFoldHash,
+    economyFoldHash,
+    defaultStartingEssence,
+    dreamsignCap,
+  } = value;
   if (
     typeof poolVariant !== "string" ||
     typeof draftMode !== "string" ||
@@ -35,7 +47,16 @@ function decodeContentConfig(
       (typeof fresh20PackSize === "number" &&
         Number.isFinite(fresh20PackSize))
     ) ||
-    !(atlasFoldHash === undefined || typeof atlasFoldHash === "string")
+    !(atlasFoldHash === undefined || typeof atlasFoldHash === "string") ||
+    !(economyFoldHash === undefined || typeof economyFoldHash === "string") ||
+    !(
+      defaultStartingEssence === undefined ||
+      isNonNegativeSafeInteger(defaultStartingEssence)
+    ) ||
+    !(
+      dreamsignCap === undefined ||
+      isNonNegativeSafeInteger(dreamsignCap)
+    )
   ) {
     return null;
   }
@@ -44,6 +65,9 @@ function decodeContentConfig(
     draftMode,
     fresh20PackSize,
     ...(atlasFoldHash === undefined ? {} : { atlasFoldHash }),
+    ...(economyFoldHash === undefined ? {} : { economyFoldHash }),
+    ...(defaultStartingEssence === undefined ? {} : { defaultStartingEssence }),
+    ...(dreamsignCap === undefined ? {} : { dreamsignCap }),
   };
 }
 

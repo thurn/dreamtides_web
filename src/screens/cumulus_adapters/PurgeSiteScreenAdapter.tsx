@@ -34,8 +34,9 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
             guide,
             guideLine,
             tutorialConfiguration: tutorialPurge,
+            economyData: journeyContent.economyData,
           }),
-    [state, node, site, cardDatabase, tutorialPurge, guide, guideLine],
+    [state, node, site, cardDatabase, tutorialPurge, guide, guideLine, journeyContent.economyData],
   );
 
   const handleTutorialShown = useCallback(

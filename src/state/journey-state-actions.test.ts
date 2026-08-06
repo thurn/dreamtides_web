@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { economyFixture } from "../testing/economy-fixture";
 import {
   loadTestAffiliations,
   loadTestAtlasData,
@@ -91,6 +92,7 @@ function makeJourneyContent(
     affiliations: loadTestAffiliations(),
     guides: loadTestDreamGuides(),
     atlasData: loadTestAtlasData(),
+    economyData: economyFixture(),
     poolContext: makeTestPoolContext(["dreamsign-a", "dreamsign-b"]),
   };
 }
