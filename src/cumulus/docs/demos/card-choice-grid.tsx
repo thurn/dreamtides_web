@@ -3,9 +3,11 @@ import { loadCardDatabase } from "../../../data/card-database";
 import type { CardData } from "../../../types/cards";
 import {
   CardChoiceGrid,
+  type CardChoiceGridColumns,
   type CardChoiceOperation,
-  type CardChoiceGridCardView,
 } from "../../components/card/CardChoiceGrid";
+import { GlassPanel } from "../../components/overlay/GlassPanel";
+import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
 
 const DEMO_CARD_IDS = [
@@ -22,8 +24,12 @@ const DEMO_OPERATIONS: readonly CardChoiceOperation[] = [
   "change",
 ];
 
-function CardChoiceGridDemo() {
-  const [cards, setCards] = useState<readonly CardChoiceGridCardView[]>([]);
+function CardChoiceGridDemo({
+  columns = "four",
+}: {
+  readonly columns?: CardChoiceGridColumns;
+}) {
+  const [cards, setCards] = useState<readonly CardData[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
 
   useEffect(() => {
@@ -32,37 +38,46 @@ function CardChoiceGridDemo() {
       if (cancelled) return;
       const byId = new Map<string, CardData>();
       for (const card of database.values()) byId.set(card.id, card);
-      setCards(
-        DEMO_CARD_IDS.flatMap((id, index) => {
-          const card = byId.get(id);
-          return card === undefined
-            ? []
-            : [
-                {
-                  entryId: card.id,
-                  model: { cardId: card.id, displaySnapshot: card },
-                  selected: selected === card.id,
-                  selectionColor: "accent-bright" as const,
-                  operation:
-                    selected === card.id ? DEMO_OPERATIONS[index] : undefined,
-                },
-              ];
-        }),
-      );
+      setCards(DEMO_CARD_IDS.flatMap((id) => byId.get(id) ?? []));
     });
     return () => {
       cancelled = true;
     };
-  }, [selected]);
+  }, []);
 
   return (
-    <div style={{ width: "min(1100px, 100%)", containerType: "size" }}>
-      <CardChoiceGrid
-        cards={cards}
-        columns="four"
-        layout={{ kind: "site", viewport: "desktop", fit: "choice" }}
-        onCardPress={setSelected}
-      />
+    <div style={{ width: "min(1100px, 100%)" }}>
+      <GlassPanel
+        eyebrow="Draft Site"
+        title="Choose a Card"
+        subtitle="Select one card to add to your deck."
+      >
+        <div
+          data-card-choice-grid-demo-surface=""
+          style={{
+            // Auto-height panels need inline containment: block-size
+            // containment would resolve the grid's cqh sizing to zero.
+            containerType: "inline-size",
+            padding: token("--space-2xl"),
+          }}
+        >
+          <CardChoiceGrid
+            cards={cards.map((card, index) => ({
+              entryId: card.id,
+              model: { cardId: card.id, displaySnapshot: card },
+              selected: selected === card.id,
+              selectionColor: "accent-bright",
+              operation:
+                selected === card.id ? DEMO_OPERATIONS[index] : undefined,
+            }))}
+            columns={columns}
+            layout={{ kind: "site", viewport: "desktop", fit: "choice" }}
+            onCardPress={(entryId) =>
+              setSelected((current) => (current === entryId ? null : entryId))
+            }
+          />
+        </div>
+      </GlassPanel>
     </div>
   );
 }
@@ -71,10 +86,12 @@ export const cardChoiceGridDemo: CumulusComponent = {
   id: "card-choice-grid",
   title: "Card Choice Grid",
   blurb:
-    "A frameless, responsive grid for presenting resolved GameCards as choices inside an existing site or panel surface.",
-  callout: "Use this inside an existing material and chrome surface.",
+    "A frameless, responsive grid that turns a small set of resolved GameCards into selectable choices inside an existing site or panel.",
+  callout:
+    "Use this when the surrounding screen already supplies the title, instructions, and material surface.",
   details: [
-    "Choose a named site fit and column count; use Card Gallery Panel when the card collection needs its own title, controls, scrolling, or glass frame.",
+    "The grid owns card sizing, selection and disabled states, optional operation badges and captions, and stable-id callbacks.",
+    "Choose a named site fit and column count; use Card Gallery Panel when the collection needs its own title, controls, scrolling, or glass frame.",
   ],
   group: "Components",
   docName: "CardChoiceGrid",
@@ -94,5 +111,5 @@ export const cardChoiceGridDemo: CumulusComponent = {
 />`,
     },
   ],
-  demo: { defaultArgs: {} },
+  demo: { defaultArgs: { columns: "four" } },
 };

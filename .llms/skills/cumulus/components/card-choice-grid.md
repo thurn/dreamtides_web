@@ -8,11 +8,13 @@ Components · Live demo & interactive props: `/cumulus#/card-choice-grid`
 
 Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 
-A frameless, responsive grid for presenting resolved GameCards as choices inside an existing site or panel surface.
+A frameless, responsive grid that turns a small set of resolved GameCards into selectable choices inside an existing site or panel.
 
-> **Guidance:** Use this inside an existing material and chrome surface.
+> **Guidance:** Use this when the surrounding screen already supplies the title, instructions, and material surface.
 
-Choose a named site fit and column count; use Card Gallery Panel when the card collection needs its own title, controls, scrolling, or glass frame.
+The grid owns card sizing, selection and disabled states, optional operation badges and captions, and stable-id callbacks.
+
+Choose a named site fit and column count; use Card Gallery Panel when the collection needs its own title, controls, scrolling, or glass frame.
 
 ## Props
 
