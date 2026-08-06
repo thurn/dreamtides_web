@@ -526,8 +526,72 @@ describe("GambleSiteScreen — Ladder Climb", () => {
       '[data-testid="gamble-ladder-climb"]',
     );
     expect(draw?.disabled).toBe(false);
+    const actionGroup = container.querySelector(
+      "[data-ladder-round-action-group]",
+    );
+    expect(
+      actionGroup?.querySelector('[data-testid="gamble-ladder-leave"]'),
+    ).not.toBeNull();
     act(() => draw?.click());
     expect(onDraw).toHaveBeenCalledOnce();
+
+    act(() => root.unmount());
+  });
+
+  it("preserves the wager stage and action footprint while a draw resolves", () => {
+    const { container, root } = mount(
+      <GambleSiteScreen
+        view={LADDER_VIEW}
+        onChooseGate={() => undefined}
+        onLeave={() => undefined}
+        onOutcomeShown={() => undefined}
+        onPlayAgain={() => undefined}
+        onDrawLadder={() => undefined}
+        onLadderOutcomeShown={() => undefined}
+        onReplaceDreamsign={() => undefined}
+      />,
+    );
+    const cardSlot = container.querySelector("[data-ladder-climb-card]");
+    const actionSlot = container.querySelector("[data-ladder-actions]");
+    const actionGroup = container.querySelector(
+      "[data-ladder-round-action-group]",
+    );
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <GambleSiteScreen
+            view={{
+              ...LADDER_VIEW,
+              nextDraw: null,
+              result: {
+                id: "ladder-continuity",
+                attemptNumber: 1,
+                targetRank: "Q",
+                card: { rank: "J", suit: "clubs" },
+                won: false,
+                resultSettled: false,
+                terminal: false,
+                pendingDreamsignReplacement: false,
+              },
+            }}
+            onChooseGate={() => undefined}
+            onLeave={() => undefined}
+            onOutcomeShown={() => undefined}
+            onPlayAgain={() => undefined}
+            onDrawLadder={() => undefined}
+            onLadderOutcomeShown={() => undefined}
+            onReplaceDreamsign={() => undefined}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    expect(container.querySelector("[data-ladder-climb-card]")).toBe(cardSlot);
+    expect(container.querySelector("[data-ladder-actions]")).toBe(actionSlot);
+    expect(container.querySelector("[data-ladder-round-action-group]"))
+      .toBe(actionGroup);
+    expect(actionSlot?.getAttribute("data-ladder-actions")).toBe("hidden");
 
     act(() => root.unmount());
   });
@@ -676,8 +740,67 @@ describe("GambleSiteScreen — Ladder Climb", () => {
       );
     });
     expect(container.querySelectorAll("[data-wager-prize-card]")).toHaveLength(1);
-    expect(container.querySelector("[data-ladder-dreamsign-reward]")).toBeNull();
+    expect(container.querySelector("[data-ladder-dreamsign-reward]"))
+      .not.toBeNull();
 
     act(() => root.unmount());
+  });
+
+  it("reveals a won Dreamsign at large size before flying it to its HUD dock", () => {
+    vi.useFakeTimers();
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function getBoundingClientRect(this: HTMLElement) {
+        if (this.hasAttribute("data-ladder-dreamsign-source")) {
+          return new DOMRect(900, 250, 240, 240);
+        }
+        return new DOMRect(0, 0, 100, 100);
+      },
+    );
+    const hudTarget = document.createElement("span");
+    hudTarget.dataset.dreamsignId = JACKPOT_DREAMSIGN.id;
+    hudTarget.getBoundingClientRect = () => new DOMRect(1180, 760, 58, 58);
+    document.body.append(hudTarget);
+    const resultView: LadderClimbSiteView = {
+      ...LADDER_VIEW,
+      nextDraw: null,
+      result: {
+        id: "ladder-reward-flight",
+        attemptNumber: 1,
+        targetRank: "Q",
+        card: { rank: "A", suit: "hearts" },
+        won: true,
+        resultSettled: true,
+        terminal: true,
+        pendingDreamsignReplacement: false,
+      },
+    };
+    const { container, root } = mount(
+      <GambleSiteScreen
+        view={resultView}
+        onChooseGate={() => undefined}
+        onLeave={() => undefined}
+        onOutcomeShown={() => undefined}
+        onPlayAgain={() => undefined}
+        onDrawLadder={() => undefined}
+        onLadderOutcomeShown={() => undefined}
+        onReplaceDreamsign={() => undefined}
+      />,
+    );
+
+    void act(() => vi.advanceTimersByTime(970));
+    const source = container.querySelector<HTMLElement>(
+      "[data-ladder-dreamsign-source]",
+    );
+    expect(source?.style.width).toBe("240px");
+    void act(() => vi.advanceTimersByTime(1_680));
+    expect(
+      container
+        .querySelector("[data-ladder-dreamsign-flight]")
+        ?.getAttribute("data-ladder-dreamsign-destination"),
+    ).toBe("journey-dreamsign");
+    expect(hudTarget.style.visibility).toBe("hidden");
+
+    act(() => root.unmount());
+    expect(hudTarget.style.visibility).toBe("");
   });
 });

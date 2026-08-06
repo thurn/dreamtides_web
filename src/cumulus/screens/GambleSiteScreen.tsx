@@ -1,5 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { requireDreamsignId } from "../../data/dreamsigns";
 import type { GravokGateId } from "../../types/gamble";
 import type { Dreamsign as DreamsignData } from "../../types/journey";
 import {
@@ -9,6 +16,7 @@ import {
   type PlayingCardSuit,
 } from "../components/card/PlayingCard";
 import { GlassButton } from "../components/controls/GlassButton";
+import { Dreamsign } from "../components/hud/Dreamsign";
 import {
   RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
   RadialAnnouncement,
@@ -157,6 +165,242 @@ const DESKTOP_GAMBLE_REGION_MAX_WIDTH = 650;
 const BET_SETTLE_DELAY_MS = 250;
 const REDUCED_MOTION_DELAY_MS = 80;
 const FADE_DURATION_SECONDS = motionTimeSeconds("--dur-slow");
+const LADDER_DREAMSIGN_READING_SECONDS =
+  motionTimeSeconds("--dur-slow") * 4;
+const LADDER_DREAMSIGN_TRAVEL_SECONDS =
+  motionTimeSeconds("--dur-slow") * 2;
+const LADDER_DREAMSIGN_DESKTOP_SIZE = 240;
+const LADDER_DREAMSIGN_MOBILE_SIZE = 180;
+const DREAM_EASE = [0.22, 0.61, 0.36, 1] as const;
+
+interface LadderDreamsignTrajectory {
+  readonly source: DOMRect;
+  readonly target: DOMRect;
+}
+
+function ladderHudDreamsignTarget(dreamsignId: string): HTMLElement | null {
+  const candidates = document.querySelectorAll<HTMLElement>(
+    "[data-dreamsign-id]",
+  );
+  for (const candidate of candidates) {
+    if (
+      candidate.dataset.dreamsignId === dreamsignId &&
+      candidate.closest("[data-gamble-wager-region]") === null &&
+      candidate.closest("[data-ladder-dreamsign-flight]") === null
+    ) {
+      return candidate;
+    }
+  }
+  return null;
+}
+
+function LadderDreamsignReward({
+  active,
+  dreamsign,
+  layout,
+  reduceMotion,
+}: {
+  readonly active: boolean;
+  readonly dreamsign: DreamsignData;
+  readonly layout: "mobile" | "desktop";
+  readonly reduceMotion: boolean;
+}) {
+  const sourceRef = useRef<HTMLDivElement>(null);
+  const hiddenTargetRef = useRef<{
+    element: HTMLElement;
+    visibility: string;
+  } | null>(null);
+  const [trajectory, setTrajectory] =
+    useState<LadderDreamsignTrajectory | null>(null);
+  const [complete, setComplete] = useState(false);
+  const dreamsignId = requireDreamsignId(
+    dreamsign,
+    "Ladder Climb reward animation",
+  );
+  const size =
+    layout === "desktop"
+      ? LADDER_DREAMSIGN_DESKTOP_SIZE
+      : LADDER_DREAMSIGN_MOBILE_SIZE;
+
+  const restoreHudTarget = useCallback((): void => {
+    const hiddenTarget = hiddenTargetRef.current;
+    if (hiddenTarget === null) return;
+    hiddenTarget.element.style.visibility = hiddenTarget.visibility;
+    hiddenTargetRef.current = null;
+  }, []);
+
+  useLayoutEffect(() => {
+    setTrajectory(null);
+    setComplete(false);
+    if (!active || reduceMotion) {
+      restoreHudTarget();
+      return;
+    }
+    let animationFrame = 0;
+    const hideHudTarget = (): void => {
+      const target = ladderHudDreamsignTarget(dreamsignId);
+      if (target === null) {
+        animationFrame = window.requestAnimationFrame(hideHudTarget);
+        return;
+      }
+      if (hiddenTargetRef.current === null) {
+        hiddenTargetRef.current = {
+          element: target,
+          visibility: target.style.visibility,
+        };
+        target.style.visibility = "hidden";
+      }
+    };
+    animationFrame = window.requestAnimationFrame(hideHudTarget);
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      restoreHudTarget();
+    };
+  }, [active, dreamsignId, reduceMotion, restoreHudTarget]);
+
+  useEffect(() => {
+    if (!active || complete) return;
+    if (reduceMotion) {
+      setComplete(true);
+      return;
+    }
+
+    let animationFrame = 0;
+    const readingTimer = window.setTimeout(() => {
+      const measureTrajectory = (): void => {
+        const source = sourceRef.current?.getBoundingClientRect();
+        const target = ladderHudDreamsignTarget(dreamsignId);
+        const targetRect = target?.getBoundingClientRect();
+        if (
+          source === undefined ||
+          source.width <= 0 ||
+          source.height <= 0 ||
+          target === null ||
+          targetRect === undefined ||
+          targetRect.width <= 0 ||
+          targetRect.height <= 0
+        ) {
+          animationFrame = window.requestAnimationFrame(measureTrajectory);
+          return;
+        }
+        if (hiddenTargetRef.current === null) {
+          hiddenTargetRef.current = {
+            element: target,
+            visibility: target.style.visibility,
+          };
+          target.style.visibility = "hidden";
+        }
+        setTrajectory({ source, target: targetRect });
+      };
+      measureTrajectory();
+    }, LADDER_DREAMSIGN_READING_SECONDS * 1_000);
+
+    return () => {
+      window.clearTimeout(readingTimer);
+      window.cancelAnimationFrame(animationFrame);
+      restoreHudTarget();
+    };
+  }, [active, complete, dreamsignId, reduceMotion, restoreHudTarget]);
+
+  if (!active || complete) return null;
+
+  if (trajectory !== null) {
+    const scale = Math.min(
+      trajectory.target.width / trajectory.source.width,
+      trajectory.target.height / trajectory.source.height,
+    );
+    return (
+      <motion.div
+        data-ladder-dreamsign-flight=""
+        data-ladder-dreamsign-destination="journey-dreamsign"
+        initial={{
+          x: trajectory.source.left,
+          y: trajectory.source.top,
+          scale: 1,
+          opacity: 1,
+        }}
+        animate={{
+          x: trajectory.target.left,
+          y: trajectory.target.top,
+          scale,
+          opacity: 1,
+        }}
+        transition={{
+          duration: LADDER_DREAMSIGN_TRAVEL_SECONDS,
+          ease: DREAM_EASE,
+        }}
+        onAnimationComplete={() => {
+          restoreHudTarget();
+          setComplete(true);
+        }}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          zIndex: 42,
+          width: trajectory.source.width,
+          height: trajectory.source.height,
+          transformOrigin: "top left",
+          pointerEvents: "none",
+        }}
+      >
+        <Dreamsign
+          dreamsign={dreamsign}
+          sizePx={trajectory.source.width}
+          variant="revelation"
+          unavailable
+        />
+      </motion.div>
+    );
+  }
+
+  return (
+    <div
+      data-ladder-dreamsign-reward=""
+      style={{
+        position: "relative",
+        gridColumn: 3,
+        gridRow: 1,
+        width: "100%",
+        height: "100%",
+        minWidth: 0,
+        minHeight: 0,
+        pointerEvents: "none",
+      }}
+    >
+      <motion.div
+        ref={sourceRef}
+        data-ladder-dreamsign-source=""
+        initial={{ opacity: 0, scale: 0.68 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{
+          duration: FADE_DURATION_SECONDS,
+          ease: DREAM_EASE,
+        }}
+        style={{
+          position: "absolute",
+          top: "50%",
+          left:
+            layout === "desktop"
+              ? "50%"
+              : `calc(50% - ${token("--space-9")})`,
+          width: size,
+          height: size,
+          marginTop: -size / 2,
+          marginLeft: -size / 2,
+          transformOrigin: "center",
+        }}
+      >
+        <Dreamsign
+          dreamsign={dreamsign}
+          sizePx={size}
+          variant="revelation"
+          unavailable
+        />
+      </motion.div>
+    </div>
+  );
+}
 
 type GambleGatePresentation =
   | "available"
@@ -686,6 +930,7 @@ function LadderClimbScreen({
   const reduceMotion = useReducedMotion() === true;
   const [revealedResultId, setRevealedResultId] = useState<string | null>(null);
   const [outcomeResultId, setOutcomeResultId] = useState<string | null>(null);
+  const [rewardResultId, setRewardResultId] = useState<string | null>(null);
   const [roundActionsVisible, setRoundActionsVisible] = useState(false);
   const [replacementVisible, setReplacementVisible] = useState(false);
   const settledResultIdRef = useRef<string | undefined>(undefined);
@@ -699,6 +944,7 @@ function LadderClimbScreen({
   useEffect(() => {
     setRoundActionsVisible(false);
     setReplacementVisible(false);
+    setRewardResultId(null);
     if (resultId === undefined) {
       setRevealedResultId(null);
       setOutcomeResultId(null);
@@ -726,6 +972,18 @@ function LadderClimbScreen({
       window.clearTimeout(outcomeTimeout);
     };
   }, [reduceMotion, resultId]);
+
+  useEffect(() => {
+    const result = view.result;
+    if (
+      result !== null &&
+      result.won &&
+      result.resultSettled &&
+      outcomeResultId === result.id
+    ) {
+      setRewardResultId(result.id);
+    }
+  }, [outcomeResultId, view.result]);
 
   useEffect(() => {
     const result = view.result;
@@ -783,6 +1041,7 @@ function LadderClimbScreen({
         const targetRank = showNextTarget && view.nextDraw !== null
           ? view.nextDraw.targetRank
           : result?.targetRank ?? view.nextDraw?.targetRank ?? "Q";
+        const actionsVisible = result === null || roundActionsVisible;
         return (
           <main
             data-gamble-wager-region=""
@@ -869,12 +1128,20 @@ function LadderClimbScreen({
                   dreamsignTestId="gamble-ladder-dreamsign-name"
                 />
               </div>
+              <LadderDreamsignReward
+                active={
+                  result?.won === true &&
+                  result.resultSettled &&
+                  rewardResultId === result.id
+                }
+                dreamsign={view.rewardDreamsign}
+                layout={layout}
+                reduceMotion={reduceMotion}
+              />
             </section>
 
             <div
-              data-ladder-actions={
-                roundActionsVisible ? "visible" : "hidden"
-              }
+              data-ladder-actions={actionsVisible ? "visible" : "hidden"}
               style={{
                 width: "100%",
                 display: "grid",
@@ -886,8 +1153,30 @@ function LadderClimbScreen({
                 justifyItems: "center",
               }}
             >
-              {result === null && view.nextDraw !== null ? (
-                <div style={{ gridColumn: 2 }}>
+              <motion.div
+                data-ladder-round-action-group=""
+                aria-hidden={!actionsVisible || undefined}
+                inert={actionsVisible ? undefined : true}
+                initial={false}
+                animate={{ opacity: actionsVisible ? 1 : 0 }}
+                transition={{
+                  duration: FADE_DURATION_SECONDS,
+                  ease: "easeOut",
+                }}
+                style={{
+                  gridColumn: "1 / span 3",
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap:
+                    layout === "desktop"
+                      ? token("--space-4")
+                      : token("--space-2"),
+                  pointerEvents: actionsVisible ? "auto" : "none",
+                }}
+              >
+                {view.nextDraw !== null && (
                   <GlassButton
                     label="Draw"
                     accessibilityLabel={`Draw attempt ${String(view.nextDraw.attemptNumber)} for ${String(view.nextDraw.cost)} Essence`}
@@ -899,67 +1188,25 @@ function LadderClimbScreen({
                       !view.nextDraw.available ||
                       !view.nextDraw.canAfford
                     }
-                    testId="gamble-ladder-climb"
+                    testId={
+                      result === null
+                        ? "gamble-ladder-climb"
+                        : "gamble-ladder-climb-again"
+                    }
                     onPress={onDraw}
                   />
-                </div>
-              ) : roundActionsVisible ? (
-                <div
-                  data-ladder-round-action-group=""
-                  style={{
-                    gridColumn: "1 / span 3",
-                    width: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap:
-                      layout === "desktop"
-                        ? token("--space-4")
-                        : token("--space-2"),
-                  }}
-                >
-                  {view.nextDraw !== null && (
-                    <GlassButton
-                      label="Draw"
-                      accessibilityLabel={`Draw attempt ${String(view.nextDraw.attemptNumber)} for ${String(view.nextDraw.cost)} Essence`}
-                      essenceCost={view.nextDraw.cost}
-                      essenceCostStyle="separated"
-                      variant="accent"
-                      disabled={
-                        !view.nextDraw.available || !view.nextDraw.canAfford
-                      }
-                      testId="gamble-ladder-climb-again"
-                      onPress={onDraw}
-                    />
-                  )}
-                  <GlassButton
-                    label="Leave"
-                    testId="gamble-ladder-leave-after-draw"
-                    onPress={onLeave}
-                  />
-                </div>
-              ) : null}
-            </div>
-
-            {result === null && (
-              <div
-                data-gamble-leave-slot=""
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
+                )}
                 <GlassButton
                   label="Leave"
-                  testId="gamble-ladder-leave"
+                  testId={
+                    result === null
+                      ? "gamble-ladder-leave"
+                      : "gamble-ladder-leave-after-draw"
+                  }
                   onPress={onLeave}
                 />
-              </div>
-            )}
+              </motion.div>
+            </div>
             {result?.pendingDreamsignReplacement === true &&
               !replacementVisible &&
               !outcomeVisible && (
