@@ -20,6 +20,7 @@ describe("glossary data hot reload Vite integration", () => {
     );
     const onFileChange = vi.fn();
     const send = vi.fn();
+    const refreshAtlasData = vi.fn();
     const server = {
       httpServer: { once: vi.fn() },
       watcher: { once: vi.fn() },
@@ -28,12 +29,13 @@ describe("glossary data hot reload Vite integration", () => {
     };
 
     try {
-      glossaryDataHotReloadPlugin().configureServer(server);
+      glossaryDataHotReloadPlugin(refreshAtlasData).configureServer(server);
       expect(onChange).toBeTypeOf("function");
 
       onChange("change", "glossary.toml");
       await vi.advanceTimersByTimeAsync(120);
 
+      expect(refreshAtlasData).toHaveBeenCalledOnce();
       expect(onFileChange).toHaveBeenCalledWith(glossaryDataWatchPath);
       expect(send).toHaveBeenCalledWith({
         type: "custom",
@@ -59,9 +61,10 @@ describe("glossary data hot reload Vite integration", () => {
     );
     const onFileChange = vi.fn();
     const send = vi.fn();
+    const refreshAtlasData = vi.fn();
 
     try {
-      glossaryDataHotReloadPlugin().configureServer({
+      glossaryDataHotReloadPlugin(refreshAtlasData).configureServer({
         httpServer: { once: vi.fn() },
         watcher: { once: vi.fn() },
         moduleGraph: { onFileChange },
@@ -71,6 +74,7 @@ describe("glossary data hot reload Vite integration", () => {
       onChange("change", "cards.toml");
       await vi.advanceTimersByTimeAsync(120);
 
+      expect(refreshAtlasData).not.toHaveBeenCalled();
       expect(onFileChange).not.toHaveBeenCalled();
       expect(send).not.toHaveBeenCalled();
     } finally {

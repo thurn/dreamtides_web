@@ -106,6 +106,7 @@ function fixtureCatalogs() {
         "affiliation-id": "fixture-affiliation",
       },
     ],
+    guides: [{ id: "fixture-random-guide" }],
     affiliations: [{
       id: "fixture-affiliation",
       "atlas-card-theme": "Fixture Theme",
@@ -176,6 +177,7 @@ describe("compileAtlasData", () => {
       (dreamscape) => dreamscape["signature-site"] === "RandomSite",
     );
     owner["guide-id"] = "alternate-fixture-guide";
+    catalogs.guides[0].id = "alternate-fixture-guide";
     const changed = compile(fixtureSource(), catalogs);
     expect(changed.randomSite.guideId).toBe("alternate-fixture-guide");
     expect(changed.foldHash).not.toBe(baseline.foldHash);
@@ -222,6 +224,11 @@ describe("compileAtlasData", () => {
         "guide-id": "duplicate-guide",
         "affiliation-id": "fixture-affiliation",
       }),
+    );
+    expectFailure(
+      () => {},
+      /unresolved guide id/,
+      (catalogs) => { catalogs.guides[0].id = "different-guide"; },
     );
     expectFailure(
       () => {},

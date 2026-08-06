@@ -19,6 +19,7 @@ import { createDreamwellEditorApiMiddleware } from "./scripts/dreamwell-editor-a
 import { refreshDreamwellDataJson } from "./scripts/dreamwell-editor-data.mjs";
 import {
   generatedConfigDataWatchPaths,
+  regenerateAtlasData,
   regenerateConfigData,
   SIMPLE_CONFIG_TOML_BASENAMES,
 } from "./scripts/config-data.mjs";
@@ -172,7 +173,9 @@ export const glossaryDataWatchPath = path.resolve(
   path.join(__dirname, "data", "tabula", "glossary.toml"),
 );
 
-export function glossaryDataHotReloadPlugin(): Plugin {
+export function glossaryDataHotReloadPlugin(
+  refreshAtlasData: typeof regenerateAtlasData = regenerateAtlasData,
+): Plugin {
   return {
     name: "glossary-data-hot-reload",
     apply: "serve",
@@ -190,11 +193,26 @@ export function glossaryDataHotReloadPlugin(): Plugin {
           if (pendingReload !== null) clearTimeout(pendingReload);
           pendingReload = setTimeout(() => {
             pendingReload = null;
-            // data/tabula is excluded from Vite's normal watcher, so explicitly
-            // invalidate the `glossary.toml?raw` module before reloading. A
-            // reload without this step can reuse Vite's cached TOML transform.
-            server.moduleGraph.onFileChange(glossaryDataWatchPath);
-            server.ws.send({ type: "custom", event: "glossary-data:changed" });
+            try {
+              refreshAtlasData({ rootDir: __dirname });
+              // data/tabula is excluded from Vite's normal watcher, so explicitly
+              // invalidate the `glossary.toml?raw` module before reloading. A
+              // reload without this step can reuse Vite's cached TOML transform.
+              server.moduleGraph.onFileChange(glossaryDataWatchPath);
+              server.ws.send({ type: "custom", event: "glossary-data:changed" });
+            } catch (error) {
+              const message =
+                error instanceof Error ? error.message : String(error);
+              console.error(`[glossary-data] hot reload failed: ${message}`);
+              server.ws.send({
+                type: "error",
+                err: {
+                  message:
+                    "Failed to validate Atlas data after glossary change",
+                  stack: message,
+                },
+              });
+            }
           }, 120);
         },
       );
@@ -459,8 +477,9 @@ function dreamwellDataHotReloadPlugin(): Plugin {
  * The dev watcher ignores `data/tabula/` (see `server.watch.ignored`), so a TOML
  * save normally has no effect on the page. This plugin watches the directory
  * directly with `fs.watch`, and on a change to one of the registered TOMLs it
- * regenerates just that config's JSON via {@link regenerateConfigData} (the same
- * TOML->JSON transform `setup-assets` uses, so no full asset rebuild is needed)
+ * regenerates that config's JSON via {@link regenerateConfigData}, including
+ * Atlas data when a referenced catalog changes (the same TOML->JSON transforms
+ * `setup-assets` uses, so no full asset rebuild is needed),
  * and emits a `config-data:changed` custom HMR event. Only the battle/journey app
  * reloads on that event (see src/main.tsx) and re-fetches the config on load;
  * the editor pages register no handler, so a save never reloads them. The

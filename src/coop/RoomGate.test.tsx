@@ -13,7 +13,7 @@ import type { Genesis, LogNode } from "../eventlog/types";
 import { resetLog } from "../logging";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 
-const REDUCER_VERSION = "dreamtides-coop-v13";
+const REDUCER_VERSION = "dreamtides-coop-v14";
 const ATLAS_FOLD_HASH = "fixture-atlas-fold-hash";
 
 // Captured subscriber so a test can hand RoomGate a chosen log node.

@@ -42,10 +42,7 @@ export function GambleSiteScreenAdapter({
 
   useEffect(() => {
     if (site === null) return;
-    mutations.ensureGambleSiteRuntime(
-      site.id,
-      gambleGameId ?? undefined,
-    );
+    mutations.ensureGambleSiteRuntime(site.id, gambleGameId ?? undefined);
     logGambleSiteEntered(site);
   }, [gambleGameId, mutations, site]);
 
@@ -90,12 +87,7 @@ export function GambleSiteScreenAdapter({
   }, [mutations, runtime, siteId]);
   const replaceDreamsign = useCallback((dreamsignId: string) => {
     if (runtime === null || runtime.gameId === "starway-stairs") return;
-    logGambleReplacement(
-      siteId,
-      runtime.gameId,
-      dreamsignId,
-      runtime.rewardDreamsign?.id,
-    );
+    logGambleReplacement(siteId, runtime.gameId, dreamsignId, runtime.rewardDreamsign?.id);
     if (runtime.gameId === "tidemark-ladder-climb") {
       mutations.replaceTidemarkLadderClimbDreamsign(siteId, dreamsignId);
     } else {

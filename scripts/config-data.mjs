@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
@@ -12,9 +12,46 @@ import {
   DREAMSCAPE_ICON_ART_DIR,
   DREAM_GUIDE_ART_DIR,
 } from "./setup-assets.mjs";
-import { compileAtlasData } from "./atlas-data.mjs";
+import {
+  collectAtlasAssetSources,
+  compileAtlasData,
+} from "./atlas-data.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+const ATLAS_DEPENDENCY_TOMLS = new Set([
+  "dreamscapes.toml",
+  "dream_guides.toml",
+  "affiliations.toml",
+]);
+
+const DEFAULT_ATLAS_ASSET_SOURCE_DIRS = {
+  bossSceneDir: DREAMSCAPE_SCENE_ART_DIR,
+  bossIconDir: DREAMSCAPE_ICON_ART_DIR,
+  bossFigureDir: DREAM_GUIDE_ART_DIR,
+};
+
+function parsedArray(tabulaDir, filename, key) {
+  const value = parse(readFileSync(join(tabulaDir, filename), "utf8"))[key];
+  if (!Array.isArray(value)) {
+    throw new Error(`Expected [[${key}]] array in ${filename}`);
+  }
+  return value;
+}
+
+function compileAtlasAtRoot(rootDir, atlasAssetSourceDirs) {
+  const tabulaDir = join(rootDir, "data", "tabula");
+  const atlasSource = parse(readFileSync(join(tabulaDir, "atlas.toml"), "utf8"));
+  const glossaryIds = parsedArray(tabulaDir, "glossary.toml", "entries")
+    .map((entry) => entry.id);
+  const assetSources = collectAtlasAssetSources(atlasAssetSourceDirs);
+  return compileAtlasData(atlasSource, {
+    dreamscapes: parsedArray(tabulaDir, "dreamscapes.toml", "dreamscapes"),
+    guides: parsedArray(tabulaDir, "dream_guides.toml", "guides"),
+    affiliations: parsedArray(tabulaDir, "affiliations.toml", "affiliations"),
+    glossaryIds,
+    ...(assetSources === undefined ? {} : { assetSources }),
+  });
+}
 
 /**
  * The hot-reloadable Dream Atlas content TOMLs: each one parses to a single JSON
@@ -29,7 +66,8 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
  * Each entry transforms with the same exported function `setup-assets.mjs` uses,
  * and writes with the same `JSON.stringify(x, null, 2) + "\n"` formatting, so the
  * file a hot-reload regenerate produces is byte-identical to the one the full
- * build produces.
+ * build produces. Changes to catalogs referenced by Atlas compilation also
+ * refresh atlas-data.json before the app reloads.
  *
  * `arrayKey` names the top-level TOML array to map over; `null` means the whole
  * parsed table is transformed as a single object.
@@ -99,12 +137,29 @@ export function generatedConfigDataWatchPaths({ rootDir = ROOT } = {}) {
   );
 }
 
+/** Recompile Atlas JSON after a referenced catalog changes. */
+export function regenerateAtlasData({
+  rootDir = ROOT,
+  atlasAssetSourceDirs = DEFAULT_ATLAS_ASSET_SOURCE_DIRS,
+} = {}) {
+  const jsonPath = join(rootDir, "public", "atlas-data.json");
+  const result = compileAtlasAtRoot(rootDir, atlasAssetSourceDirs);
+  writeFileSync(jsonPath, JSON.stringify(result, null, 2) + "\n");
+  return jsonPath;
+}
+
 /**
- * Regenerate the single runtime JSON catalog for one simple config TOML and
- * return the written path. Throws if `tomlBasename` is not a known simple config
- * or its expected top-level array is missing.
+ * Regenerate the runtime JSON catalog for one config TOML and return its written
+ * path. Atlas dependencies also refresh atlas-data.json. Throws if
+ * `tomlBasename` is unknown or its expected top-level array is missing.
  */
-export function regenerateConfigData(tomlBasename, { rootDir = ROOT } = {}) {
+export function regenerateConfigData(
+  tomlBasename,
+  {
+    rootDir = ROOT,
+    atlasAssetSourceDirs = DEFAULT_ATLAS_ASSET_SOURCE_DIRS,
+  } = {},
+) {
   const config = CONFIG_BY_TOML.get(tomlBasename);
   if (config === undefined) {
     throw new Error(`No simple config registered for ${tomlBasename}`);
@@ -116,27 +171,7 @@ export function regenerateConfigData(tomlBasename, { rootDir = ROOT } = {}) {
 
   let result;
   if (config.tomlFile === "atlas.toml") {
-    const tabulaDir = join(rootDir, "data", "tabula");
-    const dreamscapes = parse(
-      readFileSync(join(tabulaDir, "dreamscapes.toml"), "utf8"),
-    ).dreamscapes;
-    const affiliations = parse(
-      readFileSync(join(tabulaDir, "affiliations.toml"), "utf8"),
-    ).affiliations;
-    const glossary = parse(
-      readFileSync(join(tabulaDir, "glossary.toml"), "utf8"),
-    ).entries;
-    result = compileAtlasData(parsed, {
-      dreamscapes: Array.isArray(dreamscapes) ? dreamscapes : [],
-      affiliations: Array.isArray(affiliations) ? affiliations : [],
-      glossaryIds: Array.isArray(glossary) ? glossary.map((entry) => entry.id) : [],
-      assetSources: {
-        bossScenes: new Set(readdirSync(DREAMSCAPE_SCENE_ART_DIR)),
-        bossIcons: new Set(readdirSync(DREAMSCAPE_ICON_ART_DIR)),
-        bossFigures: new Set(readdirSync(DREAM_GUIDE_ART_DIR)),
-        frames: new Set(readdirSync(DREAMSCAPE_ICON_ART_DIR)),
-      },
-    });
+    result = compileAtlasAtRoot(rootDir, atlasAssetSourceDirs);
   } else if (config.arrayKey === null) {
     result = config.transform(parsed);
   } else {
@@ -149,6 +184,15 @@ export function regenerateConfigData(tomlBasename, { rootDir = ROOT } = {}) {
     result = records.map((record) => config.transform(record));
   }
 
+  const dependentAtlasData = ATLAS_DEPENDENCY_TOMLS.has(tomlBasename)
+    ? compileAtlasAtRoot(rootDir, atlasAssetSourceDirs)
+    : null;
   writeFileSync(jsonPath, JSON.stringify(result, null, 2) + "\n");
+  if (dependentAtlasData !== null) {
+    writeFileSync(
+      join(rootDir, "public", "atlas-data.json"),
+      JSON.stringify(dependentAtlasData, null, 2) + "\n",
+    );
+  }
   return jsonPath;
 }

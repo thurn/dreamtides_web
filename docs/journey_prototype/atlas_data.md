@@ -47,7 +47,12 @@ structural Battle site is appended last.
 `scripts/atlas-data.mjs` is shared by full asset setup and Vite’s targeted TOML
 reload. It validates layer and site coverage, ranges, probabilities, weights,
 capacity, profiles, Random Site ownership and choices, templates, glossary and
-affiliation references, and Atlas asset sources.
+affiliation references, and Atlas asset sources when the external source-art
+catalog is available.
+
+Vite recompiles Atlas data when its TOML or any referenced Dreamscape, Dream
+Guide, affiliation, or glossary catalog changes, so the same reference checks
+run during targeted development reloads.
 
 The compiled document contains two SHA-256 diagnostics:
 

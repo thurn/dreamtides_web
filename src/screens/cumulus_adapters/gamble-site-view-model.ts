@@ -247,6 +247,7 @@ function buildStarwayStairsSiteView(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent | null;
+  atlasData: AtlasData;
   runtime: StarwayStairsSiteRuntime;
 }): StarwayStairsSiteView {
   const { runtime } = params;
@@ -268,6 +269,9 @@ function buildStarwayStairsSiteView(params: {
       sceneNode: params.sceneNode,
       guide: params.guide,
       guideLine: STARWAY_STAIRS_GUIDE_LINE,
+      randomSiteGuideLine: params.site.randomSite?.materialized === true
+        ? params.atlasData.randomSite.guideLine
+        : null,
     }),
     isFarpoint: runtime.isFarpoint,
     runtimeReady: true,

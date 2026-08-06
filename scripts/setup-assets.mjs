@@ -26,7 +26,10 @@ import {
   validateTutorialBattleConfiguration,
   validateTutorialTriggers,
 } from "./tutorial-data.mjs";
-import { compileAtlasData } from "./atlas-data.mjs";
+import {
+  collectAtlasAssetSources,
+  compileAtlasData,
+} from "./atlas-data.mjs";
 
 // Re-exported for `setup-assets.test.mjs`, which exercises the JSONC comment
 // stripper alongside the asset-build helpers defined here.
@@ -1873,18 +1876,21 @@ export function setupAssets({
   const atlasTomlContent = readFileSync(atlasTomlPath, "utf8");
   const parsedAtlas = parse(atlasTomlContent);
   const parsedGlossary = parse(readFileSync(glossaryTomlPath, "utf8"));
+  const atlasAssetSources = collectAtlasAssetSources({
+    bossSceneDir: dreamscapeSceneArtDir,
+    bossIconDir: dreamscapeIconArtDir,
+    bossFigureDir: dreamGuideArtDir,
+  });
   const jsonAtlasData = compileAtlasData(parsedAtlas, {
     dreamscapes: allDreamscapes,
+    guides: allDreamGuides,
     affiliations: allAffiliations,
     glossaryIds: Array.isArray(parsedGlossary.entries)
       ? parsedGlossary.entries.map((entry) => entry.id)
       : [],
-    assetSources: {
-      bossScenes: new Set(readdirSync(dreamscapeSceneArtDir)),
-      bossIcons: new Set(readdirSync(dreamscapeIconArtDir)),
-      bossFigures: new Set(readdirSync(dreamGuideArtDir)),
-      frames: new Set(readdirSync(dreamscapeIconArtDir)),
-    },
+    ...(atlasAssetSources === undefined
+      ? {}
+      : { assetSources: atlasAssetSources }),
   });
   writeFileSync(
     atlasJsonPath,

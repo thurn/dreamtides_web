@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { existsSync, readdirSync } from "node:fs";
 import {
   RANDOM_SITE_DESTINATION_TYPES,
   SITE_TYPES,
@@ -135,8 +136,35 @@ function hash(value) {
     .digest("hex");
 }
 
+/**
+ * Collect the authored Atlas asset filenames when the local source-art catalog
+ * is available. A checkout without the external art directories still compiles
+ * data and lets the asset linker report its ordinary missing-art warnings.
+ */
+export function collectAtlasAssetSources({
+  bossSceneDir,
+  bossIconDir,
+  bossFigureDir,
+}) {
+  if (
+    !existsSync(bossSceneDir) ||
+    !existsSync(bossIconDir) ||
+    !existsSync(bossFigureDir)
+  ) {
+    return undefined;
+  }
+  const bossIcons = new Set(readdirSync(bossIconDir));
+  return {
+    bossScenes: new Set(readdirSync(bossSceneDir)),
+    bossIcons,
+    bossFigures: new Set(readdirSync(bossFigureDir)),
+    frames: bossIcons,
+  };
+}
+
 function validateCatalogs(result, catalogs) {
   const dreamscapes = catalogs?.dreamscapes ?? [];
+  const guides = catalogs?.guides ?? [];
   const affiliations = catalogs?.affiliations ?? [];
   const glossaryIds = new Set(catalogs?.glossaryIds ?? []);
 
@@ -154,6 +182,12 @@ function validateCatalogs(result, catalogs) {
     fail("random-site", "its owning dreamscape must reference a guide");
   }
   result.randomSite.guideId = ownerGuide;
+  if (
+    catalogs?.guides !== undefined &&
+    !guides.some((entry) => entry.id === ownerGuide)
+  ) {
+    fail("random-site", `unresolved guide id ${ownerGuide}`);
+  }
 
   if (dreamscapes.some((entry) => entry.id === result.boss.dreamscapeId)) {
     fail("boss.dreamscape-id", "the special boss id must not duplicate a normal dreamscape");
