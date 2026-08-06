@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { economyFixture } from "../testing/economy-fixture";
 import { opponentsFixture } from "../testing/opponents-fixture";
+import { draftDataFixture } from "../testing/draft-data-fixture";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
@@ -60,6 +61,7 @@ function makeJourneyContent(
     buildTestCorpusCards().map((card) => [card.cardNumber, card]),
   );
   return {
+    draftData: draftDataFixture(),
     cardDatabase,
     dreamAvatars: [makeDreamAvatar()],
     dreamwellCards: [],

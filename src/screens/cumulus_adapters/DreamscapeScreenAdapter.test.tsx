@@ -15,6 +15,7 @@ import type { DreamscapeScreenProps } from "../../cumulus/screens/DreamscapeScre
 import { logEvent, logEventOnce } from "../../logging";
 import { DreamscapeScreenAdapter } from "./DreamscapeScreenAdapter";
 import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
+import { draftDataFixture } from "../../testing/draft-data-fixture";
 
 const screenMock = vi.hoisted(() =>
   vi.fn<(props: DreamscapeScreenProps) => void>(),
@@ -116,6 +117,7 @@ function setJourneyContext(
     mutations,
     journeyContent: {
       atlasData: MINIMAL_ATLAS_DATA,
+      draftData: draftDataFixture(),
       ...journeyContent,
     },
   } as JourneyContextValue);

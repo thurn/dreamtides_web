@@ -21,9 +21,13 @@ import { DEFAULT_DRAFT_SITE_PICK_COUNT } from "./draft-site-config";
 /** Default shared draft configuration. */
 export const DEFAULT_DRAFT_CONFIG: Readonly<DraftConfig> = {
   packSize: 4,
+  sitePickCount: DEFAULT_DRAFT_SITE_PICK_COUNT,
+  rarityCaps: [
+    { rarity: "Legendary", poolCopyCap: 1, maxPicksPerRun: 1 },
+  ],
 };
 
-/** Number of player picks per draft site visit. */
+/** Legacy default used by tests and imported saves without persisted site data. */
 export const SITE_PICKS = DEFAULT_DRAFT_SITE_PICK_COUNT;
 
 /**
@@ -241,21 +245,14 @@ function eligibleOpeningOffer(
   return [...authored];
 }
 
-/**
- * Once a Legendary card is drafted, every Legendary card is banned from the
- * rest of the run's pool: removed from both the remaining multiset and the
- * fixed pool it is recreated from, so no later offer — this visit or a future
- * draft site — can surface another Legendary. The just-drafted Legendary is
- * already in the deck; dropping it from the pool here too keeps a pool
- * recreation from re-offering it. Pool mode only: the deck-fit modes draw from
- * a frozen pack sequence / fresh rolls and have no such multiset to prune.
- */
-function removeLegendariesFromPool(
+/** Remove a capped rarity from both the live and recreatable pool multisets. */
+function removeRarityFromPool(
   state: PoolDraftState,
   cardDatabase: Map<number, CardData>,
+  rarity: NonNullable<CardData["rarity"]>,
 ): void {
   for (const key of Object.keys(state.draftPoolCopiesByCard)) {
-    if (cardDatabase.get(Number(key))?.rarity === "Legendary") {
+    if (cardDatabase.get(Number(key))?.rarity === rarity) {
       delete state.draftPoolCopiesByCard[key];
       delete state.remainingCopiesByCard[key];
     }
@@ -547,6 +544,9 @@ export function enterDraftSite(
       // pack (fewer than packSize cards) as available.
       offerAvailable: state.currentOffer.length > 0,
       resumedExistingOffer: state.currentOffer.length > 0,
+      cardsPerOffer: config.packSize,
+      picksPerSite: config.sitePickCount,
+      rarityCaps: config.rarityCaps,
     });
     return;
   }
@@ -566,6 +566,9 @@ export function enterDraftSite(
     offerCards: state.currentOffer,
     offerAvailable: hasOffer,
     resumedExistingOffer: false,
+    cardsPerOffer: config.packSize,
+    picksPerSite: config.sitePickCount,
+    rarityCaps: config.rarityCaps,
   });
 }
 
@@ -624,6 +627,7 @@ function processPlayerPickInternal(
   options: { logEvents: boolean },
   offerDeps?: OfferDeps,
   rng: () => number = Math.random,
+  postPickDeckCardNumbers: readonly number[] = [cardNumber],
 ): boolean {
   const currentOffer = [...state.currentOffer];
   if (!currentOffer.includes(cardNumber)) {
@@ -655,13 +659,22 @@ function processPlayerPickInternal(
   state.pickNumber += 1;
   state.sitePicksCompleted += 1;
 
-  // Drafting a Legendary bans every other Legendary from the rest of the pool
-  // before the next offer is built, so a player ends a run with at most one.
-  if (state.mode === "pool" && card?.rarity === "Legendary") {
-    removeLegendariesFromPool(state, cardDatabase);
+  if (state.mode === "pool") {
+    for (const rarityCap of config.rarityCaps) {
+      const pickedAtRarity = postPickDeckCardNumbers.reduce(
+        (count, draftedCardNumber) =>
+          cardDatabase.get(draftedCardNumber)?.rarity === rarityCap.rarity
+            ? count + 1
+            : count,
+        0,
+      );
+      if (pickedAtRarity >= rarityCap.maxPicksPerRun) {
+        removeRarityFromPool(state, cardDatabase, rarityCap.rarity);
+      }
+    }
   }
 
-  if (state.sitePicksCompleted >= SITE_PICKS) {
+  if (state.sitePicksCompleted >= config.sitePickCount) {
     state.currentOffer = [];
     return true;
   }
@@ -676,6 +689,7 @@ export function processPlayerPick(
   config: DraftConfig = DEFAULT_DRAFT_CONFIG,
   offerDeps?: OfferDeps,
   rng: () => number = Math.random,
+  postPickDeckCardNumbers?: readonly number[],
 ): boolean {
   return processPlayerPickInternal(
     cardNumber,
@@ -685,6 +699,7 @@ export function processPlayerPick(
     { logEvents: true },
     offerDeps,
     rng,
+    postPickDeckCardNumbers,
   );
 }
 
@@ -695,6 +710,7 @@ export function processPlayerPickWithoutLogging(
   config: DraftConfig = DEFAULT_DRAFT_CONFIG,
   offerDeps?: OfferDeps,
   rng: () => number = Math.random,
+  postPickDeckCardNumbers?: readonly number[],
 ): boolean {
   return processPlayerPickInternal(
     cardNumber,
@@ -704,6 +720,7 @@ export function processPlayerPickWithoutLogging(
     { logEvents: false },
     offerDeps,
     rng,
+    postPickDeckCardNumbers,
   );
 }
 

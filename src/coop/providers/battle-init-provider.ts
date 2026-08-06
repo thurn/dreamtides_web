@@ -187,9 +187,12 @@ export function createBattleCompletionProvider(
         journey.atlas,
         dreamscapeId,
         completionLevel,
-        journey.dreamscapeModifiers.length === 0
-          ? {}
-          : { dreamscapeModifiers: journey.dreamscapeModifiers },
+        {
+          ...(journey.dreamscapeModifiers.length === 0
+            ? {}
+            : { dreamscapeModifiers: journey.dreamscapeModifiers }),
+          draftPickCount: content.draftData.offers.picksPerSite,
+        },
         {
           dreamscapes: content.dreamscapes,
           atlasData: content.atlasData,

@@ -27,7 +27,7 @@
 // At runtime the whole algorithm is the tide selection, one shuffle, and the
 // two-pass deal below: join the starter, draw a random subset of facets, top up
 // with broad tides until a full pool is dealable, shuffle everything into one
-// bag, and deal `TIDES4.dealSize` copies at most `TIDES4.cap` of any card —
+// bag, and deal the configured number of copies at the configured per-card cap —
 // seeding the starter's (signature) cards first so the signature tide is
 // guaranteed into the pool rather than risking being cut by the bag overflow. A
 // signatured
@@ -52,32 +52,21 @@ import {
   type VariantResult,
 } from "./types.ts";
 import type { Tides4DecksJson } from "./tides4-io.ts";
+import type { Tides4Tuning } from "../../types/draft-data";
 
-interface Tides4Tuning {
-  // Copies dealt into the pool. Pinned to `sigseed`'s pool size (150) rather than
-  // the journey's 200 so `tides4` reproduces the same pools `sigseed` ships; the
-  // passed `targetSize` is ignored, exactly as `sigseed`/`pickfit` ignore it.
-  dealSize: number;
-  // Max copies of any single card dealt (the pool-wide 2-copy rule).
-  cap: number;
-  // The most facet tides drawn into one pool. The subset size is drawn uniformly
-  // in [1, min(maxFacetDraw, available facets)], mirroring `sigseed`'s random
-  // signature-subset size (`SIGSEED.maxSeedCards`), so a pool leans on a single
-  // facet up to this many of them on top of the always-joined starter core.
-  maxFacetDraw: number;
-}
-export const TIDES4: Tides4Tuning = {
+/** Developer/test fallback; production injects the compiled draft.toml values. */
+export const DEFAULT_TIDES4_TUNING: Tides4Tuning = {
   dealSize: 150,
-  cap: 2,
-  maxFacetDraw: 3,
+  copyCap: 2,
+  maxFacets: 3,
 };
 
 /**
  * Build a pool by combining tide decks: join the avatar's starter tide (its
- * signature cards) when present, draw a uniformly-random subset of 1..`maxFacetDraw`
+ * signature cards) when present, draw a uniformly-random subset of facets
  * of its facet tides and join them, then top the bag up with broad neutral tides
  * (and any remaining facets) until a full pool can be dealt; finally shuffle the
- * whole bag and deal `TIDES4.dealSize` copies with at most `TIDES4.cap` copies of
+ * whole bag and deal the configured size with at most the configured copies of
  * any card, seeding the starter's signature cards first so the signature tide is
  * always present in the dealt pool. The random facet subset is the variety engine — it is the analogue of
  * `sigseed`'s random signature subset, so a DreamAvatar leans its identity a
@@ -94,6 +83,7 @@ export function generateTides4(
   rng: () => number,
   poolData: PoolData,
   dreamAvatarId?: string,
+  tuning: Tides4Tuning = DEFAULT_TIDES4_TUNING,
 ): VariantResult {
   const data: Tides4DecksJson | undefined = poolData.tides4Decks;
   if (!data) {
@@ -102,7 +92,14 @@ export function generateTides4(
       "no tide decks are bundled (data/tides4.jsonc, served as /tides4-data.json)",
     );
   }
-  return combineTidesPool(rng, poolData, data, dreamAvatarId, "tides4");
+  return combineTidesPool(
+    rng,
+    poolData,
+    data,
+    dreamAvatarId,
+    "tides4",
+    tuning,
+  );
 }
 
 /**
@@ -120,8 +117,9 @@ export function combineTidesPool(
   data: Tides4DecksJson,
   dreamAvatarId: string | undefined,
   label: string,
+  tuning: Tides4Tuning = DEFAULT_TIDES4_TUNING,
 ): VariantResult {
-  const dealSize = TIDES4.dealSize;
+  const dealSize = tuning.dealSize;
 
   // Tide selection. Join the starter (when present), draw a random subset of the
   // facets, and queue the neutral tail plus any undrawn facets as fill. A missing
@@ -168,11 +166,11 @@ export function combineTidesPool(
       joinSelections.push({ id: entry.starter, selection: "starter" });
     }
     // The random facet subset — `sigseed`'s subset draw, over baked facets. Draw
-    // its size first (uniform in [1, min(maxFacetDraw, facets)]), then take that
+    // its size first (uniform in [1, min(maxFacets, facets)]), then take that
     // many from a shuffled copy of the facet list.
     const facets = shuffle(rng, [...entry.facets]);
     facetAvailableCount = facets.length;
-    const hi = Math.max(1, Math.min(TIDES4.maxFacetDraw, facets.length));
+    const hi = Math.max(1, Math.min(tuning.maxFacets, facets.length));
     const drawCount = 1 + Math.floor(rng() * hi);
     const split = Math.min(drawCount, facets.length);
     facetDrawnCount = split;
@@ -259,7 +257,7 @@ export function combineTidesPool(
         const have = bagCounts.get(cardId) ?? 0;
         bagCounts.set(cardId, have + 1);
         bag.push(cardId);
-        if (have < TIDES4.cap) dealable += 1;
+        if (have < tuning.copyCap) dealable += 1;
       }
     }
     if (fold) deckIds.push(id);
@@ -314,7 +312,7 @@ export function combineTidesPool(
   for (const cardId of bag) {
     if (size >= dealSize) break;
     const have = counts.get(cardId) ?? 0;
-    if (have >= TIDES4.cap) continue;
+    if (have >= tuning.copyCap) continue;
     counts.set(cardId, have + 1);
     size += 1;
   }
@@ -347,7 +345,8 @@ export function combineTidesPool(
     signatureless,
     borrowedArchetypeName,
     dealSize,
-    cap: TIDES4.cap,
+    cap: tuning.copyCap,
+    maxFacets: tuning.maxFacets,
     facetDrawnCount,
     facetAvailableCount,
     tides,
@@ -372,6 +371,6 @@ export const tides4Strategy: PoolStrategy = {
     "plus a random subset of its theme (facet) tides, shuffled together and topped " +
     "up with broad tides. Reproduces sigseed's random-subset variety from readable " +
     "decks.",
-  generate: ({ rng, poolData, dreamAvatarId }) =>
-    generateTides4(rng, poolData, dreamAvatarId),
+  generate: ({ rng, poolData, dreamAvatarId, tides4Tuning }) =>
+    generateTides4(rng, poolData, dreamAvatarId, tides4Tuning),
 };

@@ -14,9 +14,11 @@ import { resetLog } from "../logging";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { economyFixture } from "../testing/economy-fixture";
 import { opponentsFixture } from "../testing/opponents-fixture";
+import { draftDataFixture } from "../testing/draft-data-fixture";
 
-const REDUCER_VERSION = "dreamtides-coop-v15";
+const REDUCER_VERSION = "dreamtides-coop-v16";
 const ATLAS_FOLD_HASH = "fixture-atlas-fold-hash";
+const DRAFT_DATA = draftDataFixture();
 const ECONOMY = economyFixture();
 const PINNED_ECONOMY = {
   economyFoldHash: ECONOMY.foldHash,
@@ -123,6 +125,7 @@ function mount(config: RuntimeConfig): void {
         gameId={config.gameId}
         runtimeConfig={config}
         atlasFoldHash={ATLAS_FOLD_HASH}
+        draftData={DRAFT_DATA}
         economyData={ECONOMY}
         opponentsData={opponentsFixture()}
       >
@@ -163,6 +166,7 @@ describe("RoomGate content-config gate", () => {
       draftMode: "pool",
       fresh20PackSize: null,
       atlasFoldHash: ATLAS_FOLD_HASH,
+      draftFoldHash: DRAFT_DATA.foldHash,
       ...PINNED_ECONOMY,
     });
 
@@ -183,6 +187,7 @@ describe("RoomGate content-config gate", () => {
             draftMode: "pool",
             fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
+            draftFoldHash: DRAFT_DATA.foldHash,
             ...PINNED_ECONOMY,
           }),
         ),
@@ -208,6 +213,7 @@ describe("RoomGate content-config gate", () => {
             draftMode: "pool",
             fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
+            draftFoldHash: DRAFT_DATA.foldHash,
             ...PINNED_ECONOMY,
           }),
         ),
@@ -231,6 +237,7 @@ describe("RoomGate content-config gate", () => {
             draftMode: "pool",
             fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
+            draftFoldHash: DRAFT_DATA.foldHash,
             ...PINNED_ECONOMY,
             opponentsFoldHash: "c".repeat(64),
           }),
@@ -241,6 +248,31 @@ describe("RoomGate content-config gate", () => {
 
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
     expect(container.textContent).toContain("Opponent Rules");
+  });
+
+  it("does not adopt a room whose Draft fold hash differs", async () => {
+    mount(runtimeConfig());
+    await flush();
+
+    act(() => {
+      deliverNode?.(
+        nodeWith(
+          genesisWith({
+            poolVariant: "tides4",
+            draftMode: "pool",
+            fresh20PackSize: null,
+            atlasFoldHash: ATLAS_FOLD_HASH,
+            draftFoldHash: "different-draft-fold-hash",
+            ...PINNED_ECONOMY,
+          }),
+        ),
+      );
+    });
+    await flush();
+
+    expect(container.querySelector("[data-config-gate]")).not.toBeNull();
+    expect(container.textContent).toContain("Start a New Game");
+    expect(container.textContent).not.toContain("Use This Game’s Settings");
   });
 
   it("treats a genesis with no contentConfig as a mismatch (config gate)", async () => {

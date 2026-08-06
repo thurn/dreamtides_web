@@ -64,6 +64,10 @@ export function JourneyApp({
   runtimeConfig: RuntimeConfig;
 }) {
   const { state, mutations, journeyContent } = useJourney();
+  const resolvedPoolVariant =
+    journeyContent.poolContext?.poolVariant ??
+    runtimeConfig.poolVariant ??
+    journeyContent.draftData.pool.defaultStrategy;
   // Reflect the current screen into the address-bar path (e.g.
   // `/dreamscape/ember-wood/purge`, `/atlas`) so the URL shows where the player
   // is. Passive reflection via `history.replaceState`; the `?game=<roomId>`
@@ -259,8 +263,7 @@ export function JourneyApp({
   // every affinity-grown variant (`seed` and the pick-record family); null for
   // variants that grow no seed (idf3, color_pool, ...).
   const isAffinityGrownVariant =
-    runtimeConfig.poolVariant !== undefined &&
-    AFFINITY_GROWN_POOL_VARIANTS.has(runtimeConfig.poolVariant);
+    AFFINITY_GROWN_POOL_VARIANTS.has(resolvedPoolVariant);
   const seedProvenanceNeeded =
     isAffinityGrownVariant && (cardSourceOverlayOpen || poolViewerOpen);
   const seedProvenance = useMemo(() => {
@@ -286,9 +289,7 @@ export function JourneyApp({
   // determinism guarantees as the provenance above) for the "Why Cards" overlay
   // and the Pool Viewer, so both surfaces describe the exact pool the player
   // drafts from. Computed only for the `tides4` variant; null otherwise.
-  const isTides4Variant =
-    runtimeConfig.poolVariant !== undefined &&
-    poolVariantNeedsTides4(runtimeConfig.poolVariant);
+  const isTides4Variant = poolVariantNeedsTides4(resolvedPoolVariant);
   const tides4ProvenanceNeeded =
     isTides4Variant && (cardSourceOverlayOpen || poolViewerOpen);
   const tides4Provenance = useMemo(() => {
@@ -491,7 +492,7 @@ export function JourneyApp({
             cardDatabase={cardDatabase}
             draftState={state.draftState}
             resolvedPackage={state.resolvedPackage}
-            poolVariant={runtimeConfig.poolVariant}
+            poolVariant={resolvedPoolVariant}
             replayRecord={replayRecord}
             seedProvenance={seedProvenance}
             tides4Provenance={tides4Provenance}
@@ -760,6 +761,7 @@ export default function App({
       gameId={runtimeConfig.gameId}
       runtimeConfig={runtimeConfig}
       atlasFoldHash={journeyContent.atlasData.foldHash}
+      draftData={journeyContent.draftData}
       opponentsData={journeyContent.opponentsData}
       economyData={journeyContent.economyData}
       frontDoorEntry={frontDoorEntry}

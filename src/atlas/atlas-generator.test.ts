@@ -130,6 +130,23 @@ function counts(sites: SiteState[]): Partial<Record<SiteType, number>> {
 }
 
 describe("generateSiteComposition", () => {
+  it("persists the configured pick target on generated Draft sites", () => {
+    const home = { ...NON_STARTER_DREAMSCAPES[0], signatureSite: "Draft" as const };
+    const result = generateSiteComposition({
+      layer: LayerName.Two,
+      dreamscape: home,
+      dreamscapes: TEST_DREAMSCAPES,
+      atlasData: TEST_ATLAS_DATA,
+      context: { draftPickCount: 7 },
+      rng: nextFixtureRandom,
+    });
+    const draftSites = result.sites.filter((site) => site.type === "Draft");
+    expect(draftSites.length).toBeGreaterThan(0);
+    for (const site of draftSites) {
+      expect(site.data?.draftPickCount).toBe(7);
+    }
+  });
+
   it("builds the presenting guide's home Random Site with a distinct eligible candidate pool", () => {
     const home = NON_STARTER_DREAMSCAPES.find(
       (dreamscape) => dreamscape.signatureSite === "RandomSite",

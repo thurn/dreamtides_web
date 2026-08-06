@@ -30,10 +30,12 @@ export function DreamscapeScreenAdapter() {
           journeyContent.atlasData,
           replacementSiteId,
           journeyContent.tutorialDreamscape,
+          journeyContent.draftData.offers.picksPerSite,
         ),
     [
       journeyContent.atlasData,
       journeyContent.tutorialDreamscape,
+      journeyContent.draftData.offers.picksPerSite,
       node,
       replacementSiteId,
       state,

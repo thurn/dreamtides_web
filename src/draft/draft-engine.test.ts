@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getLogEntries, resetLog } from "../logging";
 import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
-import type { PoolDraftState } from "../types/draft";
+import type { DraftConfig, PoolDraftState } from "../types/draft";
 import type { ResolvedDreamAvatarPackage } from "../types/content";
 import type { FitModel } from "./replay/fit-model";
 import {
@@ -552,6 +552,82 @@ describe("legendary exclusion", () => {
     for (const cardNumber of state.currentOffer) {
       expect(cardDatabase.get(cardNumber)?.rarity).not.toBe("Legendary");
     }
+  });
+});
+
+describe("configured draft rules", () => {
+  const config: DraftConfig = {
+    packSize: 3,
+    sitePickCount: 2,
+    rarityCaps: [
+      { rarity: "Special", poolCopyCap: 1, maxPicksPerRun: 2 },
+    ],
+  };
+
+  it("uses the configured offer size and completes at the configured site target", () => {
+    const cards = Array.from({ length: 8 }, (_, index) => makeCard(index + 1));
+    const cardDatabase = buildDB(cards);
+    const state = makeDraftState({
+      remainingCopiesByCard: Object.fromEntries(
+        cards.map((card) => [String(card.cardNumber), 1]),
+      ),
+    });
+
+    enterDraftSite(state, "site-configured", cardDatabase, config, undefined, () => 0);
+    expect(state.currentOffer).toHaveLength(3);
+    expect(
+      processPlayerPick(
+        state.currentOffer[0],
+        state,
+        cardDatabase,
+        config,
+        undefined,
+        () => 0,
+      ),
+    ).toBe(false);
+    expect(state.currentOffer).toHaveLength(3);
+    expect(
+      processPlayerPick(
+        state.currentOffer[0],
+        state,
+        cardDatabase,
+        config,
+        undefined,
+        () => 0,
+      ),
+    ).toBe(true);
+    expect(state.sitePicksCompleted).toBe(2);
+    expect(state.currentOffer).toEqual([]);
+  });
+
+  it("prunes any configured rarity using post-pick run deck counts", () => {
+    const cardDatabase = buildDB([
+      makeCard(1, { rarity: "Special" }),
+      makeCard(2, { rarity: "Special" }),
+      makeCard(3, { rarity: "Special" }),
+      makeCard(4),
+    ]);
+    const state = makeDraftState({
+      draftPoolCopiesByCard: { "1": 1, "2": 1, "3": 1, "4": 1 },
+      remainingCopiesByCard: { "2": 1, "3": 1, "4": 1 },
+      activeSiteId: "site-a",
+      currentOffer: [1, 2, 3],
+      siteShownCardNumbers: [1, 2, 3],
+      sitePicksCompleted: 1,
+    });
+
+    processPlayerPick(
+      1,
+      state,
+      cardDatabase,
+      config,
+      undefined,
+      () => 0,
+      [2, 1],
+    );
+
+    expect(state.draftPoolCopiesByCard).toEqual({ "4": 1 });
+    expect(state.remainingCopiesByCard).toEqual({ "4": 1 });
   });
 });
 

@@ -16,6 +16,7 @@ import type {
 } from "../eventlog/types";
 import type { EconomyData } from "../types/economy-data";
 import type { OpponentsData } from "../types/opponents-data";
+import type { DraftData } from "../types/draft-data";
 import {
   createRoomEvictingStale,
   generateRoomId,
@@ -102,6 +103,8 @@ interface RoomGateProps {
   runtimeConfig: RuntimeConfig;
   /** Hash of Atlas sections which influence deterministic folding. */
   atlasFoldHash: string;
+  /** Validated draft rules and fold hash pinned into room genesis. */
+  draftData: DraftData;
   /** Validated economy content and journey defaults pinned into room genesis. */
   economyData: EconomyData;
   opponentsData: OpponentsData;
@@ -221,6 +224,7 @@ function hasPinnedContentConfig(genesis: Genesis): genesis is PinnedGenesis {
   return (
     genesis.contentConfig !== undefined &&
     typeof genesis.contentConfig.atlasFoldHash === "string" &&
+    typeof genesis.contentConfig.draftFoldHash === "string" &&
     typeof genesis.contentConfig.economyFoldHash === "string" &&
     typeof genesis.contentConfig.opponentsFoldHash === "string" &&
     typeof genesis.contentConfig.defaultStartingEssence === "number" &&
@@ -249,6 +253,7 @@ export function RoomGate({
   gameId,
   runtimeConfig,
   atlasFoldHash,
+  draftData,
   economyData,
   opponentsData,
   frontDoorEntry,
@@ -260,10 +265,11 @@ export function RoomGate({
       contentConfigFromRuntime(
         runtimeConfig,
         atlasFoldHash,
+        draftData,
         economyData,
         opponentsData,
       ),
-    [atlasFoldHash, economyData, opponentsData, runtimeConfig],
+    [atlasFoldHash, draftData, economyData, opponentsData, runtimeConfig],
   );
   const autoCreateFiredRef = useRef(false);
   const [activeRoomId, setActiveRoomId] = useState<string | null>(gameId);
@@ -444,6 +450,7 @@ export function RoomGate({
       compatibility: classifyReducerVersion(readyReducerVersion),
       roomReducerVersion: readyReducerVersion,
       atlasFoldHash: localContentConfig.atlasFoldHash,
+      draftFoldHash: localContentConfig.draftFoldHash,
       economyFoldHash: localContentConfig.economyFoldHash,
       opponentsFoldHash: localContentConfig.opponentsFoldHash,
       defaultStartingEssence: localContentConfig.defaultStartingEssence,

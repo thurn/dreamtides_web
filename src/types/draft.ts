@@ -1,7 +1,13 @@
+import type { DraftRarityCap } from "./draft-data";
+
 /** Configuration shared across all pack generation strategies. */
 export interface DraftConfig {
   /** Number of cards shown per pick. */
   packSize: number;
+  /** Number of picks required to complete the active persisted Draft site. */
+  sitePickCount: number;
+  /** Per-rarity pool and run limits compiled from draft.toml. */
+  rarityCaps: readonly DraftRarityCap[];
   /**
    * Optional affiliation reweighting for a draft inside an affiliated dreamscape:
    * a `cardNumber -> multiplier` map (see `src/affiliations/affiliation-weights.ts`).

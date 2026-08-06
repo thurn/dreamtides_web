@@ -1,11 +1,7 @@
 import { describe, it, expect } from "vitest";
 import type { CardData } from "../types/cards";
 import type { GeneratedPool } from "../draft/pool";
-import {
-  buildIdIndex,
-  buildLegendaryCardNumbers,
-  resolvePool,
-} from "./cards-v2-database";
+import { buildIdIndex, resolvePool } from "./cards-v2-database";
 import { asCardId, asCardName } from "../types/card-identity";
 
 /** The synthetic card id a `makeCard` record carries for a given card number. */
@@ -14,10 +10,8 @@ function idFor(cardNumber: number): string {
 }
 
 /**
- * Minimal card record factory. Only the fields `buildIdIndex` /
- * `buildLegendaryCardNumbers` read (id, cardNumber, rarity) matter here; the
- * rest carry placeholder values so the tests do not depend on production card
- * data.
+ * Minimal card record factory. Only the fields used by the UUID index and cap
+ * fixtures matter here; the rest are stable placeholders.
  */
 function makeCard(overrides: Partial<CardData> & {
   name: string;
@@ -62,51 +56,40 @@ function makePool(copiesByCardNumber: Record<number, number>): GeneratedPool {
   };
 }
 
-describe("buildLegendaryCardNumbers", () => {
-  it("collects exactly the card numbers whose rarity is Legendary", () => {
-    const db = new Map<number, CardData>([
-      [1, makeCard({ name: asCardName("Ordinary"), cardNumber: 1 })],
-      [2, makeCard({ name: asCardName("Hero"), cardNumber: 2, rarity: "Legendary" })],
-      [3, makeCard({ name: asCardName("Starter"), cardNumber: 3, rarity: "Starter" })],
-      [4, makeCard({ name: asCardName("Champion"), cardNumber: 4, rarity: "Legendary" })],
-    ]);
-    const legendary = buildLegendaryCardNumbers(db);
-    expect(legendary).toEqual(new Set([2, 4]));
-  });
-});
-
-describe("resolvePool legendary cap", () => {
+describe("resolvePool copy caps", () => {
   const db = new Map<number, CardData>([
     [10, makeCard({ name: asCardName("Common"), cardNumber: 10 })],
-    [11, makeCard({ name: asCardName("Legend"), cardNumber: 11, rarity: "Legendary" })],
+    [11, makeCard({ name: asCardName("Special"), cardNumber: 11, rarity: "Special" })],
   ]);
   const idIndex = buildIdIndex(db);
-  const legendaryCardNumbers = buildLegendaryCardNumbers(db);
+  const rarityCopyCaps = new Map([[11, 1]]);
 
-  it("caps a legendary card at one copy even when the pool asks for two", () => {
+  it("caps a configured rarity at one copy even when the pool asks for two", () => {
     const resolved = resolvePool(
       makePool({ 10: 2, 11: 2 }),
       idIndex,
-      legendaryCardNumbers,
+      2,
+      rarityCopyCaps,
     );
     expect(resolved.draftPoolCopiesByCard["10"]).toBe(2);
     expect(resolved.draftPoolCopiesByCard["11"]).toBe(1);
-    expect(resolved.cappedLegendaryCardNumbers).toEqual([11]);
+    expect(resolved.cappedCardNumbers).toEqual([11]);
   });
 
-  it("leaves a single-copy legendary untouched and reports no cap", () => {
+  it("leaves a single-copy rarity-capped card untouched and reports no cap", () => {
     const resolved = resolvePool(
       makePool({ 11: 1 }),
       idIndex,
-      legendaryCardNumbers,
+      2,
+      rarityCopyCaps,
     );
     expect(resolved.draftPoolCopiesByCard["11"]).toBe(1);
-    expect(resolved.cappedLegendaryCardNumbers).toEqual([]);
+    expect(resolved.cappedCardNumbers).toEqual([]);
   });
 
-  it("applies the standard two-copy cap when no legendary set is supplied", () => {
+  it("applies the standard two-copy cap when no rarity override is supplied", () => {
     const resolved = resolvePool(makePool({ 11: 2 }), idIndex);
     expect(resolved.draftPoolCopiesByCard["11"]).toBe(2);
-    expect(resolved.cappedLegendaryCardNumbers).toEqual([]);
+    expect(resolved.cappedCardNumbers).toEqual([]);
   });
 });

@@ -35,7 +35,6 @@ import { loadFigmentDatabase } from "./figment-database";
 import { loadExplorationContent, type ExplorationContent } from "./exploration";
 import {
   buildIdIndex,
-  buildLegendaryCardNumbers,
   loadAffinityCorpus,
   loadCardsV2Database,
   loadDecklists,
@@ -64,8 +63,10 @@ import {
 } from "./dreamscapes";
 import { loadAtlasData } from "./atlas-data";
 import { loadEconomyData } from "./economy-data";
+import { loadDraftData } from "./draft-data";
 import { loadOpponentsData } from "./opponents-data";
 import type { EconomyData } from "../types/economy-data";
+import type { DraftData } from "../types/draft-data";
 import type { OpponentsData } from "../types/opponents-data";
 import type {
   AffiliationContent,
@@ -147,6 +148,8 @@ export interface JourneyContent {
    * Dream Atlas generation tuning, loaded from `public/atlas-data.json`.
    */
   atlasData: AtlasData;
+  /** Validated draft rules loaded before room folding begins. */
+  draftData: DraftData;
   /** Validated direct economy tuning loaded before room folding begins. */
   economyData: EconomyData;
   /** Fold-relevant opponent and battle tuning loaded before room entry. */
@@ -219,18 +222,18 @@ export interface RunPoolContext {
    * boundary.
    */
   idIndex: ReadonlyMap<string, number>;
-  /**
-   * Card numbers whose rarity is `Legendary`. Pools cap these at a single
-   * copy; absent contexts (e.g. tests) leave the set empty and apply no
-   * legendary-specific cap.
-   */
-  legendaryCardNumbers?: ReadonlySet<number>;
+  /** Per-card rarity copy-cap overrides compiled from draft.toml. */
+  poolCopyCapsByCardNumber?: ReadonlyMap<number, number>;
+  /** Default pool copy cap for cards without a rarity override. */
+  defaultPoolCopyCap?: number;
   allDreamsignPoolIds: string[];
   /**
    * Pool-construction strategy for this run, from `?algo=`. Absent contexts
    * (e.g. tests) fall back to {@link DEFAULT_POOL_VARIANT}.
    */
   poolVariant?: PoolVariant;
+  /** Production tides4 tuning compiled from draft.toml. */
+  tides4Tuning?: DraftData["pool"]["tides4"];
 }
 
 const POOL_TARGET_SIZE = 200;
@@ -404,6 +407,7 @@ function generateDreamAvatarPool(
     POOL_TARGET_SIZE,
     (dreamAvatar.signatureCardIds ?? []).map((id) => id.toLowerCase()),
     dreamAvatar.id,
+    ctx.tides4Tuning,
   );
 }
 
@@ -445,6 +449,15 @@ function logPoolConstructed(
     seed: pool.seed,
     poolSize: pool.size,
     distinctCardCount: pool.counts.size,
+    ...(pool.tides4Provenance === undefined
+      ? {}
+      : {
+          tides4Tuning: {
+            dealSize: pool.tides4Provenance.dealSize,
+            copyCap: pool.tides4Provenance.cap,
+            maxFacets: pool.tides4Provenance.maxFacets,
+          },
+        }),
   };
 
   const provenance = pool.seedProvenance;
@@ -522,8 +535,13 @@ export function buildDreamAvatarPackage(
     draftPoolCopiesByCard,
     unresolvedIds,
     collidedCardNumbers,
-    cappedLegendaryCardNumbers,
-  } = resolvePool(pool, ctx.idIndex, ctx.legendaryCardNumbers);
+    cappedCardNumbers,
+  } = resolvePool(
+    pool,
+    ctx.idIndex,
+    ctx.defaultPoolCopyCap,
+    ctx.poolCopyCapsByCardNumber,
+  );
   if (unresolvedIds.length > 0) {
     // A pool card whose UUID is not in the catalog id index (a card dropped from
     // the catalog). Logged so a production pool stays reconstructable: the
@@ -545,14 +563,11 @@ export function buildDreamAvatarPackage(
       collidedCardNumbers,
     });
   }
-  if (cappedLegendaryCardNumbers.length > 0) {
-    // Record which legendaries the pool asked to duplicate so a production
-    // pool can be reconstructed: the generator wanted >1 copy, the one-copy
-    // legendary cap reduced each to a single copy.
-    logEvent("build_dream_avatar_package_legendary_capped", {
+  if (cappedCardNumbers.length > 0) {
+    logEvent("build_dream_avatar_package_rarity_capped", {
       dreamAvatarId: dreamAvatar.id,
-      cappedCount: cappedLegendaryCardNumbers.length,
-      cappedLegendaryCardNumbers,
+      cappedCount: cappedCardNumbers.length,
+      cappedCardNumbers,
     });
   }
   for (const starter of STARTER_CARD_NUMBERS) {
@@ -763,6 +778,7 @@ export function buildDreamAvatarTides4Provenance(
     borrowedArchetypeName: provenance.borrowedArchetypeName,
     dealSize: provenance.dealSize,
     cap: provenance.cap,
+    maxFacets: provenance.maxFacets,
     facetDrawnCount: provenance.facetDrawnCount,
     facetAvailableCount: provenance.facetAvailableCount,
     tides,
@@ -773,36 +789,38 @@ export function buildDreamAvatarTides4Provenance(
 /**
  * Loads V2 journey content (cards, DreamAvatars, decklists) and the run pool
  * context. `poolVariant` (from `?algo=`) selects the pool-construction strategy
- * for the run; it defaults to {@link DEFAULT_POOL_VARIANT}. `draftMode` (from
- * `?algo=`) switches to a deck-fit draft: `"replay"` replays a real record's
- * packs, `"fresh20"` rolls fresh random packs. Both fetch the full draft-record
- * corpus and build the live deck-fit model from it. `fresh20PackSize` (from
- * `?packsize=`) is carried through for the fresh20 draft.
+ * for the run; an absent override resolves from compiled draft data. `draftMode`
+ * (from `?algo=`) switches to a deck-fit draft: `"replay"` replays a real
+ * record's packs, `"fresh20"` rolls fresh random packs. Both fetch the full
+ * draft-record corpus and build the live deck-fit model from it.
+ * `fresh20PackSize` (from `?packsize=`) is carried through for the fresh20 draft.
  */
 export async function loadJourneyContent(
-  poolVariant: PoolVariant = DEFAULT_POOL_VARIANT,
+  poolVariant?: PoolVariant,
   draftMode: "pool" | "replay" | "fresh20" = "pool",
   fresh20PackSize?: number,
 ): Promise<JourneyContent> {
+  const draftData = await loadDraftData();
+  const resolvedPoolVariant = poolVariant ?? draftData.pool.defaultStrategy;
   // The `embedded` variant grows from the committed affinity corpus instead of
   // the records, so it fetches `/affinity-corpus-data.json` rather than the
   // 19 MB record bundle; other pool modes skip it.
-  const poolNeedsCorpus = POOL_VARIANTS_NEEDING_CORPUS.has(poolVariant);
+  const poolNeedsCorpus = POOL_VARIANTS_NEEDING_CORPUS.has(resolvedPoolVariant);
   // The `tides` variant combines the committed tide decks; only it fetches
   // `/tides-data.json`.
-  const poolNeedsTides = POOL_VARIANTS_NEEDING_TIDES.has(poolVariant);
+  const poolNeedsTides = POOL_VARIANTS_NEEDING_TIDES.has(resolvedPoolVariant);
   // The `tides2` variant combines its own (smaller) tide decks and their curated
   // relationships; only it fetches `/tides2-data.json` and the relationships.
-  const poolNeedsTides2 = POOL_VARIANTS_NEEDING_TIDES2.has(poolVariant);
+  const poolNeedsTides2 = POOL_VARIANTS_NEEDING_TIDES2.has(resolvedPoolVariant);
   // The `tides3` variant combines its own committed artifact; only it fetches
   // `/tides3-data.json`.
-  const poolNeedsTides3 = POOL_VARIANTS_NEEDING_TIDES3.has(poolVariant);
+  const poolNeedsTides3 = POOL_VARIANTS_NEEDING_TIDES3.has(resolvedPoolVariant);
   // The `tides4` variant combines its own committed artifact; only it fetches
   // `/tides4-data.json`.
-  const poolNeedsTides4 = POOL_VARIANTS_NEEDING_TIDES4.has(poolVariant);
+  const poolNeedsTides4 = POOL_VARIANTS_NEEDING_TIDES4.has(resolvedPoolVariant);
   // The `tides5` variant combines its own committed artifact; only it fetches
   // `/tides5-data.json`.
-  const poolNeedsTides5 = POOL_VARIANTS_NEEDING_TIDES5.has(poolVariant);
+  const poolNeedsTides5 = POOL_VARIANTS_NEEDING_TIDES5.has(resolvedPoolVariant);
   const [
     cardDatabase,
     exploration,
@@ -921,7 +939,15 @@ export async function loadJourneyContent(
   // Build the collision-free id index once; every pool resolves through it, and
   // (in replay mode) the fit model translates card numbers against it too.
   const idIndex = buildIdIndex(cardDatabase);
-  const legendaryCardNumbers = buildLegendaryCardNumbers(cardDatabase);
+  const rarityCopyCapByRarity = new Map(
+    draftData.rarityCaps.map((cap) => [cap.rarity, cap.poolCopyCap]),
+  );
+  const poolCopyCapsByCardNumber = new Map<number, number>();
+  for (const card of cardDatabase.values()) {
+    if (card.rarity === undefined) continue;
+    const cap = rarityCopyCapByRarity.get(card.rarity);
+    if (cap !== undefined) poolCopyCapsByCardNumber.set(card.cardNumber, cap);
+  }
 
   const poolData = buildPoolData(
     draftPoolCards,
@@ -960,9 +986,11 @@ export async function loadJourneyContent(
   const poolContext: RunPoolContext = {
     poolData,
     idIndex,
-    legendaryCardNumbers,
+    poolCopyCapsByCardNumber,
+    defaultPoolCopyCap: draftData.pool.tides4.copyCap,
     allDreamsignPoolIds: dreamsignTemplates.map((template) => template.id),
-    poolVariant,
+    poolVariant: resolvedPoolVariant,
+    tides4Tuning: draftData.pool.tides4,
   };
 
   // Live fit corpus = all record mainboards (no per-record leave-one-out). Live
@@ -990,6 +1018,7 @@ export async function loadJourneyContent(
     affiliations,
     guides,
     atlasData,
+    draftData,
     economyData,
     opponentsData,
     apollyonIncarnations,

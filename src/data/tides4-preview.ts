@@ -32,7 +32,12 @@ export function selectedTides4Decks(
   if (decks === undefined) return [];
 
   const rng = makeRng(hashStringToSeed(`${journeySeed}:${dreamAvatar.id}`));
-  const result = generateTides4(rng, poolContext.poolData, dreamAvatar.id);
+  const result = generateTides4(
+    rng,
+    poolContext.poolData,
+    dreamAvatar.id,
+    poolContext.tides4Tuning,
+  );
   // `selected` is `["tides4", ...tideDeckIds]`; drop the leading algorithm label.
   const deckIds = result.selected.slice(1);
 

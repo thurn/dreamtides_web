@@ -12,7 +12,7 @@ import { describe, expect, it } from "vitest";
 import { makeRng } from "./rng.ts";
 import type { Tides5DecksJson } from "./tides5-io.ts";
 import type { PoolData } from "./types.ts";
-import { TIDES4 } from "./variant-tides4.ts";
+import { DEFAULT_TIDES4_TUNING } from "./variant-tides4.ts";
 import { generateTides5 } from "./variant-tides5.ts";
 
 // A synthetic artifact: one starter tide, `facetCount` facet tides, and
@@ -102,10 +102,10 @@ describe("generateTides5", () => {
   it("deals exactly the deal size with at most the copy cap per card", () => {
     const poolData = makePoolData(makeTides5(6, 30));
     const result = generateTides5(makeRng(3), poolData, "dc-a");
-    expect(poolSize(result.counts)).toBe(TIDES4.dealSize);
+    expect(poolSize(result.counts)).toBe(DEFAULT_TIDES4_TUNING.dealSize);
     for (const count of result.counts.values()) {
       expect(count).toBeGreaterThanOrEqual(1);
-      expect(count).toBeLessThanOrEqual(TIDES4.cap);
+      expect(count).toBeLessThanOrEqual(DEFAULT_TIDES4_TUNING.copyCap);
     }
   });
 

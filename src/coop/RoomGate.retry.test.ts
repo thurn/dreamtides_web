@@ -40,6 +40,7 @@ const CONTENT_CONFIG: PinnedContentConfig = {
   draftMode: "pool",
   fresh20PackSize: null,
   atlasFoldHash: "fixture-atlas-fold-hash",
+  draftFoldHash: "fixture-draft-fold-hash",
   economyFoldHash: "a".repeat(64),
   opponentsFoldHash: "b".repeat(64),
   defaultStartingEssence: 17,

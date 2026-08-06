@@ -3,6 +3,7 @@ import { DEFAULT_POOL_VARIANT } from "../draft/pool";
 import type { ContentConfig } from "../eventlog/types";
 import { economyFixture } from "../testing/economy-fixture";
 import { opponentsFixture } from "../testing/opponents-fixture";
+import { draftDataFixture } from "../testing/draft-data-fixture";
 import {
   applyContentConfigToSearch,
   contentConfigFromRuntime,
@@ -19,7 +20,7 @@ describe("parseRuntimeConfig", () => {
       tutorialPlaybackSpeed: 1,
       gameId: null,
       databaseMode: "emulator",
-      poolVariant: DEFAULT_POOL_VARIANT,
+      poolVariant: undefined,
       draftMode: "pool",
       fresh20PackSize: undefined,
       loadJourneyName: null,
@@ -186,11 +187,9 @@ describe("parseRuntimeConfig", () => {
   });
 
   describe("poolVariant", () => {
-    it("uses the default pool variant when algo is absent", () => {
-      expect(parseRuntimeConfig("").poolVariant).toBe(DEFAULT_POOL_VARIANT);
-      expect(parseRuntimeConfig("?algo=").poolVariant).toBe(
-        DEFAULT_POOL_VARIANT,
-      );
+    it("defers an absent algo to compiled draft data", () => {
+      expect(parseRuntimeConfig("").poolVariant).toBeUndefined();
+      expect(parseRuntimeConfig("?algo=").poolVariant).toBeUndefined();
     });
 
     it("throws on an unrecognised algo (no silent fallback)", () => {
@@ -243,21 +242,12 @@ describe("parseRuntimeConfig", () => {
       expect(parseRuntimeConfig("?algo=").draftMode).toBe("pool");
     });
 
-    it("uses the default pool variant when algo=replay", () => {
-      // replay is a draft mode, not a pool variant, so it never reaches the
-      // pool-variant resolution; the resolved package still needs a pool variant,
-      // so it uses the default.
-      expect(parseRuntimeConfig("?algo=replay").poolVariant).toBe(
-        DEFAULT_POOL_VARIANT,
-      );
+    it("defers pool resolution when algo=replay", () => {
+      expect(parseRuntimeConfig("?algo=replay").poolVariant).toBeUndefined();
     });
 
-    it("uses the default pool variant when algo=fresh20", () => {
-      // fresh20 is likewise a draft mode; the resolved package still needs a pool
-      // variant, so it uses the default.
-      expect(parseRuntimeConfig("?algo=fresh20").poolVariant).toBe(
-        DEFAULT_POOL_VARIANT,
-      );
+    it("defers pool resolution when algo=fresh20", () => {
+      expect(parseRuntimeConfig("?algo=fresh20").poolVariant).toBeUndefined();
     });
   });
 
@@ -320,6 +310,7 @@ describe("removeUiParamFromSearch", () => {
 
 describe("contentConfigFromRuntime", () => {
   const atlasFoldHash = "fixture-atlas-fold-hash";
+  const draftData = draftDataFixture();
   const economyData = economyFixture();
   const opponentsData = opponentsFixture();
 
@@ -328,6 +319,7 @@ describe("contentConfigFromRuntime", () => {
       contentConfigFromRuntime(
         parseRuntimeConfig(""),
         atlasFoldHash,
+        draftData,
         economyData,
         opponentsData,
       ),
@@ -336,6 +328,7 @@ describe("contentConfigFromRuntime", () => {
       draftMode: "pool",
       fresh20PackSize: null,
       atlasFoldHash,
+      draftFoldHash: draftData.foldHash,
       economyFoldHash: economyData.foldHash,
       opponentsFoldHash: opponentsData.foldHash,
       defaultStartingEssence: economyData.journey.defaultStartingEssence,
@@ -348,6 +341,7 @@ describe("contentConfigFromRuntime", () => {
       contentConfigFromRuntime(
         parseRuntimeConfig("?algo=fresh20&packsize=15"),
         atlasFoldHash,
+        draftData,
         economyData,
         opponentsData,
       ),
@@ -356,6 +350,7 @@ describe("contentConfigFromRuntime", () => {
       draftMode: "fresh20",
       fresh20PackSize: 15,
       atlasFoldHash,
+      draftFoldHash: draftData.foldHash,
       economyFoldHash: economyData.foldHash,
       opponentsFoldHash: opponentsData.foldHash,
       defaultStartingEssence: economyData.journey.defaultStartingEssence,
@@ -368,6 +363,7 @@ describe("contentConfigFromRuntime", () => {
       contentConfigFromRuntime(
         parseRuntimeConfig("?algo=idf2"),
         atlasFoldHash,
+        draftData,
         economyData,
         opponentsData,
       ).poolVariant,
@@ -382,6 +378,7 @@ describe("contentConfigsEqual", () => {
     draftMode: "pool",
     fresh20PackSize: null,
     atlasFoldHash: "fixture-atlas-fold-hash",
+    draftFoldHash: "fixture-draft-fold-hash",
     economyFoldHash: economyData.foldHash,
     opponentsFoldHash: opponentsFixture().foldHash,
     defaultStartingEssence: economyData.journey.defaultStartingEssence,
@@ -406,6 +403,9 @@ describe("contentConfigsEqual", () => {
       contentConfigsEqual(base, { ...base, atlasFoldHash: "different" }),
     ).toBe(false);
     expect(
+      contentConfigsEqual(base, { ...base, draftFoldHash: "different" }),
+    ).toBe(false);
+    expect(
       contentConfigsEqual(base, { ...base, economyFoldHash: "different" }),
     ).toBe(false);
     expect(
@@ -424,6 +424,7 @@ describe("applyContentConfigToSearch", () => {
   it("round-trips: reparsing the result yields the same content slice", () => {
     const economyData = economyFixture();
     const pinnedEconomy = {
+      draftFoldHash: draftDataFixture().foldHash,
       economyFoldHash: economyData.foldHash,
       opponentsFoldHash: opponentsFixture().foldHash,
       defaultStartingEssence: economyData.journey.defaultStartingEssence,
@@ -465,6 +466,11 @@ describe("applyContentConfigToSearch", () => {
         contentConfigFromRuntime(
           parseRuntimeConfig(search),
           config.atlasFoldHash ?? "fixture-atlas-fold-hash",
+          {
+            ...draftDataFixture(),
+            foldHash:
+              config.draftFoldHash ?? draftDataFixture().foldHash,
+          },
           {
             ...economyData,
             foldHash: config.economyFoldHash ?? economyData.foldHash,

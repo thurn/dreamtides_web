@@ -17,6 +17,7 @@ import type { DraftConfig, DraftState } from "../../types/draft";
 import type {
   DeckEntry,
   JourneyState,
+  SiteState,
   TransfigurationType,
 } from "../../types/journey";
 import {
@@ -71,7 +72,10 @@ export interface DraftContentProvider {
    * The draft config for the active dreamscape (affiliation reweighting), or
    * `undefined` for a neutral dreamscape (the engine default applies).
    */
-  draftConfigFor(draftState: DraftState): DraftConfig | undefined;
+  draftConfigFor(
+    draftState: DraftState,
+    site: Pick<SiteState, "data">,
+  ): DraftConfig | undefined;
   /** Deterministically choose a legal form for one offered card, when any. */
   transfigurationForCard?(
     cardNumber: number,
@@ -170,6 +174,8 @@ export function pickDraftCard(
 
   const draftState = journey.draftState;
   if (draftState === null || draftState.activeSiteId === null) return null;
+  const site = findSite(journey, draftState.activeSiteId);
+  if (site === null || site.type !== "Draft") return null;
 
   const cardNumber = provider.resolveCardNumber(cardId);
   if (cardNumber === null) return null;
@@ -199,7 +205,8 @@ export function pickDraftCard(
   // the root reducer catches) never leaves a half-mutated live state.
   const nextDraftState = structuredClone(draftState);
   const offerDeps = provider.offerDepsFor(nextDraftState, deckCardNumbers);
-  const config = provider.draftConfigFor(nextDraftState) ?? DEFAULT_DRAFT_CONFIG;
+  const config =
+    provider.draftConfigFor(nextDraftState, site) ?? DEFAULT_DRAFT_CONFIG;
   const stream = rngStream(ctx);
   processPlayerPickWithoutLogging(
     cardNumber,
@@ -208,6 +215,7 @@ export function pickDraftCard(
     config,
     offerDeps,
     stream,
+    deckCardNumbers,
   );
   if (nextDraftState.transfiguredOfferSource !== undefined) {
     nextDraftState.currentOfferTransfigurations = rollOfferTransfigurations(
@@ -259,7 +267,8 @@ export function enterDraftSite(
   const nextDraftState = structuredClone(draftState);
   const deckCardNumbers = journey.deck.map((entry) => entry.cardNumber);
   const offerDeps = provider.offerDepsFor(nextDraftState, deckCardNumbers);
-  const config = provider.draftConfigFor(nextDraftState) ?? DEFAULT_DRAFT_CONFIG;
+  const config =
+    provider.draftConfigFor(nextDraftState, site) ?? DEFAULT_DRAFT_CONFIG;
   const stream = rngStream(ctx);
   engineEnterDraftSite(
     nextDraftState,
@@ -330,7 +339,7 @@ export function rerollDraftOffer(
   const deckCardNumbers = journey.deck.map((entry) => entry.cardNumber);
   const offerDeps = provider.offerDepsFor(nextDraftState, deckCardNumbers);
   const config =
-    provider.draftConfigFor(nextDraftState) ?? DEFAULT_DRAFT_CONFIG;
+    provider.draftConfigFor(nextDraftState, site) ?? DEFAULT_DRAFT_CONFIG;
   const stream = rngStream(ctx);
   const hasOffer = engineRerollDraftOffer(
     nextDraftState,

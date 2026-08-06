@@ -6,11 +6,13 @@
 
 import type { JourneyContent } from "../../data/journey-content";
 import { buildIdIndex } from "../../data/cards-v2-database";
-import { DEFAULT_DRAFT_CONFIG, type OfferDeps } from "../../draft/draft-engine";
+import type { OfferDeps } from "../../draft/draft-engine";
 import type { DraftConfig, DraftState } from "../../types/draft";
 import type { CardData } from "../../types/cards";
 import type { DraftContentProvider } from "../../rules/journey/draft";
 import { offeredTransfigurationForms } from "../../transfiguration/transfiguration-logic";
+import { draftSitePickCount } from "../../draft/draft-site-config";
+import type { SiteState } from "../../types/journey";
 
 export function createDraftContentProvider(
   content: JourneyContent,
@@ -34,25 +36,34 @@ export function createDraftContentProvider(
         return {
           deckCardNumbers,
           fitModel,
-          offerSize: DEFAULT_DRAFT_CONFIG.packSize,
+          offerSize: content.draftData.offers.cardsPerOffer,
         };
       }
       if (draftState.mode === "fresh20") {
         return {
           deckCardNumbers,
           fitModel,
-          offerSize: DEFAULT_DRAFT_CONFIG.packSize,
+          offerSize: content.draftData.offers.cardsPerOffer,
           allCardNumbers,
         };
       }
       return undefined;
     },
     // SEAM (Task 27): the affiliation reweighting the legacy pick path applied is
-    // keyed on the CURRENT dreamscape node, which is not reachable from
-    // `draftState` alone (the interface hands only the draft state). Until the
-    // seam carries the node, the draft config stays neutral (engine default), so
-    // it is deterministic; affiliation-steered draft offers are a follow-up.
-    draftConfigFor: (): DraftConfig | undefined => undefined,
+    // keyed on the CURRENT dreamscape node, while this seam receives only the
+    // persisted site data. The TOML-authored rules are deterministic here;
+    // affiliation-steered draft offers remain a separate follow-up.
+    draftConfigFor: (
+      _draftState: DraftState,
+      site: Pick<SiteState, "data">,
+    ): DraftConfig => ({
+      packSize: content.draftData.offers.cardsPerOffer,
+      sitePickCount: draftSitePickCount(
+        site,
+        content.draftData.offers.picksPerSite,
+      ),
+      rarityCaps: content.draftData.rarityCaps,
+    }),
     transfigurationForCard: (cardNumber, rng) => {
       const card = content.cardDatabase.get(cardNumber);
       if (card === undefined) return null;

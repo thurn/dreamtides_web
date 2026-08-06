@@ -275,6 +275,23 @@ describe("buildDreamAvatarPackage draft_pool_constructed logging", () => {
       expect(id).toMatch(/^tide-\d+$/);
     }
   });
+
+  it("records the resolved tides4 tuning used to construct the pool", () => {
+    const tides4Tuning = { dealSize: 20, copyCap: 1, maxFacets: 1 };
+    const ctx: RunPoolContext = {
+      ...makeTides4Context(),
+      tides4Tuning,
+      defaultPoolCopyCap: tides4Tuning.copyCap,
+    };
+
+    const pkg = buildDreamAvatarPackage(makeDreamAvatar(), ctx, "seed-t4-log");
+    const event = constructedEvent();
+
+    expect(event.algo).toBe("tides4");
+    expect(event.tides4Tuning).toEqual(tides4Tuning);
+    expect(Object.values(pkg.draftPoolCopiesByCard).every((copies) => copies <= 1))
+      .toBe(true);
+  });
 });
 
 describe("buildDreamAvatarProvenance", () => {

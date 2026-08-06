@@ -117,6 +117,7 @@ export function buildSiteModels(
   node: DreamscapeNode,
   completionLevel: number,
   atlasData: AtlasData,
+  defaultDraftPickCount?: number,
 ): DreamscapeSiteModel[] {
   const allNonBattleVisited = node.sites
     .filter((site) => site.type !== "Battle")
@@ -129,7 +130,7 @@ export function buildSiteModels(
     const label = isBattle
       ? battleLabel(completionLevel)
       : site.type === "Draft"
-        ? `Draft ${String(draftSitePickCount(site))}x`
+        ? `Draft ${String(draftSitePickCount(site, defaultDraftPickCount))}x`
         : siteTypeName(atlasData, site.type);
     return {
       site,
@@ -226,6 +227,7 @@ export function buildDreamscapeView(
   atlasData: AtlasData,
   replacementSiteId: string | null = null,
   tutorialConfiguration?: TutorialDreamscapeConfiguration,
+  defaultDraftPickCount?: number,
 ): DreamscapeView {
   const inlineRewards: Record<string, InlineRewardView> = {};
   node.sites.forEach((site) => {
@@ -253,7 +255,12 @@ export function buildDreamscapeView(
   return {
     scene: dreamscapeSceneRef(node),
     title: dreamscapeTitle(node),
-    sites: buildSiteModels(node, state.completionLevel, atlasData),
+    sites: buildSiteModels(
+      node,
+      state.completionLevel,
+      atlasData,
+      defaultDraftPickCount,
+    ),
     inlineRewards,
     replacement: buildDreamsignReplacementView(state, replacementSiteId),
     guideDialogue: buildDreamscapeGuideDialogue(

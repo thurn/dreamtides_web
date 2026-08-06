@@ -35,6 +35,7 @@ import {
 } from "./tutorial-data.mjs";
 import { collectAtlasAssetSources, compileAtlasData } from "./atlas-data.mjs";
 import { compileEconomyData } from "./economy-data.mjs";
+import { compileDraftData } from "./draft-data.mjs";
 import { compileOpponentsData } from "./opponents-data.mjs";
 import { EXPLORATION_EFFECT_DEFINITION_BY_KIND } from "./exploration-editor-schema.mjs";
 
@@ -1409,6 +1410,7 @@ export function setupAssets({
   affiliationsTomlPath = join(DATA_DIR, "tabula", "affiliations.toml"),
   atlasTomlPath = join(DATA_DIR, "tabula", "atlas.toml"),
   economyTomlPath = join(DATA_DIR, "tabula", "economy.toml"),
+  draftTomlPath = join(DATA_DIR, "tabula", "draft.toml"),
   opponentsTomlPath = join(DATA_DIR, "tabula", "opponents.toml"),
   glossaryTomlPath = join(DATA_DIR, "tabula", "glossary.toml"),
   apollyonIncarnationsTomlPath = join(
@@ -1482,6 +1484,7 @@ export function setupAssets({
   const affiliationsJsonPath = join(publicDir, "affiliations-data.json");
   const atlasJsonPath = join(publicDir, "atlas-data.json");
   const economyJsonPath = join(publicDir, "economy-data.json");
+  const draftJsonPath = join(publicDir, "draft-data.json");
   const opponentsJsonPath = join(publicDir, "opponents-data.json");
   const apollyonIncarnationsJsonPath = join(
     publicDir,
@@ -2078,6 +2081,16 @@ export function setupAssets({
     JSON.stringify(jsonEconomyData, null, 2) + "\n",
   );
   console.log("Wrote Economy data to economy-data.json");
+
+  console.log("Parsing draft.toml...");
+  const jsonDraftData = compileDraftData(
+    parse(readFileSync(draftTomlPath, "utf8")),
+  );
+  writeFileSync(
+    draftJsonPath,
+    JSON.stringify(jsonDraftData, null, 2) + "\n",
+  );
+  console.log("Wrote Draft data to draft-data.json");
 
   console.log("Parsing opponents.toml...");
   generateOpponentsData({

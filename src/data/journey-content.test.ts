@@ -16,6 +16,13 @@ import {
 import { asCardId, asCardName } from "../types/card-identity";
 import { MINIMAL_ATLAS_DATA } from "../__test-helpers__/atlas-fixtures";
 import { opponentsFixture } from "../testing/opponents-fixture";
+import { draftDataFixture } from "../testing/draft-data-fixture";
+
+const DRAFT_HASH = "d".repeat(64);
+const DRAFT_DATA = draftDataFixture({
+  contentHash: DRAFT_HASH,
+  foldHash: DRAFT_HASH,
+});
 
 function makeCard(cardNumber: number): CardData {
   return {
@@ -222,6 +229,12 @@ describe("loadJourneyContent", () => {
             json: () => Promise.resolve(economyFixture()),
           });
         }
+        if (path === "/draft-data.json") {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve(DRAFT_DATA),
+          });
+        }
         if (path === "/opponents-data.json") {
           return Promise.resolve({
             ok: true,
@@ -270,6 +283,7 @@ describe("loadJourneyContent", () => {
     ]);
     expect(content.dreamAvatars[0].startingEssence).toBe(235);
     expect(content.opponentsData).toEqual(opponentsFixture());
+    expect(content.draftData).toEqual(DRAFT_DATA);
 
     // The pool context indexes every loaded card by id and carries the decklists.
     expect(content.poolContext).toBeDefined();
@@ -280,6 +294,8 @@ describe("loadJourneyContent", () => {
       );
     }
     expect(poolContext.poolData.decklists).not.toHaveLength(0);
+    expect(poolContext.poolVariant).toBe("tides4");
+    expect(poolContext.tides4Tuning).toEqual(DRAFT_DATA.pool.tides4);
   });
 
   it.each([
@@ -435,6 +451,7 @@ describe("loadJourneyContent", () => {
     expect(content.draftRecords).toEqual([fixtureRecord]);
     expect(content.fitModel).toBeDefined();
     expect(content.fresh20PackSize).toBeUndefined();
+    expect(content.poolContext?.poolVariant).toBe("idf3");
   });
 
   it("fetches the committed embedding for the embedded variant", async () => {

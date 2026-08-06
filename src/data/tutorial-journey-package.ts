@@ -42,12 +42,13 @@ export function buildTutorialJourneyPackage(
           `Tutorial journey pool card ${card.id} is already in the fixed starter deck.`,
         );
       }
-      if (
-        card.copies > 1 &&
-        context.legendaryCardNumbers?.has(cardNumber) === true
-      ) {
+      const copyCap =
+        context.poolCopyCapsByCardNumber?.get(cardNumber) ??
+        context.defaultPoolCopyCap ??
+        2;
+      if (card.copies > copyCap) {
         throw new Error(
-          `Tutorial journey pool duplicates legendary card ${card.id}.`,
+          `Tutorial journey pool exceeds the configured copy cap for ${card.id}.`,
         );
       }
       const key = String(cardNumber);

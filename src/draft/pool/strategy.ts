@@ -7,6 +7,7 @@
 // strategies lives in `registry.ts`.
 
 import type { PoolData, PoolVariant, VariantResult } from "./types.ts";
+import type { Tides4Tuning } from "../../types/draft-data";
 
 /**
  * The complete set of inputs any pool strategy might read. It is assembled once
@@ -48,6 +49,8 @@ export interface PoolGenerationRequest {
    * omitted the `tides` strategy draws all its tide decks at random.
    */
   dreamAvatarId?: string;
+  /** Production tides4 tuning compiled from draft.toml. */
+  tides4Tuning?: Tides4Tuning;
 }
 
 /**

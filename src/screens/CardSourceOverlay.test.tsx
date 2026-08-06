@@ -164,6 +164,7 @@ function makeTides4Provenance(): Tides4ProvenanceSummary {
     borrowedArchetypeName: null,
     dealSize: 150,
     cap: 2,
+    maxFacets: 3,
     facetDrawnCount: 2,
     facetAvailableCount: 6,
     tides: [

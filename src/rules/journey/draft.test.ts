@@ -199,7 +199,7 @@ describe("PICK_DRAFT_CARD", () => {
   it("applies a pick that matches the pack position, advancing the draft", () => {
     registerDraftContentProvider(provider());
     const result = reduce(
-      stateWithDraft(poolDraftState()),
+      stateWithDraftSites(poolDraftState()),
       "PICK_DRAFT_CARD",
       { packIndex: 0, cardId: "card-1" },
     );
@@ -256,7 +256,7 @@ describe("PICK_DRAFT_CARD", () => {
 
   it("bounces a pick whose card is not at the given pack position", () => {
     registerDraftContentProvider(provider());
-    const start = stateWithDraft(poolDraftState());
+    const start = stateWithDraftSites(poolDraftState());
     // packIndex 0 holds card 1, not card 3 — the pack membership guard bounces.
     const result = reduce(start, "PICK_DRAFT_CARD", {
       packIndex: 0,
@@ -269,7 +269,7 @@ describe("PICK_DRAFT_CARD", () => {
 
   it("bounces a pick for a card entirely absent from the offered pack", () => {
     registerDraftContentProvider(provider());
-    const start = stateWithDraft(poolDraftState());
+    const start = stateWithDraftSites(poolDraftState());
     const result = reduce(start, "PICK_DRAFT_CARD", {
       packIndex: 0,
       cardId: "card-8",
@@ -281,7 +281,7 @@ describe("PICK_DRAFT_CARD", () => {
 
   it("bounces a second pick against the same pack position (double-pick race)", () => {
     registerDraftContentProvider(provider());
-    const start = stateWithDraft(poolDraftState());
+    const start = stateWithDraftSites(poolDraftState());
 
     const first = reduce(start, "PICK_DRAFT_CARD", {
       packIndex: 0,
@@ -323,7 +323,7 @@ describe("PICK_DRAFT_CARD", () => {
 
   it("is deterministic: same seed + seq fold to identical state", () => {
     registerDraftContentProvider(provider());
-    const start = stateWithDraft(poolDraftState());
+    const start = stateWithDraftSites(poolDraftState());
     const context = ctx({ seq: 9, rng: makeRng(9) });
 
     const a = reduce(start, "PICK_DRAFT_CARD", {

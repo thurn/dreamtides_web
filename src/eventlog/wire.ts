@@ -29,6 +29,7 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
     draftMode,
     fresh20PackSize,
     atlasFoldHash,
+    draftFoldHash,
     economyFoldHash,
     opponentsFoldHash,
     defaultStartingEssence,
@@ -42,6 +43,7 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
       (typeof fresh20PackSize === "number" && Number.isFinite(fresh20PackSize))
     ) ||
     !(atlasFoldHash === undefined || typeof atlasFoldHash === "string") ||
+    !(draftFoldHash === undefined || typeof draftFoldHash === "string") ||
     !(economyFoldHash === undefined || typeof economyFoldHash === "string") ||
     !(
       opponentsFoldHash === undefined || typeof opponentsFoldHash === "string"
@@ -59,6 +61,7 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
     draftMode,
     fresh20PackSize,
     ...(atlasFoldHash === undefined ? {} : { atlasFoldHash }),
+    ...(draftFoldHash === undefined ? {} : { draftFoldHash }),
     ...(economyFoldHash === undefined ? {} : { economyFoldHash }),
     ...(opponentsFoldHash === undefined ? {} : { opponentsFoldHash }),
     ...(defaultStartingEssence === undefined ? {} : { defaultStartingEssence }),

@@ -15,6 +15,7 @@ import {
   type PoolVariant,
 } from "./types.ts";
 import { poolSize } from "./util.ts";
+import type { Tides4Tuning } from "../../types/draft-data";
 
 /**
  * Generate a fresh random pool from the given card records. Pass a `seed` to
@@ -35,6 +36,7 @@ export function generatePool(
   targetSize?: number,
   signatureCards?: readonly string[],
   dreamAvatarId?: string,
+  tides4Tuning?: Tides4Tuning,
 ): GeneratedPool {
   return generatePoolFromData(
     buildPoolData(cards),
@@ -45,6 +47,7 @@ export function generatePool(
     targetSize,
     signatureCards,
     dreamAvatarId,
+    tides4Tuning,
   );
 }
 
@@ -71,6 +74,7 @@ export function generatePoolFromData(
   targetSize?: number,
   signatureCards?: readonly string[],
   dreamAvatarId?: string,
+  tides4Tuning?: Tides4Tuning,
 ): GeneratedPool {
   const resolvedSeed =
     seed === undefined ? (Math.random() * 2 ** 32) >>> 0 : seed >>> 0;
@@ -91,11 +95,16 @@ export function generatePoolFromData(
       signatureCards,
       targetSize,
       dreamAvatarId,
+      tides4Tuning,
     });
 
+  const resolvedCopyCap =
+    variant === "tides4" && tides4Tuning !== undefined
+      ? tides4Tuning.copyCap
+      : 2;
   const capped = new Map<CardId, number>();
   for (const [card, count] of counts) {
-    capped.set(card, Math.min(2, count));
+    capped.set(card, Math.min(resolvedCopyCap, count));
   }
 
   const identity = [...COLORS].filter((c) => C.has(c)).join("");
@@ -104,7 +113,7 @@ export function generatePoolFromData(
     themes: selected,
     counts: capped,
     seed: resolvedSeed,
-    size: poolSize(counts),
+    size: poolSize(capped),
     variant,
     starterDeck: starterDeck ?? [],
     idf3Provenance,

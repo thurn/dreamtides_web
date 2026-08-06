@@ -62,8 +62,12 @@ export function buildDraftView(params: {
   sitePicksCompleted: number;
   journeyState?: JourneyState;
   tutorialConfiguration?: TutorialSiteConfiguration;
+  defaultPickCount?: number;
 }): DraftView {
-  const pickTotal = params.site !== null ? draftSitePickCount(params.site) : 0;
+  const pickTotal =
+    params.site !== null
+      ? draftSitePickCount(params.site, params.defaultPickCount)
+      : 0;
   return {
     scene:
       params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null,

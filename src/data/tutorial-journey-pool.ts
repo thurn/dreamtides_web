@@ -1,6 +1,6 @@
 import { parse } from "smol-toml";
 import tutorialJourneyPoolSource from "../../data/tabula/tutorial_journey_pool.toml?raw";
-import { TIDES4 } from "../draft/pool/variant-tides4";
+import { DEFAULT_TIDES4_TUNING } from "../draft/pool/variant-tides4";
 
 export interface TutorialJourneyPoolCard {
   readonly id: string;
@@ -63,7 +63,7 @@ function positiveInteger(value: unknown, label: string): number {
  */
 export function validateTutorialJourneyPool(
   input: unknown,
-  expectedPoolSize: number = TIDES4.dealSize,
+  expectedPoolSize: number = DEFAULT_TIDES4_TUNING.dealSize,
 ): TutorialJourneyPool {
   const source = record(input, "root");
   const dreamAvatarId = nonBlankString(

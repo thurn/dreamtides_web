@@ -9,7 +9,10 @@ export function draftSiteData(
   return { draftPickCount: pickCount };
 }
 
-export function draftSitePickCount(site: Pick<SiteState, "data">): number {
+export function draftSitePickCount(
+  site: Pick<SiteState, "data">,
+  fallback: number = DEFAULT_DRAFT_SITE_PICK_COUNT,
+): number {
   const rawCount = site.data?.draftPickCount;
   if (
     typeof rawCount === "number" &&
@@ -18,5 +21,5 @@ export function draftSitePickCount(site: Pick<SiteState, "data">): number {
   ) {
     return rawCount;
   }
-  return DEFAULT_DRAFT_SITE_PICK_COUNT;
+  return fallback;
 }

@@ -1,9 +1,10 @@
-import { DEFAULT_POOL_VARIANT, resolvePoolVariant } from "../draft/pool";
+import { resolvePoolVariant } from "../draft/pool";
 import type { PoolVariant } from "../draft/pool";
 import { normalizeRoomId } from "../eventlog/room";
 import type { ContentConfig, PinnedContentConfig } from "../eventlog/types";
 import type { EconomyData } from "../types/economy-data";
 import type { OpponentsData } from "../types/opponents-data";
+import type { DraftData } from "../types/draft-data";
 import { asCardId, isCardId, type CardId } from "../types/card-identity";
 import type { GambleGameId } from "../types/gamble";
 
@@ -21,22 +22,17 @@ export interface RuntimeConfig {
   databaseMode: DatabaseMode;
   /**
    * Draft-pool construction strategy from `?algo=`, resolved to a registered
-   * `PoolVariant`. An absent `?algo=` uses `DEFAULT_POOL_VARIANT`; a draft-mode
-   * value (`replay`/`fresh20`) also uses the default; any other value must name
-   * a registered strategy or `parseRuntimeConfig` throws. Drives the journey
-   * prototype's draft and enemy pools. `parseRuntimeConfig` always sets it; it is
-   * optional only so test config literals can omit it and inherit the default.
+   * `PoolVariant`. An absent value stays undefined until the compiled draft
+   * data supplies the production default; an explicit unrecognized value is an
+   * error. Drives the journey prototype's draft and enemy pools.
    */
   poolVariant?: PoolVariant;
   /**
    * Selects the draft mode: `"replay"` activates the record-replay draft (from
    * `?algo=replay`); `"fresh20"` activates the fresh-random-pack draft (from
    * `?algo=fresh20`); `"pool"` is the default pool-based draft. `poolVariant`
-   * still resolves normally alongside this — for `?algo=replay`/`fresh20` it
-   * falls back to the default (idf3), which is what we want (both still need a
-   * pool variant for the resolved package). `parseRuntimeConfig` always sets it;
-   * it is optional only so test config literals can omit it and inherit the
-   * pool default.
+   * remains undefined for replay/fresh20 until the compiled draft data supplies
+   * the production pool default.
    */
   draftMode?: "pool" | "replay" | "fresh20";
   /**
@@ -102,14 +98,16 @@ export type DatabaseMode = "emulator" | "realtime";
 export function contentConfigFromRuntime(
   config: RuntimeConfig,
   atlasFoldHash: string,
+  draftData: DraftData,
   economyData: EconomyData,
   opponentsData: OpponentsData,
 ): PinnedContentConfig {
   return {
-    poolVariant: config.poolVariant ?? DEFAULT_POOL_VARIANT,
+    poolVariant: config.poolVariant ?? draftData.pool.defaultStrategy,
     draftMode: config.draftMode ?? "pool",
     fresh20PackSize: config.fresh20PackSize ?? null,
     atlasFoldHash,
+    draftFoldHash: draftData.foldHash,
     economyFoldHash: economyData.foldHash,
     opponentsFoldHash: opponentsData.foldHash,
     defaultStartingEssence: economyData.journey.defaultStartingEssence,
@@ -127,6 +125,7 @@ export function contentConfigsEqual(
     a.draftMode === b.draftMode &&
     a.fresh20PackSize === b.fresh20PackSize &&
     a.atlasFoldHash === b.atlasFoldHash &&
+    a.draftFoldHash === b.draftFoldHash &&
     a.economyFoldHash === b.economyFoldHash &&
     a.opponentsFoldHash === b.opponentsFoldHash &&
     a.defaultStartingEssence === b.defaultStartingEssence &&
@@ -182,12 +181,12 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
   const params = new URLSearchParams(search);
   const rawAlgo = params.get("algo");
   const draftMode = parseDraftMode(rawAlgo);
-  // `?algo=replay`/`fresh20` select a draft mode, not a pool variant, but both
-  // still need a pool variant for the resolved package, so they use the default.
-  // Only in pool mode is the raw value resolved as a pool variant — where an
-  // unrecognised value throws rather than silently using the default.
+  // Draft modes and an absent `?algo=` defer pool strategy resolution until the
+  // compiled draft data has loaded. Explicit developer variants resolve here.
   const poolVariant =
-    draftMode === "pool" ? resolvePoolVariant(rawAlgo) : DEFAULT_POOL_VARIANT;
+    draftMode === "pool" && rawAlgo !== null && rawAlgo !== ""
+      ? resolvePoolVariant(rawAlgo)
+      : undefined;
   return {
     seedOverride: parseSeedOverride(params.get("seed")),
     aiMode: params.get("ai") === "1",

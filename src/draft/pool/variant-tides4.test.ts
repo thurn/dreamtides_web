@@ -1,6 +1,6 @@
 // The `tides4` variant builds a pool by joining a DreamAvatar's starter tide,
 // drawing a random subset of its facet tides, topping up with the remaining
-// facets and broad tides, and dealing to `TIDES4.dealSize`. These tests pin the
+// facets and broad tides, and dealing to the configured size. These tests pin the
 // structural contract (determinism per seed, the deal size and copy cap, the
 // always-joined starter, the varying facet subset, and the failure modes)
 // against synthetic artifacts — never against the committed `data/tides4.jsonc`,
@@ -13,7 +13,10 @@ import { makeRng } from "./rng.ts";
 import type { Tides4DecksJson } from "./tides4-io.ts";
 import { validateTides4Decks } from "./tides4-io.ts";
 import type { PoolData } from "./types.ts";
-import { TIDES4, generateTides4 } from "./variant-tides4.ts";
+import {
+  DEFAULT_TIDES4_TUNING,
+  generateTides4,
+} from "./variant-tides4.ts";
 
 // A synthetic artifact: one starter tide, `facetCount` facet tides, and
 // `neutralCount` neutral tides, each with `cardsPerTide` disjoint cards (so
@@ -95,11 +98,28 @@ describe("generateTides4", () => {
   it("deals exactly the deal size with at most the copy cap per card", () => {
     const poolData = makePoolData(makeTides4(6, 30));
     const result = generateTides4(makeRng(3), poolData, "dc-a");
-    expect(poolSize(result.counts)).toBe(TIDES4.dealSize);
+    expect(poolSize(result.counts)).toBe(DEFAULT_TIDES4_TUNING.dealSize);
     for (const count of result.counts.values()) {
       expect(count).toBeGreaterThanOrEqual(1);
-      expect(count).toBeLessThanOrEqual(TIDES4.cap);
+      expect(count).toBeLessThanOrEqual(DEFAULT_TIDES4_TUNING.copyCap);
     }
+  });
+
+  it("injects deal size, copy cap, and maximum facets deterministically", () => {
+    const poolData = makePoolData(makeTides4(6, 30));
+    const tuning = { dealSize: 40, copyCap: 1, maxFacets: 1 };
+    const first = generateTides4(makeRng(19), poolData, "dc-a", tuning);
+    const second = generateTides4(makeRng(19), poolData, "dc-a", tuning);
+
+    expect([...second.counts.entries()]).toEqual([...first.counts.entries()]);
+    expect(poolSize(first.counts)).toBe(40);
+    expect(Math.max(...first.counts.values())).toBe(1);
+    expect(first.tides4Provenance).toMatchObject({
+      dealSize: 40,
+      cap: 1,
+      maxFacets: 1,
+      facetDrawnCount: 1,
+    });
   });
 
   it("deals the whole bag when it is smaller than the deal size", () => {
@@ -122,7 +142,7 @@ describe("generateTides4", () => {
     );
     for (let seed = 0; seed < 30; seed += 1) {
       const result = generateTides4(makeRng(seed), poolData, "dc-a");
-      expect(poolSize(result.counts)).toBe(TIDES4.dealSize);
+      expect(poolSize(result.counts)).toBe(DEFAULT_TIDES4_TUNING.dealSize);
       for (const id of signatureCardIds) {
         expect(result.counts.has(asCardId(id))).toBe(true);
       }
@@ -194,7 +214,7 @@ describe("generateTides4", () => {
     const noId = generateTides4(makeRng(11), poolData, undefined);
     const unknownId = generateTides4(makeRng(11), poolData, "dc-unknown");
     expect(noId.selected).toEqual(unknownId.selected);
-    expect(poolSize(noId.counts)).toBe(TIDES4.dealSize);
+    expect(poolSize(noId.counts)).toBe(DEFAULT_TIDES4_TUNING.dealSize);
   });
 
   it("keys the pool by card UUID and skips UUIDs absent from the catalog", () => {
@@ -231,11 +251,14 @@ describe("generateTides4 provenance", () => {
     expect(provenance.dreamAvatarId).toBe("dc-a");
     expect(provenance.signatureless).toBe(false);
     expect(provenance.borrowedArchetypeName).toBeNull();
-    expect(provenance.cap).toBe(TIDES4.cap);
-    expect(provenance.dealSize).toBe(TIDES4.dealSize);
+    expect(provenance.cap).toBe(DEFAULT_TIDES4_TUNING.copyCap);
+    expect(provenance.dealSize).toBe(DEFAULT_TIDES4_TUNING.dealSize);
+    expect(provenance.maxFacets).toBe(DEFAULT_TIDES4_TUNING.maxFacets);
     expect(provenance.facetAvailableCount).toBe(6);
     expect(provenance.facetDrawnCount).toBeGreaterThanOrEqual(1);
-    expect(provenance.facetDrawnCount).toBeLessThanOrEqual(TIDES4.maxFacetDraw);
+    expect(provenance.facetDrawnCount).toBeLessThanOrEqual(
+      DEFAULT_TIDES4_TUNING.maxFacets,
+    );
 
     // The starter is the first tide and is always joined.
     expect(provenance.tides[0].selection).toBe("starter");

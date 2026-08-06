@@ -316,6 +316,8 @@ export interface Tides4ProvenanceSummary {
   dealSize: number;
   /** Max copies of any single card (the 2-copy rule). */
   cap: number;
+  /** Maximum number of facets eligible for the random subset draw. */
+  maxFacets: number;
   /** How many facet (theme) tides were drawn in the random variety subset. */
   facetDrawnCount: number;
   /** How many facet tides were available to draw the subset from. */

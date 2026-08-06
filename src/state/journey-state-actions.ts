@@ -142,6 +142,7 @@ export function pickDraftCardInJourneyState({
     // event-sourced path (`src/rules/journey/draft.ts`) drives the same engine
     // from `ctx.rng` for determinism.
     Math.random,
+    withCard.deck.map((entry) => entry.cardNumber),
   );
 
   return { ...withCard, draftState };
@@ -485,7 +486,7 @@ export function startJourneyFromDreamAvatar({
   );
   const atlas = generateInitialAtlas(
     prev.completionLevel,
-    {},
+    { draftPickCount: journeyContent.draftData.offers.picksPerSite },
     {
       dreamscapes: journeyContent.dreamscapes,
       atlasData: journeyContent.atlasData,

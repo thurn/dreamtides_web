@@ -3,6 +3,7 @@
 import { act } from "react";
 import { economyFixture } from "./testing/economy-fixture";
 import { opponentsFixture } from "./testing/opponents-fixture";
+import { draftDataFixture } from "./testing/draft-data-fixture";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
@@ -22,7 +23,12 @@ import { useJourney } from "./state/journey-context";
 import { registerGameProviders } from "./coop/providers/register-game-providers";
 
 vi.mock("./data/journey-content", () => ({
+  AFFINITY_GROWN_POOL_VARIANTS: new Set<string>(),
+  buildDreamAvatarProvenance: vi.fn(() => null),
+  buildDreamAvatarSeedProvenance: vi.fn(() => null),
+  buildDreamAvatarTides4Provenance: vi.fn(() => null),
   loadJourneyContent: vi.fn(),
+  poolVariantNeedsTides4: vi.fn(() => false),
 }));
 vi.mock("./data/tutorial-actions", () => ({
   loadTutorialConfiguration: vi.fn(() =>
@@ -363,6 +369,7 @@ function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
 
 function makeJourneyContent(): JourneyContent {
   return {
+    draftData: draftDataFixture(),
     cardDatabase: new Map<number, CardData>(),
     dreamAvatars: [],
 
@@ -383,6 +390,7 @@ function setJourneyState(state: JourneyState): void {
     mutations: makeMutations(),
     cardDatabase: new Map<number, CardData>(),
     journeyContent: {
+      draftData: draftDataFixture(),
       cardDatabase: new Map(),
       dreamAvatars: [],
 
@@ -678,6 +686,7 @@ describe("JourneyApp", () => {
       mutations,
       cardDatabase: new Map<number, CardData>(),
       journeyContent: {
+        draftData: draftDataFixture(),
         cardDatabase: new Map(),
         dreamAvatars: [],
 

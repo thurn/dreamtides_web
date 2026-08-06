@@ -252,23 +252,6 @@ export function buildIdIndex(
   return index;
 }
 
-/**
- * Build the set of card numbers whose rarity is `Legendary`. Used by
- * {@link resolvePool} to cap legendary cards at a single copy per pool while
- * ordinary cards keep the standard two-copy allowance.
- */
-export function buildLegendaryCardNumbers(
-  database: Map<number, CardData>,
-): Set<number> {
-  const legendary = new Set<number>();
-  for (const card of database.values()) {
-    if (card.rarity === "Legendary") {
-      legendary.add(card.cardNumber);
-    }
-  }
-  return legendary;
-}
-
 /** A generated pool resolved against the v2 card database. */
 export interface ResolvedPool {
   /** Fixed draft multiset keyed by card number (as string), values 1 or 2. */
@@ -286,12 +269,8 @@ export interface ResolvedPool {
    * duplicate id ever maps two pool entries onto one card.
    */
   collidedCardNumbers: number[];
-  /**
-   * Card numbers whose copy count was reduced to one because the card is
-   * `Legendary` and the generated pool asked for more than one copy. Surfaced
-   * so callers can log which legendaries hit the single-copy cap.
-   */
-  cappedLegendaryCardNumbers: number[];
+  /** Card numbers whose generated count exceeded their resolved copy cap. */
+  cappedCardNumbers: number[];
 }
 
 /**
@@ -302,19 +281,19 @@ export interface ResolvedPool {
  * one pool entry. A pool key absent from `idIndex` (a card dropped from the
  * catalog) is collected in `unresolvedIds` and left out of the pool.
  *
- * Ordinary cards are capped at two copies. Legendary cards (those whose card
- * number appears in `legendaryCardNumbers`) are capped at one copy, so a pool
- * never contains a duplicate legendary.
+ * Cards use `defaultCopyCap` unless `copyCapsByCardNumber` supplies a stricter
+ * rarity-authored override.
  */
 export function resolvePool(
   pool: GeneratedPool,
   idIndex: ReadonlyMap<string, number>,
-  legendaryCardNumbers: ReadonlySet<number> = new Set<number>(),
+  defaultCopyCap: number = 2,
+  copyCapsByCardNumber: ReadonlyMap<number, number> = new Map<number, number>(),
 ): ResolvedPool {
   const draftPoolCopiesByCard: Record<string, number> = {};
   const unresolvedIds: CardId[] = [];
   const collidedCardNumbers: number[] = [];
-  const cappedLegendaryCardNumbers: number[] = [];
+  const cappedCardNumbers: number[] = [];
 
   for (const [key, copies] of pool.counts) {
     const cardNumber = idIndex.get(key);
@@ -322,10 +301,9 @@ export function resolvePool(
       unresolvedIds.push(key);
       continue;
     }
-    const isLegendary = legendaryCardNumbers.has(cardNumber);
-    const cap = isLegendary ? 1 : 2;
-    if (isLegendary && copies > 1) {
-      cappedLegendaryCardNumbers.push(cardNumber);
+    const cap = copyCapsByCardNumber.get(cardNumber) ?? defaultCopyCap;
+    if (copies > cap) {
+      cappedCardNumbers.push(cardNumber);
     }
     // The id index maps one card number per id, so two distinct pool ids cannot
     // resolve to the same card number under normal data. Record it if it ever
@@ -340,6 +318,6 @@ export function resolvePool(
     draftPoolCopiesByCard,
     unresolvedIds,
     collidedCardNumbers,
-    cappedLegendaryCardNumbers,
+    cappedCardNumbers,
   };
 }

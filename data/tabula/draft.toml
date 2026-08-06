@@ -1,0 +1,18 @@
+schema-version = 1
+
+[offers]
+cards-per-offer = 4
+picks-per-site = 5
+
+[[rarity-caps]]
+rarity = "Legendary"
+pool-copy-cap = 1
+max-picks-per-run = 1
+
+[pool]
+default-strategy = "tides4"
+
+[pool.tides4]
+deal-size = 150
+copy-cap = 2
+max-facets = 3

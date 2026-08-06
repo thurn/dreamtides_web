@@ -36,6 +36,7 @@ public/tutorial-data.json
 public/merchant-corpus-data.json
 public/atlas-data.json
 public/economy-data.json
+public/draft-data.json
 public/opponents-data.json
 logs/
 .env

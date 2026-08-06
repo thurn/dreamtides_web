@@ -1,6 +1,7 @@
 import { asCardName } from "../../types/card-identity";
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
+import { draftDataFixture } from "../../testing/draft-data-fixture";
 import type { FitModel } from "../../draft/replay/fit-model";
 import {
   MINIMAL_ATLAS_DATA,
@@ -157,6 +158,7 @@ export function makeMerchantTestContent({
   dreamsignProfiles?: ReadonlyMap<string, DreamsignProfile>;
 }): JourneyContent {
   return {
+    draftData: draftDataFixture(),
     cardDatabase: new Map(cards.map((card) => [card.cardNumber, card])),
     dreamAvatars: [],
     dreamwellCards: [],

@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
+import { draftDataFixture } from "../../testing/draft-data-fixture";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { JourneyContent } from "../../data/journey-content";
@@ -176,6 +177,7 @@ function content(): JourneyContent {
     card(520, "229ab3a1-3720-41a2-924c-8fe112188f8e"),
   ];
   return {
+    draftData: draftDataFixture(),
     cardDatabase: new Map(cards.map((item) => [item.cardNumber, item])),
     dreamAvatars: [
       {

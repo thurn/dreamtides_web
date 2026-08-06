@@ -16,6 +16,7 @@ const GENESIS: Genesis = {
     draftMode: "pool",
     fresh20PackSize: null,
     atlasFoldHash: "fixture-atlas-fold-hash",
+    draftFoldHash: "fixture-draft-fold-hash",
     economyFoldHash: "fixture-economy-fold-hash",
     defaultStartingEssence: 137,
     dreamsignCap: 9,
@@ -123,7 +124,13 @@ describe("RTDB log wire decoding", () => {
     expect(decodeGenesis(JSON.stringify(malformed))).toBeNull();
   });
 
+  it("round-trips the pinned Draft fold hash", () => {
+    expect(decodeGenesis(JSON.stringify(GENESIS))?.contentConfig?.draftFoldHash)
+      .toBe("fixture-draft-fold-hash");
+  });
+
   it.each([
+    ["draftFoldHash", 42],
     ["economyFoldHash", 42],
     ["defaultStartingEssence", -1],
     ["dreamsignCap", 1.5],

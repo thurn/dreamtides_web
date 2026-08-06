@@ -70,9 +70,12 @@ export function createJourneyLifecycleContentProvider(
       let drawIndex = 0;
       const atlas = regenerateAtlasForProgress(
         completionLevel,
-        journey.dreamscapeModifiers.length === 0
-          ? {}
-          : { dreamscapeModifiers: journey.dreamscapeModifiers },
+        {
+          ...(journey.dreamscapeModifiers.length === 0
+            ? {}
+            : { dreamscapeModifiers: journey.dreamscapeModifiers }),
+          draftPickCount: content.draftData.offers.picksPerSite,
+        },
         {
           dreamscapes: content.dreamscapes,
           atlasData: content.atlasData,

@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
+import { draftDataFixture } from "../../testing/draft-data-fixture";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
@@ -22,6 +23,7 @@ import {
 
 function makeContent(): JourneyContent {
   return {
+    draftData: draftDataFixture(),
     cardDatabase: makeBattleTestCardDatabase(),
     dreamAvatars: makeBattleTestDreamAvatars(),
     dreamwellCards: [],

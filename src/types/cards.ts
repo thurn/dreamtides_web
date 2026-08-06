@@ -3,6 +3,9 @@ import type { CardId, CardName } from "./card-identity";
 /** The two card types in Dreamtides. */
 export type CardType = "Character" | "Event";
 
+/** Canonical rarity vocabulary shared by authored-data compilers and loaders. */
+export const CARD_RARITIES = ["Legendary", "Starter", "Special"] as const;
+
 /**
  * Card rarity in Dreamtides. Most cards have no rarity; the buckets that
  * exist are `Legendary` (powerful cards that get the gold frame in
@@ -11,7 +14,7 @@ export type CardType = "Character" | "Event";
  * add by canonical UUID). Sourced from `data/tabula/cards.toml`
  * and surfaced through the setup-assets transform.
  */
-export type Rarity = "Legendary" | "Starter" | "Special";
+export type Rarity = (typeof CARD_RARITIES)[number];
 
 /**
  * Per-card art crop. The image covers the frame at `scale` 1; `scale` is the
