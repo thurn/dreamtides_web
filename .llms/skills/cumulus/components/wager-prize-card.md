@@ -23,6 +23,7 @@ The shared Gamble prize object: one PlayingCard superellipse with a draw target 
 | `revealDrawnCard` | `boolean` | no | — | Turn the prize face over to its committed card. |
 | `dreamsignTestId` | `string` | no | — | Optional stable selector for the prize Dreamsign name. |
 | `presentation` | `WagerPrizeCardPresentation` = `"draw-target" \| "bust-range"` | no | — | Named semantic copy treatment. Defaults to `draw-target`. |
+| `emphasis` | `WagerPrizeCardEmphasis` = `"standard" \| "current" \| "muted"` | no | — | Current-tier accent, muted alternative, or standard priority. |
 | `essenceReward` | `number \| null` | yes | — | Essence awarded on a win. Null selects a Dreamsign-only prize. |
 | `rewardDreamsign` | `Dreamsign \| null` | yes | — | Dreamsign appended to the Essence reward, when present. Dreamsign used as the complete reward. |
 
@@ -61,6 +62,7 @@ The shared Gamble prize object: one PlayingCard superellipse with a draw target 
   targetLabel="2"
   essenceReward={60}
   rewardDreamsign={null}
+  emphasis="current"
 />
 
 ```

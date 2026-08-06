@@ -125,6 +125,7 @@ function apply(
     | "DRAW_STARWAY_STAIRS"
     | "SETTLE_STARWAY_STAIRS"
     | "CASH_OUT_STARWAY_STAIRS"
+    | "PLAY_AGAIN_STARWAY_STAIRS"
     | "COMPLETE_SITE",
   payload: Record<string, unknown>,
 ) {
@@ -617,6 +618,7 @@ function starwayRuntime(
     kind: "gamble",
     gameId: "starway-stairs",
     rulesVersion: "fixture-starway-rules",
+    roundNumber: 1,
     isFarpoint: false,
     entryCost: 10,
     shuffleCommitments: ["tier-1", "tier-2", "tier-3"],
@@ -766,5 +768,100 @@ describe("Starway Stairs", () => {
       terminalReason: null,
       prizeAwarded: 0,
     });
+  });
+
+  it("prepares an independent round and charges its entry only when betting", () => {
+    registerSiteContentProvider({
+      openSite: () => ({
+        runtime: starwayRuntime(safeCards, {
+          shuffleCommitments: ["next-1", "next-2", "next-3"],
+        }),
+      }),
+    });
+    const busted = settleStarway(
+      drawStarway(
+        starwayStateWith([
+          { rank: "2", suit: "clubs" },
+          safeCards[1],
+          safeCards[2],
+        ]),
+      ).state,
+    );
+
+    const replayed = apply(busted.state, "PLAY_AGAIN_STARWAY_STAIRS", {
+      siteId: SITE_ID,
+      previousShuffleCommitment: "tier-1",
+    });
+    expect(replayed.outcome).toBe("applied");
+    expect(replayed.state.journey.essence).toBe(190);
+    expect(replayed.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      roundNumber: 2,
+      shuffleCommitments: ["next-1", "next-2", "next-3"],
+      results: [],
+      terminalReason: null,
+    });
+
+    const nextBet = drawStarway(replayed.state);
+    expect(nextBet.outcome).toBe("applied");
+    expect(nextBet.state.journey.essence).toBe(180);
+
+    const staleReplay = apply(replayed.state, "PLAY_AGAIN_STARWAY_STAIRS", {
+      siteId: SITE_ID,
+      previousShuffleCommitment: "tier-1",
+    });
+    expect(staleReplay.outcome).toBe("bounced");
+  });
+
+  it("allows two retries and bounces a third Starway round", () => {
+    registerSiteContentProvider({
+      openSite: () => ({
+        runtime: starwayRuntime(
+          [
+            { rank: "2", suit: "diamonds" },
+            safeCards[1],
+            safeCards[2],
+          ],
+          { shuffleCommitments: ["final-1", "final-2", "final-3"] },
+        ),
+      }),
+    });
+    const secondRound = settleStarway(
+      drawStarway(
+        starwayStateWith(
+          [
+            { rank: "2", suit: "clubs" },
+            safeCards[1],
+            safeCards[2],
+          ],
+          {},
+          { roundNumber: 2 },
+        ),
+      ).state,
+    );
+    const secondRetry = apply(
+      secondRound.state,
+      "PLAY_AGAIN_STARWAY_STAIRS",
+      {
+        siteId: SITE_ID,
+        previousShuffleCommitment: "tier-1",
+      },
+    );
+    expect(secondRetry.outcome).toBe("applied");
+    expect(secondRetry.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      roundNumber: 3,
+      shuffleCommitments: ["final-1", "final-2", "final-3"],
+    });
+
+    const thirdRound = settleStarway(drawStarway(secondRetry.state).state);
+    const thirdRetry = apply(
+      thirdRound.state,
+      "PLAY_AGAIN_STARWAY_STAIRS",
+      {
+        siteId: SITE_ID,
+        previousShuffleCommitment: "final-1",
+      },
+    );
+    expect(thirdRetry.outcome).toBe("bounced");
+    expect(thirdRetry.state).toEqual(thirdRound.state);
   });
 });

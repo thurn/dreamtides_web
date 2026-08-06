@@ -110,6 +110,9 @@ export type WagerPrizeCardSize = "wagerCompact" | "wager";
 /** Named copy treatment for a Gamble prize card. */
 export type WagerPrizeCardPresentation = "draw-target" | "bust-range";
 
+/** Semantic visual priority for a wager prize within a multi-tier choice. */
+export type WagerPrizeCardEmphasis = "standard" | "current" | "muted";
+
 const SUIT_SYMBOLS: Record<PlayingCardSuit, string> = {
   clubs: "♣",
   diamonds: "♦",
@@ -175,7 +178,11 @@ const CARD_FACE_STYLE: CSSProperties = {
   border: 0,
 };
 
-function PlayingCardRim(): ReactElement {
+function PlayingCardRim({
+  emphasis = "standard",
+}: {
+  emphasis?: "standard" | "current";
+}): ReactElement {
   return (
     <svg
       aria-hidden="true"
@@ -192,8 +199,12 @@ function PlayingCardRim(): ReactElement {
       <path
         d={SUPERELLIPSE_RIM_PATH}
         fill="none"
-        stroke={token("--glass-rim")}
-        strokeWidth="1"
+        stroke={
+          emphasis === "current"
+            ? token("--border-accent")
+            : token("--glass-rim")
+        }
+        strokeWidth={emphasis === "current" ? "3" : "1"}
         vectorEffect="non-scaling-stroke"
       />
     </svg>
@@ -372,6 +383,8 @@ interface WagerPrizeCardBaseProps {
   dreamsignTestId?: string;
   /** Named semantic copy treatment. Defaults to `draw-target`. */
   presentation?: WagerPrizeCardPresentation;
+  /** Current-tier accent, muted alternative, or standard priority. */
+  emphasis?: WagerPrizeCardEmphasis;
 }
 
 /** A prize always carries Essence, a Dreamsign, or both. */
@@ -442,6 +455,7 @@ function WagerPrizeCardObject({
   revealDrawnCard = false,
   dreamsignTestId,
   presentation = "draw-target",
+  emphasis = "standard",
   revealBinding,
 }: WagerPrizeCardProps & {
   revealBinding?: WagerRevealSourceBinding;
@@ -455,7 +469,7 @@ function WagerPrizeCardObject({
         rewardDreamsign === null ? "" : ` and ${rewardDreamsign.name}`
       }`;
   const prizeLabel = presentation === "bust-range"
-    ? `Ranks ${targetLabel} bust. Prize ${rewardLabel}.`
+    ? `Bust on ranks ${targetLabel}. Prize ${rewardLabel}.`
     : `Draw ${targetLabel}. Win ${rewardLabel}.`;
   const drawnCardLabel =
     drawnCard === null
@@ -495,7 +509,7 @@ function WagerPrizeCardObject({
           }}
         >
           {presentation === "bust-range"
-            ? `Bust ${targetLabel}`
+            ? `Bust on ${targetLabel}`
             : `Draw ${targetLabel}`}
         </h2>
         <p
@@ -526,7 +540,9 @@ function WagerPrizeCardObject({
           )}
         </p>
       </div>
-      <PlayingCardRim />
+      <PlayingCardRim
+        emphasis={emphasis === "current" ? "current" : "standard"}
+      />
     </>
   );
   const prizeFaceStyle: CSSProperties = {
@@ -544,6 +560,7 @@ function WagerPrizeCardObject({
       data-wager-prize-card={prizeId}
       data-wager-prize-card-state={showingDrawnCard ? "drawn" : "prize"}
       data-wager-prize-card-size={size}
+      data-wager-prize-card-emphasis={emphasis}
       data-wager-prize-drawn-card={
         drawnCard === null ? undefined : `${drawnCard.rank}-${drawnCard.suit}`
       }
@@ -559,6 +576,14 @@ function WagerPrizeCardObject({
         height: sizeSpec.square,
         flex: "0 0 auto",
         perspective: PLAYING_CARD_DESIGN.flip.perspective,
+        filter:
+          emphasis === "muted"
+            ? "grayscale(0.4)"
+            : undefined,
+        opacity: emphasis === "muted" ? 0.78 : 1,
+        transition: reduceMotion
+          ? undefined
+          : `filter ${token("--dur-fast")} ${token("--ease-out")}, opacity ${token("--dur-fast")} ${token("--ease-out")}`,
       }}
     >
       <motion.div
@@ -624,7 +649,9 @@ function WagerPrizeCardObject({
               variant="rank-and-suit"
             />
           )}
-          <PlayingCardRim />
+          <PlayingCardRim
+            emphasis={emphasis === "current" ? "current" : "standard"}
+          />
         </div>
       </motion.div>
     </div>

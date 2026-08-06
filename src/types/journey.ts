@@ -578,6 +578,8 @@ export interface StarwayStairsSiteRuntime {
   kind: "gamble";
   gameId: "starway-stairs";
   rulesVersion: string;
+  /** One-based game number within this site visit. */
+  roundNumber: number;
   isFarpoint: boolean;
   entryCost: number;
   /** One independent full-deck commitment for each tier. */

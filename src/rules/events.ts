@@ -141,6 +141,10 @@ export interface EventPayloads {
     shuffleCommitment: string;
   };
   CASH_OUT_STARWAY_STAIRS: { siteId: string; shuffleCommitment: string };
+  PLAY_AGAIN_STARWAY_STAIRS: {
+    siteId: string;
+    previousShuffleCommitment: string;
+  };
 
   // --- merchant & shop ---
   ACCEPT_MERCHANT_OFFER: { siteId: string; offer?: unknown };
@@ -341,6 +345,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   DRAW_STARWAY_STAIRS: true,
   SETTLE_STARWAY_STAIRS: true,
   CASH_OUT_STARWAY_STAIRS: true,
+  PLAY_AGAIN_STARWAY_STAIRS: true,
   ACCEPT_MERCHANT_OFFER: true,
   DECLINE_MERCHANT: true,
   BUY_SHOP_SLOT: true,

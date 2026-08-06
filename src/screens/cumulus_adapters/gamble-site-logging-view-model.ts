@@ -66,6 +66,8 @@ export function logGamblePrepared(
         siteId,
         gameId: runtime.gameId,
         rulesVersion: runtime.rulesVersion,
+        roundNumber: runtime.roundNumber,
+        playerDecision: runtime.roundNumber === 1 ? "initial" : "play_again",
         isFarpoint: runtime.isFarpoint,
         entryCost: runtime.entryCost,
         shuffleCommitments: runtime.shuffleCommitments,
@@ -156,6 +158,7 @@ export function logGambleResolved(
       {
         siteId,
         gameId: runtime.gameId,
+        roundNumber: runtime.roundNumber,
         tierNumber: result.tierNumber,
         bustOddsNumerator: tier.bustOddsNumerator,
         oddsDenominator: tier.oddsDenominator,
@@ -229,6 +232,7 @@ export function logGambleSettled(
       {
         siteId,
         gameId: runtime.gameId,
+        roundNumber: runtime.roundNumber,
         tierNumber: result.tierNumber,
         busted: result.busted,
         terminalReason: runtime.terminalReason,

@@ -165,6 +165,7 @@ export interface StarwayStairsSiteView {
   runtimeReady: boolean;
   entryCost: number;
   canAffordEntry: boolean;
+  canPlayAgain: boolean;
   tiers: readonly StarwayStairsTierView[];
   currentTierNumber: StarwayStairsTierNumber | null;
   guide: GuideGalleryGuideView;
@@ -200,6 +201,8 @@ export interface GambleSiteScreenProps {
   onStarwayOutcomeShown?: () => void;
   /** Bank the latest safe Starway Stairs prize. */
   onCashOutStarway?: () => void;
+  /** Prepare another Starway Stairs round after a terminal result. */
+  onPlayAgainStarway?: () => void;
   /** Replace one UUID-identified held Dreamsign after a jackpot win. */
   onReplaceDreamsign: (dreamsignId: string) => void;
 }
@@ -609,6 +612,7 @@ export function GambleSiteScreen({
   onDrawStarway = () => undefined,
   onStarwayOutcomeShown = () => undefined,
   onCashOutStarway = () => undefined,
+  onPlayAgainStarway = () => undefined,
   onReplaceDreamsign,
 }: GambleSiteScreenProps) {
   if (view.gameId === "starway-stairs") {
@@ -619,6 +623,7 @@ export function GambleSiteScreen({
         onLeave={onLeave}
         onOutcomeShown={onStarwayOutcomeShown}
         onCashOut={onCashOutStarway}
+        onPlayAgain={onPlayAgainStarway}
       />
     );
   }
@@ -1297,12 +1302,14 @@ function StarwayStairsScreen({
   onLeave,
   onOutcomeShown,
   onCashOut,
+  onPlayAgain,
 }: {
   view: StarwayStairsSiteView;
   onDraw: () => void;
   onLeave: () => void;
   onOutcomeShown: () => void;
   onCashOut: () => void;
+  onPlayAgain: () => void;
 }) {
   const reduceMotion = useReducedMotion() === true;
   const [revealedResultId, setRevealedResultId] = useState<string | null>(null);
@@ -1433,6 +1440,8 @@ function StarwayStairsScreen({
                 justifyItems: "center",
               }}
             >
+              {/* Gamble tiles reserve immutable grid slots: result overlays are
+                  absolute so drawing and announcements never move the wager objects. */}
               {view.tiers.map((tier) => {
                 const isLatestResult =
                   view.result?.tierNumber === tier.tierNumber;
@@ -1444,6 +1453,7 @@ function StarwayStairsScreen({
                     data-starway-tier={tier.tierNumber}
                     data-starway-tier-state={tier.state}
                     style={{
+                      position: "relative",
                       width: "100%",
                       minWidth: 0,
                       display: "flex",
@@ -1453,7 +1463,6 @@ function StarwayStairsScreen({
                         layout === "desktop"
                           ? token("--space-4")
                           : token("--space-2"),
-                      opacity: tier.state === "future" ? 0.9 : 1,
                     }}
                   >
                     <WagerPrizeCard
@@ -1470,51 +1479,59 @@ function StarwayStairsScreen({
                       }
                       drawnCard={tier.card}
                       revealDrawnCard={revealDrawnCard}
+                      emphasis={
+                        tier.state === "current" ? "current" : "muted"
+                      }
                     />
+                    {outcomeVisible && isLatestResult && view.result !== null && (
+                      <div
+                        data-starway-outcome=""
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          display: "grid",
+                          placeItems: "center",
+                          pointerEvents: "none",
+                          zIndex: 2,
+                        }}
+                      >
+                        <RadialAnnouncement
+                          announcementId={view.result.id}
+                          headline={view.result.busted ? "Bust!" : "Safe!"}
+                          detail={
+                            view.result.busted ? undefined : "Prize at stake"
+                          }
+                          essenceGained={
+                            !view.result.busted &&
+                              view.result.tierNumber === 3
+                              ? view.result.prizeAtRisk
+                              : undefined
+                          }
+                          tone={view.result.busted ? "danger" : "reward"}
+                          size={layout === "mobile" ? "mini" : "wager"}
+                          duration="extended"
+                        />
+                      </div>
+                    )}
                   </div>
                 );
               })}
-              {outcomeVisible && view.result !== null && (
-                <div
-                  data-starway-outcome=""
-                  style={{
-                    position: "relative",
-                    gridColumn: view.result.tierNumber,
-                    gridRow: 1,
-                    width: "100%",
-                    height: "100%",
-                    pointerEvents: "none",
-                  }}
-                >
-                  <RadialAnnouncement
-                    announcementId={view.result.id}
-                    headline={view.result.busted ? "Bust!" : "Safe!"}
-                    detail={view.result.busted ? undefined : "Prize at stake"}
-                    essenceGained={
-                      !view.result.busted && view.result.tierNumber === 3
-                        ? view.result.prizeAtRisk
-                        : undefined
-                    }
-                    tone={view.result.busted ? "danger" : "reward"}
-                    size={layout === "mobile" ? "mini" : "wager"}
-                    duration="extended"
-                  />
-                </div>
-              )}
             </section>
 
-            {actionsVisible && (
-              <div
-                data-starway-actions=""
-                style={{
-                  minHeight: token("--touch-min"),
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: token("--space-3"),
-                  flexWrap: "nowrap",
-                }}
-              >
+            <div
+              data-starway-actions=""
+              aria-hidden={!actionsVisible || undefined}
+              style={{
+                minHeight: token("--touch-min"),
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: token("--space-3"),
+                flexWrap: "nowrap",
+                visibility: actionsVisible ? "visible" : "hidden",
+                pointerEvents: actionsVisible ? "auto" : "none",
+              }}
+            >
                 {currentTier !== null && (
                   <div data-starway-tier-button={currentTier.tierNumber}>
                     <GlassButton
@@ -1559,11 +1576,27 @@ function StarwayStairsScreen({
                   />
                 )}
                 {view.terminalReason !== null ? (
-                  <GlassButton
-                    label="Leave"
-                    testId="gamble-starway-leave-after-result"
-                    onPress={onLeave}
-                  />
+                  <>
+                    {view.canPlayAgain && (
+                      <GlassButton
+                        label="Play Again"
+                        size={layout === "mobile" ? "compact" : "standard"}
+                        variant="accent"
+                        disabled={decisionPending}
+                        testId="gamble-starway-play-again"
+                        onPress={() => {
+                          setDecisionPending(true);
+                          onPlayAgain();
+                        }}
+                      />
+                    )}
+                    <GlassButton
+                      label="Leave"
+                      size={layout === "mobile" ? "compact" : "standard"}
+                      testId="gamble-starway-leave-after-result"
+                      onPress={onLeave}
+                    />
+                  </>
                 ) : view.result === null && currentTier?.tierNumber === 1 ? (
                   <GlassButton
                     label="Leave"
@@ -1572,8 +1605,7 @@ function StarwayStairsScreen({
                     onPress={onLeave}
                   />
                 ) : null}
-              </div>
-            )}
+            </div>
           </main>
         );
       }}

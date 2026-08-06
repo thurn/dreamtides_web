@@ -230,6 +230,7 @@ describe("PlayingCard", () => {
             targetLabel="2"
             essenceReward={60}
             rewardDreamsign={null}
+            emphasis="current"
           />
         </CumulusRoot>,
       );
@@ -237,12 +238,15 @@ describe("PlayingCard", () => {
 
     const prize = host.querySelector<HTMLElement>("[data-wager-prize-card]");
     expect(prize?.getAttribute("aria-label")).toBe(
-      "Ranks 2 bust. Prize 60 Essence.",
+      "Bust on ranks 2. Prize 60 Essence.",
     );
     expect(prize?.querySelector("[data-wager-prize-title]")?.textContent)
-      .toBe("Bust 2");
+      .toBe("Bust on 2");
     expect(prize?.querySelector("[data-wager-prize-description]")?.textContent)
       .toBe("Prize: 60");
+    expect(prize?.dataset.wagerPrizeCardEmphasis).toBe("current");
+    expect(prize?.querySelector("path")?.getAttribute("stroke"))
+      .toBe("var(--border-accent)");
 
     act(() => root.unmount());
   });

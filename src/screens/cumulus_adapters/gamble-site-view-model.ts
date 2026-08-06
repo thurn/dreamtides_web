@@ -18,6 +18,7 @@ import {
 } from "../../data/tidemark-ladder-climb";
 import {
   nextStarwayStairsTierNumber,
+  STARWAY_STAIRS_MAX_RETRIES,
   STARWAY_STAIRS_TIERS,
   starwayStairsBustRangeLabel,
   starwayStairsTierRule,
@@ -253,6 +254,7 @@ function buildStarwayStairsSiteView(params: {
     runtimeReady: true,
     entryCost: runtime.entryCost,
     canAffordEntry: params.state.essence >= runtime.entryCost,
+    canPlayAgain: runtime.roundNumber <= STARWAY_STAIRS_MAX_RETRIES,
     tiers: STARWAY_STAIRS_TIERS.map((tier) => {
       const result = runtime.results.find(
         (entry) => entry.tierNumber === tier.tierNumber,

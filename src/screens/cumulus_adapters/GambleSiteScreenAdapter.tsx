@@ -76,6 +76,12 @@ export function GambleSiteScreenAdapter({
     if (commitment === undefined) return;
     mutations.settleStarwayStairs(siteId, commitment);
   }, [mutations, runtime, siteId]);
+  const playAgainStarway = useCallback(() => {
+    if (runtime?.gameId !== "starway-stairs") return;
+    const commitment = runtime.shuffleCommitments[0];
+    if (commitment === undefined) return;
+    mutations.playAgainStarwayStairs(siteId, commitment);
+  }, [mutations, runtime, siteId]);
   const replaceDreamsign = useCallback((dreamsignId: string) => {
     if (runtime === null || runtime.gameId === "starway-stairs") return;
     logGambleReplacement(
@@ -103,6 +109,7 @@ export function GambleSiteScreenAdapter({
       onLadderOutcomeShown={settleLadder}
       onDrawStarway={() => mutations.drawStarwayStairs(siteId)}
       onStarwayOutcomeShown={settleStarway}
+      onPlayAgainStarway={playAgainStarway}
       onCashOutStarway={() => {
         if (runtime?.gameId !== "starway-stairs") return;
         const result = runtime.results[runtime.results.length - 1];

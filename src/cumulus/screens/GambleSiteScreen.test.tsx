@@ -84,6 +84,7 @@ const STARWAY_VIEW: StarwayStairsSiteView = {
   runtimeReady: true,
   entryCost: 10,
   canAffordEntry: true,
+  canPlayAgain: true,
   tiers: [
     {
       tierNumber: 1,
@@ -872,12 +873,7 @@ describe("GambleSiteScreen — Starway Stairs", () => {
     expect(container.querySelectorAll("[data-starway-tier]")).toHaveLength(3);
     expect(container.querySelectorAll("[data-wager-prize-card]")).toHaveLength(3);
     expect(container.querySelectorAll("[data-starway-tier-button]")).toHaveLength(1);
-    expect(container.querySelector("[data-starway-tier='1']")?.textContent)
-      .toContain("Bust 2Prize: 60");
-    expect(container.querySelector("[data-starway-tier='2']")?.textContent)
-      .toContain("Bust 2-4Prize: 140");
-    expect(container.querySelector("[data-starway-tier='3']")?.textContent)
-      .toContain("Bust 2-7Prize: 300");
+    expect(container.querySelectorAll("[data-wager-prize-title]")).toHaveLength(3);
     expect(container.textContent).not.toContain("%");
     expect(container.textContent).toContain(
       "Starway Stairs is the game. Keep betting to see how high you can go!",
@@ -897,6 +893,12 @@ describe("GambleSiteScreen — Starway Stairs", () => {
     expect(actions?.style.justifyContent).toBe("center");
     expect(actions?.style.flexWrap).toBe("nowrap");
     expect(actions?.textContent).not.toContain("Essence");
+    expect(
+      container.querySelector('[data-starway-tier="1"] [data-wager-prize-card-emphasis="current"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelectorAll('[data-wager-prize-card-emphasis="muted"]'),
+    ).toHaveLength(2);
     act(() => bet?.click());
     expect(onDrawStarway).toHaveBeenCalledOnce();
 
@@ -948,6 +950,12 @@ describe("GambleSiteScreen — Starway Stairs", () => {
 
     void act(() => vi.advanceTimersByTime(1_000));
     expect(onOutcomeShown).toHaveBeenCalledOnce();
+    const outcome = container.querySelector<HTMLElement>("[data-starway-outcome]");
+    expect(outcome?.parentElement?.dataset.starwayTier).toBe("1");
+    expect(outcome?.style.position).toBe("absolute");
+    expect(
+      container.querySelector("[data-starway-stairs-tiers]")?.children,
+    ).toHaveLength(3);
     expect(
       container.querySelector('[data-starway-tier="1"] [data-playing-card="3-clubs"]'),
     ).not.toBeNull();
@@ -973,8 +981,9 @@ describe("GambleSiteScreen — Starway Stairs", () => {
     act(() => root.unmount());
   });
 
-  it("shows only Leave after a terminal bust", () => {
+  it("offers Play Again beside Leave after a terminal bust", () => {
     vi.useFakeTimers();
+    const onPlayAgainStarway = vi.fn();
     const bustedView: StarwayStairsSiteView = {
       ...STARWAY_VIEW,
       tiers: STARWAY_VIEW.tiers.map((tier) =>
@@ -1008,6 +1017,7 @@ describe("GambleSiteScreen — Starway Stairs", () => {
         onDrawStarway={() => undefined}
         onStarwayOutcomeShown={() => undefined}
         onCashOutStarway={() => undefined}
+        onPlayAgainStarway={onPlayAgainStarway}
         onReplaceDreamsign={() => undefined}
       />,
     );
@@ -1018,8 +1028,57 @@ describe("GambleSiteScreen — Starway Stairs", () => {
     expect(
       container.querySelector('[data-testid="gamble-starway-leave-after-result"]'),
     ).toBeInstanceOf(HTMLButtonElement);
+    const playAgain = container.querySelector<HTMLButtonElement>(
+      '[data-testid="gamble-starway-play-again"]',
+    );
+    expect(playAgain).toBeInstanceOf(HTMLButtonElement);
+    expect(playAgain?.parentElement).toBe(
+      container.querySelector('[data-testid="gamble-starway-leave-after-result"]')
+        ?.parentElement,
+    );
+    act(() => playAgain?.click());
+    expect(onPlayAgainStarway).toHaveBeenCalledOnce();
     expect(container.querySelector('[data-testid="gamble-starway-cash-out"]'))
       .toBeNull();
+
+    act(() => root.unmount());
+  });
+
+  it("hides Play Again after the third round", () => {
+    vi.useFakeTimers();
+    const { container, root } = mount(
+      <GambleSiteScreen
+        view={{
+          ...STARWAY_VIEW,
+          canPlayAgain: false,
+          currentTierNumber: null,
+          terminalReason: "bust",
+          result: {
+            id: "starway-final-round",
+            tierNumber: 1,
+            busted: true,
+            resultSettled: true,
+            prizeAtRisk: 60,
+          },
+        }}
+        onChooseGate={() => undefined}
+        onLeave={() => undefined}
+        onOutcomeShown={() => undefined}
+        onPlayAgain={() => undefined}
+        onDrawLadder={() => undefined}
+        onLadderOutcomeShown={() => undefined}
+        onReplaceDreamsign={() => undefined}
+      />,
+    );
+
+    void act(() => vi.advanceTimersByTime(1_000));
+    void act(() => vi.advanceTimersByTime(4_000));
+    expect(
+      container.querySelector('[data-testid="gamble-starway-play-again"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-testid="gamble-starway-leave-after-result"]'),
+    ).not.toBeNull();
 
     act(() => root.unmount());
   });

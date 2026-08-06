@@ -265,6 +265,7 @@ function buildStarwayStairsRuntime(
     kind: "gamble",
     gameId: "starway-stairs",
     rulesVersion: STARWAY_STAIRS_RULES_VERSION,
+    roundNumber: 1,
     isFarpoint: site.isEnhanced,
     entryCost: site.isEnhanced ? 0 : STARWAY_STAIRS_ENTRY_COST,
     shuffleCommitments: commitments.map((entry) => entry.shuffleCommitment),

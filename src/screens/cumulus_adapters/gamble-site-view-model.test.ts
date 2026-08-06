@@ -367,6 +367,7 @@ const STARWAY_RUNTIME: StarwayStairsSiteRuntime = {
   kind: "gamble",
   gameId: "starway-stairs",
   rulesVersion: "fixture-starway-rules",
+  roundNumber: 1,
   isFarpoint: false,
   entryCost: 10,
   shuffleCommitments: ["tier-1", "tier-2", "tier-3"],
@@ -420,6 +421,7 @@ describe("gamble-site-view-model — Starway Stairs", () => {
       },
     ]);
     expect(view.canAffordEntry).toBe(true);
+    expect(view.canPlayAgain).toBe(true);
     expect(view.cashOutReward).toBeNull();
   });
 
@@ -486,6 +488,7 @@ describe("gamble-site-view-model — Starway Stairs", () => {
         siteRuntime: {
           [GAMBLE_SITE.id]: {
             ...STARWAY_RUNTIME,
+            roundNumber: 3,
             results,
             terminalReason: "top",
             prizeAwarded: 300,
@@ -505,5 +508,6 @@ describe("gamble-site-view-model — Starway Stairs", () => {
     expect(view.cashOutReward).toBeNull();
     expect(view.terminalReason).toBe("top");
     expect(view.prizeAwarded).toBe(300);
+    expect(view.canPlayAgain).toBe(false);
   });
 });

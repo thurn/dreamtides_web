@@ -68,6 +68,7 @@ export const wagerPrizeCardDemo: CumulusComponent = {
   targetLabel="2"
   essenceReward={60}
   rewardDreamsign={null}
+  emphasis="current"
 />
 `,
     },

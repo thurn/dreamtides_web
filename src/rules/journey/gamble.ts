@@ -12,6 +12,7 @@ import {
 } from "../../data/tidemark-ladder-climb";
 import {
   rankBustsStarwayStairsTier,
+  STARWAY_STAIRS_MAX_RETRIES,
   STARWAY_STAIRS_TIERS,
   nextStarwayStairsTierNumber,
   starwayStairsTierRule,
@@ -534,4 +535,52 @@ export function cashOutStarwayStairs(
     siteId,
     { ...runtime, terminalReason: "cashed-out", prizeAwarded },
   );
+}
+
+/** Prepare another independent three-tier game after a terminal Starway round. */
+export function playAgainStarwayStairs(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  const previousShuffleCommitment = asString(
+    payload.previousShuffleCommitment,
+  );
+  if (siteId === null || previousShuffleCommitment === null) return null;
+
+  const runtime = starwayRuntimeFor(journey, siteId);
+  const site = findSite(journey, siteId);
+  const provider = getSiteContentProvider();
+  const latestResult = runtime?.results[runtime.results.length - 1];
+  if (
+    runtime === null ||
+    site?.type !== "Gamble" ||
+    provider === null ||
+    runtime.shuffleCommitments[0] !== previousShuffleCommitment ||
+    runtime.terminalReason === null ||
+    latestResult === undefined ||
+    !latestResult.resultSettled ||
+    runtime.roundNumber > STARWAY_STAIRS_MAX_RETRIES
+  ) {
+    return null;
+  }
+
+  const generated = provider.openSite({
+    journey,
+    site,
+    rng: ctx.rng,
+    gambleGameId: "starway-stairs",
+  });
+  if (
+    generated?.runtime.kind !== "gamble" ||
+    generated.runtime.gameId !== "starway-stairs"
+  ) {
+    return null;
+  }
+
+  return withRuntime(journey, siteId, {
+    ...generated.runtime,
+    roundNumber: runtime.roundNumber + 1,
+  });
 }

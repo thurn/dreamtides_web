@@ -139,12 +139,17 @@ Starway Stairs is a three-tier push-your-luck game. Starting costs 10 Essence.
 A safe draw earns the prize for that tier. After the first or second safe draw,
 the player may take that prize or risk it on the next tier. A bust
 loses the unclaimed prize and ends the game. The third safe draw pays
-automatically.
+automatically. A terminal round offers `Play Again` beside `Leave` while a
+retry remains. The player may retry twice, for a maximum of three independent
+rounds during one visit; each round charges its own starting cost when `Bet`
+is pressed.
 
-The UI lists all three tier squircles before play, each showing its inclusive
-bust rank range and prize. The centered action row beneath the cards presents
-`Bet` and `Leave` before play, then `Climb` and `Take [current prize]` after a
-safe draw.
+The UI lists all three tier squircles before play, each showing `Bust on`
+followed by its inclusive bust rank range and prize. The current tier has a
+purple border and the other tiers are muted. These wager objects reserve fixed
+grid positions throughout every draw and result announcement. The centered
+action row beneath the cards presents `Bet` and `Leave` before play, then
+`Climb` and `Take [current prize]` after a safe draw.
 
 | Tier | Ranks that bust | Bust chance | Prize after a safe draw |
 | --- | --- | ---: | ---: |

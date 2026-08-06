@@ -218,6 +218,7 @@ function makeMutations(): JourneyMutations {
     settleGravokWager: vi.fn(),
     playAgainGravokWager: vi.fn(),
     replaceGravokWagerDreamsign: vi.fn(),
+    playAgainStarwayStairs: vi.fn(),
     drawTidemarkLadderClimb: vi.fn(),
     settleTidemarkLadderClimb: vi.fn(),
     replaceTidemarkLadderClimbDreamsign: vi.fn(),

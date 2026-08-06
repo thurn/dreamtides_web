@@ -566,6 +566,11 @@ export function routeDomain(
       return journeyCase(state, gamble.settleStarwayStairs(journey, payload));
     case "CASH_OUT_STARWAY_STAIRS":
       return journeyCase(state, gamble.cashOutStarwayStairs(journey, payload));
+    case "PLAY_AGAIN_STARWAY_STAIRS":
+      return journeyCase(
+        state,
+        gamble.playAgainStarwayStairs(journey, payload, ctx),
+      );
 
     // --- shop, merchant & modifiers ---
     case "BUY_SHOP_SLOT":

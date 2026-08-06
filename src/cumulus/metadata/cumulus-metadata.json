@@ -5227,6 +5227,18 @@
       "description": "Named semantic copy treatment. Defaults to `draw-target`."
     },
     {
+      "name": "emphasis",
+      "tsType": "WagerPrizeCardEmphasis",
+      "unionMembers": [
+        "standard",
+        "current",
+        "muted"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "Current-tier accent, muted alternative, or standard priority."
+    },
+    {
       "name": "essenceReward",
       "tsType": "number | null",
       "unionMembers": [],

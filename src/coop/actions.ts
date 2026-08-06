@@ -197,6 +197,11 @@ export interface CoopActions {
     siteId: string,
     shuffleCommitment: string,
   ) => Promise<number>;
+  playAgainStarwayStairs: (
+    siteId: string,
+    previousShuffleCommitment: string,
+    runId?: string,
+  ) => Promise<number>;
 
   // --- merchant & shop ---
   acceptMerchantOffer: (siteId: string, offer?: unknown) => Promise<number>;
@@ -538,6 +543,12 @@ export function makeActions(append: AppendFn): CoopActions {
       ),
     cashOutStarwayStairs: (siteId, shuffleCommitment) =>
       emit("CASH_OUT_STARWAY_STAIRS", { siteId, shuffleCommitment }),
+    playAgainStarwayStairs: (siteId, previousShuffleCommitment, runId) =>
+      emit(
+        "PLAY_AGAIN_STARWAY_STAIRS",
+        { siteId, previousShuffleCommitment },
+        `${siteIntentKey("play-again-starway-stairs", siteId, runId)}:${previousShuffleCommitment}`,
+      ),
 
     // --- merchant & shop ---
     acceptMerchantOffer: (siteId, offer) =>
