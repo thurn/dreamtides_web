@@ -11,7 +11,7 @@ import type { CSSProperties } from "react";
 import { token } from "../primitives/tokens";
 import type { CumulusComponent } from "./registry";
 import { getMockup, hasMockup } from "./mockups/registry";
-import { DemoStage } from "./DemoStage";
+import { DemoStage, FIXED_PREVIEW_BOUNDARY_STYLE } from "./DemoStage";
 
 const articleStyle: CSSProperties = {
   display: "flex",
@@ -88,11 +88,10 @@ const mockupLinkStyle: CSSProperties = {
 // scenes are responsive, so they compose down to this frame. The full-screen
 // route is one click away for the uncropped experience.
 const frameStyle: CSSProperties = {
-  position: "relative",
+  ...FIXED_PREVIEW_BOUNDARY_STYLE,
   width: "100%",
   height: "clamp(360px, 52vh, 500px)",
   borderRadius: token("--radius-panel"),
-  overflow: "hidden",
   border: `1px solid ${token("--border-mid")}`,
   boxShadow: token("--shadow-lg"),
   background: token("--bg-sunken"),
@@ -128,7 +127,7 @@ export function ComponentShowcase({
       </div>
 
       {Mockup ? (
-        <div style={frameStyle}>
+        <div data-cumulus-doc-preview-boundary="" style={frameStyle}>
           <Mockup />
         </div>
       ) : (
