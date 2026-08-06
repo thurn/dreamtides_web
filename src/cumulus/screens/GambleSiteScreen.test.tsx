@@ -1319,6 +1319,15 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       container.querySelector<HTMLElement>("[data-four-suit-stage]")?.style
         .gridTemplateAreas,
     ).toBe('"target draw rewards"');
+    expect(
+      container.querySelector<HTMLElement>("[data-four-suit-stage]")?.style
+        .columnGap,
+    ).toBe("var(--space-4xl)");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-gamble-game="four-suit-reprise"]',
+      )?.style.gap,
+    ).toBe("var(--space-3xl)");
     act(() => reselect?.click());
     expect(container.querySelector("[data-four-suit-picker]")).not.toBeNull();
     act(() => {

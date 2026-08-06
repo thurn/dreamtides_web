@@ -2200,8 +2200,8 @@ function FourSuitRepriseScreen({
           ? `${String(FOUR_SUIT_TARGET_WIDTH.desktop)}px ${String(drawCardWidth)}px ${String(FOUR_SUIT_REWARD_PANEL_WIDTH.desktop)}px`
           : `${String(FOUR_SUIT_TARGET_WIDTH.mobile)}px ${String(drawCardWidth)}px`;
         const stageColumnGap = layout === "desktop"
-          ? token("--space-3xl")
-          : token("--space-xl");
+          ? token("--space-4xl")
+          : token("--space-2xl");
         return (
           <main
             data-gamble-wager-region=""
@@ -2223,9 +2223,7 @@ function FourSuitRepriseScreen({
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              gap: layout === "desktop"
-                ? token("--space-s")
-                : token("--space-s"),
+              gap: token("--space-3xl"),
               boxSizing: "border-box",
               padding: layout === "desktop"
                 ? token("--space-l")
@@ -2245,7 +2243,7 @@ function FourSuitRepriseScreen({
                   ? '"target draw rewards"'
                   : '"target draw" "rewards rewards"',
                 columnGap: stageColumnGap,
-                rowGap: layout === "desktop" ? undefined : token("--space-xl"),
+                rowGap: layout === "desktop" ? undefined : stageColumnGap,
                 alignItems: "center",
                 justifyItems: "center",
                 justifyContent: "center",
