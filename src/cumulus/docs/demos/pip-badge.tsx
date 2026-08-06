@@ -32,7 +32,7 @@ function PipBadgeDemo(args: Record<string, unknown>) {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: token("--space-8"),
+        gap: token("--space-2xl"),
       }}
     >
       {/* Control-driven hero: the args from the panel paint one pip. */}
@@ -50,7 +50,7 @@ function PipBadgeDemo(args: Record<string, unknown>) {
       <div
         style={{
           display: "flex",
-          gap: token("--space-8"),
+          gap: token("--space-2xl"),
           alignItems: "flex-end",
           flexWrap: "wrap",
           justifyContent: "center",
@@ -61,14 +61,14 @@ function PipBadgeDemo(args: Record<string, unknown>) {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: token("--space-3"),
+            gap: token("--space-xs"),
           }}
         >
           <div
             style={{
               display: "flex",
               alignItems: "flex-end",
-              gap: token("--space-5"),
+              gap: token("--space-m"),
             }}
           >
             <PipBadge variant="spark" value="3" size="sm" />
@@ -85,14 +85,14 @@ function PipBadgeDemo(args: Record<string, unknown>) {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: token("--space-3"),
+            gap: token("--space-xs"),
           }}
         >
           <div
             style={{
               display: "flex",
               alignItems: "flex-end",
-              gap: token("--space-5"),
+              gap: token("--space-m"),
             }}
           >
             <PipBadge variant="energy" value="2" size="sm" />

@@ -107,7 +107,7 @@ export function TidesEssenceBlock({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          gap: token("--space-5"),
+          gap: token("--space-m"),
         }}
       >
         {hasTides ? <TidesInfoLabel /> : <span />}
@@ -121,11 +121,11 @@ export function TidesEssenceBlock({
             display: "flex",
             flexWrap: "wrap",
             alignItems: "center",
-            gap: hitSlop != null ? undefined : token("--space-4"),
+            gap: hitSlop != null ? undefined : token("--space-s"),
             marginTop:
               hitSlop != null
-                ? `calc(${token("--space-3")} - ${hitSlop})`
-                : token("--space-3"),
+                ? `calc(${token("--space-xs")} - ${hitSlop})`
+                : token("--space-xs"),
             marginLeft: hitSlop != null ? `calc(-1 * ${hitSlop})` : undefined,
             marginRight: hitSlop != null ? `calc(-1 * ${hitSlop})` : undefined,
             marginBottom: hitSlop != null ? `calc(-1 * ${hitSlop})` : undefined,
@@ -294,7 +294,7 @@ export function ConsoleDivider({ flush = false }: { flush?: boolean }) {
     <div
       style={{
         height: 1,
-        marginTop: flush ? 0 : token("--space-4"),
+        marginTop: flush ? 0 : token("--space-s"),
         background: `linear-gradient(90deg, transparent, ${token("--border-accent")} 18%, ${token("--border-accent")} 82%, transparent)`,
       }}
     />

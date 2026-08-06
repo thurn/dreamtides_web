@@ -107,10 +107,10 @@ export function GameCardMockup() {
               flex: "1 1 0",
               display: "flex",
               flexWrap: "wrap",
-              gap: token("--space-6"),
+              gap: token("--space-l"),
               alignItems: "center",
               justifyContent: "center",
-              padding: `${token("--space-9")} ${token("--space-6")} ${token("--space-6")}`,
+              padding: `${token("--space-3xl")} ${token("--space-l")} ${token("--space-l")}`,
             }}
           >
             {board.map((card, index) => (
@@ -131,8 +131,8 @@ export function GameCardMockup() {
               flexWrap: "wrap",
               justifyContent: "center",
               alignItems: "flex-end",
-              gap: token("--space-3"),
-              padding: `${token("--space-4")} ${token("--space-4")} ${token("--space-8")}`,
+              gap: token("--space-xs"),
+              padding: `${token("--space-s")} ${token("--space-s")} ${token("--space-2xl")}`,
             }}
           >
             {hand.map((card, index) => (

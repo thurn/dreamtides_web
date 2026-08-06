@@ -36,7 +36,7 @@ describe("TidesInfoLabel", () => {
     const metric = glyph?.querySelector<HTMLElement>("[data-inline-glyph-metric]");
     expect(source?.firstElementChild).toBe(glyphGroup);
     expect(glyphGroup?.firstElementChild).toBe(glyph);
-    expect(glyphGroup?.style.marginRight).toBe("var(--space-2)");
+    expect(glyphGroup?.style.marginRight).toBe("var(--space-xs)");
     expect(glyph?.querySelector("i")?.className).toBe("bxf bx-info-circle");
     expect(metric?.style.width).toBe("1em");
     expect(metric?.style.height).toBe("1em");

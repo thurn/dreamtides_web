@@ -29,28 +29,28 @@ export const PLAYING_CARD_DESIGN = {
     compact: {
       square: 104,
       fontSize: 40,
-      rankSuitGap: 3,
+      rankSuitGap: token("--space-xxs"),
       redCharacterOutlineWidth: 5,
       blackCharacterOutlineWidth: 5,
     },
     standard: {
       square: 156,
       fontSize: 65,
-      rankSuitGap: 2,
+      rankSuitGap: token("--space-xxs"),
       redCharacterOutlineWidth: 5,
       blackCharacterOutlineWidth: 5,
     },
     wagerCompact: {
       square: 116,
       fontSize: 46,
-      rankSuitGap: 3,
+      rankSuitGap: token("--space-xxs"),
       redCharacterOutlineWidth: 5,
       blackCharacterOutlineWidth: 5,
     },
     wager: {
       square: 188,
       fontSize: 76,
-      rankSuitGap: 3,
+      rankSuitGap: token("--space-xxs"),
       redCharacterOutlineWidth: 5,
       blackCharacterOutlineWidth: 5,
     },
@@ -485,13 +485,14 @@ function WagerPrizeCardObject({
           zIndex: 1,
           width: "100%",
           padding:
-            size === "wager" ? token("--space-4") : token("--space-2"),
+            size === "wager" ? token("--space-s") : token("--space-xs"),
           boxSizing: "border-box",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: size === "wager" ? token("--space-3") : token("--space-2"),
+          gap:
+            size === "wager" ? token("--space-s") : token("--space-xs"),
           textAlign: "center",
           color:
             emphasis === "muted"

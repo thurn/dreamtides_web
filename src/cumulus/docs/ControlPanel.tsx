@@ -18,7 +18,7 @@ interface ControlPanelProps {
 const fieldStyle: React.CSSProperties = {
   display: "flex",
   flexDirection: "column",
-  gap: token("--space-2"),
+  gap: token("--space-xs"),
 };
 
 const labelStyle: React.CSSProperties = {
@@ -32,7 +32,7 @@ const inputStyle: React.CSSProperties = {
   background: token("--surface-chrome"),
   border: `1px solid ${token("--border-mid")}`,
   borderRadius: token("--radius-compact"),
-  padding: `${token("--space-2")} ${token("--space-4")}`,
+  padding: `${token("--space-xs")} ${token("--space-s")}`,
 };
 
 /**
@@ -65,7 +65,7 @@ export function ControlPanel({ metas, args, onChange }: ControlPanelProps) {
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: token("--space-5") }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: token("--space-m") }}>
       {controls.map(({ meta, spec }) => {
         const id = `cumulus-control-${meta.name}`;
         return (

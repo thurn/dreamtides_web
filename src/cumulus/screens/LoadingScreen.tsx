@@ -169,8 +169,8 @@ function calloutPosition(
     zIndex: 8,
     width: isDesktop ? "min(8vw, 108px)" : "min(20vw, 80px)",
     ...(annotation.side === "left"
-      ? { left: token(isDesktop ? "--space-2" : "--space-1") }
-      : { right: token(isDesktop ? "--space-2" : "--space-1") }),
+      ? { left: token(isDesktop ? "--space-xs" : "--space-xxs") }
+      : { right: token(isDesktop ? "--space-xs" : "--space-xxs") }),
     ...(annotation.vertical === "top"
       ? { top: isDesktop ? "18%" : "9%" }
       : { bottom }),
@@ -257,10 +257,10 @@ function AnnotatedLoadingCard({
 
   const cardWidth = isDesktop
     ? "min(26vw, 300px)"
-    : `min(47vw, 200px, calc(35.7dvh - ${token("--space-12")} - ${token("--space-3")}))`;
+    : `min(47vw, 200px, calc(35.7dvh - ${token("--space-6xl")} - ${token("--space-xs")}))`;
   const cardTypeTop = isDesktop
-    ? `calc(50% + min(18.2vw, 210px) + ${token("--space-3")})`
-    : `calc(50% + min(35.7vw, 154px, calc(25dvh - ${token("--space-11")} - ${token("--space-1")})) + ${token("--space-3")})`;
+    ? `calc(50% + min(18.2vw, 210px) + ${token("--space-xs")})`
+    : `calc(50% + min(35.7vw, 154px, calc(25dvh - ${token("--space-5xl")} - ${token("--space-xxs")})) + ${token("--space-xs")})`;
 
   return (
     <div
@@ -272,7 +272,7 @@ function AnnotatedLoadingCard({
         width: isDesktop ? "min(47vw, 560px)" : "100%",
         height: isDesktop
           ? "min(72dvh, 650px)"
-          : `min(71.4vw, 308px, calc(50dvh - ${token("--space-12")} - ${token("--space-9")} - ${token("--space-1")}))`,
+          : `min(71.4vw, 308px, calc(50dvh - ${token("--space-6xl")} - ${token("--space-3xl")} - ${token("--space-xxs")}))`,
       }}
     >
       <div
@@ -452,7 +452,7 @@ export function LoadingScreen({
         data-loading-title-boundary
         style={{
           position: "absolute",
-          top: `calc(${token(SAFE_AREA_INSET_PROPERTIES.top)} + ${token("--space-2")})`,
+          top: `calc(${token(SAFE_AREA_INSET_PROPERTIES.top)} + ${token("--space-xs")})`,
           left: 0,
           width: 0,
           height: 0,
@@ -466,7 +466,7 @@ export function LoadingScreen({
           position: "absolute",
           top:
             titleTop ??
-            `max(${token(SAFE_AREA_INSET_PROPERTIES.top)}, ${token("--space-2")})`,
+            `max(${token(SAFE_AREA_INSET_PROPERTIES.top)}, ${token("--space-xs")})`,
           right: 0,
           left: 0,
           zIndex: 10,
@@ -489,13 +489,13 @@ export function LoadingScreen({
           flexDirection: isDesktop ? "row" : "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: isDesktop ? token("--space-4") : token("--space-12"),
-          paddingTop: `max(${token(SAFE_AREA_INSET_PROPERTIES.top)}, ${token("--space-3")})`,
-          paddingRight: token("--space-2"),
+          gap: isDesktop ? token("--space-s") : token("--space-6xl"),
+          paddingTop: `max(${token(SAFE_AREA_INSET_PROPERTIES.top)}, ${token("--space-xs")})`,
+          paddingRight: token("--space-xs"),
           paddingBottom: isDesktop
-            ? `max(${token(SAFE_AREA_INSET_PROPERTIES.bottom)}, ${token("--space-3")})`
-            : `calc(max(${token(SAFE_AREA_INSET_PROPERTIES.bottom)}, ${token("--space-3")}) + ${token("--space-12")})`,
-          paddingLeft: token("--space-2"),
+            ? `max(${token(SAFE_AREA_INSET_PROPERTIES.bottom)}, ${token("--space-xs")})`
+            : `calc(max(${token(SAFE_AREA_INSET_PROPERTIES.bottom)}, ${token("--space-xs")}) + ${token("--space-6xl")})`,
+          paddingLeft: token("--space-xs"),
         }}
       >
         <AnnotatedLoadingCard
@@ -520,7 +520,7 @@ export function LoadingScreen({
           right: 0,
           bottom: isDesktop
             ? "14%"
-            : `max(${token(SAFE_AREA_INSET_PROPERTIES.bottom)}, ${token("--space-3")})`,
+            : `max(${token(SAFE_AREA_INSET_PROPERTIES.bottom)}, ${token("--space-xs")})`,
           left: 0,
           zIndex: 10,
           display: "flex",
@@ -557,7 +557,7 @@ export function LoadingScreen({
             style={{
               display: "flex",
               alignItems: "center",
-              gap: token("--space-3"),
+              gap: token("--space-xs"),
               color: token("--text-on-accent"),
               font: token("--t-title"),
             }}

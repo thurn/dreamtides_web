@@ -73,7 +73,7 @@ export function NumberStepper({
         display: "grid",
         gridTemplateColumns: "minmax(0, 1fr) auto auto auto",
         alignItems: "center",
-        gap: token(compact ? "--space-2" : "--space-3"),
+        gap: token(compact ? "--space-xs" : "--space-s"),
         minWidth: 0,
       }}
     >

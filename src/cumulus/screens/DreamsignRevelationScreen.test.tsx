@@ -144,7 +144,7 @@ describe("DreamsignRevelationScreen", () => {
     expect(
       container.querySelector<HTMLElement>("[data-revelation-site-tutorial]")
         ?.style.top,
-    ).toBe("var(--space-4)");
+    ).toBe("var(--space-s)");
     expect(onTutorialShown).toHaveBeenCalledOnce();
     expect(
       container.querySelector('[data-testid="revelation-guide-art"]'),
@@ -226,7 +226,7 @@ describe("DreamsignRevelationScreen", () => {
     const decline = Array.from(container.querySelectorAll("button")).find(
       (button) => button.textContent?.includes("Decline Offer"),
     );
-    expect(offer?.style.gap).toBe("var(--space-12)");
+    expect(offer?.style.gap).toBe("var(--space-6xl)");
     expect(decline?.style.borderColor).toBe("");
 
     act(() => {

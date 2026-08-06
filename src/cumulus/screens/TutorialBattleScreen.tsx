@@ -362,7 +362,7 @@ export function TutorialBattleScreen({
           style={{
             position: "fixed",
             left: "50%",
-            top: `calc(var(--safe-area-inset-top) + ${token("--space-12")})`,
+            top: `calc(var(--safe-area-inset-top) + ${token("--space-6xl")})`,
             width: "90vw",
             maxWidth: 416,
             transform: "translateX(-50%)",
@@ -480,7 +480,7 @@ const TUTORIAL_VICTORY_CSS = `
 
   @keyframes tutorial-victory-title-move {
     from { top: 50%; transform: translate(-50%, -50%); }
-    to { top: 0; transform: translate(-50%, calc(-100% - ${token("--space-5")})); }
+    to { top: 0; transform: translate(-50%, calc(-100% - ${token("--space-m")})); }
   }
 
   @keyframes tutorial-victory-title-fade {
@@ -499,7 +499,7 @@ const TUTORIAL_VICTORY_CSS = `
   }
 
   @keyframes tutorial-victory-action {
-    from { opacity: 0; transform: translateY(${token("--space-4")}); }
+    from { opacity: 0; transform: translateY(${token("--space-s")}); }
     to { opacity: 1; transform: translateY(0); }
   }
 
@@ -554,11 +554,11 @@ function TutorialVictorySurface({
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        gap: token("--space-8"),
-        paddingTop: safeAreaInsetAtLeast("top", "--space-8"),
-        paddingRight: `max(var(--safe-area-inset-right), ${token("--space-6")})`,
-        paddingBottom: safeAreaInsetAtLeast("bottom", "--space-8"),
-        paddingLeft: `max(var(--safe-area-inset-left), ${token("--space-6")})`,
+        gap: token("--space-2xl"),
+        paddingTop: safeAreaInsetAtLeast("top", "--space-2xl"),
+        paddingRight: `max(var(--safe-area-inset-right), ${token("--space-l")})`,
+        paddingBottom: safeAreaInsetAtLeast("bottom", "--space-2xl"),
+        paddingLeft: `max(var(--safe-area-inset-left), ${token("--space-l")})`,
       }}
     >
       <style>{TUTORIAL_VICTORY_CSS}</style>
@@ -594,7 +594,7 @@ function TutorialVictorySurface({
             textAlign: "center",
             textShadow: token("--text-outline-media"),
             whiteSpace: "nowrap",
-            transform: `translate(-50%, calc(-100% - ${token("--space-5")}))`,
+            transform: `translate(-50%, calc(-100% - ${token("--space-m")}))`,
             animation: titleSettled
               ? undefined
               : `tutorial-victory-title-move ${TUTORIAL_VICTORY_TITLE_MOVE_DURATION} ${token("--ease-dream")} ${TUTORIAL_VICTORY_TITLE_HOLD_DURATION} both`,
@@ -615,8 +615,8 @@ function TutorialVictorySurface({
           data-tutorial-victory-ripple=""
           style={{
             position: "absolute",
-            inset: token("--space-5"),
-            border: `${token("--space-1")} solid ${token("--border-accent")}`,
+            inset: token("--space-m"),
+            border: `${token("--space-xxs")} solid ${token("--border-accent")}`,
             borderRadius: token("--radius-pill"),
             animation: `tutorial-victory-ripple ${TUTORIAL_VICTORY_INTRO_DURATION} ${token("--ease-out")} infinite`,
           }}
@@ -626,8 +626,8 @@ function TutorialVictorySurface({
           data-tutorial-victory-ripple=""
           style={{
             position: "absolute",
-            inset: token("--space-5"),
-            border: `${token("--space-1")} solid ${token("--border-accent")}`,
+            inset: token("--space-m"),
+            border: `${token("--space-xxs")} solid ${token("--border-accent")}`,
             borderRadius: token("--radius-pill"),
             animation: `tutorial-victory-ripple ${TUTORIAL_VICTORY_INTRO_DURATION} ${token("--ease-out")} calc(${TUTORIAL_VICTORY_INTRO_DURATION} / 2) infinite`,
           }}
@@ -637,8 +637,8 @@ function TutorialVictorySurface({
           data-tutorial-victory-orbit=""
           style={{
             position: "absolute",
-            inset: token("--space-6"),
-            border: `${token("--space-1")} solid ${token("--border-accent")}`,
+            inset: token("--space-l"),
+            border: `${token("--space-xxs")} solid ${token("--border-accent")}`,
             borderTopColor: token("--accent-bright"),
             borderBottomColor: "transparent",
             borderRadius: token("--radius-pill"),
@@ -649,9 +649,9 @@ function TutorialVictorySurface({
             style={{
               position: "absolute",
               left: "50%",
-              top: `calc(-1 * ${token("--space-3")})`,
-              width: token("--space-6"),
-              height: token("--space-6"),
+              top: `calc(-1 * ${token("--space-xs")})`,
+              width: token("--space-l"),
+              height: token("--space-l"),
               borderRadius: token("--radius-pill"),
               background: token("--reward"),
               boxShadow: token("--glow-accent-soft"),
@@ -662,8 +662,8 @@ function TutorialVictorySurface({
           data-tutorial-victory-counter-orbit=""
           style={{
             position: "absolute",
-            inset: token("--space-12"),
-            border: `${token("--space-1")} solid ${token("--border-soft")}`,
+            inset: token("--space-6xl"),
+            border: `${token("--space-xxs")} solid ${token("--border-soft")}`,
             borderLeftColor: token("--reward"),
             borderRightColor: "transparent",
             borderRadius: token("--radius-pill"),
@@ -679,7 +679,7 @@ function TutorialVictorySurface({
             aspectRatio: "1",
             display: "grid",
             placeItems: "center",
-            border: `${token("--space-1")} solid ${token("--border-accent")}`,
+            border: `${token("--space-xxs")} solid ${token("--border-accent")}`,
             borderRadius: token("--radius-pill"),
             background: RADIAL_DISC_BACKGROUND,
             boxShadow: `${token("--shadow-lg")}, ${token("--glow-accent-soft")}`,

@@ -205,7 +205,7 @@ outside the token system). Its name and prop surface (`text`, `testId`, `side`)
 are preserved so no consumer signature changes; only the internal rendering
 becomes InfoCard-vocabulary and fully tokenized.
 
-- **The stack** becomes a token-styled flex column (`gap: --space-3`, keeping the
+- **The stack** becomes a token-styled flex column (`gap: --space-xs`, keeping the
   current scroll cap as a box measure — `maxHeight` + `overflowY: auto`) of
   `InfoCard variant="text"` tiles, each `meta="Keyword"`, `title={entry.term}`,
   `body={richText.rules(entry.definition)}` (rules so definition glyphs render,

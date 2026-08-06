@@ -336,8 +336,8 @@ function explorationChoiceStyle(
     display: "grid",
     gridTemplateColumns: "minmax(0, 1fr) auto",
     alignItems: "center",
-    gap: token("--space-4"),
-    padding: token("--space-4"),
+    gap: token("--space-s"),
+    padding: token("--space-s"),
     border: `1px solid ${token("--border-soft")}`,
     borderRadius: token("--radius-control"),
     background: token("--glass-on-glass-fill"),
@@ -356,7 +356,7 @@ function ExplorationChoiceContents({
 }) {
   return (
     <>
-      <span style={{ minWidth: 0, display: "grid", gap: token("--space-1") }}>
+      <span style={{ minWidth: 0, display: "grid", gap: token("--space-xxs") }}>
         <strong style={{ font: token("--t-button") }}>
           {renderRulesSymbolsInline(action.label)}
         </strong>
@@ -584,7 +584,7 @@ const DESKTOP_ESSENCE_CARD_WIDTH = 156;
 const MOBILE_ESSENCE_CARD_WIDTH = "min(28vw, 112px)";
 const ESSENCE_CHIP_LAYER = 12;
 const DESKTOP_FLOATING_PANEL_BOTTOM =
-  `calc(${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-9")})`;
+  `calc(${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-3xl")})`;
 // The card preview cache appends a 21px watermark strip to a 259px-tall
 // content image. Licensed originals contain the 259px content region only.
 const CARD_PREVIEW_CONTENT_FRACTION = 259 / 280;
@@ -700,7 +700,7 @@ function ExplorationNarrativeChoices({
         initial={false}
         style={{
           display: "grid",
-          gap: token("--space-3"),
+          gap: token("--space-xs"),
         }}
       >
         {actions.map((action, index) => {
@@ -715,7 +715,7 @@ function ExplorationNarrativeChoices({
               initial={false}
               animate={{
                 opacity: visible ? 1 : 0,
-                y: visible || reduceMotion ? 0 : token("--space-2"),
+                y: visible || reduceMotion ? 0 : token("--space-xs"),
               }}
               transition={{
                 duration: reduceMotion
@@ -1111,7 +1111,7 @@ function PurgedCardPresentation({
       initial={{
         opacity: reduceMotion ? 1 : 0,
         scale: reduceMotion ? 1 : 0.88,
-        y: reduceMotion ? 0 : token("--space-6"),
+        y: reduceMotion ? 0 : token("--space-l"),
         rotate: 0,
       }}
       animate={
@@ -1120,7 +1120,7 @@ function PurgedCardPresentation({
           : {
               opacity: [0, 1, 1, 0],
               scale: [0.88, 1, 1, 0.5],
-              y: [token("--space-6"), 0, 0, token("--space-8")],
+              y: [token("--space-l"), 0, 0, token("--space-2xl")],
               rotate: [0, 0, 0, -8],
             }
       }
@@ -1158,8 +1158,8 @@ function PurgedCardPresentation({
         }}
         style={{
           position: "absolute",
-          right: token("--space-3"),
-          bottom: token("--space-3"),
+          right: token("--space-xs"),
+          bottom: token("--space-xs"),
           width: "clamp(34px, 22%, 52px)",
           aspectRatio: "1 / 1",
           containerType: "inline-size",
@@ -2079,7 +2079,7 @@ export function ExplorationSiteScreen({
           activeAction.followup.selectionKey === "cardIds"
         ? "min(1120px, calc(100vw - 64px))"
         : activeAction?.followup.kind === "dreamsigns"
-          ? `min(max(420px, calc(${String(dreamsignChoiceColumns)} * ${String(DESKTOP_DREAMSIGN_CHOICE_SIZE)}px + ${String(dreamsignChoiceColumns - 1)} * ${token("--space-9")} + 2 * ${token("--space-8")})), calc(100vw - 64px))`
+          ? `min(max(420px, calc(${String(dreamsignChoiceColumns)} * ${String(DESKTOP_DREAMSIGN_CHOICE_SIZE)}px + ${String(dreamsignChoiceColumns - 1)} * ${token("--space-3xl")} + 2 * ${token("--space-2xl")})), calc(100vw - 64px))`
           : activeAction?.followup.kind === "dreamAvatars"
             ? "min(960px, calc(100vw - 64px))"
             : null;
@@ -2119,7 +2119,7 @@ export function ExplorationSiteScreen({
             style={{
               display: "grid",
               justifyItems: "center",
-              gap: token("--space-6"),
+              gap: token("--space-l"),
             }}
           >
             <div
@@ -2589,10 +2589,10 @@ export function ExplorationSiteScreen({
             }}
             style={{
               position: "fixed",
-              top: safeAreaInsetAtLeast("top", "--space-9"),
-              right: token("--space-6"),
+              top: safeAreaInsetAtLeast("top", "--space-3xl"),
+              right: token("--space-l"),
               bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
-              left: token("--space-6"),
+              left: token("--space-l"),
               zIndex: FRAME_BREAK_EXIT_LAYER + 1,
               display: "grid",
               placeItems: "center",
@@ -2722,10 +2722,10 @@ export function ExplorationSiteScreen({
             }}
             style={{
               position: "fixed",
-              top: safeAreaInsetAtLeast("top", "--space-9"),
-              right: token("--space-6"),
+              top: safeAreaInsetAtLeast("top", "--space-3xl"),
+              right: token("--space-l"),
               bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
-              left: token("--space-6"),
+              left: token("--space-l"),
               zIndex: FRAME_BREAK_EXIT_LAYER + 1,
               display: "grid",
               placeItems: "center",
@@ -2784,7 +2784,7 @@ export function ExplorationSiteScreen({
             }}
             style={{
               position: "fixed",
-              inset: `${safeAreaInsetAtLeast("top", "--space-7")} ${token("--space-5")} ${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE}`,
+              inset: `${safeAreaInsetAtLeast("top", "--space-xl")} ${token("--space-m")} ${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE}`,
               zIndex: FRAME_BREAK_EXIT_LAYER + 1,
               display: "grid",
               placeContent: "center",
@@ -3010,12 +3010,12 @@ export function ExplorationSiteScreen({
             }}
             style={{
               position: "fixed",
-              inset: `${safeAreaInsetAtLeast("top", "--space-7")} ${token("--space-5")} ${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE}`,
+              inset: `${safeAreaInsetAtLeast("top", "--space-xl")} ${token("--space-m")} ${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE}`,
               zIndex: FRAME_BREAK_EXIT_LAYER + 1,
               display: "grid",
               placeContent: "center",
               justifyItems: "center",
-              gap: token("--space-5"),
+              gap: token("--space-m"),
               color: token("--text-primary"),
               textAlign: "center",
               pointerEvents: "none",
@@ -3026,7 +3026,7 @@ export function ExplorationSiteScreen({
               variant="hero"
               size={isDesktop ? 260 : 210}
             />
-            <div style={{ display: "grid", gap: token("--space-1") }}>
+            <div style={{ display: "grid", gap: token("--space-xxs") }}>
               <strong style={{ font: token("--t-title") }}>
                 {dreamAvatarReward.current.name}
               </strong>
@@ -3116,17 +3116,17 @@ export function ExplorationSiteScreen({
             }}
             style={{
               position: "fixed",
-              top: safeAreaInsetAtLeast("top", "--space-9"),
-              right: token("--space-6"),
+              top: safeAreaInsetAtLeast("top", "--space-3xl"),
+              right: token("--space-l"),
               bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
-              left: token("--space-6"),
+              left: token("--space-l"),
               zIndex: FRAME_BREAK_EXIT_LAYER + 1,
               display: "flex",
               flexWrap: "wrap",
               alignContent: "center",
               alignItems: "center",
               justifyContent: "center",
-              gap: token("--space-6"),
+              gap: token("--space-l"),
               pointerEvents: "none",
             }}
           >
@@ -3170,7 +3170,7 @@ export function ExplorationSiteScreen({
                   initial={{
                     opacity: reduceMotion ? 1 : 0,
                     scale: reduceMotion ? 1 : 0.88,
-                    y: reduceMotion ? 0 : token("--space-6"),
+                    y: reduceMotion ? 0 : token("--space-l"),
                   }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   transition={{
@@ -3227,10 +3227,10 @@ export function ExplorationSiteScreen({
             }}
             style={{
               position: "fixed",
-              top: safeAreaInsetAtLeast("top", "--space-6"),
-              right: token("--space-4"),
+              top: safeAreaInsetAtLeast("top", "--space-l"),
+              right: token("--space-s"),
               bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
-              left: token("--space-4"),
+              left: token("--space-s"),
               zIndex: FRAME_BREAK_EXIT_LAYER + 1,
               overflow: "hidden",
               pointerEvents: "none",
@@ -3501,17 +3501,17 @@ export function ExplorationSiteScreen({
             }}
             style={{
               position: "fixed",
-              top: safeAreaInsetAtLeast("top", "--space-9"),
-              right: token("--space-6"),
+              top: safeAreaInsetAtLeast("top", "--space-3xl"),
+              right: token("--space-l"),
               bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
-              left: token("--space-6"),
+              left: token("--space-l"),
               zIndex: FRAME_BREAK_EXIT_LAYER + 1,
               display: "flex",
               flexWrap: "wrap",
               alignContent: "center",
               alignItems: "center",
               justifyContent: "center",
-              gap: isDesktop ? token("--space-4") : token("--space-3"),
+              gap: isDesktop ? token("--space-s") : token("--space-xs"),
               pointerEvents: "none",
             }}
           >
@@ -3524,7 +3524,7 @@ export function ExplorationSiteScreen({
                 initial={{
                   opacity: reduceMotion ? 1 : 0,
                   scale: reduceMotion ? 1 : 0.88,
-                  y: reduceMotion ? 0 : token("--space-6"),
+                  y: reduceMotion ? 0 : token("--space-l"),
                 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{
@@ -3564,8 +3564,8 @@ export function ExplorationSiteScreen({
                   }}
                   style={{
                     position: "absolute",
-                    right: `calc(-1 * ${token("--space-2")})`,
-                    bottom: `calc(-1 * ${token("--space-2")})`,
+                    right: `calc(-1 * ${token("--space-xs")})`,
+                    bottom: `calc(-1 * ${token("--space-xs")})`,
                     zIndex: ESSENCE_CHIP_LAYER,
                     boxShadow: token("--shadow-md"),
                     borderRadius: token("--radius-pill"),
@@ -3681,14 +3681,14 @@ export function ExplorationSiteScreen({
           }}
           style={{
             position: "fixed",
-            left: `max(var(--safe-area-inset-left), ${token("--space-5")})`,
+            left: `max(var(--safe-area-inset-left), ${token("--space-m")})`,
             bottom: isDesktop
               ? DESKTOP_FLOATING_PANEL_BOTTOM
               : JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
             zIndex: FRAME_BREAK_EXIT_LAYER,
             width: isDesktop
               ? "min(400px, calc(100vw - 48px))"
-              : `calc(100vw - ${token("--space-5")} - ${token("--space-5")})`,
+              : `calc(100vw - ${token("--space-m")} - ${token("--space-m")})`,
             maxHeight: "calc(100vh - 96px)",
             pointerEvents: "auto",
           }}
@@ -3699,9 +3699,9 @@ export function ExplorationSiteScreen({
             <div
               style={{
                 display: "grid",
-                gap: token("--space-5"),
-                padding: token("--space-6"),
-                paddingTop: token("--space-5"),
+                gap: token("--space-m"),
+                padding: token("--space-l"),
+                paddingTop: token("--space-m"),
               }}
             >
               <ExplorationNarrativeChoices
@@ -3724,13 +3724,13 @@ export function ExplorationSiteScreen({
             position: "fixed",
             zIndex: FRAME_BREAK_EXIT_LAYER + 1,
             top: isDesktop
-              ? safeAreaInsetAtLeast("top", "--space-8")
-              : `calc(max(var(--safe-area-inset-top), ${token("--space-4")}) + ${String(MENU_BUTTON_PX)}px + ${token("--space-3")})`,
+              ? safeAreaInsetAtLeast("top", "--space-2xl")
+              : `calc(max(var(--safe-area-inset-top), ${token("--space-s")}) + ${String(MENU_BUTTON_PX)}px + ${token("--space-xs")})`,
             right: isDesktop
               ? centeredFollowupWidth !== null
                 ? 0
-                : `calc(max(var(--safe-area-inset-right), ${token("--space-8")}) + ${String(MENU_BUTTON_PX)}px + ${token("--space-3")})`
-              : `max(var(--safe-area-inset-right), ${token("--space-4")})`,
+                : `calc(max(var(--safe-area-inset-right), ${token("--space-2xl")}) + ${String(MENU_BUTTON_PX)}px + ${token("--space-xs")})`
+              : `max(var(--safe-area-inset-right), ${token("--space-s")})`,
             bottom: isDesktop
               ? DESKTOP_FLOATING_PANEL_BOTTOM
               : JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
@@ -3738,7 +3738,7 @@ export function ExplorationSiteScreen({
               ? centeredFollowupWidth !== null
                 ? 0
                 : "auto"
-              : `max(var(--safe-area-inset-left), ${token("--space-4")})`,
+              : `max(var(--safe-area-inset-left), ${token("--space-s")})`,
             width:
               isDesktop && centeredFollowupWidth !== null
                 ? centeredFollowupWidth
@@ -3819,8 +3819,8 @@ export function ExplorationSiteScreen({
                       display: "flex",
                       justifyContent: "flex-end",
                       padding: isDesktop
-                        ? `0 ${token("--space-8")} ${token("--space-6")}`
-                        : `0 ${token("--space-4")} ${token("--space-4")}`,
+                        ? `0 ${token("--space-2xl")} ${token("--space-l")}`
+                        : `0 ${token("--space-s")} ${token("--space-s")}`,
                     }}
                   >
                     <GlassButton
@@ -3847,8 +3847,8 @@ export function ExplorationSiteScreen({
                     display: "grid",
                     placeItems: "center",
                     padding: isDesktop
-                      ? token("--space-7")
-                      : token("--space-4"),
+                      ? token("--space-xl")
+                      : token("--space-s"),
                     boxSizing: "border-box",
                   }}
                 >
@@ -3930,7 +3930,7 @@ export function ExplorationSiteScreen({
                 headingLevel="h1"
                 headerSpacing="medium"
               >
-                <div style={{ display: "grid", gridTemplateColumns: isDesktop ? "repeat(2, minmax(0, 1fr))" : "1fr", gap: token("--space-6"), padding: token("--space-6"), overflow: "auto" }}>
+                <div style={{ display: "grid", gridTemplateColumns: isDesktop ? "repeat(2, minmax(0, 1fr))" : "1fr", gap: token("--space-l"), padding: token("--space-l"), overflow: "auto" }}>
                   {activeAction.followup.packs.map((pack) => (
                     <section
                       key={pack.index}
@@ -3938,7 +3938,7 @@ export function ExplorationSiteScreen({
                       style={{
                         display: "grid",
                         gap: 0,
-                        padding: token("--space-5"),
+                        padding: token("--space-m"),
                         borderRadius: token("--radius-panel"),
                         border: `2px solid ${token("--border-soft")}`,
                         background: token("--glass-on-glass-fill"),
@@ -3951,13 +3951,13 @@ export function ExplorationSiteScreen({
                           font: token("--t-button"),
                           textAlign: "left",
                           margin: isDesktop
-                            ? `${token("--space-7")} ${token("--space-8")} ${token("--space-8")}`
-                            : `${token("--space-2")} 0 ${token("--space-4")}`,
+                            ? `${token("--space-xl")} ${token("--space-2xl")} ${token("--space-2xl")}`
+                            : `${token("--space-xs")} 0 ${token("--space-s")}`,
                         }}
                       >
                         Pack {String(pack.index + 1)}
                       </strong>
-                      <span data-exploration-pack-cards="" style={{ display: "grid", gridTemplateColumns: `repeat(${String(pack.cards.length)}, minmax(0, 1fr))`, gap: token("--space-3") }}>
+                      <span data-exploration-pack-cards="" style={{ display: "grid", gridTemplateColumns: `repeat(${String(pack.cards.length)}, minmax(0, 1fr))`, gap: token("--space-xs") }}>
                         {pack.cards.map((card) => <GameCard key={card.entryId} model={card.model} />)}
                       </span>
                       <div
@@ -3966,8 +3966,8 @@ export function ExplorationSiteScreen({
                           display: isDesktop ? "flex" : "grid",
                           justifyContent: isDesktop ? "center" : undefined,
                           margin: isDesktop
-                            ? `${token("--space-8")} ${token("--space-8")} ${token("--space-7")}`
-                            : `${token("--space-4")} 0 ${token("--space-2")}`,
+                            ? `${token("--space-2xl")} ${token("--space-2xl")} ${token("--space-xl")}`
+                            : `${token("--space-s")} 0 ${token("--space-xs")}`,
                         }}
                       >
                         <GlassButton
@@ -3992,12 +3992,12 @@ export function ExplorationSiteScreen({
               subtitle={activeAction.followup.subtitle}
               headingLevel="h1"
               footer={
-                <div style={{ display: "flex", justifyContent: "flex-end", padding: token("--space-5") }}>
+                <div style={{ display: "flex", justifyContent: "flex-end", padding: token("--space-m") }}>
                   <GlassButton label="Confirm Choice" variant="accent" placement="onGlass" disabled={!canCommitFollowup} onPress={commitFollowup} testId="cumulus-exploration-followup-confirm" />
                 </div>
               }
             >
-              <div role="radiogroup" style={{ display: "grid", gap: token("--space-3"), padding: token("--space-5") }}>
+              <div role="radiogroup" style={{ display: "grid", gap: token("--space-xs"), padding: token("--space-m") }}>
                 {activeAction.followup.options.map((option) => (
                   <Pressable
                     key={option}
@@ -4005,7 +4005,7 @@ export function ExplorationSiteScreen({
                     role="radio"
                     aria-checked={selectedSubtype === option}
                     onClick={() => setSelectedSubtype(option)}
-                    style={{ minHeight: token("--touch-min"), padding: token("--space-4"), borderRadius: token("--radius-control"), border: `2px solid ${selectedSubtype === option ? token("--selected") : token("--border-soft")}`, background: token("--glass-on-glass-fill"), color: token("--text-on-glass"), textAlign: "left", font: token("--t-button") }}
+                    style={{ minHeight: token("--touch-min"), padding: token("--space-s"), borderRadius: token("--radius-control"), border: `2px solid ${selectedSubtype === option ? token("--selected") : token("--border-soft")}`, background: token("--glass-on-glass-fill"), color: token("--text-on-glass"), textAlign: "left", font: token("--t-button") }}
                   >
                     {option}
                   </Pressable>
@@ -4027,12 +4027,12 @@ export function ExplorationSiteScreen({
                 style={{
                   display: "grid",
                   gridTemplateColumns: `repeat(auto-fit, minmax(${String(isDesktop ? DESKTOP_DREAMSIGN_CHOICE_SIZE : MOBILE_DREAMSIGN_CHOICE_SIZE)}px, 1fr))`,
-                  gap: isDesktop ? token("--space-9") : token("--space-5"),
+                  gap: isDesktop ? token("--space-3xl") : token("--space-m"),
                   placeItems: "center",
                   minHeight: 0,
                   maxHeight: "min(70dvh, 620px)",
                   overflow: "auto",
-                  padding: isDesktop ? token("--space-8") : token("--space-5"),
+                  padding: isDesktop ? token("--space-2xl") : token("--space-m"),
                 }}
               >
                 {activeAction.followup.dreamsigns.map((dreamsign) => (
@@ -4067,9 +4067,9 @@ export function ExplorationSiteScreen({
                   gridTemplateColumns: isDesktop
                     ? "repeat(3, minmax(0, 1fr))"
                     : "repeat(auto-fit, minmax(150px, 1fr))",
-                  gap: isDesktop ? token("--space-7") : token("--space-5"),
+                  gap: isDesktop ? token("--space-xl") : token("--space-m"),
                   placeItems: "center",
-                  padding: isDesktop ? token("--space-8") : token("--space-5"),
+                  padding: isDesktop ? token("--space-2xl") : token("--space-m"),
                   overflow: "auto",
                 }}
               >
@@ -4080,7 +4080,7 @@ export function ExplorationSiteScreen({
                     style={{
                       display: "grid",
                       justifyItems: "center",
-                      gap: token("--space-3"),
+                      gap: token("--space-xs"),
                       color: token("--text-on-glass"),
                       textAlign: "center",
                     }}
@@ -4099,7 +4099,7 @@ export function ExplorationSiteScreen({
                         })
                       }
                     />
-                    <div style={{ display: "grid", gap: token("--space-1") }}>
+                    <div style={{ display: "grid", gap: token("--space-xxs") }}>
                       <strong style={{ font: token("--t-button") }}>
                         {dreamAvatar.name}
                       </strong>
@@ -4137,7 +4137,7 @@ export function ExplorationSiteScreen({
             position: "fixed",
             top: `max(var(--safe-area-inset-top), ${String(exitEdgeInset)}px)`,
             right: isDesktop
-              ? `calc(max(var(--safe-area-inset-right), ${String(exitEdgeInset)}px) + ${String(MENU_BUTTON_PX)}px + ${token("--space-3")})`
+              ? `calc(max(var(--safe-area-inset-right), ${String(exitEdgeInset)}px) + ${String(MENU_BUTTON_PX)}px + ${token("--space-xs")})`
               : `max(var(--safe-area-inset-right), ${String(exitEdgeInset)}px)`,
             zIndex: FRAME_BREAK_EXIT_LAYER,
           }}

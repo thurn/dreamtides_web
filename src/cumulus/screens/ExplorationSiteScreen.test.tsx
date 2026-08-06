@@ -1182,7 +1182,7 @@ describe("ExplorationSiteScreen", () => {
     );
     expect(followup).not.toBeNull();
     expect(followup?.style.bottom).toBe(
-      `calc(${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-9")})`,
+      `calc(${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-3xl")})`,
     );
     act(() =>
       container

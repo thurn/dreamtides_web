@@ -70,7 +70,7 @@ function PlayingCardDemo(args: Record<string, unknown>) {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: token("--space-8"),
+        gap: token("--space-2xl"),
       }}
     >
       <PlayingCard
@@ -85,7 +85,7 @@ function PlayingCardDemo(args: Record<string, unknown>) {
           alignItems: "flex-start",
           justifyContent: "center",
           flexWrap: "wrap",
-          gap: token("--space-6"),
+          gap: token("--space-l"),
         }}
       >
         {FOCUSED_VARIANTS.map((entry) => (
@@ -95,7 +95,7 @@ function PlayingCardDemo(args: Record<string, unknown>) {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: token("--space-3"),
+              gap: token("--space-xs"),
             }}
           >
             <PlayingCard

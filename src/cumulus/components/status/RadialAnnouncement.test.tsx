@@ -67,7 +67,7 @@ describe("RadialAnnouncement", () => {
       container.querySelector<HTMLElement>(
         "[data-radial-announcement-ripple]",
       )?.style.inset,
-    ).toBe("calc(-1 * var(--space-1))");
+    ).toBe("calc(-1 * var(--space-xxs))");
 
     act(() => root.unmount());
     container.remove();

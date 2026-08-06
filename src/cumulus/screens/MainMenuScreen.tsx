@@ -47,11 +47,11 @@ export interface MainMenuScreenProps {
   readonly playbackSpeed?: number;
 }
 
-const TITLE_TOP = token("--space-10");
-const EDGE_INLINE = token("--space-12");
-const EDGE_BOTTOM = token("--space-11");
-const MOBILE_EDGE_BOTTOM = token("--space-12");
-const MOBILE_ACTION_OVERLAP = token("--space-6");
+const TITLE_TOP = token("--space-4xl");
+const EDGE_INLINE = token("--space-6xl");
+const EDGE_BOTTOM = token("--space-5xl");
+const MOBILE_EDGE_BOTTOM = token("--space-6xl");
+const MOBILE_ACTION_OVERLAP = token("--space-l");
 const BACKGROUND_POSITION = { desktop: "54% 49%", mobile: "58% 51%" } as const;
 const BUTTON_BACKGROUND_WIDTH = 280;
 const SCREEN_FADE_SECONDS = motionTimeSeconds("--dur-slow");
@@ -67,7 +67,7 @@ export function MainMenuScreen({
 }: MainMenuScreenProps): ReactElement {
   const isDesktop = useIsDesktop();
   const reduceMotion = useReducedMotion() === true;
-  const mobileEdgeInline = `max(${token(SAFE_AREA_INSET_PROPERTIES.left)}, ${token("--space-6")})`;
+  const mobileEdgeInline = `max(${token(SAFE_AREA_INSET_PROPERTIES.left)}, ${token("--space-l")})`;
   const mobileEdgeBottom = `max(${token(SAFE_AREA_INSET_PROPERTIES.bottom)}, ${MOBILE_EDGE_BOTTOM})`;
 
   return (
@@ -105,7 +105,7 @@ export function MainMenuScreen({
           position: "absolute",
           top: isDesktop
             ? TITLE_TOP
-            : `max(${token(SAFE_AREA_INSET_PROPERTIES.top)}, ${token("--space-9")})`,
+            : `max(${token(SAFE_AREA_INSET_PROPERTIES.top)}, ${token("--space-3xl")})`,
           left: "50%",
           width: "min(92vw, 1100px)",
           margin: 0,
@@ -174,7 +174,7 @@ export function MainMenuScreen({
           bottom: isDesktop ? EDGE_BOTTOM : mobileEdgeBottom,
           display: "flex",
           flexDirection: isDesktop ? "row" : "column",
-          gap: token("--space-4"),
+          gap: token("--space-s"),
         }}
       >
         {view.socials.map((social) => (

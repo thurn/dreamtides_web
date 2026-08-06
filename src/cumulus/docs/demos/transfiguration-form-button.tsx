@@ -34,7 +34,7 @@ function TransfigurationFormButtonDemo() {
         width: 560,
         display: "grid",
         gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-        gap: token("--space-6"),
+        gap: token("--space-l"),
       }}
     >
       {variants.map((variant) => (
@@ -43,7 +43,7 @@ function TransfigurationFormButtonDemo() {
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: token("--space-4"),
+            gap: token("--space-s"),
           }}
         >
           {DEMO_FORMS.map((form) => (

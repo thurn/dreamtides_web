@@ -7,9 +7,9 @@ import { spaceTokenFor } from "./cumulus-token-index.js";
  * rounding from the `--radius-*` roles — never from raw pixel literals.
  *
  * A raw `gap: 12` or `padding: "16px 18px 20px"` hardcodes a rhythm step the
- * design system can no longer control (re-skinning the scale silently skips
- * it), and off-scale values (an 18px that is neither `--space-6` nor
- * `--space-7`) are exactly how spacing drifts one screen at a time. This rule
+ * design system can no longer control (re-spacing the scale silently skips
+ * it), and off-scale values are exactly how spacing drifts one screen at a
+ * time. This rule
  * flags raw lengths on spacing/radius CSS properties in inline style objects
  * and — via {@link spaceTokenFor} — names the `--space-*` step that already
  * carries the value, autofixing when the whole value is a single on-scale
@@ -23,24 +23,28 @@ import { spaceTokenFor } from "./cumulus-token-index.js";
  * are hairline border widths, type metrics (the `--t-*` voices own those),
  * zIndex, opacity, or flex factors.
  *
- * SCOPE. The product-UI tier: files under `src/cumulus/` outside
- * {@link EXEMPT_PREFIXES}, plus the adapter/builder layer in
- * `src/screens/cumulus_adapters/`, mirroring `no-hardcoded-values` (the primitive,
- * component, and internal/ material-recipe tiers legitimately author raw
- * values; the doc site is tooling).
+ * SCOPE. Cumulus product UI plus the adapter/builder layer. Components and
+ * internal material recipes may author object geometry and component-owned
+ * radii, but their content rhythm (padding, margins, and gaps) still comes from
+ * the shared spacing vocabulary. Token-definition files and the doc site are
+ * tooling, so both remain exempt.
  */
 
 /** Repo-relative POSIX dir prefixes exempt from the check. */
 const EXEMPT_PREFIXES = [
   "src/cumulus/primitives/",
-  "src/cumulus/components/",
-  "src/cumulus/internal/",
   "src/cumulus/docs/",
   "src/cumulus/screens/devtools/",
 ];
 
+/** Tiers that author fixed object geometry while sharing content rhythm. */
+const COMPONENT_GEOMETRY_PREFIXES = [
+  "src/cumulus/components/",
+  "src/cumulus/internal/",
+];
+
 /** Style-object property names whose values are rhythm steps. */
-const SPACING_PROPS = new Set([
+const RHYTHM_PROPS = new Set([
   "padding",
   "paddingTop",
   "paddingRight",
@@ -66,6 +70,10 @@ const SPACING_PROPS = new Set([
   "gap",
   "rowGap",
   "columnGap",
+]);
+
+/** Positional geometry governed in screens, but component-owned in leaf UI. */
+const POSITION_PROPS = new Set([
   "inset",
   "insetInline",
   "insetInlineStart",
@@ -78,6 +86,8 @@ const SPACING_PROPS = new Set([
   "bottom",
   "left",
 ]);
+
+const SPACING_PROPS = new Set([...RHYTHM_PROPS, ...POSITION_PROPS]);
 
 /** Radius properties, which take the `--radius-*` role tokens. */
 const RADIUS_PROPS = new Set([
@@ -174,6 +184,9 @@ const rule = {
         : context.getFilename();
     const cwd = typeof context.cwd === "string" ? context.cwd : process.cwd();
     const fileRelative = toRepoRelativePosix(rawFilename, cwd);
+    const authorsComponentGeometry = COMPONENT_GEOMETRY_PREFIXES.some(
+      (prefix) => fileRelative.startsWith(prefix),
+    );
 
     if (!isProductUiFile(fileRelative)) {
       return {};
@@ -263,6 +276,12 @@ const rule = {
       if (!SPACING_PROPS.has(key) && !isRadius) {
         return;
       }
+      if (
+        authorsComponentGeometry &&
+        (POSITION_PROPS.has(key) || isRadius)
+      ) {
+        return;
+      }
       if (!inStyleContext(node)) {
         return;
       }
@@ -296,7 +315,7 @@ const rule = {
         }
         return;
       }
-      // Template chunks: `${token("--space-6")} 18px` — flag the raw parts.
+      // Template chunks: `${token("--space-l")} 18px` — flag the raw parts.
       if (value.type === "TemplateLiteral") {
         for (const quasi of value.quasis) {
           for (const px of pxLengthsIn(quasi.value.raw)) {

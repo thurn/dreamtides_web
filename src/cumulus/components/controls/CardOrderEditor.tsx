@@ -52,8 +52,8 @@ export function CardOrderEditor({
             display: "grid",
             gridTemplateColumns: "auto minmax(0, 1fr) auto auto",
             alignItems: "center",
-            gap: token("--space-3"),
-            paddingBlock: token("--space-4"),
+            gap: token("--space-xs"),
+            paddingBlock: token("--space-s"),
             borderBottom: `1px solid ${token("--border-soft")}`,
           }}
         >

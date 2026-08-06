@@ -21,7 +21,7 @@ import {
 
 const SPEECH_GLASS_FILL = token("--glass-fill-popover");
 const SPEECH_GLASS_BACKGROUND = `${token("--glass-sheen")}, ${SPEECH_GLASS_FILL}`;
-const SPEECH_CONTENT_PADDING = token("--space-5");
+const SPEECH_CONTENT_PADDING = token("--space-m");
 
 /** Named bubble scales that preserve the component's authored geometry. */
 export type SpeechBubbleSize = "standard" | "prominent";
@@ -154,7 +154,7 @@ export function SpeechBubble({
         style={{
           position: "relative",
           zIndex: 1,
-          marginBottom: token("--space-2"),
+          marginBottom: token("--space-xs"),
           font: token("--t-popover-meta"),
           textTransform: "uppercase",
           letterSpacing: "0.12em",

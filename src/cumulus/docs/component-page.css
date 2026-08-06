@@ -12,7 +12,7 @@
 .cumulus-component-page__layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-8);
+  gap: var(--space-2xl);
   align-items: start;
 }
 

@@ -80,7 +80,7 @@ describe("CharacterDialogue", () => {
     expect(dialogue?.style.gridTemplateColumns).toBe("64px minmax(0, 1fr)");
     expect(dialogue?.style.maxWidth).toBe("300px");
     expect(bubble?.style.padding).toBe(
-      "var(--space-5) var(--space-5) var(--space-5) calc(14px + var(--space-5))",
+      "var(--space-m) var(--space-m) var(--space-m) calc(14px + var(--space-m))",
     );
     expect(bubble?.dataset.speechBubblePointerPlacement).toBe("left-center");
     expect(bubble?.dataset.speechBubbleSize).toBe("standard");

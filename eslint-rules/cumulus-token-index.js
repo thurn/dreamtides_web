@@ -147,8 +147,8 @@ function buildNameSet() {
 const TOKEN_NAME_SET = buildNameSet();
 
 /**
- * Every custom-property name declared in cumulus-tokens.css (semantic, bridge,
- * and primitive alike). `valid-token-references` checks literal `var(--x)`
+ * Every custom-property name declared in cumulus-tokens.css. The token file is
+ * the single public vocabulary; `valid-token-references` checks literal `var(--x)`
  * strings against this set; an empty set (stylesheet unreadable) makes that
  * rule degrade to a no-op rather than flag everything.
  */
@@ -158,8 +158,8 @@ export function knownTokenNames() {
 
 /**
  * The design token whose value equals `literal`, or null if none matches.
- * Primitive/bridge tokens are only ever returned when no cleaner role token
- * shares the color (they lose the {@link semanticRank} tie-break otherwise).
+ * Compatibility bridge tokens are only ever returned when no cleaner role
+ * token shares the color (they lose the suggestion-rank tie-break otherwise).
  */
 export function colorTokenFor(literal) {
   const key = normalizeColor(literal);

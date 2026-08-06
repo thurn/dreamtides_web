@@ -32,7 +32,7 @@ export function MotesMockup() {
           // Clears the fixed "← Back" affordance MockupView overlays at
           // top-left even on a narrow viewport, where this centered title
           // would otherwise sit underneath it.
-          top: token("--space-12"),
+          top: token("--space-6xl"),
           left: 0,
           right: 0,
           textAlign: "center",
@@ -49,7 +49,7 @@ export function MotesMockup() {
           style={{
             font: token("--t-caption"),
             color: token("--text-secondary"),
-            marginTop: token("--space-2"),
+            marginTop: token("--space-xs"),
           }}
         >
           Warm motes drift over the scene art; a chrome console below carries
@@ -63,7 +63,7 @@ export function MotesMockup() {
       <div
         style={{
           position: "absolute",
-          right: token("--space-6"),
+          right: token("--space-l"),
           top: "56%",
           width: "min(300px, 68vw)",
           zIndex: 3,
@@ -75,7 +75,7 @@ export function MotesMockup() {
             style={{
               position: "relative",
               zIndex: 2,
-              padding: token("--space-6"),
+              padding: token("--space-l"),
             }}
           >
             <p
@@ -93,7 +93,7 @@ export function MotesMockup() {
               style={{
                 font: token("--t-body"),
                 color: token("--text-primary"),
-                margin: `${token("--space-3")} 0 0`,
+                margin: `${token("--space-xs")} 0 0`,
               }}
             >
               The same particle field, tinted violet for a screen with no scene

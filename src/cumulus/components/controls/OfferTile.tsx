@@ -702,7 +702,7 @@ function CardArtMosaic({
         gridTemplateRows: `repeat(${String(rows)}, minmax(0, 1fr))`,
         width: OFFER_ART_STAGE_SIZE,
         height: OFFER_ART_STAGE_SIZE,
-        gap: cards.length > 1 ? token("--space-1") : 0,
+        gap: cards.length > 1 ? token("--space-xxs") : 0,
         pointerEvents: "none",
       }}
     >

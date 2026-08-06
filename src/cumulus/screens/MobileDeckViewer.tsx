@@ -137,9 +137,9 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
           WebkitOverflowScrolling: "touch",
           touchAction: "pan-y",
           overscrollBehaviorY: "contain",
-          padding: `${token("--space-5")} ${token("--gutter")} calc(${token(
+          padding: `${token("--space-m")} ${token("--gutter")} calc(${token(
             "--safe-bottom",
-          )} + ${token("--space-6")})`,
+          )} + ${token("--space-l")})`,
         }}
       >
         {view.cards.length === 0 ? (
@@ -151,7 +151,7 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
             style={{
               display: "grid",
               gridTemplateColumns: `repeat(${String(COLUMNS)}, 1fr)`,
-              gap: token("--space-4"),
+              gap: token("--space-s"),
             }}
           >
             {visibleCards.map((cardView) => (
@@ -208,7 +208,7 @@ function TopBand({
         paddingTop: `max(var(--safe-area-inset-top), ${token("--gutter")})`,
         paddingLeft: token("--gutter"),
         paddingRight: token("--gutter"),
-        paddingBottom: token("--space-4"),
+        paddingBottom: token("--space-s"),
         // A neutral hairline closing the band, at the strong step so it reads
         // clearly over the scene art the deck floats on.
         borderBottom: `1px solid ${token("--border-strong")}`,
@@ -226,7 +226,7 @@ function TopBand({
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            gap: token("--space-1"),
+            gap: token("--space-xxs"),
             pointerEvents: "none",
           }}
         >
@@ -264,7 +264,7 @@ function TopBand({
       </div>
 
       {/* The filter/sort control row. */}
-      <div style={{ marginTop: token("--space-5") }}>{controls}</div>
+      <div style={{ marginTop: token("--space-m") }}>{controls}</div>
     </div>
   );
 }
@@ -292,7 +292,7 @@ function DeckControls({
         flexWrap: "nowrap",
         alignItems: "center",
         justifyContent: "space-between",
-        gap: token("--space-3"),
+        gap: token("--space-xs"),
       }}
     >
       <Select

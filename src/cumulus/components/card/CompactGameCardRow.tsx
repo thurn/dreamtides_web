@@ -2,6 +2,7 @@ import type { CardData } from "../../../types/cards";
 import { cardImageUrl } from "../../../data/card-database";
 import { useRevealSource } from "../../internal/reveal/context";
 import { Pressable } from "../../primitives/Pressable";
+import { token } from "../../primitives/tokens";
 import { PipBadge } from "../controls/PipBadge";
 import { rulesTextDefinitionCards } from "./rules-text-reveal";
 
@@ -41,8 +42,8 @@ export function CompactGameCardRow({ card, count, testId, revealTestId, entryIds
       aria-label={`Deck card: ${card.name}${count === "1" ? "" : ` (${count} copies)`}`}
       style={{
         ...binding.sourceProps.style,
-        height: "36px", display: "flex", alignItems: "center", gap: "8px", overflow: "hidden",
-        borderRadius: "6px", padding: "0 8px",
+        height: "36px", display: "flex", alignItems: "center", gap: token("--space-s"), overflow: "hidden",
+        borderRadius: token("--radius-compact"), padding: `0 ${token("--space-s")}`,
         backgroundImage: `linear-gradient(90deg, rgba(10, 6, 18, 0.85) 0%, rgba(10, 6, 18, 0.35) 35%, rgba(10, 6, 18, 0.05) 65%, rgba(10, 6, 18, 0.45) 100%), url("${cardImageUrl(card.imageNumber)}")`,
         backgroundSize: "cover", backgroundPosition: "center 25%", backgroundRepeat: "no-repeat",
         border: `1px solid ${accentColor}55`,

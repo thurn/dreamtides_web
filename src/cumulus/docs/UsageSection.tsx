@@ -15,7 +15,7 @@ import type { CumulusUsageExample } from "./registry";
 const listStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
-  gap: token("--space-7"),
+  gap: token("--space-xl"),
 };
 
 const variantLabelStyle: CSSProperties = {
@@ -23,13 +23,13 @@ const variantLabelStyle: CSSProperties = {
   letterSpacing: token("--tracking-eyebrow"),
   textTransform: "uppercase",
   color: token("--accent-bright"),
-  margin: `0 0 ${token("--space-2")}`,
+  margin: `0 0 ${token("--space-xs")}`,
 };
 
 const variantNoteStyle: CSSProperties = {
   font: token("--t-body-sm"),
   color: token("--text-muted"),
-  margin: `0 0 ${token("--space-4")}`,
+  margin: `0 0 ${token("--space-s")}`,
   maxWidth: "64ch",
 };
 
@@ -47,7 +47,7 @@ const preStyle: CSSProperties = {
   margin: 0,
   maxWidth: "100%",
   boxSizing: "border-box",
-  padding: `${token("--space-6")} ${token("--space-6")}`,
+  padding: `${token("--space-l")} ${token("--space-l")}`,
   overflowX: "auto",
 };
 
@@ -63,12 +63,12 @@ const codeStyle: CSSProperties = {
 
 const copyButtonStyle: CSSProperties = {
   position: "absolute",
-  top: token("--space-4"),
-  right: token("--space-4"),
+  top: token("--space-s"),
+  right: token("--space-s"),
   display: "inline-flex",
   alignItems: "center",
-  gap: token("--space-2"),
-  padding: `${token("--space-2")} ${token("--space-4")}`,
+  gap: token("--space-xs"),
+  padding: `${token("--space-xs")} ${token("--space-s")}`,
   background: token("--surface-raised"),
   border: `1px solid ${token("--border-mid")}`,
   borderRadius: token("--radius-pill"),

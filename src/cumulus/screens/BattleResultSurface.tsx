@@ -97,10 +97,10 @@ function ReopenControl({
       data-battle-result-reopen={outcome}
       style={{
         position: "fixed",
-        right: `max(var(--safe-area-inset-right), ${token("--space-5")})`,
-        bottom: `max(var(--safe-area-inset-bottom), ${token("--space-5")})`,
+        right: `max(var(--safe-area-inset-right), ${token("--space-m")})`,
+        bottom: `max(var(--safe-area-inset-bottom), ${token("--space-m")})`,
         zIndex: 80,
-        width: `min(${String(REOPEN_CONTROL_MAX_WIDTH_PX)}px, calc(100vw - ${token("--space-10")}))`,
+        width: `min(${String(REOPEN_CONTROL_MAX_WIDTH_PX)}px, calc(100vw - ${token("--space-4xl")}))`,
       }}
     >
       <GlassButton
@@ -149,10 +149,10 @@ function VictoryReward({
           ? `minmax(0, 1fr) ${MOBILE_BATTLE_INSPECTOR_RAIL_TRACK}`
           : "minmax(0, 1fr)",
         placeItems: "center",
-        paddingTop: `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${token("--space-10")})`,
-        paddingRight: `max(var(--safe-area-inset-right), ${token("--space-6")})`,
-        paddingBottom: `calc(max(var(--safe-area-inset-bottom), ${token("--safe-bottom")}) + ${token("--space-8")})`,
-        paddingLeft: `max(var(--safe-area-inset-left), ${token("--space-6")})`,
+        paddingTop: `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${token("--space-4xl")})`,
+        paddingRight: `max(var(--safe-area-inset-right), ${token("--space-l")})`,
+        paddingBottom: `calc(max(var(--safe-area-inset-bottom), ${token("--safe-bottom")}) + ${token("--space-2xl")})`,
+        paddingLeft: `max(var(--safe-area-inset-left), ${token("--space-l")})`,
       }}
     >
       <Motes on tint="warm" count={18} seed={44} zIndex={1} />
@@ -169,7 +169,7 @@ function VictoryReward({
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: token("--space-6"),
+          gap: token("--space-l"),
           textAlign: "center",
         }}
       >
@@ -178,7 +178,7 @@ function VictoryReward({
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: token("--space-3"),
+            gap: token("--space-xs"),
           }}
         >
           <h1
@@ -214,8 +214,8 @@ function VictoryReward({
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                gap: token("--space-3"),
-                padding: token("--space-6"),
+                gap: token("--space-xs"),
+                padding: token("--space-l"),
               }}
             >
               <span
@@ -294,10 +294,10 @@ function DefeatOrDrawResult({
           ? `minmax(0, 1fr) ${MOBILE_BATTLE_INSPECTOR_RAIL_TRACK}`
           : "minmax(0, 1fr)",
         placeItems: "center",
-        paddingTop: `max(var(--safe-area-inset-top), ${token("--space-6")})`,
-        paddingRight: `max(var(--safe-area-inset-right), ${token("--space-6")})`,
-        paddingBottom: `max(var(--safe-area-inset-bottom), ${token("--space-6")})`,
-        paddingLeft: `max(var(--safe-area-inset-left), ${token("--space-6")})`,
+        paddingTop: `max(var(--safe-area-inset-top), ${token("--space-l")})`,
+        paddingRight: `max(var(--safe-area-inset-right), ${token("--space-l")})`,
+        paddingBottom: `max(var(--safe-area-inset-bottom), ${token("--space-l")})`,
+        paddingLeft: `max(var(--safe-area-inset-left), ${token("--space-l")})`,
       }}
     >
       <div
@@ -316,8 +316,8 @@ function DefeatOrDrawResult({
               display: "flex",
               flexDirection: "column",
               alignItems: "stretch",
-              gap: token("--space-6"),
-              padding: token("--space-6"),
+              gap: token("--space-l"),
+              padding: token("--space-l"),
               textAlign: "center",
             }}
           >
@@ -336,7 +336,7 @@ function DefeatOrDrawResult({
                 display: "flex",
                 flexWrap: "wrap",
                 justifyContent: "center",
-                gap: token("--space-4"),
+                gap: token("--space-s"),
               }}
             >
               <GlassButton

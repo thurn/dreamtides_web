@@ -259,7 +259,7 @@ makes the chevrons real glass. **This is a visible change; QA it.**
   `glyph={dir === "left" ? GLYPHS.chevronLeft : GLYPHS.chevronRight}`,
   `label={dir === "left" ? "Previous" : "Next"}`, `onPress={onClick}`.
 - Keep the absolute positioning on a wrapper `<div>` (the chevron pins to the
-  carousel edge at `top:46%`, `[dir]: token("--space-3")`, `zIndex:6`), and keep
+  carousel edge at `top:46%`, `[dir]: token("--space-xs")`, `zIndex:6`), and keep
   the `onPointerDown` `stopPropagation` guard on that wrapper (it stops a chevron
   tap from starting a swipe).
 - Remove now-unused imports (`Pressable`, `GlowIcon`, and the `--surface-glass`/

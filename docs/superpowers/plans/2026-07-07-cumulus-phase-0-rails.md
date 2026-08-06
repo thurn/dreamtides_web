@@ -342,7 +342,7 @@ export const BASELINE = [
   "--shadow-sm",
   "--sheet-grab",
   "--space-0",
-  "--space-12",
+  "--space-6xl",
   "--stagger-travel",
   "--surface-chip",
   "--t-button",
@@ -399,7 +399,7 @@ Verified: every registry entry has ≥1 value consumer except `StatTile` (0) and
 Steps:
 
 - [ ] Add the optional field to the `CumulusComponent` interface in `src/cumulus/docs/registry.ts`, after the `callout?` field: `status?: "incubating"`. Document it as the sanctioned escape from the ghost-components check — a component documented deliberately ahead of adoption, rendered as a visible "Incubating" badge; omit for shipped components (every entry should have a real consumer by Phase 3).
-- [ ] Add a minimal incubating badge to `src/cumulus/docs/ComponentPage.tsx`, immediately after the page `</h1>`. It renders `Incubating` only when `entry.status === "incubating"`, as an inline-block pill styled purely with `token(...)` values (the docs tier is exempt from the visual lint rules, but `token()` is typed — use only keys that exist). Suggested tokens: `--space-3` (margin-top), `--space-1`/`--space-3` (padding), `--radius-pill`, `--t-lead` (font), `--text-on-accent` (color), `--accent` (background). If `typecheck` rejects any name, substitute the nearest existing token (grep `src/cumulus/primitives/tokens.ts` for valid keys).
+- [ ] Add a minimal incubating badge to `src/cumulus/docs/ComponentPage.tsx`, immediately after the page `</h1>`. It renders `Incubating` only when `entry.status === "incubating"`, as an inline-block pill styled purely with `token(...)` values (the docs tier is exempt from the visual lint rules, but `token()` is typed — use only keys that exist). Suggested tokens: `--space-xs` (margin-top), `--space-xxs`/`--space-xs` (padding), `--radius-pill`, `--t-lead` (font), `--text-on-accent` (color), `--accent` (background). If `typecheck` rejects any name, substitute the nearest existing token (grep `src/cumulus/primitives/tokens.ts` for valid keys).
 - [ ] Write `scripts/lib/cumulus-consumers.mjs` to the helper contract above.
 - [ ] Write `scripts/cumulus-ghost-components.test.mjs` (`// @vitest-environment node`), importing `computeConsumerCounts`. BASELINE is a data contract:
   ```js

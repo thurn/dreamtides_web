@@ -23,10 +23,10 @@ export function CoopPresenceStatus({
       style={{
         ...glassSurfaceStyle({ radius: token("--radius-control") }),
         position: "fixed",
-        top: token("--space-3"),
+        top: token("--space-xs"),
         left: "50%",
         zIndex: 40,
-        padding: token("--space-2"),
+        padding: token("--space-xs"),
         color: token("--text-on-glass-muted"),
         font: token("--t-eyebrow"),
         opacity: 0.72,

@@ -250,7 +250,7 @@ describe("GlassDialog", () => {
     expect(layout?.style.gridTemplateColumns).toBe(
       "360px minmax(0, 460px)",
     );
-    expect(layout?.style.width).toBe("calc(820px + var(--space-7))");
+    expect(layout?.style.width).toBe("calc(820px + var(--space-xl))");
     expect(panel?.style.width).toBe("100%");
     expect(panel?.style.boxSizing).toBe("border-box");
     expect(container.querySelector('[data-testid="companion"]')).not.toBeNull();
@@ -281,7 +281,7 @@ describe("GlassDialog", () => {
       "calc(100vw - var(--gutter) - var(--gutter))",
     );
     expect(layout?.style.maxWidth).toBe("460px");
-    expect(layout?.style.gap).toBe("var(--space-5)");
+    expect(layout?.style.gap).toBe("var(--space-m)");
     const companion = container.querySelector<HTMLElement>(
       "[data-glass-dialog-companion]",
     );
@@ -314,8 +314,8 @@ describe("GlassDialog", () => {
     expect(dialog?.querySelector("header")).toBeNull();
     expect(dialog?.querySelector("h2")).toBeNull();
     expect(closeOnly?.style.position).toBe("absolute");
-    expect(closeOnly?.style.top).toBe("var(--space-6)");
-    expect(closeOnly?.style.right).toBe("var(--space-6)");
+    expect(closeOnly?.style.top).toBe("var(--space-l)");
+    expect(closeOnly?.style.right).toBe("var(--space-l)");
     expect(
       closeOnly?.querySelector('button[aria-label="Close"]'),
     ).not.toBeNull();
@@ -349,8 +349,8 @@ describe("GlassDialog", () => {
     expect(dialog?.querySelector("h2")).toBeNull();
     expect(body?.firstElementChild).toBe(flowingClose);
     expect(flowingClose?.style.cssFloat).toBe("right");
-    expect(flowingClose?.style.marginTop).toBe("var(--space-1)");
-    expect(flowingClose?.style.marginRight).toBe("var(--space-1)");
+    expect(flowingClose?.style.marginTop).toBe("var(--space-xxs)");
+    expect(flowingClose?.style.marginRight).toBe("var(--space-xxs)");
     expect(
       flowingClose?.querySelector('button[aria-label="Close"]'),
     ).not.toBeNull();
@@ -393,8 +393,8 @@ describe("GlassDialog", () => {
     const dialog = container.querySelector<HTMLElement>('[role="dialog"]');
     expect(dialog?.style.position).toBe("fixed");
     expect(dialog?.style.inset).toBe("0px");
-    expect(dialog?.style.paddingLeft).toBe("var(--space-7)");
-    expect(dialog?.style.paddingRight).toBe("calc(var(--space-7) + 360px)");
+    expect(dialog?.style.paddingLeft).toBe("var(--space-xl)");
+    expect(dialog?.style.paddingRight).toBe("calc(var(--space-xl) + 360px)");
     expect(
       dialog?.getAttribute("data-glass-dialog-desktop-center-target"),
     ).toBe("battlefield");

@@ -20,7 +20,7 @@ const sectionHeadingStyle: React.CSSProperties = {
   letterSpacing: token("--tracking-eyebrow"),
   textTransform: "uppercase",
   color: token("--text-muted"),
-  margin: `0 0 ${token("--space-5")}`,
+  margin: `0 0 ${token("--space-m")}`,
 };
 
 // The page-level nav row (← Overview / View full-screen mockup →) pinned to the
@@ -34,9 +34,9 @@ const stickyNavStyle: React.CSSProperties = {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "baseline",
-  gap: token("--space-4"),
+  gap: token("--space-s"),
   flexWrap: "wrap",
-  padding: `${token("--space-4")} 0`,
+  padding: `${token("--space-s")} 0`,
   background: token("--bg-app"),
   borderBottom: `1px solid ${token("--border-soft")}`,
 };
@@ -51,10 +51,10 @@ function Callout({ text }: { text: string }) {
     <div
       style={{
         display: "flex",
-        gap: token("--space-3"),
-        marginTop: token("--space-6"),
+        gap: token("--space-xs"),
+        marginTop: token("--space-l"),
         maxWidth: "64ch",
-        padding: `${token("--space-4")} ${token("--space-5")}`,
+        padding: `${token("--space-s")} ${token("--space-m")}`,
         background: token("--accent-tint"),
         border: `1px solid ${token("--border-accent")}`,
         borderRadius: token("--radius-control"),
@@ -100,7 +100,7 @@ export function ComponentPage({ id }: { id: string }) {
   const metas = metasFor(entry.docName);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: token("--space-9") }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: token("--space-3xl") }}>
       <nav style={stickyNavStyle}>
         <a
           href="#/"
@@ -126,8 +126,8 @@ export function ComponentPage({ id }: { id: string }) {
           <span
             style={{
               display: "inline-block",
-              marginTop: token("--space-3"),
-              padding: `${token("--space-1")} ${token("--space-3")}`,
+              marginTop: token("--space-xs"),
+              padding: `${token("--space-xxs")} ${token("--space-xs")}`,
               borderRadius: token("--radius-pill"),
               font: token("--t-caption"),
               color: token("--text-on-accent"),
@@ -141,7 +141,7 @@ export function ComponentPage({ id }: { id: string }) {
           style={{
             font: token("--t-lead"),
             color: token("--text-secondary"),
-            margin: `${token("--space-4")} 0 0`,
+            margin: `${token("--space-s")} 0 0`,
             maxWidth: "64ch",
           }}
         >
@@ -161,7 +161,7 @@ export function ComponentPage({ id }: { id: string }) {
         </section>
         <section
           style={{
-            padding: token("--space-6"),
+            padding: token("--space-l"),
             background: token("--surface-card"),
             border: `1px solid ${token("--border-soft")}`,
             borderRadius: token("--radius-control"),

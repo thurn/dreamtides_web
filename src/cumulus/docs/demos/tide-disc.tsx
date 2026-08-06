@@ -18,8 +18,8 @@ function TideDiscDemo() {
         position: "relative",
         display: "flex",
         flexDirection: "column",
-        gap: token("--space-4"),
-        padding: token("--space-4"),
+        gap: token("--space-s"),
+        padding: token("--space-s"),
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>

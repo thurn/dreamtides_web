@@ -101,7 +101,7 @@ export function ViewportTutorialDialogue({
               height: anchor.offsetHeight,
             };
       const gap = Number.parseFloat(
-        window.getComputedStyle(layout).getPropertyValue("--space-4"),
+        window.getComputedStyle(layout).getPropertyValue("--space-s"),
       );
       const resolvedGap = Number.isFinite(gap) ? gap : 0;
       if (
@@ -201,8 +201,8 @@ export function ViewportTutorialDialogue({
           bottom: position?.bottom ?? undefined,
           visibility: position === null ? "hidden" : "visible",
           width: desktop
-            ? `min(calc(100vw - (${token("--space-4")} * 2)), ${String(view.bubbleWidth)}px)`
-            : `calc(100vw - (${token("--space-4")} * 2))`,
+            ? `min(calc(100vw - (${token("--space-s")} * 2)), ${String(view.bubbleWidth)}px)`
+            : `calc(100vw - (${token("--space-s")} * 2))`,
           maxWidth: view.bubbleWidth,
         }}
       >

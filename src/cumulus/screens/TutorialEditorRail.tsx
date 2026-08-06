@@ -491,7 +491,7 @@ function SpeechBubbleEditor({
   return (
     <div
       data-tutorial-speech-bubble-editor=""
-      style={{ display: "grid", gap: token("--space-4") }}
+      style={{ display: "grid", gap: token("--space-s") }}
     >
       <Select
         full
@@ -723,8 +723,8 @@ function TutorialActionRow({
       <article
         style={{
           display: "grid",
-          gap: token("--space-4"),
-          padding: token("--space-4"),
+          gap: token("--space-s"),
+          padding: token("--space-s"),
           border: `1px solid ${token("--border-strong")}`,
           borderRadius: token("--radius-control"),
         }}
@@ -734,7 +734,7 @@ function TutorialActionRow({
             display: "grid",
             gridTemplateColumns: "auto minmax(0, 1fr) auto auto",
             alignItems: "center",
-            gap: token("--space-2"),
+            gap: token("--space-xs"),
           }}
         >
           <Pressable
@@ -1353,12 +1353,12 @@ function TutorialEditorContent({
     actions[Math.max(0, actions.length - TUTORIAL_TAIL_ACTION_COUNT)];
   const tailActionCount = Math.min(TUTORIAL_TAIL_ACTION_COUNT, actions.length);
   return (
-    <div style={{ display: "grid", gap: token("--space-5") }}>
+    <div style={{ display: "grid", gap: token("--space-m") }}>
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-          gap: token("--space-3"),
+          gap: token("--space-xs"),
         }}
       >
         <GlassButton
@@ -1393,7 +1393,7 @@ function TutorialEditorContent({
         }}
         style={{
           display: "grid",
-          gap: token("--space-4"),
+          gap: token("--space-s"),
           margin: 0,
           padding: 0,
         }}
@@ -1448,7 +1448,7 @@ function TutorialEditorSaveFooter({
         display: "flex",
         alignItems: "center",
         minHeight: token("--touch-min"),
-        paddingInline: token("--space-5"),
+        paddingInline: token("--space-m"),
         borderTop: `1px solid ${token("--border-strong")}`,
       }}
     >
@@ -1515,7 +1515,7 @@ export function TutorialEditorTakeover({
         data-tutorial-editor="takeover"
         style={{
           display: "grid",
-          gap: token("--space-5"),
+          gap: token("--space-m"),
           width: "100%",
           maxWidth: 720,
           marginInline: "auto",

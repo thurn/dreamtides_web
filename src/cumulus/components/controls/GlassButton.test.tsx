@@ -115,7 +115,7 @@ describe("GlassButton", () => {
     expect(
       content?.querySelector<HTMLElement>("[data-glass-button-essence-cost]")
         ?.style.marginLeft,
-    ).toBe("var(--space-2)");
+    ).toBe("var(--space-xs)");
     act(() => {
       root.render(
         <GlassButton
@@ -245,7 +245,7 @@ describe("GlassButton", () => {
 
     const button = container.querySelector<HTMLButtonElement>("button");
     expect(button?.style.height).toBe("42px");
-    expect(button?.style.padding).toBe("0px 8px");
+    expect(button?.style.padding).toBe("0 var(--space-s)");
     expect(button?.style.font).toBe("var(--t-button-sm)");
 
     act(() => root.unmount());
@@ -258,7 +258,7 @@ describe("GlassButton", () => {
 
     const button = container.querySelector<HTMLButtonElement>("button");
     expect(button?.style.height).toBe("56px");
-    expect(button?.style.padding).toBe("0px 24px");
+    expect(button?.style.padding).toBe("0 var(--space-2xl)");
     expect(button?.style.font).toBe("var(--t-button-lg)");
 
     act(() => root.unmount());

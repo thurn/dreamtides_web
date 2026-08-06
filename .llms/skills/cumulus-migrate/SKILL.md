@@ -42,7 +42,7 @@ state (hover, selection, animation phase) lives here.
 - The root element carries `className="cumulus"` — the design tokens are scoped
   to that class — plus `minHeight: "100vh"` and its own layout styles. This is
   the only `className` in the file; all other styling is token-valued inline
-  style objects (`token("--space-6")`, `token("--surface-card")`).
+  style objects (`token("--space-l")`, `token("--surface-card")`).
 - Type is applied one voice at a time: `font: token("--t-body")`. A `--t-*`
   token is a complete font shorthand; never compose weight or face around it
   (lint: `cumulus/no-composed-type-voice`). `fontStyle: "italic"` may be layered

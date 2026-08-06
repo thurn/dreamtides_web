@@ -219,10 +219,10 @@ radius, a shadow, an animation duration — comes from the token vocabulary in
 by role with values and notes, is [tokens.md](tokens.md); the live specimen
 view is the Design Tokens section of `/cumulus`.
 
-**How to reference a token.** In Cumulus TS/TSX, call `token("--space-6")` from
+**How to reference a token.** In Cumulus TS/TSX, call `token("--space-l")` from
 `src/cumulus/primitives/tokens.ts` — it is typed against the real token names
-and returns the `var(--space-6)` string for inline styles. In CSS, write
-`var(--space-6)`. Tokens are scoped to the `.cumulus` subtree.
+and returns the `var(--space-l)` string for inline styles. In CSS, write
+`var(--space-l)`. Tokens are scoped to the `.cumulus` subtree.
 
 **One public vocabulary.** Every token is available to UI code and names a
 visual role or a sanctioned scale. Role tokens such as `--surface-card`,
@@ -245,8 +245,9 @@ tokens (`--dur-*`, `--ease-*`, `--motion-object-travel`,
 
 **Choosing a token.** Pick by role, never by resolved value — use
 `--text-secondary` because the text is secondary, not because you like its
-hex; `--space-6` because it is the scale step the neighboring UI uses, not
-because 16px looked right. If no existing token expresses the role, that is a
+hex; use `--space-l` because the layout needs a large rhythm step, not because
+16px looked right. Spacing from `--space-xs` upward sits on the 4px content
+grid; reserve `--space-xxs` for tight optical separation. If no existing token expresses the role, that is a
 token-system conversation (add a named token in `cumulus-tokens.css`, then run
 `npm run cumulus-tokens`) — never a raw px/hex literal in product UI code. This is
 lint-enforced in product UI: `no-hardcoded-values` catches raw colors,

@@ -33,7 +33,7 @@ export function DisclosureSection({
       data-testid={testId}
       data-disclosure-expanded={expanded ? "true" : "false"}
       style={{
-        padding: token("--space-6"),
+        padding: token("--space-l"),
         borderTop: `1px solid ${token("--border-soft")}`,
       }}
     >
@@ -51,7 +51,7 @@ export function DisclosureSection({
           display: "grid",
           gridTemplateColumns: "minmax(0, 1fr) auto",
           alignItems: "center",
-          gap: token("--space-3"),
+          gap: token("--space-xs"),
           textAlign: "start",
         }}
       >
@@ -63,7 +63,7 @@ export function DisclosureSection({
             <span
               style={{
                 display: "block",
-                marginTop: token("--space-1"),
+                marginTop: token("--space-xxs"),
                 color: token("--text-on-glass-muted"),
                 font: token("--t-caption"),
               }}
@@ -83,8 +83,8 @@ export function DisclosureSection({
         <div
           style={{
             display: "grid",
-            gap: token("--space-3"),
-            marginTop: token("--space-5"),
+            gap: token("--space-xs"),
+            marginTop: token("--space-m"),
           }}
         >
           {children}

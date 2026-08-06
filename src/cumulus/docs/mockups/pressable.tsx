@@ -36,9 +36,9 @@ function Tile({ icon, label, sub, emphasis = false }: TileSpec) {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: token("--space-4"),
+        gap: token("--space-s"),
         width: "clamp(140px, 20vw, 190px)",
-        padding: `${token("--space-8")} ${token("--space-5")}`,
+        padding: `${token("--space-2xl")} ${token("--space-m")}`,
         borderRadius: token("--radius-panel"),
         border: `1px solid ${emphasis ? token("--border-accent") : token("--border-soft")}`,
         background: emphasis ? token("--accent") : token("--surface-chrome"),
@@ -94,8 +94,8 @@ export function PressableMockup() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        gap: token("--space-9"),
-        padding: token("--space-9"),
+        gap: token("--space-3xl"),
+        padding: token("--space-3xl"),
       }}
     >
       <div style={{ textAlign: "center", pointerEvents: "none" }}>
@@ -113,7 +113,7 @@ export function PressableMockup() {
         <h1
           style={{
             font: token("--t-display"),
-            margin: `${token("--space-3")} 0 0`,
+            margin: `${token("--space-xs")} 0 0`,
             color: token("--text-primary"),
           }}
         >
@@ -125,7 +125,7 @@ export function PressableMockup() {
         style={{
           display: "flex",
           flexWrap: "wrap",
-          gap: token("--space-6"),
+          gap: token("--space-l"),
           justifyContent: "center",
         }}
       >

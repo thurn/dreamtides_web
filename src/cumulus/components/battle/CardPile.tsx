@@ -73,8 +73,8 @@ const LANDSCAPE_ASPECT_RATIO = `${String(CARD_ASPECT_H)} / ${String(CARD_ASPECT_
 const LANDSCAPE_CARD_WIDTH = `${String((CARD_ASPECT_W / CARD_ASPECT_H) * 100)}%`;
 const LAYER_SHIFT_BY_RAISED_LAYERS = [
   "0",
-  token("--space-1"),
-  token("--space-2"),
+  token("--space-xxs"),
+  token("--space-xs"),
 ] as const;
 
 function cardStageStyle(orientation: CardPileOrientation): CSSProperties {

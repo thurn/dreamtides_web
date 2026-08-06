@@ -203,7 +203,7 @@ function DreamsignBazaarGallery({
         minHeight: 0,
         height: "100%",
         maxHeight: "100%",
-        width: desktop ? "100%" : `calc(100vw - (${token("--space-4")} * 2))`,
+        width: desktop ? "100%" : `calc(100vw - (${token("--space-s")} * 2))`,
         maxWidth: desktop ? DESKTOP_GALLERY_MAX_WIDTH : "100%",
         boxSizing: "border-box",
         pointerEvents: "auto",
@@ -319,7 +319,7 @@ function DreamsignReplacementDialog({
         zIndex: 80,
         display: "grid",
         placeItems: "center",
-        padding: token("--space-6"),
+        padding: token("--space-l"),
         background: token("--scrim"),
         pointerEvents: "auto",
       }}
@@ -327,10 +327,10 @@ function DreamsignReplacementDialog({
       <div
         style={{
           width: "min(100%, 440px)",
-          maxHeight: `calc(100dvh - ${token("--space-12")})`,
+          maxHeight: `calc(100dvh - ${token("--space-6xl")})`,
           overflow: "auto",
           boxSizing: "border-box",
-          padding: token("--space-6"),
+          padding: token("--space-l"),
           background: token("--surface-chrome-strong"),
           border: `1px solid ${token("--border-soft")}`,
           borderRadius: token("--radius-panel"),
@@ -350,7 +350,7 @@ function DreamsignReplacementDialog({
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(4, 1fr)",
-            gap: token("--space-4"),
+            gap: token("--space-s"),
           }}
         >
           {purge.currentDreamsigns.map((dreamsign, index) => (
@@ -363,14 +363,14 @@ function DreamsignReplacementDialog({
             />
           ))}
         </div>
-        <div style={{ marginTop: token("--space-6"), textAlign: "center" }}>
+        <div style={{ marginTop: token("--space-l"), textAlign: "center" }}>
           <Pressable
             as="button"
             onClick={onCancel}
             style={{
               border: 0,
               background: "transparent",
-              padding: token("--space-3"),
+              padding: token("--space-xs"),
               font: token("--t-button-sm"),
               color: token("--text-secondary"),
             }}

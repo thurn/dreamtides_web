@@ -31,7 +31,7 @@ const DEMO_FIXTURE = `
 import { Widget } from "../../components/Widget";
 import type { CumulusComponent } from "../registry";
 
-const localStyle = { padding: \`\${token("--space-4")}\` };
+const localStyle = { padding: \`\${token("--space-s")}\` };
 
 export const widgetDemo: CumulusComponent = {
   id: "widget",
@@ -280,7 +280,7 @@ describe("extractTokenNotes", () => {
 .cumulus {
   --gutter: 18px;   /* default horizontal page padding */
   --inset-top: inset 0 1px 0 rgba(255, 255, 255, 0.08);  /* @kind shadow */
-  --space-6: 16px;
+  --space-l: 16px;
 
   /* ---- a section banner comment, not a note ---- */
   --accent: #9333ea;
@@ -289,7 +289,7 @@ describe("extractTokenNotes", () => {
     const notes = extractTokenNotes(css);
     expect(notes.get("gutter")).toBe("default horizontal page padding");
     expect(notes.has("inset-top")).toBe(false);
-    expect(notes.has("space-6")).toBe(false);
+    expect(notes.has("space-l")).toBe(false);
     expect(notes.has("accent")).toBe(false);
   });
 
@@ -306,7 +306,7 @@ describe("renderTokensMarkdown", () => {
   const tokens = [
     { name: "surface-card", value: "#1a1525" },
     { name: "accent-strong", value: "#7c3aed" },
-    { name: "space-6", value: "16px" },
+    { name: "space-l", value: "16px" },
     { name: "t-body", value: "400 15px/1.55 var(--font-ui)" },
     { name: "reward", value: "#d4a017" },
     { name: "zz-unclassified", value: "1px" },
@@ -320,7 +320,7 @@ describe("renderTokensMarkdown", () => {
     expect(markdown.indexOf("| `--accent-strong` |")).toBeGreaterThan(
       markdown.indexOf("## Color roles"),
     );
-    expect(markdown.indexOf("| `--space-6` |")).toBeGreaterThan(
+    expect(markdown.indexOf("| `--space-l` |")).toBeGreaterThan(
       markdown.indexOf("## Spacing & layout"),
     );
     expect(markdown.indexOf("| `--reward` |")).toBeGreaterThan(
@@ -346,9 +346,9 @@ describe("renderTokensMarkdown", () => {
   it("carries notes into the token rows", () => {
     const markdown = renderTokensMarkdown(
       tokens,
-      new Map([["space-6", "the default gap"]]),
+      new Map([["space-l", "the default gap"]]),
     );
-    expect(markdown).toContain("| `--space-6` | `16px` | the default gap |");
+    expect(markdown).toContain("| `--space-l` | `16px` | the default gap |");
   });
 });
 

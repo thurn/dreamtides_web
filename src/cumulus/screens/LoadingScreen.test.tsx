@@ -229,7 +229,7 @@ describe("LoadingScreen", () => {
 
     expect(screen?.style.height).toBe("100dvh");
     expect(screen?.style.minHeight).toBe("");
-    expect(stage?.style.gap).toBe("var(--space-12)");
+    expect(stage?.style.gap).toBe("var(--space-6xl)");
     expect(cards).toHaveLength(2);
     expect(
       cards.every((card) =>
@@ -237,7 +237,7 @@ describe("LoadingScreen", () => {
       ),
     ).toBe(true);
     expect(footer?.style.bottom).toBe(
-      "max(var(--safe-area-inset-bottom), var(--space-3))",
+      "max(var(--safe-area-inset-bottom), var(--space-xs))",
     );
   });
 

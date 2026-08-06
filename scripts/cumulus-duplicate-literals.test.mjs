@@ -52,12 +52,12 @@ export const BASELINE = [
   // Battle result and tutorial result surfaces share the same safe-area-aware
   // mobile content padding while remaining separate screen compositions.
   [
-    'max(var(--safe-area-inset-left), ${token("--space-6")})',
+    'max(var(--safe-area-inset-left), ${token("--space-l")})',
     "src/cumulus/screens/BattleResultSurface.tsx",
     "src/cumulus/screens/TutorialBattleScreen.tsx",
   ],
   [
-    'max(var(--safe-area-inset-right), ${token("--space-6")})',
+    'max(var(--safe-area-inset-right), ${token("--space-l")})',
     "src/cumulus/screens/BattleResultSurface.tsx",
     "src/cumulus/screens/TutorialBattleScreen.tsx",
   ],

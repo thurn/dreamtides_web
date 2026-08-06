@@ -140,24 +140,23 @@ Each --t-* bundles face + weight + size/line-height: apply a voice with one toke
 
 ## Spacing & layout
 
-The --space-* scale is the approved spacing system for all layout (margins, padding, gaps) — including the wrapper elements callers use to size and place Cumulus components.
+The named --space-* scale places content rhythm on a 4px grid. Use --space-xxs only for tight 2px optical separation; device and object geometry use their named measures.
 
 | Token | Value | Notes |
 | --- | --- | --- |
-| `--space-1` | `2px` |  |
-| `--space-2` | `4px` |  |
-| `--space-3` | `6px` |  |
-| `--space-4` | `8px` |  |
-| `--space-5` | `12px` |  |
-| `--space-6` | `16px` |  |
-| `--space-7` | `20px` |  |
-| `--space-8` | `24px` |  |
-| `--space-9` | `32px` |  |
-| `--space-10` | `40px` |  |
-| `--space-11` | `48px` |  |
-| `--space-12` | `64px` |  |
-| `--gutter` | `18px` | default horizontal page padding |
-| `--gutter-tight` | `12px` | dense grids |
+| `--space-xxs` | `2px` |  |
+| `--space-xs` | `4px` |  |
+| `--space-s` | `8px` |  |
+| `--space-m` | `12px` |  |
+| `--space-l` | `16px` |  |
+| `--space-xl` | `20px` |  |
+| `--space-2xl` | `24px` |  |
+| `--space-3xl` | `32px` |  |
+| `--space-4xl` | `40px` |  |
+| `--space-5xl` | `48px` |  |
+| `--space-6xl` | `64px` |  |
+| `--gutter` | `var(--space-xl)` | default horizontal page padding |
+| `--gutter-tight` | `var(--space-m)` | dense grids |
 | `--touch-min` | `44px` | never smaller — Apple HIG floor |
 | `--hud-h` | `64px` | persistent bottom resource bar |
 | `--sheet-grab` | `36px` | drag handle width on bottom sheets |

@@ -68,7 +68,7 @@ export function BattleDeckOrderOverlay({
         data-battle-deck-order-picker=""
         data-battle-deck-order-scope={scope}
         data-battle-deck-order-side={side}
-        style={{ display: "grid", gap: token("--space-5") }}
+        style={{ display: "grid", gap: token("--space-m") }}
       >
         <CardOrderEditor
           label={label}
@@ -79,7 +79,7 @@ export function BattleDeckOrderOverlay({
           style={{
             display: "flex",
             justifyContent: "flex-end",
-            gap: token("--space-3"),
+            gap: token("--space-xs"),
           }}
         >
           <GlassButton

@@ -154,14 +154,14 @@ export function GlassButton({
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
-        gap: 8,
+        gap: token("--space-s"),
         height: GLASS_BUTTON_HEIGHT[size],
         padding:
           size === "prominent"
-            ? "0 24px"
+            ? `0 ${token("--space-2xl")}`
             : size === "compact"
-              ? "0 8px"
-              : "0 14px",
+              ? `0 ${token("--space-s")}`
+              : `0 ${token("--space-l")}`,
         boxSizing: "border-box",
         font:
           size === "prominent"
@@ -254,7 +254,7 @@ function GlassButtonContent({
       {essenceCost !== null && (
         <span
           data-glass-button-essence-cost=""
-          style={{ marginLeft: token("--space-2") }}
+          style={{ marginLeft: token("--space-xs") }}
         >
           {" · "}
           <EssenceValue amount={essenceCost} tone="inherit" />
@@ -263,7 +263,7 @@ function GlassButtonContent({
       {essenceValue !== null && (
         <span
           data-glass-button-essence-value=""
-          style={{ marginLeft: token("--space-2") }}
+          style={{ marginLeft: token("--space-xs") }}
         >
           <EssenceValue amount={essenceValue} tone="inherit" />
         </span>

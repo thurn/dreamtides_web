@@ -29,9 +29,9 @@ export interface ControlChrome {
    */
   track: CSSProperties;
   /** Inner padding of the track around its segments (the frame breathing room). */
-  trackPadding: number;
-  /** Gap (px) between segments abutting inside the track. */
-  segmentGap: number;
+  trackPadding: string;
+  /** Gap between segments abutting inside the track. */
+  segmentGap: string;
   /** Corner radius (token string) for segments / chips within the track. */
   segmentRadius: string;
   /** Style applied to every segment before the active/inactive overlay. */
@@ -119,8 +119,8 @@ export function controlChrome(
     // White so the leading glyph and dropdown caret read crisply against the
     // frosted glass.
     triggerGlyphColor: "text-primary",
-    trackPadding: 4,
-    segmentGap: 2,
+    trackPadding: token("--space-xs"),
+    segmentGap: token("--space-xxs"),
     segmentRadius: token("--radius-compact"),
     segmentBase: {},
     // A neutral frosted well — this surface reads as glass, not brand. The fill

@@ -28,7 +28,7 @@ const pageStyle: CSSProperties = {
   background: token("--bg-app"),
   color: token("--text-primary"),
   fontFamily: token("--font-ui"),
-  padding: token("--space-9"),
+  padding: token("--space-3xl"),
   boxSizing: "border-box",
 };
 
@@ -97,14 +97,14 @@ function Overview() {
   return (
     <div>
       <TableOfContents entries={tocEntries} />
-      <header style={{ marginBottom: token("--space-10") }}>
+      <header style={{ marginBottom: token("--space-4xl") }}>
         <p
           style={{
             font: token("--t-eyebrow"),
             letterSpacing: token("--tracking-eyebrow"),
             textTransform: "uppercase",
             color: token("--accent-bright"),
-            margin: `0 0 ${token("--space-3")}`,
+            margin: `0 0 ${token("--space-xs")}`,
           }}
         >
           Design System
@@ -123,7 +123,7 @@ function Overview() {
           Components coming soon.
         </p>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: token("--space-10") }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: token("--space-4xl") }}>
           {groups.map(({ group, entries }) => (
             <section key={group} id={groupAnchorId(group)}>
               <h2
@@ -132,12 +132,12 @@ function Overview() {
                   letterSpacing: token("--tracking-eyebrow"),
                   textTransform: "uppercase",
                   color: token("--text-muted"),
-                  margin: `0 0 ${token("--space-6")}`,
+                  margin: `0 0 ${token("--space-l")}`,
                 }}
               >
                 {group}
               </h2>
-              <div style={{ display: "flex", flexDirection: "column", gap: token("--space-9") }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: token("--space-3xl") }}>
                 {entries.map((entry) => (
                   <ComponentShowcase
                     key={entry.id}
@@ -161,13 +161,13 @@ function MockupBackLink({ id, label }: { id: string; label: string }) {
       href={`#/${id}`}
       style={{
         position: "fixed",
-        top: token("--space-5"),
-        left: token("--space-5"),
+        top: token("--space-m"),
+        left: token("--space-m"),
         zIndex: 100,
         display: "inline-flex",
         alignItems: "center",
-        gap: token("--space-2"),
-        padding: `${token("--space-2")} ${token("--space-4")}`,
+        gap: token("--space-xs"),
+        padding: `${token("--space-xs")} ${token("--space-s")}`,
         background: "rgba(12, 8, 22, 0.72)",
         border: `1px solid ${token("--border-soft")}`,
         borderRadius: token("--radius-pill"),
@@ -212,7 +212,7 @@ function MockupView({ id }: { id: string }) {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            padding: token("--space-9"),
+            padding: token("--space-3xl"),
             textAlign: "center",
             color: token("--text-secondary"),
             font: token("--t-lead"),

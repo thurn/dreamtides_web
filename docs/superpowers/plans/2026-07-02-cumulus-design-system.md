@@ -451,7 +451,7 @@ The one **decision that changes the port** (not in the design source): generaliz
 
 **Files:** Create `src/cumulus/components/GroupPanel.tsx`; demo + registry entry.
 
-Port the design's `components/surfaces/GroupPanel.jsx` **as-is** — it is already CSS-only (`backdrop-filter: blur(22px) saturate(1.5)`, specular gradient, inset rim/wash, drop shadow). Replace its literal rgba/px values with the corresponding Cumulus tokens where a token exists (`--border-soft`, `--r-popover`, `--space-6`); keep the bespoke glass gradient/shadow literals that have no token. Expose `groupPanelStyle(radius)` and the `GroupPanel` wrapper (`as`, `padding`, `radius`). No dependency. Recipe verification + commit + push.
+Port the design's `components/surfaces/GroupPanel.jsx` **as-is** — it is already CSS-only (`backdrop-filter: blur(22px) saturate(1.5)`, specular gradient, inset rim/wash, drop shadow). Replace its literal rgba/px values with the corresponding Cumulus tokens where a token exists (`--border-soft`, `--r-popover`, `--space-l`); keep the bespoke glass gradient/shadow literals that have no token. Expose `groupPanelStyle(radius)` and the `GroupPanel` wrapper (`as`, `padding`, `radius`). No dependency. Recipe verification + commit + push.
 
 ### Task 3.3: JourneyStatusBar
 

@@ -47,7 +47,7 @@ const panelStyle = {
   background: token("--surface-card"),
   border: `1px solid ${token("--border-soft")}`,
   borderRadius: token("--radius-panel"),
-  padding: token("--space-6"),
+  padding: token("--space-l"),
 } as const;
 
 export function RulesTextMockup() {
@@ -89,10 +89,10 @@ export function RulesTextMockup() {
           boxSizing: "border-box",
           display: "flex",
           flexWrap: "wrap",
-          gap: token("--space-8"),
+          gap: token("--space-2xl"),
           alignItems: "flex-start",
           justifyContent: "center",
-          padding: `${token("--space-11")} ${token("--space-8")} ${token("--space-9")}`,
+          padding: `${token("--space-5xl")} ${token("--space-2xl")} ${token("--space-3xl")}`,
         }}
       >
         {error !== null ? (
@@ -111,7 +111,7 @@ export function RulesTextMockup() {
               </div>
             )}
 
-            <div style={{ flex: "1 1 340px", maxWidth: 560, display: "flex", flexDirection: "column", gap: token("--space-6") }}>
+            <div style={{ flex: "1 1 340px", maxWidth: 560, display: "flex", flexDirection: "column", gap: token("--space-l") }}>
               {resolved.featured !== null && (
                 <div style={panelStyle}>
                   <p
@@ -126,7 +126,7 @@ export function RulesTextMockup() {
                     Rules Text
                   </p>
                   {/* Card name resolved here, at the display boundary only. */}
-                  <h2 style={{ font: token("--t-title-sm"), margin: `${token("--space-2")} 0 ${token("--space-5")}` }}>
+                  <h2 style={{ font: token("--t-title-sm"), margin: `${token("--space-xs")} 0 ${token("--space-m")}` }}>
                     {resolved.featured.name}
                   </h2>
                   <div style={{ font: token("--t-rules") }}>
@@ -142,15 +142,15 @@ export function RulesTextMockup() {
                     letterSpacing: token("--tracking-eyebrow"),
                     textTransform: "uppercase",
                     color: token("--text-muted"),
-                    margin: `0 0 ${token("--space-5")}`,
+                    margin: `0 0 ${token("--space-m")}`,
                   }}
                 >
                   Keyword reference
                 </p>
-                <div style={{ display: "flex", flexDirection: "column", gap: token("--space-5") }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: token("--space-m") }}>
                   {resolved.reference.map((card) => (
                     <div key={card.id}>
-                      <div style={{ font: token("--t-caption"), color: token("--text-muted"), marginBottom: token("--space-2") }}>
+                      <div style={{ font: token("--t-caption"), color: token("--text-muted"), marginBottom: token("--space-xs") }}>
                         {card.name}
                       </div>
                       <div style={{ font: token("--t-rules") }}>

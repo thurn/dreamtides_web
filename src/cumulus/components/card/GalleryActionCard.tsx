@@ -41,7 +41,7 @@ export function GalleryActionCard({
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: token("--space-3"),
+          gap: token("--space-xs"),
           overflow: "hidden",
           ...glassSurfaceStyle({ radius: CARD_CORNER_RADIUS }),
           background: `${token("--glass-sheen")}, ${token("--gallery-action-fill")}`,

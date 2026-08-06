@@ -2,10 +2,10 @@
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
-  gap: var(--space-4);
+  gap: var(--space-s);
   width: 100%;
-  margin: var(--space-5) 0 0;
-  padding: 0 0 var(--space-4);
+  margin: var(--space-m) 0 0;
+  padding: 0 0 var(--space-s);
   border-bottom: 1px solid var(--border-soft);
   color: var(--text-primary);
 }

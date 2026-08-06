@@ -299,8 +299,8 @@ export function CardChoiceGrid({
       ? layout.cardWidth
       : siteCardWidth(cards.length, layout.viewport, layout.fit);
   const columnGap =
-    layout.kind === "gallery" ? layout.columnGap : token("--space-4");
-  const rowGap = layout.kind === "gallery" ? layout.rowGap : token("--space-4");
+    layout.kind === "gallery" ? layout.columnGap : token("--space-s");
+  const rowGap = layout.kind === "gallery" ? layout.rowGap : token("--space-s");
 
   return (
     <div
@@ -361,7 +361,7 @@ export function CardChoiceGrid({
               minWidth: 0,
               display: "flex",
               flexDirection: "column",
-              gap: card.caption === undefined ? 0 : token("--space-1"),
+              gap: card.caption === undefined ? 0 : token("--space-xxs"),
               opacity: card.muted === true ? 0.52 : 1,
               visibility: reserved ? "hidden" : undefined,
             }}
@@ -376,7 +376,7 @@ export function CardChoiceGrid({
                     inset: 0,
                     zIndex: 0,
                     pointerEvents: "none",
-                    transform: `translate(${stackedCopyLeft ? `calc(${token("--space-7")} * -1)` : token("--space-7")}, ${token("--space-7")}) rotate(${stackedCopyLeft ? "-3deg" : "3deg"})`,
+                    transform: `translate(${stackedCopyLeft ? `calc(${token("--space-xl")} * -1)` : token("--space-xl")}, ${token("--space-xl")}) rotate(${stackedCopyLeft ? "-3deg" : "3deg"})`,
                     transformOrigin: "center",
                   }}
                 >
@@ -407,13 +407,13 @@ export function CardChoiceGrid({
                       position: "absolute",
                       right:
                         card.operation === undefined
-                          ? token("--space-3")
+                          ? token("--space-xs")
                           : undefined,
                       left:
                         card.operation === undefined
                           ? undefined
-                          : token("--space-3"),
-                      bottom: token("--space-3"),
+                          : token("--space-xs"),
+                      bottom: token("--space-xs"),
                       zIndex: 20,
                       width: 36,
                       height: 36,
@@ -436,8 +436,8 @@ export function CardChoiceGrid({
                     data-card-choice-operation={card.operation}
                     style={{
                       position: "absolute",
-                      right: token("--space-3"),
-                      bottom: token("--space-3"),
+                      right: token("--space-xs"),
+                      bottom: token("--space-xs"),
                       zIndex: 21,
                       width: "clamp(26px, 22%, 44px)",
                       aspectRatio: "1 / 1",
@@ -476,7 +476,7 @@ export function CardChoiceGrid({
             minWidth: 0,
             display: "flex",
             flexDirection: "column",
-            gap: token("--space-1"),
+            gap: token("--space-xxs"),
             opacity: endAction.disabled === true ? 0.42 : 1,
           }}
         >

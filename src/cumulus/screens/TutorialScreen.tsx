@@ -247,7 +247,7 @@ const TUTORIAL_REVEAL_CARD_MOBILE_WIDTH_RATIO = 0.45;
 const TUTORIAL_CHALLENGE_TOTAL_SECONDS = TUTORIAL_CARD_TRAVEL_SECONDS * 6;
 const TUTORIAL_CHALLENGE_MOTE_COUNT = 24;
 // The popup panel is a content-driven desktop box measure. GlassDialog adds
-// --space-5 body padding on each side around this intrinsic content width.
+// --space-m body padding on each side around this intrinsic content width.
 const TUTORIAL_HOW_TO_PLAY_DESKTOP_PANEL_WIDTH = 500;
 // The pointer overlaps the portrait rim so it visibly connects to the frame.
 const TUTORIAL_PORTRAIT_POINTER_OVERLAP = 2;
@@ -409,15 +409,15 @@ function TutorialHowToPlayDialog({
           data-tutorial-how-to-play-content=""
           style={{
             width: desktop
-              ? `calc(${String(cardWidth)}px - ${token("--space-5")} - ${token("--space-5")})`
+              ? `calc(${String(cardWidth)}px - ${token("--space-m")} - ${token("--space-m")})`
               : "100%",
             maxWidth: "100%",
             boxSizing: "border-box",
             marginInline: "auto",
-            paddingTop: token("--space-9"),
-            paddingRight: token("--space-9"),
-            paddingBottom: token("--space-9"),
-            paddingLeft: token("--space-9"),
+            paddingTop: token("--space-3xl"),
+            paddingRight: token("--space-3xl"),
+            paddingBottom: token("--space-3xl"),
+            paddingLeft: token("--space-3xl"),
           }}
         >
           {paragraphs.map((paragraph, index) => (
@@ -425,7 +425,7 @@ function TutorialHowToPlayDialog({
               key={index}
               style={{
                 ...paragraphStyle,
-                marginTop: index === 0 ? 0 : token("--space-7"),
+                marginTop: index === 0 ? 0 : token("--space-xl"),
               }}
             >
               {renderTutorialInstructionParagraph(paragraph)}
@@ -1529,7 +1529,7 @@ function TutorialChallengeAnimation({
             top: clashCenterY - winnerFrame.width * 0.62,
             width: winnerFrame.width * 1.24,
             height: winnerFrame.width * 1.24,
-            border: `${token("--space-1")} solid ${token(ring === 0 ? "--spark" : "--accent-bright")}`,
+            border: `${token("--space-xxs")} solid ${token(ring === 0 ? "--spark" : "--accent-bright")}`,
             borderRadius: token("--radius-pill"),
             boxShadow:
               ring === 0 ? token("--shadow-card") : token("--glow-accent-soft"),
@@ -1544,7 +1544,7 @@ function TutorialChallengeAnimation({
             (index % 2 === 0 ? 0.18 : -0.11);
           const scatterDistance =
             loserFrame.width * (0.45 + (index % 5) * 0.13);
-          const moteSize = token(index % 4 === 0 ? "--space-5" : "--space-4");
+          const moteSize = token(index % 4 === 0 ? "--space-m" : "--space-s");
           return (
             <motion.div
               key={index}
@@ -2743,7 +2743,7 @@ export function TutorialScreen({
         };
       } else {
         const dialogueGap = Number.parseFloat(
-          window.getComputedStyle(screen).getPropertyValue("--space-6"),
+          window.getComputedStyle(screen).getPropertyValue("--space-l"),
         );
         next = {
           left:
@@ -3044,8 +3044,8 @@ export function TutorialScreen({
           <div
             style={{
               position: "absolute",
-              top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-4")})`,
-              left: `calc(var(${SAFE_AREA_INSET_PROPERTIES.left}) + ${token("--space-4")})`,
+              top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-s")})`,
+              left: `calc(var(${SAFE_AREA_INSET_PROPERTIES.left}) + ${token("--space-s")})`,
               zIndex: 20,
             }}
           >
@@ -3077,7 +3077,7 @@ export function TutorialScreen({
             bottom:
               !desktop &&
               view.currentAction?.action === "reveal-and-play-opponent-card"
-                ? `calc(var(${SAFE_AREA_INSET_PROPERTIES.bottom}) + ${token("--space-12")})`
+                ? `calc(var(${SAFE_AREA_INSET_PROPERTIES.bottom}) + ${token("--space-6xl")})`
                 : undefined,
             left: desktop ? (dialogueAnchor?.left ?? 0) : token("--gutter"),
             transform:

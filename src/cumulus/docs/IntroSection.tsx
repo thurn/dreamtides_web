@@ -24,20 +24,20 @@ const eyebrowStyle: CSSProperties = {
 const sectionTitleStyle: CSSProperties = {
   font: token("--t-title"),
   color: token("--text-primary"),
-  margin: `${token("--space-3")} 0 ${token("--space-6")}`,
+  margin: `${token("--space-xs")} 0 ${token("--space-l")}`,
 };
 
 const leadStyle: CSSProperties = {
   font: token("--t-lead"),
   color: token("--text-secondary"),
-  margin: `0 0 ${token("--space-9")}`,
+  margin: `0 0 ${token("--space-3xl")}`,
   maxWidth: "62ch",
 };
 
 const principleTitleStyle: CSSProperties = {
   font: token("--t-title-sm"),
   color: token("--text-primary"),
-  margin: `0 0 ${token("--space-3")}`,
+  margin: `0 0 ${token("--space-xs")}`,
 };
 
 const bodyStyle: CSSProperties = {
@@ -50,16 +50,16 @@ const bodyStyle: CSSProperties = {
 const principleBodyStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
-  gap: token("--space-6"),
+  gap: token("--space-l"),
 };
 
 const principleListStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
-  gap: token("--space-8"),
-  paddingBottom: token("--space-9"),
+  gap: token("--space-2xl"),
+  paddingBottom: token("--space-3xl"),
   borderBottom: `1px solid ${token("--border-soft")}`,
-  marginBottom: token("--space-9"),
+  marginBottom: token("--space-3xl"),
 };
 
 interface PrincipleProps {
@@ -90,7 +90,7 @@ export function IntroSection(): ReactElement {
     <section
       id="cumulus-toc-philosophy"
       aria-labelledby="cumulus-intro-heading"
-      style={{ marginBottom: token("--space-10") }}
+      style={{ marginBottom: token("--space-4xl") }}
     >
       <p style={eyebrowStyle}>Introduction</p>
       <h2 id="cumulus-intro-heading" style={sectionTitleStyle}>

@@ -16,7 +16,7 @@ import { DemoStage, FIXED_PREVIEW_BOUNDARY_STYLE } from "./DemoStage";
 const articleStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
-  gap: token("--space-5"),
+  gap: token("--space-m"),
 };
 
 // Title on its own line, with the navigation affordances as clearly-visible
@@ -26,7 +26,7 @@ const articleStyle: CSSProperties = {
 const headerStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
-  gap: token("--space-4"),
+  gap: token("--space-s"),
 };
 
 const titleLinkStyle: CSSProperties = {
@@ -49,7 +49,7 @@ const blurbStyle: CSSProperties = {
 const linksRowStyle: CSSProperties = {
   display: "flex",
   alignItems: "center",
-  gap: token("--space-4"),
+  gap: token("--space-s"),
   flexWrap: "wrap",
 };
 
@@ -58,8 +58,8 @@ const linksRowStyle: CSSProperties = {
 const pillBase: CSSProperties = {
   display: "inline-flex",
   alignItems: "center",
-  gap: token("--space-2"),
-  padding: `${token("--space-3")} ${token("--space-5")}`,
+  gap: token("--space-xs"),
+  padding: `${token("--space-xs")} ${token("--space-m")}`,
   borderRadius: token("--radius-pill"),
   font: token("--t-button-sm"),
   textDecoration: "none",

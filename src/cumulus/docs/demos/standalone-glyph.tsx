@@ -40,7 +40,7 @@ function StandaloneGlyphDemo(args: Record<string, unknown>) {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: token("--space-8"),
+        gap: token("--space-2xl"),
       }}
     >
       <span style={{ display: "inline-flex", fontSize: 48 }}>
@@ -54,7 +54,7 @@ function StandaloneGlyphDemo(args: Record<string, unknown>) {
       <div
         style={{
           display: "flex",
-          gap: token("--space-8"),
+          gap: token("--space-2xl"),
           alignItems: "flex-end",
           flexWrap: "wrap",
           justifyContent: "center",
@@ -67,14 +67,14 @@ function StandaloneGlyphDemo(args: Record<string, unknown>) {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: token("--space-3"),
+              gap: token("--space-s"),
             }}
           >
             <div
               style={{
                 display: "flex",
                 alignItems: "flex-end",
-                gap: token("--space-5"),
+                gap: token("--space-m"),
               }}
             >
               <span style={{ display: "inline-flex", fontSize: 24 }}>

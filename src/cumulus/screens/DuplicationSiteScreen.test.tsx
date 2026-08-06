@@ -136,7 +136,7 @@ describe("DuplicationSiteScreen", () => {
         '[data-testid="cumulus-duplication-speech-anchor"]',
       )?.style.left,
     ).toBe(
-      "clamp(calc(var(--space-12) + var(--space-12) + var(--space-11) + var(--space-7)), 18vw, calc(var(--space-12) + var(--space-12) + var(--space-12) + var(--space-11) + var(--space-7)))",
+      "clamp(calc(var(--space-6xl) + var(--space-6xl) + var(--space-5xl) + var(--space-xl)), 18vw, calc(var(--space-6xl) + var(--space-6xl) + var(--space-6xl) + var(--space-5xl) + var(--space-xl)))",
     );
     const initialPanelWidth = gallery?.style.width;
 

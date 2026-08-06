@@ -22,7 +22,7 @@ function GlassPanelDemo() {
         footer={
           <div
             style={{
-              padding: token("--space-6"),
+              padding: token("--space-l"),
               borderTop: `1px solid ${token("--border-strong")}`,
             }}
           >
@@ -30,7 +30,7 @@ function GlassPanelDemo() {
           </div>
         }
       >
-        <div style={{ padding: token("--space-8") }}>
+        <div style={{ padding: token("--space-2xl") }}>
           The panel body is a deliberate content slot for composed product UI.
         </div>
       </GlassPanel>

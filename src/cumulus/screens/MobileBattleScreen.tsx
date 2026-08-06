@@ -646,7 +646,7 @@ const DESKTOP_SIDE_ZONES_WIDTH = 540;
 const DESKTOP_SIDE_PILE_MAX_WIDTH = 120;
 const DESKTOP_SIDE_PILE_HEIGHT =
   DESKTOP_SIDE_PILE_MAX_WIDTH * CARD_ASPECT_RATIO_VALUE;
-const DESKTOP_SIDE_ZONE_MIN_CLEARANCE = token("--space-5");
+const DESKTOP_SIDE_ZONE_MIN_CLEARANCE = token("--space-m");
 const DESKTOP_SIDE_ZONE_SHIFT = `max(0px, calc(${DESKTOP_SIDE_ZONE_MIN_CLEARANCE} - 5.5vh + ${String(DESKTOP_SIDE_PILE_HEIGHT / 2)}px))`;
 const NEXT_PHASE_CONTROL_WIDTH = 120;
 // Canonical full-card reading size, constrained on narrow screens so the
@@ -672,13 +672,13 @@ const DREAMWELL_SIDE_ZONE_Z_INDEX = BATTLEFIELD_RANK_Z_INDEX.dragging + 1;
 const DREAMWELL_WITHIN_SIDE_ZONE_Z_INDEX = 12;
 // Mobile player zones share the hand track and lift one spacing step above it.
 // Desktop gives both sides matching rows immediately outside the play areas.
-const PLAYER_HAND_TOP = `calc(${token("--space-12")} - ${token("--space-7")} + ${token("--space-2")})`;
+const PLAYER_HAND_TOP = `calc(${token("--space-6xl")} - ${token("--space-xl")} + ${token("--space-xs")})`;
 
 const MOBILE_GRID_ROWS =
   "minmax(0, 9fr) minmax(0, 12fr) minmax(0, 20fr) minmax(0, 20fr) minmax(0, 12fr) minmax(0, 27fr)";
 const DESKTOP_PLAY_AREA_HEIGHT_PERCENT = 23;
 const DESKTOP_GRID_ROWS = `minmax(0, 8fr) minmax(0, 11fr) minmax(0, ${String(DESKTOP_PLAY_AREA_HEIGHT_PERCENT)}fr) minmax(0, ${String(DESKTOP_PLAY_AREA_HEIGHT_PERCENT)}fr) minmax(0, 11fr) minmax(0, 24fr)`;
-const BATTLEFIELD_CENTER_OFFSET = token("--space-5");
+const BATTLEFIELD_CENTER_OFFSET = token("--space-m");
 
 const ROOT_STYLE: CSSProperties = {
   position: "fixed",
@@ -849,8 +849,8 @@ function FigmentMergeTargetIndicator({
           }}
           style={{
             position: "absolute",
-            inset: token("--space-2"),
-            border: `${token("--space-1")} solid ${ringColor}`,
+            inset: token("--space-xs"),
+            border: `${token("--space-xxs")} solid ${ringColor}`,
             borderTopColor: blocked
               ? token("--danger")
               : token("--accent-bright"),
@@ -862,7 +862,7 @@ function FigmentMergeTargetIndicator({
           style={{
             position: "relative",
             display: "grid",
-            gap: token("--space-1"),
+            gap: token("--space-xxs"),
             color: token("--text-primary"),
             font: token("--t-caption"),
             textAlign: "center",
@@ -970,7 +970,7 @@ function FigmentMergeAnimation({
           top: animation.targetRect.top,
           width: animation.targetRect.width,
           height: animation.targetRect.height,
-          border: `${token("--space-1")} solid ${token("--border-accent")}`,
+          border: `${token("--space-xxs")} solid ${token("--border-accent")}`,
           borderRadius: BATTLEFIELD_CARD_CORNER_RADIUS,
           boxShadow: token("--glow-accent-soft"),
           boxSizing: "border-box",
@@ -1057,7 +1057,7 @@ function FarHand({
         display: isDesktop ? "flex" : undefined,
         alignItems: isDesktop ? "flex-start" : undefined,
         justifyContent: isDesktop ? "center" : undefined,
-        gap: isDesktop ? token("--space-2") : undefined,
+        gap: isDesktop ? token("--space-xs") : undefined,
       }}
     >
       {visibleCardIds.map((cardId, index) => {
@@ -1220,8 +1220,8 @@ function SideZones({
               }
             : {
                 alignSelf: "start",
-                height: token("--space-12"),
-                transform: `translateY(calc(-1 * ${token("--space-7")}))`,
+                height: token("--space-6xl"),
+                transform: `translateY(calc(-1 * ${token("--space-xl")}))`,
               }
           : isDesktop
             ? {
@@ -1242,8 +1242,8 @@ function SideZones({
           ? `${String(DESKTOP_SIDE_ZONES_WIDTH)}px`
           : undefined,
         boxSizing: isDesktop ? "border-box" : undefined,
-        columnGap: token(isDesktop ? "--space-12" : "--space-7"),
-        paddingInline: token(isDesktop ? "--space-8" : "--space-4"),
+        columnGap: token(isDesktop ? "--space-6xl" : "--space-xl"),
+        paddingInline: token(isDesktop ? "--space-2xl" : "--space-s"),
       }}
     >
       <div
@@ -1323,13 +1323,13 @@ function SideZones({
                 left: "50%",
                 top:
                   position === "far"
-                    ? `calc(100% + ${token("--space-3")})`
+                    ? `calc(100% + ${token("--space-xs")})`
                     : undefined,
                 bottom:
                   position === "near"
                     ? isDesktop
-                      ? `calc(100% + ${token("--space-3")})`
-                      : `calc(100% + ${token("--space-3")} + ${token("--space-12")} + ${token("--space-4")})`
+                      ? `calc(100% + ${token("--space-xs")})`
+                      : `calc(100% + ${token("--space-xs")} + ${token("--space-6xl")} + ${token("--space-s")})`
                     : undefined,
                 width: isDesktop ? 360 : "min(76vw, 340px)",
                 maxWidth: "calc(100vw - 2 * var(--gutter))",
@@ -2041,7 +2041,7 @@ function BattleCardPointsOverlay({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          gap: token("--space-1"),
+          gap: token("--space-xxs"),
           width: BATTLE_CARD_POINTS_BUBBLE_WIDTH,
           aspectRatio: "1",
           borderRadius: token("--radius-pill"),
@@ -2071,8 +2071,8 @@ function BattleCardPointsOverlay({
           }}
           style={{
             position: "absolute",
-            inset: token("--space-2"),
-            border: `${token("--space-1")} solid ${token("--border-accent")}`,
+            inset: token("--space-xs"),
+            border: `${token("--space-xxs")} solid ${token("--border-accent")}`,
             borderTopColor: token("--accent-bright"),
             borderRadius: token("--radius-pill"),
           }}
@@ -2100,7 +2100,7 @@ const BATTLE_CARD_STATUS_BADGE_STYLE: CSSProperties = {
   justifyContent: "center",
   minWidth: BATTLE_CARD_STATUS_BADGE_SIZE,
   height: BATTLE_CARD_STATUS_BADGE_SIZE,
-  paddingInline: token("--space-1"),
+  paddingInline: token("--space-xxs"),
   border: `1px solid ${token("--text-on-accent")}`,
   borderRadius: token("--radius-pill"),
   background: token("--surface-card"),
@@ -2296,12 +2296,12 @@ function mobileBattlefieldDensity(layoutBackSlotCount: number): {
   }
   if (layoutBackSlotCount > MOBILE_BATTLE_COMPACT_RANK_THRESHOLD) {
     return {
-      gap: token("--space-1"),
+      gap: token("--space-xxs"),
       sideInsetPercent: BATTLEFIELD_COMPACT_SIDE_INSET_PERCENT,
     };
   }
   return {
-    gap: token("--space-2"),
+    gap: token("--space-xs"),
     sideInsetPercent: BATTLEFIELD_SIDE_INSET_PERCENT,
   };
 }
@@ -2314,12 +2314,12 @@ function battlefieldCardSize(
 ): string {
   const slotCount = Math.max(layoutBackSlotCount, 1);
   if (!isDesktop && densityBackSlotCount >= MOBILE_BATTLE_MAX_BACK_RANK_SLOTS) {
-    return `min(22cqw, calc((${String(BATTLEFIELD_FULL_WIDTH_PERCENT)}cqw - 0 * ${token("--space-1")}) / ${String(MOBILE_BATTLE_MAX_BACK_RANK_SLOTS)}), calc((100cqh - ${centerOffset} - ${centerOffset}) / 2))`;
+    return `min(22cqw, calc((${String(BATTLEFIELD_FULL_WIDTH_PERCENT)}cqw - 0 * ${token("--space-xxs")}) / ${String(MOBILE_BATTLE_MAX_BACK_RANK_SLOTS)}), calc((100cqh - ${centerOffset} - ${centerOffset}) / 2))`;
   }
   const horizontalGapCount = Math.max(slotCount - 1, 0);
   const density = isDesktop
     ? {
-        gap: token("--space-2"),
+        gap: token("--space-xs"),
         sideInsetPercent: BATTLEFIELD_SIDE_INSET_PERCENT,
       }
     : mobileBattlefieldDensity(densityBackSlotCount);
@@ -2331,7 +2331,7 @@ function desktopControlCardSize(layoutBackSlotCount: number): string {
   const slotCount = Math.max(layoutBackSlotCount, 1);
   const horizontalGapCount = Math.max(slotCount - 1, 0);
   const pairedPlayAreaHeight = DESKTOP_PLAY_AREA_HEIGHT_PERCENT * 2;
-  return `min(22cqw, calc((${String(BATTLEFIELD_WIDTH_PERCENT)}cqw - ${String(horizontalGapCount)} * ${token("--space-2")}) / ${String(slotCount)}), calc((${String(pairedPlayAreaHeight)}dvh - 3 * ${token("--space-2")}) / 4))`;
+  return `min(22cqw, calc((${String(BATTLEFIELD_WIDTH_PERCENT)}cqw - ${String(horizontalGapCount)} * ${token("--space-xs")}) / ${String(slotCount)}), calc((${String(pairedPlayAreaHeight)}dvh - 3 * ${token("--space-xs")}) / 4))`;
 }
 
 function battlefieldTrackWidth(
@@ -2596,7 +2596,7 @@ function Rank({
     (position === "far" && order === 1) || (position === "near" && order === 0);
   const density = isDesktop
     ? {
-        gap: token("--space-2"),
+        gap: token("--space-xs"),
         sideInsetPercent: DESKTOP_BATTLEFIELD_SIDE_INSET_PERCENT,
       }
     : mobileBattlefieldDensity(densityBackSlotCount);
@@ -2757,9 +2757,9 @@ function Rank({
                     zIndex: 4,
                     boxSizing: "border-box",
                     borderRadius: BATTLEFIELD_CARD_CORNER_RADIUS,
-                    outline: `${token("--space-1")} solid ${token("--positive")}`,
-                    outlineOffset: `calc(-1 * ${token("--space-1")})`,
-                    boxShadow: `0 0 ${token("--space-7")} ${token("--positive")}`,
+                    outline: `${token("--space-xxs")} solid ${token("--positive")}`,
+                    outlineOffset: `calc(-1 * ${token("--space-xxs")})`,
+                    boxShadow: `0 0 ${token("--space-xl")} ${token("--positive")}`,
                   }}
                 />
               ) : null}
@@ -3049,15 +3049,15 @@ function NearHand({
         display: isDesktop ? "flex" : undefined,
         alignItems: isDesktop ? "flex-start" : undefined,
         justifyContent: isDesktop ? "center" : undefined,
-        gap: isDesktop ? token("--space-2") : undefined,
-        paddingTop: isDesktop ? token("--space-8") : undefined,
+        gap: isDesktop ? token("--space-xs") : undefined,
+        paddingTop: isDesktop ? token("--space-2xl") : undefined,
         paddingRight: isDesktop
-          ? `calc(var(${BATTLE_HUD_END_CLEARANCE_PROPERTY}, 0px) + ${token("--space-8")})`
+          ? `calc(var(${BATTLE_HUD_END_CLEARANCE_PROPERTY}, 0px) + ${token("--space-2xl")})`
           : undefined,
         paddingLeft: isDesktop
-          ? `calc(var(${BATTLE_HUD_START_CLEARANCE_PROPERTY}, 0px) + ${token("--space-8")})`
+          ? `calc(var(${BATTLE_HUD_START_CLEARANCE_PROPERTY}, 0px) + ${token("--space-2xl")})`
           : undefined,
-        transform: isDesktop ? `translateY(${token("--space-8")})` : undefined,
+        transform: isDesktop ? `translateY(${token("--space-2xl")})` : undefined,
         boxSizing: isDesktop ? "border-box" : undefined,
       }}
     >
@@ -3247,8 +3247,8 @@ function TargetingCardStage({
           ? DESKTOP_TARGETING_CARD_STAGE_WIDTH
           : TARGETING_CARD_STAGE_WIDTH,
         aspectRatio: CARD_ASPECT_RATIO,
-        marginTop: token("--space-2"),
-        marginLeft: `calc(var(${SAFE_AREA_INSET_PROPERTIES.left}) + ${token("--space-4")})`,
+        marginTop: token("--space-xs"),
+        marginLeft: `calc(var(${SAFE_AREA_INSET_PROPERTIES.left}) + ${token("--space-s")})`,
         zIndex: PLAYER_HAND_Z_INDEX,
         pointerEvents: "auto",
       }}
@@ -3283,7 +3283,7 @@ function SharedHandCardReveal({
       initial={
         reduceMotion
           ? false
-          : { opacity: 0, scale: 0.55, x: token("--space-8") }
+          : { opacity: 0, scale: 0.55, x: token("--space-2xl") }
       }
       animate={{ opacity: 1, scale: 1, x: 0 }}
       transition={{
@@ -3296,7 +3296,7 @@ function SharedHandCardReveal({
         alignSelf: "center",
         justifySelf: "end",
         width: SHARED_HAND_CARD_REVEAL_WIDTH,
-        marginRight: token(isDesktop ? "--space-8" : "--space-4"),
+        marginRight: token(isDesktop ? "--space-2xl" : "--space-s"),
         zIndex: token("--layer-reveal"),
         pointerEvents: "auto",
       }}
@@ -3657,7 +3657,7 @@ function CardPickerGallery({
         zIndex: 50,
         display: "grid",
         placeItems: "center",
-        padding: isDesktop ? token("--space-8") : 0,
+        padding: isDesktop ? token("--space-2xl") : 0,
         boxSizing: "border-box",
       }}
     >
@@ -3772,8 +3772,8 @@ function ControlRow({
         width: isDesktop ? "100%" : undefined,
         boxSizing: "border-box",
         containerType: isDesktop ? "inline-size" : undefined,
-        paddingInline: isDesktop ? 0 : token("--space-4"),
-        paddingTop: token(isDesktop ? "--space-5" : "--space-4"),
+        paddingInline: isDesktop ? 0 : token("--space-s"),
+        paddingTop: token(isDesktop ? "--space-m" : "--space-s"),
         zIndex: 10,
         pointerEvents: "none",
       }}
@@ -3786,7 +3786,7 @@ function ControlRow({
               ? battlefieldTrackWidth(
                   layoutBackSlotCount,
                   desktopControlCardSize(layoutBackSlotCount),
-                  token("--space-2"),
+                  token("--space-xs"),
                 )
               : "100%",
             maxWidth: isDesktop ? "100%" : undefined,
@@ -3794,7 +3794,7 @@ function ControlRow({
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-end",
-            gap: token("--space-4"),
+            gap: token("--space-s"),
             position: "relative",
             zIndex: 10,
             pointerEvents: "auto",
@@ -3852,11 +3852,11 @@ function ControlRow({
               ? battlefieldTrackWidth(
                   layoutBackSlotCount,
                   desktopControlCardSize(layoutBackSlotCount),
-                  token("--space-2"),
+                  token("--space-xs"),
                 )
               : undefined,
             maxWidth: isDesktop ? "100%" : undefined,
-            gap: token("--space-4"),
+            gap: token("--space-s"),
             position: "relative",
             zIndex: 10,
             pointerEvents: "auto",
@@ -3890,7 +3890,7 @@ function ControlRow({
               display: hasAlternateNextControls ? "flex" : "grid",
               alignItems: hasAlternateNextControls ? "center" : undefined,
               justifyContent: hasAlternateNextControls ? "flex-end" : undefined,
-              gap: hasAlternateNextControls ? token("--space-4") : undefined,
+              gap: hasAlternateNextControls ? token("--space-s") : undefined,
             }}
           >
             {choicePrompt !== null ? (
@@ -4004,7 +4004,7 @@ function BattleDebugMenu({
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-end",
-        gap: token("--space-3"),
+        gap: token("--space-xs"),
       }}
     >
       <IconButton
@@ -4021,7 +4021,7 @@ function BattleDebugMenu({
           aria-label="Battle debug actions"
           style={{
             position: "absolute",
-            top: `calc(100% + ${token("--space-3")})`,
+            top: `calc(100% + ${token("--space-xs")})`,
             right: 0,
             width: 300,
           }}
@@ -4032,8 +4032,8 @@ function BattleDebugMenu({
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "stretch",
-                gap: token("--space-3"),
-                padding: token("--space-5"),
+                gap: token("--space-xs"),
+                padding: token("--space-m"),
               }}
             >
               <GlassButton
@@ -4079,7 +4079,7 @@ function InspectorValue({
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: token("--space-1"),
+        gap: token("--space-xxs"),
         minWidth: 0,
       }}
     >
@@ -4137,7 +4137,7 @@ function InspectorSection({ children }: { readonly children: ReactNode }) {
     <section
       data-battle-inspector-section=""
       style={{
-        paddingBlock: token("--space-5"),
+        paddingBlock: token("--space-m"),
         borderTop: `1px solid ${token("--border-soft")}`,
       }}
     >
@@ -4169,12 +4169,12 @@ function BattleInspectorContent({
   const actionGrid: CSSProperties = {
     display: "grid",
     gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-    gap: token("--space-3"),
+    gap: token("--space-xs"),
   };
   const groupLayout: CSSProperties = {
     display: "flex",
     flexDirection: "column",
-    gap: token("--space-4"),
+    gap: token("--space-s"),
   };
 
   return (
@@ -4186,7 +4186,7 @@ function BattleInspectorContent({
     >
       <div
         data-battle-inspector-perspective-control=""
-        style={{ minWidth: 0, paddingBottom: token("--space-5") }}
+        style={{ minWidth: 0, paddingBottom: token("--space-m") }}
       >
         <GlassButton
           label={
@@ -4208,7 +4208,7 @@ function BattleInspectorContent({
       </div>
 
       <InspectorSection>
-        <div style={{ ...groupLayout, gap: token("--space-3") }}>
+        <div style={{ ...groupLayout, gap: token("--space-xs") }}>
           <h3
             style={{
               margin: 0,
@@ -4222,7 +4222,7 @@ function BattleInspectorContent({
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-              gap: token("--space-4"),
+              gap: token("--space-s"),
             }}
           >
             <InspectorValue label="Turn" value={inspector.turn} />
@@ -4253,7 +4253,7 @@ function BattleInspectorContent({
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              gap: token("--space-3"),
+              gap: token("--space-xs"),
             }}
           >
             <InspectorButton
@@ -4420,7 +4420,7 @@ function BattleInspectorContent({
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-              gap: token("--space-4"),
+              gap: token("--space-s"),
             }}
           >
             <InspectorValue label="Hand" value={String(side.zones.hand)} />
@@ -4582,7 +4582,7 @@ function BattleInspectorContent({
         expanded={visibilityOpen}
         onExpandedChange={setVisibilityOpen}
       >
-        <div style={{ ...actionGrid, marginTop: token("--space-4") }}>
+        <div style={{ ...actionGrid, marginTop: token("--space-s") }}>
           <InspectorButton
             label="Pool Viewer"
             onPress={() => onAction?.({ kind: "open-pool-viewer" })}
@@ -4615,8 +4615,8 @@ function BattleInspectorContent({
           <div
             style={{
               display: "grid",
-              gap: token("--space-4"),
-              marginTop: token("--space-4"),
+              gap: token("--space-s"),
+              marginTop: token("--space-s"),
             }}
           >
             <InspectorValue label="Proposal" value={inspector.ai.proposal} />
@@ -4641,7 +4641,7 @@ function BattleInspectorContent({
         expanded={endBattleOpen}
         onExpandedChange={setEndBattleOpen}
       >
-        <div style={{ ...actionGrid, marginTop: token("--space-4") }}>
+        <div style={{ ...actionGrid, marginTop: token("--space-s") }}>
           <InspectorButton
             label="Skip to Rewards"
             onPress={() => onAction?.({ kind: "skip-to-rewards" })}
@@ -5324,13 +5324,13 @@ export function MobileBattleScreen({
         data-battle-top-left-controls=""
         style={{
           position: "absolute",
-          top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-4")})`,
-          left: `calc(var(${SAFE_AREA_INSET_PROPERTIES.left}) + ${token("--space-4")})`,
+          top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-s")})`,
+          left: `calc(var(${SAFE_AREA_INSET_PROPERTIES.left}) + ${token("--space-s")})`,
           zIndex: 20,
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
-          gap: token("--space-3"),
+          gap: token("--space-xs"),
         }}
       >
         {isDesktop &&
@@ -5367,12 +5367,12 @@ export function MobileBattleScreen({
           data-battle-top-right-controls=""
           style={{
             position: "absolute",
-            top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-4")})`,
-            right: `calc(var(${SAFE_AREA_INSET_PROPERTIES.right}) + ${token("--space-4")})`,
+            top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-s")})`,
+            right: `calc(var(${SAFE_AREA_INSET_PROPERTIES.right}) + ${token("--space-s")})`,
             zIndex: 20,
             display: "flex",
             alignItems: "flex-start",
-            gap: token("--space-3"),
+            gap: token("--space-xs"),
           }}
         >
           <BattleDebugMenu
@@ -5487,7 +5487,7 @@ export function MobileBattleScreen({
             data-battle-figment-merge-confirmation=""
             style={{
               display: "grid",
-              gap: token("--space-5"),
+              gap: token("--space-m"),
               maxWidth: 420,
             }}
           >
@@ -5506,7 +5506,7 @@ export function MobileBattleScreen({
               style={{
                 display: "flex",
                 justifyContent: "flex-end",
-                gap: token("--space-3"),
+                gap: token("--space-xs"),
               }}
             >
               <GlassButton

@@ -12,7 +12,7 @@ import type { NestedTypeDoc, PropMeta } from "./controls";
 import { metasFor } from "./metadata";
 
 const cellStyle: React.CSSProperties = {
-  padding: `${token("--space-3")} ${token("--space-5")}`,
+  padding: `${token("--space-xs")} ${token("--space-m")}`,
   borderBottom: `1px solid ${token("--border-soft")}`,
   textAlign: "left",
   verticalAlign: "top",
@@ -140,7 +140,7 @@ function NestedRow({ nested }: { nested: NestedTypeDoc }) {
       <td
         colSpan={5}
         style={{
-          padding: `0 ${token("--space-5")} ${token("--space-4")}`,
+          padding: `0 ${token("--space-m")} ${token("--space-s")}`,
           borderBottom: `1px solid ${token("--border-soft")}`,
         }}
       >
@@ -148,8 +148,8 @@ function NestedRow({ nested }: { nested: NestedTypeDoc }) {
           style={{
             background: token("--bg-sunken"),
             border: `1px solid ${token("--border-soft")}`,
-            borderRadius: token("--space-2"),
-            padding: `${token("--space-2")} ${token("--space-4")}`,
+            borderRadius: token("--space-xs"),
+            padding: `${token("--space-xs")} ${token("--space-s")}`,
           }}
         >
           <summary
@@ -170,7 +170,7 @@ function NestedRow({ nested }: { nested: NestedTypeDoc }) {
               width: "100%",
               minWidth: "360px",
               borderCollapse: "collapse",
-              marginTop: token("--space-3"),
+              marginTop: token("--space-xs"),
               font: token("--t-body-sm"),
               color: token("--text-secondary"),
             }}
@@ -223,7 +223,7 @@ function NestedRow({ nested }: { nested: NestedTypeDoc }) {
 }
 
 const nestedCellStyle: React.CSSProperties = {
-  padding: `${token("--space-2")} ${token("--space-4")}`,
+  padding: `${token("--space-xs")} ${token("--space-s")}`,
   borderBottom: `1px solid ${token("--border-soft")}`,
   textAlign: "left",
   verticalAlign: "top",

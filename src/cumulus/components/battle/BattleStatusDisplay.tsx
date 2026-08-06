@@ -85,8 +85,8 @@ export function BattleStatusDisplay({
         display: "grid",
         gridTemplateColumns: "minmax(0, 1fr) auto minmax(0, 1fr)",
         alignItems: "center",
-        gap: token("--space-2"),
-        padding: token("--space-3"),
+        gap: token("--space-xs"),
+        padding: token("--space-xs"),
         color: token("--text-on-glass"),
         ...glassSurfaceStyle({ radius: token("--radius-panel") }),
       }}

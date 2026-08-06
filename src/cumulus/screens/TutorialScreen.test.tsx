@@ -703,7 +703,7 @@ describe("TutorialScreen", () => {
     const dialogue = container.querySelector<HTMLElement>(
       "[data-character-dialogue]",
     );
-    tutorialScreen!.style.setProperty("--space-6", "16px");
+    tutorialScreen!.style.setProperty("--space-l", "16px");
     tutorialScreen!.getBoundingClientRect = () =>
       DOMRect.fromRect({ width: 390, height: 844 });
     dialogue!.getBoundingClientRect = () =>
@@ -775,7 +775,7 @@ describe("TutorialScreen", () => {
     );
     expect(dialogueAnchor?.style.top).toBe("");
     expect(dialogueAnchor?.style.bottom).toBe(
-      "calc(var(--safe-area-inset-bottom) + var(--space-12))",
+      "calc(var(--safe-area-inset-bottom) + var(--space-6xl))",
     );
     expect(dialogueAnchor?.style.visibility).toBe("visible");
 
@@ -1654,13 +1654,13 @@ describe("TutorialScreen", () => {
     );
     const paragraphs = [...(content?.querySelectorAll("p") ?? [])];
     expect(paragraphs).toHaveLength(2);
-    expect(content?.style.paddingTop).toBe("var(--space-9)");
-    expect(content?.style.paddingRight).toBe("var(--space-9)");
-    expect(content?.style.paddingBottom).toBe("var(--space-9)");
-    expect(content?.style.paddingLeft).toBe("var(--space-9)");
+    expect(content?.style.paddingTop).toBe("var(--space-3xl)");
+    expect(content?.style.paddingRight).toBe("var(--space-3xl)");
+    expect(content?.style.paddingBottom).toBe("var(--space-3xl)");
+    expect(content?.style.paddingLeft).toBe("var(--space-3xl)");
     expect(paragraphs[0]?.style.font).toBe("var(--t-tutorial-instruction)");
     expect(paragraphs[0]?.style.marginTop).toBe("0px");
-    expect(paragraphs[1]?.style.marginTop).toBe("var(--space-7)");
+    expect(paragraphs[1]?.style.marginTop).toBe("var(--space-xl)");
     expect(paragraphs[0]?.textContent).toContain(
       "Play characters and challenge with them to score points () equal to their spark (), or block a challenger",
     );
@@ -1759,7 +1759,7 @@ describe("TutorialScreen", () => {
         .height,
     ).toBe("");
     expect(content?.style.width).toBe(
-      "calc(500px - var(--space-5) - var(--space-5))",
+      "calc(500px - var(--space-m) - var(--space-m))",
     );
     expect(onHowToPlayPresented).toHaveBeenCalledWith(
       "event:player-turn",
@@ -1959,11 +1959,11 @@ describe("TutorialScreen", () => {
     expect(
       dialog?.querySelector<HTMLElement>("[data-tutorial-how-to-play-content]")
         ?.style.width,
-    ).toBe("calc(650px - var(--space-5) - var(--space-5))");
+    ).toBe("calc(650px - var(--space-m) - var(--space-m))");
     expect(
       dialog?.querySelector<HTMLElement>("[data-tutorial-how-to-play-content]")
         ?.style.paddingTop,
-    ).toBe("var(--space-9)");
+    ).toBe("var(--space-3xl)");
     expect(
       dialog?.querySelector("[data-tutorial-how-to-play-close-clearance]"),
     ).toBeNull();

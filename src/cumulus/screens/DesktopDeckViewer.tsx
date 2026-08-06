@@ -161,7 +161,7 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
         zIndex: 60,
         display: "grid",
         placeItems: "center",
-        padding: token("--space-7"),
+        padding: token("--space-xl"),
       }}
     >
       <DeckViewerBackdrop />
@@ -265,15 +265,15 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        gap: token("--space-5"),
-        padding: `${token("--space-6")} ${token("--space-7")}`,
+        gap: token("--space-m"),
+        padding: `${token("--space-l")} ${token("--space-xl")}`,
       }}
     >
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: token("--space-1"),
+          gap: token("--space-xxs"),
         }}
       >
         <h2
@@ -319,10 +319,10 @@ function Sidebar({
         width: SIDEBAR_WIDTH_PX,
         flex: "none",
         overflowY: "auto",
-        padding: token("--space-6"),
+        padding: token("--space-l"),
         display: "flex",
         flexDirection: "column",
-        gap: token("--space-7"),
+        gap: token("--space-xl"),
       }}
     >
       {dreamAvatar !== null && <DreamAvatarBlock dreamAvatar={dreamAvatar} />}
@@ -350,7 +350,7 @@ function DreamAvatarBlock({
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: token("--space-6"),
+        gap: token("--space-l"),
       }}
     >
       <SidebarSectionHeader label="Avatar" />
@@ -392,7 +392,7 @@ function DreamsignsBlock({ dreamsigns }: { dreamsigns: DreamsignData[] }) {
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: token("--space-6"),
+        gap: token("--space-l"),
       }}
     >
       <SidebarSectionHeader label="Dreamsigns" />
@@ -407,7 +407,7 @@ function DreamsignsBlock({ dreamsigns }: { dreamsigns: DreamsignData[] }) {
           style={{
             display: "grid",
             gridTemplateColumns: `repeat(2, ${String(DREAMSIGN_TILE_PX)}px)`,
-            gap: token("--space-3"),
+            gap: token("--space-xs"),
             justifyContent: "start",
             justifyItems: "start",
           }}
@@ -434,7 +434,7 @@ function TidesBlock({ tides }: { tides: DreamAvatarTideView[] }) {
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: token("--space-6"),
+        gap: token("--space-l"),
       }}
     >
       <SidebarSectionHeader label="Tides" />
@@ -443,7 +443,7 @@ function TidesBlock({ tides }: { tides: DreamAvatarTideView[] }) {
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(2, max-content)",
-          gap: token("--space-4"),
+          gap: token("--space-s"),
           justifyContent: "start",
           justifyItems: "start",
         }}
@@ -484,8 +484,8 @@ function ControlBar({
         alignItems: "center",
         // One even gutter between every control, so the bar packs tightly
         // instead of floating two clusters against the panel edges.
-        gap: token("--space-4"),
-        padding: `${token("--space-4")} ${token("--space-6")}`,
+        gap: token("--space-s"),
+        padding: `${token("--space-s")} ${token("--space-l")}`,
       }}
     >
       <SegmentedControl
@@ -576,7 +576,7 @@ function DeckGrid({
         flex: 1,
         minHeight: 0,
         overflowY: "auto",
-        padding: token("--space-6"),
+        padding: token("--space-l"),
       }}
     >
       {cards.length === 0 ? (
@@ -592,7 +592,7 @@ function DeckGrid({
             gridTemplateColumns: lowCount
               ? `repeat(${String(visible.length)}, ${String(lowCountTileWidth)}px)`
               : `repeat(auto-fill, minmax(${String(tileWidth)}px, 1fr))`,
-            gap: token("--space-5"),
+            gap: token("--space-m"),
             alignItems: "start",
             justifyContent: lowCount ? "center" : undefined,
           }}

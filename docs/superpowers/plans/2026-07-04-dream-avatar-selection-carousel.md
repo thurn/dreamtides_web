@@ -195,7 +195,7 @@ export function CardTermDefinitions({
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: token("--space-3"),
+        gap: token("--space-xs"),
         // Box measures (content-driven layout): cap height and scroll a long
         // list, matching the prior panel behavior.
         maxHeight: "min(70vh, 360px)",
@@ -604,8 +604,8 @@ export function TideCluster({
         style={{
           display: "flex",
           alignItems: "center",
-          gap: token("--space-5"),
-          padding: `${token("--space-2")} ${token("--space-1")}`,
+          gap: token("--space-m"),
+          padding: `${token("--space-xs")} ${token("--space-xxs")}`,
           background: "none",
           border: "none",
           cursor: "pointer",
@@ -640,7 +640,7 @@ export function TideCluster({
               key={t.id}
               ref={(el) => (discRefs.current[t.id] = el)}
               style={{
-                marginLeft: i === 0 ? 0 : `calc(-1 * ${token("--space-3")})`,
+                marginLeft: i === 0 ? 0 : `calc(-1 * ${token("--space-xs")})`,
                 borderRadius: "50%",
                 background: token("--bg-app"),
                 boxShadow: i === 0 ? "none" : `0 0 0 2px ${token("--bg-app")}`,
@@ -661,8 +661,8 @@ export function TideCluster({
             style={{
               display: "flex",
               flexWrap: "wrap",
-              gap: token("--space-3"),
-              marginTop: token("--space-3"),
+              gap: token("--space-xs"),
+              marginTop: token("--space-xs"),
               opacity: phase === "open" ? 1 : 0,
             }}
           >
@@ -727,9 +727,9 @@ export function TideCluster({
                   top: end.top,
                   width: endPill ? end.width : DISC_PX,
                   height: endPill ? end.height : DISC_PX,
-                  paddingLeft: endPill ? token("--space-5") : token("--space-3"),
-                  paddingRight: endPill ? token("--space-5") : token("--space-0"),
-                  gap: endPill ? token("--space-3") : token("--space-0"),
+                  paddingLeft: endPill ? token("--space-m") : token("--space-xs"),
+                  paddingRight: endPill ? token("--space-m") : token("--space-0"),
+                  gap: endPill ? token("--space-xs") : token("--space-0"),
                   transition: `left ${move}, top ${move}, width ${move}, height ${move}, padding ${move}`,
                   willChange: "left, top, width, height",
                 }}
@@ -1152,7 +1152,7 @@ function ConsoleDivider() {
     <div
       style={{
         height: 1,
-        marginTop: token("--space-4"),
+        marginTop: token("--space-s"),
         background: `linear-gradient(90deg, transparent, ${token("--line-strong")} 18%, ${token("--line-strong")} 82%, transparent)`,
       }}
     />
@@ -1249,7 +1249,7 @@ function EdgeChevron({
       style={{
         position: "absolute",
         top: "46%",
-        [dir]: token("--space-3"),
+        [dir]: token("--space-xs"),
         zIndex: 6,
         width: 40,
         height: 40,
@@ -1305,7 +1305,7 @@ function DreamAvatarPage({
           top: token("--safe-top"),
           left: 0,
           right: 0,
-          padding: `${token("--space-10")} ${token("--gutter")} 0`,
+          padding: `${token("--space-4xl")} ${token("--gutter")} 0`,
           zIndex: 4,
           textAlign: "center",
         }}
@@ -1330,7 +1330,7 @@ function DreamAvatarPage({
           right: 0,
           bottom: 0,
           zIndex: 4,
-          padding: `0 ${token("--gutter")} calc(${token("--safe-bottom")} + ${token("--space-5")})`,
+          padding: `0 ${token("--gutter")} calc(${token("--safe-bottom")} + ${token("--space-m")})`,
           opacity: active ? 1 : 0,
           transform: active ? "translateY(0)" : "translateY(16px)",
           transition: `opacity ${token("--dur-base")} ${token("--ease-out")}, transform ${token("--dur-base")} ${token("--ease-out")}`,
@@ -1346,8 +1346,8 @@ function DreamAvatarPage({
               display: "flex",
               alignItems: "flex-start",
               justifyContent: "space-between",
-              gap: token("--space-5"),
-              marginTop: token("--space-3"),
+              gap: token("--space-m"),
+              marginTop: token("--space-xs"),
             }}
           >
             {dreamAvatar.tides.length > 0 ? (
@@ -1362,7 +1362,7 @@ function DreamAvatarPage({
 
           <div
             data-choose-dream-avatar={dreamAvatar.id}
-            style={{ marginTop: token("--space-6"), display: "grid" }}
+            style={{ marginTop: token("--space-l"), display: "grid" }}
           >
             <GlassButton
               label={`Choose ${dreamAvatar.name}`}
@@ -1435,7 +1435,7 @@ export function JourneyStartScreen({ dreamAvatars, onPick }: JourneyStartScreenP
           left: 0,
           right: 0,
           zIndex: 6,
-          padding: `${token("--space-5")} ${token("--gutter")} 0`,
+          padding: `${token("--space-m")} ${token("--gutter")} 0`,
           textAlign: "center",
           pointerEvents: "none",
           font: token("--t-eyebrow"),

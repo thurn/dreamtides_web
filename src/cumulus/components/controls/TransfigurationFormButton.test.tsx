@@ -90,7 +90,7 @@ describe("TransfigurationFormButton", () => {
     expect(button?.style.gridTemplateColumns).toBe(
       "auto minmax(0, 1fr) auto",
     );
-    expect(button?.style.padding).toBe("var(--space-3)");
+    expect(button?.style.padding).toBe("var(--space-xs)");
     expect(button?.textContent).toBe("EmpoweredFree");
     expect(button?.getAttribute("aria-label")).toBe("Empowered, free");
     expect(button?.getAttribute("aria-disabled")).toBe("true");

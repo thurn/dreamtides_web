@@ -78,14 +78,14 @@ describe("buildTokensSource", () => {
   it("emits a kind field when the parsed token carries one, and omits it otherwise (kind pass-through)", () => {
     const source = buildTokensSource([
       { name: "r-popover", value: "8px", kind: "radius" },
-      { name: "space-1", value: "2px" },
+      { name: "space-xxs", value: "2px" },
     ]);
 
     expect(source).toContain(
       '"--r-popover": { var: "var(--r-popover)", value: "8px", kind: "radius" },',
     );
     expect(source).toContain(
-      '"--space-1": { var: "var(--space-1)", value: "2px" },',
+      '"--space-xxs": { var: "var(--space-xxs)", value: "2px" },',
     );
   });
 

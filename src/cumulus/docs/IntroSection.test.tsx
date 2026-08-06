@@ -30,7 +30,7 @@ describe("Cumulus design philosophy prose", () => {
     );
 
     expect(longFormBody).toBeDefined();
-    expect(longFormBody?.style.gap).toBe("var(--space-6)");
+    expect(longFormBody?.style.gap).toBe("var(--space-l)");
 
     act(() => root.unmount());
   });

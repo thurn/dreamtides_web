@@ -264,11 +264,11 @@ describe("MobileBattleScreen", () => {
     expect(
       container.querySelector<HTMLElement>('[data-battle-rank="enemy-front"]')
         ?.style.bottom,
-    ).toBe("var(--space-5)");
+    ).toBe("var(--space-m)");
     expect(
       container.querySelector<HTMLElement>('[data-battle-rank="player-front"]')
         ?.style.top,
-    ).toBe("var(--space-5)");
+    ).toBe("var(--space-m)");
 
     act(() => root.unmount());
   });
@@ -1016,7 +1016,7 @@ describe("MobileBattleScreen", () => {
     expect(layer?.dataset.battleDreamwellSide).toBe("enemy");
     expect(sideZoneRow?.style.zIndex).toBe("5");
     expect(layer?.style.position).toBe("absolute");
-    expect(layer?.style.top).toBe("calc(100% + var(--space-3))");
+    expect(layer?.style.top).toBe("calc(100% + var(--space-xs))");
     expect(layer?.style.bottom).toBe("");
     expect(layer?.style.pointerEvents).toBe("none");
     expect(layer?.style.animation).toBe("none");
@@ -1071,7 +1071,7 @@ describe("MobileBattleScreen", () => {
     expect(sideZoneRow?.style.zIndex).toBe("5");
     expect(layer?.style.top).toBe("");
     expect(layer?.style.bottom).toBe(
-      "calc(100% + var(--space-3) + var(--space-12) + var(--space-4))",
+      "calc(100% + var(--space-xs) + var(--space-6xl) + var(--space-s))",
     );
     expect(
       container.querySelector(
@@ -1358,7 +1358,7 @@ describe("MobileBattleScreen", () => {
     expect(enemyZones?.style.width).toBe("100%");
     expect(enemyZones?.style.maxWidth).toBe("540px");
     expect(enemyZones?.style.boxSizing).toBe("border-box");
-    expect(enemyZones?.style.columnGap).toBe("var(--space-12)");
+    expect(enemyZones?.style.columnGap).toBe("var(--space-6xl)");
     expect(playerZones?.style.gridRow).toBe("5");
     expect(playerZones?.style.transform).toContain("translateY(max(0px");
     expect(playerZones?.style.height).toBe("");
@@ -1374,14 +1374,14 @@ describe("MobileBattleScreen", () => {
     ).toBe("center");
     expect(enemyHand?.style.display).toBe("flex");
     expect(enemyHand?.style.justifyContent).toBe("center");
-    expect(enemyHand?.style.gap).toBe("var(--space-2)");
+    expect(enemyHand?.style.gap).toBe("var(--space-xs)");
     expect(firstEnemyCard?.style.position).toBe("relative");
     expect(firstEnemyCard?.style.left).toBe("");
     expect(firstEnemyCard?.style.transform).not.toContain("translateX");
     expect(playerHand?.style.display).toBe("flex");
     expect(playerHand?.style.justifyContent).toBe("center");
-    expect(playerHand?.style.gap).toBe("var(--space-2)");
-    expect(playerHand?.style.paddingTop).toBe("var(--space-8)");
+    expect(playerHand?.style.gap).toBe("var(--space-xs)");
+    expect(playerHand?.style.paddingTop).toBe("var(--space-2xl)");
     expect(playerHand?.style.paddingLeft).toContain(
       "--battle-hud-start-clearance",
     );
@@ -1399,7 +1399,7 @@ describe("MobileBattleScreen", () => {
     expect(playerSlots?.[0]?.style.minWidth).toBe("0px");
     expect(playerCards?.[0]?.parentElement?.style.left).toBe("0px");
     expect(playerCards?.[1]?.parentElement?.style.left).toBe("50%");
-    expect(playerHand?.style.transform).toBe("translateY(var(--space-8))");
+    expect(playerHand?.style.transform).toBe("translateY(var(--space-2xl))");
     expect(playerHand?.style.pointerEvents).toBe("none");
     expect(playerHand?.dataset.battleHandCardHoverScale).toBe(
       String(BATTLE_HAND_CARD_HOVER_SCALE),
@@ -1758,7 +1758,7 @@ describe("MobileBattleScreen", () => {
       expect(row?.style.gridTemplateColumns).toBe(
         "minmax(0, 1fr) max-content minmax(0, 1fr)",
       );
-      expect(row?.style.columnGap).toBe("var(--space-7)");
+      expect(row?.style.columnGap).toBe("var(--space-xl)");
       expect(
         row?.querySelector<HTMLElement>("[data-battle-status-phase-anchor]")
           ?.style.width,
@@ -1803,9 +1803,9 @@ describe("MobileBattleScreen", () => {
     expect(playerHand?.style.gridRow).toBe("6");
     expect(playerHand?.style.gridColumn).toBe("1");
     expect(playerHand?.style.zIndex).toBe("15");
-    expect(playerZones?.style.height).toBe("var(--space-12)");
+    expect(playerZones?.style.height).toBe("var(--space-6xl)");
     expect(playerZones?.style.transform).toBe(
-      "translateY(calc(-1 * var(--space-7)))",
+      "translateY(calc(-1 * var(--space-xl)))",
     );
 
     expect(container.textContent).not.toContain("Enemy deck");
@@ -1938,7 +1938,7 @@ describe("MobileBattleScreen", () => {
 
     expect(topLeftControls?.style.position).toBe("absolute");
     expect(topLeftControls?.style.left).toBe(
-      "calc(var(--safe-area-inset-left) + var(--space-4))",
+      "calc(var(--safe-area-inset-left) + var(--space-s))",
     );
     expect(controlFrame?.dataset.battleZoneCount).toBe("3");
     expect(controlFrame?.dataset.battleZoneNearCount).toBe("2");
@@ -2284,8 +2284,8 @@ describe("MobileBattleScreen", () => {
       const frontTrack = frontRank?.querySelector<HTMLElement>(
         "[data-battle-rank-track]",
       );
-      expect(backTrack?.style.columnGap).toBe("var(--space-2)");
-      expect(frontTrack?.style.columnGap).toBe("var(--space-2)");
+      expect(backTrack?.style.columnGap).toBe("var(--space-xs)");
+      expect(frontTrack?.style.columnGap).toBe("var(--space-xs)");
       expect(backTrack?.style.gridTemplateColumns).toContain("repeat(6,");
       expect(frontTrack?.style.gridTemplateColumns).toContain("repeat(5,");
       expect(backTrack?.style.width).toContain("6 * min(");
@@ -3142,7 +3142,7 @@ describe("MobileBattleScreen", () => {
             [],
         );
         expect(rankElement?.style.height).toContain(
-          "88cqw - 5 * var(--space-2)",
+          "88cqw - 5 * var(--space-xs)",
         );
         expect(rankElement?.style.height).toContain("100cqh");
         expect(track?.style.gridTemplateColumns).toContain(
@@ -3151,8 +3151,8 @@ describe("MobileBattleScreen", () => {
         expect(track?.style.width).toContain(
           rank === "back" ? "6 * min(" : "5 * min(",
         );
-        expect(track?.style.columnGap).toBe("var(--space-2)");
-        expect(slots[0]?.style.width).toContain("var(--space-2)");
+        expect(track?.style.columnGap).toBe("var(--space-xs)");
+        expect(slots[0]?.style.width).toContain("var(--space-xs)");
         expect(slots[0]?.style.width).toContain("100cqh");
         expect(slots[0]?.style.height).toBe("");
       }
@@ -3170,10 +3170,10 @@ describe("MobileBattleScreen", () => {
     const playerBack = container.querySelector<HTMLElement>(
       '[data-battle-rank="player-back"]',
     );
-    expect(enemyFront?.style.bottom).toBe("var(--space-5)");
-    expect(playerFront?.style.top).toBe("var(--space-5)");
-    expect(enemyBack?.style.bottom).toContain("var(--space-2)");
-    expect(playerBack?.style.top).toContain("var(--space-2)");
+    expect(enemyFront?.style.bottom).toBe("var(--space-m)");
+    expect(playerFront?.style.top).toBe("var(--space-m)");
+    expect(enemyBack?.style.bottom).toContain("var(--space-xs)");
+    expect(playerBack?.style.top).toContain("var(--space-xs)");
 
     act(() => root.unmount());
   });
@@ -3255,8 +3255,8 @@ describe("MobileBattleScreen", () => {
 
     expect(rank?.style.left).toBe("3%");
     expect(rank?.style.right).toBe("3%");
-    expect(track?.style.columnGap).toBe("var(--space-1)");
-    expect(rank?.style.height).toContain("94cqw - 9 * var(--space-1)");
+    expect(track?.style.columnGap).toBe("var(--space-xxs)");
+    expect(rank?.style.height).toContain("94cqw - 9 * var(--space-xxs)");
 
     act(() => root.unmount());
   });
@@ -3300,10 +3300,10 @@ describe("MobileBattleScreen", () => {
     expect(backRank?.style.right).toBe("1%");
     expect(backTrack?.style.columnGap).toBe("0px");
     expect(backRank?.style.height).toBe(
-      "min(22cqw, calc((98cqw - 0 * var(--space-1)) / 10), calc((100cqh - var(--space-5) - var(--space-5)) / 2))",
+      "min(22cqw, calc((98cqw - 0 * var(--space-xxs)) / 10), calc((100cqh - var(--space-m) - var(--space-m)) / 2))",
     );
-    expect(backRank?.style.top).toContain("+ 0px + var(--space-5)");
-    expect(enemyBackRank?.style.bottom).toContain("+ 0px + var(--space-5)");
+    expect(backRank?.style.top).toContain("+ 0px + var(--space-m)");
+    expect(enemyBackRank?.style.bottom).toContain("+ 0px + var(--space-m)");
     expect(backTrack?.style.width).toBe("98cqw");
 
     act(() => root.unmount());
@@ -3403,7 +3403,7 @@ describe("MobileBattleScreen", () => {
     expect(playerHand?.dataset.battleHandCount).toBe("4");
     expect(playerCards).toHaveLength(view.playerHand.length);
     expect(playerCards?.[0]?.parentElement?.style.top).toBe(
-      "calc(var(--space-12) - var(--space-7) + var(--space-2))",
+      "calc(var(--space-6xl) - var(--space-xl) + var(--space-xs))",
     );
     expect(playerCards?.[0]?.parentElement?.style.bottom).toBe("");
 
@@ -3465,12 +3465,12 @@ describe("MobileBattleScreen", () => {
     expect(controlRow?.style.gridRow).toBe("5");
     expect(controlRow?.style.display).toBe("flex");
     expect(controlRow?.style.justifyContent).toBe("flex-end");
-    expect(controlRow?.style.paddingInline).toBe("var(--space-4)");
-    expect(controlRow?.style.paddingTop).toBe("var(--space-4)");
+    expect(controlRow?.style.paddingInline).toBe("var(--space-s)");
+    expect(controlRow?.style.paddingTop).toBe("var(--space-s)");
     expect(controlRow?.style.boxSizing).toBe("border-box");
     expect(controlRow?.style.zIndex).toBe("10");
     expect(phaseControls?.style.display).toBe("flex");
-    expect(phaseControls?.style.gap).toBe("var(--space-4)");
+    expect(phaseControls?.style.gap).toBe("var(--space-s)");
     expect(backSlot?.style.position).toBe("");
     expect(nextSlot?.style.width).toBe("max-content");
     expect(nextSlot?.style.minWidth).toBe("120px");
@@ -3584,8 +3584,8 @@ describe("MobileBattleScreen", () => {
     expect(nextSlot?.textContent).not.toContain("Next Phase");
     expect(nextSlot?.querySelectorAll("button")).toHaveLength(2);
     expect(nextSlot?.style.width).toBe("");
-    expect(nextSlot?.style.gap).toBe("var(--space-4)");
-    expect(phaseControls?.style.gap).toBe("var(--space-4)");
+    expect(nextSlot?.style.gap).toBe("var(--space-s)");
+    expect(phaseControls?.style.gap).toBe("var(--space-s)");
     expect(backButton?.getAttribute("aria-disabled")).toBe("true");
     expect(rejectButton?.getAttribute("aria-disabled")).toBeNull();
     expect(continueButton?.getAttribute("aria-disabled")).toBeNull();

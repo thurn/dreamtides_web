@@ -44,7 +44,7 @@ export function TextField({
   const message = error ?? supportingText;
   const chrome = controlChrome("onGlass");
   return (
-    <label style={{ display: "grid", gap: token("--space-2") }}>
+    <label style={{ display: "grid", gap: token("--space-xs") }}>
       <span
         style={{
           color: token("--text-on-glass-muted"),
@@ -69,7 +69,7 @@ export function TextField({
           width: "100%",
           minHeight: token("--touch-min"),
           boxSizing: "border-box",
-          paddingInline: token("--space-4"),
+          paddingInline: token("--space-s"),
           color: token("--text-on-glass"),
           font: token("--t-body"),
           outline: "none",

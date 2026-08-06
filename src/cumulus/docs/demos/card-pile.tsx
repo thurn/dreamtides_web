@@ -28,7 +28,7 @@ function CardPileDemo(args: Record<string, unknown>) {
   const width = orientation === "portrait" ? 96 : 152;
   return (
     <div
-      style={{ display: "flex", alignItems: "center", gap: token("--space-9") }}
+      style={{ display: "flex", alignItems: "center", gap: token("--space-3xl") }}
     >
       <div style={{ width }}>
         <CardPile

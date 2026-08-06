@@ -57,7 +57,7 @@ export function BattleCardNoteOverlay({
         className="cumulus"
         data-battle-note-editor=""
         data-battle-note-editor-card={cardId}
-        style={{ display: "grid", gap: token("--space-5") }}
+        style={{ display: "grid", gap: token("--space-m") }}
       >
         <div data-battle-note-field="text">
           <TextField
@@ -71,7 +71,7 @@ export function BattleCardNoteOverlay({
         </div>
         <div
           data-battle-note-field="expiry"
-          style={{ display: "grid", gap: token("--space-2") }}
+          style={{ display: "grid", gap: token("--space-xs") }}
         >
           <span
             style={{
@@ -120,7 +120,7 @@ export function BattleCardNoteOverlay({
           style={{
             display: "flex",
             justifyContent: "flex-end",
-            gap: token("--space-3"),
+            gap: token("--space-xs"),
           }}
         >
           <GlassButton

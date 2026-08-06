@@ -18,13 +18,13 @@
     display: block;
     position: fixed;
     top: 50%;
-    left: var(--space-5);
+    left: var(--space-m);
     transform: translateY(-50%);
-    width: min(220px, calc((100vw - 960px) / 2 - var(--space-8)));
+    width: min(220px, calc((100vw - 960px) / 2 - var(--space-2xl)));
     max-height: 82vh;
     overflow-y: auto;
     box-sizing: border-box;
-    padding: var(--space-6);
+    padding: var(--space-l);
     background: var(--surface-card);
     border: 1px solid var(--border-soft);
     border-radius: var(--radius-panel);
@@ -39,7 +39,7 @@
   letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--text-muted);
-  margin: 0 0 var(--space-5);
+  margin: 0 0 var(--space-m);
 }
 
 .cumulus-toc__list {
@@ -48,7 +48,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-xxs);
 }
 
 /* Each entry is a full-width button so the whole row is a click target. A
@@ -64,7 +64,7 @@
   border-left: 2px solid transparent;
   border-radius: 0;
   margin: 0;
-  padding: var(--space-2) var(--space-4);
+  padding: var(--space-xs) var(--space-s);
   font: var(--t-body-sm);
   color: var(--text-muted);
   transition:
@@ -78,7 +78,7 @@
 }
 
 .cumulus-toc__item--child {
-  padding-left: var(--space-7);
+  padding-left: var(--space-xl);
   font: var(--t-caption);
 }
 

@@ -363,7 +363,7 @@ export default function OffersDebugApp(): ReactElement {
           width: "min(1740px, 100%)",
           minHeight: "100vh",
           margin: "0 auto",
-          padding: `${token("--space-9")} ${token("--space-8")} ${token("--space-10")}`,
+          padding: `${token("--space-3xl")} ${token("--space-2xl")} ${token("--space-4xl")}`,
           boxSizing: "border-box",
         }}
       >
@@ -371,8 +371,8 @@ export default function OffersDebugApp(): ReactElement {
           style={{
             display: "grid",
             justifyItems: "center",
-            gap: token("--space-2"),
-            marginBottom: token("--space-9"),
+            gap: token("--space-xs"),
+            marginBottom: token("--space-3xl"),
             textAlign: "center",
             textShadow: token("--text-outline-media"),
           }}
@@ -402,7 +402,7 @@ export default function OffersDebugApp(): ReactElement {
             display: "grid",
             gridTemplateColumns: `repeat(auto-fit, minmax(${isDesktop ? "300px" : "240px"}, 1fr))`,
             alignItems: "start",
-            gap: token("--space-8"),
+            gap: token("--space-2xl"),
           }}
         >
           {OFFER_TILE_DEBUG_ARCHETYPE_IDS.map((archetypeId) => {
@@ -418,7 +418,7 @@ export default function OffersDebugApp(): ReactElement {
                 style={{
                   display: "grid",
                   justifyItems: "center",
-                  gap: token("--space-4"),
+                  gap: token("--space-s"),
                   margin: 0,
                 }}
               >
@@ -430,7 +430,7 @@ export default function OffersDebugApp(): ReactElement {
                 <figcaption
                   style={{
                     display: "grid",
-                    gap: token("--space-1"),
+                    gap: token("--space-xxs"),
                     font: token("--t-caption"),
                     color: token("--text-on-glass"),
                     textAlign: "center",

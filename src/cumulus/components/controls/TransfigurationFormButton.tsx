@@ -97,13 +97,13 @@ export function TransfigurationFormButton({
         alignItems: "center",
         justifyContent: compact ? "center" : undefined,
         textAlign: compact ? "center" : "left",
-        gap: compact ? token("--space-2") : token("--space-4"),
+        gap: compact ? token("--space-xs") : token("--space-s"),
         ...(compact
           ? {
-              paddingRight: token("--space-3"),
-              paddingLeft: token("--space-3"),
+              paddingRight: token("--space-xs"),
+              paddingLeft: token("--space-xs"),
             }
-          : { padding: token("--space-3") }),
+          : { padding: token("--space-xs") }),
         boxSizing: "border-box",
         border: `2px solid ${selected ? accent : token("--border-soft")}`,
         borderRadius: token("--radius-control"),

@@ -68,7 +68,7 @@ describe("RichText", () => {
     expect(markup).toContain(": The Nightmare card, a penalty card forced into your deck.");
     expect(markup.match(/data-definition-divider=""/g)).toHaveLength(1);
     expect(markup).toContain(
-      "margin:var(--space-4) auto;background:var(--border-strong)",
+      "margin:var(--space-s) auto;background:var(--border-strong)",
     );
     expect(markup).not.toContain("--cv-rules-highlight-color");
     expect(markup).not.toContain("data-rules-text-paragraph");

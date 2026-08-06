@@ -27,6 +27,8 @@ describe("EssenceValue", () => {
 
     const value = container.querySelector<HTMLElement>("[data-essence-value]");
     expect(value?.dataset.essenceValueVariant).toBe("rewardBadge");
+    expect(value?.style.paddingBlock).toBe("var(--space-s)");
+    expect(value?.style.paddingInline).toBe("var(--space-m)");
     expect(value?.dataset.essenceValueTone).toBe("mark");
     expect(value?.style.font).toBe("var(--t-numeral-lg)");
     expect(value?.style.background).toBe("var(--surface-chrome)");

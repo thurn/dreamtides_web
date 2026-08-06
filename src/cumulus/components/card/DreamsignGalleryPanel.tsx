@@ -213,8 +213,8 @@ export function DreamsignGalleryPanel({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          gap: token("--space-4"),
-          padding: compact ? token("--space-5") : token("--space-8"),
+          gap: token("--space-s"),
+          padding: compact ? token("--space-m") : token("--space-2xl"),
           borderBottom: `1px solid ${token("--border-strong")}`,
         }}
       >
@@ -241,10 +241,10 @@ export function DreamsignGalleryPanel({
         style={{
           display: "grid",
           gridTemplateColumns: `repeat(${compact ? "2" : "4"}, ${String(itemWidth)}px)`,
-          gap: compact ? token("--space-3") : token("--space-4"),
+          gap: compact ? token("--space-xs") : token("--space-s"),
           justifyContent: "center",
           alignItems: "start",
-          padding: compact ? token("--space-4") : token("--space-8"),
+          padding: compact ? token("--space-s") : token("--space-2xl"),
         }}
       >
         {entries.map((entry) => {
@@ -260,7 +260,7 @@ export function DreamsignGalleryPanel({
                 minWidth: 0,
                 display: "flex",
                 flexDirection: "column",
-                gap: token("--space-1"),
+                gap: token("--space-xxs"),
                 opacity: unavailable ? 0.42 : 1,
                 visibility: reserved ? "hidden" : undefined,
               }}
@@ -292,7 +292,7 @@ export function DreamsignGalleryPanel({
             minWidth: 0,
             display: "flex",
             flexDirection: "column",
-            gap: token("--space-1"),
+            gap: token("--space-xxs"),
             opacity: endAction.disabled ? 0.42 : 1,
           }}
         >

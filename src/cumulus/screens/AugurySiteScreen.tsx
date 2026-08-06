@@ -223,7 +223,7 @@ export function AugurySiteScreen({
             minHeight: 0,
             display: "grid",
             placeItems: "center",
-            padding: layout === "desktop" ? token("--space-6") : token("--space-3"),
+            padding: layout === "desktop" ? token("--space-l") : token("--space-xs"),
             boxSizing: "border-box",
             pointerEvents: "none",
           }}
@@ -255,7 +255,7 @@ export function AugurySiteScreen({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: reduceMotion === true ? 0 : -8 }}
                 transition={transition}
-                style={{ display: "grid", justifyItems: "center", gap: token("--space-5"), pointerEvents: "auto" }}
+                style={{ display: "grid", justifyItems: "center", gap: token("--space-m"), pointerEvents: "auto" }}
               >
                 <div
                   data-augury-offer-row=""
@@ -265,7 +265,7 @@ export function AugurySiteScreen({
                     maxWidth: "100%",
                     alignItems: "center",
                     justifyContent: layout === "desktop" ? "center" : "flex-start",
-                    gap: layout === "desktop" ? token("--space-9") : token("--space-4"),
+                    gap: layout === "desktop" ? token("--space-3xl") : token("--space-s"),
                     overflowX: layout === "mobile" ? "auto" : undefined,
                     paddingInline:
                       layout === "mobile"
@@ -371,10 +371,10 @@ function OfferDetailPanel({
               display: "flex",
               justifyContent: layout === "mobile" ? "center" : "flex-end",
               alignItems: "center",
-              gap: token("--space-4"),
+              gap: token("--space-s"),
               padding: layout === "mobile"
-                ? `0 ${token("--space-4")} ${token("--space-4")}`
-                : `0 ${token("--space-8")} ${token("--space-6")}`,
+                ? `0 ${token("--space-s")} ${token("--space-s")}`
+                : `0 ${token("--space-2xl")} ${token("--space-l")}`,
             }}
           >
             <GlassButton label="Choose Again" placement="onGlass" disabled={disabled} onPress={onChooseAgain} testId="cumulus-augury-choose-again" />
@@ -395,8 +395,8 @@ function OfferDetailPanel({
             containerType: "inline-size",
             display: "grid",
             placeItems: "center",
-            gap: token("--space-4"),
-            padding: layout === "desktop" ? token("--space-7") : token("--space-4"),
+            gap: token("--space-s"),
+            padding: layout === "desktop" ? token("--space-xl") : token("--space-s"),
             boxSizing: "border-box",
           }}
         >
@@ -445,7 +445,7 @@ function OfferDetailVisual({
       return choices(visual.choices, visual.doubled ? "2x" : undefined);
     case "beforeAfter":
       return (
-        <div style={{ display: "grid", gap: token("--space-4") }}>
+        <div style={{ display: "grid", gap: token("--space-s") }}>
           {visual.pairs.map((pair) => (
             <Transition key={pair.id} before={pair.before} after={pair.after} layout={layout} />
           ))}
@@ -476,10 +476,10 @@ function OfferDetailVisual({
           {visual.choices.map((choice) => {
             const selected = selectedChoiceId === choice.id;
             return (
-              <div key={choice.id} data-augury-dreamsign-choice="" data-selected={selected ? "true" : "false"} style={{ position: "relative", padding: token("--space-2"), borderRadius: token("--radius-panel"), border: `4px solid ${selected ? token("--accent-bright") : "transparent"}`, boxShadow: selected ? token("--glow-accent-soft") : undefined }}>
+              <div key={choice.id} data-augury-dreamsign-choice="" data-selected={selected ? "true" : "false"} style={{ position: "relative", padding: token("--space-xs"), borderRadius: token("--radius-panel"), border: `4px solid ${selected ? token("--accent-bright") : "transparent"}`, boxShadow: selected ? token("--glow-accent-soft") : undefined }}>
                 <Dreamsign dreamsign={choice.dreamsign} sizePx={dreamsignSize(visual.choices.length, layout)} onPress={() => onSelect(offerId, choice.id)} testid={`cumulus-augury-choice-${choice.id}`} />
                 {selected && (
-                  <span aria-hidden="true" data-augury-dreamsign-selection-marker="" style={{ position: "absolute", top: token("--space-2"), right: token("--space-2"), width: 36, height: 36, borderRadius: token("--radius-pill"), display: "grid", placeItems: "center", color: token("--text-on-accent"), background: token("--accent-bright"), boxShadow: token("--shadow-md"), pointerEvents: "none", fontSize: 24 }}>
+                  <span aria-hidden="true" data-augury-dreamsign-selection-marker="" style={{ position: "absolute", top: token("--space-xs"), right: token("--space-xs"), width: 36, height: 36, borderRadius: token("--radius-pill"), display: "grid", placeItems: "center", color: token("--text-on-accent"), background: token("--accent-bright"), boxShadow: token("--shadow-md"), pointerEvents: "none", fontSize: 24 }}>
                     <StandaloneGlyph glyph={GLYPHS.check} color="white" />
                   </span>
                 )}
@@ -492,7 +492,7 @@ function OfferDetailVisual({
       return <SiteRewardVisual model={visual.model} />;
     case "mixed":
       return (
-        <div style={{ display: "grid", justifyItems: "center", gap: token("--space-5") }}>
+        <div style={{ display: "grid", justifyItems: "center", gap: token("--space-m") }}>
           <CardRow
             cards={visual.cards}
             layout={layout}
@@ -565,13 +565,13 @@ function TransitionArrow({ layout }: { layout: "mobile" | "desktop" }) {
 
 function Transition({ before, after, layout }: { before: AuguryCardView; after: AuguryCardView; layout: "mobile" | "desktop" }) {
   const width = layout === "desktop" ? "min(240px, 40cqw, 64cqh)" : "min(124px, 38cqw, 58cqh)";
-  return <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: token("--space-4") }}><CardTile card={before} width={width} muted /><TransitionArrow layout={layout} /><CardTile card={after} width={width} selected /></div>;
+  return <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: token("--space-s") }}><CardTile card={before} width={width} muted /><TransitionArrow layout={layout} /><CardTile card={after} width={width} selected /></div>;
 }
 
 function TradeCards({ offerId, removed, choices, layout, selectedChoiceId, onSelect }: { offerId: string; removed: AuguryCardView; choices: readonly AuguryCardChoiceView[]; layout: "mobile" | "desktop"; selectedChoiceId?: string; onSelect: (offerId: string, choiceId: string) => void }) {
   const removedWidth = layout === "desktop" ? "min(190px, 18cqw, 55cqh)" : "min(96px, 23cqw, 58cqh)";
   return (
-    <div data-augury-trade-layout={layout} style={{ display: "grid", gridTemplateColumns: "auto auto minmax(0, 1fr)", alignItems: "center", justifyContent: "center", gap: layout === "desktop" ? token("--space-5") : token("--space-3"), minWidth: 0 }}>
+    <div data-augury-trade-layout={layout} style={{ display: "grid", gridTemplateColumns: "auto auto minmax(0, 1fr)", alignItems: "center", justifyContent: "center", gap: layout === "desktop" ? token("--space-m") : token("--space-xs"), minWidth: 0 }}>
       <CardTile card={removed} width={removedWidth} danger />
       <TransitionArrow layout={layout} />
       <CardChoices offerId={offerId} choices={choices} layout={layout} fit="compact-choice" columns={cardGridColumns(choices.length, layout)} selectedChoiceId={selectedChoiceId} onSelect={onSelect} />
@@ -591,7 +591,7 @@ function dreamsignSize(count: number, layout: "mobile" | "desktop"): number {
 
 function DreamsignChoiceGrid({ count, layout, children }: { count: number; layout: "mobile" | "desktop"; children: ReactNode }) {
   const columns = layout === "desktop" ? Math.max(1, count) : Math.min(2, Math.max(1, count));
-  return <div style={{ display: "grid", gridTemplateColumns: `repeat(${String(columns)}, auto)`, alignItems: "center", justifyContent: "center", gap: token("--space-4") }}>{children}</div>;
+  return <div style={{ display: "grid", gridTemplateColumns: `repeat(${String(columns)}, auto)`, alignItems: "center", justifyContent: "center", gap: token("--space-s") }}>{children}</div>;
 }
 
 function DreamsignRow({ dreamsigns, layout }: { dreamsigns: readonly DreamsignData[]; layout: "mobile" | "desktop" }) {

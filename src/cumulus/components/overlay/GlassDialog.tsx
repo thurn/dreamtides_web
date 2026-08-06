@@ -266,7 +266,7 @@ export function GlassDialog({
         maxHeight: popup
           ? "100%"
           : wideDesktop
-            ? `calc(100vh - ${token("--space-8")} - ${token("--space-8")})`
+            ? `calc(100vh - ${token("--space-2xl")} - ${token("--space-2xl")})`
             : "85vh",
         display: "flex",
         flexDirection: "column",
@@ -291,10 +291,10 @@ export function GlassDialog({
     display: "flex",
     alignItems: "flex-start",
     justifyContent: "space-between",
-    gap: token("--space-4"),
+    gap: token("--space-s"),
     borderBottom: `1px solid ${token("--border-strong")}`,
     ...(boundedPanel
-      ? { padding: token("--space-6") }
+      ? { padding: token("--space-l") }
       : {
           // Clear a device screen cutout on the full-bleed overlay: the safe-area
           // inset carries the real (or mock-up) top inset, so the title drops
@@ -302,7 +302,7 @@ export function GlassDialog({
           paddingTop: `max(${token("--safe-area-inset-top")}, ${token("--gutter")})`,
           paddingRight: token("--gutter"),
           paddingLeft: token("--gutter"),
-          paddingBottom: token("--space-4"),
+          paddingBottom: token("--space-s"),
         }),
   };
 
@@ -320,8 +320,8 @@ export function GlassDialog({
     popup && !isDesktop
       ? token("--gutter")
       : wideDesktop
-        ? token("--space-8")
-        : token("--space-7");
+        ? token("--space-2xl")
+        : token("--space-xl");
 
   const panel = (
     <div data-glass-dialog-panel="" style={panelStyle}>
@@ -330,8 +330,8 @@ export function GlassDialog({
           data-glass-dialog-close-only=""
           style={{
             position: "absolute",
-            top: token("--space-6"),
-            right: token("--space-6"),
+            top: token("--space-l"),
+            right: token("--space-l"),
             zIndex: 2,
           }}
         >
@@ -361,7 +361,7 @@ export function GlassDialog({
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: token("--space-1"),
+              gap: token("--space-xxs"),
             }}
           >
             <h2
@@ -395,7 +395,7 @@ export function GlassDialog({
           minHeight: 0,
           overflowY: "auto",
           WebkitOverflowScrolling: "touch",
-          padding: wideDesktop ? token("--space-6") : token("--space-5"),
+          padding: wideDesktop ? token("--space-l") : token("--space-m"),
         }}
       >
         {chrome === "flowing-close" && closeButton !== null ? (
@@ -403,10 +403,10 @@ export function GlassDialog({
             data-glass-dialog-flowing-close=""
             style={{
               float: "right",
-              marginTop: token("--space-1"),
-              marginRight: token("--space-1"),
+              marginTop: token("--space-xxs"),
+              marginRight: token("--space-xxs"),
               shapeOutside: "circle(50%)",
-              shapeMargin: token("--space-2"),
+              shapeMargin: token("--space-xs"),
             }}
           >
             {closeButton}
@@ -455,10 +455,10 @@ export function GlassDialog({
             gridTemplateColumns: isDesktop
               ? `${String(PAIRED_POPUP_DESKTOP_COMPANION_WIDTH_PX)}px minmax(0, ${String(PAIRED_POPUP_DESKTOP_PANEL_WIDTH_PX)}px)`
               : "minmax(0, 1fr)",
-            gap: token(isDesktop ? "--space-7" : "--space-5"),
+            gap: token(isDesktop ? "--space-xl" : "--space-m"),
             alignItems: "center",
             width: isDesktop
-              ? `calc(${String(PAIRED_POPUP_DESKTOP_COMPANION_WIDTH_PX + PAIRED_POPUP_DESKTOP_PANEL_WIDTH_PX)}px + ${token("--space-7")})`
+              ? `calc(${String(PAIRED_POPUP_DESKTOP_COMPANION_WIDTH_PX + PAIRED_POPUP_DESKTOP_PANEL_WIDTH_PX)}px + ${token("--space-xl")})`
               : `calc(100vw - ${token("--gutter")} - ${token("--gutter")})`,
             maxWidth: isDesktop
               ? "100%"

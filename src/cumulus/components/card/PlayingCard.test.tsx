@@ -135,6 +135,9 @@ describe("PlayingCard", () => {
     const description = prize?.querySelector<HTMLElement>(
       "[data-wager-prize-description]",
     );
+    expect(
+      prize?.querySelector<HTMLElement>("[data-wager-prize-copy]")?.style.gap,
+    ).toBe("var(--space-xs)");
     expect(description?.textContent).toBe("Win 200 and Bezoar");
     expect(
       description?.querySelector("[data-wager-prize-dreamsign-name]"),
@@ -204,6 +207,9 @@ describe("PlayingCard", () => {
     });
 
     const prize = host.querySelector<HTMLElement>("[data-wager-prize-card]");
+    expect(
+      prize?.querySelector<HTMLElement>("[data-wager-prize-copy]")?.style.gap,
+    ).toBe("var(--space-s)");
     expect(prize?.dataset.wagerPrizeCard).toBe("ladder-climb");
     expect(prize?.querySelector("[data-wager-prize-title]")).not.toBeNull();
     expect(

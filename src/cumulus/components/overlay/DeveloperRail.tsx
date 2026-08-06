@@ -89,7 +89,7 @@ export function DeveloperRail({
           style={{
             height: "100%",
             overflowY: "auto",
-            padding: token("--space-5"),
+            padding: token("--space-m"),
             boxSizing: "border-box",
           }}
         >

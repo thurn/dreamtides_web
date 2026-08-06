@@ -448,11 +448,11 @@ export function BattleTutorialGuidance({
         flexDirection: desktop ? "row" : "column",
         alignItems: "center",
         justifyContent: "center",
-        gap: desktop ? token("--space-10") : token("--space-4"),
+        gap: desktop ? token("--space-4xl") : token("--space-s"),
         boxSizing: "border-box",
         padding: desktop
-          ? `max(${token("--space-8")}, var(--safe-area-inset-top)) max(${token("--space-8")}, var(--safe-area-inset-right)) max(${token("--space-8")}, var(--safe-area-inset-bottom)) max(${token("--space-8")}, var(--safe-area-inset-left))`
-          : `max(${token("--space-4")}, var(--safe-area-inset-top)) max(${token("--space-4")}, var(--safe-area-inset-right)) max(${token("--space-4")}, var(--safe-area-inset-bottom)) max(${token("--space-4")}, var(--safe-area-inset-left))`,
+          ? `max(${token("--space-2xl")}, var(--safe-area-inset-top)) max(${token("--space-2xl")}, var(--safe-area-inset-right)) max(${token("--space-2xl")}, var(--safe-area-inset-bottom)) max(${token("--space-2xl")}, var(--safe-area-inset-left))`
+          : `max(${token("--space-s")}, var(--safe-area-inset-top)) max(${token("--space-s")}, var(--safe-area-inset-right)) max(${token("--space-s")}, var(--safe-area-inset-bottom)) max(${token("--space-s")}, var(--safe-area-inset-left))`,
         overflow: "hidden",
         pointerEvents: "none",
       }}

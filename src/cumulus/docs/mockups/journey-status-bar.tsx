@@ -29,7 +29,7 @@ export function JourneyStatusBarMockup() {
       <div
         style={{
           position: "absolute",
-          top: token("--space-8"),
+          top: token("--space-2xl"),
           left: 0,
           right: 0,
           textAlign: "center",
@@ -39,7 +39,7 @@ export function JourneyStatusBarMockup() {
         <div style={{ font: token("--t-title"), color: token("--text-primary") }}>
           Frostforge
         </div>
-        <div style={{ font: token("--t-caption"), color: token("--text-secondary"), marginTop: token("--space-2") }}>
+        <div style={{ font: token("--t-caption"), color: token("--text-secondary"), marginTop: token("--space-xs") }}>
           Press essence, the DreamAvatar, or a dreamsign to read it.
         </div>
       </div>

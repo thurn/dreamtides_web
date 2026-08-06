@@ -103,8 +103,8 @@ const controlsStyle: CSSProperties = {
   display: "flex",
   flexWrap: "wrap",
   alignItems: "center",
-  gap: token("--space-4"),
-  padding: token("--space-4"),
+  gap: token("--space-s"),
+  padding: token("--space-s"),
 };
 
 /** Shared pure pool viewer for full-screen and floating integration shells. */
@@ -212,18 +212,18 @@ export function PoolViewerScreen({
           onExpandedChange={(expanded) => setExpandedDisclosures((current) => ({ ...current, [disclosure.id]: expanded }))}
           testId={`pool-disclosure-${disclosure.id}`}
         >
-          <p style={{ margin: token("--space-4"), font: token("--t-body-sm"), color: token("--text-on-glass-muted") }}>
+          <p style={{ margin: token("--space-s"), font: token("--t-body-sm"), color: token("--text-on-glass-muted") }}>
             {disclosure.body}
           </p>
         </DisclosureSection>
       ))}
       {view.source === "history" ? (
-        <section data-pool-pick-history="" style={{ overflowY: "auto", padding: token("--space-4") }}>
+        <section data-pool-pick-history="" style={{ overflowY: "auto", padding: token("--space-s") }}>
           {view.replayRows.length === 0 ? (
             <p data-pool-empty="" style={{ font: token("--t-body"), color: token("--text-on-glass-muted") }}>{view.emptyLabel}</p>
           ) : view.replayRows.map((row) => (
             <DisclosureSection key={row.entryId} title={row.title} summary={row.summary} expanded={expandedDisclosures[row.entryId] ?? true} onExpandedChange={(expanded) => setExpandedDisclosures((current) => ({ ...current, [row.entryId]: expanded }))} testId={row.entryId}>
-              <p style={{ margin: token("--space-4"), font: token("--t-body-sm"), color: token("--text-on-glass-muted") }}>
+              <p style={{ margin: token("--space-s"), font: token("--t-body-sm"), color: token("--text-on-glass-muted") }}>
                 {row.cards.map((card) => `${card.picked ? "✓ " : ""}${card.label}`).join(" · ")}
               </p>
             </DisclosureSection>

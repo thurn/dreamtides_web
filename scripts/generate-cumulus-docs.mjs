@@ -501,7 +501,7 @@ export const TOKEN_GROUPS = [
   },
   {
     title: "Spacing & layout",
-    note: "The --space-* scale is the approved spacing system for all layout (margins, padding, gaps) — including the wrapper elements callers use to size and place Cumulus components.",
+    note: "The named --space-* scale places content rhythm on a 4px grid. Use --space-xxs only for tight 2px optical separation; device and object geometry use their named measures.",
     prefixes: [
       "space-",
       "gutter",

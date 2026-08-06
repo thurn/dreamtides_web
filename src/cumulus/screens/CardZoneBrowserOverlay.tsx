@@ -272,11 +272,11 @@ export function CardZoneBrowserOverlay({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        paddingTop: isDesktop ? token("--space-8") : 0,
-        paddingBottom: isDesktop ? token("--space-8") : 0,
-        paddingLeft: isDesktop ? token("--space-8") : 0,
+        paddingTop: isDesktop ? token("--space-2xl") : 0,
+        paddingBottom: isDesktop ? token("--space-2xl") : 0,
+        paddingLeft: isDesktop ? token("--space-2xl") : 0,
         paddingRight: isDesktop
-          ? `calc(${token("--space-8")} + ${String(battlefieldEndInset)}px)`
+          ? `calc(${token("--space-2xl")} + ${String(battlefieldEndInset)}px)`
           : 0,
       }}
     >
@@ -288,12 +288,12 @@ export function CardZoneBrowserOverlay({
             ? `min(100%, ${String(DESKTOP_BROWSER_MAX_WIDTH_PX)}px)`
             : "100%",
           height: fillsDesktopFrame
-            ? `calc(100vh - ${token("--space-8")} - ${token("--space-8")})`
+            ? `calc(100vh - ${token("--space-2xl")} - ${token("--space-2xl")})`
             : isDesktop
               ? undefined
               : "100%",
           maxHeight: isDesktop
-            ? `calc(100vh - ${token("--space-8")} - ${token("--space-8")})`
+            ? `calc(100vh - ${token("--space-2xl")} - ${token("--space-2xl")})`
             : undefined,
           minHeight: 0,
           display: "flex",

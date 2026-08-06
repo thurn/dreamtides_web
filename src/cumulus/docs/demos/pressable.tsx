@@ -18,7 +18,7 @@ const targetStyle: CSSProperties = {
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
-  padding: `${token("--space-4")} ${token("--space-8")}`,
+  padding: `${token("--space-s")} ${token("--space-2xl")}`,
   borderRadius: token("--radius-control"),
   border: `1px solid ${token("--border-soft")}`,
   background: token("--surface-raised"),

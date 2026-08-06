@@ -136,8 +136,8 @@ describe("CardPile", () => {
           (layer.firstElementChild as HTMLElement | null)?.style.transform,
       ),
     ).toEqual([
-      "translate(var(--space-2), calc(-1 * var(--space-2)))",
-      "translate(var(--space-1), calc(-1 * var(--space-1)))",
+      "translate(var(--space-xs), calc(-1 * var(--space-xs)))",
+      "translate(var(--space-xxs), calc(-1 * var(--space-xxs)))",
       "translate(0, 0)",
     ]);
     expect(container.querySelector('[data-battle-card-id="instance-hidden"]')).toBeNull();

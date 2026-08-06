@@ -104,7 +104,7 @@ export default tseslint.config(
   {
     // The design-system tier plus the adapter/builder layer in
     // src/screens/cumulus_adapters/. Each rule scopes itself further by path (e.g. the
-    // visual rules exempt primitives/components/docs; screen-file-taxonomy
+    // visual rules exempt token definitions/components/docs; screen-file-taxonomy
     // only acts on src/screens/cumulus_adapters/), so the block can bind them broadly.
     files: ["src/cumulus/**/*.{ts,tsx}", "src/screens/cumulus_adapters/**/*.{ts,tsx}"],
     plugins: { cumulus: cumulusPlugin },

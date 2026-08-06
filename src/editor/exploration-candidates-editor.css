@@ -14,7 +14,7 @@
   min-width: 0;
   min-height: 100dvh;
   box-sizing: border-box;
-  padding: var(--space-8);
+  padding: var(--space-2xl);
   background:
     radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 20%, transparent), transparent 34%),
     radial-gradient(circle at bottom left, color-mix(in srgb, var(--accent-bright) 10%, transparent), transparent 38%),
@@ -31,11 +31,11 @@
 
 .exploration-candidates-editor-page-header {
   min-height: 44px;
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-l);
   display: flex;
   align-items: end;
   justify-content: space-between;
-  gap: var(--space-6);
+  gap: var(--space-l);
 }
 
 .exploration-candidates-editor-page-header h1,
@@ -48,7 +48,7 @@
 }
 
 .exploration-candidates-editor-page-header p {
-  margin-bottom: var(--space-1);
+  margin-bottom: var(--space-xxs);
   color: var(--text-muted);
   font: var(--t-eyebrow);
   text-transform: uppercase;
@@ -57,7 +57,7 @@
 .exploration-candidates-editor-page-actions {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-s);
 }
 
 .exploration-candidates-editor-page-actions > span {
@@ -73,7 +73,7 @@
 
 .exploration-candidates-editor-list {
   display: grid;
-  gap: var(--space-5);
+  gap: var(--space-m);
 }
 
 .exploration-candidates-editor-row {
@@ -108,14 +108,14 @@
   box-sizing: border-box;
   display: grid;
   grid-template-rows: auto auto minmax(0, 1fr);
-  gap: var(--space-4);
-  padding: var(--space-5) var(--space-6);
+  gap: var(--space-s);
+  padding: var(--space-m) var(--space-l);
 }
 
 .exploration-candidates-editor-copy-header {
   min-width: 0;
   display: grid;
-  gap: var(--space-1);
+  gap: var(--space-xxs);
 }
 
 .exploration-candidates-editor-copy-header h2 {
@@ -138,12 +138,12 @@
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-xs);
 }
 
 .exploration-candidates-editor-prose-copy {
   min-width: 0;
-  padding-left: var(--space-4);
+  padding-left: var(--space-s);
   border-left: 2px solid var(--border-accent);
 }
 
@@ -158,14 +158,14 @@
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-xs);
 }
 
 .exploration-candidates-editor-actions {
   min-height: 0;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-4);
+  gap: var(--space-s);
 }
 
 .exploration-candidates-editor-action {
@@ -174,8 +174,8 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-4);
+  gap: var(--space-xs);
+  padding: var(--space-s);
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-compact);
   background: color-mix(in srgb, var(--surface-raised) 64%, transparent);
@@ -198,8 +198,8 @@
 
 .exploration-candidates-editor-variable-list {
   display: grid;
-  gap: var(--space-1);
-  padding-top: var(--space-1);
+  gap: var(--space-xxs);
+  padding-top: var(--space-xxs);
   border-top: 1px solid var(--border-soft);
 }
 
@@ -222,7 +222,7 @@
   width: auto;
   height: auto;
   display: block;
-  margin-top: var(--space-1);
+  margin-top: var(--space-xxs);
   overflow: visible;
   clip-path: none;
   color: var(--danger);
@@ -263,7 +263,7 @@
 .exploration-candidates-editor-notice,
 .exploration-candidates-editor-error {
   max-width: 720px;
-  margin: var(--space-12) auto;
+  margin: var(--space-6xl) auto;
 }
 
 .exploration-candidates-editor-notice {
@@ -276,19 +276,19 @@
 }
 
 .exploration-candidates-editor-error-action {
-  padding: var(--space-6);
+  padding: var(--space-l);
 }
 
 @media (max-width: 899px) {
   .exploration-candidates-editor-shell {
-    padding: var(--space-4);
+    padding: var(--space-s);
   }
 
   .exploration-candidates-editor-page-header {
     min-height: 0;
     align-items: start;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: var(--space-s);
   }
 
   .exploration-candidates-editor-page-actions {
@@ -310,8 +310,8 @@
   }
 
   .exploration-candidates-editor-copy {
-    gap: var(--space-5);
-    padding: var(--space-5) var(--space-4);
+    gap: var(--space-m);
+    padding: var(--space-m) var(--space-s);
   }
 
   .exploration-candidates-editor-copy-header h2 {

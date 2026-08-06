@@ -72,13 +72,13 @@ export interface DreamsignRevelationScreenProps {
 
 const CONTENT_VERTICAL_OFFSET = "10dvh";
 const GUIDE_LAYER_TOP = `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${CONTENT_VERTICAL_OFFSET})`;
-const OFFER_TOP = `max(44dvh, calc(${token("--safe-top")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-7")} + ${CONTENT_VERTICAL_OFFSET}))`;
+const OFFER_TOP = `max(44dvh, calc(${token("--safe-top")} + ${token("--space-6xl")} + ${token("--space-6xl")} + ${token("--space-xl")} + ${CONTENT_VERTICAL_OFFSET}))`;
 const TUTORIAL_OFFER_TOP = "50dvh";
 const HUD_CLEARANCE = `calc(${JOURNEY_STATUS_BAR_CLEARANCE_OP})`;
 const MOBILE_OFFER_TILE_SIZE = 120;
 const DESKTOP_OFFER_TILE_SIZE = 154;
 const DESKTOP_ENHANCED_OFFER_TILE_SIZE = 140;
-const DESKTOP_DECLINE_GAP = token("--space-12");
+const DESKTOP_DECLINE_GAP = token("--space-6xl");
 
 /**
  * The Cumulus mobile Dreamsign Revelation screen. Pure and props-driven: it owns
@@ -196,10 +196,10 @@ function DesktopComposition({
       data-revelation-composition=""
       style={{
         position: "absolute",
-        top: `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${token("--space-8")})`,
+        top: `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${token("--space-2xl")})`,
         left: 0,
         right: 0,
-        bottom: `calc(${HUD_CLEARANCE} + ${token("--space-8")})`,
+        bottom: `calc(${HUD_CLEARANCE} + ${token("--space-2xl")})`,
         display: "grid",
         placeItems: "stretch center",
         zIndex: 20,
@@ -208,11 +208,11 @@ function DesktopComposition({
     >
       <div
         style={{
-          width: `calc(100% - ${token("--space-12")} - ${token("--space-12")})`,
+          width: `calc(100% - ${token("--space-6xl")} - ${token("--space-6xl")})`,
           maxWidth: 1320,
           display: "grid",
           gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)",
-          gap: token("--space-12"),
+          gap: token("--space-6xl"),
           alignItems: "center",
         }}
       >
@@ -277,8 +277,8 @@ function MobileComposition({
         style={{
           position: "absolute",
           top: view.tutorial === undefined ? OFFER_TOP : TUTORIAL_OFFER_TOP,
-          left: token("--space-4"),
-          right: token("--space-4"),
+          left: token("--space-s"),
+          right: token("--space-s"),
           bottom: HUD_CLEARANCE,
           display: "flex",
           flexDirection: "column",
@@ -329,13 +329,13 @@ function GuideScene({
         draggable={false}
         style={{
           position: "absolute",
-          top: desktop ? "auto" : token("--space-4"),
-          bottom: desktop ? `calc(-1 * ${token("--space-8")})` : "auto",
+          top: desktop ? "auto" : token("--space-s"),
+          bottom: desktop ? `calc(-1 * ${token("--space-2xl")})` : "auto",
           left: desktop
             ? "clamp(-72px, -4vw, -24px)"
             : hasTutorial
-              ? `calc(-1 * ${token("--space-6")})`
-              : "calc(-1 * (var(--space-12) + var(--space-4)))",
+              ? `calc(-1 * ${token("--space-l")})`
+              : "calc(-1 * (var(--space-6xl) + var(--space-s)))",
           width: desktop
             ? "clamp(320px, 29vw, 430px)"
             : hasTutorial
@@ -356,11 +356,11 @@ function GuideScene({
           data-revelation-site-tutorial=""
           style={{
             position: "absolute",
-            top: token("--space-4"),
+            top: token("--space-s"),
             left: desktop ? "calc(100% - 240px)" : "34vw",
             width: desktop
-              ? `min(calc(100vw - (${token("--space-4")} * 2)), ${String(view.tutorial.bubbleWidth)}px)`
-              : `calc(66vw - ${token("--space-3")})`,
+              ? `min(calc(100vw - (${token("--space-s")} * 2)), ${String(view.tutorial.bubbleWidth)}px)`
+              : `calc(66vw - ${token("--space-xs")})`,
             transform: `translate(${String(view.tutorial.horizontalOffset)}px, ${String(view.tutorial.verticalOffset)}px)`,
           }}
         >
@@ -380,12 +380,12 @@ function GuideScene({
               ? "30%"
               : "14%"
             : hasTutorial
-              ? `calc(50% + ${token("--space-4")})`
-              : token("--space-5"),
+              ? `calc(50% + ${token("--space-s")})`
+              : token("--space-m"),
           left: desktop ? "clamp(202px, 18vw, 276px)" : "34vw",
           right: desktop
             ? 0
-            : `calc(${token("--space-5")} + ${token("--space-11")} + ${token("--space-3")})`,
+            : `calc(${token("--space-m")} + ${token("--space-5xl")} + ${token("--space-xs")})`,
           maxWidth: desktop ? 380 : undefined,
         }}
       >
@@ -454,7 +454,7 @@ function OfferStack({
         style={{
           display: "grid",
           gridTemplateColumns,
-          gap: desktop ? token("--space-9") : token("--space-4"),
+          gap: desktop ? token("--space-3xl") : token("--space-s"),
           justifyContent: "center",
           alignItems: "start",
         }}

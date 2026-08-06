@@ -97,7 +97,7 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
         aspectRatio: "3 / 2",
         overflow: "hidden",
         containerType: "inline-size",
-        border: `${token("--space-1")} solid ${token("--border-mid")}`,
+        border: `${token("--space-xxs")} solid ${token("--border-mid")}`,
         borderRadius: token("--radius-panel"),
         background: token("--surface-card"),
         boxShadow: token("--shadow-card"),
@@ -126,8 +126,8 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
       <div
         style={{
           position: "absolute",
-          top: token("--space-4"),
-          right: token("--space-4"),
+          top: token("--space-s"),
+          right: token("--space-s"),
           filter: `drop-shadow(${token("--shadow-sm")})`,
         }}
       >
@@ -143,13 +143,13 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
       <div
         style={{
           position: "absolute",
-          right: token("--space-4"),
-          bottom: token("--space-4"),
-          left: token("--space-4"),
+          right: token("--space-s"),
+          bottom: token("--space-s"),
+          left: token("--space-s"),
           display: "grid",
-          gap: token("--space-2"),
-          padding: token("--space-4"),
-          border: `${token("--space-1")} solid ${token("--border-soft")}`,
+          gap: token("--space-xs"),
+          padding: token("--space-s"),
+          border: `${token("--space-xxs")} solid ${token("--border-soft")}`,
           borderRadius: token("--radius-panel"),
           background: token("--surface-card"),
           boxShadow: token("--shadow-md"),

@@ -74,7 +74,7 @@ export function JourneyCompleteScreen({
           inset: 0,
           overflowY: "auto",
           overscrollBehavior: "contain",
-          padding: `${JOURNEY_RESULT_TOP_CHROME_CLEARANCE} ${token("--space-6")} ${JOURNEY_RESULT_BOTTOM_SAFE_PADDING}`,
+          padding: `${JOURNEY_RESULT_TOP_CHROME_CLEARANCE} ${token("--space-l")} ${JOURNEY_RESULT_BOTTOM_SAFE_PADDING}`,
           boxSizing: "border-box",
           display: "flex",
           justifyContent: "center",
@@ -122,7 +122,7 @@ export function JourneyCompleteScreen({
                   alignSelf: "center",
                   display: "flex",
                   lineHeight: 0,
-                  marginTop: token("--space-6"),
+                  marginTop: token("--space-l"),
                 }}
               >
                 <DreamAvatarPortrait
@@ -144,19 +144,19 @@ export function JourneyCompleteScreen({
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
-                paddingBlock: token("--space-6"),
+                paddingBlock: token("--space-l"),
                 boxSizing: "border-box",
               }}
             >
               <GlassPanel testId="journey-complete-summary-panel">
-                <div style={{ padding: token("--space-6") }}>
+                <div style={{ padding: token("--space-l") }}>
                   <dl
                     data-journey-complete-summary=""
                     style={{
                       margin: 0,
                       display: "grid",
                       gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                      gap: token("--space-5"),
+                      gap: token("--space-m"),
                     }}
                   >
                     {view.stats.map((stat) => (
@@ -198,7 +198,7 @@ function SummaryStat({ stat }: { readonly stat: JourneyCompleteStatView }) {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: token("--space-2"),
+        gap: token("--space-xs"),
         textAlign: "center",
       }}
     >

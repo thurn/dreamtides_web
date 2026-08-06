@@ -103,7 +103,7 @@ export function CharacterDialogue({
         display: "grid",
         gridTemplateColumns: `${String(portraitSize)}px minmax(0, 1fr)`,
         alignItems: "center",
-        columnGap: token("--space-4"),
+        columnGap: token("--space-s"),
         width: "100%",
         maxWidth,
         margin: 0,

@@ -285,7 +285,7 @@ describe("PurgeSiteScreen", () => {
         .paddingBottom,
     ).toBe(JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE);
     expect(cardRegion?.style.height).toBe("100%");
-    expect(cardRegion?.style.width).toBe("calc(100vw - (var(--space-4) * 2))");
+    expect(cardRegion?.style.width).toBe("calc(100vw - (var(--space-s) * 2))");
     expect(cardRegion?.style.minHeight).toBe("0px");
     expect(surface?.style.background).toContain("var(--glass-fill-popover)");
     expect(surface?.style.borderRadius).toBe("var(--radius-compact)");
@@ -293,14 +293,14 @@ describe("PurgeSiteScreen", () => {
     expect(gallery?.dataset.galleryColumns).toBe("4");
     expect(gallery?.dataset.gallerySpacing).toBe("medium");
     expect(gallery?.querySelector<HTMLElement>("header")?.style.padding).toBe(
-      "var(--space-6)",
+      "var(--space-l)",
     );
     const galleryBody = gallery?.querySelector<HTMLElement>(
       "[data-glass-panel-content] > div",
     );
-    expect(galleryBody?.style.padding).toBe("var(--space-5)");
+    expect(galleryBody?.style.padding).toBe("var(--space-m)");
     expect(galleryBody?.firstElementChild?.getAttribute("style")).toContain(
-      "gap: var(--space-4)",
+      "gap: var(--space-s)",
     );
     expect(surface?.style.borderLeft).not.toContain("var(--border-soft)");
 
@@ -349,7 +349,7 @@ describe("PurgeSiteScreen", () => {
       '[data-testid="cumulus-purge-speech-anchor"]',
     );
     expect(speechAnchor?.style.left).toBe("40vw");
-    expect(speechAnchor?.style.top).toBe("var(--space-2)");
+    expect(speechAnchor?.style.top).toBe("var(--space-xs)");
     expect(speechAnchor?.style.bottom).toBe("");
 
     act(() => {
@@ -367,7 +367,7 @@ describe("PurgeSiteScreen", () => {
       "[data-guide-gallery-desktop-composition]",
     );
     expect(desktopComposition).not.toBeNull();
-    expect(desktopComposition?.style.bottom).toContain("var(--space-9)");
+    expect(desktopComposition?.style.bottom).toContain("var(--space-3xl)");
     const desktopLayout = container.querySelector<HTMLElement>(
       "[data-guide-gallery-desktop-layout]",
     );

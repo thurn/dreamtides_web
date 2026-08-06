@@ -156,13 +156,13 @@ describe("Cumulus DraftScreen", () => {
     expect(grid?.style.gridTemplateRows).toBe("repeat(2, auto)");
     const stage = container.querySelector<HTMLElement>("[data-draft-offer-stage]");
     expect(stage?.style.justifyContent).toBe("flex-start");
-    expect(stage?.style.paddingLeft).toBe("var(--space-2)");
-    expect(stage?.style.paddingRight).toBe("var(--space-2)");
-    expect(grid?.style.gap).toBe("var(--space-2)");
+    expect(stage?.style.paddingLeft).toBe("var(--space-xs)");
+    expect(stage?.style.paddingRight).toBe("var(--space-xs)");
+    expect(grid?.style.gap).toBe("var(--space-xs)");
     const firstCard = container.querySelector<HTMLElement>(
       '[data-draft-offer-card="101"]',
     );
-    expect(firstCard?.style.width).toContain("var(--space-2)");
+    expect(firstCard?.style.width).toContain("var(--space-xs)");
 
     act(() => {
       root.unmount();
@@ -184,8 +184,8 @@ describe("Cumulus DraftScreen", () => {
     expect(firstCard?.style.width).toContain("300px");
     const stage = container.querySelector<HTMLElement>("[data-draft-offer-stage]");
     expect(stage?.style.justifyContent).toBe("center");
-    expect(stage?.style.paddingLeft).toBe("var(--space-5)");
-    expect(grid?.style.gap).toBe("var(--space-5)");
+    expect(stage?.style.paddingLeft).toBe("var(--space-m)");
+    expect(grid?.style.gap).toBe("var(--space-m)");
 
     act(() => {
       root.unmount();

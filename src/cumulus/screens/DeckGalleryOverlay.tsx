@@ -46,7 +46,7 @@ export function DeckGalleryOverlay({
   const clearsMobileMenu = !isDesktop && clearMobileJourneyMenu;
   const mobileMenuClearance =
     `calc(max(var(--safe-area-inset-top), ${String(MENU_EDGE_INSET_MOBILE_PX)}px) + ` +
-    `${String(MENU_BUTTON_PX)}px + ${token("--space-4")})`;
+    `${String(MENU_BUTTON_PX)}px + ${token("--space-s")})`;
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -82,7 +82,7 @@ export function DeckGalleryOverlay({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            padding: isDesktop ? token("--space-8") : 0,
+            padding: isDesktop ? token("--space-2xl") : 0,
             background: clearsMobileMenu ? token("--scrim-gallery") : undefined,
           }}
         >
@@ -98,7 +98,7 @@ export function DeckGalleryOverlay({
                   : "100%",
               marginTop: clearsMobileMenu ? mobileMenuClearance : undefined,
               maxHeight: isDesktop
-                ? `calc(100vh - ${token("--space-8")} - ${token("--space-8")})`
+                ? `calc(100vh - ${token("--space-2xl")} - ${token("--space-2xl")})`
                 : undefined,
               minHeight: 0,
               display: "flex",

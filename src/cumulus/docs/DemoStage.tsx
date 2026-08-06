@@ -34,7 +34,7 @@ export function DemoStage({ Component, args, sampleContent }: DemoStageProps) {
         alignItems: "center",
         justifyContent: "center",
         minHeight: "160px",
-        padding: token("--space-9"),
+        padding: token("--space-3xl"),
         background: token("--bg-sunken"),
         border: `1px solid ${token("--border-mid")}`,
         borderRadius: token("--radius-panel"),

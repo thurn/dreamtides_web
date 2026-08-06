@@ -79,11 +79,11 @@ export function SegmentedControlMockup() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        padding: token("--space-9"),
+        padding: token("--space-3xl"),
         boxSizing: "border-box",
       }}
     >
-      <div style={{ textAlign: "center", marginTop: token("--space-4") }}>
+      <div style={{ textAlign: "center", marginTop: token("--space-s") }}>
         <p
           style={{
             font: token("--t-eyebrow"),
@@ -95,12 +95,12 @@ export function SegmentedControlMockup() {
         >
           Collection
         </p>
-        <h1 style={{ font: token("--t-display"), margin: `${token("--space-3")} 0 0`, color: token("--text-primary") }}>
+        <h1 style={{ font: token("--t-display"), margin: `${token("--space-xs")} 0 0`, color: token("--text-primary") }}>
           Your Cards
         </h1>
       </div>
 
-      <div style={{ margin: `${token("--space-8")} 0` }}>
+      <div style={{ margin: `${token("--space-2xl")} 0` }}>
         <SegmentedControl options={OPTIONS} value={filter} onChange={setFilter} />
       </div>
 
@@ -108,7 +108,7 @@ export function SegmentedControlMockup() {
         style={{
           display: "flex",
           flexWrap: "wrap",
-          gap: token("--space-6"),
+          gap: token("--space-l"),
           justifyContent: "center",
           alignItems: "flex-start",
           maxWidth: 820,

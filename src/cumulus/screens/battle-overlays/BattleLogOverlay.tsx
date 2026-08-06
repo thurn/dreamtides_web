@@ -96,13 +96,13 @@ export function BattleLogOverlay({
         className="cumulus"
         data-battle-log-drawer=""
         data-battle-region="battle-log"
-        style={{ display: "grid", gap: token("--space-5") }}
+        style={{ display: "grid", gap: token("--space-m") }}
       >
         <div
           style={{
             display: "flex",
             flexWrap: "wrap",
-            gap: token("--space-2"),
+            gap: token("--space-xs"),
           }}
         >
           {HISTORY_KINDS.map((kind) => (
@@ -120,7 +120,7 @@ export function BattleLogOverlay({
           ref={listRef}
           style={{
             display: "grid",
-            gap: token("--space-3"),
+            gap: token("--space-xs"),
             maxHeight: "58vh",
             overflowY: "auto",
           }}
@@ -155,8 +155,8 @@ export function BattleLogOverlay({
                   <div
                     style={{
                       display: "grid",
-                      gap: token("--space-3"),
-                      paddingTop: token("--space-3"),
+                      gap: token("--space-xs"),
+                      paddingTop: token("--space-xs"),
                     }}
                   >
                     {turn.entries.map((entry) => {
@@ -178,8 +178,8 @@ export function BattleLogOverlay({
                           <div
                             style={{
                               display: "grid",
-                              gap: token("--space-2"),
-                              paddingTop: token("--space-3"),
+                              gap: token("--space-xs"),
+                              paddingTop: token("--space-xs"),
                               color: token("--text-on-glass-muted"),
                               font: token("--t-body-sm"),
                             }}
@@ -223,8 +223,8 @@ export function BattleLogOverlay({
             <div
               style={{
                 display: "grid",
-                gap: token("--space-2"),
-                paddingTop: token("--space-3"),
+                gap: token("--space-xs"),
+                paddingTop: token("--space-xs"),
                 color: token("--text-on-glass-muted"),
                 font: token("--t-caption"),
               }}

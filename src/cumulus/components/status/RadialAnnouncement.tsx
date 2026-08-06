@@ -159,7 +159,7 @@ export function RadialAnnouncement({
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: token("--space-2"),
+          gap: token("--space-xs"),
           width: RADIAL_ANNOUNCEMENT_SIZE[size],
           height: RADIAL_ANNOUNCEMENT_SIZE[size],
           borderRadius: token("--radius-pill"),
@@ -173,8 +173,8 @@ export function RadialAnnouncement({
           data-radial-announcement-orbit=""
           style={{
             position: "absolute",
-            inset: token("--space-4"),
-            border: `${token("--space-1")} solid ${accent}`,
+            inset: token("--space-s"),
+            border: `${token("--space-xxs")} solid ${accent}`,
             borderTopColor: token("--text-primary"),
             borderRadius: token("--radius-pill"),
             animation: `radial-announcement-orbit ${animationDuration} ${token("--ease-dream")} both`,
@@ -187,10 +187,10 @@ export function RadialAnnouncement({
             position: "absolute",
             inset: `calc(-1 * ${token(
               size === "mini" || size === "wager"
-                ? "--space-1"
-                : "--space-4",
+                ? "--space-xxs"
+                : "--space-s",
             )})`,
-            border: `${token("--space-1")} solid ${accent}`,
+            border: `${token("--space-xxs")} solid ${accent}`,
             borderRadius: token("--radius-pill"),
             animation: `${
               size === "mini"
@@ -208,7 +208,7 @@ export function RadialAnnouncement({
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: token("--space-2"),
+            gap: token("--space-xs"),
             color: token("--text-primary"),
             textAlign: "center",
             textShadow: token("--text-outline-media"),

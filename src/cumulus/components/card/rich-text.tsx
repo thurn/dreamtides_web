@@ -87,8 +87,8 @@ export const richText = {
   }),
 };
 
-/** Vertical gap (px) between stacked rich-text parts. */
-const STACK_GAP = 8;
+/** Vertical gap between stacked rich-text parts. */
+const STACK_GAP = token("--space-s");
 const INLINE_RULE_SYMBOL_RE = /[●✦◆▸⍟☾⧗❖]/;
 
 interface RichTextRenderOptions {
@@ -106,7 +106,7 @@ const GLOSSARY_DEFINITION_DIVIDER_STYLE = {
   display: "block",
   width: "100%",
   height: "1px",
-  margin: `${token("--space-4")} auto`,
+  margin: `${token("--space-s")} auto`,
   background: token("--border-strong"),
 } as const;
 
@@ -169,7 +169,7 @@ function DefinitionSymbol({
       data-definition-symbol={symbol}
       style={{
         display: "inline",
-        marginRight: trailingGap ? token("--space-1") : undefined,
+        marginRight: trailingGap ? token("--space-xxs") : undefined,
       }}
     >
       {Array.from({ length: count }, (_, index) => (

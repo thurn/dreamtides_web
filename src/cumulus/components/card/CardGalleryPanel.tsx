@@ -300,10 +300,10 @@ function fallbackCardWidth(
   const edgeReserve =
     frame === "floating"
       ? spacing === "compact"
-        ? token("--space-1")
+        ? token("--space-xxs")
         : spacing === "medium"
-          ? token("--space-4")
-          : token("--space-8")
+          ? token("--space-s")
+          : token("--space-2xl")
       : "0px";
   const gapSlots = Math.max(0, columnCount - 1);
   const padding = bodyPaddingFor(spacing);
@@ -320,9 +320,9 @@ function parsePixel(value: string): number {
 }
 
 function bodyPaddingFor(spacing: CardGallerySpacing): string {
-  if (spacing === "compact") return token("--space-4");
-  if (spacing === "medium") return token("--space-5");
-  return token("--space-8");
+  if (spacing === "compact") return token("--space-s");
+  if (spacing === "medium") return token("--space-m");
+  return token("--space-2xl");
 }
 
 function panelHeaderSpacingFor(
@@ -335,8 +335,8 @@ function panelHeaderSpacingFor(
 }
 
 function gridGapFor(spacing: CardGallerySpacing): string {
-  if (spacing === "spacious") return token("--space-6");
-  return spacing === "compact" ? token("--space-3") : token("--space-4");
+  if (spacing === "spacious") return token("--space-l");
+  return spacing === "compact" ? token("--space-xs") : token("--space-s");
 }
 
 function useGalleryMeasure({
@@ -583,7 +583,7 @@ export function CardGalleryPanel({
   const visibleGapSlots = measure?.visibleGapSlots ?? fallbackVisibleGapSlots;
   const galleryBaseGap = gridGapFor(spacing);
   const galleryColumnGap = hasStackedCopy
-    ? `calc(${galleryBaseGap} + ${token("--space-7")})`
+    ? `calc(${galleryBaseGap} + ${token("--space-xl")})`
     : galleryBaseGap;
   const galleryRowGap = hasStackedCopy
     ? `calc(${galleryBaseGap} + ${String(STACKED_COPY_RESERVE_PX)}px)`
@@ -620,7 +620,7 @@ export function CardGalleryPanel({
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-              gap: token("--space-4"),
+              gap: token("--space-s"),
               width: "min(100%, 360px)",
             }}
           >
@@ -654,8 +654,8 @@ export function CardGalleryPanel({
     ) : undefined;
 
   const toolbarGap = spacing === "spacious"
-    ? token("--space-6")
-    : token("--space-4");
+    ? token("--space-l")
+    : token("--space-s");
   const toolbarNode = toolbar === undefined ? null : (
     <div
       data-gallery-toolbar=""
@@ -667,7 +667,7 @@ export function CardGalleryPanel({
         gap: toolbarGap,
         paddingTop: galleryPadding,
         paddingRight: galleryPadding,
-        paddingBottom: token("--space-4"),
+        paddingBottom: token("--space-s"),
         paddingLeft: galleryPadding,
       }}
     >

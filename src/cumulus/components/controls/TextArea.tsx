@@ -47,7 +47,7 @@ export function TextArea({
   const message = error ?? supportingText;
   const commit = (): void => onCommit?.(value);
   return (
-    <label style={{ display: "grid", gap: token("--space-2") }}>
+    <label style={{ display: "grid", gap: token("--space-xs") }}>
       <span
         style={{
           color: token("--text-on-glass-muted"),
@@ -80,7 +80,7 @@ export function TextArea({
           width: "100%",
           minHeight: 96,
           boxSizing: "border-box",
-          padding: token("--space-4"),
+          padding: token("--space-s"),
           resize: "vertical",
           color: token("--text-on-glass"),
           font: token("--t-body"),

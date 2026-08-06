@@ -42,7 +42,7 @@ const EXEMPT_PREFIXES = [
 
 /**
  * Repo-relative POSIX dir prefixes under `src/cumulus/` that {@link isCumulusOwnedFile}
- * excludes from token ownership: the primitives directory defines the tokens, and
+ * excludes from token-ownership: the token-definition directory defines the tokens, and
  * the doc site prints specimen names that need not all resolve.
  */
 const OWNERSHIP_EXEMPT_PREFIXES = ["src/cumulus/primitives/", "src/cumulus/docs/"];
@@ -76,7 +76,7 @@ export function isProductUiFile(fileRelative) {
 /**
  * True when this rule OWNS token references in the given repo-relative POSIX
  * path. Covers the adapter/builder layer plus all of `src/cumulus/` (component
- * ownership included), excluding only the primitive and doc tiers
+ * ownership included), excluding only the token-definition and doc tiers
  * ({@link OWNERSHIP_EXEMPT_PREFIXES}).
  */
 export function isCumulusOwnedFile(fileRelative) {

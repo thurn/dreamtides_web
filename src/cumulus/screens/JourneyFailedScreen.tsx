@@ -88,7 +88,7 @@ export function JourneyFailedScreen({
           inset: 0,
           overflowY: "auto",
           overscrollBehavior: "contain",
-          padding: `${JOURNEY_RESULT_TOP_CHROME_CLEARANCE} ${token("--space-6")} ${JOURNEY_RESULT_BOTTOM_SAFE_PADDING}`,
+          padding: `${JOURNEY_RESULT_TOP_CHROME_CLEARANCE} ${token("--space-l")} ${JOURNEY_RESULT_BOTTOM_SAFE_PADDING}`,
           boxSizing: "border-box",
           display: "flex",
           justifyContent: "center",
@@ -142,7 +142,7 @@ export function JourneyFailedScreen({
                 </h1>
                 <p
                   style={{
-                    margin: `${token("--space-3")} 0 0`,
+                    margin: `${token("--space-xs")} 0 0`,
                     font: token("--t-body"),
                     color: token("--text-muted"),
                   }}
@@ -159,7 +159,7 @@ export function JourneyFailedScreen({
                     alignSelf: "center",
                     display: "flex",
                     lineHeight: 0,
-                    marginTop: token("--space-6"),
+                    marginTop: token("--space-l"),
                   }}
                 >
                   <DreamAvatarPortrait
@@ -181,12 +181,12 @@ export function JourneyFailedScreen({
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "center",
-                  paddingBlock: token("--space-6"),
+                  paddingBlock: token("--space-l"),
                   boxSizing: "border-box",
                 }}
               >
                 <GlassPanel testId="journey-failed-summary-panel">
-                  <div style={{ padding: token("--space-6") }}>
+                  <div style={{ padding: token("--space-l") }}>
                     <p
                       data-journey-failed-reason={view.reason}
                       style={{
@@ -203,10 +203,10 @@ export function JourneyFailedScreen({
                     <dl
                       data-journey-failed-summary=""
                       style={{
-                        margin: `${token("--space-5")} 0 0`,
+                        margin: `${token("--space-m")} 0 0`,
                         display: "grid",
                         gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                        gap: token("--space-5"),
+                        gap: token("--space-m"),
                       }}
                     >
                       {view.stats.map((stat) => (
@@ -248,7 +248,7 @@ function SummaryStat({ stat }: { readonly stat: JourneyFailedStatView }) {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: token("--space-2"),
+        gap: token("--space-xs"),
         textAlign: "center",
       }}
     >

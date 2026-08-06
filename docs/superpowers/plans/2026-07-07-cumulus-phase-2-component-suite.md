@@ -312,7 +312,7 @@ modeled on `StartingDeckModal`.
   `maxWidth: min(900px, 90vw)`, `maxHeight: 85vh`, glass + column + overflow hidden;
   mobile full-bleed glass with `border:none`, `borderRadius:0`, `boxShadow:none`),
   `:154-173` (header: `borderBottom 1px solid token("--border-strong")`; desktop
-  `padding token("--space-6")`; mobile safe-area top
+  `padding token("--space-l")`; mobile safe-area top
   `max(var(--safe-area-inset-top), token("--gutter"))`), and `:260-289` (title `<h2>`
   + optional subtitle `<p>`; the close disc on the header's trailing edge). The close
   uses `IconButton` size `md` (this is the deliberate decision — `md` = 48px, not a

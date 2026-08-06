@@ -256,32 +256,34 @@
 }
 
 /* ================================================================
-   SPACING & LAYOUT — sanctioned semantic scale
+   SPACING & LAYOUT — sanctioned named scale
    ================================================================
-   An 8pt-based scale with a couple of half-steps for dense card chrome.
-   The numeric --space-* scale is the approved spacing system: UI code
-   uses `var(--space-6)` directly. Mobile-first: safe-area insets, fixed
-   bottom HUD height, and the minimum 44pt touch target are all tokens so
-   every surface agrees. */
+   A 4px content grid with relative T-shirt names and one 2px optical
+   exception. UI code uses `var(--space-l)` directly. Mobile-first: safe-area
+   insets, fixed bottom HUD height, and the minimum 44pt touch target are all
+   tokens so every surface agrees. */
 
 .cumulus {
-  /* ---- Spacing scale (8pt base, with 2/4/6 half-steps) ---- */
-  --space-1: 2px;
-  --space-2: 4px;
-  --space-3: 6px;
-  --space-4: 8px;
-  --space-5: 12px;
-  --space-6: 16px;
-  --space-7: 20px;
-  --space-8: 24px;
-  --space-9: 32px;
-  --space-10: 40px;
-  --space-11: 48px;
-  --space-12: 64px;
+  /* ---- Spacing scale (4px content grid, plus one optical half-step) ----
+     T-shirt names express relative rhythm without coupling call sites to a
+     pixel count. `--space-xxs` is the sole 2px exception and is reserved for
+     tight optical adjustments; the shared content rhythm uses 4px-grid steps
+     from `--space-xs` upward. */
+  --space-xxs: 2px;
+  --space-xs: 4px;
+  --space-s: 8px;
+  --space-m: 12px;
+  --space-l: 16px;
+  --space-xl: 20px;
+  --space-2xl: 24px;
+  --space-3xl: 32px;
+  --space-4xl: 40px;
+  --space-5xl: 48px;
+  --space-6xl: 64px;
 
   /* ---- Screen gutters (the breathing room on a phone edge) ---- */
-  --gutter: 18px;          /* default horizontal page padding */
-  --gutter-tight: 12px;    /* dense grids */
+  --gutter: var(--space-xl);       /* default horizontal page padding */
+  --gutter-tight: var(--space-m);  /* dense grids */
 
   /* ---- Touch & control sizing ---- */
   --touch-min: 44px;       /* never smaller — Apple HIG floor */

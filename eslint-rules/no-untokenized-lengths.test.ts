@@ -19,14 +19,16 @@ describe("toRepoRelativePosix (no-untokenized-lengths)", () => {
 });
 
 describe("isProductUiFile (no-untokenized-lengths)", () => {
-  it("covers the product tier and the adapter layer", () => {
+  it("covers screens, components, internal UI, and the adapter layer", () => {
     expect(isProductUiFile("src/cumulus/screens/HomeScreen.tsx")).toBe(true);
+    expect(isProductUiFile("src/cumulus/components/GlassButton.tsx")).toBe(true);
+    expect(isProductUiFile("src/cumulus/internal/control-treatment.ts")).toBe(true);
     expect(isProductUiFile("src/screens/cumulus_adapters/HomeScreenAdapter.tsx")).toBe(
       true,
     );
   });
-  it("exempts primitives, components, docs, and non-cumulus files", () => {
-    expect(isProductUiFile("src/cumulus/components/GlassButton.tsx")).toBe(false);
+  it("exempts token definitions, docs, and non-cumulus files", () => {
+    expect(isProductUiFile("src/cumulus/primitives/tokens.ts")).toBe(false);
     expect(isProductUiFile("src/cumulus/docs/CumulusApp.tsx")).toBe(false);
     expect(isProductUiFile("src/screens/LegacyScreen.tsx")).toBe(false);
   });
@@ -69,7 +71,7 @@ ruleTester.run("no-untokenized-lengths", rule, {
     {
       name: "token-valued spacing is the sanctioned shape",
       filename: SCREEN,
-      code: `const el = <div style={{ gap: token("--space-5"), padding: "0 var(--space-4)" }} />;`,
+      code: `const el = <div style={{ gap: token("--space-m"), padding: "0 var(--space-s)" }} />;`,
     },
     {
       name: "zero needs no token",
@@ -97,9 +99,9 @@ ruleTester.run("no-untokenized-lengths", rule, {
       code: `export function build() { return { top: ${ON_SCALE}, left: 340, gap: 3 }; }`,
     },
     {
-      name: "the components tier authors raw values legitimately",
+      name: "components may author fixed positional geometry",
       filename: "src/cumulus/components/GlassButton.tsx",
-      code: `const el = <div style={{ gap: ${ON_SCALE} }} />;`,
+      code: `const el = <div style={{ top: ${ON_SCALE}, borderRadius: ${ON_SCALE} }} />;`,
     },
     {
       name: "files outside the product tier are inert",
@@ -142,7 +144,7 @@ ruleTester.run("no-untokenized-lengths", rule, {
     {
       name: "raw px inside a template chunk is reported",
       filename: SCREEN,
-      code: 'const el = <div style={{ padding: `${token("--space-6")} 18px` }} />;',
+      code: 'const el = <div style={{ padding: `${token("--space-l")} 18px` }} />;',
       errors: [{ messageId: "rawSpacingOffScale" }],
     },
     {
@@ -156,6 +158,13 @@ ruleTester.run("no-untokenized-lengths", rule, {
       filename: SCREEN,
       code: `const cardStyle = { gap: ${ON_SCALE} };`,
       output: `const cardStyle = { gap: "var(${ON_SCALE_TOKEN})" };`,
+      errors: [{ messageId: "rawSpacingWithToken" }],
+    },
+    {
+      name: "component content rhythm uses spacing tokens",
+      filename: "src/cumulus/components/GlassButton.tsx",
+      code: `const el = <div style={{ gap: ${ON_SCALE} }} />;`,
+      output: `const el = <div style={{ gap: "var(${ON_SCALE_TOKEN})" }} />;`,
       errors: [{ messageId: "rawSpacingWithToken" }],
     },
     {

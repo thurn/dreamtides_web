@@ -97,7 +97,7 @@ export function AtlasScreen({
           style={{
             position: "absolute",
             zIndex: 30,
-            top: `calc(${token("--safe-top")} + ${token("--space-4")})`,
+            top: `calc(${token("--safe-top")} + ${token("--space-s")})`,
             left: "50%",
             width: `${String(view.guideDialogue.bubbleWidth)}px`,
             maxWidth: `calc(100vw - 2 * ${token("--gutter")})`,

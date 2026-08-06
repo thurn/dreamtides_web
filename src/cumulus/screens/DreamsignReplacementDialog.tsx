@@ -51,8 +51,8 @@ export function DreamsignReplacementDialog({
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: token("--space-4"),
-            marginBottom: token("--space-6"),
+            gap: token("--space-s"),
+            marginBottom: token("--space-l"),
           }}
         >
           <p
@@ -74,8 +74,8 @@ export function DreamsignReplacementDialog({
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: `repeat(auto-fit, minmax(calc(2 * ${token("--touch-min")} + ${token("--space-1")}), 1fr))`,
-            gap: token("--space-5"),
+            gridTemplateColumns: `repeat(auto-fit, minmax(calc(2 * ${token("--touch-min")} + ${token("--space-xxs")}), 1fr))`,
+            gap: token("--space-m"),
             justifyItems: "center",
           }}
         >
@@ -92,7 +92,7 @@ export function DreamsignReplacementDialog({
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  gap: token("--space-4"),
+                  gap: token("--space-s"),
                 }}
               >
                 <Dreamsign
@@ -116,7 +116,7 @@ export function DreamsignReplacementDialog({
           style={{
             display: "flex",
             justifyContent: "flex-end",
-            marginTop: token("--space-6"),
+            marginTop: token("--space-l"),
           }}
         >
           <GlassButton

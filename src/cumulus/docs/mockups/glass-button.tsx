@@ -47,7 +47,7 @@ function ControlPair({ placement }: { placement: GlassControlPlacement }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        gap: token("--space-4"),
+        gap: token("--space-s"),
       }}
     >
       <GlassButton
@@ -100,8 +100,8 @@ function SampleColumn({
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          gap: token("--space-6"),
-          padding: token("--space-6"),
+          gap: token("--space-l"),
+          padding: token("--space-l"),
           boxSizing: "border-box",
         }}
       >
@@ -138,8 +138,8 @@ function MediaSamplePanel({
         minHeight: 250,
         display: "flex",
         flexDirection: "column",
-        gap: token("--space-5"),
-        padding: token("--space-6"),
+        gap: token("--space-m"),
+        padding: token("--space-l"),
         boxSizing: "border-box",
         borderRadius: token("--radius-panel"),
         overflow: "hidden",
@@ -163,7 +163,7 @@ function MediaSamplePanel({
         style={{
           display: "grid",
           gridTemplateColumns: desktop ? "repeat(2, minmax(0, 1fr))" : "1fr",
-          gap: token("--space-5"),
+          gap: token("--space-m"),
         }}
       >
         <SampleColumn
@@ -193,7 +193,7 @@ export function GlassButtonMockup() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        padding: desktop ? token("--space-8") : token("--space-4"),
+        padding: desktop ? token("--space-2xl") : token("--space-s"),
         boxSizing: "border-box",
         overflow: "auto",
       }}
@@ -201,8 +201,8 @@ export function GlassButtonMockup() {
       <header
         style={{
           width: "min(100%, 1080px)",
-          marginTop: desktop ? token("--space-5") : token("--space-12"),
-          marginBottom: token("--space-7"),
+          marginTop: desktop ? token("--space-m") : token("--space-6xl"),
+          marginBottom: token("--space-xl"),
         }}
       >
         <p
@@ -220,7 +220,7 @@ export function GlassButtonMockup() {
           style={{
             font: token("--t-title"),
             color: token("--text-primary"),
-            margin: `${token("--space-3")} 0 0`,
+            margin: `${token("--space-xs")} 0 0`,
           }}
         >
           Media And Glass Placement
@@ -233,8 +233,8 @@ export function GlassButtonMockup() {
           width: "min(100%, 1080px)",
           display: "flex",
           flexDirection: "column",
-          gap: token("--space-5"),
-          paddingBottom: token("--space-8"),
+          gap: token("--space-m"),
+          paddingBottom: token("--space-2xl"),
         }}
       >
         {mediaSamples.map((sample) => (

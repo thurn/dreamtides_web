@@ -46,8 +46,8 @@ export interface PackageDebugDialogProps {
   onForceLegendaryOffer: () => void;
 }
 
-const stackStyle: CSSProperties = { display: "grid", gap: token("--space-6") };
-const entryStyle: CSSProperties = { display: "grid", gap: token("--space-3") };
+const stackStyle: CSSProperties = { display: "grid", gap: token("--space-l") };
+const entryStyle: CSSProperties = { display: "grid", gap: token("--space-xs") };
 const mutedStyle: CSSProperties = { margin: 0, font: token("--t-body-sm"), color: token("--text-on-glass-muted") };
 
 /** Pure Cumulus presentation for package diagnostics and save management. */
@@ -57,13 +57,13 @@ export function PackageDebugDialog(props: PackageDebugDialogProps): ReactElement
     <div className="cumulus" data-package-debug-dialog="" style={{ minHeight: "100vh" }}>
       <GlassDialog title="Debug: Package State" subtitle="Inspect the active run and manage a portable journey save." onClose={props.onClose} fullScreen>
         <div style={stackStyle}>
-          <section data-package-debug-values="" style={{ display: "flex", flexWrap: "wrap", gap: token("--space-4") }}>
-            {props.view.values.map((value) => <p key={value.id} style={{ ...mutedStyle, display: "grid", gap: token("--space-1") }}><span style={{ font: token("--t-eyebrow") }}>{value.label}</span><strong style={{ font: token("--t-lead"), color: token("--text-on-glass") }}>{value.value}</strong></p>)}
+          <section data-package-debug-values="" style={{ display: "flex", flexWrap: "wrap", gap: token("--space-s") }}>
+            {props.view.values.map((value) => <p key={value.id} style={{ ...mutedStyle, display: "grid", gap: token("--space-xxs") }}><span style={{ font: token("--t-eyebrow") }}>{value.label}</span><strong style={{ font: token("--t-lead"), color: token("--text-on-glass") }}>{value.value}</strong></p>)}
           </section>
           <section style={stackStyle} data-package-debug-save-file="">
             <h3 style={{ margin: 0, font: token("--t-title-sm"), color: token("--text-on-glass") }}>Journey Save File</h3>
             <TextField label="Save name" value={props.saveName} onChange={props.onSaveNameChange} placeholder="e.g. warriors draft" disabled={props.busy || !props.canSave} testId="debug-save-journey-name" error={props.saveError ?? undefined} supportingText={props.saveStatus ?? "Download the active run as JSON, or load a journey file."} />
-            <div style={{ display: "flex", flexWrap: "wrap", gap: token("--space-3") }}><GlassButton label="Save Journey" onPress={props.onSave} disabled={props.busy || !props.canSave} placement="onGlass" variant="accent" testId="debug-save-journey" /><GlassButton label="Load Journey" onPress={props.onLoad} disabled={props.busy || !props.canLoad} placement="onGlass" testId="debug-load-journey" /></div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: token("--space-xs") }}><GlassButton label="Save Journey" onPress={props.onSave} disabled={props.busy || !props.canSave} placement="onGlass" variant="accent" testId="debug-save-journey" /><GlassButton label="Load Journey" onPress={props.onLoad} disabled={props.busy || !props.canLoad} placement="onGlass" testId="debug-load-journey" /></div>
           </section>
           <DiagnosticSection title="Avatar" entries={props.view.dreamAvatar === null ? [] : [{ id: "dreamAvatar", label: props.view.dreamAvatar }]} emptyLabel="No package data available yet." />
           <DiagnosticSection title="Package Validation" entries={props.view.validation.map((value) => ({ id: value.id, label: `${value.label}: ${value.value}` }))} emptyLabel="No package data available yet." />

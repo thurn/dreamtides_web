@@ -189,11 +189,11 @@ export function CornerUtilityMenu({
           style={{
             ...glassSurfaceStyle(),
             position: "absolute",
-            top: `calc(100% + ${token("--space-3")})`,
+            top: `calc(100% + ${token("--space-xs")})`,
             ...(trigger.corner === "topEnd" ? { right: 0 } : { left: 0 }),
             zIndex: 1,
             maxWidth: 260,
-            padding: token("--space-4"),
+            padding: token("--space-s"),
             color: token("--text-on-glass"),
             font: token("--t-caption"),
           }}
@@ -384,16 +384,16 @@ function HierarchicalMenu({
   }
 
   const menuStyle: CSSProperties = mobile
-    ? { display: "flex", flexDirection: "column", gap: token("--space-3") }
+    ? { display: "flex", flexDirection: "column", gap: token("--space-xs") }
     : {
         ...glassSurfaceStyle(),
         position: id === undefined ? "relative" : "absolute",
-        top: id === undefined ? undefined : `calc(100% + ${token("--space-3")})`,
+        top: id === undefined ? undefined : `calc(100% + ${token("--space-xs")})`,
         ...(id === undefined ? {} : align === "end" ? { right: 0 } : { left: 0 }),
         width: 240,
         maxHeight: "calc(100vh - 16px)",
         overflowY: "auto",
-        padding: token("--space-3"),
+        padding: token("--space-xs"),
       };
 
   return (
@@ -478,8 +478,8 @@ function SignedIntegerCommand({
       }}
       style={{
         display: "grid",
-        gap: token("--space-3"),
-        padding: token("--space-3"),
+        gap: token("--space-xs"),
+        padding: token("--space-xs"),
       }}
     >
       <TextField
@@ -536,11 +536,11 @@ function CommandRow({
         background: active ? token("--accent-tint") : "transparent",
         borderRadius: token("--radius-compact"),
         minHeight: token("--touch-min"),
-        padding: token("--space-4"),
+        padding: token("--space-s"),
         display: "grid",
         gridTemplateColumns: "auto 1fr auto",
         alignItems: "center",
-        gap: token("--space-4"),
+        gap: token("--space-s"),
         width: "100%",
         textAlign: "left",
         color,
@@ -571,12 +571,12 @@ const headerStyle: CSSProperties = {
   borderBottomRightRadius: 0,
   display: "flex",
   flexDirection: "column",
-  gap: token("--space-1"),
-  padding: token("--space-5"),
+  gap: token("--space-xxs"),
+  padding: token("--space-m"),
 };
 
 const dividerStyle: CSSProperties = {
   height: 1,
-  margin: `${token("--space-3")} ${token("--space-2")}`,
+  margin: token("--space-xs"),
   background: token("--border-soft"),
 };

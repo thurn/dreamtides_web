@@ -85,10 +85,10 @@ export function ApplicationStateScreen({
         boxSizing: "border-box",
         display: "grid",
         placeItems: "center",
-        paddingTop: `max(${token(SAFE_AREA_INSET_PROPERTIES.top)}, ${token("--space-8")})`,
-        paddingRight: `max(${token(SAFE_AREA_INSET_PROPERTIES.right)}, ${token("--space-6")})`,
-        paddingBottom: `max(${token(SAFE_AREA_INSET_PROPERTIES.bottom)}, ${token("--space-8")})`,
-        paddingLeft: `max(${token(SAFE_AREA_INSET_PROPERTIES.left)}, ${token("--space-6")})`,
+        paddingTop: `max(${token(SAFE_AREA_INSET_PROPERTIES.top)}, ${token("--space-2xl")})`,
+        paddingRight: `max(${token(SAFE_AREA_INSET_PROPERTIES.right)}, ${token("--space-l")})`,
+        paddingBottom: `max(${token(SAFE_AREA_INSET_PROPERTIES.bottom)}, ${token("--space-2xl")})`,
+        paddingLeft: `max(${token(SAFE_AREA_INSET_PROPERTIES.left)}, ${token("--space-l")})`,
         background: token("--bg-loading"),
       }}
     >
@@ -105,8 +105,8 @@ export function ApplicationStateScreen({
           <div
             style={{
               display: "grid",
-              gap: token("--space-6"),
-              padding: token("--space-8"),
+              gap: token("--space-l"),
+              padding: token("--space-2xl"),
               color: token("--text-on-glass"),
               font: token("--t-body"),
             }}
@@ -135,7 +135,7 @@ export function ApplicationStateScreen({
                   display: "flex",
                   flexWrap: "wrap",
                   justifyContent: "center",
-                  gap: token("--space-4"),
+                  gap: token("--space-s"),
                 }}
               >
                 {view.actions.map((action) => (
@@ -186,7 +186,7 @@ function ComparisonTable({
       style={{
         display: "grid",
         gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr)",
-        gap: token("--space-3"),
+        gap: token("--space-xs"),
         margin: 0,
         font: token("--t-rules"),
       }}

@@ -432,7 +432,7 @@ function LadderDreamsignReward({
           left:
             layout === "desktop"
               ? "50%"
-              : `calc(50% - ${token("--space-9")})`,
+              : `calc(50% - ${token("--space-3xl")})`,
           width: size,
           height: size,
           marginTop: -size / 2,
@@ -800,13 +800,13 @@ function GravokWagerScreen({
               justifyContent: "center",
               gap:
                 layout === "desktop"
-                  ? token("--space-4")
-                  : token("--space-2"),
+                  ? token("--space-s")
+                  : token("--space-xs"),
               boxSizing: "border-box",
               padding:
                 layout === "desktop"
-                  ? token("--space-6")
-                  : token("--space-2"),
+                  ? token("--space-l")
+                  : token("--space-xs"),
               pointerEvents: "auto",
             }}
           >
@@ -820,8 +820,8 @@ function GravokWagerScreen({
                 gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
                 gap:
                   layout === "desktop"
-                    ? token("--space-4")
-                    : token("--space-2"),
+                    ? token("--space-s")
+                    : token("--space-xs"),
                 alignItems: "center",
                 justifyItems: "center",
               }}
@@ -883,8 +883,8 @@ function GravokWagerScreen({
                 gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
                 gap:
                   layout === "desktop"
-                    ? token("--space-4")
-                    : token("--space-2"),
+                    ? token("--space-s")
+                    : token("--space-xs"),
                 justifyItems: "center",
               }}
             >
@@ -899,8 +899,8 @@ function GravokWagerScreen({
                     justifyContent: "center",
                     gap:
                       layout === "desktop"
-                        ? token("--space-4")
-                        : token("--space-2"),
+                        ? token("--space-s")
+                        : token("--space-xs"),
                   }}
                 >
                   {view.canPlayAgain && (
@@ -1130,13 +1130,13 @@ function LadderClimbScreen({
               justifyContent: "center",
               gap:
                 layout === "desktop"
-                  ? token("--space-4")
-                  : token("--space-2"),
+                  ? token("--space-s")
+                  : token("--space-xs"),
               boxSizing: "border-box",
               padding:
                 layout === "desktop"
-                  ? token("--space-6")
-                  : token("--space-2"),
+                  ? token("--space-l")
+                  : token("--space-xs"),
               pointerEvents: "auto",
             }}
           >
@@ -1150,8 +1150,8 @@ function LadderClimbScreen({
                 gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
                 gap:
                   layout === "desktop"
-                    ? token("--space-4")
-                    : token("--space-2"),
+                    ? token("--space-s")
+                    : token("--space-xs"),
                 alignItems: "center",
                 justifyItems: "center",
               }}
@@ -1212,8 +1212,8 @@ function LadderClimbScreen({
                 gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
                 gap:
                   layout === "desktop"
-                    ? token("--space-4")
-                    : token("--space-2"),
+                    ? token("--space-s")
+                    : token("--space-xs"),
                 justifyItems: "center",
               }}
             >
@@ -1235,8 +1235,8 @@ function LadderClimbScreen({
                   justifyContent: "center",
                   gap:
                     layout === "desktop"
-                      ? token("--space-4")
-                      : token("--space-2"),
+                      ? token("--space-s")
+                      : token("--space-xs"),
                   pointerEvents: actionsVisible ? "auto" : "none",
                 }}
               >
@@ -1424,13 +1424,13 @@ function StarwayStairsScreen({
               justifyContent: "center",
               gap:
                 layout === "desktop"
-                  ? token("--space-4")
-                  : token("--space-2"),
+                  ? token("--space-s")
+                  : token("--space-xs"),
               boxSizing: "border-box",
               padding:
                 layout === "desktop"
-                  ? token("--space-6")
-                  : token("--space-2"),
+                  ? token("--space-l")
+                  : token("--space-xs"),
               pointerEvents: "auto",
             }}
           >
@@ -1444,8 +1444,8 @@ function StarwayStairsScreen({
                 gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
                 gap:
                   layout === "desktop"
-                    ? token("--space-4")
-                    : token("--space-2"),
+                    ? token("--space-s")
+                    : token("--space-xs"),
                 alignItems: "start",
                 justifyItems: "center",
               }}
@@ -1471,8 +1471,8 @@ function StarwayStairsScreen({
                       alignItems: "center",
                       gap:
                         layout === "desktop"
-                          ? token("--space-4")
-                          : token("--space-2"),
+                          ? token("--space-s")
+                          : token("--space-xs"),
                     }}
                   >
                     <WagerPrizeCard
@@ -1537,7 +1537,7 @@ function StarwayStairsScreen({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: token("--space-3"),
+                gap: token("--space-xs"),
                 flexWrap: "nowrap",
                 visibility: actionsVisible ? "visible" : "hidden",
                 pointerEvents: actionsVisible ? "auto" : "none",

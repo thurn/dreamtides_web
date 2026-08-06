@@ -151,6 +151,9 @@ describe("Cumulus BattleStartScreen", () => {
     const pointsValue = container.querySelector(
       '[data-battle-start-stake="To Win"] > div',
     );
+    expect((pointsValue as HTMLElement | null)?.style.gap).toBe(
+      "var(--space-s)",
+    );
     expect(pointsValue?.children[0]?.textContent).toBe("12");
     expect(
       pointsValue?.children[1]?.matches("[data-inline-glyph]"),
@@ -278,15 +281,15 @@ describe("Cumulus BattleStartScreen", () => {
     expect(panel?.style.position).toBe("absolute");
     expect(panel?.style.top).toBe("");
     expect(panel?.style.bottom).toBe(JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE);
-    expect(panel?.style.left).toBe("var(--space-4)");
-    expect(panel?.style.width).toBe("calc(100vw - (var(--space-4) * 2))");
+    expect(panel?.style.left).toBe("var(--space-s)");
+    expect(panel?.style.width).toBe("calc(100vw - (var(--space-s) * 2))");
     expect(panel?.style.maxHeight).toBe(
-      `calc(100dvh - ${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE} - var(--space-4))`,
+      `calc(100dvh - ${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE} - var(--space-s))`,
     );
     expect(panel?.style.alignSelf).toBe("");
     expect(panel?.style.justifySelf).toBe("");
-    expect(panelContent?.style.padding).toBe("var(--space-6)");
-    expect(panelContent?.style.gap).toBe("var(--space-6)");
+    expect(panelContent?.style.padding).toBe("var(--space-l)");
+    expect(panelContent?.style.gap).toBe("var(--space-l)");
     expect(panel?.style.justifyContent).toBe("");
     expect(panel?.getAttribute("data-battle-start-panel-density")).toBe(
       "compact",
@@ -345,14 +348,14 @@ describe("Cumulus BattleStartScreen", () => {
       panel?.querySelector<HTMLElement>(
         '[data-battle-start-panel-section="Ability"]',
       )?.style.paddingTop,
-    ).toBe("var(--space-5)");
+    ).toBe("var(--space-m)");
     expect(
       panel?.querySelector<HTMLElement>(
         '[data-battle-start-panel-section="Ability"]',
       )?.style.gap,
-    ).toBe("var(--space-4)");
+    ).toBe("var(--space-s)");
     expect(panel?.querySelector<HTMLElement>("footer")?.style.paddingTop).toBe(
-      "var(--space-5)",
+      "var(--space-m)",
     );
     expect(
       Array.from(panel?.querySelectorAll("h2") ?? []).some(
@@ -361,6 +364,11 @@ describe("Cumulus BattleStartScreen", () => {
     ).toBe(false);
     expect(panel?.textContent).toContain("To Win");
     expect(panel?.textContent).toContain("Reward");
+    expect(
+      panel?.querySelector<HTMLElement>(
+        '[data-battle-start-stake="To Win"] > div',
+      )?.style.gap,
+    ).toBe("var(--space-xs)");
     expect(
       panel?.querySelector('[data-testid="cumulus-battle-start-begin"]'),
     ).not.toBeNull();

@@ -103,7 +103,7 @@ export function BattleFigmentCreatorOverlay({
       <div
         className="cumulus"
         data-battle-figment-creator=""
-        style={{ display: "grid", gap: token("--space-5") }}
+        style={{ display: "grid", gap: token("--space-m") }}
       >
         <div data-battle-figment-field="name">
           <TextField
@@ -116,7 +116,7 @@ export function BattleFigmentCreatorOverlay({
         </div>
         <div
           data-battle-figment-field="subtype"
-          style={{ display: "grid", gap: token("--space-2") }}
+          style={{ display: "grid", gap: token("--space-xs") }}
         >
           <Select
             ariaLabel="Figment type"
@@ -155,7 +155,7 @@ export function BattleFigmentCreatorOverlay({
         </div>
         <div
           data-battle-figment-field="side"
-          style={{ display: "grid", gap: token("--space-2") }}
+          style={{ display: "grid", gap: token("--space-xs") }}
         >
           <span style={fieldLabelStyle}>Side</span>
           <SegmentedControl
@@ -170,7 +170,7 @@ export function BattleFigmentCreatorOverlay({
         </div>
         <div
           data-battle-figment-field="zone"
-          style={{ display: "grid", gap: token("--space-2") }}
+          style={{ display: "grid", gap: token("--space-xs") }}
         >
           <span style={fieldLabelStyle}>Destination</span>
           <Select
@@ -187,7 +187,7 @@ export function BattleFigmentCreatorOverlay({
         {zone === "deck" ? (
           <div
             data-battle-figment-field="position"
-            style={{ display: "grid", gap: token("--space-2") }}
+            style={{ display: "grid", gap: token("--space-xs") }}
           >
             <span style={fieldLabelStyle}>Deck Position</span>
             <SegmentedControl
@@ -206,7 +206,7 @@ export function BattleFigmentCreatorOverlay({
         {zone === "backRank" || zone === "frontRank" ? (
           <div
             data-battle-figment-field="slot"
-            style={{ display: "grid", gap: token("--space-2") }}
+            style={{ display: "grid", gap: token("--space-xs") }}
           >
             <span style={fieldLabelStyle}>Slot</span>
             <Select
@@ -228,7 +228,7 @@ export function BattleFigmentCreatorOverlay({
           style={{
             display: "flex",
             justifyContent: "flex-end",
-            gap: token("--space-3"),
+            gap: token("--space-xs"),
           }}
         >
           <GlassButton

@@ -93,7 +93,7 @@ describe("Cumulus MainMenuScreen", () => {
       container.querySelector<HTMLElement>("[data-main-menu-actions]")?.style
         .bottom,
     ).toBe(
-      "max(var(--safe-area-inset-bottom), var(--space-12))",
+      "max(var(--safe-area-inset-bottom), var(--space-6xl))",
     );
     expect(
       Array.from(
@@ -101,10 +101,10 @@ describe("Cumulus MainMenuScreen", () => {
       ).map((action) => action.style.marginTop),
     ).toEqual([
       "0px",
-      "calc(-1 * var(--space-6))",
-      "calc(-1 * var(--space-6))",
-      "calc(-1 * var(--space-6))",
-      "calc(-1 * var(--space-6))",
+      "calc(-1 * var(--space-l))",
+      "calc(-1 * var(--space-l))",
+      "calc(-1 * var(--space-l))",
+      "calc(-1 * var(--space-l))",
     ]);
 
     act(() => root.unmount());
@@ -161,9 +161,9 @@ describe("Cumulus MainMenuScreen", () => {
     );
 
     expect(menu?.style.backgroundPosition).toBe("54% 49%");
-    expect(title?.style.top).toBe("var(--space-10)");
-    expect(actions?.style.left).toBe("var(--space-12)");
-    expect(actions?.style.bottom).toBe("var(--space-11)");
+    expect(title?.style.top).toBe("var(--space-4xl)");
+    expect(actions?.style.left).toBe("var(--space-6xl)");
+    expect(actions?.style.bottom).toBe("var(--space-5xl)");
     expect(actions?.style.width).toBe("280px");
     expect(stack?.style.gap).toBe("0px");
     expect(

@@ -19,7 +19,7 @@
 //                   (a smaller serif subtitle in white) under the name
 //
 import * as React from "react";
-import { token } from "../../primitives/tokens";
+import { token, type TokenName } from "../../primitives/tokens";
 import { type Glyph } from "../../primitives/glyph";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
 import {
@@ -33,15 +33,14 @@ import { renderRulesSymbolsInline } from "../card/RulesText";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { tideVisual, tideAlignmentLabel, type Tide } from "../hud/tide-spec";
 
-/* ---- faithfully-copied layout literals from the design source (not tokens:
-   these are the info-card's own fixed geometry, not design-system scale) ---- */
+/* ---- authored component geometry ---- */
 const CARD_W = 248; // every info card is this wide
-const PADX = 15;
-const PADY = 14;
-// Inset (px) of the fullBleed variant's floating glass text card from the square
-// hero image's edges — how much of the image shows around the card. Its own
-// fixed geometry, not a design-system scale step.
-const FULL_BLEED_INSET = 12;
+type SpacingTokenName = Extract<TokenName, `--space-${string}`>;
+const PADX = "--space-l" satisfies SpacingTokenName;
+const PADY = "--space-l" satisfies SpacingTokenName;
+// Inset of the fullBleed variant's floating glass text card from the square
+// hero image's edges — how much of the image shows around the card.
+const FULL_BLEED_INSET = "--space-m" satisfies SpacingTokenName;
 // Height (px) of the fullBleed variant's centered foreground `figure` — the
 // transparent character render (a Dream Guide, the boss) that stands prominently
 // over the hero image, above the glass text card. Its own fixed geometry, not a
@@ -68,6 +67,8 @@ const INFO_CARD_GLASS_FILL = token("--glass-fill-popover");
 const INFO_CARD_GLASS_BACKGROUND = `${token("--glass-sheen")}, ${INFO_CARD_GLASS_FILL}`;
 const geometryPx = (px: number): string =>
   `calc(${String(px)}px * var(--info-card-geometry-scale, 1))`;
+const geometrySpace = (name: SpacingTokenName): string =>
+  `calc(${token(name)} * var(--info-card-geometry-scale, 1))`;
 
 /**
  * The fixed width (px) of every InfoCard — its own geometry, not a design-system
@@ -507,11 +508,11 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
       <div
         style={{
           ...shell,
-          padding: `${geometryPx(18)} ${geometryPx(16)} ${geometryPx(16)}`,
+          padding: `${geometrySpace("--space-xl")} ${geometrySpace("--space-l")} ${geometrySpace("--space-l")}`,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: geometryPx(12),
+          gap: geometrySpace("--space-m"),
           textAlign: "center",
         }}
       >
@@ -541,7 +542,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
       subtitle,
     } = props;
     const Meta = meta ? (
-      <div style={{ ...tMeta, marginBottom: 7 }}>
+      <div style={{ ...tMeta, marginBottom: token("--space-s") }}>
         {renderRulesSymbolsInline(meta)}
       </div>
     ) : null;
@@ -557,7 +558,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-end",
-          padding: geometryPx(FULL_BLEED_INSET),
+          padding: geometrySpace(FULL_BLEED_INSET),
         }}
       >
         <div
@@ -601,11 +602,11 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
             style={{
               position: "absolute",
               left: "50%",
-              top: geometryPx(FULL_BLEED_INSET),
+              top: geometrySpace(FULL_BLEED_INSET),
               transform: "translateX(-50%)",
               height: geometryPx(FULL_BLEED_FIGURE_HEIGHT),
               width: "auto",
-              maxWidth: `calc(100% - ${geometryPx(FULL_BLEED_INSET * 2)})`,
+              maxWidth: `calc(100% - ${geometrySpace(FULL_BLEED_INSET)} - ${geometrySpace(FULL_BLEED_INSET)})`,
               objectFit: "contain",
               filter: "drop-shadow(0 8px 18px rgba(0,0,0,0.62))",
               pointerEvents: "none",
@@ -618,7 +619,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
             ...glassSurfaceStyle(),
             background: INFO_CARD_GLASS_BACKGROUND,
             position: "relative",
-            padding: `${geometryPx(PADY)} ${geometryPx(PADX)}`,
+            padding: `${geometrySpace(PADY)} ${geometrySpace(PADX)}`,
             boxSizing: "border-box",
             textAlign: "left",
             // Same wrapping reset as the shell so on-image copy always wraps to
@@ -629,12 +630,12 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
         >
           {Meta}
           <div
-            style={{ ...tHeadline, marginBottom: subtitle ? 2 : body ? 7 : 0 }}
+            style={{ ...tHeadline, marginBottom: subtitle ? token("--space-xxs") : body ? token("--space-s") : 0 }}
           >
             {titleContent}
           </div>
           {subtitle !== undefined && subtitle !== "" && (
-            <div style={{ ...tEpithet, marginBottom: body ? 7 : 0 }}>
+            <div style={{ ...tEpithet, marginBottom: body ? token("--space-s") : 0 }}>
               {renderRulesSymbolsInline(subtitle)}
             </div>
           )}
@@ -666,7 +667,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-end",
-          padding: geometryPx(10),
+          padding: geometrySpace("--space-s"),
           boxSizing: "border-box",
         }}
       >
@@ -724,7 +725,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
             ...glassSurfaceStyle(),
             background: INFO_CARD_GLASS_BACKGROUND,
             position: "relative",
-            padding: `${geometryPx(13)} ${geometryPx(15)}`,
+            padding: `${geometrySpace("--space-m")} ${geometrySpace("--space-l")}`,
             boxSizing: "border-box",
             whiteSpace: "normal",
             overflowWrap: "break-word",
@@ -742,14 +743,14 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
               )}%`,
               display: "flex",
               flexDirection: "column",
-              gap: geometryPx(5),
+              gap: geometrySpace("--space-xs"),
             }}
           >
             <div
               style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: geometryPx(2),
+                gap: geometrySpace("--space-xxs"),
               }}
             >
               <div style={tAtlasHeadline}>{titleContent}</div>
@@ -773,13 +774,13 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
     const { glyph } = props;
     return (
       <div
-        style={{ ...shell, padding: `${geometryPx(PADY)} ${geometryPx(PADX)}` }}
+        style={{ ...shell, padding: `${geometrySpace(PADY)} ${geometrySpace(PADX)}` }}
       >
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            gap: geometryPx(12),
+            gap: geometrySpace("--space-m"),
           }}
         >
           <span
@@ -805,7 +806,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
           <div style={tHeadline}>{titleContent}</div>
         </div>
         {body != null && (
-          <div style={{ ...tBody, marginTop: 11 }}>{bodyContent}</div>
+          <div style={{ ...tBody, marginTop: token("--space-m") }}>{bodyContent}</div>
         )}
       </div>
     );
@@ -818,13 +819,13 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
     const v = tideVisual(tide);
     return (
       <div
-        style={{ ...shell, padding: `${geometryPx(PADY)} ${geometryPx(PADX)}` }}
+        style={{ ...shell, padding: `${geometrySpace(PADY)} ${geometrySpace(PADX)}` }}
       >
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            gap: geometryPx(12),
+            gap: geometrySpace("--space-m"),
           }}
         >
           <span
@@ -850,13 +851,13 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
           </span>
           <div>
             <div style={tHeadline}>{titleContent}</div>
-            <div style={{ ...tMeta, color: v.fg, marginTop: 3 }}>
+            <div style={{ ...tMeta, color: v.fg, marginTop: token("--space-xs") }}>
               {tideAlignmentLabel(tide)}
             </div>
           </div>
         </div>
         {body != null && (
-          <div style={{ ...tBody, marginTop: 11 }}>{bodyContent}</div>
+          <div style={{ ...tBody, marginTop: token("--space-m") }}>{bodyContent}</div>
         )}
       </div>
     );
@@ -867,13 +868,13 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
   const { meta, leadGlyph, subtitle } = props;
   const hasHeadline = title !== undefined || leadGlyph !== undefined;
   const Meta = meta ? (
-    <div style={{ ...tMeta, marginBottom: 7 }}>
+    <div style={{ ...tMeta, marginBottom: token("--space-s") }}>
       {renderRulesSymbolsInline(meta)}
     </div>
   ) : null;
   return (
     <div
-      style={{ ...shell, padding: `${geometryPx(PADY)} ${geometryPx(PADX)}` }}
+      style={{ ...shell, padding: `${geometrySpace(PADY)} ${geometrySpace(PADX)}` }}
     >
       {Meta}
       {hasHeadline && (
@@ -881,8 +882,8 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: geometryPx(9),
-            marginBottom: subtitle ? 2 : body ? 7 : 0,
+            gap: geometrySpace("--space-s"),
+            marginBottom: subtitle ? token("--space-xxs") : body ? token("--space-s") : 0,
           }}
         >
           {leadGlyph !== undefined && (
@@ -899,7 +900,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
         </div>
       )}
       {subtitle !== undefined && subtitle !== "" && (
-        <div style={{ ...tEpithet, marginBottom: body ? 7 : 0 }}>
+        <div style={{ ...tEpithet, marginBottom: body ? token("--space-s") : 0 }}>
           {renderRulesSymbolsInline(subtitle)}
         </div>
       )}

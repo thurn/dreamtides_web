@@ -36,7 +36,7 @@ export function BattleDreamwellHistoryOverlay({
         data-battle-region="dreamwell-history"
         style={{
           display: "grid",
-          gap: token("--space-4"),
+          gap: token("--space-s"),
           maxHeight: "58vh",
           overflowY: "auto",
         }}

@@ -71,7 +71,7 @@ function shortName(name: string): string {
 }
 
 /** The token's family: its name's first `-`-delimited segment (e.g.
- * `violet-400` -> `violet`, `space-9` -> `space`, a single-segment name like
+ * `violet-400` -> `violet`, `space-3xl` -> `space`, a single-segment name like
  * `accent` -> `accent`). Sibling tokens sharing a family render together. */
 function familyOf(name: string): string {
   const short = shortName(name);
@@ -261,30 +261,30 @@ const eyebrowStyle: CSSProperties = {
 const sectionTitleStyle: CSSProperties = {
   font: token("--t-title"),
   color: token("--text-primary"),
-  margin: `${token("--space-3")} 0 ${token("--space-6")}`,
+  margin: `${token("--space-xs")} 0 ${token("--space-l")}`,
 };
 
 const leadStyle: CSSProperties = {
   font: token("--t-lead"),
   color: token("--text-secondary"),
-  margin: `0 0 ${token("--space-9")}`,
+  margin: `0 0 ${token("--space-3xl")}`,
   maxWidth: "62ch",
 };
 
 const groupWrapStyle: CSSProperties = {
-  marginBottom: token("--space-10"),
+  marginBottom: token("--space-4xl"),
 };
 
 const groupTitleStyle: CSSProperties = {
   font: token("--t-title-sm"),
   color: token("--text-primary"),
-  margin: `0 0 ${token("--space-3")}`,
+  margin: `0 0 ${token("--space-xs")}`,
 };
 
 const groupDescriptionStyle: CSSProperties = {
   font: token("--t-body-sm"),
   color: token("--text-secondary"),
-  margin: `0 0 ${token("--space-6")}`,
+  margin: `0 0 ${token("--space-l")}`,
   maxWidth: "68ch",
 };
 
@@ -293,17 +293,17 @@ const familyTitleStyle: CSSProperties = {
   letterSpacing: token("--tracking-eyebrow"),
   textTransform: "uppercase",
   color: token("--text-muted"),
-  margin: `0 0 ${token("--space-3")}`,
+  margin: `0 0 ${token("--space-xs")}`,
 };
 
 const familyBlockStyle: CSSProperties = {
-  marginBottom: token("--space-6"),
+  marginBottom: token("--space-l"),
 };
 
 const gridStyle: CSSProperties = {
   display: "grid",
   gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
-  gap: token("--space-5"),
+  gap: token("--space-m"),
 };
 
 const typeScaleGridStyle: CSSProperties = {
@@ -316,8 +316,8 @@ const typeScaleGridStyle: CSSProperties = {
 const specimenTileStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
-  gap: token("--space-2"),
-  padding: token("--space-5"),
+  gap: token("--space-xs"),
+  padding: token("--space-m"),
   background: token("--surface-card"),
   border: `1px solid ${token("--border-soft")}`,
   borderRadius: token("--radius-control"),
@@ -527,7 +527,7 @@ function SpacingSpecimen(name: string, entry: TokenEntry): ReactElement {
     <div style={specimenTileStyle}>
       <div
         style={{
-          height: token("--space-4"),
+          height: token("--space-s"),
           width: `var(${name})`,
           minWidth: "2px",
           background: token("--accent"),
@@ -579,7 +579,7 @@ function useMotionKeyframes(): void {
 const motionTrackStyle: CSSProperties = {
   position: "relative",
   width: "100%",
-  height: token("--space-8"),
+  height: token("--space-2xl"),
   background: token("--surface-raised"),
   borderRadius: token("--radius-pill"),
   overflow: "hidden",
@@ -651,7 +651,7 @@ function StaggerSpecimen(name: string): ReactElement {
               position: "relative",
               top: 0,
               left: 0,
-              marginLeft: index === 0 ? token("--space-2") : token("--space-3"),
+              marginLeft: index === 0 ? token("--space-xs") : token("--space-s"),
               animationDuration: token("--dur-base"),
               animationTimingFunction: token("--ease-out"),
               animationDelay: `calc(var(${name}) * ${String(index)})`,
@@ -693,7 +693,7 @@ function ShadowSpecimen(name: string, entry: TokenEntry): ReactElement {
       <div
         style={{
           height: "56px",
-          margin: token("--space-3"),
+          margin: token("--space-xs"),
           background: token("--surface-card"),
           borderRadius: token("--radius-control"),
           boxShadow: `var(${name})`,
@@ -748,8 +748,8 @@ function IconSpecimen({ className, label }: IconSample): ReactElement {
 const otherRowStyle: CSSProperties = {
   display: "flex",
   justifyContent: "space-between",
-  gap: token("--space-5"),
-  padding: `${token("--space-2")} 0`,
+  gap: token("--space-m"),
+  padding: `${token("--space-xs")} 0`,
   borderBottom: `1px solid ${token("--border-soft")}`,
 };
 
@@ -769,8 +769,8 @@ function OtherSpecimen(name: string, entry: TokenEntry): ReactElement {
 const noteStyle: CSSProperties = {
   font: token("--t-body-sm"),
   color: token("--text-secondary"),
-  margin: `0 0 ${token("--space-9")}`,
-  padding: token("--space-6"),
+  margin: `0 0 ${token("--space-3xl")}`,
+  padding: token("--space-l"),
   background: token("--accent-tint"),
   border: `1px solid ${token("--border-accent")}`,
   borderRadius: token("--radius-panel"),
@@ -832,7 +832,7 @@ function TokenGallery({ buckets }: { buckets: Buckets }): ReactElement {
       )}
 
       {buckets.spacing.length > 0 && (
-        <TokenGroup id={idFor("spacing")} title={BUCKET_TITLES.spacing} description="The 8pt-based spacing scale, shown as proportional bars.">
+        <TokenGroup id={idFor("spacing")} title={BUCKET_TITLES.spacing} description="The named 4px-grid spacing scale, with one 2px optical exception, shown as proportional bars.">
           <FamilyGrid entries={buckets.spacing} renderSpecimen={SpacingSpecimen} />
         </TokenGroup>
       )}
@@ -888,7 +888,7 @@ function TokenGallery({ buckets }: { buckets: Buckets }): ReactElement {
 export function DesignTokensSection(): ReactElement {
   useMotionKeyframes();
   return (
-    <section id="cumulus-toc-tokens" aria-labelledby="cumulus-design-tokens-heading" style={{ marginBottom: token("--space-10") }}>
+    <section id="cumulus-toc-tokens" aria-labelledby="cumulus-design-tokens-heading" style={{ marginBottom: token("--space-4xl") }}>
       <p style={eyebrowStyle}>Tokens</p>
       <h2 id="cumulus-design-tokens-heading" style={sectionTitleStyle}>
         Design Tokens

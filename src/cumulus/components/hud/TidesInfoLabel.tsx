@@ -59,7 +59,7 @@ export function TidesInfoLabel() {
     >
       <span
         data-tides-info-glyph=""
-        style={{ display: "inline-block", marginRight: token("--space-2") }}
+        style={{ display: "inline-block", marginRight: token("--space-xs") }}
       >
         <InlineGlyph glyph={GLYPHS.infoFilled} />
       </span>

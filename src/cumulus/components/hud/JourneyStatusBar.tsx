@@ -84,7 +84,7 @@ const STACK_THRESHOLD = 4;
 
 /** Physical home-indicator inset plus the small scene-art breathing gap. */
 export const JOURNEY_STATUS_BAR_BOTTOM_INSET =
-  "calc(var(--safe-area-inset-bottom) + var(--space-2))";
+  "calc(var(--safe-area-inset-bottom) + var(--space-xs))";
 
 /** Total fixed viewport height occupied by the component. */
 export const JOURNEY_STATUS_BAR_TOTAL_HEIGHT =
@@ -92,7 +92,7 @@ export const JOURNEY_STATUS_BAR_TOTAL_HEIGHT =
 
 /** Operation screens use when reserving content above the fixed component. */
 export const JOURNEY_STATUS_BAR_CLEARANCE_OP =
-  "var(--hud-h) + var(--safe-area-inset-bottom) + var(--space-2)";
+  "var(--hud-h) + var(--safe-area-inset-bottom) + var(--space-xs)";
 
 /**
  * Shared mobile bottom edge for a screen-level floating glass panel. The
@@ -100,7 +100,7 @@ export const JOURNEY_STATUS_BAR_CLEARANCE_OP =
  * separate from the transparent status-bar objects.
  */
 export const JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP =
-  `${JOURNEY_STATUS_BAR_CLEARANCE_OP} + ${token("--space-8")}`;
+  `${JOURNEY_STATUS_BAR_CLEARANCE_OP} + ${token("--space-2xl")}`;
 
 /** Ready-to-use CSS length for mobile floating glass panel positioning. */
 export const JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE =
@@ -276,7 +276,7 @@ function QsbDreamsignStrip({
 
   if (signs.length <= STACK_THRESHOLD) {
     return (
-      <div style={{ ...wrap, gap: 2 }}>
+      <div style={{ ...wrap, gap: token("--space-xxs") }}>
         {signs.map((s) => (
           <Dreamsign
             key={requireDreamsignId(s, "JourneyStatusBar dreamsign strip")}
@@ -328,7 +328,7 @@ function QsbDreamsignWindow({
         style={{
           position: "relative",
           width: "min(330px, 100%)",
-          padding: "20px 20px 24px",
+          padding: `${token("--space-xl")} ${token("--space-xl")} ${token("--space-2xl")}`,
           background: token("--surface-chrome-strong"),
           border: `1px solid ${token("--border-soft")}`,
           borderRadius: token("--radius-large"),
@@ -340,7 +340,7 @@ function QsbDreamsignWindow({
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            marginBottom: 16,
+            marginBottom: token("--space-l"),
           }}
         >
           <h2
@@ -363,7 +363,7 @@ function QsbDreamsignWindow({
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(4, 1fr)",
-            gap: 14,
+            gap: token("--space-l"),
             justifyItems: "center",
           }}
         >
@@ -522,13 +522,13 @@ function QsbHudBar({
       style={{
         display: "flex",
         alignItems: "center",
-        gap: Math.round(10 * scale),
+        gap: `calc(${token("--space-m")} * ${String(scale)})`,
         height: "100%",
         boxSizing: "border-box",
         paddingTop: 0,
-        paddingRight: Math.round(12 * scale),
+        paddingRight: `calc(${token("--space-m")} * ${String(scale)})`,
         paddingBottom: JOURNEY_STATUS_BAR_BOTTOM_INSET,
-        paddingLeft: Math.round(12 * scale),
+        paddingLeft: `calc(${token("--space-m")} * ${String(scale)})`,
       }}
     >
       <QsbDreamAvatarBust dreamAvatar={dreamAvatar} />
@@ -536,7 +536,7 @@ function QsbHudBar({
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: 4,
+          gap: token("--space-xs"),
           marginRight: "auto",
         }}
       >
@@ -664,7 +664,7 @@ function QsbBattleHudBar({
           gridTemplateColumns: `repeat(${String(dreamsignColumnCount)}, max-content)`,
           gridTemplateRows: "repeat(2, max-content)",
           alignItems: "center",
-          gap: token("--space-1"),
+          gap: token("--space-xxs"),
         }}
       >
         {signs.map((sign, index) => (
@@ -706,9 +706,9 @@ function QsbBattleHudBar({
         alignItems: "flex-end",
         justifyContent: "space-between",
         boxSizing: "border-box",
-        paddingRight: Math.round(12 * scale),
+        paddingRight: `calc(${token("--space-m")} * ${String(scale)})`,
         paddingBottom: JOURNEY_STATUS_BAR_BOTTOM_INSET,
-        paddingLeft: Math.round(12 * scale),
+        paddingLeft: `calc(${token("--space-m")} * ${String(scale)})`,
         pointerEvents: "none",
       }}
     >

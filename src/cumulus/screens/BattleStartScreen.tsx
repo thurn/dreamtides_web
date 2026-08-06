@@ -134,7 +134,7 @@ export function BattleStartScreen({
           style={{
             position: "absolute",
             zIndex: token("--layer-reveal"),
-            top: `calc(${token("--safe-top")} + ${token("--space-4")})`,
+            top: `calc(${token("--safe-top")} + ${token("--space-s")})`,
             left: "50%",
             width: `${String(view.guideDialogue.bubbleWidth)}px`,
             maxWidth: `calc(100vw - 2 * ${token("--gutter")})`,
@@ -160,10 +160,10 @@ function DesktopBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
       data-battle-start-layout="desktop"
       style={{
         position: "absolute",
-        inset: `max(var(--safe-area-inset-top), ${token("--space-8")}) max(var(--safe-area-inset-right), ${token("--space-10")}) max(var(--safe-area-inset-bottom), ${token("--space-8")}) max(var(--safe-area-inset-left), ${token("--space-10")})`,
+        inset: `max(var(--safe-area-inset-top), ${token("--space-2xl")}) max(var(--safe-area-inset-right), ${token("--space-4xl")}) max(var(--safe-area-inset-bottom), ${token("--space-2xl")}) max(var(--safe-area-inset-left), ${token("--space-4xl")})`,
         display: "grid",
         gridTemplateColumns: "minmax(0, 1fr) minmax(520px, 0.9fr)",
-        gap: token("--space-12"),
+        gap: token("--space-6xl"),
         alignItems: "center",
         justifyItems: "center",
       }}
@@ -269,12 +269,12 @@ function BattleStartPanel({
         top: undefined,
         right: undefined,
         bottom: compact ? JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE : undefined,
-        left: compact ? token("--space-4") : undefined,
+        left: compact ? token("--space-s") : undefined,
         zIndex: compact ? 4 : undefined,
         width: compact ? GUIDE_GALLERY_MOBILE_PANEL_WIDTH : "100%",
         maxWidth: compact ? undefined : PANEL_MAX_WIDTH,
         maxHeight: compact
-          ? `calc(100dvh - ${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE} - ${token("--space-4")})`
+          ? `calc(100dvh - ${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE} - ${token("--space-s")})`
           : "100%",
         alignSelf: undefined,
         justifySelf: undefined,
@@ -290,16 +290,16 @@ function BattleStartPanel({
           style={{
             maxHeight: "100%",
             boxSizing: "border-box",
-            padding: compact ? token("--space-6") : token("--space-9"),
+            padding: compact ? token("--space-l") : token("--space-3xl"),
             display: "flex",
             flexDirection: "column",
-            gap: compact ? token("--space-6") : token("--space-7"),
+            gap: compact ? token("--space-l") : token("--space-xl"),
             overflowY: compact ? "auto" : undefined,
             overscrollBehavior: compact ? "contain" : undefined,
           }}
         >
           <header
-            style={{ display: "grid", gap: compact ? 0 : token("--space-3") }}
+            style={{ display: "grid", gap: compact ? 0 : token("--space-xs") }}
           >
             <h1
               style={{
@@ -351,7 +351,7 @@ function BattleStartPanel({
                   data-battle-start-signature-objects=""
                   style={{
                     display: "flex",
-                    gap: token("--space-4"),
+                    gap: token("--space-s"),
                     alignItems: "center",
                   }}
                 >
@@ -367,7 +367,7 @@ function BattleStartPanel({
                 data-battle-start-signature-cards=""
                 style={{
                   display: "flex",
-                  gap: compact ? token("--space-3") : token("--space-6"),
+                  gap: compact ? token("--space-xs") : token("--space-l"),
                   alignItems: "flex-start",
                 }}
               >
@@ -381,7 +381,7 @@ function BattleStartPanel({
               <div
                 style={{
                   display: "flex",
-                  gap: compact ? token("--space-3") : token("--space-6"),
+                  gap: compact ? token("--space-xs") : token("--space-l"),
                 }}
               >
                 {dreamsigns}
@@ -391,12 +391,12 @@ function BattleStartPanel({
 
           <footer
             style={{
-              paddingTop: compact ? token("--space-5") : token("--space-6"),
+              paddingTop: compact ? token("--space-m") : token("--space-l"),
               borderTop: `1px solid ${token("--glass-rim")}`,
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              gap: compact ? token("--space-4") : token("--space-8"),
+              gap: compact ? token("--space-s") : token("--space-2xl"),
               marginTop: compact ? undefined : "auto",
             }}
           >
@@ -404,7 +404,7 @@ function BattleStartPanel({
               data-battle-start-stakes=""
               style={{
                 display: "flex",
-                gap: compact ? token("--space-5") : token("--space-8"),
+                gap: compact ? token("--space-m") : token("--space-2xl"),
               }}
             >
               <Stake label="To Win" density={density}>
@@ -443,10 +443,10 @@ function PanelSection({
     <section
       data-battle-start-panel-section={label}
       style={{
-        paddingTop: compact ? token("--space-5") : token("--space-6"),
+        paddingTop: compact ? token("--space-m") : token("--space-l"),
         borderTop: `1px solid ${token("--glass-rim")}`,
         display: "grid",
-        gap: compact ? token("--space-4") : token("--space-5"),
+        gap: compact ? token("--space-s") : token("--space-m"),
       }}
     >
       <h2
@@ -478,13 +478,13 @@ function Stake({
   return (
     <div
       data-battle-start-stake={label}
-      style={{ display: "grid", gap: compact ? 0 : token("--space-3") }}
+      style={{ display: "grid", gap: compact ? 0 : token("--space-xs") }}
     >
       <div
         style={{
           display: "flex",
           alignItems: "center",
-          gap: compact ? token("--space-2") : token("--space-3"),
+          gap: compact ? token("--space-xs") : token("--space-s"),
           font: compact ? token("--t-body") : token("--t-title-sm"),
           color: token("--text-on-glass"),
         }}

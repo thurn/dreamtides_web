@@ -60,9 +60,9 @@ function PortraitName({ dreamAvatar }: { dreamAvatar: DreamAvatarOfferView }) {
     <div
       style={{
         position: "absolute",
-        top: token("--space-4"),
-        left: token("--space-3"),
-        right: token("--space-3"),
+        top: token("--space-s"),
+        left: token("--space-xs"),
+        right: token("--space-xs"),
         zIndex: 2,
         textAlign: "center",
         pointerEvents: "none",
@@ -80,7 +80,7 @@ function PortraitName({ dreamAvatar }: { dreamAvatar: DreamAvatarOfferView }) {
       </div>
       <div
         style={{
-          marginTop: token("--space-1"),
+          marginTop: token("--space-xxs"),
           font: token("--t-hero-epithet"),
           color: token("--text-primary"),
           textShadow: token("--text-outline-media"),
@@ -94,7 +94,7 @@ function PortraitName({ dreamAvatar }: { dreamAvatar: DreamAvatarOfferView }) {
 
 /** The console panel for one DreamAvatar. It is narrower than its column and
  * center-aligned under the figure, riding up over the legs; its interior is an
- * even --space-6 rhythm stack — padding, then the ability text, divider, tides
+ * even --space-l rhythm stack — padding, then the ability text, divider, tides
  * row, and Choose button each separated by one step. The ability region takes
  * its natural height. A fixed alignment zone centers panels of different
  * heights on one line without transforming the glass or its ancestors, which
@@ -123,7 +123,7 @@ function DreamAvatarCard({
       <GlassPanel testId={`dream-avatar-glass-panel-${dreamAvatar.id}`}>
         <div
           style={{
-            padding: token("--space-6"),
+            padding: token("--space-l"),
             display: "flex",
             flexDirection: "column",
           }}
@@ -134,20 +134,20 @@ function DreamAvatarCard({
             presentation="selectionCard"
           />
 
-          <div style={{ marginTop: token("--space-6") }}>
+          <div style={{ marginTop: token("--space-l") }}>
             <ConsoleDivider flush />
           </div>
 
           {/* Tides cluster: the "Tides:" caption + starting-essence on one row,
               the tide discs stacked below the caption at the larger 'lg' size —
               the same shared arrangement the mobile carousel renders. */}
-          <div style={{ marginTop: token("--space-6") }}>
+          <div style={{ marginTop: token("--space-l") }}>
             <TidesEssenceBlock dreamAvatar={dreamAvatar} />
           </div>
 
           <div
             data-choose-dream-avatar={dreamAvatar.id}
-            style={{ marginTop: token("--space-6"), display: "grid" }}
+            style={{ marginTop: token("--space-l"), display: "grid" }}
           >
             <GlassButton
               label="Choose"
@@ -220,7 +220,7 @@ export function DesktopSelect({
         background: token("--bg-app"),
         display: "flex",
         flexDirection: "column",
-        paddingBottom: `calc(${token("--safe-bottom")} + ${token("--space-8")})`,
+        paddingBottom: `calc(${token("--safe-bottom")} + ${token("--space-2xl")})`,
       }}
     >
       {/* A soft ambient glow + drifting motes give the shared background life
@@ -252,7 +252,7 @@ export function DesktopSelect({
         style={{
           position: "relative",
           zIndex: 1,
-          padding: `calc(${token("--safe-top")} + ${token("--space-6")}) ${token("--gutter")} 0`,
+          padding: `calc(${token("--safe-top")} + ${token("--space-l")}) ${token("--gutter")} 0`,
         }}
       >
         <DesktopTitle />
@@ -270,7 +270,7 @@ export function DesktopSelect({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          padding: `${token("--space-8")} ${token("--gutter")}`,
+          padding: `${token("--space-2xl")} ${token("--gutter")}`,
         }}
       >
         <div
@@ -279,7 +279,7 @@ export function DesktopSelect({
             alignItems: "flex-start",
             justifyContent: "center",
             flexWrap: "wrap",
-            gap: token("--space-8"),
+            gap: token("--space-2xl"),
           }}
         >
           {dreamAvatars.map((dreamAvatar) => (

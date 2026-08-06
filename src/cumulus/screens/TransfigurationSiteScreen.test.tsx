@@ -342,7 +342,7 @@ describe("TransfigurationSiteScreen", () => {
       "[data-transfiguration-actions]",
     );
     expect(actions?.style.justifyContent).toBe("flex-end");
-    expect(actions?.style.gap).toBe("var(--space-4)");
+    expect(actions?.style.gap).toBe("var(--space-s)");
     expect(
       container.querySelector('[data-testid="cumulus-transfiguration-back"]'),
     ).toBeNull();
@@ -358,7 +358,7 @@ describe("TransfigurationSiteScreen", () => {
     expect(detailBody?.style.gridTemplateColumns).toBe(
       "minmax(220px, 278px) minmax(240px, 288px)",
     );
-    expect(detailBody?.style.gap).toBe("var(--space-8)");
+    expect(detailBody?.style.gap).toBe("var(--space-2xl)");
     expect(detailBody?.style.alignItems).toBe("start");
     expect(
       container.querySelector<HTMLElement>("[data-transfiguration-options]")
@@ -403,7 +403,7 @@ describe("TransfigurationSiteScreen", () => {
     expect(empowered?.getAttribute("aria-description")).toBe(
       "Reduce this card's energy cost.",
     );
-    expect(empowered?.style.padding).toBe("var(--space-3)");
+    expect(empowered?.style.padding).toBe("var(--space-xs)");
     expect(empowered?.style.background).toBe("transparent");
     expect(empowered?.style.boxShadow).toBe("none");
     act(() => empowered?.click());
@@ -496,7 +496,7 @@ describe("TransfigurationSiteScreen", () => {
     const options = container.querySelector<HTMLElement>(
       "[data-transfiguration-options]",
     );
-    expect(options?.style.padding).toBe("var(--space-2)");
+    expect(options?.style.padding).toBe("var(--space-xs)");
     expect(options?.style.overflowY).toBe("auto");
 
     act(() => root.unmount());
@@ -577,7 +577,7 @@ describe("TransfigurationSiteScreen", () => {
     expect(
       container.querySelector<HTMLElement>("[data-transfiguration-detail-body]")
         ?.style.padding,
-    ).toBe("var(--space-6) var(--space-4)");
+    ).toBe("var(--space-l) var(--space-s)");
     expect(
       container.querySelector<HTMLElement>("[data-transfiguration-detail-body]")
         ?.style.containerType,

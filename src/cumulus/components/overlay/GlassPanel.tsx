@@ -120,10 +120,10 @@ function radiusToken(radius: GlassPanelRadius): string {
 }
 
 function headerPadding(spacing: GlassPanelHeaderSpacing): string {
-  if (spacing === "compact") return token("--space-5");
-  if (spacing === "medium") return token("--space-6");
-  if (spacing === "spacious") return token("--space-9");
-  return token("--space-8");
+  if (spacing === "compact") return token("--space-m");
+  if (spacing === "medium") return token("--space-l");
+  if (spacing === "spacious") return token("--space-3xl");
+  return token("--space-2xl");
 }
 
 function accessoryNode(
@@ -147,7 +147,7 @@ function accessoryNode(
   }
   if (accessory.kind === "iconButtonGroup") {
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: token("--space-2") }}>
+      <div style={{ display: "flex", alignItems: "center", gap: token("--space-xs") }}>
         {accessory.actions.map((action) => (
           <IconButton
             key={action.label}
@@ -298,7 +298,7 @@ export function GlassPanel({
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: token("--space-4"),
+            gap: token("--space-s"),
             borderBottom: headerDivider
               ? `1px solid ${token("--border-strong")}`
               : undefined,
@@ -311,7 +311,7 @@ export function GlassPanel({
               display: "flex",
               flexDirection: "column",
               gap:
-                titleVoice === "hero" ? token("--space-3") : token("--space-1"),
+                titleVoice === "hero" ? token("--space-xs") : token("--space-xxs"),
               minWidth: 0,
             }}
           >

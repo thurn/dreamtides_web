@@ -255,7 +255,7 @@
   transform: translateX(-50%);
   z-index: 5;
   display: flex;
-  gap: 5px;
+  gap: var(--space-xs);
 }
 .dream-atlas .site-badge {
   width: calc(var(--atlas-node-size) * 0.27 * var(--atlas-badge-scale, 1));

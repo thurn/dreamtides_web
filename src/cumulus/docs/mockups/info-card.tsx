@@ -25,15 +25,15 @@ interface TriggerProps {
 /** One pressable HUD object that reveals its InfoCard on hover / press. */
 function Trigger({ label, variant, glyph, card }: TriggerProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: token("--space-4") }}>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: token("--space-s") }}>
       <span
         style={{
           display: "inline-flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: token("--space-3"),
+          gap: token("--space-xs"),
           width: 128,
-          padding: `${token("--space-5")} ${token("--space-4")}`,
+          padding: `${token("--space-m")} ${token("--space-s")}`,
           background: token("--surface-chrome"),
           border: `1px solid ${token("--border-soft")}`,
           borderRadius: token("--radius-panel"),
@@ -87,8 +87,8 @@ export function InfoCardMockup() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        gap: token("--space-10"),
-        padding: token("--space-9"),
+        gap: token("--space-4xl"),
+        padding: token("--space-3xl"),
         background:
           "radial-gradient(120% 90% at 50% 20%, #2c2450 0%, #160f2a 50%, #080512 100%)",
         touchAction: "none",
@@ -106,7 +106,7 @@ export function InfoCardMockup() {
         >
           One shell, many media variants
         </p>
-        <h1 style={{ font: token("--t-display"), margin: `${token("--space-3")} 0 0`, color: token("--text-primary") }}>
+        <h1 style={{ font: token("--t-display"), margin: `${token("--space-xs")} 0 0`, color: token("--text-primary") }}>
           Press to reveal
         </h1>
       </div>
@@ -115,7 +115,7 @@ export function InfoCardMockup() {
         style={{
           display: "flex",
           flexWrap: "wrap",
-          gap: token("--space-6"),
+          gap: token("--space-l"),
           alignItems: "flex-start",
           justifyContent: "center",
         }}

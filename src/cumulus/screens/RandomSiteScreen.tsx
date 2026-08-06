@@ -78,8 +78,8 @@ export function RandomSiteScreen({
                 display: "grid",
                 gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
                 alignItems: "center",
-                gap: token("--space-7"),
-                padding: token("--space-8"),
+                gap: token("--space-xl"),
+                padding: token("--space-2xl"),
               }}
             >
               {view.choices.map((choice, index) => {

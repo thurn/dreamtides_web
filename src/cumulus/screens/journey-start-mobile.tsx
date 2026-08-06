@@ -28,7 +28,7 @@ import { DreamAvatarAbilityText } from "../components/hud/DreamAvatarAbilityText
 /** Invisible touch slop padded around each mobile tide disc so it is easier to
  * press; the disc row reabsorbs it with negative margins so the visual layout
  * is unchanged. A spacing step, so the token is right. */
-const TIDE_HIT_SLOP = token("--space-2");
+const TIDE_HIT_SLOP = token("--space-xs");
 
 /** The mobile carousel's glass console beneath a portrait: ability text, a
  * hairline, the tides cluster + starting essence, and the Choose action. */
@@ -43,7 +43,7 @@ function DreamAvatarConsole({
     <GlassPanel testId={`dream-avatar-glass-panel-${dreamAvatar.id}`}>
       <div
         style={{
-          padding: token("--space-6"),
+          padding: token("--space-l"),
           display: "flex",
           flexDirection: "column",
         }}
@@ -53,13 +53,13 @@ function DreamAvatarConsole({
           text={dreamAvatar.renderedText}
         />
 
-        {/* An even --space-6 rhythm around the divider, matching the desktop
+        {/* An even --space-l rhythm around the divider, matching the desktop
             panel: one step above and one below. */}
-        <div style={{ marginTop: token("--space-6") }}>
+        <div style={{ marginTop: token("--space-l") }}>
           <ConsoleDivider flush />
         </div>
 
-        <div style={{ marginTop: token("--space-6") }}>
+        <div style={{ marginTop: token("--space-l") }}>
           <TidesEssenceBlock
             dreamAvatar={dreamAvatar}
             hitSlop={TIDE_HIT_SLOP}
@@ -68,7 +68,7 @@ function DreamAvatarConsole({
 
         <div
           data-choose-dream-avatar={dreamAvatar.id}
-          style={{ marginTop: token("--space-6"), display: "grid" }}
+          style={{ marginTop: token("--space-l"), display: "grid" }}
         >
           <GlassButton
             label="Choose"
@@ -96,7 +96,7 @@ function DreamAvatarTitle({
         top: token("--safe-top"),
         left: 0,
         right: 0,
-        padding: `${token("--space-10")} ${token("--gutter")} 0`,
+        padding: `${token("--space-4xl")} ${token("--gutter")} 0`,
         zIndex: 4,
         textAlign: "center",
       }}
@@ -115,7 +115,7 @@ function DreamAvatarTitle({
         <span
           style={{
             display: "block",
-            marginTop: token("--space-1"),
+            marginTop: token("--space-xxs"),
             font: token("--t-hero-epithet"),
             color: token("--text-primary"),
             textShadow: token("--text-outline-media"),
@@ -139,7 +139,7 @@ function ScreenHeader() {
         left: 0,
         right: 0,
         zIndex: 6,
-        padding: `${token("--space-5")} ${token("--gutter")} 0`,
+        padding: `${token("--space-m")} ${token("--gutter")} 0`,
         textAlign: "center",
         pointerEvents: "none",
       }}
@@ -165,7 +165,7 @@ function EdgeChevron({
       style={{
         position: "absolute",
         top: "46%",
-        [dir]: token("--space-3"),
+        [dir]: token("--space-xs"),
         zIndex: 6,
       }}
     >
@@ -311,7 +311,7 @@ export function CarouselSelect({
             right: 0,
             bottom: 0,
             zIndex: 4,
-            padding: `0 ${token("--gutter")} calc(${token("--safe-bottom")} + ${token("--space-5")})`,
+            padding: `0 ${token("--gutter")} calc(${token("--safe-bottom")} + ${token("--space-m")})`,
           }}
         >
           <DreamAvatarConsole

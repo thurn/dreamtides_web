@@ -277,6 +277,12 @@ role token describes what a value is for: `--surface-card`, `--text-primary`,
 elevation. Each declaration owns its resolved CSS value directly, making the
 token contract readable without a second lookup layer.
 
+Spacing uses relative T-shirt names on a 4px content grid: `--space-xs` is the
+smallest grid step, followed by `--space-s`, `--space-m`, `--space-l`, and the
+larger `--space-*xl` steps. `--space-xxs` is the sole 2px optical exception;
+shared content rhythm begins at `--space-xs`. Device safe areas and authored
+object dimensions are geometry rather than spacing-grid steps.
+
 Choose tokens by role rather than by resolved value. Use `--text-secondary`
 because the text is secondary and `--radius-control` because the object is a
 control. Add a named role to `cumulus-tokens.css` when the vocabulary does not
@@ -318,8 +324,9 @@ and name-prefix family.
 - **Corner radius** — five canonical roles: `--radius-compact` (8px),
   `--radius-control` (14px), `--radius-panel` (18px), `--radius-large` (24px),
   and `--radius-pill` (fully round).
-- **Spacing** — the `--space-*` scale + touch-floor tokens (`--safe-*`, 44pt
-  floor), used directly.
+- **Spacing** — the named `--space-*` 4px-grid scale, its 2px `--space-xxs`
+  optical exception, and touch-floor tokens (`--safe-*`, 44pt floor), used
+  directly.
 - **Iconography** — Boxicons v3.0.8 **filled** (`bxf bx-*`) is the set, already
   self-hosted in the app; the game's resource marks; and the two pinned
   fallbacks (`fa-solid fa-hammer`, already present, and `ph-fill ph-cards`, the

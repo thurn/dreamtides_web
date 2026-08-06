@@ -347,7 +347,7 @@ export function BattleForeseeOverlay({
     >
       <div
         data-battle-cumulus-foresee=""
-        style={{ display: "grid", gap: token("--space-5") }}
+        style={{ display: "grid", gap: token("--space-m") }}
       >
         {view.sourceDreamwellCard === undefined ? null : (
           <section
@@ -355,7 +355,7 @@ export function BattleForeseeOverlay({
             style={{
               display: "grid",
               justifyItems: "center",
-              gap: token("--space-2"),
+              gap: token("--space-xs"),
             }}
           >
             <span
@@ -379,7 +379,7 @@ export function BattleForeseeOverlay({
           style={{
             display: "flex",
             justifyContent: "center",
-            gap: token("--space-3"),
+            gap: token("--space-xs"),
           }}
         >
           <IconButton
@@ -400,14 +400,14 @@ export function BattleForeseeOverlay({
           />
         </div>
 
-        <div style={{ overflowX: "auto", paddingBottom: token("--space-3") }}>
+        <div style={{ overflowX: "auto", paddingBottom: token("--space-xs") }}>
           <div
             data-foresee-row=""
             data-foresee-drop-geometry="nearest-destination"
             style={{
               display: "flex",
               alignItems: "center",
-              gap: token("--space-4"),
+              gap: token("--space-s"),
               width: "100%",
               minWidth: "max-content",
             }}

@@ -2,6 +2,7 @@ import { useRef, type CSSProperties } from "react";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
+import { token } from "../../primitives/tokens";
 import { richText } from "../card/rich-text";
 import { glossaryInfoCard } from "../card/glossary-info-card";
 import { GLOSSARY_IDS } from "../../../data/glossary";
@@ -34,10 +35,10 @@ export function TideSelectionButton({ id, label, description, selectionRole, act
   const lastPointerType = useRef<string | null>(null);
   const pointerDown = binding.sourceProps.onPointerDown;
   const style: CSSProperties = {
-    ...binding.sourceProps.style, display: "inline-flex", alignItems: "center", gap: 6, borderRadius: 6,
+    ...binding.sourceProps.style, display: "inline-flex", alignItems: "center", gap: token("--space-xs"), borderRadius: token("--radius-compact"),
     border: active ? `1px solid ${accent}` : "1px solid rgba(247, 241, 223, 0.16)",
     background: active ? "rgba(45, 138, 128, 0.22)" : "#16242a", color: joined ? "#f7f1df" : "#8a9590",
-    padding: "4px 9px", font: "inherit", fontSize: "0.74rem", fontWeight: 700, cursor: "pointer",
+    padding: `${token("--space-xs")} ${token("--space-s")}`, font: "inherit", fontSize: "0.74rem", fontWeight: 700, cursor: "pointer",
   };
   return (
     <Pressable as="button" ref={binding.ref} {...binding.sourceProps} data-pool-tide-button={id} aria-pressed={active}

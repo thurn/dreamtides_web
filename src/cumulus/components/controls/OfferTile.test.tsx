@@ -173,7 +173,7 @@ describe("OfferTile", () => {
     )!;
     expect(four.style.gridTemplateColumns).toBe("repeat(2, minmax(0, 1fr))");
     expect(four.style.gridTemplateRows).toBe("repeat(2, minmax(0, 1fr))");
-    expect(four.style.gap).toBe("var(--space-1)");
+    expect(four.style.gap).toBe("var(--space-xxs)");
 
     const focusedSingleImage = container.querySelector<HTMLImageElement>(
       `[data-testid="one"] [data-offer-tile-card-art="${CARDS[0].cardId}"] img`,

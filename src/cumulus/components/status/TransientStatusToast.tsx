@@ -46,17 +46,17 @@ export function TransientStatusToast({
         ...glassSurfaceStyle({ radius: token("--radius-panel") }),
         position: "fixed",
         zIndex: 60,
-        bottom: `max(${token(SAFE_AREA_INSET_PROPERTIES.bottom)}, ${token("--space-6")})`,
+        bottom: `max(${token(SAFE_AREA_INSET_PROPERTIES.bottom)}, ${token("--space-l")})`,
         left: "50%",
         width: "min(90vw, 416px)",
         boxSizing: "border-box",
-        padding: token("--space-5"),
+        padding: token("--space-m"),
         color: variant === "error" ? token("--danger") : token("--text-on-glass"),
         textAlign: "center",
         transform: "translateX(-50%)",
       }}
     >
-      <span role={alertRole} style={{ display: "grid", gap: token("--space-2") }}>
+      <span role={alertRole} style={{ display: "grid", gap: token("--space-xs") }}>
         {copy.title !== undefined && (
           <strong style={{ font: token("--t-button") }}>{copy.title}</strong>
         )}

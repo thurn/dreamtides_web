@@ -191,7 +191,7 @@ export function DreamscapeScreen({
           style={{
             position: "absolute",
             zIndex: 30,
-            top: `calc(${token("--safe-top")} + ${token("--space-4")})`,
+            top: `calc(${token("--safe-top")} + ${token("--space-s")})`,
             left: "50%",
             width: `${String(view.guideDialogue.bubbleWidth)}px`,
             maxWidth: `calc(100vw - 2 * ${token("--gutter")})`,
@@ -355,7 +355,7 @@ export function DreamscapeScreen({
                 }}
                 style={{
                   position: "absolute",
-                  inset: `calc(-1 * ${token("--space-5")})`,
+                  inset: `calc(-1 * ${token("--space-m")})`,
                   border: `2px solid ${token("--accent-bright")}`,
                   borderRadius: "50%",
                   boxShadow: token("--glow-accent-soft"),
@@ -379,7 +379,7 @@ export function DreamscapeScreen({
                 }}
                 style={{
                   position: "absolute",
-                  top: `calc(100% + ${token("--space-4")})`,
+                  top: `calc(100% + ${token("--space-s")})`,
                   left: "50%",
                   translate: "-50% 0",
                   color: token("--text-primary"),

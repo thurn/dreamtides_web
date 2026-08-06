@@ -206,7 +206,7 @@ export function TransfigurationSiteScreen({
             maxHeight: "100%",
             width:
               layout === "mobile"
-                ? `calc(100vw - (${token("--space-4")} * 2))`
+                ? `calc(100vw - (${token("--space-s")} * 2))`
                 : "100%",
             boxSizing: "border-box",
             pointerEvents: "auto",
@@ -455,7 +455,7 @@ export function TransfigurationDetailPanel({
       data-testid="cumulus-transfiguration-detail"
       data-transfiguration-detail-layout={layout}
       style={{
-        width: mobile ? `calc(100vw - (${token("--space-4")} * 2))` : "100%",
+        width: mobile ? `calc(100vw - (${token("--space-s")} * 2))` : "100%",
         height: mobile ? "auto" : undefined,
         minHeight: mobile ? "100%" : undefined,
         maxHeight: mobile ? undefined : "100%",
@@ -476,10 +476,10 @@ export function TransfigurationDetailPanel({
               display: "flex",
               alignItems: "center",
               justifyContent: mobile ? "center" : "flex-end",
-              gap: token("--space-4"),
-              paddingRight: mobile ? token("--space-4") : token("--space-8"),
-              paddingBottom: mobile ? token("--space-4") : token("--space-6"),
-              paddingLeft: mobile ? token("--space-4") : token("--space-8"),
+              gap: token("--space-s"),
+              paddingRight: mobile ? token("--space-s") : token("--space-2xl"),
+              paddingBottom: mobile ? token("--space-s") : token("--space-l"),
+              paddingLeft: mobile ? token("--space-s") : token("--space-2xl"),
             }}
           >
             <GlassButton
@@ -524,11 +524,11 @@ export function TransfigurationDetailPanel({
               ? "minmax(0, 1fr) minmax(0, 1fr)"
               : "minmax(220px, 278px) minmax(240px, 288px)",
             gridTemplateRows: mobile ? "auto" : undefined,
-            gap: mobile ? token("--space-4") : token("--space-8"),
+            gap: mobile ? token("--space-s") : token("--space-2xl"),
             alignItems: mobile ? "stretch" : "start",
             padding: mobile
-              ? `${token("--space-6")} ${token("--space-4")}`
-              : token("--space-8"),
+              ? `${token("--space-l")} ${token("--space-s")}`
+              : token("--space-2xl"),
           }}
         >
           <div
@@ -563,7 +563,7 @@ export function TransfigurationDetailPanel({
               flex: mobile ? "0 0 auto" : undefined,
               display: "flex",
               flexDirection: "column",
-              gap: mobile ? token("--space-2") : token("--space-4"),
+              gap: mobile ? token("--space-xs") : token("--space-s"),
             }}
           >
             <div
@@ -579,11 +579,11 @@ export function TransfigurationDetailPanel({
                 flexDirection: "column",
                 alignItems: mobile ? "stretch" : undefined,
                 justifyContent: mobile ? "flex-start" : undefined,
-                gap: token("--space-3"),
+                gap: token("--space-xs"),
                 maxHeight: mobile ? undefined : "min(52vh, 520px)",
                 overflowY: mobile ? "visible" : "auto",
-                padding: token("--space-2"),
-                paddingBlockStart: mobile ? token("--space-2") : 0,
+                padding: token("--space-xs"),
+                paddingBlockStart: mobile ? token("--space-xs") : 0,
               }}
             >
               {candidate.forms.map((form) => {

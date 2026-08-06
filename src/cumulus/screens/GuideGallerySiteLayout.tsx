@@ -63,16 +63,16 @@ export interface GuideGallerySiteLayoutProps {
 
 const REVELATION_VERTICAL_OFFSET = "10dvh";
 const REVELATION_GUIDE_TOP = `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${REVELATION_VERTICAL_OFFSET})`;
-const REVELATION_GALLERY_TOP = `max(44dvh, calc(${token("--safe-top")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-7")} + ${REVELATION_VERTICAL_OFFSET}))`;
-const REVELATION_GALLERY_TOP_EXPANDED = `max(36dvh, calc(${token("--safe-top")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-7")} + ${REVELATION_VERTICAL_OFFSET}))`;
+const REVELATION_GALLERY_TOP = `max(44dvh, calc(${token("--safe-top")} + ${token("--space-6xl")} + ${token("--space-6xl")} + ${token("--space-xl")} + ${REVELATION_VERTICAL_OFFSET}))`;
+const REVELATION_GALLERY_TOP_EXPANDED = `max(36dvh, calc(${token("--safe-top")} + ${token("--space-6xl")} + ${token("--space-6xl")} + ${token("--space-xl")} + ${REVELATION_VERTICAL_OFFSET}))`;
 // The grand desktop HUD is taller than the root HUD token.
-const DESKTOP_HUD_CLEARANCE = `calc(${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-9")})`;
+const DESKTOP_HUD_CLEARANCE = `calc(${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-3xl")})`;
 // Three 240px cards plus the showcase gallery's compact gutters and padding.
 // This is a content-box measure used to leave the guide the remaining width.
 const SHOWCASE_GALLERY_RESERVE_PX = 800;
 // Keeps the bubble's left arrow beside the character's head at the authored
 // desktop portrait sizes, for both split and showcase compositions.
-const DESKTOP_DIALOG_LEFT = `clamp(calc(${token("--space-12")} + ${token("--space-12")} + ${token("--space-11")} + ${token("--space-7")}), 18vw, calc(${token("--space-12")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-11")} + ${token("--space-7")}))`;
+const DESKTOP_DIALOG_LEFT = `clamp(calc(${token("--space-6xl")} + ${token("--space-6xl")} + ${token("--space-5xl")} + ${token("--space-xl")}), 18vw, calc(${token("--space-6xl")} + ${token("--space-6xl")} + ${token("--space-6xl")} + ${token("--space-5xl")} + ${token("--space-xl")}))`;
 // Below this width the gallery leaves too little horizontal space for dialog,
 // so the speech bubble moves into the clear band above the showcase panel.
 const COMPACT_SHOWCASE_MAX_WIDTH_PX = 1200;
@@ -300,7 +300,7 @@ function DesktopComposition({
       data-guide-gallery-desktop-composition=""
       style={{
         position: "absolute",
-        top: `calc(${token("--space-8")} + max(var(--safe-area-inset-top), ${token("--safe-top")}))`,
+        top: `calc(${token("--space-2xl")} + max(var(--safe-area-inset-top), ${token("--safe-top")}))`,
         left: 0,
         right: 0,
         bottom: DESKTOP_HUD_CLEARANCE,
@@ -317,8 +317,8 @@ function DesktopComposition({
           position: "relative",
           width:
             composition === "showcase"
-              ? `calc(100% - ${token("--space-8")} - ${token("--space-8")})`
-              : `calc(100% - ${token("--space-12")} - ${token("--space-12")})`,
+              ? `calc(100% - ${token("--space-2xl")} - ${token("--space-2xl")})`
+              : `calc(100% - ${token("--space-6xl")} - ${token("--space-6xl")})`,
           maxWidth: 1500,
           height: "100%",
           minHeight: 0,
@@ -328,7 +328,7 @@ function DesktopComposition({
               ? "minmax(0, 1fr)"
               : "minmax(0, 0.9fr) minmax(0, 1.1fr)",
           gridTemplateRows: "minmax(0, 1fr)",
-          gap: composition === "showcase" ? 0 : token("--space-12"),
+          gap: composition === "showcase" ? 0 : token("--space-6xl"),
           alignItems: "center",
         }}
       >
@@ -395,8 +395,8 @@ function DesktopGuideScene({
         data-testid={guideArtTestId}
         style={{
           position: "absolute",
-          bottom: `calc(-1 * ${token("--space-8")})`,
-          left: `clamp(calc(-1 * ${token("--space-12")}), -4vw, calc(-1 * ${token("--space-8")}))`,
+          bottom: `calc(-1 * ${token("--space-2xl")})`,
+          left: `clamp(calc(-1 * ${token("--space-6xl")}), -4vw, calc(-1 * ${token("--space-2xl")}))`,
           width: "clamp(320px, 29vw, 430px)",
           height: "min(78dvh, 720px)",
           objectFit: "contain",
@@ -410,10 +410,10 @@ function DesktopGuideScene({
           style={{
             position: "absolute",
             top: compactShowcase
-              ? `calc(-1 * (${token("--space-12")} + ${token("--space-5")}))`
+              ? `calc(-1 * (${token("--space-6xl")} + ${token("--space-m")}))`
               : "14%",
             left: compactShowcase
-              ? `calc(-1 * ${token("--space-4")})`
+              ? `calc(-1 * ${token("--space-s")})`
               : DESKTOP_DIALOG_LEFT,
             right: compactShowcase ? "auto" : 0,
             width: compactShowcase ? 190 : undefined,
@@ -472,9 +472,9 @@ function MobileGuideBand({
         data-testid={guideArtTestId}
         style={{
           position: "absolute",
-          top: revelation ? token("--space-4") : undefined,
+          top: revelation ? token("--space-s") : undefined,
           left: revelation
-            ? `calc(-1 * (${token("--space-12")} + ${token("--space-4")}))`
+            ? `calc(-1 * (${token("--space-6xl")} + ${token("--space-s")}))`
             : dialog
               ? "0"
               : GUIDE_GALLERY_MOBILE_GUIDE_LEFT,
@@ -501,11 +501,11 @@ function MobileGuideBand({
             position: "absolute",
             left: revelation ? "34vw" : "40vw",
             right: revelation
-              ? `calc(${token("--space-5")} + ${token("--space-11")} + ${token("--space-3")})`
+              ? `calc(${token("--space-m")} + ${token("--space-5xl")} + ${token("--space-xs")})`
               : dialog
                 ? token("--gutter")
-                : `calc(${token("--gutter")} + ${token("--space-11")})`,
-            top: revelation ? token("--space-5") : token("--space-2"),
+                : `calc(${token("--gutter")} + ${token("--space-5xl")})`,
+            top: revelation ? token("--space-m") : token("--space-xs"),
           }}
         >
           <SpeechBubble

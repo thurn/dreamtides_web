@@ -101,8 +101,8 @@ interface SizeSpec {
 }
 
 const SIZES: Record<SelectSize, SizeSpec> = {
-  sm: { height: 34, font: token("--t-body-sm"), padding: "0 12px" },
-  md: { height: 42, font: token("--t-body"), padding: "0 14px" },
+  sm: { height: 34, font: token("--t-body-sm"), padding: `0 ${token("--space-m")}` },
+  md: { height: 42, font: token("--t-body"), padding: `0 ${token("--space-l")}` },
 };
 
 /** Gap (px) between the trigger and the menu it drops. */
@@ -236,7 +236,7 @@ export function Select({
         style={{
           display: "inline-flex",
           alignItems: "center",
-          gap: 8,
+          gap: token("--space-s"),
           width: full ? "100%" : "auto",
           height: spec.height,
           padding: spec.padding,
@@ -384,12 +384,12 @@ function MenuItem({ option, active, onPick }: MenuItemProps): ReactElement {
       style={{
         display: "flex",
         alignItems: "center",
-        gap: 8,
+        gap: token("--space-s"),
         width: "100%",
         minHeight: 36,
         // Generous side padding so a long label has room off both edges,
         // especially the trailing end where nothing else breaks the line.
-        padding: `0 ${token("--space-5")}`,
+        padding: `0 ${token("--space-m")}`,
         border: "none",
         // A full-width rectangle band — the menu's own rounded corners clip it,
         // so no per-row radius.

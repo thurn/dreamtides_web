@@ -79,8 +79,8 @@ export function DreamsignMockup() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        gap: token("--space-9"),
-        padding: token("--space-9"),
+        gap: token("--space-3xl"),
+        padding: token("--space-3xl"),
         background:
           "radial-gradient(120% 90% at 30% 15%, #3a2a55 0%, #1a1230 45%, #0a0612 100%)",
         touchAction: "none",
@@ -98,7 +98,7 @@ export function DreamsignMockup() {
         >
           Revelation
         </p>
-        <h1 style={{ font: token("--t-display"), margin: `${token("--space-3")} 0 0`, color: token("--text-primary") }}>
+        <h1 style={{ font: token("--t-display"), margin: `${token("--space-xs")} 0 0`, color: token("--text-primary") }}>
           Your Dreamsigns
         </h1>
       </div>

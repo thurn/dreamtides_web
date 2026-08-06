@@ -67,16 +67,16 @@ export interface DraftScreenProps {
 // The vertical bands reserved down the screen, as raw calc operands so the
 // card-height cap can subtract them from the viewport.
 // Breathing room between the safe zone and the top of the pack.
-const TOP_GAP_OP = token("--space-6");
+const TOP_GAP_OP = token("--space-l");
 // The band under the pack that holds the small pick counter (its gap above the
 // label plus the label's own line).
-const COUNTER_BAND_OP = token("--space-9");
+const COUNTER_BAND_OP = token("--space-3xl");
 // Bottom: clearance for the router-owned journey chrome and home-indicator inset.
-const HUD_CLEARANCE_OP = `${JOURNEY_STATUS_BAR_CLEARANCE_OP} + ${token("--space-9")}`;
+const HUD_CLEARANCE_OP = `${JOURNEY_STATUS_BAR_CLEARANCE_OP} + ${token("--space-3xl")}`;
 const TOP_GAP = `calc(${TOP_GAP_OP})`;
 const HUD_CLEARANCE = `calc(${HUD_CLEARANCE_OP})`;
-const MOBILE_OFFER_GRID_GAP = token("--space-2");
-const DESKTOP_OFFER_GRID_GAP = token("--space-5");
+const MOBILE_OFFER_GRID_GAP = token("--space-xs");
+const DESKTOP_OFFER_GRID_GAP = token("--space-m");
 // Desktop draft cards follow the roomy starting-deck modal card size. This is a
 // content-driven box measure: the cap keeps the four-card row readable without
 // turning each card into a full-height mobile offer.
@@ -325,7 +325,7 @@ export function DraftScreen({
         <div
           data-draft-pick-counter=""
           style={{
-            marginTop: token("--space-6"),
+            marginTop: token("--space-l"),
             font: isDesktop ? token("--t-lead") : token("--t-body"),
             color: token("--text-primary"),
             textShadow: token("--text-outline-media"),
