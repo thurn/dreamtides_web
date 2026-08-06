@@ -87,6 +87,7 @@ const FAMILY_LABELS: Record<string, string> = {
   cat: "Card Category",
   dt: "Atlas Theme",
   cv: "Card View",
+  t: "Type Scale",
 };
 
 /** The family sub-heading shown above a group of sibling tokens. */
@@ -305,6 +306,13 @@ const gridStyle: CSSProperties = {
   gap: token("--space-5"),
 };
 
+const typeScaleGridStyle: CSSProperties = {
+  ...gridStyle,
+  // Display voices need enough inline measure to demonstrate their real size
+  // without escaping the specimen card.
+  gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
+};
+
 const specimenTileStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
@@ -378,9 +386,14 @@ function FamilyGrid({
       {families.map(({ family, entries: familyEntries }) => (
         <div key={family} style={familyBlockStyle}>
           <p style={familyTitleStyle}>{familyLabel(family)}</p>
-          <div style={gridStyle}>
+          <div style={family === "t" ? typeScaleGridStyle : gridStyle}>
             {familyEntries.map(([name, entry]) => (
-              <div key={name}>{renderSpecimen(name, entry)}</div>
+              <div
+                key={name}
+                style={name === "--t-wordmark" ? { gridColumn: "1 / -1" } : undefined}
+              >
+                {renderSpecimen(name, entry)}
+              </div>
             ))}
           </div>
         </div>
@@ -421,7 +434,19 @@ function ColorSpecimen(name: string, entry: TokenEntry): ReactElement {
 const typeSampleStyle: CSSProperties = {
   color: token("--text-primary"),
   margin: 0,
+  maxWidth: "100%",
+  overflowWrap: "anywhere",
 };
+
+function typeScaleSample(name: string): string {
+  if (name === "--t-wordmark") {
+    return "Dream";
+  }
+  if (name === "--t-display" || name === "--t-hero") {
+    return "Dream deeply";
+  }
+  return "Dream deeply, wake changed.";
+}
 
 function TypographySpecimen(name: string, entry: TokenEntry): ReactElement {
   const family = familyOf(name);
@@ -460,7 +485,7 @@ function TypographySpecimen(name: string, entry: TokenEntry): ReactElement {
     );
   } else {
     // family === "t": the composite `font` shorthand tokens.
-    sample = <p style={{ ...typeSampleStyle, font: `var(${name})` }}>Dream deeply, wake changed.</p>;
+    sample = <p style={{ ...typeSampleStyle, font: `var(${name})` }}>{typeScaleSample(name)}</p>;
   }
   return (
     <div style={specimenTileStyle}>
