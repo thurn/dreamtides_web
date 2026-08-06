@@ -13,7 +13,7 @@ import { IconButton } from "../components/controls/IconButton";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
-import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
+import { DreamAvatarStage } from "../components/hud/DreamAvatarStage";
 import {
   ConsoleDivider,
   JourneyStartAbilityCopy,
@@ -198,7 +198,7 @@ function DreamAvatarPage({
         overflow: "hidden",
       }}
     >
-      <DreamAvatarPortrait dreamAvatar={dreamAvatar} variant="fullBleed" />
+      <DreamAvatarStage dreamAvatar={dreamAvatar} variant="fullBleed" />
       <Motes on={active} tint="warm" zIndex={1} />
 
       <DreamAvatarTitle dreamAvatar={dreamAvatar} />

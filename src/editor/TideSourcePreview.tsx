@@ -30,7 +30,7 @@ export function TideSourcePreview({
     if (dreamAvatar === undefined) return null;
     return (
       <div style={{ width: size, height: size, flex: `0 0 ${size}px` }}>
-        <DreamAvatarPortrait dreamAvatar={dreamAvatar} variant="thumb" size={size} profile={{ id: dreamAvatar.id, ability: dreamAvatar.renderedText }} />
+        <DreamAvatarPortrait dreamAvatar={dreamAvatar} variant="thumb" profile={{ id: dreamAvatar.id, ability: dreamAvatar.renderedText }} />
       </div>
     );
   }

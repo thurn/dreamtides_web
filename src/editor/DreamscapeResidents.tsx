@@ -126,11 +126,17 @@ export default function DreamscapeResidents({
             }}
           >
             {resident.option !== null ? (
-              <div style={{ flex: "0 0 auto", cursor: "help" }}>
+              <div
+                style={{
+                  width: thumb,
+                  height: thumb,
+                  flex: "0 0 auto",
+                  cursor: "help",
+                }}
+              >
                 <DreamAvatarPortrait
                   dreamAvatar={resident.option}
                   variant="thumb"
-                  size={thumb}
                   profile={{
                     id: resident.option.id,
                     ability: resident.option.renderedText,

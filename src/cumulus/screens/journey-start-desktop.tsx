@@ -14,7 +14,7 @@ import { Motes } from "../components/hud/Motes";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { token } from "../primitives/tokens";
-import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
+import { DreamAvatarStage } from "../components/hud/DreamAvatarStage";
 import {
   ConsoleDivider,
   JourneyStartAbilityCopy,
@@ -247,7 +247,7 @@ function DreamAvatarColumn({
           flex: "none",
         }}
       >
-        <DreamAvatarPortrait dreamAvatar={dreamAvatar} variant="standing" />
+        <DreamAvatarStage dreamAvatar={dreamAvatar} variant="standing" />
         <PortraitName dreamAvatar={dreamAvatar} />
       </div>
       <DreamAvatarCard

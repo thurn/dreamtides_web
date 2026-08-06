@@ -144,7 +144,6 @@ export default tseslint.config(
           allow: [
             "AtlasNodeView.size", // computed stage-pixel node diameter (1920x1080 space)
             "AtlasNodeView.badgeScale", // mobile atlas badge-size multiplier
-            "DreamAvatarPortraitProps.size", // fixed pixel width; a box measure, not a style knob
           ],
         },
       ],

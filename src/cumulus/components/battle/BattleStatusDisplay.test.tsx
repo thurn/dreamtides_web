@@ -102,9 +102,10 @@ describe("BattleStatusDisplay", () => {
     ).toBe("");
     expect(container.querySelector("img")?.alt).toBe("Astra, The Dawnbound");
     expect(
-      container.querySelector<HTMLImageElement>("img")?.parentElement?.style
-        .width,
-    ).toBe("44px");
+      container.querySelector<HTMLElement>(
+        "[data-battle-status-dream-avatar-slot]",
+      )?.style.width,
+    ).toBe("var(--touch-min)");
     expect(container.querySelector("button")).toBeNull();
     expect(container.querySelector('[role="button"]')).toBeNull();
 

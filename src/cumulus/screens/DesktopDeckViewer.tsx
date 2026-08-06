@@ -364,6 +364,7 @@ function DreamAvatarBlock({
             the art to that rounded frame. */}
         <div
           style={{
+            width: DREAM_AVATAR_PORTRAIT_PX,
             padding: 0,
             background: "none",
             borderRadius: token("--radius-control"),
@@ -376,7 +377,6 @@ function DreamAvatarBlock({
           <DreamAvatarPortrait
             dreamAvatar={dreamAvatar}
             variant="panel"
-            size={DREAM_AVATAR_PORTRAIT_PX}
             profile={{ id: dreamAvatar.id, ability: dreamAvatar.renderedText }}
           />
         </div>

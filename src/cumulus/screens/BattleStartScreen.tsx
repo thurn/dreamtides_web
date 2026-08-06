@@ -8,7 +8,7 @@ import { GameCard } from "../components/card/CardView";
 import { RulesText } from "../components/card/RulesText";
 import { GlassButton } from "../components/controls/GlassButton";
 import { InlineGlyph } from "../components/typography/InlineGlyph";
-import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
+import { DreamAvatarStage } from "../components/hud/DreamAvatarStage";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/JourneyStatusBar";
@@ -221,7 +221,7 @@ function OpponentPortrait({
   readonly dreamAvatar: BattleStartDreamAvatarView;
 }) {
   return (
-    <DreamAvatarPortrait
+    <DreamAvatarStage
       dreamAvatar={{
         imageNumber: dreamAvatar.imageNumber,
         name: dreamAvatar.name,

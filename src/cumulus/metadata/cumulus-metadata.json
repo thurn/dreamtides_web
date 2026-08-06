@@ -1721,24 +1721,12 @@
       "name": "variant",
       "tsType": "DreamAvatarPortraitVariant",
       "unionMembers": [
-        "fullBleed",
-        "hero",
         "panel",
-        "thumb",
-        "standing",
-        "cutout"
+        "thumb"
       ],
       "required": false,
       "defaultValue": null,
-      "description": "Framing: self-framing `hero` / `panel` / `thumb`, or the full-bleed stage\nfills `standing` (desktop column), `cutout` (art only), and `fullBleed`\n(mobile carousel).\nDefault `panel`."
-    },
-    {
-      "name": "size",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Fixed pixel width. Panel/thumb stay square, so this also sets their height.\nA sized portrait never shrinks in a flex row. Omit to fill the container\nwidth. Ignored by `standing`/`cutout`/`fullBleed`, which fill the caller's stage."
+      "description": "Square framing: `panel` for profile surfaces or `thumb` for compact rows. Default `panel`."
     },
     {
       "name": "profile",
@@ -1763,6 +1751,57 @@
       "required": false,
       "defaultValue": "false",
       "description": "Keeps the profile readable while suppressing activation."
+    }
+  ],
+  "DreamAvatarStage": [
+    {
+      "name": "dreamAvatar",
+      "tsType": "DreamAvatarVisual",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The DreamAvatar whose full-body art fills the stage.",
+      "nested": {
+        "name": "DreamAvatarVisual",
+        "fields": [
+          {
+            "name": "imageNumber",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "name",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "title",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "portraitFocus",
+            "tsType": "DreamAvatarPortraitFocus",
+            "optional": true,
+            "description": "Normalized head position used to center subject-aware crops."
+          }
+        ]
+      }
+    },
+    {
+      "name": "variant",
+      "tsType": "DreamAvatarStageVariant",
+      "unionMembers": [
+        "fullBleed",
+        "standing",
+        "cutout"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "`standing` adds an ambient glow, `cutout` preserves the scene, and `fullBleed` adds a cinematic backdrop."
     }
   ],
   "Dreamsign": [

@@ -121,6 +121,7 @@ export function JourneyCompleteScreen({
                 style={{
                   alignSelf: "center",
                   display: "flex",
+                  width: 112,
                   lineHeight: 0,
                   marginTop: token("--space-l"),
                 }}
@@ -128,7 +129,6 @@ export function JourneyCompleteScreen({
                 <DreamAvatarPortrait
                   dreamAvatar={view.dreamAvatar}
                   variant="panel"
-                  size={112}
                   profile={{
                     id: view.dreamAvatar.id,
                     ability: view.dreamAvatar.ability,

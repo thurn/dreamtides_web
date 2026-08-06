@@ -85,11 +85,12 @@ function FeaturedSource({
     if (dreamAvatar === undefined) return null;
     return (
       <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
-        <DreamAvatarPortrait
-          dreamAvatar={dreamAvatar}
-          variant="panel"
-          size={160}
-        />
+        <div style={{ width: 160, flex: "0 0 auto" }}>
+          <DreamAvatarPortrait
+            dreamAvatar={dreamAvatar}
+            variant="panel"
+          />
+        </div>
         <div style={{ minWidth: 0 }}>
           <div style={{ fontWeight: 800, fontSize: "1.1rem" }}>{dreamAvatar.name}</div>
           <div style={{ color: "#8edbd1", fontSize: "0.85rem", marginBottom: 8 }}>

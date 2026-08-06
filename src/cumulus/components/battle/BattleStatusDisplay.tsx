@@ -11,11 +11,6 @@ import { InlineGlyph } from "../typography/InlineGlyph";
 export type BattleStatusOwner = "player" | "enemy";
 export type BattleStatusRelationship = "near" | "far";
 
-// DreamAvatarPortrait's sized framing gives WebKit an intrinsic square inside
-// the reveal-source inline flex instead of asking it to resolve a cyclic 100%
-// width from the surrounding content-sized battle status.
-const BATTLE_STATUS_DREAM_AVATAR_PX = 44;
-
 /** Semantic profile revealed from a populated battle DreamAvatar portrait. */
 export interface BattleStatusDreamAvatarProfile {
   readonly id: string;
@@ -96,7 +91,10 @@ export function BattleStatusDisplay({
           value={`${String(currentEnergy)}/${String(maxEnergy)}`}
         />
       </div>
-      <div style={{ width: token("--touch-min") }}>
+      <div
+        data-battle-status-dream-avatar-slot=""
+        style={{ width: token("--touch-min") }}
+      >
         {dreamAvatar === null ? (
           <div
             role="img"
@@ -113,7 +111,6 @@ export function BattleStatusDisplay({
           <DreamAvatarPortrait
             dreamAvatar={dreamAvatar}
             variant="thumb"
-            size={BATTLE_STATUS_DREAM_AVATAR_PX}
             profile={dreamAvatarProfile}
             unavailable={dreamAvatarProfile?.unavailable}
           />

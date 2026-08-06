@@ -3021,11 +3021,12 @@ export function ExplorationSiteScreen({
               pointerEvents: "none",
             }}
           >
-            <DreamAvatarPortrait
-              dreamAvatar={dreamAvatarReward.current}
-              variant="hero"
-              size={isDesktop ? 260 : 210}
-            />
+            <div style={{ width: isDesktop ? 260 : 210 }}>
+              <DreamAvatarPortrait
+                dreamAvatar={dreamAvatarReward.current}
+                variant="panel"
+              />
+            </div>
             <div style={{ display: "grid", gap: token("--space-xxs") }}>
               <strong style={{ font: token("--t-title") }}>
                 {dreamAvatarReward.current.name}
@@ -4085,20 +4086,21 @@ export function ExplorationSiteScreen({
                       textAlign: "center",
                     }}
                   >
-                    <DreamAvatarPortrait
-                      dreamAvatar={dreamAvatar}
-                      variant="panel"
-                      size={isDesktop ? 196 : 150}
-                      profile={{
-                        id: dreamAvatar.id,
-                        ability: dreamAvatar.renderedText,
-                      }}
-                      onActivate={() =>
-                        onResolve(activeAction.id, {
-                          dreamAvatarId: dreamAvatar.id,
-                        })
-                      }
-                    />
+                    <div style={{ width: isDesktop ? 196 : 150 }}>
+                      <DreamAvatarPortrait
+                        dreamAvatar={dreamAvatar}
+                        variant="panel"
+                        profile={{
+                          id: dreamAvatar.id,
+                          ability: dreamAvatar.renderedText,
+                        }}
+                        onActivate={() =>
+                          onResolve(activeAction.id, {
+                            dreamAvatarId: dreamAvatar.id,
+                          })
+                        }
+                      />
+                    </div>
                     <div style={{ display: "grid", gap: token("--space-xxs") }}>
                       <strong style={{ font: token("--t-button") }}>
                         {dreamAvatar.name}

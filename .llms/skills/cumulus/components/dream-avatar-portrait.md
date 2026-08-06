@@ -6,19 +6,18 @@
 
 Components · Live demo & interactive props: `/cumulus#/dream-avatar-portrait`
 
-Real consumers: **18** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **16** (imports outside `src/cumulus/docs/` and tests).
 
-The shared framed and stage-filling DreamAvatar art surface: the transparent full-body cutout in one of six fixed framings. Three are self-framing over an opaque light-gray backing — a large `hero` showcase, a square `panel` for profile cards and popovers, and a small square `thumb` for HUD rows and resident lists. Three fill a caller's own stage — `standing` adds the desktop DreamAvatar-select glow, `cutout` leaves the scene beneath it untouched, and `fullBleed` creates the mobile carousel showcase. The frame chrome and the per-variant crop belong to the design system; a caller supplies only the dreamAvatar data, the variant, and an optional pixel `size`. When the art asset 404s the portrait falls back to a monogram so a missing image never leaves an empty hole.
+The shared framed DreamAvatar profile surface: a square `panel` crop for profile cards and popovers, or a close `thumb` crop for HUD rows and resident lists. Both render the transparent cutout over the canonical opaque portrait field and fall back to a monogram when art is unavailable.
 
-> **Guidance:** There is no style or className escape hatch. To size the portrait pass a fixed pixel `size` — a sized portrait then refuses to shrink in a flex row — or omit `size` to fill the container width. The `standing`, `cutout`, and `fullBleed` variants ignore `size` and fill the caller's `position: relative` stage. Choose `cutout` when scene art must remain visually unchanged. For any other layout, wrap the portrait in your own element.
+> **Guidance:** The portrait always fills its caller-owned wrapper. Put width, flex behavior, and placement on that wrapper; the component owns only its frame chrome and crop. Use DreamAvatar Stage for full-body scene art.
 
 ## Props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `dreamAvatar` | `DreamAvatarVisual` | yes | — | The dreamAvatar whose art and identity the portrait shows. |
-| `variant` | `DreamAvatarPortraitVariant` = `"fullBleed" \| "hero" \| "panel" \| "thumb" \| "standing" \| "cutout"` | no | — | Framing: self-framing `hero` / `panel` / `thumb`, or the full-bleed stage fills `standing` (desktop column), `cutout` (art only), and `fullBleed` (mobile carousel). Default `panel`. |
-| `size` | `number` | no | — | Fixed pixel width. Panel/thumb stay square, so this also sets their height. A sized portrait never shrinks in a flex row. Omit to fill the container width. Ignored by `standing`/`cutout`/`fullBleed`, which fill the caller's stage. |
+| `variant` | `DreamAvatarPortraitVariant` = `"panel" \| "thumb"` | no | — | Square framing: `panel` for profile surfaces or `thumb` for compact rows. Default `panel`. |
 | `profile` | `{ id: string; ability: string; }` | no | — | Semantic DreamAvatar profile represented by this portrait. Omit for decorative art. |
 | `onActivate` | `(() => void)` | no | — | Optional activation for selectable profile portraits. |
 | `unavailable` | `boolean` | no | `false` | Keeps the profile readable while suppressing activation. |
@@ -34,46 +33,24 @@ The shared framed and stage-filling DreamAvatar art surface: the transparent ful
 
 ## Usage
 
-### Hero showcase
+### Panel in a profile card
 
-The large framing. Omit `size` to fill the container, or pass a pixel `size` to fix its width.
+The square framing for profile cards and popovers.
 
 ```tsx
 import { DreamAvatarPortrait } from "src/cumulus/components/hud/DreamAvatarPortrait";
 
-<DreamAvatarPortrait dreamAvatar={dreamAvatar} variant="hero" />
-```
-
-### Panel in a profile card
-
-The square framing for profile cards and popovers. A pixel `size` keeps it square and stops it shrinking in a flex row.
-
-```tsx
-<DreamAvatarPortrait
-  dreamAvatar={dreamAvatar}
-  variant="panel"
-  size={160}
-/>
+<div style={{ width: 160 }}>
+  <DreamAvatarPortrait dreamAvatar={dreamAvatar} variant="panel" />
+</div>
 ```
 
 ### Thumb in a HUD row
 
-The small square framing for HUD rows and resident lists.
+The close crop for compact rows and status objects.
 
 ```tsx
-<DreamAvatarPortrait
-  dreamAvatar={dreamAvatar}
-  variant="thumb"
-  size={56}
-/>
-```
-
-### Full-bleed stage fill
-
-`standing`, `cutout`, and `fullBleed` paint edge to edge over the caller's own relative-positioned stage; `cutout` adds no backdrop treatment.
-
-```tsx
-<div style={{ position: "relative", width: 320, height: 480 }}>
-  <DreamAvatarPortrait dreamAvatar={dreamAvatar} variant="standing" />
+<div style={{ width: 56 }}>
+  <DreamAvatarPortrait dreamAvatar={dreamAvatar} variant="thumb" />
 </div>
 ```

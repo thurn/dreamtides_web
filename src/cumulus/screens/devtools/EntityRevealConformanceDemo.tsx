@@ -120,7 +120,7 @@ export function EntityRevealConformanceDemo() {
           }}
         >
           {scenario === "above" ? (
-            <DreamAvatarPortrait dreamAvatar={DREAM_AVATAR} variant="thumb" size={120} profile={{ id: DREAM_AVATAR.id, ability: "Nightmare is a Bane. Discover. Ephemeral." }} />
+            <DreamAvatarPortrait dreamAvatar={DREAM_AVATAR} variant="thumb" profile={{ id: DREAM_AVATAR.id, ability: "Nightmare is a Bane. Discover. Ephemeral." }} />
           ) : (
             <GameCard model={{ cardId: TRUNCATION_CARD.id, displaySnapshot: TRUNCATION_CARD }} onActivate={() => setActivationCount((count) => count + 1)} />
           )}
@@ -131,7 +131,7 @@ export function EntityRevealConformanceDemo() {
         <article data-conformance-press-in-place="" style={{ width: 360 }}><h2>GameCard press in place</h2><GameCard model={{ cardId: CARD_ID, displaySnapshot: CARD }} /></article>
         <article data-conformance-unavailable="" style={{ width: 160 }}><h2>Unavailable</h2><GameCard model={{ cardId: CARD_ID, displaySnapshot: CARD }} unavailable /></article>
         <article><h2>InfoCard</h2><InfoCard variant="text" title="Primary only" body={richText.plain("Strict visual content.")} /></article>
-        <article data-conformance-info-secondaries=""><h2>InfoCard group source</h2><DreamAvatarPortrait dreamAvatar={DREAM_AVATAR} variant="thumb" size={120} profile={{ id: DREAM_AVATAR.id, ability: "Nightmare is a Bane. Discover. Ephemeral." }} /></article>
+        <article data-conformance-info-secondaries="" style={{ width: 120 }}><h2>InfoCard group source</h2><DreamAvatarPortrait dreamAvatar={DREAM_AVATAR} variant="thumb" profile={{ id: DREAM_AVATAR.id, ability: "Nightmare is a Bane. Discover. Ephemeral." }} /></article>
         <article><h2>Inline</h2><p>Resolve <GlossaryTerm entry={{ term: "Bane", definition: "The Nightmare card, a penalty card forced into your deck." }} text="Bane" /> here.</p></article>
         <article style={{ position: "relative", width: 184, height: 184 }}><h2>Atlas</h2><AtlasNode model={ATLAS_MODEL} onActivate={() => undefined} /></article>
         <article data-conformance-battle-fixture="" style={{ width: 160 }}><h2>Battle</h2><GameCard model={{ cardId: BATTLE_CARD.id, displaySnapshot: BATTLE_CARD }} /></article>
