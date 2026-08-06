@@ -273,7 +273,9 @@ commentary.
      default when directly introducing a singular count noun, while allowing any
      immediately clear self-contained construction, including plural,
      quantified, and uncountable subjects. A possessive pronoun may refer back
-     to a subject already introduced in that same prose field.
+     to a subject already introduced in that same prose field. This gate applies
+     only to prose; do not rewrite an otherwise natural action label to avoid
+     `the`.
    - **Material-fidelity gate:** Are all subjects, objects, setting
      features, actions, and physical conditions visible or strongly implied?
      Reject invented companions, crowds, creatures, props, structures, weather
@@ -498,7 +500,9 @@ commentary.
     beginning with `one` as a singular-subject introduction. Reject any `prose` that
     contains first- or second-person pronouns, names the player, reader, or
     viewer, implies an off-image observer, or frames an entity relative to that
-    observer. For a Character card, audit
+    observer. Do not apply this definite-article restriction to `label`;
+    slightly prefer `the` when it makes an action label sound more natural. For
+    a Character card, audit
     every `prose` noun, modifier, and clause against the Character-focus gate and
     reject the complete design if it describes another character, lets scenery
     displace the source character, or includes a scene element unsupported by
@@ -653,7 +657,9 @@ commentary.
   performative verb with a target or intention: call, invite, welcome, release,
   offer, follow, receive, trade, or gather. Do not paraphrase the reward. Both
   labels must be plausible ways to engage with the scene and establish why the
-  effect follows.
+  effect follows. Slightly prefer action labels that use the definite article
+  `the` when it makes their phrasing more natural; do not force it into labels
+  that read better without it.
 - Every noun or collective implied by a label must have a clear referent in the
   event's prose. Do not introduce a flock, crowd, object, structure, weather
   feature, or other target in the label merely because it appears in the art or
