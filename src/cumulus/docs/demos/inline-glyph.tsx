@@ -19,7 +19,7 @@ function InlineGlyphDemo(args: Record<string, unknown>) {
     >
       A capital X
       <InlineGlyph glyph={glyph} color={color} label={label} />
-      and its inline glyph share one exact visual center.
+      {" "}and its inline glyph share one exact visual center.
     </p>
   );
 }
