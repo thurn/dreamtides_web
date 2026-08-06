@@ -155,6 +155,17 @@ export type ExplorationRewardView =
       readonly count: number;
     }
   | {
+      readonly kind: "purge-and-copy";
+      /** Exact pre-resolution deck entry removed before the copy appears. */
+      readonly purgedCard: ExplorationCardChoiceView;
+      /** Original surviving deck entry from which the copy emerges. */
+      readonly sourceEntryId: string;
+      readonly source: ExplorationCardChoiceView;
+      /** Newly created deck entries, in persisted insertion order. */
+      readonly cards: readonly ExplorationCardChoiceView[];
+      readonly count: number;
+    }
+  | {
       readonly kind: "purged-card-essence";
       readonly card: ExplorationCardChoiceView;
       readonly spark: number;
@@ -515,6 +526,11 @@ type FrameBreakPhase =
   | "returning";
 type CollapseIntent = "preview" | "exit";
 type CardCopiesPhase = "original" | "copies" | "travel";
+type PurgeAndCopyPhase = "purging" | "copying";
+type CardCopiesReward = Extract<
+  ExplorationRewardView,
+  { readonly kind: "card-copies" | "card-copies-multiple" }
+>;
 
 const DESKTOP_PANEL_HEIGHT = 580;
 const DESKTOP_PANEL_MAX_WIDTH = 620;
@@ -957,6 +973,14 @@ function explorationRewardIdentity(
           `copy:${pair.copy.entryId}`,
         ]),
       ].join("|");
+    case "purge-and-copy":
+      return [
+        actionId,
+        reward.kind,
+        `purged:${reward.purgedCard.entryId}`,
+        `source:${reward.sourceEntryId}`,
+        ...reward.cards.map((card) => `copy:${card.entryId}`),
+      ].join("|");
     case "battle-modifier":
       return [actionId, reward.kind, reward.modifier, reward.amount].join("|");
     case "smaller-hand-and-cost-discount":
@@ -1068,6 +1092,93 @@ function cardCopyEmergenceDelaySeconds(
   return Math.max(0, index - 1) * REWARD_STAGGER_SECONDS;
 }
 
+function PurgedCardPresentation({
+  card,
+  cardWidth,
+  index,
+  reduceMotion,
+}: {
+  readonly card: ExplorationCardChoiceView;
+  readonly cardWidth: number | string;
+  readonly index: number;
+  readonly reduceMotion: boolean;
+}) {
+  return (
+    <motion.div
+      data-exploration-purge-card=""
+      data-exploration-deck-entry-id={card.entryId}
+      data-card-id={card.model.cardId}
+      initial={{
+        opacity: reduceMotion ? 1 : 0,
+        scale: reduceMotion ? 1 : 0.88,
+        y: reduceMotion ? 0 : token("--space-6"),
+        rotate: 0,
+      }}
+      animate={
+        reduceMotion
+          ? { opacity: 1, scale: 1, y: 0, rotate: 0 }
+          : {
+              opacity: [0, 1, 1, 0],
+              scale: [0.88, 1, 1, 0.5],
+              y: [token("--space-6"), 0, 0, token("--space-8")],
+              rotate: [0, 0, 0, -8],
+            }
+      }
+      transition={{
+        duration: reduceMotion ? 0 : REWARD_READING_SECONDS,
+        times: reduceMotion ? undefined : [0, 0.18, 0.68, 1],
+        ease: DREAM_EASE,
+      }}
+      style={{
+        position: "relative",
+        width: cardWidth,
+        aspectRatio: CARD_ASPECT_RATIO,
+        flex: "none",
+        pointerEvents: "none",
+      }}
+    >
+      <GameCard
+        model={card.model}
+        selected
+        selectionColor="danger"
+        testId={`cumulus-exploration-purged-card-${String(index)}`}
+      />
+      <motion.span
+        data-exploration-purge-icon=""
+        aria-hidden="true"
+        initial={{ opacity: reduceMotion ? 1 : 0, scale: 0.72 }}
+        animate={{
+          opacity: 1,
+          scale: reduceMotion ? 1 : [0.72, 1, 1.2],
+        }}
+        transition={{
+          duration: reduceMotion ? 0 : REWARD_READING_SECONDS,
+          times: reduceMotion ? undefined : [0, 0.25, 1],
+          ease: DREAM_EASE,
+        }}
+        style={{
+          position: "absolute",
+          right: token("--space-3"),
+          bottom: token("--space-3"),
+          width: "clamp(34px, 22%, 52px)",
+          aspectRatio: "1 / 1",
+          borderRadius: token("--radius-control"),
+          display: "grid",
+          placeItems: "center",
+          background: token("--danger"),
+          boxShadow: token("--shadow-md"),
+        }}
+      >
+        <GlowIcon
+          iconClass={GLYPHS.trash}
+          color="text-on-accent"
+          size="58%"
+        />
+      </motion.span>
+    </motion.div>
+  );
+}
+
 function useCardTrajectory(
   targetRef: RefObject<HTMLDivElement | null>,
   cardId: string,
@@ -1144,6 +1255,8 @@ export function ExplorationSiteScreen({
   >(null);
   const [cardCopiesPhase, setCardCopiesPhase] =
     useState<CardCopiesPhase>("original");
+  const [purgeAndCopyPhase, setPurgeAndCopyPhase] =
+    useState<PurgeAndCopyPhase>("purging");
   const [cardCopyTrajectories, setCardCopyTrajectories] = useState<
     ReadonlyMap<string, RewardTrajectory> | null
   >(null);
@@ -1188,11 +1301,24 @@ export function ExplorationSiteScreen({
     effectReward?.kind === "purged-dreamsign-essence" ? effectReward : null;
   const cardPurgeReward =
     effectReward?.kind === "purged-card-essence" ? effectReward : null;
-  const cardCopiesReward =
+  const directCardCopiesReward =
     effectReward?.kind === "card-copies" ||
     effectReward?.kind === "card-copies-multiple"
       ? effectReward
       : null;
+  const purgeAndCopyReward =
+    effectReward?.kind === "purge-and-copy" ? effectReward : null;
+  const cardCopiesReward: CardCopiesReward | null =
+    directCardCopiesReward ??
+    (purgeAndCopyReward !== null && purgeAndCopyPhase === "copying"
+      ? {
+          kind: "card-copies",
+          sourceEntryId: purgeAndCopyReward.sourceEntryId,
+          source: purgeAndCopyReward.source,
+          cards: purgeAndCopyReward.cards,
+          count: purgeAndCopyReward.count,
+        }
+      : null);
   const cardCopyItems = useMemo(
     () => {
       if (cardCopiesReward === null) return [];
@@ -1276,6 +1402,7 @@ export function ExplorationSiteScreen({
     cardCopyRefs.current.clear();
     setRewardTrajectories(null);
     setCardCopiesPhase(reduceMotion ? "copies" : "original");
+    setPurgeAndCopyPhase("purging");
     setCardCopyTrajectories(null);
     setEssenceRewardPhase("cards");
     setDreamsignPurgeRewardPhase("purging");
@@ -1683,6 +1810,21 @@ export function ExplorationSiteScreen({
     siteOfferModifierReward,
     smallerHandDiscountReward,
   ]);
+
+  useEffect(() => {
+    if (
+      purgeAndCopyReward === null ||
+      frameBreakPhase !== "open" ||
+      purgeAndCopyPhase !== "purging"
+    ) {
+      return;
+    }
+    const timer = window.setTimeout(
+      () => setPurgeAndCopyPhase("copying"),
+      REWARD_READING_SECONDS * 1_000,
+    );
+    return () => window.clearTimeout(timer);
+  }, [frameBreakPhase, purgeAndCopyPhase, purgeAndCopyReward]);
 
   useEffect(() => {
     if (
@@ -2559,10 +2701,62 @@ export function ExplorationSiteScreen({
       {frameBreakGeometry !== null &&
         frameBreakPhase === "open" &&
         activeAction === null &&
+        purgeAndCopyReward !== null &&
+        purgeAndCopyPhase === "purging" && (
+          <motion.section
+            data-exploration-outcome="purge-and-copy"
+            data-exploration-compound-phase="purging"
+            data-exploration-purged-entry-id={
+              purgeAndCopyReward.purgedCard.entryId
+            }
+            data-exploration-source-entry-id={
+              purgeAndCopyReward.sourceEntryId
+            }
+            data-exploration-copy-count={purgeAndCopyReward.count}
+            role="status"
+            aria-label={`Purging ${purgeAndCopyReward.purgedCard.model.displaySnapshot.name} before copying ${purgeAndCopyReward.source.model.displaySnapshot.name}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "fixed",
+              top: safeAreaInsetAtLeast("top", "--space-9"),
+              right: token("--space-6"),
+              bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+              left: token("--space-6"),
+              zIndex: FRAME_BREAK_EXIT_LAYER + 1,
+              display: "grid",
+              placeItems: "center",
+              pointerEvents: "none",
+            }}
+          >
+            <PurgedCardPresentation
+              card={purgeAndCopyReward.purgedCard}
+              cardWidth={
+                isDesktop ? DESKTOP_REWARD_CARD_WIDTH : "min(58vw, 240px)"
+              }
+              index={0}
+              reduceMotion={reduceMotion}
+            />
+          </motion.section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
         cardCopiesReward !== null &&
         cardCopyTrajectories === null && (
           <motion.section
-            data-exploration-outcome={cardCopiesReward.kind}
+            data-exploration-outcome={
+              purgeAndCopyReward === null
+                ? cardCopiesReward.kind
+                : "purge-and-copy"
+            }
+            data-exploration-compound-phase={
+              purgeAndCopyReward === null ? undefined : "copying"
+            }
             data-exploration-source-entry-id={
               cardCopiesReward.kind === "card-copies"
                 ? cardCopiesReward.sourceEntryId
@@ -2578,7 +2772,11 @@ export function ExplorationSiteScreen({
             data-exploration-copy-count={cardCopiesReward.count}
             data-exploration-card-copies-phase={cardCopiesPhase}
             role="status"
-            aria-label={`Gained ${String(cardCopiesReward.count)} ${cardCopiesReward.count === 1 ? "copy" : "copies"}`}
+            aria-label={
+              purgeAndCopyReward === null
+                ? `Gained ${String(cardCopiesReward.count)} ${cardCopiesReward.count === 1 ? "copy" : "copies"}`
+                : `Purged ${purgeAndCopyReward.purgedCard.model.displaySnapshot.name} and gained ${String(cardCopiesReward.count)} ${cardCopiesReward.count === 1 ? "copy" : "copies"} of ${purgeAndCopyReward.source.model.displaySnapshot.name}`
+            }
             initial={{ opacity: 0, scale: reduceMotion ? 1 : 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{
@@ -2683,6 +2881,14 @@ export function ExplorationSiteScreen({
           return (
             <motion.div
               key={card.entryId}
+              data-exploration-outcome={
+                purgeAndCopyReward === null
+                  ? cardCopiesReward.kind
+                  : "purge-and-copy"
+              }
+              data-exploration-compound-phase={
+                purgeAndCopyReward === null ? undefined : "travel"
+              }
               data-exploration-card-copy-flight=""
               data-exploration-card-copy-role={role}
               data-exploration-deck-entry-id={card.entryId}
@@ -2932,76 +3138,13 @@ export function ExplorationSiteScreen({
                   ? "min(58vw, 240px)"
                   : "min(40vw, 180px)";
               return (
-                <motion.div
+                <PurgedCardPresentation
                   key={`purged:${card.entryId}`}
-                  data-exploration-purge-card=""
-                  data-exploration-deck-entry-id={card.entryId}
-                  data-card-id={card.model.cardId}
-                  initial={{
-                    opacity: reduceMotion ? 1 : 0,
-                    scale: reduceMotion ? 1 : 0.88,
-                    y: reduceMotion ? 0 : token("--space-6"),
-                    rotate: 0,
-                  }}
-                  animate={
-                    reduceMotion
-                      ? { opacity: 1, scale: 1, y: 0, rotate: 0 }
-                      : {
-                          opacity: [0, 1, 1, 0],
-                          scale: [0.88, 1, 1, 0.5],
-                          y: [token("--space-6"), 0, 0, token("--space-8")],
-                          rotate: [0, 0, 0, -8],
-                        }
-                  }
-                  transition={{
-                    duration: reduceMotion ? 0 : REWARD_READING_SECONDS,
-                    times: reduceMotion ? undefined : [0, 0.18, 0.68, 1],
-                    ease: DREAM_EASE,
-                  }}
-                  style={{
-                    position: "relative",
-                    width: cardWidth,
-                    aspectRatio: CARD_ASPECT_RATIO,
-                    flex: "none",
-                    pointerEvents: "none",
-                  }}
-                >
-                  <GameCard
-                    model={card.model}
-                    selected
-                    selectionColor="danger"
-                    testId={`cumulus-exploration-purged-card-${String(index)}`}
-                  />
-                  <motion.span
-                    data-exploration-purge-icon=""
-                    aria-hidden="true"
-                    initial={{ opacity: reduceMotion ? 1 : 0, scale: 0.72 }}
-                    animate={{ opacity: 1, scale: reduceMotion ? 1 : [0.72, 1, 1.2] }}
-                    transition={{
-                      duration: reduceMotion ? 0 : REWARD_READING_SECONDS,
-                      times: reduceMotion ? undefined : [0, 0.25, 1],
-                      ease: DREAM_EASE,
-                    }}
-                    style={{
-                      position: "absolute",
-                      right: token("--space-3"),
-                      bottom: token("--space-3"),
-                      width: "clamp(34px, 22%, 52px)",
-                      aspectRatio: "1 / 1",
-                      borderRadius: token("--radius-control"),
-                      display: "grid",
-                      placeItems: "center",
-                      background: token("--danger"),
-                      boxShadow: token("--shadow-md"),
-                    }}
-                  >
-                    <GlowIcon
-                      iconClass={GLYPHS.trash}
-                      color="text-on-accent"
-                      size="58%"
-                    />
-                  </motion.span>
-                </motion.div>
+                  card={card}
+                  cardWidth={cardWidth}
+                  index={index}
+                  reduceMotion={reduceMotion}
+                />
               );
             })}
             {rewardItems.map((item, index) => {

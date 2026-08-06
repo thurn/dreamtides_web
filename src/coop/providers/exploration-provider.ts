@@ -711,12 +711,15 @@ export function resolveExplorationChoice(input: {
       const purgeEntryId = stringValue(selection.purgeEntryId);
       const copyEntryId = stringValue(selection.copyEntryId);
       if (purgeEntryId === null || copyEntryId === null || purgeEntryId === copyEntryId) return null;
+      const beforeEntryIds = new Set(next.deck.map((entry) => entry.entryId));
+      const purged = next.deck.find((entry) => entry.entryId === purgeEntryId);
       const purgeCardId = cardIdForEntry(next, content, purgeEntryId);
       const copied = next.deck.find((entry) => entry.entryId === copyEntryId);
       const copiedCardId = cardIdForEntry(next, content, copyEntryId);
       const purgeTarget = deckTarget(next, content, purgeEntryId);
       const copyTarget = deckTarget(next, content, copyEntryId);
       if (
+        purged === undefined ||
         purgeCardId === null ||
         copied === undefined ||
         copiedCardId === null ||
@@ -732,7 +735,14 @@ export function resolveExplorationChoice(input: {
       ) return null;
       result.purgedCardIds.push(purgeCardId);
       result.purgedEntryIds?.push(purgeEntryId);
+      result.purgedEntrySnapshots?.push(purged);
       result.gainedCardIds.push(copiedCardId);
+      result.gainedEntryIds?.push(
+        ...next.deck
+          .filter((entry) => !beforeEntryIds.has(entry.entryId))
+          .map((entry) => entry.entryId),
+      );
+      result.affectedEntryIds.push(copyEntryId);
       result.selection = { purgeEntryId, copyEntryId };
       break;
     }

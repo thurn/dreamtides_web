@@ -1650,6 +1650,60 @@ describe("exploration-view-model", () => {
       },
     });
 
+    const purgedSnapshot = baseState.deck[0];
+    if (purgedSnapshot === undefined) throw new Error("Expected purge fixture");
+    const purgeAndCopyState = {
+      ...baseState,
+      deck: baseState.deck
+        .filter((entry) => entry.entryId !== "source-entry")
+        .map((entry) =>
+          entry.entryId === "copy-b"
+            ? { ...entry, cardNumber: survivor.cardNumber }
+            : entry,
+        ),
+    };
+    const purgedAndCopied = build(
+      {
+        id: "purge-copy",
+        label: "Purge and copy",
+        effectText: "Purge a chosen card and gain a copy of another chosen card",
+        effectKind: "purge-and-copy",
+      },
+      {
+        ...emptyResolution("purge-copy"),
+        selection: {
+          purgeEntryId: "source-entry",
+          copyEntryId: "survivor-entry",
+        },
+        purgedCardIds: [source.id],
+        purgedEntryIds: ["source-entry"],
+        purgedEntrySnapshots: [purgedSnapshot],
+        gainedCardIds: [survivor.id],
+        gainedEntryIds: ["copy-b"],
+        affectedEntryIds: ["survivor-entry"],
+      },
+      purgeAndCopyState,
+    );
+    expect(purgedAndCopied).toMatchObject({
+      outcomeKind: "purge-and-copy",
+      reward: {
+        kind: "purge-and-copy",
+        purgedCard: {
+          entryId: "source-entry",
+          model: { cardId: source.id },
+        },
+        sourceEntryId: "survivor-entry",
+        source: {
+          entryId: "survivor-entry",
+          model: { cardId: survivor.id },
+        },
+        cards: [
+          { entryId: "copy-b", model: { cardId: survivor.id } },
+        ],
+        count: 1,
+      },
+    });
+
     const copiedMultiple = build(
       {
         id: "copy-multiple",

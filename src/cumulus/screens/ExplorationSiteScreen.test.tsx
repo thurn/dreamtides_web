@@ -148,22 +148,33 @@ function twoCardRewardView(): ExplorationSiteView {
 function purgeAndCopyRewardView(): ExplorationSiteView {
   const base = twoCardRewardView();
   if (base.reward === null || "kind" in base.reward) return base;
-  const copiedCard = base.reward.objects.cards[0];
-  const purgedCard = base.reward.objects.cards[1];
-  if (copiedCard === undefined || purgedCard === undefined) return base;
+  const copiedCardModel = base.reward.objects.cards[0];
+  const purgedCardModel = base.reward.objects.cards[1];
+  if (copiedCardModel === undefined || purgedCardModel === undefined) return base;
   return {
     ...base,
-    outcomeKind: "card-replacement",
+    outcomeKind: "purge-and-copy",
     reward: {
-      semanticKind: "card-replacement",
-      objects: {
-        cards: [copiedCard],
-        purgedCards: [
-          { entryId: "purged-entry", model: purgedCard, isBane: false },
-        ],
-        dreamsigns: [],
+      kind: "purge-and-copy",
+      purgedCard: {
+        entryId: "purged-entry",
+        model: purgedCardModel,
+        isBane: false,
       },
-      deckModification: null,
+      sourceEntryId: "source-entry",
+      source: {
+        entryId: "source-entry",
+        model: copiedCardModel,
+        isBane: false,
+      },
+      cards: [
+        {
+          entryId: "copy-entry",
+          model: copiedCardModel,
+          isBane: false,
+        },
+      ],
+      count: 1,
     },
   };
 }
@@ -1969,7 +1980,7 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
-  it("dissolves the purged card while the copied card flies to the deck", () => {
+  it("purges first, then emits a copy from its source and flies both to the deck", () => {
     vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
     reducedMotionPreference.value = false;
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
@@ -1977,8 +1988,13 @@ describe("ExplorationSiteScreen", () => {
         if (this.hasAttribute("data-exploration-card-slot")) {
           return new DOMRect(900, 180, 240, 336);
         }
-        if (this.hasAttribute("data-exploration-reward-object")) {
-          return new DOMRect(660, 180, 240, 336);
+        if (this.hasAttribute("data-exploration-card-copy-role")) {
+          return new DOMRect(
+            this.dataset.explorationCardCopyRole === "original" ? 520 : 700,
+            180,
+            240,
+            336,
+          );
         }
         if (this instanceof HTMLImageElement && this.alt !== "") {
           return new DOMRect(780, 150, 480, 291);
@@ -2020,19 +2036,16 @@ describe("ExplorationSiteScreen", () => {
     });
 
     expect(
-      container.querySelector("[data-exploration-purge-card]"),
-    ).not.toBeNull();
-    expect(
       container.querySelector<HTMLElement>(
-        '[data-exploration-outcome="card-replacement"]',
-      )?.dataset.explorationRewardCount,
-    ).toBe("2");
+        '[data-exploration-outcome="purge-and-copy"]',
+      )?.dataset.explorationCompoundPhase,
+    ).toBe("purging");
     expect(
       container.querySelector("[data-exploration-purge-icon] .bx-trash"),
     ).not.toBeNull();
     expect(
-      container.querySelectorAll('[data-exploration-reward-object="card"]'),
-    ).toHaveLength(1);
+      container.querySelector("[data-exploration-card-copy-stage]"),
+    ).toBeNull();
 
     act(() => {
       vi.advanceTimersByTime(10_000);
@@ -2040,15 +2053,106 @@ describe("ExplorationSiteScreen", () => {
     expect(
       container.querySelector("[data-exploration-purge-card]"),
     ).toBeNull();
-    const flight = container.querySelector(
-      '[data-exploration-reward-flight="card"]',
+    const copyOutcome = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="purge-and-copy"][data-exploration-compound-phase="copying"]',
     );
-    expect(flight?.getAttribute("data-exploration-destination")).toBe(
-      "journey-deck",
+    expect(copyOutcome?.dataset.explorationCardCopiesPhase).toBe("original");
+    expect(
+      [...container.querySelectorAll("[data-exploration-card-copy-role]")].map(
+        (card) => ({
+          role: card.getAttribute("data-exploration-card-copy-role"),
+          entryId: card.getAttribute("data-exploration-deck-entry-id"),
+        }),
+      ),
+    ).toEqual([
+      { role: "original", entryId: "source-entry" },
+      { role: "copy", entryId: "copy-entry" },
+    ]);
+
+    act(() => {
+      vi.advanceTimersByTime(1_000);
+    });
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-exploration-outcome="purge-and-copy"][data-exploration-compound-phase="copying"]',
+      )?.dataset.explorationCardCopiesPhase,
+    ).toBe("copies");
+
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    const flights = container.querySelectorAll(
+      '[data-exploration-card-copy-flight][data-exploration-outcome="purge-and-copy"]',
     );
+    expect(
+      [...flights].map((flight) => ({
+        role: flight.getAttribute("data-exploration-card-copy-role"),
+        entryId: flight.getAttribute("data-exploration-deck-entry-id"),
+        destination: flight.getAttribute("data-exploration-destination"),
+      })),
+    ).toEqual([
+      {
+        role: "original",
+        entryId: "source-entry",
+        destination: "journey-deck",
+      },
+      {
+        role: "copy",
+        entryId: "copy-entry",
+        destination: "journey-deck",
+      },
+    ]);
     expect(onExit).not.toHaveBeenCalled();
     act(() => {
-      flight?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+      for (const flight of flights) {
+        flight.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+      }
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
+  it("presents both purge-and-copy phases without travel under reduced motion", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = true;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={purgeAndCopyRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-exploration-outcome="purge-and-copy"]',
+      )?.dataset.explorationCompoundPhase,
+    ).toBe("purging");
+    expect(container.querySelector("[data-exploration-purge-card]")).not.toBeNull();
+
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    const copyOutcome = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="purge-and-copy"]',
+    );
+    expect(copyOutcome?.dataset.explorationCompoundPhase).toBe("copying");
+    expect(copyOutcome?.dataset.explorationCardCopiesPhase).toBe("copies");
+    expect(
+      [...container.querySelectorAll("[data-exploration-card-copy-role]")].map(
+        (card) => card.getAttribute("data-exploration-card-copy-role"),
+      ),
+    ).toEqual(["original", "copy"]);
+    expect(container.querySelector("[data-exploration-card-copy-flight]")).toBeNull();
+    expect(onExit).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(10_000);
     });
     expect(onExit).toHaveBeenCalledOnce();
     act(() => root.unmount());

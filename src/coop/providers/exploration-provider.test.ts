@@ -718,6 +718,53 @@ describe("Exploration provider", () => {
     });
   });
 
+  it("persists the purge snapshot, copied source, and minted copy entry for purge-and-copy", () => {
+    const purgeAndCopy: ExplorationActionContent = {
+      id: "purge-and-copy",
+      label: "Exchange",
+      effectText: "Purge a chosen card and gain a copy of another chosen card",
+      effectKind: "purge-and-copy",
+    };
+    const fallback: ExplorationActionContent = {
+      id: "fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([purgeAndCopy, fallback]);
+    const state = buildState(content);
+    const purged = state.journey.deck[0];
+    const copied = state.journey.deck[1];
+    if (purged === undefined || copied === undefined) {
+      throw new Error("Expected purge-and-copy deck entries");
+    }
+    const copiedCardId = content.cardDatabase.get(copied.cardNumber)?.id;
+    if (copiedCardId === undefined) throw new Error("Expected copied card UUID");
+
+    const result = resolve(content, state.journey, purgeAndCopy.id, {
+      purgeEntryId: purged.entryId,
+      copyEntryId: copied.entryId,
+    });
+
+    expect(result.deck.some((entry) => entry.entryId === purged.entryId)).toBe(false);
+    expect(result.deck.filter((entry) => entry.cardNumber === copied.cardNumber)).toHaveLength(2);
+    expect(result.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        selection: {
+          purgeEntryId: purged.entryId,
+          copyEntryId: copied.entryId,
+        },
+        purgedEntryIds: [purged.entryId],
+        purgedEntrySnapshots: [purged],
+        gainedCardIds: [copiedCardId],
+        gainedEntryIds: ["deck-91-0"],
+        affectedEntryIds: [copied.entryId],
+      },
+    });
+  });
+
   it("mints a non-matching subtype target for $DECK_CARD and rejects another eligible card", () => {
     const subtypeAction: ExplorationActionContent = {
       id: "become-survivor",
