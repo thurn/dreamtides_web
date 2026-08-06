@@ -44,7 +44,9 @@ importance. Shared files receive one dominant owner for counting even when they
 inform several parts. The script excludes tests, tools, debug surfaces,
 infrastructure, and noncanonical draft experiments at a coarse path level.
 Update its ordered classifiers when the index or major source neighborhoods
-change.
+change. Treat detailed assignments as audit hints: when a fallback assignment
+conflicts with the boundaries below, correct the classifier rather than copying
+that accident into the book map.
 
 ## Repository-wide routing principles
 
@@ -79,7 +81,9 @@ Start with the shared Card, Dream Avatar, Dreamsign, Figment, resource, content,
 and identity models under `src/types/` and `src/data/`. Card catalog loading,
 effective Card transformations, glossary-backed rules language, and the semantic
 Card and collectible components under `src/cumulus/components/` are common
-evidence sources.
+evidence sources. Within that component family, galleries, playing-card
+presentation, rich rules text, stat orbs, and glossary reveals help reconstruct
+how a readable effective Card is assembled from the underlying object model.
 
 Keep acquisition and deck evolution in `/draft_deckbuilding`, Site
 transactions in `/sites`, and contest-time resolution in the Battle
@@ -92,7 +96,9 @@ Start with `src/cumulus/primitives/`, the material and control treatments under
 `src/cumulus/internal/`, and the reusable catalog under
 `src/cumulus/components/`. Tokens, color and glyph vocabularies, art references,
 typography, spacing, shape, elevation, glass, solid materials, and invariant
-component appearance belong here.
+component appearance belong here. Reusable status and announcement surfaces
+also belong here when their appearance and semantic variants are independent of
+the gameplay event that invokes them.
 
 The `/cumulus` documentation route can clarify intended component contracts, but
 it is supporting documentation rather than production behavior. Put coordinated
@@ -106,7 +112,9 @@ Start with the shared press primitive, the entity-reveal coordinator under
 behavior, the production screen router, journey chrome, and shared responsive
 or safe-area helpers. These sources inform activation, focus, hover, touch-hold,
 dragging, dismissal, modal behavior, accessibility, layering, transitions,
-stages, frames, and responsive composition.
+stages, frames, and responsive composition. The principal surface families
+include Info Cards, dialogs, panels, command menus, controls, fit-to-content
+behavior, and the coordinator that places and dismisses reveals.
 
 Gameplay parts own the consequences of an action and the state-dependent
 arrangement of a particular destination or contest.
@@ -117,7 +125,9 @@ Start with journey state and lifecycle rules under `src/state/` and
 `src/rules/journey/`, then follow the Atlas generator, affiliation logic,
 Dreamscape and Atlas data, and the journey-start, Dreamscape, Atlas, completion,
 and failure screens and adapters. Application-level progression and handoffs can
-help reconstruct the complete run.
+help reconstruct the complete run. Journey content assembly, global events and
+reducers, invariants, the persistent status display, the front door, the main
+menu, and loading states expose the connective rules between those phases.
 
 Destination mechanics belong in the Site parts, Battle mechanics in the Battle
 parts, and authored teaching restrictions in `/tutorial`.
@@ -127,7 +137,9 @@ parts, and authored teaching restrictions in `/tutorial`.
 Start with the canonical Tide-backed pool path under `src/draft/`, the authored
 Tide input, Draft rules, and Draft presentation. Follow journey deck rules,
 entry identity, deck viewers, and the Purge, Duplication, Transfiguration, and
-type-change logic and presentation for deck evolution.
+type-change logic and presentation for deck evolution. The Draft engine, pool
+support models, Card multiplicity, pool inspection, and starting-deck reveal
+clarify how the authored supply becomes a persistent player deck.
 
 Historical pool derivation and experimental draft modes are outside the book.
 The stable authored Tide result is the canonical input. Site arrival, payment,
@@ -140,7 +152,9 @@ helpers; authored economy data; and the Site screens and adapters for markets,
 Dreamsign Revelation, inline rewards, Random Site, and shared destination
 flows. These sources inform availability, entry, enhancement, prepared
 randomness, Guide hosting, payment, reward receipt, completion, and return to
-the Dreamscape.
+the Dreamscape. Site intent resolution, shop generation, reward effects,
+Dreamsign pool construction, and the Guide gallery expose the algorithms and
+presentation shared by several destinations.
 
 The deck mutation performed by Purge, Duplication, or Transfiguration belongs in
 `/draft_deckbuilding`. Augury, Exploration, and Gamble continue in their own
@@ -153,7 +167,9 @@ logic, authored Exploration data, the gameplay provider that resolves
 Exploration intents, and the Augury and Exploration screens, builders, and
 adapters. These sources inform eligibility, scoring, pairing, target selection,
 prepared choices, authored encounters, atomic outcomes, persistence, dialogue,
-and reward choreography.
+and reward choreography. Within the adaptive-offer system, follow operation
+archetypes, journey context, fit and Dreamsign signals, merchant generation,
+dialogue, decision traces, and offer presentation as one connected pipeline.
 
 Underlying Card changes belong in `/draft_deckbuilding`; shared prices and
 rewards belong in `/sites`; future Battle modifiers also need coverage in
@@ -177,7 +193,9 @@ Start with `src/battle/integration/`, opponent package and deck construction,
 Battle initialization provider, and the Battle-start screen and adapter. These
 sources inform participants, objectives, decks, Dreamsigns, initial zones and
 resources, deterministic setup, opponent coherence, difficulty, decision
-priorities, and the preview of the coming contest.
+priorities, and the preview of the coming contest. Corpus-backed deck selection,
+signature relationships, coherence adjustment, forward modeling, blocking, and
+evaluation explain how an opponent package becomes a legible opposing strategy.
 
 Rules governing legal play belong in `/battle_rules`; the live player-facing
 contest belongs in `/battle_outcomes`.
@@ -190,7 +208,9 @@ and selectors, and the shared Battle types. Use
 the skill. These sources inform zones, turns, timing, priority, Energy, Card
 play, costs, legality, targeting, effects, triggers, counters, repositioning,
 Challenges, Spark, scoring, Fatigue, created Cards, Figments, resolution order,
-and terminal conditions.
+and terminal conditions. The state fold, event driver, effect runner and tables,
+basic automation, and state selectors provide the clearest evidence for exact
+ordering and automatic consequences.
 
 Debug-edit commands and inspector behavior are outside the canonical rules.
 Opponent decision policy belongs in `/battle_setup`; presentation and rewards
@@ -204,7 +224,9 @@ view-model builders and adapters, the result surface, and the reward handoff.
 These sources inform Battlefield composition, participant status, action and
 target feedback, responsive layouts, inspection, announcements, motion,
 accessible interaction, result presentation, rewards, and durable journey
-consequences.
+consequences. Inspect the context menu, zone browser, Foresee view, Battle log,
+Figment creation, Card notes, deck ordering, and Dreamwell history as distinct
+player workflows rather than one generic overlay system.
 
 The legal and state-changing meaning of those interactions remains in
 `/battle_rules`; shared reward economics remain in `/sites`.
@@ -216,7 +238,10 @@ state hooks and controllers, front-door and loading presentation, and the
 Tutorial, tutorial-Battle, and guided-journey screens, builders, and adapters.
 These sources inform authored action restrictions, guidance triggers,
 instruction timing, contextual Card help, the cinematic lesson, tutorial
-Battle, and the transition into the guided journey.
+Battle, and the transition into the guided journey. The authored action
+timeline, fixed journey pool, tutorial AI overrides, controller timing, Card and
+Site guidance, and speech-bubble presentation define how that teaching sequence
+stays deterministic and context-sensitive.
 
 The primary gameplay parts remain authoritative for every rule being taught.
 This part owns the teaching sequence, presentation, and deliberate restrictions
