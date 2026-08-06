@@ -31,6 +31,12 @@ Read [references/content-patterns.md](references/content-patterns.md) before
 creating a chapter, substantially reorganizing one, or publishing a chapter
 image. Use its patterns as examples, not templates.
 
+Read [references/source-part-map.md](references/source-part-map.md) when
+deciding which part owns a subject or when routing source research across the
+book. Treat it as nonbinding discovery guidance: `ltodd/index.md` remains
+authoritative, and observed production behavior remains stronger evidence than
+source location.
+
 When the subject includes presentation or interaction, read the project-local
 `.llms/skills/cumulus/SKILL.md` and only the Cumulus references relevant to the
 primitives and behaviors involved. When the subject includes battle rules, read
