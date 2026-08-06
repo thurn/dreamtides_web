@@ -22,7 +22,9 @@ export interface InlineGlyphProps {
  * center from half the x-height to half the cap height, matching a capital
  * `X` without baking in a font- or size-specific pixel offset. A plain outer
  * inline shell preserves that internal formatting context if an ancestor
- * blockifies the component as a flex or grid item.
+ * blockifies the component as a flex or grid item. The shell intentionally
+ * owns no adjacent spacing: callers add explicit JSX whitespace when prose
+ * continues after the glyph and omit it before punctuation.
  */
 export function InlineGlyph({
   glyph,

@@ -10,7 +10,7 @@ Real consumers: **9** (imports outside `src/cumulus/docs/` and tests).
 
 The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's capital height at every type size.
 
-> **Guidance:** InlineGlyph owns a protected inline formatting context: its outer shell absorbs flex or grid blockification while its inner metric box remains centered on the surrounding font's capital height. Callers may wrap it for white-space or layout, but cannot pass className or style overrides into the component.
+> **Guidance:** InlineGlyph owns a protected inline formatting context: its outer shell absorbs flex or grid blockification while its inner metric box remains centered on the surrounding font's capital height. It adds no surrounding whitespace: callers include an explicit JSX space when prose continues after it, while punctuation stays adjacent. Callers may wrap it for white-space or layout, but cannot pass className or style overrides into the component.
 
 ## Props
 
@@ -22,13 +22,13 @@ The Boxicons renderer for flowing text: a one-em square whose midpoint follows t
 
 ## Usage
 
-The icon inherits the current type size, while the semantic color and accessible label remain explicit.
+The icon inherits the current type size, while the semantic color and accessible label remain explicit. Adjacent spacing belongs to the caller: add an explicit JSX space before continuing prose, and omit it before punctuation.
 
 ```tsx
 import { InlineGlyph } from "src/cumulus/components/typography/InlineGlyph";
 import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 <span>
-  Score 10<InlineGlyph glyph={GLYPHS.points} color="text-primary" label="points" />.
+  Gain 10<InlineGlyph glyph={GLYPHS.points} color="text-primary" label="points" />{" "}before nightfall.
 </span>
 ```

@@ -30,18 +30,18 @@ export const inlineGlyphDemo: CumulusComponent = {
   blurb:
     "The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's capital height at every type size.",
   callout:
-    "InlineGlyph owns a protected inline formatting context: its outer shell absorbs flex or grid blockification while its inner metric box remains centered on the surrounding font's capital height. Callers may wrap it for white-space or layout, but cannot pass className or style overrides into the component.",
+    "InlineGlyph owns a protected inline formatting context: its outer shell absorbs flex or grid blockification while its inner metric box remains centered on the surrounding font's capital height. It adds no surrounding whitespace: callers include an explicit JSX space when prose continues after it, while punctuation stays adjacent. Callers may wrap it for white-space or layout, but cannot pass className or style overrides into the component.",
   group: "Primitives",
   docName: "InlineGlyph",
   Component: InlineGlyphDemo,
   usage: [
     {
-      note: "The icon inherits the current type size, while the semantic color and accessible label remain explicit.",
+      note: "The icon inherits the current type size, while the semantic color and accessible label remain explicit. Adjacent spacing belongs to the caller: add an explicit JSX space before continuing prose, and omit it before punctuation.",
       code: `import { InlineGlyph } from "src/cumulus/components/typography/InlineGlyph";
 import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 <span>
-  Score 10<InlineGlyph glyph={GLYPHS.points} color="text-primary" label="points" />.
+  Gain 10<InlineGlyph glyph={GLYPHS.points} color="text-primary" label="points" />{" "}before nightfall.
 </span>`,
     },
   ],
