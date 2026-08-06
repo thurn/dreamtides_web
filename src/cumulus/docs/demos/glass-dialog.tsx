@@ -54,7 +54,9 @@ export const glassDialogDemo: CumulusComponent = {
   callout:
     "Dreamsign Revelation uses this shell for its Purge replacement dialog.",
   details: [
-    'Pass `onClose` for the shared close disc, or omit it when one explicit commit action must own completion. Use `presentation="popup"` for a bounded content-sized surface on both desktop and mobile. Add `companion` when one tangible object should lead a popup pair: the object sits left of a wider prose panel on desktop and centered above it on mobile. `chrome="flowing-close"` places the close disc in body flow so ordinary prose wraps around it. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. Battle overlays use `desktopCenterTarget="battlefield"` so a docked inspector rail stays outside the panel\'s centering region.',
+    'Pass `onClose` for the shared close disc, or omit it when one explicit commit action must own completion. Use `presentation="popup"` for a bounded content-sized surface on both desktop and mobile.',
+    'Add `companion` when one tangible object should lead a popup pair: the object sits left of a wider prose panel on desktop and centered above it on mobile. `chrome="flowing-close"` places the close disc in body flow so ordinary prose wraps around it.',
+    'Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. Battle overlays use `desktopCenterTarget="battlefield"` so a docked inspector rail stays outside the panel\'s centering region.',
   ],
   group: "Components",
   docName: "GlassDialog",

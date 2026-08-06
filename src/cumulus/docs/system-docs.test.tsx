@@ -84,7 +84,7 @@ describe("Cumulus component documentation", () => {
     const entry = CUMULUS_COMPONENTS.find(
       (component) => component.id === "game-card",
     );
-    expect(entry?.details?.length).toBeGreaterThan(0);
+    expect(entry?.details?.length).toBeGreaterThan(1);
 
     const { root, container } = mount(<ComponentPage id="game-card" />);
     const callout = container.querySelector("[data-cumulus-doc-callout]");
