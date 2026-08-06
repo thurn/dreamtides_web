@@ -81,7 +81,7 @@ ruleTester.run("no-raw-icon-classes", rule, {
     {
       name: "referencing a named glyph is fine in a governed file",
       filename: COMPONENT,
-      code: `const el = <GlowIcon iconClass={GLYPHS.close} color="essence" />;`,
+      code: `const el = <StandaloneGlyph glyph={GLYPHS.close} color="essence" />;`,
     },
     {
       name: "branding a game-data class through glyph() is the sanctioned boundary",

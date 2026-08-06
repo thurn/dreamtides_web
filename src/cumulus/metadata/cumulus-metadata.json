@@ -2636,7 +2636,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Optional leading glyph painted as a `GlowIcon` before the label."
+      "description": "Optional leading glyph painted as a `StandaloneGlyph` before the label."
     },
     {
       "name": "essenceCost",
@@ -3112,77 +3112,6 @@
       "required": false,
       "defaultValue": "false",
       "description": "Optional emphasis inherited from the rules-text renderer."
-    }
-  ],
-  "GlowIcon": [
-    {
-      "name": "iconClass",
-      "tsType": "Glyph",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "The {@link Glyph} to render (e.g. `SPARK_ICON_CLASS` / `GLYPHS.spark`)."
-    },
-    {
-      "name": "color",
-      "tsType": "CumulusColor",
-      "unionMembers": [
-        "danger",
-        "accent",
-        "accent-bright",
-        "accent-strong",
-        "essence",
-        "energy",
-        "spark",
-        "positive",
-        "selected",
-        "text-primary",
-        "text-secondary",
-        "text-muted",
-        "text-faint",
-        "text-on-accent",
-        "white"
-      ],
-      "required": true,
-      "defaultValue": null,
-      "description": "Fill {@link CumulusColor} — Boxicons paints via the element's text color."
-    },
-    {
-      "name": "size",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "1em",
-      "description": "Rendered width/height as any CSS length. Defaults to `1em` for compact\ncontrols. The icon's own `font-size` is pinned to this value so the\n`em`-based glow and outline scale with it."
-    },
-    {
-      "name": "glowFilter",
-      "tsType": "MediaFilter",
-      "unionMembers": [
-        "dreamsign-portrait",
-        "dreamsign-portrait-negative",
-        "spark-glow",
-        "energy-glow"
-      ],
-      "required": false,
-      "defaultValue": null,
-      "description": "Emitted-light bloom {@link MediaFilter}. Omit for no glow."
-    },
-    {
-      "name": "shadow",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "false",
-      "description": "When true, adds the soft content-protection shadow beneath the glow."
-    },
-    {
-      "name": "title",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Accessible label; the icon is hidden from assistive tech when unset."
     }
   ],
   "IconButton": [
@@ -4654,6 +4583,59 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional stable test id for product-screen QA."
+    }
+  ],
+  "StandaloneGlyph": [
+    {
+      "name": "glyph",
+      "tsType": "Glyph",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The standalone {@link Glyph} to render."
+    },
+    {
+      "name": "color",
+      "tsType": "CumulusColor",
+      "unionMembers": [
+        "danger",
+        "accent",
+        "accent-bright",
+        "accent-strong",
+        "essence",
+        "energy",
+        "spark",
+        "positive",
+        "selected",
+        "text-primary",
+        "text-secondary",
+        "text-muted",
+        "text-faint",
+        "text-on-accent",
+        "white"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Fill {@link CumulusColor} — Boxicons paints via the element's text color."
+    },
+    {
+      "name": "depth",
+      "tsType": "StandaloneGlyphDepth",
+      "unionMembers": [
+        "flat",
+        "content-protection"
+      ],
+      "required": false,
+      "defaultValue": "flat",
+      "description": "Flat by default; use content protection when the glyph sits over media."
+    },
+    {
+      "name": "label",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Accessible meaning; the glyph is hidden from assistive tech when unset."
     }
   ],
   "TextArea": [

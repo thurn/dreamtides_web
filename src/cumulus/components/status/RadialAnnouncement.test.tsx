@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 import {
   ENERGY_ICON_COLOR,
   SPARK_ICON_COLOR,
-} from "../controls/GlowIcon";
+} from "../controls/StandaloneGlyph";
 import { GLYPHS } from "../../primitives/glyph";
 import { RadialAnnouncement } from "./RadialAnnouncement";
 

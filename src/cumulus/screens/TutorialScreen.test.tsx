@@ -4,7 +4,7 @@ import { act, type CSSProperties, type ReactNode, type Ref } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../CumulusRoot";
-import { ENERGY_ICON_COLOR } from "../components/controls/GlowIcon";
+import { ENERGY_ICON_COLOR } from "../components/controls/StandaloneGlyph";
 import type { CharacterDialogueProps } from "../components/overlay/CharacterDialogue";
 import { TutorialScreen, type TutorialView } from "./TutorialScreen";
 import type {

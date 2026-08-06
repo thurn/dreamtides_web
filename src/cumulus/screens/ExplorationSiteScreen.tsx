@@ -33,7 +33,7 @@ import {
 } from "../components/card/card-aspect";
 import { CardBack } from "../components/battle/CardBack";
 import { GlassButton } from "../components/controls/GlassButton";
-import { GlowIcon } from "../components/controls/GlowIcon";
+import { StandaloneGlyph } from "../components/controls/StandaloneGlyph";
 import { IconButton } from "../components/controls/IconButton";
 import {
   JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
@@ -1162,6 +1162,7 @@ function PurgedCardPresentation({
           bottom: token("--space-3"),
           width: "clamp(34px, 22%, 52px)",
           aspectRatio: "1 / 1",
+          containerType: "inline-size",
           borderRadius: token("--radius-control"),
           display: "grid",
           placeItems: "center",
@@ -1169,11 +1170,9 @@ function PurgedCardPresentation({
           boxShadow: token("--shadow-md"),
         }}
       >
-        <GlowIcon
-          iconClass={GLYPHS.trash}
-          color="text-on-accent"
-          size="58%"
-        />
+        <span style={{ display: "inline-flex", fontSize: "58cqi" }}>
+          <StandaloneGlyph glyph={GLYPHS.trash} color="text-on-accent" />
+        </span>
       </motion.span>
     </motion.div>
   );

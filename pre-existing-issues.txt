@@ -1,3 +1,7 @@
 Commit 085195348 removes the only <GlassPanelExample /> render from
 src/cumulus/docs/IntroSection.tsx but leaves the GlassPanelExample function
 declared. `npm run review` fails typecheck with TS6133 at IntroSection.tsx:98.
+
+The CardChoiceGrid catalog demo wraps its grid in `containerType: "size"`
+without establishing a container height. Its `cqh`-based site card width
+therefore resolves to zero, collapsing all four demo cards to 0×0 geometry.

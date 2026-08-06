@@ -38,7 +38,7 @@ import { glassButtonDemo } from "./demos/glass-button";
 import { glassDialogDemo } from "./demos/glass-dialog";
 import { glassPanelDemo } from "./demos/glass-panel";
 import { glossaryDefinitionCardDemo } from "./demos/glossary-definition-card";
-import { glowIconDemo } from "./demos/glow-icon";
+import { standaloneGlyphDemo } from "./demos/standalone-glyph";
 import { iconButtonDemo } from "./demos/icon-button";
 import { infoCardDemo } from "./demos/info-card";
 import { inlineGlyphDemo } from "./demos/inline-glyph";
@@ -186,7 +186,7 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   motesDemo,
   infoCardDemo,
   inlineGlyphDemo,
-  glowIconDemo,
+  standaloneGlyphDemo,
   pipBadgeDemo,
   journeyStatusBarDemo,
   coopPresenceStatusDemo,

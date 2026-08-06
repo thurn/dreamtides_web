@@ -6,7 +6,7 @@ import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import { EssenceValue } from "../hud/EssenceValue";
-import { GlowIcon } from "./GlowIcon";
+import { StandaloneGlyph } from "./StandaloneGlyph";
 
 /** Canonical glyph for each named transfiguration form. */
 const TRANSFIGURATION_FORM_GLYPHS: Readonly<
@@ -113,12 +113,18 @@ export function TransfigurationFormButton({
         opacity: form.affordable ? 1 : 0.46,
       }}
     >
-      <GlowIcon
-        iconClass={glyph}
-        color={accent}
-        size={compact ? "20px" : "28px"}
-        shadow
-      />
+      <span
+        style={{
+          display: "inline-flex",
+          fontSize: compact ? 20 : 28,
+        }}
+      >
+        <StandaloneGlyph
+          glyph={glyph}
+          color={accent}
+          depth="content-protection"
+        />
+      </span>
       <strong
         style={{
           minWidth: 0,

@@ -11,7 +11,7 @@ import type { CumulusColor } from "../../primitives/color";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
-import { GlowIcon } from "../controls/GlowIcon";
+import { StandaloneGlyph } from "../controls/StandaloneGlyph";
 import { EssenceValue } from "../hud/EssenceValue";
 import { CardView, GameCard, type GameCardModel } from "./CardView";
 import { GalleryActionCard } from "./GalleryActionCard";
@@ -441,6 +441,7 @@ export function CardChoiceGrid({
                       zIndex: 21,
                       width: "clamp(26px, 22%, 44px)",
                       aspectRatio: "1 / 1",
+                      containerType: "inline-size",
                       borderRadius: token("--radius-control"),
                       display: "grid",
                       placeItems: "center",
@@ -454,11 +455,12 @@ export function CardChoiceGrid({
                       pointerEvents: "none",
                     }}
                   >
-                    <GlowIcon
-                      iconClass={operationPresentation.glyph}
-                      color="text-on-accent"
-                      size="58%"
-                    />
+                    <span style={{ display: "inline-flex", fontSize: "58cqi" }}>
+                      <StandaloneGlyph
+                        glyph={operationPresentation.glyph}
+                        color="text-on-accent"
+                      />
+                    </span>
                   </span>
                 )}
               </div>

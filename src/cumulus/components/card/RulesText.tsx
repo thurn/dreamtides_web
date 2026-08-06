@@ -15,7 +15,7 @@ import {
   ENERGY_ICON_COLOR,
   SPARK_ICON_COLOR,
   SPARK_INLINE_ICON_CLASS,
-} from "../controls/GlowIcon";
+} from "../controls/StandaloneGlyph";
 import { InlineGlyph } from "../typography/InlineGlyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";

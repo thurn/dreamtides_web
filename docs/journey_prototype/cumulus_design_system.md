@@ -109,7 +109,7 @@ and their authored CSS live in the Cumulus closure.
 component-specific helper closure physically **move** into `src/cumulus/`, and
 external call sites re-point their imports to Cumulus. Component-specific `.ts`
 helpers that live in UI directories today (`card-text`, `card-display-scale`,
-`dreamscape-scatter`, `atlas-display`, `GlowIcon`, `PipBadge`, …) move in with
+`dreamscape-scatter`, `atlas-display`, `StandaloneGlyph`, `PipBadge`, …) move in with
 their component; only genuinely cross-cutting infrastructure (types, data,
 logging, runtime) stays external and allowlisted. Borderline modules are judged
 case-by-case in the phase that touches them (e.g. `transfiguration-logic` — game
@@ -119,7 +119,7 @@ logic, moved if it is UI-coupled).
 Measured closures (small enough to move incrementally, typechecking between
 moves):
 
-- `CardView` → `card-text`, `card-display-scale`, `GlowIcon`, `CardStatOrb`,
+- `CardView` → `card-text`, `card-display-scale`, `StandaloneGlyph`, `CardStatOrb`,
   `RulesText`, `PipBadge`, `useFitText`.
 - `RulesText` → `card-text`, `PipBadge`.
 - `AtlasNode` → `atlas-display`.

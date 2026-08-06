@@ -43,7 +43,7 @@ import { GLOSSARY_IDS } from "../../../data/glossary";
 import { token } from "../../primitives/tokens";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
 import { IconButton } from "../controls/IconButton";
-import { GlowIcon } from "../controls/GlowIcon";
+import { StandaloneGlyph } from "../controls/StandaloneGlyph";
 import { GLYPHS } from "../../primitives/glyph";
 import { Dreamsign, dreamsignArtUrl, DS_SHADOW } from "./Dreamsign";
 import type { Dreamsign as DreamsignData } from "../../../types/journey";
@@ -489,11 +489,14 @@ function QsbEssence({
       }}
     >
       {essence}
-      <GlowIcon
-        iconClass={GLYPHS.essence}
-        color="essence"
-        size={`${String(Math.round(20 * scale))}px`}
-      />
+      <span
+        style={{
+          display: "inline-flex",
+          fontSize: Math.round(20 * scale),
+        }}
+      >
+        <StandaloneGlyph glyph={GLYPHS.essence} color="essence" />
+      </span>
     </Pressable>
   );
 }

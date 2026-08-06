@@ -11,7 +11,7 @@
 // sits beside. Neutral glass serves secondary actions; the purple accent
 // recipe lets a primary action retain the same material language. A
 // text `label` (a resolved string, never caller markup) sits in the control
-// font; an optional leading `glyph` paints a `GlowIcon` before it. Essence can
+// font; an optional leading `glyph` paints a `StandaloneGlyph` before it. Essence can
 // be presented either as a punctuated cost or as a plain action value. Prominent
 // primary actions can opt into the larger 56px treatment. Press/hover
 // feedback routes through the one shared `Pressable` primitive (scale-down on
@@ -19,7 +19,7 @@
 // `aria-disabled`, and detaches its click and press feedback.
 
 import type { ReactElement } from "react";
-import { GlowIcon } from "./GlowIcon";
+import { StandaloneGlyph } from "./StandaloneGlyph";
 import { EssenceValue } from "../hud/EssenceValue";
 import { Pressable } from "../../primitives/Pressable";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
@@ -82,7 +82,7 @@ export interface GlassButtonProps {
   label: string;
   /** Fires when the button is activated (no-op while disabled). */
   onPress: () => void;
-  /** Optional leading glyph painted as a `GlowIcon` before the label. */
+  /** Optional leading glyph painted as a `StandaloneGlyph` before the label. */
   glyph?: Glyph;
   /** Optional numerical essence cost rendered after a centered dot. */
   essenceCost?: number | null;
@@ -178,11 +178,9 @@ export function GlassButton({
       }}
     >
       {glyph !== undefined && (
-        <GlowIcon
-          iconClass={glyph}
-          color={chrome.triggerGlyphColor}
-          size="1.1em"
-        />
+        <span style={{ display: "inline-flex", fontSize: "1.1em" }}>
+          <StandaloneGlyph glyph={glyph} color={chrome.triggerGlyphColor} />
+        </span>
       )}
       <span
         style={

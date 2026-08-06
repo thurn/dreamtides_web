@@ -18,7 +18,7 @@ The labeled glass action — a bold text label with optional Essence cost or non
 | --- | --- | --- | --- | --- |
 | `label` | `string` | yes | — | The button's text, centered by the component at every rendered width. |
 | `onPress` | `() => void` | yes | — | Fires when the button is activated (no-op while disabled). |
-| `glyph` | `Glyph` | no | — | Optional leading glyph painted as a `GlowIcon` before the label. |
+| `glyph` | `Glyph` | no | — | Optional leading glyph painted as a `StandaloneGlyph` before the label. |
 | `essenceCost` | `number \| null` | no | `null` | Optional numerical essence cost rendered after a centered dot. |
 | `essenceValue` | `number \| null` | no | `null` | Optional non-cost Essence value rendered directly after the label. |
 | `size` | `GlassButtonSize` = `"compact" \| "standard" \| "prominent"` | no | `standard` | Prominent primary-action sizing, standard label spacing, or compact spacing for narrow parallel actions. |
@@ -56,7 +56,7 @@ import { GlassButton } from "src/cumulus/components/controls/GlassButton";
 
 ### Leading glyph
 
-A `glyph` paints a leading GlowIcon before the label (e.g. a filled funnel for a filter action).
+A `glyph` paints a leading StandaloneGlyph before the label (e.g. a filled funnel for a filter action).
 
 ```tsx
 import { GlassButton } from "src/cumulus/components/controls/GlassButton";

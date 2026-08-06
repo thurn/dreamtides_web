@@ -12,7 +12,7 @@
 // The disc is a semantic reveal source. It owns the press/hover binding for its
 // tide card; callers supply only the stable tide data and lay the disc out.
 
-import { GlowIcon } from "../controls/GlowIcon";
+import { StandaloneGlyph } from "../controls/StandaloneGlyph";
 import type { CumulusColor } from "../../primitives/color";
 import { tideVisual, type Tide } from "./tide-spec";
 import { useRevealSource } from "../../internal/reveal/context";
@@ -91,15 +91,12 @@ export function TideDisc({
         flex: "none",
         display: "grid",
         placeItems: "center",
+        fontSize: Math.round(diameter * 0.5),
         background: v.bg,
         border: `1px solid ${v.bd}`,
       }}
     >
-      <GlowIcon
-        iconClass={v.icon}
-        color={v.fg as CumulusColor}
-        size={`${String(Math.round(diameter * 0.5))}px`}
-      />
+      <StandaloneGlyph glyph={v.icon} color={v.fg as CumulusColor} />
     </Pressable>
   );
 }

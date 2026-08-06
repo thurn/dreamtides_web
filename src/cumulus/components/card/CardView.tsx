@@ -23,7 +23,7 @@ import {
 } from "./card-aspect";
 import { formatTypeLine } from "./card-text";
 import { computeCardTextScale } from "./card-display-scale";
-import { BOLT_ICON_CLASS } from "../controls/GlowIcon";
+import { BOLT_ICON_CLASS } from "../controls/StandaloneGlyph";
 import { InlineGlyph } from "../typography/InlineGlyph";
 import { glyph, GLYPHS } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";

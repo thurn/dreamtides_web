@@ -2152,8 +2152,9 @@ describe("MobileBattleScreen", () => {
     expect(core?.style.height).toBe("19px");
     expect(core?.style.borderRadius).toBe("var(--radius-pill)");
     expect(core?.style.backgroundColor).toBe("var(--bg-sunken)");
-    expect(icon?.style.width).toBe("15px");
-    expect(icon?.style.height).toBe("15px");
+    expect(core?.style.fontSize).toBe("15px");
+    expect(icon?.style.width).toBe("1em");
+    expect(icon?.style.height).toBe("1em");
     expect(icon?.style.color).toBe("var(--accent-bright)");
     expect(icon?.style.filter.match(/drop-shadow/g)).toHaveLength(2);
     expect(halo?.style.width).toBe("19px");

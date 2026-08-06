@@ -10,7 +10,7 @@ import { CumulusRoot } from "../CumulusRoot";
 import {
   ENERGY_ICON_COLOR,
   SPARK_ICON_COLOR,
-} from "../components/controls/GlowIcon";
+} from "../components/controls/StandaloneGlyph";
 import { JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP } from "../components/hud/JourneyStatusBar";
 import { artRef } from "../primitives/art";
 import { token } from "../primitives/tokens";

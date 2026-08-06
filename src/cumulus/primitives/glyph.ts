@@ -27,7 +27,7 @@ function g(className: string): Glyph {
 
 /**
  * The design system's named glyph vocabulary. Consolidates the icon-font
- * classes shared by GlowIcon, RulesText, resource values, and controls so a mark reads the same
+ * classes shared by StandaloneGlyph, RulesText, resource values, and controls so a mark reads the same
  * everywhere. Reference these by name; do not pass a raw class.
  */
 export const GLYPHS = {

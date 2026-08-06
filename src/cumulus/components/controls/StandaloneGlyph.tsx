@@ -1,19 +1,17 @@
 import { ENERGY_PIP_COLOR } from "./pip-colors";
 import { type Glyph, GLYPHS } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
-import { type MediaFilter, resolveMediaFilter } from "../../primitives/media";
 
 /**
- * A Boxicons glyph used for the card resource marks. Boxicons paints via the
- * element's text color, so callers pass the resource hue; an optional soft
- * content-protection shadow (and an optional emitted-light glow, supplied by the
- * caller) is pinned to the icon's own `font-size` so it tracks the glyph at any
- * size.
+ * A Boxicons glyph in a standalone one-em square. The surrounding layout owns
+ * its font size and placement; this component owns centered glyph geometry,
+ * semantic color, accessibility, and the optional content-protection depth
+ * treatment used over card or scene media.
  *
  * Source of truth for the spark and energy hues: the corner stat orbs
  * (`CardStatOrb`) and the inline references in rules text (`RulesText`) pull the
  * same colors so a `●3` / `1✦` reads as the same resource in both places. The
- * corner stats use the larger sparkle/flame glyphs through this component; the
+ * Corner stats use the larger sparkle/flame glyphs through this component;
  * inline references use `InlineGlyph` in the matching hue.
  */
 
@@ -47,66 +45,53 @@ export const SPARK_INLINE_ICON_CLASS: Glyph = GLYPHS.sparkInline;
  * Soft content-protection shadow that grounds the glyph against the art behind
  * it: a short downward dark blur plus a tight dark halo. This reads as depth
  * rather than the hard cartoon keyline a multi-offset solid outline produces.
- * Offsets/radii are in `em` so it tracks the rendered icon size. Applied before
- * the glow so the colored bloom still radiates outward.
+ * Offsets/radii are in `em` so it tracks the surrounding layout's font size.
  */
-export const ICON_SHADOW_FILTER =
+export const GLYPH_CONTENT_PROTECTION_FILTER =
   "drop-shadow(0 0.03em 0.05em rgba(0, 0, 0, 0.55)) " +
   "drop-shadow(0 0 0.03em rgba(0, 0, 0, 0.45))";
 
-export interface GlowIconProps {
-  /** The {@link Glyph} to render (e.g. `SPARK_ICON_CLASS` / `GLYPHS.spark`). */
-  iconClass: Glyph;
+/** Named depth treatments for a standalone glyph. */
+export type StandaloneGlyphDepth = "flat" | "content-protection";
+
+export interface StandaloneGlyphProps {
+  /** The standalone {@link Glyph} to render. */
+  glyph: Glyph;
   /** Fill {@link CumulusColor} — Boxicons paints via the element's text color. */
   color: CumulusColor;
-  /**
-   * Rendered width/height as any CSS length. Defaults to `1em` for compact
-   * controls. The icon's own `font-size` is pinned to this value so the
-   * `em`-based glow and outline scale with it.
-   */
-  size?: string;
-  /** Emitted-light bloom {@link MediaFilter}. Omit for no glow. */
-  glowFilter?: MediaFilter;
-  /** When true, adds the soft content-protection shadow beneath the glow. */
-  shadow?: boolean;
-  /** Accessible label; the icon is hidden from assistive tech when unset. */
-  title?: string;
+  /** Flat by default; use content protection when the glyph sits over media. */
+  depth?: StandaloneGlyphDepth;
+  /** Accessible meaning; the glyph is hidden from assistive tech when unset. */
+  label?: string;
 }
 
-export function GlowIcon({
-  iconClass,
+export function StandaloneGlyph({
+  glyph,
   color,
-  size = "1em",
-  glowFilter,
-  shadow = false,
-  title,
-}: GlowIconProps) {
-  const filter = [
-    shadow ? ICON_SHADOW_FILTER : null,
-    glowFilter ? resolveMediaFilter(glowFilter) : null,
-  ]
-    .filter((layer): layer is string => layer !== null)
-    .join(" ");
+  depth = "flat",
+  label,
+}: StandaloneGlyphProps) {
   return (
     <i
-      className={iconClass}
-      role={title !== undefined ? "img" : undefined}
-      aria-label={title}
-      aria-hidden={title === undefined ? true : undefined}
+      className={glyph}
+      role={label !== undefined ? "img" : undefined}
+      aria-label={label}
+      aria-hidden={label === undefined ? true : undefined}
       style={{
-        // Center the glyph in a square footprint so a caller's absolute
-        // centering lands true.
+        // The caller controls font-size on its layout wrapper. This primitive
+        // consumes exactly one em in each axis and centers the font glyph in it.
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
-        width: size,
-        height: size,
-        // Pin font-size to the icon size so the glyph fills the box and the
-        // `em`-based glow and outline track it.
-        fontSize: size,
+        width: "1em",
+        height: "1em",
+        fontSize: "1em",
         lineHeight: 1,
         color: resolveColor(color),
-        filter: filter !== "" ? filter : undefined,
+        filter:
+          depth === "content-protection"
+            ? GLYPH_CONTENT_PROTECTION_FILTER
+            : undefined,
       }}
     />
   );

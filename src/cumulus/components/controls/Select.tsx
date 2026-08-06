@@ -41,7 +41,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { HOVER_SCALE, PRESS_SCALE, usePress } from "../../primitives/Pressable";
-import { GlowIcon } from "./GlowIcon";
+import { StandaloneGlyph } from "./StandaloneGlyph";
 import { type Glyph, GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import {
@@ -257,11 +257,12 @@ export function Select({
         }}
       >
         {leadingGlyph !== undefined && (
-          <GlowIcon
-            iconClass={leadingGlyph}
-            color={chrome.triggerGlyphColor}
-            size="1.1em"
-          />
+          <span style={{ display: "inline-flex", fontSize: "1.1em" }}>
+            <StandaloneGlyph
+              glyph={leadingGlyph}
+              color={chrome.triggerGlyphColor}
+            />
+          </span>
         )}
         {/* The trigger's text — a single font by construction, so a caller
             cannot mix two type voices in one button. Every option's label is
@@ -309,11 +310,12 @@ export function Select({
             </span>
           ))}
         </span>
-        <GlowIcon
-          iconClass={GLYPHS.caretDown}
-          color={chrome.triggerGlyphColor}
-          size="1.1em"
-        />
+        <span style={{ display: "inline-flex", fontSize: "1.1em" }}>
+          <StandaloneGlyph
+            glyph={GLYPHS.caretDown}
+            color={chrome.triggerGlyphColor}
+          />
+        </span>
       </button>
 
       {open &&
@@ -412,7 +414,9 @@ function MenuItem({ option, active, onPick }: MenuItemProps): ReactElement {
         }}
       >
         {/* White so the selected-row mark stands out against the glass. */}
-        <GlowIcon iconClass={GLYPHS.check} color="text-primary" size="1.2em" />
+        <span style={{ display: "inline-flex", fontSize: "1.2em" }}>
+          <StandaloneGlyph glyph={GLYPHS.check} color="text-primary" />
+        </span>
       </span>
       {option.label}
     </button>

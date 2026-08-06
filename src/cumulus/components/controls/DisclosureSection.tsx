@@ -2,7 +2,7 @@ import type { ReactElement, ReactNode } from "react";
 import { Pressable } from "../../primitives/Pressable";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
-import { GlowIcon } from "./GlowIcon";
+import { StandaloneGlyph } from "./StandaloneGlyph";
 
 export interface DisclosureSectionProps {
   /** Section heading shown in the disclosure trigger. */
@@ -72,11 +72,12 @@ export function DisclosureSection({
             </span>
           )}
         </span>
-        <GlowIcon
-          iconClass={expanded ? GLYPHS.chevronUp : GLYPHS.chevronDown}
-          color="text-secondary"
-          size="1.25em"
-        />
+        <span style={{ display: "inline-flex", fontSize: "1.25em" }}>
+          <StandaloneGlyph
+            glyph={expanded ? GLYPHS.chevronUp : GLYPHS.chevronDown}
+            color="text-secondary"
+          />
+        </span>
       </Pressable>
       {expanded ? (
         <div

@@ -4,7 +4,7 @@ import {
   type PointerEvent,
   type ReactElement,
 } from "react";
-import { GlowIcon } from "../components/controls/GlowIcon";
+import { StandaloneGlyph } from "../components/controls/StandaloneGlyph";
 import { GlassButton } from "../components/controls/GlassButton";
 import { IconButton } from "../components/controls/IconButton";
 import { NumberStepper } from "../components/controls/NumberStepper";
@@ -763,15 +763,12 @@ function TutorialActionRow({
               border: "none",
               background: "transparent",
               color: token("--text-on-glass-muted"),
+              fontSize: "1.4em",
               cursor: "grab",
               touchAction: "none",
             }}
           >
-            <GlowIcon
-              iconClass={GLYPHS.dragHandle}
-              color="text-secondary"
-              size="1.4em"
-            />
+            <StandaloneGlyph glyph={GLYPHS.dragHandle} color="text-secondary" />
           </Pressable>
           <div style={{ minWidth: 0 }}>
             <Select
@@ -1333,12 +1330,11 @@ function SaveStatus({
       transition={
         status === "saving" ? { repeat: Infinity, duration: 1.2 } : undefined
       }
-      style={{ display: "inline-flex" }}
+      style={{ display: "inline-flex", fontSize: "1.25em" }}
     >
-      <GlowIcon
-        iconClass={glyph}
+      <StandaloneGlyph
+        glyph={glyph}
         color={status === "error" ? "danger" : "text-secondary"}
-        size="1.25em"
       />
     </motion.span>
   );

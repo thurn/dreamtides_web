@@ -78,7 +78,7 @@ describe("GlassButton", () => {
       <GlassButton label="Filter" glyph={GLYPHS.filter} onPress={() => {}} />,
     );
 
-    // The leading glyph is a GlowIcon <i> carrying the glyph class.
+    // The leading glyph is a StandaloneGlyph <i> carrying the glyph class.
     expect(container.querySelector("i")?.className).toBe(String(GLYPHS.filter));
 
     act(() => {

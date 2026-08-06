@@ -85,7 +85,7 @@ export const glassButtonDemo: CumulusComponent = {
     },
     {
       label: "Leading glyph",
-      note: "A `glyph` paints a leading GlowIcon before the label (e.g. a filled funnel for a filter action).",
+      note: "A `glyph` paints a leading StandaloneGlyph before the label (e.g. a filled funnel for a filter action).",
       code: `import { GlassButton } from "src/cumulus/components/controls/GlassButton";
 import { GLYPHS } from "src/cumulus/primitives/glyph";
 

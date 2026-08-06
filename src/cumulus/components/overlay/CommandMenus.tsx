@@ -16,7 +16,7 @@ import { createPortal } from "react-dom";
 import { GlassDialog } from "./GlassDialog";
 import { GlassButton } from "../controls/GlassButton";
 import { IconButton } from "../controls/IconButton";
-import { GlowIcon } from "../controls/GlowIcon";
+import { StandaloneGlyph } from "../controls/StandaloneGlyph";
 import { TextField } from "../controls/TextField";
 import { Pressable } from "../../primitives/Pressable";
 import type { Glyph } from "../../primitives/glyph";
@@ -547,9 +547,9 @@ function CommandRow({
         font: mobile ? token("--t-button") : token("--t-body-sm"),
       }}
     >
-      <GlowIcon iconClass={item.glyph} color="text-primary" size="1em" />
+      <StandaloneGlyph glyph={item.glyph} color="text-primary" />
       <span>{item.label}</span>
-      {item.kind === "group" && <GlowIcon iconClass={GLYPHS.chevronRight} color="text-primary" size="1em" />}
+      {item.kind === "group" && <StandaloneGlyph glyph={GLYPHS.chevronRight} color="text-primary" />}
     </Pressable>
   );
 }

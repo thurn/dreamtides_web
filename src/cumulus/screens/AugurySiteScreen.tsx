@@ -13,7 +13,7 @@ import {
   type CardChoiceGridSiteFit,
 } from "../components/card/CardChoiceGrid";
 import { GlassButton } from "../components/controls/GlassButton";
-import { GlowIcon } from "../components/controls/GlowIcon";
+import { StandaloneGlyph } from "../components/controls/StandaloneGlyph";
 import { IconButton } from "../components/controls/IconButton";
 import type { OfferTileModel } from "../components/controls/OfferTile";
 import {
@@ -479,8 +479,8 @@ function OfferDetailVisual({
               <div key={choice.id} data-augury-dreamsign-choice="" data-selected={selected ? "true" : "false"} style={{ position: "relative", padding: token("--space-2"), borderRadius: token("--radius-panel"), border: `4px solid ${selected ? token("--accent-bright") : "transparent"}`, boxShadow: selected ? token("--glow-accent-soft") : undefined }}>
                 <Dreamsign dreamsign={choice.dreamsign} sizePx={dreamsignSize(visual.choices.length, layout)} onPress={() => onSelect(offerId, choice.id)} testid={`cumulus-augury-choice-${choice.id}`} />
                 {selected && (
-                  <span aria-hidden="true" data-augury-dreamsign-selection-marker="" style={{ position: "absolute", top: token("--space-2"), right: token("--space-2"), width: 36, height: 36, borderRadius: token("--radius-pill"), display: "grid", placeItems: "center", color: token("--text-on-accent"), background: token("--accent-bright"), boxShadow: token("--shadow-md"), pointerEvents: "none" }}>
-                    <GlowIcon iconClass={GLYPHS.check} color="white" size="24px" />
+                  <span aria-hidden="true" data-augury-dreamsign-selection-marker="" style={{ position: "absolute", top: token("--space-2"), right: token("--space-2"), width: 36, height: 36, borderRadius: token("--radius-pill"), display: "grid", placeItems: "center", color: token("--text-on-accent"), background: token("--accent-bright"), boxShadow: token("--shadow-md"), pointerEvents: "none", fontSize: 24 }}>
+                    <StandaloneGlyph glyph={GLYPHS.check} color="white" />
                   </span>
                 )}
               </div>
@@ -560,7 +560,7 @@ function CardTile({ card, width, selected = false, muted = false, danger = false
 }
 
 function TransitionArrow({ layout }: { layout: "mobile" | "desktop" }) {
-  return <span data-augury-transition-arrow="" style={{ display: "grid", placeItems: "center", flexShrink: 0 }}><GlowIcon iconClass={GLYPHS.arrowRightFilled} color="white" size={layout === "desktop" ? "32px" : "24px"} /></span>;
+  return <span data-augury-transition-arrow="" style={{ display: "grid", placeItems: "center", flexShrink: 0, fontSize: layout === "desktop" ? 32 : 24 }}><StandaloneGlyph glyph={GLYPHS.arrowRightFilled} color="white" /></span>;
 }
 
 function Transition({ before, after, layout }: { before: AuguryCardView; after: AuguryCardView; layout: "mobile" | "desktop" }) {

@@ -35,7 +35,7 @@ import {
 } from "../components/battle/battle-card-layout";
 import { GlassButton } from "../components/controls/GlassButton";
 import { DisclosureSection } from "../components/controls/DisclosureSection";
-import { GlowIcon } from "../components/controls/GlowIcon";
+import { StandaloneGlyph } from "../components/controls/StandaloneGlyph";
 import { IconButton } from "../components/controls/IconButton";
 import { NumberStepper } from "../components/controls/NumberStepper";
 import { SegmentedControl } from "../components/controls/SegmentedControl";
@@ -1487,13 +1487,13 @@ function PhaseIndicator({
             height: PHASE_LIGHT_SIZE,
             borderRadius: token("--radius-pill"),
             backgroundColor: token("--bg-sunken"),
+            fontSize: PHASE_LIGHT_ICON_SIZE,
           }}
         >
-          <GlowIcon
-            iconClass={PHASE_GLYPH[phase]}
+          <StandaloneGlyph
+            glyph={PHASE_GLYPH[phase]}
             color="accent-bright"
-            size={`${String(PHASE_LIGHT_ICON_SIZE)}px`}
-            shadow
+            depth="content-protection"
           />
         </span>
       </span>
@@ -2078,11 +2078,10 @@ function BattleCardPointsOverlay({
           }}
         />
         <span data-battle-card-points-value="">{overlay.points}</span>
-        <GlowIcon
-          iconClass={GLYPHS.points}
+        <StandaloneGlyph
+          glyph={GLYPHS.points}
           color="text-primary"
-          size="1em"
-          shadow
+          depth="content-protection"
         />
       </motion.div>
     </div>
@@ -2134,13 +2133,13 @@ function BattleCardStatusIndicators({
             width: BATTLE_CARD_STATUS_BADGE_SIZE,
             paddingInline: 0,
             transform: "translate(-50%, -50%)",
+            fontSize: BATTLE_CARD_EXHAUST_ICON_SIZE,
           }}
         >
-          <GlowIcon
-            iconClass={GLYPHS.exhaust}
+          <StandaloneGlyph
+            glyph={GLYPHS.exhaust}
             color="white"
-            size={BATTLE_CARD_EXHAUST_ICON_SIZE}
-            shadow
+            depth="content-protection"
           />
         </div>
       ) : null}

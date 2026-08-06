@@ -10,13 +10,13 @@
 // fully-round disc — so a corner icon button reads as a member of the same
 // family as the filter/sort controls it sits beside. Neutral glass serves
 // secondary actions; the shared purple accent recipe gives a primary icon
-// action the same emphasis as an accent GlassButton. A `GlowIcon` paints the
+// action the same emphasis as an accent GlassButton. A `StandaloneGlyph` paints the
 // glyph centered in the disc, and press/hover feedback routes through the one
 // shared `Pressable` primitive (scale-down on press, up on hover). The disc
 // shows only its glyph; `label` is its accessible name.
 
 import type { ReactElement } from "react";
-import { GlowIcon } from "./GlowIcon";
+import { StandaloneGlyph } from "./StandaloneGlyph";
 import { Pressable } from "../../primitives/Pressable";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
 import type { Glyph } from "../../primitives/glyph";
@@ -84,7 +84,7 @@ export interface IconButtonProps {
 
 /**
  * IconButton — the glass icon disc: a `glassIconButtonChrome()` surface, a
- * centered `GlowIcon` glyph, and shared `Pressable` press/hover feedback, on a
+ * centered `StandaloneGlyph` glyph, and shared `Pressable` press/hover feedback, on a
  * fully-round disc. `label` names it for assistive tech; `disabled` detaches
  * its click and press feedback.
  */
@@ -120,7 +120,7 @@ export function IconButton({
         height: spec.disc,
         display: "grid",
         placeItems: "center",
-        // The glyph tracks the disc's font-size (GlowIcon size="1em"), matching
+        // The glyph tracks the disc's font-size (StandaloneGlyph size="1em"), matching
         // the call sites' rendered look.
         fontSize: spec.glyph,
         color: token("--text-primary"),
@@ -138,7 +138,7 @@ export function IconButton({
           height: "1em",
         }}
       >
-        <GlowIcon iconClass={glyph} color="text-primary" size="1em" />
+        <StandaloneGlyph glyph={glyph} color="text-primary" />
         {overlayGlyph !== undefined && (
           <span
             style={{
@@ -149,7 +149,7 @@ export function IconButton({
               fontSize: spec.overlayGlyph,
             }}
           >
-            <GlowIcon iconClass={overlayGlyph} color="text-primary" size="1em" />
+            <StandaloneGlyph glyph={overlayGlyph} color="text-primary" />
           </span>
         )}
       </span>

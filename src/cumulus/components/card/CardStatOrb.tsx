@@ -2,10 +2,10 @@ import { type CSSProperties } from "react";
 import {
   ENERGY_ICON_CLASS,
   ENERGY_ICON_COLOR,
-  GlowIcon,
+  StandaloneGlyph,
   SPARK_ICON_CLASS,
   SPARK_ICON_COLOR,
-} from "../controls/GlowIcon";
+} from "../controls/StandaloneGlyph";
 import { useFitText } from "../controls/useFitText";
 import { type Glyph } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
@@ -193,7 +193,7 @@ export function CardStatOrb({
       {/* The glowing mark sits below the digit. Each Boxicons glyph leaves
           padding inside its 24×24 viewBox, so it is overscaled past the box
           (centered) to reach the stat's footprint. The wrapper owns the
-          absolute centering; GlowIcon paints only the glyph. */}
+          absolute centering; StandaloneGlyph paints only the glyph. */}
       <span
         style={{
           position: "absolute",
@@ -201,13 +201,13 @@ export function CardStatOrb({
           left: "50%",
           transform: "translate(-50%, -50%)",
           display: "inline-flex",
+          fontSize: `calc(${sizeVar} * ${String(icon.overscale)})`,
         }}
       >
-        <GlowIcon
-          iconClass={icon.iconClass}
+        <StandaloneGlyph
+          glyph={icon.iconClass}
           color={icon.color}
-          shadow
-          size={`calc(${sizeVar} * ${String(icon.overscale)})`}
+          depth="content-protection"
         />
       </span>
       <div
