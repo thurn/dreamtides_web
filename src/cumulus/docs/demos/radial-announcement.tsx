@@ -5,11 +5,27 @@ import {
 import { GLYPHS } from "../../primitives/glyph";
 import type { CumulusComponent } from "../registry";
 
+// The production component is intentionally transient and finishes fully
+// transparent. Documentation keeps the same reduced-motion resting state in
+// view so the overview remains useful after the first animation cycle.
+const FROZEN_ANNOUNCEMENT_CSS = `
+  [data-radial-announcement-demo-frozen] [data-radial-announcement-disc],
+  [data-radial-announcement-demo-frozen] [data-radial-announcement-orbit],
+  [data-radial-announcement-demo-frozen] [data-radial-announcement-ripple],
+  [data-radial-announcement-demo-frozen] [data-radial-announcement-copy] {
+    animation: none !important;
+  }
+`;
+
 function RadialAnnouncementDemo(args: Record<string, unknown>) {
   const tone: RadialAnnouncementTone =
     args.tone === "reward" || args.tone === "danger" ? args.tone : "accent";
   return (
-    <div style={{ position: "relative", width: "100%", height: 320 }}>
+    <div
+      data-radial-announcement-demo-frozen=""
+      style={{ position: "relative", width: "100%", height: 320 }}
+    >
+      <style>{FROZEN_ANNOUNCEMENT_CSS}</style>
       <RadialAnnouncement
         headline="Fast"
         headlineGlyph={GLYPHS.bolt}
