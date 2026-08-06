@@ -18,7 +18,7 @@ export const developerRailDemo: CumulusComponent = {
   id: "developer-rail",
   title: "Developer Rail",
   blurb: "The shared edge-attached shell for persistent developer tools, with canonical glass, header hierarchy, close action, scrolling body, and optional footer.",
-  callout: "Use this shell for docked developer tools; the parent screen owns the rail track and responsive takeover behavior.",
+  callout: "Use this shell for docked developer tools. Place it in a rail track that defines its position and responsive takeover behavior.",
   group: "Components",
   docName: "DeveloperRail",
   Component: Demo,

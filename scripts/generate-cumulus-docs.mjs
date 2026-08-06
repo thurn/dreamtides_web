@@ -214,6 +214,21 @@ export function extractDemoDoc(sourceText, fileName, exportName) {
     return literalString(init, `${fileName} field "${field}"`);
   }
 
+  function documentationString(value, context) {
+    const screenOwnershipClaim =
+      /\bproduct owner(?:ship)?\b/i.test(value) ||
+      /\bscreen-owned\b/i.test(value) ||
+      /\b(?:[A-Za-z][A-Za-z0-9]*Screen|screen)\b[^.!?\n]{0,80}\bowns?\b/i.test(
+        value,
+      );
+    if (screenOwnershipClaim) {
+      throw new Error(
+        `${context}: Cumulus component docs describe roles and contracts, not screen ownership claims`,
+      );
+    }
+    return value;
+  }
+
   const usageInit = propertyInitializer(objectLiteral, "usage");
   if (!usageInit || !ts.isArrayLiteralExpression(usageInit)) {
     throw new Error(`${fileName}: missing or non-array "usage" field`);
@@ -240,16 +255,23 @@ export function extractDemoDoc(sourceText, fileName, exportName) {
     }
     const noteInit = propertyInitializer(element, "note");
     if (noteInit) {
-      entry.note = literalString(noteInit, `${fileName} usage[${index}].note`);
+      const context = `${fileName} usage[${index}].note`;
+      entry.note = documentationString(literalString(noteInit, context), context);
     }
     return entry;
   });
 
+  const blurbContext = `${fileName} field "blurb"`;
+  const calloutContext = `${fileName} field "callout"`;
+  const callout = optionalString("callout");
   return {
     id: requiredString("id"),
     title: requiredString("title"),
-    blurb: requiredString("blurb"),
-    callout: optionalString("callout"),
+    blurb: documentationString(requiredString("blurb"), blurbContext),
+    callout:
+      callout === undefined
+        ? undefined
+        : documentationString(callout, calloutContext),
     group: requiredString("group"),
     docName: requiredString("docName"),
     usage,

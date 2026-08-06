@@ -40,6 +40,11 @@ The reference files and the index are projections of the component sources
 `src/cumulus/docs/demos/`). Regenerate with `npm run cumulus-docs` (included in
 `npm run regenerate-assets`); edit the sources, never the generated files.
 
+Component documentation describes reusable roles, integration contracts, and
+constraints. Never designate a particular product screen as a component's
+owner or product owner: those claims become stale as compositions change. A
+screen may appear as a nonexclusive usage example when that context is useful.
+
 ## Requested content only
 
 Do not add unrequested visible text elements to a design. Treat the supplied

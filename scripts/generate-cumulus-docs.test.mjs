@@ -120,6 +120,16 @@ describe("extractDemoDoc", () => {
     );
   });
 
+  it("rejects screen ownership claims in component documentation", () => {
+    const source = DEMO_FIXTURE.replace(
+      `callout: "Prefer a real component.",`,
+      `callout: "PoolViewerScreen owns this component.",`,
+    );
+    expect(() => extractDemoDoc(source, "fixture.tsx", "widgetDemo")).toThrow(
+      /not screen ownership claims/,
+    );
+  });
+
   it("throws when the named export is missing", () => {
     expect(() => extractDemoDoc(DEMO_FIXTURE, "fixture.tsx", "nope")).toThrow(
       /could not find/,

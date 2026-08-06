@@ -71,7 +71,7 @@ export const segmentedControlDemo: CumulusComponent = {
   blurb:
     "The compact tab and filter switch used for type filters, sort direction, and small mode toggles. Its surface is the shared glass control material — the same one Select renders from — so a filter and a sort dropdown side by side read as one cluster.",
   callout:
-    "The Pool Viewer is the intentional product owner for this specialized compact filter. The track is the shared liquid-glass control surface with a neutral frosted selected segment, so a whole filter/sort cluster reads as one material.",
+    "Use this compact control for small, mutually exclusive filters, sort directions, or modes. The shared liquid-glass track and neutral frosted selection pair cleanly with adjacent Select controls.",
   group: "Components",
   docName: "SegmentedControl",
   Component: SegmentedControlDemo,

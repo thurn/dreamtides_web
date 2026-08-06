@@ -10,7 +10,7 @@ Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 
 The shared edge-attached shell for persistent developer tools, with canonical glass, header hierarchy, close action, scrolling body, and optional footer.
 
-> **Guidance:** Use this shell for docked developer tools; the parent screen owns the rail track and responsive takeover behavior.
+> **Guidance:** Use this shell for docked developer tools. Place it in a rail track that defines its position and responsive takeover behavior.
 
 ## Props
 
