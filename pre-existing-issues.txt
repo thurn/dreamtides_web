@@ -1,0 +1,3 @@
+Commit 085195348 removes the only <GlassPanelExample /> render from
+src/cumulus/docs/IntroSection.tsx but leaves the GlassPanelExample function
+declared. `npm run review` fails typecheck with TS6133 at IntroSection.tsx:98.
