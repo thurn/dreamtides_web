@@ -125,20 +125,25 @@ describe("CharacterDialogue", () => {
     const bubble = container.querySelector<HTMLElement>(
       "[data-character-dialogue] aside",
     );
-    const bubblePath = container.querySelector<SVGPathElement>(
-      "[data-character-dialogue] clipPath path",
-    );
     const bubbleRim = container.querySelector<SVGPathElement>(
       "[data-character-dialogue] [data-speech-bubble-rim]",
+    );
+    const glassBody = container.querySelector<HTMLElement>(
+      "[data-character-dialogue] [data-speech-bubble-glass-body]",
     );
     expect(dialogue?.dataset.characterDialogueSize).toBe("prominent");
     expect(dialogue?.style.gridTemplateColumns).toBe("150px minmax(0, 1fr)");
     expect(dialogue?.style.maxWidth).toBe("700px");
     expect(bubble?.dataset.speechBubbleSize).toBe("prominent");
     expect(bubble?.style.zoom).toBe("1.25");
-    expect(bubblePath?.getAttribute("d")).toContain("L 0 31");
-    expect(bubbleRim?.getAttribute("d")).toBe(
-      bubblePath?.getAttribute("d"),
+    expect(bubble?.style.background).toBe("");
+    expect(bubble?.style.backdropFilter).toBe("");
+    expect(glassBody?.style.left).toBe("14px");
+    expect(glassBody?.style.background).toBe("var(--glass-sheen)");
+    expect(glassBody?.style.backdropFilter).toContain("var(--glass-blur)");
+    expect(bubbleRim?.getAttribute("d")).toContain("L 0 31");
+    expect(bubbleRim?.getAttribute("fill")).toBe(
+      "var(--glass-fill-popover)",
     );
     expect(bubbleRim?.getAttribute("stroke")).toBe("var(--glass-rim)");
     expect(bubbleRim?.getAttribute("stroke-width")).toBe("2");

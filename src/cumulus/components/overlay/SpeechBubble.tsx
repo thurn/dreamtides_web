@@ -3,7 +3,6 @@
 // side arrow so the bubble can sit beside a character render.
 
 import {
-  useId,
   useLayoutEffect,
   useRef,
   useState,
@@ -20,7 +19,6 @@ import {
 } from "./speech-bubble-geometry";
 
 const SPEECH_GLASS_FILL = token("--glass-fill-popover");
-const SPEECH_GLASS_BACKGROUND = `${token("--glass-sheen")}, ${SPEECH_GLASS_FILL}`;
 const SPEECH_CONTENT_PADDING = token("--space-m");
 
 /** Named bubble scales that preserve the component's authored geometry. */
@@ -59,8 +57,6 @@ export function SpeechBubble({
   pointerPlacement = "left-lower",
   testId,
 }: SpeechBubbleProps): ReactElement {
-  const reactId = useId();
-  const clipId = `speech-bubble-${reactId.replace(/:/g, "")}`;
   const bubbleRef = useRef<HTMLElement | null>(null);
   const [bubbleSize, setBubbleSize] = useState({ width: 0, height: 0 });
   const tail = `${String(speechBubblePointerDepth())}px`;
@@ -78,8 +74,8 @@ export function SpeechBubble({
     const updateSize = () => {
       const rendered = bubble.getBoundingClientRect();
       setBubbleSize({
-        // Clip-path coordinates live in the unzoomed layout space. Measuring
-        // the rendered bounds without removing zoom applies it twice.
+        // SVG silhouette coordinates live in the unzoomed layout space.
+        // Measuring the rendered bounds without removing zoom applies it twice.
         width:
           rendered.width > 0 ? rendered.width / bubbleZoom : bubble.offsetWidth,
         height:
@@ -113,19 +109,19 @@ export function SpeechBubble({
             padding: `${SPEECH_CONTENT_PADDING} ${SPEECH_CONTENT_PADDING} ${SPEECH_CONTENT_PADDING} calc(${tail} + ${SPEECH_CONTENT_PADDING})`,
           };
 
+  const glassBodyLayout: CSSProperties =
+    pointerPlacement === "top-left"
+      ? { top: tail, right: 0, bottom: 0, left: 0 }
+      : pointerPlacement === "bottom-left"
+        ? { top: 0, right: 0, bottom: tail, left: 0 }
+        : { top: 0, right: 0, bottom: 0, left: tail };
+
   const bubbleStyle: CSSProperties = {
     position: "relative",
-    ...glassSurfaceStyle({ radius: null }),
-    background: SPEECH_GLASS_BACKGROUND,
-    // The clipped SVG path owns the visible rim; a CSS border would trace the
-    // rectangular border box instead of the bubble and pointer silhouette.
     border: "none",
     boxSizing: "border-box",
     ...pointerLayout,
     boxShadow: "none",
-    clipPath: path !== null ? `url(#${clipId})` : undefined,
-    WebkitClipPath: path !== null ? `url(#${clipId})` : undefined,
-    filter: `drop-shadow(${token("--shadow-md")})`,
     color: token("--text-primary"),
     zoom: bubbleZoom,
   };
@@ -138,6 +134,19 @@ export function SpeechBubble({
       data-testid={testId}
       style={bubbleStyle}
     >
+      <div
+        aria-hidden="true"
+        data-speech-bubble-glass-body=""
+        style={{
+          position: "absolute",
+          ...glassSurfaceStyle(),
+          ...glassBodyLayout,
+          background: token("--glass-sheen"),
+          border: "none",
+          boxShadow: "none",
+          pointerEvents: "none",
+        }}
+      />
       {path !== null && (
         <svg
           aria-hidden="true"
@@ -147,18 +156,14 @@ export function SpeechBubble({
             position: "absolute",
             inset: 0,
             display: "block",
+            filter: `drop-shadow(${token("--shadow-md")})`,
             pointerEvents: "none",
           }}
         >
-          <defs>
-            <clipPath id={clipId} clipPathUnits="userSpaceOnUse">
-              <path d={path} />
-            </clipPath>
-          </defs>
           <path
             d={path}
             data-speech-bubble-rim=""
-            fill="none"
+            fill={SPEECH_GLASS_FILL}
             stroke={token("--glass-rim")}
             strokeWidth={2}
             vectorEffect="non-scaling-stroke"
