@@ -54,7 +54,7 @@ describe("BattleContextMenu", () => {
     act(() => root.unmount());
   });
 
-  it("delegates clamped card actions and nested commands to ContextActionMenu", () => {
+  it("delegates clamped card actions and nested commands to CommandMenu", () => {
     const board = state();
     const battleCardId = board.sides.player.hand.find((id) => board.cardInstances[id]?.definition.battleCardKind === "character");
     if (battleCardId === undefined) throw new Error("expected character");
@@ -62,7 +62,7 @@ describe("BattleContextMenu", () => {
     const host = document.createElement("div"); document.body.append(host);
     const root = createRoot(host);
     act(() => root.render(<BattleContextMenu battleCardId={battleCardId} sourceSurface="inspector" state={board} x={9999} y={9999} onClose={() => undefined} onCommand={onCommand} onOpenNoteEditor={() => undefined} />));
-    const menu = document.querySelector('[data-context-action-menu]');
+    const menu = document.querySelector('[data-command-menu-context]');
     expect(menu).not.toBeNull();
     expect(menu?.textContent).toContain("Player · Hand");
     const status = [...document.querySelectorAll<HTMLElement>('[role="menuitem"]')].find((element) => element.textContent?.includes("Status"));
@@ -195,7 +195,7 @@ describe("BattleContextMenu", () => {
       />,
     ));
 
-    expect(document.querySelector("[data-context-action-menu]")?.textContent)
+    expect(document.querySelector("[data-command-menu-context]")?.textContent)
       .not.toContain("Add Figments");
     act(() => root.unmount());
   });

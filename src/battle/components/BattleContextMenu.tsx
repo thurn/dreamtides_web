@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import {
-  ContextActionMenu,
+  CommandMenu,
   type CommandMenuItem,
-} from "../../cumulus/components/overlay/CommandMenus";
+} from "../../cumulus/components/overlay/CommandMenu";
 import { GLYPHS, type Glyph } from "../../cumulus/primitives/glyph";
 import type {
   BattleCommand,
@@ -419,13 +419,16 @@ export function BattleContextMenu({
     ? `${formatSideLabel(location.side)} · ${formatZoneLabel(location.zone)} ${location.slotId}`
     : `${formatSideLabel(location.side)} · ${formatZoneLabel(location.zone)}`;
   return (
-    <ContextActionMenu
-      title={card.definition.name}
-      subtitle={locationLabel}
-      actions={toCommandMenuItems(items, battleCardId)}
-      anchor={{ kind: "point", x, y }}
-      onDismiss={onClose}
-      testId="battle-context-menu"
+    <CommandMenu
+      model={{
+        kind: "context",
+        title: card.definition.name,
+        subtitle: locationLabel,
+        actions: toCommandMenuItems(items, battleCardId),
+        anchor: { kind: "point", x, y },
+        onDismiss: onClose,
+        testId: "battle-context-menu",
+      }}
     />
   );
 

@@ -2,8 +2,8 @@
 
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { CornerUtilityMenu, ContextActionMenu, type CommandMenuItem } from "./CommandMenus";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { CommandMenu, type CommandMenuItem } from "./CommandMenu";
 import { GLYPHS } from "../../primitives/glyph";
 
 (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
@@ -25,16 +25,33 @@ function mount(node: React.ReactNode): { root: Root; container: HTMLDivElement }
   return { root, container };
 }
 
+beforeEach(() => {
+  window.matchMedia = (media: string) => ({
+    matches: media.includes("min-width"),
+    media,
+    onchange: null,
+    addEventListener() {},
+    removeEventListener() {},
+    addListener() {},
+    removeListener() {},
+    dispatchEvent: () => false,
+  });
+});
+
 afterEach(() => { document.body.innerHTML = ""; });
 
-describe("CornerUtilityMenu", () => {
+describe("CommandMenu app-chrome model", () => {
   it("opens root actions, drills into a submenu, and invokes a leaf", () => {
     const command = vi.fn();
     const opened = vi.fn();
-    const { root } = mount(<CornerUtilityMenu trigger={{ glyph: GLYPHS.menu, label: "Open utilities", corner: "topStart" }} actions={[
-      ...actions.slice(0, 2),
-      { kind: "group", id: "more", label: "More", glyph: GLYPHS.chevronRight, onOpen: opened, actions: [{ kind: "action", id: "load", label: "Load", glyph: GLYPHS.arrowRight, onCommand: command }] },
-    ]} />);
+    const { root } = mount(<CommandMenu model={{
+      kind: "appChrome",
+      trigger: { glyph: GLYPHS.menu, label: "Open utilities", corner: "topStart" },
+      actions: [
+        ...actions.slice(0, 2),
+        { kind: "group", id: "more", label: "More", glyph: GLYPHS.chevronRight, onOpen: opened, actions: [{ kind: "action", id: "load", label: "Load", glyph: GLYPHS.arrowRight, onCommand: command }] },
+      ],
+    }} />);
     act(() => document.querySelector<HTMLButtonElement>('[aria-label="Open utilities"]')?.click());
     expect(document.body.textContent).toContain("Save");
     act(() => [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.includes("More"))?.click());
@@ -47,7 +64,11 @@ describe("CornerUtilityMenu", () => {
 
   it("dismisses on Escape and keeps disabled commands inert", async () => {
     const command = vi.fn();
-    const { root } = mount(<CornerUtilityMenu trigger={{ glyph: GLYPHS.menu, label: "Open utilities", corner: "topEnd" }} actions={[{ kind: "action", id: "disabled", label: "Unavailable", glyph: GLYPHS.lock, disabled: true, onCommand: command }]} />);
+    const { root } = mount(<CommandMenu model={{
+      kind: "appChrome",
+      trigger: { glyph: GLYPHS.menu, label: "Open utilities", corner: "topEnd" },
+      actions: [{ kind: "action", id: "disabled", label: "Unavailable", glyph: GLYPHS.lock, disabled: true, onCommand: command }],
+    }} />);
     act(() => document.querySelector<HTMLButtonElement>('[aria-label="Open utilities"]')?.click());
     act(() => [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.includes("Unavailable"))?.click());
     expect(command).not.toHaveBeenCalled();
@@ -57,10 +78,41 @@ describe("CornerUtilityMenu", () => {
   });
 });
 
-describe("ContextActionMenu", () => {
+describe("CommandMenu context model", () => {
+  it("presents narrow context commands in a root-level dialog", () => {
+    window.matchMedia = (media: string) => ({
+      matches: false,
+      media,
+      onchange: null,
+      addEventListener() {},
+      removeEventListener() {},
+      addListener() {},
+      removeListener() {},
+      dispatchEvent: () => false,
+    });
+    const { root } = mount(<CommandMenu model={{
+      kind: "context",
+      title: "Card",
+      actions,
+      anchor: { kind: "point", x: 12, y: 12 },
+      onDismiss: () => undefined,
+    }} />);
+    expect(document.querySelector('[role="dialog"]')?.parentElement).toBe(document.body);
+    expect(document.querySelector('[data-command-menu-context]')).toBeNull();
+    act(() => root.unmount());
+  });
+
   it("owns outside dismissal and keyboard submenu navigation", async () => {
     const onDismiss = vi.fn();
-    const { root } = mount(<ContextActionMenu title="Card" subtitle="Player · Hand" actions={actions} anchor={{ kind: "point", x: 12, y: 12 }} onDismiss={onDismiss} />);
+    const { root } = mount(<CommandMenu model={{
+      kind: "context",
+      title: "Card",
+      subtitle: "Player · Hand",
+      actions,
+      anchor: { kind: "point", x: 12, y: 12 },
+      onDismiss,
+    }} />);
+    expect(document.querySelector('[data-command-menu-context]')?.parentElement).toBe(document.body);
     const menu = document.querySelector<HTMLElement>('[role="menu"]');
     await act(() => menu?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true })));
     await act(() => menu?.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true })));
@@ -88,7 +140,13 @@ describe("ContextActionMenu", () => {
         onCommand,
       }],
     }];
-    const { root } = mount(<ContextActionMenu title="Card" actions={integerActions} anchor={{ kind: "point", x: 12, y: 12 }} onDismiss={onDismiss} />);
+    const { root } = mount(<CommandMenu model={{
+      kind: "context",
+      title: "Card",
+      actions: integerActions,
+      anchor: { kind: "point", x: 12, y: 12 },
+      onDismiss,
+    }} />);
     act(() => [...document.querySelectorAll<HTMLButtonElement>('[role="menuitem"]')]
       .find((button) => button.textContent?.includes("Add Spark"))?.click());
 

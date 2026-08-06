@@ -1,4 +1,4 @@
-// Strict command-menu offerings for app-corner utilities and card/pointer actions.
+// The strict command-menu offering for app chrome and card/pointer actions.
 // These are interactive overlays, deliberately separate from InfoCard's
 // pointer-transparent entity-reveal contract.
 
@@ -88,47 +88,85 @@ export type CommandMenuItem =
 
 type CommandMenuInteractiveItem = CommandMenuAction | CommandMenuGroup;
 
-/** The fixed app-chrome trigger for a corner utility menu. */
-export interface CornerUtilityMenuTrigger {
+/** The fixed trigger rendered by an app-chrome command menu. */
+export interface CommandMenuTriggerModel {
   glyph: Glyph;
   label: string;
   corner: "topStart" | "topEnd";
 }
 
-/** Props for {@link CornerUtilityMenu}. */
-export interface CornerUtilityMenuProps {
-  /** The fixed IconButton trigger rendered by the component. */
-  trigger: CornerUtilityMenuTrigger;
-  /** Root utility commands and their nested groups. */
-  actions: readonly CommandMenuItem[];
-  /** Optional transient result reported by the app-shell command controller. */
-  status?: CornerUtilityMenuStatus;
-  /** Lifts the fixed trigger above an app-shell full-screen overlay. */
-  elevated?: boolean;
-  /** Optional test selector for the trigger. */
-  testId?: string;
-}
-
-/** A short app-shell command result shown beneath the fixed utility trigger. */
-export interface CornerUtilityMenuStatus {
+/** A short command result presented beneath an app-chrome trigger. */
+export interface CommandMenuStatusModel {
   /** Player-facing status copy. */
   text: string;
   /** Optional test selector for the status announcement. */
   testId?: string;
 }
 
+/** A command menu installed in the fixed journey app chrome. */
+export interface CommandMenuAppChromeModel {
+  kind: "appChrome";
+  /** The fixed IconButton trigger rendered by the component. */
+  trigger: CommandMenuTriggerModel;
+  /** Root utility commands and their nested groups. */
+  actions: readonly CommandMenuItem[];
+  /** Optional transient result reported by the app-shell command controller. */
+  status?: CommandMenuStatusModel;
+  /** Lifts the fixed trigger above an app-shell full-screen overlay. */
+  elevated?: boolean;
+  /** Optional test selector for the trigger. */
+  testId?: string;
+}
+
+/** Anchor supplied by a pointer interaction or a card/source rectangle. */
+export type CommandMenuAnchor =
+  | { kind: "point"; x: number; y: number }
+  | { kind: "sourceRect"; rect: DOMRectReadOnly };
+
+/** A command menu opened for an activated card or pointer target. */
+export interface CommandMenuContextModel {
+  kind: "context";
+  /** Describes the card/pointer subject in the menu's header. */
+  title: string;
+  /** Optional structured secondary location/context copy. */
+  subtitle?: string;
+  /** Commands available for the activated card or pointer target. */
+  actions: readonly CommandMenuItem[];
+  /** Semantic location used to anchor the desktop pointer menu. */
+  anchor: CommandMenuAnchor;
+  /** Called after a leaf command, outside dismissal, or Escape. */
+  onDismiss: () => void;
+  /** Optional test selector for the root offering. */
+  testId?: string;
+}
+
+/** Complete data for either supported command-menu presentation. */
+export type CommandMenuModel = CommandMenuAppChromeModel | CommandMenuContextModel;
+
+/** Props for {@link CommandMenu}. */
+export interface CommandMenuProps {
+  /** Commands and the semantic presentation selected for this offering. */
+  model: CommandMenuModel;
+}
+
 /**
- * The app-chrome command offering: a fixed `IconButton` trigger and an
- * inward-opening hierarchy. Use this for journey utilities (save, load, logs,
- * and route actions); use ContextActionMenu for a pointer/card action instead.
+ * The single Cumulus command offering. Its model selects fixed app chrome or
+ * an activated card/pointer context while preserving one typed action model.
  */
-export function CornerUtilityMenu({
-  trigger,
-  actions,
-  status,
-  elevated = false,
-  testId,
-}: CornerUtilityMenuProps): ReactElement {
+export function CommandMenu({ model }: CommandMenuProps): ReactElement {
+  return model.kind === "appChrome"
+    ? <AppChromeCommandMenu model={model} />
+    : <ContextCommandMenu model={model} />;
+}
+
+function AppChromeCommandMenu({ model }: { model: CommandMenuAppChromeModel }): ReactElement {
+  const {
+    trigger,
+    actions,
+    status,
+    elevated = false,
+    testId,
+  } = model;
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const hostRef = useRef<HTMLDivElement>(null);
@@ -209,41 +247,8 @@ export function CornerUtilityMenu({
   return elevated ? createPortal(menu, document.body) : menu;
 }
 
-/** Anchor supplied by a pointer interaction or a card/source rectangle. */
-export type ContextActionMenuAnchor =
-  | { kind: "point"; x: number; y: number }
-  | { kind: "sourceRect"; rect: DOMRectReadOnly };
-
-/** Props for {@link ContextActionMenu}. */
-export interface ContextActionMenuProps {
-  /** Describes the card/pointer subject in the menu's header. */
-  title: string;
-  /** Optional structured secondary location/context copy. */
-  subtitle?: string;
-  /** Commands available for the activated card or pointer target. */
-  actions: readonly CommandMenuItem[];
-  /** Semantic location used to anchor the desktop pointer menu. */
-  anchor: ContextActionMenuAnchor;
-  /** Called after a leaf command, outside dismissal, or Escape. */
-  onDismiss: () => void;
-  /** Optional test selector for the root offering. */
-  testId?: string;
-}
-
-/**
- * The card/pointer command offering. Desktop presentation is a clamped,
- * keyboard-navigable pointer menu; narrow presentation is a GlassDialog sheet
- * with the same typed hierarchy. It owns focus, dismissal, collision handling,
- * and all material/row treatment.
- */
-export function ContextActionMenu({
-  title,
-  subtitle,
-  actions,
-  anchor,
-  onDismiss,
-  testId,
-}: ContextActionMenuProps): ReactElement {
+function ContextCommandMenu({ model }: { model: CommandMenuContextModel }): ReactElement {
+  const { title, subtitle, actions, anchor, onDismiss, testId } = model;
   const isDesktop = useIsDesktop();
   const menuRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState<{ left: number; top: number } | null>(null);
@@ -282,18 +287,19 @@ export function ContextActionMenu({
   }, [isDesktop, onDismiss]);
 
   if (!isDesktop) {
-    return (
+    return createPortal(
       <GlassDialog title={title} subtitle={subtitle} closeLabel="Close actions" onClose={onDismiss}>
         <HierarchicalMenu items={actions} mobile onDismiss={onDismiss} />
-      </GlassDialog>
+      </GlassDialog>,
+      document.body,
     );
   }
 
-  return (
+  return createPortal(
     <div
       ref={menuRef}
       className="cumulus"
-      data-context-action-menu=""
+      data-command-menu-context=""
       data-testid={testId}
       style={{
         position: "fixed",
@@ -308,7 +314,8 @@ export function ContextActionMenu({
         {subtitle !== undefined && <span style={{ font: token("--t-caption"), color: token("--text-on-glass-muted") }}>{subtitle}</span>}
       </div>
       <HierarchicalMenu items={actions} onDismiss={onDismiss} />
-    </div>
+    </div>,
+    document.body,
   );
 }
 

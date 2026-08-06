@@ -371,18 +371,31 @@ export function renderComponentMarkdown(doc, props, consumerCount) {
       );
     }
     for (const prop of props) {
-      if (!prop.nested || !prop.nested.fields?.length) continue;
+      if (!prop.nested) continue;
+      const fields = prop.nested.fields ?? [];
+      const variants = prop.nested.variants ?? [];
+      if (fields.length === 0 && variants.length === 0) continue;
       lines.push("");
       lines.push(
         `### ${codeSpan(prop.name)}: the ${codeSpan(prop.nested.name)} model`,
       );
-      lines.push("");
-      lines.push("| Field | Type | Optional | Description |");
-      lines.push("| --- | --- | --- | --- |");
-      for (const field of prop.nested.fields) {
-        lines.push(
-          `| ${codeSpan(field.name)} | ${codeSpan(tableCell(field.tsType))} | ${field.optional ? "yes" : "no"} | ${tableCell(field.description)} |`,
-        );
+
+      function appendFieldTable(modelFields) {
+        lines.push("");
+        lines.push("| Field | Type | Optional | Description |");
+        lines.push("| --- | --- | --- | --- |");
+        for (const field of modelFields) {
+          lines.push(
+            `| ${codeSpan(field.name)} | ${codeSpan(tableCell(field.tsType))} | ${field.optional ? "yes" : "no"} | ${tableCell(field.description)} |`,
+          );
+        }
+      }
+
+      if (fields.length > 0) appendFieldTable(fields);
+      for (const variant of variants) {
+        lines.push("");
+        lines.push(`#### ${codeSpan(variant.name)}`);
+        appendFieldTable(variant.fields);
       }
     }
   }

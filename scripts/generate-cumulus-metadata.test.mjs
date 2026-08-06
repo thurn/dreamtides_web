@@ -127,6 +127,24 @@ describe("extractPropMeta (Cumulus docgen)", () => {
     expect(models.nested.fields.length).toBe(3);
   });
 
+  it("expands every object branch of a discriminated model union", () => {
+    const variant = (nestedProps ?? []).find((p) => p.name === "variant");
+    expect(variant.nested.name).toBe("NestedFixtureVariant");
+    expect(variant.nested.fields).toBeUndefined();
+    expect(variant.nested.variants.map((entry) => entry.name)).toEqual([
+      "NestedFixturePrimaryVariant",
+      "NestedFixtureSecondaryVariant",
+    ]);
+    expect(variant.nested.variants[0].fields.map((field) => field.name)).toEqual([
+      "kind",
+      "label",
+      "count",
+    ]);
+    const muted = variant.nested.variants[1].fields.find((field) => field.name === "muted");
+    expect(muted.optional).toBe(true);
+    expect(muted.tsType).toBe("boolean");
+  });
+
   it("leaves a non-model prop without a nested field list", () => {
     // A plain boolean carries no nested shape; the key must be absent rather
     // than an empty object so downstream `meta.nested ? ...` checks stay simple.

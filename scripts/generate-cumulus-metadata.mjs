@@ -18,11 +18,15 @@
 //     description: string;     // JSDoc text; "" if none
 //     nested?: {               // present only when tsType names a project
 //       name: string;          //   object type (an interface/model); the props
-//       fields: {              //   table expands one level to show its fields.
+//       fields?: {             //   table expands one level to show its fields,
 //         name: string;
 //         tsType: string;
 //         optional: boolean;
 //         description: string;
+//       }[];
+//       variants?: {           //   or each object branch of a model union.
+//         name: string;
+//         fields: NestedField[];
 //       }[];
 //     };
 //   }
@@ -235,14 +239,9 @@ function buildNestedResolver(filePaths) {
     });
   }
 
-  function resolveNested(typeName) {
-    const node = declByName.get(typeName);
-    if (!node) return null;
-    const type = checker.getTypeAtLocation(node);
-    // Only object-like types have documentable members; a union / mapped alias
-    // (e.g. a string-literal union type alias) yields nothing useful here.
+  function fieldsForType(type, node) {
     const properties = checker.getPropertiesOfType(type);
-    if (!properties || properties.length === 0) return null;
+    if (!properties || properties.length === 0) return [];
     const fields = [];
     for (const symbol of properties) {
       const declaration = symbol.valueDeclaration ?? symbol.declarations?.[0];
@@ -266,6 +265,37 @@ function buildNestedResolver(filePaths) {
       });
     }
     return fields;
+  }
+
+  function resolveNested(typeName) {
+    const node = declByName.get(typeName);
+    if (!node) return null;
+    const type = checker.getTypeAtLocation(node);
+    if (type.isUnion()) {
+      const variants = type.types.map((variant) => {
+        const name = checker.typeToString(
+          variant,
+          node,
+          ts.TypeFormatFlags.NoTruncation,
+        );
+        const fields = fieldsForType(variant, node);
+        return { name, fields };
+      });
+      // Named branches make a durable public model vocabulary. Anonymous
+      // object/intersection branches can contain local paths and unwieldy
+      // implementation shapes, so retain their concise shared-field view.
+      if (
+        variants.length > 0
+        && variants.every((variant) => (
+          /^[A-Za-z_][A-Za-z0-9_]*$/.test(variant.name)
+          && variant.fields.length > 0
+        ))
+      ) {
+        return { variants };
+      }
+    }
+    const fields = fieldsForType(type, node);
+    return fields.length > 0 ? { fields } : null;
   }
 
   return resolveNested;
@@ -307,9 +337,9 @@ function normalizeProp(prop, resolveNested) {
   if (resolveNested && unionMembers.length === 0) {
     const typeName = nestedTypeNameFor(tsType);
     if (typeName) {
-      const fields = resolveNested(typeName);
-      if (fields && fields.length > 0) {
-        meta.nested = { name: typeName, fields };
+      const nested = resolveNested(typeName);
+      if (nested) {
+        meta.nested = { name: typeName, ...nested };
       }
     }
   }

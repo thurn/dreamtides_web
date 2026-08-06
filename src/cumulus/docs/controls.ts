@@ -20,6 +20,12 @@ export interface NestedField {
   description: string;
 }
 
+/** One documented object branch of a discriminated model union. */
+export interface NestedTypeVariantDoc {
+  name: string;
+  fields: NestedField[];
+}
+
 /**
  * The one-level shape of a prop whose type is a named project model object
  * (e.g. `model: AtlasNodeModel`), so the props table can document the fields the
@@ -28,7 +34,10 @@ export interface NestedField {
 export interface NestedTypeDoc {
   /** The model type's name, e.g. "AtlasNodeModel". */
   name: string;
-  fields: NestedField[];
+  /** Fields for a single object model. */
+  fields?: NestedField[];
+  /** Object branches for a discriminated model union. */
+  variants?: NestedTypeVariantDoc[];
 }
 
 /**

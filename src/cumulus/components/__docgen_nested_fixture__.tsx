@@ -15,6 +15,22 @@ export interface NestedFixtureModel {
   tone: "calm" | "loud";
 }
 
+interface NestedFixturePrimaryVariant {
+  kind: "primary";
+  label: string;
+  count: number;
+}
+
+interface NestedFixtureSecondaryVariant {
+  kind: "secondary";
+  label: string;
+  muted?: boolean;
+}
+
+type NestedFixtureVariant =
+  | NestedFixturePrimaryVariant
+  | NestedFixtureSecondaryVariant;
+
 interface NestedFixtureProps {
   /** The single model object. */
   model: NestedFixtureModel;
@@ -22,14 +38,16 @@ interface NestedFixtureProps {
   models: NestedFixtureModel[];
   /** A plain flag with no nested shape. */
   active: boolean;
+  /** A discriminated model union. */
+  variant: NestedFixtureVariant;
 }
 
 /**
  * A throwaway component used purely to validate nested-model extraction.
  */
-export function NestedFixture({ model, models, active }: NestedFixtureProps) {
+export function NestedFixture({ model, models, active, variant }: NestedFixtureProps) {
   return (
-    <div data-active={active} data-label={model.label}>
+    <div data-active={active} data-label={model.label} data-variant={variant.kind}>
       {models.length}
     </div>
   );

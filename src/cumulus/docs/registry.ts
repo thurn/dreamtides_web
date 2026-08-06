@@ -23,7 +23,7 @@ import { cardStatOrbDemo } from "./demos/card-stat-orb";
 import { cardTermDefinitionsDemo } from "./demos/card-term-definitions";
 import { characterDialogueDemo } from "./demos/character-dialogue";
 import { coopPresenceStatusDemo } from "./demos/coop-presence-status";
-import { commandMenusDemo, contextActionMenuDemo } from "./demos/command-menus";
+import { commandMenuDemo } from "./demos/command-menu";
 import { dreamAvatarAbilityTextDemo } from "./demos/dream-avatar-ability-text";
 import { dreamAvatarPortraitDemo } from "./demos/dream-avatar-portrait";
 import { dreamwellCardDemo } from "./demos/dreamwell-card";
@@ -166,8 +166,7 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   glassPanelDemo,
   glassDialogDemo,
   developerRailDemo,
-  commandMenusDemo,
-  contextActionMenuDemo,
+  commandMenuDemo,
   tutorialFeatureCalloutDemo,
   speechBubbleDemo,
   characterDialogueDemo,

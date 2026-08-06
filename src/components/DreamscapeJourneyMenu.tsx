@@ -6,7 +6,7 @@ import type { JourneyState } from "../types/journey";
 import { GLYPHS } from "../cumulus/primitives/glyph";
 import { useIsDesktop } from "../cumulus/screens/use-is-desktop";
 import { MENU_BUTTON_PX } from "../cumulus/screens/chrome-geometry";
-import { CornerUtilityMenu } from "../cumulus/components/overlay/CommandMenus";
+import { CommandMenu } from "../cumulus/components/overlay/CommandMenu";
 import {
   useJourneyUtilityMenuController,
   type JourneyUtilityMenuAction,
@@ -140,20 +140,22 @@ export function DreamscapeJourneyMenu({
   });
 
   return (
-    <CornerUtilityMenu
-      trigger={{
-        glyph: isDesktop ? GLYPHS.gear : GLYPHS.menu,
-        label: "Open menu",
-        corner: isDesktop ? "topEnd" : "topStart",
+    <CommandMenu
+      model={{
+        kind: "appChrome",
+        trigger: {
+          glyph: isDesktop ? GLYPHS.gear : GLYPHS.menu,
+          label: "Open menu",
+          corner: isDesktop ? "topEnd" : "topStart",
+        },
+        actions: model.actions,
+        status:
+          model.status === null
+            ? undefined
+            : { text: model.status, testId: "dreamscape-menu-status" },
+        elevated,
+        testId: "dreamscape-menu-button",
       }}
-      actions={model.actions}
-      status={
-        model.status === null
-          ? undefined
-          : { text: model.status, testId: "dreamscape-menu-status" }
-      }
-      elevated={elevated}
-      testId="dreamscape-menu-button"
     />
   );
 }

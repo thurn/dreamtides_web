@@ -113,7 +113,7 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
     },
     {
       name: "the strict command-menu offering may elevate app-chrome above an overlay",
-      filename: "src/cumulus/components/overlay/CommandMenus.tsx",
+      filename: "src/cumulus/components/overlay/CommandMenu.tsx",
       code: `import { createPortal } from "react-dom";
         createPortal(<div />, document.body);`,
     },

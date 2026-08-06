@@ -205,6 +205,39 @@ describe("renderComponentMarkdown", () => {
     expect(markdown).toContain('| `WidgetSize` = `"sm" \\| "md"` |');
   });
 
+  it("renders every branch of a discriminated model union", () => {
+    const markdown = renderComponentMarkdown(
+      doc,
+      [{
+        name: "model",
+        tsType: "WidgetModel",
+        unionMembers: [],
+        required: true,
+        defaultValue: null,
+        description: "",
+        nested: {
+          name: "WidgetModel",
+          variants: [
+            {
+              name: "PlainWidgetModel",
+              fields: [{ name: "kind", tsType: '"plain"', optional: false, description: "" }],
+            },
+            {
+              name: "FancyWidgetModel",
+              fields: [{ name: "sparkle", tsType: "boolean", optional: true, description: "Adds light." }],
+            },
+          ],
+        },
+      }],
+      1,
+    );
+    expect(markdown).toContain("`WidgetModel` model");
+    expect(markdown).toContain("#### `PlainWidgetModel`");
+    expect(markdown).toContain('| `kind` | `"plain"` | no |  |');
+    expect(markdown).toContain("#### `FancyWidgetModel`");
+    expect(markdown).toContain("| `sparkle` | `boolean` | yes | Adds light. |");
+  });
+
   it("does not repeat members when the type already spells the literals", () => {
     const markdown = renderComponentMarkdown(
       doc,

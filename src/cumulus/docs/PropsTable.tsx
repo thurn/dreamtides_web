@@ -8,7 +8,7 @@
 // empty table.
 
 import { token } from "../primitives/tokens";
-import type { NestedTypeDoc, PropMeta } from "./controls";
+import type { NestedField, NestedTypeDoc, PropMeta } from "./controls";
 import { metasFor } from "./metadata";
 
 const cellStyle: React.CSSProperties = {
@@ -134,7 +134,10 @@ export function formatPropType(
 // its own compact three-column layout (Field / Type / Description) that mirrors
 // the parent table's vocabulary.
 function NestedRow({ nested }: { nested: NestedTypeDoc }) {
-  const fieldCount = nested.fields.length;
+  const fieldCount = nested.fields?.length
+    ?? nested.variants?.reduce((total, variant) => total + variant.fields.length, 0)
+    ?? 0;
+  const variantCount = nested.variants?.length ?? 0;
   return (
     <tr>
       <td
@@ -163,62 +166,78 @@ function NestedRow({ nested }: { nested: NestedTypeDoc }) {
             <code style={{ ...codeStyle, color: token("--text-secondary") }}>
               {nested.name}
             </code>{" "}
-            fields ({fieldCount})
+            {variantCount > 0 ? `variants (${String(variantCount)})` : `fields (${String(fieldCount)})`}
           </summary>
-          <table
-            style={{
-              width: "100%",
-              minWidth: "360px",
-              borderCollapse: "collapse",
-              marginTop: token("--space-xs"),
-              font: token("--t-body-sm"),
-              color: token("--text-secondary"),
-            }}
-          >
-            <thead>
-              <tr>
-                <th style={nestedHeaderCellStyle}>Field</th>
-                <th style={nestedHeaderCellStyle}>Type</th>
-                <th style={nestedHeaderCellStyle}>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              {nested.fields.map((field) => (
-                <tr key={field.name}>
-                  <td
-                    style={{
-                      ...nestedCellStyle,
-                      color: token("--text-primary"),
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    <code style={codeStyle}>{field.name}</code>
-                    {field.optional ? (
-                      <span
-                        title="optional"
-                        style={{ color: token("--text-faint") }}
-                      >
-                        ?
-                      </span>
-                    ) : null}
-                  </td>
-                  <td style={nestedCellStyle}>
-                    <code style={codeStyle}>{field.tsType}</code>
-                  </td>
-                  <td style={nestedCellStyle}>
-                    {field.description === "" ? (
-                      <span style={{ color: token("--text-faint") }}>—</span>
-                    ) : (
-                      field.description
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {nested.fields !== undefined ? (
+            <NestedFieldsTable fields={nested.fields} />
+          ) : null}
+          {nested.variants?.map((variant) => (
+            <div key={variant.name} style={{ marginTop: token("--space-s") }}>
+              <code style={{ ...codeStyle, color: token("--text-secondary") }}>
+                {variant.name}
+              </code>
+              <NestedFieldsTable fields={variant.fields} />
+            </div>
+          ))}
         </details>
       </td>
     </tr>
+  );
+}
+
+function NestedFieldsTable({ fields }: { fields: NestedField[] }) {
+  return (
+    <table
+      style={{
+        width: "100%",
+        minWidth: "360px",
+        borderCollapse: "collapse",
+        marginTop: token("--space-xs"),
+        font: token("--t-body-sm"),
+        color: token("--text-secondary"),
+      }}
+    >
+      <thead>
+        <tr>
+          <th style={nestedHeaderCellStyle}>Field</th>
+          <th style={nestedHeaderCellStyle}>Type</th>
+          <th style={nestedHeaderCellStyle}>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {fields.map((field) => (
+          <tr key={field.name}>
+            <td
+              style={{
+                ...nestedCellStyle,
+                color: token("--text-primary"),
+                whiteSpace: "nowrap",
+              }}
+            >
+              <code style={codeStyle}>{field.name}</code>
+              {field.optional ? (
+                <span
+                  title="optional"
+                  style={{ color: token("--text-faint") }}
+                >
+                  ?
+                </span>
+              ) : null}
+            </td>
+            <td style={nestedCellStyle}>
+              <code style={codeStyle}>{field.tsType}</code>
+            </td>
+            <td style={nestedCellStyle}>
+              {field.description === "" ? (
+                <span style={{ color: token("--text-faint") }}>—</span>
+              ) : (
+                field.description
+              )}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
 

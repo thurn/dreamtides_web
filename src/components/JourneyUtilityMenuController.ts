@@ -14,7 +14,7 @@ import type {
   CommandMenuAction,
   CommandMenuGroup,
   CommandMenuItem,
-} from "../cumulus/components/overlay/CommandMenus";
+} from "../cumulus/components/overlay/CommandMenu";
 import { GLYPHS } from "../cumulus/primitives/glyph";
 import type { JourneyState } from "../types/journey";
 
@@ -91,7 +91,7 @@ export interface JourneyUtilityMenuControllerOptions {
 /**
  * Owns saved-journey persistence, logging, log download, build reporting, and
  * transient status timing. The returned view model has no presentation escape
- * hatch and is rendered by `CornerUtilityMenu` in app chrome.
+ * hatch and is rendered by `CommandMenu` in app chrome.
  */
 export function useJourneyUtilityMenuController({
   actions,
