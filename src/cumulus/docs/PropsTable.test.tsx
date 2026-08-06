@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatPropType } from "./PropsTable";
+import { formatDocDescription, formatPropType } from "./PropsTable";
 
 describe("formatPropType", () => {
   it("shows string-literal values next to a named type alias", () => {
@@ -24,5 +24,15 @@ describe("formatPropType", () => {
     expect(
       formatPropType({ tsType: "boolean", unionMembers: [] }),
     ).toBe("boolean");
+  });
+});
+
+describe("formatDocDescription", () => {
+  it("renders JSDoc links as readable labels and normalizes source wrapping", () => {
+    expect(
+      formatDocDescription(
+        "Uses an {@link ArtRef} from the\ncomponent and an {@link Glyph | icon}.",
+      ),
+    ).toBe("Uses an ArtRef from the component and an icon.");
   });
 });

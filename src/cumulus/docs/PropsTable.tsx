@@ -53,12 +53,20 @@ export function PropsTable({ docName }: { docName: string }) {
       <table
         style={{
           width: "100%",
-          minWidth: "900px",
+          minWidth: "800px",
+          tableLayout: "fixed",
           borderCollapse: "collapse",
           font: token("--t-body-sm"),
           color: token("--text-secondary"),
         }}
       >
+        <colgroup>
+          <col style={{ width: "14%" }} />
+          <col style={{ width: "25%" }} />
+          <col style={{ width: "10.5%" }} />
+          <col style={{ width: "10.5%" }} />
+          <col style={{ width: "40%" }} />
+        </colgroup>
         <thead>
           <tr>
             <th style={headerCellStyle}>Prop</th>
@@ -83,10 +91,12 @@ function PropRow({ meta }: { meta: PropMeta }) {
     <>
       <tr>
         <td style={{ ...cellStyle, color: token("--text-primary") }}>
-          <code style={codeStyle}>{meta.name}</code>
+          <code style={{ ...codeStyle, overflowWrap: "anywhere" }}>
+            {meta.name}
+          </code>
         </td>
         <td style={cellStyle}>
-          <code style={{ ...codeStyle, whiteSpace: "nowrap" }}>
+          <code style={{ ...codeStyle, overflowWrap: "anywhere" }}>
             {formatPropType(meta)}
           </code>
         </td>
@@ -95,14 +105,16 @@ function PropRow({ meta }: { meta: PropMeta }) {
           {meta.defaultValue === null ? (
             <span style={{ color: token("--text-faint") }}>—</span>
           ) : (
-            <code style={codeStyle}>{meta.defaultValue}</code>
+            <code style={{ ...codeStyle, overflowWrap: "anywhere" }}>
+              {meta.defaultValue}
+            </code>
           )}
         </td>
         <td style={cellStyle}>
           {meta.description === "" ? (
             <span style={{ color: token("--text-faint") }}>—</span>
           ) : (
-            meta.description
+            formatDocDescription(meta.description)
           )}
         </td>
       </tr>
@@ -127,6 +139,20 @@ export function formatPropType(
   }
 
   return `${meta.tsType} = ${literals.join(" | ")}`;
+}
+
+/**
+ * Render docgen's plain-text descriptions without exposing JSDoc markup. Source
+ * wrapping is normalized because the table owns the readable line length.
+ */
+export function formatDocDescription(description: string): string {
+  return description
+    .replace(
+      /\{@link(?:code|plain)?\s+([^}\s|]+)(?:\s*\|\s*|\s+)?([^}]*)\}/g,
+      (_match, target: string, label: string) => label.trim() || target,
+    )
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 // A full-width row beneath a prop that carries a nested model object. The
@@ -191,12 +217,18 @@ function NestedFieldsTable({ fields }: { fields: NestedField[] }) {
       style={{
         width: "100%",
         minWidth: "360px",
+        tableLayout: "fixed",
         borderCollapse: "collapse",
         marginTop: token("--space-xs"),
         font: token("--t-body-sm"),
         color: token("--text-secondary"),
       }}
     >
+      <colgroup>
+        <col style={{ width: "22%" }} />
+        <col style={{ width: "38%" }} />
+        <col style={{ width: "40%" }} />
+      </colgroup>
       <thead>
         <tr>
           <th style={nestedHeaderCellStyle}>Field</th>
@@ -211,7 +243,7 @@ function NestedFieldsTable({ fields }: { fields: NestedField[] }) {
               style={{
                 ...nestedCellStyle,
                 color: token("--text-primary"),
-                whiteSpace: "nowrap",
+                overflowWrap: "anywhere",
               }}
             >
               <code style={codeStyle}>{field.name}</code>
@@ -225,13 +257,15 @@ function NestedFieldsTable({ fields }: { fields: NestedField[] }) {
               ) : null}
             </td>
             <td style={nestedCellStyle}>
-              <code style={codeStyle}>{field.tsType}</code>
+              <code style={{ ...codeStyle, overflowWrap: "anywhere" }}>
+                {field.tsType}
+              </code>
             </td>
             <td style={nestedCellStyle}>
               {field.description === "" ? (
                 <span style={{ color: token("--text-faint") }}>—</span>
               ) : (
-                field.description
+                formatDocDescription(field.description)
               )}
             </td>
           </tr>
