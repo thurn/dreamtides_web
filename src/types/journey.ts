@@ -581,7 +581,8 @@ export interface StarwayStairsSiteRuntime {
   /** One-based game number within this site visit. */
   roundNumber: number;
   isFarpoint: boolean;
-  entryCost: number;
+  /** Essence paid for each tier draw in this round. */
+  wagerAmount: number;
   /** One independent full-deck commitment for each tier. */
   shuffleCommitments: string[];
   committedCards: StandardPlayingCard[];

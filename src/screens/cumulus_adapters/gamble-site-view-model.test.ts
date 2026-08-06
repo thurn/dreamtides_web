@@ -369,7 +369,7 @@ const STARWAY_RUNTIME: StarwayStairsSiteRuntime = {
   rulesVersion: "fixture-starway-rules",
   roundNumber: 1,
   isFarpoint: false,
-  entryCost: 10,
+  wagerAmount: 10,
   shuffleCommitments: ["tier-1", "tier-2", "tier-3"],
   committedCards: [
     { rank: "3", suit: "clubs" },
@@ -420,7 +420,7 @@ describe("gamble-site-view-model — Starway Stairs", () => {
         state: "future",
       },
     ]);
-    expect(view.canAffordEntry).toBe(true);
+    expect(view.canAffordWager).toBe(true);
     expect(view.canPlayAgain).toBe(true);
     expect(view.cashOutReward).toBeNull();
   });

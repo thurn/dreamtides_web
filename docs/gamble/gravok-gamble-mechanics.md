@@ -69,7 +69,7 @@ flow.
 | --- | --- | --- |
 | Gravok’s Three-Gate Wager | Each wager costs 50 Essence. | The wager costs 0 Essence. |
 | Tidemark Ladder Climb | Attempts cost 15/25/40/60 Essence. | Attempts cost 10/20/30/45 Essence. |
-| Starway Stairs | Starting the climb costs 10 Essence. | Starting the climb costs 0 Essence. |
+| Starway Stairs | Each tier draw costs 10 Essence. | Each tier draw costs 0 Essence. |
 | Four-Suit Reprise | Each draw costs 25 Essence. | Each draw costs 15 Essence. |
 | Twenty-One | The deal costs 50 Essence; each hit costs 10 Essence. | Hits cost 0 Essence. |
 
@@ -135,14 +135,13 @@ Essence. The odds and Dreamsign reward are unchanged.
 
 ## 3. Starway Stairs
 
-Starway Stairs is a three-tier push-your-luck game. Starting costs 10 Essence.
-A safe draw earns the prize for that tier. After the first or second safe draw,
-the player may take that prize or risk it on the next tier. A bust
+Starway Stairs is a three-tier push-your-luck game. Each tier draw costs 10
+Essence. A safe draw earns the prize for that tier. After the first or second
+safe draw, the player may take that prize or risk it on the next tier. A bust
 loses the unclaimed prize and ends the game. The third safe draw pays
 automatically. A terminal round offers `Play Again` beside `Leave` while a
 retry remains. The player may retry twice, for a maximum of three independent
-rounds during one visit; each round charges its own starting cost when `Bet`
-is pressed.
+rounds during one visit. A complete three-tier climb costs 30 Essence.
 
 The UI lists all three tier squircles before play, each showing the minimum
 safe draw (`Draw 3+`, `Draw 5+`, or `Draw 8+`) and prize. The current tier uses
@@ -167,7 +166,7 @@ unclaimed prize.
 
 ### Farpoint Station
 
-Starting the climb costs 0 Essence. The bust ranges, odds, and prizes are
+Every tier draw costs 0 Essence. The bust ranges, odds, and prizes are
 unchanged.
 
 ## 4. Four-Suit Reprise

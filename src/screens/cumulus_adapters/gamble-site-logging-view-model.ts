@@ -69,7 +69,7 @@ export function logGamblePrepared(
         roundNumber: runtime.roundNumber,
         playerDecision: runtime.roundNumber === 1 ? "initial" : "play_again",
         isFarpoint: runtime.isFarpoint,
-        entryCost: runtime.entryCost,
+        wagerAmount: runtime.wagerAmount,
         shuffleCommitments: runtime.shuffleCommitments,
         tiers: STARWAY_STAIRS_TIERS.map((tier) => ({
           tierNumber: tier.tierNumber,
@@ -163,7 +163,7 @@ export function logGambleResolved(
         bustOddsNumerator: tier.bustOddsNumerator,
         oddsDenominator: tier.oddsDenominator,
         highestBustRank: tier.highestBustRank,
-        payment: result.tierNumber === 1 ? runtime.entryCost : 0,
+        payment: runtime.wagerAmount,
         revealedCard: result.card,
         busted: result.busted,
         prizeAtRisk: tier.essenceReward,
@@ -238,7 +238,7 @@ export function logGambleSettled(
         terminalReason: runtime.terminalReason,
         prizeAtRisk: starwayStairsTierRule(result.tierNumber).essenceReward,
         prizeAwarded: runtime.prizeAwarded,
-        entryCost: result.tierNumber === 1 ? runtime.entryCost : 0,
+        payment: runtime.wagerAmount,
       },
     );
     return;

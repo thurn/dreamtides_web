@@ -5,8 +5,8 @@ import type {
 import type { StarwayStairsSiteRuntime } from "../types/journey";
 import { STANDARD_PLAYING_CARD_RANKS } from "./gravok-wager";
 
-export const STARWAY_STAIRS_RULES_VERSION = "starway-stairs-v2";
-export const STARWAY_STAIRS_ENTRY_COST = 10;
+export const STARWAY_STAIRS_RULES_VERSION = "starway-stairs-v3";
+export const STARWAY_STAIRS_WAGER_AMOUNT = 10;
 export const STARWAY_STAIRS_MAX_RETRIES = 2;
 
 export interface StarwayStairsTierRule {

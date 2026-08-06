@@ -435,7 +435,7 @@ export function replaceTidemarkLadderClimbDreamsign(
   );
 }
 
-/** Pay the entry fee, when applicable, and reveal the current Starway tier. */
+/** Pay the tier wager, when applicable, and reveal the current Starway tier. */
 export function drawStarwayStairs(
   journey: JourneyState,
   payload: Record<string, unknown>,
@@ -451,11 +451,10 @@ export function drawStarwayStairs(
   const commitment = runtime.shuffleCommitments[tierNumber - 1];
   if (card === undefined || commitment === undefined) return null;
 
-  const cost = tierNumber === 1 ? runtime.entryCost : 0;
-  if (journey.essence < cost) return null;
+  if (journey.essence < runtime.wagerAmount) return null;
   const busted = rankBustsStarwayStairsTier(card.rank, tierNumber);
   return withRuntime(
-    { ...journey, essence: journey.essence - cost },
+    { ...journey, essence: journey.essence - runtime.wagerAmount },
     siteId,
     {
       ...runtime,

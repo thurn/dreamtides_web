@@ -620,7 +620,7 @@ function starwayRuntime(
     rulesVersion: "fixture-starway-rules",
     roundNumber: 1,
     isFarpoint: false,
-    entryCost: 10,
+    wagerAmount: 10,
     shuffleCommitments: ["tier-1", "tier-2", "tier-3"],
     committedCards: [...cards],
     results: [],
@@ -675,7 +675,7 @@ describe("Starway Stairs", () => {
     { rank: "8", suit: "hearts" },
   ];
 
-  it("charges only the entry tier and banks a settled safe prize", () => {
+  it("charges the first tier and banks a settled safe prize", () => {
     const firstDraw = drawStarway(starwayStateWith(safeCards));
     expect(firstDraw.outcome).toBe("applied");
     expect(firstDraw.state.journey.essence).toBe(190);
@@ -711,11 +711,11 @@ describe("Starway Stairs", () => {
       ).state,
     );
     const secondDraw = drawStarway(firstSettled.state);
-    expect(secondDraw.state.journey.essence).toBe(190);
+    expect(secondDraw.state.journey.essence).toBe(180);
     const busted = settleStarway(secondDraw.state);
 
     expect(busted.outcome).toBe("applied");
-    expect(busted.state.journey.essence).toBe(190);
+    expect(busted.state.journey.essence).toBe(180);
     expect(busted.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       terminalReason: "bust",
       prizeAwarded: 0,
@@ -729,10 +729,12 @@ describe("Starway Stairs", () => {
   it("automatically awards the top prize after the third safe reveal", () => {
     let state = starwayStateWith(safeCards);
     for (let tier = 0; tier < 3; tier += 1) {
-      state = settleStarway(drawStarway(state).state).state;
+      const drawn = drawStarway(state);
+      expect(drawn.state.journey.essence).toBe(190 - tier * 10);
+      state = settleStarway(drawn.state).state;
     }
 
-    expect(state.journey.essence).toBe(490);
+    expect(state.journey.essence).toBe(470);
     expect(state.journey.siteRuntime[SITE_ID]).toMatchObject({
       terminalReason: "top",
       prizeAwarded: 300,
@@ -741,7 +743,7 @@ describe("Starway Stairs", () => {
 
   it("starts for free at Farpoint Station", () => {
     const drawn = drawStarway(
-      starwayStateWith(safeCards, {}, { isFarpoint: true, entryCost: 0 }),
+      starwayStateWith(safeCards, {}, { isFarpoint: true, wagerAmount: 0 }),
     );
     expect(drawn.outcome).toBe("applied");
     expect(drawn.state.journey.essence).toBe(200);
@@ -751,6 +753,17 @@ describe("Starway Stairs", () => {
     const settled = settleStarway(drawStarway(starwayStateWith(safeCards)).state);
     const leave = apply(settled.state, "COMPLETE_SITE", { siteId: SITE_ID });
     expect(leave.outcome).toBe("bounced");
+  });
+
+  it("requires enough Essence before every climb", () => {
+    const firstSettled = settleStarway(
+      drawStarway(starwayStateWith(safeCards, { essence: 10 })).state,
+    );
+    expect(firstSettled.state.journey.essence).toBe(0);
+
+    const blockedClimb = drawStarway(firstSettled.state);
+    expect(blockedClimb.outcome).toBe("bounced");
+    expect(blockedClimb.state).toEqual(firstSettled.state);
   });
 
   it("bounces a stale cash-out commitment after a later safe tier", () => {
@@ -763,14 +776,14 @@ describe("Starway Stairs", () => {
       shuffleCommitment: "tier-1",
     });
     expect(staleCashOut.outcome).toBe("bounced");
-    expect(staleCashOut.state.journey.essence).toBe(190);
+    expect(staleCashOut.state.journey.essence).toBe(180);
     expect(staleCashOut.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       terminalReason: null,
       prizeAwarded: 0,
     });
   });
 
-  it("prepares an independent round and charges its entry only when betting", () => {
+  it("prepares an independent round and charges its first wager only when betting", () => {
     registerSiteContentProvider({
       openSite: () => ({
         runtime: starwayRuntime(safeCards, {

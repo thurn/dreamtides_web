@@ -33,9 +33,9 @@ import {
   TIDEMARK_STRONG_POOL_LIMIT,
 } from "../../data/tidemark-ladder-climb";
 import {
-  STARWAY_STAIRS_ENTRY_COST,
   STARWAY_STAIRS_RULES_VERSION,
   STARWAY_STAIRS_TIERS,
+  STARWAY_STAIRS_WAGER_AMOUNT,
 } from "../../data/starway-stairs";
 import { createDreamsign } from "../../data/dreamsigns";
 import { generateRewardSiteData } from "../../rewards/reward-generator";
@@ -267,7 +267,7 @@ function buildStarwayStairsRuntime(
     rulesVersion: STARWAY_STAIRS_RULES_VERSION,
     roundNumber: 1,
     isFarpoint: site.isEnhanced,
-    entryCost: site.isEnhanced ? 0 : STARWAY_STAIRS_ENTRY_COST,
+    wagerAmount: site.isEnhanced ? 0 : STARWAY_STAIRS_WAGER_AMOUNT,
     shuffleCommitments: commitments.map((entry) => entry.shuffleCommitment),
     committedCards: commitments.map((entry) => entry.card),
     results: [],

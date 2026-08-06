@@ -677,7 +677,7 @@ describe("createSiteContentProvider — Gamble", () => {
     expect(randomStarway?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "starway-stairs",
-      entryCost: 10,
+      wagerAmount: 10,
     });
     expect(forcedThreeGate?.runtime).toMatchObject({
       kind: "gamble",

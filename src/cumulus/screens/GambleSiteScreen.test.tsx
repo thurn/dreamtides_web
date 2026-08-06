@@ -82,8 +82,8 @@ const STARWAY_VIEW: StarwayStairsSiteView = {
   scene: null,
   isFarpoint: false,
   runtimeReady: true,
-  entryCost: 10,
-  canAffordEntry: true,
+  wagerAmount: 10,
+  canAffordWager: true,
   canPlayAgain: true,
   tiers: [
     {
@@ -916,6 +916,7 @@ describe("GambleSiteScreen — Starway Stairs", () => {
     const onCashOut = vi.fn();
     const safeView: StarwayStairsSiteView = {
       ...STARWAY_VIEW,
+      canAffordWager: false,
       tiers: STARWAY_VIEW.tiers.map((tier) =>
         tier.tierNumber === 1
           ? {
@@ -972,9 +973,16 @@ describe("GambleSiteScreen — Starway Stairs", () => {
     ).not.toBeNull();
     void act(() => vi.advanceTimersByTime(4_000));
     expect(container.querySelectorAll("[data-starway-tier-button]")).toHaveLength(1);
+    const climb = container.querySelector<HTMLButtonElement>(
+      '[data-testid="gamble-starway-tier-2"]',
+    );
+    expect(climb).not.toBeNull();
+    expect(climb?.textContent).not.toContain("·");
     expect(
-      container.querySelector('[data-starway-tier-button="2"]'),
+      climb?.querySelector("[data-glass-button-essence-value]"),
     ).not.toBeNull();
+    expect(climb?.querySelector("[data-glass-button-essence-cost]")).toBeNull();
+    expect(climb?.getAttribute("aria-disabled")).toBe("true");
     const cashOut = container.querySelector<HTMLButtonElement>(
       '[data-testid="gamble-starway-cash-out"]',
     );

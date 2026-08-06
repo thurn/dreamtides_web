@@ -163,8 +163,8 @@ export interface StarwayStairsSiteView {
   scene: ArtRef | null;
   isFarpoint: boolean;
   runtimeReady: boolean;
-  entryCost: number;
-  canAffordEntry: boolean;
+  wagerAmount: number;
+  canAffordWager: boolean;
   canPlayAgain: boolean;
   tiers: readonly StarwayStairsTierView[];
   currentTierNumber: StarwayStairsTierNumber | null;
@@ -1549,18 +1549,16 @@ function StarwayStairsScreen({
                       label={currentTier.tierNumber === 1 ? "Bet" : "Climb"}
                       accessibilityLabel={
                         currentTier.tierNumber === 1
-                          ? `Bet ${String(view.entryCost)} Essence on Starway Stairs`
-                          : `Climb to tier ${String(currentTier.tierNumber)}`
+                          ? `Bet ${String(view.wagerAmount)} Essence on Starway Stairs`
+                          : `Climb to tier ${String(currentTier.tierNumber)} for ${String(view.wagerAmount)} Essence`
                       }
-                      essenceValue={
-                        currentTier.tierNumber === 1 ? view.entryCost : null
-                      }
+                      essenceValue={view.wagerAmount}
                       size={layout === "mobile" ? "compact" : "standard"}
                       variant="accent"
                       disabled={
                         decisionPending ||
                         !view.runtimeReady ||
-                        (currentTier.tierNumber === 1 && !view.canAffordEntry)
+                        !view.canAffordWager
                       }
                       testId={`gamble-starway-tier-${String(currentTier.tierNumber)}`}
                       onPress={() => {
