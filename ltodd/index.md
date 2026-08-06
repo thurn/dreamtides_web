@@ -23,9 +23,9 @@ and rules language; concrete deck entries and effective Cards; Dream Avatars;
 Dreamsigns; resources; persistent Card modifications; and created objects.
 Specific gameplay algorithms appear with the systems that use them.
 
-## Part II: The Cumulus Visual Language and Component Library
+## Part II: The Cumulus Design System
 
-Directory: `/cumulus_design`
+Directory: `/cumulus`
 
 The visual language shared by every Dreamtides experience: design philosophy,
 semantic visual vocabulary, color, typography, glyphs, spacing, shape,
@@ -52,7 +52,7 @@ consequences, state-dependent meaning, and particular arrangement.
 
 ## Part IV: Dream Journeys and the Dream Atlas
 
-Directory: `/dream_journeys`
+Directory: `/journeys`
 
 The complete run from the main menu and Dream Avatar selection to victory or
 failure: journey assembly, durable inventory, the Dreamscape-Site-Battle-Atlas
@@ -81,7 +81,7 @@ book.
 
 ## Part VI: The Journey Economy and Dream Sites
 
-Directory: `/site_economy`
+Directory: `/sites`
 
 The flow of value and the shared destination contract throughout a journey.
 Economy chapters define Essence, sources and sinks, prices, discounts, rerolls,
@@ -153,7 +153,7 @@ durable Battle consequences, and the handoff into the next journey state.
 
 ## Part XII: The Tutorial Journey and Teaching Experience
 
-Directory: `/tutorial_journey`
+Directory: `/tutorial`
 
 The teaching path from the main menu into a guided journey: the intentional
 loading primer, cinematic lesson, guided actions, tutorial Battle, transition

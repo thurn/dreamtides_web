@@ -61,11 +61,11 @@ Card and collectible components under `src/cumulus/components/` are common
 evidence sources.
 
 Keep acquisition and deck evolution in `/draft_deckbuilding`, Site
-transactions in `/site_economy`, and contest-time resolution in the Battle
+transactions in `/sites`, and contest-time resolution in the Battle
 parts. Cumulus owns the reusable visual and interaction contracts of the same
 objects.
 
-## `/cumulus_design` — Visual Language and Components
+## `/cumulus` — The Cumulus Design System
 
 Start with `src/cumulus/primitives/`, the material and control treatments under
 `src/cumulus/internal/`, and the reusable catalog under
@@ -90,7 +90,7 @@ stages, frames, and responsive composition.
 Gameplay parts own the consequences of an action and the state-dependent
 arrangement of a particular destination or contest.
 
-## `/dream_journeys` — Dream Journeys and the Dream Atlas
+## `/journeys` — Dream Journeys and the Dream Atlas
 
 Start with journey state and lifecycle rules under `src/state/` and
 `src/rules/journey/`, then follow the Atlas generator, affiliation logic,
@@ -99,7 +99,7 @@ and failure screens and adapters. Application-level progression and handoffs can
 help reconstruct the complete run.
 
 Destination mechanics belong in the Site parts, Battle mechanics in the Battle
-parts, and authored teaching restrictions in `/tutorial_journey`.
+parts, and authored teaching restrictions in `/tutorial`.
 
 ## `/draft_deckbuilding` — Draft Pools, Tides, and Deckbuilding
 
@@ -110,9 +110,9 @@ type-change logic and presentation for deck evolution.
 
 Historical pool derivation and experimental draft modes are outside the book.
 The stable authored Tide result is the canonical input. Site arrival, payment,
-and departure belong in `/site_economy`, even when the Site changes the deck.
+and departure belong in `/sites`, even when the Site changes the deck.
 
-## `/site_economy` — Journey Economy and Dream Sites
+## `/sites` — Journey Economy and Dream Sites
 
 Start with journey Site, shop, reward, and economy rules; pricing and reward
 helpers; authored economy data; and the Site screens and adapters for markets,
@@ -135,7 +135,7 @@ prepared choices, authored encounters, atomic outcomes, persistence, dialogue,
 and reward choreography.
 
 Underlying Card changes belong in `/draft_deckbuilding`; shared prices and
-rewards belong in `/site_economy`; future Battle modifiers also need coverage in
+rewards belong in `/sites`; future Battle modifiers also need coverage in
 the relevant Battle part.
 
 ## `/gamble_site` — Gamble
@@ -146,7 +146,7 @@ wagers, committed hidden outcomes, reveals, settlement, repeated rounds,
 cashing out, enhancement, payouts, Dreamsign awards, replacement, and reveal
 choreography.
 
-Shared Essence and Dreamsign economics remain in `/site_economy` and Game
+Shared Essence and Dreamsign economics remain in `/sites` and Game
 Object identity remains in `/game_foundations`.
 
 ## `/battle_setup` — Battle Setup and Opposition
@@ -186,9 +186,9 @@ accessible interaction, result presentation, rewards, and durable journey
 consequences.
 
 The legal and state-changing meaning of those interactions remains in
-`/battle_rules`; shared reward economics remain in `/site_economy`.
+`/battle_rules`; shared reward economics remain in `/sites`.
 
-## `/tutorial_journey` — Tutorial Journey and Teaching
+## `/tutorial` — Tutorial Journey and Teaching
 
 Start with tutorial-authored data and types, tutorial guidance rules, tutorial
 state hooks and controllers, front-door and loading presentation, and the
