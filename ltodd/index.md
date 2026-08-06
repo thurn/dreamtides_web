@@ -13,7 +13,7 @@ while linking to the primary chapter for the full design.
 
 ## Part I: Foundations of Dreamtides and Its Game Objects
 
-Directory: `/design`
+Directory: `/game_foundations`
 
 The player promise, nested journey and Battle loops, information disclosure,
 meaningful commitment, authored identity, deterministic randomness, durable
@@ -25,7 +25,7 @@ Specific gameplay algorithms appear with the systems that use them.
 
 ## Part II: The Cumulus Visual Language and Component Library
 
-Directory: `/cumulus`
+Directory: `/cumulus_design`
 
 The visual language shared by every Dreamtides experience: design philosophy,
 semantic visual vocabulary, color, typography, glyphs, spacing, shape,
@@ -39,7 +39,7 @@ objects, Battle objects, announcements, and journey chrome.
 
 ## Part III: Cumulus Interaction and Screen Composition
 
-Directory: `/interaction`
+Directory: `/cumulus_interaction`
 
 Activation, press feedback, selection, focus, hover, touch-hold, entity reveals,
 dismissal, dragging, reordering, keyboard and touch parity, modal behavior,
@@ -52,7 +52,7 @@ consequences, state-dependent meaning, and particular arrangement.
 
 ## Part IV: Dream Journeys and the Dream Atlas
 
-Directory: `/journey`
+Directory: `/dream_journeys`
 
 The complete run from the main menu and Dream Avatar selection to victory or
 failure: journey assembly, durable inventory, the Dreamscape-Site-Battle-Atlas
@@ -66,7 +66,7 @@ activities entered along the route.
 
 ## Part V: Draft Pools, Tides, and Building the Deck
 
-Directory: `/deckbuilding`
+Directory: `/draft_deckbuilding`
 
 The curated Card supply and the concrete deck it becomes during a journey. Draft
 Pool chapters define authored Tide membership, Tide roles, Dream Avatar
@@ -81,7 +81,7 @@ book.
 
 ## Part VI: The Journey Economy and Dream Sites
 
-Directory: `/sites`
+Directory: `/site_economy`
 
 The flow of value and the shared destination contract throughout a journey.
 Economy chapters define Essence, sources and sinks, prices, discounts, rerolls,
@@ -93,7 +93,7 @@ Dreamsign markets, Dreamsign Revelation, Random Site, and destination handoffs.
 
 ## Part VII: The Augury and Exploration Sites
 
-Directory: `/encounters`
+Directory: `/site_encounters`
 
 The two choice-driven destinations that transform the current journey into
 persistent consequences. Augury chapters define the journey snapshot used for
@@ -108,7 +108,7 @@ catalog supplies the individual Exploration scenes and actions.
 
 ## Part VIII: The Gamble Site
 
-Directory: `/gamble`
+Directory: `/gamble_site`
 
 Chance games that exchange committed hidden outcomes for escalating risk and
 reward. Chapters define the shared wager, commitment, reveal, and settlement
@@ -119,7 +119,7 @@ choreography.
 
 ## Part IX: Battle Setup, Participants, and Opposition
 
-Directory: `/opposition`
+Directory: `/battle_setup`
 
 The formation of a Battle before normal play begins: the player and opponent
 packages, Dream Avatars, decks, Dreamsigns, objectives, the Dreamwell supply,
@@ -130,7 +130,7 @@ actions, and the behavior that makes an opposing strategy legible.
 
 ## Part X: Battle Rules, Timing, and Resolution
 
-Directory: `/battle`
+Directory: `/battle_rules`
 
 The authoritative contest model from the first playable state to its terminal
 result: zones, the Battlefield, the Dreamwell, Energy, turns, timing, priority,
@@ -142,7 +142,7 @@ rules they govern.
 
 ## Part XI: Battle Presentation, Interaction, and Outcomes
 
-Directory: `/outcomes`
+Directory: `/battle_outcomes`
 
 The player-facing Battle experience and its return to the journey: Battlefield
 composition, participant status, Cards and Dreamwell objects, selection and
@@ -153,7 +153,7 @@ durable Battle consequences, and the handoff into the next journey state.
 
 ## Part XII: The Tutorial Journey and Teaching Experience
 
-Directory: `/tutorial`
+Directory: `/tutorial_journey`
 
 The teaching path from the main menu into a guided journey: the intentional
 loading primer, cinematic lesson, guided actions, tutorial Battle, transition
