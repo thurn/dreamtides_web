@@ -43,7 +43,6 @@ describe("PlayingCard", () => {
     expect(card.dataset.playingCardRank).toBe("10");
     expect(card.dataset.playingCardSuit).toBe("hearts");
     expect(card.dataset.playingCardSize).toBe("standard");
-    expect(card.dataset.playingCardFace).toBe("front");
   });
 
   it.each([
@@ -91,18 +90,6 @@ describe("PlayingCard", () => {
     expect(
       target.querySelector("[data-playing-card-target-glyph]")?.textContent,
     ).toBe("+");
-  });
-
-  it("announces a face-down card without exposing its hidden identity", () => {
-    const card = renderCard({ rank: "K", suit: "clubs", face: "back" });
-
-    expect(card.getAttribute("aria-label")).toBe("Face-down playing card");
-    expect(card.dataset.playingCardFace).toBe("back");
-    expect(card.querySelector("[data-playing-card-front]")).not.toBeNull();
-    expect(card.querySelector("[data-playing-card-back]")).not.toBeNull();
-    expect(
-      card.querySelector("[data-playing-card-checkerboard]"),
-    ).not.toBeNull();
   });
 
   it("exposes the selected named size without changing card identity", () => {

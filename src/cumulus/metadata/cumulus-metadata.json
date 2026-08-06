@@ -4001,17 +4001,6 @@
       "description": "Named square and type-size tuple. Defaults to `standard`."
     },
     {
-      "name": "face",
-      "tsType": "PlayingCardFace",
-      "unionMembers": [
-        "front",
-        "back"
-      ],
-      "required": false,
-      "defaultValue": "front",
-      "description": "Visible side of the card. Defaults to `front`."
-    },
-    {
       "name": "variant",
       "tsType": "PlayingCardVariant",
       "unionMembers": [

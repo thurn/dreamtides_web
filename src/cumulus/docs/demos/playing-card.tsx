@@ -1,6 +1,5 @@
 import {
   PlayingCard,
-  type PlayingCardFace,
   type PlayingCardRank,
   type PlayingCardSize,
   type PlayingCardSuit,
@@ -62,7 +61,6 @@ function PlayingCardDemo(args: Record<string, unknown>) {
     args.size === "wager"
       ? args.size
       : "standard";
-  const face: PlayingCardFace = args.face === "back" ? "back" : "front";
   const variant = VARIANTS.includes(args.variant as PlayingCardVariant)
     ? (args.variant as PlayingCardVariant)
     : "rank-and-suit";
@@ -79,7 +77,6 @@ function PlayingCardDemo(args: Record<string, unknown>) {
         rank={rank}
         suit={suit}
         size={size}
-        face={face}
         variant={variant}
       />
       <div
@@ -126,7 +123,7 @@ export const playingCardDemo: CumulusComponent = {
   id: "playing-card",
   title: "Playing Card",
   blurb:
-    "The standard playing-card object: full rank-and-suit, focused rank, colored suit, rank-target, and fitted 4×4 checkerboard treatments on a quartic-superellipse square made from the shared liquid glass.",
+    "The standard playing-card object: full rank-and-suit, focused rank, colored suit, and rank-target treatments on a quartic-superellipse square made from the shared liquid glass.",
   callout:
     "Choose the front variant by its game meaning and use the named size only; suit-specific optical corrections keep every Unicode mark aligned.",
   group: "Components",
@@ -163,18 +160,12 @@ export const playingCardDemo: CumulusComponent = {
       note: "A white rank followed by a plus sign.",
       code: `<PlayingCard rank="7" suit="spades" variant="rank-target" />`,
     },
-    {
-      label: "Back Face",
-      note: "The inset superellipse carries a fitted 4×4 two-color checkerboard.",
-      code: `<PlayingCard rank="A" suit="spades" face="back" />`,
-    },
   ],
   demo: {
     defaultArgs: {
       rank: "10",
       suit: "hearts",
       size: "standard",
-      face: "front",
       variant: "rank-and-suit",
     },
   },

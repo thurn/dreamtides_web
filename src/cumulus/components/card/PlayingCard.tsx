@@ -1,4 +1,4 @@
-// PlayingCard — a flippable playing-card display on the shared Cumulus glass.
+// PlayingCard — a playing-card display on the shared Cumulus glass.
 
 import { motion, useReducedMotion } from "framer-motion";
 import type { CSSProperties, ReactElement } from "react";
@@ -21,7 +21,7 @@ type WagerRevealSourceBinding = ReturnType<typeof useRevealSource>;
 
 /**
  * The deliberately centralized playing-card art direction. Change these
- * constants to retune the square, type, colors, faces, motion, or suit optics.
+ * constants to retune the square, type, colors, motion, or suit optics.
  */
 export const PLAYING_CARD_DESIGN = {
   sizes: {
@@ -62,11 +62,6 @@ export const PLAYING_CARD_DESIGN = {
     white: "#FFFFFF",
     characterOutline: "#000000",
   },
-  backFace: {
-    panelInsetPercent: 10,
-    borderWidth: 0,
-    checkerSquaresPerSide: 4,
-  },
   flip: {
     perspective: 1000,
     durationSeconds: 0.72,
@@ -97,8 +92,6 @@ export type PlayingCardRank = StandardPlayingCardRank;
 export type PlayingCardSuit = StandardPlayingCardSuit;
 
 export type PlayingCardSize = keyof typeof PLAYING_CARD_DESIGN.sizes;
-
-export type PlayingCardFace = "front" | "back";
 
 export type PlayingCardVariant =
   "rank-and-suit" | "rank-display" | "suit-display" | "rank-target";
@@ -206,8 +199,6 @@ export interface PlayingCardProps {
   suit: PlayingCardSuit;
   /** Named square and type-size tuple. Defaults to `standard`. */
   size?: PlayingCardSize;
-  /** Visible side of the card. Defaults to `front`. */
-  face?: PlayingCardFace;
   /** Front-face content treatment. Defaults to `rank-and-suit`. */
   variant?: PlayingCardVariant;
 }
@@ -309,111 +300,48 @@ function PlayingCardIndex({
   );
 }
 
-/** A glass playing card with animated front and checkerboard-back faces. */
+/** A glass playing card with a rank-and-suit front face. */
 export function PlayingCard({
   rank,
   suit,
   size = "standard",
-  face = "front",
   variant = "rank-and-suit",
 }: PlayingCardProps): ReactElement {
-  const reduceMotion = useReducedMotion() === true;
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
-  const backFace = PLAYING_CARD_DESIGN.backFace;
-  const checkerTilePercent = (2 / backFace.checkerSquaresPerSide) * 100;
 
   return (
     <div
       role="img"
-      aria-label={
-        face === "front"
-          ? frontAriaLabel(rank, suit, variant)
-          : "Face-down playing card"
-      }
+      aria-label={frontAriaLabel(rank, suit, variant)}
       data-playing-card={`${rank}-${suit}`}
       data-playing-card-rank={rank}
       data-playing-card-suit={suit}
       data-playing-card-size={size}
-      data-playing-card-face={face}
       data-playing-card-variant={variant}
       style={{
         position: "relative",
         width: sizeSpec.square,
         height: sizeSpec.square,
         flex: "0 0 auto",
-        perspective: PLAYING_CARD_DESIGN.flip.perspective,
       }}
     >
-      <motion.div
-        data-playing-card-flip=""
-        initial={false}
-        animate={{ rotateY: face === "front" ? 0 : 180 }}
-        transition={
-          reduceMotion
-            ? { duration: 0 }
-            : {
-                duration: PLAYING_CARD_DESIGN.flip.durationSeconds,
-                ease: PLAYING_CARD_DESIGN.flip.ease,
-              }
-        }
+      <div
+        aria-hidden="true"
+        data-playing-card-front=""
         style={{
-          position: "relative",
-          width: "100%",
-          height: "100%",
-          transformStyle: "preserve-3d",
+          ...CARD_FACE_STYLE,
+          display: "grid",
+          placeItems: "center",
         }}
       >
-        <div
-          aria-hidden="true"
-          data-playing-card-front=""
-          style={{
-            ...CARD_FACE_STYLE,
-            display: "grid",
-            placeItems: "center",
-          }}
-        >
-          <PlayingCardIndex
-            rank={rank}
-            suit={suit}
-            size={size}
-            variant={variant}
-          />
-          <PlayingCardRim />
-        </div>
-        <div
-          aria-hidden="true"
-          data-playing-card-back=""
-          style={{
-            ...CARD_FACE_STYLE,
-            transform: "rotateY(180deg)",
-          }}
-        >
-          <div
-            data-playing-card-back-border=""
-            style={{
-              position: "absolute",
-              inset: `${String(backFace.panelInsetPercent)}%`,
-              overflow: "hidden",
-              clipPath: SUPERELLIPSE_CLIP_PATH,
-              background: PLAYING_CARD_DESIGN.colors.characterOutline,
-            }}
-          >
-            <div
-              data-playing-card-checkerboard=""
-              data-playing-card-checker-squares={backFace.checkerSquaresPerSide}
-              style={{
-                position: "absolute",
-                inset: backFace.borderWidth,
-                clipPath: SUPERELLIPSE_CLIP_PATH,
-                backgroundColor: PLAYING_CARD_DESIGN.colors.black,
-                backgroundImage: `conic-gradient(from 90deg, ${PLAYING_CARD_DESIGN.colors.black} 25%, ${PLAYING_CARD_DESIGN.colors.red} 0 50%, ${PLAYING_CARD_DESIGN.colors.black} 0 75%, ${PLAYING_CARD_DESIGN.colors.red} 0)`,
-                backgroundSize: `${String(checkerTilePercent)}% ${String(checkerTilePercent)}%`,
-              }}
-            />
-          </div>
-          <PlayingCardRim />
-        </div>
-      </motion.div>
+        <PlayingCardIndex
+          rank={rank}
+          suit={suit}
+          size={size}
+          variant={variant}
+        />
+        <PlayingCardRim />
+      </div>
     </div>
   );
 }
