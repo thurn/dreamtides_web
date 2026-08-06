@@ -87,8 +87,14 @@ describe("BattleResultSurface", () => {
       container.querySelector('[data-testid="battle-result-reopen"]'),
     ).toBeNull();
     expect(
-      container.querySelector("[data-battle-reward-essence-value]")?.textContent,
+      container.querySelector("[data-battle-reward-essence-value]")
+        ?.textContent,
     ).toContain("+0");
+    expect(
+      container
+        .querySelector('[data-testid="battle-reward-essence-panel"]')
+        ?.getAttribute("data-glass-panel-frame"),
+    ).toBe("floating");
     const continueButton = container.querySelector<HTMLButtonElement>(
       '[data-testid="battle-reward-continue"]',
     );
@@ -97,7 +103,8 @@ describe("BattleResultSurface", () => {
     runCountUp();
 
     expect(
-      container.querySelector("[data-battle-reward-essence-value]")?.textContent,
+      container.querySelector("[data-battle-reward-essence-value]")
+        ?.textContent,
     ).toContain("+100");
     expect(continueButton?.getAttribute("aria-disabled")).toBeNull();
     act(() => continueButton?.click());
@@ -117,7 +124,14 @@ describe("BattleResultSurface", () => {
     });
 
     expect(container.textContent).toContain(title);
-    expect(container.querySelector("[data-battle-reward-essence-value]")).toBeNull();
+    expect(
+      container.querySelector("[data-battle-reward-essence-value]"),
+    ).toBeNull();
+    expect(
+      container
+        .querySelector('[data-testid="battle-result-action-panel"]')
+        ?.getAttribute("data-glass-panel-frame"),
+    ).toBe("floating");
     const inspect = container.querySelector<HTMLButtonElement>(
       '[data-testid="battle-result-inspect"]',
     );

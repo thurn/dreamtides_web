@@ -36,7 +36,6 @@ import {
 import { GlassButton } from "../components/controls/GlassButton";
 import { DisclosureSection } from "../components/controls/DisclosureSection";
 import { GlowIcon } from "../components/controls/GlowIcon";
-import { GroupPanel } from "../components/controls/GroupPanel";
 import { IconButton } from "../components/controls/IconButton";
 import { NumberStepper } from "../components/controls/NumberStepper";
 import { SegmentedControl } from "../components/controls/SegmentedControl";
@@ -2079,7 +2078,12 @@ function BattleCardPointsOverlay({
           }}
         />
         <span data-battle-card-points-value="">{overlay.points}</span>
-        <GlowIcon iconClass={GLYPHS.points} color="text-primary" size="1em" shadow />
+        <GlowIcon
+          iconClass={GLYPHS.points}
+          color="text-primary"
+          size="1em"
+          shadow
+        />
       </motion.div>
     </div>
   );
@@ -2196,9 +2200,7 @@ function mobileBattlefieldWindow(view: MobileBattleView): {
       ...frontOccupancies.map(
         (occupancy) => occupancy.highestOccupiedIndex + 1,
       ),
-      ...backOccupancies.map(
-        (occupancy) => occupancy.highestOccupiedIndex,
-      ),
+      ...backOccupancies.map((occupancy) => occupancy.highestOccupiedIndex),
       ...frontOccupancies.map((occupancy) => occupancy.count + 1),
       ...backOccupancies.map((occupancy) => occupancy.count),
     ),
@@ -2222,8 +2224,7 @@ function mobileBattlefieldWindow(view: MobileBattleView): {
   const minimumStart = Math.max(
     0,
     ...occupiedRanges.map(
-      (occupancy) =>
-        occupancy.highestOccupiedIndex - occupancy.slotCount + 1,
+      (occupancy) => occupancy.highestOccupiedIndex - occupancy.slotCount + 1,
     ),
   );
   const maximumOccupiedStart = Math.min(
@@ -2232,10 +2233,7 @@ function mobileBattlefieldWindow(view: MobileBattleView): {
   );
   const startIndex =
     occupiedRanges.length > 0 && minimumStart <= maximumOccupiedStart
-      ? Math.min(
-          Math.max(centeredStart, minimumStart),
-          maximumOccupiedStart,
-        )
+      ? Math.min(Math.max(centeredStart, minimumStart), maximumOccupiedStart)
       : centeredStart;
   return {
     frontSlotCount,
@@ -2260,10 +2258,7 @@ function rankOccupancy(
     count += 1;
     const occupiedIndex = canonicalRankIndex(slot.id, rank) ?? index;
     lowestOccupiedIndex = Math.min(lowestOccupiedIndex, occupiedIndex);
-    highestOccupiedIndex = Math.max(
-      highestOccupiedIndex,
-      occupiedIndex,
-    );
+    highestOccupiedIndex = Math.max(highestOccupiedIndex, occupiedIndex);
   });
   return {
     count,
@@ -2416,10 +2411,7 @@ function visibleMobileRankSlots(
         card: null,
       },
   );
-  const visibleCount = Math.min(
-    Math.max(slotCount, 1),
-    normalizedSlots.length,
-  );
+  const visibleCount = Math.min(Math.max(slotCount, 1), normalizedSlots.length);
   const maximumStart = normalizedSlots.length - visibleCount;
   const start = Math.min(Math.max(startIndex, 0), maximumStart);
   return normalizedSlots.slice(start, start + visibleCount);
@@ -2591,12 +2583,7 @@ function Rank({
     ? centerAsymmetricDesktopRanks
       ? slots
       : visibleRankSlots(slots, rank, desktopSlotCount)
-    : visibleMobileRankSlots(
-        slots,
-        rank,
-        mobileSlotCount,
-        mobileStartIndex,
-      );
+    : visibleMobileRankSlots(slots, rank, mobileSlotCount, mobileStartIndex);
   const containsDraggingCard =
     draggingCardId !== null &&
     visibleSlots.some((slot) => slot.card?.id === draggingCardId);
@@ -4140,6 +4127,21 @@ function InspectorButton({
   );
 }
 
+/** A transparent subdivision laid directly on the inspector's glass shell. */
+function InspectorSection({ children }: { readonly children: ReactNode }) {
+  return (
+    <section
+      data-battle-inspector-section=""
+      style={{
+        paddingBlock: token("--space-5"),
+        borderTop: `1px solid ${token("--border-soft")}`,
+      }}
+    >
+      {children}
+    </section>
+  );
+}
+
 function BattleInspectorContent({
   inspector,
   perspective,
@@ -4176,10 +4178,12 @@ function BattleInspectorContent({
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: token("--space-4"),
       }}
     >
-      <div data-battle-inspector-perspective-control="" style={{ minWidth: 0 }}>
+      <div
+        data-battle-inspector-perspective-control=""
+        style={{ minWidth: 0, paddingBottom: token("--space-5") }}
+      >
         <GlassButton
           label={
             perspective === "player"
@@ -4199,7 +4203,7 @@ function BattleInspectorContent({
         />
       </div>
 
-      <GroupPanel>
+      <InspectorSection>
         <div style={{ ...groupLayout, gap: token("--space-3") }}>
           <h3
             style={{
@@ -4227,9 +4231,9 @@ function BattleInspectorContent({
             />
           </div>
         </div>
-      </GroupPanel>
+      </InspectorSection>
 
-      <GroupPanel>
+      <InspectorSection>
         <div style={groupLayout}>
           <h3
             style={{
@@ -4262,25 +4266,23 @@ function BattleInspectorContent({
             />
           </div>
         </div>
-      </GroupPanel>
+      </InspectorSection>
 
-      <div style={{ position: "sticky", top: 0, zIndex: 2 }}>
-        <GroupPanel>
-          <div style={groupLayout}>
-            <SegmentedControl
-              full
-              options={[
-                { value: "player", label: "You" },
-                { value: "enemy", label: "Enemy" },
-              ]}
-              value={selectedSide}
-              onChange={(value) => onSelectSide(value as MobileBattleOwner)}
-            />
-          </div>
-        </GroupPanel>
-      </div>
+      <InspectorSection>
+        <div style={groupLayout}>
+          <SegmentedControl
+            full
+            options={[
+              { value: "player", label: "You" },
+              { value: "enemy", label: "Enemy" },
+            ]}
+            value={selectedSide}
+            onChange={(value) => onSelectSide(value as MobileBattleOwner)}
+          />
+        </div>
+      </InspectorSection>
 
-      <GroupPanel>
+      <InspectorSection>
         <div style={groupLayout}>
           <h3
             style={{
@@ -4397,9 +4399,9 @@ function BattleInspectorContent({
             }
           />
         </div>
-      </GroupPanel>
+      </InspectorSection>
 
-      <GroupPanel>
+      <InspectorSection>
         <div style={groupLayout}>
           <h3
             style={{
@@ -4434,9 +4436,9 @@ function BattleInspectorContent({
             />
           </div>
         </div>
-      </GroupPanel>
+      </InspectorSection>
 
-      <GroupPanel>
+      <InspectorSection>
         <div style={groupLayout}>
           <h3
             style={{
@@ -4568,7 +4570,7 @@ function BattleInspectorContent({
             />
           </div>
         </div>
-      </GroupPanel>
+      </InspectorSection>
 
       <DisclosureSection
         title="View & Visibility"

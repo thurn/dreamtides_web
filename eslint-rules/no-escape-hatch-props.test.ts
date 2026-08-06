@@ -34,7 +34,12 @@ describe("isDomAttributeTypeName (no-escape-hatch-props)", () => {
   });
 
   it("does not match ordinary or Cumulus prop type names", () => {
-    for (const name of ["GlassButtonProps", "CSSProperties", "ReactNode", "string"]) {
+    for (const name of [
+      "GlassButtonProps",
+      "CSSProperties",
+      "ReactNode",
+      "string",
+    ]) {
       expect(isDomAttributeTypeName(name)).toBe(false);
     }
   });
@@ -109,8 +114,8 @@ ruleTester.run("no-escape-hatch-props", rule, {
     },
     {
       name: "a container in the allowlist may take children",
-      filename: "src/cumulus/components/GroupPanel.tsx",
-      code: `interface GroupPanelProps { size?: "sm" | "md"; children?: React.ReactNode; }`,
+      filename: "src/cumulus/components/GlassPanel.tsx",
+      code: `interface GlassPanelProps { size?: "sm" | "md"; children?: React.ReactNode; }`,
     },
     {
       name: "a single named data value (accent color) is fine",
@@ -216,8 +221,8 @@ ruleTester.run("no-escape-hatch-props", rule, {
     },
     {
       name: "style ban still applies to an allowlisted container",
-      filename: "src/cumulus/components/GroupPanel.tsx",
-      code: `interface GroupPanelProps { children?: ReactNode; style?: React.CSSProperties; }`,
+      filename: "src/cumulus/components/GlassPanel.tsx",
+      code: `interface GlassPanelProps { children?: ReactNode; style?: React.CSSProperties; }`,
       errors: [{ messageId: "styleMember" }],
     },
     {

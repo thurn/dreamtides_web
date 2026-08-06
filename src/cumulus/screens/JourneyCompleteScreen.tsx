@@ -1,12 +1,12 @@
 import type { ReactElement } from "react";
 import { GlassButton } from "../components/controls/GlassButton";
-import { GroupPanel } from "../components/controls/GroupPanel";
 import {
   DreamAvatarPortrait,
   type DreamAvatarVisual,
 } from "../components/hud/DreamAvatarPortrait";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { Motes } from "../components/hud/Motes";
+import { GlassPanel } from "../components/overlay/GlassPanel";
 import { token } from "../primitives/tokens";
 import {
   JOURNEY_RESULT_BOTTOM_SAFE_PADDING,
@@ -148,21 +148,23 @@ export function JourneyCompleteScreen({
                 boxSizing: "border-box",
               }}
             >
-              <GroupPanel>
-                <dl
-                  data-journey-complete-summary=""
-                  style={{
-                    margin: 0,
-                    display: "grid",
-                    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                    gap: token("--space-5"),
-                  }}
-                >
-                  {view.stats.map((stat) => (
-                    <SummaryStat key={stat.id} stat={stat} />
-                  ))}
-                </dl>
-              </GroupPanel>
+              <GlassPanel testId="journey-complete-summary-panel">
+                <div style={{ padding: token("--space-6") }}>
+                  <dl
+                    data-journey-complete-summary=""
+                    style={{
+                      margin: 0,
+                      display: "grid",
+                      gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                      gap: token("--space-5"),
+                    }}
+                  >
+                    {view.stats.map((stat) => (
+                      <SummaryStat key={stat.id} stat={stat} />
+                    ))}
+                  </dl>
+                </div>
+              </GlassPanel>
             </div>
           </div>
 
@@ -204,7 +206,10 @@ function SummaryStat({ stat }: { readonly stat: JourneyCompleteStatView }) {
         style={{
           margin: 0,
           font: token("--t-title-sm"),
-          color: stat.kind === "essence" ? token("--essence") : token("--text-primary"),
+          color:
+            stat.kind === "essence"
+              ? token("--essence")
+              : token("--text-primary"),
         }}
       >
         {stat.kind === "essence" ? (
@@ -218,7 +223,7 @@ function SummaryStat({ stat }: { readonly stat: JourneyCompleteStatView }) {
           font: token("--t-eyebrow"),
           letterSpacing: token("--tracking-eyebrow"),
           textTransform: "uppercase",
-          color: token("--text-muted"),
+          color: token("--text-on-glass-muted"),
         }}
       >
         {stat.label}

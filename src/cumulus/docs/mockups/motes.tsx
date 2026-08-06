@@ -1,15 +1,15 @@
 // Full-screen mockup for Motes — the atmospheric particle layer. A
 // Dream Atlas backdrop with the 'warm' tint drifting over the scene art
 // (its default, documented context), and a translucent bottom console — a
-// GroupPanel-styled glass pane, chrome rather than scene art — carrying the
-// 'violet' tint, its documented chrome-only context. Both layers are the same
-// component, only `tint` differs; Motes itself reads `prefers-reduced-motion`
+// GlassPanel carrying the 'violet' tint in its documented chrome-only context.
+// Both layers are the same component, only `tint` differs; Motes itself reads
+// `prefers-reduced-motion`
 // internally (its `dt-mote` class's media rule) and holds the motes at a
 // fixed mid-opacity instead of drifting, so no extra handling is needed here.
 
 import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
-import { groupPanelStyle } from "../../components/controls/GroupPanel";
 import { Motes } from "../../components/hud/Motes";
+import { GlassPanel } from "../../components/overlay/GlassPanel";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 
@@ -40,9 +40,20 @@ export function MotesMockup() {
           zIndex: 3,
         }}
       >
-        <div style={{ font: token("--t-title"), color: token("--text-primary") }}>Winterwake Fjords</div>
-        <div style={{ font: token("--t-caption"), color: token("--text-secondary"), marginTop: token("--space-2") }}>
-          Warm motes drift over the scene art; a chrome console below carries the violet tint.
+        <div
+          style={{ font: token("--t-title"), color: token("--text-primary") }}
+        >
+          Winterwake Fjords
+        </div>
+        <div
+          style={{
+            font: token("--t-caption"),
+            color: token("--text-secondary"),
+            marginTop: token("--space-2"),
+          }}
+        >
+          Warm motes drift over the scene art; a chrome console below carries
+          the violet tint.
         </div>
       </div>
 
@@ -58,16 +69,15 @@ export function MotesMockup() {
           zIndex: 3,
         }}
       >
-        <div
-          style={{
-            position: "relative",
-            overflow: "hidden",
-            padding: token("--space-6"),
-            ...groupPanelStyle(),
-          }}
-        >
+        <GlassPanel>
           <Motes tint="violet" count={16} seed={7} zIndex={1} />
-          <div style={{ position: "relative", zIndex: 2 }}>
+          <div
+            style={{
+              position: "relative",
+              zIndex: 2,
+              padding: token("--space-6"),
+            }}
+          >
             <p
               style={{
                 font: token("--t-eyebrow"),
@@ -79,13 +89,19 @@ export function MotesMockup() {
             >
               Chrome context
             </p>
-            <p style={{ font: token("--t-body"), color: token("--text-primary"), margin: `${token("--space-3")} 0 0` }}>
-              The same particle field, tinted violet for a screen with no scene art behind it.
+            <p
+              style={{
+                font: token("--t-body"),
+                color: token("--text-primary"),
+                margin: `${token("--space-3")} 0 0`,
+              }}
+            >
+              The same particle field, tinted violet for a screen with no scene
+              art behind it.
             </p>
           </div>
-        </div>
+        </GlassPanel>
       </div>
-
     </div>
   );
 }

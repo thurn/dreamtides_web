@@ -17,9 +17,6 @@
 // design tokens. This recipe supplies the shared surface geometry, while named
 // component variants compose the documented fills without re-declaring values.
 //
-// The flat information-grouping card (GroupPanel) is a DIFFERENT, solid surface
-// and does not use this recipe.
-
 import * as React from "react";
 import { token } from "../primitives/tokens";
 

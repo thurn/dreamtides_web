@@ -1,6 +1,6 @@
 ---
 name: cumulus
-description: Use when writing or changing any journey prototype UI — building screens, using or adding Cumulus design-system components, styling, spacing, colors, icons, or reviewing UI code. Triggers on cumulus, design system, UI component, component API, Pressable, Button, GroupPanel, InfoCard, GameCard, tokens, spacing, styling, /cumulus.
+description: Use when writing or changing any journey prototype UI — building screens, using or adding Cumulus design-system components, styling, spacing, colors, icons, or reviewing UI code. Triggers on cumulus, design system, UI component, component API, Pressable, Button, GlassPanel, InfoCard, GameCard, tokens, spacing, styling, /cumulus.
 ---
 
 # Cumulus Design System
@@ -81,7 +81,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | Main Menu Button | Components | 1 | [components/main-menu-button.md](components/main-menu-button.md) | The text-first action for the Dreamtides main menu: outlined white at rest, showing the shared Cumulus liquid-glass material on hover or focus. |
 | Glass Button | Components | 32 | [components/glass-button.md](components/glass-button.md) | The labeled glass action — a bold text label with optional Essence cost or non-cost value on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface. |
 | Offer Tile | Components | 2 | [components/offer-tile.md](components/offer-tile.md) | The circular symbolic Augury offer button in named 300×300 desktop and 240×240 mobile sizes: UUID-backed full-bleed card art, Dreamsigns and site glyphs over authored full-art fields, and centered operation marks inside the gold-and-feather frame. |
-| Glass Panel | Components | 16 | [components/glass-panel.md](components/glass-panel.md) | The content-hugging liquid-glass container: an optional structured header, a composed body, and an optional footer on the canonical floating material. |
+| Glass Panel | Components | 19 | [components/glass-panel.md](components/glass-panel.md) | The content-hugging liquid-glass container: an optional structured header, a composed body, and an optional footer on the canonical floating material. |
 | Glass Dialog | Components | 14 | [components/glass-dialog.md](components/glass-dialog.md) | The glass overlay shell: a modal dialog with a bounded desktop panel and a full-bleed mobile overlay by default, plus centered content-sized and companion-paired popup presentations. |
 | Developer Rail | Components | 3 | [components/developer-rail.md](components/developer-rail.md) | The shared edge-attached shell for persistent developer tools, with canonical glass, header hierarchy, close action, scrolling body, and optional footer. |
 | Corner Utility Menu | Components | 2 | [components/corner-utility-menu.md](components/corner-utility-menu.md) | The strict app-chrome command offering: a fixed icon trigger and a hierarchical inward-opening utility menu. |
@@ -103,7 +103,6 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | Radial Announcement | Components | 3 | [components/radial-announcement.md](components/radial-announcement.md) | The orbiting circular status moment for turn handoffs, wins, failures, and iconic state changes. |
 | Motes | Components | 11 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
 | Info Card | Components | 8 | [components/info-card.md](components/info-card.md) | The strict information-card presentation. |
-| Group Panel | Components | 6 | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. |
 | Inline Glyph | Primitives | 9 | [components/inline-glyph.md](components/inline-glyph.md) | The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's capital height at every type size. |
 | Glow Icon | Primitives | 18 | [components/glow-icon.md](components/glow-icon.md) | The resource-glyph renderer for card marks: a Boxicons glyph that paints in the caller's resource hue, with an optional content-protection shadow and an optional emitted-light glow pinned to its own font-size so both scale with the mark. |
 | Pip Badge | Components | 2 | [components/pip-badge.md](components/pip-badge.md) | The compact circled number used in dense card rows and inline rules text for spark or energy values. |
@@ -278,7 +277,7 @@ built", check the component's reference file for the model it actually
 accepts and build that instead. Passing an arbitrary ReactNode where a model
 exists bypasses the component's rendering decisions and breaks the uniformity
 the model encodes. The few genuine ReactNode slots (e.g. `Pressable`
-children, `GroupPanel` content) are documented as such in the props tables.
+children, `GlassPanel` content) are documented as such in the props tables.
 
 ## The isolation boundary
 
@@ -354,15 +353,15 @@ adapter against its own inputs. Full rationale:
 - **Always in motion**: tangible game objects (cards, dreamsigns, resources)
   drift gently; review chrome (status bars, deck viewers) holds still.
 - **Legibility ladder**: on-media text uses outline dilation; dense related
-  info goes in a `GroupPanel`. A scrim, wash, or vignette painted over scene
+  info goes in a `GlassPanel`. A scrim, wash, or vignette painted over scene
   art to fake legibility is not on the ladder.
 - **Glass text contrast**: text on blurred glass is white or warm near-white
   through `--text-on-glass` / `--text-on-glass-muted`; authored `[purple]`
   tutorial emphasis uses the pale-lavender `--text-tutorial-highlight`.
   Accent and resource text tokens are not legibility treatments on glass.
-- **Glass surface stacking**: never place an opaque purple container card,
-  including `GroupPanel`, inside a glass panel, dialog, or popover. Lay content
-  and tangible game objects directly on the glass instead.
+- **Glass surface stacking**: lay grouped content directly on a glass panel,
+  dialog, or popover with spacing and subtle dividers. Nested controls use
+  their named `onGlass` treatment.
 - **Popup rule**: every reveal-on-interaction popup renders through
   `InfoCard` — pointer-anchored, no close button, no scrim; hover reveals on
   fine pointers, touch-hold on touch. Desktop InfoCards normally sit beside

@@ -1,11 +1,11 @@
 import type { ReactElement } from "react";
 import { GlassButton } from "../components/controls/GlassButton";
-import { GroupPanel } from "../components/controls/GroupPanel";
 import {
   DreamAvatarPortrait,
   type DreamAvatarVisual,
 } from "../components/hud/DreamAvatarPortrait";
 import { Motes } from "../components/hud/Motes";
+import { GlassPanel } from "../components/overlay/GlassPanel";
 import { token } from "../primitives/tokens";
 import type {
   JourneyFailureBattleResult,
@@ -105,8 +105,8 @@ export function JourneyFailedScreen({
               textAlign: "center",
             }}
           >
-            Journey failure summary not found. Return to the journey menu to begin
-            again.
+            Journey failure summary not found. Return to the journey menu to
+            begin again.
           </p>
         ) : (
           <div
@@ -185,34 +185,36 @@ export function JourneyFailedScreen({
                   boxSizing: "border-box",
                 }}
               >
-                <GroupPanel>
-                  <p
-                    data-journey-failed-reason={view.reason}
-                    style={{
-                      margin: 0,
-                      font: token("--t-eyebrow"),
-                      letterSpacing: token("--tracking-eyebrow"),
-                      textTransform: "uppercase",
-                      textAlign: "center",
-                      color: token("--danger"),
-                    }}
-                  >
-                    {view.reasonLabel}
-                  </p>
-                  <dl
-                    data-journey-failed-summary=""
-                    style={{
-                      margin: `${token("--space-5")} 0 0`,
-                      display: "grid",
-                      gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                      gap: token("--space-5"),
-                    }}
-                  >
-                    {view.stats.map((stat) => (
-                      <SummaryStat key={stat.id} stat={stat} />
-                    ))}
-                  </dl>
-                </GroupPanel>
+                <GlassPanel testId="journey-failed-summary-panel">
+                  <div style={{ padding: token("--space-6") }}>
+                    <p
+                      data-journey-failed-reason={view.reason}
+                      style={{
+                        margin: 0,
+                        font: token("--t-eyebrow"),
+                        letterSpacing: token("--tracking-eyebrow"),
+                        textTransform: "uppercase",
+                        textAlign: "center",
+                        color: token("--danger"),
+                      }}
+                    >
+                      {view.reasonLabel}
+                    </p>
+                    <dl
+                      data-journey-failed-summary=""
+                      style={{
+                        margin: `${token("--space-5")} 0 0`,
+                        display: "grid",
+                        gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                        gap: token("--space-5"),
+                      }}
+                    >
+                      {view.stats.map((stat) => (
+                        <SummaryStat key={stat.id} stat={stat} />
+                      ))}
+                    </dl>
+                  </div>
+                </GlassPanel>
               </div>
             </div>
 
@@ -264,7 +266,7 @@ function SummaryStat({ stat }: { readonly stat: JourneyFailedStatView }) {
           font: token("--t-eyebrow"),
           letterSpacing: token("--tracking-eyebrow"),
           textTransform: "uppercase",
-          color: token("--text-muted"),
+          color: token("--text-on-glass-muted"),
         }}
       >
         {stat.label}

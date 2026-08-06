@@ -22,7 +22,6 @@
  * appends `Props` to match the type declaration.
  */
 export const CONTAINER_COMPONENTS = [
-  "GroupPanel",
   "HoverZoomCard",
   "GlassPanel", // the shared titled liquid-glass content container
   "GlassDialog", // the glass overlay shell — holds caller-supplied body content

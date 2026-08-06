@@ -314,6 +314,28 @@ describe("MobileBattleScreen", () => {
     container.remove();
   });
 
+  it("uses one glass boundary with transparent sections in the docked inspector", () => {
+    mockDesktopViewport(true);
+    const { container, root } = mount(makeView());
+    const inspector = container.querySelector(
+      '[data-battle-inspector="docked"]',
+    );
+
+    expect(
+      inspector?.querySelectorAll("[data-glass-panel-frame]"),
+    ).toHaveLength(1);
+    expect(
+      inspector?.querySelectorAll("[data-battle-inspector-section]").length,
+    ).toBeGreaterThan(0);
+    expect(
+      inspector?.querySelector(
+        "[data-glass-panel-frame] [data-glass-panel-frame]",
+      ),
+    ).toBeNull();
+
+    act(() => root.unmount());
+  });
+
   it("shares stable physical-card identities with a composing layout group", () => {
     const { container, root } = mount(makeView(), undefined, {
       cardLayoutGroup: "inherited",
@@ -2332,13 +2354,7 @@ describe("MobileBattleScreen", () => {
       "B6",
       "B7",
     ]);
-    expect(slotIds("enemy", "front")).toEqual([
-      "F2",
-      "F3",
-      "F4",
-      "F5",
-      "F6",
-    ]);
+    expect(slotIds("enemy", "front")).toEqual(["F2", "F3", "F4", "F5", "F6"]);
     expect(slotIds("player", "back")).toEqual([
       "B2",
       "B3",
@@ -2347,13 +2363,7 @@ describe("MobileBattleScreen", () => {
       "B6",
       "B7",
     ]);
-    expect(slotIds("player", "front")).toEqual([
-      "F2",
-      "F3",
-      "F4",
-      "F5",
-      "F6",
-    ]);
+    expect(slotIds("player", "front")).toEqual(["F2", "F3", "F4", "F5", "F6"]);
     expect(
       container.querySelector(
         '[data-battle-rank="enemy-back"] [data-battle-slot-id="B5"] [data-battle-card-id="tutorial-enemy-back-card"]',
@@ -2412,13 +2422,7 @@ describe("MobileBattleScreen", () => {
       "B4",
       "B5",
     ]);
-    expect(slotIds("player", "front")).toEqual([
-      "F0",
-      "F1",
-      "F2",
-      "F3",
-      "F4",
-    ]);
+    expect(slotIds("player", "front")).toEqual(["F0", "F1", "F2", "F3", "F4"]);
     expect(slotIds("enemy", "back")).toEqual([
       "B0",
       "B1",
@@ -3178,15 +3182,17 @@ describe("MobileBattleScreen", () => {
     const view = makeView();
     const playerBackRank = Array.from({ length: 10 }, (_, index) => ({
       id: `B${String(index)}`,
-      card: index < 6
-        ? makeCard(80 + index, `player-expanded-back-card-${String(index)}`)
-        : null,
+      card:
+        index < 6
+          ? makeCard(80 + index, `player-expanded-back-card-${String(index)}`)
+          : null,
     }));
     const playerFrontRank = Array.from({ length: 9 }, (_, index) => ({
       id: `F${String(index)}`,
-      card: index < 5
-        ? makeCard(90 + index, `player-expanded-front-card-${String(index)}`)
-        : null,
+      card:
+        index < 5
+          ? makeCard(90 + index, `player-expanded-front-card-${String(index)}`)
+          : null,
     }));
     const { container, root } = mount({
       ...view,

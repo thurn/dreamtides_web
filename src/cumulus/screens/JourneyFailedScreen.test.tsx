@@ -51,7 +51,10 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
+function mount(element: ReactElement): {
+  container: HTMLDivElement;
+  root: Root;
+} {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -70,7 +73,9 @@ describe("Cumulus JourneyFailedScreen", () => {
     const screen = container.querySelector<HTMLElement>(
       "[data-journey-failed-screen]",
     );
-    const hierarchy = container.querySelector("[data-journey-failed-hierarchy]");
+    const hierarchy = container.querySelector(
+      "[data-journey-failed-hierarchy]",
+    );
     const portrait = hierarchy?.querySelector<HTMLElement>(
       "[data-journey-failed-dream-avatar]",
     );
@@ -94,8 +99,17 @@ describe("Cumulus JourneyFailedScreen", () => {
       ),
     ).toEqual(["title", "portrait", "stats"]);
     expect(portrait?.textContent).toBe("");
-    expect(portrait?.querySelector("[data-dream-avatar-source]")).not.toBeNull();
-    expect(container.querySelectorAll("[data-journey-failed-stat]")).toHaveLength(4);
+    expect(
+      portrait?.querySelector("[data-dream-avatar-source]"),
+    ).not.toBeNull();
+    expect(
+      container.querySelectorAll("[data-journey-failed-stat]"),
+    ).toHaveLength(4);
+    expect(
+      container
+        .querySelector('[data-testid="journey-failed-summary-panel"]')
+        ?.getAttribute("data-glass-panel-frame"),
+    ).toBe("floating");
     expect(
       container.querySelector('[data-journey-failed-stat="enemyScore"]')
         ?.textContent,
@@ -125,7 +139,9 @@ describe("Cumulus JourneyFailedScreen", () => {
       <JourneyFailedScreen view={null} onNewJourney={vi.fn()} />,
     );
 
-    expect(container.textContent).toContain("Journey failure summary not found");
+    expect(container.textContent).toContain(
+      "Journey failure summary not found",
+    );
     expect(
       container.querySelector('[data-testid="journey-failed-start-new-run"]'),
     ).toBeNull();

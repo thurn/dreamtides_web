@@ -39,15 +39,15 @@ ownership program, not a bulk directory move.
 
 Use the following ownership test for every file touched by this program.
 
-| Responsibility | Owner |
-| --- | --- |
-| Reusable visual component, material, interaction engine, or authored component CSS | `src/cumulus/components/`, `src/cumulus/primitives/`, or `src/cumulus/internal/` as appropriate |
-| Pure gameplay, overlay, bootstrap, or gate presentation built from a plain view model and callbacks | `src/cumulus/screens/` |
-| Mapping domain data into a screen-owned view model | a pure builder outside Cumulus, normally beside its adapter or controller |
-| Reading live journey, coop, Firebase, URL, or battle state; performing effects; dispatching actions | adapter/controller outside Cumulus |
-| Application routing and shared stateful chrome wiring | app shell outside Cumulus, composing public Cumulus components |
-| Standalone editor, image viewer, or algorithm diagnostic route | explicit operator-tool directory outside Cumulus |
-| Minimal fallback that must render when the design system itself fails | an explicit emergency-fallback exemption outside Cumulus |
+| Responsibility                                                                                      | Owner                                                                                           |
+| --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Reusable visual component, material, interaction engine, or authored component CSS                  | `src/cumulus/components/`, `src/cumulus/primitives/`, or `src/cumulus/internal/` as appropriate |
+| Pure gameplay, overlay, bootstrap, or gate presentation built from a plain view model and callbacks | `src/cumulus/screens/`                                                                          |
+| Mapping domain data into a screen-owned view model                                                  | a pure builder outside Cumulus, normally beside its adapter or controller                       |
+| Reading live journey, coop, Firebase, URL, or battle state; performing effects; dispatching actions | adapter/controller outside Cumulus                                                              |
+| Application routing and shared stateful chrome wiring                                               | app shell outside Cumulus, composing public Cumulus components                                  |
+| Standalone editor, image viewer, or algorithm diagnostic route                                      | explicit operator-tool directory outside Cumulus                                                |
+| Minimal fallback that must render when the design system itself fails                               | an explicit emergency-fallback exemption outside Cumulus                                        |
 
 Moving a stateful file wholesale into `src/cumulus/` is not a valid migration.
 Split it at the view-model and callback boundary. Conversely, leaving pure
@@ -71,17 +71,17 @@ caller-owned reveal mechanics.
 
 The baseline at the start of this program is:
 
-| Area | Production TSX | Approximate source lines | Current role |
-| --- | ---: | ---: | --- |
-| `src/screens/cumulus_adapters/` | 20 | 1,645 | permanent adapters and registry |
-| `src/editor/` | 33 | 13,622 | standalone operator tools |
-| `src/components/`, including `card-browser/` | 16 | 4,955 | mixed app shell, tool UI, forks, and dead code |
-| `src/battle/components/` | 11 | 4,069 | mixed controller, adapters, and operator overlays |
-| `src/coop/` | 6 | 1,148 | mixed controller, player gates, and diagnostics |
-| `src/debug/` | 4 | 2,337 | standalone diagnostic tools |
-| `src/image_viewer/` | 3 | 891 | standalone operator tool |
-| other `src/screens/` and screen devtools | 5 | 2,782 | in-game diagnostics and conformance fixture |
-| app/bootstrap/state TSX | 4 | 1,809 | application wiring and bootstrap presentation |
+| Area                                         | Production TSX | Approximate source lines | Current role                                      |
+| -------------------------------------------- | -------------: | -----------------------: | ------------------------------------------------- |
+| `src/screens/cumulus_adapters/`              |             20 |                    1,645 | permanent adapters and registry                   |
+| `src/editor/`                                |             33 |                   13,622 | standalone operator tools                         |
+| `src/components/`, including `card-browser/` |             16 |                    4,955 | mixed app shell, tool UI, forks, and dead code    |
+| `src/battle/components/`                     |             11 |                    4,069 | mixed controller, adapters, and operator overlays |
+| `src/coop/`                                  |              6 |                    1,148 | mixed controller, player gates, and diagnostics   |
+| `src/debug/`                                 |              4 |                    2,337 | standalone diagnostic tools                       |
+| `src/image_viewer/`                          |              3 |                      891 | standalone operator tool                          |
+| other `src/screens/` and screen devtools     |              5 |                    2,782 | in-game diagnostics and conformance fixture       |
+| app/bootstrap/state TSX                      |              4 |                    1,809 | application wiring and bootstrap presentation     |
 
 Five CSS files sit outside Cumulus: `src/index.css`, `src/battle/battle.css`,
 the unreferenced `src/atlas/atlas.css`, and the two vendored Boxicons sheets.
@@ -110,20 +110,20 @@ dispositions described below.
 
 ## Execution order
 
-| Order | Task | Depends on |
-| ---: | --- | --- |
-| 1 | CUM-OUT-01: classify every outer UI file and install enforcement rails | — |
-| 2 | CUM-OUT-02: delete confirmed unreachable UI and obsolete global CSS | CUM-OUT-01 |
-| 3 | CUM-OUT-03: move GameCard implementation CSS into its Cumulus closure | CUM-OUT-01 |
-| 4 | CUM-OUT-04: converge Dreamwell card rendering | CUM-OUT-01 |
-| 5 | CUM-OUT-05: add strict Cumulus command-menu offerings | CUM-OUT-01 |
-| 6 | CUM-OUT-06: migrate the journey utility menu presentation | CUM-OUT-05 |
-| 7 | CUM-OUT-07: migrate bootstrap, coop gate, and transient status presentation | CUM-OUT-01 |
-| 8 | CUM-OUT-08: rebuild Pool Viewer as a Cumulus overlay screen | CUM-OUT-03 |
-| 9 | CUM-OUT-09: migrate in-game diagnostic overlays or gate them as operator tools | CUM-OUT-05, CUM-OUT-07 |
-| 10 | CUM-OUT-10: converge retained battle overlay presentation | CUM-OUT-04, CUM-OUT-05 |
-| 11 | CUM-OUT-11: relocate tool-only UI and tighten the app-shell boundary | CUM-OUT-06 through CUM-OUT-10 |
-| 12 | CUM-OUT-12: remove migration baselines and perform final conformance QA | all prior tasks |
+| Order | Task                                                                           | Depends on                    |
+| ----: | ------------------------------------------------------------------------------ | ----------------------------- |
+|     1 | CUM-OUT-01: classify every outer UI file and install enforcement rails         | —                             |
+|     2 | CUM-OUT-02: delete confirmed unreachable UI and obsolete global CSS            | CUM-OUT-01                    |
+|     3 | CUM-OUT-03: move GameCard implementation CSS into its Cumulus closure          | CUM-OUT-01                    |
+|     4 | CUM-OUT-04: converge Dreamwell card rendering                                  | CUM-OUT-01                    |
+|     5 | CUM-OUT-05: add strict Cumulus command-menu offerings                          | CUM-OUT-01                    |
+|     6 | CUM-OUT-06: migrate the journey utility menu presentation                      | CUM-OUT-05                    |
+|     7 | CUM-OUT-07: migrate bootstrap, coop gate, and transient status presentation    | CUM-OUT-01                    |
+|     8 | CUM-OUT-08: rebuild Pool Viewer as a Cumulus overlay screen                    | CUM-OUT-03                    |
+|     9 | CUM-OUT-09: migrate in-game diagnostic overlays or gate them as operator tools | CUM-OUT-05, CUM-OUT-07        |
+|    10 | CUM-OUT-10: converge retained battle overlay presentation                      | CUM-OUT-04, CUM-OUT-05        |
+|    11 | CUM-OUT-11: relocate tool-only UI and tighten the app-shell boundary           | CUM-OUT-06 through CUM-OUT-10 |
+|    12 | CUM-OUT-12: remove migration baselines and perform final conformance QA        | all prior tasks               |
 
 Tasks 2, 3, and 4 can run independently after the enforcement rails land.
 Tasks 7 and 8 can also run independently. Integration should preserve the
@@ -480,7 +480,7 @@ experience.
    model for loading, recoverable error, fatal configuration, room creation,
    version gate, content-config gate, unreadable room, and unreachable room
    states. Avoid a generic arbitrary-body screen.
-2. Use `GlassPanel`, `GlassButton`, `GroupPanel`, canonical type voices, and
+2. Use `GlassPanel`, `GlassButton`, canonical type voices, and
    structured comparison rows where they fit. Add strict variants only for
    roles the existing catalog cannot express.
 3. Keep content loading, Firebase initialization, clipboard writes, room
@@ -561,7 +561,7 @@ shared entity-reveal system.
    - floating battle diagnostic panel with drag behavior owned by an outer
      wrapper/controller.
 7. Express copy counts and algorithm/provenance metadata through named badge,
-   caption, GroupPanel, or DisclosureSection roles. Add a strict component only
+   caption, GlassPanel, or DisclosureSection roles. Add a strict component only
    when the catalog has no suitable representation.
 8. Use the automatic GameCard reveal for card reading. Delete
    `CardOverlay.tsx` after this becomes its final live consumer.
@@ -611,13 +611,13 @@ render inside the active game shell.
    - keep it shipped and migrate its pure presentation to Cumulus; or
    - make it development/operator-only through a real availability gate and
      classify it under the operator profile.
-   The default disposition for the four currently reachable overlays is to
-   keep and migrate them. Changing one to operator-only requires an explicit
-   product decision in that overlay's implementation task.
+     The default disposition for the four currently reachable overlays is to
+     keep and migrate them. Changing one to operator-only requires an explicit
+     product decision in that overlay's implementation task.
 2. Do not classify a surface as tool-only merely because its title says
    “debug.” Its runtime availability determines its role.
 3. For each retained shipped overlay, create a pure Cumulus screen using
-   `GlassDialog`, `GlassPanel`, `GroupPanel`, `TextField`, `Select`,
+   `GlassDialog`, `GlassPanel`, `TextField`, `Select`,
    `NumberStepper`, `DisclosureSection`, `GameCard`, and canonical action
    controls as appropriate.
 4. Keep journey mutations, saved-state I/O, algorithm reconstruction, provenance

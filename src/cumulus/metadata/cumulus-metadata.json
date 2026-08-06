@@ -3160,16 +3160,6 @@
       "description": "Accessible label; the icon is hidden from assistive tech when unset."
     }
   ],
-  "GroupPanel": [
-    {
-      "name": "children",
-      "tsType": "ReactNode",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "The grouped content laid out inside the pane."
-    }
-  ],
   "IconButton": [
     {
       "name": "glyph",

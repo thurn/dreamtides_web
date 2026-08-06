@@ -47,7 +47,10 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
+function mount(element: ReactElement): {
+  container: HTMLDivElement;
+  root: Root;
+} {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -64,7 +67,9 @@ describe("Cumulus JourneyCompleteScreen", () => {
     );
 
     expect(container.textContent).toContain("Journey Complete");
-    const hierarchy = container.querySelector("[data-journey-complete-hierarchy]");
+    const hierarchy = container.querySelector(
+      "[data-journey-complete-hierarchy]",
+    );
     const portrait = hierarchy?.querySelector<HTMLElement>(
       "[data-journey-complete-dream-avatar]",
     );
@@ -79,17 +84,31 @@ describe("Cumulus JourneyCompleteScreen", () => {
     expect(statsSection?.style.flex).toBe("1 1 0%");
     expect(statsSection?.style.justifyContent).toBe("center");
     expect(portrait?.textContent).toBe("");
-    expect(portrait?.querySelector("[data-dream-avatar-source]")).not.toBeNull();
+    expect(
+      portrait?.querySelector("[data-dream-avatar-source]"),
+    ).not.toBeNull();
     expect(portrait?.querySelector("img")?.getAttribute("alt")).toContain(
       "The Wayfinder",
     );
-    expect(container.querySelectorAll("[data-journey-complete-stat]")).toHaveLength(5);
     expect(
-      container.querySelector('[data-journey-complete-stat="essence"]')?.textContent,
+      container.querySelectorAll("[data-journey-complete-stat]"),
+    ).toHaveLength(5);
+    expect(
+      container
+        .querySelector('[data-testid="journey-complete-summary-panel"]')
+        ?.getAttribute("data-glass-panel-frame"),
+    ).toBe("floating");
+    expect(
+      container.querySelector('[data-journey-complete-stat="essence"]')
+        ?.textContent,
     ).toContain("140");
     expect(container.querySelector('[title="Victory"]')).toBeNull();
-    expect(container.querySelector('[data-testid="journey-complete-view-deck"]')).toBeNull();
-    expect(container.querySelector('[data-testid="journey-complete-download-log"]')).toBeNull();
+    expect(
+      container.querySelector('[data-testid="journey-complete-view-deck"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-testid="journey-complete-download-log"]'),
+    ).toBeNull();
 
     act(() => root.unmount());
   });

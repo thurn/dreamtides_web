@@ -1,12 +1,8 @@
-import {
-  useEffect,
-  useState,
-  type ReactElement,
-} from "react";
+import { useEffect, useState, type ReactElement } from "react";
 import { GlassButton } from "../components/controls/GlassButton";
-import { GroupPanel } from "../components/controls/GroupPanel";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { Motes } from "../components/hud/Motes";
+import { GlassPanel } from "../components/overlay/GlassPanel";
 import { token } from "../primitives/tokens";
 import { MOBILE_BATTLE_INSPECTOR_RAIL_TRACK } from "./mobile-battle-layout";
 import { JOURNEY_RESULT_CONTENT_MAX_WIDTH_PX } from "./journey-result-layout";
@@ -25,10 +21,7 @@ export type MobileBattleResultView =
     };
 
 export type MobileBattleResultAction =
-  | "continue"
-  | "dismiss"
-  | "reopen"
-  | "reset";
+  "continue" | "dismiss" | "reopen" | "reset";
 
 export interface BattleResultSurfaceProps {
   readonly view: MobileBattleResultView;
@@ -215,13 +208,14 @@ function VictoryReward({
           data-battle-reward-essence-callout=""
           style={{ width: "100%", maxWidth: REWARD_CALLOUT_MAX_WIDTH_PX }}
         >
-          <GroupPanel>
+          <GlassPanel radius="popover" testId="battle-reward-essence-panel">
             <div
               style={{
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 gap: token("--space-3"),
+                padding: token("--space-6"),
               }}
             >
               <span
@@ -242,7 +236,7 @@ function VictoryReward({
                 <EssenceValue amount={`+${String(value)}`} />
               </span>
             </div>
-          </GroupPanel>
+          </GlassPanel>
         </div>
 
         <GlassButton
@@ -266,7 +260,10 @@ function DefeatOrDrawResult({
   onAction,
   centerOnBattlefield,
 }: {
-  readonly view: Extract<MobileBattleResultView, { outcome: "defeat" | "draw" }>;
+  readonly view: Extract<
+    MobileBattleResultView,
+    { outcome: "defeat" | "draw" }
+  >;
   readonly onAction?: (action: MobileBattleResultAction) => void;
   readonly centerOnBattlefield: boolean;
 }): ReactElement {
@@ -312,7 +309,7 @@ function DefeatOrDrawResult({
           maxWidth: JOURNEY_RESULT_CONTENT_MAX_WIDTH_PX,
         }}
       >
-        <GroupPanel>
+        <GlassPanel radius="popover" testId="battle-result-action-panel">
           <div
             data-battle-result-content=""
             style={{
@@ -320,6 +317,7 @@ function DefeatOrDrawResult({
               flexDirection: "column",
               alignItems: "stretch",
               gap: token("--space-6"),
+              padding: token("--space-6"),
               textAlign: "center",
             }}
           >
@@ -357,7 +355,7 @@ function DefeatOrDrawResult({
               />
             </div>
           </div>
-        </GroupPanel>
+        </GlassPanel>
       </div>
     </section>
   );
