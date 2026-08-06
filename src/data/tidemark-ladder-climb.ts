@@ -12,8 +12,9 @@ import type {
 } from "../types/journey";
 import { STANDARD_PLAYING_CARD_RANKS } from "./gravok-wager";
 
-export const TIDEMARK_LADDER_CLIMB_RULES_VERSION = "tidemark-ladder-climb-v1";
+export const TIDEMARK_LADDER_CLIMB_RULES_VERSION = "tidemark-ladder-climb-v2";
 export const TIDEMARK_STRONG_POOL_LIMIT = 50;
+export const TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD = 25;
 
 export interface TidemarkLadderClimbAttemptRule {
   attemptNumber: TidemarkLadderClimbAttemptNumber;

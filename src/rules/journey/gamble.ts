@@ -8,6 +8,7 @@ import {
 import {
   nextTidemarkLadderClimbAttemptNumber,
   rankWinsTidemarkLadderClimbAttempt,
+  TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD,
   tidemarkLadderClimbAttemptCost,
 } from "../../data/tidemark-ladder-climb";
 import {
@@ -378,7 +379,12 @@ export function settleTidemarkLadderClimb(
   );
 
   return withRuntime(
-    { ...journey, dreamsigns, remainingDreamsignPool },
+    {
+      ...journey,
+      essence: journey.essence + TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD,
+      dreamsigns,
+      remainingDreamsignPool,
+    },
     siteId,
     {
       ...runtime,

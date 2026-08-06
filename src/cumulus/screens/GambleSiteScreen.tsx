@@ -126,6 +126,8 @@ export interface LadderClimbSiteView {
   scene: ArtRef | null;
   isFarpoint: boolean;
   runtimeReady: boolean;
+  /** Essence awarded alongside the locked Dreamsign on a win. */
+  essenceReward: number;
   /** Locked Dreamsign shown as the prize from the opening state. */
   rewardDreamsign: DreamsignData;
   /** Only the currently unlocked attempt; future attempts stay undisclosed. */
@@ -1183,7 +1185,7 @@ function LadderClimbScreen({
                 <WagerPrizeCard
                   prizeId="ladder-climb"
                   targetLabel={`${targetRank}-A`}
-                  essenceReward={null}
+                  essenceReward={view.essenceReward}
                   rewardDreamsign={view.rewardDreamsign}
                   drawnCard={result?.card ?? null}
                   size={cardSize}

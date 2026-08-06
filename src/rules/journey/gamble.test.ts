@@ -492,6 +492,7 @@ describe("Tidemark Ladder Climb", () => {
 
     const settled = settleLadder(drawn.state);
     expect(settled.outcome).toBe("applied");
+    expect(settled.state.journey.essence).toBe(210);
     expect(settled.state.journey.dreamsigns.map((sign) => sign.id)).toEqual([
       "reward-sign",
     ]);
@@ -580,6 +581,7 @@ describe("Tidemark Ladder Climb", () => {
       ),
     );
     const settled = settleLadder(drawn.state);
+    expect(settled.state.journey.essence).toBe(210);
     expect(settled.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       result: {
         resultSettled: true,
@@ -597,6 +599,7 @@ describe("Tidemark Ladder Climb", () => {
       { siteId: SITE_ID, replacedDreamsignId: "held-sign" },
     );
     expect(replaced.outcome).toBe("applied");
+    expect(replaced.state.journey.essence).toBe(210);
     expect(replaced.state.journey.dreamsigns.map((sign) => sign.id)).toEqual([
       "reward-sign",
     ]);

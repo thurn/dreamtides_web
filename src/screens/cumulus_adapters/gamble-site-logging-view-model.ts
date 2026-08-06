@@ -1,6 +1,7 @@
 import type { GambleSiteView } from "../../cumulus/screens/GambleSiteScreen";
 import {
   TIDEMARK_LADDER_CLIMB_ATTEMPTS,
+  TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD,
   tidemarkLadderClimbAttemptCost,
 } from "../../data/tidemark-ladder-climb";
 import {
@@ -102,6 +103,7 @@ export function logGamblePrepared(
       strongPoolSize: runtime.strongPoolSize,
       strongPoolCutoffScore: runtime.strongPoolCutoffScore,
       selectedDreamsignId: runtime.rewardDreamsign?.id ?? null,
+      rewardEssence: TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD,
       attempts: TIDEMARK_LADDER_CLIMB_ATTEMPTS.map((attempt) => ({
         attemptNumber: attempt.attemptNumber,
         cost: tidemarkLadderClimbAttemptCost(attempt.attemptNumber, runtime.isFarpoint),
@@ -190,6 +192,9 @@ export function logGambleResolved(
       cumulativeCost: result.cumulativeCost,
       revealedCard: result.card,
       won: result.won,
+      essenceGained: result.won
+        ? TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD
+        : 0,
       terminalReason: result.won
         ? "won"
         : result.attemptNumber === 4
@@ -253,6 +258,15 @@ export function logGambleSettled(
       gameId: runtime.gameId,
       attemptNumber: runtime.result.attemptNumber,
       cumulativeCost: runtime.result.cumulativeCost,
+      essenceGained: runtime.result.won
+        ? TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD
+        : 0,
+      essenceChangeAtSettlement: runtime.result.won
+        ? TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD
+        : 0,
+      netEssenceChange:
+        (runtime.result.won ? TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD : 0) -
+        runtime.result.cumulativeCost,
       dreamsignId: runtime.result.won
         ? runtime.rewardDreamsign?.id ?? null
         : null,

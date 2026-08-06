@@ -571,6 +571,7 @@ function WagerPrizeCardObject({
       data-wager-prize-card-emphasis={emphasis}
       data-wager-prize-presentation={presentation}
       data-wager-prize-target={targetLabel}
+      data-wager-prize-essence-reward={essenceReward ?? undefined}
       data-wager-prize-drawn-card={
         drawnCard === null ? undefined : `${drawnCard.rank}-${drawnCard.suit}`
       }

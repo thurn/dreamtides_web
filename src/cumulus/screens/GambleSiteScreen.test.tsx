@@ -503,6 +503,7 @@ const LADDER_VIEW: LadderClimbSiteView = {
   scene: null,
   isFarpoint: false,
   runtimeReady: true,
+  essenceReward: 25,
   rewardDreamsign: JACKPOT_DREAMSIGN,
   nextDraw: {
     attemptNumber: 1,
@@ -568,6 +569,11 @@ describe("GambleSiteScreen — Ladder Climb", () => {
     ).not.toBeNull();
     expect(container.querySelector("[data-wager-prize-dreamsign-source]"))
       .not.toBeNull();
+    expect(
+      container
+        .querySelector("[data-wager-prize-card]")
+        ?.getAttribute("data-wager-prize-essence-reward"),
+    ).toBe("25");
     const draw = container.querySelector<HTMLButtonElement>(
       '[data-testid="gamble-ladder-climb"]',
     );

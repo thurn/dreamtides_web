@@ -13,6 +13,7 @@ import {
 } from "../../data/gravok-wager";
 import {
   nextTidemarkLadderClimbAttemptNumber,
+  TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD,
   tidemarkLadderClimbAttemptCost,
   tidemarkLadderClimbAttemptRule,
 } from "../../data/tidemark-ladder-climb";
@@ -40,7 +41,7 @@ import { dreamscapeSceneRef } from "./dreamscape-view-model";
 export const GRAVOK_WAGER_GUIDE_LINE =
   "The game's called Three Gates. Place your bet on the next card drawn!";
 export const TIDEMARK_LADDER_CLIMB_GUIDE_LINE =
-  "The game's Ladder Climb. Match or beat the target to win a Dreamsign. Try again with better odds if you miss!";
+  `The game's Ladder Climb. Match or beat the target to win ${TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD} Essence and a Dreamsign. Try again with better odds if you miss!`;
 export const STARWAY_STAIRS_GUIDE_LINE =
   "Starway Stairs is the game. Keep betting to see how high you can go!";
 
@@ -198,6 +199,7 @@ function buildLadderClimbSiteView(params: {
     }),
     isFarpoint: runtime.isFarpoint,
     runtimeReady: true,
+    essenceReward: TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD,
     rewardDreamsign: runtime.rewardDreamsign,
     nextDraw:
       nextAttempt === null || nextCost === null

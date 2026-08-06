@@ -20,9 +20,9 @@ makes with the casino’s otherworldly character.
 - Farpoint Station changes exactly one cost rule in each game. It does not also
   improve the odds, increase the prize, soften a penalty, or add another
   reward.
-- A resolved wager grants one reward whenever possible. Gravok’s Three-Gate
-  Wager has one explicit exception: its hardest tier grants both 200 Essence
-  and a random Dreamsign.
+- Gravok’s Three-Gate Wager’s hardest tier grants both 200 Essence and a random
+  Dreamsign. Tidemark Ladder Climb grants both 25 Essence and its displayed
+  Dreamsign. Every other resolved wager grants one reward whenever possible.
 - There is no casino-wide table fee. Every required payment is shown on the
   button that commits it.
 - The player can leave before the first paid commitment and complete the site
@@ -106,11 +106,11 @@ unchanged.
 
 ## 2. Tidemark Ladder Climb
 
-Tidemark Ladder Climb offers up to four separately purchased attempts to
-win one displayed Dreamsign from the strong Dreamsign pool. Each miss unlocks
-a more expensive attempt with a broader winning range. The player may leave
-after any miss. A win grants the Dreamsign and ends the game; leaving or
-missing all four attempts grants nothing.
+Tidemark Ladder Climb offers up to four separately purchased attempts to win
+25 Essence and one displayed Dreamsign from the strong Dreamsign pool. Each
+miss unlocks a more expensive attempt with a broader winning range. The player
+may leave after any miss. A win grants both rewards and ends the game; leaving
+or missing all four attempts grants nothing.
 
 The prize card displays `Draw Q–A` above `Win [Dreamsign name]` before the
 first draw. Hovering, focusing, or touch-holding the prize reveals the displayed

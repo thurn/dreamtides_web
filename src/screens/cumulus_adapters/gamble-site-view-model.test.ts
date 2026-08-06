@@ -292,6 +292,7 @@ describe("gamble-site-view-model — Ladder Climb", () => {
       available: true,
     });
     expect(view.result).toBeNull();
+    expect(view.essenceReward).toBe(25);
     expect(view.rewardDreamsign?.id).toBe("fixture-sign");
   });
 

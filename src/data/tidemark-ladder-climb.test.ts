@@ -9,11 +9,13 @@ import {
   nextTidemarkLadderClimbAttemptNumber,
   rankWinsTidemarkLadderClimbAttempt,
   scoreTidemarkLadderClimbDreamsignCandidates,
+  TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD,
   tidemarkLadderClimbAttemptCost,
 } from "./tidemark-ladder-climb";
 
 describe("Tidemark Ladder Climb rules", () => {
   it("uses the four inclusive thresholds and Farpoint-only cost schedule", () => {
+    expect(TIDEMARK_LADDER_CLIMB_ESSENCE_REWARD).toBe(25);
     expect(rankWinsTidemarkLadderClimbAttempt("Q", 1)).toBe(true);
     expect(rankWinsTidemarkLadderClimbAttempt("J", 1)).toBe(false);
     expect(rankWinsTidemarkLadderClimbAttempt("10", 2)).toBe(true);
