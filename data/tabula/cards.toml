@@ -378,7 +378,7 @@ Cards you reclaim are not banished when they leave play.
 2●, ☾: Choose a character in your void to gain reclaim.'''
 energy-cost = 2
 card-type = "Character"
-subtype = "Suvivor"
+subtype = "Survivor"
 rarity = ""
 is-fast = false
 is-interrupt = false
@@ -1629,7 +1629,7 @@ art = { x = -0.538, y = 0.897, scale = 1.07 }
 name = "Whisper Forager"
 mtg-name = "Snapcaster Mage"
 id = "bf323913-3695-49ee-8d13-8165657e3dc9"
-rendered-text = "▸Materialized: Chose an event in your void to gain reclaim."
+rendered-text = "▸Materialized: Choose an event in your void to gain reclaim."
 energy-cost = 2
 card-type = "Character"
 subtype = "Tinkerer"
@@ -1852,7 +1852,7 @@ card-number = 98
 art = { x = -0.512, y = -0.074, scale = 1.57 }
 
 [[cards]]
-name = "Amythest Aurelia"
+name = "Amethyst Aurelia"
 mtg-name = "Avacyn's Pilgrim"
 id = "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c"
 rendered-text = '''
@@ -3234,7 +3234,7 @@ card-number = 171
 art = { x = 0.084, y = 0.369, scale = 1.17 }
 
 [[cards]]
-name = "Ruthless Conquerer"
+name = "Ruthless Conqueror"
 mtg-name = "Oni-Cult Anvil"
 id = "d6ec65a2-d61e-4617-bdd0-75d5573c063d"
 rendered-text = """
@@ -9788,94 +9788,3 @@ tags = []
 image-number = 1486924805
 art-owned = false
 card-number = 10002
-
-
-[metadata]
-schema_version = 1
-
-[metadata.table_style]
-color_scheme = "blue_light"
-
-[[metadata.validation_rules]]
-column = "card-type"
-type = "enum"
-enum = ["Character", "Event"]
-
-[[metadata.validation_rules]]
-column = "rarity"
-type = "enum"
-enum = ["Legendary", "Special", "Starter"]
-colors = ["#F0D08A", "#F0A0A0"]
-
-[[metadata.validation_rules]]
-column = "subtype"
-type = "enum"
-enum = ["Agent", "Ancient", "Avatar", "Child", "Detective", "Enigma", "Explorer", "Guide", "Hacker", "Mage", "Monster", "Musician", "Outsider", "Renegade", "Robot", "Spirit Animal", "Super", "Survivor", "Synth", "Tinkerer", "Trooper", "Visionary", "Visitor", "Warrior"]
-
-[[metadata.validation_rules]]
-column = "resonance"
-type = "enum"
-enum = ["Ruin", "Tide", "Stone", "Ember", "Zephyr"]
-colors = ["#E8D0F0", "#D0E4F5", "#D5F0D0", "#F5D0D0", "#F5EED0"]
-
-[[metadata.derived_columns]]
-name = ""
-function = "image_derived"
-position = 0
-width = 160
-inputs = ["image_number"]
-url_template = "https://www.shutterstock.com/image-illustration/-260nw-{image_number}.jpg"
-frozen = true
-
-[metadata.rows]
-default_height = 100
-frozen_rows = 1
-
-[[metadata.columns]]
-key = "name"
-width = 200
-bold = true
-
-[[metadata.columns]]
-key = "mtg-name"
-width = 200
-
-[[metadata.columns]]
-key = "id"
-width = 140
-
-[[metadata.columns]]
-key = "rendered-text"
-width = 320
-
-[[metadata.columns]]
-key = "energy-cost"
-width = 100
-
-[[metadata.columns]]
-key = "card-type"
-width = 150
-
-[[metadata.columns]]
-key = "subtype"
-width = 200
-
-[[metadata.columns]]
-key = "rarity"
-width = 125
-
-[[metadata.columns]]
-key = "is-fast"
-width = 80
-
-[[metadata.columns]]
-key = "is-interrupt"
-width = 80
-
-[[metadata.columns]]
-key = "spark"
-width = 80
-
-[[metadata.columns]]
-key = "tags[0]"
-width = 160

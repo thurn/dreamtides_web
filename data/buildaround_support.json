@@ -3673,7 +3673,7 @@
       ]
     },
     "d6ec65a2-d61e-4617-bdd0-75d5573c063d": {
-      "name": "Ruthless Conquerer",
+      "name": "Ruthless Conqueror",
       "needs": [
         {
           "theme": "warriors",
@@ -3944,7 +3944,7 @@
       ]
     },
     "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c": {
-      "name": "Amythest Aurelia",
+      "name": "Amethyst Aurelia",
       "needs": [],
       "supports": [
         "spirit-animals",

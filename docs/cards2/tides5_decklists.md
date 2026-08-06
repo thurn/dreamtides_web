@@ -336,7 +336,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Starsea Traveler
 - 1× Looming Oracle
 - 1× Reckless Vigilante
-- 1× Amythest Aurelia
+- 1× Amethyst Aurelia
 - 1× Grim Recruiter
 - 1× Overstory Explorer
 - 1× Dreamcatcher's Call
@@ -1477,7 +1477,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Reckless Vigilante
 - 1× Mirrorlight Architect
 - 1× Paleclaw Panther
-- 1× Amythest Aurelia
+- 1× Amethyst Aurelia
 - 1× Urban Desperado
 - 1× Nightprowler
 - 1× Rower of Changing Seas
@@ -1560,7 +1560,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 1× Angel of the Eclipse
 - 1× Reckless Vigilante
 - 1× Paleclaw Panther
-- 1× Amythest Aurelia
+- 1× Amethyst Aurelia
 - 1× Ruin Scavenger
 - 1× Overstory Explorer
 - 1× Memory Tracer
@@ -1643,7 +1643,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 1× Reckless Vigilante
 - 1× Ancient Battlesuit
 - 1× Paleclaw Panther
-- 1× Amythest Aurelia
+- 1× Amethyst Aurelia
 - 1× Ruin Scavenger
 - 1× Overstory Explorer
 - 1× Nightprowler
@@ -1727,7 +1727,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Reckless Vigilante
 - 1× Ancient Battlesuit
 - 1× Paleclaw Panther
-- 1× Amythest Aurelia
+- 1× Amethyst Aurelia
 - 1× Ruin Scavenger
 - 1× Overstory Explorer
 - 1× Nightprowler
@@ -2264,7 +2264,7 @@ Tide-fac-05 is a character-heavy (37 of 45 copies) spirit animal swarm built aro
 - 1× Spiritbound Alpha
 - 1× Shadowpaw
 - 1× Celestial Reverie
-- 1× Amythest Aurelia
+- 1× Amethyst Aurelia
 - 1× Dreamcatcher's Call
 - 1× Dreamborne Leviathan
 - 1× Sunshadow Eagle
@@ -3148,7 +3148,7 @@ Tide-fac-22 is a character-dense spirit animal swarm built around layered spark 
 - 1× Shadowpaw
 - 1× Angel of the Eclipse
 - 1× Celestial Reverie
-- 1× Amythest Aurelia
+- 1× Amethyst Aurelia
 - 1× Dreamcatcher's Call
 - 1× Rower of Changing Seas
 - 1× Dreamborne Leviathan

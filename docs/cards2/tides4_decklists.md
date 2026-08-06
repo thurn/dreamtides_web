@@ -326,7 +326,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Ghostlight Wolves
 - 1× Celestial Reverie
 - 1× The Rising God
-- 1× Amythest Aurelia
+- 1× Amethyst Aurelia
 - 1× Grim Recruiter
 - 1× Ruin Scavenger
 - 1× Dreamcatcher's Call
@@ -1451,7 +1451,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Shattering Gambit
 - 1× Warrior's Path
 - 1× Paleclaw Panther
-- 1× Amythest Aurelia
+- 1× Amethyst Aurelia
 - 1× Ruin Scavenger
 - 1× Urban Desperado
 - 1× Nightprowler
@@ -1535,7 +1535,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 1× Looming Oracle
 - 1× Reckless Vigilante
 - 1× Paleclaw Panther
-- 1× Amythest Aurelia
+- 1× Amethyst Aurelia
 - 1× Ruin Scavenger
 - 1× Overstory Explorer
 - 1× Memory Tracer
@@ -1615,7 +1615,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 1× Starsea Traveler
 - 1× Reckless Vigilante
 - 1× Paleclaw Panther
-- 1× Amythest Aurelia
+- 1× Amethyst Aurelia
 - 1× Ruin Scavenger
 - 1× Sunset Chronicler
 - 1× Heavenward Penitent
@@ -1696,7 +1696,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Reckless Vigilante
 - 1× Ancient Battlesuit
 - 1× Paleclaw Panther
-- 1× Amythest Aurelia
+- 1× Amethyst Aurelia
 - 1× Ruin Scavenger
 - 1× Nightprowler
 - 1× Memory Tracer
@@ -1884,7 +1884,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 1× Assault Trooper
 - 1× Wired Duelist
 - 1× Vanguard Charger
-- 1× Ruthless Conquerer
+- 1× Ruthless Conqueror
 - 1× Steel Abomination
 - 1× Blood Moon Ronin
 - 1× Advance Gunner
@@ -2205,7 +2205,7 @@ Tide-fac-05 is a character-heavy (37 of 45 copies) spirit animal swarm built aro
 - 1× Spiritbound Alpha
 - 1× Shadowpaw
 - 1× Celestial Reverie
-- 1× Amythest Aurelia
+- 1× Amethyst Aurelia
 - 1× Dreamcatcher's Call
 - 1× Rower of Changing Seas
 - 1× Dreamborne Leviathan
@@ -3012,7 +3012,7 @@ Tide-fac-22 is a character-dense spirit animal swarm built around layered spark 
 - 1× Shadowpaw
 - 1× Looming Oracle
 - 1× Angel of the Eclipse
-- 1× Amythest Aurelia
+- 1× Amethyst Aurelia
 - 1× Dreamcatcher's Call
 - 1× Rower of Changing Seas
 - 1× Dreamborne Leviathan
