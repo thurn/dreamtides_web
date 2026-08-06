@@ -22,6 +22,7 @@ function writeFixtureRoot() {
     Array.from({ length: 12 }, (_, index) => ({
       template_id: index + 1,
       template: `Synthetic template ${String(index + 1)}`,
+      ...(index === 1 ? { balance_class: "unique_effect" } : {}),
     })),
   ));
   mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
@@ -61,10 +62,12 @@ describe("encounter template health", () => {
       recordedTemplateUses: 4,
       softWarningThreshold: 1,
       omissionThreshold: 2,
+      uniqueEffectOmissionThreshold: 1,
+      requiredTemplateCount: 10,
     });
     expect(health.templates.map(({ templateId, status }) => ({ templateId, status }))).toEqual([
       { templateId: 1, status: "hidden" },
-      { templateId: 2, status: "warning" },
+      { templateId: 2, status: "hidden" },
       { templateId: 3, status: "warning" },
       { templateId: 4, status: "unused" },
       { templateId: 5, status: "unused" },
@@ -80,6 +83,11 @@ describe("encounter template health", () => {
       templateId: 1,
       usageCount: 2,
       reasons: ["production"],
+    });
+    expect(health.templates[1]).toMatchObject({
+      balanceClass: "unique_effect",
+      status: "hidden",
+      usageCount: 1,
     });
   });
 

@@ -21,6 +21,7 @@ const VALID_STATUSES = new Set([
   "available",
 ]);
 const VALID_REASONS = new Set(["production"]);
+const VALID_BALANCE_CLASSES = new Set(["unique_effect"]);
 
 function objectRecord(value, label) {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
@@ -59,10 +60,15 @@ function parseTemplateDiagnostic(raw, index) {
   if (!Array.isArray(entry.reasons) || entry.reasons.some((reason) => !VALID_REASONS.has(reason))) {
     throw new Error(`template_diagnostics[${String(index)}].reasons is not recognized.`);
   }
+  const balanceClass = entry.balance_class ?? null;
+  if (balanceClass !== null && !VALID_BALANCE_CLASSES.has(balanceClass)) {
+    throw new Error(`template_diagnostics[${String(index)}].balance_class is not recognized.`);
+  }
   return {
     templateId: requiredInteger(entry.template_id, `template_diagnostics[${String(index)}].template_id`),
     template: requiredString(entry.template, `template_diagnostics[${String(index)}].template`),
     usageCount: requiredInteger(entry.usage_count, `template_diagnostics[${String(index)}].usage_count`),
+    balanceClass,
     status,
     reasons: entry.reasons,
   };
@@ -110,6 +116,14 @@ export function readEncounterTemplateHealth({
     meanUsesPerTemplate: requiredNumber(balance.mean_uses_per_template, "balance.mean_uses_per_template"),
     softWarningThreshold: requiredInteger(balance.soft_warning_threshold, "balance.soft_warning_threshold"),
     omissionThreshold: requiredInteger(balance.omission_threshold, "balance.omission_threshold"),
+    uniqueEffectOmissionThreshold: requiredInteger(
+      balance.unique_effect_omission_threshold,
+      "balance.unique_effect_omission_threshold",
+    ),
+    requiredTemplateCount: requiredInteger(
+      balance.required_template_count,
+      "balance.required_template_count",
+    ),
     guidance: requiredString(balance.soft_warning_guidance, "balance.soft_warning_guidance"),
     templates,
   };

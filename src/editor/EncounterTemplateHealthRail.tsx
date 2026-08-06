@@ -12,7 +12,7 @@ import "./encounter-template-health-rail.css";
 
 export const TEMPLATE_HEALTH_RAIL_ID = "encounter-template-health";
 
-type TemplateHealthFilter = "outliers" | "unused" | "candidates";
+type TemplateHealthFilter = "selectable" | "hidden" | "all";
 type TemplateHealthLoadState = "idle" | "loading" | "ready" | "error";
 
 const STATUS_LABELS: Record<EncounterTemplateHealthStatus, string> = {
@@ -20,13 +20,15 @@ const STATUS_LABELS: Record<EncounterTemplateHealthStatus, string> = {
   warning: "Warning",
   reintroduced: "Reintroduced",
   unused: "Unused",
-  available: "Candidate",
+  available: "Available",
 };
 
-function reasonLabel(entry: EncounterTemplateHealthEntry): string {
-  if (entry.status === "unused") return "Never used";
-  if (entry.reasons.includes("production")) return "Production prevalence";
-  return "Balanced usage";
+function pluralUses(count: number): string {
+  return `${String(count)} production ${count === 1 ? "use" : "uses"}`;
+}
+
+function isSelectable(entry: EncounterTemplateHealthEntry): boolean {
+  return entry.status !== "hidden";
 }
 
 function countStatus(
@@ -36,33 +38,63 @@ function countStatus(
   return health.templates.filter((entry) => entry.status === status).length;
 }
 
-function candidatesFor(
+function selectableCount(health: EncounterTemplateHealth): number {
+  return health.templates.filter(isSelectable).length;
+}
+
+function entriesFor(
   health: EncounterTemplateHealth,
   filter: TemplateHealthFilter,
 ): EncounterTemplateHealthEntry[] {
   const filtered = health.templates.filter((entry) => {
-    if (filter === "outliers") {
-      return ["hidden", "warning", "reintroduced"].includes(entry.status);
-    }
-    if (filter === "unused") return entry.status === "unused";
-    return entry.status !== "hidden";
+    if (filter === "selectable") return isSelectable(entry);
+    if (filter === "hidden") return !isSelectable(entry);
+    return true;
   });
-  const statusOrder: Record<EncounterTemplateHealthStatus, number> = {
-    hidden: 0,
-    reintroduced: 1,
-    warning: 2,
-    unused: 3,
-    available: 4,
-  };
-  return filtered.sort((left, right) => {
-    if (filter === "candidates") {
-      return left.usageCount - right.usageCount
-        || left.templateId - right.templateId;
-    }
-    return statusOrder[left.status] - statusOrder[right.status]
-      || right.usageCount - left.usageCount
-      || left.templateId - right.templateId;
-  });
+  if (filter === "selectable") {
+    return filtered.sort((left, right) =>
+      left.usageCount - right.usageCount || left.templateId - right.templateId);
+  }
+  if (filter === "hidden") {
+    return filtered.sort((left, right) =>
+      right.usageCount - left.usageCount || left.templateId - right.templateId);
+  }
+  return filtered.sort((left, right) => left.templateId - right.templateId);
+}
+
+function statusExplanation(
+  status: EncounterTemplateHealthStatus,
+  requiredTemplateCount: number,
+): string {
+  if (status === "unused") return "Selectable · no production uses";
+  if (status === "available") return "Selectable · below the warning threshold";
+  if (status === "warning") return "Selectable · use only for a stronger fit";
+  if (status === "reintroduced") {
+    return `Selectable · restored to keep at least ${String(requiredTemplateCount)} choices`;
+  }
+  return "Not selectable · reached its hide threshold";
+}
+
+function entryRule(
+  entry: EncounterTemplateHealthEntry,
+  health: EncounterTemplateHealth,
+): string {
+  if (entry.status === "unused") {
+    return "Never used; prefer it when the fit is comparable.";
+  }
+  if (entry.status === "reintroduced") {
+    return `It reached a hide threshold, then returned to preserve at least ${String(health.requiredTemplateCount)} selectable templates.`;
+  }
+  if (entry.balanceClass === "unique_effect") {
+    return `Unique effect: hidden after ${String(health.uniqueEffectOmissionThreshold)} production use.`;
+  }
+  if (entry.status === "warning") {
+    return `Standard template: warning at ${String(health.softWarningThreshold)}, hidden at ${String(health.omissionThreshold)} uses.`;
+  }
+  if (entry.status === "hidden") {
+    return `Standard template: hidden at ${String(health.omissionThreshold)} production uses.`;
+  }
+  return `Standard template: below the warning threshold of ${String(health.softWarningThreshold)} use.`;
 }
 
 export function EncounterTemplateHealthRail({
@@ -80,15 +112,15 @@ export function EncounterTemplateHealthRail({
   onRefresh: () => void;
   onFilterChange: (filter: TemplateHealthFilter) => void;
 }) {
-  const [filter, setFilter] = useState<TemplateHealthFilter>("outliers");
+  const [filter, setFilter] = useState<TemplateHealthFilter>("selectable");
   const entries = useMemo(
-    () => health === null ? [] : candidatesFor(health, filter),
+    () => health === null ? [] : entriesFor(health, filter),
     [filter, health],
   );
   const isLoading = loadState === "loading";
   const subtitle = health === null
-    ? isLoading ? "Reading current candidate balance…" : "Candidate balance unavailable"
-    : `${String(health.productionEncounters)} production encounters · ${String(health.catalogTemplateCount)} templates${isLoading ? " · refreshing…" : ""}`;
+    ? isLoading ? "Reading current template balance…" : "Template balance unavailable"
+    : `${String(health.recordedTemplateUses)} uses across ${String(health.productionEncounters)} production encounters${isLoading ? " · refreshing…" : ""}`;
 
   function chooseFilter(next: string) {
     const selected = next as TemplateHealthFilter;
@@ -125,40 +157,66 @@ export function EncounterTemplateHealthRail({
         </div>
       ) : (
         <div className="encounter-template-health-content">
-          <section className="encounter-template-health-priority" aria-labelledby="template-health-priority-heading">
+          <section className="encounter-template-health-overview" aria-labelledby="template-health-overview-heading">
             <div className="encounter-template-health-section-heading">
-              <span>Primary signal</span>
-              <h2 id="template-health-priority-heading">Production diversity</h2>
+              <span>Selection overview</span>
+              <h2 id="template-health-overview-heading">What can be chosen now</h2>
             </div>
-            <div className="encounter-template-health-metric-grid">
-              <div>
-                <strong>{health.recordedTemplateUses}</strong>
-                <span>production uses</span>
-                <small>Mean {health.meanUsesPerTemplate.toFixed(2)}</small>
+            <div className="encounter-template-health-selection-grid">
+              <div data-template-selection-state="selectable">
+                <strong>{selectableCount(health)}</strong>
+                <span>Selectable</span>
+                <small>Can appear in a new design</small>
               </div>
-              <div>
-                <strong>{health.softWarningThreshold} / {health.omissionThreshold}</strong>
-                <span>warn / hide</span>
-                <small>Per template</small>
+              <div data-template-selection-state="hidden">
+                <strong>{countStatus(health, "hidden")}</strong>
+                <span>Hidden</span>
+                <small>Temporarily excluded</small>
               </div>
             </div>
-            <p>{health.guidance}</p>
+            <p>Every template is either selectable or hidden. Selectable templates may still carry usage guidance.</p>
           </section>
 
-          <section className="encounter-template-health-statuses" aria-label="Template status counts">
-            {(["hidden", "warning", "reintroduced", "unused"] as const).map((status) => (
+          <section className="encounter-template-health-breakdown" aria-labelledby="template-health-breakdown-heading">
+            <div className="encounter-template-health-section-heading">
+              <span>Status guide</span>
+              <h2 id="template-health-breakdown-heading">Why a template has its status</h2>
+            </div>
+            {(["unused", "available", "warning", "reintroduced", "hidden"] as const).map((status) => (
               <div key={status} data-template-health-status={status}>
                 <strong>{countStatus(health, status)}</strong>
                 <span>{STATUS_LABELS[status]}</span>
+                <small>{statusExplanation(status, health.requiredTemplateCount)}</small>
               </div>
             ))}
           </section>
 
+          <section className="encounter-template-health-policy" aria-labelledby="template-health-policy-heading">
+            <div className="encounter-template-health-section-heading">
+              <span>Thresholds</span>
+              <h2 id="template-health-policy-heading">How hiding works</h2>
+            </div>
+            <dl>
+              <div>
+                <dt>Standard templates</dt>
+                <dd>Warn at {health.softWarningThreshold}; hide at {health.omissionThreshold} uses.</dd>
+              </div>
+              <div>
+                <dt>Unique effects</dt>
+                <dd>Hide after {health.uniqueEffectOmissionThreshold} use.</dd>
+              </div>
+              <div>
+                <dt>Reintroduced</dt>
+                <dd>A hidden template restored only when fewer than {health.requiredTemplateCount} choices would remain.</dd>
+              </div>
+            </dl>
+          </section>
+
           <SegmentedControl
             options={[
-              { value: "outliers", label: "Outliers" },
-              { value: "unused", label: "Unused" },
-              { value: "candidates", label: "Candidates" },
+              { value: "selectable", label: `Selectable (${String(selectableCount(health))})` },
+              { value: "hidden", label: `Hidden (${String(countStatus(health, "hidden"))})` },
+              { value: "all", label: `All (${String(health.catalogTemplateCount)})` },
             ]}
             value={filter}
             onChange={chooseFilter}
@@ -168,7 +226,7 @@ export function EncounterTemplateHealthRail({
 
           <section className="encounter-template-health-results" aria-live="polite">
             <div className="encounter-template-health-results-heading">
-              <h2>{filter === "outliers" ? "Outliers" : filter === "unused" ? "Unused templates" : "Selectable candidates"}</h2>
+              <h2>{filter === "selectable" ? "Selectable templates" : filter === "hidden" ? "Hidden templates" : "All templates"}</h2>
               <span>{entries.length}</span>
             </div>
             <div className="encounter-template-health-list">
@@ -181,13 +239,14 @@ export function EncounterTemplateHealthRail({
                 >
                   <header>
                     <span>Template {entry.templateId}</span>
-                    <strong>{STATUS_LABELS[entry.status]}</strong>
+                    <strong>{isSelectable(entry) ? "Selectable" : "Hidden"}</strong>
                   </header>
                   <p>{entry.template}</p>
                   <footer>
-                    <span><strong>{entry.usageCount}</strong> production uses</span>
-                    <span>{reasonLabel(entry)}</span>
+                    <span><strong>{pluralUses(entry.usageCount)}</strong></span>
+                    <span>{STATUS_LABELS[entry.status]}</span>
                   </footer>
+                  <p className="encounter-template-health-rule">{entryRule(entry, health)}</p>
                 </article>
               ))}
             </div>

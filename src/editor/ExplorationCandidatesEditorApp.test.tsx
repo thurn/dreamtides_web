@@ -110,17 +110,19 @@ const GROUPS: ExplorationCandidatesEditorGroup[] = [{
 
 const TEMPLATE_HEALTH: EncounterTemplateHealth = {
   productionEncounters: 9,
-  recordedTemplateUses: 90,
+  recordedTemplateUses: 4,
   catalogTemplateCount: 70,
-  meanUsesPerTemplate: 1.286,
-  softWarningThreshold: 2,
-  omissionThreshold: 3,
+  meanUsesPerTemplate: 0.057,
+  softWarningThreshold: 1,
+  omissionThreshold: 2,
+  uniqueEffectOmissionThreshold: 1,
+  requiredTemplateCount: 10,
   guidance: "Prefer fewer prior production uses.",
   templates: [
-    { templateId: 14, template: "Draw a card", usageCount: 9, status: "hidden", reasons: ["production"] },
-    { templateId: 37, template: "Gain a dreamsign", usageCount: 2, status: "warning", reasons: ["production"] },
-    { templateId: 1, template: "Gain essence", usageCount: 0, status: "unused", reasons: [] },
-    { templateId: 2, template: "Purge a card", usageCount: 1, status: "available", reasons: [] },
+    { templateId: 14, template: "Draw a card", usageCount: 1, balanceClass: "unique_effect", status: "hidden", reasons: ["production"] },
+    { templateId: 37, template: "Gain a dreamsign", usageCount: 1, balanceClass: null, status: "warning", reasons: ["production"] },
+    { templateId: 1, template: "Gain essence", usageCount: 0, balanceClass: null, status: "unused", reasons: [] },
+    { templateId: 2, template: "Purge a card", usageCount: 2, balanceClass: null, status: "reintroduced", reasons: ["production"] },
   ],
 };
 
@@ -261,7 +263,7 @@ describe("ExplorationCandidatesEditorApp", () => {
     act(() => root.unmount());
   });
 
-  it("loads template health lazily and filters outliers, unused templates, and candidates", async () => {
+  it("explains selection states, thresholds, and why one-use templates differ", async () => {
     const loadTemplateHealth = vi.fn().mockResolvedValue(structuredClone(TEMPLATE_HEALTH));
     const { container, root } = await renderLoaded(client({ loadTemplateHealth }));
     expect(loadTemplateHealth).not.toHaveBeenCalled();
@@ -272,25 +274,28 @@ describe("ExplorationCandidatesEditorApp", () => {
       await Promise.resolve();
     });
     expect(loadTemplateHealth).toHaveBeenCalledOnce();
-    expect(container.textContent).toContain("Production diversity");
-    expect(container.textContent).toContain("Draw a card");
+    expect(container.textContent).toContain("What can be chosen now");
+    expect(container.textContent).toContain("Every template is either selectable or hidden");
+    expect(container.textContent).toContain("Unique effects");
+    expect(container.textContent).toContain("Hide after 1 use");
     expect(container.textContent).toContain("Gain a dreamsign");
-    expect(container.textContent).not.toContain("Gain essence");
-
-    const unused = [...container.querySelectorAll<HTMLButtonElement>("[role='tab']")]
-      .find((button) => button.textContent === "Unused")!;
-    act(() => unused.click());
-    expect(container.textContent).toContain("Gain essence");
-    expect(container.textContent).toContain("Never used");
-    expect(container.textContent).not.toContain("Balanced usage");
-    expect(container.textContent).not.toContain("Draw a card");
-
-    const candidates = [...container.querySelectorAll<HTMLButtonElement>("[role='tab']")]
-      .find((button) => button.textContent === "Candidates")!;
-    act(() => candidates.click());
     expect(container.textContent).toContain("Gain essence");
     expect(container.textContent).toContain("Purge a card");
     expect(container.textContent).not.toContain("Draw a card");
+
+    const hidden = [...container.querySelectorAll<HTMLButtonElement>("[role='tab']")]
+      .find((button) => button.textContent === "Hidden (1)")!;
+    act(() => hidden.click());
+    expect(container.textContent).toContain("Draw a card");
+    expect(container.textContent).toContain("Unique effect: hidden after 1 production use.");
+    expect(container.textContent).not.toContain("Gain a dreamsign");
+
+    const all = [...container.querySelectorAll<HTMLButtonElement>("[role='tab']")]
+      .find((button) => button.textContent === "All (70)")!;
+    act(() => all.click());
+    expect(container.textContent).toContain("Draw a card");
+    expect(container.textContent).toContain("Gain a dreamsign");
+    expect(container.textContent).toContain("Gain essence");
 
     act(() => container.querySelector<HTMLButtonElement>("[aria-label='Close template health']")!.click());
     expect(container.querySelector("[data-testid='encounter-template-health-rail']")).toBeNull();

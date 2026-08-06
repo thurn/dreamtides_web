@@ -77,11 +77,13 @@ export type EncounterTemplateHealthStatus =
   | "available";
 
 export type EncounterTemplateHealthReason = "production";
+export type EncounterTemplateBalanceClass = "unique_effect";
 
 export interface EncounterTemplateHealthEntry {
   templateId: number;
   template: string;
   usageCount: number;
+  balanceClass: EncounterTemplateBalanceClass | null;
   status: EncounterTemplateHealthStatus;
   reasons: EncounterTemplateHealthReason[];
 }
@@ -93,6 +95,8 @@ export interface EncounterTemplateHealth {
   meanUsesPerTemplate: number;
   softWarningThreshold: number;
   omissionThreshold: number;
+  uniqueEffectOmissionThreshold: number;
+  requiredTemplateCount: number;
   guidance: string;
   templates: EncounterTemplateHealthEntry[];
 }

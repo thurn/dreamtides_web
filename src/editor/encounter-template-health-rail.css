@@ -26,7 +26,9 @@
   font: var(--t-body);
 }
 
-.encounter-template-health-priority {
+.encounter-template-health-overview,
+.encounter-template-health-breakdown,
+.encounter-template-health-policy {
   display: grid;
   gap: var(--space-4);
   padding-bottom: var(--space-5);
@@ -51,79 +53,115 @@
   font: var(--t-lead);
 }
 
-.encounter-template-health-metric-grid {
+.encounter-template-health-selection-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-2);
 }
 
-.encounter-template-health-metric-grid > div {
+.encounter-template-health-selection-grid > div {
   min-width: 0;
   display: grid;
   gap: var(--space-1);
   padding: var(--space-3);
   border: 1px solid var(--border-soft);
+  border-top: 3px solid var(--energy);
   border-radius: var(--radius-inset);
   background: color-mix(in srgb, var(--surface-raised) 60%, transparent);
 }
 
-.encounter-template-health-metric-grid strong {
+.encounter-template-health-selection-grid [data-template-selection-state="hidden"] {
+  border-top-color: var(--danger);
+}
+
+.encounter-template-health-selection-grid strong {
   color: var(--text-on-glass);
   font: var(--t-title);
 }
 
-.encounter-template-health-metric-grid span {
+.encounter-template-health-selection-grid span {
   color: var(--text-on-glass);
   font: var(--t-body-sm);
 }
 
-.encounter-template-health-metric-grid small {
+.encounter-template-health-selection-grid small {
   color: var(--text-on-glass-muted);
   font: var(--t-caption);
 }
 
-.encounter-template-health-priority > p {
+.encounter-template-health-overview > p {
   margin: 0;
   color: var(--text-on-glass-muted);
   font: var(--t-caption);
 }
 
-.encounter-template-health-statuses {
+.encounter-template-health-breakdown {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--space-2);
+  gap: var(--space-3);
 }
 
-.encounter-template-health-statuses > div {
+.encounter-template-health-breakdown > div:not(.encounter-template-health-section-heading) {
   min-width: 0;
   display: grid;
-  gap: var(--space-1);
+  grid-template-columns: 2rem 6rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--space-2);
   padding: var(--space-2);
-  border-top: 2px solid var(--border-mid);
+  border-left: 3px solid var(--border-mid);
 }
 
-.encounter-template-health-statuses strong {
+.encounter-template-health-breakdown strong {
   color: var(--text-on-glass);
   font: var(--t-button);
 }
 
-.encounter-template-health-statuses span {
-  overflow: hidden;
+.encounter-template-health-breakdown span {
+  color: var(--text-on-glass);
+  font: var(--t-caption);
+}
+
+.encounter-template-health-breakdown small {
   color: var(--text-on-glass-muted);
   font: var(--t-caption);
-  text-overflow: ellipsis;
 }
 
-.encounter-template-health-statuses [data-template-health-status="hidden"] {
-  border-top-color: var(--danger);
+.encounter-template-health-breakdown [data-template-health-status="hidden"] {
+  border-left-color: var(--danger);
 }
 
-.encounter-template-health-statuses [data-template-health-status="warning"] {
-  border-top-color: var(--spark);
+.encounter-template-health-breakdown [data-template-health-status="warning"] {
+  border-left-color: var(--spark);
 }
 
-.encounter-template-health-statuses [data-template-health-status="reintroduced"] {
-  border-top-color: var(--energy);
+.encounter-template-health-breakdown [data-template-health-status="reintroduced"] {
+  border-left-color: var(--energy);
+}
+
+.encounter-template-health-breakdown [data-template-health-status="unused"] {
+  border-left-color: var(--text-faint);
+}
+
+.encounter-template-health-policy dl {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.encounter-template-health-policy dl > div {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+.encounter-template-health-policy dt {
+  color: var(--text-on-glass);
+  font: var(--t-caption);
+}
+
+.encounter-template-health-policy dd {
+  margin: 0;
+  color: var(--text-on-glass-muted);
+  font: var(--t-caption);
 }
 
 .encounter-template-health-results {
@@ -214,6 +252,13 @@
 
 .encounter-template-health-entry footer strong {
   color: var(--text-on-glass);
+}
+
+.encounter-template-health-entry > p.encounter-template-health-rule {
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border-soft);
+  color: var(--text-on-glass-muted);
+  font: var(--t-caption);
 }
 
 @media (max-width: 1559px) {
