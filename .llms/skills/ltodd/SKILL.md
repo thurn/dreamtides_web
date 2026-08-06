@@ -10,6 +10,11 @@ description: >-
 
 # Living Tome of Dreamtides Design
 
+The Living Tome of Dreamtides Design, or LToDD, is the canonical book describing
+how the production game works and why its major design decisions exist. An
+expert unfamiliar with this repository should be able to reimplement Dreamtides
+from the book and its companion TOML catalogs.
+
 Write the canonical, implementation-grade account of Dreamtides. Preserve the
 production game's intended behavior while presenting its rules, presentation,
 and rationale as a coherent clean design rather than an account of the current
