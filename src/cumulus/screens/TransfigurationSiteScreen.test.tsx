@@ -399,7 +399,7 @@ describe("TransfigurationSiteScreen", () => {
       '[data-testid="cumulus-transfiguration-form-Empowered"]',
     );
     expect(empowered?.textContent).toBe("Empowered40");
-    expect(empowered?.dataset.transfigurationFormVariant).toBe("priced");
+    expect(empowered?.dataset.transfigurationButtonVariant).toBe("priced");
     expect(empowered?.getAttribute("aria-description")).toBe(
       "Reduce this card's energy cost.",
     );
@@ -627,7 +627,7 @@ describe("TransfigurationSiteScreen", () => {
     expect(
       container.querySelector<HTMLButtonElement>(
         '[data-testid="cumulus-transfiguration-form-Empowered"]',
-      )?.dataset.transfigurationFormVariant,
+      )?.dataset.transfigurationButtonVariant,
     ).toBe("compact");
     expect(
       container

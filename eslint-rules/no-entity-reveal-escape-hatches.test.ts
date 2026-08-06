@@ -85,7 +85,7 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
     {
       name: "transfiguration form owns its semantic reveal and identity",
       filename:
-        "src/cumulus/components/controls/TransfigurationFormButton.tsx",
+        "src/cumulus/components/controls/TransfigurationButton.tsx",
       code: `import { useRevealSource } from "../../internal/reveal/context";
         import { revealEntityId } from "../../internal/reveal/identity";
         const binding = useRevealSource({ identity: { entityType: "transfiguration-form", entityId: revealEntityId("transfiguration-form", id) }, spec });`,

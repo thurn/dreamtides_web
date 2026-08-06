@@ -1,9 +1,9 @@
 import { useState } from "react";
 import type { TransfigurationType } from "../../../types/journey";
 import {
-  TransfigurationFormButton,
-  type TransfigurationFormButtonVariant,
-} from "../../components/controls/TransfigurationFormButton";
+  TransfigurationButton,
+  type TransfigurationButtonVariant,
+} from "../../components/controls/TransfigurationButton";
 import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
 
@@ -22,9 +22,9 @@ const DEMO_FORMS = [
   },
 ];
 
-function TransfigurationFormButtonDemo() {
+function TransfigurationButtonDemo() {
   const [selected, setSelected] = useState<TransfigurationType | null>(null);
-  const variants: readonly TransfigurationFormButtonVariant[] = [
+  const variants: readonly TransfigurationButtonVariant[] = [
     "compact",
     "priced",
   ];
@@ -47,7 +47,7 @@ function TransfigurationFormButtonDemo() {
           }}
         >
           {DEMO_FORMS.map((form) => (
-            <TransfigurationFormButton
+            <TransfigurationButton
               key={form.type}
               form={form}
               variant={variant}
@@ -61,23 +61,23 @@ function TransfigurationFormButtonDemo() {
   );
 }
 
-export const transfigurationFormButtonDemo: CumulusComponent = {
-  id: "transfiguration-form-button",
-  title: "Transfiguration Form Button",
+export const transfigurationButtonDemo: CumulusComponent = {
+  id: "transfiguration-button",
+  title: "Transfiguration Button",
   blurb:
     "The canonical forge-form choice: compact and price-bearing controls with shared glyph, color, state, and accessibility behavior.",
   callout:
     "Use the compact variant for space-constrained lists and the priced variant when each choice carries a visible essence quote.",
   group: "Components",
-  docName: "TransfigurationFormButton",
-  Component: TransfigurationFormButtonDemo,
+  docName: "TransfigurationButton",
+  Component: TransfigurationButtonDemo,
   usage: [
     {
       label: "Forge form",
       note: "Pass the structured form model and choose one of the two strict presentation variants.",
-      code: `import { TransfigurationFormButton } from "src/cumulus/components/controls/TransfigurationFormButton";
+      code: `import { TransfigurationButton } from "src/cumulus/components/controls/TransfigurationButton";
 
-<TransfigurationFormButton
+<TransfigurationButton
   form={form}
   variant="priced"
   selected={selectedType === form.type}

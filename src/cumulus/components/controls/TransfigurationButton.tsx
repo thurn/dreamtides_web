@@ -1,4 +1,4 @@
-// TransfigurationFormButton — the canonical forge-form choice.
+// TransfigurationButton — the canonical forge-form choice.
 
 import { TRANSFIGURATION_COLORS } from "../../../runtime/transfiguration-display";
 import type { TransfigurationType } from "../../../types/journey";
@@ -24,7 +24,7 @@ const TRANSFIGURATION_FORM_GLYPHS: Readonly<
 };
 
 /** Player-facing data for one offered transfiguration form. */
-export interface TransfigurationFormButtonModel {
+export interface TransfigurationButtonModel {
   /** Named transfiguration form, which determines the canonical glyph. */
   type: TransfigurationType;
   /** Player-facing rules change announced as the option's accessible description. */
@@ -36,13 +36,13 @@ export interface TransfigurationFormButtonModel {
 }
 
 /** Strict visual treatments for compact and price-bearing form lists. */
-export type TransfigurationFormButtonVariant = "compact" | "priced";
+export type TransfigurationButtonVariant = "compact" | "priced";
 
-export interface TransfigurationFormButtonProps {
+export interface TransfigurationButtonProps {
   /** Structured offered-form data; the component owns its canonical glyph and color. */
-  form: TransfigurationFormButtonModel;
+  form: TransfigurationButtonModel;
   /** Compact name-only choice or a wider choice with a visible essence price. */
-  variant: TransfigurationFormButtonVariant;
+  variant: TransfigurationButtonVariant;
   /** Whether this form is the active radio choice. */
   selected: boolean;
   /** Prevent activation while a transfiguration commit is in flight. */
@@ -57,14 +57,14 @@ export interface TransfigurationFormButtonProps {
  * Canonical forge-form choice. A quick activation selects the form and updates
  * the adjacent card preview.
  */
-export function TransfigurationFormButton({
+export function TransfigurationButton({
   form,
   variant,
   selected,
   disabled = false,
   onActivate,
   testId,
-}: TransfigurationFormButtonProps) {
+}: TransfigurationButtonProps) {
   const canSelect = form.affordable && !disabled;
   const glyph = TRANSFIGURATION_FORM_GLYPHS[form.type];
   const accent = TRANSFIGURATION_COLORS[form.type];
@@ -73,7 +73,7 @@ export function TransfigurationFormButton({
   return (
     <Pressable
       as="button"
-      data-transfiguration-form-variant={variant}
+      data-transfiguration-button-variant={variant}
       role="radio"
       aria-checked={selected}
       aria-description={form.description}

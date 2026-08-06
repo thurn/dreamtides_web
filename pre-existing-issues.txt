@@ -1,3 +1,7 @@
 The CardChoiceGrid catalog demo wraps its grid in `containerType: "size"`
 without establishing a container height. Its `cqh`-based site card width
 therefore resolves to zero, collapsing all four demo cards to 0×0 geometry.
+
+The Transfiguration Button catalog demo fixes its specimen stage at 560px
+with two equal columns. At a 390px viewport, the priced controls overlap their
+labels and Essence values instead of adapting to the available width.

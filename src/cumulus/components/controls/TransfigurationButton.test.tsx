@@ -3,7 +3,7 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { TransfigurationFormButton } from "./TransfigurationFormButton";
+import { TransfigurationButton } from "./TransfigurationButton";
 
 const empowered = {
   type: "Empowered" as const,
@@ -34,7 +34,7 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-describe("TransfigurationFormButton", () => {
+describe("TransfigurationButton", () => {
   it("owns the compact treatment and reports its semantic form type", () => {
     const container = document.createElement("div");
     document.body.append(container);
@@ -43,7 +43,7 @@ describe("TransfigurationFormButton", () => {
 
     act(() => {
       root.render(
-        <TransfigurationFormButton
+        <TransfigurationButton
           form={empowered}
           variant="compact"
           selected={false}
@@ -56,7 +56,7 @@ describe("TransfigurationFormButton", () => {
     expect(button?.style.width).toBe("100%");
     expect(button?.style.justifyContent).toBe("center");
     expect(button?.style.textAlign).toBe("center");
-    expect(button?.dataset.transfigurationFormVariant).toBe("compact");
+    expect(button?.dataset.transfigurationButtonVariant).toBe("compact");
     expect(button?.textContent).toBe("Empowered");
     expect(button?.getAttribute("aria-label")).toBe(
       "Empowered, 40 essence",
@@ -76,7 +76,7 @@ describe("TransfigurationFormButton", () => {
 
     act(() => {
       root.render(
-        <TransfigurationFormButton
+        <TransfigurationButton
           form={{ ...empowered, essenceCost: 0, affordable: false }}
           variant="priced"
           selected
@@ -86,7 +86,7 @@ describe("TransfigurationFormButton", () => {
     });
 
     const button = container.querySelector<HTMLButtonElement>("button");
-    expect(button?.dataset.transfigurationFormVariant).toBe("priced");
+    expect(button?.dataset.transfigurationButtonVariant).toBe("priced");
     expect(button?.style.gridTemplateColumns).toBe(
       "auto minmax(0, 1fr) auto",
     );

@@ -4857,16 +4857,16 @@
     }
   ],
   "TidesInfoLabel": [],
-  "TransfigurationFormButton": [
+  "TransfigurationButton": [
     {
       "name": "form",
-      "tsType": "TransfigurationFormButtonModel",
+      "tsType": "TransfigurationButtonModel",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
       "description": "Structured offered-form data; the component owns its canonical glyph and color.",
       "nested": {
-        "name": "TransfigurationFormButtonModel",
+        "name": "TransfigurationButtonModel",
         "fields": [
           {
             "name": "type",
@@ -4897,7 +4897,7 @@
     },
     {
       "name": "variant",
-      "tsType": "TransfigurationFormButtonVariant",
+      "tsType": "TransfigurationButtonVariant",
       "unionMembers": [
         "compact",
         "priced"

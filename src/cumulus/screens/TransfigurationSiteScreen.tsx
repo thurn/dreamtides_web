@@ -8,9 +8,9 @@ import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
 import { GlassButton } from "../components/controls/GlassButton";
 import {
-  TransfigurationFormButton,
-  type TransfigurationFormButtonModel,
-} from "../components/controls/TransfigurationFormButton";
+  TransfigurationButton,
+  type TransfigurationButtonModel,
+} from "../components/controls/TransfigurationButton";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import type { ArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
@@ -23,7 +23,7 @@ import {
 
 export type TransfigurationGuideView = GuideGalleryGuideView;
 
-export interface TransfigurationFormView extends TransfigurationFormButtonModel {
+export interface TransfigurationFormView extends TransfigurationButtonModel {
   /** Persisted reconstruction payload passed back to the mutation. */
   effectDetails: Record<string, unknown>;
   /** The transformed card plus its marked transfiguration display. */
@@ -589,7 +589,7 @@ export function TransfigurationDetailPanel({
               {candidate.forms.map((form) => {
                 const selected = form.type === activeForm?.type;
                 return (
-                  <TransfigurationFormButton
+                  <TransfigurationButton
                     key={form.type}
                     form={form}
                     variant={mobile ? "compact" : "priced"}
