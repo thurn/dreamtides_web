@@ -30,7 +30,7 @@ function active(overrides: Partial<RevealOverlayActive> = {}): RevealOverlayActi
     source: { identity: { entityType: "test", entityId: UUID }, registrationId: "one" },
     spec: makeTextRevealSpec("Primary", "Body", ["First", "Second"]), element: source,
     reason: "hover", sourceShowsCompleteGameCard: false, sourceIsBattlefieldGameCard: false,
-    sourceIsEntityReference: false, interactionId: 1,
+    sourceRemainsVisible: false, interactionId: 1,
     sourceRect: { x: 400, y: 250, width: 100, height: 50 }, modality: "mouse",
     ...overrides,
   };
@@ -164,7 +164,7 @@ describe("RevealOverlay", () => {
           active={active({
             element: source,
             sourceRect: { x: 27, y: 150, width: 370, height: 69 },
-            sourceIsEntityReference: true,
+            sourceRemainsVisible: true,
             spec: makeTextRevealSpec("Primary", "Body"),
           })}
           onPlaced={onPlaced}
@@ -446,7 +446,7 @@ describe("RevealOverlay", () => {
     expect(value.element.style.opacity).toBe("");
   });
 
-  it("keeps an entity-reference choice visible while placing its GameCard beside it", () => {
+  it("keeps a preview control visible while placing its GameCard beside it", () => {
     const cardId = asCardId(UUID);
     const spec: RevealSpec = { primary: { kind: "gameCard", cardId, displaySnapshot: {
       id: cardId, name: asCardName("Referenced Card"), cardNumber: 1, cardType: "Event", subtype: "",
@@ -455,7 +455,7 @@ describe("RevealOverlay", () => {
     } }, secondaries: [] };
     const value = active({
       spec,
-      sourceIsEntityReference: true,
+      sourceRemainsVisible: true,
       sourceRect: { x: 29, y: 200, width: 366, height: 53 },
     });
 
@@ -497,7 +497,7 @@ describe("RevealOverlay", () => {
       await import("../../components/card/CardView");
       renderOverlay(
         <RevealOverlay
-          active={active({ spec, sourceIsEntityReference: true })}
+          active={active({ spec, sourceRemainsVisible: true })}
         />,
       );
     });

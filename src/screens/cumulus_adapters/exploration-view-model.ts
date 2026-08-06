@@ -2,7 +2,6 @@
 
 import { resolveDeckEntryCard } from "../../card-type-change";
 import type { GameCardModel } from "../../cumulus/components/card/CardView";
-import type { EntityReferenceModel } from "../../cumulus/components/card/EntityReference";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import type {
   ExplorationActionEffectPart,
@@ -10,6 +9,7 @@ import type {
   ExplorationCardSelectionOperation,
   ExplorationCardChoiceView,
   ExplorationFollowupView,
+  ExplorationEntityView,
   ExplorationSiteView,
 } from "../../cumulus/screens/ExplorationSiteScreen";
 import type { TransfigurationCandidateView } from "../../cumulus/screens/TransfigurationSiteScreen";
@@ -482,12 +482,12 @@ function followupForAction(
 
 interface ExplorationEffectReference {
   readonly needle: string;
-  readonly entity: EntityReferenceModel;
+  readonly entity: ExplorationEntityView;
 }
 
 interface DeckCardVariableTarget {
   readonly entryId: string;
-  readonly entity: Extract<EntityReferenceModel, { readonly kind: "card" }>;
+  readonly entity: Extract<ExplorationEntityView, { readonly kind: "card" }>;
 }
 
 function fixedTransfigurationEffect(

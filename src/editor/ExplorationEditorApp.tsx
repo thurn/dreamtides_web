@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CardGalleryPanel } from "../cumulus/components/card/CardGalleryPanel";
-import { EntityReference } from "../cumulus/components/card/EntityReference";
 import { RulesText } from "../cumulus/components/card/RulesText";
 import { GlassButton } from "../cumulus/components/controls/GlassButton";
 import { NumberStepper } from "../cumulus/components/controls/NumberStepper";
@@ -93,9 +92,9 @@ function renderedEffect(
           data-runtime-card-placeholder={part.placeholder}
           key={`${part.placeholder}-${part.cardId}-${String(index)}`}
         >
-          {card === undefined
-            ? <u data-entity-reference-unresolved="card">{part.cardName}</u>
-            : <EntityReference entity={{ kind: "card", card }} />}
+          <span data-entity-unresolved={card === undefined ? "card" : undefined}>
+            {card?.name ?? part.cardName}
+          </span>
         </span>
       );
     }
@@ -106,9 +105,9 @@ function renderedEffect(
         data-runtime-dreamsign-placeholder={part.placeholder}
         key={`${part.placeholder}-${part.dreamsignId}-${String(index)}`}
       >
-        {dreamsign === undefined
-          ? <u data-entity-reference-unresolved="dreamsign">{part.dreamsignName}</u>
-          : <EntityReference entity={{ kind: "dreamsign", dreamsign }} />}
+        <span data-entity-unresolved={dreamsign === undefined ? "dreamsign" : undefined}>
+          {dreamsign?.name ?? part.dreamsignName}
+        </span>
       </span>
     );
   });
@@ -582,9 +581,7 @@ function ExplorationEditorRow({
         <div className="exploration-editor-reference-field" key={key}>
           <span>{field.label}</span>
           <div>
-            {card === undefined ? <span>Unknown card</span> : (
-              <EntityReference entity={{ kind: "card", card }} />
-            )}
+            {card === undefined ? <span>Unknown card</span> : <span>{card.name}</span>}
             <GlassButton
               label="Choose card"
               placement="onGlass"
@@ -610,7 +607,7 @@ function ExplorationEditorRow({
     return (
       <div className="exploration-editor-reference-field" key={key}>
         <span>{field.label}</span>
-        {dreamsign !== undefined && <EntityReference entity={{ kind: "dreamsign", dreamsign }} />}
+        {dreamsign !== undefined && <span>{dreamsign.name}</span>}
         <Select
           full
           size="sm"

@@ -26,7 +26,7 @@ export interface RevealOverlayActive {
   readonly touchPoint?: RevealPoint;
   readonly sourceShowsCompleteGameCard: boolean;
   readonly sourceIsBattlefieldGameCard: boolean;
-  readonly sourceIsEntityReference: boolean;
+  readonly sourceRemainsVisible: boolean;
   readonly interactionId: number;
   readonly sourceRect: RevealRect;
   readonly modality: "mouse" | "pen" | "touch" | "keyboard";
@@ -124,7 +124,7 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
         adjacentSizes,
         sourceShowsCompleteGameCard: active.sourceShowsCompleteGameCard,
         sourceIsBattlefieldGameCard: active.sourceIsBattlefieldGameCard,
-        sourceIsEntityReference: active.sourceIsEntityReference,
+        sourceRemainsVisible: active.sourceRemainsVisible,
       });
       setMeasured({ key, decision, sourceRect: placementSourceRect });
       onPlaced?.(decision, {
@@ -164,7 +164,7 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
   const decision = measured?.key === key ? measured.decision : null;
   const primaryIsCardShaped = active !== null
     && active.spec.primary.kind !== "infoCard"
-    && !active.sourceIsEntityReference;
+    && !active.sourceRemainsVisible;
   const sourcePrimaryInPlace = active !== null && decision !== null
     && (active.spec.primary.kind === "source"
       || (active.spec.primary.kind === "gameCard"

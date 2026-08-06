@@ -311,8 +311,12 @@ describe("ExplorationEditorApp", () => {
       .not.toBeNull();
     expect(container.querySelector(`[data-testid='exploration-packSize-${CARD_ID}-0']`))
       .not.toBeNull();
-    expect(container.querySelector(`[data-entity-reference-id='${REWARD_CARD_ID}']`))
-      .not.toBeNull();
+    const runtimeCardName = container.querySelector(
+      `[data-runtime-card-id='${REWARD_CARD_ID}']`,
+    );
+    expect(runtimeCardName?.textContent).toBe("Fixture Ally");
+    expect(runtimeCardName?.querySelector("[data-reveal-entity-type]"))
+      .toBeNull();
     expect(container.querySelector("[data-runtime-card-placeholder='$OFFERED_CARD']"))
       .not.toBeNull();
     expect(container.textContent).not.toContain("$OFFERED_CARD");

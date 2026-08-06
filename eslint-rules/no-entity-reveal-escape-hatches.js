@@ -6,7 +6,7 @@ const STRONG_MECHANICAL_PROPS = new Set(["anchorRect", "portalTarget", "revealSi
 const CONTROLLED_PROPS = new Set(["open", "shown", "isOpen", "isShown", "revealOpen", "revealShown"]);
 const INTERACTION_ESCAPE_PROPS = new Set(["onMouseEnter", "onMouseMove", "onMouseLeave", "onPointerEnter", "onPointerMove", "onPointerLeave", "onPointerDown", "onPointerUp", "onPointerCancel", "onMouseDown", "onMouseUp", "onTouchStart", "onTouchMove", "onTouchEnd"]);
 const CONTENT_PROPS = new Set(["content", "children", "card", "reveal", "renderedContent"]);
-const NAMED_REVEAL_COMPONENTS = new Set(["GameCard", "EntityReference", "InfoCard", "AtlasNode", "GlossaryTerm", "RulesText", "BattleGameCard", "DreamwellCard", "Dreamsign", "WagerPrizeCard", "DreamAvatarPortrait", "TideDisc", "TidesInfoLabel", "EssenceValue", "CardStatOrb", "JourneyStatusBar", "SiteNode", "TransfigurationButton", "OfferTile"]);
+const NAMED_REVEAL_COMPONENTS = new Set(["GameCard", "InfoCard", "AtlasNode", "GlossaryTerm", "RulesText", "BattleGameCard", "DreamwellCard", "Dreamsign", "WagerPrizeCard", "DreamAvatarPortrait", "TideDisc", "TidesInfoLabel", "EssenceValue", "CardStatOrb", "JourneyStatusBar", "SiteNode", "TransfigurationButton", "OfferTile"]);
 const GENERIC_REVEAL_WRAPPERS = new Set(["HoverPopover", "RevealPopover", "EntityReveal", "GenericReveal", "RevealWrapper", "EntityRevealWrapper"]);
 
 const CONTEXT_COMPONENTS = [
@@ -15,7 +15,6 @@ const CONTEXT_COMPONENTS = [
   "src/cumulus/components/card/CardChoiceGrid.tsx",
   "src/cumulus/components/card/CardGalleryPanel.tsx",
   "src/cumulus/components/card/DreamsignGalleryPanel.tsx",
-  "src/cumulus/components/card/EntityReference.tsx",
   "src/cumulus/components/card/CardView.tsx",
   "src/cumulus/components/card/GlossaryTerm.tsx",
   "src/cumulus/components/card/PlayingCard.tsx",
@@ -31,6 +30,7 @@ const CONTEXT_COMPONENTS = [
   "src/cumulus/components/hud/TideDisc.tsx",
   "src/cumulus/components/hud/TidesInfoLabel.tsx",
   "src/cumulus/components/hud/TideSelectionButton.tsx",
+  "src/cumulus/screens/ExplorationSiteScreen.tsx",
 ];
 const IDENTITY_COMPONENTS = CONTEXT_COMPONENTS.filter((file) => !file.endsWith("CardView.tsx"));
 const APPROVED_INTERNAL_IMPORTS = new Map();

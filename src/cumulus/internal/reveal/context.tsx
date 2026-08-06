@@ -266,7 +266,7 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
         ...(state.touch?.startPoint === undefined ? {} : { touchPoint: state.touch.startPoint }),
         sourceShowsCompleteGameCard: activeRegistration.element.dataset.revealCompleteGameCard === "true",
         sourceIsBattlefieldGameCard: activeRegistration.element.dataset.gameCardPresentation === "battlefield",
-        sourceIsEntityReference: activeRegistration.element.dataset.entityReference !== undefined,
+        sourceRemainsVisible: activeRegistration.element.dataset.revealSourceRetain === "true",
       }
     : null;
   const overlayActive = liveOverlayActive;

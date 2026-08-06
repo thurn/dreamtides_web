@@ -206,22 +206,16 @@ describe("ExplorationCandidatesEditorApp", () => {
     );
     expect(selectedCardName?.textContent).toBe("Fixture Ally");
     expect(selectedCardName?.dataset.runtimeCardPlaceholder).toBe("$OFFERED_CARD");
-    const cardReference = selectedCardName?.querySelector<HTMLElement>(
-      '[data-entity-reference="card"]',
-    );
-    expect(cardReference?.dataset.entityReferenceId).toBe(OTHER_CARD_ID);
-    expect(cardReference?.dataset.revealPrimaryVariant).toBe("gameCard");
+    expect(selectedCardName?.querySelector("[data-reveal-entity-type]"))
+      .toBeNull();
     const selectedDreamsignName = container.querySelector<HTMLElement>(
       `[data-runtime-dreamsign-id='${DREAMSIGN_ID}']`,
     );
     expect(selectedDreamsignName?.textContent).toBe("Bell");
     expect(selectedDreamsignName?.dataset.runtimeDreamsignPlaceholder)
       .toBe("{dreamsign_name}");
-    expect(
-      selectedDreamsignName?.querySelector<HTMLElement>(
-        '[data-entity-reference="dreamsign"]',
-      )?.dataset.revealPrimaryVariant,
-    ).toBe("object");
+    expect(selectedDreamsignName?.querySelector("[data-reveal-entity-type]"))
+      .toBeNull();
     expect(container.textContent).toContain("Rank 1 label 1");
     expect(container.textContent).not.toContain("Prose for rank 2");
     expect(container.querySelector(".exploration-candidates-editor-card-ability")?.textContent)

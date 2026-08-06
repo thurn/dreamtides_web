@@ -29,7 +29,6 @@ import { dreamAvatarStageDemo } from "./demos/dream-avatar-stage";
 import { dreamwellCardDemo } from "./demos/dreamwell-card";
 import { dreamsignDemo } from "./demos/dreamsign";
 import { dreamsignGalleryPanelDemo } from "./demos/dreamsign-gallery-panel";
-import { entityReferenceDemo } from "./demos/entity-reference";
 import { disclosureSectionDemo } from "./demos/disclosure-section";
 import { developerRailDemo } from "./demos/developer-rail";
 import { essenceValueDemo } from "./demos/essence-value";
@@ -198,7 +197,6 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   dreamwellCardDemo,
   dreamAvatarPortraitDemo,
   dreamAvatarStageDemo,
-  entityReferenceDemo,
   richTextDemo,
   rulesTextDemo,
   gameCardDemo,

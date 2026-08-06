@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { EntityReference } from "../cumulus/components/card/EntityReference";
 import { RulesText } from "../cumulus/components/card/RulesText";
 import { GlassButton } from "../cumulus/components/controls/GlassButton";
 import { IconButton } from "../cumulus/components/controls/IconButton";
@@ -220,9 +219,9 @@ function renderedTemplate(
           data-runtime-card-placeholder={part.placeholder}
           key={`${part.placeholder}-${part.cardId}-${String(index)}`}
         >
-          {card === undefined
-            ? <u data-entity-reference-unresolved="card">{part.cardName}</u>
-            : <EntityReference entity={{ kind: "card", card }} />}
+          <span data-entity-unresolved={card === undefined ? "card" : undefined}>
+            {card?.name ?? part.cardName}
+          </span>
         </span>
       );
     }
@@ -235,9 +234,9 @@ function renderedTemplate(
         data-runtime-dreamsign-placeholder={part.placeholder}
         key={`${part.placeholder}-${part.dreamsignId}-${String(index)}`}
       >
-        {dreamsign === undefined
-          ? <u data-entity-reference-unresolved="dreamsign">{part.dreamsignName}</u>
-          : <EntityReference entity={{ kind: "dreamsign", dreamsign }} />}
+        <span data-entity-unresolved={dreamsign === undefined ? "dreamsign" : undefined}>
+          {dreamsign?.name ?? part.dreamsignName}
+        </span>
       </span>
     );
   });

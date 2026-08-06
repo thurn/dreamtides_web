@@ -12,19 +12,17 @@ import {
   type CSSProperties,
   type RefObject,
 } from "react";
-import { GameCard, type GameCardModel } from "../components/card/CardView";
+import {
+  GameCard,
+  gameCardRevealSpec,
+  type GameCardModel,
+} from "../components/card/CardView";
 import {
   CardChoiceGrid,
   type CardChoiceOperation,
   type CardChoiceGridColumns,
 } from "../components/card/CardChoiceGrid";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
-import {
-  entityReferenceDisplayDetails,
-  type EntityReferenceModel,
-  useEntityReferenceRevealSource,
-} from "../components/card/EntityReference";
-import { RichTextView, richText } from "../components/card/rich-text";
 import { renderRulesSymbolsInline } from "../components/card/RulesText";
 import {
   CARD_ASPECT_RATIO,
@@ -39,7 +37,10 @@ import {
   JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
   JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP,
 } from "../components/hud/JourneyStatusBar";
-import { Dreamsign } from "../components/hud/Dreamsign";
+import {
+  Dreamsign,
+  dreamsignRevealSpec,
+} from "../components/hud/Dreamsign";
 import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { GlassPanel } from "../components/overlay/GlassPanel";
@@ -70,11 +71,16 @@ import {
 } from "./TransfigurationSiteScreen";
 import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 import { useIsDesktop } from "./use-is-desktop";
+import { requireDreamsignId } from "../../data/dreamsigns";
+import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
+import type { FrozenCardData } from "../../types/cards";
 import type {
   Dreamsign as DreamsignData,
   DreamAvatar,
   TransfigurationType,
 } from "../../types/journey";
+import { useRevealSource } from "../internal/reveal/context";
+import { revealEntityId } from "../internal/reveal/identity";
 
 export interface ExplorationSiteView {
   /** Stable site id exposed to QA and logging. */
@@ -282,9 +288,22 @@ export interface ExplorationActionView {
   readonly available: boolean;
 }
 
+/** UUID-backed entity previewed by an Exploration choice as one complete object. */
+export type ExplorationEntityView =
+  | {
+      readonly kind: "card";
+      readonly card: FrozenCardData;
+      readonly copies?: number;
+      readonly transfiguration?: CardTransfigurationDisplay;
+    }
+  | {
+      readonly kind: "dreamsign";
+      readonly dreamsign: DreamsignData;
+    };
+
 export type ExplorationActionEffectPart =
   | { readonly kind: "text"; readonly text: string }
-  | { readonly kind: "entity"; readonly entity: EntityReferenceModel };
+  | { readonly kind: "entity"; readonly entity: ExplorationEntityView };
 
 export interface ExplorationSiteScreenProps {
   /** Complete presentation view-model. */
@@ -318,11 +337,88 @@ interface RewardTrajectory {
 
 function previewEntityForAction(
   action: ExplorationActionView,
-): EntityReferenceModel | null {
+): ExplorationEntityView | null {
   for (const part of action.effectParts ?? []) {
     if (part.kind === "entity") return part.entity;
   }
   return null;
+}
+
+interface ExplorationEntityDetails {
+  readonly id: string;
+  readonly name: string;
+  readonly copies: number;
+}
+
+function normalizedEntityCopies(copies: number | undefined): number {
+  return copies !== undefined && Number.isInteger(copies) && copies > 1
+    ? copies
+    : 1;
+}
+
+function explorationEntityDetails(
+  entity: ExplorationEntityView,
+): ExplorationEntityDetails {
+  return entity.kind === "card"
+    ? {
+        id: entity.card.id,
+        name: entity.card.name,
+        copies: normalizedEntityCopies(entity.copies),
+      }
+    : {
+        id: requireDreamsignId(entity.dreamsign, "Exploration entity preview"),
+        name: entity.dreamsign.name,
+        copies: 1,
+      };
+}
+
+function explorationEntityRevealRegistration(entity: ExplorationEntityView) {
+  const details = explorationEntityDetails(entity);
+  if (entity.kind === "card") {
+    const spec = gameCardRevealSpec({
+      cardId: entity.card.id,
+      displaySnapshot: entity.card,
+      ...(entity.transfiguration === undefined
+        ? {}
+        : { transfiguration: entity.transfiguration }),
+    });
+    return {
+      details,
+      identity: {
+        entityType: details.copies === 1
+          ? "game-card" as const
+          : "game-card-copies" as const,
+        entityId: entity.card.id,
+      },
+      spec: details.copies === 1
+        ? spec
+        : { ...spec, primary: { ...spec.primary, copies: details.copies } },
+    };
+  }
+  return {
+    details,
+    identity: {
+      entityType: "dreamsign" as const,
+      entityId: revealEntityId("dreamsign", details.id),
+    },
+    spec: dreamsignRevealSpec(
+      entity.dreamsign,
+      Boolean(entity.dreamsign.imageName),
+    ),
+  };
+}
+
+function useExplorationEntityReveal(
+  entity: ExplorationEntityView,
+  onActivate: (() => void) | undefined,
+) {
+  const registration = explorationEntityRevealRegistration(entity);
+  const binding = useRevealSource({
+    identity: registration.identity,
+    spec: registration.spec,
+    onActivate,
+  });
+  return { details: registration.details, binding };
 }
 
 function explorationChoiceStyle(
@@ -392,18 +488,18 @@ function ExplorationEntityLabel({
   entity,
   "data-testid": testId,
 }: {
-  readonly entity: EntityReferenceModel;
+  readonly entity: ExplorationEntityView;
   readonly "data-testid": string;
 }) {
-  const details = entityReferenceDisplayDetails(entity);
+  const details = explorationEntityDetails(entity);
   return (
     <span
-      data-entity-reference-label={entity.kind}
-      data-entity-reference-id={details.id}
-      data-entity-reference-copies={details.copies}
+      data-exploration-entity-label={entity.kind}
+      data-entity-id={details.id}
+      data-entity-copies={details.copies}
       data-testid={testId}
     >
-      <RichTextView value={richText.underline(details.name)} />
+      {details.name}
     </span>
   );
 }
@@ -438,10 +534,11 @@ function EntityExplorationChoice({
   index,
   onActivate,
   entity,
-}: ExplorationChoiceProps & { readonly entity: EntityReferenceModel }) {
-  const { details, binding } = useEntityReferenceRevealSource(entity, {
-    onActivate: action.available ? onActivate : undefined,
-  });
+}: ExplorationChoiceProps & { readonly entity: ExplorationEntityView }) {
+  const { details, binding } = useExplorationEntityReveal(
+    entity,
+    action.available ? onActivate : undefined,
+  );
   const suppressCompatibilityClick = useRef(false);
   const pointerDown = binding.sourceProps.onPointerDown;
   const revealDescriptionId = binding.sourceProps["aria-describedby"];
@@ -453,9 +550,10 @@ function EntityExplorationChoice({
       {...binding.sourceProps}
       disabled={!action.available}
       aria-describedby={`${revealDescriptionId ?? ""} exploration-effect-${String(index)}`.trim()}
-      data-entity-reference={entity.kind}
-      data-entity-reference-id={details.id}
-      data-entity-reference-copies={details.copies}
+      data-exploration-entity-preview={entity.kind}
+      data-entity-id={details.id}
+      data-entity-copies={details.copies}
+      data-reveal-source-retain="true"
       data-testid={`cumulus-exploration-choice-${String(index)}`}
       onPointerDown={(event) => {
         suppressCompatibilityClick.current = event.pointerType === "touch";

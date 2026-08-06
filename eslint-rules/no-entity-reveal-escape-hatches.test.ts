@@ -62,6 +62,13 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
         const binding = useRevealSource(registration);`,
     },
     {
+      name: "Exploration binds its entity preview to the complete choice control",
+      filename: "src/cumulus/screens/ExplorationSiteScreen.tsx",
+      code: `import { useRevealSource } from "../internal/reveal/context";
+        import { revealEntityId } from "../internal/reveal/identity";
+        const binding = useRevealSource({ identity: { entityType: "dreamsign", entityId: revealEntityId("dreamsign", id) }, spec });`,
+    },
+    {
       name: "RulesText owns its semantic reveal and identity",
       filename: "src/cumulus/components/card/RulesText.tsx",
       code: `import { useRevealSource } from "../../internal/reveal/context";

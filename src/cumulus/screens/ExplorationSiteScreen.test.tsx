@@ -1011,17 +1011,16 @@ describe("ExplorationSiteScreen", () => {
       '[data-testid="cumulus-exploration-choice-0"]',
     );
     const label = container.querySelector<HTMLElement>(
-      '[data-entity-reference-label="card"]',
+      '[data-exploration-entity-label="card"]',
     );
     expect(source?.textContent).toContain(referencedCard.name);
-    expect(source?.dataset.entityReference).toBe("card");
-    expect(source?.dataset.entityReferenceId).toBe(referencedCard.id);
-    expect(source?.dataset.entityReferenceCopies).toBe("3");
+    expect(source?.dataset.explorationEntityPreview).toBe("card");
+    expect(source?.dataset.entityId).toBe(referencedCard.id);
+    expect(source?.dataset.entityCopies).toBe("3");
+    expect(source?.dataset.revealSourceRetain).toBe("true");
     expect(source?.dataset.revealPrimaryVariant).toBe("gameCard");
     expect(label?.textContent).toBe(referencedCard.name);
-    expect(label?.querySelector("span")?.style.textDecoration).toBe(
-      "underline",
-    );
+    expect(label?.style.textDecoration).toBe("");
     expect(label?.hasAttribute("data-reveal-entity-id")).toBe(false);
     expect(label?.tabIndex).toBe(-1);
     act(() => source?.focus());

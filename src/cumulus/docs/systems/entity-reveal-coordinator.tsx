@@ -385,7 +385,7 @@ export function EntityRevealCoordinatorDocs() {
             <li>
               Start with the named semantic component for the entity: GameCard,
               AtlasNode, Dreamsign, DreamAvatarPortrait, TideDisc, EssenceValue,
-              SiteNode, EntityReference, GlossaryTerm, or another registered
+              SiteNode, GlossaryTerm, or another registered
               source.
             </li>
             <li>

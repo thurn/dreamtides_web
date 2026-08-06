@@ -6,7 +6,7 @@ const base: RevealPlacementInput = {
   viewport, reason: "press", primaryKind: "infoCard", sourceRect: { x: 170, y: 650, width: 50, height: 50 },
   touchPoint: { x: 195, y: 675 }, primarySize: { width: 248, height: 190 }, secondarySizes: [], sourceShowsCompleteGameCard: false,
   sourceIsBattlefieldGameCard: false,
-  sourceIsEntityReference: false,
+  sourceRemainsVisible: false,
 };
 
 describe("fitSecondaryPrefix", () => {
@@ -86,7 +86,7 @@ describe("selectRevealPlacement", () => {
       sourceRect,
       primarySize: { width: 240, height: 336 },
       secondarySizes: [{ width: 248, height: 82 }],
-      sourceIsEntityReference: true,
+      sourceRemainsVisible: true,
     });
 
     expect(result.family).toBe("desktop-side-right");

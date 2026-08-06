@@ -2058,35 +2058,6 @@
       "description": "Optional stable test id for the complete card."
     }
   ],
-  "EntityReference": [
-    {
-      "name": "entity",
-      "tsType": "EntityReferenceModel",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "The UUID-backed card or Dreamsign named by the surrounding sentence.",
-      "nested": {
-        "name": "EntityReferenceModel",
-        "fields": [
-          {
-            "name": "kind",
-            "tsType": "\"card\" | \"dreamsign\"",
-            "optional": false,
-            "description": "Show the complete canonical card reading copy.\nShow the canonical Dreamsign object InfoCard."
-          }
-        ]
-      }
-    },
-    {
-      "name": "testId",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional stable selector for the semantic source."
-    }
-  ],
   "EssenceValue": [
     {
       "name": "amount",
