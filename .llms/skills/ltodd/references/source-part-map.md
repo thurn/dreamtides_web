@@ -25,6 +25,27 @@ evidence about both Game Objects and Cumulus, while a Purge screen contributes
 evidence about both Sites and Deckbuilding. Map the behavior by design
 responsibility rather than forcing every file into exactly one part.
 
+## Estimating relative source size
+
+Run the skill's heuristic estimator from the repository root:
+
+```bash
+node .llms/skills/ltodd/scripts/estimate-part-loc.mjs
+```
+
+It reads the current part names from `ltodd/index.md`, scans physical lines in
+production-oriented TS, TSX, and CSS files, assigns each included file to the
+first matching part heuristic, and prints file count, line count, and share for
+every part. Add `--details` to audit every assignment plus the excluded and
+unassigned files.
+
+The result estimates research surface area, not book length or design
+importance. Shared files receive one dominant owner for counting even when they
+inform several parts. The script excludes tests, tools, debug surfaces,
+infrastructure, and noncanonical draft experiments at a coarse path level.
+Update its ordered classifiers when the index or major source neighborhoods
+change.
+
 ## Repository-wide routing principles
 
 - `src/types/` and `src/data/` are distributed by the game concept they model.

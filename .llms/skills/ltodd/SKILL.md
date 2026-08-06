@@ -35,7 +35,8 @@ Read [references/source-part-map.md](references/source-part-map.md) when
 deciding which part owns a subject or when routing source research across the
 book. Treat it as nonbinding discovery guidance: `ltodd/index.md` remains
 authoritative, and observed production behavior remains stronger evidence than
-source location.
+source location. Run `scripts/estimate-part-loc.mjs` when a rough comparison of
+the parts' current source footprints would help.
 
 When the subject includes presentation or interaction, read the project-local
 `.llms/skills/cumulus/SKILL.md` and only the Cumulus references relevant to the
