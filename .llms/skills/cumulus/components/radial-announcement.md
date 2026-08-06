@@ -6,17 +6,18 @@
 
 Components · Live demo & interactive props: `/cumulus#/radial-announcement`
 
-Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **4** (imports outside `src/cumulus/docs/` and tests).
 
-The orbiting circular status moment for turn handoffs, wins, failures, and iconic state changes.
+The single orbiting circular status system for scene announcements, card scoring, merge targets, and terminal victory.
 
-> **Guidance:** Use it only for a brief, non-interactive state change that deserves to interrupt the whole scene. Resource symbols in headline and detail copy render through the canonical inline glyph treatment.
+> **Guidance:** Use a strict named variant for every orbiting circular status moment. The component owns the disc material, rings, animation, content treatment, and reduced-motion behavior; callers only place it in the relevant scene or card context.
 
 ## Props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `headline` | `string` | yes | — | Primary announcement copy. |
+| `variant` | `"announcement" \| "card-score" \| "merge-target" \| "victory"` | no | `announcement` | Named radial presentation. Omit for the ordinary scene announcement. Selects the card-attached scoring presentation. Selects the card-attached merge-target presentation. Selects the persistent victory presentation. |
+| `headline` | `string` | yes | — | Primary announcement copy. Victory heading moved above the radial core after its opening hold. |
 | `headlineGlyph` | `Glyph` | no | — | Optional canonical glyph rendered in place of the headline copy. |
 | `detail` | `string` | no | — | Optional supporting copy beneath the headline. |
 | `essenceGained` | `number` | no | — | Optional gained Essence amount, rendered with the canonical currency glyph. |
@@ -24,8 +25,13 @@ The orbiting circular status moment for turn handoffs, wins, failures, and iconi
 | `size` | `"compact" \| "standard" \| "wager" \| "mini"` | no | `standard` | Named disc diameter. Defaults to standard. |
 | `duration` | `RadialAnnouncementDuration` = `"standard" \| "extended"` | no | `standard` | Named animation and reading dwell. Defaults to standard. |
 | `announcementId` | `string` | no | — | Stable identifier exposed on the announcement root. |
+| `points` | `number` | yes | — | Points scored by the attached card. |
+| `status` | `"available" \| "blocked"` | yes | — | Available targets use the accent treatment. Blocked targets use the danger treatment. |
+| `addedSpark` | `number` | no | — | Spark added by completing the merge. A blocked merge cannot add Spark. |
 
 ## Usage
+
+### Variant 1
 
 ```tsx
 import { RadialAnnouncement } from "src/cumulus/components/status/RadialAnnouncement";
@@ -37,5 +43,15 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
   essenceGained={150}
   tone="reward"
   duration="extended"
+/>
+```
+
+### Variant 2
+
+```tsx
+<RadialAnnouncement
+  variant="card-score"
+  points={3}
+  announcementId="challenge-resolved:player:5:F0"
 />
 ```

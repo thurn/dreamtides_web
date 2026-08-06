@@ -196,21 +196,21 @@ describe("TutorialBattleScreen", () => {
       '[data-testid="tutorial-battle-new-journey"]',
     );
     const title = victory?.querySelector<HTMLElement>(
-      "[data-tutorial-victory-title]",
+      "[data-radial-announcement-headline]",
     );
     const action = victory?.querySelector<HTMLElement>(
       "[data-tutorial-victory-action]",
     );
     const titleCopy = victory?.querySelector<HTMLElement>(
-      "[data-tutorial-victory-title-copy]",
+      "[data-radial-announcement-copy]",
     );
 
     expect(victory).not.toBeNull();
     expect(
-      victory?.querySelector("[data-tutorial-victory-orbit]"),
+      victory?.querySelector("[data-radial-announcement-orbit]"),
     ).not.toBeNull();
     expect(
-      victory?.querySelector("[data-tutorial-victory-ripple]"),
+      victory?.querySelector("[data-radial-announcement-ripple]"),
     ).not.toBeNull();
     expect(
       Array.from(victory?.querySelectorAll("button") ?? []).map(
@@ -220,11 +220,11 @@ describe("TutorialBattleScreen", () => {
     expect(title?.tagName).toBe("H1");
     expect(title?.textContent).toBe("Victory");
     expect(title?.style.animation).toContain(
-      "tutorial-victory-title-move calc(var(--dur-slow) * 3)",
+      "radial-announcement-victory-title-move calc(var(--dur-slow) * 3)",
     );
     expect(title?.style.animation).toContain("3s both");
     expect(titleCopy?.style.animation).toContain(
-      "tutorial-victory-title-fade calc(var(--dur-slow) * 0.7)",
+      "radial-announcement-victory-title-fade calc(var(--dur-slow) * 0.7)",
     );
     expect(action?.style.animation).toContain(
       "tutorial-victory-action calc(var(--dur-slow) * 1.4)",

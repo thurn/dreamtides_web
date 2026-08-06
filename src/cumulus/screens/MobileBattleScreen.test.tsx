@@ -892,17 +892,14 @@ describe("MobileBattleScreen", () => {
       '[data-battle-card-id="player-front-card"][data-battle-card-zone="player-front-rank"]',
     );
     const overlay = scoringCard?.querySelector<HTMLElement>(
-      '[data-battle-card-overlay="points-scored"]',
+      '[data-radial-announcement-variant="card-score"]',
     );
 
     expect(overlay?.getAttribute("aria-label")).toBe("2 points");
-    expect(overlay?.dataset.battleCardOverlayCardId).toBe("player-front-card");
-    expect(overlay?.dataset.battleCardOverlayPresentationId).toBe(
+    expect(overlay?.dataset.radialAnnouncement).toBe(
       "challenge-resolved:player:5:F0",
     );
-    expect(
-      overlay?.querySelector("[data-battle-card-points-value]")?.textContent,
-    ).toBe("2");
+    expect(overlay?.dataset.radialAnnouncementPoints).toBe("2");
     expect(overlay?.querySelector("i.bxf.bx-star-circle")).not.toBeNull();
     expect(overlay?.textContent).not.toContain("⍟");
     expect(
@@ -910,14 +907,14 @@ describe("MobileBattleScreen", () => {
         .querySelector(
           '[data-battle-card-id="enemy-front-card"][data-battle-card-zone="enemy-front-rank"]',
         )
-        ?.querySelector("[data-battle-card-overlay]"),
+        ?.querySelector('[data-radial-announcement-variant="card-score"]'),
     ).toBeNull();
     expect(
       container
         .querySelector(
           '[data-battle-card-id="player-hand-0"][data-battle-card-zone="near-hand"]',
         )
-        ?.querySelector("[data-battle-card-overlay]"),
+        ?.querySelector('[data-radial-announcement-variant="card-score"]'),
     ).toBeNull();
 
     act(() => root.unmount());
@@ -3978,7 +3975,7 @@ describe("MobileBattleScreen", () => {
 
     expect(target?.dataset.battleFigmentMergeTarget).toBe("hovered");
     const mergeIndicator = container.querySelector(
-      "[data-battle-figment-merge-indicator]",
+      '[data-radial-announcement-variant="merge-target"]',
     );
     expect(mergeIndicator?.textContent).toContain("Merge+2");
     expect(mergeIndicator?.textContent).not.toContain("✦");

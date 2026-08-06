@@ -3669,12 +3669,25 @@
   ],
   "RadialAnnouncement": [
     {
+      "name": "variant",
+      "tsType": "\"announcement\" | \"card-score\" | \"merge-target\" | \"victory\"",
+      "unionMembers": [
+        "announcement",
+        "card-score",
+        "merge-target",
+        "victory"
+      ],
+      "required": false,
+      "defaultValue": "announcement",
+      "description": "Named radial presentation. Omit for the ordinary scene announcement.\nSelects the card-attached scoring presentation.\nSelects the card-attached merge-target presentation.\nSelects the persistent victory presentation."
+    },
+    {
       "name": "headline",
       "tsType": "string",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Primary announcement copy."
+      "description": "Primary announcement copy.\nVictory heading moved above the radial core after its opening hold."
     },
     {
       "name": "headlineGlyph",
@@ -3743,6 +3756,33 @@
       "required": false,
       "defaultValue": null,
       "description": "Stable identifier exposed on the announcement root."
+    },
+    {
+      "name": "points",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Points scored by the attached card."
+    },
+    {
+      "name": "status",
+      "tsType": "\"available\" | \"blocked\"",
+      "unionMembers": [
+        "available",
+        "blocked"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Available targets use the accent treatment.\nBlocked targets use the danger treatment."
+    },
+    {
+      "name": "addedSpark",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Spark added by completing the merge.\nA blocked merge cannot add Spark."
     }
   ],
   "RichTextView": [

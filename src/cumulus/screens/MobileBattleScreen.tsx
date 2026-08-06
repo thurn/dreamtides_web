@@ -59,7 +59,6 @@ import type { CumulusColor } from "../primitives/color";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
-import { RADIAL_DISC_BACKGROUND } from "../primitives/radial-disc-material";
 import {
   BATTLE_HUD_END_CLEARANCE_PROPERTY,
   BATTLE_HUD_START_CLEARANCE_PROPERTY,
@@ -580,9 +579,6 @@ const PHASE_COMET_TAIL_PEAK_SCALE = 1.55;
 const PHASE_CHALLENGE_PULSE_PEAK_SCALE = 1.65;
 const FIGMENT_MERGE_ANIMATION_SECONDS = motionTimeSeconds("--dur-slow") * 2;
 const FIGMENT_MERGE_NOTICE_MS = motionTimeSeconds("--dur-slow") * 4 * 1_000;
-// Pointer-dragged cards lift to z100 inside their rank; the merge disc must
-// remain visible above the physical card occupying the destination.
-const FIGMENT_MERGE_INDICATOR_Z_INDEX = 110;
 const PHASE_LIGHT_LEFT = {
   dawn: "10%",
   day: "30%",
@@ -793,91 +789,20 @@ function FigmentMergeTargetIndicator({
 }: {
   readonly target: MobileBattleFigmentMergeTarget;
 }) {
-  const reduceMotion = useReducedMotion();
   const blocked = target.status === "blocked-exhaustion";
-  const ringColor = blocked ? token("--danger") : token("--border-accent");
-  const label = blocked ? "Cannot Merge" : "Merge";
-  return (
-    <div
-      role="status"
-      aria-live="polite"
-      data-battle-figment-merge-indicator={target.status}
-      style={{
-        position: "absolute",
-        inset: 0,
-        zIndex: FIGMENT_MERGE_INDICATOR_Z_INDEX,
-        display: "grid",
-        placeItems: "center",
-        pointerEvents: "none",
-      }}
-    >
-      <motion.div
-        data-battle-figment-merge-disc=""
-        animate={
-          reduceMotion
-            ? { opacity: 1, scale: 1 }
-            : { opacity: [0.72, 1, 0.72], scale: [0.9, 1.04, 0.9] }
-        }
-        transition={{
-          duration: FIGMENT_MERGE_ANIMATION_SECONDS,
-          ease: "easeInOut",
-          repeat: reduceMotion ? 0 : Number.POSITIVE_INFINITY,
-        }}
-        style={{
-          position: "relative",
-          width: "72%",
-          aspectRatio: "1",
-          display: "grid",
-          placeItems: "center",
-          borderRadius: token("--radius-pill"),
-          background: `radial-gradient(circle at 38% 28%, ${token("--surface-raised")} 0%, ${token("--surface-card")} 62%, ${token("--bg-sunken")} 100%)`,
-          boxShadow: `${token("--shadow-lg")}, ${token("--glow-accent-soft")}`,
-        }}
-      >
-        <motion.span
-          aria-hidden="true"
-          data-battle-figment-merge-orbit=""
-          animate={
-            reduceMotion
-              ? { opacity: 0.72 }
-              : { opacity: [0.3, 0.9, 0.3], rotate: [0, 180, 360] }
-          }
-          transition={{
-            duration: FIGMENT_MERGE_ANIMATION_SECONDS,
-            ease: "linear",
-            repeat: reduceMotion ? 0 : Number.POSITIVE_INFINITY,
-          }}
-          style={{
-            position: "absolute",
-            inset: token("--space-xs"),
-            border: `${token("--space-xxs")} solid ${ringColor}`,
-            borderTopColor: blocked
-              ? token("--danger")
-              : token("--accent-bright"),
-            borderRadius: token("--radius-pill"),
-          }}
-        />
-        <span
-          data-battle-figment-merge-copy=""
-          style={{
-            position: "relative",
-            display: "grid",
-            gap: token("--space-xxs"),
-            color: token("--text-primary"),
-            font: token("--t-caption"),
-            textAlign: "center",
-            textShadow: token("--text-outline-media"),
-          }}
-        >
-          <span>{label}</span>
-          {!blocked ? (
-            <span>
-              {renderRulesSymbolsInline(`+${String(target.addedSpark)}✦`)}
-            </span>
-          ) : null}
-        </span>
-      </motion.div>
-    </div>
+  return blocked ? (
+    <RadialAnnouncement
+      variant="merge-target"
+      status="blocked"
+      announcementId={`merge-target:${target.destinationBattleCardId}`}
+    />
+  ) : (
+    <RadialAnnouncement
+      variant="merge-target"
+      status="available"
+      addedSpark={target.addedSpark}
+      announcementId={`merge-target:${target.destinationBattleCardId}`}
+    />
   );
 }
 
@@ -1973,114 +1898,14 @@ function FaceUpCard({
         />
       ) : null}
       {cardOverlay?.battleCardId === card.id ? (
-        <BattleCardPointsOverlay overlay={cardOverlay} />
+        <RadialAnnouncement
+          variant="card-score"
+          points={cardOverlay.points}
+          announcementId={cardOverlay.presentationId}
+        />
       ) : null}
       <BattleCardStatusIndicators card={card} />
     </motion.div>
-  );
-}
-
-// The bubble occupies most of the card art while retaining enough edge to
-// preserve the scoring character as its spatial anchor.
-const BATTLE_CARD_POINTS_BUBBLE_WIDTH = "78%";
-const BATTLE_CARD_POINTS_ANIMATION_SECONDS =
-  motionTimeSeconds("--dur-slow") * 4;
-
-function BattleCardPointsOverlay({
-  overlay,
-}: {
-  readonly overlay: MobileBattleCardOverlayView;
-}) {
-  const reduceMotion = useReducedMotion();
-  const duration = reduceMotion ? 0 : BATTLE_CARD_POINTS_ANIMATION_SECONDS;
-  return (
-    <div
-      role="status"
-      aria-live="polite"
-      aria-label={`${String(overlay.points)} points`}
-      data-battle-card-overlay="points-scored"
-      data-battle-card-overlay-presentation-id={overlay.presentationId}
-      data-battle-card-overlay-card-id={overlay.battleCardId}
-      style={{
-        position: "absolute",
-        inset: 0,
-        zIndex: 8,
-        display: "grid",
-        placeItems: "center",
-        pointerEvents: "none",
-      }}
-    >
-      <motion.div
-        data-battle-card-points-bubble=""
-        initial={
-          reduceMotion
-            ? false
-            : { opacity: 0, scale: 0.48, y: "24%", rotate: -12 }
-        }
-        animate={
-          reduceMotion
-            ? { opacity: 1, scale: 1, y: 0, rotate: 0 }
-            : {
-                opacity: [0, 1, 1, 0],
-                scale: [0.48, 1.08, 1, 0.86],
-                y: ["24%", "0%", "-8%", "-18%"],
-                rotate: [-12, 3, 0, 0],
-              }
-        }
-        transition={{
-          duration,
-          times: reduceMotion ? undefined : [0, 0.18, 0.72, 1],
-          ease: "easeInOut",
-        }}
-        style={{
-          position: "relative",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: token("--space-xxs"),
-          width: BATTLE_CARD_POINTS_BUBBLE_WIDTH,
-          aspectRatio: "1",
-          borderRadius: token("--radius-pill"),
-          background: RADIAL_DISC_BACKGROUND,
-          boxShadow: `${token("--shadow-lg")}, ${token("--glow-accent-soft")}`,
-          color: token("--text-primary"),
-          font: token("--t-popover-headline"),
-          textShadow: token("--text-outline-media"),
-        }}
-      >
-        <motion.span
-          aria-hidden="true"
-          data-battle-card-points-orbit=""
-          animate={
-            reduceMotion
-              ? { opacity: 0.42, scale: 1, rotate: 0 }
-              : {
-                  opacity: [0, 0.88, 0.42, 0],
-                  scale: [0.64, 1, 1, 1.24],
-                  rotate: [-70, 0, 140, 250],
-                }
-          }
-          transition={{
-            duration,
-            times: reduceMotion ? undefined : [0, 0.24, 0.74, 1],
-            ease: "easeInOut",
-          }}
-          style={{
-            position: "absolute",
-            inset: token("--space-xs"),
-            border: `${token("--space-xxs")} solid ${token("--border-accent")}`,
-            borderTopColor: token("--accent-bright"),
-            borderRadius: token("--radius-pill"),
-          }}
-        />
-        <span data-battle-card-points-value="">{overlay.points}</span>
-        <StandaloneGlyph
-          glyph={GLYPHS.points}
-          color="text-primary"
-          depth="content-protection"
-        />
-      </motion.div>
-    </div>
   );
 }
 

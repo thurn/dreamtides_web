@@ -5,6 +5,18 @@ import {
 import { GLYPHS } from "../../primitives/glyph";
 import type { CumulusComponent } from "../registry";
 
+// The scene announcement is intentionally transient and finishes fully
+// transparent. Documentation keeps its reduced-motion resting state visible
+// while the other enum variants demonstrate their own choreography.
+const FROZEN_ANNOUNCEMENT_CSS = `
+  [data-radial-announcement-demo-frozen] [data-radial-announcement-disc],
+  [data-radial-announcement-demo-frozen] [data-radial-announcement-orbit],
+  [data-radial-announcement-demo-frozen] [data-radial-announcement-ripple],
+  [data-radial-announcement-demo-frozen] [data-radial-announcement-copy] {
+    animation: none !important;
+  }
+`;
+
 // The production component is intentionally transient and finishes fully
 // transparent. Documentation keeps the same reduced-motion resting state in
 // view so the overview remains useful after the first animation cycle.
@@ -20,18 +32,53 @@ const FROZEN_ANNOUNCEMENT_CSS = `
 function RadialAnnouncementDemo(args: Record<string, unknown>) {
   const tone: RadialAnnouncementTone =
     args.tone === "reward" || args.tone === "danger" ? args.tone : "accent";
+  const variant =
+    args.variant === "card-score" ||
+    args.variant === "merge-target" ||
+    args.variant === "victory"
+      ? args.variant
+      : "announcement";
+  const points = typeof args.points === "number" ? args.points : 3;
+  const status = args.status === "blocked" ? "blocked" : "available";
+  const addedSpark = typeof args.addedSpark === "number" ? args.addedSpark : 2;
   return (
     <div
-      data-radial-announcement-demo-frozen=""
-      style={{ position: "relative", width: "100%", height: 320 }}
+      data-radial-announcement-demo-frozen={
+        variant === "announcement" ? "" : undefined
+      }
+      style={{
+        position: "relative",
+        width:
+          variant === "card-score" || variant === "merge-target"
+            ? 220
+            : "100%",
+        height: 320,
+        margin: "0 auto",
+      }}
     >
       <style>{FROZEN_ANNOUNCEMENT_CSS}</style>
-      <RadialAnnouncement
-        headline="Fast"
-        headlineGlyph={GLYPHS.bolt}
-        essenceGained={tone === "reward" ? 150 : undefined}
-        tone={tone}
-      />
+      {variant === "card-score" ? (
+        <RadialAnnouncement variant="card-score" points={points} />
+      ) : variant === "merge-target" ? (
+        status === "blocked" ? (
+          <RadialAnnouncement variant="merge-target" status="blocked" />
+        ) : (
+          <RadialAnnouncement
+            variant="merge-target"
+            status="available"
+            addedSpark={addedSpark}
+          />
+        )
+      ) : variant === "victory" ? (
+        <RadialAnnouncement variant="victory" headline="Victory" />
+      ) : (
+        <RadialAnnouncement
+          headline="Fast"
+          headlineGlyph={GLYPHS.bolt}
+          essenceGained={tone === "reward" ? 150 : undefined}
+          tone={tone}
+        />
+      )}
     </div>
   );
 }
@@ -39,8 +86,8 @@ function RadialAnnouncementDemo(args: Record<string, unknown>) {
 export const radialAnnouncementDemo: CumulusComponent = {
   id: "radial-announcement",
   title: "Radial Announcement",
-  blurb: "The orbiting circular status moment for turn handoffs, wins, failures, and iconic state changes.",
-  callout: "Use it only for a brief, non-interactive state change that deserves to interrupt the whole scene. Resource symbols in headline and detail copy render through the canonical inline glyph treatment.",
+  blurb: "The single orbiting circular status system for scene announcements, card scoring, merge targets, and terminal victory.",
+  callout: "Use a strict named variant for every orbiting circular status moment. The component owns the disc material, rings, animation, content treatment, and reduced-motion behavior; callers only place it in the relevant scene or card context.",
   group: "Components",
   docName: "RadialAnnouncement",
   Component: RadialAnnouncementDemo,
@@ -55,6 +102,20 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
   tone="reward"
   duration="extended"
 />`,
+  }, {
+    code: `<RadialAnnouncement
+  variant="card-score"
+  points={3}
+  announcementId="challenge-resolved:player:5:F0"
+/>`,
   }],
-  demo: { defaultArgs: { tone: "reward" } },
+  demo: {
+    defaultArgs: {
+      variant: "announcement",
+      tone: "reward",
+      points: 3,
+      status: "available",
+      addedSpark: 2,
+    },
+  },
 };

@@ -10,6 +10,9 @@ import {
 import { GLYPHS } from "../../primitives/glyph";
 import { RadialAnnouncement } from "./RadialAnnouncement";
 
+(globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean })
+  .IS_REACT_ACT_ENVIRONMENT = true;
+
 describe("RadialAnnouncement", () => {
   it("renders a semantic reward with canonical Essence notation", () => {
     const container = document.createElement("div");
@@ -72,6 +75,145 @@ describe("RadialAnnouncement", () => {
     act(() => root.unmount());
     container.remove();
   });
+
+  it("uses the shared transient disc for card-attached scoring", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => {
+      root.render(
+        <RadialAnnouncement
+          variant="card-score"
+          points={3}
+          announcementId="challenge-resolved:player:5:F0"
+        />,
+      );
+    });
+
+    const announcement = container.querySelector<HTMLElement>(
+      '[data-radial-announcement-variant="card-score"]',
+    );
+    expect(announcement?.dataset.radialAnnouncement).toBe(
+      "challenge-resolved:player:5:F0",
+    );
+    expect(announcement?.dataset.radialAnnouncementPoints).toBe("3");
+    expect(announcement?.getAttribute("aria-label")).toBe("3 points");
+    expect(
+      announcement?.querySelector<HTMLElement>(
+        "[data-radial-announcement-disc]",
+      )?.style.width,
+    ).toBe("78%");
+    expect(announcement?.querySelector("i.bxf.bx-star-circle")).not.toBeNull();
+    expect(announcement?.textContent).not.toContain("⍟");
+    expect(
+      announcement?.querySelector<HTMLElement>(
+        "[data-radial-announcement-disc]",
+      )?.style.animation,
+    ).toContain("radial-announcement-disc");
+    const orbit = announcement?.querySelector<HTMLElement>(
+      "[data-radial-announcement-orbit]",
+    );
+    expect(orbit?.getAttribute("style")).toContain("var(--border-accent)");
+    expect(orbit?.getAttribute("style")).toContain("var(--accent-bright)");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("owns available and blocked merge-target circle treatments", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => {
+      root.render(
+        <RadialAnnouncement
+          variant="merge-target"
+          status="available"
+          addedSpark={2}
+        />,
+      );
+    });
+
+    const available = container.querySelector<HTMLElement>(
+      '[data-radial-announcement-variant="merge-target"]',
+    );
+    expect(available?.dataset.radialAnnouncementTargetStatus).toBe("available");
+    expect(available?.textContent).toContain("Merge+2");
+    expect(available?.querySelector("i.bx-sparkle")).not.toBeNull();
+    expect(
+      available?.querySelector<HTMLElement>(
+        "[data-radial-announcement-disc]",
+      )?.style.animation,
+    ).toContain("radial-announcement-target-disc");
+    const availableOrbit = available?.querySelector<HTMLElement>(
+      "[data-radial-announcement-orbit]",
+    );
+    expect(availableOrbit?.getAttribute("style")).toContain(
+      "var(--border-accent)",
+    );
+    expect(availableOrbit?.getAttribute("style")).toContain(
+      "var(--accent-bright)",
+    );
+
+    act(() => {
+      root.render(
+        <RadialAnnouncement variant="merge-target" status="blocked" />,
+      );
+    });
+    const blocked = container.querySelector<HTMLElement>(
+      '[data-radial-announcement-variant="merge-target"]',
+    );
+    expect(blocked?.dataset.radialAnnouncementTargetStatus).toBe("blocked");
+    expect(blocked?.dataset.radialAnnouncementTone).toBe("danger");
+    expect(blocked?.textContent).toContain("Cannot Merge");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("owns the persistent victory circle and title sequence", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => {
+      root.render(
+        <RadialAnnouncement
+          variant="victory"
+          headline="Victory"
+          announcementId="fixture-victory"
+        />,
+      );
+    });
+
+    const victory = container.querySelector<HTMLElement>(
+      '[data-radial-announcement-variant="victory"]',
+    );
+    const title = victory?.querySelector<HTMLElement>(
+      "[data-radial-announcement-headline]",
+    );
+    expect(victory?.dataset.radialAnnouncement).toBe("fixture-victory");
+    expect(title?.tagName).toBe("H1");
+    expect(title?.textContent).toBe("Victory");
+    expect(title?.style.animation).toContain(
+      "radial-announcement-victory-title-move",
+    );
+    expect(
+      victory?.querySelectorAll("[data-radial-announcement-orbit]"),
+    ).toHaveLength(2);
+    expect(
+      victory?.querySelectorAll("[data-radial-announcement-ripple]"),
+    ).toHaveLength(2);
+    expect(
+      victory?.querySelector("[data-radial-announcement-symbol=\"victory\"]"),
+    ).not.toBeNull();
+    expect(victory?.querySelector("style")?.textContent).toContain(
+      '[data-radial-announcement-variant="victory"]',
+    );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("renders a canonical glyph in place of the headline copy", () => {
     const container = document.createElement("div");
     document.body.append(container);

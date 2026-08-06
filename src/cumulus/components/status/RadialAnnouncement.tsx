@@ -1,13 +1,12 @@
-// RadialAnnouncement — the shared orbiting announcement used for turn and
-// wager-result moments.
+// RadialAnnouncement — the one orbiting circular status presentation for
+// scene announcements, card scoring, merge targets, and victory moments.
 
-import type { ReactElement } from "react";
+import { useState, type ReactElement } from "react";
 import { renderRulesSymbolsInline } from "../card/RulesText";
 import { EssenceValue } from "../hud/EssenceValue";
 import { InlineGlyph } from "../typography/InlineGlyph";
 import type { Glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
-import { RADIAL_DISC_BACKGROUND } from "../../primitives/radial-disc-material";
 
 export const RADIAL_ANNOUNCEMENT_DURATION_MS = 2_100;
 export const RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS = 3_360;
@@ -19,6 +18,10 @@ const RADIAL_ANNOUNCEMENT_SIZE = {
   standard: 236,
 } as const;
 
+const CARD_SCORE_DISC_WIDTH = "78%";
+const MERGE_TARGET_DISC_WIDTH = "72%";
+const VICTORY_STAGE_SIZE = "min(76vw, 420px)";
+const VICTORY_CORE_SIZE = "min(43vw, 236px)";
 const DISC_ARRIVAL_SCALE = 0.48;
 const DISC_OVERSHOOT_SCALE = 1.08;
 const DISC_EXIT_SCALE = 0.86;
@@ -33,6 +36,25 @@ const WAGER_RIPPLE_EXIT_SCALE = 1.08;
 const COPY_ARRIVAL_SCALE = 0.72;
 const COPY_OVERSHOOT_SCALE = 1.06;
 const COPY_EXIT_SCALE = 0.94;
+const TARGET_DISC_LOW_SCALE = 0.9;
+const TARGET_DISC_HIGH_SCALE = 1.04;
+const VICTORY_ARRIVAL_SCALE = 0.36;
+const VICTORY_OVERSHOOT_SCALE = 1.08;
+const VICTORY_RIPPLE_START_SCALE = 0.72;
+const VICTORY_RIPPLE_END_SCALE = 1.46;
+const VICTORY_BREATHE_LOW_SCALE = 0.97;
+const VICTORY_BREATHE_HIGH_SCALE = 1.03;
+const VICTORY_STAR_LOW_SCALE = 0.92;
+const VICTORY_STAR_HIGH_SCALE = 1.08;
+const VICTORY_INTRO_DURATION = `calc(${token("--dur-slow")} * 5)`;
+const VICTORY_TITLE_HOLD_DURATION = "3s";
+const VICTORY_TITLE_MOVE_DURATION = `calc(${token("--dur-slow")} * 3)`;
+export const RADIAL_ANNOUNCEMENT_VICTORY_ACTION_DELAY =
+  `calc(${VICTORY_TITLE_HOLD_DURATION} + ${token("--dur-slow")} * 3)`;
+const VICTORY_TITLE_FADE_DURATION = `calc(${token("--dur-slow")} * 0.7)`;
+
+const RADIAL_DISC_BACKGROUND =
+  `radial-gradient(circle at 38% 28%, ${token("--surface-raised")} 0%, ${token("--surface-card")} 56%, ${token("--bg-sunken")} 100%)`;
 
 const RADIAL_ANNOUNCEMENT_CSS = `
   @keyframes radial-announcement-disc {
@@ -74,11 +96,72 @@ const RADIAL_ANNOUNCEMENT_CSS = `
     100% { opacity: 0; transform: scale(${String(COPY_EXIT_SCALE)}); }
   }
 
+  @keyframes radial-announcement-target-disc {
+    0%, 100% { opacity: 0.72; transform: scale(${String(TARGET_DISC_LOW_SCALE)}); }
+    50% { opacity: 1; transform: scale(${String(TARGET_DISC_HIGH_SCALE)}); }
+  }
+
+  @keyframes radial-announcement-target-orbit {
+    0% { opacity: 0.3; transform: rotate(0deg); }
+    50% { opacity: 0.9; }
+    100% { opacity: 0.3; transform: rotate(360deg); }
+  }
+
+  @keyframes radial-announcement-victory-arrival {
+    0% { opacity: 0; transform: scale(${String(VICTORY_ARRIVAL_SCALE)}) rotate(-18deg); }
+    18% { opacity: 1; transform: scale(${String(VICTORY_OVERSHOOT_SCALE)}) rotate(3deg); }
+    32%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+
+  @keyframes radial-announcement-victory-orbit {
+    from { transform: rotate(-70deg); }
+    to { transform: rotate(290deg); }
+  }
+
+  @keyframes radial-announcement-victory-counter-orbit {
+    from { transform: rotate(40deg); }
+    to { transform: rotate(-320deg); }
+  }
+
+  @keyframes radial-announcement-victory-ripple {
+    0% { opacity: 0; transform: scale(${String(VICTORY_RIPPLE_START_SCALE)}); }
+    18% { opacity: 0.68; }
+    78%, 100% { opacity: 0; transform: scale(${String(VICTORY_RIPPLE_END_SCALE)}); }
+  }
+
+  @keyframes radial-announcement-victory-breathe {
+    0%, 100% { transform: scale(${String(VICTORY_BREATHE_LOW_SCALE)}); }
+    50% { transform: scale(${String(VICTORY_BREATHE_HIGH_SCALE)}); }
+  }
+
+  @keyframes radial-announcement-victory-title-move {
+    from { top: 50%; transform: translate(-50%, -50%); }
+    to { top: 0; transform: translate(-50%, calc(-100% - ${token("--space-m")})); }
+  }
+
+  @keyframes radial-announcement-victory-title-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes radial-announcement-victory-star-reveal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes radial-announcement-victory-star-spin {
+    0%, 100% { transform: rotate(0deg) scale(${String(VICTORY_STAR_LOW_SCALE)}); }
+    50% { transform: rotate(45deg) scale(${String(VICTORY_STAR_HIGH_SCALE)}); }
+  }
+
   @media (prefers-reduced-motion: reduce) {
+    [data-radial-announcement-variant="victory"],
     [data-radial-announcement-disc],
     [data-radial-announcement-orbit],
     [data-radial-announcement-ripple],
-    [data-radial-announcement-copy] {
+    [data-radial-announcement-copy],
+    [data-radial-announcement-headline],
+    [data-radial-announcement-symbol] {
       animation: none !important;
       transition: none !important;
     }
@@ -94,7 +177,16 @@ export type RadialAnnouncementSize = keyof typeof RADIAL_ANNOUNCEMENT_SIZE;
 /** Named display dwell for ordinary and longer reading moments. */
 export type RadialAnnouncementDuration = "standard" | "extended";
 
-export interface RadialAnnouncementProps {
+interface RadialAnnouncementCommonProps {
+  /** Stable identifier exposed on the announcement root. */
+  announcementId?: string;
+}
+
+/** A transient whole-scene announcement. */
+export interface RadialAnnouncementSceneProps
+  extends RadialAnnouncementCommonProps {
+  /** Named radial presentation. Omit for the ordinary scene announcement. */
+  variant?: "announcement";
   /** Primary announcement copy. */
   headline: string;
   /** Optional canonical glyph rendered in place of the headline copy. */
@@ -109,9 +201,62 @@ export interface RadialAnnouncementProps {
   size?: RadialAnnouncementSize;
   /** Named animation and reading dwell. Defaults to standard. */
   duration?: RadialAnnouncementDuration;
-  /** Stable identifier exposed on the announcement root. */
-  announcementId?: string;
 }
+
+/** A transient points announcement attached to its scoring card. */
+export interface RadialAnnouncementCardScoreProps
+  extends RadialAnnouncementCommonProps {
+  /** Selects the card-attached scoring presentation. */
+  variant: "card-score";
+  /** Points scored by the attached card. */
+  points: number;
+}
+
+/** A continuously animated available merge target. */
+export interface RadialAnnouncementAvailableTargetProps
+  extends RadialAnnouncementCommonProps {
+  /** Selects the card-attached merge-target presentation. */
+  variant: "merge-target";
+  /** Available targets use the accent treatment. */
+  status: "available";
+  /** Spark added by completing the merge. */
+  addedSpark: number;
+}
+
+/** A continuously animated blocked merge target. */
+export interface RadialAnnouncementBlockedTargetProps
+  extends RadialAnnouncementCommonProps {
+  /** Selects the card-attached merge-target presentation. */
+  variant: "merge-target";
+  /** Blocked targets use the danger treatment. */
+  status: "blocked";
+  /** A blocked merge cannot add Spark. */
+  addedSpark?: never;
+}
+
+/** A persistent terminal victory presentation. */
+export interface RadialAnnouncementVictoryProps
+  extends RadialAnnouncementCommonProps {
+  /** Selects the persistent victory presentation. */
+  variant: "victory";
+  /** Victory heading moved above the radial core after its opening hold. */
+  headline: string;
+}
+
+/** Strict models for every orbiting circular status presentation. */
+export type RadialAnnouncementProps =
+  | RadialAnnouncementSceneProps
+  | RadialAnnouncementCardScoreProps
+  | RadialAnnouncementAvailableTargetProps
+  | RadialAnnouncementBlockedTargetProps
+  | RadialAnnouncementVictoryProps;
+
+type RadialAnnouncementImplementationProps = RadialAnnouncementProps & {
+  readonly variant?: RadialAnnouncementProps["variant"];
+  readonly tone?: RadialAnnouncementTone;
+  readonly size?: RadialAnnouncementSize;
+  readonly duration?: RadialAnnouncementDuration;
+};
 
 function toneColor(tone: RadialAnnouncementTone): string {
   if (tone === "reward") return token("--reward");
@@ -119,8 +264,74 @@ function toneColor(tone: RadialAnnouncementTone): string {
   return token("--accent-bright");
 }
 
-/** Orbiting circular status moment shared by battle turns and game outcomes. */
+/**
+ * The single orbiting circular status system. Named variants cover transient
+ * scene announcements, card scoring, merge targets, and terminal victory.
+ */
+export function RadialAnnouncement(props: RadialAnnouncementProps): ReactElement;
 export function RadialAnnouncement({
+  variant = "announcement",
+  tone = "accent",
+  size = "standard",
+  duration = "standard",
+  ...props
+}: RadialAnnouncementImplementationProps): ReactElement {
+  if (variant === "card-score") {
+    return (
+      <CardScoreAnnouncement
+        {...(props as Omit<RadialAnnouncementCardScoreProps, "variant">)}
+        variant="card-score"
+      />
+    );
+  }
+  if (variant === "merge-target") {
+    const mergeProps = props as Omit<
+      | RadialAnnouncementAvailableTargetProps
+      | RadialAnnouncementBlockedTargetProps,
+      "variant"
+    >;
+    if (mergeProps.status === "available") {
+      const availableProps = mergeProps as Omit<
+        RadialAnnouncementAvailableTargetProps,
+        "variant"
+      >;
+      return (
+        <MergeTargetAnnouncement
+          variant="merge-target"
+          status="available"
+          addedSpark={availableProps.addedSpark}
+          announcementId={availableProps.announcementId}
+        />
+      );
+    }
+    return (
+      <MergeTargetAnnouncement
+        variant="merge-target"
+        status="blocked"
+        announcementId={mergeProps.announcementId}
+      />
+    );
+  }
+  if (variant === "victory") {
+    return (
+      <VictoryAnnouncement
+        {...(props as Omit<RadialAnnouncementVictoryProps, "variant">)}
+        variant="victory"
+      />
+    );
+  }
+  return (
+    <SceneAnnouncement
+      {...(props as Omit<RadialAnnouncementSceneProps, "variant">)}
+      variant="announcement"
+      tone={tone}
+      size={size}
+      duration={duration}
+    />
+  );
+}
+
+function SceneAnnouncement({
   headline,
   headlineGlyph,
   detail,
@@ -129,21 +340,90 @@ export function RadialAnnouncement({
   size = "standard",
   duration = "standard",
   announcementId,
-}: RadialAnnouncementProps): ReactElement {
+}: RadialAnnouncementSceneProps): ReactElement {
+  return (
+    <TransientAnnouncement
+      announcementId={announcementId}
+      headline={headline}
+      headlineGlyph={headlineGlyph}
+      detail={detail}
+      essenceGained={essenceGained}
+      tone={tone}
+      size={size}
+      duration={duration}
+      placement="scene"
+    />
+  );
+}
+
+function CardScoreAnnouncement({
+  points,
+  announcementId,
+}: RadialAnnouncementCardScoreProps): ReactElement {
+  return (
+    <TransientAnnouncement
+      announcementId={announcementId}
+      headline={`${String(points)}⍟`}
+      tone="accent"
+      size="mini"
+      duration="standard"
+      placement="card"
+      points={points}
+    />
+  );
+}
+
+function TransientAnnouncement({
+  announcementId,
+  headline,
+  headlineGlyph,
+  detail,
+  essenceGained,
+  tone,
+  size,
+  duration,
+  placement,
+  points,
+}: {
+  readonly announcementId?: string;
+  readonly headline: string;
+  readonly headlineGlyph?: Glyph;
+  readonly detail?: string;
+  readonly essenceGained?: number;
+  readonly tone: RadialAnnouncementTone;
+  readonly size: RadialAnnouncementSize;
+  readonly duration: RadialAnnouncementDuration;
+  readonly placement: "scene" | "card";
+  readonly points?: number;
+}): ReactElement {
   const accent = toneColor(tone);
+  const isCard = placement === "card";
+  const orbitColor = isCard ? token("--border-accent") : accent;
+  const orbitHighlight = isCard
+    ? token("--accent-bright")
+    : token("--text-primary");
   const animationDuration = `calc(${token("--dur-slow")} * ${duration === "extended" ? "8" : "5"})`;
+  const rippleAnimation =
+    size === "mini"
+      ? "radial-announcement-ripple-mini"
+      : size === "wager"
+        ? "radial-announcement-ripple-wager"
+        : "radial-announcement-ripple";
 
   return (
     <div
       role="status"
       aria-live="polite"
+      aria-label={points === undefined ? undefined : `${String(points)} points`}
       data-radial-announcement={announcementId ?? ""}
+      data-radial-announcement-variant={isCard ? "card-score" : "announcement"}
       data-radial-announcement-tone={tone}
       data-radial-announcement-duration={duration}
+      data-radial-announcement-points={points}
       style={{
         position: "absolute",
         inset: 0,
-        zIndex: 55,
+        zIndex: isCard ? 8 : 55,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -159,9 +439,10 @@ export function RadialAnnouncement({
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: token("--space-xs"),
-          width: RADIAL_ANNOUNCEMENT_SIZE[size],
-          height: RADIAL_ANNOUNCEMENT_SIZE[size],
+          gap: isCard ? token("--space-xxs") : token("--space-xs"),
+          width: isCard ? CARD_SCORE_DISC_WIDTH : RADIAL_ANNOUNCEMENT_SIZE[size],
+          height: isCard ? undefined : RADIAL_ANNOUNCEMENT_SIZE[size],
+          aspectRatio: isCard ? "1" : undefined,
           borderRadius: token("--radius-pill"),
           background: RADIAL_DISC_BACKGROUND,
           boxShadow: `${token("--shadow-lg")}, ${token("--glow-accent-soft")}`,
@@ -173,9 +454,13 @@ export function RadialAnnouncement({
           data-radial-announcement-orbit=""
           style={{
             position: "absolute",
-            inset: token("--space-s"),
-            border: `${token("--space-xxs")} solid ${accent}`,
-            borderTopColor: token("--text-primary"),
+            inset: isCard ? token("--space-xs") : token("--space-s"),
+            borderWidth: token("--space-xxs"),
+            borderStyle: "solid",
+            borderTopColor: orbitHighlight,
+            borderRightColor: orbitColor,
+            borderBottomColor: orbitColor,
+            borderLeftColor: orbitColor,
             borderRadius: token("--radius-pill"),
             animation: `radial-announcement-orbit ${animationDuration} ${token("--ease-dream")} both`,
           }}
@@ -186,19 +471,13 @@ export function RadialAnnouncement({
           style={{
             position: "absolute",
             inset: `calc(-1 * ${token(
-              size === "mini" || size === "wager"
+              isCard || size === "mini" || size === "wager"
                 ? "--space-xxs"
                 : "--space-s",
             )})`,
             border: `${token("--space-xxs")} solid ${accent}`,
             borderRadius: token("--radius-pill"),
-            animation: `${
-              size === "mini"
-                ? "radial-announcement-ripple-mini"
-                : size === "wager"
-                  ? "radial-announcement-ripple-wager"
-                : "radial-announcement-ripple"
-            } ${animationDuration} ${token("--ease-out")} both`,
+            animation: `${rippleAnimation} ${animationDuration} ${token("--ease-out")} both`,
           }}
         />
         <div
@@ -208,7 +487,7 @@ export function RadialAnnouncement({
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: token("--space-xs"),
+            gap: isCard ? token("--space-xxs") : token("--space-xs"),
             color: token("--text-primary"),
             textAlign: "center",
             textShadow: token("--text-outline-media"),
@@ -216,16 +495,19 @@ export function RadialAnnouncement({
           }}
         >
           <span
+            data-radial-announcement-headline=""
             data-radial-announcement-headline-glyph={headlineGlyph}
             style={{
               font: token(
-                headlineGlyph === undefined
-                  ? size === "mini"
-                    ? "--t-title-sm"
-                    : "--t-title"
-                  : size === "mini"
-                    ? "--t-title"
-                    : "--t-display",
+                isCard
+                  ? "--t-popover-headline"
+                  : headlineGlyph === undefined
+                    ? size === "mini"
+                      ? "--t-title-sm"
+                      : "--t-title"
+                    : size === "mini"
+                      ? "--t-title"
+                      : "--t-display",
               ),
             }}
           >
@@ -259,6 +541,235 @@ export function RadialAnnouncement({
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+function MergeTargetAnnouncement(
+  props:
+    | RadialAnnouncementAvailableTargetProps
+    | RadialAnnouncementBlockedTargetProps,
+): ReactElement {
+  const blocked = props.status === "blocked";
+  const tone: RadialAnnouncementTone = blocked ? "danger" : "accent";
+  const orbitColor = blocked ? token("--danger") : token("--border-accent");
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      data-radial-announcement={props.announcementId ?? ""}
+      data-radial-announcement-variant="merge-target"
+      data-radial-announcement-tone={tone}
+      data-radial-announcement-target-status={props.status}
+      style={{
+        position: "absolute",
+        inset: 0,
+        zIndex: 110,
+        display: "grid",
+        placeItems: "center",
+        pointerEvents: "none",
+      }}
+    >
+      <style>{RADIAL_ANNOUNCEMENT_CSS}</style>
+      <div
+        data-radial-announcement-disc=""
+        style={{
+          position: "relative",
+          width: MERGE_TARGET_DISC_WIDTH,
+          aspectRatio: "1",
+          display: "grid",
+          placeItems: "center",
+          borderRadius: token("--radius-pill"),
+          background: RADIAL_DISC_BACKGROUND,
+          boxShadow: `${token("--shadow-lg")}, ${token("--glow-accent-soft")}`,
+          animation: `radial-announcement-target-disc calc(${token("--dur-slow")} * 2) ${token("--ease-in-out")} infinite`,
+        }}
+      >
+        <span
+          aria-hidden="true"
+          data-radial-announcement-orbit=""
+          style={{
+            position: "absolute",
+            inset: token("--space-xs"),
+            borderWidth: token("--space-xxs"),
+            borderStyle: "solid",
+            borderTopColor: blocked
+              ? token("--danger")
+              : token("--accent-bright"),
+            borderRightColor: orbitColor,
+            borderBottomColor: orbitColor,
+            borderLeftColor: orbitColor,
+            borderRadius: token("--radius-pill"),
+            animation: `radial-announcement-target-orbit calc(${token("--dur-slow")} * 2) linear infinite`,
+          }}
+        />
+        <span
+          data-radial-announcement-copy=""
+          style={{
+            position: "relative",
+            display: "grid",
+            gap: token("--space-xxs"),
+            color: token("--text-primary"),
+            font: token("--t-caption"),
+            textAlign: "center",
+            textShadow: token("--text-outline-media"),
+          }}
+        >
+          <span data-radial-announcement-headline="">
+            {blocked ? "Cannot Merge" : "Merge"}
+          </span>
+          {!blocked ? (
+            <span data-radial-announcement-detail="">
+              {renderRulesSymbolsInline(`+${String(props.addedSpark)}✦`)}
+            </span>
+          ) : null}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function VictoryAnnouncement({
+  headline,
+  announcementId,
+}: RadialAnnouncementVictoryProps): ReactElement {
+  const [titleSettled, setTitleSettled] = useState(false);
+  return (
+    <div
+      data-radial-announcement={announcementId ?? ""}
+      data-radial-announcement-variant="victory"
+      data-radial-announcement-tone="reward"
+      style={{
+        position: "relative",
+        zIndex: 2,
+        width: VICTORY_STAGE_SIZE,
+        aspectRatio: "1",
+        display: "grid",
+        placeItems: "center",
+        animation: `radial-announcement-victory-arrival ${VICTORY_INTRO_DURATION} ${token("--ease-dream")} both`,
+      }}
+    >
+      <style>{RADIAL_ANNOUNCEMENT_CSS}</style>
+      <h1
+        data-radial-announcement-headline=""
+        onAnimationEnd={(event) => {
+          if (event.currentTarget === event.target) {
+            setTitleSettled(true);
+          }
+        }}
+        style={{
+          position: "absolute",
+          left: "50%",
+          top: 0,
+          zIndex: 4,
+          margin: 0,
+          color: token("--text-primary"),
+          font: token("--t-display"),
+          textAlign: "center",
+          textShadow: token("--text-outline-media"),
+          whiteSpace: "nowrap",
+          transform: `translate(-50%, calc(-100% - ${token("--space-m")}))`,
+          animation: titleSettled
+            ? undefined
+            : `radial-announcement-victory-title-move ${VICTORY_TITLE_MOVE_DURATION} ${token("--ease-dream")} ${VICTORY_TITLE_HOLD_DURATION} both`,
+        }}
+      >
+        <span
+          data-radial-announcement-copy=""
+          style={{
+            display: "block",
+            animation: `radial-announcement-victory-title-fade ${VICTORY_TITLE_FADE_DURATION} ${token("--ease-out")} both`,
+          }}
+        >
+          {headline}
+        </span>
+      </h1>
+      {[0, 1].map((index) => (
+        <span
+          key={index}
+          aria-hidden="true"
+          data-radial-announcement-ripple=""
+          style={{
+            position: "absolute",
+            inset: token("--space-m"),
+            border: `${token("--space-xxs")} solid ${token("--border-accent")}`,
+            borderRadius: token("--radius-pill"),
+            animation:
+              `radial-announcement-victory-ripple ${VICTORY_INTRO_DURATION} ${token("--ease-out")} ` +
+              `${index === 0 ? "0s" : `calc(${VICTORY_INTRO_DURATION} / 2)`} infinite`,
+          }}
+        />
+      ))}
+      <span
+        aria-hidden="true"
+        data-radial-announcement-orbit="outer"
+        style={{
+          position: "absolute",
+          inset: token("--space-l"),
+          border: `${token("--space-xxs")} solid ${token("--border-accent")}`,
+          borderTopColor: token("--accent-bright"),
+          borderBottomColor: "transparent",
+          borderRadius: token("--radius-pill"),
+          animation: `radial-announcement-victory-orbit calc(${token("--dur-slow")} * 12) linear infinite`,
+        }}
+      >
+        <span
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: `calc(-1 * ${token("--space-xs")})`,
+            width: token("--space-l"),
+            height: token("--space-l"),
+            borderRadius: token("--radius-pill"),
+            background: token("--reward"),
+            boxShadow: token("--glow-accent-soft"),
+          }}
+        />
+      </span>
+      <span
+        aria-hidden="true"
+        data-radial-announcement-orbit="inner"
+        style={{
+          position: "absolute",
+          inset: token("--space-6xl"),
+          border: `${token("--space-xxs")} solid ${token("--border-soft")}`,
+          borderLeftColor: token("--reward"),
+          borderRightColor: "transparent",
+          borderRadius: token("--radius-pill"),
+          animation: `radial-announcement-victory-counter-orbit calc(${token("--dur-slow")} * 16) linear infinite`,
+        }}
+      />
+      <span
+        aria-hidden="true"
+        data-radial-announcement-disc=""
+        style={{
+          position: "relative",
+          width: VICTORY_CORE_SIZE,
+          aspectRatio: "1",
+          display: "grid",
+          placeItems: "center",
+          border: `${token("--space-xxs")} solid ${token("--border-accent")}`,
+          borderRadius: token("--radius-pill"),
+          background: RADIAL_DISC_BACKGROUND,
+          boxShadow: `${token("--shadow-lg")}, ${token("--glow-accent-soft")}`,
+          animation: `radial-announcement-victory-breathe calc(${token("--dur-slow")} * 7) ${token("--ease-in-out")} infinite`,
+        }}
+      >
+        <span
+          data-radial-announcement-symbol="victory"
+          style={{
+            width: "42%",
+            aspectRatio: "1",
+            background: token("--reward"),
+            clipPath:
+              "polygon(50% 0%, 56% 44%, 100% 50%, 56% 56%, 50% 100%, 44% 56%, 0% 50%, 44% 44%)",
+            boxShadow: token("--glow-accent-soft"),
+            animation:
+              `radial-announcement-victory-star-reveal ${VICTORY_TITLE_MOVE_DURATION} ${token("--ease-out")} ${VICTORY_TITLE_HOLD_DURATION} both, ` +
+              `radial-announcement-victory-star-spin calc(${token("--dur-slow")} * 8) ${token("--ease-in-out")} ${RADIAL_ANNOUNCEMENT_VICTORY_ACTION_DELAY} infinite`,
+          }}
+        />
+      </span>
     </div>
   );
 }

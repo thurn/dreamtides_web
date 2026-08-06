@@ -12,11 +12,14 @@ import { battleCardLayoutId } from "../components/battle/battle-card-layout";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { Motes } from "../components/hud/Motes";
+import {
+  RADIAL_ANNOUNCEMENT_VICTORY_ACTION_DELAY,
+  RadialAnnouncement,
+} from "../components/status/RadialAnnouncement";
 import { TransientStatusToast } from "../components/status/TransientStatusToast";
 import { safeAreaInsetAtLeast } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
 import { motionTimeSeconds } from "../primitives/motion-time";
-import { RADIAL_DISC_BACKGROUND } from "../primitives/radial-disc-material";
 import {
   BattleForeseeOverlay,
   type BattleForeseeView,
@@ -429,74 +432,10 @@ function renderedBattleCard(
   );
 }
 
-const TUTORIAL_VICTORY_STAGE_SIZE = "min(76vw, 420px)";
-const TUTORIAL_VICTORY_CORE_SIZE = "min(43vw, 236px)";
 const TUTORIAL_VICTORY_BUTTON_MAX_WIDTH = 240;
-const TUTORIAL_VICTORY_ARRIVAL_SCALE = 0.36;
-const TUTORIAL_VICTORY_OVERSHOOT_SCALE = 1.08;
-const TUTORIAL_VICTORY_RIPPLE_START_SCALE = 0.72;
-const TUTORIAL_VICTORY_RIPPLE_END_SCALE = 1.46;
-const TUTORIAL_VICTORY_BREATHE_LOW_SCALE = 0.97;
-const TUTORIAL_VICTORY_BREATHE_HIGH_SCALE = 1.03;
-const TUTORIAL_VICTORY_STAR_LOW_SCALE = 0.92;
-const TUTORIAL_VICTORY_STAR_HIGH_SCALE = 1.08;
-const TUTORIAL_VICTORY_INTRO_DURATION = `calc(${token("--dur-slow")} * 5)`;
-const TUTORIAL_VICTORY_TITLE_HOLD_DURATION = "3s";
-const TUTORIAL_VICTORY_TITLE_MOVE_DURATION = `calc(${token("--dur-slow")} * 3)`;
-const TUTORIAL_VICTORY_TITLE_TOTAL_DURATION =
-  `calc(${TUTORIAL_VICTORY_TITLE_HOLD_DURATION} + ` +
-  `${token("--dur-slow")} * 3)`;
-const TUTORIAL_VICTORY_TITLE_FADE_DURATION = `calc(${token("--dur-slow")} * 0.7)`;
 const TUTORIAL_VICTORY_ACTION_FADE_DURATION = `calc(${token("--dur-slow")} * 1.4)`;
 
 const TUTORIAL_VICTORY_CSS = `
-  @keyframes tutorial-victory-arrival {
-    0% { opacity: 0; transform: scale(${String(TUTORIAL_VICTORY_ARRIVAL_SCALE)}) rotate(-18deg); }
-    18% { opacity: 1; transform: scale(${String(TUTORIAL_VICTORY_OVERSHOOT_SCALE)}) rotate(3deg); }
-    32%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
-  }
-
-  @keyframes tutorial-victory-orbit {
-    from { transform: rotate(-70deg); }
-    to { transform: rotate(290deg); }
-  }
-
-  @keyframes tutorial-victory-counter-orbit {
-    from { transform: rotate(40deg); }
-    to { transform: rotate(-320deg); }
-  }
-
-  @keyframes tutorial-victory-ripple {
-    0% { opacity: 0; transform: scale(${String(TUTORIAL_VICTORY_RIPPLE_START_SCALE)}); }
-    18% { opacity: 0.68; }
-    78%, 100% { opacity: 0; transform: scale(${String(TUTORIAL_VICTORY_RIPPLE_END_SCALE)}); }
-  }
-
-  @keyframes tutorial-victory-breathe {
-    0%, 100% { transform: scale(${String(TUTORIAL_VICTORY_BREATHE_LOW_SCALE)}); }
-    50% { transform: scale(${String(TUTORIAL_VICTORY_BREATHE_HIGH_SCALE)}); }
-  }
-
-  @keyframes tutorial-victory-title-move {
-    from { top: 50%; transform: translate(-50%, -50%); }
-    to { top: 0; transform: translate(-50%, calc(-100% - ${token("--space-m")})); }
-  }
-
-  @keyframes tutorial-victory-title-fade {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes tutorial-victory-star-reveal {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes tutorial-victory-star-spin {
-    0%, 100% { transform: rotate(0deg) scale(${String(TUTORIAL_VICTORY_STAR_LOW_SCALE)}); }
-    50% { transform: rotate(45deg) scale(${String(TUTORIAL_VICTORY_STAR_HIGH_SCALE)}); }
-  }
-
   @keyframes tutorial-victory-action {
     from { opacity: 0; transform: translateY(${token("--space-s")}); }
     to { opacity: 1; transform: translateY(0); }
@@ -507,14 +446,6 @@ const TUTORIAL_VICTORY_CSS = `
   }
 
   @media (prefers-reduced-motion: reduce) {
-    [data-tutorial-victory-arrival],
-    [data-tutorial-victory-orbit],
-    [data-tutorial-victory-counter-orbit],
-    [data-tutorial-victory-ripple],
-    [data-tutorial-victory-core],
-    [data-tutorial-victory-title],
-    [data-tutorial-victory-title-copy],
-    [data-tutorial-victory-star],
     [data-tutorial-victory-action] {
       animation: none !important;
     }
@@ -531,7 +462,6 @@ function TutorialVictorySurface({
 }: {
   readonly onNewJourney: () => void;
 }): ReactElement {
-  const [titleSettled, setTitleSettled] = useState(false);
   const [actionSettled, setActionSettled] = useState(false);
   return (
     <section
@@ -563,144 +493,11 @@ function TutorialVictorySurface({
       <style>{TUTORIAL_VICTORY_CSS}</style>
       <Motes on tint="violet" count={24} seed={121} zIndex={1} />
       <Motes on tint="warm" count={12} seed={243} zIndex={1} />
-      <div
-        data-tutorial-victory-arrival=""
-        style={{
-          position: "relative",
-          zIndex: 2,
-          width: TUTORIAL_VICTORY_STAGE_SIZE,
-          aspectRatio: "1",
-          display: "grid",
-          placeItems: "center",
-          animation: `tutorial-victory-arrival ${TUTORIAL_VICTORY_INTRO_DURATION} ${token("--ease-dream")} both`,
-        }}
-      >
-        <h1
-          data-tutorial-victory-title=""
-          onAnimationEnd={(event) => {
-            if (event.currentTarget === event.target) {
-              setTitleSettled(true);
-            }
-          }}
-          style={{
-            position: "absolute",
-            left: "50%",
-            top: 0,
-            zIndex: 4,
-            margin: 0,
-            color: token("--text-primary"),
-            font: token("--t-display"),
-            textAlign: "center",
-            textShadow: token("--text-outline-media"),
-            whiteSpace: "nowrap",
-            transform: `translate(-50%, calc(-100% - ${token("--space-m")}))`,
-            animation: titleSettled
-              ? undefined
-              : `tutorial-victory-title-move ${TUTORIAL_VICTORY_TITLE_MOVE_DURATION} ${token("--ease-dream")} ${TUTORIAL_VICTORY_TITLE_HOLD_DURATION} both`,
-          }}
-        >
-          <span
-            data-tutorial-victory-title-copy=""
-            style={{
-              display: "block",
-              animation: `tutorial-victory-title-fade ${TUTORIAL_VICTORY_TITLE_FADE_DURATION} ${token("--ease-out")} both`,
-            }}
-          >
-            Victory
-          </span>
-        </h1>
-        <span
-          aria-hidden="true"
-          data-tutorial-victory-ripple=""
-          style={{
-            position: "absolute",
-            inset: token("--space-m"),
-            border: `${token("--space-xxs")} solid ${token("--border-accent")}`,
-            borderRadius: token("--radius-pill"),
-            animation: `tutorial-victory-ripple ${TUTORIAL_VICTORY_INTRO_DURATION} ${token("--ease-out")} infinite`,
-          }}
-        />
-        <span
-          aria-hidden="true"
-          data-tutorial-victory-ripple=""
-          style={{
-            position: "absolute",
-            inset: token("--space-m"),
-            border: `${token("--space-xxs")} solid ${token("--border-accent")}`,
-            borderRadius: token("--radius-pill"),
-            animation: `tutorial-victory-ripple ${TUTORIAL_VICTORY_INTRO_DURATION} ${token("--ease-out")} calc(${TUTORIAL_VICTORY_INTRO_DURATION} / 2) infinite`,
-          }}
-        />
-        <span
-          aria-hidden="true"
-          data-tutorial-victory-orbit=""
-          style={{
-            position: "absolute",
-            inset: token("--space-l"),
-            border: `${token("--space-xxs")} solid ${token("--border-accent")}`,
-            borderTopColor: token("--accent-bright"),
-            borderBottomColor: "transparent",
-            borderRadius: token("--radius-pill"),
-            animation: `tutorial-victory-orbit calc(${token("--dur-slow")} * 12) linear infinite`,
-          }}
-        >
-          <span
-            style={{
-              position: "absolute",
-              left: "50%",
-              top: `calc(-1 * ${token("--space-xs")})`,
-              width: token("--space-l"),
-              height: token("--space-l"),
-              borderRadius: token("--radius-pill"),
-              background: token("--reward"),
-              boxShadow: token("--glow-accent-soft"),
-            }}
-          />
-        </span>
-        <span
-          data-tutorial-victory-counter-orbit=""
-          style={{
-            position: "absolute",
-            inset: token("--space-6xl"),
-            border: `${token("--space-xxs")} solid ${token("--border-soft")}`,
-            borderLeftColor: token("--reward"),
-            borderRightColor: "transparent",
-            borderRadius: token("--radius-pill"),
-            animation: `tutorial-victory-counter-orbit calc(${token("--dur-slow")} * 16) linear infinite`,
-          }}
-        />
-        <span
-          aria-hidden="true"
-          data-tutorial-victory-core=""
-          style={{
-            position: "relative",
-            width: TUTORIAL_VICTORY_CORE_SIZE,
-            aspectRatio: "1",
-            display: "grid",
-            placeItems: "center",
-            border: `${token("--space-xxs")} solid ${token("--border-accent")}`,
-            borderRadius: token("--radius-pill"),
-            background: RADIAL_DISC_BACKGROUND,
-            boxShadow: `${token("--shadow-lg")}, ${token("--glow-accent-soft")}`,
-            animation: `tutorial-victory-breathe calc(${token("--dur-slow")} * 7) ${token("--ease-in-out")} infinite`,
-          }}
-        >
-          <span
-            data-tutorial-victory-star=""
-            style={{
-              width: "42%",
-              aspectRatio: "1",
-              background: token("--reward"),
-              clipPath:
-                "polygon(50% 0%, 56% 44%, 100% 50%, 56% 56%, 50% 100%, 44% 56%, 0% 50%, 44% 44%)",
-              boxShadow: token("--glow-accent-soft"),
-              animation:
-                `tutorial-victory-star-reveal ${TUTORIAL_VICTORY_TITLE_MOVE_DURATION} ${token("--ease-out")} ${TUTORIAL_VICTORY_TITLE_HOLD_DURATION} both, ` +
-                `tutorial-victory-star-spin calc(${token("--dur-slow")} * 8) ${token("--ease-in-out")} ${TUTORIAL_VICTORY_TITLE_TOTAL_DURATION} infinite`,
-            }}
-          />
-        </span>
-      </div>
+      <RadialAnnouncement
+        variant="victory"
+        headline="Victory"
+        announcementId="tutorial-victory"
+      />
       <div
         data-tutorial-victory-action=""
         data-tutorial-victory-action-entering={actionSettled ? undefined : ""}
@@ -719,7 +516,7 @@ function TutorialVictorySurface({
           justifyContent: "center",
           animation: actionSettled
             ? undefined
-            : `tutorial-victory-action ${TUTORIAL_VICTORY_ACTION_FADE_DURATION} ${token("--ease-out")} ${TUTORIAL_VICTORY_TITLE_TOTAL_DURATION} both`,
+            : `tutorial-victory-action ${TUTORIAL_VICTORY_ACTION_FADE_DURATION} ${token("--ease-out")} ${RADIAL_ANNOUNCEMENT_VICTORY_ACTION_DELAY} both`,
         }}
       >
         <GlassButton
