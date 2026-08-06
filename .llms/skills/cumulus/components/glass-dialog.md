@@ -8,9 +8,9 @@ Components · Live demo & interactive props: `/cumulus#/glass-dialog`
 
 Real consumers: **14** (imports outside `src/cumulus/docs/` and tests).
 
-The glass overlay shell: a modal dialog with a bounded desktop panel and a full-bleed mobile overlay by default, plus centered content-sized and companion-paired popup presentations. Standard chrome places the title, optional subtitle, and close disc in a hairline-closed header; titleless chrome can overlay the close disc or float it in prose flow. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.
+The glass overlay shell: a modal dialog with a bounded desktop panel and a full-bleed mobile overlay by default, plus centered content-sized and companion-paired popup presentations. Standard chrome places the title, optional subtitle, and close disc in a hairline-closed header; flowing chrome floats the close disc in prose flow. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.
 
-> **Guidance:** Dreamsign Revelation uses this shell for its Purge replacement dialog. Pass `onClose` for the shared close disc, or omit it when one explicit commit action must own completion. Use `presentation="popup"` for a bounded content-sized surface on both desktop and mobile. Add `companion` when one tangible object should lead a popup pair: the object sits left of a wider prose panel on desktop and centered above it on mobile. `chrome="close-only"` overlays a titleless close disc; `chrome="flowing-close"` places that disc in body flow so ordinary prose wraps around it. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. `wide` opts into the roomy-desktop variant. Battle overlays use `desktopCenterTarget="battlefield"` so a docked inspector rail stays outside the panel's centering region.
+> **Guidance:** Dreamsign Revelation uses this shell for its Purge replacement dialog. Pass `onClose` for the shared close disc, or omit it when one explicit commit action must own completion. Use `presentation="popup"` for a bounded content-sized surface on both desktop and mobile. Add `companion` when one tangible object should lead a popup pair: the object sits left of a wider prose panel on desktop and centered above it on mobile. `chrome="flowing-close"` places the close disc in body flow so ordinary prose wraps around it. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. Battle overlays use `desktopCenterTarget="battlefield"` so a docked inspector rail stays outside the panel's centering region.
 
 ## Props
 
@@ -21,10 +21,9 @@ The glass overlay shell: a modal dialog with a bounded desktop panel and a full-
 | `onClose` | `(() => void)` | no | — | Dismisses the dialog from its close disc. Omit for a commit-gated dialog that intentionally exposes no dismissal control. |
 | `closeLabel` | `string` | no | `Close` | Accessible name for the close disc. Defaults to `"Close"`. |
 | `cutoutAwareClose` | `boolean` | no | `false` | When true, on a full-bleed mobile overlay whose screen-cutout box is known (a device-screenshot mock-up) the close disc floats up beside the device island instead of sitting on the header row, so the header title clears the safe area below it. No effect on desktop or on real hardware (where the island geometry is not exposed). Defaults to `false`. |
-| `wide` | `boolean` | no | `false` | On desktop, widen the panel and trade the `85vh` height cap for explicit viewport padding so a roomy grid fits in two rows without internal scroll. No effect on the full-bleed mobile overlay. Defaults to `false`. A caller gates this on its own roomy-desktop media query. |
 | `fullScreen` | `boolean` | no | `false` | Force the edge-to-edge takeover treatment at any viewport width. |
 | `presentation` | `"responsive" \| "popup"` | no | `responsive` | Responsive behavior for the dialog surface. `"responsive"` uses the standard bounded desktop panel and full-bleed mobile takeover. `"popup"` keeps a centered, content-sized glass panel at every viewport width. `fullScreen` takes precedence. Defaults to `"responsive"`. |
-| `chrome` | `"standard" \| "close-only" \| "flowing-close"` | no | `standard` | Visible dialog chrome. `"standard"` renders the title/subtitle header and its divider. `"close-only"` keeps `title` as the accessible dialog name, omits the visible header, and overlays the optional close disc in the panel's top-right corner. `"flowing-close"` also omits the visible header, but floats the close disc in the scrolling body so nearby prose wraps around its circular footprint. Defaults to `"standard"`. |
+| `chrome` | `"standard" \| "flowing-close"` | no | `standard` | Visible dialog chrome. `"standard"` renders the title/subtitle header and its divider. `"flowing-close"` keeps `title` as the accessible dialog name, omits the visible header, and floats the close disc in the scrolling body so nearby prose wraps around its circular footprint. Defaults to `"standard"`. |
 | `desktopCenterTarget` | `"battlefield" \| "viewport"` | no | `viewport` | Region used to center a bounded desktop panel. `"battlefield"` measures the visible `main[data-battle-mobile]` stage, keeping a docked inspector rail outside the centering calculation while the modal layer continues to block the complete viewport. Mobile and full-screen dialogs remain viewport-aligned. Defaults to `"viewport"`. |
 | `companion` | `ReactNode` | no | — | Optional tangible object paired with a popup panel. On desktop the companion leads a horizontal pair with a wider prose panel; on mobile it sits centered above the panel. The complete pair is centered in the target region. Only applies to `presentation="popup"`. |
 | `children` | `ReactNode` | yes | — | The scrolling body content. |
@@ -63,7 +62,7 @@ Omit `onClose` when the dialog must expose only its explicit commit action. The 
 Use the popup presentation for compact guidance or confirmation copy that should remain a centered glass window on mobile as well as desktop.
 
 ```tsx
-<GlassDialog title="How to Play" presentation="popup" chrome="close-only" onClose={closeGuide}>
+<GlassDialog title="How to Play" presentation="popup" onClose={closeGuide}>
   <HowToPlayCopy />
 </GlassDialog>
 ```
@@ -86,7 +85,6 @@ Pair one tangible object with a prose popup. The complete pair is centered horiz
 <GlassDialog
   title="How to Play"
   presentation="popup"
-  chrome="close-only"
   companion={<DreamwellCard model={dreamwell} />}
   onClose={closeGuide}
 >

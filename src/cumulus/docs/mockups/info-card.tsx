@@ -141,7 +141,6 @@ export function InfoCardMockup() {
           card={
             <InfoCard
               variant="object"
-              frame
               image={artRef.dreamAvatar("0025")}
               title="Seld Rakor"
               body={richText.rules("Whenever you Reclaim a card, deal 1 damage.")}

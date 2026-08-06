@@ -65,17 +65,4 @@ describe("MainMenuButton", () => {
     act(() => root.unmount());
   });
 
-  it("names the hero action hierarchy through its strict size variant", () => {
-    const { container, root } = mount(
-      <MainMenuButton label="New Journey" size="hero" onPress={() => {}} />,
-    );
-
-    expect(
-      container.querySelector("button")?.getAttribute(
-        "data-main-menu-button-size",
-      ),
-    ).toBe("hero");
-
-    act(() => root.unmount());
-  });
 });

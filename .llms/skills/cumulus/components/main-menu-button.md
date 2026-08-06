@@ -18,30 +18,17 @@ The text-first action for the Dreamtides main menu: outlined white at rest, show
 | --- | --- | --- | --- | --- |
 | `label` | `string` | yes | — | Player-facing action label. |
 | `onPress` | `() => void` | yes | — | Reports activation to the route adapter. |
-| `size` | `"standard" \| "hero"` | no | `standard` | Named action hierarchy for the main-menu scene. Defaults to `standard`. |
 | `testId` | `string` | no | — | A `data-testid` for selecting the action in tests. |
 
 ## Usage
 
-### Standard action
+### Main-menu action
 
-Use the standard hierarchy for secondary main-menu actions.
-
-```tsx
-<MainMenuButton
-  label="New Journey"
-  onPress={startJourney}
-/>
-```
-
-### Hero action
-
-Use the hero hierarchy for the primary full-bleed scene actions.
+Use this hierarchy for full-bleed main-menu actions.
 
 ```tsx
 <MainMenuButton
   label="New Journey"
-  size="hero"
   onPress={startJourney}
 />
 ```

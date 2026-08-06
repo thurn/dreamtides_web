@@ -29,9 +29,6 @@ import {
   MENU_EDGE_INSET_MOBILE_PX,
 } from "../../screens/chrome-geometry";
 
-/** A semantic emphasis for a command's label and active state. */
-export type CommandMenuAccent = "default" | "accent" | "danger";
-
 /** A single command row. `id` is stable domain identity, never display copy. */
 export interface CommandMenuAction {
   kind: "action";
@@ -39,8 +36,6 @@ export interface CommandMenuAction {
   label: string;
   glyph: Glyph;
   active?: boolean;
-  disabled?: boolean;
-  accent?: CommandMenuAccent;
   onCommand: () => void;
 }
 
@@ -51,8 +46,6 @@ export interface CommandMenuGroup {
   label: string;
   glyph: Glyph;
   active?: boolean;
-  disabled?: boolean;
-  accent?: CommandMenuAccent;
   /** Runs when Cumulus opens this group, before its nested commands are shown. */
   onOpen?: () => void;
   actions: readonly CommandMenuItem[];
@@ -118,10 +111,11 @@ export interface CommandMenuAppChromeModel {
   testId?: string;
 }
 
-/** Anchor supplied by a pointer interaction or a card/source rectangle. */
-export type CommandMenuAnchor =
-  | { kind: "point"; x: number; y: number }
-  | { kind: "sourceRect"; rect: DOMRectReadOnly };
+/** Anchor supplied by a pointer interaction. */
+export interface CommandMenuAnchor {
+  x: number;
+  y: number;
+}
 
 /** A command menu opened for an activated card or pointer target. */
 export interface CommandMenuContextModel {
@@ -252,9 +246,7 @@ function ContextCommandMenu({ model }: { model: CommandMenuContextModel }): Reac
   const isDesktop = useIsDesktop();
   const menuRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState<{ left: number; top: number } | null>(null);
-  const origin = anchor.kind === "point"
-    ? anchor
-    : { x: anchor.rect.left, y: anchor.rect.bottom };
+  const origin = anchor;
 
   useLayoutEffect(() => {
     if (!isDesktop || menuRef.current === null) return;
@@ -352,7 +344,6 @@ function HierarchicalMenu({
   }, [path]);
 
   function choose(item: CommandMenuInteractiveItem): void {
-    if (item.disabled) return;
     if (item.kind === "group") {
       item.onOpen?.();
       setPath((previous) => [...previous, item.id]);
@@ -523,19 +514,14 @@ function CommandRow({
   mobile: boolean;
   onActivate: () => void;
 }): ReactElement {
-  const disabled = item.disabled === true;
-  const color = item.accent === "danger"
-    ? token("--danger")
-    : item.accent === "accent" || item.active === true
-      ? token("--accent-bright")
-      : token("--text-on-glass");
+  const color = item.active === true
+    ? token("--accent-bright")
+    : token("--text-on-glass");
   return (
     <Pressable
       as="button"
       role="menuitem"
-      aria-disabled={disabled || undefined}
       aria-haspopup={item.kind === "group" ? "menu" : undefined}
-      disabled={disabled}
       onClick={onActivate}
       style={{
         appearance: "none",

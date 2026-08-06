@@ -70,8 +70,6 @@ Accent and game-semantic colors (resources, states, categories). A color prop on
 | `--mote-warm-glow` | `rgba(255, 224, 160, 0.7)` |  |
 | `--mote-violet` | `rgba(216, 180, 254, 0.6)` |  |
 | `--mote-violet-glow` | `rgba(192, 132, 252, 0.7)` |  |
-| `--mote-dreamscape` | `#d8b4fe` |  |
-| `--mote-dreamscape-glow` | `rgba(216, 180, 254, 0.8)` |  |
 
 ## Borders & lines
 

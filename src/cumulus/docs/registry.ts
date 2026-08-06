@@ -20,7 +20,6 @@ import { cardGalleryPanelDemo } from "./demos/card-gallery-panel";
 import { cardPileDemo } from "./demos/card-pile";
 import { cardOrderEditorDemo } from "./demos/card-order-editor";
 import { cardStatOrbDemo } from "./demos/card-stat-orb";
-import { cardTermDefinitionsDemo } from "./demos/card-term-definitions";
 import { characterDialogueDemo } from "./demos/character-dialogue";
 import { coopPresenceStatusDemo } from "./demos/coop-presence-status";
 import { commandMenuDemo } from "./demos/command-menu";
@@ -47,7 +46,6 @@ import { motesDemo } from "./demos/motes";
 import { numberStepperDemo } from "./demos/number-stepper";
 import { offerTileDemo } from "./demos/offer-tile";
 import { pipBadgeDemo } from "./demos/pip-badge";
-import { playingCardDemo } from "./demos/playing-card";
 import { pressableDemo } from "./demos/pressable";
 import { radialAnnouncementDemo } from "./demos/radial-announcement";
 import { journeyStatusBarDemo } from "./demos/journey-status-bar";
@@ -196,13 +194,11 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   entityReferenceDemo,
   richTextDemo,
   rulesTextDemo,
-  playingCardDemo,
   gameCardDemo,
   cardBackDemo,
   cardPileDemo,
   cardChoiceGridDemo,
   cardGalleryPanelDemo,
-  cardTermDefinitionsDemo,
   glossaryDefinitionCardDemo,
   cardStatOrbDemo,
   atlasNodeDemo,

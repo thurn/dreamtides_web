@@ -449,7 +449,7 @@ function TidesBlock({ tides }: { tides: DreamAvatarTideView[] }) {
         }}
       >
         {tides.map((tide) => (
-          <TideDiscReveal key={tide.id} tide={tide} size="lg" />
+          <TideDiscReveal key={tide.id} tide={tide} />
         ))}
       </div>
     </section>

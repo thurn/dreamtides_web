@@ -32,7 +32,7 @@ The Dream Atlas map surface — the run graph of dreamscape nodes and their conn
 | `size` | `number` | no | Rendered node diameter in stage pixels. |
 | `isStarter` | `boolean` | no |  |
 | `isBoss` | `boolean` | no |  |
-| `isReachable` | `boolean` | yes |  |
+| `isReachable` | `boolean` | no |  |
 | `iconRef` | `ArtRef \| null` | no |  |
 | `siteBadgeGlyph` | `Glyph \| null` | no |  |
 | `knownDreamsignRef` | `ArtRef \| null` | no |  |

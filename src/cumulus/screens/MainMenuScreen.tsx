@@ -155,7 +155,6 @@ export function MainMenuScreen({
             >
               <MainMenuButton
                 label={action.label}
-                size="hero"
                 testId={`main-menu-action-${action.id}`}
                 onPress={() => onAction(action.id)}
               />
@@ -182,7 +181,6 @@ export function MainMenuScreen({
             key={social.id}
             glyph={social.glyph}
             label={social.label}
-            variant="default"
             testId={`main-menu-social-${social.id}`}
             onPress={() => onSocial(social.id)}
           />

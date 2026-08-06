@@ -235,7 +235,6 @@ function CardShopGallery({
                 ? { kind: "text", text: "Free" }
                 : { kind: "essence", amount: restock.price },
           disabled: restock.state !== "available",
-          interactionFeedback: "stationary",
           testId: "cumulus-card-shop-restock",
         }}
         onEndActionPress={onRestock}

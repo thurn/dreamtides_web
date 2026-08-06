@@ -27,7 +27,7 @@ One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engin
 | `size` | `number` | no | Rendered node diameter in stage pixels. |
 | `isStarter` | `boolean` | no |  |
 | `isBoss` | `boolean` | no |  |
-| `isReachable` | `boolean` | yes |  |
+| `isReachable` | `boolean` | no |  |
 | `iconRef` | `ArtRef \| null` | no |  |
 | `siteBadgeGlyph` | `Glyph \| null` | no |  |
 | `knownDreamsignRef` | `ArtRef \| null` | no |  |

@@ -11,7 +11,7 @@ describe("TideDisc", () => {
     (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<CumulusRoot><TideDisc tide="valor" id="tide-valor" label="Rising Valor" description="Stand firm." size="lg" /></CumulusRoot>));
+    act(() => root.render(<CumulusRoot><TideDisc tide="valor" id="tide-valor" label="Rising Valor" description="Stand firm." /></CumulusRoot>));
     const source = container.querySelector<HTMLElement>("[data-tide-disc]")!;
     expect(source.dataset.revealFeedback).toBe("measured");
     expect(source.dataset.revealEntityType).toBe("tide");

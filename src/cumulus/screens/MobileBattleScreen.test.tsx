@@ -3481,7 +3481,6 @@ describe("MobileBattleScreen", () => {
     expect(next?.textContent).toBe("Next Phase");
     expect(previous?.dataset.glassPlacement).toBe("onMedia");
     expect(next?.dataset.glassPlacement).toBe("onMedia");
-    expect(previous?.dataset.glassVariant).toBe("default");
     expect(next?.dataset.glassVariant).toBe("accent");
 
     act(() => {

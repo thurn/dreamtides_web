@@ -885,11 +885,6 @@ describe("GambleSiteScreen — Starway Stairs", () => {
         title.textContent
       ),
     ).toEqual(["Draw 3-A", "Draw 5-A", "Draw 8-A"]);
-    expect(
-      Array.from(container.querySelectorAll("[data-wager-prize-card]"), (card) =>
-        card.getAttribute("data-wager-prize-presentation")
-      ),
-    ).toEqual(["draw-target", "draw-target", "draw-target"]);
     expect(container.textContent).not.toContain("%");
     expect(container.textContent).toContain(
       "Starway Stairs is the game. Keep betting to see how high you can go!",

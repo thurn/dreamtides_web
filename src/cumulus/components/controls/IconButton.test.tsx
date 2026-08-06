@@ -160,51 +160,6 @@ describe("IconButton", () => {
     });
   });
 
-  it("renders the shared purple soft-wash accent without dropping the glass blur", () => {
-    const { container, root } = mount(
-      <IconButton
-        glyph={GLYPHS.close}
-        label="Close"
-        variant="accent"
-        onPress={() => {}}
-      />,
-    );
-
-    const button = container.querySelector("button");
-    expect(button?.dataset.glassVariant).toBe("accent");
-    expect(button?.style.backdropFilter).toContain("--glass-blur");
-    expect(button?.style.background).toContain("var(--accent-bright) 20%");
-    expect(button?.style.background).toContain("var(--accent-strong) 10%");
-    expect(button?.style.boxShadow).toContain("inset 0 -12px 26px");
-    expect(button?.style.boxShadow).toContain("0 10px 26px");
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("balances the purple accent for an icon button nested on glass", () => {
-    const { container, root } = mount(
-      <IconButton
-        glyph={GLYPHS.close}
-        label="Close"
-        variant="accent"
-        placement="onGlass"
-        onPress={() => {}}
-      />,
-    );
-
-    const button = container.querySelector("button");
-    expect(button?.style.background).toContain("var(--accent-bright) 18%");
-    expect(button?.style.background).toContain("var(--accent-strong) 8%");
-    expect(button?.style.boxShadow).toContain("inset 0 -10px 22px");
-    expect(button?.style.boxShadow).toContain("0 8px 22px");
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
   it("fires `onPress` on click", () => {
     const onPress = vi.fn();
     const { container, root } = mount(

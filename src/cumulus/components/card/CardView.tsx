@@ -676,15 +676,6 @@ export interface CardViewProps {
    * beside a materializing card's desktop reveal. Card geometry is unchanged.
    */
   rulesTextPresentation?: "adjacent-figment";
-  /** Hide rules text for dense card surfaces that show identity and stats. */
-  hideRulesText?: boolean;
-  /**
-   * Visual treatment for the source card. `"battlefield"` uses a rounded square
-   * frame that widens the art viewport at its existing vertical scale, keeping
-   * only the art and an enlarged top-right spark mark; the shared reveal remains
-   * complete.
-   */
-  presentation?: GameCardPresentation;
   /** Optional editor wrappers for individual rendered card slots. */
   slots?: CardViewSlots;
   /**
@@ -731,7 +722,18 @@ export interface CardViewProps {
  * directly on the art at the card's bottom-right, just above a bottom-anchored
  * text box that holds the rules body and auto-sizes to the amount of rules text.
  */
-function GameCardSurface(props: CardViewProps) {
+interface GameCardSurfaceProps extends CardViewProps {
+  /** Hide rules text for dense card surfaces that show identity and stats. */
+  hideRulesText?: boolean;
+  /**
+   * Visual treatment for the source card. `"battlefield"` uses a rounded square
+   * frame that widens the art viewport at its existing vertical scale, keeping
+   * only the art and an enlarged top-right spark mark.
+   */
+  presentation?: GameCardPresentation;
+}
+
+function GameCardSurface(props: GameCardSurfaceProps) {
   const {
     card: sourceCard,
     onClick,

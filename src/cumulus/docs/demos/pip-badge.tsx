@@ -19,7 +19,6 @@ function coerceString(value: unknown, fallback: string): string {
 function PipBadgeDemo(args: Record<string, unknown>) {
   const variant = args.variant === "energy" ? "energy" : "spark";
   const value = coerceString(args.value, "3");
-  const size = args.size === "md" ? "md" : "sm";
   const scale = typeof args.scale === "number" ? args.scale : 1;
   const ariaLabel =
     typeof args.ariaLabel === "string" ? args.ariaLabel : undefined;
@@ -39,7 +38,6 @@ function PipBadgeDemo(args: Record<string, unknown>) {
       <PipBadge
         variant={variant}
         value={value}
-        size={size}
         scale={scale}
         ariaLabel={ariaLabel}
         glossaryId={glossaryId}
@@ -71,8 +69,7 @@ function PipBadgeDemo(args: Record<string, unknown>) {
               gap: token("--space-m"),
             }}
           >
-            <PipBadge variant="spark" value="3" size="sm" />
-            <PipBadge variant="spark" value="3" size="md" />
+            <PipBadge variant="spark" value="3" />
           </div>
           <span
             style={{ font: token("--t-caption"), color: token("--text-muted") }}
@@ -95,11 +92,10 @@ function PipBadgeDemo(args: Record<string, unknown>) {
               gap: token("--space-m"),
             }}
           >
-            <PipBadge variant="energy" value="2" size="sm" />
+            <PipBadge variant="energy" value="2" />
             <PipBadge
               variant="energy"
               value="2"
-              size="md"
               glossaryId={GLOSSARY_IDS.energyCost}
             />
           </div>
@@ -130,7 +126,7 @@ export const pipBadgeDemo: CumulusComponent = {
       note: "The spark stat as a corner pip. `value` is a string so a variable value can pass \"X\"; `scale` lets a card renderer track the surrounding card text scale.",
       code: `import { PipBadge } from "src/cumulus/components/controls/PipBadge";
 
-<PipBadge variant="spark" value="3" size="sm" />`,
+<PipBadge variant="spark" value="3" />`,
     },
     {
       label: "Energy-cost pip with glossary entry",
@@ -141,7 +137,6 @@ import { PipBadge } from "src/cumulus/components/controls/PipBadge";
 <PipBadge
   variant="energy"
   value="2"
-  size="sm"
   glossaryId={GLOSSARY_IDS.energyCost}
 />`,
     },
@@ -150,7 +145,6 @@ import { PipBadge } from "src/cumulus/components/controls/PipBadge";
     defaultArgs: {
       variant: "spark",
       value: "3",
-      size: "sm",
     },
   },
 };

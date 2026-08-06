@@ -1272,9 +1272,7 @@ function SideZones({
         >
           <CardPile
             cards={deck}
-            orientation="landscape"
             label={`${position === "near" ? "Your" : "Opponent"} deck`}
-            cardInteraction="inactive"
             onActivate={
               interactions?.onZoneOpen === undefined
                 ? undefined
@@ -1373,9 +1371,7 @@ function SideZones({
         >
           <CardPile
             cards={voidPile}
-            orientation="landscape"
             label={`${position === "near" ? "Your" : "Opponent"} void`}
-            cardInteraction="inactive"
             emptyState="outlined"
             emptyLabel={zoneLabels === "voids" ? "Void" : undefined}
             onActivate={
@@ -3702,7 +3698,6 @@ function CardPickerGallery({
           }
           cardSize="compact"
           frame={isDesktop ? "floating" : "fullBleed"}
-          spacing="compact"
           widthMode="fill"
           heightMode="fill"
           testId="battle-card-picker-gallery-panel"
@@ -5473,7 +5468,6 @@ export function MobileBattleScreen({
       ) : null}
       {mergeNotice !== null ? (
         <TransientStatusToast
-          variant="warning"
           copy={{ title: "Merge Blocked", message: mergeNotice }}
           onDismiss={() => setMergeNotice(null)}
         />

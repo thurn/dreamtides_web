@@ -17,7 +17,7 @@ The Boxicons renderer for controls, badges, overlays, and card marks: a centered
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `glyph` | `Glyph` | yes | — | The standalone {@link Glyph} to render. |
-| `color` | `CumulusColor` = `"danger" \| "accent" \| "accent-bright" \| "accent-strong" \| "essence" \| "energy" \| "spark" \| "positive" \| "selected" \| "text-primary" \| "text-secondary" \| "text-muted" \| "text-faint" \| "text-on-accent" \| "white"` | yes | — | Fill {@link CumulusColor} — Boxicons paints via the element's text color. |
+| `color` | `CumulusColor` = `"danger" \| "accent" \| "accent-bright" \| "essence" \| "energy" \| "spark" \| "positive" \| "selected" \| "text-primary" \| "text-secondary" \| "text-on-accent" \| "white"` | yes | — | Fill {@link CumulusColor} — Boxicons paints via the element's text color. |
 | `depth` | `StandaloneGlyphDepth` = `"flat" \| "content-protection"` | no | `flat` | Flat by default; use content protection when the glyph sits over media. |
 | `label` | `string` | no | — | Accessible meaning; the glyph is hidden from assistive tech when unset. |
 

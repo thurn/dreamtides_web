@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/card-pile`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-A physical deck or void stack built from structured, topmost-first card instances. It shows at most three slightly offset layers and rests upright or sideways as one fixed object.
+A physical deck or void stack built from structured, topmost-first card instances. It shows at most three slightly offset layers and rests sideways as one fixed object.
 
 > **Guidance:** Pass stable battle-card instance ids so the shared layout identity can carry each card continuously between zones. Face-up entries can reveal their card or remain inactive beneath one pile-level activation; face-down entries resolve through CardBack.
 
@@ -17,9 +17,7 @@ A physical deck or void stack built from structured, topmost-first card instance
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `cards` | `readonly BattlePileCard[]` | yes | — | Cards ordered topmost-first. At most three physical layers are rendered. |
-| `orientation` | `CardPileOrientation` = `"portrait" \| "landscape"` | yes | — | Whether cards rest upright or sideways. |
 | `label` | `string` | yes | — | Accessible name for the card zone represented by this pile. |
-| `cardInteraction` | `CardPileCardInteraction` = `"inactive" \| "reveal"` | no | `reveal` | Reveal behavior for face-up cards. Defaults to `reveal`. |
 | `emptyState` | `CardPileEmptyState` = `"hidden" \| "outlined"` | no | `hidden` | Treatment shown when the pile has no cards. Defaults to `hidden`. |
 | `emptyLabel` | `string` | no | — | Visible copy centered inside an empty outlined pile. |
 | `onActivate` | `(() => void)` | no | — | Activates the pile as one zone control. |
@@ -36,7 +34,6 @@ import { CardPile } from "src/cumulus/components/battle/CardPile";
 
 <CardPile
   cards={deck.map((card) => ({ face: "down", id: card.instanceId }))}
-  orientation="landscape"
   label="Player deck"
 />
 ```
@@ -52,9 +49,7 @@ Inactive face-up layers keep the pile clickable as one zone control without reve
     id: card.instanceId,
     model: card.gameCard,
   }))}
-  orientation="landscape"
   label="Enemy void"
-  cardInteraction="inactive"
   onActivate={openEnemyVoid}
 />
 ```
@@ -66,7 +61,6 @@ An empty void retains its physical card footprint with a dotted outline and can 
 ```tsx
 <CardPile
   cards={[]}
-  orientation="landscape"
   label="Player void"
   emptyState="outlined"
   emptyLabel="Void"

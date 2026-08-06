@@ -41,7 +41,6 @@ A frameless, responsive grid for presenting resolved GameCards as choices inside
 | `label` | `string` | no | Accessible action label. |
 | `caption` | `CardChoiceGridCaption` | no | Small uncontained line rendered below the glyph. |
 | `disabled` | `boolean` | yes | Detach interaction and visually recede the action. |
-| `interactionFeedback` | `"responsive" \| "stationary"` | yes | Interaction motion for the action surface. |
 | `testId` | `string` | yes | Optional stable test id on the action button. |
 
 ## Usage

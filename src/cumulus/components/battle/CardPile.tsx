@@ -3,7 +3,6 @@ import type { CSSProperties } from "react";
 import { token } from "../../primitives/tokens";
 import {
   CardView,
-  GameCard,
   type GameCardModel,
 } from "../card/CardView";
 import {
@@ -38,24 +37,14 @@ export interface FaceUpPileCard {
 /** A physical card instance in a pile, ordered topmost-first by callers. */
 export type BattlePileCard = FaceDownPileCard | FaceUpPileCard;
 
-/** The two physical ways a pile may rest on the battle surface. */
-export type CardPileOrientation = "portrait" | "landscape";
-
-/** Whether face-up pile cards participate in the shared reveal interaction. */
-export type CardPileCardInteraction = "inactive" | "reveal";
-
 /** The treatment used when a pile has no physical cards to render. */
 export type CardPileEmptyState = "hidden" | "outlined";
 
 export interface CardPileProps {
   /** Cards ordered topmost-first. At most three physical layers are rendered. */
   readonly cards: readonly BattlePileCard[];
-  /** Whether cards rest upright or sideways. */
-  readonly orientation: CardPileOrientation;
   /** Accessible name for the card zone represented by this pile. */
   readonly label: string;
-  /** Reveal behavior for face-up cards. Defaults to `reveal`. */
-  readonly cardInteraction?: CardPileCardInteraction;
   /** Treatment shown when the pile has no cards. Defaults to `hidden`. */
   readonly emptyState?: CardPileEmptyState;
   /** Visible copy centered inside an empty outlined pile. */
@@ -77,14 +66,7 @@ const LAYER_SHIFT_BY_RAISED_LAYERS = [
   token("--space-xs"),
 ] as const;
 
-function cardStageStyle(orientation: CardPileOrientation): CSSProperties {
-  if (orientation === "portrait") {
-    return {
-      position: "absolute",
-      inset: 0,
-    };
-  }
-
+function cardStageStyle(): CSSProperties {
   return {
     position: "absolute",
     left: "50%",
@@ -140,16 +122,14 @@ function EmptyPileOutline({ label }: { readonly label?: string }) {
  */
 export function CardPile({
   cards,
-  orientation,
   label,
-  cardInteraction = "reveal",
   emptyState = "hidden",
   emptyLabel,
   onActivate,
   testId,
 }: CardPileProps) {
   const visibleCards = cards.slice(0, CARD_PILE_VISIBLE_LAYER_CAP);
-  const stageStyle = cardStageStyle(orientation);
+  const stageStyle = cardStageStyle();
 
   const layers = visibleCards.map((card, depth) => {
     const raisedLayers = visibleCards.length - depth - 1;
@@ -196,11 +176,6 @@ export function CardPile({
           <div style={stageStyle}>
             {card.face === "down" ? (
               <CardBack label={`${label}, face-down card ${String(depth + 1)}`} />
-            ) : cardInteraction === "reveal" ? (
-              <GameCard
-                model={card.model}
-                figment={card.figment}
-              />
             ) : (
               <CardView
                 card={card.model.displaySnapshot}
@@ -216,19 +191,15 @@ export function CardPile({
   const rootStyle: CSSProperties = {
     position: "relative",
     width: "100%",
-    aspectRatio:
-      orientation === "portrait"
-        ? CARD_ASPECT_RATIO
-        : LANDSCAPE_ASPECT_RATIO,
+    aspectRatio: LANDSCAPE_ASPECT_RATIO,
     overflow: "visible",
   };
   const sharedProps = {
     "aria-label": label,
     "data-card-pile": "",
-    "data-pile-orientation": orientation,
+    "data-pile-orientation": "landscape",
     "data-pile-count": String(cards.length),
     "data-pile-visible-count": String(visibleCards.length),
-    "data-pile-card-interaction": cardInteraction,
     "data-pile-empty-state": emptyState,
     "data-testid": testId,
   } as const;

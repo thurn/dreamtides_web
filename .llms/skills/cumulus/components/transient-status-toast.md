@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/transient-status-toast`
 
 Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 
-The fixed, safe-area-aware short-lived status surface for player notices that need a semantic severity and structured copy.
+The fixed, safe-area-aware short-lived warning surface for structured player-facing status copy.
 
 > **Guidance:** Keep lifecycle and auto-dismiss timing in the controller; this component owns only transient presentation and optional tap dismissal.
 
@@ -16,7 +16,6 @@ The fixed, safe-area-aware short-lived status surface for player notices that ne
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `variant` | `TransientStatusVariant` = `"notice" \| "warning" \| "error"` | yes | — | Semantic severity for the status material and assistive announcement. |
 | `copy` | `TransientStatusCopy` | yes | — | Structured player-facing copy. |
 | `onDismiss` | `(() => void)` | no | — | Optional dismissal callback; lifecycle ownership remains outside Cumulus. |
 
@@ -33,7 +32,6 @@ The fixed, safe-area-aware short-lived status surface for player notices that ne
 import { TransientStatusToast } from "src/cumulus/components/status/TransientStatusToast";
 
 <TransientStatusToast
-  variant="warning"
   copy={{ message: "Action not applied. Try again." }}
   onDismiss={dismiss}
 />

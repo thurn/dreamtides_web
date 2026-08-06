@@ -44,6 +44,7 @@ describe("BattleStatusDisplay", () => {
       root.render(
         <BattleStatusDisplay
           owner="enemy"
+          relationship="far"
           dreamAvatar={{
             imageNumber: "0042",
             name: "Astra",
@@ -65,7 +66,7 @@ describe("BattleStatusDisplay", () => {
     expect(status?.dataset.points).toBe("4");
     expect(status?.dataset.pointsToWin).toBe("25");
     expect(status?.getAttribute("aria-label")).toBe(
-      "Enemy: 2 of 3 energy, 4 of 25 points",
+      "Opponent: 2 of 3 energy, 4 of 25 points",
     );
     expect(status?.style.background).toContain("var(--glass-sheen)");
     expect(status?.style.background).toContain("var(--glass-fill)");
@@ -120,6 +121,7 @@ describe("BattleStatusDisplay", () => {
       root.render(
         <BattleStatusDisplay
           owner="player"
+          relationship="near"
           dreamAvatar={null}
           currentEnergy={0}
           maxEnergy={0}
@@ -155,6 +157,7 @@ describe("BattleStatusDisplay", () => {
         <CumulusRoot>
           <BattleStatusDisplay
             owner="player"
+            relationship="near"
             dreamAvatar={{
               imageNumber: "0029",
               name: "Tensho",

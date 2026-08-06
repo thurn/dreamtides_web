@@ -14,7 +14,6 @@ const actions: readonly CommandMenuItem[] = [
   { kind: "group", id: "more", label: "More", glyph: GLYPHS.chevronRight, actions: [
     { kind: "action", id: "load", label: "Load", glyph: GLYPHS.arrowRight, onCommand: () => undefined },
   ] },
-  { kind: "action", id: "disabled", label: "Unavailable", glyph: GLYPHS.lock, disabled: true, onCommand: () => undefined },
 ];
 
 function mount(node: React.ReactNode): { root: Root; container: HTMLDivElement } {
@@ -62,18 +61,15 @@ describe("CommandMenu app-chrome model", () => {
     act(() => root.unmount());
   });
 
-  it("dismisses on Escape and keeps disabled commands inert", async () => {
-    const command = vi.fn();
+  it("dismisses on Escape", async () => {
     const { root } = mount(<CommandMenu model={{
       kind: "appChrome",
       trigger: { glyph: GLYPHS.menu, label: "Open utilities", corner: "topEnd" },
-      actions: [{ kind: "action", id: "disabled", label: "Unavailable", glyph: GLYPHS.lock, disabled: true, onCommand: command }],
+      actions,
     }} />);
     act(() => document.querySelector<HTMLButtonElement>('[aria-label="Open utilities"]')?.click());
-    act(() => [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.includes("Unavailable"))?.click());
-    expect(command).not.toHaveBeenCalled();
     await act(() => window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true })));
-    expect(document.body.textContent).not.toContain("Unavailable");
+    expect(document.body.textContent).not.toContain("Save");
     act(() => root.unmount());
   });
 });
@@ -94,7 +90,7 @@ describe("CommandMenu context model", () => {
       kind: "context",
       title: "Card",
       actions,
-      anchor: { kind: "point", x: 12, y: 12 },
+      anchor: { x: 12, y: 12 },
       onDismiss: () => undefined,
     }} />);
     expect(document.querySelector('[role="dialog"]')?.parentElement).toBe(document.body);
@@ -109,7 +105,7 @@ describe("CommandMenu context model", () => {
       title: "Card",
       subtitle: "Player · Hand",
       actions,
-      anchor: { kind: "point", x: 12, y: 12 },
+      anchor: { x: 12, y: 12 },
       onDismiss,
     }} />);
     expect(document.querySelector('[data-command-menu-context]')?.parentElement).toBe(document.body);
@@ -144,7 +140,7 @@ describe("CommandMenu context model", () => {
       kind: "context",
       title: "Card",
       actions: integerActions,
-      anchor: { kind: "point", x: 12, y: 12 },
+      anchor: { x: 12, y: 12 },
       onDismiss,
     }} />);
     act(() => [...document.querySelectorAll<HTMLButtonElement>('[role="menuitem"]')]

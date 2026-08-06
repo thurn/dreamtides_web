@@ -1,5 +1,4 @@
 import type { ReactElement } from "react";
-import type { GlassControlPlacement } from "../../primitives/control-placement";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { InlineGlyph } from "../typography/InlineGlyph";
@@ -12,8 +11,7 @@ export type NumberStepperResource =
   | "essence"
   | "energy"
   | "spark"
-  | "points"
-  | "counter";
+  | "points";
 
 export interface NumberStepperProps {
   /** Visible label for the numeric value. */
@@ -38,8 +36,6 @@ export interface NumberStepperProps {
   incrementDisabled?: boolean;
   /** Compact or regular row density. Defaults to `md`. */
   size?: NumberStepperSize;
-  /** Surface beneath the two icon buttons. Defaults to `onGlass`. */
-  placement?: GlassControlPlacement;
   /** Stable test id for the row. */
   testId?: string;
 }
@@ -60,7 +56,6 @@ export function NumberStepper({
   decrementDisabled = false,
   incrementDisabled = false,
   size = "md",
-  placement = "onGlass",
   testId,
 }: NumberStepperProps): ReactElement {
   const compact = size === "sm";
@@ -90,7 +85,7 @@ export function NumberStepper({
         glyph={GLYPHS.minus}
         size="sm"
         label={decrementLabel}
-        placement={placement}
+        placement="onGlass"
         disabled={decrementDisabled}
         onPress={onDecrement}
       />
@@ -114,7 +109,7 @@ export function NumberStepper({
         glyph={GLYPHS.plus}
         size="sm"
         label={incrementLabel}
-        placement={placement}
+        placement="onGlass"
         disabled={incrementDisabled}
         onPress={onIncrement}
       />

@@ -214,7 +214,6 @@ export function CardZoneBrowserOverlay({
         value: ownerSwitch.value,
         onChange: (value: string) =>
           ownerSwitch.onChange(value as CardZoneBrowserOwner),
-        full: true,
       };
   const toolbar: CardGalleryToolbar = zone === "void"
     ? {

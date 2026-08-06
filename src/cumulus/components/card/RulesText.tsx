@@ -301,7 +301,6 @@ function renderSegment(
         <PipBadge
           variant="spark"
           value={segment.value}
-          size="sm"
           scale={options.pipScale}
         />
       </span>

@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/tide-disc`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The single semantic tide mark: a colored disc carrying the tide's glyph and its own strict tide reveal, sized 'sm' or 'lg'.
+The single semantic tide mark: a colored disc carrying the tide's glyph and its own strict tide reveal.
 
 > **Guidance:** The tide-identity palette lives in src/cumulus/components/hud/tide-spec.ts. Its five tides — Ember #fb923c, Valor #facc15, Vision #60a5fa, Wild #4ade80, Shadow #c084fc — each own a fixed accent and glyph, exposed as TIDES / tideVisual / tideAlignmentLabel. TideDisc and InfoCard's tide variant read that table. Selection-provenance controls use role colors instead. tide-spec has no renderable component of its own, so it is documented here on its canonical renderer.
 
@@ -20,7 +20,6 @@ The single semantic tide mark: a colored disc carrying the tide's glyph and its 
 | `id` | `string` | yes | — | Stable id (a tide deck id) for the `data-tide-disc` QA hook. |
 | `label` | `string` | yes | — | Display name used by the source and its tide card. |
 | `description` | `string` | yes | — | Semantic description revealed by this tide source. |
-| `size` | `TideDiscSize` = `"sm" \| "lg"` | no | `sm` | Which enumerated {@link TideDiscSize} to render. Default 'sm'. |
 
 ## Usage
 
@@ -31,9 +30,7 @@ The color and glyph come from the named tide (never a raw value). The component 
 ```tsx
 import { TideDisc } from "src/cumulus/components/hud/TideDisc";
 
-// The compact 'sm' disc (desktop select) and the larger 'lg' disc (mobile select):
 <TideDisc tide="valor" id={tideDeckId} label="Rising Valor" description={tide.description} />
-<TideDisc tide="valor" id={tideDeckId} label="Rising Valor" description={tide.description} size="lg" />
 ```
 
 ### Self-revealing tide
@@ -43,5 +40,5 @@ The named component derives its tide primary and general Tides secondary interna
 ```tsx
 import { TideDisc } from "src/cumulus/components/hud/TideDisc";
 
-<TideDisc tide="valor" id={tideDeckId} label="Rising Valor" description={tide.description} size="lg" />
+<TideDisc tide="valor" id={tideDeckId} label="Rising Valor" description={tide.description} />
 ```

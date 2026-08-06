@@ -27,7 +27,7 @@ export interface BattleStatusDisplayProps {
   /** Combatant represented by this status card. */
   readonly owner: BattleStatusOwner;
   /** Relationship of this canonical combatant to the current local perspective. */
-  readonly relationship?: BattleStatusRelationship;
+  readonly relationship: BattleStatusRelationship;
   /** DreamAvatar whose head portrait anchors the card, or null while it loads. */
   readonly dreamAvatar: DreamAvatarVisual | null;
   /** Optional identity and ability copy revealed from the portrait. */
@@ -60,11 +60,7 @@ export function BattleStatusDisplay({
   pointsToWin,
   testId,
 }: BattleStatusDisplayProps) {
-  const ownerLabel = relationship === "near"
-    ? "Your side"
-    : relationship === "far"
-      ? "Opponent"
-      : owner === "player" ? "Player" : "Enemy";
+  const ownerLabel = relationship === "near" ? "Your side" : "Opponent";
 
   return (
     <div

@@ -37,7 +37,7 @@ export const glossaryDefinitionCardDemo: CumulusComponent = {
   id: "glossary-definition-card",
   title: "Glossary Definition Card",
   blurb:
-    "A renderable keyword-definition tile for normal document flow: one glossary entry in an InfoCard text card whose body is the keyword's rules text. The glossary entry supplies the headline by default and may select definition-only presentation for a complete explanatory sentence. The signature-deck inspector uses it directly; multi-term rules-text surfaces use CardTermDefinitions and the shared consolidated glossary-card model. It re-establishes its own `.cumulus` token scope for portalled surfaces.",
+    "A renderable keyword-definition tile for normal document flow: one glossary entry in an InfoCard text card whose body is the keyword's rules text. The glossary entry supplies the headline by default and may select definition-only presentation for a complete explanatory sentence. The signature-deck inspector uses it directly. It re-establishes its own `.cumulus` token scope for portalled surfaces.",
   group: "Components",
   docName: "GlossaryDefinitionCard",
   Component: GlossaryDefinitionCardDemo,

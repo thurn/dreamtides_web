@@ -53,7 +53,7 @@ function CommandMenuDemo() {
           title: "Demo Card",
           subtitle: "Player · Hand",
           actions: contextDemoActions,
-          anchor: { kind: "point", x: 160, y: 160 },
+          anchor: { x: 160, y: 160 },
           onDismiss: () => setContextOpen(false),
         }} />
       )}
@@ -95,7 +95,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
   kind: "context",
   title: "Card actions",
   actions: cardActions,
-  anchor: { kind: "point", x: event.clientX, y: event.clientY },
+  anchor: { x: event.clientX, y: event.clientY },
   onDismiss: closeMenu,
 }} />`,
     },

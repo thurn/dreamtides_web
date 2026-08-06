@@ -103,8 +103,6 @@ export interface CardChoiceGridActionView {
   caption: CardChoiceGridCaption;
   /** Detach interaction and visually recede the action. */
   disabled?: boolean;
-  /** Interaction motion for the action surface. */
-  interactionFeedback?: "responsive" | "stationary";
   /** Optional stable test id on the action button. */
   testId?: string;
 }
@@ -248,10 +246,8 @@ function CardChoiceAction({
       aria-label={action.label}
       aria-disabled={action.disabled || undefined}
       disabled={action.disabled}
-      pressFeedback={
-        action.interactionFeedback === "stationary" ? "stationary" : "scale"
-      }
-      data-press-feedback={action.interactionFeedback ?? "responsive"}
+      pressFeedback="stationary"
+      data-press-feedback="stationary"
       data-testid={action.testId}
       data-reveal-complete-game-card="false"
       onPointerDown={(event) => {

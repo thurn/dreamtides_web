@@ -15,9 +15,6 @@
   font: var(--t-lead);
   text-align: left;
   text-shadow: var(--text-outline-media);
-}
-
-.main-menu-button[data-main-menu-button-size="hero"] {
   zoom: 1.5;
 }
 

@@ -176,20 +176,9 @@ describe("Cumulus MainMenuScreen", () => {
         .flexDirection,
     ).toBe("row");
     expect(
-      container
-        .querySelector("[data-testid='main-menu-action-new-journey']")
-        ?.getAttribute("data-main-menu-button-size"),
-    ).toBe("hero");
-    expect(
       container.querySelector<HTMLElement>("[data-main-menu-button-glass]")
         ?.style.background,
     ).not.toContain("--accent-bright");
-    expect(
-      Array.from(container.querySelectorAll("[data-main-menu-socials] button")).map(
-        (button) => button.getAttribute("data-glass-variant"),
-      ),
-    ).toEqual(["default", "default", "default"]);
-
     act(() => root.unmount());
   });
 });

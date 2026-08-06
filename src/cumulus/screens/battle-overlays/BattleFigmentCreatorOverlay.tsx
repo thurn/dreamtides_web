@@ -147,7 +147,6 @@ export function BattleFigmentCreatorOverlay({
             incrementLabel="Create more figments"
             decrementDisabled={count <= 1}
             incrementDisabled={count >= maxCount}
-            placement="onGlass"
             testId="battle-figment-count"
             onDecrement={() => onCountChange(Math.max(1, count - 1))}
             onIncrement={() => onCountChange(Math.min(maxCount, count + 1))}

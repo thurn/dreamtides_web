@@ -12,8 +12,7 @@ import { richText } from "./rich-text";
  * present their complete explanatory sentence without a headline.
  *
  * The signature-deck inspector uses this renderable tile in normal document
- * flow. Multi-term rules-text surfaces use CardTermDefinitions and the shared
- * consolidated glossary-card model.
+ * flow.
  *
  * The tile establishes its own `.cumulus` token scope so it renders correctly on
  * any surface, including popovers portalled outside a Cumulus subtree. The body is

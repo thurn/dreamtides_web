@@ -116,7 +116,7 @@ export function JourneyDebugEditorScreen(props: JourneyDebugEditorScreenProps): 
 
 function ResourceSteppers({ view, onChange }: { view: JourneyDebugEditorView; onChange: JourneyDebugEditorScreenProps["onResourceChange"] }): ReactElement {
   const resources: readonly [JourneyDebugResourceId, string, number][] = [["essence", "Essence", view.essence], ["maxDreamsigns", "Max dreamsigns", view.maxDreamsigns], ["completionLevel", "Completion level", view.completionLevel]];
-  return <div style={sectionStyle}>{resources.map(([id, label, value]) => <NumberStepper key={id} label={label} value={value} decrementLabel={`Decrease ${label}`} incrementLabel={`Increase ${label}`} onDecrement={() => onChange(id, -1)} onIncrement={() => onChange(id, 1)} placement="onGlass" testId={`journey-debug-${id}`} />)}</div>;
+  return <div style={sectionStyle}>{resources.map(([id, label, value]) => <NumberStepper key={id} label={label} value={value} decrementLabel={`Decrease ${label}`} incrementLabel={`Increase ${label}`} onDecrement={() => onChange(id, -1)} onIncrement={() => onChange(id, 1)} testId={`journey-debug-${id}`} />)}</div>;
 }
 
 function DeckEntryEditor({ entry, onRemove, onSetStatOverride, onSetTransfiguration, onSetTypeChange, onSetKeywords }: { entry: JourneyDebugDeckEntryView; onRemove: (entryId: string) => void; onSetStatOverride: JourneyDebugEditorScreenProps["onSetStatOverride"]; onSetTransfiguration: JourneyDebugEditorScreenProps["onSetTransfiguration"]; onSetTypeChange: JourneyDebugEditorScreenProps["onSetTypeChange"]; onSetKeywords: JourneyDebugEditorScreenProps["onSetKeywords"] }): ReactElement {

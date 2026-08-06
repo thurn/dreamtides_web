@@ -5,9 +5,7 @@
 // apart. Colors and glyphs come from `tideVisual` (tide-spec) — the same table
 // the pills and the shared InfoCard's tide variant read.
 //
-// The disc comes in two enumerated sizes: `sm` (the desktop select's compact
-// hover-reveal row) and `lg` (the mobile select's larger, easier-to-press row).
-// The glyph scales with the disc, so both sizes read as the same mark.
+// The disc uses the larger touch-friendly size everywhere it appears.
 //
 // The disc is a semantic reveal source. It owns the press/hover binding for its
 // tide card; callers supply only the stable tide data and lay the disc out.
@@ -22,23 +20,8 @@ import { richText } from "../card/rich-text";
 import { glossaryInfoCard } from "../card/glossary-info-card";
 import { GLOSSARY_IDS } from "../../../data/glossary";
 
-/** The `sm` tide disc's diameter, in px. The desktop select's tide-row sizing
- * reads this constant, so the compact disc is one size everywhere. */
-export const TIDE_DISC_PX = 24;
-
-/** The `lg` tide disc's diameter, in px — the mobile select's larger, more
- * touch-friendly disc. */
+/** The tide disc's touch-friendly diameter, in px. */
 export const TIDE_DISC_LG_PX = 40;
-
-/** How big a tide disc renders. An enumerated size, never a raw pixel: `sm` is
- * the desktop select's compact row, `lg` the mobile select's larger row. */
-export type TideDiscSize = "sm" | "lg";
-
-/** The diameter, in px, each enumerated {@link TideDiscSize} renders at. */
-const TIDE_DISC_SIZE_PX: Record<TideDiscSize, number> = {
-  sm: TIDE_DISC_PX,
-  lg: TIDE_DISC_LG_PX,
-};
 
 export interface TideDiscProps {
   /** Which of the five tides. Fixes the disc's color and glyph. */
@@ -49,13 +32,11 @@ export interface TideDiscProps {
   label: string;
   /** Semantic description revealed by this tide source. */
   description: string;
-  /** Which enumerated {@link TideDiscSize} to render. Default 'sm'. */
-  size?: TideDiscSize;
 }
 
 /**
  * TideDisc — the single tide mark: a colored disc carrying the tide's fixed
- * glyph, sized `sm` ({@link TIDE_DISC_PX}px) or `lg` ({@link TIDE_DISC_LG_PX}px).
+ * glyph, sized to the canonical {@link TIDE_DISC_LG_PX}px diameter.
  * The atom both DreamAvatar-select layouts render their tide discs from, so the
  * treatment is identical everywhere a tide disc appears.
  */
@@ -64,10 +45,9 @@ export function TideDisc({
   id,
   label,
   description,
-  size = "sm",
 }: TideDiscProps) {
   const v = tideVisual(tide);
-  const diameter = TIDE_DISC_SIZE_PX[size];
+  const diameter = TIDE_DISC_LG_PX;
   const binding = useRevealSource({
     identity: { entityType: "tide", entityId: revealEntityId("tide", id) },
     spec: {

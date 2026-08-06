@@ -17,7 +17,7 @@ The glass status card for one battle participant: centered current and maximum e
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `owner` | `BattleStatusOwner` = `"player" \| "enemy"` | yes | — | Combatant represented by this status card. |
-| `relationship` | `BattleStatusRelationship` = `"near" \| "far"` | no | — | Relationship of this canonical combatant to the current local perspective. |
+| `relationship` | `BattleStatusRelationship` = `"near" \| "far"` | yes | — | Relationship of this canonical combatant to the current local perspective. |
 | `dreamAvatar` | `DreamAvatarVisual \| null` | yes | — | DreamAvatar whose head portrait anchors the card, or null while it loads. |
 | `dreamAvatarProfile` | `BattleStatusDreamAvatarProfile` | no | — | Optional identity and ability copy revealed from the portrait. |
 | `currentEnergy` | `number` | yes | — | Energy currently available to this combatant. |
@@ -61,6 +61,7 @@ Use the null portrait state while the participant identity is being populated.
 ```tsx
 <BattleStatusDisplay
   owner="enemy"
+  relationship="far"
   dreamAvatar={null}
   currentEnergy={0}
   maxEnergy={0}

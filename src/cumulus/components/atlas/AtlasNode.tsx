@@ -8,7 +8,7 @@ import { revealEntityId } from "../../internal/reveal/identity";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
 import { type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
-import { atlasPrimaryInfoCard } from "./AtlasHoverCard";
+import type { InfoCardProps } from "../overlay/InfoCard";
 import { BOSS_DISPLAY, ROUND_FRAME_URL } from "./atlas-display";
 import "./atlas.css";
 
@@ -24,6 +24,26 @@ export interface AtlasNodePrimary {
   guideName: string | null;
   title: string;
   body: string;
+}
+
+/** Selects the strict Atlas primary variant from semantic node content. */
+export function atlasPrimaryInfoCard(content: AtlasNodePrimary): InfoCardProps {
+  if (content.sceneArt === null || content.placeName === null) {
+    return {
+      variant: "text",
+      title: content.title,
+      body: richText.plain(content.body),
+    };
+  }
+  return {
+    variant: "atlasReveal",
+    image: content.sceneArt,
+    imageCrop: "center",
+    figure: content.figureArt ?? undefined,
+    title: content.placeName,
+    subtitle: content.guideName ?? undefined,
+    body: richText.plain(content.body),
+  };
 }
 
 /** A UUID-backed known Dreamsign related to an Atlas node. */
@@ -63,7 +83,7 @@ export interface AtlasNodeModel {
   size: number;
   isStarter: boolean;
   isBoss: boolean;
-  isReachable?: boolean;
+  isReachable: boolean;
   iconRef: ArtRef | null;
   siteBadgeGlyph: Glyph | null;
   knownDreamsignRef: ArtRef | null;

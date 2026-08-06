@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/glossary-definition-card
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-A renderable keyword-definition tile for normal document flow: one glossary entry in an InfoCard text card whose body is the keyword's rules text. The glossary entry supplies the headline by default and may select definition-only presentation for a complete explanatory sentence. The signature-deck inspector uses it directly; multi-term rules-text surfaces use CardTermDefinitions and the shared consolidated glossary-card model. It re-establishes its own `.cumulus` token scope for portalled surfaces.
+A renderable keyword-definition tile for normal document flow: one glossary entry in an InfoCard text card whose body is the keyword's rules text. The glossary entry supplies the headline by default and may select definition-only presentation for a complete explanatory sentence. The signature-deck inspector uses it directly. It re-establishes its own `.cumulus` token scope for portalled surfaces.
 
 ## Props
 

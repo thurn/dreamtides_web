@@ -7,7 +7,7 @@
 //   - one shadow/rim treatment  — glassSurfaceStyle's layered glass edge
 //   - one type scale            — headline (serif) / body (rules) / meta (mono)
 // Only the MEDIA treatment varies by content, via `variant`:
-//   - object      — a centered framed portrait OR contained transparent object
+//   - object      — a centered contained transparent object
 //   - fullBleed   — a square hero image with a glass text card laid on TOP of it:
 //                   the image IS the card, with meta / name / epithet / body
 //                   revealed on the shared glass, floating over the lower image
@@ -279,20 +279,16 @@ export interface InfoCardSlots {
 }
 
 /**
- * object variant — a centered media block (a framed portrait OR a contained
- * transparent object) above the title + body. An object card IS its media, so
+ * object variant — a centered contained transparent object above the title +
+ * body. An object card IS its media, so
  * `image` is required: there is no object card without one.
  */
 export interface InfoCardObjectProps extends InfoCardCommonProps {
   variant: "object";
   /** The media the card is built around, as an {@link ArtRef}. Required. */
   image: ArtRef;
-  /** How the media is cropped. Default `"top"`. */
-  imageCrop?: ImageCrop;
   /** A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object). */
   imageFilter?: MediaFilter;
-  /** true = framed portrait, false = contained transparent object. Default false. */
-  frame?: boolean;
 }
 
 /**
@@ -460,37 +456,9 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
   /* --- object: a centered media block (framed portrait OR contained
      transparent object) above its name + text. --- */
   if (props.variant === "object") {
-    const { image, imageCrop = "top", imageFilter, frame = false } = props;
+    const { image, imageFilter } = props;
     const imageUrl = resolveArtRef(image);
-    const media = frame ? (
-      <div
-        style={{
-          width: geometryPx(124),
-          height: geometryPx(150),
-          flex: "none",
-          position: "relative",
-          overflow: "hidden",
-          borderRadius: token("--radius-control"),
-          // shadow token + a faithfully-copied inset hairline highlight
-          boxShadow: `${token("--shadow-md")}, inset 0 0 0 1px rgba(255,255,255,0.08)`,
-        }}
-      >
-        <img
-          src={imageUrl}
-          alt=""
-          draggable={false}
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            objectPosition: resolveImageCrop(imageCrop),
-            userSelect: "none",
-          }}
-        />
-      </div>
-    ) : (
+    const media = (
       <img
         src={imageUrl}
         alt=""

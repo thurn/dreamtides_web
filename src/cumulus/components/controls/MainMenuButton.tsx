@@ -8,8 +8,6 @@ export interface MainMenuButtonProps {
   label: string;
   /** Reports activation to the route adapter. */
   onPress: () => void;
-  /** Named action hierarchy for the main-menu scene. Defaults to `standard`. */
-  size?: "standard" | "hero";
   /** A `data-testid` for selecting the action in tests. */
   testId?: string;
 }
@@ -21,7 +19,6 @@ export interface MainMenuButtonProps {
 export function MainMenuButton({
   label,
   onPress,
-  size = "standard",
   testId,
 }: MainMenuButtonProps): ReactElement {
   const glassChrome = controlChrome("onMedia").trigger;
@@ -30,7 +27,6 @@ export function MainMenuButton({
     <Pressable
       as="button"
       className="main-menu-button"
-      data-main-menu-button-size={size}
       data-testid={testId}
       onClick={onPress}
     >

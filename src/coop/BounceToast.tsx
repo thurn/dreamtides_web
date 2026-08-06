@@ -44,7 +44,6 @@ export function BounceToast({
 }): ReactNode {
   return (
     <TransientStatusToast
-      variant="warning"
       copy={{ message }}
       onDismiss={onDismiss}
     />

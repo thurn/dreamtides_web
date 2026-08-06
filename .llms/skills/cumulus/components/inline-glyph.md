@@ -17,7 +17,7 @@ The Boxicons renderer for flowing text: a one-em square whose midpoint follows t
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `glyph` | `Glyph` | yes | — | Named Boxicons glyph from the shared Cumulus glyph vocabulary. |
-| `color` | `CumulusColor` = `"danger" \| "accent" \| "accent-bright" \| "accent-strong" \| "essence" \| "energy" \| "spark" \| "positive" \| "selected" \| "text-primary" \| "text-secondary" \| "text-muted" \| "text-faint" \| "text-on-accent" \| "white"` | no | — | Optional semantic fill color. Omit to inherit the surrounding text color. |
+| `color` | `CumulusColor` = `"danger" \| "accent" \| "accent-bright" \| "essence" \| "energy" \| "spark" \| "positive" \| "selected" \| "text-primary" \| "text-secondary" \| "text-on-accent" \| "white"` | no | — | Optional semantic fill color. Omit to inherit the surrounding text color. |
 | `label` | `string` | no | — | Accessible meaning. Omit only when surrounding copy already names the glyph. |
 
 ## Usage

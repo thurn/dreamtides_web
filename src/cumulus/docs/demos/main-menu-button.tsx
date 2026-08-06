@@ -1,14 +1,10 @@
 import { MainMenuButton } from "../../components/controls/MainMenuButton";
 import type { CumulusComponent } from "../registry";
 
-function MainMenuButtonDemo(args: Record<string, unknown>) {
+function MainMenuButtonDemo() {
   return (
     <div style={{ width: 280 }}>
-      <MainMenuButton
-        label="New Journey"
-        size={args.size === "hero" ? "hero" : "standard"}
-        onPress={() => {}}
-      />
+      <MainMenuButton label="New Journey" onPress={() => {}} />
     </div>
   );
 }
@@ -25,24 +21,15 @@ export const mainMenuButtonDemo: CumulusComponent = {
   Component: MainMenuButtonDemo,
   usage: [
     {
-      label: "Standard action",
-      note: "Use the standard hierarchy for secondary main-menu actions.",
+      label: "Main-menu action",
+      note: "Use this hierarchy for full-bleed main-menu actions.",
       code: `<MainMenuButton
   label="New Journey"
-  onPress={startJourney}
-/>`,
-    },
-    {
-      label: "Hero action",
-      note: "Use the hero hierarchy for the primary full-bleed scene actions.",
-      code: `<MainMenuButton
-  label="New Journey"
-  size="hero"
   onPress={startJourney}
 />`,
     },
   ],
   demo: {
-    defaultArgs: { size: "standard" },
+    defaultArgs: {},
   },
 };

@@ -425,7 +425,7 @@ export function BattleContextMenu({
         title: card.definition.name,
         subtitle: locationLabel,
         actions: toCommandMenuItems(items, battleCardId),
-        anchor: { kind: "point", x, y },
+        anchor: { x, y },
         onDismiss: onClose,
         testId: "battle-context-menu",
       }}

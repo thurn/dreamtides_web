@@ -34,12 +34,6 @@ function richTextDescription(value: RichText | undefined): string {
   if (value.kind === "stack") {
     return value.parts.map(richTextDescription).filter(Boolean).join(" ");
   }
-  if (value.kind === "inline") {
-    return value.parts.map(richTextDescription).join("");
-  }
-  if (value.kind === "glyph") {
-    return value.label;
-  }
   return value.text;
 }
 

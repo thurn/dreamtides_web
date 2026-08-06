@@ -31,7 +31,6 @@ describe("TransientStatusToast", () => {
     act(() => {
       root.render(
         <TransientStatusToast
-          variant="warning"
           copy={{ title: "Action Not Applied", message: "Try again." }}
           onDismiss={onDismiss}
         />,

@@ -18,7 +18,7 @@ The shared card-browser surface: GlassPanel title and action chrome around a scr
 | --- | --- | --- | --- | --- |
 | `title` | `string` | yes | — | Header title, rendered as an `<h2>`. |
 | `subtitle` | `string` | no | — | Optional intro line under the title. |
-| `rightAccessory` | `GlassPanelAccessory` | no | — | Optional trailing header action. |
+| `rightAccessory` | `CardGalleryAccessory` | no | — | Optional trailing header action. |
 | `footerAction` | `CardGalleryFooterAction` | no | — | Optional centered GlassButton rendered below the card grid. |
 | `footerActions` | `readonly [CardGalleryFooterAction, CardGalleryFooterAction]` | no | — | Optional equal-width pair of GlassButtons rendered below the card grid. |
 | `toolbar` | `CardGalleryToolbar` | no | — | Optional structured search, sort, and filter toolbar above the card grid. |
@@ -41,11 +41,16 @@ The shared card-browser surface: GlassPanel title and action chrome around a scr
 | `endAction` | `CardChoiceGridActionView` | no | — | Optional card-sized action appended after the cards. |
 | `onEndActionPress` | `((entryId: string) => void)` | no | — | Fires with the appended action's stable id when it is activated. |
 
-### `rightAccessory`: the `GlassPanelAccessory` model
+### `rightAccessory`: the `CardGalleryAccessory` model
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `kind` | `"glassButton" \| "iconButton" \| "iconButtonGroup"` | no |  |
+| `kind` | `"glassButton" \| "iconButton"` | no |  |
+| `label` | `string` | no |  |
+| `onPress` | `(() => void) \| (() => void)` | no |  |
+| `glyph` | `Glyph` | yes |  |
+| `disabled` | `boolean` | yes |  |
+| `testId` | `string` | yes | A `data-testid` for selecting the button in tests. A `data-testid` for selecting the disc in tests. |
 
 ### `footerAction`: the `CardGalleryFooterAction` model
 
@@ -56,7 +61,7 @@ The shared card-browser surface: GlassPanel title and action chrome around a scr
 | `glyph` | `Glyph` | yes | Optional leading glyph. |
 | `essenceCost` | `number \| null` | yes | Optional numerical essence cost. |
 | `disabled` | `boolean` | yes | Detach interaction and visually recede the action. |
-| `variant` | `GlassButtonVariant` | yes | Semantic surface treatment for the action. |
+| `variant` | `CardGalleryFooterVariant` | yes | Semantic surface treatment for the action. |
 | `testId` | `string` | yes | A `data-testid` for selecting the footer action in tests. |
 
 ### `toolbar`: the `CardGalleryToolbar` model
@@ -77,7 +82,6 @@ The shared card-browser surface: GlassPanel title and action chrome around a scr
 | `label` | `string` | no | Accessible action label. |
 | `caption` | `CardChoiceGridCaption` | no | Small uncontained line rendered below the glyph. |
 | `disabled` | `boolean` | yes | Detach interaction and visually recede the action. |
-| `interactionFeedback` | `"responsive" \| "stationary"` | yes | Interaction motion for the action surface. |
 | `testId` | `string` | yes | Optional stable test id on the action button. |
 
 ## Usage

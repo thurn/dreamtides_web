@@ -62,6 +62,7 @@ export const battleStatusDisplayDemo: CumulusComponent = {
       note: "Use the null portrait state while the participant identity is being populated.",
       code: `<BattleStatusDisplay
   owner="enemy"
+  relationship="far"
   dreamAvatar={null}
   currentEnergy={0}
   maxEnergy={0}

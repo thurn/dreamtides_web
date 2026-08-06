@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/info-card`
 
-Real consumers: **8** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **6** (imports outside `src/cumulus/docs/` and tests).
 
 The strict information-card presentation. Its media treatment varies by content — object, full-bleed, atlas reveal, icon, tide, or text — over a single fixed liquid-glass shell; named semantic sources register cards with the root reveal coordinator. On a narrow viewport a card lays out at 45% of screen width capped at its native 248px, so below ~551px (248 ÷ 0.45) it begins scaling down — an intentional content-driven cutoff, distinct from the 900px desktop/mobile breakpoint.
 
@@ -18,12 +18,11 @@ The strict information-card presentation. Its media treatment varies by content 
 | --- | --- | --- | --- | --- |
 | `variant` | `"object" \| "fullBleed" \| "text" \| "atlasReveal" \| "icon" \| "tide"` | no | — | Which media treatment. Omit — or pass 'text' — for the text variant. |
 | `image` | `ArtRef` | yes | — | The media the card is built around, as an {@link ArtRef}. Required. The square hero image the card is built on, as an {@link ArtRef}. Required. The scene hero image the card is built on, as an {@link ArtRef}. Required. |
-| `imageCrop` | `ImageCrop` = `"top" \| "center"` | no | — | How the media is cropped. Default `"top"`. How the hero image is cropped. Default `"center"`. |
-| `imageFilter` | `MediaFilter` = `"dreamsign-portrait" \| "dreamsign-portrait-negative" \| "spark-glow" \| "energy-glow"` | no | — | A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object). A named media {@link MediaFilter} (e.g. a spark glow). A named media {@link MediaFilter} for the scene image. |
-| `frame` | `boolean` | no | — | true = framed portrait, false = contained transparent object. Default false. |
+| `imageFilter` | `MediaFilter` = `"dreamsign-portrait" \| "dreamsign-portrait-negative"` | no | — | A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object). A named media {@link MediaFilter} (e.g. a spark glow). A named media {@link MediaFilter} for the scene image. |
 | `title` | `string` | no | — | The card's headline. Resolve names before display; canonical rules symbols render as their inline icons. |
 | `body` | `RichText` | no | — | The reveal copy, as a structured {@link RichText} value. Canonical rules symbols and explicit glyph parts render as cap-height-aligned inline icons. |
 | `slots` | `InfoCardSlots` | no | — | Optional wrappers for the rendered headline and body content. |
+| `imageCrop` | `ImageCrop` = `"top" \| "center"` | no | — | How the hero image is cropped. Default `"center"`. |
 | `figure` | `ArtRef` | no | — | An optional foreground character render (a transparent full-body cutout — a Dream Guide, the boss) laid centered and prominent OVER the hero image, standing above the glass text card. Its own subject of the card; omit for a scene-only hero. An {@link ArtRef}, resolved by the component. Optional transparent full-body figure standing on the card's right side. |
 | `meta` | `string` | no | — | Small mono/uppercase overline above the title; rules symbols render as icons. |
 | `subtitle` | `string` | no | — | An epithet under the name — a smaller serif line in white, mirroring the Dream Avatar-select name/epithet pairing. Resolve before display; rules symbols render as icons. The resident guide / boss title; rules symbols render as icons. An epithet under the name — a smaller serif subtitle in white, mirroring the Dream Avatar-select name/epithet pairing. Resolve before display; rules symbols render as icons. |
@@ -35,7 +34,7 @@ The strict information-card presentation. Its media treatment varies by content 
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `kind` | `"glyph" \| "plain" \| "rules" \| "underline" \| "inline" \| "note" \| "stack" \| "definitions"` | no |  |
+| `kind` | `"plain" \| "rules" \| "underline" \| "note" \| "stack" \| "definitions"` | no |  |
 
 ### `slots`: the `InfoCardSlots` model
 

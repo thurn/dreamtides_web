@@ -28,18 +28,6 @@ vi.mock("../card/CardView", () => ({
   CardView: ({ card }: { readonly card: GameCardModel["displaySnapshot"] }) => (
     <div data-mock-card-view={card.id} />
   ),
-  GameCard: ({
-    model,
-    figment,
-  }: {
-    readonly model: GameCardModel;
-    readonly figment?: boolean;
-  }) => (
-    <div
-      data-mock-game-card={model.cardId}
-      data-figment={String(figment ?? false)}
-    />
-  ),
 }));
 
 import {
@@ -92,7 +80,6 @@ describe("CardPile", () => {
       root.render(
         <CardPile
           cards={CARDS}
-          orientation="portrait"
           label="Enemy void"
           testId="enemy-void"
         />,
@@ -142,7 +129,7 @@ describe("CardPile", () => {
     ]);
     expect(container.querySelector('[data-battle-card-id="instance-hidden"]')).toBeNull();
     expect(container.querySelectorAll("[data-card-back]")).toHaveLength(1);
-    expect(container.querySelectorAll("[data-mock-game-card]")).toHaveLength(2);
+    expect(container.querySelectorAll("[data-mock-card-view]")).toHaveLength(2);
     expect(container.querySelector("button")).toBeNull();
 
     act(() => root.unmount());
@@ -158,7 +145,6 @@ describe("CardPile", () => {
       root.render(
         <CardPile
           cards={[{ face: "down", id: "deck-top" }]}
-          orientation="landscape"
           label="Player deck"
         />,
       );
@@ -194,7 +180,6 @@ describe("CardPile", () => {
               layoutMotion: "snap",
             },
           ]}
-          orientation="landscape"
           label="Enemy void"
         />,
       );
@@ -210,7 +195,7 @@ describe("CardPile", () => {
     container.remove();
   });
 
-  it("activates an inactive pile without registering its face-up card for reveal", () => {
+  it("activates the pile without registering its face-up card for reveal", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -220,18 +205,14 @@ describe("CardPile", () => {
       root.render(
         <CardPile
           cards={[{ face: "up", id: "void-top", model: MODEL }]}
-          orientation="landscape"
           label="Player void"
-          cardInteraction="inactive"
           onActivate={onActivate}
         />,
       );
     });
 
     const pile = container.querySelector<HTMLButtonElement>("[data-card-pile]");
-    expect(pile?.dataset.pileCardInteraction).toBe("inactive");
     expect(container.querySelector("[data-mock-card-view]")).not.toBeNull();
-    expect(container.querySelector("[data-mock-game-card]")).toBeNull();
 
     act(() => pile?.click());
     expect(onActivate).toHaveBeenCalledTimes(1);
@@ -249,7 +230,6 @@ describe("CardPile", () => {
       root.render(
         <CardPile
           cards={[]}
-          orientation="landscape"
           label="Player void"
           emptyState="outlined"
           emptyLabel="Void"

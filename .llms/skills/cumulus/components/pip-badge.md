@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/pip-badge`
 
-Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
 The compact circled number used in dense card rows and inline rules text for spark or energy values. The value renders in white with a thin outline at small sizes; full game-card corners use the larger, art-aware CardStatOrb. An optional glossary entry turns a pip into its own semantic reveal source.
 
@@ -18,7 +18,6 @@ The compact circled number used in dense card rows and inline rules text for spa
 | --- | --- | --- | --- | --- |
 | `variant` | `PipBadgeVariant` = `"energy" \| "spark"` | yes | — | Which pip this is — picks the fill color. |
 | `value` | `string` | yes | — | The displayed value (string so callers can pass `"X"` for variable cost). |
-| `size` | `"sm" \| "md"` | no | `sm` | `"sm"` matches the small card stat row; `"md"` matches the larger `large` GameCard variant. Sizes are tuned so the number stays readable but the badge does not overpower adjacent text. |
 | `scale` | `number` | no | `1` | Multiplier for card renderers that need the pip to follow card text scale. |
 | `ariaLabel` | `string` | no | — | Optional accessible label for screen readers. If omitted, the badge uses a sensible default for its variant. |
 | `glossaryId` | `string` | no | — | Optional stable TOML glossary id. When provided, the badge becomes its own hover anchor and reveals that glossary entry. |
@@ -32,7 +31,7 @@ The spark stat as a corner pip. `value` is a string so a variable value can pass
 ```tsx
 import { PipBadge } from "src/cumulus/components/controls/PipBadge";
 
-<PipBadge variant="spark" value="3" size="sm" />
+<PipBadge variant="spark" value="3" />
 ```
 
 ### Energy-cost pip with glossary entry
@@ -46,7 +45,6 @@ import { PipBadge } from "src/cumulus/components/controls/PipBadge";
 <PipBadge
   variant="energy"
   value="2"
-  size="sm"
   glossaryId={GLOSSARY_IDS.energyCost}
 />
 ```

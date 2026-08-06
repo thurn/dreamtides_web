@@ -26,20 +26,6 @@ type WagerRevealSourceBinding = ReturnType<typeof useRevealSource>;
  */
 export const PLAYING_CARD_DESIGN = {
   sizes: {
-    compact: {
-      square: 104,
-      fontSize: 40,
-      rankSuitGap: token("--space-xxs"),
-      redCharacterOutlineWidth: 5,
-      blackCharacterOutlineWidth: 5,
-    },
-    standard: {
-      square: 156,
-      fontSize: 65,
-      rankSuitGap: token("--space-xxs"),
-      redCharacterOutlineWidth: 5,
-      blackCharacterOutlineWidth: 5,
-    },
     wagerCompact: {
       square: 116,
       fontSize: 46,
@@ -56,7 +42,6 @@ export const PLAYING_CARD_DESIGN = {
     },
   },
   fontFamily: "Inter",
-  displayFontScale: 1.5,
   colors: {
     black: "#2196F3",
     red: "#FF9800",
@@ -92,11 +77,6 @@ export type PlayingCardRank = StandardPlayingCardRank;
 
 export type PlayingCardSuit = StandardPlayingCardSuit;
 
-export type PlayingCardSize = keyof typeof PLAYING_CARD_DESIGN.sizes;
-
-export type PlayingCardVariant =
-  "rank-and-suit" | "rank-display" | "suit-display" | "rank-target";
-
 /** Stable Gamble prize identities rendered by the shared wager object. */
 export type WagerPrizeCardId =
   | GravokGateId
@@ -107,9 +87,6 @@ export type WagerPrizeCardId =
 
 /** Named square sizes reserved for Gamble prize cards. */
 export type WagerPrizeCardSize = "wagerCompact" | "wager";
-
-/** Named copy treatment for a Gamble prize card. */
-export type WagerPrizeCardPresentation = "draw-target" | "draw-minimum";
 
 /** Semantic visual priority for a wager prize within a multi-tier choice. */
 export type WagerPrizeCardEmphasis = "standard" | "current" | "muted";
@@ -212,61 +189,31 @@ function PlayingCardRim({
   );
 }
 
-export interface PlayingCardProps {
-  /** Playing-card rank used by rank-bearing front variants. */
-  rank: PlayingCardRank;
-  /** Standard playing-card suit used by suit-bearing front variants. */
-  suit: PlayingCardSuit;
-  /** Named square and type-size tuple. Defaults to `standard`. */
-  size?: PlayingCardSize;
-  /** Front-face content treatment. Defaults to `rank-and-suit`. */
-  variant?: PlayingCardVariant;
-}
-
 function frontAriaLabel(
   rank: PlayingCardRank,
   suit: PlayingCardSuit,
-  variant: PlayingCardVariant,
 ): string {
-  switch (variant) {
-    case "rank-display":
-      return `Rank ${rank}`;
-    case "suit-display":
-      return suit;
-    case "rank-target":
-      return `Rank target ${rank} or higher`;
-    case "rank-and-suit":
-      return `${rank} of ${suit}`;
-  }
+  return `${rank} of ${suit}`;
 }
 
 function PlayingCardIndex({
   rank,
   suit,
   size,
-  variant,
 }: {
   rank: PlayingCardRank;
   suit: PlayingCardSuit;
-  size: PlayingCardSize;
-  variant: PlayingCardVariant;
+  size: WagerPrizeCardSize;
 }): ReactElement {
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const suitOptics = PLAYING_CARD_DESIGN.suitOptics[suit];
   const isRedSuit = RED_SUITS.has(suit);
-  const fontSize =
-    sizeSpec.fontSize *
-    (variant === "rank-display" || variant === "suit-display"
-      ? PLAYING_CARD_DESIGN.displayFontScale
-      : 1);
-  const foreground =
-    variant === "rank-display" || variant === "rank-target"
-      ? PLAYING_CARD_DESIGN.colors.white
-      : isRedSuit
-        ? PLAYING_CARD_DESIGN.colors.red
-        : PLAYING_CARD_DESIGN.colors.black;
+  const fontSize = sizeSpec.fontSize;
+  const foreground = isRedSuit
+    ? PLAYING_CARD_DESIGN.colors.red
+    : PLAYING_CARD_DESIGN.colors.black;
   const characterOutlineWidth =
-    (variant === "rank-and-suit" || variant === "suit-display") && isRedSuit
+    isRedSuit
       ? sizeSpec.redCharacterOutlineWidth
       : sizeSpec.blackCharacterOutlineWidth;
 
@@ -296,73 +243,20 @@ function PlayingCardIndex({
           : {}),
       }}
     >
-      {variant !== "suit-display" && (
-        <span data-playing-card-rank-glyph="">{rank}</span>
-      )}
-      {variant === "rank-target" && (
-        <span data-playing-card-target-glyph="">+</span>
-      )}
-      {(variant === "rank-and-suit" || variant === "suit-display") && (
-        <span
-          data-playing-card-suit-glyph=""
-          style={{
-            position: "relative",
-            top: fontSize * suitOptics.verticalOffsetEm,
-            display: "inline-block",
-            fontSize: fontSize * suitOptics.scale,
-            lineHeight: 1,
-          }}
-        >
-          {SUIT_SYMBOLS[suit]}
-        </span>
-      )}
-    </span>
-  );
-}
-
-/** A glass playing card with a rank-and-suit front face. */
-export function PlayingCard({
-  rank,
-  suit,
-  size = "standard",
-  variant = "rank-and-suit",
-}: PlayingCardProps): ReactElement {
-  const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
-
-  return (
-    <div
-      role="img"
-      aria-label={frontAriaLabel(rank, suit, variant)}
-      data-playing-card={`${rank}-${suit}`}
-      data-playing-card-rank={rank}
-      data-playing-card-suit={suit}
-      data-playing-card-size={size}
-      data-playing-card-variant={variant}
-      style={{
-        position: "relative",
-        width: sizeSpec.square,
-        height: sizeSpec.square,
-        flex: "0 0 auto",
-      }}
-    >
-      <div
-        aria-hidden="true"
-        data-playing-card-front=""
+      <span data-playing-card-rank-glyph="">{rank}</span>
+      <span
+        data-playing-card-suit-glyph=""
         style={{
-          ...CARD_FACE_STYLE,
-          display: "grid",
-          placeItems: "center",
+          position: "relative",
+          top: fontSize * suitOptics.verticalOffsetEm,
+          display: "inline-block",
+          fontSize: fontSize * suitOptics.scale,
+          lineHeight: 1,
         }}
       >
-        <PlayingCardIndex
-          rank={rank}
-          suit={suit}
-          size={size}
-          variant={variant}
-        />
-        <PlayingCardRim />
-      </div>
-    </div>
+        {SUIT_SYMBOLS[suit]}
+      </span>
+    </span>
   );
 }
 
@@ -374,7 +268,7 @@ interface WagerPrizeCardBaseProps {
   /** Named desktop or mobile square size. Defaults to `wager`. */
   size?: WagerPrizeCardSize;
   /** Committed card shown on the reverse face after a bet. */
-  drawnCard?: {
+  drawnCard: {
     rank: PlayingCardRank;
     suit: PlayingCardSuit;
   } | null;
@@ -382,28 +276,17 @@ interface WagerPrizeCardBaseProps {
   revealDrawnCard?: boolean;
   /** Optional stable selector for the prize Dreamsign name. */
   dreamsignTestId?: string;
-  /** Named semantic copy treatment. Defaults to `draw-target`. */
-  presentation?: WagerPrizeCardPresentation;
   /** Accent current tier, foreground-muted alternative, or standard priority. */
   emphasis?: WagerPrizeCardEmphasis;
 }
 
-/** A prize always carries Essence, a Dreamsign, or both. */
-export type WagerPrizeCardProps = WagerPrizeCardBaseProps &
-  (
-    | {
-        /** Essence awarded on a win. */
-        essenceReward: number;
-        /** Dreamsign appended to the Essence reward, when present. */
-        rewardDreamsign: DreamsignData | null;
-      }
-    | {
-        /** Null selects a Dreamsign-only prize. */
-        essenceReward: null;
-        /** Dreamsign used as the complete reward. */
-        rewardDreamsign: DreamsignData;
-      }
-  );
+/** A prize always carries Essence and may append a Dreamsign. */
+export type WagerPrizeCardProps = WagerPrizeCardBaseProps & {
+  /** Essence awarded on a win. */
+  essenceReward: number;
+  /** Dreamsign appended to the Essence reward, when present. */
+  rewardDreamsign: DreamsignData | null;
+};
 
 /**
  * A Gamble prize on the PlayingCard superellipse. Its reward copy stays one
@@ -452,10 +335,9 @@ function WagerPrizeCardObject({
   essenceReward,
   rewardDreamsign,
   size = "wager",
-  drawnCard = null,
+  drawnCard,
   revealDrawnCard = false,
   dreamsignTestId,
-  presentation = "draw-target",
   emphasis = "standard",
   revealBinding,
 }: WagerPrizeCardProps & {
@@ -464,18 +346,14 @@ function WagerPrizeCardObject({
   const reduceMotion = useReducedMotion() === true;
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const showingDrawnCard = revealDrawnCard && drawnCard !== null;
-  const rewardLabel = essenceReward === null
-    ? rewardDreamsign?.name ?? ""
-    : `${String(essenceReward)} Essence${
-        rewardDreamsign === null ? "" : ` and ${rewardDreamsign.name}`
-      }`;
-  const prizeLabel = presentation === "draw-minimum"
-    ? `Draw ${targetLabel}. Prize ${rewardLabel}.`
-    : `Draw ${targetLabel}. Win ${rewardLabel}.`;
+  const rewardLabel = `${String(essenceReward)} Essence${
+    rewardDreamsign === null ? "" : ` and ${rewardDreamsign.name}`
+  }`;
+  const prizeLabel = `Draw ${targetLabel}. Win ${rewardLabel}.`;
   const drawnCardLabel =
     drawnCard === null
       ? prizeLabel
-      : frontAriaLabel(drawnCard.rank, drawnCard.suit, "rank-and-suit");
+      : frontAriaLabel(drawnCard.rank, drawnCard.suit);
   const prizeFaceContent = (
     <>
       <div
@@ -507,13 +385,7 @@ function WagerPrizeCardObject({
           data-wager-prize-title=""
           style={{
             margin: 0,
-            font:
-              size === "wager"
-                ? token("--t-title")
-                : presentation === "draw-minimum"
-                  ? token("--t-tutorial-dialogue")
-                  : token("--t-title-sm"),
-            whiteSpace: presentation === "draw-minimum" ? "nowrap" : undefined,
+            font: size === "wager" ? token("--t-title") : token("--t-title-sm"),
           }}
         >
           {`Draw ${targetLabel}`}
@@ -526,11 +398,8 @@ function WagerPrizeCardObject({
               size === "wager" ? token("--t-body") : token("--t-body-sm"),
           }}
         >
-          {presentation === "draw-minimum" ? "Prize: " : "Win "}
-          {essenceReward !== null && (
-            <EssenceValue amount={essenceReward} tone="inherit" />
-          )}
-          {essenceReward !== null && rewardDreamsign !== null && " and "}
+          Win <EssenceValue amount={essenceReward} tone="inherit" />
+          {rewardDreamsign !== null && " and "}
           {rewardDreamsign !== null && (
             <span
               data-testid={dreamsignTestId}
@@ -570,9 +439,8 @@ function WagerPrizeCardObject({
       data-wager-prize-card-state={showingDrawnCard ? "drawn" : "prize"}
       data-wager-prize-card-size={size}
       data-wager-prize-card-emphasis={emphasis}
-      data-wager-prize-presentation={presentation}
       data-wager-prize-target={targetLabel}
-      data-wager-prize-essence-reward={essenceReward ?? undefined}
+      data-wager-prize-essence-reward={essenceReward}
       data-wager-prize-drawn-card={
         drawnCard === null ? undefined : `${drawnCard.rank}-${drawnCard.suit}`
       }
@@ -664,7 +532,6 @@ function WagerPrizeCardObject({
                 rank={drawnCard.rank}
                 suit={drawnCard.suit}
                 size={size}
-                variant="rank-and-suit"
               />
             </div>
           )}

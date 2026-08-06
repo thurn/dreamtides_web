@@ -21,7 +21,6 @@ The reusable multiline authoring field on Cumulus control chrome, with explicit 
 | `placeholder` | `string` | no | — | Optional placeholder shown while empty. |
 | `supportingText` | `string` | no | — | Supporting copy beneath the control. |
 | `error` | `string` | no | — | Validation copy; also marks the textarea invalid. |
-| `disabled` | `boolean` | no | `false` | Prevent editing. |
 | `testId` | `string` | no | — | Stable test id for product QA. |
 | `inputRef` | `Ref<HTMLTextAreaElement>` | no | — | Optional ref to the native textarea. |
 

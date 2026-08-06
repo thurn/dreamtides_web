@@ -7,7 +7,7 @@
 import { useEffect } from "react";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { IconButton } from "../components/controls/IconButton";
-import { TideDisc, type TideDiscSize } from "../components/hud/TideDisc";
+import { TideDisc } from "../components/hud/TideDisc";
 import { TidesInfoLabel } from "../components/hud/TidesInfoLabel";
 import { CharacterDialogue } from "../components/overlay/CharacterDialogue";
 import { type Tide } from "../components/hud/tide-spec";
@@ -40,7 +40,7 @@ export const MAX_TIDE_DISCS = 4;
 
 /** What the secondary tide-definition card explains. */
 /** One tide mark wired up as a reveal trigger: the shared {@link TideDisc}, at
- * the given {@link TideDiscSize}, that reveals — through the shared InfoCard —
+ * that reveals — through the shared InfoCard —
  * this specific tide's colored card as the primary information, with the
  * general definition beside it as a secondary text card. Informational: the
  * disc brightens on hover, and — like every
@@ -53,11 +53,9 @@ export const MAX_TIDE_DISCS = 4;
  * margins so the visual layout is unchanged. */
 export function TideDiscReveal({
   tide,
-  size = "sm",
   hitSlop,
 }: {
   tide: DreamAvatarTideView;
-  size?: TideDiscSize;
   hitSlop?: string;
 }) {
   const disc = (
@@ -66,7 +64,6 @@ export function TideDiscReveal({
       id={tide.id}
       label={tide.label}
       description={tide.description}
-      size={size}
     />
   );
   return hitSlop != null ? (
@@ -135,7 +132,6 @@ export function TidesEssenceBlock({
             <TideDiscReveal
               key={tide.id}
               tide={tide}
-              size="lg"
               hitSlop={hitSlop}
             />
           ))}

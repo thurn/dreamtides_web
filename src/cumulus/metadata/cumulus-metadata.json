@@ -46,69 +46,6 @@
       "description": "End y, in the atlas svg's coordinate space."
     }
   ],
-  "AtlasHoverCard": [
-    {
-      "name": "content",
-      "tsType": "AtlasHoverContent",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "",
-      "nested": {
-        "name": "AtlasHoverContent",
-        "fields": [
-          {
-            "name": "isBoss",
-            "tsType": "boolean",
-            "optional": false,
-            "description": "The looming boss node — suppresses the site / affiliation, and the\nincarnation title stands in as the guide name."
-          },
-          {
-            "name": "sceneArt",
-            "tsType": "ArtRef",
-            "optional": false,
-            "description": "The scene hero art (the dreamscape scene, or Limbo for the boss)."
-          },
-          {
-            "name": "figureArt",
-            "tsType": "ArtRef | null",
-            "optional": false,
-            "description": "The character render standing on the right (the guide, or the boss); null\nfor a guideless place (the starter)."
-          },
-          {
-            "name": "placeName",
-            "tsType": "string",
-            "optional": false,
-            "description": "The place name (dreamscape, or \"Limbo\")."
-          },
-          {
-            "name": "guideName",
-            "tsType": "string | null",
-            "optional": false,
-            "description": "The resident guide's name, or the boss incarnation title; null for the\nstarter."
-          },
-          {
-            "name": "siteName",
-            "tsType": "string | null",
-            "optional": false,
-            "description": "The signature site's display name (e.g. \"Augury\"); null for the\nstarter / boss."
-          },
-          {
-            "name": "body",
-            "tsType": "string",
-            "optional": false,
-            "description": "The site bonus, starter blurb, or boss incarnation description."
-          },
-          {
-            "name": "affiliation",
-            "tsType": "string | null",
-            "optional": false,
-            "description": "The dreamscape's affiliation name; null for the starter / boss."
-          }
-        ]
-      }
-    }
-  ],
   "AtlasMap": [
     {
       "name": "stageWidth",
@@ -175,7 +112,7 @@
           {
             "name": "isReachable",
             "tsType": "boolean",
-            "optional": true,
+            "optional": false,
             "description": ""
           },
           {
@@ -337,7 +274,7 @@
           {
             "name": "isReachable",
             "tsType": "boolean",
-            "optional": true,
+            "optional": false,
             "description": ""
           },
           {
@@ -419,7 +356,7 @@
         "near",
         "far"
       ],
-      "required": false,
+      "required": true,
       "defaultValue": null,
       "description": "Relationship of this canonical combatant to the current local perspective."
     },
@@ -604,12 +541,6 @@
             "description": "Detach interaction and visually recede the action."
           },
           {
-            "name": "interactionFeedback",
-            "tsType": "\"responsive\" | \"stationary\"",
-            "optional": true,
-            "description": "Interaction motion for the action surface."
-          },
-          {
             "name": "testId",
             "tsType": "string",
             "optional": true,
@@ -678,19 +609,49 @@
     },
     {
       "name": "rightAccessory",
-      "tsType": "GlassPanelAccessory",
+      "tsType": "CardGalleryAccessory",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "Optional trailing header action.",
       "nested": {
-        "name": "GlassPanelAccessory",
+        "name": "CardGalleryAccessory",
         "fields": [
           {
             "name": "kind",
-            "tsType": "\"glassButton\" | \"iconButton\" | \"iconButtonGroup\"",
+            "tsType": "\"glassButton\" | \"iconButton\"",
             "optional": false,
             "description": ""
+          },
+          {
+            "name": "label",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "onPress",
+            "tsType": "(() => void) | (() => void)",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "glyph",
+            "tsType": "Glyph",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "tsType": "boolean",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "testId",
+            "tsType": "string",
+            "optional": true,
+            "description": "A `data-testid` for selecting the button in tests.\nA `data-testid` for selecting the disc in tests."
           }
         ]
       }
@@ -737,7 +698,7 @@
           },
           {
             "name": "variant",
-            "tsType": "GlassButtonVariant",
+            "tsType": "CardGalleryFooterVariant",
             "optional": true,
             "description": "Semantic surface treatment for the action."
           },
@@ -989,12 +950,6 @@
             "description": "Detach interaction and visually recede the action."
           },
           {
-            "name": "interactionFeedback",
-            "tsType": "\"responsive\" | \"stationary\"",
-            "optional": true,
-            "description": "Interaction motion for the action surface."
-          },
-          {
             "name": "testId",
             "tsType": "string",
             "optional": true,
@@ -1059,34 +1014,12 @@
       "description": "Cards ordered topmost-first. At most three physical layers are rendered."
     },
     {
-      "name": "orientation",
-      "tsType": "CardPileOrientation",
-      "unionMembers": [
-        "portrait",
-        "landscape"
-      ],
-      "required": true,
-      "defaultValue": null,
-      "description": "Whether cards rest upright or sideways."
-    },
-    {
       "name": "label",
       "tsType": "string",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
       "description": "Accessible name for the card zone represented by this pile."
-    },
-    {
-      "name": "cardInteraction",
-      "tsType": "CardPileCardInteraction",
-      "unionMembers": [
-        "inactive",
-        "reveal"
-      ],
-      "required": false,
-      "defaultValue": "reveal",
-      "description": "Reveal behavior for face-up cards. Defaults to `reveal`."
     },
     {
       "name": "emptyState",
@@ -1189,35 +1122,6 @@
       "description": "Monochrome hammer marker for a transfiguration-changed stat, shared with\nthe Transfiguration site's atlas icon."
     }
   ],
-  "CardTermDefinitions": [
-    {
-      "name": "text",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "The rules text to scan for glossary terms."
-    },
-    {
-      "name": "testId",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional test id for the stack container."
-    },
-    {
-      "name": "side",
-      "tsType": "\"left\" | \"right\"",
-      "unionMembers": [
-        "left",
-        "right"
-      ],
-      "required": false,
-      "defaultValue": null,
-      "description": "Which side of the card the panel sits on, exposed for layout/tests."
-    }
-  ],
   "CardView": [
     {
       "name": "card",
@@ -1250,7 +1154,6 @@
         "danger",
         "accent",
         "accent-bright",
-        "accent-strong",
         "essence",
         "energy",
         "spark",
@@ -1258,8 +1161,6 @@
         "selected",
         "text-primary",
         "text-secondary",
-        "text-muted",
-        "text-faint",
         "text-on-accent",
         "white"
       ],
@@ -1341,25 +1242,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Use the enlarged rules-text treatment for the small figment card shown\nbeside a materializing card's desktop reveal. Card geometry is unchanged."
-    },
-    {
-      "name": "hideRulesText",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Hide rules text for dense card surfaces that show identity and stats."
-    },
-    {
-      "name": "presentation",
-      "tsType": "GameCardPresentation",
-      "unionMembers": [
-        "full",
-        "battlefield"
-      ],
-      "required": false,
-      "defaultValue": null,
-      "description": "Visual treatment for the source card. `\"battlefield\"` uses a rounded square\nframe that widens the art viewport at its existing vertical scale, keeping\nonly the art and an enlarged top-right spark mark; the shared reveal remains\ncomplete."
     },
     {
       "name": "slots",
@@ -1627,185 +1509,6 @@
           }
         ]
       }
-    }
-  ],
-  "CompactGameCardRow": [
-    {
-      "name": "card",
-      "tsType": "CardData",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Canonical UUID-backed card semantics.",
-      "nested": {
-        "name": "CardData",
-        "fields": [
-          {
-            "name": "name",
-            "tsType": "CardName",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "id",
-            "tsType": "CardId",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "cardNumber",
-            "tsType": "number",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "cardType",
-            "tsType": "CardType",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "subtype",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "isStarter",
-            "tsType": "boolean",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "rarity",
-            "tsType": "Rarity",
-            "optional": true,
-            "description": "Rarity bucket sourced from the TOML. Present only on `Legendary` and\n`Starter` cards; most cards have no rarity."
-          },
-          {
-            "name": "energyCost",
-            "tsType": "number | null",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "energyCosts",
-            "tsType": "string[]",
-            "optional": true,
-            "description": "Ordered orb labels for a card that has more than one energy cost, sourced\nfrom a comma-separated TOML `energy-cost` such as `\"2,X\"` (which yields\n`[\"2\", \"X\"]`). `CardView` renders one energy orb per label in a vertical\ncolumn. Absent on the common single-cost card, where the single orb is\nderived from `energyCost` (or `X` when it is `null`)."
-          },
-          {
-            "name": "spark",
-            "tsType": "number | null",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "sparkVariable",
-            "tsType": "boolean",
-            "optional": true,
-            "description": "Whether this card's spark is variable (printed as an `X` orb), sourced from\na TOML `spark` of `X`/`x`/`*`. When `true`, `spark` is `null` and `CardView`\nrenders a single `X` spark orb. This distinguishes a variable-spark card\nfrom a card with no spark at all (the common case for Events), which also\nhas `spark: null` but leaves this `false`/absent and renders no spark orb.\nMirrors how a `null` `energyCost` falls back to an `X` energy orb."
-          },
-          {
-            "name": "isFast",
-            "tsType": "boolean",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "isInterrupt",
-            "tsType": "boolean",
-            "optional": true,
-            "description": "Whether this card is an interrupt, sourced from a TOML `is-interrupt`.\nInterrupt cards are always also `isFast`; card surfaces mark an interrupt\nwith a double-bolt glyph (versus the single bolt for a plain fast card)."
-          },
-          {
-            "name": "reclaimCost",
-            "tsType": "number | null",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "renderedText",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "mtgName",
-            "tsType": "string",
-            "optional": true,
-            "description": "Name of the Magic: The Gathering card this card is derived from, sourced\nfrom a TOML `mtg-name` and carried through the setup-assets transform.\nSurfaced as a reference hover tooltip in card-browsing surfaces (the card\neditor and the Pool Viewer). Present on sources that record it (e.g.\n`cards.toml`); absent on cards whose source TOML omits `mtg-name`."
-          },
-          {
-            "name": "imageNumber",
-            "tsType": "number",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "artOwned",
-            "tsType": "boolean",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "art",
-            "tsType": "ArtCrop",
-            "optional": true,
-            "description": "Art crop applied to the card's image; absent cards use the default crop."
-          },
-          {
-            "name": "core",
-            "tsType": "boolean",
-            "optional": true,
-            "description": "Draft-pool membership metadata for the experimental cards_v2 pool, defined\nin TypeScript (`src/data/cards-v2-metadata.ts`) and merged into\n`cards_v2-data.json` by `scripts/setup-assets.mjs`. Present on the cards_v2\nrecords the non-`idf3` pool variants consume; absent on runtime catalog\ncards. `core` flags an always-included staple, `colors` lists the bare\ncolor-combo pools the card belongs to (e.g. `\"b\"`, `\"br\"`), and\n`draftArchetypes` lists the color+archetype slices (e.g. `\"br-aristocrats\"`).\nSee `docs/cards2/draft_pool_algorithms.md`."
-          },
-          {
-            "name": "colors",
-            "tsType": "string[]",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "draftArchetypes",
-            "tsType": "string[]",
-            "optional": true,
-            "description": ""
-          }
-        ]
-      }
-    },
-    {
-      "name": "count",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Display copy count, already formatted for the surface."
-    },
-    {
-      "name": "testId",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Stable row test id."
-    },
-    {
-      "name": "revealTestId",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Stable reading-copy test id."
-    },
-    {
-      "name": "entryIds",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Comma-separated stable deck entry UUIDs represented by the row."
     }
   ],
   "CoopPresenceStatus": [
@@ -2501,7 +2204,6 @@
         "danger",
         "accent",
         "accent-bright",
-        "accent-strong",
         "essence",
         "energy",
         "spark",
@@ -2509,8 +2211,6 @@
         "selected",
         "text-primary",
         "text-secondary",
-        "text-muted",
-        "text-faint",
         "text-on-accent",
         "white"
       ],
@@ -2562,16 +2262,7 @@
       "description": "Optional stable test id for the semantic source."
     }
   ],
-  "GlassBackdrop": [
-    {
-      "name": "children",
-      "tsType": "ReactNode",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional content lifted above the frost. Childless, the backdrop is a bare\n`aria-hidden` decorative layer; with children it hosts them over the frost."
-    }
-  ],
+  "GlassBackdrop": [],
   "GlassButton": [
     {
       "name": "label",
@@ -2731,14 +2422,6 @@
       "description": "When true, on a full-bleed mobile overlay whose screen-cutout box is known\n(a device-screenshot mock-up) the close disc floats up beside the device\nisland instead of sitting on the header row, so the header title clears the\nsafe area below it. No effect on desktop or on real hardware (where the\nisland geometry is not exposed). Defaults to `false`."
     },
     {
-      "name": "wide",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "false",
-      "description": "On desktop, widen the panel and trade the `85vh` height cap for explicit\nviewport padding so a roomy grid fits in two rows without internal scroll.\nNo effect on the full-bleed mobile overlay. Defaults to `false`. A caller\ngates this on its own roomy-desktop media query."
-    },
-    {
       "name": "fullScreen",
       "tsType": "boolean",
       "unionMembers": [],
@@ -2759,15 +2442,14 @@
     },
     {
       "name": "chrome",
-      "tsType": "\"standard\" | \"close-only\" | \"flowing-close\"",
+      "tsType": "\"standard\" | \"flowing-close\"",
       "unionMembers": [
         "standard",
-        "close-only",
         "flowing-close"
       ],
       "required": false,
       "defaultValue": "standard",
-      "description": "Visible dialog chrome. `\"standard\"` renders the title/subtitle header and\nits divider. `\"close-only\"` keeps `title` as the accessible dialog name,\nomits the visible header, and overlays the optional close disc in the\npanel's top-right corner. `\"flowing-close\"` also omits the visible header,\nbut floats the close disc in the scrolling body so nearby prose wraps\naround its circular footprint. Defaults to `\"standard\"`."
+      "description": "Visible dialog chrome. `\"standard\"` renders the title/subtitle header and\nits divider. `\"flowing-close\"` keeps `title` as the accessible dialog name,\nomits the visible header, and floats the close disc in the scrolling body\nso nearby prose wraps around its circular footprint. Defaults to\n`\"standard\"`."
     },
     {
       "name": "desktopCenterTarget",
@@ -2885,7 +2567,7 @@
         "fields": [
           {
             "name": "kind",
-            "tsType": "\"glassButton\" | \"iconButton\" | \"iconButtonGroup\"",
+            "tsType": "\"iconButtonGroup\" | \"glassButton\" | \"iconButton\"",
             "optional": false,
             "description": ""
           }
@@ -3110,17 +2792,6 @@
       "description": "The disc's accessible name (`aria-label`); the disc shows only its glyph."
     },
     {
-      "name": "variant",
-      "tsType": "IconButtonVariant",
-      "unionMembers": [
-        "default",
-        "accent"
-      ],
-      "required": false,
-      "defaultValue": "default",
-      "description": "Strict neutral or purple accent glass surface treatment."
-    },
-    {
       "name": "onPress",
       "tsType": "() => void",
       "unionMembers": [],
@@ -3197,36 +2868,15 @@
       "description": "The media the card is built around, as an {@link ArtRef}. Required.\nThe square hero image the card is built on, as an {@link ArtRef}. Required.\nThe scene hero image the card is built on, as an {@link ArtRef}. Required."
     },
     {
-      "name": "imageCrop",
-      "tsType": "ImageCrop",
-      "unionMembers": [
-        "top",
-        "center"
-      ],
-      "required": false,
-      "defaultValue": null,
-      "description": "How the media is cropped. Default `\"top\"`.\nHow the hero image is cropped. Default `\"center\"`."
-    },
-    {
       "name": "imageFilter",
       "tsType": "MediaFilter",
       "unionMembers": [
         "dreamsign-portrait",
-        "dreamsign-portrait-negative",
-        "spark-glow",
-        "energy-glow"
+        "dreamsign-portrait-negative"
       ],
       "required": false,
       "defaultValue": null,
       "description": "A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object).\nA named media {@link MediaFilter} (e.g. a spark glow).\nA named media {@link MediaFilter} for the scene image."
-    },
-    {
-      "name": "frame",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "true = framed portrait, false = contained transparent object. Default false."
     },
     {
       "name": "title",
@@ -3248,7 +2898,7 @@
         "fields": [
           {
             "name": "kind",
-            "tsType": "\"glyph\" | \"plain\" | \"rules\" | \"underline\" | \"inline\" | \"note\" | \"stack\" | \"definitions\"",
+            "tsType": "\"plain\" | \"rules\" | \"underline\" | \"note\" | \"stack\" | \"definitions\"",
             "optional": false,
             "description": ""
           }
@@ -3279,6 +2929,17 @@
           }
         ]
       }
+    },
+    {
+      "name": "imageCrop",
+      "tsType": "ImageCrop",
+      "unionMembers": [
+        "top",
+        "center"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "How the hero image is cropped. Default `\"center\"`."
     },
     {
       "name": "figure",
@@ -3351,7 +3012,6 @@
         "danger",
         "accent",
         "accent-bright",
-        "accent-strong",
         "essence",
         "energy",
         "spark",
@@ -3359,8 +3019,6 @@
         "selected",
         "text-primary",
         "text-secondary",
-        "text-muted",
-        "text-faint",
         "text-on-accent",
         "white"
       ],
@@ -3549,17 +3207,6 @@
       "description": "Reports activation to the route adapter."
     },
     {
-      "name": "size",
-      "tsType": "\"standard\" | \"hero\"",
-      "unionMembers": [
-        "standard",
-        "hero"
-      ],
-      "required": false,
-      "defaultValue": "standard",
-      "description": "Named action hierarchy for the main-menu scene. Defaults to `standard`."
-    },
-    {
       "name": "testId",
       "tsType": "string",
       "unionMembers": [],
@@ -3582,8 +3229,7 @@
       "tsType": "MoteTint",
       "unionMembers": [
         "warm",
-        "violet",
-        "dreamscape"
+        "violet"
       ],
       "required": false,
       "defaultValue": "warm",
@@ -3646,8 +3292,7 @@
         "essence",
         "energy",
         "spark",
-        "points",
-        "counter"
+        "points"
       ],
       "required": false,
       "defaultValue": null,
@@ -3711,17 +3356,6 @@
       "required": false,
       "defaultValue": "md",
       "description": "Compact or regular row density. Defaults to `md`."
-    },
-    {
-      "name": "placement",
-      "tsType": "GlassControlPlacement",
-      "unionMembers": [
-        "onMedia",
-        "onGlass"
-      ],
-      "required": false,
-      "defaultValue": "onGlass",
-      "description": "Surface beneath the two icon buttons. Defaults to `onGlass`."
     },
     {
       "name": "testId",
@@ -3807,17 +3441,6 @@
       "description": "The displayed value (string so callers can pass `\"X\"` for variable cost)."
     },
     {
-      "name": "size",
-      "tsType": "\"sm\" | \"md\"",
-      "unionMembers": [
-        "sm",
-        "md"
-      ],
-      "required": false,
-      "defaultValue": "sm",
-      "description": "`\"sm\"` matches the small card stat row; `\"md\"` matches the larger\n`large` GameCard variant. Sizes are tuned so the number\nstays readable but the badge does not overpower adjacent text."
-    },
-    {
       "name": "scale",
       "tsType": "number",
       "unionMembers": [],
@@ -3840,69 +3463,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional stable TOML glossary id. When provided, the badge becomes its own\nhover anchor and reveals that glossary entry."
-    }
-  ],
-  "PlayingCard": [
-    {
-      "name": "rank",
-      "tsType": "StandardPlayingCardRank",
-      "unionMembers": [
-        "A",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
-        "J",
-        "Q",
-        "K"
-      ],
-      "required": true,
-      "defaultValue": null,
-      "description": "Playing-card rank used by rank-bearing front variants."
-    },
-    {
-      "name": "suit",
-      "tsType": "StandardPlayingCardSuit",
-      "unionMembers": [
-        "clubs",
-        "diamonds",
-        "hearts",
-        "spades"
-      ],
-      "required": true,
-      "defaultValue": null,
-      "description": "Standard playing-card suit used by suit-bearing front variants."
-    },
-    {
-      "name": "size",
-      "tsType": "\"compact\" | \"standard\" | \"wagerCompact\" | \"wager\"",
-      "unionMembers": [
-        "compact",
-        "standard",
-        "wagerCompact",
-        "wager"
-      ],
-      "required": false,
-      "defaultValue": "standard",
-      "description": "Named square and type-size tuple. Defaults to `standard`."
-    },
-    {
-      "name": "variant",
-      "tsType": "PlayingCardVariant",
-      "unionMembers": [
-        "rank-and-suit",
-        "rank-display",
-        "suit-display",
-        "rank-target"
-      ],
-      "required": false,
-      "defaultValue": "rank-and-suit",
-      "description": "Front-face content treatment. Defaults to `rank-and-suit`."
     }
   ],
   "Pressable": [
@@ -4231,7 +3791,7 @@
         "fields": [
           {
             "name": "kind",
-            "tsType": "\"glyph\" | \"plain\" | \"rules\" | \"underline\" | \"inline\" | \"note\" | \"stack\" | \"definitions\"",
+            "tsType": "\"plain\" | \"rules\" | \"underline\" | \"note\" | \"stack\" | \"definitions\"",
             "optional": false,
             "description": ""
           }
@@ -4560,7 +4120,6 @@
         "danger",
         "accent",
         "accent-bright",
-        "accent-strong",
         "essence",
         "energy",
         "spark",
@@ -4568,8 +4127,6 @@
         "selected",
         "text-primary",
         "text-secondary",
-        "text-muted",
-        "text-faint",
         "text-on-accent",
         "white"
       ],
@@ -4653,14 +4210,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Validation copy; also marks the textarea invalid."
-    },
-    {
-      "name": "disabled",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "false",
-      "description": "Prevent editing."
     },
     {
       "name": "testId",
@@ -4802,80 +4351,6 @@
       "required": true,
       "defaultValue": null,
       "description": "Semantic description revealed by this tide source."
-    },
-    {
-      "name": "size",
-      "tsType": "TideDiscSize",
-      "unionMembers": [
-        "sm",
-        "lg"
-      ],
-      "required": false,
-      "defaultValue": "sm",
-      "description": "Which enumerated {@link TideDiscSize} to render. Default 'sm'."
-    }
-  ],
-  "TideSelectionButton": [
-    {
-      "name": "id",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
-      "name": "label",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
-      "name": "description",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
-      "name": "selectionRole",
-      "tsType": "TideSelectionRole",
-      "unionMembers": [
-        "starter",
-        "facet-drawn",
-        "facet-fill",
-        "neutral-fill"
-      ],
-      "required": true,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
-      "name": "active",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
-      "name": "joined",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
-      "name": "onActivate",
-      "tsType": "() => void",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": ""
     }
   ],
   "TidesInfoLabel": [],
@@ -4962,18 +4437,6 @@
     }
   ],
   "TransientStatusToast": [
-    {
-      "name": "variant",
-      "tsType": "TransientStatusVariant",
-      "unionMembers": [
-        "notice",
-        "warning",
-        "error"
-      ],
-      "required": true,
-      "defaultValue": null,
-      "description": "Semantic severity for the status material and assistive announcement."
-    },
     {
       "name": "copy",
       "tsType": "TransientStatusCopy",
@@ -5071,7 +4534,7 @@
       "name": "drawnCard",
       "tsType": "{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } | null",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
       "description": "Committed card shown on the reverse face after a bet."
     },
@@ -5092,17 +4555,6 @@
       "description": "Optional stable selector for the prize Dreamsign name."
     },
     {
-      "name": "presentation",
-      "tsType": "WagerPrizeCardPresentation",
-      "unionMembers": [
-        "draw-target",
-        "draw-minimum"
-      ],
-      "required": false,
-      "defaultValue": null,
-      "description": "Named semantic copy treatment. Defaults to `draw-target`."
-    },
-    {
       "name": "emphasis",
       "tsType": "WagerPrizeCardEmphasis",
       "unionMembers": [
@@ -5116,11 +4568,11 @@
     },
     {
       "name": "essenceReward",
-      "tsType": "number | null",
+      "tsType": "number",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Essence awarded on a win.\nNull selects a Dreamsign-only prize."
+      "description": "Essence awarded on a win."
     },
     {
       "name": "rewardDreamsign",
@@ -5128,7 +4580,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Dreamsign appended to the Essence reward, when present.\nDreamsign used as the complete reward."
+      "description": "Dreamsign appended to the Essence reward, when present."
     }
   ]
 }

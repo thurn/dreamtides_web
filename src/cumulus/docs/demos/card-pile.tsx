@@ -23,9 +23,8 @@ const DEMO_CARD: GameCardModel = {
   },
 };
 
-function CardPileDemo(args: Record<string, unknown>) {
-  const orientation = args.orientation === "portrait" ? "portrait" : "landscape";
-  const width = orientation === "portrait" ? 96 : 152;
+function CardPileDemo() {
+  const width = 152;
   return (
     <div
       style={{ display: "flex", alignItems: "center", gap: token("--space-3xl") }}
@@ -37,7 +36,6 @@ function CardPileDemo(args: Record<string, unknown>) {
             { face: "down", id: "demo-deck-middle" },
             { face: "down", id: "demo-deck-bottom" },
           ]}
-          orientation={orientation}
           label="Face-down deck"
         />
       </div>
@@ -48,18 +46,14 @@ function CardPileDemo(args: Record<string, unknown>) {
             { face: "up", id: "demo-void-middle", model: DEMO_CARD },
             { face: "up", id: "demo-void-bottom", model: DEMO_CARD },
           ]}
-          orientation={orientation}
           label="Face-up void"
-          cardInteraction="inactive"
           onActivate={() => undefined}
         />
       </div>
       <div style={{ width }}>
         <CardPile
           cards={[]}
-          orientation={orientation}
           label="Empty void"
-          cardInteraction="inactive"
           emptyState="outlined"
           emptyLabel="Void"
           onActivate={() => undefined}
@@ -73,7 +67,7 @@ export const cardPileDemo: CumulusComponent = {
   id: "card-pile",
   title: "Card Pile",
   blurb:
-    "A physical deck or void stack built from structured, topmost-first card instances. It shows at most three slightly offset layers and rests upright or sideways as one fixed object.",
+    "A physical deck or void stack built from structured, topmost-first card instances. It shows at most three slightly offset layers and rests sideways as one fixed object.",
   callout:
     "Pass stable battle-card instance ids so the shared layout identity can carry each card continuously between zones. Face-up entries can reveal their card or remain inactive beneath one pile-level activation; face-down entries resolve through CardBack.",
   group: "Components",
@@ -87,7 +81,6 @@ export const cardPileDemo: CumulusComponent = {
 
 <CardPile
   cards={deck.map((card) => ({ face: "down", id: card.instanceId }))}
-  orientation="landscape"
   label="Player deck"
 />`,
     },
@@ -100,9 +93,7 @@ export const cardPileDemo: CumulusComponent = {
     id: card.instanceId,
     model: card.gameCard,
   }))}
-  orientation="landscape"
   label="Enemy void"
-  cardInteraction="inactive"
   onActivate={openEnemyVoid}
 />`,
     },
@@ -111,7 +102,6 @@ export const cardPileDemo: CumulusComponent = {
       note: "An empty void retains its physical card footprint with a dotted outline and can carry a centered teaching label.",
       code: `<CardPile
   cards={[]}
-  orientation="landscape"
   label="Player void"
   emptyState="outlined"
   emptyLabel="Void"
@@ -119,8 +109,6 @@ export const cardPileDemo: CumulusComponent = {
     },
   ],
   demo: {
-    defaultArgs: {
-      orientation: "landscape",
-    },
+    defaultArgs: {},
   },
 };

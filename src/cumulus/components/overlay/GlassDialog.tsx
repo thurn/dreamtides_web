@@ -10,8 +10,7 @@
 //     through as glass without a border at the screen edges. Kept a separate z0
 //     layer (rather than a style on a host container) so sibling controls frost
 //     the raw scene directly instead of double-frosting an ancestor glass
-//     surface. An optional `children` slot lets a caller lift content above the
-//     frost; childless, it is `aria-hidden` decoration.
+//     surface. It is `aria-hidden` decoration.
 //
 //   - GlassDialog: a modal overlay with a bounded, centered glass panel on
 //     desktop and a full-bleed frosted overlay on mobile, plus a strict popup
@@ -44,13 +43,6 @@ import { hasInjectedDisplayCutout } from "../../../runtime/device-frame";
 const CLOSE_DISC_PX = 48;
 
 /**
- * Panel width cap (px) for a `wide` desktop dialog — enough for a roomy grid to
- * lay out in two rows without internal scroll on a 16-inch-MacBook-class
- * viewport, while `min(…, 90vw)` still leaves margin on narrower desktops.
- */
-const WIDE_PANEL_MAX_WIDTH_PX = 1120;
-
-/**
  * Desktop width (px) for a tangible popup companion. This matches the
  * canonical desktop Dreamwell-card presentation.
  */
@@ -62,27 +54,18 @@ const PAIRED_POPUP_DESKTOP_COMPANION_WIDTH_PX = 360;
  */
 const PAIRED_POPUP_DESKTOP_PANEL_WIDTH_PX = 460;
 
-/** Props for {@link GlassBackdrop}. */
-export interface GlassBackdropProps {
-  /**
-   * Optional content lifted above the frost. Childless, the backdrop is a bare
-   * `aria-hidden` decorative layer; with children it hosts them over the frost.
-   */
-  children?: ReactNode;
-}
-
 /**
  * The full-bleed frosted-glass layer. Fills its positioned ancestor
  * (`position: absolute; inset: 0; zIndex: 0`) with the shared liquid-glass
  * material reduced to its three edge-to-edge properties — the translucent fill
  * plus the blur/saturate backdrop — so the scene behind refracts through as
- * glass. `aria-hidden` when childless.
+ * glass. The layer is hidden from assistive technology.
  */
-export function GlassBackdrop({ children }: GlassBackdropProps): ReactElement {
+export function GlassBackdrop(): ReactElement {
   const glass = glassSurfaceStyle();
   return (
     <div
-      aria-hidden={children === undefined ? "true" : undefined}
+      aria-hidden="true"
       style={{
         position: "absolute",
         inset: 0,
@@ -91,9 +74,7 @@ export function GlassBackdrop({ children }: GlassBackdropProps): ReactElement {
         backdropFilter: glass.backdropFilter,
         WebkitBackdropFilter: glass.WebkitBackdropFilter,
       }}
-    >
-      {children}
-    </div>
+    />
   );
 }
 
@@ -118,13 +99,6 @@ export interface GlassDialogProps {
    * island geometry is not exposed). Defaults to `false`.
    */
   cutoutAwareClose?: boolean;
-  /**
-   * On desktop, widen the panel and trade the `85vh` height cap for explicit
-   * viewport padding so a roomy grid fits in two rows without internal scroll.
-   * No effect on the full-bleed mobile overlay. Defaults to `false`. A caller
-   * gates this on its own roomy-desktop media query.
-   */
-  wide?: boolean;
   /** Force the edge-to-edge takeover treatment at any viewport width. */
   fullScreen?: boolean;
   /**
@@ -136,13 +110,12 @@ export interface GlassDialogProps {
   presentation?: "responsive" | "popup";
   /**
    * Visible dialog chrome. `"standard"` renders the title/subtitle header and
-   * its divider. `"close-only"` keeps `title` as the accessible dialog name,
-   * omits the visible header, and overlays the optional close disc in the
-   * panel's top-right corner. `"flowing-close"` also omits the visible header,
-   * but floats the close disc in the scrolling body so nearby prose wraps
-   * around its circular footprint. Defaults to `"standard"`.
+   * its divider. `"flowing-close"` keeps `title` as the accessible dialog name,
+   * omits the visible header, and floats the close disc in the scrolling body
+   * so nearby prose wraps around its circular footprint. Defaults to
+   * `"standard"`.
    */
-  chrome?: "standard" | "close-only" | "flowing-close";
+  chrome?: "standard" | "flowing-close";
   /**
    * Region used to center a bounded desktop panel. `"battlefield"` measures
    * the visible `main[data-battle-mobile]` stage, keeping a docked inspector
@@ -168,17 +141,14 @@ export interface GlassDialogProps {
  * 90vw)`, `maxHeight: 85vh`) and full-bleed below `DESKTOP_MIN_WIDTH`, where the
  * mobile shell also carries the {@link GlassBackdrop}. The `"popup"`
  * presentation keeps the glass panel centered, bounded, and content-sized on
- * every viewport. With `wide`, the standard desktop panel widens to
- * `min(1120px, 90vw)` and trades the `85vh` cap for explicit viewport padding so
- * a roomy grid fits in two rows without internal scroll. The header pairs the
+ * every viewport. The header pairs the
  * title `<h2>` and optional subtitle `<p>` with an optional trailing
  * `IconButton size="md"` close, closed by a `--border-strong` hairline; omit
  * `onClose` for a commit-gated dialog with no dismissal control. On mobile the
  * header pads its top by the safe-area inset so the title clears a device
  * cutout. The titleless chrome variants retain the accessible title while
- * omitting the visible header: `"close-only"` overlays the disc at the panel
- * corner, while `"flowing-close"` floats it in the body so adjacent prose can
- * wrap around the disc. The body scrolls.
+ * omitting the visible header: `"flowing-close"` floats it in the body so
+ * adjacent prose can wrap around the disc. The body scrolls.
  */
 export function GlassDialog({
   title,
@@ -186,7 +156,6 @@ export function GlassDialog({
   onClose,
   closeLabel = "Close",
   cutoutAwareClose = false,
-  wide = false,
   fullScreen = false,
   presentation = "responsive",
   chrome = "standard",
@@ -200,7 +169,6 @@ export function GlassDialog({
   const pairedPopup = popup && companion !== undefined;
   const boundedPanel = (isDesktop && !fullScreen) || popup;
   const fullBleed = !boundedPanel;
-  const wideDesktop = isDesktop && boundedPanel && !popup && wide;
   const centerOnBattlefield =
     isDesktop && boundedPanel && desktopCenterTarget === "battlefield";
   const [battlefieldEndInset, setBattlefieldEndInset] = useState(0);
@@ -258,16 +226,8 @@ export function GlassDialog({
         zIndex: 1,
         width: pairedPopup ? "100%" : popup ? "fit-content" : "100%",
         boxSizing: pairedPopup ? "border-box" : undefined,
-        maxWidth: popup
-          ? "100%"
-          : wideDesktop
-            ? `min(${String(WIDE_PANEL_MAX_WIDTH_PX)}px, 90vw)`
-            : "min(900px, 90vw)",
-        maxHeight: popup
-          ? "100%"
-          : wideDesktop
-            ? `calc(100vh - ${token("--space-2xl")} - ${token("--space-2xl")})`
-            : "85vh",
+        maxWidth: popup ? "100%" : "min(900px, 90vw)",
+        maxHeight: popup ? "100%" : "85vh",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
@@ -319,25 +279,10 @@ export function GlassDialog({
   const boundedPadding =
     popup && !isDesktop
       ? token("--gutter")
-      : wideDesktop
-        ? token("--space-2xl")
-        : token("--space-xl");
+      : token("--space-xl");
 
   const panel = (
     <div data-glass-dialog-panel="" style={panelStyle}>
-      {chrome === "close-only" && closeButton !== null ? (
-        <div
-          data-glass-dialog-close-only=""
-          style={{
-            position: "absolute",
-            top: token("--space-l"),
-            right: token("--space-l"),
-            zIndex: 2,
-          }}
-        >
-          {closeButton}
-        </div>
-      ) : null}
       {besideCutout && (
         // The disc floats up beside the device island (vertically centered on
         // it, at the trailing gutter), so the header title clears the safe
@@ -395,7 +340,7 @@ export function GlassDialog({
           minHeight: 0,
           overflowY: "auto",
           WebkitOverflowScrolling: "touch",
-          padding: wideDesktop ? token("--space-l") : token("--space-m"),
+          padding: token("--space-m"),
         }}
       >
         {chrome === "flowing-close" && closeButton !== null ? (

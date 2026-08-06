@@ -22,8 +22,6 @@ export interface TextAreaProps {
   readonly supportingText?: string;
   /** Validation copy; also marks the textarea invalid. */
   readonly error?: string;
-  /** Prevent editing. */
-  readonly disabled?: boolean;
   /** Stable test id for product QA. */
   readonly testId?: string;
   /** Optional ref to the native textarea. */
@@ -39,7 +37,6 @@ export function TextArea({
   placeholder,
   supportingText,
   error,
-  disabled = false,
   testId,
   inputRef,
 }: TextAreaProps): ReactElement {
@@ -62,7 +59,6 @@ export function TextArea({
         rows={3}
         value={value}
         placeholder={placeholder}
-        disabled={disabled}
         aria-invalid={error === undefined ? undefined : true}
         data-testid={testId}
         onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>

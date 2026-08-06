@@ -104,7 +104,7 @@ describe("CardGalleryPanel", () => {
     const close = vi.fn(); const restock = vi.fn();
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<CumulusRoot><CardGalleryPanel title="Card Shop" cards={[]} rightAccessory={{ kind: "iconButton", glyph: GLYPHS.close, label: "Close", onPress: close, testId: "close" }} endAction={{ entryId: "restock", glyph: GLYPHS.refresh, label: "Restock", caption: { kind: "essence", amount: 50 }, interactionFeedback: "stationary", testId: "restock" }} onEndActionPress={restock} /></CumulusRoot>));
+    act(() => root.render(<CumulusRoot><CardGalleryPanel title="Card Shop" cards={[]} rightAccessory={{ kind: "iconButton", glyph: GLYPHS.close, label: "Close", onPress: close, testId: "close" }} endAction={{ entryId: "restock", glyph: GLYPHS.refresh, label: "Restock", caption: { kind: "essence", amount: 50 }, testId: "restock" }} onEndActionPress={restock} /></CumulusRoot>));
     act(() => (container.querySelector('[data-testid="close"]') as HTMLButtonElement).click());
     act(() => (container.querySelector('[data-testid="restock"]') as HTMLButtonElement).click());
     expect(close).toHaveBeenCalledOnce(); expect(restock).toHaveBeenCalledWith("restock");
@@ -172,7 +172,6 @@ describe("CardGalleryPanel", () => {
           ],
           value: "viewer",
           onChange: ownerChange,
-          full: true,
         },
         search: { label: "Search Cards", value: "", onChange: vi.fn(), testId: "search" },
         sort: { ariaLabel: "Sort cards", value: "current", options: [{ value: "current", label: "Current Order" }], onChange: vi.fn() },

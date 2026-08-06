@@ -46,6 +46,7 @@ function item(id: string, overrides: Partial<AtlasMapNode>): AtlasMapNode {
     site: null,
     affiliation: null,
     ...overrides,
+    isReachable: overrides.isReachable ?? true,
   };
 }
 

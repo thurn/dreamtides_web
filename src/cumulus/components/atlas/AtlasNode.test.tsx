@@ -7,12 +7,41 @@ import { LayerName } from "../../../types/layer-name";
 import { CumulusRoot } from "../../CumulusRoot";
 import { artRef } from "../../primitives/art";
 import { GLYPHS } from "../../primitives/glyph";
-import { AtlasNode, type AtlasNodeModel } from "./AtlasNode";
+import {
+  AtlasNode,
+  atlasPrimaryInfoCard,
+  type AtlasNodeModel,
+} from "./AtlasNode";
 
 const NODE_ID = "00000000-0000-4000-8000-000000000051";
 const DREAMSIGN_ID = "00000000-0000-4000-8000-000000000052";
 const SITE_ID = "00000000-0000-4000-8000-000000000053";
 const AFFILIATION_ID = "00000000-0000-4000-8000-000000000054";
+
+describe("atlasPrimaryInfoCard", () => {
+  it("selects the scene reveal for a known place and text for an unseen dream", () => {
+    expect(atlasPrimaryInfoCard({
+      sceneArt: artRef.dreamscapeScene("wilderveil"),
+      figureArt: artRef.dreamGuide("aldric"),
+      placeName: "Wilderveil",
+      guideName: "Aldric, the Seer",
+      title: "Aldric, the Seer",
+      body: "A curated vision.",
+    })).toMatchObject({
+      variant: "atlasReveal",
+      title: "Wilderveil",
+      subtitle: "Aldric, the Seer",
+    });
+    expect(atlasPrimaryInfoCard({
+      sceneArt: null,
+      figureArt: null,
+      placeName: null,
+      guideName: null,
+      title: "An Unseen Dream",
+      body: "Travel onward.",
+    })).toMatchObject({ variant: "text", title: "An Unseen Dream" });
+  });
+});
 
 function model(
   state: AtlasNodeModel["node"]["state"],

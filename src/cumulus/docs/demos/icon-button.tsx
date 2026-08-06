@@ -9,7 +9,6 @@
 import {
   IconButton,
   type IconButtonSize,
-  type IconButtonVariant,
 } from "../../components/controls/IconButton";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
 import { GLYPHS } from "../../primitives/glyph";
@@ -17,7 +16,6 @@ import type { CumulusComponent } from "../registry";
 
 interface IconButtonDemoArgs {
   size?: IconButtonSize;
-  variant?: IconButtonVariant;
   placement?: GlassControlPlacement;
   disabled?: boolean;
 }
@@ -30,7 +28,6 @@ interface IconButtonDemoArgs {
  */
 function IconButtonDemo({
   size = "md",
-  variant = "default",
   placement = "onMedia",
   disabled = false,
 }: IconButtonDemoArgs) {
@@ -38,7 +35,6 @@ function IconButtonDemo({
     <IconButton
       glyph={GLYPHS.close}
       size={size}
-      variant={variant}
       placement={placement}
       disabled={disabled}
       label="Close"
@@ -51,9 +47,9 @@ export const iconButtonDemo: CumulusComponent = {
   id: "icon-button",
   title: "Icon Button",
   blurb:
-    "The compact glyph-only glass disc — neutral or purple accent liquid glass, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls.",
+    "The compact glyph-only glass disc, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls.",
   callout:
-    "Use GlassButton for labeled actions, neutral IconButton for secondary corner actions, purple accent IconButton for the primary action in a paired icon cluster, and a bare Pressable glyph for the lightest inline affordance.",
+    "Use GlassButton for labeled actions, IconButton for compact corner actions, and a bare Pressable glyph for the lightest inline affordance.",
   group: "Components",
   docName: "IconButton",
   Component: IconButtonDemo,
@@ -86,16 +82,6 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
 />`,
     },
     {
-      label: "Purple accent",
-      note: 'Use `variant="accent"` for the primary action in a paired glass-icon cluster.',
-      code: `<IconButton
-  variant="accent"
-  glyph={GLYPHS.arrowRight}
-  label="Next phase"
-  onPress={advancePhase}
-/>`,
-    },
-    {
       label: "Centered overlay",
       note: "Use `overlayGlyph` for one smaller semantic mark superimposed within the primary glyph.",
       code: `<IconButton
@@ -109,7 +95,6 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
   demo: {
     defaultArgs: {
       size: "md",
-      variant: "default",
       placement: "onMedia",
       disabled: false,
     },

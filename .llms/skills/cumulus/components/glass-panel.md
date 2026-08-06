@@ -38,7 +38,7 @@ The persistent, non-modal, content-hugging liquid-glass container: an optional s
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `kind` | `"glassButton" \| "iconButton" \| "iconButtonGroup"` | no |  |
+| `kind` | `"iconButtonGroup" \| "glassButton" \| "iconButton"` | no |  |
 
 ## Usage
 

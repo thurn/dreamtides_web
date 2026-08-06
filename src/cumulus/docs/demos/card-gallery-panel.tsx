@@ -92,7 +92,6 @@ function CardGalleryPanelDemo() {
             ],
             value: owner,
             onChange: setOwner,
-            full: true,
           },
           search: { label: "Search Cards", value: query, onChange: setQuery },
           sort: {

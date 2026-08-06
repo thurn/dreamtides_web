@@ -32,12 +32,6 @@ interface PipBadgeProps {
   variant: PipBadgeVariant;
   /** The displayed value (string so callers can pass `"X"` for variable cost). */
   value: string;
-  /**
-   * `"sm"` matches the small card stat row; `"md"` matches the larger
-   * `large` GameCard variant. Sizes are tuned so the number
-   * stays readable but the badge does not overpower adjacent text.
-   */
-  size?: "sm" | "md";
   /** Multiplier for card renderers that need the pip to follow card text scale. */
   scale?: number;
   /**
@@ -102,30 +96,21 @@ interface SizeSpec {
   fontSizePx: number;
 }
 
-const SIZES: Readonly<Record<"sm" | "md", SizeSpec>> = {
-  sm: {
-    sizeClass: "h-5 w-5",
-    textClass: "text-[11px]",
-    sizePx: 20,
-    fontSizePx: 11,
-  },
-  md: {
-    sizeClass: "h-7 w-7",
-    textClass: "text-base",
-    sizePx: 28,
-    fontSizePx: 16,
-  },
+const SIZE: SizeSpec = {
+  sizeClass: "h-5 w-5",
+  textClass: "text-[11px]",
+  sizePx: 20,
+  fontSizePx: 11,
 };
 
 export function PipBadge({
   variant,
   value,
-  size = "sm",
   scale = 1,
   ariaLabel,
   glossaryId,
 }: PipBadgeProps) {
-  const spec = SIZES[size];
+  const spec = SIZE;
   const label = ariaLabel ?? VARIANT_DEFAULT_LABEL[variant];
   const resolvedScale = Number.isFinite(scale) && scale > 0 ? scale : 1;
 

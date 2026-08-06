@@ -236,6 +236,7 @@ function nodeItem(
       size: 132,
       isStarter: extra.isStarter ?? false,
       isBoss: extra.isBoss ?? false,
+      isReachable: true,
       iconRef: null,
       siteBadgeGlyph: null,
       knownDreamsignRef: null,

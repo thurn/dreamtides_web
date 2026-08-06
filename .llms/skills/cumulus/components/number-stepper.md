@@ -17,7 +17,7 @@ A labeled, accessible decrement/value/increment row with optional canonical reso
 | `label` | `string` | yes | — | Visible label for the numeric value. |
 | `value` | `number` | yes | — | Current numeric value. |
 | `displayValue` | `string` | no | — | Optional formatted value while `value` remains the numeric state contract. |
-| `resource` | `NumberStepperResource` = `"essence" \| "energy" \| "spark" \| "points" \| "counter"` | no | — | Optional economy mark paired with the value. |
+| `resource` | `NumberStepperResource` = `"essence" \| "energy" \| "spark" \| "points"` | no | — | Optional economy mark paired with the value. |
 | `decrementLabel` | `string` | yes | — | Accessible label for the decrement action. |
 | `incrementLabel` | `string` | yes | — | Accessible label for the increment action. |
 | `onDecrement` | `() => void` | yes | — | Fires when the decrement disc is pressed. |
@@ -25,7 +25,6 @@ A labeled, accessible decrement/value/increment row with optional canonical reso
 | `decrementDisabled` | `boolean` | no | `false` | Prevent decrementing while preserving the control's layout. |
 | `incrementDisabled` | `boolean` | no | `false` | Prevent incrementing while preserving the control's layout. |
 | `size` | `NumberStepperSize` = `"sm" \| "md"` | no | `md` | Compact or regular row density. Defaults to `md`. |
-| `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onGlass` | Surface beneath the two icon buttons. Defaults to `onGlass`. |
 | `testId` | `string` | no | — | Stable test id for the row. |
 
 ## Usage

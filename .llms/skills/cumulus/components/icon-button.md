@@ -8,9 +8,9 @@ Components · Live demo & interactive props: `/cumulus#/icon-button`
 
 Real consumers: **20** (imports outside `src/cumulus/docs/` and tests).
 
-The compact glyph-only glass disc — neutral or purple accent liquid glass, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls.
+The compact glyph-only glass disc, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls.
 
-> **Guidance:** Use GlassButton for labeled actions, neutral IconButton for secondary corner actions, purple accent IconButton for the primary action in a paired icon cluster, and a bare Pressable glyph for the lightest inline affordance.
+> **Guidance:** Use GlassButton for labeled actions, IconButton for compact corner actions, and a bare Pressable glyph for the lightest inline affordance.
 
 ## Props
 
@@ -20,7 +20,6 @@ The compact glyph-only glass disc — neutral or purple accent liquid glass, wit
 | `overlayGlyph` | `Glyph` | no | — | Optional smaller glyph superimposed at the center of the primary glyph. |
 | `size` | `IconButtonSize` = `"sm" \| "md"` | no | `md` | Disc size — `sm` (40/22) or `md` (48/26). Defaults to `md`. |
 | `label` | `string` | yes | — | The disc's accessible name (`aria-label`); the disc shows only its glyph. |
-| `variant` | `IconButtonVariant` = `"default" \| "accent"` | no | `default` | Strict neutral or purple accent glass surface treatment. |
 | `onPress` | `() => void` | yes | — | Fires when the disc is activated (no-op while disabled). |
 | `disabled` | `boolean` | no | `false` | Detaches the click / press feedback and marks the disc `aria-disabled`. |
 | `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the control. `onMedia` uses the full liquid-glass recipe; `onGlass` uses a lighter tonal lens so an existing glass tint is not compounded. Defaults to `onMedia`. |
@@ -64,19 +63,6 @@ Use `placement="onGlass"` for a disc nested inside a glass panel.
   glyph={GLYPHS.close}
   label="Close deck"
   onPress={closeViewer}
-/>
-```
-
-### Purple accent
-
-Use `variant="accent"` for the primary action in a paired glass-icon cluster.
-
-```tsx
-<IconButton
-  variant="accent"
-  glyph={GLYPHS.arrowRight}
-  label="Next phase"
-  onPress={advancePhase}
 />
 ```
 

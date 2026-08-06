@@ -112,7 +112,6 @@ export function BattleCardNoteOverlay({
               onIncrement={() =>
                 onAfterNTurnsChange(Math.min(maximumTurns, afterNTurns + 1))
               }
-              placement="onGlass"
             />
           </div>
         ) : null}

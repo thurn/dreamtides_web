@@ -53,7 +53,12 @@ export type CardGalleryCaption = CardChoiceGridCaption;
 export type CardGalleryActionView = CardChoiceGridActionView;
 
 /** The trailing header action rendered by a {@link CardGalleryPanel}. */
-export type CardGalleryAccessory = GlassPanelAccessory;
+export type CardGalleryAccessory = Exclude<
+  GlassPanelAccessory,
+  { kind: "iconButtonGroup" }
+>;
+
+export type CardGalleryFooterVariant = Exclude<GlassButtonVariant, "danger">;
 
 /** A centered labeled action rendered below the card grid. */
 export interface CardGalleryFooterAction {
@@ -68,7 +73,7 @@ export interface CardGalleryFooterAction {
   /** Detach interaction and visually recede the action. */
   disabled?: boolean;
   /** Semantic surface treatment for the action. */
-  variant?: GlassButtonVariant;
+  variant?: CardGalleryFooterVariant;
   /** A `data-testid` for selecting the footer action in tests. */
   testId?: string;
 }
@@ -109,8 +114,6 @@ export interface CardGallerySegmentedControl {
   value: string;
   /** Reports segment changes. */
   onChange: (value: string) => void;
-  /** Stretch the control across its toolbar row. */
-  full?: boolean;
 }
 
 /** Structured mode, search, sort, and filter controls for browser galleries. */
@@ -680,7 +683,7 @@ export function CardGalleryPanel({
             options={[...toolbar.segmented.options]}
             value={toolbar.segmented.value}
             onChange={toolbar.segmented.onChange}
-            full={toolbar.segmented.full}
+            full
           />
         </div>
       )}

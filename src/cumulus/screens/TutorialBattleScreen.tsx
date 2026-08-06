@@ -388,7 +388,6 @@ export function TutorialBattleScreen({
       ) : null}
       {movementStatusMessage !== null ? (
         <TransientStatusToast
-          variant="warning"
           copy={{ message: movementStatusMessage }}
           onDismiss={onMovementStatusDismiss}
         />

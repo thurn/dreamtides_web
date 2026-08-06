@@ -75,7 +75,7 @@ import { CommandMenu } from "src/cumulus/components/overlay/CommandMenu";
   kind: "context",
   title: "Card actions",
   actions: cardActions,
-  anchor: { kind: "point", x: event.clientX, y: event.clientY },
+  anchor: { x: event.clientX, y: event.clientY },
   onDismiss: closeMenu,
 }} />
 ```

@@ -55,12 +55,8 @@ afterEach(() => {
 });
 
 describe("GlassBackdrop", () => {
-  it("renders a position:absolute frosted layer carrying its children", () => {
-    const { container, root } = mount(
-      <GlassBackdrop>
-        <span data-testid="child">behind</span>
-      </GlassBackdrop>,
-    );
+  it("renders an aria-hidden position:absolute frosted layer", () => {
+    const { container, root } = mount(<GlassBackdrop />);
 
     const layer = container.firstElementChild as HTMLElement | null;
     expect(layer).not.toBeNull();
@@ -68,16 +64,6 @@ describe("GlassBackdrop", () => {
     expect(style).toContain("position: absolute");
     // The blur backdrop from the shared glass recipe.
     expect(style).toContain("blur(");
-    expect(container.querySelector('[data-testid="child"]')).not.toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("is aria-hidden when childless", () => {
-    const { container, root } = mount(<GlassBackdrop />);
-    const layer = container.firstElementChild as HTMLElement | null;
     expect(layer?.getAttribute("aria-hidden")).toBe("true");
 
     act(() => {
@@ -294,37 +280,6 @@ describe("GlassDialog", () => {
     });
   });
 
-  it("keeps the title accessible while rendering only the floating close chrome", () => {
-    const { container, root } = mount(
-      <GlassDialog
-        title="How to Play"
-        presentation="popup"
-        chrome="close-only"
-        onClose={() => {}}
-      >
-        <div>Two paragraphs</div>
-      </GlassDialog>,
-    );
-
-    const dialog = container.querySelector<HTMLElement>('[role="dialog"]');
-    const closeOnly = container.querySelector<HTMLElement>(
-      "[data-glass-dialog-close-only]",
-    );
-    expect(dialog?.getAttribute("aria-label")).toBe("How to Play");
-    expect(dialog?.querySelector("header")).toBeNull();
-    expect(dialog?.querySelector("h2")).toBeNull();
-    expect(closeOnly?.style.position).toBe("absolute");
-    expect(closeOnly?.style.top).toBe("var(--space-l)");
-    expect(closeOnly?.style.right).toBe("var(--space-l)");
-    expect(
-      closeOnly?.querySelector('button[aria-label="Close"]'),
-    ).not.toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
   it("floats the close disc in body flow for prose wrapping", () => {
     const { container, root } = mount(
       <GlassDialog
@@ -354,10 +309,6 @@ describe("GlassDialog", () => {
     expect(
       flowingClose?.querySelector('button[aria-label="Close"]'),
     ).not.toBeNull();
-    expect(
-      container.querySelector("[data-glass-dialog-close-only]"),
-    ).toBeNull();
-
     act(() => {
       root.unmount();
     });

@@ -37,7 +37,6 @@ export function isHexColor(color: CumulusColor): color is HexColor {
 export type ColorRole =
   | "accent"
   | "accent-bright"
-  | "accent-strong"
   | "essence"
   | "energy"
   | "spark"
@@ -46,8 +45,6 @@ export type ColorRole =
   | "selected"
   | "text-primary"
   | "text-secondary"
-  | "text-muted"
-  | "text-faint"
   | "text-on-accent"
   | "white";
 
@@ -55,7 +52,6 @@ export type ColorRole =
 const COLOR_ROLE_TOKENS: Record<ColorRole, string> = {
   accent: token("--accent"),
   "accent-bright": token("--accent-bright"),
-  "accent-strong": token("--accent-strong"),
   essence: token("--essence"),
   energy: token("--energy"),
   spark: token("--spark"),
@@ -64,8 +60,6 @@ const COLOR_ROLE_TOKENS: Record<ColorRole, string> = {
   selected: token("--selected"),
   "text-primary": token("--text-primary"),
   "text-secondary": token("--text-secondary"),
-  "text-muted": token("--text-muted"),
-  "text-faint": token("--text-faint"),
   "text-on-accent": token("--text-on-accent"),
   white: "#ffffff",
 };
