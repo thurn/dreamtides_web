@@ -1020,7 +1020,9 @@ describe("ExplorationSiteScreen", () => {
     expect(source?.dataset.revealSourceRetain).toBe("true");
     expect(source?.dataset.revealPrimaryVariant).toBe("gameCard");
     expect(label?.textContent).toBe(referencedCard.name);
-    expect(label?.style.textDecoration).toBe("");
+    expect(label?.querySelector("span")?.style.textDecoration).toBe(
+      "underline",
+    );
     expect(label?.hasAttribute("data-reveal-entity-id")).toBe(false);
     expect(label?.tabIndex).toBe(-1);
     act(() => source?.focus());

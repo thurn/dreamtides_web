@@ -23,6 +23,7 @@ import {
   type CardChoiceGridColumns,
 } from "../components/card/CardChoiceGrid";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
+import { RichTextView, richText } from "../components/card/rich-text";
 import { renderRulesSymbolsInline } from "../components/card/RulesText";
 import {
   CARD_ASPECT_RATIO,
@@ -499,7 +500,7 @@ function ExplorationEntityLabel({
       data-entity-copies={details.copies}
       data-testid={testId}
     >
-      {details.name}
+      <RichTextView value={richText.underline(details.name)} />
     </span>
   );
 }

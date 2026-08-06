@@ -206,6 +206,7 @@ describe("ExplorationCandidatesEditorApp", () => {
     );
     expect(selectedCardName?.textContent).toBe("Fixture Ally");
     expect(selectedCardName?.dataset.runtimeCardPlaceholder).toBe("$OFFERED_CARD");
+    expect(selectedCardName?.querySelector("u")?.textContent).toBe("Fixture Ally");
     expect(selectedCardName?.querySelector("[data-reveal-entity-type]"))
       .toBeNull();
     const selectedDreamsignName = container.querySelector<HTMLElement>(
@@ -214,6 +215,7 @@ describe("ExplorationCandidatesEditorApp", () => {
     expect(selectedDreamsignName?.textContent).toBe("Bell");
     expect(selectedDreamsignName?.dataset.runtimeDreamsignPlaceholder)
       .toBe("{dreamsign_name}");
+    expect(selectedDreamsignName?.querySelector("u")?.textContent).toBe("Bell");
     expect(selectedDreamsignName?.querySelector("[data-reveal-entity-type]"))
       .toBeNull();
     expect(container.textContent).toContain("Rank 1 label 1");

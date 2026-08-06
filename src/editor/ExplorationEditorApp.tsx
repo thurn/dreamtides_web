@@ -92,9 +92,9 @@ function renderedEffect(
           data-runtime-card-placeholder={part.placeholder}
           key={`${part.placeholder}-${part.cardId}-${String(index)}`}
         >
-          <span data-entity-unresolved={card === undefined ? "card" : undefined}>
+          <u data-entity-unresolved={card === undefined ? "card" : undefined}>
             {card?.name ?? part.cardName}
-          </span>
+          </u>
         </span>
       );
     }
@@ -105,9 +105,9 @@ function renderedEffect(
         data-runtime-dreamsign-placeholder={part.placeholder}
         key={`${part.placeholder}-${part.dreamsignId}-${String(index)}`}
       >
-        <span data-entity-unresolved={dreamsign === undefined ? "dreamsign" : undefined}>
+        <u data-entity-unresolved={dreamsign === undefined ? "dreamsign" : undefined}>
           {dreamsign?.name ?? part.dreamsignName}
-        </span>
+        </u>
       </span>
     );
   });
@@ -581,7 +581,7 @@ function ExplorationEditorRow({
         <div className="exploration-editor-reference-field" key={key}>
           <span>{field.label}</span>
           <div>
-            {card === undefined ? <span>Unknown card</span> : <span>{card.name}</span>}
+            {card === undefined ? <span>Unknown card</span> : <u>{card.name}</u>}
             <GlassButton
               label="Choose card"
               placement="onGlass"
@@ -607,7 +607,7 @@ function ExplorationEditorRow({
     return (
       <div className="exploration-editor-reference-field" key={key}>
         <span>{field.label}</span>
-        {dreamsign !== undefined && <span>{dreamsign.name}</span>}
+        {dreamsign !== undefined && <u>{dreamsign.name}</u>}
         <Select
           full
           size="sm"

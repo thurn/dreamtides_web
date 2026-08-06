@@ -219,9 +219,9 @@ function renderedTemplate(
           data-runtime-card-placeholder={part.placeholder}
           key={`${part.placeholder}-${part.cardId}-${String(index)}`}
         >
-          <span data-entity-unresolved={card === undefined ? "card" : undefined}>
+          <u data-entity-unresolved={card === undefined ? "card" : undefined}>
             {card?.name ?? part.cardName}
-          </span>
+          </u>
         </span>
       );
     }
@@ -234,9 +234,9 @@ function renderedTemplate(
         data-runtime-dreamsign-placeholder={part.placeholder}
         key={`${part.placeholder}-${part.dreamsignId}-${String(index)}`}
       >
-        <span data-entity-unresolved={dreamsign === undefined ? "dreamsign" : undefined}>
+        <u data-entity-unresolved={dreamsign === undefined ? "dreamsign" : undefined}>
           {dreamsign?.name ?? part.dreamsignName}
-        </span>
+        </u>
       </span>
     );
   });

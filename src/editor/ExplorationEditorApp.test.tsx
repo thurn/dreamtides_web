@@ -315,6 +315,7 @@ describe("ExplorationEditorApp", () => {
       `[data-runtime-card-id='${REWARD_CARD_ID}']`,
     );
     expect(runtimeCardName?.textContent).toBe("Fixture Ally");
+    expect(runtimeCardName?.querySelector("u")?.textContent).toBe("Fixture Ally");
     expect(runtimeCardName?.querySelector("[data-reveal-entity-type]"))
       .toBeNull();
     expect(container.querySelector("[data-runtime-card-placeholder='$OFFERED_CARD']"))
