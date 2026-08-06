@@ -1,199 +1,198 @@
-# Living Tome of Dreamtides Design
+# Living Tome of Dreamtides Design (LToDD)
 
 This index is the authoritative reading order and ownership map for the
 canonical design of Dreamtides.
 
 ## How to read this book
 
-Choose the part that owns the system you are implementing, then choose a chapter
-by its scope statement. Follow local links for prerequisites, shared rules, and
-deeper systems. Each chapter states the complete rules needed in its own context
-while linking to the primary chapter for the full design.
+Choose the numbered part that matches the system you are implementing, then
+choose a chapter by its scope statement. Each part shows its stable path beneath
+the heading. Follow local links for prerequisites, shared rules, and deeper
+systems. Chapters state the complete rules needed in their own context while
+linking to the primary chapter for the full design.
 
-## Design
+## Part I: Foundations of Dreamtides
 
-This part establishes the player experience and the principles that constrain
-every Dreamtides system.
+Part path: `/design`
 
-It owns the player promise, the nested journey and Battle loops, information
-disclosure, meaningful commitment, authored identity, deterministic randomness,
-durable state, and the relationship between rules, presentation, and rationale.
-Specific gameplay algorithms remain with the parts that use them.
+The player promise, nested journey and Battle loops, information disclosure,
+meaningful commitment, authored identity, deterministic randomness, durable
+state, and the relationship between rules, presentation, and rationale. Specific
+gameplay algorithms appear with the systems that use them.
 
-## Game Objects
+## Part II: Cards and Game Objects
 
-This part defines the persistent and rule-bearing objects from which Dreamtides
-is built.
+Part path: `/game_objects`
 
-It owns Cards and their identities, anatomy, types, subtypes, symbols, and rules
+Cards and their identities, anatomy, types, subtypes, symbols, and rules
 language; concrete deck entries and effective Cards; Dream Avatars; Dreamsigns;
-resources; persistent Card modifications; and created objects. Acquisition and
-deck evolution belong to Deckbuilding, while Battle owns how these objects
+resources; persistent Card modifications; and created objects. Deckbuilding
+explains acquisition and deck evolution, while Battle explains how these objects
 resolve during a contest.
 
-## Draft Pools
+## Part III: Draft Pools and Tides
 
-This part specifies how a journey receives and consumes its curated supply of
-Cards.
+Part path: `/draft_pools`
 
-It owns authored Tide membership, Tide roles, Dream Avatar relationships, pool
-eligibility, pool construction, Card multiplicity, deterministic selection,
-per-journey commitment, affiliation influence, Draft offers, picks, and shared
-pool consumption. The authored Tides are canonical inputs; their historical
-derivation from play records is outside the book.
+The curated Card supply for a journey: authored Tide membership, Tide roles,
+Dream Avatar relationships, pool eligibility, pool construction, Card
+multiplicity, deterministic selection, per-journey commitment, affiliation
+influence, Draft offers, picks, and shared pool consumption. Authored Tides are
+canonical inputs; their historical derivation from play records is outside the
+book.
 
-## Cumulus
+## Part IV: The Cumulus Language
 
-This part defines the visual language that gives every Dreamtides experience a
-shared material and expressive identity.
+Part path: `/cumulus`
 
-It owns the design philosophy, semantic visual vocabulary, color, typography,
-glyphs, spacing, shape, elevation, liquid glass, solid materials, legibility,
-and the distinction between tangible game objects and review chrome. Components
-owns reusable surfaces, while Interaction and Composition own their coordinated
-behavior and arrangement.
+The visual language shared by every Dreamtides experience: design philosophy,
+semantic visual vocabulary, color, typography, glyphs, spacing, shape,
+elevation, liquid glass, solid materials, legibility, and the distinction
+between tangible game objects and review chrome. Reusable surfaces appear in
+Cumulus Components, with coordinated behavior and arrangement in the following
+two parts.
 
-## Components
+## Part V: The Cumulus Components
 
-This part specifies the reusable Cumulus objects that carry information and
-interaction across the game.
+Part path: `/components`
 
-It owns the invariant appearance, semantic models, variants, local states, and
-standard feedback of controls, glass surfaces, information reveals, dialogue,
-text, Cards, Dreamsigns, Dream Avatars, Atlas objects, Site objects, Battle
-objects, announcements, and journey chrome. Consequential components receive
-individual chapters; compact primitives may share a family chapter.
+The reusable Cumulus objects that carry information and interaction across the
+game. Chapters define their semantic models, invariant appearance, variants,
+local states, and standard feedback. The catalog includes controls, glass
+surfaces, information reveals, dialogue, text, Cards, Dreamsigns, Dream Avatars,
+Atlas objects, Site objects, Battle objects, announcements, and journey chrome.
+Consequential components receive individual chapters; compact primitives may
+share a family chapter.
 
-## Interaction
+## Part VI: Cumulus Interaction Systems
 
-This part specifies how players act on Cumulus objects and how those objects
-respond across input modes.
+Part path: `/interaction`
 
-It owns activation, press feedback, selection, focus, hover, touch-hold, entity
-reveals, dismissal, dragging, reordering, keyboard and touch parity, modal
-behavior, interruption, accessible communication, and reduced-motion
-equivalence. Gameplay parts own the consequences of each action.
+Activation, press feedback, selection, focus, hover, touch-hold, entity reveals,
+dismissal, dragging, reordering, keyboard and touch parity, modal behavior,
+interruption, accessible communication, and reduced-motion equivalence. Gameplay
+chapters provide the consequences attached to each action.
 
-## Composition
+## Part VII: Cumulus Screen Composition
 
-This part specifies how Cumulus objects become complete screens and continuous
-player flows.
+Part path: `/composition`
 
-It owns stages, frames, content-sized surfaces, visual hierarchy, responsive
+The principles that turn Cumulus objects into complete screens and continuous
+flows: stages, frames, content-sized surfaces, visual hierarchy, responsive
 desktop and narrow compositions, safe areas, journey chrome, overlays, layer
-ordering, transitions, and screen-level motion. Gameplay parts own the
-state-dependent meaning and particular arrangement of their screens.
+ordering, transitions, and screen-level motion. Gameplay chapters provide each
+screen's state-dependent meaning and particular arrangement.
 
-## Journey
+## Part VIII: The Dream Journey
 
-This part specifies the complete run from Dream Avatar selection to victory or
-failure.
+Part path: `/journey`
 
-It owns journey assembly, durable inventory, the Dreamscape-Site-Battle-Atlas
-loop, screen progression, Site and Battle handoffs, persistent and temporary
-modifiers, journey inspection, completion depth, terminal outcomes, and starting
-again. Atlas owns route topology, while specialized destination parts own the
-activities entered during the journey.
+The complete run from Dream Avatar selection to victory or failure: journey
+assembly, durable inventory, the Dreamscape-Site-Battle-Atlas loop, screen
+progression, Site and Battle handoffs, persistent and temporary modifiers,
+journey inspection, completion depth, terminal outcomes, and starting again.
+Atlas describes route topology, while destination parts describe the activities
+entered along the way.
 
-## Atlas
+## Part IX: The Dream Atlas
 
-This part specifies the world map, the Dreamscapes it reveals, and the route a
-journey takes through them.
+Part path: `/atlas`
 
-It owns graph structure, layers, node generation, revelation, reachability,
-route commitment, known Dreamsigns, Dreamscape selection, repeat avoidance,
-Dream Guides, affiliations, signature Site enhancement, Site composition, local
-Dreamscape navigation, the final boss destination, and map presentation.
-Destination mechanics begin when the player enters a Site.
+The world map, the Dreamscapes it reveals, and the route a journey takes through
+them. Topics include graph structure, layers, node generation, revelation,
+reachability, route commitment, known Dreamsigns, Dreamscape selection, repeat
+avoidance, Dream Guides, affiliations, signature Site enhancement, Site
+composition, local Dreamscape navigation, the final boss destination, and map
+presentation. Destination mechanics begin when the player enters a Site.
 
-## Deckbuilding
+## Part X: Building the Deck
 
-This part specifies how the player's concrete deck is established, understood,
-and transformed throughout a journey.
+Part path: `/deckbuilding`
 
-It owns the starting deck, acquisition, entry identity, duplicate handling,
-effective-Card resolution, Purge, Duplication, Transfiguration, type and keyword
-changes, temporary and permanent modifications, and deck inspection. Draft Pools
-owns the supply from which Draft offers are made; Economy owns prices and shared
-reward valuation.
+The player's concrete deck and its evolution throughout a journey: the starting
+deck, acquisition, entry identity, duplicate handling, effective-Card
+resolution, Purge, Duplication, Transfiguration, type and keyword changes,
+temporary and permanent modifications, and deck inspection. Draft Pools provides
+the supply for Draft offers; Economy provides prices and shared reward
+valuation.
 
-## Economy
+## Part XI: The Journey Economy
 
-This part specifies how value enters, leaves, and redirects a journey.
+Part path: `/economy`
 
-It owns Essence, sources and sinks, prices, discounts, rerolls, Battle payouts,
-reward selection policies, deck-fit evaluation, Dreamsign capacity economics,
-and modifiers that alter later rewards or costs. Sites owns the player-facing
-transaction flow at each destination.
+The flow of value through a journey: Essence, sources and sinks, prices,
+discounts, rerolls, Battle payouts, reward selection policies, deck-fit
+evaluation, Dreamsign capacity economics, and modifiers that alter later rewards
+or costs. Sites describes the player-facing transaction at each destination.
 
-## Sites
+## Part XII: The Site System
 
-This part specifies the shared destination contract and the Site experiences
-that do not require their own parts.
+Part path: `/sites`
 
-It owns Site availability, entry, prepared randomness, enhancement, completion,
-return to the Dreamscape, Guide hosting, inline rewards, Card and Dreamsign
-markets, Dreamsign Revelation, Purge, Transfiguration, Duplication, Random Site,
-and the handoffs into Draft, Augury, Exploration, Gamble, and Battle. The
-specialized parts own the complete rules after those handoffs.
+The shared destination contract and the Site experiences that do not require
+their own parts. Content includes Site availability, entry, prepared randomness,
+enhancement, completion, return to the Dreamscape, Guide hosting, inline
+rewards, Card and Dreamsign markets, Dreamsign Revelation, Purge,
+Transfiguration, Duplication, Random Site, and the handoffs into Draft, Augury,
+Exploration, Gamble, and Battle. The specialized parts continue from those
+handoffs.
 
-## Augury
+## Part XIII: The Augury Site
 
-This part specifies the adaptive vision in which the player chooses between two
-rewards shaped by the current journey.
+Part path: `/augury`
 
-It owns the journey snapshot used for evaluation, offer families, eligibility,
-candidate scoring, distinct-family pairing, target selection, acceptance,
-decline, dialogue, persistent outcomes, and the symbolic two-offer presentation.
-The parts for Game Objects, Deckbuilding, Economy, and Sites own the underlying
-operations an accepted offer invokes.
+The adaptive vision in which the player chooses between two rewards shaped by
+the current journey. Chapters address the journey snapshot used for evaluation,
+offer families, eligibility, candidate scoring, distinct-family pairing, target
+selection, acceptance, decline, dialogue, persistent outcomes, and the symbolic
+two-offer presentation. The accepted operations draw their underlying rules from
+Game Objects, Deckbuilding, Economy, and Sites.
 
-## Exploration
+## Part XIV: The Exploration Site
 
-This part specifies authored, art-led encounters that turn narrative choices
-into replayable journey consequences.
+Part path: `/exploration`
 
-It owns encounter selection, scene art and prose, the two-action authoring
-contract, prepared choices, target-selection policies, effect families, future
-Site and Battle modifiers, atomic resolution, persisted responses and outcomes,
-and the transition and reward choreography. The accompanying encounter catalog
-owns individual scenes and actions.
+Authored, art-led encounters that turn narrative choices into replayable journey
+consequences. Content includes encounter selection, scene art and prose, the
+two-action authoring contract, prepared choices, target-selection policies,
+effect families, future Site and Battle modifiers, atomic resolution, persisted
+responses and outcomes, and transition and reward choreography. The accompanying
+encounter catalog supplies the individual scenes and actions.
 
-## Gamble
+## Part XV: The Gamble Site
 
-This part specifies the chance games that exchange committed hidden outcomes for
-escalating risk and reward.
+Part path: `/gamble`
 
-It owns the shared wager, commitment, reveal, and settlement model; the playing
-Card deck; Three-Gate Wager; Tidemark Ladder Climb; Starway Stairs; enhanced
-behavior; repeated rounds and cashing out; Essence costs and payouts; Dreamsign
-awards and replacement; durable outcomes; and reveal choreography.
+Chance games that exchange committed hidden outcomes for escalating risk and
+reward. Chapters describe the shared wager, commitment, reveal, and settlement
+model; the playing Card deck; Three-Gate Wager; Tidemark Ladder Climb; Starway
+Stairs; enhanced behavior; repeated rounds and cashing out; Essence costs and
+payouts; Dreamsign awards and replacement; durable outcomes; and reveal
+choreography.
 
-## Battle
+## Part XVI: The Battle System
 
-This part specifies how a journey creates, presents, plays, and resolves a
-Battle.
+Part path: `/battle`
 
-It owns participant setup, opposing packages, objectives, zones, the
-Battlefield, the Dreamwell, Energy, turns, timing, priority, Card play, costs,
-targeting, effects, triggers, counters, repositioning, Challenges, Spark,
-scoring, Fatigue, created Cards, Figments, Battle interaction, results, rewards,
-and the journey handoff.
+The creation, presentation, play, and resolution of a Battle: participant setup,
+opposing packages, objectives, zones, the Battlefield, the Dreamwell, Energy,
+turns, timing, priority, Card play, costs, targeting, effects, triggers,
+counters, repositioning, Challenges, Spark, scoring, Fatigue, created Cards,
+Figments, Battle interaction, results, rewards, and the journey handoff.
 
-## Tutorial
+## Part XVII: The Dreamtides Tutorial
 
-This part specifies how Dreamtides teaches its rules and then hands control to
-the player.
+Part path: `/tutorial`
 
-It owns the main-menu entry, intentional loading primer, cinematic lesson,
-guided actions, tutorial Battle, transition into the tutorial journey, guided
-first encounters with journey systems, contextual Card guidance, and the
-presentation and pacing of instruction. Primary gameplay parts remain
-authoritative for the rules being taught.
+The teaching path from the main menu into a guided journey: the intentional
+loading primer, cinematic lesson, guided actions, tutorial Battle, transition
+into the tutorial journey, first encounters with journey systems, contextual
+Card guidance, and the presentation and pacing of instruction. Primary gameplay
+chapters remain authoritative for the rules being taught.
 
-## Book Reference
+## Book-Level Reference
 
-The book-level reference defines canonical terminology used across every part.
+The canonical terminology used throughout every part.
 
 1. [Glossary](glossary.md) — Read this chapter when resolving the precise
    meaning or primary ownership of a Dreamtides term.
