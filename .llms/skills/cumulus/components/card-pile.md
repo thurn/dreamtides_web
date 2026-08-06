@@ -10,7 +10,9 @@ Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
 A physical deck or void stack built from structured, topmost-first card instances. It shows at most three slightly offset layers and rests sideways as one fixed object.
 
-> **Guidance:** Pass stable battle-card instance ids so the shared layout identity can carry each card continuously between zones. Face-up entries can reveal their card or remain inactive beneath one pile-level activation; face-down entries resolve through CardBack.
+> **Guidance:** Pass stable battle-card instance ids so the shared layout identity can carry each card continuously between zones.
+
+Face-up entries can reveal their card or remain inactive beneath one pile-level activation; face-down entries resolve through CardBack.
 
 ## Props
 

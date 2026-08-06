@@ -32,7 +32,10 @@ export const infoCardDemo: CumulusComponent = {
   blurb:
     "The strict information-card presentation. Its media treatment varies by content — object, full-bleed, atlas reveal, icon, tide, or text — over a single fixed liquid-glass shell. Standard variants have a native width of 248px and begin geometry scaling below ~551px; atlasReveal has a native width of 360px and begins geometry scaling below 800px. Both cutoffs are distinct from the Entity Reveal Coordinator's 900px input-layout breakpoint.",
   callout:
-    "InfoCard supplies the visual content; the Entity Reveal Coordinator owns popup interaction, measurement, portal rendering, and placement. Product screens use named semantic sources rather than positioning InfoCard directly. Augury OfferTile is the single one-off desktop placement exception: its body-only InfoCard centers above its respective offer.",
+    "InfoCard supplies the visual content; the Entity Reveal Coordinator owns popup interaction, measurement, portal rendering, and placement.",
+  details: [
+    "Product screens use named semantic sources rather than positioning InfoCard directly. Augury OfferTile is the single one-off desktop placement exception: its body-only InfoCard centers above its respective offer.",
+  ],
   propsNote:
     "InfoCardProps is a discriminated union. The flattened table combines every variant: image is required only for object, fullBleed, and atlasReveal; glyph only for icon; and tide only for tide. Omit variant, or pass text, for the text member.",
   relatedSystems: ["entity-reveals"],

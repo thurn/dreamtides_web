@@ -10,7 +10,9 @@ Real consumers: **6** (imports outside `src/cumulus/docs/` and tests).
 
 The compact tab and filter switch used for type filters, sort direction, and small mode toggles. Its surface is the shared glass control material — the same one Select renders from — so a filter and a sort dropdown side by side read as one cluster.
 
-> **Guidance:** Use this compact control for small, mutually exclusive filters, sort directions, or modes. The shared liquid-glass track and neutral frosted selection pair cleanly with adjacent Select controls.
+> **Guidance:** Use this compact control for small, mutually exclusive filters, sort directions, or modes.
+
+The shared liquid-glass track and neutral frosted selection pair cleanly with adjacent Select controls.
 
 ## Props
 

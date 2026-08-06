@@ -10,7 +10,9 @@ Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
 The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art, essence captions, a close disc, and one bare-glyph end action.
 
-> **Guidance:** Use this when Dreamsigns are the primary purchasable objects. The panel preserves the chrome-free Dreamsign material and shared InfoCard reveal while matching the Dream Market's gallery frame and direct-buy interaction.
+> **Guidance:** Use this when Dreamsigns are the primary purchasable objects.
+
+The panel preserves the chrome-free Dreamsign material and shared InfoCard reveal while matching the Dream Market's gallery frame and direct-buy interaction.
 
 ## Props
 

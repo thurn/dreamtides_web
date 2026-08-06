@@ -37,9 +37,7 @@ function RadialAnnouncementDemo(args: Record<string, unknown>) {
       style={{
         position: "relative",
         width:
-          variant === "card-score" || variant === "merge-target"
-            ? 220
-            : "100%",
+          variant === "card-score" || variant === "merge-target" ? 220 : "100%",
         height: 320,
         margin: "0 auto",
       }}
@@ -74,13 +72,19 @@ function RadialAnnouncementDemo(args: Record<string, unknown>) {
 export const radialAnnouncementDemo: CumulusComponent = {
   id: "radial-announcement",
   title: "Radial Announcement",
-  blurb: "The single orbiting circular status system for scene announcements, card scoring, merge targets, and terminal victory.",
-  callout: "Use a strict named variant for every orbiting circular status moment. Each enum branch owns its established production choreography—including the card-attached scoring travel—while callers only place it in the relevant scene or card context.",
+  blurb:
+    "The single orbiting circular status system for scene announcements, card scoring, merge targets, and terminal victory.",
+  callout:
+    "Use a strict named variant for every orbiting circular status moment.",
+  details: [
+    "Each enum branch owns its established production choreography—including the card-attached scoring travel—while callers only place it in the relevant scene or card context.",
+  ],
   group: "Components",
   docName: "RadialAnnouncement",
   Component: RadialAnnouncementDemo,
-  usage: [{
-    code: `import { RadialAnnouncement } from "src/cumulus/components/status/RadialAnnouncement";
+  usage: [
+    {
+      code: `import { RadialAnnouncement } from "src/cumulus/components/status/RadialAnnouncement";
 import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 <RadialAnnouncement
@@ -90,13 +94,15 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
   tone="reward"
   duration="extended"
 />`,
-  }, {
-    code: `<RadialAnnouncement
+    },
+    {
+      code: `<RadialAnnouncement
   variant="card-score"
   points={3}
   announcementId="challenge-resolved:player:5:F0"
 />`,
-  }],
+    },
+  ],
   demo: {
     defaultArgs: {
       variant: "announcement",

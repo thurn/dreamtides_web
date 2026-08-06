@@ -10,12 +10,13 @@
 // renders, so the skill reference can never drift from the site:
 //
 //   - src/cumulus/docs/registry.ts          canonical component list + order
-//   - src/cumulus/docs/demos/<id>.tsx       authored prose: blurb, callout, usage
+//   - src/cumulus/docs/demos/<id>.tsx       authored prose: blurb, callout,
+//                                           details, usage
 //   - src/cumulus/metadata/cumulus-metadata.json  docgen props (run cumulus-metadata
 //                                             first; regenerate-assets does)
 //   - src/cumulus/primitives/cumulus-tokens.css   public design-token vocabulary
 //
-// The demo prose (id, title, blurb, callout, group, docName, usage snippets)
+// The demo prose (id, title, blurb, callout, details, group, docName, usage snippets)
 // is extracted statically from the demo files' object literals with the
 // TypeScript AST — the modules are never executed, so their JSX/CSS imports
 // don't matter. Doc-relevant fields must therefore be plain string literals or
@@ -45,8 +46,14 @@ import { computeConsumerCounts } from "./lib/cumulus-consumers.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const REGISTRY_PATH = resolve(ROOT, "src/cumulus/docs/registry.ts");
-const METADATA_PATH = resolve(ROOT, "src/cumulus/metadata/cumulus-metadata.json");
-const TOKENS_CSS_PATH = resolve(ROOT, "src/cumulus/primitives/cumulus-tokens.css");
+const METADATA_PATH = resolve(
+  ROOT,
+  "src/cumulus/metadata/cumulus-metadata.json",
+);
+const TOKENS_CSS_PATH = resolve(
+  ROOT,
+  "src/cumulus/primitives/cumulus-tokens.css",
+);
 const SKILL_DIR = resolve(ROOT, ".llms/skills/cumulus");
 const COMPONENTS_OUT_DIR = join(SKILL_DIR, "components");
 const SKILL_PATH = join(SKILL_DIR, "SKILL.md");
@@ -167,7 +174,7 @@ export function extractRegistryOrder(sourceText, fileName = "registry.ts") {
 
 /**
  * PURE core: extract the doc-relevant fields of a demo file's CumulusComponent
- * object literal — id, title, blurb, callout?, propsNote?, group, docName,
+ * object literal — id, title, blurb, callout?, details?, propsNote?, group, docName,
  * usage[] — from source text. When `exportName` is given, that exported const is required;
  * otherwise the first exported const initialized to an object literal with an
  * `id` property is used (test convenience).
@@ -184,7 +191,10 @@ export function extractDemoDoc(sourceText, fileName, exportName) {
     if (!isExported) continue;
     for (const decl of statement.declarationList.declarations) {
       if (!ts.isIdentifier(decl.name)) continue;
-      if (!decl.initializer || !ts.isObjectLiteralExpression(decl.initializer)) {
+      if (
+        !decl.initializer ||
+        !ts.isObjectLiteralExpression(decl.initializer)
+      ) {
         continue;
       }
       if (exportName) {
@@ -214,6 +224,20 @@ export function extractDemoDoc(sourceText, fileName, exportName) {
     return literalString(init, `${fileName} field "${field}"`);
   }
 
+  function optionalStringArray(field) {
+    const init = propertyInitializer(objectLiteral, field);
+    if (!init) return undefined;
+    if (!ts.isArrayLiteralExpression(init)) {
+      throw new Error(`${fileName}: field "${field}" must be an array literal`);
+    }
+    if (init.elements.length === 0) {
+      throw new Error(`${fileName}: field "${field}" must not be empty`);
+    }
+    return init.elements.map((element, index) =>
+      literalString(element, `${fileName} field "${field}"[${index}]`),
+    );
+  }
+
   function documentationString(value, context) {
     const screenOwnershipClaim =
       /\bproduct owner(?:ship)?\b/i.test(value) ||
@@ -235,9 +259,7 @@ export function extractDemoDoc(sourceText, fileName, exportName) {
   }
   const usage = usageInit.elements.map((element, index) => {
     if (!ts.isObjectLiteralExpression(element)) {
-      throw new Error(
-        `${fileName}: usage[${index}] must be an object literal`,
-      );
+      throw new Error(`${fileName}: usage[${index}] must be an object literal`);
     }
     const codeInit = propertyInitializer(element, "code");
     if (!codeInit) {
@@ -256,16 +278,26 @@ export function extractDemoDoc(sourceText, fileName, exportName) {
     const noteInit = propertyInitializer(element, "note");
     if (noteInit) {
       const context = `${fileName} usage[${index}].note`;
-      entry.note = documentationString(literalString(noteInit, context), context);
+      entry.note = documentationString(
+        literalString(noteInit, context),
+        context,
+      );
     }
     return entry;
   });
 
   const blurbContext = `${fileName} field "blurb"`;
   const calloutContext = `${fileName} field "callout"`;
+  const detailsContext = `${fileName} field "details"`;
   const propsNoteContext = `${fileName} field "propsNote"`;
   const callout = optionalString("callout");
+  const details = optionalStringArray("details");
   const propsNote = optionalString("propsNote");
+  if (callout !== undefined && sentenceCount(callout) !== 1) {
+    throw new Error(
+      `${calloutContext}: info callouts must contain exactly one sentence; move supporting prose to "details"`,
+    );
+  }
   return {
     id: requiredString("id"),
     title: requiredString("title"),
@@ -274,6 +306,9 @@ export function extractDemoDoc(sourceText, fileName, exportName) {
       callout === undefined
         ? undefined
         : documentationString(callout, calloutContext),
+    details: details?.map((paragraph) =>
+      documentationString(paragraph, detailsContext),
+    ),
     propsNote:
       propsNote === undefined
         ? undefined
@@ -305,7 +340,9 @@ function codeSpan(text) {
   const content = String(text ?? "");
   if (content.length === 0) return "";
   const runs = content.match(/`+/g);
-  const fence = "`".repeat(runs ? Math.max(...runs.map((r) => r.length)) + 1 : 1);
+  const fence = "`".repeat(
+    runs ? Math.max(...runs.map((r) => r.length)) + 1 : 1,
+  );
   const pad = content.startsWith("`") || content.endsWith("`") ? " " : "";
   return `${fence}${pad}${content}${pad}${fence}`;
 }
@@ -327,9 +364,25 @@ function typeCell(prop) {
 
 /** First sentence of a blurb, for the one-line index summary. */
 export function firstSentence(text) {
-  const collapsed = String(text ?? "").replace(/\s+/g, " ").trim();
+  const collapsed = String(text ?? "")
+    .replace(/\s+/g, " ")
+    .trim();
   const match = collapsed.match(/^.*?[.!?](?=\s|$)/);
   return match ? match[0] : collapsed;
+}
+
+/** Count human-readable sentences using the platform's locale-aware segmenter. */
+export function sentenceCount(text) {
+  // Segmenter treats a capitalized word after these abbreviations as a new
+  // sentence. Mask their periods only in the temporary analysis string.
+  const normalized = String(text ?? "").replace(
+    /\b(?:e\.g|i\.e|vs|Dr|Mr|Mrs|Ms|Prof|Sr|Jr|Fig)\./gi,
+    (abbreviation) => abbreviation.replaceAll(".", "_"),
+  );
+  const segmenter = new Intl.Segmenter("en", { granularity: "sentence" });
+  return [...segmenter.segment(normalized)].filter(
+    ({ segment }) => segment.trim().length > 0,
+  ).length;
 }
 
 const GENERATED_HEADER = (id) =>
@@ -361,6 +414,10 @@ export function renderComponentMarkdown(doc, props, consumerCount) {
   if (doc.callout) {
     lines.push("");
     lines.push(`> **Guidance:** ${doc.callout}`);
+  }
+  for (const paragraph of doc.details ?? []) {
+    lines.push("");
+    lines.push(paragraph);
   }
 
   lines.push("");
@@ -484,7 +541,8 @@ export function spliceGeneratedIndex(skillText, indexMarkdown) {
  */
 export function extractTokenNotes(cssText) {
   const notes = new Map();
-  const lineRe = /^\s*--([a-zA-Z0-9_-]+)\s*:[^;]*;[ \t]*\/\*\s*(.+?)\s*\*\/\s*$/;
+  const lineRe =
+    /^\s*--([a-zA-Z0-9_-]+)\s*:[^;]*;[ \t]*\/\*\s*(.+?)\s*\*\/\s*$/;
   for (const line of cssText.split("\n")) {
     const match = line.match(lineRe);
     if (!match) continue;
@@ -618,7 +676,7 @@ export function renderTokensMarkdown(tokens, notes) {
   lines.push("# Cumulus design tokens");
   lines.push("");
   lines.push(
-    "Every visual value in UI code — spacing, color, type, radius, shadow, motion — comes from this vocabulary. In Cumulus TS/TSX reference a token with `token(\"--name\")` (`src/cumulus/primitives/tokens.ts`, typed; returns the `var(--name)` string); in CSS write `var(--name)`. Tokens apply within the `.cumulus` subtree. Pick tokens by *role*, not by value; when no role fits, raise a token-system change instead of writing a literal. Policy: SKILL.md, \"Tokens\" section.",
+    'Every visual value in UI code — spacing, color, type, radius, shadow, motion — comes from this vocabulary. In Cumulus TS/TSX reference a token with `token("--name")` (`src/cumulus/primitives/tokens.ts`, typed; returns the `var(--name)` string); in CSS write `var(--name)`. Tokens apply within the `.cumulus` subtree. Pick tokens by *role*, not by value; when no role fits, raise a token-system change instead of writing a literal. Policy: SKILL.md, "Tokens" section.',
   );
 
   const orderedTitles = [
@@ -694,7 +752,11 @@ export function computeDocOutputs() {
   for (const doc of docs) {
     files.set(
       join(COMPONENTS_OUT_DIR, `${doc.id}.md`),
-      renderComponentMarkdown(doc, metadata[doc.docName], countByTitle.get(doc.title)),
+      renderComponentMarkdown(
+        doc,
+        metadata[doc.docName],
+        countByTitle.get(doc.title),
+      ),
     );
   }
 

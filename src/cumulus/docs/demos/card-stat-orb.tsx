@@ -15,7 +15,9 @@ function CardStatOrbDemo(args: Record<string, unknown>) {
         typeof args.numberSizeVar === "string" ? args.numberSizeVar : "22px"
       }
       numberCapPx={typeof args.numberCapPx === "number" ? args.numberCapPx : 22}
-      ariaLabel={typeof args.ariaLabel === "string" ? args.ariaLabel : undefined}
+      ariaLabel={
+        typeof args.ariaLabel === "string" ? args.ariaLabel : undefined
+      }
       changeBadge={
         args.changeBadge === "empowered" || args.changeBadge === "kindled"
           ? args.changeBadge
@@ -30,8 +32,10 @@ export const cardStatOrbDemo: CumulusComponent = {
   title: "Card Stat Orb",
   blurb:
     "The card-corner resource stat: a fitted white numeral over the energy, spark, or Dreamwell-energy glyph, with an optional monochrome transfiguration badge.",
-  callout:
-    "Changed numerals stay white. The hammer matches the Transfiguration site's atlas icon; the 30px design-size badge intersects the mark's lower-right edge and scales with it.",
+  callout: "Changed numerals stay white.",
+  details: [
+    "The hammer matches the Transfiguration site's atlas icon; the 30px design-size badge intersects the mark's lower-right edge and scales with it.",
+  ],
   group: "Components",
   docName: "CardStatOrb",
   Component: CardStatOrbDemo,

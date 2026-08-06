@@ -93,7 +93,10 @@ export const dreamAvatarStageDemo: CumulusComponent = {
   blurb:
     "The full-body DreamAvatar art layer for a caller-owned stage: `standing` adds a low ambient glow, `cutout` preserves the underlying scene, and `fullBleed` supplies a cinematic backdrop and head-focused composition.",
   callout:
-    "Place this component inside a position-relative stage whose width, height, overflow, and placement belong to the caller. Use DreamAvatar Portrait for framed profile crops and semantic profile reveals.",
+    "Place this component inside a position-relative stage whose width, height, overflow, and placement belong to the caller.",
+  details: [
+    "Use DreamAvatar Portrait for framed profile crops and semantic profile reveals.",
+  ],
   group: "Components",
   docName: "DreamAvatarStage",
   Component: DreamAvatarStageDemo,

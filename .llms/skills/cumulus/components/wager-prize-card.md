@@ -10,7 +10,9 @@ Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
 The shared Gamble prize object: one playing-card superellipse with a draw target, an Essence reward with an optional Dreamsign, an optional whole-face Dreamsign reveal, and a committed-card reverse face.
 
-> **Guidance:** Keep the reward in one sentence. When a Dreamsign is present, the entire prize face is its hover and press reveal source.
+> **Guidance:** Keep the reward in one sentence.
+
+When a Dreamsign is present, the entire prize face is its hover and press reveal source.
 
 ## Props
 

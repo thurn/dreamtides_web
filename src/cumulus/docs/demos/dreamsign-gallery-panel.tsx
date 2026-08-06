@@ -10,7 +10,8 @@ const DEMO_DREAMSIGNS: DreamsignData[] = [
     name: "Amplified Acorn",
     imageName: "acorn_gold.png",
     imageAlt: "Golden fruit-like charm with a mesh-patterned orb.",
-    effectDescription: "Once per turn, when you discard a card, your next card this turn costs 2● less.",
+    effectDescription:
+      "Once per turn, when you discard a card, your next card this turn costs 2● less.",
     isNegative: false,
   },
   {
@@ -26,7 +27,8 @@ const DEMO_DREAMSIGNS: DreamsignData[] = [
     name: "Amanita",
     imageName: "amanita.png",
     imageAlt: "Red spotted mushroom with white flecks.",
-    effectDescription: "Once per turn, when an ally leaves play, your next character this turn costs 2● less.",
+    effectDescription:
+      "Once per turn, when an ally leaves play, your next character this turn costs 2● less.",
     isNegative: true,
   },
 ];
@@ -70,8 +72,10 @@ export const dreamsignGalleryPanelDemo: CumulusComponent = {
   title: "Dreamsign Gallery Panel",
   blurb:
     "The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art, essence captions, a close disc, and one bare-glyph end action.",
-  callout:
-    "Use this when Dreamsigns are the primary purchasable objects. The panel preserves the chrome-free Dreamsign material and shared InfoCard reveal while matching the Dream Market's gallery frame and direct-buy interaction.",
+  callout: "Use this when Dreamsigns are the primary purchasable objects.",
+  details: [
+    "The panel preserves the chrome-free Dreamsign material and shared InfoCard reveal while matching the Dream Market's gallery frame and direct-buy interaction.",
+  ],
   group: "Components",
   docName: "DreamsignGalleryPanel",
   Component: DreamsignGalleryPanelDemo,

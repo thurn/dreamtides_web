@@ -57,7 +57,11 @@ const PLACEMENTS: Record<AtlasFixtureRole, Placement> = {
 };
 
 /** Forward connectors between the placed nodes, one per AtlasEdge treatment. */
-const EDGES: { from: AtlasFixtureRole; to: AtlasFixtureRole; kind: AtlasEdgeKind }[] = [
+const EDGES: {
+  from: AtlasFixtureRole;
+  to: AtlasFixtureRole;
+  kind: AtlasEdgeKind;
+}[] = [
   { from: "starter", to: "completed", kind: "traveled" },
   { from: "completed", to: "available", kind: "open" },
   { from: "completed", to: "forgone", kind: "dim" },
@@ -136,7 +140,10 @@ export const atlasMapDemo: CumulusComponent = {
   blurb:
     "The Dream Atlas map surface — the run graph of dreamscape nodes and their connectors, fitted into a fixed portrait design stage that uniformly scales to fit its container (letterboxed). It owns the `.dream-atlas` scope and the scale-to-fit while the placed view models decide the vertical layout (the starter anchors the bottom, the boss the top); each node reveals its detail through the shared InfoCard press engine — hover on desktop, press-down on touch.",
   callout:
-    "Use AtlasMap for a Dream Atlas run graph that follows its fixed stage, node model, and scale-to-fit contract. For other graph compositions, compose the lower-level AtlasNode and AtlasEdge components.",
+    "Use AtlasMap for a Dream Atlas run graph that follows its fixed stage, node model, and scale-to-fit contract.",
+  details: [
+    "For other graph compositions, compose the lower-level AtlasNode and AtlasEdge components.",
+  ],
   group: "Components",
   docName: "AtlasMap",
   Component: AtlasMapDemo,

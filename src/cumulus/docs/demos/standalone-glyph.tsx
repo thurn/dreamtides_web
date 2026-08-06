@@ -114,7 +114,10 @@ export const standaloneGlyphDemo: CumulusComponent = {
   blurb:
     "The Boxicons renderer for controls, badges, overlays, and card marks: a centered one-em square whose surrounding layout owns its size and placement.",
   callout:
-    "Use StandaloneGlyph when layout owns the mark's box; use InlineGlyph when a glyph participates in flowing text. Content-protection depth is reserved for marks painted over card or scene media.",
+    "Use StandaloneGlyph when layout owns the mark's box; use InlineGlyph when a glyph participates in flowing text.",
+  details: [
+    "Content-protection depth is reserved for marks painted over card or scene media.",
+  ],
   group: "Primitives",
   docName: "StandaloneGlyph",
   Component: StandaloneGlyphDemo,

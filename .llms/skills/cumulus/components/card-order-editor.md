@@ -10,7 +10,9 @@ Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
 A surface-aware, identity-safe drag-to-reorder control for the battle deck-order workflow, with arrow-key reordering on each drag handle.
 
-> **Guidance:** Use the default on scene media and dark standalone surfaces. Set placement to onGlass inside GlassPanel, GlassDialog, or DeveloperRail so the editor uses its lighter nested-glass treatment.
+> **Guidance:** Use the default on scene media and dark standalone surfaces.
+
+Set placement to onGlass inside GlassPanel, GlassDialog, or DeveloperRail so the editor uses its lighter nested-glass treatment.
 
 ## Props
 

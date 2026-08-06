@@ -10,7 +10,9 @@ Real consumers: **19** (imports outside `src/cumulus/docs/` and tests).
 
 The persistent, non-modal, content-hugging liquid-glass container: an optional structured header, a composed body, and an optional footer on the canonical floating material.
 
-> **Guidance:** Use this for persistent, non-modal titled content that floats over scene art; use GlassDialog when the user must dismiss or complete a modal interruption before returning to the screen. An X icon is discouraged for a desktop panel. Prefer a labeled action whose copy states the specific intent, such as Leave on a shop screen. Floating panels always hug their header, body, and footer; unassigned interior whitespace is not allowed. Do not give the panel or its slots a decorative height, flex growth, or spacer that separates content. Cap an overflowing body with max-height and scrolling instead. Width and placement belong to the caller's wrapper. Edge-rail and full-bleed frames own their bounded height through those named frame contracts.
+> **Guidance:** Use this for persistent, non-modal titled content that floats over scene art; use GlassDialog when the user must dismiss or complete a modal interruption before returning to the screen.
+
+An X icon is discouraged for a desktop panel. Prefer a labeled action whose copy states the specific intent, such as Leave on a shop screen. Floating panels always hug their header, body, and footer; unassigned interior whitespace is not allowed. Do not give the panel or its slots a decorative height, flex growth, or spacer that separates content. Cap an overflowing body with max-height and scrolling instead. Width and placement belong to the caller's wrapper. Edge-rail and full-bleed frames own their bounded height through those named frame contracts.
 
 ## Props
 

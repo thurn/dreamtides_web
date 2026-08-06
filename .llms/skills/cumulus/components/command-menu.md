@@ -10,7 +10,9 @@ Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 
 The single command offering: one strict model renders fixed app-chrome commands or card and pointer actions through the same typed hierarchy.
 
-> **Guidance:** Use the appChrome model for journey chrome and the context model for an activated target. Use Select for value choice, DisclosureSection for reading flow, and InfoCard for entity reveals.
+> **Guidance:** Use the appChrome model for journey chrome and the context model for an activated target.
+
+Use Select for value choice, DisclosureSection for reading flow, and InfoCard for entity reveals.
 
 ## Props
 

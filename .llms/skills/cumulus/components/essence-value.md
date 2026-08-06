@@ -10,7 +10,9 @@ Real consumers: **12** (imports outside `src/cumulus/docs/` and tests).
 
 The canonical Essence amount: a tight inline value for player-facing currency text, with a named solid reward badge for values placed over art.
 
-> **Guidance:** Use the inline presentation in flowing copy and controls. The reward badge is reserved for an Essence gain attached directly to reward art.
+> **Guidance:** Use the inline presentation in flowing copy and controls.
+
+The reward badge is reserved for an Essence gain attached directly to reward art.
 
 ## Props
 

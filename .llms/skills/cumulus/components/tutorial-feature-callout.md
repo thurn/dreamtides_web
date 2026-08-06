@@ -10,7 +10,9 @@ Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
 A compact speech-inspired glass label for teaching one semantic region of a full GameCard, with canonical energy and spark glyph treatments.
 
-> **Guidance:** Use beside a full GameCard with a leader line whose endpoint is measured from the rendered card region. CardFeatureCallout provides the card-language labels, resource colors, and popover material; place the callout and leader line in the surrounding layout.
+> **Guidance:** Use beside a full GameCard with a leader line whose endpoint is measured from the rendered card region.
+
+CardFeatureCallout provides the card-language labels, resource colors, and popover material; place the callout and leader line in the surrounding layout.
 
 ## Props
 

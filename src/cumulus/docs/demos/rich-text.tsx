@@ -40,7 +40,10 @@ export const richTextDemo: CumulusComponent = {
   blurb:
     "The design system's model for formatted copy. The caller describes what the text is — plain prose, Dreamtides rules text with glossary-keyword emphasis and inline resource glyphs, an underlined subject, a compact definition list, a muted note, or a stack of parts — and the renderer owns how it looks. Copy slots take a RichText, never an arbitrary node.",
   callout:
-    "Build values with the `richText` constructors — `richText.plain`, `richText.rules`, `richText.underline`, `richText.definitions`, `richText.note`, and `richText.stack` — and hand them to a copy slot (like `InfoCard.body`); reach for `RichTextView` only to render a standalone value inline. Definition rows use their term and colon by default; set `termPresentation: \"definitionOnly\"` when the authored sentence carries its own symbol and context. Use underline only for a semantically named subject, not general emphasis.",
+    "Build values with the `richText` constructors — `richText.plain`, `richText.rules`, `richText.underline`, `richText.definitions`, `richText.note`, and `richText.stack` — and hand them to a copy slot (like `InfoCard.body`); reach for `RichTextView` only to render a standalone value inline.",
+  details: [
+    'Definition rows use their term and colon by default; set `termPresentation: "definitionOnly"` when the authored sentence carries its own symbol and context. Use underline only for a semantically named subject, not general emphasis.',
+  ],
   group: "Components",
   docName: "RichTextView",
   Component: RichTextViewDemo,

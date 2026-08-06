@@ -16,7 +16,8 @@ export const cardBackDemo: CumulusComponent = {
   blurb:
     "The canonical face-down Dreamtides card object: the shipped card-back sprite on the shared 5:7 card geometry, with fixed crop, edge, and elevation.",
   callout:
-    "CardBack owns its appearance and takes only an accessible label plus an optional test id. Size and place it through a wrapper.",
+    "CardBack owns its appearance and takes only an accessible label plus an optional test id.",
+  details: ["Size and place it through a wrapper."],
   group: "Components",
   docName: "CardBack",
   Component: CardBackDemo,

@@ -44,9 +44,7 @@ function CardChoiceGridDemo() {
                   selected: selected === card.id,
                   selectionColor: "accent-bright" as const,
                   operation:
-                    selected === card.id
-                      ? DEMO_OPERATIONS[index]
-                      : undefined,
+                    selected === card.id ? DEMO_OPERATIONS[index] : undefined,
                 },
               ];
         }),
@@ -74,8 +72,10 @@ export const cardChoiceGridDemo: CumulusComponent = {
   title: "Card Choice Grid",
   blurb:
     "A frameless, responsive grid for presenting resolved GameCards as choices inside an existing site or panel surface.",
-  callout:
-    "Use this inside an existing material and chrome surface. Choose a named site fit and column count; use Card Gallery Panel when the card collection needs its own title, controls, scrolling, or glass frame.",
+  callout: "Use this inside an existing material and chrome surface.",
+  details: [
+    "Choose a named site fit and column count; use Card Gallery Panel when the card collection needs its own title, controls, scrolling, or glass frame.",
+  ],
   group: "Components",
   docName: "CardChoiceGrid",
   Component: CardChoiceGridDemo,

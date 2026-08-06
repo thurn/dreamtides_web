@@ -10,7 +10,9 @@ Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 
 A frameless, responsive grid for presenting resolved GameCards as choices inside an existing site or panel surface.
 
-> **Guidance:** Use this inside an existing material and chrome surface. Choose a named site fit and column count; use Card Gallery Panel when the card collection needs its own title, controls, scrolling, or glass frame.
+> **Guidance:** Use this inside an existing material and chrome surface.
+
+Choose a named site fit and column count; use Card Gallery Panel when the card collection needs its own title, controls, scrolling, or glass frame.
 
 ## Props
 

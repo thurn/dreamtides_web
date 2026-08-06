@@ -50,6 +50,7 @@ const stickyNavStyle: React.CSSProperties = {
 function Callout({ text }: { text: string }) {
   return (
     <div
+      data-cumulus-doc-callout=""
       style={{
         display: "flex",
         gap: token("--space-xs"),
@@ -64,7 +65,11 @@ function Callout({ text }: { text: string }) {
       <i
         className="bxf bx-info-circle"
         aria-hidden="true"
-        style={{ color: token("--accent-bright"), fontSize: 18, lineHeight: 1.4 }}
+        style={{
+          color: token("--accent-bright"),
+          fontSize: 18,
+          lineHeight: 1.4,
+        }}
       />
       <p
         style={{
@@ -79,11 +84,39 @@ function Callout({ text }: { text: string }) {
   );
 }
 
+function Details({ paragraphs }: { paragraphs: readonly string[] }) {
+  return (
+    <div
+      data-cumulus-doc-details=""
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: token("--space-m"),
+        marginTop: token("--space-m"),
+        maxWidth: "64ch",
+      }}
+    >
+      {paragraphs.map((paragraph) => (
+        <p
+          key={paragraph}
+          style={{
+            margin: 0,
+            font: token("--t-body"),
+            color: token("--text-secondary"),
+          }}
+        >
+          {paragraph}
+        </p>
+      ))}
+    </div>
+  );
+}
+
 export function ComponentPage({ id }: { id: string }) {
   const entry = getComponent(id);
-  const [args, setArgs] = useState<Record<string, unknown>>(
-    () => ({ ...entry?.demo.defaultArgs }),
-  );
+  const [args, setArgs] = useState<Record<string, unknown>>(() => ({
+    ...entry?.demo.defaultArgs,
+  }));
 
   if (!entry) {
     return (
@@ -101,7 +134,13 @@ export function ComponentPage({ id }: { id: string }) {
   const metas = metasFor(entry.docName);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: token("--space-3xl") }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: token("--space-3xl"),
+      }}
+    >
       <nav style={stickyNavStyle}>
         <a
           href="#/"
@@ -112,7 +151,10 @@ export function ComponentPage({ id }: { id: string }) {
         {hasMockup(entry.id) && (
           <a
             href={`#/${entry.id}/mockup`}
-            style={{ font: token("--t-caption"), color: token("--accent-bright") }}
+            style={{
+              font: token("--t-caption"),
+              color: token("--accent-bright"),
+            }}
           >
             View full-screen mockup →
           </a>
@@ -120,7 +162,13 @@ export function ComponentPage({ id }: { id: string }) {
       </nav>
 
       <header>
-        <h1 style={{ font: token("--t-title"), color: token("--text-primary"), margin: 0 }}>
+        <h1
+          style={{
+            font: token("--t-title"),
+            color: token("--text-primary"),
+            margin: 0,
+          }}
+        >
           {entry.title}
         </h1>
         {entry.status === "incubating" && (
@@ -149,35 +197,37 @@ export function ComponentPage({ id }: { id: string }) {
           {entry.blurb}
         </p>
         {entry.callout != null && <Callout text={entry.callout} />}
-        {entry.relatedSystems !== undefined && entry.relatedSystems.length > 0 && (
-          <div
-            data-cumulus-related-systems=""
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: token("--space-xs"),
-              flexWrap: "wrap",
-              marginTop: token("--space-m"),
-              font: token("--t-body-sm"),
-              color: token("--text-muted"),
-            }}
-          >
-            <span>Related UI system:</span>
-            {entry.relatedSystems.map((systemId) => {
-              const system = getUISystem(systemId);
-              return system === undefined ? null : (
-                <a
-                  key={systemId}
-                  data-related-system={systemId}
-                  href={`#/systems/${systemId}`}
-                  style={{ color: token("--accent-bright") }}
-                >
-                  {system.title} →
-                </a>
-              );
-            })}
-          </div>
-        )}
+        {entry.details !== undefined && <Details paragraphs={entry.details} />}
+        {entry.relatedSystems !== undefined &&
+          entry.relatedSystems.length > 0 && (
+            <div
+              data-cumulus-related-systems=""
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: token("--space-xs"),
+                flexWrap: "wrap",
+                marginTop: token("--space-m"),
+                font: token("--t-body-sm"),
+                color: token("--text-muted"),
+              }}
+            >
+              <span>Related UI system:</span>
+              {entry.relatedSystems.map((systemId) => {
+                const system = getUISystem(systemId);
+                return system === undefined ? null : (
+                  <a
+                    key={systemId}
+                    data-related-system={systemId}
+                    href={`#/systems/${systemId}`}
+                    style={{ color: token("--accent-bright") }}
+                  >
+                    {system.title} →
+                  </a>
+                );
+              })}
+            </div>
+          )}
       </header>
 
       <div className="cumulus-component-page__layout">

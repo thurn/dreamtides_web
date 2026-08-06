@@ -18,8 +18,8 @@ function InlineGlyphDemo(args: Record<string, unknown>) {
       }}
     >
       A capital X
-      <InlineGlyph glyph={glyph} color={color} label={label} />
-      {" "}and its inline glyph share one exact visual center.
+      <InlineGlyph glyph={glyph} color={color} label={label} /> and its inline
+      glyph share one exact visual center.
     </p>
   );
 }
@@ -30,7 +30,10 @@ export const inlineGlyphDemo: CumulusComponent = {
   blurb:
     "The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's capital height at every type size.",
   callout:
-    "InlineGlyph owns a protected inline formatting context: its outer shell absorbs flex or grid blockification while its inner metric box remains centered on the surrounding font's capital height. It adds no surrounding whitespace: callers include an explicit JSX space when prose continues after it, while punctuation stays adjacent. Callers may wrap it for white-space or layout, but cannot pass className or style overrides into the component.",
+    "InlineGlyph owns a protected inline formatting context: its outer shell absorbs flex or grid blockification while its inner metric box remains centered on the surrounding font's capital height.",
+  details: [
+    "It adds no surrounding whitespace: callers include an explicit JSX space when prose continues after it, while punctuation stays adjacent. Callers may wrap it for white-space or layout, but cannot pass className or style overrides into the component.",
+  ],
   group: "Primitives",
   docName: "InlineGlyph",
   Component: InlineGlyphDemo,

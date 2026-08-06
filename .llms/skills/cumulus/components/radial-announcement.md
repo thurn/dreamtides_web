@@ -10,7 +10,9 @@ Real consumers: **4** (imports outside `src/cumulus/docs/` and tests).
 
 The single orbiting circular status system for scene announcements, card scoring, merge targets, and terminal victory.
 
-> **Guidance:** Use a strict named variant for every orbiting circular status moment. Each enum branch owns its established production choreography—including the card-attached scoring travel—while callers only place it in the relevant scene or card context.
+> **Guidance:** Use a strict named variant for every orbiting circular status moment.
+
+Each enum branch owns its established production choreography—including the card-attached scoring travel—while callers only place it in the relevant scene or card context.
 
 ## Props
 

@@ -41,8 +41,11 @@ component past its typed surface is not an available move at all (see
 
 The reference files and the index are projections of the component sources
 (prop JSDoc via `npm run cumulus-metadata`, prose via the demo entries in
-`src/cumulus/docs/demos/`). Regenerate with `npm run cumulus-docs` (included in
-`npm run regenerate-assets`); edit the sources, never the generated files.
+`src/cumulus/docs/demos/`). A demo's tinted `callout` is exactly one sentence;
+put longer guidance into its `details` paragraph array so the live page and
+generated reference keep the explanation readable below the callout. Regenerate
+with `npm run cumulus-docs` (included in `npm run regenerate-assets`); edit the
+sources, never the generated files.
 
 Component documentation describes reusable visual roles, typed props, and
 component-local constraints. UI-system documentation describes contracts that
@@ -477,7 +480,7 @@ the panel leaves no residue in the tree.
    generated from those comments, so the prop comment is the primary
    documentation surface.
 2. Add or update the demo entry in `src/cumulus/docs/demos/<id>.tsx` (blurb,
-   callout guidance, usage snippets) and register it in
+   one-sentence callout, supporting `details`, usage snippets) and register it in
    `src/cumulus/docs/registry.ts`. Keep doc fields as plain string literals —
    the docs generator extracts them statically.
 3. Run `npm run cumulus-metadata && npm run cumulus-docs` (or

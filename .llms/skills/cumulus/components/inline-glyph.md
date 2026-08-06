@@ -10,7 +10,9 @@ Real consumers: **12** (imports outside `src/cumulus/docs/` and tests).
 
 The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's capital height at every type size.
 
-> **Guidance:** InlineGlyph owns a protected inline formatting context: its outer shell absorbs flex or grid blockification while its inner metric box remains centered on the surrounding font's capital height. It adds no surrounding whitespace: callers include an explicit JSX space when prose continues after it, while punctuation stays adjacent. Callers may wrap it for white-space or layout, but cannot pass className or style overrides into the component.
+> **Guidance:** InlineGlyph owns a protected inline formatting context: its outer shell absorbs flex or grid blockification while its inner metric box remains centered on the surrounding font's capital height.
+
+It adds no surrounding whitespace: callers include an explicit JSX space when prose continues after it, while punctuation stays adjacent. Callers may wrap it for white-space or layout, but cannot pass className or style overrides into the component.
 
 ## Props
 

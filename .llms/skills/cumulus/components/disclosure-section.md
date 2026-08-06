@@ -10,7 +10,9 @@ Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
 
 A controlled, surface-aware Cumulus section for progressively revealing dense secondary information.
 
-> **Guidance:** Use the default on scene media and dark standalone surfaces. Set placement to onGlass inside GlassPanel, GlassDialog, or DeveloperRail so the section uses its lighter nested-glass treatment.
+> **Guidance:** Use the default on scene media and dark standalone surfaces.
+
+Set placement to onGlass inside GlassPanel, GlassDialog, or DeveloperRail so the section uses its lighter nested-glass treatment.
 
 ## Props
 

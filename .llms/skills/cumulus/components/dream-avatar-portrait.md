@@ -10,7 +10,9 @@ Real consumers: **16** (imports outside `src/cumulus/docs/` and tests).
 
 The shared framed DreamAvatar profile surface: a square `panel` crop for profile cards and popovers, or a close `thumb` crop for HUD rows and resident lists. Both render the transparent cutout over the canonical opaque portrait field and fall back to a monogram when art is unavailable.
 
-> **Guidance:** The portrait always fills its caller-owned wrapper. Put width, flex behavior, and placement on that wrapper; the component owns only its frame chrome and crop. Use DreamAvatar Stage for full-body scene art.
+> **Guidance:** The portrait always fills its caller-owned wrapper.
+
+Put width, flex behavior, and placement on that wrapper; the component owns only its frame chrome and crop. Use DreamAvatar Stage for full-body scene art.
 
 ## Props
 

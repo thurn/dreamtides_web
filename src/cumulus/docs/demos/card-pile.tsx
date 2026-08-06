@@ -27,7 +27,11 @@ function CardPileDemo() {
   const width = 152;
   return (
     <div
-      style={{ display: "flex", alignItems: "center", gap: token("--space-3xl") }}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: token("--space-3xl"),
+      }}
     >
       <div style={{ width }}>
         <CardPile
@@ -69,7 +73,10 @@ export const cardPileDemo: CumulusComponent = {
   blurb:
     "A physical deck or void stack built from structured, topmost-first card instances. It shows at most three slightly offset layers and rests sideways as one fixed object.",
   callout:
-    "Pass stable battle-card instance ids so the shared layout identity can carry each card continuously between zones. Face-up entries can reveal their card or remain inactive beneath one pile-level activation; face-down entries resolve through CardBack.",
+    "Pass stable battle-card instance ids so the shared layout identity can carry each card continuously between zones.",
+  details: [
+    "Face-up entries can reveal their card or remain inactive beneath one pile-level activation; face-down entries resolve through CardBack.",
+  ],
   group: "Components",
   docName: "CardPile",
   Component: CardPileDemo,

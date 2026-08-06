@@ -10,7 +10,9 @@ Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 
 The card-corner resource stat: a fitted white numeral over the energy, spark, or Dreamwell-energy glyph, with an optional monochrome transfiguration badge.
 
-> **Guidance:** Changed numerals stay white. The hammer matches the Transfiguration site's atlas icon; the 30px design-size badge intersects the mark's lower-right edge and scales with it.
+> **Guidance:** Changed numerals stay white.
+
+The hammer matches the Transfiguration site's atlas icon; the 30px design-size badge intersects the mark's lower-right edge and scales with it.
 
 ## Props
 

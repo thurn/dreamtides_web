@@ -10,7 +10,9 @@ Real consumers: **20** (imports outside `src/cumulus/docs/` and tests).
 
 The Boxicons renderer for controls, badges, overlays, and card marks: a centered one-em square whose surrounding layout owns its size and placement.
 
-> **Guidance:** Use StandaloneGlyph when layout owns the mark's box; use InlineGlyph when a glyph participates in flowing text. Content-protection depth is reserved for marks painted over card or scene media.
+> **Guidance:** Use StandaloneGlyph when layout owns the mark's box; use InlineGlyph when a glyph participates in flowing text.
+
+Content-protection depth is reserved for marks painted over card or scene media.
 
 ## Props
 

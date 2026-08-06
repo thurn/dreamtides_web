@@ -98,12 +98,16 @@ export interface CumulusComponent {
    */
   blurb: string;
   /**
-   * Optional guidance admonition shown under the blurb on the component's doc
-   * page — steers the reader before they use it (e.g. "prefer a higher-level
-   * component before reaching for this primitive"). Omit when the blurb says
-   * enough.
+   * Optional one-sentence guidance admonition shown under the blurb on the
+   * component's doc page. Keep the tinted callout scannable; put supporting
+   * explanation in `details`.
    */
   callout?: string;
+  /**
+   * Optional supporting paragraphs shown as ordinary prose immediately below
+   * the callout. Each array item is one authored paragraph.
+   */
+  details?: readonly string[];
   /**
    * Optional clarification shown immediately above the generated props table.
    * Use this for contracts the flattened docgen table cannot express, such as

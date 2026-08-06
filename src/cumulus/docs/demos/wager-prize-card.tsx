@@ -12,11 +12,7 @@ const SAMPLE_DREAMSIGN: DreamsignData = {
   isNegative: false,
 };
 
-function WagerPrizeCardDemo({
-  revealed = false,
-}: {
-  revealed?: boolean;
-}) {
+function WagerPrizeCardDemo({ revealed = false }: { revealed?: boolean }) {
   return (
     <WagerPrizeCard
       prizeId="jack"
@@ -34,8 +30,10 @@ export const wagerPrizeCardDemo: CumulusComponent = {
   title: "Wager Prize Card",
   blurb:
     "The shared Gamble prize object: one playing-card superellipse with a draw target, an Essence reward with an optional Dreamsign, an optional whole-face Dreamsign reveal, and a committed-card reverse face.",
-  callout:
-    "Keep the reward in one sentence. When a Dreamsign is present, the entire prize face is its hover and press reveal source.",
+  callout: "Keep the reward in one sentence.",
+  details: [
+    "When a Dreamsign is present, the entire prize face is its hover and press reveal source.",
+  ],
   group: "Components",
   docName: "WagerPrizeCard",
   Component: WagerPrizeCardDemo,

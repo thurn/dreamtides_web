@@ -10,7 +10,9 @@ Real consumers: **4** (imports outside `src/cumulus/docs/` and tests).
 
 The canonical face-down Dreamtides card object: the shipped card-back sprite on the shared 5:7 card geometry, with fixed crop, edge, and elevation.
 
-> **Guidance:** CardBack owns its appearance and takes only an accessible label plus an optional test id. Size and place it through a wrapper.
+> **Guidance:** CardBack owns its appearance and takes only an accessible label plus an optional test id.
+
+Size and place it through a wrapper.
 
 ## Props
 

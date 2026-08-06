@@ -20,7 +20,10 @@ export const tutorialFeatureCalloutDemo: CumulusComponent = {
   blurb:
     "A compact speech-inspired glass label for teaching one semantic region of a full GameCard, with canonical energy and spark glyph treatments.",
   callout:
-    "Use beside a full GameCard with a leader line whose endpoint is measured from the rendered card region. CardFeatureCallout provides the card-language labels, resource colors, and popover material; place the callout and leader line in the surrounding layout.",
+    "Use beside a full GameCard with a leader line whose endpoint is measured from the rendered card region.",
+  details: [
+    "CardFeatureCallout provides the card-language labels, resource colors, and popover material; place the callout and leader line in the surrounding layout.",
+  ],
   group: "Components",
   docName: "TutorialFeatureCallout",
   Component: TutorialFeatureCalloutDemo,

@@ -71,7 +71,10 @@ export const segmentedControlDemo: CumulusComponent = {
   blurb:
     "The compact tab and filter switch used for type filters, sort direction, and small mode toggles. Its surface is the shared glass control material — the same one Select renders from — so a filter and a sort dropdown side by side read as one cluster.",
   callout:
-    "Use this compact control for small, mutually exclusive filters, sort directions, or modes. The shared liquid-glass track and neutral frosted selection pair cleanly with adjacent Select controls.",
+    "Use this compact control for small, mutually exclusive filters, sort directions, or modes.",
+  details: [
+    "The shared liquid-glass track and neutral frosted selection pair cleanly with adjacent Select controls.",
+  ],
   group: "Components",
   docName: "SegmentedControl",
   Component: SegmentedControlDemo,
