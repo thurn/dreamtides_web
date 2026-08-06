@@ -695,7 +695,6 @@ export function transformExplorationData(source) {
       id: dreamsign.id,
       name: dreamsign.name,
       effectDescription: dreamsign.renderedText ?? "",
-      isNegative: false,
     };
   });
   const encounters = (source.encounter ?? []).map((rawEncounter) => {

@@ -20,8 +20,8 @@ import { CumulusRoot } from "../../CumulusRoot";
  *
  * The tile renders the dreamsign's `imageName` artwork (from
  * `/dreamsigns/<imageName>`) inside a sized square with no chrome — the art
- * floats on the media — conveys a negative Dreamsign via a desaturation filter, and reveals
- * its full name + effect text through the shared InfoCard `object` variant.
+ * floats on the media — and reveals its full name + effect text through the
+ * shared InfoCard `object` variant.
  * jsdom exposes no `matchMedia`, so the reveal coordinator treats it as a coarse
  * pointer: a press-down reveals the card.
  */
@@ -33,7 +33,6 @@ function makeDreamsign(
     name: overrides.name,
     effectDescription:
       overrides.effectDescription ?? `${overrides.name} effect.`,
-    isNegative: overrides.isNegative ?? false,
     imageName: overrides.imageName,
     imageAlt: overrides.imageAlt,
     id: overrides.id ?? "00000000-0000-4000-8000-000000000031",
@@ -198,38 +197,10 @@ describe("Dreamsign", () => {
     });
   });
 
-  it("desaturates negative Dreamsigns and renders no tile chrome", () => {
-    const sign = makeDreamsign({
-      name: "Skull",
-      imageName: "skull.png",
-      isNegative: true,
-    });
-
-    const { container, root } = mountInto(
-      <Dreamsign dreamsign={sign} sizePx={48} />,
-    );
-
-    const tile = container.querySelector<HTMLElement>(
-      '[data-testid="dreamsign-art-tile"]',
-    );
-    expect(tile).not.toBeNull();
-    expect(tile?.dataset.isNegative).toBe("true");
-    // Negative art is desaturated so the warning reads before the art does.
-    expect(tile?.style.filter).toContain("grayscale");
-    // The art floats on the media with no chrome: no border or background.
-    expect(tile?.style.border).toBe("");
-    expect(tile?.style.background).toBe("");
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("renders boon dreamsigns with no grayscale and no tile chrome", () => {
+  it("renders dreamsigns with no tile chrome", () => {
     const sign = makeDreamsign({
       name: "Moonstone",
       imageName: "moonstone.png",
-      isNegative: false,
     });
 
     const { container, root } = mountInto(
@@ -239,9 +210,7 @@ describe("Dreamsign", () => {
     const tile = container.querySelector<HTMLElement>(
       '[data-testid="dreamsign-art-tile"]',
     );
-    expect(tile?.dataset.isNegative).toBe("false");
-    expect(tile?.style.filter).not.toContain("grayscale");
-    // No chrome: the boon art floats with no border or background.
+    // The art floats on the media with no border or background.
     expect(tile?.style.border).toBe("");
     expect(tile?.style.background).toBe("");
 
@@ -286,29 +255,6 @@ describe("Dreamsign", () => {
       '[data-testid="dreamsign-art-tile"]',
     );
     expect(tile?.style.filter).not.toContain("drop-shadow");
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("combines negative desaturation with the hud drop-shadow", () => {
-    const sign = makeDreamsign({
-      name: "Amanita",
-      imageName: "amanita.png",
-      isNegative: true,
-    });
-
-    const { container, root } = mountInto(
-      <Dreamsign dreamsign={sign} sizePx={36} variant="hud" />,
-    );
-
-    const tile = container.querySelector<HTMLElement>(
-      '[data-testid="dreamsign-art-tile"]',
-    );
-    // A negative Dreamsign docked in the HUD carries both signals in one filter.
-    expect(tile?.style.filter).toContain("grayscale");
-    expect(tile?.style.filter).toContain("drop-shadow");
 
     act(() => {
       root.unmount();

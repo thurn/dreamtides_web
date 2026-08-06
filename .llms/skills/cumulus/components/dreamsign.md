@@ -30,7 +30,6 @@ A dreamsign — a minor passive collectible — shown as its art floating on the
 | `effectDescription` | `string` | no |  |
 | `imageName` | `string` | yes |  |
 | `imageAlt` | `string` | yes |  |
-| `isNegative` | `boolean` | no |  |
 
 ## Usage
 

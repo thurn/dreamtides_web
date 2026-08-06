@@ -90,7 +90,6 @@ export function makeMerchantTestDreamsign(
     id: "held-sign",
     name: "Held Sign",
     effectDescription: "",
-    isNegative: false,
     ...overrides,
   };
 }

@@ -108,7 +108,6 @@ function captureAllDrafts(): EventDraft[] {
   void actions.addDreamsign("ds-1");
   void actions.removeDreamsign("ds-1");
   void actions.setDreamsignPool(["ds-1"]);
-  void actions.setDreamsignIsNegative("ds-1", true);
   void actions.setDraftState({});
   void actions.pickDraftCard(0, "card-1");
   void actions.rerollDraftOffer("site-1");

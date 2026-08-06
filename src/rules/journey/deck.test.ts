@@ -82,8 +82,8 @@ function stateWithDeck(): FoldState {
   });
 }
 
-function dreamsign(id: string, isNegative = false): Dreamsign {
-  return { id, name: "n", effectDescription: "e", isNegative };
+function dreamsign(id: string): Dreamsign {
+  return { id, name: "n", effectDescription: "e" };
 }
 
 /** A deterministic PRNG bound to a seed so a purge draw is reproducible. */
@@ -523,35 +523,6 @@ describe("dreamsigns", () => {
     expect(out.state.journey.remainingDreamsignPool).toEqual(["a", "b", "c"]);
   });
 
-  it("SET_DREAMSIGN_IS_NEGATIVE flips the flag on a matching id", () => {
-    const state = stateWith({ dreamsigns: [dreamsign("ds-1", false)] });
-    const out = reduce(state, "SET_DREAMSIGN_IS_NEGATIVE", {
-      dreamsignId: "ds-1",
-      isNegative: true,
-    });
-    expect(out.outcome).toBe("applied");
-    expect(out.state.journey.dreamsigns[0].isNegative).toBe(true);
-  });
-
-  it("replays the historical Dreamsign presentation event as negative", () => {
-    const state = stateWith({ dreamsigns: [dreamsign("ds-1")] });
-    const out = reduce(state, "SET_DREAMSIGN_IS_BANE", {
-      dreamsignId: "ds-1",
-      isBane: true,
-    });
-    expect(out.outcome).toBe("applied");
-    expect(out.state.journey.dreamsigns[0]?.isNegative).toBe(true);
-  });
-
-  it("SET_DREAMSIGN_IS_NEGATIVE bounces a missing id", () => {
-    const state = stateWith({ dreamsigns: [dreamsign("ds-1")] });
-    const out = reduce(state, "SET_DREAMSIGN_IS_NEGATIVE", {
-      dreamsignId: "ghost",
-      isNegative: true,
-    });
-    expect(out.outcome).toBe("bounced");
-    expect(out.state).toBe(state);
-  });
 });
 
 // ---------------------------------------------------------------------------

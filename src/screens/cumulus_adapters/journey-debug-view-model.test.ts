@@ -28,7 +28,7 @@ function state(): JourneyState {
     essence: 4,
     maxDreamsigns: 3,
     completionLevel: 2,
-    dreamsigns: [{ id: "sign-a", name: "Shared Sign", effectDescription: "Fixture", isNegative: false }],
+    dreamsigns: [{ id: "sign-a", name: "Shared Sign", effectDescription: "Fixture" }],
     deck: [
       { entryId: "entry-a", cardNumber: 1, transfiguration: null, isBane: false, statOverride: { energyCost: 0 } },
       { entryId: "nightmare", cardNumber: 10002, transfiguration: "Kindled", isBane: true },

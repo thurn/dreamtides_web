@@ -344,7 +344,6 @@ export interface BattleDreamsignSummary {
   effectDescription: Dreamsign["effectDescription"];
   imageName?: Dreamsign["imageName"];
   imageAlt?: Dreamsign["imageAlt"];
-  isNegative: Dreamsign["isNegative"];
 }
 
 export interface BattleInit {

@@ -233,11 +233,6 @@ export function CoopJourneyProvider({
         if (dreamsignId === undefined) return;
         dispatch(actions.removeDreamsign(dreamsignId));
       },
-      setDreamsignIsNegative: (index, isNegative) => {
-        const dreamsignId = stateRef.current.dreamsigns[index]?.id;
-        if (dreamsignId === undefined) return;
-        dispatch(actions.setDreamsignIsNegative(dreamsignId, isNegative));
-      },
       setRemainingDreamsignPool: (remainingDreamsignPool) =>
         dispatch(actions.setDreamsignPool(remainingDreamsignPool)),
 

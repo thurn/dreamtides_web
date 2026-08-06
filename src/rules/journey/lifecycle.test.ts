@@ -715,7 +715,6 @@ describe("LOAD_STATE", () => {
     ]);
     expect(loaded.journey.dreamsigns[0]).toMatchObject({
       id: "negative",
-      isNegative: true,
     });
   });
 

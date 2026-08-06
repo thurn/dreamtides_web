@@ -47,7 +47,6 @@ const RUNTIME: GravokWagerSiteRuntime = {
     id: "fixture-sign",
     name: "Fixture Sign",
     effectDescription: "A fixture effect.",
-    isNegative: false,
   },
   result: null,
 };
@@ -203,7 +202,6 @@ describe("gamble-site-view-model", () => {
           id: "held-sign",
           name: "Held Sign",
           effectDescription: "Held effect.",
-          isNegative: false,
         },
       ],
       siteRuntime: { [GAMBLE_SITE.id]: resultRuntime },

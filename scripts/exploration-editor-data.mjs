@@ -167,10 +167,9 @@ function readCatalogs(rootDir, paths, fileSystem) {
     cards,
     dreamsigns,
     runtimeCards: (cardsDocument.cards ?? []).map(transformCard),
-    runtimeDreamsigns: (dreamsignDocument.dreamsign ?? []).map((dreamsign) => ({
-      ...transformDreamsign(dreamsign),
-      isNegative: false,
-    })),
+    runtimeDreamsigns: (dreamsignDocument.dreamsign ?? []).map((dreamsign) =>
+      transformDreamsign(dreamsign),
+    ),
     subtypes,
   };
 }

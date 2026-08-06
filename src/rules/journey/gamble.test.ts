@@ -38,7 +38,6 @@ const REWARD_DREAMSIGN: Dreamsign = {
   id: "reward-sign",
   name: "Reward Sign",
   effectDescription: "Fixture effect.",
-  isNegative: false,
 };
 const ECONOMY = economyFixture();
 
@@ -268,7 +267,6 @@ describe("Gravok's Three-Gate Wager", () => {
       id: "held-sign",
       name: "Held Sign",
       effectDescription: "Held effect.",
-      isNegative: false,
     };
     const won = wager(
       stateWith("A", { maxDreamsigns: 1, dreamsigns: [held] }),
@@ -579,7 +577,6 @@ describe("Tidemark Ladder Climb", () => {
       id: "held-sign",
       name: "Held Sign",
       effectDescription: "Held effect.",
-      isNegative: false,
     };
     const drawn = drawLadder(
       ladderStateWith(

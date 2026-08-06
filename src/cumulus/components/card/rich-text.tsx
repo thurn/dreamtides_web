@@ -21,6 +21,22 @@ import {
 export type RichTextDefinitionSymbol =
   "fast" | "interrupt" | "exhaust" | "trigger";
 
+/** Canonical rules-text token for a structured definition symbol. */
+export function richTextDefinitionSymbolText(
+  symbol: RichTextDefinitionSymbol,
+): string {
+  switch (symbol) {
+    case "fast":
+      return "❖";
+    case "interrupt":
+      return "❖❖";
+    case "exhaust":
+      return "☾";
+    case "trigger":
+      return "▸";
+  }
+}
+
 export interface RichTextDefinition {
   /** Canonical glossary term used as the compact row label. */
   readonly term: string;

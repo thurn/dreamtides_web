@@ -666,7 +666,6 @@ export function buildEnemyDescriptor(
       effectDescription: template.effectDescription,
       imageName: template.imageName,
       imageAlt: template.imageAlt,
-      isNegative: false,
     }),
   );
 
@@ -941,7 +940,6 @@ function freezeBattleDreamsignSummary(
     effectDescription: dreamsign.effectDescription,
     imageName: dreamsign.imageName,
     imageAlt: dreamsign.imageAlt,
-    isNegative: dreamsign.isNegative,
   });
 }
 

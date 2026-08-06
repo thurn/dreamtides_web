@@ -60,7 +60,6 @@ beforeEach(() => {
     name: `Test Dreamsign ${String(index + 1)}`,
     effectDescription: "Keep watch over the lower corner.",
     imageName: "bell.png",
-    isNegative: false,
   }));
   vi.mocked(useJourney).mockReturnValue({
     state,

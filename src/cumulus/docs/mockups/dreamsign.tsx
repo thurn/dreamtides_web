@@ -21,7 +21,6 @@ const GALLERY: DreamsignData[] = [
     imageAlt: "Golden fruit-like charm with a mesh-patterned orb.",
     effectDescription:
       "Once per turn, when you discard a card, your next card this turn costs 2● less.",
-    isNegative: false,
   },
   {
     id: "278EC1AB-F532-4862-84AE-63DF5E49548C",
@@ -29,7 +28,6 @@ const GALLERY: DreamsignData[] = [
     imageName: "aertfact.png",
     imageAlt: "Blue-gray panel with bright red-orange branching nodes.",
     effectDescription: "The second character you play each turn costs 1● less.",
-    isNegative: false,
   },
   {
     id: "D1FDBE21-56F6-43C0-AAAC-1E4683964DA5",
@@ -38,7 +36,6 @@ const GALLERY: DreamsignData[] = [
     imageAlt: "A brass bell.",
     effectDescription:
       "When you play a character from your void, rematerialize it.",
-    isNegative: false,
   },
   {
     id: "49990864-1DB0-4C08-91AE-40A1F04223E4",
@@ -47,7 +44,6 @@ const GALLERY: DreamsignData[] = [
     imageAlt: "Green tangled algae fronds.",
     effectDescription:
       "Once per turn, when you draw a character, reduce its cost by 1● until end of turn.",
-    isNegative: false,
   },
   {
     id: "D2A916C1-321A-4AE3-9A50-0B7F13C5EFF6",
@@ -55,7 +51,6 @@ const GALLERY: DreamsignData[] = [
     imageName: "apple.png",
     imageAlt: "A polished red apple.",
     effectDescription: "You may play ❖ and ❖❖ events for 1●.",
-    isNegative: false,
   },
   {
     id: "6E20E6C7-295A-48B1-B252-B8B00D6902C9",
@@ -64,7 +59,6 @@ const GALLERY: DreamsignData[] = [
     imageAlt: "Red spotted mushroom with white flecks.",
     effectDescription:
       "Once per turn, when an ally leaves play, your next character this turn costs 2● less.",
-    isNegative: true,
   },
 ];
 

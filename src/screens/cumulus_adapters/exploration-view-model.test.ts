@@ -61,7 +61,6 @@ describe("exploration-view-model", () => {
       id: "gained-dreamsign-id",
       name: "Gained Dreamsign",
       effectDescription: "A synthetic reward sign.",
-      isNegative: false,
     };
     const state = {
       ...createDefaultState(),
@@ -1374,7 +1373,6 @@ describe("exploration-view-model", () => {
       effectDescription: "A synthetic sign effect.",
       imageName: "held-dreamsign.webp",
       imageAlt: "Held Dreamsign art",
-      isNegative: false,
     };
     const state = {
       ...createDefaultState(),

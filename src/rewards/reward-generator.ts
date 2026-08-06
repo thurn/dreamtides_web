@@ -81,7 +81,6 @@ export function generateRewardSiteData({
           effectDescription: dreamsignTemplate.effectDescription,
           imageName: dreamsignTemplate.imageName,
           imageAlt: dreamsignTemplate.imageAlt,
-          isNegative: false,
         },
       },
       remainingDreamsignPoolIds: availableIds.filter(

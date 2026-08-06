@@ -46,16 +46,15 @@ export function normalizePersistedNightmareJourney(value: unknown): unknown {
   if (Array.isArray(dreamsigns)) {
     const entries: unknown[] = dreamsigns;
     dreamsigns = entries.map((dreamsign): unknown => {
-      if (!isRecord(dreamsign) || !("isBane" in dreamsign)) return dreamsign;
-      const { isBane, ...current } = dreamsign;
+      if (
+        !isRecord(dreamsign) ||
+        (!("isBane" in dreamsign) && !("isNegative" in dreamsign))
+      ) {
+        return dreamsign;
+      }
+      const { isBane: _isBane, isNegative: _isNegative, ...current } = dreamsign;
       changed = true;
-      return {
-        ...current,
-        isNegative:
-          typeof current.isNegative === "boolean"
-            ? current.isNegative
-            : isBane === true,
-      };
+      return current;
     });
   }
 

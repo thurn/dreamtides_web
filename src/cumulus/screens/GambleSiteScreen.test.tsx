@@ -18,7 +18,6 @@ const JACKPOT_DREAMSIGN = {
   name: "Fixture Jackpot",
   imageName: "fixture-jackpot.png",
   effectDescription: "Foresee 1.",
-  isNegative: false,
 };
 
 const VIEW: GravokWagerSiteView = {
@@ -463,7 +462,6 @@ describe("GambleSiteScreen", () => {
             id: "held-sign",
             name: "Held Sign",
             effectDescription: "A held effect.",
-            isNegative: false,
           },
         ],
         maxDreamsigns: 1,

@@ -25,7 +25,7 @@ import { formatTypeLine } from "./card-text";
 import { computeCardTextScale } from "./card-display-scale";
 import { BOLT_ICON_CLASS } from "../controls/StandaloneGlyph";
 import { InlineGlyph } from "../typography/InlineGlyph";
-import { glyph, GLYPHS } from "../../primitives/glyph";
+import { glyph } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
 import { CardStatOrb } from "./CardStatOrb";
 import { renderCardChangeBadge } from "./card-change-badge";
@@ -1628,10 +1628,7 @@ export function gameCardRevealSpec(
     : model.displaySnapshot;
   const statusCards = exhausted
     ? [
-        glossaryInfoCard(GLOSSARY_IDS.exhausted, {
-          variant: "text",
-          leadGlyph: GLYPHS.exhaust,
-        }),
+        glossaryInfoCard(GLOSSARY_IDS.exhausted),
       ]
     : [];
   const figmentStatusCards = figment

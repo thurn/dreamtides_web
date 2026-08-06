@@ -176,7 +176,7 @@ function applyEffect(
       }
       return {
         ...state,
-        dreamsigns: [...state.dreamsigns, createDreamsign(template, false)],
+        dreamsigns: [...state.dreamsigns, createDreamsign(template)],
       };
     }
     case "transfigure_deck_entry": {

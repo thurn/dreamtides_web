@@ -879,7 +879,6 @@ describe("createBattleInit", () => {
       const dreamsignNames = new Set(templates.map((t) => t.name));
       for (const dreamsign of init.enemyDescriptor.dreamsigns) {
         expect(dreamsignNames.has(dreamsign.name)).toBe(true);
-        expect(dreamsign.isNegative).toBe(false);
       }
       const dreamsign = init.enemyDescriptor.dreamsigns[0];
       const source = templates.find((template) => template.id === dreamsign?.id);

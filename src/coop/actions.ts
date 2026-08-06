@@ -122,7 +122,6 @@ export interface CoopActions {
   addDreamsign: (dreamsignId: string) => Promise<number>;
   removeDreamsign: (dreamsignId: string) => Promise<number>;
   setDreamsignPool: (ids: readonly string[]) => Promise<number>;
-  setDreamsignIsNegative: (dreamsignId: string, isNegative: boolean) => Promise<number>;
 
   // --- draft ---
   setDraftState: (draftState: unknown) => Promise<number>;
@@ -448,8 +447,6 @@ export function makeActions(
     addDreamsign: (dreamsignId) => emit("ADD_DREAMSIGN", { dreamsignId }),
     removeDreamsign: (dreamsignId) => emit("REMOVE_DREAMSIGN", { dreamsignId }),
     setDreamsignPool: (ids) => emit("SET_DREAMSIGN_POOL", { ids: [...ids] }),
-    setDreamsignIsNegative: (dreamsignId, isNegative) =>
-      emit("SET_DREAMSIGN_IS_NEGATIVE", { dreamsignId, isNegative }),
 
     // --- draft ---
     setDraftState: (draftState) => emit("SET_DRAFT_STATE", { draftState }),

@@ -117,6 +117,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | Radial Announcement | Components | 4 | [components/radial-announcement.md](components/radial-announcement.md) | The single orbiting circular status system for scene announcements, card scoring, merge targets, and terminal victory. |
 | Motes | Components | 11 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
 | Info Card | Components | 6 | [components/info-card.md](components/info-card.md) | The strict information-card presentation. |
+| Editable Info Card | Components | 6 | [components/editable-info-card.md](components/editable-info-card.md) | The constrained authoring form of InfoCard. |
 | Inline Glyph | Primitives | 12 | [components/inline-glyph.md](components/inline-glyph.md) | The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's capital height at every type size. |
 | Standalone Glyph | Primitives | 20 | [components/standalone-glyph.md](components/standalone-glyph.md) | The Boxicons renderer for controls, badges, overlays, and card marks: a centered one-em square whose surrounding layout owns its size and placement. |
 | Journey Status Bar | Components | 6 | [components/journey-status-bar.md](components/journey-status-bar.md) | The persistent, transparent bottom HUD for journey screens. |
@@ -125,7 +126,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | Dreamwell Card | Components | 5 | [components/dreamwell-card.md](components/dreamwell-card.md) | The static landscape card drawn from the Dreamwell: UUID-keyed art, energy grant, name, and complete rules text in one readable object. |
 | DreamAvatar Portrait | Components | 16 | [components/dream-avatar-portrait.md](components/dream-avatar-portrait.md) | The shared framed DreamAvatar profile surface: a square `panel` crop for profile cards and popovers, or a close `thumb` crop for HUD rows and resident lists. |
 | DreamAvatar Stage | Components | 3 | [components/dream-avatar-stage.md](components/dream-avatar-stage.md) | The full-body DreamAvatar art layer for a caller-owned stage: `standing` adds a low ambient glow, `cutout` preserves the underlying scene, and `fullBleed` supplies a cinematic backdrop and head-focused composition. |
-| Rich Text | Components | 13 | [components/rich-text.md](components/rich-text.md) | The design system's model for formatted copy. |
+| Rich Text | Components | 12 | [components/rich-text.md](components/rich-text.md) | The design system's model for formatted copy. |
 | Rules Text | Components | 17 | [components/rules-text.md](components/rules-text.md) | The canonical Dreamtides rules-copy source: resource symbols and keywords render in place, while hovering, focusing, or touch-holding anywhere in the complete block reveals one contextual glossary card. |
 | Game Card | Components | 30 | [components/game-card.md](components/game-card.md) | The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name. |
 | Card Back | Components | 4 | [components/card-back.md](components/card-back.md) | The canonical face-down Dreamtides card object: the shipped card-back sprite on the shared 5:7 card geometry, with fixed crop, edge, and elevation. |
@@ -217,7 +218,7 @@ _named_ value type from `src/cumulus/primitives/`, never a bare string:
   name string or inline SVG.
 - A piece of art is an `ArtRef` the component resolves to a URL itself
   (`art.ts`). Never a raw URL or path string.
-- A media filter or image crop is a named union from `media.ts`.
+- An image crop is a named union from `media.ts`.
 
 Spacing, type, radius, shadow, color, and motion values come from the token
 system — see "Tokens" below.

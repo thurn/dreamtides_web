@@ -7,13 +7,11 @@ import {
 import { GlassButton } from "../cumulus/components/controls/GlassButton";
 import { Select } from "../cumulus/components/controls/Select";
 import { TextField } from "../cumulus/components/controls/TextField";
-import { richText } from "../cumulus/components/card/rich-text";
 import { GlassPanel } from "../cumulus/components/overlay/GlassPanel";
-import { InfoCard } from "../cumulus/components/overlay/InfoCard";
+import { EditableInfoCard } from "../cumulus/components/overlay/InfoCard";
 import { Pressable } from "../cumulus/primitives/Pressable";
 import { logEvent } from "../logging";
-import EditableField from "./EditableField";
-import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
+import type { EditableFieldValue } from "./save-state";
 import {
   loadGlossaryEntries,
   saveGlossaryEntry,
@@ -98,7 +96,6 @@ export default function GlossaryEditorApp({
   const [editingError, setEditingError] = useState<string | null>(null);
   const hydratedEntryId = useRef<string | null>(null);
   const editingStartValue = useRef("");
-  const interactiveCardRef = useRef<HTMLDivElement | null>(null);
   const saveQueueRef = useRef<Promise<void>>(Promise.resolve());
   const latestSaveRevision = useRef(0);
 
@@ -324,23 +321,6 @@ export default function GlossaryEditorApp({
     setEditingError(null);
   };
 
-  const inlineEntryFor = (
-    field: InlineGlossaryField,
-    draftValue: string,
-  ): EditableFieldSaveEntry | null =>
-    editingField === field && selectedEntry !== null
-      ? {
-          cardId: selectedEntry.id,
-          field,
-          status: "editing",
-          clientRevision: 0,
-          submittedRevision: 0,
-          draftValue,
-          confirmedValue: editingStartValue.current,
-          message: editingError,
-        }
-      : null;
-
   return (
     <main className="cumulus glossary-editor-shell" data-testid="glossary-editor">
       <header className="glossary-editor-header">
@@ -426,77 +406,57 @@ export default function GlossaryEditorApp({
                 </span>
               </div>
               <div className="glossary-editor-preview-stage" data-testid="glossary-preview">
-                <div ref={interactiveCardRef} className="glossary-editor-interactive-card">
-                  <InfoCard
-                    variant="text"
+                <div className="glossary-editor-interactive-card">
+                  <EditableInfoCard
                     title={
                       presentationDraft === "definitionOnly"
                         ? undefined
-                        : glossaryEntryDisplayTitle({
-                            ...selectedEntry,
-                            termPresentation:
-                              presentationDraft === "titleAndDefinition"
-                                ? undefined
-                                : presentationDraft,
-                            term:
-                              termDraft.trim() === ""
-                                ? "Untitled Term"
-                                : termDraft,
-                          })
-                    }
-                    body={
-                      glossaryDefinitionUsesRulesText(selectedEntry)
-                        ? richText.rules(definitionDraft)
-                        : richText.plain(definitionDraft)
-                    }
-                    slots={{
-                      ...(presentationDraft === "definitionOnly"
-                        ? {}
                         : {
-                            title: (_context, defaultNode) => (
-                              <EditableField
-                                field="title"
-                                value={termDraft}
-                                activation="click"
-                                saveEntry={inlineEntryFor("title", termDraft)}
-                                cardAnchorRef={interactiveCardRef}
-                                onBeginEdit={(value) =>
-                                  beginInlineEdit("title", value)
-                                }
-                                onDraftChange={(value) =>
-                                  setInlineDraft("title", value)
-                                }
-                                onCancel={() => cancelInlineEdit("title")}
-                                onSave={(value) =>
-                                  finishInlineEdit("title", value)
-                                }
-                                onCommit={(value) =>
-                                  blurInlineEdit("title", value)
-                                }
-                              >
-                                {defaultNode}
-                              </EditableField>
-                            ),
-                          }),
-                      body: (_context, defaultNode) => (
-                        <EditableField
-                          field="description"
-                          value={definitionDraft}
-                          mode="multiline"
-                          multilineSize="expanded"
-                          activation="click"
-                          saveEntry={inlineEntryFor("description", definitionDraft)}
-                          cardAnchorRef={interactiveCardRef}
-                          onBeginEdit={(value) => beginInlineEdit("description", value)}
-                          onDraftChange={(value) => setInlineDraft("description", value)}
-                          onCancel={() => cancelInlineEdit("description")}
-                          onSave={(value) => finishInlineEdit("description", value)}
-                          onCommit={(value) => blurInlineEdit("description", value)}
-                        >
-                          {defaultNode}
-                        </EditableField>
-                      ),
+                            value:
+                              glossaryEntryDisplayTitle({
+                                ...selectedEntry,
+                                termPresentation:
+                                  presentationDraft === "titleAndDefinition"
+                                    ? undefined
+                                    : presentationDraft,
+                                term:
+                                  termDraft.trim() === ""
+                                    ? "Untitled Term"
+                                    : termDraft,
+                              }) ?? "Untitled Term",
+                            draftValue: termDraft,
+                            isEditing: editingField === "title",
+                            ...(editingField === "title" && editingError !== null
+                              ? { error: editingError }
+                              : {}),
+                            onBeginEdit: () => beginInlineEdit("title", termDraft),
+                            onDraftChange: (value) => setInlineDraft("title", value),
+                            onCancel: () => cancelInlineEdit("title"),
+                            onSubmit: (value) => finishInlineEdit("title", value),
+                            onBlur: (value) => blurInlineEdit("title", value),
+                          }
+                    }
+                    body={{
+                      value: definitionDraft,
+                      draftValue: definitionDraft,
+                      isEditing: editingField === "description",
+                      ...(editingField === "description" && editingError !== null
+                        ? { error: editingError }
+                        : {}),
+                      onBeginEdit: () =>
+                        beginInlineEdit("description", definitionDraft),
+                      onDraftChange: (value) =>
+                        setInlineDraft("description", value),
+                      onCancel: () => cancelInlineEdit("description"),
+                      onSubmit: (value) =>
+                        finishInlineEdit("description", value),
+                      onBlur: (value) => blurInlineEdit("description", value),
                     }}
+                    bodyFormat={
+                      glossaryDefinitionUsesRulesText(selectedEntry)
+                        ? "rules"
+                        : "plain"
+                    }
                   />
                 </div>
               </div>

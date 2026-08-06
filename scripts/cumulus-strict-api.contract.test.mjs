@@ -140,7 +140,7 @@ describe("Cumulus strict-API contract (resolved surface)", () => {
   });
 
   // A glyph, color, image, or filter is a NAMED value (a Glyph from the
-  // registry, a CumulusColor role / hex, an ArtRef, a MediaFilter), never
+  // registry, a CumulusColor role / hex, or an ArtRef), never
   // an arbitrary class / CSS / URL string. This guards those props on the
   // RESOLVED surface so one can't regress to a bare `string` — the same escape
   // hatch as `style`, one value at a time. (Text props — title, label, blurb,

@@ -18,7 +18,6 @@ function sign(index: number): Dreamsign {
     imageName: `fixture-${String(index)}.png`,
     imageAlt: `Dreamsign fixture ${String(index)}`,
     effectDescription: index === 1 ? "Foresee 1." : "Draw a card.",
-    isNegative: index === 3,
   };
 }
 

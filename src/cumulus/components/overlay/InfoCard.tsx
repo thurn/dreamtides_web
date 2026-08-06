@@ -15,22 +15,19 @@
 //                   right-side figure, and place / guide / bonus glass panel
 //   - icon        — a glyph disc beside the title
 //   - tide        — a tide's own colored disc + alignment label
-//   - text        — an optional small lead glyph + title, with an optional epithet
+//   - text        — a title with an optional epithet
 //                   (a smaller serif subtitle in white) under the name
 //
 import * as React from "react";
 import { token, type TokenName } from "../../primitives/tokens";
 import { type Glyph } from "../../primitives/glyph";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
-import {
-  type ImageCrop,
-  type MediaFilter,
-  resolveImageCrop,
-  resolveMediaFilter,
-} from "../../primitives/media";
+import { type ImageCrop, resolveImageCrop } from "../../primitives/media";
 import { renderRichText, type RichText } from "../card/rich-text";
 import { renderRulesSymbolsInline } from "../card/RulesText";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
+import { controlChrome } from "../../internal/control-treatment";
+import { applySymbolReplacements } from "../../primitives/symbol-replacements";
 import { tideVisual, tideAlignmentLabel, type Tide } from "../hud/tide-spec";
 
 /* ---- authored component geometry ---- */
@@ -246,36 +243,6 @@ interface InfoCardCommonProps {
    * symbols and explicit glyph parts render as cap-height-aligned inline icons.
    */
   body?: RichText;
-  /** Optional wrappers for the rendered headline and body content. */
-  slots?: InfoCardSlots;
-}
-
-/** Render context supplied to the Info Card's named content slots. */
-export interface InfoCardSlotContext {
-  /** The resolved visual treatment, including the default text variant. */
-  variant: InfoCardVariant;
-  /** The plain headline value passed to the card. */
-  title?: string;
-  /** The structured body value passed to the card. */
-  body?: RichText;
-}
-
-/**
- * Named wrappers for authoring surfaces that edit rendered Info Card copy in
- * place while preserving the component's strict shell, typography, and rich
- * text rendering.
- */
-export interface InfoCardSlots {
-  /** Wraps the rendered headline content inside its canonical type container. */
-  title?: (
-    context: InfoCardSlotContext,
-    defaultNode: React.ReactNode,
-  ) => React.ReactNode;
-  /** Wraps the rendered body content inside its canonical type container. */
-  body?: (
-    context: InfoCardSlotContext,
-    defaultNode: React.ReactNode,
-  ) => React.ReactNode;
 }
 
 /**
@@ -287,8 +254,6 @@ export interface InfoCardObjectProps extends InfoCardCommonProps {
   variant: "object";
   /** The media the card is built around, as an {@link ArtRef}. Required. */
   image: ArtRef;
-  /** A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object). */
-  imageFilter?: MediaFilter;
 }
 
 /**
@@ -305,8 +270,6 @@ export interface InfoCardFullBleedProps extends InfoCardCommonProps {
   image: ArtRef;
   /** How the hero image is cropped. Default `"center"`. */
   imageCrop?: ImageCrop;
-  /** A named media {@link MediaFilter} (e.g. a spark glow). */
-  imageFilter?: MediaFilter;
   /**
    * An optional foreground character render (a transparent full-body cutout —
    * a Dream Guide, the boss) laid centered and prominent OVER the hero image,
@@ -334,8 +297,6 @@ export interface InfoCardAtlasRevealProps extends InfoCardCommonProps {
   image: ArtRef;
   /** How the hero image is cropped. Default `"center"`. */
   imageCrop?: ImageCrop;
-  /** A named media {@link MediaFilter} for the scene image. */
-  imageFilter?: MediaFilter;
   /** Optional transparent full-body figure standing on the card's right side. */
   figure?: ArtRef;
   /** The resident guide / boss title; rules symbols render as icons. */
@@ -366,15 +327,12 @@ export interface InfoCardTideProps extends InfoCardCommonProps {
 }
 
 /**
- * text variant (the default) — an optional small lead glyph + title, an
- * optional epithet under the name, then the body. Carries no required media;
- * its lead glyph is decorative.
+ * text variant (the default) — a title, an optional epithet under the name,
+ * then the body. Carries no required media.
  */
 export interface InfoCardTextProps extends InfoCardCommonProps {
   /** Which media treatment. Omit — or pass 'text' — for the text variant. */
   variant?: "text";
-  /** A small leading {@link Glyph}. */
-  leadGlyph?: Glyph;
   /**
    * An epithet under the name — a smaller serif subtitle in white, mirroring
    * the Dream Avatar-select name/epithet pairing. Resolve before display;
@@ -419,24 +377,28 @@ export function infoCardNativeWidth(
  * {@link InfoCard} supplies the viewport-driven width and text-scale variables
  * so the body never has to read screen size.
  */
-function InfoCardBody(props: InfoCardProps): React.ReactElement {
-  const { title, body, slots = {} } = props;
+interface InfoCardContentOverride {
+  readonly title?: React.ReactNode;
+  readonly body?: React.ReactNode;
+}
+
+function InfoCardBody(
+  props: InfoCardProps,
+  contentOverride?: InfoCardContentOverride,
+): React.ReactElement {
+  const { title, body } = props;
   // `variant` is optional only on the text member; resolve the default once for
   // the shared body/title styling. The per-variant branches below narrow on the
   // discriminant directly so each reads only the media its interface carries.
   const variant: InfoCardVariant = props.variant ?? "text";
-  const slotContext: InfoCardSlotContext = { variant, title, body };
   const renderedTitle =
     title === undefined ? undefined : renderRulesSymbolsInline(title);
-  const titleContent =
-    slots.title?.(slotContext, renderedTitle ?? "") ?? renderedTitle;
+  const titleContent = contentOverride?.title ?? renderedTitle;
   const bodyContent =
     body == null
       ? null
-      : (slots.body?.(
-          slotContext,
-          renderRichText(body, 0, { substituteRulesSymbols: true }),
-        ) ?? renderRichText(body, 0, { substituteRulesSymbols: true }));
+      : (contentOverride?.body ??
+        renderRichText(body, 0, { substituteRulesSymbols: true }));
   const Body =
     body == null ? null : (
       <div
@@ -452,7 +414,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
   /* --- object: a centered media block (framed portrait OR contained
      transparent object) above its name + text. --- */
   if (props.variant === "object") {
-    const { image, imageFilter } = props;
+    const { image } = props;
     const imageUrl = resolveArtRef(image);
     const media = (
       <img
@@ -464,7 +426,6 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
           height: geometryPx(96),
           objectFit: "contain",
           display: "block",
-          filter: imageFilter ? resolveMediaFilter(imageFilter) : undefined,
         }}
       />
     );
@@ -500,7 +461,6 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
     const {
       image,
       imageCrop = "center",
-      imageFilter,
       figure,
       subtitle,
     } = props;
@@ -542,7 +502,6 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
               objectFit: "cover",
               objectPosition: resolveImageCrop(imageCrop),
               userSelect: "none",
-              filter: imageFilter ? resolveMediaFilter(imageFilter) : undefined,
             }}
           />
         </div>
@@ -612,7 +571,6 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
     const {
       image,
       imageCrop = "center",
-      imageFilter,
       figure,
       subtitle,
     } = props;
@@ -649,7 +607,6 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
               objectFit: "cover",
               objectPosition: resolveImageCrop(imageCrop),
               userSelect: "none",
-              filter: imageFilter ? resolveMediaFilter(imageFilter) : undefined,
             }}
           />
         </div>
@@ -820,10 +777,9 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
     );
   }
 
-  /* --- text: optional small lead glyph + title, an optional epithet under the
-     name, description below --- */
-  const { leadGlyph, subtitle } = props;
-  const hasHeadline = title !== undefined || leadGlyph !== undefined;
+  /* --- text: title, an optional epithet under the name, description below --- */
+  const { subtitle } = props;
+  const hasHeadline = title !== undefined;
   return (
     <div
       style={{ ...shell, padding: `${geometrySpace(PADY)} ${geometrySpace(PADX)}` }}
@@ -837,16 +793,6 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
             marginBottom: subtitle ? token("--space-xxs") : body ? token("--space-s") : 0,
           }}
         >
-          {leadGlyph !== undefined && (
-            <i
-              className={leadGlyph}
-              aria-hidden="true"
-              style={{
-                fontSize: geometryPx(20),
-                color: token("--text-secondary"),
-              }}
-            />
-          )}
           <div style={tHeadline}>{titleContent}</div>
         </div>
       )}
@@ -858,6 +804,30 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
       {Body}
     </div>
   );
+}
+
+type InfoCardFrameStyle = React.CSSProperties &
+  Record<
+    | "--info-card-width"
+    | "--info-card-geometry-scale"
+    | "--info-card-text-scale",
+    string
+  >;
+
+/** Shared responsive frame contract for display and authoring cards. */
+function useInfoCardFrameStyle(nativeWidth: number): InfoCardFrameStyle {
+  const viewportWidth = useViewportWidth();
+  const cardWidth = infoCardWidth(
+    viewportWidth,
+    MOBILE_WIDTH_FRACTION,
+    nativeWidth,
+  );
+  return {
+    "--info-card-width": `${String(cardWidth)}px`,
+    "--info-card-geometry-scale": String(cardWidth / nativeWidth),
+    "--info-card-text-scale": String(infoCardTextScale(viewportWidth)),
+    width: cardWidth,
+  };
 }
 
 /**
@@ -874,30 +844,221 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
  *
  */
 export function InfoCard(props: InfoCardProps): React.ReactElement {
-  const viewportWidth = useViewportWidth();
-  const nativeWidth = infoCardNativeWidth(props.variant);
-  const cardWidth = infoCardWidth(
-    viewportWidth,
-    MOBILE_WIDTH_FRACTION,
-    nativeWidth,
-  );
-  const geometryScale = cardWidth / nativeWidth;
-  const textScale = infoCardTextScale(viewportWidth);
-  const style: React.CSSProperties &
-    Record<
-      | "--info-card-width"
-      | "--info-card-geometry-scale"
-      | "--info-card-text-scale",
-      string
-    > = {
-    "--info-card-width": `${String(cardWidth)}px`,
-    "--info-card-geometry-scale": String(geometryScale),
-    "--info-card-text-scale": String(textScale),
-    width: cardWidth,
-  };
+  const style = useInfoCardFrameStyle(infoCardNativeWidth(props.variant));
   return (
     <div style={style}>
       <InfoCardBody {...props} />
+    </div>
+  );
+}
+
+/** A single copy field controlled by an Info Card authoring surface. */
+export interface EditableInfoCardField {
+  /** Confirmed copy rendered when the field is idle. */
+  readonly value: string;
+  /** Controlled draft rendered by the native editor. */
+  readonly draftValue: string;
+  /** Whether the card is currently showing this field's editor. */
+  readonly isEditing: boolean;
+  /** Validation message shown beneath the native editor. */
+  readonly error?: string;
+  readonly onBeginEdit: () => void;
+  readonly onDraftChange: (value: string) => void;
+  readonly onCancel: () => void;
+  /** Explicit Enter submission; invalid drafts may remain in edit mode. */
+  readonly onSubmit: (value: string) => void;
+  /** Blur submission; the owner decides whether invalid copy is discarded. */
+  readonly onBlur: (value: string) => void;
+}
+
+export interface EditableInfoCardProps {
+  /** Optional editable headline. Omit for definition-only cards. */
+  readonly title?: EditableInfoCardField;
+  /** Editable definition copy. */
+  readonly body: EditableInfoCardField;
+  /** Semantic renderer used for the definition while it is idle. */
+  readonly bodyFormat: "plain" | "rules";
+}
+
+function EditableInfoCardCopy({
+  field,
+  mode,
+  children,
+  value,
+}: {
+  readonly field: "title" | "description";
+  readonly mode: "single-line" | "multiline";
+  readonly children: React.ReactNode;
+  readonly value: EditableInfoCardField;
+}): React.ReactElement {
+  const editorRef = React.useRef<HTMLInputElement | HTMLTextAreaElement | null>(
+    null,
+  );
+  const closingRef = React.useRef(false);
+  const pendingCaretRef = React.useRef<number | null>(null);
+
+  React.useEffect(() => {
+    if (!value.isEditing) return;
+    closingRef.current = false;
+    editorRef.current?.focus();
+    editorRef.current?.select();
+  }, [value.isEditing]);
+
+  React.useLayoutEffect(() => {
+    const caret = pendingCaretRef.current;
+    if (caret === null) return;
+    pendingCaretRef.current = null;
+    editorRef.current?.setSelectionRange(caret, caret);
+  }, [value.draftValue]);
+
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ): void => {
+    const raw = event.currentTarget.value;
+    const rawCaret = event.currentTarget.selectionStart ?? raw.length;
+    const replacement = applySymbolReplacements(raw, rawCaret);
+    pendingCaretRef.current = replacement.value === raw ? null : replacement.caret;
+    value.onDraftChange(replacement.value);
+  };
+  const handleKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ): void => {
+    if (event.key === "Enter" && (mode === "single-line" || !event.shiftKey)) {
+      event.preventDefault();
+      closingRef.current = true;
+      value.onSubmit(value.draftValue);
+      queueMicrotask(() => {
+        closingRef.current = false;
+      });
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      closingRef.current = true;
+      value.onCancel();
+      queueMicrotask(() => {
+        closingRef.current = false;
+      });
+    }
+  };
+  const handleBlur = (): void => {
+    if (closingRef.current) {
+      closingRef.current = false;
+      return;
+    }
+    value.onBlur(value.draftValue);
+  };
+  const chrome = controlChrome("onGlass");
+  const editorStyle: React.CSSProperties = {
+    ...chrome.trigger,
+    boxSizing: "border-box",
+    width: "100%",
+    minHeight: mode === "multiline" ? "5.8em" : "1.6em",
+    padding: `${token("--space-xxs")} ${token("--space-xs")}`,
+    color: token("--text-primary"),
+    font: "inherit",
+    fontWeight: "inherit",
+    lineHeight: "inherit",
+    resize: "none",
+  };
+  const editor =
+    mode === "multiline" ? (
+      <textarea
+        ref={(element) => {
+          editorRef.current = element;
+        }}
+        aria-label={`${field} editor`}
+        aria-invalid={value.error === undefined ? undefined : true}
+        data-editor-input-field={field}
+        rows={4}
+        value={value.draftValue}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        onBlur={handleBlur}
+        style={editorStyle}
+      />
+    ) : (
+      <input
+        ref={(element) => {
+          editorRef.current = element;
+        }}
+        aria-label={`${field} editor`}
+        aria-invalid={value.error === undefined ? undefined : true}
+        data-editor-input-field={field}
+        type="text"
+        value={value.draftValue}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        onBlur={handleBlur}
+        style={editorStyle}
+      />
+    );
+
+  return (
+    <span
+      data-editor-field={field}
+      data-editor-save-status={value.isEditing ? "editing" : "idle"}
+      onClick={value.isEditing ? undefined : value.onBeginEdit}
+      style={{ display: "contents", cursor: "text" }}
+    >
+      {value.isEditing ? editor : children}
+      {value.isEditing && value.error !== undefined ? (
+        <span
+          role="alert"
+          style={{
+            display: "block",
+            marginTop: token("--space-xxs"),
+            color: token("--danger"),
+            font: token("--t-caption"),
+          }}
+        >
+          {value.error}
+        </span>
+      ) : null}
+    </span>
+  );
+}
+
+/**
+ * Authoring-only Info Card with closed, controlled title and body fields.
+ * The component owns its native inputs, interaction states, typography, and
+ * shell; callers supply strings and lifecycle callbacks, never render nodes.
+ */
+export function EditableInfoCard({
+  title,
+  body,
+  bodyFormat,
+}: EditableInfoCardProps): React.ReactElement {
+  const bodyModel: RichText =
+    bodyFormat === "rules"
+      ? { kind: "rules", text: body.value }
+      : { kind: "plain", text: body.value };
+  const props: InfoCardTextProps = {
+    variant: "text",
+    title: title?.value,
+    body: bodyModel,
+  };
+  const titleContent =
+    title === undefined ? undefined : (
+      <EditableInfoCardCopy
+        field="title"
+        mode="single-line"
+        value={title}
+      >
+        {renderRulesSymbolsInline(title.value)}
+      </EditableInfoCardCopy>
+    );
+  const bodyContent = (
+    <EditableInfoCardCopy
+      field="description"
+      mode="multiline"
+      value={body}
+    >
+      {renderRichText(bodyModel, 0, { substituteRulesSymbols: true })}
+    </EditableInfoCardCopy>
+  );
+  const style = useInfoCardFrameStyle(CARD_W);
+  return (
+    <div style={style} data-editable-info-card="">
+      {InfoCardBody(props, { title: titleContent, body: bodyContent })}
     </div>
   );
 }

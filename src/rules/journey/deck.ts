@@ -538,25 +538,3 @@ export function setDreamsignPool(
   }
   return { ...journey, remainingDreamsignPool: [...raw] };
 }
-
-/**
- * `SET_DREAMSIGN_IS_NEGATIVE { dreamsignId, isNegative }` updates the
- * presentation classification of one Dreamsign by UUID.
- */
-export function setDreamsignIsNegative(
-  journey: JourneyState,
-  payload: Record<string, unknown>,
-): JourneyState | null {
-  const dreamsignId = asString(payload.dreamsignId);
-  if (dreamsignId === null) return null;
-  if (typeof payload.isNegative !== "boolean") return null;
-  const isNegative = payload.isNegative;
-  const index = journey.dreamsigns.findIndex((d) => d.id === dreamsignId);
-  if (index === -1) return null;
-  return {
-    ...journey,
-    dreamsigns: journey.dreamsigns.map((d, i) =>
-      i === index ? { ...d, isNegative } : d,
-    ),
-  };
-}

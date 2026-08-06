@@ -54,6 +54,10 @@ describe("exploration editor data", () => {
       encounter.cardId.match(/^[0-9a-f-]{36}$/iu) &&
       encounter.cardName.length > 0 &&
       encounter.actions.length === 2)).toBe(true);
+    expect(
+      data.dreamsigns.every((dreamsign) =>
+        !Object.hasOwn(dreamsign, "isNegative")),
+    ).toBe(true);
   });
 
   it("compiles every effect to its canonical mechanic and only selectable effects to a policy", () => {

@@ -126,7 +126,6 @@ describe("shared reward selection", () => {
           id: customDreamsignId,
           name: "Custom Selection Dreamsign",
           effectDescription: "A synthetic custom effect.",
-          isNegative: false,
         }],
         encounters: [],
       },

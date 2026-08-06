@@ -1,36 +1,4 @@
-// Typed media-treatment values for the strict Cumulus API.
-//
-// The design system owns appearance, so the CSS knobs a media card exposes —
-// the filter over an image and how it is cropped — are named, enumerated values
-// rather than raw CSS strings. Each type below is a small union; the string it
-// resolves to lives in one table here, so a treatment reads the same wherever it
-// is used.
-
-/* ── MediaFilter ─────────────────────────────────────────────────────────── */
-
-/**
- * A named CSS `filter` for a piece of media. `dreamsign-portrait` is the soft
- * drop-shadow + violet bloom that grounds a transparent dreamsign portrait;
- * its `-negative` variant adds the negative-sign desaturation.
- */
-export type MediaFilter =
-  | "dreamsign-portrait"
-  | "dreamsign-portrait-negative";
-
-const DREAMSIGN_PORTRAIT_SHADOW =
-  "drop-shadow(0 3px 6px rgba(0,0,0,0.55)) drop-shadow(0 0 14px rgba(147,51,234,0.30))";
-
-const MEDIA_FILTERS: Record<MediaFilter, string> = {
-  "dreamsign-portrait": DREAMSIGN_PORTRAIT_SHADOW,
-  "dreamsign-portrait-negative": `${DREAMSIGN_PORTRAIT_SHADOW} grayscale(0.5)`,
-};
-
-/** Resolve a {@link MediaFilter} to its CSS `filter` string. */
-export function resolveMediaFilter(filter: MediaFilter): string {
-  return MEDIA_FILTERS[filter];
-}
-
-/* ── ImageCrop ───────────────────────────────────────────────────────────── */
+// Typed crop values for strict Cumulus media APIs.
 
 /**
  * How a media image is cropped within its frame, as a named `object-position`.

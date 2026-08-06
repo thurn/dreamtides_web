@@ -118,7 +118,6 @@ export interface Dreamsign {
   effectDescription: string;
   imageName?: string;
   imageAlt?: string;
-  isNegative: boolean;
 }
 
 /**

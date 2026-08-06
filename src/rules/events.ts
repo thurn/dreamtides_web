@@ -83,7 +83,6 @@ export interface EventPayloads {
   ADD_DREAMSIGN: { dreamsignId: string };
   REMOVE_DREAMSIGN: { dreamsignId: string };
   SET_DREAMSIGN_POOL: { ids: string[] };
-  SET_DREAMSIGN_IS_NEGATIVE: { dreamsignId: string; isNegative: boolean };
 
   // --- draft ---
   SET_DRAFT_STATE: { draftState: unknown };
@@ -321,7 +320,6 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   ADD_DREAMSIGN: true,
   REMOVE_DREAMSIGN: true,
   SET_DREAMSIGN_POOL: true,
-  SET_DREAMSIGN_IS_NEGATIVE: true,
   SET_DRAFT_STATE: true,
   PICK_DRAFT_CARD: true,
   REROLL_DRAFT_OFFER: true,

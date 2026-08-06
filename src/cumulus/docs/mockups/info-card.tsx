@@ -11,7 +11,7 @@ import { useRef } from "react";
 import { InfoCard } from "../../components/overlay/InfoCard";
 import { richText } from "../../components/card/rich-text";
 import { artRef } from "../../primitives/art";
-import { GLYPHS, glyph } from "../../primitives/glyph";
+import { glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 
@@ -188,7 +188,6 @@ export function InfoCardMockup() {
               body={richText.plain(
                 "The dream's currency — spent to draft cards and buy from merchants.",
               )}
-              leadGlyph={GLYPHS.water}
             />
           }
         />

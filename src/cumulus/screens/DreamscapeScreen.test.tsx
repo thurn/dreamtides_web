@@ -315,7 +315,6 @@ describe("DreamscapeScreen", () => {
             name: "Lantern in the Rain",
             effectDescription: "Your first dream each dawn costs 1 less.",
             imageName: "lantern-in-the-rain.webp",
-            isNegative: false,
           },
         },
       },
@@ -401,14 +400,12 @@ describe("DreamscapeScreen", () => {
       name: "Lantern in the Rain",
       effectDescription: "Your first dream each dawn costs 1 less.",
       imageName: "lantern-in-the-rain.webp",
-      isNegative: false,
     };
     const heldDreamsign = {
       id: "held-dreamsign",
       name: "Held Sign",
       effectDescription: "A held effect.",
       imageName: "held.webp",
-      isNegative: false,
     };
     const rewardView: DreamscapeView = {
       ...VIEW,

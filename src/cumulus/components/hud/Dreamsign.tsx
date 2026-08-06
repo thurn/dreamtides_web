@@ -1,9 +1,8 @@
 // Dreamsign — the unified dreamsign entity for Cumulus. A dreamsign is a
 // minor passive collectible; its art floats directly on the media with no
 // chrome — no tile border, background, or frame — so the collectible reads as
-// an object in the world rather than a card in a slot. Negative Dreamsigns
-// carry a desaturation so the warning reads before the art does. Pressing or
-// hovering the art reveals its full detail
+// an object in the world rather than a card in a slot. Pressing or hovering the
+// art reveals its full detail
 // — name and rules text — through the shared coordinator as an InfoCard
 // `object` variant. Mouse and hover-capable pen reveal on hover; touch uses the
 // shared intent/hold state machine while preserving native scrolling.
@@ -19,9 +18,7 @@ import { useRevealSource } from "../../internal/reveal/context";
 import { Pressable } from "../../primitives/Pressable";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
-
-/** Desaturation applied to negative Dreamsign art. */
-const NEGATIVE_FILTER = "grayscale(0.7)";
+import { token } from "../../primitives/tokens";
 
 /** The dreamsign object's own drop-shadow + violet glow (its material, not a
  * legibility overlay) — a faithfully-copied literal with no token equivalent.
@@ -55,9 +52,6 @@ export function dreamsignRevealSpec(
         ? {
             variant: "object" as const,
             image: artRef.dreamsign(String(dreamsign.imageName)),
-            imageFilter: dreamsign.isNegative
-              ? ("dreamsign-portrait-negative" as const)
-              : ("dreamsign-portrait" as const),
             title: dreamsign.name,
             body: effect ? richText.rules(effect) : undefined,
           }
@@ -97,8 +91,7 @@ export interface DreamsignProps {
 
 /**
  * A dreamsign artwork tile that reveals its full detail through the shared
- * InfoCard `object` variant on hover (fine pointer) or press (touch). Negative
- * Dreamsigns use a desaturated warning treatment.
+ * InfoCard `object` variant on hover (fine pointer) or press (touch).
  */
 export function Dreamsign({
   dreamsign,
@@ -121,11 +114,10 @@ export function Dreamsign({
   const pointerDown = binding.sourceProps.onPointerDown;
 
   // No chrome: the art floats on the media with no tile border, background,
-  // frame, or radius. A negative sign's desaturation and path-following shadows are
-  // the only material the tile wears; both compose into the one filter.
+  // frame, or radius. Variant-driven path-following shadows are the only
+  // material the tile wears.
   const tileFilter =
     [
-      dreamsign.isNegative ? NEGATIVE_FILTER : null,
       variant === "hud" ? DS_SHADOW : null,
       variant === "revelation" ? DS_REVELATION_SHADOW : null,
     ]
@@ -157,12 +149,7 @@ export function Dreamsign({
       aria-disabled={unavailable || undefined}
       data-testid={testid}
       data-dreamsign-id={dreamsignId}
-      data-is-negative={String(dreamsign.isNegative)}
-      aria-label={
-        dreamsign.isNegative
-          ? `Negative Dreamsign: ${dreamsign.name}`
-          : `Dreamsign: ${dreamsign.name}`
-      }
+      aria-label={`Dreamsign: ${dreamsign.name}`}
       onPointerDown={(event) => { lastPointerType.current = event.pointerType; pointerDown?.(event); }}
       onClick={() => { if (!unavailable && lastPointerType.current !== "touch") onPress?.(); }}
       onKeyDown={(event) => {
@@ -188,10 +175,10 @@ export function Dreamsign({
           aria-hidden="true"
           style={{
             fontSize: sizePx * 0.42,
-            color: dreamsign.isNegative ? "#fca5a5" : "#e9d5ff",
+            color: token("--text-tutorial-highlight"),
           }}
         >
-          {dreamsign.isNegative ? "☠" : "✦"}
+          ✦
         </span>
       )}
     </Pressable>

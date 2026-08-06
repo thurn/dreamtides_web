@@ -47,7 +47,6 @@ const DREAMSIGN: Dreamsign = {
   effectDescription: "At the start of battle, gain 1●.",
   imageName: "bell.png",
   imageAlt: "A small bell",
-  isNegative: false,
 };
 
 const SERVER_DATA: ExplorationEditorServerData = {

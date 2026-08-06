@@ -101,6 +101,22 @@ describe("transformExplorationData", () => {
     expect(effectKinds).toContain("increase-spark-all");
   });
 
+  it("compiles custom Dreamsigns as canonical collectible data", () => {
+    const source = syntheticExplorationSource();
+    source["custom-dreamsign"] = [
+      {
+        id: "custom-sign",
+        name: "Custom Sign",
+        "rendered-text": "A synthetic effect.",
+      },
+    ];
+
+    const [dreamsign] = transformExplorationData(source).customDreamsigns;
+
+    expect(dreamsign).toMatchObject({ id: "custom-sign" });
+    expect(dreamsign).not.toHaveProperty("isNegative");
+  });
+
   it("rejects a non-positive per-card essence reward", () => {
     expect(() => transformExplorationData(syntheticExplorationSource(0)))
       .toThrow(/requires positive essence-per-card/);

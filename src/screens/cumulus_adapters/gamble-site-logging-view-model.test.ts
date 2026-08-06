@@ -10,7 +10,6 @@ const REWARD_DREAMSIGN = {
   id: "00000000-0000-4000-8000-000000000025",
   name: "Fixture Sign",
   effectDescription: "Fixture effect.",
-  isNegative: false,
 };
 
 const RUNTIME: TidemarkLadderClimbSiteRuntime = {

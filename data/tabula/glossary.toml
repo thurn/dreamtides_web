@@ -248,6 +248,7 @@ id = "exhausted"
 category = "Battle Status"
 term = "Exhausted"
 definition = "This character cannot challenge or use ☾ abilities until next turn."
+definition-symbol = "exhaust"
 priority = 30
 matches-rules-text = true
 variants = []

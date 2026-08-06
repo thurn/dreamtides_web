@@ -274,8 +274,6 @@ export interface JourneyMutations {
     typeChange: CardTypeChange | null,
     source: string,
   ) => void;
-  /** Debug-only: set the negative presentation flag on a Dreamsign. */
-  setDreamsignIsNegative?: (index: number, isNegative: boolean, source: string) => void;
   resetJourney: () => void;
 
   // ---- Augury effect plumbing (Wave 1) ----

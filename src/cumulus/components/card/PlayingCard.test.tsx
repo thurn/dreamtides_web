@@ -26,7 +26,6 @@ describe("WagerPrizeCard", () => {
       name: "Bezoar",
       imageName: "bezoar.png",
       effectDescription: "Foresee 1.",
-      isNegative: false,
     };
 
     act(() => {

@@ -463,7 +463,6 @@ describe("Exploration provider", () => {
           id: "held-dreamsign",
           name: "Held Dreamsign",
           effectDescription: "A held fixture.",
-          isNegative: false,
         },
       ],
     };
@@ -504,7 +503,6 @@ describe("Exploration provider", () => {
           id: customDreamsignId,
           name: "Custom Exploration Dreamsign",
           effectDescription: "A synthetic custom effect.",
-          isNegative: false,
         }],
       },
     };
@@ -515,7 +513,6 @@ describe("Exploration provider", () => {
       id: customDreamsignId,
       name: "Custom Exploration Dreamsign",
       effectDescription: "A synthetic custom effect.",
-      isNegative: false,
     });
   });
 
@@ -629,7 +626,6 @@ describe("Exploration provider", () => {
         id: CHARM_POUCH_ID,
         name: "Charm Pouch",
         effectDescription: "A fixture effect.",
-        isNegative: false,
       }],
       remainingDreamsignPool: [alternateDreamsignId],
     });

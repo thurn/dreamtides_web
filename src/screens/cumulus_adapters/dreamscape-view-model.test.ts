@@ -129,9 +129,8 @@ describe("toQsbDreamsigns", () => {
         name: "Dreaming Orb",
         effectDescription: "At Dawn, foresee 1.",
         imageName: "magic-ball.png",
-        isNegative: false,
       },
-      { name: "Nameless", effectDescription: "No art.", isNegative: false },
+      { name: "Nameless", effectDescription: "No art." },
     ];
     const docked = toQsbDreamsigns(signs);
     expect(docked).toHaveLength(1);
@@ -139,7 +138,6 @@ describe("toQsbDreamsigns", () => {
     expect(docked[0]?.name).toBe("Dreaming Orb");
     expect(docked[0]?.effectDescription).toBe("At Dawn, foresee 1.");
     expect(docked[0]?.imageName).toBe("magic-ball.png");
-    expect(docked[0]?.isNegative).toBe(false);
   });
 });
 
@@ -278,7 +276,6 @@ describe("buildDreamscapeView", () => {
       name: "Lantern in the Rain",
       effectDescription: "Your first dream each dawn costs 1 less.",
       imageName: "lantern-in-the-rain.webp",
-      isNegative: false,
     };
     const state = {
       essence: 240,
@@ -313,13 +310,11 @@ describe("buildDreamscapeView", () => {
       id: "pending-dreamsign",
       name: "Pending",
       effectDescription: "Pending effect.",
-      isNegative: false,
     };
     const heldDreamsign = {
       id: "held-dreamsign",
       name: "Held",
       effectDescription: "Held effect.",
-      isNegative: false,
     };
     const state = {
       dreamsigns: [heldDreamsign],

@@ -7,10 +7,10 @@ import { logEventOnce } from "../../../logging";
 import type { Glyph } from "../../primitives/glyph";
 import type { Tide } from "../hud/tide-spec";
 import type { InfoCardProps } from "../overlay/InfoCard";
-import { richText } from "./rich-text";
+import { richText, richTextDefinitionSymbolText } from "./rich-text";
 
 type GlossaryCardPresentation =
-  | { readonly variant?: "text"; readonly leadGlyph?: Glyph }
+  | { readonly variant?: "text" }
   | { readonly variant: "icon"; readonly glyph: Glyph }
   | { readonly variant: "tide"; readonly tide: Tide };
 
@@ -31,10 +31,14 @@ export function glossaryInfoCard(
       : glossaryDefinitionUsesRulesText(entry)
         ? richText.rules(entry.definition)
         : richText.plain(entry.definition);
-  const title =
+  const titleText =
     entry === undefined
       ? "Rule definition unavailable"
       : glossaryEntryDisplayTitle(entry);
+  const title =
+    titleText === undefined || entry?.definitionSymbol === undefined
+      ? titleText
+      : `${richTextDefinitionSymbolText(entry.definitionSymbol)} ${titleText}`;
   if (presentation.variant === "icon") {
     return {
       variant: "icon",
@@ -55,8 +59,5 @@ export function glossaryInfoCard(
     variant: "text",
     title,
     body,
-    ...(presentation.leadGlyph === undefined
-      ? {}
-      : { leadGlyph: presentation.leadGlyph }),
   };
 }

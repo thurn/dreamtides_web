@@ -15,7 +15,6 @@ function sign(id: string, name: string): Dreamsign {
     imageName: `${id}.png`,
     imageAlt: `${name} fixture art`,
     effectDescription: "Draw a card.",
-    isNegative: false,
   };
 }
 

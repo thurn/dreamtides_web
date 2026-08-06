@@ -9,6 +9,7 @@ import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { TOKENS } from "../../primitives/tokens";
 import {
   InfoCard,
+  EditableInfoCard,
   INFO_CARD_WIDTH,
   infoCardNativeWidth,
   infoCardTextScale,
@@ -108,22 +109,32 @@ describe("InfoCard shell treatment", () => {
     expect(html).toContain("width:360px");
   });
 
-  it("keeps named authoring wrappers inside the canonical title and body containers", () => {
+  it("keeps authoring controls inside the canonical title and body containers", () => {
+    const field = {
+      value: "Essence",
+      draftValue: "Essence",
+      isEditing: false,
+      onBeginEdit: () => undefined,
+      onDraftChange: () => undefined,
+      onCancel: () => undefined,
+      onSubmit: () => undefined,
+      onBlur: () => undefined,
+    };
     const html = renderToStaticMarkup(
-      React.createElement(InfoCard, {
-        title: "Essence",
-        body: richText.plain("Currency carried through a journey."),
-        slots: {
-          title: (_context, defaultNode) =>
-            React.createElement("span", { "data-title-editor": "" }, defaultNode),
-          body: (_context, defaultNode) =>
-            React.createElement("span", { "data-body-editor": "" }, defaultNode),
+      React.createElement(EditableInfoCard, {
+        title: field,
+        body: {
+          ...field,
+          value: "Currency carried through a journey.",
+          draftValue: "Currency carried through a journey.",
         },
+        bodyFormat: "plain",
       }),
     );
 
-    expect(html).toContain('data-title-editor=""');
-    expect(html).toContain('data-body-editor=""');
+    expect(html).toContain('data-editable-info-card=""');
+    expect(html).toContain('data-editor-field="title"');
+    expect(html).toContain('data-editor-field="description"');
     expect(html).toContain("Currency carried through a journey.");
     expect(html).toContain(TOKENS["--glass-fill-popover"].var);
   });

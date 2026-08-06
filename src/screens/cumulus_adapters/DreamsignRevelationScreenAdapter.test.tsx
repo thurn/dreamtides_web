@@ -83,7 +83,6 @@ function makeDreamsign(id: string): Dreamsign {
     effectDescription: "Drawn from the test pool.",
     imageName: `${id}.png`,
     imageAlt: `Dreamsign ${id}`,
-    isNegative: false,
   };
 }
 

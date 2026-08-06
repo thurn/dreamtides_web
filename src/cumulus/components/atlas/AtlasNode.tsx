@@ -97,7 +97,6 @@ function dreamsignCard(dreamsign: AtlasNodeDreamsign): RevealInfoCardModel {
     : {
         variant: "object",
         image: dreamsign.art,
-        imageFilter: "dreamsign-portrait",
         title: dreamsign.name,
         body: richText.rules(dreamsign.rulesText),
       };

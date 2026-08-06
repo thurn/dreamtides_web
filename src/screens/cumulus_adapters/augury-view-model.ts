@@ -297,7 +297,6 @@ function toDreamsign(
     effectDescription: object.dreamsignTemplate.effectDescription,
     imageName: object.dreamsignTemplate.imageName,
     imageAlt: object.dreamsignTemplate.imageAlt,
-    isNegative: false,
   };
 }
 

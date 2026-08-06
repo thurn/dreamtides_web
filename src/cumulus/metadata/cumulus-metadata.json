@@ -1844,12 +1844,6 @@
             "tsType": "string",
             "optional": true,
             "description": ""
-          },
-          {
-            "name": "isNegative",
-            "tsType": "boolean",
-            "optional": false,
-            "description": ""
           }
         ]
       }
@@ -2056,6 +2050,153 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional stable test id for the complete card."
+    }
+  ],
+  "EditableInfoCard": [
+    {
+      "name": "title",
+      "tsType": "EditableInfoCardField",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional editable headline. Omit for definition-only cards.",
+      "nested": {
+        "name": "EditableInfoCardField",
+        "fields": [
+          {
+            "name": "value",
+            "tsType": "string",
+            "optional": false,
+            "description": "Confirmed copy rendered when the field is idle."
+          },
+          {
+            "name": "draftValue",
+            "tsType": "string",
+            "optional": false,
+            "description": "Controlled draft rendered by the native editor."
+          },
+          {
+            "name": "isEditing",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "Whether the card is currently showing this field's editor."
+          },
+          {
+            "name": "error",
+            "tsType": "string",
+            "optional": true,
+            "description": "Validation message shown beneath the native editor."
+          },
+          {
+            "name": "onBeginEdit",
+            "tsType": "() => void",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "onDraftChange",
+            "tsType": "(value: string) => void",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "onCancel",
+            "tsType": "() => void",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "onSubmit",
+            "tsType": "(value: string) => void",
+            "optional": false,
+            "description": "Explicit Enter submission; invalid drafts may remain in edit mode."
+          },
+          {
+            "name": "onBlur",
+            "tsType": "(value: string) => void",
+            "optional": false,
+            "description": "Blur submission; the owner decides whether invalid copy is discarded."
+          }
+        ]
+      }
+    },
+    {
+      "name": "body",
+      "tsType": "EditableInfoCardField",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Editable definition copy.",
+      "nested": {
+        "name": "EditableInfoCardField",
+        "fields": [
+          {
+            "name": "value",
+            "tsType": "string",
+            "optional": false,
+            "description": "Confirmed copy rendered when the field is idle."
+          },
+          {
+            "name": "draftValue",
+            "tsType": "string",
+            "optional": false,
+            "description": "Controlled draft rendered by the native editor."
+          },
+          {
+            "name": "isEditing",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "Whether the card is currently showing this field's editor."
+          },
+          {
+            "name": "error",
+            "tsType": "string",
+            "optional": true,
+            "description": "Validation message shown beneath the native editor."
+          },
+          {
+            "name": "onBeginEdit",
+            "tsType": "() => void",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "onDraftChange",
+            "tsType": "(value: string) => void",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "onCancel",
+            "tsType": "() => void",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "onSubmit",
+            "tsType": "(value: string) => void",
+            "optional": false,
+            "description": "Explicit Enter submission; invalid drafts may remain in edit mode."
+          },
+          {
+            "name": "onBlur",
+            "tsType": "(value: string) => void",
+            "optional": false,
+            "description": "Blur submission; the owner decides whether invalid copy is discarded."
+          }
+        ]
+      }
+    },
+    {
+      "name": "bodyFormat",
+      "tsType": "\"plain\" | \"rules\"",
+      "unionMembers": [
+        "plain",
+        "rules"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Semantic renderer used for the definition while it is idle."
     }
   ],
   "EssenceValue": [
@@ -2861,17 +3002,6 @@
       "description": "The media the card is built around, as an {@link ArtRef}. Required.\nThe square hero image the card is built on, as an {@link ArtRef}. Required.\nThe scene hero image the card is built on, as an {@link ArtRef}. Required."
     },
     {
-      "name": "imageFilter",
-      "tsType": "MediaFilter",
-      "unionMembers": [
-        "dreamsign-portrait",
-        "dreamsign-portrait-negative"
-      ],
-      "required": false,
-      "defaultValue": null,
-      "description": "A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object).\nA named media {@link MediaFilter} (e.g. a spark glow).\nA named media {@link MediaFilter} for the scene image."
-    },
-    {
       "name": "title",
       "tsType": "string",
       "unionMembers": [],
@@ -2894,31 +3024,6 @@
             "tsType": "\"plain\" | \"rules\" | \"underline\" | \"note\" | \"stack\" | \"definitions\"",
             "optional": false,
             "description": ""
-          }
-        ]
-      }
-    },
-    {
-      "name": "slots",
-      "tsType": "InfoCardSlots",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional wrappers for the rendered headline and body content.",
-      "nested": {
-        "name": "InfoCardSlots",
-        "fields": [
-          {
-            "name": "title",
-            "tsType": "((context: InfoCardSlotContext, defaultNode: React.ReactNode) => React.ReactNode)",
-            "optional": true,
-            "description": "Wraps the rendered headline content inside its canonical type container."
-          },
-          {
-            "name": "body",
-            "tsType": "((context: InfoCardSlotContext, defaultNode: React.ReactNode) => React.ReactNode)",
-            "optional": true,
-            "description": "Wraps the rendered body content inside its canonical type container."
           }
         ]
       }
@@ -2971,14 +3076,6 @@
       "required": true,
       "defaultValue": null,
       "description": "Which of the five tides. Fixes the disc color/mark and the alignment label."
-    },
-    {
-      "name": "leadGlyph",
-      "tsType": "Glyph",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "A small leading {@link Glyph}."
     }
   ],
   "InlineGlyph": [
@@ -3075,12 +3172,6 @@
             "name": "imageAlt",
             "tsType": "string",
             "optional": true,
-            "description": ""
-          },
-          {
-            "name": "isNegative",
-            "tsType": "boolean",
-            "optional": false,
             "description": ""
           }
         ]

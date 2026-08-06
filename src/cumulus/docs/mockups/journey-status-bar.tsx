@@ -63,7 +63,6 @@ export function JourneyStatusBarMockup() {
             imageName: "acorn_gold.png",
             effectDescription:
               "Once per turn, when you discard a card, your next card this turn costs 2● less.",
-            isNegative: false,
           },
           {
             id: "278EC1AB-F532-4862-84AE-63DF5E49548C",
@@ -71,7 +70,6 @@ export function JourneyStatusBarMockup() {
             imageName: "aertfact.png",
             effectDescription:
               "The second character you play each turn costs 1● less.",
-            isNegative: false,
           },
           {
             id: "D1FDBE21-56F6-43C0-AAAC-1E4683964DA5",
@@ -79,7 +77,6 @@ export function JourneyStatusBarMockup() {
             imageName: "bell.png",
             effectDescription:
               "When you play a character from your void, rematerialize it.",
-            isNegative: false,
           },
         ]}
       />

@@ -20,7 +20,6 @@ function dreamsign(id: string, imageName: string): Dreamsign {
     effectDescription: "A test effect.",
     imageName,
     imageAlt: `Art for ${id}`,
-    isNegative: false,
   };
 }
 

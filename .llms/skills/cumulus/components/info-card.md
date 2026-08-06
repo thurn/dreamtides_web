@@ -22,16 +22,13 @@ InfoCardProps is a discriminated union. The flattened table combines every varia
 | --- | --- | --- | --- | --- |
 | `variant` | `"object" \| "fullBleed" \| "text" \| "atlasReveal" \| "icon" \| "tide"` | no | — | Which media treatment. Omit — or pass 'text' — for the text variant. |
 | `image` | `ArtRef` | yes | — | The media the card is built around, as an {@link ArtRef}. Required. The square hero image the card is built on, as an {@link ArtRef}. Required. The scene hero image the card is built on, as an {@link ArtRef}. Required. |
-| `imageFilter` | `MediaFilter` = `"dreamsign-portrait" \| "dreamsign-portrait-negative"` | no | — | A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object). A named media {@link MediaFilter} (e.g. a spark glow). A named media {@link MediaFilter} for the scene image. |
 | `title` | `string` | no | — | The card's headline. Resolve names before display; canonical rules symbols render as their inline icons. |
 | `body` | `RichText` | no | — | The reveal copy, as a structured {@link RichText} value. Canonical rules symbols and explicit glyph parts render as cap-height-aligned inline icons. |
-| `slots` | `InfoCardSlots` | no | — | Optional wrappers for the rendered headline and body content. |
 | `imageCrop` | `ImageCrop` = `"top" \| "center"` | no | — | How the hero image is cropped. Default `"center"`. |
 | `figure` | `ArtRef` | no | — | An optional foreground character render (a transparent full-body cutout — a Dream Guide, the boss) laid centered and prominent OVER the hero image, standing above the glass text card. Its own subject of the card; omit for a scene-only hero. An {@link ArtRef}, resolved by the component. Optional transparent full-body figure standing on the card's right side. |
 | `subtitle` | `string` | no | — | An epithet under the name — a smaller serif line in white, mirroring the Dream Avatar-select name/epithet pairing. Resolve before display; rules symbols render as icons. The resident guide / boss title; rules symbols render as icons. An epithet under the name — a smaller serif subtitle in white, mirroring the Dream Avatar-select name/epithet pairing. Resolve before display; rules symbols render as icons. |
 | `glyph` | `Glyph` | yes | — | The {@link Glyph} the disc renders. Required. |
 | `tide` | `Tide` = `"shadow" \| "ember" \| "valor" \| "vision" \| "wild"` | yes | — | Which of the five tides. Fixes the disc color/mark and the alignment label. |
-| `leadGlyph` | `Glyph` | no | — | A small leading {@link Glyph}. |
 
 ### `body`: the `RichText` model
 
@@ -39,29 +36,20 @@ InfoCardProps is a discriminated union. The flattened table combines every varia
 | --- | --- | --- | --- |
 | `kind` | `"plain" \| "rules" \| "underline" \| "note" \| "stack" \| "definitions"` | no |  |
 
-### `slots`: the `InfoCardSlots` model
-
-| Field | Type | Optional | Description |
-| --- | --- | --- | --- |
-| `title` | `((context: InfoCardSlotContext, defaultNode: React.ReactNode) => React.ReactNode)` | yes | Wraps the rendered headline content inside its canonical type container. |
-| `body` | `((context: InfoCardSlotContext, defaultNode: React.ReactNode) => React.ReactNode)` | yes | Wraps the rendered body content inside its canonical type container. |
-
 ## Usage
 
 ### Text variant
 
-The default: a `title`, a `RichText` `body`, and an optional small `leadGlyph` from the named `GLYPHS` vocabulary.
+The default: a `title` and a structured `RichText` body.
 
 ```tsx
 import { InfoCard } from "src/cumulus/components/overlay/InfoCard";
 import { richText } from "src/cumulus/components/card/rich-text";
-import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 <InfoCard
   variant="text"
   title="Singular Storm"
   body={richText.plain("A rising tide that floods the board with essence.")}
-  leadGlyph={GLYPHS.water}
 />
 ```
 
@@ -75,25 +63,6 @@ Pass a `subtitle` to render an epithet under the name — a smaller serif line i
   title="Kragg"
   subtitle="Spent-Blood Chieftain"
   body={richText.rules("At the start of your first turn, gain 1 essence.")}
-/>
-```
-
-### Authoring slots
-
-Editor surfaces may wrap the canonical headline and body content with their interaction layer. InfoCard continues to own the shell, typography, and rich-text rendering.
-
-```tsx
-<InfoCard
-  title="Reclaim"
-  body={richText.rules("Return a card from your void.")}
-  slots={{
-    title: (_context, defaultNode) => (
-      <EditableField field="title">{defaultNode}</EditableField>
-    ),
-    body: (_context, defaultNode) => (
-      <EditableField field="description">{defaultNode}</EditableField>
-    ),
-  }}
 />
 ```
 

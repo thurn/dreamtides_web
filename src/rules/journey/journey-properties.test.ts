@@ -318,7 +318,6 @@ function deckProvider(): DeckContentProvider {
         id: dreamsignId,
         name: `dreamsign-${match[1]}`,
         effectDescription: "effect",
-        isNegative: false,
       };
     },
   };
@@ -487,11 +486,6 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<(rng: () => number) => GeneratedEvent>
   // dreamsigns
   (rng) => ({ type: "ADD_DREAMSIGN", payload: { dreamsignId: `ds-${Math.floor(rng() * 1_000_000)}` } }),
   (rng) => ({ type: "REMOVE_DREAMSIGN", payload: { dreamsignId: `ds-${Math.floor(rng() * 1_000_000)}` } }),
-  (rng) => ({
-    type: "SET_DREAMSIGN_IS_NEGATIVE",
-    payload: { dreamsignId: `ds-${Math.floor(rng() * 1_000_000)}`, isNegative: rng() < 0.5 },
-  }),
-
   // draft — a pick aligned with the start draft's offer ([100,101,102]) so it
   // APPLIES on the first pick (writing draftState); later picks bounce once the
   // offer empties. The engine advances on a clone, so draftState stays non-null.

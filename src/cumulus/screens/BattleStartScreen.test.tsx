@@ -77,7 +77,6 @@ function makeView(): BattleStartView {
         name: "Sign of Quiet Thunder",
         effectDescription: "The first event each turn costs 1 less.",
         imageName: "quiet-thunder.webp",
-        isNegative: false,
       },
     ],
     signatureCards: cards.map((card) => ({

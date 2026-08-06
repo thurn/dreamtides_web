@@ -40,6 +40,7 @@ import { glossaryDefinitionCardDemo } from "./demos/glossary-definition-card";
 import { standaloneGlyphDemo } from "./demos/standalone-glyph";
 import { iconButtonDemo } from "./demos/icon-button";
 import { infoCardDemo } from "./demos/info-card";
+import { editableInfoCardDemo } from "./demos/editable-info-card";
 import { inlineGlyphDemo } from "./demos/inline-glyph";
 import { mainMenuButtonDemo } from "./demos/main-menu-button";
 import { motesDemo } from "./demos/motes";
@@ -193,6 +194,7 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   radialAnnouncementDemo,
   motesDemo,
   infoCardDemo,
+  editableInfoCardDemo,
   inlineGlyphDemo,
   standaloneGlyphDemo,
   journeyStatusBarDemo,

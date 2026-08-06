@@ -13,7 +13,7 @@ import type { CardKeywordModification, CardTypeChange, TransfigurationType } fro
 import { token } from "../primitives/tokens";
 
 export type JourneyDebugResourceId = "essence" | "maxDreamsigns" | "completionLevel";
-export interface JourneyDebugDreamsignView { actionId: string; templateId: string; name: string; isNegative: boolean; }
+export interface JourneyDebugDreamsignView { actionId: string; templateId: string; name: string; }
 export interface JourneyDebugCardSearchView { cardId: string; title: string; model: GameCardModel; }
 export interface JourneyDebugDeckEntryView {
   entryId: string;
@@ -43,7 +43,6 @@ export interface JourneyDebugEditorScreenProps {
   onResourceChange: (id: JourneyDebugResourceId, delta: number) => void;
   onAddDreamsign: (id: string) => void;
   onRemoveDreamsign: (actionId: string) => void;
-  onToggleDreamsignNegative: (actionId: string) => void;
   onAddCard: (id: string) => void;
   onRemoveCard: (entryId: string) => void;
   onSetStatOverride: (entryId: string, statOverride: { energyCost?: number; spark?: number } | null) => void;
@@ -96,7 +95,7 @@ export function JourneyDebugEditorScreen(props: JourneyDebugEditorScreenProps): 
           </section>
           <DisclosureSection title="Dreamsigns" summary={`${String(props.view.dreamsigns.length)} / ${String(props.view.maxDreamsigns)}`} expanded={expanded.dreamsigns ?? true} onExpandedChange={(value) => setExpanded((current) => ({ ...current, dreamsigns: value }))} placement="onGlass" testId="journey-debug-dreamsigns">
             <div style={sectionStyle}>
-              {props.view.dreamsigns.length === 0 ? <p style={textStyle}>No dreamsigns yet.</p> : props.view.dreamsigns.map((dreamsign) => <div key={dreamsign.actionId} data-journey-debug-dreamsign={dreamsign.actionId} style={sectionStyle}><p style={textStyle}>{dreamsign.name}{dreamsign.isNegative ? " · negative" : ""}</p><div style={{ display: "flex", flexWrap: "wrap", gap: token("--space-xs") }}><GlassButton label={dreamsign.isNegative ? "Mark positive" : "Mark negative"} onPress={() => props.onToggleDreamsignNegative(dreamsign.actionId)} placement="onGlass" testId={`journey-debug-negative-${dreamsign.actionId}`} /><GlassButton label="Remove" onPress={() => props.onRemoveDreamsign(dreamsign.actionId)} placement="onGlass" variant="danger" testId={`journey-debug-remove-dreamsign-${dreamsign.actionId}`} /></div></div>)}
+              {props.view.dreamsigns.length === 0 ? <p style={textStyle}>No dreamsigns yet.</p> : props.view.dreamsigns.map((dreamsign) => <div key={dreamsign.actionId} data-journey-debug-dreamsign={dreamsign.actionId} style={sectionStyle}><p style={textStyle}>{dreamsign.name}</p><div style={{ display: "flex", flexWrap: "wrap", gap: token("--space-xs") }}><GlassButton label="Remove" onPress={() => props.onRemoveDreamsign(dreamsign.actionId)} placement="onGlass" variant="danger" testId={`journey-debug-remove-dreamsign-${dreamsign.actionId}`} /></div></div>)}
               <TextField label="Add dreamsign" value={dreamsignQuery} onChange={setDreamsignQuery} kind="search" disabled={!canAddDreamsign} placeholder={canAddDreamsign ? "Search by name or ID" : "Dreamsign cap reached"} supportingText={canAddDreamsign ? "Choose a matching Dreamsign below." : "Remove one before adding another."} testId="journey-debug-dreamsign-search" />
               <div style={{ display: "flex", flexWrap: "wrap", gap: token("--space-xs") }}>{dreamsignMatches.map((option) => <GlassButton key={option.id} label={`Add ${option.name}`} onPress={() => props.onAddDreamsign(option.id)} disabled={!canAddDreamsign} placement="onGlass" testId={`journey-debug-add-dreamsign-${option.id}`} />)}</div>
             </div>

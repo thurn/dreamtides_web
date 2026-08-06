@@ -9,7 +9,6 @@ const SAMPLE_DREAMSIGN: DreamsignData = {
   imageAlt: "Golden fruit-like charm with a mesh-patterned orb.",
   effectDescription:
     "Once per turn, when you discard a card, your next card this turn costs 2● less.",
-  isNegative: false,
 };
 
 function WagerPrizeCardDemo({ revealed = false }: { revealed?: boolean }) {

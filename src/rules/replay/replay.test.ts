@@ -93,9 +93,10 @@ describe("replay fixtures", () => {
       }),
     ]);
     expect(decoded.journey.dreamsigns).toEqual([
-      expect.objectContaining({ id: "negative", isNegative: true }),
+      expect.objectContaining({ id: "negative" }),
     ]);
     expect(decoded.journey.dreamsigns[0]).not.toHaveProperty("isBane");
+    expect(decoded.journey.dreamsigns[0]).not.toHaveProperty("isNegative");
     expect(decoded.journey.battleModifiers).toEqual([
       expect.objectContaining({ kind: "temporary_nightmare_grant" }),
       expect.objectContaining({ kind: "temporary_nightmare_grant" }),

@@ -14,7 +14,7 @@ import { glyph } from "../../primitives/glyph";
 
 const CARD_ID = asCardId("11111111-1111-4111-8111-111111111111");
 const CARD: CardData = { id: CARD_ID, name: asCardName("Fixture Card"), cardNumber: 1, cardType: "Event", subtype: "", isStarter: false, rarity: "Special", energyCost: 1, spark: null, isFast: false, renderedText: "Nightmare is a Bane. Discover. Ephemeral.", imageNumber: 1, artOwned: false };
-const SIGN: DreamsignData = { id: "22222222-2222-4222-8222-222222222222", name: "Fixture Sign", effectDescription: "Fixed effect.", isNegative: false };
+const SIGN: DreamsignData = { id: "22222222-2222-4222-8222-222222222222", name: "Fixture Sign", effectDescription: "Fixed effect." };
 const SITE: DreamscapeSiteModel = { site: { id: "33333333-3333-4333-8333-333333333333", type: "Battle", isEnhanced: false, isVisited: false }, pos: { x: 50, y: 50 }, index: 0, isBattle: true, isLocked: true, isInteractive: false, label: "Locked Fixture", blurb: "Fixed site detail.", icon: glyph("bxf bx-lock") };
 
 let root: Root;

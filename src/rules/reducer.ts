@@ -160,15 +160,6 @@ function normalizeLegacyNightmareEvent(event: GameEvent): GameEvent {
           source: event.payload.source,
         },
       };
-    case "SET_DREAMSIGN_IS_BANE":
-      return {
-        ...event,
-        type: "SET_DREAMSIGN_IS_NEGATIVE",
-        payload: {
-          dreamsignId: event.payload.dreamsignId,
-          isNegative: event.payload.isBane,
-        },
-      };
     default:
       return event;
   }
@@ -617,9 +608,6 @@ export function routeDomain(
       return journeyCase(state, deck.removeDreamsign(journey, payload));
     case "SET_DREAMSIGN_POOL":
       return journeyCase(state, deck.setDreamsignPool(journey, payload));
-    case "SET_DREAMSIGN_IS_NEGATIVE":
-      return journeyCase(state, deck.setDreamsignIsNegative(journey, payload));
-
     // --- battle lifecycle (create / tear down the battle slice) ---
     case "BEGIN_BATTLE":
       return foldCase(state, battleEvents.beginBattle(state, payload, ctx));

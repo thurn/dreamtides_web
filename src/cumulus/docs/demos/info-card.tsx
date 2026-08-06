@@ -1,14 +1,14 @@
 // Registry demo entry for InfoCard — see tide-pill.tsx for the recipe this
 // follows. `variant` is a string-literal union (select control); `title`,
 // `title` and `subtitle` are strings (text controls) seeded from defaultArgs;
-// `leadGlyph` is a named `Glyph`. `body` is a `RichText` model value with no
+// `body` is a `RichText` model value with no
 // generated control, so it is seeded via sampleContent.
 //
 // The media props are seeded so that EVERY variant renders real content the
 // moment the reader switches the `variant` control: `image` is a real
 // Dream Avatar `ArtRef` (drives the object / fullBleed media) and `glyph` is a
 // named `Glyph` (drives the icon-disc variant), the same production art the
-// full-screen mockup uses — the text default still leads with `leadGlyph`.
+// full-screen mockup uses.
 //
 // InfoCardProps is a discriminated union on `variant` — each media variant
 // requires the media it renders (object / fullBleed require `image`, icon
@@ -23,7 +23,7 @@
 import { InfoCard } from "../../components/overlay/InfoCard";
 import { richText } from "../../components/card/rich-text";
 import { artRef } from "../../primitives/art";
-import { GLYPHS, glyph } from "../../primitives/glyph";
+import { glyph } from "../../primitives/glyph";
 import type { CumulusComponent } from "../registry";
 
 export const infoCardDemo: CumulusComponent = {
@@ -45,16 +45,14 @@ export const infoCardDemo: CumulusComponent = {
   usage: [
     {
       label: "Text variant",
-      note: "The default: a `title`, a `RichText` `body`, and an optional small `leadGlyph` from the named `GLYPHS` vocabulary.",
+      note: "The default: a `title` and a structured `RichText` body.",
       code: `import { InfoCard } from "src/cumulus/components/overlay/InfoCard";
 import { richText } from "src/cumulus/components/card/rich-text";
-import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 <InfoCard
   variant="text"
   title="Singular Storm"
   body={richText.plain("A rising tide that floods the board with essence.")}
-  leadGlyph={GLYPHS.water}
 />`,
     },
     {
@@ -65,22 +63,6 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
   title="Kragg"
   subtitle="Spent-Blood Chieftain"
   body={richText.rules("At the start of your first turn, gain 1 essence.")}
-/>`,
-    },
-    {
-      label: "Authoring slots",
-      note: "Editor surfaces may wrap the canonical headline and body content with their interaction layer. InfoCard continues to own the shell, typography, and rich-text rendering.",
-      code: `<InfoCard
-  title="Reclaim"
-  body={richText.rules("Return a card from your void.")}
-  slots={{
-    title: (_context, defaultNode) => (
-      <EditableField field="title">{defaultNode}</EditableField>
-    ),
-    body: (_context, defaultNode) => (
-      <EditableField field="description">{defaultNode}</EditableField>
-    ),
-  }}
 />`,
     },
     {
@@ -150,7 +132,6 @@ const scale = infoCardTextScale(window.innerWidth); // 0.86 below ~551px; otherw
     defaultArgs: {
       variant: "text",
       title: "Singular Storm",
-      leadGlyph: GLYPHS.water,
       // Real media so switching `variant` to object / fullBleed / icon renders
       // genuine art rather than an empty frame. `image` is a real Dream Avatar
       // portrait, `figure` gives image-led variants a real foreground subject,
