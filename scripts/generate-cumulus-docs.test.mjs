@@ -283,7 +283,7 @@ describe("extractTokenNotes", () => {
   --space-6: 16px;
 
   /* ---- a section banner comment, not a note ---- */
-  --accent: var(--primitive-violet-500);
+  --accent: #9333ea;
 }
 `;
     const notes = extractTokenNotes(css);
@@ -304,18 +304,16 @@ describe("extractTokenNotes", () => {
 
 describe("renderTokensMarkdown", () => {
   const tokens = [
-    { name: "primitive-violet-500", value: "#9333ea" },
-    { name: "surface-card", value: "var(--primitive-plum-700)" },
-    { name: "accent-strong", value: "var(--primitive-violet-600)" },
+    { name: "surface-card", value: "#1a1525" },
+    { name: "accent-strong", value: "#7c3aed" },
     { name: "space-6", value: "16px" },
     { name: "t-body", value: "400 15px/1.55 var(--font-ui)" },
-    { name: "reward", value: "var(--primitive-gold-600)" },
+    { name: "reward", value: "#d4a017" },
     { name: "zz-unclassified", value: "1px" },
   ];
 
-  it("filters primitives and groups the rest by role family", () => {
+  it("groups tokens by role family", () => {
     const markdown = renderTokensMarkdown(tokens, new Map());
-    expect(markdown).not.toContain("primitive-violet-500");
     expect(markdown).toContain("## Backgrounds & surfaces");
     expect(markdown).toContain("| `--surface-card` |");
     // A bare family prefix covers hyphenated descendants (accent-strong).

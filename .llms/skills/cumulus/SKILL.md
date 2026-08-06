@@ -219,21 +219,19 @@ Every visual value you write in UI code — a margin, a color, a font, a corner
 radius, a shadow, an animation duration — comes from the token vocabulary in
 `src/cumulus/primitives/cumulus-tokens.css`. The full generated reference, grouped
 by role with values and notes, is [tokens.md](tokens.md); the live specimen
-view is the Primitives section of `/cumulus`.
+view is the Design Tokens section of `/cumulus`.
 
 **How to reference a token.** In Cumulus TS/TSX, call `token("--space-6")` from
 `src/cumulus/primitives/tokens.ts` — it is typed against the real token names
 and returns the `var(--space-6)` string for inline styles. In CSS, write
 `var(--space-6)`. Tokens are scoped to the `.cumulus` subtree.
 
-**Two tiers — use the semantic one.** `--primitive-*` names a raw value (a
-color-ramp step, a radius step, a font face) and is the internal material the
-semantic layer is built from; the `no-primitive-tokens` ESLint rule errors on
-any `--primitive-*` reference outside `src/cumulus/primitives/` and
-`src/cumulus/components/`. Everything else is a semantic token that names a
-_use_ — `--surface-card`, `--text-secondary`, `--radius-control` — and is
-what all UI code writes against. This split is what lets the whole system
-re-skin by editing the primitive layer alone.
+**One public vocabulary.** Every token is available to UI code and names a
+visual role or a sanctioned scale. Role tokens such as `--surface-card`,
+`--text-secondary`, and `--radius-control` say what a value is for. Scale
+families such as `--space-*`, `--t-*`, `--dur-*`, and `--shadow-*` provide the
+approved steps for layout, typography, motion, and elevation. Each declaration
+owns its resolved value directly in `cumulus-tokens.css`.
 
 **When you use tokens directly.** Mostly in rung-2 layout wrappers (see the
 customization ladder): the wrapper you put around a Cumulus component to size,
@@ -250,9 +248,8 @@ tokens (`--dur-*`, `--ease-*`, `--motion-object-travel`,
 `--text-secondary` because the text is secondary, not because you like its
 hex; `--space-6` because it is the scale step the neighboring UI uses, not
 because 16px looked right. If no existing token expresses the role, that is a
-token-system conversation (add a semantic token in `cumulus-tokens.css`,
-resolving through a primitive, then `npm run cumulus-tokens`) — never a raw
-px/hex literal in UI code, and never a reach into `--primitive-*`. This is
+token-system conversation (add a named token in `cumulus-tokens.css`, then run
+`npm run cumulus-tokens`) — never a raw px/hex literal in product UI code. This is
 lint-enforced in product UI: `no-hardcoded-values` catches raw colors,
 `no-untokenized-lengths` catches raw px spacing and radii,
 `no-composed-type-voice` catches hand-assembled font shorthands, and

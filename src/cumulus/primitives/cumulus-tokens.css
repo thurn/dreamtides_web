@@ -9,43 +9,26 @@
    and never leak onto the rest of the app.
 
    ----------------------------------------------------------------
-   TWO TIERS. Read this before adding or using a token.
+   PUBLIC TOKEN VOCABULARY
    ----------------------------------------------------------------
-   1. PRIMITIVES — `--primitive-*`. A primitive names a raw VALUE: a
-      point on the color ramp (`--primitive-violet-500`), a step on the
-      radius scale (`--primitive-radius-lg`), a font face, a weight.
-      Primitives are the raw material the semantic layer is built from.
-      They may be referenced ONLY inside `src/cumulus/primitives/` (this
-      sheet) and `src/cumulus/components/` (leaf components). A lint rule
-      (eslint-rules/no-primitive-tokens.js) fails the build on any
-      `--primitive-*` reference elsewhere. No exceptions.
-
-   2. SEMANTIC TOKENS — everything else. A semantic token names a USE:
-      `--surface-card`, `--text-primary`, `--accent`, `--radius-control`,
-      `--font-ui`. UI/product/doc code writes against THESE, never a
-      primitive. A semantic token resolves through a primitive (or,
-      where no ramp step fits, a literal) so the whole system re-skins
-      by editing the primitive layer alone.
-
-      The spacing scale (`--space-*`), the layout constants, the type
-      scale (`--t-*`), the motion tokens, and the elevation/glow shadows
-      are sanctioned semantic scales: they are role/intent named and used
-      directly by any code. They carry no `--primitive-` prefix and the
-      lint rule does not touch them.
+   Every custom property in this sheet is available to product code. Choose a
+   token by the role it plays (surface, text, accent, radius, spacing, type,
+   motion, elevation), and use it directly. Where the vocabulary lacks the role
+   you need, add a named token here instead of adding an incidental value at the
+   call site.
 
    CardView's `--cv-*` frame variables live in its component-owned stylesheet
    so every card rendering context loads the full closure together.
 
-   Trailing `/* @kind ... *\/` comments are preserved because the
-   Primitives doc section reads them to group tokens for display.
+   Trailing `/* @kind ... *\/` comments are preserved because the Design
+   Tokens doc section reads them to group tokens for display.
 
    Two of the six source files contribute no custom properties here:
      - tokens/base.css declares element/class resets, not custom
        properties.
      - tokens/fonts.css only contains a Google Fonts `@import`; the app
        already loads all five families itself (see index.html and
-       src/runtime/verify-fonts.ts), so the `--primitive-font-*` faces
-       below reference those already-loaded families. */
+       src/runtime/verify-fonts.ts). */
 
 /* ================================================================
    RUNTIME SAFE-AREA CHANNEL — declared on :root, not .cumulus.
@@ -79,101 +62,25 @@
 }
 
 /* ================================================================
-   PRIMITIVES — raw values. Reference only within primitives/ + components/.
-   ================================================================ */
-
-.cumulus {
-  /* ---- Color: dream backgrounds (darkest -> lifted) ---- */
-  --primitive-void-900: #060410;   /* the deepest backdrop, behind everything */
-  --primitive-void-800: #0a0612;   /* default app background */
-  --primitive-void-700: #14101f;   /* raised background band */
-  --primitive-plum-700: #1a1525;   /* card / sheet surface */
-  --primitive-plum-600: #221a31;   /* elevated surface, popover */
-  --primitive-plum-500: #2a2040;   /* hover / pressed surface  (parent surface-light) */
-
-  /* ---- Color: violet accent (the brand glow) — matches parent ---- */
-  --primitive-violet-600: #7c3aed;
-  --primitive-violet-400: #a855f7;  /* primary accent */
-  --primitive-violet-300: #c084fc;  /* bright glow / highlight */
-  --primitive-violet-100: #e9d5ff;  /* high-contrast lavender */
-
-  /* ---- Color: gold (omens, reward, victory) — matches parent ---- */
-  --primitive-gold-600: #d4a017;
-  --primitive-gold-400: #fbbf24;    /* omens value */
-
-  /* ---- Color: card resources — matches parent ---- */
-  --primitive-energy-400: #0ea5e9;  /* energy droplet */
-  --primitive-spark-500: #f3c33f;   /* spark sparkle — production SPARK_ICON_COLOR */
-  --primitive-ember-500: #ef4444;   /* danger / boss / purge / close */
-  --primitive-sap-400: #22c55e;     /* grant / player green */
-  --primitive-orange-400: #f09837;  /* challenger chevron */
-  --primitive-orange-500: #f97316;  /* default selection ring — production SELECTION_DEFAULT_COLOR */
-
-  /* ---- Color: text on dark ---- */
-  --primitive-ink-100: #fff8ec;     /* primary, a warm near-white */
-  --primitive-ink-300: #eee3d2;     /* secondary */
-  --primitive-ink-400: #d8ccba;     /* muted */
-  --primitive-ink-500: #bba994;     /* faint label / disabled */
-  --primitive-neutral-300: #b8b8b8; /* light neutral portrait field */
-  --primitive-neutral-500: #787878; /* neutral loading placeholder */
-
-  /* ---- Color: lines & scrims ---- */
-  --primitive-line-soft: rgba(255, 255, 255, 0.07);
-  --primitive-line-mid:  rgba(255, 255, 255, 0.12);
-  --primitive-line-strong: rgba(255, 255, 255, 0.18);
-  --primitive-line-violet: rgba(168, 85, 247, 0.40);
-  --primitive-line-black: #000;
-  --primitive-line-battlefield: rgba(24, 24, 28, 0.30);
-  --primitive-scrim-700: rgba(5, 3, 10, 0.72);   /* modal backdrop */
-  --primitive-scrim-800: rgba(0, 0, 0, 0.80);    /* full-screen gallery backdrop */
-  --primitive-scrim-900: rgba(5, 3, 10, 0.90);
-
-  /* ---- Font faces (match the parent) ---- */
-  --primitive-font-serif: 'EB Garamond', Georgia, 'Times New Roman', serif;
-  --primitive-font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --primitive-font-rules: 'Fira Sans Condensed', 'Inter', system-ui, sans-serif;
-  --primitive-font-display: 'Anton', Impact, sans-serif;
-  --primitive-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-
-  /* ---- Font weights ---- */
-  --primitive-weight-regular: 400;   /* @kind font */
-  --primitive-weight-medium: 500;    /* @kind font */
-  --primitive-weight-semibold: 600;  /* @kind font */
-  --primitive-weight-bold: 700;      /* @kind font */
-  --primitive-weight-extrabold: 800; /* @kind font */
-
-  /* ---- Corner radius scale ---- */
-  --primitive-radius-xs: 6px;
-  --primitive-radius-sm: 10px;
-  --primitive-radius-md: 14px;     /* default control / chip */
-  --primitive-radius-lg: 18px;     /* cards, tiles */
-  --primitive-radius-xl: 24px;     /* sheets, large surfaces */
-  --primitive-radius-2xl: 30px;    /* hero panels */
-  --primitive-radius-pill: 999px;  /* pills, fully-round buttons */
-  --primitive-radius-card: 16px;   /* the game card corner */
-  --primitive-radius-popover: 8px; /* @kind radius */
-}
-
-/* ================================================================
-   SEMANTIC TOKENS — name a use. Write UI code against these.
+   PUBLIC TOKEN VOCABULARY — choose by role and use directly.
    ================================================================ */
 
 .cumulus {
   /* ---- Backgrounds & surfaces ---- */
-  --bg-app: var(--primitive-void-800);
-  --bg-sunken: var(--primitive-void-900);
-  --bg-band: var(--primitive-void-700);
-  --bg-loading: var(--primitive-line-black); /* true-black cinematic loading stage */
-  --tutorial-dissolve-fragment: var(--primitive-line-black); /* true-black card fragments during the tutorial dissolve */
-  --surface-card: var(--primitive-plum-700);
-  --surface-raised: var(--primitive-plum-600);
-  --surface-hover: var(--primitive-plum-500);
+  --bg-app: #0a0612;
+  --bg-sunken: #060410;
+  --bg-band: #14101f;
+  --bg-loading: #000; /* true-black cinematic loading stage */
+  --tutorial-dissolve-fragment: #000; /* true-black card fragments during the tutorial dissolve */
+  --surface-card: #1a1525;
+  --surface-raised: #221a31;
+  --surface-hover: #2a2040;
   --surface-chrome: #191423;   /* solid raised chrome (HUD/popovers/windows) */
   --surface-chrome-strong: #120e1c;  /* solid, deeper chrome for windows */
-  --surface-status-badge: var(--primitive-line-black); /* high-contrast in-card status mark */
-  --battle-challenger-chevron: var(--primitive-orange-400);
-  --surface-placeholder: var(--primitive-neutral-500); /* content reserved for imminent media */
-  --surface-portrait: var(--primitive-neutral-300); /* light neutral field behind framed character art */
+  --surface-status-badge: #000; /* high-contrast in-card status mark */
+  --battle-challenger-chevron: #f09837;
+  --surface-placeholder: #787878; /* content reserved for imminent media */
+  --surface-portrait: #b8b8b8; /* light neutral field behind framed character art */
 
   /* ---- Dream Atlas material ----
      The map owns a semantic palette because edges, node halos, badges, and the
@@ -183,18 +90,18 @@
   --atlas-edge-dim: rgba(206, 192, 236, 0.92);
   --atlas-edge-locked: rgba(182, 154, 248, 0.9);
   --atlas-edge-shadow: rgba(0, 0, 0, 0.7);
-  --atlas-edge-traveled-from: var(--primitive-gold-400);
-  --atlas-edge-traveled-to: var(--primitive-gold-600);
+  --atlas-edge-traveled-from: #fbbf24;
+  --atlas-edge-traveled-to: #d4a017;
   --atlas-edge-traveled-glow: rgba(251, 191, 36, 0.55);
-  --atlas-edge-open-from: var(--primitive-violet-400);
-  --atlas-edge-open-to: var(--primitive-violet-600);
+  --atlas-edge-open-from: #a855f7;
+  --atlas-edge-open-to: #7c3aed;
   --atlas-edge-open-glow: rgba(168, 85, 247, 0.6);
   --atlas-edge-open-flow: #ede0ff;
   --atlas-node-completed-halo: rgba(212, 160, 23, 0.22);
   --atlas-node-completed-glow: rgba(212, 160, 23, 0.45);
   --atlas-node-available-halo: rgba(168, 85, 247, 0.32);
   --atlas-node-available-glow: rgba(168, 85, 247, 0.6);
-  --atlas-node-selectable-outline: var(--primitive-violet-300);
+  --atlas-node-selectable-outline: #c084fc;
   --atlas-node-selectable-outline-width: 2.5%;
   --atlas-node-selectable-frame-glow:
     drop-shadow(0 0 3px rgba(216, 180, 254, 0.95))
@@ -212,82 +119,82 @@
   --atlas-node-active-glow: rgba(168, 85, 247, 0.85);
   --atlas-node-unrevealed-face: radial-gradient(closest-side, #4a4658, #322e40);
   --atlas-badge-shadow: rgba(0, 0, 0, 0.55);
-  --atlas-boss-badge-background: radial-gradient(closest-side, var(--primitive-ember-500), #7f1d1d);
-  --atlas-boss-badge-border: var(--primitive-void-800);
+  --atlas-boss-badge-background: radial-gradient(closest-side, #ef4444, #7f1d1d);
+  --atlas-boss-badge-border: #0a0612;
   --atlas-boss-badge-glow: rgba(239, 68, 68, 0.8);
-  --atlas-known-badge-border: var(--primitive-gold-600);
+  --atlas-known-badge-border: #d4a017;
   --atlas-known-badge-glow: rgba(250, 204, 21, 0.6);
   --atlas-known-image-shadow: rgba(0, 0, 0, 0.6);
   --atlas-known-pulse-glow: rgba(250, 204, 21, 0.5);
   --atlas-known-pulse-clear: rgba(250, 204, 21, 0);
 
   /* ---- Text ---- */
-  --text-primary: var(--primitive-ink-100);
-  --text-secondary: var(--primitive-ink-300);
-  --text-muted: var(--primitive-ink-400);
-  --text-faint: var(--primitive-ink-500);
+  --text-primary: #fff8ec;
+  --text-secondary: #eee3d2;
+  --text-muted: #d8ccba;
+  --text-faint: #bba994;
   --text-on-accent: #ffffff;
   --text-on-card: #f6f6f5;   /* card name on dark card chrome (parent value) */
-  --text-on-glass: var(--primitive-ink-100); /* high-contrast text on blurred glass; never violet/accent */
-  --text-on-glass-muted: var(--primitive-ink-300); /* secondary text on blurred glass */
-  --text-tutorial-highlight: var(--primitive-violet-100); /* high-contrast lavender emphasis in tutorial glass copy */
+  --text-on-glass: #fff8ec; /* high-contrast text on blurred glass; never violet/accent */
+  --text-on-glass-muted: #eee3d2; /* secondary text on blurred glass */
+  --text-tutorial-highlight: #e9d5ff; /* high-contrast lavender emphasis in tutorial glass copy */
 
   /* ---- Accent / primary action ---- */
-  --accent: var(--primitive-violet-400);
-  --accent-strong: var(--primitive-violet-600);
-  --accent-bright: var(--primitive-violet-300);
+  --accent: #a855f7;
+  --accent-strong: #7c3aed;
+  --accent-bright: #c084fc;
   --accent-tint: rgba(168, 85, 247, 0.16);   /* low-alpha fill behind accents */
 
   /* ---- Resource roles (game economy) — match the parent's resource marks ---- */
-  --energy: var(--primitive-energy-400);    /* blue droplet  (bxf bx-fire-alt) */
-  --spark: var(--primitive-spark-500);      /* gold sparkle  (bxf bx-sparkles) */
-  --essence: var(--primitive-violet-400);   /* violet, unified with accent  (bxf bx-crypto) */
-  --danger: var(--primitive-ember-500);
-  --positive: var(--primitive-sap-400);     /* player / grant green */
-  --selected: var(--primitive-orange-500);  /* default card selection ring */
-  --reward: var(--primitive-gold-600);      /* victory and earned-reward moments */
-  --portrait-warmth: var(--primitive-gold-600); /* warm ambient light in DreamAvatar portrait stages */
+  --energy: #0ea5e9;    /* blue droplet  (bxf bx-fire-alt) */
+  --spark: #f3c33f;      /* gold sparkle  (bxf bx-sparkles) */
+  --essence: #a855f7;   /* violet, unified with accent  (bxf bx-crypto) */
+  --danger: #ef4444;
+  --positive: #22c55e;     /* player / grant green */
+  --selected: #f97316;  /* default card selection ring */
+  --reward: #d4a017;      /* victory and earned-reward moments */
+  --portrait-warmth: #d4a017; /* warm ambient light in DreamAvatar portrait stages */
 
   /* ---- Lines / borders ---- */
-  --border-soft: var(--primitive-line-soft);
-  --border-mid: var(--primitive-line-mid);
-  --border-strong: var(--primitive-line-strong);
-  --border-accent: var(--primitive-line-violet);
+  --border-soft: rgba(255, 255, 255, 0.07);
+  --border-mid: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.18);
+  --border-accent: rgba(168, 85, 247, 0.40);
   --border-accent-glass: color-mix(in srgb, var(--accent-bright) 62%, white 38%);
-  --battlefield-slot-border: 2px dotted var(--primitive-line-battlefield);
+  --battlefield-slot-border: 2px dotted rgba(24, 24, 28, 0.30);
 
   /* ---- Scrims (full-surface darkening behind a focused element) ---- */
-  --scrim: var(--primitive-scrim-700);          /* modal / sheet backdrop */
-  --scrim-gallery: var(--primitive-scrim-800);  /* full-screen card gallery */
-  --scrim-strong: var(--primitive-scrim-900);   /* full-screen focus (held zoom) */
+  --scrim: rgba(5, 3, 10, 0.72);          /* modal / sheet backdrop */
+  --scrim-gallery: rgba(0, 0, 0, 0.80);  /* full-screen card gallery */
+  --scrim-strong: rgba(5, 3, 10, 0.90);   /* full-screen focus (held zoom) */
 
   /* ---- Corner radius, by role. UI code sizes corners by what the
      element IS, not by a scale step. ---- */
-  --radius-inset: var(--primitive-radius-sm);       /* small nested chips / swatches */
-  --radius-status-badge: var(--primitive-radius-xs);/* compact in-card status squares */
-  --radius-control: var(--primitive-radius-md);     /* buttons, chips, inputs, menus */
-  --radius-card: var(--primitive-radius-card);      /* the game card */
-  --radius-panel: var(--primitive-radius-lg);       /* cards, tiles, group panels */
-  --radius-sheet: var(--primitive-radius-xl);       /* bottom sheets, large surfaces */
-  --radius-hero: var(--primitive-radius-2xl);       /* hero banners / panels */
-  --radius-pill: var(--primitive-radius-pill);      /* pills, fully-round buttons */
-  --radius-popover: var(--primitive-radius-popover);/* InfoCard / press-reveal popover */
+  --radius-inset: 10px;       /* small nested chips / swatches */
+  --radius-status-badge: 6px;/* compact in-card status squares */
+  --radius-control: 14px;     /* buttons, chips, inputs, menus */
+  --radius-card: 16px;      /* the game card */
+  --radius-panel: 18px;       /* cards, tiles, group panels */
+  --radius-sheet: 24px;       /* bottom sheets, large surfaces */
+  --radius-hero: 30px;       /* hero banners / panels */
+  --radius-pill: 999px;      /* pills, fully-round buttons */
+  --radius-popover: 8px;/* InfoCard / press-reveal popover */
 
   /* ---- Font, by role. The type scale (--t-*) below bundles size +
      weight + face; these bare faces are for the cases that need only a
      family. ---- */
-  --font-ui: var(--primitive-font-sans);        /* body, chrome, buttons, HUD */
-  --font-title: var(--primitive-font-serif);    /* titles, names, display */
-  --font-rules-text: var(--primitive-font-rules); /* card / ability rules text */
-  --font-numeral: var(--primitive-font-display);/* stat-orb numerals (Anton) */
-  --font-meta: var(--primitive-font-mono);      /* eyebrows, counters, meta */
-  --font-logo: var(--primitive-font-serif);     /* wordmark = serif + violet title gradient */
+  --font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;        /* body, chrome, buttons, HUD */
+  --font-title: 'EB Garamond', Georgia, 'Times New Roman', serif;    /* titles, names, display */
+  --font-rules-text: 'Fira Sans Condensed', 'Inter', system-ui, sans-serif; /* card / ability rules text */
+  --font-numeral: 'Anton', Impact, sans-serif;/* stat-orb numerals (Anton) */
+  --font-meta: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;      /* eyebrows, counters, meta */
+  --font-logo: 'EB Garamond', Georgia, 'Times New Roman', serif;     /* wordmark = serif + violet title gradient */
 
   /* Canonical font faces shared by component-owned materials. */
-  --font-serif-canon: var(--primitive-font-serif);  /* EB Garamond — titles, names */
-  --font-sans-canon: var(--primitive-font-sans);    /* Inter — body, HUD, buttons */
-  --font-mono-canon: var(--primitive-font-mono);    /* JetBrains Mono — eyebrows */
-  --font-rules-canon: var(--primitive-font-rules);  /* Fira Sans Condensed — rules text */
+  --font-serif-canon: 'EB Garamond', Georgia, 'Times New Roman', serif;  /* EB Garamond — titles, names */
+  --font-sans-canon: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;    /* Inter — body, HUD, buttons */
+  --font-mono-canon: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;    /* JetBrains Mono — eyebrows */
+  --font-rules-canon: 'Fira Sans Condensed', 'Inter', system-ui, sans-serif;  /* Fira Sans Condensed — rules text */
 }
 
 /* ================================================================
@@ -313,41 +220,41 @@
 
 .cumulus {
   /* ---- Display / serif scale (titles, place names) ---- */
-  --t-wordmark: 600 clamp(72px, 10vw, 150px)/0.9 var(--primitive-font-serif); /* Dreamtides main-menu wordmark */
-  --t-display: 600 40px/1.04 var(--primitive-font-serif);    /* screen hero title */
-  --t-hero: 600 46px/1.05 var(--primitive-font-serif);       /* dream-avatar-select hero name */
-  --t-hero-epithet: 500 21px/1.15 var(--primitive-font-serif); /* the epithet under the hero name */
-  --t-title: 600 30px/1.08 var(--primitive-font-serif);      /* place / screen name */
-  --t-title-sm: 600 23px/1.12 var(--primitive-font-serif);   /* card-detail name, section */
-  --t-tutorial-dialogue: 500 17px/1.3 var(--primitive-font-serif); /* tutorial speech bubbles */
+  --t-wordmark: 600 clamp(72px, 10vw, 150px)/0.9 'EB Garamond', Georgia, 'Times New Roman', serif; /* Dreamtides main-menu wordmark */
+  --t-display: 600 40px/1.04 'EB Garamond', Georgia, 'Times New Roman', serif;    /* screen hero title */
+  --t-hero: 600 46px/1.05 'EB Garamond', Georgia, 'Times New Roman', serif;       /* dream-avatar-select hero name */
+  --t-hero-epithet: 500 21px/1.15 'EB Garamond', Georgia, 'Times New Roman', serif; /* the epithet under the hero name */
+  --t-title: 600 30px/1.08 'EB Garamond', Georgia, 'Times New Roman', serif;      /* place / screen name */
+  --t-title-sm: 600 23px/1.12 'EB Garamond', Georgia, 'Times New Roman', serif;   /* card-detail name, section */
+  --t-tutorial-dialogue: 500 17px/1.3 'EB Garamond', Georgia, 'Times New Roman', serif; /* tutorial speech bubbles */
 
   /* ---- Sans / UI scale ---- */
-  --t-tutorial-instruction: 600 22px/1.3 var(--primitive-font-sans); /* desktop tutorial guidance */
-  --t-lead: 600 19px/1.3 var(--primitive-font-sans);         /* prominent UI heading */
-  --t-body: 500 15px/1.45 var(--primitive-font-sans);        /* default body */
-  --t-body-sm: 500 13px/1.45 var(--primitive-font-sans);     /* dense UI body */
-  --t-rules: 500 14px/1.32 var(--primitive-font-rules);      /* card / ability rules text */
-  --t-button-lg: 700 19px/1 var(--primitive-font-sans);      /* prominent primary action */
-  --t-button: 700 16px/1 var(--primitive-font-sans);         /* button face */
-  --t-button-sm: 700 14px/1 var(--primitive-font-sans);
-  --t-caption: 600 12px/1.35 var(--primitive-font-sans);     /* metadata */
+  --t-tutorial-instruction: 600 22px/1.3 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* desktop tutorial guidance */
+  --t-lead: 600 19px/1.3 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;         /* prominent UI heading */
+  --t-body: 500 15px/1.45 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;        /* default body */
+  --t-body-sm: 500 13px/1.45 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;     /* dense UI body */
+  --t-rules: 500 14px/1.32 'Fira Sans Condensed', 'Inter', system-ui, sans-serif;      /* card / ability rules text */
+  --t-button-lg: 700 19px/1 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;      /* prominent primary action */
+  --t-button: 700 16px/1 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;         /* button face */
+  --t-button-sm: 700 14px/1 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --t-caption: 600 12px/1.35 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;     /* metadata */
 
   /* ---- InfoCard popover scale ----
      The ONE type scale every press-reveal popover uses, formalized from the
      shipped InfoCard: a serif headline, rules-face body, mono meta. */
-  --t-popover-headline: 600 19px/1.18 var(--primitive-font-serif);  /* letter-spacing: -0.01em */
-  --t-popover-epithet: 500 14px/1.25 var(--primitive-font-serif);   /* a name's epithet under a popover headline */
-  --t-popover-body: 500 14px/1.45 var(--primitive-font-rules);
-  --t-popover-meta: 700 10.5px/1 var(--primitive-font-mono);        /* .12em uppercase */
+  --t-popover-headline: 600 19px/1.18 'EB Garamond', Georgia, 'Times New Roman', serif;  /* letter-spacing: -0.01em */
+  --t-popover-epithet: 500 14px/1.25 'EB Garamond', Georgia, 'Times New Roman', serif;   /* a name's epithet under a popover headline */
+  --t-popover-body: 500 14px/1.45 'Fira Sans Condensed', 'Inter', system-ui, sans-serif;
+  --t-popover-meta: 700 10.5px/1 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;        /* .12em uppercase */
 
   /* ---- Eyebrow / overline (mono, letter-spaced, uppercase) ---- */
-  --t-eyebrow: 700 11px/1.2 var(--primitive-font-mono);
+  --t-eyebrow: 700 11px/1.2 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --tracking-eyebrow: 0.14em;   /* @kind other */
   --tracking-wordmark: 0.01em;  /* @kind other */
 
   /* numeric chips (essence/score values) read best in tabular sans;
      card stat ORBS use --font-numeral (Anton) directly. */
-  --t-numeral: 800 17px/1 var(--primitive-font-sans);
+  --t-numeral: 800 17px/1 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* ================================================================

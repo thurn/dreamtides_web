@@ -19,7 +19,7 @@ import { getMockup } from "./mockups/registry";
 import { ComponentPage } from "./ComponentPage";
 import { ComponentShowcase } from "./ComponentShowcase";
 import { IntroSection } from "./IntroSection";
-import { PrimitivesSection, TOKEN_TOC_ENTRIES } from "./PrimitivesSection";
+import { DesignTokensSection, TOKEN_TOC_ENTRIES } from "./DesignTokensSection";
 import { TableOfContents, type TocEntry } from "./TableOfContents";
 import { token } from "../primitives/tokens";
 
@@ -116,7 +116,7 @@ function Overview() {
 
       <IntroSection />
 
-      <PrimitivesSection />
+      <DesignTokensSection />
 
       {groups.length === 0 ? (
         <p style={{ color: token("--text-muted"), font: token("--t-body") }}>

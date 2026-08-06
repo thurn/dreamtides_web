@@ -420,10 +420,9 @@ function QsbDreamAvatarBust({
         overflow: "hidden",
         border: `2px solid ${token("--border-accent")}`,
         boxShadow: token("--glow-accent-soft"),
-        // Faithfully-copied bespoke gradient literal: the first stop #2a2140 has
-        // NO exact token equivalent (--primitive-plum-500 is #2a2040, off by one digit),
-        // so it stays a literal rather than silently shifting the design color.
-        background: `radial-gradient(circle at 50% 30%, #2a2140, ${token("--primitive-void-700")})`,
+        // The center tint is an authored component gradient color; the edge
+        // resolves through the shared raised background band.
+        background: `radial-gradient(circle at 50% 30%, #2a2140, ${token("--bg-band")})`,
         padding: 0,
         cursor: "pointer",
         touchAction: "pan-x pan-y",

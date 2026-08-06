@@ -128,7 +128,7 @@
     rgba(6, 6, 7, 0.8) 0%,
     rgba(2, 2, 3, 0.86) 100%
   );
-  --cv-textbox-border: var(--primitive-line-mid, rgba(255, 255, 255, 0.14));
+  --cv-textbox-border: var(--border-mid, rgba(255, 255, 255, 0.14));
 
   /* Event chrome remains a complete component-owned treatment in rendering
    * contexts that do not provide the surrounding Cumulus token scope. The

@@ -5,9 +5,9 @@ import { isStrictCompositionFile } from "./ui-boundary-roles.js";
 /**
  * Bans hardcoded COLOR literals in Cumulus's product-UI tier.
  *
- * The Cumulus token system exposes a semantic color layer (`--accent`,
- * `--surface-card`, `--text-primary`, …) that re-skins the whole app from one
- * place. Product UI must build from those tokens; a raw `#a855f7`, `rgb(...)`,
+ * The Cumulus token system exposes public color roles (`--accent`,
+ * `--surface-card`, `--text-primary`, …). Product UI must build from those
+ * tokens; a raw `#a855f7`, `rgb(...)`,
  * or `hsl(...)` literal hardcodes a value the design system can no longer
  * control. This rule flags such literals and — via the reverse index in
  * {@link colorTokenFor} — names the semantic token that already carries the
@@ -16,10 +16,9 @@ import { isStrictCompositionFile } from "./ui-boundary-roles.js";
  * SCOPE. The rule fires only on the composition / product-UI tier: files under
  * `src/cumulus/` that are NOT in {@link EXEMPT_PREFIXES}. The exempt dirs are:
  *   - `src/cumulus/primitives/`, `src/cumulus/components/`, and `src/cumulus/internal/`
- *     — the primitive, leaf-component, and material-recipe layers legitimately
- *     author raw values (a leaf occasionally needs a specific ramp step; the
- *     primitives sheet DEFINES the colors; a material recipe like the glass
- *     surface IS its own bespoke literals). This mirrors `no-primitive-tokens`.
+ *     — the token-definition, leaf-component, and material-recipe layers
+ *     legitimately author raw values; a material recipe like the glass surface
+ *     is itself a bespoke value.
  *   - `src/cumulus/docs/` — the design-system's own documentation site: demos and
  *     mockups intentionally show components against arbitrary sample colors and
  *     backdrops, and the doc chrome is tooling, not product UI.

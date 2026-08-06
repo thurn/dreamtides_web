@@ -275,7 +275,7 @@ Steps:
 - Produces: `export const BASELINE` (array of token names), `export function findOrphanTokens(): string[]` (sorted).
 
 Detector contract:
-- Parse token names from `src/cumulus/primitives/cumulus-tokens.css` (`/^\s*(--[a-zA-Z0-9_-]+)\s*:/gm`), skipping `--primitive-*` names.
+- Parse every token name from `src/cumulus/primitives/cumulus-tokens.css` (`/^\s*(--[a-zA-Z0-9_-]+)\s*:/gm`).
 - A token is orphaned when it has no READ anywhere under `src/` except the CSS file, the generated mirror `src/cumulus/primitives/tokens.ts`, `src/cumulus/docs/**`, and `*.test.*`/`*.spec.*`. A READ is `var(--x)` / `var(--x, …)` / `token("--x")` / `readLengthToken("--x")` (regex-matched against a properly escaped token name):
   ```js
   // isRead(name, text): true iff either matches (q = escaped name)

@@ -2,10 +2,8 @@
 //
 // Orphan-token integrity check for src/cumulus's design tokens.
 //
-// cumulus-tokens.css defines the design system's semantic tokens (the
-// --primitive-* tier that feeds them is intentionally excluded — primitives
-// are consumed exclusively by other tokens, never read directly by
-// components). A semantic token with no live reader anywhere under src/ is
+// cumulus-tokens.css defines the design system's public token vocabulary. A
+// token with no live reader anywhere under src/ is
 // dead weight: it silently drifts from the values components actually use,
 // and it's easy to miss during review because grepping component code alone
 // never surfaces it. This test scans every non-excluded TS/TSX/CSS file
@@ -115,8 +113,8 @@ function collectFiles(dir) {
 }
 
 /**
- * Every semantic (non-`--primitive-*`) token name declared in
- * cumulus-tokens.css, in declaration order with duplicates removed.
+ * Every token name declared in cumulus-tokens.css, in declaration order with
+ * duplicates removed.
  */
 function parseTokenNames(cssText) {
   const names = [];
@@ -124,7 +122,6 @@ function parseTokenNames(cssText) {
   const declarationRe = /^\s*(--[a-zA-Z0-9_-]+)\s*:/gm;
   for (const match of cssText.matchAll(declarationRe)) {
     const name = match[1];
-    if (name.startsWith("--primitive-")) continue;
     if (seen.has(name)) continue;
     seen.add(name);
     names.push(name);

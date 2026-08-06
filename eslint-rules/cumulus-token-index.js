@@ -3,23 +3,21 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 /**
- * Builds a reverse index from a raw COLOR value to the semantic Cumulus token that
+ * Builds a reverse index from a raw COLOR value to the Cumulus design token that
  * carries it, so `no-hardcoded-values` can tell an author "use var(--accent)"
  * instead of `#a855f7`.
  *
  * The source of truth is `src/cumulus/primitives/cumulus-tokens.css`. Each `--name:
  * value;` declaration is parsed; a value that is a single `var(--other)`
- * reference is followed through the primitive layer until it resolves to a
- * literal color (`#rrggbb`, `rgb()/rgba()`, `hsl()/hsla()`). Composite values —
+ * reference is followed until it resolves to a literal color (`#rrggbb`,
+ * `rgb()/rgba()`, `hsl()/hsla()`). Composite values —
  * gradients, shadow lists, `font: … / …` shorthands — never resolve to a bare
  * color and are skipped, so only true color tokens land in the index.
  *
- * When several tokens share one color (e.g. `--accent`, `--essence`, and the
- * `--primitive-violet-400` they both alias all resolve to `#a855f7`), the SUGGESTED
- * token is the most semantic one: a clean role name (`--accent`) is preferred
- * over a component-local alias (`--cv-*`) and over the raw `--primitive-*` it
- * resolves through. That keeps product UI pointed at the re-skinnable semantic
- * layer.
+ * When several tokens share one color (for example `--accent`, `--essence`,
+ * and `--dt-primary-light`), the suggested token is the clean public role:
+ * `--accent` is preferred over a compatibility-bridge alias (`--dt-*`,
+ * `--color-*`, `--cv-*`).
  *
  * The parse happens once at module load. If the stylesheet can't be read the
  * index is simply empty and the rule degrades to reporting the literal with no
@@ -65,13 +63,10 @@ function isBareColor(value) {
   return /^(rgba?|hsla?)\([^()]*\)$/.test(v);
 }
 
-/** Rank a token name by how "semantic" it is — lower is a better suggestion. */
-function semanticRank(name) {
-  if (name.startsWith("--primitive-")) {
-    return 3; // raw material
-  }
-  if (name.startsWith("--cv-")) {
-    return 2; // component-local card-view aliases
+/** Rank a token name for lint suggestions — lower is a better suggestion. */
+function suggestionRank(name) {
+  if (name.startsWith("--dt-") || name.startsWith("--color-") || name.startsWith("--cv-")) {
+    return 2; // production-bridge / legacy aliases
   }
   return 0; // clean semantic role name
 }
@@ -127,7 +122,7 @@ function buildIndex() {
       continue;
     }
     const existing = index.get(key);
-    if (existing === undefined || semanticRank(name) < semanticRank(existing)) {
+    if (existing === undefined || suggestionRank(name) < suggestionRank(existing)) {
       index.set(key, name);
     }
   }

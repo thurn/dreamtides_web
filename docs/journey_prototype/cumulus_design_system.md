@@ -172,12 +172,11 @@ deliberately skeletal, because it is the one layer hooks make hard to test.
   mean logic-free: layout, conditional rendering, formatting, and _local UI
   state_ (hover, selection-in-progress, pan/zoom, animation phase) are all
   screen code, because none of it touches journey state. Its root carries
-  `className="cumulus"` so the semantic tokens resolve (the adapter mounts it
+  `className="cumulus"` so the design tokens resolve (the adapter mounts it
   outside any other `.cumulus` subtree). Screens inherit every strict rule —
-  semantic tokens only (they are absent from the `no-primitive-tokens` and
-  `no-hardcoded-values` exemptions), no raw interactive elements, no
-  escape-hatch props — so `npm run review` is what proves a migrated screen
-  conforms.
+  named design tokens rather than hardcoded visual values, no raw interactive
+  elements, and no escape-hatch props — so `npm run review` is what proves a
+  migrated screen conforms.
 - A **view-model builder** (`src/screens/cumulus_adapters/*-view-model.ts`) is a module of
   pure, exported, unit-tested functions mapping domain data to the screen's
   view types (e.g. `buildDreamAvatarOfferViews` in
@@ -269,33 +268,20 @@ adopts these values verbatim.
   constants for TS/inline-style use and for the demo harness. Generation is
   wired into `scripts/regenerate-assets.sh`.
 
-### Two tiers: primitive and semantic
+### One public vocabulary
 
-The token sheet is organized into two tiers, and this distinction governs what
-UI code is allowed to reference.
+Every token in the sheet is part of the vocabulary UI code may reference. A
+role token describes what a value is for: `--surface-card`, `--text-primary`,
+`--accent`, `--radius-control`, and `--font-ui`. Sanctioned scales cover spacing
+(`--space-*`), type (`--t-*`), motion, and elevation. Each declaration owns its
+resolved CSS value directly, making the token contract readable without a
+second lookup layer.
 
-- **Primitives — `--primitive-*`.** A primitive names a raw _value_: a point on
-  a color ramp (`--primitive-violet-500`), a step on the radius scale
-  (`--primitive-radius-lg`), a font face (`--primitive-font-sans`), a weight.
-  Primitives are the raw material the semantic layer is built from.
-- **Semantic tokens — everything else.** A semantic token names a _use_:
-  `--surface-card`, `--text-primary`, `--accent`, `--radius-control`,
-  `--font-ui`. Each resolves through a primitive (or a literal where no ramp step
-  fits), so the whole system re-skins by editing the primitive layer alone.
-
-**Write UI code against semantic tokens — never a primitive.** A semantic token
-describes what it is _for_, not what its value _is_; that indirection is the
-entire point of the token system. Primitives may be referenced **only** inside
-`src/cumulus/primitives/` (where the semantic layer is defined) and
-`src/cumulus/components/` (leaf components that occasionally need a raw ramp step
-with no semantic role, e.g. a specific tide-tone). Referencing a `--primitive-*`
-token anywhere else — a doc page, a demo, a mockup, any future product screen —
-is a lint error (see the `no-primitive-tokens` rule in §9). No exceptions.
-
-The spacing scale (`--space-*`), the layout constants, the type scale (`--t-*`),
-the motion tokens, and the elevation/glow shadows carry no `--primitive-` prefix:
-they are sanctioned semantic scales, role/intent named, and UI code uses them
-directly.
+Choose tokens by role rather than by resolved value. Use `--text-secondary`
+because the text is secondary and `--radius-control` because the object is a
+control. Add a named role to `cumulus-tokens.css` when the vocabulary does not
+express a product need; product screens do not author incidental colors,
+spacing, type voices, radii, shadows, or motion values at their call sites.
 
 ### Glass text tokens
 
@@ -318,25 +304,20 @@ without an additional container behind them.
 
 ### Token groups documented in the Tokens section
 
-The `/cumulus` Tokens section renders every token as a specimen, split into a
-**Semantic Tokens** tier (shown first, the vocabulary UI code writes against) and
-a **Primitives** tier below it, each grouped by kind and name-prefix family.
+The `/cumulus` Tokens section renders every token as a specimen, grouped by kind
+and name-prefix family.
 
-- **Color** — semantic surface / text / accent / resource / status / category
+- **Color** — surface / text / accent / resource / status / category
   roles (`--surface-*`, `--text-*`, `--accent`, `--energy`, `--danger`,
-  `--tide-earthy`, `--scrim`, …) over the primitive ramps (void / plum / violet /
-  gold / energy / spark / ember / sap / …). The Dream Atlas material is the
-  `--atlas-*` semantic family: journey field, edges, node halos, and badges all
-  resolve through it. Atlas components consume that family directly. CardView's
-  component-owned `--cv-*` variables carry its frame geometry and material as
-  one local rendering contract.
+  `--tide-earthy`, `--scrim`, …). The Dream Atlas material is the `--atlas-*`
+  family: journey field, edges, node halos, and badges. Atlas components consume
+  that family directly. CardView's component-owned `--cv-*` variables carry its
+  frame geometry and material as one local rendering contract.
 - **Typography** — the type scale (`--t-*`) and font roles (`--font-ui` = Inter,
   `--font-title` = EB Garamond, `--font-rules-text` = Fira Sans Condensed,
-  `--font-numeral` = Anton, `--font-meta` = JetBrains Mono) over the primitive
-  font faces (`--primitive-font-*`) and weights (`--primitive-weight-*`).
+  `--font-numeral` = Anton, `--font-meta` = JetBrains Mono).
 - **Corner radius** — semantic roles `--radius-inset / -control / -card / -panel
-/ -sheet / -hero / -pill / -popover` over the primitive scale
-  (`--primitive-radius-xs … -2xl`, `-pill`, `-card`, `-popover`).
+/ -sheet / -hero / -pill / -popover`.
 - **Spacing** — the `--space-*` scale + touch-floor tokens (`--safe-*`, 44pt
   floor), used directly.
 - **Iconography** — Boxicons v3.0.8 **filled** (`bxf bx-*`) is the set, already
@@ -386,11 +367,10 @@ these as plain string literals so no module execution is needed) and joins it
 with the docgen props to write one reference file per component to
 `.llms/skills/cumulus/components/<id>.md`, plus a component index spliced into
 `.llms/skills/cumulus/SKILL.md` between its GENERATED COMPONENT INDEX markers.
-It also renders `.llms/skills/cumulus/tokens.md`, the semantic-token reference:
-cumulus-tokens.css parsed with the shared `parseCssTokens` lib and deduped
-last-wins, `--primitive-*` filtered out (that tier is cumulus-internal), the
-rest grouped by role family with each declaration's trailing same-line
-comment carried through as its note.
+It also renders `.llms/skills/cumulus/tokens.md`, the token reference:
+cumulus-tokens.css is parsed with the shared `parseCssTokens` library, deduped
+last-wins, and grouped by role family with each declaration's trailing
+same-line comment carried through as its note.
 The generator sweeps stale `.md` files from the components output directory,
 so a renamed or unregistered component's reference disappears with it.
 SKILL.md itself is hand-authored (design philosophy, customization rules,
@@ -495,9 +475,8 @@ reference, not by a from-scratch subagent rewrite.
 ## 9. Testing & verification
 
 - `npm run review` selects changed-file lint (including the fail-closed import-boundary rule
-  `no-external-ui-imports`; the token-tier rule `no-primitive-tokens`, which
-  errors on any `--primitive-*` reference outside `primitives/` + `components/`;
-  and the strict-API rule `no-escape-hatch-props`, which errors when a
+  `no-external-ui-imports`; the visual-value rules that require named tokens in
+  product UI; and the strict-API rule `no-escape-hatch-props`, which errors when a
   `components/` `*Props` type re-opens an escape hatch — a `style`/`className`
   member, a `CSSProperties`-typed prop, a DOM-attribute `extends`/intersection,
   or an index signature), incremental typecheck when applicable, and related

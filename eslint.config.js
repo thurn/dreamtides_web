@@ -1,7 +1,6 @@
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 import cumulusNoExternalUiImports from "./eslint-rules/no-external-ui-imports.js";
-import cumulusNoPrimitiveTokens from "./eslint-rules/no-primitive-tokens.js";
 import cumulusNoEscapeHatchProps from "./eslint-rules/no-escape-hatch-props.js";
 import cumulusNoHardcodedValues from "./eslint-rules/no-hardcoded-values.js";
 import cumulusNoRawInteractiveElements from "./eslint-rules/no-raw-interactive-elements.js";
@@ -27,7 +26,6 @@ import { baselineConfigEntries } from "./eslint-rules/ui-boundary-baselines.js";
 const cumulusPlugin = {
   rules: {
     "no-external-ui-imports": cumulusNoExternalUiImports,
-    "no-primitive-tokens": cumulusNoPrimitiveTokens,
     "no-escape-hatch-props": cumulusNoEscapeHatchProps,
     "no-hardcoded-values": cumulusNoHardcodedValues,
     "no-raw-interactive-elements": cumulusNoRawInteractiveElements,
@@ -112,7 +110,6 @@ export default tseslint.config(
     plugins: { cumulus: cumulusPlugin },
     rules: {
       "cumulus/no-external-ui-imports": "error",
-      "cumulus/no-primitive-tokens": "error",
       "cumulus/no-escape-hatch-props": "error",
       "cumulus/no-hardcoded-values": "error",
       "cumulus/no-raw-interactive-elements": "error",
