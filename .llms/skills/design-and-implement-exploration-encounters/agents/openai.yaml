@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design and Implement Exploration Encounters"
+  short_description: "Design and ship live Exploration batches"
+  default_prompt: "Use $design-and-implement-exploration-encounters to design and ship five live Exploration encounters."
