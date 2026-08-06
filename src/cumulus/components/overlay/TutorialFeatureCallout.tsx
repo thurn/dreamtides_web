@@ -6,7 +6,11 @@ import { token } from "../../primitives/tokens";
 import { InlineGlyph } from "../typography/InlineGlyph";
 
 /** The four authored card regions taught by the loading-screen anatomy scene. */
-export type CardFeatureCalloutKind = "cost" | "spark" | "ability" | "cardType";
+export type TutorialFeatureCalloutKind =
+  | "cost"
+  | "spark"
+  | "ability"
+  | "cardType";
 
 interface CardFeatureSpec {
   readonly label: string;
@@ -15,8 +19,9 @@ interface CardFeatureSpec {
   readonly glyphLabel?: string;
 }
 
-const CARD_FEATURES: Readonly<Record<CardFeatureCalloutKind, CardFeatureSpec>> =
-  {
+const CARD_FEATURES: Readonly<
+  Record<TutorialFeatureCalloutKind, CardFeatureSpec>
+> = {
     cost: {
       label: "Cost",
       glyph: GLYPHS.energy,
@@ -33,9 +38,9 @@ const CARD_FEATURES: Readonly<Record<CardFeatureCalloutKind, CardFeatureSpec>> =
     cardType: { label: "Card Type" },
   };
 
-export interface CardFeatureCalloutProps {
+export interface TutorialFeatureCalloutProps {
   /** Semantic card region named by this callout. */
-  readonly feature: CardFeatureCalloutKind;
+  readonly feature: TutorialFeatureCalloutKind;
   /** Optional stable test id for product-screen QA. */
   readonly testId?: string;
 }
@@ -45,15 +50,15 @@ export interface CardFeatureCalloutProps {
  * placement and leader line; the component owns its card-language copy,
  * resource glyphs, type, and speech-inspired popover material.
  */
-export function CardFeatureCallout({
+export function TutorialFeatureCallout({
   feature,
   testId,
-}: CardFeatureCalloutProps): ReactElement {
+}: TutorialFeatureCalloutProps): ReactElement {
   const spec = CARD_FEATURES[feature];
 
   return (
     <aside
-      data-card-feature-callout={feature}
+      data-tutorial-feature-callout={feature}
       data-testid={testId}
       style={{
         ...glassSurfaceStyle({ radius: token("--radius-pill") }),

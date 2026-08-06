@@ -14,7 +14,7 @@ import { atlasMapDemo } from "./demos/atlas-map";
 import { atlasNodeDemo } from "./demos/atlas-node";
 import { battleStatusDisplayDemo } from "./demos/battle-status-display";
 import { cardBackDemo } from "./demos/card-back";
-import { cardFeatureCalloutDemo } from "./demos/card-feature-callout";
+import { tutorialFeatureCalloutDemo } from "./demos/tutorial-feature-callout";
 import { cardChoiceGridDemo } from "./demos/card-choice-grid";
 import { cardGalleryPanelDemo } from "./demos/card-gallery-panel";
 import { cardPileDemo } from "./demos/card-pile";
@@ -168,7 +168,7 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   developerRailDemo,
   commandMenusDemo,
   contextActionMenuDemo,
-  cardFeatureCalloutDemo,
+  tutorialFeatureCalloutDemo,
   speechBubbleDemo,
   characterDialogueDemo,
   segmentedControlDemo,

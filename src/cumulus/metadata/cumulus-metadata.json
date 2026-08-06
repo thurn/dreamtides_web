@@ -659,29 +659,6 @@
       "description": "Fires with the trailing action's stable id."
     }
   ],
-  "CardFeatureCallout": [
-    {
-      "name": "feature",
-      "tsType": "CardFeatureCalloutKind",
-      "unionMembers": [
-        "spark",
-        "cost",
-        "ability",
-        "cardType"
-      ],
-      "required": true,
-      "defaultValue": null,
-      "description": "Semantic card region named by this callout."
-    },
-    {
-      "name": "testId",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional stable test id for product-screen QA."
-    }
-  ],
   "CardGalleryPanel": [
     {
       "name": "title",
@@ -5047,6 +5024,29 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional dismissal callback; lifecycle ownership remains outside Cumulus."
+    }
+  ],
+  "TutorialFeatureCallout": [
+    {
+      "name": "feature",
+      "tsType": "TutorialFeatureCalloutKind",
+      "unionMembers": [
+        "spark",
+        "cost",
+        "ability",
+        "cardType"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Semantic card region named by this callout."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional stable test id for product-screen QA."
     }
   ],
   "WagerPrizeCard": [

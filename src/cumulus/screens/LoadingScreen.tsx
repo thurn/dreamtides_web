@@ -10,9 +10,9 @@ import {
 import { LOADING_SCREEN_DURATION_MS } from "../../runtime/front-door-timing";
 import { GlassButton } from "../components/controls/GlassButton";
 import {
-  CardFeatureCallout,
-  type CardFeatureCalloutKind,
-} from "../components/overlay/CardFeatureCallout";
+  TutorialFeatureCallout,
+  type TutorialFeatureCalloutKind,
+} from "../components/overlay/TutorialFeatureCallout";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
@@ -37,7 +37,7 @@ export interface LoadingScreenProps {
 }
 
 interface AnnotationSpec {
-  readonly feature: CardFeatureCalloutKind;
+  readonly feature: TutorialFeatureCalloutKind;
   readonly targetSelector: string;
   readonly targetMeasure: "element" | "contents";
   readonly side: "left" | "right";
@@ -45,7 +45,7 @@ interface AnnotationSpec {
 }
 
 interface MeasuredAnnotation extends LoadingCalloutLeaderLine {
-  readonly feature: CardFeatureCalloutKind;
+  readonly feature: TutorialFeatureCalloutKind;
 }
 
 const SCREEN_FADE_SECONDS = motionTimeSeconds("--dur-loading-screen-fade");
@@ -192,7 +192,7 @@ function AnnotatedLoadingCard({
 }): ReactElement {
   const groupRef = useRef<HTMLDivElement | null>(null);
   const calloutRefs = useRef<
-    Partial<Record<CardFeatureCalloutKind, HTMLDivElement | null>>
+    Partial<Record<TutorialFeatureCalloutKind, HTMLDivElement | null>>
   >({});
   const [lines, setLines] = useState<readonly MeasuredAnnotation[]>([]);
 
@@ -348,7 +348,7 @@ function AnnotatedLoadingCard({
           data-loading-callout={annotation.feature}
           style={calloutPosition(annotation, isDesktop)}
         >
-          <CardFeatureCallout feature={annotation.feature} />
+          <TutorialFeatureCallout feature={annotation.feature} />
         </div>
       ))}
     </div>

@@ -5,9 +5,9 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, describe, expect, it } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
 import {
-  CardFeatureCallout,
-  type CardFeatureCalloutKind,
-} from "./CardFeatureCallout";
+  TutorialFeatureCallout,
+  type TutorialFeatureCalloutKind,
+} from "./TutorialFeatureCallout";
 
 let root: Root | null = null;
 
@@ -17,25 +17,25 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-function renderCallout(feature: CardFeatureCalloutKind): HTMLElement {
+function renderCallout(feature: TutorialFeatureCalloutKind): HTMLElement {
   const container = document.createElement("div");
   document.body.append(container);
   root = createRoot(container);
   act(() =>
     root?.render(
       <CumulusRoot>
-        <CardFeatureCallout feature={feature} />
+        <TutorialFeatureCallout feature={feature} />
       </CumulusRoot>,
     ),
   );
   const callout = container.querySelector<HTMLElement>(
-    "[data-card-feature-callout]",
+    "[data-tutorial-feature-callout]",
   );
   if (callout === null) throw new Error("Callout did not render");
   return callout;
 }
 
-describe("CardFeatureCallout", () => {
+describe("TutorialFeatureCallout", () => {
   it.each([
     ["ability", "Ability"],
     ["cardType", "Card Type"],
