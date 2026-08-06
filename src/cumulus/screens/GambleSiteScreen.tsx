@@ -355,8 +355,7 @@ function FourSuitOutcomeCard({
         >
           <GameCard
             model={result.target.model}
-            selected
-            selectionColor="positive"
+            selection="reward"
           />
         </motion.div>
         <motion.div
@@ -376,8 +375,7 @@ function FourSuitOutcomeCard({
         >
           <GameCard
             model={result.target.model}
-            selected
-            selectionColor="positive"
+            selection="copied"
           />
         </motion.div>
       </div>
@@ -385,7 +383,6 @@ function FourSuitOutcomeCard({
   }
 
   if (result.outcome === "transfiguration") {
-    const selectionColor = result.target.model.transfiguration?.color;
     return (
       <motion.div
         data-four-suit-card-outcome="transfiguration"
@@ -441,8 +438,7 @@ function FourSuitOutcomeCard({
           >
             <GameCard
               model={result.target.model}
-              selected
-              selectionColor={selectionColor}
+              selection="transfigured"
             />
           </div>
         </motion.div>
@@ -471,8 +467,7 @@ function FourSuitOutcomeCard({
       >
         <GameCard
           model={result.target.model}
-          selected
-          selectionColor="essence"
+          selection="reward"
         />
         <motion.div
           data-four-suit-essence-badge=""
@@ -527,8 +522,7 @@ function FourSuitOutcomeCard({
     >
       <GameCard
         model={result.target.model}
-        selected
-        selectionColor="danger"
+        selection="danger"
       />
     </motion.div>
   );
@@ -2126,11 +2120,13 @@ function FourSuitRepriseScreen({
               <CardGalleryPanel
                 title="Four-Suit Reprise"
                 subtitle="Choose a card to wager"
-                footerAction={{
-                  label: "Leave",
-                  onPress: onLeave,
-                  testId: "gamble-four-suit-leave",
-                }}
+                footerActions={[
+                  {
+                    label: "Leave",
+                    onPress: onLeave,
+                    testId: "gamble-four-suit-leave",
+                  },
+                ]}
                 cards={view.cards.map((card) => ({
                   entryId: card.entryId,
                   model: card.model,

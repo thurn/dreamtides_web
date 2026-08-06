@@ -8,7 +8,6 @@ import { CumulusRoot } from "../CumulusRoot";
 import { artRef } from "../primitives/art";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
-import { TRANSFIGURATION_TINT_COLORS } from "../../runtime/transfiguration-display";
 import { PLAYING_CARD_DESIGN } from "../components/card/PlayingCard";
 import {
   GambleSiteScreen,
@@ -209,7 +208,6 @@ function fourSuitResultView(
             displaySnapshot: { ...card, energyCost: 1 },
             transfiguration: {
               type: "Empowered",
-              color: TRANSFIGURATION_TINT_COLORS.Empowered,
               markedText: card.renderedText,
               energyChanged: true,
               sparkChanged: false,

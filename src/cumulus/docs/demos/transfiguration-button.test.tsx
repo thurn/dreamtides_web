@@ -32,7 +32,7 @@ describe("TransfigurationButton documentation demo", () => {
     );
     expect(
       container.querySelectorAll("[data-transfiguration-button-variant]"),
-    ).toHaveLength(4);
+    ).toHaveLength(6);
 
     act(() => root.unmount());
     container.remove();
