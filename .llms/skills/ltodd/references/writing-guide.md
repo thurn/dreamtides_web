@@ -22,7 +22,7 @@ navigation contract.
 Describe the intended production game presented at the root, `/main`,
 `/loading`, and `/tutorial` routes. Cover the default single-player experience:
 its rules, algorithms, state, content semantics, interaction, visual
-presentation, motion, and design philosophy.
+presentation, motion, game-design philosophy, and UI-design philosophy.
 
 Describe one canonical design. Do not discuss alternative implementations,
 discarded behavior, editor tools, scripts, test infrastructure, debug controls,
@@ -72,6 +72,11 @@ Write for an expert implementer who knows game development but does not know
 Dreamtides. Introduce concepts with compact sentences, then use bullets,
 numbered lists, or narrow tables when enumeration is clearer. Prefer one precise
 statement over several qualifying sentences.
+
+Make every requirement explicit. Do not rely on screenshots, genre convention,
+implementation habits, or the reader's intuition to supply an unstated rule.
+Write so an implementation LLM can reconstruct the intended behavior correctly
+and with high confidence without inferring missing requirements.
 
 Describe behavior in plain, active, present-tense prose. Do not use RFC
 keywords, discuss permitted variants, or present multiple designs. Put each
@@ -244,6 +249,9 @@ Before finishing an LToDD change, confirm that:
 - the index scope statements and reading order remain accurate;
 - the glossary contains every introduced or changed project term;
 - behavior and rationale are locally complete;
+- every requirement is explicit rather than implied;
+- consequential game-design and UI-design philosophy is stated beside the
+  behavior it explains;
 - presentation delegates standard behavior to the correct Cumulus definitions;
 - TOML references describe stable interfaces without copying current values;
 - no specific authored content, excluded system, or web implementation leaks
