@@ -29,7 +29,8 @@ function validFiles() {
       "## Choice",
       "",
       "A player decision that commits the journey to one outcome. Read",
-      "[Journey Flow](journey_flow.md) for the complete resolution rules.",
+      "[Journey Flow](journey/journey_flow.md) for the complete resolution",
+      "rules.",
       "",
       "## Journey",
       "",
@@ -46,13 +47,23 @@ function validFiles() {
       "Choose a chapter by its scope, then follow its local links for the",
       "prerequisites and deeper systems needed by the current task.",
       "",
+      "## Book reference",
+      "",
+      "The book-level reference defines terminology used throughout LToDD.",
+      "",
       "1. [Glossary](glossary.md) — Read this chapter when looking up canonical",
       "   Dreamtides terminology.",
-      "2. [Journey Flow](journey_flow.md) — Read this chapter when implementing",
+      "",
+      "## Journey",
+      "",
+      "This part specifies the decisions and state that advance a journey.",
+      "",
+      "1. [Journey Flow](journey/journey_flow.md) — Read this chapter when",
+      "   implementing",
       "   the ordered decisions that advance a journey.",
       "",
     ].join("\n"),
-    "journey_flow.md": [
+    "journey/journey_flow.md": [
       "# Journey Flow",
       "",
       "This chapter specifies how journey decisions advance. Read it when",
@@ -62,6 +73,7 @@ function validFiles() {
       "",
       "Assume an authored destination exists with one available action. Selecting",
       "the action commits the journey before its result becomes visible.",
+      "Read the [Glossary](../glossary.md) for canonical journey terminology.",
       "",
       "<!-- ltodd-image",
       "Purpose: Show the relationship between the choice and its destination.",
@@ -81,7 +93,9 @@ async function withBook(files, callback) {
   const bookDirectory = path.join(temporaryRoot, "ltodd");
   await mkdir(bookDirectory);
   for (const [filename, source] of Object.entries(files)) {
-    await writeFile(path.join(bookDirectory, filename), source, "utf8");
+    const absolutePath = path.join(bookDirectory, filename);
+    await mkdir(path.dirname(absolutePath), { recursive: true });
+    await writeFile(absolutePath, source, "utf8");
   }
 
   try {
@@ -91,7 +105,7 @@ async function withBook(files, callback) {
   }
 }
 
-test("accepts a complete flat book with valid discovery metadata", async () => {
+test("accepts a part-organized book with valid discovery metadata", async () => {
   await withBook(validFiles(), async (bookDirectory) => {
     const result = await validateBook(bookDirectory);
     assert.deepEqual(result.errors, []);
@@ -116,7 +130,7 @@ test("reports missing catalog structure and orphan chapters", async () => {
     /1\. \[Glossary\][\s\S]*?terminology\.\n/,
     "",
   );
-  files["extra_chapter.md"] = [
+  files["journey/extra_chapter.md"] = [
     "# Extra Chapter",
     "",
     "This chapter has enough opening context to be structurally valid.",
@@ -136,9 +150,82 @@ test("reports missing catalog structure and orphan chapters", async () => {
   });
 });
 
+test("rejects root chapters and directories deeper than a part", async () => {
+  const files = validFiles();
+  files["orphan.md"] = [
+    "# Orphan",
+    "",
+    "This chapter is incorrectly stored at the root of the book.",
+    "",
+  ].join("\n");
+  files["journey/deeper/hidden.md"] = [
+    "# Hidden",
+    "",
+    "This chapter is incorrectly stored below the part directory.",
+    "",
+  ].join("\n");
+
+  await withBook(files, async (bookDirectory) => {
+    const result = await validateBook(bookDirectory);
+    assert.ok(
+      result.errors.some((error) =>
+        error.includes("ordinary chapters must live in a part directory"),
+      ),
+    );
+    assert.ok(
+      result.errors.some((error) =>
+        error.includes("exactly one directory deep"),
+      ),
+    );
+  });
+});
+
+test("requires each part to have one scoped index section", async () => {
+  const files = validFiles();
+  files["sites/augury.md"] = [
+    "# Augury",
+    "",
+    "This chapter specifies one site flow and when an implementer needs it.",
+    "",
+  ].join("\n");
+  files["index.md"] = files["index.md"].replace(
+    "   the ordered decisions that advance a journey.\n",
+    [
+      "   the ordered decisions that advance a journey.",
+      "2. [Augury](sites/augury.md) — Read this chapter when implementing a",
+      "   site visit.",
+      "",
+    ].join("\n"),
+  );
+
+  await withBook(files, async (bookDirectory) => {
+    const result = await validateBook(bookDirectory);
+    assert.ok(
+      result.errors.some((error) =>
+        error.includes("mixes chapter directories"),
+      ),
+    );
+  });
+});
+
+test("resolves chapter links relative to their part directory", async () => {
+  const files = validFiles();
+  files["journey/journey_flow.md"] = files["journey/journey_flow.md"].replace(
+    "../glossary.md",
+    "../missing.md",
+  );
+
+  await withBook(files, async (bookDirectory) => {
+    const result = await validateBook(bookDirectory);
+    assert.ok(
+      result.errors.some((error) => error.includes("broken chapter link")),
+    );
+  });
+});
+
 test("rejects unresolved prose, fenced code, and malformed image briefs", async () => {
   const files = validFiles();
-  files["journey_flow.md"] = [
+  files["journey/journey_flow.md"] = [
     "# Journey Flow",
     "",
     "This chapter contains a TODO that still needs a design decision.",
@@ -168,7 +255,7 @@ test("rejects unresolved prose, fenced code, and malformed image briefs", async 
 
 test("warns about implementation leakage without failing validation", async () => {
   const files = validFiles();
-  files["journey_flow.md"] = files["journey_flow.md"].replace(
+  files["journey/journey_flow.md"] = files["journey/journey_flow.md"].replace(
     "Assume an authored destination exists with one available action. Selecting",
     "The React prototype assumes an authored destination exists. Selecting",
   );
@@ -182,7 +269,7 @@ test("warns about implementation leakage without failing validation", async () =
 
 test("enforces the physical chapter line cap", async () => {
   const files = validFiles();
-  files["journey_flow.md"] = [
+  files["journey/journey_flow.md"] = [
     "# Journey Flow",
     "",
     "This chapter has a valid scope paragraph followed by excessive padding.",
@@ -197,7 +284,7 @@ test("enforces the physical chapter line cap", async () => {
 
 test("write mode wraps prose and produces a checkable book", async () => {
   const files = validFiles();
-  files["journey_flow.md"] = files["journey_flow.md"].replace(
+  files["journey/journey_flow.md"] = files["journey/journey_flow.md"].replace(
     "Assume an authored destination exists with one available action. Selecting\n" +
       "the action commits the journey before its result becomes visible.",
     "Assume an authored destination exists with one available action. Selecting the action commits the journey before its result becomes visible and before the next destination can be considered.",
@@ -212,7 +299,7 @@ test("write mode wraps prose and produces a checkable book", async () => {
     assert.equal(write.status, 0, `${write.stdout}\n${write.stderr}`);
 
     const formatted = await readFile(
-      path.join(bookDirectory, "journey_flow.md"),
+      path.join(bookDirectory, "journey/journey_flow.md"),
       "utf8",
     );
     assert.ok(

@@ -13,7 +13,7 @@ function usage() {
   return [
     "Usage: format-markdown.mjs (--write | --check) [--book <directory>]",
     "",
-    "Formats and validates the flat LToDD Markdown corpus.",
+    "Formats and validates the part-organized LToDD Markdown corpus.",
   ].join("\n");
 }
 

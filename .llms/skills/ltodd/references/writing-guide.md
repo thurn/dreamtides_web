@@ -159,9 +159,17 @@ rather than designing an unrelated accessibility system during authoring.
 
 ## Chapter organization
 
-Keep chapters as flat `ltodd/*.md` files with lowercase underscore names. A
-chapter contains no YAML frontmatter, version label, update date, authorship,
-research notes, or design history. Git owns history.
+Keep `ltodd/index.md` and `ltodd/glossary.md` at the book root. Place every
+ordinary chapter exactly one level down as
+`ltodd/<part_name>/<chapter_name>.md`. Use lowercase underscore names without
+numeric prefixes for both parts and chapters. A chapter contains no YAML
+frontmatter, version label, update date, authorship, research notes, or design
+history. Git owns history.
+
+Make each part a coherent, discoverable subject area such as Cumulus or sites.
+Reuse an existing part whenever its scope fits. Create a part when the new
+subject would otherwise make an existing part incoherent; do not create a
+directory merely to hold one arbitrarily isolated chapter.
 
 Begin each chapter with exactly one level-one title. Follow it with a compact
 opening paragraph that answers:
@@ -183,12 +191,14 @@ blank lines and image briefs, at 500 lines or fewer. The line cap applies to
 
 Make `index.md` the authoritative reading order and discovery map. Start it with
 the book title and a compact “How to read this book” paragraph that tells an
-implementer to choose chapters by scope and follow local links for prerequisites
-or deeper systems.
+implementer to choose a part and chapter by scope, then follow local links for
+prerequisites or deeper systems.
 
-List every chapter, including `glossary.md`, exactly once in an ordered list.
-Give each entry the chapter's exact title, its stable filename link, and a short
-scope statement answering “when should I read this?” Do not place authorship,
+Give every part a heading, a concise scope statement, and an ordered list of its
+chapters in canonical reading order. List every ordinary chapter exactly once
+under its part. Give each entry the chapter's exact title, its stable path link,
+and a short scope statement answering “when should I read this?” List
+`glossary.md` exactly once as a book-level reference. Do not place authorship,
 status, planning notes, or dates in the index.
 
 Give each concept a primary chapter, then repeat the exact facts and constraints

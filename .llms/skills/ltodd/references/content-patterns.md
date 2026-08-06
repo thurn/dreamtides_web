@@ -100,17 +100,20 @@ Adapt the prose to the subject. Do not repeat these sentences mechanically.
 
 ## Index catalog entries
 
-Use one ordered-list entry for every chapter. Write the exact chapter title,
-stable underscore filename, and one sentence explaining when to read it.
+Group chapter entries beneath part headings. Give each part a concise sentence
+explaining its subject, then use one ordered-list entry for every chapter in the
+part. Write the exact chapter title, stable underscore path, and one sentence
+explaining when to read it.
 
 Use this shape:
 
-> 1. [Chapter Title](chapter_name.md) — Read this chapter when building the
->    behavior named by its concise scope statement.
+> 1. [Chapter Title](part_name/chapter_name.md) — Read this chapter when
+>    building the behavior named by its concise scope statement.
 
-Keep the entries in authoritative reading order. Include `glossary.md` exactly
-once. Keep planning state, authorship, dates, and chapter numbers out of entries
-and filenames.
+Keep the parts and their entries in authoritative reading order. Include the
+root `glossary.md` exactly once as a book-level reference. Keep planning state,
+authorship, dates, and chapter numbers out of entries, directories, and
+filenames.
 
 ## Glossary entries
 

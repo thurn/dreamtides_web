@@ -33,17 +33,19 @@ primitives and behaviors involved. When the subject includes battle rules, read
 
 ### 1. Establish the book and requested change
 
-Work only in the top-level `ltodd/` directory. Keep every Markdown file flat in
-that directory and name chapters with stable lowercase underscore filenames.
+Work only in the top-level `ltodd/` directory. Keep `index.md` and `glossary.md`
+at the book root. Place every ordinary chapter exactly one level down at
+`ltodd/<part>/<chapter>.md`. Name part directories and chapters with stable
+lowercase underscore names.
 
 If the book does not exist when the first chapter is requested, create these
 files as part of that authoring request:
 
 - `ltodd/index.md`, containing a short “How to read this book” passage and the
-  authoritative ordered chapter catalog;
+  authoritative chapter catalog grouped into ordered parts;
 - `ltodd/glossary.md`, containing the alphabetical canonical terminology
   catalog; and
-- the requested chapter.
+- the requested part directory and chapter.
 
 Do not create the book merely to install or test this skill.
 
@@ -53,10 +55,11 @@ Avoid unrelated editorial cleanup.
 
 ### 2. Discover relevant chapters
 
-Read `ltodd/index.md` first. Use its scope statements to identify candidate
-chapters. Search the corpus for relevant titles, opening scope paragraphs,
-headings, links, user-facing terms, rules, and duplicated constraints. Fully
-read every primary or plausibly affected chapter before editing it.
+Read `ltodd/index.md` first. Use its part descriptions and chapter scope
+statements to identify candidates. Search the corpus for relevant titles,
+opening scope paragraphs, headings, links, user-facing terms, rules, and
+duplicated constraints. Fully read every primary or plausibly affected chapter
+before editing it.
 
 Do not load the entire book by default. Use the index and search results as
 routing metadata, then follow relevant chapter links. After editing, repeat the

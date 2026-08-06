@@ -1,6 +1,7 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
+const NAME_SEGMENT = /^[a-z0-9]+(?:_[a-z0-9]+)*$/;
 const CHAPTER_NAME = /^[a-z0-9]+(?:_[a-z0-9]+)*\.md$/;
 const IMAGE_FIELDS = [
   "Purpose",
@@ -221,17 +222,23 @@ function validateMarkdownFile(relativePath, source, errors, warnings) {
 function orderedIndexEntries(lines) {
   const blocks = [];
   let current;
+  let section;
 
   for (const line of lines) {
+    const heading = line.match(/^## (.+)$/);
+    if (heading) {
+      section = heading[1];
+      current = undefined;
+      continue;
+    }
     const start = line.match(/^\d+\.\s+(.+)$/);
     if (start) {
-      current = start[1];
+      current = { body: start[1], section };
       blocks.push(current);
       continue;
     }
     if (current && /^\s{2,}\S/.test(line)) {
-      current = `${current} ${line.trim()}`;
-      blocks[blocks.length - 1] = current;
+      current.body = `${current.body} ${line.trim()}`;
       continue;
     }
     if (line.trim()) {
@@ -240,11 +247,84 @@ function orderedIndexEntries(lines) {
   }
 
   return blocks.map((block) => {
-    const match = block.match(/^\[([^\]]+)\]\(([^)]+\.md)\)\s+—\s+(.+)$/);
+    const match = block.body.match(/^\[([^\]]+)\]\(([^)]+\.md)\)\s+—\s+(.+)$/);
     return match
-      ? { title: match[1], target: match[2], scope: match[3] }
-      : { malformed: block };
+      ? {
+          section: block.section,
+          title: match[1],
+          target: match[2],
+          scope: match[3],
+        }
+      : { malformed: block.body };
   });
+}
+
+function isCanonicalIndexTarget(target) {
+  if (target === "glossary.md") {
+    return true;
+  }
+  const segments = target.split("/");
+  return (
+    segments.length === 2 &&
+    NAME_SEGMENT.test(segments[0]) &&
+    CHAPTER_NAME.test(segments[1]) &&
+    segments[1] !== "index.md" &&
+    segments[1] !== "glossary.md"
+  );
+}
+
+function validatePartSections(lines, entries, errors) {
+  const headings = new Map();
+  for (const [index, line] of lines.entries()) {
+    const match = line.match(/^## (.+)$/);
+    if (match) {
+      headings.set(match[1], index);
+    }
+  }
+
+  const sectionParts = new Map();
+  const partSections = new Map();
+  for (const entry of entries) {
+    if (!entry.target || entry.target === "glossary.md") {
+      continue;
+    }
+    const part = entry.target.split("/")[0];
+    if (!entry.section) {
+      errors.push(
+        `index.md:1: ${entry.target} must appear beneath a part heading`,
+      );
+      continue;
+    }
+    const parts = sectionParts.get(entry.section) ?? new Set();
+    parts.add(part);
+    sectionParts.set(entry.section, parts);
+    const sections = partSections.get(part) ?? new Set();
+    sections.add(entry.section);
+    partSections.set(part, sections);
+  }
+
+  for (const [section, parts] of sectionParts) {
+    if (parts.size > 1) {
+      errors.push(
+        `index.md:1: part heading '${section}' mixes chapter directories`,
+      );
+    }
+    const headingIndex = headings.get(section);
+    const scopeIndex = firstNonemptyLine(lines, headingIndex + 1);
+    if (
+      scopeIndex === -1 ||
+      /^(?:#{1,6}\s|\d+\.\s)/.test(lines[scopeIndex].trim())
+    ) {
+      errors.push(
+        `index.md:${headingIndex + 1}: add a prose scope for this part`,
+      );
+    }
+  }
+  for (const [part, sections] of partSections) {
+    if (sections.size > 1) {
+      errors.push(`index.md:1: ${part} chapters must share one part heading`);
+    }
+  }
 }
 
 function validateIndex(indexSource, chapters, errors) {
@@ -274,12 +354,9 @@ function validateIndex(indexSource, chapters, errors) {
       errors.push(`index.md:1: malformed chapter entry: ${entry.malformed}`);
       continue;
     }
-    if (
-      path.basename(entry.target) !== entry.target ||
-      !CHAPTER_NAME.test(entry.target)
-    ) {
+    if (!isCanonicalIndexTarget(entry.target)) {
       errors.push(
-        `index.md:1: chapter link must be a flat underscore filename: ${entry.target}`,
+        `index.md:1: chapter link must use <part>/<chapter>.md: ${entry.target}`,
       );
       continue;
     }
@@ -317,6 +394,7 @@ function validateIndex(indexSource, chapters, errors) {
       errors.push(`index.md:1: chapter entry points to missing ${target}`);
     }
   }
+  validatePartSections(lines, entries, errors);
 }
 
 function validateGlossary(glossarySource, errors) {
@@ -346,10 +424,15 @@ function validateInternalLinks(files, errors) {
       if (/^[a-z]+:\/\//i.test(target)) {
         continue;
       }
-      if (path.basename(target) !== target || !filenames.has(target)) {
-        errors.push(
-          `${filename}:1: broken or non-flat chapter link: ${target}`,
-        );
+      const resolvedTarget = path.posix.normalize(
+        path.posix.join(path.posix.dirname(filename), target),
+      );
+      if (
+        path.posix.isAbsolute(target) ||
+        resolvedTarget.startsWith("../") ||
+        !filenames.has(resolvedTarget)
+      ) {
+        errors.push(`${filename}:1: broken chapter link: ${target}`);
       }
     }
   }
@@ -370,18 +453,54 @@ async function collectBookFiles(bookDirectory, errors) {
   const files = new Map();
   for (const entry of entries) {
     if (entry.isDirectory()) {
-      errors.push(`${entry.name}: nested directories are not allowed in LToDD`);
+      if (!NAME_SEGMENT.test(entry.name)) {
+        errors.push(`${entry.name}: use a lowercase underscore part directory`);
+      }
+      const partDirectory = path.join(bookDirectory, entry.name);
+      const partEntries = await readdir(partDirectory, { withFileTypes: true });
+      let chapterCount = 0;
+      for (const partEntry of partEntries) {
+        const relativePath = `${entry.name}/${partEntry.name}`;
+        if (partEntry.isDirectory()) {
+          errors.push(
+            `${relativePath}: chapters must live exactly one directory deep`,
+          );
+          continue;
+        }
+        if (!partEntry.isFile() || !partEntry.name.endsWith(".md")) {
+          errors.push(
+            `${relativePath}: part directories contain Markdown only`,
+          );
+          continue;
+        }
+        if (
+          !CHAPTER_NAME.test(partEntry.name) ||
+          partEntry.name === "index.md" ||
+          partEntry.name === "glossary.md"
+        ) {
+          errors.push(
+            `${relativePath}: use a lowercase underscore chapter filename`,
+          );
+        }
+        const absolutePath = path.join(partDirectory, partEntry.name);
+        files.set(relativePath, {
+          absolutePath,
+          source: await readFile(absolutePath, "utf8"),
+        });
+        chapterCount += 1;
+      }
+      if (chapterCount === 0) {
+        errors.push(`${entry.name}: part directory contains no chapters`);
+      }
       continue;
     }
     if (!entry.isFile() || !entry.name.endsWith(".md")) {
-      errors.push(
-        `${entry.name}: only flat Markdown files are allowed in LToDD`,
-      );
+      errors.push(`${entry.name}: the LToDD root contains Markdown only`);
       continue;
     }
-    if (!CHAPTER_NAME.test(entry.name)) {
+    if (entry.name !== "index.md" && entry.name !== "glossary.md") {
       errors.push(
-        `${entry.name}: use a lowercase underscore Markdown filename`,
+        `${entry.name}: ordinary chapters must live in a part directory`,
       );
     }
     const absolutePath = path.join(bookDirectory, entry.name);
