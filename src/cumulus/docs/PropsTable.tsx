@@ -53,7 +53,7 @@ export function PropsTable({ docName }: { docName: string }) {
       <table
         style={{
           width: "100%",
-          minWidth: "480px",
+          minWidth: "900px",
           borderCollapse: "collapse",
           font: token("--t-body-sm"),
           color: token("--text-secondary"),
@@ -86,7 +86,9 @@ function PropRow({ meta }: { meta: PropMeta }) {
           <code style={codeStyle}>{meta.name}</code>
         </td>
         <td style={cellStyle}>
-          <code style={codeStyle}>{meta.tsType}</code>
+          <code style={{ ...codeStyle, whiteSpace: "nowrap" }}>
+            {formatPropType(meta)}
+          </code>
         </td>
         <td style={cellStyle}>{meta.required ? "yes" : "no"}</td>
         <td style={cellStyle}>
@@ -107,6 +109,24 @@ function PropRow({ meta }: { meta: PropMeta }) {
       {meta.nested ? <NestedRow nested={meta.nested} /> : null}
     </>
   );
+}
+
+/**
+ * Spell out string-literal union members when docgen leaves the type behind a
+ * named alias. Direct unions already contain their values in `tsType`, so they
+ * stay unchanged instead of repeating the same literals twice.
+ */
+export function formatPropType(
+  meta: Pick<PropMeta, "tsType" | "unionMembers">,
+): string {
+  if (meta.unionMembers.length === 0) return meta.tsType;
+
+  const literals = meta.unionMembers.map((member) => JSON.stringify(member));
+  if (literals.every((literal) => meta.tsType.includes(literal))) {
+    return meta.tsType;
+  }
+
+  return `${meta.tsType} = ${literals.join(" | ")}`;
 }
 
 // A full-width row beneath a prop that carries a nested model object. The
