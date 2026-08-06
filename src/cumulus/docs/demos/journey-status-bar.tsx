@@ -32,6 +32,10 @@ function JourneyStatusBarDemo(args: Omit<JourneyStatusBarProps, "stageRef">) {
         width: 390,
         height: 300,
         overflow: "hidden",
+        // JourneyStatusBar uses viewport-fixed chrome in production. Making
+        // this specimen its containing block keeps every fixed HUD element
+        // aligned to the same stageRef inside the docs preview boundary.
+        transform: "translateZ(0)",
         borderRadius: token("--radius-large"),
         // A dark, scene-like backdrop so the transparent HUD sits on "art"
         // and the .hud-outline glyph dilation is visibly earning its keep.
