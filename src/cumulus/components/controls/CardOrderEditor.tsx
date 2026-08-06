@@ -1,9 +1,15 @@
-import type { ReactElement } from "react";
+import { Reorder, useDragControls } from "framer-motion";
+import {
+  type KeyboardEvent,
+  type PointerEvent,
+  type ReactElement,
+} from "react";
 import { glassContentControlSurface } from "../../internal/control-treatment";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
+import { Pressable } from "../../primitives/Pressable";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
-import { IconButton } from "./IconButton";
+import { StandaloneGlyph } from "./StandaloneGlyph";
 
 export interface CardOrderEditorItem {
   /** Card UUID or battle-instance id returned unchanged by callbacks. */
@@ -29,7 +35,7 @@ export interface CardOrderEditorProps {
   placement?: GlassControlPlacement;
 }
 
-/** A structured, identity-safe top-to-bottom card ordering control. */
+/** A structured, identity-safe drag-to-reorder control for a top-to-bottom card sequence. */
 export function CardOrderEditor({
   items,
   label,
@@ -44,7 +50,11 @@ export function CardOrderEditor({
     onOrderChange(ids);
   };
   return (
-    <div
+    <Reorder.Group
+      as="div"
+      axis="y"
+      values={items.map((item) => item.id)}
+      onReorder={onOrderChange}
       role="list"
       aria-label={label}
       data-glass-placement={placement}
@@ -56,70 +66,120 @@ export function CardOrderEditor({
       }}
     >
       {items.map((item, index) => (
-        <div
-          role="listitem"
+        <CardOrderEditorRow
           key={item.id}
-          data-card-order-id={item.id}
+          item={item}
+          index={index}
+          itemCount={items.length}
+          onMove={move}
+        />
+      ))}
+    </Reorder.Group>
+  );
+}
+
+function CardOrderEditorRow({
+  item,
+  index,
+  itemCount,
+  onMove,
+}: {
+  readonly item: CardOrderEditorItem;
+  readonly index: number;
+  readonly itemCount: number;
+  readonly onMove: (from: number, to: number) => void;
+}): ReactElement {
+  const controls = useDragControls();
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>): void => {
+    if (event.key === "ArrowUp" && index > 0) {
+      event.preventDefault();
+      onMove(index, index - 1);
+    }
+    if (event.key === "ArrowDown" && index < itemCount - 1) {
+      event.preventDefault();
+      onMove(index, index + 1);
+    }
+  };
+
+  return (
+    <Reorder.Item
+      as="div"
+      value={item.id}
+      role="listitem"
+      aria-posinset={index + 1}
+      aria-setsize={itemCount}
+      dragListener={false}
+      dragControls={controls}
+      data-card-order-id={item.id}
+      style={{
+        display: "grid",
+        gridTemplateColumns: "auto minmax(0, 1fr) auto",
+        alignItems: "center",
+        gap: token("--space-xs"),
+        paddingBlock: token("--space-s"),
+        borderBottom: `1px solid ${token("--border-soft")}`,
+      }}
+    >
+      <span
+        style={{
+          color: token("--text-on-glass-muted"),
+          font: token("--t-numeral"),
+        }}
+      >
+        {String(index + 1)}
+      </span>
+      <span
+        style={{ display: "flex", flexDirection: "column", minWidth: 0 }}
+      >
+        <span
           style={{
-            display: "grid",
-            gridTemplateColumns: "auto minmax(0, 1fr) auto auto",
-            alignItems: "center",
-            gap: token("--space-xs"),
-            paddingBlock: token("--space-s"),
-            borderBottom: `1px solid ${token("--border-soft")}`,
+            color: token("--text-on-glass"),
+            font: token("--t-body-sm"),
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
           }}
         >
+          {item.label}
+        </span>
+        {item.summary === undefined ? null : (
           <span
             style={{
               color: token("--text-on-glass-muted"),
-              font: token("--t-numeral"),
+              font: token("--t-caption"),
             }}
           >
-            {String(index + 1)}
+            {item.summary}
           </span>
-          <span
-            style={{ display: "flex", flexDirection: "column", minWidth: 0 }}
-          >
-            <span
-              style={{
-                color: token("--text-on-glass"),
-                font: token("--t-body-sm"),
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {item.label}
-            </span>
-            {item.summary === undefined ? null : (
-              <span
-                style={{
-                  color: token("--text-on-glass-muted"),
-                  font: token("--t-caption"),
-                }}
-              >
-                {item.summary}
-              </span>
-            )}
-          </span>
-          <IconButton
-            glyph={GLYPHS.chevronUp}
-            size="sm"
-            placement="onGlass"
-            label={`Move ${item.label} up`}
-            disabled={index === 0}
-            onPress={() => move(index, index - 1)}
-          />
-          <IconButton
-            glyph={GLYPHS.chevronDown}
-            size="sm"
-            placement="onGlass"
-            label={`Move ${item.label} down`}
-            disabled={index === items.length - 1}
-            onPress={() => move(index, index + 1)}
-          />
-        </div>
-      ))}
-    </div>
+        )}
+      </span>
+      <Pressable
+        as="button"
+        aria-label={`Reorder ${item.label}`}
+        aria-keyshortcuts="ArrowUp ArrowDown"
+        data-card-order-drag-handle={item.id}
+        onPointerDown={(event: PointerEvent<HTMLButtonElement>) =>
+          controls.start(event)
+        }
+        onKeyDown={handleKeyDown}
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: token("--touch-min"),
+          height: token("--touch-min"),
+          padding: 0,
+          border: "none",
+          background: "transparent",
+          color: token("--text-on-glass-muted"),
+          fontSize: "1.4em",
+          cursor: "grab",
+          touchAction: "none",
+        }}
+      >
+        <StandaloneGlyph glyph={GLYPHS.dragHandle} color="text-secondary" />
+      </Pressable>
+    </Reorder.Item>
   );
 }

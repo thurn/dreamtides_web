@@ -79,9 +79,9 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 <!-- BEGIN GENERATED COMPONENT INDEX (npm run cumulus-docs) -->
 | Component | Group | Consumers | Reference | What it is |
 | --- | --- | --- | --- | --- |
-| Pressable | Primitives | 32 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
+| Pressable | Primitives | 33 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
 | Essence Value | Components | 12 | [components/essence-value.md](components/essence-value.md) | The canonical Essence amount: a tight inline value for player-facing currency text, with a named solid reward badge for values placed over art. |
-| Icon Button | Components | 20 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
+| Icon Button | Components | 19 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
 | Main Menu Button | Components | 1 | [components/main-menu-button.md](components/main-menu-button.md) | The text-first action for the Dreamtides main menu: outlined white at rest, showing the shared Cumulus liquid-glass material on hover or focus. |
 | Glass Button | Components | 32 | [components/glass-button.md](components/glass-button.md) | The labeled glass action — a bold text label with optional Essence cost or non-cost value on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface. |
 | Offer Tile | Components | 2 | [components/offer-tile.md](components/offer-tile.md) | The circular symbolic Augury offer button in named 300×300 desktop and 240×240 mobile sizes: UUID-backed full-bleed card art, Dreamsigns and site glyphs over authored full-art fields, and centered operation marks inside the gold-and-feather frame. |
@@ -98,7 +98,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | Text Area | Components | 1 | [components/text-area.md](components/text-area.md) | The reusable multiline authoring field on Cumulus control chrome, with explicit draft and commit callbacks. |
 | NumberStepper | Components | 7 | [components/number-stepper.md](components/number-stepper.md) | A labeled, accessible decrement/value/increment row with optional canonical resource notation. |
 | DisclosureSection | Components | 5 | [components/disclosure-section.md](components/disclosure-section.md) | A controlled, surface-aware Cumulus section for progressively revealing dense secondary information. |
-| CardOrderEditor | Components | 1 | [components/card-order-editor.md](components/card-order-editor.md) | A surface-aware, identity-safe top-to-bottom card ordering control for the battle deck-order workflow. |
+| CardOrderEditor | Components | 1 | [components/card-order-editor.md](components/card-order-editor.md) | A surface-aware, identity-safe drag-to-reorder control for the battle deck-order workflow, with arrow-key reordering on each drag handle. |
 | Tide Disc | Components | 1 | [components/tide-disc.md](components/tide-disc.md) | The single semantic tide mark: a colored disc carrying the tide's glyph and its own strict tide reveal. |
 | Tides Info Label | Components | 1 | [components/tides-info-label.md](components/tides-info-label.md) | The typographic Tides eyebrow: a filled one-em information glyph followed by uppercase copy, with one shared definition reveal across the complete label. |
 | Transfiguration Button | Components | 1 | [components/transfiguration-button.md](components/transfiguration-button.md) | The canonical forge-form choice: compact and price-bearing controls with shared glyph, color, state, and accessibility behavior. |
@@ -107,7 +107,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | Motes | Components | 11 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
 | Info Card | Components | 6 | [components/info-card.md](components/info-card.md) | The strict information-card presentation. |
 | Inline Glyph | Primitives | 12 | [components/inline-glyph.md](components/inline-glyph.md) | The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's capital height at every type size. |
-| Standalone Glyph | Primitives | 18 | [components/standalone-glyph.md](components/standalone-glyph.md) | The Boxicons renderer for controls, badges, overlays, and card marks: a centered one-em square whose surrounding layout owns its size and placement. |
+| Standalone Glyph | Primitives | 19 | [components/standalone-glyph.md](components/standalone-glyph.md) | The Boxicons renderer for controls, badges, overlays, and card marks: a centered one-em square whose surrounding layout owns its size and placement. |
 | Pip Badge | Components | 1 | [components/pip-badge.md](components/pip-badge.md) | The compact circled number used in dense card rows and inline rules text for spark or energy values. |
 | Journey Status Bar | Components | 6 | [components/journey-status-bar.md](components/journey-status-bar.md) | The persistent, transparent bottom HUD for journey screens. |
 | Coop Presence Status | Components | 1 | [components/coop-presence-status.md](components/coop-presence-status.md) | The compact, non-interactive app chrome that reports connected room participants from an explicit view-model count. |

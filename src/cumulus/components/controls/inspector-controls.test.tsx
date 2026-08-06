@@ -67,10 +67,13 @@ describe("inspector Cumulus controls", () => {
     act(() => root.unmount());
   });
 
-  it("returns card instance ids from CardOrderEditor moves", () => {
+  it("returns card instance ids from CardOrderEditor keyboard reordering", () => {
     const onOrderChange = vi.fn();
     const { container, root } = mount(<CardOrderEditor label="Deck order" items={[{ id: "instance-a", label: "A" }, { id: "instance-b", label: "B" }]} onOrderChange={onOrderChange} />);
-    act(() => (container.querySelector('button[aria-label="Move B up"]') as HTMLButtonElement).click());
+    const handle = container.querySelector<HTMLButtonElement>('[data-card-order-drag-handle="instance-b"]');
+    act(() => {
+      handle?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true }));
+    });
     expect(onOrderChange).toHaveBeenCalledWith(["instance-b", "instance-a"]);
     act(() => root.unmount());
   });

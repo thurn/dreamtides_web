@@ -6,7 +6,7 @@
 
 Primitives · Live demo & interactive props: `/cumulus#/standalone-glyph`
 
-Real consumers: **18** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **19** (imports outside `src/cumulus/docs/` and tests).
 
 The Boxicons renderer for controls, badges, overlays, and card marks: a centered one-em square whose surrounding layout owns its size and placement.
 

@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/card-order-editor`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-A surface-aware, identity-safe top-to-bottom card ordering control for the battle deck-order workflow.
+A surface-aware, identity-safe drag-to-reorder control for the battle deck-order workflow, with arrow-key reordering on each drag handle.
 
 > **Guidance:** Use the default on scene media and dark standalone surfaces. Set placement to onGlass inside GlassPanel, GlassDialog, or DeveloperRail so the editor uses its lighter nested-glass treatment.
 

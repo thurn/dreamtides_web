@@ -36,7 +36,7 @@ afterEach(() => {
 });
 
 describe("BattleDeckOrderPicker", () => {
-  it("moves rows via move-up / move-down and confirms with the expected permutation", () => {
+  it("reorders rows from the drag handles and confirms with the expected permutation", () => {
     const { state } = createTestBattle();
     const initialOrder = state.sides.player.deck.slice(0, 3);
     expect(initialOrder).toHaveLength(3);
@@ -67,8 +67,8 @@ describe("BattleDeckOrderPicker", () => {
     expect(rootNode?.getAttribute("data-battle-deck-order-side")).toBe("player");
 
     // Move the first row down through two neighbours so it becomes last.
-    clickRowAction(0, "move-down");
-    clickRowAction(1, "move-down");
+    pressReorderKey(0, "ArrowDown");
+    pressReorderKey(1, "ArrowDown");
 
     const slotOrder = [
       ...document.querySelectorAll<HTMLElement>("[data-card-order-id]"),
@@ -121,7 +121,7 @@ describe("BattleDeckOrderPicker", () => {
     });
 
     // Swap the two rows.
-    clickRowAction(0, "move-down");
+    pressReorderKey(0, "ArrowDown");
     const confirm = document.querySelector<HTMLButtonElement>(
       '[data-testid="battle-deck-order-confirm"]',
     );
@@ -142,19 +142,19 @@ describe("BattleDeckOrderPicker", () => {
   });
 });
 
-function clickRowAction(
+function pressReorderKey(
   slot: number,
-  action: "move-up" | "move-down",
+  key: "ArrowUp" | "ArrowDown",
 ): void {
   const row = document.querySelectorAll<HTMLElement>("[data-card-order-id]")[slot];
-  const direction = action === "move-up" ? " up" : " down";
-  const button = [...(row?.querySelectorAll<HTMLButtonElement>("button") ?? [])]
-    .find((candidate) => candidate.getAttribute("aria-label")?.endsWith(direction));
-  if (button === undefined) {
-    throw new Error(`Missing deck-order action on row ${String(slot)}: ${action}`);
+  const handle = row?.querySelector<HTMLButtonElement>(
+    "[data-card-order-drag-handle]",
+  );
+  if (handle === null || handle === undefined) {
+    throw new Error(`Missing deck-order drag handle on row ${String(slot)}`);
   }
   act(() => {
-    button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    handle.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
   });
 }
 
