@@ -3460,6 +3460,122 @@
       "description": "Optional test selector; defaults to `offer-tile`."
     }
   ],
+  "PlayingCard": [
+    {
+      "name": "size",
+      "tsType": "WagerPrizeCardSize",
+      "unionMembers": [
+        "wagerCompact",
+        "wager"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "Named Gamble playing-card size. Defaults to `wager`."
+    },
+    {
+      "name": "emphasis",
+      "tsType": "\"standard\" | \"current\"",
+      "unionMembers": [
+        "standard",
+        "current"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "Accent the card rim when it is the current choice."
+    },
+    {
+      "name": "variant",
+      "tsType": "\"fourSuit\" | \"rankSuit\"",
+      "unionMembers": [
+        "fourSuit",
+        "rankSuit"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Render a visible rank-and-suit card face.\nRender the concealed four-suit face, optionally flipping to a committed draw."
+    },
+    {
+      "name": "rank",
+      "tsType": "StandardPlayingCardRank",
+      "unionMembers": [
+        "A",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "J",
+        "Q",
+        "K"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "Rank shown on the visible card face."
+    },
+    {
+      "name": "suit",
+      "tsType": "StandardPlayingCardSuit",
+      "unionMembers": [
+        "clubs",
+        "diamonds",
+        "hearts",
+        "spades"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "Suit shown on the visible card face."
+    },
+    {
+      "name": "drawnCard",
+      "tsType": "{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } | null",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Committed result available on the reverse face."
+    },
+    {
+      "name": "revealDrawnCard",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Flip the concealed four-suit face to the committed result."
+    }
+  ],
+  "PlayingCardSuitMark": [
+    {
+      "name": "suit",
+      "tsType": "StandardPlayingCardSuit",
+      "unionMembers": [
+        "clubs",
+        "diamonds",
+        "hearts",
+        "spades"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Suit whose canonical color and symbol are rendered."
+    },
+    {
+      "name": "size",
+      "tsType": "PlayingCardSuitMarkSize",
+      "unionMembers": [
+        "reward",
+        "indexCompact",
+        "index",
+        "fourSuitCompact",
+        "fourSuit",
+        "rewardCompact"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Named optical footprint for a card index, four-suit face, or reward row."
+    }
+  ],
   "Pressable": [
     {
       "name": "as",
@@ -4568,7 +4684,7 @@
   "WagerPrizeCard": [
     {
       "name": "prizeId",
-      "tsType": "\"six\" | \"nine\" | \"jack\" | \"ladder-climb\" | \"starway-1\" | \"starway-2\" | \"starway-3\" | \"four-suit-reprise\"",
+      "tsType": "WagerPrizeCardId",
       "unionMembers": [
         "six",
         "nine",
@@ -4576,8 +4692,7 @@
         "ladder-climb",
         "starway-1",
         "starway-2",
-        "starway-3",
-        "four-suit-reprise"
+        "starway-3"
       ],
       "required": true,
       "defaultValue": null,
@@ -4642,7 +4757,7 @@
       "name": "essenceReward",
       "tsType": "number",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
       "description": "Essence awarded on a win."
     },
@@ -4650,7 +4765,7 @@
       "name": "rewardDreamsign",
       "tsType": "Dreamsign | null",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
       "description": "Dreamsign appended to the Essence reward, when present."
     }

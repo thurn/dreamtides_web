@@ -9,6 +9,7 @@ import { artRef } from "../primitives/art";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { TRANSFIGURATION_TINT_COLORS } from "../../runtime/transfiguration-display";
+import { PLAYING_CARD_DESIGN } from "../components/card/PlayingCard";
 import {
   GambleSiteScreen,
   type FourSuitRepriseSiteView,
@@ -1263,11 +1264,13 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     expect(outcomePanel?.querySelector("[data-wager-prize-card]")).toBeNull();
     expect(
       container.querySelector(
-        '[data-four-suit-draw-card] [data-wager-prize-card="four-suit-reprise"]',
+        '[data-four-suit-draw-card] [data-playing-card-variant="fourSuit"]',
       ),
     ).not.toBeNull();
     expect(
-      container.querySelectorAll("[data-four-suit-playing-card-symbol]"),
+      container.querySelectorAll(
+        "[data-playing-card-four-suit-face] [data-playing-card-suit-mark]",
+      ),
     ).toHaveLength(4);
     expect(container.querySelectorAll("[data-four-suit-outcome]")).toHaveLength(4);
     expect(
@@ -1276,16 +1279,42 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
         (element) => element.dataset.fourSuitOutcome,
       ),
     ).toEqual(["spades", "diamonds", "hearts", "clubs"]);
+    expect(
+      Array.from(
+        container.querySelectorAll<HTMLElement>("[data-four-suit-outcome]"),
+        (element) => element.querySelector<HTMLElement>(
+          "[data-playing-card-suit-mark]",
+        )?.dataset.playingCardSuitMark,
+      ),
+    ).toEqual(["spades", "diamonds", "hearts", "clubs"]);
+    expect(
+      Array.from(
+        container.querySelectorAll<HTMLElement>(
+          "[data-four-suit-outcome] [data-playing-card-suit-glyph]",
+        ),
+      ).every((element) => element.style.webkitTextStroke.includes(
+        PLAYING_CARD_DESIGN.colors.characterOutline,
+      )),
+    ).toBe(true);
     expect(container.querySelector("[data-four-suit-chance]")).toBeNull();
     const reselect = container.querySelector<HTMLButtonElement>(
       '[data-testid="gamble-four-suit-choose-again"]',
     );
-    expect(reselect?.querySelector("i.bx-arrow-left")).not.toBeNull();
+    expect(reselect?.querySelector("i.bx-refresh-ccw")).not.toBeNull();
     expect(
       container.querySelector(
         '[data-four-suit-actions] [data-testid="gamble-four-suit-choose-again"]',
       ),
+    ).toBeNull();
+    expect(
+      container.querySelector(
+        '[data-four-suit-reselect] [data-testid="gamble-four-suit-choose-again"]',
+      ),
     ).toBe(reselect);
+    expect(
+      container.querySelector<HTMLElement>("[data-four-suit-reselect]")?.style
+        .gridArea,
+    ).toBe("reselect");
     act(() => reselect?.click());
     expect(container.querySelector("[data-four-suit-picker]")).not.toBeNull();
     act(() => {
@@ -1327,7 +1356,7 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     expect(onOutcomeShown).toHaveBeenCalledOnce();
     expect(
       container.querySelector(
-        '[data-wager-prize-card="four-suit-reprise"][data-wager-prize-card-state="drawn"]',
+        '[data-playing-card-variant="fourSuit"][data-playing-card-state="drawn"]',
       ),
     ).not.toBeNull();
     expect(container.querySelectorAll("[data-four-suit-outcome]")).toHaveLength(4);
@@ -1369,6 +1398,9 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       '[data-testid="cumulus-transfiguration-confirm"]',
     );
     expect(confirm?.getAttribute("aria-disabled")).not.toBe("true");
+    expect(
+      confirm?.querySelector("[data-glass-button-essence-cost]"),
+    ).toBeNull();
     act(() => confirm?.click());
     expect(onChooseTransfiguration).toHaveBeenCalledWith("Empowered");
 
@@ -1414,6 +1446,11 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     ).toHaveLength(2);
     void act(() => vi.advanceTimersByTime(2_600));
     expect(container.querySelector("[data-four-suit-target]")).toBeNull();
+    const replay = container.querySelector<HTMLButtonElement>(
+      '[data-testid="gamble-four-suit-play-again"]',
+    );
+    expect(replay).not.toBeNull();
+    expect(replay?.getAttribute("aria-disabled")).not.toBe("true");
 
     act(() => root.unmount());
   });
@@ -1498,6 +1535,9 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     expect(replay).not.toBeNull();
     act(() => replay?.click());
     expect(onPlayAgain).toHaveBeenCalledOnce();
+    expect(
+      container.querySelector('[data-testid="gamble-four-suit-play-again"]'),
+    ).toBeNull();
 
     const replayView: FourSuitRepriseSiteView = {
       ...fourSuitResultView({
@@ -1537,7 +1577,7 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     ).not.toBeNull();
     expect(
       container.querySelector(
-        '[data-wager-prize-card="four-suit-reprise"][data-wager-prize-card-state="prize"]',
+        '[data-playing-card-variant="fourSuit"][data-playing-card-state="concealed"]',
       ),
     ).not.toBeNull();
 

@@ -431,6 +431,7 @@ export function TransfigurationDetailPanel({
   selectedFormType,
   confirming,
   alreadyAccepted,
+  showConfirmEssenceCost = true,
   onBack,
   onSelectForm,
   onConfirm,
@@ -440,6 +441,8 @@ export function TransfigurationDetailPanel({
   readonly selectedFormType: TransfigurationType | null;
   readonly confirming: boolean;
   readonly alreadyAccepted: boolean;
+  /** Whether the confirmation action shows the selected form's quoted cost. */
+  readonly showConfirmEssenceCost?: boolean;
   readonly onBack?: () => void;
   readonly onSelectForm: (type: TransfigurationType) => void;
   readonly onConfirm: (form: TransfigurationFormView) => void;
@@ -498,14 +501,23 @@ export function TransfigurationDetailPanel({
               placement="onGlass"
               variant="accent"
               label={confirming ? "Reforging…" : "Transfigure"}
-              essenceCost={activeForm?.essenceCost ?? null}
-              widthReservations={[
-                { label: "Transfigure", essenceCost: null },
-                ...candidate.forms.flatMap((form) => [
-                  { label: "Transfigure", essenceCost: form.essenceCost },
-                  { label: "Reforging…", essenceCost: form.essenceCost },
-                ]),
-              ]}
+              essenceCost={
+                showConfirmEssenceCost
+                  ? activeForm?.essenceCost ?? null
+                  : null
+              }
+              widthReservations={showConfirmEssenceCost
+                ? [
+                    { label: "Transfigure", essenceCost: null },
+                    ...candidate.forms.flatMap((form) => [
+                      { label: "Transfigure", essenceCost: form.essenceCost },
+                      { label: "Reforging…", essenceCost: form.essenceCost },
+                    ]),
+                  ]
+                : [
+                    { label: "Transfigure", essenceCost: null },
+                    { label: "Reforging…", essenceCost: null },
+                  ]}
               disabled={disabled}
               onPress={() => {
                 if (activeForm !== null) onConfirm(activeForm);

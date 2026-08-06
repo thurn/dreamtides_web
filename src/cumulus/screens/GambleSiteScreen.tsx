@@ -20,6 +20,8 @@ import {
   type FourSuitRepriseOutcome,
 } from "../../data/four-suit-reprise";
 import {
+  PlayingCard,
+  PlayingCardSuitMark,
   PLAYING_CARD_FLIP_DURATION_MS,
   WagerPrizeCard,
   type PlayingCardRank,
@@ -284,12 +286,6 @@ const LADDER_DREAMSIGN_TRAVEL_SECONDS =
 const LADDER_DREAMSIGN_DESKTOP_SIZE = 240;
 const LADDER_DREAMSIGN_MOBILE_SIZE = 180;
 const DREAM_EASE = [0.22, 0.61, 0.36, 1] as const;
-const FOUR_SUIT_SYMBOLS: Readonly<Record<PlayingCardSuit, string>> = {
-  clubs: "♣",
-  diamonds: "♦",
-  hearts: "♥",
-  spades: "♠",
-};
 const FOUR_SUIT_STAGE_MAX_WIDTH = 720;
 const FOUR_SUIT_TARGET_WIDTH = { desktop: 164, mobile: 104 } as const;
 const FOUR_SUIT_REWARD_PANEL_WIDTH = { desktop: 220, mobile: 216 } as const;
@@ -2088,6 +2084,7 @@ function FourSuitRepriseScreen({
   useEffect(() => {
     if (!transfigurationVisible || view.result?.resultSettled !== true) return;
     setTransfigurationVisible(false);
+    setDecisionPending(false);
     setCardOutcomePhase("animating");
   }, [transfigurationVisible, view.result]);
 
@@ -2170,6 +2167,7 @@ function FourSuitRepriseScreen({
                 selectedFormType={selectedFormType}
                 confirming={decisionPending}
                 alreadyAccepted={false}
+                showConfirmEssenceCost={false}
                 onSelectForm={(type) =>
                   setSelectedFormType((current) =>
                     current === type ? null : type,
@@ -2193,6 +2191,7 @@ function FourSuitRepriseScreen({
           activeResult !== null && revealedResultId === activeResult.id;
         const outcomeVisible =
           activeResult !== null && outcomeResultId === activeResult.id;
+        const showReselect = view.phase === "choose" && selectedCard !== null;
         return (
           <main
             data-gamble-wager-region=""
@@ -2216,7 +2215,7 @@ function FourSuitRepriseScreen({
               justifyContent: "center",
               gap: layout === "desktop"
                 ? token("--space-s")
-                : token("--space-xs"),
+                : token("--space-s"),
               boxSizing: "border-box",
               padding: layout === "desktop"
                 ? token("--space-l")
@@ -2235,14 +2234,20 @@ function FourSuitRepriseScreen({
                   ? `${String(FOUR_SUIT_TARGET_WIDTH.desktop)}px max-content minmax(0, ${String(FOUR_SUIT_REWARD_PANEL_WIDTH.desktop)}px)`
                   : `${String(FOUR_SUIT_TARGET_WIDTH.mobile)}px max-content`,
                 gridTemplateAreas: layout === "desktop"
-                  ? '"target draw rewards"'
-                  : '"target draw" "rewards rewards"',
+                  ? showReselect
+                    ? '"target draw rewards" "reselect . ."'
+                    : '"target draw rewards"'
+                  : showReselect
+                    ? '"target draw" "reselect ." "rewards rewards"'
+                    : '"target draw" "rewards rewards"',
                 columnGap: layout === "desktop"
                   ? token("--space-3xl")
                   : token("--space-xl"),
-                rowGap: layout === "desktop"
-                  ? undefined
-                  : token("--space-xl"),
+                rowGap: showReselect
+                  ? token("--space-xs")
+                  : layout === "desktop"
+                    ? undefined
+                    : token("--space-xl"),
                 alignItems: "center",
                 justifyItems: "center",
                 justifyContent: "center",
@@ -2277,13 +2282,31 @@ function FourSuitRepriseScreen({
                   )}
                 </div>
               )}
+              {showReselect && (
+                <div
+                  data-four-suit-reselect=""
+                  style={{
+                    gridArea: "reselect",
+                    justifySelf: "start",
+                    transform: "translateX(-50%)",
+                  }}
+                >
+                  <IconButton
+                    glyph={GLYPHS.refreshCcw}
+                    label="Choose another card"
+                    size="sm"
+                    disabled={decisionPending}
+                    testId="gamble-four-suit-choose-again"
+                    onPress={() => setSelectedEntryId(null)}
+                  />
+                </div>
+              )}
               <div
                 data-four-suit-draw-card=""
                 style={{ gridArea: "draw" }}
               >
-                <WagerPrizeCard
-                  prizeId="four-suit-reprise"
-                  targetLabel="a suit"
+                <PlayingCard
+                  variant="fourSuit"
                   size={layout === "desktop" ? "wager" : "wagerCompact"}
                   drawnCard={drawnCard}
                   revealDrawnCard={drawnCardVisible}
@@ -2316,9 +2339,12 @@ function FourSuitRepriseScreen({
                       <div
                         key={outcome.suit}
                         data-four-suit-outcome={outcome.suit}
+                        aria-label={`${outcome.suit}: ${outcome.label}`}
                         style={{
                           display: "grid",
-                          gridTemplateColumns: "2em minmax(0, 1fr)",
+                          gridTemplateColumns: layout === "desktop"
+                            ? "44px minmax(0, 1fr)"
+                            : "40px minmax(0, 1fr)",
                           alignItems: "center",
                           gap: layout === "desktop"
                             ? token("--space-s")
@@ -2328,17 +2354,12 @@ function FourSuitRepriseScreen({
                             : token("--t-button"),
                         }}
                       >
-                        <span
-                          aria-hidden="true"
-                          style={{
-                            font: layout === "desktop"
-                              ? token("--t-title")
-                              : token("--t-title-sm"),
-                            lineHeight: 1,
-                          }}
-                        >
-                          {FOUR_SUIT_SYMBOLS[outcome.suit]}
-                        </span>
+                        <PlayingCardSuitMark
+                          suit={outcome.suit}
+                          size={layout === "desktop"
+                            ? "reward"
+                            : "rewardCompact"}
+                        />
                         <span>
                           {outcome.outcome === "transfiguration"
                             ? "Transfigure"
@@ -2413,16 +2434,6 @@ function FourSuitRepriseScreen({
             >
               {view.phase === "choose" && selectedCard !== null ? (
                 <>
-                  <div data-four-suit-reselect="">
-                    <IconButton
-                      glyph={GLYPHS.arrowLeft}
-                      label="Choose another card"
-                      size="sm"
-                      disabled={decisionPending}
-                      testId="gamble-four-suit-choose-again"
-                      onPress={() => setSelectedEntryId(null)}
-                    />
-                  </div>
                   <GlassButton
                     label="Draw"
                     accessibilityLabel={`Draw for ${String(view.drawCost)} Essence`}
@@ -2450,7 +2461,7 @@ function FourSuitRepriseScreen({
                 </>
               ) : actionsVisible ? (
                 <>
-                  {view.canPlayAgain && (
+                  {view.canPlayAgain && !decisionPending && (
                     <GlassButton
                       label="Play Again"
                       size={layout === "mobile" ? "compact" : "standard"}

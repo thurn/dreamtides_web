@@ -143,6 +143,7 @@ That implementation term does not cross the component API boundary.
 | Rich Text | Components | 12 | [components/rich-text.md](components/rich-text.md) | The design system's model for formatted copy. |
 | Rules Text | Components | 17 | [components/rules-text.md](components/rules-text.md) | The canonical Dreamtides rules-copy source: resource symbols and keywords render in place, while hovering, focusing, or touch-holding anywhere in the complete block reveals one contextual glossary card. |
 | Game Card | Components | 31 | [components/game-card.md](components/game-card.md) | The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name. |
+| Playing Card | Components | 1 | [components/playing-card.md](components/playing-card.md) | The shared outlined playing-card face, with a visible rank-and-suit variant and Four-Suit Reprise's concealed suit grid. |
 | Card Back | Components | 4 | [components/card-back.md](components/card-back.md) | The canonical face-down Dreamtides card object: the shipped card-back sprite on the shared 5:7 card geometry, with fixed crop, edge, and elevation. |
 | Card Pile | Components | 1 | [components/card-pile.md](components/card-pile.md) | A physical deck or void stack built from structured, topmost-first card instances. |
 | Card Choice Grid | Components | 3 | [components/card-choice-grid.md](components/card-choice-grid.md) | A frameless, responsive grid that turns a small set of resolved GameCards into selectable choices inside an existing site or panel. |
@@ -155,7 +156,7 @@ That implementation term does not cross the component API boundary.
 | Dreamsign | Components | 12 | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
 | Dreamsign Gallery Panel | Components | 1 | [components/dreamsign-gallery-panel.md](components/dreamsign-gallery-panel.md) | The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art, essence captions, a close disc, and one bare-glyph end action. |
 | Site Node | Components | 3 | [components/site-node.md](components/site-node.md) | The dreamscape site disc: a floating circular node carrying a glyph and accent ring. |
-| Wager Prize Card | Components | 1 | [components/wager-prize-card.md](components/wager-prize-card.md) | The shared Gamble draw object: a playing-card superellipse with either a reward face or Four-Suit Reprise's concealed suit grid, plus a committed-card reverse face. |
+| Wager Prize Card | Components | 1 | [components/wager-prize-card.md](components/wager-prize-card.md) | The shared threshold-game prize object: a playing-card superellipse with a reward face and a committed-card reverse face. |
 <!-- END GENERATED COMPONENT INDEX -->
 
 ## Customization: step back before adding any knob

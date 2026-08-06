@@ -28,11 +28,11 @@ export const wagerPrizeCardDemo: CumulusComponent = {
   id: "wager-prize-card",
   title: "Wager Prize Card",
   blurb:
-    "The shared Gamble draw object: a playing-card superellipse with either a reward face or Four-Suit Reprise's concealed suit grid, plus a committed-card reverse face.",
-  callout: "Keep standard rewards in one sentence.",
+    "The shared threshold-game prize object: a playing-card superellipse with a reward face and a committed-card reverse face.",
+  callout:
+    "Keep the reward in one sentence and use PlayingCard for a standalone playing-card face.",
   details: [
     "When a Dreamsign is present, the entire prize face is its hover and press reveal source.",
-    "The Four-Suit Reprise variant is the separate draw object; its reward table belongs in a GlassPanel.",
   ],
   group: "Components",
   docName: "WagerPrizeCard",
@@ -58,15 +58,6 @@ export const wagerPrizeCardDemo: CumulusComponent = {
   rewardDreamsign={dreamsign}
   drawnCard={{ rank: "Q", suit: "hearts" }}
   revealDrawnCard
-/>
-`,
-    },
-    {
-      label: "Four-suit draw",
-      code: `<WagerPrizeCard
-  prizeId="four-suit-reprise"
-  targetLabel="a suit"
-  drawnCard={{ rank: "Q", suit: "spades" }}
 />
 `,
     },

@@ -29,7 +29,6 @@ export const PLAYING_CARD_DESIGN = {
     wagerCompact: {
       square: 116,
       fontSize: 46,
-      suitGridFontSize: 34,
       rankSuitGap: token("--space-xxs"),
       redCharacterOutlineWidth: 5,
       blackCharacterOutlineWidth: 5,
@@ -37,7 +36,6 @@ export const PLAYING_CARD_DESIGN = {
     wager: {
       square: 188,
       fontSize: 76,
-      suitGridFontSize: 54,
       rankSuitGap: token("--space-xxs"),
       redCharacterOutlineWidth: 5,
       blackCharacterOutlineWidth: 5,
@@ -79,14 +77,22 @@ export type PlayingCardRank = StandardPlayingCardRank;
 
 export type PlayingCardSuit = StandardPlayingCardSuit;
 
+/** Named optical sizes for the shared outlined suit mark. */
+export type PlayingCardSuitMarkSize =
+  | "indexCompact"
+  | "index"
+  | "fourSuitCompact"
+  | "fourSuit"
+  | "rewardCompact"
+  | "reward";
+
 /** Stable Gamble prize identities rendered by the shared wager object. */
 export type WagerPrizeCardId =
   | GravokGateId
   | "ladder-climb"
   | "starway-1"
   | "starway-2"
-  | "starway-3"
-  | "four-suit-reprise";
+  | "starway-3";
 
 /** Named square sizes reserved for Gamble prize cards. */
 export type WagerPrizeCardSize = "wagerCompact" | "wager";
@@ -108,6 +114,27 @@ const FOUR_SUIT_FACE_ORDER: readonly PlayingCardSuit[] = [
   "diamonds",
   "clubs",
 ];
+
+const PLAYING_CARD_SUIT_MARK_SPECS: Readonly<
+  Record<
+    PlayingCardSuitMarkSize,
+    { readonly fontSize: number; readonly outlineWidth: number }
+  >
+> = {
+  indexCompact: {
+    fontSize: PLAYING_CARD_DESIGN.sizes.wagerCompact.fontSize,
+    outlineWidth:
+      PLAYING_CARD_DESIGN.sizes.wagerCompact.blackCharacterOutlineWidth,
+  },
+  index: {
+    fontSize: PLAYING_CARD_DESIGN.sizes.wager.fontSize,
+    outlineWidth: PLAYING_CARD_DESIGN.sizes.wager.blackCharacterOutlineWidth,
+  },
+  fourSuitCompact: { fontSize: 46, outlineWidth: 4 },
+  fourSuit: { fontSize: 68, outlineWidth: 5 },
+  rewardCompact: { fontSize: 36, outlineWidth: 3 },
+  reward: { fontSize: 40, outlineWidth: 3 },
+};
 
 function superellipsePoint(
   index: number,
@@ -205,6 +232,62 @@ function frontAriaLabel(
   return `${rank} of ${suit}`;
 }
 
+export interface PlayingCardSuitMarkProps {
+  /** Suit whose canonical color and symbol are rendered. */
+  suit: PlayingCardSuit;
+  /** Named optical footprint for a card index, four-suit face, or reward row. */
+  size: PlayingCardSuitMarkSize;
+}
+
+/** The canonical colored playing-card suit with an optically balanced black outline. */
+export function PlayingCardSuitMark({
+  suit,
+  size,
+}: PlayingCardSuitMarkProps): ReactElement {
+  const sizeSpec = PLAYING_CARD_SUIT_MARK_SPECS[size];
+  const suitOptics = PLAYING_CARD_DESIGN.suitOptics[suit];
+  const isRedSuit = RED_SUITS.has(suit);
+  const foreground = isRedSuit
+    ? PLAYING_CARD_DESIGN.colors.red
+    : PLAYING_CARD_DESIGN.colors.black;
+
+  return (
+    <span
+      aria-hidden="true"
+      data-playing-card-suit-mark={suit}
+      data-playing-card-suit-mark-size={size}
+      style={{
+        width: sizeSpec.fontSize,
+        height: sizeSpec.fontSize,
+        display: "inline-grid",
+        placeItems: "center",
+        flex: "0 0 auto",
+        color: foreground,
+        fontFamily: PLAYING_CARD_DESIGN.fontFamily,
+        fontSize: sizeSpec.fontSize,
+        fontWeight: 900,
+        fontStyle: "normal",
+        lineHeight: 1,
+      }}
+    >
+      <span
+        data-playing-card-suit-glyph=""
+        style={{
+          position: "relative",
+          top: sizeSpec.fontSize * suitOptics.verticalOffsetEm,
+          display: "inline-block",
+          lineHeight: 1,
+          transform: `scale(${String(suitOptics.scale)})`,
+          WebkitTextStroke: `${String(sizeSpec.outlineWidth)}px ${PLAYING_CARD_DESIGN.colors.characterOutline}`,
+          paintOrder: "stroke fill",
+        }}
+      >
+        {SUIT_SYMBOLS[suit]}
+      </span>
+    </span>
+  );
+}
+
 function PlayingCardIndex({
   rank,
   suit,
@@ -215,7 +298,6 @@ function PlayingCardIndex({
   size: WagerPrizeCardSize;
 }): ReactElement {
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
-  const suitOptics = PLAYING_CARD_DESIGN.suitOptics[suit];
   const isRedSuit = RED_SUITS.has(suit);
   const fontSize = sizeSpec.fontSize;
   const foreground = isRedSuit
@@ -244,32 +326,193 @@ function PlayingCardIndex({
         lineHeight: 1,
         letterSpacing: "-0.025em",
         whiteSpace: "nowrap",
-        ...(characterOutlineWidth > 0
-          ? {
-              WebkitTextStroke: `${String(characterOutlineWidth)}px ${PLAYING_CARD_DESIGN.colors.characterOutline}`,
-              paintOrder: "stroke fill",
-            }
-          : {}),
       }}
     >
-      <span data-playing-card-rank-glyph="">{rank}</span>
       <span
-        data-playing-card-suit-glyph=""
+        data-playing-card-rank-glyph=""
         style={{
-          position: "relative",
-          top: fontSize * suitOptics.verticalOffsetEm,
-          display: "inline-block",
-          fontSize: fontSize * suitOptics.scale,
-          lineHeight: 1,
+          WebkitTextStroke: `${String(characterOutlineWidth)}px ${PLAYING_CARD_DESIGN.colors.characterOutline}`,
+          paintOrder: "stroke fill",
         }}
       >
-        {SUIT_SYMBOLS[suit]}
+        {rank}
       </span>
+      <PlayingCardSuitMark
+        suit={suit}
+        size={size === "wager" ? "index" : "indexCompact"}
+      />
     </span>
   );
 }
 
-interface WagerPrizeCardBaseProps {
+interface PlayingCardBaseProps {
+  /** Named Gamble playing-card size. Defaults to `wager`. */
+  size?: WagerPrizeCardSize;
+  /** Accent the card rim when it is the current choice. */
+  emphasis?: "standard" | "current";
+}
+
+type RankSuitPlayingCardProps = PlayingCardBaseProps & {
+  /** Render a visible rank-and-suit card face. */
+  variant: "rankSuit";
+  /** Rank shown on the visible card face. */
+  rank: PlayingCardRank;
+  /** Suit shown on the visible card face. */
+  suit: PlayingCardSuit;
+  drawnCard?: never;
+  revealDrawnCard?: never;
+};
+
+type FourSuitPlayingCardProps = PlayingCardBaseProps & {
+  /** Render the concealed four-suit face, optionally flipping to a committed draw. */
+  variant: "fourSuit";
+  rank?: never;
+  suit?: never;
+  /** Committed result available on the reverse face. */
+  drawnCard: {
+    rank: PlayingCardRank;
+    suit: PlayingCardSuit;
+  } | null;
+  /** Flip the concealed four-suit face to the committed result. */
+  revealDrawnCard?: boolean;
+};
+
+/** Official visible-rank and concealed-four-suit playing-card variants. */
+export type PlayingCardProps =
+  | RankSuitPlayingCardProps
+  | FourSuitPlayingCardProps;
+
+/**
+ * A standalone playing card on the shared glass superellipse. Four-Suit
+ * Reprise uses its concealed suit-grid variant and built-in result flip.
+ */
+export function PlayingCard(props: PlayingCardProps): ReactElement {
+  const reduceMotion = useReducedMotion() === true;
+  const size = props.size ?? "wager";
+  const emphasis = props.emphasis ?? "standard";
+  const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
+  const showingDrawnCard =
+    props.variant === "fourSuit" &&
+    props.revealDrawnCard === true &&
+    props.drawnCard !== null;
+  const visibleCard = props.variant === "rankSuit"
+    ? { rank: props.rank, suit: props.suit }
+    : showingDrawnCard
+      ? props.drawnCard
+      : null;
+  const label = visibleCard === null
+    ? "Face-down four-suit playing card"
+    : frontAriaLabel(visibleCard.rank, visibleCard.suit);
+  const state = props.variant === "rankSuit"
+    ? "visible"
+    : showingDrawnCard
+      ? "drawn"
+      : "concealed";
+  const surfaceStyle: CSSProperties = {
+    ...CARD_FACE_STYLE,
+    ...(emphasis === "current"
+      ? { ...glassAccentChrome("onMedia"), border: 0 }
+      : {}),
+    display: "grid",
+    placeItems: "center",
+  };
+
+  const rankSuitContent = visibleCard === null ? null : (
+    <PlayingCardIndex
+      rank={visibleCard.rank}
+      suit={visibleCard.suit}
+      size={size}
+    />
+  );
+
+  return (
+    <div
+      role="img"
+      aria-label={label}
+      data-playing-card={visibleCard === null
+        ? "four-suit"
+        : `${visibleCard.rank}-${visibleCard.suit}`}
+      data-playing-card-variant={props.variant}
+      data-playing-card-state={state}
+      data-playing-card-face={visibleCard === null ? "reverse" : "front"}
+      style={{
+        position: "relative",
+        width: sizeSpec.square,
+        height: sizeSpec.square,
+        flex: "0 0 auto",
+        perspective: PLAYING_CARD_DESIGN.flip.perspective,
+      }}
+    >
+      {props.variant === "rankSuit" ? (
+        <div data-playing-card-surface="" style={surfaceStyle}>
+          {rankSuitContent}
+          <PlayingCardRim emphasis={emphasis} />
+        </div>
+      ) : (
+        <motion.div
+          data-playing-card-flip=""
+          initial={false}
+          animate={{ rotateY: showingDrawnCard ? 180 : 0 }}
+          transition={
+            reduceMotion
+              ? { duration: 0 }
+              : {
+                  duration: PLAYING_CARD_DESIGN.flip.durationSeconds,
+                  ease: PLAYING_CARD_DESIGN.flip.ease,
+                }
+          }
+          style={{
+            position: "relative",
+            width: "100%",
+            height: "100%",
+            transformStyle: "preserve-3d",
+          }}
+        >
+          <div
+            aria-hidden={showingDrawnCard || undefined}
+            data-playing-card-four-suit-face=""
+            style={surfaceStyle}
+          >
+            <div
+              data-four-suit-playing-card-face=""
+              style={{
+                position: "relative",
+                zIndex: 1,
+                display: "grid",
+                gridTemplateColumns: "repeat(2, max-content)",
+                gridTemplateRows: "repeat(2, max-content)",
+                placeItems: "center",
+                gap: token("--space-xxs"),
+              }}
+            >
+              {FOUR_SUIT_FACE_ORDER.map((suit) => (
+                <PlayingCardSuitMark
+                  key={suit}
+                  suit={suit}
+                  size={size === "wager" ? "fourSuit" : "fourSuitCompact"}
+                />
+              ))}
+            </div>
+            <PlayingCardRim emphasis={emphasis} />
+          </div>
+          <div
+            aria-hidden={!showingDrawnCard || undefined}
+            data-playing-card-drawn-face=""
+            style={{
+              ...surfaceStyle,
+              transform: "rotateY(180deg)",
+            }}
+          >
+            {rankSuitContent}
+            <PlayingCardRim emphasis={emphasis} />
+          </div>
+        </motion.div>
+      )}
+    </div>
+  );
+}
+
+export interface WagerPrizeCardProps {
   /** Stable Gamble choice represented by this prize object. */
   prizeId: WagerPrizeCardId;
   /** Draw condition shown as authored compact notation. */
@@ -287,26 +530,11 @@ interface WagerPrizeCardBaseProps {
   dreamsignTestId?: string;
   /** Accent current tier, foreground-muted alternative, or standard priority. */
   emphasis?: WagerPrizeCardEmphasis;
-}
-
-type StandardWagerPrizeCardProps = WagerPrizeCardBaseProps & {
-  prizeId: Exclude<WagerPrizeCardId, "four-suit-reprise">;
   /** Essence awarded on a win. */
   essenceReward: number;
   /** Dreamsign appended to the Essence reward, when present. */
   rewardDreamsign: DreamsignData | null;
-};
-
-type FourSuitWagerPrizeCardProps = WagerPrizeCardBaseProps & {
-  prizeId: "four-suit-reprise";
-  essenceReward?: never;
-  rewardDreamsign?: never;
-};
-
-/** A standard reward face or Four-Suit Reprise's concealed suit face. */
-export type WagerPrizeCardProps =
-  | StandardWagerPrizeCardProps
-  | FourSuitWagerPrizeCardProps;
+}
 
 /**
  * A Gamble prize on the PlayingCard superellipse. Its reward copy stays one
@@ -316,9 +544,6 @@ export type WagerPrizeCardProps =
 export function WagerPrizeCard(
   props: WagerPrizeCardProps,
 ): ReactElement {
-  if (props.prizeId === "four-suit-reprise") {
-    return <WagerPrizeCardObject {...props} />;
-  }
   if (props.rewardDreamsign !== null) {
     return (
       <DreamsignWagerPrizeCard
@@ -331,7 +556,7 @@ export function WagerPrizeCard(
 }
 
 function DreamsignWagerPrizeCard(
-  props: StandardWagerPrizeCardProps & { rewardDreamsign: DreamsignData },
+  props: WagerPrizeCardProps & { rewardDreamsign: DreamsignData },
 ): ReactElement {
   const dreamsignId = requireDreamsignId(
     props.rewardDreamsign,
@@ -360,70 +585,24 @@ function WagerPrizeCardObject({
   revealDrawnCard = false,
   dreamsignTestId,
   emphasis = "standard",
+  essenceReward,
+  rewardDreamsign,
   revealBinding,
-  ...prize
 }: WagerPrizeCardProps & {
   revealBinding?: WagerRevealSourceBinding;
 }): ReactElement {
   const reduceMotion = useReducedMotion() === true;
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const showingDrawnCard = revealDrawnCard && drawnCard !== null;
-  const standardPrize = prizeId === "four-suit-reprise"
-    ? null
-    : prize as Omit<StandardWagerPrizeCardProps, keyof WagerPrizeCardBaseProps>;
-  const essenceReward = standardPrize?.essenceReward;
-  const rewardDreamsign = standardPrize?.rewardDreamsign ?? null;
-  const rewardLabel = standardPrize === null
-    ? null
-    : `${String(standardPrize.essenceReward)} Essence${
-        rewardDreamsign === null ? "" : ` and ${rewardDreamsign.name}`
-      }`;
-  const prizeLabel = prizeId === "four-suit-reprise"
-    ? "Face-down four-suit draw card"
-    : `Draw ${targetLabel}. Win ${rewardLabel ?? ""}.`;
+  const rewardLabel = `${String(essenceReward)} Essence${
+    rewardDreamsign === null ? "" : ` and ${rewardDreamsign.name}`
+  }`;
+  const prizeLabel = `Draw ${targetLabel}. Win ${rewardLabel}.`;
   const drawnCardLabel =
     drawnCard === null
       ? prizeLabel
       : frontAriaLabel(drawnCard.rank, drawnCard.suit);
-  const prizeFaceContent = prizeId === "four-suit-reprise" ? (
-    <>
-      <div
-        data-four-suit-playing-card-face=""
-        style={{
-          position: "relative",
-          zIndex: 1,
-          width: "58%",
-          aspectRatio: "1",
-          display: "grid",
-          gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-          gridTemplateRows: "repeat(2, minmax(0, 1fr))",
-          placeItems: "center",
-          fontFamily: PLAYING_CARD_DESIGN.fontFamily,
-          fontSize: sizeSpec.suitGridFontSize,
-          fontWeight: 900,
-          lineHeight: 1,
-        }}
-      >
-        {FOUR_SUIT_FACE_ORDER.map((suit) => (
-          <span
-            key={suit}
-            aria-hidden="true"
-            data-four-suit-playing-card-symbol={suit}
-            style={{
-              color: RED_SUITS.has(suit)
-                ? PLAYING_CARD_DESIGN.colors.red
-                : PLAYING_CARD_DESIGN.colors.black,
-            }}
-          >
-            {SUIT_SYMBOLS[suit]}
-          </span>
-        ))}
-      </div>
-      <PlayingCardRim
-        emphasis={emphasis === "current" ? "current" : "standard"}
-      />
-    </>
-  ) : (
+  const prizeFaceContent = (
     <>
       <div
         data-wager-prize-copy=""
@@ -467,7 +646,7 @@ function WagerPrizeCardObject({
               size === "wager" ? token("--t-body") : token("--t-body-sm"),
           }}
         >
-          Win <EssenceValue amount={essenceReward ?? 0} tone="inherit" />
+          Win <EssenceValue amount={essenceReward} tone="inherit" />
           {rewardDreamsign !== null && " and "}
           {rewardDreamsign !== null && (
             <span

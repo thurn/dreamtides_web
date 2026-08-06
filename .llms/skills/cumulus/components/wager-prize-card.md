@@ -8,27 +8,25 @@ Components · Live demo & interactive props: `/cumulus#/wager-prize-card`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The shared Gamble draw object: a playing-card superellipse with either a reward face or Four-Suit Reprise's concealed suit grid, plus a committed-card reverse face.
+The shared threshold-game prize object: a playing-card superellipse with a reward face and a committed-card reverse face.
 
-> **Guidance:** Keep standard rewards in one sentence.
+> **Guidance:** Keep the reward in one sentence and use PlayingCard for a standalone playing-card face.
 
 When a Dreamsign is present, the entire prize face is its hover and press reveal source.
-
-The Four-Suit Reprise variant is the separate draw object; its reward table belongs in a GlassPanel.
 
 ## Props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `prizeId` | `"six" \| "nine" \| "jack" \| "ladder-climb" \| "starway-1" \| "starway-2" \| "starway-3" \| "four-suit-reprise"` | yes | — | Stable Gamble choice represented by this prize object. |
+| `prizeId` | `WagerPrizeCardId` = `"six" \| "nine" \| "jack" \| "ladder-climb" \| "starway-1" \| "starway-2" \| "starway-3"` | yes | — | Stable Gamble choice represented by this prize object. |
 | `targetLabel` | `string` | yes | — | Draw condition shown as authored compact notation. |
 | `size` | `WagerPrizeCardSize` = `"wagerCompact" \| "wager"` | no | — | Named desktop or mobile square size. Defaults to `wager`. |
 | `drawnCard` | `{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } \| null` | yes | — | Committed card shown on the reverse face after a bet. |
 | `revealDrawnCard` | `boolean` | no | — | Turn the prize face over to its committed card. |
 | `dreamsignTestId` | `string` | no | — | Optional stable selector for the prize Dreamsign name. |
 | `emphasis` | `WagerPrizeCardEmphasis` = `"standard" \| "current" \| "muted"` | no | — | Accent current tier, foreground-muted alternative, or standard priority. |
-| `essenceReward` | `number` | no | — | Essence awarded on a win. |
-| `rewardDreamsign` | `Dreamsign \| null` | no | — | Dreamsign appended to the Essence reward, when present. |
+| `essenceReward` | `number` | yes | — | Essence awarded on a win. |
+| `rewardDreamsign` | `Dreamsign \| null` | yes | — | Dreamsign appended to the Essence reward, when present. |
 
 ## Usage
 
@@ -55,17 +53,6 @@ The Four-Suit Reprise variant is the separate draw object; its reward table belo
   rewardDreamsign={dreamsign}
   drawnCard={{ rank: "Q", suit: "hearts" }}
   revealDrawnCard
-/>
-
-```
-
-### Four-suit draw
-
-```tsx
-<WagerPrizeCard
-  prizeId="four-suit-reprise"
-  targetLabel="a suit"
-  drawnCard={{ rank: "Q", suit: "spades" }}
 />
 
 ```
