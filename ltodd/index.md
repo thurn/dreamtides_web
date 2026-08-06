@@ -6,14 +6,14 @@ canonical design of Dreamtides.
 ## How to read this book
 
 Choose the numbered part that matches the system you are implementing, then
-choose a chapter by its scope statement. Each part shows its stable path beneath
-the heading. Follow local links for prerequisites, shared rules, and deeper
-systems. Chapters state the complete rules needed in their own context while
-linking to the primary chapter for the full design.
+choose a chapter by its scope statement. Each part shows its stable directory
+beneath the heading. Follow local links for prerequisites, shared rules, and
+deeper systems. Chapters state the complete rules needed in their own context
+while linking to the primary chapter for the full design.
 
 ## Part I: Foundations of Dreamtides
 
-Part path: `/design`
+Directory: `/design`
 
 The player promise, nested journey and Battle loops, information disclosure,
 meaningful commitment, authored identity, deterministic randomness, durable
@@ -22,7 +22,7 @@ gameplay algorithms appear with the systems that use them.
 
 ## Part II: Cards and Game Objects
 
-Part path: `/game_objects`
+Directory: `/game_objects`
 
 Cards and their identities, anatomy, types, subtypes, symbols, and rules
 language; concrete deck entries and effective Cards; Dream Avatars; Dreamsigns;
@@ -32,7 +32,7 @@ resolve during a contest.
 
 ## Part III: Draft Pools and Tides
 
-Part path: `/draft_pools`
+Directory: `/draft_pools`
 
 The curated Card supply for a journey: authored Tide membership, Tide roles,
 Dream Avatar relationships, pool eligibility, pool construction, Card
@@ -41,9 +41,9 @@ influence, Draft offers, picks, and shared pool consumption. Authored Tides are
 canonical inputs; their historical derivation from play records is outside the
 book.
 
-## Part IV: The Cumulus Language
+## Part IV: The Cumulus Design System
 
-Part path: `/cumulus`
+Directory: `/cumulus`
 
 The visual language shared by every Dreamtides experience: design philosophy,
 semantic visual vocabulary, color, typography, glyphs, spacing, shape,
@@ -52,9 +52,9 @@ between tangible game objects and review chrome. Reusable surfaces appear in
 Cumulus Components, with coordinated behavior and arrangement in the following
 two parts.
 
-## Part V: The Cumulus Components
+## Part V: Cumulus Components
 
-Part path: `/components`
+Directory: `/components`
 
 The reusable Cumulus objects that carry information and interaction across the
 game. Chapters define their semantic models, invariant appearance, variants,
@@ -66,7 +66,7 @@ share a family chapter.
 
 ## Part VI: Cumulus Interaction Systems
 
-Part path: `/interaction`
+Directory: `/interaction`
 
 Activation, press feedback, selection, focus, hover, touch-hold, entity reveals,
 dismissal, dragging, reordering, keyboard and touch parity, modal behavior,
@@ -75,7 +75,7 @@ chapters provide the consequences attached to each action.
 
 ## Part VII: Cumulus Screen Composition
 
-Part path: `/composition`
+Directory: `/composition`
 
 The principles that turn Cumulus objects into complete screens and continuous
 flows: stages, frames, content-sized surfaces, visual hierarchy, responsive
@@ -83,9 +83,9 @@ desktop and narrow compositions, safe areas, journey chrome, overlays, layer
 ordering, transitions, and screen-level motion. Gameplay chapters provide each
 screen's state-dependent meaning and particular arrangement.
 
-## Part VIII: The Dream Journey
+## Part VIII: Dream Journeys
 
-Part path: `/journey`
+Directory: `/journey`
 
 The complete run from Dream Avatar selection to victory or failure: journey
 assembly, durable inventory, the Dreamscape-Site-Battle-Atlas loop, screen
@@ -96,7 +96,7 @@ entered along the way.
 
 ## Part IX: The Dream Atlas
 
-Part path: `/atlas`
+Directory: `/atlas`
 
 The world map, the Dreamscapes it reveals, and the route a journey takes through
 them. Topics include graph structure, layers, node generation, revelation,
@@ -107,7 +107,7 @@ presentation. Destination mechanics begin when the player enters a Site.
 
 ## Part X: Building the Deck
 
-Part path: `/deckbuilding`
+Directory: `/deckbuilding`
 
 The player's concrete deck and its evolution throughout a journey: the starting
 deck, acquisition, entry identity, duplicate handling, effective-Card
@@ -118,16 +118,16 @@ valuation.
 
 ## Part XI: The Journey Economy
 
-Part path: `/economy`
+Directory: `/economy`
 
 The flow of value through a journey: Essence, sources and sinks, prices,
 discounts, rerolls, Battle payouts, reward selection policies, deck-fit
 evaluation, Dreamsign capacity economics, and modifiers that alter later rewards
 or costs. Sites describes the player-facing transaction at each destination.
 
-## Part XII: The Site System
+## Part XII: Dream Sites
 
-Part path: `/sites`
+Directory: `/sites`
 
 The shared destination contract and the Site experiences that do not require
 their own parts. Content includes Site availability, entry, prepared randomness,
@@ -139,7 +139,7 @@ handoffs.
 
 ## Part XIII: The Augury Site
 
-Part path: `/augury`
+Directory: `/augury`
 
 The adaptive vision in which the player chooses between two rewards shaped by
 the current journey. Chapters address the journey snapshot used for evaluation,
@@ -150,7 +150,7 @@ Game Objects, Deckbuilding, Economy, and Sites.
 
 ## Part XIV: The Exploration Site
 
-Part path: `/exploration`
+Directory: `/exploration`
 
 Authored, art-led encounters that turn narrative choices into replayable journey
 consequences. Content includes encounter selection, scene art and prose, the
@@ -161,7 +161,7 @@ encounter catalog supplies the individual scenes and actions.
 
 ## Part XV: The Gamble Site
 
-Part path: `/gamble`
+Directory: `/gamble`
 
 Chance games that exchange committed hidden outcomes for escalating risk and
 reward. Chapters describe the shared wager, commitment, reveal, and settlement
@@ -170,9 +170,9 @@ Stairs; enhanced behavior; repeated rounds and cashing out; Essence costs and
 payouts; Dreamsign awards and replacement; durable outcomes; and reveal
 choreography.
 
-## Part XVI: The Battle System
+## Part XVI: Battles
 
-Part path: `/battle`
+Directory: `/battle`
 
 The creation, presentation, play, and resolution of a Battle: participant setup,
 opposing packages, objectives, zones, the Battlefield, the Dreamwell, Energy,
@@ -180,9 +180,9 @@ turns, timing, priority, Card play, costs, targeting, effects, triggers,
 counters, repositioning, Challenges, Spark, scoring, Fatigue, created Cards,
 Figments, Battle interaction, results, rewards, and the journey handoff.
 
-## Part XVII: The Dreamtides Tutorial
+## Part XVII: The Tutorial
 
-Part path: `/tutorial`
+Directory: `/tutorial`
 
 The teaching path from the main menu into a guided journey: the intentional
 loading primer, cinematic lesson, guided actions, tutorial Battle, transition
