@@ -1,13 +1,19 @@
 import type { ReactElement } from "react";
-import type { EconomyKind } from "../hud/economy-spec";
-import { ResourceChip } from "../hud/ResourceChip";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
+import { InlineGlyph } from "../typography/InlineGlyph";
 import { IconButton } from "./IconButton";
 
 /** The density presets for a NumberStepper row. */
 export type NumberStepperSize = "sm" | "md";
+/** Economy mark optionally paired with a stepper's numeric output. */
+export type NumberStepperResource =
+  | "essence"
+  | "energy"
+  | "spark"
+  | "points"
+  | "counter";
 
 export interface NumberStepperProps {
   /** Visible label for the numeric value. */
@@ -17,7 +23,7 @@ export interface NumberStepperProps {
   /** Optional formatted value while `value` remains the numeric state contract. */
   displayValue?: string;
   /** Optional economy mark paired with the value. */
-  resource?: EconomyKind;
+  resource?: NumberStepperResource;
   /** Accessible label for the decrement action. */
   decrementLabel: string;
   /** Accessible label for the increment action. */
@@ -99,15 +105,9 @@ export function NumberStepper({
           fontVariantNumeric: "tabular-nums",
         }}
       >
-        {resource === undefined ? (
-          displayValue ?? String(value)
-        ) : (
-          <ResourceChip
-            kind={resource}
-            value={displayValue ?? value}
-            size="md"
-            tone="inherit"
-          />
+        <span>{displayValue ?? String(value)}</span>
+        {resource === undefined ? null : (
+          <InlineGlyph glyph={GLYPHS[resource]} />
         )}
       </output>
       <IconButton

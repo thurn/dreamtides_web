@@ -6,21 +6,42 @@
 
 Components · Live demo & interactive props: `/cumulus#/essence-value`
 
-Real consumers: **10** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **12** (imports outside `src/cumulus/docs/` and tests).
 
-The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy.
+The canonical Essence amount: a tight inline value for player-facing currency text, with a named solid reward badge for values placed over art.
+
+> **Guidance:** Use the inline presentation in flowing copy and controls. The reward badge is reserved for an Essence gain attached directly to reward art.
 
 ## Props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `amount` | `string \| number` | yes | — | The essence amount. |
-| `tone` | `EssenceTone` = `"value" \| "inherit"` | no | `value` | Color role. `value` (default) paints the amount and glyph in the essence violet; `inherit` takes the surrounding text color, for a value that sits inside a button or other control whose label color already reads. |
+| `tone` | `EssenceTone` = `"value" \| "mark" \| "inherit"` | no | `value` | Color role. `value` paints the complete value in Essence violet; `mark` keeps the amount in primary text and paints only the glyph; `inherit` takes the surrounding text color. |
+| `variant` | `EssenceValueVariant` = `"inline" \| "rewardBadge"` | no | `inline` | Inline text or the solid pill used over reward art. |
+| `entity` | `EssenceEntity` | no | — | Optional semantic source that reveals an explanatory glossary Info Card. |
+
+### `entity`: the `EssenceEntity` model
+
+| Field | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `id` | `string` | no | Stable identity of the Essence source. |
+| `glossaryId` | `string` | no | Stable TOML glossary entry used for the explanatory Info Card. |
 
 ## Usage
+
+### Inline value
 
 ```tsx
 import { EssenceValue } from "src/cumulus/components/hud/EssenceValue";
 
 <EssenceValue amount={120} />
+```
+
+### Reward badge
+
+The solid pill preserves contrast when an Essence gain is attached to reward art.
+
+```tsx
+<EssenceValue amount="+15" tone="mark" variant="rewardBadge" />
 ```

@@ -38,7 +38,7 @@ The glass status card for one battle participant: centered current and maximum e
 
 ### Variant 1
 
-One complete participant status card. Energy and points use the canonical ResourceChip marks; the portrait uses DreamAvatarPortrait's thumb framing.
+One complete participant status card. Energy and points use the component's fixed battle notation; the portrait uses DreamAvatarPortrait's thumb framing.
 
 ```tsx
 import { BattleStatusDisplay } from "src/cumulus/components/battle/BattleStatusDisplay";

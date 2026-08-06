@@ -2417,11 +2417,48 @@
       "tsType": "EssenceTone",
       "unionMembers": [
         "value",
+        "mark",
         "inherit"
       ],
       "required": false,
       "defaultValue": "value",
-      "description": "Color role. `value` (default) paints the amount and glyph in the essence\nviolet; `inherit` takes the surrounding text color, for a value that sits\ninside a button or other control whose label color already reads."
+      "description": "Color role. `value` paints the complete value in Essence violet; `mark`\nkeeps the amount in primary text and paints only the glyph; `inherit`\ntakes the surrounding text color."
+    },
+    {
+      "name": "variant",
+      "tsType": "EssenceValueVariant",
+      "unionMembers": [
+        "inline",
+        "rewardBadge"
+      ],
+      "required": false,
+      "defaultValue": "inline",
+      "description": "Inline text or the solid pill used over reward art."
+    },
+    {
+      "name": "entity",
+      "tsType": "EssenceEntity",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional semantic source that reveals an explanatory glossary Info Card.",
+      "nested": {
+        "name": "EssenceEntity",
+        "fields": [
+          {
+            "name": "id",
+            "tsType": "string",
+            "optional": false,
+            "description": "Stable identity of the Essence source."
+          },
+          {
+            "name": "glossaryId",
+            "tsType": "string",
+            "optional": false,
+            "description": "Stable TOML glossary entry used for the explanatory Info Card."
+          }
+        ]
+      }
     }
   ],
   "GalleryActionCard": [
@@ -3727,7 +3764,7 @@
     },
     {
       "name": "resource",
-      "tsType": "EconomyKind",
+      "tsType": "NumberStepperResource",
       "unionMembers": [
         "essence",
         "energy",
@@ -4002,6 +4039,7 @@
         "filter",
         "text",
         "search",
+        "mark",
         "h1",
         "h2",
         "big",
@@ -4073,7 +4111,6 @@
         "legend",
         "li",
         "main",
-        "mark",
         "menu",
         "menuitem",
         "meter",
@@ -4302,97 +4339,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Stable identifier exposed on the announcement root."
-    }
-  ],
-  "ResourceChip": [
-    {
-      "name": "kind",
-      "tsType": "EconomyKind",
-      "unionMembers": [
-        "essence",
-        "energy",
-        "spark",
-        "points",
-        "counter"
-      ],
-      "required": false,
-      "defaultValue": "essence",
-      "description": "Which economy value: essence, energy, spark, points, memory counter. Rendered as\nthe parent's filled-Boxicon mark (bx-crypto / bx-fire-alt / bx-sparkles /\nbx-star-circle / bx-brain), colored by role."
-    },
-    {
-      "name": "value",
-      "tsType": "string | number",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "The numeric value to show. Omit to render the mark alone."
-    },
-    {
-      "name": "size",
-      "tsType": "ResourceChipSize",
-      "unionMembers": [
-        "sm",
-        "md",
-        "lg"
-      ],
-      "required": false,
-      "defaultValue": "md",
-      "description": "Inline scale — sm (13px) / md (16px, default) / lg (20px)."
-    },
-    {
-      "name": "chip",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "false",
-      "description": "Render as a solid pill badge (for HUD/over-art) instead of inline text."
-    },
-    {
-      "name": "spacing",
-      "tsType": "ResourceChipSpacing",
-      "unionMembers": [
-        "tight",
-        "loose"
-      ],
-      "required": false,
-      "defaultValue": "tight",
-      "description": "Gap between value and mark — tight (0px, default) or loose (4px)."
-    },
-    {
-      "name": "tone",
-      "tsType": "ResourceChipTone",
-      "unionMembers": [
-        "inherit",
-        "resource"
-      ],
-      "required": false,
-      "defaultValue": "resource",
-      "description": "Color treatment — the resource role (default) or the parent surface."
-    },
-    {
-      "name": "entity",
-      "tsType": "ResourceEntity",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Semantic resource represented by this chip; makes the named chip self-revealing.",
-      "nested": {
-        "name": "ResourceEntity",
-        "fields": [
-          {
-            "name": "id",
-            "tsType": "string",
-            "optional": false,
-            "description": "Stable domain identity of this resource source."
-          },
-          {
-            "name": "glossaryId",
-            "tsType": "string",
-            "optional": false,
-            "description": "Stable TOML glossary entry used for the explanatory Info Card."
-          }
-        ]
-      }
     }
   ],
   "RichTextView": [

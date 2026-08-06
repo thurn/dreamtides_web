@@ -22,7 +22,6 @@ import { InfoCardMockup } from "./info-card";
 import { MotesMockup } from "./motes";
 import { PressableMockup } from "./pressable";
 import { JourneyStatusBarMockup } from "./journey-status-bar";
-import { ResourceChipMockup } from "./resource-chip";
 import { RulesTextMockup } from "./rules-text";
 import { SegmentedControlMockup } from "./segmented-control";
 import { SiteNodeMockup } from "./site-node";
@@ -42,7 +41,6 @@ export const MOCKUPS: Record<string, ComponentType> = {
   dreamsign: DreamsignMockup,
   "info-card": InfoCardMockup,
   pressable: PressableMockup,
-  "resource-chip": ResourceChipMockup,
   "glass-button": GlassButtonMockup,
   "segmented-control": SegmentedControlMockup,
   motes: MotesMockup,

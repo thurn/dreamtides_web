@@ -2614,7 +2614,9 @@ describe("ExplorationSiteScreen", () => {
       container.querySelectorAll("[data-exploration-essence-card]"),
     ).toHaveLength(6);
     expect(
-      container.querySelectorAll('[data-resource-chip-kind="essence"]'),
+      container.querySelectorAll(
+        '[data-essence-value-variant="rewardBadge"]',
+      ),
     ).toHaveLength(6);
     expect(
       container.querySelector("[data-exploration-essence-cards]")

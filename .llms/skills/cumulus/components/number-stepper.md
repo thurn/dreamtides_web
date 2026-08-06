@@ -17,7 +17,7 @@ A labeled, accessible decrement/value/increment row with optional canonical reso
 | `label` | `string` | yes | — | Visible label for the numeric value. |
 | `value` | `number` | yes | — | Current numeric value. |
 | `displayValue` | `string` | no | — | Optional formatted value while `value` remains the numeric state contract. |
-| `resource` | `EconomyKind` = `"essence" \| "energy" \| "spark" \| "points" \| "counter"` | no | — | Optional economy mark paired with the value. |
+| `resource` | `NumberStepperResource` = `"essence" \| "energy" \| "spark" \| "points" \| "counter"` | no | — | Optional economy mark paired with the value. |
 | `decrementLabel` | `string` | yes | — | Accessible label for the decrement action. |
 | `incrementLabel` | `string` | yes | — | Accessible label for the increment action. |
 | `onDecrement` | `() => void` | yes | — | Fires when the decrement disc is pressed. |

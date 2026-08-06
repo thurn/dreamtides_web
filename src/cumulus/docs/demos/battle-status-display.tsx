@@ -45,7 +45,7 @@ export const battleStatusDisplayDemo: CumulusComponent = {
   Component: BattleStatusDisplayDemo,
   usage: [
     {
-      note: "One complete participant status card. Energy and points use the canonical ResourceChip marks; the portrait uses DreamAvatarPortrait's thumb framing.",
+      note: "One complete participant status card. Energy and points use the component's fixed battle notation; the portrait uses DreamAvatarPortrait's thumb framing.",
       code: `import { BattleStatusDisplay } from "src/cumulus/components/battle/BattleStatusDisplay";
 
 <BattleStatusDisplay

@@ -250,7 +250,9 @@
 
   /* numeric chips (essence/score values) read best in tabular sans;
      card stat ORBS use --font-numeral (Anton) directly. */
+  --t-numeral-sm: 800 13px/1 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --t-numeral: 800 17px/1 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --t-numeral-lg: 800 20px/1 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* ================================================================

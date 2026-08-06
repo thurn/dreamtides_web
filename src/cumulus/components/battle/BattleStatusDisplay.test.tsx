@@ -86,19 +86,19 @@ describe("BattleStatusDisplay", () => {
     expect(energy?.style.justifyContent).toBe("center");
     expect(points?.style.justifyContent).toBe("center");
     expect(
-      energy?.querySelector<HTMLElement>("[data-resource-chip]")?.style
-        .fontSize,
-    ).toBe("16px");
+      energy?.querySelector<HTMLElement>("[data-battle-resource-value]")?.style
+        .font,
+    ).toBe("var(--t-numeral)");
     expect(
-      points?.querySelector<HTMLElement>("[data-resource-chip]")?.style
-        .fontSize,
-    ).toBe("16px");
-    expect(energy?.querySelector("i")?.getAttribute("style")).toContain(
-      "--energy",
-    );
-    expect(points?.querySelector("i")?.getAttribute("style")).toContain(
-      "inherit",
-    );
+      points?.querySelector<HTMLElement>("[data-battle-resource-value]")?.style
+        .font,
+    ).toBe("var(--t-numeral)");
+    expect(
+      energy?.querySelector<HTMLElement>("[data-inline-glyph]")?.style.color,
+    ).toBe("var(--energy)");
+    expect(
+      points?.querySelector<HTMLElement>("[data-inline-glyph]")?.style.color,
+    ).toBe("");
     expect(container.querySelector("img")?.alt).toBe("Astra, The Dawnbound");
     expect(
       container.querySelector<HTMLImageElement>("img")?.parentElement?.style

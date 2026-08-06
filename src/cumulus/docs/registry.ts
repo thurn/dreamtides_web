@@ -51,7 +51,6 @@ import { playingCardDemo } from "./demos/playing-card";
 import { pressableDemo } from "./demos/pressable";
 import { radialAnnouncementDemo } from "./demos/radial-announcement";
 import { journeyStatusBarDemo } from "./demos/journey-status-bar";
-import { resourceChipDemo } from "./demos/resource-chip";
 import { richTextDemo } from "./demos/rich-text";
 import { rulesTextDemo } from "./demos/rules-text";
 import { segmentedControlDemo } from "./demos/segmented-control";
@@ -159,7 +158,6 @@ export interface CumulusComponent {
  */
 export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   pressableDemo,
-  resourceChipDemo,
   essenceValueDemo,
   iconButtonDemo,
   mainMenuButtonDemo,

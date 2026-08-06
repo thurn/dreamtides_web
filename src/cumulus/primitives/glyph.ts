@@ -27,8 +27,7 @@ function g(className: string): Glyph {
 
 /**
  * The design system's named glyph vocabulary. Consolidates the icon-font
- * classes that were previously duplicated as loose `*_ICON_CLASS` constants
- * across GlowIcon / RulesText / ResourceChip / Button so a mark reads the same
+ * classes shared by GlowIcon, RulesText, resource values, and controls so a mark reads the same
  * everywhere. Reference these by name; do not pass a raw class.
  */
 export const GLYPHS = {

@@ -99,8 +99,8 @@ ruleTester.run("no-numeric-style-props", rule, {
   invalid: [
     {
       name: "numeric size + gap knobs on an exported *Props are both flagged",
-      filename: "src/cumulus/components/controls/ResourceChip.tsx",
-      code: `export interface ResourceChipProps { size?: number; gap?: number; }`,
+      filename: "src/cumulus/components/controls/SizedValue.tsx",
+      code: `export interface SizedValueProps { size?: number; gap?: number; }`,
       errors: [{ messageId: "numericKnob" }, { messageId: "numericKnob" }],
     },
     {

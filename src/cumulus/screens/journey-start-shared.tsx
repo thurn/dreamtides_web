@@ -5,7 +5,7 @@
 // PURE: no state ownership; the adapter owns the offer, the seed, and startJourney.
 
 import { useEffect } from "react";
-import { ResourceChip } from "../components/hud/ResourceChip";
+import { EssenceValue } from "../components/hud/EssenceValue";
 import { IconButton } from "../components/controls/IconButton";
 import { TideDisc, type TideDiscSize } from "../components/hud/TideDisc";
 import { TidesInfoLabel } from "../components/hud/TidesInfoLabel";
@@ -315,13 +315,13 @@ export function EssenceReveal({
       style={{
         display: "inline-flex",
         alignItems: "center",
-        font: token("--t-body"),
+        font: token("--t-numeral"),
         color: token("--text-primary"),
       }}
     >
-      <ResourceChip
-        kind="essence"
-        value={dreamAvatar.startingEssence}
+      <EssenceValue
+        amount={dreamAvatar.startingEssence}
+        tone="mark"
         entity={{
           id: dreamAvatar.id,
           glossaryId: GLOSSARY_IDS.startingEssence,

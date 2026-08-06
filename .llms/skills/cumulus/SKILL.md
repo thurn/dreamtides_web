@@ -75,8 +75,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | Component | Group | Consumers | Reference | What it is |
 | --- | --- | --- | --- | --- |
 | Pressable | Primitives | 34 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
-| Resource Chip | Components | 5 | [components/resource-chip.md](components/resource-chip.md) | The sized, self-contained value-and-mark chip for the game economy. |
-| Essence Value | Components | 10 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
+| Essence Value | Components | 12 | [components/essence-value.md](components/essence-value.md) | The canonical Essence amount: a tight inline value for player-facing currency text, with a named solid reward badge for values placed over art. |
 | Icon Button | Components | 20 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — neutral or purple accent liquid glass, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
 | Main Menu Button | Components | 1 | [components/main-menu-button.md](components/main-menu-button.md) | The text-first action for the Dreamtides main menu: outlined white at rest, showing the shared Cumulus liquid-glass material on hover or focus. |
 | Glass Button | Components | 32 | [components/glass-button.md](components/glass-button.md) | The labeled glass action — a bold text label with optional Essence cost or non-cost value on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface. |
@@ -103,7 +102,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | Radial Announcement | Components | 3 | [components/radial-announcement.md](components/radial-announcement.md) | The orbiting circular status moment for turn handoffs, wins, failures, and iconic state changes. |
 | Motes | Components | 11 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
 | Info Card | Components | 8 | [components/info-card.md](components/info-card.md) | The strict information-card presentation. |
-| Inline Glyph | Primitives | 9 | [components/inline-glyph.md](components/inline-glyph.md) | The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's capital height at every type size. |
+| Inline Glyph | Primitives | 12 | [components/inline-glyph.md](components/inline-glyph.md) | The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's capital height at every type size. |
 | Glow Icon | Primitives | 18 | [components/glow-icon.md](components/glow-icon.md) | The resource-glyph renderer for card marks: a Boxicons glyph that paints in the caller's resource hue, with an optional content-protection shadow and an optional emitted-light glow pinned to its own font-size so both scale with the mark. |
 | Pip Badge | Components | 2 | [components/pip-badge.md](components/pip-badge.md) | The compact circled number used in dense card rows and inline rules text for spark or energy values. |
 | Journey Status Bar | Components | 6 | [components/journey-status-bar.md](components/journey-status-bar.md) | The persistent, transparent bottom HUD for journey screens. |

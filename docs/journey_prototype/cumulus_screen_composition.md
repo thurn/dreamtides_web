@@ -85,7 +85,7 @@ placement. Parent screen stacking contexts do not participate in reveal layout.
 ## Reveal Surfaces
 
 Screens render named semantic sources such as `GameCard`, `AtlasNode`,
-`Dreamsign`, `DreamAvatarPortrait`, `TideDisc`, `ResourceChip`, `SiteNode`, and
+`Dreamsign`, `DreamAvatarPortrait`, `TideDisc`, `EssenceValue`, `SiteNode`, and
 `GlossaryTerm`. Each component derives one strict primary plus ordered
 `InfoCard` secondaries from UUID-backed domain data. `InfoCard` itself is a
 visual content component with strict variants.

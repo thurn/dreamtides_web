@@ -134,7 +134,9 @@ Each --t-* bundles face + weight + size/line-height: apply a voice with one toke
 | `--t-popover-body` | `500 14px/1.45 'Fira Sans Condensed', 'Inter', system-ui, sans-serif` |  |
 | `--t-popover-meta` | `700 10.5px/1 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace` | .12em uppercase |
 | `--t-eyebrow` | `700 11px/1.2 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace` |  |
+| `--t-numeral-sm` | `800 13px/1 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif` |  |
 | `--t-numeral` | `800 17px/1 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif` |  |
+| `--t-numeral-lg` | `800 20px/1 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif` |  |
 
 ## Spacing & layout
 

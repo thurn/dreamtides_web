@@ -39,7 +39,6 @@ import { GlowIcon } from "../components/controls/GlowIcon";
 import { IconButton } from "../components/controls/IconButton";
 import { NumberStepper } from "../components/controls/NumberStepper";
 import { SegmentedControl } from "../components/controls/SegmentedControl";
-import { ResourceChip } from "../components/hud/ResourceChip";
 import { GlassBackdrop, GlassDialog } from "../components/overlay/GlassDialog";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { DeveloperRail } from "../components/overlay/DeveloperRail";
@@ -49,6 +48,7 @@ import {
   RadialAnnouncement,
 } from "../components/status/RadialAnnouncement";
 import type { DreamAvatarVisual } from "../components/hud/DreamAvatarPortrait";
+import { InlineGlyph } from "../components/typography/InlineGlyph";
 import { GLYPHS } from "../primitives/glyph";
 import {
   DOUBLE_TAP_WINDOW_MS,
@@ -2159,13 +2159,18 @@ function BattleCardStatusIndicators({
             color: token("--text-on-accent"),
           }}
         >
-          <ResourceChip
-            kind="counter"
-            value={card.storedTime}
-            size="sm"
-            spacing="tight"
-            tone="inherit"
-          />
+          <span
+            data-battle-memory-counter=""
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              font: token("--t-numeral-sm"),
+              fontVariantNumeric: "tabular-nums",
+            }}
+          >
+            <span>{card.storedTime}</span>
+            <InlineGlyph glyph={GLYPHS.memory} />
+          </span>
         </div>
       ) : null}
     </div>

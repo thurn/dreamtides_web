@@ -27,8 +27,9 @@ describe("inspector Cumulus controls", () => {
   it("exposes labeled NumberStepper actions and formatted output", () => {
     const decrement = vi.fn();
     const increment = vi.fn();
-    const { container, root } = mount(<NumberStepper label="Energy" value={2} displayValue="2/4" decrementLabel="Decrease energy" incrementLabel="Increase energy" onDecrement={decrement} onIncrement={increment} />);
+    const { container, root } = mount(<NumberStepper label="Energy" value={2} displayValue="2/4" resource="energy" decrementLabel="Decrease energy" incrementLabel="Increase energy" onDecrement={decrement} onIncrement={increment} />);
     expect(container.querySelector('[role="group"]')?.getAttribute("aria-label")).toBe("Energy: 2/4");
+    expect(container.querySelector("i.bxf.bx-fire-alt")).not.toBeNull();
     act(() => { (container.querySelector('button[aria-label="Decrease energy"]') as HTMLButtonElement).click(); (container.querySelector('button[aria-label="Increase energy"]') as HTMLButtonElement).click(); });
     expect(decrement).toHaveBeenCalledOnce();
     expect(increment).toHaveBeenCalledOnce();

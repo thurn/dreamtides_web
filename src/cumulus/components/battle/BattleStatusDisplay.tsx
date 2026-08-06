@@ -1,10 +1,11 @@
 import { glassSurfaceStyle } from "../../internal/glass-surface";
+import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import {
   DreamAvatarPortrait,
   type DreamAvatarVisual,
 } from "../hud/DreamAvatarPortrait";
-import { ResourceChip } from "../hud/ResourceChip";
+import { InlineGlyph } from "../typography/InlineGlyph";
 
 /** Which combatant this status card describes. */
 export type BattleStatusOwner = "player" | "enemy";
@@ -94,10 +95,9 @@ export function BattleStatusDisplay({
         data-battle-status-resource="energy"
         style={{ display: "flex", justifyContent: "center", minWidth: 0 }}
       >
-        <ResourceChip
+        <BattleResourceValue
           kind="energy"
           value={`${String(currentEnergy)}/${String(maxEnergy)}`}
-          size="md"
         />
       </div>
       <div style={{ width: token("--touch-min") }}>
@@ -127,13 +127,39 @@ export function BattleStatusDisplay({
         data-battle-status-resource="points"
         style={{ display: "flex", justifyContent: "center", minWidth: 0 }}
       >
-        <ResourceChip
+        <BattleResourceValue
           kind="points"
           value={`${String(points)}/${String(pointsToWin)}`}
-          size="md"
-          tone="inherit"
         />
       </div>
     </div>
+  );
+}
+
+function BattleResourceValue({
+  kind,
+  value,
+}: {
+  kind: "energy" | "points";
+  value: string;
+}) {
+  return (
+    <span
+      data-battle-resource-value={kind}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        color: "inherit",
+        font: token("--t-numeral"),
+        fontVariantNumeric: "tabular-nums",
+        whiteSpace: "nowrap",
+      }}
+    >
+      <span>{value}</span>
+      <InlineGlyph
+        glyph={kind === "energy" ? GLYPHS.energy : GLYPHS.points}
+        color={kind === "energy" ? "energy" : undefined}
+      />
+    </span>
   );
 }

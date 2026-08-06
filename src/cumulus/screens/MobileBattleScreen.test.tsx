@@ -669,19 +669,18 @@ describe("MobileBattleScreen", () => {
     const storedTimeBadge = battlefield?.querySelector<HTMLElement>(
       '[data-battle-card-status="stored-time"]',
     );
-    const storedTimeChip = storedTimeBadge?.querySelector<HTMLElement>(
-      '[data-resource-chip-kind="counter"]',
+    const storedTimeValue = storedTimeBadge?.querySelector<HTMLElement>(
+      "[data-battle-memory-counter]",
     );
-    expect(storedTimeChip?.dataset.resourceChipSize).toBe("sm");
-    expect(storedTimeChip?.textContent).toBe("4");
-    expect(storedTimeChip?.firstElementChild?.nodeName).toBe("SPAN");
-    expect(storedTimeChip?.lastElementChild?.nodeName).toBe("I");
-    expect(storedTimeChip?.querySelector("i.bxf.bx-brain")).not.toBeNull();
-    expect(storedTimeChip?.querySelector("i.bxf.bx-hourglass")).toBeNull();
+    expect(storedTimeValue?.style.font).toBe("var(--t-numeral-sm)");
+    expect(storedTimeValue?.textContent).toBe("4");
+    expect(storedTimeValue?.firstElementChild?.nodeName).toBe("SPAN");
+    expect(storedTimeValue?.querySelector("i.bxf.bx-brain")).not.toBeNull();
+    expect(storedTimeValue?.querySelector("i.bxf.bx-hourglass")).toBeNull();
     expect(
-      (storedTimeChip?.lastElementChild as HTMLElement | null)?.style.color,
-    ).toBe("inherit");
-    expect(storedTimeChip?.style.gap).toBe("0px");
+      storedTimeValue?.querySelector<HTMLElement>("[data-inline-glyph]")?.style
+        .color,
+    ).toBe("");
     expect(storedTimeBadge?.style.background).toBe(
       "var(--surface-status-badge)",
     );

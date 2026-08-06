@@ -41,7 +41,7 @@ import {
 } from "../components/hud/JourneyStatusBar";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
-import { ResourceChip } from "../components/hud/ResourceChip";
+import { EssenceValue } from "../components/hud/EssenceValue";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import {
   RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
@@ -3572,11 +3572,10 @@ export function ExplorationSiteScreen({
                     borderRadius: token("--radius-pill"),
                   }}
                 >
-                  <ResourceChip
-                    kind="essence"
-                    value={`+${String(essenceReward.essencePerCard)}`}
-                    size="lg"
-                    chip
+                  <EssenceValue
+                    amount={`+${String(essenceReward.essencePerCard)}`}
+                    tone="mark"
+                    variant="rewardBadge"
                   />
                 </motion.div>
               </motion.div>
