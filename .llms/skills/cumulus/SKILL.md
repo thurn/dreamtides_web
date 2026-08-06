@@ -79,7 +79,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 <!-- BEGIN GENERATED COMPONENT INDEX (npm run cumulus-docs) -->
 | Component | Group | Consumers | Reference | What it is |
 | --- | --- | --- | --- | --- |
-| Pressable | Primitives | 33 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
+| Pressable | Primitives | 32 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
 | Essence Value | Components | 12 | [components/essence-value.md](components/essence-value.md) | The canonical Essence amount: a tight inline value for player-facing currency text, with a named solid reward badge for values placed over art. |
 | Icon Button | Components | 19 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
 | Main Menu Button | Components | 1 | [components/main-menu-button.md](components/main-menu-button.md) | The text-first action for the Dreamtides main menu: outlined white at rest, showing the shared Cumulus liquid-glass material on hover or focus. |
@@ -108,7 +108,6 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | Info Card | Components | 6 | [components/info-card.md](components/info-card.md) | The strict information-card presentation. |
 | Inline Glyph | Primitives | 12 | [components/inline-glyph.md](components/inline-glyph.md) | The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's capital height at every type size. |
 | Standalone Glyph | Primitives | 19 | [components/standalone-glyph.md](components/standalone-glyph.md) | The Boxicons renderer for controls, badges, overlays, and card marks: a centered one-em square whose surrounding layout owns its size and placement. |
-| Pip Badge | Components | 1 | [components/pip-badge.md](components/pip-badge.md) | The compact circled number used in dense card rows and inline rules text for spark or energy values. |
 | Journey Status Bar | Components | 6 | [components/journey-status-bar.md](components/journey-status-bar.md) | The persistent, transparent bottom HUD for journey screens. |
 | Coop Presence Status | Components | 1 | [components/coop-presence-status.md](components/coop-presence-status.md) | The compact, non-interactive app chrome that reports connected room participants from an explicit view-model count. |
 | Battle Status Display | Components | 1 | [components/battle-status-display.md](components/battle-status-display.md) | The glass status card for one battle participant: centered current and maximum energy at left, a head-focused DreamAvatar portrait or loading placeholder at center, and centered current and target points at right. |

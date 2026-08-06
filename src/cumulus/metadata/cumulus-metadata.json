@@ -3432,51 +3432,6 @@
       "description": "Optional test selector; defaults to `offer-tile`."
     }
   ],
-  "PipBadge": [
-    {
-      "name": "variant",
-      "tsType": "PipBadgeVariant",
-      "unionMembers": [
-        "energy",
-        "spark"
-      ],
-      "required": true,
-      "defaultValue": null,
-      "description": "Which pip this is — picks the fill color."
-    },
-    {
-      "name": "value",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "The displayed value (string so callers can pass `\"X\"` for variable cost)."
-    },
-    {
-      "name": "scale",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "1",
-      "description": "Multiplier for card renderers that need the pip to follow card text scale."
-    },
-    {
-      "name": "ariaLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional accessible label for screen readers. If omitted, the badge\nuses a sensible default for its variant."
-    },
-    {
-      "name": "glossaryId",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional stable TOML glossary id. When provided, the badge becomes its own\nhover anchor and reveals that glossary entry."
-    }
-  ],
   "Pressable": [
     {
       "name": "as",

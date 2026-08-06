@@ -37,8 +37,6 @@ function reconstructText(segments: TextSegment[]): string {
           return segment.word;
         case "symbol":
           return segment.char;
-        case "sparkPip":
-          return `⍏${segment.value}`;
         case "bolt":
           return "❖".repeat(segment.count);
         case "essence":
@@ -167,17 +165,24 @@ describe("tokenizeRulesText", () => {
     expect(result).toEqual([{ kind: "symbol", symbol: "energy", char: "●" }]);
   });
 
-  // The spark glyph followed immediately by digits collapses into a sparkPip
-  // segment so the renderer can draw a circled-number badge.
-  it("collapses ⍏ followed by digits into a sparkPip segment", () => {
+  it("tokenizes ⍏ followed by digits as an inline spark and value", () => {
     const result = tokenizeRulesText("Gain ⍏1.");
-    expect(flatten(result)).toContainEqual({ kind: "sparkPip", value: "1" });
+    expect(collectSymbols(result)).toContainEqual({
+      kind: "symbol",
+      symbol: "spark",
+      char: "⍏",
+    });
     expect(reconstructText(result)).toBe("Gain ⍏1.");
   });
 
-  it("collapses multi-digit spark values ⍏10 into a sparkPip segment", () => {
+  it("preserves multi-digit values beside an inline ⍏ spark", () => {
     const result = tokenizeRulesText("Gain ⍏10.");
-    expect(flatten(result)).toContainEqual({ kind: "sparkPip", value: "10" });
+    expect(collectSymbols(result)).toContainEqual({
+      kind: "symbol",
+      symbol: "spark",
+      char: "⍏",
+    });
+    expect(reconstructText(result)).toBe("Gain ⍏10.");
   });
 
   it("treats a bare ⍏ (no trailing digits) as a spark symbol segment", () => {

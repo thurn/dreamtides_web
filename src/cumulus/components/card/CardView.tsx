@@ -1086,7 +1086,6 @@ function GameCardSurface(props: GameCardSurfaceProps) {
       }}
     >
       {renderRulesText(transfiguration?.markedText ?? card.renderedText, {
-        pipScale: textScale,
         highlightColor: transfiguration?.color,
         interactiveTerms: false,
       })}

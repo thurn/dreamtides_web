@@ -27,9 +27,6 @@ export type SymbolType =
  *   popover showing its definition. Carries the matched word as written
  *   (with its original capitalization and trailing punctuation) plus the
  *   resolved glossary entry.
- * - `sparkPip` represents the spark glyph followed immediately by an integer
- *   (e.g. `⍏2`). The renderer draws this as a circled-number `PipBadge` so
- *   inline references match the spark stat badge on character cards.
  * - `bolt` represents the fast marker `❖` (and the interrupt marker `❖❖`).
  *   The renderer draws `count` filled lightning bolts, the same mark shown
  *   before the card name in the title bar — one bolt for fast, two
@@ -53,7 +50,6 @@ export type TextSegment =
     }
   | { kind: "nobreak"; segments: TextSegment[] }
   | { kind: "term"; word: string; entry: GlossaryCatalogEntry }
-  | { kind: "sparkPip"; value: string }
   | { kind: "bolt"; count: number }
   | { kind: "essence"; amount: string | null }
   | { kind: "siteName"; value: string };
@@ -78,8 +74,6 @@ const SYMBOL_MAP: Readonly<Record<string, SymbolType>> = {
 };
 
 const TRIGGER_CHAR = "▸";
-const SPARK_CHAR = "⍏";
-
 /**
  * Ability timing marker. A single `❖` identifies a fast ability; two `❖❖`
  * identify an interrupt. The renderer collapses a run of these into a single
@@ -87,14 +81,6 @@ const SPARK_CHAR = "⍏";
  * bolts (the same mark the title bar shows before the card name).
  */
 const ACTIVATED_CHAR = "❖";
-
-/**
- * Matches the spark glyph followed immediately by one or more digits, e.g.
- * `⍏2`, `⍏10`. The renderer collapses this to a single circled-number pip
- * badge so inline references read as the same visual unit as the spark
- * stat badge on character cards.
- */
-const SPARK_PIP_RE = /^⍏(\d+)/;
 
 /**
  * Matches a trigger group at the start of a string: the `▸` arrow, optional
@@ -239,7 +225,7 @@ function maybeWrapKeyword(
  * An intermediate token used by `bindIconsToText` when regrouping segments so
  * inline icons never wrap away from the text they belong to. A `space` is a run
  * of whitespace (a potential line-break point); a `unit` is everything else — a
- * word of plain text, a glossary term, or an icon (`symbol`/`sparkPip`/`bolt`).
+ * word of plain text, a glossary term, or an icon (`symbol`/`bolt`).
  * Each unit carries the segment to render plus the bare `word` used to decide
  * whether it reads as a numeric value.
  */
@@ -292,7 +278,6 @@ function toAtoms(segments: TextSegment[]): Atom[] {
     }
     const icon =
       segment.kind === "symbol" ||
-      segment.kind === "sparkPip" ||
       segment.kind === "bolt" ||
       segment.kind === "essence";
     atoms.push({
@@ -521,17 +506,6 @@ function scanSegments(
                 ]),
           ],
         });
-        i += match[0].length;
-        continue;
-      }
-    }
-
-    if (char === SPARK_CHAR) {
-      const rest = text.slice(i);
-      const match = SPARK_PIP_RE.exec(rest);
-      if (match) {
-        flushBufferAndExtractTerms();
-        segments.push({ kind: "sparkPip", value: match[1] });
         i += match[0].length;
         continue;
       }

@@ -5,7 +5,7 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { CumulusRoot } from "../../CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { ENERGY_PIP_COLOR } from "../controls/PipBadge";
+import { ENERGY_ICON_COLOR } from "../controls/StandaloneGlyph";
 import { GLOSSARY_IDS, requireGlossaryEntry } from "../../../data/glossary";
 import { RulesText } from "./RulesText";
 
@@ -67,12 +67,12 @@ describe("RulesText", () => {
   });
 
   // Backlog task 001: the inline energy flame inside rules text reads in the
-  // same teal as the corner energy-cost PipBadge (`ENERGY_PIP_COLOR`). They
+  // same teal as the corner energy-cost glyph (`ENERGY_ICON_COLOR`). They
   // represent the same resource at two anchors on the card and must read as
   // unified at normal viewing distance. The flame color is a CSS var so a
   // light-box surface (the figment frame) can override it, with the shared
   // constant as the fallback everywhere else, so the two cannot drift apart.
-  it("colors the inline energy flame with ENERGY_PIP_COLOR (matches the energy-cost pip)", () => {
+  it("colors the inline energy flame with ENERGY_ICON_COLOR", () => {
     const { container, root } = mount(
       <RulesText text="Pay ●2 to draw a card." />,
     );
@@ -83,13 +83,13 @@ describe("RulesText", () => {
       flame
         ?.closest<HTMLElement>("[data-inline-glyph]")
         ?.parentElement?.getAttribute("style") ?? "";
-    // The color is a var whose fallback is ENERGY_PIP_COLOR, so a card outside a
+    // The color is a var whose fallback is ENERGY_ICON_COLOR, so a card outside a
     // figment renders the flame in the energy teal.
     expect(style.toLowerCase()).toContain("var(--cv-rules-energy-color");
-    expect(style.toLowerCase()).toContain(ENERGY_PIP_COLOR.toLowerCase());
-    // Sanity-check ENERGY_PIP_COLOR itself: if the shared token ever
+    expect(style.toLowerCase()).toContain(ENERGY_ICON_COLOR.toLowerCase());
+    // Sanity-check ENERGY_ICON_COLOR itself: if the shared token ever
     // changes hex value, this assertion makes the change explicit.
-    expect(ENERGY_PIP_COLOR.toLowerCase()).toBe("#0ea5e9");
+    expect(ENERGY_ICON_COLOR.toLowerCase()).toBe("#0ea5e9");
     // Guard against regression to the previous gold/amber fill `#fbbf24`.
     expect(style.toLowerCase()).not.toContain("#fbbf24");
 

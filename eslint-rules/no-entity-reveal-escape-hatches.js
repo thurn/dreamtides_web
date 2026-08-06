@@ -6,7 +6,7 @@ const STRONG_MECHANICAL_PROPS = new Set(["anchorRect", "portalTarget", "revealSi
 const CONTROLLED_PROPS = new Set(["open", "shown", "isOpen", "isShown", "revealOpen", "revealShown"]);
 const INTERACTION_ESCAPE_PROPS = new Set(["onMouseEnter", "onMouseMove", "onMouseLeave", "onPointerEnter", "onPointerMove", "onPointerLeave", "onPointerDown", "onPointerUp", "onPointerCancel", "onMouseDown", "onMouseUp", "onTouchStart", "onTouchMove", "onTouchEnd"]);
 const CONTENT_PROPS = new Set(["content", "children", "card", "reveal", "renderedContent"]);
-const NAMED_REVEAL_COMPONENTS = new Set(["GameCard", "CompactGameCardRow", "EntityReference", "InfoCard", "AtlasNode", "GlossaryTerm", "BattleGameCard", "Dreamsign", "WagerPrizeCard", "DreamAvatarPortrait", "DreamAvatarAbilityText", "TideDisc", "TidesInfoLabel", "EssenceValue", "PipBadge", "CardStatOrb", "JourneyStatusBar", "SiteNode", "TransfigurationButton", "OfferTile"]);
+const NAMED_REVEAL_COMPONENTS = new Set(["GameCard", "EntityReference", "InfoCard", "AtlasNode", "GlossaryTerm", "BattleGameCard", "Dreamsign", "WagerPrizeCard", "DreamAvatarPortrait", "DreamAvatarAbilityText", "TideDisc", "TidesInfoLabel", "EssenceValue", "CardStatOrb", "JourneyStatusBar", "SiteNode", "TransfigurationButton", "OfferTile"]);
 const GENERIC_REVEAL_WRAPPERS = new Set(["HoverPopover", "RevealPopover", "EntityReveal", "GenericReveal", "RevealWrapper", "EntityRevealWrapper"]);
 
 const CONTEXT_COMPONENTS = [
@@ -17,10 +17,8 @@ const CONTEXT_COMPONENTS = [
   "src/cumulus/components/card/DreamsignGalleryPanel.tsx",
   "src/cumulus/components/card/EntityReference.tsx",
   "src/cumulus/components/card/CardView.tsx",
-  "src/cumulus/components/card/CompactGameCardRow.tsx",
   "src/cumulus/components/card/GlossaryTerm.tsx",
   "src/cumulus/components/card/PlayingCard.tsx",
-  "src/cumulus/components/controls/PipBadge.tsx",
   "src/cumulus/components/controls/OfferTile.tsx",
   "src/cumulus/components/controls/TransfigurationButton.tsx",
   "src/cumulus/components/dreamscape/SiteNode.tsx",
@@ -33,7 +31,7 @@ const CONTEXT_COMPONENTS = [
   "src/cumulus/components/hud/TidesInfoLabel.tsx",
   "src/cumulus/components/hud/TideSelectionButton.tsx",
 ];
-const IDENTITY_COMPONENTS = CONTEXT_COMPONENTS.filter((file) => !file.endsWith("CardView.tsx") && !file.endsWith("CompactGameCardRow.tsx"));
+const IDENTITY_COMPONENTS = CONTEXT_COMPONENTS.filter((file) => !file.endsWith("CardView.tsx"));
 const APPROVED_INTERNAL_IMPORTS = new Map();
 for (const file of CONTEXT_COMPONENTS) APPROVED_INTERNAL_IMPORTS.set(`${file}|src/cumulus/internal/reveal/context`, new Set(["useRevealSource"]));
 for (const file of IDENTITY_COMPONENTS) APPROVED_INTERNAL_IMPORTS.set(`${file}|src/cumulus/internal/reveal/identity`, new Set(["revealEntityId"]));

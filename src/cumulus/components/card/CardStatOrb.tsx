@@ -130,8 +130,8 @@ interface CardStatOrbProps {
  * black-and-white shape badge at the glyph's lower-right edge.
  *
  * Single source of truth for the corner stat treatment shared by every
- * `CardView` surface. The inline `⍏N` references in rules text keep their own
- * compact `PipBadge` rendering; this component is only for the corner stats.
+ * `CardView` surface. Rules-text resource references use `InlineGlyph`; this
+ * component is only for the corner stats.
  */
 export function CardStatOrb({
   variant,

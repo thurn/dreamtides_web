@@ -6,7 +6,7 @@ import { isUniversalUiFile } from "./ui-boundary-roles.js";
  *
  * A glyph must arrive as a typed `Glyph` — `GLYPHS.<name>` (the design system's
  * named vocabulary) or `glyph(className)` (the single documented boundary for a
- * class from GAME DATA) — and be rendered through `StandaloneGlyph` / `PipBadge`. A
+ * class from GAME DATA) — and be rendered through `StandaloneGlyph` or `InlineGlyph`. A
  * bare `<i className="bxf bx-crypto" />` re-hardcodes a class string that the
  * glyph registry already owns, so the same mark drifts out of sync across call
  * sites (and a typo'd class silently renders a blank box at runtime).
@@ -97,12 +97,12 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Ban raw Boxicons icon-font class strings (bx / bxf / bx-*) across the Cumulus tier (all of src/cumulus/ plus src/screens/cumulus_adapters/), except the vocabulary file src/cumulus/primitives/glyph.ts, the doc site, and test files. A glyph must arrive as a typed Glyph (GLYPHS.* / glyph()) rendered through StandaloneGlyph / PipBadge.",
+        "Ban raw Boxicons icon-font class strings (bx / bxf / bx-*) across the Cumulus tier (all of src/cumulus/ plus src/screens/cumulus_adapters/), except the vocabulary file src/cumulus/primitives/glyph.ts, the doc site, and test files. A glyph must arrive as a typed Glyph (GLYPHS.* / glyph()) rendered through StandaloneGlyph or InlineGlyph.",
     },
     schema: [],
     messages: {
       rawIconClass:
-        "`{{text}}` is a raw Boxicons class string. Reference a named glyph from `GLYPHS` (or brand a game-data class via `glyph()`) and render it through `StandaloneGlyph` / `PipBadge` — the design system owns the icon vocabulary so a mark does not drift or silently render blank.",
+        "`{{text}}` is a raw Boxicons class string. Reference a named glyph from `GLYPHS` (or brand a game-data class via `glyph()`) and render it through `StandaloneGlyph` or `InlineGlyph` — the design system owns the icon vocabulary so a mark does not drift or silently render blank.",
     },
   },
 

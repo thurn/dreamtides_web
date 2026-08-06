@@ -45,7 +45,6 @@ import { mainMenuButtonDemo } from "./demos/main-menu-button";
 import { motesDemo } from "./demos/motes";
 import { numberStepperDemo } from "./demos/number-stepper";
 import { offerTileDemo } from "./demos/offer-tile";
-import { pipBadgeDemo } from "./demos/pip-badge";
 import { pressableDemo } from "./demos/pressable";
 import { radialAnnouncementDemo } from "./demos/radial-announcement";
 import { journeyStatusBarDemo } from "./demos/journey-status-bar";
@@ -184,7 +183,6 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   infoCardDemo,
   inlineGlyphDemo,
   standaloneGlyphDemo,
-  pipBadgeDemo,
   journeyStatusBarDemo,
   coopPresenceStatusDemo,
   battleStatusDisplayDemo,

@@ -8,7 +8,6 @@ import {
   TRANSFIGURE_MARK_END,
   TRANSFIGURE_MARK_START,
 } from "../../../runtime/transfigure-markers";
-import { PipBadge } from "../controls/PipBadge";
 import {
   BOLT_ICON_CLASS,
   ENERGY_ICON_CLASS,
@@ -168,7 +167,6 @@ interface RulesTextProps {
 }
 
 interface RenderRulesTextOptions {
-  pipScale?: number;
   /** Inline terms own reveal semantics on readable source copy. */
   interactiveTerms?: boolean;
   /** Complete source copy used to contextualize matched glossary terms. */
@@ -293,17 +291,6 @@ function renderSegment(
         emphasized={isHighlightedRulesTextTerm(segment.word)}
         text={segment.word}
       />
-    );
-  }
-  if (segment.kind === "sparkPip") {
-    return (
-      <span key={key} className="inline-flex align-middle">
-        <PipBadge
-          variant="spark"
-          value={segment.value}
-          scale={options.pipScale}
-        />
-      </span>
     );
   }
   if (segment.kind === "bolt") {

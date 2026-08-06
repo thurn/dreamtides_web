@@ -1,4 +1,3 @@
-import { ENERGY_PIP_COLOR } from "./pip-colors";
 import { type Glyph, GLYPHS } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
 
@@ -18,10 +17,9 @@ import { type CumulusColor, resolveColor } from "../../primitives/color";
 /** Solid amber-gold fill for the spark mark. */
 export const SPARK_ICON_COLOR: CumulusColor = "#f3c33f";
 /**
- * Blue fill for the energy mark. Shared with the compact energy pip so inline
- * energy glyphs and dense-row values read as the same resource.
+ * Blue fill for the energy mark shared by card corners and inline rules text.
  */
-export const ENERGY_ICON_COLOR: CumulusColor = ENERGY_PIP_COLOR;
+export const ENERGY_ICON_COLOR: CumulusColor = "#0ea5e9";
 
 /** Boxicons filled classes for each resource mark, from the shared glyph registry. */
 export const SPARK_ICON_CLASS: Glyph = GLYPHS.spark;
