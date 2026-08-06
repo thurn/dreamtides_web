@@ -17,11 +17,11 @@ jobs:
   checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # Pin Node to 24.16.0: Node 24.17.0 regressed node-fetch keep-alive socket
       # reuse, breaking firebase-tools' OAuth token fetch with "Premature
       # close" (see firebase-hosting-merge.yml).
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24.16.0
       - run: npm ci

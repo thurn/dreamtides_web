@@ -197,7 +197,7 @@ export const BATTLE_CARD_EFFECTS: Record<string, BattleCardEffectScript> = {
   "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6": {
     id: "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6",
     trigger: "support",
-    textHash: "77e9432c",
+    textHash: "c72e97a0",
     support: {
       bonus: () => 1,
       applies: (ally) => ally.definition.subtype === "Spirit Animal",
@@ -247,7 +247,7 @@ export const BATTLE_CARD_EFFECTS: Record<string, BattleCardEffectScript> = {
   "c8579b20-95ff-4b1d-b4c6-6bd049fc4760": {
     id: "c8579b20-95ff-4b1d-b4c6-6bd049fc4760",
     trigger: "support",
-    textHash: "7f113a7a",
+    textHash: "7415a86e",
     support: {
       bonus: () => 2,
       applies: (ally) => ally.definition.subtype === "Spirit Animal",

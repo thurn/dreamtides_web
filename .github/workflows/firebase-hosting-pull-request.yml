@@ -12,11 +12,11 @@ jobs:
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # Pin Node to 24.16.0: Node 24.17.0 regressed node-fetch keep-alive socket
       # reuse, breaking the firebase-tools OAuth token fetch with "Premature
       # close". See firebase-hosting-merge.yml for the full explanation.
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24.16.0
       - run: npm ci && npm run build
