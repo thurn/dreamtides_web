@@ -13,6 +13,7 @@ describe("reducer compatibility", () => {
   });
 
   it("accepts only reviewed legacy build identities", () => {
+    expect(COMPATIBLE_LEGACY_REDUCER_VERSIONS).toContain("dreamtides-coop-v13");
     for (const version of COMPATIBLE_LEGACY_REDUCER_VERSIONS) {
       expect(classifyReducerVersion(version)).toBe("legacy");
       expect(isReducerVersionCompatible(version)).toBe(true);

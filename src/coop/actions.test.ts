@@ -281,6 +281,28 @@ describe("coop actions facade", () => {
     ]);
   });
 
+  it("omits the selection protocol from intents written to legacy rooms", () => {
+    const captured: EventDraft[] = [];
+    const actions = makeActions((draft) => {
+      captured.push(draft);
+      return Promise.resolve(captured.length);
+    }, { selectionRulesVersion: null });
+
+    void actions.openSite("site-7", "journey:12", "Exploration");
+    void actions.resolveExplorationChoice("site-7", "action-1", {
+      entryIds: ["entry-1"],
+    });
+
+    expect(captured.map((draft) => draft.payload)).toEqual([
+      { siteId: "site-7" },
+      {
+        siteId: "site-7",
+        actionId: "action-1",
+        selection: { entryIds: ["entry-1"] },
+      },
+    ]);
+  });
+
   it("deduplicates concurrent card tutorial opening while leaving bounces retriable", () => {
     const captured: EventDraft[] = [];
     const actions = makeActions((draft) => {

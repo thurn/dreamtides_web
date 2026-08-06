@@ -32,10 +32,22 @@ export type RewardMechanicId =
   | "gain-dreamsign"
   | "transfigure-deck-entry"
   | "purge-deck-entry"
+  | "purge-for-essence"
+  | "purge-and-duplicate"
   | "replace-deck-entry"
   | "duplicate-deck-entry"
   | "change-entry-subtype"
+  | "change-deck-subtype"
+  | "gain-nightmare-and-card"
+  | "next-site-transfiguration"
+  | "gain-essence-by-deck-predicate"
+  | "increase-deck-spark"
+  | "purge-dreamsign-for-essence"
+  | "make-deck-fast"
+  | "reduce-deck-cost-and-add-nightmares"
+  | "next-battle-modifier"
   | "choose-dream-avatar"
+  | "purge-duplicates-and-grant-reclaim"
   | "add-site";
 
 export type RewardCardPredicate =
@@ -142,6 +154,11 @@ export interface RewardSelectionTrace {
   saltParts: readonly string[];
   purpose: string;
   drawsConsumed: number;
+  streams: readonly {
+    purpose: string;
+    saltParts: readonly string[];
+    drawsConsumed: number;
+  }[];
   constraints: RewardSelectionConstraints;
   candidateCount: number;
   candidateDigest: string;

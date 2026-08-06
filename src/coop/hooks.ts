@@ -61,6 +61,7 @@ import {
   bounceMessageForReason,
 } from "./BounceToast";
 import { UnreadableRoomScreen } from "./UnreadableRoomScreen";
+import { CURRENT_REDUCER_VERSION } from "./reducer-version";
 
 /** A confirmed event's outcome, delivered to `useEventOutcomes` subscribers. */
 export type OutcomeListener = (
@@ -402,7 +403,10 @@ export function CoopProvider({
   // "resolve waits for its confirmation" rule; the battle UI keeps its button
   // disabled via `useConfirmedPromptId` so this is a defensive backstop).
   const actions = useMemo<CoopActions>(() => {
-    const base = makeActions(append);
+    const base = makeActions(append, {
+      selectionRulesVersion:
+        genesis.reducerVersion === CURRENT_REDUCER_VERSION ? undefined : null,
+    });
     return {
       ...base,
       resolvePrompt: (promptId, resolution, intentKey, actor) => {
@@ -416,7 +420,7 @@ export function CoopProvider({
         return base.resolvePrompt(promptId, resolution, intentKey, actor);
       },
     };
-  }, [append]);
+  }, [append, genesis.reducerVersion]);
 
   const value = useMemo<CoopContextValue>(
     () => ({

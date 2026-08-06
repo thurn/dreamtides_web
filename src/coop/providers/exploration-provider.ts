@@ -9,7 +9,10 @@ import {
   type ExplorationPredicate,
 } from "../../data/exploration";
 import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
-import type { JourneyContent } from "../../data/journey-content";
+import {
+  hashStringToSeed,
+  type JourneyContent,
+} from "../../data/journey-content";
 import { offeredTransfigurationForms } from "../../transfiguration/transfiguration-logic";
 import type { CardData } from "../../types/cards";
 import type {
@@ -26,16 +29,16 @@ import {
   applyJourneyRewardEffect,
   type JourneyRewardEffect,
 } from "../../rules/journey/reward-effects";
+import { buildRewardSelectionContext } from "../../reward-selection/context";
+import { createRewardSelectionStream } from "../../reward-selection/rng";
+import { selectReward } from "../../reward-selection/selectReward";
 import {
-  buildRewardSelectionContext,
-  createRewardSelectionStream,
   SELECTION_RULES_VERSION,
-  selectReward,
   type RewardMechanicId,
   type RewardSelectionPolicyId,
   type RewardSelectionRequest,
   type RewardSelectionResult,
-} from "../../reward-selection";
+} from "../../reward-selection/types";
 import { stableDigest } from "../../reward-selection/stable";
 import { MERCHANT_TUNING } from "../../journey_v2/tuning";
 
@@ -110,14 +113,168 @@ function emptyOffer(
   };
 }
 
+function legacyShuffled<T>(items: readonly T[], rng: () => number): T[] {
+  const result = [...items];
+  for (let index = result.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(rng() * (index + 1));
+    [result[index], result[swapIndex]] = [result[swapIndex], result[index]];
+  }
+  return result;
+}
+
+function legacyCatalogCandidates(
+  content: JourneyContent,
+  predicate: ExplorationPredicate,
+  excludedCardId: string,
+): CardData[] {
+  const customCardIds = new Set(
+    (content.exploration?.customCards ?? []).map((card) => card.id.toLowerCase()),
+  );
+  return [...content.cardDatabase.values()]
+    .filter(
+      (card) =>
+        !customCardIds.has(card.id.toLowerCase()) &&
+        card.id.toLowerCase() !== excludedCardId.toLowerCase() &&
+        matchesPredicate(card, predicate),
+    )
+    .sort((left, right) => left.id.localeCompare(right.id));
+}
+
+function isLegacyDeckCardVariableTarget(
+  action: ExplorationActionContent,
+  entry: DeckEntry,
+  card: CardData,
+): boolean {
+  if (action.predicate !== undefined && !matchesPredicate(card, action.predicate)) {
+    return false;
+  }
+  switch (action.effectKind) {
+    case "change-subtype-selected":
+      return (
+        action.subtype !== undefined &&
+        card.cardType === "Character" &&
+        card.subtype !== action.subtype
+      );
+    case "transfigure-fixed-selected":
+      return (
+        entry.transfiguration === null &&
+        action.transfiguration !== undefined &&
+        offeredTransfigurationForms(card, null).some(
+          (form) => form.type === action.transfiguration,
+        )
+      );
+    case "transfigure-selected":
+      return (
+        entry.transfiguration === null &&
+        offeredTransfigurationForms(card, null).length > 0
+      );
+    default:
+      return true;
+  }
+}
+
+function buildLegacyActionOffer(
+  action: ExplorationActionContent,
+  journey: JourneyState,
+  content: JourneyContent,
+  rng: () => number,
+  encounterCardId: string,
+): ExplorationActionOfferRuntime {
+  const offer = emptyOffer(action.id);
+  if (action.effectKind === "gain-random-dreamsign") {
+    const availableIds = new Set(
+      content.dreamsignTemplates.map((dreamsign) => dreamsign.id.toLowerCase()),
+    );
+    const candidates = journey.remainingDreamsignPool.filter((id) =>
+      availableIds.has(id.toLowerCase()),
+    );
+    const selected = legacyShuffled(candidates, rng)[0];
+    if (selected !== undefined) offer.offeredDreamsignIds = [selected];
+    return offer;
+  }
+  if (action.effectKind === "copy-offered-deck-card") {
+    offer.offeredDeckEntryIds = legacyShuffled(journey.deck, rng)
+      .slice(0, action.offerCount ?? 4)
+      .map((entry) => entry.entryId);
+    return offer;
+  }
+  if (action.effectKind === "choose-dream-avatar") {
+    const currentId = journey.dreamAvatar?.id.toLowerCase();
+    const candidates = content.dreamAvatars
+      .filter((dreamAvatar) => dreamAvatar.id.toLowerCase() !== currentId)
+      .sort((left, right) => left.id.localeCompare(right.id));
+    offer.offeredDreamAvatarIds = legacyShuffled(candidates, rng)
+      .slice(0, action.offerCount ?? 3)
+      .map((dreamAvatar) => dreamAvatar.id);
+    return offer;
+  }
+  if (usesDeckCardVariable(action)) {
+    const target = legacyShuffled(
+      resolvedDeckCards(journey, content).filter(
+        ({ entry, card }) =>
+          card.id.toLowerCase() !== encounterCardId.toLowerCase() &&
+          isLegacyDeckCardVariableTarget(action, entry, card),
+      ),
+      rng,
+    )[0];
+    if (target !== undefined) offer.offeredDeckEntryIds = [target.entry.entryId];
+    return offer;
+  }
+  if (action.predicate === undefined) return offer;
+
+  const candidates = legacyCatalogCandidates(content, action.predicate, encounterCardId);
+  if (
+    action.effectKind === "gain-offered-card" ||
+    action.effectKind === "draft-card" ||
+    action.effectKind === "take-cards" ||
+    action.effectKind === "gain-random-cards"
+  ) {
+    const offerCount =
+      action.effectKind === "gain-offered-card"
+        ? 1
+        : action.effectKind === "gain-random-cards"
+          ? action.count ?? 1
+          : action.offerCount ?? 4;
+    offer.offeredCardIds = legacyShuffled(candidates, rng)
+      .slice(0, offerCount)
+      .map((card) => card.id);
+  } else if (action.effectKind === "choose-pack") {
+    const ordered = legacyShuffled(candidates, rng);
+    const packCount = action.packCount ?? 2;
+    const packSize = action.packSize ?? 3;
+    offer.packCardIds = Array.from({ length: packCount }, (_, packIndex) =>
+      ordered
+        .slice(packIndex * packSize, (packIndex + 1) * packSize)
+        .map((card) => card.id),
+    ).filter((pack) => pack.length > 0);
+  } else if (action.effectKind === "replace-selected") {
+    const deckCards = resolvedDeckCards(journey, content).filter(({ card }) =>
+      matchesPredicate(card, action.predicate as ExplorationPredicate),
+    );
+    for (const { entry, card } of deckCards) {
+      const replacement = legacyShuffled(
+        candidates.filter((candidate) => candidate.id !== card.id),
+        rng,
+      )[0];
+      if (replacement !== undefined) {
+        offer.replacementCardIdByEntryId[entry.entryId] = replacement.id;
+      }
+    }
+  }
+  return offer;
+}
+
 function canonicalSelectionForAction(action: ExplorationActionContent): {
   mechanicId: RewardMechanicId;
-  policyId: RewardSelectionPolicyId;
+  policyId?: RewardSelectionPolicyId;
 } {
   const compiledMechanic = action.canonicalMechanicId;
   const compiledPolicy = action.selectionPolicyId;
-  if (compiledMechanic !== undefined && compiledPolicy !== undefined) {
-    return { mechanicId: compiledMechanic, policyId: compiledPolicy };
+  if (compiledMechanic !== undefined) {
+    return {
+      mechanicId: compiledMechanic,
+      ...(compiledPolicy === undefined ? {} : { policyId: compiledPolicy }),
+    };
   }
   switch (action.effectKind) {
     case "gain-card":
@@ -139,16 +296,19 @@ function canonicalSelectionForAction(action: ExplorationActionContent): {
     case "transfigure-fixed-selected":
       return { mechanicId: "transfigure-deck-entry", policyId: "transfiguration-value" };
     case "purge-selected":
-    case "purge-for-essence":
       return { mechanicId: "purge-deck-entry", policyId: "purge-misfit" };
+    case "purge-for-essence":
+      return { mechanicId: "purge-for-essence", policyId: "purge-misfit" };
     case "replace-selected":
-    case "replace-selected-with-card":
       return { mechanicId: "replace-deck-entry", policyId: "card-fit-quality" };
+    case "replace-selected-with-card":
+      return { mechanicId: "replace-deck-entry", policyId: "fixed" };
     case "copy-selected-card":
     case "copy-selected-cards":
     case "copy-offered-deck-card":
-    case "purge-and-copy":
       return { mechanicId: "duplicate-deck-entry", policyId: "duplicate-value" };
+    case "purge-and-copy":
+      return { mechanicId: "purge-and-duplicate" };
     case "change-subtype-selected":
       return { mechanicId: "change-entry-subtype", policyId: "deck-entry-centrality" };
     case "choose-dream-avatar":
@@ -157,6 +317,28 @@ function canonicalSelectionForAction(action: ExplorationActionContent): {
       return { mechanicId: "transfigured-card-chooser", policyId: "card-fit" };
     case "add-site":
       return { mechanicId: "add-site", policyId: "site-uniform" };
+    case "change-subtype-all":
+      return { mechanicId: "change-deck-subtype" };
+    case "gain-nightmare-and-card":
+      return { mechanicId: "gain-nightmare-and-card", policyId: "fixed" };
+    case "transfigure-next-draft-or-shop":
+      return { mechanicId: "next-site-transfiguration" };
+    case "gain-essence-per-card":
+      return { mechanicId: "gain-essence-by-deck-predicate" };
+    case "increase-spark-all":
+      return { mechanicId: "increase-deck-spark" };
+    case "purge-dreamsign-for-essence":
+      return { mechanicId: "purge-dreamsign-for-essence" };
+    case "make-fast-all":
+      return { mechanicId: "make-deck-fast" };
+    case "reduce-cost-all-and-gain-nightmares":
+      return { mechanicId: "reduce-deck-cost-and-add-nightmares" };
+    case "next-battle-opening-hand":
+    case "next-battle-starting-energy":
+    case "next-battle-smaller-hand-and-cost-discount":
+      return { mechanicId: "next-battle-modifier" };
+    case "purge-duplicates-and-grant-reclaim":
+      return { mechanicId: "purge-duplicates-and-grant-reclaim" };
     default:
       return { mechanicId: "gain-card", policyId: "fixed" };
   }
@@ -195,6 +377,7 @@ function buildActionOffer(
   const select = (
     overrides: Partial<RewardSelectionRequest> = {},
   ): RewardSelectionResult | null => {
+    if (canonical.policyId === undefined) return null;
     const request: RewardSelectionRequest = {
       mechanicId: canonical.mechanicId,
       policyId: canonical.policyId,
@@ -386,6 +569,40 @@ function buildActionOffer(
     };
   }
   return offer;
+}
+
+/** Reproduce the prepared offers written by unversioned Exploration opens. */
+export function buildLegacyExplorationRuntime(
+  journey: JourneyState,
+  site: SiteState,
+  content: JourneyContent,
+  rng: () => number,
+  encounterCardId?: string | null,
+): ExplorationSiteRuntime | null {
+  if (content.exploration === undefined) return null;
+  const availableEncounters = content.exploration.encounters.filter(
+    (encounter) => idIndex(content).has(encounter.cardId.toLowerCase()),
+  );
+  if (availableEncounters.length === 0) return null;
+  const encounter =
+    encounterCardId === undefined || encounterCardId === null
+      ? availableEncounters[
+          hashStringToSeed(`${journey.seed}:${site.id}:exploration-card`) %
+            availableEncounters.length
+        ]
+      : availableEncounters.find(
+          (candidate) =>
+            candidate.cardId.toLowerCase() === encounterCardId.toLowerCase(),
+        );
+  if (encounter === undefined) return null;
+  return {
+    kind: "exploration",
+    encounterCardId: encounter.cardId,
+    actionOffers: encounter.actions.map((action) =>
+      buildLegacyActionOffer(action, journey, content, rng, encounter.cardId),
+    ),
+    resolution: null,
+  };
 }
 
 /** Build the shared source-card encounter and every randomized follow-up offer. */

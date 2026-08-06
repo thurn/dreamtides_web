@@ -33,7 +33,7 @@ interface Candidate {
   components: Record<string, number>;
   card?: CardData;
   entryId?: string;
-  dreamsign?: DreamsignTemplate;
+  dreamsign?: Pick<DreamsignTemplate, "id" | "name" | "effectDescription">;
   dreamAvatarId?: string;
   siteType?: SiteType;
   transfiguration?: TransfigurationType;
@@ -448,16 +448,29 @@ function dreamsignCandidates(
   fallback: string[],
 ): Candidate[] | RewardSelectionFailure {
   const fixed = request.constraints?.fixedDreamsignId;
-  const legal = context.content.dreamsignTemplates.filter((dreamsign) =>
-    !context.heldDreamsignIds.has(dreamsign.id) &&
-    (request.policyId === "fixed" || context.remainingDreamsignIds.has(dreamsign.id)),
-  );
   if (request.policyId === "fixed") {
-    const dreamsign = legal.find((candidate) => candidate.id === fixed);
+    const dreamsign = [
+      ...context.content.dreamsignTemplates,
+      ...(context.content.exploration?.customDreamsigns ?? []).flatMap((candidate) =>
+        candidate.id === undefined
+          ? []
+          : [{
+              id: candidate.id,
+              name: candidate.name,
+              effectDescription: candidate.effectDescription,
+            }],
+      ),
+    ].find((candidate) =>
+      candidate.id === fixed && !context.heldDreamsignIds.has(candidate.id),
+    );
     return dreamsign === undefined
       ? failure(request, "fixed_target_unavailable")
       : [{ key: dreamsign.id, dreamsign, score: 0, components: {} }];
   }
+  const legal = context.content.dreamsignTemplates.filter((dreamsign) =>
+    !context.heldDreamsignIds.has(dreamsign.id) &&
+    context.remainingDreamsignIds.has(dreamsign.id),
+  );
   if (request.policyId !== "dreamsign-match" && request.policyId !== "uniform") {
     return failure(request, "unsupported_mechanic_policy");
   }
@@ -555,6 +568,7 @@ function candidatesFor(
     case "transfigure-deck-entry":
       return transfigurationCandidates(context, request);
     case "purge-deck-entry":
+    case "purge-for-essence":
     case "replace-deck-entry":
     case "duplicate-deck-entry":
     case "change-entry-subtype":
@@ -562,6 +576,18 @@ function candidatesFor(
     case "choose-dream-avatar":
     case "add-site":
       return otherCandidates(context, request);
+    case "purge-and-duplicate":
+    case "change-deck-subtype":
+    case "gain-nightmare-and-card":
+    case "next-site-transfiguration":
+    case "gain-essence-by-deck-predicate":
+    case "increase-deck-spark":
+    case "purge-dreamsign-for-essence":
+    case "make-deck-fast":
+    case "reduce-deck-cost-and-add-nightmares":
+    case "next-battle-modifier":
+    case "purge-duplicates-and-grant-reclaim":
+      return failure(request, "unsupported_mechanic_policy");
   }
 }
 
@@ -577,10 +603,26 @@ function keyKind(request: RewardSelectionRequest): RewardCandidateKeyKind {
     case "transfigure-deck-entry":
       return "entryModification";
     case "purge-deck-entry":
+    case "purge-for-essence":
+    case "purge-and-duplicate":
     case "replace-deck-entry":
     case "duplicate-deck-entry":
     case "change-entry-subtype":
       return "entryId";
+    case "change-deck-subtype":
+    case "next-site-transfiguration":
+    case "next-battle-modifier":
+      return "entryModification";
+    case "gain-nightmare-and-card":
+      return "cardUuid";
+    case "gain-essence-by-deck-predicate":
+    case "increase-deck-spark":
+    case "make-deck-fast":
+    case "reduce-deck-cost-and-add-nightmares":
+    case "purge-duplicates-and-grant-reclaim":
+      return "entryId";
+    case "purge-dreamsign-for-essence":
+      return "dreamsignId";
     case "choose-dream-avatar":
       return "dreamAvatarId";
     case "add-site":
@@ -715,7 +757,14 @@ export function selectReward(
   const targetCount = request.upTo === true ? Math.min(required, size) : required;
   if (targetCount === 0) return failure(request, "insufficient_candidates");
   const band = candidates.slice(0, size);
-  const stream = createRewardSelectionStream(request, "candidate");
+  const candidateStream = createRewardSelectionStream(request, "candidate");
+  const packStream = request.mechanicId === "pack-chooser"
+    ? createRewardSelectionStream(request, "pack")
+    : null;
+  const bundleGrowthStream = request.policyId === "card-bundle"
+    ? createRewardSelectionStream(request, "bundle-growth")
+    : null;
+  const samplingStream = packStream ?? candidateStream;
   const remaining = [...band];
   const selected: Candidate[] = [];
   while (selected.length < targetCount) {
@@ -749,7 +798,7 @@ export function selectReward(
       });
       const growBandSize = Math.min(5, remaining.length);
       const growIndex = Math.min(
-        Math.floor(stream.draw() * growBandSize),
+        Math.floor((bundleGrowthStream ?? candidateStream).draw() * growBandSize),
         growBandSize - 1,
       );
       const [candidate] = remaining.splice(growIndex, 1);
@@ -757,7 +806,7 @@ export function selectReward(
       continue;
     }
     const index = Math.min(
-      Math.floor(stream.draw() * remaining.length),
+      Math.floor(samplingStream.draw() * remaining.length),
       remaining.length - 1,
     );
     const [candidate] = remaining.splice(index, 1);
@@ -816,6 +865,15 @@ export function selectReward(
     candidates.map(({ key, score, components }) => ({ key, score, components })),
   );
   const bindings = bindingsFor(selected, request);
+  const streams = [candidateStream, packStream, bundleGrowthStream]
+    .filter((stream): stream is NonNullable<typeof stream> => stream !== null)
+    .filter((stream) => stream.drawsConsumed() > 0)
+    .map((stream) => ({
+      purpose: stream.saltParts[stream.saltParts.length - 1] ?? "candidate",
+      saltParts: stream.saltParts,
+      drawsConsumed: stream.drawsConsumed(),
+    }));
+  const primaryStream = packStream ?? candidateStream;
   const trace = {
     selectionRulesVersion: SELECTION_RULES_VERSION,
     selectionContentRevision: context.selectionContentRevision,
@@ -823,9 +881,10 @@ export function selectReward(
     policyId: request.policyId,
     selectionKey: request.scope.selectionKey,
     keyKind: keyKind(request),
-    saltParts: stream.saltParts,
-    purpose: "candidate",
-    drawsConsumed: stream.drawsConsumed(),
+    saltParts: primaryStream.saltParts,
+    purpose: primaryStream.saltParts[primaryStream.saltParts.length - 1] ?? "candidate",
+    drawsConsumed: primaryStream.drawsConsumed(),
+    streams,
     constraints: request.constraints ?? {},
     candidateCount: candidates.length,
     candidateDigest,

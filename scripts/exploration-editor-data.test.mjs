@@ -56,6 +56,31 @@ describe("exploration editor data", () => {
       encounter.actions.length === 2)).toBe(true);
   });
 
+  it("compiles every effect to its canonical mechanic and only selectable effects to a policy", () => {
+    expect(EXPLORATION_EFFECT_DEFINITIONS.every((definition) =>
+      typeof definition.canonicalMechanicId === "string" &&
+      definition.canonicalMechanicId.length > 0)).toBe(true);
+
+    const byKind = new Map(
+      EXPLORATION_EFFECT_DEFINITIONS.map((definition) => [definition.kind, definition]),
+    );
+    expect(byKind.get("purge-and-copy")).toMatchObject({
+      canonicalMechanicId: "purge-and-duplicate",
+    });
+    expect(byKind.get("purge-and-copy")).not.toHaveProperty("selectionPolicyId");
+    expect(byKind.get("purge-for-essence")).toMatchObject({
+      canonicalMechanicId: "purge-for-essence",
+      defaultSelectionPolicyId: "purge-misfit",
+    });
+    expect(byKind.get("replace-selected-with-card")).toMatchObject({
+      canonicalMechanicId: "replace-deck-entry",
+      defaultSelectionPolicyId: "fixed",
+    });
+    expect(byKind.get("gain-nightmare-and-card")).toMatchObject({
+      canonicalMechanicId: "gain-nightmare-and-card",
+    });
+  });
+
   it("round-trips every effect kind with defaults and removes stale fields", () => {
     const rootDir = fixtureRoot();
     let data = readExplorationEditorData({ rootDir });

@@ -290,7 +290,44 @@ const RAW_EXPLORATION_EFFECT_DEFINITIONS = [
   { kind: "add-site", label: "Add a disclosed site", templateIds: [84], fields: [] },
 ];
 
-const COMMON_SELECTION_BY_EFFECT_KIND = {
+const CANONICAL_MECHANIC_BY_EFFECT_KIND = {
+  "purge-and-copy": "purge-and-duplicate",
+  "gain-dreamsign": "gain-dreamsign",
+  "gain-card": "gain-card",
+  "transfigure-selected": "transfigure-deck-entry",
+  "purge-selected": "purge-deck-entry",
+  "choose-pack": "pack-chooser",
+  "draft-card": "catalog-card-chooser",
+  "purge-for-essence": "purge-for-essence",
+  "change-subtype-selected": "change-entry-subtype",
+  "change-subtype-all": "change-deck-subtype",
+  "take-cards": "catalog-card-chooser",
+  "replace-selected-with-card": "replace-deck-entry",
+  "replace-selected": "replace-deck-entry",
+  "gain-nightmare-and-card": "gain-nightmare-and-card",
+  "gain-random-cards": "gain-card",
+  "transfigure-fixed-selected": "transfigure-deck-entry",
+  "gain-offered-card": "gain-card",
+  "transfigure-next-draft-or-shop": "next-site-transfiguration",
+  "gain-essence-per-card": "gain-essence-by-deck-predicate",
+  "increase-spark-all": "increase-deck-spark",
+  "gain-random-dreamsign": "gain-dreamsign",
+  "purge-dreamsign-for-essence": "purge-dreamsign-for-essence",
+  "make-fast-all": "make-deck-fast",
+  "reduce-cost-all-and-gain-nightmares": "reduce-deck-cost-and-add-nightmares",
+  "copy-selected-card": "duplicate-deck-entry",
+  "copy-selected-cards": "duplicate-deck-entry",
+  "copy-offered-deck-card": "duplicate-deck-entry",
+  "next-battle-opening-hand": "next-battle-modifier",
+  "next-battle-starting-energy": "next-battle-modifier",
+  "next-battle-smaller-hand-and-cost-discount": "next-battle-modifier",
+  "choose-dream-avatar": "choose-dream-avatar",
+  "purge-duplicates-and-grant-reclaim": "purge-duplicates-and-grant-reclaim",
+  "transfigured-card-draft": "transfigured-card-chooser",
+  "add-site": "add-site",
+};
+
+const SELECTION_POLICY_BY_EFFECT_KIND = {
   "gain-card": ["gain-card", "fixed", ["fixed"]],
   "gain-offered-card": ["gain-card", "card-fit-quality", ["uniform", "card-fit", "card-fit-quality"]],
   "gain-random-cards": ["gain-card", "card-bundle", ["uniform", "card-fit", "card-fit-quality", "card-bundle"]],
@@ -302,13 +339,13 @@ const COMMON_SELECTION_BY_EFFECT_KIND = {
   "transfigure-selected": ["transfigure-deck-entry", "transfiguration-value", ["uniform", "transfiguration-value"]],
   "transfigure-fixed-selected": ["transfigure-deck-entry", "transfiguration-value", ["uniform", "transfiguration-value"]],
   "purge-selected": ["purge-deck-entry", "purge-misfit", ["uniform", "purge-misfit"]],
-  "purge-for-essence": ["purge-deck-entry", "purge-misfit", ["uniform", "purge-misfit"]],
+  "purge-for-essence": ["purge-for-essence", "purge-misfit", ["uniform", "purge-misfit"]],
   "replace-selected": ["replace-deck-entry", "card-fit-quality", ["uniform", "card-fit-quality"]],
-  "replace-selected-with-card": ["replace-deck-entry", "card-fit-quality", ["uniform", "card-fit-quality"]],
+  "replace-selected-with-card": ["replace-deck-entry", "fixed", ["fixed"]],
+  "gain-nightmare-and-card": ["gain-nightmare-and-card", "fixed", ["fixed"]],
   "copy-selected-card": ["duplicate-deck-entry", "duplicate-value", ["uniform", "duplicate-value"]],
   "copy-selected-cards": ["duplicate-deck-entry", "duplicate-value", ["uniform", "duplicate-value"]],
   "copy-offered-deck-card": ["duplicate-deck-entry", "duplicate-value", ["uniform", "duplicate-value"]],
-  "purge-and-copy": ["duplicate-deck-entry", "duplicate-value", ["uniform", "duplicate-value"]],
   "change-subtype-selected": ["change-entry-subtype", "deck-entry-centrality", ["uniform", "deck-entry-centrality"]],
   "choose-dream-avatar": ["choose-dream-avatar", "uniform", ["uniform"]],
   "transfigured-card-draft": ["transfigured-card-chooser", "card-fit", ["uniform", "card-fit", "card-fit-quality"]],
@@ -317,15 +354,21 @@ const COMMON_SELECTION_BY_EFFECT_KIND = {
 
 export const EXPLORATION_EFFECT_DEFINITIONS = RAW_EXPLORATION_EFFECT_DEFINITIONS.map(
   (definition) => {
-    const selection = COMMON_SELECTION_BY_EFFECT_KIND[definition.kind];
-    return selection === undefined
-      ? definition
-      : {
-          ...definition,
-          canonicalMechanicId: selection[0],
-          defaultSelectionPolicyId: selection[1],
-          allowedSelectionPolicyIds: selection[2],
-        };
+    const canonicalMechanicId = CANONICAL_MECHANIC_BY_EFFECT_KIND[definition.kind];
+    if (canonicalMechanicId === undefined) {
+      throw new Error(`Missing canonical mechanic for ${definition.kind}.`);
+    }
+    const selection = SELECTION_POLICY_BY_EFFECT_KIND[definition.kind];
+    return {
+      ...definition,
+      canonicalMechanicId,
+      ...(selection === undefined
+        ? {}
+        : {
+            defaultSelectionPolicyId: selection[1],
+            allowedSelectionPolicyIds: selection[2],
+          }),
+    };
   },
 );
 

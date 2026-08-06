@@ -68,6 +68,7 @@ import { streamFromKeyed } from "./rng-stream";
 import { readDreamsignPool } from "../../dreamsign/dreamsign-pool";
 import {
   buildExplorationRuntime,
+  buildLegacyExplorationRuntime,
   resolveExplorationChoice,
 } from "./exploration-provider";
 import {
@@ -575,7 +576,11 @@ export function createSiteContentProvider(
           };
         }
         case "Exploration": {
-          const runtime = buildExplorationRuntime(journey, site, content, stream);
+          const runtime = selectionRulesVersion === undefined
+            ? buildLegacyExplorationRuntime(journey, site, content, stream)
+            : selectionRulesVersion === SELECTION_RULES_VERSION
+              ? buildExplorationRuntime(journey, site, content, stream)
+              : null;
           if (runtime === null) return null;
           return {
             runtime,

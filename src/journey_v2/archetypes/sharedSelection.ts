@@ -21,6 +21,7 @@ function legacyTraceFor(selection: RewardSelectionResult): MerchantOfferTrace {
       : selection.mechanicId === "add-site"
         ? "uniform"
         : selection.mechanicId === "purge-deck-entry" ||
+            selection.mechanicId === "purge-for-essence" ||
             selection.mechanicId === "duplicate-deck-entry"
           ? "deck_entry_rank"
           : selection.mechanicId === "transfigure-deck-entry" ||

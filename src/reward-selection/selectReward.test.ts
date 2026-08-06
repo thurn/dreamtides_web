@@ -4,6 +4,7 @@ import {
   makeMerchantTestCard,
   makeMerchantTestContent,
   makeMerchantTestDeckEntry,
+  makeMerchantTestFitModel,
   makeMerchantTestJourneyState,
   makeMerchantTestResolvedPackage,
   makeMerchantTestSite,
@@ -34,7 +35,9 @@ function context(reverse = false): RewardSelectionContext {
       makeMerchantTestDeckEntry({ entryId: "entry-c", cardNumber: 2 }),
     ],
     resolvedPackage: makeMerchantTestResolvedPackage({
-      draftPoolCopiesByCard: Object.fromEntries(cards.map((card) => [card.id, 1])),
+      draftPoolCopiesByCard: Object.fromEntries(
+        cards.map((card) => [String(card.cardNumber), 1]),
+      ),
     }),
   });
   return buildRewardSelectionContext({
@@ -110,6 +113,92 @@ describe("shared reward selection", () => {
       constraints: { fixedCardUuid: ids[1] },
     }));
     expect(result.ok && result.bindings.cardUuids).toEqual([ids[1]]);
+  });
+
+  it("resolves a fixed custom Dreamsign by UUID", () => {
+    const base = context();
+    const customDreamsignId = "custom-selection-dreamsign";
+    const content = {
+      ...base.content,
+      exploration: {
+        customCards: [],
+        customDreamsigns: [{
+          id: customDreamsignId,
+          name: "Custom Selection Dreamsign",
+          effectDescription: "A synthetic custom effect.",
+          isNegative: false,
+        }],
+        encounters: [],
+      },
+    };
+    const customContext = buildRewardSelectionContext({
+      journeyState: makeMerchantTestJourneyState({ seed: "selection-seed" }),
+      journeyContent: content,
+      site: makeMerchantTestSite({ id: "selection-site", type: "Exploration" }),
+    });
+    const result = selectReward(customContext, request({
+      mechanicId: "gain-dreamsign",
+      policyId: "fixed",
+      count: 1,
+      constraints: { fixedDreamsignId: customDreamsignId },
+    }));
+
+    expect(result.ok && result.bindings.dreamsignIds).toEqual([customDreamsignId]);
+  });
+
+  it("includes every reward-selection input in the content revision", () => {
+    const base = context();
+    const cards = [...base.content.cardDatabase.values()];
+    const journey = makeMerchantTestJourneyState({ seed: "selection-seed" });
+    const site = makeMerchantTestSite({ id: "selection-site", type: "Exploration" });
+    const withFitModel = buildRewardSelectionContext({
+      journeyState: journey,
+      journeyContent: makeMerchantTestContent({
+        cards,
+        fitModel: makeMerchantTestFitModel(),
+      }),
+      site,
+    });
+    const withAvatar = buildRewardSelectionContext({
+      journeyState: journey,
+      journeyContent: {
+        ...makeMerchantTestContent({ cards }),
+        dreamAvatars: [{
+          id: "selection-avatar",
+          name: "Selection Avatar",
+          title: "Synthetic",
+          renderedText: "A synthetic ability.",
+          imageNumber: "1",
+          startingEssence: 250,
+          signatureCards: [],
+        }],
+      },
+      site,
+    });
+
+    expect(withFitModel.selectionContentRevision)
+      .not.toBe(base.selectionContentRevision);
+    expect(withAvatar.selectionContentRevision)
+      .not.toBe(base.selectionContentRevision);
+  });
+
+  it("uses purpose-isolated streams for pack selection and bundle growth", () => {
+    const packs = selectReward(context(), request({
+      mechanicId: "pack-chooser",
+      policyId: "card-bundle",
+      count: 2,
+      packSize: 2,
+    }));
+    const bundle = selectReward(context(), request({
+      mechanicId: "gain-card",
+      policyId: "card-bundle",
+      count: 3,
+    }));
+
+    expect(packs.ok && packs.trace.streams.map((stream) => stream.purpose))
+      .toEqual(["pack", "bundle-growth"]);
+    expect(bundle.ok && bundle.trace.streams.map((stream) => stream.purpose))
+      .toEqual(["candidate", "bundle-growth"]);
   });
 
   it("samples duplicate targets by deck-entry UUID", () => {

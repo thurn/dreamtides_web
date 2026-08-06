@@ -15,7 +15,9 @@ export const CURRENT_REDUCER_VERSION = "dreamtides-coop-v14";
  * Keep the full id: its digest includes generated runtime catalogs, so a
  * different catalog build is not accepted accidentally.
  */
-export const COMPATIBLE_LEGACY_REDUCER_VERSIONS: ReadonlySet<string> = new Set();
+export const COMPATIBLE_LEGACY_REDUCER_VERSIONS: ReadonlySet<string> = new Set([
+  "dreamtides-coop-v13",
+]);
 
 export type ReducerCompatibility = "current" | "legacy" | "incompatible";
 

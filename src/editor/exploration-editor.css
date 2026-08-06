@@ -192,7 +192,7 @@
 }
 
 .exploration-editor-selection-policy {
-  margin-top: var(--space-2);
+  margin-top: var(--space-xxs);
   color: var(--text-secondary);
 }
 
@@ -201,7 +201,7 @@
 }
 
 .exploration-editor-selection-policy p {
-  margin: var(--space-2) 0;
+  margin: var(--space-xxs) 0;
 }
 
 .exploration-editor-select-field,

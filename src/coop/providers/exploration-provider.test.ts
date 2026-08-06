@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
 import { resolveDeckEntryCard } from "../../card-type-change";
 import type {
   ExplorationActionContent,
@@ -10,10 +11,13 @@ import { createDefaultState } from "../../state/journey-context";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { JourneyState, SiteState } from "../../types/journey";
+import { SELECTION_RULES_VERSION } from "../../reward-selection";
 import {
   buildExplorationRuntime,
+  buildLegacyExplorationRuntime,
   resolveExplorationChoice,
 } from "./exploration-provider";
+import { createSiteContentProvider } from "./site-provider";
 
 const SOURCE_CARD_ID = asCardId("161482b6-af07-4d9e-822d-8c738672beb9");
 const CHARM_POUCH_ID = "2D4EB3EE-0931-45ED-8365-69F18096EAD5";
@@ -112,8 +116,8 @@ function contentFixture(
     dreamscapes: [],
     affiliations: [],
     guides: [],
-    atlasData: {},
-  } as unknown as JourneyContent;
+    atlasData: MINIMAL_ATLAS_DATA,
+  };
 }
 
 function journeyFixture(content: JourneyContent): JourneyState {
@@ -187,6 +191,78 @@ function resolve(
 }
 
 describe("Exploration provider", () => {
+  it("keeps the frozen unversioned offer algorithm available for legacy room replay", () => {
+    const offeredAction: ExplorationActionContent = {
+      id: "gain-offered",
+      label: "Invite someone through",
+      effectText: "Gain $OFFERED_CARD",
+      effectKind: "gain-offered-card",
+      predicate: "cheap-character",
+    };
+    const fallbackAction: ExplorationActionContent = {
+      id: "gain-card",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([offeredAction, fallbackAction]);
+    const journey = journeyFixture(content);
+    const legacy = buildLegacyExplorationRuntime(journey, site, content, () => 0.37);
+    const current = buildExplorationRuntime(journey, site, content, () => 0.37);
+
+    expect(legacy).toMatchObject({
+      kind: "exploration",
+      encounterCardId: SOURCE_CARD_ID,
+    });
+    expect(legacy?.actionOffers[0]).toMatchObject({
+      actionId: offeredAction.id,
+      offeredCardIds: ["f0000000-0000-4000-8000-000000000033"],
+    });
+    expect(legacy).not.toHaveProperty("selectionRulesVersion");
+    expect(legacy?.actionOffers[0]).not.toHaveProperty("canonicalMechanicId");
+    expect(current?.selectionRulesVersion).toBe("1");
+  });
+
+  it("routes unversioned opens to legacy replay and current opens to shared selection", () => {
+    const offeredAction: ExplorationActionContent = {
+      id: "gain-offered",
+      label: "Invite someone through",
+      effectText: "Gain $OFFERED_CARD",
+      effectKind: "gain-offered-card",
+      predicate: "cheap-character",
+    };
+    const fallbackAction: ExplorationActionContent = {
+      id: "gain-card",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([offeredAction, fallbackAction]);
+    const provider = createSiteContentProvider(content);
+    const input = {
+      journey: journeyFixture(content),
+      site,
+      rng: () => 0.37,
+    };
+    const legacy = provider.openSite(input);
+    const current = provider.openSite({
+      ...input,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
+    });
+
+    expect(legacy?.runtime).not.toHaveProperty("selectionRulesVersion");
+    expect(current?.runtime).toMatchObject({
+      kind: "exploration",
+      selectionRulesVersion: SELECTION_RULES_VERSION,
+    });
+    expect(provider.openSite({
+      ...input,
+      selectionRulesVersion: "unsupported-selection-version",
+    })).toBeNull();
+  });
+
   it("builds and resolves the offered-card and unrestricted transfiguration effects", () => {
     const offeredAction: ExplorationActionContent = {
       id: "gain-offered",
@@ -396,6 +472,49 @@ describe("Exploration provider", () => {
 
     expect(result.dreamsigns).toHaveLength(1);
     expect(result.dreamsigns[0]?.id).toBe(CHARM_POUCH_ID);
+  });
+
+  it("resolves a fixed custom Dreamsign by UUID", () => {
+    const customDreamsignId = "custom-exploration-dreamsign";
+    const dreamsignAction: ExplorationActionContent = {
+      id: "gain-custom-dreamsign",
+      label: "Take the custom sign",
+      effectText: "Gain a custom Dreamsign",
+      effectKind: "gain-dreamsign",
+      dreamsignId: customDreamsignId,
+    };
+    const fallbackAction: ExplorationActionContent = {
+      id: "gain-card",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const base = contentFixture([dreamsignAction, fallbackAction]);
+    if (base.exploration === undefined) {
+      throw new Error("Expected Exploration content");
+    }
+    const content: JourneyContent = {
+      ...base,
+      exploration: {
+        ...base.exploration,
+        customDreamsigns: [{
+          id: customDreamsignId,
+          name: "Custom Exploration Dreamsign",
+          effectDescription: "A synthetic custom effect.",
+          isNegative: false,
+        }],
+      },
+    };
+    const state = buildState(content);
+    const result = resolve(content, state.journey, dreamsignAction.id);
+
+    expect(result.dreamsigns).toContainEqual({
+      id: customDreamsignId,
+      name: "Custom Exploration Dreamsign",
+      effectDescription: "A synthetic custom effect.",
+      isNegative: false,
+    });
   });
 
   it("drafts one offered card and gains the authored number of copies", () => {

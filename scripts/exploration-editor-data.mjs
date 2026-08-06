@@ -400,7 +400,8 @@ export function normalizeExplorationAction(rawAction, context) {
       : {
           selectionPolicyId:
             raw.canonicalMechanicId === definition.canonicalMechanicId &&
-            typeof raw.selectionPolicyId === "string"
+            typeof raw.selectionPolicyId === "string" &&
+            definition.allowedSelectionPolicyIds.includes(raw.selectionPolicyId)
               ? raw.selectionPolicyId
               : definition.defaultSelectionPolicyId,
         }),

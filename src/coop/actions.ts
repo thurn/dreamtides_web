@@ -298,7 +298,13 @@ export interface CoopActions {
  * fake in tests), and every creator is a thin payload-builder that appends one
  * event.
  */
-export function makeActions(append: AppendFn): CoopActions {
+export function makeActions(
+  append: AppendFn,
+  options: { selectionRulesVersion?: string | null } = {},
+): CoopActions {
+  const selectionRulesVersion = options.selectionRulesVersion === undefined
+    ? SELECTION_RULES_VERSION
+    : options.selectionRulesVersion;
   const emit = (
     type: string,
     payload: Record<string, unknown>,
@@ -461,9 +467,11 @@ export function makeActions(append: AppendFn): CoopActions {
     openSite: (siteId, runId, siteType, gambleGameId) =>
       emit(
         "OPEN_SITE",
-        gambleGameId === undefined
-          ? { siteId, selectionRulesVersion: SELECTION_RULES_VERSION }
-          : { siteId, gambleGameId, selectionRulesVersion: SELECTION_RULES_VERSION },
+        {
+          siteId,
+          ...(gambleGameId === undefined ? {} : { gambleGameId }),
+          ...(selectionRulesVersion === null ? {} : { selectionRulesVersion }),
+        },
         gambleGameId === undefined
           ? siteIntentKey(`open-site:${siteType ?? "unknown"}`, siteId, runId)
           : `${siteIntentKey(`open-site:${siteType ?? "unknown"}`, siteId, runId)}:${gambleGameId}`,
@@ -474,7 +482,7 @@ export function makeActions(append: AppendFn): CoopActions {
       emit("RESOLVE_EXPLORATION_CHOICE", {
         siteId,
         actionId,
-        selectionRulesVersion: SELECTION_RULES_VERSION,
+        ...(selectionRulesVersion === null ? {} : { selectionRulesVersion }),
         ...(selection === undefined ? {} : { selection }),
       }),
     completeAugury: (siteId) => emit("COMPLETE_AUGURY", { siteId }),

@@ -291,7 +291,8 @@
           },
           "effectKind": "gain-essence-per-card",
           "predicate": "spirit-animal",
-          "essencePerCard": 15
+          "essencePerCard": 15,
+          "canonicalMechanicId": "gain-essence-by-deck-predicate"
         }
       ]
     },
@@ -325,7 +326,8 @@
             "spark_bonus": 1
           },
           "effectKind": "increase-spark-all",
-          "sparkBonus": 1
+          "sparkBonus": 1,
+          "canonicalMechanicId": "increase-deck-spark"
         }
       ]
     },
@@ -339,7 +341,8 @@
           "effectText": "All cards in your deck become ❖ (fast)",
           "templateId": 66,
           "templateVariables": {},
-          "effectKind": "make-fast-all"
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
         },
         {
           "id": "15b63630-d9f8-473b-9717-15ad91ff2f16:pair-1:template-65",
@@ -352,7 +355,8 @@
           },
           "effectKind": "reduce-cost-all-and-gain-nightmares",
           "energyCostReduction": 1,
-          "nightmareCount": 3
+          "nightmareCount": 3,
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares"
         }
       ]
     },
@@ -388,7 +392,8 @@
           },
           "effectKind": "reduce-cost-all-and-gain-nightmares",
           "energyCostReduction": 1,
-          "nightmareCount": 3
+          "nightmareCount": 3,
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares"
         }
       ]
     },
@@ -403,8 +408,7 @@
           "templateId": 61,
           "templateVariables": {},
           "effectKind": "purge-and-copy",
-          "canonicalMechanicId": "duplicate-deck-entry",
-          "selectionPolicyId": "duplicate-value"
+          "canonicalMechanicId": "purge-and-duplicate"
         },
         {
           "id": "e26e0ac8-d6c9-4b0c-8672-4f73651f2586:pair-1:template-19",
@@ -498,7 +502,8 @@
             "essence": 50
           },
           "effectKind": "purge-dreamsign-for-essence",
-          "essence": 50
+          "essence": 50,
+          "canonicalMechanicId": "purge-dreamsign-for-essence"
         }
       ]
     },
@@ -612,7 +617,8 @@
             "count": 2
           },
           "effectKind": "next-battle-opening-hand",
-          "count": 2
+          "count": 2,
+          "canonicalMechanicId": "next-battle-modifier"
         }
       ]
     },
@@ -629,7 +635,8 @@
             "count": 2
           },
           "effectKind": "next-battle-opening-hand",
-          "count": 2
+          "count": 2,
+          "canonicalMechanicId": "next-battle-modifier"
         },
         {
           "id": "86fd585b-e9d0-4dc1-bce9-488014b9316d:pair-1:template-39",
@@ -640,7 +647,8 @@
             "count": 2
           },
           "effectKind": "next-battle-starting-energy",
-          "count": 2
+          "count": 2,
+          "canonicalMechanicId": "next-battle-modifier"
         }
       ]
     },
@@ -665,7 +673,8 @@
           "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
           "templateId": 79,
           "templateVariables": {},
-          "effectKind": "purge-duplicates-and-grant-reclaim"
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
         }
       ]
     },
@@ -811,7 +820,7 @@
           "effectKind": "replace-selected-with-card",
           "cardId": "1658d9a0-c3b0-4eb7-babc-4933acf362c4",
           "canonicalMechanicId": "replace-deck-entry",
-          "selectionPolicyId": "card-fit-quality"
+          "selectionPolicyId": "fixed"
         },
         {
           "id": "9d14885c-a757-40cc-b43e-87dbec7ec379:pair-1:template-16",
@@ -853,7 +862,8 @@
           "effectText": "The next draft or shop site you visit will contain transfigured cards",
           "templateId": 37,
           "templateVariables": {},
-          "effectKind": "transfigure-next-draft-or-shop"
+          "effectKind": "transfigure-next-draft-or-shop",
+          "canonicalMechanicId": "next-site-transfiguration"
         }
       ]
     },
@@ -878,7 +888,8 @@
           "effectText": "The next draft or shop site you visit will contain transfigured cards",
           "templateId": 37,
           "templateVariables": {},
-          "effectKind": "transfigure-next-draft-or-shop"
+          "effectKind": "transfigure-next-draft-or-shop",
+          "canonicalMechanicId": "next-site-transfiguration"
         }
       ]
     },
@@ -927,7 +938,8 @@
             "count": 2
           },
           "effectKind": "next-battle-starting-energy",
-          "count": 2
+          "count": 2,
+          "canonicalMechanicId": "next-battle-modifier"
         },
         {
           "id": "7dd2214f-8d16-453a-9f28-62712e64eae1:pair-4:template-59",
@@ -940,7 +952,8 @@
           },
           "effectKind": "gain-essence-per-card",
           "predicate": "spirit-animal",
-          "essencePerCard": 15
+          "essencePerCard": 15,
+          "canonicalMechanicId": "gain-essence-by-deck-predicate"
         }
       ]
     },
@@ -957,7 +970,8 @@
             "count": 2
           },
           "effectKind": "next-battle-starting-energy",
-          "count": 2
+          "count": 2,
+          "canonicalMechanicId": "next-battle-modifier"
         },
         {
           "id": "5b2b2188-b9f0-4b3b-9185-26a820d343c7:pair-2:template-81",
@@ -965,7 +979,8 @@
           "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
           "templateId": 81,
           "templateVariables": {},
-          "effectKind": "next-battle-smaller-hand-and-cost-discount"
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
         }
       ]
     },
@@ -983,7 +998,7 @@
           },
           "effectKind": "purge-for-essence",
           "essencePerSpark": 20,
-          "canonicalMechanicId": "purge-deck-entry",
+          "canonicalMechanicId": "purge-for-essence",
           "selectionPolicyId": "purge-misfit"
         },
         {
@@ -993,8 +1008,7 @@
           "templateId": 61,
           "templateVariables": {},
           "effectKind": "purge-and-copy",
-          "canonicalMechanicId": "duplicate-deck-entry",
-          "selectionPolicyId": "duplicate-value"
+          "canonicalMechanicId": "purge-and-duplicate"
         }
       ]
     }

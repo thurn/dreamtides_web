@@ -23,20 +23,17 @@ function selectionContentRevision(content: JourneyContent): string {
   return stableDigest({
     cards: [...content.cardDatabase.values()]
       .sort((left, right) => left.id.localeCompare(right.id))
-      .map((card) => ({
-        id: card.id,
-        cardNumber: card.cardNumber,
-        cardType: card.cardType,
-        subtype: card.subtype,
-        energyCost: card.energyCost,
-        spark: card.spark,
-        rarity: card.rarity,
-        isStarter: card.isStarter,
-      })),
-    dreamsigns: content.dreamsignTemplates
-      .map((dreamsign) => dreamsign.id)
-      .sort((left, right) => left.localeCompare(right)),
-    corpus: content.merchantCorpus?.cards,
+      .map((card) => ({ ...card })),
+    dreamsigns: [...content.dreamsignTemplates]
+      .sort((left, right) => left.id.localeCompare(right.id)),
+    customCards: [...(content.exploration?.customCards ?? [])]
+      .sort((left, right) => left.id.localeCompare(right.id)),
+    customDreamsigns: [...(content.exploration?.customDreamsigns ?? [])]
+      .sort((left, right) => (left.id ?? "").localeCompare(right.id ?? "")),
+    dreamAvatars: [...content.dreamAvatars]
+      .sort((left, right) => left.id.localeCompare(right.id)),
+    fitModel: content.fitModel,
+    corpus: content.merchantCorpus,
     profiles: content.dreamsignProfiles,
   });
 }
