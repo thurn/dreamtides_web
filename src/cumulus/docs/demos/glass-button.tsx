@@ -128,7 +128,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
     },
     {
       label: "Purple accent",
-      note: "Use the purple soft-wash accent for primary and commit actions. A numerical essence cost appears in component-owned parentheses with the essence glyph.",
+      note: "Use the purple soft-wash accent for primary and commit actions. A numerical essence cost follows the label after a centered dot.",
       code: `<GlassButton
   label="Transfigure"
   essenceCost={20}
@@ -138,13 +138,12 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
 />`,
     },
     {
-      label: "Separated wager price",
-      note: "Use the centered-dot cost treatment for parallel wager choices whose price is part of the comparison.",
+      label: "Essence cost",
+      note: "Every numerical Essence cost uses the centered-dot treatment.",
       code: `<GlassButton
   label="Choose"
   accessibilityLabel="Choose the Six Gate for 50 Essence"
   essenceCost={50}
-  essenceCostStyle="separated"
   variant="accent"
   onPress={chooseGate}
 />`,
@@ -174,7 +173,6 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
       code: `<GlassButton
   label="Choose"
   essenceCost={50}
-  essenceCostStyle="separated"
   size="compact"
   onPress={chooseGate}
 />`,

@@ -86,13 +86,13 @@ describe("GlassButton", () => {
     });
   });
 
-  it("renders an optional inline essence cost in parentheses", () => {
+  it("renders an optional inline essence cost after a centered dot", () => {
     const { container, root } = mount(
       <GlassButton label="Transfigure" essenceCost={20} onPress={() => {}} />,
     );
 
     const button = container.querySelector("button");
-    expect(button?.textContent).toBe("Transfigure (20)");
+    expect(button?.textContent).toBe("Transfigure · 20");
     const essenceIcon = button?.querySelector<HTMLElement>(
       "[data-inline-glyph]",
     );
@@ -111,17 +111,11 @@ describe("GlassButton", () => {
     expect(content?.style.gap).toBe("0px");
     expect(
       content?.querySelector("[data-glass-button-essence-cost]")?.textContent,
-    ).toBe(" (20)");
+    ).toBe(" · 20");
     expect(
       content?.querySelector<HTMLElement>("[data-glass-button-essence-cost]")
         ?.style.marginLeft,
     ).toBe("var(--space-2)");
-    const closeParenthesis = content?.querySelector<HTMLElement>(
-      "[data-glass-button-cost-close]",
-    );
-    expect(closeParenthesis?.textContent).toBe(")");
-    expect(closeParenthesis?.style.marginLeft).toBe("-0.2em");
-
     act(() => {
       root.render(
         <GlassButton
@@ -139,12 +133,11 @@ describe("GlassButton", () => {
     act(() => root.unmount());
   });
 
-  it("supports a centered-dot wager price and a distinct accessible name", () => {
+  it("supports a distinct accessible name for a priced action", () => {
     const { container, root } = mount(
       <GlassButton
         label="Choose"
         essenceCost={50}
-        essenceCostStyle="separated"
         accessibilityLabel="Choose the Six Gate for 50 Essence"
         onPress={() => {}}
       />,
@@ -155,8 +148,6 @@ describe("GlassButton", () => {
     expect(button?.getAttribute("aria-label")).toBe(
       "Choose the Six Gate for 50 Essence",
     );
-    expect(button?.querySelector("[data-glass-button-cost-close]")).toBeNull();
-
     act(() => root.unmount());
   });
 
@@ -197,8 +188,8 @@ describe("GlassButton", () => {
     );
     expect(initialReservations).toEqual([
       "Decline",
-      "Purge 1 (40)",
-      "Purge 2 (100)",
+      "Purge 1 · 40",
+      "Purge 2 · 100",
     ]);
 
     act(() => {

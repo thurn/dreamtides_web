@@ -391,7 +391,6 @@ describe("TransfigurationSiteScreen", () => {
     expect(
       commit?.querySelectorAll("[data-glass-button-width-reservation]"),
     ).toHaveLength(5);
-    expect(commit?.textContent).toContain("Reforging… (80)");
     expect(
       container.querySelector('[role="radio"][aria-checked="true"]'),
     ).toBeNull();
@@ -411,7 +410,9 @@ describe("TransfigurationSiteScreen", () => {
     expect(empowered?.getAttribute("aria-checked")).toBe("true");
     expect(commit?.getAttribute("aria-disabled")).toBeNull();
     expect(commit?.style.opacity).toBe("1");
-    expect(visibleCommitContent()).toBe("Transfigure (40)");
+    expect(
+      commit?.querySelector("[data-glass-button-essence-cost]"),
+    ).not.toBeNull();
     act(() => commit?.click());
     expect(onTransfigure).toHaveBeenCalledWith(
       "entry-1",

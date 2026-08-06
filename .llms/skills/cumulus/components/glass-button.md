@@ -19,9 +19,8 @@ The labeled glass action — a bold text label with optional Essence cost or non
 | `label` | `string` | yes | — | The button's text, centered by the component at every rendered width. |
 | `onPress` | `() => void` | yes | — | Fires when the button is activated (no-op while disabled). |
 | `glyph` | `Glyph` | no | — | Optional leading glyph painted as a `GlowIcon` before the label. |
-| `essenceCost` | `number \| null` | no | `null` | Optional numerical essence cost rendered in parentheses after the label: `Transfigure (20◆)`. |
+| `essenceCost` | `number \| null` | no | `null` | Optional numerical essence cost rendered after a centered dot. |
 | `essenceValue` | `number \| null` | no | `null` | Optional non-cost Essence value rendered directly after the label. |
-| `essenceCostStyle` | `GlassButtonEssenceCostStyle` = `"parenthetical" \| "separated"` | no | `parenthetical` | Parenthesized cost, or a centered-dot-separated wager price. |
 | `size` | `GlassButtonSize` = `"compact" \| "standard" \| "prominent"` | no | `standard` | Prominent primary-action sizing, standard label spacing, or compact spacing for narrow parallel actions. |
 | `widthReservations` | `readonly GlassButtonWidthReservation[]` | no | `[]` | Possible dynamic label/essence-cost states. The button reserves the widest state while rendering only the current one, preventing surrounding layout shift. |
 | `variant` | `GlassButtonVariant` = `"default" \| "danger" \| "accent"` | no | `default` | Strict surface treatment: accent for primary/commit actions, default for secondary actions, or danger for destructive actions. |
@@ -112,7 +111,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 ### Purple accent
 
-Use the purple soft-wash accent for primary and commit actions. A numerical essence cost appears in component-owned parentheses with the essence glyph.
+Use the purple soft-wash accent for primary and commit actions. A numerical essence cost follows the label after a centered dot.
 
 ```tsx
 <GlassButton
@@ -124,16 +123,15 @@ Use the purple soft-wash accent for primary and commit actions. A numerical esse
 />
 ```
 
-### Separated wager price
+### Essence cost
 
-Use the centered-dot cost treatment for parallel wager choices whose price is part of the comparison.
+Every numerical Essence cost uses the centered-dot treatment.
 
 ```tsx
 <GlassButton
   label="Choose"
   accessibilityLabel="Choose the Six Gate for 50 Essence"
   essenceCost={50}
-  essenceCostStyle="separated"
   variant="accent"
   onPress={chooseGate}
 />
@@ -172,7 +170,6 @@ Use the compact label scale and horizontal spacing when several actions must rem
 <GlassButton
   label="Choose"
   essenceCost={50}
-  essenceCostStyle="separated"
   size="compact"
   onPress={chooseGate}
 />

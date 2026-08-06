@@ -2644,7 +2644,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "null",
-      "description": "Optional numerical essence cost rendered in parentheses after the label:\n`Transfigure (20◆)`."
+      "description": "Optional numerical essence cost rendered after a centered dot."
     },
     {
       "name": "essenceValue",
@@ -2653,17 +2653,6 @@
       "required": false,
       "defaultValue": "null",
       "description": "Optional non-cost Essence value rendered directly after the label."
-    },
-    {
-      "name": "essenceCostStyle",
-      "tsType": "GlassButtonEssenceCostStyle",
-      "unionMembers": [
-        "parenthetical",
-        "separated"
-      ],
-      "required": false,
-      "defaultValue": "parenthetical",
-      "description": "Parenthesized cost, or a centered-dot-separated wager price."
     },
     {
       "name": "size",

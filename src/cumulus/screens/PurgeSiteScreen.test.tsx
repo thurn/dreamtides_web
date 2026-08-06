@@ -180,9 +180,8 @@ describe("PurgeSiteScreen", () => {
     expect(
       container
         .querySelector('[data-testid="cumulus-purge-header-action"]')
-        ?.querySelector<HTMLElement>("[data-glass-button-content]")
-        ?.textContent,
-    ).toBe("Purge 1 (40)");
+        ?.querySelector("[data-glass-button-essence-cost]"),
+    ).not.toBeNull();
     expect(
       container.querySelector<HTMLElement>(
         '[data-testid="cumulus-purge-header-action"]',

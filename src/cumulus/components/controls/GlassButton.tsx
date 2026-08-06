@@ -41,9 +41,6 @@ const GLASS_BUTTON_HEIGHT = {
 /** Visual treatment for the glass button surface. */
 export type GlassButtonVariant = "default" | "danger" | "accent";
 
-/** How an optional Essence cost is punctuated after the button label. */
-export type GlassButtonEssenceCostStyle = "parenthetical" | "separated";
-
 /** Horizontal density and label scale; both sizes preserve the 42px target. */
 export type GlassButtonSize = "prominent" | "standard" | "compact";
 
@@ -87,15 +84,10 @@ export interface GlassButtonProps {
   onPress: () => void;
   /** Optional leading glyph painted as a `GlowIcon` before the label. */
   glyph?: Glyph;
-  /**
-   * Optional numerical essence cost rendered in parentheses after the label:
-   * `Transfigure (20◆)`.
-   */
+  /** Optional numerical essence cost rendered after a centered dot. */
   essenceCost?: number | null;
   /** Optional non-cost Essence value rendered directly after the label. */
   essenceValue?: number | null;
-  /** Parenthesized cost, or a centered-dot-separated wager price. */
-  essenceCostStyle?: GlassButtonEssenceCostStyle;
   /** Prominent primary-action sizing, standard label spacing, or compact
    * spacing for narrow parallel actions. */
   size?: GlassButtonSize;
@@ -136,7 +128,6 @@ export function GlassButton({
   glyph,
   essenceCost = null,
   essenceValue = null,
-  essenceCostStyle = "parenthetical",
   size = "standard",
   widthReservations = [],
   variant = "default",
@@ -204,7 +195,6 @@ export function GlassButton({
           label={label}
           essenceCost={essenceCost}
           essenceValue={essenceValue}
-          essenceCostStyle={essenceCostStyle}
         />
         {widthReservations.map((reservation, index) => (
           <span
@@ -223,7 +213,6 @@ export function GlassButton({
               label={reservation.label}
               essenceCost={reservation.essenceCost ?? null}
               essenceValue={null}
-              essenceCostStyle={essenceCostStyle}
             />
           </span>
         ))}
@@ -247,12 +236,10 @@ function GlassButtonContent({
   label,
   essenceCost,
   essenceValue,
-  essenceCostStyle,
 }: {
   readonly label: string;
   readonly essenceCost: number | null;
   readonly essenceValue: number | null;
-  readonly essenceCostStyle: GlassButtonEssenceCostStyle;
 }): ReactElement {
   return (
     <span
@@ -271,18 +258,8 @@ function GlassButtonContent({
           data-glass-button-essence-cost=""
           style={{ marginLeft: token("--space-2") }}
         >
-          {essenceCostStyle === "parenthetical" ? " (" : " · "}
+          {" · "}
           <EssenceValue amount={essenceCost} tone="inherit" />
-          {essenceCostStyle === "parenthetical" && (
-            <span
-              data-glass-button-cost-close=""
-              // Boxicons leaves a wide right side-bearing on the essence mark;
-              // pull the close parenthesis into that empty advance width.
-              style={{ marginLeft: "-0.2em" }}
-            >
-              )
-            </span>
-          )}
         </span>
       )}
       {essenceValue !== null && (

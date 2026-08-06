@@ -541,7 +541,6 @@ function GambleBetButton({
       label="Bet"
       accessibilityLabel={`Bet on ${gate.name} for ${String(view.wagerCost)} Essence`}
       essenceCost={view.wagerCost}
-      essenceCostStyle="separated"
       size={layout === "mobile" ? "compact" : "standard"}
       variant="accent"
       disabled={
@@ -1246,7 +1245,6 @@ function LadderClimbScreen({
                     label="Draw"
                     accessibilityLabel={`Draw attempt ${String(view.nextDraw.attemptNumber)} for ${String(view.nextDraw.cost)} Essence`}
                     essenceCost={view.nextDraw.cost}
-                    essenceCostStyle="separated"
                     variant="accent"
                     disabled={
                       !view.runtimeReady ||
