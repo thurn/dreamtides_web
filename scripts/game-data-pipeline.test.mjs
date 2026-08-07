@@ -47,6 +47,7 @@ describe("game-data publication", () => {
 
     expect(readFileSync(join(stage, "data", "cards.ron"), "utf8")).toBe(
       `// preserved
+
 [CardDefinition(name: "Fixture", id: "00000000-0000-4000-8000-000000000001")]
 `,
     );

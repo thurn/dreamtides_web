@@ -1,4 +1,5 @@
 // An exploratory RON-native rendering of exploration.toml.
+
 #![enable(implicit_some)]
 ExplorationCatalog(
   actions_per_encounter: 2,

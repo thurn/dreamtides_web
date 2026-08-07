@@ -34,6 +34,17 @@ second: [line]"#,
     expect(formatted).toContain("/* exact comment */");
   });
 
+  it("separates a leading file comment from the top-level value", () => {
+    const source = `// Catalog guidance.\n// More guidance.\n#![enable(implicit_some)]\nCatalog(value: 1)`;
+
+    expect(formatRon(source, options)).toBe(`// Catalog guidance.
+// More guidance.
+
+#![enable(implicit_some)]
+Catalog(value: 1)
+`);
+  });
+
   it("separates top-level record fields with blank lines", () => {
     const source = `Catalog(
       first: 1,

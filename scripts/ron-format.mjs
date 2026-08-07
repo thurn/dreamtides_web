@@ -465,10 +465,24 @@ export function formatRon(source, options = {}) {
   const tokens = tokenizeRon(source);
   const nodes = parseNodes(tokens);
   const writer = new Writer(indentWidth);
+  let sawLeadingFileComment = false;
+  let sawTopLevelValue = false;
   for (const node of nodes) {
     const token = firstToken(node);
-    if (token.newlinesBefore > 0 && writer.lineHasContent) writer.newline(0);
+    const isComment = ["line-comment", "block-comment"].includes(token.kind);
+    if (
+      writer.lineHasContent &&
+      sawLeadingFileComment &&
+      !sawTopLevelValue &&
+      !isComment
+    ) {
+      writer.blankLine(0);
+    } else if (token.newlinesBefore > 0 && writer.lineHasContent) {
+      writer.newline(0);
+    }
     renderSequence(writer, [node], 0, { printWidth });
+    if (isComment && !sawTopLevelValue) sawLeadingFileComment = true;
+    else if (!isComment) sawTopLevelValue = true;
   }
 
   const formatted = `${writer.output.trimEnd()}\n`;

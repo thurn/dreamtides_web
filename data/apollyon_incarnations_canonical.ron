@@ -1,5 +1,6 @@
 // Apollyon's possible incarnations. Atlas generation selects one definition
 // per run to present the final Dream Avatar's title and deck description.
+
 #![enable(implicit_some)]
 [
   ApollyonIncarnation(

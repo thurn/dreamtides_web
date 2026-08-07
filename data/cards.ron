@@ -1,6 +1,7 @@
 // An exploratory RON-native rendering of cards.toml.
 // Omitted fields take their schema defaults.
 // FixedAndVariable(N) represents the authored multi-orb energy cost `N,X`.
+
 #![enable(implicit_some)]
 [
   CardDefinition(
