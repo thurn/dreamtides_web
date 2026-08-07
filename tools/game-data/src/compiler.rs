@@ -9,7 +9,7 @@ use serde::Serialize;
 use sha2::{Digest, Sha256};
 
 use crate::manifest::{Dataset, Manifest, MigrationState};
-use crate::models::{cards, compat, draft, exploration};
+use crate::models::{affiliations, cards, compat, draft, exploration};
 
 pub const BUILD_VERSION: &str = env!("GAME_DATA_BUILD_VERSION");
 
@@ -117,6 +117,7 @@ pub fn compile(request: CompileRequest<'_>) -> Result<CompileReport> {
 fn adapt(dataset: &Dataset, source: &[u8]) -> Result<toml::Value> {
     let source = std::str::from_utf8(source).context("RON source is not UTF-8")?;
     match dataset.adapter.as_str() {
+        "affiliations_v1" => affiliations::lower(parse_ron(source, dataset)?),
         "draft_v1" => draft::lower(parse_ron(source, dataset)?),
         "cards_v1" => cards::lower(parse_ron(source, dataset)?),
         "exploration_v1" => exploration::lower(parse_ron(source, dataset)?),
@@ -328,6 +329,9 @@ mod tests {
         for dataset in &manifest.datasets {
             let source = fs::read_to_string(root.join(&dataset.source)).unwrap();
             match dataset.adapter.as_str() {
+                "affiliations_v1" => {
+                    canonical::<affiliations::AffiliationCatalog>(&source, true);
+                }
                 "cards_v1" => {
                     canonical::<Vec<CardDefinition>>(&source, true);
                 }

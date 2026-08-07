@@ -44,6 +44,12 @@ it("discovers RON files and enforces check and write modes", () => {
     const cleanCheck = runFormatter(fixtureRoot, "--check");
     expect(cleanCheck.status).toBe(0);
     expect(cleanCheck.stdout).toContain("RON formatting is current");
+
+    execFileSync("git", ["add", "fixture.ron"], { cwd: fixtureRoot });
+    rmSync(ronPath);
+    const deletedCheck = runFormatter(fixtureRoot, "--check");
+    expect(deletedCheck.status).toBe(0);
+    expect(deletedCheck.stdout).toContain("0 files checked");
   } finally {
     rmSync(fixtureRoot, { recursive: true, force: true });
   }

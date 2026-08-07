@@ -80,21 +80,24 @@ selected actions: pair-3 (rank 4)
 
 ## `data/affiliations.ron`
 
-### `[[affiliations]]`
+### `AffiliationCatalog`
 
 Affiliations: the thematic faction backing each non-starter dreamscape. An
-affiliation's `signature-cards` are a curated set of cards that exemplify its
+affiliation's `signature_card_ids` are a curated set of cards that exemplify its
 theme; later draft and battle systems reweight content toward these cards
-(`weight-strength`) and bias opponent decks toward them
-(`opponent-bias-strength`). These curations are chosen by theme and serve as
+(`default_random_draw_max_multiplier`) and bias opponent decks toward them
+(`default_opponent_deck_max_multiplier`). The catalog-level multipliers apply
+to every affiliation and are expanded into the generated TOML compatibility
+fields. These curations are chosen by theme and serve as
 probes for the shared IDF reweighting math.
 
 Fields:
-  id                       Stable identifier referenced by dreamscapes.
-  name                     Player-facing affiliation name.
-  signature-cards          Curated cards_v2 UUIDs exemplifying the theme.
-  weight-strength          Pull strength applied when reweighting draft content.
-  opponent-bias-strength   Pull strength applied when biasing opponent decks.
+  id                                      UUIDv4 referenced by dreamscapes.
+  name                                    Player-facing affiliation name.
+  atlas_card_theme                        Theme label used by Atlas generation.
+  signature_card_ids                      Curated card UUIDs exemplifying the theme.
+  default_random_draw_max_multiplier      Pull strength for random card content.
+  default_opponent_deck_max_multiplier    Pull strength for opponent deck bias.
 
 ## `data/apollyon_incarnations.ron`
 

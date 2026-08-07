@@ -1,3 +1,4 @@
+pub mod affiliations;
 pub mod atlas;
 pub mod cards;
 pub mod compat;

@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { formatRon } from "./ron-format.mjs";
 
@@ -30,9 +30,9 @@ const files =
           "*.ron",
         ],
         { cwd: root, encoding: "utf8" },
-      )
+        )
         .split("\0")
-        .filter(Boolean)
+        .filter((file) => file !== "" && existsSync(resolve(root, file)))
         .sort();
 
 const changes = files

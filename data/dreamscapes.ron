@@ -26,7 +26,7 @@ CompatDocument(
         "id": "tumbleleaf_village",
         "name": "Tumbleleaf Village",
         "aesthetic": "A cozy fantasy village of anthropomorphic animals.",
-        "affiliation-id": "spirit_animals",
+        "affiliation-id": "4b715cd0-8b41-4b82-9cef-c47b15e8992b",
         "dream-avatar-ids": [
           /*[0]*/
           "94E7C651-25E9-4A62-9DE4-EAF5BA20542C",
@@ -41,7 +41,7 @@ CompatDocument(
         "id": "pharaohs_gate",
         "name": "Pharaoh\'s Gate",
         "aesthetic": "An ancient Egyptian realm of sun-baked stone and gold.",
-        "affiliation-id": "erode_void",
+        "affiliation-id": "c3815562-e80d-4afc-8ba6-91bd60ad323e",
         "dream-avatar-ids": [
           /*[0]*/
           "C72CFD7B-408B-47F6-ADF1-1E486A7E20D3",
@@ -58,7 +58,7 @@ CompatDocument(
         "id": "winterwake_fjords",
         "name": "Winterwake Fjords",
         "aesthetic": "A snowy viking village beneath frozen cliffs.",
-        "affiliation-id": "removal",
+        "affiliation-id": "a544314c-2e90-42b1-ba04-06c7f2f0a6f9",
         "dream-avatar-ids": [
           /*[0]*/
           "FE2510D9-BFEE-4C35-97F9-30E0CD2E2851",
@@ -73,7 +73,7 @@ CompatDocument(
         "id": "frostforge",
         "name": "Frostforge",
         "aesthetic": "A dwarven fortress of anvils and glowing forges.",
-        "affiliation-id": "storm_events",
+        "affiliation-id": "04103386-ca4e-42a0-9a90-150297a20e91",
         "dream-avatar-ids": [
           /*[0]*/
           "2B7E921D-0CD7-4C20-A415-9E7EEDE7B477",
@@ -88,7 +88,7 @@ CompatDocument(
         "id": "hopes_end",
         "name": "Hope\'s End",
         "aesthetic": "A rural town in the grip of a zombie apocalypse.",
-        "affiliation-id": "inexpensive_characters",
+        "affiliation-id": "8b30f0bf-6b9d-47c0-92ba-80f62ae8899d",
         "dream-avatar-ids": [
           /*[0]*/
           "6029BE40-75B9-4C07-912F-9718B6C5C747",
@@ -103,7 +103,7 @@ CompatDocument(
         "id": "tsukiren",
         "name": "Tsukiren",
         "aesthetic": "A samurai-era Japanese kingdom of paper lanterns and steel.",
-        "affiliation-id": "warriors",
+        "affiliation-id": "33dee3b4-19d2-4788-9cef-b69057385844",
         "dream-avatar-ids": [
           /*[0]*/
           "BF72ADFF-7D74-4BE8-9B93-1DB7BA13A1DB",
@@ -118,7 +118,7 @@ CompatDocument(
         "id": "wilderveil",
         "name": "Wilderveil",
         "aesthetic": "An enchanted forest of ancient trees and drifting lights.",
-        "affiliation-id": "abandon_sacrifice",
+        "affiliation-id": "c674a92f-3860-4851-8357-dd4f3e469674",
         "dream-avatar-ids": [
           /*[0]*/
           "B9BF6D4B-907C-4750-B51C-811AFF29DE59",
@@ -133,7 +133,7 @@ CompatDocument(
         "id": "rust_expanse",
         "name": "The Rust Expanse",
         "aesthetic": "A Mad-Max post-apocalyptic wasteland of scrap and dust.",
-        "affiliation-id": "survivors",
+        "affiliation-id": "d1a8f46d-0efe-4ae6-bda3-0866d5d20633",
         "dream-avatar-ids": [
           /*[0]*/
           "133E22DD-F81B-406D-B4E3-98C346D7FD4E",
@@ -148,7 +148,7 @@ CompatDocument(
         "id": "farpoint_station",
         "name": "Farpoint Station",
         "aesthetic": "A sci-fi outpost clinging to a distant planet.",
-        "affiliation-id": "figments",
+        "affiliation-id": "96258dfd-33c9-44a7-96a5-6747eb42cc60",
         "dream-avatar-ids": [
           /*[0]*/
           "9E19B3D1-12F2-43C1-9CB1-08DE7CD32E32",
@@ -163,7 +163,7 @@ CompatDocument(
         "id": "grid_city",
         "name": "Grid City",
         "aesthetic": "A neon-drenched cyberpunk city of rain and chrome.",
-        "affiliation-id": "discard",
+        "affiliation-id": "0f09352d-3a1d-44db-a58e-229ab834cdc3",
         "dream-avatar-ids": [
           /*[0]*/
           "86026206-1B11-4F38-A24E-FD3C697F5353",

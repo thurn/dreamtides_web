@@ -74,7 +74,13 @@ impl Manifest {
         let mut ids = BTreeSet::new();
         let mut sources = BTreeSet::new();
         let mut outputs = BTreeSet::new();
-        let adapters = ["draft_v1", "cards_v1", "exploration_v1", "compat_v1"];
+        let adapters = [
+            "affiliations_v1",
+            "draft_v1",
+            "cards_v1",
+            "exploration_v1",
+            "compat_v1",
+        ];
         for dataset in &self.datasets {
             if !ids.insert(&dataset.id) {
                 bail!("duplicate dataset id: {}", dataset.id);

@@ -1,6 +1,6 @@
 [
   {
-    "id": "spirit_animals",
+    "id": "4b715cd0-8b41-4b82-9cef-c47b15e8992b",
     "name": "Spirit Animals",
     "atlasCardTheme": "Spirit Animal",
     "signatureCards": [
@@ -14,7 +14,7 @@
     "opponentBiasStrength": 2
   },
   {
-    "id": "erode_void",
+    "id": "c3815562-e80d-4afc-8ba6-91bd60ad323e",
     "name": "The Void",
     "atlasCardTheme": "Void",
     "signatureCards": [
@@ -28,7 +28,7 @@
     "opponentBiasStrength": 2
   },
   {
-    "id": "removal",
+    "id": "a544314c-2e90-42b1-ba04-06c7f2f0a6f9",
     "name": "Tempo",
     "atlasCardTheme": "Tempo",
     "signatureCards": [
@@ -44,7 +44,7 @@
     "opponentBiasStrength": 2
   },
   {
-    "id": "storm_events",
+    "id": "04103386-ca4e-42a0-9a90-150297a20e91",
     "name": "Events",
     "atlasCardTheme": "Event",
     "signatureCards": [
@@ -58,7 +58,7 @@
     "opponentBiasStrength": 2
   },
   {
-    "id": "inexpensive_characters",
+    "id": "8b30f0bf-6b9d-47c0-92ba-80f62ae8899d",
     "name": "Characters",
     "atlasCardTheme": "Character",
     "signatureCards": [
@@ -72,7 +72,7 @@
     "opponentBiasStrength": 2
   },
   {
-    "id": "warriors",
+    "id": "33dee3b4-19d2-4788-9cef-b69057385844",
     "name": "Warriors",
     "atlasCardTheme": "Warrior",
     "signatureCards": [
@@ -86,7 +86,7 @@
     "opponentBiasStrength": 2
   },
   {
-    "id": "abandon_sacrifice",
+    "id": "c674a92f-3860-4851-8357-dd4f3e469674",
     "name": "Abandon",
     "atlasCardTheme": "Abandon",
     "signatureCards": [
@@ -100,7 +100,7 @@
     "opponentBiasStrength": 2
   },
   {
-    "id": "survivors",
+    "id": "d1a8f46d-0efe-4ae6-bda3-0866d5d20633",
     "name": "Survivors",
     "atlasCardTheme": "Survivor",
     "signatureCards": [
@@ -113,7 +113,7 @@
     "opponentBiasStrength": 2
   },
   {
-    "id": "figments",
+    "id": "96258dfd-33c9-44a7-96a5-6747eb42cc60",
     "name": "Figments",
     "atlasCardTheme": "Figment",
     "signatureCards": [
@@ -126,7 +126,7 @@
     "opponentBiasStrength": 2
   },
   {
-    "id": "discard",
+    "id": "0f09352d-3a1d-44db-a58e-229ab834cdc3",
     "name": "Discard",
     "atlasCardTheme": "Discard",
     "signatureCards": [
