@@ -3,9 +3,10 @@
 # Regenerate canonical assets in one command.
 #
 #   ./scripts/regenerate-assets.sh          # full regeneration
-#   ./scripts/regenerate-assets.sh --fast   # routine TOML content changes
+#   ./scripts/regenerate-assets.sh --fast   # routine RON content changes
 #
-# Fast mode refreshes the runtime public/ bundles from the source TOMLs and
+# Fast mode refreshes the runtime public/ bundles from canonical RON and
+# generated compatibility TOML plus
 # existing committed data. Use it for player-facing copy or balance changes
 # where stable IDs, card names, reference membership, draft records, pool data,
 # and Cumulus sources are unchanged. glossary.toml is imported directly by the
@@ -13,13 +14,13 @@
 #
 # The committed, git-tracked artifacts (data/*.jsonc, data/*.json, docs/cards2/*)
 # are baked from source by the scripts below, while the gitignored public/ bundles
-# are derived from those artifacts and the source TOMLs by setup-assets. The bakes
+# are derived from those artifacts and generated TOML by setup-assets. The bakes
 # READ the public/ bundles and setup-assets COPIES the baked artifacts back into
 # public/, so setup-assets must bracket the bakes — run once before (to give them
 # inputs) and once after (to refresh the bundles from the fresh artifacts).
 #
 # Order:
-#    1. setup-assets         build public/ inputs from the source TOMLs + records
+#    1. setup-assets         build public/ inputs from canonical RON + records
 #    2. bake-merchant-corpus  data/merchant_corpus.json
 #    3. bake-tides4           data/tides4.jsonc + docs/cards2/tides4_decklists.md
 #    4. setup-assets         copy the fresh artifacts into public/
@@ -63,7 +64,7 @@ if [[ ! -d node_modules ]]; then
 fi
 
 if [[ "$FAST" == true ]]; then
-  step "1/2  setup-assets — refresh runtime bundles from TOML content"
+  step "1/2  setup-assets — refresh runtime bundles from RON content"
   node scripts/setup-assets.mjs
 
   step "2/2  generate-localization-types — refresh typed message contracts"

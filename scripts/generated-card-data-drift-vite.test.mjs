@@ -56,6 +56,7 @@ describe("generated card data drift Vite integration", () => {
     // reload event) round out the list.
     expect(viteConfig.server?.watch?.ignored).toEqual([
       resolve(join(rootDir, "data", "tabula")) + "/**",
+      resolve(join(rootDir, "data", "exploration_candidates.toml")),
       resolve(join(rootDir, "data", "image-viewer-state.json")),
       encounterCandidatesWatchPattern,
       resolve(join(rootDir, "data", "templates.json")),

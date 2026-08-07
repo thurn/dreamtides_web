@@ -7,6 +7,9 @@ import type {
   SaveEditorFigmentFieldResponse,
   SaveEditorFigmentImageNumberRequest,
 } from "./figment-types";
+import { confirmSourceRevision, queueSourceSave, withExpectedSourceRevision } from "./source-revision";
+
+const SOURCE = "figments";
 
 function readApiError(body: unknown): EditorApiErrorBody["error"] | undefined {
   if (
@@ -60,7 +63,7 @@ function withTomlParam(path: string): string {
   }
 
   const separator = path.includes("?") ? "&" : "?";
-  return `${path}${separator}toml=${encodeURIComponent(toml)}`;
+  return `${path}${separator}source=${encodeURIComponent(toml)}`;
 }
 
 export async function loadEditorFigments(
@@ -71,54 +74,66 @@ export async function loadEditorFigments(
     signal,
   });
   const body = await readJsonResponse<LoadEditorFigmentsResponse>(response);
+  confirmSourceRevision(SOURCE, body);
   return body.figments;
 }
 
 export async function saveEditorFigmentField(
   request: SaveEditorFigmentFieldRequest,
 ): Promise<SaveEditorFigmentFieldResponse> {
-  const response = await fetch(withTomlParam(`/api/editor/figments/${request.id}`), {
+  return queueSourceSave(SOURCE, async () => {
+    const response = await fetch(withTomlParam(`/api/editor/figments/${request.id}`), {
     method: "PATCH",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(request),
+      body: JSON.stringify(withExpectedSourceRevision(SOURCE, request)),
+    });
+    const body = await readJsonResponse<SaveEditorFigmentFieldResponse>(response);
+    confirmSourceRevision(SOURCE, body);
+    return body;
   });
-
-  return readJsonResponse<SaveEditorFigmentFieldResponse>(response);
 }
 
 export async function saveEditorFigmentArt(
   request: SaveEditorFigmentArtRequest,
 ): Promise<SaveEditorFigmentFieldResponse> {
-  const response = await fetch(withTomlParam(`/api/editor/figments/${request.id}`), {
+  return queueSourceSave(SOURCE, async () => {
+    const response = await fetch(withTomlParam(`/api/editor/figments/${request.id}`), {
     method: "PATCH",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ id: request.id, field: "art", value: request.art }),
+      body: JSON.stringify(withExpectedSourceRevision(SOURCE, {
+        id: request.id, field: "art", value: request.art,
+      })),
+    });
+    const body = await readJsonResponse<SaveEditorFigmentFieldResponse>(response);
+    confirmSourceRevision(SOURCE, body);
+    return body;
   });
-
-  return readJsonResponse<SaveEditorFigmentFieldResponse>(response);
 }
 
 export async function saveEditorFigmentImageNumber(
   request: SaveEditorFigmentImageNumberRequest,
 ): Promise<SaveEditorFigmentFieldResponse> {
-  const response = await fetch(withTomlParam(`/api/editor/figments/${request.id}`), {
+  return queueSourceSave(SOURCE, async () => {
+    const response = await fetch(withTomlParam(`/api/editor/figments/${request.id}`), {
     method: "PATCH",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
+      body: JSON.stringify(withExpectedSourceRevision(SOURCE, {
       id: request.id,
       field: "image-number",
       value: request.imageNumber,
-    }),
+      })),
+    });
+    const body = await readJsonResponse<SaveEditorFigmentFieldResponse>(response);
+    confirmSourceRevision(SOURCE, body);
+    return body;
   });
-
-  return readJsonResponse<SaveEditorFigmentFieldResponse>(response);
 }

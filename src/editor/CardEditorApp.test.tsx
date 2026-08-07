@@ -1105,6 +1105,33 @@ describe("CardEditorApp", () => {
     });
   });
 
+  it("hides per-card tide editing from the focused editor for a RON source", async () => {
+    window.history.pushState(null, "", "/editor?artedit=1&source=cards.ron");
+    const { container, root } = await mountLoadedApp([
+      makeEditorCard({ id: "card-id-1" }),
+    ]);
+    const cardButton = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"] [role="button"]',
+    );
+    if (cardButton === null) {
+      throw new Error("Missing art-edit card button");
+    }
+
+    act(() => {
+      cardButton.click();
+    });
+
+    expect(
+      Array.from(container.querySelectorAll("button")).some(
+        (button) => button.textContent?.trim() === "Tide",
+      ),
+    ).toBe(false);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("keeps a newly saved art image when a later crop save returns an older card snapshot", async () => {
     window.history.pushState(null, "", "/editor?artedit=1");
     const imageSave =

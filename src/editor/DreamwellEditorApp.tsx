@@ -248,7 +248,7 @@ export default function DreamwellEditorApp({
 
   const activeTomlLabel = useMemo(() => {
     const param = editorTomlParam();
-    const path = param ?? "dreamwell.toml";
+    const path = param ?? "dreamwell.ron";
     const fileName = path.split(/[\\/]/u).pop();
     return fileName !== undefined && fileName !== "" ? fileName : path;
   }, []);

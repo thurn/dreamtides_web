@@ -38,6 +38,12 @@ logs/
 .DS_Store
 .claude/worktrees
 .worktrees/
+.game-data-stage-*/
+.game-data-transactions/
+.game-data-transaction.json
+.game-data-transaction.json.tmp-*
+.game-data.lock
+tools/game-data/target/
 merchant-metric-report.json
 .superpowers/
 # Default output directory for scripts/mobile-screenshot.mjs
@@ -46,3 +52,32 @@ artifacts/journey-desktop-screenshots/
 artifacts/coop-fuzz/
 
 cumulus/Assets/ThirdParty/
+
+# Generated compatibility data. Canonical game data is authored in the paired
+# manifest-declared RON files.
+data/exploration_candidates.toml
+data/tabula/affiliations.toml
+data/tabula/apollyon_incarnations.toml
+data/tabula/atlas.toml
+data/tabula/augury.toml
+data/tabula/cards.toml
+data/tabula/cards.tags.toml
+data/tabula/cards.tides.toml
+data/tabula/draft.toml
+data/tabula/dream_avatars.toml
+data/tabula/dream_guides.toml
+data/tabula/dreamscapes.toml
+data/tabula/dreamsign_profiles.toml
+data/tabula/dreamsign_signatures.toml
+data/tabula/dreamsigns.toml
+data/tabula/dreamsigns.tags.toml
+data/tabula/dreamwell.toml
+data/tabula/economy.toml
+data/tabula/exploration.toml
+data/tabula/figments.toml
+data/tabula/glossary.toml
+data/tabula/opponents.toml
+data/tabula/reward_selection.toml
+data/tabula/sites.toml
+data/tabula/tutorial.toml
+data/tabula/tutorial_journey_pool.toml

@@ -1,0 +1,702 @@
+use std::collections::BTreeSet;
+
+use anyhow::{Result, bail};
+use indexmap::IndexMap;
+use serde::{Deserialize, Serialize};
+
+macro_rules! string_enum {
+    ($name:ident { $($variant:ident => $value:literal),+ $(,)? }) => {
+        #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
+        pub enum $name { $($variant),+ }
+        impl $name {
+            pub(crate) fn as_compat(self) -> &'static str {
+                match self { $(Self::$variant => $value),+ }
+            }
+            #[allow(dead_code)]
+            pub(crate) fn from_compat(value: &str) -> Option<Self> {
+                match value { $($value => Some(Self::$variant)),+, _ => None }
+            }
+        }
+    };
+}
+
+string_enum!(EffectKind {
+    PurgeAndCopy => "purge-and-copy", GainDreamsign => "gain-dreamsign",
+    GainCard => "gain-card", TransfigureSelected => "transfigure-selected",
+    PurgeSelected => "purge-selected", ChoosePack => "choose-pack",
+    DraftCard => "draft-card", PurgeForEssence => "purge-for-essence",
+    ChangeSubtypeSelected => "change-subtype-selected", ChangeSubtypeAll => "change-subtype-all",
+    TakeCards => "take-cards", ReplaceSelectedWithCard => "replace-selected-with-card",
+    ReplaceSelected => "replace-selected", GainNightmareAndCard => "gain-nightmare-and-card",
+    GainRandomCards => "gain-random-cards", TransfigureFixedSelected => "transfigure-fixed-selected",
+    GainOfferedCard => "gain-offered-card", TransfigureNextDraftOrShop => "transfigure-next-draft-or-shop",
+    GainEssencePerCard => "gain-essence-per-card", IncreaseSparkAll => "increase-spark-all",
+    GainRandomDreamsign => "gain-random-dreamsign", PurgeDreamsignForEssence => "purge-dreamsign-for-essence",
+    MakeFastAll => "make-fast-all", ReduceCostAllAndGainNightmares => "reduce-cost-all-and-gain-nightmares",
+    CopySelectedCard => "copy-selected-card", CopySelectedCards => "copy-selected-cards",
+    CopyOfferedDeckCard => "copy-offered-deck-card", NextBattleOpeningHand => "next-battle-opening-hand",
+    NextBattleStartingEnergy => "next-battle-starting-energy",
+    NextBattleSmallerHandAndCostDiscount => "next-battle-smaller-hand-and-cost-discount",
+    ChooseDreamAvatar => "choose-dream-avatar",
+    PurgeDuplicatesAndGrantReclaim => "purge-duplicates-and-grant-reclaim",
+    TransfiguredCardDraft => "transfigured-card-draft", AddSite => "add-site"
+});
+
+string_enum!(Mechanic {
+    PurgeAndDuplicate => "purge-and-duplicate", GainDreamsign => "gain-dreamsign",
+    GainCard => "gain-card", TransfigureDeckEntry => "transfigure-deck-entry",
+    PurgeDeckEntry => "purge-deck-entry", PackChooser => "pack-chooser",
+    CatalogCardChooser => "catalog-card-chooser", PurgeForEssence => "purge-for-essence",
+    ChangeEntrySubtype => "change-entry-subtype", ChangeDeckSubtype => "change-deck-subtype",
+    ReplaceDeckEntry => "replace-deck-entry", GainNightmareAndCard => "gain-nightmare-and-card",
+    NextSiteTransfiguration => "next-site-transfiguration",
+    GainEssenceByDeckPredicate => "gain-essence-by-deck-predicate",
+    IncreaseDeckSpark => "increase-deck-spark", PurgeDreamsignForEssence => "purge-dreamsign-for-essence",
+    MakeDeckFast => "make-deck-fast", ReduceDeckCostAndAddNightmares => "reduce-deck-cost-and-add-nightmares",
+    DuplicateDeckEntry => "duplicate-deck-entry", NextBattleModifier => "next-battle-modifier",
+    ChooseDreamAvatar => "choose-dream-avatar",
+    PurgeDuplicatesAndGrantReclaim => "purge-duplicates-and-grant-reclaim",
+    TransfiguredCardChooser => "transfigured-card-chooser", AddSite => "add-site"
+});
+
+string_enum!(SelectionPolicy {
+    Fixed => "fixed", TransfigurationValue => "transfiguration-value",
+    PurgeMisfit => "purge-misfit", CardBundle => "card-bundle", CardFit => "card-fit",
+    DeckEntryCentrality => "deck-entry-centrality", CardFitQuality => "card-fit-quality",
+    DreamsignMatch => "dreamsign-match", DuplicateValue => "duplicate-value",
+    Uniform => "uniform", SiteUniform => "site-uniform"
+});
+
+string_enum!(FieldKey {
+    DreamsignId => "dreamsignId", CardId => "cardId", Predicate => "predicate",
+    Count => "count", PackCount => "packCount", PackSize => "packSize",
+    OfferCount => "offerCount", EssencePerSpark => "essencePerSpark", Subtype => "subtype",
+    SubtypeOptions => "subtypeOptions", NightmareCount => "nightmareCount",
+    Transfiguration => "transfiguration", EssencePerCard => "essencePerCard",
+    SparkBonus => "sparkBonus", Essence => "essence", EnergyCostReduction => "energyCostReduction"
+});
+
+string_enum!(Control {
+    Dreamsign => "dreamsign", Card => "card", Predicate => "predicate", Number => "number",
+    Subtype => "subtype", SubtypeOptions => "subtype-options", Transfiguration => "transfiguration"
+});
+
+string_enum!(Resource { Essence => "essence", Spark => "spark", Energy => "energy" });
+
+string_enum!(Predicate {
+    CheapCharacter => "cheap-character", Survivor => "survivor", SpiritAnimal => "spirit-animal",
+    Character => "character", Warrior => "warrior", Event => "event"
+});
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct ExplorationCatalog {
+    pub actions_per_encounter: u32,
+    pub effects: Vec<EffectDefinition>,
+    pub encounters: Vec<EncounterDefinition>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct EffectDefinition {
+    pub kind: EffectKind,
+    pub label: String,
+    pub mechanic: Mechanic,
+    pub templates: Vec<i64>,
+    pub followup: Followup,
+    #[serde(default)]
+    pub selection_policy: Option<SelectionPolicyDefinition>,
+    #[serde(default)]
+    pub fields: Vec<FieldDefinition>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct Followup {
+    pub title: String,
+    pub subtitle: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct SelectionPolicyDefinition {
+    pub default: SelectionPolicy,
+    pub allowed: Vec<SelectionPolicy>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct FieldDefinition {
+    pub key: FieldKey,
+    pub label: String,
+    pub control: Control,
+    #[serde(default)]
+    pub optional: bool,
+    #[serde(default)]
+    pub default: Option<DefaultValue>,
+    #[serde(default)]
+    pub minimum: Option<i64>,
+    #[serde(default)]
+    pub step: Option<i64>,
+    #[serde(default)]
+    pub resource: Option<Resource>,
+    #[serde(default)]
+    pub templates: Option<Vec<i64>>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+pub enum DefaultValue {
+    Integer(i64),
+    Text(String),
+    Boolean(bool),
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct EncounterDefinition {
+    pub card_id: String,
+    pub prose: String,
+    pub actions: Vec<ActionDefinition>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct ActionDefinition {
+    pub label: String,
+    pub id: String,
+    pub effect_text: String,
+    pub effect: ActionEffect,
+    pub template: TemplateInvocation,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct TemplateInvocation {
+    pub id: i64,
+    #[serde(default)]
+    pub variables: IndexMap<String, DynamicValue>,
+    #[serde(default)]
+    pub selections: IndexMap<String, DynamicValue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(untagged)]
+pub enum DynamicValue {
+    String(String),
+    Integer(i64),
+    Boolean(bool),
+    Object(IndexMap<String, DynamicValue>),
+    Array(Vec<DynamicValue>),
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+pub enum ActionEffect {
+    GainOfferedCard {
+        predicate: Predicate,
+        count: Option<i64>,
+    },
+    TransfigureSelected {
+        count: i64,
+    },
+    PurgeSelected {
+        predicate: Option<Predicate>,
+        count: Option<i64>,
+    },
+    GainRandomCards {
+        predicate: Predicate,
+        count: i64,
+    },
+    DraftCard {
+        predicate: Predicate,
+        count: i64,
+        offer_count: i64,
+    },
+    ChangeSubtypeSelected {
+        predicate: Option<Predicate>,
+        subtype: String,
+    },
+    ChangeSubtypeAll {
+        subtype_options: Vec<String>,
+    },
+    GainCard {
+        card_id: String,
+    },
+    GainDreamsign {
+        dreamsign_id: String,
+    },
+    GainEssencePerCard {
+        predicate: Predicate,
+        essence_per_card: i64,
+    },
+    ChoosePack {
+        predicate: Predicate,
+        pack_count: i64,
+        pack_size: i64,
+    },
+    IncreaseSparkAll {
+        spark_bonus: i64,
+    },
+    MakeFastAll,
+    ReduceCostAllAndGainNightmares {
+        energy_cost_reduction: i64,
+        nightmare_count: i64,
+    },
+    PurgeAndCopy,
+    TransfigureFixedSelected {
+        predicate: Option<Predicate>,
+        transfiguration: String,
+    },
+    GainRandomDreamsign,
+    PurgeDreamsignForEssence {
+        essence: i64,
+    },
+    CopySelectedCard {
+        predicate: Option<Predicate>,
+        count: i64,
+    },
+    CopySelectedCards {
+        count: i64,
+    },
+    CopyOfferedDeckCard {
+        offer_count: i64,
+    },
+    NextBattleOpeningHand {
+        count: i64,
+    },
+    NextBattleStartingEnergy {
+        count: i64,
+    },
+    NextBattleSmallerHandAndCostDiscount,
+    ChooseDreamAvatar {
+        offer_count: i64,
+    },
+    PurgeDuplicatesAndGrantReclaim,
+    TakeCards {
+        predicate: Predicate,
+        offer_count: i64,
+    },
+    ReplaceSelectedWithCard {
+        card_id: String,
+    },
+    ReplaceSelected {
+        predicate: Predicate,
+    },
+    GainNightmareAndCard {
+        card_id: String,
+        nightmare_count: i64,
+    },
+    TransfigureNextDraftOrShop,
+    TransfiguredCardDraft {
+        predicate: Predicate,
+        offer_count: i64,
+    },
+    PurgeForEssence {
+        essence_per_spark: i64,
+    },
+    AddSite,
+}
+
+pub fn lower(catalog: ExplorationCatalog) -> Result<toml::Value> {
+    let mut effect_kinds = BTreeSet::new();
+    let effects = catalog
+        .effects
+        .into_iter()
+        .map(|effect| {
+            if !effect_kinds.insert(effect.kind.as_compat()) {
+                bail!(
+                    "duplicate Exploration effect kind: {}",
+                    effect.kind.as_compat()
+                );
+            }
+            Ok(toml::Value::Table(lower_effect_definition(effect)))
+        })
+        .collect::<Result<Vec<_>>>()?;
+
+    let mut encounter_ids = BTreeSet::new();
+    let mut action_ids = BTreeSet::new();
+    let encounters = catalog
+        .encounters
+        .into_iter()
+        .map(|encounter| {
+            if !encounter_ids.insert(encounter.card_id.clone()) {
+                bail!(
+                    "duplicate Exploration encounter card UUID: {}",
+                    encounter.card_id
+                );
+            }
+            let actions = encounter
+                .actions
+                .into_iter()
+                .map(|action| {
+                    if !action_ids.insert(action.id.clone()) {
+                        bail!("duplicate Exploration action id: {}", action.id);
+                    }
+                    Ok(toml::Value::Table(lower_action(action)))
+                })
+                .collect::<Result<Vec<_>>>()?;
+            Ok(toml::Value::Table(toml::map::Map::from_iter([
+                ("card-id".into(), encounter.card_id.into()),
+                ("prose".into(), encounter.prose.into()),
+                ("action".into(), toml::Value::Array(actions)),
+            ])))
+        })
+        .collect::<Result<Vec<_>>>()?;
+
+    Ok(toml::Value::Table(toml::map::Map::from_iter([
+        ("schema-version".into(), 1_i64.into()),
+        (
+            "encounters".into(),
+            toml::Value::Table(toml::map::Map::from_iter([(
+                "actions-per-encounter".into(),
+                i64::from(catalog.actions_per_encounter).into(),
+            )])),
+        ),
+        ("effect-kind".into(), toml::Value::Array(effects)),
+        ("encounter".into(), toml::Value::Array(encounters)),
+    ])))
+}
+
+fn lower_effect_definition(effect: EffectDefinition) -> toml::map::Map<String, toml::Value> {
+    let mut output = toml::map::Map::new();
+    output.insert("kind".into(), effect.kind.as_compat().into());
+    output.insert("label".into(), effect.label.into());
+    output.insert("template-ids".into(), integers(effect.templates));
+    output.insert(
+        "canonical-mechanic-id".into(),
+        effect.mechanic.as_compat().into(),
+    );
+    if let Some(policy) = effect.selection_policy {
+        output.insert(
+            "default-selection-policy-id".into(),
+            policy.default.as_compat().into(),
+        );
+        output.insert(
+            "allowed-selection-policy-ids".into(),
+            toml::Value::Array(
+                policy
+                    .allowed
+                    .into_iter()
+                    .map(|value| value.as_compat().into())
+                    .collect(),
+            ),
+        );
+    }
+    output.insert(
+        "copy".into(),
+        toml::Value::Table(toml::map::Map::from_iter([
+            ("followup-title".into(), effect.followup.title.into()),
+            ("followup-subtitle".into(), effect.followup.subtitle.into()),
+        ])),
+    );
+    if !effect.fields.is_empty() {
+        output.insert(
+            "field".into(),
+            toml::Value::Array(
+                effect
+                    .fields
+                    .into_iter()
+                    .map(|field| {
+                        let mut value = toml::map::Map::new();
+                        value.insert("key".into(), field.key.as_compat().into());
+                        value.insert("label".into(), field.label.into());
+                        value.insert("control".into(), field.control.as_compat().into());
+                        if field.optional {
+                            value.insert("optional".into(), true.into());
+                        }
+                        if let Some(default) = field.default {
+                            value.insert(
+                                "default-value".into(),
+                                match default {
+                                    DefaultValue::Integer(value) => value.into(),
+                                    DefaultValue::Text(value) => value.into(),
+                                    DefaultValue::Boolean(value) => value.into(),
+                                },
+                            );
+                        }
+                        if let Some(minimum) = field.minimum {
+                            value.insert("min".into(), minimum.into());
+                        }
+                        if let Some(step) = field.step {
+                            value.insert("step".into(), step.into());
+                        }
+                        if let Some(resource) = field.resource {
+                            value.insert("resource".into(), resource.as_compat().into());
+                        }
+                        if let Some(templates) = field.templates {
+                            value.insert("template-ids".into(), integers(templates));
+                        }
+                        toml::Value::Table(value)
+                    })
+                    .collect(),
+            ),
+        );
+    }
+    output
+}
+
+fn lower_action(action: ActionDefinition) -> toml::map::Map<String, toml::Value> {
+    let mut output = toml::map::Map::new();
+    output.insert("id".into(), action.id.into());
+    output.insert("label".into(), action.label.into());
+    output.insert("effect-text".into(), action.effect_text.into());
+    output.insert("template-id".into(), action.template.id.into());
+    output.insert(
+        "template-variables".into(),
+        dynamic_map(action.template.variables),
+    );
+    if !action.template.selections.is_empty() {
+        output.insert("selection".into(), dynamic_map(action.template.selections));
+    }
+    lower_action_effect(action.effect, &mut output);
+    output
+}
+
+fn lower_action_effect(effect: ActionEffect, output: &mut toml::map::Map<String, toml::Value>) {
+    macro_rules! kind {
+        ($kind:ident) => {
+            output.insert("effect-kind".into(), EffectKind::$kind.as_compat().into());
+        };
+    }
+    macro_rules! int {
+        ($key:literal, $value:expr) => {
+            output.insert($key.into(), toml::Value::Integer($value));
+        };
+    }
+    macro_rules! text {
+        ($key:literal, $value:expr) => {
+            output.insert($key.into(), toml::Value::String($value));
+        };
+    }
+    macro_rules! predicate {
+        ($value:expr) => {
+            output.insert("predicate".into(), $value.as_compat().into());
+        };
+    }
+    match effect {
+        ActionEffect::GainOfferedCard {
+            predicate: value,
+            count,
+        } => {
+            kind!(GainOfferedCard);
+            predicate!(value);
+            if let Some(value) = count {
+                int!("count", value);
+            }
+        }
+        ActionEffect::TransfigureSelected { count } => {
+            kind!(TransfigureSelected);
+            int!("count", count);
+        }
+        ActionEffect::PurgeSelected {
+            predicate: value,
+            count,
+        } => {
+            kind!(PurgeSelected);
+            if let Some(value) = value {
+                predicate!(value);
+            }
+            if let Some(value) = count {
+                int!("count", value);
+            }
+        }
+        ActionEffect::GainRandomCards {
+            predicate: value,
+            count,
+        } => {
+            kind!(GainRandomCards);
+            predicate!(value);
+            int!("count", count);
+        }
+        ActionEffect::DraftCard {
+            predicate: value,
+            count,
+            offer_count,
+        } => {
+            kind!(DraftCard);
+            predicate!(value);
+            int!("count", count);
+            int!("offer-count", offer_count);
+        }
+        ActionEffect::ChangeSubtypeSelected {
+            predicate: value,
+            subtype,
+        } => {
+            kind!(ChangeSubtypeSelected);
+            if let Some(value) = value {
+                predicate!(value);
+            }
+            text!("subtype", subtype);
+        }
+        ActionEffect::ChangeSubtypeAll { subtype_options } => {
+            kind!(ChangeSubtypeAll);
+            output.insert(
+                "subtype-options".into(),
+                toml::Value::Array(subtype_options.into_iter().map(Into::into).collect()),
+            );
+        }
+        ActionEffect::GainCard { card_id } => {
+            kind!(GainCard);
+            text!("card-id", card_id);
+        }
+        ActionEffect::GainDreamsign { dreamsign_id } => {
+            kind!(GainDreamsign);
+            text!("dreamsign-id", dreamsign_id);
+        }
+        ActionEffect::GainEssencePerCard {
+            predicate: value,
+            essence_per_card,
+        } => {
+            kind!(GainEssencePerCard);
+            predicate!(value);
+            int!("essence-per-card", essence_per_card);
+        }
+        ActionEffect::ChoosePack {
+            predicate: value,
+            pack_count,
+            pack_size,
+        } => {
+            kind!(ChoosePack);
+            predicate!(value);
+            int!("pack-count", pack_count);
+            int!("pack-size", pack_size);
+        }
+        ActionEffect::IncreaseSparkAll { spark_bonus } => {
+            kind!(IncreaseSparkAll);
+            int!("spark-bonus", spark_bonus);
+        }
+        ActionEffect::MakeFastAll => {
+            kind!(MakeFastAll);
+        }
+        ActionEffect::ReduceCostAllAndGainNightmares {
+            energy_cost_reduction,
+            nightmare_count,
+        } => {
+            kind!(ReduceCostAllAndGainNightmares);
+            int!("energy-cost-reduction", energy_cost_reduction);
+            int!("nightmare-count", nightmare_count);
+        }
+        ActionEffect::PurgeAndCopy => {
+            kind!(PurgeAndCopy);
+        }
+        ActionEffect::TransfigureFixedSelected {
+            predicate: value,
+            transfiguration,
+        } => {
+            kind!(TransfigureFixedSelected);
+            if let Some(value) = value {
+                predicate!(value);
+            }
+            text!("transfiguration", transfiguration);
+        }
+        ActionEffect::GainRandomDreamsign => {
+            kind!(GainRandomDreamsign);
+        }
+        ActionEffect::PurgeDreamsignForEssence { essence } => {
+            kind!(PurgeDreamsignForEssence);
+            int!("essence", essence);
+        }
+        ActionEffect::CopySelectedCard {
+            predicate: value,
+            count,
+        } => {
+            kind!(CopySelectedCard);
+            if let Some(value) = value {
+                predicate!(value);
+            }
+            int!("count", count);
+        }
+        ActionEffect::CopySelectedCards { count } => {
+            kind!(CopySelectedCards);
+            int!("count", count);
+        }
+        ActionEffect::CopyOfferedDeckCard { offer_count } => {
+            kind!(CopyOfferedDeckCard);
+            int!("offer-count", offer_count);
+        }
+        ActionEffect::NextBattleOpeningHand { count } => {
+            kind!(NextBattleOpeningHand);
+            int!("count", count);
+        }
+        ActionEffect::NextBattleStartingEnergy { count } => {
+            kind!(NextBattleStartingEnergy);
+            int!("count", count);
+        }
+        ActionEffect::NextBattleSmallerHandAndCostDiscount => {
+            kind!(NextBattleSmallerHandAndCostDiscount);
+        }
+        ActionEffect::ChooseDreamAvatar { offer_count } => {
+            kind!(ChooseDreamAvatar);
+            int!("offer-count", offer_count);
+        }
+        ActionEffect::PurgeDuplicatesAndGrantReclaim => {
+            kind!(PurgeDuplicatesAndGrantReclaim);
+        }
+        ActionEffect::TakeCards {
+            predicate: value,
+            offer_count,
+        } => {
+            kind!(TakeCards);
+            predicate!(value);
+            int!("offer-count", offer_count);
+        }
+        ActionEffect::ReplaceSelectedWithCard { card_id } => {
+            kind!(ReplaceSelectedWithCard);
+            text!("card-id", card_id);
+        }
+        ActionEffect::ReplaceSelected { predicate: value } => {
+            kind!(ReplaceSelected);
+            predicate!(value);
+        }
+        ActionEffect::GainNightmareAndCard {
+            card_id,
+            nightmare_count,
+        } => {
+            kind!(GainNightmareAndCard);
+            text!("card-id", card_id);
+            int!("nightmare-count", nightmare_count);
+        }
+        ActionEffect::TransfigureNextDraftOrShop => {
+            kind!(TransfigureNextDraftOrShop);
+        }
+        ActionEffect::TransfiguredCardDraft {
+            predicate: value,
+            offer_count,
+        } => {
+            kind!(TransfiguredCardDraft);
+            predicate!(value);
+            int!("offer-count", offer_count);
+        }
+        ActionEffect::PurgeForEssence { essence_per_spark } => {
+            kind!(PurgeForEssence);
+            int!("essence-per-spark", essence_per_spark);
+        }
+        ActionEffect::AddSite => {
+            kind!(AddSite);
+        }
+    }
+}
+
+fn dynamic_map(values: IndexMap<String, DynamicValue>) -> toml::Value {
+    toml::Value::Table(
+        values
+            .into_iter()
+            .map(|(key, value)| (key, dynamic_value(value)))
+            .collect(),
+    )
+}
+
+fn dynamic_value(value: DynamicValue) -> toml::Value {
+    match value {
+        DynamicValue::String(value) => value.into(),
+        DynamicValue::Integer(value) => value.into(),
+        DynamicValue::Boolean(value) => value.into(),
+        DynamicValue::Object(value) => dynamic_map(value),
+        DynamicValue::Array(value) => {
+            toml::Value::Array(value.into_iter().map(dynamic_value).collect())
+        }
+    }
+}
+
+fn integers(values: Vec<i64>) -> toml::Value {
+    toml::Value::Array(values.into_iter().map(Into::into).collect())
+}

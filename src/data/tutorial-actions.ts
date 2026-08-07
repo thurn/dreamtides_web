@@ -15,6 +15,7 @@ import type {
   TutorialFeaturedCardRole,
   TutorialFeaturedCards,
 } from "../types/tutorial";
+import { confirmSourceRevision } from "../editor/source-revision";
 import { parseTutorialBattleAiActionOverrides } from "../types/tutorial-ai-action-overrides";
 import semanticPlayCardIds from "../battle/semantic-play-card-ids.json";
 import { glossaryEntry } from "./glossary";
@@ -1046,6 +1047,7 @@ export async function loadTutorialConfiguration(
     throw new Error("Tutorial data response must be an object.");
   }
   const record = body as Record<string, unknown>;
+  if (source === "editor") confirmSourceRevision("tutorial", record);
   if (
     typeof record.contentHash !== "string" ||
     !SHA256_PATTERN.test(record.contentHash) ||

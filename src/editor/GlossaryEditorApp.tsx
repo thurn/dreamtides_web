@@ -329,7 +329,7 @@ export default function GlossaryEditorApp({
           <h1>Info Card Glossary</h1>
           <p>Author the reusable explanations players discover on hover or press.</p>
         </div>
-        <span data-glossary-file="">data/tabula/glossary.toml</span>
+        <span data-glossary-file="">data/tabula/glossary.ron</span>
       </header>
 
       {loadState.kind === "loading" ? (
@@ -519,9 +519,9 @@ export default function GlossaryEditorApp({
                     <div className="glossary-editor-save-status">
                       <p role="status" data-save-state={saveState.kind}>
                         {saveState.kind === "saving"
-                          ? "Saving to glossary.toml…"
+                          ? "Saving to glossary.ron…"
                           : saveState.kind === "saved"
-                          ? "Saved to glossary.toml"
+                          ? "Saved to glossary.ron"
                           : saveState.kind === "error"
                             ? saveState.message
                             : dirty

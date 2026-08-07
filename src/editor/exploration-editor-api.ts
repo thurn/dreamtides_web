@@ -6,16 +6,42 @@ import type {
 } from "./exploration-editor-types";
 import type { EncounterTemplateHealth } from "./exploration-candidates-editor-types";
 
+let currentSourceRevision: string | undefined;
+let saveQueue: Promise<void> = Promise.resolve();
+let pausedSaveError: Error | null = null;
+
+function rememberSourceRevision(data: { sourceRevision?: string }): void {
+  if (data.sourceRevision !== undefined) currentSourceRevision = data.sourceRevision;
+}
+
+function queueSave<T>(operation: () => Promise<T>): Promise<T> {
+  const queued = saveQueue.then(async () => {
+    if (pausedSaveError !== null) throw pausedSaveError;
+    try {
+      return await operation();
+    } catch (error) {
+      const saveError = error instanceof Error ? error : new Error(String(error));
+      pausedSaveError = saveError;
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("exploration-editor:save-failed"));
+      }
+      throw saveError;
+    }
+  });
+  saveQueue = queued.then(() => undefined, () => undefined);
+  return queued;
+}
+
 async function readResponse<T>(response: Response): Promise<T> {
   const text = await response.text();
   const body = text === "" ? null : JSON.parse(text) as unknown;
   if (!response.ok) {
     const error = body !== null && typeof body === "object" && "error" in body
-      ? body.error as { code?: string; message?: string }
+      ? body.error as { code?: string; message?: string; [key: string]: unknown }
       : undefined;
     throw new EditorApiRequestError({
       code: error?.code,
-      details: undefined,
+      details: error,
       message: error?.message ?? `Exploration editor API request failed with ${String(response.status)}`,
       status: response.status,
     });
@@ -24,13 +50,18 @@ async function readResponse<T>(response: Response): Promise<T> {
 }
 
 async function patch(path: string, body: unknown) {
-  return readResponse<{ data: ExplorationEditorServerData; clientRevision: number }>(
-    await fetch(path, {
+  return queueSave(async () => {
+    const result = await readResponse<{
+      data: ExplorationEditorServerData;
+      clientRevision: number;
+    }>(await fetch(path, {
       method: "PATCH",
       headers: { Accept: "application/json", "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }),
-  );
+      body: JSON.stringify({ ...body as object, expectedSourceRevision: currentSourceRevision }),
+    }));
+    rememberSourceRevision(result.data);
+    return result;
+  });
 }
 
 export const explorationEditorClient: ExplorationEditorClient = {
@@ -39,7 +70,10 @@ export const explorationEditorClient: ExplorationEditorClient = {
       headers: { Accept: "application/json" },
       signal,
     });
-    return readResponse<ExplorationEditorLoadResult>(response);
+    const result = await readResponse<ExplorationEditorLoadResult>(response);
+    rememberSourceRevision(result);
+    pausedSaveError = null;
+    return result;
   },
 
   async loadTemplateHealth(signal) {

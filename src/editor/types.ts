@@ -168,6 +168,7 @@ export type EditorSaveState = Record<string, EditorFieldSaveState>;
 
 export interface LoadEditorCardsResponse {
   cards: EditorCardRecord[];
+  sourceRevision?: string;
 }
 
 export interface SaveEditorCardFieldRequest {
@@ -203,6 +204,7 @@ export interface EditorSaveTiming {
 export interface SaveEditorCardFieldResponse {
   card: EditorCardRecord;
   clientRevision?: number;
+  sourceRevision?: string;
   timing: EditorSaveTiming;
 }
 
@@ -216,6 +218,7 @@ export interface EditorApiErrorBody {
 
 export interface LoadEditorTagsResponse {
   tags: EditorTag[];
+  sourceRevision?: string;
 }
 
 export interface SaveEditorCardTagsRequest {
@@ -225,11 +228,13 @@ export interface SaveEditorCardTagsRequest {
 
 export interface SaveEditorTagRegistryRequest {
   tags: EditorTag[];
+  sourceRevision?: string;
 }
 
 export interface SaveEditorTagRegistryResponse {
   tags: EditorTag[];
   cards: EditorCardRecord[];
+  sourceRevision?: string;
 }
 
 export interface SaveEditorCardTidesRequest {
@@ -239,6 +244,7 @@ export interface SaveEditorCardTidesRequest {
 
 export interface SaveEditorTideRegistryRequest {
   tides: EditorTag[];
+  sourceRevision?: string;
 }
 
 export interface EditorApiClient {

@@ -1,4 +1,7 @@
 import type { GlossaryCatalogEntry } from "../data/glossary";
+import { confirmSourceRevision, queueSourceSave, withExpectedSourceRevision } from "./source-revision";
+
+const SOURCE = "glossary";
 
 export interface GlossaryEntryEdit {
   readonly id: string;
@@ -23,7 +26,7 @@ async function readResponse<T>(response: Response): Promise<T> {
   return body;
 }
 
-/** Load the complete TOML-backed Info Card glossary. */
+/** Load the complete RON-authored Info Card glossary. */
 export async function loadGlossaryEntries(
   signal?: AbortSignal,
 ): Promise<GlossaryCatalogEntry[]> {
@@ -32,6 +35,7 @@ export async function loadGlossaryEntries(
     signal,
   });
   const body = await readResponse<{ entries: GlossaryCatalogEntry[] }>(response);
+  confirmSourceRevision(SOURCE, body);
   return body.entries;
 }
 
@@ -39,7 +43,8 @@ export async function loadGlossaryEntries(
 export async function saveGlossaryEntry(
   entry: GlossaryEntryEdit,
 ): Promise<GlossaryCatalogEntry> {
-  const response = await fetch(
+  return queueSourceSave(SOURCE, async () => {
+    const response = await fetch(
     `/api/editor/glossary/${encodeURIComponent(entry.id)}`,
     {
       method: "PATCH",
@@ -47,9 +52,11 @@ export async function saveGlossaryEntry(
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(entry),
+      body: JSON.stringify(withExpectedSourceRevision(SOURCE, entry)),
     },
   );
-  const body = await readResponse<{ entry: GlossaryCatalogEntry }>(response);
-  return body.entry;
+    const body = await readResponse<{ entry: GlossaryCatalogEntry }>(response);
+    confirmSourceRevision(SOURCE, body);
+    return body.entry;
+  });
 }

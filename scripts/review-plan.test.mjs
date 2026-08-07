@@ -10,6 +10,7 @@ describe("fast review plan", () => {
       lintFiles: [],
       shouldCheckRonFormatting: false,
       shouldTypecheck: false,
+      shouldTestGameData: false,
       shouldValidate: false,
       testInputs: [],
     });
@@ -30,6 +31,7 @@ describe("fast review plan", () => {
       ],
       shouldCheckRonFormatting: false,
       shouldTypecheck: true,
+      shouldTestGameData: false,
       shouldValidate: false,
       testInputs: [
         "scripts/cumulus-generated-docs-drift.test.mjs",
@@ -45,6 +47,16 @@ describe("fast review plan", () => {
       shouldTypecheck: false,
       shouldValidate: true,
       testInputs: ["data/tabula/cards.toml"],
+    });
+  });
+
+  it("selects Rust compiler tests for canonical RON and orchestration changes", () => {
+    expect(buildReviewPlan(["data/tabula/cards.ron"])).toMatchObject({
+      shouldTestGameData: true,
+      shouldValidate: true,
+    });
+    expect(buildReviewPlan(["scripts/game-data-pipeline.mjs"])).toMatchObject({
+      shouldTestGameData: true,
     });
   });
 

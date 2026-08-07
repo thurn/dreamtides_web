@@ -20,6 +20,7 @@ interface CardEditorToolbarProps {
   totalCount: number;
   /** How many cards in the whole pool carry the active checkbox tag. */
   checkboxTagCount: number;
+  allowPerCardTides?: boolean;
   onDisplayStateChange: (state: EditorDisplayState) => void;
   onOpenManageTags: () => void;
   onOpenManageTides: () => void;
@@ -114,6 +115,7 @@ export default function CardEditorToolbar({
   visibleCount,
   totalCount,
   checkboxTagCount,
+  allowPerCardTides = true,
   onDisplayStateChange,
   onOpenManageTags,
   onOpenManageTides,
@@ -216,15 +218,17 @@ export default function CardEditorToolbar({
         }
       />
 
-      <ModeToggle
-        active={displayState.tideEditing}
-        icon="🌊"
-        label="Tides"
-        title="Show tide chips with add/remove controls under each card"
-        onToggle={() =>
-          updateDisplayState({ tideEditing: !displayState.tideEditing })
-        }
-      />
+      {allowPerCardTides ? (
+        <ModeToggle
+          active={displayState.tideEditing}
+          icon="🌊"
+          label="Tides"
+          title="Show tide chips with add/remove controls under each card"
+          onToggle={() =>
+            updateDisplayState({ tideEditing: !displayState.tideEditing })
+          }
+        />
+      ) : null}
 
       <ModeToggle
         active={displayState.artEditing}

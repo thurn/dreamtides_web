@@ -1,7 +1,7 @@
 # Journey Meta Progression
 
 Meta progression in dreamtides journeys is an "achievement-based" system. Each
-meta progression reward is defined in TOML with an associated trigger condition
+meta progression reward is defined in RON with an associated trigger condition
 like "win 3 journeys", "win a journey with only Ember cards", "play 500 events",
 etc.
 

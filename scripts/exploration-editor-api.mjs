@@ -1,16 +1,26 @@
-import { resolve } from "node:path";
+import { existsSync } from "node:fs";
+import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
+  previewExplorationTemplateEdit,
   readExplorationEditorData,
   updateExplorationAction,
   updateExplorationProse,
   updateExplorationTemplate,
 } from "./exploration-editor-data.mjs";
+import {
+  sourceRevision,
+  stageAndPublishGameDataEdit,
+} from "./game-data-pipeline.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/exploration";
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
 const TEMPLATE_ID_PATTERN = /^\d+$/u;
+const EXPLORATION_SOURCE_PATHS = [
+  "data/tabula/exploration.ron",
+  "data/templates.json",
+];
 
 function respond(res, status, body) {
   res.writeHead(status, { "Content-Type": "application/json; charset=utf-8" });
@@ -72,10 +82,13 @@ function routeFor(url) {
 }
 
 function statusFor(error) {
-  if (["ENCOUNTER_NOT_FOUND", "ACTION_NOT_FOUND", "TEMPLATE_NOT_FOUND"].includes(error.code)) {
+  if (["ENCOUNTER_NOT_FOUND", "ACTION_NOT_FOUND", "TEMPLATE_NOT_FOUND", "RECORD_NOT_FOUND"].includes(error.code)) {
     return 404;
   }
-  return 400;
+  if (error.code === "STALE_SOURCE") return 409;
+  if (["MALFORMED_SOURCE", "COMPATIBILITY_VALIDATION_FAILED"].includes(error.code)) return 422;
+  if (error.code === "PUBLICATION_FAILED") return 500;
+  return error.statusCode ?? 400;
 }
 
 /** Vite development middleware for the TOML-backed Exploration editor. */
@@ -97,6 +110,9 @@ export function createExplorationEditorApiMiddleware(options = {}) {
       ? {}
       : { explorationJsonPath: options.explorationJsonPath }),
   };
+  const ronBacked = options.explorationTomlPath === undefined &&
+    options.templatesPath === undefined &&
+    existsSync(join(rootDir, "data", "game-data-manifest.ron"));
   let writeQueue = Promise.resolve();
 
   return async function explorationEditorApi(req, res, next) {
@@ -115,7 +131,11 @@ export function createExplorationEditorApiMiddleware(options = {}) {
         return;
       }
       try {
-        respond(res, 200, readExplorationEditorData(dataOptions));
+        const data = readExplorationEditorData(dataOptions);
+        respond(res, 200, ronBacked ? {
+          ...data,
+          sourceRevision: sourceRevision(rootDir, EXPLORATION_SOURCE_PATHS),
+        } : data);
       } catch (error) {
         fail(res, statusFor(error), error.code ?? "INVALID_REQUEST", error.message);
       }
@@ -133,16 +153,44 @@ export function createExplorationEditorApiMiddleware(options = {}) {
       }
       const operation = async () => {
         let data;
+        if (ronBacked && typeof body.expectedSourceRevision !== "string") {
+          const error = new Error("Every Exploration save requires expectedSourceRevision.");
+          error.code = "INVALID_EDIT";
+          throw error;
+        }
         if (route.kind === "template") {
           if (!TEMPLATE_ID_PATTERN.test(route.templateId ?? "")) {
             const error = new Error("Route template id must contain digits only.");
             error.code = "INVALID_TEMPLATE_ID";
             throw error;
           }
-          data = updateExplorationTemplate({
-            templateId: Number(route.templateId),
-            value: body.value,
-          }, dataOptions);
+          const edit = { templateId: Number(route.templateId), value: body.value };
+          if (ronBacked) {
+            const preview = previewExplorationTemplateEdit(edit, dataOptions);
+            const result = await stageAndPublishGameDataEdit({
+              rootDir,
+              dataset: "exploration",
+              expectedSourceRevision: body.expectedSourceRevision,
+              sourcePaths: EXPLORATION_SOURCE_PATHS,
+              stagedFiles: { "data/templates.json": preview.templateSource },
+              operations: [{
+                operation: "replace_template",
+                template_id: edit.templateId,
+                actions: preview.actions.map((entry) => ({
+                  card_id: entry.cardId,
+                  slot: entry.slot,
+                  expected_action_id: entry.expectedActionId,
+                  action: entry.action,
+                })),
+              }],
+            });
+            data = {
+              ...readExplorationEditorData(dataOptions),
+              sourceRevision: result.sourceRevision,
+            };
+          } else {
+            data = updateExplorationTemplate(edit, dataOptions);
+          }
           onChanged({ kind: "template", templateId: Number(route.templateId) });
         } else {
           if (!UUID_PATTERN.test(route.cardId ?? "")) {
@@ -151,7 +199,25 @@ export function createExplorationEditorApiMiddleware(options = {}) {
             throw error;
           }
           if (route.kind === "encounter") {
-            data = updateExplorationProse({ cardId: route.cardId, value: body.value }, dataOptions);
+            if (ronBacked) {
+              const result = await stageAndPublishGameDataEdit({
+                rootDir,
+                dataset: "exploration",
+                expectedSourceRevision: body.expectedSourceRevision,
+                sourcePaths: EXPLORATION_SOURCE_PATHS,
+                operations: [{
+                  operation: "set_encounter_prose",
+                  card_id: route.cardId,
+                  prose: body.value,
+                }],
+              });
+              data = {
+                ...readExplorationEditorData(dataOptions),
+                sourceRevision: result.sourceRevision,
+              };
+            } else {
+              data = updateExplorationProse({ cardId: route.cardId, value: body.value }, dataOptions);
+            }
             onChanged({ kind: "prose", cardId: route.cardId });
           } else {
             if (route.slot !== "0" && route.slot !== "1") {
@@ -159,11 +225,40 @@ export function createExplorationEditorApiMiddleware(options = {}) {
               error.code = "INVALID_ACTION_SLOT";
               throw error;
             }
-            data = updateExplorationAction({
-              cardId: route.cardId,
-              slot: Number(route.slot),
-              action: body.action,
-            }, dataOptions);
+            if (ronBacked) {
+              const current = readExplorationEditorData(dataOptions);
+              const encounter = current.encounters.find((entry) =>
+                entry.cardId.toLowerCase() === route.cardId.toLowerCase());
+              const expectedActionId = encounter?.actions[Number(route.slot)]?.id;
+              if (expectedActionId === undefined) {
+                const error = new Error("The requested Exploration action was not found.");
+                error.code = "RECORD_NOT_FOUND";
+                throw error;
+              }
+              const result = await stageAndPublishGameDataEdit({
+                rootDir,
+                dataset: "exploration",
+                expectedSourceRevision: body.expectedSourceRevision,
+                sourcePaths: EXPLORATION_SOURCE_PATHS,
+                operations: [{
+                  operation: "replace_action",
+                  card_id: route.cardId,
+                  slot: Number(route.slot),
+                  expected_action_id: expectedActionId,
+                  action: body.action,
+                }],
+              });
+              data = {
+                ...readExplorationEditorData(dataOptions),
+                sourceRevision: result.sourceRevision,
+              };
+            } else {
+              data = updateExplorationAction({
+                cardId: route.cardId,
+                slot: Number(route.slot),
+                action: body.action,
+              }, dataOptions);
+            }
             onChanged({ kind: "action", cardId: route.cardId, slot: Number(route.slot) });
           }
         }
@@ -177,12 +272,25 @@ export function createExplorationEditorApiMiddleware(options = {}) {
         ...(body.clientRevision === undefined ? {} : { clientRevision: body.clientRevision }),
       });
     } catch (error) {
-      fail(
-        res,
-        statusFor(error),
-        error.code ?? "INVALID_REQUEST",
-        error instanceof Error ? error.message : "Exploration editor request failed.",
-      );
+      if (error.code === "STALE_SOURCE" && ronBacked) {
+        respond(res, 409, {
+          error: {
+            code: "STALE_SOURCE",
+            message: error.message,
+            currentSourceRevision: error.currentSourceRevision,
+            confirmed: readExplorationEditorData(dataOptions),
+            datasetId: "exploration",
+            source: EXPLORATION_SOURCE_PATHS[0],
+          },
+        });
+      } else {
+        fail(
+          res,
+          statusFor(error),
+          error.code ?? "INVALID_REQUEST",
+          error instanceof Error ? error.message : "Exploration editor request failed.",
+        );
+      }
     }
   };
 }

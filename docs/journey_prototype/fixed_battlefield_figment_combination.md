@@ -28,7 +28,7 @@ to implement it. The battle rules remain authoritative for game semantics.
 
 - [Dreamtides Battle Rules](../battle_rules/battle_rules.md) defines the fixed
   field, materialization, combination, Gain Control, and figment rules.
-- [Figment Catalog](../../data/tabula/figments.toml) authors stable figment
+- [Figment Catalog](../../data/tabula/figments.ron) authors stable figment
   identities, base spark, rules text, keywords, and presentation data.
 - [Journey Prototype](journey_prototype.md) explains the folded room-event
   architecture and current battle model.
@@ -609,7 +609,7 @@ The Legionnaire catalog change preserves its ordinary effective spark:
 - With one other Warrior its controller controls: 1 base plus 1 gives 2.
 - With three other Warriors its controller controls: 1 base plus 3 gives 4.
 
-Generated browser data must be refreshed from `figments.toml`. Tests should
+Generated browser data must be refreshed from `figments.ron`. Tests should
 identify the Legionnaire by UUID and should not key game behavior by its name.
 
 The primary architecture and AI documents must agree with the live
@@ -654,7 +654,7 @@ Automated validation must cover:
 Data and documentation checks must confirm the Legionnaire UUID retains base
 spark 1 and the "each other Warrior you control" rules text after generation.
 
-Tests must use local fixtures rather than relying on unrelated production TOML
+Tests must use local fixtures rather than relying on unrelated production RON
 defaults.
 
 The completed implementation must pass lint, typecheck, and the full test

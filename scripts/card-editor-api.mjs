@@ -26,12 +26,17 @@ import {
   validateCardEdit,
   validateTagRegistry,
 } from "./card-editor-data.mjs";
+import {
+  sourceRevision,
+  stageAndPublishGameDataEdit,
+} from "./game-data-pipeline.mjs";
 
 // API-side facet descriptors bind each card taxonomy to its registry endpoint
 // and the data-layer helpers that read, serialize, and cascade it. Tags and
 // tides share every handler; only this table differs.
 const API_FACETS = {
   tags: {
+    kind: "tags",
     field: "tags",
     basePath: "/api/editor/tags",
     Noun: "Tag",
@@ -43,6 +48,7 @@ const API_FACETS = {
     removeFromCards: removeTagsFromCards,
   },
   tides: {
+    kind: "tides",
     field: "tides",
     basePath: "/api/editor/tides",
     Noun: "Tide",
@@ -60,6 +66,12 @@ const BASE_PATH = "/api/editor/cards";
 const CARD_TOML_PATH = DEFAULT_CARD_TOML_PATH;
 const CARD_TOML_DIR = join("data", "tabula");
 const CARD_JSON_PATH = join("public", "card-data.json");
+const CARD_RON_PATH = join("data", "tabula", "cards.ron");
+const CARD_SOURCE_PATHS = [
+  CARD_RON_PATH,
+  join("data", "tabula", "cards.tags.ron"),
+  join("data", "tabula", "cards.tides.ron"),
+];
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
 
 const defaultFileSystem = {
@@ -107,7 +119,8 @@ function tomlParamFromUrl(url) {
     return null;
   }
 
-  return new URLSearchParams((url ?? "").slice(queryIndex + 1)).get("toml");
+  const params = new URLSearchParams((url ?? "").slice(queryIndex + 1));
+  return params.get("source") ?? params.get("toml");
 }
 
 // Resolve the `toml` query parameter to a repository-relative path that is
@@ -125,7 +138,13 @@ function resolveRequestedTomlPath(rootDir, requested) {
   }
 
   const hasDirectory = trimmed.includes("/") || trimmed.includes("\\");
-  const candidate = hasDirectory ? trimmed : join(CARD_TOML_DIR, trimmed);
+  const normalizedSource = trimmed === "cards" ? "cards.ron" : trimmed;
+  const sourceCandidate = hasDirectory
+    ? normalizedSource
+    : join(CARD_TOML_DIR, normalizedSource);
+  const candidate = sourceCandidate.toLowerCase().endsWith(".ron")
+    ? `${sourceCandidate.slice(0, -4)}.toml`
+    : sourceCandidate;
 
   if (!candidate.toLowerCase().endsWith(".toml")) {
     return { ok: false, message: "The toml file must have a .toml extension." };
@@ -467,6 +486,14 @@ async function handlePatch(req, res, rootDir, cardId, cardTomlPath, fileSystem) 
     return;
   }
 
+  if (
+    body.sourceRevision !== undefined &&
+    typeof body.sourceRevision !== "string"
+  ) {
+    errorResponse(res, 400, "INVALID_REQUEST", "sourceRevision must be a string.");
+    return;
+  }
+
   const validation = validateCardEdit(body.field, body.value);
   if (!validation.ok) {
     errorResponse(res, 400, "INVALID_EDIT", validation.message, {
@@ -495,6 +522,72 @@ async function handlePatch(req, res, rootDir, cardId, cardTomlPath, fileSystem) 
       );
       return;
     }
+  }
+
+
+  if (
+    cardTomlPath === DEFAULT_CARD_TOML_PATH &&
+    fileSystem === defaultFileSystem &&
+    fileSystem.existsSync(join(rootDir, CARD_RON_PATH))
+  ) {
+    if (body.field === "tides") {
+      errorResponse(
+        res,
+        400,
+        "FIELD_NOT_APPLICABLE",
+        "Per-card tides are derived and cannot be edited in the RON source.",
+        { field: body.field, id: cardId },
+      );
+      return;
+    }
+    const totalStart = performance.now();
+    try {
+      const result = await stageAndPublishGameDataEdit({
+        rootDir,
+        dataset: "cards",
+        sourcePaths: CARD_SOURCE_PATHS,
+        expectedSourceRevision: body.sourceRevision,
+        operations: [{
+          operation: "set_card_field",
+          card_id: cardId,
+          field: body.field,
+          value: validation.value,
+        }],
+      });
+      const confirmedCard = readEditorCards({ rootDir, cardTomlPath }).find(
+        (card) => card.id === cardId,
+      );
+      if (confirmedCard === undefined) {
+        cardNotFound(res, cardId);
+        return;
+      }
+      jsonResponse(res, 200, {
+        card: confirmedCard,
+        sourceRevision: result.sourceRevision,
+        ...(Object.hasOwn(body, "clientRevision")
+          ? { clientRevision: body.clientRevision }
+          : {}),
+        timing: { totalMs: elapsedMs(totalStart) },
+      });
+    } catch (error) {
+      const status = error.statusCode ?? (error.code === "STALE_SOURCE" ? 409 : 422);
+      errorResponse(
+        res,
+        status,
+        error.code ?? "COMPATIBILITY_VALIDATION_FAILED",
+        error instanceof Error ? error.message : "RON save failed.",
+        {
+          datasetId: "cards",
+          source: CARD_RON_PATH,
+          id: cardId,
+          field: body.field,
+          ...(error.currentSourceRevision === undefined
+            ? {}
+            : { currentSourceRevision: error.currentSourceRevision }),
+        },
+      );
+    }
+    return;
   }
 
   const totalStart = performance.now();
@@ -600,6 +693,65 @@ async function handleFacetPut(req, res, rootDir, cardTomlPath, fileSystem, facet
   }
   const removedUsed = [...usedNames].filter((name) => !newNames.has(name));
 
+  if (
+    cardTomlPath === DEFAULT_CARD_TOML_PATH &&
+    fileSystem === defaultFileSystem &&
+    fileSystem.existsSync(join(rootDir, CARD_RON_PATH))
+  ) {
+    const current = facet.readRegistry({ rootDir, cardTomlPath });
+    const currentByName = new Map(current.map((entry) => [entry.name, entry]));
+    const operations = validation.tags.flatMap((entry) => {
+      const previous = currentByName.get(entry.name);
+      return previous?.color === entry.color
+        ? []
+        : [{
+            operation: "upsert_facet",
+            facet: facet.kind,
+            name: entry.name,
+            color: entry.color,
+          }];
+    });
+    for (const entry of current) {
+      if (!newNames.has(entry.name)) {
+        operations.push({
+          operation: "delete_facet",
+          facet: facet.kind,
+          name: entry.name,
+        });
+      }
+    }
+    try {
+      const result = await stageAndPublishGameDataEdit({
+        rootDir,
+        dataset: "cards",
+        sourcePaths: CARD_SOURCE_PATHS,
+        expectedSourceRevision:
+          typeof body.sourceRevision === "string" ? body.sourceRevision : undefined,
+        operations,
+      });
+      jsonResponse(res, 200, {
+        tags: facet.readRegistry({ rootDir, cardTomlPath }),
+        cards: readEditorCards({ rootDir, cardTomlPath }),
+        sourceRevision: result.sourceRevision,
+      });
+    } catch (error) {
+      errorResponse(
+        res,
+        error.statusCode ?? (error.code === "STALE_SOURCE" ? 409 : 422),
+        error.code ?? "COMPATIBILITY_VALIDATION_FAILED",
+        error instanceof Error ? error.message : "RON registry save failed.",
+        {
+          datasetId: "cards",
+          source: CARD_RON_PATH,
+          ...(error.currentSourceRevision === undefined
+            ? {}
+            : { currentSourceRevision: error.currentSourceRevision }),
+        },
+      );
+    }
+    return;
+  }
+
   const registryAbsPath = join(rootDir, facet.registryPathFor(cardTomlPath));
   const cardTomlBasename = cardTomlPath.split(/[\\/]/u).pop();
   const writes = [
@@ -633,7 +785,13 @@ async function handleFacetPut(req, res, rootDir, cardTomlPath, fileSystem, facet
 
 async function handleFacet(req, res, rootDir, cardTomlPath, fileSystem, facet) {
   if (req.method === "GET") {
-    jsonResponse(res, 200, { tags: facet.readRegistry({ rootDir, cardTomlPath }) });
+    jsonResponse(res, 200, {
+      tags: facet.readRegistry({ rootDir, cardTomlPath }),
+      ...(cardTomlPath === DEFAULT_CARD_TOML_PATH &&
+      fileSystem.existsSync(join(rootDir, CARD_RON_PATH))
+        ? { sourceRevision: sourceRevision(rootDir, CARD_SOURCE_PATHS) }
+        : {}),
+    });
     return;
   }
 
@@ -705,6 +863,10 @@ export function createCardEditorApiMiddleware({
       if (req.method === "GET" && route.resource === "collection") {
         jsonResponse(res, 200, {
           cards: readEditorCards({ rootDir, cardTomlPath }),
+          ...(cardTomlPath === DEFAULT_CARD_TOML_PATH &&
+          fileSystem.existsSync(join(rootDir, CARD_RON_PATH))
+            ? { sourceRevision: sourceRevision(rootDir, CARD_SOURCE_PATHS) }
+            : {}),
         });
         return;
       }

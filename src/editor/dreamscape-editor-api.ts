@@ -8,6 +8,9 @@ import type {
   SaveEditorDreamscapeFieldRequest,
   SaveEditorDreamscapeFieldResponse,
 } from "./dreamscape-types";
+import { confirmSourceRevision, queueSourceSave, withExpectedSourceRevision } from "./source-revision";
+
+const SOURCE = "dreamscapes";
 
 function readApiError(body: unknown): EditorApiErrorBody["error"] | undefined {
   if (
@@ -62,7 +65,7 @@ function withTomlParam(path: string): string {
   }
 
   const separator = path.includes("?") ? "&" : "?";
-  return `${path}${separator}toml=${encodeURIComponent(toml)}`;
+  return `${path}${separator}source=${encodeURIComponent(toml)}`;
 }
 
 export async function loadEditorDreamscapes(
@@ -75,6 +78,7 @@ export async function loadEditorDreamscapes(
     signal,
   });
   const body = await readJsonResponse<LoadEditorDreamscapesResponse>(response);
+  confirmSourceRevision(SOURCE, body);
   return {
     dreamscapes: body.dreamscapes,
     guides: body.guides,
@@ -87,7 +91,8 @@ export async function loadEditorDreamscapes(
 export async function saveEditorDreamscapeField(
   request: SaveEditorDreamscapeFieldRequest,
 ): Promise<SaveEditorDreamscapeFieldResponse> {
-  const response = await fetch(
+  return queueSourceSave(SOURCE, async () => {
+    const response = await fetch(
     withTomlParam(`/api/editor/dreamscapes/${request.id}`),
     {
       method: "PATCH",
@@ -95,17 +100,21 @@ export async function saveEditorDreamscapeField(
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(request),
+      body: JSON.stringify(withExpectedSourceRevision(SOURCE, request)),
     },
   );
 
-  return readJsonResponse<SaveEditorDreamscapeFieldResponse>(response);
+    const body = await readJsonResponse<SaveEditorDreamscapeFieldResponse>(response);
+    confirmSourceRevision(SOURCE, body);
+    return body;
+  });
 }
 
 export async function assignDreamscapeDreamAvatar(
   request: DreamAvatarAssignmentRequest,
 ): Promise<DreamAvatarAssignmentResponse> {
-  const response = await fetch(
+  return queueSourceSave(SOURCE, async () => {
+    const response = await fetch(
     withTomlParam(`/api/editor/dreamscapes/${request.dreamscapeId}/dream-avatars`),
     {
       method: "POST",
@@ -113,13 +122,16 @@ export async function assignDreamscapeDreamAvatar(
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
+      body: JSON.stringify(withExpectedSourceRevision(SOURCE, {
         action: request.action,
         ...(request.inId !== undefined ? { inId: request.inId } : {}),
         ...(request.outId !== undefined ? { outId: request.outId } : {}),
-      }),
+      })),
     },
   );
 
-  return readJsonResponse<DreamAvatarAssignmentResponse>(response);
+    const body = await readJsonResponse<DreamAvatarAssignmentResponse>(response);
+    confirmSourceRevision(SOURCE, body);
+    return body;
+  });
 }

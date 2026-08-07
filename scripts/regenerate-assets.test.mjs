@@ -102,6 +102,6 @@ describe("regenerate-assets.sh", () => {
     });
 
     expect(output).toContain("./scripts/regenerate-assets.sh --fast");
-    expect(output).toContain("routine TOML content changes");
+    expect(output).toContain("routine RON content changes");
   });
 });

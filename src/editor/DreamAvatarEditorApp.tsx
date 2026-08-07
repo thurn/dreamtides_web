@@ -227,7 +227,7 @@ export default function DreamAvatarEditorApp({
   );
   const activeTomlLabel = useMemo(() => {
     const param = editorTomlParam();
-    const path = param ?? "dream_avatars.toml";
+    const path = param ?? "dream_avatars.ron";
     const fileName = path.split(/[\\/]/u).pop();
     return fileName !== undefined && fileName !== "" ? fileName : path;
   }, []);

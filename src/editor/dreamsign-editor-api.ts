@@ -10,6 +10,9 @@ import type {
   SaveEditorDreamsignTagsRequest,
 } from "./dreamsign-types";
 import type { EditorTag } from "./types";
+import { confirmSourceRevision, queueSourceSave, withExpectedSourceRevision } from "./source-revision";
+
+const SOURCE = "dreamsigns";
 
 function readApiError(body: unknown): EditorApiErrorBody["error"] | undefined {
   if (
@@ -64,7 +67,7 @@ function withTomlParam(path: string): string {
   }
 
   const separator = path.includes("?") ? "&" : "?";
-  return `${path}${separator}toml=${encodeURIComponent(toml)}`;
+  return `${path}${separator}source=${encodeURIComponent(toml)}`;
 }
 
 export async function loadEditorDreamsigns(
@@ -77,13 +80,15 @@ export async function loadEditorDreamsigns(
     signal,
   });
   const body = await readJsonResponse<LoadEditorDreamsignsResponse>(response);
+  confirmSourceRevision(SOURCE, body);
   return body.dreamsigns;
 }
 
 export async function saveEditorDreamsignField(
   request: SaveEditorDreamsignFieldRequest,
 ): Promise<SaveEditorDreamsignFieldResponse> {
-  const response = await fetch(
+  return queueSourceSave(SOURCE, async () => {
+    const response = await fetch(
     withTomlParam(`/api/editor/dreamsigns/${request.id}`),
     {
       method: "PATCH",
@@ -91,11 +96,14 @@ export async function saveEditorDreamsignField(
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(request),
+      body: JSON.stringify(withExpectedSourceRevision(SOURCE, request)),
     },
   );
 
-  return readJsonResponse<SaveEditorDreamsignFieldResponse>(response);
+    const body = await readJsonResponse<SaveEditorDreamsignFieldResponse>(response);
+    confirmSourceRevision(SOURCE, body);
+    return body;
+  });
 }
 
 export async function loadEditorDreamsignTags(
@@ -108,13 +116,15 @@ export async function loadEditorDreamsignTags(
     signal,
   });
   const body = await readJsonResponse<LoadEditorDreamsignTagsResponse>(response);
+  confirmSourceRevision(SOURCE, body);
   return body.tags;
 }
 
 export async function saveEditorDreamsignTags(
   request: SaveEditorDreamsignTagsRequest,
 ): Promise<SaveEditorDreamsignFieldResponse> {
-  const response = await fetch(
+  return queueSourceSave(SOURCE, async () => {
+    const response = await fetch(
     withTomlParam(`/api/editor/dreamsigns/${request.id}`),
     {
       method: "PATCH",
@@ -122,24 +132,32 @@ export async function saveEditorDreamsignTags(
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id: request.id, field: "tags", value: request.tags }),
+      body: JSON.stringify(withExpectedSourceRevision(SOURCE, {
+        id: request.id, field: "tags", value: request.tags,
+      })),
     },
   );
 
-  return readJsonResponse<SaveEditorDreamsignFieldResponse>(response);
+    const body = await readJsonResponse<SaveEditorDreamsignFieldResponse>(response);
+    confirmSourceRevision(SOURCE, body);
+    return body;
+  });
 }
 
 export async function saveEditorDreamsignTagRegistry(
   request: SaveEditorDreamsignTagRegistryRequest,
 ): Promise<SaveEditorDreamsignTagRegistryResponse> {
-  const response = await fetch(withTomlParam("/api/editor/dreamsign-tags"), {
-    method: "PUT",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(request),
+  return queueSourceSave(SOURCE, async () => {
+    const response = await fetch(withTomlParam("/api/editor/dreamsign-tags"), {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(withExpectedSourceRevision(SOURCE, request)),
+    });
+    const body = await readJsonResponse<SaveEditorDreamsignTagRegistryResponse>(response);
+    confirmSourceRevision(SOURCE, body);
+    return body;
   });
-
-  return readJsonResponse<SaveEditorDreamsignTagRegistryResponse>(response);
 }

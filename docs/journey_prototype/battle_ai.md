@@ -2,7 +2,7 @@
 
 This document describes the design for an automated opponent ("Battle AI") for
 the journey prototype's playable battle. The AI plays the UUID-keyed deck
-authored in `data/tabula/opponents.toml`, makes decisions with a blend of
+authored in `data/tabula/opponents.ron`, makes decisions with a blend of
 heuristics, shallow search, and light Monte Carlo sampling, and observes the
 planning budget of its resolved preset.
 
@@ -61,7 +61,7 @@ It is written to be read alongside:
 
 **Non-Goals.**
 
-- A full rules engine that simulates every card in `cards.toml`. The AI
+- A full rules engine that simulates every card in `cards.ron`. The AI
   understands its own deck plus general rules and broad _classes_ of cards; it
   treats opponent cards abstractly.
 - Perfect play or a player-facing difficulty selector. Named presets provide the
@@ -74,7 +74,7 @@ It is written to be read alongside:
 
 ## Authored Configuration
 
-`opponents.toml` owns the journey AI deck, evaluation weights, removal and
+`opponents.ron` owns the journey AI deck, evaluation weights, removal and
 response priors, sample safety cap, and named presets. A preset contains beam
 width, opponent-response mode, sample count, search depth, journey planning
 budget, and deterministic tutorial expansion budget. `BattleInit` persists the
@@ -822,7 +822,7 @@ channel that already exists end to end.
 6. **Presentation.** `aiChoices` trace population, the proposal bar's
    plain-language descriptions and rationale, the thinking indicator, and the
    debug inspector tab.
-7. **Hardening.** Browser QA, multiplayer-coexistence gating, and TOML-authored
+7. **Hardening.** Browser QA, multiplayer-coexistence gating, and RON-authored
    difficulty presets.
 
 Each phase is independently testable; phases 1–4 need no UI and are exercised

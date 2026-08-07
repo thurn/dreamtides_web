@@ -99,6 +99,7 @@ export interface ExplorationEditorServerData {
   predicates: Array<{ value: string; label: string }>;
   transfigurations: TransfigurationType[];
   subtypes: string[];
+  sourceRevision?: string;
 }
 
 export interface ExplorationEditorLoadResult extends ExplorationEditorServerData {

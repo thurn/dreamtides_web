@@ -672,27 +672,6 @@ function ExplorationEditorRow({
               .map((field) => controlFor(slot, action, field))}
           </div>
         )}
-        {definition.canonicalMechanicId !== undefined &&
-          definition.allowedSelectionPolicyIds !== undefined && (
-          <details className="exploration-editor-selection-policy">
-            <summary>Advanced selection behavior</summary>
-            <p>Controls candidate preparation for this mechanic.</p>
-            <label className="exploration-editor-select-field">
-              <span>Selection policy</span>
-              <Select
-                full
-                size="sm"
-                ariaLabel={`Selection policy for ${action.label}`}
-                options={definition.allowedSelectionPolicyIds.map((policyId) => ({
-                  value: policyId,
-                  label: policyId,
-                }))}
-                value={action.selectionPolicyId ?? definition.defaultSelectionPolicyId ?? ""}
-                onChange={(value) => updateField(slot, "selectionPolicyId", value)}
-              />
-            </label>
-          </details>
-        )}
         <span
           aria-live="polite"
           className="exploration-editor-action-status"
@@ -835,6 +814,12 @@ export default function ExplorationEditorApp({
   }, [client, loadRevision, setData]);
 
   useEffect(() => {
+    const reloadConfirmedData = () => setLoadRevision((revision) => revision + 1);
+    window.addEventListener("exploration-editor:save-failed", reloadConfirmedData);
+    return () => window.removeEventListener("exploration-editor:save-failed", reloadConfirmedData);
+  }, []);
+
+  useEffect(() => {
     if (loadState !== "ready" || !window.location.hash.startsWith("#exploration-")) return;
     document.getElementById(decodeURIComponent(window.location.hash.slice(1)))
       ?.scrollIntoView({ block: "start" });
@@ -945,7 +930,7 @@ export default function ExplorationEditorApp({
           </div>
           {loadState === "ready" && data !== null && (
             <div className="exploration-editor-page-actions">
-              <span>{data.encounters.length} encounters · edits write directly to exploration.toml</span>
+              <span>{data.encounters.length} encounters · edits write directly to exploration.ron</span>
               <GlassButton
                 label="Template health"
                 glyph={GLYPHS.sidebarRight}

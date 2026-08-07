@@ -60,7 +60,9 @@ export function generateOpponentsData({
   return compiled;
 }
 
-const ROOT = resolve(import.meta.dirname, "..");
+const ROOT = resolve(
+  process.env.DREAMTIDES_DATA_ROOT ?? resolve(import.meta.dirname, ".."),
+);
 const DATA_DIR = join(ROOT, "data");
 const LEGACY_DRAFT_POOL_ARTIFACTS = [
   "decklists-data.json",
@@ -776,7 +778,30 @@ export function transformExplorationData(source) {
     const encounter = transformTomlRecord(rawEncounter);
     return {
       ...encounter,
-      action: (encounter.action ?? []).map((action) => {
+      action: (encounter.action ?? []).map((rawAction) => {
+        // The RON compatibility serializer may render nested maps as child
+        // tables. Reconstruct the established action contract explicitly so
+        // generated JSON field order is independent of TOML table layout.
+        const {
+          id,
+          label,
+          effectText,
+          templateId,
+          templateVariables,
+          selection,
+          effectKind,
+          ...effectFields
+        } = rawAction;
+        const action = {
+          id,
+          label,
+          effectText,
+          templateId,
+          templateVariables,
+          ...(selection === undefined ? {} : { selection }),
+          effectKind,
+          ...effectFields,
+        };
         const definition = effectDefinitionByKind.get(action.effectKind);
         const specialVariables = [
           ...new Set(action.effectText?.match(/\$[A-Z][A-Z0-9_]*/gu) ?? []),
@@ -2522,5 +2547,9 @@ if (
   process.argv[1] !== undefined &&
   import.meta.url === pathToFileURL(process.argv[1]).href
 ) {
+  if (process.env.GAME_DATA_SKIP_GENERATION !== "1") {
+    const { ensureGameData } = await import("./game-data-pipeline.mjs");
+    await ensureGameData({ rootDir: ROOT });
+  }
   setupAssets();
 }

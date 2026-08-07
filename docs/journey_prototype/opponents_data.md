@@ -1,16 +1,16 @@
 # Opponent Data
 
-`data/tabula/opponents.toml` is the authoritative source for battle setup,
+`data/tabula/opponents.ron` is the authoritative source for battle setup,
 Dreamwell construction, opponent progression and deck generation, the journey
 AI deck, and AI tuning. Asset setup strictly validates and normalizes the file
 into gitignored `public/opponents-data.json`. The browser loads that artifact as
 required `JourneyContent.opponentsData` before room gameplay mounts.
 
 TypeScript owns mechanics such as interpolation, seeded selection, pruning,
-rank geometry, fatigue, and card-effect automation. TOML owns the schedules,
+rank geometry, fatigue, and card-effect automation. RON owns the schedules,
 limits, coefficients, card UUID counts, and named presets those mechanics use.
 Tutorial decks, scripted opening hands, action overrides, and other
-tutorial-specific sequencing remain in `tutorial.toml`.
+tutorial-specific sequencing remain in `tutorial.ron`.
 
 ## Schema
 
@@ -39,13 +39,13 @@ The compiler rejects missing or unknown keys, invalid numeric ranges,
 non-monotonic curves, duplicate or overlapping Dreamwell orders, invalid
 coherence weights, invalid or duplicate preset IDs, unknown preset references,
 sample counts above the safety cap, non-positive deck counts, and AI deck UUIDs
-absent from `cards.toml`. Failures identify the TOML path that needs correction.
+absent from `cards.ron`. Failures identify the RON path that needs correction.
 
 ## Generated artifact and hashes
 
 Run `scripts/regenerate-assets.sh` or `npm run setup-assets` after editing the
 catalog. `scripts/opponents-data.mjs` is the shared compiler. Generated JSON is
-reproducible from TOML and is not committed.
+reproducible from RON and is not committed.
 
 The normalized document contains SHA-256 `contentHash` and `foldHash` fields.
 Both cover the complete v1 normalized document and therefore have the same

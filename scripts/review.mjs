@@ -220,6 +220,15 @@ function commandFor(step, extraArgs = []) {
   if (step === "validate") {
     return [process.execPath, [join(root, "scripts", "setup-assets.mjs"), ...extraArgs]];
   }
+  if (step === "rust-test") {
+    return ["cargo", ["test", "--locked", "--manifest-path", "tools/game-data/Cargo.toml"]];
+  }
+  if (step === "clean-game-data") {
+    return [process.execPath, [join(root, "scripts", "game-data-clean-checkout-test.mjs")]];
+  }
+  if (step === "game-data-compile") {
+    return [process.execPath, [join(root, "scripts", "game-data-pipeline.mjs"), "compile"]];
+  }
   if (step === "test-related") {
     return [
       process.execPath,
@@ -264,6 +273,8 @@ function executionPlan() {
     return [
       { step: "validate", args: [] },
       { step: "ron-format-check", args: [] },
+      { step: "rust-test", args: [] },
+      { step: "clean-game-data", args: [] },
       { step: "lint", args: [] },
       { step: "typecheck", args: [] },
       { step: "test", args: [] },
@@ -275,7 +286,12 @@ function executionPlan() {
       { step: "lint", args: passthrough },
     ];
   }
-  if (task === "test-full") return [{ step: "test", args: passthrough }];
+  if (task === "test-full") {
+    return [
+      { step: "game-data-compile", args: [] },
+      { step: "test", args: passthrough },
+    ];
+  }
   if (task === "lint") {
     const steps = [];
     if (reviewPlan.shouldCheckRonFormatting) {
@@ -290,10 +306,18 @@ function executionPlan() {
     return steps;
   }
   if (task === "test") {
-    if (passthrough.length > 0) return [{ step: "test", args: passthrough }];
+    if (passthrough.length > 0) {
+      return [
+        { step: "game-data-compile", args: [] },
+        { step: "test", args: passthrough },
+      ];
+    }
     return reviewPlan.testInputs.length === 0
       ? []
-      : [{ step: "test-related", args: reviewPlan.testInputs }];
+      : [
+          { step: "game-data-compile", args: [] },
+          { step: "test-related", args: reviewPlan.testInputs },
+        ];
   }
   if (task === "quick") {
     const steps = [];
@@ -301,6 +325,7 @@ function executionPlan() {
     if (reviewPlan.shouldCheckRonFormatting) {
       steps.push({ step: "ron-format-check", args: [] });
     }
+    if (reviewPlan.shouldTestGameData) steps.push({ step: "rust-test", args: [] });
     if (reviewPlan.lintFiles.length > 0) {
       steps.push({ step: "lint", args: reviewPlan.lintFiles });
     }

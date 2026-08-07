@@ -235,7 +235,7 @@ export default function DreamsignEditorApp({
   );
   const activeTomlLabel = useMemo(() => {
     const param = editorTomlParam();
-    const path = param ?? "dreamsigns.toml";
+    const path = param ?? "dreamsigns.ron";
     const fileName = path.split(/[\\/]/u).pop();
     return fileName !== undefined && fileName !== "" ? fileName : path;
   }, []);

@@ -15,6 +15,7 @@ const TEST_INPUT_EXTENSIONS = new Set([
   ".ftl",
   ".json",
   ".jsonc",
+  ".ron",
   ".toml",
 ]);
 
@@ -54,6 +55,8 @@ function isTypecheckInput(file) {
 function isValidationInput(file) {
   return (
     file.startsWith("data/") ||
+    file.startsWith("tools/game-data/") ||
+    file === "rust-toolchain.toml" ||
     file.startsWith("docs/draft_records_adapted/") ||
     file === "scripts/setup-assets.mjs" ||
     file.startsWith("scripts/generate-") ||
@@ -101,6 +104,9 @@ export function buildReviewPlan(files, fileExists = () => true) {
     shouldTypecheck: changedFiles.some(isTypecheckInput),
     shouldValidate: changedFiles.some(isValidationInput),
     shouldCheckRonFormatting: changedFiles.some(isRonFormattingInput),
+    shouldTestGameData: changedFiles.some((file) =>
+      file.endsWith(".ron") || file.startsWith("tools/game-data/") ||
+      file === "rust-toolchain.toml" || file === "scripts/game-data-pipeline.mjs"),
     testInputs: [...new Set(testInputs)].sort(),
   };
 }

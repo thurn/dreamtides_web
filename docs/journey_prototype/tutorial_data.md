@@ -1,6 +1,6 @@
 # Tutorial Data
 
-`data/tabula/tutorial.toml` is the authoritative source for the standalone
+`data/tabula/tutorial.ron` is the authoritative source for the standalone
 tutorial scenario, the playable battle handoff, tutorial-journey guidance, and
 supplemental first-occurrence explanations. Run `npm run regenerate-assets`
 after editing it. Asset generation validates the source and writes the complete
@@ -19,9 +19,9 @@ tutorial:
 - `dreamwellCardId`: the featured Dreamwell card
 
 Every field is a catalog UUID. Ordinary card roles resolve against
-`cards.toml`; `dreamwellCardId` resolves against `dreamwell.toml`.
+`cards.ron`; `dreamwellCardId` resolves against `dreamwell.ron`.
 `playerDreamAvatarId` and `enemyDreamAvatarId` resolve against
-`dream_avatars.toml`.
+`dream_avatars.ron`.
 
 ## Battle setup
 
@@ -67,7 +67,7 @@ shared first-occurrence explanations. The `journeyStart`, `dreamscape`,
 configure persistent Mira guidance on their journey surfaces.
 
 The development Tutorial Editor edits the `actions` array. Saving serializes
-the complete normalized TOML document and preserves every guidance, trigger,
+the complete normalized RON document and preserves every guidance, trigger,
 and battle setup table.
 
 ## Validation and hashes

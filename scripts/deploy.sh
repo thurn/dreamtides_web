@@ -2,7 +2,8 @@
 #
 # Deploy everything needed to make the production site match local.
 #
-#   ./scripts/deploy.sh        # or: npm run deploy
+#   ./scripts/deploy.sh             # or: npm run deploy
+#   ./scripts/deploy.sh --dry-run   # build and validate without external writes
 #
 # Production is served from TWO origins, and a full deploy must update both:
 #
@@ -16,7 +17,7 @@
 # Deploying Hosting alone leaves newly-keyed art 404ing in the bucket (the image
 # shows blank with no console error), so both steps run here unconditionally.
 #
-# This script deploys the CURRENT local state. If you have changed TOML game data
+# This script deploys the CURRENT local state. If you have changed RON game data
 # and need to re-bake the committed artifacts first, run `npm run regenerate-assets`
 # (and commit the result) before deploying.
 #
@@ -37,6 +38,14 @@ if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
   exit 0
 fi
 
+DRY_RUN=false
+if [[ "${1:-}" == "--dry-run" ]]; then
+  DRY_RUN=true
+elif [[ -n "${1:-}" ]]; then
+  printf 'Unknown argument: %s\nUsage: %s [--dry-run]\n' "$1" "$0" >&2
+  exit 2
+fi
+
 step() {
   printf '\n\033[1m========== %s ==========\033[0m\n' "$1"
 }
@@ -46,6 +55,11 @@ npm ci --include=dev
 
 step "1/3  build — compile + bundle code, HTML, and data catalogs into dist/"
 npm run build
+
+if [[ "$DRY_RUN" == true ]]; then
+  step "Dry run complete — generation and production build passed"
+  exit 0
+fi
 
 step "2/3  firebase deploy — publish dist/ to Hosting"
 firebase deploy --only hosting

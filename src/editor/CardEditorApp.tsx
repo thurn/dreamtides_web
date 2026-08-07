@@ -452,9 +452,13 @@ export default function CardEditorApp({
   );
   const activeTomlLabel = useMemo(() => {
     const param = editorTomlParam();
-    const path = param ?? "cards.toml";
+    const path = param ?? "cards.ron";
     const fileName = path.split(/[\\/]/u).pop();
     return fileName !== undefined && fileName !== "" ? fileName : path;
+  }, []);
+  const isRonSource = useMemo(() => {
+    const source = editorTomlParam();
+    return source === null || source === "cards" || source.endsWith(".ron");
   }, []);
   const [loadStatus, setLoadStatus] = useState<LoadStatus>({
     kind: "loading",
@@ -525,6 +529,14 @@ export default function CardEditorApp({
       controller.abort();
     };
   }, [apiClient, loadAttempt]);
+
+  useEffect(() => {
+    const reloadConfirmedSource = () => setLoadAttempt((attempt) => attempt + 1);
+    window.addEventListener("card-editor:stale-source", reloadConfirmedSource);
+    return () => {
+      window.removeEventListener("card-editor:stale-source", reloadConfirmedSource);
+    };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -1173,6 +1185,7 @@ export default function CardEditorApp({
                   ? 0
                   : (tagUsageCounts[displayState.checkboxTag] ?? 0)
               }
+              allowPerCardTides={!isRonSource}
               onDisplayStateChange={handleDisplayStateChange}
               onOpenManageTags={() => setManageTagsOpen(true)}
               onOpenManageTides={() => setManageTidesOpen(true)}
@@ -1193,7 +1206,7 @@ export default function CardEditorApp({
                 size={displayState.size}
                 saveState={saveState}
                 tagEditing={displayState.tagEditing}
-                tideEditing={displayState.tideEditing}
+                tideEditing={!isRonSource && displayState.tideEditing}
                 artEditing={displayState.artEditing}
                 checkboxTag={displayState.checkboxTag}
                 showFontSize={displayState.showFontSize}
@@ -1348,16 +1361,21 @@ export default function CardEditorApp({
               onRemove: (name) => handleRemoveCardTag(artEditorCard, name),
               onOpenManage: () => setManageTagsOpen(true),
             },
-            {
-              noun: "tide",
-              values: artEditorCard.tides,
-              available: tides,
-              saving: tideSaveState[artEditorCard.id]?.saving ?? false,
-              error: tideSaveState[artEditorCard.id]?.error ?? null,
-              onAdd: (name) => handleAddCardTide(artEditorCard, name),
-              onRemove: (name) => handleRemoveCardTide(artEditorCard, name),
-              onOpenManage: () => setManageTidesOpen(true),
-            },
+            ...(!isRonSource
+              ? [
+                  {
+                    noun: "tide",
+                    values: artEditorCard.tides,
+                    available: tides,
+                    saving: tideSaveState[artEditorCard.id]?.saving ?? false,
+                    error: tideSaveState[artEditorCard.id]?.error ?? null,
+                    onAdd: (name: string) => handleAddCardTide(artEditorCard, name),
+                    onRemove: (name: string) =>
+                      handleRemoveCardTide(artEditorCard, name),
+                    onOpenManage: () => setManageTidesOpen(true),
+                  },
+                ]
+              : []),
           ]}
           art={{
             model: { kind: "card" },

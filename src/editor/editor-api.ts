@@ -38,6 +38,40 @@ export class EditorApiRequestError extends Error {
   }
 }
 
+let currentSourceRevision: string | undefined;
+let saveQueue: Promise<void> = Promise.resolve();
+let pausedSaveError: Error | null = null;
+
+function rememberSourceRevision(body: { sourceRevision?: string }): void {
+  if (body.sourceRevision !== undefined) {
+    currentSourceRevision = body.sourceRevision;
+  }
+}
+
+function queueSave<T>(operation: () => Promise<T>): Promise<T> {
+  const queued = saveQueue.then(async () => {
+    if (pausedSaveError !== null) {
+      throw pausedSaveError;
+    }
+    try {
+      return await operation();
+    } catch (error) {
+      const saveError = error instanceof Error ? error : new Error(String(error));
+      pausedSaveError = saveError;
+      if (
+        typeof window !== "undefined" &&
+        saveError instanceof EditorApiRequestError &&
+        saveError.code === "STALE_SOURCE"
+      ) {
+        window.dispatchEvent(new CustomEvent("card-editor:stale-source"));
+      }
+      throw saveError;
+    }
+  });
+  saveQueue = queued.then(() => undefined, () => undefined);
+  return queued;
+}
+
 function readApiError(body: unknown): EditorApiErrorBody["error"] | undefined {
   if (
     body !== null &&
@@ -85,28 +119,28 @@ async function readJsonResponse<T>(response: Response): Promise<T> {
 }
 
 /**
- * The `toml` URL parameter selects which source TOML file under `data/tabula`
- * the editor reads and writes. When absent the canonical card file
- * (cards.toml) is used. The same value is forwarded to every editor API request so loads
- * and saves stay pinned to the selected file.
+ * The `source` URL parameter selects a canonical RON file under `data/tabula`.
+ * When absent, the Cards dataset is selected. The same value is forwarded to
+ * editor API requests so reads and semantic saves stay pinned to one source.
  */
 export function editorTomlParam(): string | null {
   if (typeof window === "undefined") {
     return null;
   }
 
-  const value = new URLSearchParams(window.location.search).get("toml");
+  const params = new URLSearchParams(window.location.search);
+  const value = params.get("source") ?? params.get("toml");
   return value !== null && value.trim() !== "" ? value : null;
 }
 
 function withTomlParam(path: string): string {
-  const toml = editorTomlParam();
-  if (toml === null) {
+  const source = editorTomlParam();
+  if (source === null) {
     return path;
   }
 
   const separator = path.includes("?") ? "&" : "?";
-  return `${path}${separator}toml=${encodeURIComponent(toml)}`;
+  return `${path}${separator}source=${encodeURIComponent(source)}`;
 }
 
 export async function loadEditorCards(
@@ -119,56 +153,47 @@ export async function loadEditorCards(
     signal,
   });
   const body = await readJsonResponse<LoadEditorCardsResponse>(response);
+  rememberSourceRevision(body);
+  pausedSaveError = null;
   return body.cards;
 }
 
 export async function saveEditorCardField(
   request: SaveEditorCardFieldRequest,
 ): Promise<SaveEditorCardFieldResponse> {
-  const response = await fetch(withTomlParam(`/api/editor/cards/${request.id}`), {
-    method: "PATCH",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(request),
+  return queueSave(async () => {
+    const response = await fetch(withTomlParam(`/api/editor/cards/${request.id}`), {
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...request, sourceRevision: currentSourceRevision }),
+    });
+    const body = await readJsonResponse<SaveEditorCardFieldResponse>(response);
+    rememberSourceRevision(body);
+    return body;
   });
-
-  return readJsonResponse<SaveEditorCardFieldResponse>(response);
 }
 
 export async function saveEditorCardArt(
   request: SaveEditorCardArtRequest,
 ): Promise<SaveEditorCardFieldResponse> {
-  const response = await fetch(withTomlParam(`/api/editor/cards/${request.id}`), {
-    method: "PATCH",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ id: request.id, field: "art", value: request.art }),
+  return saveEditorCardField({
+    id: request.id,
+    field: "art",
+    value: request.art,
   });
-
-  return readJsonResponse<SaveEditorCardFieldResponse>(response);
 }
 
 export async function saveEditorCardImageNumber(
   request: SaveEditorCardImageNumberRequest,
 ): Promise<SaveEditorCardFieldResponse> {
-  const response = await fetch(withTomlParam(`/api/editor/cards/${request.id}`), {
-    method: "PATCH",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      id: request.id,
-      field: "image-number",
-      value: request.imageNumber,
-    }),
+  return saveEditorCardField({
+    id: request.id,
+    field: "image-number",
+    value: request.imageNumber,
   });
-
-  return readJsonResponse<SaveEditorCardFieldResponse>(response);
 }
 
 export async function loadEditorTags(signal?: AbortSignal): Promise<EditorTag[]> {
@@ -179,37 +204,36 @@ export async function loadEditorTags(signal?: AbortSignal): Promise<EditorTag[]>
     signal,
   });
   const body = await readJsonResponse<LoadEditorTagsResponse>(response);
+  rememberSourceRevision(body);
   return body.tags;
 }
 
 export async function saveEditorCardTags(
   request: SaveEditorCardTagsRequest,
 ): Promise<SaveEditorCardFieldResponse> {
-  const response = await fetch(withTomlParam(`/api/editor/cards/${request.id}`), {
-    method: "PATCH",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ id: request.id, field: "tags", value: request.tags }),
+  return saveEditorCardField({
+    id: request.id,
+    field: "tags",
+    value: request.tags,
   });
-
-  return readJsonResponse<SaveEditorCardFieldResponse>(response);
 }
 
 export async function saveEditorTagRegistry(
   request: SaveEditorTagRegistryRequest,
 ): Promise<SaveEditorTagRegistryResponse> {
-  const response = await fetch(withTomlParam("/api/editor/tags"), {
-    method: "PUT",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(request),
+  return queueSave(async () => {
+    const response = await fetch(withTomlParam("/api/editor/tags"), {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...request, sourceRevision: currentSourceRevision }),
+    });
+    const body = await readJsonResponse<SaveEditorTagRegistryResponse>(response);
+    rememberSourceRevision(body);
+    return body;
   });
-
-  return readJsonResponse<SaveEditorTagRegistryResponse>(response);
 }
 
 export async function loadEditorTides(signal?: AbortSignal): Promise<EditorTag[]> {
@@ -220,22 +244,18 @@ export async function loadEditorTides(signal?: AbortSignal): Promise<EditorTag[]
     signal,
   });
   const body = await readJsonResponse<LoadEditorTagsResponse>(response);
+  rememberSourceRevision(body);
   return body.tags;
 }
 
 export async function saveEditorCardTides(
   request: SaveEditorCardTidesRequest,
 ): Promise<SaveEditorCardFieldResponse> {
-  const response = await fetch(withTomlParam(`/api/editor/cards/${request.id}`), {
-    method: "PATCH",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ id: request.id, field: "tides", value: request.tides }),
+  return saveEditorCardField({
+    id: request.id,
+    field: "tides",
+    value: request.tides,
   });
-
-  return readJsonResponse<SaveEditorCardFieldResponse>(response);
 }
 
 export async function saveEditorTideRegistry(
@@ -243,14 +263,20 @@ export async function saveEditorTideRegistry(
 ): Promise<SaveEditorTagRegistryResponse> {
   // The tide registry endpoint shares the tag registry's body shape: the entry
   // list is carried under `tags` regardless of facet.
-  const response = await fetch(withTomlParam("/api/editor/tides"), {
-    method: "PUT",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ tags: request.tides }),
+  return queueSave(async () => {
+    const response = await fetch(withTomlParam("/api/editor/tides"), {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        tags: request.tides,
+        sourceRevision: currentSourceRevision,
+      }),
+    });
+    const body = await readJsonResponse<SaveEditorTagRegistryResponse>(response);
+    rememberSourceRevision(body);
+    return body;
   });
-
-  return readJsonResponse<SaveEditorTagRegistryResponse>(response);
 }

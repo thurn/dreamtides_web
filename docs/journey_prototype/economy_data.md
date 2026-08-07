@@ -1,16 +1,16 @@
 # Economy Data
 
-`data/tabula/economy.toml` is the authoritative source for direct economy
+`data/tabula/economy.ron` is the authoritative source for direct economy
 tuning. The asset build validates and normalizes it into
 `public/economy-data.json`; the browser loads that document as `EconomyData`
 before a room begins folding events.
 
 TypeScript owns pricing formulas, eligibility, reward modifiers, seeded random
-streams, weighted sampling, and Gamble algorithms. TOML owns the coefficients,
+streams, weighted sampling, and Gamble algorithms. RON owns the coefficients,
 ranges, distributions, caps, stock composition, and payout tables those
 algorithms consume. DreamAvatar-specific starting essence remains in
-`dream_avatars.toml`, and Exploration encounter-specific essence-per-spark
-remains in `exploration.toml`.
+`dream_avatars.ron`, and Exploration encounter-specific essence-per-spark
+remains in `exploration.ron`.
 
 ## Schema
 
@@ -42,9 +42,9 @@ identities the corresponding algorithms implement.
 
 Run `scripts/regenerate-assets.sh` to regenerate all derived artifacts. The
 economy-specific compiler is `scripts/economy-data.mjs`, and the generated JSON
-is gitignored because it is reproduced from TOML.
+is gitignored because it is reproduced from RON.
 
-During Vite development, saving `economy.toml` recompiles
+During Vite development, saving `economy.ron` recompiles
 `public/economy-data.json` and reloads the journey app. Full asset setup and the
 targeted Vite path call the same compiler and emit the same formatted JSON.
 
@@ -68,7 +68,7 @@ economy default after both catalogs have loaded.
 
 ## Algorithm boundary
 
-Tune a number in TOML when it is a direct cost, payout, range, distribution,
+Tune a number in RON when it is a direct cost, payout, range, distribution,
 stock count, cap, or coefficient. Keep behavioral identities and decisions in
 TypeScript: which transfiguration form applies, how a purge total is summed,
 which Gamble gate, tier, or suit result was reached, how modifiers affect a battle reward,

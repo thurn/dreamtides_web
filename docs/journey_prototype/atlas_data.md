@@ -1,12 +1,12 @@
 # Dream Atlas Data
 
-`data/tabula/atlas.toml` is the authoritative Atlas document. The asset build
+`data/tabula/atlas.ron` is the authoritative Atlas document. The asset build
 validates and normalizes it into `public/atlas-data.json`; the browser loads that
 document as `AtlasData` through `loadAtlasData()`.
 
 The Atlas remains a seven-layer game mode. TypeScript owns graph algorithms,
 random-number generation, journey routing, site implementations, renderer
-geometry, interaction, motion, and accessibility. TOML owns the authored rules
+geometry, interaction, motion, and accessibility. RON owns the authored rules
 and content those systems consume.
 
 ## Schema
@@ -26,7 +26,7 @@ The document contains these sections:
 | `presentation`         | Unseen/starter copy and validated affiliation templates.                                                            |
 | `assets`               | Source filenames and emitted Atlas asset keys.                                                                      |
 
-Affiliations provide `atlas-card-theme` in `affiliations.toml`. Atlas templates
+Affiliations provide `atlas-card-theme` in `affiliations.ron`. Atlas templates
 may use `{name}` in the affiliation title and `{card-theme}` in the affiliation
 body. The compiler rejects any other placeholder or a missing required
 placeholder.
@@ -34,22 +34,22 @@ placeholder.
 ## Layer VII
 
 Layer VII has the `boss` role and represents Limbo. Its node stores the stable
-Limbo dreamscape ID and player-facing place name from `atlas.toml`. It does not
+Limbo dreamscape ID and player-facing place name from `atlas.ron`. It does not
 resolve a normal `DreamscapeContent`, guide affiliation, signature site, or site
 enhancement. Its configured fill profile composes utility sites, and the
 structural Battle site is appended last.
 
 ## Validation and hashes
 
-`scripts/atlas-data.mjs` is shared by full asset setup and Vite’s targeted TOML
+`scripts/atlas-data.mjs` is shared by full asset setup and Vite’s targeted RON
 reload. It validates layer and site coverage, ranges, probabilities, weights,
 capacity, profiles, templates, affiliation references, and Atlas asset sources
 when the external source-art catalog is available.
 
-Vite recompiles Atlas data when its TOML or any referenced Dreamscape or
+Vite recompiles Atlas data when its RON or any referenced Dreamscape or
 affiliation catalog changes, so the same reference checks run during targeted
 development reloads. Site presentation and mechanics are compiled from
-`sites.toml`; guide assignments used by generation enter Atlas through the
+`sites.ron`; guide assignments used by generation enter Atlas through the
 validated Sites catalog. See [Dream Guide and Site Data](guide_and_sites_data.md).
 
 The compiled document contains two SHA-256 diagnostics:

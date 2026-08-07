@@ -234,11 +234,12 @@ export function replaceEditorDisplayStateInUrl(
   const url = new URL(location.href);
   const params = serializeEditorDisplayState(state);
 
-  // The `toml` parameter selects the source file and is not part of the
+  // The `source` parameter selects the canonical RON file and is not part of the
   // display state, so carry it across display-state-driven URL updates.
-  const toml = new URLSearchParams(location.search).get("toml");
-  if (toml !== null && toml.trim() !== "") {
-    params.set("toml", toml);
+  const current = new URLSearchParams(location.search);
+  const source = current.get("source") ?? current.get("toml");
+  if (source !== null && source.trim() !== "") {
+    params.set("source", source);
   }
 
   const query = params.toString();

@@ -612,6 +612,43 @@ export function editExplorationTemplateSource(templateSource, explorationSource,
   };
 }
 
+/**
+ * Computes the canonical template source and the complete ordered set of
+ * compatibility-shaped actions affected by a template edit without writing.
+ * The caller can therefore stage the sidecar and typed RON mutations in one
+ * repository transaction.
+ */
+export function previewExplorationTemplateEdit(edit, options = {}) {
+  const context = readContext(options);
+  const explorationSource = context.fileSystem.readFileSync(
+    join(context.rootDir, context.paths.exploration),
+    "utf8",
+  );
+  const result = editExplorationTemplateSource(
+    context.templateSource,
+    explorationSource,
+    edit,
+    context.catalogs,
+  );
+  if (result.templateSource === context.templateSource) {
+    return { templateSource: result.templateSource, actions: [] };
+  }
+  const document = parse(result.explorationSource);
+  const actions = [];
+  for (const encounter of document.encounter ?? []) {
+    for (const [slot, action] of (encounter.action ?? []).entries()) {
+      if (action["template-id"] !== edit.templateId) continue;
+      actions.push({
+        cardId: encounter["card-id"],
+        slot,
+        expectedActionId: action.id,
+        action: camelAction(action),
+      });
+    }
+  }
+  return { templateSource: result.templateSource, actions };
+}
+
 function validateAndBuildJson(source, templates, catalogs) {
   const document = parse(source);
   validateExplorationDocument(document, templates, catalogs);

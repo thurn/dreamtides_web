@@ -1,13 +1,13 @@
 # Dream Guide and Site Data
 
-`data/tabula/dream_guides.toml` and `data/tabula/sites.toml` are the canonical
+`data/tabula/dream_guides.ron` and `data/tabula/sites.ron` are the canonical
 cross-site authoring catalogs. Full asset setup validates and compiles them to
 `public/dream-guides-data.json` and `public/sites-data.json`; the browser loads
 both documents before constructing `JourneyContent`.
 
 TypeScript owns structural identities and algorithms: `SiteType`, Gamble game
 IDs, the standard card deck, fixed gate and suit identities, routing, reducers,
-and screen composition. TOML owns guide identity and dialogue, site
+and screen composition. RON owns guide identity and dialogue, site
 presentation, selection tuning, and rule tables that designers and modders are
 expected to revise.
 
@@ -44,11 +44,11 @@ The Site document uses `schema-version = 1` and contains:
 | `gamble.starway-stairs` | Attempt count, target range, and ordered reward tiers.                                       |
 | `gamble.four-suit`      | Draw count, suit order, ranking order, and result table.                                     |
 
-Four-Suit prices and Essence rewards live in `economy.toml`. The other Gamble
+Four-Suit prices and Essence rewards live in `economy.ron`. The other Gamble
 prices and rewards continue to use the existing Economy catalog. The Sites
 compiler cross-validates its schedule against the compiled Economy data.
 
-Metadata glossary IDs must resolve in `glossary.toml`. Random Site destinations
+Metadata glossary IDs must resolve in `glossary.ron`. Random Site destinations
 must be materializable site implementations and fit the configured choice
 counts. Gamble tables must cover their code-owned identities and accepted
 template values. When the external art catalog is available, guide portrait

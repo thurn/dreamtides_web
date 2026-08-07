@@ -6,6 +6,9 @@ import type {
   SaveEditorDreamAvatarFieldResponse,
   SaveEditorDreamAvatarTidePoolRequest,
 } from "./dream-avatar-types";
+import { confirmSourceRevision, queueSourceSave, withExpectedSourceRevision } from "./source-revision";
+
+const SOURCE = "dream-avatars";
 
 function readApiError(body: unknown): EditorApiErrorBody["error"] | undefined {
   if (
@@ -57,7 +60,7 @@ function withTomlParam(path: string): string {
     return path;
   }
   const separator = path.includes("?") ? "&" : "?";
-  return `${path}${separator}toml=${encodeURIComponent(toml)}`;
+  return `${path}${separator}source=${encodeURIComponent(toml)}`;
 }
 
 export async function loadEditorDreamAvatars(
@@ -67,27 +70,39 @@ export async function loadEditorDreamAvatars(
     headers: { Accept: "application/json" },
     signal,
   });
-  return readJsonResponse<LoadEditorDreamAvatarsResponse>(response);
+  const body = await readJsonResponse<LoadEditorDreamAvatarsResponse>(response);
+  confirmSourceRevision(SOURCE, body);
+  return body;
 }
 
 export async function saveEditorDreamAvatarField(
   request: SaveEditorDreamAvatarFieldRequest,
 ): Promise<SaveEditorDreamAvatarFieldResponse> {
-  const response = await fetch(withTomlParam(`/api/editor/dream-avatars/${request.id}`), {
-    method: "PATCH",
-    headers: { Accept: "application/json", "Content-Type": "application/json" },
-    body: JSON.stringify(request),
+  return queueSourceSave(SOURCE, async () => {
+    const response = await fetch(withTomlParam(`/api/editor/dream-avatars/${request.id}`), {
+      method: "PATCH",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify(withExpectedSourceRevision(SOURCE, request)),
+    });
+    const body = await readJsonResponse<SaveEditorDreamAvatarFieldResponse>(response);
+    confirmSourceRevision(SOURCE, body);
+    return body;
   });
-  return readJsonResponse<SaveEditorDreamAvatarFieldResponse>(response);
 }
 
 export async function saveEditorDreamAvatarTidePool(
   request: SaveEditorDreamAvatarTidePoolRequest,
 ): Promise<SaveEditorDreamAvatarFieldResponse> {
-  const response = await fetch(withTomlParam(`/api/editor/dream-avatars/${request.id}`), {
-    method: "PATCH",
-    headers: { Accept: "application/json", "Content-Type": "application/json" },
-    body: JSON.stringify({ id: request.id, field: "tide-pool", value: request.pool }),
+  return queueSourceSave(SOURCE, async () => {
+    const response = await fetch(withTomlParam(`/api/editor/dream-avatars/${request.id}`), {
+      method: "PATCH",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify(withExpectedSourceRevision(SOURCE, {
+        id: request.id, field: "tide-pool", value: request.pool,
+      })),
+    });
+    const body = await readJsonResponse<SaveEditorDreamAvatarFieldResponse>(response);
+    confirmSourceRevision(SOURCE, body);
+    return body;
   });
-  return readJsonResponse<SaveEditorDreamAvatarFieldResponse>(response);
 }

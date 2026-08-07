@@ -106,7 +106,7 @@ describe("editor-api", () => {
     );
   });
 
-  it("reads the toml selection from the URL", () => {
+  it("reads the canonical source selection from the URL", () => {
     expect(editorTomlParam()).toBeNull();
 
     window.history.replaceState({}, "", "/editor?toml=data/tabula/cards.toml");
@@ -116,7 +116,7 @@ describe("editor-api", () => {
     expect(editorTomlParam()).toBeNull();
   });
 
-  it("forwards the toml selection on the card load request", async () => {
+  it("forwards the canonical source selection on the card load request", async () => {
     window.history.replaceState({}, "", "/editor?toml=data/tabula/cards.toml");
     const fetchMock = vi.fn(
       () =>
@@ -129,12 +129,12 @@ describe("editor-api", () => {
     await loadEditorCards();
 
     expect(fetchMock).toHaveBeenCalledWith(
-      "/api/editor/cards?toml=data%2Ftabula%2Fcards.toml",
+      "/api/editor/cards?source=data%2Ftabula%2Fcards.toml",
       expect.anything(),
     );
   });
 
-  it("forwards the toml selection on the field save request", async () => {
+  it("forwards the canonical source selection on the field save request", async () => {
     window.history.replaceState({}, "", "/editor?toml=cards.toml");
     const fetchMock = vi.fn(
       () =>
@@ -147,7 +147,7 @@ describe("editor-api", () => {
     await saveEditorCardField({ field: "name", id: "card-id", value: "Renamed" });
 
     expect(fetchMock).toHaveBeenCalledWith(
-      "/api/editor/cards/card-id?toml=cards.toml",
+      "/api/editor/cards/card-id?source=cards.toml",
       expect.objectContaining({ method: "PATCH" }),
     );
   });

@@ -31,6 +31,8 @@ import { createGlossaryEditorApiMiddleware } from "./scripts/glossary-editor-api
 import { checkGeneratedCardData } from "./scripts/generated-card-data-drift.mjs";
 import { regenerateCardData } from "./scripts/setup-assets.mjs";
 import { resolveBuildHash } from "./scripts/build-hash.mjs";
+import { ensureGameData, listGameData } from "./scripts/game-data-pipeline.mjs";
+import { createRonEditorBridge } from "./scripts/ron-editor-bridge.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const buildGitSha = resolveBuildGitSha();
@@ -59,6 +61,97 @@ function resolveBuildGitSha(): string {
   } catch {
     return "unknown";
   }
+}
+
+interface RonGenerationOptions {
+  ensure?: typeof ensureGameData;
+  list?: typeof listGameData;
+  rootDir?: string;
+  debounceMs?: number;
+}
+
+/** Materialize generated compatibility data and keep canonical RON hot. */
+export function gameDataRonPlugin(options: RonGenerationOptions = {}): Plugin {
+  const rootDir = options.rootDir ?? __dirname;
+  const ensure = options.ensure ?? ensureGameData;
+  const list = options.list ?? listGameData;
+  const debounceMs = options.debounceMs ?? 120;
+  return {
+    name: "game-data-ron-generation",
+    apply: "serve",
+    async configureServer(server) {
+      await ensure({ rootDir });
+      const manifest = list({ rootDir });
+      const datasets = new Map<string, { id: string; source: string }>();
+      const watchedDirectories = new Map<string, Set<string>>();
+      for (const dataset of manifest.datasets) {
+        const source = path.resolve(rootDir, dataset.source);
+        datasets.set(source, { id: dataset.id, source: dataset.source });
+        const names = watchedDirectories.get(path.dirname(source)) ?? new Set<string>();
+        names.add(path.basename(source));
+        watchedDirectories.set(path.dirname(source), names);
+      }
+
+      const timers = new Map<string, ReturnType<typeof setTimeout>>();
+      const running = new Map<string, Promise<void>>();
+      const regenerate = async (source: string): Promise<void> => {
+        const dataset = datasets.get(source);
+        if (dataset === undefined) return;
+        const previous = running.get(dataset.id) ?? Promise.resolve();
+        const next = previous.then(async () => {
+          try {
+            await ensure({ rootDir, dataset: dataset.id });
+            server.ws.send({
+              type: "custom",
+              event: "game-data:generated",
+              data: { datasetId: dataset.id, source: dataset.source },
+            });
+          } catch (error) {
+            const message = error instanceof Error ? error.message : String(error);
+            console.error(`[game-data] ${dataset.id}: ${message}`);
+            server.ws.send({
+              type: "error",
+              err: {
+                message: `RON generation failed for ${dataset.id} (${dataset.source})`,
+                stack: message,
+              },
+            });
+          }
+        });
+        running.set(dataset.id, next);
+        await next;
+        if (running.get(dataset.id) === next) running.delete(dataset.id);
+      };
+      const schedule = (source: string): void => {
+        const dataset = datasets.get(source);
+        if (dataset === undefined) return;
+        const pending = timers.get(dataset.id);
+        if (pending !== undefined) clearTimeout(pending);
+        timers.set(dataset.id, setTimeout(() => {
+          timers.delete(dataset.id);
+          void regenerate(source);
+        }, debounceMs));
+      };
+      const watchers = [...watchedDirectories].map(([directory, names]) =>
+        fs.watch(directory, { persistent: false }, (_eventType, filename) => {
+          if (filename === null) {
+            for (const name of names) schedule(path.join(directory, name));
+          } else if (names.has(filename.toString())) {
+            schedule(path.join(directory, filename.toString()));
+          }
+        }));
+      let closed = false;
+      const close = (): void => {
+        if (closed) return;
+        closed = true;
+        for (const timer of timers.values()) clearTimeout(timer);
+        timers.clear();
+        for (const watcher of watchers) watcher.close();
+      };
+      server.httpServer?.once("close", close);
+      server.watcher.once("close", close);
+    },
+  };
 }
 
 /** Vite plugin that writes journey log events to disk during development. */
@@ -145,9 +238,14 @@ function dreamsignEditorApiPlugin(): Plugin {
     name: "dreamsign-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(
-        createDreamsignEditorApiMiddleware({ rootDir: __dirname }),
-      );
+      server.middlewares.use(createRonEditorBridge({
+        rootDir: __dirname,
+        basePaths: ["/api/editor/dreamsigns", "/api/editor/dreamsign-tags"],
+        collectionPath: "/api/editor/dreamsigns",
+        datasets: ["dreamsigns", "dreamsign-tags"],
+        sourcePaths: ["data/tabula/dreamsigns.ron", "data/tabula/dreamsigns.tags.ron"],
+        createLegacy: (rootDir) => createDreamsignEditorApiMiddleware({ rootDir }),
+      }));
     },
   };
 }
@@ -158,9 +256,14 @@ function glossaryEditorApiPlugin(): Plugin {
     name: "glossary-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(
-        createGlossaryEditorApiMiddleware({ rootDir: __dirname }),
-      );
+      server.middlewares.use(createRonEditorBridge({
+        rootDir: __dirname,
+        basePaths: ["/api/editor/glossary"],
+        collectionPath: "/api/editor/glossary",
+        datasets: ["glossary"],
+        sourcePaths: ["data/tabula/glossary.ron"],
+        createLegacy: (rootDir) => createGlossaryEditorApiMiddleware({ rootDir }),
+      }));
     },
   };
 }
@@ -238,9 +341,14 @@ function dreamAvatarEditorApiPlugin(): Plugin {
     name: "dream-avatar-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(
-        createDreamAvatarEditorApiMiddleware({ rootDir: __dirname }),
-      );
+      server.middlewares.use(createRonEditorBridge({
+        rootDir: __dirname,
+        basePaths: ["/api/editor/dream-avatars"],
+        collectionPath: "/api/editor/dream-avatars",
+        datasets: ["dream-avatars"],
+        sourcePaths: ["data/tabula/dream_avatars.ron", "data/tides4.jsonc"],
+        createLegacy: (rootDir) => createDreamAvatarEditorApiMiddleware({ rootDir }),
+      }));
     },
   };
 }
@@ -264,9 +372,14 @@ function dreamscapeEditorApiPlugin(): Plugin {
     name: "dreamscape-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(
-        createDreamscapeEditorApiMiddleware({ rootDir: __dirname }),
-      );
+      server.middlewares.use(createRonEditorBridge({
+        rootDir: __dirname,
+        basePaths: ["/api/editor/dreamscapes"],
+        collectionPath: "/api/editor/dreamscapes",
+        datasets: ["dreamscapes", "dream-guides"],
+        sourcePaths: ["data/tabula/dreamscapes.ron", "data/tabula/dream_guides.ron"],
+        createLegacy: (rootDir) => createDreamscapeEditorApiMiddleware({ rootDir }),
+      }));
     },
   };
 }
@@ -277,9 +390,14 @@ function figmentEditorApiPlugin(): Plugin {
     name: "figment-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(
-        createFigmentEditorApiMiddleware({ rootDir: __dirname }),
-      );
+      server.middlewares.use(createRonEditorBridge({
+        rootDir: __dirname,
+        basePaths: ["/api/editor/figments"],
+        collectionPath: "/api/editor/figments",
+        datasets: ["figments"],
+        sourcePaths: ["data/tabula/figments.ron"],
+        createLegacy: (rootDir) => createFigmentEditorApiMiddleware({ rootDir }),
+      }));
     },
   };
 }
@@ -380,9 +498,14 @@ function dreamwellEditorApiPlugin(): Plugin {
     name: "dreamwell-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(
-        createDreamwellEditorApiMiddleware({ rootDir: __dirname }),
-      );
+      server.middlewares.use(createRonEditorBridge({
+        rootDir: __dirname,
+        basePaths: ["/api/editor/dreamwell"],
+        collectionPath: "/api/editor/dreamwell",
+        datasets: ["dreamwell"],
+        sourcePaths: ["data/tabula/dreamwell.ron"],
+        createLegacy: (rootDir) => createDreamwellEditorApiMiddleware({ rootDir }),
+      }));
     },
   };
 }
@@ -393,9 +516,14 @@ function tutorialEditorApiPlugin(): Plugin {
     name: "tutorial-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(
-        createTutorialEditorApiMiddleware({ rootDir: __dirname }),
-      );
+      server.middlewares.use(createRonEditorBridge({
+        rootDir: __dirname,
+        basePaths: ["/api/editor/tutorial"],
+        collectionPath: "/api/editor/tutorial",
+        datasets: ["tutorial"],
+        sourcePaths: ["data/tabula/tutorial.ron"],
+        createLegacy: (rootDir) => createTutorialEditorApiMiddleware({ rootDir }),
+      }));
     },
   };
 }
@@ -899,6 +1027,7 @@ export default defineConfig({
   },
   plugins: [
     firebaseConfigGuardPlugin(),
+    gameDataRonPlugin(),
     react(),
     tailwindcss(),
     journeyLogPlugin(),
@@ -942,6 +1071,7 @@ export default defineConfig({
       // creating a worktree from reloading the dev server.
       ignored: [
         path.resolve(path.join(__dirname, "data", "tabula")) + "/**",
+        path.resolve(path.join(__dirname, "data", "exploration_candidates.toml")),
         imageViewerStatePath,
         // Exploration candidates editor saves atomically rotate the JSON source through
         // sibling .tmp/.bak files. Ignore the source and transaction siblings

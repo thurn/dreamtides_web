@@ -13,19 +13,19 @@ directory provide more detailed gameplay & technical breakdowns of the feature.
 The document at [battle_rules](../../battle_rules/battle_rules.md) provides more
 information about the actual rules of the game.
 
-## The Golden Rule: Configuration via TOML
+## The Golden Rule: Configuration via RON
 
 The rest of this document goes into detail about specific game systems. To the
 maximum extent possible, though, Dreamtides gameplay is intended to be
-completely configurable via TOML file changes. If a section in the plan says
-"shops contain 6 items", this is implied to be configured in TOML. Whenever
+completely configurable via RON file changes. If a section in the plan says
+"shops contain 6 items", this is implied to be configured in RON. Whenever
 reasonable, we should even allow more complex algorithmic changes via data
 (dreamscape generation, draft pool rules, battle rewards, etc). When
 implementing any rules engine feature, we should ask the question "could we make
 this configurable?"
 
 This rule applies to user interface behavior as well as game design: things like
-particle effects, sound effects, and animations are always configured in TOML
+particle effects, sound effects, and animations are always configured in RON
 when possible.
 
 ## Overview
@@ -47,7 +47,7 @@ to lead their deck and may have some number of Dreamsigns:
   Dreamsign pool, and default reward bias as described in
   [Draft Pool Construction](#draft-pool-construction).
 - **Dreamsigns:** Cards with 2D illustrations of objects which provide more
-  minor ongoing effects, defined in `data/tabula/dreamsigns.toml`. A dreamsign
+  minor ongoing effects, defined in `data/tabula/dreamsigns.ron`. A dreamsign
   the player gains is kept for the rest of the run; its effect can apply during
   battles, on the journey map, or both (for example, a battle effect such as "Once
   per turn, when you discard a card, your next card this turn costs 2 less," or a
@@ -228,7 +228,7 @@ more likely to be against a Spirit Animals deck.
 
 Affiliations are flavor-aligned with their dreamscape (Tumbleleaf Village leans
 toward Spirit Animals, Tsukiren toward Warriors), but mechanically they are just
-signature card sets and corresponding similarity weights configured in TOML.
+signature card sets and corresponding similarity weights configured in RON.
 
 ## Tides
 
@@ -319,7 +319,7 @@ from different pools.
 The same resolution step also builds the run's initial Dreamsign pool from the
 Dreamsign templates associated with the selected tides.
 
-Pool size, copy cap, and the facet draw range are configured in TOML; assume all
+Pool size, copy cap, and the facet draw range are configured in RON; assume all
 of these values are subject to change.
 
 ### Draft Pick Generation
@@ -360,12 +360,12 @@ Sites are the encounters within a dreamscape. Sites can generally be visited in
 any order, with the exception that the "Battle" site must be visited last. Each
 site must be visited exactly once and cannot be returned to. Dreamscapes contain
 between 3 and 6 total sites (including battle and draft sites, configured in
-TOML) as described in [Dreamscape Generation](#dreamscape-generation).
+RON) as described in [Dreamscape Generation](#dreamscape-generation).
 
 Most sites are paired with a [Dream Guide](#dreamscapes-and-dream-guides). The
 guide is the same character for a given site type everywhere it appears (every
 Card Shop is Tobias), and the guide character appears wherever their site
-appears, home or not. Their behavior and dialog are configured via TOML. For
+appears, home or not. Their behavior and dialog are configured via RON. For
 sites with a guide, portrait mode frames the guide at the top of the screen with
 content below, while landscape mode places the guide to one side with content
 beside them.
@@ -450,7 +450,7 @@ Shop cards are drawn from the run's tide-based draft pool, in the same manner as
 draft picks, and are removed from the draft pool even if not selected. A Card
 Shop always shows 5 cards to purchase plus a restock option.
 
-Shop base prices and the overall essence economy are defined in TOML. A card's
+Shop base prices and the overall essence economy are defined in RON. A card's
 median price is around 100 essence, and the restock option always costs 50
 essence. The shop implements a random "discount" system where one or more items
 can be displayed as being on sale, for between 30% and 90% cost reduction. Effects such as dreamsigns
@@ -552,7 +552,7 @@ indicate the transfiguration. Possible transfigurations include:
   cards which cost 0.
 - Amplified Transfiguration: Improves the effect of the card by increasing or
   decreasing a number in its rules text by 1. Only available for cards with
-  numbers in their text. The amplified variant of each card is defined in TOML.
+  numbers in their text. The amplified variant of each card is defined in RON.
 - Kindled Transfiguration: Doubles the base spark of a character, or sets it to
   1 for characters with 0 spark. Only available for characters.
 - Resonant Transfiguration: Increases the frequency of named card triggers,
@@ -744,7 +744,7 @@ enhancements are:
 The guide's signature site is always present and enhanced in the home dreamscape.
 The same site can also appear in the random fill of other dreamscapes, where the
 guide still presents it but the enhancement does not apply. Enhancement details
-are configured in TOML.
+are configured in RON.
 
 ## Victory & Defeat
 
@@ -809,7 +809,7 @@ The Atlas is organized into **7 layers**, each a vertical column of stacked
 dreamscape nodes. The player visits exactly one node per layer, advancing in
 sequence; once a layer is completed the player proceeds to the next layer and the
 other nodes in the completed layer are gone for good, with no backtracking. The
-default layer shape — itself a TOML layer-spec list, described with concrete
+default layer shape — itself a RON layer-spec list, described with concrete
 defaults here to show the intended shape — is:
 
 | Layer | Width | Notes |
@@ -905,7 +905,7 @@ likely than a fresh dreamscape. A draw that would place a dreamscape directly
 adjacent to a copy of itself is rejected and redrawn. The two layer-2 choices out
 of Firstlight Meadow are guaranteed to show different site icons. The layer widths,
 the weighting, the connection average, the reveal counts, and how sharply repeats
-are discouraged are configured in TOML.
+are discouraged are configured in RON.
 
 ### Known Dreamsigns
 
@@ -926,7 +926,7 @@ dreamsign in its corner and on hover, visible as soon as the node is revealed.
 Within a dreamscape, sites are generated by drawing from a pool, in a similar
 manner to how draft picks are generated. Sites are selected when the dreamscape
 becomes available. Each dreamscape contains between 3 and 6 total sites
-(configured in TOML).
+(configured in RON).
 
 The contents of a non-starter dreamscape are assembled as follows:
 
@@ -940,7 +940,7 @@ The contents of a non-starter dreamscape are assembled as follows:
    range) from a pool of the 9 other guides' signature sites (each bringing its
    guide, non-enhanced) plus the generic Essence site. The pool for fill generation
    changes by layer, with new options shuffled in after each dreamscape is
-   completed as defined in TOML for that layer; Transfiguration and Duplication, for
+   completed as defined in RON for that layer; Transfiguration and Duplication, for
    example, become more common later in the journey. When the node carries a
    [known dreamsign](#known-dreamsigns), a [Dreamsign Reward](#dreamsign-reward)
    site takes one of these fill slots.

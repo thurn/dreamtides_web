@@ -125,7 +125,7 @@ describe("GlossaryEditorApp", () => {
       definition: "Power used during a challenge.",
       variants: [],
     });
-    expect(container.textContent).toContain("Saved to glossary.toml");
+    expect(container.textContent).toContain("Saved to glossary.ron");
     expect(container.textContent).not.toContain("Save Definition");
 
     act(() => root.unmount());
@@ -259,7 +259,7 @@ describe("GlossaryEditorApp", () => {
         "[data-testid='glossary-term-input']",
       )?.value,
     ).toBe("Spark");
-    expect(container.textContent).toContain("Saved to glossary.toml");
+    expect(container.textContent).toContain("Saved to glossary.ron");
 
     act(() => root.unmount());
   });

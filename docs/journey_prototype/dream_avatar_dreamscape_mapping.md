@@ -1,8 +1,8 @@
 # Dream Avatar ↔ Dreamscape mapping
 
-Every non-starter dreamscape in `data/tabula/dreamscapes.toml` lists the 3–4
+Every non-starter dreamscape in `data/tabula/dreamscapes.ron` lists the 3–4
 Dream Avatars that call it home, under a `dream-avatar-ids` field. Together these
-lists **partition** `data/tabula/dream_avatars.toml`: each of the 32
+lists **partition** `data/tabula/dream_avatars.ron`: each of the 32
 Dream Avatars belongs to exactly one dreamscape, and no Dream Avatar is shared.
 The starter region (Firstlight Meadow) has no residents.
 
@@ -64,7 +64,7 @@ of 4**. The two four-caller regions are Pharaoh's Gate (The Void) and Grid City
 (`validateDreamAvatarMapping`). The structural checks — the same Dream Avatar
 listed under two dreamscapes, a non-starter region outside the 3–4 band, or the
 starter carrying residents — are **fatal**; they depend only on
-`dreamscapes.toml`, so a routine edit elsewhere can never trip them. The
+`dreamscapes.ron`, so a routine edit elsewhere can never trip them. The
 referential checks against the Dream Avatar set are **warnings**: a
 `dream-avatar-id` that resolves to no Dream Avatar, and a Dream Avatar assigned to
 no dreamscape. They warn rather than abort because the build may run against a

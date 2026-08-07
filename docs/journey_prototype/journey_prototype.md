@@ -18,19 +18,20 @@ npm run dev          # runs setup-assets.mjs then starts Vite
 ```
 
 `npm run dev` invokes `scripts/setup-assets.mjs` automatically before starting
-Vite. The setup script is idempotent and:
+Vite. The setup script first compiles every manifest-declared RON catalog to
+validated, generated compatibility TOML. It is idempotent and then:
 
-1. Parses `cards.toml` into `public/card-data.json`.
-2. Parses `dream_avatars.toml` into `public/dream-avatars-v2-data.json`.
+1. Parses generated `cards.toml` into `public/card-data.json`.
+2. Parses generated `dream_avatars.toml` into `public/dream-avatars-v2-data.json`.
 3. Symlinks `public/cards/{cardNumber}.webp` into the local image cache at
    `~/Library/Caches/io.github.dreamtides.tv/image_cache/`.
 4. Copies `data/tides4.jsonc` into `public/tides4-data.json` with comments
    stripped.
-5. Compiles `data/tabula/atlas.toml` into validated `public/atlas-data.json`.
+5. Compiles generated `data/tabula/atlas.toml` into validated `public/atlas-data.json`.
 6. Compiles and cross-validates the canonical Dream Guide and Site catalogs,
    derives Dreamscape assignments, and emits `public/dream-guides-data.json`,
    `public/dreamscapes-data.json`, and `public/sites-data.json`.
-7. Compiles `data/tabula/opponents.toml` into validated
+7. Compiles generated `data/tabula/opponents.toml` into validated
    `public/opponents-data.json`.
 
 The generated `public/cards/`, `public/card-data.json`,
@@ -40,7 +41,7 @@ The generated `public/cards/`, `public/card-data.json`,
 Battle and opponent tuning is documented in
 [Opponent Data](opponents_data.md). Battle setup, Dreamwell schedules,
 progression curves, opponent construction, and named AI presets are authored in
-`data/tabula/opponents.toml`.
+`data/tabula/opponents.ron`.
 
 Other commands:
 
@@ -55,7 +56,7 @@ npm run build        # production build
 
 React 19, Vite 7, TypeScript 5.8 in strict mode. Tailwind CSS v4 via
 `@tailwindcss/vite` and Framer Motion for animations. The prototype uses
-browser-loaded JSON instead of a runtime TOML parser.
+browser-loaded JSON built through the generated TOML compatibility layer.
 
 TypeScript is configured for bundler mode (`moduleResolution: "bundler"`), so
 Node built-in modules are not available in type-checked code. Tests that need
@@ -105,7 +106,7 @@ The important ownership boundaries are:
   tutorial, live battle, victory, and journey.
 
 Atlas graph generation, boss content, presentation copy, and asset references
-are authored in `data/tabula/atlas.toml`. See [Dream Atlas Data](atlas_data.md)
+are authored in `data/tabula/atlas.ron`. See [Dream Atlas Data](atlas_data.md)
 for the schema, validation rules, hashing, and Layer VII Limbo semantics. Guide
 identity, home and specialty assignments, dialogue, site presentation, and
 cross-site mechanics are documented in
@@ -152,7 +153,7 @@ clears the room's battle slice and resumes the imported journey screen.
 
 ### Tutorial authoring
 
-The standalone tutorial scenario is authored in `data/tabula/tutorial.toml`.
+The standalone tutorial scenario is authored in `data/tabula/tutorial.ron`.
 It includes presentation actions, guidance, featured identities, battle setup,
 and the playable handoff. `scripts/setup-assets.mjs` validates that source and
 generates the browser-readable `public/tutorial-data.json` snapshot. The
@@ -384,10 +385,10 @@ design lives in `docs/journey_prototype/battle_ai.md`.
 
 ## Card Data Normalization
 
-The TOML source has a few field variants that `setup-assets.mjs` normalizes to
-JSON:
+The Cards RON schema lowers typed variants to compatibility TOML that
+`setup-assets.mjs` normalizes to JSON:
 
-| Field         | TOML source values           | JSON output    |
+| Field         | Compatibility TOML values    | JSON output    |
 | ------------- | ---------------------------- | -------------- |
 | `spark`       | absent, `""`, `"*"`, integer | `null` or int  |
 | `energy-cost` | `"*"`, integer               | `null` or int  |

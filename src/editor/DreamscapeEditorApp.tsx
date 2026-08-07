@@ -497,7 +497,7 @@ export default function DreamscapeEditorApp({
         <span
           style={{ color: "#8edbd1", fontSize: "0.82rem", fontWeight: 600 }}
         >
-          {loadStatus.kind === "loaded" ? "dreamscapes.toml" : "Loading..."}
+          {loadStatus.kind === "loaded" ? "dreamscapes.ron" : "Loading..."}
         </span>
         <span
           style={{ color: "#6f7a76", fontSize: "0.76rem", marginLeft: "6px" }}

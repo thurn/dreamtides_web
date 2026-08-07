@@ -236,7 +236,7 @@ export default function FigmentEditorApp({
     useState<FigmentDisplayState>(DEFAULT_DISPLAY_STATE);
   const activeTomlLabel = useMemo(() => {
     const param = editorTomlParam();
-    const path = param ?? "figments.toml";
+    const path = param ?? "figments.ron";
     const fileName = path.split(/[\\/]/u).pop();
     return fileName !== undefined && fileName !== "" ? fileName : path;
   }, []);
