@@ -101,9 +101,17 @@ Research across module boundaries. Source ownership, type names, helper
 objects, routes, debug tools, and test fixtures are evidence, not a chapter
 outline. Do not turn them into book concepts without a design reason.
 
+Trace each player-facing object through its complete flow: where it comes from,
+how it is selected, what the player sees, what the player does with it, and
+where it goes next. Prefer the gameplay verb established by that flow, such as
+“draw,” “choose,” or “purge,” over a data-model verb such as “contains,” “owns,”
+or “supplies.” Do not let one provider, adapter, screen comment, or data catalog
+settle a behavior when the end-to-end flow disagrees.
+
 When evidence conflicts with an explicit user decision, document the user's
-design. When evidence conflicts internally and no intent is known, ask the user
-to choose before writing the disputed behavior.
+design. Record the implementation mismatch outside LToDD when repository
+instructions require it. When evidence conflicts internally and no intent is
+known, ask the user to choose before writing the disputed behavior.
 
 ### 4. Ask only material, concrete questions
 
@@ -139,9 +147,9 @@ the subject clearly needs another:
 3. Introduce the core objects, resources, choices, and outcomes as they become
    necessary.
 4. Explain important rules and algorithms beside the phase where they operate.
-5. Put identity, derived values, persistence boundaries, randomness contracts,
-   and other narrow technical models after the reader understands why they
-   matter.
+5. Add identity, derived values, persistence boundaries, randomness contracts,
+   or other narrow technical models only when they define a non-obvious design
+   rule, and only after the reader understands why they matter.
 6. Link to adjacent chapters for concepts that have their full definition
    elsewhere.
 
@@ -150,11 +158,28 @@ interesting an internal mechanism is. A foundational chapter should spend most
 of its space explaining the game, not card copying, identifiers, random state,
 or generic invariants.
 
+Build a heading tree before drafting. Level-two headings name the part's major
+systems. Phases, screens, algorithms, outcomes, and departure behavior remain
+under their owning system as level-three headings. Technical complexity does
+not justify promoting a subordinate topic into a peer section.
+
+Before treating a source abstraction such as a policy, strategy, result record,
+or prepared object as canonical, map where it varies in production content. If
+each effect or encounter effectively fixes one obvious value, explain the
+behavior as part of that effect rather than elevating the abstraction. Preserve
+the separate concept only when the intended design varies it independently or
+the distinction explains materially different outcomes.
+
 ### 6. Write the canonical design
 
 Write in plain, active, present-tense prose for a technical audience. Use
 specific nouns and verbs. Prefer a direct definition or state transition over
 an abstract claim about experience, clarity, importance, or philosophy.
+
+Use the verb the game actually performs. Say that a site draws a card when the
+card comes from the player's deck; do not say that a scene contains a source
+card. Do not lead with a property shared by every sibling object unless that
+property matters to the distinction being explained.
 
 Describe one coherent design. Preserve exact rules where exactness matters, but
 do not mirror source structure. Explain algorithms through their inputs,
@@ -177,6 +202,27 @@ unambiguous term for a real concept.
 Do not call an authored status or implementation difference a defect unless the
 user has established that it is a bug. Use neutral descriptions of current
 state and intended design.
+
+Assume routine implementation correctness. Omit validation plumbing,
+signatures, serialization, logging traces, atomic application, and the fact
+that completed choices are saved unless one of those creates a non-obvious
+gameplay rule or cross-phase design constraint. “The game remembers what the
+player did” is not useful technical design by itself.
+
+Introduce an algorithm in this order:
+
+1. State in ordinary language what gameplay question it answers and when it
+   runs.
+2. Distinguish it from adjacent concepts in one sentence.
+3. Give one concrete example when the distinction remains abstract.
+4. Present variants, scoring, constants, or edge cases only if the chapter
+   still needs them.
+
+Prefer bullets for three or more sibling attributes, options, effects, or
+recorded facts. Use numbered steps when order matters. Keep causal explanation
+in prose. After formatting, inspect the Markdown source for links or coordinated
+phrases broken into visually jagged fragments; recast them as separate sentences
+or bullets rather than accepting technically valid but hard-to-read wrapping.
 
 #### Write a primary chapter
 
@@ -208,6 +254,10 @@ goal to hit. Complete, concise chapters may be substantially shorter. Never add
 detail, examples, rationale, or sections to approach the reference size. A
 chapter must not exceed 40,000 characters. Use
 `node .llms/skills/ltodd/scripts/measure-chapters.mjs` to inspect counts.
+
+When the user requests a target length, use that target instead of the planning
+reference. Measure during drafting and remove low-value technical detail before
+exceeding the requested scale.
 
 ### 7. Audit terminology and navigation
 
@@ -259,6 +309,19 @@ Resolve every error and inspect every warning. Then review the formatted diff
 for factual accuracy, concept order, undefined terms, accidental title case,
 platform leakage, vague prose, unnecessary repetition, and broken reading
 paths.
+
+Perform four final structural checks:
+
+- **Opening check:** Every opening claim uses a literal game action or result,
+  not an abstract transformation or a redundant property shared by the whole
+  category.
+- **Hierarchy check:** Every heading belongs at its level; phases and outcomes
+  remain beneath the system they describe.
+- **Abstraction check:** Every named algorithm or technical object earns an
+  independent place in the design rather than merely mirroring a source type or
+  one-to-one effect configuration.
+- **Scope check:** Remove routine correctness and persistence details that a
+  clean implementation would naturally provide without LToDD instruction.
 
 Finish only when the change describes one resolved design, a new contributor
 can follow each chapter from its opening, technical depth is proportional to

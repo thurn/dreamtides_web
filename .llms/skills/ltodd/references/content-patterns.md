@@ -26,6 +26,11 @@ Prefer headings that name a recognizable concept, phase, or rule. Avoid one
 heading per source module, generic buckets such as “Implementation” or “State,”
 and long inventories that separate rules from the flow where they operate.
 
+Make the heading tree show ownership. A destination such as Augury or
+Exploration may be a level-two section; entering it, choosing, resolving, and
+leaving are level-three phases beneath that destination. Do not make a
+subordinate phase a peer because its source implementation is large.
+
 Do not let a technically intricate research area dominate an overview unless
 it also dominates the reader's understanding of the system.
 
@@ -39,8 +44,9 @@ itself:
 3. Define the core objects and resources when the lifecycle first needs them.
 4. Explain each major phase, choice, and result in order.
 5. Add the rules and algorithms that govern those phases.
-6. Explain identity, persistent and temporary state, copying, derived values,
-   and deterministic randomness after their purpose is clear.
+6. Add identity, persistent and temporary state, copying, derived values, or
+   deterministic randomness only when they define a non-obvious rule, and only
+   after their purpose is clear.
 7. Link to adjacent chapters that own deeper rules.
 
 For a chapter about Dreamtides, the reader should learn what kind of game it is
@@ -64,6 +70,11 @@ Use this pattern for rules or an algorithm that operates across several phases:
 7. Give one short example if several state changes are otherwise hard to track.
 8. Link to the chapter that owns the surrounding lifecycle.
 
+When the system uses a named policy or strategy, begin with the gameplay
+question it answers. Show one effect using it before cataloging variants. If the
+effect always fixes one obvious strategy, keep the strategy inside the effect's
+explanation instead of giving it an independent section.
+
 Headings should make the flow easy to scan. “Choose an offer,” “Pay its cost,”
 and “Apply the result” are usually clearer than “Selection logic,” “Economy,”
 and “Persistence.”
@@ -83,6 +94,18 @@ or interaction:
 Name shared Cumulus components only when that helps connect the flow to the
 design system. Leave routine presentation, component APIs, and motion details
 to Cumulus and the prototype.
+
+Keep the whole flow beneath its owning screen or destination heading. A useful
+shape is:
+
+1. Arrival and visible choice.
+2. How the offered objects are selected, if non-obvious.
+3. One concrete example of a choice being prepared and applied.
+4. Outcome presentation and the handoff back to the surrounding game.
+
+Do not add sections about validation payloads, saved resolution records,
+atomicity, or resume mechanics unless they change what the player can do or what
+a later game phase receives.
 
 ## Supplemental deep dive
 
@@ -124,6 +147,15 @@ Do not open with a catalog of authored definitions, runtime objects, source
 types, or internal IDs unless the chapter's declared subject is the data model
 itself.
 
+Avoid openings built from vague transformations or redundant category traits:
+
+> The site turns the journey into a persistent consequence.
+
+Name what the player sees and what actually changes instead:
+
+> The site presents two rewards. The chosen reward may add a card, modify the
+> deck, or change a later battle.
+
 ## Definitions and early references
 
 Define a term where the reader first needs it:
@@ -133,7 +165,8 @@ Define a term where the reader first needs it:
 If a term appears before its full section, add a short explanation and link:
 
 > The player chooses a **Dream Avatar**, the character that supplies the
-> starting deck and abilities. See [Dream Avatars](#dream-avatars).
+> starting deck and abilities. See
+> [Dream Avatars](../../../../ltodd/dreamtides/dreamtides.md#dream-avatars-and-dreamsigns).
 
 Do not rely on capitalization to signal vocabulary. Bold the first definition,
 then write the term normally. Do not introduce a named keyword or status merely
@@ -146,6 +179,10 @@ For a calculation without separate identity, use ordinary prose:
 
 Do not invent a new object name for the result unless rules refer to that result
 as an independent object.
+
+Use the concrete gameplay verb instead of describing a source record. Say “the
+site draws a card from the player's deck” when that is the rule, not “the scene
+contains a source card.”
 
 ## Index entries
 

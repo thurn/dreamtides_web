@@ -81,6 +81,13 @@ language:
 - What does the player do or observe?
 - What does it produce or change?
 
+Test every opening sentence literally. Its subject should perform a real game
+action or name a real result. A site may draw a card, present two offers, modify
+the deck, or add a future battle rule. It does not “turn the journey into a
+consequence.” Do not spend the opening on a property shared by every member of
+the category, such as calling one particular site single-use when all sites are
+single-use.
+
 Continue in dependency order. A reliable sequence for a foundational chapter
 is:
 
@@ -88,8 +95,9 @@ is:
 2. Introduce the first objects and resources needed to follow that lifecycle.
 3. Explain choices, resolution, and outcomes in the order they occur.
 4. Add rules and algorithms beside the phase where they matter.
-5. Explain technical distinctions, identity, persistence, derived values, and
-   deterministic randomness after their gameplay role is clear.
+5. Add technical distinctions, identity, persistence, derived values, or
+   deterministic randomness only when they define a non-obvious rule, and only
+   after their gameplay role is clear.
 6. Link to adjacent chapters for systems that own deeper rules.
 
 Do not open a general chapter with authored data shapes, runtime instances,
@@ -100,6 +108,12 @@ first thing a new contributor needs.
 Research depth does not determine prose emphasis. A large or intricate source
 subsystem may need only one paragraph in an overview. Spend words according to
 what the reader must understand, not according to source line count.
+
+Follow the player-facing object's actual lifecycle. State where it comes from
+and use the corresponding gameplay verb. If a site draws a card from the deck,
+say that it draws the card. “The encounter contains a source card” replaces an
+observable action with a data-shape description and can conceal a materially
+different selection rule.
 
 ## Plain technical prose
 
@@ -139,6 +153,17 @@ Use sentence case for headings. Capitalize proper names such as Dreamtides and
 Dream Atlas. Write common game terms such as card, battle, journey, status, and
 ability in lowercase.
 
+Prefer lists when prose is carrying an inventory rather than an argument. Turn
+three or more sibling attributes, choices, effect categories, or output fields
+into bullets. Use numbered steps for an ordered algorithm. Keep the sentence or
+paragraph form when one clause explains why another is true.
+
+Formatting to 80 columns is necessary but not sufficient. After formatting,
+inspect the Markdown itself. When inline links or coordinated phrases wrap into
+several hanging fragments, give each linked item its own bullet or rewrite the
+sentence. Do not make a reader reconstruct one grammatical list across five
+physical lines.
+
 ## Terminology and first use
 
 Never require a new reader to infer a project term from context. At the first
@@ -152,7 +177,8 @@ When a concept needs a brief early mention, explain enough to continue and link
 to its full treatment. For example:
 
 > The player first chooses a **Dream Avatar**, the character that supplies the
-> journey's starting deck and abilities. See [Dream Avatars](#dream-avatars).
+> journey's starting deck and abilities. See
+> [Dream Avatars](../../../../ltodd/dreamtides/dreamtides.md#dream-avatars-and-dreamsigns).
 
 Do not repeatedly use a term and define it several sections later. A glossary
 entry does not excuse an unexplained first use in the chapter.
@@ -189,6 +215,19 @@ properties:
 - rules that treat the object differently from nearby concepts; or
 - a boundary a clean implementation must preserve.
 
+For a policy, strategy, mode, or other configurable source abstraction, also
+test whether the value varies independently in authored production content.
+Build a quick mapping from the effect or encounter to its allowed and configured
+values. When almost every effect fixes one obvious value, describe that target
+selection as part of the effect. Do not promote a one-to-one configuration seam
+into a major design concept merely because the implementation makes it reusable.
+
+When the abstraction does vary, explain the design reason before its taxonomy.
+For example, a generic “gain a card” effect may need distinct target algorithms
+for an authored card, a card fitted to the deck, a generally strong card, or a
+coherent bundle. This establishes why the separation exists. It does not make
+the policy a player-facing choice.
+
 For example, a persistent card instance and a battle card are distinct because
 one card instance can produce several battle cards, each with independent
 battle-local state. A calculated set of card values is not necessarily another
@@ -220,6 +259,13 @@ State what must remain true:
 - which operations may create multiple independent copies; and
 - which ordering affects the result.
 
+Routine correctness is implicit. Do not document that the game validates an
+ordinary submitted choice, applies an ordinary reward completely, saves a
+completed action, or can reload recorded state unless the behavior introduces a
+non-obvious rule, interruption boundary, or later gameplay consequence. Avoid
+signatures, trace payloads, serialization fields, and atomicity discussions in
+an overview whose design does not depend on them.
+
 Do not prescribe browser actions, URLs, framework state, event-log reduction,
 database layout, file format, or serialization strategy. Avoid implementation
 terms such as reload, reducer, fold, component state, or storage key when the
@@ -243,6 +289,15 @@ of this contract:
 - fixed constants that are intrinsic rules;
 - edge cases that change an outcome; and
 - the reason for a non-obvious constraint.
+
+Before giving that contract, define the algorithm in one plain sentence: what
+question does it answer for the game? State when it runs and distinguish it from
+the effect that consumes its output. If the distinction is still abstract, give
+one concrete example before listing variants or scoring inputs. “The purge
+effect removes a card; its target-selection algorithm chooses which eligible
+card the offer names” is clearer than beginning with a catalog of policy IDs.
+When a section is named for a specialized term, make its first sentence a direct
+definition in the form “A [term] is …,” not a contrast with another subsystem.
 
 Use ordered steps when order matters, equations when a formula is the clearest
 expression, and narrow tables for exact mappings. Do not write source code,
@@ -305,6 +360,12 @@ stand alone, but “complete” does not mean every internal edge case or data
 structure. It means the reader understands what the system is, how its main
 flow works, which rules define it, and where linked systems take over.
 
+Make heading depth express ownership. Use level-two headings for the major
+systems promised by the part. Put arrival, interaction, resolution, outcome,
+and departure beneath the site or system they describe. Do not promote a phase
+to level two because its implementation is large, and do not append a technical
+reference section to a primary chapter merely because research uncovered one.
+
 A supplement owns one focused system whose complexity would otherwise obscure
 the primary chapter. It is not a place to move ordinary explanation, screen
 catalogs, or source-module details.
@@ -318,6 +379,10 @@ Use 20,000 Unicode characters as a loose planning reference only. A clear
 chapter may be much shorter. Never add examples, tables, rationale, or technical
 detail to approach that size. The hard limit is 40,000 characters for an
 ordinary chapter.
+
+When the user requests a target length, that request replaces the planning
+reference. Measure while drafting and remove low-value technical detail before
+exceeding the requested scale.
 
 ## Cross-references and the glossary
 
@@ -342,8 +407,10 @@ synonyms, one-off helper labels, derived views, or every bold phrase.
 ## Examples, tables, and symbols
 
 Use a concrete example when it clarifies multiple state changes, identity,
-multiplicity, ordering, or an edge case. State the minimum initial conditions,
-walk through the relevant change, and name the result. Omit examples that only
+multiplicity, ordering, an edge case, or the boundary between two easily
+confused abstractions. State the minimum initial conditions, walk through the
+relevant change, and name the result. Put the example before a detailed taxonomy
+when it supplies the reader's first intuitive model. Omit examples that only
 repeat the preceding sentence.
 
 Use tables for exact mappings and comparisons. Put a symbol directly in the
@@ -374,26 +441,35 @@ Read the completed chapter once as a newcomer and once as an implementer.
 
 During the newcomer pass, verify:
 
+- each opening sentence names a literal game action or result;
 - the opening explains the subject before using specialized vocabulary;
 - the main lifecycle appears before narrow technical machinery;
+- heading depth matches conceptual ownership;
 - every specialized term is defined, briefly explained and linked, or deferred
   at first use;
 - common game terms are lowercase and first definitions are bolded once;
 - cross-links appear where a concept precedes its full treatment;
 - no vague roadmap sentence, pitch language, or ornamental phrasing remains;
 - parenthetical asides use parentheses, commas, or separate sentences; and
-- the chapter is concise enough that the important concepts remain prominent.
+- the chapter is concise enough that the important concepts remain prominent;
+- dense inventories use readable bullets or numbered steps;
+- formatted links and phrases do not leave jagged hanging fragments; and
+- technical references do not appear before the gameplay need they explain.
 
 During the implementation pass, verify:
 
 - rules, inputs, ordering, state changes, and edge cases are exact where needed;
 - source helpers have not become unnecessary canonical concepts;
+- configurable abstractions vary meaningfully rather than mirroring one obvious
+  value per effect;
 - identity distinctions correspond to real lifetime, multiplicity, or behavior;
 - platform, framework, storage, and serialization choices do not leak in;
 - user decisions are represented even when implementation evidence differs;
 - terminology is consistent with the glossary and adjacent chapters;
 - tables contain every symbol or mapping they claim to define;
-- examples add information rather than padding; and
+- examples add information rather than padding;
+- routine validation, persistence, logging, signatures, and atomicity have been
+  omitted unless they define a non-obvious game rule; and
 - no TODO, alternative design, uncertainty, or speculative claim remains.
 
 Finally, search the corpus for changed terms and duplicated rules, update the
