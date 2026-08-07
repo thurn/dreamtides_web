@@ -1,6 +1,6 @@
 ---
 name: implement-canonical-ron
-description: Activate a reviewed production-intended `_canonical.ron` candidate by reusing its existing dataset-specific Rust source model, compatibility-TOML lowerer, and synthetic tests, then registering the adapter, replacing the production RON source, regenerating outputs, proving parity, and invoking `build-ron-editor` before cutover whenever an existing UI, API, or save path can edit the dataset. Use when asked to implement, integrate, ship, promote, cut over, or replace a compatibility-shaped production RON file with a canonical modeled candidate such as `data/affiliations_canonical.ron`.
+description: Activate a reviewed production-intended `_canonical.ron` candidate without modifying its input bytes by reusing its existing dataset-specific Rust source model, compatibility-TOML lowerer, and synthetic tests, then registering the adapter, replacing the production RON source, regenerating outputs, proving parity, and invoking `build-ron-editor` before cutover whenever an existing UI, API, or save path can edit the dataset. Abort when activation would require changing the candidate. Use when asked to implement, integrate, ship, promote, cut over, or replace a compatibility-shaped production RON file with a canonical modeled candidate such as `data/affiliations_canonical.ron`.
 ---
 
 # Activate Canonical RON
@@ -9,6 +9,21 @@ Treat this as activation of already-tested design artifacts, not a second
 implementation pass. Preserve runtime data, record order, stable IDs,
 references, generated artifacts, and consumer behavior while switching authored
 ownership to the modeled RON source.
+
+## Immutable input contract
+
+Treat the requested `_canonical.ron` file as immutable input. At the start of
+the task, record its byte hash. Do not edit, format, regenerate, normalize, or
+otherwise change its contents. The only permitted cutover operation is to place
+those exact bytes at the production RON path and remove the suffixed input path;
+verify the production file still has the recorded hash afterward.
+
+If activation would require any change to the input RON bytes, abort the
+activation. Do not repair the candidate, continue with a partially corrected
+candidate, or substitute newly generated content. Leave the production source
+and manifest unactivated, unwind only partial changes made by this activation,
+and report the exact candidate correction required so it can return through
+review.
 
 ## Required handoff
 
@@ -23,8 +38,9 @@ Expect `convert-toml-to-ron` to have produced all of the following:
   when legacy identifiers were migrated.
 
 If these durable Rust artifacts are absent, use `convert-toml-to-ron` to create
-them in the repository. Do not reconstruct them in a disposable crate and then
-write them again here.
+them in the repository without changing the input candidate. If conversion
+cannot produce the missing artifacts from the candidate as-is, abort. Do not
+reconstruct them in a disposable crate and then write them again here.
 
 ## 1. Audit, do not rewrite
 
@@ -46,9 +62,11 @@ Confirm that the durable code still:
 - rejects duplicate identities, non-UUIDv4 canonical IDs, incomplete UUID
   mappings, and invalid combinations.
 
-Make only review-driven corrections to these existing artifacts. Do not replace
-them with a fresh implementation merely because the activation agent would have
-modeled them differently.
+Make only review-driven corrections to the durable Rust artifacts. Never apply
+those corrections to the input candidate during activation. If a correction to
+the Rust artifacts cannot accept and faithfully lower the candidate as-is,
+abort. Do not replace the artifacts with a fresh implementation merely because
+the activation agent would have modeled them differently.
 
 Materialize a clean current compatibility output before cutover. Save parsed
 TOML and affected derived artifacts outside the committed tree, or use a
@@ -85,8 +103,11 @@ validation, and the normal browser save and recovery workflow.
 
 Begin the editor migration before the source-replacement phase. The editor and
 activation may become coherent together in one working tree, but do not accept
-or commit the activation until a normal UI save reaches every production-intended
-canonical RON source and the `$build-ron-editor` completion standard passes.
+or commit the activation until a normal UI save reaches an isolated,
+byte-identical staging copy of every production-intended canonical RON source
+and the `$build-ron-editor` completion standard passes. Never exercise a
+modifying editor operation against the input candidate or its activated
+production path during activation.
 The editor must not patch generated TOML or adopt a whole compatibility
 document as an ordinary save.
 
@@ -113,7 +134,8 @@ compiler match and manifest validator are the only registration points.
 
 Make one coherent activation change that:
 
-1. replaces `data/<stem>.ron` with the reviewed candidate content;
+1. replaces `data/<stem>.ron` with the reviewed candidate bytes verbatim and
+   verifies its hash matches the recorded input hash;
 2. removes `data/<stem>_canonical.ron`;
 3. activates the existing typed schema and lowerer;
 4. applies the approved old-to-new UUID mapping to every dependent source and
@@ -124,6 +146,11 @@ Make one coherent activation change that:
 Leave exactly one canonical RON source. Do not point the manifest at the
 suffixed review candidate, keep dual production sources, or hand-edit generated
 TOML/JSON to force parity.
+
+Do not run a formatter in write mode on the input candidate or on the activated
+production file derived from it. Run formatting in check mode for that file. If
+the check fails, abort and report that the reviewed candidate requires
+formatting before activation.
 
 ## 5. Prove the production boundary
 
@@ -151,7 +178,8 @@ reference validation pass. Its source model, lowerer, and synthetic tests stay.
 
 Run focused checks while iterating, then at minimum:
 
-1. format Rust and RON with repository tooling;
+1. format Rust and other changed RON with repository tooling, and check the
+   immutable activated RON without rewriting it;
 2. run the existing model/adapter tests;
 3. compile and check the selected dataset through the normal game-data
    pipeline;
@@ -160,14 +188,16 @@ Run focused checks while iterating, then at minimum:
 5. run affected TypeScript validators and generated-artifact tests;
 6. run `scripts/regenerate-assets.sh` and include its tracked output;
 7. run `npm run review`; and
-8. confirm one production RON source, no suffixed candidate, and the expected
-   generated-file tracking state.
+8. confirm one production RON source, no suffixed candidate, the production
+   source hash equals the recorded input hash, and the expected generated-file
+   tracking state.
 
 For read-only migrations, browser screenshots are unnecessary. For
 editor-backed migrations, exercise a normal save, validation failure, stale
-revision, and recovery; verify canonical RON and generated outputs, preservation
-of unrelated comments/literals/values/order, an operation-sized source diff,
-formatter-clean RON, and an empty captured error buffer.
+revision, and recovery against isolated staging copies; verify canonical RON
+and generated outputs, preservation of unrelated comments/literals/values/order,
+an operation-sized source diff, formatter-clean RON, an unchanged production
+source hash, and an empty captured error buffer.
 
 Update affected documentation and source comments to state the current RON
 authoring and generated TOML compatibility boundaries directly. Use UUIDs or
