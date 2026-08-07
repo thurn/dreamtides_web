@@ -1,0 +1,7 @@
+interface:
+  display_name: "Dreamtides Design Anthology"
+  short_description: "Author focused Dreamtides design essays"
+  default_prompt: "Use $dda to author or revise a focused Dreamtides design essay."
+
+policy:
+  allow_implicit_invocation: false
