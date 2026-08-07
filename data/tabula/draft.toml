@@ -1,18 +1,31 @@
+# Version of this file's schema. Increment only when the compiler contract changes.
 schema-version = 1
 
 [offers]
+# Number of cards shown to the player in each draft offer.
 cards-per-offer = 4
+# Number of cards the player picks before a Draft site is complete.
 picks-per-site = 5
 
+# Optional per-rarity limits. Add another [[rarity-caps]] block for each rarity
+# that needs stricter limits than the strategy-wide copy cap.
 [[rarity-caps]]
+# Card rarity to which this block applies.
 rarity = "Legendary"
+# Maximum copies of each card of this rarity placed in the generated pool.
 pool-copy-cap = 1
+# Maximum total cards of this rarity the player may pick during the entire run.
 max-picks-per-run = 1
 
 [pool]
+# Pool-generation strategy used when no developer ?algo= override is supplied.
 default-strategy = "tides4"
 
 [pool.tides4]
+# Total number of card copies tides4 deals into the generated draft pool.
 deal-size = 150
+# Default maximum copies of any one card placed in the generated pool.
+# A matching [[rarity-caps]] block may lower this limit for a specific rarity.
 copy-cap = 2
+# Maximum number of distinct facets tides4 may draw from when building the pool.
 max-facets = 3
