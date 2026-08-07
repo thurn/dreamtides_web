@@ -189,41 +189,47 @@ does not change when a card is acquired, copied, or modified. The card's name is
 display text, not identity. Names are allowed to collide, so lookup, equality,
 grouping, and deduplication always use IDs.
 
-A **card instance** is one specific card based on a definition. It has an
-instance ID in addition to its definition ID. If a deck contains two copies of
-the same definition, the copies have different instance IDs. A modification to
-one copy does not affect the other or the base definition.
+A **journey card instance** is one specific card owned by the player during a
+journey. It has a journey instance ID in addition to its definition ID and owns
+any persistent modifications to that copy. If the journey deck contains two
+cards with the same definition ID, they have different journey instance IDs. A
+modification to one does not affect the other or the base definition.
 
-Journey deck entries are persistent card instances. When a deck entry is used in
-a battle, the battle creates its own card instance and records which journey
-entry it came from. This lets battle rules track each copy independently without
-putting zones, counters, and temporary effects into the journey deck.
+A **battle card instance** is one specific card in a battle. It has its own
+battle instance ID and owns battle-local state such as its zone, counters, and
+temporary effects. When it comes from the journey deck, it also records the
+source journey instance ID.
 
-Copying a card creates a new instance with the same definition ID. Created cards
-also have a definition ID identifying the base card they started from and a new
-instance ID identifying the created object. Creating the same figment twice, for
-example, produces two battle instances of the same figment definition.
+The relationship between journey and battle instances can be one-to-many. Battle
+deck construction may add multiple copies of one journey card. Each copy has a
+different battle instance ID, while all of them retain the same source journey
+instance ID and definition ID. Their battle-local state can then change
+independently.
+
+Copying a card creates a new instance in the relevant scope with the same
+definition ID. Created cards also retain the definition ID of the base card and
+receive a new battle instance ID. Creating the same figment twice, for example,
+produces two battle instances of the same figment definition.
 
 Instance IDs that become part of game state must be reproducible from that
 state. Clocks and unrelated random UUIDs cannot determine gameplay identity.
 
-## Persistent modifications and effective cards
+## Persistent modifications and resolved card values
 
-Journey effects can modify one deck entry without changing its base card
-definition. Persistent modifications include transfigurations, type or subtype
-changes, keyword changes, energy-cost reductions, reclaim changes, and spark
-bonuses.
+Journey effects can modify one journey card instance without changing its base
+card definition. Persistent modifications include transfigurations, type or
+subtype changes, keyword changes, energy-cost reductions, reclaim changes, and
+spark bonuses.
 
-An **effective card** is the resolved version of a card in its current context.
-For a journey deck entry, resolution starts from the base definition and applies
-the entry's persistent modifications. A battle can then apply battle-local
-changes to its own instance. Each system's detailed chapter defines the
-algorithms and order for the changes it owns.
+To determine a card's current characteristics, start with the base definition
+and apply the persistent modifications on the journey instance. In a battle,
+then apply any changes local to the particular battle instance. Each system's
+detailed chapter defines the algorithms and order for the changes it owns.
 
-Presentation receives the complete effective card. A compact card and its full
-inspection view must use the same resolved values so they cannot disagree about
-cost, type, spark, or rules text. The effective card is derived data; the base
-definition, journey entry, and battle instance remain the owners of state.
+The resulting cost, type, spark, keywords, and rules text are resolved values,
+not another kind of card. A compact card and its full inspection view must use
+the same resolved values so they cannot disagree. The definition, journey
+instance, and battle instance remain the owners of state.
 
 ## Content and deterministic behavior
 

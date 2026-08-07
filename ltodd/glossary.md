@@ -10,6 +10,12 @@ A two-player Card game between the player and an automated opponent, played as
 part of a Dream Journey. See the
 [Dreamtides introduction](dreamtides/dreamtides.md).
 
+## Battle card instance
+
+One specific card in a battle, with its own instance ID and battle-local state.
+It may record the journey card instance from which it was created. See the
+[foundations chapter](dreamtides/dreamtides.md).
+
 ## Card
 
 An authored Character or Event definition, or a specific instance based on that
@@ -23,8 +29,9 @@ The immutable authored record for a Card, identified by a stable UUID. See the
 
 ## Card instance
 
-One concrete Card in a journey or Battle, identified separately from its base
-Card definition. See the [foundations chapter](dreamtides/dreamtides.md).
+The general term for a journey card instance or battle card instance. Use the
+qualified term when the scope matters. See the
+[foundations chapter](dreamtides/dreamtides.md).
 
 ## Card status
 
@@ -38,12 +45,12 @@ The Card type that has Spark and can participate in Challenges. See the
 
 ## Created Card
 
-A Card instance produced by a game rule rather than drawn from an existing zone.
-See the [foundations chapter](dreamtides/dreamtides.md).
+A battle card instance produced by a game rule rather than drawn from the battle
+deck. See the [foundations chapter](dreamtides/dreamtides.md).
 
 ## Deck entry
 
-One persistent Card instance in a journey deck, including modifications to that
+One journey card instance in the journey deck, including modifications to that
 specific copy. See the [foundations chapter](dreamtides/dreamtides.md).
 
 ## Definition ID
@@ -72,12 +79,6 @@ An authored passive effect collected during a journey. See the
 The shared deck that increases each participant's Energy production during a
 Battle. See the [Dreamtides introduction](dreamtides/dreamtides.md).
 
-## Effective Card
-
-A read-only snapshot produced by resolving a Card definition with the state of a
-particular Card instance. See the
-[foundations chapter](dreamtides/dreamtides.md).
-
 ## Energy
 
 The Battle resource spent to play Cards and activate abilities. See the
@@ -103,9 +104,15 @@ A catalog-defined created Character. See the
 The ID of one concrete occurrence of an object in game state. See the
 [foundations chapter](dreamtides/dreamtides.md).
 
+## Journey card instance
+
+One specific card owned during a journey, with its own instance ID and
+persistent modifications. See the
+[foundations chapter](dreamtides/dreamtides.md).
+
 ## Memory
 
-A Battle resource stored by a Card instance for later effects. See the
+A Battle resource stored by a battle card instance for later effects. See the
 [foundations chapter](dreamtides/dreamtides.md).
 
 ## Points
