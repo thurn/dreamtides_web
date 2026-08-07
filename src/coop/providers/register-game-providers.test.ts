@@ -409,6 +409,68 @@ describe("registerGameProviders (real content providers)", () => {
     ).toContain(requiredId);
   });
 
+  it("uses standard card pricing for enhanced Shop inventory and restocks", () => {
+    const content = makeJourneyContent();
+    const journey = replayLog({
+      genesis: GENESIS,
+      events: [
+        ev(1, "START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }),
+        ev(2, "SELECT_DREAM_AVATAR", { dreamAvatarId: DREAM_AVATAR_ID }),
+      ],
+    }).finalState.journey;
+    const shop: SiteState = {
+      id: "enhanced-shop",
+      type: "Shop",
+      isEnhanced: true,
+      isVisited: false,
+      data: {},
+    };
+    const provider = createSiteContentProvider(content);
+
+    const opened = provider.openSite({ journey, site: shop, rng: () => 0 });
+
+    expect(opened?.runtime.kind).toBe("shop");
+    if (opened?.runtime.kind !== "shop") return;
+    const openingCards = opened.runtime.slots.filter(
+      (slot) => slot.itemType === "card",
+    );
+    expect(openingCards).toHaveLength(
+      content.economyData.shop.stock.specialtyShop.cardSlots,
+    );
+    expect(
+      openingCards.every(
+        (slot) =>
+          slot.basePrice === content.economyData.shop.prices.standardCard,
+      ),
+    ).toBe(true);
+
+    const rerolled = provider.rerollShop?.({
+      journey: {
+        ...journey,
+        siteRuntime: {
+          ...journey.siteRuntime,
+          [shop.id]: opened.runtime,
+        },
+      },
+      site: shop,
+      rng: () => 0.5,
+    });
+
+    expect(rerolled).not.toBeNull();
+    const restockedCards = rerolled?.slots.filter(
+      (slot) => slot.itemType === "card",
+    );
+    expect(restockedCards).toHaveLength(
+      content.economyData.shop.stock.specialtyShop.cardSlots,
+    );
+    expect(
+      restockedCards?.every(
+        (slot) =>
+          slot.basePrice === content.economyData.shop.prices.standardCard,
+      ),
+    ).toBe(true);
+  });
+
   it("consumes the one-use modifier while minting exact transfigured Shop slots", () => {
     const content = makeJourneyContent();
     const started = replayLog({
