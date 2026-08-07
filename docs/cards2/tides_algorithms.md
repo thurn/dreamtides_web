@@ -42,3 +42,10 @@ UUIDs, tuning, per-tide contribution, and each card's primary source tide.
 generated `public/tides4-data.json`, regenerates the readable decklists, and runs
 the freshness and annotation checks. Runtime loading validates the artifact in
 `src/draft/pool/tides4-io.ts` before pool construction.
+
+## Historical archive
+
+Historical draft-pool implementations and their supporting data, tools, and
+design notes are archived by Git commit
+`463042baeaf73f5d6dea9bc594e926265f5629c5`. Inspect that commit's parent to read
+their final source, or the commit diff to see the complete retirement.
