@@ -10,17 +10,17 @@ A two-player Card game between the player and an automated opponent, played as
 part of a Dream Journey. See the
 [Dreamtides introduction](dreamtides/dreamtides.md).
 
-## Battle card instance
+## Battle card
 
-One specific card in a battle, with its own instance ID and battle-local state.
-It may record the journey card instance from which it was created. See the
+One specific card in a battle, with its own battle card ID and battle-local
+state. It may record the card instance from which it was created. See the
 [foundations chapter](dreamtides/dreamtides.md).
 
 ## Card
 
-An authored Character or Event definition, or a specific instance based on that
-definition. Use the qualified terms Card definition and Card instance when the
-distinction matters. See the [foundations chapter](dreamtides/dreamtides.md).
+An authored Character or Event definition, a card instance in a journey, or a
+battle card. Use the qualified term when the distinction matters. See the
+[foundations chapter](dreamtides/dreamtides.md).
 
 ## Card definition
 
@@ -29,8 +29,8 @@ The immutable authored record for a Card, identified by a stable UUID. See the
 
 ## Card instance
 
-The general term for a journey card instance or battle card instance. Use the
-qualified term when the scope matters. See the
+One specific card owned during a journey, with its own instance ID and
+persistent modifications. See the
 [foundations chapter](dreamtides/dreamtides.md).
 
 ## Card status
@@ -45,13 +45,13 @@ The Card type that has Spark and can participate in Challenges. See the
 
 ## Created Card
 
-A battle card instance produced by a game rule rather than drawn from the battle
-deck. See the [foundations chapter](dreamtides/dreamtides.md).
+A battle card produced by a game rule rather than drawn from the battle deck.
+See the [foundations chapter](dreamtides/dreamtides.md).
 
 ## Deck entry
 
-One journey card instance in the journey deck, including modifications to that
-specific copy. See the [foundations chapter](dreamtides/dreamtides.md).
+One card instance in the journey deck, including modifications to that specific
+copy. See the [foundations chapter](dreamtides/dreamtides.md).
 
 ## Definition ID
 
@@ -104,15 +104,9 @@ A catalog-defined created Character. See the
 The ID of one concrete occurrence of an object in game state. See the
 [foundations chapter](dreamtides/dreamtides.md).
 
-## Journey card instance
-
-One specific card owned during a journey, with its own instance ID and
-persistent modifications. See the
-[foundations chapter](dreamtides/dreamtides.md).
-
 ## Memory
 
-A Battle resource stored by a battle card instance for later effects. See the
+A Battle resource stored by a battle card for later effects. See the
 [foundations chapter](dreamtides/dreamtides.md).
 
 ## Points

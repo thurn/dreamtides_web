@@ -19,7 +19,7 @@ Directory: `/dreamtides`
 An introduction to Dreamtides for new contributors: how dream journeys and
 battles fit together, how a run progresses, and the roles of cards, dream
 avatars, dreamsigns, the Dreamwell, and game resources. This part also defines
-the shared conventions for card definitions, journey and battle card instances,
+the shared conventions for card definitions, card instances, battle cards,
 persistent modifications, created objects, authored content, and deterministic
 behavior. Specific gameplay algorithms appear with the systems that use them.
 

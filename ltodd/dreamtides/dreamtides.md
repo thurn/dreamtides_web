@@ -194,30 +194,29 @@ and does not change when a card is acquired, copied, or modified. The card's
 name is display text, not identity. Names are allowed to collide, so lookup,
 equality, grouping, and deduplication always use IDs.
 
-A **journey card instance** is one specific card owned by the player during a
-journey. It has a **journey instance ID** in addition to its definition ID and
-owns any
+A **card instance** is one specific card owned by the player during a journey.
+It has an **instance ID** in addition to its definition ID and owns any
 [persistent modifications](#persistent-modifications-and-resolved-card-values)
 to that copy. If the journey deck contains two cards with the same definition
-ID, they have different journey instance IDs. A modification to one does not
-affect the other or the base definition.
+ID, they have different instance IDs. A modification to one does not affect the
+other or the base definition.
 
-A **battle card instance** is one specific card in a battle. It has its own
-**battle instance ID** and owns battle-local state such as its zone, counters,
-and temporary effects. When it comes from the journey deck, it also records the
-source journey instance ID.
+A **battle card** is one specific card in a battle. It has its own **battle card
+ID** and owns battle-local state such as its zone, counters, and temporary
+effects. When it comes from the journey deck, it also records the source card's
+instance ID.
 
-The relationship between journey and battle instances can be one-to-many. Battle
-deck construction may add multiple copies of one journey card. Each copy has a
-different battle instance ID, while all of them retain the same source journey
+The relationship between card instances and battle cards can be one-to-many.
+Battle deck construction may add multiple copies of one card instance. Each copy
+has a different battle card ID, while all of them retain the same source
 instance ID and definition ID. Their battle-local state can then change
 independently.
 
-Copying a card creates a new instance in the relevant scope with the same
-definition ID. A **created card** is produced by a battle effect rather than
-drawn from the battle deck. It retains the definition ID of the base card and
-receives a new battle instance ID. Creating the same **figment** (a created
-character) twice, for example, produces two battle instances of the same figment
+Copying a card creates a new card instance or battle card in the relevant scope
+with the same definition ID. A **created card** is produced by a battle effect
+rather than drawn from the battle deck. It retains the definition ID of the base
+card and receives a new battle card ID. Creating the same **figment** (a created
+character) twice, for example, produces two battle cards with the same figment
 definition.
 
 Instance IDs that become part of game state must be reproducible from that
@@ -225,20 +224,20 @@ state. Clocks and unrelated random UUIDs cannot determine gameplay identity.
 
 ## Persistent modifications and resolved card values
 
-Journey effects can modify one journey card instance without changing its base
-card definition. **Persistent modifications** include **transfigurations**
+Journey effects can modify one card instance without changing its base card
+definition. **Persistent modifications** include **transfigurations**
 (persistent card upgrades), type or subtype changes, keyword changes,
 energy-cost reductions, reclaim changes, and spark bonuses.
 
 To determine a card's current characteristics, start with the base definition
-and apply the persistent modifications on the journey instance. In a battle,
-then apply any changes local to the particular battle instance. Each system's
-detailed chapter defines the algorithms and order for the changes it owns.
+and apply the persistent modifications on the card instance. In a battle, then
+apply any changes local to the particular battle card. Each system's detailed
+chapter defines the algorithms and order for the changes it owns.
 
 The resulting cost, type, spark, keywords, and rules text are **resolved card
 values**, not another kind of card. A compact card and its full inspection view
-must use the same resolved values so they cannot disagree. The definition,
-journey instance, and battle instance remain the owners of state.
+must use the same resolved values so they cannot disagree. The definition, card
+instance, and battle card remain the owners of state.
 
 ## Content and deterministic behavior
 
