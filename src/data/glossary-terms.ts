@@ -35,11 +35,10 @@ export type RulesTextGlossaryOwner = "card" | "dreamAvatar" | "dreamsign";
  *   * Entries retain their first-occurrence order in `text`.
  *   * Empty input or input with no recognized terms returns an empty array.
  *
- * Consumers: the journey hover stack auto-renders one
- * `GlossaryDefinitionCard` per returned entry beneath the journey tooltip.
- * Other surfaces that show free-form prose with glossary references
- * (dreamsign offers, card draft offers, future tooltip pop-ups) can use
- * this same helper instead of re-implementing extraction.
+ * Consumers use the returned entries to build glossary Info Cards in reading
+ * order. Other surfaces that show free-form prose with glossary references
+ * (dreamsign offers, card draft offers, future tooltip pop-ups) can use this
+ * same helper instead of re-implementing extraction.
  */
 
 /**

@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/info-card`
 
-Real consumers: **6** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
 
 The strict information-card presentation. Its media treatment varies by content — object, full-bleed, atlas reveal, icon, tide, or text — over a single fixed liquid-glass shell. Standard variants have a native width of 248px and begin geometry scaling below ~551px; atlasReveal has a native width of 360px and begins geometry scaling below 800px. Both cutoffs are distinct from the Entity Reveal Coordinator's 900px input-layout breakpoint.
 

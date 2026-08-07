@@ -37,7 +37,6 @@ import { gameCardDemo } from "./demos/game-card";
 import { glassButtonDemo } from "./demos/glass-button";
 import { glassDialogDemo } from "./demos/glass-dialog";
 import { glassPanelDemo } from "./demos/glass-panel";
-import { glossaryDefinitionCardDemo } from "./demos/glossary-definition-card";
 import { standaloneGlyphDemo } from "./demos/standalone-glyph";
 import { iconButtonDemo } from "./demos/icon-button";
 import { infoCardDemo } from "./demos/info-card";
@@ -214,7 +213,6 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   cardChoiceGridDemo,
   cardBrowserPanelDemo,
   cardPickerPanelDemo,
-  glossaryDefinitionCardDemo,
   cardStatOrbDemo,
   atlasNodeDemo,
   atlasEdgeDemo,

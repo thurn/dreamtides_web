@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/editable-info-card`
 
-Real consumers: **6** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
 
 The constrained authoring form of InfoCard. It owns its text inputs, editing states, typography, and shell; callers provide controlled strings and lifecycle callbacks.
 

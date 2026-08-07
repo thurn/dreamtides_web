@@ -2782,45 +2782,6 @@
       "description": "Stable test id for the panel root."
     }
   ],
-  "GlossaryDefinitionCard": [
-    {
-      "name": "entry",
-      "tsType": "GlossaryEntry",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "",
-      "nested": {
-        "name": "GlossaryEntry",
-        "fields": [
-          {
-            "name": "term",
-            "tsType": "string",
-            "optional": false,
-            "description": "Canonical heading displayed on the Info Card."
-          },
-          {
-            "name": "definition",
-            "tsType": "string",
-            "optional": false,
-            "description": "Player-facing explanatory copy displayed on the Info Card."
-          },
-          {
-            "name": "variants",
-            "tsType": "readonly string[]",
-            "optional": true,
-            "description": "Extra rules-text word forms beyond the canonical term."
-          },
-          {
-            "name": "termPresentation",
-            "tsType": "\"symbolOnly\" | \"definitionOnly\"",
-            "optional": true,
-            "description": "Optional treatment for the entry's label in definition surfaces."
-          }
-        ]
-      }
-    }
-  ],
   "GlossaryTerm": [
     {
       "name": "entry",

@@ -16,9 +16,13 @@ import {
   DreamAvatarPortrait,
   dreamAvatarImageSrc,
 } from "../cumulus/components/hud/DreamAvatarPortrait";
+import { richText } from "../cumulus/components/card/rich-text";
 import { extractGlossaryTerms } from "../data/glossary-terms";
-import { GlossaryDefinitionCard } from "../cumulus/components/card/GlossaryDefinitionCard";
-import { INFO_CARD_WIDTH } from "../cumulus/components/overlay/InfoCard";
+import { glossaryEntryDisplayTitle } from "../data/glossary";
+import {
+  INFO_CARD_WIDTH,
+  InfoCard,
+} from "../cumulus/components/overlay/InfoCard";
 import { logEvent } from "../logging";
 import { buildIdfStats, signatureFit } from "../draft/idf-fit.ts";
 import { idfCosine } from "../draft/pool/variant-idf.ts";
@@ -431,7 +435,17 @@ function CardLightbox({
           }}
         >
           {terms.map((entry) => (
-            <GlossaryDefinitionCard key={entry.term} entry={entry} />
+            <div
+              className="cumulus"
+              data-glossary-term={entry.term}
+              key={entry.term}
+            >
+              <InfoCard
+                variant="text"
+                title={glossaryEntryDisplayTitle(entry)}
+                body={richText.rules(entry.definition)}
+              />
+            </div>
           ))}
         </div>
       )}
