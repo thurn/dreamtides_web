@@ -235,11 +235,46 @@ export interface FourSuitRepriseSiteView {
   canPlayAgain: boolean;
 }
 
+export interface TwentyOneSiteView {
+  gameId: "twenty-one";
+  siteId: string;
+  scene: ArtRef | null;
+  isFarpoint: boolean;
+  runtimeReady: boolean;
+  roundNumber: 1 | 2 | 3;
+  maxRounds: 3;
+  dealCost: number;
+  hitCost: number;
+  canAffordDeal: boolean;
+  canAffordHit: boolean;
+  cards: readonly { rank: PlayingCardRank; suit: PlayingCardSuit }[];
+  total: number | null;
+  /** Current total paired with its exact stand reward. */
+  title: string;
+  essenceReward: number;
+  rewardDreamsign: DreamsignData;
+  nextCardOdds: {
+    remainingCards: number;
+    noReward: number;
+    lowReward: number;
+    highReward: number;
+    dreamsign: number;
+    bust: number;
+  } | null;
+  terminalReason: "stood" | "twenty-one" | "bust" | null;
+  resultSettled: boolean;
+  resultId: string | null;
+  canPlayAgain: boolean;
+  guide: GuideGalleryGuideView;
+  replacement: DreamsignReplacementView | null;
+}
+
 export type GambleSiteView =
   | GravokWagerSiteView
   | LadderClimbSiteView
   | StarwayStairsSiteView
-  | FourSuitRepriseSiteView;
+  | FourSuitRepriseSiteView
+  | TwentyOneSiteView;
 
 export interface GambleSiteScreenProps {
   /** View-model rendered by the pure screen. */
@@ -272,6 +307,16 @@ export interface GambleSiteScreenProps {
   onChooseFourSuitTransfiguration?: (type: TransfigurationType) => void;
   /** Advance the shared visit to another distinct-card round. */
   onPlayAgainFourSuit?: () => void;
+  /** Pay for and reveal a fresh Twenty-One hand. */
+  onDealTwentyOne?: () => void;
+  /** Pay for and reveal the next Twenty-One card. */
+  onHitTwentyOne?: () => void;
+  /** Finish Twenty-One on the current total. */
+  onStandTwentyOne?: () => void;
+  /** Apply a terminal Twenty-One reward after its announcement appears. */
+  onTwentyOneOutcomeShown?: () => void;
+  /** Prepare another independently shuffled Twenty-One round. */
+  onPlayAgainTwentyOne?: () => void;
   /** Replace one UUID-identified held Dreamsign after a jackpot win. */
   onReplaceDreamsign: (dreamsignId: string) => void;
 }
@@ -918,8 +963,27 @@ export function GambleSiteScreen({
   onFourSuitOutcomeShown = () => undefined,
   onChooseFourSuitTransfiguration = () => undefined,
   onPlayAgainFourSuit = () => undefined,
+  onDealTwentyOne = () => undefined,
+  onHitTwentyOne = () => undefined,
+  onStandTwentyOne = () => undefined,
+  onTwentyOneOutcomeShown = () => undefined,
+  onPlayAgainTwentyOne = () => undefined,
   onReplaceDreamsign,
 }: GambleSiteScreenProps) {
+  if (view.gameId === "twenty-one") {
+    return (
+      <TwentyOneScreen
+        view={view}
+        onDeal={onDealTwentyOne}
+        onHit={onHitTwentyOne}
+        onStand={onStandTwentyOne}
+        onLeave={onLeave}
+        onOutcomeShown={onTwentyOneOutcomeShown}
+        onPlayAgain={onPlayAgainTwentyOne}
+        onReplaceDreamsign={onReplaceDreamsign}
+      />
+    );
+  }
   if (view.gameId === "four-suit-reprise") {
     return (
       <FourSuitRepriseScreen
@@ -1942,6 +2006,338 @@ function StarwayStairsScreen({
         );
       }}
     />
+  );
+}
+
+function TwentyOneScreen({
+  view,
+  onDeal,
+  onHit,
+  onStand,
+  onLeave,
+  onOutcomeShown,
+  onPlayAgain,
+  onReplaceDreamsign,
+}: {
+  view: TwentyOneSiteView;
+  onDeal: () => void;
+  onHit: () => void;
+  onStand: () => void;
+  onLeave: () => void;
+  onOutcomeShown: () => void;
+  onPlayAgain: () => void;
+  onReplaceDreamsign: (dreamsignId: string) => void;
+}) {
+  const reduceMotion = useReducedMotion() === true;
+  const [outcomeResultId, setOutcomeResultId] = useState<string | null>(null);
+  const [actionsVisible, setActionsVisible] = useState(
+    view.terminalReason === null,
+  );
+  const [replacementVisible, setReplacementVisible] = useState(false);
+  const [decisionPending, setDecisionPending] = useState(false);
+  const settledResultIdRef = useRef<string | null>(null);
+  const onOutcomeShownRef = useRef(onOutcomeShown);
+
+  useEffect(() => {
+    onOutcomeShownRef.current = onOutcomeShown;
+  }, [onOutcomeShown]);
+
+  useEffect(() => {
+    setDecisionPending(false);
+    setReplacementVisible(false);
+    if (view.resultId === null) {
+      setOutcomeResultId(null);
+      setActionsVisible(true);
+      return;
+    }
+    setActionsVisible(false);
+    const timeout = window.setTimeout(() => {
+      setOutcomeResultId(view.resultId);
+      if (settledResultIdRef.current !== view.resultId) {
+        settledResultIdRef.current = view.resultId;
+        onOutcomeShownRef.current();
+      }
+    }, reduceMotion ? REDUCED_MOTION_DELAY_MS : BET_SETTLE_DELAY_MS);
+    return () => window.clearTimeout(timeout);
+  }, [reduceMotion, view.cards.length, view.resultId, view.roundNumber]);
+
+  useEffect(() => {
+    if (
+      view.resultId === null ||
+      outcomeResultId !== view.resultId ||
+      !view.resultSettled
+    ) {
+      return;
+    }
+    const timeout = window.setTimeout(() => {
+      setOutcomeResultId(null);
+      if (view.replacement !== null) setReplacementVisible(true);
+      else setActionsVisible(true);
+    }, RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS);
+    return () => window.clearTimeout(timeout);
+  }, [outcomeResultId, view.replacement, view.resultId, view.resultSettled]);
+
+  return (
+    <GuideGallerySiteLayout
+      siteId={view.siteId}
+      scene={view.scene}
+      guide={view.guide}
+      mobileComposition="dialog"
+      screenTestId="cumulus-gamble-site-screen"
+      guideArtTestId="cumulus-gamble-guide-art"
+      speechAnchorTestId="cumulus-gamble-speech-anchor"
+      speechBubbleTestId="cumulus-gamble-speech-bubble"
+      renderGallery={(layout) => (
+        <main
+          data-gamble-wager-region=""
+          data-gamble-game={view.gameId}
+          data-gamble-layout={layout}
+          data-gamble-farpoint={view.isFarpoint ? "true" : "false"}
+          style={{
+            position: "relative",
+            zIndex: 10,
+            width: "100%",
+            maxWidth:
+              layout === "desktop" ? DESKTOP_GAMBLE_REGION_MAX_WIDTH : undefined,
+            height: "100%",
+            minHeight: 0,
+            justifySelf: "center",
+            alignSelf: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: layout === "desktop" ? token("--space-s") : token("--space-xs"),
+            boxSizing: "border-box",
+            padding: layout === "desktop" ? token("--space-l") : token("--space-xs"),
+            pointerEvents: "auto",
+          }}
+        >
+          <div
+            data-twenty-one-round={view.roundNumber}
+            style={{
+              color: token("--text-primary"),
+              font: token("--t-eyebrow"),
+              textShadow: token("--text-outline-media"),
+              textTransform: "uppercase",
+            }}
+          >
+            Round {view.roundNumber} of {view.maxRounds}
+          </div>
+          <h2
+            data-twenty-one-title=""
+            style={{
+              margin: 0,
+              color: token("--text-primary"),
+              font: token(layout === "desktop" ? "--t-title" : "--t-title-sm"),
+              textAlign: "center",
+              textShadow: token("--text-outline-media"),
+            }}
+          >
+            {view.title}
+          </h2>
+          <section
+            aria-label="Twenty-One hand"
+            data-twenty-one-hand=""
+            style={{
+              position: "relative",
+              minHeight:
+                layout === "desktop"
+                  ? PLAYING_CARD_DESIGN.sizes.wager.square
+                  : PLAYING_CARD_DESIGN.sizes.wagerCompact.square,
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: layout === "desktop" ? token("--space-s") : token("--space-xs"),
+              flexWrap: "wrap",
+            }}
+          >
+            {view.cards.map((card, index) => (
+              <motion.div
+                key={`${String(index)}:${card.rank}:${card.suit}`}
+                data-twenty-one-card={index}
+                initial={reduceMotion ? false : { opacity: 0, y: token("--space-l"), scale: 0.82 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: FADE_DURATION_SECONDS, ease: DREAM_EASE }}
+              >
+                <PlayingCard
+                  variant="rankSuit"
+                  rank={card.rank}
+                  suit={card.suit}
+                  size={layout === "desktop" ? "wager" : "wagerCompact"}
+                />
+              </motion.div>
+            ))}
+            {view.cards.length === 0 && (
+              <div
+                data-twenty-one-prize=""
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: token("--space-xs"),
+                }}
+              >
+                <div
+                  style={{
+                    color: token("--text-primary"),
+                    font: token("--t-caption"),
+                    textShadow: token("--text-outline-media"),
+                  }}
+                >
+                  21 wins {view.essenceReward} Essence +{" "}
+                  {view.rewardDreamsign.name}
+                </div>
+                <Dreamsign
+                  dreamsign={view.rewardDreamsign}
+                  sizePx={layout === "desktop" ? 128 : 88}
+                  variant="revelation"
+                  testid="twenty-one-reward-dreamsign"
+                />
+              </div>
+            )}
+            {view.resultId !== null && outcomeResultId === view.resultId && (
+              <div
+                data-twenty-one-outcome=""
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  display: "grid",
+                  placeItems: "center",
+                  pointerEvents: "none",
+                  zIndex: 2,
+                }}
+              >
+                <RadialAnnouncement
+                  announcementId={view.resultId}
+                  headline={
+                    view.terminalReason === "bust"
+                      ? "Bust!"
+                      : view.terminalReason === "twenty-one"
+                        ? "Twenty-One!"
+                        : "Stand"
+                  }
+                  detail={
+                    view.terminalReason === "twenty-one"
+                      ? view.rewardDreamsign.name
+                      : undefined
+                  }
+                  essenceGained={view.essenceReward > 0 ? view.essenceReward : undefined}
+                  tone={view.essenceReward > 0 ? "reward" : "danger"}
+                  size={layout === "mobile" ? "mini" : "wager"}
+                  duration="extended"
+                />
+              </div>
+            )}
+          </section>
+          {view.nextCardOdds !== null && (
+            <div
+              data-twenty-one-odds=""
+              style={{
+                color: token("--text-primary"),
+                font: token("--t-caption"),
+                textAlign: "center",
+                textShadow: token("--text-outline-media"),
+              }}
+            >
+              Next card: {view.nextCardOdds.dreamsign} reach 21 ·{" "}
+              {view.nextCardOdds.lowReward + view.nextCardOdds.highReward} other rewards ·{" "}
+              {view.nextCardOdds.bust} bust
+            </div>
+          )}
+          <div
+            data-twenty-one-actions=""
+            aria-hidden={!actionsVisible || undefined}
+            style={{
+              minHeight: token("--touch-min"),
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: token("--space-xs"),
+              visibility: actionsVisible ? "visible" : "hidden",
+              pointerEvents: actionsVisible ? "auto" : "none",
+            }}
+          >
+            {!view.cards.length ? (
+              <>
+                <GlassButton
+                  label="Deal"
+                  essenceCost={view.dealCost}
+                  variant="accent"
+                  disabled={decisionPending || !view.runtimeReady || !view.canAffordDeal}
+                  testId="gamble-twenty-one-deal"
+                  onPress={() => {
+                    setDecisionPending(true);
+                    onDeal();
+                  }}
+                />
+                <GlassButton label="Leave" testId="gamble-twenty-one-leave" onPress={onLeave} />
+              </>
+            ) : view.terminalReason === null ? (
+              <>
+                <GlassButton
+                  label="Hit"
+                  essenceCost={view.hitCost}
+                  variant="accent"
+                  disabled={decisionPending || !view.canAffordHit}
+                  testId="gamble-twenty-one-hit"
+                  onPress={() => {
+                    setDecisionPending(true);
+                    onHit();
+                  }}
+                />
+                <GlassButton
+                  label="Stand"
+                  testId="gamble-twenty-one-stand"
+                  disabled={decisionPending}
+                  onPress={() => {
+                    setDecisionPending(true);
+                    onStand();
+                  }}
+                />
+              </>
+            ) : (
+              <>
+                {view.canPlayAgain && (
+                  <GlassButton
+                    label="Play Again"
+                    variant="accent"
+                    disabled={decisionPending}
+                    testId="gamble-twenty-one-play-again"
+                    onPress={() => {
+                      setDecisionPending(true);
+                      onPlayAgain();
+                    }}
+                  />
+                )}
+                <GlassButton label="Leave" testId="gamble-twenty-one-leave-after-result" onPress={onLeave} />
+              </>
+            )}
+          </div>
+          {view.replacement !== null &&
+            !replacementVisible &&
+            outcomeResultId === null && (
+              <GlassButton
+                label="Choose Replacement"
+                variant="accent"
+                testId="gamble-open-replacement"
+                onPress={() => setReplacementVisible(true)}
+              />
+            )}
+        </main>
+      )}
+    >
+      {replacementVisible && view.replacement !== null && (
+        <DreamsignReplacementDialog
+          view={view.replacement}
+          cancelLabel="Not Yet"
+          closeLabel="Close replacement choice"
+          onCancel={() => setReplacementVisible(false)}
+          onReplace={onReplaceDreamsign}
+        />
+      )}
+    </GuideGallerySiteLayout>
   );
 }
 

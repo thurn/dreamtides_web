@@ -98,7 +98,8 @@ export interface EventPayloads {
       | "gravok-three-gate-wager"
       | "tidemark-ladder-climb"
       | "starway-stairs"
-      | "four-suit-reprise";
+      | "four-suit-reprise"
+      | "twenty-one";
   };
   CHOOSE_RANDOM_SITE: { siteId: string; siteType: string };
   RESOLVE_EXPLORATION_CHOICE: {
@@ -160,6 +161,18 @@ export interface EventPayloads {
   PLAY_AGAIN_FOUR_SUIT_REPRISE: {
     siteId: string;
     previousShuffleCommitment: string;
+  };
+  DEAL_TWENTY_ONE: { siteId: string };
+  HIT_TWENTY_ONE: { siteId: string };
+  STAND_TWENTY_ONE: { siteId: string };
+  SETTLE_TWENTY_ONE: { siteId: string; shuffleCommitment: string };
+  PLAY_AGAIN_TWENTY_ONE: {
+    siteId: string;
+    previousShuffleCommitment: string;
+  };
+  REPLACE_TWENTY_ONE_DREAMSIGN: {
+    siteId: string;
+    replacedDreamsignId: string;
   };
 
   // --- merchant & shop ---
@@ -365,6 +378,12 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   SETTLE_FOUR_SUIT_REPRISE: true,
   CHOOSE_FOUR_SUIT_REPRISE_TRANSFIGURATION: true,
   PLAY_AGAIN_FOUR_SUIT_REPRISE: true,
+  DEAL_TWENTY_ONE: true,
+  HIT_TWENTY_ONE: true,
+  STAND_TWENTY_ONE: true,
+  SETTLE_TWENTY_ONE: true,
+  PLAY_AGAIN_TWENTY_ONE: true,
+  REPLACE_TWENTY_ONE_DREAMSIGN: true,
   ACCEPT_MERCHANT_OFFER: true,
   DECLINE_MERCHANT: true,
   BUY_SHOP_SLOT: true,

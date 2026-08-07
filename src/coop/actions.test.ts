@@ -144,6 +144,12 @@ function captureAllDrafts(): EventDraft[] {
     "Empowered",
   );
   void actions.playAgainFourSuitReprise("site-1", "commitment-1");
+  void actions.dealTwentyOne("site-1");
+  void actions.hitTwentyOne("site-1");
+  void actions.standTwentyOne("site-1");
+  void actions.settleTwentyOne("site-1", "commitment-1");
+  void actions.playAgainTwentyOne("site-1", "commitment-1");
+  void actions.replaceTwentyOneDreamsign("site-1", "ds-1");
   void actions.acceptMerchantOffer("site-1");
   void actions.declineMerchant("site-1");
   void actions.buyShopSlot("site-1", 0);
@@ -263,6 +269,16 @@ describe("coop actions facade", () => {
       "commitment-2",
       "journey:12",
     );
+    void actions.settleTwentyOne(
+      "site-7",
+      "commitment-3",
+      "journey:12",
+    );
+    void actions.playAgainTwentyOne(
+      "site-7",
+      "commitment-3",
+      "journey:12",
+    );
     void actions.battleCommand(
       { id: "DEBUG_EDIT" },
       "battle:b-1:dreamwell:player:2",
@@ -281,6 +297,8 @@ describe("coop actions facade", () => {
       "play-again-gravok-wager:journey:12:site-7:commitment-1",
       "settle-starway-stairs:journey:12:site-7:commitment-2",
       "play-again-starway-stairs:journey:12:site-7:commitment-2",
+      "settle-twenty-one:journey:12:site-7:commitment-3",
+      "play-again-twenty-one:journey:12:site-7:commitment-3",
       "battle:b-1:dreamwell:player:2",
       "tutorial-battle:event:9:begin",
       "tutorial-battle:tutorial-battle:event:9:0:restart",

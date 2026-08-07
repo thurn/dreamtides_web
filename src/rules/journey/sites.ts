@@ -352,7 +352,8 @@ export function openSite(
     rawGambleGameId !== "gravok-three-gate-wager" &&
     rawGambleGameId !== "tidemark-ladder-climb" &&
     rawGambleGameId !== "starway-stairs" &&
-    rawGambleGameId !== "four-suit-reprise"
+    rawGambleGameId !== "four-suit-reprise" &&
+    rawGambleGameId !== "twenty-one"
   ) {
     return null;
   }

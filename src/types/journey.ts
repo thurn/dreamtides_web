@@ -612,12 +612,45 @@ export interface FourSuitRepriseSiteRuntime {
   phase: "choose" | "result";
 }
 
+/** Shared, replayable runtime for one round of Twenty-One. */
+export interface TwentyOneSiteRuntime {
+  kind: "gamble";
+  gameId: "twenty-one";
+  rulesVersion: string;
+  /** One-based independently shuffled round within this site visit. */
+  roundNumber: 1 | 2 | 3;
+  isFarpoint: boolean;
+  dealCost: number;
+  hitCost: number;
+  shuffleCommitment: string;
+  /** Complete deterministic shoe; only the prefix through deckCursor is shown. */
+  committedDeck: StandardPlayingCard[];
+  deckCursor: number;
+  revealedCards: StandardPlayingCard[];
+  hitCount: number;
+  dealPaid: boolean;
+  /** All eligible candidates, sorted by descending match score then UUID. */
+  dreamsignCandidateScores: TidemarkLadderClimbDreamsignCandidateScore[];
+  strongPoolSize: number;
+  strongPoolCutoffScore: number | null;
+  /** Every round's distinct locked reward, in visit order. */
+  offeredDreamsignIds: string[];
+  rewardDreamsign: Dreamsign;
+  terminalReason: "stood" | "twenty-one" | "bust" | null;
+  resultSettled: boolean;
+  essenceAwarded: number;
+  dreamsignAwarded: boolean;
+  pendingDreamsignReplacement: boolean;
+  replacedDreamsignId?: string;
+}
+
 /** Every game runtime currently available at a Gamble site. */
 export type GambleSiteRuntime =
   | GravokWagerSiteRuntime
   | TidemarkLadderClimbSiteRuntime
   | StarwayStairsSiteRuntime
-  | FourSuitRepriseSiteRuntime;
+  | FourSuitRepriseSiteRuntime
+  | TwentyOneSiteRuntime;
 
 /** Stable Gamble game id, re-exported beside its persisted runtime union. */
 export type GambleSiteGameId = GambleGameId;

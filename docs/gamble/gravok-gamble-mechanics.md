@@ -71,7 +71,7 @@ flow.
 | Tidemark Ladder Climb | Attempts cost 0/5/10/15 Essence. | Every attempt is free. |
 | Starway Stairs | Each tier draw costs 30 Essence. | Each tier draw costs 20 Essence. |
 | Four-Suit Reprise | Each draw costs 25 Essence. | Each draw costs 15 Essence. |
-| Twenty-One | The deal costs 50 Essence; each hit costs 10 Essence. | Hits cost 0 Essence. |
+| Twenty-One | The deal costs 55 Essence; each hit costs 10 Essence. | Hits cost 0 Essence. |
 
 All odds, rewards, thresholds, outcome mappings, and limits are identical at
 ordinary and Farpoint Station sites.
@@ -215,30 +215,38 @@ outcomes, replay limit, and odds are unchanged.
 
 ## 5. Twenty-One
 
-Twenty-One is a solo blackjack game with no dealer. The player pays 50 Essence
-and receives two cards, then chooses `Stand` or `Hit — 10 Essence`. The goal is
-to finish from 17 through 21. A total in that range grants one displayed
-Dreamsign from the strong Dreamsign pool. Standing at 16 or less or going over
-21 grants nothing. Exactly 21 and any bust resolve immediately.
+Twenty-One is a solo blackjack game with no dealer. The player pays 55 Essence
+and receives two cards, then chooses `Stand` or `Hit — 10 Essence`. The title
+pairs the current numeric total with the reward earned by standing at that
+total. Every revealed playing card occupies its own squircle tile. Aces count
+as 1 or 11 to make the highest total at or below 21; J, Q, and K count as 10.
 
-The UI shows the current total and, after every card, how many cards remaining
-would produce a winning total or a bust. Aces count as 1 or 11 to make the
-highest total at or below 21; J, Q, and K count as 10.
+Each round locks and displays one Dreamsign from the strong Dreamsign pool.
+Landing exactly on 21 grants that Dreamsign in addition to 150 Essence. A bust
+or exact 21 resolves immediately. After any other terminal result, the player
+may leave or start another independently shuffled round while a retry remains.
+The visit permits two retries, for at most three rounds, and every round offers
+a distinct Dreamsign. Winning a Dreamsign ends the game.
+
+After every card, the UI shows exact counts from the remaining shoe for draws
+that reach 21, reach another reward band, or bust.
 
 | Terminal total | Result |
 | --- | --- |
-| 16 or less by standing | No reward. |
-| 17–21 | Gain the displayed strong-pool Dreamsign. |
+| 15 or less by standing | No reward. |
+| 16–18 | Gain 55 Essence. |
+| 19–20 | Gain 150 Essence. |
+| Exactly 21 | Gain 150 Essence and the displayed strong-pool Dreamsign. |
 | Above 21 | No reward. |
 
-For the objective of winning the Dreamsign, the optimal policy is simple: hit
-on 16 or less and stand on 17 or more. Exact enumeration of the 52-card deck
-without replacement gives that policy a 71.64% chance to win the Dreamsign,
-comfortably above the 60% target.
+With the Dreamsign valued at 75 Essence, exact enumeration of the 52-card shoe
+without replacement gives optimal play across all three rounds a 30.91% chance
+to win a Dreamsign. The complete visit has +75.29 Essence EV at an ordinary
+site and +97.17 Essence EV at Farpoint Station, including the Dreamsign value.
 
 ### Farpoint Station
 
-Hits cost 0 Essence. The 50-Essence deal cost, winning totals, odds, and
+Hits cost 0 Essence. The 55-Essence deal cost, reward bands, odds, and
 Dreamsign reward are unchanged.
 
 ## Determinism, co-op authority, and logging

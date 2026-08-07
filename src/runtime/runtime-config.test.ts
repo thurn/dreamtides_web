@@ -46,14 +46,14 @@ describe("parseRuntimeConfig", () => {
       expect(
         parseRuntimeConfig("?gambleGame=four-suit-reprise").gambleGameId,
       ).toBe("four-suit-reprise");
+      expect(
+        parseRuntimeConfig("?gambleGame=twenty-one").gambleGameId,
+      ).toBe("twenty-one");
     });
 
     it("uses random selection for absent or unrecognized values", () => {
       expect(parseRuntimeConfig("").gambleGameId).toBeNull();
       expect(parseRuntimeConfig("?gambleGame=").gambleGameId).toBeNull();
-      expect(
-        parseRuntimeConfig("?gambleGame=twenty-one").gambleGameId,
-      ).toBeNull();
       expect(
         parseRuntimeConfig("?gambleGame=progressive-draw").gambleGameId,
       ).toBeNull();

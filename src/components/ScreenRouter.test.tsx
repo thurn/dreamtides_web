@@ -246,6 +246,12 @@ function makeMutations(): JourneyMutations {
     settleFourSuitReprise: vi.fn(),
     chooseFourSuitRepriseTransfiguration: vi.fn(),
     playAgainFourSuitReprise: vi.fn(),
+    dealTwentyOne: vi.fn(),
+    hitTwentyOne: vi.fn(),
+    standTwentyOne: vi.fn(),
+    settleTwentyOne: vi.fn(),
+    playAgainTwentyOne: vi.fn(),
+    replaceTwentyOneDreamsign: vi.fn(),
     drawTidemarkLadderClimb: vi.fn(),
     settleTidemarkLadderClimb: vi.fn(),
     replaceTidemarkLadderClimbDreamsign: vi.fn(),
@@ -1046,6 +1052,26 @@ describe("ScreenRouter site-dispatch completeness", () => {
     expect(mutations.ensureGambleSiteRuntime).toHaveBeenCalledWith(
       site.id,
       "four-suit-reprise",
+    );
+  });
+
+  it("passes a forced Twenty-One URL choice into Gamble initialization", () => {
+    const site = makeSite("Gamble");
+    const mutations = makeMutations();
+    renderWithJourney({
+      state: makeStateFor(site),
+      journeyContent: merchantContent(),
+      mutations,
+      children: (
+        <ScreenRouter
+          runtimeConfig={parseRuntimeConfig("?gambleGame=twenty-one")}
+        />
+      ),
+    });
+
+    expect(mutations.ensureGambleSiteRuntime).toHaveBeenCalledWith(
+      site.id,
+      "twenty-one",
     );
   });
 

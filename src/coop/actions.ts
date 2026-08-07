@@ -222,6 +222,23 @@ export interface CoopActions {
     previousShuffleCommitment: string,
     runId?: string,
   ) => Promise<number>;
+  dealTwentyOne: (siteId: string) => Promise<number>;
+  hitTwentyOne: (siteId: string) => Promise<number>;
+  standTwentyOne: (siteId: string) => Promise<number>;
+  settleTwentyOne: (
+    siteId: string,
+    shuffleCommitment: string,
+    runId?: string,
+  ) => Promise<number>;
+  playAgainTwentyOne: (
+    siteId: string,
+    previousShuffleCommitment: string,
+    runId?: string,
+  ) => Promise<number>;
+  replaceTwentyOneDreamsign: (
+    siteId: string,
+    replacedDreamsignId: string,
+  ) => Promise<number>;
 
   // --- merchant & shop ---
   acceptMerchantOffer: (siteId: string, offer?: unknown) => Promise<number>;
@@ -606,6 +623,30 @@ export function makeActions(
         { siteId, previousShuffleCommitment },
         `${siteIntentKey("play-again-four-suit-reprise", siteId, runId)}:${previousShuffleCommitment}`,
       ),
+    dealTwentyOne: (siteId) => emit("DEAL_TWENTY_ONE", { siteId }),
+    hitTwentyOne: (siteId) => emit("HIT_TWENTY_ONE", { siteId }),
+    standTwentyOne: (siteId) => emit("STAND_TWENTY_ONE", { siteId }),
+    settleTwentyOne: (siteId, shuffleCommitment, runId) =>
+      emit(
+        "SETTLE_TWENTY_ONE",
+        { siteId, shuffleCommitment },
+        `${siteIntentKey("settle-twenty-one", siteId, runId)}:${shuffleCommitment}`,
+      ),
+    playAgainTwentyOne: (
+      siteId,
+      previousShuffleCommitment,
+      runId,
+    ) =>
+      emit(
+        "PLAY_AGAIN_TWENTY_ONE",
+        { siteId, previousShuffleCommitment },
+        `${siteIntentKey("play-again-twenty-one", siteId, runId)}:${previousShuffleCommitment}`,
+      ),
+    replaceTwentyOneDreamsign: (siteId, replacedDreamsignId) =>
+      emit("REPLACE_TWENTY_ONE_DREAMSIGN", {
+        siteId,
+        replacedDreamsignId,
+      }),
 
     // --- merchant & shop ---
     acceptMerchantOffer: (siteId, offer) =>
