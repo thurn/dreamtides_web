@@ -18,7 +18,7 @@ AffiliationCatalog(
 
   affiliations: [
     AffiliationDefinition(
-      id: "spirit_animals",
+      id: "4b715cd0-8b41-4b82-9cef-c47b15e8992b",
       name: "Spirit Animals",
       atlas_card_theme: "Spirit Animal",
       signature_card_ids: [
@@ -30,7 +30,7 @@ AffiliationCatalog(
       ],
     ),
     AffiliationDefinition(
-      id: "erode_void",
+      id: "c3815562-e80d-4afc-8ba6-91bd60ad323e",
       name: "The Void",
       atlas_card_theme: "Void",
       signature_card_ids: [
@@ -42,7 +42,7 @@ AffiliationCatalog(
       ],
     ),
     AffiliationDefinition(
-      id: "removal",
+      id: "a544314c-2e90-42b1-ba04-06c7f2f0a6f9",
       name: "Tempo",
       atlas_card_theme: "Tempo",
       signature_card_ids: [
@@ -56,7 +56,7 @@ AffiliationCatalog(
       ],
     ),
     AffiliationDefinition(
-      id: "storm_events",
+      id: "04103386-ca4e-42a0-9a90-150297a20e91",
       name: "Events",
       atlas_card_theme: "Event",
       signature_card_ids: [
@@ -68,7 +68,7 @@ AffiliationCatalog(
       ],
     ),
     AffiliationDefinition(
-      id: "inexpensive_characters",
+      id: "8b30f0bf-6b9d-47c0-92ba-80f62ae8899d",
       name: "Characters",
       atlas_card_theme: "Character",
       signature_card_ids: [
@@ -80,7 +80,7 @@ AffiliationCatalog(
       ],
     ),
     AffiliationDefinition(
-      id: "warriors",
+      id: "33dee3b4-19d2-4788-9cef-b69057385844",
       name: "Warriors",
       atlas_card_theme: "Warrior",
       signature_card_ids: [
@@ -92,7 +92,7 @@ AffiliationCatalog(
       ],
     ),
     AffiliationDefinition(
-      id: "abandon_sacrifice",
+      id: "c674a92f-3860-4851-8357-dd4f3e469674",
       name: "Abandon",
       atlas_card_theme: "Abandon",
       signature_card_ids: [
@@ -104,7 +104,7 @@ AffiliationCatalog(
       ],
     ),
     AffiliationDefinition(
-      id: "survivors",
+      id: "d1a8f46d-0efe-4ae6-bda3-0866d5d20633",
       name: "Survivors",
       atlas_card_theme: "Survivor",
       signature_card_ids: [
@@ -115,7 +115,7 @@ AffiliationCatalog(
       ],
     ),
     AffiliationDefinition(
-      id: "figments",
+      id: "96258dfd-33c9-44a7-96a5-6747eb42cc60",
       name: "Figments",
       atlas_card_theme: "Figment",
       signature_card_ids: [
@@ -126,7 +126,7 @@ AffiliationCatalog(
       ],
     ),
     AffiliationDefinition(
-      id: "discard",
+      id: "0f09352d-3a1d-44db-a58e-229ab834cdc3",
       name: "Discard",
       atlas_card_theme: "Discard",
       signature_card_ids: [
