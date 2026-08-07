@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+// Run this with `node .llms/skills/ltodd/scripts/estimate-part-loc.mjs`
+
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
