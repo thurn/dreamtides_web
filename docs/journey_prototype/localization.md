@@ -1,0 +1,78 @@
+# Localization Vocabulary
+
+The English Fluent source is `data/tabula/strings.flt`. Its first section is
+the shared vocabulary for concepts that recur across Journey, Dreamscape,
+Dreamsign, deck, site, and battle screens. The set follows the canonical terms
+used by `data/tabula/glossary.toml` and the player-facing Cumulus surfaces.
+
+Fluent terms begin with `-` and are private to the localization resource. React
+code requests complete message IDs through `useMessages()`; messages reference
+terms when they need canonical game vocabulary.
+
+## Term Groups
+
+The vocabulary covers:
+
+- product and named world concepts: `-dreamtides`, `-dreamwell`, and
+  `-dream-atlas`;
+- world entities: `-journey`, `-dream-avatar`, `-dream-guide`, `-dreamscape`,
+  `-dreamsign`, `-tide`, `-site`, and `-reward`;
+- cards and zones: `-card`, `-character`, `-event-card`, `-deck`, `-hand`,
+  `-void`, and `-figment`;
+- battle language: `-battle`, `-player`, `-opponent`, `-turn`, `-round`, and
+  `-point`;
+- resource names that are count-invariant in English: `-essence`, `-energy`,
+  and `-spark`.
+
+Site action verbs and keywords stay out of the shared term set. Their form can
+depend on tense, mood, subject, object, and the surrounding sentence. Complete
+messages give a translator enough context to conjugate or replace them.
+
+## Grammatical Number
+
+Every countable term exposes a locale-private `$number` facet whose default is
+`one`. The current Fluent syntax accepts literal term arguments, so the complete
+message selects on its runtime count and passes the matching CLDR category to
+the term:
+
+```ftl
+-card =
+    { $number ->
+       *[one] Card
+        [other] Cards
+    }
+
+deck-card-count =
+    { $count ->
+        [one] { $count } { -card(number: "one") }
+       *[other] { $count } { -card(number: "other") }
+    }
+deck-heading = { -deck }
+```
+
+Numeric selectors use the locale's CLDR rules. A translation may add `zero`,
+`two`, `few`, or `many` message variants and matching term facets. A singular
+label can reference the term without arguments because `one` is its default.
+
+The term does not render the numeral because its position, spacing, and role
+are locale-specific. A Chinese translation can put the appropriate classifier
+in the term and place the numeral next to it in the complete message. A message
+whose layout renders the numeral separately can use the same grammatical-number
+facet as its adjacent label.
+
+## Complete Messages Own Grammar
+
+Messages own articles, possessives, adjectives, verbs, punctuation, and word
+order. This keeps English `a` versus `an` out of a context-free article term
+and lets translations express agreement across the whole phrase.
+
+Fluent permits locale-specific grammar that is absent from the English source.
+A locale can parameterize a term by grammatical case and pass that parameter
+from its translated message. It can also add private attributes such as
+`.gender` or `.starts-with` and use them as selectors for adjective, article,
+or verb agreement. These details stay inside the locale's Fluent resource and
+do not become application variables.
+
+Term values use the canonical title-style game vocabulary. A complete message
+may use a contextual lexical form when sentence casing, compounding, or idiom
+requires one.
