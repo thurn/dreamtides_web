@@ -90,12 +90,11 @@ adapters need. Narrow metadata leaves such as Exploration template variables
 may use a dynamic value type when their schema deliberately permits strings,
 integers, booleans, and small string-keyed objects.
 
-The energy cost for UUID `29d25251-8b42-4d3d-97e6-6c3abaabd9a2` and the spark
-for UUID `229ab3a1-3720-41a2-924c-8fe112188f8e` are mistakenly quoted numeric
-strings in TOML but are `Fixed(2)` in RON. A standalone data-cleanup commit
-corrects those TOML values to numeric `2` before the Cards parity baseline is
-captured. The migration itself then requires parsed-value parity without an
-adapter-specific exception.
+Existing TOML may contain minor, unambiguous representation errors, such as a
+numeric value accidentally written as a string. These are routine data cleanup,
+not schema exceptions or migration blockers. Correct them when encountered and
+verify that the established TypeScript result is unchanged; do not add adapter
+special cases merely to reproduce a historical typo.
 
 The candidates are sufficient for read/build conversion and editor-backed
 migration without source schema changes. Editor controls without a corresponding
@@ -851,11 +850,13 @@ oracle:
 
 Differences are classified before the cutover. Formatting and the generated
 header may differ in TOML. Compiler outputs, UUID references, record order,
-string code points, parsed TOML values, and runtime artifacts must agree.
-Pre-existing data errors are corrected in separately reviewed commits before
-the applicable parity baseline is captured. Filesystem-dependent art discovery
-is compared through stable logical asset references, not machine-specific
-absolute paths or symlink metadata.
+string code points, parsed TOML values, and runtime artifacts must agree after
+routine corrections for minor, unambiguous pre-existing data errors. The parity
+report records any such cleanup and verifies that the established TypeScript
+result is unchanged. These corrections do not require adapter-specific behavior
+or separate migration machinery. Filesystem-dependent art discovery is compared
+through stable logical asset references, not machine-specific absolute paths or
+symlink metadata.
 
 These production-data comparisons are migration commands and review evidence,
 not permanent CI tests. Permanent tests use synthetic fixtures so routine game
