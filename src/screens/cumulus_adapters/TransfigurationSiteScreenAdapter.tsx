@@ -1,6 +1,6 @@
 // Wiring-only adapter for the standard desktop Cumulus Transfiguration site.
 
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";
 import type { TransfigurationType } from "../../types/journey";
@@ -9,8 +9,13 @@ import {
   buildTransfigurationSiteView,
   resolveTransfigurationGuide,
 } from "./transfiguration-view-model";
+import { useGuideDialogue } from "./guide-dialogue-view-model";
 
-export function TransfigurationSiteScreenAdapter({ siteId }: { siteId: string }) {
+export function TransfigurationSiteScreenAdapter({
+  siteId,
+}: {
+  siteId: string;
+}) {
   const { state, mutations, journeyContent } = useJourney();
   const node =
     state.currentDreamscape === null
@@ -23,14 +28,11 @@ export function TransfigurationSiteScreenAdapter({ siteId }: { siteId: string })
     persistedRuntime.choiceKind === "transfiguration"
       ? persistedRuntime
       : null;
-  const guide = resolveTransfigurationGuide(journeyContent.guides, site?.guideIdOverride);
-  const guideLineRef = useRef<string | null | undefined>(undefined);
-  if (guideLineRef.current === undefined) {
-    guideLineRef.current =
-      guide === null || guide.dialog.length === 0
-        ? null
-        : guide.dialog[Math.floor(Math.random() * guide.dialog.length)];
-  }
+  const guide = resolveTransfigurationGuide(
+    journeyContent.guides,
+    site?.guideIdOverride,
+  );
+  const guideLine = useGuideDialogue(guide, "site");
 
   const view = useMemo(
     () =>
@@ -43,7 +45,7 @@ export function TransfigurationSiteScreenAdapter({ siteId }: { siteId: string })
             runtime,
             cardDatabase: journeyContent.cardDatabase,
             guide,
-            guideLine: guideLineRef.current ?? null,
+            guideLine,
           }),
     [state, node, site, runtime, journeyContent.cardDatabase, guide],
   );
@@ -106,7 +108,11 @@ export function TransfigurationSiteScreenAdapter({ siteId }: { siteId: string })
         completionLevel: state.completionLevel,
       });
       mutations.acceptTransfigurationChoice(
-        site.id, entryId, type, effectDescription, effectDetails,
+        site.id,
+        entryId,
+        type,
+        effectDescription,
+        effectDetails,
       );
     },
     [mutations, journeyContent.cardDatabase, runtime, site, state],

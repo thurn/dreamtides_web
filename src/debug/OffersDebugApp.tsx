@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactElement } from "react";
 import { loadCardDatabase } from "../data/card-database";
-import { loadAtlasData, siteTypeIcon } from "../data/atlas-data";
+import { loadSitesData, siteTypeIcon } from "../data/sites-data";
 import {
   OfferTile,
   type OfferTileCard,
@@ -17,7 +17,7 @@ import { MERCHANT_ARCHETYPE_BUILDERS } from "../journey_v2/archetypes/registry";
 import type { MerchantArchetypeId } from "../journey_v2/archetypes/types";
 import { asCardId, asCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
-import type { AtlasData } from "../types/atlas-data";
+import type { SitesData } from "../types/sites-data";
 
 const fixtureCard = (cardId: string, imageNumber: number): OfferTileCard => {
   const id = asCardId(cardId);
@@ -102,105 +102,105 @@ const DREAMSIGNS: OfferTileDreamsignChoices = [
 ];
 
 /** One maximal, production-shaped UUID-backed specimen per canonical archetype. */
-export function buildOfferTileDebugModels(atlasData: AtlasData): Readonly<
-  Record<MerchantArchetypeId, OfferTileModel>
-> {
+export function buildOfferTileDebugModels(
+  sitesData: SitesData,
+): Readonly<Record<MerchantArchetypeId, OfferTileModel>> {
   return {
-  fit_card_grant: {
-    id: "debug:fit_card_grant",
-    kind: "card-gift",
-    card: GENERAL_DRAFT_A[0],
-  },
-  fit_card_draft: {
-    id: "debug:fit_card_draft",
-    kind: "card-draft",
-    cards: GENERAL_DRAFT_A,
-  },
-  copies_draft: {
-    id: "debug:copies_draft",
-    kind: "copies-draft",
-    copyCount: 2,
-    cards: GENERAL_DRAFT_B,
-  },
-  strong_card: {
-    id: "debug:strong_card",
-    kind: "card-gift",
-    card: GENERAL_DRAFT_B[0],
-  },
-  category_draft_known: {
-    id: "debug:category_draft_known",
-    kind: "category-draft",
-    categoryName: "spirit animal",
-    cards: CATEGORY_DRAFT,
-  },
-  card_bundle: {
-    id: "debug:card_bundle",
-    kind: "card-bundle",
-    cards: [CATEGORY_DRAFT[0], CATEGORY_DRAFT[1], CATEGORY_DRAFT[2]],
-  },
-  transfigured_draft: {
-    id: "debug:transfigured_draft",
-    kind: "transfigured-draft",
-    cards: GENERAL_DRAFT_B,
-  },
-  transfigure: {
-    id: "debug:transfigure",
-    kind: "transfigure-card",
-    card: GENERAL_DRAFT_B[1],
-    transfiguration: "Empowered",
-  },
-  starter_transfigure: {
-    id: "debug:starter_transfigure",
-    kind: "transfigure-starters",
-    cards: STARTER_TARGETS,
-  },
-  keyword_mod: {
-    id: "debug:keyword_mod",
-    kind: "keyword-modification",
-    card: KEYWORD_TARGET,
-    reclaimReduction: 1,
-  },
-  tribal_change: {
-    id: "debug:tribal_change",
-    kind: "tribal-change",
-    card: GENERAL_DRAFT_A[0],
-    newCharacterSubtype: "Warrior",
-  },
-  purge: {
-    id: "debug:purge",
-    kind: "purge-card",
-    card: PURGE_TARGET,
-  },
-  purge_replace: {
-    id: "debug:purge_replace",
-    kind: "trade-card",
-    outgoing: GENERAL_DRAFT_A[3],
-    incoming: GENERAL_DRAFT_B,
-  },
-  duplicate: {
-    id: "debug:duplicate",
-    kind: "duplicate-card",
-    cards: [GENERAL_DRAFT_A[0], GENERAL_DRAFT_A[1], GENERAL_DRAFT_A[3]],
-  },
-  dreamsign: {
-    id: "debug:dreamsign",
-    kind: "dreamsign-gift",
-    dreamsign: DREAMSIGNS[0],
-  },
-  dreamsign_draft: {
-    id: "debug:dreamsign_draft",
-    kind: "dreamsign-draft",
-    dreamsigns: DREAMSIGNS,
-  },
-  add_site: {
-    id: "debug:add_site",
-    kind: "add-site",
-    site: {
-      id: "Duplication",
-      name: "Duplication",
-      glyph: glyph(siteTypeIcon(atlasData, "Duplication")),
+    fit_card_grant: {
+      id: "debug:fit_card_grant",
+      kind: "card-gift",
+      card: GENERAL_DRAFT_A[0],
     },
-  },
+    fit_card_draft: {
+      id: "debug:fit_card_draft",
+      kind: "card-draft",
+      cards: GENERAL_DRAFT_A,
+    },
+    copies_draft: {
+      id: "debug:copies_draft",
+      kind: "copies-draft",
+      copyCount: 2,
+      cards: GENERAL_DRAFT_B,
+    },
+    strong_card: {
+      id: "debug:strong_card",
+      kind: "card-gift",
+      card: GENERAL_DRAFT_B[0],
+    },
+    category_draft_known: {
+      id: "debug:category_draft_known",
+      kind: "category-draft",
+      categoryName: "spirit animal",
+      cards: CATEGORY_DRAFT,
+    },
+    card_bundle: {
+      id: "debug:card_bundle",
+      kind: "card-bundle",
+      cards: [CATEGORY_DRAFT[0], CATEGORY_DRAFT[1], CATEGORY_DRAFT[2]],
+    },
+    transfigured_draft: {
+      id: "debug:transfigured_draft",
+      kind: "transfigured-draft",
+      cards: GENERAL_DRAFT_B,
+    },
+    transfigure: {
+      id: "debug:transfigure",
+      kind: "transfigure-card",
+      card: GENERAL_DRAFT_B[1],
+      transfiguration: "Empowered",
+    },
+    starter_transfigure: {
+      id: "debug:starter_transfigure",
+      kind: "transfigure-starters",
+      cards: STARTER_TARGETS,
+    },
+    keyword_mod: {
+      id: "debug:keyword_mod",
+      kind: "keyword-modification",
+      card: KEYWORD_TARGET,
+      reclaimReduction: 1,
+    },
+    tribal_change: {
+      id: "debug:tribal_change",
+      kind: "tribal-change",
+      card: GENERAL_DRAFT_A[0],
+      newCharacterSubtype: "Warrior",
+    },
+    purge: {
+      id: "debug:purge",
+      kind: "purge-card",
+      card: PURGE_TARGET,
+    },
+    purge_replace: {
+      id: "debug:purge_replace",
+      kind: "trade-card",
+      outgoing: GENERAL_DRAFT_A[3],
+      incoming: GENERAL_DRAFT_B,
+    },
+    duplicate: {
+      id: "debug:duplicate",
+      kind: "duplicate-card",
+      cards: [GENERAL_DRAFT_A[0], GENERAL_DRAFT_A[1], GENERAL_DRAFT_A[3]],
+    },
+    dreamsign: {
+      id: "debug:dreamsign",
+      kind: "dreamsign-gift",
+      dreamsign: DREAMSIGNS[0],
+    },
+    dreamsign_draft: {
+      id: "debug:dreamsign_draft",
+      kind: "dreamsign-draft",
+      dreamsigns: DREAMSIGNS,
+    },
+    add_site: {
+      id: "debug:add_site",
+      kind: "add-site",
+      site: {
+        id: "Duplication",
+        name: "Duplication",
+        glyph: glyph(siteTypeIcon(sitesData, "Duplication")),
+      },
+    },
   };
 }
 
@@ -237,9 +237,7 @@ function hydrateCard(
   cardsById: ReadonlyMap<string, CardData>,
 ): OfferTileCard {
   const displaySnapshot = cardsById.get(card.cardId);
-  return displaySnapshot === undefined
-    ? card
-    : { ...card, displaySnapshot };
+  return displaySnapshot === undefined ? card : { ...card, displaySnapshot };
 }
 
 function hydrateCards<T extends readonly OfferTileCard[]>(
@@ -293,11 +291,12 @@ function hydrateOfferCards(
 export default function OffersDebugApp(): ReactElement {
   const isDesktop = useIsDesktop();
   const [lastPressed, setLastPressed] = useState<string | null>(null);
-  const [cardsById, setCardsById] = useState<ReadonlyMap<string, CardData> | null>(
-    null,
-  );
+  const [cardsById, setCardsById] = useState<ReadonlyMap<
+    string,
+    CardData
+  > | null>(null);
   const [cardLoadError, setCardLoadError] = useState<string | null>(null);
-  const [atlasData, setAtlasData] = useState<AtlasData | null>(null);
+  const [sitesData, setSitesData] = useState<SitesData | null>(null);
   useEffect(() => {
     let cancelled = false;
     loadCardDatabase()
@@ -313,7 +312,9 @@ export default function OffersDebugApp(): ReactElement {
       })
       .catch((cause: unknown) => {
         if (!cancelled) {
-          setCardLoadError(cause instanceof Error ? cause.message : String(cause));
+          setCardLoadError(
+            cause instanceof Error ? cause.message : String(cause),
+          );
         }
       });
     return () => {
@@ -322,29 +323,33 @@ export default function OffersDebugApp(): ReactElement {
   }, []);
   useEffect(() => {
     let cancelled = false;
-    loadAtlasData()
-      .then((loadedAtlasData) => {
-        if (!cancelled) setAtlasData(loadedAtlasData);
+    loadSitesData()
+      .then((loadedSitesData) => {
+        if (!cancelled) setSitesData(loadedSitesData);
       })
       .catch((cause: unknown) => {
         if (!cancelled) {
-          setCardLoadError(cause instanceof Error ? cause.message : String(cause));
+          setCardLoadError(
+            cause instanceof Error ? cause.message : String(cause),
+          );
         }
       });
     return () => {
       cancelled = true;
     };
   }, []);
-  const debugModels = atlasData === null ? null : buildOfferTileDebugModels(atlasData);
-  const models = debugModels === null
-    ? []
-    : OFFER_TILE_DEBUG_ARCHETYPE_IDS.map((archetypeId) =>
-        hydrateOfferCards(debugModels[archetypeId], cardsById),
-      );
+  const debugModels =
+    sitesData === null ? null : buildOfferTileDebugModels(sitesData);
+  const models =
+    debugModels === null
+      ? []
+      : OFFER_TILE_DEBUG_ARCHETYPE_IDS.map((archetypeId) =>
+          hydrateOfferCards(debugModels[archetypeId], cardsById),
+        );
   const selected =
     lastPressed === null
       ? null
-      : models.find((model) => model.id === lastPressed) ?? null;
+      : (models.find((model) => model.id === lastPressed) ?? null);
   return (
     <div
       className="cumulus"
@@ -413,7 +418,10 @@ export default function OffersDebugApp(): ReactElement {
           <p style={{ margin: 0, font: token("--t-body-sm") }}>
             {models.length} maximal offer shapes · every surfaced choice shown
           </p>
-          <p aria-live="polite" style={{ margin: 0, minHeight: 20, font: token("--t-caption") }}>
+          <p
+            aria-live="polite"
+            style={{ margin: 0, minHeight: 20, font: token("--t-caption") }}
+          >
             {selected === null ? "" : offerTileDescription(selected)}
           </p>
         </header>
@@ -429,7 +437,10 @@ export default function OffersDebugApp(): ReactElement {
         >
           {OFFER_TILE_DEBUG_ARCHETYPE_IDS.map((archetypeId) => {
             if (debugModels === null) return null;
-            const model = hydrateOfferCards(debugModels[archetypeId], cardsById);
+            const model = hydrateOfferCards(
+              debugModels[archetypeId],
+              cardsById,
+            );
             return (
               <figure
                 key={archetypeId}

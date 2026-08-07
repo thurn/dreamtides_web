@@ -100,6 +100,7 @@ export type DatabaseMode = "emulator" | "realtime";
 export function contentConfigFromRuntime(
   config: RuntimeConfig,
   atlasFoldHash: string,
+  sitesFoldHash: string,
   draftData: DraftData,
   economyData: EconomyData,
   opponentsData: OpponentsData,
@@ -113,6 +114,7 @@ export function contentConfigFromRuntime(
     draftMode: config.draftMode ?? "pool",
     fresh20PackSize: config.fresh20PackSize ?? null,
     atlasFoldHash,
+    sitesFoldHash,
     draftFoldHash: draftData.foldHash,
     economyFoldHash: economyData.foldHash,
     rewardSelectionFoldHash: rewardSelectionData.foldHash,
@@ -135,6 +137,7 @@ export function contentConfigsEqual(
     a.draftMode === b.draftMode &&
     a.fresh20PackSize === b.fresh20PackSize &&
     a.atlasFoldHash === b.atlasFoldHash &&
+    a.sitesFoldHash === b.sitesFoldHash &&
     a.draftFoldHash === b.draftFoldHash &&
     a.economyFoldHash === b.economyFoldHash &&
     a.rewardSelectionFoldHash === b.rewardSelectionFoldHash &&

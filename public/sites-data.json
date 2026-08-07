@@ -1,0 +1,268 @@
+{
+  "schemaVersion": 1,
+  "siteTypes": {
+    "Battle": {
+      "icon": "bxf bx-sword-alt",
+      "glossaryId": "site-battle"
+    },
+    "Draft": {
+      "icon": "bxf bx-rectangle-vertical",
+      "glossaryId": "site-draft"
+    },
+    "Shop": {
+      "icon": "bxf bx-store-alt-2",
+      "glossaryId": "site-shop"
+    },
+    "Purge": {
+      "icon": "bxf bx-hot",
+      "glossaryId": "site-purge"
+    },
+    "Essence": {
+      "icon": "bxf bx-diamond-alt",
+      "glossaryId": "site-essence"
+    },
+    "Transfiguration": {
+      "icon": "fa-solid fa-hammer",
+      "glossaryId": "site-transfiguration"
+    },
+    "Duplication": {
+      "icon": "bxf bx-copy",
+      "glossaryId": "site-duplication"
+    },
+    "Reward": {
+      "icon": "bxf bx-treasure-chest",
+      "glossaryId": "site-reward"
+    },
+    "Augury": {
+      "icon": "bxf bx-eye",
+      "glossaryId": "site-augury"
+    },
+    "DreamsignMarket": {
+      "icon": "bxf bx-pyramid",
+      "glossaryId": "site-dreamsign-market"
+    },
+    "DreamsignRevelation": {
+      "icon": "bxf bx-meteor",
+      "glossaryId": "site-dreamsign-revelation"
+    },
+    "RandomSite": {
+      "icon": "fa-solid fa-question",
+      "glossaryId": "site-random-site"
+    },
+    "Gamble": {
+      "icon": "bxf bx-coin",
+      "glossaryId": "site-gamble"
+    },
+    "Exploration": {
+      "icon": "bxf bx-compass",
+      "glossaryId": "site-exploration"
+    }
+  },
+  "fallbackSiteType": {
+    "icon": "bx bx-help-circle",
+    "name": "Unknown Site",
+    "description": "An unfamiliar site from an earlier dream."
+  },
+  "randomSite": {
+    "destinations": [
+      "Shop",
+      "DreamsignMarket",
+      "DreamsignRevelation",
+      "Transfiguration",
+      "Duplication",
+      "Purge",
+      "Augury",
+      "Gamble",
+      "Exploration"
+    ],
+    "homeChoiceCount": 3,
+    "awayChoiceCount": 1,
+    "insufficientDestinations": "fail",
+    "guideId": "maddox"
+  },
+  "cardChoices": {
+    "transfiguration": {
+      "standardLimit": 3,
+      "enhancedLimit": null
+    },
+    "duplication": {
+      "standardLimit": 3,
+      "enhancedLimit": null
+    }
+  },
+  "gamble": {
+    "selection": {
+      "fallbackGame": "gravok-three-gate-wager",
+      "games": [
+        {
+          "id": "gravok-three-gate-wager",
+          "weight": 1
+        },
+        {
+          "id": "tidemark-ladder-climb",
+          "weight": 1
+        },
+        {
+          "id": "starway-stairs",
+          "weight": 1
+        },
+        {
+          "id": "four-suit-reprise",
+          "weight": 1
+        }
+      ]
+    },
+    "threeGate": {
+      "maxRetries": 2,
+      "gates": [
+        {
+          "id": "six",
+          "name": "Six Gate",
+          "threshold": "6",
+          "oddsNumerator": 36,
+          "oddsDenominator": 52,
+          "awardsDreamsign": false
+        },
+        {
+          "id": "nine",
+          "name": "Nine Gate",
+          "threshold": "9",
+          "oddsNumerator": 24,
+          "oddsDenominator": 52,
+          "awardsDreamsign": false
+        },
+        {
+          "id": "jack",
+          "name": "Jack Gate",
+          "threshold": "J",
+          "oddsNumerator": 16,
+          "oddsDenominator": 52,
+          "awardsDreamsign": true
+        }
+      ]
+    },
+    "ladderClimb": {
+      "strongPoolLimit": 50,
+      "attempts": [
+        {
+          "attempt": 1,
+          "threshold": "Q",
+          "oddsNumerator": 12,
+          "oddsDenominator": 52
+        },
+        {
+          "attempt": 2,
+          "threshold": "10",
+          "oddsNumerator": 20,
+          "oddsDenominator": 52
+        },
+        {
+          "attempt": 3,
+          "threshold": "8",
+          "oddsNumerator": 28,
+          "oddsDenominator": 52
+        },
+        {
+          "attempt": 4,
+          "threshold": "6",
+          "oddsNumerator": 36,
+          "oddsDenominator": 52
+        }
+      ]
+    },
+    "starwayStairs": {
+      "maxRetries": 2,
+      "tiers": [
+        {
+          "tier": 1,
+          "highestBustRank": "2",
+          "bustOddsNumerator": 4,
+          "oddsDenominator": 52
+        },
+        {
+          "tier": 2,
+          "highestBustRank": "4",
+          "bustOddsNumerator": 12,
+          "oddsDenominator": 52
+        },
+        {
+          "tier": 3,
+          "highestBustRank": "7",
+          "bustOddsNumerator": 24,
+          "oddsDenominator": 52
+        }
+      ]
+    },
+    "fourSuitReprise": {
+      "maxRounds": 3,
+      "oddsNumerator": 13,
+      "oddsDenominator": 52,
+      "outcomes": [
+        {
+          "suit": "spades",
+          "outcome": "transfiguration",
+          "label": "Transfigure"
+        },
+        {
+          "suit": "diamonds",
+          "outcome": "essence",
+          "label": "Unchanged + 100 Essence"
+        },
+        {
+          "suit": "hearts",
+          "outcome": "duplication",
+          "label": "Duplicate"
+        },
+        {
+          "suit": "clubs",
+          "outcome": "purge",
+          "label": "Purge"
+        }
+      ]
+    }
+  },
+  "guideAssignments": {
+    "Shop": {
+      "guideId": "tobias_tanglefur",
+      "homeDreamscapeId": "tumbleleaf_village"
+    },
+    "DreamsignMarket": {
+      "guideId": "amunet_the_tomb_keeper",
+      "homeDreamscapeId": "pharaohs_gate"
+    },
+    "DreamsignRevelation": {
+      "guideId": "sigrun",
+      "homeDreamscapeId": "winterwake_fjords"
+    },
+    "Transfiguration": {
+      "guideId": "durgan_forgehammer",
+      "homeDreamscapeId": "frostforge"
+    },
+    "Duplication": {
+      "guideId": "deacon_holt",
+      "homeDreamscapeId": "hopes_end"
+    },
+    "Purge": {
+      "guideId": "master_takeshi",
+      "homeDreamscapeId": "tsukiren"
+    },
+    "Augury": {
+      "guideId": "aldric_the_seer",
+      "homeDreamscapeId": "wilderveil"
+    },
+    "RandomSite": {
+      "guideId": "maddox",
+      "homeDreamscapeId": "rust_expanse"
+    },
+    "Gamble": {
+      "guideId": "gravok",
+      "homeDreamscapeId": "farpoint_station"
+    },
+    "Exploration": {
+      "guideId": "layaway",
+      "homeDreamscapeId": "grid_city"
+    }
+  },
+  "contentHash": "55793b1d63ccc34b7db73932454bf8362058f928032c3600804dc4fa18f957c8",
+  "foldHash": "f2158d573c3fb29e088ad72239ea79ae753a3b11a660ed80fa343708547dfd0a"
+}

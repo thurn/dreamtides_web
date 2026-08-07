@@ -29,6 +29,7 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
     draftMode,
     fresh20PackSize,
     atlasFoldHash,
+    sitesFoldHash,
     draftFoldHash,
     economyFoldHash,
     rewardSelectionFoldHash,
@@ -47,11 +48,18 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
       (typeof fresh20PackSize === "number" && Number.isFinite(fresh20PackSize))
     ) ||
     !(atlasFoldHash === undefined || typeof atlasFoldHash === "string") ||
+    !(sitesFoldHash === undefined || typeof sitesFoldHash === "string") ||
     !(draftFoldHash === undefined || typeof draftFoldHash === "string") ||
     !(economyFoldHash === undefined || typeof economyFoldHash === "string") ||
-    !(rewardSelectionFoldHash === undefined || typeof rewardSelectionFoldHash === "string") ||
+    !(
+      rewardSelectionFoldHash === undefined ||
+      typeof rewardSelectionFoldHash === "string"
+    ) ||
     !(auguryFoldHash === undefined || typeof auguryFoldHash === "string") ||
-    !(explorationFoldHash === undefined || typeof explorationFoldHash === "string") ||
+    !(
+      explorationFoldHash === undefined ||
+      typeof explorationFoldHash === "string"
+    ) ||
     !(tutorialFoldHash === undefined || typeof tutorialFoldHash === "string") ||
     !(
       opponentsFoldHash === undefined || typeof opponentsFoldHash === "string"
@@ -69,9 +77,12 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
     draftMode,
     fresh20PackSize,
     ...(atlasFoldHash === undefined ? {} : { atlasFoldHash }),
+    ...(sitesFoldHash === undefined ? {} : { sitesFoldHash }),
     ...(draftFoldHash === undefined ? {} : { draftFoldHash }),
     ...(economyFoldHash === undefined ? {} : { economyFoldHash }),
-    ...(rewardSelectionFoldHash === undefined ? {} : { rewardSelectionFoldHash }),
+    ...(rewardSelectionFoldHash === undefined
+      ? {}
+      : { rewardSelectionFoldHash }),
     ...(auguryFoldHash === undefined ? {} : { auguryFoldHash }),
     ...(explorationFoldHash === undefined ? {} : { explorationFoldHash }),
     ...(tutorialFoldHash === undefined ? {} : { tutorialFoldHash }),

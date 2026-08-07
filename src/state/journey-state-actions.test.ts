@@ -6,6 +6,7 @@ import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import {
   loadTestAffiliations,
   loadTestAtlasData,
+  loadTestSitesData,
   loadTestDreamGuides,
   loadTestDreamscapes,
   makeTestAtlasNode,
@@ -98,6 +99,7 @@ function makeJourneyContent(
     affiliations: loadTestAffiliations(),
     guides: loadTestDreamGuides(),
     atlasData: loadTestAtlasData(),
+    sitesData: loadTestSitesData(),
     economyData: economyFixture(),
     opponentsData: opponentsFixture(),
     poolContext: makeTestPoolContext(["dreamsign-a", "dreamsign-b"]),

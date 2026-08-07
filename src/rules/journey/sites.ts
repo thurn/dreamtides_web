@@ -27,9 +27,9 @@
 
 import type { EventContext } from "../../eventlog/types";
 import type { EconomyData } from "../../types/economy-data";
+import type { SitesData } from "../../types/sites-data";
 import type { DraftState } from "../../types/draft";
 import type { GambleGameId } from "../../types/gamble";
-import type { RandomSiteDestinationType } from "../../types/journey";
 import type {
   DeckEntry,
   AugurySiteRuntime,
@@ -82,12 +82,10 @@ export interface SiteOpenResult {
  * Augury are generated purely in-reducer and never need it.
  */
 export interface SiteContentProvider {
+  /** Immutable validated site rules captured with the provider registration. */
+  sitesData: SitesData;
   /** Immutable validated economy data captured with the provider registration. */
   economyData?: EconomyData;
-  /** Authored Random Site destination catalog used by debug Atlas edits. */
-  randomSiteDestinations?: readonly RandomSiteDestinationType[];
-  /** Guide derived from the unique Random Site signature-site owner. */
-  randomSiteGuideId?: string;
   /**
    * Generate the runtime for `site` (of a content-coupled type) deterministically
    * from `(journey, site, rng)`, or `null` to bounce. Must not mutate `journey`.
@@ -217,7 +215,10 @@ function clampEssence(value: number): number {
 }
 
 /** Locate a site by id anywhere in the atlas (relocated legacy `findSite`). */
-export function findSite(journey: JourneyState, siteId: string): SiteState | null {
+export function findSite(
+  journey: JourneyState,
+  siteId: string,
+): SiteState | null {
   for (const node of Object.values(journey.atlas.nodes)) {
     const site = node.sites.find((candidate) => candidate.id === siteId);
     if (site !== undefined) return site;
@@ -236,7 +237,10 @@ export function canVisitSite(journey: JourneyState, siteId: string): boolean {
     const site = node.sites.find((candidate) => candidate.id === siteId);
     if (site === undefined) continue;
     if (site.isVisited || journey.visitedSites.includes(siteId)) return false;
-    if (journey.currentDreamscape !== null && node.id !== journey.currentDreamscape) {
+    if (
+      journey.currentDreamscape !== null &&
+      node.id !== journey.currentDreamscape
+    ) {
       return false;
     }
     if (site.type === "Battle") {
@@ -278,7 +282,10 @@ export function completeJourneySite(
 }
 
 /** Complete the site and return to the dreamscape (legacy `completeSiteAndReturnToDreamscape`). */
-function completeAndReturn(journey: JourneyState, siteId: string): JourneyState {
+function completeAndReturn(
+  journey: JourneyState,
+  siteId: string,
+): JourneyState {
   return {
     ...completeJourneySite(journey, siteId),
     screen: { type: "dreamscape" },
@@ -352,15 +359,17 @@ export function openSite(
 
   switch (site.type) {
     case "RandomSite": {
+      const choiceCount = contentProvider?.sitesData.randomSite.homeChoiceCount;
       if (
+        choiceCount === undefined ||
         site.randomSite?.mode !== "homeChoice" ||
-        site.randomSite.candidateSiteTypes.length < 3
+        site.randomSite.candidateSiteTypes.length < choiceCount
       ) {
         return null;
       }
       const remaining = [...site.randomSite.candidateSiteTypes];
       const offeredSiteTypes: typeof remaining = [];
-      for (let index = 0; index < 3; index += 1) {
+      for (let index = 0; index < choiceCount; index += 1) {
         const choiceIndex = Math.floor(ctx.rng(index) * remaining.length);
         offeredSiteTypes.push(remaining.splice(choiceIndex, 1)[0]);
       }
@@ -374,7 +383,12 @@ export function openSite(
       const economy = contentProvider?.economyData?.siteRewards.essence;
       if (economy === undefined) return null;
       const rewardRange = site.isEnhanced ? economy.enhanced : economy.standard;
-      const amount = randomIntInRange(ctx.rng, 0, rewardRange.min, rewardRange.max);
+      const amount = randomIntInRange(
+        ctx.rng,
+        0,
+        rewardRange.min,
+        rewardRange.max,
+      );
       return withRuntime(journey, siteId, {
         kind: "essence",
         amount,
@@ -471,7 +485,11 @@ export function chooseRandomSite(
     ...owner,
     sites: owner.sites.map((candidate) =>
       candidate.id === siteId
-        ? materializeRandomSite(candidate, siteType, contentProvider?.randomSiteGuideId)
+        ? materializeRandomSite(
+            candidate,
+            siteType,
+            contentProvider?.sitesData.randomSite.guideId,
+          )
         : candidate,
     ),
   };
@@ -522,7 +540,8 @@ export function acceptReward(
   if (runtime === undefined || runtime.kind !== "reward" || runtime.accepted) {
     return null;
   }
-  const purgeIndex = payload.purgeIndex === undefined ? undefined : integer(payload.purgeIndex);
+  const purgeIndex =
+    payload.purgeIndex === undefined ? undefined : integer(payload.purgeIndex);
   if (payload.purgeIndex !== undefined && purgeIndex === null) return null;
 
   const reward = runtime.reward;
@@ -635,15 +654,19 @@ export function acceptDreamsignOffer(
   );
   if (dreamsign === undefined) return null;
 
-  const purgeIndex = payload.purgeIndex === undefined ? undefined : integer(payload.purgeIndex);
+  const purgeIndex =
+    payload.purgeIndex === undefined ? undefined : integer(payload.purgeIndex);
   if (payload.purgeIndex !== undefined && purgeIndex === null) return null;
   const purgedDreamsign =
     purgeIndex === undefined || purgeIndex === null
       ? null
       : journey.dreamsigns[purgeIndex];
   if (
-    (purgeIndex !== undefined && purgeIndex !== null && purgedDreamsign == null) ||
-    (purgeIndex === undefined && journey.dreamsigns.length >= journey.maxDreamsigns)
+    (purgeIndex !== undefined &&
+      purgeIndex !== null &&
+      purgedDreamsign == null) ||
+    (purgeIndex === undefined &&
+      journey.dreamsigns.length >= journey.maxDreamsigns)
   ) {
     return null;
   }
@@ -734,7 +757,8 @@ export function acceptTransfigurationChoice(
   }
   const offered = runtime.transfigurationOffers.find(
     (offer) =>
-      offer.entryId === entryId && (wantType === null || offer.type === wantType),
+      offer.entryId === entryId &&
+      (wantType === null || offer.type === wantType),
   );
   if (offered === undefined) return null;
 
@@ -849,7 +873,7 @@ export function rerollAugury(
   if (existing !== undefined && existing.kind !== "augury") return null;
   if (existing?.kind === "augury" && existing.completed) return null;
   const previousNonce =
-    existing?.kind === "augury" ? existing.rerollNonce ?? 0 : 0;
+    existing?.kind === "augury" ? (existing.rerollNonce ?? 0) : 0;
   const forcedArchetypeId =
     existing?.kind === "augury" ? existing.forcedArchetypeId : undefined;
   const runtime: AugurySiteRuntime = {
@@ -882,7 +906,7 @@ export function forceAuguryArchetype(
   if (existing !== undefined && existing.kind !== "augury") return null;
   if (existing?.kind === "augury" && existing.completed) return null;
   const previousNonce =
-    existing?.kind === "augury" ? existing.rerollNonce ?? 0 : 0;
+    existing?.kind === "augury" ? (existing.rerollNonce ?? 0) : 0;
   const runtime: AugurySiteRuntime = {
     kind: "augury",
     completed: false,
@@ -999,7 +1023,8 @@ export function purgeDeckCards(
   }
   const paidCount = removed.filter((entry) => !entry.isBane).length;
   const purgeConfig = contentProvider?.economyData?.purge;
-  if (purgeConfig === undefined || paidCount > purgeConfig.marginalCosts.length) return null;
+  if (purgeConfig === undefined || paidCount > purgeConfig.marginalCosts.length)
+    return null;
   const cost = purgeVisitCost(purgeConfig, paidCount, {
     isEnhanced: site.isEnhanced,
     essenceDiscountPercent: journey.shopModifiers.essenceDiscountPercent,

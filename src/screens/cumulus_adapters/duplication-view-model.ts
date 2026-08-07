@@ -1,12 +1,12 @@
 // Pure view-model builder for the Cumulus Duplication site.
 
-import { artRef, type ArtRef } from "../../cumulus/primitives/art";
+import type { ArtRef } from "../../cumulus/primitives/art";
 import type {
   DuplicationCardView,
   DuplicationGuideView,
   DuplicationSiteView,
 } from "../../cumulus/screens/DuplicationSiteScreen";
-import { guideForSiteType } from "../../data/dreamscapes";
+import { requireGuideForSiteType } from "../../data/dreamscapes";
 import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
 import type {
@@ -17,31 +17,22 @@ import type {
 } from "../../types/journey";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { toDeckCardView } from "./mobile-deck-view-model";
-
-const FALLBACK_GUIDE_ID = "deacon_holt";
-const FALLBACK_GUIDE_NAME = "Deacon Holt";
-const FALLBACK_GUIDE_LINE = "Pick one, and I'll make another.";
+import { projectGuideView } from "./guide-view-model";
 
 /** Resolve Deacon Holt, the resident guide for Duplication. */
 export function resolveDuplicationGuide(
   guides: readonly DreamGuideContent[],
   guideIdOverride?: string,
-): DreamGuideContent | null {
-  return guideForSiteType(guides, "Duplication", guideIdOverride);
+): DreamGuideContent {
+  return requireGuideForSiteType(guides, "Duplication", guideIdOverride);
 }
 
 /** Build the guide art and stable greeting used by the shared site layout. */
 export function buildDuplicationGuideView(
-  guide: DreamGuideContent | null,
-  guideLine: string | null,
+  guide: DreamGuideContent,
+  guideLine: string,
 ): DuplicationGuideView {
-  const id = guide?.id ?? FALLBACK_GUIDE_ID;
-  return {
-    id,
-    name: guide?.name ?? FALLBACK_GUIDE_NAME,
-    line: guideLine ?? guide?.dialog[0] ?? FALLBACK_GUIDE_LINE,
-    art: artRef.dreamGuide(id),
-  };
+  return projectGuideView(guide, guideLine);
 }
 
 /** Resolve the persisted concrete entry ids into their current card displays. */
@@ -90,8 +81,8 @@ export function buildDuplicationSiteView(params: {
   site: SiteState;
   runtime: CardChoiceSiteRuntime | null;
   cardDatabase: Map<number, CardData>;
-  guide: DreamGuideContent | null;
-  guideLine: string | null;
+  guide: DreamGuideContent;
+  guideLine: string;
 }): DuplicationSiteView {
   const scene: ArtRef | null =
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);

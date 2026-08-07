@@ -1,32 +1,41 @@
 import {
   existsSync,
   mkdirSync,
-  mkdtempSync,
   readFileSync,
   renameSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
-import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { parse } from "smol-toml";
 import {
   DEFAULT_DREAMSCAPE_TOML_PATH,
+  DREAM_GUIDES_TOML_PATH,
   SITE_TYPES,
   applyDreamAvatarChanges,
   makeValidateDreamscapeEdit,
   patchDreamscapesToml,
+  patchDreamGuideAssignments,
+  swapDreamGuideSpecializedDialogue,
   planDreamAvatarAssignment,
   readAffiliationOptions,
   readDreamAvatarOptions,
   readDreamGuideOptions,
   readEditorDreamscapes,
-  refreshDreamscapesDataJson,
 } from "./dreamscape-editor-data.mjs";
+import {
+  compileDreamGuidesData,
+  compileSitesData,
+  deriveDreamscapesData,
+} from "./guide-sites-data.mjs";
+import { compileEconomyData } from "./economy-data.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/dreamscapes";
 const DREAMSCAPE_JSON_PATH = join("public", "dreamscapes-data.json");
+const DREAM_GUIDES_JSON_PATH = join("public", "dream-guides-data.json");
+const SITES_JSON_PATH = join("public", "sites-data.json");
 // Dreamscape ids are stable lowercase slugs (e.g. `firstlight_meadow`), not
 // UUIDs, so the editor keys its routes on this slug shape.
 const SLUG_PATTERN = /^[a-z0-9_]+$/u;
@@ -34,7 +43,6 @@ const SLUG_PATTERN = /^[a-z0-9_]+$/u;
 const defaultFileSystem = {
   existsSync,
   mkdirSync,
-  mkdtempSync,
   readFileSync,
   renameSync,
   rmSync,
@@ -82,7 +90,8 @@ function routeForRawPath(rawPath) {
   // A dream-avatar-assignment route is `${BASE_PATH}/:id/dream-avatars`; the bare
   // record route is `${BASE_PATH}/:id`.
   const segments = remainder.split("/");
-  const isDreamAvatarRoute = segments.length === 2 && segments[1] === "dream-avatars";
+  const isDreamAvatarRoute =
+    segments.length === 2 && segments[1] === "dream-avatars";
 
   if (remainder.length === 0 || (segments.length > 1 && !isDreamAvatarRoute)) {
     return {
@@ -163,16 +172,32 @@ function methodNotAllowed(res, allowedMethods) {
 
 function assertPatchBody(body) {
   if (body === null || typeof body !== "object" || Array.isArray(body)) {
-    return { ok: false, code: "INVALID_REQUEST", message: "PATCH body must be a JSON object." };
+    return {
+      ok: false,
+      code: "INVALID_REQUEST",
+      message: "PATCH body must be a JSON object.",
+    };
   }
   if (typeof body.id !== "string") {
-    return { ok: false, code: "INVALID_REQUEST", message: "PATCH body id must be a string." };
+    return {
+      ok: false,
+      code: "INVALID_REQUEST",
+      message: "PATCH body id must be a string.",
+    };
   }
   if (typeof body.field !== "string") {
-    return { ok: false, code: "INVALID_REQUEST", message: "PATCH body field must be a string." };
+    return {
+      ok: false,
+      code: "INVALID_REQUEST",
+      message: "PATCH body field must be a string.",
+    };
   }
   if (!Object.hasOwn(body, "value")) {
-    return { ok: false, code: "INVALID_REQUEST", message: "PATCH body value is required." };
+    return {
+      ok: false,
+      code: "INVALID_REQUEST",
+      message: "PATCH body value is required.",
+    };
   }
   return { ok: true };
 }
@@ -191,7 +216,7 @@ function preparedWrite(destination, content) {
   };
 }
 
-function commitFiles(writes, fileSystem) {
+export function commitFiles(writes, fileSystem) {
   const preexisting = new Set(
     writes.filter((write) => fileSystem.existsSync(write.destination)),
   );
@@ -215,7 +240,10 @@ function commitFiles(writes, fileSystem) {
     for (const write of writes) {
       if (preexisting.has(write)) {
         if (fileSystem.existsSync(write.backup)) {
-          fileSystem.rmSync(write.destination, { force: true, recursive: true });
+          fileSystem.rmSync(write.destination, {
+            force: true,
+            recursive: true,
+          });
           fileSystem.renameSync(write.backup, write.destination);
         }
       } else {
@@ -237,23 +265,48 @@ function commitFiles(writes, fileSystem) {
   }
 }
 
-function generateDreamscapesDataJsonFromToml(patchedSource, fileSystem) {
-  const tempRoot = fileSystem.mkdtempSync(join(tmpdir(), "journey-dreamscape-editor-refresh-"));
-
-  try {
-    fileSystem.mkdirSync(join(tempRoot, "data", "tabula"), { recursive: true });
-    fileSystem.mkdirSync(join(tempRoot, "public"), { recursive: true });
-    fileSystem.writeFileSync(join(tempRoot, DEFAULT_DREAMSCAPE_TOML_PATH), patchedSource);
-
-    refreshDreamscapesDataJson({ rootDir: tempRoot });
-
-    const dreamscapesJson = fileSystem.readFileSync(join(tempRoot, DREAMSCAPE_JSON_PATH), "utf8");
-    JSON.parse(dreamscapesJson);
-
-    return dreamscapesJson;
-  } finally {
-    fileSystem.rmSync(tempRoot, { recursive: true, force: true });
-  }
+export function generateCatalogArtifacts(
+  rootDir,
+  dreamscapeSource,
+  guideSource,
+  fileSystem,
+) {
+  const sourceDreamscapes = parse(dreamscapeSource).dreamscapes;
+  const guides = compileDreamGuidesData(parse(guideSource), {
+    dreamscapes: sourceDreamscapes,
+  });
+  const dreamscapes = deriveDreamscapesData(sourceDreamscapes, guides);
+  const glossary = parse(
+    fileSystem.readFileSync(
+      join(rootDir, "data", "tabula", "glossary.toml"),
+      "utf8",
+    ),
+  );
+  const sites = compileSitesData(
+    parse(
+      fileSystem.readFileSync(
+        join(rootDir, "data", "tabula", "sites.toml"),
+        "utf8",
+      ),
+    ),
+    {
+      guides,
+      glossaryIds: glossary.entries.map((entry) => entry.id),
+      economy: compileEconomyData(
+        parse(
+          fileSystem.readFileSync(
+            join(rootDir, "data", "tabula", "economy.toml"),
+            "utf8",
+          ),
+        ),
+      ),
+    },
+  );
+  return {
+    dreamscapes: JSON.stringify(dreamscapes, null, 2) + "\n",
+    guides: JSON.stringify(guides, null, 2) + "\n",
+    sites: JSON.stringify(sites, null, 2) + "\n",
+  };
 }
 
 function collectionPayload(rootDir, dreamscapeTomlPath) {
@@ -270,8 +323,15 @@ function assertAssignmentBody(body) {
   if (body === null || typeof body !== "object" || Array.isArray(body)) {
     return { ok: false, message: "Request body must be a JSON object." };
   }
-  if (body.action !== "replace" && body.action !== "add" && body.action !== "remove") {
-    return { ok: false, message: 'action must be "replace", "add", or "remove".' };
+  if (
+    body.action !== "replace" &&
+    body.action !== "add" &&
+    body.action !== "remove"
+  ) {
+    return {
+      ok: false,
+      message: 'action must be "replace", "add", or "remove".',
+    };
   }
   if (body.inId !== undefined && typeof body.inId !== "string") {
     return { ok: false, message: "inId must be a DreamAvatar id string." };
@@ -310,16 +370,25 @@ async function handleDreamAvatarAssignment(
   const totalStart = performance.now();
   const dreamscapes = readEditorDreamscapes({ rootDir, dreamscapeTomlPath });
   if (!dreamscapes.some((dreamscape) => dreamscape.id === dreamscapeId)) {
-    errorResponse(res, 404, "DREAMSCAPE_NOT_FOUND", "Dreamscape was not found.", {
-      id: dreamscapeId,
-    });
+    errorResponse(
+      res,
+      404,
+      "DREAMSCAPE_NOT_FOUND",
+      "Dreamscape was not found.",
+      {
+        id: dreamscapeId,
+      },
+    );
     return;
   }
 
   const dreamAvatars = readDreamAvatarOptions({ rootDir });
   const catalogIds = dreamAvatars.map((dreamAvatar) => dreamAvatar.id);
   const nameById = new Map(
-    dreamAvatars.map((dreamAvatar) => [dreamAvatar.id.toLowerCase(), dreamAvatar.name]),
+    dreamAvatars.map((dreamAvatar) => [
+      dreamAvatar.id.toLowerCase(),
+      dreamAvatar.name,
+    ]),
   );
 
   const plan = planDreamAvatarAssignment(dreamscapes, catalogIds, {
@@ -340,8 +409,21 @@ async function handleDreamAvatarAssignment(
   const refreshesJson = dreamscapeTomlPath === DEFAULT_DREAMSCAPE_TOML_PATH;
   const writes = [preparedWrite(tomlPath, patchedSource)];
   if (refreshesJson) {
-    const dreamscapesJson = generateDreamscapesDataJsonFromToml(patchedSource, fileSystem);
-    writes.push(preparedWrite(join(rootDir, DREAMSCAPE_JSON_PATH), dreamscapesJson));
+    const guideSource = fileSystem.readFileSync(
+      join(rootDir, DREAM_GUIDES_TOML_PATH),
+      "utf8",
+    );
+    const artifacts = generateCatalogArtifacts(
+      rootDir,
+      patchedSource,
+      guideSource,
+      fileSystem,
+    );
+    writes.push(
+      preparedWrite(join(rootDir, DREAMSCAPE_JSON_PATH), artifacts.dreamscapes),
+      preparedWrite(join(rootDir, DREAM_GUIDES_JSON_PATH), artifacts.guides),
+      preparedWrite(join(rootDir, SITES_JSON_PATH), artifacts.sites),
+    );
   }
   commitFiles(writes, fileSystem);
 
@@ -361,7 +443,14 @@ async function handleDreamAvatarAssignment(
   });
 }
 
-async function handlePatch(req, res, rootDir, dreamscapeId, dreamscapeTomlPath, fileSystem) {
+async function handlePatch(
+  req,
+  res,
+  rootDir,
+  dreamscapeId,
+  dreamscapeTomlPath,
+  fileSystem,
+) {
   let body;
   try {
     body = await readJsonRequest(req);
@@ -380,9 +469,15 @@ async function handlePatch(req, res, rootDir, dreamscapeId, dreamscapeTomlPath, 
   }
 
   if (!SLUG_PATTERN.test(body.id)) {
-    errorResponse(res, 400, "INVALID_DREAMSCAPE_ID", "Request body id must be a canonical slug.", {
-      id: body.id,
-    });
+    errorResponse(
+      res,
+      400,
+      "INVALID_DREAMSCAPE_ID",
+      "Request body id must be a canonical slug.",
+      {
+        id: body.id,
+      },
+    );
     return;
   }
 
@@ -397,8 +492,11 @@ async function handlePatch(req, res, rootDir, dreamscapeId, dreamscapeTomlPath, 
     return;
   }
 
-  const guideIds = readDreamGuideOptions({ rootDir }).map((guide) => guide.id);
-  const affiliationIds = readAffiliationOptions({ rootDir }).map((affiliation) => affiliation.id);
+  const guideOptions = readDreamGuideOptions({ rootDir });
+  const guideIds = guideOptions.map((guide) => guide.id);
+  const affiliationIds = readAffiliationOptions({ rootDir }).map(
+    (affiliation) => affiliation.id,
+  );
   const validateEdit = makeValidateDreamscapeEdit({ guideIds, affiliationIds });
 
   const validation = validateEdit(body.field, body.value);
@@ -412,47 +510,157 @@ async function handlePatch(req, res, rootDir, dreamscapeId, dreamscapeTomlPath, 
 
   const totalStart = performance.now();
   const readStart = performance.now();
-  const beforeDreamscapes = readEditorDreamscapes({ rootDir, dreamscapeTomlPath });
+  const beforeDreamscapes = readEditorDreamscapes({
+    rootDir,
+    dreamscapeTomlPath,
+  });
   const readMs = elapsedMs(readStart);
 
-  if (!beforeDreamscapes.some((dreamscape) => dreamscape.id === dreamscapeId)) {
-    errorResponse(res, 404, "DREAMSCAPE_NOT_FOUND", "Dreamscape was not found.", {
-      id: dreamscapeId,
-    });
+  const beforeDreamscape = beforeDreamscapes.find(
+    (dreamscape) => dreamscape.id === dreamscapeId,
+  );
+  if (beforeDreamscape === undefined) {
+    errorResponse(
+      res,
+      404,
+      "DREAMSCAPE_NOT_FOUND",
+      "Dreamscape was not found.",
+      {
+        id: dreamscapeId,
+      },
+    );
     return;
   }
 
   const tomlPath = join(rootDir, dreamscapeTomlPath);
+  const guideTomlPath = join(rootDir, DREAM_GUIDES_TOML_PATH);
   const patchStart = performance.now();
   const source = fileSystem.readFileSync(tomlPath, "utf8");
-  const patched = patchDreamscapesToml(source, {
-    dreamscapeId,
-    field: body.field,
-    value: validation.value,
-    validateEdit,
-  });
+  const guideSource = fileSystem.readFileSync(guideTomlPath, "utf8");
+  let patchedDreamscapesSource = source;
+  let patchedGuideSource = guideSource;
+  const changesGuideCatalog =
+    body.field === "guide-id" || body.field === "signature-site";
+  if (changesGuideCatalog) {
+    if (beforeDreamscape.isStarter) {
+      errorResponse(
+        res,
+        400,
+        "INVALID_EDIT",
+        "The starter guide and Draft signature are fixed.",
+        {
+          field: body.field,
+          value: validation.value,
+        },
+      );
+      return;
+    }
+    const currentGuide = guideOptions.find(
+      (guide) => guide.homeDreamscapeId === dreamscapeId,
+    );
+    const requestedGuide =
+      body.field === "guide-id"
+        ? guideOptions.find((guide) => guide.id === validation.value)
+        : guideOptions.find((guide) => guide.siteType === validation.value);
+    if (currentGuide === undefined || requestedGuide === undefined) {
+      errorResponse(
+        res,
+        400,
+        "INVALID_EDIT",
+        "The selected guide specialty is not canonical.",
+        {
+          field: body.field,
+          value: validation.value,
+        },
+      );
+      return;
+    }
+    if (currentGuide.id !== requestedGuide.id) {
+      patchedGuideSource = patchDreamGuideAssignments(
+        guideSource,
+        body.field === "guide-id"
+          ? [
+              {
+                guideId: currentGuide.id,
+                field: "home-dreamscape-id",
+                value: requestedGuide.homeDreamscapeId,
+              },
+              {
+                guideId: requestedGuide.id,
+                field: "home-dreamscape-id",
+                value: currentGuide.homeDreamscapeId,
+              },
+            ]
+          : [
+              {
+                guideId: currentGuide.id,
+                field: "site-type",
+                value: requestedGuide.siteType,
+              },
+              {
+                guideId: requestedGuide.id,
+                field: "site-type",
+                value: currentGuide.siteType,
+              },
+            ],
+      );
+      if (body.field === "signature-site") {
+        patchedGuideSource = swapDreamGuideSpecializedDialogue(
+          patchedGuideSource,
+          currentGuide.id,
+          requestedGuide.id,
+        );
+      }
+    }
+  } else {
+    patchedDreamscapesSource = patchDreamscapesToml(source, {
+      dreamscapeId,
+      field: body.field,
+      value: validation.value,
+      validateEdit,
+    }).source;
+  }
   const patchMs = elapsedMs(patchStart);
 
   const refreshesJson = dreamscapeTomlPath === DEFAULT_DREAMSCAPE_TOML_PATH;
   const refreshStart = performance.now();
-  const writes = [preparedWrite(tomlPath, patched.source)];
+  const writes = [preparedWrite(tomlPath, patchedDreamscapesSource)];
+  if (changesGuideCatalog) {
+    writes.push(preparedWrite(guideTomlPath, patchedGuideSource));
+  }
   if (refreshesJson) {
-    const dreamscapesJson = generateDreamscapesDataJsonFromToml(patched.source, fileSystem);
-    writes.push(preparedWrite(join(rootDir, DREAMSCAPE_JSON_PATH), dreamscapesJson));
+    const artifacts = generateCatalogArtifacts(
+      rootDir,
+      patchedDreamscapesSource,
+      patchedGuideSource,
+      fileSystem,
+    );
+    writes.push(
+      preparedWrite(join(rootDir, DREAMSCAPE_JSON_PATH), artifacts.dreamscapes),
+      preparedWrite(join(rootDir, DREAM_GUIDES_JSON_PATH), artifacts.guides),
+      preparedWrite(join(rootDir, SITES_JSON_PATH), artifacts.sites),
+    );
   }
   commitFiles(writes, fileSystem);
   const refreshMs = elapsedMs(refreshStart);
 
   const confirmStart = performance.now();
-  const confirmedDreamscape = readEditorDreamscapes({ rootDir, dreamscapeTomlPath }).find(
-    (dreamscape) => dreamscape.id === dreamscapeId,
-  );
+  const confirmedDreamscape = readEditorDreamscapes({
+    rootDir,
+    dreamscapeTomlPath,
+  }).find((dreamscape) => dreamscape.id === dreamscapeId);
   const confirmMs = elapsedMs(confirmStart);
 
   if (confirmedDreamscape === undefined) {
-    errorResponse(res, 404, "DREAMSCAPE_NOT_FOUND", "Dreamscape was not found.", {
-      id: dreamscapeId,
-    });
+    errorResponse(
+      res,
+      404,
+      "DREAMSCAPE_NOT_FOUND",
+      "Dreamscape was not found.",
+      {
+        id: dreamscapeId,
+      },
+    );
     return;
   }
 
@@ -468,7 +676,11 @@ async function handlePatch(req, res, rootDir, dreamscapeId, dreamscapeTomlPath, 
 
   jsonResponse(res, 200, {
     dreamscape: confirmedDreamscape,
-    ...(Object.hasOwn(body, "clientRevision") ? { clientRevision: body.clientRevision } : {}),
+    dreamscapes: readEditorDreamscapes({ rootDir, dreamscapeTomlPath }),
+    guides: readDreamGuideOptions({ rootDir }),
+    ...(Object.hasOwn(body, "clientRevision")
+      ? { clientRevision: body.clientRevision }
+      : {}),
     timing: {
       readMs,
       patchMs,
@@ -495,14 +707,26 @@ export function createDreamscapeEditorApiMiddleware({
     try {
       const route = routeForRawPath(rawPath);
       if (!route.ok) {
-        errorResponse(res, route.statusCode, route.code, route.message, route.details);
+        errorResponse(
+          res,
+          route.statusCode,
+          route.code,
+          route.message,
+          route.details,
+        );
         return;
       }
 
       if (!fileSystem.existsSync(join(rootDir, dreamscapeTomlPath))) {
-        errorResponse(res, 404, "TOML_NOT_FOUND", "The requested toml file was not found.", {
-          toml: dreamscapeTomlPath,
-        });
+        errorResponse(
+          res,
+          404,
+          "TOML_NOT_FOUND",
+          "The requested toml file was not found.",
+          {
+            toml: dreamscapeTomlPath,
+          },
+        );
         return;
       }
 
@@ -512,7 +736,14 @@ export function createDreamscapeEditorApiMiddleware({
       }
 
       if (req.method === "PATCH" && route.resource === "dreamscape") {
-        await handlePatch(req, res, rootDir, route.dreamscapeId, dreamscapeTomlPath, fileSystem);
+        await handlePatch(
+          req,
+          res,
+          rootDir,
+          route.dreamscapeId,
+          dreamscapeTomlPath,
+          fileSystem,
+        );
         return;
       }
 
@@ -536,7 +767,12 @@ export function createDreamscapeEditorApiMiddleware({
             : ["PATCH"];
       methodNotAllowed(res, allowed);
     } catch (error) {
-      errorResponse(res, 500, "SAVE_FAILED", error instanceof Error ? error.message : "Save failed.");
+      errorResponse(
+        res,
+        500,
+        "SAVE_FAILED",
+        error instanceof Error ? error.message : "Save failed.",
+      );
     }
   };
 }

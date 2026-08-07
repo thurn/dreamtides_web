@@ -8,7 +8,7 @@ import {
   siteTypeDescription,
   siteTypeIcon,
   siteTypeName,
-} from "../../data/atlas-data";
+} from "../../data/sites-data";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import { draftSitePickCount } from "../../draft/draft-site-config";
 import {
@@ -34,7 +34,7 @@ import type {
   DreamscapeNode,
   JourneyState,
 } from "../../types/journey";
-import type { AtlasData } from "../../types/atlas-data";
+import type { SitesData } from "../../types/sites-data";
 import type { TutorialDreamscapeConfiguration } from "../../types/tutorial";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 
@@ -116,8 +116,8 @@ export function battleLabel(completionLevel: number): string {
 export function buildSiteModels(
   node: DreamscapeNode,
   completionLevel: number,
-  atlasData: AtlasData,
-  defaultDraftPickCount?: number,
+  sitesData: SitesData,
+  defaultDraftPickCount: number,
 ): DreamscapeSiteModel[] {
   const allNonBattleVisited = node.sites
     .filter((site) => site.type !== "Battle")
@@ -131,7 +131,7 @@ export function buildSiteModels(
       ? battleLabel(completionLevel)
       : site.type === "Draft"
         ? `Draft ${String(draftSitePickCount(site, defaultDraftPickCount))}x`
-        : siteTypeName(atlasData, site.type);
+        : siteTypeName(sitesData, site.type);
     return {
       site,
       pos: positions[index] ?? FALLBACK_POS,
@@ -140,8 +140,8 @@ export function buildSiteModels(
       isLocked,
       isInteractive,
       label,
-      blurb: siteTypeDescription(atlasData, site.type),
-      icon: glyph(siteTypeIcon(atlasData, site.type)),
+      blurb: siteTypeDescription(sitesData, site.type),
+      icon: glyph(siteTypeIcon(sitesData, site.type)),
     };
   });
 }
@@ -188,7 +188,9 @@ export function toQsbDreamsigns(
 }
 
 /** The bottom-HUD slice of the view-model, from live run state. */
-export function buildDreamscapeHudView(state: JourneyState): JourneyChromeHudView {
+export function buildDreamscapeHudView(
+  state: JourneyState,
+): JourneyChromeHudView {
   const activeRuntime =
     state.screen.type === "site"
       ? state.siteRuntime[state.screen.siteId]
@@ -224,11 +226,14 @@ export function dreamscapeTitle(node: DreamscapeNode): string {
 export function buildDreamscapeView(
   node: DreamscapeNode,
   state: JourneyState,
-  atlasData: AtlasData,
+  sitesData: SitesData,
   replacementSiteId: string | null = null,
   tutorialConfiguration?: TutorialDreamscapeConfiguration,
   defaultDraftPickCount?: number,
 ): DreamscapeView {
+  if (defaultDraftPickCount === undefined) {
+    throw new Error("Dreamscape view requires validated Draft data.");
+  }
   const inlineRewards: Record<string, InlineRewardView> = {};
   node.sites.forEach((site) => {
     const runtime = state.siteRuntime?.[site.id];
@@ -258,7 +263,7 @@ export function buildDreamscapeView(
     sites: buildSiteModels(
       node,
       state.completionLevel,
-      atlasData,
+      sitesData,
       defaultDraftPickCount,
     ),
     inlineRewards,

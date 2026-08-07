@@ -79,11 +79,7 @@ export interface DreamAvatarAssignmentResponse {
 }
 
 export type EditableDreamscapeField =
-  | "name"
-  | "aesthetic"
-  | "signature-site"
-  | "guide-id"
-  | "affiliation-id";
+  "name" | "aesthetic" | "signature-site" | "guide-id" | "affiliation-id";
 
 export interface SaveEditorDreamscapeFieldRequest {
   id: string;
@@ -94,6 +90,9 @@ export interface SaveEditorDreamscapeFieldRequest {
 
 export interface SaveEditorDreamscapeFieldResponse {
   dreamscape: EditorDreamscapeRecord;
+  /** Full recomputed assignments, returned because guide/site swaps affect two regions. */
+  dreamscapes?: EditorDreamscapeRecord[];
+  guides?: GuideOption[];
   clientRevision?: number;
 }
 

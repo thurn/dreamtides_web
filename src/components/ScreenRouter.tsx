@@ -65,10 +65,7 @@ export function ScreenRouter({
 
   return (
     <AnimatePresence mode="sync">
-      <JourneyScreenFrame
-        key={screenKey(screen)}
-        screenType={screen.type}
-      >
+      <JourneyScreenFrame key={screenKey(screen)} screenType={screen.type}>
         <ErrorBoundary
           scope={`screen:${screen.type}`}
           resetKey={screenKey(screen)}
@@ -129,21 +126,26 @@ function SiteRoute({
   const node = activeNode?.sites.some((candidate) => candidate.id === siteId)
     ? activeNode
     : Object.values(state.atlas.nodes).find((candidate) =>
-      candidate.sites.some((site) => site.id === siteId)
-    );
+        candidate.sites.some((site) => site.id === siteId),
+      );
   const site = node?.sites.find((candidate) => candidate.id === siteId);
   const auguryMenuActions = useAuguryJourneyMenuActions(site, node);
 
   useEffect(() => {
     if (site?.randomSite?.materialized !== true) return;
-    logEventOnce(`random-site:${site.id}:hosted:${site.type}`, "random_site_entered", {
-      siteId: site.id,
-      siteType: site.type,
-      guideId: site.guideIdOverride ?? journeyContent.atlasData.randomSite.guideId,
-      isEnhanced: site.isEnhanced,
-      sourceMode: site.randomSite.mode,
-    });
-  }, [journeyContent.atlasData.randomSite.guideId, site]);
+    logEventOnce(
+      `random-site:${site.id}:hosted:${site.type}`,
+      "random_site_entered",
+      {
+        siteId: site.id,
+        siteType: site.type,
+        guideId:
+          site.guideIdOverride ?? journeyContent.sitesData.randomSite.guideId,
+        isEnhanced: site.isEnhanced,
+        sourceMode: site.randomSite.mode,
+      },
+    );
+  }, [journeyContent.sitesData.randomSite.guideId, site]);
 
   if (site === undefined) {
     throw new Error(

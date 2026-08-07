@@ -6,7 +6,7 @@ tuning. The asset build validates and normalizes it into
 before a room begins folding events.
 
 TypeScript owns pricing formulas, eligibility, reward modifiers, seeded random
-streams, weighted sampling, and Gamble rules. TOML owns the coefficients,
+streams, weighted sampling, and Gamble algorithms. TOML owns the coefficients,
 ranges, distributions, caps, stock composition, and payout tables those
 algorithms consume. DreamAvatar-specific starting essence remains in
 `dream_avatars.toml`, and Exploration encounter-specific essence-per-spark
@@ -17,19 +17,19 @@ remains in `exploration.toml`.
 The root `schema-version` is `1`. Compilation requires every v1 section and
 rejects unknown keys.
 
-| Section | Authored contract |
-|---|---|
-| `journey` | Default starting essence and the Dreamsign cap. |
-| `shop.prices` | Standard-card, specialty-card, and Dreamsign prices. |
-| `shop.stock` | Card and Dreamsign slot counts for each shop identity. |
-| `shop.discounts` | Positive weighted distributions for discounted-slot counts and discount percentages. |
-| `shop.reroll` | Standard and enhanced prices plus the visit limit. |
-| `site-rewards` | Standard/enhanced Essence ranges, Reward fallback range, and Dreamsign Revelation offer counts. |
-| `purge` | Ordered marginal costs and the enhanced-site discount percentage. The table length is the paid-purge cap. |
+| Section           | Authored contract                                                                                                  |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `journey`         | Default starting essence and the Dreamsign cap.                                                                    |
+| `shop.prices`     | Standard-card, specialty-card, and Dreamsign prices.                                                               |
+| `shop.stock`      | Card and Dreamsign slot counts for each shop identity.                                                             |
+| `shop.discounts`  | Positive weighted distributions for discounted-slot counts and discount percentages.                               |
+| `shop.reroll`     | Standard and enhanced prices plus the visit limit.                                                                 |
+| `site-rewards`    | Standard/enhanced Essence ranges, Reward fallback range, and Dreamsign Revelation offer counts.                    |
+| `purge`           | Ordered marginal costs and the enhanced-site discount percentage. The table length is the paid-purge cap.          |
 | `transfiguration` | Global bounds and step, the zero-cost band, exact form bands, and the code-owned delta identities 1, 2, 3, and 4+. |
-| `battle-reward` | Base Essence, Essence per completion level, and the final floor. |
-| `gamble` | Wagers and rewards for the Three-Gate, Ladder Climb, and Starway Stairs code-owned identities. |
-| `exploration` | Default Essence awarded per spark. |
+| `battle-reward`   | Base Essence, Essence per completion level, and the final floor.                                                   |
+| `gamble`          | Wagers and rewards for the Three-Gate, Ladder Climb, Starway Stairs, and Four-Suit code-owned identities.          |
+| `exploration`     | Default Essence awarded per spark.                                                                                 |
 
 Counts and costs are non-negative integers. Percentages are within `0–100`.
 Ranges require `min <= max`. Weighted distributions must be nonempty, have
@@ -71,5 +71,5 @@ economy default after both catalogs have loaded.
 Tune a number in TOML when it is a direct cost, payout, range, distribution,
 stock count, cap, or coefficient. Keep behavioral identities and decisions in
 TypeScript: which transfiguration form applies, how a purge total is summed,
-which Gamble gate or tier was reached, how modifiers affect a battle reward,
+which Gamble gate, tier, or suit result was reached, how modifiers affect a battle reward,
 how seeded random draws are consumed, and whether an offer is eligible.

@@ -1,24 +1,18 @@
 import type { GambleSiteView } from "../../cumulus/screens/GambleSiteScreen";
+import { tidemarkLadderClimbAttemptCost } from "../../data/tidemark-ladder-climb";
 import {
-  TIDEMARK_LADDER_CLIMB_ATTEMPTS,
-  tidemarkLadderClimbAttemptCost,
-} from "../../data/tidemark-ladder-climb";
-import {
-  STARWAY_STAIRS_TIERS,
   starwayStairsEssenceReward,
   starwayStairsTierRule,
 } from "../../data/starway-stairs";
-import {
-  FOUR_SUIT_REPRISE_OUTCOMES,
-  FOUR_SUIT_REPRISE_ODDS_DENOMINATOR,
-  FOUR_SUIT_REPRISE_ODDS_NUMERATOR,
-} from "../../data/four-suit-reprise";
 import { logEventOnce } from "../../logging";
 import type { GambleSiteRuntime, SiteState } from "../../types/journey";
 import type { EconomyData } from "../../types/economy-data";
+import type { SitesData } from "../../types/sites-data";
 
 /** Record one Gamble visit without coupling logging payloads to the adapter. */
-export function logGambleSiteEntered(site: SiteState & { type: "Gamble" }): void {
+export function logGambleSiteEntered(
+  site: SiteState & { type: "Gamble" },
+): void {
   logEventOnce(`Gamble:${site.id}:site-entered`, "site_entered", {
     siteType: site.type,
     isEnhanced: site.isEnhanced,
@@ -31,6 +25,7 @@ export function logGamblePrepared(
   runtime: GambleSiteRuntime,
   view: GambleSiteView,
   economyData: EconomyData,
+  sitesData: SitesData,
 ): void {
   if (
     runtime.gameId === "four-suit-reprise" &&
@@ -43,6 +38,7 @@ export function logGamblePrepared(
         siteId,
         gameId: runtime.gameId,
         rulesVersion: runtime.rulesVersion,
+        sitesFoldHash: sitesData.foldHash,
         isFarpoint: runtime.isFarpoint,
         drawCost: runtime.drawCost,
         maxRounds: runtime.shuffleCommitments.length,
@@ -54,12 +50,12 @@ export function logGamblePrepared(
             (offer) => offer.type,
           ),
         })),
-        outcomes: FOUR_SUIT_REPRISE_OUTCOMES.map((rule) => ({
+        outcomes: sitesData.gamble.fourSuitReprise.outcomes.map((rule) => ({
           suit: rule.suit,
           outcome: rule.outcome,
         })),
-        oddsNumerator: FOUR_SUIT_REPRISE_ODDS_NUMERATOR,
-        oddsDenominator: FOUR_SUIT_REPRISE_ODDS_DENOMINATOR,
+        oddsNumerator: sitesData.gamble.fourSuitReprise.oddsNumerator,
+        oddsDenominator: sitesData.gamble.fourSuitReprise.oddsDenominator,
       },
     );
     if (runtime.phase === "choose" && runtime.rounds.length > 0) {
@@ -89,6 +85,7 @@ export function logGamblePrepared(
         siteId,
         gameId: runtime.gameId,
         rulesVersion: runtime.rulesVersion,
+        sitesFoldHash: sitesData.foldHash,
         roundNumber: runtime.roundNumber ?? 1,
         playerDecision:
           (runtime.roundNumber ?? 1) === 1 ? "initial" : "play_again",
@@ -109,10 +106,7 @@ export function logGamblePrepared(
     return;
   }
 
-  if (
-    runtime.gameId === "starway-stairs" &&
-    view.gameId === "starway-stairs"
-  ) {
+  if (runtime.gameId === "starway-stairs" && view.gameId === "starway-stairs") {
     logEventOnce(
       `Gamble:${siteId}:prepared:${runtime.shuffleCommitments.join(":")}`,
       "gamble_game_prepared",
@@ -120,17 +114,21 @@ export function logGamblePrepared(
         siteId,
         gameId: runtime.gameId,
         rulesVersion: runtime.rulesVersion,
+        sitesFoldHash: sitesData.foldHash,
         roundNumber: runtime.roundNumber,
         playerDecision: runtime.roundNumber === 1 ? "initial" : "play_again",
         isFarpoint: runtime.isFarpoint,
         wagerAmount: runtime.wagerAmount,
         shuffleCommitments: runtime.shuffleCommitments,
-        tiers: STARWAY_STAIRS_TIERS.map((tier) => ({
-          tierNumber: tier.tierNumber,
+        tiers: sitesData.gamble.starwayStairs.tiers.map((tier) => ({
+          tierNumber: tier.tier,
           bustOddsNumerator: tier.bustOddsNumerator,
           oddsDenominator: tier.oddsDenominator,
           highestBustRank: tier.highestBustRank,
-          rewardEssence: starwayStairsEssenceReward(economyData.gamble.starwayStairs, tier.tierNumber),
+          rewardEssence: starwayStairsEssenceReward(
+            economyData.gamble.starwayStairs,
+            tier.tier,
+          ),
         })),
       },
     );
@@ -150,6 +148,7 @@ export function logGamblePrepared(
       siteId,
       gameId: runtime.gameId,
       rulesVersion: runtime.rulesVersion,
+      sitesFoldHash: sitesData.foldHash,
       isFarpoint: runtime.isFarpoint,
       shuffleCommitments: runtime.shuffleCommitments,
       dreamsignCandidates: runtime.dreamsignCandidateScores,
@@ -157,9 +156,13 @@ export function logGamblePrepared(
       strongPoolCutoffScore: runtime.strongPoolCutoffScore,
       selectedDreamsignId: runtime.rewardDreamsign?.id ?? null,
       rewardEssence: economyData.gamble.ladderClimb.winEssence,
-      attempts: TIDEMARK_LADDER_CLIMB_ATTEMPTS.map((attempt) => ({
-        attemptNumber: attempt.attemptNumber,
-        cost: tidemarkLadderClimbAttemptCost(economyData.gamble.ladderClimb, attempt.attemptNumber, runtime.isFarpoint),
+      attempts: sitesData.gamble.ladderClimb.attempts.map((attempt) => ({
+        attemptNumber: attempt.attempt,
+        cost: tidemarkLadderClimbAttemptCost(
+          economyData.gamble.ladderClimb,
+          attempt.attempt,
+          runtime.isFarpoint,
+        ),
         oddsNumerator: attempt.oddsNumerator,
         oddsDenominator: attempt.oddsDenominator,
         threshold: attempt.threshold,
@@ -174,6 +177,7 @@ export function logGambleResolved(
   runtime: GambleSiteRuntime,
   view: GambleSiteView,
   economyData: EconomyData,
+  sitesData: SitesData,
 ): void {
   if (runtime.gameId === "four-suit-reprise") {
     const result = runtime.rounds[runtime.rounds.length - 1];
@@ -191,8 +195,9 @@ export function logGambleResolved(
         selectedCardId: result.targetCardId,
         revealedCard: result.card,
         resolvedSuitOutcome: result.outcome,
-        oddsNumerator: FOUR_SUIT_REPRISE_ODDS_NUMERATOR,
-        oddsDenominator: FOUR_SUIT_REPRISE_ODDS_DENOMINATOR,
+        sitesFoldHash: sitesData.foldHash,
+        oddsNumerator: sitesData.gamble.fourSuitReprise.oddsNumerator,
+        oddsDenominator: sitesData.gamble.fourSuitReprise.oddsDenominator,
       },
     );
     return;
@@ -202,7 +207,9 @@ export function logGambleResolved(
     view.gameId === "gravok-three-gate-wager"
   ) {
     if (runtime.result === null) return;
-    const gate = view.gates.find((entry) => entry.id === runtime.result?.gateId);
+    const gate = view.gates.find(
+      (entry) => entry.id === runtime.result?.gateId,
+    );
     logEventOnce(
       `Gamble:${siteId}:result:${view.result?.id ?? "unknown"}`,
       "gamble_wager_resolved",
@@ -219,8 +226,7 @@ export function logGambleResolved(
         terminalReason: runtime.result.won ? "won" : "bust",
         essenceGained: runtime.result.essenceGained,
         dreamsignId: runtime.rewardDreamsign?.id ?? null,
-        pendingDreamsignReplacement:
-          runtime.result.pendingDreamsignReplacement,
+        pendingDreamsignReplacement: runtime.result.pendingDreamsignReplacement,
       },
     );
     return;
@@ -229,7 +235,10 @@ export function logGambleResolved(
   if (runtime.gameId === "starway-stairs") {
     const result = runtime.results[runtime.results.length - 1];
     if (result === undefined) return;
-    const tier = starwayStairsTierRule(result.tierNumber);
+    const tier = starwayStairsTierRule(
+      sitesData.gamble.starwayStairs,
+      result.tierNumber,
+    );
     logEventOnce(
       `Gamble:${siteId}:starway-result:${runtime.shuffleCommitments[result.tierNumber - 1] ?? "unknown"}`,
       "gamble_wager_resolved",
@@ -244,7 +253,10 @@ export function logGambleResolved(
         payment: runtime.wagerAmount,
         revealedCard: result.card,
         busted: result.busted,
-        prizeAtRisk: starwayStairsEssenceReward(economyData.gamble.starwayStairs, result.tierNumber),
+        prizeAtRisk: starwayStairsEssenceReward(
+          economyData.gamble.starwayStairs,
+          result.tierNumber,
+        ),
       },
     );
     return;
@@ -253,7 +265,8 @@ export function logGambleResolved(
   if (runtime.gameId !== "tidemark-ladder-climb") return;
   const result = runtime.result;
   if (result === null) return;
-  const attempt = TIDEMARK_LADDER_CLIMB_ATTEMPTS[result.attemptNumber - 1];
+  const attempt =
+    sitesData.gamble.ladderClimb.attempts[result.attemptNumber - 1];
   logEventOnce(
     `Gamble:${siteId}:ladder-result:${runtime.shuffleCommitments[result.attemptNumber - 1] ?? "unknown"}`,
     "gamble_wager_resolved",
@@ -268,9 +281,7 @@ export function logGambleResolved(
       cumulativeCost: result.cumulativeCost,
       revealedCard: result.card,
       won: result.won,
-      essenceGained: result.won
-        ? economyData.gamble.ladderClimb.winEssence
-        : 0,
+      essenceGained: result.won ? economyData.gamble.ladderClimb.winEssence : 0,
       terminalReason: result.won
         ? "won"
         : result.attemptNumber === 4
@@ -286,6 +297,7 @@ export function logGambleSettled(
   runtime: GambleSiteRuntime,
   view: GambleSiteView,
   economyData: EconomyData,
+  sitesData: SitesData,
 ): void {
   if (runtime.gameId === "four-suit-reprise") {
     const result = runtime.rounds[runtime.rounds.length - 1];
@@ -296,6 +308,7 @@ export function logGambleSettled(
       {
         siteId,
         gameId: runtime.gameId,
+        sitesFoldHash: sitesData.foldHash,
         roundNumber: result.roundNumber,
         payment: result.costPaid,
         selectedEntryId: result.targetEntryId,
@@ -344,7 +357,10 @@ export function logGambleSettled(
         tierNumber: result.tierNumber,
         busted: result.busted,
         terminalReason: runtime.terminalReason,
-        prizeAtRisk: starwayStairsEssenceReward(economyData.gamble.starwayStairs, result.tierNumber),
+        prizeAtRisk: starwayStairsEssenceReward(
+          economyData.gamble.starwayStairs,
+          result.tierNumber,
+        ),
         prizeAwarded: runtime.prizeAwarded,
         payment: runtime.wagerAmount,
       },
@@ -355,7 +371,8 @@ export function logGambleSettled(
   if (
     runtime.gameId !== "tidemark-ladder-climb" ||
     runtime.result?.resultSettled !== true
-  ) return;
+  )
+    return;
   logEventOnce(
     `Gamble:${siteId}:ladder-settled:${runtime.shuffleCommitments[runtime.result.attemptNumber - 1] ?? "unknown"}`,
     "gamble_wager_settled",
@@ -374,11 +391,10 @@ export function logGambleSettled(
         (runtime.result.won ? economyData.gamble.ladderClimb.winEssence : 0) -
         runtime.result.cumulativeCost,
       dreamsignId: runtime.result.won
-        ? runtime.rewardDreamsign?.id ?? null
+        ? (runtime.rewardDreamsign?.id ?? null)
         : null,
       dreamsignAwarded: runtime.result.dreamsignAwarded,
-      pendingDreamsignReplacement:
-        runtime.result.pendingDreamsignReplacement,
+      pendingDreamsignReplacement: runtime.result.pendingDreamsignReplacement,
     },
   );
 }

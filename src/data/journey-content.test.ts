@@ -8,7 +8,10 @@ import {
   selectRecordIndex,
   selectReplayRecordIndex,
 } from "../draft/replay/draft-records";
-import { MINIMAL_ATLAS_DATA } from "../__test-helpers__/atlas-fixtures";
+import {
+  MINIMAL_ATLAS_DATA,
+  MINIMAL_SITES_DATA,
+} from "../__test-helpers__/atlas-fixtures";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
 import { economyFixture } from "../testing/economy-fixture";
@@ -146,8 +149,16 @@ describe("loadJourneyContent", () => {
       ["/dreamsign-signatures-data.json", []],
       ["/dreamscapes-data.json", []],
       ["/affiliations-data.json", []],
-      ["/dream-guides-data.json", []],
+      [
+        "/dream-guides-data.json",
+        {
+          schemaVersion: 1,
+          contentHash: "a".repeat(64),
+          guides: [],
+        },
+      ],
       ["/atlas-data.json", MINIMAL_ATLAS_DATA],
+      ["/sites-data.json", MINIMAL_SITES_DATA],
       ["/economy-data.json", economy],
       ["/draft-data.json", DRAFT_DATA],
       ["/opponents-data.json", opponentsFixture()],
@@ -216,13 +227,15 @@ describe("loadJourneyContent", () => {
     expect(content.poolContext?.tides4Tuning).toEqual(DRAFT_DATA.pool.tides4);
     expect(content.opponentsData).toEqual(opponentsFixture());
 
-    const fetchedPaths = vi.mocked(fetch).mock.calls.map(([input]) =>
-      typeof input === "string"
-        ? input
-        : input instanceof URL
-          ? input.pathname
-          : new URL(input.url).pathname,
-    );
+    const fetchedPaths = vi
+      .mocked(fetch)
+      .mock.calls.map(([input]) =>
+        typeof input === "string"
+          ? input
+          : input instanceof URL
+            ? input.pathname
+            : new URL(input.url).pathname,
+      );
     expect(fetchedPaths).toContain("/tides4-data.json");
   });
 
@@ -322,8 +335,9 @@ describe("buildReplayDraftState", () => {
     expect(first.mode).toBe("replay");
     expect(first.signatureCardNumbers).toEqual([101, 103]);
     expect(first.packSequence.flat()).toEqual(
-      records.find((record) => record.id === first.recordId)?.packIds
-        .flat()
+      records
+        .find((record) => record.id === first.recordId)
+        ?.packIds.flat()
         .map((id) => idIndex.get(id)),
     );
   });
@@ -381,7 +395,13 @@ describe("buildReplayDraftState", () => {
     const avatar = makeDreamAvatar([cards[0].id]);
     const ordered = [recordB, recordA];
     const seed = "fit-seed";
-    const state = buildReplayDraftState(avatar, idIndex, seed, ordered, fitModel);
+    const state = buildReplayDraftState(
+      avatar,
+      idIndex,
+      seed,
+      ordered,
+      fitModel,
+    );
     const expectedIndex = selectReplayRecordIndex(
       avatar.signatureCardIds ?? [],
       ordered,

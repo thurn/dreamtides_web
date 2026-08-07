@@ -1,7 +1,7 @@
 // Pure view-model builder for Tobias Tanglefur's Cumulus Card Shop.
 
 import { buildCardSourceDebugState } from "../../debug/card-source-debug";
-import { guideForSiteType } from "../../data/dreamscapes";
+import { requireGuideForSiteType } from "../../data/dreamscapes";
 import {
   effectivePrice,
   type ShopPriceModifiers,
@@ -20,7 +20,7 @@ import type {
   ShopSiteRuntime,
   SiteState,
 } from "../../types/journey";
-import { artRef, type ArtRef } from "../../cumulus/primitives/art";
+import type { ArtRef } from "../../cumulus/primitives/art";
 import type {
   CardShopOfferView,
   CardShopRestockView,
@@ -28,31 +28,22 @@ import type {
 } from "../../cumulus/screens/CardShopSiteScreen";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
-
-const FALLBACK_GUIDE_ID = "tobias_tanglefur";
-const FALLBACK_GUIDE_NAME = "Tobias Tanglefur";
-const FALLBACK_GUIDE_LINE = "Welcome, friend! Browse a while.";
+import { projectGuideView } from "./guide-view-model";
 
 /** Resolve Tobias, the resident Dream Guide for Card Shops. */
 export function resolveCardShopGuide(
   guides: readonly DreamGuideContent[],
   guideIdOverride?: string,
-): DreamGuideContent | null {
-  return guideForSiteType(guides, "Shop", guideIdOverride);
+): DreamGuideContent {
+  return requireGuideForSiteType(guides, "Shop", guideIdOverride);
 }
 
 /** Build Tobias's guide slice for the shared character-gallery layout. */
 export function buildCardShopGuideView(
-  guide: DreamGuideContent | null,
-  guideLine: string | null,
+  guide: DreamGuideContent,
+  guideLine: string,
 ) {
-  const id = guide?.id ?? FALLBACK_GUIDE_ID;
-  return {
-    id,
-    name: guide?.name ?? FALLBACK_GUIDE_NAME,
-    line: guideLine ?? guide?.dialog[0] ?? FALLBACK_GUIDE_LINE,
-    art: artRef.dreamGuide(id),
-  };
+  return projectGuideView(guide, guideLine);
 }
 
 /** Resolve persistent card slots into UUID-derived, effectively priced wares. */
@@ -140,11 +131,13 @@ export function buildCardShopTransfiguredOfferLog(
     cards: view.offers.flatMap((offer) =>
       offer.model.transfiguration === undefined
         ? []
-        : [{
-            cardId: offer.model.cardId,
-            slotIndex: offer.slotIndex,
-            transfiguration: offer.model.transfiguration.type,
-          }],
+        : [
+            {
+              cardId: offer.model.cardId,
+              slotIndex: offer.slotIndex,
+              transfiguration: offer.model.transfiguration.type,
+            },
+          ],
     ),
   };
 }
@@ -156,8 +149,8 @@ export function buildCardShopSiteView(params: {
   site: SiteState;
   runtime: ShopSiteRuntime;
   cardDatabase: ReadonlyMap<number, CardData>;
-  guide: DreamGuideContent | null;
-  guideLine: string | null;
+  guide: DreamGuideContent;
+  guideLine: string;
   economyData: EconomyData;
 }): CardShopSiteView {
   const priceModifiers: ShopPriceModifiers = {

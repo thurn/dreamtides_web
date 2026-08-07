@@ -13,7 +13,10 @@ import { createTutorialBattleInitProvider } from "../../coop/providers/battle-in
 import { planTutorialBattleController } from "../../battle/tutorial-battle-controller";
 import type { EventContext } from "../../eventlog/types";
 import type { FoldState } from "../fold-state";
-import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
+import {
+  MINIMAL_ATLAS_DATA,
+  MINIMAL_SITES_DATA,
+} from "../../__test-helpers__/atlas-fixtures";
 import type { TutorialAction } from "../../types/tutorial";
 import {
   makeTutorialBattleConfiguration,
@@ -259,6 +262,7 @@ function content(): JourneyContent {
     affiliations: [],
     guides: [],
     atlasData: MINIMAL_ATLAS_DATA,
+    sitesData: MINIMAL_SITES_DATA,
     economyData: economyFixture(),
     opponentsData: opponentsFixture(),
   };

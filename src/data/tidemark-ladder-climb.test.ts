@@ -11,6 +11,7 @@ import {
   scoreTidemarkLadderClimbDreamsignCandidates,
   tidemarkLadderClimbAttemptCost,
 } from "./tidemark-ladder-climb";
+import { MINIMAL_SITES_DATA } from "../__test-helpers__/atlas-fixtures";
 
 describe("Tidemark Ladder Climb rules", () => {
   const economy = {
@@ -22,24 +23,34 @@ describe("Tidemark Ladder Climb rules", () => {
     })),
   };
   it("uses the four inclusive thresholds and Farpoint-only cost schedule", () => {
+    const rules = MINIMAL_SITES_DATA.gamble.ladderClimb;
     expect(economy.winEssence).toBe(37);
-    expect(rankWinsTidemarkLadderClimbAttempt("Q", 1)).toBe(true);
-    expect(rankWinsTidemarkLadderClimbAttempt("J", 1)).toBe(false);
-    expect(rankWinsTidemarkLadderClimbAttempt("10", 2)).toBe(true);
-    expect(rankWinsTidemarkLadderClimbAttempt("9", 2)).toBe(false);
-    expect(rankWinsTidemarkLadderClimbAttempt("8", 3)).toBe(true);
-    expect(rankWinsTidemarkLadderClimbAttempt("7", 3)).toBe(false);
-    expect(rankWinsTidemarkLadderClimbAttempt("6", 4)).toBe(true);
-    expect(rankWinsTidemarkLadderClimbAttempt("5", 4)).toBe(false);
-    expect([1, 2, 3, 4].map((attempt) =>
-      tidemarkLadderClimbAttemptCost(economy, attempt as 1 | 2 | 3 | 4, false),
-    )).toEqual([2, 7, 13, 23]);
-    expect([1, 2, 3, 4].map((attempt) =>
-      tidemarkLadderClimbAttemptCost(economy, attempt as 1 | 2 | 3 | 4, true),
-    )).toEqual([1, 1, 1, 1]);
+    expect(rankWinsTidemarkLadderClimbAttempt(rules, "Q", 1)).toBe(true);
+    expect(rankWinsTidemarkLadderClimbAttempt(rules, "J", 1)).toBe(false);
+    expect(rankWinsTidemarkLadderClimbAttempt(rules, "10", 2)).toBe(true);
+    expect(rankWinsTidemarkLadderClimbAttempt(rules, "9", 2)).toBe(false);
+    expect(rankWinsTidemarkLadderClimbAttempt(rules, "8", 3)).toBe(true);
+    expect(rankWinsTidemarkLadderClimbAttempt(rules, "7", 3)).toBe(false);
+    expect(rankWinsTidemarkLadderClimbAttempt(rules, "6", 4)).toBe(true);
+    expect(rankWinsTidemarkLadderClimbAttempt(rules, "5", 4)).toBe(false);
+    expect(
+      [1, 2, 3, 4].map((attempt) =>
+        tidemarkLadderClimbAttemptCost(
+          economy,
+          attempt as 1 | 2 | 3 | 4,
+          false,
+        ),
+      ),
+    ).toEqual([2, 7, 13, 23]);
+    expect(
+      [1, 2, 3, 4].map((attempt) =>
+        tidemarkLadderClimbAttemptCost(economy, attempt as 1 | 2 | 3 | 4, true),
+      ),
+    ).toEqual([1, 1, 1, 1]);
   });
 
   it("owns the shared next-attempt eligibility contract", () => {
+    const rules = MINIMAL_SITES_DATA.gamble.ladderClimb;
     const card = { rank: "2", suit: "clubs" } as const;
     const settledMiss = {
       attemptNumber: 1,
@@ -53,28 +64,31 @@ describe("Tidemark Ladder Climb rules", () => {
     } as const;
 
     expect(
-      nextTidemarkLadderClimbAttemptNumber({ revealedCards: [], result: null }),
+      nextTidemarkLadderClimbAttemptNumber(rules, {
+        revealedCards: [],
+        result: null,
+      }),
     ).toBe(1);
     expect(
-      nextTidemarkLadderClimbAttemptNumber({
+      nextTidemarkLadderClimbAttemptNumber(rules, {
         revealedCards: [card],
         result: settledMiss,
       }),
     ).toBe(2);
     expect(
-      nextTidemarkLadderClimbAttemptNumber({
+      nextTidemarkLadderClimbAttemptNumber(rules, {
         revealedCards: [card],
         result: { ...settledMiss, resultSettled: false },
       }),
     ).toBeNull();
     expect(
-      nextTidemarkLadderClimbAttemptNumber({
+      nextTidemarkLadderClimbAttemptNumber(rules, {
         revealedCards: [card],
         result: { ...settledMiss, won: true },
       }),
     ).toBeNull();
     expect(
-      nextTidemarkLadderClimbAttemptNumber({
+      nextTidemarkLadderClimbAttemptNumber(rules, {
         revealedCards: [card, card, card, card],
         result: {
           ...settledMiss,
@@ -135,7 +149,11 @@ describe("Tidemark Ladder Climb rules", () => {
     ]);
 
     expect(
-      scoreTidemarkLadderClimbDreamsignCandidates({ templates, profiles, deckCards }),
+      scoreTidemarkLadderClimbDreamsignCandidates({
+        templates,
+        profiles,
+        deckCards,
+      }),
     ).toEqual([
       { dreamsignId: "sign-z-matched", score: 1 },
       { dreamsignId: "sign-a-generic", score: 0.4 },

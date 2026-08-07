@@ -94,7 +94,9 @@ function validateFieldSave(
     return { ok: false, message: "Aesthetic cannot be blank." };
   }
   if (
-    (field === "signature-site" || field === "guide-id" || field === "affiliation-id") &&
+    (field === "signature-site" ||
+      field === "guide-id" ||
+      field === "affiliation-id") &&
     text.length === 0
   ) {
     return { ok: false, message: "Please choose a value." };
@@ -132,11 +134,17 @@ export default function DreamscapeEditorApp({
   );
   const [loadStatus, setLoadStatus] = useState<LoadStatus>({ kind: "loading" });
   const [loadAttempt, setLoadAttempt] = useState(0);
-  const [saveState, setSaveState] = useState<EditableSaveState>(EMPTY_EDITOR_SAVE_STATE);
+  const [saveState, setSaveState] = useState<EditableSaveState>(
+    EMPTY_EDITOR_SAVE_STATE,
+  );
   const saveStateRef = useRef(saveState);
   // Per-dreamscape resident-reassignment feedback (one in-flight op at a time).
-  const [residentPendingId, setResidentPendingId] = useState<string | null>(null);
-  const [residentErrors, setResidentErrors] = useState<Record<string, string>>({});
+  const [residentPendingId, setResidentPendingId] = useState<string | null>(
+    null,
+  );
+  const [residentErrors, setResidentErrors] = useState<Record<string, string>>(
+    {},
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -145,7 +153,9 @@ export default function DreamscapeEditorApp({
     async function load() {
       setLoadStatus({ kind: "loading" });
       try {
-        const catalog = await apiClient.loadEditorDreamscapes(controller.signal);
+        const catalog = await apiClient.loadEditorDreamscapes(
+          controller.signal,
+        );
         if (!cancelled) {
           setLoadStatus({ kind: "loaded", catalog });
         }
@@ -310,7 +320,10 @@ export default function DreamscapeEditorApp({
           current.kind === "loaded"
             ? {
                 kind: "loaded",
-                catalog: { ...current.catalog, dreamscapes: response.dreamscapes },
+                catalog: {
+                  ...current.catalog,
+                  dreamscapes: response.dreamscapes,
+                },
               }
             : current,
         );
@@ -322,7 +335,9 @@ export default function DreamscapeEditorApp({
         }));
       })
       .finally(() => {
-        setResidentPendingId((current) => (current === record.id ? null : current));
+        setResidentPendingId((current) =>
+          current === record.id ? null : current,
+        );
       });
   }
 
@@ -347,7 +362,9 @@ export default function DreamscapeEditorApp({
       return;
     }
 
-    if (String(validation.value) === String(confirmedFieldValue(record, field))) {
+    if (
+      String(validation.value) === String(confirmedFieldValue(record, field))
+    ) {
       handleFieldCancel(record, field);
       return;
     }
@@ -375,7 +392,10 @@ export default function DreamscapeEditorApp({
       .then((response) => {
         const responseRevision = response.clientRevision ?? clientRevision;
         const currentEntry = fieldSaveEntry(saveStateRef.current, target);
-        if (currentEntry === null || responseRevision < currentEntry.submittedRevision) {
+        if (
+          currentEntry === null ||
+          responseRevision < currentEntry.submittedRevision
+        ) {
           return;
         }
         setEditorSaveState((current) =>
@@ -386,12 +406,31 @@ export default function DreamscapeEditorApp({
             confirmedFieldValue(response.dreamscape, field),
           ),
         );
-        replaceConfirmed(response.dreamscape);
+        if (response.dreamscapes !== undefined) {
+          setLoadStatus((current) =>
+            current.kind === "loaded"
+              ? {
+                  kind: "loaded",
+                  catalog: {
+                    ...current.catalog,
+                    dreamscapes:
+                      response.dreamscapes ?? current.catalog.dreamscapes,
+                    guides: response.guides ?? current.catalog.guides,
+                  },
+                }
+              : current,
+          );
+        } else {
+          replaceConfirmed(response.dreamscape);
+        }
       })
       .catch((error: unknown) => {
         const message = errorMessageFor(error);
         const currentEntry = fieldSaveEntry(saveStateRef.current, target);
-        if (currentEntry !== null && clientRevision >= currentEntry.submittedRevision) {
+        if (
+          currentEntry !== null &&
+          clientRevision >= currentEntry.submittedRevision
+        ) {
           setEditorSaveState((current) => {
             if (isServerValidationError(error)) {
               return rejectSubmittedFieldSave(
@@ -442,18 +481,29 @@ export default function DreamscapeEditorApp({
           flexWrap: "wrap",
         }}
       >
-        <h1 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 800, lineHeight: 1.1 }}>
+        <h1
+          style={{
+            margin: 0,
+            fontSize: "1.05rem",
+            fontWeight: 800,
+            lineHeight: 1.1,
+          }}
+        >
           Dreamscape Editor
         </h1>
         <span aria-hidden="true" style={{ color: "rgba(247, 241, 223, 0.35)" }}>
           -
         </span>
-        <span style={{ color: "#8edbd1", fontSize: "0.82rem", fontWeight: 600 }}>
+        <span
+          style={{ color: "#8edbd1", fontSize: "0.82rem", fontWeight: 600 }}
+        >
           {loadStatus.kind === "loaded" ? "dreamscapes.toml" : "Loading..."}
         </span>
-        <span style={{ color: "#6f7a76", fontSize: "0.76rem", marginLeft: "6px" }}>
-          Double-click the name, aesthetic, or site icon to edit. Pick a site, guide, or
-          affiliation from its dropdown.
+        <span
+          style={{ color: "#6f7a76", fontSize: "0.76rem", marginLeft: "6px" }}
+        >
+          Double-click the name, aesthetic, or site icon to edit. Pick a site,
+          guide, or affiliation from its dropdown.
         </span>
       </header>
 
@@ -502,7 +552,10 @@ export default function DreamscapeEditorApp({
                 {visible.map((record) => (
                   <div
                     key={record.id}
-                    style={{ width: CARD_WIDTH[displayState.size], flex: "0 0 auto" }}
+                    style={{
+                      width: CARD_WIDTH[displayState.size],
+                      flex: "0 0 auto",
+                    }}
                   >
                     <EditableDreamscape
                       record={record}
@@ -538,7 +591,9 @@ export default function DreamscapeEditorApp({
             <h2 style={{ margin: "0 0 8px", fontSize: "1.25rem" }}>
               Unable to load dreamscapes
             </h2>
-            <p style={{ margin: "0 0 18px", color: "#f0c6bd" }}>{loadStatus.message}</p>
+            <p style={{ margin: "0 0 18px", color: "#f0c6bd" }}>
+              {loadStatus.message}
+            </p>
             <button
               type="button"
               onClick={() => setLoadAttempt((attempt) => attempt + 1)}

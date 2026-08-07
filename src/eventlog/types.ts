@@ -94,6 +94,8 @@ export interface ContentConfig {
   fresh20PackSize: number | null;
   /** Atlas generation/reducer content pinned independently of URL settings. */
   atlasFoldHash?: string;
+  /** Site assignments and deterministic site rules pinned for room folding. */
+  sitesFoldHash?: string;
   /** Draft offers, caps, and pool tuning pinned independently of URL settings. */
   draftFoldHash?: string;
   /** Economy coefficients and genesis defaults pinned independently of URL settings. */
@@ -113,6 +115,7 @@ export interface ContentConfig {
 
 export interface PinnedContentConfig extends ContentConfig {
   atlasFoldHash: string;
+  sitesFoldHash: string;
   draftFoldHash: string;
   economyFoldHash: string;
   rewardSelectionFoldHash: string;

@@ -1,7 +1,7 @@
 // Pure view-model builder for Durgan Forgehammer's standard Cumulus
 // Transfiguration site.
 
-import { guideForSiteType } from "../../data/dreamscapes";
+import { requireGuideForSiteType } from "../../data/dreamscapes";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
@@ -11,39 +11,30 @@ import type {
   JourneyState,
   SiteState,
 } from "../../types/journey";
-import { artRef, type ArtRef } from "../../cumulus/primitives/art";
+import type { ArtRef } from "../../cumulus/primitives/art";
 import type {
   TransfigurationCandidateView,
   TransfigurationGuideView,
   TransfigurationSiteView,
 } from "../../cumulus/screens/TransfigurationSiteScreen";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
-
-const FALLBACK_GUIDE_ID = "durgan_forgehammer";
-const FALLBACK_GUIDE_NAME = "Durgan Forgehammer";
-const FALLBACK_GUIDE_LINE = "Stoke the forge — let's reshape it.";
+import { projectGuideView } from "./guide-view-model";
 const STANDARD_CANDIDATE_COUNT = 3;
 
 /** Resolve Durgan, the resident guide for Transfiguration. */
 export function resolveTransfigurationGuide(
   guides: readonly DreamGuideContent[],
   guideIdOverride?: string,
-): DreamGuideContent | null {
-  return guideForSiteType(guides, "Transfiguration", guideIdOverride);
+): DreamGuideContent {
+  return requireGuideForSiteType(guides, "Transfiguration", guideIdOverride);
 }
 
 /** Build the guide art and one stable greeting for the site layout. */
 export function buildTransfigurationGuideView(
-  guide: DreamGuideContent | null,
-  guideLine: string | null,
+  guide: DreamGuideContent,
+  guideLine: string,
 ): TransfigurationGuideView {
-  const id = guide?.id ?? FALLBACK_GUIDE_ID;
-  return {
-    id,
-    name: guide?.name ?? FALLBACK_GUIDE_NAME,
-    line: guideLine ?? guide?.dialog[0] ?? FALLBACK_GUIDE_LINE,
-    art: artRef.dreamGuide(id),
-  };
+  return projectGuideView(guide, guideLine);
 }
 
 /** Group persisted form rows into card choices for the active visit mode. */
@@ -135,8 +126,8 @@ export function buildTransfigurationSiteView(params: {
   site: SiteState;
   runtime: CardChoiceSiteRuntime | null;
   cardDatabase: ReadonlyMap<number, CardData>;
-  guide: DreamGuideContent | null;
-  guideLine: string | null;
+  guide: DreamGuideContent;
+  guideLine: string;
 }): TransfigurationSiteView {
   const scene: ArtRef | null =
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);

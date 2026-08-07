@@ -17,6 +17,7 @@ import {
 } from "../state/journey-context";
 import { parseRuntimeConfig } from "../runtime/runtime-config";
 import type { JourneyContent } from "../data/journey-content";
+import type { DreamGuideContent } from "../types/content";
 import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
@@ -64,10 +65,7 @@ vi.mock("framer-motion", () => ({
       children: ReactNode;
       exit?: { pointerEvents?: string };
     }) => (
-      <div
-        {...props}
-        data-exit-pointer-events={exit?.pointerEvents}
-      >
+      <div {...props} data-exit-pointer-events={exit?.pointerEvents}>
         {children}
       </div>
     ),
@@ -201,16 +199,30 @@ function merchantContent() {
     merchantCorpus: makeMerchantTestCorpus({ cards: corpus }),
     dreamsignProfiles: new Map(),
   });
+  return withFixtureGuides(content);
+}
+
+function withFixtureGuides(content: JourneyContent): JourneyContent {
   return {
     ...content,
-    guides: [{
-      id: content.atlasData.randomSite.guideId,
-      name: "Fixture Random Site Guide",
-      homeDreamscapeId: "fixture-random-site-home",
-      siteType: "RandomSite" as const,
-      dialog: [],
-      homeSpecialty: "Fixture specialty",
-    }],
+    guides: Object.entries(content.sitesData.guideAssignments).map(
+      ([siteType, assignment]): DreamGuideContent => ({
+        id: assignment.guideId,
+        name: `Fixture ${siteType} Guide`,
+        homeDreamscapeId: assignment.homeDreamscapeId,
+        siteType: siteType as DreamGuideContent["siteType"],
+        portraitSource: "fixture-guide.png",
+        dialogue: {
+          site: ["Fixture greeting."],
+          "random-site": ["Fixture road."],
+          "gamble-three-gate": ["Fixture gate."],
+          "gamble-ladder-climb": ["Fixture ladder {win-essence}."],
+          "gamble-starway-stairs": ["Fixture stairs."],
+          "gamble-four-suit-reprise": ["Fixture suits."],
+        },
+        homeSpecialty: "Fixture specialty",
+      }),
+    ),
   };
 }
 
@@ -356,8 +368,13 @@ function renderWithJourney({
   children: ReactElement;
   strict?: boolean;
 }) {
-  return mountWithJourney({ state, journeyContent, mutations, children, strict })
-    .container;
+  return mountWithJourney({
+    state,
+    journeyContent,
+    mutations,
+    children,
+    strict,
+  }).container;
 }
 
 function mountWithJourney({
@@ -459,9 +476,7 @@ describe("ScreenRouter Augury routing", () => {
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
-    const frame = container.querySelector<HTMLElement>(
-      "[data-journey-screen]",
-    );
+    const frame = container.querySelector<HTMLElement>("[data-journey-screen]");
     expect(frame?.dataset.journeyScreenPresence).toBe("exiting");
     expect(frame?.hasAttribute("inert")).toBe(true);
     expect(frame?.getAttribute("aria-hidden")).toBe("true");
@@ -473,10 +488,10 @@ describe("ScreenRouter Augury routing", () => {
     const state = makeStateFor(site);
     const container = renderWithJourney({
       state,
-      journeyContent: makeMerchantTestContent({ cards: fixtureCards() }),
-      children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
+      journeyContent: withFixtureGuides(
+        makeMerchantTestContent({ cards: fixtureCards() }),
       ),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
     expect(
@@ -490,9 +505,7 @@ describe("ScreenRouter Augury routing", () => {
     const container = renderWithJourney({
       state,
       journeyContent: merchantContent(),
-      children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
-      ),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
     expect(
@@ -505,15 +518,11 @@ describe("ScreenRouter Augury routing", () => {
     const container = renderWithJourney({
       state: makeStateFor(site),
       journeyContent: merchantContent(),
-      children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
-      ),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
     expect(
-      container.querySelector(
-        '[data-testid="cumulus-augury-site-screen"]',
-      ),
+      container.querySelector('[data-testid="cumulus-augury-site-screen"]'),
     ).not.toBeNull();
     expect(
       getLogEntries().find((entry) => entry.event === "screen_rendered"),
@@ -536,9 +545,7 @@ describe("ScreenRouter Augury routing", () => {
       state,
       mutations,
       journeyContent: merchantContent(),
-      children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
-      ),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
     const openMenu = () => {
@@ -591,9 +598,7 @@ describe("ScreenRouter Augury routing", () => {
     renderWithJourney({
       state,
       journeyContent: merchantContent(),
-      children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
-      ),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
       strict: true,
     });
 
@@ -613,9 +618,7 @@ describe("ScreenRouter Augury routing", () => {
     renderWithJourney({
       state,
       journeyContent: merchantContent(),
-      children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
-      ),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
       strict: true,
     });
 
@@ -645,9 +648,7 @@ describe("ScreenRouter Augury routing", () => {
     renderWithJourney({
       state,
       journeyContent: merchantContent(),
-      children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
-      ),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
     const encounterLogs = getLogEntries().filter(
@@ -689,12 +690,14 @@ describe("ScreenRouter Augury routing", () => {
     for (const [index, c] of cards.entries()) {
       corpus[c.id] = { quality: 0.1 + (index % 10) / 10 };
     }
-    const contentWithoutDreamsigns = makeMerchantTestContent({
-      cards,
-      dreamsignTemplates: [],
-      merchantCorpus: makeMerchantTestCorpus({ cards: corpus }),
-      dreamsignProfiles: new Map(),
-    });
+    const contentWithoutDreamsigns = withFixtureGuides(
+      makeMerchantTestContent({
+        cards,
+        dreamsignTemplates: [],
+        merchantCorpus: makeMerchantTestCorpus({ cards: corpus }),
+        dreamsignProfiles: new Map(),
+      }),
+    );
     // An empty deck keeps the deck-targeting families (duplicate / purge) and
     // fit-gated drafts ineligible, so both offer slots come from the
     // always-eligible face-up grant families (strong_card / card_bundle) and the
@@ -705,9 +708,7 @@ describe("ScreenRouter Augury routing", () => {
       state,
       mutations,
       journeyContent: contentWithoutDreamsigns,
-      children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
-      ),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
     const [debugState, source] =
@@ -734,9 +735,7 @@ describe("ScreenRouter Augury routing", () => {
       state,
       mutations,
       journeyContent: content,
-      children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
-      ),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
     const published = vi.mocked(mutations.setCardSourceDebug).mock
       .calls[0]?.[0];
@@ -758,9 +757,7 @@ describe("ScreenRouter Augury routing", () => {
       state: { ...makeStateFor(site), deck: [] },
       mutations,
       journeyContent: merchantContent(),
-      children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
-      ),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
       strict: true,
     });
 
@@ -777,9 +774,7 @@ describe("ScreenRouter Augury routing", () => {
     const container = renderWithJourney({
       state,
       journeyContent: merchantContent(),
-      children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
-      ),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
     expect(
@@ -794,10 +789,10 @@ describe("ScreenRouter Augury routing", () => {
     const container = renderWithJourney({
       state,
       mutations,
-      journeyContent: makeMerchantTestContent({ cards: [] }),
-      children: (
-        <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
+      journeyContent: withFixtureGuides(
+        makeMerchantTestContent({ cards: [] }),
       ),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
     const walkAway = container.querySelector(
@@ -907,39 +902,42 @@ describe("ScreenRouter site-dispatch completeness", () => {
   });
 
   it("routes RandomSite to the configured guide's choice screen", () => {
-      motionPreference.reduced = true;
-      const site: SiteState = {
-        ...makeSite("RandomSite"),
-        isEnhanced: true,
-        randomSite: {
-          mode: "homeChoice" as const,
-          candidateSiteTypes: ["Shop", "Purge", "Augury"],
-        },
-      };
-      const mutations = makeMutations();
-      const state = makeStateFor(site);
-      state.siteRuntime[site.id] = {
-        kind: "randomSite",
-        offeredSiteTypes: ["Shop", "Purge", "Augury"],
-        selectedSiteType: null,
-      };
-      const container = renderWithJourney({
-        state,
-        journeyContent: merchantContent(),
-        mutations,
-        children: (
-          <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
-        ),
-      });
-
-      expect(container.querySelectorAll("[data-random-site-choice]")).toHaveLength(3);
-      const firstChoice = container.querySelector("[data-random-site-choice] button");
-      if (!(firstChoice instanceof HTMLButtonElement)) throw new Error("expected a Random Site choice");
-      act(() => {
-        firstChoice.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      });
-      expect(mutations.chooseRandomSite).toHaveBeenCalledWith(site.id, "Shop");
+    motionPreference.reduced = true;
+    const site: SiteState = {
+      ...makeSite("RandomSite"),
+      isEnhanced: true,
+      randomSite: {
+        mode: "homeChoice" as const,
+        candidateSiteTypes: ["Shop", "Purge", "Augury"],
+      },
+    };
+    const mutations = makeMutations();
+    const state = makeStateFor(site);
+    state.siteRuntime[site.id] = {
+      kind: "randomSite",
+      offeredSiteTypes: ["Shop", "Purge", "Augury"],
+      selectedSiteType: null,
+    };
+    const container = renderWithJourney({
+      state,
+      journeyContent: merchantContent(),
+      mutations,
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
+
+    expect(
+      container.querySelectorAll("[data-random-site-choice]"),
+    ).toHaveLength(3);
+    const firstChoice = container.querySelector(
+      "[data-random-site-choice] button",
+    );
+    if (!(firstChoice instanceof HTMLButtonElement))
+      throw new Error("expected a Random Site choice");
+    act(() => {
+      firstChoice.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(mutations.chooseRandomSite).toHaveBeenCalledWith(site.id, "Shop");
+  });
 
   it("routes Gamble to the Three-Gate Wager screen", () => {
     const site = makeSite("Gamble");
@@ -972,8 +970,9 @@ describe("ScreenRouter site-dispatch completeness", () => {
     expect(
       container.querySelectorAll("[data-gamble-gates] [data-gamble-gate]"),
     ).toHaveLength(3);
-    expect(container.querySelectorAll("[data-gamble-draw-card] [data-playing-card]"))
-      .toHaveLength(0);
+    expect(
+      container.querySelectorAll("[data-gamble-draw-card] [data-playing-card]"),
+    ).toHaveLength(0);
     expect(
       container.querySelector('[data-testid="gamble-choose-six"]'),
     ).toBeInstanceOf(HTMLButtonElement);
@@ -984,7 +983,9 @@ describe("ScreenRouter site-dispatch completeness", () => {
       site.id,
       undefined,
     );
-    expect(container.querySelector("[data-random-site-choice-panel]")).toBeNull();
+    expect(
+      container.querySelector("[data-random-site-choice-panel]"),
+    ).toBeNull();
   });
 
   it("passes a forced Ladder Climb URL choice into Gamble initialization", () => {
@@ -996,9 +997,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
       mutations,
       children: (
         <ScreenRouter
-          runtimeConfig={parseRuntimeConfig(
-            "?gambleGame=ladder-climb",
-          )}
+          runtimeConfig={parseRuntimeConfig("?gambleGame=ladder-climb")}
         />
       ),
     });
@@ -1019,9 +1018,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
       mutations,
       children: (
         <ScreenRouter
-          runtimeConfig={parseRuntimeConfig(
-            "?gambleGame=starway-stairs",
-          )}
+          runtimeConfig={parseRuntimeConfig("?gambleGame=starway-stairs")}
         />
       ),
     });
@@ -1041,9 +1038,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
       mutations,
       children: (
         <ScreenRouter
-          runtimeConfig={parseRuntimeConfig(
-            "?gambleGame=four-suit-reprise",
-          )}
+          runtimeConfig={parseRuntimeConfig("?gambleGame=four-suit-reprise")}
         />
       ),
     });
@@ -1105,13 +1100,15 @@ describe("ScreenRouter site-dispatch completeness", () => {
     state.siteRuntime[site.id] = {
       kind: "exploration",
       encounterCardId: selectedCard.id,
-      actionOffers: ["fixture-action-a", "fixture-action-b"].map((actionId) => ({
-        actionId,
-        offeredCardIds: [],
-        packCardIds: [],
-        replacementCardIdByEntryId: {},
-        transfigurationByEntryId: {},
-      })),
+      actionOffers: ["fixture-action-a", "fixture-action-b"].map(
+        (actionId) => ({
+          actionId,
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        }),
+      ),
       resolution: null,
     };
     const container = renderWithJourney({

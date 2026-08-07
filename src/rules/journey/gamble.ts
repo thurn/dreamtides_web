@@ -3,7 +3,6 @@
 import {
   gravokGateEssenceReward,
   gravokGateRule,
-  GRAVOK_WAGER_MAX_RETRIES,
   rankWinsGravokGate,
 } from "../../data/gravok-wager";
 import {
@@ -13,20 +12,14 @@ import {
 } from "../../data/tidemark-ladder-climb";
 import {
   rankBustsStarwayStairsTier,
-  STARWAY_STAIRS_MAX_RETRIES,
-  STARWAY_STAIRS_TIERS,
   nextStarwayStairsTierNumber,
   starwayStairsEssenceReward,
 } from "../../data/starway-stairs";
 import {
-  FOUR_SUIT_REPRISE_ESSENCE_REWARD,
-  FOUR_SUIT_REPRISE_MAX_ROUNDS,
   eligibleFourSuitRepriseTargets,
   fourSuitRepriseOutcomeForSuit,
 } from "../../data/four-suit-reprise";
-import type {
-  GravokGateId,
-} from "../../types/gamble";
+import type { GravokGateId } from "../../types/gamble";
 import type {
   DeckEntry,
   FourSuitRepriseRound,
@@ -136,22 +129,20 @@ export function placeGravokWager(
 ): JourneyState | null {
   const siteId = asString(payload.siteId);
   const rawGateId = asString(payload.gateId);
-  if (
-    siteId === null ||
-    rawGateId === null ||
-    !GATE_IDS.has(rawGateId)
-  ) {
+  if (siteId === null || rawGateId === null || !GATE_IDS.has(rawGateId)) {
     return null;
   }
 
   const gateId = rawGateId as GravokGateId;
   const runtime = gravokRuntimeFor(journey, siteId);
   if (runtime === null || runtime.result !== null) return null;
-  const economy = getSiteContentProvider()?.economyData?.gamble.threeGate;
-  if (economy === undefined) return null;
+  const provider = getSiteContentProvider();
+  const economy = provider?.economyData?.gamble.threeGate;
+  const rules = provider?.sitesData?.gamble.threeGate;
+  if (economy === undefined || rules === undefined) return null;
   if (journey.essence < runtime.wagerCost) return null;
 
-  const gate = gravokGateRule(gateId);
+  const gate = gravokGateRule(rules, gateId);
   if (
     gate.awardsDreamsign &&
     (runtime.rewardDreamsign === null || journey.maxDreamsigns === 0)
@@ -159,14 +150,17 @@ export function placeGravokWager(
     return null;
   }
 
-  const won = rankWinsGravokGate(runtime.committedCard.rank, gateId);
+  const won = rankWinsGravokGate(rules, runtime.committedCard.rank, gateId);
   const essenceGained = won ? gravokGateEssenceReward(economy, gateId) : 0;
   const winsDreamsign = won && gate.awardsDreamsign;
   const needsReplacement =
     winsDreamsign && journey.dreamsigns.length >= journey.maxDreamsigns;
   const rewardDreamsign = winsDreamsign ? runtime.rewardDreamsign : null;
   const rewardDreamsignId = rewardDreamsign?.id;
-  if (winsDreamsign && (rewardDreamsign === null || rewardDreamsignId === undefined)) {
+  if (
+    winsDreamsign &&
+    (rewardDreamsign === null || rewardDreamsignId === undefined)
+  ) {
     return null;
   }
 
@@ -242,9 +236,7 @@ export function playAgainGravokWager(
   ctx: EventContext,
 ): JourneyState | null {
   const siteId = asString(payload.siteId);
-  const previousShuffleCommitment = asString(
-    payload.previousShuffleCommitment,
-  );
+  const previousShuffleCommitment = asString(payload.previousShuffleCommitment);
   if (siteId === null || previousShuffleCommitment === null) return null;
 
   const runtime = gravokRuntimeFor(journey, siteId);
@@ -259,7 +251,8 @@ export function playAgainGravokWager(
     runtime.result === null ||
     runtime.result.essenceSettled !== true ||
     runtime.result.pendingDreamsignReplacement ||
-    roundNumber > GRAVOK_WAGER_MAX_RETRIES
+    provider.sitesData === undefined ||
+    roundNumber > provider.sitesData.gamble.threeGate.maxRetries
   ) {
     return null;
   }
@@ -322,11 +315,7 @@ export function replaceGravokWagerDreamsign(
       replacedDreamsignId,
     },
   };
-  return withRuntime(
-    { ...journey, dreamsigns },
-    siteId,
-    nextRuntime,
-  );
+  return withRuntime({ ...journey, dreamsigns }, siteId, nextRuntime);
 }
 
 /** Buy and reveal the next independently committed Ladder Climb attempt. */
@@ -339,20 +328,30 @@ export function drawTidemarkLadderClimb(
 
   const runtime = tidemarkRuntimeFor(journey, siteId);
   if (runtime === null) return null;
-  const economy = getSiteContentProvider()?.economyData?.gamble.ladderClimb;
-  if (economy === undefined) return null;
+  const provider = getSiteContentProvider();
+  const economy = provider?.economyData?.gamble.ladderClimb;
+  const rules = provider?.sitesData?.gamble.ladderClimb;
+  if (economy === undefined || rules === undefined) return null;
   if (journey.maxDreamsigns === 0) return null;
 
-  const attemptNumber = nextTidemarkLadderClimbAttemptNumber(runtime);
+  const attemptNumber = nextTidemarkLadderClimbAttemptNumber(rules, runtime);
   if (attemptNumber === null) return null;
   const card = runtime.committedCards[attemptNumber - 1];
   const shuffleCommitment = runtime.shuffleCommitments[attemptNumber - 1];
   if (card === undefined || shuffleCommitment === undefined) return null;
 
-  const costPaid = tidemarkLadderClimbAttemptCost(economy, attemptNumber, runtime.isFarpoint);
+  const costPaid = tidemarkLadderClimbAttemptCost(
+    economy,
+    attemptNumber,
+    runtime.isFarpoint,
+  );
   if (journey.essence < costPaid) return null;
   const cumulativeCost = runtime.cumulativeCost + costPaid;
-  const won = rankWinsTidemarkLadderClimbAttempt(card.rank, attemptNumber);
+  const won = rankWinsTidemarkLadderClimbAttempt(
+    rules,
+    card.rank,
+    attemptNumber,
+  );
 
   return withRuntime(
     { ...journey, essence: journey.essence - costPaid },
@@ -391,7 +390,8 @@ export function settleTidemarkLadderClimb(
   const result = runtime?.result ?? null;
   const economy = getSiteContentProvider()?.economyData?.gamble.ladderClimb;
   if (
-    runtime === null || economy === undefined ||
+    runtime === null ||
+    economy === undefined ||
     result === null ||
     result.resultSettled ||
     runtime.shuffleCommitments[result.attemptNumber - 1] !== shuffleCommitment
@@ -408,8 +408,7 @@ export function settleTidemarkLadderClimb(
 
   const rewardDreamsign = runtime.rewardDreamsign;
   const rewardDreamsignId = rewardDreamsign.id;
-  const needsReplacement =
-    journey.dreamsigns.length >= journey.maxDreamsigns;
+  const needsReplacement = journey.dreamsigns.length >= journey.maxDreamsigns;
   const dreamsigns = needsReplacement
     ? journey.dreamsigns
     : [...journey.dreamsigns, rewardDreamsign];
@@ -465,19 +464,15 @@ export function replaceTidemarkLadderClimbDreamsign(
     index === replaceIndex ? runtime.rewardDreamsign : dreamsign,
   );
 
-  return withRuntime(
-    { ...journey, dreamsigns },
-    siteId,
-    {
-      ...runtime,
-      result: {
-        ...runtime.result,
-        dreamsignAwarded: true,
-        pendingDreamsignReplacement: false,
-        replacedDreamsignId,
-      },
+  return withRuntime({ ...journey, dreamsigns }, siteId, {
+    ...runtime,
+    result: {
+      ...runtime.result,
+      dreamsignAwarded: true,
+      pendingDreamsignReplacement: false,
+      replacedDreamsignId,
     },
-  );
+  });
 }
 
 /** Pay the tier wager, when applicable, and reveal the current Starway tier. */
@@ -488,16 +483,17 @@ export function drawStarwayStairs(
   const siteId = asString(payload.siteId);
   if (siteId === null) return null;
   const runtime = starwayRuntimeFor(journey, siteId);
-  if (runtime === null) return null;
+  const rules = getSiteContentProvider()?.sitesData?.gamble.starwayStairs;
+  if (runtime === null || rules === undefined) return null;
 
-  const tierNumber = nextStarwayStairsTierNumber(runtime);
+  const tierNumber = nextStarwayStairsTierNumber(rules, runtime);
   if (tierNumber === null) return null;
   const card = runtime.committedCards[tierNumber - 1];
   const commitment = runtime.shuffleCommitments[tierNumber - 1];
   if (card === undefined || commitment === undefined) return null;
 
   if (journey.essence < runtime.wagerAmount) return null;
-  const busted = rankBustsStarwayStairsTier(card.rank, tierNumber);
+  const busted = rankBustsStarwayStairsTier(rules, card.rank, tierNumber);
   return withRuntime(
     { ...journey, essence: journey.essence - runtime.wagerAmount },
     siteId,
@@ -521,9 +517,13 @@ export function settleStarwayStairs(
   if (siteId === null || shuffleCommitment === null) return null;
   const runtime = starwayRuntimeFor(journey, siteId);
   const result = runtime?.results[runtime.results.length - 1];
-  const economy = getSiteContentProvider()?.economyData?.gamble.starwayStairs;
+  const provider = getSiteContentProvider();
+  const economy = provider?.economyData?.gamble.starwayStairs;
+  const rules = provider?.sitesData?.gamble.starwayStairs;
   if (
-    runtime === null || economy === undefined ||
+    runtime === null ||
+    economy === undefined ||
+    rules === undefined ||
     result === undefined ||
     result.resultSettled ||
     runtime.shuffleCommitments[result.tierNumber - 1] !== shuffleCommitment
@@ -531,8 +531,7 @@ export function settleStarwayStairs(
     return null;
   }
 
-  const reachedTop =
-    !result.busted && result.tierNumber === STARWAY_STAIRS_TIERS.length;
+  const reachedTop = !result.busted && result.tierNumber === rules.tiers.length;
   const prizeAwarded = reachedTop
     ? starwayStairsEssenceReward(economy, result.tierNumber)
     : 0;
@@ -563,13 +562,17 @@ export function cashOutStarwayStairs(
   if (siteId === null || shuffleCommitment === null) return null;
   const runtime = starwayRuntimeFor(journey, siteId);
   const result = runtime?.results[runtime.results.length - 1];
-  const economy = getSiteContentProvider()?.economyData?.gamble.starwayStairs;
+  const provider = getSiteContentProvider();
+  const economy = provider?.economyData?.gamble.starwayStairs;
+  const rules = provider?.sitesData?.gamble.starwayStairs;
   if (
-    runtime === null || economy === undefined ||
+    runtime === null ||
+    economy === undefined ||
+    rules === undefined ||
     result === undefined ||
     result.busted ||
     !result.resultSettled ||
-    result.tierNumber >= STARWAY_STAIRS_TIERS.length ||
+    result.tierNumber >= rules.tiers.length ||
     runtime.terminalReason !== null ||
     runtime.shuffleCommitments[result.tierNumber - 1] !== shuffleCommitment
   ) {
@@ -590,9 +593,7 @@ export function playAgainStarwayStairs(
   ctx: EventContext,
 ): JourneyState | null {
   const siteId = asString(payload.siteId);
-  const previousShuffleCommitment = asString(
-    payload.previousShuffleCommitment,
-  );
+  const previousShuffleCommitment = asString(payload.previousShuffleCommitment);
   if (siteId === null || previousShuffleCommitment === null) return null;
 
   const runtime = starwayRuntimeFor(journey, siteId);
@@ -607,7 +608,8 @@ export function playAgainStarwayStairs(
     runtime.terminalReason === null ||
     latestResult === undefined ||
     !latestResult.resultSettled ||
-    runtime.roundNumber > STARWAY_STAIRS_MAX_RETRIES
+    provider.sitesData === undefined ||
+    runtime.roundNumber > provider.sitesData.gamble.starwayStairs.maxRetries
   ) {
     return null;
   }
@@ -641,10 +643,12 @@ export function drawFourSuitReprise(
   if (siteId === null || entryId === null) return null;
 
   const runtime = fourSuitRuntimeFor(journey, siteId);
+  const rules = getSiteContentProvider()?.sitesData?.gamble.fourSuitReprise;
   if (
     runtime === null ||
+    rules === undefined ||
     runtime.phase !== "choose" ||
-    runtime.rounds.length >= FOUR_SUIT_REPRISE_MAX_ROUNDS ||
+    runtime.rounds.length >= rules.maxRounds ||
     journey.essence < runtime.drawCost
   ) {
     return null;
@@ -685,7 +689,7 @@ export function drawFourSuitReprise(
           targetEntryId: target.entryId,
           targetCardId: target.cardId,
           costPaid: runtime.drawCost,
-          outcome: fourSuitRepriseOutcomeForSuit(card.suit),
+          outcome: fourSuitRepriseOutcomeForSuit(rules, card.suit),
           resultRevealed: false,
           resultSettled: false,
           essenceGained: 0,
@@ -706,9 +710,11 @@ export function settleFourSuitReprise(
   if (siteId === null || shuffleCommitment === null) return null;
 
   const runtime = fourSuitRuntimeFor(journey, siteId);
+  const economy = getSiteContentProvider()?.economyData?.gamble.fourSuitReprise;
   const round = runtime === null ? null : latestFourSuitRound(runtime);
   if (
     runtime === null ||
+    economy === undefined ||
     runtime.phase !== "result" ||
     round === null ||
     round.shuffleCommitment !== shuffleCommitment ||
@@ -728,19 +734,20 @@ export function settleFourSuitReprise(
     targetEntry.cardNumber !== target.cardNumber ||
     targetEntry.isBane ||
     targetEntry.transfiguration !== null
-  ) return null;
+  )
+    return null;
 
   let nextJourney = journey;
   let nextRound: FourSuitRepriseRound = { ...round, resultRevealed: true };
   if (round.outcome === "essence") {
     nextJourney = {
       ...journey,
-      essence: journey.essence + FOUR_SUIT_REPRISE_ESSENCE_REWARD,
+      essence: journey.essence + economy.essenceReward,
     };
     nextRound = {
       ...nextRound,
       resultSettled: true,
-      essenceGained: FOUR_SUIT_REPRISE_ESSENCE_REWARD,
+      essenceGained: economy.essenceReward,
     };
   } else if (round.outcome === "duplication") {
     const duplicatedEntryId = mintEntryId(journey.deck, ctx.seq, 0);
@@ -783,9 +790,11 @@ export function chooseFourSuitRepriseTransfiguration(
   }
 
   const runtime = fourSuitRuntimeFor(journey, siteId);
+  const rules = getSiteContentProvider()?.sitesData?.gamble.fourSuitReprise;
   const round = runtime === null ? null : latestFourSuitRound(runtime);
   if (
     runtime === null ||
+    rules === undefined ||
     runtime.phase !== "result" ||
     round === null ||
     round.shuffleCommitment !== shuffleCommitment ||
@@ -847,20 +856,20 @@ export function playAgainFourSuitReprise(
   payload: Record<string, unknown>,
 ): JourneyState | null {
   const siteId = asString(payload.siteId);
-  const previousShuffleCommitment = asString(
-    payload.previousShuffleCommitment,
-  );
+  const previousShuffleCommitment = asString(payload.previousShuffleCommitment);
   if (siteId === null || previousShuffleCommitment === null) return null;
 
   const runtime = fourSuitRuntimeFor(journey, siteId);
+  const rules = getSiteContentProvider()?.sitesData?.gamble.fourSuitReprise;
   const round = runtime === null ? null : latestFourSuitRound(runtime);
   if (
     runtime === null ||
+    rules === undefined ||
     runtime.phase !== "result" ||
     round === null ||
     round.shuffleCommitment !== previousShuffleCommitment ||
     !round.resultSettled ||
-    runtime.rounds.length >= FOUR_SUIT_REPRISE_MAX_ROUNDS ||
+    runtime.rounds.length >= rules.maxRounds ||
     remainingFourSuitTargets(journey, runtime).length === 0
   ) {
     return null;

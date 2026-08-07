@@ -50,6 +50,7 @@
 // proves the nullability checker fires on a deliberate non-carve-out nulling.
 
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
 
 import { eventRng } from "../../eventlog/rng";
 import { foldEvents } from "../../eventlog/fold";
@@ -70,10 +71,7 @@ import { LayerName } from "../../types/layer-name";
 import { SITE_PICKS } from "../../draft/draft-engine";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
-import {
-  registerDeckContentProvider,
-  type DeckContentProvider,
-} from "./deck";
+import { registerDeckContentProvider, type DeckContentProvider } from "./deck";
 import {
   registerDraftContentProvider,
   type DraftContentProvider,
@@ -82,10 +80,7 @@ import {
   registerJourneyLifecycleContentProvider,
   type JourneyLifecycleContentProvider,
 } from "./lifecycle";
-import {
-  registerSiteContentProvider,
-  type SiteContentProvider,
-} from "./sites";
+import { registerSiteContentProvider, type SiteContentProvider } from "./sites";
 import { registerBattleInitProvider } from "../battle/battle-events";
 import { fixtureBattleInitProvider } from "../replay/fixture-providers";
 
@@ -97,7 +92,11 @@ const GENESIS: Genesis = {
   seed: "journey-properties-seed",
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null },
+  contentConfig: {
+    poolVariant: "test",
+    draftMode: "pool",
+    fresh20PackSize: null,
+  },
 };
 
 const ACTOR = "alice";
@@ -289,6 +288,7 @@ function draftProvider(): DraftContentProvider {
  */
 function siteProvider(): SiteContentProvider {
   return {
+    sitesData: MINIMAL_SITES_DATA,
     openSite: () => null,
     rerollShop: () => ({
       slots: [],
@@ -443,13 +443,21 @@ function maybeCorrupt(
  * (unknown ids, no provider wired for the content-coupled cases). Both paths
  * are intended.
  */
-const NON_DEBUG_GENERATORS: ReadonlyArray<(rng: () => number) => GeneratedEvent> = [
+const NON_DEBUG_GENERATORS: ReadonlyArray<
+  (rng: () => number) => GeneratedEvent
+> = [
   // essence & limits (non-debug)
-  (rng) => ({ type: "ADJUST_ESSENCE", payload: { delta: smallInt(rng, 3000) } }),
+  (rng) => ({
+    type: "ADJUST_ESSENCE",
+    payload: { delta: smallInt(rng, 3000) },
+  }),
 
   // navigation
   (rng) => ({ type: "ENTER_SITE", payload: { siteId: pick(rng, SITE_IDS) } }),
-  (rng) => ({ type: "TRAVEL_TO_DREAMSCAPE", payload: { nodeId: pick(rng, NODE_IDS) } }),
+  (rng) => ({
+    type: "TRAVEL_TO_DREAMSCAPE",
+    payload: { nodeId: pick(rng, NODE_IDS) },
+  }),
   () => ({ type: "DISMISS_STARTING_DECK_POPUP", payload: {} }),
 
   // deck & transfiguration
@@ -457,65 +465,122 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<(rng: () => number) => GeneratedEvent>
     type: "ADD_CARD",
     payload: { cardId: `card-${100 + Math.floor(rng() * 20)}` },
   }),
-  (rng) => ({ type: "REMOVE_DECK_ENTRY", payload: { entryId: `entry-${Math.floor(rng() * 20)}` } }),
+  (rng) => ({
+    type: "REMOVE_DECK_ENTRY",
+    payload: { entryId: `entry-${Math.floor(rng() * 20)}` },
+  }),
   (rng) => ({
     type: "PURGE_DECK_CARDS",
     payload: { entryIds: [`entry-${Math.floor(rng() * 20)}`] },
   }),
-  (rng) => ({ type: "DUPLICATE_DECK_ENTRY", payload: { entryId: `entry-${Math.floor(rng() * 20)}` } }),
+  (rng) => ({
+    type: "DUPLICATE_DECK_ENTRY",
+    payload: { entryId: `entry-${Math.floor(rng() * 20)}` },
+  }),
   (rng) => ({
     type: "SET_DECK_ENTRY_TYPE",
-    payload: { entryId: `entry-${Math.floor(rng() * 20)}`, typeChange: { to: "Event" } },
+    payload: {
+      entryId: `entry-${Math.floor(rng() * 20)}`,
+      typeChange: { to: "Event" },
+    },
   }),
   (rng) => ({
     type: "TRANSFIGURE_CARD",
-    payload: { entryId: `entry-${Math.floor(rng() * 20)}`, transfiguration: { kind: "x" } },
+    payload: {
+      entryId: `entry-${Math.floor(rng() * 20)}`,
+      transfiguration: { kind: "x" },
+    },
   }),
   (rng) => ({
     type: "ACCEPT_TRANSFIGURATION_CHOICE",
-    payload: { siteId: pick(rng, SITE_IDS), entryId: `entry-${Math.floor(rng() * 20)}` },
+    payload: {
+      siteId: pick(rng, SITE_IDS),
+      entryId: `entry-${Math.floor(rng() * 20)}`,
+    },
   }),
   (rng) => ({
     type: "ACCEPT_DUPLICATION_CHOICE",
-    payload: { siteId: pick(rng, SITE_IDS), entryId: `entry-${Math.floor(rng() * 20)}` },
+    payload: {
+      siteId: pick(rng, SITE_IDS),
+      entryId: `entry-${Math.floor(rng() * 20)}`,
+    },
   }),
   () => ({ type: "PURGE_ALL_NIGHTMARE_CARDS", payload: {} }),
-  (rng) => ({ type: "PURGE_RANDOM_NIGHTMARE_CARDS", payload: { count: Math.floor(rng() * 4) } }),
+  (rng) => ({
+    type: "PURGE_RANDOM_NIGHTMARE_CARDS",
+    payload: { count: Math.floor(rng() * 4) },
+  }),
 
   // dreamsigns
-  (rng) => ({ type: "ADD_DREAMSIGN", payload: { dreamsignId: `ds-${Math.floor(rng() * 1_000_000)}` } }),
-  (rng) => ({ type: "REMOVE_DREAMSIGN", payload: { dreamsignId: `ds-${Math.floor(rng() * 1_000_000)}` } }),
+  (rng) => ({
+    type: "ADD_DREAMSIGN",
+    payload: { dreamsignId: `ds-${Math.floor(rng() * 1_000_000)}` },
+  }),
+  (rng) => ({
+    type: "REMOVE_DREAMSIGN",
+    payload: { dreamsignId: `ds-${Math.floor(rng() * 1_000_000)}` },
+  }),
   // draft — a pick aligned with the start draft's offer ([100,101,102]) so it
   // APPLIES on the first pick (writing draftState); later picks bounce once the
   // offer empties. The engine advances on a clone, so draftState stays non-null.
   (rng) => {
     const idx = Math.floor(rng() * 3);
-    return { type: "PICK_DRAFT_CARD", payload: { packIndex: idx, cardId: `card-${100 + idx}` } };
+    return {
+      type: "PICK_DRAFT_CARD",
+      payload: { packIndex: idx, cardId: `card-${100 + idx}` },
+    };
   },
   // draft — a deliberately mismatched pick (exercises the pack-membership bounce)
   (rng) => ({
     type: "PICK_DRAFT_CARD",
-    payload: { packIndex: Math.floor(rng() * 5), cardId: `card-${200 + Math.floor(rng() * 5)}` },
+    payload: {
+      packIndex: Math.floor(rng() * 5),
+      cardId: `card-${200 + Math.floor(rng() * 5)}`,
+    },
   }),
 
   // sites (bounce without a SiteContentProvider / matching runtime)
   (rng) => ({ type: "OPEN_SITE", payload: { siteId: pick(rng, SITE_IDS) } }),
-  (rng) => ({ type: "COMPLETE_AUGURY", payload: { siteId: pick(rng, SITE_IDS) } }),
+  (rng) => ({
+    type: "COMPLETE_AUGURY",
+    payload: { siteId: pick(rng, SITE_IDS) },
+  }),
   (rng) => ({
     type: "ACCEPT_REWARD",
-    payload: { siteId: pick(rng, SITE_IDS), choiceIndex: Math.floor(rng() * 3) },
+    payload: {
+      siteId: pick(rng, SITE_IDS),
+      choiceIndex: Math.floor(rng() * 3),
+    },
   }),
   (rng) => ({
     type: "ACCEPT_DREAMSIGN_OFFER",
-    payload: { siteId: pick(rng, SITE_IDS), dreamsignId: `ds-${Math.floor(rng() * 1000)}` },
+    payload: {
+      siteId: pick(rng, SITE_IDS),
+      dreamsignId: `ds-${Math.floor(rng() * 1000)}`,
+    },
   }),
-  (rng) => ({ type: "REJECT_DREAMSIGN_OFFER", payload: { siteId: pick(rng, SITE_IDS) } }),
-  (rng) => ({ type: "ACCEPT_ESSENCE", payload: { siteId: pick(rng, SITE_IDS) } }),
-  (rng) => ({ type: "COMPLETE_SITE", payload: { siteId: pick(rng, SITE_IDS) } }),
+  (rng) => ({
+    type: "REJECT_DREAMSIGN_OFFER",
+    payload: { siteId: pick(rng, SITE_IDS) },
+  }),
+  (rng) => ({
+    type: "ACCEPT_ESSENCE",
+    payload: { siteId: pick(rng, SITE_IDS) },
+  }),
+  (rng) => ({
+    type: "COMPLETE_SITE",
+    payload: { siteId: pick(rng, SITE_IDS) },
+  }),
 
   // shop & merchant
-  (rng) => ({ type: "ACCEPT_MERCHANT_OFFER", payload: { siteId: pick(rng, SITE_IDS) } }),
-  (rng) => ({ type: "DECLINE_MERCHANT", payload: { siteId: pick(rng, SITE_IDS) } }),
+  (rng) => ({
+    type: "ACCEPT_MERCHANT_OFFER",
+    payload: { siteId: pick(rng, SITE_IDS) },
+  }),
+  (rng) => ({
+    type: "DECLINE_MERCHANT",
+    payload: { siteId: pick(rng, SITE_IDS) },
+  }),
   (rng) => ({
     type: "BUY_SHOP_SLOT",
     payload: { siteId: pick(rng, SITE_IDS), slotIndex: Math.floor(rng() * 4) },
@@ -525,15 +590,27 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<(rng: () => number) => GeneratedEvent>
   // draftState from the Site fake's non-null restock) at least once per run,
   // before another action can close it.
   () => ({ type: "REROLL_SHOP", payload: { siteId: SHOP_SITE_ID } }),
-  (rng) => ({ type: "GRANT_FREE_REROLLS", payload: { count: Math.floor(rng() * 3) } }),
-  (rng) => ({ type: "APPLY_SHOP_DISCOUNT", payload: { percent: Math.floor(rng() * 50) } }),
+  (rng) => ({
+    type: "GRANT_FREE_REROLLS",
+    payload: { count: Math.floor(rng() * 3) },
+  }),
+  (rng) => ({
+    type: "APPLY_SHOP_DISCOUNT",
+    payload: { percent: Math.floor(rng() * 50) },
+  }),
 
   // modifiers & atlas edits (non-debug)
-  (rng) => ({ type: "PUSH_BATTLE_MODIFIER", payload: { modifier: { kind: "x", value: smallInt(rng, 5) } } }),
+  (rng) => ({
+    type: "PUSH_BATTLE_MODIFIER",
+    payload: { modifier: { kind: "x", value: smallInt(rng, 5) } },
+  }),
   () => ({ type: "PUSH_TEMPORARY_NIGHTMARE_GRANT", payload: { count: 1 } }),
   (rng) => ({
     type: "BAN_SITE_TYPE",
-    payload: { siteType: pick(rng, SITE_TYPES), dreamscapesRemaining: Math.floor(rng() * 4) },
+    payload: {
+      siteType: pick(rng, SITE_TYPES),
+      dreamscapesRemaining: Math.floor(rng() * 4),
+    },
   }),
   (rng) => ({
     type: "BOOST_SITE_APPEARANCE",
@@ -567,7 +644,11 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<(rng: () => number) => GeneratedEvent>
     payload: {
       command: {
         id: "DEBUG_EDIT",
-        edit: { kind: "ADJUST_SCORE", side: pick(rng, ["player", "enemy"]), amount: smallInt(rng, 5) },
+        edit: {
+          kind: "ADJUST_SCORE",
+          side: pick(rng, ["player", "enemy"]),
+          amount: smallInt(rng, 5),
+        },
       },
     },
   }),
@@ -575,13 +656,30 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<(rng: () => number) => GeneratedEvent>
     type: "BATTLE_GESTURE",
     payload: {
       commands: [
-        { id: "DEBUG_EDIT", edit: { kind: "ADJUST_SCORE", side: "player", amount: smallInt(rng, 5) } },
-        { id: "DEBUG_EDIT", edit: { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: smallInt(rng, 3) } },
+        {
+          id: "DEBUG_EDIT",
+          edit: {
+            kind: "ADJUST_SCORE",
+            side: "player",
+            amount: smallInt(rng, 5),
+          },
+        },
+        {
+          id: "DEBUG_EDIT",
+          edit: {
+            kind: "ADJUST_CURRENT_ENERGY",
+            side: "player",
+            amount: smallInt(rng, 3),
+          },
+        },
       ],
     },
   }),
   () => ({ type: "SET_CARD_NOTE", payload: { instanceId: "i1", note: "hi" } }),
-  (rng) => ({ type: "RESOLVE_PROMPT", payload: { promptId: Math.floor(rng() * 5), resolution: {} } }),
+  (rng) => ({
+    type: "RESOLVE_PROMPT",
+    payload: { promptId: Math.floor(rng() * 5), resolution: {} },
+  }),
 
   // LOAD_STATE — adversarial snapshots the validator must bounce, preserving
   // the nullability invariant IN-REDUCER rather than via a generator carve-out:
@@ -595,11 +693,15 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<(rng: () => number) => GeneratedEvent>
   }),
   () => ({
     type: "LOAD_STATE",
-    payload: { snapshot: { ...genesisFoldState(GENESIS).journey, seed: "foreign-seed" } },
+    payload: {
+      snapshot: { ...genesisFoldState(GENESIS).journey, seed: "foreign-seed" },
+    },
   }),
   (rng) => ({
     type: "LOAD_STATE",
-    payload: { snapshot: pick(rng, [null, "nope", { essence: "not-a-number" }]) },
+    payload: {
+      snapshot: pick(rng, [null, "nope", { essence: "not-a-number" }]),
+    },
   }),
 
   // pure garbage: unknown type (must bounce, never throw)

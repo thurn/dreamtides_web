@@ -12,49 +12,17 @@ import type {
 } from "../types/journey";
 import { STANDARD_PLAYING_CARD_RANKS } from "./gravok-wager";
 import type { EconomyData } from "../types/economy-data";
+import type { SitesData } from "../types/sites-data";
 
 export const TIDEMARK_LADDER_CLIMB_RULES_VERSION = "tidemark-ladder-climb-v2";
-export const TIDEMARK_STRONG_POOL_LIMIT = 50;
-
-export interface TidemarkLadderClimbAttemptRule {
-  attemptNumber: TidemarkLadderClimbAttemptNumber;
-  threshold: StandardPlayingCardRank;
-  oddsNumerator: number;
-  oddsDenominator: number;
-}
-
-/** Stable costs and inclusive rank thresholds for each ladder attempt. */
-export const TIDEMARK_LADDER_CLIMB_ATTEMPTS: readonly TidemarkLadderClimbAttemptRule[] = [
-  {
-    attemptNumber: 1,
-    threshold: "Q",
-    oddsNumerator: 12,
-    oddsDenominator: 52,
-  },
-  {
-    attemptNumber: 2,
-    threshold: "10",
-    oddsNumerator: 20,
-    oddsDenominator: 52,
-  },
-  {
-    attemptNumber: 3,
-    threshold: "8",
-    oddsNumerator: 28,
-    oddsDenominator: 52,
-  },
-  {
-    attemptNumber: 4,
-    threshold: "6",
-    oddsNumerator: 36,
-    oddsDenominator: 52,
-  },
-];
+export type TidemarkLadderClimbAttemptRule =
+  SitesData["gamble"]["ladderClimb"]["attempts"][number];
 
 export function tidemarkLadderClimbAttemptRule(
+  config: SitesData["gamble"]["ladderClimb"],
   attemptNumber: TidemarkLadderClimbAttemptNumber,
 ): TidemarkLadderClimbAttemptRule {
-  return TIDEMARK_LADDER_CLIMB_ATTEMPTS[attemptNumber - 1];
+  return config.attempts[attemptNumber - 1];
 }
 
 export function tidemarkLadderClimbAttemptCost(
@@ -68,31 +36,30 @@ export function tidemarkLadderClimbAttemptCost(
 
 /** The next attempt the current result state permits, if play may continue. */
 export function nextTidemarkLadderClimbAttemptNumber(
+  config: SitesData["gamble"]["ladderClimb"],
   runtime: Pick<TidemarkLadderClimbSiteRuntime, "result" | "revealedCards">,
 ): TidemarkLadderClimbAttemptNumber | null {
   if (
     runtime.result !== null &&
     (!runtime.result.resultSettled ||
       runtime.result.won ||
-      runtime.result.attemptNumber >= TIDEMARK_LADDER_CLIMB_ATTEMPTS.length)
+      runtime.result.attemptNumber >= config.attempts.length)
   ) {
     return null;
   }
-  return (
-    TIDEMARK_LADDER_CLIMB_ATTEMPTS[runtime.revealedCards.length]
-      ?.attemptNumber ?? null
-  );
+  return config.attempts[runtime.revealedCards.length]?.attempt ?? null;
 }
 
 /** Whether a rank crosses the current attempt's inclusive threshold. */
 export function rankWinsTidemarkLadderClimbAttempt(
+  config: SitesData["gamble"]["ladderClimb"],
   rank: StandardPlayingCardRank,
   attemptNumber: TidemarkLadderClimbAttemptNumber,
 ): boolean {
   return (
     STANDARD_PLAYING_CARD_RANKS.indexOf(rank) >=
     STANDARD_PLAYING_CARD_RANKS.indexOf(
-      tidemarkLadderClimbAttemptRule(attemptNumber).threshold,
+      tidemarkLadderClimbAttemptRule(config, attemptNumber).threshold,
     )
   );
 }

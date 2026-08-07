@@ -21,7 +21,6 @@ import type {
   TransfigurationType,
 } from "../../types/journey";
 import {
-  DEFAULT_DRAFT_CONFIG,
   enterDraftSite as engineEnterDraftSite,
   processPlayerPickWithoutLogging,
   rerollDraftOffer as engineRerollDraftOffer,
@@ -69,8 +68,8 @@ export interface DraftContentProvider {
     deckCardNumbers: readonly number[],
   ): OfferDeps | undefined;
   /**
-   * The draft config for the active dreamscape (affiliation reweighting), or
-   * `undefined` for a neutral dreamscape (the engine default applies).
+   * The explicit draft config for the active dreamscape, including any
+   * affiliation reweighting. `undefined` rejects the reducer action.
    */
   draftConfigFor(
     draftState: DraftState,
@@ -205,8 +204,8 @@ export function pickDraftCard(
   // the root reducer catches) never leaves a half-mutated live state.
   const nextDraftState = structuredClone(draftState);
   const offerDeps = provider.offerDepsFor(nextDraftState, deckCardNumbers);
-  const config =
-    provider.draftConfigFor(nextDraftState, site) ?? DEFAULT_DRAFT_CONFIG;
+  const config = provider.draftConfigFor(nextDraftState, site);
+  if (config === undefined) return null;
   const stream = rngStream(ctx);
   processPlayerPickWithoutLogging(
     cardNumber,
@@ -267,8 +266,8 @@ export function enterDraftSite(
   const nextDraftState = structuredClone(draftState);
   const deckCardNumbers = journey.deck.map((entry) => entry.cardNumber);
   const offerDeps = provider.offerDepsFor(nextDraftState, deckCardNumbers);
-  const config =
-    provider.draftConfigFor(nextDraftState, site) ?? DEFAULT_DRAFT_CONFIG;
+  const config = provider.draftConfigFor(nextDraftState, site);
+  if (config === undefined) return null;
   const stream = rngStream(ctx);
   engineEnterDraftSite(
     nextDraftState,
@@ -338,8 +337,8 @@ export function rerollDraftOffer(
   const nextDraftState = structuredClone(draftState);
   const deckCardNumbers = journey.deck.map((entry) => entry.cardNumber);
   const offerDeps = provider.offerDepsFor(nextDraftState, deckCardNumbers);
-  const config =
-    provider.draftConfigFor(nextDraftState, site) ?? DEFAULT_DRAFT_CONFIG;
+  const config = provider.draftConfigFor(nextDraftState, site);
+  if (config === undefined) return null;
   const stream = rngStream(ctx);
   const hasOffer = engineRerollDraftOffer(
     nextDraftState,

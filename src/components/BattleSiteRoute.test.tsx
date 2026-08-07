@@ -8,6 +8,7 @@ import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
+  MINIMAL_SITES_DATA,
 } from "../__test-helpers__/atlas-fixtures";
 import { createRoot, type Root } from "react-dom/client";
 import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
@@ -183,6 +184,7 @@ function setJourneyState(
       affiliations: [],
       guides: [],
       atlasData: MINIMAL_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
       economyData: economyFixture(),
       opponentsData: opponentsFixture(),
     },

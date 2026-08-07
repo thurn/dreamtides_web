@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { economyFixture } from "../../testing/economy-fixture";
+import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
 import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
 import type {
   GravokGateId,
@@ -21,10 +22,7 @@ import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
-import {
-  registerSiteContentProvider,
-  type SiteContentProvider,
-} from "./sites";
+import { registerSiteContentProvider, type SiteContentProvider } from "./sites";
 
 const SITE_ID = "fixture-gamble";
 const NODE_ID = "fixture-node";
@@ -157,7 +155,11 @@ afterEach(() => {
   registerSiteContentProvider(null);
 });
 beforeEach(() => {
-  registerSiteContentProvider({ economyData: ECONOMY, openSite: () => null });
+  registerSiteContentProvider({
+    sitesData: MINIMAL_SITES_DATA,
+    economyData: ECONOMY,
+    openSite: () => null,
+  });
 });
 
 function wager(state: FoldState, gateId: GravokGateId) {
@@ -334,6 +336,7 @@ describe("Gravok's Three-Gate Wager", () => {
 
   it("prepares a fresh full-deck commitment when the player plays again", () => {
     const provider: SiteContentProvider = {
+      sitesData: MINIMAL_SITES_DATA,
       economyData: ECONOMY,
       openSite: () => ({
         runtime: runtime("K", {
@@ -375,6 +378,7 @@ describe("Gravok's Three-Gate Wager", () => {
 
   it("allows two retries and bounces a third", () => {
     const provider: SiteContentProvider = {
+      sitesData: MINIMAL_SITES_DATA,
       economyData: ECONOMY,
       openSite: () => ({
         runtime: runtime("K", {
@@ -419,9 +423,7 @@ function ladderRuntime(
     isFarpoint: false,
     shuffleCommitments: ["attempt-1", "attempt-2", "attempt-3", "attempt-4"],
     committedCards: [...cards],
-    dreamsignCandidateScores: [
-      { dreamsignId: "reward-sign", score: 1 },
-    ],
+    dreamsignCandidateScores: [{ dreamsignId: "reward-sign", score: 1 }],
     strongPoolSize: 1,
     strongPoolCutoffScore: 1,
     rewardDreamsign: REWARD_DREAMSIGN,
@@ -479,10 +481,7 @@ describe("Tidemark Ladder Climb", () => {
 
   it("draws attempt one for free and grants its hidden Dreamsign only at settlement", () => {
     const drawn = drawLadder(
-      ladderStateWith([
-        { rank: "Q", suit: "clubs" },
-        ...missCards.slice(1),
-      ]),
+      ladderStateWith([{ rank: "Q", suit: "clubs" }, ...missCards.slice(1)]),
     );
 
     expect(drawn.outcome).toBe("applied");
@@ -587,10 +586,10 @@ describe("Tidemark Ladder Climb", () => {
       effectDescription: "Held effect.",
     };
     const drawn = drawLadder(
-      ladderStateWith(
-        [{ rank: "A", suit: "spades" }, ...missCards.slice(1)],
-        { maxDreamsigns: 1, dreamsigns: [held] },
-      ),
+      ladderStateWith([{ rank: "A", suit: "spades" }, ...missCards.slice(1)], {
+        maxDreamsigns: 1,
+        dreamsigns: [held],
+      }),
     );
     const settled = settleLadder(drawn.state);
     expect(settled.state.journey.essence).toBe(225);
@@ -678,8 +677,7 @@ function settleStarway(state: FoldState) {
   if (result === undefined) throw new Error("expected Starway Stairs result");
   return apply(state, "SETTLE_STARWAY_STAIRS", {
     siteId: SITE_ID,
-    shuffleCommitment:
-      siteRuntime.shuffleCommitments[result.tierNumber - 1],
+    shuffleCommitment: siteRuntime.shuffleCommitments[result.tierNumber - 1],
   });
 }
 
@@ -765,7 +763,9 @@ describe("Starway Stairs", () => {
   });
 
   it("blocks leaving while a safe result awaits a cash-out or climb", () => {
-    const settled = settleStarway(drawStarway(starwayStateWith(safeCards)).state);
+    const settled = settleStarway(
+      drawStarway(starwayStateWith(safeCards)).state,
+    );
     const leave = apply(settled.state, "COMPLETE_SITE", { siteId: SITE_ID });
     expect(leave.outcome).toBe("bounced");
   });
@@ -800,6 +800,7 @@ describe("Starway Stairs", () => {
 
   it("prepares an independent round and charges its first wager only when betting", () => {
     registerSiteContentProvider({
+      sitesData: MINIMAL_SITES_DATA,
       economyData: ECONOMY,
       openSite: () => ({
         runtime: starwayRuntime(safeCards, {
@@ -843,14 +844,11 @@ describe("Starway Stairs", () => {
 
   it("allows two retries and bounces a third Starway round", () => {
     registerSiteContentProvider({
+      sitesData: MINIMAL_SITES_DATA,
       economyData: ECONOMY,
       openSite: () => ({
         runtime: starwayRuntime(
-          [
-            { rank: "2", suit: "diamonds" },
-            safeCards[1],
-            safeCards[2],
-          ],
+          [{ rank: "2", suit: "diamonds" }, safeCards[1], safeCards[2]],
           { shuffleCommitments: ["final-1", "final-2", "final-3"] },
         ),
       }),
@@ -858,24 +856,16 @@ describe("Starway Stairs", () => {
     const secondRound = settleStarway(
       drawStarway(
         starwayStateWith(
-          [
-            { rank: "2", suit: "clubs" },
-            safeCards[1],
-            safeCards[2],
-          ],
+          [{ rank: "2", suit: "clubs" }, safeCards[1], safeCards[2]],
           {},
           { roundNumber: 2 },
         ),
       ).state,
     );
-    const secondRetry = apply(
-      secondRound.state,
-      "PLAY_AGAIN_STARWAY_STAIRS",
-      {
-        siteId: SITE_ID,
-        previousShuffleCommitment: "tier-1",
-      },
-    );
+    const secondRetry = apply(secondRound.state, "PLAY_AGAIN_STARWAY_STAIRS", {
+      siteId: SITE_ID,
+      previousShuffleCommitment: "tier-1",
+    });
     expect(secondRetry.outcome).toBe("applied");
     expect(secondRetry.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       roundNumber: 3,
@@ -883,14 +873,10 @@ describe("Starway Stairs", () => {
     });
 
     const thirdRound = settleStarway(drawStarway(secondRetry.state).state);
-    const thirdRetry = apply(
-      thirdRound.state,
-      "PLAY_AGAIN_STARWAY_STAIRS",
-      {
-        siteId: SITE_ID,
-        previousShuffleCommitment: "final-1",
-      },
-    );
+    const thirdRetry = apply(thirdRound.state, "PLAY_AGAIN_STARWAY_STAIRS", {
+      siteId: SITE_ID,
+      previousShuffleCommitment: "final-1",
+    });
     expect(thirdRetry.outcome).toBe("bounced");
     expect(thirdRetry.state).toEqual(thirdRound.state);
   });
@@ -913,21 +899,26 @@ function fourSuitCard(index: number): CardData {
   };
 }
 
-function fourSuitTarget(index: number, entryId = `deck-${String(index)}`): FourSuitRepriseTarget {
+function fourSuitTarget(
+  index: number,
+  entryId = `deck-${String(index)}`,
+): FourSuitRepriseTarget {
   const card = fourSuitCard(index);
   return {
     entryId,
     cardId: card.id,
     cardNumber: card.cardNumber,
     cardSnapshot: card,
-    transfigurationOffers: [{
-      entryId,
-      type: "Empowered",
-      effectDescription: "Fixture form.",
-      effectDetails: {},
-      previewCard: { ...card, energyCost: 2 },
-      essenceCost: 0,
-    }],
+    transfigurationOffers: [
+      {
+        entryId,
+        type: "Empowered",
+        effectDescription: "Fixture form.",
+        effectDetails: {},
+        previewCard: { ...card, energyCost: 2 },
+        essenceCost: 0,
+      },
+    ],
   };
 }
 
@@ -1020,14 +1011,16 @@ describe("Four-Suit Reprise", () => {
     expect(settled.state.journey.deck).toHaveLength(3);
     expect(settled.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       phase: "result",
-      rounds: [{
-        targetEntryId: "deck-1",
-        targetCardId: "fixture-card-1",
-        outcome: "essence",
-        resultRevealed: true,
-        resultSettled: true,
-        essenceGained: 100,
-      }],
+      rounds: [
+        {
+          targetEntryId: "deck-1",
+          targetCardId: "fixture-card-1",
+          outcome: "essence",
+          resultRevealed: true,
+          resultSettled: true,
+          essenceGained: 100,
+        },
+      ],
     });
   });
 
@@ -1055,9 +1048,7 @@ describe("Four-Suit Reprise", () => {
       followupCards[1],
       followupCards[2],
     ]);
-    const purged = settleFourSuit(
-      drawFourSuit(clubsState, "deck-1").state,
-    );
+    const purged = settleFourSuit(drawFourSuit(clubsState, "deck-1").state);
     expect(purged.state.journey.deck.map((entry) => entry.entryId)).toEqual([
       "deck-2",
       "deck-3",
@@ -1079,11 +1070,13 @@ describe("Four-Suit Reprise", () => {
     const revealed = settleFourSuit(drawn.state);
     expect(revealed.outcome).toBe("applied");
     expect(revealed.state.journey.siteRuntime[SITE_ID]).toMatchObject({
-      rounds: [{
-        outcome: "transfiguration",
-        resultRevealed: true,
-        resultSettled: false,
-      }],
+      rounds: [
+        {
+          outcome: "transfiguration",
+          resultRevealed: true,
+          resultSettled: false,
+        },
+      ],
     });
     expect(
       apply(revealed.state, "COMPLETE_SITE", { siteId: SITE_ID }).outcome,
@@ -1102,10 +1095,12 @@ describe("Four-Suit Reprise", () => {
     expect(chosen.state.journey.deck[0]?.transfiguration).toBe("Empowered");
     expect(chosen.state.journey.essence).toBe(175);
     expect(chosen.state.journey.siteRuntime[SITE_ID]).toMatchObject({
-      rounds: [{
-        resultSettled: true,
-        chosenTransfiguration: "Empowered",
-      }],
+      rounds: [
+        {
+          resultSettled: true,
+          chosenTransfiguration: "Empowered",
+        },
+      ],
     });
   });
 
@@ -1119,7 +1114,8 @@ describe("Four-Suit Reprise", () => {
       fourSuitTarget(4),
     ];
     let state = settleFourSuit(
-      drawFourSuit(fourSuitStateWith(followupCards, { targets }), "deck-1").state,
+      drawFourSuit(fourSuitStateWith(followupCards, { targets }), "deck-1")
+        .state,
     ).state;
     let replay = apply(state, "PLAY_AGAIN_FOUR_SUIT_REPRISE", {
       siteId: SITE_ID,

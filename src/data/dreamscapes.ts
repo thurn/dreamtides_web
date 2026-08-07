@@ -5,6 +5,7 @@ import type {
   DreamscapeContent,
 } from "../types/content";
 import type { SiteState, SiteType } from "../types/journey";
+import { SITE_TYPES } from "../types/site-type";
 
 // Re-export the content types so callers can import dreamscape/guide/affiliation
 // shapes alongside their loaders from one module.
@@ -40,9 +41,65 @@ export async function loadDreamscapes(): Promise<DreamscapeContent[]> {
 
 /** Fetches the Dream Guide definitions from the asset pipeline output. */
 export async function loadDreamGuides(): Promise<DreamGuideContent[]> {
-  return fetchJson<DreamGuideContent[]>(
+  const catalog = await fetchJson<unknown>(
     DREAM_GUIDES_JSON_PATH,
     "dream guide data",
+  );
+  if (
+    typeof catalog !== "object" ||
+    catalog === null ||
+    !("schemaVersion" in catalog) ||
+    !("contentHash" in catalog) ||
+    !("guides" in catalog) ||
+    catalog.schemaVersion !== 1 ||
+    typeof catalog.contentHash !== "string" ||
+    !/^[0-9a-f]{64}$/u.test(catalog.contentHash) ||
+    !Array.isArray(catalog.guides) ||
+    !catalog.guides.every(isDreamGuideContent) ||
+    new Set(catalog.guides.map((guide) => guide.id)).size !==
+      catalog.guides.length ||
+    new Set(catalog.guides.map((guide) => guide.homeDreamscapeId)).size !==
+      catalog.guides.length ||
+    new Set(catalog.guides.map((guide) => guide.siteType)).size !==
+      catalog.guides.length
+  ) {
+    throw new Error(
+      "Failed to load dream guide data: malformed dream-guides-data.json",
+    );
+  }
+  return [...catalog.guides];
+}
+
+function isDreamGuideContent(value: unknown): value is DreamGuideContent {
+  if (typeof value !== "object" || value === null) return false;
+  if (
+    !("id" in value) ||
+    !("name" in value) ||
+    !("portraitSource" in value) ||
+    !("homeDreamscapeId" in value) ||
+    !("siteType" in value) ||
+    !("homeSpecialty" in value) ||
+    !("dialogue" in value) ||
+    typeof value.id !== "string" ||
+    typeof value.name !== "string" ||
+    typeof value.portraitSource !== "string" ||
+    typeof value.homeDreamscapeId !== "string" ||
+    typeof value.siteType !== "string" ||
+    !SITE_TYPES.includes(value.siteType as SiteType) ||
+    typeof value.homeSpecialty !== "string" ||
+    typeof value.dialogue !== "object" ||
+    value.dialogue === null ||
+    !("site" in value.dialogue) ||
+    !Array.isArray(value.dialogue.site) ||
+    value.dialogue.site.length === 0
+  ) {
+    return false;
+  }
+  return Object.values(value.dialogue).every(
+    (lines) =>
+      Array.isArray(lines) &&
+      lines.length > 0 &&
+      lines.every((line: unknown) => typeof line === "string" && line.length > 0),
   );
 }
 
@@ -125,6 +182,47 @@ export function guideForSiteType(
     return guides.find((guide) => guide.id === guideIdOverride) ?? null;
   }
   return guides.find((guide) => guide.siteType === siteType) ?? null;
+}
+
+/** Resolve exactly one authored guide, failing when content is incomplete. */
+export function requireGuideForSiteType(
+  guides: readonly DreamGuideContent[],
+  siteType: SiteType,
+  guideIdOverride?: string,
+): DreamGuideContent {
+  const matches =
+    guideIdOverride === undefined
+      ? guides.filter((guide) => guide.siteType === siteType)
+      : guides.filter((guide) => guide.id === guideIdOverride);
+  if (matches.length !== 1) {
+    throw new Error(
+      `Expected exactly one Dream Guide for ${guideIdOverride ?? siteType}; found ${String(matches.length)}.`,
+    );
+  }
+  return matches[0];
+}
+
+/** Resolve a named dialogue context and expand its validated template slots. */
+export function guideDialogueLines(
+  guide: DreamGuideContent,
+  context: string,
+  values: Readonly<Record<string, string | number>> = {},
+): readonly string[] {
+  const lines = guide.dialogue[context];
+  if (lines === undefined || lines.length === 0) {
+    throw new Error(`Dream Guide ${guide.id} has no ${context} dialogue.`);
+  }
+  return lines.map((line) =>
+    line.replace(/\{([^{}]+)\}/gu, (_match, key: string) => {
+      const value = values[key];
+      if (value === undefined) {
+        throw new Error(
+          `Dream Guide ${guide.id} dialogue ${context} requires {${key}}.`,
+        );
+      }
+      return String(value);
+    }),
+  );
 }
 
 /** Resolve the guide for a concrete site, honoring Random Site hosting. */

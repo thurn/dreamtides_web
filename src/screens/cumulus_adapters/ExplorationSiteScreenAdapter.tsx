@@ -3,15 +3,9 @@ import { ExplorationSiteScreen } from "../../cumulus/screens/ExplorationSiteScre
 import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";
 import { selectCurrentSite } from "../../state/journey-selectors";
-import {
-  buildExplorationSiteView,
-  resolveExplorationGuide,
-} from "./exploration-view-model";
-import {
-  buildExplorationCompletionLog,
-  buildExplorationEntryLog,
-  buildExplorationResolutionLog,
-} from "./exploration-logging-view-model";
+import { buildExplorationSiteView, resolveExplorationGuide } from "./exploration-view-model";
+import { buildExplorationCompletionLog, buildExplorationEntryLog, buildExplorationResolutionLog } from "./exploration-logging-view-model";
+import { useGuideDialogue } from "./guide-dialogue-view-model";
 
 export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
   const { state, journeyContent, mutations } = useJourney();
@@ -19,6 +13,7 @@ export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
   const node = current?.node ?? null;
   const site = current?.site ?? null;
   const guide = resolveExplorationGuide(journeyContent.guides, site?.guideIdOverride);
+  const guideLine = useGuideDialogue(guide, "site");
   const runtime = state.siteRuntime[siteId];
   const explorationRuntime = runtime?.kind === "exploration" ? runtime : null;
 
@@ -36,6 +31,7 @@ export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
             sceneNode: node,
             site,
             guide,
+            guideLine,
             runtime: explorationRuntime,
             state,
             content: journeyContent,
@@ -50,37 +46,22 @@ export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
       isEnhanced: site.isEnhanced,
       ...buildExplorationEntryLog(view, explorationRuntime),
     });
-    if (guide !== null) {
-      logEventOnce(
-        `exploration:${site.id}:guide:${guide.id}`,
-        "dream_guide_presented",
-        {
-          guideId: guide.id,
-          siteType: site.type,
-          isEnhanced: site.isEnhanced,
-        },
-      );
-    }
+    logEventOnce(`exploration:${site.id}:guide:${guide.id}`, "dream_guide_presented", {
+      guideId: guide.id,
+      siteType: site.type,
+      isEnhanced: site.isEnhanced,
+    });
   }, [explorationRuntime, guide, site, view]);
 
   useEffect(() => {
     const resolution = explorationRuntime?.resolution;
-    if (
-      site === null ||
-      explorationRuntime === null ||
-      resolution == null ||
-      view === null
-    ) return;
+    if (site === null || explorationRuntime === null || resolution == null || view === null) return;
     const log = buildExplorationResolutionLog(view, explorationRuntime);
     if (log === null) return;
-    logEventOnce(
-      `exploration:${site.id}:resolved:${resolution.actionId}`,
-      "exploration_choice_resolved",
-      {
-        siteId: site.id,
-        ...log,
-      },
-    );
+    logEventOnce(`exploration:${site.id}:resolved:${resolution.actionId}`, "exploration_choice_resolved", {
+      siteId: site.id,
+      ...log,
+    });
   }, [explorationRuntime, site, view]);
 
   const handleChannel = useCallback(() => {
@@ -88,10 +69,7 @@ export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
     logEvent("exploration_frame_break_started", {
       siteId: site.id,
       cardId: explorationRuntime.encounterCardId,
-      highResolutionImageNumber:
-        view.fullArt.kind === "exploration-card"
-          ? view.fullArt.imageNumber
-          : null,
+      highResolutionImageNumber: view.fullArt.kind === "exploration-card" ? view.fullArt.imageNumber : null,
       isEnhanced: site.isEnhanced,
     });
   }, [explorationRuntime, site, view]);

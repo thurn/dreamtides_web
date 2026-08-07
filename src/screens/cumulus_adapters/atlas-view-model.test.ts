@@ -10,7 +10,10 @@ import type {
   JourneyState,
 } from "../../types/journey";
 import type { JourneyContent } from "../../data/journey-content";
-import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
+import {
+  MINIMAL_ATLAS_DATA,
+  MINIMAL_SITES_DATA,
+} from "../../__test-helpers__/atlas-fixtures";
 import {
   ATLAS_LAYOUT_DESKTOP,
   ATLAS_LAYOUT_MOBILE,
@@ -40,6 +43,7 @@ const EMPTY_CONTENT: JourneyContent = {
   affiliations: [],
   guides: [],
   atlasData: MINIMAL_ATLAS_DATA,
+  sitesData: MINIMAL_SITES_DATA,
   economyData: economyFixture(),
   opponentsData: opponentsFixture(),
 };
@@ -409,17 +413,20 @@ describe("buildAtlasMapNodes", () => {
       ...EMPTY_CONTENT,
       atlasData: {
         ...MINIMAL_ATLAS_DATA,
-        siteTypes: {
-          ...MINIMAL_ATLAS_DATA.siteTypes,
-          Augury: {
-            ...MINIMAL_ATLAS_DATA.siteTypes.Augury,
-            icon: "fixture-atlas-icon",
-          },
-        },
         presentation: {
           ...MINIMAL_ATLAS_DATA.presentation,
           affiliationTitleTemplate: "Fixture title {name}",
           affiliationBodyTemplate: "Fixture body {card-theme}",
+        },
+      },
+      sitesData: {
+        ...MINIMAL_SITES_DATA,
+        siteTypes: {
+          ...MINIMAL_SITES_DATA.siteTypes,
+          Augury: {
+            ...MINIMAL_SITES_DATA.siteTypes.Augury,
+            icon: "fixture-atlas-icon",
+          },
         },
       },
       dreamscapes: [
@@ -440,7 +447,8 @@ describe("buildAtlasMapNodes", () => {
           name: "Aldric, the Seer",
           homeDreamscapeId: "wilderveil",
           siteType: "Augury",
-          dialog: [],
+          portraitSource: "fixture-guide.png",
+          dialogue: { site: [] },
           homeSpecialty: "Aldric offers curated visions of the future.",
         },
       ],

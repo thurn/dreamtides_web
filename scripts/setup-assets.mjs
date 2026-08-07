@@ -32,6 +32,12 @@ import { compileAuguryData } from "./augury-data.mjs";
 import { isRewardCardPredicate } from "./reward-selection-contracts.mjs";
 import { compileOpponentsData } from "./opponents-data.mjs";
 import {
+  collectGuidePortraitSources,
+  compileDreamGuidesData,
+  compileSitesData,
+  deriveDreamscapesData,
+} from "./guide-sites-data.mjs";
+import {
   buildExplorationEffectDefinitions,
   EXPLORATION_EFFECT_DEFINITIONS,
 } from "./exploration-editor-schema.mjs";
@@ -157,25 +163,6 @@ export const DREAM_GUIDE_ART_DIR = join(
   "synty",
   "dream_guides",
 );
-
-/**
- * Maps each Dream Guide id to the basename of its character render in
- * {@link DREAM_GUIDE_ART_DIR}. The source files use short forms, so this table
- * lets the pipeline emit `public/dream-guides/<guideId>.png`, letting the atlas
- * resolve a guide's portrait directly from its id.
- */
-const GUIDE_PORTRAIT_SOURCE_BY_ID = {
-  tobias_tanglefur: "tobias.png",
-  amunet_the_tomb_keeper: "amunet.png",
-  sigrun: "sigrun.png",
-  durgan_forgehammer: "durgan.png",
-  deacon_holt: "holt.png",
-  master_takeshi: "takeshi.png",
-  aldric_the_seer: "aldric.png",
-  maddox: "maddox.png",
-  gravok: "gravok.png",
-  layaway: "layaway.png",
-};
 
 const CARD_FRAME_ART_DIR = join(
   homedir(),
@@ -1436,6 +1423,7 @@ export function setupAssets({
   ),
   dreamscapesTomlPath = join(DATA_DIR, "tabula", "dreamscapes.toml"),
   dreamGuidesTomlPath = join(DATA_DIR, "tabula", "dream_guides.toml"),
+  sitesTomlPath = join(DATA_DIR, "tabula", "sites.toml"),
   explorationTomlPath = join(DATA_DIR, "tabula", "exploration.toml"),
   rewardSelectionTomlPath = join(DATA_DIR, "tabula", "reward_selection.toml"),
   auguryTomlPath = join(DATA_DIR, "tabula", "augury.toml"),
@@ -1513,6 +1501,7 @@ export function setupAssets({
   );
   const dreamscapesJsonPath = join(publicDir, "dreamscapes-data.json");
   const dreamGuidesJsonPath = join(publicDir, "dream-guides-data.json");
+  const sitesJsonPath = join(publicDir, "sites-data.json");
   const explorationJsonPath = join(publicDir, "exploration-data.json");
   const rewardSelectionJsonPath = join(publicDir, "reward-selection-data.json");
   const auguryJsonPath = join(publicDir, "augury-data.json");
@@ -1834,18 +1823,32 @@ export function setupAssets({
     `Wrote ${jsonDreamsignSignatures.length} dreamsign signatures to dreamsign-signatures-data.json`,
   );
 
-  // Dreamscapes: the themed Dream Atlas regions. Parse the TOML and write the
-  // kebab->camel JSON the runtime loader fetches at /dreamscapes-data.json.
-  console.log("Parsing dreamscapes.toml...");
-  const dreamscapesTomlContent = readFileSync(dreamscapesTomlPath, "utf8");
-  const parsedDreamscapes = parse(dreamscapesTomlContent);
+  console.log("Parsing dream_guides.toml...");
+  const parsedDreamGuides = parse(readFileSync(dreamGuidesTomlPath, "utf8"));
+  const parsedDreamscapes = parse(readFileSync(dreamscapesTomlPath, "utf8"));
   const allDreamscapes = parsedDreamscapes.dreamscapes;
-
   if (!Array.isArray(allDreamscapes)) {
     throw new Error("Expected [[dreamscapes]] array in dreamscapes.toml");
   }
+  const jsonDreamGuides = compileDreamGuidesData(parsedDreamGuides, {
+    dreamscapes: allDreamscapes,
+    portraitSources: collectGuidePortraitSources(dreamGuideArtDir),
+  });
+  writeFileSync(
+    dreamGuidesJsonPath,
+    JSON.stringify(jsonDreamGuides, null, 2) + "\n",
+  );
+  console.log(
+    `Wrote ${jsonDreamGuides.guides.length} dream guides to dream-guides-data.json`,
+  );
 
-  const jsonDreamscapes = allDreamscapes.map(transformDreamscape);
+  // Dreamscapes derive their resident guide and signature site from the
+  // canonical guide catalog before the runtime JSON is emitted.
+  console.log("Parsing dreamscapes.toml...");
+  const jsonDreamscapes = deriveDreamscapesData(
+    allDreamscapes,
+    jsonDreamGuides,
+  );
   // Enforce the resident-DreamAvatar invariant: non-starter dreamscapes
   // partition dream_avatars.toml into 3-4 per region with no DreamAvatar in
   // two regions. `jsonDreamAvatarsV2` was parsed above, so its ids are the
@@ -1867,26 +1870,6 @@ export function setupAssets({
   );
   console.log(
     `Wrote ${jsonDreamscapes.length} dreamscapes to dreamscapes-data.json`,
-  );
-
-  // Dream Guides: the resident character of each non-starter dreamscape. Parse
-  // the TOML and write the kebab->camel JSON fetched at /dream-guides-data.json.
-  console.log("Parsing dream_guides.toml...");
-  const dreamGuidesTomlContent = readFileSync(dreamGuidesTomlPath, "utf8");
-  const parsedDreamGuides = parse(dreamGuidesTomlContent);
-  const allDreamGuides = parsedDreamGuides.guides;
-
-  if (!Array.isArray(allDreamGuides)) {
-    throw new Error("Expected [[guides]] array in dream_guides.toml");
-  }
-
-  const jsonDreamGuides = allDreamGuides.map(transformGuide);
-  writeFileSync(
-    dreamGuidesJsonPath,
-    JSON.stringify(jsonDreamGuides, null, 2) + "\n",
-  );
-  console.log(
-    `Wrote ${jsonDreamGuides.length} dream guides to dream-guides-data.json`,
   );
 
   // Affiliations: the thematic factions backing each dreamscape. Signature
@@ -1929,12 +1912,8 @@ export function setupAssets({
     bossFigureDir: dreamGuideArtDir,
   });
   const jsonAtlasData = compileAtlasData(parsedAtlas, {
-    dreamscapes: allDreamscapes,
-    guides: allDreamGuides,
+    dreamscapes: jsonDreamscapes,
     affiliations: allAffiliations,
-    glossaryIds: Array.isArray(parsedGlossary.entries)
-      ? parsedGlossary.entries.map((entry) => entry.id)
-      : [],
     ...(atlasAssetSources === undefined
       ? {}
       : { assetSources: atlasAssetSources }),
@@ -1951,6 +1930,21 @@ export function setupAssets({
     JSON.stringify(jsonEconomyData, null, 2) + "\n",
   );
   console.log("Wrote Economy data to economy-data.json");
+
+  console.log("Parsing sites.toml...");
+  const jsonSitesData = compileSitesData(
+    parse(readFileSync(sitesTomlPath, "utf8")),
+    {
+      guides: jsonDreamGuides,
+      dreamscapes: jsonDreamscapes,
+      glossaryIds: Array.isArray(parsedGlossary.entries)
+        ? parsedGlossary.entries.map((entry) => entry.id)
+        : [],
+      economy: jsonEconomyData,
+    },
+  );
+  writeFileSync(sitesJsonPath, JSON.stringify(jsonSitesData, null, 2) + "\n");
+  console.log("Wrote Sites data to sites-data.json");
 
   console.log("Parsing draft.toml...");
   const jsonDraftData = compileDraftData(
@@ -2482,10 +2476,8 @@ export function setupAssets({
       missingGuideArt++;
     }
   };
-  for (const [guideId, sourceFile] of Object.entries(
-    GUIDE_PORTRAIT_SOURCE_BY_ID,
-  )) {
-    linkGuidePortrait(sourceFile, `${guideId}.png`);
+  for (const guide of jsonDreamGuides.guides) {
+    linkGuidePortrait(guide.portraitSource, `${guide.id}.png`);
   }
   linkGuidePortrait(
     jsonAtlasData.assets.bossFigureSource,

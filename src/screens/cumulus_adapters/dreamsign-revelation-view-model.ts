@@ -1,50 +1,48 @@
 // Pure view-model builder for the Cumulus Dreamsign Revelation screen.
 
-import { guideForSiteType } from "../../data/dreamscapes";
+import { requireGuideForSiteType } from "../../data/dreamscapes";
 import type { DreamGuideContent } from "../../types/content";
-import type { DreamscapeNode, Dreamsign, JourneyState } from "../../types/journey";
+import type {
+  DreamscapeNode,
+  Dreamsign,
+  JourneyState,
+} from "../../types/journey";
 import type { TutorialSiteConfiguration } from "../../types/tutorial";
-import { artRef, type ArtRef } from "../../cumulus/primitives/art";
+import type { ArtRef } from "../../cumulus/primitives/art";
 import type {
   DreamsignRevelationGuideView,
   DreamsignRevelationView,
 } from "../../cumulus/screens/DreamsignRevelationScreen";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
-
-const FALLBACK_GUIDE_ID = "sigrun";
-const FALLBACK_GUIDE_NAME = "Sigrún";
-const FALLBACK_GUIDE_LINE =
-  "The frost reveals what is hidden. Pick one sign to claim.";
+import { projectGuideView } from "./guide-view-model";
 
 /** Resolve Sigrun, the resident guide for Dreamsign Revelation. */
 export function resolveDreamsignRevelationGuide(
   guides: readonly DreamGuideContent[],
   guideIdOverride?: string,
-): DreamGuideContent | null {
-  return guideForSiteType(guides, "DreamsignRevelation", guideIdOverride);
+): DreamGuideContent {
+  return requireGuideForSiteType(
+    guides,
+    "DreamsignRevelation",
+    guideIdOverride,
+  );
 }
 
 /** Build the guide slice shown beside the offer. */
 export function buildDreamsignRevelationGuideView(
-  guide: DreamGuideContent | null,
-  guideLine: string | null,
+  guide: DreamGuideContent,
+  guideLine: string,
 ): DreamsignRevelationGuideView {
-  const id = guide?.id ?? FALLBACK_GUIDE_ID;
-  return {
-    id,
-    name: guide?.name ?? FALLBACK_GUIDE_NAME,
-    line: guideLine ?? guide?.dialog[0] ?? FALLBACK_GUIDE_LINE,
-    art: artRef.dreamGuide(id),
-  };
+  return projectGuideView(guide, guideLine);
 }
 
 /** Build the complete Cumulus Dreamsign Revelation view-model. */
 export function buildDreamsignRevelationView(params: {
   state: JourneyState;
   sceneNode: DreamscapeNode | null;
-  guide: DreamGuideContent | null;
-  guideLine: string | null;
+  guide: DreamGuideContent;
+  guideLine: string;
   offeredDreamsigns: readonly Dreamsign[] | null;
   pendingPurgeDreamsign: Dreamsign | null;
   tutorialConfiguration?: TutorialSiteConfiguration;

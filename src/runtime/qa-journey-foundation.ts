@@ -4,7 +4,11 @@ import { toJourneyDreamAvatar } from "../data/dream-avatar-selection";
 import { initializeDraftState } from "../draft/draft-engine";
 import { buildDreamAvatarPackage } from "../data/journey-content";
 import type { JourneyContent } from "../data/journey-content";
-import type { DreamAtlas, DreamscapeNode, JourneyState } from "../types/journey";
+import type {
+  DreamAtlas,
+  DreamscapeNode,
+  JourneyState,
+} from "../types/journey";
 import { generateJourneySeed } from "../state/journey-state-actions";
 
 /**
@@ -51,10 +55,11 @@ export function createQaJourneyFoundation(
 
   const atlas = generateInitialAtlas(
     0,
-    {},
+    { draftPickCount: journeyContent.draftData.offers.picksPerSite },
     {
       dreamscapes: journeyContent.dreamscapes,
       atlasData: journeyContent.atlasData,
+      sitesData: journeyContent.sitesData,
       dreamsignPoolIds: resolvedPackage.dreamsignPoolIds,
       apollyonIncarnations: journeyContent.apollyonIncarnations,
     },
@@ -86,7 +91,10 @@ export function createQaJourneyFoundation(
     currentDreamscape: null,
     visitedSites: [],
     siteRuntime: {},
-    draftState: initializeDraftState(journeyContent.cardDatabase, resolvedPackage),
+    draftState: initializeDraftState(
+      journeyContent.cardDatabase,
+      resolvedPackage,
+    ),
     screen: { type: "atlas" },
     activeSiteId: null,
     failureSummary: null,

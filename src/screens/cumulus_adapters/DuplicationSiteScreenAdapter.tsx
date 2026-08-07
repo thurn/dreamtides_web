@@ -1,6 +1,6 @@
 // Wiring-only adapter for the Cumulus Duplication site.
 
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { DuplicationSiteScreen } from "../../cumulus/screens/DuplicationSiteScreen";
 import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";
@@ -9,12 +9,14 @@ import {
   buildDuplicationOfferLog,
   resolveDuplicationGuide,
 } from "./duplication-view-model";
+import { useGuideDialogue } from "./guide-dialogue-view-model";
 
 export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
   const { state, mutations, journeyContent } = useJourney();
-  const node = state.currentDreamscape === null
-    ? null
-    : (state.atlas.nodes[state.currentDreamscape] ?? null);
+  const node =
+    state.currentDreamscape === null
+      ? null
+      : (state.atlas.nodes[state.currentDreamscape] ?? null);
   const site = node?.sites.find((candidate) => candidate.id === siteId) ?? null;
   const persistedRuntime = state.siteRuntime[siteId];
   const runtime =
@@ -22,14 +24,11 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
     persistedRuntime.choiceKind === "duplication"
       ? persistedRuntime
       : null;
-  const guide = resolveDuplicationGuide(journeyContent.guides, site?.guideIdOverride);
-  const guideLineRef = useRef<string | null | undefined>(undefined);
-  if (guideLineRef.current === undefined) {
-    guideLineRef.current =
-      guide === null || guide.dialog.length === 0
-        ? null
-        : guide.dialog[Math.floor(Math.random() * guide.dialog.length)];
-  }
+  const guide = resolveDuplicationGuide(
+    journeyContent.guides,
+    site?.guideIdOverride,
+  );
+  const guideLine = useGuideDialogue(guide, "site");
 
   const view = useMemo(
     () =>
@@ -42,7 +41,7 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
             runtime,
             cardDatabase: journeyContent.cardDatabase,
             guide,
-            guideLine: guideLineRef.current ?? null,
+            guideLine,
           }),
     [state, node, site, runtime, journeyContent.cardDatabase, guide],
   );
@@ -84,29 +83,48 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
     if (site === null) return;
     logEvent("site_completed", {
       siteType: "Duplication",
-      outcome: runtime === null || runtime.entryIds.length === 0 ? "no_candidates" : "skipped",
+      outcome:
+        runtime === null || runtime.entryIds.length === 0
+          ? "no_candidates"
+          : "skipped",
     });
     mutations.completeSite(site.id, "duplication_skipped");
   }, [mutations, runtime, site]);
 
-  const handleDuplicate = useCallback((entryId: string) => {
-    if (site === null || runtime === null || runtime.acceptedEntryIds.length > 0) return;
-    const entry = state.deck.find((candidate) => candidate.entryId === entryId);
-    if (entry === undefined || !runtime.entryIds.includes(entryId)) return;
-    logEvent("duplication_completed", {
-      siteId: site.id,
-      entryId,
-      cardId: journeyContent.cardDatabase.get(entry.cardNumber)?.id ?? null,
-      copyCount: 1,
-      isEnhanced: site.isEnhanced,
-      deckSizeBefore: state.deck.length,
-      deckSizeAfter: state.deck.length + 1,
-      currentDreamscape: state.currentDreamscape,
-      completionLevel: state.completionLevel,
-    });
-    mutations.acceptDuplicationChoice(site.id, entryId);
-  }, [mutations, journeyContent.cardDatabase, runtime, site, state]);
+  const handleDuplicate = useCallback(
+    (entryId: string) => {
+      if (
+        site === null ||
+        runtime === null ||
+        runtime.acceptedEntryIds.length > 0
+      )
+        return;
+      const entry = state.deck.find(
+        (candidate) => candidate.entryId === entryId,
+      );
+      if (entry === undefined || !runtime.entryIds.includes(entryId)) return;
+      logEvent("duplication_completed", {
+        siteId: site.id,
+        entryId,
+        cardId: journeyContent.cardDatabase.get(entry.cardNumber)?.id ?? null,
+        copyCount: 1,
+        isEnhanced: site.isEnhanced,
+        deckSizeBefore: state.deck.length,
+        deckSizeAfter: state.deck.length + 1,
+        currentDreamscape: state.currentDreamscape,
+        completionLevel: state.completionLevel,
+      });
+      mutations.acceptDuplicationChoice(site.id, entryId);
+    },
+    [mutations, journeyContent.cardDatabase, runtime, site, state],
+  );
 
   if (site === null || view === null) return null;
-  return <DuplicationSiteScreen view={view} onClose={handleClose} onDuplicate={handleDuplicate} />;
+  return (
+    <DuplicationSiteScreen
+      view={view}
+      onClose={handleClose}
+      onDuplicate={handleDuplicate}
+    />
+  );
 }

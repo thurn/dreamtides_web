@@ -1,7 +1,12 @@
 import type { JourneyContent } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
 import type { DreamsignTemplate } from "../../types/content";
-import type { DeckEntry, Dreamsign, JourneyState, SiteState } from "../../types/journey";
+import type {
+  DeckEntry,
+  Dreamsign,
+  JourneyState,
+  SiteState,
+} from "../../types/journey";
 import type {
   MerchantContext,
   MerchantCatalogCard,
@@ -84,7 +89,9 @@ function buildDraftPoolCardUuids(
   return draftPoolCardUuids;
 }
 
-function buildHeldDreamsignIds(dreamsigns: readonly Dreamsign[]): ReadonlySet<string> {
+function buildHeldDreamsignIds(
+  dreamsigns: readonly Dreamsign[],
+): ReadonlySet<string> {
   const heldDreamsignIds = new Set<string>();
   for (const dreamsign of dreamsigns) {
     if (dreamsign.id !== undefined) {
@@ -142,7 +149,10 @@ export function buildMerchantContext({
     [...cardByNumber.values()].filter(isGrantCandidate).map(projectCatalogCard),
   );
 
-  const draftPoolCardUuids = buildDraftPoolCardUuids(journeyState, cardByNumber);
+  const draftPoolCardUuids = buildDraftPoolCardUuids(
+    journeyState,
+    cardByNumber,
+  );
 
   const heldDreamsignIds = buildHeldDreamsignIds(journeyState.dreamsigns);
   const heldDreamsignFallbackNames = buildHeldDreamsignFallbackNames(
@@ -160,14 +170,12 @@ export function buildMerchantContext({
 
   const siteRuntime = journeyState.siteRuntime[site.id];
   const rerollNonce =
-    siteRuntime?.kind === "augury" ? siteRuntime.rerollNonce ?? 0 : 0;
+    siteRuntime?.kind === "augury" ? (siteRuntime.rerollNonce ?? 0) : 0;
   const forcedArchetypeId =
-    siteRuntime?.kind === "augury"
-      ? siteRuntime.forcedArchetypeId
-      : undefined;
+    siteRuntime?.kind === "augury" ? siteRuntime.forcedArchetypeId : undefined;
 
   return {
-    atlasData: journeyContent.atlasData,
+    sitesData: journeyContent.sitesData,
     journeySeed: journeyState.seed,
     site,
     rerollNonce,

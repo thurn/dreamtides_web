@@ -24,7 +24,7 @@ import { createDreamsign } from "../../data/dreamsigns";
 import { toJourneyDreamAvatar } from "../../data/dream-avatar-selection";
 import type { JourneyContent } from "../../data/journey-content";
 import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
-import { guideForSiteType } from "../../data/dreamscapes";
+import { requireGuideForSiteType } from "../../data/dreamscapes";
 import { asCardId } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
@@ -44,18 +44,14 @@ import {
   transfigurationEffectDetails,
 } from "../../transfiguration/transfiguration-logic";
 import { MERCHANT_TUNING } from "../../journey_v2/tuning";
-
-const FALLBACK_GUIDE_ID = "layaway";
-const FALLBACK_GUIDE_NAME = '"Layaway"';
-const FALLBACK_GUIDE_LINE =
-  "Every card dreams, friend. Draw one, and we'll step inside.";
+import { projectGuideView } from "./guide-view-model";
 
 /** Resolve Layaway, the resident guide for Exploration. */
 export function resolveExplorationGuide(
   guides: readonly DreamGuideContent[],
   guideIdOverride?: string,
-): DreamGuideContent | null {
-  return guideForSiteType(guides, "Exploration", guideIdOverride);
+): DreamGuideContent {
+  return requireGuideForSiteType(guides, "Exploration", guideIdOverride);
 }
 
 function matchesPredicate(
@@ -73,7 +69,8 @@ function matchesPredicate(
         card.cardType === "Character" &&
         card.energyCost !== null &&
         card.energyCost <=
-          (content.rewardSelectionData?.tuning.costBands.cheapCharacterMaximum ??
+          (content.rewardSelectionData?.tuning.costBands
+            .cheapCharacterMaximum ??
             MERCHANT_TUNING.costBands.cheapCharacterMaximum)
       );
     case "spirit-animal":
@@ -167,7 +164,8 @@ function freeTransfigurationCandidates(
     const base = content.cardDatabase.get(entry.cardNumber);
     if (base === undefined) return [];
     const card = resolveDeckEntryCard(base, entry);
-    if (predicate !== undefined && !matchesPredicate(card, predicate, content)) return [];
+    if (predicate !== undefined && !matchesPredicate(card, predicate, content))
+      return [];
     const forms = offeredTransfigurationForms(card, null).map((offer) => {
       const preview = buildTransfigurationDisplay(card, offer.type);
       return {
@@ -209,15 +207,17 @@ function offeredCards(
       return [{ entryId: card.id, model: modelForCard(card), isBane: false }];
     }
     const preview = buildTransfigurationDisplay(card, transfiguration);
-    return [{
-      entryId: card.id,
-      model: {
-        cardId: card.id,
-        displaySnapshot: preview.card,
-        transfiguration: preview.display,
+    return [
+      {
+        entryId: card.id,
+        model: {
+          cardId: card.id,
+          displaySnapshot: preview.card,
+          transfiguration: preview.display,
+        },
+        isBane: false,
       },
-      isBane: false,
-    }];
+    ];
   });
 }
 
@@ -270,9 +270,10 @@ function configuredFollowupCopy(
   fallback: string,
 ): string {
   const exploration = content.exploration;
-  const template = exploration === undefined
-    ? undefined
-    : explorationEffectDefinition(exploration, action.effectKind)?.copy[key];
+  const template =
+    exploration === undefined
+      ? undefined
+      : explorationEffectDefinition(exploration, action.effectKind)?.copy[key];
   if (template === undefined || template === "") return fallback;
   const values: Readonly<Record<string, string | number>> = {
     "action-label": action.label,
@@ -280,11 +281,13 @@ function configuredFollowupCopy(
     subtype: action.subtype ?? "Outsider",
     transfiguration: action.transfiguration ?? "Kindled",
     "essence-per-spark":
-      action.essencePerSpark ?? content.economyData.exploration.defaultEssencePerSpark,
+      action.essencePerSpark ??
+      content.economyData.exploration.defaultEssencePerSpark,
   };
   return template.replace(/\{([^{}]+)\}/gu, (slot, name: string) => {
     const value = values[name];
-    if (value === undefined) throw new Error(`Exploration copy is missing ${slot}`);
+    if (value === undefined)
+      throw new Error(`Exploration copy is missing ${slot}`);
     return String(value);
   });
 }
@@ -303,8 +306,18 @@ function followupForAction(
   switch (action.effectKind) {
     case "purge-and-copy":
       return deckFollowup(
-        configuredFollowupCopy(action, content, "followupTitle", "Exchange Familiar Forms"),
-        configuredFollowupCopy(action, content, "followupSubtitle", "First choose a card to purge, then choose a different card to copy."),
+        configuredFollowupCopy(
+          action,
+          content,
+          "followupTitle",
+          "Exchange Familiar Forms",
+        ),
+        configuredFollowupCopy(
+          action,
+          content,
+          "followupSubtitle",
+          "First choose a card to purge, then choose a different card to copy.",
+        ),
         eligibleDeckCards(state, content),
         "purge-and-copy",
         undefined,
@@ -319,22 +332,44 @@ function followupForAction(
                 state,
                 content,
                 action.predicate,
-                hasMintedDeckCard ? offer.offeredDeckEntryIds ?? [] : undefined,
+                hasMintedDeckCard
+                  ? (offer.offeredDeckEntryIds ?? [])
+                  : undefined,
               )
             : [],
       };
     case "purge-selected":
       return deckFollowup(
-        configuredFollowupCopy(action, content, "followupTitle", "Feed the Fire"),
-        configuredFollowupCopy(action, content, "followupSubtitle", "Choose an Event to purge."),
+        configuredFollowupCopy(
+          action,
+          content,
+          "followupTitle",
+          "Feed the Fire",
+        ),
+        configuredFollowupCopy(
+          action,
+          content,
+          "followupSubtitle",
+          "Choose an Event to purge.",
+        ),
         deckCards,
         "single",
         "purge",
       );
     case "purge-for-essence":
       return deckFollowup(
-        configuredFollowupCopy(action, content, "followupTitle", "Trade Away a Figure"),
-        configuredFollowupCopy(action, content, "followupSubtitle", `Choose a card to purge for ${String(action.essencePerSpark ?? content.economyData.exploration.defaultEssencePerSpark)} essence per ✦.`),
+        configuredFollowupCopy(
+          action,
+          content,
+          "followupTitle",
+          "Trade Away a Figure",
+        ),
+        configuredFollowupCopy(
+          action,
+          content,
+          "followupSubtitle",
+          `Choose a card to purge for ${String(action.essencePerSpark ?? content.economyData.exploration.defaultEssencePerSpark)} essence per ✦.`,
+        ),
         eligibleDeckCards(state, content),
         "single",
         "purge",
@@ -343,7 +378,12 @@ function followupForAction(
       if (hasMintedDeckCard) return { kind: "none" };
       return deckFollowup(
         configuredFollowupCopy(action, content, "followupTitle", action.label),
-        configuredFollowupCopy(action, content, "followupSubtitle", `Choose a Character to become ${action.subtype ?? "Outsider"}.`),
+        configuredFollowupCopy(
+          action,
+          content,
+          "followupSubtitle",
+          `Choose a Character to become ${action.subtype ?? "Outsider"}.`,
+        ),
         deckCards,
         "single",
         "change",
@@ -352,7 +392,12 @@ function followupForAction(
       if (hasMintedDeckCard) return { kind: "none" };
       return deckFollowup(
         configuredFollowupCopy(action, content, "followupTitle", action.label),
-        configuredFollowupCopy(action, content, "followupSubtitle", `Choose a card to gain ${String(action.count ?? 1)} copies of.`),
+        configuredFollowupCopy(
+          action,
+          content,
+          "followupSubtitle",
+          `Choose a card to gain ${String(action.count ?? 1)} copies of.`,
+        ),
         deckCards,
         "single",
         "copy",
@@ -360,7 +405,12 @@ function followupForAction(
     case "copy-selected-cards":
       return deckFollowup(
         configuredFollowupCopy(action, content, "followupTitle", action.label),
-        configuredFollowupCopy(action, content, "followupSubtitle", `Choose ${String(action.count ?? 2)} cards to copy.`),
+        configuredFollowupCopy(
+          action,
+          content,
+          "followupSubtitle",
+          `Choose ${String(action.count ?? 2)} cards to copy.`,
+        ),
         deckCards,
         "exact",
         "copy",
@@ -369,15 +419,30 @@ function followupForAction(
     case "copy-offered-deck-card":
       return deckFollowup(
         configuredFollowupCopy(action, content, "followupTitle", action.label),
-        configuredFollowupCopy(action, content, "followupSubtitle", "Choose one offered card to copy."),
+        configuredFollowupCopy(
+          action,
+          content,
+          "followupSubtitle",
+          "Choose one offered card to copy.",
+        ),
         offeredDeckCards(offer.offeredDeckEntryIds ?? [], state, content),
         "single",
         "copy",
       );
     case "replace-selected":
       return deckFollowup(
-        configuredFollowupCopy(action, content, "followupTitle", "Release a Fellow Swimmer"),
-        configuredFollowupCopy(action, content, "followupSubtitle", "Choose a Spirit Animal to exchange."),
+        configuredFollowupCopy(
+          action,
+          content,
+          "followupTitle",
+          "Release a Fellow Swimmer",
+        ),
+        configuredFollowupCopy(
+          action,
+          content,
+          "followupSubtitle",
+          "Choose a Spirit Animal to exchange.",
+        ),
         deckCards.filter((card) =>
           Object.prototype.hasOwnProperty.call(
             offer.replacementCardIdByEntryId,
@@ -390,7 +455,12 @@ function followupForAction(
     case "replace-selected-with-card":
       return deckFollowup(
         configuredFollowupCopy(action, content, "followupTitle", action.label),
-        configuredFollowupCopy(action, content, "followupSubtitle", "Choose a card to replace."),
+        configuredFollowupCopy(
+          action,
+          content,
+          "followupSubtitle",
+          "Choose a card to replace.",
+        ),
         deckCards,
         "single",
         "purge",
@@ -399,15 +469,19 @@ function followupForAction(
       if (hasMintedDeckCard) return { kind: "none" };
       return deckFollowup(
         configuredFollowupCopy(action, content, "followupTitle", action.label),
-        configuredFollowupCopy(action, content, "followupSubtitle", `Choose a card to become ${action.transfiguration ?? "Kindled"}.`),
+        configuredFollowupCopy(
+          action,
+          content,
+          "followupSubtitle",
+          `Choose a card to become ${action.transfiguration ?? "Kindled"}.`,
+        ),
         deckCards.filter(
           (card) =>
             state.deck.find((entry) => entry.entryId === card.entryId)
               ?.transfiguration === null &&
-            offeredTransfigurationForms(
-              card.model.displaySnapshot,
-              null,
-            ).some((form) => form.type === action.transfiguration),
+            offeredTransfigurationForms(card.model.displaySnapshot, null).some(
+              (form) => form.type === action.transfiguration,
+            ),
         ),
         "single",
         "transfigure",
@@ -415,7 +489,12 @@ function followupForAction(
     case "draft-card":
       return deckFollowup(
         configuredFollowupCopy(action, content, "followupTitle", action.label),
-        configuredFollowupCopy(action, content, "followupSubtitle", "Choose one offered card."),
+        configuredFollowupCopy(
+          action,
+          content,
+          "followupSubtitle",
+          "Choose one offered card.",
+        ),
         offeredCards(offer.offeredCardIds, content),
         "single",
         undefined,
@@ -425,8 +504,17 @@ function followupForAction(
     case "transfigured-card-draft":
       return deckFollowup(
         configuredFollowupCopy(action, content, "followupTitle", action.label),
-        configuredFollowupCopy(action, content, "followupSubtitle", "Choose one offered transfigured card."),
-        offeredCards(offer.offeredCardIds, content, offer.transfigurationByCardId),
+        configuredFollowupCopy(
+          action,
+          content,
+          "followupSubtitle",
+          "Choose one offered transfigured card.",
+        ),
+        offeredCards(
+          offer.offeredCardIds,
+          content,
+          offer.transfigurationByCardId,
+        ),
         "single",
         undefined,
         1,
@@ -439,8 +527,18 @@ function followupForAction(
       const cards = offeredCards(offer.offeredCardIds, content);
       return {
         kind: "cards",
-        title: configuredFollowupCopy(action, content, "followupTitle", action.label),
-        subtitle: configuredFollowupCopy(action, content, "followupSubtitle", "Choose any number of offered cards."),
+        title: configuredFollowupCopy(
+          action,
+          content,
+          "followupTitle",
+          action.label,
+        ),
+        subtitle: configuredFollowupCopy(
+          action,
+          content,
+          "followupSubtitle",
+          "Choose any number of offered cards.",
+        ),
         cards,
         mode: "exact",
         selectionKey: "cardIds",
@@ -451,8 +549,18 @@ function followupForAction(
     case "choose-pack":
       return {
         kind: "packs",
-        title: configuredFollowupCopy(action, content, "followupTitle", action.label),
-        subtitle: configuredFollowupCopy(action, content, "followupSubtitle", "Choose one pack to add to your deck."),
+        title: configuredFollowupCopy(
+          action,
+          content,
+          "followupTitle",
+          action.label,
+        ),
+        subtitle: configuredFollowupCopy(
+          action,
+          content,
+          "followupSubtitle",
+          "Choose one pack to add to your deck.",
+        ),
         packs: offer.packCardIds.map((ids, index) => ({
           index,
           cards: offeredCards(ids, content),
@@ -461,8 +569,18 @@ function followupForAction(
     case "change-subtype-all":
       return {
         kind: "subtypes",
-        title: configuredFollowupCopy(action, content, "followupTitle", action.label),
-        subtitle: configuredFollowupCopy(action, content, "followupSubtitle", "Choose the subtype for every Character in your deck."),
+        title: configuredFollowupCopy(
+          action,
+          content,
+          "followupTitle",
+          action.label,
+        ),
+        subtitle: configuredFollowupCopy(
+          action,
+          content,
+          "followupSubtitle",
+          "Choose the subtype for every Character in your deck.",
+        ),
         options: action.subtypeOptions ?? [],
       };
     case "gain-dreamsign":
@@ -470,8 +588,18 @@ function followupForAction(
       if (state.dreamsigns.length >= state.maxDreamsigns) {
         return {
           kind: "dreamsigns",
-          title: configuredFollowupCopy(action, content, "followupTitle", action.label),
-          subtitle: configuredFollowupCopy(action, content, "followupSubtitle", "Choose a Dreamsign to replace."),
+          title: configuredFollowupCopy(
+            action,
+            content,
+            "followupTitle",
+            action.label,
+          ),
+          subtitle: configuredFollowupCopy(
+            action,
+            content,
+            "followupSubtitle",
+            "Choose a Dreamsign to replace.",
+          ),
           selectionKey: "replacedDreamsignId",
           dreamsigns: heldDreamsignChoices(state),
         };
@@ -480,16 +608,36 @@ function followupForAction(
     case "purge-dreamsign-for-essence":
       return {
         kind: "dreamsigns",
-        title: configuredFollowupCopy(action, content, "followupTitle", action.label),
-        subtitle: configuredFollowupCopy(action, content, "followupSubtitle", "Choose a Dreamsign to purge."),
+        title: configuredFollowupCopy(
+          action,
+          content,
+          "followupTitle",
+          action.label,
+        ),
+        subtitle: configuredFollowupCopy(
+          action,
+          content,
+          "followupSubtitle",
+          "Choose a Dreamsign to purge.",
+        ),
         selectionKey: "dreamsignId",
         dreamsigns: heldDreamsignChoices(state),
       };
     case "choose-dream-avatar":
       return {
         kind: "dreamAvatars",
-        title: configuredFollowupCopy(action, content, "followupTitle", action.label),
-        subtitle: configuredFollowupCopy(action, content, "followupSubtitle", "Choose your new Dream Avatar."),
+        title: configuredFollowupCopy(
+          action,
+          content,
+          "followupTitle",
+          action.label,
+        ),
+        subtitle: configuredFollowupCopy(
+          action,
+          content,
+          "followupSubtitle",
+          "Choose your new Dream Avatar.",
+        ),
         dreamAvatars: (offer.offeredDreamAvatarIds ?? []).flatMap((id) => {
           const dreamAvatar = dreamAvatarById(content, id);
           return dreamAvatar === null ? [] : [dreamAvatar];
@@ -590,7 +738,10 @@ function deckCardVariableTarget(
     action.effectKind === "transfigure-fixed-selected" &&
     action.transfiguration !== undefined
       ? (() => {
-          const preview = buildTransfigurationDisplay(card, action.transfiguration);
+          const preview = buildTransfigurationDisplay(
+            card,
+            action.transfiguration,
+          );
           return {
             kind: "card" as const,
             card: preview.card,
@@ -753,14 +904,13 @@ function actionView(
             ? (offer.offeredDreamAvatarIds?.length ?? 0) > 0
             : action.effectKind === "add-site"
               ? offer.offeredSiteType !== undefined
-            : requiresDeckCardTarget
-              ? deckCardTarget !== null
-              : true;
+              : requiresDeckCardTarget
+                ? deckCardTarget !== null
+                : true;
   const available =
     hasRequiredOffer &&
     (followup.kind === "none" ||
-      (followup.kind === "transfiguration" &&
-        followup.candidates.length > 0) ||
+      (followup.kind === "transfiguration" && followup.candidates.length > 0) ||
       (followup.kind === "cards" && followup.cards.length >= followup.min) ||
       (followup.kind === "packs" && followup.packs.length > 0) ||
       (followup.kind === "subtypes" && followup.options.length > 0) ||
@@ -775,20 +925,29 @@ function actionView(
     ),
     action,
   );
-  const disclosedEffect = action.effectKind === "add-site" && offer.offeredSiteType !== undefined
-    ? { effectText: `${effect.effectText} ${offer.offeredSiteType}.` }
-    : effect;
+  const disclosedEffect =
+    action.effectKind === "add-site" && offer.offeredSiteType !== undefined
+      ? { effectText: `${effect.effectText} ${offer.offeredSiteType}.` }
+      : effect;
   return {
     id: action.id,
     effectKind: action.effectKind,
     mechanics: {
       effectKind: action.effectKind,
-      ...(action.templateId === undefined ? {} : { templateId: action.templateId }),
-      ...(action.predicate === undefined ? {} : { predicate: action.predicate }),
+      ...(action.templateId === undefined
+        ? {}
+        : { templateId: action.templateId }),
+      ...(action.predicate === undefined
+        ? {}
+        : { predicate: action.predicate }),
       ...(action.count === undefined ? {} : { count: action.count }),
       ...(action.cardId === undefined ? {} : { cardId: action.cardId }),
-      ...(action.offerCount === undefined ? {} : { offerCount: action.offerCount }),
-      ...(action.packCount === undefined ? {} : { packCount: action.packCount }),
+      ...(action.offerCount === undefined
+        ? {}
+        : { offerCount: action.offerCount }),
+      ...(action.packCount === undefined
+        ? {}
+        : { packCount: action.packCount }),
       ...(action.packSize === undefined ? {} : { packSize: action.packSize }),
       ...(action.essencePerSpark === undefined
         ? {}
@@ -796,7 +955,9 @@ function actionView(
       ...(action.essencePerCard === undefined
         ? {}
         : { essencePerCard: action.essencePerCard }),
-      ...(action.sparkBonus === undefined ? {} : { sparkBonus: action.sparkBonus }),
+      ...(action.sparkBonus === undefined
+        ? {}
+        : { sparkBonus: action.sparkBonus }),
       ...(action.essence === undefined ? {} : { essence: action.essence }),
       ...(action.energyCostReduction === undefined
         ? {}
@@ -804,7 +965,9 @@ function actionView(
       ...(action.nightmareCount === undefined
         ? {}
         : { nightmareCount: action.nightmareCount }),
-      ...(action.dreamsignId === undefined ? {} : { dreamsignId: action.dreamsignId }),
+      ...(action.dreamsignId === undefined
+        ? {}
+        : { dreamsignId: action.dreamsignId }),
       ...(action.subtype === undefined ? {} : { subtype: action.subtype }),
       ...(action.subtypeOptions === undefined
         ? {}
@@ -824,7 +987,7 @@ function actionView(
             action.effectKind === "change-subtype-selected" ||
             action.effectKind === "copy-selected-card")
         ? { automaticSelection: { entryIds: [deckCardTarget.entryId] } }
-      : {}),
+        : {}),
     available,
   };
 }
@@ -842,10 +1005,9 @@ function rewardForResolution(
     (action) => action.id === resolution.actionId,
   );
   const resolvedEffectText =
-    actionViews.find((action) => action.id === resolution.actionId)?.effectText ??
-    resolvedAction?.effectText
-      .split("$DECK_CARD")
-      .join("the affected card") ??
+    actionViews.find((action) => action.id === resolution.actionId)
+      ?.effectText ??
+    resolvedAction?.effectText.split("$DECK_CARD").join("the affected card") ??
     "Exploration effect resolved";
   if (resolvedAction?.effectKind === "purge-and-copy") {
     const purgedEntry = resolution.purgedEntrySnapshots?.[0];
@@ -858,7 +1020,9 @@ function rewardForResolution(
     const source =
       sourceEntry === undefined ? null : deckCardChoice(sourceEntry, content);
     const cards = (resolution.gainedEntryIds ?? []).flatMap((entryId) => {
-      const entry = state.deck.find((candidate) => candidate.entryId === entryId);
+      const entry = state.deck.find(
+        (candidate) => candidate.entryId === entryId,
+      );
       if (entry === undefined) return [];
       const card = deckCardChoice(entry, content);
       return card === null ? [] : [card];
@@ -879,17 +1043,19 @@ function rewardForResolution(
       };
     }
   }
-  if (
-    resolvedAction?.effectKind === "copy-selected-cards"
-  ) {
+  if (resolvedAction?.effectKind === "copy-selected-cards") {
     const sources = resolution.affectedEntryIds.flatMap((entryId) => {
-      const entry = state.deck.find((candidate) => candidate.entryId === entryId);
+      const entry = state.deck.find(
+        (candidate) => candidate.entryId === entryId,
+      );
       if (entry === undefined) return [];
       const source = deckCardChoice(entry, content);
       return source === null ? [] : [source];
     });
     const copies = (resolution.gainedEntryIds ?? []).flatMap((entryId) => {
-      const entry = state.deck.find((candidate) => candidate.entryId === entryId);
+      const entry = state.deck.find(
+        (candidate) => candidate.entryId === entryId,
+      );
       if (entry === undefined) return [];
       const copy = deckCardChoice(entry, content);
       return copy === null ? [] : [copy];
@@ -916,7 +1082,9 @@ function rewardForResolution(
     const source =
       sourceEntry === undefined ? null : deckCardChoice(sourceEntry, content);
     const cards = (resolution.gainedEntryIds ?? []).flatMap((entryId) => {
-      const entry = state.deck.find((candidate) => candidate.entryId === entryId);
+      const entry = state.deck.find(
+        (candidate) => candidate.entryId === entryId,
+      );
       if (entry === undefined) return [];
       const card = deckCardChoice(entry, content);
       return card === null ? [] : [card];
@@ -993,8 +1161,15 @@ function rewardForResolution(
     const type =
       resolution.chosenTransfiguration ?? resolvedAction.transfiguration;
     const base =
-      entry === undefined ? undefined : content.cardDatabase.get(entry.cardNumber);
-    if (entryId !== undefined && entry !== undefined && type !== undefined && base !== undefined) {
+      entry === undefined
+        ? undefined
+        : content.cardDatabase.get(entry.cardNumber);
+    if (
+      entryId !== undefined &&
+      entry !== undefined &&
+      type !== undefined &&
+      base !== undefined
+    ) {
       const before = resolveDeckEntryCard(base, {
         ...entry,
         transfiguration: null,
@@ -1040,7 +1215,8 @@ function rewardForResolution(
         card,
         spark: Math.max(0, card.model.displaySnapshot.spark ?? 0),
         essencePerSpark:
-          resolvedAction.essencePerSpark ?? content.economyData.exploration.defaultEssencePerSpark,
+          resolvedAction.essencePerSpark ??
+          content.economyData.exploration.defaultEssencePerSpark,
         totalEssence: resolution.essenceGained,
       };
     }
@@ -1126,13 +1302,15 @@ function rewardForResolution(
       ? resolution.purgedCardIds.flatMap((cardId, index) => {
           const card = cardById(content, cardId);
           if (card === null) return [];
-          return [{
-            entryId:
-              resolution.purgedEntryIds?.[index] ??
-              `purged:${String(index)}:${card.id}`,
-            model: modelForCard(card),
-            isBane: false,
-          }];
+          return [
+            {
+              entryId:
+                resolution.purgedEntryIds?.[index] ??
+                `purged:${String(index)}:${card.id}`,
+              model: modelForCard(card),
+              isBane: false,
+            },
+          ];
         })
       : [];
   const dreamsigns = resolution.gainedDreamsignIds.flatMap((dreamsignId) => {
@@ -1169,7 +1347,8 @@ function rewardForResolution(
 export function buildExplorationSiteView(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: "Exploration" };
-  guide: DreamGuideContent | null;
+  guide: DreamGuideContent;
+  guideLine: string;
   runtime: ExplorationSiteRuntime;
   state: JourneyState;
   content: JourneyContent;
@@ -1191,7 +1370,6 @@ export function buildExplorationSiteView(params: {
       : [actionView(action, offer, params.state, params.content)];
   });
   if (actions.length !== 2) return null;
-  const guideId = params.guide?.id ?? FALLBACK_GUIDE_ID;
   const scene: ArtRef | null =
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
   const reward = rewardForResolution(
@@ -1206,17 +1384,12 @@ export function buildExplorationSiteView(params: {
       ? null
       : "kind" in reward
         ? reward.kind
-        : reward.deckModification?.kind ?? reward.semanticKind ?? "objects";
+        : (reward.deckModification?.kind ?? reward.semanticKind ?? "objects");
   return {
     siteId: params.site.id,
     scene,
     fullArt: artRef.explorationCard(sourceCard.imageNumber),
-    guide: {
-      id: guideId,
-      name: params.guide?.name ?? FALLBACK_GUIDE_NAME,
-      line: params.guide?.dialog[0] ?? FALLBACK_GUIDE_LINE,
-      art: artRef.dreamGuide(guideId),
-    },
+    guide: projectGuideView(params.guide, params.guideLine),
     card: { cardId: asCardId(sourceCard.id), displaySnapshot: sourceCard },
     narrative: encounter.prose,
     actions: actions as [ExplorationActionView, ExplorationActionView],

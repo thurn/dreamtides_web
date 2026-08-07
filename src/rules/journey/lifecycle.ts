@@ -187,7 +187,7 @@ export function enterSite(
     const materialized = materializeRandomSite(
       site,
       site.randomSite.destinationSiteType,
-      getSiteContentProvider()?.randomSiteGuideId,
+      getSiteContentProvider()?.sitesData.randomSite.guideId,
     );
     return {
       ...journey,
@@ -287,7 +287,9 @@ export function regenerateAtlas(
 }
 
 /** `DISMISS_STARTING_DECK_POPUP { }` — legacy `dismissStartingDeckPopup`. */
-export function dismissStartingDeckPopup(journey: JourneyState): JourneyState | null {
+export function dismissStartingDeckPopup(
+  journey: JourneyState,
+): JourneyState | null {
   if (journey.hasSeenStartingDeckPopup) return journey;
   return { ...journey, hasSeenStartingDeckPopup: true };
 }
@@ -509,10 +511,16 @@ function hasValidAtlasSites(atlas: Record<string, unknown>): boolean {
       ) {
         return false;
       }
-      if (site.type === "RandomSite" && !isRandomSiteMetadata(site.randomSite)) {
+      if (
+        site.type === "RandomSite" &&
+        !isRandomSiteMetadata(site.randomSite)
+      ) {
         return false;
       }
-      if (site.randomSite !== undefined && !isRandomSiteMetadata(site.randomSite)) {
+      if (
+        site.randomSite !== undefined &&
+        !isRandomSiteMetadata(site.randomSite)
+      ) {
         return false;
       }
     }
@@ -582,7 +590,10 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
   if (!isRecord(value)) return null;
   if (!isRecord(value.init) || !isRecord(value.board)) return null;
   if (!isRecord(value.dawnFired)) return null;
-  if (value.triggerDawnFired !== undefined && !isDawnMarker(value.triggerDawnFired)) {
+  if (
+    value.triggerDawnFired !== undefined &&
+    !isDawnMarker(value.triggerDawnFired)
+  ) {
     return null;
   }
   if (
@@ -620,7 +631,11 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
   ) {
     return null;
   }
-  if (value.challengeCursor !== undefined && value.challengeCursor !== null && !isChallengeCursor(value.challengeCursor)) {
+  if (
+    value.challengeCursor !== undefined &&
+    value.challengeCursor !== null &&
+    !isChallengeCursor(value.challengeCursor)
+  ) {
     return null;
   }
   if (!Array.isArray(value.effectQueue)) return null;
@@ -633,18 +648,22 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
   }
   const loaded = value as unknown as BattleFoldState;
   const board = loaded.board as unknown as Record<string, unknown>;
-  const canNormalizeCards = isRecord(board.cardInstances) && isRecord(board.sides);
+  const canNormalizeCards =
+    isRecord(board.cardInstances) && isRecord(board.sides);
   return {
     ...loaded,
     mode: battleModeOf(loaded),
     challengeCursor: loaded.challengeCursor ?? null,
-    board: canNormalizeCards ? cloneBattleMutableState(loaded.board) : loaded.board,
+    board: canNormalizeCards
+      ? cloneBattleMutableState(loaded.board)
+      : loaded.board,
   };
 }
 
 function isChallengeCursor(value: unknown): value is ChallengeCursor {
   if (!isRecord(value)) return false;
-  if (value.activeSide !== "player" && value.activeSide !== "enemy") return false;
+  if (value.activeSide !== "player" && value.activeSide !== "enemy")
+    return false;
   if (
     typeof value.nextLane !== "number" ||
     !Number.isInteger(value.nextLane) ||
@@ -656,7 +675,8 @@ function isChallengeCursor(value: unknown): value is ChallengeCursor {
   if (value.handoff === null) return true;
   if (!isRecord(value.handoff)) return false;
   return (
-    (value.handoff.activeSide === "player" || value.handoff.activeSide === "enemy") &&
+    (value.handoff.activeSide === "player" ||
+      value.handoff.activeSide === "enemy") &&
     (value.handoff.phase === "dreamwell" ||
       value.handoff.phase === "draw" ||
       value.handoff.phase === "dawn" ||
@@ -731,19 +751,27 @@ function isResolvableRun(value: unknown): value is EffectRun {
   const cursor = value.cursor;
   if (!Array.isArray(cursor) || !cursor.every((n) => Number.isInteger(n)))
     return false;
-  if (value.sourceInstanceId !== undefined && typeof value.sourceInstanceId !== "string") {
+  if (
+    value.sourceInstanceId !== undefined &&
+    typeof value.sourceInstanceId !== "string"
+  ) {
     return false;
   }
-  if (value.bindings !== undefined && !isEffectBindings(value.bindings)) return false;
+  if (value.bindings !== undefined && !isEffectBindings(value.bindings))
+    return false;
   const steps = resolveScript(ref);
   if (steps.length === 0) return false;
   return cursorInRange(steps, cursor as number[]);
 }
 
 function isDawnMarker(value: unknown): boolean {
-  return isRecord(value) &&
-    (value.player === null || (typeof value.player === "number" && Number.isInteger(value.player))) &&
-    (value.enemy === null || (typeof value.enemy === "number" && Number.isInteger(value.enemy)));
+  return (
+    isRecord(value) &&
+    (value.player === null ||
+      (typeof value.player === "number" && Number.isInteger(value.player))) &&
+    (value.enemy === null ||
+      (typeof value.enemy === "number" && Number.isInteger(value.enemy)))
+  );
 }
 
 function isEffectBindings(value: unknown): boolean {
@@ -752,10 +780,27 @@ function isEffectBindings(value: unknown): boolean {
   if (
     trigger !== undefined &&
     (typeof trigger !== "string" ||
-      !["played", "materialized", "rematerialized", "dawn", "dissolved", "abandoned"].includes(trigger))
-  ) return false;
-  if (value.sourceCardId !== undefined && typeof value.sourceCardId !== "string") return false;
-  if (value.sourceController !== undefined && value.sourceController !== "player" && value.sourceController !== "enemy") return false;
+      ![
+        "played",
+        "materialized",
+        "rematerialized",
+        "dawn",
+        "dissolved",
+        "abandoned",
+      ].includes(trigger))
+  )
+    return false;
+  if (
+    value.sourceCardId !== undefined &&
+    typeof value.sourceCardId !== "string"
+  )
+    return false;
+  if (
+    value.sourceController !== undefined &&
+    value.sourceController !== "player" &&
+    value.sourceController !== "enemy"
+  )
+    return false;
   return value.sourceZone === undefined || typeof value.sourceZone === "string";
 }
 

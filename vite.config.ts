@@ -19,8 +19,8 @@ import { createDreamwellEditorApiMiddleware } from "./scripts/dreamwell-editor-a
 import { refreshDreamwellDataJson } from "./scripts/dreamwell-editor-data.mjs";
 import {
   generatedConfigDataWatchPaths,
-  regenerateAtlasData,
   regenerateConfigData,
+  regenerateSitesData,
   SIMPLE_CONFIG_TOML_BASENAMES,
 } from "./scripts/config-data.mjs";
 import { createImageViewerApiMiddleware } from "./scripts/image-viewer-api.mjs";
@@ -41,7 +41,8 @@ const imageViewerStatePath = path.join(
   "image-viewer-state.json",
 );
 export const encounterCandidatesWatchPattern =
-  path.resolve(path.join(__dirname, "data", "exploration_candidates.json")) + "*";
+  path.resolve(path.join(__dirname, "data", "exploration_candidates.json")) +
+  "*";
 export const generatedCardDataWatchPaths = [
   path.join(__dirname, "data", "tabula", "cards.toml"),
   path.join(__dirname, "public", "card-data.json"),
@@ -77,10 +78,7 @@ function journeyLogPlugin(): Plugin {
       req.on("end", () => {
         const logDir = path.join(__dirname, "logs");
         fs.mkdirSync(logDir, { recursive: true });
-        fs.appendFileSync(
-          path.join(logDir, "journey-log.jsonl"),
-          body + "\n",
-        );
+        fs.appendFileSync(path.join(logDir, "journey-log.jsonl"), body + "\n");
         res.writeHead(200, { "Content-Type": "text/plain" });
         res.end("ok");
       });
@@ -99,7 +97,9 @@ function cardEditorApiPlugin(): Plugin {
     name: "card-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(createCardEditorApiMiddleware({ rootDir: __dirname }));
+      server.middlewares.use(
+        createCardEditorApiMiddleware({ rootDir: __dirname }),
+      );
     },
   };
 }
@@ -145,7 +145,9 @@ function dreamsignEditorApiPlugin(): Plugin {
     name: "dreamsign-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(createDreamsignEditorApiMiddleware({ rootDir: __dirname }));
+      server.middlewares.use(
+        createDreamsignEditorApiMiddleware({ rootDir: __dirname }),
+      );
     },
   };
 }
@@ -174,7 +176,7 @@ export const glossaryDataWatchPath = path.resolve(
 );
 
 export function glossaryDataHotReloadPlugin(
-  refreshAtlasData: typeof regenerateAtlasData = regenerateAtlasData,
+  refreshSitesData: typeof regenerateSitesData = regenerateSitesData,
 ): Plugin {
   return {
     name: "glossary-data-hot-reload",
@@ -194,12 +196,15 @@ export function glossaryDataHotReloadPlugin(
           pendingReload = setTimeout(() => {
             pendingReload = null;
             try {
-              refreshAtlasData({ rootDir: __dirname });
+              refreshSitesData({ rootDir: __dirname });
               // data/tabula is excluded from Vite's normal watcher, so explicitly
               // invalidate the `glossary.toml?raw` module before reloading. A
               // reload without this step can reuse Vite's cached TOML transform.
               server.moduleGraph.onFileChange(glossaryDataWatchPath);
-              server.ws.send({ type: "custom", event: "glossary-data:changed" });
+              server.ws.send({
+                type: "custom",
+                event: "glossary-data:changed",
+              });
             } catch (error) {
               const message =
                 error instanceof Error ? error.message : String(error);
@@ -233,7 +238,9 @@ function dreamAvatarEditorApiPlugin(): Plugin {
     name: "dream-avatar-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(createDreamAvatarEditorApiMiddleware({ rootDir: __dirname }));
+      server.middlewares.use(
+        createDreamAvatarEditorApiMiddleware({ rootDir: __dirname }),
+      );
     },
   };
 }
@@ -244,7 +251,9 @@ function tidesEditorApiPlugin(): Plugin {
     name: "tides-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(createTidesEditorApiMiddleware({ rootDir: __dirname }));
+      server.middlewares.use(
+        createTidesEditorApiMiddleware({ rootDir: __dirname }),
+      );
     },
   };
 }
@@ -255,7 +264,9 @@ function dreamscapeEditorApiPlugin(): Plugin {
     name: "dreamscape-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(createDreamscapeEditorApiMiddleware({ rootDir: __dirname }));
+      server.middlewares.use(
+        createDreamscapeEditorApiMiddleware({ rootDir: __dirname }),
+      );
     },
   };
 }
@@ -266,7 +277,9 @@ function figmentEditorApiPlugin(): Plugin {
     name: "figment-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(createFigmentEditorApiMiddleware({ rootDir: __dirname }));
+      server.middlewares.use(
+        createFigmentEditorApiMiddleware({ rootDir: __dirname }),
+      );
     },
   };
 }
@@ -309,7 +322,8 @@ function figmentDataHotReloadPlugin(): Plugin {
           // art editor or an inline edit.
           server.ws.send({ type: "custom", event: "figment-data:changed" });
         } catch (error) {
-          const message = error instanceof Error ? error.message : String(error);
+          const message =
+            error instanceof Error ? error.message : String(error);
           console.error(`[figment-data] hot reload failed: ${message}`);
           server.ws.send({
             type: "error",
@@ -366,7 +380,9 @@ function dreamwellEditorApiPlugin(): Plugin {
     name: "dreamwell-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(createDreamwellEditorApiMiddleware({ rootDir: __dirname }));
+      server.middlewares.use(
+        createDreamwellEditorApiMiddleware({ rootDir: __dirname }),
+      );
     },
   };
 }
@@ -416,12 +432,14 @@ function dreamwellDataHotReloadPlugin(): Plugin {
           );
           server.ws.send({ type: "custom", event: "dreamwell-data:changed" });
         } catch (error) {
-          const message = error instanceof Error ? error.message : String(error);
+          const message =
+            error instanceof Error ? error.message : String(error);
           console.error(`[dreamwell-data] hot reload failed: ${message}`);
           server.ws.send({
             type: "error",
             err: {
-              message: "Failed to regenerate Dreamwell data from dreamwell.toml",
+              message:
+                "Failed to regenerate Dreamwell data from dreamwell.toml",
               stack: message,
             },
           });
@@ -471,7 +489,7 @@ function dreamwellDataHotReloadPlugin(): Plugin {
  * Dev-only Vite plugin that hot-reloads the simple Dream Atlas config TOMLs into
  * a running battle/journey app when one is edited. The configs covered are the
  * single-TOML-to-single-JSON catalogs registered in scripts/config-data.mjs
- * (`dreamscapes.toml`, `dream_guides.toml`, `affiliations.toml`,
+ * (`dreamscapes.toml`, `dream_guides.toml`, `sites.toml`, `affiliations.toml`,
  * `atlas.toml`, `apollyon_incarnations.toml`, `dreamsign_profiles.toml`).
  *
  * The dev watcher ignores `data/tabula/` (see `server.watch.ignored`), so a TOML
@@ -505,7 +523,8 @@ function configDataHotReloadPlugin(): Plugin {
           );
           server.ws.send({ type: "custom", event: "config-data:changed" });
         } catch (error) {
-          const message = error instanceof Error ? error.message : String(error);
+          const message =
+            error instanceof Error ? error.message : String(error);
           console.error(`[config-data] hot reload failed: ${message}`);
           server.ws.send({
             type: "error",
@@ -594,7 +613,9 @@ function cardImageApiPlugin(): Plugin {
     name: "card-image-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(createCardImageApiMiddleware({ rootDir: __dirname }));
+      server.middlewares.use(
+        createCardImageApiMiddleware({ rootDir: __dirname }),
+      );
     },
   };
 }
@@ -665,7 +686,8 @@ export function cardDataHotReloadPlugin(): Plugin {
           // does not reload the page and close an open art editor.
           server.ws.send({ type: "custom", event: "card-data:changed" });
         } catch (error) {
-          const message = error instanceof Error ? error.message : String(error);
+          const message =
+            error instanceof Error ? error.message : String(error);
           console.error(`[card-data] hot reload failed: ${message}`);
           server.ws.send({
             type: "error",
@@ -777,11 +799,10 @@ export function generatedCardDataDriftPlugin(): Plugin {
         }, 25);
       };
 
-      const watchers = Array.from(watchedDirectories, ([directory, filenames]) =>
-        fs.watch(
-          directory,
-          { persistent: false },
-          (_eventType, filename) => {
+      const watchers = Array.from(
+        watchedDirectories,
+        ([directory, filenames]) =>
+          fs.watch(directory, { persistent: false }, (_eventType, filename) => {
             if (filename === null) {
               scheduleCheck();
               return;
@@ -790,8 +811,7 @@ export function generatedCardDataDriftPlugin(): Plugin {
             if (filenames.has(filename.toString())) {
               scheduleCheck();
             }
-          },
-        ),
+          }),
       );
 
       let closed = false;
@@ -943,7 +963,9 @@ export default defineConfig({
         // public/, so all three are otherwise watched; ignoring them keeps a
         // dream-avatar-editor save from reloading the page mid-edit.
         path.resolve(path.join(__dirname, "data", "tides4.jsonc")),
-        path.resolve(path.join(__dirname, "public", "dream-avatars-v2-data.json")),
+        path.resolve(
+          path.join(__dirname, "public", "dream-avatars-v2-data.json"),
+        ),
         path.resolve(path.join(__dirname, "public", "tides4-data.json")),
         // The Dreamwell editor regenerates public/dreamwell-data.json on every
         // save; ignore it so an editor save does not trigger a full page reload

@@ -1,0 +1,213 @@
+# Canonical cross-site presentation and rules configuration. Structural site
+# and Gamble identifiers remain code-owned; this catalog supplies the authored
+# metadata and tuning for those fixed identities.
+
+schema-version = 1
+
+[[site-types]]
+type = "Battle"
+icon = "bxf bx-sword-alt"
+glossary-id = "site-battle"
+
+[[site-types]]
+type = "Draft"
+icon = "bxf bx-rectangle-vertical"
+glossary-id = "site-draft"
+
+[[site-types]]
+type = "Shop"
+icon = "bxf bx-store-alt-2"
+glossary-id = "site-shop"
+
+[[site-types]]
+type = "Purge"
+icon = "bxf bx-hot"
+glossary-id = "site-purge"
+
+[[site-types]]
+type = "Essence"
+icon = "bxf bx-diamond-alt"
+glossary-id = "site-essence"
+
+[[site-types]]
+type = "Transfiguration"
+icon = "fa-solid fa-hammer"
+glossary-id = "site-transfiguration"
+
+[[site-types]]
+type = "Duplication"
+icon = "bxf bx-copy"
+glossary-id = "site-duplication"
+
+[[site-types]]
+type = "Reward"
+icon = "bxf bx-treasure-chest"
+glossary-id = "site-reward"
+
+[[site-types]]
+type = "Augury"
+icon = "bxf bx-eye"
+glossary-id = "site-augury"
+
+[[site-types]]
+type = "DreamsignMarket"
+icon = "bxf bx-pyramid"
+glossary-id = "site-dreamsign-market"
+
+[[site-types]]
+type = "DreamsignRevelation"
+icon = "bxf bx-meteor"
+glossary-id = "site-dreamsign-revelation"
+
+[[site-types]]
+type = "RandomSite"
+icon = "fa-solid fa-question"
+glossary-id = "site-random-site"
+
+[[site-types]]
+type = "Gamble"
+icon = "bxf bx-coin"
+glossary-id = "site-gamble"
+
+[[site-types]]
+type = "Exploration"
+icon = "bxf bx-compass"
+glossary-id = "site-exploration"
+
+[fallback-site-type]
+icon = "bx bx-help-circle"
+name = "Unknown Site"
+description = "An unfamiliar site from an earlier dream."
+
+[random-site]
+destinations = [
+  "Shop",
+  "DreamsignMarket",
+  "DreamsignRevelation",
+  "Transfiguration",
+  "Duplication",
+  "Purge",
+  "Augury",
+  "Gamble",
+  "Exploration",
+]
+home-choice-count = 3
+away-choice-count = 1
+insufficient-destinations = "fail"
+
+[card-choices.transfiguration]
+standard-limit = 3
+enhanced-limit = "all"
+
+[card-choices.duplication]
+standard-limit = 3
+enhanced-limit = "all"
+
+[gamble.selection]
+fallback-game = "gravok-three-gate-wager"
+games = [
+  { id = "gravok-three-gate-wager", weight = 1 },
+  { id = "tidemark-ladder-climb", weight = 1 },
+  { id = "starway-stairs", weight = 1 },
+  { id = "four-suit-reprise", weight = 1 },
+]
+
+[gamble.three-gate]
+max-retries = 2
+
+[[gamble.three-gate.gates]]
+id = "six"
+name = "Six Gate"
+threshold = "6"
+odds-numerator = 36
+odds-denominator = 52
+awards-dreamsign = false
+
+[[gamble.three-gate.gates]]
+id = "nine"
+name = "Nine Gate"
+threshold = "9"
+odds-numerator = 24
+odds-denominator = 52
+awards-dreamsign = false
+
+[[gamble.three-gate.gates]]
+id = "jack"
+name = "Jack Gate"
+threshold = "J"
+odds-numerator = 16
+odds-denominator = 52
+awards-dreamsign = true
+
+[gamble.ladder-climb]
+strong-pool-limit = 50
+
+[[gamble.ladder-climb.attempts]]
+attempt = 1
+threshold = "Q"
+odds-numerator = 12
+odds-denominator = 52
+
+[[gamble.ladder-climb.attempts]]
+attempt = 2
+threshold = "10"
+odds-numerator = 20
+odds-denominator = 52
+
+[[gamble.ladder-climb.attempts]]
+attempt = 3
+threshold = "8"
+odds-numerator = 28
+odds-denominator = 52
+
+[[gamble.ladder-climb.attempts]]
+attempt = 4
+threshold = "6"
+odds-numerator = 36
+odds-denominator = 52
+
+[gamble.starway-stairs]
+max-retries = 2
+
+[[gamble.starway-stairs.tiers]]
+tier = 1
+highest-bust-rank = "2"
+bust-odds-numerator = 4
+odds-denominator = 52
+
+[[gamble.starway-stairs.tiers]]
+tier = 2
+highest-bust-rank = "4"
+bust-odds-numerator = 12
+odds-denominator = 52
+
+[[gamble.starway-stairs.tiers]]
+tier = 3
+highest-bust-rank = "7"
+bust-odds-numerator = 24
+odds-denominator = 52
+
+[gamble.four-suit-reprise]
+max-rounds = 3
+odds-numerator = 13
+odds-denominator = 52
+
+[[gamble.four-suit-reprise.outcomes]]
+suit = "spades"
+outcome = "transfiguration"
+label = "Transfigure"
+
+[[gamble.four-suit-reprise.outcomes]]
+suit = "diamonds"
+outcome = "essence"
+label = "Unchanged + 100 Essence"
+
+[[gamble.four-suit-reprise.outcomes]]
+suit = "hearts"
+outcome = "duplication"
+label = "Duplicate"
+
+[[gamble.four-suit-reprise.outcomes]]
+suit = "clubs"
+outcome = "purge"
+label = "Purge"

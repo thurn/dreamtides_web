@@ -1,31 +1,46 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync,
+} from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
 import {
   transformAffiliation,
-  transformDreamscape,
   transformDreamsignProfile,
-  transformGuide,
   transformIncarnation,
   DREAMSCAPE_SCENE_ART_DIR,
   DREAMSCAPE_ICON_ART_DIR,
   DREAM_GUIDE_ART_DIR,
 } from "./setup-assets.mjs";
-import {
-  collectAtlasAssetSources,
-  compileAtlasData,
-} from "./atlas-data.mjs";
+import { collectAtlasAssetSources, compileAtlasData } from "./atlas-data.mjs";
 import { compileEconomyData } from "./economy-data.mjs";
 import { compileDraftData } from "./draft-data.mjs";
 import { compileRewardSelectionData } from "./reward-selection-data.mjs";
 import { compileAuguryData } from "./augury-data.mjs";
+import {
+  collectGuidePortraitSources,
+  compileDreamGuidesData,
+  compileSitesData,
+  deriveDreamscapesData,
+} from "./guide-sites-data.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const ATLAS_DEPENDENCY_TOMLS = new Set([
   "dreamscapes.toml",
   "dream_guides.toml",
   "affiliations.toml",
+]);
+const GUIDE_SITE_DEPENDENCY_TOMLS = new Set([
+  "dreamscapes.toml",
+  "dream_guides.toml",
+  "sites.toml",
+  "glossary.toml",
+  "economy.toml",
 ]);
 
 const DEFAULT_ATLAS_ASSET_SOURCE_DIRS = {
@@ -44,17 +59,63 @@ function parsedArray(tabulaDir, filename, key) {
 
 function compileAtlasAtRoot(rootDir, atlasAssetSourceDirs) {
   const tabulaDir = join(rootDir, "data", "tabula");
-  const atlasSource = parse(readFileSync(join(tabulaDir, "atlas.toml"), "utf8"));
-  const glossaryIds = parsedArray(tabulaDir, "glossary.toml", "entries")
-    .map((entry) => entry.id);
+  const atlasSource = parse(
+    readFileSync(join(tabulaDir, "atlas.toml"), "utf8"),
+  );
   const assetSources = collectAtlasAssetSources(atlasAssetSourceDirs);
   return compileAtlasData(atlasSource, {
-    dreamscapes: parsedArray(tabulaDir, "dreamscapes.toml", "dreamscapes"),
-    guides: parsedArray(tabulaDir, "dream_guides.toml", "guides"),
+    dreamscapes: compileGuideSiteCatalogsAtRoot(rootDir).dreamscapes,
     affiliations: parsedArray(tabulaDir, "affiliations.toml", "affiliations"),
-    glossaryIds,
     ...(assetSources === undefined ? {} : { assetSources }),
   });
+}
+
+function compileGuideSiteCatalogsAtRoot(rootDir) {
+  const tabulaDir = join(rootDir, "data", "tabula");
+  const rawDreamscapes = parsedArray(
+    tabulaDir,
+    "dreamscapes.toml",
+    "dreamscapes",
+  );
+  const guides = compileDreamGuidesData(
+    parse(readFileSync(join(tabulaDir, "dream_guides.toml"), "utf8")),
+    {
+      dreamscapes: rawDreamscapes,
+      portraitSources: collectGuidePortraitSources(DREAM_GUIDE_ART_DIR),
+    },
+  );
+  const dreamscapes = deriveDreamscapesData(rawDreamscapes, guides);
+  const economy = compileEconomyData(
+    parse(readFileSync(join(tabulaDir, "economy.toml"), "utf8")),
+  );
+  const sites = compileSitesData(
+    parse(readFileSync(join(tabulaDir, "sites.toml"), "utf8")),
+    {
+      guides,
+      dreamscapes,
+      economy,
+      glossaryIds: parsedArray(tabulaDir, "glossary.toml", "entries").map(
+        (entry) => entry.id,
+      ),
+    },
+  );
+  return { guides, dreamscapes, sites, economy };
+}
+
+export function refreshGuidePortraitLinks(
+  rootDir,
+  guides,
+  sourceDir = DREAM_GUIDE_ART_DIR,
+) {
+  const destinationDir = join(rootDir, "public", "dream-guides");
+  mkdirSync(destinationDir, { recursive: true });
+  for (const guide of guides.guides) {
+    const source = join(sourceDir, guide.portraitSource);
+    if (!existsSync(source)) continue;
+    const destination = join(destinationDir, `${guide.id}.png`);
+    rmSync(destination, { force: true });
+    symlinkSync(source, destination);
+  }
 }
 
 /**
@@ -81,13 +142,19 @@ export const SIMPLE_CONFIGS = [
     tomlFile: "dreamscapes.toml",
     jsonFile: "dreamscapes-data.json",
     arrayKey: "dreamscapes",
-    transform: transformDreamscape,
+    transform: null,
   },
   {
     tomlFile: "dream_guides.toml",
     jsonFile: "dream-guides-data.json",
-    arrayKey: "guides",
-    transform: transformGuide,
+    arrayKey: null,
+    transform: null,
+  },
+  {
+    tomlFile: "sites.toml",
+    jsonFile: "sites-data.json",
+    arrayKey: null,
+    transform: null,
   },
   {
     tomlFile: "affiliations.toml",
@@ -176,6 +243,25 @@ export function regenerateAtlasData({
   return jsonPath;
 }
 
+/** Recompile sites.json and every canonical guide-derived artifact. */
+export function regenerateSitesData({ rootDir = ROOT } = {}) {
+  const compiled = compileGuideSiteCatalogsAtRoot(rootDir);
+  const publicDir = join(rootDir, "public");
+  writeFileSync(
+    join(publicDir, "dream-guides-data.json"),
+    JSON.stringify(compiled.guides, null, 2) + "\n",
+  );
+  writeFileSync(
+    join(publicDir, "dreamscapes-data.json"),
+    JSON.stringify(compiled.dreamscapes, null, 2) + "\n",
+  );
+  writeFileSync(
+    join(publicDir, "sites-data.json"),
+    JSON.stringify(compiled.sites, null, 2) + "\n",
+  );
+  return join(publicDir, "sites-data.json");
+}
+
 /**
  * Regenerate the runtime JSON catalog for one config TOML and return its written
  * path. Atlas dependencies also refresh atlas-data.json. Throws if
@@ -188,6 +274,9 @@ export function regenerateConfigData(
     atlasAssetSourceDirs = DEFAULT_ATLAS_ASSET_SOURCE_DIRS,
   } = {},
 ) {
+  if (tomlBasename === "glossary.toml") {
+    return regenerateSitesData({ rootDir });
+  }
   const config = CONFIG_BY_TOML.get(tomlBasename);
   if (config === undefined) {
     throw new Error(`No simple config registered for ${tomlBasename}`);
@@ -198,7 +287,32 @@ export function regenerateConfigData(
   const parsed = parse(readFileSync(tomlPath, "utf8"));
 
   let result;
-  if (config.tomlFile === "atlas.toml") {
+  if (GUIDE_SITE_DEPENDENCY_TOMLS.has(config.tomlFile)) {
+    const compiled = compileGuideSiteCatalogsAtRoot(rootDir);
+    const publicDir = join(rootDir, "public");
+    writeFileSync(
+      join(publicDir, "dream-guides-data.json"),
+      JSON.stringify(compiled.guides, null, 2) + "\n",
+    );
+    writeFileSync(
+      join(publicDir, "dreamscapes-data.json"),
+      JSON.stringify(compiled.dreamscapes, null, 2) + "\n",
+    );
+    writeFileSync(
+      join(publicDir, "sites-data.json"),
+      JSON.stringify(compiled.sites, null, 2) + "\n",
+    );
+    if (config.tomlFile === "economy.toml") {
+      result = compiled.economy;
+    } else if (config.tomlFile === "dream_guides.toml") {
+      result = compiled.guides;
+      refreshGuidePortraitLinks(rootDir, compiled.guides);
+    } else if (config.tomlFile === "dreamscapes.toml") {
+      result = compiled.dreamscapes;
+    } else {
+      result = compiled.sites;
+    }
+  } else if (config.tomlFile === "atlas.toml") {
     result = compileAtlasAtRoot(rootDir, atlasAssetSourceDirs);
   } else if (config.arrayKey === null) {
     result = config.transform(parsed);

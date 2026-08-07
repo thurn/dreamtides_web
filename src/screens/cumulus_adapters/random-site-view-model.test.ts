@@ -1,21 +1,19 @@
 import { describe, expect, it } from "vitest";
-import { makeSyntheticAtlasData } from "../../__test-helpers__/atlas-fixtures";
+import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
 import { LayerName } from "../../types/layer-name";
 import type { DreamscapeNode, SiteState } from "../../types/journey";
 import { buildRandomSiteView } from "./random-site-view-model";
 
 describe("buildRandomSiteView", () => {
-  it("projects Atlas-authored guide copy and site icons into the display model", () => {
-    const atlasData = makeSyntheticAtlasData();
-    atlasData.randomSite = {
-      ...atlasData.randomSite,
-      guideLine: "Synthetic TOML guide copy",
-    };
-    atlasData.siteTypes = {
-      ...atlasData.siteTypes,
-      Shop: {
-        ...atlasData.siteTypes.Shop,
-        icon: "synthetic-toml-shop-icon",
+  it("projects guide dialogue and site-registry icons into the display model", () => {
+    const sitesData = {
+      ...MINIMAL_SITES_DATA,
+      siteTypes: {
+        ...MINIMAL_SITES_DATA.siteTypes,
+        Shop: {
+          ...MINIMAL_SITES_DATA.siteTypes.Shop,
+          icon: "synthetic-toml-shop-icon",
+        },
       },
     };
     const site: SiteState & { type: "RandomSite" } = {
@@ -48,17 +46,19 @@ describe("buildRandomSiteView", () => {
         selectedSiteType: null,
       },
       guide: {
-        id: atlasData.randomSite.guideId,
+        id: sitesData.randomSite.guideId,
         name: "Fixture Guide",
         homeDreamscapeId: "fixture-dreamscape",
         siteType: "RandomSite",
-        dialog: [],
+        portraitSource: "fixture-guide.png",
+        dialogue: { site: [] },
         homeSpecialty: "Fixture specialty",
       },
-      atlasData,
+      sitesData,
+      guideLine: "Synthetic TOML guide copy",
     });
 
-    expect(view.guide.line).toBe(atlasData.randomSite.guideLine);
-    expect(view.choices[0].icon).toBe(atlasData.siteTypes.Shop.icon);
+    expect(view.guide.line).toBe("Synthetic TOML guide copy");
+    expect(view.choices[0].icon).toBe(sitesData.siteTypes.Shop.icon);
   });
 });

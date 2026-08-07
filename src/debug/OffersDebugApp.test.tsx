@@ -6,14 +6,14 @@ import { describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { offerTileDescription } from "../cumulus/components/controls/offer-tile-descriptions";
 import { MERCHANT_ARCHETYPE_BUILDERS } from "../journey_v2/archetypes/registry";
-import { MINIMAL_ATLAS_DATA } from "../__test-helpers__/atlas-fixtures";
+import { MINIMAL_SITES_DATA } from "../__test-helpers__/atlas-fixtures";
 import OffersDebugApp, {
   buildOfferTileDebugModels,
   OFFER_TILE_DEBUG_ARCHETYPE_IDS,
   OFFER_TILE_DEBUG_NOTES,
 } from "./OffersDebugApp";
 
-const OFFER_TILE_DEBUG_MODELS = buildOfferTileDebugModels(MINIMAL_ATLAS_DATA);
+const OFFER_TILE_DEBUG_MODELS = buildOfferTileDebugModels(MINIMAL_SITES_DATA);
 
 vi.mock("../data/card-database", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../data/card-database")>();
@@ -23,18 +23,19 @@ vi.mock("../data/card-database", async (importOriginal) => {
   };
 });
 
-vi.mock("../data/atlas-data", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("../data/atlas-data")>();
+vi.mock("../data/sites-data", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../data/sites-data")>();
   return {
     ...actual,
-    loadAtlasData: vi.fn(() => Promise.resolve(MINIMAL_ATLAS_DATA)),
+    loadSitesData: vi.fn(() => Promise.resolve(MINIMAL_SITES_DATA)),
   };
 });
 
 describe("OffersDebugApp", () => {
   it("shows one OfferTile for every distinct Augury UI presentation", async () => {
-    (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean })
-      .IS_REACT_ACT_ENVIRONMENT = true;
+    (
+      globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
+    ).IS_REACT_ACT_ENVIRONMENT = true;
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -58,8 +59,8 @@ describe("OffersDebugApp", () => {
     expect(OFFER_TILE_DEBUG_ARCHETYPE_IDS).toContain("category_draft_known");
     const motionDelays = [...tiles].map(
       (tile) =>
-        tile.querySelector<HTMLElement>("[data-offer-tile-floating-frame]")?.style
-          .animationDelay,
+        tile.querySelector<HTMLElement>("[data-offer-tile-floating-frame]")
+          ?.style.animationDelay,
     );
     expect(new Set(motionDelays).size).toBeGreaterThan(8);
     for (const archetypeId of OFFER_TILE_DEBUG_ARCHETYPE_IDS) {
@@ -104,12 +105,16 @@ describe("OffersDebugApp", () => {
       "Transfigure a card in your deck.",
     );
     expect(duplicate.kind).toBe("duplicate-card");
-    expect(duplicate.kind === "duplicate-card" ? duplicate.cards : []).toHaveLength(3);
+    expect(
+      duplicate.kind === "duplicate-card" ? duplicate.cards : [],
+    ).toHaveLength(3);
     expect(offerTileDescription(duplicate)).toBe(
       "Choose one of three cards in your deck to duplicate.",
     );
     expect(starters.kind).toBe("transfigure-starters");
-    expect(starters.kind === "transfigure-starters" ? starters.cards : []).toHaveLength(2);
+    expect(
+      starters.kind === "transfigure-starters" ? starters.cards : [],
+    ).toHaveLength(2);
     expect(offerTileDescription(starters)).toBe(
       "Transfigure two starter cards.",
     );

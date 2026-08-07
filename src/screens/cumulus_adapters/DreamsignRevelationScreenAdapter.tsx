@@ -10,6 +10,7 @@ import {
   resolveDreamsignRevelationGuide,
 } from "./dreamsign-revelation-view-model";
 import type { FirstVisitSiteTutorialView } from "../../cumulus/screens/site-tutorial-view";
+import { useGuideDialogue } from "./guide-dialogue-view-model";
 
 const FLY_TO_HUD_MS = 900;
 
@@ -38,13 +39,7 @@ export function DreamsignRevelationScreenAdapter({
     journeyContent.guides,
     site?.guideIdOverride,
   );
-  const guideLine = useMemo(
-    () =>
-      guide?.dialog.length
-        ? guide.dialog[Math.floor(Math.random() * guide.dialog.length)]
-        : null,
-    [guide],
-  );
+  const guideLine = useGuideDialogue(guide, "site");
   const [claimedIndex, setClaimedIndex] = useState<number | null>(null);
   const [pendingPurgeDreamsign, setPendingPurgeDreamsign] =
     useState<Dreamsign | null>(null);

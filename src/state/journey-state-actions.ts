@@ -252,7 +252,10 @@ export function commitPreparedDraftCardPickInJourneyState({
   };
 }
 
-export function setJourneyScreen(prev: JourneyState, screen: Screen): JourneyState {
+export function setJourneyScreen(
+  prev: JourneyState,
+  screen: Screen,
+): JourneyState {
   return {
     ...prev,
     screen,
@@ -406,9 +409,7 @@ export function addSiteToCurrentDreamscape(
  */
 export function generateJourneySeed(): string {
   const cryptoCandidate: { randomUUID?: () => string } | undefined =
-    typeof crypto === "undefined"
-      ? undefined
-      : (crypto);
+    typeof crypto === "undefined" ? undefined : crypto;
   if (cryptoCandidate?.randomUUID !== undefined) {
     return cryptoCandidate.randomUUID();
   }
@@ -490,6 +491,7 @@ export function startJourneyFromDreamAvatar({
     {
       dreamscapes: journeyContent.dreamscapes,
       atlasData: journeyContent.atlasData,
+      sitesData: journeyContent.sitesData,
       dreamsignPoolIds: atlasDreamsignPoolIds,
       apollyonIncarnations: journeyContent.apollyonIncarnations,
     },
@@ -520,7 +522,8 @@ export function startJourneyFromDreamAvatar({
     journeyContent.draftRecords !== undefined &&
     journeyContent.draftRecords.length > 0;
   const useFresh20Draft =
-    journeyContent.draftMode === "fresh20" && journeyContent.fitModel !== undefined;
+    journeyContent.draftMode === "fresh20" &&
+    journeyContent.fitModel !== undefined;
   const draftState = useReplayDraft
     ? buildReplayDraftState(
         dreamAvatar,

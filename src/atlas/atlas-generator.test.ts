@@ -14,6 +14,7 @@ import {
 import {
   makeSyntheticAtlasData,
   makeTestAtlasNode,
+  MINIMAL_SITES_DATA,
   SYNTHETIC_ATLAS_DREAMSCAPES,
 } from "../__test-helpers__/atlas-fixtures";
 import type {
@@ -23,16 +24,13 @@ import type {
   SiteState,
   SiteType,
 } from "../types/journey";
-import {
-  LayerName,
-  layerAtOrdinal,
-  layerOrdinal,
-} from "../types/layer-name";
+import { LayerName, layerAtOrdinal, layerOrdinal } from "../types/layer-name";
 
 function defaultContext(
   overrides?: Partial<SiteGenerationContext>,
 ): SiteGenerationContext {
   return {
+    draftPickCount: 5,
     ...overrides,
   };
 }
@@ -59,6 +57,7 @@ function buildContext(
   return {
     dreamscapes: TEST_DREAMSCAPES,
     atlasData: TEST_ATLAS_DATA,
+    sitesData: MINIMAL_SITES_DATA,
     dreamsignPoolIds: TEST_DREAMSIGN_POOL,
     ...overrides,
   };
@@ -115,6 +114,7 @@ function composeFor(
     dreamscape,
     dreamscapes: TEST_DREAMSCAPES,
     atlasData: TEST_ATLAS_DATA,
+    sitesData: MINIMAL_SITES_DATA,
     context: defaultContext(),
     hasKnownDreamsign: overrides?.hasKnownDreamsign,
     rng: nextFixtureRandom,
@@ -131,12 +131,16 @@ function counts(sites: SiteState[]): Partial<Record<SiteType, number>> {
 
 describe("generateSiteComposition", () => {
   it("persists the configured pick target on generated Draft sites", () => {
-    const home = { ...NON_STARTER_DREAMSCAPES[0], signatureSite: "Draft" as const };
+    const home = {
+      ...NON_STARTER_DREAMSCAPES[0],
+      signatureSite: "Draft" as const,
+    };
     const result = generateSiteComposition({
       layer: LayerName.Two,
       dreamscape: home,
       dreamscapes: TEST_DREAMSCAPES,
       atlasData: TEST_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
       context: { draftPickCount: 7 },
       rng: nextFixtureRandom,
     });
@@ -151,12 +155,15 @@ describe("generateSiteComposition", () => {
     const home = NON_STARTER_DREAMSCAPES.find(
       (dreamscape) => dreamscape.signatureSite === "RandomSite",
     );
-    if (home === undefined) throw new Error("expected a Random Site dreamscape");
+    if (home === undefined)
+      throw new Error("expected a Random Site dreamscape");
     const sites = composeFor(home, 4);
     const randomSite = sites.find((site) => site.type === "RandomSite");
     expect(randomSite?.isEnhanced).toBe(true);
     expect(randomSite?.randomSite?.mode).toBe("homeChoice");
-    expect(randomSite?.randomSite?.candidateSiteTypes.length).toBeGreaterThanOrEqual(3);
+    expect(
+      randomSite?.randomSite?.candidateSiteTypes.length,
+    ).toBeGreaterThanOrEqual(3);
     expect(new Set(randomSite?.randomSite?.candidateSiteTypes).size).toBe(
       randomSite?.randomSite?.candidateSiteTypes.length,
     );
@@ -170,18 +177,23 @@ describe("generateSiteComposition", () => {
     const home = NON_STARTER_DREAMSCAPES.find(
       (dreamscape) => dreamscape.signatureSite === "RandomSite",
     );
-    if (home === undefined) throw new Error("expected a Random Site dreamscape");
+    if (home === undefined)
+      throw new Error("expected a Random Site dreamscape");
     const result = generateSiteComposition({
       layer: LayerName.Five,
       dreamscape: home,
       dreamscapes: TEST_DREAMSCAPES,
       atlasData: TEST_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
       context: {
-        dreamscapeModifiers: [{
-          kind: "remove_shop_sites",
-          dreamscapesRemaining: 1,
-          source: "fixture",
-        }],
+        draftPickCount: 5,
+        dreamscapeModifiers: [
+          {
+            kind: "remove_shop_sites",
+            dreamscapesRemaining: 1,
+            source: "fixture",
+          },
+        ],
       },
       rng: nextFixtureRandom,
     });
@@ -225,7 +237,12 @@ describe("generateSiteComposition", () => {
           // The presenting guide's hidden destination is also enhanced when Random Site fills
           // a different guide's dreamscape.
           expect(sites.filter((s) => s.isEnhanced)).toHaveLength(
-            1 + (sites.some((site) => site.type === "RandomSite" && site !== signature[0]) ? 1 : 0),
+            1 +
+              (sites.some(
+                (site) => site.type === "RandomSite" && site !== signature[0],
+              )
+                ? 1
+                : 0),
           );
         }
       }
@@ -255,7 +272,9 @@ describe("generateSiteComposition", () => {
             mandatoryAllHadPurge = false;
           }
           // Purge, when present, is never duplicated.
-          expect(sites.filter((s) => s.type === "Purge").length).toBeLessThanOrEqual(1);
+          expect(
+            sites.filter((s) => s.type === "Purge").length,
+          ).toBeLessThanOrEqual(1);
         }
         if (expectsMandatoryPurge(layer)) {
           expect(mandatoryAllHadPurge).toBe(true);
@@ -402,6 +421,7 @@ describe("generateSiteComposition", () => {
         dreamscape: STARTER_DREAMSCAPE,
         dreamscapes: TEST_DREAMSCAPES,
         atlasData: TEST_ATLAS_DATA,
+        sitesData: MINIMAL_SITES_DATA,
         context: defaultContext(),
         hasKnownDreamsign: false,
         rng: nextFixtureRandom,
@@ -600,7 +620,9 @@ describe("generateInitialAtlas structural invariants", () => {
       expect(bonusCount).toBeGreaterThanOrEqual(
         TEST_ATLAS_DATA.graph.bonusReveal.min,
       );
-      expect(bonusCount).toBeLessThanOrEqual(TEST_ATLAS_DATA.graph.bonusReveal.max);
+      expect(bonusCount).toBeLessThanOrEqual(
+        TEST_ATLAS_DATA.graph.bonusReveal.max,
+      );
     }
   });
 
@@ -624,9 +646,7 @@ describe("generateInitialAtlas structural invariants", () => {
   });
 
   it("gives the two layer-1 choices out of the starter different dreamscapes (and signature site icons)", () => {
-    const dreamscapesById = new Map(
-      TEST_DREAMSCAPES.map((d) => [d.id, d]),
-    );
+    const dreamscapesById = new Map(TEST_DREAMSCAPES.map((d) => [d.id, d]));
     for (let iter = 0; iter < 60; iter++) {
       const atlas = freshAtlas();
       // Layer 1 is the first choice out of Firstlight Meadow. Derive its
@@ -1061,9 +1081,14 @@ describe("regenerateAtlasForProgress", () => {
       .length;
 
   it("rebuilds a fresh, unprogressed atlas at zero depth", () => {
-    const atlas = regenerateAtlasForProgress(0, defaultContext(), buildContext(), {
-      logEvents: false,
-    });
+    const atlas = regenerateAtlasForProgress(
+      0,
+      defaultContext(),
+      buildContext(),
+      {
+        logEvents: false,
+      },
+    );
 
     // No dreamscape has been completed yet, and the only entry point is the
     // starter — the same shape a brand-new journey begins with.
@@ -1270,7 +1295,9 @@ describe("revealedAtlasSite", () => {
     ];
     const nodeA = makeNode("dreamscape-42", sites, null);
     const nodeAClone = makeNode("dreamscape-42", sites, null);
-    expect(revealedAtlasSite(nodeA)?.id).toBe(revealedAtlasSite(nodeAClone)?.id);
+    expect(revealedAtlasSite(nodeA)?.id).toBe(
+      revealedAtlasSite(nodeAClone)?.id,
+    );
   });
 
   it("returns different reveals for different node ids (at least sometimes)", () => {

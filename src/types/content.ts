@@ -79,8 +79,16 @@ export interface DreamGuideContent {
   name: string;
   homeDreamscapeId: string;
   siteType: SiteType;
-  dialog: string[];
+  portraitSource: string;
+  dialogue: Readonly<Record<string, readonly string[]>>;
   homeSpecialty: string;
+}
+
+/** Versioned canonical Dream Guide catalog emitted by the asset compiler. */
+export interface DreamGuidesData {
+  schemaVersion: 1;
+  contentHash: string;
+  guides: readonly DreamGuideContent[];
 }
 
 /**
@@ -116,10 +124,7 @@ export type Tides4Role = "signature" | "facet" | "neutral";
 
 /** Why a tide was joined into a `tides4` pool this run. */
 export type Tides4TideSelection =
-  | "starter"
-  | "facet-drawn"
-  | "facet-fill"
-  | "neutral-fill";
+  "starter" | "facet-drawn" | "facet-fill" | "neutral-fill";
 
 /**
  * One tide that took part in a `tides4` run, resolved for the debug surface. The

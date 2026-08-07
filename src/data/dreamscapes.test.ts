@@ -9,6 +9,7 @@ import {
   loadDreamscapes,
 } from "./dreamscapes";
 import { loadAtlasData } from "./atlas-data";
+import { loadSitesData } from "./sites-data";
 import { generateSiteComposition } from "../atlas/atlas-generator";
 import { LayerName } from "../types/layer-name";
 import type { DreamscapeContent } from "../types/content";
@@ -161,7 +162,8 @@ describe("dreamscape content referential integrity", () => {
       loadDreamGuides(),
       loadAtlasData(),
     ]);
-    const context = { dreamscapeModifiers: [] };
+    const context = { dreamscapeModifiers: [], draftPickCount: 5 };
+    const sitesData = await loadSitesData();
     const homeOf = (siteType: string): DreamscapeContent | undefined =>
       dreamscapes.find((d) => !d.isStarter && d.signatureSite === siteType);
 
@@ -177,6 +179,7 @@ describe("dreamscape content referential integrity", () => {
         dreamscape: home,
         dreamscapes,
         atlasData,
+        sitesData,
         context,
       });
       expect(homeComposition.enhancedSiteType).toBe(guide.siteType);
@@ -199,6 +202,7 @@ describe("dreamscape content referential integrity", () => {
         dreamscape: elsewhere,
         dreamscapes,
         atlasData,
+        sitesData,
         context,
       });
       expect(elsewhereComposition.enhancedSiteType).not.toBe(guide.siteType);
@@ -211,16 +215,22 @@ describe("dreamscape content referential integrity", () => {
   });
 
   it("resolves the Random Site owner as host for every configured destination", async () => {
-    const [guides, dreamscapes, atlasData] = await Promise.all([
+    const [guides, dreamscapes, sitesData] = await Promise.all([
       loadDreamGuides(),
       loadDreamscapes(),
-      loadAtlasData(),
+      loadSitesData(),
     ]);
-    const owner = dreamscapes.find((entry) => entry.signatureSite === "RandomSite");
+    const owner = dreamscapes.find(
+      (entry) => entry.signatureSite === "RandomSite",
+    );
     expect(owner?.guideId).not.toBeNull();
-    for (const type of atlasData.randomSite.destinations) {
-      expect(guideForSite(guides, { type, guideIdOverride: owner?.guideId ?? undefined })?.id)
-        .toBe(owner?.guideId);
+    for (const type of sitesData.randomSite.destinations) {
+      expect(
+        guideForSite(guides, {
+          type,
+          guideIdOverride: owner?.guideId ?? undefined,
+        })?.id,
+      ).toBe(owner?.guideId);
     }
   });
 

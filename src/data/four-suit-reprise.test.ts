@@ -1,28 +1,33 @@
 import { describe, expect, it } from "vitest";
 import {
-  FOUR_SUIT_REPRISE_OUTCOMES,
   eligibleFourSuitRepriseTargets,
   fourSuitRepriseDrawCost,
   fourSuitRepriseOutcomeForSuit,
 } from "./four-suit-reprise";
+import { MINIMAL_SITES_DATA } from "../__test-helpers__/atlas-fixtures";
+import { economyFixture } from "../testing/economy-fixture";
 
 describe("Four-Suit Reprise rules", () => {
   it("maps every suit to exactly one deck effect", () => {
-    expect(FOUR_SUIT_REPRISE_OUTCOMES.map((rule) => rule.suit)).toEqual([
+    const rules = MINIMAL_SITES_DATA.gamble.fourSuitReprise;
+    expect(rules.outcomes.map((rule) => rule.suit)).toEqual([
       "spades",
       "diamonds",
       "hearts",
       "clubs",
     ]);
-    expect(fourSuitRepriseOutcomeForSuit("spades")).toBe("transfiguration");
-    expect(fourSuitRepriseOutcomeForSuit("diamonds")).toBe("essence");
-    expect(fourSuitRepriseOutcomeForSuit("hearts")).toBe("duplication");
-    expect(fourSuitRepriseOutcomeForSuit("clubs")).toBe("purge");
+    expect(fourSuitRepriseOutcomeForSuit(rules, "spades")).toBe(
+      "transfiguration",
+    );
+    expect(fourSuitRepriseOutcomeForSuit(rules, "diamonds")).toBe("essence");
+    expect(fourSuitRepriseOutcomeForSuit(rules, "hearts")).toBe("duplication");
+    expect(fourSuitRepriseOutcomeForSuit(rules, "clubs")).toBe("purge");
   });
 
   it("applies the Farpoint price", () => {
-    expect(fourSuitRepriseDrawCost(false)).toBe(25);
-    expect(fourSuitRepriseDrawCost(true)).toBe(15);
+    const economy = economyFixture().gamble.fourSuitReprise;
+    expect(fourSuitRepriseDrawCost(economy, false)).toBe(10);
+    expect(fourSuitRepriseDrawCost(economy, true)).toBe(0);
   });
 
   it("keeps only live, unused, untransfigured target entries", () => {
@@ -32,15 +37,37 @@ describe("Four-Suit Reprise rules", () => {
       { entryId: "entry-3", cardId: "card-3", cardNumber: 3 },
       { entryId: "entry-4", cardId: "card-4", cardNumber: 4 },
     ];
-    expect(eligibleFourSuitRepriseTargets({
-      targets,
-      usedCardIds: ["card-1"],
-      deck: [
-        { entryId: "entry-1", cardNumber: 1, isBane: false, transfiguration: null },
-        { entryId: "entry-2", cardNumber: 2, isBane: false, transfiguration: null },
-        { entryId: "entry-3", cardNumber: 3, isBane: true, transfiguration: null },
-        { entryId: "entry-4", cardNumber: 4, isBane: false, transfiguration: "Empowered" },
-      ],
-    })).toEqual([targets[1]]);
+    expect(
+      eligibleFourSuitRepriseTargets({
+        targets,
+        usedCardIds: ["card-1"],
+        deck: [
+          {
+            entryId: "entry-1",
+            cardNumber: 1,
+            isBane: false,
+            transfiguration: null,
+          },
+          {
+            entryId: "entry-2",
+            cardNumber: 2,
+            isBane: false,
+            transfiguration: null,
+          },
+          {
+            entryId: "entry-3",
+            cardNumber: 3,
+            isBane: true,
+            transfiguration: null,
+          },
+          {
+            entryId: "entry-4",
+            cardNumber: 4,
+            isBane: false,
+            transfiguration: "Empowered",
+          },
+        ],
+      }),
+    ).toEqual([targets[1]]);
   });
 });

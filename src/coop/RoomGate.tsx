@@ -105,6 +105,8 @@ interface RoomGateProps {
   runtimeConfig: RuntimeConfig;
   /** Hash of Atlas sections which influence deterministic folding. */
   atlasFoldHash: string;
+  /** Hash of guide assignments and deterministic site rules. */
+  sitesFoldHash: string;
   /** Validated draft rules and fold hash pinned into room genesis. */
   draftData: DraftData;
   /** Validated economy content and journey defaults pinned into room genesis. */
@@ -230,6 +232,7 @@ function hasPinnedContentConfig(genesis: Genesis): genesis is PinnedGenesis {
   return (
     genesis.contentConfig !== undefined &&
     typeof genesis.contentConfig.atlasFoldHash === "string" &&
+    typeof genesis.contentConfig.sitesFoldHash === "string" &&
     typeof genesis.contentConfig.draftFoldHash === "string" &&
     typeof genesis.contentConfig.economyFoldHash === "string" &&
     typeof genesis.contentConfig.rewardSelectionFoldHash === "string" &&
@@ -263,6 +266,7 @@ export function RoomGate({
   gameId,
   runtimeConfig,
   atlasFoldHash,
+  sitesFoldHash,
   draftData,
   economyData,
   opponentsData,
@@ -279,6 +283,7 @@ export function RoomGate({
       contentConfigFromRuntime(
         runtimeConfig,
         atlasFoldHash,
+        sitesFoldHash,
         draftData,
         economyData,
         opponentsData,
@@ -296,6 +301,7 @@ export function RoomGate({
       opponentsData,
       rewardSelectionData,
       runtimeConfig,
+      sitesFoldHash,
       tutorialFoldHash,
     ],
   );

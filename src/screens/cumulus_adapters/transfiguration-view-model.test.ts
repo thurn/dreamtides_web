@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createDefaultState } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
+import type { DreamGuideContent } from "../../types/content";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type {
   CardChoiceSiteRuntime,
@@ -12,6 +13,16 @@ import {
   buildTransfigurationCandidates,
   buildTransfigurationSiteView,
 } from "./transfiguration-view-model";
+
+const GUIDE = {
+  id: "fixture-transfiguration-guide",
+  name: "Fixture Transfiguration Guide",
+  homeDreamscapeId: "fixture-home",
+  siteType: "Transfiguration",
+  portraitSource: "fixture-guide.png",
+  dialogue: { site: ["Fixture line."] },
+  homeSpecialty: "Fixture specialty.",
+} satisfies DreamGuideContent;
 
 function makeCard(cardNumber: number): CardData {
   return {
@@ -174,7 +185,7 @@ describe("buildTransfigurationCandidates", () => {
 });
 
 describe("buildTransfigurationSiteView", () => {
-  it("builds Durgan's guide slice and loading state without asserting production content", () => {
+  it("projects the required authored guide and loading state", () => {
     const state = createDefaultState();
     const view = buildTransfigurationSiteView({
       state,
@@ -182,16 +193,16 @@ describe("buildTransfigurationSiteView", () => {
       site,
       runtime: null,
       cardDatabase: new Map(),
-      guide: null,
-      guideLine: null,
+      guide: GUIDE,
+      guideLine: "Fixture line.",
     });
 
     expect(view.siteId).toBe(site.id);
     expect(view.isEnhanced).toBe(false);
     expect(view.ready).toBe(false);
     expect(view.guide).toMatchObject({
-      id: "durgan_forgehammer",
-      name: "Durgan Forgehammer",
+      id: GUIDE.id,
+      name: GUIDE.name,
     });
     expect(view.candidates).toEqual([]);
   });

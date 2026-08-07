@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
-import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
+import {
+  MINIMAL_ATLAS_DATA,
+  MINIMAL_SITES_DATA,
+} from "../../__test-helpers__/atlas-fixtures";
 import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
 import type {
   MerchantChoiceCandidate,
@@ -145,6 +148,7 @@ const deckObject = mappedDeckObject(0, "entry-fixture");
 
 const mappingContext = {
   atlasData: MINIMAL_ATLAS_DATA,
+  sitesData: MINIMAL_SITES_DATA,
   candidateGrantCards: mappingCards
     .slice(0, 4)
     .map((_unused, index) => catalogObject(index)),
@@ -243,6 +247,7 @@ function dreamsignObject(
 describe("augury view model", () => {
   const context = {
     deckEntryById: new Map(),
+    sitesData: MINIMAL_SITES_DATA,
     rewardSelection: { tuning: CONFIG_DATA_FIXTURE.rewardSelectionData.tuning },
   } as unknown as MerchantContext;
 

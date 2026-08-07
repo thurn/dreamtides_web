@@ -6,6 +6,7 @@ import type { FitModel } from "../../draft/replay/fit-model";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
+  MINIMAL_SITES_DATA,
 } from "../../__test-helpers__/atlas-fixtures";
 import type {
   MerchantCorpus,
@@ -169,6 +170,7 @@ export function makeMerchantTestContent({
     affiliations: [],
     guides: [],
     atlasData: MINIMAL_ATLAS_DATA,
+    sitesData: MINIMAL_SITES_DATA,
     economyData: economyFixture(),
     opponentsData: opponentsFixture(),
     fitModel,

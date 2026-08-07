@@ -8,6 +8,7 @@ import { useJourney } from "../../state/journey-context";
 import { PurgeSiteScreen } from "../../cumulus/screens/PurgeSiteScreen";
 import { buildPurgeSiteView, resolvePurgeGuide } from "./purge-view-model";
 import type { FirstVisitSiteTutorialView } from "../../cumulus/screens/site-tutorial-view";
+import { useGuideDialogue } from "./guide-dialogue-view-model";
 
 export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
   const { state, mutations, journeyContent } = useJourney();
@@ -19,10 +20,7 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
       : null;
   const site = node?.sites.find((candidate) => candidate.id === siteId) ?? null;
   const guide = resolvePurgeGuide(guides, site?.guideIdOverride);
-  const guideLine = useMemo(() => {
-    if (guide === null || guide.dialog.length === 0) return null;
-    return guide.dialog[Math.floor(Math.random() * guide.dialog.length)];
-  }, [guide]);
+  const guideLine = useGuideDialogue(guide, "site");
 
   const view = useMemo(
     () =>

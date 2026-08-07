@@ -10,9 +10,7 @@
 
 import type { JourneyContent } from "../../data/journey-content";
 import type { ResolvedDreamAvatarPackage } from "../../types/content";
-import {
-  buildDreamAvatarPackage,
-} from "../../data/journey-content";
+import { buildDreamAvatarPackage } from "../../data/journey-content";
 import { buildTutorialJourneyPackage } from "../../data/tutorial-journey-package";
 import { startJourneyFromDreamAvatar } from "../../state/journey-state-actions";
 import type { JourneyLifecycleContentProvider } from "../../rules/journey/lifecycle";
@@ -79,6 +77,7 @@ export function createJourneyLifecycleContentProvider(
         {
           dreamscapes: content.dreamscapes,
           atlasData: content.atlasData,
+          sitesData: content.sitesData,
           dreamsignPoolIds: journey.remainingDreamsignPool,
           apollyonIncarnations: content.apollyonIncarnations,
         },
@@ -91,8 +90,7 @@ export function createJourneyLifecycleContentProvider(
         ...journey,
         completionLevel,
         atlas,
-        currentDreamscape:
-          completionLevel === 0 ? atlas.startingNodeId : null,
+        currentDreamscape: completionLevel === 0 ? atlas.startingNodeId : null,
         screen:
           completionLevel === 0
             ? { type: "dreamscape" }

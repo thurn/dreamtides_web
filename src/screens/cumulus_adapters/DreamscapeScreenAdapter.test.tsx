@@ -15,7 +15,10 @@ import type { DreamscapeScreenProps } from "../../cumulus/screens/DreamscapeScre
 import { logEvent, logEventOnce } from "../../logging";
 import { DreamscapeScreenAdapter } from "./DreamscapeScreenAdapter";
 import { makeTutorialConfiguration } from "../../test/tutorial-configuration-fixture";
-import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
+import {
+  MINIMAL_ATLAS_DATA,
+  MINIMAL_SITES_DATA,
+} from "../../__test-helpers__/atlas-fixtures";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
 
 const screenMock = vi.hoisted(() =>
@@ -118,6 +121,7 @@ function setJourneyContext(
     mutations,
     journeyContent: {
       atlasData: MINIMAL_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
       draftData: draftDataFixture(),
       ...journeyContent,
     },

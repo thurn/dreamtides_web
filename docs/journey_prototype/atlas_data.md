@@ -14,20 +14,17 @@ and content those systems consume.
 The root `schema-version` is `1`. Compilation rejects any unsupported version.
 The document contains these sections:
 
-| Section | Authored contract |
-|---|---|
-| `layers` | Ordered Layer I–VII records with role, node-count range, site-count range, fill profile, and mandatory site counts. |
-| `graph` | Connection average, reveal lookahead, and the triangular bonus-reveal distribution and eligible layers. |
-| `dreamscape-selection` | Base draw weight, repeat discouragement, adjacency and same-layer exclusions, and the pool-exhaustion policy. |
-| `site-composition` | Site uniqueness, the known-dreamsign carrier site, and mandatory-capacity behavior. |
-| `fill-profiles` | Signature-site and explicit site weights selected by layer. |
-| `known-dreamsign` | Per-Atlas maximum, eligible layers, placement probability, and early-reveal bias. |
-| `random-site` | Eligible destinations, home and away choice counts, and the presenting guide’s line. |
-| `site-types` | Complete `SiteType` coverage with icon classes and references into `glossary.toml`. |
-| `fallback-site-type` | Neutral display metadata for unknown site types in legacy data. |
-| `boss` | Limbo identity and copy plus stable scene, icon, and Apollyon figure keys. |
-| `presentation` | Unseen/starter copy and validated affiliation templates. |
-| `assets` | Source filenames and emitted Atlas asset keys. |
+| Section                | Authored contract                                                                                                   |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `layers`               | Ordered Layer I–VII records with role, node-count range, site-count range, fill profile, and mandatory site counts. |
+| `graph`                | Connection average, reveal lookahead, and the triangular bonus-reveal distribution and eligible layers.             |
+| `dreamscape-selection` | Base draw weight, repeat discouragement, adjacency and same-layer exclusions, and the pool-exhaustion policy.       |
+| `site-composition`     | Site uniqueness, the known-dreamsign carrier site, and mandatory-capacity behavior.                                 |
+| `fill-profiles`        | Signature-site and explicit site weights selected by layer.                                                         |
+| `known-dreamsign`      | Per-Atlas maximum, eligible layers, placement probability, and early-reveal bias.                                   |
+| `boss`                 | Limbo identity and copy plus stable scene, icon, and Apollyon figure keys.                                          |
+| `presentation`         | Unseen/starter copy and validated affiliation templates.                                                            |
+| `assets`               | Source filenames and emitted Atlas asset keys.                                                                      |
 
 Affiliations provide `atlas-card-theme` in `affiliations.toml`. Atlas templates
 may use `{name}` in the affiliation title and `{card-theme}` in the affiliation
@@ -46,19 +43,20 @@ structural Battle site is appended last.
 
 `scripts/atlas-data.mjs` is shared by full asset setup and Vite’s targeted TOML
 reload. It validates layer and site coverage, ranges, probabilities, weights,
-capacity, profiles, Random Site ownership and choices, templates, glossary and
-affiliation references, and Atlas asset sources when the external source-art
-catalog is available.
+capacity, profiles, templates, affiliation references, and Atlas asset sources
+when the external source-art catalog is available.
 
-Vite recompiles Atlas data when its TOML or any referenced Dreamscape, Dream
-Guide, affiliation, or glossary catalog changes, so the same reference checks
-run during targeted development reloads.
+Vite recompiles Atlas data when its TOML or any referenced Dreamscape or
+affiliation catalog changes, so the same reference checks run during targeted
+development reloads. Site presentation and mechanics are compiled from
+`sites.toml`; guide assignments used by generation enter Atlas through the
+validated Sites catalog. See [Dream Guide and Site Data](guide_and_sites_data.md).
 
 The compiled document contains two SHA-256 diagnostics:
 
 - `contentHash` covers the complete normalized Atlas document.
-- `foldHash` covers generation and reducer inputs. Presentation copy, site
-  display metadata, Random Site dialogue, and artwork are outside this hash.
+- `foldHash` covers Atlas graph-generation and reducer inputs. Presentation
+  copy and artwork are outside this hash.
 
 Atlas generation logs both hashes, the resolved rules, graph edges, candidate
 weights, selections, site compositions, known-dreamsign placement, and the boss

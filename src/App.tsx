@@ -710,6 +710,7 @@ export default function App({
       gameId={runtimeConfig.gameId}
       runtimeConfig={runtimeConfig}
       atlasFoldHash={journeyContent.atlasData.foldHash}
+      sitesFoldHash={journeyContent.sitesData.foldHash}
       draftData={journeyContent.draftData}
       opponentsData={journeyContent.opponentsData}
       economyData={journeyContent.economyData}

@@ -6,6 +6,7 @@ import type {
 } from "../../cumulus/screens/GambleSiteScreen";
 import { getLogEntries, resetLog } from "../../logging";
 import { economyFixture } from "../../testing/economy-fixture";
+import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type {
@@ -85,7 +86,13 @@ describe("gamble-site-logging-view-model", () => {
   });
 
   it("records the Ladder Climb Essence payout and net settlement", () => {
-    logGambleSettled("fixture-site", RUNTIME, VIEW, economyFixture());
+    logGambleSettled(
+      "fixture-site",
+      RUNTIME,
+      VIEW,
+      economyFixture(),
+      MINIMAL_SITES_DATA,
+    );
 
     expect(getLogEntries()).toHaveLength(1);
     expect(getLogEntries()[0]).toMatchObject({
@@ -128,33 +135,39 @@ describe("gamble-site-logging-view-model", () => {
         { rank: "4", suit: "diamonds" },
         { rank: "Q", suit: "clubs" },
       ],
-      targets: [{
-        entryId: "entry-101",
-        cardId: card.id,
-        cardNumber: card.cardNumber,
-        cardSnapshot: card,
-        transfigurationOffers: [{
+      targets: [
+        {
           entryId: "entry-101",
-          type: "Empowered",
-          effectDescription: "Fixture form.",
-          effectDetails: { fixture: true },
-          previewCard: { ...card, energyCost: 1 },
-          essenceCost: 0,
-        }],
-      }],
-      rounds: [{
-        roundNumber: 1,
-        shuffleCommitment: "round-1",
-        card: { rank: "7", suit: "hearts" },
-        targetEntryId: "entry-101",
-        targetCardId: card.id,
-        costPaid: 25,
-        outcome: "duplication",
-        resultRevealed: true,
-        resultSettled: true,
-        essenceGained: 0,
-        duplicatedEntryId: "duplicate-101",
-      }],
+          cardId: card.id,
+          cardNumber: card.cardNumber,
+          cardSnapshot: card,
+          transfigurationOffers: [
+            {
+              entryId: "entry-101",
+              type: "Empowered",
+              effectDescription: "Fixture form.",
+              effectDetails: { fixture: true },
+              previewCard: { ...card, energyCost: 1 },
+              essenceCost: 0,
+            },
+          ],
+        },
+      ],
+      rounds: [
+        {
+          roundNumber: 1,
+          shuffleCommitment: "round-1",
+          card: { rank: "7", suit: "hearts" },
+          targetEntryId: "entry-101",
+          targetCardId: card.id,
+          costPaid: 25,
+          outcome: "duplication",
+          resultRevealed: true,
+          resultSettled: true,
+          essenceGained: 0,
+          duplicatedEntryId: "duplicate-101",
+        },
+      ],
       phase: "result",
     };
     const view = {
@@ -162,9 +175,27 @@ describe("gamble-site-logging-view-model", () => {
       cards: [],
     } as unknown as FourSuitRepriseSiteView;
 
-    logGamblePrepared("fixture-site", runtime, view, economyFixture());
-    logGambleResolved("fixture-site", runtime, view, economyFixture());
-    logGambleSettled("fixture-site", runtime, view, economyFixture());
+    logGamblePrepared(
+      "fixture-site",
+      runtime,
+      view,
+      economyFixture(),
+      MINIMAL_SITES_DATA,
+    );
+    logGambleResolved(
+      "fixture-site",
+      runtime,
+      view,
+      economyFixture(),
+      MINIMAL_SITES_DATA,
+    );
+    logGambleSettled(
+      "fixture-site",
+      runtime,
+      view,
+      economyFixture(),
+      MINIMAL_SITES_DATA,
+    );
 
     expect(getLogEntries()).toHaveLength(3);
     expect(getLogEntries()[0]).toMatchObject({

@@ -2,40 +2,36 @@ import { useCallback, useEffect, useMemo } from "react";
 import { GambleSiteScreen } from "../../cumulus/screens/GambleSiteScreen";
 import { useJourney } from "../../state/journey-context";
 import type { GambleGameId } from "../../types/gamble";
-import {
-  logGamblePrepared, logGambleReplacement, logGambleResolved,
-  logGambleSettled, logGambleSiteEntered,
-} from "./gamble-site-logging-view-model";
+import { logGamblePrepared, logGambleReplacement, logGambleResolved, logGambleSettled, logGambleSiteEntered } from "./gamble-site-logging-view-model";
 import { buildGambleSiteView, resolveGambleGuide } from "./gamble-site-view-model";
+import { useGuideDialogue } from "./guide-dialogue-view-model";
 
-export function GambleSiteScreenAdapter({
-  siteId,
-  gambleGameId,
-}: {
-  siteId: string;
-  gambleGameId: GambleGameId | null;
-}) {
+export function GambleSiteScreenAdapter({ siteId, gambleGameId }: { siteId: string; gambleGameId: GambleGameId | null }) {
   const { state, journeyContent, mutations } = useJourney();
-  const node = state.currentDreamscape === null
-    ? null
-    : (state.atlas.nodes[state.currentDreamscape] ?? null);
+  const node = state.currentDreamscape === null ? null : (state.atlas.nodes[state.currentDreamscape] ?? null);
   const candidate = node?.sites.find((entry) => entry.id === siteId) ?? null;
   const site = candidate?.type === "Gamble" ? { ...candidate, type: candidate.type } : null;
   const runtimeCandidate = state.siteRuntime[siteId];
   const runtime = runtimeCandidate?.kind === "gamble" ? runtimeCandidate : null;
   const guide = resolveGambleGuide(journeyContent.guides, site?.guideIdOverride);
+  const dialogueContext = site?.randomSite?.materialized === true ? "random-site" : runtime?.gameId === "tidemark-ladder-climb" ? "gamble-ladder-climb" : runtime?.gameId === "starway-stairs" ? "gamble-starway-stairs" : runtime?.gameId === "four-suit-reprise" ? "gamble-four-suit-reprise" : "gamble-three-gate";
+  const guideLine = useGuideDialogue(guide, dialogueContext, {
+    "win-essence": journeyContent.economyData.gamble.ladderClimb.winEssence,
+  });
   const view = useMemo(
-    () => site === null
-      ? null
-      : buildGambleSiteView({
-          state,
-          sceneNode: node,
-          site,
-          guide,
-          atlasData: journeyContent.atlasData,
-          economyData: journeyContent.economyData,
-        }),
-    [guide, journeyContent.atlasData, journeyContent.economyData, node, site, state],
+    () =>
+      site === null
+        ? null
+        : buildGambleSiteView({
+            state,
+            sceneNode: node,
+            site,
+            guide,
+            guideLine,
+            sitesData: journeyContent.sitesData,
+            economyData: journeyContent.economyData,
+          }),
+    [guide, guideLine, journeyContent.economyData, journeyContent.sitesData, node, site, state],
   );
 
   useEffect(() => {
@@ -46,10 +42,10 @@ export function GambleSiteScreenAdapter({
 
   useEffect(() => {
     if (runtime === null || view === null) return;
-    logGamblePrepared(siteId, runtime, view, journeyContent.economyData);
-    logGambleResolved(siteId, runtime, view, journeyContent.economyData);
-    logGambleSettled(siteId, runtime, view, journeyContent.economyData);
-  }, [runtime, siteId, view, journeyContent.economyData]);
+    logGamblePrepared(siteId, runtime, view, journeyContent.economyData, journeyContent.sitesData);
+    logGambleResolved(siteId, runtime, view, journeyContent.economyData, journeyContent.sitesData);
+    logGambleSettled(siteId, runtime, view, journeyContent.economyData, journeyContent.sitesData);
+  }, [runtime, siteId, view, journeyContent.economyData, journeyContent.sitesData]);
 
   const settleOutcome = useCallback(() => {
     if (runtime?.gameId === "gravok-three-gate-wager") {
@@ -77,15 +73,18 @@ export function GambleSiteScreenAdapter({
       if (commitment !== undefined) mutations.playAgainFourSuitReprise(siteId, commitment);
     }
   }, [mutations, runtime, siteId]);
-  const replaceDreamsign = useCallback((dreamsignId: string) => {
-    if (runtime?.gameId !== "gravok-three-gate-wager" && runtime?.gameId !== "tidemark-ladder-climb") return;
-    logGambleReplacement(siteId, runtime.gameId, dreamsignId, runtime.rewardDreamsign?.id);
-    if (runtime.gameId === "tidemark-ladder-climb") {
-      mutations.replaceTidemarkLadderClimbDreamsign(siteId, dreamsignId);
-    } else {
-      mutations.replaceGravokWagerDreamsign(siteId, dreamsignId);
-    }
-  }, [mutations, runtime, siteId]);
+  const replaceDreamsign = useCallback(
+    (dreamsignId: string) => {
+      if (runtime?.gameId !== "gravok-three-gate-wager" && runtime?.gameId !== "tidemark-ladder-climb") return;
+      logGambleReplacement(siteId, runtime.gameId, dreamsignId, runtime.rewardDreamsign?.id);
+      if (runtime.gameId === "tidemark-ladder-climb") {
+        mutations.replaceTidemarkLadderClimbDreamsign(siteId, dreamsignId);
+      } else {
+        mutations.replaceGravokWagerDreamsign(siteId, dreamsignId);
+      }
+    },
+    [mutations, runtime, siteId],
+  );
 
   if (view === null) return null;
   return (
@@ -114,8 +113,7 @@ export function GambleSiteScreenAdapter({
       onChooseFourSuitTransfiguration={(type) => {
         if (runtime?.gameId !== "four-suit-reprise") return;
         const commitment = runtime.rounds[runtime.rounds.length - 1]?.shuffleCommitment;
-        if (commitment !== undefined)
-          mutations.chooseFourSuitRepriseTransfiguration(siteId, commitment, type);
+        if (commitment !== undefined) mutations.chooseFourSuitRepriseTransfiguration(siteId, commitment, type);
       }}
       onPlayAgainFourSuit={playAgain}
       onReplaceDreamsign={replaceDreamsign}

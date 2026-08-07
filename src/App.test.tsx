@@ -8,6 +8,7 @@ import { CONFIG_DATA_FIXTURE } from "./testing/config-data-fixture";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
+  MINIMAL_SITES_DATA,
 } from "./__test-helpers__/atlas-fixtures";
 import type { ReactElement, ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
@@ -405,6 +406,7 @@ function makeJourneyContent(): JourneyContent {
     affiliations: [],
     guides: [],
     atlasData: MINIMAL_ATLAS_DATA,
+    sitesData: MINIMAL_SITES_DATA,
     economyData: economyFixture(),
     opponentsData: opponentsFixture(),
   };
@@ -427,6 +429,7 @@ function setJourneyState(state: JourneyState): void {
       affiliations: [],
       guides: [],
       atlasData: MINIMAL_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
       economyData: economyFixture(),
       opponentsData: opponentsFixture(),
     },
@@ -724,6 +727,7 @@ describe("JourneyApp", () => {
         affiliations: [],
         guides: [],
         atlasData: MINIMAL_ATLAS_DATA,
+        sitesData: MINIMAL_SITES_DATA,
         economyData: economyFixture(),
         opponentsData: opponentsFixture(),
       },

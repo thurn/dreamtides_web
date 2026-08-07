@@ -1,6 +1,6 @@
 // Pure view-model builder for Amunet's Cumulus Dreamsign Bazaar.
 
-import { guideForSiteType } from "../../data/dreamscapes";
+import { requireGuideForSiteType } from "../../data/dreamscapes";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import {
   effectivePrice,
@@ -16,7 +16,7 @@ import type {
   ShopSiteRuntime,
   SiteState,
 } from "../../types/journey";
-import { artRef, type ArtRef } from "../../cumulus/primitives/art";
+import type { ArtRef } from "../../cumulus/primitives/art";
 import type {
   DreamsignBazaarOfferView,
   DreamsignBazaarPurgeView,
@@ -24,31 +24,22 @@ import type {
   DreamsignBazaarSiteView,
 } from "../../cumulus/screens/DreamsignBazaarSiteScreen";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
-
-const FALLBACK_GUIDE_ID = "amunet_the_tomb_keeper";
-const FALLBACK_GUIDE_NAME = "Amunet, the Tomb-Keeper";
-const FALLBACK_GUIDE_LINE = "The sands remember all dreams.";
+import { projectGuideView } from "./guide-view-model";
 
 /** Resolve Amunet, the resident Dream Guide for Dreamsign Markets. */
 export function resolveDreamsignBazaarGuide(
   guides: readonly DreamGuideContent[],
   guideIdOverride?: string,
-): DreamGuideContent | null {
-  return guideForSiteType(guides, "DreamsignMarket", guideIdOverride);
+): DreamGuideContent {
+  return requireGuideForSiteType(guides, "DreamsignMarket", guideIdOverride);
 }
 
 /** Build Amunet's guide slice for the shared character-gallery layout. */
 export function buildDreamsignBazaarGuideView(
-  guide: DreamGuideContent | null,
-  guideLine: string | null,
+  guide: DreamGuideContent,
+  guideLine: string,
 ) {
-  const id = guide?.id ?? FALLBACK_GUIDE_ID;
-  return {
-    id,
-    name: guide?.name ?? FALLBACK_GUIDE_NAME,
-    line: guideLine ?? guide?.dialog[0] ?? FALLBACK_GUIDE_LINE,
-    art: artRef.dreamGuide(id),
-  };
+  return projectGuideView(guide, guideLine);
 }
 
 /** Resolve persistent Dreamsign slots into UUID-derived, effectively priced wares. */
@@ -122,8 +113,8 @@ export function buildDreamsignBazaarSiteView(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState;
   runtime: ShopSiteRuntime;
-  guide: DreamGuideContent | null;
-  guideLine: string | null;
+  guide: DreamGuideContent;
+  guideLine: string;
   pendingDreamsign: Dreamsign | null;
   economyData: EconomyData;
 }): DreamsignBazaarSiteView {

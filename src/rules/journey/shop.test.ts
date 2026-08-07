@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { economyFixture } from "../../testing/economy-fixture";
+import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
 
 import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import type { EventContext, GameEvent } from "../../eventlog/types";
@@ -26,7 +27,16 @@ import { registerDeckContentProvider } from "./deck";
 // Fixtures
 // ---------------------------------------------------------------------------
 
-const GENESIS = { seed: "shop-seed", reducerVersion: "test", createdAt: 0, contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null } };
+const GENESIS = {
+  seed: "shop-seed",
+  reducerVersion: "test",
+  createdAt: 0,
+  contentConfig: {
+    poolVariant: "test",
+    draftMode: "pool",
+    fresh20PackSize: null,
+  },
+};
 const SITE_ID = "site-1";
 const NODE_ID = "node-1";
 
@@ -75,7 +85,10 @@ function reduce(
   return reduceGameEvent(state, event(type, payload), context);
 }
 
-function makeSite(type: SiteType, overrides: Partial<SiteState> = {}): SiteState {
+function makeSite(
+  type: SiteType,
+  overrides: Partial<SiteState> = {},
+): SiteState {
   return {
     id: SITE_ID,
     type,
@@ -103,7 +116,9 @@ function makeNode(sites: SiteState[]): DreamscapeNode {
   };
 }
 
-function cardSlot(overrides: Partial<Extract<RuntimeShopSlot, { itemType: "card" }>> = {}): RuntimeShopSlot {
+function cardSlot(
+  overrides: Partial<Extract<RuntimeShopSlot, { itemType: "card" }>> = {},
+): RuntimeShopSlot {
   return {
     itemType: "card",
     cardNumber: 7,
@@ -160,6 +175,7 @@ function shopState(
 
 /** A provider that regenerates a shop with a single deterministic card slot. */
 const rerollProvider: SiteContentProvider = {
+  sitesData: MINIMAL_SITES_DATA,
   economyData: economyFixture(),
   openSite() {
     return null;
@@ -208,7 +224,9 @@ describe("BUY_SHOP_SLOT", () => {
     expect(result.state.journey.essence).toBe(200);
     expect(result.state.journey.deck).toHaveLength(1);
     expect(result.state.journey.deck[0].cardNumber).toBe(9);
-    const runtime = result.state.journey.siteRuntime[SITE_ID] as ShopSiteRuntime;
+    const runtime = result.state.journey.siteRuntime[
+      SITE_ID
+    ] as ShopSiteRuntime;
     expect(runtime.slots[0].purchased).toBe(true);
   });
 
@@ -301,7 +319,9 @@ describe("REROLL_SHOP", () => {
     // Free reroll consumed first; essence untouched.
     expect(result.state.journey.shopModifiers.freeRerolls).toBe(0);
     expect(result.state.journey.essence).toBe(300);
-    const runtime = result.state.journey.siteRuntime[SITE_ID] as ShopSiteRuntime;
+    const runtime = result.state.journey.siteRuntime[
+      SITE_ID
+    ] as ShopSiteRuntime;
     expect(runtime.rerollCount).toBe(1);
   });
 
@@ -358,7 +378,10 @@ describe("REROLL_SHOP", () => {
     expect(second.outcome).toBe("applied");
     expect(third.outcome).toBe("bounced");
     expect(second.state.journey.essence).toBe(200);
-    expect((second.state.journey.siteRuntime[SITE_ID] as ShopSiteRuntime).rerollCount).toBe(2);
+    expect(
+      (second.state.journey.siteRuntime[SITE_ID] as ShopSiteRuntime)
+        .rerollCount,
+    ).toBe(2);
   });
 });
 
@@ -428,7 +451,8 @@ describe("battle modifiers", () => {
 
   it("PUSH_TEMPORARY_NIGHTMARE_GRANT adds Nightmare entries and a modifier", () => {
     registerDeckContentProvider({
-      resolveCardNumber: (cardId) => cardId === NIGHTMARE_CARD_ID ? 10002 : null,
+      resolveCardNumber: (cardId) =>
+        cardId === NIGHTMARE_CARD_ID ? 10002 : null,
       resolveDreamsign: () => null,
     });
     const state = shopState([cardSlot()]);
@@ -441,7 +465,9 @@ describe("battle modifiers", () => {
     expect(result.outcome).toBe("applied");
     expect(result.state.journey.deck).toHaveLength(2);
     expect(result.state.journey.deck.every((e) => e.isBane)).toBe(true);
-    expect(result.state.journey.deck.every((e) => e.cardNumber === 10002)).toBe(true);
+    expect(result.state.journey.deck.every((e) => e.cardNumber === 10002)).toBe(
+      true,
+    );
     const modifiers = result.state.journey.battleModifiers;
     expect(modifiers).toHaveLength(1);
     const mod = modifiers[0];
@@ -457,7 +483,8 @@ describe("battle modifiers", () => {
 
   it("replays the historical temporary grant only for Nightmare", () => {
     registerDeckContentProvider({
-      resolveCardNumber: (cardId) => cardId === NIGHTMARE_CARD_ID ? 10002 : null,
+      resolveCardNumber: (cardId) =>
+        cardId === NIGHTMARE_CARD_ID ? 10002 : null,
       resolveDreamsign: () => null,
     });
     const state = shopState([cardSlot()]);
@@ -479,7 +506,8 @@ describe("battle modifiers", () => {
 
   it("maps every historical temporary Bane grant to Nightmare", () => {
     registerDeckContentProvider({
-      resolveCardNumber: (cardId) => cardId === NIGHTMARE_CARD_ID ? 10002 : null,
+      resolveCardNumber: (cardId) =>
+        cardId === NIGHTMARE_CARD_ID ? 10002 : null,
       resolveDreamsign: () => null,
     });
     const state = shopState([cardSlot()]);
@@ -498,7 +526,8 @@ describe("battle modifiers", () => {
 
   it("PUSH_TEMPORARY_NIGHTMARE_GRANT bounces a non-positive count", () => {
     registerDeckContentProvider({
-      resolveCardNumber: (cardId) => cardId === NIGHTMARE_CARD_ID ? 10002 : null,
+      resolveCardNumber: (cardId) =>
+        cardId === NIGHTMARE_CARD_ID ? 10002 : null,
       resolveDreamsign: () => null,
     });
     const state = shopState([cardSlot()]);
@@ -608,8 +637,14 @@ describe("atlas edits", () => {
 
   it("uses configured Random Site destinations and presenting guide for Atlas edits", () => {
     registerSiteContentProvider({
-      randomSiteDestinations: ["Exploration"],
-      randomSiteGuideId: "fixture-random-guide",
+      sitesData: {
+        ...MINIMAL_SITES_DATA,
+        randomSite: {
+          ...MINIMAL_SITES_DATA.randomSite,
+          destinations: ["Exploration"],
+          guideId: "fixture-random-guide",
+        },
+      },
       openSite: () => null,
     });
     const state = shopState([cardSlot()]);
@@ -638,7 +673,6 @@ describe("atlas edits", () => {
       }).outcome,
     ).toBe("bounced");
   });
-
 });
 
 // ---------------------------------------------------------------------------
@@ -669,6 +703,7 @@ describe("SET_CARD_SOURCE_DEBUG", () => {
 describe("merchant offers", () => {
   it("ACCEPT_MERCHANT_OFFER delegates to the provider and applies its state", () => {
     const provider: SiteContentProvider = {
+      sitesData: MINIMAL_SITES_DATA,
       openSite() {
         return null;
       },
@@ -685,6 +720,7 @@ describe("merchant offers", () => {
 
   it("ACCEPT_MERCHANT_OFFER bounces when the provider returns null", () => {
     const provider: SiteContentProvider = {
+      sitesData: MINIMAL_SITES_DATA,
       openSite() {
         return null;
       },
@@ -705,6 +741,7 @@ describe("merchant offers", () => {
       reduce(state, "ACCEPT_MERCHANT_OFFER", { siteId: SITE_ID }).outcome,
     ).toBe("bounced");
     const provider: SiteContentProvider = {
+      sitesData: MINIMAL_SITES_DATA,
       openSite() {
         return null;
       },
@@ -720,6 +757,7 @@ describe("merchant offers", () => {
 
   it("DECLINE_MERCHANT delegates to the provider", () => {
     const provider: SiteContentProvider = {
+      sitesData: MINIMAL_SITES_DATA,
       openSite() {
         return null;
       },

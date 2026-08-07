@@ -39,6 +39,7 @@ const fake = vi.hoisted(() => {
       draftMode: "pool",
       fresh20PackSize: null,
       atlasFoldHash: "fixture-atlas-fold-hash",
+      sitesFoldHash: "fixture-sites-fold-hash",
       draftFoldHash: "fixture-draft-fold-hash",
       economyFoldHash: "a".repeat(64),
       rewardSelectionFoldHash: "c".repeat(64),

@@ -3,7 +3,10 @@ import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
-import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
+import {
+  MINIMAL_ATLAS_DATA,
+  MINIMAL_SITES_DATA,
+} from "../../__test-helpers__/atlas-fixtures";
 import { resolveDeckEntryCard } from "../../card-type-change";
 import type {
   ExplorationActionContent,
@@ -123,6 +126,7 @@ function contentFixture(
     affiliations: [],
     guides: [],
     atlasData: MINIMAL_ATLAS_DATA,
+    sitesData: MINIMAL_SITES_DATA,
     economyData: economyFixture(),
     opponentsData: opponentsFixture(),
   };

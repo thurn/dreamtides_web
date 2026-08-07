@@ -1,6 +1,6 @@
 // Pure view-model builder for the Cumulus Purge site.
 
-import { guideForSiteType } from "../../data/dreamscapes";
+import { requireGuideForSiteType } from "../../data/dreamscapes";
 import {
   maxAffordablePurgeCount,
   purgeVisitCost,
@@ -14,7 +14,7 @@ import type {
   JourneyState,
   SiteState,
 } from "../../types/journey";
-import { artRef, type ArtRef } from "../../cumulus/primitives/art";
+import type { ArtRef } from "../../cumulus/primitives/art";
 import type {
   PurgeCardView,
   PurgeGuideView,
@@ -25,31 +25,22 @@ import type { TutorialSiteConfiguration } from "../../types/tutorial";
 import { toDeckCardView } from "./mobile-deck-view-model";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
-
-const FALLBACK_GUIDE_ID = "takeshi";
-const FALLBACK_GUIDE_NAME = "Master Takeshi";
-const FALLBACK_GUIDE_LINE = "A precise cut leaves the dream lighter.";
+import { projectGuideView } from "./guide-view-model";
 
 /** Resolve Master Takeshi, the resident guide for Purge. */
 export function resolvePurgeGuide(
   guides: readonly DreamGuideContent[],
   guideIdOverride?: string,
-): DreamGuideContent | null {
-  return guideForSiteType(guides, "Purge", guideIdOverride);
+): DreamGuideContent {
+  return requireGuideForSiteType(guides, "Purge", guideIdOverride);
 }
 
 /** Build the guide slice shown at the top of the purge screen. */
 export function buildPurgeGuideView(
-  guide: DreamGuideContent | null,
-  guideLine: string | null,
+  guide: DreamGuideContent,
+  guideLine: string,
 ): PurgeGuideView {
-  const id = guide?.id ?? FALLBACK_GUIDE_ID;
-  return {
-    id,
-    name: guide?.name ?? FALLBACK_GUIDE_NAME,
-    line: guideLine ?? guide?.dialog[0] ?? FALLBACK_GUIDE_LINE,
-    art: artRef.dreamGuide(id),
-  };
+  return projectGuideView(guide, guideLine);
 }
 
 /** Resolve every deck entry into the card view used by the purge grid. */
@@ -87,8 +78,8 @@ export function buildPurgeSiteView(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState;
   cardDatabase: Map<number, CardData>;
-  guide: DreamGuideContent | null;
-  guideLine: string | null;
+  guide: DreamGuideContent;
+  guideLine: string;
   tutorialConfiguration?: TutorialSiteConfiguration;
   economyData: EconomyData;
 }): PurgeSiteView {

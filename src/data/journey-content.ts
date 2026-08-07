@@ -55,12 +55,14 @@ import {
   loadDreamscapes,
 } from "./dreamscapes";
 import { loadAtlasData } from "./atlas-data";
+import { loadSitesData } from "./sites-data";
 import { loadEconomyData } from "./economy-data";
 import { loadDraftData } from "./draft-data";
 import { loadOpponentsData } from "./opponents-data";
 import type { EconomyData } from "../types/economy-data";
 import type { DraftData } from "../types/draft-data";
 import type { OpponentsData } from "../types/opponents-data";
+import type { SitesData } from "../types/sites-data";
 import type {
   AffiliationContent,
   ApollyonIncarnationContent,
@@ -121,6 +123,8 @@ export interface JourneyContent {
    * Dream Atlas generation tuning, loaded from `public/atlas-data.json`.
    */
   atlasData: AtlasData;
+  /** Canonical cross-site metadata and fold-relevant site rules. */
+  sitesData: SitesData;
   /** Validated draft rules loaded before room folding begins. */
   draftData: DraftData;
   /** Validated direct economy tuning loaded before room folding begins. */
@@ -456,6 +460,7 @@ export async function loadJourneyContent(
     affiliations,
     guides,
     atlasData,
+    sitesData,
     economyData,
     opponentsData,
     apollyonIncarnations,
@@ -498,6 +503,7 @@ export async function loadJourneyContent(
     // present the resident guide and their home specialty.
     loadDreamGuides(),
     loadAtlasData(),
+    loadSitesData(),
     loadEconomyData(),
     loadOpponentsData(),
     // Apollyon's incarnations are small and always loaded so the Atlas can
@@ -586,6 +592,7 @@ export async function loadJourneyContent(
     affiliations,
     guides,
     atlasData,
+    sitesData,
     draftData,
     economyData,
     opponentsData,

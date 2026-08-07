@@ -11,6 +11,7 @@ import { useJourney } from "../state/journey-context";
 import type { DreamscapeNode, SiteState } from "../types/journey";
 import { GLYPHS } from "../cumulus/primitives/glyph";
 import type { JourneyUtilityMenuAction } from "./JourneyUtilityMenuController";
+import { guideDialogueLines } from "../data/dreamscapes";
 
 /** Builds the Augury commands contributed to the shared Cumulus menu. */
 export function useAuguryJourneyMenuActions(
@@ -26,13 +27,14 @@ export function useAuguryJourneyMenuActions(
     ) {
       return null;
     }
+    const guide = resolveAuguryGuide(journeyContent.guides);
     return buildAugurySiteModel({
       state,
       sceneNode,
       site,
       journeyContent,
-      guide: resolveAuguryGuide(journeyContent.guides),
-      guideLine: null,
+      guide,
+      guideLine: guideDialogueLines(guide, "site")[0],
     });
   }, [journeyContent, sceneNode, site, state]);
 
@@ -48,8 +50,9 @@ export function useAuguryJourneyMenuActions(
     const forceCategory = mutations.forceAuguryArchetype;
     if (forceCategory !== undefined) {
       const forcedArchetypeId = result.context?.forcedArchetypeId ?? null;
-      const eligibleArchetypes = [...(result.debug?.eligibleArchetypeIds ?? [])]
-        .sort(compareArchetypeLabels);
+      const eligibleArchetypes = [
+        ...(result.debug?.eligibleArchetypeIds ?? []),
+      ].sort(compareArchetypeLabels);
       actions.push({
         id: "forceJourneyCategory",
         kind: "group",

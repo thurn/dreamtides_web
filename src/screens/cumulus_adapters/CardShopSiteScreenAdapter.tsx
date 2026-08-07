@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";
 import { useCardSourceDebugPublication } from "../../state/use-card-source-debug-publication";
@@ -9,6 +9,7 @@ import {
   buildCardShopTransfiguredOfferLog,
   resolveCardShopGuide,
 } from "./card-shop-view-model";
+import { useGuideDialogue } from "./guide-dialogue-view-model";
 
 export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
   const { state, mutations, journeyContent } = useJourney();
@@ -19,14 +20,11 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
   const site = node?.sites.find((candidate) => candidate.id === siteId) ?? null;
   const runtime = state.siteRuntime[siteId];
   const shopRuntime = runtime?.kind === "shop" ? runtime : null;
-  const guide = resolveCardShopGuide(journeyContent.guides, site?.guideIdOverride);
-  const guideLineRef = useRef<string | null | undefined>(undefined);
-  if (guideLineRef.current === undefined) {
-    guideLineRef.current =
-      guide === null || guide.dialog.length === 0
-        ? null
-        : guide.dialog[Math.floor(Math.random() * guide.dialog.length)];
-  }
+  const guide = resolveCardShopGuide(
+    journeyContent.guides,
+    site?.guideIdOverride,
+  );
+  const guideLine = useGuideDialogue(guide, "site");
 
   const view = useMemo(
     () =>
@@ -39,7 +37,7 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
             runtime: shopRuntime,
             cardDatabase: journeyContent.cardDatabase,
             guide,
-            guideLine: guideLineRef.current ?? null,
+            guideLine,
             economyData: journeyContent.economyData,
           }),
     [
@@ -102,7 +100,8 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
   }, [guide, site]);
 
   const handleBuy = useCallback(
-    (slotIndex: number) => site !== null && mutations.buyShopSlot(site.id, slotIndex),
+    (slotIndex: number) =>
+      site !== null && mutations.buyShopSlot(site.id, slotIndex),
     [mutations, site],
   );
   const handleRestock = useCallback(() => {

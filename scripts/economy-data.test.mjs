@@ -51,6 +51,11 @@ function fixture() {
         "standard-wager": 29, "enhanced-wager": 17,
         tiers: [71, 151, 317].map((reward, index) => ({ tier: index + 1, "essence-reward": reward })),
       },
+      "four-suit-reprise": {
+        "standard-draw-price": 19,
+        "enhanced-draw-price": 11,
+        "essence-reward": 83,
+      },
     },
     exploration: { "default-essence-per-spark": 43 },
   };

@@ -8,9 +8,8 @@
 #   id              Stable identifier referenced by guides and atlas generation.
 #   name            Player-facing dreamscape name.
 #   aesthetic       Art-direction / mood description for the region.
-#   guide-id        Resident Dream Guide id (omitted for the starter).
-#   signature-site  The SiteType this dreamscape is known for; its guide enhances
-#                   this site type in the dreamscape they call home.
+#   Guide residency and signature sites are derived from dream_guides.toml.
+#   signature-site  Authored only for the starter's fixed Draft identity.
 #   affiliation-id  Thematic affiliation id steering content (omitted for starter).
 #   is-starter      Present and true only on the run's opening dreamscape.
 #   fixed-sites     Ordered SiteType list the starter always presents.
@@ -38,8 +37,6 @@ fixed-sites = ["Draft", "Draft", "DreamsignRevelation", "Purge", "Battle"]
 id = "tumbleleaf_village"
 name = "Tumbleleaf Village"
 aesthetic = "A cozy fantasy village of anthropomorphic animals."
-guide-id = "tobias_tanglefur"
-signature-site = "Shop"
 affiliation-id = "spirit_animals"
 # Spirit-animal payoffs: Grath rewards allied spirit animals directly; Radulf
 # and Demetrios are the go-wide character builders whose signature decks lean on
@@ -54,8 +51,6 @@ dream-avatar-ids = [
 id = "pharaohs_gate"
 name = "Pharaoh's Gate"
 aesthetic = "An ancient Egyptian realm of sun-baked stone and gold."
-guide-id = "amunet_the_tomb_keeper"
-signature-site = "DreamsignMarket"
 affiliation-id = "erode_void"
 # The Void: the deepest reclaim/void-matters pool. Seld Rakor, Seraveth, and
 # Vaela all key off cards in the void; Vethran's cost-X Discover rounds out the
@@ -71,8 +66,6 @@ dream-avatar-ids = [
 id = "winterwake_fjords"
 name = "Winterwake Fjords"
 aesthetic = "A snowy viking village beneath frozen cliffs."
-guide-id = "sigrun"
-signature-site = "DreamsignRevelation"
 affiliation-id = "removal"
 # Tempo: proactive, fast-starting plans. Yveth Coravel bounces to reuse and
 # undercut; Drusus Calvus spends his opening turn pulling ahead on energy. Edran
@@ -88,8 +81,6 @@ dream-avatar-ids = [
 id = "frostforge"
 name = "Frostforge"
 aesthetic = "A dwarven fortress of anvils and glowing forges."
-guide-id = "durgan_forgehammer"
-signature-site = "Transfiguration"
 affiliation-id = "storm_events"
 # Events: every resident is an event-cast payoff. Kasane copies events, Rael
 # foresees off a second event, and Ovanel refills events after playing one.
@@ -103,8 +94,6 @@ dream-avatar-ids = [
 id = "hopes_end"
 name = "Hope's End"
 aesthetic = "A rural town in the grip of a zombie apocalypse."
-guide-id = "deacon_holt"
-signature-site = "Duplication"
 affiliation-id = "inexpensive_characters"
 # Characters: flood the board and reward each body. Korrax buffs an ally every
 # night, Kaleth awakens allies, and Senemhet turns a wide board's energy into
@@ -119,8 +108,6 @@ dream-avatar-ids = [
 id = "tsukiren"
 name = "Tsukiren"
 aesthetic = "A samurai-era Japanese kingdom of paper lanterns and steel."
-guide-id = "master_takeshi"
-signature-site = "Purge"
 affiliation-id = "warriors"
 # Warriors: the whole warrior tribe lives here. Gunnar Deepforge copies the last
 # warrior played, Tensho discounts the first warrior drawn, and Valdren reclaims
@@ -135,8 +122,6 @@ dream-avatar-ids = [
 id = "wilderveil"
 name = "Wilderveil"
 aesthetic = "An enchanted forest of ancient trees and drifting lights."
-guide-id = "aldric_the_seer"
-signature-site = "Augury"
 affiliation-id = "abandon_sacrifice"
 # Abandon: sacrifice your own allies for value. Ossian abandons to draw, Caedryn
 # abandons to materialize a bigger body, and Kragg discounts the next character
@@ -151,8 +136,6 @@ dream-avatar-ids = [
 id = "rust_expanse"
 name = "The Rust Expanse"
 aesthetic = "A Mad-Max post-apocalyptic wasteland of scrap and dust."
-guide-id = "maddox"
-signature-site = "RandomSite"
 affiliation-id = "survivors"
 # Survivors: grind-it-out attrition in the wasteland. Kell Tarn's signature deck
 # is built on survivor bodies (Wreckland Maverick); Karev Soltis punishes the
@@ -167,8 +150,6 @@ dream-avatar-ids = [
 id = "farpoint_station"
 name = "Farpoint Station"
 aesthetic = "A sci-fi outpost clinging to a distant planet."
-guide-id = "gravok"
-signature-site = "Gamble"
 affiliation-id = "figments"
 # Figments: token-makers and figment payoffs. Serenath Veyl rewards
 # materializing a figment and Kael Voss discards to materialize a survivor
@@ -184,8 +165,6 @@ dream-avatar-ids = [
 id = "grid_city"
 name = "Grid City"
 aesthetic = "A neon-drenched cyberpunk city of rain and chrome."
-guide-id = "layaway"
-signature-site = "Exploration"
 affiliation-id = "discard"
 # Discard: turn discarding into advantage. Vrakmoth and Corvath both convert a
 # discard into a card or reclaim, Tessa loots (draw-then-discard), and Zeva

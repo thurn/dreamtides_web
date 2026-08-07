@@ -10,16 +10,30 @@ import {
   SITE_TYPES,
   makeValidateDreamscapeEdit,
   patchDreamscapesToml,
+  patchDreamGuideAssignments,
   readAffiliationOptions,
   readDreamGuideOptions,
   readEditorDreamscapes,
   refreshDreamscapesDataJson,
+  swapDreamGuideSpecializedDialogue,
 } from "./dreamscape-editor-data.mjs";
 
 // Self-contained fixtures so these assertions never depend on (and never break
 // when the author edits) the production dreamscapes / guides / affiliations.
 const GUIDE_IDS = ["guide_one", "guide_two"];
 const AFFILIATION_IDS = ["affil_one", "affil_two"];
+const GUIDE_SITE_TYPES = [
+  "Shop",
+  "Purge",
+  "Exploration",
+  "Transfiguration",
+  "Duplication",
+  "Augury",
+  "DreamsignMarket",
+  "DreamsignRevelation",
+  "RandomSite",
+  "Gamble",
+];
 
 function fixtureToml() {
   return `[[dreamscapes]]
@@ -30,20 +44,58 @@ signature-site = "Draft"
 is-starter = true
 fixed-sites = ["Draft", "Battle"]
 
-[[dreamscapes]]
-id = "second_realm"
-name = "Second Realm"
-aesthetic = "A stormy coast."
-guide-id = "guide_one"
-signature-site = "Shop"
+${GUIDE_SITE_TYPES.map(
+  (siteType, index) => `[[dreamscapes]]
+id = "${index === 0 ? "second_realm" : `realm_${String(index)}`}"
+name = "Realm ${String(index)}"
+aesthetic = "Synthetic region ${String(index)}."
 affiliation-id = "affil_one"
-`;
+`,
+).join("\n")}`;
+}
+
+function fixtureGuidesToml() {
+  return `schema-version = 1
+
+${GUIDE_SITE_TYPES.map((siteType, index) => {
+  const id =
+    index === 0
+      ? "guide_one"
+      : index === 1
+        ? "guide_two"
+        : `guide_${String(index)}`;
+  const home = index === 0 ? "second_realm" : `realm_${String(index)}`;
+  const specialDialogue =
+    siteType === "RandomSite"
+      ? 'random-site = ["Fixture roads."]\n'
+      : siteType === "Gamble"
+        ? 'gamble-three-gate = ["Fixture gates."]\ngamble-ladder-climb = ["Fixture {win-essence} ladder."]\ngamble-starway-stairs = ["Fixture stairs."]\ngamble-four-suit-reprise = ["Fixture suits."]\n'
+        : "";
+  return `[[guides]]
+id = "${id}"
+name = "Guide ${String(index)}"
+portrait-source = "fixture-${String(index)}.png"
+home-dreamscape-id = "${home}"
+site-type = "${siteType}"
+home-specialty = "Fixture specialty ${String(index)}."
+
+[guides.dialogue]
+site = ["Fixture site line ${String(index)}."]
+${specialDialogue}`;
+}).join("\n")}`;
 }
 
 function writeFixture() {
   const rootDir = mkdtempSync(join(tmpdir(), "dreamscape-editor-data-test-"));
   mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
-  writeFileSync(join(rootDir, "data", "tabula", "dreamscapes.toml"), fixtureToml());
+  writeFileSync(
+    join(rootDir, "data", "tabula", "dreamscapes.toml"),
+    fixtureToml(),
+  );
+  writeFileSync(
+    join(rootDir, "data", "tabula", "dream_guides.toml"),
+    fixtureGuidesToml(),
+  );
   return rootDir;
 }
 
@@ -106,22 +158,74 @@ describe("patchDreamscapesToml", () => {
     expect(second.name).toBe("Renamed Realm");
   });
 
-  it("inserts an optional guide-id onto a record that lacks it", () => {
+  it("inserts an optional affiliation-id onto a record that lacks it", () => {
     const patched = patchDreamscapesToml(fixtureToml(), {
       dreamscapeId: "starter_field",
-      field: "guide-id",
-      value: "guide_two",
+      field: "affiliation-id",
+      value: "affil_two",
       validateEdit,
     });
     const starter = parse(patched.source).dreamscapes.find(
       (entry) => entry.id === "starter_field",
     );
-    expect(starter["guide-id"]).toBe("guide_two");
-    // The unrelated record keeps its original guide.
+    expect(starter["affiliation-id"]).toBe("affil_two");
+    // The unrelated record keeps its original affiliation.
     const second = parse(patched.source).dreamscapes.find(
       (entry) => entry.id === "second_realm",
     );
-    expect(second["guide-id"]).toBe("guide_one");
+    expect(second["affiliation-id"]).toBe("affil_one");
+  });
+});
+
+describe("canonical guide swaps", () => {
+  it("swaps homes and moves specialized dialogue with site specialties", () => {
+    const homes = patchDreamGuideAssignments(fixtureGuidesToml(), [
+      { guideId: "guide_one", field: "home-dreamscape-id", value: "realm_1" },
+      {
+        guideId: "guide_two",
+        field: "home-dreamscape-id",
+        value: "second_realm",
+      },
+    ]);
+    const parsedHomes = parse(homes).guides;
+    expect(
+      parsedHomes.find((guide) => guide.id === "guide_one")[
+        "home-dreamscape-id"
+      ],
+    ).toBe("realm_1");
+    expect(
+      parsedHomes.find((guide) => guide.id === "guide_two")[
+        "home-dreamscape-id"
+      ],
+    ).toBe("second_realm");
+
+    const source = fixtureGuidesToml();
+    const randomGuide = parse(source).guides.find(
+      (guide) => guide["site-type"] === "RandomSite",
+    );
+    const gambleGuide = parse(source).guides.find(
+      (guide) => guide["site-type"] === "Gamble",
+    );
+    const swappedTypes = patchDreamGuideAssignments(source, [
+      { guideId: randomGuide.id, field: "site-type", value: "Gamble" },
+      { guideId: gambleGuide.id, field: "site-type", value: "RandomSite" },
+    ]);
+    const swapped = swapDreamGuideSpecializedDialogue(
+      swappedTypes,
+      randomGuide.id,
+      gambleGuide.id,
+    );
+    const parsed = parse(swapped).guides;
+    expect(
+      parsed.find((guide) => guide.id === randomGuide.id).dialogue[
+        "gamble-three-gate"
+      ],
+    ).toEqual(["Fixture gates."]);
+    expect(
+      parsed.find((guide) => guide.id === gambleGuide.id).dialogue[
+        "random-site"
+      ],
+    ).toEqual(["Fixture roads."]);
   });
 });
 
@@ -129,7 +233,7 @@ describe("refreshDreamscapesDataJson", () => {
   it("writes camelCased runtime JSON with explicit null guide/affiliation", () => {
     const rootDir = writeFixture();
     const result = refreshDreamscapesDataJson({ rootDir });
-    expect(result.count).toBe(2);
+    expect(result.count).toBe(11);
 
     const json = JSON.parse(readFileSync(result.path, "utf8"));
     const starter = json.find((entry) => entry.id === "starter_field");
@@ -145,25 +249,21 @@ describe("catalog readers", () => {
     const rootDir = writeFixture();
     mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
     writeFileSync(
-      join(rootDir, "data", "tabula", "dream_guides.toml"),
-      `[[guides]]\nid = "guide_one"\nname = "Guide One"\nhome-dreamscape-id = "second_realm"\nsite-type = "Shop"\n`,
-    );
-    writeFileSync(
       join(rootDir, "data", "tabula", "affiliations.toml"),
       `[[affiliations]]\nid = "affil_one"\nname = "Affiliation One"\n`,
     );
 
     const guides = readDreamGuideOptions({ rootDir });
-    expect(guides).toEqual([
-      {
-        id: "guide_one",
-        name: "Guide One",
-        homeDreamscapeId: "second_realm",
-        siteType: "Shop",
-      },
-    ]);
+    expect(guides[0]).toEqual({
+      id: "guide_one",
+      name: "Guide 0",
+      homeDreamscapeId: "second_realm",
+      siteType: "Shop",
+    });
 
     const affiliations = readAffiliationOptions({ rootDir });
-    expect(affiliations).toEqual([{ id: "affil_one", name: "Affiliation One" }]);
+    expect(affiliations).toEqual([
+      { id: "affil_one", name: "Affiliation One" },
+    ]);
   });
 });

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createDefaultState } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
+import type { DreamGuideContent } from "../../types/content";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type {
   CardChoiceSiteRuntime,
@@ -12,6 +13,16 @@ import {
   buildDuplicationOfferLog,
   buildDuplicationSiteView,
 } from "./duplication-view-model";
+
+const GUIDE = {
+  id: "fixture-duplication-guide",
+  name: "Fixture Duplication Guide",
+  homeDreamscapeId: "fixture-home",
+  siteType: "Duplication",
+  portraitSource: "fixture-guide.png",
+  dialogue: { site: ["Fixture line."] },
+  homeSpecialty: "Fixture specialty.",
+} satisfies DreamGuideContent;
 
 function makeCard(cardNumber: number): CardData {
   return {
@@ -107,7 +118,7 @@ describe("buildDuplicationOfferLog", () => {
 });
 
 describe("buildDuplicationSiteView", () => {
-  it("builds Holt's guide fallback and exposes runtime state without production-data assertions", () => {
+  it("projects the required authored guide and exposes runtime state", () => {
     const state = createDefaultState();
     const view = buildDuplicationSiteView({
       state,
@@ -115,8 +126,8 @@ describe("buildDuplicationSiteView", () => {
       site,
       runtime: runtime(["entry-1"]),
       cardDatabase: new Map(),
-      guide: null,
-      guideLine: null,
+      guide: GUIDE,
+      guideLine: "Fixture line.",
     });
 
     expect(view).toMatchObject({
@@ -124,7 +135,7 @@ describe("buildDuplicationSiteView", () => {
       ready: true,
       alreadyAccepted: true,
       isEnhanced: true,
-      guide: { id: "deacon_holt", name: "Deacon Holt" },
+      guide: { id: GUIDE.id, name: GUIDE.name },
     });
   });
 
@@ -135,8 +146,8 @@ describe("buildDuplicationSiteView", () => {
       site,
       runtime: null,
       cardDatabase: new Map(),
-      guide: null,
-      guideLine: null,
+      guide: GUIDE,
+      guideLine: "Fixture line.",
     });
     expect(view.ready).toBe(false);
     expect(view.cards).toEqual([]);

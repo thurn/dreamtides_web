@@ -6,11 +6,8 @@ import type { CardTransfigurationDisplay } from "../transfiguration/transfigurat
 import type { CardData } from "../types/cards";
 import type { DreamsignTemplate } from "../types/content";
 import type { JourneyRewardEffect } from "../rules/journey/reward-effects";
-import type { AtlasData } from "../types/atlas-data";
-import type {
-  DeckEntry,
-  SiteState,
-} from "../types/journey";
+import type { SitesData } from "../types/sites-data";
+import type { DeckEntry, SiteState } from "../types/journey";
 import type {
   MerchantArchetypeId,
   MerchantOfferFamily,
@@ -62,7 +59,7 @@ export interface MerchantCatalogCard extends MerchantCardIdentity {
 }
 
 export interface MerchantContext {
-  atlasData: AtlasData;
+  sitesData: SitesData;
   journeySeed: string;
   site: SiteState;
   /** Canonical Augury slot scope injected by encounter generation. */

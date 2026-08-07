@@ -8,18 +8,39 @@ import type {
 } from "../../types/journey";
 import { resolveArtRef } from "../../cumulus/primitives/art";
 import { createDefaultState } from "../../state/journey-context";
-import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
+import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
 import {
   battleLabel,
   buildDreamscapeHudView,
   buildDreamscapeGuideDialogue,
-  buildDreamscapeView,
-  buildSiteModels,
+  buildDreamscapeView as buildDreamscapeViewImpl,
+  buildSiteModels as buildSiteModelsImpl,
   dreamscapeSceneRef,
   dreamscapeTitle,
   toQsbDreamAvatar,
   toQsbDreamsigns,
 } from "./dreamscape-view-model";
+
+const buildSiteModels = (
+  dreamscapeNode: DreamscapeNode,
+  completionLevel: number,
+  sitesData = MINIMAL_SITES_DATA,
+) => buildSiteModelsImpl(dreamscapeNode, completionLevel, sitesData, 5);
+
+const buildDreamscapeView = (
+  dreamscapeNode: DreamscapeNode,
+  state: JourneyState,
+  sitesData = MINIMAL_SITES_DATA,
+  replacementSiteId: string | null = null,
+) =>
+  buildDreamscapeViewImpl(
+    dreamscapeNode,
+    state,
+    sitesData,
+    replacementSiteId,
+    undefined,
+    5,
+  );
 
 function site(
   overrides: Partial<SiteState> & Pick<SiteState, "id" | "type">,
@@ -59,7 +80,7 @@ describe("battleLabel", () => {
 
 describe("buildSiteModels", () => {
   it("places one model per site with a seeded scatter position", () => {
-    const models = buildSiteModels(node(), 0, MINIMAL_ATLAS_DATA);
+    const models = buildSiteModels(node(), 0);
     expect(models).toHaveLength(3);
     for (const model of models) {
       expect(model.pos.x).toBeGreaterThanOrEqual(0);
@@ -70,7 +91,7 @@ describe("buildSiteModels", () => {
   });
 
   it("locks the guardian battle until every non-battle site is visited", () => {
-    const locked = buildSiteModels(node(), 0, MINIMAL_ATLAS_DATA).find((m) => m.isBattle);
+    const locked = buildSiteModels(node(), 0).find((m) => m.isBattle);
     expect(locked?.isLocked).toBe(true);
     expect(locked?.isInteractive).toBe(false);
 
@@ -81,7 +102,7 @@ describe("buildSiteModels", () => {
         site({ id: "s-battle", type: "Battle" }),
       ],
     });
-    const unlocked = buildSiteModels(visitedNonBattle, 0, MINIMAL_ATLAS_DATA).find(
+    const unlocked = buildSiteModels(visitedNonBattle, 0).find(
       (m) => m.isBattle,
     );
     expect(unlocked?.isLocked).toBe(false);
@@ -89,7 +110,7 @@ describe("buildSiteModels", () => {
   });
 
   it("labels the guardian by tier and the draft site with its pick count", () => {
-    const models = buildSiteModels(node(), 6, MINIMAL_ATLAS_DATA);
+    const models = buildSiteModels(node(), 6);
     const battle = models.find((m) => m.isBattle);
     const draft = models.find((m) => m.site.type === "Draft");
     expect(battle?.label).toBe("Final Boss");
@@ -225,11 +246,7 @@ describe("buildDreamscapeView", () => {
     });
 
     expect(
-      buildDreamscapeGuideDialogue(
-        returnedNode,
-        tutorialState,
-        configuration,
-      ),
+      buildDreamscapeGuideDialogue(returnedNode, tutorialState, configuration),
     ).toBeUndefined();
   });
 
@@ -241,7 +258,7 @@ describe("buildDreamscapeView", () => {
       dreamsigns: [],
       completionLevel: 2,
     } as unknown as JourneyState;
-    const view = buildDreamscapeView(node(), state, MINIMAL_ATLAS_DATA);
+    const view = buildDreamscapeView(node(), state, MINIMAL_SITES_DATA);
     expect(view.title).toBe("Ember Wood");
     expect(view.sites).toHaveLength(3);
     expect(view.inlineRewards).toEqual({});
@@ -262,7 +279,9 @@ describe("buildDreamscapeView", () => {
       },
     } as unknown as JourneyState;
 
-    expect(buildDreamscapeView(essenceNode, state, MINIMAL_ATLAS_DATA).inlineRewards).toEqual({
+    expect(
+      buildDreamscapeView(essenceNode, state, MINIMAL_SITES_DATA).inlineRewards,
+    ).toEqual({
       "s-essence": { kind: "essence", amount: 275 },
     });
   });
@@ -293,7 +312,9 @@ describe("buildDreamscapeView", () => {
       },
     } as unknown as JourneyState;
 
-    expect(buildDreamscapeView(rewardNode, state, MINIMAL_ATLAS_DATA).inlineRewards).toEqual({
+    expect(
+      buildDreamscapeView(rewardNode, state, MINIMAL_SITES_DATA).inlineRewards,
+    ).toEqual({
       "s-reward": {
         kind: "dreamsign",
         dreamsign,
@@ -332,7 +353,7 @@ describe("buildDreamscapeView", () => {
     const view = buildDreamscapeView(
       rewardNode,
       state,
-      MINIMAL_ATLAS_DATA,
+      MINIMAL_SITES_DATA,
       "s-reward",
     );
     expect(view.inlineRewards["s-reward"]).toMatchObject({

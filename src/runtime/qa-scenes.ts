@@ -123,13 +123,16 @@ function atlasLayerSceneState(layer: number): QaScene["build"] {
 
     // No dreamscape modifiers are active on a QA jump-in, so the site-generation
     // context is empty — matching a fresh run's atlas generation.
-    const context: SiteGenerationContext = {};
+    const context: SiteGenerationContext = {
+      draftPickCount: journeyContent.draftData.offers.picksPerSite,
+    };
     const atlas = regenerateAtlasForProgress(
       layer,
       context,
       {
         dreamscapes: journeyContent.dreamscapes,
         atlasData: journeyContent.atlasData,
+        sitesData: journeyContent.sitesData,
         dreamsignPoolIds: foundation.state.remainingDreamsignPool,
         apollyonIncarnations: journeyContent.apollyonIncarnations,
       },
@@ -202,7 +205,7 @@ const RANDOM_SITE_ATLAS_SCENE: QaScene = {
       randomSite: {
         mode: "homeChoice",
         candidateSiteTypes: [
-          ...journeyContent.atlasData.randomSite.destinations,
+          ...journeyContent.sitesData.randomSite.destinations,
         ],
       },
     };
@@ -278,10 +281,11 @@ function battleLayerSceneState(displayLayer: number): QaScene["build"] {
         ? foundation.atlas
         : regenerateAtlasForProgress(
             completionLevel,
-            {},
+            { draftPickCount: journeyContent.draftData.offers.picksPerSite },
             {
               dreamscapes: journeyContent.dreamscapes,
               atlasData: journeyContent.atlasData,
+              sitesData: journeyContent.sitesData,
               dreamsignPoolIds: foundation.state.remainingDreamsignPool,
               apollyonIncarnations: journeyContent.apollyonIncarnations,
             },
@@ -769,10 +773,11 @@ const JOURNEY_COMPLETE_SCENE: QaScene = {
     }
     const atlas = regenerateAtlasForProgress(
       6,
-      {},
+      { draftPickCount: journeyContent.draftData.offers.picksPerSite },
       {
         dreamscapes: journeyContent.dreamscapes,
         atlasData: journeyContent.atlasData,
+        sitesData: journeyContent.sitesData,
         dreamsignPoolIds: foundation.state.remainingDreamsignPool,
         apollyonIncarnations: journeyContent.apollyonIncarnations,
       },
@@ -868,8 +873,8 @@ function randomSiteScene(mode: "single" | "homeChoice"): QaScene {
         ? "A configured enhanced destination hosted by Random Site's presenting guide."
         : "Random Site's home choice with configured persisted destinations ready to be offered.",
     build: (journeyContent) => {
-      const destination = journeyContent.atlasData.randomSite.destinations[0];
-      const guideId = journeyContent.atlasData.randomSite.guideId;
+      const destination = journeyContent.sitesData.randomSite.destinations[0];
+      const guideId = journeyContent.sitesData.randomSite.guideId;
       if (destination === undefined || typeof guideId !== "string") return null;
       const state = parkOnSite(
         mode === "single" ? destination : "RandomSite",
@@ -903,7 +908,7 @@ function randomSiteScene(mode: "single" | "homeChoice"): QaScene {
                 randomSite: {
                   mode: "homeChoice" as const,
                   candidateSiteTypes: [
-                    ...journeyContent.atlasData.randomSite.destinations,
+                    ...journeyContent.sitesData.randomSite.destinations,
                   ],
                 },
               },

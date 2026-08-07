@@ -6,6 +6,7 @@ import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
+  MINIMAL_SITES_DATA,
 } from "../__test-helpers__/atlas-fixtures";
 import type { CardData } from "../types/cards";
 import { layerOrdinal } from "../types/layer-name";
@@ -78,6 +79,7 @@ function makeJourneyContent(
     affiliations: [],
     guides: [],
     atlasData: MINIMAL_ATLAS_DATA,
+    sitesData: MINIMAL_SITES_DATA,
     economyData: economyFixture(),
     opponentsData: opponentsFixture(),
     apollyonIncarnations: incarnations,
@@ -214,7 +216,8 @@ describe('the "random-site-atlas" QA scene', () => {
         name: "Maddox",
         homeDreamscapeId: "rust-expanse-test",
         siteType: "RandomSite",
-        dialog: ["Pick a road."],
+        portraitSource: "fixture-guide.png",
+        dialogue: { site: ["Pick a road."] },
         homeSpecialty: "Choose one of three sites.",
       },
     ];

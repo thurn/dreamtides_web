@@ -3,15 +3,26 @@ import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
 import { patchTomlRecord } from "./card-editor-data.mjs";
-import { transformDreamscape } from "./setup-assets.mjs";
+import {
+  compileDreamGuidesData,
+  deriveDreamscapesData,
+} from "./guide-sites-data.mjs";
 import { SITE_TYPES } from "../src/types/site-type.ts";
 
 export { SITE_TYPES };
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-export const DEFAULT_DREAMSCAPE_TOML_PATH = join("data", "tabula", "dreamscapes.toml");
+export const DEFAULT_DREAMSCAPE_TOML_PATH = join(
+  "data",
+  "tabula",
+  "dreamscapes.toml",
+);
 const DREAMSCAPE_JSON_PATH = join("public", "dreamscapes-data.json");
-const DREAM_GUIDES_TOML_PATH = join("data", "tabula", "dream_guides.toml");
+export const DREAM_GUIDES_TOML_PATH = join(
+  "data",
+  "tabula",
+  "dream_guides.toml",
+);
 const AFFILIATIONS_TOML_PATH = join("data", "tabula", "affiliations.toml");
 const DREAM_AVATARS_TOML_PATH = join("data", "tabula", "dream_avatars.toml");
 
@@ -53,7 +64,10 @@ function validationSuccess(field, value) {
   return { ok: true, field, value };
 }
 
-function readSourceDreamscapes(rootDir, dreamscapeTomlPath = DEFAULT_DREAMSCAPE_TOML_PATH) {
+function readSourceDreamscapes(
+  rootDir,
+  dreamscapeTomlPath = DEFAULT_DREAMSCAPE_TOML_PATH,
+) {
   const absoluteTomlPath = join(rootDir, dreamscapeTomlPath);
   const parsed = parse(readFileSync(absoluteTomlPath, "utf8"));
   const dreamscapes = parsed.dreamscapes;
@@ -65,16 +79,18 @@ function readSourceDreamscapes(rootDir, dreamscapeTomlPath = DEFAULT_DREAMSCAPE_
   return dreamscapes;
 }
 
-function editorRecordFromDreamscape(dreamscape, index) {
+function editorRecordFromDreamscape(dreamscape, index, guideByHome) {
+  const guide = guideByHome.get(dreamscape.id);
+  const isStarter = dreamscape["is-starter"] === true;
   return {
     id: dreamscape.id,
     name: typeof dreamscape.name === "string" ? dreamscape.name : "",
-    aesthetic: typeof dreamscape.aesthetic === "string" ? dreamscape.aesthetic : "",
-    "signature-site":
-      typeof dreamscape["signature-site"] === "string"
-        ? dreamscape["signature-site"]
-        : "",
-    "guide-id": typeof dreamscape["guide-id"] === "string" ? dreamscape["guide-id"] : null,
+    aesthetic:
+      typeof dreamscape.aesthetic === "string" ? dreamscape.aesthetic : "",
+    "signature-site": isStarter
+      ? dreamscape["signature-site"]
+      : (guide?.siteType ?? ""),
+    "guide-id": isStarter ? null : (guide?.id ?? null),
     "affiliation-id":
       typeof dreamscape["affiliation-id"] === "string"
         ? dreamscape["affiliation-id"]
@@ -84,7 +100,9 @@ function editorRecordFromDreamscape(dreamscape, index) {
       ? dreamscape["fixed-sites"].filter((entry) => typeof entry === "string")
       : [],
     dreamAvatarIds: Array.isArray(dreamscape["dream-avatar-ids"])
-      ? dreamscape["dream-avatar-ids"].filter((entry) => typeof entry === "string")
+      ? dreamscape["dream-avatar-ids"].filter(
+          (entry) => typeof entry === "string",
+        )
       : [],
     sourceIndex: index,
     source: dreamscape,
@@ -95,7 +113,16 @@ export function readEditorDreamscapes({
   rootDir = ROOT,
   dreamscapeTomlPath = DEFAULT_DREAMSCAPE_TOML_PATH,
 } = {}) {
-  return readSourceDreamscapes(rootDir, dreamscapeTomlPath).map(editorRecordFromDreamscape);
+  const guideByHome = new Map(
+    readDreamGuideOptions({ rootDir }).map((guide) => [
+      guide.homeDreamscapeId,
+      guide,
+    ]),
+  );
+  return readSourceDreamscapes(rootDir, dreamscapeTomlPath).map(
+    (dreamscape, index) =>
+      editorRecordFromDreamscape(dreamscape, index, guideByHome),
+  );
 }
 
 /**
@@ -104,7 +131,9 @@ export function readEditorDreamscapes({
  * authoritative key written back into a dreamscape's `guide-id`.
  */
 export function readDreamGuideOptions({ rootDir = ROOT } = {}) {
-  const parsed = parse(readFileSync(join(rootDir, DREAM_GUIDES_TOML_PATH), "utf8"));
+  const parsed = parse(
+    readFileSync(join(rootDir, DREAM_GUIDES_TOML_PATH), "utf8"),
+  );
   const guides = Array.isArray(parsed.guides) ? parsed.guides : [];
   return guides
     .filter((guide) => typeof guide.id === "string")
@@ -115,7 +144,8 @@ export function readDreamGuideOptions({ rootDir = ROOT } = {}) {
         typeof guide["home-dreamscape-id"] === "string"
           ? guide["home-dreamscape-id"]
           : null,
-      siteType: typeof guide["site-type"] === "string" ? guide["site-type"] : null,
+      siteType:
+        typeof guide["site-type"] === "string" ? guide["site-type"] : null,
     }));
 }
 
@@ -124,13 +154,20 @@ export function readDreamGuideOptions({ rootDir = ROOT } = {}) {
  * affiliation picker.
  */
 export function readAffiliationOptions({ rootDir = ROOT } = {}) {
-  const parsed = parse(readFileSync(join(rootDir, AFFILIATIONS_TOML_PATH), "utf8"));
-  const affiliations = Array.isArray(parsed.affiliations) ? parsed.affiliations : [];
+  const parsed = parse(
+    readFileSync(join(rootDir, AFFILIATIONS_TOML_PATH), "utf8"),
+  );
+  const affiliations = Array.isArray(parsed.affiliations)
+    ? parsed.affiliations
+    : [];
   return affiliations
     .filter((affiliation) => typeof affiliation.id === "string")
     .map((affiliation) => ({
       id: affiliation.id,
-      name: typeof affiliation.name === "string" ? affiliation.name : affiliation.id,
+      name:
+        typeof affiliation.name === "string"
+          ? affiliation.name
+          : affiliation.id,
     }));
 }
 
@@ -171,21 +208,33 @@ export function makeValidateDreamscapeEdit({ guideIds, affiliationIds }) {
 
     if (field === "signature-site") {
       if (typeof rawValue !== "string" || !SITE_TYPES.includes(rawValue)) {
-        return validationFailure(field, "Signature site must be a known site type.", rawValue);
+        return validationFailure(
+          field,
+          "Signature site must be a known site type.",
+          rawValue,
+        );
       }
       return validationSuccess(field, rawValue);
     }
 
     if (field === "guide-id") {
       if (typeof rawValue !== "string" || !validGuideIds.has(rawValue)) {
-        return validationFailure(field, "Dream guide must be a known guide.", rawValue);
+        return validationFailure(
+          field,
+          "Dream guide must be a known guide.",
+          rawValue,
+        );
       }
       return validationSuccess(field, rawValue);
     }
 
     if (field === "affiliation-id") {
       if (typeof rawValue !== "string" || !validAffiliationIds.has(rawValue)) {
-        return validationFailure(field, "Affiliation must be a known affiliation.", rawValue);
+        return validationFailure(
+          field,
+          "Affiliation must be a known affiliation.",
+          rawValue,
+        );
       }
       return validationSuccess(field, rawValue);
     }
@@ -194,7 +243,10 @@ export function makeValidateDreamscapeEdit({ guideIds, affiliationIds }) {
   };
 }
 
-export function patchDreamscapesToml(source, { dreamscapeId, field, value, validateEdit }) {
+export function patchDreamscapesToml(
+  source,
+  { dreamscapeId, field, value, validateEdit },
+) {
   return patchTomlRecord(source, {
     id: dreamscapeId,
     tableName: "dreamscapes",
@@ -207,21 +259,143 @@ export function patchDreamscapesToml(source, { dreamscapeId, field, value, valid
   });
 }
 
+const EDITABLE_GUIDE_ASSIGNMENT_FIELDS = new Set([
+  "home-dreamscape-id",
+  "site-type",
+]);
+
+/** Patch one or more canonical guide assignments while preserving TOML layout. */
+export function patchDreamGuideAssignments(source, changes) {
+  let next = source;
+  for (const change of changes) {
+    next = patchTomlRecord(next, {
+      id: change.guideId,
+      tableName: "guides",
+      editableFields: EDITABLE_GUIDE_ASSIGNMENT_FIELDS,
+      validateEdit: (field, value) => ({ ok: true, field, value }),
+      field: change.field,
+      value: change.value,
+      optionalFields: new Set(),
+      notFoundNoun: "Dream Guide",
+    }).source;
+  }
+  parse(next);
+  return next;
+}
+
+const SPECIALIZED_DIALOGUE_CONTEXTS = [
+  "random-site",
+  "gamble-three-gate",
+  "gamble-ladder-climb",
+  "gamble-starway-stairs",
+  "gamble-four-suit-reprise",
+];
+
+function guideBlockRange(source, guideId) {
+  const header = "[[guides]]";
+  const headers = [];
+  for (
+    let index = source.indexOf(header);
+    index !== -1;
+    index = source.indexOf(header, index + header.length)
+  ) {
+    headers.push(index);
+  }
+  const idPattern = new RegExp(
+    `(^|\\n)[ \\t]*id[ \\t]*=[ \\t]*"${escapeRegExp(guideId)}"[ \\t]*(?:#.*)?(?=\\n|$)`,
+    "u",
+  );
+  for (let index = 0; index < headers.length; index += 1) {
+    const start = headers[index];
+    const end = headers[index + 1] ?? source.length;
+    if (idPattern.test(source.slice(start, end))) return { start, end };
+  }
+  return null;
+}
+
+function serializeDialogue(dialogue) {
+  const orderedContexts = ["site", ...SPECIALIZED_DIALOGUE_CONTEXTS];
+  const fields = orderedContexts.flatMap((context) => {
+    const lines = dialogue[context];
+    if (!Array.isArray(lines)) return [];
+    return [
+      `${context} = [\n${lines.map((line) => `  ${JSON.stringify(line)},`).join("\n")}\n]`,
+    ];
+  });
+  return `[guides.dialogue]\n${fields.join("\n")}\n`;
+}
+
+function rewriteGuideDialogue(source, guideId, dialogue) {
+  const block = guideBlockRange(source, guideId);
+  if (block === null) throw new Error(`Dream Guide ${guideId} was not found`);
+  const text = source.slice(block.start, block.end);
+  const headerIndex = text.indexOf("[guides.dialogue]");
+  if (headerIndex < 0)
+    throw new Error(`Dream Guide ${guideId} has no dialogue table`);
+  const replacement = serializeDialogue(dialogue);
+  return (
+    source.slice(0, block.start + headerIndex) +
+    replacement +
+    "\n" +
+    source.slice(block.end)
+  );
+}
+
+/** Move site-specific dialogue contexts with a specialty swap. */
+export function swapDreamGuideSpecializedDialogue(
+  source,
+  firstGuideId,
+  secondGuideId,
+) {
+  const parsed = parse(source);
+  const first = parsed.guides.find((guide) => guide.id === firstGuideId);
+  const second = parsed.guides.find((guide) => guide.id === secondGuideId);
+  if (first === undefined || second === undefined)
+    throw new Error("Dream Guide dialogue swap target was not found");
+  const firstDialogue = { ...first.dialogue };
+  const secondDialogue = { ...second.dialogue };
+  let hasSpecializedDialogue = false;
+  for (const context of SPECIALIZED_DIALOGUE_CONTEXTS) {
+    const firstLines = first.dialogue?.[context];
+    const secondLines = second.dialogue?.[context];
+    hasSpecializedDialogue ||=
+      firstLines !== undefined || secondLines !== undefined;
+    delete firstDialogue[context];
+    delete secondDialogue[context];
+    if (secondLines !== undefined) firstDialogue[context] = secondLines;
+    if (firstLines !== undefined) secondDialogue[context] = firstLines;
+  }
+  if (!hasSpecializedDialogue) return source;
+  let next = rewriteGuideDialogue(source, firstGuideId, firstDialogue);
+  next = rewriteGuideDialogue(next, secondGuideId, secondDialogue);
+  parse(next);
+  return next;
+}
+
 export function refreshDreamscapesDataJson({
   rootDir = ROOT,
   dreamscapeTomlPath = DEFAULT_DREAMSCAPE_TOML_PATH,
 } = {}) {
-  const dreamscapes = readSourceDreamscapes(rootDir, dreamscapeTomlPath).map((dreamscape) =>
-    transformDreamscape(dreamscape),
+  const sourceDreamscapes = readSourceDreamscapes(rootDir, dreamscapeTomlPath);
+  const guides = compileDreamGuidesData(
+    parse(readFileSync(join(rootDir, DREAM_GUIDES_TOML_PATH), "utf8")),
+    { dreamscapes: sourceDreamscapes },
   );
+  const dreamscapes = deriveDreamscapesData(sourceDreamscapes, guides);
   const dreamscapesJsonPath = join(rootDir, DREAMSCAPE_JSON_PATH);
+  const guidesJsonPath = join(rootDir, "public", "dream-guides-data.json");
 
   mkdirSync(join(rootDir, "public"), { recursive: true });
-  writeFileSync(dreamscapesJsonPath, JSON.stringify(dreamscapes, null, 2) + "\n");
+  writeFileSync(
+    dreamscapesJsonPath,
+    JSON.stringify(dreamscapes, null, 2) + "\n",
+  );
+  writeFileSync(guidesJsonPath, JSON.stringify(guides, null, 2) + "\n");
 
   return {
     count: dreamscapes.length,
     path: dreamscapesJsonPath,
+    guidesPath: guidesJsonPath,
   };
 }
 
@@ -232,18 +406,29 @@ export function refreshDreamscapesDataJson({
  * `dream-avatar-ids`.
  */
 export function readDreamAvatarOptions({ rootDir = ROOT } = {}) {
-  const parsed = parse(readFileSync(join(rootDir, DREAM_AVATARS_TOML_PATH), "utf8"));
-  const dreamAvatars = Array.isArray(parsed.dreamAvatar) ? parsed.dreamAvatar : [];
+  const parsed = parse(
+    readFileSync(join(rootDir, DREAM_AVATARS_TOML_PATH), "utf8"),
+  );
+  const dreamAvatars = Array.isArray(parsed.dreamAvatar)
+    ? parsed.dreamAvatar
+    : [];
   return dreamAvatars
     .filter((dreamAvatar) => typeof dreamAvatar.id === "string")
     .map((dreamAvatar) => ({
       id: dreamAvatar.id,
-      name: typeof dreamAvatar.name === "string" ? dreamAvatar.name : dreamAvatar.id,
+      name:
+        typeof dreamAvatar.name === "string"
+          ? dreamAvatar.name
+          : dreamAvatar.id,
       title: typeof dreamAvatar.title === "string" ? dreamAvatar.title : "",
       imageNumber:
-        typeof dreamAvatar["image-number"] === "string" ? dreamAvatar["image-number"] : "",
+        typeof dreamAvatar["image-number"] === "string"
+          ? dreamAvatar["image-number"]
+          : "",
       renderedText:
-        typeof dreamAvatar["rendered-text"] === "string" ? dreamAvatar["rendered-text"] : "",
+        typeof dreamAvatar["rendered-text"] === "string"
+          ? dreamAvatar["rendered-text"]
+          : "",
     }));
 }
 
@@ -259,7 +444,11 @@ function escapeRegExp(value) {
 function dreamscapeBlockRange(source, dreamscapeId) {
   const header = "[[dreamscapes]]";
   const headers = [];
-  for (let idx = source.indexOf(header); idx !== -1; idx = source.indexOf(header, idx + header.length)) {
+  for (
+    let idx = source.indexOf(header);
+    idx !== -1;
+    idx = source.indexOf(header, idx + header.length)
+  ) {
     headers.push(idx);
   }
 
@@ -308,7 +497,9 @@ export function rewriteDreamAvatarIds(source, { dreamscapeId, ids, nameById }) {
   }
 
   const blockText = source.slice(block.start, block.end);
-  const fieldMatch = /(^|\n)([ \t]*)dream-avatar-ids[ \t]*=[ \t]*\[/u.exec(blockText);
+  const fieldMatch = /(^|\n)([ \t]*)dream-avatar-ids[ \t]*=[ \t]*\[/u.exec(
+    blockText,
+  );
   const serialized = serializeDreamAvatarIdsField(ids, nameById);
 
   let patched;
@@ -318,13 +509,16 @@ export function rewriteDreamAvatarIds(source, { dreamscapeId, ids, nameById }) {
     // lines so the field sits flush against the record.
     const trimmed = blockText.replace(/\s*$/u, "");
     const rebuiltBlock = `${trimmed}\n${serialized}\n`;
-    patched = source.slice(0, block.start) + rebuiltBlock + source.slice(block.end);
+    patched =
+      source.slice(0, block.start) + rebuiltBlock + source.slice(block.end);
   } else {
     const fieldStartInBlock = fieldMatch.index + fieldMatch[1].length;
     const openBracketInBlock = fieldMatch.index + fieldMatch[0].length - 1;
     const closeBracketInBlock = blockText.indexOf("]", openBracketInBlock);
     if (closeBracketInBlock === -1) {
-      throw new Error(`Dreamscape ${dreamscapeId} has an unterminated dream-avatar-ids array`);
+      throw new Error(
+        `Dreamscape ${dreamscapeId} has an unterminated dream-avatar-ids array`,
+      );
     }
     const absStart = block.start + fieldStartInBlock;
     const absEnd = block.start + closeBracketInBlock + 1;
@@ -387,20 +581,26 @@ export function planDreamAvatarAssignment(dreamscapes, catalogIds, request) {
   }
 
   const canonicalIn =
-    request.inId === undefined ? null : knownById.get(String(request.inId).toLowerCase()) ?? null;
+    request.inId === undefined
+      ? null
+      : (knownById.get(String(request.inId).toLowerCase()) ?? null);
   const canonicalOut =
     request.outId === undefined
       ? null
-      : target.dreamAvatarIds.find(
+      : (target.dreamAvatarIds.find(
           (id) => id.toLowerCase() === String(request.outId).toLowerCase(),
-        ) ?? null;
+        ) ?? null);
 
   const targetHas = (id) =>
-    target.dreamAvatarIds.some((existing) => existing.toLowerCase() === id.toLowerCase());
+    target.dreamAvatarIds.some(
+      (existing) => existing.toLowerCase() === id.toLowerCase(),
+    );
 
   if (action === "replace") {
     if (canonicalOut === null) {
-      return planFailure("The DreamAvatar to replace is not a resident of this region.");
+      return planFailure(
+        "The DreamAvatar to replace is not a resident of this region.",
+      );
     }
     if (request.inId !== undefined && canonicalIn === null) {
       return planFailure("The replacement is not a known DreamAvatar.");
@@ -414,7 +614,10 @@ export function planDreamAvatarAssignment(dreamscapes, catalogIds, request) {
 
     const source = regionForDreamAvatar(dreamscapes, canonicalIn);
     const changes = [
-      { id: target.id, ids: replaceId(target.dreamAvatarIds, canonicalOut, canonicalIn) },
+      {
+        id: target.id,
+        ids: replaceId(target.dreamAvatarIds, canonicalOut, canonicalIn),
+      },
     ];
     if (source !== null) {
       // Swap: the displaced resident takes the incoming caller's old slot, so
@@ -441,7 +644,10 @@ export function planDreamAvatarAssignment(dreamscapes, catalogIds, request) {
     }
 
     const source = regionForDreamAvatar(dreamscapes, canonicalIn);
-    if (source !== null && source.dreamAvatarIds.length <= MIN_DREAM_AVATARS_PER_REGION) {
+    if (
+      source !== null &&
+      source.dreamAvatarIds.length <= MIN_DREAM_AVATARS_PER_REGION
+    ) {
       return planFailure(
         `${source.name} would drop below ${String(MIN_DREAM_AVATARS_PER_REGION)} DreamAvatars. ` +
           "Swap with one of its residents instead.",
@@ -452,14 +658,19 @@ export function planDreamAvatarAssignment(dreamscapes, catalogIds, request) {
       { id: target.id, ids: [...target.dreamAvatarIds, canonicalIn] },
     ];
     if (source !== null) {
-      changes.push({ id: source.id, ids: withoutId(source.dreamAvatarIds, canonicalIn) });
+      changes.push({
+        id: source.id,
+        ids: withoutId(source.dreamAvatarIds, canonicalIn),
+      });
     }
     return { ok: true, changes };
   }
 
   if (action === "remove") {
     if (canonicalOut === null) {
-      return planFailure("The DreamAvatar to remove is not a resident of this region.");
+      return planFailure(
+        "The DreamAvatar to remove is not a resident of this region.",
+      );
     }
     if (target.dreamAvatarIds.length <= MIN_DREAM_AVATARS_PER_REGION) {
       return planFailure(
@@ -469,7 +680,9 @@ export function planDreamAvatarAssignment(dreamscapes, catalogIds, request) {
     }
     return {
       ok: true,
-      changes: [{ id: target.id, ids: withoutId(target.dreamAvatarIds, canonicalOut) }],
+      changes: [
+        { id: target.id, ids: withoutId(target.dreamAvatarIds, canonicalOut) },
+      ],
     };
   }
 

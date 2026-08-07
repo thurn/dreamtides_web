@@ -127,9 +127,7 @@ const STARWAY_VIEW: StarwayStairsSiteView = {
 function fourSuitCard(index: number): CardData {
   return {
     name: asCardName(`Four Suit Fixture ${String(index)}`),
-    id: asCardId(
-      `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
-    ),
+    id: asCardId(`00000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
     cardNumber: index,
     cardType: "Character",
     subtype: "",
@@ -162,6 +160,13 @@ const FOUR_SUIT_VIEW: FourSuitRepriseSiteView = {
   canAffordDraw: true,
   roundNumber: 1,
   maxRounds: 3,
+  essenceReward: 100,
+  outcomes: [
+    { suit: "spades", outcome: "transfiguration", label: "Fixture A" },
+    { suit: "diamonds", outcome: "essence", label: "Fixture B" },
+    { suit: "hearts", outcome: "duplication", label: "Fixture C" },
+    { suit: "clubs", outcome: "purge", label: "Fixture D" },
+  ],
   phase: "choose",
   cards: [fourSuitCardView(1), fourSuitCardView(2)],
   guide: {
@@ -197,24 +202,26 @@ function fourSuitResultView(
         model: target.model,
         availability: "available",
         reforgedType: null,
-        forms: [{
-          type: "Empowered",
-          description: "Fixture form.",
-          effectDetails: { fixture: true },
-          essenceCost: 0,
-          affordable: true,
-          previewModel: {
-            cardId: card.id,
-            displaySnapshot: { ...card, energyCost: 1 },
-            transfiguration: {
-              type: "Empowered",
-              markedText: card.renderedText,
-              energyChanged: true,
-              sparkChanged: false,
-              fastChanged: false,
+        forms: [
+          {
+            type: "Empowered",
+            description: "Fixture form.",
+            effectDetails: { fixture: true },
+            essenceCost: 0,
+            affordable: true,
+            previewModel: {
+              cardId: card.id,
+              displaySnapshot: { ...card, energyCost: 1 },
+              transfiguration: {
+                type: "Empowered",
+                markedText: card.renderedText,
+                energyChanged: true,
+                sparkChanged: false,
+                fastChanged: false,
+              },
             },
           },
-        }],
+        ],
       },
       chosenTransfiguration: null,
       ...overrides,
@@ -297,9 +304,7 @@ describe("GambleSiteScreen", () => {
       />,
     );
 
-    expect(
-      container.querySelector("[data-playing-card]"),
-    ).toBeNull();
+    expect(container.querySelector("[data-playing-card]")).toBeNull();
     expect(container.querySelectorAll("[data-gamble-gate]")).toHaveLength(3);
     expect(
       [...container.querySelectorAll<HTMLElement>("[data-gamble-gate]")].map(
@@ -310,22 +315,25 @@ describe("GambleSiteScreen", () => {
       ["2", "1"],
       ["3", "1"],
     ]);
-    expect(container.querySelectorAll("[data-wager-prize-card]"))
-      .toHaveLength(3);
-    expect(container.querySelector('[data-gamble-gate="six"]')?.textContent)
-      .toBe("Draw 6-AWin 100");
-    expect(container.querySelector('[data-gamble-gate="nine"]')?.textContent)
-      .toBe("Draw 9-AWin 150");
-    expect(container.querySelector('[data-gamble-gate="jack"]')?.textContent)
-      .toBe("Draw J-AWin 200 and Fixture Jackpot");
+    expect(container.querySelectorAll("[data-wager-prize-card]")).toHaveLength(
+      3,
+    );
+    expect(
+      container.querySelector('[data-gamble-gate="six"]')?.textContent,
+    ).toBe("Draw 6-AWin 100");
+    expect(
+      container.querySelector('[data-gamble-gate="nine"]')?.textContent,
+    ).toBe("Draw 9-AWin 150");
+    expect(
+      container.querySelector('[data-gamble-gate="jack"]')?.textContent,
+    ).toBe("Draw J-AWin 200 and Fixture Jackpot");
     expect(container.textContent).not.toContain("chance");
     expect(container.textContent).not.toContain("Gravok’s Casino");
     expect(container.textContent).not.toContain("Three-Gate Wager");
     const dreamsignName = container.querySelector<HTMLElement>(
       "[data-testid=gamble-jackpot-dreamsign-name]",
     );
-    expect(dreamsignName)
-      .not.toBeNull();
+    expect(dreamsignName).not.toBeNull();
     expect(dreamsignName?.style.textDecoration).toContain("underline");
     expect(
       dreamsignName?.parentElement?.hasAttribute(
@@ -337,10 +345,12 @@ describe("GambleSiteScreen", () => {
       '[data-gamble-gate="jack"] [data-wager-prize-dreamsign-source]',
     );
     expect(dreamsignSource?.dataset.revealPrimaryVariant).toBe("object");
-    expect(dreamsignSource?.querySelector("[data-wager-prize-title]"))
-      .not.toBeNull();
-    expect(dreamsignSource?.querySelector("[data-wager-prize-description]"))
-      .not.toBeNull();
+    expect(
+      dreamsignSource?.querySelector("[data-wager-prize-title]"),
+    ).not.toBeNull();
+    expect(
+      dreamsignSource?.querySelector("[data-wager-prize-description]"),
+    ).not.toBeNull();
     const leaveSlot = container.querySelector<HTMLElement>(
       "[data-gamble-leave-slot]",
     );
@@ -358,7 +368,8 @@ describe("GambleSiteScreen", () => {
     expect(onChooseGate).toHaveBeenCalledWith("six");
 
     act(() => {
-      container.querySelector<HTMLButtonElement>('[data-testid="gamble-leave"]')
+      container
+        .querySelector<HTMLButtonElement>('[data-testid="gamble-leave"]')
         ?.click();
     });
     expect(onLeave).toHaveBeenCalledOnce();
@@ -400,14 +411,14 @@ describe("GambleSiteScreen", () => {
 
     expect(container.querySelector("[data-playing-card]")).toBeNull();
     expect(
-      container.querySelector('[data-gamble-gate="nine"]')?.getAttribute(
-        "data-gamble-gate-presentation",
-      ),
+      container
+        .querySelector('[data-gamble-gate="nine"]')
+        ?.getAttribute("data-gamble-gate-presentation"),
     ).toBe("selected");
     expect(
-      container.querySelector('[data-gamble-gate="jack"]')?.getAttribute(
-        "data-gamble-gate-presentation",
-      ),
+      container
+        .querySelector('[data-gamble-gate="jack"]')
+        ?.getAttribute("data-gamble-gate-presentation"),
     ).toBe("revealed");
     expect(container.querySelector('[data-testid="gamble-leave"]')).toBeNull();
     const lockedBet = container.querySelector<HTMLElement>(
@@ -421,23 +432,24 @@ describe("GambleSiteScreen", () => {
     expect(lockedButton?.style.opacity).toBe("1");
     void act(() => vi.advanceTimersByTime(250));
     expect(
-      container.querySelector('[data-gamble-gate="jack"] [data-playing-card]')
+      container
+        .querySelector('[data-gamble-gate="jack"] [data-playing-card]')
         ?.getAttribute("data-playing-card-face"),
     ).toBe("front");
     expect(
-      container.querySelector('[data-gamble-gate="six"]')?.getAttribute(
-        "aria-hidden",
-      ),
+      container
+        .querySelector('[data-gamble-gate="six"]')
+        ?.getAttribute("aria-hidden"),
     ).toBe("true");
     expect(
-      container.querySelector('[data-gamble-bet="jack"]')?.getAttribute(
-        "aria-hidden",
-      ),
+      container
+        .querySelector('[data-gamble-bet="jack"]')
+        ?.getAttribute("aria-hidden"),
     ).toBe("true");
     expect(
-      container.querySelector('[data-gamble-bet="nine"]')?.getAttribute(
-        "aria-hidden",
-      ),
+      container
+        .querySelector('[data-gamble-bet="nine"]')
+        ?.getAttribute("aria-hidden"),
     ).toBe("true");
     expect(
       container.querySelectorAll('[data-gamble-bet][aria-hidden="true"]'),
@@ -450,8 +462,9 @@ describe("GambleSiteScreen", () => {
       '[data-radial-announcement="fixture-result"]',
     );
     expect(announcement?.textContent).toContain("Won!+150");
-    expect(announcement?.getAttribute("data-radial-announcement-duration"))
-      .toBe("extended");
+    expect(
+      announcement?.getAttribute("data-radial-announcement-duration"),
+    ).toBe("extended");
     expect(
       announcement?.querySelector<HTMLElement>(
         "[data-radial-announcement-disc]",
@@ -482,8 +495,9 @@ describe("GambleSiteScreen", () => {
       );
     });
     void act(() => vi.advanceTimersByTime(3_359));
-    expect(container.querySelector('[data-testid="gamble-play-again"]'))
-      .toBeNull();
+    expect(
+      container.querySelector('[data-testid="gamble-play-again"]'),
+    ).toBeNull();
     void act(() => vi.advanceTimersByTime(1));
     const playAgain = container.querySelector<HTMLButtonElement>(
       '[data-testid="gamble-play-again"]',
@@ -529,14 +543,15 @@ describe("GambleSiteScreen", () => {
         </CumulusRoot>,
       );
     });
-    expect(container.querySelector('[data-testid="gamble-play-again"]'))
-      .toBeNull();
-    expect(container.querySelector('[data-testid="gamble-leave-after-round"]'))
-      .not.toBeNull();
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-gamble-round-action-group]",
-      )?.style.gridColumn,
+      container.querySelector('[data-testid="gamble-play-again"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-testid="gamble-leave-after-round"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector<HTMLElement>("[data-gamble-round-action-group]")
+        ?.style.gridColumn,
     ).toBe("1 / span 3");
 
     act(() => root.unmount());
@@ -585,12 +600,15 @@ describe("GambleSiteScreen", () => {
 
     void act(() => vi.advanceTimersByTime(970));
     void act(() => vi.advanceTimersByTime(3_360));
-    expect(container.querySelector("[data-dreamsign-replacement-dialog]"))
-      .not.toBeNull();
+    expect(
+      container.querySelector("[data-dreamsign-replacement-dialog]"),
+    ).not.toBeNull();
     act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="replace-dreamsign-held-sign"]',
-      )?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="replace-dreamsign-held-sign"]',
+        )
+        ?.click();
     });
     expect(onReplaceDreamsign).toHaveBeenCalledWith("held-sign");
 
@@ -668,8 +686,9 @@ describe("GambleSiteScreen — Ladder Climb", () => {
     expect(
       container.querySelector('[data-testid="gamble-ladder-dreamsign-name"]'),
     ).not.toBeNull();
-    expect(container.querySelector("[data-wager-prize-dreamsign-source]"))
-      .not.toBeNull();
+    expect(
+      container.querySelector("[data-wager-prize-dreamsign-source]"),
+    ).not.toBeNull();
     expect(
       container
         .querySelector("[data-wager-prize-card]")
@@ -742,8 +761,9 @@ describe("GambleSiteScreen — Ladder Climb", () => {
 
     expect(container.querySelector("[data-ladder-climb-card]")).toBe(cardSlot);
     expect(container.querySelector("[data-ladder-actions]")).toBe(actionSlot);
-    expect(container.querySelector("[data-ladder-round-action-group]"))
-      .toBe(actionGroup);
+    expect(container.querySelector("[data-ladder-round-action-group]")).toBe(
+      actionGroup,
+    );
     expect(actionSlot?.getAttribute("data-ladder-actions")).toBe("hidden");
 
     act(() => root.unmount());
@@ -780,8 +800,9 @@ describe("GambleSiteScreen — Ladder Climb", () => {
       />,
     );
 
-    expect(container.querySelector('[data-testid="gamble-ladder-climb-again"]'))
-      .toBeNull();
+    expect(
+      container.querySelector('[data-testid="gamble-ladder-climb-again"]'),
+    ).toBeNull();
     void act(() => vi.advanceTimersByTime(970));
     expect(onOutcomeShown).toHaveBeenCalledOnce();
     expect(
@@ -868,7 +889,9 @@ describe("GambleSiteScreen — Ladder Climb", () => {
       />,
     );
 
-    expect(container.querySelectorAll("[data-wager-prize-card]")).toHaveLength(1);
+    expect(container.querySelectorAll("[data-wager-prize-card]")).toHaveLength(
+      1,
+    );
     void act(() => vi.advanceTimersByTime(970));
     act(() => {
       root.render(
@@ -892,9 +915,12 @@ describe("GambleSiteScreen — Ladder Climb", () => {
         </CumulusRoot>,
       );
     });
-    expect(container.querySelectorAll("[data-wager-prize-card]")).toHaveLength(1);
-    expect(container.querySelector("[data-ladder-dreamsign-reward]"))
-      .not.toBeNull();
+    expect(container.querySelectorAll("[data-wager-prize-card]")).toHaveLength(
+      1,
+    );
+    expect(
+      container.querySelector("[data-ladder-dreamsign-reward]"),
+    ).not.toBeNull();
 
     act(() => root.unmount());
   });
@@ -978,12 +1004,19 @@ describe("GambleSiteScreen — Starway Stairs", () => {
     );
 
     expect(container.querySelectorAll("[data-starway-tier]")).toHaveLength(3);
-    expect(container.querySelectorAll("[data-wager-prize-card]")).toHaveLength(3);
-    expect(container.querySelectorAll("[data-starway-tier-button]")).toHaveLength(1);
-    expect(container.querySelectorAll("[data-wager-prize-title]")).toHaveLength(3);
+    expect(container.querySelectorAll("[data-wager-prize-card]")).toHaveLength(
+      3,
+    );
     expect(
-      Array.from(container.querySelectorAll("[data-wager-prize-title]"), (title) =>
-        title.textContent
+      container.querySelectorAll("[data-starway-tier-button]"),
+    ).toHaveLength(1);
+    expect(container.querySelectorAll("[data-wager-prize-title]")).toHaveLength(
+      3,
+    );
+    expect(
+      Array.from(
+        container.querySelectorAll("[data-wager-prize-title]"),
+        (title) => title.textContent,
       ),
     ).toEqual(["Draw 3-A", "Draw 5-A", "Draw 8-A"]);
     expect(container.textContent).not.toContain("%");
@@ -997,13 +1030,14 @@ describe("GambleSiteScreen — Starway Stairs", () => {
     const leave = container.querySelector<HTMLButtonElement>(
       '[data-testid="gamble-starway-leave"]',
     );
-    const actions = container.querySelector<HTMLElement>("[data-starway-actions]");
+    const actions = container.querySelector<HTMLElement>(
+      "[data-starway-actions]",
+    );
     expect(bet?.textContent).not.toContain("·");
     expect(
       bet?.querySelector("[data-glass-button-essence-value]"),
     ).not.toBeNull();
-    expect(bet?.querySelector("[data-glass-button-essence-cost]"))
-      .toBeNull();
+    expect(bet?.querySelector("[data-glass-button-essence-cost]")).toBeNull();
     expect(leave?.textContent).toBe("Leave");
     expect(bet?.parentElement?.parentElement).toBe(actions);
     expect(leave?.parentElement).toBe(actions);
@@ -1011,7 +1045,9 @@ describe("GambleSiteScreen — Starway Stairs", () => {
     expect(actions?.style.flexWrap).toBe("nowrap");
     expect(actions?.textContent).not.toContain("Essence");
     expect(
-      container.querySelector('[data-starway-tier="1"] [data-wager-prize-card-emphasis="current"]'),
+      container.querySelector(
+        '[data-starway-tier="1"] [data-wager-prize-card-emphasis="current"]',
+      ),
     ).not.toBeNull();
     expect(
       container.querySelectorAll('[data-wager-prize-card-emphasis="muted"]'),
@@ -1068,23 +1104,33 @@ describe("GambleSiteScreen — Starway Stairs", () => {
 
     void act(() => vi.advanceTimersByTime(1_000));
     expect(onOutcomeShown).toHaveBeenCalledOnce();
-    const outcome = container.querySelector<HTMLElement>("[data-starway-outcome]");
+    const outcome = container.querySelector<HTMLElement>(
+      "[data-starway-outcome]",
+    );
     expect(outcome?.parentElement?.dataset.starwayTier).toBe("1");
     expect(outcome?.style.position).toBe("absolute");
     expect(
       container.querySelector("[data-starway-stairs-tiers]")?.children,
     ).toHaveLength(3);
     expect(
-      container.querySelector('[data-starway-tier="1"] [data-playing-card="3-clubs"]'),
+      container.querySelector(
+        '[data-starway-tier="1"] [data-playing-card="3-clubs"]',
+      ),
     ).not.toBeNull();
     expect(
-      container.querySelector('[data-starway-tier="1"] [data-wager-prize-card-emphasis="current"]'),
+      container.querySelector(
+        '[data-starway-tier="1"] [data-wager-prize-card-emphasis="current"]',
+      ),
     ).not.toBeNull();
     expect(
-      container.querySelector('[data-starway-tier="2"] [data-wager-prize-card-emphasis="muted"]'),
+      container.querySelector(
+        '[data-starway-tier="2"] [data-wager-prize-card-emphasis="muted"]',
+      ),
     ).not.toBeNull();
     void act(() => vi.advanceTimersByTime(4_000));
-    expect(container.querySelectorAll("[data-starway-tier-button]")).toHaveLength(1);
+    expect(
+      container.querySelectorAll("[data-starway-tier-button]"),
+    ).toHaveLength(1);
     const climb = container.querySelector<HTMLButtonElement>(
       '[data-testid="gamble-starway-tier-2"]',
     );
@@ -1104,10 +1150,14 @@ describe("GambleSiteScreen — Starway Stairs", () => {
       cashOut?.querySelector("[data-glass-button-essence-value]"),
     ).not.toBeNull();
     expect(
-      container.querySelector('[data-starway-tier="1"] [data-wager-prize-card-emphasis="muted"]'),
+      container.querySelector(
+        '[data-starway-tier="1"] [data-wager-prize-card-emphasis="muted"]',
+      ),
     ).not.toBeNull();
     expect(
-      container.querySelector('[data-starway-tier="2"] [data-wager-prize-card-emphasis="current"]'),
+      container.querySelector(
+        '[data-starway-tier="2"] [data-wager-prize-card-emphasis="current"]',
+      ),
     ).not.toBeNull();
     act(() => cashOut?.click());
     expect(onCashOut).toHaveBeenCalledOnce();
@@ -1164,22 +1214,28 @@ describe("GambleSiteScreen — Starway Stairs", () => {
 
     void act(() => vi.advanceTimersByTime(1_000));
     void act(() => vi.advanceTimersByTime(4_000));
-    expect(container.querySelectorAll("[data-starway-tier-button]")).toHaveLength(0);
     expect(
-      container.querySelector('[data-testid="gamble-starway-leave-after-result"]'),
+      container.querySelectorAll("[data-starway-tier-button]"),
+    ).toHaveLength(0);
+    expect(
+      container.querySelector(
+        '[data-testid="gamble-starway-leave-after-result"]',
+      ),
     ).toBeInstanceOf(HTMLButtonElement);
     const playAgain = container.querySelector<HTMLButtonElement>(
       '[data-testid="gamble-starway-play-again"]',
     );
     expect(playAgain).toBeInstanceOf(HTMLButtonElement);
     expect(playAgain?.parentElement).toBe(
-      container.querySelector('[data-testid="gamble-starway-leave-after-result"]')
-        ?.parentElement,
+      container.querySelector(
+        '[data-testid="gamble-starway-leave-after-result"]',
+      )?.parentElement,
     );
     act(() => playAgain?.click());
     expect(onPlayAgainStarway).toHaveBeenCalledOnce();
-    expect(container.querySelector('[data-testid="gamble-starway-cash-out"]'))
-      .toBeNull();
+    expect(
+      container.querySelector('[data-testid="gamble-starway-cash-out"]'),
+    ).toBeNull();
 
     act(() => root.unmount());
   });
@@ -1217,7 +1273,9 @@ describe("GambleSiteScreen — Starway Stairs", () => {
       container.querySelector('[data-testid="gamble-starway-play-again"]'),
     ).toBeNull();
     expect(
-      container.querySelector('[data-testid="gamble-starway-leave-after-result"]'),
+      container.querySelector(
+        '[data-testid="gamble-starway-leave-after-result"]',
+      ),
     ).not.toBeNull();
 
     act(() => root.unmount());
@@ -1249,9 +1307,11 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     ).toBe("picker");
     expect(container.querySelector("[data-four-suit-prize]")).toBeNull();
     act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="gamble-four-suit-card-four-suit-entry-1"]',
-      )?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="gamble-four-suit-card-four-suit-entry-1"]',
+        )
+        ?.click();
     });
 
     expect(container.querySelector("[data-four-suit-picker]")).toBeNull();
@@ -1275,7 +1335,9 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
         "[data-playing-card-four-suit-face] [data-playing-card-suit-mark]",
       ),
     ).toHaveLength(4);
-    expect(container.querySelectorAll("[data-four-suit-outcome]")).toHaveLength(4);
+    expect(container.querySelectorAll("[data-four-suit-outcome]")).toHaveLength(
+      4,
+    );
     expect(
       Array.from(
         container.querySelectorAll<HTMLElement>("[data-four-suit-outcome]"),
@@ -1285,9 +1347,9 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     expect(
       Array.from(
         container.querySelectorAll<HTMLElement>("[data-four-suit-outcome]"),
-        (element) => element.querySelector<HTMLElement>(
-          "[data-playing-card-suit-mark]",
-        )?.dataset.playingCardSuitMark,
+        (element) =>
+          element.querySelector<HTMLElement>("[data-playing-card-suit-mark]")
+            ?.dataset.playingCardSuitMark,
       ),
     ).toEqual(["spades", "diamonds", "hearts", "clubs"]);
     expect(
@@ -1295,9 +1357,11 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
         container.querySelectorAll<HTMLElement>(
           "[data-four-suit-outcome] [data-playing-card-suit-glyph]",
         ),
-      ).every((element) => element.style.webkitTextStroke.includes(
-        PLAYING_CARD_DESIGN.colors.characterOutline,
-      )),
+      ).every((element) =>
+        element.style.webkitTextStroke.includes(
+          PLAYING_CARD_DESIGN.colors.characterOutline,
+        ),
+      ),
     ).toBe(true);
     expect(container.querySelector("[data-four-suit-chance]")).toBeNull();
     const reselect = container.querySelector<HTMLButtonElement>(
@@ -1334,14 +1398,18 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     act(() => reselect?.click());
     expect(container.querySelector("[data-four-suit-picker]")).not.toBeNull();
     act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="gamble-four-suit-card-four-suit-entry-1"]',
-      )?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="gamble-four-suit-card-four-suit-entry-1"]',
+        )
+        ?.click();
     });
     const draw = container.querySelector<HTMLButtonElement>(
       '[data-testid="gamble-four-suit-draw"]',
     );
-    expect(draw?.querySelector("[data-glass-button-essence-cost]")).not.toBeNull();
+    expect(
+      draw?.querySelector("[data-glass-button-essence-cost]"),
+    ).not.toBeNull();
     act(() => draw?.click());
     expect(onDraw).toHaveBeenCalledWith("four-suit-entry-1");
 
@@ -1375,7 +1443,9 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
         '[data-playing-card-variant="fourSuit"][data-playing-card-state="drawn"]',
       ),
     ).not.toBeNull();
-    expect(container.querySelectorAll("[data-four-suit-outcome]")).toHaveLength(4);
+    expect(container.querySelectorAll("[data-four-suit-outcome]")).toHaveLength(
+      4,
+    );
     const revealedView = fourSuitResultView({ resultRevealed: true });
     act(() => {
       root.render(
@@ -1406,9 +1476,11 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       ),
     ).toBeNull();
     act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="cumulus-transfiguration-form-Empowered"]',
-      )?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-transfiguration-form-Empowered"]',
+        )
+        ?.click();
     });
     const confirm = container.querySelector<HTMLButtonElement>(
       '[data-testid="cumulus-transfiguration-confirm"]',
@@ -1421,8 +1493,8 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     expect(onChooseTransfiguration).toHaveBeenCalledWith("Empowered");
 
     const revealedResult = revealedView.result;
-    const previewModel = revealedResult?.transfigurationCandidate.forms[0]
-      ?.previewModel;
+    const previewModel =
+      revealedResult?.transfigurationCandidate.forms[0]?.previewModel;
     if (previewModel === undefined || revealedResult === null) {
       throw new Error("expected fixture Transfiguration preview");
     }
@@ -1462,7 +1534,9 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     ).toHaveLength(2);
     void act(() => vi.advanceTimersByTime(2_600));
     expect(container.querySelector("[data-four-suit-target]")).toBeNull();
-    expect(container.querySelector("[data-four-suit-target-slot]")).not.toBeNull();
+    expect(
+      container.querySelector("[data-four-suit-target-slot]"),
+    ).not.toBeNull();
     const replay = container.querySelector<HTMLButtonElement>(
       '[data-testid="gamble-four-suit-play-again"]',
     );
@@ -1501,9 +1575,7 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
 
       void act(() => vi.advanceTimersByTime(1_000));
       expect(
-        container.querySelector(
-          `[data-four-suit-card-outcome="${outcome}"]`,
-        ),
+        container.querySelector(`[data-four-suit-card-outcome="${outcome}"]`),
       ).not.toBeNull();
       if (outcome === "duplication") {
         expect(
@@ -1517,7 +1589,9 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       }
       void act(() => vi.advanceTimersByTime(2_600));
       expect(container.querySelector("[data-four-suit-target]")).toBeNull();
-      expect(container.querySelector("[data-four-suit-target-slot]")).not.toBeNull();
+      expect(
+        container.querySelector("[data-four-suit-target-slot]"),
+      ).not.toBeNull();
 
       act(() => root.unmount());
     },
@@ -1586,9 +1660,11 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       );
     });
     act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="gamble-four-suit-card-four-suit-entry-2"]',
-      )?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="gamble-four-suit-card-four-suit-entry-2"]',
+        )
+        ?.click();
     });
     expect(
       container.querySelector('[data-four-suit-target="four-suit-entry-2"]'),

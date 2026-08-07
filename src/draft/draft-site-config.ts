@@ -3,15 +3,13 @@ import type { SiteState } from "../types/journey";
 /** Default number of player picks represented by a Draft site. */
 export const DEFAULT_DRAFT_SITE_PICK_COUNT = 5;
 
-export function draftSiteData(
-  pickCount: number = DEFAULT_DRAFT_SITE_PICK_COUNT,
-): Record<string, unknown> {
+export function draftSiteData(pickCount: number): Record<string, unknown> {
   return { draftPickCount: pickCount };
 }
 
 export function draftSitePickCount(
   site: Pick<SiteState, "data">,
-  fallback: number = DEFAULT_DRAFT_SITE_PICK_COUNT,
+  fallback: number,
 ): number {
   const rawCount = site.data?.draftPickCount;
   if (

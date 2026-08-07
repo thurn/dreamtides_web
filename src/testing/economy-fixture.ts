@@ -15,17 +15,29 @@ export function economyFixture(): EconomyData {
         dreamsignMarket: { cardSlots: 0, dreamsignSlots: 3 },
       },
       discounts: {
-        slotCounts: [{ value: 1, weight: 1 }, { value: 2, weight: 1 }],
-        percentages: [30, 40, 50, 60, 70, 80, 90].map((value) => ({ value, weight: 1 })),
+        slotCounts: [
+          { value: 1, weight: 1 },
+          { value: 2, weight: 1 },
+        ],
+        percentages: [30, 40, 50, 60, 70, 80, 90].map((value) => ({
+          value,
+          weight: 1,
+        })),
       },
       reroll: { standardPrice: 50, enhancedPrice: 0, maxPerVisit: 1 },
     },
     siteRewards: {
-      essence: { standard: { min: 200, max: 300 }, enhanced: { min: 400, max: 600 } },
+      essence: {
+        standard: { min: 200, max: 300 },
+        enhanced: { min: 400, max: 600 },
+      },
       reward: { fallbackEssence: { min: 150, max: 350 } },
       dreamsignRevelation: { standardOfferCount: 3, enhancedOfferCount: 4 },
     },
-    purge: { marginalCosts: [40, 60, 90, 130, 180, 240], enhancedDiscountPercent: 30 },
+    purge: {
+      marginalCosts: [40, 60, 90, 130, 180, 240],
+      enhancedDiscountPercent: 30,
+    },
     transfiguration: {
       minimumCost: 0,
       maximumCost: 100,
@@ -43,12 +55,26 @@ export function economyFixture(): EconomyData {
         { minimumDelta: 1, maximumDelta: 1, base: 10, jitter: 20, floor: 10 },
         { minimumDelta: 2, maximumDelta: 2, base: 30, jitter: 20, floor: 10 },
         { minimumDelta: 3, maximumDelta: 3, base: 50, jitter: 20, floor: 30 },
-        { minimumDelta: 4, maximumDelta: null, base: 70, jitter: 20, floor: 50 },
+        {
+          minimumDelta: 4,
+          maximumDelta: null,
+          base: 70,
+          jitter: 20,
+          floor: 50,
+        },
       ],
     },
-    battleReward: { baseEssence: 100, essencePerCompletionLevel: 50, minimumEssence: 0 },
+    battleReward: {
+      baseEssence: 100,
+      essencePerCompletionLevel: 50,
+      minimumEssence: 0,
+    },
     gamble: {
-      threeGate: { standardWager: 50, enhancedWager: 45, rewards: { six: 100, nine: 150, jack: 200 } },
+      threeGate: {
+        standardWager: 50,
+        enhancedWager: 45,
+        rewards: { six: 100, nine: 150, jack: 200 },
+      },
       ladderClimb: {
         winEssence: 25,
         attempts: [0, 5, 10, 15].map((standardCost, index) => ({
@@ -64,6 +90,11 @@ export function economyFixture(): EconomyData {
           tier: (index + 1) as 1 | 2 | 3,
           essenceReward,
         })),
+      },
+      fourSuitReprise: {
+        standardDrawPrice: 10,
+        enhancedDrawPrice: 0,
+        essenceReward: 100,
       },
     },
     exploration: { defaultEssencePerSpark: 40 },

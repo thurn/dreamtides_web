@@ -89,6 +89,7 @@ describe("buildDraftView", () => {
       sceneNode: null,
       site: { data: { draftPickCount: 5 } },
       sitePicksCompleted: 0,
+      defaultPickCount: 5,
     });
     expect(view.offer.map((c) => c.displaySnapshot.cardNumber)).toEqual([6, 5]);
     // The key is the offered card numbers (identity), not names.
@@ -103,6 +104,7 @@ describe("buildDraftView", () => {
       sceneNode: null,
       site: { data: { draftPickCount: 5 } },
       sitePicksCompleted: 2,
+      defaultPickCount: 5,
     });
     expect(view.pickNumber).toBe(3);
     expect(view.pickTotal).toBe(5);
@@ -115,6 +117,7 @@ describe("buildDraftView", () => {
       sceneNode: null,
       site: { data: { draftPickCount: 5 } },
       sitePicksCompleted: 5,
+      defaultPickCount: 5,
     });
     expect(view.pickNumber).toBe(5);
   });
@@ -126,6 +129,7 @@ describe("buildDraftView", () => {
       sceneNode: null,
       site: { data: { draftPickCount: 5 } },
       sitePicksCompleted: 0,
+      defaultPickCount: 5,
     });
     expect(view.offer).toEqual([]);
     expect(view.offerKey).toBe("");
@@ -142,6 +146,7 @@ describe("buildDraftView", () => {
       sceneNode: null,
       site: { data: { draftPickCount: 5 } },
       sitePicksCompleted: 0,
+      defaultPickCount: 5,
     });
     expect(view.offer.map((model) => model.transfiguration?.type)).toEqual([
       "Kindled",

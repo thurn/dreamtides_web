@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { economyFixture } from "../../testing/economy-fixture";
+import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
 
 import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
 import { LayerName } from "../../types/layer-name";
@@ -14,10 +15,7 @@ import type {
 } from "../../types/journey";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent, type ReduceResult } from "../reducer";
-import {
-  registerSiteContentProvider,
-  type SiteContentProvider,
-} from "./sites";
+import { registerSiteContentProvider, type SiteContentProvider } from "./sites";
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -27,7 +25,11 @@ const GENESIS: Genesis = {
   seed: "sites-seed",
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null },
+  contentConfig: {
+    poolVariant: "test",
+    draftMode: "pool",
+    fresh20PackSize: null,
+  },
 };
 
 /** A deterministic PRNG bound to a seed so a generation draw is reproducible. */
@@ -148,7 +150,10 @@ function stateWithSites(
   };
 }
 
-function siteState(type: SiteType, overrides: Partial<JourneyState> = {}): FoldState {
+function siteState(
+  type: SiteType,
+  overrides: Partial<JourneyState> = {},
+): FoldState {
   return stateWithSites([makeSite(type)], overrides);
 }
 
@@ -159,6 +164,7 @@ function siteState(type: SiteType, overrides: Partial<JourneyState> = {}): FoldS
  * augury) are generated purely in-reducer and never reach this provider.
  */
 const fakeProvider: SiteContentProvider = {
+  sitesData: MINIMAL_SITES_DATA,
   economyData: economyFixture(),
   openSite({ site, rng }) {
     const draw = Math.floor(rng(0) * 1_000_000);
@@ -260,13 +266,21 @@ function runtimeOf(result: ReduceResult): SiteRuntimeState | undefined {
 }
 
 describe("Random Site", () => {
+  beforeEach(() => registerSiteContentProvider(fakeProvider));
+
   function homeRandomSite(): SiteState {
     return {
       ...makeSite("RandomSite", true),
       guideIdOverride: "fixture-random-guide",
       randomSite: {
         mode: "homeChoice",
-        candidateSiteTypes: ["Shop", "Purge", "Augury", "Gamble", "Exploration"],
+        candidateSiteTypes: [
+          "Shop",
+          "Purge",
+          "Augury",
+          "Gamble",
+          "Exploration",
+        ],
       },
     };
   }
@@ -282,7 +296,8 @@ describe("Random Site", () => {
     expect(runtimeOf(first)).toEqual(runtimeOf(replay));
     const runtime = runtimeOf(first);
     expect(runtime?.kind).toBe("randomSite");
-    if (runtime?.kind !== "randomSite") throw new Error("expected Random Site runtime");
+    if (runtime?.kind !== "randomSite")
+      throw new Error("expected Random Site runtime");
     expect(runtime.offeredSiteTypes).toHaveLength(3);
     expect(new Set(runtime.offeredSiteTypes).size).toBe(3);
   });
@@ -292,7 +307,8 @@ describe("Random Site", () => {
       siteId: SITE_ID,
     });
     const runtime = runtimeOf(opened);
-    if (runtime?.kind !== "randomSite") throw new Error("expected Random Site runtime");
+    if (runtime?.kind !== "randomSite")
+      throw new Error("expected Random Site runtime");
     const selected = runtime.offeredSiteTypes[0];
     const chosen = reduce(opened.state, "CHOOSE_RANDOM_SITE", {
       siteId: SITE_ID,
@@ -305,7 +321,11 @@ describe("Random Site", () => {
       type: selected,
       isEnhanced: true,
       guideIdOverride: "fixture-random-guide",
-      randomSite: { mode: "homeChoice", destinationSiteType: selected, materialized: true },
+      randomSite: {
+        mode: "homeChoice",
+        destinationSiteType: selected,
+        materialized: true,
+      },
     });
     expect(chosen.state.journey.siteRuntime[SITE_ID]).toBeUndefined();
 
@@ -538,7 +558,8 @@ describe("ACCEPT_ESSENCE", () => {
     expect(out.outcome).toBe("applied");
     expect(out.state.journey.essence).toBe(amount);
     expect(
-      (out.state.journey.siteRuntime[SITE_ID] as { accepted: boolean }).accepted,
+      (out.state.journey.siteRuntime[SITE_ID] as { accepted: boolean })
+        .accepted,
     ).toBe(true);
     expect(out.state.journey.visitedSites).toContain(SITE_ID);
     expect(out.state.journey.screen.type).toBe("dreamscape");
@@ -550,7 +571,8 @@ describe("ACCEPT_ESSENCE", () => {
     expect(out.outcome).toBe("applied");
     const runtime = out.state.journey.siteRuntime[SITE_ID];
     expect(runtime?.kind).toBe("essence");
-    if (runtime?.kind !== "essence") throw new Error("expected Essence runtime");
+    if (runtime?.kind !== "essence")
+      throw new Error("expected Essence runtime");
     expect(runtime.amount).toBeGreaterThanOrEqual(200);
     expect(runtime.amount).toBeLessThanOrEqual(300);
     expect(runtime.accepted).toBe(true);
@@ -634,17 +656,18 @@ describe("ACCEPT_REWARD (Dreamsign reward at the cap)", () => {
       siteId: SITE_ID,
     });
     expect(withoutReplacement.outcome).toBe("bounced");
-    expect(withoutReplacement.state.journey.visitedSites).not.toContain(SITE_ID);
+    expect(withoutReplacement.state.journey.visitedSites).not.toContain(
+      SITE_ID,
+    );
 
     const withReplacement = reduce(state, "ACCEPT_REWARD", {
       siteId: SITE_ID,
       purgeIndex: 1,
     });
     expect(withReplacement.outcome).toBe("applied");
-    expect(withReplacement.state.journey.dreamsigns.map((sign) => sign.id)).toEqual([
-      "held-1",
-      "reward-dreamsign",
-    ]);
+    expect(
+      withReplacement.state.journey.dreamsigns.map((sign) => sign.id),
+    ).toEqual(["held-1", "reward-dreamsign"]);
     expect(withReplacement.state.journey.visitedSites).toContain(SITE_ID);
   });
 });
@@ -652,11 +675,9 @@ describe("ACCEPT_REWARD (Dreamsign reward at the cap)", () => {
 describe("dreamsign offer accept / reject", () => {
   function opened(overrides: Partial<JourneyState> = {}): FoldState {
     registerSiteContentProvider(fakeProvider);
-    return reduce(
-      siteState("DreamsignRevelation", overrides),
-      "OPEN_SITE",
-      { siteId: SITE_ID },
-    ).state;
+    return reduce(siteState("DreamsignRevelation", overrides), "OPEN_SITE", {
+      siteId: SITE_ID,
+    }).state;
   }
 
   it("accepts an offered dreamsign by id and appends it", () => {
@@ -690,7 +711,8 @@ describe("dreamsign offer accept / reject", () => {
     expect(out.outcome).toBe("applied");
     expect(out.state.journey.visitedSites).toContain(SITE_ID);
     expect(
-      (out.state.journey.siteRuntime[SITE_ID] as { accepted: boolean }).accepted,
+      (out.state.journey.siteRuntime[SITE_ID] as { accepted: boolean })
+        .accepted,
     ).toBe(true);
   });
 
@@ -744,11 +766,9 @@ describe("Augury", () => {
   });
 
   it("REROLL bounces once the augury is completed", () => {
-    const completed = reduce(
-      siteState("Augury"),
-      "COMPLETE_AUGURY",
-      { siteId: SITE_ID },
-    ).state;
+    const completed = reduce(siteState("Augury"), "COMPLETE_AUGURY", {
+      siteId: SITE_ID,
+    }).state;
     expect(
       reduce(completed, "REROLL_AUGURY", { siteId: SITE_ID }).outcome,
     ).toBe("bounced");
@@ -863,9 +883,9 @@ describe("ACCEPT_DUPLICATION_CHOICE", () => {
       entryId: "deck-1",
     });
     expect(out.outcome).toBe("applied");
-    expect(out.state.journey.deck.filter((e) => e.cardNumber === 7)).toHaveLength(
-      2,
-    );
+    expect(
+      out.state.journey.deck.filter((e) => e.cardNumber === 7),
+    ).toHaveLength(2);
     expect(out.state.journey.visitedSites).toContain(SITE_ID);
   });
 

@@ -12,7 +12,11 @@ import type {
   JourneyMutations,
 } from "../../state/journey-context";
 import type { DreamGuideContent } from "../../types/content";
-import type { DreamscapeNode, Dreamsign, JourneyState } from "../../types/journey";
+import type {
+  DreamscapeNode,
+  Dreamsign,
+  JourneyState,
+} from "../../types/journey";
 import type { TutorialSiteConfiguration } from "../../types/tutorial";
 import { LayerName } from "../../types/layer-name";
 import { economyFixture } from "../../testing/economy-fixture";
@@ -61,7 +65,8 @@ const GUIDE: DreamGuideContent = {
   name: "Sigrun",
   homeDreamscapeId: "winterwake",
   siteType: "DreamsignRevelation",
-  dialog: ["Choose what the frost reveals."],
+  portraitSource: "fixture-guide.png",
+  dialogue: { site: ["Choose what the frost reveals."] },
   homeSpecialty: "Dreamsign Revelation",
 };
 

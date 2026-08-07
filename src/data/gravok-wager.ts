@@ -5,50 +5,18 @@ import type {
   StandardPlayingCardSuit,
 } from "../types/gamble";
 import type { EconomyData } from "../types/economy-data";
+import type { SitesData } from "../types/sites-data";
 
 export const GRAVOK_WAGER_RULES_VERSION = "three-gate-v2";
-export const GRAVOK_WAGER_MAX_RETRIES = 2;
 
-export function gravokWagerCost(config: EconomyData["gamble"]["threeGate"], isFarpoint: boolean): number {
+export function gravokWagerCost(
+  config: EconomyData["gamble"]["threeGate"],
+  isFarpoint: boolean,
+): number {
   return isFarpoint ? config.enhancedWager : config.standardWager;
 }
 
-export interface GravokGateRule {
-  id: GravokGateId;
-  name: string;
-  threshold: StandardPlayingCardRank;
-  oddsNumerator: number;
-  oddsDenominator: number;
-  awardsDreamsign: boolean;
-}
-
-/** Stable player-facing and rules-layer definitions for the three gates. */
-export const GRAVOK_GATE_RULES: readonly GravokGateRule[] = [
-  {
-    id: "six",
-    name: "Six Gate",
-    threshold: "6",
-    oddsNumerator: 36,
-    oddsDenominator: 52,
-    awardsDreamsign: false,
-  },
-  {
-    id: "nine",
-    name: "Nine Gate",
-    threshold: "9",
-    oddsNumerator: 24,
-    oddsDenominator: 52,
-    awardsDreamsign: false,
-  },
-  {
-    id: "jack",
-    name: "Jack Gate",
-    threshold: "J",
-    oddsNumerator: 16,
-    oddsDenominator: 52,
-    awardsDreamsign: true,
-  },
-];
+export type GravokGateRule = SitesData["gamble"]["threeGate"]["gates"][number];
 
 export const STANDARD_PLAYING_CARD_RANKS: readonly StandardPlayingCardRank[] = [
   "2",
@@ -79,8 +47,13 @@ export const STANDARD_PLAYING_CARD_DECK: readonly StandardPlayingCard[] =
     STANDARD_PLAYING_CARD_SUITS.map((suit) => ({ rank, suit })),
   );
 
-export function gravokGateRule(gateId: GravokGateId): GravokGateRule {
-  return GRAVOK_GATE_RULES.find((gate) => gate.id === gateId)!;
+export function gravokGateRule(
+  config: SitesData["gamble"]["threeGate"],
+  gateId: GravokGateId,
+): GravokGateRule {
+  const rule = config.gates.find((gate) => gate.id === gateId);
+  if (rule === undefined) throw new Error(`Missing configured gate ${gateId}`);
+  return rule;
 }
 
 export function gravokGateEssenceReward(
@@ -97,11 +70,14 @@ export function gravokGateChanceLabel(gate: GravokGateRule): string {
 
 /** Whether a drawn rank crosses a gate's inclusive threshold. */
 export function rankWinsGravokGate(
+  config: SitesData["gamble"]["threeGate"],
   rank: StandardPlayingCardRank,
   gateId: GravokGateId,
 ): boolean {
   return (
     STANDARD_PLAYING_CARD_RANKS.indexOf(rank) >=
-    STANDARD_PLAYING_CARD_RANKS.indexOf(gravokGateRule(gateId).threshold)
+    STANDARD_PLAYING_CARD_RANKS.indexOf(
+      gravokGateRule(config, gateId).threshold,
+    )
   );
 }

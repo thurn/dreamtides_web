@@ -8,6 +8,7 @@ import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
+import { loadTestSitesData } from "../../__test-helpers__/atlas-fixtures";
 //
 //   START_JOURNEY -> SELECT_DREAM_AVATAR -> OPEN_SITE (every content-coupled site
 //   type) -> REROLL_SHOP -> BEGIN_BATTLE
@@ -156,6 +157,7 @@ function makeJourneyContent(): JourneyContent {
     affiliations: loadTestAffiliations(),
     guides: loadTestDreamGuides(),
     atlasData: loadTestAtlasData(),
+    sitesData: loadTestSitesData(),
     economyData: economyFixture(),
     opponentsData: opponentsFixture(),
     poolContext: makeTestPoolContext(dreamsignIds),
@@ -809,7 +811,8 @@ describe("createSiteContentProvider — Gamble", () => {
     expect(randomFourSuit?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "four-suit-reprise",
-      drawCost: 25,
+      drawCost:
+        fixture.content.economyData.gamble.fourSuitReprise.standardDrawPrice,
     });
     expect(forcedThreeGate?.runtime).toMatchObject({
       kind: "gamble",
@@ -828,7 +831,8 @@ describe("createSiteContentProvider — Gamble", () => {
     expect(forcedFourSuit?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "four-suit-reprise",
-      drawCost: 25,
+      drawCost:
+        fixture.content.economyData.gamble.fourSuitReprise.standardDrawPrice,
       phase: "choose",
     });
     expect(farpointThreeGate?.runtime).toMatchObject({
@@ -844,7 +848,8 @@ describe("createSiteContentProvider — Gamble", () => {
     expect(farpointFourSuit?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "four-suit-reprise",
-      drawCost: 15,
+      drawCost:
+        fixture.content.economyData.gamble.fourSuitReprise.enhancedDrawPrice,
     });
     if (
       forcedFourSuit?.runtime.kind === "gamble" &&
@@ -855,13 +860,12 @@ describe("createSiteContentProvider — Gamble", () => {
         forcedFourSuit.runtime.targets.every((target) =>
           target.transfigurationOffers.every(
             (offer) => offer.essenceCost === 0,
-          )
+          ),
         ),
       ).toBe(true);
       expect(
-        new Set(
-          forcedFourSuit.runtime.targets.map((target) => target.entryId),
-        ).size,
+        new Set(forcedFourSuit.runtime.targets.map((target) => target.entryId))
+          .size,
       ).toBe(forcedFourSuit.runtime.targets.length);
     }
   });

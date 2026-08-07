@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createDefaultState } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
+import type { DreamGuideContent } from "../../types/content";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { economyFixture } from "../../testing/economy-fixture";
 import type { DeckEntry, SiteState } from "../../types/journey";
@@ -10,6 +11,16 @@ import {
   buildPurgeSiteView,
   buildPurgeVisitCosts,
 } from "./purge-view-model";
+
+const GUIDE = {
+  id: "fixture-purge-guide",
+  name: "Fixture Purge Guide",
+  homeDreamscapeId: "fixture-home",
+  siteType: "Purge",
+  portraitSource: "fixture-guide.png",
+  dialogue: { site: ["Fixture line."] },
+  homeSpecialty: "Fixture specialty.",
+} satisfies DreamGuideContent;
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
@@ -75,7 +86,8 @@ describe("buildPurgeGuideView", () => {
         name: "Master Takeshi",
         homeDreamscapeId: "tsukiren",
         siteType: "Purge",
-        dialog: ["First line."],
+        portraitSource: "fixture-guide.png",
+        dialogue: { site: ["First line."] },
         homeSpecialty: "Purge cards.",
       },
       "Chosen line.",
@@ -112,8 +124,8 @@ describe("buildPurgeSiteView", () => {
         makeCard({ cardNumber: 2 }),
         makeCard({ cardNumber: 10002 }),
       ),
-      guide: null,
-      guideLine: null,
+      guide: GUIDE,
+      guideLine: "Fixture line.",
       economyData: economyFixture(),
     });
 

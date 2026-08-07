@@ -306,6 +306,7 @@ describe("removeUiParamFromSearch", () => {
 
 describe("contentConfigFromRuntime", () => {
   const atlasFoldHash = "fixture-atlas-fold-hash";
+  const sitesFoldHash = "fixture-sites-fold-hash";
   const draftData = draftDataFixture();
   const economyData = economyFixture();
   const opponentsData = opponentsFixture();
@@ -317,6 +318,7 @@ describe("contentConfigFromRuntime", () => {
       contentConfigFromRuntime(
         parseRuntimeConfig(""),
         atlasFoldHash,
+        sitesFoldHash,
         draftData,
         economyData,
         opponentsData,
@@ -330,6 +332,7 @@ describe("contentConfigFromRuntime", () => {
       draftMode: "pool",
       fresh20PackSize: null,
       atlasFoldHash,
+      sitesFoldHash,
       draftFoldHash: draftData.foldHash,
       economyFoldHash: economyData.foldHash,
       rewardSelectionFoldHash: CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
@@ -347,6 +350,7 @@ describe("contentConfigFromRuntime", () => {
       contentConfigFromRuntime(
         parseRuntimeConfig("?algo=fresh20&packsize=15"),
         atlasFoldHash,
+        sitesFoldHash,
         draftData,
         economyData,
         opponentsData,
@@ -360,6 +364,7 @@ describe("contentConfigFromRuntime", () => {
       draftMode: "fresh20",
       fresh20PackSize: 15,
       atlasFoldHash,
+      sitesFoldHash,
       draftFoldHash: draftData.foldHash,
       economyFoldHash: economyData.foldHash,
       rewardSelectionFoldHash: CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
@@ -377,6 +382,7 @@ describe("contentConfigFromRuntime", () => {
       contentConfigFromRuntime(
         parseRuntimeConfig("?algo=tides4"),
         atlasFoldHash,
+        sitesFoldHash,
         draftData,
         economyData,
         opponentsData,
@@ -396,6 +402,7 @@ describe("contentConfigsEqual", () => {
     draftMode: "pool",
     fresh20PackSize: null,
     atlasFoldHash: "fixture-atlas-fold-hash",
+    sitesFoldHash: "fixture-sites-fold-hash",
     draftFoldHash: "fixture-draft-fold-hash",
     economyFoldHash: economyData.foldHash,
     rewardSelectionFoldHash: CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
@@ -426,6 +433,9 @@ describe("contentConfigsEqual", () => {
     ).toBe(false);
     expect(
       contentConfigsEqual(base, { ...base, economyFoldHash: "different" }),
+    ).toBe(false);
+    expect(
+      contentConfigsEqual(base, { ...base, sitesFoldHash: "different" }),
     ).toBe(false);
     expect(
       contentConfigsEqual(base, {
@@ -474,6 +484,7 @@ describe("applyContentConfigToSearch", () => {
         draftMode: "pool",
         fresh20PackSize: null,
         atlasFoldHash: "fixture-atlas-fold-hash",
+        sitesFoldHash: "fixture-sites-fold-hash",
         ...pinnedEconomy,
       },
       {
@@ -481,6 +492,7 @@ describe("applyContentConfigToSearch", () => {
         draftMode: "replay",
         fresh20PackSize: null,
         atlasFoldHash: "fixture-atlas-fold-hash",
+        sitesFoldHash: "fixture-sites-fold-hash",
         ...pinnedEconomy,
       },
       {
@@ -488,6 +500,7 @@ describe("applyContentConfigToSearch", () => {
         draftMode: "fresh20",
         fresh20PackSize: 12,
         atlasFoldHash: "fixture-atlas-fold-hash",
+        sitesFoldHash: "fixture-sites-fold-hash",
         ...pinnedEconomy,
       },
       {
@@ -495,6 +508,7 @@ describe("applyContentConfigToSearch", () => {
         draftMode: "fresh20",
         fresh20PackSize: null,
         atlasFoldHash: "fixture-atlas-fold-hash",
+        sitesFoldHash: "fixture-sites-fold-hash",
         ...pinnedEconomy,
       },
     ];
@@ -504,6 +518,7 @@ describe("applyContentConfigToSearch", () => {
         contentConfigFromRuntime(
           parseRuntimeConfig(search),
           config.atlasFoldHash ?? "fixture-atlas-fold-hash",
+          config.sitesFoldHash ?? "fixture-sites-fold-hash",
           {
             ...draftDataFixture(),
             foldHash: config.draftFoldHash ?? draftDataFixture().foldHash,

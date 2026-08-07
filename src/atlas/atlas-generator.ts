@@ -21,6 +21,7 @@ import { draftSiteData } from "../draft/draft-site-config";
 import { logEvent } from "../logging";
 import type { RandomSiteDestinationType } from "../types/journey";
 import { atlasLayerData } from "../types/atlas-data";
+import type { SitesData } from "../types/sites-data";
 
 /** Parameters for site generation that require external data. */
 export interface SiteGenerationContext {
@@ -31,7 +32,7 @@ export interface SiteGenerationContext {
    */
   dreamscapeModifiers?: readonly DreamscapeModifier[];
   /** Number of picks persisted on each newly generated Draft site. */
-  draftPickCount?: number;
+  draftPickCount: number;
 }
 
 /**
@@ -44,6 +45,7 @@ export interface SiteGenerationContext {
 export interface AtlasBuildContext {
   dreamscapes: readonly DreamscapeContent[];
   atlasData: AtlasData;
+  sitesData: SitesData;
   /** Dreamsign ids eligible to be granted as pre-revealed known dreamsigns. */
   dreamsignPoolIds: readonly string[];
   /**
@@ -270,9 +272,10 @@ function buildFillPool(
   atlasData: AtlasData,
 ): Array<[SiteType, number]> {
   const layerData = atlasLayerData(atlasData, layer);
-  const profile = layerData.fillProfile === null
-    ? null
-    : atlasData.fillProfiles[layerData.fillProfile];
+  const profile =
+    layerData.fillProfile === null
+      ? null
+      : atlasData.fillProfiles[layerData.fillProfile];
   if (profile === null || profile === undefined) return [];
   const weights = new Map<SiteType, number>();
 
@@ -318,6 +321,7 @@ export interface SiteCompositionInput {
   dreamscapes: readonly DreamscapeContent[];
   /** Authored Atlas rules used for this composition. */
   atlasData: AtlasData;
+  sitesData: SitesData;
   /** Site-generation tuning (active dreamscape modifiers). */
   context: SiteGenerationContext;
   /**
@@ -340,7 +344,7 @@ export interface SiteCompositionResult {
 function makeSite(
   type: SiteType,
   isEnhanced: boolean,
-  draftPickCount?: number,
+  draftPickCount: number,
 ): SiteState {
   return {
     id: nextSiteId(),
@@ -352,12 +356,12 @@ function makeSite(
 }
 
 function randomSiteCandidates(
-  atlasData: AtlasData,
+  sitesData: SitesData,
   usedTypes: ReadonlySet<SiteType>,
   modifiers: readonly DreamscapeModifier[] = [],
 ): RandomSiteDestinationType[] {
   const removed = removedSiteTypesFromModifiers(modifiers);
-  return atlasData.randomSite.destinations.filter(
+  return sitesData.randomSite.destinations.filter(
     (type) => !usedTypes.has(type) && !removed.has(type),
   );
 }
@@ -368,7 +372,7 @@ function makeRandomSite(
   homeChoiceCount: number,
   awayChoiceCount: number,
   guideId: string | null,
-  draftPickCount?: number,
+  draftPickCount: number,
 ): SiteState {
   if (mode === "homeChoice" && candidates.length < homeChoiceCount) {
     throw new Error(
@@ -380,7 +384,7 @@ function makeRandomSite(
       ? candidates[randomInt(0, candidates.length - 1)]
       : undefined;
   return {
-    ...makeSite("RandomSite", true),
+    ...makeSite("RandomSite", true, draftPickCount),
     data: draftSiteData(draftPickCount),
     ...(guideId === null ? {} : { guideIdOverride: guideId }),
     randomSite: {
@@ -426,7 +430,15 @@ function generateSiteCompositionInternal(
   input: SiteCompositionInput,
   logEvents: boolean,
 ): SiteCompositionResult {
-  const { layer, dreamscape, dreamscapes, atlasData, context, hasKnownDreamsign } = input;
+  const {
+    layer,
+    dreamscape,
+    dreamscapes,
+    atlasData,
+    sitesData,
+    context,
+    hasKnownDreamsign,
+  } = input;
 
   // Starter dreamscape: fixed list, no enhancement, no fill.
   if (dreamscape?.isStarter === true && dreamscape.fixedSites !== undefined) {
@@ -447,7 +459,7 @@ function generateSiteCompositionInternal(
 
   const homeSite = dreamscape?.signatureSite ?? null;
   const layerData = atlasLayerData(atlasData, layer);
-  const randomSiteGuideId = atlasData.randomSite.guideId;
+  const randomSiteGuideId = sitesData.randomSite.guideId;
   // Types already placed, so fill never duplicates a non-Draft type.
   const usedTypes = new Set<SiteType>();
   // Non-battle sites, in visit order. Battle is appended last at the end.
@@ -462,7 +474,9 @@ function generateSiteCompositionInternal(
   }
 
   // --- Mandatory sites authored per layer. Draft may repeat; other types do not. ---
-  for (const [mandatoryType, count] of Object.entries(layerData.mandatorySites)) {
+  for (const [mandatoryType, count] of Object.entries(
+    layerData.mandatorySites,
+  )) {
     const siteType = mandatoryType as SiteType;
     for (let index = 0; index < count; index += 1) {
       if (siteType !== "Draft" && usedTypes.has(siteType)) break;
@@ -474,9 +488,7 @@ function generateSiteCompositionInternal(
   // --- Known-dreamsign carrier: one fill slot becomes a Dreamsign Reward. ---
   const knownDreamsignSite = atlasData.siteComposition.knownDreamsignSite;
   if (hasKnownDreamsign === true && !usedTypes.has(knownDreamsignSite)) {
-    preBattle.push(
-      makeSite(knownDreamsignSite, false, context.draftPickCount),
-    );
+    preBattle.push(makeSite(knownDreamsignSite, false, context.draftPickCount));
     usedTypes.add(knownDreamsignSite);
   }
 
@@ -501,7 +513,9 @@ function generateSiteCompositionInternal(
   }));
   const siteCount = layerData.siteCount;
   if (siteCount === null) {
-    throw new Error(`Atlas layer ${layer} has no non-starter site-count rules.`);
+    throw new Error(
+      `Atlas layer ${layer} has no non-starter site-count rules.`,
+    );
   }
   const minPreBattle = Math.max(0, siteCount.min - 1);
   const maxPreBattle = Math.max(0, siteCount.max - 1);
@@ -515,8 +529,11 @@ function generateSiteCompositionInternal(
         const prospective = new Set(usedTypes);
         prospective.add(remainingPool[index][0]);
         if (
-          randomSiteCandidates(atlasData, prospective, context.dreamscapeModifiers).length <
-            atlasData.randomSite.homeChoiceCount
+          randomSiteCandidates(
+            sitesData,
+            prospective,
+            context.dreamscapeModifiers,
+          ).length < sitesData.randomSite.homeChoiceCount
         ) {
           remainingPool.splice(index, 1);
         }
@@ -526,15 +543,15 @@ function generateSiteCompositionInternal(
     const siteType = weightedPick(remainingPool);
     if (siteType === "RandomSite") {
       const candidates = randomSiteCandidates(
-        atlasData,
+        sitesData,
         usedTypes,
         context.dreamscapeModifiers,
       );
       const randomSite = makeRandomSite(
         "single",
         candidates,
-        atlasData.randomSite.homeChoiceCount,
-        atlasData.randomSite.awayChoiceCount,
+        sitesData.randomSite.homeChoiceCount,
+        sitesData.randomSite.awayChoiceCount,
         randomSiteGuideId,
         context.draftPickCount,
       );
@@ -542,7 +559,10 @@ function generateSiteCompositionInternal(
       if (randomSite.randomSite?.destinationSiteType !== undefined) {
         usedTypes.add(randomSite.randomSite.destinationSiteType);
         for (let index = remainingPool.length - 1; index >= 0; index -= 1) {
-          if (remainingPool[index][0] === randomSite.randomSite.destinationSiteType) {
+          if (
+            remainingPool[index][0] ===
+            randomSite.randomSite.destinationSiteType
+          ) {
             remainingPool.splice(index, 1);
           }
         }
@@ -566,7 +586,7 @@ function generateSiteCompositionInternal(
         .filter((type) => type !== "RandomSite"),
     );
     const candidates = randomSiteCandidates(
-      atlasData,
+      sitesData,
       occupiedGuideTypes,
       context.dreamscapeModifiers,
     );
@@ -575,8 +595,8 @@ function generateSiteCompositionInternal(
       preBattle[homeIndex] = makeRandomSite(
         "homeChoice",
         candidates,
-        atlasData.randomSite.homeChoiceCount,
-        atlasData.randomSite.awayChoiceCount,
+        sitesData.randomSite.homeChoiceCount,
+        sitesData.randomSite.awayChoiceCount,
         randomSiteGuideId,
         context.draftPickCount,
       );
@@ -584,7 +604,10 @@ function generateSiteCompositionInternal(
   }
 
   // --- Battle, always last. ---
-  const sites = [...preBattle, makeSite("Battle", false)];
+  const sites = [
+    ...preBattle,
+    makeSite("Battle", false, context.draftPickCount),
+  ];
 
   if (logEvents) {
     logEvent("dreamscape_site_composition", {
@@ -603,7 +626,8 @@ function generateSiteCompositionInternal(
           siteId: site.id,
           mode: site.randomSite?.mode,
           candidateSiteTypes: site.randomSite?.candidateSiteTypes,
-          hiddenDestinationSiteType: site.randomSite?.destinationSiteType ?? null,
+          hiddenDestinationSiteType:
+            site.randomSite?.destinationSiteType ?? null,
         })),
       siteTypes: sites.map((s) => s.type),
     });
@@ -796,8 +820,8 @@ function drawDreamscapeForNode(
   );
   const candidates = eligible.length > 0 ? eligible : nonStarter;
   const weighted = candidates.map((d): [DreamscapeContent, number] => [
-      d,
-      state.dreamscapeWeights.get(d.id) ?? selection.baseWeight,
+    d,
+    state.dreamscapeWeights.get(d.id) ?? selection.baseWeight,
   ]);
   const selected = weightedPick(weighted);
   if (state.logEvents) {
@@ -873,6 +897,7 @@ function revealNodeDreamscape(state: AtlasState, nodeId: string): void {
       dreamscape,
       dreamscapes: state.context.dreamscapes,
       atlasData: state.context.atlasData,
+      sitesData: state.context.sitesData,
       context: state.siteContext,
       hasKnownDreamsign: (node.knownDreamsignId ?? null) !== null,
     },
@@ -1031,7 +1056,12 @@ export function generateInitialAtlas(
   const previousAtlasRandom = atlasRandom;
   atlasRandom = options.rng ?? Math.random;
   try {
-    return generateInitialAtlasInternal(completionLevel, context, build, options);
+    return generateInitialAtlasInternal(
+      completionLevel,
+      context,
+      build,
+      options,
+    );
   } finally {
     atlasRandom = previousAtlasRandom;
   }
@@ -1188,6 +1218,12 @@ function generateInitialAtlasInternal(
           earlyRevealBias: cfg.knownDreamsign.earlyRevealBias,
         },
       },
+      sitesData: {
+        foldHash: build.sitesData.foldHash,
+        randomSite: build.sitesData.randomSite,
+        gambleSelection: build.sitesData.gamble.selection,
+        cardChoices: build.sitesData.cardChoices,
+      },
     });
   }
 
@@ -1199,7 +1235,8 @@ function generateInitialAtlasInternal(
     build.atlasData.graph.bonusReveal.mode,
   );
   const bonusPool: string[] = [];
-  for (const eligibleLayer of build.atlasData.graph.bonusReveal.eligibleLayers) {
+  for (const eligibleLayer of build.atlasData.graph.bonusReveal
+    .eligibleLayers) {
     const ordinal = layerOrdinal(eligibleLayer);
     if (ordinal < layers.length - 1) {
       bonusPool.push(...layers[ordinal]);

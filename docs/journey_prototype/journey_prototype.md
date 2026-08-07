@@ -27,7 +27,10 @@ Vite. The setup script is idempotent and:
 4. Copies `data/tides4.jsonc` into `public/tides4-data.json` with comments
    stripped.
 5. Compiles `data/tabula/atlas.toml` into validated `public/atlas-data.json`.
-6. Compiles `data/tabula/opponents.toml` into validated
+6. Compiles and cross-validates the canonical Dream Guide and Site catalogs,
+   derives Dreamscape assignments, and emits `public/dream-guides-data.json`,
+   `public/dreamscapes-data.json`, and `public/sites-data.json`.
+7. Compiles `data/tabula/opponents.toml` into validated
    `public/opponents-data.json`.
 
 The generated `public/cards/`, `public/card-data.json`,
@@ -101,10 +104,12 @@ The important ownership boundaries are:
   `CoopJourneyProvider`, and shared experience router for main, loading,
   tutorial, live battle, victory, and journey.
 
-Atlas generation rules, site metadata, boss content, presentation copy, and
-asset references are authored in `data/tabula/atlas.toml`. See
-[Dream Atlas Data](atlas_data.md) for the schema, validation rules, hashing, and
-Layer VII Limbo semantics.
+Atlas graph generation, boss content, presentation copy, and asset references
+are authored in `data/tabula/atlas.toml`. See [Dream Atlas Data](atlas_data.md)
+for the schema, validation rules, hashing, and Layer VII Limbo semantics. Guide
+identity, home and specialty assignments, dialogue, site presentation, and
+cross-site mechanics are documented in
+[Dream Guide and Site Data](guide_and_sites_data.md).
 
 `LogClient` keeps a confirmed fold and an ordered pending-intent queue. A local
 intent is optimistically folded for immediate feedback, then reconciled by its

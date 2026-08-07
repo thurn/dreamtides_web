@@ -182,7 +182,11 @@ function provider(): DraftContentProvider {
     },
     cardDatabase: () => CARD_DB,
     offerDepsFor: () => undefined,
-    draftConfigFor: () => undefined,
+    draftConfigFor: () => ({
+      packSize: 4,
+      sitePickCount: 5,
+      rarityCaps: [],
+    }),
     transfigurationForCard: () => "Empowered",
   };
 }

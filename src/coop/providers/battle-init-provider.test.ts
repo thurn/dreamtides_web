@@ -6,6 +6,7 @@ import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
+  MINIMAL_SITES_DATA,
 } from "../../__test-helpers__/atlas-fixtures";
 import {
   makeBattleTestCardDatabase,
@@ -34,6 +35,7 @@ function makeContent(): JourneyContent {
     affiliations: [],
     guides: [],
     atlasData: MINIMAL_ATLAS_DATA,
+    sitesData: MINIMAL_SITES_DATA,
     economyData: economyFixture(),
     opponentsData: opponentsFixture(),
   };

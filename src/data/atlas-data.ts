@@ -1,6 +1,4 @@
 import type { AtlasData } from "../types/atlas-data";
-import type { SiteType } from "../types/site-type";
-import { requireGlossaryEntry } from "./glossary";
 
 export type { AtlasData } from "../types/atlas-data";
 
@@ -29,44 +27,13 @@ export async function loadAtlasData(): Promise<AtlasData> {
   return value as AtlasData;
 }
 
-function siteTypeData(atlasData: AtlasData, siteType: SiteType) {
-  return (atlasData.siteTypes as Partial<AtlasData["siteTypes"]>)[siteType];
-}
-
-/** Returns the authored icon class for a site, with the legacy-safe fallback. */
-export function siteTypeIcon(
-  atlasData: AtlasData,
-  siteType: SiteType,
-): string {
-  return siteTypeData(atlasData, siteType)?.icon ?? atlasData.fallbackSiteType.icon;
-}
-
-/** Returns the glossary-authored display name for a site. */
-export function siteTypeName(
-  atlasData: AtlasData,
-  siteType: SiteType,
-): string {
-  const metadata = siteTypeData(atlasData, siteType);
-  return metadata === undefined
-    ? atlasData.fallbackSiteType.name
-    : requireGlossaryEntry(metadata.glossaryId).term;
-}
-
-/** Returns the glossary-authored one-line description for a site. */
-export function siteTypeDescription(
-  atlasData: AtlasData,
-  siteType: SiteType,
-): string {
-  const metadata = siteTypeData(atlasData, siteType);
-  return metadata === undefined
-    ? atlasData.fallbackSiteType.description
-    : requireGlossaryEntry(metadata.glossaryId).definition;
-}
-
 /** Expands one validated Atlas presentation template. */
 export function atlasTemplate(
   template: string,
   values: Readonly<Record<string, string>>,
 ): string {
-  return template.replace(/\{([^{}]+)\}/gu, (_match, key: string) => values[key] ?? "");
+  return template.replace(
+    /\{([^{}]+)\}/gu,
+    (_match, key: string) => values[key] ?? "",
+  );
 }

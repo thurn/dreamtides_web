@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createDefaultState } from "../../state/journey-context";
-import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
+import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
 import { economyFixture } from "../../testing/economy-fixture";
 import type { DreamGuideContent } from "../../types/content";
 import type {
@@ -21,14 +21,31 @@ import {
   buildGambleGateViews,
   buildGambleSiteView as buildGambleSiteViewImpl,
   gravokRevealGateId,
-  GRAVOK_WAGER_GUIDE_LINE,
   resolveGambleGuide,
-  STARWAY_STAIRS_GUIDE_LINE,
 } from "./gamble-site-view-model";
 
 const buildGambleSiteView = (
-  params: Omit<Parameters<typeof buildGambleSiteViewImpl>[0], "atlasData" | "economyData">,
-) => buildGambleSiteViewImpl({ ...params, atlasData: MINIMAL_ATLAS_DATA, economyData: economyFixture() });
+  params: Omit<
+    Parameters<typeof buildGambleSiteViewImpl>[0],
+    "sitesData" | "economyData"
+  >,
+) =>
+  buildGambleSiteViewImpl({
+    ...params,
+    sitesData: MINIMAL_SITES_DATA,
+    economyData: economyFixture(),
+  });
+
+const GUIDE_LINE = "Fixture game line.";
+const GUIDE = {
+  id: "fixture-gamble-guide",
+  name: "Fixture Gamble Guide",
+  homeDreamscapeId: "fixture-home",
+  siteType: "Gamble",
+  portraitSource: "fixture-guide.png",
+  dialogue: { site: [GUIDE_LINE] },
+  homeSpecialty: "Fixture specialty.",
+} satisfies DreamGuideContent;
 
 const GAMBLE_SITE: SiteState & { type: "Gamble" } = {
   id: "fixture-gamble-site",
@@ -66,13 +83,19 @@ function expectGravokView(
 
 describe("gamble-site-view-model", () => {
   it("uses the next non-selected gate as the stable reveal object", () => {
-    expect(gravokRevealGateId("six")).toBe("nine");
-    expect(gravokRevealGateId("nine")).toBe("jack");
-    expect(gravokRevealGateId("jack")).toBe("six");
+    const rules = MINIMAL_SITES_DATA.gamble.threeGate;
+    expect(gravokRevealGateId(rules, "six")).toBe("nine");
+    expect(gravokRevealGateId(rules, "nine")).toBe("jack");
+    expect(gravokRevealGateId(rules, "jack")).toBe("six");
   });
 
   it("maps all exact gate targets, odds, rewards, and the locked jackpot", () => {
-    const gates = buildGambleGateViews(economyFixture().gamble.threeGate, RUNTIME, 12);
+    const gates = buildGambleGateViews(
+      economyFixture().gamble.threeGate,
+      MINIMAL_SITES_DATA.gamble.threeGate,
+      RUNTIME,
+      12,
+    );
 
     expect(gates).toMatchObject([
       {
@@ -112,7 +135,8 @@ describe("gamble-site-view-model", () => {
       state,
       sceneNode: null,
       site: GAMBLE_SITE,
-      guide: null,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
     });
     expectGravokView(view);
 
@@ -120,7 +144,7 @@ describe("gamble-site-view-model", () => {
     expect(view.canAfford).toBe(true);
     expect(view.canPlayAgain).toBe(false);
     expect(view.card).toEqual({ rank: "A", suit: "spades" });
-    expect(view.guide.line).toBe(GRAVOK_WAGER_GUIDE_LINE);
+    expect(view.guide.line).toBe(GUIDE_LINE);
     expect(view.result).toBeNull();
   });
 
@@ -149,7 +173,8 @@ describe("gamble-site-view-model", () => {
       state,
       sceneNode: null,
       site: GAMBLE_SITE,
-      guide: null,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
     });
     expectGravokView(view);
 
@@ -177,7 +202,8 @@ describe("gamble-site-view-model", () => {
       },
       sceneNode: null,
       site: GAMBLE_SITE,
-      guide: null,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
     });
     expectGravokView(view);
 
@@ -214,7 +240,8 @@ describe("gamble-site-view-model", () => {
       state,
       sceneNode: null,
       site: GAMBLE_SITE,
-      guide: null,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
     });
     expectGravokView(view);
 
@@ -242,7 +269,8 @@ describe("gamble-site-view-model", () => {
         name: "Fixture Gambler",
         homeDreamscapeId: "fixture-dreamscape",
         siteType: "Gamble",
-        dialog: ["A fixture greeting."],
+        portraitSource: "fixture-guide.png",
+        dialogue: { site: ["A fixture greeting."] },
         homeSpecialty: "Fixture specialty.",
       },
     ];
@@ -263,9 +291,7 @@ const LADDER_RUNTIME: TidemarkLadderClimbSiteRuntime = {
     { rank: "8", suit: "hearts" },
     { rank: "6", suit: "spades" },
   ],
-  dreamsignCandidateScores: [
-    { dreamsignId: "fixture-sign", score: 1 },
-  ],
+  dreamsignCandidateScores: [{ dreamsignId: "fixture-sign", score: 1 }],
   strongPoolSize: 1,
   strongPoolCutoffScore: 1,
   rewardDreamsign: RUNTIME.rewardDreamsign!,
@@ -285,7 +311,8 @@ describe("gamble-site-view-model — Ladder Climb", () => {
       state,
       sceneNode: null,
       site: GAMBLE_SITE,
-      guide: null,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
     });
 
     expect(view?.gameId).toBe("tidemark-ladder-climb");
@@ -328,7 +355,8 @@ describe("gamble-site-view-model — Ladder Climb", () => {
       },
       sceneNode: null,
       site: GAMBLE_SITE,
-      guide: null,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
     });
 
     expect(view?.gameId).toBe("tidemark-ladder-climb");
@@ -361,22 +389,24 @@ describe("gamble-site-view-model — Ladder Climb", () => {
       dreamsignAwarded: false,
       pendingDreamsignReplacement: false,
     };
-    const build = (resultSettled: boolean) => buildGambleSiteView({
-      state: {
-        ...createDefaultState(),
-        siteRuntime: {
-          [GAMBLE_SITE.id]: {
-            ...LADDER_RUNTIME,
-            revealedCards: [winningResult.card],
-            cumulativeCost: 0,
-            result: { ...winningResult, resultSettled },
+    const build = (resultSettled: boolean) =>
+      buildGambleSiteView({
+        state: {
+          ...createDefaultState(),
+          siteRuntime: {
+            [GAMBLE_SITE.id]: {
+              ...LADDER_RUNTIME,
+              revealedCards: [winningResult.card],
+              cumulativeCost: 0,
+              result: { ...winningResult, resultSettled },
+            },
           },
         },
-      },
-      sceneNode: null,
-      site: GAMBLE_SITE,
-      guide: null,
-    });
+        sceneNode: null,
+        site: GAMBLE_SITE,
+        guide: GUIDE,
+        guideLine: GUIDE_LINE,
+      });
 
     const before = build(false);
     const after = build(true);
@@ -403,7 +433,8 @@ describe("gamble-site-view-model — Ladder Climb", () => {
       },
       sceneNode: null,
       site: GAMBLE_SITE,
-      guide: null,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
     });
 
     expect(view?.gameId).toBe("tidemark-ladder-climb");
@@ -442,14 +473,15 @@ describe("gamble-site-view-model — Starway Stairs", () => {
       },
       sceneNode: null,
       site: GAMBLE_SITE,
-      guide: null,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
     });
 
     expect(view?.gameId).toBe("starway-stairs");
     if (view?.gameId !== "starway-stairs") {
       throw new Error("expected Starway Stairs view");
     }
-    expect(view.guide.line).toBe(STARWAY_STAIRS_GUIDE_LINE);
+    expect(view.guide.line).toBe(GUIDE_LINE);
     expect(view.currentTierNumber).toBe(1);
     expect(view.tiers).toMatchObject([
       {
@@ -496,7 +528,8 @@ describe("gamble-site-view-model — Starway Stairs", () => {
       },
       sceneNode: null,
       site: GAMBLE_SITE,
-      guide: null,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
     });
 
     expect(view?.gameId).toBe("starway-stairs");
@@ -534,7 +567,8 @@ describe("gamble-site-view-model — Starway Stairs", () => {
       },
       sceneNode: null,
       site: GAMBLE_SITE,
-      guide: null,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
     });
 
     expect(view?.gameId).toBe("starway-stairs");
@@ -566,7 +600,8 @@ describe("gamble-site-view-model — Starway Stairs", () => {
       },
       sceneNode: null,
       site: GAMBLE_SITE,
-      guide: null,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
     });
 
     expect(view?.gameId).toBe("starway-stairs");
@@ -612,7 +647,8 @@ describe("gamble-site-view-model — Starway Stairs", () => {
       },
       sceneNode: null,
       site: GAMBLE_SITE,
-      guide: null,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
     });
 
     expect(view?.gameId).toBe("starway-stairs");
@@ -630,9 +666,7 @@ describe("gamble-site-view-model — Starway Stairs", () => {
 function fourSuitCard(index: number): CardData {
   return {
     name: asCardName(`Four Suit Fixture ${String(index)}`),
-    id: asCardId(
-      `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
-    ),
+    id: asCardId(`00000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
     cardNumber: index,
     cardType: "Character",
     subtype: "",
@@ -656,14 +690,16 @@ function fourSuitTarget(
     cardId: card.id,
     cardNumber: card.cardNumber,
     cardSnapshot: card,
-    transfigurationOffers: [{
-      entryId,
-      type: "Empowered",
-      effectDescription: "Fixture form.",
-      effectDetails: { fixture: true },
-      previewCard: { ...card, energyCost: 1 },
-      essenceCost: 0,
-    }],
+    transfigurationOffers: [
+      {
+        entryId,
+        type: "Empowered",
+        effectDescription: "Fixture form.",
+        effectDetails: { fixture: true },
+        previewCard: { ...card, energyCost: 1 },
+        essenceCost: 0,
+      },
+    ],
   };
 }
 
@@ -689,18 +725,20 @@ describe("gamble-site-view-model — Four-Suit Reprise", () => {
         { rank: "Q", suit: "clubs" },
       ],
       targets: [target, sameCardCopy, nextTarget],
-      rounds: [{
-        roundNumber: 1,
-        shuffleCommitment: "round-1",
-        card: { rank: "4", suit: "diamonds" },
-        targetEntryId: target.entryId,
-        targetCardId: target.cardId,
-        costPaid: 25,
-        outcome: "essence",
-        resultRevealed: true,
-        resultSettled: true,
-        essenceGained: 100,
-      }],
+      rounds: [
+        {
+          roundNumber: 1,
+          shuffleCommitment: "round-1",
+          card: { rank: "4", suit: "diamonds" },
+          targetEntryId: target.entryId,
+          targetCardId: target.cardId,
+          costPaid: 25,
+          outcome: "essence",
+          resultRevealed: true,
+          resultSettled: true,
+          essenceGained: 100,
+        },
+      ],
       phase: "result",
     };
     const view = buildGambleSiteView({
@@ -717,16 +755,15 @@ describe("gamble-site-view-model — Four-Suit Reprise", () => {
       },
       sceneNode: null,
       site: GAMBLE_SITE,
-      guide: null,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
     });
 
     expect(view?.gameId).toBe("four-suit-reprise");
     if (view?.gameId !== "four-suit-reprise") {
       throw new Error("expected Four-Suit Reprise view");
     }
-    expect(view.cards.map((card) => card.cardId)).toEqual([
-      nextTarget.cardId,
-    ]);
+    expect(view.cards.map((card) => card.cardId)).toEqual([nextTarget.cardId]);
     expect(view.result?.target.entryId).toBe(target.entryId);
     expect(
       view.result?.transfigurationCandidate.forms.map((form) => ({
@@ -734,11 +771,13 @@ describe("gamble-site-view-model — Four-Suit Reprise", () => {
         essenceCost: form.essenceCost,
         affordable: form.affordable,
       })),
-    ).toEqual([{
-      type: "Empowered",
-      essenceCost: 0,
-      affordable: true,
-    }]);
+    ).toEqual([
+      {
+        type: "Empowered",
+        essenceCost: 0,
+        affordable: true,
+      },
+    ]);
     expect(view.canPlayAgain).toBe(true);
 
     const replayView = buildGambleSiteView({
@@ -757,7 +796,8 @@ describe("gamble-site-view-model — Four-Suit Reprise", () => {
       },
       sceneNode: null,
       site: GAMBLE_SITE,
-      guide: null,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
     });
     expect(replayView?.gameId).toBe("four-suit-reprise");
     if (replayView?.gameId !== "four-suit-reprise") {

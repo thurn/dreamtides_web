@@ -3,6 +3,7 @@ import {
   mkdirSync,
   mkdtempSync,
   readFileSync,
+  readlinkSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
@@ -11,7 +12,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
 import {
-  regenerateAtlasData,
+  refreshGuidePortraitLinks,
   regenerateConfigData,
 } from "./config-data.mjs";
 
@@ -23,6 +24,7 @@ const REQUIRED_TABULA_FILES = [
   "dreamscapes.toml",
   "economy.toml",
   "glossary.toml",
+  "sites.toml",
 ];
 
 let tempRoot = null;
@@ -49,9 +51,9 @@ function missingAssetSourceDirs(rootDir) {
   };
 }
 
-function readAtlasData(rootDir) {
+function readSitesData(rootDir) {
   return JSON.parse(
-    readFileSync(join(rootDir, "public", "atlas-data.json"), "utf8"),
+    readFileSync(join(rootDir, "public", "sites-data.json"), "utf8"),
   );
 }
 
@@ -63,6 +65,25 @@ afterEach(() => {
 });
 
 describe("regenerateConfigData Atlas dependencies", () => {
+  it("relinks guide portraits from the TOML-authored source filename", () => {
+    const rootDir = makeFixtureRoot();
+    const sourceDir = join(rootDir, "fixture-guide-art");
+    mkdirSync(sourceDir, { recursive: true });
+    writeFileSync(join(sourceDir, "new-source.png"), "fixture image bytes");
+    refreshGuidePortraitLinks(
+      rootDir,
+      {
+        guides: [{ id: "fixture-guide", portraitSource: "new-source.png" }],
+      },
+      sourceDir,
+    );
+    expect(
+      readlinkSync(
+        join(rootDir, "public", "dream-guides", "fixture-guide.png"),
+      ),
+    ).toBe(join(sourceDir, "new-source.png"));
+  });
+
   it("hot-regenerates economy JSON and changes its fold hash after an edit", () => {
     const rootDir = makeFixtureRoot();
     regenerateConfigData("economy.toml", { rootDir });
@@ -70,36 +91,39 @@ describe("regenerateConfigData Atlas dependencies", () => {
     const before = JSON.parse(readFileSync(jsonPath, "utf8"));
     const sourcePath = join(rootDir, "data", "tabula", "economy.toml");
     const source = readFileSync(sourcePath, "utf8");
-    writeFileSync(sourcePath, source.replace("standard-card = 100", "standard-card = 101"));
+    writeFileSync(
+      sourcePath,
+      source.replace("standard-card = 100", "standard-card = 101"),
+    );
     regenerateConfigData("economy.toml", { rootDir });
     const after = JSON.parse(readFileSync(jsonPath, "utf8"));
     expect(after.shop.prices.standardCard).toBe(101);
     expect(after.foldHash).not.toBe(before.foldHash);
   });
 
-  it("compiles without external art and refreshes the fold hash after a dreamscape edit", () => {
+  it("compiles without external art and refreshes Sites after a guide specialty swap", () => {
     const rootDir = makeFixtureRoot();
     const options = {
       rootDir,
       atlasAssetSourceDirs: missingAssetSourceDirs(rootDir),
     };
 
-    regenerateConfigData("atlas.toml", options);
-    const before = readAtlasData(rootDir);
-    expect(before.randomSite.guideId).toBe("maddox");
+    regenerateConfigData("dream_guides.toml", options);
+    const before = readSitesData(rootDir);
+    const guidesPath = join(rootDir, "data", "tabula", "dream_guides.toml");
+    const guides = readFileSync(guidesPath, "utf8");
+    const changed = guides
+      .replace('site-type = "Shop"', 'site-type = "__swap__"')
+      .replace('site-type = "Purge"', 'site-type = "Shop"')
+      .replace('site-type = "__swap__"', 'site-type = "Purge"');
+    expect(changed).not.toBe(guides);
+    writeFileSync(guidesPath, changed);
 
-    const dreamscapesPath = join(rootDir, "data", "tabula", "dreamscapes.toml");
-    const dreamscapes = readFileSync(dreamscapesPath, "utf8");
-    const changed = dreamscapes.replace(
-      'guide-id = "maddox"\nsignature-site = "RandomSite"',
-      'guide-id = "gravok"\nsignature-site = "RandomSite"',
+    regenerateConfigData("dream_guides.toml", options);
+    const after = readSitesData(rootDir);
+    expect(after.guideAssignments.Shop.guideId).not.toBe(
+      before.guideAssignments.Shop.guideId,
     );
-    expect(changed).not.toBe(dreamscapes);
-    writeFileSync(dreamscapesPath, changed);
-
-    regenerateConfigData("dreamscapes.toml", options);
-    const after = readAtlasData(rootDir);
-    expect(after.randomSite.guideId).toBe("gravok");
     expect(after.foldHash).not.toBe(before.foldHash);
   });
 
@@ -114,11 +138,8 @@ describe("regenerateConfigData Atlas dependencies", () => {
     expect(changed).not.toBe(glossary);
     writeFileSync(glossaryPath, changed);
 
-    expect(() =>
-      regenerateAtlasData({
-        rootDir,
-        atlasAssetSourceDirs: missingAssetSourceDirs(rootDir),
-      }),
-    ).toThrow(/unresolved glossary id site-battle/);
+    expect(() => regenerateConfigData("glossary.toml", { rootDir })).toThrow(
+      /unresolved glossary id site-battle/,
+    );
   });
 });

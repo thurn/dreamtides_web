@@ -1,5 +1,5 @@
 import type { LayerName } from "./layer-name";
-import type { RandomSiteDestinationType, SiteType } from "./site-type";
+import type { SiteType } from "./site-type";
 
 export interface AtlasIntegerRange {
   min: number;
@@ -23,11 +23,6 @@ export interface AtlasFillProfile {
   id: string;
   signatureSiteWeight: number;
   siteWeights: Partial<Record<SiteType, number>>;
-}
-
-export interface AtlasSiteTypeData {
-  icon: string;
-  glossaryId: string;
 }
 
 /** Validated browser data compiled from data/tabula/atlas.toml. */
@@ -62,19 +57,6 @@ export interface AtlasData {
     eligibleLayers: readonly LayerName[];
     placementProbability: number;
     earlyRevealBias: number;
-  };
-  randomSite: {
-    destinations: readonly RandomSiteDestinationType[];
-    homeChoiceCount: number;
-    awayChoiceCount: 1;
-    guideLine: string;
-    guideId: string;
-  };
-  siteTypes: Readonly<Record<SiteType, AtlasSiteTypeData>>;
-  fallbackSiteType: {
-    icon: string;
-    name: string;
-    description: string;
   };
   boss: {
     dreamscapeId: string;

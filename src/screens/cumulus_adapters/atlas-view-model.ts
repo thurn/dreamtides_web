@@ -44,12 +44,12 @@ import type {
   AtlasView,
 } from "../../cumulus/screens/AtlasScreen";
 import type { JourneyContent } from "../../data/journey-content";
+import { atlasTemplate } from "../../data/atlas-data";
 import {
-  atlasTemplate,
   siteTypeDescription,
   siteTypeIcon,
   siteTypeName,
-} from "../../data/atlas-data";
+} from "../../data/sites-data";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 import type {
   DreamAtlas,
@@ -361,13 +361,13 @@ function buildSignatureSiteCard(
 ): AtlasNodeSite {
   return {
     id: siteId,
-    name: siteTypeName(journeyContent.atlasData, dreamscape.signatureSite),
+    name: siteTypeName(journeyContent.sitesData, dreamscape.signatureSite),
     blurb: siteTypeDescription(
-      journeyContent.atlasData,
+      journeyContent.sitesData,
       dreamscape.signatureSite,
     ),
     icon: glyph(
-      siteTypeIcon(journeyContent.atlasData, dreamscape.signatureSite),
+      siteTypeIcon(journeyContent.sitesData, dreamscape.signatureSite),
     ),
   };
 }
@@ -566,7 +566,7 @@ export function buildAtlasMapNodes(
       revealedSite === null
         ? null
         : glyph(
-            siteTypeIcon(journeyContent.atlasData, dreamscape.signatureSite),
+            siteTypeIcon(journeyContent.sitesData, dreamscape.signatureSite),
           );
 
     const dreamsignTemplate =

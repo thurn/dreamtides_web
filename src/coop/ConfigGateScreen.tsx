@@ -26,6 +26,8 @@ export function ConfigGateScreen({
   const canAdopt =
     roomContentConfig?.atlasFoldHash !== undefined &&
     roomContentConfig.atlasFoldHash === localContentConfig.atlasFoldHash &&
+    roomContentConfig.sitesFoldHash !== undefined &&
+    roomContentConfig.sitesFoldHash === localContentConfig.sitesFoldHash &&
     roomContentConfig.draftFoldHash !== undefined &&
     roomContentConfig.draftFoldHash === localContentConfig.draftFoldHash &&
     roomContentConfig.economyFoldHash !== undefined &&
@@ -101,6 +103,7 @@ function describeConfig(
       { label: "Draft", value: "Unavailable" },
       { label: "Pack Size", value: "Unavailable" },
       { label: "Atlas Rules", value: "Unavailable" },
+      { label: "Site Rules", value: "Unavailable" },
       { label: "Draft Rules", value: "Unavailable" },
       { label: "Economy Rules", value: "Unavailable" },
       { label: "Opponent Rules", value: "Unavailable" },
@@ -120,6 +123,10 @@ function describeConfig(
     {
       label: "Atlas Rules",
       value: config.atlasFoldHash?.slice(0, 12) ?? "Unavailable",
+    },
+    {
+      label: "Site Rules",
+      value: config.sitesFoldHash?.slice(0, 12) ?? "Unavailable",
     },
     {
       label: "Draft Rules",

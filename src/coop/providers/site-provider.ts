@@ -31,15 +31,12 @@ import {
 import {
   scoreTidemarkLadderClimbDreamsignCandidates,
   TIDEMARK_LADDER_CLIMB_RULES_VERSION,
-  TIDEMARK_STRONG_POOL_LIMIT,
 } from "../../data/tidemark-ladder-climb";
 import {
   STARWAY_STAIRS_RULES_VERSION,
-  STARWAY_STAIRS_TIERS,
   starwayStairsWagerAmount,
 } from "../../data/starway-stairs";
 import {
-  FOUR_SUIT_REPRISE_MAX_ROUNDS,
   FOUR_SUIT_REPRISE_RULES_VERSION,
   fourSuitRepriseDrawCost,
 } from "../../data/four-suit-reprise";
@@ -82,6 +79,7 @@ import {
   SELECTION_RULES_VERSION,
 } from "../../reward-selection";
 import { resolveDeckEntryCard } from "../../card-type-change";
+import { logEvent } from "../../logging";
 
 function asString(value: unknown): string | null {
   return typeof value === "string" ? value : null;
@@ -97,7 +95,8 @@ function coerceMerchantChoice(value: unknown): MerchantChoice | undefined {
 /** Whether the run's draft is a deck-fit mode (replay / fresh20). */
 function isDeckFitDraft(journey: JourneyState): boolean {
   return (
-    journey.draftState?.mode === "replay" || journey.draftState?.mode === "fresh20"
+    journey.draftState?.mode === "replay" ||
+    journey.draftState?.mode === "fresh20"
   );
 }
 
@@ -188,13 +187,11 @@ function buildGravokWagerRuntime(
   const selectedDreamsignId =
     dreamsignCandidateIds.length === 0
       ? null
-      : dreamsignCandidateIds[
-          Math.floor(rng() * dreamsignCandidateIds.length)
-        ];
+      : dreamsignCandidateIds[Math.floor(rng() * dreamsignCandidateIds.length)];
   const selectedTemplate =
     selectedDreamsignId === null
       ? null
-      : templatesById.get(selectedDreamsignId) ?? null;
+      : (templatesById.get(selectedDreamsignId) ?? null);
 
   return {
     kind: "gamble",
@@ -202,7 +199,10 @@ function buildGravokWagerRuntime(
     rulesVersion: GRAVOK_WAGER_RULES_VERSION,
     roundNumber: 1,
     isFarpoint: site.isEnhanced,
-    wagerCost: gravokWagerCost(content.economyData.gamble.threeGate, site.isEnhanced),
+    wagerCost: gravokWagerCost(
+      content.economyData.gamble.threeGate,
+      site.isEnhanced,
+    ),
     shuffleCommitment,
     committedCard,
     dreamsignCandidateIds,
@@ -235,7 +235,7 @@ function buildTidemarkLadderClimbRuntime(
   });
   const strongPool = dreamsignCandidateScores.slice(
     0,
-    TIDEMARK_STRONG_POOL_LIMIT,
+    content.sitesData.gamble.ladderClimb.strongPoolLimit,
   );
   const selectedCandidate =
     strongPool.length === 0
@@ -244,9 +244,9 @@ function buildTidemarkLadderClimbRuntime(
   const selectedTemplate =
     selectedCandidate === undefined
       ? null
-      : templates.find(
+      : (templates.find(
           (template) => template.id === selectedCandidate.dreamsignId,
-        ) ?? null;
+        ) ?? null);
   if (selectedTemplate === null) return null;
 
   return {
@@ -258,8 +258,7 @@ function buildTidemarkLadderClimbRuntime(
     committedCards: commitments.map((entry) => entry.card),
     dreamsignCandidateScores,
     strongPoolSize: strongPool.length,
-    strongPoolCutoffScore:
-      strongPool[strongPool.length - 1]?.score ?? null,
+    strongPoolCutoffScore: strongPool[strongPool.length - 1]?.score ?? null,
     rewardDreamsign: createDreamsign(selectedTemplate),
     revealedCards: [],
     cumulativeCost: 0,
@@ -272,7 +271,7 @@ function buildStarwayStairsRuntime(
   content: JourneyContent,
   rng: () => number,
 ): StarwayStairsSiteRuntime {
-  const commitments = STARWAY_STAIRS_TIERS.map(() => ({
+  const commitments = content.sitesData.gamble.starwayStairs.tiers.map(() => ({
     shuffleCommitment: gambleShuffleCommitment(rng),
     card: gambleCommittedCard(rng),
   }));
@@ -282,7 +281,10 @@ function buildStarwayStairsRuntime(
     rulesVersion: STARWAY_STAIRS_RULES_VERSION,
     roundNumber: 1,
     isFarpoint: site.isEnhanced,
-    wagerAmount: starwayStairsWagerAmount(content.economyData.gamble.starwayStairs, site.isEnhanced),
+    wagerAmount: starwayStairsWagerAmount(
+      content.economyData.gamble.starwayStairs,
+      site.isEnhanced,
+    ),
     shuffleCommitments: commitments.map((entry) => entry.shuffleCommitment),
     committedCards: commitments.map((entry) => entry.card),
     results: [],
@@ -304,25 +306,27 @@ function buildFourSuitRepriseRuntime(
     const cardSnapshot = resolveDeckEntryCard(baseCard, entry);
     const forms = offeredTransfigurationForms(cardSnapshot, null);
     if (forms.length === 0) return [];
-    return [{
-      entryId: entry.entryId,
-      cardId: baseCard.id,
-      cardNumber: entry.cardNumber,
-      cardSnapshot,
-      transfigurationOffers: forms.map((offer) => ({
+    return [
+      {
         entryId: entry.entryId,
-        type: offer.type,
-        effectDescription: offer.description,
-        effectDetails: transfigurationEffectDetails(offer, cardSnapshot),
-        previewCard: offer.previewCard,
-        essenceCost: 0,
-      })),
-    }];
+        cardId: baseCard.id,
+        cardNumber: entry.cardNumber,
+        cardSnapshot,
+        transfigurationOffers: forms.map((offer) => ({
+          entryId: entry.entryId,
+          type: offer.type,
+          effectDescription: offer.description,
+          effectDetails: transfigurationEffectDetails(offer, cardSnapshot),
+          previewCard: offer.previewCard,
+          essenceCost: 0,
+        })),
+      },
+    ];
   });
   if (targets.length === 0) return null;
 
   const commitments = Array.from(
-    { length: FOUR_SUIT_REPRISE_MAX_ROUNDS },
+    { length: content.sitesData.gamble.fourSuitReprise.maxRounds },
     () => ({
       shuffleCommitment: gambleShuffleCommitment(rng),
       card: gambleCommittedCard(rng),
@@ -333,7 +337,10 @@ function buildFourSuitRepriseRuntime(
     gameId: "four-suit-reprise",
     rulesVersion: FOUR_SUIT_REPRISE_RULES_VERSION,
     isFarpoint: site.isEnhanced,
-    drawCost: fourSuitRepriseDrawCost(site.isEnhanced),
+    drawCost: fourSuitRepriseDrawCost(
+      content.economyData.gamble.fourSuitReprise,
+      site.isEnhanced,
+    ),
     shuffleCommitments: commitments.map((entry) => entry.shuffleCommitment),
     committedCards: commitments.map((entry) => entry.card),
     targets,
@@ -349,14 +356,23 @@ function buildGambleRuntime(
   rng: () => number,
   requestedGameId: GambleGameId | undefined,
 ): GambleSiteRuntime {
-  const gameId =
-    requestedGameId ??
-    ([
-      "gravok-three-gate-wager",
-      "tidemark-ladder-climb",
-      "starway-stairs",
-      "four-suit-reprise",
-    ] as const)[Math.floor(rng() * 4)];
+  const configuredGames = content.sitesData.gamble.selection.games;
+  const totalWeight = configuredGames.reduce(
+    (sum, game) => sum + game.weight,
+    0,
+  );
+  let roll = rng() * totalWeight;
+  let selectedGameId = content.sitesData.gamble.selection.fallbackGame;
+  for (const game of configuredGames) {
+    roll -= game.weight;
+    if (roll <= 0) {
+      selectedGameId = game.id;
+      break;
+    }
+  }
+  const gameId = requestedGameId ?? selectedGameId;
+  let runtime: GambleSiteRuntime;
+  let usedFallback = false;
   if (gameId === "tidemark-ladder-climb") {
     const ladderRuntime = buildTidemarkLadderClimbRuntime(
       journey,
@@ -364,16 +380,51 @@ function buildGambleRuntime(
       content,
       rng,
     );
-    return ladderRuntime ?? buildGravokWagerRuntime(journey, site, content, rng);
+    usedFallback = ladderRuntime === null;
+    runtime =
+      ladderRuntime ?? buildGambleFallbackRuntime(journey, site, content, rng);
+  } else if (gameId === "starway-stairs") {
+    runtime = buildStarwayStairsRuntime(site, content, rng);
+  } else if (gameId === "four-suit-reprise") {
+    const fourSuitRuntime = buildFourSuitRepriseRuntime(
+      journey,
+      site,
+      content,
+      rng,
+    );
+    usedFallback = fourSuitRuntime === null;
+    runtime =
+      fourSuitRuntime ??
+      buildGambleFallbackRuntime(journey, site, content, rng);
+  } else {
+    runtime = buildGravokWagerRuntime(journey, site, content, rng);
   }
-  if (gameId === "starway-stairs") {
+  logEvent("gamble_configuration_resolved", {
+    siteId: site.id,
+    sitesFoldHash: content.sitesData.foldHash,
+    requestedGameId: requestedGameId ?? null,
+    weightedGameId: selectedGameId,
+    resolvedGameId: runtime.gameId,
+    usedFallback,
+    selection: content.sitesData.gamble.selection,
+  });
+  return runtime;
+}
+
+function buildGambleFallbackRuntime(
+  journey: JourneyState,
+  site: SiteState,
+  content: JourneyContent,
+  rng: () => number,
+): GambleSiteRuntime {
+  const fallback = content.sitesData.gamble.selection.fallbackGame;
+  if (fallback === "gravok-three-gate-wager") {
+    return buildGravokWagerRuntime(journey, site, content, rng);
+  }
+  if (fallback === "starway-stairs") {
     return buildStarwayStairsRuntime(site, content, rng);
   }
-  if (gameId === "four-suit-reprise") {
-    return buildFourSuitRepriseRuntime(journey, site, content, rng) ??
-      buildGravokWagerRuntime(journey, site, content, rng);
-  }
-  return buildGravokWagerRuntime(journey, site, content, rng);
+  throw new Error(`Unsupported unavailable-game fallback ${fallback}`);
 }
 
 /**
@@ -386,10 +437,14 @@ function selectCardChoiceEntryIds(
   cardDatabase: Map<number, CardData>,
   kind: "transfiguration" | "duplication",
   isEnhanced: boolean,
+  limits: JourneyContent["sitesData"]["cardChoices"]["transfiguration"],
   rng: () => number,
 ): string[] {
   const ordered = isEnhanced ? [...deck] : rngShuffle(deck, rng);
-  const limit = isEnhanced ? Number.POSITIVE_INFINITY : 3;
+  const configuredLimit = isEnhanced
+    ? limits.enhancedLimit
+    : limits.standardLimit;
+  const limit = configuredLimit ?? Number.POSITIVE_INFINITY;
   const entryIds: string[] = [];
   for (const entry of ordered) {
     if (entryIds.length >= limit) break;
@@ -415,27 +470,39 @@ function buildCardChoiceRuntime(
   kind: "transfiguration" | "duplication",
   rng: () => number,
   economy: JourneyContent["economyData"]["transfiguration"],
+  limits: JourneyContent["sitesData"]["cardChoices"]["transfiguration"],
 ): CardChoiceSiteRuntime {
   const entryIds = selectCardChoiceEntryIds(
     journey.deck,
     cardDatabase,
     kind,
     site.isEnhanced,
+    limits,
     rng,
   );
 
   if (kind === "duplication") {
-    return { kind: "cardChoice", choiceKind: "duplication", entryIds, acceptedEntryIds: [] };
+    return {
+      kind: "cardChoice",
+      choiceKind: "duplication",
+      entryIds,
+      acceptedEntryIds: [],
+    };
   }
 
-  const deckByEntryId = new Map(journey.deck.map((entry) => [entry.entryId, entry]));
+  const deckByEntryId = new Map(
+    journey.deck.map((entry) => [entry.entryId, entry]),
+  );
   const transfigurationOffers: CardChoiceTransfigurationOffer[] = [];
   for (const entryId of entryIds) {
     const entry = deckByEntryId.get(entryId);
     if (entry === undefined) continue;
     const card = cardDatabase.get(entry.cardNumber);
     if (card === undefined) continue;
-    for (const offer of offeredTransfigurationForms(card, entry.transfiguration)) {
+    for (const offer of offeredTransfigurationForms(
+      card,
+      entry.transfiguration,
+    )) {
       transfigurationOffers.push({
         entryId,
         type: offer.type,
@@ -465,8 +532,9 @@ function buildCardChoiceRuntime(
 export function createSiteContentProvider(
   content: JourneyContent,
 ): SiteContentProvider {
-  const dreamsignRegenerationPoolIds = (journey: JourneyState): readonly string[] =>
-    journey.resolvedPackage?.dreamsignPoolIds ?? [];
+  const dreamsignRegenerationPoolIds = (
+    journey: JourneyState,
+  ): readonly string[] => journey.resolvedPackage?.dreamsignPoolIds ?? [];
   const tutorialOpeningDreamsignIds = (
     journey: JourneyState,
     site: SiteState,
@@ -481,9 +549,8 @@ export function createSiteContentProvider(
   };
 
   return {
+    sitesData: content.sitesData,
     economyData: content.economyData,
-    randomSiteDestinations: content.atlasData.randomSite.destinations,
-    randomSiteGuideId: content.atlasData.randomSite.guideId,
     openSite: ({
       journey,
       site,
@@ -511,11 +578,13 @@ export function createSiteContentProvider(
               kind: "augury",
               completed: false,
               selectionRulesVersion: SELECTION_RULES_VERSION,
-              selectionContentRevision: selectionContext.selectionContentRevision,
+              selectionContentRevision:
+                selectionContext.selectionContentRevision,
               encounter: {
                 ...generated,
                 selectionRulesVersion: SELECTION_RULES_VERSION,
-                selectionContentRevision: selectionContext.selectionContentRevision,
+                selectionContentRevision:
+                  selectionContext.selectionContentRevision,
               },
             },
           };
@@ -546,8 +615,10 @@ export function createSiteContentProvider(
         }
         case "DreamsignRevelation": {
           const optionCount = site.isEnhanced
-            ? content.economyData.siteRewards.dreamsignRevelation.enhancedOfferCount
-            : content.economyData.siteRewards.dreamsignRevelation.standardOfferCount;
+            ? content.economyData.siteRewards.dreamsignRevelation
+                .enhancedOfferCount
+            : content.economyData.siteRewards.dreamsignRevelation
+                .standardOfferCount;
           const draw = drawDreamsignOptions(
             journey.remainingDreamsignPool,
             content.dreamsignTemplates,
@@ -562,7 +633,10 @@ export function createSiteContentProvider(
             remainingDreamsignPool: draw.remainingDreamsignPool,
             accepted: false,
           };
-          return { runtime, remainingDreamsignPool: draw.remainingDreamsignPool };
+          return {
+            runtime,
+            remainingDreamsignPool: draw.remainingDreamsignPool,
+          };
         }
         case "Shop":
         case "DreamsignMarket": {
@@ -631,7 +705,8 @@ export function createSiteContentProvider(
         }
         case "Transfiguration":
         case "Duplication": {
-          const kind = site.type === "Transfiguration" ? "transfiguration" : "duplication";
+          const kind =
+            site.type === "Transfiguration" ? "transfiguration" : "duplication";
           const runtime = buildCardChoiceRuntime(
             journey,
             site,
@@ -639,6 +714,7 @@ export function createSiteContentProvider(
             kind,
             stream,
             content.economyData.transfiguration,
+            content.sitesData.cardChoices[kind],
           );
           return { runtime };
         }
@@ -654,11 +730,12 @@ export function createSiteContentProvider(
           };
         }
         case "Exploration": {
-          const runtime = selectionRulesVersion === undefined
-            ? buildLegacyExplorationRuntime(journey, site, content, stream)
-            : selectionRulesVersion === SELECTION_RULES_VERSION
-              ? buildExplorationRuntime(journey, site, content, stream)
-              : null;
+          const runtime =
+            selectionRulesVersion === undefined
+              ? buildLegacyExplorationRuntime(journey, site, content, stream)
+              : selectionRulesVersion === SELECTION_RULES_VERSION
+                ? buildExplorationRuntime(journey, site, content, stream)
+                : null;
           if (runtime === null) return null;
           return {
             runtime,
@@ -694,7 +771,7 @@ export function createSiteContentProvider(
       // null-wiping it on a reroll. ALWAYS returns the resolved draft state.
       const draftState = isDeckFitDraft(journey)
         ? journey.draftState
-        : generated.draftState ?? journey.draftState;
+        : (generated.draftState ?? journey.draftState);
       const currentRuntime = journey.siteRuntime[site.id];
       return {
         slots:
@@ -718,7 +795,13 @@ export function createSiteContentProvider(
     // request)` — no rng, no clock — so the provider `rng` is unused. Both
     // resolvers regenerate the encounter deterministically from the same journey
     // state the reducer folds against, so two clients resolve identically.
-    resolveMerchant: ({ journey, site, action, payload, seq }): JourneyState | null => {
+    resolveMerchant: ({
+      journey,
+      site,
+      action,
+      payload,
+      seq,
+    }): JourneyState | null => {
       const encounterSignature = asString(payload.encounterSignature);
       const offerId = asString(payload.offerId);
       const selectionRulesVersion = asString(payload.selectionRulesVersion);
@@ -733,7 +816,9 @@ export function createSiteContentProvider(
           request: {
             encounterSignature,
             offerId,
-            ...(selectionRulesVersion === null ? {} : { selectionRulesVersion }),
+            ...(selectionRulesVersion === null
+              ? {}
+              : { selectionRulesVersion }),
             ...(choice ? { choice } : {}),
           },
         });

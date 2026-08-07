@@ -2,9 +2,9 @@ import {
   siteTypeDescription,
   siteTypeIcon,
   siteTypeName,
-} from "../../data/atlas-data";
+} from "../../data/sites-data";
 import { buildCardSourceDebugState } from "../../debug/card-source-debug";
-import { guideForSiteType } from "../../data/dreamscapes";
+import { requireGuideForSiteType } from "../../data/dreamscapes";
 import type { JourneyContent } from "../../data/journey-content";
 import {
   buildMerchantContext,
@@ -30,7 +30,7 @@ import type { CardData } from "../../types/cards";
 import { asCardId } from "../../types/card-identity";
 import { resolveDeckEntryCard } from "../../card-type-change";
 import type { DreamGuideContent } from "../../types/content";
-import type { AtlasData } from "../../types/atlas-data";
+import type { SitesData } from "../../types/sites-data";
 import type {
   CardSourceDebugState,
   DreamscapeNode,
@@ -64,11 +64,7 @@ import type {
   AugurySiteView,
 } from "../../cumulus/screens/AugurySiteScreen";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
-
-const FALLBACK_GUIDE_ID = "aldric_the_seer";
-const FALLBACK_GUIDE_NAME = "Aldric, the Seer";
-const FALLBACK_GUIDE_LINE =
-  "Two paths unfold before you. Choose one to shape your dream.";
+import { projectGuideView } from "./guide-view-model";
 
 type CardObject = MerchantCatalogCard | MerchantDeckCard;
 
@@ -91,21 +87,15 @@ export interface AuguryLogEntry {
 export function resolveAuguryGuide(
   guides: readonly DreamGuideContent[],
   guideIdOverride?: string,
-): DreamGuideContent | null {
-  return guideForSiteType(guides, "Augury", guideIdOverride);
+): DreamGuideContent {
+  return requireGuideForSiteType(guides, "Augury", guideIdOverride);
 }
 
 export function buildAuguryGuideView(
-  guide: DreamGuideContent | null,
-  line: string | null,
+  guide: DreamGuideContent,
+  line: string,
 ): AuguryGuideView {
-  const id = guide?.id ?? FALLBACK_GUIDE_ID;
-  return {
-    id,
-    name: guide?.name ?? FALLBACK_GUIDE_NAME,
-    line: line ?? guide?.dialog[0] ?? FALLBACK_GUIDE_LINE,
-    art: artRef.dreamGuide(id),
-  };
+  return projectGuideView(guide, line);
 }
 
 function toCardView(
@@ -252,7 +242,7 @@ export function buildAuguryOfferSubtitle(
 
 function sitePreviewModel(
   siteType: SiteState["type"],
-  atlasData: AtlasData,
+  sitesData: SitesData,
 ): DreamscapeSiteModel {
   return {
     site: {
@@ -266,9 +256,9 @@ function sitePreviewModel(
     isBattle: siteType === "Battle",
     isLocked: false,
     isInteractive: false,
-    label: siteTypeName(atlasData, siteType),
-    blurb: siteTypeDescription(atlasData, siteType),
-    icon: glyph(siteTypeIcon(atlasData, siteType)),
+    label: siteTypeName(sitesData, siteType),
+    blurb: siteTypeDescription(sitesData, siteType),
+    icon: glyph(siteTypeIcon(sitesData, siteType)),
   };
 }
 
@@ -606,8 +596,8 @@ export function buildAuguryOfferTileModel(
         kind: "add-site",
         site: {
           id: payload.siteType,
-          name: siteTypeName(context.atlasData, payload.siteType),
-          glyph: glyph(siteTypeIcon(context.atlasData, payload.siteType)),
+          name: siteTypeName(context.sitesData, payload.siteType),
+          glyph: glyph(siteTypeIcon(context.sitesData, payload.siteType)),
         },
       };
     }
@@ -657,7 +647,7 @@ function dreamsignChoices(
 function buildOfferVisual(
   offer: MerchantOffer,
   context: Pick<MerchantContext, "deckEntryById">,
-  atlasData: AtlasData,
+  sitesData: SitesData,
 ): AuguryOfferVisualView {
   const presentation = resolveOfferPresentation(offer);
   switch (presentation.kind) {
@@ -739,7 +729,7 @@ function buildOfferVisual(
     case "addSite":
       return {
         kind: "site",
-        model: sitePreviewModel(presentation.siteType, atlasData),
+        model: sitePreviewModel(presentation.siteType, sitesData),
       };
     case "fallback":
       return {
@@ -776,7 +766,7 @@ export function buildAuguryOfferViews(
       subtitle: offer.detailSubtitle ?? buildAuguryOfferSubtitle(tile),
       requiresSelection: (offer.choiceRequest?.candidates.length ?? 0) > 0,
       tile,
-      visual: buildOfferVisual(offer, context, context.atlasData),
+      visual: buildOfferVisual(offer, context, context.sitesData),
     };
   });
 }
@@ -804,8 +794,8 @@ export function buildAugurySiteModel(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState;
   journeyContent: JourneyContent;
-  guide: DreamGuideContent | null;
-  guideLine: string | null;
+  guide: DreamGuideContent;
+  guideLine: string;
 }): AuguryBuildResult {
   const scene: ArtRef | null =
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
@@ -824,11 +814,13 @@ export function buildAugurySiteModel(params: {
     const runtime = params.state.siteRuntime[params.site.id];
     const persistedEncounter =
       runtime?.kind === "augury" ? runtime.encounter : undefined;
-    const generated = persistedEncounter === undefined
-      ? generateMerchantEncounterWithDebug(context)
-      : null;
+    const generated =
+      persistedEncounter === undefined
+        ? generateMerchantEncounterWithDebug(context)
+        : null;
     const encounter = persistedEncounter ?? generated?.encounter;
-    if (encounter === undefined) throw new Error("Augury encounter is unavailable");
+    if (encounter === undefined)
+      throw new Error("Augury encounter is unavailable");
     const debug = generated?.debug ?? null;
     return {
       view: {

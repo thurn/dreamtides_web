@@ -62,7 +62,7 @@ export function buildDraftView(params: {
   sitePicksCompleted: number;
   journeyState?: JourneyState;
   tutorialConfiguration?: TutorialSiteConfiguration;
-  defaultPickCount?: number;
+  defaultPickCount: number;
 }): DraftView {
   const pickTotal =
     params.site !== null
@@ -112,7 +112,12 @@ export function buildDraftTransfiguredOfferLog(
     cards: view.offer.flatMap((model) =>
       model.transfiguration === undefined
         ? []
-        : [{ cardId: model.cardId, transfiguration: model.transfiguration.type }],
+        : [
+            {
+              cardId: model.cardId,
+              transfiguration: model.transfiguration.type,
+            },
+          ],
     ),
   };
 }

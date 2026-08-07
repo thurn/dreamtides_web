@@ -16,6 +16,7 @@ const GENESIS: Genesis = {
     draftMode: "pool",
     fresh20PackSize: null,
     atlasFoldHash: "fixture-atlas-fold-hash",
+    sitesFoldHash: "fixture-sites-fold-hash",
     draftFoldHash: "fixture-draft-fold-hash",
     economyFoldHash: "fixture-economy-fold-hash",
     rewardSelectionFoldHash: "fixture-reward-selection-fold-hash",
@@ -89,7 +90,9 @@ describe("RTDB log wire decoding", () => {
   it("rejects malformed-but-valid JSON genesis values", () => {
     expect(decodeGenesis("null")).toBeNull();
     expect(decodeGenesis("[]")).toBeNull();
-    expect(decodeGenesis(JSON.stringify({ seed: "missing-fields" }))).toBeNull();
+    expect(
+      decodeGenesis(JSON.stringify({ seed: "missing-fields" })),
+    ).toBeNull();
   });
 
   it("accepts a structurally valid legacy genesis without content settings", () => {
@@ -120,6 +123,12 @@ describe("RTDB log wire decoding", () => {
     expect(decodeGenesis(JSON.stringify(legacy))).toEqual(legacy);
   });
 
+  it("decodes an older pinned genesis without a Sites hash for compatibility gating", () => {
+    const older = structuredClone(GENESIS);
+    delete older.contentConfig?.sitesFoldHash;
+    expect(decodeGenesis(JSON.stringify(older))).toEqual(older);
+  });
+
   it("rejects a malformed Atlas hash field", () => {
     const malformed = {
       ...GENESIS,
@@ -129,8 +138,9 @@ describe("RTDB log wire decoding", () => {
   });
 
   it("round-trips the pinned Draft fold hash", () => {
-    expect(decodeGenesis(JSON.stringify(GENESIS))?.contentConfig?.draftFoldHash)
-      .toBe("fixture-draft-fold-hash");
+    expect(
+      decodeGenesis(JSON.stringify(GENESIS))?.contentConfig?.draftFoldHash,
+    ).toBe("fixture-draft-fold-hash");
   });
 
   it("round-trips the pinned tutorial fold hash", () => {
@@ -141,6 +151,7 @@ describe("RTDB log wire decoding", () => {
 
   it.each([
     ["draftFoldHash", 42],
+    ["sitesFoldHash", 42],
     ["economyFoldHash", 42],
     ["rewardSelectionFoldHash", 42],
     ["auguryFoldHash", 42],

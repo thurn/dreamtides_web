@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
   rankBustsStarwayStairsTier,
-  STARWAY_STAIRS_TIERS,
   starwayStairsBustRangeLabel,
   starwayStairsDrawTargetLabel,
   starwayStairsEssenceReward,
   starwayStairsWagerAmount,
 } from "./starway-stairs";
+import { MINIMAL_SITES_DATA } from "../__test-helpers__/atlas-fixtures";
 
 describe("Starway Stairs rules", () => {
   const economy = {
@@ -22,11 +22,11 @@ describe("Starway Stairs rules", () => {
     expect(starwayStairsWagerAmount(economy, false)).toBe(31);
     expect(starwayStairsWagerAmount(economy, true)).toBe(19);
     expect(
-      STARWAY_STAIRS_TIERS.map((tier) => ({
-        tierNumber: tier.tierNumber,
+      MINIMAL_SITES_DATA.gamble.starwayStairs.tiers.map((tier) => ({
+        tierNumber: tier.tier,
         bustRange: starwayStairsBustRangeLabel(tier),
         drawTarget: starwayStairsDrawTargetLabel(tier),
-        reward: starwayStairsEssenceReward(economy, tier.tierNumber),
+        reward: starwayStairsEssenceReward(economy, tier.tier),
       })),
     ).toEqual([
       { tierNumber: 1, bustRange: "2", drawTarget: "3-A", reward: 67 },
@@ -36,11 +36,12 @@ describe("Starway Stairs rules", () => {
   });
 
   it("uses inclusive low-rank bust ranges for every tier", () => {
-    expect(rankBustsStarwayStairsTier("2", 1)).toBe(true);
-    expect(rankBustsStarwayStairsTier("3", 1)).toBe(false);
-    expect(rankBustsStarwayStairsTier("4", 2)).toBe(true);
-    expect(rankBustsStarwayStairsTier("5", 2)).toBe(false);
-    expect(rankBustsStarwayStairsTier("7", 3)).toBe(true);
-    expect(rankBustsStarwayStairsTier("8", 3)).toBe(false);
+    const rules = MINIMAL_SITES_DATA.gamble.starwayStairs;
+    expect(rankBustsStarwayStairsTier(rules, "2", 1)).toBe(true);
+    expect(rankBustsStarwayStairsTier(rules, "3", 1)).toBe(false);
+    expect(rankBustsStarwayStairsTier(rules, "4", 2)).toBe(true);
+    expect(rankBustsStarwayStairsTier(rules, "5", 2)).toBe(false);
+    expect(rankBustsStarwayStairsTier(rules, "7", 3)).toBe(true);
+    expect(rankBustsStarwayStairsTier(rules, "8", 3)).toBe(false);
   });
 });

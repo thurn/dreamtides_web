@@ -19,6 +19,7 @@ import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 
 const REDUCER_VERSION = "dreamtides-coop-v17";
 const ATLAS_FOLD_HASH = "fixture-atlas-fold-hash";
+const SITES_FOLD_HASH = "fixture-sites-fold-hash";
 const DRAFT_DATA = draftDataFixture();
 const ECONOMY = economyFixture();
 const PINNED_ECONOMY = {
@@ -130,6 +131,7 @@ function mount(config: RuntimeConfig): void {
         gameId={config.gameId}
         runtimeConfig={config}
         atlasFoldHash={ATLAS_FOLD_HASH}
+        sitesFoldHash={SITES_FOLD_HASH}
         draftData={DRAFT_DATA}
         economyData={ECONOMY}
         opponentsData={opponentsFixture()}
@@ -175,6 +177,7 @@ describe("RoomGate content-config gate", () => {
       draftMode: "pool",
       fresh20PackSize: null,
       atlasFoldHash: ATLAS_FOLD_HASH,
+      sitesFoldHash: SITES_FOLD_HASH,
       draftFoldHash: DRAFT_DATA.foldHash,
       ...PINNED_ECONOMY,
     });
@@ -196,6 +199,7 @@ describe("RoomGate content-config gate", () => {
             draftMode: "replay",
             fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
+            sitesFoldHash: SITES_FOLD_HASH,
             draftFoldHash: DRAFT_DATA.foldHash,
             ...PINNED_ECONOMY,
           }),
@@ -222,6 +226,7 @@ describe("RoomGate content-config gate", () => {
             draftMode: "pool",
             fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
+            sitesFoldHash: SITES_FOLD_HASH,
             draftFoldHash: DRAFT_DATA.foldHash,
             ...PINNED_ECONOMY,
           }),
@@ -246,6 +251,7 @@ describe("RoomGate content-config gate", () => {
             draftMode: "pool",
             fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
+            sitesFoldHash: SITES_FOLD_HASH,
             draftFoldHash: DRAFT_DATA.foldHash,
             ...PINNED_ECONOMY,
             opponentsFoldHash: "c".repeat(64),
@@ -296,6 +302,7 @@ describe("RoomGate content-config gate", () => {
             draftMode: "pool",
             fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
+            sitesFoldHash: SITES_FOLD_HASH,
             draftFoldHash: "different-draft-fold-hash",
             ...PINNED_ECONOMY,
           }),
@@ -340,6 +347,7 @@ describe("RoomGate content-config gate", () => {
             draftMode: "pool",
             fresh20PackSize: null,
             atlasFoldHash: "different-atlas-fold-hash",
+            sitesFoldHash: SITES_FOLD_HASH,
             ...PINNED_ECONOMY,
           }),
         ),
@@ -350,6 +358,30 @@ describe("RoomGate content-config gate", () => {
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
     expect(container.textContent).toContain("Start a New Game");
     expect(container.textContent).not.toContain("Use This Game’s Settings");
+  });
+
+  it("opens the content gate when the Sites fold hash differs", async () => {
+    mount(runtimeConfig());
+    await flush();
+
+    act(() => {
+      deliverNode?.(
+        nodeWith(
+          genesisWith({
+            poolVariant: "tides4",
+            draftMode: "pool",
+            fresh20PackSize: null,
+            atlasFoldHash: ATLAS_FOLD_HASH,
+            sitesFoldHash: "different-sites-fold-hash",
+            ...PINNED_ECONOMY,
+          }),
+        ),
+      );
+    });
+    await flush();
+
+    expect(container.querySelector("[data-config-gate]")).not.toBeNull();
+    expect(container.textContent).toContain("Start a New Game");
   });
 
   it("does not adopt a room whose economy fold hash differs", async () => {
@@ -364,6 +396,7 @@ describe("RoomGate content-config gate", () => {
             draftMode: "pool",
             fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
+            sitesFoldHash: SITES_FOLD_HASH,
             ...PINNED_ECONOMY,
             economyFoldHash: "different-economy-fold-hash",
           }),
@@ -410,6 +443,7 @@ describe("RoomGate content-config gate", () => {
             draftMode: "pool",
             fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
+            sitesFoldHash: SITES_FOLD_HASH,
             ...PINNED_ECONOMY,
           }),
           reducerVersion: "0dfbc840a6a3-6d94b82e9b7a",
@@ -434,6 +468,7 @@ describe("RoomGate content-config gate", () => {
             draftMode: "pool",
             fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
+            sitesFoldHash: SITES_FOLD_HASH,
             ...PINNED_ECONOMY,
           }),
           reducerVersion: "incompatible-rules-v2",

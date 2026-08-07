@@ -12,7 +12,10 @@ import type {
   SiteState,
 } from "../../types/journey";
 import { createDefaultState } from "../../state/journey-context";
-import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
+import {
+  MINIMAL_ATLAS_DATA,
+  MINIMAL_SITES_DATA,
+} from "../../__test-helpers__/atlas-fixtures";
 import {
   buildExplorationActionEffect,
   buildExplorationSiteView,
@@ -50,7 +53,8 @@ const guide: DreamGuideContent = {
   name: "Fixture Guide",
   homeDreamscapeId: "fixture-dreamscape",
   siteType: "Exploration",
-  dialog: ["Every card dreams. Draw one, and we'll step inside."],
+  portraitSource: "fixture-guide.png",
+  dialogue: { site: ["Every card dreams. Draw one, and we'll step inside."] },
   homeSpecialty: "Fixture specialty.",
 };
 
@@ -112,6 +116,7 @@ describe("exploration-view-model", () => {
       affiliations: [],
       guides: [guide],
       atlasData: MINIMAL_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -143,6 +148,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -236,6 +242,7 @@ describe("exploration-view-model", () => {
       affiliations: [],
       guides: [guide],
       atlasData: MINIMAL_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -268,6 +275,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -318,6 +326,7 @@ describe("exploration-view-model", () => {
       affiliations: [],
       guides: [guide],
       atlasData: MINIMAL_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -357,6 +366,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
+      guideLine: "Fixture line.",
       runtime: {
         kind: "exploration",
         encounterCardId: source.id,
@@ -400,6 +410,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
+      guideLine: "Fixture line.",
       runtime: {
         kind: "exploration",
         encounterCardId: source.id,
@@ -407,7 +418,11 @@ describe("exploration-view-model", () => {
         resolution: {
           ...baseResolution,
           actionId: "reduce-cost",
-          gainedCardIds: [NIGHTMARE_CARD_ID, NIGHTMARE_CARD_ID, NIGHTMARE_CARD_ID],
+          gainedCardIds: [
+            NIGHTMARE_CARD_ID,
+            NIGHTMARE_CARD_ID,
+            NIGHTMARE_CARD_ID,
+          ],
         },
       },
       state: {
@@ -509,6 +524,7 @@ describe("exploration-view-model", () => {
       affiliations: [],
       guides: [guide],
       atlasData: MINIMAL_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -541,6 +557,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -616,6 +633,7 @@ describe("exploration-view-model", () => {
       affiliations: [],
       guides: [guide],
       atlasData: MINIMAL_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -629,7 +647,7 @@ describe("exploration-view-model", () => {
                 label: "Present a Written Charm",
                 effectText: "Apply Inspired to $DECK_CARD",
                 effectKind: "transfigure-fixed-selected",
-                selection: { "$DECK_CARD": { predicate: "Event" } },
+                selection: { $DECK_CARD: { predicate: "Event" } },
                 predicate: "event",
                 transfiguration: "Inspired",
               },
@@ -650,6 +668,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -735,6 +754,7 @@ describe("exploration-view-model", () => {
       affiliations: [],
       guides: [guide],
       atlasData: MINIMAL_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -749,7 +769,7 @@ describe("exploration-view-model", () => {
                 effectText: "Change $DECK_CARD to become a Survivor",
                 effectKind: "change-subtype-selected",
                 selection: {
-                  "$DECK_CARD": { predicate: "≤2● cost Character" },
+                  $DECK_CARD: { predicate: "≤2● cost Character" },
                 },
                 predicate: "cheap-character",
                 subtype: "Survivor",
@@ -771,6 +791,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -797,6 +818,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
+      guideLine: "Fixture line.",
       runtime: {
         ...runtime,
         resolution: {
@@ -822,10 +844,7 @@ describe("exploration-view-model", () => {
 
   it("builds the persisted before-and-after reward for a fixed transfiguration", () => {
     const source = card(sourceId, 17);
-    const target = card(
-      asCardId("f0000000-0000-4000-8000-000000000018"),
-      18,
-    );
+    const target = card(asCardId("f0000000-0000-4000-8000-000000000018"), 18);
     const state = {
       ...createDefaultState(),
       deck: [
@@ -878,6 +897,7 @@ describe("exploration-view-model", () => {
       affiliations: [],
       guides: [guide],
       atlasData: MINIMAL_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -911,6 +931,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -980,6 +1001,7 @@ describe("exploration-view-model", () => {
       affiliations: [],
       guides: [guide],
       atlasData: MINIMAL_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -1012,6 +1034,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -1100,6 +1123,7 @@ describe("exploration-view-model", () => {
       affiliations: [],
       guides: [guide],
       atlasData: MINIMAL_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -1134,6 +1158,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -1152,10 +1177,7 @@ describe("exploration-view-model", () => {
 
   it("resolves an offered-card placeholder and presents the UUID-backed card", () => {
     const source = card(sourceId, 17);
-    const offered = card(
-      asCardId("f0000000-0000-4000-8000-000000000018"),
-      18,
-    );
+    const offered = card(asCardId("f0000000-0000-4000-8000-000000000018"), 18);
     const state = {
       ...createDefaultState(),
       deck: [
@@ -1200,6 +1222,7 @@ describe("exploration-view-model", () => {
       affiliations: [],
       guides: [guide],
       atlasData: MINIMAL_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -1232,6 +1255,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -1284,6 +1308,7 @@ describe("exploration-view-model", () => {
       affiliations: [],
       guides: [],
       atlasData: MINIMAL_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [],
@@ -1407,28 +1432,31 @@ describe("exploration-view-model", () => {
       affiliations: [],
       guides: [guide],
       atlasData: MINIMAL_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
       exploration: {
         customCards: [],
         customDreamsigns: [heldDreamsign],
-        encounters: [{
-          cardId: source.id,
-          prose: "The authored scene appears.",
-          actions: [
-            {
-              id: "random-dreamsign",
-              label: "Read the pattern",
-              effectText: "Gain a random dreamsign",
-              effectKind: "gain-random-dreamsign",
-            },
-            {
-              id: "purge-dreamsign",
-              label: "Break the pattern",
-              effectText: "Purge a dreamsign for essence",
-              effectKind: "purge-dreamsign-for-essence",
-              essence: 50,
-            },
-          ],
-        }],
+        encounters: [
+          {
+            cardId: source.id,
+            prose: "The authored scene appears.",
+            actions: [
+              {
+                id: "random-dreamsign",
+                label: "Read the pattern",
+                effectText: "Gain a random dreamsign",
+                effectKind: "gain-random-dreamsign",
+              },
+              {
+                id: "purge-dreamsign",
+                label: "Break the pattern",
+                effectText: "Purge a dreamsign for essence",
+                effectKind: "purge-dreamsign-for-essence",
+                essence: 50,
+              },
+            ],
+          },
+        ],
       },
     } as unknown as JourneyContent;
 
@@ -1436,6 +1464,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
+      guideLine: "Fixture line.",
       runtime,
       state,
       content,
@@ -1469,6 +1498,7 @@ describe("exploration-view-model", () => {
       sceneNode: null,
       site: explorationSite,
       guide,
+      guideLine: "Fixture line.",
       runtime: {
         ...runtime,
         resolution: {
@@ -1494,10 +1524,7 @@ describe("exploration-view-model", () => {
 
   it("builds semantic outcomes for copied cards, next-battle modifiers, Reclaim, and Dream Avatar replacement", () => {
     const source = card(sourceId, 17);
-    const survivor = card(
-      asCardId("f0000000-0000-4000-8000-000000000018"),
-      18,
-    );
+    const survivor = card(asCardId("f0000000-0000-4000-8000-000000000018"), 18);
     const dreamAvatars = Array.from({ length: 4 }, (_, index) => ({
       id: `avatar-${String(index)}`,
       name: `Avatar ${String(index)}`,
@@ -1569,6 +1596,7 @@ describe("exploration-view-model", () => {
         affiliations: [],
         guides: [guide],
         atlasData: MINIMAL_ATLAS_DATA,
+        sitesData: MINIMAL_SITES_DATA,
         exploration: {
           customCards: [],
           customDreamsigns: [],
@@ -1585,6 +1613,7 @@ describe("exploration-view-model", () => {
         sceneNode: null,
         site: explorationSite,
         guide,
+        guideLine: "Fixture line.",
         state,
         content,
         runtime: {
@@ -1662,7 +1691,8 @@ describe("exploration-view-model", () => {
       {
         id: "purge-copy",
         label: "Purge and copy",
-        effectText: "Purge a chosen card and gain a copy of another chosen card",
+        effectText:
+          "Purge a chosen card and gain a copy of another chosen card",
         effectKind: "purge-and-copy",
       },
       {
@@ -1693,9 +1723,7 @@ describe("exploration-view-model", () => {
           entryId: "survivor-entry",
           model: { cardId: survivor.id },
         },
-        cards: [
-          { entryId: "copy-b", model: { cardId: survivor.id } },
-        ],
+        cards: [{ entryId: "copy-b", model: { cardId: survivor.id } }],
         count: 1,
       },
     });
@@ -1723,7 +1751,10 @@ describe("exploration-view-model", () => {
         count: 2,
         pairs: [
           { source: { entryId: "source-entry" }, copy: { entryId: "copy-a" } },
-          { source: { entryId: "survivor-entry" }, copy: { entryId: "copy-b" } },
+          {
+            source: { entryId: "survivor-entry" },
+            copy: { entryId: "copy-b" },
+          },
         ],
       },
     });
@@ -1793,7 +1824,11 @@ describe("exploration-view-model", () => {
     );
     expect(modifier).toMatchObject({
       outcomeKind: "battle-modifier",
-      reward: { kind: "battle-modifier", modifier: "starting-energy", amount: 2 },
+      reward: {
+        kind: "battle-modifier",
+        modifier: "starting-energy",
+        amount: 2,
+      },
     });
 
     const compoundModifier = build(
@@ -1883,7 +1918,11 @@ describe("exploration-view-model", () => {
     expect(avatar?.actions[0]).toMatchObject({
       followup: {
         kind: "dreamAvatars",
-        dreamAvatars: [{ id: "avatar-1" }, { id: "avatar-2" }, { id: "avatar-3" }],
+        dreamAvatars: [
+          { id: "avatar-1" },
+          { id: "avatar-2" },
+          { id: "avatar-3" },
+        ],
       },
     });
 
@@ -1951,7 +1990,8 @@ describe("exploration-view-model", () => {
       {
         id: "future-transfigured-site",
         label: "Follow",
-        effectText: "The next draft or shop site will contain transfigured cards",
+        effectText:
+          "The next draft or shop site will contain transfigured cards",
         effectKind: "transfigure-next-draft-or-shop",
       },
       {

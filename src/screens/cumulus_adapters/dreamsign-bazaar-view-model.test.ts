@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { createDefaultState } from "../../state/journey-context";
 import { economyFixture } from "../../testing/economy-fixture";
-import type { Dreamsign, ShopSiteRuntime, SiteState } from "../../types/journey";
+import type {
+  Dreamsign,
+  ShopSiteRuntime,
+  SiteState,
+} from "../../types/journey";
 import {
   buildDreamsignBazaarOffers,
   buildDreamsignBazaarRestock,
@@ -104,25 +108,53 @@ describe("buildDreamsignBazaarOffers", () => {
 
 describe("buildDreamsignBazaarRestock", () => {
   it("prices a normal restock, makes an enhanced one free, and marks a used one", () => {
-    expect(buildDreamsignBazaarRestock(economyFixture().shop.reroll, runtime(), site, 100)).toMatchObject({
+    expect(
+      buildDreamsignBazaarRestock(
+        economyFixture().shop.reroll,
+        runtime(),
+        site,
+        100,
+      ),
+    ).toMatchObject({
       price: 50,
       state: "available",
     });
     expect(
-      buildDreamsignBazaarRestock(economyFixture().shop.reroll, runtime(), { ...site, isEnhanced: true }, 0),
+      buildDreamsignBazaarRestock(
+        economyFixture().shop.reroll,
+        runtime(),
+        { ...site, isEnhanced: true },
+        0,
+      ),
     ).toMatchObject({ price: 0, state: "available" });
     expect(
-      buildDreamsignBazaarRestock(economyFixture().shop.reroll, { ...runtime(), rerollCount: 1 }, site, 100)
-        .state,
+      buildDreamsignBazaarRestock(
+        economyFixture().shop.reroll,
+        { ...runtime(), rerollCount: 1 },
+        site,
+        100,
+      ).state,
     ).toBe("used");
   });
 
   it("keeps restock available until an injected visit limit is reached", () => {
     const config = { ...economyFixture().shop.reroll, maxPerVisit: 2 };
-    expect(buildDreamsignBazaarRestock(config, { ...runtime(), rerollCount: 1 }, site, 100).state)
-      .toBe("available");
-    expect(buildDreamsignBazaarRestock(config, { ...runtime(), rerollCount: 2 }, site, 100).state)
-      .toBe("used");
+    expect(
+      buildDreamsignBazaarRestock(
+        config,
+        { ...runtime(), rerollCount: 1 },
+        site,
+        100,
+      ).state,
+    ).toBe("available");
+    expect(
+      buildDreamsignBazaarRestock(
+        config,
+        { ...runtime(), rerollCount: 2 },
+        site,
+        100,
+      ).state,
+    ).toBe("used");
   });
 });
 
@@ -145,7 +177,8 @@ describe("buildDreamsignBazaarSiteView", () => {
         name: "Amunet Fixture",
         homeDreamscapeId: "fixture-dream",
         siteType: "DreamsignMarket",
-        dialog: ["Choose carefully."],
+        portraitSource: "fixture-guide.png",
+        dialogue: { site: ["Choose carefully."] },
         homeSpecialty: "Fixture specialty.",
       },
       guideLine: "A chosen greeting.",

@@ -39,7 +39,6 @@ import type {
 } from "../../types/journey";
 import { mintEntryId } from "./deck";
 import { findSite, getSiteContentProvider } from "./sites";
-import { isRandomSiteDestinationType } from "../../random-site/random-site";
 import { SITE_TYPES as SITE_TYPE_VALUES } from "../../types/site-type";
 
 // ---------------------------------------------------------------------------
@@ -126,12 +125,13 @@ function debugSite(
   }
   const visible = new Set(siblingSites.map((site) => site.type));
   const provider = getSiteContentProvider();
-  const authoredDestinations = provider?.randomSiteDestinations;
-  const destinations = authoredDestinations ?? SITE_TYPE_VALUES.filter(
-    isRandomSiteDestinationType,
-  );
+  if (provider === null) {
+    throw new Error("Random Site edits require loaded Sites data.");
+  }
+  const destinations = provider.sitesData.randomSite.destinations;
   const destinationSiteType =
-    destinations.find((candidate) => !visible.has(candidate)) ?? destinations[0];
+    destinations.find((candidate) => !visible.has(candidate)) ??
+    destinations[0];
   if (destinationSiteType === undefined) {
     throw new Error("Random Site has no configured destinations.");
   }
@@ -140,9 +140,9 @@ function debugSite(
     type,
     isEnhanced: true,
     isVisited: false,
-    ...(provider?.randomSiteGuideId === undefined
+    ...(provider?.sitesData.randomSite.guideId === undefined
       ? {}
-      : { guideIdOverride: provider.randomSiteGuideId }),
+      : { guideIdOverride: provider.sitesData.randomSite.guideId }),
     randomSite: {
       mode: "single",
       candidateSiteTypes: [destinationSiteType],
@@ -212,8 +212,11 @@ export function buyShopSlot(
         ? null
         : journey.dreamsigns[purgeIndex];
     if (
-      (purgeIndex !== undefined && purgeIndex !== null && purgedDreamsign == null) ||
-      (purgeIndex === undefined && journey.dreamsigns.length >= journey.maxDreamsigns)
+      (purgeIndex !== undefined &&
+        purgeIndex !== null &&
+        purgedDreamsign == null) ||
+      (purgeIndex === undefined &&
+        journey.dreamsigns.length >= journey.maxDreamsigns)
     ) {
       return null;
     }
@@ -428,7 +431,10 @@ export function pushBattleModifier(
 ): JourneyState | null {
   const modifier = asRewardReductionModifier(payload.modifier);
   if (modifier === null) return null;
-  return { ...journey, battleModifiers: [...journey.battleModifiers, modifier] };
+  return {
+    ...journey,
+    battleModifiers: [...journey.battleModifiers, modifier],
+  };
 }
 
 function asRewardReductionModifier(value: unknown): BattleModifier | null {
@@ -479,7 +485,8 @@ export function pushTemporaryNightmareGrant(
   ) {
     return null;
   }
-  const cardNumber = getDeckContentProvider()?.resolveCardNumber(cardId) ?? null;
+  const cardNumber =
+    getDeckContentProvider()?.resolveCardNumber(cardId) ?? null;
   if (cardNumber === null) return null;
 
   let deck = journey.deck;
@@ -607,7 +614,11 @@ export function replaceSiteType(
   if (targetIndex === -1) return null;
   if (node.sites[targetIndex].id === journey.activeSiteId) return null;
 
-  const replacement = debugSite(nextSiteId(journey.atlas), toSiteType, node.sites);
+  const replacement = debugSite(
+    nextSiteId(journey.atlas),
+    toSiteType,
+    node.sites,
+  );
   const sites = node.sites.map((site, index) =>
     index === targetIndex ? replacement : site,
   );

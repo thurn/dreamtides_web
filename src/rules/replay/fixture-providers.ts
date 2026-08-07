@@ -26,6 +26,7 @@
 
 import type { ResolvedDreamAvatarPackage } from "../../types/content";
 import { economyFixture } from "../../testing/economy-fixture";
+import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
 import type { PoolDraftState } from "../../types/draft";
 import type {
   BattleCardInstance,
@@ -166,14 +167,20 @@ function fixtureNode(
   includedSiteTypes: ReadonlySet<SiteState["type"]> | null = null,
 ): DreamscapeNode {
   const allSites: SiteState[] = [
-    { id: ESSENCE_SITE_ID, type: "Essence", isEnhanced: false, isVisited: false },
+    {
+      id: ESSENCE_SITE_ID,
+      type: "Essence",
+      isEnhanced: false,
+      isVisited: false,
+    },
     { id: SHOP_SITE_ID, type: "Shop", isEnhanced: false, isVisited: false },
     { id: DRAFT_SITE_ID, type: "Draft", isEnhanced: false, isVisited: false },
     { id: BATTLE_SITE_ID, type: "Battle", isEnhanced: false, isVisited: false },
   ];
-  const sites = includedSiteTypes === null
-    ? allSites
-    : allSites.filter((site) => includedSiteTypes.has(site.type));
+  const sites =
+    includedSiteTypes === null
+      ? allSites
+      : allSites.filter((site) => includedSiteTypes.has(site.type));
   return {
     id: NODE_ID,
     layer: LayerName.One,
@@ -312,6 +319,7 @@ function draftProvider(): DraftContentProvider {
 
 function siteProvider(): SiteContentProvider {
   return {
+    sitesData: MINIMAL_SITES_DATA,
     economyData: economyFixture(),
     openSite: ({ site }) => {
       if (site.type !== "Shop") return null;
@@ -438,15 +446,17 @@ function makeInit(siteId: string): BattleInit {
     playerDrawSkipsTurnOne: true,
     journeyDeckEntries: [],
     playerDeckOrder: [],
-    dreamwellDeck: [{
-      id: foresee.id,
-      name: "Fixture Dreamwell",
-      renderedText: "",
-      energyAdded: 0,
-      order: 0,
-      cardNumber: 0,
-      imageNumber: 0,
-    }],
+    dreamwellDeck: [
+      {
+        id: foresee.id,
+        name: "Fixture Dreamwell",
+        renderedText: "",
+        energyAdded: 0,
+        order: 0,
+        cardNumber: 0,
+        imageNumber: 0,
+      },
+    ],
     enemyDescriptor: {
       id: "fixture-enemy",
       name: "Fixture Enemy",

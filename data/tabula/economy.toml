@@ -202,6 +202,13 @@ tiers = [
   { tier = 3, essence-reward = 300 },
 ]
 
+[gamble.four-suit-reprise]
+# Essence charged for each draw at a standard or enhanced Gamble site.
+standard-draw-price = 25
+enhanced-draw-price = 15
+# Essence granted when the drawn suit resolves to the Essence outcome.
+essence-reward = 100
+
 [exploration]
 # Fallback Essence granted per spark by Exploration effects. An encounter's
 # essence-per-spark value in exploration.toml takes precedence when present.

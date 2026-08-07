@@ -14,11 +14,8 @@ import type {
   Dreamsign as DreamsignData,
   TransfigurationType,
 } from "../../types/journey";
-import {
-  FOUR_SUIT_REPRISE_ESSENCE_REWARD,
-  FOUR_SUIT_REPRISE_OUTCOMES,
-  type FourSuitRepriseOutcome,
-} from "../../data/four-suit-reprise";
+import type { FourSuitRepriseOutcome } from "../../data/four-suit-reprise";
+import type { SitesData } from "../../types/sites-data";
 import {
   PlayingCard,
   PLAYING_CARD_DESIGN,
@@ -227,7 +224,9 @@ export interface FourSuitRepriseSiteView {
   drawCost: number;
   canAffordDraw: boolean;
   roundNumber: 1 | 2 | 3;
-  maxRounds: 3;
+  maxRounds: number;
+  essenceReward: number;
+  outcomes: SitesData["gamble"]["fourSuitReprise"]["outcomes"];
   phase: "choose" | "result";
   cards: readonly FourSuitRepriseCardView[];
   guide: GuideGalleryGuideView;
@@ -280,10 +279,8 @@ const DESKTOP_GAMBLE_REGION_MAX_WIDTH = 650;
 const BET_SETTLE_DELAY_MS = 250;
 const REDUCED_MOTION_DELAY_MS = 80;
 const FADE_DURATION_SECONDS = motionTimeSeconds("--dur-slow");
-const LADDER_DREAMSIGN_READING_SECONDS =
-  motionTimeSeconds("--dur-slow") * 4;
-const LADDER_DREAMSIGN_TRAVEL_SECONDS =
-  motionTimeSeconds("--dur-slow") * 2;
+const LADDER_DREAMSIGN_READING_SECONDS = motionTimeSeconds("--dur-slow") * 4;
+const LADDER_DREAMSIGN_TRAVEL_SECONDS = motionTimeSeconds("--dur-slow") * 2;
 const LADDER_DREAMSIGN_DESKTOP_SIZE = 240;
 const LADDER_DREAMSIGN_MOBILE_SIZE = 180;
 const DREAM_EASE = [0.22, 0.61, 0.36, 1] as const;
@@ -291,18 +288,17 @@ const FOUR_SUIT_STAGE_MAX_WIDTH = 720;
 const FOUR_SUIT_TARGET_WIDTH = { desktop: 164, mobile: 104 } as const;
 const FOUR_SUIT_REWARD_PANEL_WIDTH = { desktop: 220, mobile: 216 } as const;
 const FOUR_SUIT_DUPLICATE_OFFSET = { desktop: 74, mobile: 44 } as const;
-const FOUR_SUIT_CARD_OUTCOME_SECONDS =
-  motionTimeSeconds("--dur-slow") * 6;
+const FOUR_SUIT_CARD_OUTCOME_SECONDS = motionTimeSeconds("--dur-slow") * 6;
 const FOUR_SUIT_CARD_OUTCOME_MS = FOUR_SUIT_CARD_OUTCOME_SECONDS * 1_000;
 // GlassPanel contributes a one-pixel rim on each edge. The grid receives the
 // remaining measured height so the complete panel matches the 5:7 GameCard.
 const FOUR_SUIT_PANEL_RIM_HEIGHT = 2;
 
-function fourSuitRewardPanelBodyHeight(
-  layout: "mobile" | "desktop",
-): number {
-  return FOUR_SUIT_TARGET_WIDTH[layout] / CARD_ASPECT_RATIO_VALUE -
-    FOUR_SUIT_PANEL_RIM_HEIGHT;
+function fourSuitRewardPanelBodyHeight(layout: "mobile" | "desktop"): number {
+  return (
+    FOUR_SUIT_TARGET_WIDTH[layout] / CARD_ASPECT_RATIO_VALUE -
+    FOUR_SUIT_PANEL_RIM_HEIGHT
+  );
 }
 
 type FourSuitCardOutcomePhase = "idle" | "animating" | "complete";
@@ -311,10 +307,12 @@ function FourSuitOutcomeCard({
   result,
   layout,
   reduceMotion,
+  essenceReward,
 }: {
   readonly result: FourSuitRepriseResultView;
   readonly layout: "mobile" | "desktop";
   readonly reduceMotion: boolean;
+  readonly essenceReward: number;
 }) {
   const exitTransition = {
     duration: reduceMotion ? 0 : FOUR_SUIT_CARD_OUTCOME_SECONDS,
@@ -341,42 +339,40 @@ function FourSuitOutcomeCard({
         <motion.div
           data-four-suit-duplicate-card="original"
           initial={false}
-          animate={reduceMotion
-            ? { opacity: 0 }
-            : {
-                x: [0, -offset, -offset],
-                y: [0, 0, token("--space-l")],
-                rotate: [0, -4, -4],
-                scale: [1, 1, 0.64],
-                opacity: [1, 1, 0],
-              }}
+          animate={
+            reduceMotion
+              ? { opacity: 0 }
+              : {
+                  x: [0, -offset, -offset],
+                  y: [0, 0, token("--space-l")],
+                  rotate: [0, -4, -4],
+                  scale: [1, 1, 0.64],
+                  opacity: [1, 1, 0],
+                }
+          }
           transition={exitTransition}
           style={{ ...cardStyle, zIndex: 2 }}
         >
-          <GameCard
-            model={result.target.model}
-            selection="reward"
-          />
+          <GameCard model={result.target.model} selection="reward" />
         </motion.div>
         <motion.div
           data-four-suit-duplicate-card="copy"
           initial={false}
-          animate={reduceMotion
-            ? { opacity: 0 }
-            : {
-                x: [0, offset, offset],
-                y: [0, 0, token("--space-l")],
-                rotate: [0, 4, 4],
-                scale: [0.9, 1, 0.64],
-                opacity: [0, 1, 0],
-              }}
+          animate={
+            reduceMotion
+              ? { opacity: 0 }
+              : {
+                  x: [0, offset, offset],
+                  y: [0, 0, token("--space-l")],
+                  rotate: [0, 4, 4],
+                  scale: [0.9, 1, 0.64],
+                  opacity: [0, 1, 0],
+                }
+          }
           transition={exitTransition}
           style={{ ...cardStyle, zIndex: 1 }}
         >
-          <GameCard
-            model={result.target.model}
-            selection="copied"
-          />
+          <GameCard model={result.target.model} selection="copied" />
         </motion.div>
       </div>
     );
@@ -387,13 +383,15 @@ function FourSuitOutcomeCard({
       <motion.div
         data-four-suit-card-outcome="transfiguration"
         initial={false}
-        animate={reduceMotion
-          ? { opacity: 0 }
-          : {
-              y: [0, 0, token("--space-l")],
-              scale: [1, 1.04, 0.64],
-              opacity: [1, 1, 0],
-            }}
+        animate={
+          reduceMotion
+            ? { opacity: 0 }
+            : {
+                y: [0, 0, token("--space-l")],
+                scale: [1, 1.04, 0.64],
+                opacity: [1, 1, 0],
+              }
+        }
         transition={exitTransition}
         style={{
           position: "relative",
@@ -436,10 +434,7 @@ function FourSuitOutcomeCard({
               backfaceVisibility: "hidden",
             }}
           >
-            <GameCard
-              model={result.target.model}
-              selection="transfigured"
-            />
+            <GameCard model={result.target.model} selection="transfigured" />
           </div>
         </motion.div>
       </motion.div>
@@ -451,13 +446,15 @@ function FourSuitOutcomeCard({
       <motion.div
         data-four-suit-card-outcome="essence"
         initial={false}
-        animate={reduceMotion
-          ? { opacity: 0 }
-          : {
-              y: [0, 0, token("--space-l")],
-              scale: [1, 1.04, 0.64],
-              opacity: [1, 1, 0],
-            }}
+        animate={
+          reduceMotion
+            ? { opacity: 0 }
+            : {
+                y: [0, 0, token("--space-l")],
+                scale: [1, 1.04, 0.64],
+                opacity: [1, 1, 0],
+              }
+        }
         transition={exitTransition}
         style={{
           position: "relative",
@@ -465,19 +462,18 @@ function FourSuitOutcomeCard({
           aspectRatio: CARD_ASPECT_RATIO_VALUE,
         }}
       >
-        <GameCard
-          model={result.target.model}
-          selection="reward"
-        />
+        <GameCard model={result.target.model} selection="reward" />
         <motion.div
           data-four-suit-essence-badge=""
           initial={false}
-          animate={reduceMotion
-            ? { opacity: 0 }
-            : {
-                opacity: [0, 1, 1, 0],
-                scale: [0.72, 1, 1, 0.82],
-              }}
+          animate={
+            reduceMotion
+              ? { opacity: 0 }
+              : {
+                  opacity: [0, 1, 1, 0],
+                  scale: [0.72, 1, 1, 0.82],
+                }
+          }
           transition={{
             duration: FOUR_SUIT_CARD_OUTCOME_SECONDS,
             times: [0, 0.2, 0.72, 1],
@@ -492,7 +488,7 @@ function FourSuitOutcomeCard({
           }}
         >
           <EssenceValue
-            amount={`+${String(FOUR_SUIT_REPRISE_ESSENCE_REWARD)}`}
+            amount={`+${String(essenceReward)}`}
             tone="mark"
             variant="rewardBadge"
           />
@@ -505,14 +501,16 @@ function FourSuitOutcomeCard({
     <motion.div
       data-four-suit-card-outcome="purge"
       initial={false}
-      animate={reduceMotion
-        ? { opacity: 0 }
-        : {
-            y: [0, 0, token("--space-2xl")],
-            rotate: [0, -2, 8],
-            scale: [1, 1.04, 0.24],
-            opacity: [1, 1, 0],
-          }}
+      animate={
+        reduceMotion
+          ? { opacity: 0 }
+          : {
+              y: [0, 0, token("--space-2xl")],
+              rotate: [0, -2, 8],
+              scale: [1, 1.04, 0.24],
+              opacity: [1, 1, 0],
+            }
+      }
       transition={exitTransition}
       style={{
         position: "relative",
@@ -520,10 +518,7 @@ function FourSuitOutcomeCard({
         aspectRatio: CARD_ASPECT_RATIO_VALUE,
       }}
     >
-      <GameCard
-        model={result.target.model}
-        selection="danger"
-      />
+      <GameCard model={result.target.model} selection="danger" />
     </motion.div>
   );
 }
@@ -699,7 +694,12 @@ function LadderDreamsignReward({
           pointerEvents: "none",
         }}
       >
-        <div style={{ width: trajectory.source.width, height: trajectory.source.width }}>
+        <div
+          style={{
+            width: trajectory.source.width,
+            height: trajectory.source.width,
+          }}
+        >
           <Dreamsign dreamsign={dreamsign} variant="revelation" unavailable />
         </div>
       </motion.div>
@@ -743,21 +743,13 @@ function LadderDreamsignReward({
           transformOrigin: "center",
         }}
       >
-        <Dreamsign
-          dreamsign={dreamsign}
-          variant="revelation"
-          unavailable
-        />
+        <Dreamsign dreamsign={dreamsign} variant="revelation" unavailable />
       </motion.div>
     </div>
   );
 }
 
-type GambleGatePresentation =
-  | "available"
-  | "selected"
-  | "revealed"
-  | "faded";
+type GambleGatePresentation = "available" | "selected" | "revealed" | "faded";
 
 function GambleGateCard({
   gate,
@@ -856,10 +848,7 @@ function GambleBetButton({
 
   if (!wagerLocked) {
     return (
-      <div
-        data-gamble-bet={gate.id}
-        data-gamble-bet-presentation="available"
-      >
+      <div data-gamble-bet={gate.id} data-gamble-bet-presentation="available">
         {button}
       </div>
     );
@@ -1032,24 +1021,16 @@ function GravokWagerScreen({
 
   useEffect(() => {
     if (!outcomeVisible || resultId === undefined || !essenceSettled) return;
-    const timeout = window.setTimeout(
-      () => {
-        setOutcomeVisible(false);
-        if (pendingDreamsignReplacement) {
-          setReplacementVisible(true);
-        } else {
-          setRoundActionsVisible(true);
-        }
-      },
-      RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
-    );
+    const timeout = window.setTimeout(() => {
+      setOutcomeVisible(false);
+      if (pendingDreamsignReplacement) {
+        setReplacementVisible(true);
+      } else {
+        setRoundActionsVisible(true);
+      }
+    }, RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS);
     return () => window.clearTimeout(timeout);
-  }, [
-    essenceSettled,
-    outcomeVisible,
-    pendingDreamsignReplacement,
-    resultId,
-  ]);
+  }, [essenceSettled, outcomeVisible, pendingDreamsignReplacement, resultId]);
 
   useEffect(() => {
     if (
@@ -1121,14 +1102,10 @@ function GravokWagerScreen({
               alignItems: "center",
               justifyContent: "center",
               gap:
-                layout === "desktop"
-                  ? token("--space-s")
-                  : token("--space-xs"),
+                layout === "desktop" ? token("--space-s") : token("--space-xs"),
               boxSizing: "border-box",
               padding:
-                layout === "desktop"
-                  ? token("--space-l")
-                  : token("--space-xs"),
+                layout === "desktop" ? token("--space-l") : token("--space-xs"),
               pointerEvents: "auto",
             }}
           >
@@ -1419,14 +1396,13 @@ function LadderClimbScreen({
         const result = view.result;
         const resultRevealed =
           result !== null && revealedResultId === result.id;
-        const outcomeVisible =
-          result !== null && outcomeResultId === result.id;
+        const outcomeVisible = result !== null && outcomeResultId === result.id;
         const cardSize = layout === "desktop" ? "wager" : "wagerCompact";
-        const showNextTarget =
-          roundActionsVisible && view.nextDraw !== null;
-        const targetRank = showNextTarget && view.nextDraw !== null
-          ? view.nextDraw.targetRank
-          : result?.targetRank ?? view.nextDraw?.targetRank ?? "Q";
+        const showNextTarget = roundActionsVisible && view.nextDraw !== null;
+        const targetRank =
+          showNextTarget && view.nextDraw !== null
+            ? view.nextDraw.targetRank
+            : (result?.targetRank ?? view.nextDraw?.targetRank ?? "Q");
         const actionsVisible = result === null || roundActionsVisible;
         return (
           <main
@@ -1451,14 +1427,10 @@ function LadderClimbScreen({
               alignItems: "center",
               justifyContent: "center",
               gap:
-                layout === "desktop"
-                  ? token("--space-s")
-                  : token("--space-xs"),
+                layout === "desktop" ? token("--space-s") : token("--space-xs"),
               boxSizing: "border-box",
               padding:
-                layout === "desktop"
-                  ? token("--space-l")
-                  : token("--space-xs"),
+                layout === "desktop" ? token("--space-l") : token("--space-xs"),
               pointerEvents: "auto",
             }}
           >
@@ -1648,9 +1620,9 @@ function StarwayStairsScreen({
   const resultId = view.result?.id;
   const emphasisTierForResult =
     view.result?.tierNumber ?? view.currentTierNumber;
-  const currentTier = view.tiers.find(
-    (tier) => tier.tierNumber === view.currentTierNumber,
-  ) ?? null;
+  const currentTier =
+    view.tiers.find((tier) => tier.tierNumber === view.currentTierNumber) ??
+    null;
 
   useEffect(() => {
     onOutcomeShownRef.current = onOutcomeShown;
@@ -1745,14 +1717,10 @@ function StarwayStairsScreen({
               alignItems: "center",
               justifyContent: "center",
               gap:
-                layout === "desktop"
-                  ? token("--space-s")
-                  : token("--space-xs"),
+                layout === "desktop" ? token("--space-s") : token("--space-xs"),
               boxSizing: "border-box",
               padding:
-                layout === "desktop"
-                  ? token("--space-l")
-                  : token("--space-xs"),
+                layout === "desktop" ? token("--space-l") : token("--space-xs"),
               pointerEvents: "auto",
             }}
           >
@@ -1777,7 +1745,8 @@ function StarwayStairsScreen({
               {view.tiers.map((tier) => {
                 const isLatestResult =
                   view.result?.tierNumber === tier.tierNumber;
-                const revealDrawnCard = tier.card !== null &&
+                const revealDrawnCard =
+                  tier.card !== null &&
                   (!isLatestResult || revealedResultId === view.result?.id);
                 return (
                   <div
@@ -1798,16 +1767,14 @@ function StarwayStairsScreen({
                     }}
                   >
                     <WagerPrizeCard
-                      prizeId={`starway-${String(tier.tierNumber)}` as
-                        | "starway-1"
-                        | "starway-2"
-                        | "starway-3"}
+                      prizeId={
+                        `starway-${String(tier.tierNumber)}` as
+                          "starway-1" | "starway-2" | "starway-3"
+                      }
                       targetLabel={tier.drawTargetLabel}
                       essenceReward={tier.essenceReward}
                       rewardDreamsign={null}
-                      size={
-                        layout === "desktop" ? "wager" : "wagerCompact"
-                      }
+                      size={layout === "desktop" ? "wager" : "wagerCompact"}
                       drawnCard={tier.card}
                       revealDrawnCard={revealDrawnCard}
                       emphasis={
@@ -1816,36 +1783,38 @@ function StarwayStairsScreen({
                           : "muted"
                       }
                     />
-                    {outcomeVisible && isLatestResult && view.result !== null && (
-                      <div
-                        data-starway-outcome=""
-                        style={{
-                          position: "absolute",
-                          inset: 0,
-                          display: "grid",
-                          placeItems: "center",
-                          pointerEvents: "none",
-                          zIndex: 2,
-                        }}
-                      >
-                        <RadialAnnouncement
-                          announcementId={view.result.id}
-                          headline={view.result.busted ? "Bust!" : "Safe!"}
-                          detail={
-                            view.result.busted ? undefined : "Prize at stake"
-                          }
-                          essenceGained={
-                            !view.result.busted &&
+                    {outcomeVisible &&
+                      isLatestResult &&
+                      view.result !== null && (
+                        <div
+                          data-starway-outcome=""
+                          style={{
+                            position: "absolute",
+                            inset: 0,
+                            display: "grid",
+                            placeItems: "center",
+                            pointerEvents: "none",
+                            zIndex: 2,
+                          }}
+                        >
+                          <RadialAnnouncement
+                            announcementId={view.result.id}
+                            headline={view.result.busted ? "Bust!" : "Safe!"}
+                            detail={
+                              view.result.busted ? undefined : "Prize at stake"
+                            }
+                            essenceGained={
+                              !view.result.busted &&
                               view.result.tierNumber === 3
-                              ? view.result.prizeAtRisk
-                              : undefined
-                          }
-                          tone={view.result.busted ? "danger" : "reward"}
-                          size={layout === "mobile" ? "mini" : "wager"}
-                          duration="extended"
-                        />
-                      </div>
-                    )}
+                                ? view.result.prizeAtRisk
+                                : undefined
+                            }
+                            tone={view.result.busted ? "danger" : "reward"}
+                            size={layout === "mobile" ? "mini" : "wager"}
+                            duration="extended"
+                          />
+                        </div>
+                      )}
                   </div>
                 );
               })}
@@ -1865,76 +1834,76 @@ function StarwayStairsScreen({
                 pointerEvents: actionsVisible ? "auto" : "none",
               }}
             >
-                {currentTier !== null && (
-                  <div data-starway-tier-button={currentTier.tierNumber}>
-                    <GlassButton
-                      label={currentTier.tierNumber === 1 ? "Bet" : "Climb"}
-                      accessibilityLabel={
-                        currentTier.tierNumber === 1
-                          ? `Bet ${String(view.wagerAmount)} Essence on Starway Stairs`
-                          : `Climb to tier ${String(currentTier.tierNumber)} for ${String(view.wagerAmount)} Essence`
-                      }
-                      essenceValue={view.wagerAmount}
-                      size={layout === "mobile" ? "compact" : "standard"}
-                      variant="accent"
-                      disabled={
-                        decisionPending ||
-                        !view.runtimeReady ||
-                        !view.canAffordWager
-                      }
-                      testId={`gamble-starway-tier-${String(currentTier.tierNumber)}`}
-                      onPress={() => {
-                        setDecisionPending(true);
-                        onDraw();
-                      }}
-                    />
-                  </div>
-                )}
-                {view.cashOutReward !== null && (
+              {currentTier !== null && (
+                <div data-starway-tier-button={currentTier.tierNumber}>
                   <GlassButton
-                    label="Take"
-                    accessibilityLabel={`Take ${String(view.cashOutReward)} Essence`}
-                    essenceValue={view.cashOutReward}
+                    label={currentTier.tierNumber === 1 ? "Bet" : "Climb"}
+                    accessibilityLabel={
+                      currentTier.tierNumber === 1
+                        ? `Bet ${String(view.wagerAmount)} Essence on Starway Stairs`
+                        : `Climb to tier ${String(currentTier.tierNumber)} for ${String(view.wagerAmount)} Essence`
+                    }
+                    essenceValue={view.wagerAmount}
                     size={layout === "mobile" ? "compact" : "standard"}
-                    disabled={decisionPending}
-                    testId="gamble-starway-cash-out"
+                    variant="accent"
+                    disabled={
+                      decisionPending ||
+                      !view.runtimeReady ||
+                      !view.canAffordWager
+                    }
+                    testId={`gamble-starway-tier-${String(currentTier.tierNumber)}`}
                     onPress={() => {
                       setDecisionPending(true);
-                      setEmphasisTierNumber(null);
-                      onCashOut();
+                      onDraw();
                     }}
                   />
-                )}
-                {view.terminalReason !== null ? (
-                  <>
-                    {view.canPlayAgain && (
-                      <GlassButton
-                        label="Play Again"
-                        size={layout === "mobile" ? "compact" : "standard"}
-                        variant="accent"
-                        disabled={decisionPending}
-                        testId="gamble-starway-play-again"
-                        onPress={() => {
-                          setDecisionPending(true);
-                          onPlayAgain();
-                        }}
-                      />
-                    )}
+                </div>
+              )}
+              {view.cashOutReward !== null && (
+                <GlassButton
+                  label="Take"
+                  accessibilityLabel={`Take ${String(view.cashOutReward)} Essence`}
+                  essenceValue={view.cashOutReward}
+                  size={layout === "mobile" ? "compact" : "standard"}
+                  disabled={decisionPending}
+                  testId="gamble-starway-cash-out"
+                  onPress={() => {
+                    setDecisionPending(true);
+                    setEmphasisTierNumber(null);
+                    onCashOut();
+                  }}
+                />
+              )}
+              {view.terminalReason !== null ? (
+                <>
+                  {view.canPlayAgain && (
                     <GlassButton
-                      label="Leave"
+                      label="Play Again"
                       size={layout === "mobile" ? "compact" : "standard"}
-                      testId="gamble-starway-leave-after-result"
-                      onPress={onLeave}
+                      variant="accent"
+                      disabled={decisionPending}
+                      testId="gamble-starway-play-again"
+                      onPress={() => {
+                        setDecisionPending(true);
+                        onPlayAgain();
+                      }}
                     />
-                  </>
-                ) : view.result === null && currentTier?.tierNumber === 1 ? (
+                  )}
                   <GlassButton
                     label="Leave"
                     size={layout === "mobile" ? "compact" : "standard"}
-                    testId="gamble-starway-leave"
+                    testId="gamble-starway-leave-after-result"
                     onPress={onLeave}
                   />
-                ) : null}
+                </>
+              ) : view.result === null && currentTier?.tierNumber === 1 ? (
+                <GlassButton
+                  label="Leave"
+                  size={layout === "mobile" ? "compact" : "standard"}
+                  testId="gamble-starway-leave"
+                  onPress={onLeave}
+                />
+              ) : null}
             </div>
           </main>
         );
@@ -2090,9 +2059,8 @@ function FourSuitRepriseScreen({
       speechAnchorTestId="cumulus-gamble-speech-anchor"
       speechBubbleTestId="cumulus-gamble-speech-bubble"
       renderGallery={(layout) => {
-        const selectedCard = view.cards.find(
-          (card) => card.entryId === selectedEntryId,
-        ) ?? null;
+        const selectedCard =
+          view.cards.find((card) => card.entryId === selectedEntryId) ?? null;
         if (view.phase === "choose" && selectedCard === null) {
           return (
             <section
@@ -2104,9 +2072,10 @@ function FourSuitRepriseScreen({
                 minHeight: 0,
                 height: "100%",
                 maxHeight: "100%",
-                width: layout === "desktop"
-                  ? "100%"
-                  : `calc(100vw - (${token("--space-s")} * 2))`,
+                width:
+                  layout === "desktop"
+                    ? "100%"
+                    : `calc(100vw - (${token("--space-s")} * 2))`,
                 boxSizing: "border-box",
                 pointerEvents: "auto",
                 display: "grid",
@@ -2171,24 +2140,26 @@ function FourSuitRepriseScreen({
         }
 
         const activeResult = view.phase === "result" ? view.result : null;
-        const target = view.phase === "choose"
-          ? selectedCard
-          : activeResult?.target ?? null;
+        const target =
+          view.phase === "choose"
+            ? selectedCard
+            : (activeResult?.target ?? null);
         const drawnCard = activeResult?.card ?? null;
         const drawnCardVisible =
           activeResult !== null && revealedResultId === activeResult.id;
         const outcomeVisible =
           activeResult !== null && outcomeResultId === activeResult.id;
         const showReselect = view.phase === "choose" && selectedCard !== null;
-        const drawCardWidth = PLAYING_CARD_DESIGN.sizes[
-          layout === "desktop" ? "wager" : "wagerCompact"
-        ].square;
-        const stageGridTemplateColumns = layout === "desktop"
-          ? `${String(FOUR_SUIT_TARGET_WIDTH.desktop)}px ${String(drawCardWidth)}px ${String(FOUR_SUIT_REWARD_PANEL_WIDTH.desktop)}px`
-          : `${String(FOUR_SUIT_TARGET_WIDTH.mobile)}px ${String(drawCardWidth)}px`;
-        const stageColumnGap = layout === "desktop"
-          ? token("--space-4xl")
-          : token("--space-2xl");
+        const drawCardWidth =
+          PLAYING_CARD_DESIGN.sizes[
+            layout === "desktop" ? "wager" : "wagerCompact"
+          ].square;
+        const stageGridTemplateColumns =
+          layout === "desktop"
+            ? `${String(FOUR_SUIT_TARGET_WIDTH.desktop)}px ${String(drawCardWidth)}px ${String(FOUR_SUIT_REWARD_PANEL_WIDTH.desktop)}px`
+            : `${String(FOUR_SUIT_TARGET_WIDTH.mobile)}px ${String(drawCardWidth)}px`;
+        const stageColumnGap =
+          layout === "desktop" ? token("--space-4xl") : token("--space-2xl");
         return (
           <main
             data-gamble-wager-region=""
@@ -2199,9 +2170,8 @@ function FourSuitRepriseScreen({
               position: "relative",
               zIndex: 10,
               width: "100%",
-              maxWidth: layout === "desktop"
-                ? FOUR_SUIT_STAGE_MAX_WIDTH
-                : undefined,
+              maxWidth:
+                layout === "desktop" ? FOUR_SUIT_STAGE_MAX_WIDTH : undefined,
               height: "100%",
               minHeight: 0,
               justifySelf: "center",
@@ -2212,9 +2182,8 @@ function FourSuitRepriseScreen({
               justifyContent: "center",
               gap: token("--space-3xl"),
               boxSizing: "border-box",
-              padding: layout === "desktop"
-                ? token("--space-l")
-                : token("--space-xs"),
+              padding:
+                layout === "desktop" ? token("--space-l") : token("--space-xs"),
               pointerEvents: "auto",
             }}
           >
@@ -2226,9 +2195,10 @@ function FourSuitRepriseScreen({
                 width: "max-content",
                 display: "grid",
                 gridTemplateColumns: stageGridTemplateColumns,
-                gridTemplateAreas: layout === "desktop"
-                  ? '"target draw rewards"'
-                  : '"target draw" "rewards rewards"',
+                gridTemplateAreas:
+                  layout === "desktop"
+                    ? '"target draw rewards"'
+                    : '"target draw" "rewards rewards"',
                 columnGap: stageColumnGap,
                 rowGap: layout === "desktop" ? undefined : stageColumnGap,
                 alignItems: "center",
@@ -2244,8 +2214,7 @@ function FourSuitRepriseScreen({
                     gridArea: "target",
                     width: FOUR_SUIT_TARGET_WIDTH[layout],
                     height:
-                      FOUR_SUIT_TARGET_WIDTH[layout] /
-                      CARD_ASPECT_RATIO_VALUE,
+                      FOUR_SUIT_TARGET_WIDTH[layout] / CARD_ASPECT_RATIO_VALUE,
                     minWidth: 0,
                   }}
                 >
@@ -2261,6 +2230,7 @@ function FourSuitRepriseScreen({
                           result={activeResult}
                           layout={layout}
                           reduceMotion={reduceMotion}
+                          essenceReward={view.essenceReward}
                         />
                       ) : (
                         <GameCard
@@ -2275,10 +2245,7 @@ function FourSuitRepriseScreen({
                   )}
                 </div>
               )}
-              <div
-                data-four-suit-draw-card=""
-                style={{ gridArea: "draw" }}
-              >
+              <div data-four-suit-draw-card="" style={{ gridArea: "draw" }}>
                 <PlayingCard
                   variant="fourSuit"
                   size={layout === "desktop" ? "wager" : "wagerCompact"}
@@ -2294,9 +2261,7 @@ function FourSuitRepriseScreen({
                   minWidth: 0,
                 }}
               >
-                <GlassPanel
-                  testId="gamble-four-suit-outcome-panel"
-                >
+                <GlassPanel testId="gamble-four-suit-outcome-panel">
                   <div
                     data-four-suit-outcomes=""
                     style={{
@@ -2304,48 +2269,54 @@ function FourSuitRepriseScreen({
                       boxSizing: "border-box",
                       display: "grid",
                       gridTemplateRows: "repeat(4, minmax(0, 1fr))",
-                      padding: layout === "desktop"
-                        ? token("--space-s")
-                        : token("--space-xs"),
+                      padding:
+                        layout === "desktop"
+                          ? token("--space-s")
+                          : token("--space-xs"),
                     }}
                   >
-                    {FOUR_SUIT_REPRISE_OUTCOMES.map((outcome) => (
+                    {view.outcomes.map((outcome) => (
                       <div
                         key={outcome.suit}
                         data-four-suit-outcome={outcome.suit}
                         aria-label={`${outcome.suit}: ${outcome.label}`}
                         style={{
                           display: "grid",
-                          gridTemplateColumns: layout === "desktop"
-                            ? "44px minmax(0, 1fr)"
-                            : "40px minmax(0, 1fr)",
+                          gridTemplateColumns:
+                            layout === "desktop"
+                              ? "44px minmax(0, 1fr)"
+                              : "40px minmax(0, 1fr)",
                           alignItems: "center",
-                          gap: layout === "desktop"
-                            ? token("--space-s")
-                            : token("--space-xs"),
-                          font: layout === "desktop"
-                            ? token("--t-button-lg")
-                            : token("--t-button"),
+                          gap:
+                            layout === "desktop"
+                              ? token("--space-s")
+                              : token("--space-xs"),
+                          font:
+                            layout === "desktop"
+                              ? token("--t-button-lg")
+                              : token("--t-button"),
                         }}
                       >
                         <PlayingCardSuitMark
                           suit={outcome.suit}
-                          size={layout === "desktop"
-                            ? "reward"
-                            : "rewardCompact"}
+                          size={
+                            layout === "desktop" ? "reward" : "rewardCompact"
+                          }
                         />
                         <span>
-                          {outcome.outcome === "transfiguration"
-                            ? "Transfigure"
-                            : outcome.outcome === "essence" ? (
-                                <>
-                                  Gain{" "}
-                                  <EssenceValue
-                                    amount={FOUR_SUIT_REPRISE_ESSENCE_REWARD}
-                                    tone="inherit"
-                                  />
-                                </>
-                              ) : outcome.label}
+                          {outcome.outcome === "transfiguration" ? (
+                            "Transfigure"
+                          ) : outcome.outcome === "essence" ? (
+                            <>
+                              Gain{" "}
+                              <EssenceValue
+                                amount={view.essenceReward}
+                                tone="inherit"
+                              />
+                            </>
+                          ) : (
+                            outcome.label
+                          )}
                         </span>
                       </div>
                     ))}

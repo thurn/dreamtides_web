@@ -1,25 +1,11 @@
-import type {
-  StandardPlayingCardSuit,
-} from "../types/gamble";
+import type { StandardPlayingCardSuit } from "../types/gamble";
+import type { EconomyData } from "../types/economy-data";
+import type { SitesData, FourSuitRepriseOutcome } from "../types/sites-data";
 
 export const FOUR_SUIT_REPRISE_RULES_VERSION = "four-suit-reprise-v1";
-export const FOUR_SUIT_REPRISE_MAX_ROUNDS = 3;
-export const FOUR_SUIT_REPRISE_ESSENCE_REWARD = 100;
-export const FOUR_SUIT_REPRISE_ODDS_NUMERATOR = 13;
-export const FOUR_SUIT_REPRISE_ODDS_DENOMINATOR = 52;
-
-/** The authoritative card effect attached to one playing-card suit. */
-export type FourSuitRepriseOutcome =
-  | "transfiguration"
-  | "essence"
-  | "duplication"
-  | "purge";
-
-export interface FourSuitRepriseOutcomeRule {
-  suit: StandardPlayingCardSuit;
-  outcome: FourSuitRepriseOutcome;
-  label: string;
-}
+export type { FourSuitRepriseOutcome } from "../types/sites-data";
+export type FourSuitRepriseOutcomeRule =
+  SitesData["gamble"]["fourSuitReprise"]["outcomes"][number];
 
 interface FourSuitRepriseTargetIdentity {
   entryId: string;
@@ -34,26 +20,20 @@ interface FourSuitRepriseDeckEntryState {
   transfiguration: unknown;
 }
 
-/** Stable suit order and exact outcome mapping shown by the wager object. */
-export const FOUR_SUIT_REPRISE_OUTCOMES: readonly FourSuitRepriseOutcomeRule[] = [
-  { suit: "spades", outcome: "transfiguration", label: "Transfigure" },
-  { suit: "diamonds", outcome: "essence", label: "Unchanged + 100 Essence" },
-  { suit: "hearts", outcome: "duplication", label: "Duplicate" },
-  { suit: "clubs", outcome: "purge", label: "Purge" },
-];
-
 /** Essence paid for each one-shot round. */
-export function fourSuitRepriseDrawCost(isFarpoint: boolean): number {
-  return isFarpoint ? 15 : 25;
+export function fourSuitRepriseDrawCost(
+  config: EconomyData["gamble"]["fourSuitReprise"],
+  isFarpoint: boolean,
+): number {
+  return isFarpoint ? config.enhancedDrawPrice : config.standardDrawPrice;
 }
 
 /** Resolve a playing-card suit into the deck effect it commits. */
 export function fourSuitRepriseOutcomeForSuit(
+  config: SitesData["gamble"]["fourSuitReprise"],
   suit: StandardPlayingCardSuit,
 ): FourSuitRepriseOutcome {
-  const rule = FOUR_SUIT_REPRISE_OUTCOMES.find(
-    (candidate) => candidate.suit === suit,
-  );
+  const rule = config.outcomes.find((candidate) => candidate.suit === suit);
   if (rule === undefined) {
     throw new Error(`Missing Four-Suit Reprise outcome for ${suit}`);
   }
@@ -74,9 +54,11 @@ export function eligibleFourSuitRepriseTargets<
   );
   return params.targets.filter((target) => {
     const entry = liveEntries.get(target.entryId);
-    return !usedCardIds.has(target.cardId) &&
+    return (
+      !usedCardIds.has(target.cardId) &&
       entry?.cardNumber === target.cardNumber &&
       !entry.isBane &&
-      entry.transfiguration === null;
+      entry.transfiguration === null
+    );
   });
 }
