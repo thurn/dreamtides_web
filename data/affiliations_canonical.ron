@@ -1,3 +1,6 @@
+// Controls the possible "affiliations" for Dreamscapes, specific types of cards
+// found at that location.
+
 #![enable(implicit_some)]
 AffiliationCatalog(
   // Makes a dreamscape's affiliation affect which cards its Dream Sites offer.
