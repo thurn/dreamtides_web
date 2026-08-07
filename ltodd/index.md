@@ -14,7 +14,7 @@ supplements provide deeper implementation treatment where useful.
 
 ## Part I: Foundations of Dreamtides and Its Game Objects
 
-Directory: `/game_foundations`
+Directory: `/dreamtides`
 
 The player promise, nested journey and Battle loops, information disclosure,
 meaningful commitment, authored identity, deterministic randomness, durable
@@ -94,7 +94,7 @@ Dreamsign markets, Dreamsign Revelation, Random Site, and destination handoffs.
 
 ## Part VII: The Augury and Exploration Sites
 
-Directory: `/exploration_and_augury_sites`
+Directory: `/exploration_augury`
 
 The two choice-driven destinations that transform the current journey into
 persistent consequences. Augury chapters define the journey snapshot used for
