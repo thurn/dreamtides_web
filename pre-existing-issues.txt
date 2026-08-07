@@ -7,3 +7,8 @@ player's deck and use that card's authored encounter. Align the provider with
 the deck-based selection contract and add deterministic tests covering
 eligibility, duplicate card instances, and fallback when a drawn encounter
 cannot prepare both actions.
+
+`scripts/regenerate-assets.sh` currently fails in a fresh worktree because
+`scripts/tutorial-data.mjs` still reads `data/tabula/glossary.toml`, while the
+canonical glossary is now `data/tabula/glossary.ron`. The failure occurs during
+the first `setup-assets` step with `ENOENT` for the removed TOML path.
