@@ -1,7 +1,7 @@
 import type { EconomyData } from "../types/economy-data";
 import type { StandardPlayingCard } from "../types/gamble";
 
-export const BLACKJACK_RULES_VERSION = "blackjack-v3";
+export const BLACKJACK_RULES_VERSION = "blackjack-v4";
 export const BLACKJACK_MAX_ATTEMPTS = 3;
 
 export type BlackjackOutcome = "player-win" | "dealer-win" | "push";

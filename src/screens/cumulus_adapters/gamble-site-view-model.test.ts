@@ -807,3 +807,199 @@ describe("gamble-site-view-model — Four-Suit Reprise", () => {
     expect(replayView.result).toBeNull();
   });
 });
+
+describe("gamble-site-view-model — Blackjack", () => {
+  const runtime: BlackjackSiteRuntime = {
+    kind: "gamble",
+    gameId: "blackjack",
+    rulesVersion: "fixture-blackjack-rules",
+    isFarpoint: false,
+    wagerCost: 50,
+    prizeEssence: 300,
+    attemptNumber: 1,
+    shuffleCommitment: "fixture-blackjack-commitment",
+    committedDeck: [
+      { rank: "10", suit: "clubs" },
+      { rank: "6", suit: "hearts" },
+      { rank: "5", suit: "spades" },
+      { rank: "K", suit: "diamonds" },
+    ],
+    deckCursor: 4,
+    playerCards: [
+      { rank: "10", suit: "clubs" },
+      { rank: "6", suit: "hearts" },
+    ],
+    dealerCards: [
+      { rank: "5", suit: "spades" },
+      { rank: "K", suit: "diamonds" },
+    ],
+    dealerRevealed: false,
+    wagerPaid: true,
+    playerDecision: "deal",
+    outcome: null,
+    resultSettled: false,
+    essenceAwarded: 0,
+  };
+
+  it("maps the wager, flat prize, player hand, and concealed dealer hand", () => {
+    const view = buildGambleSiteView({
+      state: {
+        ...createDefaultState(),
+        essence: 64,
+        siteRuntime: { [GAMBLE_SITE.id]: runtime },
+      },
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+    });
+    expect(view?.gameId).toBe("blackjack");
+    if (view?.gameId !== "blackjack") {
+      throw new Error("expected Blackjack view");
+    }
+    expect(view).toMatchObject({
+      handId: "fixture-blackjack-commitment",
+      wagerCost: 50,
+      prizeEssence: 300,
+      canAffordWager: true,
+      playerTotal: 16,
+      dealerTotal: 5,
+      dealerRevealed: false,
+      outcome: null,
+      canPlayAgain: false,
+    });
+  });
+
+  it("reveals both final totals and the flat player-win award", () => {
+    const view = buildGambleSiteView({
+      state: {
+        ...createDefaultState(),
+        siteRuntime: {
+          [GAMBLE_SITE.id]: {
+            ...runtime,
+            playerCards: [
+              { rank: "10", suit: "clubs" },
+              { rank: "9", suit: "hearts" },
+            ],
+            dealerCards: [
+              { rank: "10", suit: "spades" },
+              { rank: "8", suit: "diamonds" },
+            ],
+            dealerRevealed: true,
+            outcome: "player-win",
+            resultSettled: true,
+            essenceAwarded: 300,
+          },
+        },
+      },
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+    });
+    expect(view?.gameId).toBe("blackjack");
+    if (view?.gameId !== "blackjack") {
+      throw new Error("expected Blackjack view");
+    }
+    expect(view).toMatchObject({
+      playerTotal: 19,
+      dealerTotal: 18,
+      outcome: "player-win",
+      essenceAwarded: 300,
+      canPlayAgain: false,
+    });
+  });
+
+  it("offers another paid hand after a settled push", () => {
+    const view = buildGambleSiteView({
+      state: {
+        ...createDefaultState(),
+        essence: 50,
+        siteRuntime: {
+          [GAMBLE_SITE.id]: {
+            ...runtime,
+            dealerRevealed: true,
+            outcome: "push",
+            resultSettled: true,
+            essenceAwarded: 50,
+          },
+        },
+      },
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+    });
+    expect(view?.gameId).toBe("blackjack");
+    if (view?.gameId !== "blackjack") {
+      throw new Error("expected Blackjack view");
+    }
+    expect(view.canPlayAgain).toBe(true);
+  });
+
+  it("offers up to two additional paid hands after dealer wins", () => {
+    const view = buildGambleSiteView({
+      state: {
+        ...createDefaultState(),
+        essence: 50,
+        siteRuntime: {
+          [GAMBLE_SITE.id]: {
+            ...runtime,
+            playerCards: [
+              { rank: "10", suit: "clubs" },
+              { rank: "9", suit: "hearts" },
+            ],
+            dealerCards: [
+              { rank: "A", suit: "spades" },
+              { rank: "K", suit: "diamonds" },
+            ],
+            dealerRevealed: true,
+            outcome: "dealer-win",
+            resultSettled: true,
+          },
+        },
+      },
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+    });
+    expect(view?.gameId).toBe("blackjack");
+    if (view?.gameId !== "blackjack") {
+      throw new Error("expected Blackjack view");
+    }
+    expect(view).toMatchObject({
+      attemptNumber: 1,
+      maxAttempts: 3,
+      canPlayAgain: true,
+    });
+
+    const finalAttemptView = buildGambleSiteView({
+      state: {
+        ...createDefaultState(),
+        essence: 50,
+        siteRuntime: {
+          [GAMBLE_SITE.id]: {
+            ...runtime,
+            attemptNumber: 3,
+            playerCards: [
+              { rank: "10", suit: "clubs" },
+              { rank: "9", suit: "hearts" },
+            ],
+            dealerCards: [
+              { rank: "A", suit: "spades" },
+              { rank: "K", suit: "diamonds" },
+            ],
+            dealerRevealed: true,
+            outcome: "dealer-win",
+            resultSettled: true,
+          },
+        },
+      },
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+    });
+    expect(finalAttemptView?.gameId).toBe("blackjack");
+    if (finalAttemptView?.gameId === "blackjack") {
+      expect(finalAttemptView.canPlayAgain).toBe(false);
+    }
+  });
+
+});

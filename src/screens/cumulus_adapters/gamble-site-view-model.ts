@@ -23,7 +23,15 @@ import {
   starwayStairsDrawTargetLabel,
   starwayStairsEssenceReward,
 } from "../../data/starway-stairs";
-import { eligibleFourSuitRepriseTargets } from "../../data/four-suit-reprise";
+import {
+  eligibleFourSuitRepriseTargets,
+  FOUR_SUIT_REPRISE_MAX_ROUNDS,
+} from "../../data/four-suit-reprise";
+import {
+  BLACKJACK_MAX_ATTEMPTS,
+  blackjackEssenceAward,
+  blackjackHandTotal,
+} from "../../data/blackjack";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
 import type { DreamGuideContent } from "../../types/content";
@@ -337,6 +345,72 @@ function buildStarwayStairsSiteView(params: {
     cashOutReward,
     terminalReason: runtime.terminalReason,
     prizeAwarded: runtime.prizeAwarded,
+  };
+}
+
+function buildBlackjackSiteView(params: {
+  state: JourneyState;
+  sceneNode: DreamscapeNode | null;
+  site: SiteState & { type: "Gamble" };
+  guide: DreamGuideContent | null;
+  atlasData: AtlasData;
+  runtime: BlackjackSiteRuntime;
+  economyData: EconomyData;
+}): BlackjackSiteView {
+  const { runtime } = params;
+  const playerTotal = runtime.playerCards.length === 0
+    ? null
+    : blackjackHandTotal(runtime.playerCards);
+  const visibleDealerCards = runtime.dealerRevealed
+    ? runtime.dealerCards
+    : runtime.dealerCards.slice(0, 1);
+  const dealerTotal = visibleDealerCards.length === 0
+    ? null
+    : blackjackHandTotal(visibleDealerCards);
+  const essenceAwarded = runtime.outcome === null
+    ? 0
+    : blackjackEssenceAward(
+        runtime.wagerCost,
+        runtime.prizeEssence,
+        runtime.outcome,
+      );
+  return {
+    gameId: "blackjack",
+    siteId: params.site.id,
+    handId: runtime.shuffleCommitment,
+    ...commonGambleView({
+      sceneNode: params.sceneNode,
+      guide: params.guide,
+      guideLine: BLACKJACK_GUIDE_LINE,
+      randomSiteGuideLine: params.site.randomSite?.materialized === true
+        ? params.atlasData.randomSite.guideLine
+        : null,
+    }),
+    isFarpoint: runtime.isFarpoint,
+    runtimeReady: true,
+    wagerCost: runtime.wagerCost,
+    prizeEssence: runtime.prizeEssence,
+    attemptNumber: runtime.attemptNumber,
+    maxAttempts: BLACKJACK_MAX_ATTEMPTS,
+    canAffordWager: params.state.essence >= runtime.wagerCost,
+    playerCards: runtime.playerCards,
+    playerTotal,
+    dealerCards: runtime.dealerCards,
+    dealerTotal,
+    dealerRevealed: runtime.dealerRevealed,
+    outcome: runtime.outcome,
+    essenceAwarded,
+    resultSettled: runtime.resultSettled,
+    resultId:
+      runtime.outcome === null
+        ? null
+        : `${params.site.id}:${runtime.shuffleCommitment}:${runtime.outcome}:${String(runtime.deckCursor)}`,
+    canPlayAgain:
+      (runtime.outcome === "push" ||
+        (runtime.outcome === "dealer-win" &&
+          runtime.attemptNumber < BLACKJACK_MAX_ATTEMPTS)) &&
+      runtime.resultSettled &&
+      params.state.essence >= runtime.wagerCost,
   };
 }
 

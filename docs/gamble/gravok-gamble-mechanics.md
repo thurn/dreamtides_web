@@ -72,7 +72,7 @@ flow.
 | Tidemark Ladder Climb | Attempts cost 0/5/10/15 Essence. | Every attempt is free. |
 | Starway Stairs | Each tier draw costs 30 Essence. | Each tier draw costs 20 Essence. |
 | Four-Suit Reprise | Each draw costs 25 Essence. | Each draw costs 15 Essence. |
-| Blackjack | Each hand costs 70 Essence. | Each hand costs 40 Essence. |
+| Blackjack | Each hand costs 90 Essence. | Each hand costs 40 Essence. |
 
 All odds, rewards, thresholds, outcome mappings, and limits are identical at
 ordinary and Farpoint Station sites.
@@ -216,7 +216,7 @@ outcomes, replay limit, and odds are unchanged.
 
 ## 5. Blackjack
 
-Blackjack pits the player against Gravok's dealer hand. The player wagers 70
+Blackjack pits the player against Gravok's dealer hand. The player wagers 90
 Essence for each hand, then the player and dealer each receive two cards from one shuffled
 52-card shoe. The dealer shows the first card and keeps the second face down.
 Every card occupies its own squircle tile. Aces count as 1 or 11 to make the
@@ -232,7 +232,7 @@ stands on every 17 including soft 17.
 | --- | --- |
 | Player total beats the dealer, or dealer busts | Gain 300 Essence. |
 | Equal totals | Refund the wager and offer a fresh hand. |
-| Dealer total beats the player | No reward. |
+| Dealer total beats the player | No reward; offer another paid hand when fewer than three attempts have been played. |
 | Player busts | No reward; offer another paid hand when fewer than three attempts have been played. |
 
 The fixed middle glass panel reads `Closest to 21 Without Going Over` and
@@ -247,18 +247,19 @@ card waits for the dealer turn. Reading holds separate each card, the dealer
 reveal and draws, and the result announcement.
 
 Choosing `Play Again` clears the settled hand before the fresh-hand intent is
-submitted. Cards leave one at a time in reverse deal order through the inverse
-of their arrival travel and scale motion.
+submitted. Every card flips face down simultaneously, then both complete hands
+and their total discs travel away together through the inverse of the cards'
+arrival motion.
 
-A push starts a fresh paid hand without advancing the attempt count. A player
-bust advances the attempt count and may start another paid hand through attempt
-three. Wins and non-bust dealer wins end the visit.
+A push starts a fresh paid hand without advancing the attempt count. Every
+dealer win advances the attempt count and may start another paid hand through
+attempt three. A player win ends the visit.
 
 Exact enumeration of one 52-card shoe without replacement gives optimal play a
-43.80% win rate, 7.95% push rate, and 48.25% loss rate before the limited bust
-retries are applied. An optimal-control balance model that includes the value
-of those retries puts the ordinary site's complete-visit EV at approximately
-+98 Essence.
+43.80% win rate, 7.95% push rate, and 48.25% loss rate before retries are
+applied. With a 90-Essence wager and up to three attempts after losses, the
+ordinary site's complete-visit EV is approximately +95 Essence under optimal
+play.
 
 ### Farpoint Station
 

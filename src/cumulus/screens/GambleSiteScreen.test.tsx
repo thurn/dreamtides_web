@@ -1961,7 +1961,7 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     act(() => root.unmount());
   });
 
-  it("dismisses a settled hand in reverse deal order before playing again", () => {
+  it("conceals and dismisses the complete settled table before playing again", () => {
     vi.useFakeTimers();
     const onPlayAgain = vi.fn();
     const { container, root } = mount(
@@ -1996,24 +1996,43 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       />,
     );
     void act(() => vi.runAllTimers());
-    expect(
-      container.querySelector('[data-blackjack-card="dealer:1"]')
-        ?.getAttribute("data-blackjack-card-departure-order"),
-    ).toBe("0");
-    expect(
-      container.querySelector('[data-blackjack-card="player:0"]')
-        ?.getAttribute("data-blackjack-card-departure-order"),
-    ).toBe("3");
+    const cards = [...container.querySelectorAll('[data-blackjack-card]')];
+    const totals = [...container.querySelectorAll('[data-blackjack-total]')];
+    expect(container.querySelectorAll(
+      '[data-playing-card-state="drawn"]',
+    )).toHaveLength(4);
     act(() => {
       container.querySelector<HTMLButtonElement>(
         '[data-testid="gamble-blackjack-play-again"]',
       )?.click();
     });
-    expect(
-      container.querySelector('[data-blackjack-cards-departing="true"]'),
-    ).not.toBeNull();
+    expect(container.querySelector('[data-blackjack-departure-phase]')
+      ?.getAttribute("data-blackjack-departure-phase")).toBe("concealing");
+    expect(container.querySelectorAll(
+      '[data-blackjack-card-departure-phase="concealing"]',
+    )).toHaveLength(4);
+    expect(container.querySelectorAll(
+      '[data-blackjack-total-departure-phase="concealing"]',
+    )).toHaveLength(2);
+    expect(container.querySelectorAll(
+      '[data-playing-card-state="concealed"]',
+    )).toHaveLength(4);
+    expect([...container.querySelectorAll('[data-blackjack-card]')]).toEqual(cards);
+    expect([...container.querySelectorAll('[data-blackjack-total]')]).toEqual(totals);
     expect(onPlayAgain).not.toHaveBeenCalled();
-    void act(() => vi.runAllTimers());
+    void act(() => vi.advanceTimersToNextTimer());
+    expect(container.querySelector('[data-blackjack-departure-phase]')
+      ?.getAttribute("data-blackjack-departure-phase")).toBe("departing");
+    expect(container.querySelectorAll(
+      '[data-blackjack-card-departure-phase="departing"]',
+    )).toHaveLength(4);
+    expect(container.querySelectorAll(
+      '[data-blackjack-total-departure-phase="departing"]',
+    )).toHaveLength(2);
+    expect([...container.querySelectorAll('[data-blackjack-card]')]).toEqual(cards);
+    expect([...container.querySelectorAll('[data-blackjack-total]')]).toEqual(totals);
+    expect(onPlayAgain).not.toHaveBeenCalled();
+    void act(() => vi.advanceTimersToNextTimer());
     expect(onPlayAgain).toHaveBeenCalledOnce();
     act(() => root.unmount());
   });

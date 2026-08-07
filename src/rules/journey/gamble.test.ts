@@ -1338,7 +1338,49 @@ describe("Blackjack", () => {
     });
   });
 
-  it("allows at most three paid attempts after player busts", () => {
+  it("offers another paid attempt after a dealer blackjack", () => {
+    const dealt = apply(
+      blackjackStateWith([
+        { rank: "10", suit: "clubs" },
+        { rank: "A", suit: "spades" },
+        { rank: "9", suit: "hearts" },
+        { rank: "K", suit: "diamonds" },
+      ]),
+      "DEAL_BLACKJACK",
+      { siteId: SITE_ID },
+    );
+    expect(dealt.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      dealerRevealed: true,
+      outcome: "dealer-win",
+    });
+    const settled = settleBlackjack(dealt.state);
+    registerSiteContentProvider({
+      economyData: ECONOMY,
+      openSite: () => ({
+        runtime: blackjackRuntime(
+          [
+            { rank: "10", suit: "hearts" },
+            { rank: "9", suit: "clubs" },
+            { rank: "5", suit: "spades" },
+            { rank: "7", suit: "diamonds" },
+          ],
+          { shuffleCommitment: "dealer-blackjack-retry" },
+        ),
+      }),
+    });
+    const replayed = apply(settled.state, "PLAY_AGAIN_BLACKJACK", {
+      siteId: SITE_ID,
+      previousShuffleCommitment: "blackjack-hand",
+    });
+    expect(replayed.outcome).toBe("applied");
+    expect(replayed.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      attemptNumber: 2,
+      shuffleCommitment: "dealer-blackjack-retry",
+      wagerPaid: true,
+    });
+  });
+
+  it("allows at most three paid attempts after losses", () => {
     const state = blackjackStateWith(
       [],
       {},

@@ -119,6 +119,216 @@ function remainingFourSuitTargets(
   });
 }
 
+/** Pay the wager and deal two cards each, leaving the dealer's hole card hidden. */
+export function dealBlackjack(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  if (siteId === null) return null;
+  const runtime = blackjackRuntimeFor(journey, siteId);
+  if (
+    runtime === null ||
+    runtime.wagerPaid ||
+    runtime.playerCards.length > 0 ||
+    runtime.dealerCards.length > 0 ||
+    journey.essence < runtime.wagerCost
+  ) {
+    return null;
+  }
+  const playerCards = [runtime.committedDeck[0], runtime.committedDeck[2]];
+  const dealerCards = [runtime.committedDeck[1], runtime.committedDeck[3]];
+  if (playerCards.some((card) => card === undefined) || dealerCards.some((card) => card === undefined)) {
+    return null;
+  }
+  const safePlayerCards = playerCards;
+  const safeDealerCards = dealerCards;
+  const outcome = blackjackOpeningOutcome(safePlayerCards, safeDealerCards);
+  return withRuntime(
+    { ...journey, essence: journey.essence - runtime.wagerCost },
+    siteId,
+    {
+      ...runtime,
+      wagerPaid: true,
+      deckCursor: 4,
+      playerCards: safePlayerCards,
+      dealerCards: safeDealerCards,
+      dealerRevealed: outcome !== null,
+      playerDecision: "deal",
+      outcome,
+    },
+  );
+}
+
+/** Reveal one free player card; 21 advances directly through the dealer turn. */
+export function hitBlackjack(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  if (siteId === null) return null;
+  const runtime = blackjackRuntimeFor(journey, siteId);
+  if (
+    runtime === null ||
+    !runtime.wagerPaid ||
+    runtime.outcome !== null
+  ) {
+    return null;
+  }
+  const card = runtime.committedDeck[runtime.deckCursor];
+  if (card === undefined) return null;
+  const playerCards = [...runtime.playerCards, card];
+  const playerValue = blackjackHandValue(playerCards);
+  const deckCursor = runtime.deckCursor + 1;
+  const dealerResolution = playerValue.total === 21 || playerValue.isBust
+    ? resolveBlackjackDealer(
+        playerCards,
+        runtime.dealerCards,
+        runtime.committedDeck,
+        deckCursor,
+      )
+    : null;
+  if ((playerValue.total === 21 || playerValue.isBust) && dealerResolution === null) {
+    return null;
+  }
+  return withRuntime(
+    journey,
+    siteId,
+    {
+      ...runtime,
+      deckCursor: dealerResolution?.deckCursor ?? deckCursor,
+      playerCards,
+      dealerCards: dealerResolution?.dealerCards ?? runtime.dealerCards,
+      dealerRevealed: dealerResolution !== null,
+      playerDecision: "hit",
+      outcome: dealerResolution?.outcome ?? null,
+    },
+  );
+}
+
+/** End the player turn, reveal the hole card, and resolve the dealer's draws. */
+export function standBlackjack(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  if (siteId === null) return null;
+  const runtime = blackjackRuntimeFor(journey, siteId);
+  if (
+    runtime === null ||
+    !runtime.wagerPaid ||
+    runtime.outcome !== null
+  ) {
+    return null;
+  }
+  const resolution = resolveBlackjackDealer(
+    runtime.playerCards,
+    runtime.dealerCards,
+    runtime.committedDeck,
+    runtime.deckCursor,
+  );
+  if (resolution === null) return null;
+  return withRuntime(journey, siteId, {
+    ...runtime,
+    deckCursor: resolution.deckCursor,
+    dealerCards: resolution.dealerCards,
+    dealerRevealed: true,
+    playerDecision: "stand",
+    outcome: resolution.outcome,
+  });
+}
+
+/** Apply the flat win prize, push refund, or zero dealer-win payout. */
+export function settleBlackjack(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  const shuffleCommitment = asString(payload.shuffleCommitment);
+  if (siteId === null || shuffleCommitment === null) return null;
+  const runtime = blackjackRuntimeFor(journey, siteId);
+  if (
+    runtime === null ||
+    runtime.shuffleCommitment !== shuffleCommitment ||
+    runtime.outcome === null ||
+    runtime.resultSettled
+  ) {
+    return null;
+  }
+  const essenceAwarded = blackjackEssenceAward(
+    runtime.wagerCost,
+    runtime.prizeEssence,
+    runtime.outcome,
+  );
+
+  return withRuntime(
+    {
+      ...journey,
+      essence: journey.essence + essenceAwarded,
+    },
+    siteId,
+    {
+      ...runtime,
+      resultSettled: true,
+      essenceAwarded,
+    },
+  );
+}
+
+/** Start another paid hand after a push or an eligible loss. */
+export function playAgainBlackjack(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  const previousShuffleCommitment = asString(
+    payload.previousShuffleCommitment,
+  );
+  if (siteId === null || previousShuffleCommitment === null) return null;
+
+  const runtime = blackjackRuntimeFor(journey, siteId);
+  const site = findSite(journey, siteId);
+  const provider = getSiteContentProvider();
+  const consumesAttempt = runtime?.outcome === "dealer-win";
+  const replayEligible = runtime?.outcome === "push" ||
+    (consumesAttempt && runtime.attemptNumber < BLACKJACK_MAX_ATTEMPTS);
+  if (
+    runtime === null ||
+    site?.type !== "Gamble" ||
+    provider === null ||
+    runtime.shuffleCommitment !== previousShuffleCommitment ||
+    !replayEligible ||
+    !runtime.resultSettled
+  ) {
+    return null;
+  }
+
+  const generated = provider.openSite({
+    journey,
+    site,
+    rng: ctx.rng,
+    gambleGameId: "blackjack",
+  });
+  if (
+    generated?.runtime.kind !== "gamble" ||
+    generated.runtime.gameId !== "blackjack"
+  ) {
+    return null;
+  }
+
+  const nextRuntime: BlackjackSiteRuntime = {
+    ...generated.runtime,
+    attemptNumber: consumesAttempt
+      ? runtime.attemptNumber + 1
+      : runtime.attemptNumber,
+  };
+  return dealBlackjack(
+    withRuntime(journey, siteId, nextRuntime),
+    { siteId },
+  );
+}
+
 /**
  * Commit one chosen gate. The intent carries only the gate id; cost, draw,
  * threshold, payout, and Dreamsign handling derive from the locked runtime.

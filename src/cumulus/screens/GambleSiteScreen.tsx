@@ -5,7 +5,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { CardPickerPanel } from "../components/card/CardPickerPanel";
@@ -255,6 +255,8 @@ export interface TwentyOneSiteView {
   essenceAwarded: number;
   resultSettled: boolean;
   resultId: string | null;
+  /** Whether a settled push or eligible loss may start another paid hand. */
+  canPlayAgain: boolean;
   guide: GuideGalleryGuideView;
 }
 
@@ -301,9 +303,11 @@ export interface GambleSiteScreenProps {
   /** Reveal the next player card. */
   onHitTwentyOne?: () => void;
   /** Finish the player turn and resolve the dealer. */
-  onStandTwentyOne?: () => void;
-  /** Apply a terminal Twenty-One reward after its announcement appears. */
-  onTwentyOneOutcomeShown?: () => void;
+  onStandBlackjack?: () => void;
+  /** Apply a terminal Blackjack reward after its announcement appears. */
+  onBlackjackOutcomeShown?: () => void;
+  /** Start a fresh Blackjack hand after a settled push or eligible loss. */
+  onPlayAgainBlackjack?: () => void;
   /** Replace one UUID-identified held Dreamsign after a jackpot win. */
   onReplaceDreamsign: (dreamsignId: string) => void;
 }
@@ -329,8 +333,6 @@ const FOUR_SUIT_PANEL_RIM_HEIGHT = 2;
 const BLACKJACK_CARD_ARRIVAL_SECONDS = FADE_DURATION_SECONDS * 1.5;
 const BLACKJACK_CARD_ARRIVAL_MS =
   BLACKJACK_CARD_ARRIVAL_SECONDS * 1_000;
-const BLACKJACK_CARD_DEPARTURE_STAGGER_SECONDS =
-  BLACKJACK_CARD_ARRIVAL_SECONDS;
 const BLACKJACK_CARD_READING_MS = PLAYING_CARD_FLIP_DURATION_MS * 0.75;
 const BLACKJACK_CONCEALED_READING_MS = PLAYING_CARD_FLIP_DURATION_MS;
 const BLACKJACK_TURN_READING_MS = PLAYING_CARD_FLIP_DURATION_MS;
@@ -2011,12 +2013,13 @@ function StarwayStairsScreen({
 }
 
 type BlackjackHandOwner = "dealer" | "player";
+type BlackjackDeparturePhase = "idle" | "concealing" | "departing";
 
 interface BlackjackPresentationState {
   readonly playerCardCount: number;
   readonly dealerCardCount: number;
   readonly revealedCardKeys: readonly string[];
-  readonly departingCardKeys: readonly string[];
+  readonly departurePhase: BlackjackDeparturePhase;
   readonly outcomeResultId: string | null;
   readonly actionsVisible: boolean;
 }
@@ -2048,31 +2051,6 @@ function blackjackCardDisplaySize(
   );
 }
 
-function blackjackCardDepartureOrder(
-  view: BlackjackSiteView,
-): readonly string[] {
-  const arrivalOrder: string[] = [];
-  const appendCard = (owner: BlackjackHandOwner, index: number) => {
-    const cards = owner === "player" ? view.playerCards : view.dealerCards;
-    const card = cards[index];
-    if (card !== undefined) {
-      arrivalOrder.push(blackjackCardKey(owner, index, card));
-    }
-  };
-
-  appendCard("player", 0);
-  appendCard("dealer", 0);
-  appendCard("player", 1);
-  appendCard("dealer", 1);
-  for (let index = 2; index < view.playerCards.length; index += 1) {
-    appendCard("player", index);
-  }
-  for (let index = 2; index < view.dealerCards.length; index += 1) {
-    appendCard("dealer", index);
-  }
-  return arrivalOrder.reverse();
-}
-
 function BlackjackScreen({
   view,
   onDeal,
@@ -2093,7 +2071,7 @@ function BlackjackScreen({
     playerCardCount: 0,
     dealerCardCount: 0,
     revealedCardKeys: [],
-    departingCardKeys: [],
+    departurePhase: "idle",
     outcomeResultId: null,
     actionsVisible: view.playerCards.length === 0,
   });
@@ -2102,15 +2080,15 @@ function BlackjackScreen({
   const [decisionPending, setDecisionPending] = useState(false);
   const settledResultIdRef = useRef<string | null>(null);
   const onOutcomeShownRef = useRef(onOutcomeShown);
-  const playAgainTimeoutRef = useRef<number | null>(null);
+  const playAgainTimeoutsRef = useRef<number[]>([]);
 
   useEffect(() => {
     onOutcomeShownRef.current = onOutcomeShown;
   }, [onOutcomeShown]);
 
   useEffect(() => () => {
-    if (playAgainTimeoutRef.current !== null) {
-      window.clearTimeout(playAgainTimeoutRef.current);
+    for (const timeout of playAgainTimeoutsRef.current) {
+      window.clearTimeout(timeout);
     }
   }, []);
 
@@ -2129,7 +2107,7 @@ function BlackjackScreen({
           playerCardCount: 0,
           dealerCardCount: 0,
           revealedCardKeys: [],
-          departingCardKeys: [],
+          departurePhase: "idle",
           outcomeResultId: null,
           actionsVisible: view.playerCards.length === 0,
         }
@@ -2223,26 +2201,32 @@ function BlackjackScreen({
     return () => window.clearTimeout(timeout);
   }, [outcomeResultId, view.resultId, view.resultSettled]);
 
-  const departureOrder = blackjackCardDepartureOrder(view);
-  const departureIndexByKey = new Map(
-    departureOrder.map((key, index) => [key, index]),
-  );
-
   const beginPlayAgain = () => {
     if (decisionPending) return;
     setDecisionPending(true);
     commitPresentation({
       ...presentationRef.current,
       actionsVisible: false,
-      departingCardKeys: departureOrder,
+      departurePhase: "concealing",
     });
+    const concealDurationMs = reduceMotion
+      ? REDUCED_MOTION_DELAY_MS
+      : PLAYING_CARD_FLIP_DURATION_MS;
     const departureDurationMs = reduceMotion
       ? REDUCED_MOTION_DELAY_MS
-      : departureOrder.length * BLACKJACK_CARD_ARRIVAL_MS;
-    playAgainTimeoutRef.current = window.setTimeout(() => {
-      playAgainTimeoutRef.current = null;
-      onPlayAgain();
-    }, departureDurationMs);
+      : BLACKJACK_CARD_ARRIVAL_MS;
+    playAgainTimeoutsRef.current = [
+      window.setTimeout(() => {
+        commitPresentation({
+          ...presentationRef.current,
+          departurePhase: "departing",
+        });
+      }, concealDurationMs),
+      window.setTimeout(() => {
+        playAgainTimeoutsRef.current = [];
+        onPlayAgain();
+      }, concealDurationMs + departureDurationMs),
+    ];
   };
 
   const renderHand = (
@@ -2254,9 +2238,6 @@ function BlackjackScreen({
       ? presentation.playerCardCount
       : presentation.dealerCardCount;
     const visibleCards = cards.slice(0, visibleCardCount);
-    const cardsInLayout = presentation.departingCardKeys.length > 0
-      ? []
-      : visibleCards;
     const revealedKeys = new Set(presentation.revealedCardKeys);
     const faceUpCards = visibleCards.filter((card, index) =>
       revealedKeys.has(blackjackCardKey(owner, index, card))
@@ -2298,96 +2279,108 @@ function BlackjackScreen({
             gap: BLACKJACK_HAND_GAP_PX,
           }}
         >
-          <AnimatePresence>
-            {cardsInLayout.map((card, index) => {
-              const key = blackjackCardKey(owner, index, card);
-              const revealed = revealedKeys.has(key);
-              const departureIndex = departureIndexByKey.get(key) ?? 0;
-              return (
-                <motion.div
-                  key={key}
-                  layout
-                  data-blackjack-card={`${owner}:${String(index)}`}
-                  data-blackjack-card-revealed={revealed ? "true" : "false"}
-                  data-blackjack-card-display-size={cardDisplaySize}
-                  data-blackjack-card-departure-order={departureIndex}
-                  initial={
-                    reduceMotion
-                      ? false
-                      : {
-                          y: token("--space-5xl"),
-                          scale: 0.78,
-                        }
-                  }
-                  animate={{ y: 0, scale: 1 }}
-                  exit={
-                    reduceMotion
-                      ? { y: 0, scale: 1, transition: { duration: 0 } }
-                      : {
-                          y: token("--space-5xl"),
-                          scale: 0.78,
-                          transition: {
-                            duration: BLACKJACK_CARD_ARRIVAL_SECONDS,
-                            delay:
-                              departureIndex *
-                              BLACKJACK_CARD_DEPARTURE_STAGGER_SECONDS,
-                            ease: DREAM_EASE,
-                          },
-                        }
-                  }
-                  transition={{
-                    duration: reduceMotion ? 0 : BLACKJACK_CARD_ARRIVAL_SECONDS,
+          {visibleCards.map((card, index) => {
+            const key = blackjackCardKey(owner, index, card);
+            const revealed = revealedKeys.has(key) &&
+              presentation.departurePhase === "idle";
+            const isDeparting = presentation.departurePhase === "departing";
+            return (
+              <motion.div
+                key={key}
+                layout
+                data-blackjack-card={`${owner}:${String(index)}`}
+                data-blackjack-card-revealed={revealed ? "true" : "false"}
+                data-blackjack-card-display-size={cardDisplaySize}
+                data-blackjack-card-departure-phase={
+                  presentation.departurePhase
+                }
+                initial={
+                  reduceMotion
+                    ? false
+                    : {
+                        y: token("--space-5xl"),
+                        scale: 0.78,
+                      }
+                }
+                animate={
+                  isDeparting
+                    ? { y: token("--space-5xl"), scale: 0.78 }
+                    : { y: 0, scale: 1 }
+                }
+                transition={{
+                  duration: reduceMotion ? 0 : BLACKJACK_CARD_ARRIVAL_SECONDS,
+                  ease: DREAM_EASE,
+                  layout: {
+                    duration: reduceMotion
+                      ? 0
+                      : BLACKJACK_CARD_ARRIVAL_SECONDS,
                     ease: DREAM_EASE,
-                    layout: {
-                      duration: reduceMotion
-                        ? 0
-                        : BLACKJACK_CARD_ARRIVAL_SECONDS,
-                      ease: DREAM_EASE,
-                    },
+                  },
+                }}
+                style={{
+                  position: "relative",
+                  width: cardDisplaySize,
+                  height: cardDisplaySize,
+                  flex: "0 0 auto",
+                }}
+              >
+                <motion.div
+                  initial={false}
+                  animate={{ scale: cardScale }}
+                  transition={{
+                    duration: reduceMotion
+                      ? 0
+                      : BLACKJACK_CARD_ARRIVAL_SECONDS,
+                    ease: DREAM_EASE,
                   }}
                   style={{
-                    position: "relative",
-                    width: cardDisplaySize,
-                    height: cardDisplaySize,
-                    flex: "0 0 auto",
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    width: PLAYING_CARD_DESIGN.sizes.wagerCompact.square,
+                    height: PLAYING_CARD_DESIGN.sizes.wagerCompact.square,
+                    translate: "-50% -50%",
                   }}
                 >
-                  <motion.div
-                    initial={false}
-                    animate={{ scale: cardScale }}
-                    transition={{
-                      duration: reduceMotion
-                        ? 0
-                        : BLACKJACK_CARD_ARRIVAL_SECONDS,
-                      ease: DREAM_EASE,
-                    }}
-                    style={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      width: PLAYING_CARD_DESIGN.sizes.wagerCompact.square,
-                      height: PLAYING_CARD_DESIGN.sizes.wagerCompact.square,
-                      translate: "-50% -50%",
-                    }}
-                  >
-                    <PlayingCard
-                      variant="faceDown"
-                      drawnCard={card}
-                      revealDrawnCard={revealed}
-                      size="wagerCompact"
-                    />
-                  </motion.div>
+                  <PlayingCard
+                    variant="faceDown"
+                    drawnCard={card}
+                    revealDrawnCard={revealed}
+                    size="wagerCompact"
+                  />
                 </motion.div>
-              );
-            })}
-          </AnimatePresence>
+              </motion.div>
+            );
+          })}
           <motion.div
-            key={`${owner}:${String(index)}:${card.rank}:${card.suit}`}
-            data-twenty-one-card={`${owner}:${String(index)}`}
-            initial={reduceMotion ? false : { opacity: 0, y: token("--space-l"), scale: 0.82 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: FADE_DURATION_SECONDS, ease: DREAM_EASE }}
-            style={{ flex: "0 0 auto" }}
+            layout
+            aria-hidden={visibleTotal === null ? true : undefined}
+            data-blackjack-total={owner}
+            data-blackjack-total-value={visibleTotal ?? undefined}
+            data-blackjack-total-slot={owner}
+            data-blackjack-total-departure-phase={
+              presentation.departurePhase
+            }
+            animate={
+              presentation.departurePhase === "departing"
+                ? { y: token("--space-5xl"), scale: 0.78 }
+                : { y: 0, scale: 1 }
+            }
+            style={{
+              width: BLACKJACK_TOTAL_SIZE[layout],
+              height: BLACKJACK_TOTAL_SIZE[layout],
+              flex: "0 0 auto",
+              display: "grid",
+              placeItems: "center",
+            }}
+            transition={{
+              duration: reduceMotion ? 0 : BLACKJACK_CARD_ARRIVAL_SECONDS,
+              ease: DREAM_EASE,
+              layout: {
+                duration: reduceMotion ? 0 : BLACKJACK_CARD_ARRIVAL_SECONDS,
+                ease: DREAM_EASE,
+              },
+            }}
           >
             {holeCard ? (
               <PlayingCard
@@ -2448,9 +2441,7 @@ function BlackjackScreen({
         >
           <div
             data-blackjack-table=""
-            data-blackjack-cards-departing={
-              presentation.departingCardKeys.length > 0 ? "true" : "false"
-            }
+            data-blackjack-departure-phase={presentation.departurePhase}
             style={{
               margin: 0,
               color: token("--text-primary"),
