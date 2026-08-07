@@ -166,6 +166,10 @@ export interface EventPayloads {
   HIT_TWENTY_ONE: { siteId: string };
   STAND_TWENTY_ONE: { siteId: string };
   SETTLE_TWENTY_ONE: { siteId: string; shuffleCommitment: string };
+  PLAY_AGAIN_TWENTY_ONE: {
+    siteId: string;
+    previousShuffleCommitment: string;
+  };
 
   // --- merchant & shop ---
   ACCEPT_MERCHANT_OFFER: { siteId: string; offer?: unknown };
@@ -374,6 +378,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   HIT_TWENTY_ONE: true,
   STAND_TWENTY_ONE: true,
   SETTLE_TWENTY_ONE: true,
+  PLAY_AGAIN_TWENTY_ONE: true,
   ACCEPT_MERCHANT_OFFER: true,
   DECLINE_MERCHANT: true,
   BUY_SHOP_SLOT: true,

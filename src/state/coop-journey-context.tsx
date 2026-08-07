@@ -388,6 +388,14 @@ export function CoopJourneyProvider({
             stateRef.current.runId ?? undefined,
           ),
         ),
+      playAgainTwentyOne: (siteId, previousShuffleCommitment) =>
+        dispatch(
+          actions.playAgainTwentyOne(
+            siteId,
+            previousShuffleCommitment,
+            stateRef.current.runId ?? undefined,
+          ),
+        ),
       acceptRewardSite: (siteId, purgeIndex) => {
         // ACCEPT_REWARD's reducer reads `purgeIndex` (the at-cap Dreamsign
         // replace slot), which the typed facade does not carry.

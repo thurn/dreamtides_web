@@ -14,8 +14,8 @@ describe("reducer compatibility", () => {
 
   it("requires rooms to use v17", () => {
     expect(COMPATIBLE_LEGACY_REDUCER_VERSIONS.size).toBe(0);
-    expect(classifyReducerVersion("dreamtides-coop-v17")).toBe("incompatible");
-    expect(isReducerVersionCompatible("dreamtides-coop-v17")).toBe(false);
+    expect(classifyReducerVersion("dreamtides-coop-v18")).toBe("incompatible");
+    expect(isReducerVersionCompatible("dreamtides-coop-v18")).toBe(false);
   });
 
   it("rejects an unreviewed reducer identity", () => {

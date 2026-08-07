@@ -117,6 +117,11 @@ export interface JourneyMutations {
   standTwentyOne: (siteId: string) => void;
   /** Apply the visible hand outcome. */
   settleTwentyOne: (siteId: string, shuffleCommitment: string) => void;
+  /** Start and pay for a fresh hand after a settled push. */
+  playAgainTwentyOne: (
+    siteId: string,
+    previousShuffleCommitment: string,
+  ) => void;
   ensureRewardSiteRuntime: (siteId: string) => void;
   /**
    * Accepts the Dreamsign Reward at the given site. When the player is at the

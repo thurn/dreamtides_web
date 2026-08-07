@@ -137,6 +137,7 @@ function apply(
     | "HIT_TWENTY_ONE"
     | "STAND_TWENTY_ONE"
     | "SETTLE_TWENTY_ONE"
+    | "PLAY_AGAIN_TWENTY_ONE"
     | "COMPLETE_SITE",
   payload: Record<string, unknown>,
 ) {
@@ -1359,6 +1360,40 @@ describe("Twenty-One", () => {
     expect(settled.state.journey.essence).toBe(200);
     expect(settled.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       essenceAwarded: 40,
+    });
+
+    registerSiteContentProvider({
+      economyData: ECONOMY,
+      openSite: () => ({
+        runtime: twentyOneRuntime(
+          [
+            { rank: "10", suit: "hearts" },
+            { rank: "9", suit: "clubs" },
+            { rank: "5", suit: "spades" },
+            { rank: "7", suit: "diamonds" },
+          ],
+          {
+            isFarpoint: true,
+            wagerCost: 40,
+            shuffleCommitment: "next-twenty-one-hand",
+          },
+        ),
+      }),
+    });
+    const replayed = apply(settled.state, "PLAY_AGAIN_TWENTY_ONE", {
+      siteId: SITE_ID,
+      previousShuffleCommitment: "twenty-one-hand",
+    });
+    expect(replayed.outcome).toBe("applied");
+    expect(replayed.state.journey.essence).toBe(160);
+    expect(replayed.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      shuffleCommitment: "next-twenty-one-hand",
+      wagerPaid: true,
+      deckCursor: 4,
+      playerCards: [{ rank: "10" }, { rank: "5" }],
+      dealerCards: [{ rank: "9" }, { rank: "7" }],
+      outcome: null,
+      resultSettled: false,
     });
   });
 });

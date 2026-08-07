@@ -28,9 +28,9 @@ export const wagerPrizeCardDemo: CumulusComponent = {
   id: "wager-prize-card",
   title: "Wager Prize Card",
   blurb:
-    "The shared threshold-game prize object: a playing-card superellipse with a reward face and a committed-card reverse face.",
+    "The shared Gamble reward object: a playing-card superellipse with threshold-and-reverse or flat-reward presentations.",
   callout:
-    "Keep the reward in one sentence and use PlayingCard for a standalone playing-card face.",
+    "Use the flat-reward presentation when the game has one persistent prize instead of a draw threshold.",
   details: [
     "When a Dreamsign is present, the entire prize face is its hover and press reveal source.",
   ],
@@ -46,6 +46,16 @@ export const wagerPrizeCardDemo: CumulusComponent = {
   essenceReward={200}
   rewardDreamsign={dreamsign}
   drawnCard={null}
+/>
+`,
+    },
+    {
+      label: "Flat reward",
+      code: `<WagerPrizeCard
+  prizeId="twenty-one"
+  presentation="rewardOnly"
+  essenceReward={300}
+  rewardDreamsign={null}
 />
 `,
     },

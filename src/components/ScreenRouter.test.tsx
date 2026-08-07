@@ -250,6 +250,7 @@ function makeMutations(): JourneyMutations {
     hitTwentyOne: vi.fn(),
     standTwentyOne: vi.fn(),
     settleTwentyOne: vi.fn(),
+    playAgainTwentyOne: vi.fn(),
     drawTidemarkLadderClimb: vi.fn(),
     settleTidemarkLadderClimb: vi.fn(),
     replaceTidemarkLadderClimbDreamsign: vi.fn(),

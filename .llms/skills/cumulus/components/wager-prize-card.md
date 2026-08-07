@@ -8,9 +8,9 @@ Components · Live demo & interactive props: `/cumulus#/wager-prize-card`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The shared threshold-game prize object: a playing-card superellipse with a reward face and a committed-card reverse face.
+The shared Gamble reward object: a playing-card superellipse with threshold-and-reverse or flat-reward presentations.
 
-> **Guidance:** Keep the reward in one sentence and use PlayingCard for a standalone playing-card face.
+> **Guidance:** Use the flat-reward presentation when the game has one persistent prize instead of a draw threshold.
 
 When a Dreamsign is present, the entire prize face is its hover and press reveal source.
 
@@ -18,15 +18,16 @@ When a Dreamsign is present, the entire prize face is its hover and press reveal
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `prizeId` | `WagerPrizeCardId` = `"six" \| "nine" \| "jack" \| "ladder-climb" \| "starway-1" \| "starway-2" \| "starway-3"` | yes | — | Stable Gamble choice represented by this prize object. |
-| `targetLabel` | `string` | yes | — | Draw condition shown as authored compact notation. |
+| `prizeId` | `WagerPrizeCardId` = `"six" \| "nine" \| "jack" \| "ladder-climb" \| "starway-1" \| "starway-2" \| "starway-3" \| "twenty-one"` | yes | — | Stable Gamble choice represented by this prize object. |
 | `size` | `WagerPrizeCardSize` = `"wagerCompact" \| "wager"` | no | — | Named desktop or mobile square size. Defaults to `wager`. |
-| `drawnCard` | `{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } \| null` | yes | — | Committed card shown on the reverse face after a bet. |
-| `revealDrawnCard` | `boolean` | no | — | Turn the prize face over to its committed card. |
 | `dreamsignTestId` | `string` | no | — | Optional stable selector for the prize Dreamsign name. |
 | `emphasis` | `WagerPrizeCardEmphasis` = `"standard" \| "current" \| "muted"` | no | — | Accent current tier, foreground-muted alternative, or standard priority. |
 | `essenceReward` | `number` | yes | — | Essence awarded on a win. |
 | `rewardDreamsign` | `Dreamsign \| null` | yes | — | Dreamsign appended to the Essence reward, when present. |
+| `presentation` | `"threshold" \| "rewardOnly"` | no | — | Show the standard target condition and reward face. Show one centered flat reward without a draw condition or reverse face. |
+| `targetLabel` | `string` | no | — | Draw condition shown as authored compact notation. |
+| `drawnCard` | `{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } \| null` | no | — | Committed card shown on the reverse face after a bet. |
+| `revealDrawnCard` | `boolean` | no | — | Turn the prize face over to its committed card. |
 
 ## Usage
 
@@ -39,6 +40,18 @@ When a Dreamsign is present, the entire prize face is its hover and press reveal
   essenceReward={200}
   rewardDreamsign={dreamsign}
   drawnCard={null}
+/>
+
+```
+
+### Flat reward
+
+```tsx
+<WagerPrizeCard
+  prizeId="twenty-one"
+  presentation="rewardOnly"
+  essenceReward={300}
+  rewardDreamsign={null}
 />
 
 ```

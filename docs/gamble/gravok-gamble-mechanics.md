@@ -216,8 +216,8 @@ outcomes, replay limit, and odds are unchanged.
 
 ## 5. Twenty-One
 
-Twenty-One is one hand of blackjack against Gravok. The player wagers 50
-Essence, then the player and dealer each receive two cards from one shuffled
+Twenty-One is blackjack against Gravok. The player wagers 50 Essence for each
+hand, then the player and dealer each receive two cards from one shuffled
 52-card shoe. The dealer shows the first card and keeps the second face down.
 Every card occupies its own squircle tile. Aces count as 1 or 11 to make the
 highest total at or below 21; J, Q, and K count as 10.
@@ -231,13 +231,18 @@ stands on every 17 including soft 17.
 | Outcome | Result |
 | --- | --- |
 | Player total beats the dealer, or dealer busts | Gain 300 Essence. |
-| Equal totals | Refund the wager. |
+| Equal totals | Refund the wager and offer a fresh hand. |
 | Dealer total beats the player, or player busts | No reward. |
 
-The player and dealer totals share the screen title, with the concealed dealer
-card represented as `+ ?` until its reveal. Exact enumeration of the 52-card
-shoe without replacement gives optimal play a 43.80% win rate, 7.95% push rate,
-and 48.25% loss rate. The ordinary site's net value is +85.38 Essence EV.
+The flat reward occupies a centered squircle tile. Each unlabeled running total
+sits to the right of its hand. Cards enter one at a time in deal order with the
+face-down side showing, then flip to their visible face; the dealer's hole card
+waits for the dealer turn. Reading holds separate each card, the dealer reveal
+and draws, and the result announcement.
+
+Exact enumeration of the 52-card shoe without replacement gives optimal play a
+43.80% win rate, 7.95% push rate, and 48.25% loss rate per hand. Replaying every
+push gives the ordinary site +92.76 Essence EV across the complete visit.
 
 ### Farpoint Station
 

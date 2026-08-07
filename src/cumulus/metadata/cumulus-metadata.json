@@ -4463,19 +4463,12 @@
         "ladder-climb",
         "starway-1",
         "starway-2",
-        "starway-3"
+        "starway-3",
+        "twenty-one"
       ],
       "required": true,
       "defaultValue": null,
       "description": "Stable Gamble choice represented by this prize object."
-    },
-    {
-      "name": "targetLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Draw condition shown as authored compact notation."
     },
     {
       "name": "size",
@@ -4487,22 +4480,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Named desktop or mobile square size. Defaults to `wager`."
-    },
-    {
-      "name": "drawnCard",
-      "tsType": "{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } | null",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Committed card shown on the reverse face after a bet."
-    },
-    {
-      "name": "revealDrawnCard",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Turn the prize face over to its committed card."
     },
     {
       "name": "dreamsignTestId",
@@ -4539,6 +4516,41 @@
       "required": true,
       "defaultValue": null,
       "description": "Dreamsign appended to the Essence reward, when present."
+    },
+    {
+      "name": "presentation",
+      "tsType": "\"threshold\" | \"rewardOnly\"",
+      "unionMembers": [
+        "threshold",
+        "rewardOnly"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "Show the standard target condition and reward face.\nShow one centered flat reward without a draw condition or reverse face."
+    },
+    {
+      "name": "targetLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Draw condition shown as authored compact notation."
+    },
+    {
+      "name": "drawnCard",
+      "tsType": "{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } | null",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Committed card shown on the reverse face after a bet."
+    },
+    {
+      "name": "revealDrawnCard",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Turn the prize face over to its committed card."
     }
   ]
 }
