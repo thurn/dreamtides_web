@@ -1,23 +1,10 @@
 import type { CardId } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type {
-  AffinityCorpus,
   GeneratedPool,
-  TideDecksJson,
-  TideRelationshipsJson,
-  Tides3DecksJson,
   Tides4DecksJson,
-  Tides5DecksJson,
 } from "../draft/pool";
-import {
-  deserializeCorpus,
-  validateTideDecks,
-  validateTideRelationships,
-  validateTides3Decks,
-  validateTides4Decks,
-  validateTides5Decks,
-} from "../draft/pool";
-import type { AffinityCorpusJson } from "../draft/pool";
+import { validateTides4Decks } from "../draft/pool";
 
 /**
  * Fetches the experimental v2 card pool (generated from `cards.toml` by
@@ -41,25 +28,9 @@ export async function loadCardsV2Database(): Promise<Map<number, CardData>> {
 }
 
 /**
- * Fetch the bundled real decklists (each seat's mainboard from
- * `docs/draft_records_adapted`, written to `/decklists-data.json` by
- * `scripts/setup-assets.mjs`) used by the `decklists`, `idf`, `idf2`, and `idf3`
- * pool variants. Each inner array is one deck's card names. Returns an empty
- * array if the bundle is missing so the harness still loads (the variant then
- * falls back to the `default` algorithm).
- */
-export async function loadDecklists(): Promise<string[][]> {
-  const response = await fetch("/decklists-data.json");
-  if (!response.ok) return [];
-  return (await response.json()) as string[][];
-}
-
-/**
- * Fetch the id-keyed real decklists (the same per-seat mainboards as
- * {@link loadDecklists}, but each inner array is the cards' stable cards_v2
+ * Fetch the id-keyed real decklists. Each inner array contains stable cards_v2
  * UUIDs, lowercased, written to `/decklist-ids-data.json` by
- * `scripts/setup-assets.mjs`). The IDF-cosine pool engine (`idf`/`idf2`/`idf3`/
- * `idf4`) and the affiliation reweighting score on this corpus so two distinct
+ * `scripts/setup-assets.mjs`. Affiliation reweighting scores on this corpus so two distinct
  * cards that share a display name stay distinct.
  */
 export async function loadDecklistIds(): Promise<string[][]> {
@@ -78,8 +49,7 @@ export async function loadDecklistIds(): Promise<string[][]> {
  * `picks` are aligned arrays of length 30 (10 picks per pack × 3 packs); their
  * entries are CURRENT display names, refreshed from each card's stable id at
  * bundle time. `packIds`/`pickIds` carry the matching cards_v2 UUIDs, aligned
- * index-for-index, so a rename-stable consumer (the `pickfit` pool variant) can
- * key on ids instead of names.
+ * index-for-index.
  */
 export interface DraftRecord {
   id: string;
@@ -140,57 +110,6 @@ export async function loadKnownGoodDecklists(): Promise<KnownGoodDecklist[]> {
 }
 
 /**
- * Fetch the committed affinity corpus (`data/affinity_corpus.jsonc`, copied to
- * `/affinity-corpus-data.json` by `scripts/setup-assets.mjs`) and reconstruct the
- * {@link AffinityCorpus} the `embedded` pool variant grows from. Returns `null`
- * if the asset is missing so the caller can surface a clear configuration error
- * when the variant runs.
- */
-export async function loadAffinityCorpus(): Promise<AffinityCorpus | null> {
-  const response = await fetch("/affinity-corpus-data.json");
-  if (!response.ok) return null;
-  const json = (await response.json()) as AffinityCorpusJson;
-  return deserializeCorpus(json);
-}
-
-/**
- * Fetch the committed tide decks (`data/tides.jsonc`, copied to
- * `/tides-data.json` by `scripts/setup-assets.mjs`) the `tides` pool variant
- * combines into pools. Returns `null` if the asset is missing so the caller
- * can surface a clear configuration error when the variant runs.
- */
-export async function loadTideDecks(): Promise<TideDecksJson | null> {
-  const response = await fetch("/tides-data.json");
-  if (!response.ok) return null;
-  return validateTideDecks(await response.json());
-}
-
-/**
- * Fetch the committed `tides2` tide decks (`data/tides2.jsonc`, copied to
- * `/tides2-data.json` by `scripts/setup-assets.mjs`) the `tides2` pool variant
- * combines into pools. Returns `null` if the asset is missing so the caller can
- * surface a clear configuration error when the variant runs.
- */
-export async function loadTides2Decks(): Promise<TideDecksJson | null> {
-  const response = await fetch("/tides2-data.json");
-  if (!response.ok) return null;
-  return validateTideDecks(await response.json());
-}
-
-/**
- * Fetch the committed `tides3` artifact (`data/tides3.jsonc`, copied to
- * `/tides3-data.json` by `scripts/setup-assets.mjs`) the `tides3` pool variant
- * combines into pools — the 32 tide decks and the per-DreamAvatar tide pools in
- * one file. Returns `null` if the asset is missing so the caller can surface a
- * clear configuration error when the variant runs.
- */
-export async function loadTides3Decks(): Promise<Tides3DecksJson | null> {
-  const response = await fetch("/tides3-data.json");
-  if (!response.ok) return null;
-  return validateTides3Decks(await response.json());
-}
-
-/**
  * Fetch the committed `tides4` artifact (`data/tides4.jsonc`, copied to
  * `/tides4-data.json` by `scripts/setup-assets.mjs`) the `tides4` pool variant
  * combines into pools — the signature, facet, and neutral tide decks and the
@@ -201,37 +120,6 @@ export async function loadTides4Decks(): Promise<Tides4DecksJson | null> {
   const response = await fetch("/tides4-data.json");
   if (!response.ok) return null;
   return validateTides4Decks(await response.json());
-}
-
-/**
- * Fetch the committed `tides5` artifact (`data/tides5.jsonc`, copied to
- * `/tides5-data.json` by `scripts/setup-assets.mjs`) the `tides5` pool variant
- * combines into pools — the signature, facet, and neutral tide decks and the
- * per-DreamAvatar tide pools in one file, baked only from the known-good
- * decklists. Returns `null` if the asset is missing so the caller can surface a
- * clear configuration error when the variant runs.
- */
-export async function loadTides5Decks(): Promise<Tides5DecksJson | null> {
-  const response = await fetch("/tides5-data.json");
-  if (!response.ok) return null;
-  return validateTides5Decks(await response.json());
-}
-
-/**
- * Fetch the committed `tides2` relationships (`data/tides2_relationships.jsonc`,
- * copied to `/tides2-relationships-data.json` by `scripts/setup-assets.mjs`) the
- * `tides2` pool variant steers selection by, validated against the tide ids in
- * `tideDecks`. Returns `null` if the asset is missing so the caller can surface
- * a clear configuration error when the variant runs. A dangling tide id (e.g. a
- * relationships file stale against a re-baked `tides2.jsonc`) throws.
- */
-export async function loadTides2Relationships(
-  tideDecks: TideDecksJson,
-): Promise<TideRelationshipsJson | null> {
-  const response = await fetch("/tides2-relationships-data.json");
-  if (!response.ok) return null;
-  const tideIds = new Set(tideDecks.tides.map((t) => t.id));
-  return validateTideRelationships(await response.json(), tideIds);
 }
 
 /**

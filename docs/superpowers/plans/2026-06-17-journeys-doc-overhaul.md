@@ -306,7 +306,7 @@ In `affiliation-weights.test.ts` assert the **contract**, using live card data +
 - Reweighting **never removes membership**: applying weights to a candidate list keeps every candidate selectable (no weight is 0). *(Catches the doc's "any card can still appear" rule.)*
 - A statistical property: over many weighted draws from a fixed pool, affiliated cards appear strictly more often than in unweighted draws from the same pool/seed. *(Catches the reweighting not actually biasing draws.)*
 
-Reuse the existing IDF/similarity machinery in `src/draft/pool/variant-idf*.ts` — do not write a new similarity metric. Find the exported similarity/IDF function there and build on it.
+Reuse the existing IDF/similarity machinery in `src/draft/idf-fit.ts` — do not write a new similarity metric. Find the exported similarity/IDF function there and build on it.
 
 - [ ] **Step 2: Run; verify failure.** Expected: FAIL.
 

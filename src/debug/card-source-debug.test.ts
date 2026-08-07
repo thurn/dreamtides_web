@@ -39,12 +39,11 @@ function makeResolvedPackage(): ResolvedDreamAvatarPackage {
     doubledCardCount: 10,
     legalSubsetCount: 1,
     preferredSubsetCount: 1,
-    starterDecklistCardNumbers: [1],
   };
 }
 
 describe("buildCardSourceDebugState", () => {
-  it("flags cards that belong to the dreamAvatar's starter decklist", () => {
+  it("reports zero copies for cards outside the draft pool", () => {
     const result = buildCardSourceDebugState(
       "Draft Picks",
       "Draft",
@@ -59,7 +58,6 @@ describe("buildCardSourceDebugState", () => {
         {
           cardNumber: 1,
           cardName: "Lantern Witness",
-          inStarterDecklist: true,
           draftPoolCopies: 0,
         },
       ],
@@ -78,19 +76,17 @@ describe("buildCardSourceDebugState", () => {
       {
         cardNumber: 2,
         cardName: "Banner Patrol",
-        inStarterDecklist: false,
         draftPoolCopies: 2,
       },
       {
         cardNumber: 7,
         cardName: "Wandering Relic",
-        inStarterDecklist: false,
         draftPoolCopies: 1,
       },
     ]);
   });
 
-  it("reports zero copies for cards outside the draft pool", () => {
+  it("reports zero copies for another card outside the draft pool", () => {
     const result = buildCardSourceDebugState(
       "Shop Offers",
       "Shop",
@@ -101,7 +97,6 @@ describe("buildCardSourceDebugState", () => {
     expect(result?.entries[0]).toEqual({
       cardNumber: 9,
       cardName: "Outsider Wisp",
-      inStarterDecklist: false,
       draftPoolCopies: 0,
     });
   });
@@ -117,7 +112,6 @@ describe("buildCardSourceDebugState", () => {
     expect(result?.entries[0]).toEqual({
       cardNumber: 3,
       cardName: "Stray Echo",
-      inStarterDecklist: false,
       draftPoolCopies: 0,
     });
   });

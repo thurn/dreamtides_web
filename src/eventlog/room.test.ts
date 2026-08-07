@@ -120,7 +120,7 @@ describe("shouldEvict (stale-room eviction boundary)", () => {
 describe("genesisLogNode (createRoom's written node)", () => {
   it("writes genesis.contentConfig verbatim", () => {
     const contentConfig: ContentConfig = {
-      poolVariant: "idf3",
+      poolVariant: "tides4",
       draftMode: "fresh20",
       fresh20PackSize: 20,
     };

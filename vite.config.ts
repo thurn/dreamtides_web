@@ -907,15 +907,11 @@ export default defineConfig({
     watch: {
       // The card editor APIs write card and tag TOML files under data/tabula
       // (via temp-file swaps) and regenerate the generated card data on every
-      // save. regenerateCardData() writes three files: the two public card
-      // JSON catalogs (public/card-data.json and public/cards_v2-data.json) and
-      // data/buildaround_support.json, whose per-card name fields are refreshed
-      // from the current card names (so a rename rewrites it). Files in public/
+      // save. regenerateCardData() writes the two public card JSON catalogs
+      // (public/card-data.json and public/cards_v2-data.json). Files in public/
       // are not part of the module graph, but Vite still forces a full page
-      // reload whenever any public/ file changes, and data/buildaround_support
-      // .json sits outside data/tabula so it is otherwise watched too. The two
-      // catalogs are listed in generatedCardDataWatchPaths below and
-      // buildaround_support.json is ignored just below; ignoring all three keeps
+      // reload whenever any public/ file changes. The two catalogs are listed in
+      // generatedCardDataWatchPaths below; ignoring them keeps
       // an editor save from reloading the page, closing the art editor mid-edit,
       // and discarding inline edits.
       //
@@ -941,10 +937,6 @@ export default defineConfig({
         path.resolve(path.join(__dirname, "saved-journeys")) + "/**",
         path.resolve(path.join(__dirname, ".worktrees")) + "/**",
         path.resolve(path.join(__dirname, ".claude", "worktrees")) + "/**",
-        // Regenerated on every card save (its per-card name fields track the
-        // current card names), so a rename rewrites it; ignore it so the save
-        // does not trigger a full page reload that closes the art editor.
-        path.resolve(path.join(__dirname, "data", "buildaround_support.json")),
         // The dreamAvatar editor writes data/tides4.jsonc (tide-pool edits) and
         // regenerates the public dream-avatar/tides4 JSON catalogs on every save.
         // tides4.jsonc sits outside data/tabula and the JSON outputs live under
@@ -953,12 +945,6 @@ export default defineConfig({
         path.resolve(path.join(__dirname, "data", "tides4.jsonc")),
         path.resolve(path.join(__dirname, "public", "dream-avatars-v2-data.json")),
         path.resolve(path.join(__dirname, "public", "tides4-data.json")),
-        // The tides editor (/tides) writes data/tides<n>.jsonc annotation edits
-        // and regenerates the matching public/tides<n>-data.json on every save;
-        // ignore the tides5 pair (the tides4 pair is already ignored above) so an
-        // editor save does not trigger a full page reload mid-edit.
-        path.resolve(path.join(__dirname, "data", "tides5.jsonc")),
-        path.resolve(path.join(__dirname, "public", "tides5-data.json")),
         // The Dreamwell editor regenerates public/dreamwell-data.json on every
         // save; ignore it so an editor save does not trigger a full page reload
         // that closes the open card editor mid-edit.

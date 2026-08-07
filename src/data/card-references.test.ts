@@ -1,8 +1,7 @@
 // Guards the UUID-keyed card-reference systems against drift. Every hand-authored
 // place that names cards in data — the `signature-cards` in
-// `dream_avatars.toml`, the tutorial journey pool, the pool metadata in
-// `cards-v2-metadata.ts`, and the build-around metadata in
-// `buildaround_support.json` — references cards by their stable `id` UUID from
+// `dream_avatars.toml` and the tutorial journey pool reference cards by stable
+// UUID from
 // `cards.toml`. These tests fail if any reference points at a UUID that is not
 // a real card, so renaming a card can never silently desynchronize one of these
 // files. (The adapted draft records in
@@ -14,9 +13,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { parse as parseToml } from "smol-toml";
-import { CARDS_V2_POOL_METADATA } from "./cards-v2-metadata";
 import { STARTER_CARD_NUMBERS } from "./starter-cards";
-import buildaroundSupport from "../../data/buildaround_support.json" with { type: "json" };
 
 const ROOT = process.cwd();
 const TABULA = join(ROOT, "data", "tabula");
@@ -98,26 +95,5 @@ describe("card references resolve to real cards", () => {
       readFileSync(join(TABULA, "cards.tags.toml"), "utf8"),
     ) as { tags?: Array<{ name?: string }> };
     expect(tagRegistry.tags?.some((tag) => tag.name === "tutorial")).toBe(true);
-  });
-
-  it("every pool-metadata key is a real card UUID", () => {
-    const keys = Object.keys(CARDS_V2_POOL_METADATA);
-    expect(keys.length).toBeGreaterThan(0);
-    for (const key of keys) expectCard("cards-v2-metadata.ts", key);
-  });
-
-  it("every build-around key is a real card UUID with a current name", () => {
-    const entries = Object.entries(
-      buildaroundSupport.cards as Record<string, { name?: string }>,
-    );
-    expect(entries.length).toBeGreaterThan(0);
-    for (const [key, entry] of entries) {
-      const name = expectCard("buildaround_support.json", key);
-      // The name field is the lookup key idf4 / the experiment harness use, so it
-      // must match the current card name (refreshed by setup-assets on build).
-      expect(entry.name, `buildaround_support.json[${key}] name drifted`).toBe(
-        name,
-      );
-    }
   });
 });

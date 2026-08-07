@@ -45,12 +45,9 @@ describe("generated card data drift Vite integration", () => {
     // reload the page. The .worktrees and
     // .claude/worktrees directories are ignored so creating a git worktree
     // (which writes a full repo copy, including a tsconfig.json) does not force
-    // a full reload. buildaround_support.json (regenerated on every card save),
-    // data/tides4.jsonc, and the public dream-avatar/tides4 JSON catalogs (all
+    // a full reload. data/tides4.jsonc and the public dream-avatar/tides4 JSON catalogs (all
     // rewritten by the dreamAvatar editor) are ignored so those editor saves do
-    // not reload the page either. The tides5 artifact and its public JSON catalog
-    // (rewritten by the tides editor when editing tides5) are ignored for the same
-    // reason. Exploration's canonical templates and generated public catalog
+    // not reload the page either. Exploration's canonical templates and generated public catalog
     // are ignored because its API sends a targeted journey reload event. The
     // public dreamwell JSON catalog (rewritten
     // by the Dreamwell editor on every save) is ignored for the same reason. The
@@ -66,12 +63,9 @@ describe("generated card data drift Vite integration", () => {
       resolve(join(rootDir, "saved-journeys")) + "/**",
       resolve(join(rootDir, ".worktrees")) + "/**",
       resolve(join(rootDir, ".claude", "worktrees")) + "/**",
-      resolve(join(rootDir, "data", "buildaround_support.json")),
       resolve(join(rootDir, "data", "tides4.jsonc")),
       resolve(join(rootDir, "public", "dream-avatars-v2-data.json")),
       resolve(join(rootDir, "public", "tides4-data.json")),
-      resolve(join(rootDir, "data", "tides5.jsonc")),
-      resolve(join(rootDir, "public", "tides5-data.json")),
       resolve(join(rootDir, "public", "dreamwell-data.json")),
       ...generatedCardDataWatchPaths,
       ...generatedConfigDataWatchPaths({ rootDir }).map((p) => resolve(p)),

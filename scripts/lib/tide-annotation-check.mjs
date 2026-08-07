@@ -6,7 +6,7 @@
 // the affinity grow reshapes a tide, the label stays bolted to whatever archetype
 // used to live at that id — producing blurbs that name the wrong tribe or mechanic
 // (e.g. a Spirit Animal blurb on an all-Warrior deck). The freshness gates
-// (check-tides4 / check-tides5) only prove the file matches a fresh bake; a WRONG
+// check-tides4 only proves the file matches a fresh bake; a WRONG
 // label reproduces perfectly, so they are blind to this drift.
 //
 // This gate closes that gap. Each tide may carry a machine-checkable `claims`
@@ -158,8 +158,8 @@ export function checkTideClaims(
 }
 
 /**
- * Check every tide annotation in a baked tides artifact (data/tides4.jsonc or
- * data/tides5.jsonc). Validates each tide's `claims` against its contents and
+ * Check every tide annotation in the baked data/tides4.jsonc artifact. Validates
+ * each tide's `claims` against its contents and
  * enforces `displayName` uniqueness across tides.
  *
  * @param {object} opts
@@ -288,7 +288,7 @@ export function formatAnnotationFailures(result) {
     "     so both describe the deck's real dominant tribe and mechanics.",
   );
   lines.push(
-    "  3. Re-bake:  npm run bake-tides4 && npm run bake-tides5 && npm run setup-assets",
+    "  3. Re-bake:  npm run bake-tides4 && npm run setup-assets",
   );
   lines.push("");
   lines.push(

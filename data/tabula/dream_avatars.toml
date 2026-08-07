@@ -5,10 +5,9 @@
 # flavor best fits the new ability. Starting essence is left unset and assigned
 # separately.
 #
-# `signature-cards` is draft-pool steering data: a short list of cards standing in
-# for "what this avatar wants to do", used by `idf3` to locate the real decks
-# that most embody the DreamAvatar and bias pool construction toward them (see
-# `docs/cards2/idf3_signature_design.md`).
+# `signature-cards` is a short UUID-keyed list standing in for "what this avatar
+# wants to do". The tides4 bake uses it to derive the avatar's signature and
+# facet tides.
 #
 # How the signature cards are chosen
 # ----------------------------------

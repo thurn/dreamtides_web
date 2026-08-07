@@ -149,6 +149,5 @@ export function buildTutorialJourneyPackage(
     ).length,
     legalSubsetCount: 1,
     preferredSubsetCount: 1,
-    starterDecklistCardNumbers: [],
   };
 }

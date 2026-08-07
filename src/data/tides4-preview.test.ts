@@ -59,9 +59,6 @@ function makeContext(
   poolVariant: RunPoolContext["poolVariant"],
 ): RunPoolContext {
   const poolData: PoolData = {
-    core: new Set(),
-    archLists: new Map(),
-    draftLists: new Map(),
     tides4Decks: decks,
   };
   return {
@@ -97,11 +94,6 @@ describe("selectedTides4Decks", () => {
     const a = selectedTides4Decks(ctx, DREAM_AVATAR, "seed-x");
     const b = selectedTides4Decks(ctx, DREAM_AVATAR, "seed-x");
     expect(a.map((t) => t.id)).toEqual(b.map((t) => t.id));
-  });
-
-  it("returns nothing for a non-tides4 run", () => {
-    const ctx = makeContext(makeTides4(), "idf3");
-    expect(selectedTides4Decks(ctx, DREAM_AVATAR, "seed-x")).toEqual([]);
   });
 
   it("returns nothing when no tide artifact is loaded", () => {

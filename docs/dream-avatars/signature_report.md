@@ -6,13 +6,10 @@ in game-mechanics terms.
 
 ## How to read this report
 
-**When signatures were introduced.** Signature cards did not exist in the
-original `dreamAvatars.toml` (which used legacy tide metadata) nor in the first
-version of `dream_avatars.toml`. They were first added in commit `70a4f6ad`
-*("Standardize on idf3: move pool metadata between toml and TypeScript",
-2026-06-04)*, which gave **20 of the 32 Dream Avatars** a fixed list of **five
-signature cards each, referenced by card name**. Throughout this report,
-"original signatures" means that `70a4f6ad` snapshot.
+**When signatures were introduced.** The first signature snapshot is commit
+`70a4f6ad` (2026-06-04), which gave **20 of the 32 Dream Avatars** a fixed list
+of **five signature cards each, referenced by card name**. Throughout this
+report, "original signatures" means that snapshot.
 
 **How they reached the present.** The original by-name lists were almost entirely
 replaced over the following days:

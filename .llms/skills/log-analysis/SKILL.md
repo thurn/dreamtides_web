@@ -96,43 +96,25 @@ game). Non-CLI alternative: open `https://redacted-firebase-project.web.app/?vie
 | Event | What it records |
 |---|---|
 | `dream_avatar_package_validation_summary` / `dream_avatar_package_skipped` | Which dream avatars were eligible to seed a pool and which were rejected, **with the `reason`** (e.g. `mandatory-only pool size 109 is outside 110-150`). This is the first gate — a card's dream avatar may never have qualified. |
-| `draft_pool_constructed` | The authoritative provenance record: `algo`, `seed`, `dreamAvatarId`, `poolSize`, `distinctCardCount`, and **algo-specific provenance** (see below). |
+| `draft_pool_constructed` | The authoritative tides4 provenance record: `algo`, `seed`, `dreamAvatarId`, `poolSize`, `distinctCardCount`, `tideDeckIds`, and `tides4Tuning`. |
 | `draft_pool_initialized` | Tide/color breakdown of the finished pool (`cardCountByTide`, `selectedPackageTides`). |
 | `draft_offer_revealed` / `draft_site_entered` | The actual 4-card offers (`offerCards` = card numbers) shown at each `pickNumber`. |
 | `draft_pick_player` | What the player picked from each offer. |
 
 ### Reading `draft_pool_constructed` provenance
 
-The shape depends on `algo`. The two affinity-based algos (`pickearly`,
-`pickcohere`) are the richest and directly answer "why is card X here":
+The `tides4` pool is the union of the dealt tide decks in `tideDeckIds`, subject
+to the logged `tides4Tuning` values (`dealSize`, `copyCap`, and `maxFacets`). The
+first selected tide is the Dream Avatar's signature tide; the remaining ids are
+dealt from its authored facet/neutral tide pool. Cross-reference those ids with
+`data/tides4.jsonc` to see the exact UUID-keyed card lists.
 
-- `seedCardName` / `seedCardNumber` / `seedAffinityWeight` — the pool was grown
-  outward from this seed card.
-- `topPartners` — the cards most affined to the seed.
-- `topCards[]` — for each included card: `addOrder` (when it entered the pool),
-  `copies` (1 or 2 — `doubledCardCount` totals the 2-copy cards), `seedAffinity`
-  (similarity to the seed card), `poolAffinity` (similarity to the pool so far),
-  and `blendedScore` (the ranking that got it in, weighted by
-  `seedAffinityWeight`).
-
-So "Why is *Terminus* in my warriors pool?" → find the game's
-`draft_pool_constructed`, confirm the `algo`, find Terminus in `topCards` by its
-`cardNumber`, and read its `seedAffinity` / `poolAffinity` / `blendedScore` /
-`addOrder`. A high `seedAffinity` means it resembles the seed card; a high
-`poolAffinity` with low `seedAffinity` means it was pulled in because it matched
-cards *already added*, not the seed. **`topCards` is truncated to the top N** —
-if the card isn't listed, it was a lower-scoring inclusion; report that and use
-`poolSize`/`distinctCardCount` to bound the tail rather than claiming it's
-absent.
-
-Other algos carry lighter provenance:
-- `tides` — `tideDeckIds` (which baked tide decks were unioned).
-- `idf3` — `algo`/`seed`/sizes only; reconstruct ranking by re-running the algo
-  with that `seed` if deeper detail is needed.
-
-An **empty or missing provenance block** (just `algo`/`seed`/sizes with no
-`seedCard*`/`topCards`) means a random or fallback construction path — say so
-rather than inventing a rationale.
+For "Why is card UUID X in my pool?", isolate the game's
+`draft_pool_constructed`, confirm its `dreamAvatarId`, then find X in the cards
+of the logged `tideDeckIds`. Report the tide id and role that contributed it. If
+X appears in more than one selected tide, `copyCap` explains whether it receives
+an additional copy. If the trace lacks `tideDeckIds` or tuning, report the
+missing provenance instead of inventing a rationale.
 
 ### Determinism
 

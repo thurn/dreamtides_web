@@ -187,13 +187,13 @@ describe("RoomGate content-config gate", () => {
     mount(runtimeConfig());
     await flush();
 
-    // Room pinned a different pool variant than the local config.
+    // Room pinned a different draft mode than the local config.
     act(() => {
       deliverNode?.(
         nodeWith(
           genesisWith({
-            poolVariant: "idf3",
-            draftMode: "pool",
+            poolVariant: "tides4",
+            draftMode: "replay",
             fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
             draftFoldHash: DRAFT_DATA.foldHash,

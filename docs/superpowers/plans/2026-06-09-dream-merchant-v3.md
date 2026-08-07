@@ -76,7 +76,7 @@ The script reads `docs/draft_records_adapted/*.jsonc` (strip comments with
 by card UUID:
 
 1. **quality** — mirror the conditional-logit fit from
-   `src/draft/pool/variant-pickchoice.ts` (`fitChoiceModel`: quality +
+   the merchant corpus conditional-logit fit (`fitChoiceModel`: quality +
    pairwise synergy on taken-over-passed, 40 epochs, lr 0.05, l2 0.01,
    minSupport 3) in plain JS, using the records' `packIds`/`pickIds` UUID
    arrays. Keep only the quality map; min-max normalize to [0, 1].
@@ -526,10 +526,8 @@ archetypeId (+ choice membership when a `choiceRequest` exists), applies the
 payload, completes the site. No payment branch. `resolveMerchantDecline`
 unchanged in shape. `applyMerchantPayloadToState` drops the essence cases.
 
-**Context cleanup:** `buildMerchantContext` drops `supportMetaByUuid`,
-`candidateGrantCards` precomputation tied to support meta, and the
-`buildaround_support.json` import; gains `merchantCorpus` and
-`dreamsignProfiles` passthrough from `JourneyContent`. Keep
+**Context:** `buildMerchantContext` receives `merchantCorpus` and
+`dreamsignProfiles` from `JourneyContent`. Keep
 `cardByUuid`/`cardByNumber`/`deckEntryById`/`ownedCardUuids`/
 `heldDreamsignIds`. `essence`/`essenceCap` stay on the context (other screens
 read them) but the merchant ignores them.

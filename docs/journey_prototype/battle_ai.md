@@ -698,7 +698,7 @@ battle).
 flag is set from `rarity === "Starter"` in `scripts/setup-assets.mjs`), expanded
 to the tuned multiset and mapped through `createBaseBattleDeckCardDefinition`. In
 `createBattleInit` (`src/battle/integration/create-battle-init.ts`), when AI mode
-is on, use this deck for `enemyDeckDefinition` instead of the idf3-steered pool.
+is on, use this deck for `enemyDeckDefinition` instead of the run-pool deck.
 This is a narrow branch at the single existing `createEnemyDeckDefinition` call
 site; the surrounding padding/shuffle logic is reused unchanged.
 

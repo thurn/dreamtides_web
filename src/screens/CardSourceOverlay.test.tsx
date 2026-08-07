@@ -1,412 +1,48 @@
-// @vitest-environment jsdom
+import { describe, expect, it } from "vitest";
 
-import { act } from "react";
-import type { HTMLAttributes, ReactElement, ReactNode } from "react";
-import { createRoot, type Root } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { CardSourceOverlay } from "./CardSourceOverlay";
-import type { CardSourceDebugEntry, CardSourceDebugState } from "../types/journey";
-import type {
-  Idf3ProvenanceSummary,
-  SeedProvenanceSummary,
-  Tides4ProvenanceSummary,
-} from "../types/content";
+import type { Tides4ProvenanceSummary } from "../types/content";
+import type { CardSourceDebugState } from "../types/journey";
+import { buildCardSourceView } from "./cumulus_adapters/card-source-view-model";
 
-vi.mock("framer-motion", () => ({
-  AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
-  motion: {
-    aside: ({
-      animate: _animate,
-      children,
-      exit: _exit,
-      initial: _initial,
-      transition: _transition,
-      ...props
-    }: {
-      animate?: unknown;
-      children: ReactNode;
-      exit?: unknown;
-      initial?: unknown;
-      transition?: unknown;
-    } & HTMLAttributes<HTMLElement>) => <aside {...props}>{children}</aside>,
+const DEBUG: CardSourceDebugState = {
+  screenLabel: "Draft",
+  surface: "Draft",
+  entries: [{ cardNumber: 1, cardName: "Alpha", draftPoolCopies: 2 }],
+};
+
+const PROVENANCE: Tides4ProvenanceSummary = {
+  dreamAvatarId: "avatar-a",
+  signatureless: false,
+  borrowedArchetypeName: null,
+  dealSize: 150,
+  cap: 2,
+  maxFacets: 3,
+  facetDrawnCount: 1,
+  facetAvailableCount: 2,
+  tides: [{
+    id: "tide-a",
+    name: "Signature A",
+    displayName: "Signature A",
+    role: "signature",
+    selection: "starter",
+    joined: true,
+    cardNumbers: [1],
+    contributedCardCount: 1,
+  }],
+  cardProvenanceByNumber: {
+    "1": { copies: 2, tideIds: ["tide-a"], primaryTideId: "tide-a" },
   },
-}));
+};
 
-function makeOverlayState(): CardSourceDebugState {
-  return {
-    screenLabel: "Shop Offers",
-    surface: "Shop",
-    entries: [
-      {
-        cardNumber: 11,
-        cardName: "Lantern Broker",
-        inStarterDecklist: true,
-        draftPoolCopies: 0,
-      },
-      {
-        cardNumber: 12,
-        cardName: "Driftbound Relic",
-        inStarterDecklist: false,
-        draftPoolCopies: 2,
-      },
-    ],
-  };
-}
-
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => {
-    root.render(element);
-  });
-  return { container, root };
-}
-
-beforeEach(() => {
-  vi.clearAllMocks();
-  (
-    globalThis as typeof globalThis & {
-      IS_REACT_ACT_ENVIRONMENT?: boolean;
-    }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
-});
-
-afterEach(() => {
-  document.body.innerHTML = "";
-});
-
-function makeProvenance(): Idf3ProvenanceSummary {
-  return {
-    signatureCardNames: ["Soul Reaper", "Grim Harvest"],
-    signatureWeightedNames: ["Soul Reaper", "Grim Harvest"],
-    signatureDroppedNames: ["Forest"],
-    anchors: [
-      {
-        similarityToSignature: 0.42,
-        distinctiveCardNames: ["Soul Reaper", "Blood Artist"],
-      },
-    ],
-    starterDistinctiveCardNames: ["Lantern Broker", "Grim Harvest"],
-    starterCardCount: 24,
-    sourceDecks: [
-      {
-        rank: 0,
-        similarityToStarter: 1,
-        distinctiveCardNames: ["Lantern Broker"],
-        contributedCardCount: 24,
-      },
-      {
-        rank: 1,
-        similarityToStarter: 0.31,
-        distinctiveCardNames: ["Driftbound Relic", "Tidal Surge"],
-        contributedCardCount: 8,
-      },
-    ],
-    cardProvenanceByNumber: {
-      "11": {
-        isSignature: false,
-        inStarterDeck: true,
-        copies: 1,
-        sourceRank: 0,
-        sourceSimilarity: 1,
-      },
-      "12": {
-        isSignature: false,
-        inStarterDeck: false,
-        copies: 2,
-        sourceRank: 1,
-        sourceSimilarity: 0.31,
-      },
-    },
-  };
-}
-
-function makeSeedProvenance(): SeedProvenanceSummary {
-  return {
-    variant: "seed",
-    seedCardName: "Lantern Broker",
-    seedCardNumber: 11,
-    targetSize: 150,
-    seedAffinityWeight: 0.4,
-    distinctCardCount: 96,
-    totalCopies: 150,
-    doubledCardCount: 54,
-    topPartnerCardNames: ["Driftbound Relic", "Tidal Surge"],
-    cardProvenanceByNumber: {
-      "11": {
-        isSeed: true,
-        copies: 2,
-        addOrder: 0,
-        seedAffinity: 1,
-        poolAffinity: 1,
-        blendedScore: 1,
-      },
-      "12": {
-        isSeed: false,
-        copies: 1,
-        addOrder: 7,
-        seedAffinity: 0.62,
-        poolAffinity: 0.48,
-        blendedScore: 0.55,
-      },
-    },
-  };
-}
-
-function makeTides4Provenance(): Tides4ProvenanceSummary {
-  return {
-    dreamAvatarId: "dc-x",
-    signatureless: false,
-    borrowedArchetypeName: null,
-    dealSize: 150,
-    cap: 2,
-    maxFacets: 3,
-    facetDrawnCount: 2,
-    facetAvailableCount: 6,
-    tides: [
-      {
-        id: "tide-sig-1",
-        name: "Reaper Signature",
-        role: "signature",
-        selection: "starter",
-        joined: true,
-        cardNumbers: [11],
-        contributedCardCount: 1,
-      },
-      {
-        id: "tide-fac-1",
-        name: "Tidal Theme",
-        role: "facet",
-        selection: "facet-drawn",
-        joined: true,
-        cardNumbers: [12],
-        contributedCardCount: 1,
-      },
-      {
-        id: "tide-neu-1",
-        name: "Broadwater",
-        role: "neutral",
-        selection: "neutral-fill",
-        joined: false,
-        cardNumbers: [],
-        contributedCardCount: 0,
-      },
-    ],
-    cardProvenanceByNumber: {
-      "11": { copies: 1, tideIds: ["tide-sig-1"], primaryTideId: "tide-sig-1" },
-      "12": { copies: 2, tideIds: ["tide-fac-1"], primaryTideId: "tide-fac-1" },
-    },
-  };
-}
-
-describe("CardSourceOverlay", () => {
-  it("walks the tide construction story and names each card's source tide", () => {
-    const { container, root } = mount(
-      <CardSourceOverlay
-        cardSourceDebug={makeOverlayState()}
-        idf3Provenance={makeProvenance()}
-        seedProvenance={makeSeedProvenance()}
-        tides4Provenance={makeTides4Provenance()}
-        isOpen
-        onClose={vi.fn()}
-      />,
-    );
-
-    const text = container.textContent ?? "";
-    // Tide provenance takes precedence over both seed and idf3.
-    expect(text).toContain("dealt from your DreamAvatar's tides");
-    expect(text).toContain("How this pool was built");
-    expect(text).toContain("Signature tide");
-    expect(text).toContain("Theme tides");
-    expect(text).toContain("2 of 6 theme tides");
-    expect(text).toContain("Deal");
-    // Not the seed or idf3 walkthroughs.
-    expect(text).not.toContain("Anchor decks");
-    expect(text).not.toContain("Seed card");
-    // Per-card tide attribution.
-    expect(text).toContain("From your signature tide Reaper Signature");
-    expect(text).toContain("From the theme tide Tidal Theme");
-    expect(text).toContain("one of the 2 drawn");
-
-    act(() => {
-      root.unmount();
-    });
+describe("card source view", () => {
+  it("explains cards using tides4 provenance", () => {
+    const view = buildCardSourceView(DEBUG, PROVENANCE, new Map());
+    expect(view?.construction?.lines.map((line) => line.text)).toContain("Signature A");
+    expect(view?.cards.lines[0]?.text).toContain("signature tide Signature A");
   });
 
-  it("walks the seed -> affinity -> growth story and traces each card in seed mode", () => {
-    const { container, root } = mount(
-      <CardSourceOverlay
-        cardSourceDebug={makeOverlayState()}
-        idf3Provenance={makeProvenance()}
-        seedProvenance={makeSeedProvenance()}
-        isOpen
-        onClose={vi.fn()}
-      />,
-    );
-
-    const text = container.textContent ?? "";
-    // Seed provenance takes precedence over idf3 when both are present.
-    expect(text).toContain("How this pool was built");
-    expect(text).toContain("Seed card");
-    expect(text).toContain("uniformly at random");
-    expect(text).toContain("Affinity");
-    expect(text).toContain("Growth");
-    expect(text).toContain("150"); // target size
-    // The seed walkthrough, not the idf3 anchors walkthrough.
-    expect(text).not.toContain("Anchor decks");
-    // Per-card tracing: the seed card and a grown card.
-    expect(text).toContain("The seed card");
-    expect(text).toContain("Driftbound Relic");
-    expect(text).toContain("affinity to the");
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("describes the pick-record story for the pickfit family instead of decklist co-occurrence", () => {
-    const { container, root } = mount(
-      <CardSourceOverlay
-        cardSourceDebug={makeOverlayState()}
-        idf3Provenance={makeProvenance()}
-        seedProvenance={{ ...makeSeedProvenance(), variant: "pickfit" }}
-        isOpen
-        onClose={vi.fn()}
-      />,
-    );
-
-    const text = container.textContent ?? "";
-    expect(text).toContain("How this pool was built");
-    // The pickfit-specific affinity wording.
-    expect(text).toContain("took over what they passed");
-    // Not the seed variant's decklist-co-occurrence wording.
-    expect(text).not.toContain("co-occurs with the seed");
-    // Per-card growth metrics still trace each shown card.
-    expect(text).toContain("Driftbound Relic");
-    expect(text).toContain("affinity to the");
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("walks the signature -> anchors -> starter -> growth chain and traces each card", () => {
-    const { container, root } = mount(
-      <CardSourceOverlay
-        cardSourceDebug={makeOverlayState()}
-        idf3Provenance={makeProvenance()}
-        isOpen
-        onClose={vi.fn()}
-      />,
-    );
-
-    const text = container.textContent ?? "";
-    // Algorithm walkthrough.
-    expect(text).toContain("How this pool was built");
-    expect(text).toContain("Signature");
-    expect(text).toContain("Soul Reaper");
-    expect(text).toContain("Anchor decks");
-    expect(text).toContain("42% match to signature");
-    expect(text).toContain("Starter deck");
-    expect(text).toContain("Growth");
-    // Per-card tracing: the starter card and the grown neighbour card.
-    expect(text).toContain("Lantern Broker");
-    expect(text).toContain("In your");
-    expect(text).toContain("Driftbound Relic");
-    expect(text).toContain("source deck");
-    expect(text).toContain("31%");
-    expect(text).toContain("that deck features");
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("falls back to a starter-deck / pool summary without provenance", () => {
-    const { container, root } = mount(
-      <CardSourceOverlay
-        cardSourceDebug={makeOverlayState()}
-        idf3Provenance={null}
-        isOpen
-        onClose={vi.fn()}
-      />,
-    );
-
-    const text = container.textContent ?? "";
-    expect(text).toContain("Why am I seeing these cards?");
-    expect(text).toContain("Shop Offers");
-    expect(text).not.toContain("How this pool was built");
-    expect(text).toContain("Lantern Broker");
-    expect(text).toContain("Starter deck");
-    expect(text).toContain("In your");
-    expect(text).toContain("Driftbound Relic");
-    expect(text).toContain("Draft-pool card. 2 copies in the pool.");
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("renders without crashing when provenance fields are missing", () => {
-    // Realtime Database silently drops `false` and `0` on write, so a
-    // round-tripped entry can arrive with `inStarterDecklist` and
-    // `draftPoolCopies` set to `undefined`. The overlay must still render its
-    // summary without crashing.
-    const strippedEntry = {
-      cardNumber: 99,
-      cardName: "Stripped Entry",
-    } as unknown as CardSourceDebugEntry;
-    const overlay: CardSourceDebugState = {
-      screenLabel: "Draft Picks",
-      surface: "Draft",
-      entries: [strippedEntry],
-    };
-
-    const { container, root } = mount(
-      <CardSourceOverlay
-        cardSourceDebug={overlay}
-        idf3Provenance={null}
-        isOpen
-        onClose={vi.fn()}
-      />,
-    );
-
-    expect(container.textContent).toContain("Why am I seeing these cards?");
-    expect(container.textContent).toContain("Stripped Entry");
-    expect(container.textContent).toContain("Pool");
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("renders without crashing when the entries field itself is missing", () => {
-    // Defence-in-depth: a manually crafted or upstream-mangled overlay
-    // state with `entries` set to `undefined` should still render its
-    // header rather than crash the app.
-    const overlay = {
-      screenLabel: "Draft Picks",
-      surface: "Draft",
-    } as unknown as CardSourceDebugState;
-
-    const { container, root } = mount(
-      <CardSourceOverlay
-        cardSourceDebug={overlay}
-        idf3Provenance={null}
-        isOpen
-        onClose={vi.fn()}
-      />,
-    );
-
-    expect(container.textContent).toContain("Why am I seeing these cards?");
-    expect(container.textContent).toContain("Draft Picks");
-
-    act(() => {
-      root.unmount();
-    });
+  it("falls back to pool-copy provenance while tides are loading", () => {
+    const view = buildCardSourceView(DEBUG, null, new Map());
+    expect(view?.cards.lines[0]?.text).toContain("2 copies in the pool");
   });
 });

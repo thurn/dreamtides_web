@@ -18,7 +18,6 @@ export function PoolViewerAdapter({
   poolVariant = null,
   replayRecord = null,
   resolvedPackage = null,
-  seedProvenance = null,
   tides4Provenance = null,
   title = "Pool Viewer",
   variant = "overlay",
@@ -26,7 +25,7 @@ export function PoolViewerAdapter({
   const [source, setSource] = useState<PoolViewerSourceId>("run");
   const [filters, setFilters] = useState<PoolViewerFilterView>(DEFAULT_POOL_VIEWER_FILTERS);
   const previousOpen = useRef(false);
-  const view = useMemo(() => buildPoolViewerView({ cardDatabase, draftState, resolvedPackage, replayRecord, poolVariant, seedProvenance, tides4Provenance, source, filters, title, frame: variant === "overlay" ? "fullScreen" : "floating" }), [cardDatabase, draftState, filters, poolVariant, replayRecord, resolvedPackage, seedProvenance, source, tides4Provenance, title, variant]);
+  const view = useMemo(() => buildPoolViewerView({ cardDatabase, draftState, resolvedPackage, replayRecord, poolVariant, tides4Provenance, source, filters, title, frame: variant === "overlay" ? "fullScreen" : "floating" }), [cardDatabase, draftState, filters, poolVariant, replayRecord, resolvedPackage, source, tides4Provenance, title, variant]);
 
   useEffect(() => {
     const wasOpen = previousOpen.current;

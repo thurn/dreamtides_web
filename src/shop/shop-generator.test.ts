@@ -345,48 +345,18 @@ describe("generateShopInventory", () => {
     }
   });
 
-  it("uses a deterministic Fisher-Yates pass for discount slot selection", () => {
-    const draws = [
-      // Specialty stock shuffle.
-      0, 0, 0, 0,
-      // One discounted slot, then discount-index Fisher-Yates.
-      0, 0, 0, 0, 0,
-      // 30% discount.
-      0,
-    ];
-    let calls = 0;
-    const rng = () => {
-      const value = draws[calls];
-      if (value === undefined) {
-        throw new Error(`unexpected rng call ${String(calls)}`);
-      }
-      calls += 1;
-      return value;
-    };
-
-    const result = generateShopInventory({
+  it("uses the supplied random stream deterministically", () => {
+    const options = {
       cardDatabase: db,
       draftState: makeDraftState({ 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 }),
       remainingDreamsignPoolIds: [],
       dreamsignTemplates: DREAMSIGN_TEMPLATES,
-      starterDecklistCardNumbers: [1, 2, 3, 4, 5],
       cardCount: 5,
-      rng,
-    });
-
-    expect(calls).toBe(draws.length);
-    expect(
-      result.slots.map((slot) => ({
-        cardNumber: slot.card?.cardNumber ?? null,
-        discountPercent: slot.discountPercent,
-      })),
-    ).toEqual([
-      { cardNumber: 2, discountPercent: 0 },
-      { cardNumber: 3, discountPercent: 30 },
-      { cardNumber: 4, discountPercent: 0 },
-      { cardNumber: 5, discountPercent: 0 },
-      { cardNumber: 1, discountPercent: 0 },
-    ]);
+      rng: () => 0.25,
+    };
+    const first = generateShopInventory(options);
+    const second = generateShopInventory({ ...options, draftState: structuredClone(options.draftState) });
+    expect(first.slots).toEqual(second.slots);
   });
 
   it("returns shop reconstruction data without emitting the inventory log during generation", () => {
@@ -408,25 +378,24 @@ describe("generateShopInventory", () => {
     ).toBe(false);
   });
 
-  it("draws Specialty Shop card slots from the starter decklist", () => {
-    const starterDecklistCardNumbers = [2, 4];
+  it("draws Specialty Shop card slots from the current run pool", () => {
     const result = generateShopInventory({
       cardDatabase: db,
       draftState: makeDraftState({ 1: 1, 3: 1, 5: 1 }),
       remainingDreamsignPoolIds: ["dreamsign-1"],
       dreamsignTemplates: DREAMSIGN_TEMPLATES,
-      starterDecklistCardNumbers,
+      isSpecialty: true,
       cardCount: 2,
     });
     const cardSlots = result.slots.filter((slot) => slot.itemType === "card");
     expect(cardSlots.length).toBeGreaterThan(0);
     for (const slot of cardSlots) {
       expect(slot.card).not.toBeNull();
-      expect(starterDecklistCardNumbers).toContain(slot.card!.cardNumber);
+      expect([1, 3, 5]).toContain(slot.card!.cardNumber);
     }
   });
 
-  it("does not deplete the draft pool for a Specialty Shop", () => {
+  it("spends the draft pool for a Specialty Shop", () => {
     const draftState = makeDraftState({ 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 });
     const before = structuredClone(draftState.remainingCopiesByCard);
     const result = generateShopInventory({
@@ -434,14 +403,14 @@ describe("generateShopInventory", () => {
       draftState,
       remainingDreamsignPoolIds: ["dreamsign-1"],
       dreamsignTemplates: DREAMSIGN_TEMPLATES,
-      starterDecklistCardNumbers: [1, 2, 3, 4, 5],
+      isSpecialty: true,
     });
     // The original passed-in object is unchanged.
     expect(draftState.remainingCopiesByCard).toEqual(before);
-    // A Specialty Shop never spends the run draft multiset, so it hands back no
-    // draft state: the caller keeps its own untouched, and nothing the shop
-    // returns can overwrite the run's draft pool.
-    expect(result.draftState).toBeUndefined();
+    expect(result.draftState).toBeDefined();
+    expect(result.draftState?.mode).toBe("pool");
+    if (result.draftState?.mode !== "pool") throw new Error("expected pool state");
+    expect(result.draftState.remainingCopiesByCard).not.toEqual(before);
   });
 
   it("prices Specialty Shop card slots at the specialty price", () => {
@@ -450,7 +419,7 @@ describe("generateShopInventory", () => {
       draftState: makeDraftState({ 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 }),
       remainingDreamsignPoolIds: ["dreamsign-1"],
       dreamsignTemplates: DREAMSIGN_TEMPLATES,
-      starterDecklistCardNumbers: [1, 2, 3, 4, 5],
+      isSpecialty: true,
     });
     for (const slot of result.slots) {
       if (slot.itemType === "card") {
@@ -525,7 +494,6 @@ function makePackage(
     doubledCardCount: 0,
     legalSubsetCount: 1,
     preferredSubsetCount: 1,
-    starterDecklistCardNumbers: [],
   };
 }
 

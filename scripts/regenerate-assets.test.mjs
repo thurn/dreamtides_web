@@ -58,7 +58,7 @@ describe("regenerate-assets.sh", () => {
     expect(result.status).toBe(0);
     expect(result.commands).toEqual([
       "node scripts/setup-assets.mjs",
-      "git status --short -- data/tabula data/buildaround_support.json",
+      "git status --short -- data/tabula",
     ]);
     expect(result.stdout).toContain("1/1  setup-assets");
     expect(result.stdout).toContain("fast content regeneration complete");
@@ -71,15 +71,12 @@ describe("regenerate-assets.sh", () => {
     expect(result.commands.filter((command) => command.startsWith("node "))).toEqual([
       "node scripts/setup-assets.mjs",
       "node scripts/bake-merchant-corpus.mjs",
-      "node scripts/bake-affinity-corpus.mjs",
       "node scripts/bake-tides4.mjs",
-      "node scripts/bake-tides5.mjs",
       "node scripts/setup-assets.mjs",
       "node scripts/generate-cumulus-tokens.mjs",
       "node scripts/generate-cumulus-metadata.mjs",
       "node scripts/generate-cumulus-docs.mjs",
       "node scripts/check-tides4.mjs",
-      "node scripts/check-tides5.mjs",
       "node scripts/check-tide-annotations.mjs",
     ]);
   });

@@ -11,9 +11,7 @@
 // Per card UUID the bake computes:
 //   1. quality      — the conditional-logit `quality[c]` term fit on
 //                     taken-over-passed pick choices, min-max normalized to
-//                     [0, 1]. Plain-JS mirror of `fitChoiceModel` in
-//                     src/draft/pool/variant-pickchoice.ts (PICKCHOICE tuning:
-//                     40 epochs, lr 0.05, l2 0.01, minSupport 3).
+//                     [0, 1] using 40 epochs, lr 0.05, l2 0.01, and minSupport 3.
 //   2. multiplicity — mainboardsWith2Plus(c) / mainboardsWith1Plus(c), forced
 //                     to 0 when fewer than 5 mainboards contain the card.
 //   3. df           — number of corpus mainboards containing the card, so the
@@ -41,8 +39,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 /** Relative records directory, recorded in the artifact's `source` field. */
 const SOURCE = "docs/draft_records_adapted";
 
-// Mirror of the fit settings in PICKCHOICE (src/draft/pool/variant-pickchoice.ts).
-// If you change them there, change them here.
+// Merchant quality-model fit settings.
 const CHOICE_FIT = {
   minSupport: 3,
   epochs: 40,
@@ -67,7 +64,7 @@ const MULTIPLICITY_MIN_MAINBOARDS = 5;
 const MIN_CLUSTER_SIZE = 8;
 /** Label-propagation round cap (stops earlier on convergence). */
 const LABEL_PROPAGATION_ROUNDS = 20;
-/** Float rounding, matching DEFAULT_DECIMALS in affinity-corpus-io.ts. */
+/** Float rounding used by the committed merchant artifact. */
 const DECIMALS = 6;
 
 /** Round to {@link DECIMALS} places, collapsing -0 to 0. */
@@ -78,7 +75,7 @@ function round(x) {
 }
 
 // ===========================================================================
-// Quality: conditional-logit fit, mirrored from variant-pickchoice.ts.
+// Quality: conditional-logit fit.
 // ===========================================================================
 
 /**
@@ -146,9 +143,8 @@ function collectSamples(pickRecords) {
 /**
  * Fit the conditional-logit choice model by gradient ascent and return the
  * min-max normalized quality map over the drawable (taken) cards. Mirrors
- * `fitChoiceModel` + the prior normalization in `buildPickChoiceCorpus`
- * (src/draft/pool/variant-pickchoice.ts); the synergy parameters are fit (they
- * shape the quality estimates) but only the quality map is kept.
+ * The synergy parameters are fit because they shape the quality estimates, but
+ * only the quality map is kept.
  *
  * @returns Map of card UUID -> quality in [0, 1].
  */
@@ -227,8 +223,7 @@ function fitNormalizedQuality(pickRecords) {
     }
   }
 
-  // Min-max normalize over the drawable (taken) cards, exactly the way the
-  // pickchoice prior is normalized.
+  // Min-max normalize over the drawable (taken) cards.
   const cards = [...taken.keys()];
   let lo = Infinity;
   let hi = -Infinity;

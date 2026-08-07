@@ -199,12 +199,8 @@ describe("parseRuntimeConfig", () => {
       );
     });
 
-    it("returns a registered strategy id when algo matches one", () => {
-      expect(parseRuntimeConfig("?algo=color_pool").poolVariant).toBe(
-        "color_pool",
-      );
-      expect(parseRuntimeConfig("?algo=diverse").poolVariant).toBe("diverse");
-      expect(parseRuntimeConfig("?algo=idf2").poolVariant).toBe("idf2");
+    it("returns tides4 when explicitly selected", () => {
+      expect(parseRuntimeConfig("?algo=tides4").poolVariant).toBe("tides4");
     });
   });
 
@@ -235,8 +231,7 @@ describe("parseRuntimeConfig", () => {
 
     it("returns pool when algo is absent or a known pool variant", () => {
       expect(parseRuntimeConfig("").draftMode).toBe("pool");
-      expect(parseRuntimeConfig("?algo=idf3").draftMode).toBe("pool");
-      expect(parseRuntimeConfig("?algo=color_pool").draftMode).toBe("pool");
+      expect(parseRuntimeConfig("?algo=tides4").draftMode).toBe("pool");
     });
 
     it("returns pool when algo is empty", () => {
@@ -377,10 +372,10 @@ describe("contentConfigFromRuntime", () => {
     });
   });
 
-  it("reflects a named pool variant", () => {
+  it("reflects the named pool algorithm", () => {
     expect(
       contentConfigFromRuntime(
-        parseRuntimeConfig("?algo=idf2"),
+        parseRuntimeConfig("?algo=tides4"),
         atlasFoldHash,
         draftData,
         economyData,
@@ -390,7 +385,7 @@ describe("contentConfigFromRuntime", () => {
         explorationFoldHash,
         tutorialFoldHash,
       ).poolVariant,
-    ).toBe("idf2");
+    ).toBe("tides4");
   });
 });
 
@@ -417,9 +412,6 @@ describe("contentConfigsEqual", () => {
   });
 
   it("is false when any single field differs", () => {
-    expect(contentConfigsEqual(base, { ...base, poolVariant: "idf3" })).toBe(
-      false,
-    );
     expect(contentConfigsEqual(base, { ...base, draftMode: "replay" })).toBe(
       false,
     );
@@ -478,7 +470,7 @@ describe("applyContentConfigToSearch", () => {
     };
     const configs: ContentConfig[] = [
       {
-        poolVariant: "idf2",
+        poolVariant: "tides4",
         draftMode: "pool",
         fresh20PackSize: null,
         atlasFoldHash: "fixture-atlas-fold-hash",
@@ -544,7 +536,7 @@ describe("applyContentConfigToSearch", () => {
 
   it("preserves unrelated gameplay and device params while overriding content params", () => {
     const config: ContentConfig = {
-      poolVariant: "idf2",
+      poolVariant: "tides4",
       draftMode: "pool",
       fresh20PackSize: null,
     };
@@ -555,7 +547,7 @@ describe("applyContentConfigToSearch", () => {
     const params = new URLSearchParams(result);
     expect(params.get("game")).toBe("abc123");
     expect(params.get("deviceFrame")).toBe("iphone16");
-    expect(params.get("algo")).toBe("idf2");
+    expect(params.get("algo")).toBe("tides4");
     // packsize is dropped when the adopted mode is not fresh20.
     expect(params.get("packsize")).toBeNull();
     expect(params.get("journey")).toBeNull();

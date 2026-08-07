@@ -514,7 +514,6 @@ describe("journey state actions", () => {
       doubledCardCount: 1,
       legalSubsetCount: 1,
       preferredSubsetCount: 1,
-      starterDecklistCardNumbers: [],
     };
 
     const next = startJourneyFromDreamAvatar({

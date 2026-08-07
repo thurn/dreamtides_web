@@ -1,9 +1,8 @@
 // Data layer for the tides editor dev API (`/api/editor/tides`). It reads a
-// committed tides artifact (`data/tides4.jsonc` by default, or another
-// `data/tides<n>.jsonc` selected by the `file` query parameter), validates and
+// committed tides artifact (`data/tides4.jsonc`), validates and
 // applies an edit to one tide's player-facing annotation fields (displayName,
 // displayDescription, color), and writes the file back in the canonical baked
-// format so the tides4/tides5 freshness gates still pass.
+// format so the tides4 freshness gate still passes.
 //
 // The write-back round-trips the parsed artifact through the SAME
 // `serializeArtifact` the bake uses (imported from scripts/bake-tides4.mjs), so a
@@ -13,7 +12,7 @@
 // no code here resolves or compares card names.
 
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { isAbsolute, join, relative, resolve, sep } from "node:path";
+import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { serializeArtifact } from "./bake-tides4.mjs";
 import { stripJsonComments } from "./setup-assets.mjs";
@@ -36,9 +35,7 @@ export const EDITABLE_TIDE_FIELDS = new Set([
 ]);
 
 /**
- * Resolve a requested `file` parameter (e.g. "tides4", "tides5") to the relative
- * path of its committed artifact under `data/`, guarding against traversal. The
- * artifact must be a `.jsonc` file located directly in `data/`.
+ * Resolve the optional `file` parameter to the tides4 artifact.
  */
 export function resolveTidesFile(rootDir, requested) {
   const name =
@@ -46,22 +43,11 @@ export function resolveTidesFile(rootDir, requested) {
       ? DEFAULT_TIDES_FILE
       : String(requested).trim();
 
-  if (name.includes("\0")) {
-    return { ok: false, message: "The file parameter is invalid." };
-  }
-  // The selector names a tides artifact stem (no directories, no extension).
-  if (!/^[A-Za-z0-9_-]+$/u.test(name)) {
+  if (name !== DEFAULT_TIDES_FILE) {
     return {
       ok: false,
-      message: "The file parameter must be a tides artifact name, e.g. tides4.",
+      message: "The file parameter must be tides4.",
     };
-  }
-
-  const dataDir = resolve(rootDir, DATA_DIR);
-  const target = resolve(dataDir, `${name}.jsonc`);
-  const within = relative(dataDir, target);
-  if (within === "" || within.startsWith("..") || isAbsolute(within) || within.includes(sep)) {
-    return { ok: false, message: "The file must be located in data/." };
   }
 
   return {
@@ -116,7 +102,7 @@ export function validateTideEdit(field, rawValue) {
 /**
  * Split a serialized tides artifact into its leading `//` header block and the
  * JSON body's opening brace, so the file can be re-serialized with its own header
- * preserved (tides4 and tides5 carry different headers).
+ * preserved.
  */
 function extractHeader(source) {
   const lines = source.split("\n");

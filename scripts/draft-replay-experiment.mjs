@@ -18,9 +18,8 @@
 // just card popularity) is doing real work.
 //
 // TS<->JS MIRROR. The scoring below is a faithful plain-JS reimplementation of
-// src/draft/replay/fit-model.ts, the same established pattern as
-// variant-idf.ts <-> scripts/idf3-*.mjs. If you change a formula in one, change
-// it in the other. The eval CORPUS is built exactly the way the live bundle is
+// src/draft/replay/fit-model.ts. If you change a formula in one, change it in
+// the other. The eval CORPUS is built exactly the way the live bundle is
 // (buildDraftRecords + buildCardMaps over cards.toml), so the corpus the
 // heuristic is measured on is the corpus it runs on in the game.
 //

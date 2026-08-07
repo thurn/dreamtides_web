@@ -21,7 +21,7 @@ Hard rules for all code written in this plan:
 - The **only** identity key is the lowercased UUID. Build every `Map`/`Set` on UUIDs. Lowercase every UUID at the boundary (catalog ids, manifest ids, adapted-record ids, all signature lists) so casing never splits one card into two.
 - Card **names and card numbers may appear only as human-readable decoration** in the UI and in log fields — never as a lookup key, a comparison, or a dedup key. If a name or a number is used to *find* or *equate* a card anywhere in new code, that is a bug to fix, not ship.
 - `src/draft/idf-fit.ts` and `src/draft/deck-cooccurrence.ts` are generic over `string` so the *pre-existing* name-keyed affiliation caller can keep compiling — but **at every new call site in this feature the `string` is a lowercased UUID.** Never pass names into them from any new code.
-- The legacy **name-keyed systems are not used for identity by this feature**: `src/draft/replay/fit-model.ts`, `src/battle/integration/coherence.ts`, `src/affiliations/affiliation-weights.ts`, and the `idfCorpus(poolData)` (name) path of `variant-idf.ts`. The new algorithm builds its **own UUID-keyed** corpus, IDF, affinity, and co-occurrence over the known-good decklists' `mainboardIds`. Do not reach into the name-keyed `FitModel` for the corpus algorithm.
+- The opponent corpus algorithm builds its own UUID-keyed corpus, IDF, affinity, and co-occurrence over the known-good decklists' `mainboardIds`.
 - UUID sources to key on: deck `mainboardIds`, dream avatar `signatureCardIds`, affiliation `signatureCards`, dreamsign `signatureCardIds`, and `CardData.id`. Resolve a UUID to its `CardData` through a `Map<lowercaseUuid, CardData>` built from `cardDatabase.values()` — never via name.
 
 **Guardrail:** Task 1 includes a **name-collision test** — a fixture with two distinct UUIDs sharing one display name must be treated as two separate cards by the corpus, fit, affinity, and co-occurrence. Tasks 7–8 re-assert this at the selection/tuning level. If any of these tests would pass under a name-keyed implementation, the test is too weak — strengthen it.
@@ -31,8 +31,8 @@ Hard rules for all code written in this plan:
 ## Key facts the implementer must not re-derive
 
 - **Identity is always the lowercased cards_v2 UUID, never the card name** (24 cards share a display name). All new corpus/fit/synergy code keys on UUID.
-- **Two IDF key-spaces already exist.** The legacy machinery (`src/draft/pool/variant-idf.ts`, `src/affiliations/affiliation-weights.ts`, `src/draft/replay/fit-model.ts`, `src/battle/integration/coherence.ts`) is keyed by card **name** because the legacy decklists are name arrays. The new algorithm is keyed by **UUID** (draft records carry `mainboardIds`). Do **not** reuse the name-keyed `FitModel`/`coherence.ts` co-occurrence for the new algorithm — build UUID-keyed equivalents over the known-good corpus.
-- `idfCosine(a: IdfDeck, b: IdfDeck, idfOf)` in `src/draft/pool/variant-idf.ts` is generic over `string` and reusable as-is. `IdfDeck = { cards: Set<string>; norm: number }`, `IdfCorpus = { decks: IdfDeck[]; idf: Map<string, number> }`.
+- **IDF identity is UUID-keyed.** Draft records carry `mainboardIds`, and shared IDF/cosine helpers live in `src/draft/idf-fit.ts`.
+- `idfCosine(a: IdfDeck, b: IdfDeck, idfOf)` is generic over `string` and reusable as-is. `IdfDeck = { cards: Set<string>; norm: number }`, `IdfCorpus = { decks: IdfDeck[]; idf: Map<string, number> }`.
 - The signature-`fit` numerator in `SignatureDecksApp.tsx` sums **idf** (not idf²) over the shared cards: `fit = (Σ idf(c) over probe∩deck) / (deckNorm · probeNorm)`. This is intentional and differs from `idfCosine` (which sums idf²). Preserve both formulas.
 - `buildDraftRecords(dir, cardMaps, { seatFilter, requireFullPicks })` in `scripts/setup-assets.mjs` already resolves adapted-record seats to `mainboardIds`. `seatFilter` is a `Set<"<draftId>#<seat>">`; `requireFullPicks:false` keeps all allowlisted seats (the default `true` drops the 44 known-good decks whose drafts never trim to exactly 30 picks). Verified: all 497 known-good decks resolve, 0 cards dropped.
 - `validateCardIds(keys, idToName, label)` in `scripts/setup-assets.mjs` throws on any UUID not in the catalog — use it to gate the dreamsign signature artifact at build time.
@@ -67,7 +67,7 @@ Hard rules for all code written in this plan:
 - Create: `src/draft/idf-fit.ts`
 - Test: `src/draft/idf-fit.test.ts`
 
-This module holds the IDF/cosine/affinity logic currently duplicated in `SignatureDecksApp.tsx` and partially in `affiliation-weights.ts`, generalized to operate on raw `Set<string>` decks (the string is a UUID for the new callers, a name for the legacy affiliation caller). Reuse `idfCosine`, `IdfDeck`, `IdfCorpus` from `src/draft/pool/variant-idf.ts`.
+This module holds the shared IDF/cosine/affinity logic, generalized to operate on raw `Set<string>` decks keyed by UUID. Reuse `idfCosine`, `IdfDeck`, and `IdfCorpus` from `src/draft/idf-fit.ts`.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -90,7 +90,7 @@ Expected: FAIL (module/exports not found).
 Export exactly these signatures (these are the contract every later task depends on):
 
 ```typescript
-import { idfCosine, type IdfCorpus, type IdfDeck } from "./pool/variant-idf";
+import { idfCosine, type IdfCorpus, type IdfDeck } from "./idf-fit";
 
 /** Build an IDF corpus from raw decks of opaque string keys (UUIDs or names).
  *  N = decks.length; idf(c) = ln(N / df(c)); each deck's norm = sqrt(Σ idf²).

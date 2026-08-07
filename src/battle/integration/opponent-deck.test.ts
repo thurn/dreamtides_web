@@ -71,14 +71,14 @@ function makeCorpus(db: Map<number, CardData>): {
   fitModel: FitModel;
   draftRecords: DraftRecord[];
 } {
+  const alpha = ALPHA_CARDS.map((n) => nameOf(db, n));
+  const beta = BETA_CARDS.map((n) => nameOf(db, n));
   // Synthetic corpus tokens are unique card names, so a local name -> cardNumber
   // index serves as the collision-free id index the fit model resolves against.
   const nameIndex = new Map<string, number>();
   for (const card of db.values()) {
     if (!nameIndex.has(card.name)) nameIndex.set(card.name, card.cardNumber);
   }
-  const alpha = ALPHA_CARDS.map((n) => nameOf(db, n));
-  const beta = BETA_CARDS.map((n) => nameOf(db, n));
 
   const records: DraftRecord[] = [];
   const makeFactionRecords = (
@@ -135,8 +135,6 @@ function makeCorpus(db: Map<number, CardData>): {
  * decklist corpus, so affiliation probe affinities resolve.
  */
 function makePoolContext(db: Map<number, CardData>): RunPoolContext {
-  const alpha = ALPHA_CARDS.map((n) => nameOf(db, n));
-  const beta = BETA_CARDS.map((n) => nameOf(db, n));
   const idOf = (n: number): string => {
     const card = db.get(n);
     if (card === undefined) throw new Error(`missing test card #${String(n)}`);
@@ -148,17 +146,13 @@ function makePoolContext(db: Map<number, CardData>): RunPoolContext {
     name: card.name,
     id: card.id,
   }));
-  // The IDF pool engine and affiliation reweighting score on the id-keyed corpus,
-  // so feed the decklists as card-id arrays (the affiliation signatures are UUIDs).
-  const poolData = buildPoolData(poolCards, [alpha, beta], undefined, [
-    alphaIds,
-    betaIds,
-  ]);
+  // Affiliation scoring uses the UUID-keyed decklist corpus.
+  const poolData = buildPoolData(poolCards, [alphaIds, betaIds]);
   return {
     poolData,
     idIndex: buildIdIndex(db),
     allDreamsignPoolIds: [],
-    poolVariant: "idf3",
+    poolVariant: "tides4",
   };
 }
 

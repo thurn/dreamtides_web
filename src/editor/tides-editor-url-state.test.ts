@@ -12,9 +12,9 @@ describe("tides editor URL state", () => {
     expect(state).toEqual({ file: DEFAULT_TIDES_FILE, tideId: null, size: "medium" });
   });
 
-  it("parses the file, selected tide, and size", () => {
-    const state = parseTidesEditorUrlState("?file=tides5&tide=tide-fac-03&size=large");
-    expect(state).toEqual({ file: "tides5", tideId: "tide-fac-03", size: "large" });
+  it("parses the selected tide and size", () => {
+    const state = parseTidesEditorUrlState("?tide=tide-fac-03&size=large");
+    expect(state).toEqual({ file: "tides4", tideId: "tide-fac-03", size: "large" });
   });
 
   it("rejects a malformed file selector and an unknown size", () => {
@@ -33,7 +33,7 @@ describe("tides editor URL state", () => {
   });
 
   it("round-trips a non-default view", () => {
-    const original = { file: "tides5", tideId: "tide-neu-01", size: "small" as const };
+    const original = { file: "tides4" as const, tideId: "tide-neu-01", size: "small" as const };
     const params = serializeTidesEditorUrlState(original);
     expect(parseTidesEditorUrlState(`?${params.toString()}`)).toEqual(original);
   });

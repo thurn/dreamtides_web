@@ -122,14 +122,11 @@ export interface Dreamsign {
 }
 
 /**
- * One card currently being explained by the provenance debug overlay. idf3
- * builds each DreamAvatar's pool from its signature cards, so provenance is
- * reported as starter-decklist membership and the card's draft-pool copy count.
+ * One card currently being explained by the provenance debug overlay.
  */
 export interface CardSourceDebugEntry {
   cardNumber: number;
   cardName: string;
-  inStarterDecklist: boolean;
   draftPoolCopies: number;
 }
 

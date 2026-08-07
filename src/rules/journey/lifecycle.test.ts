@@ -141,7 +141,6 @@ function deterministicProvider(
       doubledCardCount: 1,
       legalSubsetCount: 1,
       preferredSubsetCount: 1,
-      starterDecklistCardNumbers: [10, 11, 12],
     };
   }
   return {

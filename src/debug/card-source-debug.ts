@@ -10,16 +10,12 @@ function buildCardSourceDebugEntry(
   card: CardData | FrozenCardData,
   resolvedPackage: ResolvedDreamAvatarPackage | null,
 ): CardSourceDebugEntry {
-  const starterDecklist = new Set(
-    resolvedPackage?.starterDecklistCardNumbers ?? [],
-  );
   const draftPoolCopies =
     resolvedPackage?.draftPoolCopiesByCard[String(card.cardNumber)] ?? 0;
 
   return {
     cardNumber: card.cardNumber,
     cardName: card.name,
-    inStarterDecklist: starterDecklist.has(card.cardNumber),
     draftPoolCopies,
   };
 }

@@ -39,16 +39,6 @@ describe("tide annotation consistency", () => {
     );
   });
 
-  it("tides5 inherits unique displayNames from tides4", () => {
-    const result = checkArtifactAnnotations({
-      artifactPath: resolve(ROOT, "data/tides5.jsonc"),
-      requireClaims: false,
-    });
-    expect(result.ok, result.ok ? "" : formatAnnotationFailures(result)).toBe(
-      true,
-    );
-  });
-
   // The check itself must actually catch the failure modes it exists to prevent.
   // These use synthetic tides so they never depend on production card data.
   it("flags a swapped tribe claim", () => {

@@ -135,11 +135,7 @@ describe("buildTutorialJourneyPackage", () => {
     const context = {
       idIndex: new Map(CARD_IDS.map((id, index) => [id, index + 101])),
       allDreamsignPoolIds: [OPENING_DREAMSIGN_ID],
-      poolData: {
-        core: new Set(),
-        archLists: new Map(),
-        draftLists: new Map(),
-      },
+      poolData: {},
     } satisfies RunPoolContext;
 
     const pkg = buildTutorialJourneyPackage(
@@ -184,11 +180,7 @@ describe("buildTutorialJourneyPackage", () => {
     const context = {
       idIndex: new Map([[CARD_IDS[0], 101]]),
       allDreamsignPoolIds: [OPENING_DREAMSIGN_ID],
-      poolData: {
-        core: new Set(),
-        archLists: new Map(),
-        draftLists: new Map(),
-      },
+      poolData: {},
     } satisfies RunPoolContext;
 
     expect(() =>
@@ -206,11 +198,7 @@ describe("buildTutorialJourneyPackage", () => {
     const context = {
       idIndex: new Map(CARD_IDS.map((id, index) => [id, index + 101])),
       allDreamsignPoolIds: [],
-      poolData: {
-        core: new Set(),
-        archLists: new Map(),
-        draftLists: new Map(),
-      },
+      poolData: {},
     } satisfies RunPoolContext;
 
     expect(() =>
@@ -253,11 +241,7 @@ describe("buildTutorialJourneyPackage", () => {
     const context = {
       idIndex: new Map(CARD_IDS.map((id, index) => [id, index + 101])),
       allDreamsignPoolIds: [OPENING_DREAMSIGN_ID],
-      poolData: {
-        core: new Set(),
-        archLists: new Map(),
-        draftLists: new Map(),
-      },
+      poolData: {},
     } satisfies RunPoolContext;
 
     expect(() =>

@@ -34,7 +34,6 @@ function readPublicJson<T>(filename: string): T {
 // score on the id-keyed decklist corpus, so feed `decklist-ids-data.json` (the
 // UUID corpus) — the affiliation signatures are themselves UUIDs.
 const CARDS = readPublicJson<CardData[]>("cards_v2-data.json");
-const DECKLISTS = readPublicJson<string[][]>("decklists-data.json");
 const DECKLIST_IDS = readPublicJson<string[][]>("decklist-ids-data.json");
 const AFFILIATIONS = readPublicJson<AffiliationContent[]>(
   "affiliations-data.json",
@@ -43,7 +42,7 @@ const AFFILIATIONS = readPublicJson<AffiliationContent[]>(
 const CARD_DATABASE = new Map<number, CardData>(
   CARDS.map((card) => [card.cardNumber, card]),
 );
-const POOL_DATA: PoolData = buildPoolData(CARDS, DECKLISTS, undefined, DECKLIST_IDS);
+const POOL_DATA: PoolData = buildPoolData(CARDS, DECKLIST_IDS);
 
 // Pick the first affiliation that the live corpus can actually score, so the
 // suite never depends on a specific affiliation id surviving a data edit.

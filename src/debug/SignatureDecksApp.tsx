@@ -25,7 +25,7 @@ import {
 } from "../cumulus/components/overlay/InfoCard";
 import { logEvent } from "../logging";
 import { buildIdfStats, signatureFit } from "../draft/idf-fit.ts";
-import { idfCosine } from "../draft/pool/variant-idf.ts";
+import { idfCosine } from "../draft/idf-fit.ts";
 
 /**
  * `/sigdecks` — a temporary visualization tool. For each DreamAvatar that
@@ -37,7 +37,7 @@ import { idfCosine } from "../draft/pool/variant-idf.ts";
  * Correlation metric: IDF cosine similarity. Each card is weighted by its
  * inverse document frequency `ln(N / df)` (`df` = number of corpus mainboards
  * containing it), so sharing a *rare* signature card weighs more than sharing a
- * common one (the same idea `idf3` pool steering uses). The score is the cosine
+ * common one. The score is the cosine
  * between the signature vector and the deck vector — the IDF overlap normalized
  * by both vectors' norms. Normalizing by the deck norm is what keeps the metric
  * scale-invariant: a raw overlap sum favours large decks (more slots to contain

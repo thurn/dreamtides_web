@@ -7,8 +7,7 @@
 // strictly positive selection weight, so any card the dreamscape could offer can
 // still appear (the doc's "any card can still appear" rule).
 //
-// The pull is computed with the SAME IDF / card-similarity machinery the draft
-// pool generator uses (`src/draft/pool/variant-idf.ts`): the affiliation's
+// The pull is computed with the shared IDF / card-similarity machinery: the affiliation's
 // curated `signatureCards` are treated as a synthetic "probe" deck, and each
 // candidate card's affinity to the affiliation is how strongly the real corpus
 // decks that hold that card cohere with the probe. A signature card sits in the
@@ -33,8 +32,11 @@ import type { CardData } from "../types/cards.ts";
 import type { DreamscapeNode } from "../types/journey.ts";
 import { logEvent } from "../logging.ts";
 import type { PoolData } from "../draft/pool/types.ts";
-import { type IdfCorpus, idfCorpus } from "../draft/pool/variant-idf.ts";
-import { computeAffinity } from "../draft/idf-fit.ts";
+import {
+  buildDecklistIdfCorpus,
+  computeAffinity,
+  type IdfCorpus,
+} from "../draft/idf-fit.ts";
 
 /**
  * The smallest multiplier any card receives. Unaffiliated cards keep their base
@@ -63,7 +65,7 @@ export interface AffiliationWeightContext {
 // Computes each corpus card's affinity (0..1) to the affiliation probe. The probe
 // is the signature cards that exist in the corpus with positive IDF weight,
 // treated as a synthetic deck so the standard IDF cosine applies (mirroring the
-// idf3/idf4 signature probe). A card's RAW affinity is the greatest IDF cosine,
+// shared signature probe). A card's RAW affinity is the greatest IDF cosine,
 // over the corpus decks that contain it, of that deck to the probe — so a card
 // that lives in decks shaped like the probe scores high whether or not it is a
 // literal signature card. Affinities are normalized to [0,1] by the max observed
@@ -102,7 +104,7 @@ export function buildAffiliationWeightContext(
   cardDatabase: ReadonlyMap<number, CardData>,
   affiliation: AffiliationContent,
 ): AffiliationWeightContext | null {
-  const corpus = idfCorpus(poolData);
+  const corpus = buildDecklistIdfCorpus(poolData);
   if (!corpus) return null;
 
   // Card UUID (lowercased) -> card number, the draw-site translation. Ids are

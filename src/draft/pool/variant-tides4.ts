@@ -1,6 +1,5 @@
-// The `tides4` variant: the human-legible counterpart of `sigseed`, built to
-// reproduce the run-to-run VARIETY `sigseed` gets from a fresh random subset of a
-// DreamAvatar's signature cards. A player can be told it in one sentence:
+// The production `tides4` draft-pool algorithm. A player can be told it in one
+// sentence:
 //
 //   "There are preconstructed decks called tides — each has a known decklist you
 //    can go read. Your DreamAvatar has a small signature tide plus several theme
@@ -8,21 +7,16 @@
 //    tides, shuffle them together, and deal your draft pool, never more than 2
 //    copies of a card."
 //
-// `sigseed` grows each pool live from a random SUBSET (1..4) of an avatar's
-// signature cards, and that subset is where its variety comes from: a single
-// anchor leans the pool one way, a pair or triple blends them. `tides4` bakes the
-// AXES of that variety as separate decks (`scripts/bake-tides4.mjs`, committed as
+// `tides4` bakes the axes of an avatar's identity as separate decks
+// (`scripts/bake-tides4.mjs`, committed as
 // `data/tides4.jsonc`, rendered as `docs/cards2/tides4_decklists.md`):
 //   * a SIGNATURE tide is one signatured DreamAvatar's signature cards themselves
-//     — the always-joined identity floor, standing in for the signature anchors
-//     `sigseed` always seeds with;
-//   * a FACET tide is a single-anchor `sigseed` pool — the coherent lean one
+//     — the always-joined identity floor;
+//   * a FACET tide is a single-anchor affinity pool — the coherent lean one
 //     signature-region card grows into. Drawing a random few of an avatar's
-//     facets each run is the direct analogue of `sigseed`'s random signature
-//     subset, so different runs lean the same identity different ways;
+//     facets each run makes different runs lean the same identity different ways;
 //   * a NEUTRAL tide is a broad, format-spanning deck — the generic tail a
-//     `sigseed` pool's play-rate prior pulls in, and the body of a signatureless
-//     DreamAvatar's pool.
+//     body of a signatureless DreamAvatar's pool.
 //
 // At runtime the whole algorithm is the tide selection, one shuffle, and the
 // two-pass deal below: join the starter, draw a random subset of facets, top up
@@ -30,10 +24,9 @@
 // bag, and deal the configured number of copies at the configured per-card cap —
 // seeding the starter's (signature) cards first so the signature tide is
 // guaranteed into the pool rather than risking being cut by the bag overflow. A
-// signatured
+// A signatured
 // DreamAvatar leans its own identity a different way each run (the facet subset).
-// A signatureless DreamAvatar has no identity to anchor on, so — exactly as
-// `sigseed` reduces to a coherent, randomly-themed `pickcohere` pool — it borrows a
+// A signatureless DreamAvatar has no identity to anchor on, so it borrows a
 // random signatured DreamAvatar's whole pool (that archetype's signature core plus
 // its own facets), leaning toward a different coherent archetype each run rather
 // than a blend of unrelated leans. The pool is keyed by cards_v2 UUID; the
@@ -41,7 +34,6 @@
 
 import { asCardId, type CardId } from "../../types/card-identity.ts";
 import { shuffle } from "./rng.ts";
-import type { PoolStrategy } from "./strategy.ts";
 import {
   missingPoolData,
   type PoolData,
@@ -49,7 +41,7 @@ import {
   type Tides4PoolProvenance,
   type Tides4PoolTide,
   type Tides4PoolTideSelection,
-  type VariantResult,
+  type Tides4GenerationResult,
 } from "./types.ts";
 import type { Tides4DecksJson } from "./tides4-io.ts";
 import type { Tides4Tuning } from "../../types/draft-data";
@@ -68,9 +60,9 @@ export const DEFAULT_TIDES4_TUNING: Tides4Tuning = {
  * (and any remaining facets) until a full pool can be dealt; finally shuffle the
  * whole bag and deal the configured size with at most the configured copies of
  * any card, seeding the starter's signature cards first so the signature tide is
- * always present in the dealt pool. The random facet subset is the variety engine — it is the analogue of
- * `sigseed`'s random signature subset, so a DreamAvatar leans its identity a
- * different way each run. A signatureless DreamAvatar (null starter) instead borrows
+ * always present in the dealt pool. The random facet subset is the variety engine,
+ * so a DreamAvatar leans its identity a different way each run. A signatureless
+ * DreamAvatar (null starter) instead borrows
  * a random signatured DreamAvatar's pool, so it leans a different coherent archetype
  * each run. Tide-deck cards are keyed by cards_v2 UUID; the catalog index
  * (`poolData.cardNameById`) gates membership, so a UUID absent from it (a card
@@ -84,11 +76,10 @@ export function generateTides4(
   poolData: PoolData,
   dreamAvatarId?: string,
   tuning: Tides4Tuning = DEFAULT_TIDES4_TUNING,
-): VariantResult {
+): Tides4GenerationResult {
   const data: Tides4DecksJson | undefined = poolData.tides4Decks;
   if (!data) {
     missingPoolData(
-      "tides4",
       "no tide decks are bundled (data/tides4.jsonc, served as /tides4-data.json)",
     );
   }
@@ -97,28 +88,20 @@ export function generateTides4(
     poolData,
     data,
     dreamAvatarId,
-    "tides4",
     tuning,
   );
 }
 
 /**
- * The shared runtime core both `tides4` and `tides5` use to combine the tide decks
- * in `data` into one pool. The two variants differ only in WHICH committed
- * artifact feeds this — their corpora are baked from different draft data
- * (`tides4` from every usable seat, `tides5` from only the known-good decklists) —
- * while the tide selection, the one shuffle, the deal, and the provenance below
- * are identical. `label` tags the generated pool's `selected` list with the
- * variant id that produced it.
+ * Combine the committed tide decks into one pool and its provenance record.
  */
 export function combineTidesPool(
   rng: () => number,
   poolData: PoolData,
   data: Tides4DecksJson,
   dreamAvatarId: string | undefined,
-  label: string,
   tuning: Tides4Tuning = DEFAULT_TIDES4_TUNING,
-): VariantResult {
+): Tides4GenerationResult {
   const dealSize = tuning.dealSize;
 
   // Tide selection. Join the starter (when present), draw a random subset of the
@@ -129,7 +112,7 @@ export function combineTidesPool(
     ? data.tidePoolByDreamAvatar[dreamAvatarId]
     : undefined;
   // A signatureless DreamAvatar (null starter) leans a random coherent archetype
-  // each run, the way `sigseed` reduces to `pickcohere`: it borrows a random
+  // each run by borrowing a random
   // signatured DreamAvatar's whole pool — that archetype's signature core plus its
   // own on-identity facets — so the pool is a single coherent archetype rather than
   // a blend of unrelated facet leans. The archetype draw consumes one `rng()` and
@@ -165,8 +148,8 @@ export function combineTidesPool(
     if (entry.starter !== null) {
       joinSelections.push({ id: entry.starter, selection: "starter" });
     }
-    // The random facet subset — `sigseed`'s subset draw, over baked facets. Draw
-    // its size first (uniform in [1, min(maxFacets, facets)]), then take that
+    // Draw the random facet subset size first (uniform in
+    // [1, min(maxFacets, facets)]), then take that
     // many from a shuffled copy of the facet list.
     const facets = shuffle(rng, [...entry.facets]);
     facetAvailableCount = facets.length;
@@ -353,24 +336,10 @@ export function combineTidesPool(
     cardProvenanceById,
   };
 
-  // No color identity (this variant reads nothing but the tide decks); the labels
-  // record the algorithm and the tide ids the pool was dealt from.
   return {
-    C: new Set(),
-    selected: [label, ...deckIds],
     counts,
+    tideDeckIds: deckIds,
+    selected: ["tides4", ...deckIds],
     tides4Provenance,
   };
 }
-
-/** Strategy adapter for the `tides4` algorithm. */
-export const tides4Strategy: PoolStrategy = {
-  id: "tides4",
-  description:
-    "Combine preconstructed tides into a pool: the avatar's signature tide " +
-    "plus a random subset of its theme (facet) tides, shuffled together and topped " +
-    "up with broad tides. Reproduces sigseed's random-subset variety from readable " +
-    "decks.",
-  generate: ({ rng, poolData, dreamAvatarId, tides4Tuning }) =>
-    generateTides4(rng, poolData, dreamAvatarId, tides4Tuning),
-};

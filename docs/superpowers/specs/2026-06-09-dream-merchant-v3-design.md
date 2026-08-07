@@ -354,7 +354,7 @@ understanding is mechanical; cards are identified by UUID throughout.
   min-max normalization of fit scores over the candidate pool for the current
   deck. `fitPrior` and `fitCooccurrence` are the model's component signals.
 - **Quality** — the conditional-logit `quality[c]` term from
-  `src/draft/pool/variant-pickchoice.ts` (taken-over-passed strength), fit
+  the merchant corpus's conditional-logit choice model (taken-over-passed strength), fit
   offline over the adapted records and baked. `qualityNorm` is min-max
   normalized over the pool.
 - **Misfit (leave-one-out)** — for deck entry `e` with card `c`:
@@ -541,7 +541,6 @@ Deleted:
 - The `convert_event_to_role` reward builder. The `change_deck_entry_type`
   payload kind is retained for `tribal_change` (subtype-only changes).
 - The seven-beat dialogue grammar and its template banks.
-- The merchant's consumption of `data/buildaround_support.json`.
 
 ## Testing
 

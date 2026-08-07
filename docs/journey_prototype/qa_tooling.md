@@ -263,13 +263,13 @@ not resolve imports correctly.
 ## Vite SPA Fallback Behavior
 
 Vite serves the HTML fallback document for any path that does not match a static
-file. This means a `curl` request for a missing static file (e.g.,
-`/tides/Wild.png`) returns HTTP 200 with `Content-Type: text/html`, not 404.
+file. This means a `curl` request for a missing static file returns HTTP 200
+with `Content-Type: text/html`, not 404.
 Check the `Content-Type` header rather than the status code when verifying
 whether a static file exists:
 
 ```bash
-curl -s -I http://localhost:5174/tides/Arc.png | grep content-type
+curl -s -I http://localhost:5174/cards/not-a-card.webp | grep content-type
 # content-type: image/webp  → file exists
 # content-type: text/html   → Vite fallback, file missing
 ```

@@ -105,83 +105,14 @@ Room navigation keeps `realtime=1` in the URL when a cloud room is created.
 
 ## `algo`
 
-Selects the draft-pool construction strategy. It drives the journey prototype's
-draft and enemy pools (parsed by `parseRuntimeConfig`, threaded through the run's
-pool context).
+The journey uses the `tides4` draft-pool algorithm documented in
+`docs/cards2/tides_algorithms.md`. An absent `algo` value and `algo=tides4` both
+select this pool. The parameter is read once at page load.
 
-Each strategy is a `PoolStrategy` registered in `src/draft/pool/registry.ts`,
-the single source of truth for the accepted ids. The registry currently
-provides:
-
-- `algo=color_pool` — color-identity generator.
-- `algo=diverse` — spreads cards and archetypes more evenly across pools.
-- `algo=decklists` — grows the pool out of real human-built decklists.
-- `algo=merged` — draws from pre-merged per-archetype lists.
-- `algo=idf` — grows a pool from one random decklist by IDF-cosine similarity.
-- `algo=idf2` — `idf` with a diversity-biased starter draw.
-- `algo=idf3` — `idf2` steered toward a Dream Avatar by its signature cards
-  (the default).
-- `algo=seed` — draws one card uniformly at random and grows a 150-card pool
-  around it by IDF-weighted co-occurrence affinity, both to the seed card and to
-  the cards already chosen (the same co-occurrence signal the deck-fit draft model
-  reads). Copies cap at 2; the most central cards earn the second copy.
-- `algo=tides` — combines the 32 preconstructed tide decks
-  (`data/tides.jsonc`, rendered as `docs/cards2/tide_decklists.md`): one of the
-  Dream Avatar's baked favored tides is shuffled together with tides drawn at
-  random until a full pool is dealable, then 200 cards are dealt with at most
-  2 copies of any card. The human-legible counterpart of `idf3`; requires the
-  baked artifact (`npm run bake-tides`).
-- `algo=tides2` — an affinity-selected counterpart to `tides`, built for direct
-  comparison. It draws a lead tide from the Dream Avatar's curated tide pool, then
-  shuffles in the lead's allied tides until a full pool is dealable, dealing 200
-  cards with at most 2 copies of any card. Tides are smaller and purer than
-  `tides`, and which tides ally and which a Dream Avatar draws from are curated in
-  `data/tides2_relationships.jsonc` (decks in `data/tides2.jsonc`, both rendered
-  as `docs/cards2/tides2_decklists.md`). Requires the baked decks
-  (`npm run bake-tides2`) and the seeded relationships
-  (`npm run seed-tide-relationships`).
-- `algo=tides3` — the human-legible counterpart of `sigseed`. Combines the 32
-  preconstructed tides in `data/tides3.jsonc` (rendered as
-  `docs/cards2/tides3_decklists.md`): a signatured Dream Avatar's own signature
-  tide leads, shuffled together with broad tides until a 150-card pool can be
-  dealt (at most 2 copies of any card). Each signature tide is a Dream Avatar's
-  full-signature `sigseed` pool baked as a deck, so a pool delivers the
-  Dream Avatar's identity the way `sigseed` does. Requires the baked artifact
-  (`npm run bake-tides3`); see `docs/cards2/tides3_algorithm.md`.
-- `algo=tides4` — the human-legible counterpart of `sigseed`'s run-to-run
-  _variety_. Combines the preconstructed tides in `data/tides4.jsonc` (rendered as
-  `docs/cards2/tides4_decklists.md`): the Dream Avatar's signature tide is always
-  joined as a dense on-theme core, a random subset of its small _facet_ tides
-  (each a single-anchor `sigseed` pool) is mixed in to lean the pool a different
-  way each run, and broad tides top it up to a 150-card pool (at most 2 copies of
-  any card). Drawing a random facet subset reproduces the variety `sigseed` gets
-  from a random signature subset, so a Dream Avatar yields a cloud of distinct,
-  on-identity pools rather than one fixed pool. Requires the baked artifact
-  (`npm run bake-tides4`); see section 5 of `docs/cards2/tides_algorithms.md`.
-- `algo=tides5` — the exact `tides4` algorithm (same signature / facet / neutral
-  tides, same runtime combine), grown from a curated corpus: only the known-good
-  decklists in `docs/known_good_decklists.json` feed the pick-affinity statistics,
-  and every other draft seat is discarded. Combines the preconstructed tides in
-  `data/tides5.jsonc` (rendered as `docs/cards2/tides5_decklists.md`). Requires the
-  baked artifact (`npm run bake-tides5`); see section 5.6 of
-  `docs/cards2/tides_algorithms.md`.
-
-Most of these are described in `docs/cards2/draft_pool_algorithms.md`. Any value
-not registered (including empty or absent) falls back to `DEFAULT_POOL_VARIANT`,
-currently `idf3`. `idf3` consumes the Dream Avatar's signature cards; `seed`
-ignores it and draws its own random seed card. Both `idf3` and `seed` produce the
-"Why Cards" provenance surface — `idf3` describing the signature → starter →
-growth chain, `seed` describing the random seed card and its affinity growth. The
-other strategies ignore the signature and produce no provenance, and a pool with
-no anchor/seed yields no anchor deck, so the enemy battle deck falls back to a
-sampled draftable deck.
-
-The parameter is read once at page load and is not reactive; changing it requires
-a reload.
-
-Two values of `algo` select a deck-fit draft mode instead of a pool strategy.
-Both build a deck-fit model from the historical draft-record corpus and, at each
-pick, rank candidate cards by how well they fit the deck drafted so far:
+Two `algo` values select a deck-fit draft mode while retaining tides4 as the
+run's underlying pool context. Both build a deck-fit model from the historical
+draft-record corpus and rank candidate cards by how well they fit the deck
+drafted so far:
 
 - `algo=replay` — replays a historical draft, showing the deck-fit best slice of
   a real recorded pack at each pick.
@@ -190,10 +121,7 @@ pick, rank candidate cards by how well they fit the deck drafted so far:
   before it can be shown again, and is retired for good once it has been shown
   twice. Every pack is drawn only from cards still eligible under those rules.
 
-When `algo` is `replay` or `fresh20`, `poolVariant` still resolves to the default
-(`idf3`) and supplies the resolved Dream Avatar package: signatures, Dreamsign
-pool, starter decklist, and the transient shop pool used by the deck-fit modes.
-The `algo` selection governs draft pack construction.
+The `algo` selection governs draft pack construction for these two modes.
 
 ## `packsize`
 
@@ -204,9 +132,8 @@ of 20. It has no effect in any other draft mode.
 Examples:
 
 ```
-http://localhost:5173/                          # journey prototype, default idf3 pool
-http://localhost:5173/?algo=color_pool          # journey prototype, color-identity pool
-http://localhost:5173/?algo=seed                # single random-card affinity-grown pool
+http://localhost:5173/                          # journey prototype, tides4 pool
+http://localhost:5173/?algo=tides4              # explicit tides4 pool
 http://localhost:5173/?algo=replay              # record-replay deck-fit draft
 http://localhost:5173/?algo=fresh20             # fresh-pack deck-fit draft (20-card packs)
 http://localhost:5173/?algo=fresh20&packsize=30 # fresh-pack draft with 30-card packs

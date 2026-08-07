@@ -52,7 +52,7 @@ describe("compileDraftData", () => {
     ["unknown root key", (source) => { source.extra = true; }, /unknown key/u],
     ["unknown nested key", (source) => { source.offers.extra = 1; }, /unknown key/u],
     ["unsupported version", (source) => { source["schema-version"] = 2; }, /only schema version 1/u],
-    ["unsupported strategy", (source) => { source.pool["default-strategy"] = "idf3"; }, /only "tides4"/u],
+    ["unsupported strategy", (source) => { source.pool["default-strategy"] = "retired"; }, /only "tides4"/u],
     ["unknown rarity", (source) => { source["rarity-caps"][0].rarity = "Mythic"; }, /unknown rarity/u],
     ["duplicate rarity", (source) => { source["rarity-caps"][1].rarity = "Special"; }, /duplicate rarity/u],
     ["zero offer size", (source) => { source.offers["cards-per-offer"] = 0; }, /positive integer/u],

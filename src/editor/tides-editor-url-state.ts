@@ -3,12 +3,12 @@ import type { CardSizePreset } from "./card-size";
 /**
  * All tides-editor view state lives in the URL so a view is shareable and
  * survives reload:
- *   - `file`  which tides artifact is open (default `tides4`).
+ *   - `file`  the tides4 artifact.
  *   - `tide`  the selected tide id; absent means the list view.
  *   - `size`  the detail card-grid size preset (default `medium`).
  */
 export interface TidesEditorUrlState {
-  file: string;
+  file: typeof DEFAULT_TIDES_FILE;
   tideId: string | null;
   size: CardSizePreset;
 }
@@ -22,11 +22,10 @@ function isSize(value: string | null): value is CardSizePreset {
 
 export function parseTidesEditorUrlState(search: string): TidesEditorUrlState {
   const params = new URLSearchParams(search);
-  const file = params.get("file");
   const tideId = params.get("tide");
   const size = params.get("size");
   return {
-    file: file !== null && /^[A-Za-z0-9_-]+$/u.test(file) ? file : DEFAULT_TIDES_FILE,
+    file: DEFAULT_TIDES_FILE,
     tideId: tideId !== null && tideId !== "" ? tideId : null,
     size: isSize(size) ? size : DEFAULT_SIZE,
   };
@@ -34,7 +33,6 @@ export function parseTidesEditorUrlState(search: string): TidesEditorUrlState {
 
 export function serializeTidesEditorUrlState(state: TidesEditorUrlState): URLSearchParams {
   const params = new URLSearchParams();
-  if (state.file !== DEFAULT_TIDES_FILE) params.set("file", state.file);
   if (state.tideId !== null) params.set("tide", state.tideId);
   if (state.size !== DEFAULT_SIZE) params.set("size", state.size);
   return params;

@@ -22,7 +22,7 @@ so it *can* later become the live path, but no battle wiring is in scope here.
   best fits a Dream Avatar's signature using an **IDF-cosine `fit`** metric, with
   `match` and `typical` modes. Its IDF-cosine logic is implemented locally in that
   file (a near-duplicate of `idfCosine` in
-  [src/draft/pool/variant-idf.ts](../../src/draft/pool/variant-idf.ts)).
+  [src/draft/idf-fit.ts](../../src/draft/idf-fit.ts)).
 - Runs progress through a fixed **7-layer** Dream Atlas, **0-indexed**, with
   exactly **one battle per layer**: layer 0 = first battle (starter dreamscape),
   layer 6 = boss.

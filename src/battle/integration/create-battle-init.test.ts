@@ -77,7 +77,7 @@ function makePackageCard(
 
 /**
  * Builds a {@link RunPoolContext} over the battle test card database with two
- * disjoint decklists, each large enough (>= 16 cards) to enter the idf3 corpus.
+ * disjoint decklists, each large enough (>= 16 cards) to enter the fit corpus.
  * Returns the context plus the card names that make up each decklist so steering
  * assertions can compare against a known set.
  */
@@ -119,7 +119,7 @@ function makeSteeredPoolContext(): {
     poolData,
     idIndex: nameIndex,
     allDreamsignPoolIds: [],
-    poolVariant: "idf3",
+    poolVariant: "tides4",
   };
 
   // A synthetic corpus: coherent A and B decks (so the fit model learns each
@@ -1235,16 +1235,15 @@ describe("createBattleInit", () => {
       );
     });
 
-    it("falls back when a poolContext resolves to an empty starter deck", () => {
+    it("falls back when a poolContext resolves no matching UUIDs", () => {
       // A poolContext whose id index shares nothing with the generated pool keys
       // yields an empty resolved list; the fallback still fills the deck.
       const emptyIndexContext: RunPoolContext = {
         poolData: makeSteeredPoolContext().poolContext.poolData,
         idIndex: new Map<string, number>([["does-not-exist", -1]]),
         allDreamsignPoolIds: [],
-        // idf3 produces a starter deck whose keys cannot resolve through this
-        // mismatched index, exercising the empty-resolved-list fallback.
-        poolVariant: "idf3",
+        // The mismatched index exercises the empty-resolved-list fallback.
+        poolVariant: "tides4",
       };
       const init = createBattleInit({
         ...makeBaseInput(),

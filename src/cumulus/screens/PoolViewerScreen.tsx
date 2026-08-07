@@ -19,7 +19,6 @@ export type PoolViewerSourceId =
   | "run"
   | "tides"
   | "catalog"
-  | "idf3"
   | "signature"
   | "deck"
   | "history";

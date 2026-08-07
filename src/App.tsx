@@ -9,12 +9,8 @@ import type { Database } from "firebase/database";
 import type { CardData } from "./types/cards";
 import type { JourneyContent } from "./data/journey-content";
 import {
-  AFFINITY_GROWN_POOL_VARIANTS,
-  buildDreamAvatarProvenance,
-  buildDreamAvatarSeedProvenance,
   buildDreamAvatarTides4Provenance,
   loadJourneyContent,
-  poolVariantNeedsTides4,
 } from "./data/journey-content";
 import { loadTutorialConfiguration } from "./data/tutorial-actions";
 import { tutorialStarterDeckSize } from "./data/tutorial-actions";
@@ -233,66 +229,14 @@ export function JourneyApp({
     return records.find((record) => record.id === draftState.recordId) ?? null;
   }, [draftState, journeyContent.draftRecords]);
 
-  // Recompute the full idf3 provenance for the "Why Cards" overlay on demand
-  // from the run seed and the pool corpus. It is deterministic per
-  // `(state.seed, dreamAvatar.id)`, so it reproduces the exact pool the player
-  // is drafting from without ever being persisted. The signature is read from
-  // the freshly loaded content (matched by id) rather than the RTDB-round-tripped
-  // package, so an empty-array strip cannot silently lose the steer.
   const resolvedDreamAvatarId = state.resolvedPackage?.dreamAvatar.id ?? null;
-  const cardSourceProvenance = useMemo(() => {
-    const poolContext = journeyContent.poolContext;
-    if (!cardSourceOverlayOpen || poolContext === undefined) return null;
-    if (resolvedDreamAvatarId === null) return null;
-    const dreamAvatar = journeyContent.dreamAvatars.find(
-      (dc) => dc.id === resolvedDreamAvatarId,
-    );
-    if (dreamAvatar === undefined) return null;
-    return buildDreamAvatarProvenance(dreamAvatar, poolContext, state.seed);
-  }, [
-    cardSourceOverlayOpen,
-    journeyContent.poolContext,
-    journeyContent.dreamAvatars,
-    resolvedDreamAvatarId,
-    state.seed,
-  ]);
-
-  // Seed-growth provenance: the random seed card and the affinity growth that
-  // built the pool. Recomputed on demand (same determinism guarantees as the
-  // idf3 provenance above) for the "Why Cards" overlay and the Pool Viewer, so
-  // both surfaces describe the exact pool the player drafts from. Computed for
-  // every affinity-grown variant (`seed` and the pick-record family); null for
-  // variants that grow no seed (idf3, color_pool, ...).
-  const isAffinityGrownVariant =
-    AFFINITY_GROWN_POOL_VARIANTS.has(resolvedPoolVariant);
-  const seedProvenanceNeeded =
-    isAffinityGrownVariant && (cardSourceOverlayOpen || poolViewerOpen);
-  const seedProvenance = useMemo(() => {
-    const poolContext = journeyContent.poolContext;
-    if (!seedProvenanceNeeded || poolContext === undefined) return null;
-    if (resolvedDreamAvatarId === null) return null;
-    const dreamAvatar = journeyContent.dreamAvatars.find(
-      (dc) => dc.id === resolvedDreamAvatarId,
-    );
-    if (dreamAvatar === undefined) return null;
-    return buildDreamAvatarSeedProvenance(dreamAvatar, poolContext, state.seed);
-  }, [
-    seedProvenanceNeeded,
-    journeyContent.poolContext,
-    journeyContent.dreamAvatars,
-    resolvedDreamAvatarId,
-    state.seed,
-  ]);
-
   // Tide provenance: which preconstructed tides the run's pool was dealt from
   // (the signature tide, the random subset of theme tides, the broad tail) and
   // which tide each pooled card rode in on. Recomputed on demand (same
   // determinism guarantees as the provenance above) for the "Why Cards" overlay
   // and the Pool Viewer, so both surfaces describe the exact pool the player
-  // drafts from. Computed only for the `tides4` variant; null otherwise.
-  const isTides4Variant = poolVariantNeedsTides4(resolvedPoolVariant);
-  const tides4ProvenanceNeeded =
-    isTides4Variant && (cardSourceOverlayOpen || poolViewerOpen);
+  // drafts from.
+  const tides4ProvenanceNeeded = cardSourceOverlayOpen || poolViewerOpen;
   const tides4Provenance = useMemo(() => {
     const poolContext = journeyContent.poolContext;
     if (!tides4ProvenanceNeeded || poolContext === undefined) return null;
@@ -495,7 +439,6 @@ export function JourneyApp({
             resolvedPackage={state.resolvedPackage}
             poolVariant={resolvedPoolVariant}
             replayRecord={replayRecord}
-            seedProvenance={seedProvenance}
             tides4Provenance={tides4Provenance}
             isOpen={poolViewerOpen}
             onClose={handleClosePoolViewer}
@@ -543,8 +486,6 @@ export function JourneyApp({
           <CardSourceOverlay
             cardSourceDebug={state.cardSourceDebug}
             cardDatabase={cardDatabase}
-            idf3Provenance={cardSourceProvenance}
-            seedProvenance={seedProvenance}
             tides4Provenance={tides4Provenance}
             isOpen={cardSourceOverlayOpen}
             onClose={handleCloseCardSourceOverlay}

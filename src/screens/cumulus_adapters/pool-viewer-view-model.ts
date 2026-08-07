@@ -1,8 +1,7 @@
 import type { DraftRecord } from "../../data/cards-v2-database";
-import { seedProvenanceVariantCopy } from "../../draft/pool/seed-provenance-copy";
 import type { PoolVariant } from "../../draft/pool/types";
 import type { CardData } from "../../types/cards";
-import type { ResolvedDreamAvatarPackage, SeedProvenanceSummary, Tides4ProvenanceSummary } from "../../types/content";
+import type { ResolvedDreamAvatarPackage, Tides4ProvenanceSummary } from "../../types/content";
 import type { DraftState } from "../../types/draft";
 import type { CardChoiceGridCardView as CardGalleryCardView } from "../../cumulus/components/card/CardChoiceGrid";
 import type { PoolViewerCostFilter, PoolViewerDisclosureView, PoolViewerFilterView, PoolViewerReplayRowView, PoolViewerSourceId, PoolViewerView } from "../../cumulus/screens/PoolViewerScreen";
@@ -28,7 +27,6 @@ export interface BuildPoolViewerViewInput {
   resolvedPackage: ResolvedDreamAvatarPackage | null;
   replayRecord: DraftRecord | null;
   poolVariant: PoolVariant | null;
-  seedProvenance: SeedProvenanceSummary | null;
   tides4Provenance: Tides4ProvenanceSummary | null;
   source: PoolViewerSourceId;
   filters: PoolViewerFilterView;
@@ -47,18 +45,17 @@ export interface PoolViewerAdapterInput {
   poolVariant?: PoolVariant | null;
   replayRecord?: DraftRecord | null;
   resolvedPackage?: ResolvedDreamAvatarPackage | null;
-  seedProvenance?: SeedProvenanceSummary | null;
   tides4Provenance?: Tides4ProvenanceSummary | null;
   title?: string;
   variant?: "overlay" | "floating";
 }
 
 const SOURCE_LABELS: Record<PoolViewerSourceId, string> = {
-  run: "Run Pool", tides: "Tide Decks", catalog: "All Cards", idf3: "IDF3 Decklist", signature: "Signature Cards", deck: "Record Deck", history: "Pick History",
+  run: "Run Pool", tides: "Tide Decks", catalog: "All Cards", signature: "Signature Cards", deck: "Record Deck", history: "Pick History",
 };
 
 const EMPTY_LABELS: Record<PoolViewerSourceId, string> = {
-  run: "No run pool cards are available.", tides: "This run was not built from tide decks.", catalog: "No cards match the current filters.", idf3: "No IDF3 starting decklist is available for this run.", signature: "This avatar has no signature cards.", deck: "The replay record has no resolvable deck cards.", history: "The replay record has no pick history.",
+  run: "No run pool cards are available.", tides: "This run has no tide decks.", catalog: "No cards match the current filters.", signature: "This avatar has no signature cards.", deck: "The replay record has no resolvable deck cards.", history: "The replay record has no pick history.",
 };
 
 /** Maps complete domain inputs into deterministic screen data with UUID-based identity. */
@@ -71,7 +68,7 @@ export function buildPoolViewerView(input: BuildPoolViewerViewInput): PoolViewer
   const filtered = filterEntries(entries, input.filters);
   const cards = filtered.map((entry) => cardView(entry));
   const replayRows = source === "history" && input.replayRecord !== null ? buildReplayRows(input.replayRecord, byId) : [];
-  const disclosures = buildDisclosures(input.seedProvenance, input.tides4Provenance, input.replayRecord, source, input.poolVariant, isReplay);
+  const disclosures = buildDisclosures(input.tides4Provenance, input.replayRecord, source, input.poolVariant, isReplay);
   return {
     title: input.title,
     frame: input.frame,
@@ -98,7 +95,6 @@ function cardsById(database: ReadonlyMap<number, CardData>): ReadonlyMap<string,
 
 function sourceOptions(isReplay: boolean, pkg: ResolvedDreamAvatarPackage | null, tides: Tides4ProvenanceSummary | null) {
   const ids: PoolViewerSourceId[] = isReplay ? ["deck", "history", "catalog"] : ["run", ...(tides?.tides.length ? ["tides" as const] : []), "catalog"];
-  if (!isReplay && (pkg?.starterDecklistCardNumbers?.length ?? 0) > 0) ids.push("idf3");
   if ((pkg?.dreamAvatar.signatureCardIds?.length ?? 0) > 0) ids.push("signature");
   return ids.map((id) => ({ id, label: SOURCE_LABELS[id] }));
 }
@@ -109,9 +105,6 @@ function entriesFor(source: PoolViewerSourceId, input: BuildPoolViewerViewInput,
     const card = input.cardDatabase.get(Number(number));
     return card === undefined || copies <= 0 ? [] : [entry("run", card, copies)];
   }) : [];
-  if (source === "idf3") return (input.resolvedPackage?.starterDecklistCardNumbers ?? []).flatMap((number, index) => {
-    const card = input.cardDatabase.get(number); return card === undefined ? [] : [{ ...entry("idf3", card, null), entryId: `idf3:${String(index)}:${card.id}` }];
-  });
   if (source === "signature") return (input.resolvedPackage?.dreamAvatar.signatureCardIds ?? []).flatMap((id, index) => {
     const card = byId.get(id.toLowerCase()); return card === undefined ? [] : [{ ...entry("signature", card, null), entryId: `signature:${String(index)}:${card.id}` }];
   });
@@ -161,11 +154,10 @@ function buildReplayRows(record: DraftRecord, byId: ReadonlyMap<string, CardData
   });
 }
 
-function buildDisclosures(seed: SeedProvenanceSummary | null, tides: Tides4ProvenanceSummary | null, record: DraftRecord | null, source: PoolViewerSourceId, variant: PoolVariant | null, replay: boolean) {
+function buildDisclosures(tides: Tides4ProvenanceSummary | null, record: DraftRecord | null, source: PoolViewerSourceId, variant: PoolVariant | null, replay: boolean) {
   const rows: PoolViewerDisclosureView[] = [];
-  if (seed !== null) rows.push({ id: "seed", title: "Pool construction", summary: `algo: ${seed.variant}`, body: `Seed card ${seed.seedCardName}; ${String(seed.totalCopies)} copies across ${String(seed.distinctCardCount)} cards. ${seedProvenanceVariantCopy(seed.variant).poolViewerAffinityBasis}` });
   if (tides !== null) rows.push({ id: "tides", title: "Tide provenance", summary: `${String(tides.tides.length)} tides`, body: `Built to ${String(tides.dealSize)} cards at a ${String(tides.cap)}-copy cap; ${String(tides.facetDrawnCount)} of ${String(tides.facetAvailableCount)} theme tides were drawn.` });
   if (source === "deck" && record !== null) rows.push({ id: "record", title: "Replay record", summary: record.id, body: `Record deck loaded from ${record.sourceFile}.` });
-  if (seed === null && tides === null && !replay && variant !== null) rows.push({ id: "algorithm", title: "Pool construction", summary: `algo: ${variant}`, body: "The active run pool is shown with its remaining copies." });
+  if (tides === null && !replay && variant !== null) rows.push({ id: "algorithm", title: "Pool construction", summary: `algo: ${variant}`, body: "The active run pool is shown with its remaining copies." });
   return rows;
 }

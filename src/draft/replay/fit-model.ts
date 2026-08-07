@@ -15,20 +15,18 @@
 //     the cards already in the deck. This is "X pairs well with what you have".
 //   - prior:      the candidate's global play-rate. This is the tie-breaker /
 //     fallback that dominates on pick 1 when the deck is empty.
-// The IDF math (corpus build recipe, weighted cosine) mirrors the pool
-// `variant-idf` module; `idfCosine` is imported and reused directly.
+// The IDF math uses the shared deck-scoring primitives in `src/draft/idf-fit.ts`.
 //
 // A plain-JS mirror of this scoring lives in
 // `scripts/draft-replay-experiment.mjs` (the offline recall@4 harness that tuned
 // `DEFAULT_FIT_TUNING`). If you change a formula here, change it there too.
 
-import { idfCosine, type IdfDeck } from "../pool/variant-idf.ts";
+import { idfCosine, type IdfDeck } from "../idf-fit.ts";
 
 /**
  * Tuning knobs for the fit model. `alpha`/`beta`/`gamma` are the blend weights
  * for the neighbour-CF, co-occurrence, and prior terms; `K` is the neighbour
- * count. The remaining knobs control the IDF corpus exactly as the pool
- * `variant-idf` module's do.
+ * count. The remaining knobs control the IDF corpus hygiene.
  */
 export interface FitTuning {
   /** Weight on the neighbour collaborative-filtering term. */
@@ -69,7 +67,7 @@ export interface FitTuning {
  * secondary signal. `gamma` (the global prior) is kept small on purpose: a large
  * gamma pulls toward popular cards and erodes mid/late recall, while a small
  * weight aids the early picks and is the intended pick-1 fallback for an empty
- * deck. The IDF corpus knobs mirror the pool `variant-idf` module's hygiene.
+ * deck.
  */
 export const DEFAULT_FIT_TUNING: FitTuning = {
   alpha: 1.0,

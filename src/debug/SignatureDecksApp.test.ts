@@ -10,7 +10,7 @@ import {
   type SignatureDeck,
 } from "./SignatureDecksApp.tsx";
 import { buildIdfStats, signatureFit } from "../draft/idf-fit.ts";
-import { idfCosine } from "../draft/pool/variant-idf.ts";
+import { idfCosine } from "../draft/idf-fit.ts";
 import type { JourneyContent } from "../data/journey-content.ts";
 import type { CardData } from "../types/cards.ts";
 import type { DreamAvatarContent } from "../types/content.ts";

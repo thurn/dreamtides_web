@@ -24,14 +24,15 @@ Vite. The setup script is idempotent and:
 2. Parses `dream_avatars.toml` into `public/dream-avatars-v2-data.json`.
 3. Symlinks `public/cards/{cardNumber}.webp` into the local image cache at
    `~/Library/Caches/io.github.dreamtides.tv/image_cache/`.
-4. Copies the tide PNGs into `public/tides/`.
+4. Copies `data/tides4.jsonc` into `public/tides4-data.json` with comments
+   stripped.
 5. Compiles `data/tabula/atlas.toml` into validated `public/atlas-data.json`.
 6. Compiles `data/tabula/opponents.toml` into validated
    `public/opponents-data.json`.
 
-The generated `public/cards/`, `public/tides/`, `public/card-data.json`, and
-`public/dream-avatars-v2-data.json`, and `public/opponents-data.json` paths are
-gitignored.
+The generated `public/cards/`, `public/card-data.json`,
+`public/dream-avatars-v2-data.json`, `public/tides4-data.json`, and
+`public/opponents-data.json` paths are gitignored.
 
 Battle and opponent tuning is documented in
 [Opponent Data](opponents_data.md). Battle setup, Dreamwell schedules,

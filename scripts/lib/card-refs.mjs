@@ -1,9 +1,8 @@
 // Shared helpers for resolving card references by their stable cards_v2 UUID.
 //
-// Every system that names cards in data — the signature lists in
-// `dream_avatars.toml`, the pool metadata in `cards-v2-metadata.ts`, the
-// build-around metadata in `buildaround_support.json`, and the adapted draft
-// records under `docs/draft_records_adapted` — keys cards by their `id` UUID
+// Every maintained system that names cards in data — including the signature
+// lists in `dream_avatars.toml` and adapted draft records under
+// `docs/draft_records_adapted` — keys cards by their `id` UUID
 // from `data/tabula/cards.toml`. The UUID is stable across display renames,
 // so renaming a card in `cards.toml` keeps every one of those files in sync.
 //
@@ -53,43 +52,6 @@ export function mapsFromCards(cards) {
     idToName.set(card.id, card.name);
   }
   return { idToName };
-}
-
-// Per-`meta` cache of the build-around support entries indexed by current card
-// name. `buildaround_support.json` is keyed by card-id UUID with a `name` field;
-// the experiment harness works in card-name space, so it looks entries up by
-// name through this index.
-const supportByNameCache = new WeakMap();
-
-/**
- * Look up a `buildaround_support.json` card entry by current card name. The
- * name index is built once per `meta` object and cached.
- */
-export function supportEntryByName(meta, name) {
-  let byName = supportByNameCache.get(meta);
-  if (byName === undefined) {
-    byName = new Map();
-    // Index by the entry's current card name. Fall back to the object key when an
-    // entry carries no `name` field (e.g. synthetic fixtures keyed by name).
-    for (const [key, entry] of Object.entries(meta.cards ?? {})) {
-      byName.set(typeof entry.name === "string" ? entry.name : key, entry);
-    }
-    supportByNameCache.set(meta, byName);
-  }
-  return byName.get(name);
-}
-
-/**
- * Look up a `buildaround_support.json` card entry directly by its cards_v2
- * UUID (case-insensitive). `buildaround_support.json` is natively keyed by
- * lowercase UUID, so this is an O(1) lookup that avoids the name-index
- * altogether — and is safe when two distinct cards share a display name.
- *
- * Returns `undefined` when the UUID is not in the support metadata (neutral
- * cards are simply absent from the file).
- */
-export function supportEntryById(meta, id) {
-  return (meta.cards ?? {})[id.toLowerCase()];
 }
 
 /**
@@ -162,42 +124,9 @@ export function stripJsonComments(text) {
 
 /**
  * Read every adapted draft record (`*.jsonc`) in `dir` and return one decklist
- * per seat that has a non-empty mainboard: the seat's `mainboard` resolved to
- * current card names, in order. Card tokens are stable cards_v2 UUIDs; a token
- * that is not a UUID for a known card is dropped from that decklist. Seats with
- * an empty (or fully unresolved) mainboard are skipped, as are files without a
- * `seats` array.
- */
-export function readAdaptedRecordDecklists(dir, { idToName }) {
-  const decks = [];
-  for (const filename of readdirSync(dir)
-    .filter((f) => f.endsWith(".jsonc"))
-    .sort()) {
-    const raw = JSON.parse(
-      stripJsonComments(readFileSync(join(dir, filename), "utf8")),
-    );
-    if (!Array.isArray(raw.seats)) continue;
-    for (const seat of raw.seats) {
-      if (!Array.isArray(seat.mainboard)) continue;
-      const names = [];
-      for (const token of seat.mainboard) {
-        if (CARD_ID_RE.test(token) && idToName.has(token)) {
-          names.push(idToName.get(token));
-        }
-      }
-      if (names.length > 0) decks.push(names);
-    }
-  }
-  return decks;
-}
-
-/**
- * Read every adapted draft record (`*.jsonc`) in `dir` and return one decklist
- * per seat that has a non-empty mainboard, exactly like
- * {@link readAdaptedRecordDecklists}, but keyed on each card's stable cards_v2
- * UUID (lowercased) rather than its current display name. This is the
- * rename-proof, collision-proof corpus the IDF-cosine pool engine and its
- * affiliations score on: two distinct cards that happen to share a display name
+ * per seat that has a non-empty mainboard, keyed on each card's stable cards_v2
+ * UUID (lowercased). This is the collision-proof corpus affiliation scoring
+ * consumes: two distinct cards that happen to share a display name
  * stay distinct here because they carry different UUIDs. The same seat-filtering
  * and resolution rules apply — a token that resolves to no known card is
  * dropped, and a seat with an empty (or fully unresolved) mainboard is skipped.

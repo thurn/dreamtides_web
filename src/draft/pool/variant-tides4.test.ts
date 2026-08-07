@@ -73,9 +73,6 @@ function makeTides4(
 
 function makePoolData(tides4Decks: Tides4DecksJson): PoolData {
   return {
-    core: new Set(),
-    archLists: new Map(),
-    draftLists: new Map(),
     tides4Decks,
   };
 }

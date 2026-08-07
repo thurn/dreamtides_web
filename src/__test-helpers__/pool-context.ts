@@ -7,8 +7,8 @@ import type { RunPoolContext } from "../data/journey-content";
 /**
  * A small hand-authored corpus for tests that drive the journey-start build path
  * (`buildDreamAvatarPackage`). It provides three real-ish decklists of twenty
- * card names each and a name index covering every name, so the idf3 generator
- * has a usable corpus and `resolvePool` can map the generated names back onto
+ * card names each and a UUID index covering every name, so tides4 has a usable
+ * synthetic artifact and `resolvePool` can map the generated ids back onto
  * card numbers. Assertions over the resulting pool should be property-based
  * (a non-empty draft pool was produced) rather than checking exact numbers.
  */
@@ -93,13 +93,27 @@ export function makeTestPoolContext(
     cards.map((c) => [c.cardNumber, c]),
   );
   const decklistIds = TEST_DECKLISTS.map((deck) => deck.map(idForName));
+  const poolData = buildPoolData(cards, decklistIds);
+  poolData.tides4Decks = {
+    version: 1,
+    tides: decklistIds.map((ids, index) => ({
+      id: `test-tide-${String(index + 1)}`,
+      name: `Test Tide ${String(index + 1)}`,
+      role: index === 0 ? "signature" : index === 1 ? "facet" : "neutral",
+      color: index === 0 ? "purple" : index === 1 ? "green" : "blue",
+      cards: ids.map((id) => ({
+        id,
+        name: cards.find((card) => card.id === id)?.name ?? id,
+        copies: 2,
+      })),
+    })),
+    tidePoolByDreamAvatar: {},
+  };
   return {
-    poolData: buildPoolData(cards, TEST_DECKLISTS, undefined, decklistIds),
+    poolData,
     idIndex: buildIdIndex(cardDatabase),
     allDreamsignPoolIds,
-    // This corpus has decklists but no draft records, so pin idf3 (which builds
-    // from the decklist corpus) rather than inheriting the records-driven
-    // default, which would throw on the empty record corpus.
-    poolVariant: "idf3",
+    poolVariant: "tides4",
+    tides4Tuning: { dealSize: 60, copyCap: 2, maxFacets: 3 },
   };
 }

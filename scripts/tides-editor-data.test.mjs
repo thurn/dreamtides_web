@@ -9,7 +9,7 @@ import {
 
 // A small synthetic artifact, serialized through the real bake serializer, so
 // these tests exercise the editor's read/patch path without coupling to the
-// production tides4/tides5 card content (which is free to change at any time).
+// production tides4 card content (which is free to change at any time).
 function fixtureArtifact() {
   const json = {
     version: 1,
@@ -131,12 +131,8 @@ describe("resolveTidesFile", () => {
     });
   });
 
-  it("allows another tides artifact name", () => {
-    expect(resolveTidesFile(rootDir, "tides5")).toMatchObject({
-      ok: true,
-      file: "tides5",
-      jsoncPath: "data/tides5.jsonc",
-    });
+  it("rejects another artifact name", () => {
+    expect(resolveTidesFile(rootDir, "tides-other").ok).toBe(false);
   });
 
   it("rejects traversal and path-bearing selectors", () => {

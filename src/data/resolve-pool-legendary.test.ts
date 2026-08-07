@@ -47,12 +47,23 @@ function makePool(copiesByCardNumber: Record<number, number>): GeneratedPool {
   let size = 0;
   for (const copies of counts.values()) size += copies;
   return {
-    identity: "u",
-    themes: [],
     counts,
     seed: 1,
     size,
     variant: "tides4",
+    tideDeckIds: [],
+    tides4Provenance: {
+      dreamAvatarId: "test-avatar",
+      signatureless: false,
+      borrowedArchetypeName: null,
+      dealSize: size,
+      cap: 2,
+      maxFacets: 0,
+      facetDrawnCount: 0,
+      facetAvailableCount: 0,
+      tides: [],
+      cardProvenanceById: {},
+    },
   };
 }
 

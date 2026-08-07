@@ -43,22 +43,15 @@ export interface ShopGenerationOptions {
   dreamsignTemplates?: readonly DreamsignTemplate[];
   /** The run's full Dreamsign pool, used to regenerate an exhausted pool. */
   dreamsignRegenerationPoolIds?: readonly string[];
-  /**
-   * When provided and non-empty the shop is a Specialty Shop: its card slots
-   * are drawn from this fixed list (the run's chosen idf3 starter decklist)
-   * instead of the depleting draft multiset, and they do not spend the draft
-   * pool.
-   */
-  starterDecklistCardNumbers?: readonly number[];
+  /** Specialty Shops use their authored stock count and card price. */
+  isSpecialty?: boolean;
   cardCount?: number;
   dreamsignCount?: number;
   /**
    * Optional affiliation reweighting (`cardNumber -> multiplier`) for a shop in
    * an affiliated dreamscape (see `src/affiliations/affiliation-weights.ts`).
-   * Applied to a regular shop's draft-multiset card draw so the stock leans toward
-   * the dreamscape's affiliation without ever removing a card. A Specialty Shop's
-   * card slots come from the run's fixed starter decklist and are deliberately
-   * left unbiased — that shop already features a curated list by design.
+   * Applied to the shop's draft-multiset card draw so stock leans toward the
+   * dreamscape's affiliation without removing a candidate from consideration.
    */
   affiliationNumberWeights?: ReadonlyMap<number, number>;
   /**
@@ -93,10 +86,9 @@ export interface ShopInventoryResult {
   reconstructionLog: ShopInventoryReconstructionLog;
   /**
    * The draft multiset after this shop drew its card slots from — and spent —
-   * it. Present ONLY for a regular pool-card shop that actually spent the run
-   * draft multiset. `undefined` means the shop did not touch the run's draft
-   * state at all — a Specialty Shop (draws from the fixed starter decklist), a
-   * card-less Dreamsign Market (`cardCount: 0`), or a run with no draft state —
+   * it. Present only for a card shop that spent the run draft multiset.
+   * `undefined` means the shop did not touch the run's draft state — a card-less
+   * Dreamsign Market (`cardCount: 0`) or a run with no draft state —
    * and the caller MUST keep its existing draft state rather than persist
    * anything from the result.
    *
@@ -115,7 +107,7 @@ export interface ShopInventoryReconstructionLog {
   affiliationId: string | null;
   requestedCardCount: number;
   requestedDreamsignCount: number;
-  cardSource: "specialty" | "draft_multiset" | "none";
+  cardSource: "draft_multiset" | "none";
   drawnCardCount: number;
   cardsMissingFromDatabase: number;
   cardSlotCount: number;
@@ -217,7 +209,7 @@ export function runtimeSlotsToShopSlots(
 /**
  * Build a transient pool {@link PoolDraftState} for shops to draw from when the
  * run's live draft state is a replay state (which has no card multiset of its
- * own). The pool comes from the resolved package's idf3 draft pool. Returns
+ * own). The pool comes from the resolved DreamAvatar package. Returns
  * `null` when there is no package or the pool is empty. The caller passes this
  * to {@link generateShopInventory} in place of the replay draft state, and on
  * write-back keeps the replay state (it does NOT persist the spent pool), so
@@ -282,9 +274,7 @@ function shuffledIndices(length: number, rng: () => number): number[] {
  * Generates shop inventory: 3 cards and 2 dreamsigns by default. Dreamsigns are
  * drawn from — and spent against — the run's shared Dreamsign pool. A regular
  * shop's card slots are drawn from — and spent against — the run draft
- * multiset. When `starterDecklistCardNumbers` is non-empty the shop is a
- * Specialty Shop whose card slots are instead drawn from that fixed list
- * without touching the draft multiset.
+ * multiset. Specialty Shops use the authored specialty stock count and price.
  */
 export function generateShopInventory(
   options: ShopGenerationOptions,
@@ -296,7 +286,7 @@ export function generateShopInventory(
     remainingDreamsignPoolIds = [],
     dreamsignTemplates = [],
     dreamsignRegenerationPoolIds,
-    starterDecklistCardNumbers = [],
+    isSpecialty = false,
     cardCount = economy.stock.cardShop.cardSlots,
     dreamsignCount = economy.stock.cardShop.dreamsignSlots,
     affiliationNumberWeights,
@@ -304,14 +294,13 @@ export function generateShopInventory(
     rng = Math.random,
   } = options;
 
-  const isSpecialty = starterDecklistCardNumbers.length > 0;
   const cardPrice = isSpecialty ? economy.prices.specialtyCard : economy.prices.standardCard;
 
   const nextDraftState =
     draftState === null ? null : structuredClone(draftState);
   // The spent draft multiset to hand back, set ONLY when the regular pool-card
   // branch below actually draws from and spends it. Left `undefined` for every
-  // card-less or fixed-list shop so the caller keeps its own draft state (see
+  // card-less shop so the caller keeps its own draft state (see
   // `ShopInventoryResult.draftState`).
   let spentDraftState: DraftState | undefined = undefined;
   const slots: ShopSlot[] = [];
@@ -323,41 +312,14 @@ export function generateShopInventory(
   // explain any shortfall between the requested `cardCount` and the card slots
   // that actually appear.
   const poolBefore = summarizeDraftPool(draftState);
-  let cardSource: "specialty" | "draft_multiset" | "none" = "none";
+  let cardSource: "draft_multiset" | "none" = "none";
   let drawnCardCount = 0;
   let cardsMissingFromDatabase = 0;
 
-  if (isSpecialty) {
-    // --- Specialty card slots: drawn from the fixed starter decklist,
-    // without touching the draft multiset. ---
-    const shuffled = [...starterDecklistCardNumbers];
-    for (let i = shuffled.length - 1; i > 0; i -= 1) {
-      const j = Math.floor(rng() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    const drawnCardNumbers = shuffled.slice(0, cardCount);
-    cardSource = "specialty";
-    drawnCardCount = drawnCardNumbers.length;
-    for (const cardNumber of drawnCardNumbers) {
-      const card = cardDatabase.get(cardNumber);
-      if (card === undefined) {
-        cardsMissingFromDatabase += 1;
-        continue;
-      }
-      slots.push({
-        itemType: "card",
-        card,
-        dreamsign: null,
-        basePrice: cardPrice,
-        discountPercent: 0,
-        purchased: false,
-      });
-    }
-  } else if (nextDraftState !== null) {
-    // --- Regular card slots: drawn from the draft multiset and spent, biased
+  if (nextDraftState !== null) {
+    // --- Card slots: drawn from the draft multiset and spent, biased
     // toward the dreamscape's affiliation when one is supplied. This is the
-    // only branch that spends the run draft multiset, so it is the only one
-    // that hands a draft state back to the caller. ---
+    // branch hands the spent draft state back to the caller. ---
     spentDraftState = nextDraftState;
     const drawnCardNumbers = drawAndSpendUniqueCards(
       nextDraftState,

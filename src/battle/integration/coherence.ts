@@ -22,7 +22,7 @@
 // function of (deck, fit model). The same function backs both the construction
 // trace logging and the offline validation harness, so both report one number.
 
-import { idfCosine, type IdfDeck } from "../../draft/pool/variant-idf";
+import { idfCosine, type IdfDeck } from "../../draft/idf-fit";
 import {
   scoreCandidatesForDeck,
   type FitModel,

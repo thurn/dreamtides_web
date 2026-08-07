@@ -581,9 +581,7 @@ export function createSiteContentProvider(
             dreamsignRegenerationPoolIds: dreamsignRegenerationPoolIds(journey),
             cardCount: stock.cardSlots,
             dreamsignCount: stock.dreamsignSlots,
-            ...(site.isEnhanced && !isMarket
-              ? { starterDecklistCardNumbers: journey.resolvedPackage?.starterDecklistCardNumbers ?? [] }
-              : {}),
+            isSpecialty: site.isEnhanced && !isMarket,
             rng: stream,
           });
           const baseSlots = shopSlotsToRuntime(generated.slots);
@@ -689,9 +687,7 @@ export function createSiteContentProvider(
         dreamsignRegenerationPoolIds: dreamsignRegenerationPoolIds(journey),
         cardCount: stock.cardSlots,
         dreamsignCount: stock.dreamsignSlots,
-        ...(site.isEnhanced && !isMarket
-          ? { starterDecklistCardNumbers: journey.resolvedPackage?.starterDecklistCardNumbers ?? [] }
-          : {}),
+        isSpecialty: site.isEnhanced && !isMarket,
         rng: stream,
       });
       // Task-15 trap: deck-fit runs keep the live draft state, and a card-less

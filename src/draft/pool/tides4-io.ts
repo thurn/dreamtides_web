@@ -1,23 +1,16 @@
 // Schema and validation for the committed `tides4` artifact (`data/tides4.jsonc`,
-// served as `/tides4-data.json`), the single input the `tides4` pool variant
-// combines into draft pools. `tides4` is the human-legible counterpart of
-// `sigseed`, built to reproduce the run-to-run VARIETY `sigseed` gets from
-// growing each pool from a fresh random SUBSET of a DreamAvatar's signature
-// cards. Where `tides3` bakes only the deterministic centre of that variety (one
-// all-signatures pool per DreamAvatar) and so produces nearly the same pool every
-// run, `tides4` bakes the AXES of the variety as separate decks and recombines a
-// random few of them per run, the way `sigseed` recombines a random subset of
-// signature anchors.
+// served as `/tides4-data.json`), the single input the tides4 pool algorithm
+// combines into draft pools. It bakes the axes of a DreamAvatar's identity as
+// separate decks and recombines a seeded subset per run.
 //
 // The artifact carries both halves of the algorithm so it is self-contained:
 //   * `tides` — the preconstructed decklists. Each tide has a `role`:
 //       - a `signature` tide is one signatured DreamAvatar's signature cards
 //         themselves (the always-included identity floor for its pool);
-//       - a `facet` tide is a single-anchor `sigseed` pool — the coherent "lean"
-//         one signature-region card grows into — and is the variety engine: a
+//       - a `facet` tide is a coherent lean around one signature-region card and
+//         is the variety engine: a
 //         pool draws a random few of a DreamAvatar's facets, so different runs
-//         lean its identity different ways, exactly as `sigseed`'s subset draw
-//         does;
+//         lean its identity different ways;
 //       - a `neutral` tide is a broad, format-spanning deck used as the generic
 //         tail of a pool and as the body of a signatureless DreamAvatar's pool.
 //   * `tidePoolByDreamAvatar` — per DreamAvatar UUID, the tides a pool combines:
@@ -34,7 +27,14 @@
 // script, the metric harnesses, the unit tests, and the browser loader all share
 // one implementation.
 
-import type { TideDeckCardJson } from "./tides-io.ts";
+/** One card entry in a committed tide deck. */
+export interface TideDeckCardJson {
+  id: string;
+  name: string;
+  copies: number;
+  subtype?: string;
+  text?: string;
+}
 
 /** The role a tide plays in pool construction. */
 export type Tides4Role = "signature" | "facet" | "neutral";

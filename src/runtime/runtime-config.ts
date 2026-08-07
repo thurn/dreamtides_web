@@ -23,7 +23,7 @@ export interface RuntimeConfig {
   gameId: string | null;
   databaseMode: DatabaseMode;
   /**
-   * Draft-pool construction strategy from `?algo=`, resolved to a registered
+   * Draft-pool construction algorithm from `?algo=`, resolved to the registered
    * `PoolVariant`. An absent value stays undefined until the compiled draft
    * data supplies the production default; an explicit unrecognized value is an
    * error. Drives the journey prototype's draft and enemy pools.

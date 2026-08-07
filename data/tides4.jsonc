@@ -9,10 +9,9 @@
 // Player-facing contract: a draft pool is built by combining a few tides — the
 // DreamAvatar's signature tide, plus a random subset of its theme (facet) tides,
 // shuffled together and topped up with broad tides until there are enough cards,
-// then dealing the first 150 (never more than 2 copies of a card). `tides4` is
-// the human-legible counterpart of `sigseed`: each facet tide is a single-anchor
-// `sigseed` pool, and drawing a random subset of them reproduces the variety
-// `sigseed` gets from a random signature subset.
+// then dealing the first 150 (never more than 2 copies of a card). Each facet
+// tide is a single-anchor affinity pool, and drawing a random subset creates
+// distinct coherent runs.
 //
 // Cards are keyed by stable cards_v2 UUID; `name` fields are informational,
 // refreshed at bake time. Each tide may also carry hand-authored identity
@@ -36,7 +35,7 @@
 // in), then:
 //   npm run bake-tides4       # rewrites this file + the markdown rendering
 //   npm run setup-assets      # copies it to public/tides4-data.json
-//   npm run pool-metrics -- --variant tides4   # measures it against sigseed
+//   npm run check-tides4    # verifies the committed artifact
 {
   "version": 1,
   "tides": [

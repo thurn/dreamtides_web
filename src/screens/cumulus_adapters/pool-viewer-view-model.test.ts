@@ -16,7 +16,7 @@ const database = new Map([[1, alpha], [2, beta]]);
 const poolState: DraftState = { mode: "pool", draftPoolCopiesByCard: { "1": 2, "2": 1 }, remainingCopiesByCard: { "1": 2, "2": 1 }, currentOffer: [], activeSiteId: null, pickNumber: 1, sitePicksCompleted: 0 };
 
 function build(overrides: Partial<Parameters<typeof buildPoolViewerView>[0]> = {}) {
-  return buildPoolViewerView({ cardDatabase: database, draftState: poolState, resolvedPackage: null, replayRecord: null, poolVariant: null, seedProvenance: null, tides4Provenance: null, source: "run", filters: DEFAULT_POOL_VIEWER_FILTERS, title: "Pool Viewer", frame: "fullScreen", ...overrides });
+  return buildPoolViewerView({ cardDatabase: database, draftState: poolState, resolvedPackage: null, replayRecord: null, poolVariant: null, tides4Provenance: null, source: "run", filters: DEFAULT_POOL_VIEWER_FILTERS, title: "Pool Viewer", frame: "fullScreen", ...overrides });
 }
 
 describe("buildPoolViewerView", () => {
@@ -47,13 +47,12 @@ describe("buildPoolViewerView", () => {
     expect(view.disclosures.some((item) => item.id === "tides")).toBe(true);
   });
 
-  it("maps catalog, IDF3, and signature sources without display-name identity", () => {
+  it("maps catalog and signature sources without display-name identity", () => {
     const resolvedPackage = {
       dreamAvatar: { id: "dc", name: "Fixture", title: "", renderedText: "", imageNumber: "1", startingEssence: 0, signatureCards: ["display-only"], signatureCardIds: [beta.id] },
-      draftPoolCopiesByCard: {}, dreamsignPoolIds: [], mandatoryOnlyPoolSize: 0, draftPoolSize: 0, doubledCardCount: 0, legalSubsetCount: 0, preferredSubsetCount: 0, starterDecklistCardNumbers: [1],
+      draftPoolCopiesByCard: {}, dreamsignPoolIds: [], mandatoryOnlyPoolSize: 0, draftPoolSize: 0, doubledCardCount: 0, legalSubsetCount: 0, preferredSubsetCount: 0,
     };
     expect(build({ source: "catalog" }).cards.map((item) => item.model.cardId)).toEqual([alpha.id, beta.id]);
-    expect(build({ source: "idf3", resolvedPackage }).cards[0]?.model.cardId).toBe(alpha.id);
     expect(build({ source: "signature", resolvedPackage }).cards[0]?.model.cardId).toBe(beta.id);
   });
 

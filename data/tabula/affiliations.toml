@@ -2,8 +2,8 @@
 # affiliation's `signature-cards` are a curated set of cards that exemplify its
 # theme; later draft and battle systems reweight content toward these cards
 # (`weight-strength`) and bias opponent decks toward them
-# (`opponent-bias-strength`). These curations are placeholders chosen by theme;
-# the IDF reweighting math is owned by a later task.
+# (`opponent-bias-strength`). These curations are chosen by theme and serve as
+# probes for the shared IDF reweighting math.
 #
 # Fields:
 #   id                       Stable identifier referenced by dreamscapes.

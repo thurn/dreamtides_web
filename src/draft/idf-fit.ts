@@ -9,17 +9,75 @@
 // metric), while `computeAffinity` uses the standard idf² cosine via
 // `idfCosine`. Choose based on which metric the caller needs.
 //
-// Reuses `idfCosine`, `IdfDeck`, and `IdfCorpus` from variant-idf.ts so the
-// scoring arithmetic is consistent with the rest of the draft pipeline.
-//
 // Mirrors the df/idf/norm logic in `src/debug/SignatureDecksApp.tsx` and the
 // affinity logic in `src/affiliations/affiliation-weights.ts`, generalized to
 // opaque string keys (no name ↔ UUID translation here).
 
-import { idfCosine, type IdfCorpus, type IdfDeck } from "./pool/variant-idf.ts";
+import type { PoolData } from "./pool/types.ts";
 
-// Re-export so callers can import the types from one place.
-export type { IdfCorpus, IdfDeck };
+export interface IdfDeck {
+  cards: Set<string>;
+  norm: number;
+}
+
+export interface IdfCorpus {
+  decks: IdfDeck[];
+  idf: Map<string, number>;
+  df?: ReadonlyMap<string, number>;
+}
+
+/** IDF-weighted cosine similarity between two deck vectors. */
+export function idfCosine(
+  left: IdfDeck,
+  right: IdfDeck,
+  idfOf: (card: string) => number,
+): number {
+  const [small, large] =
+    left.cards.size <= right.cards.size ? [left, right] : [right, left];
+  let dot = 0;
+  for (const card of small.cards) {
+    if (large.cards.has(card)) dot += idfOf(card) ** 2;
+  }
+  return dot / (left.norm * right.norm);
+}
+
+const decklistCorpusCache = new WeakMap<PoolData, IdfCorpus | null>();
+
+/** Build the UUID-keyed historical deck corpus used by affiliation scoring. */
+export function buildDecklistIdfCorpus(poolData: PoolData): IdfCorpus | null {
+  const cached = decklistCorpusCache.get(poolData);
+  if (cached !== undefined) return cached;
+  const source = poolData.decklistIds;
+  if (!source || source.length === 0) {
+    decklistCorpusCache.set(poolData, null);
+    return null;
+  }
+  const filtered = source
+    .map((deck) => new Set(deck))
+    .filter((deck) => deck.size >= 16 && deck.size <= 34);
+  if (filtered.length === 0) {
+    decklistCorpusCache.set(poolData, null);
+    return null;
+  }
+  const documentFrequency = new Map<string, number>();
+  for (const deck of filtered) {
+    for (const card of deck) {
+      documentFrequency.set(card, (documentFrequency.get(card) ?? 0) + 1);
+    }
+  }
+  const idf = new Map<string, number>();
+  for (const [card, frequency] of documentFrequency) {
+    idf.set(card, Math.log((filtered.length + 1) / frequency));
+  }
+  const decks = filtered.map((cards): IdfDeck => {
+    let squaredNorm = 0;
+    for (const card of cards) squaredNorm += (idf.get(card) ?? 0) ** 2;
+    return { cards, norm: Math.sqrt(squaredNorm) || 1 };
+  });
+  const corpus = { decks, idf, df: documentFrequency };
+  decklistCorpusCache.set(poolData, corpus);
+  return corpus;
+}
 
 /**
  * Build an IDF corpus from raw decks of opaque string keys (UUIDs or names).

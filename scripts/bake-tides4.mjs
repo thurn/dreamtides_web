@@ -4,31 +4,27 @@
 //   node scripts/bake-tides4.mjs           # writes data/tides4.jsonc + docs/cards2/tides4_decklists.md
 //   node scripts/bake-tides4.mjs --out /tmp/tides4.jsonc --doc /tmp/tides4.md
 //
-// `tides4` is the human-legible counterpart of `sigseed`, built to reproduce the
-// run-to-run VARIETY `sigseed` gets from growing each pool from a fresh random
-// SUBSET of a DreamAvatar's signature cards. `tides3` bakes only the deterministic
-// CENTRE of that variety (one all-signatures pool per DreamAvatar) and so ships
-// nearly the same pool every run; `tides4` instead bakes the AXES of the variety
-// as separate decks and recombines a random few per run, the way `sigseed`
-// recombines a random subset of signature anchors. This bake derives those decks
-// from the exact corpus and affinity grower `sigseed` uses:
+// `tides4` represents each Dream Avatar as an always-joined signature tide plus
+// several independently selectable facet tides. A random facet subset gives the
+// avatar a different coherent lean on each run, while neutral tides supply the
+// broad tail needed to deal a complete pool. This bake derives those decks from
+// the draft-record pick-affinity corpus:
 //
-//   1. Build the pick-affinity corpus `sigseed` grows from (`buildSigSeedCorpus`).
+//   1. Build the pick-affinity corpus from recorded offers and choices.
 //   2. SIGNATURE tides — one per signatured DreamAvatar: its signature cards
 //      themselves, at `starterCopies` copies each. This is the always-joined
-//      identity floor, standing in for the signature anchors `sigseed` always
-//      seeds with.
-//   3. FACET tides — a shared library of single-anchor `sigseed` pools, one per
+//      identity floor.
+//   3. FACET tides — a shared library of single-anchor affinity pools, one per
 //      selected anchor card. Each facet is the coherent "lean" that one
 //      signature-region card grows into. Drawing a random few of a DreamAvatar's
-//      facets each run is the direct analogue of `sigseed`'s random signature
-//      subset. The facet anchors are chosen from the union of every signatured
+//      facets each run provides the run-to-run variety. The facet anchors are
+//      chosen from the union of every signatured
 //      DreamAvatar's signature cards by per-DreamAvatar round-robin (most-played
 //      first), so every DreamAvatar's strongest signature cards become facets and
 //      the library stays within `facetBudget` decks.
 //   4. NEUTRAL tides — broad, format-spanning decks grown from farthest-point seed
-//      cards, the kind of pool `sigseed` reduces to (plain `pickcohere`) for a
-//      signatureless DreamAvatar; also the generic tail that tops a pool up.
+//      cards, providing a coherent body for a signatureless Dream Avatar and the
+//      generic tail that tops a pool up.
 //   5. tidePoolByDreamAvatar — per DreamAvatar, its starter (its signature tide,
 //      or null), the on-identity facets a random subset is drawn from, and the
 //      broad neutral tail. A signatured DreamAvatar draws its subset from its own
@@ -44,31 +40,27 @@
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
-import { buildPoolData } from "../src/draft/pool/pool-data.ts";
-import { growAffinityPoolFromSeeds } from "../src/draft/pool/affinity-grower.ts";
-import { buildSigSeedCorpus, SIGSEED } from "../src/draft/pool/variant-sigseed.ts";
 import {
+  buildTides4Corpus,
   buildSignatureAffinity,
+  growTides4Deck,
   resolveSignatureToCorpus,
-} from "../src/draft/pool/variant-picksig.ts";
+} from "./lib/tides4-bake-corpus.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 // --- Tuning ------------------------------------------------------------------
-// The one-stop dial block. Re-bake + `npm run pool-metrics -- --variant tides4`
-// (against `--variant sigseed`) after editing.
+// The one-stop dial block. Re-bake and run `npm run check-tides4` after editing.
 const TUNING = {
   // Copies in a DreamAvatar's signature (starter) tide — its full-signature
-  // `sigseed` pool, grown from all its signature cards at once. This is the dense,
-  // on-theme CORE every one of the DreamAvatar's pools is built on (it is exactly
-  // `tides3`'s signature tide), always joined; the facets perturb the lean on top
-  // of it. Sized below `sigseed`'s 150 so a few facet cards always join, which is
-  // where the run-to-run variety comes from.
+  // affinity pool, grown from all its signature cards at once. This is the dense,
+  // on-theme core every one of the Dream Avatar's pools is built on. It is sized
+  // so a few facet cards always join, which creates the run-to-run variety.
   starterSize: 110,
-  // Copies in a facet tide — one single-anchor `sigseed` pool, the coherent lean
+  // Copies in a facet tide — one single-anchor affinity pool, the coherent lean
   // one signature-region card grows into. Small, so drawing a random few of them
   // perturbs the starter's lean (the variety engine) without swamping its
-  // on-theme core. A few join every pool to top it past `sigseed`'s 150.
+  // on-theme core. A few join every pool to reach the runtime deal size.
   facetSize: 45,
   // How many facet tides to bake (the shared library spanning the signature
   // anchors). Capped so the player-facing deck count stays small.
@@ -225,7 +217,7 @@ function chooseNeutralSeeds(corpus, count, priorFloor) {
 // text. These extra fields are for human reading only — the runtime schema
 // ignores them.
 function growTideCards(corpus, seedKeys, size, nameOf, detailOf) {
-  const { counts } = growAffinityPoolFromSeeds(corpus, seedKeys, size, SIGSEED);
+  const counts = growTides4Deck(corpus, seedKeys, size);
   const cards = [];
   for (const [id, copies] of counts) {
     const name = nameOf(id);
@@ -299,10 +291,9 @@ const HEADER = `// data/tides4.jsonc — the committed tide decks the \`tides4\`
 // Player-facing contract: a draft pool is built by combining a few tides — the
 // DreamAvatar's signature tide, plus a random subset of its theme (facet) tides,
 // shuffled together and topped up with broad tides until there are enough cards,
-// then dealing the first 150 (never more than 2 copies of a card). \`tides4\` is
-// the human-legible counterpart of \`sigseed\`: each facet tide is a single-anchor
-// \`sigseed\` pool, and drawing a random subset of them reproduces the variety
-// \`sigseed\` gets from a random signature subset.
+// then dealing the first 150 (never more than 2 copies of a card). Each facet
+// tide is a single-anchor affinity pool, and drawing a random subset creates
+// distinct coherent runs.
 //
 // Cards are keyed by stable cards_v2 UUID; \`name\` fields are informational,
 // refreshed at bake time. Each tide may also carry hand-authored identity
@@ -326,7 +317,7 @@ const HEADER = `// data/tides4.jsonc — the committed tide decks the \`tides4\`
 // in), then:
 //   npm run bake-tides4       # rewrites this file + the markdown rendering
 //   npm run setup-assets      # copies it to public/tides4-data.json
-//   npm run pool-metrics -- --variant tides4   # measures it against sigseed`;
+//   npm run check-tides4    # verifies the committed artifact`;
 
 // Canonical one-line serialization of a tide's `claims` annotation, e.g.
 // `      "claims": {"tribe": "Survivor", "mechanics": ["abandon","figment"]},`.
@@ -421,15 +412,13 @@ function renderMarkdown(json, dreamAvatars) {
   lines.push("# Tides4 decklists");
   lines.push("");
   lines.push(
-    "The preconstructed decks (\"tides\") the `?algo=tides4` draft-pool variant",
+    "The preconstructed decks (\"tides\") the tides4 draft-pool algorithm",
     "combines into draft pools. A pool is built by combining a few tides: the",
     "DreamAvatar's signature tide is always joined, a random subset of its theme",
     "(facet) tides is drawn, and broad tides top the pool up; the combined bag is",
     "shuffled and the first 150 cards are dealt (never more than 2 copies of a",
-    "card). `tides4` is the human-legible counterpart of `sigseed` — each facet tide",
-    "is a single-anchor `sigseed` pool, and drawing a random subset of a",
-    "DreamAvatar's facets reproduces the variety `sigseed` gets from growing each",
-    "pool from a random subset of its signature cards. A signatureless DreamAvatar",
+    "card). Each facet tide is a single-anchor affinity pool, and drawing a random",
+    "subset of a DreamAvatar's facets creates distinct coherent runs. A signatureless DreamAvatar",
     "draws its subset from the whole facet library, so each run leans toward a",
     "different coherent archetype.",
     "",
@@ -736,12 +725,11 @@ function applyOverrides(tides, overrides, nameOf, detailOf, logger = () => {}) {
 
 const BAKE_INPUT_FILES = {
   cards: "public/cards_v2-data.json",
-  decklists: "public/decklists-data.json",
   draftRecords: "public/draft-records-data.json",
   dreamAvatars: "public/dream-avatars-v2-data.json",
 };
 
-// Load the four bundled bake inputs from `public/`. Throws (rather than exiting)
+// Load the three bundled bake inputs from `public/`. Throws (rather than exiting)
 // with a clear remedy when an input is missing, so callers — including the test —
 // can surface it.
 export function loadBakeInputs(rootDir = ROOT) {
@@ -760,14 +748,13 @@ export function loadBakeInputs(rootDir = ROOT) {
 }
 
 /**
- * Pure core of the bake: turn the four inputs (+ the optional override layer and
+ * Pure core of the bake: turn the three inputs (+ the optional override layer and
  * the carried-forward annotations) into the serializable `json` plus the richer
  * `tides` array the markdown render needs. No file IO; routes progress/override
  * messages through `logger` (default noop). Throws on bad inputs/overrides.
  */
 export function buildTides4({
   cards,
-  decklists,
   draftRecords,
   dreamAvatars,
   overrides = null,
@@ -775,12 +762,12 @@ export function buildTides4({
   logger = () => {},
 }) {
   const pickRecords = draftRecords.map((r) => ({ packs: r.packIds, picks: r.pickIds }));
-  const poolData = buildPoolData(cards, decklists, pickRecords);
-  const corpus = buildSigSeedCorpus(poolData);
+  const corpus = buildTides4Corpus(pickRecords);
   if (!corpus || corpus.cards.length === 0) {
     throw new Error("Empty pick-affinity corpus (no usable draft records).");
   }
-  const nameOf = (id) => poolData.cardNameById?.get(id);
+  const cardNameById = new Map(cards.map((card) => [card.id, card.name]));
+  const nameOf = (id) => cardNameById.get(id);
   const priorOf = (id) => corpus.prior.get(id) ?? 0;
   // Card subtype + rendered rules text by UUID, for the informational `subtype`
   // and `text` fields on each baked card entry (human reading only).
@@ -810,7 +797,7 @@ export function buildTides4({
     anchorsByDreamAvatar.set(dc.id, keys);
     sigIdx += 1;
     const id = `tide-sig-${String(sigIdx).padStart(2, "0")}`;
-    // The starter is the full-signature `sigseed` pool — the dense on-theme core.
+    // The starter is the full-signature affinity pool — the dense on-theme core.
     const cardsList = growTideCards(corpus, keys, TUNING.starterSize, nameOf, detailOf);
     tides.push({
       id,
@@ -822,7 +809,7 @@ export function buildTides4({
     starterByDreamAvatar.set(dc.id, id);
   }
 
-  // FACET tides — a shared library of single-anchor `sigseed` pools. Anchors are
+  // FACET tides — a shared library of single-anchor affinity pools. Anchors are
   // chosen from the union of all signatures by per-DreamAvatar round-robin so
   // every DreamAvatar's strongest cards become facets within the budget.
   const dcAnchors = [...anchorsByDreamAvatar.entries()].map(([dcId, keys]) => ({
@@ -849,8 +836,8 @@ export function buildTides4({
   });
   const facetTides = tides.filter((t) => t.role === "facet");
 
-  // NEUTRAL tides — broad, format-spanning decks (the `pickcohere`-style pools
-  // `sigseed` reduces to for signatureless DreamAvatars, and the generic tail).
+  // NEUTRAL tides — broad, format-spanning decks used for signatureless
+  // Dream Avatars and as the generic tail.
   const neutralSeeds = chooseNeutralSeeds(
     corpus,
     TUNING.neutralTideCount,
@@ -888,7 +875,7 @@ export function buildTides4({
   //     neutral tail is the broad tides nearest its starter by cosine.
   //   * a SIGNATURELESS DreamAvatar draws its subset from the whole facet library
   //     (so each run leans a random coherent archetype) and its tail is every
-  //     broad tide — mirroring how `sigseed` reduces to `pickcohere`.
+  //     broad tide.
   const tidePoolByDreamAvatar = {};
   const facetById = new Map(facetTides.map((t) => [t.id, t]));
   for (const dc of dreamAvatars) {

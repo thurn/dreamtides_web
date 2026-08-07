@@ -13,12 +13,9 @@ import { homedir } from "node:os";
 import { pathToFileURL } from "node:url";
 import { parse } from "smol-toml";
 import { NIGHTMARE_CARD_ID } from "../src/data/nightmare-identity.ts";
-import { CARDS_V2_POOL_METADATA } from "../src/data/cards-v2-metadata.ts";
-import { DREAM_AVATAR_ARCHETYPES_BY_ID } from "../src/data/dream-avatars-v2-database.ts";
 import { OFFER_TILE_BACKGROUND_IMAGE_NUMBERS } from "../src/data/offer-tile-art.ts";
 import {
   CARD_ID_RE,
-  readAdaptedRecordDecklists,
   readAdaptedRecordDecklistIds,
   resolveToken,
   stripJsonComments,
@@ -59,6 +56,25 @@ export function generateOpponentsData({
 
 const ROOT = resolve(import.meta.dirname, "..");
 const DATA_DIR = join(ROOT, "data");
+const LEGACY_DRAFT_POOL_ARTIFACTS = [
+  "decklists-data.json",
+  "human-decklists-data.json",
+  "merged-archetype-lists-data.json",
+  "affinity-corpus-data.json",
+  "tides-data.json",
+  "tides2-data.json",
+  "tides2-relationships-data.json",
+  "tides3-data.json",
+  "tides5-data.json",
+];
+
+/** Keep a regenerated public directory aligned with the current pool inputs. */
+export function removeLegacyDraftPoolArtifacts(publicDir) {
+  for (const filename of LEGACY_DRAFT_POOL_ARTIFACTS) {
+    rmSync(join(publicDir, filename), { force: true });
+  }
+}
+
 export const IMAGE_CACHE_DIR = join(
   homedir(),
   "Library",
@@ -366,15 +382,12 @@ export function transformCard(card) {
  * Options (all optional, defaults preserve the canonical behaviour):
  *   * `seatFilter` — a `Set` of `"<draftId>#<seat>"` keys; when given, only seats
  *     whose key is in the set are kept (every other seat is skipped before any
- *     work). Used by the `tides5` bake to restrict the corpus to the known-good
- *     decklists in `docs/known_good_decklists.json`.
+ *     work). Useful for focused corpus experiments.
  *   * `requireFullPicks` (default true) — when true, a seat is dropped unless it
  *     trims to exactly 30 picks (the standard 3×15 / first-three-packs layout).
  *     When false, a seat is kept with whatever pack-1-3 / pickInPack≤10 picks it
  *     has (≥1), so non-standard layouts — 5 packs of 9, a single big pack — still
- *     contribute their high-signal early picks. The corpus the pick-data variants
- *     build weights every pick equally regardless of its in-pack position, so a
- *     short seat's observations stay valid.
+ *     contribute their high-signal early picks.
  */
 export function buildDraftRecords(dir, cardMaps, opts = {}) {
   const { idToName } = cardMaps;
@@ -1323,50 +1336,10 @@ export function regenerateCardData({
     throw new Error("Expected [[cards]] array in cards.toml");
   }
 
-  // id<->name maps for resolving the UUID-keyed reference systems (signatures,
-  // pool metadata, build-around metadata, and the decklist corpora) back to the
-  // current display names. Validate the two TypeScript/JSON reference files up
-  // front so a dangling UUID fails the build loudly.
+  // id<->name maps for resolving UUID-keyed signatures and decklist corpora
+  // back to the current display names.
   const cardMaps = buildCardMaps(allCardsV2);
-  validateCardIds(
-    Object.keys(CARDS_V2_POOL_METADATA),
-    cardMaps.idToName,
-    "cards-v2-metadata.ts",
-  );
-  const buildaroundPath = join(DATA_DIR, "buildaround_support.json");
-  const buildaroundOriginal = readFileSync(buildaroundPath, "utf8");
-  const buildaroundSupport = JSON.parse(buildaroundOriginal);
-  validateCardIds(
-    Object.keys(buildaroundSupport.cards ?? {}),
-    cardMaps.idToName,
-    "buildaround_support.json",
-  );
-  // The build-around metadata is keyed by card id but looked up by current card
-  // name (idf4 / the experiment harness index it on `entry.name`), so refresh the
-  // name field from the current card name. Renaming a card needs no edit here.
-  for (const [id, entry] of Object.entries(buildaroundSupport.cards ?? {})) {
-    entry.name = cardMaps.idToName.get(id);
-  }
-  const buildaroundNext = `${JSON.stringify(buildaroundSupport, null, 2)}\n`;
-  if (buildaroundNext !== buildaroundOriginal) {
-    writeFileSync(buildaroundPath, buildaroundNext);
-  }
-
-  // The draft-pool metadata (core/colors/draft-archetypes) the non-`idf3`
-  // pool variants consume lives in TypeScript (`cards-v2-metadata.ts`), not in
-  // cards.toml. It is keyed by the stable card id; merge it back into each
-  // record before serializing so the generated JSON the pool experiments read is
-  // complete. The standard `idf3` variant ignores all of it. Per-card `tides`
-  // are deliberately not injected: the runtime card data carries no tide values.
-  const jsonCardsV2 = allCardsV2.map((card) => {
-    const meta = CARDS_V2_POOL_METADATA[card.id];
-    if (meta) {
-      if (meta.core !== undefined) card.core = meta.core;
-      if (meta.colors) card.colors = meta.colors;
-      if (meta.draftArchetypes) card["draft-archetypes"] = meta.draftArchetypes;
-    }
-    return transformCard(card);
-  });
+  const jsonCardsV2 = allCardsV2.map(transformCard);
   writeFileSync(cardV2JsonPath, JSON.stringify(jsonCardsV2, null, 2) + "\n");
   console.log(`Wrote ${jsonCardsV2.length} cards to cards_v2-data.json`);
 
@@ -1496,6 +1469,7 @@ export function setupAssets({
   tutorialDialogueFrameArtPath = TUTORIAL_DIALOGUE_FRAME_ART_PATH,
   catalogFixtureOnly = false,
 } = {}) {
+  removeLegacyDraftPoolArtifacts(publicDir);
   if (catalogFixtureOnly) {
     setupCatalogFixture({
       cardTomlPath,
@@ -1523,7 +1497,6 @@ export function setupAssets({
   const atlasArtDir = join(publicDir, "atlas");
   const cardJsonPath = join(publicDir, "card-data.json");
   const cardV2JsonPath = join(publicDir, "cards_v2-data.json");
-  const decklistsJsonPath = join(publicDir, "decklists-data.json");
   const decklistIdsJsonPath = join(publicDir, "decklist-ids-data.json");
   const draftRecordsAdaptedDir = join(ROOT, "docs", "draft_records_adapted");
   const draftRecordsJsonPath = join(publicDir, "draft-records-data.json");
@@ -1599,32 +1572,8 @@ export function setupAssets({
     `Wrote ${tutorialConfiguration.actions.length} tutorial actions and ${tutorialConfiguration.triggers.length} triggers to tutorial-data.json`,
   );
 
-  // Real per-deck card lists bundled for the draft test's `decklists` pool
-  // variant (and the `idf`/`idf2`/`idf3` variants), which build a pool by
-  // snowballing similar real decklists rather than synthesizing one from
-  // archetype themes. Each seat in the adapted draft records
-  // (`docs/draft_records_adapted`) contributes its `mainboard` as one deck, with
-  // every card resolved from its stable cards_v2 UUID to the current name, so
-  // renaming a card needs no edit here. Empty decks are dropped; all size
-  // filtering happens in the algorithm so it stays tunable. The runtime bundle is
-  // keyed by current card name (`string[][]`, one inner array per deck), matching
-  // the name-based pool engine and oracle tests.
-  console.log("Bundling real decklists from the adapted draft records...");
-  const decklists = readAdaptedRecordDecklists(
-    draftRecordsAdaptedDir,
-    cardMaps,
-  );
-  writeFileSync(decklistsJsonPath, JSON.stringify(decklists) + "\n");
-  console.log(`Wrote ${decklists.length} decklists to decklists-data.json`);
-
-  // The same per-seat decklists, but keyed on each card's stable cards_v2 UUID
-  // (lowercased) instead of its current display name. The IDF-cosine pool engine
-  // (`idf`/`idf2`/`idf3`/`idf4`) and the affiliation reweighting score on this
-  // id-keyed corpus so two distinct cards that share a display name stay distinct
-  // (24 cards_v2 cards share a name with another). Bundled alongside the name
-  // corpus, which the `decklists` variant and the human-readable tooling still
-  // read. Built from the SAME seats (every non-empty mainboard), so the two
-  // corpora line up index-for-index.
+  // Stable-UUID decklists back affiliation scoring. Each non-empty mainboard in
+  // the adapted draft records contributes one deck.
   const decklistIds = readAdaptedRecordDecklistIds(
     draftRecordsAdaptedDir,
     cardMaps,
@@ -1634,8 +1583,8 @@ export function setupAssets({
     `Wrote ${decklistIds.length} id-keyed decklists to decklist-ids-data.json`,
   );
 
-  // Adapted draft records bundled for the record-replay draft mode and the
-  // pick-data pool variants. Each JSON file in `docs/draft_records_adapted` is
+  // Adapted draft records bundled for record-replay draft mode. Each JSON file
+  // in `docs/draft_records_adapted` is
   // one draft event; we extract one entry per seat (trimmed to the first 10 picks
   // per pack) and write the flat array to the browser bundle.
   console.log("Bundling adapted draft records from the corpus...");
@@ -1659,82 +1608,6 @@ export function setupAssets({
     `Wrote ${knownGoodDecklists.length} known-good decklists to known-good-decklists-data.json`,
   );
 
-  // The committed affinity corpus the `embedded` pool variant grows from. It is an
-  // authored/baked artifact (run `npm run bake-affinity-corpus` to regenerate it
-  // from the records and the affinity overlay) committed as JSONC with a
-  // provenance header. The browser fetches the served copy and parses it with
-  // `JSON.parse`, so the comments are stripped on the way to the served path; the
-  // committed source stays authoritative like a lockfile. Absent only in a
-  // checkout that has not baked it yet.
-  const affinityCorpusSourcePath = join(DATA_DIR, "affinity_corpus.jsonc");
-  const affinityCorpusJsonPath = join(publicDir, "affinity-corpus-data.json");
-  if (existsSync(affinityCorpusSourcePath)) {
-    const corpusJsonc = readFileSync(affinityCorpusSourcePath, "utf8");
-    // Strip comments and re-serialize so the served asset is valid JSON.
-    const served = JSON.stringify(JSON.parse(stripJsonComments(corpusJsonc)));
-    writeFileSync(affinityCorpusJsonPath, served + "\n");
-    console.log(
-      "Copied affinity_corpus.jsonc to affinity-corpus-data.json (comments stripped)",
-    );
-  } else {
-    console.log(
-      "No data/affinity_corpus.jsonc found; the `embedded` pool variant will " +
-        "be unavailable until `npm run bake-affinity-corpus` is run.",
-    );
-  }
-
-  // The committed tide decks the `tides` pool variant combines into pools. A
-  // baked artifact like the affinity corpus above (run `npm run bake-tides` to
-  // regenerate it from the bundled decklists), committed as JSONC with a
-  // provenance header and served as plain JSON.
-  const tidesSourcePath = join(DATA_DIR, "tides.jsonc");
-  const tidesJsonPath = join(publicDir, "tides-data.json");
-  if (existsSync(tidesSourcePath)) {
-    const tidesJsonc = readFileSync(tidesSourcePath, "utf8");
-    const served = JSON.stringify(JSON.parse(stripJsonComments(tidesJsonc)));
-    writeFileSync(tidesJsonPath, served + "\n");
-    console.log("Copied tides.jsonc to tides-data.json (comments stripped)");
-  } else {
-    console.log(
-      "No data/tides.jsonc found; the `tides` pool variant will be " +
-        "unavailable until `npm run bake-tides` is run.",
-    );
-  }
-
-  // The committed `tides2` tide decks and their curated relationships. The decks
-  // are baked by `npm run bake-tides2`; the relationships are seeded once by
-  // `npm run seed-tide-relationships`, then hand-curated. Both are committed as
-  // JSONC with a provenance header and served as plain JSON.
-  const tides2SourcePath = join(DATA_DIR, "tides2.jsonc");
-  const tides2JsonPath = join(publicDir, "tides2-data.json");
-  if (existsSync(tides2SourcePath)) {
-    const tides2Jsonc = readFileSync(tides2SourcePath, "utf8");
-    const served = JSON.stringify(JSON.parse(stripJsonComments(tides2Jsonc)));
-    writeFileSync(tides2JsonPath, served + "\n");
-    console.log("Copied tides2.jsonc to tides2-data.json (comments stripped)");
-  } else {
-    console.log(
-      "No data/tides2.jsonc found; the `tides2` pool variant will be " +
-        "unavailable until `npm run bake-tides2` is run.",
-    );
-  }
-  // The committed `tides3` artifact (decks + per-DreamAvatar tide pools in one
-  // file) the `tides3` pool variant combines into pools. Baked by
-  // `npm run bake-tides3`, committed as JSONC with a provenance header.
-  const tides3SourcePath = join(DATA_DIR, "tides3.jsonc");
-  const tides3JsonPath = join(publicDir, "tides3-data.json");
-  if (existsSync(tides3SourcePath)) {
-    const tides3Jsonc = readFileSync(tides3SourcePath, "utf8");
-    const served = JSON.stringify(JSON.parse(stripJsonComments(tides3Jsonc)));
-    writeFileSync(tides3JsonPath, served + "\n");
-    console.log("Copied tides3.jsonc to tides3-data.json (comments stripped)");
-  } else {
-    console.log(
-      "No data/tides3.jsonc found; the `tides3` pool variant will be " +
-        "unavailable until `npm run bake-tides3` is run.",
-    );
-  }
-
   // The committed `tides4` artifact (signature/facet/neutral tides + the
   // per-DreamAvatar tide pools in one file) the `tides4` pool variant combines
   // into pools. Baked by `npm run bake-tides4`, committed as JSONC with a
@@ -1748,52 +1621,13 @@ export function setupAssets({
     console.log("Copied tides4.jsonc to tides4-data.json (comments stripped)");
   } else {
     console.log(
-      "No data/tides4.jsonc found; the `tides4` pool variant will be " +
-        "unavailable until `npm run bake-tides4` is run.",
-    );
-  }
-
-  // The committed `tides5` artifact — the same kind of signature/facet/neutral
-  // tides + per-DreamAvatar tide pools as `tides4`, but baked only from the
-  // known-good decklists. Baked by `npm run bake-tides5`, committed as JSONC with
-  // a provenance header.
-  const tides5SourcePath = join(DATA_DIR, "tides5.jsonc");
-  const tides5JsonPath = join(publicDir, "tides5-data.json");
-  if (existsSync(tides5SourcePath)) {
-    const tides5Jsonc = readFileSync(tides5SourcePath, "utf8");
-    const served = JSON.stringify(JSON.parse(stripJsonComments(tides5Jsonc)));
-    writeFileSync(tides5JsonPath, served + "\n");
-    console.log("Copied tides5.jsonc to tides5-data.json (comments stripped)");
-  } else {
-    console.log(
-      "No data/tides5.jsonc found; the `tides5` pool variant will be " +
-        "unavailable until `npm run bake-tides5` is run.",
-    );
-  }
-
-  const tides2RelSourcePath = join(DATA_DIR, "tides2_relationships.jsonc");
-  const tides2RelJsonPath = join(publicDir, "tides2-relationships-data.json");
-  if (existsSync(tides2RelSourcePath)) {
-    const tides2RelJsonc = readFileSync(tides2RelSourcePath, "utf8");
-    const served = JSON.stringify(
-      JSON.parse(stripJsonComments(tides2RelJsonc)),
-    );
-    writeFileSync(tides2RelJsonPath, served + "\n");
-    console.log(
-      "Copied tides2_relationships.jsonc to tides2-relationships-data.json (comments stripped)",
-    );
-  } else {
-    console.log(
-      "No data/tides2_relationships.jsonc found; the `tides2` pool variant will " +
-        "be unavailable until `npm run seed-tide-relationships` is run.",
+      "No data/tides4.jsonc found; run `npm run bake-tides4` to create it.",
     );
   }
 
   // The v2 DreamAvatar identities (`dream_avatars.toml`) drive the standalone
   // draft test harness. They carry a kebab->camel normalization and a
-  // `signature-cards` list that steers the standard `idf3` pool variant. The
-  // `draft-archetypes` the non-`idf3` variants seed from live in TypeScript
-  // ({@link DREAM_AVATAR_ARCHETYPES_BY_ID}) and are merged in below.
+  // `signature-cards` list used by tides4 baking and display surfaces.
   console.log("Parsing dream_avatars.toml...");
   const dreamAvatarV2TomlContent = readFileSync(dreamAvatarV2TomlPath, "utf8");
   const parsedDreamAvatarsV2 = parse(dreamAvatarV2TomlContent);
@@ -1803,16 +1637,11 @@ export function setupAssets({
     throw new Error("Expected [[dreamAvatar]] array in dream_avatars.toml");
   }
 
-  // Signatures are authored as stable card-id UUIDs (`docs/cards2/
-  // idf3_signature_design.md`). Resolve them to the current card names here so
-  // the runtime bundle and the name-based pool engine see names, and so a
-  // dangling signature UUID fails the build. Renaming a card in cards.toml
-  // therefore needs no edit to dream_avatars.toml. The resolved UUIDs are also
+  // Signatures are authored as stable card UUIDs. Resolve them to current card
+  // names for display and fail the build for a dangling reference. The UUIDs are
   // emitted as `signatureCardIds` (index-aligned with `signatureCards`) so
   // consumers that must distinguish two cards sharing a name can key on the id.
   const jsonDreamAvatarsV2 = allDreamAvatarsV2.map((dreamAvatar) => {
-    const archetypes = DREAM_AVATAR_ARCHETYPES_BY_ID[dreamAvatar.id];
-    if (archetypes) dreamAvatar["draft-archetypes"] = archetypes;
     const transformed = transformDreamAvatar(dreamAvatar);
     if (Array.isArray(transformed.signatureCards)) {
       const resolved = transformed.signatureCards.map((ref) =>

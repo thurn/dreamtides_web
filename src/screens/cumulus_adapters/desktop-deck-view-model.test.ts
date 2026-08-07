@@ -68,9 +68,6 @@ function tidesContext(
 ): RunPoolContext {
   const tideId = "tide-sig-fixture";
   const poolData: PoolData = {
-    core: new Set(),
-    archLists: new Map(),
-    draftLists: new Map(),
     tides4Decks: {
       version: 1,
       tides: [
@@ -168,17 +165,4 @@ describe("buildDesktopDeckView", () => {
     ]);
   });
 
-  it("omits tides when the current run does not use the tides4 pool", () => {
-    const view = buildDesktopDeckView(
-      [],
-      database(),
-      dreamAvatar,
-      [],
-      [dreamAvatarContent],
-      tidesContext("idf3"),
-      "run-seed",
-    );
-
-    expect(view.tides).toEqual([]);
-  });
 });

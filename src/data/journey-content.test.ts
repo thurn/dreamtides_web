@@ -1,24 +1,25 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import {
-  buildReplayDraftState,
-  hashStringToSeed,
-  loadJourneyContent,
-} from "./journey-content";
+
 import type { CardData } from "../types/cards";
-import type { DraftRecord, KnownGoodDecklist } from "./cards-v2-database";
+import { asCardId, asCardName } from "../types/card-identity";
 import type { DreamAvatarContent } from "../types/content";
-import { economyFixture } from "../testing/economy-fixture";
 import type { FitModel } from "../draft/replay/fit-model";
 import {
   selectRecordIndex,
   selectReplayRecordIndex,
 } from "../draft/replay/draft-records";
-import { asCardId, asCardName } from "../types/card-identity";
 import { MINIMAL_ATLAS_DATA } from "../__test-helpers__/atlas-fixtures";
-import { opponentsFixture } from "../testing/opponents-fixture";
-import { draftDataFixture } from "../testing/draft-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
+import { draftDataFixture } from "../testing/draft-data-fixture";
+import { economyFixture } from "../testing/economy-fixture";
+import { opponentsFixture } from "../testing/opponents-fixture";
 import explorationJson from "../../public/exploration-data.json";
+import type { DraftRecord, KnownGoodDecklist } from "./cards-v2-database";
+import {
+  buildReplayDraftState,
+  hashStringToSeed,
+  loadJourneyContent,
+} from "./journey-content";
 
 const DRAFT_HASH = "d".repeat(64);
 const DRAFT_DATA = draftDataFixture({
@@ -47,574 +48,6 @@ function makeCards(count: number): CardData[] {
   return Array.from({ length: count }, (_value, index) => makeCard(index + 1));
 }
 
-function makeValidDraftRecord(
-  id: string,
-  mainboard: readonly string[],
-): DraftRecord {
-  return {
-    id,
-    draftId: `draft-${id}`,
-    sourceFile: `draft-${id}-records.json`,
-    mainboard: [...mainboard],
-    mainboardIds: [...mainboard],
-    packs: [mainboard.slice(0, 4)],
-    picks: [[mainboard[0]]],
-    packIds: [mainboard.slice(0, 4)],
-    pickIds: [[mainboard[0]]],
-  };
-}
-
-beforeEach(() => {
-  vi.restoreAllMocks();
-});
-
-describe("loadJourneyContent", () => {
-  // A minimal valid affinity corpus (2 cards) so the `embedded` variant's
-  // `/affinity-corpus-data.json` fetch deserializes without error.
-  const tinyCorpus = {
-    version: 2,
-    kind: "matrix",
-    cards: ["card-1", "card-2"],
-    prior: [0.5, 0.5],
-    affinity: [[0, [[1, 0.4]]]],
-  };
-
-  function stubFetch({
-    cards,
-    dreamAvatars,
-    dreamsigns,
-    decklists,
-    decklistIds,
-    draftRecords = [],
-    knownGoodDecklists = [],
-    merchantCorpus = {
-      version: 1,
-      source: "test",
-      cards: {},
-      clusters: [],
-    },
-    affinityCorpus = tinyCorpus,
-    failingPaths = [],
-  }: {
-    cards: CardData[];
-    dreamAvatars: unknown[];
-    dreamsigns: unknown[];
-    decklists: string[][];
-    decklistIds?: string[][];
-    draftRecords?: DraftRecord[];
-    knownGoodDecklists?: KnownGoodDecklist[];
-    merchantCorpus?: unknown;
-    affinityCorpus?: unknown;
-    failingPaths?: string[];
-  }): void {
-    const idByName = new Map(cards.map((card) => [String(card.name), card.id]));
-    const resolvedDecklistIds =
-      decklistIds ??
-      decklists.map((deck) =>
-        deck.map((name) => idByName.get(name) ?? name.toLowerCase()),
-      );
-    const failingPathSet = new Set(failingPaths);
-    const explorationData = {
-      schemaVersion: explorationJson.schemaVersion,
-      actionsPerEncounter: explorationJson.actionsPerEncounter,
-      contentHash: explorationJson.contentHash,
-      foldHash: explorationJson.foldHash,
-      effectKinds: explorationJson.effectKinds,
-      customCards: [],
-      customDreamsigns: [],
-      encounters: Array.from({ length: 14 }, (_value, encounterIndex) => ({
-        cardId: `exploration-source-${String(encounterIndex + 1)}`,
-        prose: `Exploration fixture ${String(encounterIndex + 1)}.`,
-        action: [0, 1].map((actionIndex) => ({
-          id: `exploration-${String(encounterIndex + 1)}-${String(actionIndex + 1)}`,
-          label: `Choice ${String(actionIndex + 1)}`,
-          effectText: "Gain the fixture card.",
-          effectKind: "gain-card",
-          cardId: String(cards[0]?.id ?? "fixture-card"),
-        })),
-      })),
-    };
-    vi.stubGlobal(
-      "fetch",
-      vi.fn((input: string | URL) => {
-        const path = String(input);
-        if (failingPathSet.has(path)) {
-          return Promise.resolve({
-            ok: false,
-            status: 503,
-            statusText: "Test Failure",
-            json: () => Promise.resolve(null),
-          });
-        }
-        if (path === "/cards_v2-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(cards),
-          });
-        }
-        if (path === "/dream-avatars-v2-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(dreamAvatars),
-          });
-        }
-        if (path === "/dreamsign-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(dreamsigns),
-          });
-        }
-        if (path === "/exploration-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(explorationData),
-          });
-        }
-        if (path === "/reward-selection-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(CONFIG_DATA_FIXTURE.rewardSelectionData),
-          });
-        }
-        if (path === "/augury-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(CONFIG_DATA_FIXTURE.auguryData),
-          });
-        }
-        if (path === "/dreamwell-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve([]),
-          });
-        }
-        if (path === "/decklists-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(decklists),
-          });
-        }
-        if (path === "/decklist-ids-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(resolvedDecklistIds),
-          });
-        }
-        if (path === "/draft-records-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(draftRecords),
-          });
-        }
-        if (path === "/known-good-decklists-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(knownGoodDecklists),
-          });
-        }
-        if (path === "/merchant-corpus-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(merchantCorpus),
-          });
-        }
-        if (path === "/affinity-corpus-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(affinityCorpus),
-          });
-        }
-        if (path === "/dreamscapes-data.json") {
-          return Promise.resolve({ ok: true, json: () => Promise.resolve([]) });
-        }
-        if (path === "/affiliations-data.json") {
-          return Promise.resolve({ ok: true, json: () => Promise.resolve([]) });
-        }
-        if (path === "/dream-guides-data.json") {
-          return Promise.resolve({ ok: true, json: () => Promise.resolve([]) });
-        }
-        if (path === "/apollyon-incarnations-data.json") {
-          return Promise.resolve({ ok: true, json: () => Promise.resolve([]) });
-        }
-        if (path === "/atlas-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(MINIMAL_ATLAS_DATA),
-          });
-        }
-        if (path === "/economy-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(economyFixture()),
-          });
-        }
-        if (path === "/draft-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(DRAFT_DATA),
-          });
-        }
-        if (path === "/opponents-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(opponentsFixture()),
-          });
-        }
-        // Any other asset the loader requests is an optional, variant-specific
-        // artifact (a tides bundle, dreamsign profiles, etc.). Returning a 404
-        // here keeps these tests focused on the shared load path.
-        return Promise.resolve({
-          ok: false,
-          status: 404,
-          json: () => Promise.resolve(null),
-        });
-      }),
-    );
-  }
-
-  it("loads V2 cards, DreamAvatars, decklists and builds the run pool context", async () => {
-    const cards = [makeCard(1), makeCard(2), makeCard(3)];
-    const v2DreamAvatar = {
-      id: "dream-avatar-1",
-      name: "Test DreamAvatar",
-      title: "Speaker of Tests",
-      renderedText: "Test rules text.",
-      imageNumber: "0001",
-      startingEssence: 235,
-      signatureCards: ["Card 1", "Card 2"],
-    };
-
-    stubFetch({
-      cards,
-      dreamAvatars: [v2DreamAvatar],
-      dreamsigns: [],
-      decklists: [["Card 1", "Card 2", "Card 3"]],
-    });
-
-    const content = await loadJourneyContent();
-
-    expect(content.cardDatabase.size).toBe(cards.length);
-    expect(content.dreamAvatars).toHaveLength(1);
-    // The DreamAvatar mapping must carry the V2 signature cards through.
-    expect(content.dreamAvatars[0].signatureCards).toEqual([
-      "Card 1",
-      "Card 2",
-    ]);
-    expect(content.dreamAvatars[0].startingEssence).toBe(235);
-    expect(content.opponentsData).toEqual(opponentsFixture());
-    expect(content.draftData).toEqual(DRAFT_DATA);
-
-    // The pool context indexes every loaded card by id and carries the decklists.
-    expect(content.poolContext).toBeDefined();
-    const poolContext = content.poolContext!;
-    for (const card of cards) {
-      expect(poolContext.idIndex.get(card.id.toLowerCase())).toBe(
-        card.cardNumber,
-      );
-    }
-    expect(poolContext.poolData.decklists).not.toHaveLength(0);
-    expect(poolContext.poolVariant).toBe("tides4");
-    expect(poolContext.tides4Tuning).toEqual(DRAFT_DATA.pool.tides4);
-  });
-
-  it.each([
-    ["/decklist-ids-data.json", "Failed to load decklist ids"],
-    ["/draft-records-data.json", "Failed to load draft records"],
-    ["/known-good-decklists-data.json", "Failed to load known-good decklists"],
-    ["/merchant-corpus-data.json", "Failed to load merchant corpus"],
-    ["/opponents-data.json", "Failed to load opponent data"],
-  ])(
-    "rejects when fold-relevant content fetch %s fails",
-    async (path, message) => {
-      const cards = [makeCard(1), makeCard(2), makeCard(3)];
-      const dreamAvatars = [
-        {
-          id: "dc-a",
-          name: "Alpha",
-          title: "A",
-          renderedText: "",
-          imageNumber: "0001",
-          startingEssence: 250,
-          signatureCards: ["Card 1"],
-        },
-      ];
-      stubFetch({
-        cards,
-        dreamAvatars,
-        dreamsigns: [],
-        decklists: [["Card 1", "Card 2"]],
-        failingPaths: [path],
-      });
-
-      await expect(loadJourneyContent()).rejects.toThrow(message);
-    },
-  );
-
-  it("fetches the draft-record corpus for pick-data pool variants", async () => {
-    // pickearly (like pickfit/pickpos/pickchoice) grows its pool from the draft
-    // records; without them it would silently fall back to the random color
-    // pool. The records must therefore be fetched even in pool mode.
-    const cards = [makeCard(1), makeCard(2), makeCard(3)];
-    const dreamAvatars = [
-      {
-        id: "dc-a",
-        name: "Alpha",
-        title: "A",
-        renderedText: "",
-        imageNumber: "0001",
-        startingEssence: 250,
-        signatureCards: ["Card 1"],
-      },
-    ];
-    stubFetch({
-      cards,
-      dreamAvatars,
-      dreamsigns: [],
-      decklists: [["Card 1", "Card 2"]],
-      draftRecords: [],
-    });
-
-    await loadJourneyContent("pickearly");
-
-    const fetchedPaths = vi.mocked(fetch).mock.calls.map((c) => c[0] as string);
-    expect(fetchedPaths).toContain("/draft-records-data.json");
-  });
-
-  it("always fetches the draft-record corpus for the default pool variant", async () => {
-    // Every run needs the record corpus regardless of pool variant: it builds the
-    // shared fit model and supplies the pack structures coherent opponent decks
-    // draft from. The no-argument load path (DEFAULT_POOL_VARIANT) fetches it.
-    const cards = [makeCard(1), makeCard(2), makeCard(3)];
-    const dreamAvatars = [
-      {
-        id: "dc-a",
-        name: "Alpha",
-        title: "A",
-        renderedText: "",
-        imageNumber: "0001",
-        startingEssence: 250,
-        signatureCards: ["Card 1"],
-      },
-    ];
-    stubFetch({
-      cards,
-      dreamAvatars,
-      dreamsigns: [],
-      decklists: [["Card 1", "Card 2"]],
-      draftRecords: [],
-    });
-
-    await loadJourneyContent();
-
-    const fetchedPaths = vi.mocked(fetch).mock.calls.map((c) => c[0] as string);
-    expect(fetchedPaths).toContain("/draft-records-data.json");
-  });
-
-  it("fetches the draft-record corpus even for a pool variant that builds from decklists", async () => {
-    // idf3 builds its pool from decklist similarity, not the draft records, but
-    // the records are still fetched so opponent decks have a fit model and packs.
-    const cards = [makeCard(1), makeCard(2), makeCard(3)];
-    const dreamAvatars = [
-      {
-        id: "dc-a",
-        name: "Alpha",
-        title: "A",
-        renderedText: "",
-        imageNumber: "0001",
-        startingEssence: 250,
-        signatureCards: ["Card 1"],
-      },
-    ];
-    stubFetch({
-      cards,
-      dreamAvatars,
-      dreamsigns: [],
-      decklists: [["Card 1", "Card 2"]],
-    });
-
-    await loadJourneyContent("idf3");
-
-    const fetchedPaths = vi.mocked(fetch).mock.calls.map((c) => c[0] as string);
-    expect(fetchedPaths).toContain("/draft-records-data.json");
-  });
-
-  it("loads draft records and builds a fit model for v2 pool mode", async () => {
-    const cards = makeCards(20);
-    const dreamAvatars = [
-      {
-        id: "dc-a",
-        name: "Alpha",
-        title: "A",
-        renderedText: "",
-        imageNumber: "0001",
-        startingEssence: 250,
-        signatureCards: ["Card 1"],
-      },
-    ];
-    const fixtureRecord = makeValidDraftRecord(
-      "rec-1",
-      cards.map((card) => card.name),
-    );
-
-    stubFetch({
-      cards,
-      dreamAvatars,
-      dreamsigns: [],
-      decklists: [cards.slice(0, 4).map((card) => card.name)],
-      draftRecords: [fixtureRecord],
-    });
-
-    const content = await loadJourneyContent("idf3", "pool");
-
-    expect(content.draftMode).toBe("pool");
-    expect(content.draftRecords).toEqual([fixtureRecord]);
-    expect(content.fitModel).toBeDefined();
-    expect(content.fresh20PackSize).toBeUndefined();
-    expect(content.poolContext?.poolVariant).toBe("idf3");
-  });
-
-  it("fetches the committed embedding for the embedded variant", async () => {
-    // The `embedded` variant grows its pool from `/affinity-corpus-data.json`.
-    // The corpus is reconstructed and threaded onto poolData.affinityCorpus.
-    const cards = [makeCard(1), makeCard(2)];
-    const dreamAvatars = [
-      {
-        id: "dc-a",
-        name: "Alpha",
-        title: "A",
-        renderedText: "",
-        imageNumber: "0001",
-        startingEssence: 250,
-        signatureCards: ["Card 1"],
-      },
-    ];
-    stubFetch({
-      cards,
-      dreamAvatars,
-      dreamsigns: [],
-      decklists: [["Card 1", "Card 2"]],
-    });
-
-    const content = await loadJourneyContent("embedded");
-
-    const fetchedPaths = vi.mocked(fetch).mock.calls.map((c) => c[0] as string);
-    expect(fetchedPaths).toContain("/affinity-corpus-data.json");
-    expect(content.poolContext!.poolData.affinityCorpus).toBeDefined();
-    expect(content.poolContext!.poolData.affinityCorpus!.cards).toEqual([
-      "card-1",
-      "card-2",
-    ]);
-  });
-
-  it("offers every DreamAvatar without a validation skip loop", async () => {
-    const cards = [makeCard(1), makeCard(2)];
-    const dreamAvatars = [
-      {
-        id: "dc-a",
-        name: "Alpha",
-        title: "A",
-        renderedText: "",
-        imageNumber: "0001",
-        startingEssence: 0,
-        signatureCards: ["Card 1"],
-      },
-      {
-        id: "dc-b",
-        name: "Beta",
-        title: "B",
-        renderedText: "",
-        imageNumber: "0002",
-        startingEssence: 250,
-        signatureCards: [],
-      },
-    ];
-
-    stubFetch({ cards, dreamAvatars, dreamsigns: [], decklists: [["Card 1"]] });
-
-    const content = await loadJourneyContent();
-
-    expect(content.dreamAvatars.map((dc) => dc.id)).toEqual(["dc-a", "dc-b"]);
-    expect(content.dreamAvatars[0].startingEssence).toBe(0);
-  });
-
-  it("fills an omitted DreamAvatar starting essence from economy data", async () => {
-    const cards = [makeCard(1), makeCard(2)];
-    const economy = economyFixture();
-    economy.journey.defaultStartingEssence = 137;
-    const dreamAvatars = [
-      {
-        id: "dc-defaulted",
-        name: "Defaulted",
-        title: "D",
-        renderedText: "",
-        imageNumber: "0001",
-        signatureCards: ["Card 1"],
-      },
-    ];
-    stubFetch({ cards, dreamAvatars, dreamsigns: [], decklists: [["Card 1"]] });
-    const catalogFetch = vi.mocked(fetch).getMockImplementation()!;
-    vi.mocked(fetch).mockImplementation((input: string | URL | Request) => {
-      const path =
-        typeof input === "string"
-          ? input
-          : input instanceof URL
-            ? input.href
-            : input.url;
-      return path === "/economy-data.json"
-        ? Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(economy),
-          } as Response)
-        : catalogFetch(input);
-    });
-
-    const content = await loadJourneyContent();
-
-    expect(content.dreamAvatars[0].startingEssence).toBe(137);
-  });
-
-  it("populates draftMode, draftRecords, and fitModel in replay mode", async () => {
-    const cards = makeCards(20);
-    const dreamAvatars = [
-      {
-        id: "dc-a",
-        name: "Alpha",
-        title: "A",
-        renderedText: "",
-        imageNumber: "0001",
-        startingEssence: 250,
-        signatureCards: ["Card 1"],
-      },
-    ];
-    const fixtureRecord = makeValidDraftRecord(
-      "rec-1",
-      cards.map((card) => card.name),
-    );
-
-    stubFetch({
-      cards,
-      dreamAvatars,
-      dreamsigns: [],
-      decklists: [cards.slice(0, 4).map((card) => card.name)],
-      draftRecords: [fixtureRecord],
-    });
-
-    const content = await loadJourneyContent("idf3", "replay");
-
-    expect(content.draftMode).toBe("replay");
-    // draftRecords must be populated (even if the corpus is small).
-    expect(content.draftRecords).toBeDefined();
-    expect(content.draftRecords).toHaveLength(1);
-    expect(content.draftRecords![0].id).toBe("rec-1");
-    expect(content.fitModel).toBeDefined();
-  });
-});
-
-// ---------------------------------------------------------------------------
-// buildReplayDraftState
-// ---------------------------------------------------------------------------
-
-/** Minimal DraftRecord fixture with two packs, keyed by card id. */
 function makeRecord(id: string, packCardIds: string[][]): DraftRecord {
   return {
     id,
@@ -629,11 +62,10 @@ function makeRecord(id: string, packCardIds: string[][]): DraftRecord {
   };
 }
 
-/** Minimal DreamAvatarContent fixture; signatures are keyed by card id. */
 function makeDreamAvatar(signatureCardIds: string[]): DreamAvatarContent {
   return {
-    id: "dc-test",
-    name: "Test DreamAvatar",
+    id: "avatar-test",
+    name: "Test Avatar",
     title: "Speaker of Tests",
     renderedText: "",
     imageNumber: "0001",
@@ -642,100 +74,293 @@ function makeDreamAvatar(signatureCardIds: string[]): DreamAvatarContent {
   };
 }
 
+beforeEach(() => {
+  vi.restoreAllMocks();
+});
+
+describe("loadJourneyContent", () => {
+  function stubFetch({
+    cards,
+    dreamAvatars,
+    decklistIds,
+    draftRecords = [],
+    knownGoodDecklists = [],
+    failingPaths = [],
+    economy = economyFixture(),
+  }: {
+    cards: CardData[];
+    dreamAvatars: unknown[];
+    decklistIds: string[][];
+    draftRecords?: DraftRecord[];
+    knownGoodDecklists?: KnownGoodDecklist[];
+    failingPaths?: string[];
+    economy?: ReturnType<typeof economyFixture>;
+  }): void {
+    const explorationData = {
+      schemaVersion: explorationJson.schemaVersion,
+      actionsPerEncounter: explorationJson.actionsPerEncounter,
+      contentHash: explorationJson.contentHash,
+      foldHash: explorationJson.foldHash,
+      effectKinds: explorationJson.effectKinds,
+      customCards: [],
+      customDreamsigns: [],
+      encounters: [
+        {
+          cardId: "exploration-fixture",
+          prose: "A synthetic encounter.",
+          action: [
+            {
+              id: "choice-a",
+              label: "Choose A",
+              effectText: "Gain the fixture card.",
+              effectKind: "gain-card",
+              cardId: String(cards[0]?.id ?? "fixture-card"),
+            },
+            {
+              id: "choice-b",
+              label: "Choose B",
+              effectText: "Gain the fixture card.",
+              effectKind: "gain-card",
+              cardId: String(cards[0]?.id ?? "fixture-card"),
+            },
+          ],
+        },
+      ],
+    };
+    const assets = new Map<string, unknown>([
+      ["/cards_v2-data.json", cards],
+      ["/exploration-data.json", explorationData],
+      ["/reward-selection-data.json", CONFIG_DATA_FIXTURE.rewardSelectionData],
+      ["/augury-data.json", CONFIG_DATA_FIXTURE.auguryData],
+      ["/dream-avatars-v2-data.json", dreamAvatars],
+      ["/dreamwell-data.json", []],
+      ["/dreamsign-data.json", []],
+      ["/decklist-ids-data.json", decklistIds],
+      ["/draft-records-data.json", draftRecords],
+      ["/known-good-decklists-data.json", knownGoodDecklists],
+      [
+        "/merchant-corpus-data.json",
+        { version: 1, source: "test", cards: {}, clusters: [] },
+      ],
+      ["/dreamsign-profiles-data.json", []],
+      ["/dreamsign-signatures-data.json", []],
+      ["/dreamscapes-data.json", []],
+      ["/affiliations-data.json", []],
+      ["/dream-guides-data.json", []],
+      ["/atlas-data.json", MINIMAL_ATLAS_DATA],
+      ["/economy-data.json", economy],
+      ["/draft-data.json", DRAFT_DATA],
+      ["/opponents-data.json", opponentsFixture()],
+      ["/apollyon-incarnations-data.json", []],
+      ["/figments-data.json", []],
+    ]);
+    const failures = new Set(failingPaths);
+
+    vi.stubGlobal(
+      "fetch",
+      vi.fn((input: string | URL | Request) => {
+        const path =
+          typeof input === "string"
+            ? input
+            : input instanceof URL
+              ? input.pathname
+              : new URL(input.url).pathname;
+        if (failures.has(path) || !assets.has(path)) {
+          return Promise.resolve({
+            ok: false,
+            status: failures.has(path) ? 503 : 404,
+            statusText: failures.has(path) ? "Test Failure" : "Not Found",
+            json: () => Promise.resolve(null),
+          } as Response);
+        }
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          statusText: "OK",
+          json: () => Promise.resolve(assets.get(path)),
+        } as Response);
+      }),
+    );
+  }
+
+  it("loads the current catalog and builds a tides4 pool context", async () => {
+    const cards = [makeCard(1), makeCard(2), makeCard(3)];
+    const avatar = {
+      id: "avatar-1",
+      name: "Test Avatar",
+      title: "Speaker of Tests",
+      renderedText: "Test rules text.",
+      imageNumber: "0001",
+      startingEssence: 235,
+      signatureCards: ["Card 1", "Card 2"],
+      signatureCardIds: ["card-1", "card-2"],
+    };
+    stubFetch({
+      cards,
+      dreamAvatars: [avatar],
+      decklistIds: [["card-1", "card-2", "card-3"]],
+    });
+
+    const content = await loadJourneyContent();
+
+    expect(content.cardDatabase.size).toBe(3);
+    expect(content.dreamAvatars[0]).toMatchObject({
+      id: "avatar-1",
+      startingEssence: 235,
+      signatureCardIds: ["card-1", "card-2"],
+    });
+    expect(content.poolContext?.poolVariant).toBe("tides4");
+    expect(content.poolContext?.poolData.decklistIds).toEqual([
+      ["card-1", "card-2", "card-3"],
+    ]);
+    expect(content.poolContext?.tides4Tuning).toEqual(DRAFT_DATA.pool.tides4);
+    expect(content.opponentsData).toEqual(opponentsFixture());
+
+    const fetchedPaths = vi.mocked(fetch).mock.calls.map(([input]) =>
+      typeof input === "string"
+        ? input
+        : input instanceof URL
+          ? input.pathname
+          : new URL(input.url).pathname,
+    );
+    expect(fetchedPaths).toContain("/tides4-data.json");
+  });
+
+  it.each([
+    ["/decklist-ids-data.json", "Failed to load decklist ids"],
+    ["/draft-records-data.json", "Failed to load draft records"],
+    ["/known-good-decklists-data.json", "Failed to load known-good decklists"],
+    ["/merchant-corpus-data.json", "Failed to load merchant corpus"],
+    ["/opponents-data.json", "Failed to load opponent data"],
+  ])("rejects when current content fetch %s fails", async (path, message) => {
+    stubFetch({
+      cards: [makeCard(1)],
+      dreamAvatars: [],
+      decklistIds: [["card-1"]],
+      failingPaths: [path],
+    });
+
+    await expect(loadJourneyContent()).rejects.toThrow(message);
+  });
+
+  it("builds the shared fit model from draft records in pool mode", async () => {
+    const cards = makeCards(20);
+    const record = makeRecord("record-1", [cards.map((card) => card.id)]);
+    stubFetch({
+      cards,
+      dreamAvatars: [],
+      decklistIds: [cards.map((card) => card.id)],
+      draftRecords: [record],
+    });
+
+    const content = await loadJourneyContent("tides4", "pool");
+
+    expect(content.draftMode).toBe("pool");
+    expect(content.draftRecords).toEqual([record]);
+    expect(content.fitModel).toBeDefined();
+    expect(content.fresh20PackSize).toBeUndefined();
+  });
+
+  it("defaults an omitted starting essence and carries replay mode", async () => {
+    const economy = economyFixture();
+    economy.journey.defaultStartingEssence = 137;
+    const record = makeRecord("record-1", [["card-1"]]);
+    stubFetch({
+      cards: [makeCard(1)],
+      dreamAvatars: [
+        {
+          id: "avatar-defaulted",
+          name: "Defaulted",
+          title: "D",
+          renderedText: "",
+          imageNumber: "0001",
+          signatureCards: ["Card 1"],
+          signatureCardIds: ["card-1"],
+        },
+      ],
+      decklistIds: [["card-1"]],
+      draftRecords: [record],
+      economy,
+    });
+
+    const content = await loadJourneyContent("tides4", "replay");
+
+    expect(content.dreamAvatars[0].startingEssence).toBe(137);
+    expect(content.draftMode).toBe("replay");
+    expect(content.draftRecords).toEqual([record]);
+    expect(content.fitModel).toBeDefined();
+  });
+});
+
 describe("buildReplayDraftState", () => {
-  const card1 = makeCard(101);
-  const card2 = makeCard(102);
-  const card3 = makeCard(103);
-  const card4 = makeCard(104);
-
-  // Build a card-id index from the fixture cards.
-  const idIndex = new Map<string, number>([
-    [card1.id, card1.cardNumber],
-    [card2.id, card2.cardNumber],
-    [card3.id, card3.cardNumber],
-    [card4.id, card4.cardNumber],
+  const cards = [makeCard(101), makeCard(102), makeCard(103), makeCard(104)];
+  const idIndex = new Map<string, number>(
+    cards.map((card) => [card.id, card.cardNumber]),
+  );
+  const recordA = makeRecord("record-a", [
+    [cards[0].id, cards[1].id],
+    [cards[2].id],
   ]);
+  const recordB = makeRecord("record-b", [
+    [cards[1].id, cards[2].id],
+    [cards[3].id],
+  ]);
+  const records = [recordA, recordB];
 
-  // Two fixture records with distinct ids.
-  const recordA = makeRecord("rec-a", [[card1.id, card2.id], [card3.id]]);
-  const recordB = makeRecord("rec-b", [[card2.id, card3.id], [card4.id]]);
-  const records: DraftRecord[] = [recordA, recordB];
+  it("rejects an empty record corpus", () => {
+    expect(() =>
+      buildReplayDraftState(makeDreamAvatar([]), idIndex, "seed", []),
+    ).toThrow("requires at least one draft record");
+  });
 
-  it("throws when draftRecords is empty", () => {
-    const dc = makeDreamAvatar([]);
-    expect(() => buildReplayDraftState(dc, idIndex, "seed-1", [])).toThrow(
-      "buildReplayDraftState requires at least one draft record",
+  it("is deterministic and resolves packs plus signature UUIDs", () => {
+    const avatar = makeDreamAvatar([cards[0].id, "unknown", cards[2].id]);
+    const first = buildReplayDraftState(avatar, idIndex, "seed-a", records);
+    const second = buildReplayDraftState(avatar, idIndex, "seed-a", records);
+
+    expect(first).toEqual(second);
+    expect(first.mode).toBe("replay");
+    expect(first.signatureCardNumbers).toEqual([101, 103]);
+    expect(first.packSequence.flat()).toEqual(
+      records.find((record) => record.id === first.recordId)?.packIds
+        .flat()
+        .map((id) => idIndex.get(id)),
     );
   });
 
-  it("selects a record deterministically for a fixed seed", () => {
-    const dc = makeDreamAvatar([]);
-    const state1 = buildReplayDraftState(dc, idIndex, "seed-abc", records);
-    const state2 = buildReplayDraftState(dc, idIndex, "seed-abc", records);
-    expect(state1.recordId).toBe(state2.recordId);
-  });
-
-  it("returns a mode:replay state with packSequence resolved from the chosen record", () => {
-    const dc = makeDreamAvatar([]);
-    const state = buildReplayDraftState(dc, idIndex, "journey-seed-1", records);
-    expect(state.mode).toBe("replay");
-    // recordId must be one of the fixture ids.
-    expect(["rec-a", "rec-b"]).toContain(state.recordId);
-    // packSequence must be resolved to card numbers.
-    const chosenRecord = records.find((r) => r.id === state.recordId)!;
-    expect(state.packSequence).toHaveLength(chosenRecord.packIds.length);
-    for (let i = 0; i < chosenRecord.packIds.length; i += 1) {
-      const expectedNumbers = chosenRecord.packIds[i]
-        .map((cardId) => idIndex.get(cardId))
-        .filter((n): n is number => n !== undefined);
-      expect(state.packSequence[i]).toEqual(expectedNumbers);
-    }
-  });
-
-  it("resolves the dreamAvatar's signature cards to signatureCardNumbers", () => {
-    // dc has card 101 and card 103 as signatures.
-    const dc = makeDreamAvatar([card1.id, card3.id]);
-    const state = buildReplayDraftState(dc, idIndex, "journey-seed-2", records);
-    expect(state.signatureCardNumbers).toContain(card1.cardNumber);
-    expect(state.signatureCardNumbers).toContain(card3.cardNumber);
-  });
-
-  it("drops signature ids not present in the id index", () => {
-    const dc = makeDreamAvatar(["unknown-card", card2.id]);
-    const state = buildReplayDraftState(dc, idIndex, "journey-seed-3", records);
-    // Only card2's number survives; the unknown id is silently dropped.
-    expect(state.signatureCardNumbers).toEqual([card2.cardNumber]);
-  });
-
-  it("produces different records for different seeds", () => {
-    // With two records, different seeds should sometimes select different records.
-    const dc = makeDreamAvatar([]);
+  it("draws both records across deterministic seeds", () => {
     const ids = new Set<string>();
-    for (let i = 0; i < 20; i += 1) {
-      const state = buildReplayDraftState(
-        dc,
-        idIndex,
-        `seed-${String(i)}`,
-        records,
+    for (let index = 0; index < 20; index += 1) {
+      ids.add(
+        buildReplayDraftState(
+          makeDreamAvatar([]),
+          idIndex,
+          `seed-${String(index)}`,
+          records,
+        ).recordId,
       );
-      ids.add(state.recordId);
     }
-    // Both records must appear across the 20 seeds (probability of failure ≈ 2^-19).
-    expect(ids.size).toBe(2);
+    expect(ids).toEqual(new Set(["record-a", "record-b"]));
   });
 
-  // -------------------------------------------------------------------------
-  // fitModel integration
-  // -------------------------------------------------------------------------
+  it("uses the uniform fallback without a fit model", () => {
+    const seed = "uniform-seed";
+    const state = buildReplayDraftState(
+      makeDreamAvatar([cards[0].id]),
+      idIndex,
+      seed,
+      records,
+    );
+    const expectedIndex = selectRecordIndex(
+      hashStringToSeed(`${seed}:replay`),
+      records.length,
+    );
+    expect(state.recordId).toBe(records[expectedIndex].id);
+  });
 
-  /**
-   * Build a minimal FitModel stub with only the idf field populated.
-   * The other fields are unused by buildReplayDraftState (only the idf map
-   * flows through to selectReplayRecordIndex).
-   */
-  function makeFitModelStub(idfEntries: [string, number][]): FitModel {
-    return {
-      idf: new Map(idfEntries),
+  it("uses positive signature IDF to select a matching record", () => {
+    const fitModel: FitModel = {
+      idf: new Map([[cards[0].id, 3]]),
       decks: [],
       prior: new Map(),
       coocNorm: new Map(),
@@ -753,58 +378,17 @@ describe("buildReplayDraftState", () => {
         maxDeckSize: 34,
       },
     };
-  }
-
-  it("without a fitModel the selection equals the uniform fallback", () => {
-    const dc = makeDreamAvatar([card1.id]);
-    // No fitModel → uniform seeded draw.
-    const state = buildReplayDraftState(dc, idIndex, "journey-fm-0", records);
-    const expectedSeed = hashStringToSeed("journey-fm-0:replay");
-    const expectedIndex = selectRecordIndex(expectedSeed, records.length);
-    expect(state.recordId).toBe(records[expectedIndex].id);
-  });
-
-  it("with a fitModel favoring a record's packs, the fitModel steers selection away from the uniform draw", () => {
-    // Only recordA has card1 in its packs, so a positive IDF weight makes it the
-    // single matched record. Placing it at index 1 makes the matched shortlist
-    // order [recordA, recordB] differ from the uniform order [recordB, recordA]
-    // for every seed, so the choice provably depends on the fitModel. The ranking
-    // math itself is covered exhaustively in draft-records.test.ts.
-    const fitModel = makeFitModelStub([[card1.id, 3.0]]);
-    const dc = makeDreamAvatar([card1.id]);
+    const avatar = makeDreamAvatar([cards[0].id]);
     const ordered = [recordB, recordA];
-    const seed = "journey-fm-1";
-
-    const matched = buildReplayDraftState(dc, idIndex, seed, ordered, fitModel);
-    const uniform = buildReplayDraftState(dc, idIndex, seed, ordered);
-    expect(matched.recordId).not.toBe(uniform.recordId);
-
-    // buildReplayDraftState delegates to selectReplayRecordIndex with fitModel.idf.
+    const seed = "fit-seed";
+    const state = buildReplayDraftState(avatar, idIndex, seed, ordered, fitModel);
     const expectedIndex = selectReplayRecordIndex(
-      dc.signatureCardIds ?? [],
+      avatar.signatureCardIds ?? [],
       ordered,
       fitModel.idf,
       hashStringToSeed(`${seed}:replay`),
     );
-    expect(matched.recordId).toBe(ordered[expectedIndex].id);
-  });
 
-  it("with a fitModel whose idf has no weight for any signature, falls back to uniform", () => {
-    // All idf weights are 0 for the signature cards.
-    const fitModel = makeFitModelStub([
-      [card1.id, 0],
-      [card2.id, 0],
-    ]);
-    const dc = makeDreamAvatar([card1.id, card2.id]);
-    const state1 = buildReplayDraftState(
-      dc,
-      idIndex,
-      "journey-fm-2",
-      records,
-      fitModel,
-    );
-    const state2 = buildReplayDraftState(dc, idIndex, "journey-fm-2", records);
-    // Both should pick the same record (uniform fallback in both cases).
-    expect(state1.recordId).toBe(state2.recordId);
+    expect(state.recordId).toBe(ordered[expectedIndex].id);
   });
 });

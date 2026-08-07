@@ -1,14 +1,12 @@
 # Tides4 decklists
 
-The preconstructed decks ("tides") the `?algo=tides4` draft-pool variant
+The preconstructed decks ("tides") the tides4 draft-pool algorithm
 combines into draft pools. A pool is built by combining a few tides: the
 DreamAvatar's signature tide is always joined, a random subset of its theme
 (facet) tides is drawn, and broad tides top the pool up; the combined bag is
 shuffled and the first 150 cards are dealt (never more than 2 copies of a
-card). `tides4` is the human-legible counterpart of `sigseed` — each facet tide
-is a single-anchor `sigseed` pool, and drawing a random subset of a
-DreamAvatar's facets reproduces the variety `sigseed` gets from growing each
-pool from a random subset of its signature cards. A signatureless DreamAvatar
+card). Each facet tide is a single-anchor affinity pool, and drawing a random
+subset of a DreamAvatar's facets creates distinct coherent runs. A signatureless DreamAvatar
 draws its subset from the whole facet library, so each run leans toward a
 different coherent archetype.
 

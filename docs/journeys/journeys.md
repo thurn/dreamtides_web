@@ -233,7 +233,7 @@ signature card sets and corresponding similarity weights configured in TOML.
 ## Tides
 
 Journey content uses the layered tide system described in
-[Tides](../../tides/tides.md) and implemented by the **tides4** draft pool
+[Tides](../cards2/tides_algorithms.md) and implemented by the **tides4** draft pool
 algorithm. Each tide is a preconstructed deck of cards with one of three roles:
 
 - **Signature tides** define a Dream Avatar's identity floor and are always

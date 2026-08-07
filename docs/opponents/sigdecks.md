@@ -39,8 +39,7 @@ authored as stable cards_v2 UUIDs. `setup-assets.mjs` resolves each to its curre
 display name and emits both, index-aligned, on every Dream Avatar in
 `public/dream-avatars-v2-data.json`:
 
-- `signatureCards: string[]` — display names (consumed by the name-based idf3
-  pool engine).
+- `signatureCards: string[]` — display names used by presentation surfaces.
 - `signatureCardIds: string[]` — the matching UUIDs.
 
 `/sigdecks` reads `signatureCardIds`. Of the 32 Dream Avatars, 20 carry a
@@ -81,8 +80,8 @@ deduplicated sets) that contain it, and
 idf(c) = ln(N / df(c))
 ```
 
-so a rare card carries more weight than a common one — the same steering idea the
-idf3 pool variant uses. A signature card shared with a deck therefore counts for
+so a rare card carries more weight than a common one. A signature card shared
+with a deck therefore counts for
 more when that card is distinctive.
 
 ### Vectors and norms

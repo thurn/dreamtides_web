@@ -2,7 +2,7 @@
 
 For each card below, this lists the five cards **most uniquely associated** with it
 across the real draft decklists — each seat's mainboard in
-`docs/draft_records_adapted` (bundled to `public/decklists-data.json`). The goal is
+`docs/draft_records_adapted` (bundled by UUID to `public/decklist-ids-data.json`). The goal is
 to surface the cards that specifically signal a card's archetype, not the
 generically powerful staples that show up in every deck.
 
