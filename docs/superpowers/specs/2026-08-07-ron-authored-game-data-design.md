@@ -784,6 +784,112 @@ maintenance utility only if it still has demonstrated value. Current
 documentation names RON as authored data and TOML as generated compatibility
 data, and `.git-blame-ignore-revs` lists the mechanical migration commits.
 
+## Proposed implementation milestones
+
+The milestones are ordered by dependency. Each should land as a reviewable
+change that leaves the repository usable; tasks may proceed in parallel only
+when they do not change the same compiler, generated file, or editor boundary.
+
+### Milestone 1: Freeze contracts and build the Rust compiler core
+
+Goal: compile declared RON datasets into deterministic staged TOML.
+
+- Freeze manifest, source-version, header, diagnostic, and exit-code contracts.
+- Add fixtures for every supported RON value shape and numeric boundary.
+- Create the pinned Rust workspace, manifest loader, and dataset dispatch.
+- Implement typed Draft, Cards, and Exploration compatibility adapters.
+- Implement deterministic TOML serialization and atomic staging.
+- Add unit, property, golden, invalid-input, and determinism tests.
+- Benchmark all three complete RON candidates.
+
+Exit criteria: `compile` and `compile-all` produce stable staged TOML for all
+three candidates and return the specified structured diagnostics on failure.
+
+### Milestone 2: Integrate generation with TypeScript workflows
+
+Goal: make generated TOML dependable at every existing read entry point.
+
+- Add Node staging, TypeScript validation, publication, and recovery logic.
+- Wire generation into development, review, regeneration, build, and deploy.
+- Add content-aware publication and dataset-level watcher debounce.
+- Test clean checkout, invalid source, interrupted writes, and watcher loops.
+- Document toolchain setup and the missing-generated-data recovery command.
+
+Exit criteria: a clean checkout can generate, validate, build, and watch the
+representative datasets while every failed compile preserves last-valid data.
+
+### Milestone 3: Prove representative parity and cut over Draft
+
+Goal: establish unchanged runtime behavior before canonical ownership changes.
+
+- Capture temporary TypeScript parity oracles for all three candidates.
+- Classify each difference as formatting, normalization, or defect.
+- Require exact runtime data, order, UUID, and generated-artifact parity.
+- Exercise focused application workflows for each generated catalog.
+- Make Draft canonical RON and ignore its generated TOML target.
+- Keep Cards and Exploration in proof mode pending editor cutover.
+
+Exit criteria: Draft is RON-authored in development and release paths; Cards
+and Exploration have approved parity reports and complete adapters.
+
+### Milestone 4: Implement the source-preserving edit engine
+
+Goal: safely apply semantic edit operations without reserializing source files.
+
+- Implement lexing, delimiter trees, schema traversal, spans, and trivia rules.
+- Implement stable-ID lookup, narrow replacement, and canonical insertion.
+- Apply non-overlapping operation batches and detect semantic no-ops.
+- Add revisions, locking, staging, typed equality checks, and publication.
+- Implement the specified editor errors and diagnostic payloads.
+- Add corpus byte-identity tests for every current RON source.
+- Test insertion, comment conflicts, stale writes, rollback, and recovery.
+
+Exit criteria: `stage-edit` applies every declared fixture operation safely and
+all production RON candidates pass the span-index corpus gate.
+
+### Milestone 5: Cut over the Cards editor
+
+Goal: complete the first browser-to-RON editing workflow.
+
+- Add defaulted per-card `tides` to Cards source schema version 2.
+- Implement card-field, facet, cascade, and registry-diff operations.
+- Test every energy, kind, optional-field, collection, and crop mapping.
+- Make the API read generated data and submit revisioned operations.
+- Add the browser save queue, stale UI, applicability, and recovery.
+- QA successful, invalid, conflicting, concurrent, and recovered saves.
+
+Exit criteria: Cards saves preserve unrelated RON bytes and comments, and
+`cards.ron` is canonical for development, editor use, build, and deployment.
+
+### Milestone 6: Cut over the Exploration editor
+
+Goal: prove multi-file operation batching and exhaustive typed effect mapping.
+
+- Add `selection_policy` to source schema version 2 while emitting TOML v1.
+- Implement encounter prose, action, and template replacement operations.
+- Validate action slot plus ID and exhaustively map every effect variant.
+- Publish template changes and affected actions in one transaction.
+- Apply the shared API revision, browser queue, and error contracts.
+- Test every effect and QA valid, stale, invalid, conflict, and recovery paths.
+
+Exit criteria: Exploration editor workflows write canonical RON atomically and
+their generated TOML remains semantically identical to the approved oracle.
+
+### Milestone 7: Migrate remaining catalogs and harden release
+
+Goal: finish dataset conversion and prove the complete release pipeline.
+
+- Order remaining datasets by dependency, editor use, size, and registries.
+- Convert read-only catalogs with models, adapters, fixtures, and parity proof.
+- Add edit operations and browser QA before each editor-backed cutover.
+- Record mechanical commits and update authoring and build documentation.
+- Run full review, regeneration, build, and deployment dry-run without cache.
+- Verify macOS, Linux, CI, watch mode, recovery, and deterministic output.
+- Confirm generated TOML is ignored and assess the migration command's value.
+
+Exit criteria: every scoped dataset is canonical RON, every editor has semantic
+operation coverage, and every acceptance criterion in this design passes.
+
 ## Migration parity
 
 Every dataset cutover uses the pre-migration TypeScript output as a temporary
