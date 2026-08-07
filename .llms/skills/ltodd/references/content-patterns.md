@@ -23,8 +23,8 @@ structure makes the answer and its rationale easy to locate. Combine or discard
 the patterns when the subject demands a different sequence.
 
 Prefer sections that name a meaningful decision or phase of play. Avoid
-component inventories, one heading per source module, and generic buckets that
-separate every rule from its rationale.
+long component inventories, one heading per source module, and generic buckets
+that separate every rule from its rationale.
 
 ## Gameplay-system pattern
 
@@ -40,7 +40,7 @@ A compact progression often works:
 5. Describe randomness, ordering, and persistence near the step they affect.
 6. Cover only edge cases that materially change an outcome.
 7. Close a complex sequence with a one- or two-sentence worked example.
-8. Link presentation-heavy phases to the chapters that own their screens.
+8. Link each phase to the concise screen coverage that orients prototype use.
 
 Good section titles name the decisions: “Offers preserve commitment,” “Payment
 follows selection,” or “The result persists at departure.” They tell the reader
@@ -52,20 +52,22 @@ Use this shape when the chapter explains one player destination and the flow
 through it.
 
 Start with the screen's role in the larger journey and the state on arrival.
-Then follow the player's attention and actions:
+Then supplement the prototype without transcribing it:
 
-1. Establish the initial composition and strongest visual focus.
-2. Explain what information is visible before interaction and why.
-3. Follow the normal action sequence in player order.
-4. Describe state-dependent composition at the point where state changes.
-5. Name standard Cumulus primitives and animations instead of restating them.
-6. Explain screen-specific layout, transition, and interruption logic.
-7. Integrate desktop or narrow-layout differences beside the affected element.
+1. Describe the screen's role, principal interaction, and handoff in one or two
+   sentences.
+2. Briefly name every visible Cumulus component without explaining its API.
+3. Give every distinct player choice or outcome a one-sentence semantic result.
+4. Explain the state or algorithm that selects what the player sees.
+5. Fully specify non-obvious placement, safe-area, responsive, reveal,
+   collision, priority, or interruption algorithms.
+6. State the flow's animation and choreography philosophy once near the top.
+7. Use a representative screenshot only when it adds useful orientation.
 8. End at the handoff into the next canonical game state.
 
-Do not turn the chapter into a list of visible components. The composition
-exists to support decisions, attention, anticipation, and feedback; explain
-those relationships.
+Keep the component inventory brief. Do not reproduce normal component behavior,
+detailed composition, or shot-by-shot presentation that readers can inspect in
+the prototype and Cumulus documentation.
 
 ## Cross-cutting-principle pattern
 
@@ -94,8 +96,8 @@ An effective paragraph has this information shape:
 
 > This chapter specifies how a journey chooses and resolves its next
 > destination. Read it when implementing destination availability, player
-> commitment, or the handoff into a site. Read the linked presentation chapter
-> for the shared map primitives and their standard motion.
+> commitment, or the handoff into a site. Use the prototype for detailed screen
+> presentation and the Cumulus documentation for standard component behavior.
 
 Adapt the prose to the subject. Do not repeat these sentences mechanically.
 
@@ -120,7 +122,7 @@ filenames.
 
 Use one level-two heading per term and sort headings alphabetically. Define the
 user-facing term in one compact paragraph. Link the primary chapter that owns
-its complete rules or presentation.
+its complete rules or design significance.
 
 Prefer definitions that distinguish nearby concepts and state their gameplay
 role. Avoid source synonyms, abbreviations that players never see, and copied
@@ -128,8 +130,9 @@ catalog entries.
 
 ## Prototype images
 
-Place a published image exactly where its evidence supports the prose. Use the
-reference-style Markdown printed by
+Place a selective representative image exactly where it orients the reader or
+clarifies a spatial or algorithmic relationship. Use the reference-style
+Markdown printed by
 `.llms/skills/ltodd/scripts/publish-image.mjs`:
 
 ```markdown
@@ -142,8 +145,10 @@ _The available destination holds visual focus before commitment._
 
 The publisher supplies the content hash in the reference label and URL. Keep
 the image and italic caption together. The reference definition may live at the
-end of the chapter when that makes the prose easier to scan. Use separate images
-for materially different states or viewports rather than composing a collage.
+end of the chapter when that makes the prose easier to scan. Do not add images
+for every state, outcome, viewport, or animation key moment. Add a second image
+only when it communicates a distinct fact that prototype play does not make
+easy to locate.
 
 Alt text describes the visible evidence in 10-59 characters. The caption states
 why that evidence matters in context without repeating the alt text. Review the

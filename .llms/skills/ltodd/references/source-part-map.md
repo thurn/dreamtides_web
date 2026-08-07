@@ -56,9 +56,10 @@ that accident into the book map.
 - `src/rules/` usually provides the strongest source evidence for resolution
   order, invariants, and durable consequences. Confirm presentation and
   player-facing terminology in the production flow.
-- `src/cumulus/primitives/`, generic reusable components, and Cumulus internal
-  systems primarily inform the two Cumulus parts. Feature-specific Cumulus
-  screens and components also inform their gameplay parts.
+- `src/cumulus/primitives/` and generic reusable components help identify each
+  screen's brief component inventory. Cumulus documentation owns their standard
+  behavior and APIs. Cumulus internal systems inform LToDD when they contain
+  non-obvious UI algorithms.
 - `src/cumulus/screens/` supplies presentation and local interaction evidence.
   Its corresponding builders and adapters under
   `src/screens/cumulus_adapters/` reveal how journey state becomes player-facing
@@ -92,29 +93,27 @@ objects.
 
 ## `/cumulus` — The Cumulus Design System
 
-Start with `src/cumulus/primitives/`, the material and control treatments under
-`src/cumulus/internal/`, and the reusable catalog under
-`src/cumulus/components/`. Tokens, color and glyph vocabularies, art references,
-typography, spacing, shape, elevation, glass, solid materials, and invariant
-component appearance belong here. Reusable status and announcement surfaces
-also belong here when their appearance and semantic variants are independent of
-the gameplay event that invokes them.
+Use `src/cumulus/primitives/`, `src/cumulus/components/`, and the `/cumulus`
+documentation route to identify the components visible on each screen. The
+Cumulus documentation owns component APIs and invariant appearance and behavior.
+LToDD names those components briefly and explains only cross-cutting design
+decisions or algorithms that prototype use and component documentation do not
+reveal.
 
-The `/cumulus` documentation route can clarify intended component contracts, but
-it is supporting documentation rather than production behavior. Put coordinated
-gestures and screen arrangement in `/cumulus_interaction`, and put a screen's
-particular meaning in its gameplay part.
+Put coordinated gestures, screen arrangement algorithms, and other non-obvious
+UI behavior in `/cumulus_interaction`, and put a screen's particular meaning in
+its gameplay part.
 
 ## `/cumulus_interaction` — Interaction and Screen Composition
 
 Start with the shared press primitive, the entity-reveal coordinator under
 `src/cumulus/internal/reveal/`, `CumulusRoot`, reusable control and overlay
 behavior, the production screen router, journey chrome, and shared responsive
-or safe-area helpers. These sources inform activation, focus, hover, touch-hold,
-dragging, dismissal, modal behavior, accessibility, layering, transitions,
-stages, frames, and responsive composition. The principal surface families
-include Info Cards, dialogs, panels, command menus, controls, fit-to-content
-behavior, and the coordinator that places and dismisses reveals.
+or safe-area helpers. These sources inform algorithms behind activation, focus,
+hover, touch-hold, dragging, dismissal, modal priority, layering, safe-area
+avoidance, responsive selection, fit-to-content behavior, and coordinated
+placement and dismissal of reveals. Leave ordinary component interaction and
+presentation to Cumulus documentation and the prototype.
 
 Gameplay parts own the consequences of an action and the state-dependent
 arrangement of a particular destination or contest.
@@ -167,9 +166,10 @@ logic, authored Exploration data, the gameplay provider that resolves
 Exploration intents, and the Augury and Exploration screens, builders, and
 adapters. These sources inform eligibility, scoring, pairing, target selection,
 prepared choices, authored encounters, atomic outcomes, persistence, dialogue,
-and reward choreography. Within the adaptive-offer system, follow operation
-archetypes, journey context, fit and Dreamsign signals, merchant generation,
-dialogue, decision traces, and offer presentation as one connected pipeline.
+and reward sequencing philosophy. Within the adaptive-offer system, follow
+operation archetypes, journey context, fit and Dreamsign signals, merchant
+generation, dialogue, decision traces, and offer presentation as one connected
+pipeline.
 
 Underlying Card changes belong in `/draft_deckbuilding`; shared prices and
 rewards belong in `/sites`; future Battle modifiers also need coverage in
@@ -181,7 +181,7 @@ Start with the journey Gamble rules, Gamble state types, authored data for each
 chance game, and the Gamble screen, builder, and adapter. These sources inform
 wagers, committed hidden outcomes, reveals, settlement, repeated rounds,
 cashing out, enhancement, payouts, Dreamsign awards, replacement, and reveal
-choreography.
+sequencing philosophy.
 
 Shared Essence and Dreamsign economics remain in `/sites` and Game
 Object identity remains in `/game_foundations`.
@@ -221,12 +221,12 @@ belong in `/battle_outcomes`.
 Start with the live Battle controllers and components under `src/battle/`, the
 playable Battle screen, Battle-specific Cumulus components and overlays, Battle
 view-model builders and adapters, the result surface, and the reward handoff.
-These sources inform Battlefield composition, participant status, action and
-target feedback, responsive layouts, inspection, announcements, motion,
-accessible interaction, result presentation, rewards, and durable journey
-consequences. Inspect the context menu, zone browser, Foresee view, Battle log,
-Figment creation, Card notes, deck ordering, and Dreamwell history as distinct
-player workflows rather than one generic overlay system.
+These sources inform Battle-specific algorithms, participant status, action and
+target consequences, responsive selection, inspection, rewards, and durable
+journey consequences. Briefly cover the context menu, zone browser, Foresee
+view, Battle log, Figment creation, Card notes, deck ordering, and Dreamwell
+history as distinct player workflows, while leaving their detailed presentation
+to the prototype.
 
 The legal and state-changing meaning of those interactions remains in
 `/battle_rules`; shared reward economics remain in `/sites`.
@@ -244,5 +244,5 @@ Site guidance, and speech-bubble presentation define how that teaching sequence
 stays deterministic and context-sensitive.
 
 The primary gameplay parts remain authoritative for every rule being taught.
-This part owns the teaching sequence, presentation, and deliberate restrictions
-that turn those rules into instruction.
+This part owns the teaching sequence, high-level presentation philosophy, and
+deliberate restrictions that turn those rules into instruction.

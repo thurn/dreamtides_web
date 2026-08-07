@@ -10,7 +10,7 @@ navigation contract.
 - [Clean design from prototype evidence](#clean-design-from-prototype-evidence)
 - [Information density and precision](#information-density-and-precision)
 - [Terminology and authored data](#terminology-and-authored-data)
-- [Presentation through Cumulus](#presentation-through-cumulus)
+- [Screens, outcomes, and Cumulus](#screens-outcomes-and-cumulus)
 - [Chapter organization](#chapter-organization)
 - [Discovery and cross-references](#discovery-and-cross-references)
 - [Worked examples](#worked-examples)
@@ -21,8 +21,14 @@ navigation contract.
 
 Describe the intended production game presented at the root, `/main`,
 `/loading`, and `/tutorial` routes. Cover the default single-player experience:
-its rules, algorithms, state, content semantics, interaction, visual
-presentation, motion, game-design philosophy, and UI-design philosophy.
+its rules, algorithms, state, content semantics, interaction outcomes,
+game-design philosophy, and non-obvious UI algorithms and philosophy.
+
+LToDD supplements the playable prototype and Cumulus documentation. Assume the
+reader uses the prototype for detailed visual and interaction behavior and the
+Cumulus documentation for component appearance, standard behavior, and APIs.
+Give each meaningful screen and outcome enough concise coverage to orient that
+research, but do not duplicate what those companion references make obvious.
 
 Describe one canonical design. Do not discuss alternative implementations,
 discarded behavior, editor tools, scripts, test infrastructure, debug controls,
@@ -37,19 +43,21 @@ derived from those materials. When production logic currently depends on such an
 algorithm, describe the clean version-controlled TOML input that supplies the
 resulting design behavior.
 
-Assume the shipped TOML files accompany LToDD as part of the implementation
-package. A chapter may name a stable TOML file or key when that helps define the
-interface between authored data and game behavior. Explain the key's meaning,
-constraints, and consumption. Do not copy its current value or enumerate its
-entries. State fixed design constants in prose when they are intrinsic rules
-rather than mutable authored configuration.
+Assume the shipped TOML files, playable prototype, and Cumulus documentation
+accompany LToDD as part of the implementation package. A chapter may name a
+stable TOML file or key when that helps define the interface between authored
+data and game behavior. Explain the key's meaning, constraints, and
+consumption. Do not copy its current value or enumerate its entries. State fixed
+design constants in prose when they are intrinsic rules rather than mutable
+authored configuration.
 
 ## Clean design from prototype evidence
 
-Use the prototype to determine behavior, not terminology or architecture. The
-production UI is strong evidence for player-facing presentation and names. Code
-and data expose rules that the UI cannot. Logs can reveal how a production
-algorithm reached a particular decision.
+Use the prototype to determine observable behavior and terminology, not
+architecture. The production UI is the reader's detailed reference for screens,
+interactions, and motion. Code and data expose rules and non-obvious UI
+algorithms that playing cannot. Logs can reveal how a production algorithm
+reached a particular decision.
 
 Do not assume source modules, types, identifiers, or data shapes form a good
 explanatory model. Replace legacy iteration with the simplest coherent model
@@ -68,15 +76,17 @@ when they are part of the clean implementation package.
 
 ## Information density and precision
 
-Write for an expert implementer who knows game development but does not know
-Dreamtides. Introduce concepts with compact sentences, then use bullets,
-numbered lists, or narrow tables when enumeration is clearer. Prefer one precise
-statement over several qualifying sentences.
+Write for an expert implementer who knows game development, can play the
+prototype, and can read Cumulus component documentation, but does not know
+Dreamtides or its TypeScript source. Introduce concepts with compact sentences,
+then use bullets, numbered lists, or narrow tables when enumeration is clearer.
+Prefer one precise statement over several qualifying sentences.
 
-Make every requirement explicit. Do not rely on screenshots, genre convention,
-implementation habits, or the reader's intuition to supply an unstated rule.
-Write so an implementation LLM can reconstruct the intended behavior correctly
-and with high confidence without inferring missing requirements.
+Make every non-obvious rule, algorithm, state transition, and design decision
+explicit. The prototype may own visible presentation detail, and Cumulus may
+own standard component behavior. Do not rely on genre convention,
+implementation habits, or the reader's intuition to supply an unstated gameplay
+or algorithmic requirement.
 
 Describe behavior in plain, active, present-tense prose. Do not use RFC
 keywords, discuss permitted variants, or present multiple designs. Put each
@@ -90,13 +100,16 @@ Specify all details needed to reproduce the canonical system, including:
 - random selection domains and when randomness is sampled;
 - persistence boundaries and transitions between durable states;
 - algorithmic structure and internal models that materially explain behavior;
-- player choices, feedback, and consequences;
-- composition, responsive changes, and meaningful motion; and
+- a concise description of every meaningful player choice and outcome;
+- non-obvious UI selection, placement, coordination, and interruption rules;
 - the design goal or player experience behind consequential decisions.
 
 Include implementation detail when it expresses a stable, useful clean-rewrite
 contract. Exclude details that merely recite TypeScript, React, DOM structure,
-source file ownership, or temporary prototype machinery.
+source file ownership, normal component composition, or temporary prototype
+machinery. Describe an algorithm through exact prose, ordered steps, equations,
+or compact tables at the highest level that preserves its contract. Do not write
+pseudocode.
 
 Do not include source code, pseudocode, diagrams, or Mermaid. Use exact prose,
 ordered steps, equations, or compact tables when an algorithm needs formal
@@ -126,41 +139,45 @@ term a concise definition and link its primary chapter. Still explain an
 essential term in local context when a reader needs it to understand the
 surrounding section.
 
-## Presentation through Cumulus
+## Screens, outcomes, and Cumulus
 
-Treat Cumulus as the canonical design language. Read its current skill and the
-references for each relevant primitive before describing a screen or
+Treat the prototype and Cumulus documentation as companion parts of the design.
+Read the Cumulus skill and relevant references before describing a screen or
 interaction. Use established Cumulus names rather than inventing nearly
 equivalent visual concepts.
 
-Delegate a primitive's standard material, typography, spacing, press feedback,
-focus treatment, and generic motion to Cumulus. Specify the chapter-specific
-composition:
+For each meaningful screen or screen family:
 
-- which Cumulus primitives appear and what content each carries;
-- their visual hierarchy, grouping, placement, and spatial relationships;
-- the player state that selects each variation;
-- meaningful responsive rearrangement or visibility changes;
-- screen-specific interaction and state progression;
-- meaningful transitions into, within, and out of the experience; and
-- every deliberate departure that belongs to the screen rather than Cumulus.
+- give one or two sentences explaining its role, principal interaction, and
+  handoff;
+- briefly name every Cumulus component visible on it;
+- describe each distinct player choice or outcome in one concise sentence,
+  including the semantic result and durable consequence; and
+- use a representative screenshot selectively when it materially helps the
+  reader recognize the screen or understand a spatial relationship.
 
-For a standard animation, name the Cumulus animation and let its definition own
-timing, easing, interruption, and generic ordering. Describe custom motion only
-where screen-specific logic adds a distinct trigger, sequence, state change, or
-gameplay meaning.
+Delegate component appearance, APIs, material, typography, spacing, ordinary
+press and focus behavior, and generic motion to Cumulus. Do not explain normal
+React composition or restate how a component works.
 
-Describe presentation precisely enough to recreate it without images. Images
-support the prose; they never carry a requirement that the prose omits. Discuss
-mouse, keyboard, touch, or controller actions directly when they are part of the
-canonical interaction. Avoid web-platform concepts such as CSS layout, DOM
+State the governing animation and choreography philosophy once near the start
+of the relevant chapter or flow. Individual screens and outcomes do not need
+shot-by-shot motion, timing, easing, or routine transition descriptions. Explain
+motion locally only when it communicates a hidden rule, changes gameplay state,
+or participates in a non-obvious coordination algorithm.
+
+Fully specify UI algorithms that cannot be recovered simply by playing. Common
+examples include safe-area avoidance, responsive mode selection, object and
+Info Card positioning, collision resolution, reveal coordination, priority,
+interruption, and focus or input routing with game-specific consequences. Give
+their inputs, ordering, invariants, meaningful constants, edge cases, and
+rationale in exact high-level prose rather than pseudocode.
+
+Discuss mouse, keyboard, touch, controller, or accessibility behavior when it
+changes the canonical interaction or relies on a non-obvious screen-specific
+rule. Delegate standard input, focus, contrast, text scaling, and reduced-motion
+contracts to Cumulus. Avoid web-platform concepts such as CSS layout, DOM
 events, browser storage, and React component structure.
-
-Include accessibility behavior when it affects the canonical interaction or
-presentation. Describe relevant input alternatives, focus order, readable
-contrast, non-color cues, text scaling, reduced motion, and equivalent
-communication for audio or animation. Recover or confirm the intended behavior
-rather than designing an unrelated accessibility system during authoring.
 
 ## Chapter organization
 
@@ -228,11 +245,13 @@ variant of the design.
 
 ## Prototype images
 
-Include a live prototype screenshot wherever a visual state, spatial
-relationship, responsive branch, or animation key moment materially improves
-implementation confidence. Use no quota. Capture each image while researching
-the chapter so its state, framing, and visible relationships can be checked
-against the surrounding prose.
+Include a live prototype screenshot when it materially helps the reader
+recognize a screen, follow a flow, or understand a spatial relationship or
+non-obvious UI algorithm. Use images selectively. A chapter or screen family
+usually needs no more than one representative view; add another only when it
+communicates a distinct fact that prose and hands-on use of the prototype do not
+make clear. Do not document every outcome, viewport, transient state, or motion
+key moment with an image.
 
 Every image shows canonical player-facing presentation at a deliberate desktop
 or narrow viewport. Exclude debug controls, browser chrome, annotations,
@@ -247,8 +266,9 @@ the required reference-style Markdown. Keep binaries outside version control.
 
 Place the image beside the prose it supports, followed immediately by a concise
 italic caption. Give the image useful alt text that describes the visible
-evidence. Keep its generated URL reference in the same chapter. The image
-supports the prose; it never carries a requirement that the prose omits.
+evidence. Keep its generated URL reference in the same chapter. Screenshots may
+carry ordinary visual detail because the prototype is a companion reference;
+all non-obvious rules and algorithms still belong in prose.
 
 Every committed image link resolves to the project's public bucket. Do not
 commit image-plan comments, local file paths, invented URLs, expiring signed
@@ -263,11 +283,16 @@ Before finishing an LToDD change, confirm that:
 - every affected chapter and duplicated rule agrees;
 - the index scope statements and reading order remain accurate;
 - the glossary contains every introduced or changed project term;
-- behavior and rationale are locally complete;
-- every requirement is explicit rather than implied;
+- non-obvious behavior, algorithms, and rationale are locally complete;
+- every gameplay and algorithmic requirement is explicit rather than implied;
 - consequential game-design and UI-design philosophy is stated beside the
   behavior it explains;
-- presentation delegates standard behavior to the correct Cumulus definitions;
+- every meaningful screen and outcome has concise orienting coverage;
+- screens briefly name their visible Cumulus components and delegate standard
+  behavior and APIs to Cumulus documentation;
+- detailed presentation and choreography are left to the prototype;
+- UI algorithms are specified with enough precision to reproduce their
+  decisions without reading TypeScript;
 - TOML references describe stable interfaces without copying current values;
 - no specific authored content, excluded system, or web implementation leaks
   into the chapter;
