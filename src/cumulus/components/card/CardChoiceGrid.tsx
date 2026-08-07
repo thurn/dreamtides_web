@@ -19,17 +19,14 @@ import {
   type GameCardSelection,
 } from "./CardView";
 import { GalleryActionCard } from "./GalleryActionCard";
+import { CARD_CORNER_RADIUS } from "./card-aspect";
 
 /** A small line rendered directly below a card-choice tile. */
 export type CardChoiceGridCaption =
   { kind: "essence"; amount: number } | { kind: "text"; text: string };
 
 /** The pending operation identified on a selected card-choice tile. */
-export type CardChoiceOperation =
-  | "purge"
-  | "copy"
-  | "transfigure"
-  | "change";
+export type CardChoiceOperation = "purge" | "copy" | "transfigure" | "change";
 
 const OPERATION_PRESENTATION = {
   purge: {
@@ -71,17 +68,15 @@ export interface CardChoiceGridCardView {
   testId?: string;
   /** Semantic reason to draw the card's selection ring. */
   selection?: GameCardSelection;
-  /** Detach card interaction and dim the tile. */
+  /** Detach activation and physical gestures, then dim the tile. */
   disabled?: boolean;
   /** Optional danger outline for purge targets. */
   emphasis?: "danger";
   /** Small uncontained line rendered below the card. */
   caption?: CardChoiceGridCaption;
-  /** Visually recede the card while preserving its footprint. */
-  muted?: boolean;
   /** Preserve the card's grid footprint while hiding its content. */
   reserved?: boolean;
-  /** Allow the caller to drag this physical card entry. */
+  /** Allow the caller to drag this physical card entry while it is enabled. */
   draggable?: boolean;
   /**
    * Optional offset-copy capability. The gallery reserves the fan footprint
@@ -151,11 +146,11 @@ export interface CardChoiceGridProps {
   endAction?: CardChoiceGridActionView;
   /** Fires when an enabled card tile is activated. */
   onCardPress?: (entryId: string) => void;
-  /** Fires when a draggable card begins a native drag. */
+  /** Fires when an enabled draggable card begins a native drag. */
   onCardDragStart?: (entryId: string, event: DragEvent<HTMLDivElement>) => void;
-  /** Fires when a draggable card's native drag ends. */
+  /** Fires when an enabled draggable card's native drag ends. */
   onCardDragEnd?: (entryId: string, event: DragEvent<HTMLDivElement>) => void;
-  /** Fires when a card requests contextual actions. */
+  /** Fires when an enabled card requests contextual actions. */
   onCardContextMenu?: (
     entryId: string,
     event: MouseEvent<HTMLDivElement>,
@@ -286,6 +281,186 @@ function CardChoiceAction({
   );
 }
 
+interface CardChoiceGridItemProps {
+  readonly card: CardChoiceGridCardView;
+  readonly onCardPress?: (entryId: string) => void;
+  readonly onCardDragStart?: (
+    entryId: string,
+    event: DragEvent<HTMLDivElement>,
+  ) => void;
+  readonly onCardDragEnd?: (
+    entryId: string,
+    event: DragEvent<HTMLDivElement>,
+  ) => void;
+  readonly onCardContextMenu?: (
+    entryId: string,
+    event: MouseEvent<HTMLDivElement>,
+  ) => void;
+}
+
+/** Private grid-item envelope around the canonical player-facing GameCard. */
+function CardChoiceGridItem({
+  card,
+  onCardPress,
+  onCardDragStart,
+  onCardDragEnd,
+  onCardContextMenu,
+}: CardChoiceGridItemProps): ReactElement {
+  const reserved = card.reserved === true;
+  const disabled = card.disabled === true || reserved;
+  const draggable = !disabled && card.draggable === true;
+  const stackedCopyShown = card.stackedCopy?.shown === true;
+  const stackedCopyLeft = card.stackedCopy?.direction === "left";
+  const operationPresentation =
+    card.operation === undefined
+      ? null
+      : OPERATION_PRESENTATION[card.operation];
+  const tileStyle: CSSProperties = {
+    position: "relative",
+    zIndex: stackedCopyShown ? 1 : undefined,
+    display: "block",
+    width: "100%",
+    borderRadius: CARD_CORNER_RADIUS,
+    boxShadow:
+      card.emphasis === "danger" ? `0 0 0 2px ${token("--danger")}` : "none",
+    WebkitTouchCallout: "none",
+    WebkitUserSelect: "none",
+    userSelect: "none",
+    touchAction: "pan-y",
+  };
+
+  return (
+    <div
+      data-gallery-entry-id={card.entryId}
+      data-gallery-reserved={reserved || undefined}
+      data-gallery-draggable={draggable || undefined}
+      aria-hidden={reserved || undefined}
+      draggable={draggable}
+      onDragStart={
+        draggable
+          ? (event) => onCardDragStart?.(card.entryId, event)
+          : undefined
+      }
+      onDragEnd={
+        draggable ? (event) => onCardDragEnd?.(card.entryId, event) : undefined
+      }
+      onContextMenu={
+        disabled || onCardContextMenu === undefined
+          ? undefined
+          : (event) => onCardContextMenu(card.entryId, event)
+      }
+      style={{
+        minWidth: 0,
+        display: "flex",
+        flexDirection: "column",
+        gap: card.caption === undefined ? 0 : token("--space-xxs"),
+        opacity: disabled ? 0.42 : 1,
+        visibility: reserved ? "hidden" : undefined,
+      }}
+    >
+      <div style={tileStyle}>
+        {stackedCopyShown && (
+          <div
+            aria-hidden="true"
+            data-gallery-stacked-copy=""
+            style={{
+              position: "absolute",
+              inset: 0,
+              zIndex: 0,
+              pointerEvents: "none",
+              transform: `translate(${stackedCopyLeft ? `calc(${token("--space-xl")} * -1)` : token("--space-xl")}, ${token("--space-xl")}) rotate(${stackedCopyLeft ? "-3deg" : "3deg"})`,
+              transformOrigin: "center",
+            }}
+          >
+            <CardView
+              card={card.model.displaySnapshot}
+              transfiguration={card.model.transfiguration}
+            />
+          </div>
+        )}
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <GameCard
+            model={card.model}
+            selection={card.selection}
+            unavailable={disabled}
+            testId={card.testId}
+            onPress={
+              onCardPress === undefined
+                ? undefined
+                : () => onCardPress(card.entryId)
+            }
+          />
+          {card.quantityBadge !== undefined && (
+            <span
+              aria-label={`${card.quantityBadge} copies`}
+              data-card-choice-quantity-badge=""
+              style={{
+                position: "absolute",
+                right:
+                  card.operation === undefined
+                    ? token("--space-xs")
+                    : undefined,
+                left:
+                  card.operation === undefined
+                    ? undefined
+                    : token("--space-xs"),
+                bottom: token("--space-xs"),
+                zIndex: 20,
+                width: 36,
+                height: 36,
+                borderRadius: token("--radius-control"),
+                display: "grid",
+                placeItems: "center",
+                color: token("--text-on-accent"),
+                background: token("--accent-bright"),
+                boxShadow: token("--shadow-md"),
+                font: token("--t-button-sm"),
+                pointerEvents: "none",
+              }}
+            >
+              {card.quantityBadge}
+            </span>
+          )}
+          {operationPresentation !== null && (
+            <span
+              aria-label={operationPresentation.label}
+              data-card-choice-operation={card.operation}
+              style={{
+                position: "absolute",
+                right: token("--space-xs"),
+                bottom: token("--space-xs"),
+                zIndex: 21,
+                width: "clamp(26px, 22%, 44px)",
+                aspectRatio: "1 / 1",
+                containerType: "inline-size",
+                borderRadius: token("--radius-control"),
+                display: "grid",
+                placeItems: "center",
+                color: token("--text-on-accent"),
+                background: token(
+                  operationPresentation.tone === "danger"
+                    ? "--danger"
+                    : "--selected",
+                ),
+                boxShadow: token("--shadow-md"),
+                pointerEvents: "none",
+              }}
+            >
+              <span style={{ display: "inline-flex", fontSize: "58cqi" }}>
+                <StandaloneGlyph
+                  glyph={operationPresentation.glyph}
+                  color="text-on-accent"
+                />
+              </span>
+            </span>
+          )}
+        </div>
+      </div>
+      {card.caption !== undefined && captionNode(card.caption)}
+    </div>
+  );
+}
+
 /** Frameless card-choice grid shared by sites and framed gallery surfaces. */
 export function CardChoiceGrid({
   cards,
@@ -322,158 +497,16 @@ export function CardChoiceGrid({
         minWidth: 0,
       }}
     >
-      {cards.map((card) => {
-        const reserved = card.reserved === true;
-        const disabled = card.disabled === true || reserved;
-        const stackedCopyShown = card.stackedCopy?.shown === true;
-        const stackedCopyLeft = card.stackedCopy?.direction === "left";
-        const operationPresentation =
-          card.operation === undefined
-            ? null
-            : OPERATION_PRESENTATION[card.operation];
-        const tileStyle: CSSProperties = {
-          position: "relative",
-          zIndex: stackedCopyShown ? 1 : undefined,
-          display: "block",
-          width: "100%",
-          borderRadius: token("--radius-panel"),
-          opacity: disabled ? 0.42 : 1,
-          boxShadow:
-            card.emphasis === "danger"
-              ? `0 0 0 2px ${token("--danger")}`
-              : "none",
-          WebkitTouchCallout: "none",
-          WebkitUserSelect: "none",
-          userSelect: "none",
-          touchAction: "pan-y",
-        };
-        return (
-          <div
-            key={card.entryId}
-            data-gallery-entry-id={card.entryId}
-            data-gallery-reserved={reserved || undefined}
-            data-gallery-draggable={card.draggable || undefined}
-            aria-hidden={reserved || undefined}
-            draggable={card.draggable}
-            onDragStart={(event) => {
-              if (card.draggable === true)
-                onCardDragStart?.(card.entryId, event);
-            }}
-            onDragEnd={(event) => {
-              if (card.draggable === true) onCardDragEnd?.(card.entryId, event);
-            }}
-            onContextMenu={(event) => onCardContextMenu?.(card.entryId, event)}
-            style={{
-              minWidth: 0,
-              display: "flex",
-              flexDirection: "column",
-              gap: card.caption === undefined ? 0 : token("--space-xxs"),
-              opacity: card.muted === true ? 0.52 : 1,
-              visibility: reserved ? "hidden" : undefined,
-            }}
-          >
-            <div style={tileStyle}>
-              {stackedCopyShown && (
-                <div
-                  aria-hidden="true"
-                  data-gallery-stacked-copy=""
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    zIndex: 0,
-                    pointerEvents: "none",
-                    transform: `translate(${stackedCopyLeft ? `calc(${token("--space-xl")} * -1)` : token("--space-xl")}, ${token("--space-xl")}) rotate(${stackedCopyLeft ? "-3deg" : "3deg"})`,
-                    transformOrigin: "center",
-                  }}
-                >
-                  <CardView
-                    card={card.model.displaySnapshot}
-                    transfiguration={card.model.transfiguration}
-                  />
-                </div>
-              )}
-              <div style={{ position: "relative", zIndex: 1 }}>
-                <GameCard
-                  model={card.model}
-                  selection={card.selection}
-                  unavailable={disabled}
-                  testId={card.testId}
-                  onPress={
-                    onCardPress === undefined
-                      ? undefined
-                      : () => onCardPress(card.entryId)
-                  }
-                />
-                {card.quantityBadge !== undefined && (
-                  <span
-                    aria-label={`${card.quantityBadge} copies`}
-                    data-card-choice-quantity-badge=""
-                    style={{
-                      position: "absolute",
-                      right:
-                        card.operation === undefined
-                          ? token("--space-xs")
-                          : undefined,
-                      left:
-                        card.operation === undefined
-                          ? undefined
-                          : token("--space-xs"),
-                      bottom: token("--space-xs"),
-                      zIndex: 20,
-                      width: 36,
-                      height: 36,
-                      borderRadius: token("--radius-control"),
-                      display: "grid",
-                      placeItems: "center",
-                      color: token("--text-on-accent"),
-                      background: token("--accent-bright"),
-                      boxShadow: token("--shadow-md"),
-                      font: token("--t-button-sm"),
-                      pointerEvents: "none",
-                    }}
-                  >
-                    {card.quantityBadge}
-                  </span>
-                )}
-                {operationPresentation !== null && (
-                  <span
-                    aria-label={operationPresentation.label}
-                    data-card-choice-operation={card.operation}
-                    style={{
-                      position: "absolute",
-                      right: token("--space-xs"),
-                      bottom: token("--space-xs"),
-                      zIndex: 21,
-                      width: "clamp(26px, 22%, 44px)",
-                      aspectRatio: "1 / 1",
-                      containerType: "inline-size",
-                      borderRadius: token("--radius-control"),
-                      display: "grid",
-                      placeItems: "center",
-                      color: token("--text-on-accent"),
-                      background: token(
-                        operationPresentation.tone === "danger"
-                          ? "--danger"
-                          : "--selected",
-                      ),
-                      boxShadow: token("--shadow-md"),
-                      pointerEvents: "none",
-                    }}
-                  >
-                    <span style={{ display: "inline-flex", fontSize: "58cqi" }}>
-                      <StandaloneGlyph
-                        glyph={operationPresentation.glyph}
-                        color="text-on-accent"
-                      />
-                    </span>
-                  </span>
-                )}
-              </div>
-            </div>
-            {card.caption !== undefined && captionNode(card.caption)}
-          </div>
-        );
-      })}
+      {cards.map((card) => (
+        <CardChoiceGridItem
+          key={card.entryId}
+          card={card}
+          onCardPress={onCardPress}
+          onCardDragStart={onCardDragStart}
+          onCardDragEnd={onCardDragEnd}
+          onCardContextMenu={onCardContextMenu}
+        />
+      ))}
       {endAction !== undefined && (
         <div
           key={endAction.entryId}

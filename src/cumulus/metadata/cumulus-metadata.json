@@ -753,7 +753,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Fires when a draggable card begins a native drag."
+      "description": "Fires when an enabled draggable card begins a native drag."
     },
     {
       "name": "onCardDragEnd",
@@ -761,7 +761,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Fires when a draggable card's native drag ends."
+      "description": "Fires when an enabled draggable card's native drag ends."
     },
     {
       "name": "onCardContextMenu",
@@ -769,7 +769,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Fires when a card requests contextual actions."
+      "description": "Fires when an enabled card requests contextual actions."
     },
     {
       "name": "onEndActionPress",

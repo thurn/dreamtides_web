@@ -25,9 +25,9 @@ Choose a named site fit and column count; use Card Gallery Panel when the collec
 | `layout` | `CardChoiceGridLayout` | yes | — | Site preset or gallery-computed layout. |
 | `endAction` | `CardChoiceGridActionView` | no | — | Optional card-sized action appended after the cards. |
 | `onCardPress` | `((entryId: string) => void)` | no | — | Fires when an enabled card tile is activated. |
-| `onCardDragStart` | `((entryId: string, event: DragEvent<HTMLDivElement>) => void)` | no | — | Fires when a draggable card begins a native drag. |
-| `onCardDragEnd` | `((entryId: string, event: DragEvent<HTMLDivElement>) => void)` | no | — | Fires when a draggable card's native drag ends. |
-| `onCardContextMenu` | `((entryId: string, event: MouseEvent<HTMLDivElement, MouseEvent>) => void)` | no | — | Fires when a card requests contextual actions. |
+| `onCardDragStart` | `((entryId: string, event: DragEvent<HTMLDivElement>) => void)` | no | — | Fires when an enabled draggable card begins a native drag. |
+| `onCardDragEnd` | `((entryId: string, event: DragEvent<HTMLDivElement>) => void)` | no | — | Fires when an enabled draggable card's native drag ends. |
+| `onCardContextMenu` | `((entryId: string, event: MouseEvent<HTMLDivElement, MouseEvent>) => void)` | no | — | Fires when an enabled card requests contextual actions. |
 | `onEndActionPress` | `((entryId: string) => void)` | no | — | Fires with the trailing action's stable id. |
 
 ### `layout`: the `CardChoiceGridLayout` model

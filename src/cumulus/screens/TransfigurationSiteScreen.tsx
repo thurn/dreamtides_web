@@ -402,7 +402,6 @@ export function TransfigurationPickerPanel({
         model: candidate.model,
         testId: `cumulus-transfiguration-card-${candidate.entryId}`,
         disabled: candidate.availability !== "available",
-        muted: candidate.availability !== "available",
         caption:
           candidate.reforgedType === null
             ? undefined

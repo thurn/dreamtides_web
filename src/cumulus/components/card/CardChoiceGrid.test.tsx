@@ -5,6 +5,7 @@ import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import { CardChoiceGrid } from "./CardChoiceGrid";
+import { CARD_CORNER_RADIUS } from "./card-aspect";
 
 vi.mock("./CardView", () => ({
   CardView: () => <div />,
@@ -13,16 +14,19 @@ vi.mock("./CardView", () => ({
     onPress,
     selection,
     testId,
+    unavailable,
   }: {
     model: { displaySnapshot: { name: string } };
     onPress?: () => void;
     selection?: string;
     testId?: string;
+    unavailable?: boolean;
   }) => (
     <button
       data-testid={testId}
       data-selection={selection}
-      onClick={onPress}
+      aria-disabled={unavailable || undefined}
+      onClick={unavailable === true ? undefined : onPress}
     >
       {model.displaySnapshot.name}
     </button>
@@ -102,6 +106,70 @@ describe("CardChoiceGrid", () => {
       ).click(),
     );
     expect(choose).toHaveBeenCalledWith("choice-b");
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("uses one disabled state for activation, physical gestures, and dimming", () => {
+    const choose = vi.fn();
+    const dragStart = vi.fn();
+    const dragEnd = vi.fn();
+    const contextMenu = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() =>
+      root.render(
+        <CardChoiceGrid
+          cards={[
+            {
+              entryId: "disabled-card",
+              model: model("Disabled"),
+              testId: "disabled-card",
+              disabled: true,
+              draggable: true,
+              emphasis: "danger",
+            },
+          ]}
+          columns="one"
+          layout={{ kind: "site", viewport: "desktop", fit: "choice" }}
+          onCardPress={choose}
+          onCardDragStart={dragStart}
+          onCardDragEnd={dragEnd}
+          onCardContextMenu={contextMenu}
+        />,
+      ),
+    );
+
+    const entry = container.querySelector<HTMLElement>(
+      '[data-gallery-entry-id="disabled-card"]',
+    );
+    const cardSurface = entry?.firstElementChild as HTMLElement | undefined;
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>('[data-testid="disabled-card"]')
+        ?.click();
+      entry?.dispatchEvent(
+        new Event("dragstart", { bubbles: true, cancelable: true }),
+      );
+      entry?.dispatchEvent(
+        new Event("dragend", { bubbles: true, cancelable: true }),
+      );
+      entry?.dispatchEvent(
+        new MouseEvent("contextmenu", { bubbles: true, cancelable: true }),
+      );
+    });
+
+    expect(choose).not.toHaveBeenCalled();
+    expect(dragStart).not.toHaveBeenCalled();
+    expect(dragEnd).not.toHaveBeenCalled();
+    expect(contextMenu).not.toHaveBeenCalled();
+    expect(entry?.draggable).toBe(false);
+    expect(entry?.dataset.galleryDraggable).toBeUndefined();
+    expect(entry?.style.opacity).toBe("0.42");
+    expect(cardSurface?.style.opacity).toBe("");
+    expect(cardSurface?.style.borderRadius).toBe(CARD_CORNER_RADIUS);
+
     act(() => root.unmount());
     container.remove();
   });
