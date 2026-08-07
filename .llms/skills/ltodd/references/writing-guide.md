@@ -11,6 +11,7 @@ navigation contract.
 - [Information density and precision](#information-density-and-precision)
 - [Terminology and authored data](#terminology-and-authored-data)
 - [Screens, outcomes, and Cumulus](#screens-outcomes-and-cumulus)
+- [Parts, primary chapters, and supplements](#parts-primary-chapters-and-supplements)
 - [Chapter organization](#chapter-organization)
 - [Discovery and cross-references](#discovery-and-cross-references)
 - [Worked examples](#worked-examples)
@@ -117,9 +118,10 @@ detail. Keep tables narrow enough for the 80-column limit; use lists when a
 table would become wide or sparse.
 
 Remove repetition, throat-clearing, generic advice, and implementation trivia.
-Split a chapter only when it contains genuinely separate subjects after this
-editing pass. A complete short chapter is preferable to padding toward the
-typical length of roughly 250 lines.
+A complete short chapter is preferable to padding toward the editorial target
+of roughly 20,000 characters. Reserve supplements for systems or algorithms
+whose unusual complexity rewards a deeper treatment after the primary chapter
+has already explained the part clearly and in detail.
 
 ## Terminology and authored data
 
@@ -179,6 +181,39 @@ rule. Delegate standard input, focus, contrast, text scaling, and reduced-motion
 contracts to Cumulus. Avoid web-platform concepts such as CSS layout, DOM
 events, browser storage, and React component structure.
 
+## Parts, primary chapters, and supplements
+
+Organize LToDD as an ordered series of coherent, discoverable subject areas
+such as Cumulus or Sites. Each populated part has exactly one primary chapter,
+whose filename mirrors its directory:
+
+- `ltodd/cumulus/cumulus.md` is the primary chapter of `/cumulus`.
+- Any other Markdown chapter in `ltodd/cumulus/` is a supplement.
+
+The primary chapter owns the part's complete conceptual account. Write it first
+and make it stand alone: introduce the whole subject, state its consequential
+rules and decisions, give the algorithms enough detail to understand their
+role, and do not depend on hypothetical supplements. Do not seed it with
+placeholders, forward references, or artificial gaps for possible later work.
+
+After finishing and validating a new primary chapter, assess whether two to
+four especially complex systems or algorithms might benefit from supplemental
+chapters. Present those candidates to the user with a scope and rationale; do
+not add them to the book until selected. A primary chapter that already gives
+the topic sufficient depth needs no supplements.
+
+A supplemental chapter owns a narrow deep dive. It typically formalizes a
+complex selection, resolution, state-transition, or coordination algorithm at
+greater depth. It does not exist to catalog screens, describe ordinary UI,
+mirror source modules, or shorten the primary mechanically. When adding one,
+revise the primary to summarize and link the deeper treatment while preserving
+the primary as a clear, detailed, independently useful account of the part.
+
+Reuse an existing part whenever its purpose fits. Create a part when the new
+subject would otherwise make an existing part incoherent, and create its
+matching primary chapter as the first chapter. Never create an empty part or a
+part containing only supplements.
+
 ## Chapter organization
 
 Keep `ltodd/index.md` and `ltodd/glossary.md` at the book root. Place every
@@ -205,23 +240,35 @@ Do not force universal headings or include empty sections. Use the structural
 patterns in `content-patterns.md` as adaptable examples.
 
 Keep every physical line at 80 columns or fewer. An unbreakable external URL in
-a reference definition is the sole exception. Keep every chapter, including
-blank lines and published images, at 500 lines or fewer. The line cap applies
-to `glossary.md`; `index.md` is the book catalog rather than a chapter.
+a reference definition is the sole exception. This is a formatting rule, not a
+chapter-size measure.
+
+Aim for roughly 20,000 Unicode characters in each primary or supplemental
+chapter, counting Markdown and whitespace. The tools normalize CRLF line
+endings to LF and count Unicode code points. Treat the target as a density
+guide, not a minimum. A chapter must not exceed 40,000 characters. Roughly
+3,000–3,500 English words or 275–325 lines wrapped to 80 columns often lands
+near the target; prose varies, so use the measurement script rather than
+relying on the heuristic. The hard cap does not apply to the book-level
+`index.md` or `glossary.md` references.
 
 ## Discovery and cross-references
 
-Make `index.md` the authoritative reading order and discovery map. Start it with
-the book title and a compact “How to read this book” paragraph that tells an
-implementer to choose a part and chapter by scope, then follow local links for
-prerequisites or deeper systems.
+Make `index.md` the authoritative book structure, reading order, and discovery
+map. Start it with the book title and a compact “How to read this book” paragraph
+that explains the primary-and-supplemental structure and tells an implementer
+to choose a part by purpose, begin with its primary chapter, and follow a
+supplement when deeper algorithmic detail is relevant.
 
-Give every part a heading, a concise scope statement, and an ordered list of its
-chapters in canonical reading order. List every ordinary chapter exactly once
-under its part. Give each entry the chapter's exact title, its stable path link,
-and a short scope statement answering “when should I read this?” List
-`glossary.md` exactly once as a book-level reference. Do not place authorship,
-status, planning notes, or dates in the index.
+Give every part a heading and a concise purpose statement describing what the
+part contributes to the overall book. For every populated part, list the
+matching primary chapter first and label it **Primary**. Follow it with each
+optional chapter labeled **Supplement** in canonical reading order. List every
+ordinary chapter exactly once. Give each entry the chapter's exact title, its
+stable path link, and a short scope statement answering “when should I read
+this?” List `glossary.md` exactly once as a book-level reference. Do not list
+possible future supplements or place authorship, status, planning notes, or
+dates in the index.
 
 Give each concept a primary chapter, then repeat the exact facts and constraints
 a reader needs locally. Link to the primary chapter for the complete system.
@@ -280,6 +327,9 @@ capture is unavailable, omit the image and report the blocker outside the book.
 Before finishing an LToDD change, confirm that:
 
 - the prose describes one resolved canonical design;
+- every populated part has exactly one matching primary chapter;
+- each primary chapter remains a clear, detailed account of its complete part;
+- every supplement is a justified deep dive into a complex system or algorithm;
 - every affected chapter and duplicated rule agrees;
 - the index scope statements and reading order remain accurate;
 - the glossary contains every introduced or changed project term;

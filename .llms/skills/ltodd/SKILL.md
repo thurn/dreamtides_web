@@ -2,10 +2,11 @@
 name: ltodd
 description: >-
   Author and revise the Living Tome of Dreamtides Design in the repository's
-  top-level ltodd directory. Use only when the user explicitly invokes $ltodd to
-  create chapters, propagate a game-design change through every affected
-  chapter, or change canonical terminology or models across the book. Never
-  invoke this skill implicitly and never edit LToDD without explicit invocation.
+  top-level ltodd directory. Use only when the user explicitly invokes $ltodd
+  to create parts or chapters, propagate a game-design change through every
+  affected chapter, or change canonical terminology or models across the book.
+  Never invoke this skill implicitly and never edit LToDD without explicit
+  invocation.
 ---
 
 # Living Tome of Dreamtides Design
@@ -58,21 +59,39 @@ trusted secondary source.
 
 ### 1. Establish the book and requested change
 
-Work only in the top-level `ltodd/` directory. Keep `index.md` and `glossary.md`
-at the book root. Place every ordinary chapter exactly one level down at
-`ltodd/<part>/<chapter>.md`. Name part directories and chapters with stable
-lowercase underscore names.
+Work only in the top-level `ltodd/` directory. Organize the book as an ordered
+series of parts. Keep `index.md` and `glossary.md` at the book root. Each
+populated part has exactly one primary chapter and may have supplemental
+chapters:
+
+- The primary chapter is `ltodd/<part>/<part>.md`; its filename always matches
+  its directory.
+- Supplemental chapters are `ltodd/<part>/<subject>.md` siblings whose
+  filenames do not match the directory.
+
+Name part directories and chapters with stable lowercase underscore names. The
+primary chapter defines the part's complete subject in a clear, detailed,
+self-contained way. A supplemental chapter gives a deeper account of one
+especially complex system or algorithm within that subject. Do not use
+supplements to document UI presentation or to partition an ordinary primary
+chapter into arbitrary fragments.
 
 If the book does not exist when the first chapter is requested, create these
 files as part of that authoring request:
 
 - `ltodd/index.md`, containing a short “How to read this book” passage and the
-  authoritative chapter catalog grouped into ordered parts;
+  authoritative structure, purpose, and chapter catalog for every ordered
+  part;
 - `ltodd/glossary.md`, containing the alphabetical canonical terminology
   catalog; and
-- the requested part directory and chapter.
+- the requested part directory and its matching primary chapter.
 
 Do not create the book merely to install or test this skill.
+
+Write a part's primary chapter before proposing or writing supplements. If a
+request names a new subject without explicitly identifying it as a supplement,
+treat it as work on the primary chapter of the owning part. Never create a
+supplement for a part whose primary chapter is absent.
 
 Treat one invocation as one coherent design change, not as one chapter. Update
 every affected chapter, index entry, glossary definition, and cross-reference.
@@ -80,11 +99,12 @@ Avoid unrelated editorial cleanup.
 
 ### 2. Discover relevant chapters
 
-Read `ltodd/index.md` first. Use its part descriptions and chapter scope
-statements to identify candidates. Search the corpus for relevant titles,
-opening scope paragraphs, headings, links, user-facing terms, rules, and
-duplicated constraints. Fully read every primary or plausibly affected chapter
-before editing it.
+Read `ltodd/index.md` first. Use its part purposes and chapter scope statements
+to identify candidates. Always read the primary chapter of every plausibly
+affected part in full, then read the supplements implicated by the change.
+Search the corpus for relevant titles, opening scope paragraphs, headings,
+links, user-facing terms, rules, and duplicated constraints. Fully read every
+plausibly affected chapter before editing it.
 
 Do not load the entire book by default. Use the index and search results as
 routing metadata, then follow relevant chapter links. After editing, repeat the
@@ -168,9 +188,50 @@ explanation.
 Do not leave TODOs, alternatives, uncertainty, speculative explanations, or
 image placeholders in a chapter.
 
-If a chapter approaches the 500-line limit, remove bloat first. Split it only
-when its genuine subject contains multiple coherent scopes. Update the index and
-every affected link in the same change.
+#### Write a primary chapter
+
+Make the primary chapter a coherent, detailed account of the whole part. It
+must stand alone when first written: explain every concept and consequential
+rule needed to understand the subject, and do not mention, reserve space for,
+or rely on supplements that do not exist. Organize it around the part's major
+design decisions rather than around possible future chapter boundaries.
+
+After the primary chapter is complete and validated, propose two to four
+specific supplemental topics that might merit a deeper dive. Propose only
+complex systems or algorithms for which a separate treatment would add real
+implementation value. Give each candidate a stable subject, a one-sentence
+scope, the concrete depth it would add beyond the primary, and a recommendation
+about whether it is worth writing. Make these proposals in the user-facing
+handoff, not as planning notes or placeholders in the book. Do not create a
+proposed supplement until the user selects it.
+
+#### Write a supplemental chapter
+
+Use a supplement for a focused, unusually complex system or algorithm within
+the part. Specify that subject at greater depth without turning the chapter
+into source documentation or detailed UI description. When adding or revising
+a supplement, update the primary chapter to summarize the relationship and
+link to the deeper treatment, update `index.md`, and repair every affected
+cross-reference. Keep the primary chapter independently useful as the clear,
+detailed account of the part; a reader should understand the system's purpose,
+place, and governing rules before following the supplement.
+
+#### Control chapter size
+
+Aim for roughly 20,000 Unicode characters per primary or supplemental chapter,
+including Markdown and whitespace. The tools normalize CRLF line endings to LF
+and count Unicode code points. This is a density target, not a minimum: prefer
+a complete shorter chapter to padding. A chapter must not exceed 40,000
+characters. At typical English prose density, 20,000 characters is about
+3,000–3,500 words or roughly 275–325 wrapped lines; 40,000 characters is about
+6,000–7,000 words. Use
+`node .llms/skills/ltodd/scripts/measure-chapters.mjs` to inspect the actual
+counts. The 80-column wrapping rule is formatting, not a chapter-size target.
+
+When a chapter approaches the hard limit, remove bloat first. If the remaining
+detail is a coherent, unusually complex system or algorithm, keep the primary
+chapter's complete overview and move the deeper treatment into a supplement.
+Update the primary, index, and every affected link in the same change.
 
 ### 6. Capture and publish prototype images
 
@@ -244,6 +305,7 @@ server started for the capture after the needed images are published.
 Run the formatter, then the checker from the repository root:
 
 ```bash
+node .llms/skills/ltodd/scripts/measure-chapters.mjs
 node .llms/skills/ltodd/scripts/format-markdown.mjs --write
 node .llms/skills/ltodd/scripts/format-markdown.mjs --check
 ```
@@ -253,7 +315,8 @@ do not ignore warnings merely because they are non-fatal. Review the formatted
 diff for factual accuracy, local completeness, information density, link
 quality, and accidental changes outside the requested design.
 
-Finish only when the affected rules and algorithms are consistent across the
-corpus, concise screen and outcome coverage is present, the index and glossary
-are current, every included image is live and useful, no material question
-remains, and the checker passes.
+Finish only when every populated part has its matching primary chapter, the
+affected rules and algorithms are consistent across the corpus, concise screen
+and outcome coverage is present, the index and glossary are current, every
+included image is live and useful, chapter counts respect the hard limit, no
+material question remains, and the checker passes.

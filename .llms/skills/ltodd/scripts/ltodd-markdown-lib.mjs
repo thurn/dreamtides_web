@@ -11,6 +11,8 @@ import {
 const NAME_SEGMENT = BOOK_SEGMENT_PATTERN;
 const CHAPTER_NAME = /^[a-z0-9]+(?:_[a-z0-9]+)*\.md$/;
 const IMAGE_ORIGIN = `${PUBLIC_ORIGIN}/${DEFAULT_BUCKET}`;
+export const CHAPTER_CHARACTER_LIMIT = 40_000;
+export const CHAPTER_CHARACTER_TARGET = 20_000;
 const LEAKAGE_PATTERNS = [
   [/(?:^|\W)draft_records(?:_adapted)?(?:\W|$)/i, "draft-record source"],
   [/\bIDF\b/, "IDF"],
@@ -31,6 +33,10 @@ function physicalLines(source) {
     lines.pop();
   }
   return lines;
+}
+
+export function countUnicodeCharacters(source) {
+  return [...source.replaceAll("\r\n", "\n")].length;
 }
 
 function diagnostic(relativePath, line, message) {
@@ -224,14 +230,15 @@ function validateOpeningParagraph(relativePath, lines, errors) {
 
 function validateMarkdownFile(relativePath, source, errors, warnings) {
   const lines = physicalLines(source);
-  const baseName = path.basename(relativePath);
+  const isOrdinaryChapter = relativePath.includes("/");
+  const characterCount = countUnicodeCharacters(source);
 
-  if (baseName !== "index.md" && lines.length > 500) {
+  if (isOrdinaryChapter && characterCount > CHAPTER_CHARACTER_LIMIT) {
     errors.push(
       diagnostic(
         relativePath,
-        501,
-        `chapter has ${lines.length} lines; maximum is 500`,
+        1,
+        `chapter has ${characterCount.toLocaleString("en-US")} Unicode code points; maximum is ${CHAPTER_CHARACTER_LIMIT.toLocaleString("en-US")}`,
       ),
     );
   }
@@ -326,16 +333,27 @@ function orderedIndexEntries(lines) {
   }
 
   return blocks.map((block) => {
-    const match = block.body.match(/^\[([^\]]+)\]\(([^)]+\.md)\)\s+—\s+(.+)$/);
+    const match = block.body.match(
+      /^(?:\*\*(Primary|Supplement):\*\*\s+)?\[([^\]]+)\]\(([^)]+\.md)\)\s+—\s+(.+)$/,
+    );
     return match
       ? {
+          role: match[1]?.toLowerCase(),
           section: block.section,
-          title: match[1],
-          target: match[2],
-          scope: match[3],
+          title: match[2],
+          target: match[3],
+          scope: match[4],
         }
       : { malformed: block.body };
   });
+}
+
+function chapterRole(target) {
+  if (target === "glossary.md") {
+    return undefined;
+  }
+  const [part, filename] = target.split("/");
+  return filename === `${part}.md` ? "primary" : "supplement";
 }
 
 function isCanonicalIndexTarget(target) {
@@ -363,6 +381,7 @@ function validatePartSections(lines, entries, errors) {
 
   const sectionParts = new Map();
   const partSections = new Map();
+  const partEntries = new Map();
   for (const entry of entries) {
     if (!entry.target || entry.target === "glossary.md") {
       continue;
@@ -380,6 +399,9 @@ function validatePartSections(lines, entries, errors) {
     const sections = partSections.get(part) ?? new Set();
     sections.add(entry.section);
     partSections.set(part, sections);
+    const orderedEntries = partEntries.get(part) ?? [];
+    orderedEntries.push(entry);
+    partEntries.set(part, orderedEntries);
   }
 
   for (const [section, parts] of sectionParts) {
@@ -402,6 +424,14 @@ function validatePartSections(lines, entries, errors) {
   for (const [part, sections] of partSections) {
     if (sections.size > 1) {
       errors.push(`index.md:1: ${part} chapters must share one part heading`);
+    }
+  }
+  for (const [part, orderedEntries] of partEntries) {
+    const expectedPrimary = `${part}/${part}.md`;
+    if (orderedEntries[0]?.target !== expectedPrimary) {
+      errors.push(
+        `index.md:1: ${expectedPrimary} must be the first chapter in its part`,
+      );
     }
   }
 }
@@ -444,6 +474,14 @@ function validateIndex(indexSource, chapters, errors) {
       continue;
     }
     targets.set(entry.target, entry);
+
+    const expectedRole = chapterRole(entry.target);
+    if (entry.role !== expectedRole) {
+      const label = expectedRole
+        ? `must be labeled **${expectedRole === "primary" ? "Primary" : "Supplement"}:**`
+        : "must not have a primary or supplement label";
+      errors.push(`index.md:1: ${entry.target} ${label}`);
+    }
 
     if (!entry.scope.startsWith("Read this chapter when ")) {
       errors.push(
@@ -570,6 +608,13 @@ async function collectBookFiles(bookDirectory, errors) {
       }
       if (chapterCount === 0) {
         errors.push(`${entry.name}: part directory contains no chapters`);
+      } else {
+        const primaryPath = `${entry.name}/${entry.name}.md`;
+        if (!files.has(primaryPath)) {
+          errors.push(
+            `${entry.name}: part must contain primary chapter ${primaryPath}`,
+          );
+        }
       }
       continue;
     }

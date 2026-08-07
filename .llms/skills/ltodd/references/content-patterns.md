@@ -8,8 +8,10 @@ content.
 ## Contents
 
 - [Choosing a shape](#choosing-a-shape)
+- [Part and primary-chapter pattern](#part-and-primary-chapter-pattern)
 - [Gameplay-system pattern](#gameplay-system-pattern)
 - [Screen-and-flow pattern](#screen-and-flow-pattern)
+- [Supplemental deep-dive pattern](#supplemental-deep-dive-pattern)
 - [Cross-cutting-principle pattern](#cross-cutting-principle-pattern)
 - [Opening scope paragraphs](#opening-scope-paragraphs)
 - [Index catalog entries](#index-catalog-entries)
@@ -25,6 +27,24 @@ the patterns when the subject demands a different sequence.
 Prefer sections that name a meaningful decision or phase of play. Avoid
 long component inventories, one heading per source module, and generic buckets
 that separate every rule from its rationale.
+
+## Part and primary-chapter pattern
+
+Start a part with the primary chapter whose filename mirrors the part
+directory. Give that chapter the full conceptual span of the part. A useful
+progression is:
+
+1. Establish the subject's purpose and place in Dreamtides.
+2. Define its player-facing concepts, authored inputs, and durable state.
+3. Explain its major flows and algorithms in the order readers need them.
+4. Keep each consequential decision beside its rationale and effects.
+5. Orient the reader to relevant screens without detailing presentation.
+6. Close local loops, edge cases, and handoffs so the chapter stands alone.
+
+Do not structure the primary around supplements that might be written later.
+Once it is complete, identify a few unusually complex systems or algorithms
+that could support a deeper treatment, and present those candidates outside the
+book for the user's judgment.
 
 ## Gameplay-system pattern
 
@@ -69,6 +89,23 @@ Keep the component inventory brief. Do not reproduce normal component behavior,
 detailed composition, or shot-by-shot presentation that readers can inspect in
 the prototype and Cumulus documentation.
 
+## Supplemental deep-dive pattern
+
+Use this shape only after the owning primary chapter exists and the user has
+selected a complex system or algorithm for deeper treatment:
+
+1. Open with the exact contract being deepened and link back to the primary.
+2. Identify inputs, outputs, state ownership, and preconditions.
+3. Explain evaluation or resolution in consequential order.
+4. State formulas, constants, random domains, invariants, and persistence.
+5. Cover meaningful edge cases and interruption or failure boundaries.
+6. Give a compact worked example when it clarifies multiple state changes.
+7. Link back to the primary for the surrounding system and player experience.
+
+Revise the primary in the same change so it summarizes the algorithm's place
+and links to the supplement. Keep the supplement focused: detailed screen
+presentation and ordinary Cumulus behavior remain outside LToDD.
+
 ## Cross-cutting-principle pattern
 
 Use this shape for a design rule that governs many systems, such as information
@@ -104,14 +141,16 @@ Adapt the prose to the subject. Do not repeat these sentences mechanically.
 ## Index catalog entries
 
 Group chapter entries beneath part headings. Give each part a concise sentence
-explaining its subject, then use one ordered-list entry for every chapter in the
-part. Write the exact chapter title, stable underscore path, and one sentence
-explaining when to read it.
+explaining its purpose in the overall book. List the matching primary chapter
+first, followed by any supplements. Write the exact chapter title, stable
+underscore path, role label, and one sentence explaining when to read it.
 
-Use this shape:
+Use these shapes:
 
-> 1. [Chapter Title](part_name/chapter_name.md) — Read this chapter when
->    building the behavior named by its concise scope statement.
+> 1. **Primary:** [Part Title](part_name/part_name.md) — Read this chapter when
+>    building or understanding the part as a whole.
+> 2. **Supplement:** [Algorithm Title](part_name/algorithm_name.md) — Read this
+>    chapter when implementing the focused algorithm in full detail.
 
 Keep the parts and their entries in authoritative reading order. Include the
 root `glossary.md` exactly once as a book-level reference. Keep planning state,

@@ -5,11 +5,12 @@ canonical design of Dreamtides.
 
 ## How to read this book
 
-Choose the numbered part that matches the system you are implementing, then
-choose a chapter by its scope statement. Each part shows its stable directory
-beneath the heading. Follow local links for prerequisites, shared rules, and
-deeper systems. Chapters state the complete rules needed in their own context
-while linking to the primary chapter for the full design.
+Choose the numbered part whose purpose matches the system you are implementing.
+Each part shows its stable directory beneath the heading. Begin with the primary
+chapter whose filename mirrors that directory, then follow a supplemental
+chapter when its scope identifies a relevant complex system or algorithm.
+Primary chapters give clear, detailed accounts of their complete parts;
+supplements provide deeper implementation treatment where useful.
 
 ## Part I: Foundations of Dreamtides and Its Game Objects
 

@@ -26,6 +26,10 @@ const publisherCliPath = path.join(
   repositoryRoot,
   ".llms/skills/ltodd/scripts/publish-image.mjs",
 );
+const measurementCliPath = path.join(
+  repositoryRoot,
+  ".llms/skills/ltodd/scripts/measure-chapters.mjs",
+);
 
 function validFiles() {
   return {
@@ -38,7 +42,7 @@ function validFiles() {
       "## Choice",
       "",
       "A player decision that commits the journey to one outcome. Read",
-      "[Journey Flow](journey/journey_flow.md) for the complete resolution",
+      "[Journey](journey/journey.md) for the complete resolution",
       "rules.",
       "",
       "## Journey",
@@ -67,13 +71,13 @@ function validFiles() {
       "",
       "This part specifies the decisions and state that advance a journey.",
       "",
-      "1. [Journey Flow](journey/journey_flow.md) — Read this chapter when",
+      "1. **Primary:** [Journey](journey/journey.md) — Read this chapter when",
       "   implementing",
       "   the ordered decisions that advance a journey.",
       "",
     ].join("\n"),
-    "journey/journey_flow.md": [
-      "# Journey Flow",
+    "journey/journey.md": [
+      "# Journey",
       "",
       "This chapter specifies how journey decisions advance. Read it when",
       "implementing commitment, resolution, or the transition to a destination.",
@@ -88,7 +92,7 @@ function validFiles() {
       "",
       "_The journey presents one commitment before resolution._",
       "",
-      "[img-0123456789ab]: https://storage.googleapis.com/redacted-firebase-project.firebasestorage.app/ltodd/journey/journey_flow/available-choice-0123456789ab.png",
+      "[img-0123456789ab]: https://storage.googleapis.com/redacted-firebase-project.firebasestorage.app/ltodd/journey/journey/available-choice-0123456789ab.png",
       "",
     ].join("\n"),
   };
@@ -120,6 +124,61 @@ test("accepts a part-organized book with valid discovery metadata", async () => 
   });
 });
 
+test("accepts a labeled supplement after its primary chapter", async () => {
+  const files = validFiles();
+  files["journey/commitment.md"] = [
+    "# Commitment",
+    "",
+    "This supplement deepens the journey commitment algorithm. Read it when",
+    "implementing the exact transition from choice to durable resolution.",
+    "",
+    "Read [Journey](journey.md) for the complete surrounding system.",
+    "",
+  ].join("\n");
+  files["index.md"] = files["index.md"].replace(
+    "   the ordered decisions that advance a journey.\n",
+    [
+      "   the ordered decisions that advance a journey.",
+      "2. **Supplement:** [Commitment](journey/commitment.md) — Read this",
+      "   chapter when implementing commitment resolution in full detail.",
+      "",
+    ].join("\n"),
+  );
+
+  await withBook(files, async (bookDirectory) => {
+    const result = await validateBook(bookDirectory);
+    assert.deepEqual(result.errors, []);
+  });
+});
+
+test("requires a matching primary chapter and correct index role", async () => {
+  const files = validFiles();
+  files["journey/commitment.md"] = files["journey/journey.md"]
+    .replace("# Journey", "# Commitment")
+    .replaceAll("/ltodd/journey/journey/", "/ltodd/journey/commitment/");
+  delete files["journey/journey.md"];
+  files["index.md"] = files["index.md"]
+    .replace(
+      "**Primary:** [Journey](journey/journey.md)",
+      "**Primary:** [Commitment](journey/commitment.md)",
+    )
+    .replace("ordered decisions", "commitment decisions");
+
+  await withBook(files, async (bookDirectory) => {
+    const result = await validateBook(bookDirectory);
+    assert.ok(
+      result.errors.some((error) =>
+        error.includes("primary chapter journey/journey.md"),
+      ),
+    );
+    assert.ok(
+      result.errors.some((error) =>
+        error.includes("journey/commitment.md must be labeled **Supplement:**"),
+      ),
+    );
+  });
+});
+
 test("reports an empty book clearly", async () => {
   await withBook({}, async (bookDirectory) => {
     const result = await validateBook(bookDirectory);
@@ -129,7 +188,7 @@ test("reports an empty book clearly", async () => {
   });
 });
 
-test("reports missing catalog structure and orphan chapters", async () => {
+test("reports missing catalog structure and unlisted supplements", async () => {
   const files = validFiles();
   delete files["glossary.md"];
   files["index.md"] = files["index.md"].replace(
@@ -188,8 +247,8 @@ test("rejects root chapters and directories deeper than a part", async () => {
 
 test("requires each part to have one scoped index section", async () => {
   const files = validFiles();
-  files["sites/augury.md"] = [
-    "# Augury",
+  files["sites/sites.md"] = [
+    "# Sites",
     "",
     "This chapter specifies one site flow and when an implementer needs it.",
     "",
@@ -198,7 +257,7 @@ test("requires each part to have one scoped index section", async () => {
     "   the ordered decisions that advance a journey.\n",
     [
       "   the ordered decisions that advance a journey.",
-      "2. [Augury](sites/augury.md) — Read this chapter when implementing a",
+      "2. **Primary:** [Sites](sites/sites.md) — Read this chapter when implementing a",
       "   site visit.",
       "",
     ].join("\n"),
@@ -216,7 +275,7 @@ test("requires each part to have one scoped index section", async () => {
 
 test("resolves chapter links relative to their part directory", async () => {
   const files = validFiles();
-  files["journey/journey_flow.md"] = files["journey/journey_flow.md"].replace(
+  files["journey/journey.md"] = files["journey/journey.md"].replace(
     "../glossary.md",
     "../missing.md",
   );
@@ -231,8 +290,8 @@ test("resolves chapter links relative to their part directory", async () => {
 
 test("rejects unresolved prose, fenced code, and image-plan comments", async () => {
   const files = validFiles();
-  files["journey/journey_flow.md"] = [
-    "# Journey Flow",
+  files["journey/journey.md"] = [
+    "# Journey",
     "",
     "This chapter contains a TODO that still needs a design decision.",
     "",
@@ -263,7 +322,7 @@ test("rejects unresolved prose, fenced code, and image-plan comments", async () 
 
 test("requires published images to use their chapter namespace and caption", async () => {
   const files = validFiles();
-  files["journey/journey_flow.md"] = files["journey/journey_flow.md"]
+  files["journey/journey.md"] = files["journey/journey.md"]
     .replace(
       [
         "![One available choice beside its destination][img-0123456789ab]",
@@ -272,7 +331,7 @@ test("requires published images to use their chapter namespace and caption", asy
       ].join("\n"),
       "![One available choice beside its destination][img-0123456789ab]",
     )
-    .replace("/ltodd/journey/journey_flow/", "/ltodd/sites/site_arrival/");
+    .replace("/ltodd/journey/journey/", "/ltodd/sites/site_arrival/");
 
   await withBook(files, async (bookDirectory) => {
     const result = await validateBook(bookDirectory);
@@ -296,14 +355,14 @@ test("builds content-addressed Markdown for a validated screenshot", async () =>
     const publication = await buildImagePublication({
       alt: "One available destination before commitment",
       caption: "The destination holds focus before the player commits.",
-      chapter: "journey_flow",
+      chapter: "journey",
       file: imagePath,
       part: "journey",
       slug: "available-destination",
     });
     assert.match(
       publication.objectName,
-      /^ltodd\/journey\/journey_flow\/available-destination-[0-9a-f]{12}\.png$/,
+      /^ltodd\/journey\/journey\/available-destination-[0-9a-f]{12}\.png$/,
     );
     assert.ok(publication.markdown.includes(`![One available destination`));
     assert.ok(publication.markdown.includes(publication.url));
@@ -318,7 +377,7 @@ test("builds content-addressed Markdown for a validated screenshot", async () =>
         "--part",
         "journey",
         "--chapter",
-        "journey_flow",
+        "journey",
         "--slug",
         "available-destination",
         "--alt",
@@ -340,7 +399,7 @@ test("publishes without overwriting existing content-addressed objects", () => {
   const publication = {
     absoluteFile: "/tmp/ltodd-choice.png",
     contentType: "image/png",
-    gcsUri: "gs://example/ltodd/journey/journey_flow/choice-abc.png",
+    gcsUri: "gs://example/ltodd/journey/journey/choice-abc.png",
   };
 
   const existingCalls = [];
@@ -421,7 +480,7 @@ test("verifies that a published image is publicly readable", async () => {
 
 test("warns about implementation leakage without failing validation", async () => {
   const files = validFiles();
-  files["journey/journey_flow.md"] = files["journey/journey_flow.md"].replace(
+  files["journey/journey.md"] = files["journey/journey.md"].replace(
     "Assume an authored destination exists with one available action. Selecting",
     "The React prototype assumes an authored destination exists. Selecting",
   );
@@ -433,24 +492,44 @@ test("warns about implementation leakage without failing validation", async () =
   });
 });
 
-test("enforces the physical chapter line cap", async () => {
+test("enforces the Unicode chapter character cap", async () => {
   const files = validFiles();
-  files["journey/journey_flow.md"] = [
-    "# Journey Flow",
+  files["journey/journey.md"] = [
+    "# Journey",
     "",
     "This chapter has a valid scope paragraph followed by excessive padding.",
-    ...Array.from({ length: 499 }, () => ""),
+    ...Array.from({ length: 600 }, () => "x".repeat(70)),
   ].join("\n");
 
   await withBook(files, async (bookDirectory) => {
     const result = await validateBook(bookDirectory);
-    assert.ok(result.errors.some((error) => error.includes("maximum is 500")));
+    assert.ok(
+      result.errors.some((error) => error.includes("maximum is 40,000")),
+    );
+  });
+});
+
+test("reports chapter roles and character counts", async () => {
+  await withBook(validFiles(), async (bookDirectory) => {
+    const measurement = spawnSync(
+      process.execPath,
+      [measurementCliPath, "--book", bookDirectory],
+      { encoding: "utf8" },
+    );
+    assert.equal(
+      measurement.status,
+      0,
+      `${measurement.stdout}\n${measurement.stderr}`,
+    );
+    assert.match(measurement.stdout, /journey\/journey\.md\s+primary/);
+    assert.ok(measurement.stdout.includes("Editorial target: 20,000"));
+    assert.ok(measurement.stdout.includes("hard limit: 40,000"));
   });
 });
 
 test("write mode wraps prose and produces a checkable book", async () => {
   const files = validFiles();
-  files["journey/journey_flow.md"] = files["journey/journey_flow.md"].replace(
+  files["journey/journey.md"] = files["journey/journey.md"].replace(
     "Assume an authored destination exists with one available action. Selecting\n" +
       "the action commits the journey before its result becomes visible.",
     "Assume an authored destination exists with one available action. Selecting the action commits the journey before its result becomes visible and before the next destination can be considered.",
@@ -465,7 +544,7 @@ test("write mode wraps prose and produces a checkable book", async () => {
     assert.equal(write.status, 0, `${write.stdout}\n${write.stderr}`);
 
     const formatted = await readFile(
-      path.join(bookDirectory, "journey/journey_flow.md"),
+      path.join(bookDirectory, "journey/journey.md"),
       "utf8",
     );
     assert.ok(
