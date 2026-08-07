@@ -48,7 +48,7 @@ function primary(role: AtlasFixtureRole): AtlasNodePrimary {
     return { sceneArt: null, figureArt: null, placeName: null, guideName: null, title: "Fixture Unseen Dream", body: "Fixture unrevealed-node copy." };
   }
   if (role === "boss") {
-    return { sceneArt: artRef.dreamscapeScene("fixture-boss"), figureArt: artRef.dreamGuide("fixture-boss"), placeName: "Fixture Boss Realm", guideName: "Fixture Boss", title: "Fixture Boss", body: "A fixed boss fixture." };
+    return { sceneArt: artRef.dreamscapeScene("limbo"), figureArt: artRef.dreamGuide("apollyon"), placeName: "Fixture Boss Realm", guideName: "Fixture Boss", title: "Fixture Boss", body: "A fixed boss fixture." };
   }
   const id = role === "starter" ? "firstlight_meadow" : role === "completed" ? "tumbleleaf_village" : role === "available" ? "frostforge" : "hopes_end";
   return { sceneArt: artRef.dreamscapeScene(id), figureArt: null, placeName: "A Revealed Dream", guideName: null, title: "A Revealed Dream", body: "A place whose shape you have already glimpsed." };
@@ -77,8 +77,8 @@ export function atlasFixtureNodes(sizing: NodeSizing): AtlasFixtureNode[] {
         node: node(role, state), left: 0, top: 0,
         size: isStarter || isBoss ? sizing.anchorNodeSize : sizing.nodeSize,
         isStarter, isBoss, isReachable: role !== "forgone",
-        iconRef: isHidden || isBoss ? null : artRef.dreamscapeIcon(role === "starter" ? "firstlight_meadow" : role === "completed" ? "tumbleleaf_village" : role === "available" ? "frostforge" : "hopes_end"),
-        unrevealedFrameRef: artRef.atlasAsset("fixture-frame.png"),
+        iconRef: isHidden ? null : artRef.dreamscapeIcon(isBoss ? "limbo" : role === "starter" ? "firstlight_meadow" : role === "completed" ? "tumbleleaf_village" : role === "available" ? "frostforge" : "hopes_end"),
+        unrevealedFrameRef: artRef.atlasAsset("Round_frame_main.png"),
         siteBadgeGlyph: isHidden || isStarter || isBoss ? null : badge,
         knownDreamsignRef: dreamsign?.art ?? null, badgeScale: sizing.badgeScale,
         primary: primary(role), dreamsign, site: null, affiliation: null,
