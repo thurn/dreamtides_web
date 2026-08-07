@@ -777,16 +777,16 @@ ExplorationCatalog(
     encounters: [
         EncounterDefinition(
             card_id: "161482b6-af07-4d9e-822d-8c738672beb9",
-            prose: r#"A young lantern bearer approaches a towering window of stars."#,
+            prose: "A young lantern bearer approaches a towering window of stars.",
             actions: [
                 ActionDefinition(
                     label: "Invite someone through",
                     id: "161482b6-af07-4d9e-822d-8c738672beb9:pair-5:template-11",
-                    effect_text: r#"Gain $OFFERED_CARD"#,
+                    effect_text: "Gain $OFFERED_CARD",
                     effect: GainOfferedCard(
-                        predicate: "cheap-character",
+                        predicate: CheapCharacter,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 11,
                         selections: {"$OFFERED_CARD": {"predicate": "≤2● cost Character"}},
                     ),
@@ -794,11 +794,11 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Send a possession through",
                     id: "161482b6-af07-4d9e-822d-8c738672beb9:pair-5:template-17",
-                    effect_text: r#"Apply a transfiguration to a chosen card"#,
+                    effect_text: "Apply a transfiguration to a chosen card",
                     effect: TransfigureSelected(
                         count: 1,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 17,
                     ),
                 ),
@@ -806,17 +806,17 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "738a5af0-f848-4d48-bceb-9a43c9b11066",
-            prose: r#"An armored traveler hunches beside a doorway veiled in luminous grids."#,
+            prose: "An armored traveler hunches beside a doorway veiled in luminous grids.",
             actions: [
                 ActionDefinition(
                     label: "Open the Passage",
                     id: "738a5af0-f848-4d48-bceb-9a43c9b11066:pair-1:template-13",
-                    effect_text: r#"Gain 2 random Survivor cards"#,
+                    effect_text: "Gain 2 random Survivor cards",
                     effect: GainRandomCards(
-                        predicate: "survivor",
+                        predicate: Survivor,
                         count: 2,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 13,
                         variables: {"count": 2, "predicate": "Survivor"},
                     ),
@@ -824,13 +824,13 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Choose a Guide",
                     id: "738a5af0-f848-4d48-bceb-9a43c9b11066:pair-1:template-14",
-                    effect_text: r#"Draft a Survivor from 4 choices"#,
+                    effect_text: "Draft a Survivor from 4 choices",
                     effect: DraftCard(
-                        predicate: "survivor",
+                        predicate: Survivor,
                         count: 1,
                         offer_count: 4,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 14,
                         variables: {"predicate": "Survivor", "offer_count": 4},
                     ),
@@ -839,18 +839,18 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "401bb341-8385-41e9-8f6f-7b48e9ce174d",
-            prose: r#"A heavy-furred wolf prowls low through blazing grass, its eyes shining."#,
+            prose: "A heavy-furred wolf prowls low through blazing grass, its eyes shining.",
             actions: [
                 ActionDefinition(
                     label: "Call Across the Fire",
                     id: "401bb341-8385-41e9-8f6f-7b48e9ce174d:pair-1:template-14",
-                    effect_text: r#"Draft a Spirit Animal from 4 choices"#,
+                    effect_text: "Draft a Spirit Animal from 4 choices",
                     effect: DraftCard(
-                        predicate: "spirit-animal",
+                        predicate: SpiritAnimal,
                         count: 1,
                         offer_count: 4,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 14,
                         variables: {"predicate": "Spirit Animal", "offer_count": 4},
                     ),
@@ -858,12 +858,12 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Invite Another to Follow",
                     id: "401bb341-8385-41e9-8f6f-7b48e9ce174d:pair-1:template-58",
-                    effect_text: r#"Change a chosen character card to be a Spirit Animal"#,
+                    effect_text: "Change a chosen character card to be a Spirit Animal",
                     effect: ChangeSubtypeSelected(
-                        predicate: "character",
+                        predicate: Character,
                         subtype: "Spirit Animal",
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 58,
                         variables: {"subtype": "Spirit Animal"},
                     ),
@@ -872,16 +872,16 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "8b5eb29c-146f-46fb-9407-55004128fba7",
-            prose: r#"A skull-faced guardian extends a lantern ablaze with drifting motes."#,
+            prose: "A skull-faced guardian extends a lantern ablaze with drifting motes.",
             actions: [
                 ActionDefinition(
                     label: "Accept the Lantern",
                     id: "8b5eb29c-146f-46fb-9407-55004128fba7:pair-1:template-10",
-                    effect_text: r#"Gain Lantern Keeper"#,
+                    effect_text: "Gain Lantern Keeper",
                     effect: GainCard(
                         card_id: "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 10,
                         variables: {"card_id": {"id": "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", "display_name": "Lantern Keeper"}},
                     ),
@@ -889,13 +889,13 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Study the Motes",
                     id: "8b5eb29c-146f-46fb-9407-55004128fba7:pair-1:template-14",
-                    effect_text: r#"Draft a ≤2● cost Character from 4 choices"#,
+                    effect_text: "Draft a ≤2● cost Character from 4 choices",
                     effect: DraftCard(
-                        predicate: "cheap-character",
+                        predicate: CheapCharacter,
                         count: 1,
                         offer_count: 4,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 14,
                         variables: {"predicate": "≤2● cost Character", "offer_count": 4},
                     ),
@@ -904,16 +904,16 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "954e8d50-d494-4fb2-b4c7-74979083b774",
-            prose: r#"A gunman stands braced as cables of shadow stream from him."#,
+            prose: "A gunman stands braced as cables of shadow stream from him.",
             actions: [
                 ActionDefinition(
                     label: "Answer His Signal",
                     id: "954e8d50-d494-4fb2-b4c7-74979083b774:pair-1:template-10",
-                    effect_text: r#"Gain Breach Artist"#,
+                    effect_text: "Gain Breach Artist",
                     effect: GainCard(
                         card_id: "87aba308-00b4-40d8-a46f-4e6f58a664a8",
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 10,
                         variables: {"card_id": {"id": "87aba308-00b4-40d8-a46f-4e6f58a664a8", "display_name": "Breach Artist"}},
                     ),
@@ -921,12 +921,12 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Accept His Commission",
                     id: "954e8d50-d494-4fb2-b4c7-74979083b774:pair-1:template-58",
-                    effect_text: r#"Change a chosen character card to be a Outsider"#,
+                    effect_text: "Change a chosen character card to be a Outsider",
                     effect: ChangeSubtypeSelected(
-                        predicate: "character",
+                        predicate: Character,
                         subtype: "Outsider",
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 58,
                         variables: {"subtype": "Outsider"},
                     ),
@@ -935,18 +935,18 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "b8ecc46d-bd92-4826-a416-7ce177e69cbf",
-            prose: r#"An owl perches heavily on a branch, dense plumage backlit."#,
+            prose: "An owl perches heavily on a branch, dense plumage backlit.",
             actions: [
                 ActionDefinition(
                     label: "Follow the owl's focus",
                     id: "b8ecc46d-bd92-4826-a416-7ce177e69cbf:pair-1:template-14",
-                    effect_text: r#"Draft a Spirit Animal from 4 choices"#,
+                    effect_text: "Draft a Spirit Animal from 4 choices",
                     effect: DraftCard(
-                        predicate: "spirit-animal",
+                        predicate: SpiritAnimal,
                         count: 1,
                         offer_count: 4,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 14,
                         variables: {"predicate": "Spirit Animal", "offer_count": 4},
                     ),
@@ -954,12 +954,12 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Answer its low call",
                     id: "b8ecc46d-bd92-4826-a416-7ce177e69cbf:pair-1:template-13",
-                    effect_text: r#"Gain 2 random Spirit Animal cards"#,
+                    effect_text: "Gain 2 random Spirit Animal cards",
                     effect: GainRandomCards(
-                        predicate: "spirit-animal",
+                        predicate: SpiritAnimal,
                         count: 2,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 13,
                         variables: {"count": 2, "predicate": "Spirit Animal"},
                     ),
@@ -968,16 +968,16 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "e2f542eb-090f-4a22-a42c-a120eb6caaa3",
-            prose: r#"Beneath a starry haze, a dark whale banks with fins extended."#,
+            prose: "Beneath a starry haze, a dark whale banks with fins extended.",
             actions: [
                 ActionDefinition(
                     label: "Call Across the Sky",
                     id: "e2f542eb-090f-4a22-a42c-a120eb6caaa3:pair-1:template-10",
-                    effect_text: r#"Gain Cloudmantle Ray"#,
+                    effect_text: "Gain Cloudmantle Ray",
                     effect: GainCard(
                         card_id: "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5",
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 10,
                         variables: {"card_id": {"id": "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", "display_name": "Cloudmantle Ray"}},
                     ),
@@ -985,13 +985,13 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Follow Its Crossing",
                     id: "e2f542eb-090f-4a22-a42c-a120eb6caaa3:pair-1:template-14",
-                    effect_text: r#"Draft a Spirit Animal from 4 choices"#,
+                    effect_text: "Draft a Spirit Animal from 4 choices",
                     effect: DraftCard(
-                        predicate: "spirit-animal",
+                        predicate: SpiritAnimal,
                         count: 1,
                         offer_count: 4,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 14,
                         variables: {"predicate": "Spirit Animal", "offer_count": 4},
                     ),
@@ -1000,16 +1000,16 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
-            prose: r#"An elephant looms through starry haze, bright tusks sharply curved."#,
+            prose: "An elephant looms through starry haze, bright tusks sharply curved.",
             actions: [
                 ActionDefinition(
                     label: "Reach toward the tusks",
                     id: "46783333-78f9-4146-a8ec-0d1b81e1bf2f:pair-1:template-27",
-                    effect_text: r#"Gain Charm Pouch"#,
+                    effect_text: "Gain Charm Pouch",
                     effect: GainDreamsign(
                         dreamsign_id: "2D4EB3EE-0931-45ED-8365-69F18096EAD5",
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 27,
                         variables: {"dreamsign_name": {"id": "2D4EB3EE-0931-45ED-8365-69F18096EAD5", "display_name": "Charm Pouch"}},
                     ),
@@ -1017,12 +1017,12 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Sound a gathering call",
                     id: "46783333-78f9-4146-a8ec-0d1b81e1bf2f:pair-1:template-59",
-                    effect_text: r#"Gain 15 essence for each Spirit Animal card in your deck"#,
+                    effect_text: "Gain 15 essence for each Spirit Animal card in your deck",
                     effect: GainEssencePerCard(
-                        predicate: "spirit-animal",
+                        predicate: SpiritAnimal,
                         essence_per_card: 15,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 59,
                         variables: {"essence_per_card": 15, "predicate": "Spirit Animal"},
                     ),
@@ -1031,18 +1031,18 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "886c9d49-b25f-4ddd-97f0-2ec4b42eda89",
-            prose: r#"A colossal rider looms through star-filled haze, long hair streaming."#,
+            prose: "A colossal rider looms through star-filled haze, long hair streaming.",
             actions: [
                 ActionDefinition(
                     label: "Answer Their Muster",
                     id: "886c9d49-b25f-4ddd-97f0-2ec4b42eda89:pair-5:template-36",
-                    effect_text: r#"Choose one of 2 packs of 3 Warrior cards to add to your deck"#,
+                    effect_text: "Choose one of 2 packs of 3 Warrior cards to add to your deck",
                     effect: ChoosePack(
-                        predicate: "warrior",
+                        predicate: Warrior,
                         pack_count: 2,
                         pack_size: 3,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 36,
                         variables: {"pack_count": 2, "pack_size": 3, "predicate": "Warrior"},
                     ),
@@ -1050,11 +1050,11 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Receive Their Blessing",
                     id: "886c9d49-b25f-4ddd-97f0-2ec4b42eda89:pair-5:template-64",
-                    effect_text: r#"All characters in your deck gain +1✦"#,
+                    effect_text: "All characters in your deck gain +1✦",
                     effect: IncreaseSparkAll(
                         spark_bonus: 1,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 64,
                         variables: {"spark_bonus": 1},
                     ),
@@ -1063,26 +1063,26 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "15b63630-d9f8-473b-9717-15ad91ff2f16",
-            prose: r#"Branching currents surround a figure kneeling inside a ruptured chamber."#,
+            prose: "Branching currents surround a figure kneeling inside a ruptured chamber.",
             actions: [
                 ActionDefinition(
                     label: "Accept the charge",
                     id: "15b63630-d9f8-473b-9717-15ad91ff2f16:pair-1:template-66",
-                    effect_text: r#"All cards in your deck become ❖ (fast)"#,
+                    effect_text: "All cards in your deck become ❖ (fast)",
                     effect: MakeFastAll,
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 66,
                     ),
                 ),
                 ActionDefinition(
                     label: "Overload the aperture",
                     id: "15b63630-d9f8-473b-9717-15ad91ff2f16:pair-1:template-65",
-                    effect_text: r#"All cards in your deck are reduced in cost by 1●. Gain 3 Nightmare cards."#,
+                    effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 Nightmare cards.",
                     effect: ReduceCostAllAndGainNightmares(
                         energy_cost_reduction: 1,
                         nightmare_count: 3,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 65,
                         variables: {"energy_cost_reduction": 1, "nightmare_count": 3},
                     ),
@@ -1091,18 +1091,18 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "764b62f6-6af9-40ad-8d1f-653cc1a11030",
-            prose: r#"A cloaked warrior leans forward, raising a bright-emblemed standard through smoke."#,
+            prose: "A cloaked warrior leans forward, raising a bright-emblemed standard through smoke.",
             actions: [
                 ActionDefinition(
                     label: "Rally at the Crest",
                     id: "764b62f6-6af9-40ad-8d1f-653cc1a11030:pair-5:template-36",
-                    effect_text: r#"Choose one of 2 packs of 3 Warrior cards to add to your deck"#,
+                    effect_text: "Choose one of 2 packs of 3 Warrior cards to add to your deck",
                     effect: ChoosePack(
-                        predicate: "warrior",
+                        predicate: Warrior,
                         pack_count: 2,
                         pack_size: 3,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 36,
                         variables: {"pack_count": 2, "pack_size": 3, "predicate": "Warrior"},
                     ),
@@ -1110,12 +1110,12 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Charge Through the Smoke",
                     id: "764b62f6-6af9-40ad-8d1f-653cc1a11030:pair-5:template-65",
-                    effect_text: r#"All cards in your deck are reduced in cost by 1●. Gain 3 Nightmare cards."#,
+                    effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 Nightmare cards.",
                     effect: ReduceCostAllAndGainNightmares(
                         energy_cost_reduction: 1,
                         nightmare_count: 3,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 65,
                         variables: {"energy_cost_reduction": 1, "nightmare_count": 3},
                     ),
@@ -1124,26 +1124,26 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
-            prose: r#"A solitary man pauses on a gnarled bough beneath suspended lanterns."#,
+            prose: "A solitary man pauses on a gnarled bough beneath suspended lanterns.",
             actions: [
                 ActionDefinition(
                     label: "Offer Him an Exchange",
                     id: "e26e0ac8-d6c9-4b0c-8672-4f73651f2586:pair-1:template-61",
-                    effect_text: r#"Purge a chosen card and gain a copy of another chosen card in your deck"#,
+                    effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
                     effect: PurgeAndCopy,
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 61,
                     ),
                 ),
                 ActionDefinition(
                     label: "Present a Written Charm",
                     id: "e26e0ac8-d6c9-4b0c-8672-4f73651f2586:pair-1:template-19",
-                    effect_text: r#"Apply Inspired to $DECK_CARD"#,
+                    effect_text: "Apply Inspired to $DECK_CARD",
                     effect: TransfigureFixedSelected(
-                        predicate: "event",
+                        predicate: Event,
                         transfiguration: "Inspired",
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 19,
                         variables: {"transfiguration": "Inspired"},
                         selections: {"$DECK_CARD": {"predicate": "Event"}},
@@ -1153,18 +1153,18 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "123baf70-305a-4583-bdba-a10b5153fbeb",
-            prose: r#"A masked soldier braces a long rifle amid smoke-darkened wreckage."#,
+            prose: "A masked soldier braces a long rifle amid smoke-darkened wreckage.",
             actions: [
                 ActionDefinition(
                     label: "Call for Reinforcements",
                     id: "123baf70-305a-4583-bdba-a10b5153fbeb:pair-1:template-15",
-                    effect_text: r#"Draft a Survivor from 4 choices and gain 2 copies of it"#,
+                    effect_text: "Draft a Survivor from 4 choices and gain 2 copies of it",
                     effect: DraftCard(
-                        predicate: "survivor",
+                        predicate: Survivor,
                         count: 2,
                         offer_count: 4,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 15,
                         variables: {"predicate": "Survivor", "offer_count": 4, "count": 2},
                     ),
@@ -1172,12 +1172,12 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Request Field Training",
                     id: "123baf70-305a-4583-bdba-a10b5153fbeb:pair-1:template-19",
-                    effect_text: r#"Apply Kindled to $DECK_CARD"#,
+                    effect_text: "Apply Kindled to $DECK_CARD",
                     effect: TransfigureFixedSelected(
-                        predicate: "survivor",
+                        predicate: Survivor,
                         transfiguration: "Kindled",
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 19,
                         variables: {"transfiguration": "Kindled"},
                         selections: {"$DECK_CARD": {"predicate": "Survivor"}},
@@ -1187,25 +1187,25 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "e455225f-c444-44a2-8796-805cae2b755f",
-            prose: r#"A witch extends both hands as stones hover around her."#,
+            prose: "A witch extends both hands as stones hover around her.",
             actions: [
                 ActionDefinition(
                     label: "Read the suspended pattern",
                     id: "e455225f-c444-44a2-8796-805cae2b755f:pair-3:template-28",
-                    effect_text: r#"Gain a random dreamsign"#,
+                    effect_text: "Gain a random dreamsign",
                     effect: GainRandomDreamsign,
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 28,
                     ),
                 ),
                 ActionDefinition(
                     label: "Break the suspended pattern",
                     id: "e455225f-c444-44a2-8796-805cae2b755f:pair-3:template-62",
-                    effect_text: r#"Purge a chosen dreamsign and gain 50 essence"#,
+                    effect_text: "Purge a chosen dreamsign and gain 50 essence",
                     effect: PurgeDreamsignForEssence(
                         essence: 50,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 62,
                         variables: {"essence": 50},
                     ),
@@ -1214,17 +1214,17 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6",
-            prose: r#"Three sealed figures press through billowing haze, opaque visors hidden beneath hoods."#,
+            prose: "Three sealed figures press through billowing haze, opaque visors hidden beneath hoods.",
             actions: [
                 ActionDefinition(
                     label: "Learn their ways",
                     id: "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6:pair-5:template-53",
-                    effect_text: r#"Change $DECK_CARD to become a Survivor"#,
+                    effect_text: "Change $DECK_CARD to become a Survivor",
                     effect: ChangeSubtypeSelected(
-                        predicate: "cheap-character",
+                        predicate: CheapCharacter,
                         subtype: "Survivor",
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 53,
                         variables: {"card_type": "Survivor"},
                         selections: {"$DECK_CARD": {"predicate": "≤2● cost Character"}},
@@ -1233,12 +1233,12 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Recruit an Ally",
                     id: "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6:pair-5:template-9",
-                    effect_text: r#"Gain a random Survivor card"#,
+                    effect_text: "Gain a random Survivor card",
                     effect: GainRandomCards(
-                        predicate: "survivor",
+                        predicate: Survivor,
                         count: 1,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 9,
                         variables: {"predicate": "Survivor"},
                     ),
@@ -1247,17 +1247,17 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "f9a65b32-537b-457c-9eaf-b512cf1f3791",
-            prose: r#"Luminous seams thread a heavy thorax; articulated legs fold above a branch beneath spread wings."#,
+            prose: "Luminous seams thread a heavy thorax; articulated legs fold above a branch beneath spread wings.",
             actions: [
                 ActionDefinition(
                     label: "Copy the linked armor pattern",
                     id: "f9a65b32-537b-457c-9eaf-b512cf1f3791:pair-2:template-49",
-                    effect_text: r#"Gain 2 copies of $DECK_CARD"#,
+                    effect_text: "Gain 2 copies of $DECK_CARD",
                     effect: CopySelectedCard(
-                        predicate: "cheap-character",
+                        predicate: CheapCharacter,
                         count: 2,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 49,
                         variables: {"count": 2},
                         selections: {"$DECK_CARD": {"predicate": "≤2● cost Character"}},
@@ -1266,11 +1266,11 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Compare the repeating plates",
                     id: "f9a65b32-537b-457c-9eaf-b512cf1f3791:pair-2:template-55",
-                    effect_text: r#"Draw 4 cards from your deck and choose one to gain a copy of."#,
+                    effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
                     effect: CopyOfferedDeckCard(
                         offer_count: 4,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 55,
                     ),
                 ),
@@ -1278,16 +1278,16 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034",
-            prose: r#"A skeletal giant reaches across water, its shape repeating in broken reflections."#,
+            prose: "A skeletal giant reaches across water, its shape repeating in broken reflections.",
             actions: [
                 ActionDefinition(
                     label: "Study the bare crown",
                     id: "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034:pair-1:template-27",
-                    effect_text: r#"Gain Mortal Skull"#,
+                    effect_text: "Gain Mortal Skull",
                     effect: GainDreamsign(
                         dreamsign_id: "EB55B141-82F8-4BA4-B319-420F762E9EE4",
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 27,
                         variables: {"dreamsign_name": {"id": "EB55B141-82F8-4BA4-B319-420F762E9EE4", "display_name": "Mortal Skull"}},
                     ),
@@ -1295,11 +1295,11 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Hold the hollow gaze",
                     id: "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034:pair-1:template-38",
-                    effect_text: r#"Draw 2 additional cards at the start of your next battle"#,
+                    effect_text: "Draw 2 additional cards at the start of your next battle",
                     effect: NextBattleOpeningHand(
                         count: 2,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 38,
                         variables: {"count": 2},
                     ),
@@ -1308,16 +1308,16 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "86fd585b-e9d0-4dc1-bce9-488014b9316d",
-            prose: r#"A luminous jellyfish glides among stars, its flowing tendrils brightly lit."#,
+            prose: "A luminous jellyfish glides among stars, its flowing tendrils brightly lit.",
             actions: [
                 ActionDefinition(
                     label: "Study its measured pulse",
                     id: "86fd585b-e9d0-4dc1-bce9-488014b9316d:pair-1:template-38",
-                    effect_text: r#"Draw 2 additional cards at the start of your next battle"#,
+                    effect_text: "Draw 2 additional cards at the start of your next battle",
                     effect: NextBattleOpeningHand(
                         count: 2,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 38,
                         variables: {"count": 2},
                     ),
@@ -1325,11 +1325,11 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Follow its radiant wake",
                     id: "86fd585b-e9d0-4dc1-bce9-488014b9316d:pair-1:template-39",
-                    effect_text: r#"Gain 2 additional energy at the start of your next battle"#,
+                    effect_text: "Gain 2 additional energy at the start of your next battle",
                     effect: NextBattleStartingEnergy(
                         count: 2,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 39,
                         variables: {"count": 2},
                     ),
@@ -1338,25 +1338,25 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "b1d36337-5668-4f1d-b155-2d07fc00f872",
-            prose: r#"A lone astronaut stands rigid where luminous steps meet a vast black aperture."#,
+            prose: "A lone astronaut stands rigid where luminous steps meet a vast black aperture.",
             actions: [
                 ActionDefinition(
                     label: "Follow the astronaut",
                     id: "b1d36337-5668-4f1d-b155-2d07fc00f872:pair-1:template-57",
-                    effect_text: r#"Pick a new Dream Avatar from 3 choices"#,
+                    effect_text: "Pick a new Dream Avatar from 3 choices",
                     effect: ChooseDreamAvatar(
                         offer_count: 3,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 57,
                     ),
                 ),
                 ActionDefinition(
                     label: "Enter the aperture alone",
                     id: "b1d36337-5668-4f1d-b155-2d07fc00f872:pair-1:template-79",
-                    effect_text: r#"Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim."#,
+                    effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
                     effect: PurgeDuplicatesAndGrantReclaim,
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 79,
                     ),
                 ),
@@ -1364,17 +1364,17 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "edb479be-68a5-45bc-bd19-2602156edb57",
-            prose: r#"A colossal eagle beats broad wings through canyon haze, dark feathers edged with glare."#,
+            prose: "A colossal eagle beats broad wings through canyon haze, dark feathers edged with glare.",
             actions: [
                 ActionDefinition(
                     label: "Echo its wingbeats",
                     id: "edb479be-68a5-45bc-bd19-2602156edb57:pair-1:template-12",
-                    effect_text: r#"Gain 3 copies of $OFFERED_CARD"#,
+                    effect_text: "Gain 3 copies of $OFFERED_CARD",
                     effect: GainOfferedCard(
-                        predicate: "spirit-animal",
+                        predicate: SpiritAnimal,
                         count: 3,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 12,
                         variables: {"count": 3},
                         selections: {"$OFFERED_CARD": {"predicate": "Spirit Animal"}},
@@ -1383,12 +1383,12 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Join its flight",
                     id: "edb479be-68a5-45bc-bd19-2602156edb57:pair-1:template-16",
-                    effect_text: r#"Take any number of Spirit Animal cards from 4 choices"#,
+                    effect_text: "Take any number of Spirit Animal cards from 4 choices",
                     effect: TakeCards(
-                        predicate: "spirit-animal",
+                        predicate: SpiritAnimal,
                         offer_count: 4,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 16,
                         variables: {"offer_count": 4, "predicate": "Spirit Animal"},
                     ),
@@ -1397,18 +1397,18 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e",
-            prose: r#"A lone fisher casts a slender line across misty, light-speckled water."#,
+            prose: "A lone fisher casts a slender line across misty, light-speckled water.",
             actions: [
                 ActionDefinition(
                     label: "Haul his line",
                     id: "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e:pair-1:template-15",
-                    effect_text: r#"Draft a ≤2● cost Character from 4 choices and gain 2 copies of it"#,
+                    effect_text: "Draft a ≤2● cost Character from 4 choices and gain 2 copies of it",
                     effect: DraftCard(
-                        predicate: "cheap-character",
+                        predicate: CheapCharacter,
                         count: 2,
                         offer_count: 4,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 15,
                         variables: {"count": 2, "offer_count": 4, "predicate": "≤2● cost Character"},
                     ),
@@ -1416,12 +1416,12 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Guide his cast",
                     id: "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e:pair-1:template-16",
-                    effect_text: r#"Take any number of ≤2● cost Character cards from 4 choices"#,
+                    effect_text: "Take any number of ≤2● cost Character cards from 4 choices",
                     effect: TakeCards(
-                        predicate: "cheap-character",
+                        predicate: CheapCharacter,
                         offer_count: 4,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 16,
                         variables: {"offer_count": 4, "predicate": "≤2● cost Character"},
                     ),
@@ -1430,17 +1430,17 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "2ce84a16-1295-4738-9e2d-1f57590b2269",
-            prose: r#"A hooded warrior stands rigid as marked slabs orbit a luminous sword."#,
+            prose: "A hooded warrior stands rigid as marked slabs orbit a luminous sword.",
             actions: [
                 ActionDefinition(
                     label: "Join His Vigil",
                     id: "2ce84a16-1295-4738-9e2d-1f57590b2269:pair-3:template-16",
-                    effect_text: r#"Take any number of ≤2● cost Character cards from 4 choices"#,
+                    effect_text: "Take any number of ≤2● cost Character cards from 4 choices",
                     effect: TakeCards(
-                        predicate: "cheap-character",
+                        predicate: CheapCharacter,
                         offer_count: 4,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 16,
                         variables: {"offer_count": 4, "predicate": "≤2● cost Character"},
                     ),
@@ -1448,12 +1448,12 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Answer His Summons",
                     id: "2ce84a16-1295-4738-9e2d-1f57590b2269:pair-3:template-12",
-                    effect_text: r#"Gain 2 copies of $OFFERED_CARD"#,
+                    effect_text: "Gain 2 copies of $OFFERED_CARD",
                     effect: GainOfferedCard(
-                        predicate: "cheap-character",
+                        predicate: CheapCharacter,
                         count: 2,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 12,
                         variables: {"count": 2},
                         selections: {"$OFFERED_CARD": {"predicate": "≤2● cost Character"}},
@@ -1463,16 +1463,16 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "9d14885c-a757-40cc-b43e-87dbec7ec379",
-            prose: r#"A tentacled colossus surges through a furnace-bright rupture."#,
+            prose: "A tentacled colossus surges through a furnace-bright rupture.",
             actions: [
                 ActionDefinition(
                     label: "Feed it, then gaze",
                     id: "9d14885c-a757-40cc-b43e-87dbec7ec379:pair-1:template-47",
-                    effect_text: r#"Choose a card to purge and replace it with Glimpse of Infinity"#,
+                    effect_text: "Choose a card to purge and replace it with Glimpse of Infinity",
                     effect: ReplaceSelectedWithCard(
                         card_id: "1658d9a0-c3b0-4eb7-babc-4933acf362c4",
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 47,
                         variables: {"card_id": {"id": "1658d9a0-c3b0-4eb7-babc-4933acf362c4", "display_name": "Glimpse of Infinity"}},
                     ),
@@ -1480,12 +1480,12 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Witness its emergence",
                     id: "9d14885c-a757-40cc-b43e-87dbec7ec379:pair-1:template-16",
-                    effect_text: r#"Take any number of Event cards from 4 choices"#,
+                    effect_text: "Take any number of Event cards from 4 choices",
                     effect: TakeCards(
-                        predicate: "event",
+                        predicate: Event,
                         offer_count: 4,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 16,
                         variables: {"offer_count": 4, "predicate": "Event"},
                     ),
@@ -1494,16 +1494,16 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2",
-            prose: r#"An immense creature crouches between slender trunks, rough limbs glowing with narrow lines."#,
+            prose: "An immense creature crouches between slender trunks, rough limbs glowing with narrow lines.",
             actions: [
                 ActionDefinition(
                     label: "Touch a luminous seam",
                     id: "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2:pair-4:template-18",
-                    effect_text: r#"Apply Empowered to a chosen card"#,
+                    effect_text: "Apply Empowered to a chosen card",
                     effect: TransfigureFixedSelected(
                         transfiguration: "Empowered",
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 18,
                         variables: {"transfiguration": "Empowered"},
                     ),
@@ -1511,9 +1511,9 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Follow its lowered gaze",
                     id: "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2:pair-4:template-37",
-                    effect_text: r#"The next draft or shop site you visit will contain transfigured cards"#,
+                    effect_text: "The next draft or shop site you visit will contain transfigured cards",
                     effect: TransfigureNextDraftOrShop,
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 37,
                     ),
                 ),
@@ -1521,25 +1521,25 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "1dc8f23e-58bd-47e5-9510-b48315fba1df",
-            prose: r#"A dark-coated explorer holds a bright lantern as wind whips his hair."#,
+            prose: "A dark-coated explorer holds a bright lantern as wind whips his hair.",
             actions: [
                 ActionDefinition(
                     label: "Touch the lantern",
                     id: "1dc8f23e-58bd-47e5-9510-b48315fba1df:pair-3:template-17",
-                    effect_text: r#"Apply a transfiguration to a chosen card"#,
+                    effect_text: "Apply a transfiguration to a chosen card",
                     effect: TransfigureSelected(
                         count: 1,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 17,
                     ),
                 ),
                 ActionDefinition(
                     label: "Follow his light onward",
                     id: "1dc8f23e-58bd-47e5-9510-b48315fba1df:pair-3:template-37",
-                    effect_text: r#"The next draft or shop site you visit will contain transfigured cards"#,
+                    effect_text: "The next draft or shop site you visit will contain transfigured cards",
                     effect: TransfigureNextDraftOrShop,
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 37,
                     ),
                 ),
@@ -1547,16 +1547,16 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "7ad10754-690c-45fa-abe6-28944da6eef6",
-            prose: r#"A rigid figure fractures into dark pieces beside a molten fissure."#,
+            prose: "A rigid figure fractures into dark pieces beside a molten fissure.",
             actions: [
                 ActionDefinition(
                     label: "Separate the drifting fragments",
                     id: "7ad10754-690c-45fa-abe6-28944da6eef6:pair-1:template-51",
-                    effect_text: r#"Gain one copy of each of 2 chosen cards"#,
+                    effect_text: "Gain one copy of each of 2 chosen cards",
                     effect: CopySelectedCards(
                         count: 2,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 51,
                         variables: {"count": 2},
                     ),
@@ -1564,11 +1564,11 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Fuse the glowing fragments",
                     id: "7ad10754-690c-45fa-abe6-28944da6eef6:pair-1:template-50",
-                    effect_text: r#"Gain 2 copies of a chosen card"#,
+                    effect_text: "Gain 2 copies of a chosen card",
                     effect: CopySelectedCard(
                         count: 2,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 50,
                         variables: {"count": 2},
                     ),
@@ -1577,16 +1577,16 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "7dd2214f-8d16-453a-9f28-62712e64eae1",
-            prose: r#"A black firefly hovers, amber abdomen blazing."#,
+            prose: "A black firefly hovers, amber abdomen blazing.",
             actions: [
                 ActionDefinition(
                     label: "Rest in its radiance",
                     id: "7dd2214f-8d16-453a-9f28-62712e64eae1:pair-4:template-39",
-                    effect_text: r#"Gain 2 additional energy at the start of your next battle"#,
+                    effect_text: "Gain 2 additional energy at the start of your next battle",
                     effect: NextBattleStartingEnergy(
                         count: 2,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 39,
                         variables: {"count": 2},
                     ),
@@ -1594,12 +1594,12 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Gather its amber light",
                     id: "7dd2214f-8d16-453a-9f28-62712e64eae1:pair-4:template-59",
-                    effect_text: r#"Gain 15 essence for each Spirit Animal card in your deck"#,
+                    effect_text: "Gain 15 essence for each Spirit Animal card in your deck",
                     effect: GainEssencePerCard(
-                        predicate: "spirit-animal",
+                        predicate: SpiritAnimal,
                         essence_per_card: 15,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 59,
                         variables: {"essence_per_card": 15, "predicate": "Spirit Animal"},
                     ),
@@ -1608,16 +1608,16 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "5b2b2188-b9f0-4b3b-9185-26a820d343c7",
-            prose: r#"A suited astronaut crosses glassy water as blue canyon light spills ahead."#,
+            prose: "A suited astronaut crosses glassy water as blue canyon light spills ahead.",
             actions: [
                 ActionDefinition(
                     label: "Follow the canyon light",
                     id: "5b2b2188-b9f0-4b3b-9185-26a820d343c7:pair-2:template-39",
-                    effect_text: r#"Gain 2 additional energy at the start of your next battle"#,
+                    effect_text: "Gain 2 additional energy at the start of your next battle",
                     effect: NextBattleStartingEnergy(
                         count: 2,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 39,
                         variables: {"count": 2},
                     ),
@@ -1625,9 +1625,9 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Enter the blue radiance",
                     id: "5b2b2188-b9f0-4b3b-9185-26a820d343c7:pair-2:template-81",
-                    effect_text: r#"Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle."#,
+                    effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
                     effect: NextBattleSmallerHandAndCostDiscount,
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 81,
                     ),
                 ),
@@ -1635,16 +1635,16 @@ ExplorationCatalog(
         ),
         EncounterDefinition(
             card_id: "77f31db4-0397-49a7-8886-f5459ee960e9",
-            prose: r#"An armored warrior sweeps a glowing scythe through wind-driven sand."#,
+            prose: "An armored warrior sweeps a glowing scythe through wind-driven sand.",
             actions: [
                 ActionDefinition(
                     label: "Yield",
                     id: "77f31db4-0397-49a7-8886-f5459ee960e9:pair-1:template-60",
-                    effect_text: r#"Purge a chosen card and gain 20 essence for each ✦ it had"#,
+                    effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
                     effect: PurgeForEssence(
                         essence_per_spark: 20,
                     ),
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 60,
                         variables: {"essence_per_spark": 20},
                     ),
@@ -1652,9 +1652,9 @@ ExplorationCatalog(
                 ActionDefinition(
                     label: "Barter",
                     id: "77f31db4-0397-49a7-8886-f5459ee960e9:pair-1:template-61",
-                    effect_text: r#"Purge a chosen card and gain a copy of another chosen card in your deck"#,
+                    effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
                     effect: PurgeAndCopy,
-                    template: TemplateTrace(
+                    template: TemplateInvocation(
                         id: 61,
                     ),
                 ),
