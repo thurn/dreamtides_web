@@ -14,95 +14,7 @@ Their rewards can:
 - Change the deck as a whole.
 - Create an effect for a later site or battle.
 
-Both sites separate preparation from resolution:
-
-- Entering the site prepares a deterministic encounter and its random targets.
-- The player sees the prepared possibilities and makes one choice.
-- Resolution validates that choice and applies the complete outcome atomically.
-- The journey records the result so it can be reconstructed after resuming.
-
-## How Augury builds its offers
-
-Augury constructs each vision in two stages:
-
-1. **Choose an offer archetype.** An offer archetype is a reusable recipe with
-   an eligibility rule, reward family, lottery weight, selection policy, and
-   reward parameters. Only enabled archetypes with legal targets enter the
-   weighted lottery.
-2. **Select the concrete targets.** The chosen archetype runs its selection
-   policy to determine the particular card, deck entry, Dreamsign, or site in
-   the offer. If the recipe cannot produce a complete reward, Augury removes it
-   from that slot's pool and tries another archetype.
-
-The first offer draws from all eligible archetypes. The second draws after
-excluding the first offer's entire family. A completed Augury encounter
-therefore contains two different kinds of reward, even when one family contains
-many archetypes.
-
-### Selection policies
-
-A **selection policy** defines how one mechanic filters, ranks, and samples its
-legal targets. Production uses several policies because “a good card to gain,”
-“a good card to copy,” and “a good card to remove” are different questions:
-
-- **Fixed** validates and uses a target named by authored content.
-- **Uniform** samples equally from the legal candidates.
-- **Card fit** favors cards that work with the effective current deck.
-- **Card fit and quality** blends deck fit with an authored, deck-independent
-  strength signal.
-- **Card bundle** chooses a seed card, then adds cards that relate to the seed,
-  the growing bundle, and the player's deck.
-- **Purge misfit** favors starters and entries whose removal least harms deck
-  fit.
-- **Duplicate value** favors entries whose additional copy combines card quality
-  with strong contribution to deck fit.
-- **Deck-entry centrality** favors an instance that contributes strongly to the
-  deck's relationships.
-- **Transfiguration value** favors an applicable form with high mechanical
-  benefit on a central card.
-- **Dreamsign match** compares an unowned Dreamsign's authored features with the
-  effective deck.
-- **Site uniform** samples equally from the utility site types allowed for an
-  add-site reward.
-
-Augury assigns one of these policies to every offer archetype. Exploration uses
-the same policy engine to select an encounter uniformly and to prepare any card,
-deck entry, Dreamsign, Dream Avatar, or site required by an authored action. The
-author still defines the scene, its two actions, and their effect kinds;
-selection policy supplies only the variable targets required by those rules.
-
-### Ranking and reproducibility
-
-Reward preparation starts from a snapshot of the journey at site entry. It
-includes the journey seed, site identity, effective deck, owned and available
-Dreamsigns, resolved draft pool, Dream Avatar, and relevant authored content.
-Selection uses card UUIDs and concrete deck-entry IDs; names are display text
-only.
-
-A scored policy:
-
-- Ranks candidates by score and breaks ties by stable identity.
-- Keeps a configured leading band of candidates.
-- Samples uniformly from that band without replacement.
-
-The standard band contains the larger of one quarter of the legal pool or five
-candidates, capped by the pool size. Individual mechanics can use a narrower or
-wider band. This keeps rewards responsive to the deck without always producing
-the single highest score.
-
-Each selection receives an independent deterministic stream derived from the
-journey seed, site identity, selection key, policy, and draw purpose. Preparing
-one action does not consume randomness belonging to another. Its trace records:
-
-- Rules and content versions.
-- Candidate count, digest, scores, and sampled band.
-- Selected identities and any fallbacks.
-- Randomness scope and draw count.
-
-These records make a production choice reconstructible when several ranking or
-fallback rules contributed to it.
-
-## Presenting and resolving Augury
+## Augury
 
 Augury is hosted by Aldric, the Seer. On entry, Aldric appears with two circular
 Offer Tiles. Each is a symbolic summary of one reward: card or Dreamsign art, an
@@ -112,7 +24,7 @@ several candidates first requires a choice. The player can return to the
 two-tile comparison before confirming. When the encounter permits it, the player
 may decline both visions and complete the site without a reward.
 
-Every archetype belongs to one **offer family**:
+Augury's possible rewards are grouped into six **offer families**:
 
 - **Grant:** Gain a fitted or strong card, draft from a short list or category,
   receive several copies, gain a coherent bundle, or draft a transfigured card.
@@ -124,16 +36,46 @@ Every archetype belongs to one **offer family**:
 - **Dreamsign:** Gain an unowned Dreamsign selected for the current deck.
 - **Site:** Add one eligible utility site to the current dreamscape.
 
-Grant candidates normally exclude starter, special, and already-owned cards;
-category drafts also stay within the journey's resolved draft pool.
+### How the two visions are prepared
+
+Augury builds each vision from two separate rules:
+
+- The **offer archetype** says what the reward does, such as “purge a card,”
+  “gain a Dreamsign,” or “draft a transfigured card.” It also defines the offer
+  family, eligibility requirements, lottery weight, and reward quantity.
+- The **selection policy** says how that reward chooses its concrete target from
+  the legal candidates. It might choose one card automatically or prepare a
+  short list for the player.
+
+For example, suppose Augury prepares a Purge vision:
+
+1. The weighted archetype lottery chooses **Purge** from the eligible recipes.
+2. The effect establishes the legal targets: card instances that may be removed
+   from the current deck.
+3. The **purge misfit** policy favors starter cards and cards whose removal does
+   the least damage to the deck's relationships.
+4. The policy chooses one of its leading candidates. The Offer Tile can now say
+   exactly which card Augury proposes to remove.
+5. If the player accepts, the purge effect removes that prepared card instance.
+
+The effect and policy answer different questions: **Purge** says what will
+happen; **purge misfit** decides which card the offer targets.
+
+The first vision draws from every eligible archetype. The second draws after
+excluding the first vision's entire offer family. The two tiles therefore
+present different kinds of reward. If an archetype cannot produce a complete
+offer, Augury tries another recipe for that slot.
+
+Grant candidates normally exclude starter, special, and already-owned cards.
+Category drafts also remain within the journey's resolved draft pool.
 Deck-changing offers use concrete card instances so an improvement, purge, or
 duplication applies to the copy that was evaluated.
 
-The prepared encounter has a signature derived from the journey snapshot and the
-two visible offers. Confirmation names the encounter, offer, archetype, and any
-nested choice. The game rejects a stale signature, mismatched offer, absent
-choice, or illegal target. A valid payload applies as one reward. Composite
-rewards either apply in full or leave the journey unchanged. The site then
+### Accepting a vision
+
+When the player confirms a vision, the game checks that the prepared offer and
+any required choice are still valid. It then applies the complete reward.
+Composite rewards either apply in full or leave the journey unchanged. The site
 completes and the player returns to the dreamscape.
 
 ## Exploration encounters
@@ -170,7 +112,7 @@ prepared target with a later player selection. A follow-up can ask for:
 At site entry, Exploration:
 
 1. Filters the catalog to encounters whose source card exists.
-2. Deterministically shuffles those encounters with the uniform policy.
+2. Deterministically shuffles those encounters.
 3. Tries them in that order while preparing both actions.
 4. Uses the first encounter for which both actions can produce their required
    offers.
@@ -224,11 +166,11 @@ quantities, predicates, fixed objects, or subtype options.
 
 ## Atomic outcomes and departure
 
-One Exploration action may resolve per visit. Resolution validates the action,
-encounter signature, selection-rules version, and submitted identities before
-calculating and applying the complete result. Multi-object gains, mass deck
-changes, purge-and-copy exchanges, and effects with both benefits and Nightmares
-cannot partially succeed.
+One Exploration action may resolve per visit. Resolution checks the action and
+submitted choices against the prepared encounter before calculating and applying
+the complete result. Multi-object gains, mass deck changes, purge-and-copy
+exchanges, and effects with both benefits and Nightmares cannot partially
+succeed.
 
 The persisted resolution records:
 
@@ -251,3 +193,70 @@ running selection again, so a resumed journey reconstructs the same outcome.
 Once the outcome presentation finishes, the full art collapses into the card,
 the card returns toward the deck, the site completes, and the player returns to
 the dreamscape.
+
+## Selection policy reference
+
+Selection policies are shared reward tools, not an Augury-only system. Augury
+uses them to fill in its generated offers. Exploration uses them to select an
+encounter uniformly and to prepare any variable card, deck entry, Dreamsign,
+Dream Avatar, or site required by an authored action. The authored Exploration
+scene still determines its prose, two actions, and effect kinds.
+
+Production defines eleven policies because each kind of target calls for a
+different decision rule:
+
+- **Fixed:** Validate and use a target named by authored content.
+- **Uniform:** Give every legal candidate the same chance.
+- **Card fit:** Favor cards that work with the effective current deck.
+- **Card fit and quality:** Blend deck fit with an authored, deck-independent
+  strength signal.
+- **Card bundle:** Choose a seed card, then add cards that relate to the seed,
+  the growing bundle, and the deck.
+- **Purge misfit:** Favor starters and entries whose removal least harms deck
+  fit.
+- **Duplicate value:** Favor entries whose card quality and contribution to deck
+  fit make an additional copy valuable.
+- **Deck-entry centrality:** Favor an instance that contributes strongly to the
+  deck's relationships.
+- **Transfiguration value:** Favor a mechanically valuable form on a central
+  card.
+- **Dreamsign match:** Compare an unowned Dreamsign's authored features with the
+  effective deck.
+- **Site uniform:** Give every eligible utility site type the same chance.
+
+### Ranked selection
+
+Reward preparation reads a snapshot of the journey at site entry, including the
+effective deck, resolved draft pool, owned Dreamsigns, and other objects
+relevant to the effect. Selection uses card UUIDs and concrete deck-entry IDs;
+names are display text only.
+
+A scored policy:
+
+- Filters the source objects to legal candidates.
+- Scores and ranks those candidates, breaking ties by stable identity.
+- Keeps a configured leading band.
+- Samples uniformly from that band without replacement.
+
+The standard band contains the larger of one quarter of the legal pool or five
+candidates, capped by the pool size. Individual mechanics can use a narrower or
+wider band. This keeps rewards responsive to the deck without always producing
+the single highest score.
+
+### Reproducibility
+
+Each selection receives an independent deterministic stream derived from the
+journey seed, site identity, selection key, policy, and draw purpose. Preparing
+one action does not consume randomness belonging to another. Its trace records:
+
+- Rules and content versions.
+- Candidate count, digest, scores, and sampled band.
+- Selected identities and any fallbacks.
+- Randomness scope and draw count.
+
+Each prepared encounter also has a signature derived from the journey snapshot
+and its visible offers. Resolution rejects a stale signature, mismatched offer,
+missing choice, or illegal target.
+
+These records make a production choice reconstructible when several ranking or
+fallback rules contributed to it.
