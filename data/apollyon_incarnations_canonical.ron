@@ -2,71 +2,71 @@
 // per run to present the final Dream Avatar's title and deck description.
 #![enable(implicit_some)]
 [
-  ApollyonIncarnationDefinition(
-    id: "howl_at_worlds_end",
+  ApollyonIncarnation(
+    id: "1380edc9-09ed-44df-ad09-ab4cbfc081b5",
     title: "Apollyon, the World's End",
     description: "Apollyon has the Aspect of Ravening: Spirit animals multiply, then rise as one devouring chorus.",
     deck_archetype: "Spirit Animal Flood",
   ),
 
-  ApollyonIncarnationDefinition(
-    id: "last_causality",
+  ApollyonIncarnation(
+    id: "3fe26475-8023-46d3-b13b-86673b92e3d0",
     title: "Apollyon, the End of Causality",
     description: "Apollyon has the Aspect of Catastrophe: Each event births another, portents of the coming storm.",
     deck_archetype: "Event Chain/Storm",
   ),
 
-  ApollyonIncarnationDefinition(
-    id: "marshal_of_the_final_host",
+  ApollyonIncarnation(
+    id: "80b6296d-840e-4ed7-b684-5aadc0981bf4",
     title: "Apollyon, the Doom of Humanity",
     description: "Apollyon has the Aspect of Slaughter: Warriors gather in ranks and strike before mercy.",
     deck_archetype: "Warrior Support Aggro",
   ),
 
-  ApollyonIncarnationDefinition(
-    id: "butcher_of_the_unfallen",
+  ApollyonIncarnation(
+    id: "ac116276-5569-491b-85c9-e192823bddae",
     title: "Apollyon, the Butcher",
     description: "Apollyon has the Aspect of Hunger: Every sacrifice feeds the survivors.",
     deck_archetype: "Abandon/Survivor Replenishment",
   ),
 
-  ApollyonIncarnationDefinition(
-    id: "crawling_return",
+  ApollyonIncarnation(
+    id: "57c65dfd-a125-440e-a410-c8c4a314b1d1",
     title: "Apollyon, the Last Word",
     description: "Apollyon has the Aspect of Haunting: An ethereal host returns endlessly.",
     deck_archetype: "Cheap-Character Recursion",
   ),
 
-  ApollyonIncarnationDefinition(
-    id: "closed_grave",
+  ApollyonIncarnation(
+    id: "e70d2d02-9ba6-434b-94d3-73ad29d3e9f4",
     title: "Apollyon, the Broken Cycle",
     description: "Apollyon has the Aspect of Damnation: Broken souls wind through death's river.",
     deck_archetype: "Reclaim Loop",
   ),
 
-  ApollyonIncarnationDefinition(
-    id: "keeper_of_cast_off_names",
+  ApollyonIncarnation(
+    id: "9ae35d68-a432-45f6-ab8c-07572a25ad6b",
     title: "Apollyon, the Keeper of Names",
     description: "Apollyon has the Aspect of Suffering: The discarded become omens of the coming calamity.",
     deck_archetype: "Discard/Reclaim",
   ),
 
-  ApollyonIncarnationDefinition(
-    id: "sovereign_of_the_full_void",
+  ApollyonIncarnation(
+    id: "8890b892-0634-4b8a-bfc0-018adfa979a7",
     title: "Apollyon, Sovereign of the Void",
     description: "Apollyon has the Aspect of Oblivion: The onrushing void swells to infinity.",
     deck_archetype: "Void-Density Recursion",
   ),
 
-  ApollyonIncarnationDefinition(
-    id: "the_unplaceable",
+  ApollyonIncarnation(
+    id: "ccc0385e-ff00-4be3-a807-99e4def47d2d",
     title: "Apollyon, the Unplaceable",
     description: "Apollyon has the Aspect of Violation: Striking with precision dissolves every blocker.",
     deck_archetype: "Outsider Tempo",
   ),
 
-  ApollyonIncarnationDefinition(
-    id: "herald_of_the_roused_blade",
+  ApollyonIncarnation(
+    id: "9a1bf275-2763-4db9-ad10-86d8f7e7efdf",
     title: "Apollyon, the Herald of Revelation",
     description: "Apollyon has the Aspect of Frenzy: Warriors awaken into the final rapture.",
     deck_archetype: "Event/Awaken Warriors",
