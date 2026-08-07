@@ -35,6 +35,11 @@ const LOCALIZATION_CONTRACT_TESTS = [
   "scripts/format-fluent.test.mjs",
   "scripts/generate-localization-types.test.mjs",
 ];
+const LOCALIZATION_LINT_INPUTS = new Set([
+  "data/strings.ftl",
+  "scripts/validate-localization-source.mjs",
+  "scripts/lint-localization-source.mjs",
+]);
 
 function isProductionSourceInput(file) {
   return (
@@ -114,6 +119,9 @@ export function buildReviewPlan(files, fileExists = () => true) {
     lintFiles: existingFiles.filter((file) =>
       file.startsWith("src/") && LINTABLE_EXTENSIONS.has(extname(file))),
     shouldCheckFluentFormatting: changedFiles.some(isFluentFormattingInput),
+    shouldLintLocalization: changedFiles.some((file) =>
+      LOCALIZATION_LINT_INPUTS.has(file),
+    ),
     shouldTypecheck: changedFiles.some(isTypecheckInput),
     shouldValidate: changedFiles.some(isValidationInput),
     shouldCheckRonFormatting: changedFiles.some(isRonFormattingInput),

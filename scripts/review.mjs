@@ -192,6 +192,12 @@ function commandFor(step, extraArgs = []) {
   if (step === "lint") {
     return [process.execPath, [join(root, "scripts", "run-eslint.mjs"), ...extraArgs]];
   }
+  if (step === "lint-localization") {
+    return [
+      process.execPath,
+      [join(root, "scripts", "lint-localization-source.mjs")],
+    ];
+  }
   if (step === "ron-format-check") {
     return [
       process.execPath,
@@ -282,6 +288,7 @@ function executionPlan() {
       { step: "ron-format-check", args: [] },
       { step: "rust-test", args: [] },
       { step: "clean-game-data", args: [] },
+      { step: "lint-localization", args: [] },
       { step: "lint", args: [] },
       { step: "typecheck", args: [] },
       { step: "test", args: [] },
@@ -291,6 +298,7 @@ function executionPlan() {
     return [
       { step: "fluent-format-check", args: [] },
       { step: "ron-format-check", args: [] },
+      { step: "lint-localization", args: [] },
       { step: "lint", args: passthrough },
     ];
   }
@@ -307,6 +315,9 @@ function executionPlan() {
     }
     if (reviewPlan.shouldCheckRonFormatting) {
       steps.push({ step: "ron-format-check", args: [] });
+    }
+    if (reviewPlan.shouldLintLocalization) {
+      steps.push({ step: "lint-localization", args: [] });
     }
     if (reviewPlan.lintFiles.length > 0 || passthrough.length > 0) {
       steps.push({
@@ -338,6 +349,9 @@ function executionPlan() {
     }
     if (reviewPlan.shouldCheckRonFormatting) {
       steps.push({ step: "ron-format-check", args: [] });
+    }
+    if (reviewPlan.shouldLintLocalization) {
+      steps.push({ step: "lint-localization", args: [] });
     }
     if (reviewPlan.shouldTestGameData) steps.push({ step: "rust-test", args: [] });
     if (reviewPlan.lintFiles.length > 0) {

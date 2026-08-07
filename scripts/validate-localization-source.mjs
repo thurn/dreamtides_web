@@ -33,13 +33,28 @@ const PLURAL_CATEGORIES = new Set([
   "many",
   "other",
 ]);
+export const UI_STRING_WORKAROUND_WARNING =
+  "Changing the UI string to work around this failure is not an acceptable resolution.";
+
+const RULE_GUIDANCE = {
+  "valid-fluent-syntax":
+    "The Fluent source is invalid. Repair the Fluent syntax while preserving the intended UI meaning.",
+  "indefinite-article-before-variable":
+    "An indefinite article cannot safely precede an interpolated value. Pass a semantic discriminator and select complete grammatical variants in Fluent.",
+  "countable-term-without-number-facet":
+    "A countable term must choose its number facet from the runtime count. Use a Fluent plural selector and the matching term facet in every branch.",
+  "number-facet-outside-matching-selector":
+    "A fixed number facet does not match a runtime plural branch. Use a Fluent plural selector and the matching term facet in every branch.",
+  "plural-selector-needs-default-other":
+    "A plural selector must provide a default other branch so Fluent can handle every locale plural category.",
+};
 
 /**
  * Finds source-English grammar that depends on an interpolated value or that
  * bypasses Fluent's runtime plural selection.
  *
  * @param {string} source
- * @returns {Array<{ messageId: string, rule: string }>}
+ * @returns {Array<{ messageId: string, rule: string, message: string }>}
  */
 export function validateLocalizationSource(source) {
   const resource = new FluentParser({ withSpans: false }).parse(source);
@@ -49,6 +64,7 @@ export function validateLocalizationSource(source) {
       entry.annotations.map(() => ({
         messageId: "<syntax>",
         rule: "valid-fluent-syntax",
+        message: diagnosticMessage("valid-fluent-syntax"),
       })),
     );
 
@@ -67,6 +83,20 @@ export function validateLocalizationSource(source) {
   }
 
   return diagnostics;
+}
+
+export function formatLocalizationDiagnostics(
+  diagnostics,
+  sourcePath = "data/strings.ftl",
+) {
+  if (diagnostics.length === 0) return "";
+  return [
+    "Localization grammar lint failed:",
+    ...diagnostics.map(
+      ({ messageId, rule, message }) =>
+        `- ${sourcePath}:${messageId} [${rule}] ${message}`,
+    ),
+  ].join("\n");
 }
 
 function inspectPattern(pattern, context) {
@@ -177,6 +207,14 @@ function addDiagnostic(context, rule) {
         diagnostic.messageId === context.messageId && diagnostic.rule === rule,
     )
   ) {
-    context.diagnostics.push({ messageId: context.messageId, rule });
+    context.diagnostics.push({
+      messageId: context.messageId,
+      rule,
+      message: diagnosticMessage(rule),
+    });
   }
+}
+
+function diagnosticMessage(rule) {
+  return `${RULE_GUIDANCE[rule]} ${UI_STRING_WORKAROUND_WARNING}`;
 }

@@ -9,7 +9,11 @@ import {
   generateLocalizationTypes,
   parseMessageContracts,
 } from "./generate-localization-types.mjs";
-import { validateLocalizationSource } from "./validate-localization-source.mjs";
+import {
+  UI_STRING_WORKAROUND_WARNING,
+  formatLocalizationDiagnostics,
+  validateLocalizationSource,
+} from "./validate-localization-source.mjs";
 
 const INVARIANT_TERM_IDS = [
   "dreamtides",
@@ -149,7 +153,7 @@ score = { $count } { $unit }
 unsafe-a = Choose a { $categoryName } card.
 unsafe-an = Choose an { $categoryName } card.
 `),
-    ).toEqual([
+    ).toMatchObject([
       {
         messageId: "unsafe-a",
         rule: "indefinite-article-before-variable",
@@ -177,7 +181,7 @@ semantic-other =
        *[other] { -card(number: "other") }
     }
 `),
-    ).toEqual([
+    ).toMatchObject([
       { messageId: "bare", rule: "countable-term-without-number-facet" },
       {
         messageId: "fixed",
@@ -203,7 +207,7 @@ unsafe =
         [other] { $count } copies
     }
 `),
-    ).toEqual([
+    ).toMatchObject([
       {
         messageId: "unsafe",
         rule: "plural-selector-needs-default-other",
@@ -211,10 +215,27 @@ unsafe =
     ]);
   });
 
+  it("explains that rewriting UI copy is not an acceptable grammar fix", () => {
+    const diagnostics = validateLocalizationSource(`
+unsafe-article = Choose a { $categoryName } card.
+unsafe-plural = { $count } { -card }
+`);
+    const lintOutput = formatLocalizationDiagnostics(diagnostics);
+
+    expect(diagnostics).toHaveLength(2);
+    for (const diagnostic of diagnostics) {
+      expect(diagnostic.message).toContain(UI_STRING_WORKAROUND_WARNING);
+    }
+    expect(lintOutput).toContain(UI_STRING_WORKAROUND_WARNING);
+    expect(lintOutput).toContain("Pass a semantic discriminator");
+    expect(lintOutput).toContain("Use a Fluent plural selector");
+  });
+
   it("keeps the production catalog free of unsafe article and plural patterns", () => {
-    expect(
-      validateLocalizationSource(readFileSync(SOURCE_PATH, "utf8")),
-    ).toEqual([]);
+    const diagnostics = validateLocalizationSource(
+      readFileSync(SOURCE_PATH, "utf8"),
+    );
+    expect(diagnostics, formatLocalizationDiagnostics(diagnostics)).toEqual([]);
   });
 
   it("keeps the committed types synchronized with strings.ftl", async () => {

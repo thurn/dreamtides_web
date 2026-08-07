@@ -9,6 +9,7 @@ describe("fast review plan", () => {
       changedFiles: ["docs/notes.md"],
       lintFiles: [],
       shouldCheckFluentFormatting: false,
+      shouldLintLocalization: false,
       shouldCheckRonFormatting: false,
       shouldTypecheck: false,
       shouldTestGameData: false,
@@ -31,6 +32,7 @@ describe("fast review plan", () => {
         "src/state/journey-state-actions.ts",
       ],
       shouldCheckFluentFormatting: false,
+      shouldLintLocalization: false,
       shouldCheckRonFormatting: false,
       shouldTypecheck: true,
       shouldTestGameData: false,
@@ -64,6 +66,7 @@ describe("fast review plan", () => {
 
   it("selects localization contract checks for Fluent source changes", () => {
     expect(buildReviewPlan(["data/strings.ftl"])).toMatchObject({
+      shouldLintLocalization: true,
       shouldTypecheck: false,
       shouldValidate: true,
       testInputs: [
@@ -84,6 +87,12 @@ describe("fast review plan", () => {
         "scripts/generate-localization-types.test.mjs",
       ],
     });
+  });
+
+  it("selects localization lint when its validator changes", () => {
+    expect(
+      buildReviewPlan(["scripts/validate-localization-source.mjs"]),
+    ).toMatchObject({ shouldLintLocalization: true });
   });
 
   it("routes repository scripts to related tests without typed source lint", () => {
