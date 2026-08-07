@@ -233,7 +233,12 @@ battle-zone-browser-total-count =
     }
 # Subtitle when filters show only part of a battle zone. $visibleCount and
 # $totalCount are non-negative card-entry counts; either can be zero.
-battle-zone-browser-filtered-count = { $visibleCount } of { $totalCount } { -card(number: "other") }
+battle-zone-browser-filtered-count =
+    { $totalCount ->
+        [one] { $visibleCount } of { $totalCount } { -card(number: "one") }
+       *[other] { $visibleCount } of { $totalCount } { -card(number: "other") }
+    }
+
 # Label for the local-player option in a battle zone owner switch. $count is
 # the non-negative number of that player's banished cards and can be zero.
 battle-zone-browser-viewer-option =
@@ -430,8 +435,14 @@ battle-victory-essence-gained = Gained { $amount } { -essence }
 # maximums and the points-to-win target are positive integers.
 battle-participant-status =
     { $owner ->
-        [viewer] Your side: { $currentEnergy } of { $maxEnergy } { -energy }, { $points } of { $pointsToWin } { -point(number: "other") }
-       *[opponent] Opponent: { $currentEnergy } of { $maxEnergy } { -energy }, { $points } of { $pointsToWin } { -point(number: "other") }
+        [viewer] Your side: { $currentEnergy } of { $maxEnergy } { -energy }, { $points } of { $pointsToWin } { $pointsToWin ->
+            [one] { -point(number: "one") }
+           *[other] { -point(number: "other") }
+        }
+       *[opponent] Opponent: { $currentEnergy } of { $maxEnergy } { -energy }, { $points } of { $pointsToWin } { $pointsToWin ->
+            [one] { -point(number: "one") }
+           *[other] { -point(number: "other") }
+        }
     }
 # Accessible name for a Dreamwell card. $cardName is its canonical display name
 # with unknown grammatical gender; $energyAmount is the non-negative Energy the
@@ -489,7 +500,12 @@ battle-card-note-title = Annotate { $cardName }
 battle-log-turn-title = Turn { $turn }
 # Subtitle for a card-pool browser. $visibleCount and $totalCount are
 # non-negative card counts; the visible count may be smaller after filtering.
-card-pool-browser-count = { $visibleCount } of { $totalCount } { -card(number: "other") }
+card-pool-browser-count =
+    { $totalCount ->
+        [one] { $visibleCount } of { $totalCount } { -card(number: "one") }
+       *[other] { $visibleCount } of { $totalCount } { -card(number: "other") }
+    }
+
 # Title of the card-pool browser. $context is "pool" in the Journey utility
 # overlay and "battle" in the floating battle inspector.
 card-pool-viewer-title =
@@ -586,7 +602,8 @@ card-pool-tide-provenance-description =
     { $dealSize ->
         [one] Built to { $dealSize } { -card(number: "one") }
        *[other] Built to { $dealSize } { -card(number: "other") }
-    } at a { $copyCap }-copy cap; { $facetDrawnCount } of { $facetAvailableCount } theme Tides were drawn.
+    } with a per-card copy cap of { $copyCap }; { $facetDrawnCount } of { $facetAvailableCount } theme Tides were drawn.
+
 # Title of the disclosure describing the loaded replay record.
 card-pool-replay-record-title = Replay record
 # Description of the replay deck source. $sourceFile is a developer-authored
@@ -724,8 +741,10 @@ augury-offer-copies-draft-description =
 # Detail title for an Augury offer whose candidates share one card category.
 augury-offer-category-draft-title = Choose a Card
 # Description for an Augury offer whose choices share one category.
-# $categoryName is an authored card category name with unknown grammar.
-augury-offer-category-draft-description = Choose a { $categoryName } card to add to your deck.
+# $categoryName is the authored display name of that category, such as Event or
+# Character, and has unknown grammar.
+augury-offer-category-draft-description = Choose a card from the { $categoryName } category to add to your deck.
+
 # Detail title for an Augury offer whose card choices arrive transfigured.
 augury-offer-transfigured-draft-title = Choose a Transfigured Card
 # Description for an Augury offer that adds one already-transfigured card chosen

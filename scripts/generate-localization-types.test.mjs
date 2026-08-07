@@ -9,6 +9,7 @@ import {
   generateLocalizationTypes,
   parseMessageContracts,
 } from "./generate-localization-types.mjs";
+import { validateLocalizationSource } from "./validate-localization-source.mjs";
 
 const INVARIANT_TERM_IDS = [
   "dreamtides",
@@ -121,9 +122,7 @@ score = { $count } { $unit }
   it("formats every standard term and both English number facets", () => {
     const source = readFileSync(SOURCE_PATH, "utf8");
     const probes = [
-      ...INVARIANT_TERM_IDS.map(
-        (id) => `probe-${id} = { -${id} }`,
-      ),
+      ...INVARIANT_TERM_IDS.map((id) => `probe-${id} = { -${id} }`),
       ...COUNTABLE_TERM_IDS.flatMap((id) => [
         `probe-${id}-one = { -${id}(number: "one") }`,
         `probe-${id}-other = { -${id}(number: "other") }`,
@@ -142,6 +141,80 @@ score = { $count } { $unit }
         formatProbe(bundle, `probe-${id}-other`),
       );
     }
+  });
+
+  it("rejects an English indefinite article before an interpolated value", () => {
+    expect(
+      validateLocalizationSource(`
+unsafe-a = Choose a { $categoryName } card.
+unsafe-an = Choose an { $categoryName } card.
+`),
+    ).toEqual([
+      {
+        messageId: "unsafe-a",
+        rule: "indefinite-article-before-variable",
+      },
+      {
+        messageId: "unsafe-an",
+        rule: "indefinite-article-before-variable",
+      },
+    ]);
+  });
+
+  it("rejects countable terms that bypass runtime plural selection", () => {
+    expect(
+      validateLocalizationSource(`
+bare = { $count } { -card }
+fixed = { $count } { -card(number: "other") }
+wrong-branch =
+    { $count ->
+        [one] { -card(number: "other") }
+       *[other] { -card(number: "other") }
+    }
+semantic-other =
+    { $owner ->
+        [viewer] Cards
+       *[other] { -card(number: "other") }
+    }
+`),
+    ).toEqual([
+      { messageId: "bare", rule: "countable-term-without-number-facet" },
+      {
+        messageId: "fixed",
+        rule: "number-facet-outside-matching-selector",
+      },
+      {
+        messageId: "wrong-branch",
+        rule: "number-facet-outside-matching-selector",
+      },
+      {
+        messageId: "semantic-other",
+        rule: "number-facet-outside-matching-selector",
+      },
+    ]);
+  });
+
+  it("requires a default other branch for English plural selectors", () => {
+    expect(
+      validateLocalizationSource(`
+unsafe =
+    { $count ->
+       *[one] { $count } copy
+        [other] { $count } copies
+    }
+`),
+    ).toEqual([
+      {
+        messageId: "unsafe",
+        rule: "plural-selector-needs-default-other",
+      },
+    ]);
+  });
+
+  it("keeps the production catalog free of unsafe article and plural patterns", () => {
+    expect(
+      validateLocalizationSource(readFileSync(SOURCE_PATH, "utf8")),
+    ).toEqual([]);
   });
 
   it("keeps the committed types synchronized with strings.ftl", async () => {
