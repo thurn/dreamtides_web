@@ -1,7 +1,6 @@
 // An exploratory RON-native rendering of exploration.toml.
 #![enable(implicit_some)]
 ExplorationCatalog(
-    schema_version: 1,
     actions_per_encounter: 2,
     effects: [
         EffectDefinition(

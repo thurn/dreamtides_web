@@ -55,7 +55,7 @@ schema-blind format converter. Their current shapes and required lowerings are:
   `[[rarity-caps]]`, converts the `Tides4` key and value to
   `default-strategy = "tides4"` plus `[pool.tides4]`, and maps snake_case fields
   to kebab-case.
-- Cards is a 304 KB catalog of 521 `CardDefinition` records using
+- Cards is a 270 KB top-level list of 521 `CardDefinition` records using
   `implicit_some`, `Fixed`, `Variable`, `FixedAndVariable`, `Character`,
   `Event`, optional crop data, and omitted defaults. The adapter materializes
   the established flat TOML card record, including card type, subtype, spark,
@@ -211,7 +211,6 @@ conversion graph. It records, per dataset:
 - stable dataset ID;
 - canonical RON path;
 - generated TOML path;
-- accepted dataset `schema_version` values;
 - registered Rust source-schema and adapter ID;
 - compatibility-adapter version;
 - dependent datasets whose TypeScript validation must run together;
@@ -235,6 +234,10 @@ pinned official RON and Serde crates. The RON source schema is allowed to model
 the domain directly instead of imitating TOML. Struct fields use snake_case;
 named types and enum variants follow Rust identifier conventions.
 
+The root value follows the dataset's domain shape. A homogeneous catalog such
+as Cards is a top-level `Vec<CardDefinition>`. Datasets with multiple
+independent sections, such as Draft and Exploration, use typed document records.
+
 Any RON construct supported by the pinned parser may be used when the dataset's
 Rust source schema and compatibility adapter define its meaning. The compiler
 does not predefine compatibility encodings for constructs that no canonical
@@ -256,19 +259,17 @@ Exploration template metadata recursively and rejects value kinds outside that
 leaf's declared vocabulary. These schema checks preserve author intent while
 allowing every typed construct that has a defined adapter lowering.
 
-Every canonical document carries its dataset field `schema_version`. This is
-the version of the typed source schema and adapter contract. The manifest lists
-the versions accepted by the compiled adapter, and compilation fails on an
-unsupported version before lowering.
+Canonical RON uses an unversioned source contract defined by the registered Rust
+source type and compiler build. Schema evolution is backward compatible: new
+fields are optional or have explicit defaults, and new typed forms receive
+deliberate adapter handling while existing authored forms retain their meaning.
+The compiler reads every canonical document through the current source type.
 
-The compatibility adapter decides whether and how that source version appears
-in TOML. Draft and Exploration schema version 1 map `schema_version` to the
-established `schema-version = 1`. Cards schema version 1 is source-only because
-`cards.toml` has no schema marker. The migration accepts these existing source
-schema versions without advancing them. A separate per-document RON format
-version would duplicate the source-schema contract and is not required. Parser
-behavior is pinned by the Cargo lockfile and toolchain; a parser upgrade is
-reviewed and tested as a compiler change.
+Version fields required by an established generated TOML contract are
+compatibility-only adapter output. Draft and Exploration adapters emit the
+`schema-version = 1` constant expected by their TypeScript readers. Parser
+behavior is pinned by the Cargo lockfile and toolchain, and parser upgrades are
+reviewed and tested as compiler changes.
 
 The authoring style uses trailing commas and stable field order. Long rules text
 and narrative copy use raw strings with the minimum safe hash delimiter. The
@@ -287,8 +288,6 @@ An adapter defines:
 - source field path to generated field path mappings;
 - top-level collection names;
 - array-of-table and nested-table representation;
-- fields omitted from compatibility output, such as Cards
-  `schema_version`; and
 - any representation conversion required by the current TOML contract.
 
 The adapter is normal Rust code from the typed source model to a typed or
@@ -368,10 +367,10 @@ diagnostics; interactive use receives concise human-readable diagnostics. The
 Node launcher builds the locked crate on cache miss and invokes the cached
 binary directly for subsequent watch and editor operations.
 
-Compilation reports dataset ID, source path, dataset schema version,
-compatibility-adapter version, source hash, manifest-entry fingerprint,
-generated hash, duration, and whether the output differs. It never emits game
-data values or authored copy into routine logs.
+Compilation reports dataset ID, source path, compatibility-adapter version,
+source hash, manifest-entry fingerprint, generated hash, duration, and whether
+the output differs. It never emits game data values or authored copy into
+routine logs.
 
 ## Deterministic conversion
 
@@ -598,7 +597,7 @@ For each operation batch, the middleware and Rust tool perform these steps:
 1. Node validates the HTTP body, references, and editor-level normalization.
 2. Under the transaction lock, Node verifies `sourceRevision` and copies every
    writable canonical source to the staging root.
-3. Rust strictly deserializes the staged RON into the versioned dataset type and
+3. Rust strictly deserializes the staged RON into the current dataset type and
    rejects duplicate identities before locating a target.
 4. Rust applies the operation to an in-memory clone to produce the exact
    intended typed result.
@@ -620,9 +619,9 @@ conversion. Watch and HMR notifications are emitted only after confirmation.
 ### RON serialization and edit rules
 
 Editor operations traverse the strictly typed source model. Cards are located
-only in root `cards` by their direct UUID. Exploration encounters are located
-only in root `encounters` by direct `card_id`; actions are then selected by
-validated slot and action ID. Missing and duplicate targets are errors.
+in the top-level sequence by their direct UUID. Exploration encounters are
+located only in root `encounters` by direct `card_id`; actions are then selected
+by validated slot and action ID. Missing and duplicate targets are errors.
 
 The editor prototype selects either the official `ron` serializer with a pinned
 pretty configuration or an existing maintained formatter. The selected strategy
@@ -733,7 +732,7 @@ when they do not change the same compiler, generated file, or editor boundary.
 
 Goal: compile declared RON datasets into deterministic staged TOML.
 
-- Freeze manifest, source-version, header, diagnostic, and exit-code contracts.
+- Freeze manifest, source-schema, header, diagnostic, and exit-code contracts.
 - Add fixtures for the source shapes and adapter mappings used by the three
   representative datasets.
 - Create the pinned Rust workspace, manifest loader, and dataset dispatch.

@@ -1,7 +1,4 @@
-// Version of this file's schema. Increment only when the compiler contract changes.
 (
-    schema_version: 1,
-
     offers: (
         // Number of cards shown to the player in each draft offer.
         cards_per_offer: 4,

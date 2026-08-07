@@ -16,8 +16,11 @@ otherwise.
    summarize record counts, key unions, optional fields, value types, and closed
    vocabularies.
 2. Design the RON shape:
-   - Prefer flat lists with explicit stable ID fields. Use maps only when keyed
-     lookup is part of the domain model.
+   - When a document consists solely of homogeneous definitions, make the list
+     itself the top-level value and deserialize it as `Vec<Definition>`. Use a
+     document record only when the source has multiple independent root fields.
+     Prefer explicit stable ID fields, and use maps only when keyed lookup is
+     part of the domain model.
    - Give entries in long lists a named record such as `CardDefinition(...)` or
      `ActionDefinition(...)`; anonymous inline records such as `art: (...)` are
      fine when the surrounding field already supplies enough context.
@@ -30,6 +33,9 @@ otherwise.
      semantic source value even when renaming or regrouping it.
    - Keep presentation and template-substitution text as strings, while typing
      runtime identifiers, predicates, and modes.
+   - Do not add schema-version fields. The typed source model and compiler build
+     define the current contract. Evolve source models compatibly with optional
+     or defaulted fields and deliberate adapter handling for new variants.
 3. Start the file with `#![enable(implicit_some)]`. Write present `Option<T>`
    values as `value` instead of `Some(value)`, and omit absent or default-valued
    fields when the Serde schema supports omission. Skip this extension only when
@@ -46,15 +52,13 @@ Use named entries in long lists and anonymous records inline:
 
 ```ron
 #![enable(implicit_some)]
-Catalog(
-    cards: [
-        CardDefinition(
-            id: "7be2e6d7-abff-4c44-a0c3-35460da1693c",
-            rarity: Legendary,
-            art: (image: 454095982, owned: true),
-        ),
-    ],
-)
+[
+    CardDefinition(
+        id: "7be2e6d7-abff-4c44-a0c3-35460da1693c",
+        rarity: Legendary,
+        art: (image: 454095982, owned: true),
+    ),
+]
 ```
 
 Replace a string discriminator and its loose parameters with one typed value:
@@ -104,9 +108,9 @@ Validate with the real `ron` and Serde crates, not a text or bracket check.
        let mut args = std::env::args().skip(1);
        let ron_path = args.next().expect("RON path");
        let toml_path = args.next().expect("TOML path");
-       let ron_catalog: Catalog = ron::from_str(&std::fs::read_to_string(ron_path)?)?;
+       let ron_cards: Vec<CardDefinition> = ron::from_str(&std::fs::read_to_string(ron_path)?)?;
        let toml_catalog: TomlCatalog = toml::from_str(&std::fs::read_to_string(toml_path)?)?;
-       assert_eq!(ron_catalog.cards.len(), toml_catalog.cards.len());
+       assert_eq!(ron_cards.len(), toml_catalog.cards.len());
        Ok(())
    }
    ```
