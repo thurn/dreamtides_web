@@ -30,18 +30,18 @@ import {
 } from "../../cumulus/components/atlas/atlas-display";
 import type { AtlasEdgeKind } from "../../cumulus/components/atlas/AtlasEdge";
 import type {
-  AtlasMapEdge,
-  AtlasMapNode,
-} from "../../cumulus/components/atlas/AtlasMap";
-import type {
   AtlasNodeAffiliation,
   AtlasNodeDreamsign,
+  AtlasNodeModel,
   AtlasNodePrimary,
   AtlasNodeSite,
 } from "../../cumulus/components/atlas/AtlasNode";
 import { artRef } from "../../cumulus/primitives/art";
 import { glyph } from "../../cumulus/primitives/glyph";
-import type { AtlasView } from "../../cumulus/screens/AtlasScreen";
+import type {
+  AtlasEdgeView,
+  AtlasView,
+} from "../../cumulus/screens/AtlasScreen";
 import type { JourneyContent } from "../../data/journey-content";
 import {
   atlasTemplate,
@@ -298,13 +298,13 @@ export function atlasEdgeKind(
 export function buildAtlasMapEdges(
   atlas: DreamAtlas,
   profile: AtlasLayoutProfile = ATLAS_LAYOUT_MOBILE,
-): AtlasMapEdge[] {
+): AtlasEdgeView[] {
   const geometry = resolveAtlasNodeGeometry(atlas, profile);
   const choiceLayer = atlasChoiceLayer(atlas);
   // An edge touching a node the player can no longer reach is drawn dim, matching
   // the faded treatment of the unreachable node itself.
   const reachable = reachableAtlasNodeIds(atlas);
-  const edges: AtlasMapEdge[] = [];
+  const edges: AtlasEdgeView[] = [];
   for (const from of Object.values(atlas.nodes)) {
     const fromGeo = geometry.get(from.id);
     if (fromGeo === undefined) {
@@ -368,8 +368,13 @@ function buildSignatureSiteCard(
   return {
     id: siteId,
     name: siteTypeName(journeyContent.atlasData, dreamscape.signatureSite),
-    blurb: siteTypeDescription(journeyContent.atlasData, dreamscape.signatureSite),
-    icon: glyph(siteTypeIcon(journeyContent.atlasData, dreamscape.signatureSite)),
+    blurb: siteTypeDescription(
+      journeyContent.atlasData,
+      dreamscape.signatureSite,
+    ),
+    icon: glyph(
+      siteTypeIcon(journeyContent.atlasData, dreamscape.signatureSite),
+    ),
   };
 }
 
@@ -506,7 +511,9 @@ function buildNodeCard(
       sceneArt: artRef.dreamscapeScene(dreamscape.id),
       figureArt: guide != null ? artRef.dreamGuide(guide.id) : null,
       title: guide?.name ?? dreamscape.name,
-      body: guide?.homeSpecialty ?? journeyContent.atlasData.presentation.starterBody,
+      body:
+        guide?.homeSpecialty ??
+        journeyContent.atlasData.presentation.starterBody,
       // The large desktop hover card presents the place, its resident guide, the
       // signature site, and the dreamscape's affiliation as distinct fields.
       placeName: dreamscape.name,
@@ -523,7 +530,7 @@ export function buildAtlasMapNodes(
   atlas: DreamAtlas,
   journeyContent: JourneyContent,
   profile: AtlasLayoutProfile = ATLAS_LAYOUT_MOBILE,
-): AtlasMapNode[] {
+): AtlasNodeModel[] {
   const geometry = resolveAtlasNodeGeometry(atlas, profile);
   // A node the player can no longer reach is faded and never reveals its site:
   // it renders as a dimmed, unrevealed frame regardless of what the generator
@@ -531,7 +538,7 @@ export function buildAtlasMapNodes(
   // covers the passed-by siblings in the current and previous layers and any
   // deeper node cut off from the frontier.
   const reachable = reachableAtlasNodeIds(atlas);
-  const items: AtlasMapNode[] = [];
+  const items: AtlasNodeModel[] = [];
   for (const node of Object.values(atlas.nodes)) {
     const geo = geometry.get(node.id);
     if (geo === undefined) {
@@ -564,7 +571,9 @@ export function buildAtlasMapNodes(
       dreamscape === null ||
       revealedSite === null
         ? null
-        : glyph(siteTypeIcon(journeyContent.atlasData, dreamscape.signatureSite));
+        : glyph(
+            siteTypeIcon(journeyContent.atlasData, dreamscape.signatureSite),
+          );
 
     const dreamsignTemplate =
       isReachable && node.knownDreamsignId !== null

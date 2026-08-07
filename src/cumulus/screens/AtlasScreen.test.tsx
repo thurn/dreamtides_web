@@ -7,8 +7,10 @@ import { CumulusRoot } from "../CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { LayerName } from "../../types/layer-name";
 import type { DreamscapeNode } from "../../types/journey";
-import type { AtlasMapNode } from "../components/atlas/AtlasMap";
-import type { AtlasNodeModel, AtlasNodePrimary } from "../components/atlas/AtlasNode";
+import type {
+  AtlasNodeModel,
+  AtlasNodePrimary,
+} from "../components/atlas/AtlasNode";
 import { artRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { AtlasScreen, type AtlasView } from "./AtlasScreen";
@@ -49,7 +51,10 @@ beforeEach(() => {
     HTMLElement.prototype,
     "clientHeight",
   );
-  originalVisualViewport = Object.getOwnPropertyDescriptor(window, "visualViewport");
+  originalVisualViewport = Object.getOwnPropertyDescriptor(
+    window,
+    "visualViewport",
+  );
   stubViewport(false);
   class StubResizeObserver {
     observe() {}
@@ -92,7 +97,10 @@ function restorePrototypeDescriptor(
   Object.defineProperty(HTMLElement.prototype, name, descriptor);
 }
 
-function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
+function mount(element: ReactElement): {
+  container: HTMLDivElement;
+  root: Root;
+} {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -135,7 +143,10 @@ function domRect(x: number, y: number, width: number, height: number): DOMRect {
   };
 }
 
-function mockRevealCardMeasurements(primary: { width: number; height: number }): void {
+function mockRevealCardMeasurements(primary: {
+  width: number;
+  height: number;
+}): void {
   vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
     function (this: HTMLElement) {
       if (this.dataset.revealMeasure === "primary") {
@@ -149,7 +160,12 @@ function mockRevealCardMeasurements(primary: { width: number; height: number }):
   );
 }
 
-function placedPrimary(): { x: number; y: number; width: number; height: number } {
+function placedPrimary(): {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+} {
   const primary = document.querySelector<HTMLElement>(
     '[data-cumulus-reveal-card="primary"]',
   )!;
@@ -193,7 +209,10 @@ function emptyPrimary(): AtlasNodePrimary {
   };
 }
 
-function residentModel(): Pick<AtlasNodeModel, "primary" | "dreamsign" | "site" | "affiliation"> {
+function residentModel(): Pick<
+  AtlasNodeModel,
+  "primary" | "dreamsign" | "site" | "affiliation"
+> {
   return {
     primary: {
       sceneArt: artRef.dreamscapeScene("wilderveil"),
@@ -225,21 +244,23 @@ function nodeItem(
   extra: {
     isStarter?: boolean;
     isBoss?: boolean;
-    semantic?: Partial<Pick<AtlasNodeModel, "primary" | "dreamsign" | "site" | "affiliation">>;
+    semantic?: Partial<
+      Pick<AtlasNodeModel, "primary" | "dreamsign" | "site" | "affiliation">
+    >;
   } = {},
-): AtlasMapNode {
+): AtlasNodeModel {
   return {
-      node: makeNode(id, state, layer),
-      left: 500,
-      top: 400,
-      size: 132,
-      isStarter: extra.isStarter ?? false,
-      isBoss: extra.isBoss ?? false,
-      isReachable: true,
-      iconRef: null,
-      unrevealedFrameRef: artRef.atlasAsset("fixture-frame.png"),
-      siteBadgeGlyph: null,
-      knownDreamsignRef: null,
+    node: makeNode(id, state, layer),
+    left: 500,
+    top: 400,
+    size: 132,
+    isStarter: extra.isStarter ?? false,
+    isBoss: extra.isBoss ?? false,
+    isReachable: true,
+    iconRef: null,
+    unrevealedFrameRef: artRef.atlasAsset("fixture-frame.png"),
+    siteBadgeGlyph: null,
+    knownDreamsignRef: null,
     primary: extra.semantic?.primary ?? emptyPrimary(),
     dreamsign: extra.semantic?.dreamsign ?? null,
     site: extra.semantic?.site ?? null,
@@ -257,7 +278,14 @@ function makeView(): AtlasView {
       nodeItem("boss", "revealedLocked", LayerName.Seven, { isBoss: true }),
     ],
     edges: [
-      { key: "starter-frontier", x1: 500, y1: 210, x2: 500, y2: 900, kind: "open" },
+      {
+        key: "starter-frontier",
+        x1: 500,
+        y1: 210,
+        x2: 500,
+        y2: 900,
+        kind: "open",
+      },
     ],
   };
 }
@@ -324,7 +352,9 @@ describe("Cumulus AtlasScreen", () => {
     expect(container.querySelectorAll("[data-node-state]")).toHaveLength(3);
     expect(container.querySelector("[data-node-starting]")).not.toBeNull();
     expect(container.querySelector("[data-node-boss]")).not.toBeNull();
-    expect(container.querySelector("[data-journey-status-bar-anchor]")).toBeNull();
+    expect(
+      container.querySelector("[data-journey-status-bar-anchor]"),
+    ).toBeNull();
 
     act(() => {
       root.unmount();

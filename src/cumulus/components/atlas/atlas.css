@@ -3,24 +3,18 @@
  * and `AtlasEdge` carry their own presentation and render identically in the
  * /cumulus doc site and in the live atlas screen.
  *
- * Everything is scoped under `.dream-atlas` (the atlas screen's root) so the
- * generic class names (.node, .edge, ...) never collide with the rest of the
- * app. The `--atlas-*` semantic material tokens are declared by
+ * Every selector uses the `cumulus-atlas-*` component namespace, so AtlasNode
+ * and AtlasEdge need no screen-owned wrapper class. The `--atlas-*` semantic
+ * material tokens are declared by
  * `cumulus-tokens.css`; the live screen and /cumulus specimens both nest this
  * surface inside `.cumulus`, so the same authored material resolves everywhere.
  */
 
 /* ---- Connections ---- */
-.dream-atlas .edges {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-}
-.dream-atlas .edge {
+.cumulus-atlas-edge {
   fill: none;
 }
-.dream-atlas .edge-dim {
+.cumulus-atlas-edge-dim {
   stroke: var(--atlas-edge-dim);
   stroke-width: 3.5;
   stroke-linecap: round;
@@ -28,27 +22,27 @@
      brighter node glows and the lighter centre of the wash. */
   filter: drop-shadow(0 0 2px var(--atlas-edge-shadow));
 }
-.dream-atlas .edge-locked {
+.cumulus-atlas-edge-locked {
   stroke: var(--atlas-edge-locked);
   stroke-width: 3.5;
   stroke-dasharray: 4 8;
   stroke-linecap: round;
   filter: drop-shadow(0 0 2px var(--atlas-edge-shadow));
 }
-.dream-atlas .edge-traveled {
+.cumulus-atlas-edge-traveled {
   /* Stroke is a per-edge userSpaceOnUse gradient set inline by AtlasEdge so it
      survives horizontal/vertical orientations; see AtlasEdge.tsx. */
   stroke-width: 5;
   stroke-linecap: round;
   filter: drop-shadow(0 0 6px var(--atlas-edge-traveled-glow));
 }
-.dream-atlas .edge-open {
+.cumulus-atlas-edge-open {
   /* Stroke is a per-edge userSpaceOnUse gradient set inline by AtlasEdge. */
   stroke-width: 4;
   stroke-linecap: round;
   filter: drop-shadow(0 0 8px var(--atlas-edge-open-glow));
 }
-.dream-atlas .edge-open-flow {
+.cumulus-atlas-edge-open-flow {
   stroke: var(--atlas-edge-open-flow);
   stroke-width: 2;
   stroke-dasharray: 2 16;
@@ -62,12 +56,7 @@
 }
 
 /* ---- Nodes ---- */
-.dream-atlas .nodes {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-}
-.dream-atlas .node {
+.cumulus-atlas-node {
   position: absolute;
   /* Centre the node on its stage-space left/top through negative margins set
      inline per node (-size/2), NOT `transform: translate(-50%,-50%)`: an
@@ -88,14 +77,14 @@
   font: inherit;
   text-align: inherit;
 }
-.dream-atlas .node-art {
+.cumulus-atlas-node-art {
   position: relative;
   width: 100%;
   height: 100%;
   z-index: 2;
   transition: transform 0.14s ease;
 }
-.dream-atlas .frame-img {
+.cumulus-atlas-frame-img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -103,7 +92,7 @@
   -webkit-user-drag: none;
   user-select: none;
 }
-.dream-atlas .node-glow {
+.cumulus-atlas-node-glow {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -114,13 +103,13 @@
   z-index: 1;
   pointer-events: none;
 }
-.dream-atlas .node-selectable-highlight {
+.cumulus-atlas-node-selectable-highlight {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
 }
-.dream-atlas .node-selectable-highlight-layer {
+.cumulus-atlas-node-selectable-highlight-layer {
   position: absolute;
   inset: calc(0px - var(--atlas-node-selectable-outline-width));
   background: var(--atlas-node-selectable-outline);
@@ -131,17 +120,15 @@
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-size: contain;
 }
-.dream-atlas .node-selectable-highlight-base {
+.cumulus-atlas-node-selectable-highlight-base {
   filter: var(--atlas-node-selectable-frame-glow);
 }
-.dream-atlas .node-selectable-highlight-pulse {
+.cumulus-atlas-node-selectable-highlight-pulse {
   filter: var(--atlas-node-selectable-pulse-glow);
   /* The node art sits above this exact-frame copy, so expanding its inset
      exposes a wider outer band without washing across the scene art. */
   animation: dream-atlas-selectable-width-pulse
-    var(--atlas-node-selectable-pulse-duration)
-    var(--ease-in-out)
-    infinite;
+    var(--atlas-node-selectable-pulse-duration) var(--ease-in-out) infinite;
 }
 @keyframes dream-atlas-selectable-width-pulse {
   0%,
@@ -152,33 +139,44 @@
   50% {
     opacity: 1;
     inset: calc(
-      0px
-      - var(--atlas-node-selectable-outline-width)
-      - var(--atlas-node-selectable-outline-width)
+      0px - var(--atlas-node-selectable-outline-width) -
+        var(--atlas-node-selectable-outline-width)
     );
   }
 }
 
-.dream-atlas .node-completed .node-glow {
-  background: radial-gradient(closest-side, var(--atlas-node-completed-halo), transparent);
+.cumulus-atlas-node-completed .cumulus-atlas-node-glow {
+  background: radial-gradient(
+    closest-side,
+    var(--atlas-node-completed-halo),
+    transparent
+  );
   box-shadow: 0 0 26px 3px var(--atlas-node-completed-glow);
 }
-.dream-atlas .node-available {
+.cumulus-atlas-node-available {
   cursor: pointer;
 }
-.dream-atlas .node-available .node-glow {
-  background: radial-gradient(closest-side, var(--atlas-node-available-halo), transparent);
+.cumulus-atlas-node-available .cumulus-atlas-node-glow {
+  background: radial-gradient(
+    closest-side,
+    var(--atlas-node-available-halo),
+    transparent
+  );
   box-shadow: 0 0 32px 6px var(--atlas-node-available-glow);
   animation: dream-atlas-pulse 2.6s ease-in-out infinite;
 }
-.dream-atlas .node-revealedLocked .node-glow {
+.cumulus-atlas-node-revealedLocked .cumulus-atlas-node-glow {
   box-shadow: 0 0 16px 2px var(--atlas-node-revealed-locked-glow);
 }
-.dream-atlas .node-unrevealed .node-glow {
+.cumulus-atlas-node-unrevealed .cumulus-atlas-node-glow {
   box-shadow: 0 0 14px 2px var(--atlas-node-unrevealed-glow);
 }
-.dream-atlas .node-boss .node-glow {
-  background: radial-gradient(closest-side, var(--atlas-node-boss-halo), transparent);
+.cumulus-atlas-node-boss .cumulus-atlas-node-glow {
+  background: radial-gradient(
+    closest-side,
+    var(--atlas-node-boss-halo),
+    transparent
+  );
   box-shadow: 0 0 42px 9px var(--atlas-node-boss-glow);
   animation: dream-atlas-pulse 3.4s ease-in-out infinite;
 }
@@ -192,7 +190,7 @@
   }
 }
 
-.dream-atlas .node-unreachable {
+.cumulus-atlas-node-unreachable {
   /* Fade every node the player can no longer reach (the view-model's
      `isReachable === false`) — the passed-by siblings and any deeper node cut off
      from the frontier. Dim via filter only (no opacity) so the node stays opaque
@@ -200,28 +198,28 @@
      lines show through and read as if drawn on top. */
   filter: grayscale(0.9) brightness(0.42);
 }
-.dream-atlas .node-unreachable .node-glow {
+.cumulus-atlas-node-unreachable .cumulus-atlas-node-glow {
   display: none;
 }
 
-.dream-atlas .node-available[data-reveal-active="true"] .node-glow {
+.cumulus-atlas-node-available[data-reveal-active="true"]
+  .cumulus-atlas-node-glow {
   box-shadow: 0 0 42px 10px var(--atlas-node-active-glow);
 }
-.dream-atlas .node-glow[data-ambient-paused="true"],
-.dream-atlas
-  .node-selectable-highlight[data-ambient-paused="true"]
-  .node-selectable-highlight-pulse {
+.cumulus-atlas-node-glow[data-ambient-paused="true"],
+.cumulus-atlas-node-selectable-highlight[data-ambient-paused="true"]
+  .cumulus-atlas-node-selectable-highlight-pulse {
   animation-play-state: paused;
 }
 
-.dream-atlas .unrevealed-face {
+.cumulus-atlas-unrevealed-face {
   position: relative;
   width: 100%;
   height: 100%;
 }
 /* Fill the round frame's transparent centre with a solid grey disc so an
    unrevealed node reads as a filled circle rather than an empty ring. */
-.dream-atlas .unrevealed-face::before {
+.cumulus-atlas-unrevealed-face::before {
   content: "";
   position: absolute;
   left: 50%;
@@ -233,7 +231,7 @@
   background: var(--atlas-node-unrevealed-face);
   z-index: 0;
 }
-.dream-atlas .unrevealed-face .frame-img {
+.cumulus-atlas-unrevealed-face .cumulus-atlas-frame-img {
   position: relative;
   z-index: 1;
 }
@@ -248,7 +246,7 @@
    pixel-unchanged. The mobile profile draws larger nodes *and* sets a larger
    badge scale, so the site / dreamsign icons stay legibly large once the
    portrait viewport scales the whole stage down. */
-.dream-atlas .site-badges {
+.cumulus-atlas-site-badges {
   position: absolute;
   bottom: -3px;
   left: 50%;
@@ -257,7 +255,7 @@
   display: flex;
   gap: var(--space-xs);
 }
-.dream-atlas .site-badge {
+.cumulus-atlas-site-badge {
   width: calc(var(--atlas-node-size) * 0.27 * var(--atlas-badge-scale, 1));
   height: calc(var(--atlas-node-size) * 0.27 * var(--atlas-badge-scale, 1));
   border-radius: 50%;
@@ -269,11 +267,11 @@
   color: var(--accent);
   box-shadow: 0 2px 7px var(--atlas-badge-shadow);
 }
-.dream-atlas .site-badge-glyph {
+.cumulus-atlas-site-badge-glyph {
   font-size: calc(var(--atlas-node-size) * 0.16 * var(--atlas-badge-scale, 1));
   line-height: 1;
 }
-.dream-atlas .boss-badge {
+.cumulus-atlas-boss-badge {
   position: absolute;
   top: 2px;
   right: 2px;
@@ -290,7 +288,7 @@
   border: 2px solid var(--atlas-boss-badge-border);
   box-shadow: 0 0 14px var(--atlas-boss-badge-glow);
 }
-.dream-atlas .known-badge {
+.cumulus-atlas-known-badge {
   position: absolute;
   top: -6px;
   right: -6px;
@@ -305,14 +303,14 @@
   border: 2px solid var(--atlas-known-badge-border);
   box-shadow: 0 0 14px var(--atlas-known-badge-glow);
 }
-.dream-atlas .known-badge img {
+.cumulus-atlas-known-badge img {
   width: calc(var(--atlas-node-size) * 0.26 * var(--atlas-badge-scale, 1));
   height: calc(var(--atlas-node-size) * 0.26 * var(--atlas-badge-scale, 1));
   object-fit: contain;
   filter: drop-shadow(0 1px 3px var(--atlas-known-image-shadow));
   pointer-events: none;
 }
-.dream-atlas .known-badge::after {
+.cumulus-atlas-known-badge::after {
   content: "";
   position: absolute;
   inset: -2px;
@@ -331,13 +329,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dream-atlas .node-glow,
-  .dream-atlas .node-selectable-highlight-pulse,
-  .dream-atlas .known-badge::after,
-  .dream-atlas .edge-open-flow {
+  .cumulus-atlas-node-glow,
+  .cumulus-atlas-node-selectable-highlight-pulse,
+  .cumulus-atlas-known-badge::after,
+  .cumulus-atlas-edge-open-flow {
     animation: none !important;
   }
-  .dream-atlas .node-selectable-highlight-pulse {
+  .cumulus-atlas-node-selectable-highlight-pulse {
     display: none;
   }
 }

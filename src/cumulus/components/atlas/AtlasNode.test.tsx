@@ -20,26 +20,30 @@ const AFFILIATION_ID = "00000000-0000-4000-8000-000000000054";
 
 describe("atlasPrimaryInfoCard", () => {
   it("selects the scene reveal for a known place and text for an unseen dream", () => {
-    expect(atlasPrimaryInfoCard({
-      sceneArt: artRef.dreamscapeScene("wilderveil"),
-      figureArt: artRef.dreamGuide("aldric"),
-      placeName: "Wilderveil",
-      guideName: "Aldric, the Seer",
-      title: "Aldric, the Seer",
-      body: "A curated vision.",
-    })).toMatchObject({
+    expect(
+      atlasPrimaryInfoCard({
+        sceneArt: artRef.dreamscapeScene("wilderveil"),
+        figureArt: artRef.dreamGuide("aldric"),
+        placeName: "Wilderveil",
+        guideName: "Aldric, the Seer",
+        title: "Aldric, the Seer",
+        body: "A curated vision.",
+      }),
+    ).toMatchObject({
       variant: "atlasReveal",
       title: "Wilderveil",
       subtitle: "Aldric, the Seer",
     });
-    expect(atlasPrimaryInfoCard({
-      sceneArt: null,
-      figureArt: null,
-      placeName: null,
-      guideName: null,
-      title: "An Unseen Dream",
-      body: "Travel onward.",
-    })).toMatchObject({ variant: "text", title: "An Unseen Dream" });
+    expect(
+      atlasPrimaryInfoCard({
+        sceneArt: null,
+        figureArt: null,
+        placeName: null,
+        guideName: null,
+        title: "An Unseen Dream",
+        body: "Travel onward.",
+      }),
+    ).toMatchObject({ variant: "text", title: "An Unseen Dream" });
   });
 });
 
@@ -105,8 +109,9 @@ let root: Root;
 let container: HTMLDivElement;
 
 beforeEach(() => {
-  (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean })
-    .IS_REACT_ACT_ENVIRONMENT = true;
+  (
+    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
+  ).IS_REACT_ACT_ENVIRONMENT = true;
   window.matchMedia = vi.fn().mockReturnValue({
     matches: false,
     addEventListener: vi.fn(),
@@ -147,7 +152,13 @@ function renderNode(value: AtlasNodeModel, onActivate = vi.fn()) {
 
 function pointer(
   type: "pointerover" | "pointerdown" | "pointerup" | "pointercancel",
-  options: { pointerType: "mouse" | "touch"; pointerId?: number; clientX?: number; clientY?: number; timeStamp?: number },
+  options: {
+    pointerType: "mouse" | "touch";
+    pointerId?: number;
+    clientX?: number;
+    clientY?: number;
+    timeStamp?: number;
+  },
 ): Event {
   const event = new MouseEvent(type, {
     bubbles: true,
@@ -158,7 +169,9 @@ function pointer(
   Object.defineProperties(event, {
     pointerType: { value: options.pointerType },
     pointerId: { value: options.pointerId ?? 1 },
-    ...(options.timeStamp === undefined ? {} : { timeStamp: { value: options.timeStamp } }),
+    ...(options.timeStamp === undefined
+      ? {}
+      : { timeStamp: { value: options.timeStamp } }),
   });
   return event;
 }
@@ -188,7 +201,8 @@ describe("AtlasNode semantic reveal contract", () => {
   });
 
   it("keeps reveal protocol derivation private to the named component", async () => {
-    const atlasNodeModule: Record<string, unknown> = await import("./AtlasNode");
+    const atlasNodeModule: Record<string, unknown> =
+      await import("./AtlasNode");
     expect(atlasNodeModule).not.toHaveProperty("atlasNodeRevealSpec");
   });
 
@@ -235,13 +249,13 @@ describe("AtlasNode semantic reveal contract", () => {
   it("activates only an available node", () => {
     const available = renderNode(model("available"));
     const highlight = available.source.querySelector<HTMLElement>(
-      ".node-selectable-highlight",
+      ".cumulus-atlas-node-selectable-highlight",
     );
     const baseHighlight = highlight?.querySelector<HTMLElement>(
-      ".node-selectable-highlight-base",
+      ".cumulus-atlas-node-selectable-highlight-base",
     );
     const pulseHighlight = highlight?.querySelector<HTMLElement>(
-      ".node-selectable-highlight-pulse",
+      ".cumulus-atlas-node-selectable-highlight-pulse",
     );
     expect(highlight).not.toBeNull();
     expect(highlight?.getAttribute("aria-hidden")).toBe("true");
@@ -281,7 +295,9 @@ describe("AtlasNode semantic reveal contract", () => {
     expect(unavailable.source.style.transform).toBe("none");
     expect(unavailable.source.style.cursor).toBe("default");
     expect(
-      unavailable.source.querySelector(".node-selectable-highlight"),
+      unavailable.source.querySelector(
+        ".cumulus-atlas-node-selectable-highlight",
+      ),
     ).toBeNull();
     act(() => unavailable.source.click());
     expect(unavailable.onActivate).not.toHaveBeenCalled();
@@ -289,9 +305,13 @@ describe("AtlasNode semantic reveal contract", () => {
   });
 
   it("keeps an unreachable node focusable and suppresses activation", () => {
-    const unreachable = renderNode(model("revealedLocked", { isReachable: false }));
+    const unreachable = renderNode(
+      model("revealedLocked", { isReachable: false }),
+    );
     expect(unreachable.source.tabIndex).toBe(0);
-    expect(unreachable.source.classList.contains("node-unreachable")).toBe(true);
+    expect(
+      unreachable.source.classList.contains("cumulus-atlas-node-unreachable"),
+    ).toBe(true);
     expect(unreachable.source.getAttribute("aria-disabled")).toBe("true");
     act(() => unreachable.source.focus());
     expect(document.activeElement).toBe(unreachable.source);
@@ -301,24 +321,62 @@ describe("AtlasNode semantic reveal contract", () => {
 
   it("activates a quick touch once, suppresses its compatibility click, then accepts keyboard activation", () => {
     const available = renderNode(model("available"));
-    act(() => { available.source.dispatchEvent(pointer("pointerdown", { pointerType: "touch", pointerId: 7 })); });
-    act(() => { available.source.dispatchEvent(pointer("pointerup", { pointerType: "touch", pointerId: 7 })); });
+    act(() => {
+      available.source.dispatchEvent(
+        pointer("pointerdown", { pointerType: "touch", pointerId: 7 }),
+      );
+    });
+    act(() => {
+      available.source.dispatchEvent(
+        pointer("pointerup", { pointerType: "touch", pointerId: 7 }),
+      );
+    });
     expect(available.onActivate).toHaveBeenCalledTimes(1);
 
-    act(() => { available.source.dispatchEvent(new MouseEvent("click", { bubbles: true, detail: 1 })); });
+    act(() => {
+      available.source.dispatchEvent(
+        new MouseEvent("click", { bubbles: true, detail: 1 }),
+      );
+    });
     expect(available.onActivate).toHaveBeenCalledTimes(1);
 
-    act(() => { available.source.dispatchEvent(new MouseEvent("click", { bubbles: true, detail: 0 })); });
+    act(() => {
+      available.source.dispatchEvent(
+        new MouseEvent("click", { bubbles: true, detail: 0 }),
+      );
+    });
     expect(available.onActivate).toHaveBeenCalledTimes(2);
   });
 
   it("suppresses touch-hold activation and only its compatibility click", () => {
     vi.useFakeTimers();
     const available = renderNode(model("available"));
-    act(() => { available.source.dispatchEvent(pointer("pointerdown", { pointerType: "touch", pointerId: 8, timeStamp: 100 })); });
-    act(() => { vi.advanceTimersByTime(35); });
-    act(() => { available.source.dispatchEvent(pointer("pointerup", { pointerType: "touch", pointerId: 8, timeStamp: 401 })); });
-    act(() => { available.source.dispatchEvent(new MouseEvent("click", { bubbles: true, detail: 1 })); });
+    act(() => {
+      available.source.dispatchEvent(
+        pointer("pointerdown", {
+          pointerType: "touch",
+          pointerId: 8,
+          timeStamp: 100,
+        }),
+      );
+    });
+    act(() => {
+      vi.advanceTimersByTime(35);
+    });
+    act(() => {
+      available.source.dispatchEvent(
+        pointer("pointerup", {
+          pointerType: "touch",
+          pointerId: 8,
+          timeStamp: 401,
+        }),
+      );
+    });
+    act(() => {
+      available.source.dispatchEvent(
+        new MouseEvent("click", { bubbles: true, detail: 1 }),
+      );
+    });
     expect(available.onActivate).not.toHaveBeenCalled();
     vi.useRealTimers();
   });
@@ -344,25 +402,61 @@ describe("AtlasNode semantic reveal contract", () => {
     expect(source.style.getPropertyValue("--reveal-hover-scale")).not.toBe("");
     expect(source.style.transform.startsWith("scale(var(")).toBe(true);
     expect(source.style.transform).toContain("reveal-hover-scale");
-    expect(source.querySelector<HTMLElement>(".node-art")?.style.transform).toBe("");
-    expect(getComputedStyle(source.querySelector<HTMLElement>(".node-art")!).transform).toBe("none");
-    expect(source.querySelector(".node-glow")?.getAttribute("data-ambient-paused"))
-      .toBe("true");
     expect(
-      source.querySelector(".node-selectable-highlight")
+      source.querySelector<HTMLElement>(".cumulus-atlas-node-art")?.style
+        .transform,
+    ).toBe("");
+    expect(
+      getComputedStyle(
+        source.querySelector<HTMLElement>(".cumulus-atlas-node-art")!,
+      ).transform,
+    ).toBe("none");
+    expect(
+      source
+        .querySelector(".cumulus-atlas-node-glow")
+        ?.getAttribute("data-ambient-paused"),
+    ).toBe("true");
+    expect(
+      source
+        .querySelector(".cumulus-atlas-node-selectable-highlight")
         ?.getAttribute("data-ambient-paused"),
     ).toBe("true");
   });
 
   it("applies touch press feedback once on the root without scaling node art", () => {
     const { source } = renderNode(model("available"));
-    source.getBoundingClientRect = () => ({ x: 80, y: 90, left: 80, top: 90, right: 212, bottom: 222, width: 132, height: 132, toJSON: () => ({}) });
-    act(() => { source.dispatchEvent(pointer("pointerdown", { pointerType: "touch", pointerId: 9 })); });
+    source.getBoundingClientRect = () => ({
+      x: 80,
+      y: 90,
+      left: 80,
+      top: 90,
+      right: 212,
+      bottom: 222,
+      width: 132,
+      height: 132,
+      toJSON: () => ({}),
+    });
+    act(() => {
+      source.dispatchEvent(
+        pointer("pointerdown", { pointerType: "touch", pointerId: 9 }),
+      );
+    });
     expect(source.style.transform.startsWith("scale(var(")).toBe(true);
     expect(source.style.transform).toContain("reveal-press-scale");
-    expect(source.querySelector<HTMLElement>(".node-art")?.style.transform).toBe("");
-    expect(getComputedStyle(source.querySelector<HTMLElement>(".node-art")!).transform).toBe("none");
-    act(() => { source.dispatchEvent(pointer("pointerup", { pointerType: "touch", pointerId: 9 })); });
+    expect(
+      source.querySelector<HTMLElement>(".cumulus-atlas-node-art")?.style
+        .transform,
+    ).toBe("");
+    expect(
+      getComputedStyle(
+        source.querySelector<HTMLElement>(".cumulus-atlas-node-art")!,
+      ).transform,
+    ).toBe("none");
+    act(() => {
+      source.dispatchEvent(
+        pointer("pointerup", { pointerType: "touch", pointerId: 9 }),
+      );
+    });
     expect(source.style.transform).toBe("none");
   });
 });

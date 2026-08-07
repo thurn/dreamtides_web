@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { LayerName } from "../../../types/layer-name";
-import type { DreamscapeNode } from "../../../types/journey";
-import { artRef, resolveArtRef } from "../../primitives/art";
-import type { AtlasMapNode } from "./AtlasMap";
+import { LayerName } from "../../types/layer-name";
+import type { DreamscapeNode } from "../../types/journey";
+import type { AtlasNodeModel } from "../components/atlas/AtlasNode";
+import { artRef, resolveArtRef } from "../primitives/art";
 import { atlasPreflightImageUrls } from "./atlas-preflight";
 
 function node(id: string): DreamscapeNode {
@@ -22,18 +22,19 @@ function node(id: string): DreamscapeNode {
   };
 }
 
-function item(id: string, overrides: Partial<AtlasMapNode>): AtlasMapNode {
+function item(id: string, overrides: Partial<AtlasNodeModel>): AtlasNodeModel {
   return {
-      node: node(id),
-      left: 0,
-      top: 0,
-      size: 120,
-      isStarter: false,
-      isBoss: false,
-      iconRef: null,
-      unrevealedFrameRef: artRef.atlasAsset("fixture-frame.png"),
-      siteBadgeGlyph: null,
-      knownDreamsignRef: null,
+    node: node(id),
+    left: 0,
+    top: 0,
+    size: 120,
+    isStarter: false,
+    isBoss: false,
+    isReachable: true,
+    iconRef: null,
+    unrevealedFrameRef: artRef.atlasAsset("fixture-frame.png"),
+    siteBadgeGlyph: null,
+    knownDreamsignRef: null,
     primary: {
       sceneArt: null,
       figureArt: null,
@@ -46,12 +47,11 @@ function item(id: string, overrides: Partial<AtlasMapNode>): AtlasMapNode {
     site: null,
     affiliation: null,
     ...overrides,
-    isReachable: overrides.isReachable ?? true,
   };
 }
 
 describe("atlasPreflightImageUrls", () => {
-  it("collects map and reveal images once in first-seen order", () => {
+  it("collects screen and reveal images once in first-seen order", () => {
     const icon = artRef.dreamscapeIcon("wilderveil");
     const scene = artRef.dreamscapeScene("wilderveil");
     const guide = artRef.dreamGuide("aldric");
@@ -67,10 +67,10 @@ describe("atlasPreflightImageUrls", () => {
           figureArt: guide,
         },
         dreamsign: {
-            id: "00000000-0000-4000-8000-000000000061",
-            name: "The Held Star",
-            art: dreamsign,
-            rulesText: "Gain 1 essence.",
+          id: "00000000-0000-4000-8000-000000000061",
+          name: "The Held Star",
+          art: dreamsign,
+          rulesText: "Gain 1 essence.",
         },
       }),
       item("duplicate", {

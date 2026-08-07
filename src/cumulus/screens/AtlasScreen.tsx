@@ -11,21 +11,31 @@
 //
 // PURE: it renders from a view-model and reports the chosen node through
 // `onEnterNode`; the adapter owns state, navigation, and logging. The screen
-// owns and exports its view types. The map surface, its scale-to-fit, and the
-// node hover previews live in the `AtlasMap` component; this screen composes
-// that surface with drifting Motes.
+// owns and exports its view types. The screen owns the scaled run-graph
+// composition and preflight; AtlasNode and AtlasEdge remain the reusable game
+// objects that own their presentation and interaction contracts.
 
-import { useEffect } from "react";
-import {
-  AtlasMap,
-  type AtlasMapEdge,
-  type AtlasMapNode,
-} from "../components/atlas/AtlasMap";
+import { useEffect, useMemo } from "react";
+import { AtlasEdge, type AtlasEdgeKind } from "../components/atlas/AtlasEdge";
+import { AtlasNode, type AtlasNodeModel } from "../components/atlas/AtlasNode";
 import { Motes } from "../components/hud/Motes";
 import { CharacterDialogue } from "../components/overlay/CharacterDialogue";
+import { glassSurfaceStyle } from "../internal/glass-surface";
 import { token } from "../primitives/tokens";
+import { useScaleToFit } from "../primitives/use-scale-to-fit";
+import { atlasPreflightImageUrls } from "./atlas-preflight";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
+
+/** One connector between two nodes, in stage coordinates. */
+export interface AtlasEdgeView {
+  key: string;
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  kind: AtlasEdgeKind;
+}
 
 /** Everything the atlas screen renders, mapped from live journey state. */
 export interface AtlasView {
@@ -34,9 +44,9 @@ export interface AtlasView {
   stageWidth: number;
   stageHeight: number;
   /** Placed nodes, running starter → boss along the map's layer axis. */
-  nodes: AtlasMapNode[];
+  nodes: AtlasNodeModel[];
   /** Forward connectors between nodes. */
-  edges: AtlasMapEdge[];
+  edges: AtlasEdgeView[];
   /** Mira's delayed tutorial-only explanation of the Atlas. */
   guideDialogue?: TutorialSpeechBubbleView;
 }
@@ -51,8 +61,8 @@ export interface AtlasScreenProps {
 }
 
 /**
- * The Cumulus Dream Atlas. Pure and props-driven: the vertical {@link AtlasMap}
- * of the run graph and drifting {@link Motes}.
+ * The Cumulus Dream Atlas. Pure and props-driven: a scaled graph of
+ * {@link AtlasNode} and {@link AtlasEdge} objects with drifting {@link Motes}.
  */
 export function AtlasScreen({
   view,
@@ -65,6 +75,7 @@ export function AtlasScreen({
       ? undefined
       : (view.guideDialogue.delaySeconds ?? 0),
   );
+  const scale = useScaleToFit(view.stageWidth, view.stageHeight);
 
   useEffect(() => {
     if (guideDialogueVisible) onGuideDialogueShown?.();
@@ -83,13 +94,47 @@ export function AtlasScreen({
     >
       <Motes on tint="violet" zIndex={1} />
 
-      <AtlasMap
-        stageWidth={view.stageWidth}
-        stageHeight={view.stageHeight}
-        nodes={view.nodes}
-        edges={view.edges}
-        onEnterNode={onEnterNode}
-      />
+      <AtlasPreflight nodes={view.nodes} />
+      <div data-atlas-map-layer="" style={mapLayerStyle}>
+        <div
+          data-atlas-stage=""
+          style={{
+            ...stageStyle,
+            width: view.stageWidth,
+            height: view.stageHeight,
+            transform: `translate(-50%, -50%) scale(${String(scale)})`,
+          }}
+        >
+          <svg
+            data-atlas-edge-layer=""
+            style={edgeLayerStyle}
+            viewBox={`0 0 ${String(view.stageWidth)} ${String(view.stageHeight)}`}
+            width={view.stageWidth}
+            height={view.stageHeight}
+          >
+            {view.edges.map((edge) => (
+              <AtlasEdge
+                key={edge.key}
+                kind={edge.kind}
+                x1={edge.x1}
+                y1={edge.y1}
+                x2={edge.x2}
+                y2={edge.y2}
+              />
+            ))}
+          </svg>
+
+          <div data-atlas-node-layer="" style={nodeLayerStyle}>
+            {view.nodes.map((model) => (
+              <AtlasNode
+                key={model.node.id}
+                model={model}
+                onPress={onEnterNode}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
 
       {view.guideDialogue !== undefined && (
         <div
@@ -116,3 +161,113 @@ export function AtlasScreen({
     </div>
   );
 }
+
+function usePreloadImages(urls: string[]): void {
+  useEffect(() => {
+    if (typeof document === "undefined" || typeof Image === "undefined") {
+      return;
+    }
+
+    const links: HTMLLinkElement[] = [];
+    const images: HTMLImageElement[] = [];
+
+    for (const url of urls) {
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.as = "image";
+      link.href = url;
+      document.head.append(link);
+      links.push(link);
+
+      const image = new Image();
+      image.decoding = "async";
+      image.src = url;
+      images.push(image);
+      void image.decode?.().catch(() => undefined);
+    }
+
+    return () => {
+      for (const link of links) link.remove();
+      for (const image of images) image.src = "";
+    };
+  }, [urls]);
+}
+
+function AtlasPreflight({ nodes }: { nodes: AtlasNodeModel[] }) {
+  const urls = useMemo(() => atlasPreflightImageUrls(nodes), [nodes]);
+  usePreloadImages(urls);
+
+  return (
+    <div aria-hidden="true" data-atlas-preflight="" style={preflightStyle}>
+      <div style={glassWarmupStyle} />
+      {urls.map((url) => (
+        <img
+          key={url}
+          src={url}
+          alt=""
+          draggable={false}
+          loading="eager"
+          decoding="async"
+          style={preloadImageStyle}
+        />
+      ))}
+    </div>
+  );
+}
+
+const mapLayerStyle: React.CSSProperties = {
+  position: "absolute",
+  inset: 0,
+  zIndex: 2,
+};
+
+const stageStyle: React.CSSProperties = {
+  position: "absolute",
+  left: "50%",
+  top: "50%",
+  transformOrigin: "center center",
+};
+
+const edgeLayerStyle: React.CSSProperties = {
+  position: "absolute",
+  inset: 0,
+  zIndex: 2,
+  pointerEvents: "none",
+};
+
+const nodeLayerStyle: React.CSSProperties = {
+  position: "absolute",
+  inset: 0,
+  zIndex: 3,
+};
+
+const preflightStyle: React.CSSProperties = {
+  position: "absolute",
+  inset: 0,
+  zIndex: 0,
+  pointerEvents: "none",
+  userSelect: "none",
+  overflow: "hidden",
+};
+
+const glassWarmupStyle: React.CSSProperties = {
+  ...glassSurfaceStyle(),
+  position: "absolute",
+  left: 0,
+  top: 0,
+  width: 1,
+  height: 1,
+  opacity: 0.001,
+  transform: "translateZ(0)",
+  willChange: "backdrop-filter, -webkit-backdrop-filter",
+};
+
+const preloadImageStyle: React.CSSProperties = {
+  position: "absolute",
+  left: 0,
+  top: 0,
+  width: 1,
+  height: 1,
+  opacity: 0.001,
+  objectFit: "cover",
+};

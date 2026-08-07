@@ -1,18 +1,15 @@
-import { type ArtRef, resolveArtRef } from "../../primitives/art";
-import { type AtlasMapNode } from "./AtlasMap";
+import { type AtlasNodeModel } from "../components/atlas/AtlasNode";
+import { type ArtRef, resolveArtRef } from "../primitives/art";
 
 function addArtRef(target: ArtRef[], ref: ArtRef | null | undefined): void {
-  if (ref !== null && ref !== undefined) {
-    target.push(ref);
-  }
+  if (ref !== null && ref !== undefined) target.push(ref);
 }
 
 /**
- * Resolves every image the Atlas map and node reveal cards can show, in stable
- * first-seen order. PURE, exported for regression coverage around the preflight
- * contract.
+ * Resolves every image the Atlas screen and node reveal cards can show, in
+ * stable first-seen order.
  */
-export function atlasPreflightImageUrls(nodes: AtlasMapNode[]): string[] {
+export function atlasPreflightImageUrls(nodes: AtlasNodeModel[]): string[] {
   const refs: ArtRef[] = [];
   for (const model of nodes) {
     addArtRef(refs, model.iconRef);

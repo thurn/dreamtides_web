@@ -3,7 +3,10 @@ import type { CSSProperties } from "react";
 import type { DreamscapeNode } from "../../../types/journey";
 import { richText } from "../card/rich-text";
 import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
-import type { RevealInfoCardModel, RevealSpec } from "../../internal/reveal/model";
+import type {
+  RevealInfoCardModel,
+  RevealSpec,
+} from "../../internal/reveal/model";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
@@ -93,7 +96,11 @@ export interface AtlasNodeModel {
 
 function dreamsignCard(dreamsign: AtlasNodeDreamsign): RevealInfoCardModel {
   return dreamsign.art === null
-    ? { variant: "text", title: dreamsign.name, body: richText.rules(dreamsign.rulesText) }
+    ? {
+        variant: "text",
+        title: dreamsign.name,
+        body: richText.rules(dreamsign.rulesText),
+      }
     : {
         variant: "object",
         image: dreamsign.art,
@@ -140,7 +147,10 @@ export interface AtlasNodeProps {
 }
 
 /** One self-revealing, focusable Dream Atlas node. */
-export function AtlasNode({ model, onPress }: AtlasNodeProps): React.ReactElement {
+export function AtlasNode({
+  model,
+  onPress,
+}: AtlasNodeProps): React.ReactElement {
   const { node, isStarter, isBoss } = model;
   const isAvailable = node.state === "available";
   const binding = useRevealSource({
@@ -157,19 +167,30 @@ export function AtlasNode({ model, onPress }: AtlasNodeProps): React.ReactElemen
   const isCompleted = node.state === "completed";
 
   const frameUrl = resolveArtRef(model.unrevealedFrameRef);
-  const face = model.iconRef !== null ? (
-    <img className="frame-img" src={resolveArtRef(model.iconRef)} alt={node.biomeName} draggable={false} />
-  ) : (
-    <div className="unrevealed-face">
-      <img className="frame-img" src={frameUrl} alt="" draggable={false} />
-    </div>
-  );
+  const face =
+    model.iconRef !== null ? (
+      <img
+        className="cumulus-atlas-frame-img"
+        src={resolveArtRef(model.iconRef)}
+        alt={node.biomeName}
+        draggable={false}
+      />
+    ) : (
+      <div className="cumulus-atlas-unrevealed-face">
+        <img
+          className="cumulus-atlas-frame-img"
+          src={frameUrl}
+          alt=""
+          draggable={false}
+        />
+      </div>
+    );
 
   const className =
-    `node node-${node.state}` +
-    (model.isReachable === false ? " node-unreachable" : "") +
-    (isBoss ? " node-boss" : "") +
-    (isStarter ? " node-start" : "");
+    `cumulus-atlas-node cumulus-atlas-node-${node.state}` +
+    (model.isReachable === false ? " cumulus-atlas-node-unreachable" : "") +
+    (isBoss ? " cumulus-atlas-node-boss" : "") +
+    (isStarter ? " cumulus-atlas-node-start" : "");
   const ariaLabel =
     `${node.biomeName === "" ? "Unrevealed dreamscape" : node.biomeName} - ${node.state}` +
     (isStarter ? " - starting dreamscape" : "") +
@@ -208,7 +229,9 @@ export function AtlasNode({ model, onPress }: AtlasNodeProps): React.ReactElemen
       data-node-state={node.state}
       data-node-boss={isBoss ? "true" : undefined}
       data-node-starting={isStarter ? "true" : undefined}
-      data-node-known-dreamsign={model.knownDreamsignRef !== null ? "true" : undefined}
+      data-node-known-dreamsign={
+        model.knownDreamsignRef !== null ? "true" : undefined
+      }
       onPointerDown={(event) => {
         suppressCompatibilityClick.current = event.pointerType === "touch";
         pointerDown?.(event);
@@ -229,28 +252,31 @@ export function AtlasNode({ model, onPress }: AtlasNodeProps): React.ReactElemen
     >
       {isAvailable && (
         <div
-          className="node-selectable-highlight"
+          className="cumulus-atlas-node-selectable-highlight"
           data-ambient-paused={active ? "true" : "false"}
           aria-hidden="true"
         >
           <div
-            className="node-selectable-highlight-layer node-selectable-highlight-pulse"
+            className="cumulus-atlas-node-selectable-highlight-layer cumulus-atlas-node-selectable-highlight-pulse"
             style={selectableHighlightStyle}
           />
           <div
-            className="node-selectable-highlight-layer node-selectable-highlight-base"
+            className="cumulus-atlas-node-selectable-highlight-layer cumulus-atlas-node-selectable-highlight-base"
             style={selectableHighlightStyle}
           />
         </div>
       )}
-      <div className="node-glow" data-ambient-paused={active ? "true" : "false"} />
-      <div className="node-art">{face}</div>
+      <div
+        className="cumulus-atlas-node-glow"
+        data-ambient-paused={active ? "true" : "false"}
+      />
+      <div className="cumulus-atlas-node-art">{face}</div>
 
       {(isCompleted || model.siteBadgeGlyph !== null) && (
-        <div className="site-badges">
-          <div className="site-badge">
+        <div className="cumulus-atlas-site-badges">
+          <div className="cumulus-atlas-site-badge">
             <i
-              className={`${isCompleted ? "fa-solid fa-check" : (model.siteBadgeGlyph ?? "")} site-badge-glyph`}
+              className={`${isCompleted ? "fa-solid fa-check" : (model.siteBadgeGlyph ?? "")} cumulus-atlas-site-badge-glyph`}
               aria-hidden="true"
             />
           </div>
@@ -258,14 +284,18 @@ export function AtlasNode({ model, onPress }: AtlasNodeProps): React.ReactElemen
       )}
 
       {isBoss && (
-        <div className="boss-badge" title="Final boss">
+        <div className="cumulus-atlas-boss-badge" title="Final boss">
           <i className="fa-solid fa-skull" aria-hidden="true" />
         </div>
       )}
 
       {model.knownDreamsignRef !== null && (
-        <div className="known-badge" title="Known dreamsign">
-          <img src={resolveArtRef(model.knownDreamsignRef)} alt="" draggable={false} />
+        <div className="cumulus-atlas-known-badge" title="Known dreamsign">
+          <img
+            src={resolveArtRef(model.knownDreamsignRef)}
+            alt=""
+            draggable={false}
+          />
         </div>
       )}
     </Pressable>

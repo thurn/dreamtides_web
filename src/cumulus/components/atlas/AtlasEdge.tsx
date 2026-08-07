@@ -72,7 +72,7 @@ export function AtlasEdge({ kind, x1, y1, x2, y2 }: AtlasEdgeProps) {
         </linearGradient>
       )}
       <line
-        className={`edge edge-${kind}`}
+        className={`cumulus-atlas-edge cumulus-atlas-edge-${kind}`}
         style={
           stops !== undefined ? { stroke: `url(#${gradientId})` } : undefined
         }
@@ -82,7 +82,13 @@ export function AtlasEdge({ kind, x1, y1, x2, y2 }: AtlasEdgeProps) {
         y2={y2}
       />
       {kind === "open" && (
-        <line className="edge-open-flow" x1={x1} y1={y1} x2={x2} y2={y2} />
+        <line
+          className="cumulus-atlas-edge-open-flow"
+          x1={x1}
+          y1={y1}
+          x2={x2}
+          y2={y2}
+        />
       )}
     </g>
   );

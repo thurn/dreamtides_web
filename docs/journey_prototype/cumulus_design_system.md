@@ -129,7 +129,7 @@ moves):
 
 Consumer count is an audit signal, not a reuse target. A component may have one
 production consumer when it owns a named game object, scene action, or workflow
-whose semantics and interaction contract belong in Cumulus. `AtlasMap`,
+whose semantics and interaction contract belong in Cumulus.
 `BattleStatusDisplay`, `MainMenuButton`, and `CardOrderEditor` are examples of
 deliberately narrow roles: their value is one canonical implementation and a
 strict typed API, even when the product has one place to render that concept.

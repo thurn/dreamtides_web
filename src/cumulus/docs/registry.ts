@@ -11,7 +11,6 @@
 import type { ComponentType } from "react";
 import type { CumulusUISystemId } from "./systems/registry";
 import { atlasEdgeDemo } from "./demos/atlas-edge";
-import { atlasMapDemo } from "./demos/atlas-map";
 import { atlasNodeDemo } from "./demos/atlas-node";
 import { battleStatusDisplayDemo } from "./demos/battle-status-display";
 import { cardBackDemo } from "./demos/card-back";
@@ -216,7 +215,6 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   cardStatOrbDemo,
   atlasNodeDemo,
   atlasEdgeDemo,
-  atlasMapDemo,
   dreamsignDemo,
   dreamsignGalleryPanelDemo,
   siteNodeDemo,

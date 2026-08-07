@@ -1,11 +1,7 @@
-// Full-screen mockup for the Dream Atlas — the shared scene behind the
-// `atlas-node` and `atlas-edge` component pages. It mounts the real `AtlasMap`
-// surface: the run graph of dreamscape nodes and their connectors, fitted into
-// the production portrait design stage and uniformly scaled to fit the viewport
-// (letterboxed) by AtlasMap itself. The mockup only owns the full-bleed
-// `.dream-atlas` scene, its violet journey wash, and the `stageRef` the node
-// reveals anchor and clamp against — the orientation, scale-to-fit, edge drawing,
-// and press / hover reveals all belong to the real component.
+// Full-screen mockup shared by the `atlas-node` and `atlas-edge` component
+// pages. It renders those components in the real AtlasScreen composition so
+// the scale-to-fit, edge drawing, preflight, and press / hover reveals match
+// the product screen.
 //
 // The fixtures form a vertical run graph read bottom-up, exactly as the live
 // mobile atlas reads: the Firstlight Meadow starter anchors the bottom, each
@@ -22,19 +18,14 @@ import {
   ATLAS_STAGE_HEIGHT,
   ATLAS_STAGE_WIDTH,
 } from "../../components/atlas/atlas-display";
-import {
-  AtlasMap,
-  type AtlasMapEdge,
-  type AtlasMapNode,
-} from "../../components/atlas/AtlasMap";
 import type { AtlasEdgeKind } from "../../components/atlas/AtlasEdge";
-import { token } from "../../primitives/tokens";
+import type { AtlasNodeModel } from "../../components/atlas/AtlasNode";
+import { AtlasScreen, type AtlasEdgeView } from "../../screens/AtlasScreen";
 import {
   type AtlasFixtureRole,
   atlasFixtureNodes,
   nodeSizing,
 } from "../__atlas-fixtures__";
-import { sceneRoot } from "./scene";
 
 /** A node centre in the production portrait stage (1080×1920) space. */
 interface Placement {
@@ -58,7 +49,11 @@ const PLACEMENTS: Record<AtlasFixtureRole, Placement> = {
 };
 
 /** Forward connectors between the placed nodes, one per AtlasEdge treatment. */
-const EDGES: { from: AtlasFixtureRole; to: AtlasFixtureRole; kind: AtlasEdgeKind }[] = [
+const EDGES: {
+  from: AtlasFixtureRole;
+  to: AtlasFixtureRole;
+  kind: AtlasEdgeKind;
+}[] = [
   { from: "starter", to: "completed", kind: "traveled" },
   { from: "completed", to: "available", kind: "open" },
   { from: "completed", to: "forgone", kind: "dim" },
@@ -69,9 +64,9 @@ const EDGES: { from: AtlasFixtureRole; to: AtlasFixtureRole; kind: AtlasEdgeKind
   { from: "unrevealed", to: "boss", kind: "locked" },
 ];
 
-export function AtlasMapMockup() {
+export function AtlasScreenMockup() {
   // The production mobile node sizes suit the vertical portrait stage.
-  const nodes: AtlasMapNode[] = atlasFixtureNodes(nodeSizing(true)).map(
+  const nodes: AtlasNodeModel[] = atlasFixtureNodes(nodeSizing(true)).map(
     (fixture) => {
       const at = PLACEMENTS[fixture.role];
       return {
@@ -82,7 +77,7 @@ export function AtlasMapMockup() {
     },
   );
 
-  const edges: AtlasMapEdge[] = EDGES.map((edge) => {
+  const edges: AtlasEdgeView[] = EDGES.map((edge) => {
     const from = PLACEMENTS[edge.from];
     const to = PLACEMENTS[edge.to];
     return {
@@ -96,17 +91,14 @@ export function AtlasMapMockup() {
   });
 
   return (
-    <div
-      className="dream-atlas"
-      style={{ ...sceneRoot, background: token("--atlas-map-background") }}
-    >
-      <AtlasMap
-        stageWidth={ATLAS_STAGE_WIDTH}
-        stageHeight={ATLAS_STAGE_HEIGHT}
-        nodes={nodes}
-        edges={edges}
-        onEnterNode={() => undefined}
-      />
-    </div>
+    <AtlasScreen
+      view={{
+        stageWidth: ATLAS_STAGE_WIDTH,
+        stageHeight: ATLAS_STAGE_HEIGHT,
+        nodes,
+        edges,
+      }}
+      onEnterNode={() => undefined}
+    />
   );
 }
