@@ -479,9 +479,10 @@ function OfferDetailVisual({
         <DreamsignChoiceGrid count={visual.choices.length} layout={layout}>
           {visual.choices.map((choice) => {
             const selected = selectedChoiceId === choice.id;
+            const size = dreamsignSize(visual.choices.length, layout);
             return (
               <div key={choice.id} data-augury-dreamsign-choice="" data-selected={selected ? "true" : "false"} style={{ position: "relative", padding: token("--space-xs"), borderRadius: token("--radius-panel"), border: `4px solid ${selected ? token("--accent-bright") : "transparent"}`, boxShadow: selected ? token("--glow-accent-soft") : undefined }}>
-                <Dreamsign dreamsign={choice.dreamsign} sizePx={dreamsignSize(visual.choices.length, layout)} onPress={() => onSelect(offerId, choice.id)} testid={`cumulus-augury-choice-${choice.id}`} />
+                <div style={{ width: size, height: size }}><Dreamsign dreamsign={choice.dreamsign} onPress={() => onSelect(offerId, choice.id)} testid={`cumulus-augury-choice-${choice.id}`} /></div>
                 {selected && (
                   <span aria-hidden="true" data-augury-dreamsign-selection-marker="" style={{ position: "absolute", top: token("--space-xs"), right: token("--space-xs"), width: 36, height: 36, borderRadius: token("--radius-pill"), display: "grid", placeItems: "center", color: token("--text-on-accent"), background: token("--accent-bright"), boxShadow: token("--shadow-md"), pointerEvents: "none", fontSize: 24 }}>
                     <StandaloneGlyph glyph={GLYPHS.check} color="white" />
@@ -598,7 +599,8 @@ function DreamsignChoiceGrid({ count, layout, children }: { count: number; layou
 }
 
 function DreamsignRow({ dreamsigns, layout }: { dreamsigns: readonly DreamsignData[]; layout: "mobile" | "desktop" }) {
-  return <DreamsignChoiceGrid count={dreamsigns.length} layout={layout}>{dreamsigns.map((dreamsign) => <Dreamsign key={dreamsign.id} dreamsign={dreamsign} sizePx={dreamsignSize(dreamsigns.length, layout)} testid={`cumulus-augury-dreamsign-${dreamsign.id}`} />)}</DreamsignChoiceGrid>;
+  const size = dreamsignSize(dreamsigns.length, layout);
+  return <DreamsignChoiceGrid count={dreamsigns.length} layout={layout}>{dreamsigns.map((dreamsign) => <div key={dreamsign.id} style={{ width: size, height: size }}><Dreamsign dreamsign={dreamsign} testid={`cumulus-augury-dreamsign-${dreamsign.id}`} /></div>)}</DreamsignChoiceGrid>;
 }
 
 function SiteRewardVisual({ model }: { model: DreamscapeSiteModel }) {

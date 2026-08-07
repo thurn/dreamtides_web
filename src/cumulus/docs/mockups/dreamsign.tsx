@@ -92,7 +92,13 @@ export function DreamsignMockup() {
         >
           Revelation
         </p>
-        <h1 style={{ font: token("--t-display"), margin: `${token("--space-xs")} 0 0`, color: token("--text-primary") }}>
+        <h1
+          style={{
+            font: token("--t-display"),
+            margin: `${token("--space-xs")} 0 0`,
+            color: token("--text-primary"),
+          }}
+        >
           Your Dreamsigns
         </h1>
       </div>
@@ -108,14 +114,11 @@ export function DreamsignMockup() {
         }}
       >
         {GALLERY.map((dreamsign) => (
-          <Dreamsign
-            key={dreamsign.id}
-            dreamsign={dreamsign}
-            sizePx={92}
-          />
+          <div key={dreamsign.id} style={{ width: 92, height: 92 }}>
+            <Dreamsign dreamsign={dreamsign} />
+          </div>
         ))}
       </div>
-
     </div>
   );
 }

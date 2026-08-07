@@ -1,14 +1,9 @@
 // Registry demo for Dreamsign — the dreamsign entity tile whose hover / press
-// reveal routes through InfoCard's `object` variant. Like JourneyStatusBar,
-// Dreamsign anchors its reveal to a `stageRef` (the screen root), so the demo's
-// `Component` is a small wrapper that supplies a phone-proportioned,
-// `position: relative` stage with a dark scene-like backdrop, owns the
-// `stageRef`, and lays a row of real dreamsigns (identified by id, never name)
-// inside it. `docName` still points at the real Dreamsign so the props table
-// reports its actual API. The art resolves from real dreamsign image names via
-// the asset pipeline, exactly as it does on the shop / reward / deck surfaces.
+// reveal routes through InfoCard's `object` variant. The demo supplies a
+// phone-proportioned scene-like stage and caller-owned square wrappers for a
+// row of real dreamsigns (identified by id, never name). `docName` still points
+// at the real Dreamsign so the props table reports its actual API.
 
-import { useRef } from "react";
 import { Dreamsign } from "../../components/hud/Dreamsign";
 import type { Dreamsign as DreamsignData } from "../../../types/journey";
 import { token } from "../../primitives/tokens";
@@ -42,17 +37,13 @@ const DEMO_DREAMSIGNS: DreamsignData[] = [
 ];
 
 interface DreamsignDemoArgs {
-  /** Tile edge length in px (drives every tile in the row). */
-  sizePx?: number;
   /** Tile material: `flat` (chrome-free) or `hud` (drop-shadow + violet glow). */
   variant?: "flat" | "hud";
 }
 
-function DreamsignDemo({ sizePx = 72, variant = "hud" }: DreamsignDemoArgs) {
-  const stageRef = useRef<HTMLDivElement>(null);
+function DreamsignDemo({ variant = "hud" }: DreamsignDemoArgs) {
   return (
     <div
-      ref={stageRef}
       style={{
         position: "relative",
         width: 390,
@@ -70,12 +61,9 @@ function DreamsignDemo({ sizePx = 72, variant = "hud" }: DreamsignDemoArgs) {
       }}
     >
       {DEMO_DREAMSIGNS.map((dreamsign) => (
-        <Dreamsign
-          key={dreamsign.id}
-          dreamsign={dreamsign}
-          sizePx={sizePx}
-          variant={variant}
-        />
+        <div key={dreamsign.id} style={{ width: 72, height: 72 }}>
+          <Dreamsign dreamsign={dreamsign} variant={variant} />
+        </div>
       ))}
     </div>
   );
@@ -91,17 +79,16 @@ export const dreamsignDemo: CumulusComponent = {
   Component: DreamsignDemo,
   usage: [
     {
-      note: "A dreamsign entity tile whose hover / press reveals its ability through InfoCard, anchored to the screen root — so pass the scene's `stageRef`. `sizePx` sets the tile edge length. The tile reads its art / ability from the `dreamsign` data (identified by id, never name).",
+      note: "A dreamsign entity tile whose hover / press reveals its ability through InfoCard. Its caller owns the square layout wrapper; the tile reads its art and ability from UUID-identified `dreamsign` data.",
       code: `import { Dreamsign } from "src/cumulus/components/hud/Dreamsign";
 
-<div ref={stageRef} style={{ position: "relative" }}>
-  <Dreamsign dreamsign={dreamsign} sizePx={72} stageRef={stageRef} />
+<div style={{ width: 72, height: 72 }}>
+  <Dreamsign dreamsign={dreamsign} />
 </div>`,
     },
   ],
   demo: {
     defaultArgs: {
-      sizePx: 72,
       variant: "hud",
     },
   },

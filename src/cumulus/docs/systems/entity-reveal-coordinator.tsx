@@ -57,8 +57,8 @@ const revealComponents = [
     id: "dreamsign",
     name: "Dreamsign",
     use: "Dreamsign art in lists, rewards, shops, and the journey HUD.",
-    api: "dreamsign, sizePx; optional onPress, unavailable, variant",
-    note: "The Dreamsign's UUID, art, rules text, and glossary terms supply its reveal.",
+    api: "dreamsign; optional onPress, unavailable, variant",
+    note: "The Dreamsign's UUID, art, rules text, and glossary terms supply its reveal; its layout wrapper owns the rendered size.",
   },
   {
     id: "tide-disc",

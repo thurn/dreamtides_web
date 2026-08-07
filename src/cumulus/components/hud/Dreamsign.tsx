@@ -68,8 +68,6 @@ export function dreamsignRevealSpec(
 export interface DreamsignProps {
   /** The dreamsign to show. Identified by `id` (never by name). */
   dreamsign: DreamsignData;
-  /** Square tile edge length in pixels. */
-  sizePx: number;
   /**
    * Override the tile's `data-testid`. Defaults to `"dreamsign-art-tile"` so the
    * shipped shop / reward / deck-viewer selectors keep working.
@@ -95,7 +93,6 @@ export interface DreamsignProps {
  */
 export function Dreamsign({
   dreamsign,
-  sizePx,
   testid = "dreamsign-art-tile",
   onPress,
   unavailable = false,
@@ -106,7 +103,10 @@ export function Dreamsign({
   const imgAlt = dreamsign.imageAlt ?? dreamsign.name;
   const dreamsignId = requireDreamsignId(dreamsign, "Dreamsign tile");
   const binding = useRevealSource({
-    identity: { entityType: "dreamsign", entityId: revealEntityId("dreamsign", dreamsignId) },
+    identity: {
+      entityType: "dreamsign",
+      entityId: revealEntityId("dreamsign", dreamsignId),
+    },
     spec: dreamsignRevealSpec(dreamsign, showImage),
     onActivate: unavailable ? undefined : onPress,
   });
@@ -124,12 +124,14 @@ export function Dreamsign({
       .filter((part): part is string => part !== null)
       .join(" ") || "none";
   const tileStyle: CSSProperties = {
-    height: sizePx,
-    width: sizePx,
+    // Layout owns the square wrapper; the Dreamsign consumes that complete box.
+    height: "100%",
+    width: "100%",
     flex: "none",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    containerType: "inline-size",
     filter: tileFilter,
     position: "relative",
     cursor: "pointer",
@@ -150,10 +152,19 @@ export function Dreamsign({
       data-testid={testid}
       data-dreamsign-id={dreamsignId}
       aria-label={`Dreamsign: ${dreamsign.name}`}
-      onPointerDown={(event) => { lastPointerType.current = event.pointerType; pointerDown?.(event); }}
-      onClick={() => { if (!unavailable && lastPointerType.current !== "touch") onPress?.(); }}
+      onPointerDown={(event) => {
+        lastPointerType.current = event.pointerType;
+        pointerDown?.(event);
+      }}
+      onClick={() => {
+        if (!unavailable && lastPointerType.current !== "touch") onPress?.();
+      }}
       onKeyDown={(event) => {
-        if (!unavailable && onPress !== undefined && (event.key === "Enter" || event.key === " ")) {
+        if (
+          !unavailable &&
+          onPress !== undefined &&
+          (event.key === "Enter" || event.key === " ")
+        ) {
           event.preventDefault();
           onPress();
         }
@@ -174,7 +185,7 @@ export function Dreamsign({
         <span
           aria-hidden="true"
           style={{
-            fontSize: sizePx * 0.42,
+            fontSize: "42cqi",
             color: token("--text-tutorial-highlight"),
           }}
         >

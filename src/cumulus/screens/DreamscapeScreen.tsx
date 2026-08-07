@@ -363,7 +363,6 @@ export function DreamscapeScreen({
               />
               <Dreamsign
                 dreamsign={collectingReward.dreamsign}
-                sizePx={REWARD_DREAMSIGN_SIZE_PX}
                 unavailable
                 variant="flat"
                 testid="reward-dreamsign-collection"

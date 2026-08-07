@@ -252,12 +252,15 @@ function BattleStartPanel({
     </div>
   ));
   const dreamsigns = view.dreamsigns.map((dreamsign) => (
-    <Dreamsign
+    <div
       key={dreamsign.id}
-      dreamsign={dreamsign}
-      sizePx={dreamsignSize}
-      testid={`cumulus-battle-start-dreamsign-${String(dreamsign.id)}`}
-    />
+      style={{ width: dreamsignSize, height: dreamsignSize, flex: "none" }}
+    >
+      <Dreamsign
+        dreamsign={dreamsign}
+        testid={`cumulus-battle-start-dreamsign-${String(dreamsign.id)}`}
+      />
+    </div>
   ));
 
   return (
@@ -268,7 +271,9 @@ function BattleStartPanel({
         position: compact ? "absolute" : "relative",
         top: undefined,
         right: undefined,
-        bottom: compact ? JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE : undefined,
+        bottom: compact
+          ? JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE
+          : undefined,
         left: compact ? token("--space-s") : undefined,
         zIndex: compact ? 4 : undefined,
         width: compact ? GUIDE_GALLERY_MOBILE_PANEL_WIDTH : "100%",

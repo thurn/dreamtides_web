@@ -1624,14 +1624,6 @@
       }
     },
     {
-      "name": "sizePx",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Square tile edge length in pixels."
-    },
-    {
       "name": "testid",
       "tsType": "string",
       "unionMembers": [],

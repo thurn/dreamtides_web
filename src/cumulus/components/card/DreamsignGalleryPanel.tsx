@@ -71,10 +71,7 @@ const COMPACT_ITEM_WIDTH = 92;
 const STANDARD_ITEM_WIDTH = 126;
 const END_ACTION_GLYPH_SCALE = 0.82;
 
-function captionNode(
-  price: number | null,
-  text: string | null,
-): ReactElement {
+function captionNode(price: number | null, text: string | null): ReactElement {
   return (
     <p
       data-dreamsign-gallery-caption={price === null ? "text" : "essence"}
@@ -102,7 +99,8 @@ function DreamsignGalleryEndAction({
   readonly size: "compact" | "standard";
   readonly onActivate: () => void;
 }): ReactElement {
-  const itemWidth = size === "compact" ? COMPACT_ITEM_WIDTH : STANDARD_ITEM_WIDTH;
+  const itemWidth =
+    size === "compact" ? COMPACT_ITEM_WIDTH : STANDARD_ITEM_WIDTH;
   const itemHeight = itemWidth / CARD_ASPECT_RATIO_VALUE;
   const binding = useRevealSource({
     identity: {
@@ -139,7 +137,8 @@ function DreamsignGalleryEndAction({
         pointerDown?.(event);
       }}
       onClick={() => {
-        if (!action.disabled && lastPointerType.current !== "touch") onActivate();
+        if (!action.disabled && lastPointerType.current !== "touch")
+          onActivate();
       }}
       style={{
         ...binding.sourceProps.style,
@@ -273,14 +272,15 @@ export function DreamsignGalleryPanel({
                   placeItems: "center",
                 }}
               >
-                <Dreamsign
-                  dreamsign={entry.dreamsign}
-                  sizePx={itemWidth}
-                  variant="hud"
-                  unavailable={unavailable}
-                  testid={`cumulus-dreamsign-bazaar-offer-${entry.entryId}`}
-                  onPress={() => onEntryPress(entry.entryId)}
-                />
+                <div style={{ width: itemWidth, height: itemWidth }}>
+                  <Dreamsign
+                    dreamsign={entry.dreamsign}
+                    variant="hud"
+                    unavailable={unavailable}
+                    testid={`cumulus-dreamsign-bazaar-offer-${entry.entryId}`}
+                    onPress={() => onEntryPress(entry.entryId)}
+                  />
+                </div>
               </div>
               {captionNode(entry.price, null)}
             </div>

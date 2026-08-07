@@ -16,7 +16,8 @@ import path from "node:path";
  * A member is a numeric knob when BOTH hold:
  *   1. its name is a knob word — exactly one of
  *      `{size, gap, scale, padding, radius, blur, opacity}`, or a camelCase name
- *      ending in a capitalized knob-word suffix (`badgeScale`, `pipScale`); and
+ *      beginning or ending with a capitalized knob-word boundary (`sizePx`,
+ *      `badgeScale`, `pipScale`); and
  *   2. its type is `number` (or a union that includes `number`).
  *
  * Some production measures genuinely have no enumerable form — a computed
@@ -37,9 +38,17 @@ import path from "node:path";
 /** Repo-relative POSIX dir prefixes whose exported `*Props`/`*View` types this rule guards. */
 const SURFACE_PREFIXES = ["src/cumulus/components/"];
 
-/** The visual-knob words. A member named exactly one of these (or ending in a
- * capitalized form of one) is a style knob rather than a data value. */
-const KNOB_WORDS = ["size", "gap", "scale", "padding", "radius", "blur", "opacity"];
+/** The visual-knob words. A member named exactly one of these, or using one at
+ * a capitalized camelCase boundary, is a style knob rather than a data value. */
+const KNOB_WORDS = [
+  "size",
+  "gap",
+  "scale",
+  "padding",
+  "radius",
+  "blur",
+  "opacity",
+];
 
 /** Convert an OS path to a repo-relative POSIX path against ESLint's cwd. */
 export function toRepoRelativePosix(absolutePath, cwd) {
@@ -48,9 +57,9 @@ export function toRepoRelativePosix(absolutePath, cwd) {
 
 /**
  * True when a property name is a visual-knob word: an exact match for a knob
- * word, or a camelCase name ending in a capitalized knob-word suffix
- * (`badgeScale`, `pipScale`). A knob word used as a PREFIX (`sizePx`) is a named
- * box measure, not a knob, and is not matched.
+ * word, or a camelCase name beginning or ending at a capitalized knob-word
+ * boundary (`sizePx`, `badgeScale`, `pipScale`). Genuine computed measures use
+ * the rule's explicit allowlist instead of escaping through their spelling.
  */
 export function isKnobName(name) {
   if (typeof name !== "string" || name.length === 0) {
@@ -61,7 +70,12 @@ export function isKnobName(name) {
   }
   return KNOB_WORDS.some((word) => {
     const suffix = word.charAt(0).toUpperCase() + word.slice(1);
-    return name.length > suffix.length && name.endsWith(suffix);
+    return (
+      (name.length > word.length &&
+        name.startsWith(word) &&
+        /[A-Z]/.test(name.charAt(word.length))) ||
+      (name.length > suffix.length && name.endsWith(suffix))
+    );
   });
 }
 
@@ -102,7 +116,7 @@ const rule = {
     ],
     messages: {
       numericKnob:
-        "Prop `{{name}}` on `{{type}}` is a number-typed visual knob — an arbitrary-customization escape hatch. Use an enumerated string variant (e.g. `size?: \"sm\" | \"md\"`) that the component maps to its own measure. If this is a genuine production measure with no enumerable form, add `{{type}}.{{name}}` to the rule's `allow` option with a comment.",
+        'Prop `{{name}}` on `{{type}}` is a number-typed visual knob — an arbitrary-customization escape hatch. Use an enumerated string variant (e.g. `size?: "sm" | "md"`) that the component maps to its own measure. If this is a genuine production measure with no enumerable form, add `{{type}}.{{name}}` to the rule\'s `allow` option with a comment.',
     },
   },
 

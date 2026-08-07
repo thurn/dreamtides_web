@@ -274,7 +274,9 @@ function DreamsignBazaarGallery({
             willChange: "transform, opacity",
           }}
         >
-          <Dreamsign dreamsign={travel.dreamsign} sizePx={travel.sourceRect.width} variant="hud" />
+          <div style={{ width: travel.sourceRect.width, height: travel.sourceRect.width }}>
+            <Dreamsign dreamsign={travel.dreamsign} variant="hud" />
+          </div>
         </motion.div>
       ))}
     </section>
@@ -354,13 +356,13 @@ function DreamsignReplacementDialog({
           }}
         >
           {purge.currentDreamsigns.map((dreamsign, index) => (
-            <Dreamsign
-              key={dreamsign.id}
-              dreamsign={dreamsign}
-              sizePx={72}
-              onPress={() => onPurge(index)}
-              testid={`cumulus-dreamsign-bazaar-purge-${String(index)}`}
-            />
+            <div key={dreamsign.id} style={{ width: 72, height: 72 }}>
+              <Dreamsign
+                dreamsign={dreamsign}
+                onPress={() => onPurge(index)}
+                testid={`cumulus-dreamsign-bazaar-purge-${String(index)}`}
+              />
+            </div>
           ))}
         </div>
         <div style={{ marginTop: token("--space-l"), textAlign: "center" }}>

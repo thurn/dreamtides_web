@@ -47,7 +47,10 @@ import { IconButton } from "../components/controls/IconButton";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { DeckCardView } from "./MobileDeckViewer";
-import { TideDiscReveal, type DreamAvatarTideView } from "./journey-start-shared";
+import {
+  TideDiscReveal,
+  type DreamAvatarTideView,
+} from "./journey-start-shared";
 import { DeckViewerBackdrop, GridPlaceholder } from "./deck-viewer-shared";
 import {
   type DesktopDeckFilterSort,
@@ -413,11 +416,12 @@ function DreamsignsBlock({ dreamsigns }: { dreamsigns: DreamsignData[] }) {
           }}
         >
           {dreamsigns.map((sign) => (
-            <Dreamsign
+            <div
               key={requireDreamsignId(sign, "Desktop deck viewer dreamsign")}
-              dreamsign={sign}
-              sizePx={DREAMSIGN_TILE_PX}
-            />
+              style={{ width: DREAMSIGN_TILE_PX, height: DREAMSIGN_TILE_PX }}
+            >
+              <Dreamsign dreamsign={sign} />
+            </div>
           ))}
         </div>
       )}

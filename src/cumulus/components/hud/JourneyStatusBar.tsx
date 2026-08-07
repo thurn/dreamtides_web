@@ -278,12 +278,12 @@ function QsbDreamsignStrip({
     return (
       <div style={{ ...wrap, gap: token("--space-xxs") }}>
         {signs.map((s) => (
-          <Dreamsign
+          <div
             key={requireDreamsignId(s, "JourneyStatusBar dreamsign strip")}
-            variant="hud"
-            dreamsign={s}
-            sizePx={SIGN}
-          />
+            style={{ width: SIGN, height: SIGN, flex: "none" }}
+          >
+            <Dreamsign variant="hud" dreamsign={s} />
+          </div>
         ))}
       </div>
     );
@@ -368,12 +368,12 @@ function QsbDreamsignWindow({
           }}
         >
           {signs.map((s) => (
-            <Dreamsign
+            <div
               key={requireDreamsignId(s, "JourneyStatusBar dreamsign window")}
-              variant="hud"
-              dreamsign={s}
-              sizePx={60}
-            />
+              style={{ width: 60, height: 60 }}
+            >
+              <Dreamsign variant="hud" dreamsign={s} />
+            </div>
           ))}
         </div>
       </div>
@@ -678,13 +678,11 @@ function QsbBattleHudBar({
             style={{
               gridColumn: dreamsignColumnCount - Math.floor(index / 2),
               gridRow: index % 2 === 0 ? 2 : 1,
+              width: signSize,
+              height: signSize,
             }}
           >
-            <Dreamsign
-              variant="hud"
-              dreamsign={sign}
-              sizePx={signSize}
-            />
+            <Dreamsign variant="hud" dreamsign={sign} />
           </div>
         ))}
       </div>

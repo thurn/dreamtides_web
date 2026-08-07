@@ -699,12 +699,9 @@ function LadderDreamsignReward({
           pointerEvents: "none",
         }}
       >
-        <Dreamsign
-          dreamsign={dreamsign}
-          sizePx={trajectory.source.width}
-          variant="revelation"
-          unavailable
-        />
+        <div style={{ width: trajectory.source.width, height: trajectory.source.width }}>
+          <Dreamsign dreamsign={dreamsign} variant="revelation" unavailable />
+        </div>
       </motion.div>
     );
   }
@@ -748,7 +745,6 @@ function LadderDreamsignReward({
       >
         <Dreamsign
           dreamsign={dreamsign}
-          sizePx={size}
           variant="revelation"
           unavailable
         />

@@ -341,8 +341,13 @@ describe("Cumulus BattleStartScreen", () => {
     expect(
       objectSection?.querySelector<HTMLElement>(
         '[data-testid^="cumulus-battle-start-dreamsign-"]',
-      )?.style.width,
+      )?.parentElement?.style.width,
     ).toBe("52px");
+    expect(
+      objectSection?.querySelector<HTMLElement>(
+        '[data-testid^="cumulus-battle-start-dreamsign-"]',
+      )?.style.width,
+    ).toBe("100%");
     expect(
       panel?.querySelector<HTMLElement>(
         '[data-battle-start-panel-section="Ability"]',

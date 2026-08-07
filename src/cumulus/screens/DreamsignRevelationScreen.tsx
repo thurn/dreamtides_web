@@ -10,9 +10,7 @@ import type { Dreamsign as DreamsignData } from "../../types/journey";
 import { GlassButton } from "../components/controls/GlassButton";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { Motes } from "../components/hud/Motes";
-import {
-  JOURNEY_STATUS_BAR_CLEARANCE_OP,
-} from "../components/hud/JourneyStatusBar";
+import { JOURNEY_STATUS_BAR_CLEARANCE_OP } from "../components/hud/JourneyStatusBar";
 import { SpeechBubble } from "../components/overlay/SpeechBubble";
 import { CharacterDialogue } from "../components/overlay/CharacterDialogue";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
@@ -554,11 +552,12 @@ function RevelationOption({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        width: tileSize,
+        height: tileSize,
       }}
     >
       <Dreamsign
         dreamsign={dreamsign}
-        sizePx={tileSize}
         testid={`dreamsign-revelation-art-${String(index)}`}
         onPress={() => onClaim(index)}
         unavailable={disabled}

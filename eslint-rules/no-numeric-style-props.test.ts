@@ -4,7 +4,7 @@ import { describe, it, expect } from "vitest";
 import rule, { isKnobName } from "./no-numeric-style-props.js";
 
 describe("isKnobName (no-numeric-style-props)", () => {
-  it("matches the exact knob words and camelCase knob suffixes", () => {
+  it("matches exact knob words and camelCase knob boundaries", () => {
     for (const name of [
       "size",
       "gap",
@@ -15,12 +15,14 @@ describe("isKnobName (no-numeric-style-props)", () => {
       "opacity",
       "badgeScale",
       "pipScale",
+      "sizePx",
+      "scaleFactor",
     ]) {
       expect(isKnobName(name)).toBe(true);
     }
   });
 
-  it("does not match non-knob names or knob words used as a prefix", () => {
+  it("does not match non-knob names", () => {
     for (const name of [
       "kind",
       "value",
@@ -29,7 +31,6 @@ describe("isKnobName (no-numeric-style-props)", () => {
       "height",
       "left",
       "top",
-      "sizePx",
       "targetWidthPx",
     ]) {
       expect(isKnobName(name)).toBe(false);
@@ -78,7 +79,7 @@ ruleTester.run("no-numeric-style-props", rule, {
     {
       name: "a non-knob numeric member is a legitimate box measure",
       filename: COMPONENT,
-      code: `export interface WidgetProps { sizePx?: number; targetWidthPx?: number; }`,
+      code: `export interface WidgetProps { targetWidthPx?: number; }`,
     },
     {
       name: "a non-exported *Props with a numeric knob is out of scope",
@@ -102,6 +103,12 @@ ruleTester.run("no-numeric-style-props", rule, {
       filename: "src/cumulus/components/controls/SizedValue.tsx",
       code: `export interface SizedValueProps { size?: number; gap?: number; }`,
       errors: [{ messageId: "numericKnob" }, { messageId: "numericKnob" }],
+    },
+    {
+      name: "a knob-word prefix cannot disguise a numeric size",
+      filename: COMPONENT,
+      code: `export interface WidgetProps { sizePx?: number; }`,
+      errors: [{ messageId: "numericKnob" }],
     },
     {
       name: "a camelCase knob suffix on an exported *View is flagged",

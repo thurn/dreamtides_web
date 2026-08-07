@@ -64,12 +64,13 @@ export function DreamsignReplacementDialog({
           >
             New Dreamsign
           </p>
-          <Dreamsign
-            dreamsign={view.pendingDreamsign}
-            sizePx={88}
-            testid="dreamsign-replacement-pending"
-            variant="hud"
-          />
+          <div style={{ width: 88, height: 88 }}>
+            <Dreamsign
+              dreamsign={view.pendingDreamsign}
+              testid="dreamsign-replacement-pending"
+              variant="hud"
+            />
+          </div>
         </div>
         <div
           style={{
@@ -95,12 +96,13 @@ export function DreamsignReplacementDialog({
                   gap: token("--space-s"),
                 }}
               >
-                <Dreamsign
-                  dreamsign={dreamsign}
-                  sizePx={72}
-                  testid={`dreamsign-replacement-held-${dreamsignId}`}
-                  variant="hud"
-                />
+                <div style={{ width: 72, height: 72 }}>
+                  <Dreamsign
+                    dreamsign={dreamsign}
+                    testid={`dreamsign-replacement-held-${dreamsignId}`}
+                    variant="hud"
+                  />
+                </div>
                 <GlassButton
                   label="Replace"
                   variant="accent"

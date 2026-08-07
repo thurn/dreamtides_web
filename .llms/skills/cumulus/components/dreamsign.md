@@ -15,7 +15,6 @@ A dreamsign — a minor passive collectible — shown as its art floating on the
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `dreamsign` | `Dreamsign` | yes | — | The dreamsign to show. Identified by `id` (never by name). |
-| `sizePx` | `number` | yes | — | Square tile edge length in pixels. |
 | `testid` | `string` | no | `dreamsign-art-tile` | Override the tile's `data-testid`. Defaults to `"dreamsign-art-tile"` so the shipped shop / reward / deck-viewer selectors keep working. |
 | `onPress` | `(() => void)` | no | — | Fired on a tap / click that was not a deliberate hold-to-read. |
 | `unavailable` | `boolean` | no | `false` | Keeps details readable while suppressing selection. |
@@ -33,12 +32,12 @@ A dreamsign — a minor passive collectible — shown as its art floating on the
 
 ## Usage
 
-A dreamsign entity tile whose hover / press reveals its ability through InfoCard, anchored to the screen root — so pass the scene's `stageRef`. `sizePx` sets the tile edge length. The tile reads its art / ability from the `dreamsign` data (identified by id, never name).
+A dreamsign entity tile whose hover / press reveals its ability through InfoCard. Its caller owns the square layout wrapper; the tile reads its art and ability from UUID-identified `dreamsign` data.
 
 ```tsx
 import { Dreamsign } from "src/cumulus/components/hud/Dreamsign";
 
-<div ref={stageRef} style={{ position: "relative" }}>
-  <Dreamsign dreamsign={dreamsign} sizePx={72} stageRef={stageRef} />
+<div style={{ width: 72, height: 72 }}>
+  <Dreamsign dreamsign={dreamsign} />
 </div>
 ```

@@ -66,7 +66,7 @@ describe("cross-family reveal competition", () => {
     act(() => root.render(<CumulusRoot>
       <GameCard model={{ cardId: CARD_ID, displaySnapshot: CARD }} />
       <GlossaryTerm entry={{ term: "Fixture", definition: "Fixed local definition." }} text="Fixture" />
-      <Dreamsign dreamsign={SIGN} sizePx={40} />
+      <div style={{ width: 40, height: 40 }}><Dreamsign dreamsign={SIGN} /></div>
       <SiteNode model={SITE} motion={false} onSelect={unavailableActivation} />
     </CumulusRoot>));
     const card = container.querySelector<HTMLElement>("[data-game-card-source]")!;

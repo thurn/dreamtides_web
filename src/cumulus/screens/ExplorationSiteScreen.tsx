@@ -3291,7 +3291,6 @@ export function ExplorationSiteScreen({
                   ) : (
                     <Dreamsign
                       dreamsign={item.dreamsign}
-                      sizePx={dreamsignSize}
                       variant="revelation"
                       testid={`cumulus-exploration-reward-dreamsign-${String(index)}`}
                     />
@@ -3543,14 +3542,13 @@ export function ExplorationSiteScreen({
               onAnimationComplete={() =>
                 setDreamsignPurgeRewardPhase("announcement")
               }
+              style={{
+                width: isDesktop ? DESKTOP_REWARD_DREAMSIGN_SIZE : MOBILE_REWARD_DREAMSIGN_SIZE,
+                height: isDesktop ? DESKTOP_REWARD_DREAMSIGN_SIZE : MOBILE_REWARD_DREAMSIGN_SIZE,
+              }}
             >
               <Dreamsign
                 dreamsign={dreamsignPurgeReward.dreamsign}
-                sizePx={
-                  isDesktop
-                    ? DESKTOP_REWARD_DREAMSIGN_SIZE
-                    : MOBILE_REWARD_DREAMSIGN_SIZE
-                }
                 variant="revelation"
                 testid="cumulus-exploration-purged-dreamsign"
               />
@@ -3754,7 +3752,6 @@ export function ExplorationSiteScreen({
               ) : (
                 <Dreamsign
                   dreamsign={item.dreamsign}
-                  sizePx={trajectoryForReward.source.width}
                   variant="revelation"
                 />
               )}
@@ -4135,17 +4132,9 @@ export function ExplorationSiteScreen({
                 }}
               >
                 {activeAction.followup.dreamsigns.map((dreamsign) => (
-                  <Dreamsign
-                    key={dreamsign.id}
-                    dreamsign={dreamsign}
-                    sizePx={
-                      isDesktop
-                        ? DESKTOP_DREAMSIGN_CHOICE_SIZE
-                        : MOBILE_DREAMSIGN_CHOICE_SIZE
-                    }
-                    testid={`cumulus-exploration-dreamsign-${dreamsign.id}`}
-                    onPress={() => chooseDreamsign(dreamsign.id)}
-                  />
+                  <div key={dreamsign.id} style={{ width: isDesktop ? DESKTOP_DREAMSIGN_CHOICE_SIZE : MOBILE_DREAMSIGN_CHOICE_SIZE, height: isDesktop ? DESKTOP_DREAMSIGN_CHOICE_SIZE : MOBILE_DREAMSIGN_CHOICE_SIZE }}>
+                    <Dreamsign dreamsign={dreamsign} testid={`cumulus-exploration-dreamsign-${dreamsign.id}`} onPress={() => chooseDreamsign(dreamsign.id)} />
+                  </div>
                 ))}
               </div>
             </GlassPanel>

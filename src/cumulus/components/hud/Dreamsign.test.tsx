@@ -19,9 +19,9 @@ import { CumulusRoot } from "../../CumulusRoot";
  * `DreamsignHoverCard`).
  *
  * The tile renders the dreamsign's `imageName` artwork (from
- * `/dreamsigns/<imageName>`) inside a sized square with no chrome — the art
- * floats on the media — and reveals its full name + effect text through the
- * shared InfoCard `object` variant.
+ * `/dreamsigns/<imageName>`) inside its caller-owned square with no chrome —
+ * the art floats on the media — and reveals its full name + effect text
+ * through the shared InfoCard `object` variant.
  * jsdom exposes no `matchMedia`, so the reveal coordinator treats it as a coarse
  * pointer: a press-down reveals the card.
  */
@@ -67,9 +67,15 @@ afterEach(() => {
 describe("Dreamsign", () => {
   it("owns its UUID reveal model and ordered glossary definitions", () => {
     const { entry, effect } = pickGlossaryFixture();
-    const sign = makeDreamsign({ name: "Semantic sign", effectDescription: effect, imageName: "semantic.png" });
-    const { container } = mountInto(<Dreamsign dreamsign={sign} sizePx={64} />);
-    const tile = container.querySelector<HTMLElement>('[data-testid="dreamsign-art-tile"]');
+    const sign = makeDreamsign({
+      name: "Semantic sign",
+      effectDescription: effect,
+      imageName: "semantic.png",
+    });
+    const { container } = mountInto(<Dreamsign dreamsign={sign} />);
+    const tile = container.querySelector<HTMLElement>(
+      '[data-testid="dreamsign-art-tile"]',
+    );
     expect(tile?.dataset.dreamsignId).toBe(sign.id);
     expect(tile?.dataset.revealFeedback).toBe("measured");
     expect(tile?.dataset.revealEntityType).toBe("dreamsign");
@@ -78,7 +84,9 @@ describe("Dreamsign", () => {
     expect(tile?.dataset.revealSecondaryTitles).toBe("");
     expect(tile?.tabIndex).toBe(0);
     expect(tile?.style.touchAction).toBe("pan-x pan-y");
-    const description = document.getElementById(tile?.getAttribute("aria-describedby") ?? "");
+    const description = document.getElementById(
+      tile?.getAttribute("aria-describedby") ?? "",
+    );
     expect(description?.textContent).toContain(sign.name);
     expect(description?.textContent).toContain(effect);
     expect(description?.textContent).toContain(entry.definition);
@@ -89,9 +97,7 @@ describe("Dreamsign", () => {
       name: "Summoning sign",
       effectDescription: "Materialize a figment from your void.",
     });
-    const { container, root } = mountInto(
-      <Dreamsign dreamsign={sign} sizePx={64} />,
-    );
+    const { container, root } = mountInto(<Dreamsign dreamsign={sign} />);
     const tile = container.querySelector<HTMLElement>(
       '[data-testid="dreamsign-art-tile"]',
     );
@@ -127,9 +133,7 @@ describe("Dreamsign", () => {
         name: "Card timing sign",
         effectDescription: effect,
       });
-      const { container, root } = mountInto(
-        <Dreamsign dreamsign={sign} sizePx={64} />,
-      );
+      const { container, root } = mountInto(<Dreamsign dreamsign={sign} />);
       const tile = container.querySelector<HTMLElement>(
         '[data-testid="dreamsign-art-tile"]',
       );
@@ -140,7 +144,9 @@ describe("Dreamsign", () => {
       expect(description?.textContent).toContain(
         requireGlossaryEntry(glossaryId).definition,
       );
-      expect(description?.textContent).not.toContain("ability may be activated");
+      expect(description?.textContent).not.toContain(
+        "ability may be activated",
+      );
 
       act(() => {
         root.unmount();
@@ -153,7 +159,7 @@ describe("Dreamsign", () => {
     delete sign.id;
 
     expect(() => {
-      mountInto(<Dreamsign dreamsign={sign} sizePx={64} />);
+      mountInto(<Dreamsign dreamsign={sign} />);
     }).toThrow(/Dreamsign tile dreamsign is missing a stable id/);
   });
 
@@ -163,9 +169,7 @@ describe("Dreamsign", () => {
       imageName: "black_horn.png",
     });
 
-    const { container, root } = mountInto(
-      <Dreamsign dreamsign={sign} sizePx={64} />,
-    );
+    const { container, root } = mountInto(<Dreamsign dreamsign={sign} />);
 
     const img = container.querySelector("img");
     expect(img).not.toBeNull();
@@ -184,9 +188,7 @@ describe("Dreamsign", () => {
       imageAlt: "A ringing bell wreathed in mist",
     });
 
-    const { container, root } = mountInto(
-      <Dreamsign dreamsign={sign} sizePx={48} />,
-    );
+    const { container, root } = mountInto(<Dreamsign dreamsign={sign} />);
 
     expect(container.querySelector("img")?.getAttribute("alt")).toBe(
       "A ringing bell wreathed in mist",
@@ -203,9 +205,7 @@ describe("Dreamsign", () => {
       imageName: "moonstone.png",
     });
 
-    const { container, root } = mountInto(
-      <Dreamsign dreamsign={sign} sizePx={48} />,
-    );
+    const { container, root } = mountInto(<Dreamsign dreamsign={sign} />);
 
     const tile = container.querySelector<HTMLElement>(
       '[data-testid="dreamsign-art-tile"]',
@@ -219,6 +219,29 @@ describe("Dreamsign", () => {
     });
   });
 
+  it("fills the caller-owned layout box", () => {
+    const sign = makeDreamsign({
+      name: "Moonstone",
+      imageName: "moonstone.png",
+    });
+
+    const { container, root } = mountInto(
+      <div style={{ width: 96, height: 96 }}>
+        <Dreamsign dreamsign={sign} />
+      </div>,
+    );
+
+    const tile = container.querySelector<HTMLElement>(
+      '[data-testid="dreamsign-art-tile"]',
+    );
+    expect(tile?.style.width).toBe("100%");
+    expect(tile?.style.height).toBe("100%");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("composes the hud variant's drop-shadow into the tile filter", () => {
     const sign = makeDreamsign({
       name: "Moonstone",
@@ -226,7 +249,7 @@ describe("Dreamsign", () => {
     });
 
     const { container, root } = mountInto(
-      <Dreamsign dreamsign={sign} sizePx={36} variant="hud" />,
+      <Dreamsign dreamsign={sign} variant="hud" />,
     );
 
     const tile = container.querySelector<HTMLElement>(
@@ -247,9 +270,7 @@ describe("Dreamsign", () => {
       imageName: "moonstone.png",
     });
 
-    const { container, root } = mountInto(
-      <Dreamsign dreamsign={sign} sizePx={36} />,
-    );
+    const { container, root } = mountInto(<Dreamsign dreamsign={sign} />);
 
     const tile = container.querySelector<HTMLElement>(
       '[data-testid="dreamsign-art-tile"]',
@@ -264,9 +285,7 @@ describe("Dreamsign", () => {
   it("falls back to a glyph only when imageName is missing", () => {
     const sign = makeDreamsign({ name: "Untextured" });
 
-    const { container, root } = mountInto(
-      <Dreamsign dreamsign={sign} sizePx={48} />,
-    );
+    const { container, root } = mountInto(<Dreamsign dreamsign={sign} />);
 
     expect(container.querySelector("img")).toBeNull();
     // Some visible placeholder must still appear so the slot is not empty.
@@ -296,12 +315,10 @@ describe("Dreamsign", () => {
       if (!extractGlossaryTerms(effect).includes(entry)) {
         continue;
       }
-      const effectWords = new Set(
-        (effect.toLowerCase().match(/[a-z]+/g) ?? []),
-      );
-      const definitionWord = (entry.definition.match(/[A-Za-z]{4,}/g) ?? []).find(
-        (word) => !effectWords.has(word.toLowerCase()),
-      );
+      const effectWords = new Set(effect.toLowerCase().match(/[a-z]+/g) ?? []);
+      const definitionWord = (
+        entry.definition.match(/[A-Za-z]{4,}/g) ?? []
+      ).find((word) => !effectWords.has(word.toLowerCase()));
       if (definitionWord !== undefined) {
         return { entry, effect, definitionWord };
       }
@@ -317,12 +334,14 @@ describe("Dreamsign", () => {
       imageName: "keyworded.png",
     });
 
-    const { container, root } = mountInto(<Dreamsign dreamsign={sign} sizePx={64} />);
+    const { container, root } = mountInto(<Dreamsign dreamsign={sign} />);
 
     const tile = container.querySelector<HTMLElement>(
       '[data-testid="dreamsign-art-tile"]',
     );
-    const description = document.getElementById(tile?.getAttribute("aria-describedby") ?? "");
+    const description = document.getElementById(
+      tile?.getAttribute("aria-describedby") ?? "",
+    );
     expect(description?.textContent).toContain(definitionWord);
 
     act(() => {
@@ -338,7 +357,7 @@ describe("Dreamsign", () => {
       imageName: "black_horn.png",
     });
 
-    const { container, root } = mountInto(<Dreamsign dreamsign={sign} sizePx={64} />);
+    const { container, root } = mountInto(<Dreamsign dreamsign={sign} />);
 
     const tile = container.querySelector<HTMLElement>(
       '[data-testid="dreamsign-art-tile"]',
@@ -347,7 +366,9 @@ describe("Dreamsign", () => {
 
     act(() => tile?.focus());
     expect(tile?.dataset.revealActive).toBe("true");
-    const description = document.getElementById(tile?.getAttribute("aria-describedby") ?? "");
+    const description = document.getElementById(
+      tile?.getAttribute("aria-describedby") ?? "",
+    );
     expect(description?.textContent).toContain("Black Horn");
     expect(description?.textContent).toContain(
       "When you dissolve or banish an enemy",

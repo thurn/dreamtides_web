@@ -56,7 +56,9 @@ function collectComponentFiles(dir) {
   return files;
 }
 
-const files = COMPONENT_ROOTS.flatMap((dir) => collectComponentFiles(dir)).sort();
+const files = COMPONENT_ROOTS.flatMap((dir) =>
+  collectComponentFiles(dir),
+).sort();
 const surface = extractPropMeta(files);
 
 /** Props whose very presence re-opens an arbitrary-customization escape hatch. */
@@ -76,7 +78,8 @@ const BANNED_PROP_NAMES = new Set(["style", "className"]);
 const CONTAINERS = new Set([...CONTAINER_COMPONENTS, ...CONTAINER_PRIMITIVES]);
 
 /** Matches a React-node family type anywhere in a resolved tsType string. */
-const REACT_NODE_TYPE = /\b(ReactNode|ReactElement|ReactChild|ReactPortal)\b|JSX\.Element/;
+const REACT_NODE_TYPE =
+  /\b(ReactNode|ReactElement|ReactChild|ReactPortal)\b|JSX\.Element/;
 
 describe("Cumulus strict-API contract (resolved surface)", () => {
   it("finds a non-trivial component surface to check", () => {
@@ -112,6 +115,14 @@ describe("Cumulus strict-API contract (resolved surface)", () => {
   it("GameCard does not expose caller-selected sizing", () => {
     const propNames = (surface.GameCard ?? []).map((prop) => prop.name);
     expect(propNames).not.toContain("large");
+  });
+
+  it("Dreamsign leaves sizing to its layout wrapper", () => {
+    const propNames = (surface.Dreamsign ?? []).map((prop) => prop.name);
+    expect(propNames).not.toContain("size");
+    expect(propNames).not.toContain("sizePx");
+    expect(propNames).not.toContain("width");
+    expect(propNames).not.toContain("height");
   });
 
   it("component primary-action props use the onPress convention", () => {
