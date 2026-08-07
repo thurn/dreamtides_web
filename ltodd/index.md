@@ -111,6 +111,12 @@ families, future Site and Battle modifiers, atomic resolution, persisted
 responses and outcomes, and transition and reward choreography. The encounter
 catalog supplies the individual Exploration scenes and actions.
 
+1. **Primary:**
+   [The Augury and Exploration Sites](exploration_augury/exploration_augury.md)
+   — Read this chapter when you need the shared reward-preparation model, Augury
+   offer construction, authored Exploration encounters, resolution, persistence,
+   or outcome presentation.
+
 ## Part VIII: The Gamble Site
 
 Directory: `/gamble_site`

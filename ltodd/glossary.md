@@ -4,6 +4,12 @@ This book-level reference defines Dreamtides' canonical player-facing terms in
 alphabetical order. Read it when resolving terminology across parts; each term
 links to the chapter that owns its complete rules or presentation.
 
+## Augury
+
+A one-use Dream Site that presents two generated rewards from distinct offer
+families. See
+[The Augury and Exploration Sites](exploration_augury/exploration_augury.md).
+
 ## Battle
 
 A two-player Card game between the player and an automated opponent, played as
@@ -93,6 +99,12 @@ The currency gained and spent during a Dream Journey. See the
 
 The Card type that resolves its effect instead of entering play as a Character.
 See the [foundations chapter](dreamtides/dreamtides.md).
+
+## Exploration encounter
+
+An authored, art-led scene with one source Card and exactly two player actions.
+See
+[The Augury and Exploration Sites](exploration_augury/exploration_augury.md).
 
 ## Figment
 
