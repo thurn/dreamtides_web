@@ -13,16 +13,16 @@ defines the shared conventions used by the more detailed chapters in this book.
 ## A dream journey
 
 A dream journey is one complete run. It begins when the player selects a
-[**dream avatar**](#dream-avatars-and-dreamsigns), the character that leads the
-player's deck, and ends in victory or defeat. The main activity during a journey
+[**dream avatar**](#dream-avatars-and-dreamsigns) (the character that leads the
+player's deck) and ends in victory or defeat. The main activity during a journey
 is building and refining the deck that the player brings into each battle.
 
 At the start of a journey, the player chooses one of three dream avatars. The
 selected dream avatar supplies a fixed starter deck and starting
 [essence](#resources-and-scope). It also influences which [cards](#cards),
-rewards, and [**dreamsigns**](#dream-avatars-and-dreamsigns) can appear during
-the run. Dreamsigns are passive effects collected during the journey. Once the
-journey has been assembled, the player enters its first dreamscape.
+rewards, and [**dreamsigns**](#dream-avatars-and-dreamsigns) (passive effects
+collected during the journey) can appear during the run. Once the journey has
+been assembled, the player enters its first dreamscape.
 
 The journey takes place on the **Dream Atlas**, a branching map of
 **dreamscapes**. Each dreamscape contains several **sites**. Sites let the
