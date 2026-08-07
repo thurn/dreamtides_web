@@ -17,7 +17,7 @@ import type {
   SiteState,
   StarwayStairsSiteRuntime,
   TidemarkLadderClimbSiteRuntime,
-  TwentyOneSiteRuntime,
+  BlackjackSiteRuntime,
 } from "../../types/journey";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
@@ -133,11 +133,11 @@ function apply(
     | "SETTLE_FOUR_SUIT_REPRISE"
     | "CHOOSE_FOUR_SUIT_REPRISE_TRANSFIGURATION"
     | "PLAY_AGAIN_FOUR_SUIT_REPRISE"
-    | "DEAL_TWENTY_ONE"
-    | "HIT_TWENTY_ONE"
-    | "STAND_TWENTY_ONE"
-    | "SETTLE_TWENTY_ONE"
-    | "PLAY_AGAIN_TWENTY_ONE"
+    | "DEAL_BLACKJACK"
+    | "HIT_BLACKJACK"
+    | "STAND_BLACKJACK"
+    | "SETTLE_BLACKJACK"
+    | "PLAY_AGAIN_BLACKJACK"
     | "COMPLETE_SITE",
   payload: Record<string, unknown>,
 ) {
@@ -1159,19 +1159,19 @@ describe("Four-Suit Reprise", () => {
   });
 });
 
-function twentyOneRuntime(
+function blackjackRuntime(
   cards: readonly StandardPlayingCard[],
-  overrides: Partial<TwentyOneSiteRuntime> = {},
-): TwentyOneSiteRuntime {
+  overrides: Partial<BlackjackSiteRuntime> = {},
+): BlackjackSiteRuntime {
   return {
     kind: "gamble",
-    gameId: "twenty-one",
-    rulesVersion: "fixture-twenty-one-rules",
+    gameId: "blackjack",
+    rulesVersion: "fixture-blackjack-rules",
     isFarpoint: false,
     wagerCost: 50,
     prizeEssence: 300,
     attemptNumber: 1,
-    shuffleCommitment: "twenty-one-hand",
+    shuffleCommitment: "blackjack-hand",
     committedDeck: [...cards],
     deckCursor: 0,
     playerCards: [],
@@ -1186,10 +1186,10 @@ function twentyOneRuntime(
   };
 }
 
-function twentyOneStateWith(
+function blackjackStateWith(
   cards: readonly StandardPlayingCard[],
   stateOverrides: Partial<JourneyState> = {},
-  runtimeOverrides: Partial<TwentyOneSiteRuntime> = {},
+  runtimeOverrides: Partial<BlackjackSiteRuntime> = {},
 ): FoldState {
   const base = stateWith("2", stateOverrides);
   return {
@@ -1197,33 +1197,33 @@ function twentyOneStateWith(
     journey: {
       ...base.journey,
       siteRuntime: {
-        [SITE_ID]: twentyOneRuntime(cards, runtimeOverrides),
+        [SITE_ID]: blackjackRuntime(cards, runtimeOverrides),
       },
     },
   };
 }
 
-function settleTwentyOne(state: FoldState) {
+function settleBlackjack(state: FoldState) {
   const siteRuntime = state.journey.siteRuntime[SITE_ID];
-  if (siteRuntime?.kind !== "gamble" || siteRuntime.gameId !== "twenty-one") {
-    throw new Error("expected Twenty-One runtime");
+  if (siteRuntime?.kind !== "gamble" || siteRuntime.gameId !== "blackjack") {
+    throw new Error("expected Blackjack runtime");
   }
-  return apply(state, "SETTLE_TWENTY_ONE", {
+  return apply(state, "SETTLE_BLACKJACK", {
     siteId: SITE_ID,
     shuffleCommitment: siteRuntime.shuffleCommitment,
   });
 }
 
-describe("Twenty-One", () => {
+describe("Blackjack", () => {
   it("deals both opening hands and pays the flat prize for a player blackjack", () => {
     const dealt = apply(
-      twentyOneStateWith([
+      blackjackStateWith([
         { rank: "A", suit: "spades" },
         { rank: "10", suit: "clubs" },
         { rank: "K", suit: "hearts" },
         { rank: "9", suit: "diamonds" },
       ]),
-      "DEAL_TWENTY_ONE",
+      "DEAL_BLACKJACK",
       { siteId: SITE_ID },
     );
     expect(dealt.outcome).toBe("applied");
@@ -1237,7 +1237,7 @@ describe("Twenty-One", () => {
       resultSettled: false,
     });
 
-    const settled = settleTwentyOne(dealt.state);
+    const settled = settleBlackjack(dealt.state);
     expect(settled.outcome).toBe("applied");
     expect(settled.state.journey.essence).toBe(450);
     expect(settled.state.journey.dreamsigns).toEqual([]);
@@ -1249,7 +1249,7 @@ describe("Twenty-One", () => {
 
   it("keeps hits free, then draws the dealer to 17 before comparing hands", () => {
     const dealt = apply(
-      twentyOneStateWith([
+      blackjackStateWith([
         { rank: "A", suit: "clubs" },
         { rank: "10", suit: "spades" },
         { rank: "5", suit: "hearts" },
@@ -1257,10 +1257,10 @@ describe("Twenty-One", () => {
         { rank: "3", suit: "diamonds" },
         { rank: "K", suit: "diamonds" },
       ]),
-      "DEAL_TWENTY_ONE",
+      "DEAL_BLACKJACK",
       { siteId: SITE_ID },
     );
-    const hit = apply(dealt.state, "HIT_TWENTY_ONE", { siteId: SITE_ID });
+    const hit = apply(dealt.state, "HIT_BLACKJACK", { siteId: SITE_ID });
     expect(hit.outcome).toBe("applied");
     expect(hit.state.journey.essence).toBe(150);
     expect(hit.state.journey.siteRuntime[SITE_ID]).toMatchObject({
@@ -1269,14 +1269,14 @@ describe("Twenty-One", () => {
       dealerRevealed: false,
       outcome: null,
     });
-    const stood = apply(hit.state, "STAND_TWENTY_ONE", { siteId: SITE_ID });
+    const stood = apply(hit.state, "STAND_BLACKJACK", { siteId: SITE_ID });
     expect(stood.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       deckCursor: 6,
       dealerCards: [{ rank: "10" }, { rank: "6" }, { rank: "K" }],
       dealerRevealed: true,
       outcome: "player-win",
     });
-    const settled = settleTwentyOne(stood.state);
+    const settled = settleBlackjack(stood.state);
     expect(settled.state.journey.essence).toBe(450);
     expect(settled.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       essenceAwarded: 300,
@@ -1286,7 +1286,7 @@ describe("Twenty-One", () => {
 
   it("reveals the dealer and resolves a player bust without drawing", () => {
     const dealt = apply(
-      twentyOneStateWith(
+      blackjackStateWith(
         [
           { rank: "K", suit: "clubs" },
           { rank: "10", suit: "spades" },
@@ -1295,17 +1295,17 @@ describe("Twenty-One", () => {
           { rank: "5", suit: "diamonds" },
         ],
       ),
-      "DEAL_TWENTY_ONE",
+      "DEAL_BLACKJACK",
       { siteId: SITE_ID },
     );
-    const hit = apply(dealt.state, "HIT_TWENTY_ONE", { siteId: SITE_ID });
+    const hit = apply(dealt.state, "HIT_BLACKJACK", { siteId: SITE_ID });
     expect(hit.state.journey.essence).toBe(150);
     expect(hit.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       deckCursor: 5,
       dealerRevealed: true,
       outcome: "dealer-win",
     });
-    const settled = settleTwentyOne(hit.state);
+    const settled = settleBlackjack(hit.state);
     expect(settled.state.journey.essence).toBe(150);
     expect(settled.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       essenceAwarded: 0,
@@ -1315,7 +1315,7 @@ describe("Twenty-One", () => {
     registerSiteContentProvider({
       economyData: ECONOMY,
       openSite: () => ({
-        runtime: twentyOneRuntime(
+        runtime: blackjackRuntime(
           [
             { rank: "10", suit: "hearts" },
             { rank: "9", suit: "clubs" },
@@ -1326,9 +1326,9 @@ describe("Twenty-One", () => {
         ),
       }),
     });
-    const replayed = apply(settled.state, "PLAY_AGAIN_TWENTY_ONE", {
+    const replayed = apply(settled.state, "PLAY_AGAIN_BLACKJACK", {
       siteId: SITE_ID,
-      previousShuffleCommitment: "twenty-one-hand",
+      previousShuffleCommitment: "blackjack-hand",
     });
     expect(replayed.outcome).toBe("applied");
     expect(replayed.state.journey.siteRuntime[SITE_ID]).toMatchObject({
@@ -1339,7 +1339,7 @@ describe("Twenty-One", () => {
   });
 
   it("allows at most three paid attempts after player busts", () => {
-    const state = twentyOneStateWith(
+    const state = blackjackStateWith(
       [],
       {},
       {
@@ -1360,7 +1360,7 @@ describe("Twenty-One", () => {
         resultSettled: true,
       },
     );
-    const replayed = apply(state, "PLAY_AGAIN_TWENTY_ONE", {
+    const replayed = apply(state, "PLAY_AGAIN_BLACKJACK", {
       siteId: SITE_ID,
       previousShuffleCommitment: "third-attempt",
     });
@@ -1369,7 +1369,7 @@ describe("Twenty-One", () => {
 
   it("advances directly through the dealer turn when a hit reaches 21", () => {
     const dealt = apply(
-      twentyOneStateWith([
+      blackjackStateWith([
         { rank: "10", suit: "clubs" },
         { rank: "9", suit: "spades" },
         { rank: "5", suit: "hearts" },
@@ -1377,10 +1377,10 @@ describe("Twenty-One", () => {
         { rank: "6", suit: "diamonds" },
         { rank: "K", suit: "hearts" },
       ]),
-      "DEAL_TWENTY_ONE",
+      "DEAL_BLACKJACK",
       { siteId: SITE_ID },
     );
-    const hit = apply(dealt.state, "HIT_TWENTY_ONE", { siteId: SITE_ID });
+    const hit = apply(dealt.state, "HIT_BLACKJACK", { siteId: SITE_ID });
     expect(hit.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       deckCursor: 6,
       playerCards: [{ rank: "10" }, { rank: "5" }, { rank: "6" }],
@@ -1393,7 +1393,7 @@ describe("Twenty-One", () => {
 
   it("refunds the wager on a push and makes the enhanced wager cheaper", () => {
     const dealt = apply(
-      twentyOneStateWith(
+      blackjackStateWith(
         [
           { rank: "10", suit: "clubs" },
           { rank: "9", suit: "spades" },
@@ -1403,15 +1403,15 @@ describe("Twenty-One", () => {
         {},
         { isFarpoint: true, wagerCost: 40 },
       ),
-      "DEAL_TWENTY_ONE",
+      "DEAL_BLACKJACK",
       { siteId: SITE_ID },
     );
     expect(dealt.state.journey.essence).toBe(160);
-    const stood = apply(dealt.state, "STAND_TWENTY_ONE", { siteId: SITE_ID });
+    const stood = apply(dealt.state, "STAND_BLACKJACK", { siteId: SITE_ID });
     expect(stood.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       outcome: "push",
     });
-    const settled = settleTwentyOne(stood.state);
+    const settled = settleBlackjack(stood.state);
     expect(settled.state.journey.essence).toBe(200);
     expect(settled.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       essenceAwarded: 40,
@@ -1420,7 +1420,7 @@ describe("Twenty-One", () => {
     registerSiteContentProvider({
       economyData: ECONOMY,
       openSite: () => ({
-        runtime: twentyOneRuntime(
+        runtime: blackjackRuntime(
           [
             { rank: "10", suit: "hearts" },
             { rank: "9", suit: "clubs" },
@@ -1430,19 +1430,19 @@ describe("Twenty-One", () => {
           {
             isFarpoint: true,
             wagerCost: 40,
-            shuffleCommitment: "next-twenty-one-hand",
+            shuffleCommitment: "next-blackjack-hand",
           },
         ),
       }),
     });
-    const replayed = apply(settled.state, "PLAY_AGAIN_TWENTY_ONE", {
+    const replayed = apply(settled.state, "PLAY_AGAIN_BLACKJACK", {
       siteId: SITE_ID,
-      previousShuffleCommitment: "twenty-one-hand",
+      previousShuffleCommitment: "blackjack-hand",
     });
     expect(replayed.outcome).toBe("applied");
     expect(replayed.state.journey.essence).toBe(160);
     expect(replayed.state.journey.siteRuntime[SITE_ID]).toMatchObject({
-      shuffleCommitment: "next-twenty-one-hand",
+      shuffleCommitment: "next-blackjack-hand",
       wagerPaid: true,
       deckCursor: 4,
       playerCards: [{ rank: "10" }, { rank: "5" }],

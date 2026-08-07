@@ -234,7 +234,7 @@ function parseGambleGameId(rawGame: string | null): GambleGameId | null {
   if (rawGame === "ladder-climb") return "tidemark-ladder-climb";
   if (rawGame === "starway-stairs") return "starway-stairs";
   if (rawGame === "four-suit-reprise") return "four-suit-reprise";
-  if (rawGame === "twenty-one") return "twenty-one";
+  if (rawGame === "blackjack") return "blackjack";
   return null;
 }
 

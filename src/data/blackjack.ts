@@ -1,28 +1,28 @@
 import type { EconomyData } from "../types/economy-data";
 import type { StandardPlayingCard } from "../types/gamble";
 
-export const TWENTY_ONE_RULES_VERSION = "twenty-one-v3";
-export const TWENTY_ONE_MAX_ATTEMPTS = 3;
+export const BLACKJACK_RULES_VERSION = "blackjack-v3";
+export const BLACKJACK_MAX_ATTEMPTS = 3;
 
-export type TwentyOneOutcome = "player-win" | "dealer-win" | "push";
+export type BlackjackOutcome = "player-win" | "dealer-win" | "push";
 
-export interface TwentyOneHandValue {
+export interface BlackjackHandValue {
   total: number;
   isSoft: boolean;
   isBlackjack: boolean;
   isBust: boolean;
 }
 
-export interface TwentyOneDealerResolution {
+export interface BlackjackDealerResolution {
   dealerCards: StandardPlayingCard[];
   deckCursor: number;
-  outcome: TwentyOneOutcome;
+  outcome: BlackjackOutcome;
 }
 
 /** Best blackjack value, with enough Aces demoted from 11 to 1 to avoid busting. */
-export function twentyOneHandValue(
+export function blackjackHandValue(
   cards: readonly StandardPlayingCard[],
-): TwentyOneHandValue {
+): BlackjackHandValue {
   let total = 0;
   let highAces = 0;
   for (const card of cards) {
@@ -47,27 +47,27 @@ export function twentyOneHandValue(
   };
 }
 
-export function twentyOneHandTotal(
+export function blackjackHandTotal(
   cards: readonly StandardPlayingCard[],
 ): number {
-  return twentyOneHandValue(cards).total;
+  return blackjackHandValue(cards).total;
 }
 
 /** Enhanced Gamble sites discount the one up-front wager. */
-export function twentyOneWagerCost(
-  config: EconomyData["gamble"]["twentyOne"],
+export function blackjackWagerCost(
+  config: EconomyData["gamble"]["blackjack"],
   isFarpoint: boolean,
 ): number {
   return isFarpoint ? config.enhancedWager : config.standardWager;
 }
 
 /** A natural resolves before either side takes a turn. */
-export function twentyOneOpeningOutcome(
+export function blackjackOpeningOutcome(
   playerCards: readonly StandardPlayingCard[],
   dealerCards: readonly StandardPlayingCard[],
-): TwentyOneOutcome | null {
-  const playerBlackjack = twentyOneHandValue(playerCards).isBlackjack;
-  const dealerBlackjack = twentyOneHandValue(dealerCards).isBlackjack;
+): BlackjackOutcome | null {
+  const playerBlackjack = blackjackHandValue(playerCards).isBlackjack;
+  const dealerBlackjack = blackjackHandValue(dealerCards).isBlackjack;
   if (playerBlackjack && dealerBlackjack) return "push";
   if (playerBlackjack) return "player-win";
   if (dealerBlackjack) return "dealer-win";
@@ -75,13 +75,13 @@ export function twentyOneOpeningOutcome(
 }
 
 /** Reveal the hole card, draw until 17, stand on soft 17, then compare hands. */
-export function resolveTwentyOneDealer(
+export function resolveBlackjackDealer(
   playerCards: readonly StandardPlayingCard[],
   initialDealerCards: readonly StandardPlayingCard[],
   committedDeck: readonly StandardPlayingCard[],
   initialDeckCursor: number,
-): TwentyOneDealerResolution | null {
-  const playerValue = twentyOneHandValue(playerCards);
+): BlackjackDealerResolution | null {
+  const playerValue = blackjackHandValue(playerCards);
   if (playerValue.isBust) {
     return {
       dealerCards: [...initialDealerCards],
@@ -92,14 +92,14 @@ export function resolveTwentyOneDealer(
 
   const dealerCards = [...initialDealerCards];
   let deckCursor = initialDeckCursor;
-  while (twentyOneHandValue(dealerCards).total < 17) {
+  while (blackjackHandValue(dealerCards).total < 17) {
     const card = committedDeck[deckCursor];
     if (card === undefined) return null;
     dealerCards.push(card);
     deckCursor += 1;
   }
 
-  const dealerValue = twentyOneHandValue(dealerCards);
+  const dealerValue = blackjackHandValue(dealerCards);
   const outcome = dealerValue.isBust || playerValue.total > dealerValue.total
     ? "player-win"
     : playerValue.total < dealerValue.total
@@ -109,10 +109,10 @@ export function resolveTwentyOneDealer(
 }
 
 /** Player-win prize, push refund, or zero on a dealer win. */
-export function twentyOneEssenceAward(
+export function blackjackEssenceAward(
   wagerCost: number,
   prizeEssence: number,
-  outcome: TwentyOneOutcome,
+  outcome: BlackjackOutcome,
 ): number {
   if (outcome === "player-win") return prizeEssence;
   if (outcome === "push") return wagerCost;

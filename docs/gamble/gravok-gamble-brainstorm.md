@@ -52,7 +52,7 @@ revision.
 | 6 | Wheel of 52 | Alternate | choose a low-variance or jackpot payout table |
 | 7 | Four-Suit Escrow | Signature | choose the exact card placed at risk |
 | 8 | High–Low | Signature | call a direction and choose when to cash out |
-| 9 | Twenty-One | Signature | hit or stand using live deck odds |
+| 9 | Blackjack | Signature | hit or stand using live deck odds |
 | 10 | Five-Card Draw | Signature | choose which cards to hold |
 | 11 | Memory Pairs | Rejected | excluded from the Gamble design |
 | 12 | Bottom-Card Exchange | Alternate | choose a stack, then take or expose its rider |
@@ -204,7 +204,7 @@ lower cards among the remaining shoe. Correct calls bank total payouts of
 50/100/200/400 Essence; after calls one through three the player may cash out.
 One wrong call loses the 25-Essence stake and the unclaimed bank.
 
-## 9. Twenty-One
+## 9. Blackjack
 
 **Inspiration:** Cursed Tome, Knowing Skull, and Sensory Stone, which exchange
 additional cost or danger for deeper reward tiers.

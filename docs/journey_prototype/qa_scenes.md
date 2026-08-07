@@ -180,7 +180,7 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `random-site`                   | A materialized enhanced destination hosted by Random Site's configured presenting guide                                                                                                                       |
 | `random-site-home`              | Random Site's configured home behavior with its persisted destination choices                                                                                                                                |
 | `random-site-atlas`             | The first Dream Atlas frontier containing the configured Random Site owner's dreamscape, badge, and reveal cards                                                                                             |
-| `gamble`                        | Gamble site; the game is selected randomly or fixed with `?gambleGame=three-gate`, `?gambleGame=ladder-climb`, `?gambleGame=starway-stairs`, `?gambleGame=four-suit-reprise`, or `?gambleGame=twenty-one`                              |
+| `gamble`                        | Gamble site; the game is selected randomly or fixed with `?gambleGame=three-gate`, `?gambleGame=ladder-climb`, `?gambleGame=starway-stairs`, `?gambleGame=four-suit-reprise`, or `?gambleGame=blackjack`                              |
 | `gamble-enhanced`               | Farpoint Gamble site with the selected game’s discounted cost rule                                                                                                                                              |
 | `exploration`                   | Exploration card-channeling site                                                                                                                                                                               |
 | `exploration-enhanced`          | Exploration card-channeling site, enhanced                                                                                                                                                                     |
@@ -199,7 +199,7 @@ for the bootstrapped run. Use `?goto=gamble&gambleGame=ladder-climb` for a
 stable Ladder Climb QA entry point, or `?goto=gamble&gambleGame=starway-stairs`
 for Starway Stairs. Use `?goto=gamble&gambleGame=four-suit-reprise` for a
 stable Four-Suit Reprise entry point.
-Use `?goto=gamble&gambleGame=twenty-one` for a stable Twenty-One entry point.
+Use `?goto=gamble&gambleGame=blackjack` for a stable Blackjack entry point.
 
 ## Adding a scene
 

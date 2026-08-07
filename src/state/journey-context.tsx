@@ -110,15 +110,15 @@ export interface JourneyMutations {
     previousShuffleCommitment: string,
   ) => void;
   /** Pay for a round and reveal its opening hand. */
-  dealTwentyOne: (siteId: string) => void;
+  dealBlackjack: (siteId: string) => void;
   /** Pay for and reveal the next committed card. */
-  hitTwentyOne: (siteId: string) => void;
+  hitBlackjack: (siteId: string) => void;
   /** Finish the round on its current total. */
-  standTwentyOne: (siteId: string) => void;
+  standBlackjack: (siteId: string) => void;
   /** Apply the visible hand outcome. */
-  settleTwentyOne: (siteId: string, shuffleCommitment: string) => void;
+  settleBlackjack: (siteId: string, shuffleCommitment: string) => void;
   /** Start and pay for a fresh hand after a settled push. */
-  playAgainTwentyOne: (
+  playAgainBlackjack: (
     siteId: string,
     previousShuffleCommitment: string,
   ) => void;

@@ -3585,16 +3585,17 @@
   "RadialAnnouncement": [
     {
       "name": "variant",
-      "tsType": "\"announcement\" | \"card-score\" | \"merge-target\" | \"victory\"",
+      "tsType": "\"announcement\" | \"card-score\" | \"merge-target\" | \"victory\" | \"hand-total\"",
       "unionMembers": [
         "announcement",
         "card-score",
         "merge-target",
-        "victory"
+        "victory",
+        "hand-total"
       ],
       "required": false,
       "defaultValue": "announcement",
-      "description": "Named radial presentation. Omit for the ordinary scene announcement.\nSelects the card-attached scoring presentation.\nSelects the card-attached merge-target presentation.\nSelects the persistent victory presentation."
+      "description": "Named radial presentation. Omit for the ordinary scene announcement.\nSelects the card-attached scoring presentation.\nSelects the card-attached merge-target presentation.\nSelects the persistent victory presentation.\nSelects the compact playing-hand total presentation."
     },
     {
       "name": "headline",
@@ -3651,7 +3652,7 @@
       ],
       "required": false,
       "defaultValue": "standard",
-      "description": "Named disc diameter. Defaults to standard."
+      "description": "Named disc diameter. Defaults to standard.\nNamed compact disc diameter. Defaults to compact."
     },
     {
       "name": "duration",
@@ -3698,6 +3699,25 @@
       "required": false,
       "defaultValue": null,
       "description": "Spark added by completing the merge.\nA blocked merge cannot add Spark."
+    },
+    {
+      "name": "total",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Numeric value shown at the end of the hand."
+    },
+    {
+      "name": "owner",
+      "tsType": "\"player\" | \"dealer\"",
+      "unionMembers": [
+        "player",
+        "dealer"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Owner included in the accessible total announcement."
     }
   ],
   "RichTextView": [
@@ -4464,7 +4484,7 @@
         "starway-1",
         "starway-2",
         "starway-3",
-        "twenty-one"
+        "blackjack"
       ],
       "required": true,
       "defaultValue": null,
@@ -4519,15 +4539,14 @@
     },
     {
       "name": "presentation",
-      "tsType": "\"threshold\" | \"rewardOnly\" | \"closestToTwentyOne\"",
+      "tsType": "\"threshold\" | \"rewardOnly\"",
       "unionMembers": [
         "threshold",
-        "rewardOnly",
-        "closestToTwentyOne"
+        "rewardOnly"
       ],
       "required": false,
       "defaultValue": null,
-      "description": "Show the standard target condition and reward face.\nShow one centered flat reward without a draw condition or reverse face.\nShow the fixed Twenty-One win condition above its flat reward."
+      "description": "Show the standard target condition and reward face.\nShow one centered flat reward without a draw condition or reverse face."
     },
     {
       "name": "targetLabel",

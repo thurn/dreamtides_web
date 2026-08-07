@@ -377,20 +377,20 @@ export function CoopJourneyProvider({
             stateRef.current.runId ?? undefined,
           ),
         ),
-      dealTwentyOne: (siteId) => dispatch(actions.dealTwentyOne(siteId)),
-      hitTwentyOne: (siteId) => dispatch(actions.hitTwentyOne(siteId)),
-      standTwentyOne: (siteId) => dispatch(actions.standTwentyOne(siteId)),
-      settleTwentyOne: (siteId, shuffleCommitment) =>
+      dealBlackjack: (siteId) => dispatch(actions.dealBlackjack(siteId)),
+      hitBlackjack: (siteId) => dispatch(actions.hitBlackjack(siteId)),
+      standBlackjack: (siteId) => dispatch(actions.standBlackjack(siteId)),
+      settleBlackjack: (siteId, shuffleCommitment) =>
         dispatch(
-          actions.settleTwentyOne(
+          actions.settleBlackjack(
             siteId,
             shuffleCommitment,
             stateRef.current.runId ?? undefined,
           ),
         ),
-      playAgainTwentyOne: (siteId, previousShuffleCommitment) =>
+      playAgainBlackjack: (siteId, previousShuffleCommitment) =>
         dispatch(
-          actions.playAgainTwentyOne(
+          actions.playAgainBlackjack(
             siteId,
             previousShuffleCommitment,
             stateRef.current.runId ?? undefined,

@@ -579,18 +579,18 @@ export function routeDomain(
         state,
         gamble.playAgainFourSuitReprise(journey, payload),
       );
-    case "DEAL_TWENTY_ONE":
-      return journeyCase(state, gamble.dealTwentyOne(journey, payload));
-    case "HIT_TWENTY_ONE":
-      return journeyCase(state, gamble.hitTwentyOne(journey, payload));
-    case "STAND_TWENTY_ONE":
-      return journeyCase(state, gamble.standTwentyOne(journey, payload));
-    case "SETTLE_TWENTY_ONE":
-      return journeyCase(state, gamble.settleTwentyOne(journey, payload));
-    case "PLAY_AGAIN_TWENTY_ONE":
+    case "DEAL_BLACKJACK":
+      return journeyCase(state, gamble.dealBlackjack(journey, payload));
+    case "HIT_BLACKJACK":
+      return journeyCase(state, gamble.hitBlackjack(journey, payload));
+    case "STAND_BLACKJACK":
+      return journeyCase(state, gamble.standBlackjack(journey, payload));
+    case "SETTLE_BLACKJACK":
+      return journeyCase(state, gamble.settleBlackjack(journey, payload));
+    case "PLAY_AGAIN_BLACKJACK":
       return journeyCase(
         state,
-        gamble.playAgainTwentyOne(journey, payload, ctx),
+        gamble.playAgainBlackjack(journey, payload, ctx),
       );
 
     // --- shop, merchant & modifiers ---

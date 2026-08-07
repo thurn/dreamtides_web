@@ -246,11 +246,11 @@ function makeMutations(): JourneyMutations {
     settleFourSuitReprise: vi.fn(),
     chooseFourSuitRepriseTransfiguration: vi.fn(),
     playAgainFourSuitReprise: vi.fn(),
-    dealTwentyOne: vi.fn(),
-    hitTwentyOne: vi.fn(),
-    standTwentyOne: vi.fn(),
-    settleTwentyOne: vi.fn(),
-    playAgainTwentyOne: vi.fn(),
+    dealBlackjack: vi.fn(),
+    hitBlackjack: vi.fn(),
+    standBlackjack: vi.fn(),
+    settleBlackjack: vi.fn(),
+    playAgainBlackjack: vi.fn(),
     drawTidemarkLadderClimb: vi.fn(),
     settleTidemarkLadderClimb: vi.fn(),
     replaceTidemarkLadderClimbDreamsign: vi.fn(),
@@ -1054,7 +1054,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
     );
   });
 
-  it("passes a forced Twenty-One URL choice into Gamble initialization", () => {
+  it("passes a forced Blackjack URL choice into Gamble initialization", () => {
     const site = makeSite("Gamble");
     const mutations = makeMutations();
     renderWithJourney({
@@ -1063,14 +1063,14 @@ describe("ScreenRouter site-dispatch completeness", () => {
       mutations,
       children: (
         <ScreenRouter
-          runtimeConfig={parseRuntimeConfig("?gambleGame=twenty-one")}
+          runtimeConfig={parseRuntimeConfig("?gambleGame=blackjack")}
         />
       ),
     });
 
     expect(mutations.ensureGambleSiteRuntime).toHaveBeenCalledWith(
       site.id,
-      "twenty-one",
+      "blackjack",
     );
   });
 

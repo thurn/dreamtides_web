@@ -52,7 +52,7 @@ export const wagerPrizeCardDemo: CumulusComponent = {
     {
       label: "Flat reward",
       code: `<WagerPrizeCard
-  prizeId="twenty-one"
+  prizeId="blackjack"
   presentation="rewardOnly"
   essenceReward={300}
   rewardDreamsign={null}

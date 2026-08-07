@@ -3,7 +3,7 @@ import { artRef } from "../../cumulus/primitives/art";
 import type {
   FourSuitRepriseSiteView,
   LadderClimbSiteView,
-  TwentyOneSiteView,
+  BlackjackSiteView,
 } from "../../cumulus/screens/GambleSiteScreen";
 import { getLogEntries, resetLog } from "../../logging";
 import { economyFixture } from "../../testing/economy-fixture";
@@ -13,7 +13,7 @@ import type { CardData } from "../../types/cards";
 import type {
   FourSuitRepriseSiteRuntime,
   TidemarkLadderClimbSiteRuntime,
-  TwentyOneSiteRuntime,
+  BlackjackSiteRuntime,
 } from "../../types/journey";
 import {
   logGamblePrepared,
@@ -226,16 +226,16 @@ describe("gamble-site-logging-view-model", () => {
     });
   });
 
-  it("records the Twenty-One wager, both hands, decision, and final reward", () => {
-    const runtime: TwentyOneSiteRuntime = {
+  it("records the Blackjack wager, both hands, decision, and final reward", () => {
+    const runtime: BlackjackSiteRuntime = {
       kind: "gamble",
-      gameId: "twenty-one",
-      rulesVersion: "fixture-twenty-one-rules",
+      gameId: "blackjack",
+      rulesVersion: "fixture-blackjack-rules",
       isFarpoint: false,
       wagerCost: 50,
       prizeEssence: 300,
       attemptNumber: 1,
-      shuffleCommitment: "twenty-one-hand",
+      shuffleCommitment: "blackjack-hand",
       committedDeck: [
         { rank: "10", suit: "clubs" },
         { rank: "10", suit: "spades" },
@@ -258,7 +258,7 @@ describe("gamble-site-logging-view-model", () => {
       resultSettled: true,
       essenceAwarded: 300,
     };
-    const view = { gameId: "twenty-one" } as unknown as TwentyOneSiteView;
+    const view = { gameId: "blackjack" } as unknown as BlackjackSiteView;
 
     logGamblePrepared("fixture-site", runtime, view, economyFixture());
     logGambleResolved("fixture-site", runtime, view, economyFixture());
@@ -267,7 +267,7 @@ describe("gamble-site-logging-view-model", () => {
     expect(getLogEntries()).toHaveLength(3);
     expect(getLogEntries()[0]).toMatchObject({
       event: "gamble_game_prepared",
-      gameId: "twenty-one",
+      gameId: "blackjack",
       wagerCost: 50,
       prizeEssence: 300,
       dealerRule: "stand-soft-17",

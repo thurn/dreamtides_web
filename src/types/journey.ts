@@ -612,10 +612,10 @@ export interface FourSuitRepriseSiteRuntime {
   phase: "choose" | "result";
 }
 
-/** Shared, replayable player-versus-dealer Twenty-One hand. */
-export interface TwentyOneSiteRuntime {
+/** Shared, replayable player-versus-dealer Blackjack hand. */
+export interface BlackjackSiteRuntime {
   kind: "gamble";
-  gameId: "twenty-one";
+  gameId: "blackjack";
   rulesVersion: string;
   isFarpoint: boolean;
   wagerCost: number;
@@ -642,7 +642,7 @@ export type GambleSiteRuntime =
   | TidemarkLadderClimbSiteRuntime
   | StarwayStairsSiteRuntime
   | FourSuitRepriseSiteRuntime
-  | TwentyOneSiteRuntime;
+  | BlackjackSiteRuntime;
 
 /** Stable Gamble game id, re-exported beside its persisted runtime union. */
 export type GambleSiteGameId = GambleGameId;

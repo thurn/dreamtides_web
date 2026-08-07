@@ -30,7 +30,7 @@ describe("WagerPrizeCard", () => {
       root.render(
         <CumulusRoot>
           <WagerPrizeCard
-            prizeId="twenty-one"
+            prizeId="blackjack"
             presentation="rewardOnly"
             essenceReward={300}
             rewardDreamsign={null}

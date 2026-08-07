@@ -18,18 +18,20 @@ Each enum branch owns its established production choreography—including card-a
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `variant` | `"announcement" \| "card-score" \| "merge-target" \| "victory"` | no | `announcement` | Named radial presentation. Omit for the ordinary scene announcement. Selects the card-attached scoring presentation. Selects the card-attached merge-target presentation. Selects the persistent victory presentation. |
+| `variant` | `"announcement" \| "card-score" \| "merge-target" \| "victory" \| "hand-total"` | no | `announcement` | Named radial presentation. Omit for the ordinary scene announcement. Selects the card-attached scoring presentation. Selects the card-attached merge-target presentation. Selects the persistent victory presentation. Selects the compact playing-hand total presentation. |
 | `headline` | `string` | yes | — | Primary announcement copy. Victory heading moved above the radial core after its opening hold. |
 | `headlineGlyph` | `Glyph` | no | — | Optional canonical glyph rendered in place of the headline copy. |
 | `detail` | `string` | no | — | Optional supporting copy beneath the headline. |
 | `essenceGained` | `number` | no | — | Optional gained Essence amount, rendered with the canonical currency glyph. |
 | `tone` | `RadialAnnouncementTone` = `"accent" \| "danger" \| "reward"` | no | `accent` | Semantic orbit and ripple color. Defaults to accent. |
-| `size` | `"compact" \| "standard" \| "wager" \| "mini"` | no | `standard` | Named disc diameter. Defaults to standard. |
+| `size` | `"compact" \| "standard" \| "wager" \| "mini"` | no | `standard` | Named disc diameter. Defaults to standard. Named compact disc diameter. Defaults to compact. |
 | `duration` | `RadialAnnouncementDuration` = `"standard" \| "extended"` | no | `standard` | Named animation and reading dwell. Defaults to standard. |
 | `announcementId` | `string` | no | — | Stable identifier exposed on the announcement root. |
 | `points` | `number` | yes | — | Points scored by the attached card. |
 | `status` | `"available" \| "blocked"` | yes | — | Available targets use the accent treatment. Blocked targets use the danger treatment. |
 | `addedSpark` | `number` | no | — | Spark added by completing the merge. A blocked merge cannot add Spark. |
+| `total` | `number` | yes | — | Numeric value shown at the end of the hand. |
+| `owner` | `"player" \| "dealer"` | yes | — | Owner included in the accessible total announcement. |
 
 ## Usage
 

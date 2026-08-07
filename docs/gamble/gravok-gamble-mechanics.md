@@ -11,7 +11,7 @@ makes with the casino’s otherworldly character.
 | **Tidemark Ladder Climb** | Buy increasingly favorable attempts at one strong Dreamsign. |
 | **Starway Stairs** | Bank an Essence prize or risk it on the next tier. |
 | **Four-Suit Reprise** | Risk up to three different deck cards on one suit draw apiece. |
-| **Twenty-One** | Hit or stand against Gravok's dealer hand. |
+| **Blackjack** | Hit or stand against Gravok's dealer hand. |
 
 ## Casino-wide rules
 
@@ -36,7 +36,7 @@ makes with the casino’s otherworldly character.
   diamonds, hearts, and spades, with no jokers.
 - Cards are drawn without replacement during a hand or round. When a rule says
   **reassemble and reshuffle**, all 52 cards return before the next draw.
-- Aces are high except in Twenty-One, where an Ace is worth 1 or 11.
+- Aces are high except in Blackjack, where an Ace is worth 1 or 11.
 - Rank thresholds are inclusive. For example, 6+ contains ranks 6 through Ace,
   or 36 of the 52 cards.
 - The UI shows exact relevant odds before each choice whose outcome
@@ -72,7 +72,7 @@ flow.
 | Tidemark Ladder Climb | Attempts cost 0/5/10/15 Essence. | Every attempt is free. |
 | Starway Stairs | Each tier draw costs 30 Essence. | Each tier draw costs 20 Essence. |
 | Four-Suit Reprise | Each draw costs 25 Essence. | Each draw costs 15 Essence. |
-| Twenty-One | Each hand costs 70 Essence. | Each hand costs 40 Essence. |
+| Blackjack | Each hand costs 70 Essence. | Each hand costs 40 Essence. |
 
 All odds, rewards, thresholds, outcome mappings, and limits are identical at
 ordinary and Farpoint Station sites.
@@ -214,10 +214,10 @@ player to the card choice.
 Every draw costs 15 Essence, for a maximum total of 45 Essence. The suit
 outcomes, replay limit, and odds are unchanged.
 
-## 5. Twenty-One
+## 5. Blackjack
 
-Twenty-One is blackjack against Gravok. The player wagers 70 Essence for each
-hand, then the player and dealer each receive two cards from one shuffled
+Blackjack pits the player against Gravok's dealer hand. The player wagers 70
+Essence for each hand, then the player and dealer each receive two cards from one shuffled
 52-card shoe. The dealer shows the first card and keeps the second face down.
 Every card occupies its own squircle tile. Aces count as 1 or 11 to make the
 highest total at or below 21; J, Q, and K count as 10.
@@ -235,14 +235,16 @@ stands on every 17 including soft 17.
 | Dealer total beats the player | No reward. |
 | Player busts | No reward; offer another paid hand when fewer than three attempts have been played. |
 
-The fixed middle glass panel reads `Closest ≤21` and `Wins 300 Essence`. The
-dealer hand stays above it and the player hand stays below it. Each unlabeled
-running total appears in a black orbiting disc immediately after its hand once
-the current deal or draw animation finishes. Cards enter one at a time in deal
-order with the face-down side showing, then flip to their visible face. Each
-hand smoothly reflows and scales its cards to keep every tile visible as more
-cards arrive. The dealer's hole card waits for the dealer turn. Reading holds
-separate each card, the dealer reveal and draws, and the result announcement.
+The fixed middle glass panel reads `Closest to 21 Without Going Over` and
+`Wins 300 Essence`. The dealer hand stays above it and the player hand stays
+below it. Each unlabeled running total appears in a black orbiting disc when
+the hand's first card turns face up. The disc remains mounted for that hand,
+slides beside newly arriving cards, and updates its number as each card turns
+face up. Cards enter one at a time in deal order with the face-down side
+showing, then flip to their visible face. Each hand smoothly reflows and scales
+its cards to keep every tile visible as more cards arrive. The dealer's hole
+card waits for the dealer turn. Reading holds separate each card, the dealer
+reveal and draws, and the result announcement.
 
 A push starts a fresh paid hand without advancing the attempt count. A player
 bust advances the attempt count and may start another paid hand through attempt
@@ -293,5 +295,5 @@ Logs must make a production game reconstructable. Record:
    decisions, stop conditions, and cumulative costs or banks.
 3. **Four-Suit Reprise** adds locked deck targets, suit-driven card effects,
    and repeated rounds.
-4. **Twenty-One** adds player and dealer hands, a concealed hole card, Ace
+4. **Blackjack** adds player and dealer hands, a concealed hole card, Ace
    valuation, and deterministic dealer play.

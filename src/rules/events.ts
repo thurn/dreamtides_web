@@ -99,7 +99,7 @@ export interface EventPayloads {
       | "tidemark-ladder-climb"
       | "starway-stairs"
       | "four-suit-reprise"
-      | "twenty-one";
+      | "blackjack";
   };
   CHOOSE_RANDOM_SITE: { siteId: string; siteType: string };
   RESOLVE_EXPLORATION_CHOICE: {
@@ -162,11 +162,11 @@ export interface EventPayloads {
     siteId: string;
     previousShuffleCommitment: string;
   };
-  DEAL_TWENTY_ONE: { siteId: string };
-  HIT_TWENTY_ONE: { siteId: string };
-  STAND_TWENTY_ONE: { siteId: string };
-  SETTLE_TWENTY_ONE: { siteId: string; shuffleCommitment: string };
-  PLAY_AGAIN_TWENTY_ONE: {
+  DEAL_BLACKJACK: { siteId: string };
+  HIT_BLACKJACK: { siteId: string };
+  STAND_BLACKJACK: { siteId: string };
+  SETTLE_BLACKJACK: { siteId: string; shuffleCommitment: string };
+  PLAY_AGAIN_BLACKJACK: {
     siteId: string;
     previousShuffleCommitment: string;
   };
@@ -374,11 +374,11 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   SETTLE_FOUR_SUIT_REPRISE: true,
   CHOOSE_FOUR_SUIT_REPRISE_TRANSFIGURATION: true,
   PLAY_AGAIN_FOUR_SUIT_REPRISE: true,
-  DEAL_TWENTY_ONE: true,
-  HIT_TWENTY_ONE: true,
-  STAND_TWENTY_ONE: true,
-  SETTLE_TWENTY_ONE: true,
-  PLAY_AGAIN_TWENTY_ONE: true,
+  DEAL_BLACKJACK: true,
+  HIT_BLACKJACK: true,
+  STAND_BLACKJACK: true,
+  SETTLE_BLACKJACK: true,
+  PLAY_AGAIN_BLACKJACK: true,
   ACCEPT_MERCHANT_OFFER: true,
   DECLINE_MERCHANT: true,
   BUY_SHOP_SLOT: true,

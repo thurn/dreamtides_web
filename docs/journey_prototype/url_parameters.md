@@ -216,8 +216,8 @@ http://localhost:5173/?goto=exploration-duplicates&card=b1d36337-5668-4f1d-b155-
 
 Chooses the game prepared when a Gamble site opens. Omit it to choose randomly
 among Three-Gate Wager, Ladder Climb, Starway Stairs, Four-Suit Reprise, and
-Twenty-One. The supported values are `three-gate`, `ladder-climb`,
-`starway-stairs`, `four-suit-reprise`, and `twenty-one`; other values use the
+Blackjack. The supported values are `three-gate`, `ladder-climb`,
+`starway-stairs`, `four-suit-reprise`, and `blackjack`; other values use the
 random selection.
 
 ```
@@ -225,7 +225,7 @@ http://localhost:5173/?goto=gamble&gambleGame=three-gate
 http://localhost:5173/?goto=gamble&gambleGame=ladder-climb
 http://localhost:5173/?goto=gamble&gambleGame=starway-stairs
 http://localhost:5173/?goto=gamble&gambleGame=four-suit-reprise
-http://localhost:5173/?goto=gamble&gambleGame=twenty-one
+http://localhost:5173/?goto=gamble&gambleGame=blackjack
 ```
 
 ## `identicons`

@@ -353,7 +353,7 @@ export function openSite(
     rawGambleGameId !== "tidemark-ladder-climb" &&
     rawGambleGameId !== "starway-stairs" &&
     rawGambleGameId !== "four-suit-reprise" &&
-    rawGambleGameId !== "twenty-one"
+    rawGambleGameId !== "blackjack"
   ) {
     return null;
   }
