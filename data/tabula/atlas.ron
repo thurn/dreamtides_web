@@ -1,189 +1,143 @@
 CompatDocument(
-    data: {
-        "schema-version": 1,
-        "layers": [
-            /*[0]*/ {
-                "name": "one",
-                "role": "starter",
-                "node-count": {
-                    "min": 1,
-                    "max": 1,
-                },
-                "mandatory-sites": {},
-            },
-            /*[1]*/ {
-                "name": "two",
-                "role": "standard",
-                "node-count": {
-                    "min": 2,
-                    "max": 2,
-                },
-                "site-count": {
-                    "min": 3,
-                    "max": 6,
-                },
-                "fill-profile": "early",
-                "mandatory-sites": {
-                    "Draft": 2,
-                    "Purge": 1,
-                    "Augury": 1,
-                },
-            },
-            /*[2]*/ {
-                "name": "three",
-                "role": "standard",
-                "node-count": {
-                    "min": 3,
-                    "max": 3,
-                },
-                "site-count": {
-                    "min": 3,
-                    "max": 6,
-                },
-                "fill-profile": "early",
-                "mandatory-sites": {
-                    "Draft": 1,
-                    "Purge": 1,
-                },
-            },
-            /*[3]*/ {
-                "name": "four",
-                "role": "standard",
-                "node-count": {
-                    "min": 3,
-                    "max": 4,
-                },
-                "site-count": {
-                    "min": 3,
-                    "max": 6,
-                },
-                "fill-profile": "early",
-                "mandatory-sites": {
-                    "Draft": 1,
-                },
-            },
-            /*[4]*/ {
-                "name": "five",
-                "role": "standard",
-                "node-count": {
-                    "min": 3,
-                    "max": 5,
-                },
-                "site-count": {
-                    "min": 3,
-                    "max": 6,
-                },
-                "fill-profile": "late",
-                "mandatory-sites": {},
-            },
-            /*[5]*/ {
-                "name": "six",
-                "role": "standard",
-                "node-count": {
-                    "min": 3,
-                    "max": 5,
-                },
-                "site-count": {
-                    "min": 3,
-                    "max": 6,
-                },
-                "fill-profile": "late",
-                "mandatory-sites": {},
-            },
-            /*[6]*/ {
-                "name": "seven",
-                "role": "boss",
-                "node-count": {
-                    "min": 1,
-                    "max": 1,
-                },
-                "site-count": {
-                    "min": 3,
-                    "max": 6,
-                },
-                "fill-profile": "late",
-                "mandatory-sites": {},
-            },
+  data: {
+    "schema-version": 1,
+    "layers": [
+      /*[0]*/
+      {"name": "one", "role": "starter", "node-count": {"min": 1, "max": 1}, "mandatory-sites": {}},
+      /*[1]*/
+      {
+        "name": "two",
+        "role": "standard",
+        "node-count": {"min": 2, "max": 2},
+        "site-count": {"min": 3, "max": 6},
+        "fill-profile": "early",
+        "mandatory-sites": {"Draft": 2, "Purge": 1, "Augury": 1},
+      },
+      /*[2]*/
+      {
+        "name": "three",
+        "role": "standard",
+        "node-count": {"min": 3, "max": 3},
+        "site-count": {"min": 3, "max": 6},
+        "fill-profile": "early",
+        "mandatory-sites": {"Draft": 1, "Purge": 1},
+      },
+      /*[3]*/
+      {
+        "name": "four",
+        "role": "standard",
+        "node-count": {"min": 3, "max": 4},
+        "site-count": {"min": 3, "max": 6},
+        "fill-profile": "early",
+        "mandatory-sites": {"Draft": 1},
+      },
+      /*[4]*/
+      {
+        "name": "five",
+        "role": "standard",
+        "node-count": {"min": 3, "max": 5},
+        "site-count": {"min": 3, "max": 6},
+        "fill-profile": "late",
+        "mandatory-sites": {},
+      },
+      /*[5]*/
+      {
+        "name": "six",
+        "role": "standard",
+        "node-count": {"min": 3, "max": 5},
+        "site-count": {"min": 3, "max": 6},
+        "fill-profile": "late",
+        "mandatory-sites": {},
+      },
+      /*[6]*/
+      {
+        "name": "seven",
+        "role": "boss",
+        "node-count": {"min": 1, "max": 1},
+        "site-count": {"min": 3, "max": 6},
+        "fill-profile": "late",
+        "mandatory-sites": {},
+      },
+    ],
+    "graph": {
+      "connection-average": 2.0,
+      "reveal-lookahead-layers": 2,
+      "bonus-reveal": {
+        "min": 0,
+        "max": 2,
+        "mode": 1,
+        "eligible-layers": [
+          /*[0]*/
+          "five",
+          /*[1]*/
+          "six",
         ],
-        "graph": {
-            "connection-average": 2.0,
-            "reveal-lookahead-layers": 2,
-            "bonus-reveal": {
-                "min": 0,
-                "max": 2,
-                "mode": 1,
-                "eligible-layers": [
-                    /*[0]*/ "five",
-                    /*[1]*/ "six",
-                ],
-            },
-        },
-        "dreamscape-selection": {
-            "base-weight": 1.0,
-            "repeat-discourage-strength": 2.0,
-            "exclude-connected-repeats": true,
-            "exclude-same-layer-repeats": true,
-            "exhaustion-fallback": "allow-repeats",
-        },
-        "site-composition": {
-            "unique-non-draft-sites": true,
-            "known-dreamsign-site": "Reward",
-            "mandatory-capacity-behavior": "omit-fill",
-        },
-        "fill-profiles": [
-            /*[0]*/ {
-                "id": "early",
-                "signature-site-weight": 3.0,
-                "site-weights": {
-                    "Essence": 3.0,
-                    "Transfiguration": 1.0,
-                    "Duplication": 1.0,
-                },
-            },
-            /*[1]*/ {
-                "id": "late",
-                "signature-site-weight": 3.0,
-                "site-weights": {
-                    "Essence": 3.0,
-                    "Transfiguration": 5.0,
-                    "Duplication": 5.0,
-                },
-            },
-        ],
-        "known-dreamsign": {
-            "max-per-atlas": 2,
-            "eligible-layers": [
-                /*[0]*/ "three",
-                /*[1]*/ "four",
-                /*[2]*/ "five",
-                /*[3]*/ "six",
-            ],
-            "placement-probability": 0.5,
-            "early-reveal-bias": 1.0,
-        },
-        "boss": {
-            "dreamscape-id": "limbo",
-            "place": "Limbo",
-            "name": "Apollyon",
-            "fallback-title": "Apollyon, the Doom of Humanity",
-            "fallback-introduction": "An avatar of annihilating power — his own deck, dreamsigns, and abilities bend the dream toward ruin.",
-            "scene-art-id": "limbo",
-            "icon-art-id": "limbo",
-            "figure-art-id": "apollyon",
-        },
-        "presentation": {
-            "unseen-title": "An Unseen Dream",
-            "unseen-body": "This dreamscape is revealed only as you draw near. Travel onward to learn what waits here.",
-            "starter-body": "A quiet place where every dream journey begins.",
-            "affiliation-title-template": "Affiliation: {name}",
-            "affiliation-body-template": "{card-theme} cards are more likely here.",
-        },
-        "assets": {
-            "unrevealed-frame-source": "Round_frame_main.png",
-            "unrevealed-frame-key": "Round_frame_main.png",
-            "boss-scene-source": "limbo.png",
-            "boss-icon-source": "limbo_icon.png",
-            "boss-figure-source": "apollyon.png",
-        },
+      },
     },
+    "dreamscape-selection": {
+      "base-weight": 1.0,
+      "repeat-discourage-strength": 2.0,
+      "exclude-connected-repeats": true,
+      "exclude-same-layer-repeats": true,
+      "exhaustion-fallback": "allow-repeats",
+    },
+    "site-composition": {
+      "unique-non-draft-sites": true,
+      "known-dreamsign-site": "Reward",
+      "mandatory-capacity-behavior": "omit-fill",
+    },
+    "fill-profiles": [
+      /*[0]*/
+      {
+        "id": "early",
+        "signature-site-weight": 3.0,
+        "site-weights": {"Essence": 3.0, "Transfiguration": 1.0, "Duplication": 1.0},
+      },
+      /*[1]*/
+      {
+        "id": "late",
+        "signature-site-weight": 3.0,
+        "site-weights": {"Essence": 3.0, "Transfiguration": 5.0, "Duplication": 5.0},
+      },
+    ],
+    "known-dreamsign": {
+      "max-per-atlas": 2,
+      "eligible-layers": [
+        /*[0]*/
+        "three",
+        /*[1]*/
+        "four",
+        /*[2]*/
+        "five",
+        /*[3]*/
+        "six",
+      ],
+      "placement-probability": 0.5,
+      "early-reveal-bias": 1.0,
+    },
+    "boss": {
+      "dreamscape-id": "limbo",
+      "place": "Limbo",
+      "name": "Apollyon",
+      "fallback-title": "Apollyon, the Doom of Humanity",
+      "fallback-introduction": "An avatar of annihilating power — his own deck, dreamsigns, and abilities bend the dream toward ruin.",
+      "scene-art-id": "limbo",
+      "icon-art-id": "limbo",
+      "figure-art-id": "apollyon",
+    },
+    "presentation": {
+      "unseen-title": "An Unseen Dream",
+      "unseen-body": "This dreamscape is revealed only as you draw near. Travel onward to learn what waits here.",
+      "starter-body": "A quiet place where every dream journey begins.",
+      "affiliation-title-template": "Affiliation: {name}",
+      "affiliation-body-template": "{card-theme} cards are more likely here.",
+    },
+    "assets": {
+      "unrevealed-frame-source": "Round_frame_main.png",
+      "unrevealed-frame-key": "Round_frame_main.png",
+      "boss-scene-source": "limbo.png",
+      "boss-icon-source": "limbo_icon.png",
+      "boss-figure-source": "apollyon.png",
+    },
+  },
 )

@@ -1,125 +1,103 @@
 CompatDocument(
-    data: {
-        "schema-version": 1,
-        "rules-version": "1",
-        "bands": {
-            "default": {
-                "fraction": 0.25,
-                "minimum": 5,
-            },
-            "strong-card": {
-                "fraction": 0.15,
-                "minimum": 5,
-            },
-            "dreamsign": {
-                "fraction": 0.4,
-                "minimum": 5,
-            },
-            "tribal-change": {
-                "fraction": 0.25,
-                "minimum": 2,
-            },
-        },
-        "eligibility": {
-            "min-deck-for-fit": 6,
-            "min-deck-for-purge": 8,
-            "purge-misfit-fraction": 0.2,
-            "starter-purge-bonus": 0.25,
-            "tribal-threshold": 4,
-            "subtype-min-pool-cards": 12,
-        },
-        "bundle": {
-            "growth-band-size": 5,
-        },
-        "blends": {
-            "strong-card": {
-                "fit": 0.7,
-                "quality": 0.3,
-            },
-            "copies-draft": {
-                "fit": 0.6,
-                "quality": 0.4,
-            },
-            "duplicate": {
-                "quality": 0.5,
-                "fit-loo": 0.5,
-            },
-            "transfiguration": {
-                "benefit": 0.7,
-                "centrality": 0.3,
-            },
-            "bundle": {
-                "seed": 0.5,
-                "bundle": 0.3,
-                "fit": 0.2,
-            },
-        },
-        "categories": {
-            "affine-weight": 0.75,
-            "deck-affine-minimum": 2,
-            "cluster-affine-minimum": 1,
-        },
-        "centrality": {
-            "prior-weight": 0.65,
-            "cooccurrence-weight": 0.35,
-            "fallback": 0.25,
-            "spark-threshold": 3,
-            "spark-bonus": 0.15,
-        },
-        "dreamsign": {
-            "full-coverage-count": 3,
-            "featureless-coverage": 0.4,
-            "quality-weight": {
-                "1": 1.2,
-                "2": 1.0,
-                "3": 0.8,
-            },
-        },
-        "cost-bands": {
-            "cheap-maximum": 1,
-            "mid-minimum": 2,
-            "mid-maximum": 3,
-            "big-minimum": 4,
-            "cheap-character-maximum": 2,
-        },
-        "transfiguration": {
-            "allowed-forms": [
-                /*[0]*/ "Empowered",
-                /*[1]*/ "Amplified",
-                /*[2]*/ "Kindled",
-                /*[3]*/ "Inspired",
-                /*[4]*/ "Enduring",
-                /*[5]*/ "Hastened",
-                /*[6]*/ "Resonant",
-                /*[7]*/ "Attuned",
-            ],
-            "empowered-cost-divisor": 2,
-            "kindled-spark-divisor": 4,
-            "flat-benefit": {
-                "Amplified": 0.4,
-                "Inspired": 0.55,
-                "Enduring": 0.55,
-                "Hastened": 0.5,
-                "Resonant": 0.5,
-                "Attuned": 0.5,
-                "Perfected": 0.65,
-            },
-        },
-        "site": {
-            "placeable-types": [
-                /*[0]*/ "Shop",
-                /*[1]*/ "Purge",
-                /*[2]*/ "Transfiguration",
-                /*[3]*/ "Duplication",
-            ],
-        },
-        "tribes": {
-            "values": [
-                /*[0]*/ "Spirit Animal",
-                /*[1]*/ "Survivor",
-                /*[2]*/ "Warrior",
-                /*[3]*/ "Outsider",
-            ],
-        },
+  data: {
+    "schema-version": 1,
+    "rules-version": "1",
+    "bands": {
+      "default": {"fraction": 0.25, "minimum": 5},
+      "strong-card": {"fraction": 0.15, "minimum": 5},
+      "dreamsign": {"fraction": 0.4, "minimum": 5},
+      "tribal-change": {"fraction": 0.25, "minimum": 2},
     },
+    "eligibility": {
+      "min-deck-for-fit": 6,
+      "min-deck-for-purge": 8,
+      "purge-misfit-fraction": 0.2,
+      "starter-purge-bonus": 0.25,
+      "tribal-threshold": 4,
+      "subtype-min-pool-cards": 12,
+    },
+    "bundle": {"growth-band-size": 5},
+    "blends": {
+      "strong-card": {"fit": 0.7, "quality": 0.3},
+      "copies-draft": {"fit": 0.6, "quality": 0.4},
+      "duplicate": {"quality": 0.5, "fit-loo": 0.5},
+      "transfiguration": {"benefit": 0.7, "centrality": 0.3},
+      "bundle": {"seed": 0.5, "bundle": 0.3, "fit": 0.2},
+    },
+    "categories": {"affine-weight": 0.75, "deck-affine-minimum": 2, "cluster-affine-minimum": 1},
+    "centrality": {
+      "prior-weight": 0.65,
+      "cooccurrence-weight": 0.35,
+      "fallback": 0.25,
+      "spark-threshold": 3,
+      "spark-bonus": 0.15,
+    },
+    "dreamsign": {
+      "full-coverage-count": 3,
+      "featureless-coverage": 0.4,
+      "quality-weight": {"1": 1.2, "2": 1.0, "3": 0.8},
+    },
+    "cost-bands": {
+      "cheap-maximum": 1,
+      "mid-minimum": 2,
+      "mid-maximum": 3,
+      "big-minimum": 4,
+      "cheap-character-maximum": 2,
+    },
+    "transfiguration": {
+      "allowed-forms": [
+        /*[0]*/
+        "Empowered",
+        /*[1]*/
+        "Amplified",
+        /*[2]*/
+        "Kindled",
+        /*[3]*/
+        "Inspired",
+        /*[4]*/
+        "Enduring",
+        /*[5]*/
+        "Hastened",
+        /*[6]*/
+        "Resonant",
+        /*[7]*/
+        "Attuned",
+      ],
+      "empowered-cost-divisor": 2,
+      "kindled-spark-divisor": 4,
+      "flat-benefit": {
+        "Amplified": 0.4,
+        "Inspired": 0.55,
+        "Enduring": 0.55,
+        "Hastened": 0.5,
+        "Resonant": 0.5,
+        "Attuned": 0.5,
+        "Perfected": 0.65,
+      },
+    },
+    "site": {
+      "placeable-types": [
+        /*[0]*/
+        "Shop",
+        /*[1]*/
+        "Purge",
+        /*[2]*/
+        "Transfiguration",
+        /*[3]*/
+        "Duplication",
+      ],
+    },
+    "tribes": {
+      "values": [
+        /*[0]*/
+        "Spirit Animal",
+        /*[1]*/
+        "Survivor",
+        /*[2]*/
+        "Warrior",
+        /*[3]*/
+        "Outsider",
+      ],
+    },
+  },
 )

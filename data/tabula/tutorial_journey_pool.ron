@@ -1,349 +1,213 @@
 CompatDocument(
-    data: {
-        "dream-avatar-id": "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
-        "pool-size": 150,
-        "opening-dreamsigns": [
-            /*[0]*/ "4409A691-49B4-4FB0-82F6-4F45AE86D8C2",
+  data: {
+    "dream-avatar-id": "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+    "pool-size": 150,
+    "opening-dreamsigns": [
+      /*[0]*/
+      "4409A691-49B4-4FB0-82F6-4F45AE86D8C2",
+    ],
+    "opening-offers": [
+      /*[0]*/
+      [
+        /*[0]*/
+        "66959155-9e79-459e-afdb-eb4c0fbdeb11",
+        /*[1]*/
+        "caaee8a9-0c22-41b4-950f-4c1131b98221",
+        /*[2]*/
+        "8904714c-38a9-491f-92ce-5cb5ece26ab1",
+        /*[3]*/
+        "f07dfe42-566c-4e91-a250-9e2781e9d06f",
+      ],
+      /*[1]*/
+      [
+        /*[0]*/
+        "b1bea643-1a7b-4e5e-b072-7174d3405421",
+        /*[1]*/
+        "f4b34207-2ad4-421b-8798-9c20320607ae",
+        /*[2]*/
+        "8367b757-c3d2-4c22-9043-8baadee1c5ba",
+        /*[3]*/
+        "6f1833a0-30f5-4718-9a3e-7620beb72bfc",
+      ],
+    ],
+    "tides": [
+      /*[0]*/
+      {
+        "id": "tutorial-bannerwake",
+        "name": "The Bannerwake",
+        "description": "Every oath adds another voice: cheap warriors gather quickly, then grow mighty in one another\'s company.",
+        "type": "valor",
+        "cards": [
+          /*[0]*/
+          {"id": "66959155-9e79-459e-afdb-eb4c0fbdeb11", "copies": 2},
+          /*[1]*/
+          {"id": "d95533f4-7809-44a8-a882-7675c61cee1c", "copies": 2},
+          /*[2]*/
+          {"id": "7947e9db-a85e-4277-a42a-8d45f7475295", "copies": 2},
+          /*[3]*/
+          {"id": "7ecc1da1-dc39-4596-9a1d-262a261ffeea", "copies": 2},
+          /*[4]*/
+          {"id": "57bb1572-6075-4efd-a592-102b134132fd", "copies": 2},
+          /*[5]*/
+          {"id": "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", "copies": 2},
+          /*[6]*/
+          {"id": "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", "copies": 2},
+          /*[7]*/
+          {"id": "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", "copies": 2},
+          /*[8]*/
+          {"id": "a42fbd1b-7629-48c9-90da-e9a4246867d7", "copies": 2},
+          /*[9]*/
+          {"id": "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", "copies": 2},
+          /*[10]*/
+          {"id": "742a376f-68db-466a-b087-405188634ba4", "copies": 2},
+          /*[11]*/
+          {"id": "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", "copies": 2},
+          /*[12]*/
+          {"id": "3fab0780-59d4-45f1-8aac-a870ad8729ac", "copies": 2},
+          /*[13]*/
+          {"id": "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", "copies": 2},
+          /*[14]*/
+          {"id": "90a6a7a0-b739-475e-8379-647741aab423", "copies": 2},
+          /*[15]*/
+          {"id": "55340736-7fc5-4555-8f47-081d770a6e8d", "copies": 2},
+          /*[16]*/
+          {"id": "26a05558-4692-43d2-ae6c-a6eb385a6d22", "copies": 2},
+          /*[17]*/
+          {"id": "8c117d3f-09af-4312-9897-694a76bd23c6", "copies": 2},
+          /*[18]*/
+          {"id": "43628666-2ecd-47a7-b2c0-241cda0de5e8", "copies": 2},
+          /*[19]*/
+          {"id": "b1bea643-1a7b-4e5e-b072-7174d3405421", "copies": 2},
+          /*[20]*/
+          {"id": "ca37f80e-8474-4d40-b793-7a900f6ca467", "copies": 2},
+          /*[21]*/
+          {"id": "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", "copies": 2},
+          /*[22]*/
+          {"id": "caaee8a9-0c22-41b4-950f-4c1131b98221", "copies": 2},
+          /*[23]*/
+          {"id": "3076694f-ffc2-46c9-8e1a-39f3878c73c9", "copies": 2},
+          /*[24]*/
+          {"id": "f07dfe42-566c-4e91-a250-9e2781e9d06f", "copies": 2},
         ],
-        "opening-offers": [
-            /*[0]*/ [
-                /*[0]*/ "66959155-9e79-459e-afdb-eb4c0fbdeb11",
-                /*[1]*/ "caaee8a9-0c22-41b4-950f-4c1131b98221",
-                /*[2]*/ "8904714c-38a9-491f-92ce-5cb5ece26ab1",
-                /*[3]*/ "f07dfe42-566c-4e91-a250-9e2781e9d06f",
-            ],
-            /*[1]*/ [
-                /*[0]*/ "b1bea643-1a7b-4e5e-b072-7174d3405421",
-                /*[1]*/ "f4b34207-2ad4-421b-8798-9c20320607ae",
-                /*[2]*/ "8367b757-c3d2-4c22-9043-8baadee1c5ba",
-                /*[3]*/ "6f1833a0-30f5-4718-9a3e-7620beb72bfc",
-            ],
+      },
+      /*[1]*/
+      {
+        "id": "tutorial-sunwall",
+        "name": "The Sunwall Accord",
+        "description": "A disciplined line shifts, shields, and supports its neighbors until even the humblest recruit can hold the horizon.",
+        "type": "valor",
+        "cards": [
+          /*[0]*/
+          {"id": "56411ed4-bda9-4fdf-82e5-b5492de67039", "copies": 2},
+          /*[1]*/
+          {"id": "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", "copies": 2},
+          /*[2]*/
+          {"id": "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", "copies": 2},
+          /*[3]*/
+          {"id": "6497d8b1-85b8-486d-99e2-5c141486d508", "copies": 2},
+          /*[4]*/
+          {"id": "78673e2b-a6d1-43de-8850-3d3327de5cc6", "copies": 2},
+          /*[5]*/
+          {"id": "41d0aa36-f15a-487d-b97c-7fd765973921", "copies": 2},
+          /*[6]*/
+          {"id": "629fe4d4-826f-41b9-a913-458a503856a8", "copies": 2},
+          /*[7]*/
+          {"id": "d6e8842f-c0a4-4b4c-93bd-377cfae60894", "copies": 2},
+          /*[8]*/
+          {"id": "2708c635-9332-4cfb-b43d-889ba2e329b6", "copies": 2},
+          /*[9]*/
+          {"id": "516dbd2d-dae4-4873-937e-adfeeee4444d", "copies": 2},
+          /*[10]*/
+          {"id": "82749215-ed35-44e3-a745-72ca76036c7c", "copies": 2},
+          /*[11]*/
+          {"id": "747859fb-6fca-49fc-a653-08011a9bb44c", "copies": 2},
+          /*[12]*/
+          {"id": "8436eaae-e410-4bfb-89d2-55bebf5a8144", "copies": 2},
+          /*[13]*/
+          {"id": "7be2e6d7-abff-4c44-a0c3-35460da1693c", "copies": 2},
+          /*[14]*/
+          {"id": "f256a0e7-e396-492b-8881-284ecd36025b", "copies": 2},
+          /*[15]*/
+          {"id": "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", "copies": 2},
+          /*[16]*/
+          {"id": "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", "copies": 2},
+          /*[17]*/
+          {"id": "ce09ddfa-c349-4b32-b524-fb74444cddcb", "copies": 2},
+          /*[18]*/
+          {"id": "c73f978e-8196-4589-a432-845265115555", "copies": 2},
+          /*[19]*/
+          {"id": "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", "copies": 2},
+          /*[20]*/
+          {"id": "25173cac-333f-4efc-9a03-b532d5783419", "copies": 2},
+          /*[21]*/
+          {"id": "8904714c-38a9-491f-92ce-5cb5ece26ab1", "copies": 2},
+          /*[22]*/
+          {"id": "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", "copies": 2},
+          /*[23]*/
+          {"id": "331e2846-85d1-4667-8c64-dc6c21a418ed", "copies": 2},
+          /*[24]*/
+          {"id": "f4b34207-2ad4-421b-8798-9c20320607ae", "copies": 2},
         ],
-        "tides": [
-            /*[0]*/ {
-                "id": "tutorial-bannerwake",
-                "name": "The Bannerwake",
-                "description": "Every oath adds another voice: cheap warriors gather quickly, then grow mighty in one another\'s company.",
-                "type": "valor",
-                "cards": [
-                    /*[0]*/ {
-                        "id": "66959155-9e79-459e-afdb-eb4c0fbdeb11",
-                        "copies": 2,
-                    },
-                    /*[1]*/ {
-                        "id": "d95533f4-7809-44a8-a882-7675c61cee1c",
-                        "copies": 2,
-                    },
-                    /*[2]*/ {
-                        "id": "7947e9db-a85e-4277-a42a-8d45f7475295",
-                        "copies": 2,
-                    },
-                    /*[3]*/ {
-                        "id": "7ecc1da1-dc39-4596-9a1d-262a261ffeea",
-                        "copies": 2,
-                    },
-                    /*[4]*/ {
-                        "id": "57bb1572-6075-4efd-a592-102b134132fd",
-                        "copies": 2,
-                    },
-                    /*[5]*/ {
-                        "id": "243a15d3-a4eb-415c-b106-86d4a2b7ec6a",
-                        "copies": 2,
-                    },
-                    /*[6]*/ {
-                        "id": "bbdc6ee7-e9b1-488b-90b9-19337b65fee6",
-                        "copies": 2,
-                    },
-                    /*[7]*/ {
-                        "id": "8fed2e20-09c6-43e0-b6e0-5a4a417529a1",
-                        "copies": 2,
-                    },
-                    /*[8]*/ {
-                        "id": "a42fbd1b-7629-48c9-90da-e9a4246867d7",
-                        "copies": 2,
-                    },
-                    /*[9]*/ {
-                        "id": "78b5a42d-b099-48f1-a1b4-5b6bc177adeb",
-                        "copies": 2,
-                    },
-                    /*[10]*/ {
-                        "id": "742a376f-68db-466a-b087-405188634ba4",
-                        "copies": 2,
-                    },
-                    /*[11]*/ {
-                        "id": "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49",
-                        "copies": 2,
-                    },
-                    /*[12]*/ {
-                        "id": "3fab0780-59d4-45f1-8aac-a870ad8729ac",
-                        "copies": 2,
-                    },
-                    /*[13]*/ {
-                        "id": "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a",
-                        "copies": 2,
-                    },
-                    /*[14]*/ {
-                        "id": "90a6a7a0-b739-475e-8379-647741aab423",
-                        "copies": 2,
-                    },
-                    /*[15]*/ {
-                        "id": "55340736-7fc5-4555-8f47-081d770a6e8d",
-                        "copies": 2,
-                    },
-                    /*[16]*/ {
-                        "id": "26a05558-4692-43d2-ae6c-a6eb385a6d22",
-                        "copies": 2,
-                    },
-                    /*[17]*/ {
-                        "id": "8c117d3f-09af-4312-9897-694a76bd23c6",
-                        "copies": 2,
-                    },
-                    /*[18]*/ {
-                        "id": "43628666-2ecd-47a7-b2c0-241cda0de5e8",
-                        "copies": 2,
-                    },
-                    /*[19]*/ {
-                        "id": "b1bea643-1a7b-4e5e-b072-7174d3405421",
-                        "copies": 2,
-                    },
-                    /*[20]*/ {
-                        "id": "ca37f80e-8474-4d40-b793-7a900f6ca467",
-                        "copies": 2,
-                    },
-                    /*[21]*/ {
-                        "id": "f79c63f6-7cf1-4030-be39-217fd3c2fb7f",
-                        "copies": 2,
-                    },
-                    /*[22]*/ {
-                        "id": "caaee8a9-0c22-41b4-950f-4c1131b98221",
-                        "copies": 2,
-                    },
-                    /*[23]*/ {
-                        "id": "3076694f-ffc2-46c9-8e1a-39f3878c73c9",
-                        "copies": 2,
-                    },
-                    /*[24]*/ {
-                        "id": "f07dfe42-566c-4e91-a250-9e2781e9d06f",
-                        "copies": 2,
-                    },
-                ],
-            },
-            /*[1]*/ {
-                "id": "tutorial-sunwall",
-                "name": "The Sunwall Accord",
-                "description": "A disciplined line shifts, shields, and supports its neighbors until even the humblest recruit can hold the horizon.",
-                "type": "valor",
-                "cards": [
-                    /*[0]*/ {
-                        "id": "56411ed4-bda9-4fdf-82e5-b5492de67039",
-                        "copies": 2,
-                    },
-                    /*[1]*/ {
-                        "id": "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f",
-                        "copies": 2,
-                    },
-                    /*[2]*/ {
-                        "id": "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd",
-                        "copies": 2,
-                    },
-                    /*[3]*/ {
-                        "id": "6497d8b1-85b8-486d-99e2-5c141486d508",
-                        "copies": 2,
-                    },
-                    /*[4]*/ {
-                        "id": "78673e2b-a6d1-43de-8850-3d3327de5cc6",
-                        "copies": 2,
-                    },
-                    /*[5]*/ {
-                        "id": "41d0aa36-f15a-487d-b97c-7fd765973921",
-                        "copies": 2,
-                    },
-                    /*[6]*/ {
-                        "id": "629fe4d4-826f-41b9-a913-458a503856a8",
-                        "copies": 2,
-                    },
-                    /*[7]*/ {
-                        "id": "d6e8842f-c0a4-4b4c-93bd-377cfae60894",
-                        "copies": 2,
-                    },
-                    /*[8]*/ {
-                        "id": "2708c635-9332-4cfb-b43d-889ba2e329b6",
-                        "copies": 2,
-                    },
-                    /*[9]*/ {
-                        "id": "516dbd2d-dae4-4873-937e-adfeeee4444d",
-                        "copies": 2,
-                    },
-                    /*[10]*/ {
-                        "id": "82749215-ed35-44e3-a745-72ca76036c7c",
-                        "copies": 2,
-                    },
-                    /*[11]*/ {
-                        "id": "747859fb-6fca-49fc-a653-08011a9bb44c",
-                        "copies": 2,
-                    },
-                    /*[12]*/ {
-                        "id": "8436eaae-e410-4bfb-89d2-55bebf5a8144",
-                        "copies": 2,
-                    },
-                    /*[13]*/ {
-                        "id": "7be2e6d7-abff-4c44-a0c3-35460da1693c",
-                        "copies": 2,
-                    },
-                    /*[14]*/ {
-                        "id": "f256a0e7-e396-492b-8881-284ecd36025b",
-                        "copies": 2,
-                    },
-                    /*[15]*/ {
-                        "id": "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1",
-                        "copies": 2,
-                    },
-                    /*[16]*/ {
-                        "id": "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3",
-                        "copies": 2,
-                    },
-                    /*[17]*/ {
-                        "id": "ce09ddfa-c349-4b32-b524-fb74444cddcb",
-                        "copies": 2,
-                    },
-                    /*[18]*/ {
-                        "id": "c73f978e-8196-4589-a432-845265115555",
-                        "copies": 2,
-                    },
-                    /*[19]*/ {
-                        "id": "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a",
-                        "copies": 2,
-                    },
-                    /*[20]*/ {
-                        "id": "25173cac-333f-4efc-9a03-b532d5783419",
-                        "copies": 2,
-                    },
-                    /*[21]*/ {
-                        "id": "8904714c-38a9-491f-92ce-5cb5ece26ab1",
-                        "copies": 2,
-                    },
-                    /*[22]*/ {
-                        "id": "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6",
-                        "copies": 2,
-                    },
-                    /*[23]*/ {
-                        "id": "331e2846-85d1-4667-8c64-dc6c21a418ed",
-                        "copies": 2,
-                    },
-                    /*[24]*/ {
-                        "id": "f4b34207-2ad4-421b-8798-9c20320607ae",
-                        "copies": 2,
-                    },
-                ],
-            },
-            /*[2]*/ {
-                "id": "tutorial-unfallen-host",
-                "name": "The Unfallen Host",
-                "description": "No warrior is lost to the dark for long; the fallen return, carrying each defeat into the next charge.",
-                "type": "valor",
-                "cards": [
-                    /*[0]*/ {
-                        "id": "a9b5afaa-e149-4bf4-9007-077e8e9f12e6",
-                        "copies": 2,
-                    },
-                    /*[1]*/ {
-                        "id": "6f1833a0-30f5-4718-9a3e-7620beb72bfc",
-                        "copies": 2,
-                    },
-                    /*[2]*/ {
-                        "id": "2ce84a16-1295-4738-9e2d-1f57590b2269",
-                        "copies": 2,
-                    },
-                    /*[3]*/ {
-                        "id": "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a",
-                        "copies": 2,
-                    },
-                    /*[4]*/ {
-                        "id": "fc0c6f10-8864-4660-904a-8e90d261c6ef",
-                        "copies": 2,
-                    },
-                    /*[5]*/ {
-                        "id": "9af63811-7fef-4e28-b672-95ea82796f45",
-                        "copies": 2,
-                    },
-                    /*[6]*/ {
-                        "id": "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7",
-                        "copies": 2,
-                    },
-                    /*[7]*/ {
-                        "id": "b64f0beb-6ba4-4559-b6ab-091c2f60a613",
-                        "copies": 2,
-                    },
-                    /*[8]*/ {
-                        "id": "426825c7-7259-41af-ac1c-c042b878d69b",
-                        "copies": 2,
-                    },
-                    /*[9]*/ {
-                        "id": "4b2f044c-0afe-432a-a121-2ea785bb1182",
-                        "copies": 2,
-                    },
-                    /*[10]*/ {
-                        "id": "886c9d49-b25f-4ddd-97f0-2ec4b42eda89",
-                        "copies": 2,
-                    },
-                    /*[11]*/ {
-                        "id": "8367b757-c3d2-4c22-9043-8baadee1c5ba",
-                        "copies": 2,
-                    },
-                    /*[12]*/ {
-                        "id": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
-                        "copies": 2,
-                    },
-                    /*[13]*/ {
-                        "id": "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c",
-                        "copies": 2,
-                    },
-                    /*[14]*/ {
-                        "id": "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7",
-                        "copies": 2,
-                    },
-                    /*[15]*/ {
-                        "id": "e3193b23-2002-40a9-91fc-e0713200355e",
-                        "copies": 2,
-                    },
-                    /*[16]*/ {
-                        "id": "e4ab6a18-c3b2-4149-a446-c7c1e8d66714",
-                        "copies": 2,
-                    },
-                    /*[17]*/ {
-                        "id": "41044897-b70a-4e2b-8eb6-baf843a14a43",
-                        "copies": 2,
-                    },
-                    /*[18]*/ {
-                        "id": "b977afaf-f583-45ec-8e34-99fbfa4e9190",
-                        "copies": 2,
-                    },
-                    /*[19]*/ {
-                        "id": "1ce0f0f2-4b1a-483d-b93b-74c36e946a08",
-                        "copies": 2,
-                    },
-                    /*[20]*/ {
-                        "id": "8a6fc6ea-9a88-441e-bdc2-d40dfec37481",
-                        "copies": 2,
-                    },
-                    /*[21]*/ {
-                        "id": "2a230602-a39b-4ec2-a467-97b92b389aff",
-                        "copies": 2,
-                    },
-                    /*[22]*/ {
-                        "id": "e3431bd0-5a81-497f-9ec9-18275b568c00",
-                        "copies": 2,
-                    },
-                    /*[23]*/ {
-                        "id": "967c714f-40c5-4a77-8e22-40691a2755d4",
-                        "copies": 2,
-                    },
-                    /*[24]*/ {
-                        "id": "72debe2e-1f47-4a66-83c3-71bb72876663",
-                        "copies": 2,
-                    },
-                ],
-            },
+      },
+      /*[2]*/
+      {
+        "id": "tutorial-unfallen-host",
+        "name": "The Unfallen Host",
+        "description": "No warrior is lost to the dark for long; the fallen return, carrying each defeat into the next charge.",
+        "type": "valor",
+        "cards": [
+          /*[0]*/
+          {"id": "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", "copies": 2},
+          /*[1]*/
+          {"id": "6f1833a0-30f5-4718-9a3e-7620beb72bfc", "copies": 2},
+          /*[2]*/
+          {"id": "2ce84a16-1295-4738-9e2d-1f57590b2269", "copies": 2},
+          /*[3]*/
+          {"id": "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", "copies": 2},
+          /*[4]*/
+          {"id": "fc0c6f10-8864-4660-904a-8e90d261c6ef", "copies": 2},
+          /*[5]*/
+          {"id": "9af63811-7fef-4e28-b672-95ea82796f45", "copies": 2},
+          /*[6]*/
+          {"id": "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", "copies": 2},
+          /*[7]*/
+          {"id": "b64f0beb-6ba4-4559-b6ab-091c2f60a613", "copies": 2},
+          /*[8]*/
+          {"id": "426825c7-7259-41af-ac1c-c042b878d69b", "copies": 2},
+          /*[9]*/
+          {"id": "4b2f044c-0afe-432a-a121-2ea785bb1182", "copies": 2},
+          /*[10]*/
+          {"id": "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", "copies": 2},
+          /*[11]*/
+          {"id": "8367b757-c3d2-4c22-9043-8baadee1c5ba", "copies": 2},
+          /*[12]*/
+          {"id": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", "copies": 2},
+          /*[13]*/
+          {"id": "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", "copies": 2},
+          /*[14]*/
+          {"id": "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", "copies": 2},
+          /*[15]*/
+          {"id": "e3193b23-2002-40a9-91fc-e0713200355e", "copies": 2},
+          /*[16]*/
+          {"id": "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", "copies": 2},
+          /*[17]*/
+          {"id": "41044897-b70a-4e2b-8eb6-baf843a14a43", "copies": 2},
+          /*[18]*/
+          {"id": "b977afaf-f583-45ec-8e34-99fbfa4e9190", "copies": 2},
+          /*[19]*/
+          {"id": "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", "copies": 2},
+          /*[20]*/
+          {"id": "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", "copies": 2},
+          /*[21]*/
+          {"id": "2a230602-a39b-4ec2-a467-97b92b389aff", "copies": 2},
+          /*[22]*/
+          {"id": "e3431bd0-5a81-497f-9ec9-18275b568c00", "copies": 2},
+          /*[23]*/
+          {"id": "967c714f-40c5-4a77-8e22-40691a2755d4", "copies": 2},
+          /*[24]*/
+          {"id": "72debe2e-1f47-4a66-83c3-71bb72876663", "copies": 2},
         ],
-    },
+      },
+    ],
+  },
 )

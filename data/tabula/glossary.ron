@@ -1,730 +1,841 @@
 CompatDocument(
-    data: {
-        "entries": [
-            /*[0]*/ {
-                "id": "figment",
-                "category": "Card Types",
-                "term": "Figment",
-                "definition": "A created token character. Multiple figments of the same type can be merged into one character.",
-                "priority": 60,
-                "matches-rules-text": true,
-                "variants": [
-                    /*[0]*/ "figments",
-                ],
-            },
-            /*[1]*/ {
-                "id": "materialized-trigger",
-                "category": "Triggers & Timing",
-                "term": "▸Materialized",
-                "definition": "Triggers when this character enters play.",
-                "priority": 5,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[2]*/ {
-                "id": "dawn-trigger",
-                "category": "Triggers & Timing",
-                "term": "▸Dawn",
-                "definition": "Triggers at the start of controller\'s turn.",
-                "priority": 40,
-                "matches-rules-text": true,
-                "variants": [
-                    /*[0]*/ "dawn",
-                ],
-            },
-            /*[3]*/ {
-                "id": "challenge-trigger",
-                "category": "Triggers & Timing",
-                "term": "▸Challenge",
-                "definition": "Triggers when this character is declared as a challenger.",
-                "priority": 40,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[4]*/ {
-                "id": "night-trigger",
-                "category": "Triggers & Timing",
-                "term": "▸Night",
-                "definition": "Triggers at the end of your turn.",
-                "priority": 40,
-                "matches-rules-text": false,
-                "variants": [],
-                "rules-text-forms": [
-                    /*[0]*/ "▸Night",
-                ],
-            },
-            /*[5]*/ {
-                "id": "day",
-                "category": "Triggers & Timing",
-                "term": "Day",
-                "definition": "The turn phase when the active player plays standard cards.",
-                "priority": 10,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[6]*/ {
-                "id": "rematerialize",
-                "category": "Triggers & Timing",
-                "term": "Rematerialize",
-                "definition": "Trigger an in-play character\'s materialization again.",
-                "priority": 75,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[7]*/ {
-                "id": "dissolved-trigger",
-                "category": "Triggers & Timing",
-                "term": "▸Dissolved",
-                "definition": "Triggers when this character is sent to the void from play.",
-                "priority": 40,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[8]*/ {
-                "id": "dissolve",
-                "category": "Triggers & Timing",
-                "term": "Dissolve",
-                "definition": "Destroy a character, sending it to the void.",
-                "priority": 60,
-                "matches-rules-text": true,
-                "variants": [
-                    /*[0]*/ "dissolves",
-                    /*[1]*/ "dissolved",
-                ],
-            },
-            /*[9]*/ {
-                "id": "banish",
-                "category": "Triggers & Timing",
-                "term": "Banish",
-                "definition": "Remove a card from the game.",
-                "priority": 60,
-                "matches-rules-text": true,
-                "variants": [
-                    /*[0]*/ "banished",
-                    /*[1]*/ "banishes",
-                ],
-            },
-            /*[10]*/ {
-                "id": "abandon",
-                "category": "Triggers & Timing",
-                "term": "Abandon",
-                "definition": "Dissolve a character you control.",
-                "priority": 75,
-                "matches-rules-text": true,
-                "variants": [
-                    /*[0]*/ "abandoned",
-                    /*[1]*/ "abandons",
-                ],
-            },
-            /*[11]*/ {
-                "id": "points",
-                "category": "Resources",
-                "term": "Points",
-                "definition": "Scoring points (⍟)  allows you to win a dream battle. Each battle has a different target points threshold to win.",
-                "priority": 60,
-                "matches-rules-text": false,
-                "variants": [],
-                "rules-text-forms": [
-                    /*[0]*/ "⍟",
-                ],
-                "definition-uses-rules-text": true,
-                "term-presentation": "definition-only",
-            },
-            /*[12]*/ {
-                "id": "memory",
-                "category": "Resources",
-                "term": "Memory",
-                "definition": "Memory Counters (⧗) are stored by cards to use later for effects.",
-                "priority": 60,
-                "matches-rules-text": false,
-                "variants": [],
-                "rules-text-forms": [
-                    /*[0]*/ "⧗",
-                ],
-                "definition-uses-rules-text": true,
-                "term-presentation": "definition-only",
-            },
-            /*[13]*/ {
-                "id": "reclaim",
-                "category": "Keywords",
-                "term": "Reclaim",
-                "definition": "You may play this card from your void, then banish it when it leaves play.",
-                "priority": 100,
-                "matches-rules-text": true,
-                "variants": [
-                    /*[0]*/ "reclaimed",
-                ],
-                "contexts": [
-                    /*[0]*/ {
-                        "pattern": "\\b(?:gain|gains|gained)\\s+reclaim\\s+(\\d+)\\s*●",
-                        "term": "{term} {1}●",
-                        "definition": "You may play that card from your void for {1}●, then banish it when it leaves play.",
-                    },
-                    /*[1]*/ {
-                        "pattern": "\\breclaim\\s+(\\d+)\\s*●",
-                        "term": "{term} {1}●",
-                        "definition": "You may play this card from your void for {1}●, then banish it when it leaves play.",
-                    },
-                    /*[2]*/ {
-                        "pattern": "\\b(?:gain|gains|gained)\\s+reclaim\\b",
-                        "definition": "You may play that card from your void, then banish it when it leaves play.",
-                    },
-                ],
-            },
-            /*[14]*/ {
-                "id": "foresee",
-                "category": "Keywords",
-                "term": "Foresee",
-                "definition": "Look at the top N cards of your deck, put any number into your void, and put the rest back on top in any order.",
-                "priority": 95,
-                "matches-rules-text": true,
-                "variants": [],
-                "contexts": [
-                    /*[0]*/ {
-                        "pattern": "\\bforesee\\s+(\\d+)\\b",
-                        "term": "{term} {1}",
-                        "definition": "Look at the top {1} cards of your deck, then put any number of them into your void and the rest on top in any order.",
-                        "singular-capture": 1,
-                        "singular-definition": "Look at the top card of your deck. You may put it into your void.",
-                    },
-                ],
-            },
-            /*[15]*/ {
-                "id": "discover",
-                "category": "Keywords",
-                "term": "Discover",
-                "definition": "Reveal three matching cards from your deck and choose one to draw.",
-                "priority": 95,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[16]*/ {
-                "id": "erode",
-                "category": "Keywords",
-                "term": "Erode",
-                "definition": "Put cards from the top of a player’s deck into their void. For each card they can’t, their opponent scores 3⍟.",
-                "priority": 95,
-                "matches-rules-text": true,
-                "variants": [
-                    /*[0]*/ "eroded",
-                    /*[1]*/ "erodes",
-                ],
-                "contexts": [
-                    /*[0]*/ {
-                        "pattern": "\\berode\\s+(\\d+)\\b",
-                        "term": "{term} {1}",
-                        "definition": "Put the top {1} cards of a player\'s deck into their void. If the deck is empty, their opponent scores 3⍟ instead.",
-                        "singular-capture": 1,
-                        "singular-definition": "Put the top card of a player\'s deck into their void. If the deck is empty, their opponent scores 3⍟ instead.",
-                    },
-                ],
-            },
-            /*[17]*/ {
-                "id": "fast",
-                "category": "Keywords",
-                "term": "Fast",
-                "definition": "A fast (❖) card may be played at the end of either player\'s turn.",
-                "priority": 95,
-                "matches-rules-text": false,
-                "variants": [],
-                "rules-text-forms": [
-                    /*[0]*/ "❖",
-                ],
-                "definition-uses-rules-text": true,
-                "term-presentation": "definition-only",
-                "contexts": [
-                    /*[0]*/ {
-                        "pattern": "(?:^|\\n)\\s*❖\\s*[–-]",
-                        "definition": "A fast (❖) ability may be activated at the end of either player\'s turn.",
-                    },
-                ],
-            },
-            /*[18]*/ {
-                "id": "interrupt",
-                "category": "Keywords",
-                "term": "Interrupt",
-                "definition": "An interrupt (❖❖) card may be played in response to an opponent action, or at the end of either player\'s turn.",
-                "priority": 95,
-                "matches-rules-text": false,
-                "variants": [],
-                "rules-text-forms": [
-                    /*[0]*/ "❖❖",
-                ],
-                "definition-uses-rules-text": true,
-                "term-presentation": "definition-only",
-                "contexts": [
-                    /*[0]*/ {
-                        "pattern": "(?:^|\\n)\\s*❖❖\\s*[–-]",
-                        "definition": "An interrupt (❖❖) ability may be activated in response to an opponent action, or at the end of either player\'s turn.",
-                    },
-                ],
-            },
-            /*[19]*/ {
-                "id": "exhaust-cost",
-                "category": "Keywords",
-                "term": "Exhaust Cost",
-                "definition": "A back-rank character may exhaust (☾) once per turn to use an ability instead of challenging.",
-                "priority": 95,
-                "matches-rules-text": false,
-                "variants": [],
-                "rules-text-forms": [
-                    /*[0]*/ "☾",
-                ],
-                "definition-uses-rules-text": true,
-                "term-presentation": "definition-only",
-                "contexts": [
-                    /*[0]*/ {
-                        "owner": "dreamAvatar",
-                        "definition": "You may exhaust (☾) this avatar to activate this ability once per turn.",
-                    },
-                ],
-            },
-            /*[20]*/ {
-                "id": "awakened",
-                "category": "Keywords",
-                "term": "Awakened",
-                "definition": "Can challenge and activate ☾ abilities on the same turn in which it is materialized.",
-                "priority": 90,
-                "matches-rules-text": true,
-                "variants": [
-                    /*[0]*/ "awaken",
-                    /*[1]*/ "awakens",
-                ],
-            },
-            /*[21]*/ {
-                "id": "exhausted",
-                "category": "Battle Status",
-                "term": "Exhausted",
-                "definition": "This character cannot challenge or use ☾ abilities until next turn.",
-                "definition-symbol": "exhaust",
-                "priority": 30,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[22]*/ {
-                "id": "veil",
-                "category": "Keywords",
-                "term": "Veil",
-                "definition": "If this character would be dissolved by an effect the opponent controls, instead it loses Veil.",
-                "priority": 90,
-                "matches-rules-text": true,
-                "variants": [
-                    /*[0]*/ "veiled",
-                ],
-            },
-            /*[23]*/ {
-                "id": "vengeful",
-                "category": "Keywords",
-                "term": "Vengeful",
-                "definition": "When this character loses a challenge, it dissolves the opposing character.",
-                "priority": 90,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[24]*/ {
-                "id": "support",
-                "category": "Keywords",
-                "term": "Support",
-                "definition": "A back-rank character supports the front-rank characters ahead of it.",
-                "priority": 70,
-                "matches-rules-text": true,
-                "variants": [
-                    /*[0]*/ "supported",
-                    /*[1]*/ "supports",
-                    /*[2]*/ "supporting",
-                ],
-            },
-            /*[25]*/ {
-                "id": "challenger",
-                "category": "Keywords",
-                "term": "Challenger",
-                "definition": "A front-rank ally during your Night phase.",
-                "priority": 70,
-                "matches-rules-text": true,
-                "variants": [
-                    /*[0]*/ "challengers",
-                ],
-            },
-            /*[26]*/ {
-                "id": "blocker",
-                "category": "Keywords",
-                "term": "Blocker",
-                "definition": "A front-rank ally opposite a challenger during the opponent\'s Night phase.",
-                "priority": 70,
-                "matches-rules-text": true,
-                "variants": [
-                    /*[0]*/ "blockers",
-                    /*[1]*/ "block",
-                    /*[2]*/ "blocks",
-                    /*[3]*/ "blocking",
-                ],
-            },
-            /*[27]*/ {
-                "id": "unpaired",
-                "category": "Keywords",
-                "term": "Unpaired",
-                "definition": "A challenger with no blocker opposite it.",
-                "priority": 70,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[28]*/ {
-                "id": "prevent",
-                "category": "Keywords",
-                "term": "Prevent",
-                "definition": "Counter a card on the stack and send it to the void.",
-                "priority": 95,
-                "matches-rules-text": true,
-                "variants": [
-                    /*[0]*/ "prevented",
-                ],
-            },
-            /*[29]*/ {
-                "id": "offering",
-                "category": "Keywords",
-                "term": "Offering",
-                "definition": "You may play this card for 0● by banishing a card from your hand. If you do, banish this card at end of turn.",
-                "priority": 95,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[30]*/ {
-                "id": "phasing",
-                "category": "Keywords",
-                "term": "Phasing",
-                "definition": "When you play this character, you may return a character you control to your hand and materialize this character in its position.",
-                "priority": 95,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[31]*/ {
-                "id": "ephemeral",
-                "category": "Keywords",
-                "term": "Ephemeral",
-                "definition": "If an ephemeral card is in your hand at end of turn, banish it.",
-                "priority": 95,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[32]*/ {
-                "id": "transfigure",
-                "category": "Verbs",
-                "term": "Transfigure",
-                "definition": "Permanently upgrade a card in your deck.",
-                "priority": 80,
-                "matches-rules-text": true,
-                "variants": [
-                    /*[0]*/ "transfigured",
-                    /*[1]*/ "transfigures",
-                ],
-            },
-            /*[33]*/ {
-                "id": "purge",
-                "category": "Verbs",
-                "term": "Purge",
-                "definition": "Permanently remove a card from your deck for the run.",
-                "priority": 80,
-                "matches-rules-text": true,
-                "variants": [
-                    /*[0]*/ "purged",
-                    /*[1]*/ "purges",
-                ],
-            },
-            /*[34]*/ {
-                "id": "duplicate",
-                "category": "Verbs",
-                "term": "Duplicate",
-                "definition": "Add an exact copy of a card to your deck.",
-                "priority": 80,
-                "matches-rules-text": true,
-                "variants": [
-                    /*[0]*/ "duplicated",
-                    /*[1]*/ "duplicates",
-                ],
-            },
-            /*[35]*/ {
-                "id": "bane",
-                "category": "Journey Terms",
-                "term": "Bane",
-                "definition": "The Nightmare card, a penalty card forced into your deck.",
-                "priority": 65,
-                "matches-rules-text": true,
-                "variants": [
-                    /*[0]*/ "banes",
-                ],
-            },
-            /*[36]*/ {
-                "id": "essence",
-                "category": "Journey Terms",
-                "term": "Essence",
-                "definition": "Currency you gain and spend over the course of a run.",
-                "priority": 10,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[37]*/ {
-                "id": "enhanced",
-                "category": "Journey Terms",
-                "term": "Enhanced",
-                "definition": "An improved site that offers better or additional rewards.",
-                "priority": 65,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[38]*/ {
-                "id": "transfiguration",
-                "category": "Transfigurations",
-                "term": "Transfiguration",
-                "definition": "A permanent modification to a card.",
-                "priority": 85,
-                "matches-rules-text": true,
-                "variants": [
-                    /*[0]*/ "transfigurations",
-                ],
-            },
-            /*[39]*/ {
-                "id": "empowered",
-                "category": "Transfigurations",
-                "term": "Empowered",
-                "definition": "Transfiguration: reduces this card\'s energy cost by 50%, rounded to the nearest whole number.",
-                "priority": 85,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[40]*/ {
-                "id": "amplified",
-                "category": "Transfigurations",
-                "term": "Amplified",
-                "definition": "Transfiguration: increases or decreases a number in this card\'s rules text by 1.",
-                "priority": 85,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[41]*/ {
-                "id": "kindled",
-                "category": "Transfigurations",
-                "term": "Kindled",
-                "definition": "Transfiguration: doubles a character\'s base spark, or sets it to 1 if zero.",
-                "priority": 85,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[42]*/ {
-                "id": "resonant",
-                "category": "Transfigurations",
-                "term": "Resonant",
-                "definition": "Transfiguration: increases the frequency of named triggers on this card.",
-                "priority": 85,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[43]*/ {
-                "id": "inspired",
-                "category": "Transfigurations",
-                "term": "Inspired",
-                "definition": "Transfiguration: appends \"draw a card\" to this event card\'s text.",
-                "priority": 85,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[44]*/ {
-                "id": "enduring",
-                "category": "Transfigurations",
-                "term": "Enduring",
-                "definition": "Transfiguration: adds \"reclaim\" to this event card\'s text.",
-                "priority": 85,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[45]*/ {
-                "id": "attuned",
-                "category": "Transfigurations",
-                "term": "Attuned",
-                "definition": "Transfiguration: reduces an activated ability\'s energy cost by 1.",
-                "priority": 85,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[46]*/ {
-                "id": "perfected",
-                "category": "Transfigurations",
-                "term": "Perfected",
-                "definition": "Transfiguration: applies every other eligible transfiguration to a card.",
-                "priority": 85,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[47]*/ {
-                "id": "energy-cost",
-                "category": "Resources",
-                "term": "Energy Cost",
-                "definition": "Spend this much energy to play the card.",
-                "priority": 0,
-                "matches-rules-text": false,
-                "variants": [],
-            },
-            /*[48]*/ {
-                "id": "spark",
-                "category": "Resources",
-                "term": "Spark",
-                "definition": "A character\'s power during a challenge; higher spark wins.",
-                "priority": 10,
-                "matches-rules-text": true,
-                "variants": [],
-            },
-            /*[49]*/ {
-                "id": "starting-essence",
-                "category": "Resources",
-                "term": "Starting Essence",
-                "definition": "The essence this avatar begins the journey with, spent at sites this run.",
-                "priority": 0,
-                "matches-rules-text": false,
-                "variants": [],
-            },
-            /*[50]*/ {
-                "id": "tides",
-                "category": "Journey Terms",
-                "term": "Tides",
-                "definition": "Pools of cards you will see during the journey. Different tides are used every time you play.",
-                "priority": 0,
-                "matches-rules-text": false,
-                "variants": [],
-            },
-            /*[51]*/ {
-                "id": "site-battle",
-                "category": "Sites",
-                "term": "Battle",
-                "definition": "A battle against this dream\'s guardian.",
-                "priority": 0,
-                "matches-rules-text": false,
-                "variants": [],
-            },
-            /*[52]*/ {
-                "id": "site-draft",
-                "category": "Sites",
-                "term": "Draft",
-                "definition": "Pick 5 cards to add to your deck.",
-                "priority": 0,
-                "matches-rules-text": false,
-                "variants": [],
-            },
-            /*[53]*/ {
-                "id": "site-shop",
-                "category": "Sites",
-                "term": "Card Shop",
-                "definition": "Spend essence to buy cards.",
-                "priority": 0,
-                "matches-rules-text": false,
-                "variants": [],
-            },
-            /*[54]*/ {
-                "id": "site-purge",
-                "category": "Sites",
-                "term": "Purge",
-                "definition": "Remove any number of cards from your deck",
-                "priority": 0,
-                "matches-rules-text": false,
-                "variants": [],
-            },
-            /*[55]*/ {
-                "id": "site-essence",
-                "category": "Sites",
-                "term": "Essence",
-                "definition": "Collect a trove of essence.",
-                "priority": 0,
-                "matches-rules-text": false,
-                "variants": [],
-            },
-            /*[56]*/ {
-                "id": "site-transfiguration",
-                "category": "Sites",
-                "term": "Transfiguration",
-                "definition": "Modify and upgrade a card in your deck.",
-                "priority": 0,
-                "matches-rules-text": false,
-                "variants": [],
-            },
-            /*[57]*/ {
-                "id": "site-duplication",
-                "category": "Sites",
-                "term": "Duplication",
-                "definition": "Make a copy of a card in your deck.",
-                "priority": 0,
-                "matches-rules-text": false,
-                "variants": [],
-            },
-            /*[58]*/ {
-                "id": "site-reward",
-                "category": "Sites",
-                "term": "Reward",
-                "definition": "Claim a reward.",
-                "priority": 0,
-                "matches-rules-text": false,
-                "variants": [],
-            },
-            /*[59]*/ {
-                "id": "site-augury",
-                "category": "Sites",
-                "term": "Augury",
-                "definition": "Choose one of two foreseen rewards.",
-                "priority": 0,
-                "matches-rules-text": false,
-                "variants": [],
-            },
-            /*[60]*/ {
-                "id": "site-dreamsign-market",
-                "category": "Sites",
-                "term": "Dreamsign Market",
-                "definition": "Purchase dreamsigns from a rotating selection.",
-                "priority": 0,
-                "matches-rules-text": false,
-                "variants": [],
-            },
-            /*[61]*/ {
-                "id": "site-dreamsign-revelation",
-                "category": "Sites",
-                "term": "Dreamsign Revelation",
-                "definition": "Receive a dreamsign.",
-                "priority": 0,
-                "matches-rules-text": false,
-                "variants": [],
-            },
-            /*[62]*/ {
-                "id": "site-random-site",
-                "category": "Sites",
-                "term": "Random Site",
-                "definition": "Enter a random enhanced site hosted by the presenting Dream Guide.",
-                "priority": 0,
-                "matches-rules-text": false,
-                "variants": [],
-            },
-            /*[63]*/ {
-                "id": "site-gamble",
-                "category": "Sites",
-                "term": "Gamble",
-                "definition": "Take a risk for an uncertain reward.",
-                "priority": 0,
-                "matches-rules-text": false,
-                "variants": [],
-            },
-            /*[64]*/ {
-                "id": "site-exploration",
-                "category": "Sites",
-                "term": "Exploration",
-                "definition": "Draw a card from your deck, then delve into the dream within it.",
-                "priority": 0,
-                "matches-rules-text": false,
-                "variants": [],
-            },
-            /*[65]*/ {
-                "id": "dreamsign-restock",
-                "category": "Actions",
-                "term": "Restock Offers",
-                "definition": "Replace the current offers with three new Dreamsigns. You may restock once per visit.",
-                "priority": 0,
-                "matches-rules-text": false,
-                "variants": [],
-            },
+  data: {
+    "entries": [
+      /*[0]*/
+      {
+        "id": "figment",
+        "category": "Card Types",
+        "term": "Figment",
+        "definition": "A created token character. Multiple figments of the same type can be merged into one character.",
+        "priority": 60,
+        "matches-rules-text": true,
+        "variants": [
+          /*[0]*/
+          "figments",
         ],
-    },
+      },
+      /*[1]*/
+      {
+        "id": "materialized-trigger",
+        "category": "Triggers & Timing",
+        "term": "▸Materialized",
+        "definition": "Triggers when this character enters play.",
+        "priority": 5,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[2]*/
+      {
+        "id": "dawn-trigger",
+        "category": "Triggers & Timing",
+        "term": "▸Dawn",
+        "definition": "Triggers at the start of controller\'s turn.",
+        "priority": 40,
+        "matches-rules-text": true,
+        "variants": [
+          /*[0]*/
+          "dawn",
+        ],
+      },
+      /*[3]*/
+      {
+        "id": "challenge-trigger",
+        "category": "Triggers & Timing",
+        "term": "▸Challenge",
+        "definition": "Triggers when this character is declared as a challenger.",
+        "priority": 40,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[4]*/
+      {
+        "id": "night-trigger",
+        "category": "Triggers & Timing",
+        "term": "▸Night",
+        "definition": "Triggers at the end of your turn.",
+        "priority": 40,
+        "matches-rules-text": false,
+        "variants": [],
+        "rules-text-forms": [
+          /*[0]*/
+          "▸Night",
+        ],
+      },
+      /*[5]*/
+      {
+        "id": "day",
+        "category": "Triggers & Timing",
+        "term": "Day",
+        "definition": "The turn phase when the active player plays standard cards.",
+        "priority": 10,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[6]*/
+      {
+        "id": "rematerialize",
+        "category": "Triggers & Timing",
+        "term": "Rematerialize",
+        "definition": "Trigger an in-play character\'s materialization again.",
+        "priority": 75,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[7]*/
+      {
+        "id": "dissolved-trigger",
+        "category": "Triggers & Timing",
+        "term": "▸Dissolved",
+        "definition": "Triggers when this character is sent to the void from play.",
+        "priority": 40,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[8]*/
+      {
+        "id": "dissolve",
+        "category": "Triggers & Timing",
+        "term": "Dissolve",
+        "definition": "Destroy a character, sending it to the void.",
+        "priority": 60,
+        "matches-rules-text": true,
+        "variants": [
+          /*[0]*/
+          "dissolves",
+          /*[1]*/
+          "dissolved",
+        ],
+      },
+      /*[9]*/
+      {
+        "id": "banish",
+        "category": "Triggers & Timing",
+        "term": "Banish",
+        "definition": "Remove a card from the game.",
+        "priority": 60,
+        "matches-rules-text": true,
+        "variants": [
+          /*[0]*/
+          "banished",
+          /*[1]*/
+          "banishes",
+        ],
+      },
+      /*[10]*/
+      {
+        "id": "abandon",
+        "category": "Triggers & Timing",
+        "term": "Abandon",
+        "definition": "Dissolve a character you control.",
+        "priority": 75,
+        "matches-rules-text": true,
+        "variants": [
+          /*[0]*/
+          "abandoned",
+          /*[1]*/
+          "abandons",
+        ],
+      },
+      /*[11]*/
+      {
+        "id": "points",
+        "category": "Resources",
+        "term": "Points",
+        "definition": "Scoring points (⍟)  allows you to win a dream battle. Each battle has a different target points threshold to win.",
+        "priority": 60,
+        "matches-rules-text": false,
+        "variants": [],
+        "rules-text-forms": [
+          /*[0]*/
+          "⍟",
+        ],
+        "definition-uses-rules-text": true,
+        "term-presentation": "definition-only",
+      },
+      /*[12]*/
+      {
+        "id": "memory",
+        "category": "Resources",
+        "term": "Memory",
+        "definition": "Memory Counters (⧗) are stored by cards to use later for effects.",
+        "priority": 60,
+        "matches-rules-text": false,
+        "variants": [],
+        "rules-text-forms": [
+          /*[0]*/
+          "⧗",
+        ],
+        "definition-uses-rules-text": true,
+        "term-presentation": "definition-only",
+      },
+      /*[13]*/
+      {
+        "id": "reclaim",
+        "category": "Keywords",
+        "term": "Reclaim",
+        "definition": "You may play this card from your void, then banish it when it leaves play.",
+        "priority": 100,
+        "matches-rules-text": true,
+        "variants": [
+          /*[0]*/
+          "reclaimed",
+        ],
+        "contexts": [
+          /*[0]*/
+          {
+            "pattern": "\\b(?:gain|gains|gained)\\s+reclaim\\s+(\\d+)\\s*●",
+            "term": "{term} {1}●",
+            "definition": "You may play that card from your void for {1}●, then banish it when it leaves play.",
+          },
+          /*[1]*/
+          {
+            "pattern": "\\breclaim\\s+(\\d+)\\s*●",
+            "term": "{term} {1}●",
+            "definition": "You may play this card from your void for {1}●, then banish it when it leaves play.",
+          },
+          /*[2]*/
+          {
+            "pattern": "\\b(?:gain|gains|gained)\\s+reclaim\\b",
+            "definition": "You may play that card from your void, then banish it when it leaves play.",
+          },
+        ],
+      },
+      /*[14]*/
+      {
+        "id": "foresee",
+        "category": "Keywords",
+        "term": "Foresee",
+        "definition": "Look at the top N cards of your deck, put any number into your void, and put the rest back on top in any order.",
+        "priority": 95,
+        "matches-rules-text": true,
+        "variants": [],
+        "contexts": [
+          /*[0]*/
+          {
+            "pattern": "\\bforesee\\s+(\\d+)\\b",
+            "term": "{term} {1}",
+            "definition": "Look at the top {1} cards of your deck, then put any number of them into your void and the rest on top in any order.",
+            "singular-capture": 1,
+            "singular-definition": "Look at the top card of your deck. You may put it into your void.",
+          },
+        ],
+      },
+      /*[15]*/
+      {
+        "id": "discover",
+        "category": "Keywords",
+        "term": "Discover",
+        "definition": "Reveal three matching cards from your deck and choose one to draw.",
+        "priority": 95,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[16]*/
+      {
+        "id": "erode",
+        "category": "Keywords",
+        "term": "Erode",
+        "definition": "Put cards from the top of a player’s deck into their void. For each card they can’t, their opponent scores 3⍟.",
+        "priority": 95,
+        "matches-rules-text": true,
+        "variants": [
+          /*[0]*/
+          "eroded",
+          /*[1]*/
+          "erodes",
+        ],
+        "contexts": [
+          /*[0]*/
+          {
+            "pattern": "\\berode\\s+(\\d+)\\b",
+            "term": "{term} {1}",
+            "definition": "Put the top {1} cards of a player\'s deck into their void. If the deck is empty, their opponent scores 3⍟ instead.",
+            "singular-capture": 1,
+            "singular-definition": "Put the top card of a player\'s deck into their void. If the deck is empty, their opponent scores 3⍟ instead.",
+          },
+        ],
+      },
+      /*[17]*/
+      {
+        "id": "fast",
+        "category": "Keywords",
+        "term": "Fast",
+        "definition": "A fast (❖) card may be played at the end of either player\'s turn.",
+        "priority": 95,
+        "matches-rules-text": false,
+        "variants": [],
+        "rules-text-forms": [
+          /*[0]*/
+          "❖",
+        ],
+        "definition-uses-rules-text": true,
+        "term-presentation": "definition-only",
+        "contexts": [
+          /*[0]*/
+          {
+            "pattern": "(?:^|\\n)\\s*❖\\s*[–-]",
+            "definition": "A fast (❖) ability may be activated at the end of either player\'s turn.",
+          },
+        ],
+      },
+      /*[18]*/
+      {
+        "id": "interrupt",
+        "category": "Keywords",
+        "term": "Interrupt",
+        "definition": "An interrupt (❖❖) card may be played in response to an opponent action, or at the end of either player\'s turn.",
+        "priority": 95,
+        "matches-rules-text": false,
+        "variants": [],
+        "rules-text-forms": [
+          /*[0]*/
+          "❖❖",
+        ],
+        "definition-uses-rules-text": true,
+        "term-presentation": "definition-only",
+        "contexts": [
+          /*[0]*/
+          {
+            "pattern": "(?:^|\\n)\\s*❖❖\\s*[–-]",
+            "definition": "An interrupt (❖❖) ability may be activated in response to an opponent action, or at the end of either player\'s turn.",
+          },
+        ],
+      },
+      /*[19]*/
+      {
+        "id": "exhaust-cost",
+        "category": "Keywords",
+        "term": "Exhaust Cost",
+        "definition": "A back-rank character may exhaust (☾) once per turn to use an ability instead of challenging.",
+        "priority": 95,
+        "matches-rules-text": false,
+        "variants": [],
+        "rules-text-forms": [
+          /*[0]*/
+          "☾",
+        ],
+        "definition-uses-rules-text": true,
+        "term-presentation": "definition-only",
+        "contexts": [
+          /*[0]*/
+          {
+            "owner": "dreamAvatar",
+            "definition": "You may exhaust (☾) this avatar to activate this ability once per turn.",
+          },
+        ],
+      },
+      /*[20]*/
+      {
+        "id": "awakened",
+        "category": "Keywords",
+        "term": "Awakened",
+        "definition": "Can challenge and activate ☾ abilities on the same turn in which it is materialized.",
+        "priority": 90,
+        "matches-rules-text": true,
+        "variants": [
+          /*[0]*/
+          "awaken",
+          /*[1]*/
+          "awakens",
+        ],
+      },
+      /*[21]*/
+      {
+        "id": "exhausted",
+        "category": "Battle Status",
+        "term": "Exhausted",
+        "definition": "This character cannot challenge or use ☾ abilities until next turn.",
+        "definition-symbol": "exhaust",
+        "priority": 30,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[22]*/
+      {
+        "id": "veil",
+        "category": "Keywords",
+        "term": "Veil",
+        "definition": "If this character would be dissolved by an effect the opponent controls, instead it loses Veil.",
+        "priority": 90,
+        "matches-rules-text": true,
+        "variants": [
+          /*[0]*/
+          "veiled",
+        ],
+      },
+      /*[23]*/
+      {
+        "id": "vengeful",
+        "category": "Keywords",
+        "term": "Vengeful",
+        "definition": "When this character loses a challenge, it dissolves the opposing character.",
+        "priority": 90,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[24]*/
+      {
+        "id": "support",
+        "category": "Keywords",
+        "term": "Support",
+        "definition": "A back-rank character supports the front-rank characters ahead of it.",
+        "priority": 70,
+        "matches-rules-text": true,
+        "variants": [
+          /*[0]*/
+          "supported",
+          /*[1]*/
+          "supports",
+          /*[2]*/
+          "supporting",
+        ],
+      },
+      /*[25]*/
+      {
+        "id": "challenger",
+        "category": "Keywords",
+        "term": "Challenger",
+        "definition": "A front-rank ally during your Night phase.",
+        "priority": 70,
+        "matches-rules-text": true,
+        "variants": [
+          /*[0]*/
+          "challengers",
+        ],
+      },
+      /*[26]*/
+      {
+        "id": "blocker",
+        "category": "Keywords",
+        "term": "Blocker",
+        "definition": "A front-rank ally opposite a challenger during the opponent\'s Night phase.",
+        "priority": 70,
+        "matches-rules-text": true,
+        "variants": [
+          /*[0]*/
+          "blockers",
+          /*[1]*/
+          "block",
+          /*[2]*/
+          "blocks",
+          /*[3]*/
+          "blocking",
+        ],
+      },
+      /*[27]*/
+      {
+        "id": "unpaired",
+        "category": "Keywords",
+        "term": "Unpaired",
+        "definition": "A challenger with no blocker opposite it.",
+        "priority": 70,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[28]*/
+      {
+        "id": "prevent",
+        "category": "Keywords",
+        "term": "Prevent",
+        "definition": "Counter a card on the stack and send it to the void.",
+        "priority": 95,
+        "matches-rules-text": true,
+        "variants": [
+          /*[0]*/
+          "prevented",
+        ],
+      },
+      /*[29]*/
+      {
+        "id": "offering",
+        "category": "Keywords",
+        "term": "Offering",
+        "definition": "You may play this card for 0● by banishing a card from your hand. If you do, banish this card at end of turn.",
+        "priority": 95,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[30]*/
+      {
+        "id": "phasing",
+        "category": "Keywords",
+        "term": "Phasing",
+        "definition": "When you play this character, you may return a character you control to your hand and materialize this character in its position.",
+        "priority": 95,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[31]*/
+      {
+        "id": "ephemeral",
+        "category": "Keywords",
+        "term": "Ephemeral",
+        "definition": "If an ephemeral card is in your hand at end of turn, banish it.",
+        "priority": 95,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[32]*/
+      {
+        "id": "transfigure",
+        "category": "Verbs",
+        "term": "Transfigure",
+        "definition": "Permanently upgrade a card in your deck.",
+        "priority": 80,
+        "matches-rules-text": true,
+        "variants": [
+          /*[0]*/
+          "transfigured",
+          /*[1]*/
+          "transfigures",
+        ],
+      },
+      /*[33]*/
+      {
+        "id": "purge",
+        "category": "Verbs",
+        "term": "Purge",
+        "definition": "Permanently remove a card from your deck for the run.",
+        "priority": 80,
+        "matches-rules-text": true,
+        "variants": [
+          /*[0]*/
+          "purged",
+          /*[1]*/
+          "purges",
+        ],
+      },
+      /*[34]*/
+      {
+        "id": "duplicate",
+        "category": "Verbs",
+        "term": "Duplicate",
+        "definition": "Add an exact copy of a card to your deck.",
+        "priority": 80,
+        "matches-rules-text": true,
+        "variants": [
+          /*[0]*/
+          "duplicated",
+          /*[1]*/
+          "duplicates",
+        ],
+      },
+      /*[35]*/
+      {
+        "id": "bane",
+        "category": "Journey Terms",
+        "term": "Bane",
+        "definition": "The Nightmare card, a penalty card forced into your deck.",
+        "priority": 65,
+        "matches-rules-text": true,
+        "variants": [
+          /*[0]*/
+          "banes",
+        ],
+      },
+      /*[36]*/
+      {
+        "id": "essence",
+        "category": "Journey Terms",
+        "term": "Essence",
+        "definition": "Currency you gain and spend over the course of a run.",
+        "priority": 10,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[37]*/
+      {
+        "id": "enhanced",
+        "category": "Journey Terms",
+        "term": "Enhanced",
+        "definition": "An improved site that offers better or additional rewards.",
+        "priority": 65,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[38]*/
+      {
+        "id": "transfiguration",
+        "category": "Transfigurations",
+        "term": "Transfiguration",
+        "definition": "A permanent modification to a card.",
+        "priority": 85,
+        "matches-rules-text": true,
+        "variants": [
+          /*[0]*/
+          "transfigurations",
+        ],
+      },
+      /*[39]*/
+      {
+        "id": "empowered",
+        "category": "Transfigurations",
+        "term": "Empowered",
+        "definition": "Transfiguration: reduces this card\'s energy cost by 50%, rounded to the nearest whole number.",
+        "priority": 85,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[40]*/
+      {
+        "id": "amplified",
+        "category": "Transfigurations",
+        "term": "Amplified",
+        "definition": "Transfiguration: increases or decreases a number in this card\'s rules text by 1.",
+        "priority": 85,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[41]*/
+      {
+        "id": "kindled",
+        "category": "Transfigurations",
+        "term": "Kindled",
+        "definition": "Transfiguration: doubles a character\'s base spark, or sets it to 1 if zero.",
+        "priority": 85,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[42]*/
+      {
+        "id": "resonant",
+        "category": "Transfigurations",
+        "term": "Resonant",
+        "definition": "Transfiguration: increases the frequency of named triggers on this card.",
+        "priority": 85,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[43]*/
+      {
+        "id": "inspired",
+        "category": "Transfigurations",
+        "term": "Inspired",
+        "definition": "Transfiguration: appends \"draw a card\" to this event card\'s text.",
+        "priority": 85,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[44]*/
+      {
+        "id": "enduring",
+        "category": "Transfigurations",
+        "term": "Enduring",
+        "definition": "Transfiguration: adds \"reclaim\" to this event card\'s text.",
+        "priority": 85,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[45]*/
+      {
+        "id": "attuned",
+        "category": "Transfigurations",
+        "term": "Attuned",
+        "definition": "Transfiguration: reduces an activated ability\'s energy cost by 1.",
+        "priority": 85,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[46]*/
+      {
+        "id": "perfected",
+        "category": "Transfigurations",
+        "term": "Perfected",
+        "definition": "Transfiguration: applies every other eligible transfiguration to a card.",
+        "priority": 85,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[47]*/
+      {
+        "id": "energy-cost",
+        "category": "Resources",
+        "term": "Energy Cost",
+        "definition": "Spend this much energy to play the card.",
+        "priority": 0,
+        "matches-rules-text": false,
+        "variants": [],
+      },
+      /*[48]*/
+      {
+        "id": "spark",
+        "category": "Resources",
+        "term": "Spark",
+        "definition": "A character\'s power during a challenge; higher spark wins.",
+        "priority": 10,
+        "matches-rules-text": true,
+        "variants": [],
+      },
+      /*[49]*/
+      {
+        "id": "starting-essence",
+        "category": "Resources",
+        "term": "Starting Essence",
+        "definition": "The essence this avatar begins the journey with, spent at sites this run.",
+        "priority": 0,
+        "matches-rules-text": false,
+        "variants": [],
+      },
+      /*[50]*/
+      {
+        "id": "tides",
+        "category": "Journey Terms",
+        "term": "Tides",
+        "definition": "Pools of cards you will see during the journey. Different tides are used every time you play.",
+        "priority": 0,
+        "matches-rules-text": false,
+        "variants": [],
+      },
+      /*[51]*/
+      {
+        "id": "site-battle",
+        "category": "Sites",
+        "term": "Battle",
+        "definition": "A battle against this dream\'s guardian.",
+        "priority": 0,
+        "matches-rules-text": false,
+        "variants": [],
+      },
+      /*[52]*/
+      {
+        "id": "site-draft",
+        "category": "Sites",
+        "term": "Draft",
+        "definition": "Pick 5 cards to add to your deck.",
+        "priority": 0,
+        "matches-rules-text": false,
+        "variants": [],
+      },
+      /*[53]*/
+      {
+        "id": "site-shop",
+        "category": "Sites",
+        "term": "Card Shop",
+        "definition": "Spend essence to buy cards.",
+        "priority": 0,
+        "matches-rules-text": false,
+        "variants": [],
+      },
+      /*[54]*/
+      {
+        "id": "site-purge",
+        "category": "Sites",
+        "term": "Purge",
+        "definition": "Remove any number of cards from your deck",
+        "priority": 0,
+        "matches-rules-text": false,
+        "variants": [],
+      },
+      /*[55]*/
+      {
+        "id": "site-essence",
+        "category": "Sites",
+        "term": "Essence",
+        "definition": "Collect a trove of essence.",
+        "priority": 0,
+        "matches-rules-text": false,
+        "variants": [],
+      },
+      /*[56]*/
+      {
+        "id": "site-transfiguration",
+        "category": "Sites",
+        "term": "Transfiguration",
+        "definition": "Modify and upgrade a card in your deck.",
+        "priority": 0,
+        "matches-rules-text": false,
+        "variants": [],
+      },
+      /*[57]*/
+      {
+        "id": "site-duplication",
+        "category": "Sites",
+        "term": "Duplication",
+        "definition": "Make a copy of a card in your deck.",
+        "priority": 0,
+        "matches-rules-text": false,
+        "variants": [],
+      },
+      /*[58]*/
+      {
+        "id": "site-reward",
+        "category": "Sites",
+        "term": "Reward",
+        "definition": "Claim a reward.",
+        "priority": 0,
+        "matches-rules-text": false,
+        "variants": [],
+      },
+      /*[59]*/
+      {
+        "id": "site-augury",
+        "category": "Sites",
+        "term": "Augury",
+        "definition": "Choose one of two foreseen rewards.",
+        "priority": 0,
+        "matches-rules-text": false,
+        "variants": [],
+      },
+      /*[60]*/
+      {
+        "id": "site-dreamsign-market",
+        "category": "Sites",
+        "term": "Dreamsign Market",
+        "definition": "Purchase dreamsigns from a rotating selection.",
+        "priority": 0,
+        "matches-rules-text": false,
+        "variants": [],
+      },
+      /*[61]*/
+      {
+        "id": "site-dreamsign-revelation",
+        "category": "Sites",
+        "term": "Dreamsign Revelation",
+        "definition": "Receive a dreamsign.",
+        "priority": 0,
+        "matches-rules-text": false,
+        "variants": [],
+      },
+      /*[62]*/
+      {
+        "id": "site-random-site",
+        "category": "Sites",
+        "term": "Random Site",
+        "definition": "Enter a random enhanced site hosted by the presenting Dream Guide.",
+        "priority": 0,
+        "matches-rules-text": false,
+        "variants": [],
+      },
+      /*[63]*/
+      {
+        "id": "site-gamble",
+        "category": "Sites",
+        "term": "Gamble",
+        "definition": "Take a risk for an uncertain reward.",
+        "priority": 0,
+        "matches-rules-text": false,
+        "variants": [],
+      },
+      /*[64]*/
+      {
+        "id": "site-exploration",
+        "category": "Sites",
+        "term": "Exploration",
+        "definition": "Draw a card from your deck, then delve into the dream within it.",
+        "priority": 0,
+        "matches-rules-text": false,
+        "variants": [],
+      },
+      /*[65]*/
+      {
+        "id": "dreamsign-restock",
+        "category": "Actions",
+        "term": "Restock Offers",
+        "definition": "Replace the current offers with three new Dreamsigns. You may restock once per visit.",
+        "priority": 0,
+        "matches-rules-text": false,
+        "variants": [],
+      },
+    ],
+  },
 )

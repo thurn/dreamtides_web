@@ -1,130 +1,68 @@
 CompatDocument(
-    data: {
-        "tags": [
-            /*[0]*/ {
-                "name": "Ally Audit",
-                "color": "#ea580c",
-            },
-            /*[1]*/ {
-                "name": "Art OK",
-                "color": "#15803d",
-            },
-            /*[2]*/ {
-                "name": "Art Rework",
-                "color": "#b91c1c",
-            },
-            /*[3]*/ {
-                "name": "Cantrips",
-                "color": "#7c3aed",
-            },
-            /*[4]*/ {
-                "name": "Discover",
-                "color": "#1d4ed8",
-            },
-            /*[5]*/ {
-                "name": "Elves",
-                "color": "#15803d",
-            },
-            /*[6]*/ {
-                "name": "Free Sacrifice",
-                "color": "#b91c1c",
-            },
-            /*[7]*/ {
-                "name": "Merfolk Looter",
-                "color": "#0e7490",
-            },
-            /*[8]*/ {
-                "name": "Removal",
-                "color": "#c2410c",
-            },
-            /*[9]*/ {
-                "name": "Thoughtseize",
-                "color": "#be185d",
-            },
-            /*[10]*/ {
-                "name": "Blood Artist",
-                "color": "#7e22ce",
-            },
-            /*[11]*/ {
-                "name": "ETB Draw",
-                "color": "#0369a1",
-            },
-            /*[12]*/ {
-                "name": "Lurrus",
-                "color": "#4d7c0f",
-            },
-            /*[13]*/ {
-                "name": "Tidehollow Sculler",
-                "color": "#9f1239",
-            },
-            /*[14]*/ {
-                "name": "Ritual",
-                "color": "#a16207",
-            },
-            /*[15]*/ {
-                "name": "Vanilla",
-                "color": "#525252",
-            },
-            /*[16]*/ {
-                "name": "Ichor Wellspring",
-                "color": "#0d9488",
-            },
-            /*[17]*/ {
-                "name": "Counterspell",
-                "color": "#1e3a8a",
-            },
-            /*[18]*/ {
-                "name": "Lotus Petal",
-                "color": "#ca8a04",
-            },
-            /*[19]*/ {
-                "name": "Figment Maker",
-                "color": "#7c2d12",
-            },
-            /*[20]*/ {
-                "name": "Event Payoff",
-                "color": "#6d28d9",
-            },
-            /*[21]*/ {
-                "name": "Character Payoff",
-                "color": "#2563eb",
-            },
-            /*[22]*/ {
-                "name": "Self-Mill",
-                "color": "#3f6212",
-            },
-            /*[23]*/ {
-                "name": "Storage Removal",
-                "color": "#b45309",
-            },
-            /*[24]*/ {
-                "name": "Ninja",
-                "color": "#334155",
-            },
-            /*[25]*/ {
-                "name": "ETB Bounce",
-                "color": "#0891b2",
-            },
-            /*[26]*/ {
-                "name": "Awaken",
-                "color": "#c026d3",
-            },
-            /*[27]*/ {
-                "name": "Spirit Lord",
-                "color": "#166534",
-            },
-            /*[28]*/ {
-                "name": "Spark Scaler",
-                "color": "#a21caf",
-            },
-            /*[29]*/ {
-                "name": "Score Trigger",
-                "color": "#d97706",
-            },
-            /*[30]*/ {
-                "name": "tutorial",
-                "color": "#ca8a04",
-            },
-        ],
-    },
+  data: {
+    "tags": [
+      /*[0]*/
+      {"name": "Ally Audit", "color": "#ea580c"},
+      /*[1]*/
+      {"name": "Art OK", "color": "#15803d"},
+      /*[2]*/
+      {"name": "Art Rework", "color": "#b91c1c"},
+      /*[3]*/
+      {"name": "Cantrips", "color": "#7c3aed"},
+      /*[4]*/
+      {"name": "Discover", "color": "#1d4ed8"},
+      /*[5]*/
+      {"name": "Elves", "color": "#15803d"},
+      /*[6]*/
+      {"name": "Free Sacrifice", "color": "#b91c1c"},
+      /*[7]*/
+      {"name": "Merfolk Looter", "color": "#0e7490"},
+      /*[8]*/
+      {"name": "Removal", "color": "#c2410c"},
+      /*[9]*/
+      {"name": "Thoughtseize", "color": "#be185d"},
+      /*[10]*/
+      {"name": "Blood Artist", "color": "#7e22ce"},
+      /*[11]*/
+      {"name": "ETB Draw", "color": "#0369a1"},
+      /*[12]*/
+      {"name": "Lurrus", "color": "#4d7c0f"},
+      /*[13]*/
+      {"name": "Tidehollow Sculler", "color": "#9f1239"},
+      /*[14]*/
+      {"name": "Ritual", "color": "#a16207"},
+      /*[15]*/
+      {"name": "Vanilla", "color": "#525252"},
+      /*[16]*/
+      {"name": "Ichor Wellspring", "color": "#0d9488"},
+      /*[17]*/
+      {"name": "Counterspell", "color": "#1e3a8a"},
+      /*[18]*/
+      {"name": "Lotus Petal", "color": "#ca8a04"},
+      /*[19]*/
+      {"name": "Figment Maker", "color": "#7c2d12"},
+      /*[20]*/
+      {"name": "Event Payoff", "color": "#6d28d9"},
+      /*[21]*/
+      {"name": "Character Payoff", "color": "#2563eb"},
+      /*[22]*/
+      {"name": "Self-Mill", "color": "#3f6212"},
+      /*[23]*/
+      {"name": "Storage Removal", "color": "#b45309"},
+      /*[24]*/
+      {"name": "Ninja", "color": "#334155"},
+      /*[25]*/
+      {"name": "ETB Bounce", "color": "#0891b2"},
+      /*[26]*/
+      {"name": "Awaken", "color": "#c026d3"},
+      /*[27]*/
+      {"name": "Spirit Lord", "color": "#166534"},
+      /*[28]*/
+      {"name": "Spark Scaler", "color": "#a21caf"},
+      /*[29]*/
+      {"name": "Score Trigger", "color": "#d97706"},
+      /*[30]*/
+      {"name": "tutorial", "color": "#ca8a04"},
+    ],
+  },
 )

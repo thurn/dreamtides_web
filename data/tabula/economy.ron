@@ -1,254 +1,122 @@
 CompatDocument(
-    data: {
-        "schema-version": 1,
-        "journey": {
-            "default-starting-essence": 200,
-            "dreamsign-cap": 12,
-        },
-        "shop": {
-            "prices": {
-                "standard-card": 100,
-                "specialty-card": 200,
-                "dreamsign": 50,
-            },
-            "stock": {
-                "card-shop": {
-                    "card-slots": 5,
-                    "dreamsign-slots": 0,
-                },
-                "specialty-shop": {
-                    "card-slots": 5,
-                    "dreamsign-slots": 0,
-                },
-                "dreamsign-market": {
-                    "card-slots": 0,
-                    "dreamsign-slots": 3,
-                },
-            },
-            "discounts": {
-                "slot-counts": [
-                    /*[0]*/ {
-                        "value": 1,
-                        "weight": 1,
-                    },
-                    /*[1]*/ {
-                        "value": 2,
-                        "weight": 1,
-                    },
-                ],
-                "percentages": [
-                    /*[0]*/ {
-                        "value": 30,
-                        "weight": 1,
-                    },
-                    /*[1]*/ {
-                        "value": 40,
-                        "weight": 1,
-                    },
-                    /*[2]*/ {
-                        "value": 50,
-                        "weight": 1,
-                    },
-                    /*[3]*/ {
-                        "value": 60,
-                        "weight": 1,
-                    },
-                    /*[4]*/ {
-                        "value": 70,
-                        "weight": 1,
-                    },
-                    /*[5]*/ {
-                        "value": 80,
-                        "weight": 1,
-                    },
-                    /*[6]*/ {
-                        "value": 90,
-                        "weight": 1,
-                    },
-                ],
-            },
-            "reroll": {
-                "standard-price": 50,
-                "enhanced-price": 0,
-                "max-per-visit": 1,
-            },
-        },
-        "site-rewards": {
-            "essence": {
-                "standard": {
-                    "min": 200,
-                    "max": 300,
-                },
-                "enhanced": {
-                    "min": 400,
-                    "max": 600,
-                },
-            },
-            "reward": {
-                "fallback-essence": {
-                    "min": 150,
-                    "max": 350,
-                },
-            },
-            "dreamsign-revelation": {
-                "standard-offer-count": 3,
-                "enhanced-offer-count": 4,
-            },
-        },
-        "purge": {
-            "marginal-costs": [
-                /*[0]*/ 40,
-                /*[1]*/ 60,
-                /*[2]*/ 90,
-                /*[3]*/ 130,
-                /*[4]*/ 180,
-                /*[5]*/ 240,
-            ],
-            "enhanced-discount-percent": 30,
-        },
-        "transfiguration": {
-            "minimum-cost": 0,
-            "maximum-cost": 100,
-            "step": 10,
-            "free-band": {
-                "base": 0,
-                "jitter": 0,
-                "floor": 0,
-            },
-            "form-bands": [
-                /*[0]*/ {
-                    "form": "Amplified",
-                    "base": 10,
-                    "jitter": 20,
-                    "floor": 10,
-                },
-                /*[1]*/ {
-                    "form": "Attuned",
-                    "base": 10,
-                    "jitter": 20,
-                    "floor": 10,
-                },
-                /*[2]*/ {
-                    "form": "Inspired",
-                    "base": 20,
-                    "jitter": 20,
-                    "floor": 10,
-                },
-                /*[3]*/ {
-                    "form": "Enduring",
-                    "base": 50,
-                    "jitter": 30,
-                    "floor": 20,
-                },
-                /*[4]*/ {
-                    "form": "Resonant",
-                    "base": 50,
-                    "jitter": 30,
-                    "floor": 20,
-                },
-                /*[5]*/ {
-                    "form": "Perfected",
-                    "base": 100,
-                    "jitter": 0,
-                    "floor": 100,
-                },
-            ],
-            "stat-delta-bands": [
-                /*[0]*/ {
-                    "minimum-delta": 1,
-                    "maximum-delta": 1,
-                    "base": 10,
-                    "jitter": 20,
-                    "floor": 10,
-                },
-                /*[1]*/ {
-                    "minimum-delta": 2,
-                    "maximum-delta": 2,
-                    "base": 30,
-                    "jitter": 20,
-                    "floor": 10,
-                },
-                /*[2]*/ {
-                    "minimum-delta": 3,
-                    "maximum-delta": 3,
-                    "base": 50,
-                    "jitter": 20,
-                    "floor": 30,
-                },
-                /*[3]*/ {
-                    "minimum-delta": 4,
-                    "base": 70,
-                    "jitter": 20,
-                    "floor": 50,
-                },
-            ],
-        },
-        "battle-reward": {
-            "base-essence": 100,
-            "essence-per-completion-level": 50,
-            "minimum-essence": 0,
-        },
-        "gamble": {
-            "three-gate": {
-                "standard-wager": 50,
-                "enhanced-wager": 45,
-                "rewards": {
-                    "six": 100,
-                    "nine": 150,
-                    "jack": 200,
-                },
-            },
-            "ladder-climb": {
-                "win-essence": 25,
-                "attempts": [
-                    /*[0]*/ {
-                        "attempt": 1,
-                        "standard-cost": 0,
-                        "enhanced-cost": 0,
-                    },
-                    /*[1]*/ {
-                        "attempt": 2,
-                        "standard-cost": 5,
-                        "enhanced-cost": 0,
-                    },
-                    /*[2]*/ {
-                        "attempt": 3,
-                        "standard-cost": 10,
-                        "enhanced-cost": 0,
-                    },
-                    /*[3]*/ {
-                        "attempt": 4,
-                        "standard-cost": 15,
-                        "enhanced-cost": 0,
-                    },
-                ],
-            },
-            "starway-stairs": {
-                "standard-wager": 30,
-                "enhanced-wager": 20,
-                "tiers": [
-                    /*[0]*/ {
-                        "tier": 1,
-                        "essence-reward": 60,
-                    },
-                    /*[1]*/ {
-                        "tier": 2,
-                        "essence-reward": 140,
-                    },
-                    /*[2]*/ {
-                        "tier": 3,
-                        "essence-reward": 300,
-                    },
-                ],
-            },
-            "four-suit-reprise": {
-                "standard-draw-price": 25,
-                "enhanced-draw-price": 15,
-                "essence-reward": 100,
-            },
-        },
-        "exploration": {
-            "default-essence-per-spark": 40,
-        },
+  data: {
+    "schema-version": 1,
+    "journey": {"default-starting-essence": 200, "dreamsign-cap": 12},
+    "shop": {
+      "prices": {"standard-card": 100, "specialty-card": 200, "dreamsign": 50},
+      "stock": {
+        "card-shop": {"card-slots": 5, "dreamsign-slots": 0},
+        "specialty-shop": {"card-slots": 5, "dreamsign-slots": 0},
+        "dreamsign-market": {"card-slots": 0, "dreamsign-slots": 3},
+      },
+      "discounts": {
+        "slot-counts": [
+          /*[0]*/
+          {"value": 1, "weight": 1},
+          /*[1]*/
+          {"value": 2, "weight": 1},
+        ],
+        "percentages": [
+          /*[0]*/
+          {"value": 30, "weight": 1},
+          /*[1]*/
+          {"value": 40, "weight": 1},
+          /*[2]*/
+          {"value": 50, "weight": 1},
+          /*[3]*/
+          {"value": 60, "weight": 1},
+          /*[4]*/
+          {"value": 70, "weight": 1},
+          /*[5]*/
+          {"value": 80, "weight": 1},
+          /*[6]*/
+          {"value": 90, "weight": 1},
+        ],
+      },
+      "reroll": {"standard-price": 50, "enhanced-price": 0, "max-per-visit": 1},
     },
+    "site-rewards": {
+      "essence": {"standard": {"min": 200, "max": 300}, "enhanced": {"min": 400, "max": 600}},
+      "reward": {"fallback-essence": {"min": 150, "max": 350}},
+      "dreamsign-revelation": {"standard-offer-count": 3, "enhanced-offer-count": 4},
+    },
+    "purge": {
+      "marginal-costs": [
+        /*[0]*/
+        40,
+        /*[1]*/
+        60,
+        /*[2]*/
+        90,
+        /*[3]*/
+        130,
+        /*[4]*/
+        180,
+        /*[5]*/
+        240,
+      ],
+      "enhanced-discount-percent": 30,
+    },
+    "transfiguration": {
+      "minimum-cost": 0,
+      "maximum-cost": 100,
+      "step": 10,
+      "free-band": {"base": 0, "jitter": 0, "floor": 0},
+      "form-bands": [
+        /*[0]*/
+        {"form": "Amplified", "base": 10, "jitter": 20, "floor": 10},
+        /*[1]*/
+        {"form": "Attuned", "base": 10, "jitter": 20, "floor": 10},
+        /*[2]*/
+        {"form": "Inspired", "base": 20, "jitter": 20, "floor": 10},
+        /*[3]*/
+        {"form": "Enduring", "base": 50, "jitter": 30, "floor": 20},
+        /*[4]*/
+        {"form": "Resonant", "base": 50, "jitter": 30, "floor": 20},
+        /*[5]*/
+        {"form": "Perfected", "base": 100, "jitter": 0, "floor": 100},
+      ],
+      "stat-delta-bands": [
+        /*[0]*/
+        {"minimum-delta": 1, "maximum-delta": 1, "base": 10, "jitter": 20, "floor": 10},
+        /*[1]*/
+        {"minimum-delta": 2, "maximum-delta": 2, "base": 30, "jitter": 20, "floor": 10},
+        /*[2]*/
+        {"minimum-delta": 3, "maximum-delta": 3, "base": 50, "jitter": 20, "floor": 30},
+        /*[3]*/
+        {"minimum-delta": 4, "base": 70, "jitter": 20, "floor": 50},
+      ],
+    },
+    "battle-reward": {"base-essence": 100, "essence-per-completion-level": 50, "minimum-essence": 0},
+    "gamble": {
+      "three-gate": {"standard-wager": 50, "enhanced-wager": 45, "rewards": {"six": 100, "nine": 150, "jack": 200}},
+      "ladder-climb": {
+        "win-essence": 25,
+        "attempts": [
+          /*[0]*/
+          {"attempt": 1, "standard-cost": 0, "enhanced-cost": 0},
+          /*[1]*/
+          {"attempt": 2, "standard-cost": 5, "enhanced-cost": 0},
+          /*[2]*/
+          {"attempt": 3, "standard-cost": 10, "enhanced-cost": 0},
+          /*[3]*/
+          {"attempt": 4, "standard-cost": 15, "enhanced-cost": 0},
+        ],
+      },
+      "starway-stairs": {
+        "standard-wager": 30,
+        "enhanced-wager": 20,
+        "tiers": [
+          /*[0]*/
+          {"tier": 1, "essence-reward": 60},
+          /*[1]*/
+          {"tier": 2, "essence-reward": 140},
+          /*[2]*/
+          {"tier": 3, "essence-reward": 300},
+        ],
+      },
+      "four-suit-reprise": {"standard-draw-price": 25, "enhanced-draw-price": 15, "essence-reward": 100},
+    },
+    "exploration": {"default-essence-per-spark": 40},
+  },
 )

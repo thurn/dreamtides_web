@@ -1,853 +1,822 @@
 CompatDocument(
-    data: {
-        "journeyStart": {
-            "speechBubble": {
-                "speaker": "mira",
-                "delay": 1,
-                "horizontalOffset": 40,
-                "verticalOffset": 0,
-                "bubbleWidth": 550,
-                "text": "For each journey, you must choose a [purple]Dream Avatar[/purple] who provides a permanent ability.",
-            },
-        },
-        "dreamscape": {
-            "speechBubble": {
-                "speaker": "mira",
-                "delay": 1,
-                "horizontalOffset": 0,
-                "verticalOffset": 0,
-                "bubbleWidth": 700,
-                "text": "In each dream, you will visit [purple]sites[/purple] to build your deck and prepare for a [purple]dream battle[/purple].",
-            },
-        },
-        "atlas": {
-            "speechBubble": {
-                "speaker": "mira",
-                "delay": 1,
-                "horizontalOffset": 0,
-                "verticalOffset": 0,
-                "bubbleWidth": 700,
-                "text": "On the [purple]Atlas[/purple] screen, you will pick which dream to enter next.",
-            },
-        },
-        "draft": {
-            "speechBubble": {
-                "speaker": "mira",
-                "horizontalOffset": 0,
-                "verticalOffset": 0,
-                "bubbleWidth": 600,
-                "delay": 1,
-                "text": "At a [purple]Draft[/purple] site you build your deck by repeatedly selecting one of four cards to add.",
-            },
-        },
-        "purge": {
-            "speechBubble": {
-                "speaker": "mira",
-                "horizontalOffset": 0,
-                "verticalOffset": 0,
-                "bubbleWidth": 600,
-                "delay": 1,
-                "text": "You can [yellow]purge[/yellow] cards here, removing them from your deck for an ◆ essence cost.",
-            },
-        },
-        "dreamsignRevelation": {
-            "speechBubble": {
-                "speaker": "mira",
-                "horizontalOffset": 0,
-                "verticalOffset": 0,
-                "bubbleWidth": 600,
-                "delay": 1,
-                "text": "A [purple]Dreamsign[/purple] is a persistent artifact of the dream that gives ongoing benefits.",
-            },
-        },
-        "battleStart": {
-            "firstBattle": {
-                "speechBubble": {
-                    "speaker": "mira",
-                    "horizontalOffset": 0,
-                    "verticalOffset": 0,
-                    "bubbleWidth": 700,
-                    "delay": 1,
-                    "text": "Before each dream battle, you can view cards from your opponent\'s deck and see the ⍟ required to win",
-                },
-            },
-            "secondBattle": {
-                "speechBubble": {
-                    "speaker": "mira",
-                    "horizontalOffset": 0,
-                    "verticalOffset": 0,
-                    "bubbleWidth": 700,
-                    "delay": 1,
-                    "text": "For this battle, the opponent\'s avatar ability is active and you must score 25⍟ to win",
-                },
-            },
-        },
-        "battle": {
-            "playerDreamAvatarId": "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
-            "enemyDreamAvatarId": "B99936CA-97F9-4930-AF5A-FA9EF92557EF",
-            "startingEnergy": 4,
-            "scoreToWin": 10,
-            "starterDeck": [
-                /*[0]*/ {
-                    "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
-                    "copies": 3,
-                },
-                /*[1]*/ {
-                    "cardId": "647f5150-b2e0-424b-9480-27557642524e",
-                    "copies": 3,
-                },
-                /*[2]*/ {
-                    "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
-                    "copies": 3,
-                },
-                /*[3]*/ {
-                    "cardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
-                    "copies": 3,
-                },
-                /*[4]*/ {
-                    "cardId": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
-                    "copies": 3,
-                },
-                /*[5]*/ {
-                    "cardId": "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
-                    "copies": 3,
-                },
-                /*[6]*/ {
-                    "cardId": "4408b942-09a0-4f4e-a403-10c708c6e3c5",
-                    "copies": 3,
-                },
-                /*[7]*/ {
-                    "cardId": "2162742c-09d0-4e62-ae49-0f8f79b45adc",
-                    "copies": 3,
-                },
-                /*[8]*/ {
-                    "cardId": "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
-                    "copies": 3,
-                },
-                /*[9]*/ {
-                    "cardId": "944e15d2-d680-4ebe-8d18-36826f4b1535",
-                    "copies": 3,
-                },
-            ],
-            "playerDraws": [
-                /*[0]*/ "4408b942-09a0-4f4e-a403-10c708c6e3c5",
-                /*[1]*/ "647f5150-b2e0-424b-9480-27557642524e",
-                /*[2]*/ "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
-                /*[3]*/ "944e15d2-d680-4ebe-8d18-36826f4b1535",
-                /*[4]*/ "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
-            ],
-            "enemyDraws": [
-                /*[0]*/ "944e15d2-d680-4ebe-8d18-36826f4b1535",
-                /*[1]*/ "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
-                /*[2]*/ "647f5150-b2e0-424b-9480-27557642524e",
-                /*[3]*/ "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
-                /*[4]*/ "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
-            ],
-            "dreamwellDraws": [
-                /*[0]*/ "02e8ea92-1218-413c-9f0b-4c865a3921d3",
-                /*[1]*/ "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
-                /*[2]*/ "51caf26d-83bf-45a9-bc80-010d353277db",
-                /*[3]*/ "5ec17498-9028-4a01-80a0-67c91b03d505",
-                /*[4]*/ "03e4e701-4720-4278-8198-9b7e0514d4cf",
-                /*[5]*/ "de98477c-e216-4618-bff1-0e24bd982fdb",
-                /*[6]*/ "662b7393-751c-4aa9-8150-5f20b4d176a4",
-                /*[7]*/ "120ec4c2-aa7b-48f4-be9f-f39820e565ca",
-                /*[8]*/ "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a",
-                /*[9]*/ "a57f1276-3fb6-4527-b538-953fbace35cf",
-                /*[10]*/ "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf",
-            ],
-            "featuredCards": {
-                "playerCardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
-                "opponentCardId": "229ab3a1-3720-41a2-924c-8fe112188f8e",
-                "enemyStarterCardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
-                "loadingEventCardId": "944e15d2-d680-4ebe-8d18-36826f4b1535",
-                "dreamwellCardId": "02e8ea92-1218-413c-9f0b-4c865a3921d3",
-            },
-            "scriptedBoard": {
-                "playerBackRankIndex": 0,
-                "playerFrontRankIndex": 0,
-            },
-            "handoff": {
-                "activeSide": "player",
-                "turnNumber": 4,
-                "phase": "dawn",
-                "dreamwellDeckIndex": 2,
-                "player": {
-                    "currentEnergy": 5,
-                    "maxEnergy": 5,
-                    "score": 0,
-                    "dreamwellCardIndex": 1,
-                    "dreamwellDrawnTurn": 3,
-                },
-                "enemy": {
-                    "currentEnergy": 0,
-                    "maxEnergy": 5,
-                    "score": 2,
-                    "dreamwellCardIndex": 0,
-                    "dreamwellDrawnTurn": 2,
-                },
-                "placements": [
-                    /*[0]*/ {
-                        "cardRole": "player",
-                        "side": "player",
-                        "source": "deck",
-                        "zone": "frontRank",
-                        "slotId": "F4",
-                    },
-                    /*[1]*/ {
-                        "cardRole": "enemyStarter",
-                        "side": "enemy",
-                        "source": "deck",
-                        "zone": "backRank",
-                        "slotId": "B5",
-                    },
-                    /*[2]*/ {
-                        "cardRole": "opponent",
-                        "side": "enemy",
-                        "source": "created",
-                        "zone": "void",
-                    },
-                ],
-            },
-            "aiActionOverrides": [
-                /*[0]*/ {
-                    "id": "play-twilight-after-nomads-verge",
-                    "trigger": {
-                        "kind": "after-dreamwell",
-                        "side": "enemy",
-                        "cardId": "51caf26d-83bf-45a9-bc80-010d353277db",
-                    },
-                    "action": {
-                        "kind": "play-card",
-                        "cardId": "229ab3a1-3720-41a2-924c-8fe112188f8e",
-                    },
-                },
-            ],
-        },
-        "actions": [
-            /*[0]*/ {
-                "id": "welcome",
-                "action": "display-speech-bubble",
-                "wait": 0,
-                "speechBubble": {
-                    "speaker": "mira",
-                    "duration": 3,
-                    "verticalOffset": 0,
-                    "bubbleWidth": 700,
-                    "text": "Welcome, Dreamer.",
-                },
-            },
-            /*[1]*/ {
-                "id": "dream-avatar-arrival",
-                "action": "animate-dream-avatar-portrait",
-                "owner": "player",
-                "pause": 1,
-                "duration": 0.6,
-                "wait": 0,
-            },
-            /*[2]*/ {
-                "id": "nightmare-call",
-                "action": "display-speech-bubble",
-                "wait": 0,
-                "speechBubble": {
-                    "speaker": "mira",
-                    "duration": 3,
-                    "verticalOffset": 100,
-                    "bubbleWidth": 700,
-                    "text": "You are called to stand against\nthe power of Nightmare.",
-                },
-            },
-            /*[3]*/ {
-                "id": "vrakmoth-arrival",
-                "action": "animate-dream-avatar-portrait",
-                "owner": "enemy",
-                "pause": 1,
-                "duration": 0.6,
-                "wait": 0,
-            },
-            /*[4]*/ {
-                "id": "vrakmoth-taunt",
-                "action": "display-speech-bubble",
-                "wait": 0,
-                "speechBubble": {
-                    "speaker": "enemy",
-                    "duration": 3,
-                    "verticalOffset": 0,
-                    "bubbleWidth": 300,
-                    "text": "For the Abyss!",
-                },
-            },
-            /*[5]*/ {
-                "id": "vrakmoth-draw",
-                "action": "draw-opponent-card",
-                "cardId": "229ab3a1-3720-41a2-924c-8fe112188f8e",
-                "wait": 0,
-            },
-            /*[6]*/ {
-                "id": "vrakmoth-reveal-and-play",
-                "action": "reveal-and-play-opponent-card",
-                "cardId": "229ab3a1-3720-41a2-924c-8fe112188f8e",
-                "revealDuration": 2,
-                "wait": 0,
-            },
-            /*[7]*/ {
-                "id": "how-to-play",
-                "action": "display-how-to-play",
-                "trigger": "player-turn-announcement-complete",
-                "text": "You can [yellow]materialize[/yellow] characters and then [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦).\n\nScore 10⍟ to win this dream battle.",
-                "wait": 0,
-            },
-            /*[8]*/ {
-                "id": "end-turn",
-                "action": "end-turn",
-                "wait": 0,
-            },
-            /*[9]*/ {
-                "id": "autumn-glade",
-                "action": "draw-dreamwell-card",
-                "owner": "enemy",
-                "cardId": "02e8ea92-1218-413c-9f0b-4c865a3921d3",
-                "wait": 0,
-            },
-            /*[10]*/ {
-                "id": "dreamwell-how-to-play",
-                "action": "display-how-to-play",
-                "trigger": "immediate",
-                "companion": "dreamwell-card",
-                "cardWidth": 500,
-                "text": "From turn 2, players draw [yellow]dreamwell[/yellow] cards that increase their energy (●) production and have special effects.",
-                "wait": 0,
-            },
-            /*[11]*/ {
-                "id": "runebound-champion-draw",
-                "action": "draw-opponent-card",
-                "cardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
-                "wait": 0,
-            },
-            /*[12]*/ {
-                "id": "runebound-champion-reveal-and-play",
-                "action": "reveal-and-play-opponent-card",
-                "cardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
-                "revealDuration": 5,
-                "wait": 0,
-                "speechBubble": {
-                    "speaker": "mira",
-                    "duration": 4,
-                    "verticalOffset": 0,
-                    "bubbleWidth": 500,
-                    "text": "This card has a ▸Dawn ability which triggers at the start of turn.",
-                },
-            },
-            /*[13]*/ {
-                "id": "vrakmoth-challenge",
-                "action": "display-speech-bubble",
-                "wait": 0,
-                "speechBubble": {
-                    "speaker": "enemy",
-                    "duration": 3,
-                    "verticalOffset": 0,
-                    "bubbleWidth": 300,
-                    "text": "My character [yellow]challenges[/yellow] you! Prove your worth!",
-                },
-            },
-            /*[14]*/ {
-                "id": "opponent-character-advance",
-                "action": "reposition-opponent-character",
-                "cardId": "229ab3a1-3720-41a2-924c-8fe112188f8e",
-                "wait": 1.5,
-            },
-            /*[15]*/ {
-                "id": "challenge-positioning-how-to-play",
-                "action": "display-how-to-play",
-                "trigger": "immediate",
-                "text": "Characters in the front rank [yellow]challenge[/yellow] during their turn and [yellow]block[/yellow] challengers during the opponent\'s turn.",
-                "wait": 0,
-            },
-            /*[16]*/ {
-                "id": "block-twilight-troubadour",
-                "action": "reposition-player-character",
-                "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
-                "opposingCardId": "229ab3a1-3720-41a2-924c-8fe112188f8e",
-                "wait": 0,
-            },
-            /*[17]*/ {
-                "id": "resolve-twilight-challenge",
-                "action": "resolve-challenge",
-                "challengerCardId": "229ab3a1-3720-41a2-924c-8fe112188f8e",
-                "blockerCardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
-                "wait": 1,
-            },
-            /*[18]*/ {
-                "id": "challenge-resolution-dissolved",
-                "action": "display-speech-bubble",
-                "wait": 0,
-                "speechBubble": {
-                    "speaker": "mira",
-                    "duration": 10,
-                    "verticalOffset": -30,
-                    "bubbleWidth": 500,
-                    "text": "The lowest spark (✦) character in the challenge is [yellow]dissolved[/yellow] and sent to the void.",
-                },
-            },
-            /*[19]*/ {
-                "id": "challenge-resolution-points",
-                "action": "display-speech-bubble",
-                "wait": 0,
-                "speechBubble": {
-                    "speaker": "mira",
-                    "duration": 10,
-                    "verticalOffset": 30,
-                    "bubbleWidth": 500,
-                    "text": "A [yellow]blocked[/yellow] character that isn\'t dissolved scores fewer points (⍟), reduced by the enemy\'s spark (✦).",
-                },
-            },
-            /*[20]*/ {
-                "id": "player-voltsurge",
-                "action": "draw-dreamwell-card",
-                "owner": "player",
-                "cardId": "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
-                "revealDuration": 3,
-                "wait": 0,
-            },
-            /*[21]*/ {
-                "id": "voltsurge-player-draw-nocturne",
-                "action": "draw-card",
-                "owner": "player",
-                "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
-                "reason": "dreamwell-effect",
-                "wait": 0,
-            },
-            /*[22]*/ {
-                "id": "voltsurge-player-draw-witness",
-                "action": "draw-card",
-                "owner": "player",
-                "cardId": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
-                "reason": "dreamwell-effect",
-                "wait": 0,
-            },
-            /*[23]*/ {
-                "id": "voltsurge-enemy-draw-troubadour",
-                "action": "draw-card",
-                "owner": "enemy",
-                "cardId": "229ab3a1-3720-41a2-924c-8fe112188f8e",
-                "reason": "dreamwell-effect",
-                "wait": 0,
-            },
-            /*[24]*/ {
-                "id": "voltsurge-enemy-draw-flashpoint",
-                "action": "draw-card",
-                "owner": "enemy",
-                "cardId": "4408b942-09a0-4f4e-a403-10c708c6e3c5",
-                "reason": "dreamwell-effect",
-                "wait": 0,
-            },
-            /*[25]*/ {
-                "id": "player-turn-draw-glimpse",
-                "action": "draw-card",
-                "owner": "player",
-                "cardId": "2162742c-09d0-4e62-ae49-0f8f79b45adc",
-                "reason": "turn-draw",
-                "wait": 0,
-            },
-            /*[26]*/ {
-                "id": "event-cards-explained",
-                "action": "display-speech-bubble",
-                "wait": 0,
-                "speechBubble": {
-                    "speaker": "mira",
-                    "duration": 5,
-                    "verticalOffset": 0,
-                    "bubbleWidth": 500,
-                    "text": "An [purple]event[purple] card has a one-time effect, and then is sent the void.",
-                },
-            },
-        ],
-        "triggers": [
-            /*[0]*/ {
-                "id": "opponent-reposition-opportunity",
-                "on": [
-                    /*[0]*/ "opponent-reposition-opportunity",
-                ],
-                "priority": 10,
-                "duration": 5,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "any",
-                },
-                "text": "During your [purple]Dusk[/purple] phase, the opposing player may reposition their characters.",
-            },
-            /*[1]*/ {
-                "id": "player-night-phase",
-                "on": [
-                    /*[0]*/ "player-night-phase",
-                ],
-                "priority": 10,
-                "duration": 6,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "any",
-                },
-                "text": "During your [purple]Night[/purple] phase, you can play ❖ fast cards and activate ❖ fast abilities",
-            },
-            /*[2]*/ {
-                "id": "flashpoint-no-valid-targets",
-                "on": [
-                    /*[0]*/ "card-no-valid-targets",
-                ],
-                "priority": 10,
-                "duration": 4,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "card-id",
-                    "cardId": "4408b942-09a0-4f4e-a403-10c708c6e3c5",
-                },
-                "text": "There are no valid targets for this card",
-            },
-            /*[3]*/ {
-                "id": "spark-tie",
-                "on": [
-                    /*[0]*/ "challenge-resolved",
-                ],
-                "priority": 10,
-                "duration": 5,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "any",
-                },
-                "text": "If there is a tie in spark (✦) values, both characters in the challenge are dissolved",
-            },
-            /*[4]*/ {
-                "id": "transfiguration",
-                "on": [
-                    /*[0]*/ "transfiguration-seen",
-                ],
-                "priority": 100,
-                "delay": {
-                    "transfiguration-seen": 1,
-                },
-                "duration": 5,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "any",
-                },
-                "text": "Cards can be [yellow]transfigured[/yellow] to change their cost, spark, or abilities",
-            },
-            /*[5]*/ {
-                "id": "support",
-                "on": [
-                    /*[0]*/ "card-seen",
-                    /*[1]*/ "card-play",
-                    /*[2]*/ "dreamwell-resolve",
-                ],
-                "priority": 100,
-                "delay": {
-                    "card-seen": 1,
-                },
-                "duration": 5,
-                "match": {
-                    "kind": "glossary",
-                    "id": "support",
-                },
-                "bubbleWidth": 500,
-                "text": "A character with [yellow]support[/yellow] gives a bonus to the two characters in front of it.",
-            },
-            /*[6]*/ {
-                "id": "foresee",
-                "on": [
-                    /*[0]*/ "card-seen",
-                    /*[1]*/ "card-play",
-                    /*[2]*/ "dreamwell-resolve",
-                ],
-                "priority": 100,
-                "delay": {
-                    "card-seen": 1,
-                },
-                "duration": 5,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "glossary",
-                    "id": "foresee",
-                },
-                "text": "To [yellow]foresee[/yellow] 1, look at the top card of your deck. You may put it into your void.",
-            },
-            /*[7]*/ {
-                "id": "dissolved-trigger",
-                "on": [
-                    /*[0]*/ "card-seen",
-                    /*[1]*/ "card-play",
-                ],
-                "priority": 100,
-                "delay": {
-                    "card-seen": 1,
-                },
-                "duration": 3,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "glossary",
-                    "id": "dissolved-trigger",
-                },
-                "text": "A ▸Dissolved ability triggers when the character is sent to the void.",
-            },
-            /*[8]*/ {
-                "id": "discover",
-                "on": [
-                    /*[0]*/ "card-seen",
-                    /*[1]*/ "card-play",
-                    /*[2]*/ "dreamwell-resolve",
-                ],
-                "priority": 100,
-                "delay": {
-                    "card-seen": 1,
-                },
-                "duration": 3,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "glossary",
-                    "id": "discover",
-                },
-                "text": "To [yellow]discover[/yellow] a card, reveal 3 matching cards from your deck and pick one to draw.",
-            },
-            /*[9]*/ {
-                "id": "erode",
-                "on": [
-                    /*[0]*/ "card-seen",
-                    /*[1]*/ "card-play",
-                    /*[2]*/ "dreamwell-resolve",
-                ],
-                "priority": 100,
-                "delay": {
-                    "card-seen": 1,
-                },
-                "duration": 10,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "glossary",
-                    "id": "erode",
-                },
-                "text": "[yellow]Erode[/yellow] means to put cards from a deck into the void.",
-            },
-            /*[10]*/ {
-                "id": "figment-created",
-                "on": [
-                    /*[0]*/ "figment-created",
-                ],
-                "priority": 100,
-                "duration": 8,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "any",
-                },
-                "text": "Figments are token representations of characters which can be merged together.",
-            },
-            /*[11]*/ {
-                "id": "banish",
-                "on": [
-                    /*[0]*/ "card-seen",
-                    /*[1]*/ "card-play",
-                    /*[2]*/ "dreamwell-resolve",
-                ],
-                "priority": 100,
-                "delay": {
-                    "card-seen": 1,
-                },
-                "duration": 3,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "glossary",
-                    "id": "banish",
-                },
-                "text": "To [yellow]banish[/yellow] a card, remove it from the game. It does not go to the void.",
-            },
-            /*[12]*/ {
-                "id": "dissolve",
-                "on": [
-                    /*[0]*/ "card-seen",
-                    /*[1]*/ "card-play",
-                    /*[2]*/ "dreamwell-resolve",
-                ],
-                "priority": 100,
-                "delay": {
-                    "card-seen": 1,
-                },
-                "duration": 3,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "glossary",
-                    "id": "dissolve",
-                },
-                "text": "To [yellow]dissolve[/yellow] a character, send it to its controller’s void.",
-            },
-            /*[13]*/ {
-                "id": "prevent",
-                "on": [
-                    /*[0]*/ "card-seen",
-                    /*[1]*/ "card-play",
-                    /*[2]*/ "dreamwell-resolve",
-                ],
-                "priority": 100,
-                "delay": {
-                    "card-seen": 1,
-                },
-                "duration": 3,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "glossary",
-                    "id": "prevent",
-                },
-                "text": "[yellow]Prevent[/yellow] stops a card on the stack before it resolves, then sends it to the void.",
-            },
-            /*[14]*/ {
-                "id": "rematerialize",
-                "on": [
-                    /*[0]*/ "card-seen",
-                    /*[1]*/ "card-play",
-                    /*[2]*/ "dreamwell-resolve",
-                ],
-                "priority": 100,
-                "delay": {
-                    "card-seen": 1,
-                },
-                "duration": 3,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "glossary",
-                    "id": "rematerialize",
-                },
-                "text": "To [yellow]rematerialize[/yellow] a character, trigger its ▸Materialized ability again while it stays in play.",
-            },
-            /*[15]*/ {
-                "id": "ephemeral",
-                "on": [
-                    /*[0]*/ "card-seen",
-                    /*[1]*/ "card-play",
-                    /*[2]*/ "dreamwell-resolve",
-                ],
-                "priority": 100,
-                "delay": {
-                    "card-seen": 1,
-                },
-                "duration": 3,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "glossary",
-                    "id": "ephemeral",
-                },
-                "text": "An [yellow]ephemeral[/yellow] card left in your hand at end of turn is banished.",
-            },
-            /*[16]*/ {
-                "id": "awakened",
-                "on": [
-                    /*[0]*/ "card-seen",
-                    /*[1]*/ "card-play",
-                    /*[2]*/ "dreamwell-resolve",
-                ],
-                "priority": 100,
-                "delay": {
-                    "card-seen": 1,
-                },
-                "duration": 3,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "glossary",
-                    "id": "awakened",
-                },
-                "text": "An [yellow]awakened[/yellow] character can challenge and use ☾ abilities on the turn it enters play.",
-            },
-            /*[17]*/ {
-                "id": "phasing",
-                "on": [
-                    /*[0]*/ "card-seen",
-                    /*[1]*/ "card-play",
-                    /*[2]*/ "dreamwell-resolve",
-                ],
-                "priority": 100,
-                "delay": {
-                    "card-seen": 1,
-                },
-                "duration": 3,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "glossary",
-                    "id": "phasing",
-                },
-                "text": "When a [yellow]phasing[/yellow] character is played, you may return one of your characters to your hand and put this one in its position.",
-            },
-            /*[18]*/ {
-                "id": "veil",
-                "on": [
-                    /*[0]*/ "card-seen",
-                    /*[1]*/ "card-play",
-                    /*[2]*/ "dreamwell-resolve",
-                ],
-                "priority": 100,
-                "delay": {
-                    "card-seen": 1,
-                },
-                "duration": 3,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "glossary",
-                    "id": "veil",
-                },
-                "text": "If an opposing effect would dissolve a character with [yellow]veil[/yellow], remove its veil instead.",
-            },
-            /*[19]*/ {
-                "id": "reclaim",
-                "on": [
-                    /*[0]*/ "card-seen",
-                    /*[1]*/ "card-play",
-                    /*[2]*/ "dreamwell-resolve",
-                ],
-                "priority": 100,
-                "delay": {
-                    "card-seen": 1,
-                },
-                "duration": 3,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "glossary",
-                    "id": "reclaim",
-                },
-                "text": "[yellow]Reclaim[/yellow] lets you play this card from your void for its Reclaim cost, and then banish it when it leaves play.",
-            },
-            /*[20]*/ {
-                "id": "offering",
-                "on": [
-                    /*[0]*/ "card-seen",
-                    /*[1]*/ "card-play",
-                    /*[2]*/ "dreamwell-resolve",
-                ],
-                "priority": 100,
-                "delay": {
-                    "card-seen": 1,
-                },
-                "duration": 3,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "glossary",
-                    "id": "offering",
-                },
-                "text": "[yellow]Offering[/yellow] lets you play this card for 0● by banishing a card from your hand. If you do, banish it at end of turn.",
-            },
-            /*[21]*/ {
-                "id": "vengeful",
-                "on": [
-                    /*[0]*/ "card-seen",
-                    /*[1]*/ "card-play",
-                    /*[2]*/ "dreamwell-resolve",
-                ],
-                "priority": 100,
-                "delay": {
-                    "card-seen": 1,
-                },
-                "duration": 3,
-                "bubbleWidth": 500,
-                "match": {
-                    "kind": "glossary",
-                    "id": "vengeful",
-                },
-                "text": "When a [yellow]vengeful[/yellow] character loses a challenge, it dissolves the opposing character too.",
-            },
-        ],
+  data: {
+    "journeyStart": {
+      "speechBubble": {
+        "speaker": "mira",
+        "delay": 1,
+        "horizontalOffset": 40,
+        "verticalOffset": 0,
+        "bubbleWidth": 550,
+        "text": "For each journey, you must choose a [purple]Dream Avatar[/purple] who provides a permanent ability.",
+      },
     },
+    "dreamscape": {
+      "speechBubble": {
+        "speaker": "mira",
+        "delay": 1,
+        "horizontalOffset": 0,
+        "verticalOffset": 0,
+        "bubbleWidth": 700,
+        "text": "In each dream, you will visit [purple]sites[/purple] to build your deck and prepare for a [purple]dream battle[/purple].",
+      },
+    },
+    "atlas": {
+      "speechBubble": {
+        "speaker": "mira",
+        "delay": 1,
+        "horizontalOffset": 0,
+        "verticalOffset": 0,
+        "bubbleWidth": 700,
+        "text": "On the [purple]Atlas[/purple] screen, you will pick which dream to enter next.",
+      },
+    },
+    "draft": {
+      "speechBubble": {
+        "speaker": "mira",
+        "horizontalOffset": 0,
+        "verticalOffset": 0,
+        "bubbleWidth": 600,
+        "delay": 1,
+        "text": "At a [purple]Draft[/purple] site you build your deck by repeatedly selecting one of four cards to add.",
+      },
+    },
+    "purge": {
+      "speechBubble": {
+        "speaker": "mira",
+        "horizontalOffset": 0,
+        "verticalOffset": 0,
+        "bubbleWidth": 600,
+        "delay": 1,
+        "text": "You can [yellow]purge[/yellow] cards here, removing them from your deck for an ◆ essence cost.",
+      },
+    },
+    "dreamsignRevelation": {
+      "speechBubble": {
+        "speaker": "mira",
+        "horizontalOffset": 0,
+        "verticalOffset": 0,
+        "bubbleWidth": 600,
+        "delay": 1,
+        "text": "A [purple]Dreamsign[/purple] is a persistent artifact of the dream that gives ongoing benefits.",
+      },
+    },
+    "battleStart": {
+      "firstBattle": {
+        "speechBubble": {
+          "speaker": "mira",
+          "horizontalOffset": 0,
+          "verticalOffset": 0,
+          "bubbleWidth": 700,
+          "delay": 1,
+          "text": "Before each dream battle, you can view cards from your opponent\'s deck and see the ⍟ required to win",
+        },
+      },
+      "secondBattle": {
+        "speechBubble": {
+          "speaker": "mira",
+          "horizontalOffset": 0,
+          "verticalOffset": 0,
+          "bubbleWidth": 700,
+          "delay": 1,
+          "text": "For this battle, the opponent\'s avatar ability is active and you must score 25⍟ to win",
+        },
+      },
+    },
+    "battle": {
+      "playerDreamAvatarId": "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+      "enemyDreamAvatarId": "B99936CA-97F9-4930-AF5A-FA9EF92557EF",
+      "startingEnergy": 4,
+      "scoreToWin": 10,
+      "starterDeck": [
+        /*[0]*/
+        {"cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8", "copies": 3},
+        /*[1]*/
+        {"cardId": "647f5150-b2e0-424b-9480-27557642524e", "copies": 3},
+        /*[2]*/
+        {"cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af", "copies": 3},
+        /*[3]*/
+        {"cardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0", "copies": 3},
+        /*[4]*/
+        {"cardId": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", "copies": 3},
+        /*[5]*/
+        {"cardId": "5ab11bef-5dcd-49f5-be49-ae2ccde76e70", "copies": 3},
+        /*[6]*/
+        {"cardId": "4408b942-09a0-4f4e-a403-10c708c6e3c5", "copies": 3},
+        /*[7]*/
+        {"cardId": "2162742c-09d0-4e62-ae49-0f8f79b45adc", "copies": 3},
+        /*[8]*/
+        {"cardId": "910b4cf9-dec7-4e03-af4f-7d5ae342eeba", "copies": 3},
+        /*[9]*/
+        {"cardId": "944e15d2-d680-4ebe-8d18-36826f4b1535", "copies": 3},
+      ],
+      "playerDraws": [
+        /*[0]*/
+        "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+        /*[1]*/
+        "647f5150-b2e0-424b-9480-27557642524e",
+        /*[2]*/
+        "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
+        /*[3]*/
+        "944e15d2-d680-4ebe-8d18-36826f4b1535",
+        /*[4]*/
+        "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
+      ],
+      "enemyDraws": [
+        /*[0]*/
+        "944e15d2-d680-4ebe-8d18-36826f4b1535",
+        /*[1]*/
+        "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
+        /*[2]*/
+        "647f5150-b2e0-424b-9480-27557642524e",
+        /*[3]*/
+        "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+        /*[4]*/
+        "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
+      ],
+      "dreamwellDraws": [
+        /*[0]*/
+        "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+        /*[1]*/
+        "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+        /*[2]*/
+        "51caf26d-83bf-45a9-bc80-010d353277db",
+        /*[3]*/
+        "5ec17498-9028-4a01-80a0-67c91b03d505",
+        /*[4]*/
+        "03e4e701-4720-4278-8198-9b7e0514d4cf",
+        /*[5]*/
+        "de98477c-e216-4618-bff1-0e24bd982fdb",
+        /*[6]*/
+        "662b7393-751c-4aa9-8150-5f20b4d176a4",
+        /*[7]*/
+        "120ec4c2-aa7b-48f4-be9f-f39820e565ca",
+        /*[8]*/
+        "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a",
+        /*[9]*/
+        "a57f1276-3fb6-4527-b538-953fbace35cf",
+        /*[10]*/
+        "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf",
+      ],
+      "featuredCards": {
+        "playerCardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "opponentCardId": "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        "enemyStarterCardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+        "loadingEventCardId": "944e15d2-d680-4ebe-8d18-36826f4b1535",
+        "dreamwellCardId": "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+      },
+      "scriptedBoard": {"playerBackRankIndex": 0, "playerFrontRankIndex": 0},
+      "handoff": {
+        "activeSide": "player",
+        "turnNumber": 4,
+        "phase": "dawn",
+        "dreamwellDeckIndex": 2,
+        "player": {"currentEnergy": 5, "maxEnergy": 5, "score": 0, "dreamwellCardIndex": 1, "dreamwellDrawnTurn": 3},
+        "enemy": {"currentEnergy": 0, "maxEnergy": 5, "score": 2, "dreamwellCardIndex": 0, "dreamwellDrawnTurn": 2},
+        "placements": [
+          /*[0]*/
+          {"cardRole": "player", "side": "player", "source": "deck", "zone": "frontRank", "slotId": "F4"},
+          /*[1]*/
+          {"cardRole": "enemyStarter", "side": "enemy", "source": "deck", "zone": "backRank", "slotId": "B5"},
+          /*[2]*/
+          {"cardRole": "opponent", "side": "enemy", "source": "created", "zone": "void"},
+        ],
+      },
+      "aiActionOverrides": [
+        /*[0]*/
+        {
+          "id": "play-twilight-after-nomads-verge",
+          "trigger": {"kind": "after-dreamwell", "side": "enemy", "cardId": "51caf26d-83bf-45a9-bc80-010d353277db"},
+          "action": {"kind": "play-card", "cardId": "229ab3a1-3720-41a2-924c-8fe112188f8e"},
+        },
+      ],
+    },
+    "actions": [
+      /*[0]*/
+      {
+        "id": "welcome",
+        "action": "display-speech-bubble",
+        "wait": 0,
+        "speechBubble": {
+          "speaker": "mira",
+          "duration": 3,
+          "verticalOffset": 0,
+          "bubbleWidth": 700,
+          "text": "Welcome, Dreamer.",
+        },
+      },
+      /*[1]*/
+      {
+        "id": "dream-avatar-arrival",
+        "action": "animate-dream-avatar-portrait",
+        "owner": "player",
+        "pause": 1,
+        "duration": 0.6,
+        "wait": 0,
+      },
+      /*[2]*/
+      {
+        "id": "nightmare-call",
+        "action": "display-speech-bubble",
+        "wait": 0,
+        "speechBubble": {
+          "speaker": "mira",
+          "duration": 3,
+          "verticalOffset": 100,
+          "bubbleWidth": 700,
+          "text": "You are called to stand against\nthe power of Nightmare.",
+        },
+      },
+      /*[3]*/
+      {
+        "id": "vrakmoth-arrival",
+        "action": "animate-dream-avatar-portrait",
+        "owner": "enemy",
+        "pause": 1,
+        "duration": 0.6,
+        "wait": 0,
+      },
+      /*[4]*/
+      {
+        "id": "vrakmoth-taunt",
+        "action": "display-speech-bubble",
+        "wait": 0,
+        "speechBubble": {
+          "speaker": "enemy",
+          "duration": 3,
+          "verticalOffset": 0,
+          "bubbleWidth": 300,
+          "text": "For the Abyss!",
+        },
+      },
+      /*[5]*/
+      {
+        "id": "vrakmoth-draw",
+        "action": "draw-opponent-card",
+        "cardId": "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        "wait": 0,
+      },
+      /*[6]*/
+      {
+        "id": "vrakmoth-reveal-and-play",
+        "action": "reveal-and-play-opponent-card",
+        "cardId": "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        "revealDuration": 2,
+        "wait": 0,
+      },
+      /*[7]*/
+      {
+        "id": "how-to-play",
+        "action": "display-how-to-play",
+        "trigger": "player-turn-announcement-complete",
+        "text": "You can [yellow]materialize[/yellow] characters and then [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦).\n\nScore 10⍟ to win this dream battle.",
+        "wait": 0,
+      },
+      /*[8]*/
+      {"id": "end-turn", "action": "end-turn", "wait": 0},
+      /*[9]*/
+      {
+        "id": "autumn-glade",
+        "action": "draw-dreamwell-card",
+        "owner": "enemy",
+        "cardId": "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+        "wait": 0,
+      },
+      /*[10]*/
+      {
+        "id": "dreamwell-how-to-play",
+        "action": "display-how-to-play",
+        "trigger": "immediate",
+        "companion": "dreamwell-card",
+        "cardWidth": 500,
+        "text": "From turn 2, players draw [yellow]dreamwell[/yellow] cards that increase their energy (●) production and have special effects.",
+        "wait": 0,
+      },
+      /*[11]*/
+      {
+        "id": "runebound-champion-draw",
+        "action": "draw-opponent-card",
+        "cardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+        "wait": 0,
+      },
+      /*[12]*/
+      {
+        "id": "runebound-champion-reveal-and-play",
+        "action": "reveal-and-play-opponent-card",
+        "cardId": "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+        "revealDuration": 5,
+        "wait": 0,
+        "speechBubble": {
+          "speaker": "mira",
+          "duration": 4,
+          "verticalOffset": 0,
+          "bubbleWidth": 500,
+          "text": "This card has a ▸Dawn ability which triggers at the start of turn.",
+        },
+      },
+      /*[13]*/
+      {
+        "id": "vrakmoth-challenge",
+        "action": "display-speech-bubble",
+        "wait": 0,
+        "speechBubble": {
+          "speaker": "enemy",
+          "duration": 3,
+          "verticalOffset": 0,
+          "bubbleWidth": 300,
+          "text": "My character [yellow]challenges[/yellow] you! Prove your worth!",
+        },
+      },
+      /*[14]*/
+      {
+        "id": "opponent-character-advance",
+        "action": "reposition-opponent-character",
+        "cardId": "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        "wait": 1.5,
+      },
+      /*[15]*/
+      {
+        "id": "challenge-positioning-how-to-play",
+        "action": "display-how-to-play",
+        "trigger": "immediate",
+        "text": "Characters in the front rank [yellow]challenge[/yellow] during their turn and [yellow]block[/yellow] challengers during the opponent\'s turn.",
+        "wait": 0,
+      },
+      /*[16]*/
+      {
+        "id": "block-twilight-troubadour",
+        "action": "reposition-player-character",
+        "cardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "opposingCardId": "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        "wait": 0,
+      },
+      /*[17]*/
+      {
+        "id": "resolve-twilight-challenge",
+        "action": "resolve-challenge",
+        "challengerCardId": "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        "blockerCardId": "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "wait": 1,
+      },
+      /*[18]*/
+      {
+        "id": "challenge-resolution-dissolved",
+        "action": "display-speech-bubble",
+        "wait": 0,
+        "speechBubble": {
+          "speaker": "mira",
+          "duration": 10,
+          "verticalOffset": -30,
+          "bubbleWidth": 500,
+          "text": "The lowest spark (✦) character in the challenge is [yellow]dissolved[/yellow] and sent to the void.",
+        },
+      },
+      /*[19]*/
+      {
+        "id": "challenge-resolution-points",
+        "action": "display-speech-bubble",
+        "wait": 0,
+        "speechBubble": {
+          "speaker": "mira",
+          "duration": 10,
+          "verticalOffset": 30,
+          "bubbleWidth": 500,
+          "text": "A [yellow]blocked[/yellow] character that isn\'t dissolved scores fewer points (⍟), reduced by the enemy\'s spark (✦).",
+        },
+      },
+      /*[20]*/
+      {
+        "id": "player-voltsurge",
+        "action": "draw-dreamwell-card",
+        "owner": "player",
+        "cardId": "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+        "revealDuration": 3,
+        "wait": 0,
+      },
+      /*[21]*/
+      {
+        "id": "voltsurge-player-draw-nocturne",
+        "action": "draw-card",
+        "owner": "player",
+        "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+        "reason": "dreamwell-effect",
+        "wait": 0,
+      },
+      /*[22]*/
+      {
+        "id": "voltsurge-player-draw-witness",
+        "action": "draw-card",
+        "owner": "player",
+        "cardId": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+        "reason": "dreamwell-effect",
+        "wait": 0,
+      },
+      /*[23]*/
+      {
+        "id": "voltsurge-enemy-draw-troubadour",
+        "action": "draw-card",
+        "owner": "enemy",
+        "cardId": "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        "reason": "dreamwell-effect",
+        "wait": 0,
+      },
+      /*[24]*/
+      {
+        "id": "voltsurge-enemy-draw-flashpoint",
+        "action": "draw-card",
+        "owner": "enemy",
+        "cardId": "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+        "reason": "dreamwell-effect",
+        "wait": 0,
+      },
+      /*[25]*/
+      {
+        "id": "player-turn-draw-glimpse",
+        "action": "draw-card",
+        "owner": "player",
+        "cardId": "2162742c-09d0-4e62-ae49-0f8f79b45adc",
+        "reason": "turn-draw",
+        "wait": 0,
+      },
+      /*[26]*/
+      {
+        "id": "event-cards-explained",
+        "action": "display-speech-bubble",
+        "wait": 0,
+        "speechBubble": {
+          "speaker": "mira",
+          "duration": 5,
+          "verticalOffset": 0,
+          "bubbleWidth": 500,
+          "text": "An [purple]event[purple] card has a one-time effect, and then is sent the void.",
+        },
+      },
+    ],
+    "triggers": [
+      /*[0]*/
+      {
+        "id": "opponent-reposition-opportunity",
+        "on": [
+          /*[0]*/
+          "opponent-reposition-opportunity",
+        ],
+        "priority": 10,
+        "duration": 5,
+        "bubbleWidth": 500,
+        "match": {"kind": "any"},
+        "text": "During your [purple]Dusk[/purple] phase, the opposing player may reposition their characters.",
+      },
+      /*[1]*/
+      {
+        "id": "player-night-phase",
+        "on": [
+          /*[0]*/
+          "player-night-phase",
+        ],
+        "priority": 10,
+        "duration": 6,
+        "bubbleWidth": 500,
+        "match": {"kind": "any"},
+        "text": "During your [purple]Night[/purple] phase, you can play ❖ fast cards and activate ❖ fast abilities",
+      },
+      /*[2]*/
+      {
+        "id": "flashpoint-no-valid-targets",
+        "on": [
+          /*[0]*/
+          "card-no-valid-targets",
+        ],
+        "priority": 10,
+        "duration": 4,
+        "bubbleWidth": 500,
+        "match": {"kind": "card-id", "cardId": "4408b942-09a0-4f4e-a403-10c708c6e3c5"},
+        "text": "There are no valid targets for this card",
+      },
+      /*[3]*/
+      {
+        "id": "spark-tie",
+        "on": [
+          /*[0]*/
+          "challenge-resolved",
+        ],
+        "priority": 10,
+        "duration": 5,
+        "bubbleWidth": 500,
+        "match": {"kind": "any"},
+        "text": "If there is a tie in spark (✦) values, both characters in the challenge are dissolved",
+      },
+      /*[4]*/
+      {
+        "id": "transfiguration",
+        "on": [
+          /*[0]*/
+          "transfiguration-seen",
+        ],
+        "priority": 100,
+        "delay": {"transfiguration-seen": 1},
+        "duration": 5,
+        "bubbleWidth": 500,
+        "match": {"kind": "any"},
+        "text": "Cards can be [yellow]transfigured[/yellow] to change their cost, spark, or abilities",
+      },
+      /*[5]*/
+      {
+        "id": "support",
+        "on": [
+          /*[0]*/
+          "card-seen",
+          /*[1]*/
+          "card-play",
+          /*[2]*/
+          "dreamwell-resolve",
+        ],
+        "priority": 100,
+        "delay": {"card-seen": 1},
+        "duration": 5,
+        "match": {"kind": "glossary", "id": "support"},
+        "bubbleWidth": 500,
+        "text": "A character with [yellow]support[/yellow] gives a bonus to the two characters in front of it.",
+      },
+      /*[6]*/
+      {
+        "id": "foresee",
+        "on": [
+          /*[0]*/
+          "card-seen",
+          /*[1]*/
+          "card-play",
+          /*[2]*/
+          "dreamwell-resolve",
+        ],
+        "priority": 100,
+        "delay": {"card-seen": 1},
+        "duration": 5,
+        "bubbleWidth": 500,
+        "match": {"kind": "glossary", "id": "foresee"},
+        "text": "To [yellow]foresee[/yellow] 1, look at the top card of your deck. You may put it into your void.",
+      },
+      /*[7]*/
+      {
+        "id": "dissolved-trigger",
+        "on": [
+          /*[0]*/
+          "card-seen",
+          /*[1]*/
+          "card-play",
+        ],
+        "priority": 100,
+        "delay": {"card-seen": 1},
+        "duration": 3,
+        "bubbleWidth": 500,
+        "match": {"kind": "glossary", "id": "dissolved-trigger"},
+        "text": "A ▸Dissolved ability triggers when the character is sent to the void.",
+      },
+      /*[8]*/
+      {
+        "id": "discover",
+        "on": [
+          /*[0]*/
+          "card-seen",
+          /*[1]*/
+          "card-play",
+          /*[2]*/
+          "dreamwell-resolve",
+        ],
+        "priority": 100,
+        "delay": {"card-seen": 1},
+        "duration": 3,
+        "bubbleWidth": 500,
+        "match": {"kind": "glossary", "id": "discover"},
+        "text": "To [yellow]discover[/yellow] a card, reveal 3 matching cards from your deck and pick one to draw.",
+      },
+      /*[9]*/
+      {
+        "id": "erode",
+        "on": [
+          /*[0]*/
+          "card-seen",
+          /*[1]*/
+          "card-play",
+          /*[2]*/
+          "dreamwell-resolve",
+        ],
+        "priority": 100,
+        "delay": {"card-seen": 1},
+        "duration": 10,
+        "bubbleWidth": 500,
+        "match": {"kind": "glossary", "id": "erode"},
+        "text": "[yellow]Erode[/yellow] means to put cards from a deck into the void.",
+      },
+      /*[10]*/
+      {
+        "id": "figment-created",
+        "on": [
+          /*[0]*/
+          "figment-created",
+        ],
+        "priority": 100,
+        "duration": 8,
+        "bubbleWidth": 500,
+        "match": {"kind": "any"},
+        "text": "Figments are token representations of characters which can be merged together.",
+      },
+      /*[11]*/
+      {
+        "id": "banish",
+        "on": [
+          /*[0]*/
+          "card-seen",
+          /*[1]*/
+          "card-play",
+          /*[2]*/
+          "dreamwell-resolve",
+        ],
+        "priority": 100,
+        "delay": {"card-seen": 1},
+        "duration": 3,
+        "bubbleWidth": 500,
+        "match": {"kind": "glossary", "id": "banish"},
+        "text": "To [yellow]banish[/yellow] a card, remove it from the game. It does not go to the void.",
+      },
+      /*[12]*/
+      {
+        "id": "dissolve",
+        "on": [
+          /*[0]*/
+          "card-seen",
+          /*[1]*/
+          "card-play",
+          /*[2]*/
+          "dreamwell-resolve",
+        ],
+        "priority": 100,
+        "delay": {"card-seen": 1},
+        "duration": 3,
+        "bubbleWidth": 500,
+        "match": {"kind": "glossary", "id": "dissolve"},
+        "text": "To [yellow]dissolve[/yellow] a character, send it to its controller’s void.",
+      },
+      /*[13]*/
+      {
+        "id": "prevent",
+        "on": [
+          /*[0]*/
+          "card-seen",
+          /*[1]*/
+          "card-play",
+          /*[2]*/
+          "dreamwell-resolve",
+        ],
+        "priority": 100,
+        "delay": {"card-seen": 1},
+        "duration": 3,
+        "bubbleWidth": 500,
+        "match": {"kind": "glossary", "id": "prevent"},
+        "text": "[yellow]Prevent[/yellow] stops a card on the stack before it resolves, then sends it to the void.",
+      },
+      /*[14]*/
+      {
+        "id": "rematerialize",
+        "on": [
+          /*[0]*/
+          "card-seen",
+          /*[1]*/
+          "card-play",
+          /*[2]*/
+          "dreamwell-resolve",
+        ],
+        "priority": 100,
+        "delay": {"card-seen": 1},
+        "duration": 3,
+        "bubbleWidth": 500,
+        "match": {"kind": "glossary", "id": "rematerialize"},
+        "text": "To [yellow]rematerialize[/yellow] a character, trigger its ▸Materialized ability again while it stays in play.",
+      },
+      /*[15]*/
+      {
+        "id": "ephemeral",
+        "on": [
+          /*[0]*/
+          "card-seen",
+          /*[1]*/
+          "card-play",
+          /*[2]*/
+          "dreamwell-resolve",
+        ],
+        "priority": 100,
+        "delay": {"card-seen": 1},
+        "duration": 3,
+        "bubbleWidth": 500,
+        "match": {"kind": "glossary", "id": "ephemeral"},
+        "text": "An [yellow]ephemeral[/yellow] card left in your hand at end of turn is banished.",
+      },
+      /*[16]*/
+      {
+        "id": "awakened",
+        "on": [
+          /*[0]*/
+          "card-seen",
+          /*[1]*/
+          "card-play",
+          /*[2]*/
+          "dreamwell-resolve",
+        ],
+        "priority": 100,
+        "delay": {"card-seen": 1},
+        "duration": 3,
+        "bubbleWidth": 500,
+        "match": {"kind": "glossary", "id": "awakened"},
+        "text": "An [yellow]awakened[/yellow] character can challenge and use ☾ abilities on the turn it enters play.",
+      },
+      /*[17]*/
+      {
+        "id": "phasing",
+        "on": [
+          /*[0]*/
+          "card-seen",
+          /*[1]*/
+          "card-play",
+          /*[2]*/
+          "dreamwell-resolve",
+        ],
+        "priority": 100,
+        "delay": {"card-seen": 1},
+        "duration": 3,
+        "bubbleWidth": 500,
+        "match": {"kind": "glossary", "id": "phasing"},
+        "text": "When a [yellow]phasing[/yellow] character is played, you may return one of your characters to your hand and put this one in its position.",
+      },
+      /*[18]*/
+      {
+        "id": "veil",
+        "on": [
+          /*[0]*/
+          "card-seen",
+          /*[1]*/
+          "card-play",
+          /*[2]*/
+          "dreamwell-resolve",
+        ],
+        "priority": 100,
+        "delay": {"card-seen": 1},
+        "duration": 3,
+        "bubbleWidth": 500,
+        "match": {"kind": "glossary", "id": "veil"},
+        "text": "If an opposing effect would dissolve a character with [yellow]veil[/yellow], remove its veil instead.",
+      },
+      /*[19]*/
+      {
+        "id": "reclaim",
+        "on": [
+          /*[0]*/
+          "card-seen",
+          /*[1]*/
+          "card-play",
+          /*[2]*/
+          "dreamwell-resolve",
+        ],
+        "priority": 100,
+        "delay": {"card-seen": 1},
+        "duration": 3,
+        "bubbleWidth": 500,
+        "match": {"kind": "glossary", "id": "reclaim"},
+        "text": "[yellow]Reclaim[/yellow] lets you play this card from your void for its Reclaim cost, and then banish it when it leaves play.",
+      },
+      /*[20]*/
+      {
+        "id": "offering",
+        "on": [
+          /*[0]*/
+          "card-seen",
+          /*[1]*/
+          "card-play",
+          /*[2]*/
+          "dreamwell-resolve",
+        ],
+        "priority": 100,
+        "delay": {"card-seen": 1},
+        "duration": 3,
+        "bubbleWidth": 500,
+        "match": {"kind": "glossary", "id": "offering"},
+        "text": "[yellow]Offering[/yellow] lets you play this card for 0● by banishing a card from your hand. If you do, banish it at end of turn.",
+      },
+      /*[21]*/
+      {
+        "id": "vengeful",
+        "on": [
+          /*[0]*/
+          "card-seen",
+          /*[1]*/
+          "card-play",
+          /*[2]*/
+          "dreamwell-resolve",
+        ],
+        "priority": 100,
+        "delay": {"card-seen": 1},
+        "duration": 3,
+        "bubbleWidth": 500,
+        "match": {"kind": "glossary", "id": "vengeful"},
+        "text": "When a [yellow]vengeful[/yellow] character loses a challenge, it dissolves the opposing character too.",
+      },
+    ],
+  },
 )
