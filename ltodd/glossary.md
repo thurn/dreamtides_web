@@ -4,6 +4,12 @@ This book-level reference defines Dreamtides' canonical player-facing terms in
 alphabetical order. Read it when resolving terminology across parts; each term
 links to the chapter that owns its complete rules or presentation.
 
+## Battle
+
+A two-player Card game between the player and an automated opponent, played as
+part of a Dream Journey. See the
+[Dreamtides introduction](dreamtides/dreamtides.md).
+
 ## Card
 
 An authored Character or Event definition, or a specific instance based on that
@@ -51,10 +57,20 @@ The authored character selected for a journey, including its ability, starting
 Essence, and signature Cards. See the
 [foundations chapter](dreamtides/dreamtides.md).
 
+## Dream Journey
+
+One complete run through the Dream Atlas, including deckbuilding Sites and
+Battles. See the [Dreamtides introduction](dreamtides/dreamtides.md).
+
 ## Dreamsign
 
 An authored passive effect collected during a journey. See the
 [foundations chapter](dreamtides/dreamtides.md).
+
+## Dreamwell
+
+The shared deck that increases each participant's Energy production during a
+Battle. See the [Dreamtides introduction](dreamtides/dreamtides.md).
 
 ## Effective Card
 
