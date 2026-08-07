@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implement Canonical RON"
+  short_description: "Ship modeled RON as production game data"
+  default_prompt: "Use $implement-canonical-ron to replace a compatibility RON source with its reviewed canonical RON candidate."
