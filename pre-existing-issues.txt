@@ -1,0 +1,9 @@
+Exploration encounter selection does not draw from the player's journey deck.
+`buildExplorationRuntime` in `src/coop/providers/exploration-provider.ts`
+filters the authored encounter catalog only by whether each source card exists
+in the global card database, then uniformly selects from that catalog. The
+canonical design and screen presentation draw an eligible card from the
+player's deck and use that card's authored encounter. Align the provider with
+the deck-based selection contract and add deterministic tests covering
+eligibility, duplicate card instances, and fallback when a drawn encounter
+cannot prepare both actions.

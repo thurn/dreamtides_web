@@ -107,15 +107,15 @@ pairing, target selection, acceptance, decline, dialogue, persistent outcomes,
 and symbolic two-offer presentation. Exploration chapters define authored,
 art-led encounters, encounter selection, scene art and prose, the two-action
 authoring contract, prepared choices, target-selection policies, effect
-families, future Site and Battle modifiers, atomic resolution, persisted
-responses and outcomes, and transition and reward choreography. The encounter
-catalog supplies the individual Exploration scenes and actions.
+families, future Site and Battle modifiers, choice resolution, and outcome
+choreography. The encounter catalog supplies the individual Exploration scenes
+and actions.
 
 1. **Primary:**
    [The Augury and Exploration Sites](exploration_augury/exploration_augury.md)
    — Read this chapter when you need the shared reward-preparation model, Augury
-   offer construction, authored Exploration encounters, resolution, persistence,
-   or outcome presentation.
+   offer construction, authored Exploration encounters, choice resolution, or
+   outcome presentation.
 
 ## Part VIII: The Gamble Site
 

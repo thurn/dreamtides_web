@@ -102,8 +102,8 @@ See the [foundations chapter](dreamtides/dreamtides.md).
 
 ## Exploration encounter
 
-An authored, art-led scene with one source Card and exactly two player actions.
-See
+An authored, art-led scene selected by a Card drawn from the player's deck, with
+exactly two player actions. See
 [The Augury and Exploration Sites](exploration_augury/exploration_augury.md).
 
 ## Figment

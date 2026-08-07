@@ -74,75 +74,62 @@ duplication applies to the copy that was evaluated.
 ### Accepting a vision
 
 When the player confirms a vision, the game checks that the prepared offer and
-any required choice are still valid. It then applies the complete reward.
-Composite rewards either apply in full or leave the journey unchanged. The site
-completes and the player returns to the dreamscape.
+any required choice are still valid. It then applies the reward, completes the
+site, and returns the player to the dreamscape.
 
-## Exploration encounters
+## Exploration
 
-An **Exploration encounter** is an authored scene containing:
+Exploration draws an eligible card from the player's deck. That card determines
+the authored encounter and supplies both the framed card shown on arrival and
+the full art used inside the scene. Drawing the card for Exploration does not
+remove it from the deck or change it; an action must explicitly do so.
 
-- A source card UUID.
-- One prose passage.
-- Exactly two authored actions.
+### Encounter structure
 
-The source card supplies the framed card shown on arrival and the full art used
-inside the scene. It is a narrative and visual anchor: it need not be in the
-player's deck, and entering its scene does not itself acquire, remove, or modify
-that card.
+Each eligible card has an authored **Exploration encounter** containing:
+
+- One prose passage inspired by the card's art.
+- Exactly two actions for the player to choose between.
 
 Each action defines:
 
-- A stable ID.
 - A player-facing label and concise effect text.
-- An effect kind.
-- The quantities, predicates, fixed objects, or other parameters required by
-  that effect.
-- Any prepared card or Dreamsign that its text presents as an inspectable game
-  object.
+- The effect that occurs when chosen.
+- Any quantities, eligible targets, or fixed game objects required by that
+  effect.
 
-An action may resolve immediately, require a follow-up choice, or combine a
-prepared target with a later player selection. A follow-up can ask for:
+An action may resolve immediately or ask the player to choose something else,
+such as:
 
-- One or more card instances or catalog cards.
-- A card pack, transfiguration, or subtype.
+- One or more cards from the deck or card catalog.
+- A card pack, transfiguration, or Character subtype.
 - A Dreamsign to gain, replace, or give up.
 - A new Dream Avatar.
 
-At site entry, Exploration:
+Exploration prepares both actions before showing the encounter. If either action
+cannot be fulfilled, it draws another eligible encounter card. The two actions
+presented to the player are therefore usable in the current journey.
 
-1. Filters the catalog to encounters whose source card exists.
-2. Deterministically shuffles those encounters.
-3. Tries them in that order while preparing both actions.
-4. Uses the first encounter for which both actions can produce their required
-   offers.
+Prepared card rewards normally come from unowned, non-special cards in the
+resolved draft pool. Prepared deck targets refer to specific card instances.
+Fixed authored cards and Dreamsigns must still be available when the encounter
+is prepared.
 
-If a draft lacks enough eligible cards, a Dreamsign cannot be granted, or
-another target is unavailable, Exploration tries the next encounter. The
-presented pair is therefore fully actionable.
+### Entering the scene
 
-Prepared card rewards normally draw from unowned, non-special cards in the
-resolved draft pool and exclude the source card. Prepared deck targets use the
-effective cards and their concrete entry IDs. Fixed authored card and Dreamsign
-rewards still validate their UUIDs and current availability. Every prepared
-choice is stored with the encounter so the same visible action cannot resolve to
-a different hidden reward later.
-
-## Entering and resolving the scene
-
-"Layaway" presents the source card beside the site's dialogue. The card travels
-from the journey-deck area, turns face up, and waits for the player to Delve.
-Delving breaks the frame open and expands the full art across the viewport. The
+"Layaway" presents the drawn card beside the site's dialogue. The card travels
+from the journey deck, turns face up, and waits for the player to Delve. Delving
+breaks the frame open and expands the full art across the viewport. The
 encounter prose appears over the scene, followed by its two actions. The player
 may collapse the scene and inspect the card again before choosing.
 
-An action without a follow-up submits its prepared selection directly.
-Otherwise, the scene opens a focused picker and remains unresolved until the
-required identities are chosen. Card-instance pickers use entry IDs, catalog
-choices use card UUIDs, and other game objects use their stable IDs. Resolution
-checks those identities against the prepared offer and current eligibility.
+### Choosing an action
 
-Exploration effects fall into several gameplay groups:
+An action without a follow-up resolves directly. Otherwise, the scene opens a
+focused picker and waits for the required choice. Cards, Dreamsigns, and Dream
+Avatars shown by an action remain inspectable before confirmation.
+
+Exploration effects fall into several groups:
 
 - Card acquisition and exchange: gain or draft cards, choose a bundle, gain a
   pre-transfigured card, replace a card instance, or gain cards with Nightmares.
@@ -164,99 +151,34 @@ These groups are a mechanic vocabulary, not a fixed menu for every scene. Each
 encounter chooses the two effects that fit its art and prose and supplies their
 quantities, predicates, fixed objects, or subtype options.
 
-## Atomic outcomes and departure
+### Leaving the scene
 
-One Exploration action may resolve per visit. Resolution checks the action and
-submitted choices against the prepared encounter before calculating and applying
-the complete result. Multi-object gains, mass deck changes, purge-and-copy
-exchanges, and effects with both benefits and Nightmares cannot partially
-succeed.
-
-The persisted resolution records:
-
-- The action and player selection.
-- Every card or Dreamsign gained or purged.
-- Affected deck-entry IDs and any pre-resolution snapshot needed to show what
-  left the deck.
-- Essence gained and the chosen transfiguration or subtype.
-- Any future-site or next-battle modifier.
-
-New copies receive new entry IDs, while modifications retain the targeted
-instance's identity.
-
-The scene remains open after the state change while presenting the outcome.
-Cards and Dreamsigns appear as tangible objects and travel toward their journey
-destinations; purges, copies, transfigurations, Essence gains, deck-wide
-changes, Dream Avatar changes, and future modifiers use choreography suited to
-the recorded result. Presentation reads the persisted resolution instead of
-running selection again, so a resumed journey reconstructs the same outcome.
-Once the outcome presentation finishes, the full art collapses into the card,
-the card returns toward the deck, the site completes, and the player returns to
-the dreamscape.
+After the choice, Exploration presents the result. Cards and Dreamsigns travel
+toward their journey destinations, while purges, copies, transfigurations,
+Essence gains, deck-wide changes, Dream Avatar changes, and future modifiers use
+outcome-specific choreography. The full art then collapses into the drawn card,
+the card returns to the deck, and the player returns to the dreamscape.
 
 ## Selection policy reference
 
-Selection policies are shared reward tools, not an Augury-only system. Augury
-uses them to fill in its generated offers. Exploration uses them to select an
-encounter uniformly and to prepare any variable card, deck entry, Dreamsign,
-Dream Avatar, or site required by an authored action. The authored Exploration
-scene still determines its prose, two actions, and effect kinds.
+A **selection policy** is an algorithm for picking the card or other game object
+to use for a given effect. The effect says what happens; its policy determines
+which legal target or targets it uses.
 
-Production defines eleven policies because each kind of target calls for a
-different decision rule:
+Policies are separate from effects so a shared effect can support different
+offer designs. “Gain a card,” for example, can mean:
 
-- **Fixed:** Validate and use a target named by authored content.
-- **Uniform:** Give every legal candidate the same chance.
-- **Card fit:** Favor cards that work with the effective current deck.
-- **Card fit and quality:** Blend deck fit with an authored, deck-independent
-  strength signal.
-- **Card bundle:** Choose a seed card, then add cards that relate to the seed,
-  the growing bundle, and the deck.
-- **Purge misfit:** Favor starters and entries whose removal least harms deck
-  fit.
-- **Duplicate value:** Favor entries whose card quality and contribution to deck
-  fit make an additional copy valuable.
-- **Deck-entry centrality:** Favor an instance that contributes strongly to the
-  deck's relationships.
-- **Transfiguration value:** Favor a mechanically valuable form on a central
-  card.
-- **Dreamsign match:** Compare an unowned Dreamsign's authored features with the
-  effective deck.
-- **Site uniform:** Give every eligible utility site type the same chance.
+- Gain one particular authored card.
+- Gain a card fitted to the current deck.
+- Gain a card chosen for both deck fit and general strength.
+- Gain a bundle of cards chosen to work together.
 
-### Ranked selection
+In current authored content, an effect or Augury archetype normally determines
+the appropriate policy. The player does not choose a policy, and designers do
+not combine them freely. The separation lets several rewards reuse the same
+target-selection algorithms; it is not a separate player-facing rule.
 
-Reward preparation reads a snapshot of the journey at site entry, including the
-effective deck, resolved draft pool, owned Dreamsigns, and other objects
-relevant to the effect. Selection uses card UUIDs and concrete deck-entry IDs;
-names are display text only.
-
-A scored policy:
-
-- Filters the source objects to legal candidates.
-- Scores and ranks those candidates, breaking ties by stable identity.
-- Keeps a configured leading band.
-- Samples uniformly from that band without replacement.
-
-The standard band contains the larger of one quarter of the legal pool or five
-candidates, capped by the pool size. Individual mechanics can use a narrower or
-wider band. This keeps rewards responsive to the deck without always producing
-the single highest score.
-
-### Reproducibility
-
-Each selection receives an independent deterministic stream derived from the
-journey seed, site identity, selection key, policy, and draw purpose. Preparing
-one action does not consume randomness belonging to another. Its trace records:
-
-- Rules and content versions.
-- Candidate count, digest, scores, and sampled band.
-- Selected identities and any fallbacks.
-- Randomness scope and draw count.
-
-Each prepared encounter also has a signature derived from the journey snapshot
-and its visible offers. Resolution rejects a stale signature, mismatched offer,
-missing choice, or illegal target.
-
-These records make a production choice reconstructible when several ranking or
-fallback rules contributed to it.
+Other effect-specific policies choose a weak card to purge, a valuable card to
+duplicate, a central card to transfigure, a matching Dreamsign, or a random
+eligible utility site. Authored targets and choices that need no scoring use
+fixed or uniform selection.
