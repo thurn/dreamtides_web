@@ -11,7 +11,7 @@ makes with the casino’s otherworldly character.
 | **Tidemark Ladder Climb** | Buy increasingly favorable attempts at one strong Dreamsign. |
 | **Starway Stairs** | Bank an Essence prize or risk it on the next tier. |
 | **Four-Suit Reprise** | Risk up to three different deck cards on one suit draw apiece. |
-| **Twenty-One** | Hit or stand to finish from 17 through 21 without busting. |
+| **Twenty-One** | Hit or stand against Gravok's dealer hand. |
 
 ## Casino-wide rules
 
@@ -39,7 +39,8 @@ makes with the casino’s otherworldly character.
 - Aces are high except in Twenty-One, where an Ace is worth 1 or 11.
 - Rank thresholds are inclusive. For example, 6+ contains ranks 6 through Ace,
   or 36 of the 52 cards.
-- The UI shows the exact relevant odds before every paid choice.
+- The UI shows exact relevant odds before each choice whose outcome
+  distribution is fixed when that choice commits.
 
 ### Dreamsign preparation
 
@@ -51,7 +52,7 @@ The casino uses two Dreamsign selection methods:
   current deck with the existing Dreamsign match model, sort by descending
   score with UUID as the tiebreaker, and retain the best 50, or all eligible
   Dreamsigns when fewer than 50 remain. Select uniformly from that pool.
-  Tidemark Ladder Climb and Twenty-One use this method. This preserves
+  Tidemark Ladder Climb uses this method. This preserves
   variety while making the reward meaningfully better than unrestricted random
   selection.
 
@@ -71,7 +72,7 @@ flow.
 | Tidemark Ladder Climb | Attempts cost 0/5/10/15 Essence. | Every attempt is free. |
 | Starway Stairs | Each tier draw costs 30 Essence. | Each tier draw costs 20 Essence. |
 | Four-Suit Reprise | Each draw costs 25 Essence. | Each draw costs 15 Essence. |
-| Twenty-One | The deal costs 55 Essence; each hit costs 10 Essence. | Hits cost 0 Essence. |
+| Twenty-One | The hand costs 50 Essence. | The hand costs 40 Essence. |
 
 All odds, rewards, thresholds, outcome mappings, and limits are identical at
 ordinary and Farpoint Station sites.
@@ -215,39 +216,33 @@ outcomes, replay limit, and odds are unchanged.
 
 ## 5. Twenty-One
 
-Twenty-One is a solo blackjack game with no dealer. The player pays 55 Essence
-and receives two cards, then chooses `Stand` or `Hit — 10 Essence`. The title
-pairs the current numeric total with the reward earned by standing at that
-total. Every revealed playing card occupies its own squircle tile. Aces count
-as 1 or 11 to make the highest total at or below 21; J, Q, and K count as 10.
+Twenty-One is one hand of blackjack against Gravok. The player wagers 50
+Essence, then the player and dealer each receive two cards from one shuffled
+52-card shoe. The dealer shows the first card and keeps the second face down.
+Every card occupies its own squircle tile. Aces count as 1 or 11 to make the
+highest total at or below 21; J, Q, and K count as 10.
 
-Each round locks and displays one Dreamsign from the strong Dreamsign pool.
-Landing exactly on 21 grants that Dreamsign in addition to 150 Essence. A bust
-or exact 21 resolves immediately. After any other terminal result, the player
-may leave or start another independently shuffled round while a retry remains.
-The visit permits two retries, for at most three rounds, and every round offers
-a distinct Dreamsign. Winning a Dreamsign ends the game.
+A player or dealer natural blackjack resolves immediately; two naturals push.
+Otherwise the player may `Hit` for free or `Stand`. Reaching 21 after a hit
+advances directly to the dealer turn, while going over 21 loses immediately.
+After the player stands, the dealer reveals the hole card, draws below 17, and
+stands on every 17 including soft 17.
 
-After every card, the UI shows exact counts from the remaining shoe for draws
-that reach 21, reach another reward band, or bust.
-
-| Terminal total | Result |
+| Outcome | Result |
 | --- | --- |
-| 15 or less by standing | No reward. |
-| 16–18 | Gain 55 Essence. |
-| 19–20 | Gain 150 Essence. |
-| Exactly 21 | Gain 150 Essence and the displayed strong-pool Dreamsign. |
-| Above 21 | No reward. |
+| Player total beats the dealer, or dealer busts | Gain 300 Essence. |
+| Equal totals | Refund the wager. |
+| Dealer total beats the player, or player busts | No reward. |
 
-With the Dreamsign valued at 75 Essence, exact enumeration of the 52-card shoe
-without replacement gives optimal play across all three rounds a 30.91% chance
-to win a Dreamsign. The complete visit has +75.29 Essence EV at an ordinary
-site and +97.17 Essence EV at Farpoint Station, including the Dreamsign value.
+The player and dealer totals share the screen title, with the concealed dealer
+card represented as `+ ?` until its reveal. Exact enumeration of the 52-card
+shoe without replacement gives optimal play a 43.80% win rate, 7.95% push rate,
+and 48.25% loss rate. The ordinary site's net value is +85.38 Essence EV.
 
 ### Farpoint Station
 
-Hits cost 0 Essence. The 55-Essence deal cost, reward bands, odds, and
-Dreamsign reward are unchanged.
+The wager costs 40 Essence. Dealer behavior, player actions, cards, and the
+300-Essence prize are unchanged.
 
 ## Determinism, co-op authority, and logging
 
@@ -256,10 +251,11 @@ only: game id, selected wager, selected card UUID and entry id, draw again,
 cash out, hit, stand, accept, or leave. React state controls presentation only.
 
 Each active game records the site id, ordinary or Farpoint rules, locked reward
-and target ids, deterministic shuffle commitment, revealed playing cards,
-deck cursor, payments, current bank or pending card-effect choice, decisions
-remaining, and terminal state. Replaying the room log must reproduce every
-draw, displayed probability, payment, and reward without `Math.random`.
+and target ids, deterministic shuffle commitment, player and dealer cards,
+dealer-hole visibility, deck cursor, payments, current bank or pending
+card-effect choice, decisions remaining, and terminal state. Replaying the room
+log must reproduce every draw, displayed probability, payment, and reward
+without `Math.random`.
 
 Logs must make a production game reconstructable. Record:
 
@@ -282,5 +278,5 @@ Logs must make a production game reconstructable. Record:
    decisions, stop conditions, and cumulative costs or banks.
 3. **Four-Suit Reprise** adds locked deck targets, suit-driven card effects,
    and repeated rounds.
-4. **Twenty-One** adds a persistent hand, Ace valuation, and dynamic remaining
-   deck counts.
+4. **Twenty-One** adds player and dealer hands, a concealed hole card, Ace
+   valuation, and deterministic dealer play.

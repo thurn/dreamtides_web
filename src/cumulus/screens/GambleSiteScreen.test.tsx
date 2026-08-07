@@ -186,29 +186,25 @@ const TWENTY_ONE_VIEW: TwentyOneSiteView = {
   scene: null,
   isFarpoint: false,
   runtimeReady: true,
-  roundNumber: 1,
-  maxRounds: 3,
-  dealCost: 55,
-  hitCost: 10,
-  canAffordDeal: true,
-  canAffordHit: true,
-  cards: [],
-  total: null,
+  wagerCost: 50,
+  prizeEssence: 300,
+  canAffordWager: true,
+  playerCards: [],
+  playerTotal: null,
+  dealerCards: [],
+  dealerTotal: null,
+  dealerRevealed: false,
   title: "Twenty-One",
-  essenceReward: 150,
-  rewardDreamsign: JACKPOT_DREAMSIGN,
-  nextCardOdds: null,
-  terminalReason: null,
+  outcome: null,
+  essenceAwarded: 0,
   resultSettled: false,
   resultId: null,
-  canPlayAgain: false,
   guide: {
     id: "gravok",
     name: "Gravok",
     line: "A fixture gamble.",
     art: artRef.dreamGuide("gravok"),
   },
-  replacement: null,
 };
 
 function fourSuitResultView(
@@ -1708,7 +1704,7 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     act(() => root.unmount());
   });
 
-  it("shows the changing Twenty-One Dreamsign before the paid deal", () => {
+  it("shows the flat prize and one up-front wager before the deal", () => {
     const onDeal = vi.fn();
     const { container, root } = mount(
       <GambleSiteScreen
@@ -1726,13 +1722,13 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     expect(container.querySelector("[data-twenty-one-title]")?.textContent).toBe(
       "Twenty-One",
     );
-    expect(
-      container.querySelector('[data-testid="twenty-one-reward-dreamsign"]'),
-    ).not.toBeNull();
+    expect(container.querySelector("[data-twenty-one-prize]")?.textContent)
+      .toContain("300");
+    expect(container.querySelector("[data-dreamsign]")).toBeNull();
     expect(
       container.querySelector('[data-testid="gamble-twenty-one-deal"]')
         ?.textContent,
-    ).toContain("55");
+    ).toContain("50");
     act(() => {
       container.querySelector<HTMLButtonElement>(
         '[data-testid="gamble-twenty-one-deal"]',
@@ -1742,27 +1738,23 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     act(() => root.unmount());
   });
 
-  it("renders every revealed card as a squircle and pairs the total with its reward", () => {
+  it("renders player and dealer squircles with a concealed dealer hole card", () => {
     const onHit = vi.fn();
     const { container, root } = mount(
       <GambleSiteScreen
         view={{
           ...TWENTY_ONE_VIEW,
-          cards: [
+          playerCards: [
             { rank: "10", suit: "clubs" },
             { rank: "6", suit: "hearts" },
           ],
-          total: 16,
-          title: "16 · 55 Essence",
-          essenceReward: 55,
-          nextCardOdds: {
-            remainingCards: 50,
-            noReward: 12,
-            lowReward: 10,
-            highReward: 8,
-            dreamsign: 4,
-            bust: 16,
-          },
+          playerTotal: 16,
+          dealerCards: [
+            { rank: "5", suit: "spades" },
+            { rank: "K", suit: "diamonds" },
+          ],
+          dealerTotal: 5,
+          title: "Player 16 · Dealer 5 + ?",
         }}
         onChooseGate={() => undefined}
         onLeave={() => undefined}
@@ -1775,12 +1767,18 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       />,
     );
     expect(container.querySelector("[data-twenty-one-title]")?.textContent).toBe(
-      "16 · 55 Essence",
+      "Player 16 · Dealer 5 + ?",
     );
-    expect(container.querySelectorAll('[data-playing-card-variant="rankSuit"]')).toHaveLength(2);
-    expect(container.querySelector("[data-twenty-one-odds]")?.textContent).toContain(
-      "4 reach 21",
-    );
+    expect(container.querySelectorAll('[data-playing-card-variant="rankSuit"]')).toHaveLength(3);
+    expect(container.querySelectorAll('[data-playing-card-variant="faceDown"]')).toHaveLength(1);
+    expect(
+      container.querySelector('[data-playing-card-variant="faceDown"]')
+        ?.getAttribute("aria-label"),
+    ).toBe("Face-down playing card");
+    expect(
+      container.querySelector('[data-testid="gamble-twenty-one-hit"]')
+        ?.textContent,
+    ).toBe("Hit");
     act(() => {
       container.querySelector<HTMLButtonElement>(
         '[data-testid="gamble-twenty-one-hit"]',
@@ -1794,22 +1792,18 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
           <GambleSiteScreen
             view={{
               ...TWENTY_ONE_VIEW,
-              cards: [
+              playerCards: [
                 { rank: "10", suit: "clubs" },
                 { rank: "6", suit: "hearts" },
                 { rank: "A", suit: "spades" },
               ],
-              total: 17,
-              title: "17 · 55 Essence",
-              essenceReward: 55,
-              nextCardOdds: {
-                remainingCards: 49,
-                noReward: 8,
-                lowReward: 9,
-                highReward: 8,
-                dreamsign: 4,
-                bust: 20,
-              },
+              playerTotal: 17,
+              dealerCards: [
+                { rank: "5", suit: "spades" },
+                { rank: "K", suit: "diamonds" },
+              ],
+              dealerTotal: 5,
+              title: "Player 17 · Dealer 5 + ?",
             }}
             onChooseGate={() => undefined}
             onLeave={() => undefined}
@@ -1831,24 +1825,28 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     act(() => root.unmount());
   });
 
-  it("offers a second Twenty-One round only after a settled miss", () => {
+  it("reveals the dealer hand and offers only Leave after settlement", () => {
     vi.useFakeTimers();
-    const onPlayAgain = vi.fn();
     const { container, root } = mount(
       <GambleSiteScreen
         view={{
           ...TWENTY_ONE_VIEW,
-          cards: [
+          playerCards: [
             { rank: "10", suit: "clubs" },
-            { rank: "5", suit: "hearts" },
+            { rank: "9", suit: "hearts" },
           ],
-          total: 15,
-          title: "15 · No Reward",
-          essenceReward: 0,
-          terminalReason: "stood",
+          playerTotal: 19,
+          dealerCards: [
+            { rank: "10", suit: "spades" },
+            { rank: "8", suit: "diamonds" },
+          ],
+          dealerTotal: 18,
+          dealerRevealed: true,
+          title: "Player 19 · Dealer 18",
+          outcome: "player-win",
+          essenceAwarded: 300,
           resultSettled: true,
           resultId: "fixture-twenty-one-result",
-          canPlayAgain: true,
         }}
         onChooseGate={() => undefined}
         onLeave={() => undefined}
@@ -1856,44 +1854,43 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
         onPlayAgain={() => undefined}
         onDrawLadder={() => undefined}
         onLadderOutcomeShown={() => undefined}
-        onPlayAgainTwentyOne={onPlayAgain}
         onReplaceDreamsign={() => undefined}
       />,
     );
     void act(() => vi.advanceTimersByTime(4_500));
-    const replay = container.querySelector<HTMLButtonElement>(
+    expect(
+      container.querySelector('[data-playing-card-variant="faceDown"]')
+        ?.getAttribute("aria-label"),
+    ).toBe("8 of diamonds");
+    expect(container.querySelector(
+      '[data-testid="gamble-twenty-one-leave-after-result"]',
+    )).not.toBeNull();
+    expect(container.querySelector(
       '[data-testid="gamble-twenty-one-play-again"]',
-    );
-    expect(replay).not.toBeNull();
-    act(() => replay?.click());
-    expect(onPlayAgain).toHaveBeenCalledOnce();
+    )).toBeNull();
+    expect(container.querySelector(
+      '[data-testid="gamble-open-replacement"]',
+    )).toBeNull();
+
     act(() => root.unmount());
   });
 
-  it("lets the player reopen a canceled Twenty-One replacement choice", () => {
+  it("settles the authoritative result when the outcome animation appears", () => {
     vi.useFakeTimers();
-    const { container, root } = mount(
+    const onOutcomeShown = vi.fn();
+    const { root } = mount(
       <GambleSiteScreen
         view={{
           ...TWENTY_ONE_VIEW,
-          cards: [
-            { rank: "A", suit: "clubs" },
-            { rank: "K", suit: "hearts" },
-          ],
-          total: 21,
-          title: "21 · 150 Essence + Jackpot Sign",
-          terminalReason: "twenty-one",
-          resultSettled: true,
-          resultId: "fixture-twenty-one-jackpot",
-          replacement: {
-            pendingDreamsign: JACKPOT_DREAMSIGN,
-            currentDreamsigns: [{
-              id: "held-sign",
-              name: "Held Sign",
-              effectDescription: "A held effect.",
-            }],
-            maxDreamsigns: 1,
-          },
+          playerCards: [{ rank: "K", suit: "clubs" }, { rank: "9", suit: "hearts" }],
+          playerTotal: 19,
+          dealerCards: [{ rank: "10", suit: "spades" }, { rank: "8", suit: "diamonds" }],
+          dealerTotal: 18,
+          dealerRevealed: true,
+          title: "Player 19 · Dealer 18",
+          outcome: "player-win",
+          essenceAwarded: 300,
+          resultId: "fixture-twenty-one-unsettled",
         }}
         onChooseGate={() => undefined}
         onLeave={() => undefined}
@@ -1901,29 +1898,12 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
         onPlayAgain={() => undefined}
         onDrawLadder={() => undefined}
         onLadderOutcomeShown={() => undefined}
+        onTwentyOneOutcomeShown={onOutcomeShown}
         onReplaceDreamsign={() => undefined}
       />,
     );
-
-    void act(() => vi.advanceTimersByTime(970));
-    void act(() => vi.advanceTimersByTime(3_360));
-    expect(container.querySelector("[data-dreamsign-replacement-dialog]"))
-      .not.toBeNull();
-    act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="dreamsign-replacement-cancel"]',
-      )?.click();
-    });
-    expect(container.querySelector("[data-dreamsign-replacement-dialog]"))
-      .toBeNull();
-    const reopen = container.querySelector<HTMLButtonElement>(
-      '[data-testid="gamble-open-replacement"]',
-    );
-    expect(reopen).not.toBeNull();
-    act(() => reopen?.click());
-    expect(container.querySelector("[data-dreamsign-replacement-dialog]"))
-      .not.toBeNull();
-
+    void act(() => vi.advanceTimersByTime(300));
+    expect(onOutcomeShown).toHaveBeenCalledOnce();
     act(() => root.unmount());
   });
 });

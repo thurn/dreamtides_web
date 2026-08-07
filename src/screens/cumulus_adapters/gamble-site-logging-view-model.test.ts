@@ -226,44 +226,38 @@ describe("gamble-site-logging-view-model", () => {
     });
   });
 
-  it("records the Twenty-One shoe state, live odds, payments, and final reward", () => {
+  it("records the Twenty-One wager, both hands, decision, and final reward", () => {
     const runtime: TwentyOneSiteRuntime = {
       kind: "gamble",
       gameId: "twenty-one",
       rulesVersion: "fixture-twenty-one-rules",
-      roundNumber: 2,
       isFarpoint: false,
-      dealCost: 55,
-      hitCost: 10,
-      shuffleCommitment: "twenty-one-round-2",
+      wagerCost: 50,
+      prizeEssence: 300,
+      shuffleCommitment: "twenty-one-hand",
       committedDeck: [
         { rank: "10", suit: "clubs" },
-        { rank: "6", suit: "hearts" },
-        { rank: "5", suit: "spades" },
+        { rank: "10", suit: "spades" },
+        { rank: "9", suit: "hearts" },
+        { rank: "8", suit: "diamonds" },
       ],
-      deckCursor: 3,
-      revealedCards: [
+      deckCursor: 4,
+      playerCards: [
         { rank: "10", suit: "clubs" },
-        { rank: "6", suit: "hearts" },
-        { rank: "5", suit: "spades" },
+        { rank: "9", suit: "hearts" },
       ],
-      hitCount: 1,
-      dealPaid: true,
-      dreamsignCandidateScores: [{ dreamsignId: REWARD_DREAMSIGN.id, score: 4 }],
-      strongPoolSize: 1,
-      strongPoolCutoffScore: 4,
-      offeredDreamsignIds: ["previous-sign", REWARD_DREAMSIGN.id],
-      rewardDreamsign: REWARD_DREAMSIGN,
-      terminalReason: "twenty-one",
+      dealerCards: [
+        { rank: "10", suit: "spades" },
+        { rank: "8", suit: "diamonds" },
+      ],
+      dealerRevealed: true,
+      wagerPaid: true,
+      playerDecision: "stand",
+      outcome: "player-win",
       resultSettled: true,
-      essenceAwarded: 150,
-      dreamsignAwarded: true,
-      pendingDreamsignReplacement: false,
+      essenceAwarded: 300,
     };
-    const view = {
-      gameId: "twenty-one",
-      nextCardOdds: null,
-    } as unknown as TwentyOneSiteView;
+    const view = { gameId: "twenty-one" } as unknown as TwentyOneSiteView;
 
     logGamblePrepared("fixture-site", runtime, view, economyFixture());
     logGambleResolved("fixture-site", runtime, view, economyFixture());
@@ -273,28 +267,27 @@ describe("gamble-site-logging-view-model", () => {
     expect(getLogEntries()[0]).toMatchObject({
       event: "gamble_game_prepared",
       gameId: "twenty-one",
-      roundNumber: 2,
-      dealCost: 55,
-      hitCost: 10,
-      selectedDreamsignId: REWARD_DREAMSIGN.id,
-      strongPoolCutoffScore: 4,
+      wagerCost: 50,
+      prizeEssence: 300,
+      dealerRule: "stand-soft-17",
     });
     expect(getLogEntries()[1]).toMatchObject({
       event: "gamble_wager_resolved",
-      playerDecision: "hit",
-      payment: 10,
-      deckCursor: 3,
-      total: 21,
+      playerDecision: "stand",
+      payment: 0,
+      deckCursor: 4,
+      playerTotal: 19,
+      dealerTotal: 18,
+      outcome: "player-win",
     });
     expect(getLogEntries()[2]).toMatchObject({
       event: "gamble_wager_settled",
-      total: 21,
-      dealPayment: 55,
-      hitPayments: 10,
-      essenceGained: 150,
-      netEssenceChange: 85,
-      dreamsignId: REWARD_DREAMSIGN.id,
-      dreamsignAwarded: true,
+      playerTotal: 19,
+      dealerTotal: 18,
+      wagerPayment: 50,
+      essenceGained: 300,
+      netEssenceChange: 250,
+      outcome: "player-win",
     });
   });
 });

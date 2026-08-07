@@ -115,18 +115,8 @@ export interface JourneyMutations {
   hitTwentyOne: (siteId: string) => void;
   /** Finish the round on its current total. */
   standTwentyOne: (siteId: string) => void;
-  /** Apply the visible round reward. */
+  /** Apply the visible hand outcome. */
   settleTwentyOne: (siteId: string, shuffleCommitment: string) => void;
-  /** Prepare another round with a distinct locked Dreamsign. */
-  playAgainTwentyOne: (
-    siteId: string,
-    previousShuffleCommitment: string,
-  ) => void;
-  /** Replace a held Dreamsign after an exact-21 win at the cap. */
-  replaceTwentyOneDreamsign: (
-    siteId: string,
-    replacedDreamsignId: string,
-  ) => void;
   ensureRewardSiteRuntime: (siteId: string) => void;
   /**
    * Accepts the Dreamsign Reward at the given site. When the player is at the

@@ -8,23 +8,23 @@ Components · Live demo & interactive props: `/cumulus#/playing-card`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The shared outlined playing-card face, with a visible rank-and-suit variant and Four-Suit Reprise's concealed suit grid.
+The shared outlined playing-card face, with visible rank-and-suit, conventional face-down, and Four-Suit Reprise variants.
 
-> **Guidance:** Use the four-suit variant for the Gamble draw object; its committed result flips onto the reverse face without changing the footprint.
+> **Guidance:** Use the face-down variant for a hidden committed card and the four-suit variant for Four-Suit Reprise's draw object.
 
 ## Props
 
-The rankSuit variant requires rank and suit. The fourSuit variant requires drawnCard and accepts revealDrawnCard.
+The rankSuit variant requires rank and suit. The faceDown and fourSuit variants require drawnCard and accept revealDrawnCard.
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `size` | `WagerPrizeCardSize` = `"wagerCompact" \| "wager"` | no | — | Named Gamble playing-card size. Defaults to `wager`. |
 | `emphasis` | `"standard" \| "current"` | no | — | Accent the card rim when it is the current choice. |
-| `variant` | `"fourSuit" \| "rankSuit"` | yes | — | Render a visible rank-and-suit card face. Render the concealed four-suit face, optionally flipping to a committed draw. |
+| `variant` | `"fourSuit" \| "rankSuit" \| "faceDown"` | yes | — | Render a visible rank-and-suit card face. Render the concealed four-suit face, optionally flipping to a committed draw. Render a conventional face-down card, optionally flipping to its committed face. |
 | `rank` | `StandardPlayingCardRank` = `"A" \| "2" \| "3" \| "4" \| "5" \| "6" \| "7" \| "8" \| "9" \| "10" \| "J" \| "Q" \| "K"` | no | — | Rank shown on the visible card face. |
 | `suit` | `StandardPlayingCardSuit` = `"clubs" \| "diamonds" \| "hearts" \| "spades"` | no | — | Suit shown on the visible card face. |
-| `drawnCard` | `{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } \| null` | no | — | Committed result available on the reverse face. |
-| `revealDrawnCard` | `boolean` | no | — | Flip the concealed four-suit face to the committed result. |
+| `drawnCard` | `{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } \| { rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } \| null` | no | — | Committed result available on the reverse face. Committed face available when the dealer reveals this card. |
+| `revealDrawnCard` | `boolean` | no | — | Flip the concealed four-suit face to the committed result. Flip the face-down card to its committed rank and suit. |
 
 ## Usage
 
@@ -32,6 +32,16 @@ The rankSuit variant requires rank and suit. The fourSuit variant requires drawn
 
 ```tsx
 <PlayingCard variant="rankSuit" rank="Q" suit="hearts" />
+```
+
+### Face-down card
+
+```tsx
+<PlayingCard
+  variant="faceDown"
+  drawnCard={{ rank: "A", suit: "spades" }}
+  revealDrawnCard
+/>
 ```
 
 ### Four-suit draw

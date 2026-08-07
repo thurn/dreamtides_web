@@ -3255,14 +3255,15 @@
     },
     {
       "name": "variant",
-      "tsType": "\"fourSuit\" | \"rankSuit\"",
+      "tsType": "\"fourSuit\" | \"rankSuit\" | \"faceDown\"",
       "unionMembers": [
         "fourSuit",
-        "rankSuit"
+        "rankSuit",
+        "faceDown"
       ],
       "required": true,
       "defaultValue": null,
-      "description": "Render a visible rank-and-suit card face.\nRender the concealed four-suit face, optionally flipping to a committed draw."
+      "description": "Render a visible rank-and-suit card face.\nRender the concealed four-suit face, optionally flipping to a committed draw.\nRender a conventional face-down card, optionally flipping to its committed face."
     },
     {
       "name": "rank",
@@ -3301,11 +3302,11 @@
     },
     {
       "name": "drawnCard",
-      "tsType": "{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } | null",
+      "tsType": "{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } | { rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } | null",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Committed result available on the reverse face."
+      "description": "Committed result available on the reverse face.\nCommitted face available when the dealer reveals this card."
     },
     {
       "name": "revealDrawnCard",
@@ -3313,7 +3314,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Flip the concealed four-suit face to the committed result."
+      "description": "Flip the concealed four-suit face to the committed result.\nFlip the face-down card to its committed rank and suit."
     }
   ],
   "PlayingCardSuitMark": [

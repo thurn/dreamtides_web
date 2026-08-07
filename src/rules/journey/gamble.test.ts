@@ -137,8 +137,6 @@ function apply(
     | "HIT_TWENTY_ONE"
     | "STAND_TWENTY_ONE"
     | "SETTLE_TWENTY_ONE"
-    | "PLAY_AGAIN_TWENTY_ONE"
-    | "REPLACE_TWENTY_ONE_DREAMSIGN"
     | "COMPLETE_SITE",
   payload: Record<string, unknown>,
 ) {
@@ -1168,26 +1166,20 @@ function twentyOneRuntime(
     kind: "gamble",
     gameId: "twenty-one",
     rulesVersion: "fixture-twenty-one-rules",
-    roundNumber: 1,
     isFarpoint: false,
-    dealCost: 55,
-    hitCost: 10,
-    shuffleCommitment: "twenty-one-round-1",
+    wagerCost: 50,
+    prizeEssence: 300,
+    shuffleCommitment: "twenty-one-hand",
     committedDeck: [...cards],
     deckCursor: 0,
-    revealedCards: [],
-    hitCount: 0,
-    dealPaid: false,
-    dreamsignCandidateScores: [{ dreamsignId: "reward-sign", score: 3 }],
-    strongPoolSize: 1,
-    strongPoolCutoffScore: 3,
-    offeredDreamsignIds: ["reward-sign"],
-    rewardDreamsign: REWARD_DREAMSIGN,
-    terminalReason: null,
+    playerCards: [],
+    dealerCards: [],
+    dealerRevealed: false,
+    wagerPaid: false,
+    playerDecision: null,
+    outcome: null,
     resultSettled: false,
     essenceAwarded: 0,
-    dreamsignAwarded: false,
-    pendingDreamsignReplacement: false,
     ...overrides,
   };
 }
@@ -1221,42 +1213,46 @@ function settleTwentyOne(state: FoldState) {
 }
 
 describe("Twenty-One", () => {
-  it("charges the deal and awards 150 Essence plus the locked Dreamsign at 21", () => {
+  it("deals both opening hands and pays the flat prize for a player blackjack", () => {
     const dealt = apply(
       twentyOneStateWith([
         { rank: "A", suit: "spades" },
+        { rank: "10", suit: "clubs" },
         { rank: "K", suit: "hearts" },
+        { rank: "9", suit: "diamonds" },
       ]),
       "DEAL_TWENTY_ONE",
       { siteId: SITE_ID },
     );
     expect(dealt.outcome).toBe("applied");
-    expect(dealt.state.journey.essence).toBe(145);
+    expect(dealt.state.journey.essence).toBe(150);
     expect(dealt.state.journey.siteRuntime[SITE_ID]).toMatchObject({
-      deckCursor: 2,
-      terminalReason: "twenty-one",
+      deckCursor: 4,
+      playerCards: [{ rank: "A" }, { rank: "K" }],
+      dealerCards: [{ rank: "10" }, { rank: "9" }],
+      dealerRevealed: true,
+      outcome: "player-win",
       resultSettled: false,
     });
 
     const settled = settleTwentyOne(dealt.state);
     expect(settled.outcome).toBe("applied");
-    expect(settled.state.journey.essence).toBe(295);
-    expect(settled.state.journey.dreamsigns).toEqual([REWARD_DREAMSIGN]);
-    expect(settled.state.journey.remainingDreamsignPool).not.toContain(
-      REWARD_DREAMSIGN.id,
-    );
+    expect(settled.state.journey.essence).toBe(450);
+    expect(settled.state.journey.dreamsigns).toEqual([]);
     expect(settled.state.journey.siteRuntime[SITE_ID]).toMatchObject({
-      essenceAwarded: 150,
-      dreamsignAwarded: true,
+      essenceAwarded: 300,
       resultSettled: true,
     });
   });
 
-  it("values soft Aces, charges hits, and pays the standing reward band", () => {
+  it("keeps hits free, then draws the dealer to 17 before comparing hands", () => {
     const dealt = apply(
       twentyOneStateWith([
         { rank: "A", suit: "clubs" },
+        { rank: "10", suit: "spades" },
         { rank: "5", suit: "hearts" },
+        { rank: "6", suit: "clubs" },
+        { rank: "3", suit: "diamonds" },
         { rank: "K", suit: "diamonds" },
       ]),
       "DEAL_TWENTY_ONE",
@@ -1264,129 +1260,105 @@ describe("Twenty-One", () => {
     );
     const hit = apply(dealt.state, "HIT_TWENTY_ONE", { siteId: SITE_ID });
     expect(hit.outcome).toBe("applied");
-    expect(hit.state.journey.essence).toBe(135);
+    expect(hit.state.journey.essence).toBe(150);
     expect(hit.state.journey.siteRuntime[SITE_ID]).toMatchObject({
-      deckCursor: 3,
-      hitCount: 1,
-      terminalReason: null,
+      deckCursor: 5,
+      playerCards: [{ rank: "A" }, { rank: "5" }, { rank: "3" }],
+      dealerRevealed: false,
+      outcome: null,
     });
     const stood = apply(hit.state, "STAND_TWENTY_ONE", { siteId: SITE_ID });
+    expect(stood.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      deckCursor: 6,
+      dealerCards: [{ rank: "10" }, { rank: "6" }, { rank: "K" }],
+      dealerRevealed: true,
+      outcome: "player-win",
+    });
     const settled = settleTwentyOne(stood.state);
-    expect(settled.state.journey.essence).toBe(190);
+    expect(settled.state.journey.essence).toBe(450);
     expect(settled.state.journey.siteRuntime[SITE_ID]).toMatchObject({
-      terminalReason: "stood",
-      essenceAwarded: 55,
-      dreamsignAwarded: false,
+      essenceAwarded: 300,
+      resultSettled: true,
     });
   });
 
-  it("ends a bust immediately with no reward and uses free Farpoint hits", () => {
+  it("reveals the dealer and resolves a player bust without drawing", () => {
     const dealt = apply(
       twentyOneStateWith(
         [
           { rank: "K", suit: "clubs" },
+          { rank: "10", suit: "spades" },
           { rank: "9", suit: "hearts" },
+          { rank: "6", suit: "clubs" },
           { rank: "5", suit: "diamonds" },
         ],
-        {},
-        { isFarpoint: true, hitCost: 0 },
       ),
       "DEAL_TWENTY_ONE",
       { siteId: SITE_ID },
     );
     const hit = apply(dealt.state, "HIT_TWENTY_ONE", { siteId: SITE_ID });
-    expect(hit.state.journey.essence).toBe(145);
+    expect(hit.state.journey.essence).toBe(150);
     expect(hit.state.journey.siteRuntime[SITE_ID]).toMatchObject({
-      terminalReason: "bust",
+      deckCursor: 5,
+      dealerRevealed: true,
+      outcome: "dealer-win",
     });
     const settled = settleTwentyOne(hit.state);
-    expect(settled.state.journey.essence).toBe(145);
+    expect(settled.state.journey.essence).toBe(150);
     expect(settled.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       essenceAwarded: 0,
       resultSettled: true,
     });
   });
 
-  it("prepares at most two retries with a different Dreamsign each round", () => {
-    const nextDreamsign: Dreamsign = {
-      id: "next-sign",
-      name: "Next Sign",
-      effectDescription: "Another fixture effect.",
-    };
-    const nextRuntime = twentyOneRuntime(
-      [{ rank: "10", suit: "clubs" }, { rank: "8", suit: "spades" }],
-      {
-        roundNumber: 2,
-        shuffleCommitment: "twenty-one-round-2",
-        offeredDreamsignIds: ["reward-sign", "next-sign"],
-        rewardDreamsign: nextDreamsign,
-      },
+  it("advances directly through the dealer turn when a hit reaches 21", () => {
+    const dealt = apply(
+      twentyOneStateWith([
+        { rank: "10", suit: "clubs" },
+        { rank: "9", suit: "spades" },
+        { rank: "5", suit: "hearts" },
+        { rank: "7", suit: "clubs" },
+        { rank: "6", suit: "diamonds" },
+        { rank: "K", suit: "hearts" },
+      ]),
+      "DEAL_TWENTY_ONE",
+      { siteId: SITE_ID },
     );
-    registerSiteContentProvider({
-      economyData: ECONOMY,
-      openSite: () => ({ runtime: nextRuntime }),
+    const hit = apply(dealt.state, "HIT_TWENTY_ONE", { siteId: SITE_ID });
+    expect(hit.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      deckCursor: 6,
+      playerCards: [{ rank: "10" }, { rank: "5" }, { rank: "6" }],
+      dealerCards: [{ rank: "9" }, { rank: "7" }, { rank: "K" }],
+      dealerRevealed: true,
+      playerDecision: "hit",
+      outcome: "player-win",
     });
-    const terminal = twentyOneStateWith([], {}, {
-      dealPaid: true,
-      revealedCards: [{ rank: "10", suit: "clubs" }, { rank: "5", suit: "spades" }],
-      deckCursor: 2,
-      terminalReason: "stood",
-      resultSettled: true,
-    });
-    const replayed = apply(terminal, "PLAY_AGAIN_TWENTY_ONE", {
-      siteId: SITE_ID,
-      previousShuffleCommitment: "twenty-one-round-1",
-    });
-    expect(replayed.outcome).toBe("applied");
-    expect(replayed.state.journey.siteRuntime[SITE_ID]).toMatchObject({
-      roundNumber: 2,
-      rewardDreamsign: { id: "next-sign" },
-      offeredDreamsignIds: ["reward-sign", "next-sign"],
-    });
-
-    const roundThree = twentyOneStateWith([], {}, {
-      roundNumber: 3,
-      dealPaid: true,
-      revealedCards: [{ rank: "10", suit: "clubs" }, { rank: "5", suit: "spades" }],
-      deckCursor: 2,
-      terminalReason: "stood",
-      resultSettled: true,
-    });
-    expect(apply(roundThree, "PLAY_AGAIN_TWENTY_ONE", {
-      siteId: SITE_ID,
-      previousShuffleCommitment: "twenty-one-round-1",
-    }).outcome).toBe("bounced");
   });
 
-  it("uses the shared replacement flow for a 21 at the Dreamsign cap", () => {
-    const held: Dreamsign = {
-      id: "held-sign",
-      name: "Held Sign",
-      effectDescription: "Held fixture effect.",
-    };
+  it("refunds the wager on a push and makes the enhanced wager cheaper", () => {
     const dealt = apply(
       twentyOneStateWith(
-        [{ rank: "A", suit: "spades" }, { rank: "K", suit: "hearts" }],
-        { dreamsigns: [held], maxDreamsigns: 1 },
+        [
+          { rank: "10", suit: "clubs" },
+          { rank: "9", suit: "spades" },
+          { rank: "8", suit: "hearts" },
+          { rank: "9", suit: "diamonds" },
+        ],
+        {},
+        { isFarpoint: true, wagerCost: 40 },
       ),
       "DEAL_TWENTY_ONE",
       { siteId: SITE_ID },
     );
-    const settled = settleTwentyOne(dealt.state);
-    expect(settled.state.journey.dreamsigns).toEqual([held]);
+    expect(dealt.state.journey.essence).toBe(160);
+    const stood = apply(dealt.state, "STAND_TWENTY_ONE", { siteId: SITE_ID });
+    expect(stood.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      outcome: "push",
+    });
+    const settled = settleTwentyOne(stood.state);
+    expect(settled.state.journey.essence).toBe(200);
     expect(settled.state.journey.siteRuntime[SITE_ID]).toMatchObject({
-      pendingDreamsignReplacement: true,
-      dreamsignAwarded: false,
-    });
-    const replaced = apply(settled.state, "REPLACE_TWENTY_ONE_DREAMSIGN", {
-      siteId: SITE_ID,
-      replacedDreamsignId: "held-sign",
-    });
-    expect(replaced.state.journey.dreamsigns).toEqual([REWARD_DREAMSIGN]);
-    expect(replaced.state.journey.siteRuntime[SITE_ID]).toMatchObject({
-      pendingDreamsignReplacement: false,
-      dreamsignAwarded: true,
-      replacedDreamsignId: "held-sign",
+      essenceAwarded: 40,
     });
   });
 });

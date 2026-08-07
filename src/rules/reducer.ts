@@ -587,16 +587,6 @@ export function routeDomain(
       return journeyCase(state, gamble.standTwentyOne(journey, payload));
     case "SETTLE_TWENTY_ONE":
       return journeyCase(state, gamble.settleTwentyOne(journey, payload));
-    case "PLAY_AGAIN_TWENTY_ONE":
-      return journeyCase(
-        state,
-        gamble.playAgainTwentyOne(journey, payload, ctx),
-      );
-    case "REPLACE_TWENTY_ONE_DREAMSIGN":
-      return journeyCase(
-        state,
-        gamble.replaceTwentyOneDreamsign(journey, payload),
-      );
 
     // --- shop, merchant & modifiers ---
     case "BUY_SHOP_SLOT":

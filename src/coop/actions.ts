@@ -230,15 +230,6 @@ export interface CoopActions {
     shuffleCommitment: string,
     runId?: string,
   ) => Promise<number>;
-  playAgainTwentyOne: (
-    siteId: string,
-    previousShuffleCommitment: string,
-    runId?: string,
-  ) => Promise<number>;
-  replaceTwentyOneDreamsign: (
-    siteId: string,
-    replacedDreamsignId: string,
-  ) => Promise<number>;
 
   // --- merchant & shop ---
   acceptMerchantOffer: (siteId: string, offer?: unknown) => Promise<number>;
@@ -632,21 +623,6 @@ export function makeActions(
         { siteId, shuffleCommitment },
         `${siteIntentKey("settle-twenty-one", siteId, runId)}:${shuffleCommitment}`,
       ),
-    playAgainTwentyOne: (
-      siteId,
-      previousShuffleCommitment,
-      runId,
-    ) =>
-      emit(
-        "PLAY_AGAIN_TWENTY_ONE",
-        { siteId, previousShuffleCommitment },
-        `${siteIntentKey("play-again-twenty-one", siteId, runId)}:${previousShuffleCommitment}`,
-      ),
-    replaceTwentyOneDreamsign: (siteId, replacedDreamsignId) =>
-      emit("REPLACE_TWENTY_ONE_DREAMSIGN", {
-        siteId,
-        replacedDreamsignId,
-      }),
 
     // --- merchant & shop ---
     acceptMerchantOffer: (siteId, offer) =>

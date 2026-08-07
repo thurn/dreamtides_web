@@ -154,6 +154,46 @@ describe("WagerPrizeCard", () => {
     act(() => root.unmount());
   });
 
+  it("keeps a committed dealer card concealed until it flips", () => {
+    const host = document.createElement("div");
+    document.body.append(host);
+    const root = createRoot(host);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <PlayingCard
+            variant="faceDown"
+            size="wagerCompact"
+            drawnCard={{ rank: "A", suit: "spades" }}
+          />
+        </CumulusRoot>,
+      );
+    });
+    const card = host.querySelector<HTMLElement>(
+      '[data-playing-card-variant="faceDown"]',
+    );
+    expect(card?.getAttribute("aria-label")).toBe("Face-down playing card");
+    expect(card?.querySelector("[data-playing-card-face-down]")).not.toBeNull();
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <PlayingCard
+            variant="faceDown"
+            size="wagerCompact"
+            drawnCard={{ rank: "A", suit: "spades" }}
+            revealDrawnCard
+          />
+        </CumulusRoot>,
+      );
+    });
+    expect(card?.getAttribute("aria-label")).toBe("A of spades");
+    expect(card?.dataset.playingCardState).toBe("drawn");
+
+    act(() => root.unmount());
+  });
+
   it("renders and emphasizes a Starway Stairs prize", () => {
     const host = document.createElement("div");
     document.body.append(host);

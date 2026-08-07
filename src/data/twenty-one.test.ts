@@ -2,10 +2,11 @@ import { describe, expect, it } from "vitest";
 import { economyFixture } from "../testing/economy-fixture";
 import type { StandardPlayingCard } from "../types/gamble";
 import {
-  twentyOneEssenceReward,
-  twentyOneHandTotal,
-  twentyOneHitCost,
-  twentyOneNextCardOdds,
+  resolveTwentyOneDealer,
+  twentyOneEssenceAward,
+  twentyOneHandValue,
+  twentyOneOpeningOutcome,
+  twentyOneWagerCost,
 } from "./twenty-one";
 
 function card(rank: StandardPlayingCard["rank"]): StandardPlayingCard {
@@ -13,30 +14,61 @@ function card(rank: StandardPlayingCard["rank"]): StandardPlayingCard {
 }
 
 describe("Twenty-One rules", () => {
-  it("demotes as many Aces as needed to keep the best playable total", () => {
-    expect(twentyOneHandTotal([card("A"), card("K")])).toBe(21);
-    expect(twentyOneHandTotal([card("A"), card("A"), card("9")])).toBe(21);
-    expect(twentyOneHandTotal([card("A"), card("A"), card("K")])).toBe(12);
-  });
-
-  it("maps terminal totals to the low, high, and Dreamsign reward bands", () => {
-    const config = economyFixture().gamble.twentyOne;
-    expect([15, 16, 18, 19, 20, 21, 22].map((total) =>
-      twentyOneEssenceReward(config, total)
-    )).toEqual([0, 55, 55, 150, 150, 150, 0]);
-    expect(twentyOneHitCost(config, false)).toBe(10);
-    expect(twentyOneHitCost(config, true)).toBe(0);
-  });
-
-  it("counts exact next-card outcomes from the remaining committed shoe", () => {
-    const deck = [card("A"), card("2"), card("6"), card("7"), card("10")];
-    expect(twentyOneNextCardOdds([card("10"), card("5")], deck, 1)).toEqual({
-      remainingCards: 4,
-      noReward: 0,
-      lowReward: 1,
-      highReward: 0,
-      dreamsign: 1,
-      bust: 2,
+  it("values soft hands and natural blackjacks", () => {
+    expect(twentyOneHandValue([card("A"), card("K")])).toEqual({
+      total: 21,
+      isSoft: true,
+      isBlackjack: true,
+      isBust: false,
     });
+    expect(twentyOneHandValue([card("A"), card("A"), card("9")])).toMatchObject({
+      total: 21,
+      isSoft: true,
+      isBlackjack: false,
+    });
+    expect(twentyOneHandValue([card("A"), card("A"), card("K")])).toMatchObject({
+      total: 12,
+      isSoft: false,
+      isBust: false,
+    });
+  });
+
+  it("resolves player, dealer, and shared natural blackjacks", () => {
+    expect(twentyOneOpeningOutcome(
+      [card("A"), card("K")],
+      [card("10"), card("9")],
+    )).toBe("player-win");
+    expect(twentyOneOpeningOutcome(
+      [card("10"), card("9")],
+      [card("A"), card("Q")],
+    )).toBe("dealer-win");
+    expect(twentyOneOpeningOutcome(
+      [card("A"), card("K")],
+      [card("A"), card("Q")],
+    )).toBe("push");
+  });
+
+  it("draws the dealer through 16, stands on soft 17, and compares hands", () => {
+    expect(resolveTwentyOneDealer(
+      [card("10"), card("9")],
+      [card("10"), card("6")],
+      [card("5")],
+      0,
+    )).toEqual({ dealerCards: [card("10"), card("6"), card("5")], deckCursor: 1, outcome: "dealer-win" });
+    expect(resolveTwentyOneDealer(
+      [card("10"), card("8")],
+      [card("A"), card("6")],
+      [card("4")],
+      0,
+    )).toEqual({ dealerCards: [card("A"), card("6")], deckCursor: 0, outcome: "player-win" });
+  });
+
+  it("uses one enhanced wager discount and one flat prize", () => {
+    const config = economyFixture().gamble.twentyOne;
+    expect(twentyOneWagerCost(config, false)).toBe(50);
+    expect(twentyOneWagerCost(config, true)).toBe(40);
+    expect(twentyOneEssenceAward(50, 300, "player-win")).toBe(300);
+    expect(twentyOneEssenceAward(50, 300, "push")).toBe(50);
+    expect(twentyOneEssenceAward(50, 300, "dealer-win")).toBe(0);
   });
 });
