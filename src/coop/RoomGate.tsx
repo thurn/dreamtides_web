@@ -484,6 +484,7 @@ export function RoomGate({
       compatibility: classifyReducerVersion(readyReducerVersion),
       roomReducerVersion: readyReducerVersion,
       atlasFoldHash: localContentConfig.atlasFoldHash,
+      sitesFoldHash: localContentConfig.sitesFoldHash,
       draftFoldHash: localContentConfig.draftFoldHash,
       economyFoldHash: localContentConfig.economyFoldHash,
       rewardSelectionFoldHash: localContentConfig.rewardSelectionFoldHash,

@@ -20,6 +20,21 @@ const DREAMSCAPES_JSON_PATH = "/dreamscapes-data.json";
 const DREAM_GUIDES_JSON_PATH = "/dream-guides-data.json";
 const AFFILIATIONS_JSON_PATH = "/affiliations-data.json";
 const APOLLYON_INCARNATIONS_JSON_PATH = "/apollyon-incarnations-data.json";
+const GUIDE_DIALOGUE_CONTEXTS = new Set([
+  "site",
+  "random-site",
+  "gamble-three-gate",
+  "gamble-ladder-climb",
+  "gamble-starway-stairs",
+  "gamble-four-suit-reprise",
+]);
+const GAMBLE_DIALOGUE_CONTEXTS = [
+  "gamble-three-gate",
+  "gamble-ladder-climb",
+  "gamble-starway-stairs",
+  "gamble-four-suit-reprise",
+] as const;
+const TEMPLATE_SLOT = /\{([^{}]+)\}/gu;
 
 async function fetchJson<T>(path: string, label: string): Promise<T> {
   const response = await fetch(path);
@@ -81,12 +96,17 @@ function isDreamGuideContent(value: unknown): value is DreamGuideContent {
     !("homeSpecialty" in value) ||
     !("dialogue" in value) ||
     typeof value.id !== "string" ||
+    value.id.trim() === "" ||
     typeof value.name !== "string" ||
+    value.name.trim() === "" ||
     typeof value.portraitSource !== "string" ||
+    value.portraitSource.trim() === "" ||
     typeof value.homeDreamscapeId !== "string" ||
+    value.homeDreamscapeId.trim() === "" ||
     typeof value.siteType !== "string" ||
     !SITE_TYPES.includes(value.siteType as SiteType) ||
     typeof value.homeSpecialty !== "string" ||
+    value.homeSpecialty.trim() === "" ||
     typeof value.dialogue !== "object" ||
     value.dialogue === null ||
     !("site" in value.dialogue) ||
@@ -95,12 +115,46 @@ function isDreamGuideContent(value: unknown): value is DreamGuideContent {
   ) {
     return false;
   }
-  return Object.values(value.dialogue).every(
-    (lines) =>
-      Array.isArray(lines) &&
-      lines.length > 0 &&
-      lines.every((line: unknown) => typeof line === "string" && line.length > 0),
-  );
+  const dialogue = value.dialogue as Record<string, unknown>;
+  if (
+    Object.keys(dialogue).some(
+      (context) => !GUIDE_DIALOGUE_CONTEXTS.has(context),
+    ) ||
+    (value.siteType === "RandomSite" &&
+      !Array.isArray(dialogue["random-site"])) ||
+    (value.siteType === "Gamble" &&
+      GAMBLE_DIALOGUE_CONTEXTS.some(
+        (context) => !Array.isArray(dialogue[context]),
+      ))
+  ) {
+    return false;
+  }
+  let hasWinEssenceSlot = false;
+  for (const [context, lines] of Object.entries(dialogue)) {
+    if (
+      !Array.isArray(lines) ||
+      lines.length === 0 ||
+      lines.some(
+        (line: unknown) => typeof line !== "string" || line.trim() === "",
+      )
+    ) {
+      return false;
+    }
+    for (const line of lines as string[]) {
+      const slots = [...line.matchAll(TEMPLATE_SLOT)].map((match) => match[1]);
+      if (
+        slots.some(
+          (slot) => context !== "gamble-ladder-climb" || slot !== "win-essence",
+        )
+      ) {
+        return false;
+      }
+      if (context === "gamble-ladder-climb" && slots.includes("win-essence")) {
+        hasWinEssenceSlot = true;
+      }
+    }
+  }
+  return value.siteType !== "Gamble" || hasWinEssenceSlot;
 }
 
 /** Fetches the affiliation definitions from the asset pipeline output. */

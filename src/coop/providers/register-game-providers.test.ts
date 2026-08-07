@@ -30,6 +30,7 @@ import { loadTestSitesData } from "../../__test-helpers__/atlas-fixtures";
 // break the suite.
 
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { getLogEntries, resetLog } from "../../logging";
 
 import type { Genesis } from "../../eventlog/types";
 import { eventRng } from "../../eventlog/rng";
@@ -716,6 +717,7 @@ function makeMerchantFixture(): {
 
 describe("createSiteContentProvider — Gamble", () => {
   it("chooses either game randomly unless a game is forced", () => {
+    resetLog();
     const fixture = makeMerchantFixture();
     const site = makeMerchantTestSite({ id: "gamble-site", type: "Gamble" });
     const farpointSite = makeMerchantTestSite({
@@ -794,6 +796,12 @@ describe("createSiteContentProvider — Gamble", () => {
       rng: () => 0,
       gambleGameId: "four-suit-reprise",
     });
+
+    expect(
+      getLogEntries().filter(
+        (entry) => entry.event === "gamble_configuration_resolved",
+      ),
+    ).toHaveLength(0);
 
     expect(randomThreeGate?.runtime).toMatchObject({
       kind: "gamble",

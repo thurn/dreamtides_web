@@ -87,17 +87,18 @@ function boolean(value, file, path) {
   return value;
 }
 
-function number(value, file, path, { min = 0, integer = true } = {}) {
+function number(value, file, path, { min = 0, max, integer = true } = {}) {
   if (
     typeof value !== "number" ||
     !Number.isFinite(value) ||
     (integer && !Number.isInteger(value)) ||
-    value < min
+    value < min ||
+    (max !== undefined && value > max)
   ) {
     fail(
       file,
       path,
-      `expected a${integer ? "n integer" : " finite number"} >= ${String(min)}`,
+      `expected a${integer ? "n integer" : " finite number"} ${max === undefined ? `>= ${String(min)}` : `between ${String(min)} and ${String(max)}`}`,
     );
   }
   return value;
@@ -494,6 +495,12 @@ export function compileSitesData(sourceValue, catalogs = {}) {
       "random-site.away-choice-count",
       "current materializer requires 1",
     );
+  if (randomSite.homeChoiceCount !== 3)
+    fail(
+      file,
+      "random-site.home-choice-count",
+      "current Random Site screen requires exactly 3",
+    );
   if (randomSite.homeChoiceCount > destinations.length)
     fail(
       file,
@@ -774,7 +781,7 @@ export function compileSitesData(sourceValue, catalogs = {}) {
       fourSource["max-rounds"],
       file,
       "gamble.four-suit-reprise.max-rounds",
-      { min: 1 },
+      { min: 1, max: 3 },
     ),
     oddsNumerator: number(
       fourSource["odds-numerator"],

@@ -15,7 +15,7 @@ import {
   readDreamGuideOptions,
   readEditorDreamscapes,
   refreshDreamscapesDataJson,
-  swapDreamGuideSpecializedDialogue,
+  swapDreamGuideSpecialties,
 } from "./dreamscape-editor-data.mjs";
 
 // Self-contained fixtures so these assertions never depend on (and never break
@@ -206,26 +206,32 @@ describe("canonical guide swaps", () => {
     const gambleGuide = parse(source).guides.find(
       (guide) => guide["site-type"] === "Gamble",
     );
-    const swappedTypes = patchDreamGuideAssignments(source, [
-      { guideId: randomGuide.id, field: "site-type", value: "Gamble" },
-      { guideId: gambleGuide.id, field: "site-type", value: "RandomSite" },
-    ]);
-    const swapped = swapDreamGuideSpecializedDialogue(
-      swappedTypes,
+    const swapped = swapDreamGuideSpecialties(
+      source,
       randomGuide.id,
       gambleGuide.id,
     );
     const parsed = parse(swapped).guides;
-    expect(
-      parsed.find((guide) => guide.id === randomGuide.id).dialogue[
-        "gamble-three-gate"
-      ],
-    ).toEqual(["Fixture gates."]);
-    expect(
-      parsed.find((guide) => guide.id === gambleGuide.id).dialogue[
-        "random-site"
-      ],
-    ).toEqual(["Fixture roads."]);
+    const updatedRandomGuide = parsed.find(
+      (guide) => guide.id === randomGuide.id,
+    );
+    const updatedGambleGuide = parsed.find(
+      (guide) => guide.id === gambleGuide.id,
+    );
+    expect(updatedRandomGuide["site-type"]).toBe("Gamble");
+    expect(updatedRandomGuide["home-specialty"]).toBe(
+      gambleGuide["home-specialty"],
+    );
+    expect(updatedGambleGuide["site-type"]).toBe("RandomSite");
+    expect(updatedGambleGuide["home-specialty"]).toBe(
+      randomGuide["home-specialty"],
+    );
+    expect(updatedRandomGuide.dialogue["gamble-three-gate"]).toEqual([
+      "Fixture gates.",
+    ]);
+    expect(updatedGambleGuide.dialogue["random-site"]).toEqual([
+      "Fixture roads.",
+    ]);
   });
 });
 

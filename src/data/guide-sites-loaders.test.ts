@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { MINIMAL_SITES_DATA } from "../__test-helpers__/atlas-fixtures";
+import type { SitesData } from "../types/sites-data";
 import { loadDreamGuides } from "./dreamscapes";
 import { loadSitesData } from "./sites-data";
 
@@ -27,6 +28,13 @@ const GUIDE_CATALOG = {
     },
   ],
 };
+
+type Mutable<T> = T extends readonly (infer Entry)[]
+  ? Mutable<Entry>[]
+  : T extends object
+    ? { -readonly [Key in keyof T]: Mutable<T[Key]> }
+    : T;
+type MutableSitesData = Mutable<SitesData>;
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -67,5 +75,92 @@ describe("compiled guide and site artifact loaders", () => {
       vi.fn(() => Promise.resolve(response(sites))),
     );
     await expect(loadSitesData()).rejects.toThrow(/malformed sites-data/u);
+  });
+
+  it("rejects malformed site rules that affect deterministic folding", async () => {
+    const mutations: Array<(sites: MutableSitesData) => void> = [
+      (sites) => {
+        sites.randomSite.destinations = ["Battle" as never];
+      },
+      (sites) => {
+        sites.randomSite.homeChoiceCount = 2;
+      },
+      (sites) => {
+        sites.siteTypes.Shop.glossaryId = "missing-fixture-glossary";
+      },
+      (sites) => {
+        sites.cardChoices.transfiguration.standardLimit = Number.NaN;
+      },
+      (sites) => {
+        sites.gamble.selection.games[0].weight = 0;
+      },
+      (sites) => {
+        sites.gamble.threeGate.gates[0].threshold = "invalid" as never;
+      },
+      (sites) => {
+        sites.gamble.ladderClimb.attempts[0].attempt = 2;
+      },
+      (sites) => {
+        sites.gamble.starwayStairs.tiers[0].tier = 2;
+      },
+      (sites) => {
+        sites.gamble.fourSuitReprise.maxRounds = 4;
+      },
+      (sites) => {
+        sites.guideAssignments.RandomSite = {
+          guideId: "wrong-guide",
+          homeDreamscapeId: "fixture-home",
+        };
+      },
+    ];
+
+    for (const mutate of mutations) {
+      const sites = structuredClone(MINIMAL_SITES_DATA) as MutableSitesData;
+      mutate(sites);
+      vi.stubGlobal(
+        "fetch",
+        vi.fn(() => Promise.resolve(response(sites))),
+      );
+      await expect(loadSitesData()).rejects.toThrow(/malformed sites-data/u);
+    }
+  });
+
+  it("enforces site-specific guide contexts and template slots at runtime", async () => {
+    const randomGuide = structuredClone(GUIDE_CATALOG);
+    randomGuide.guides[0].siteType = "RandomSite";
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() => Promise.resolve(response(randomGuide))),
+    );
+    await expect(loadDreamGuides()).rejects.toThrow(
+      /malformed dream-guides-data/u,
+    );
+
+    const gambleGuide = structuredClone(GUIDE_CATALOG);
+    gambleGuide.guides[0].siteType = "Gamble";
+    const gambleDialogue: Record<string, string[]> & { site: string[] } = {
+      site: ["Fixture line."],
+      "gamble-three-gate": ["Fixture gates."],
+      "gamble-ladder-climb": ["Fixture ladder without its slot."],
+      "gamble-starway-stairs": ["Fixture stairs."],
+      "gamble-four-suit-reprise": ["Fixture suits."],
+    };
+    gambleGuide.guides[0].dialogue = gambleDialogue;
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() => Promise.resolve(response(gambleGuide))),
+    );
+    await expect(loadDreamGuides()).rejects.toThrow(
+      /malformed dream-guides-data/u,
+    );
+
+    gambleDialogue["gamble-ladder-climb"] = ["Win {unexpected-slot} Essence."];
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() => Promise.resolve(response(gambleGuide))),
+    );
+    await expect(loadDreamGuides()).rejects.toThrow(
+      /malformed dream-guides-data/u,
+    );
   });
 });

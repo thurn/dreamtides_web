@@ -308,6 +308,21 @@ describe("canonical Dream Guide and Sites compilers", () => {
       /cannot be materialized/u,
     );
 
+    const tooManyHomeChoices = sitesFixture();
+    tooManyHomeChoices["random-site"]["home-choice-count"] = 4;
+    expect(() => compileSitesData(tooManyHomeChoices, catalogs)).toThrow(
+      /requires exactly 3/u,
+    );
+
+    const tooManyFourSuitRounds = sitesFixture();
+    tooManyFourSuitRounds.gamble["four-suit-reprise"]["max-rounds"] = 4;
+    expect(() => compileSitesData(tooManyFourSuitRounds, catalogs)).toThrow(
+      /between 1 and 3/u,
+    );
+    expect(
+      compileSitesData(sitesFixture(), catalogs).gamble.fourSuitReprise,
+    ).toMatchObject({ maxRounds: 3 });
+
     const missingGame = sitesFixture();
     missingGame.gamble.selection.games.pop();
     expect(() => compileSitesData(missingGame, catalogs)).toThrow(

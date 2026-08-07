@@ -10,7 +10,7 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Genesis, LogNode } from "../eventlog/types";
-import { resetLog } from "../logging";
+import { getLogEntries, resetLog } from "../logging";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { economyFixture } from "../testing/economy-fixture";
 import { opponentsFixture } from "../testing/opponents-fixture";
@@ -237,6 +237,11 @@ describe("RoomGate content-config gate", () => {
 
     expect(container.querySelector("[data-config-gate]")).toBeNull();
     expect(container.querySelector("[data-room-children]")).not.toBeNull();
+    expect(
+      getLogEntries().find(
+        (entry) => entry.event === "room_reducer_compatibility",
+      ),
+    ).toMatchObject({ sitesFoldHash: SITES_FOLD_HASH });
   });
 
   it("gates a room pinned to different opponent rules", async () => {

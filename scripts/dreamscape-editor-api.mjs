@@ -17,7 +17,7 @@ import {
   makeValidateDreamscapeEdit,
   patchDreamscapesToml,
   patchDreamGuideAssignments,
-  swapDreamGuideSpecializedDialogue,
+  swapDreamGuideSpecialties,
   planDreamAvatarAssignment,
   readAffiliationOptions,
   readDreamAvatarOptions,
@@ -576,37 +576,22 @@ async function handlePatch(
       return;
     }
     if (currentGuide.id !== requestedGuide.id) {
-      patchedGuideSource = patchDreamGuideAssignments(
-        guideSource,
-        body.field === "guide-id"
-          ? [
-              {
-                guideId: currentGuide.id,
-                field: "home-dreamscape-id",
-                value: requestedGuide.homeDreamscapeId,
-              },
-              {
-                guideId: requestedGuide.id,
-                field: "home-dreamscape-id",
-                value: currentGuide.homeDreamscapeId,
-              },
-            ]
-          : [
-              {
-                guideId: currentGuide.id,
-                field: "site-type",
-                value: requestedGuide.siteType,
-              },
-              {
-                guideId: requestedGuide.id,
-                field: "site-type",
-                value: currentGuide.siteType,
-              },
-            ],
-      );
-      if (body.field === "signature-site") {
-        patchedGuideSource = swapDreamGuideSpecializedDialogue(
-          patchedGuideSource,
+      if (body.field === "guide-id") {
+        patchedGuideSource = patchDreamGuideAssignments(guideSource, [
+          {
+            guideId: currentGuide.id,
+            field: "home-dreamscape-id",
+            value: requestedGuide.homeDreamscapeId,
+          },
+          {
+            guideId: requestedGuide.id,
+            field: "home-dreamscape-id",
+            value: currentGuide.homeDreamscapeId,
+          },
+        ]);
+      } else {
+        patchedGuideSource = swapDreamGuideSpecialties(
+          guideSource,
           currentGuide.id,
           requestedGuide.id,
         );

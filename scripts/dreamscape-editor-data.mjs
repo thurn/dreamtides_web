@@ -262,6 +262,7 @@ export function patchDreamscapesToml(
 const EDITABLE_GUIDE_ASSIGNMENT_FIELDS = new Set([
   "home-dreamscape-id",
   "site-type",
+  "home-specialty",
 ]);
 
 /** Patch one or more canonical guide assignments while preserving TOML layout. */
@@ -370,6 +371,42 @@ export function swapDreamGuideSpecializedDialogue(
   next = rewriteGuideDialogue(next, secondGuideId, secondDialogue);
   parse(next);
   return next;
+}
+
+/** Atomically swap the canonical specialty, its player-facing copy, and dialogue. */
+export function swapDreamGuideSpecialties(source, firstGuideId, secondGuideId) {
+  const parsed = parse(source);
+  const first = parsed.guides.find((guide) => guide.id === firstGuideId);
+  const second = parsed.guides.find((guide) => guide.id === secondGuideId);
+  if (first === undefined || second === undefined)
+    throw new Error("Dream Guide specialty swap target was not found");
+  const patched = patchDreamGuideAssignments(source, [
+    {
+      guideId: firstGuideId,
+      field: "site-type",
+      value: second["site-type"],
+    },
+    {
+      guideId: firstGuideId,
+      field: "home-specialty",
+      value: second["home-specialty"],
+    },
+    {
+      guideId: secondGuideId,
+      field: "site-type",
+      value: first["site-type"],
+    },
+    {
+      guideId: secondGuideId,
+      field: "home-specialty",
+      value: first["home-specialty"],
+    },
+  ]);
+  return swapDreamGuideSpecializedDialogue(
+    patched,
+    firstGuideId,
+    secondGuideId,
+  );
 }
 
 export function refreshDreamscapesDataJson({

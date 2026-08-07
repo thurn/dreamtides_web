@@ -79,7 +79,6 @@ import {
   SELECTION_RULES_VERSION,
 } from "../../reward-selection";
 import { resolveDeckEntryCard } from "../../card-type-change";
-import { logEvent } from "../../logging";
 
 function asString(value: unknown): string | null {
   return typeof value === "string" ? value : null;
@@ -372,7 +371,6 @@ function buildGambleRuntime(
   }
   const gameId = requestedGameId ?? selectedGameId;
   let runtime: GambleSiteRuntime;
-  let usedFallback = false;
   if (gameId === "tidemark-ladder-climb") {
     const ladderRuntime = buildTidemarkLadderClimbRuntime(
       journey,
@@ -380,7 +378,6 @@ function buildGambleRuntime(
       content,
       rng,
     );
-    usedFallback = ladderRuntime === null;
     runtime =
       ladderRuntime ?? buildGambleFallbackRuntime(journey, site, content, rng);
   } else if (gameId === "starway-stairs") {
@@ -392,22 +389,12 @@ function buildGambleRuntime(
       content,
       rng,
     );
-    usedFallback = fourSuitRuntime === null;
     runtime =
       fourSuitRuntime ??
       buildGambleFallbackRuntime(journey, site, content, rng);
   } else {
     runtime = buildGravokWagerRuntime(journey, site, content, rng);
   }
-  logEvent("gamble_configuration_resolved", {
-    siteId: site.id,
-    sitesFoldHash: content.sitesData.foldHash,
-    requestedGameId: requestedGameId ?? null,
-    weightedGameId: selectedGameId,
-    resolvedGameId: runtime.gameId,
-    usedFallback,
-    selection: content.sitesData.gamble.selection,
-  });
   return runtime;
 }
 
