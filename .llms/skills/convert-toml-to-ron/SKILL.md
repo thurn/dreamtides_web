@@ -29,6 +29,13 @@ comments. Treat these files as inputs to this process, not examples of good RON.
 - Preserve all semantic source information. Do not preserve compatibility
   wrappers, map/list nesting, key spelling, ordering annotations, or other
   representational artifacts merely because they appear in the input.
+- Use a lowercase, hyphenated RFC 4122 version-4 UUID for every identifier in
+  the candidate. This applies to primary IDs, foreign keys, nested/action IDs,
+  reference lists, and identifiers encoded as map keys. Explicitly flag every
+  source identifier that is not UUIDv4, assign it a fresh UUIDv4, rewrite every
+  reference to it, and retain an old-to-new mapping in the parity validator.
+  Do not carry a legacy slug, name, integer, or other non-UUID value forward as
+  an ID.
 
 ## Workflow
 
@@ -36,7 +43,9 @@ comments. Treat these files as inputs to this process, not examples of good RON.
    code, validation code, and domain documentation. If the catalog is large, do
    not dump it into context. Parse it to summarize record counts, stable IDs,
    key unions, optional fields, value types, repeated defaults, closed
-   vocabularies, exceptional records, and cross-record invariants.
+   vocabularies, exceptional records, and cross-record invariants. Inventory
+   every identifier-bearing field and keyed identifier, validate its UUID
+   version, and report all non-UUIDv4 identifiers before converting them.
 2. Classify the observed shape before designing anything:
    - **Domain concepts** belong in the candidate in an intentionally modeled
      form.
@@ -71,6 +80,9 @@ comments. Treat these files as inputs to this process, not examples of good RON.
      regroup fields around domain meaning while preserving their semantics.
    - Keep presentation and template-substitution text as strings, while typing
      runtime identifiers, predicates, and modes.
+   - Model every identifier as `uuid::Uuid` or a domain newtype around it. Emit
+     UUIDv4 values in lowercase hyphenated form, including references and
+     identifiers nested inside variants or lists.
    - Do not add schema-version fields. The typed source model and compiler build
      define the current contract. Evolve source models compatibly with optional
      or defaulted fields and deliberate adapter handling for new variants.
@@ -82,7 +94,8 @@ comments. Treat these files as inputs to this process, not examples of good RON.
 6. Use normal quoted strings by default. Use raw strings only when multiline
    content or escaping makes them materially clearer.
 7. Generate large catalogs mechanically. Fail on unknown or missing input keys,
-   duplicate stable IDs, unsupported variants, invalid references, and violated
+   duplicate stable IDs, candidate IDs that are not UUIDv4, unsupported
+   variants, invalid or incompletely migrated references, and violated
    invariants so the transformation cannot silently discard or reinterpret
    data.
 
@@ -107,7 +120,7 @@ candidate. A modeled candidate might instead be:
 #![enable(implicit_some)]
 [
     ActionDefinition(
-        id: "gather",
+        id: "a60022e4-aa68-49ac-a389-bf3c8a29fe1c",
         effect: DraftCard(count: 1),
     ),
 ]
@@ -161,6 +174,7 @@ Validate with the real `ron` and Serde crates, not a text or bracket check.
    ron = "0.10"
    serde = { version = "1", features = ["derive"] }
    toml = "0.9" # Include when TOML is a parity input.
+   uuid = { version = "1", features = ["serde"] }
    ```
 
 3. In `src/main.rs`, define two strict typed models:
@@ -174,12 +188,17 @@ Validate with the real `ron` and Serde crates, not a text or bracket check.
 4. Convert both typed forms into a shared semantic comparison model, derive
    `PartialEq`, and assert equality. This comparison should permit deliberate
    renaming, regrouping, enum modeling, and default hoisting while proving that
-   every source value has an accounted-for meaning.
+   every source value has an accounted-for meaning. When migrating legacy IDs,
+   compare through an explicit old-to-new UUID mapping and prove that all
+   references resolve through that same mapping.
 5. Also assert source/output record counts, unique stable IDs, enum coverage,
    reference validity, required nested cardinalities, repeated-default
-   assumptions, and every exceptional variant. If TOML and compatibility RON
-   both exist, first prove that they carry the same semantic data or report the
-   discrepancy.
+   assumptions, and every exceptional variant. Parse every candidate ID as a
+   `uuid::Uuid`, assert `Version::Random` and `Variant::RFC4122`, assert
+   lowercase hyphenated formatting, and fail if any identifier-bearing source
+   value was neither already UUIDv4 nor included in the migration mapping. If
+   TOML and compatibility RON both exist, first prove that they carry the same
+   semantic data or report the discrepancy.
 6. Run the validator against the real files, passing the compatibility input,
    candidate, and optional TOML parity source explicitly:
 
