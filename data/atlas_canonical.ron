@@ -3,14 +3,26 @@
 
 #![enable(implicit_some)]
 AtlasCatalog(
+  // Layers are listed in travel order. `position` is the stable layer identity,
+  // while `rules` chooses how that layer is generated. All `min`/`max` ranges
+  // below are inclusive.
   layers: [
+    // The starter rule always creates one node. Its sites come from the starter
+    // dreamscape's fixed site list, so it needs no counts or fill profile here.
     LayerDefinition(position: One, rules: Starter),
     LayerDefinition(
       position: Two,
       rules: Standard(
+        // Number of alternative dreamscape nodes generated in this layer.
         node_count: (min: 2, max: 2),
+        // Target total sites on each node. This includes the dreamscape's
+        // enhanced signature site and the Battle that is always appended last.
         site_count: (min: 3, max: 6),
+        // Names the weighted pool used to fill any slots left after structural
+        // and mandatory sites have been placed.
         fill_profile: Early,
+        // Per-node required sites. Draft may repeat; another type is skipped if
+        // it duplicates the node's signature site. An omitted map means none.
         mandatory_sites: {Draft: 2, Purge: 1, Augury: 1},
       ),
     ),
@@ -40,60 +52,125 @@ AtlasCatalog(
       position: Six,
       rules: Standard(node_count: (min: 3, max: 5), site_count: (min: 3, max: 6), fill_profile: Late),
     ),
+    // The boss rule always creates one special Limbo node. It has no normal
+    // dreamscape signature site, but its utility sites use the named profile
+    // and still end with Battle.
     LayerDefinition(position: Seven, rules: Boss(site_count: (min: 3, max: 6), fill_profile: Late)),
   ],
 
   graph: (
+    // Soft target for outgoing edges per node across each pair of adjacent
+    // layers. The generator first guarantees every node has an edge, then adds
+    // non-crossing edges toward round(source-node-count * this value).
     connection_average: 2.0,
+    // After a node is completed, reveal (but keep locked) the layer this many
+    // positions ahead. Its immediate successors become available separately.
     reveal_lookahead_layers: 2,
+    // At Atlas creation, reveal this many extra nodes without unlocking them.
+    // `count` is sampled from a triangular distribution favoring `mode`, then
+    // distinct nodes are chosen from `eligible_layers`.
     bonus_reveal: (count: (min: 0, max: 2), mode: 1, eligible_layers: [Five, Six]),
   ),
 
   dreamscape_selection: (
+    // Initial weighted-draw weight for every non-starter dreamscape.
     base_weight: 1.0,
+    // After a dreamscape is selected, divide its future weight by this value.
+    // For example, 2.0 halves its chance relative to an unused dreamscape.
     repeat_discourage_strength: 2.0,
+    // Exclude a candidate when an already-assigned node connected to this node
+    // has the same dreamscape.
     exclude_connected_repeats: true,
+    // Exclude a candidate already assigned to another choice in this layer.
     exclude_same_layer_repeats: true,
+    // If the exclusions consume the whole pool, restore all non-starter
+    // dreamscapes and rely on their repeat-discouraged weights.
     exhaustion_fallback: AllowRepeats,
   ),
 
-  site_composition: (unique_non_draft_sites: true, known_dreamsign_site: Reward, mandatory_capacity_behavior: OmitFill),
+  site_composition: (
+    // Within one node, sample fill sites without replacement. Draft is the one
+    // site type allowed to appear more than once through mandatory counts.
+    unique_non_draft_sites: true,
+    // A node carrying a known dreamsign gets this site type; visiting that site
+    // grants the pre-revealed dreamsign. It occupies one of the node's slots.
+    known_dreamsign_site: Reward,
+    // Structural and mandatory sites take priority when they consume the node's
+    // capacity; reduce or omit random fill instead of dropping those sites.
+    mandatory_capacity_behavior: OmitFill,
+  ),
 
+  // Fill profiles provide relative weights, not percentages. A layer names one
+  // profile above; its node samples from that profile without replacement until
+  // the rolled site count is reached.
   fill_profiles: {
     Early: FillProfile(
+      // Default weight for the signature site types belonging to other guides.
+      // The resident guide's own signature site is already added as enhanced
+      // and is therefore excluded from this pool.
       signature_site_weight: 3.0,
+      // Explicit entries add generic site types to the pool and override the
+      // default above when an entry is also another guide's signature type.
       site_weights: {Essence: 3.0, Transfiguration: 1.0, Duplication: 1.0},
     ),
     Late: FillProfile(signature_site_weight: 3.0, site_weights: {Essence: 3.0, Transfiguration: 5.0, Duplication: 5.0}),
   },
 
   known_dreamsign: (
+    // Maximum distinct dreamsigns and carrier nodes created in one Atlas,
+    // additionally limited by the available dreamsign pool and eligible nodes.
     max_per_atlas: 2,
+    // Layers whose nodes may carry a known dreamsign.
     eligible_layers: [Three, Four, Five, Six],
+    // Chance to place each successive carrier. Rolls continue up to the cap but
+    // stop at the first failure; with a cap of 2 and 0.5, the counts 0/1/2 have
+    // probabilities 0.5/0.25/0.25 when enough candidates and signs exist.
     placement_probability: 0.5,
+    // Strength of two carrier-selection boosts: lower-numbered layers receive
+    // more weight, and nodes revealed at Atlas creation receive another boost.
+    // Zero makes eligible carrier nodes equally likely.
     early_reveal_bias: 1.0,
   ),
 
   boss: (
+    // Stable UUID persisted on the special Layer Seven node. It identifies
+    // Limbo without resolving a normal dreamscape definition.
     dreamscape_id: "f31e1199-70bc-4110-85f9-505afebb02c4",
+    // Place label stored on and displayed for the boss node.
     place: "Limbo",
+    // Base character name used when no per-run Apollyon incarnation supplies a
+    // more specific title.
     name: "Apollyon",
+    // Card title and body used only when the run has no resolvable incarnation.
     fallback_title: "Apollyon, the Doom of Humanity",
     fallback_introduction: "An avatar of annihilating power — his own deck, dreamsigns, and abilities bend the dream toward ruin.",
+    // Each asset pairs an authoring filename (`source`) with the stable runtime
+    // lookup identity (`key`) under which the asset build publishes it.
     art: (
+      // Full-bleed Limbo background on the boss reveal card.
       scene: (key: "limbo", source: "limbo.png"),
+      // Circular image drawn on the Layer Seven Atlas node.
       icon: (key: "limbo", source: "limbo_icon.png"),
+      // Apollyon character figure composited over the Limbo scene.
       figure: (key: "apollyon", source: "apollyon.png"),
     ),
   ),
 
   presentation: (
+    // Text-card copy and node-face artwork used before a dreamscape is revealed
+    // (and for dreamscapes that are no longer reachable).
     unrevealed: (
       title: "An Unseen Dream",
       body: "This dreamscape is revealed only as you draw near. Travel onward to learn what waits here.",
+      // As with boss art, `source` is the build input and `key` is the runtime
+      // asset name used by the Atlas node component.
       frame: (key: "Round_frame_main.png", source: "Round_frame_main.png"),
     ),
+    // Fallback body for the guideless starter node's reveal card.
     starter_body: "A quiet place where every dream journey begins.",
+    // Templates for a revealed dreamscape's affiliation card. `{name}` is the
+    // affiliation name; `{card-theme}` comes from that affiliation's
+    // `atlas_card_theme`. The compiler requires exactly these placeholders.
     affiliation: (title_template: "Affiliation: {name}", body_template: "{card-theme} cards are more likely here."),
   ),
 )
