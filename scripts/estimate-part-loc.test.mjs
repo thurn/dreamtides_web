@@ -1,9 +1,22 @@
+import { spawnSync } from "node:child_process";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import { describe, expect, it } from "vitest";
 
 import {
   parseArguments,
   summarizePathNeighborhoods,
 } from "../.llms/skills/ltodd/scripts/estimate-part-loc.mjs";
+
+const repositoryRoot = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "..",
+);
+const estimatorPath = path.join(
+  repositoryRoot,
+  ".llms/skills/ltodd/scripts/estimate-part-loc.mjs",
+);
 
 describe("estimate-part-loc path summaries", () => {
   it("ranks parent neighborhoods by their combined physical lines", () => {
@@ -40,5 +53,15 @@ describe("estimate-part-loc path summaries", () => {
     expect(() => parseArguments(["--paths", "--details"])).toThrow(
       "--details and --paths cannot be used together",
     );
+  });
+
+  it("keeps the checked-in part classifiers aligned with the LToDD index", () => {
+    const result = spawnSync(process.execPath, [estimatorPath, "--paths"], {
+      cwd: repositoryRoot,
+      encoding: "utf8",
+    });
+
+    expect(result.stderr).toBe("");
+    expect(result.status).toBe(0);
   });
 });

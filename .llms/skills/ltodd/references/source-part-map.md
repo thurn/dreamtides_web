@@ -77,7 +77,7 @@ that accident into the book map.
 - Editor, debug, QA, test, generated-documentation, and build-tool sources are
   research aids or implementation infrastructure rather than book subjects.
 
-## `/game_foundations` — Foundations and Game Objects
+## `/dreamtides` — Foundations and Game Objects
 
 Start with the shared Card, Dream Avatar, Dreamsign, Figment, resource, content,
 and identity models under `src/types/` and `src/data/`. Card catalog loading,
@@ -160,7 +160,7 @@ The deck mutation performed by Purge, Duplication, or Transfiguration belongs in
 `/draft_deckbuilding`. Augury, Exploration, and Gamble continue in their own
 parts after the shared Site handoff.
 
-## `/exploration_and_augury_sites` — Augury and Exploration
+## `/exploration_augury` — Augury and Exploration
 
 Start with the adaptive-offer system under `src/journey_v2/`, reward-selection
 logic, authored Exploration data, the gameplay provider that resolves
@@ -185,7 +185,7 @@ cashing out, enhancement, payouts, Dreamsign awards, replacement, and reveal
 sequencing philosophy.
 
 Shared Essence and Dreamsign economics remain in `/sites` and Game
-Object identity remains in `/game_foundations`.
+Object identity remains in `/dreamtides`.
 
 ## `/battle_setup` — Battle Setup and Opposition
 

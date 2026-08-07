@@ -84,7 +84,7 @@ const partRules = [
     patterns: [/gamble/i, /gravok-wager|starway-stairs|tidemark-ladder-climb/i],
   },
   {
-    directory: "exploration_and_augury_sites",
+    directory: "exploration_augury",
     patterns: [
       /augury|exploration/i,
       /^src\/journey_v2\//,
@@ -176,7 +176,7 @@ const partRules = [
     ],
   },
   {
-    directory: "game_foundations",
+    directory: "dreamtides",
     patterns: [/^src\/data\//, /^src\/rules\//, /^src\/types\//],
   },
   {
