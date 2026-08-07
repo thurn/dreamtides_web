@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build RON Editor"
+  short_description: "Build source-preserving typed RON editors"
+  default_prompt: "Use $build-ron-editor to create a high-quality editor for a canonical RON catalog."
