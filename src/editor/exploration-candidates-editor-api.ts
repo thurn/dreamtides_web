@@ -10,6 +10,13 @@ import type {
   EncounterTextSaveRequest,
   EncounterVariableSaveRequest,
 } from "./exploration-candidates-editor-types";
+import {
+  confirmSourceRevision,
+  queueSourceSave,
+  withExpectedSourceRevision,
+} from "./source-revision";
+
+const SOURCE = "exploration-candidates";
 
 async function readResponse<T>(response: Response): Promise<T> {
   const text = await response.text();
@@ -28,12 +35,16 @@ async function readResponse<T>(response: Response): Promise<T> {
   return body as T;
 }
 
-async function patch<T>(path: string, body: unknown): Promise<T> {
-  return readResponse<T>(await fetch(path, {
-    method: "PATCH",
-    headers: { Accept: "application/json", "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  }));
+async function patch<T>(path: string, body: object): Promise<T> {
+  return queueSourceSave(SOURCE, async () => {
+    const confirmed = await readResponse<T>(await fetch(path, {
+      method: "PATCH",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify(withExpectedSourceRevision(SOURCE, body)),
+    }));
+    confirmSourceRevision(SOURCE, confirmed);
+    return confirmed;
+  });
 }
 
 export const explorationCandidatesEditorClient: ExplorationCandidatesEditorClient = {
@@ -46,7 +57,11 @@ export const explorationCandidatesEditorClient: ExplorationCandidatesEditorClien
       loadCardDatabase(),
       loadDreamsignTemplates(),
     ]);
-    const body = await readResponse<{ groups: ExplorationCandidatesEditorGroup[] }>(response);
+    const body = await readResponse<{
+      groups: ExplorationCandidatesEditorGroup[];
+      sourceRevision?: string;
+    }>(response);
+    confirmSourceRevision(SOURCE, body);
     return {
       groups: body.groups,
       cards: [...cardDatabase.values()],

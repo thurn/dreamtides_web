@@ -7,7 +7,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Plugin, ViteDevServer } from "vite";
 import { createCardEditorApiMiddleware } from "./scripts/card-editor-api.mjs";
-import { createExplorationCandidatesEditorApiMiddleware } from "./scripts/exploration-candidates-editor-api.mjs";
+import { createExplorationCandidatesRonEditorApiMiddleware } from "./scripts/exploration-candidates-editor-api.mjs";
 import { createExplorationEditorApiMiddleware } from "./scripts/exploration-editor-api.mjs";
 import { createDreamsignEditorApiMiddleware } from "./scripts/dreamsign-editor-api.mjs";
 import { createDreamAvatarEditorApiMiddleware } from "./scripts/dream-avatar-editor-api.mjs";
@@ -197,14 +197,14 @@ function cardEditorApiPlugin(): Plugin {
   };
 }
 
-/** Vite plugin that serves the JSON-backed Exploration candidates editor. */
+/** Vite plugin that serves the revisioned Exploration candidates editor. */
 function explorationCandidatesEditorApiPlugin(): Plugin {
   return {
     name: "exploration-candidates-editor-api",
     apply: "serve",
     configureServer(server) {
       server.middlewares.use(
-        createExplorationCandidatesEditorApiMiddleware({ rootDir: __dirname }),
+        createExplorationCandidatesRonEditorApiMiddleware({ rootDir: __dirname }),
       );
     },
   };

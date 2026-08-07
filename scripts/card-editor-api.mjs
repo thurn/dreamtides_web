@@ -486,11 +486,22 @@ async function handlePatch(req, res, rootDir, cardId, cardTomlPath, fileSystem) 
     return;
   }
 
+  const ronBacked =
+    cardTomlPath === DEFAULT_CARD_TOML_PATH &&
+    fileSystem === defaultFileSystem &&
+    fileSystem.existsSync(join(rootDir, CARD_RON_PATH));
   if (
-    body.sourceRevision !== undefined &&
+    (ronBacked || body.sourceRevision !== undefined) &&
     typeof body.sourceRevision !== "string"
   ) {
-    errorResponse(res, 400, "INVALID_REQUEST", "sourceRevision must be a string.");
+    errorResponse(
+      res,
+      400,
+      "INVALID_REQUEST",
+      ronBacked
+        ? "Every canonical RON card save requires sourceRevision."
+        : "sourceRevision must be a string.",
+    );
     return;
   }
 
@@ -525,11 +536,7 @@ async function handlePatch(req, res, rootDir, cardId, cardTomlPath, fileSystem) 
   }
 
 
-  if (
-    cardTomlPath === DEFAULT_CARD_TOML_PATH &&
-    fileSystem === defaultFileSystem &&
-    fileSystem.existsSync(join(rootDir, CARD_RON_PATH))
-  ) {
+  if (ronBacked) {
     if (body.field === "tides") {
       errorResponse(
         res,
@@ -678,6 +685,25 @@ async function handleFacetPut(req, res, rootDir, cardTomlPath, fileSystem, facet
     return;
   }
 
+  const ronBacked =
+    cardTomlPath === DEFAULT_CARD_TOML_PATH &&
+    fileSystem === defaultFileSystem &&
+    fileSystem.existsSync(join(rootDir, CARD_RON_PATH));
+  if (
+    (ronBacked || body.sourceRevision !== undefined) &&
+    typeof body.sourceRevision !== "string"
+  ) {
+    errorResponse(
+      res,
+      400,
+      "INVALID_REQUEST",
+      ronBacked
+        ? "Every canonical RON registry save requires sourceRevision."
+        : "sourceRevision must be a string.",
+    );
+    return;
+  }
+
   const validation = validateTagRegistry(body.tags);
   if (!validation.ok) {
     errorResponse(res, 400, facet.invalidRegistryCode, validation.message);
@@ -693,11 +719,7 @@ async function handleFacetPut(req, res, rootDir, cardTomlPath, fileSystem, facet
   }
   const removedUsed = [...usedNames].filter((name) => !newNames.has(name));
 
-  if (
-    cardTomlPath === DEFAULT_CARD_TOML_PATH &&
-    fileSystem === defaultFileSystem &&
-    fileSystem.existsSync(join(rootDir, CARD_RON_PATH))
-  ) {
+  if (ronBacked) {
     const current = facet.readRegistry({ rootDir, cardTomlPath });
     const currentByName = new Map(current.map((entry) => [entry.name, entry]));
     const operations = validation.tags.flatMap((entry) => {
@@ -725,8 +747,7 @@ async function handleFacetPut(req, res, rootDir, cardTomlPath, fileSystem, facet
         rootDir,
         dataset: "cards",
         sourcePaths: CARD_SOURCE_PATHS,
-        expectedSourceRevision:
-          typeof body.sourceRevision === "string" ? body.sourceRevision : undefined,
+        expectedSourceRevision: body.sourceRevision,
         operations,
       });
       jsonResponse(res, 200, {

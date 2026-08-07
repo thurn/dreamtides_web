@@ -10,6 +10,8 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
+import { once } from "node:events";
+import { Worker } from "node:worker_threads";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   gameDataPipelineInternals,
@@ -61,6 +63,58 @@ describe("game-data publication", () => {
     });
     expect(readFileSync(join(root, output), "utf8")).toBe("confirmed\n");
     expect(existsSync(join(root, ".game-data-transaction.json"))).toBe(false);
+  });
+
+  it("waits for the publication lock before recovering a journal", async () => {
+    const { root, output } = fixture();
+    const transactionRoot = ".game-data-transactions/active";
+    const backup = `${transactionRoot}/backups/${output}`;
+    mkdirSync(dirname(join(root, backup)), { recursive: true });
+    writeFileSync(join(root, output), "partially published\n");
+    writeFileSync(join(root, backup), "confirmed\n");
+    writeFileSync(join(root, ".game-data-transaction.json"), `${JSON.stringify({
+      id: "active",
+      state: "publishing",
+      transactionRoot,
+      entries: [{ destination: output, backup, hadDestination: true, published: true }],
+    })}\n`);
+    writeFileSync(join(root, ".game-data.lock"), JSON.stringify({
+      pid: process.pid,
+      token: "active-publisher",
+      startedAt: new Date().toISOString(),
+    }));
+
+    const worker = new Worker(`
+      const { parentPort, workerData } = require("node:worker_threads");
+      (async () => {
+        const pipeline = await import(workerData.moduleUrl);
+        parentPort.postMessage({ kind: "started" });
+        const result = pipeline.recoverGameDataPublication({ rootDir: workerData.root });
+        parentPort.postMessage({ kind: "done", result });
+      })().catch((error) => parentPort.postMessage({ kind: "error", message: error.message }));
+    `, {
+      eval: true,
+      workerData: {
+        moduleUrl: new URL("./game-data-pipeline.mjs", import.meta.url).href,
+        root,
+      },
+    });
+    const [started] = await once(worker, "message");
+    expect(started).toEqual({ kind: "started" });
+    expect(readFileSync(join(root, output), "utf8")).toBe("partially published\n");
+    expect(existsSync(join(root, ".game-data-transaction.json"))).toBe(true);
+
+    const completed = once(worker, "message");
+    rmSync(join(root, ".game-data.lock"), { force: true });
+    const [done] = await completed;
+    expect(done).toMatchObject({
+      kind: "done",
+      result: { recovered: true, state: "publishing" },
+    });
+    expect(readFileSync(join(root, output), "utf8")).toBe("confirmed\n");
+    expect(existsSync(join(root, ".game-data-transaction.json"))).toBe(false);
+    expect(existsSync(join(root, ".game-data.lock"))).toBe(false);
+    await worker.terminate();
   });
 
   it("hashes source paths and ordered source bytes and rejects traversal", () => {

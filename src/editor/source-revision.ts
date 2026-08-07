@@ -36,12 +36,13 @@ export function queueSourceSave<T>(source: string, operation: () => Promise<T>):
       return await operation();
     } catch (error) {
       const saveError = error instanceof Error ? error : new Error(String(error));
-      state.pausedError = saveError;
-      if (typeof window !== "undefined") {
+      const stale = saveError instanceof EditorApiRequestError && saveError.code === "STALE_SOURCE";
+      if (stale) state.pausedError = saveError;
+      if (stale && typeof window !== "undefined") {
         window.dispatchEvent(new CustomEvent("game-data-editor:save-failed", {
           detail: {
             source,
-            stale: saveError instanceof EditorApiRequestError && saveError.code === "STALE_SOURCE",
+            stale: true,
           },
         }));
       }

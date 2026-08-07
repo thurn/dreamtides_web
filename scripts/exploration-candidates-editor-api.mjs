@@ -1,5 +1,5 @@
 import { existsSync } from "node:fs";
-import { readFile, readdir } from "node:fs/promises";
+import { readFile, readdir, writeFile } from "node:fs/promises";
 import { basename, extname, join, resolve } from "node:path";
 import { homedir } from "node:os";
 import { fileURLToPath } from "node:url";
@@ -13,9 +13,16 @@ import {
   updateEncounterTemplate,
 } from "./exploration-candidates-editor-data.mjs";
 import { readEncounterTemplateHealth } from "./encounter-template-health.mjs";
+import { generateSelectedEncountersToml } from "./generate-selected-encounters-toml.mjs";
+import { createRonEditorBridge } from "./ron-editor-bridge.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/exploration_candidates";
+const CANDIDATE_SOURCE_PATHS = [
+  "data/exploration_candidates.ron",
+  "data/exploration_candidates.json",
+  "data/templates.json",
+];
 const DEFAULT_CURATED_ART_DIR = join(
   homedir(),
   "Documents",
@@ -303,4 +310,36 @@ export function createExplorationCandidatesEditorApiMiddleware(options = {}) {
       fail(res, statusFor(error), error.code ?? "INVALID_REQUEST", message);
     }
   };
+}
+
+/**
+ * Preserve the full JSON candidate catalog while adopting its selected
+ * projection into canonical RON in the shared validated publication transaction.
+ */
+export function createExplorationCandidatesRonEditorApiMiddleware(options = {}) {
+  const rootDir = options.rootDir ?? ROOT;
+  return createRonEditorBridge({
+    rootDir,
+    basePaths: [BASE_PATH],
+    collectionPath: BASE_PATH,
+    datasets: ["exploration-candidates"],
+    sourcePaths: CANDIDATE_SOURCE_PATHS,
+    createLegacy: (legacyRoot) => createExplorationCandidatesEditorApiMiddleware({
+      ...options,
+      rootDir: legacyRoot,
+    }),
+    afterLegacyMutation: async ({ stageRoot }) => {
+      const candidatesPath = join(stageRoot, "data", "exploration_candidates.json");
+      const templatesPath = join(stageRoot, "data", "templates.json");
+      const outputPath = join(stageRoot, "data", "exploration_candidates.toml");
+      const selected = generateSelectedEncountersToml(
+        await readFile(candidatesPath, "utf8"),
+        await readFile(templatesPath, "utf8"),
+      );
+      await writeFile(outputPath, selected);
+    },
+    ...(options.onChanged === undefined ? {} : { onChanged: options.onChanged }),
+    ...(options.revision === undefined ? {} : { revision: options.revision }),
+    ...(options.publishEdit === undefined ? {} : { publishEdit: options.publishEdit }),
+  });
 }

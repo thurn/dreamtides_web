@@ -195,26 +195,31 @@ function writeJournal(rootDir, journal) {
   renameSync(temporary, path);
 }
 
-export function recoverGameDataPublication({ rootDir = MODULE_ROOT } = {}) {
+export function recoverGameDataPublication({ rootDir = MODULE_ROOT, lockHeld = false } = {}) {
   rootDir = resolve(rootDir);
-  const journalPath = join(rootDir, JOURNAL_PATH);
-  if (!existsSync(journalPath)) return { recovered: false };
-  const journal = JSON.parse(readFileSync(journalPath, "utf8"));
-  if (journal.state !== "committed") {
-    for (const entry of [...journal.entries].reverse()) {
-      const destination = join(rootDir, entry.destination);
-      const backup = entry.backup === null ? null : join(rootDir, entry.backup);
-      if (backup !== null && existsSync(backup)) {
-        mkdirSync(dirname(destination), { recursive: true });
-        copyFileSync(backup, destination);
-      } else if (entry.hadDestination === false) {
-        rmSync(destination, { force: true });
+  const release = lockHeld ? () => {} : acquireLock(rootDir);
+  try {
+    const journalPath = join(rootDir, JOURNAL_PATH);
+    if (!existsSync(journalPath)) return { recovered: false };
+    const journal = JSON.parse(readFileSync(journalPath, "utf8"));
+    if (journal.state !== "committed") {
+      for (const entry of [...journal.entries].reverse()) {
+        const destination = join(rootDir, entry.destination);
+        const backup = entry.backup === null ? null : join(rootDir, entry.backup);
+        if (backup !== null && existsSync(backup)) {
+          mkdirSync(dirname(destination), { recursive: true });
+          copyFileSync(backup, destination);
+        } else if (entry.hadDestination === false) {
+          rmSync(destination, { force: true });
+        }
       }
     }
+    rmSync(join(rootDir, journal.transactionRoot), { recursive: true, force: true });
+    rmSync(journalPath, { force: true });
+    return { recovered: true, transactionId: journal.id, state: journal.state };
+  } finally {
+    release();
   }
-  rmSync(join(rootDir, journal.transactionRoot), { recursive: true, force: true });
-  rmSync(journalPath, { force: true });
-  return { recovered: true, transactionId: journal.id, state: journal.state };
 }
 
 function collectFiles(root, predicate, result = []) {
@@ -258,7 +263,7 @@ function publish(
 ) {
   const release = lockHeld ? () => {} : acquireLock(rootDir);
   try {
-    recoverGameDataPublication({ rootDir });
+    recoverGameDataPublication({ rootDir, lockHeld: true });
     const changed = publicationCandidates(
       rootDir,
       stageRoot,
@@ -300,7 +305,7 @@ function publish(
       rmSync(join(rootDir, JOURNAL_PATH), { force: true });
       return { changed };
     } catch (error) {
-      recoverGameDataPublication({ rootDir });
+      recoverGameDataPublication({ rootDir, lockHeld: true });
       const wrapped = new Error(`PUBLICATION_FAILED: ${error.message}`);
       wrapped.code = "PUBLICATION_FAILED";
       wrapped.cause = error;
@@ -313,29 +318,34 @@ function publish(
 
 export async function ensureGameData({ rootDir = MODULE_ROOT, dataset } = {}) {
   rootDir = resolve(rootDir);
-  recoverGameDataPublication({ rootDir });
-  const manifest = listGameData({ rootDir });
-  const stageRoot = stageRootFor(rootDir);
+  const release = acquireLock(rootDir);
+  let stageRoot;
   try {
+    recoverGameDataPublication({ rootDir, lockHeld: true });
+    const manifest = listGameData({ rootDir });
+    stageRoot = stageRootFor(rootDir);
     prepareValidationRoot(rootDir, stageRoot);
     const compileArgs = ["compile", "--staging-root", stageRoot];
     if (dataset !== undefined) compileArgs.push("--dataset", dataset);
     const compileReport = runCompiler(rootDir, compileArgs);
     validateTomlDocuments(manifest, stageRoot);
     validateWithTypeScript(rootDir, stageRoot);
-    const publication = publish(rootDir, stageRoot, manifest);
+    const publication = publish(rootDir, stageRoot, manifest, { lockHeld: true });
     return { ok: true, compile: compileReport, publication };
   } finally {
-    rmSync(stageRoot, { recursive: true, force: true });
+    if (stageRoot !== undefined) rmSync(stageRoot, { recursive: true, force: true });
+    release();
   }
 }
 
 export async function checkGameData({ rootDir = MODULE_ROOT } = {}) {
   rootDir = resolve(rootDir);
-  recoverGameDataPublication({ rootDir });
-  const manifest = listGameData({ rootDir });
-  const stageRoot = stageRootFor(rootDir);
+  const release = acquireLock(rootDir);
+  let stageRoot;
   try {
+    recoverGameDataPublication({ rootDir, lockHeld: true });
+    const manifest = listGameData({ rootDir });
+    stageRoot = stageRootFor(rootDir);
     prepareValidationRoot(rootDir, stageRoot);
     const compileReport = runCompiler(rootDir, ["compile", "--staging-root", stageRoot]);
     validateTomlDocuments(manifest, stageRoot);
@@ -347,7 +357,8 @@ export async function checkGameData({ rootDir = MODULE_ROOT } = {}) {
     }).map((dataset) => dataset.id);
     return { ok: stale.length === 0, stale, compile: compileReport };
   } finally {
-    rmSync(stageRoot, { recursive: true, force: true });
+    if (stageRoot !== undefined) rmSync(stageRoot, { recursive: true, force: true });
+    release();
   }
 }
 
@@ -384,7 +395,7 @@ export async function stageAndPublishGameDataEdit({
   const release = acquireLock(rootDir);
   let stageRoot;
   try {
-    recoverGameDataPublication({ rootDir });
+    recoverGameDataPublication({ rootDir, lockHeld: true });
     const currentRevision = sourceRevision(rootDir, sourcePaths);
     if (
       expectedSourceRevision !== undefined &&
@@ -460,7 +471,7 @@ export async function stageAndPublishCompatibilityEdit({
   const release = acquireLock(rootDir);
   let stageRoot;
   try {
-    recoverGameDataPublication({ rootDir });
+    recoverGameDataPublication({ rootDir, lockHeld: true });
     const currentRevision = sourceRevision(rootDir, sourcePaths);
     if (expectedSourceRevision !== currentRevision) {
       const error = new Error("STALE_SOURCE: canonical RON changed after the editor loaded it");

@@ -91,6 +91,10 @@ function writeFixtureRoot() {
   return rootDir;
 }
 
+function enableCanonicalRon(rootDir) {
+  writeFileSync(join(rootDir, "data", "tabula", "cards.ron"), "[]\n");
+}
+
 function readToml(rootDir) {
   return readFileSync(join(rootDir, "data", "tabula", "cards.toml"), "utf8");
 }
@@ -289,6 +293,48 @@ describe("createCardEditorApiMiddleware", () => {
     expect(readToml(rootDir)).toContain('name = "Moonlit Envoy"');
     const cards = JSON.parse(readCardJson(rootDir));
     expect(cards.map((card) => card.name)).toEqual(["Moonlit Envoy", "Second Card", "Nightmare"]);
+  });
+
+  it("rejects a canonical RON card save without a source revision", async () => {
+    const rootDir = writeFixtureRoot();
+    enableCanonicalRon(rootDir);
+    const originalToml = readToml(rootDir);
+    const originalCardJson = readCardJson(rootDir);
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(origin, `/api/editor/cards/${FIRST_ID}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: FIRST_ID,
+        field: "name",
+        value: "Unrevisioned overwrite",
+      }),
+    });
+
+    expect(response.status).toBe(400);
+    expect(body.error).toMatchObject({ code: "INVALID_REQUEST" });
+    expect(body.error.message).toContain("requires sourceRevision");
+    expectNoWrites(rootDir, originalToml, originalCardJson);
+  });
+
+  it("rejects a canonical RON registry save without a source revision", async () => {
+    const rootDir = writeFixtureRoot();
+    enableCanonicalRon(rootDir);
+    const originalToml = readToml(rootDir);
+    const originalCardJson = readCardJson(rootDir);
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(origin, "/api/editor/tags", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tags: [] }),
+    });
+
+    expect(response.status).toBe(400);
+    expect(body.error).toMatchObject({ code: "INVALID_REQUEST" });
+    expect(body.error.message).toContain("requires sourceRevision");
+    expectNoWrites(rootDir, originalToml, originalCardJson);
   });
 
   it("keeps TOML and card-data.json unchanged when the generated JSON write fails", async () => {

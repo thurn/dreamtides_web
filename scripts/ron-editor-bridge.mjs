@@ -75,6 +75,7 @@ export function createRonEditorBridge({
   datasets,
   sourcePaths,
   createLegacy,
+  afterLegacyMutation = async () => {},
   onChanged = () => {},
   revision = sourceRevision,
   publishEdit = stageAndPublishCompatibilityEdit,
@@ -128,6 +129,7 @@ export function createRonEditorBridge({
             error.response = staged;
             throw error;
           }
+          await afterLegacyMutation({ stageRoot, method, url, body, response: staged });
           return staged;
         },
       });

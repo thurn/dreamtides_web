@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { EditorApiRequestError } from "./editor-api";
 import {
   confirmSourceRevision,
   queueSourceSave,
@@ -22,7 +23,7 @@ describe("per-source editor revision queues", () => {
     });
   });
 
-  it("serializes saves and pauses later operations after failure", async () => {
+  it("serializes saves and pauses later operations after a stale-source failure", async () => {
     const calls: string[] = [];
     let release: (() => void) | undefined;
     const first = queueSourceSave("fixture", async () => {
@@ -31,7 +32,11 @@ describe("per-source editor revision queues", () => {
         release = resolve;
       });
       calls.push("first-end");
-      throw new Error("rejected");
+      throw new EditorApiRequestError({
+        code: "STALE_SOURCE",
+        message: "rejected",
+        status: 409,
+      });
     });
     const secondOperation = vi.fn(() => Promise.resolve(calls.push("second")));
     const second = queueSourceSave("fixture", secondOperation);
@@ -49,5 +54,15 @@ describe("per-source editor revision queues", () => {
     await expect(
       queueSourceSave("fixture", () => Promise.resolve("retried")),
     ).resolves.toBe("retried");
+  });
+
+  it("permits a retry after a transient save failure", async () => {
+    await expect(
+      queueSourceSave("fixture", () => Promise.reject(new Error("network unavailable"))),
+    ).rejects.toThrow("network unavailable");
+
+    const retry = vi.fn(() => Promise.resolve("retried"));
+    await expect(queueSourceSave("fixture", retry)).resolves.toBe("retried");
+    expect(retry).toHaveBeenCalledOnce();
   });
 });

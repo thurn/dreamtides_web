@@ -1,9 +1,12 @@
 import { EventEmitter } from "node:events";
-import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { createExplorationCandidatesEditorApiMiddleware } from "./exploration-candidates-editor-api.mjs";
+import {
+  createExplorationCandidatesEditorApiMiddleware,
+  createExplorationCandidatesRonEditorApiMiddleware,
+} from "./exploration-candidates-editor-api.mjs";
 
 const CARD_ID = "11111111-1111-4111-8111-111111111111";
 const OTHER_CARD_ID = "22222222-2222-4222-8222-222222222222";
@@ -26,6 +29,7 @@ function request(method, url, body) {
   const req = new EventEmitter();
   req.method = method;
   req.url = url;
+  req.setEncoding = vi.fn();
   queueMicrotask(() => {
     if (body !== undefined) req.emit("data", JSON.stringify(body));
     req.emit("end");
@@ -193,6 +197,87 @@ describe("Exploration candidates editor API", () => {
       { prose: true },
       { actions: true },
     ]);
+  });
+
+  it("stages JSON selections and regenerates their canonical RON projection", async () => {
+    const stageRoot = join(rootDir, "stage");
+    mkdirSync(stageRoot);
+    cpSync(join(rootDir, "data"), join(stageRoot, "data"), { recursive: true });
+    const publishEdit = vi.fn(async (options) => ({
+      mutation: await options.mutateStage(stageRoot),
+      sourceRevision: "next-revision",
+    }));
+    middleware = createExplorationCandidatesRonEditorApiMiddleware({
+      rootDir,
+      curatedArtDir: join(rootDir, "curated-art"),
+      sourceArtDir: join(rootDir, "source-art"),
+      revision: () => "confirmed-revision",
+      publishEdit,
+    });
+
+    const loaded = await call("GET", "/api/editor/exploration_candidates");
+    expect(loaded.body.sourceRevision).toBe("confirmed-revision");
+    const saved = await call(
+      "PATCH",
+      `/api/editor/exploration_candidates/${CARD_ID}/selection`,
+      {
+        templatePairId: "pair-2",
+        selectionKind: "prose",
+        clientRevision: 8,
+        expectedSourceRevision: "confirmed-revision",
+      },
+    );
+
+    expect(saved).toMatchObject({
+      status: 200,
+      body: {
+        clientRevision: 8,
+        sourceRevision: "next-revision",
+      },
+    });
+    expect(publishEdit).toHaveBeenCalledWith(expect.objectContaining({
+      datasets: ["exploration-candidates"],
+      expectedSourceRevision: "confirmed-revision",
+      sourcePaths: [
+        "data/exploration_candidates.ron",
+        "data/exploration_candidates.json",
+        "data/templates.json",
+      ],
+    }));
+    const stagedProjection = readFileSync(
+      join(stageRoot, "data", "exploration_candidates.toml"),
+      "utf8",
+    );
+    expect(stagedProjection).toContain("# selected prose: pair-2 (rank 2)");
+    expect(stagedProjection).toContain('prose = "Prose 2"');
+    const visibleCandidates = JSON.parse(
+      readFileSync(join(rootDir, "data", "exploration_candidates.json"), "utf8"),
+    );
+    expect(visibleCandidates[CARD_ID][0].selected).toEqual({ prose: true, actions: true });
+  });
+
+  it("rejects an unrevisioned canonical candidate save before staging", async () => {
+    const publishEdit = vi.fn();
+    middleware = createExplorationCandidatesRonEditorApiMiddleware({
+      rootDir,
+      revision: () => "confirmed-revision",
+      publishEdit,
+    });
+
+    const saved = await call(
+      "PATCH",
+      `/api/editor/exploration_candidates/${CARD_ID}/selection`,
+      {
+        templatePairId: "pair-2",
+        selectionKind: "prose",
+      },
+    );
+
+    expect(saved).toMatchObject({
+      status: 400,
+      body: { error: { code: "INVALID_EDIT" } },
+    });
+    expect(publishEdit).not.toHaveBeenCalled();
   });
 
   it("persists only the targeted action text", async () => {
