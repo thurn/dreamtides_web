@@ -291,6 +291,16 @@ class Writer {
     this.column = indentation.length;
     this.lineHasContent = false;
   }
+
+  blankLine(indentLevel = 0) {
+    this.output = this.output.replace(/[ \t]+$/u, "");
+    if (!this.output.endsWith("\n")) this.output += "\n";
+    this.output += "\n";
+    const indentation = " ".repeat(indentLevel * this.indentWidth);
+    this.output += indentation;
+    this.column = indentation.length;
+    this.lineHasContent = false;
+  }
 }
 
 function splitAtCommas(nodes) {
@@ -306,6 +316,31 @@ function splitAtCommas(nodes) {
   }
   if (current.length > 0) segments.push({ nodes: current, comma: null });
   return segments;
+}
+
+function segmentHasNamedRecord(nodes) {
+  return nodes.some(
+    (node, index) =>
+      node.kind === "token" &&
+      node.token.kind === "atom" &&
+      nodes[index + 1]?.kind === "group" &&
+      nodes[index + 1].open.text === "(",
+  );
+}
+
+function shouldSeparateRootSegments(group, segments, indentLevel) {
+  if (indentLevel !== 0 || segments.length < 2) return false;
+
+  const isRecordWithNamedFields =
+    group.open.text === "(" &&
+    group.nodes.some(
+      (node) => node.kind === "token" && node.token.kind === "colon",
+    );
+  const isListOfNamedRecords =
+    group.open.text === "[" &&
+    segments.every((segment) => segmentHasNamedRecord(segment.nodes));
+
+  return isRecordWithNamedFields || isListOfNamedRecords;
 }
 
 function renderSequence(writer, nodes, indentLevel, options) {
@@ -343,7 +378,19 @@ function renderSequence(writer, nodes, indentLevel, options) {
 }
 
 function renderGroup(writer, group, indentLevel, options) {
-  const flat = flatGroup(group);
+  const segments = splitAtCommas(group.nodes);
+  const separateRootSegments = shouldSeparateRootSegments(
+    group,
+    segments,
+    indentLevel,
+  );
+  const hasIntentionalRootBlankLine =
+    indentLevel === 0 &&
+    group.nodes.some((node) => firstToken(node).newlinesBefore >= 2);
+  const flat =
+    separateRootSegments || hasIntentionalRootBlankLine
+      ? null
+      : flatGroup(group);
   if (
     flat !== null &&
     writer.column + flat.length + (options.reserveWidth ?? 0) <=
@@ -360,10 +407,18 @@ function renderGroup(writer, group, indentLevel, options) {
   }
 
   const childIndent = indentLevel + 1;
-  const segments = splitAtCommas(group.nodes);
   writer.newline(childIndent);
   for (let index = 0; index < segments.length; index += 1) {
     const segment = segments[index];
+    const segmentFirstToken =
+      segment.nodes.length === 0 ? null : firstToken(segment.nodes[0]);
+    if (
+      index > 0 &&
+      indentLevel === 0 &&
+      (separateRootSegments || segmentFirstToken?.newlinesBefore >= 2)
+    ) {
+      writer.blankLine(childIndent);
+    }
     renderSequence(writer, segment.nodes, childIndent, {
       ...options,
       reserveWidth:

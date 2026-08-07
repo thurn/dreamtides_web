@@ -5,6 +5,7 @@
     // Number of cards the player picks before a Draft site is complete.
     picks_per_site: 5,
   ),
+
   // Per-rarity exceptions to the strategy-wide copy cap.
   rarity_caps: {
     Legendary: (
@@ -14,6 +15,7 @@
       max_picks_per_run: 1,
     ),
   },
+
   pool: (
     // Strategy used when no developer override is supplied.
     default_strategy: Tides4,

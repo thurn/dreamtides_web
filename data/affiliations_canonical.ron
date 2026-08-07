@@ -6,12 +6,14 @@ AffiliationCatalog(
   // that boost: 1.0 disables it, while 2.0 lets the strongest match receive
   // twice its base selection weight. Every candidate remains eligible.
   default_random_draw_max_multiplier: 2.0,
+
   // Makes opponents encountered in an affiliated dreamscape bring decks shaped
   // around that affiliation's theme. During deck construction, cards resembling
   // its signature cards receive more weight. This value caps that boost: 1.0
   // disables it, while 2.0 gives the strongest match twice its base deck-building
   // weight. Other candidate cards remain eligible.
   default_opponent_deck_max_multiplier: 2.0,
+
   affiliations: [
     AffiliationDefinition(
       id: "spirit_animals",

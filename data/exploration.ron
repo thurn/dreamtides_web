@@ -2,6 +2,7 @@
 #![enable(implicit_some)]
 ExplorationCatalog(
   actions_per_encounter: 2,
+
   effects: [
     EffectDefinition(
       kind: PurgeAndCopy,
@@ -426,6 +427,7 @@ ExplorationCatalog(
       selection_policy: (default: SiteUniform, allowed: [SiteUniform]),
     ),
   ],
+
   encounters: [
     EncounterDefinition(
       card_id: "161482b6-af07-4d9e-822d-8c738672beb9",

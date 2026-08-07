@@ -11,6 +11,7 @@ describe("RON formatter", () => {
 
     expect(formatRon(source, options)).toBe(`Catalog(
   title: "A deliberately long catalog title",
+
   entries: [Entry(id: "one", point: (x: 1, y: 2))],
 )
 `);
@@ -24,12 +25,46 @@ describe("RON formatter", () => {
   // Field guidance.
   text: r#"first line
 second: [line]"#,
+
   nested: /* exact comment */ (value: "// not a comment"),
 )
 `);
     expect(formatted).toContain("// Field guidance.");
     expect(formatted).toContain('r#"first line\nsecond: [line]"#');
     expect(formatted).toContain("/* exact comment */");
+  });
+
+  it("separates top-level record fields with blank lines", () => {
+    const source = `Catalog(
+      first: 1,
+      // Why the second field exists.
+      second: 2,
+      entries: [Entry(id: "one")],
+    )`;
+
+    expect(formatRon(source, options)).toBe(`Catalog(
+  first: 1,
+
+  // Why the second field exists.
+  second: 2,
+
+  entries: [Entry(id: "one")],
+)
+`);
+  });
+
+  it("separates named records in top-level lists with blank lines", () => {
+    const source = `[
+      CardDefinition(id: "one"),
+      CardDefinition(id: "two"),
+    ]`;
+
+    expect(formatRon(source, options)).toBe(`[
+  CardDefinition(id: "one"),
+
+  CardDefinition(id: "two"),
+]
+`);
   });
 
   it("is idempotent", () => {
@@ -53,6 +88,7 @@ second: [line]"#,
       }),
     ).toBe(`Record(
   first: 1,
+
   second: 2,
 )
 `);
