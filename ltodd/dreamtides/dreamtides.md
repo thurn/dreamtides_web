@@ -60,7 +60,8 @@ Players use two main types of [cards](#cards):
 - **Characters** enter play and remain there until removed. Each character has
   [**spark**](#resources-and-scope), the value used to resolve challenges
   against opposing characters.
-- **Events** produce an effect when they resolve, then move to the void.
+- **Events** produce an effect when they resolve, then move to the **void** (the
+  discard pile).
 
 Cards are played by spending [**energy**](#resources-and-scope). Energy comes
 from the shared **Dreamwell**, a deck of special cards used by both players.
@@ -76,9 +77,9 @@ compares the two characters' spark; an unblocked character scores
 battle's target number of points wins.
 
 The battle rules chapters define turn structure, zones, timing, costs,
-challenges, keywords, created cards, and victory. For this chapter, the
-important boundary is that a battle is built from the current journey and has
-its own temporary state. Hands, zones, current energy, counters, temporary
+challenges, keywords, and victory. For this chapter, the important boundary is
+that a battle is built from the current journey and has its own temporary state.
+Hands, zones, current energy, [counters](#resources-and-scope), temporary
 effects, and character positions belong to the battle. Changes to the journey
 deck occur only when a journey rule explicitly makes them persistent.
 
@@ -105,16 +106,19 @@ cost components. Character spark can likewise be fixed or variable. An absent
 spark value is different from zero spark: events normally have no spark, while a
 character with zero spark still has the stat.
 
-Cards may be **fast** or **interrupts**, which changes when they can be played.
-Every interrupt is also fast. Some events have **reclaim**, allowing them to be
-played from the void. The battle rules define the exact timing and behavior of
-these properties.
+**Fast** cards can be played during designated windows outside the normal
+card-playing phase. **Interrupts** are fast cards that can also be played in
+response to an opponent's card or ability. Some events have **reclaim**,
+allowing them to be played from the void. The battle rules define the complete
+timing and behavior of these properties.
 
-An optional card status identifies cards that particular systems treat
+An optional **card status** identifies cards that particular systems treat
 differently. Current statuses include starter, legendary, special, and tutorial.
-Statuses are unordered labels, not a rarity scale. A system that uses a status
-defines its meaning; for example, starter marks cards used to assemble a starter
-deck. The distinction between a base card and a modified copy is described in
+Statuses are unordered labels, not a rarity scale. Starter identifies
+starter-deck cards, legendary restricts how often a card can appear during a
+journey, special reserves cards for specific authored effects, and tutorial
+identifies cards created for tutorial content. The distinction between a base
+card and a modified copy is described in
 [Card definitions and instances](#card-definitions-and-instances).
 
 ### Rules text and symbols
@@ -133,8 +137,8 @@ Card rules text uses a shared vocabulary and symbols:
 | `❖`    | fast                          |
 | `❖❖`   | interrupt                     |
 
-The rules glossary defines shared keywords such as reclaim, materialize,
-dissolve, and foresee. A glossary definition may depend on its surrounding text;
+The **rules glossary** is the shared catalog of keyword definitions used when
+displaying rules text. A glossary definition may depend on its surrounding text;
 for example, a printed reclaim cost should be included when explaining that
 instance of reclaim.
 
@@ -146,14 +150,15 @@ definitions, but it does not alter the authored rule.
 
 A dream avatar is the character that leads a deck. Its definition includes a
 name, title, ability, starting essence, visual representation, and signature
-cards. The player selects one dream avatar for a journey, and both participants
-bring one into each battle. A dream avatar begins a battle in play rather than
-being drawn from the deck.
+**signature cards** (an authored set of cards associated with that avatar). The
+player selects one dream avatar for a journey, and both participants bring one
+into each battle. A dream avatar begins a battle in play rather than being drawn
+from the deck.
 
 Dream avatars connect the journey and battle layers. During journey setup, the
-selected avatar determines the starter deck and influences the pools used to
-generate later cards and dreamsigns. During battle, its ongoing, triggered, or
-activated ability helps define the deck's strategy.
+selected avatar determines the starter deck and influences the **pools** (the
+sets of content eligible to appear) used to generate later cards and dreamsigns.
+During battle, its ability helps define the deck's strategy.
 
 A dreamsign is a passive effect collected during a journey. Dreamsigns can
 affect journey systems, battle rules, or both. Each has a stable ID, name, rules
@@ -184,20 +189,22 @@ update the scope that owns the value.
 
 ## Card definitions and instances
 
-A **card definition** is the authored base card. Its definition ID is a UUID and
-does not change when a card is acquired, copied, or modified. The card's name is
-display text, not identity. Names are allowed to collide, so lookup, equality,
-grouping, and deduplication always use IDs.
+A **card definition** is the authored base card. Its **definition ID** is a UUID
+and does not change when a card is acquired, copied, or modified. The card's
+name is display text, not identity. Names are allowed to collide, so lookup,
+equality, grouping, and deduplication always use IDs.
 
 A **journey card instance** is one specific card owned by the player during a
-journey. It has a journey instance ID in addition to its definition ID and owns
-any persistent modifications to that copy. If the journey deck contains two
-cards with the same definition ID, they have different journey instance IDs. A
-modification to one does not affect the other or the base definition.
+journey. It has a **journey instance ID** in addition to its definition ID and
+owns any
+[persistent modifications](#persistent-modifications-and-resolved-card-values)
+to that copy. If the journey deck contains two cards with the same definition
+ID, they have different journey instance IDs. A modification to one does not
+affect the other or the base definition.
 
 A **battle card instance** is one specific card in a battle. It has its own
-battle instance ID and owns battle-local state such as its zone, counters, and
-temporary effects. When it comes from the journey deck, it also records the
+**battle instance ID** and owns battle-local state such as its zone, counters,
+and temporary effects. When it comes from the journey deck, it also records the
 source journey instance ID.
 
 The relationship between journey and battle instances can be one-to-many. Battle
@@ -207,9 +214,11 @@ instance ID and definition ID. Their battle-local state can then change
 independently.
 
 Copying a card creates a new instance in the relevant scope with the same
-definition ID. Created cards also retain the definition ID of the base card and
-receive a new battle instance ID. Creating the same figment twice, for example,
-produces two battle instances of the same figment definition.
+definition ID. A **created card** is produced by a battle effect rather than
+drawn from the battle deck. It retains the definition ID of the base card and
+receives a new battle instance ID. Creating the same **figment** (a created
+character) twice, for example, produces two battle instances of the same figment
+definition.
 
 Instance IDs that become part of game state must be reproducible from that
 state. Clocks and unrelated random UUIDs cannot determine gameplay identity.
@@ -217,19 +226,19 @@ state. Clocks and unrelated random UUIDs cannot determine gameplay identity.
 ## Persistent modifications and resolved card values
 
 Journey effects can modify one journey card instance without changing its base
-card definition. Persistent modifications include transfigurations, type or
-subtype changes, keyword changes, energy-cost reductions, reclaim changes, and
-spark bonuses.
+card definition. **Persistent modifications** include **transfigurations**
+(persistent card upgrades), type or subtype changes, keyword changes,
+energy-cost reductions, reclaim changes, and spark bonuses.
 
 To determine a card's current characteristics, start with the base definition
 and apply the persistent modifications on the journey instance. In a battle,
 then apply any changes local to the particular battle instance. Each system's
 detailed chapter defines the algorithms and order for the changes it owns.
 
-The resulting cost, type, spark, keywords, and rules text are resolved values,
-not another kind of card. A compact card and its full inspection view must use
-the same resolved values so they cannot disagree. The definition, journey
-instance, and battle instance remain the owners of state.
+The resulting cost, type, spark, keywords, and rules text are **resolved card
+values**, not another kind of card. A compact card and its full inspection view
+must use the same resolved values so they cannot disagree. The definition,
+journey instance, and battle instance remain the owners of state.
 
 ## Content and deterministic behavior
 
@@ -238,11 +247,11 @@ defined in data catalogs. Catalog IDs are the stable interface between authored
 content and game systems. Rules should resolve names and visual data from those
 IDs only when needed for presentation.
 
-Consequential randomness uses `Xoshiro256PlusPlus`. Its complete state is part
-of the game state so the same state and action produce the same result. Systems
-must document the order in which they draw random values; changing that order
-changes later results. Separate streams can be used when two systems need to
-evolve independently.
+Consequential randomness uses the `Xoshiro256PlusPlus` pseudorandom number
+generator. Its complete state is part of the game state so the same state and
+action produce the same result. Systems must document the order in which they
+draw random values; changing that order changes later results. Separate streams
+can be used when two systems need to evolve independently.
 
 Game rules determine legal actions and resulting state. Presentation displays
 that state and collects player intent. It does not choose random outcomes,
