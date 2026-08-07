@@ -71,13 +71,19 @@ export interface OfferTileSite {
   glyph: Glyph;
 }
 
-/** The four surfaced card choices carried by every card-draft offer. */
+/** A fixed four-card fixture, retained for debug compositions. */
 export type OfferTileFourCards = readonly [
   OfferTileCard,
   OfferTileCard,
   OfferTileCard,
   OfferTileCard,
 ];
+
+/** The two to four surfaced card choices carried by a card-draft offer. */
+export type OfferTileCardChoices =
+  | readonly [OfferTileCard, OfferTileCard]
+  | readonly [OfferTileCard, OfferTileCard, OfferTileCard]
+  | OfferTileFourCards;
 
 /** The fixed cards granted together by a bundle offer. */
 export type OfferTileBundleCards =
@@ -125,17 +131,17 @@ export type OfferTileModel =
   | (OfferTileBase & { kind: "card-gift"; card: OfferTileCard })
   | (OfferTileBase & {
       kind: "card-draft" | "transfigured-draft";
-      cards: OfferTileFourCards;
+      cards: OfferTileCardChoices;
     })
   | (OfferTileBase & {
       kind: "category-draft";
-      cards: OfferTileFourCards;
+      cards: OfferTileCardChoices;
       /** Player-facing category noun, such as `warrior` or `Event`. */
       categoryName: string;
     })
   | (OfferTileBase & {
       kind: "copies-draft";
-      cards: OfferTileFourCards;
+      cards: OfferTileCardChoices;
       /** Exact number of copies granted for the selected card. */
       copyCount: number;
     })
@@ -166,7 +172,7 @@ export type OfferTileModel =
   | (OfferTileBase & {
       kind: "trade-card";
       outgoing: OfferTileCard;
-      incoming: OfferTileFourCards;
+      incoming: OfferTileCardChoices;
     })
   | (OfferTileBase & {
       kind: "duplicate-card";
@@ -808,7 +814,7 @@ function TradeComposition({
   incoming,
 }: {
   readonly outgoing: OfferTileCard;
-  readonly incoming: OfferTileFourCards;
+  readonly incoming: OfferTileCardChoices;
 }): ReactElement {
   return (
     <span

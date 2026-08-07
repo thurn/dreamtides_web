@@ -8,6 +8,7 @@ import {
 } from "../../reward-selection";
 import type { MerchantArchetypeId, MerchantOfferDraft } from "./types";
 import type { MerchantContext } from "../types";
+import { auguryArchetype } from "../../data/augury-data";
 import type {
   MerchantOfferTrace,
   MerchantTraceDecision,
@@ -88,6 +89,17 @@ function legacyTraceFor(selection: RewardSelectionResult): MerchantOfferTrace {
       : { blend: selection.trace.tuning }),
     ...(notes.length === 0 ? {} : { notes }),
   };
+}
+
+/** The TOML-authored policy for an Augury archetype. */
+export function augurySelectionPolicy(
+  context: MerchantContext,
+  archetypeId: MerchantArchetypeId,
+): RewardSelectionPolicyId {
+  return auguryArchetype(
+    context.rewardSelection.content.auguryData,
+    archetypeId,
+  ).selectionPolicyId;
 }
 
 export function selectMerchantReward(input: {

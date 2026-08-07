@@ -13,6 +13,11 @@ import type { CandidateFitScore } from "../journey_v2/signals/fit";
 import { createRewardSelectionStream } from "./rng";
 import { compareStableKeys, stableDigest } from "./stable";
 import {
+  isRewardMechanicId,
+  isRewardSelectionPolicyId,
+  mechanicSupportsPolicy,
+} from "../../scripts/reward-selection-contracts.mjs";
+import {
   SELECTION_RULES_VERSION,
   type RewardCandidateKeyKind,
   type RewardCardPredicate,
@@ -785,6 +790,13 @@ export function selectReward(
   context: RewardSelectionContext,
   request: RewardSelectionRequest,
 ): RewardSelectionOutcome {
+  if (
+    !isRewardMechanicId(request.mechanicId) ||
+    !isRewardSelectionPolicyId(request.policyId) ||
+    !mechanicSupportsPolicy(request.mechanicId, request.policyId)
+  ) {
+    return failure(request, "invalid_request", "unknown or incompatible mechanic/policy contract");
+  }
   const required = request.mechanicId === "pack-chooser"
     ? request.count * (request.packSize ?? 0)
     : request.count;

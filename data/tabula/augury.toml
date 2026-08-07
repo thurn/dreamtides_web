@@ -29,13 +29,20 @@ accept-reactions = [
 # Each archetype defines its family, lottery weight, selection policy, quantity
 # knobs, dialogue bank, and copy templates. Supported copy slots are {card},
 # {cards}, {count}, {count-word}, {category}, {site}, {subtype}, and
-# {transfiguration}. A template may omit every slot.
+# {transfiguration}, {copies}, {copies-word}, and {copies-label}. A template may
+# omit every slot. {copies-label} is singular or plural as appropriate.
 # `enabled` controls whether the implemented builder enters the lottery.
 # `family` groups offers so the two visions can be required to differ.
 # `weight` is the relative lottery weight among enabled, eligible archetypes.
 # `selection-policy-id` chooses the shared reward-ranking/sampling policy.
-# Values under `quantities` control chooser sizes, copy counts, or target counts
-# for that archetype; their names describe the affected collection.
+# Values under `quantities` control only the collections named for that
+# archetype. Unknown keys are rejected. Card chooser sizes are between 2 and 4.
+# `chooser-size` is the exact number of visible candidates.
+# `granted-copies` is how many copies of the selected card enter the deck.
+# `bundle-size` and `minimum-bundle-size` bound the seeded bundle count.
+# `maximum-targets` caps how many starter cards are improved together.
+# `minimum-chooser-size` and `maximum-chooser-size` bound a seeded chooser count.
+# An empty quantities table means the archetype has no numeric designer knobs.
 # `dialogue-lines` is the seeded bank spoken when this archetype is featured.
 # Under `copy`, title/summary describe the offer tile, prompt describes a chooser,
 # candidate-title/candidate-summary describe one chooser entry, and
@@ -58,10 +65,10 @@ dialogue-lines = [
 granted-copies = 1
 [archetype.copy]
 title = "Receive {card}"
-summary = "Add this card to your deck."
+summary = "Add {copies-word} {copies-label} of this card to your deck."
 prompt = ""
 candidate-title = "{card}"
-candidate-summary = "Add this card to your deck."
+candidate-summary = "Add {copies-word} {copies-label} of this card to your deck."
 detail-headline = "Gain a Card"
 detail-subtitle = "Gain {card}"
 
@@ -86,7 +93,7 @@ title = "Draft a card"
 summary = "Choose one of {count-word} cards to keep."
 prompt = "Pick 1 of these cards"
 candidate-title = "{card}"
-candidate-summary = "Add this card to your deck."
+candidate-summary = "Add {copies-word} {copies-label} of this card to your deck."
 detail-headline = "Choose a Card"
 detail-subtitle = "Choose a card to add to your deck."
 
@@ -108,12 +115,12 @@ chooser-size = 4
 granted-copies = 2
 [archetype.copy]
 title = "Draft a card, doubled"
-summary = "Choose one of {count-word} cards and keep two copies."
-prompt = "Pick 1 — you keep two copies"
+summary = "Choose one of {count-word} cards and keep {copies-word} {copies-label}."
+prompt = "Pick 1 — you keep {copies-word} {copies-label}"
 candidate-title = "{card}"
-candidate-summary = "Add two copies of this card to your deck."
+candidate-summary = "Add {copies-word} {copies-label} of this card to your deck."
 detail-headline = "Choose a Card"
-detail-subtitle = "Choose a card and add two copies of it to your deck."
+detail-subtitle = "Choose a card and add {copies-word} {copies-label} of it to your deck."
 
 [[archetype]]
 id = "strong_card"
@@ -132,10 +139,10 @@ dialogue-lines = [
 granted-copies = 1
 [archetype.copy]
 title = "Receive {card}"
-summary = "A powerful card."
+summary = "Add {copies-word} {copies-label} of a powerful card."
 prompt = ""
 candidate-title = "{card}"
-candidate-summary = "A powerful card."
+candidate-summary = "Add {copies-word} {copies-label} of this powerful card."
 detail-headline = "Gain a Card"
 detail-subtitle = "Gain {card}"
 
@@ -160,7 +167,7 @@ title = "Draft {category}"
 summary = "Choose one of {count-word} {category} cards."
 prompt = "Pick 1 of these {category} cards"
 candidate-title = "{card}"
-candidate-summary = "Add this {category} card to your deck."
+candidate-summary = "Add {copies-word} {copies-label} of this {category} card to your deck."
 detail-headline = "Choose a Card"
 detail-subtitle = "Choose a card from a single category to add to your deck."
 
@@ -210,7 +217,7 @@ title = "Draft a transfigured card"
 summary = "Choose one of {count-word} cards that arrive already transfigured."
 prompt = "Pick 1 of these transfigured cards"
 candidate-title = "{card} ({transfiguration})"
-candidate-summary = "Arrives already {transfiguration}."
+candidate-summary = "Add {copies-word} {copies-label}; each arrives already {transfiguration}."
 detail-headline = "Choose a Transfigured Card"
 detail-subtitle = "Choose a transfigured card to add to your deck."
 
@@ -228,7 +235,6 @@ dialogue-lines = [
   "A little heat, a little patience, and it changes.",
 ]
 [archetype.quantities]
-target-count = 1
 [archetype.copy]
 title = "{card}: {transfiguration}"
 summary = "Permanently improve a deck card."
@@ -276,7 +282,6 @@ dialogue-lines = [
   "A single new gift, and everything after it shifts.",
 ]
 [archetype.quantities]
-target-count = 1
 [archetype.copy]
 title = "{card}: {transfiguration}"
 summary = "{transfiguration}"
@@ -300,7 +305,6 @@ dialogue-lines = [
   "It only ever wanted to belong somewhere else.",
 ]
 [archetype.quantities]
-target-count = 1
 [archetype.copy]
 title = "{card} becomes a {subtype}"
 summary = "Change a character's subtype to {subtype}."
@@ -324,7 +328,6 @@ dialogue-lines = [
   "Release it, and feel how the road opens.",
 ]
 [archetype.quantities]
-target-count = 1
 [archetype.copy]
 title = "Remove {card}"
 summary = "Remove this card from your deck."
@@ -376,10 +379,10 @@ chooser-size = 3
 granted-copies = 1
 [archetype.copy]
 title = "Duplicate {card}"
-summary = "Add another copy of a deck card."
+summary = "Add {copies-word} {copies-label} of a deck card."
 prompt = "Pick 1 of up to {count}"
 candidate-title = "{card}"
-candidate-summary = "Duplicate this card."
+candidate-summary = "Add {copies-word} {copies-label} of this card."
 detail-headline = "Choose a Card"
 detail-subtitle = "Choose one of {count-word} cards in your deck to duplicate."
 
@@ -397,7 +400,6 @@ dialogue-lines = [
   "A faithful light. It asks nothing and gives daily.",
 ]
 [archetype.quantities]
-granted-copies = 1
 [archetype.copy]
 title = "Gain the {card} dreamsign"
 summary = "Add this dreamsign to your collection."
@@ -423,7 +425,6 @@ dialogue-lines = [
 [archetype.quantities]
 minimum-chooser-size = 2
 maximum-chooser-size = 4
-granted-copies = 1
 [archetype.copy]
 title = "Pick a dreamsign (1 of {count})"
 summary = "Choose a dreamsign for your collection."
@@ -447,7 +448,6 @@ dialogue-lines = [
   "The dreamscape will widen, if you let it.",
 ]
 [archetype.quantities]
-target-count = 1
 [archetype.copy]
 title = "Add a {site} to this dreamscape"
 summary = "A {site} will appear on the current dreamscape map."

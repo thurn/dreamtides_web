@@ -7,58 +7,21 @@ import type {
 } from "../types/journey";
 import type { JourneyContent } from "../data/journey-content";
 import type { RewardSelectionTuning } from "../types/reward-selection-data";
+import type {
+  REWARD_CARD_PREDICATES,
+  REWARD_MECHANIC_IDS,
+  REWARD_SELECTION_POLICY_IDS,
+} from "../../scripts/reward-selection-contracts.mjs";
 
 export const SELECTION_RULES_VERSION = "1" as const;
 
 export type SelectionRulesVersion = typeof SELECTION_RULES_VERSION;
 
-export type RewardSelectionPolicyId =
-  | "fixed"
-  | "uniform"
-  | "card-fit"
-  | "card-fit-quality"
-  | "card-bundle"
-  | "purge-misfit"
-  | "duplicate-value"
-  | "deck-entry-centrality"
-  | "transfiguration-value"
-  | "dreamsign-match"
-  | "site-uniform";
+export type RewardSelectionPolicyId = typeof REWARD_SELECTION_POLICY_IDS[number];
 
-export type RewardMechanicId =
-  | "gain-card"
-  | "catalog-card-chooser"
-  | "pack-chooser"
-  | "transfigured-card-chooser"
-  | "gain-dreamsign"
-  | "transfigure-deck-entry"
-  | "purge-deck-entry"
-  | "purge-for-essence"
-  | "purge-and-duplicate"
-  | "replace-deck-entry"
-  | "duplicate-deck-entry"
-  | "change-entry-subtype"
-  | "change-deck-subtype"
-  | "gain-nightmare-and-card"
-  | "next-site-transfiguration"
-  | "gain-essence-by-deck-predicate"
-  | "increase-deck-spark"
-  | "purge-dreamsign-for-essence"
-  | "make-deck-fast"
-  | "reduce-deck-cost-and-add-nightmares"
-  | "next-battle-modifier"
-  | "choose-dream-avatar"
-  | "purge-duplicates-and-grant-reclaim"
-  | "add-site";
+export type RewardMechanicId = typeof REWARD_MECHANIC_IDS[number];
 
-export type RewardCardPredicate =
-  | "any"
-  | "character"
-  | "event"
-  | "cheap-character"
-  | "spirit-animal"
-  | "survivor"
-  | "warrior";
+export type RewardCardPredicate = typeof REWARD_CARD_PREDICATES[number];
 
 export type RewardCandidateKeyKind =
   | "cardUuid"

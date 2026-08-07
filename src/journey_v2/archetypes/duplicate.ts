@@ -12,8 +12,8 @@ import type {
   MerchantDeckCard,
 } from "../types";
 import type { MerchantArchetypeBuilder, MerchantChoiceCandidateDraft, MerchantOfferDraft } from "./types";
-import { selectionMetadata, selectMerchantReward } from "./sharedSelection";
-import { auguryArchetype } from "../../data/augury-data";
+import { augurySelectionPolicy, selectionMetadata, selectMerchantReward } from "./sharedSelection";
+import { auguryArchetype, auguryCountWord } from "../../data/augury-data";
 
 // ---------------------------------------------------------------------------
 // Candidate selection
@@ -136,11 +136,15 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
       context.rewardSelection.content.auguryData,
       "duplicate",
     ).quantities.chooserSize;
+    const grantedCopies = auguryArchetype(
+      context.rewardSelection.content.auguryData,
+      "duplicate",
+    ).quantities.grantedCopies;
     const selection = selectMerchantReward({
       context,
       archetypeId: "duplicate",
       mechanicId: "duplicate-deck-entry",
-      policyId: "duplicate-value",
+      policyId: augurySelectionPolicy(context, "duplicate"),
       request: {
         count: chooserSize,
         upTo: true,
@@ -154,12 +158,17 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
     if (sampled.length === 0) return null;
 
     // Build payloads.
-    const duplicatePayload = (dc: MerchantDeckCard): Extract<MerchantApplyPayload, { kind: "duplicate_deck_entry" }> => ({
-      kind: "duplicate_deck_entry",
-      entryId: dc.entryId,
-      cardUuid: dc.cardUuid,
-      cardNumber: dc.cardNumber,
-    });
+    const duplicatePayload = (dc: MerchantDeckCard): MerchantApplyPayload => {
+      const child = {
+        kind: "duplicate_deck_entry" as const,
+        entryId: dc.entryId,
+        cardUuid: dc.cardUuid,
+        cardNumber: dc.cardNumber,
+      };
+      return grantedCopies === 1
+        ? child
+        : { kind: "composite", children: Array.from({ length: grantedCopies }, () => child) };
+    };
 
     if (sampled.length === 1) {
       // Single candidate → direct offer.
@@ -167,6 +176,11 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
       return {
         archetypeId: "duplicate",
         family: "duplicate",
+        copyVariables: {
+          copies: grantedCopies,
+          "copies-word": auguryCountWord(grantedCopies),
+          "copies-label": grantedCopies === 1 ? "copy" : "copies",
+        },
         gameObjects: [
           {
             objectType: "deckCard",
@@ -204,6 +218,11 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "duplicate",
       family: "duplicate",
+      copyVariables: {
+        copies: grantedCopies,
+        "copies-word": auguryCountWord(grantedCopies),
+        "copies-label": grantedCopies === 1 ? "copy" : "copies",
+      },
       gameObjects: [],
       choiceRequest: {
         choiceType: "catalogCard",

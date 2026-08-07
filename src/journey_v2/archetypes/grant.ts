@@ -11,7 +11,7 @@ import {
   type CardTransfigurationDisplay,
 } from "../../transfiguration/transfiguration-logic";
 import type { TransfigurationType } from "../../types/journey";
-import { auguryArchetype } from "../../data/augury-data";
+import { auguryArchetype, auguryCountWord } from "../../data/augury-data";
 import type {
   MerchantApplyPayload,
   MerchantContext,
@@ -30,6 +30,7 @@ import type {
   MerchantOfferDraft,
 } from "./types";
 import {
+  augurySelectionPolicy,
   selectionMetadata,
   selectMerchantCount,
   selectMerchantReward,
@@ -184,6 +185,34 @@ function addCatalogCardPayload(card: MerchantCatalogCard): MerchantApplyPayload 
   };
 }
 
+function repeatedPayload(
+  payload: MerchantApplyPayload,
+  count: number,
+): MerchantApplyPayload {
+  return count === 1
+    ? payload
+    : { kind: "composite", children: Array.from({ length: count }, () => payload) };
+}
+
+function grantedCopies(
+  context: MerchantContext,
+  archetypeId: "fit_card_grant" | "fit_card_draft" | "copies_draft" |
+    "strong_card" | "category_draft_known" | "transfigured_draft",
+): number {
+  return auguryArchetype(
+    context.rewardSelection.content.auguryData,
+    archetypeId,
+  ).quantities.grantedCopies;
+}
+
+function copyVariables(count: number): MerchantOfferDraft["copyVariables"] {
+  return {
+    copies: count,
+    "copies-word": auguryCountWord(count),
+    "copies-label": count === 1 ? "copy" : "copies",
+  };
+}
+
 function catalogChoiceCandidate(
   card: MerchantCatalogCard,
   payload: MerchantApplyPayload,
@@ -281,7 +310,7 @@ export const strongCardBuilder: MerchantArchetypeBuilder = {
       context,
       archetypeId: "strong_card",
       mechanicId: "gain-card",
-      policyId: "card-fit-quality",
+      policyId: augurySelectionPolicy(context, "strong_card"),
       request: { constraints: { excludeOwned: true } },
     });
     const target = selectedCatalogCards(context, selection?.bindings.cardUuids ?? [])[0];
@@ -291,7 +320,11 @@ export const strongCardBuilder: MerchantArchetypeBuilder = {
       archetypeId: "strong_card",
       family: "grant",
       gameObjects: [catalogGameObject(target)],
-      applyPayload: addCatalogCardPayload(target),
+      copyVariables: copyVariables(grantedCopies(context, "strong_card")),
+      applyPayload: repeatedPayload(
+        addCatalogCardPayload(target),
+        grantedCopies(context, "strong_card"),
+      ),
       targetKey: target.cardUuid,
       ...selectionMetadata(selection),
     };
@@ -320,7 +353,7 @@ export const fitCardGrantBuilder: MerchantArchetypeBuilder = {
       context,
       archetypeId: "fit_card_grant",
       mechanicId: "gain-card",
-      policyId: "card-fit",
+      policyId: augurySelectionPolicy(context, "fit_card_grant"),
       request: { constraints: { excludeOwned: true } },
     });
     const target = selectedCatalogCards(context, selection?.bindings.cardUuids ?? [])[0];
@@ -330,7 +363,11 @@ export const fitCardGrantBuilder: MerchantArchetypeBuilder = {
       archetypeId: "fit_card_grant",
       family: "grant",
       gameObjects: [catalogGameObject(target)],
-      applyPayload: addCatalogCardPayload(target),
+      copyVariables: copyVariables(grantedCopies(context, "fit_card_grant")),
+      applyPayload: repeatedPayload(
+        addCatalogCardPayload(target),
+        grantedCopies(context, "fit_card_grant"),
+      ),
       targetKey: target.cardUuid,
       ...selectionMetadata(selection),
     };
@@ -369,7 +406,7 @@ export const fitCardDraftBuilder: MerchantArchetypeBuilder = {
       context,
       archetypeId: "fit_card_draft",
       mechanicId: "catalog-card-chooser",
-      policyId: "card-fit",
+      policyId: augurySelectionPolicy(context, "fit_card_draft"),
       request: {
         count: chooserSize,
         constraints: { excludeOwned: true },
@@ -384,13 +421,17 @@ export const fitCardDraftBuilder: MerchantArchetypeBuilder = {
     const candidates = sampled.map((card) =>
       catalogChoiceCandidate(
         card,
-        addCatalogCardPayload(card),
+        repeatedPayload(
+          addCatalogCardPayload(card),
+          grantedCopies(context, "fit_card_draft"),
+        ),
       ),
     );
 
     return {
       archetypeId: "fit_card_draft",
       family: "grant",
+      copyVariables: copyVariables(grantedCopies(context, "fit_card_draft")),
       gameObjects: [],
       choiceRequest: {
         choiceType: "catalogCard",
@@ -473,7 +514,7 @@ export const copiesDraftBuilder: MerchantArchetypeBuilder = {
       context,
       archetypeId: "copies_draft",
       mechanicId: "catalog-card-chooser",
-      policyId: "card-fit-quality",
+      policyId: augurySelectionPolicy(context, "copies_draft"),
       request: {
         count: chooserSize,
         constraints: { excludeOwned: true },
@@ -489,19 +530,14 @@ export const copiesDraftBuilder: MerchantArchetypeBuilder = {
     const candidates = sampled.map((card) =>
       catalogChoiceCandidate(
         card,
-        {
-          kind: "composite",
-          children: Array.from(
-            { length: grantedCopies },
-            () => addCatalogCardPayload(card),
-          ),
-        },
+        repeatedPayload(addCatalogCardPayload(card), grantedCopies),
       ),
     );
 
     return {
       archetypeId: "copies_draft",
       family: "grant",
+      copyVariables: copyVariables(grantedCopies),
       gameObjects: [],
       choiceRequest: {
         choiceType: "catalogCard",
@@ -613,7 +649,7 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
       context,
       archetypeId: "category_draft_known",
       mechanicId: "catalog-card-chooser",
-      policyId: "card-fit",
+      policyId: augurySelectionPolicy(context, "category_draft_known"),
       request: {
         count: chooserSize,
         constraints: {
@@ -631,14 +667,20 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
     const candidates = sampled.map((card) =>
       catalogChoiceCandidate(
         card,
-        addCatalogCardPayload(card),
+        repeatedPayload(
+          addCatalogCardPayload(card),
+          grantedCopies(context, "category_draft_known"),
+        ),
       ),
     );
 
     return {
       archetypeId: "category_draft_known",
       family: "grant",
-      copyVariables: { category: category.label },
+      copyVariables: {
+        category: category.label,
+        ...copyVariables(grantedCopies(context, "category_draft_known")),
+      },
       gameObjects: [],
       choiceRequest: {
         choiceType: "catalogCard",
@@ -698,7 +740,7 @@ export const cardBundleBuilder: MerchantArchetypeBuilder = {
       context,
       archetypeId: "card_bundle",
       mechanicId: "gain-card",
-      policyId: "card-bundle",
+      policyId: augurySelectionPolicy(context, "card_bundle"),
       minimum: quantities.minimumBundleSize,
       maximum: quantities.bundleSize,
     });
@@ -706,7 +748,7 @@ export const cardBundleBuilder: MerchantArchetypeBuilder = {
       context,
       archetypeId: "card_bundle",
       mechanicId: "gain-card",
-      policyId: "card-bundle",
+      policyId: augurySelectionPolicy(context, "card_bundle"),
       request: { count: bundleSize, upTo: true, constraints: { excludeOwned: true } },
     });
     const bundle = selectedCatalogCards(context, selection?.bindings.cardUuids ?? []);
@@ -807,7 +849,7 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
       context,
       archetypeId: "transfigured_draft",
       mechanicId: "transfigured-card-chooser",
-      policyId: "card-fit",
+      policyId: augurySelectionPolicy(context, "transfigured_draft"),
       request: {
         count: chooserSize,
         constraints: { excludeOwned: true },
@@ -844,12 +886,12 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
           transfiguration: choice.display,
         },
       ],
-      applyPayload: {
+      applyPayload: repeatedPayload({
         kind: "add_catalog_card",
         cardUuid: choice.card.cardUuid,
         cardNumber: choice.card.cardNumber,
         transfiguration: choice.transfiguration,
-      },
+      }, grantedCopies(context, "transfigured_draft")),
       cardUuid: choice.card.cardUuid,
       cardNumber: choice.card.cardNumber,
     }));
@@ -857,6 +899,7 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "transfigured_draft",
       family: "grant",
+      copyVariables: copyVariables(grantedCopies(context, "transfigured_draft")),
       gameObjects: [],
       choiceRequest: {
         choiceType: "catalogCard",

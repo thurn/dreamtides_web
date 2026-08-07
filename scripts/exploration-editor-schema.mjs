@@ -1,6 +1,12 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { parse } from "smol-toml";
+import {
+  isRewardMechanicId,
+  isRewardSelectionPolicyId,
+  mechanicSupportsPolicy,
+  REWARD_CARD_PREDICATES,
+} from "./reward-selection-contracts.mjs";
 
 export const EXPLORATION_PREDICATES = [
   { value: "", label: "Any card" },
@@ -11,6 +17,11 @@ export const EXPLORATION_PREDICATES = [
   { value: "survivor", label: "Survivor" },
   { value: "warrior", label: "Warrior" },
 ];
+
+if (!EXPLORATION_PREDICATES.every(({ value }) =>
+  value === "" || REWARD_CARD_PREDICATES.includes(value))) {
+  throw new Error("Exploration predicate options are out of sync with reward selection");
+}
 
 export const EXPLORATION_TRANSFIGURATIONS = [
   "Empowered", "Amplified", "Kindled", "Inspired", "Enduring",
@@ -96,15 +107,39 @@ export function buildExplorationEffectDefinitions(source) {
     if ((defaultSelectionPolicyId === undefined) !== (allowedSelectionPolicyIds === undefined)) {
       throw new Error(`exploration.toml: ${path} must define both selection-policy keys`);
     }
+    const canonicalMechanicId = string(entry["canonical-mechanic-id"], `${path}.canonical-mechanic-id`);
+    if (!isRewardMechanicId(canonicalMechanicId)) {
+      throw new Error(`exploration.toml: ${path}.canonical-mechanic-id is unknown`);
+    }
+    let compiledPolicies = {};
+    if (defaultSelectionPolicyId !== undefined) {
+      const defaultPolicy = string(defaultSelectionPolicyId, `${path}.default-selection-policy-id`);
+      const allowedPolicies = stringArray(allowedSelectionPolicyIds, `${path}.allowed-selection-policy-ids`);
+      if (!isRewardSelectionPolicyId(defaultPolicy)) {
+        throw new Error(`exploration.toml: ${path}.default-selection-policy-id is unknown`);
+      }
+      if (!allowedPolicies.includes(defaultPolicy)) {
+        throw new Error(`exploration.toml: ${path}.default-selection-policy-id must be allowed`);
+      }
+      for (const policyId of allowedPolicies) {
+        if (!isRewardSelectionPolicyId(policyId)) {
+          throw new Error(`exploration.toml: ${path}.allowed-selection-policy-ids contains unknown policy ${policyId}`);
+        }
+        if (!mechanicSupportsPolicy(canonicalMechanicId, policyId)) {
+          throw new Error(`exploration.toml: ${path} policy ${policyId} is incompatible with ${canonicalMechanicId}`);
+        }
+      }
+      compiledPolicies = {
+        defaultSelectionPolicyId: defaultPolicy,
+        allowedSelectionPolicyIds: allowedPolicies,
+      };
+    }
     return {
       kind,
       label: string(entry.label, `${path}.label`),
       templateIds: integerArray(entry["template-ids"], `${path}.template-ids`),
-      canonicalMechanicId: string(entry["canonical-mechanic-id"], `${path}.canonical-mechanic-id`),
-      ...(defaultSelectionPolicyId === undefined ? {} : {
-        defaultSelectionPolicyId: string(defaultSelectionPolicyId, `${path}.default-selection-policy-id`),
-        allowedSelectionPolicyIds: stringArray(allowedSelectionPolicyIds, `${path}.allowed-selection-policy-ids`),
-      }),
+      canonicalMechanicId,
+      ...compiledPolicies,
       copy: {
         followupTitle: copyTemplate(copy["followup-title"], `${path}.copy.followup-title`),
         followupSubtitle: copyTemplate(copy["followup-subtitle"], `${path}.copy.followup-subtitle`),

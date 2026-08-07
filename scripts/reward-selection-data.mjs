@@ -168,8 +168,12 @@ export function compileRewardSelectionData(sourceValue) {
     placeableSiteTypes: stringList(site["placeable-types"], "site.placeable-types", SITE_TYPES),
     tribes: stringList(tribes.values, "tribes.values"),
   };
-  if (!(tuning.costBands.cheapMaximum < tuning.costBands.midMinimum && tuning.costBands.midMinimum <= tuning.costBands.midMaximum && tuning.costBands.midMaximum < tuning.costBands.bigMinimum)) {
-    fail("cost-bands", "bands must be ordered and non-overlapping");
+  if (!(
+    tuning.costBands.cheapMaximum + 1 === tuning.costBands.midMinimum &&
+    tuning.costBands.midMinimum <= tuning.costBands.midMaximum &&
+    tuning.costBands.midMaximum + 1 === tuning.costBands.bigMinimum
+  )) {
+    fail("cost-bands", "bands must be ordered, non-overlapping, and contiguous");
   }
   const payload = { schemaVersion: 1, rulesVersion: "1", tuning };
   const contentHash = hash(payload);

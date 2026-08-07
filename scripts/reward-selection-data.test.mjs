@@ -24,4 +24,10 @@ describe("compileRewardSelectionData", () => {
     invalid.eligibility["minimum-deck-for-fit"] = 6;
     expect(() => compileRewardSelectionData(invalid)).toThrow(/unknown key/u);
   });
+
+  it("rejects cost-band gaps", () => {
+    const invalid = source();
+    invalid["cost-bands"]["big-minimum"] += 1;
+    expect(() => compileRewardSelectionData(invalid)).toThrow(/contiguous/u);
+  });
 });

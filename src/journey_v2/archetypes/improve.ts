@@ -12,13 +12,7 @@ import type { CardTypeChange, TransfigurationType } from "../../types/journey";
 import type { RewardSelectionTuning } from "../../types/reward-selection-data";
 import { auguryArchetype } from "../../data/augury-data";
 import { MERCHANT_TUNING } from "../tuning";
-import { centrality } from "../signals/fit";
 import { bandSample, type MerchantRng } from "../signals/rng";
-import {
-  assembleOfferTrace,
-  type TraceCandidateInput,
-} from "../trace/buildTrace";
-import type { MerchantOfferTrace } from "../trace/types";
 import type {
   MerchantApplyPayload,
   MerchantContext,
@@ -27,37 +21,11 @@ import type {
 } from "../types";
 import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
 import {
+  augurySelectionPolicy,
   selectionMetadata,
   selectMerchantCount,
   selectMerchantReward,
 } from "./sharedSelection";
-
-/**
- * Assembles the `entry_modification` trace shared by the improve family: an
- * (entry, modification) candidate set keyed by `${entryId}:${variant}`.
- */
-function entryModificationTrace(params: {
-  candidates: readonly TraceCandidateInput[];
-  selectedKeys: readonly string[];
-  bandFraction: number;
-  bandMinimum?: number;
-  blend?: Readonly<Record<string, number>>;
-  notes?: readonly string[];
-}): MerchantOfferTrace {
-  return assembleOfferTrace({
-    decision: "entry_modification",
-    keyKind: "entryModification",
-    candidates: params.candidates,
-    selectedKeys: params.selectedKeys,
-    selectedCount: params.selectedKeys.length,
-    bandFraction: params.bandFraction,
-    ...(params.bandMinimum === undefined
-      ? {}
-      : { bandMinimum: params.bandMinimum }),
-    ...(params.blend === undefined ? {} : { blend: params.blend }),
-    ...(params.notes === undefined ? {} : { notes: params.notes }),
-  });
-}
 
 /** Clamp a value to [0, 1]. */
 function clamp01(v: number): number {
@@ -247,7 +215,7 @@ export const transfigureBuilder: MerchantArchetypeBuilder = {
       context,
       archetypeId: "transfigure",
       mechanicId: "transfigure-deck-entry",
-      policyId: "transfiguration-value",
+      policyId: augurySelectionPolicy(context, "transfigure"),
     });
     const binding = selection?.bindings.transfigurations[0];
     const target = binding === undefined
@@ -331,7 +299,7 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
       context,
       archetypeId: "starter_transfigure",
       mechanicId: "transfigure-deck-entry",
-      policyId: "uniform",
+      policyId: augurySelectionPolicy(context, "starter_transfigure"),
       minimum: 1,
       maximum: Math.min(maximumTargets, starters.length),
     });
@@ -339,7 +307,7 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
       context,
       archetypeId: "starter_transfigure",
       mechanicId: "transfigure-deck-entry",
-      policyId: "uniform",
+      policyId: augurySelectionPolicy(context, "starter_transfigure"),
       request: {
         count: desired,
         upTo: true,
@@ -481,15 +449,27 @@ export const keywordModBuilder: MerchantArchetypeBuilder = {
   eligible(context: MerchantContext): boolean {
     return keywordModCandidatePairs(context).length > 0;
   },
-  build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
+  build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
     const pairs = keywordModCandidatePairs(context);
     if (pairs.length === 0) return null;
-    // Uniform seeded sample: a flat band over the whole list.
-    const target = bandSample(pairs, () => 0, 1, rng, {
-      bandFraction: 1,
-      bandMinimum: pairs.length,
-    })[0];
-    if (target === undefined) return null;
+    const allowedEntryIds = new Set(pairs.map((pair) => pair.entryId));
+    const selection = selectMerchantReward({
+      context,
+      archetypeId: "keyword_mod",
+      mechanicId: "change-entry-subtype",
+      policyId: augurySelectionPolicy(context, "keyword_mod"),
+      request: {
+        constraints: {
+          allowStarters: true,
+          excludedDeckEntryIds: context.deckCards
+            .filter((card) => !allowedEntryIds.has(card.entryId))
+            .map((card) => card.entryId),
+        },
+      },
+    });
+    const selectedEntryId = selection?.bindings.deckEntryIds[0];
+    const target = pairs.find((pair) => pair.entryId === selectedEntryId);
+    if (selection === null || target === undefined) return null;
 
     return {
       archetypeId: "keyword_mod",
@@ -508,20 +488,7 @@ export const keywordModBuilder: MerchantArchetypeBuilder = {
       ],
       applyPayload: target.payload,
       targetKey: `${target.entryId}:${target.variant}`,
-      trace: entryModificationTrace({
-        candidates: pairs.map((pair) => ({
-          key: `${pair.entryId}:${pair.variant}`,
-          displayName: `${pair.deckCard.displayName}: ${pair.variant}`,
-          cardUuid: pair.deckCard.cardUuid,
-          cardNumber: pair.deckCard.cardNumber,
-          entryId: pair.entryId,
-          score: 0,
-        })),
-        selectedKeys: [`${target.entryId}:${target.variant}`],
-        bandFraction: 1,
-        bandMinimum: pairs.length,
-        notes: ["uniform"],
-      }),
+      ...selectionMetadata(selection),
     };
   },
 };
@@ -612,19 +579,28 @@ export const tribalChangeBuilder: MerchantArchetypeBuilder = {
     const pairs = tribalChangeCandidatePairs(context);
     if (pairs.length === 0) return null;
 
-    const deck = context.deckCards.map((deckCard) => deckCard.card);
-    const scoreFor = (pair: TribalChangeCandidatePair): number =>
-      centrality(
-        pair.deckCard.card,
-        deck,
-        context.fitModel,
-        context.rewardSelection.tuning.centrality,
-      );
-    const target = bandSample(pairs, scoreFor, 1, rng, {
-      bandFraction: context.rewardSelection.tuning.tribalBandFraction,
-      bandMinimum: context.rewardSelection.tuning.tribalBandMinimum,
+    const allowedEntryIds = new Set(pairs.map((pair) => pair.entryId));
+    const selection = selectMerchantReward({
+      context,
+      archetypeId: "tribal_change",
+      mechanicId: "change-entry-subtype",
+      policyId: augurySelectionPolicy(context, "tribal_change"),
+      request: {
+        constraints: {
+          allowStarters: true,
+          excludedDeckEntryIds: context.deckCards
+            .filter((card) => !allowedEntryIds.has(card.entryId))
+            .map((card) => card.entryId),
+        },
+      },
+    });
+    const selectedEntryId = selection?.bindings.deckEntryIds[0];
+    const eligiblePairs = pairs.filter((pair) => pair.entryId === selectedEntryId);
+    const target = bandSample(eligiblePairs, () => 0, 1, rng, {
+      bandFraction: 1,
+      bandMinimum: eligiblePairs.length,
     })[0];
-    if (target === undefined) return null;
+    if (selection === null || target === undefined) return null;
 
     const typeChange = tribalTypeChange(target.tribe);
     const preview = applyDeckEntryCardModification(
@@ -656,21 +632,7 @@ export const tribalChangeBuilder: MerchantArchetypeBuilder = {
         typeChange,
       },
       targetKey: `${target.entryId}:${target.tribe}`,
-      trace: entryModificationTrace({
-        candidates: pairs.map((pair) => ({
-          key: `${pair.entryId}:${pair.tribe}`,
-          displayName: `${pair.deckCard.displayName} → ${pair.tribe}`,
-          cardUuid: pair.deckCard.cardUuid,
-          cardNumber: pair.deckCard.cardNumber,
-          entryId: pair.entryId,
-          score: scoreFor(pair),
-          components: { centrality: scoreFor(pair) },
-        })),
-        selectedKeys: [`${target.entryId}:${target.tribe}`],
-        bandFraction: context.rewardSelection.tuning.tribalBandFraction,
-        bandMinimum: context.rewardSelection.tuning.tribalBandMinimum,
-        notes: [`activeTribes=${[...activeTribes(context)].join(",")}`],
-      }),
+      ...selectionMetadata(selection),
     };
   },
 };

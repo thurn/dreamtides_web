@@ -12,7 +12,10 @@ export type AuguryCopySlot =
   | "category"
   | "site"
   | "subtype"
-  | "transfiguration";
+  | "transfiguration"
+  | "copies"
+  | "copies-word"
+  | "copies-label";
 
 export interface AuguryCopyTemplates {
   title: string;

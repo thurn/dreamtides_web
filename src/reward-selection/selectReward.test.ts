@@ -62,6 +62,20 @@ function request(overrides: Partial<RewardSelectionRequest> = {}): RewardSelecti
 }
 
 describe("shared reward selection", () => {
+  it("rejects unknown and incompatible runtime contracts without throwing", () => {
+    const unknownMechanic = selectReward(context(), {
+      ...request(),
+      mechanicId: "typo-mechanic",
+    } as unknown as RewardSelectionRequest);
+    expect(unknownMechanic).toMatchObject({ ok: false, reason: "invalid_request" });
+
+    const incompatible = selectReward(context(), {
+      ...request(),
+      policyId: "purge-misfit",
+    });
+    expect(incompatible).toMatchObject({ ok: false, reason: "invalid_request" });
+  });
+
   it("is stable across catalog iteration order and keys identity by UUID", () => {
     const forward = selectReward(context(), request());
     const reversed = selectReward(context(true), request());

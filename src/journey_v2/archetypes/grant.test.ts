@@ -28,6 +28,8 @@ import {
 } from "./grant";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardId } from "../../types/card-identity";
+import type { MerchantArchetypeId } from "./types";
+import type { RewardSelectionPolicyId } from "../../reward-selection/types";
 
 // A simple deterministic UUID generator for fixtures.
 function uuid(n: number): CardId {
@@ -123,7 +125,68 @@ function makeContext(input: {
   });
 }
 
+function configureArchetype(
+  context: MerchantContext,
+  archetypeId: MerchantArchetypeId,
+  updates: {
+    selectionPolicyId?: RewardSelectionPolicyId;
+    quantities?: Readonly<Record<string, number>>;
+  },
+): MerchantContext {
+  const auguryData = context.rewardSelection.content.auguryData;
+  return {
+    ...context,
+    rewardSelection: {
+      ...context.rewardSelection,
+      content: {
+        ...context.rewardSelection.content,
+        auguryData: {
+          ...auguryData,
+          archetypes: auguryData.archetypes.map((archetype) =>
+            archetype.id === archetypeId
+              ? {
+                  ...archetype,
+                  ...updates,
+                  quantities: {
+                    ...archetype.quantities,
+                    ...updates.quantities,
+                  },
+                }
+              : archetype,
+          ),
+        },
+      },
+    },
+  };
+}
+
 describe("grant family — fit_card_grant", () => {
+  it("honors its configured policy and granted copy count", () => {
+    const pool = makePoolCards(12);
+    const deckEntries = Array.from({ length: MERCHANT_TUNING.minDeckForFit }, (_, index) => ({
+      entryId: `configured-${String(index)}`,
+      cardNumber: 200 + index,
+    }));
+    const deckCards = deckEntries.map(({ cardNumber }) =>
+      makeMerchantTestCard({ id: uuid(cardNumber), cardNumber }),
+    );
+    const base = makeContext({
+      poolCards: [...pool, ...deckCards],
+      deckEntries,
+      fitModel: makeRankedFitModel([...pool, ...deckCards]),
+    });
+    const context = configureArchetype(base, "fit_card_grant", {
+      selectionPolicyId: "uniform",
+      quantities: { grantedCopies: 3 },
+    });
+    const draft = fitCardGrantBuilder.build(context, merchantRng("configured-grant"));
+    expect(draft?.policyId).toBe("uniform");
+    expect(draft?.applyPayload).toMatchObject({ kind: "composite" });
+    if (draft?.applyPayload?.kind === "composite") {
+      expect(draft.applyPayload.children).toHaveLength(3);
+    }
+  });
+
   it("excludes owned cards from candidates over 20 seeds", () => {
     const pool = makePoolCards(10);
     const ownedNumber = pool[0].cardNumber;
@@ -201,6 +264,25 @@ describe("grant family — fit_card_grant", () => {
 });
 
 describe("grant family — fit_card_draft", () => {
+  it("builds the configured chooser size", () => {
+    const pool = makePoolCards(12);
+    const deckEntries = Array.from({ length: MERCHANT_TUNING.minDeckForFit }, (_, index) => ({
+      entryId: `chooser-${String(index)}`,
+      cardNumber: 200 + index,
+    }));
+    const deckCards = deckEntries.map(({ cardNumber }) =>
+      makeMerchantTestCard({ id: uuid(cardNumber), cardNumber }),
+    );
+    const allCards = [...pool, ...deckCards];
+    const context = configureArchetype(makeContext({
+      poolCards: allCards,
+      deckEntries,
+      fitModel: makeRankedFitModel(allCards),
+    }), "fit_card_draft", { quantities: { chooserSize: 3 } });
+    const draft = fitCardDraftBuilder.build(context, merchantRng("configured-chooser"));
+    expect(draft?.choiceRequest?.candidates).toHaveLength(3);
+  });
+
   it("offers 4 distinct unowned candidates above the band floor over 20 seeds", () => {
     const pool = makePoolCards(12);
     const fitModel = makeRankedFitModel(pool);

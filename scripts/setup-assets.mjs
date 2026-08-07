@@ -38,6 +38,7 @@ import { compileEconomyData } from "./economy-data.mjs";
 import { compileDraftData } from "./draft-data.mjs";
 import { compileRewardSelectionData } from "./reward-selection-data.mjs";
 import { compileAuguryData } from "./augury-data.mjs";
+import { isRewardCardPredicate } from "./reward-selection-contracts.mjs";
 import { compileOpponentsData } from "./opponents-data.mjs";
 import {
   buildExplorationEffectDefinitions,
@@ -872,6 +873,15 @@ export function transformExplorationData(source) {
       ) {
         throw new Error(
           `exploration.toml: action ${action.id} requires predicate`,
+        );
+      }
+      if (
+        action.predicate !== undefined &&
+        action.predicate !== "" &&
+        !isRewardCardPredicate(action.predicate)
+      ) {
+        throw new Error(
+          `exploration.toml: action ${action.id} has unsupported predicate ${String(action.predicate)}`,
         );
       }
       if (

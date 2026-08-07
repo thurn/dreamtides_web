@@ -212,7 +212,7 @@ function buildLegacyActionOffer(
       .map((dreamAvatar) => dreamAvatar.id);
     return offer;
   }
-  if (usesDeckCardVariable(action)) {
+  if (usesDeckCardVariable(action) && action.effectKind !== "replace-selected") {
     const target = legacyShuffled(
       resolvedDeckCards(journey, content).filter(
         ({ entry, card }) =>

@@ -20,7 +20,8 @@ function costBandOf(card: CardData, context: MerchantContext): CostBand | null {
   const bands = context.rewardSelection.tuning.costBands;
   if (cost <= bands.cheapMaximum) return "cheap";
   if (cost >= bands.midMinimum && cost <= bands.midMaximum) return "mid";
-  return "big";
+  if (cost >= bands.bigMinimum) return "big";
+  return null;
 }
 
 const COST_BAND_LABELS: Readonly<Record<CostBand, string>> = {

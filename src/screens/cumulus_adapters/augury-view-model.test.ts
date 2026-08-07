@@ -664,14 +664,16 @@ describe("augury view model", () => {
       categoryName: "Character",
     });
     expect(copies).toMatchObject({ kind: "copies-draft", copyCount: 2 });
-    expect(() =>
-      buildAuguryOfferTileModel(
+    for (const count of [2, 3, 4]) {
+      const model = buildAuguryOfferTileModel(
         mappedOffer("fit_card_draft", {
-          choiceRequest: choiceRequest(fourCandidates().slice(0, 3)),
+          choiceRequest: choiceRequest(fourCandidates().slice(0, count)),
         }),
         mappingContext,
-      ),
-    ).toThrow(/requires 4 candidates/);
+      );
+      expect(model.kind).toBe("card-draft");
+      if (model.kind === "card-draft") expect(model.cards).toHaveLength(count);
+    }
     expect(() =>
       buildAuguryOfferTileModel(
         mappedOffer("dreamsign_draft", {

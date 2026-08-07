@@ -36,10 +36,10 @@
       ],
       "copy": {
         "title": "Receive {card}",
-        "summary": "Add this card to your deck.",
+        "summary": "Add {copies-word} {copies-label} of this card to your deck.",
         "prompt": "",
         "candidateTitle": "{card}",
-        "candidateSummary": "Add this card to your deck.",
+        "candidateSummary": "Add {copies-word} {copies-label} of this card to your deck.",
         "detailHeadline": "Gain a Card",
         "detailSubtitle": "Gain {card}"
       }
@@ -66,7 +66,7 @@
         "summary": "Choose one of {count-word} cards to keep.",
         "prompt": "Pick 1 of these cards",
         "candidateTitle": "{card}",
-        "candidateSummary": "Add this card to your deck.",
+        "candidateSummary": "Add {copies-word} {copies-label} of this card to your deck.",
         "detailHeadline": "Choose a Card",
         "detailSubtitle": "Choose a card to add to your deck."
       }
@@ -90,12 +90,12 @@
       ],
       "copy": {
         "title": "Draft a card, doubled",
-        "summary": "Choose one of {count-word} cards and keep two copies.",
-        "prompt": "Pick 1 — you keep two copies",
+        "summary": "Choose one of {count-word} cards and keep {copies-word} {copies-label}.",
+        "prompt": "Pick 1 — you keep {copies-word} {copies-label}",
         "candidateTitle": "{card}",
-        "candidateSummary": "Add two copies of this card to your deck.",
+        "candidateSummary": "Add {copies-word} {copies-label} of this card to your deck.",
         "detailHeadline": "Choose a Card",
-        "detailSubtitle": "Choose a card and add two copies of it to your deck."
+        "detailSubtitle": "Choose a card and add {copies-word} {copies-label} of it to your deck."
       }
     },
     {
@@ -116,10 +116,10 @@
       ],
       "copy": {
         "title": "Receive {card}",
-        "summary": "A powerful card.",
+        "summary": "Add {copies-word} {copies-label} of a powerful card.",
         "prompt": "",
         "candidateTitle": "{card}",
-        "candidateSummary": "A powerful card.",
+        "candidateSummary": "Add {copies-word} {copies-label} of this powerful card.",
         "detailHeadline": "Gain a Card",
         "detailSubtitle": "Gain {card}"
       }
@@ -146,7 +146,7 @@
         "summary": "Choose one of {count-word} {category} cards.",
         "prompt": "Pick 1 of these {category} cards",
         "candidateTitle": "{card}",
-        "candidateSummary": "Add this {category} card to your deck.",
+        "candidateSummary": "Add {copies-word} {copies-label} of this {category} card to your deck.",
         "detailHeadline": "Choose a Card",
         "detailSubtitle": "Choose a card from a single category to add to your deck."
       }
@@ -200,7 +200,7 @@
         "summary": "Choose one of {count-word} cards that arrive already transfigured.",
         "prompt": "Pick 1 of these transfigured cards",
         "candidateTitle": "{card} ({transfiguration})",
-        "candidateSummary": "Arrives already {transfiguration}.",
+        "candidateSummary": "Add {copies-word} {copies-label}; each arrives already {transfiguration}.",
         "detailHeadline": "Choose a Transfigured Card",
         "detailSubtitle": "Choose a transfigured card to add to your deck."
       }
@@ -211,9 +211,7 @@
       "family": "improve",
       "weight": 10,
       "selectionPolicyId": "transfiguration-value",
-      "quantities": {
-        "targetCount": 1
-      },
+      "quantities": {},
       "dialogueLines": [
         "Even a dreaming thing can be honed.",
         "There is a finer version of this, waiting inside.",
@@ -263,9 +261,7 @@
       "family": "improve",
       "weight": 8,
       "selectionPolicyId": "deck-entry-centrality",
-      "quantities": {
-        "targetCount": 1
-      },
+      "quantities": {},
       "dialogueLines": [
         "A small new habit can change a whole life.",
         "One trick it never knew it wanted to learn.",
@@ -289,9 +285,7 @@
       "family": "improve",
       "weight": 6,
       "selectionPolicyId": "deck-entry-centrality",
-      "quantities": {
-        "targetCount": 1
-      },
+      "quantities": {},
       "dialogueLines": [
         "Blood is only a story. It can be retold.",
         "Born to one kin, but it would run better with another.",
@@ -315,9 +309,7 @@
       "family": "remove",
       "weight": 8,
       "selectionPolicyId": "purge-misfit",
-      "quantities": {
-        "targetCount": 1
-      },
+      "quantities": {},
       "dialogueLines": [
         "Some weight is only weight. Set it down with me.",
         "Travel lighter. Leave the dead branch behind.",
@@ -380,10 +372,10 @@
       ],
       "copy": {
         "title": "Duplicate {card}",
-        "summary": "Add another copy of a deck card.",
+        "summary": "Add {copies-word} {copies-label} of a deck card.",
         "prompt": "Pick 1 of up to {count}",
         "candidateTitle": "{card}",
-        "candidateSummary": "Duplicate this card.",
+        "candidateSummary": "Add {copies-word} {copies-label} of this card.",
         "detailHeadline": "Choose a Card",
         "detailSubtitle": "Choose one of {count-word} cards in your deck to duplicate."
       }
@@ -394,9 +386,7 @@
       "family": "dreamsign",
       "weight": 8,
       "selectionPolicyId": "dreamsign-match",
-      "quantities": {
-        "grantedCopies": 1
-      },
+      "quantities": {},
       "dialogueLines": [
         "A quiet star to walk beneath, all the way home.",
         "A blessing that keeps working while you sleep.",
@@ -422,8 +412,7 @@
       "selectionPolicyId": "dreamsign-match",
       "quantities": {
         "minimumChooserSize": 2,
-        "maximumChooserSize": 4,
-        "grantedCopies": 1
+        "maximumChooserSize": 4
       },
       "dialogueLines": [
         "Several stars lean close. Choose one to follow.",
@@ -448,9 +437,7 @@
       "family": "site",
       "weight": 6,
       "selectionPolicyId": "site-uniform",
-      "quantities": {
-        "targetCount": 1
-      },
+      "quantities": {},
       "dialogueLines": [
         "I can open a door where there was only wall.",
         "Your map has room for one more strange place.",
@@ -469,6 +456,6 @@
       }
     }
   ],
-  "contentHash": "271944a5d396f75812af29a67e03641dae6909c5798fef8ca7759fd293ea5271",
-  "foldHash": "271944a5d396f75812af29a67e03641dae6909c5798fef8ca7759fd293ea5271"
+  "contentHash": "7d80720586170ebd554455e12f3a4cdc1d316cf202384491e273d8a97b8af31d",
+  "foldHash": "7d80720586170ebd554455e12f3a4cdc1d316cf202384491e273d8a97b8af31d"
 }

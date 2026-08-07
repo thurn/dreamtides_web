@@ -2,7 +2,7 @@ import type { MerchantRng } from "../signals/rng";
 import type { SiteType } from "../../types/journey";
 import type { MerchantContext } from "../types";
 import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
-import { selectionMetadata, selectMerchantReward } from "./sharedSelection";
+import { augurySelectionPolicy, selectionMetadata, selectMerchantReward } from "./sharedSelection";
 import { MERCHANT_TUNING } from "../tuning";
 
 /**
@@ -51,7 +51,7 @@ export const addSiteBuilder: MerchantArchetypeBuilder = {
       context,
       archetypeId: "add_site",
       mechanicId: "add-site",
-      policyId: "site-uniform",
+      policyId: augurySelectionPolicy(context, "add_site"),
       request: {
         constraints: {
           allowedSiteTypes:

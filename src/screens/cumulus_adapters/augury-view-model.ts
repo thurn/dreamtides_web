@@ -43,11 +43,11 @@ import { glyph } from "../../cumulus/primitives/glyph";
 import type {
   OfferTileCard,
   OfferTileBundleCards,
+  OfferTileCardChoices,
   OfferTileCharacterSubtype,
   OfferTileDreamsignChoices,
   OfferTileDreamsign,
   OfferTileDuplicateCards,
-  OfferTileFourCards,
   OfferTileModel,
   OfferTileStarterCards,
 } from "../../cumulus/components/controls/OfferTile";
@@ -347,9 +347,11 @@ function candidateCards(
   );
 }
 
-function fourCards(cards: readonly OfferTileCard[]): OfferTileFourCards {
-  if (cards.length !== 4) unavailable("expected exactly 4 cards");
-  return [cards[0], cards[1], cards[2], cards[3]];
+function fourCards(cards: readonly OfferTileCard[]): OfferTileCardChoices {
+  if (cards.length === 2) return [cards[0], cards[1]];
+  if (cards.length === 3) return [cards[0], cards[1], cards[2]];
+  if (cards.length === 4) return [cards[0], cards[1], cards[2], cards[3]];
+  return unavailable("expected 2 to 4 cards");
 }
 
 function bundleCards(cards: readonly OfferTileCard[]): OfferTileBundleCards {
@@ -463,26 +465,26 @@ export function buildAuguryOfferTileModel(
       return {
         id,
         kind: "card-draft",
-        cards: fourCards(candidateCards(offer, [4])),
+        cards: fourCards(candidateCards(offer, [2, 3, 4])),
       };
     case "transfigured_draft":
       return {
         id,
         kind: "transfigured-draft",
-        cards: fourCards(candidateCards(offer, [4], true)),
+        cards: fourCards(candidateCards(offer, [2, 3, 4], true)),
       };
     case "category_draft_known":
       return {
         id,
         kind: "category-draft",
-        cards: fourCards(candidateCards(offer, [4])),
+        cards: fourCards(candidateCards(offer, [2, 3, 4])),
         categoryName: categoryName(offer, context),
       };
     case "copies_draft":
       return {
         id,
         kind: "copies-draft",
-        cards: fourCards(candidateCards(offer, [4])),
+        cards: fourCards(candidateCards(offer, [2, 3, 4])),
         copyCount: copyCount(offer),
       };
     case "card_bundle": {
@@ -558,7 +560,7 @@ export function buildAuguryOfferTileModel(
         id,
         kind: "trade-card",
         outgoing: requiredCard(offer.gameObjects, "purge_replace"),
-        incoming: fourCards(candidateCards(offer, [4])),
+        incoming: fourCards(candidateCards(offer, [2, 3, 4])),
       };
     case "duplicate": {
       const cards =

@@ -94,6 +94,32 @@ describe("exploration editor data", () => {
     );
   });
 
+  it("rejects unknown and incompatible canonical selection contracts", () => {
+    const unknownMechanic = parse(fs.readFileSync("data/tabula/exploration.toml", "utf8"));
+    unknownMechanic["effect-kind"][0]["canonical-mechanic-id"] = "typo-mechanic";
+    expect(() => buildExplorationEffectDefinitions(unknownMechanic)).toThrow(/canonical-mechanic-id is unknown/u);
+
+    const unknownPolicy = parse(fs.readFileSync("data/tabula/exploration.toml", "utf8"));
+    const gainCard = unknownPolicy["effect-kind"].find(({ kind }) => kind === "gain-card");
+    gainCard["allowed-selection-policy-ids"] = ["typo-policy"];
+    gainCard["default-selection-policy-id"] = "typo-policy";
+    expect(() => buildExplorationEffectDefinitions(unknownPolicy)).toThrow(/selection-policy-id is unknown/u);
+
+    const incompatible = parse(fs.readFileSync("data/tabula/exploration.toml", "utf8"));
+    const draft = incompatible["effect-kind"].find(({ kind }) => kind === "draft-card");
+    draft["allowed-selection-policy-ids"] = ["purge-misfit"];
+    draft["default-selection-policy-id"] = "purge-misfit";
+    expect(() => buildExplorationEffectDefinitions(incompatible)).toThrow(/incompatible/u);
+  });
+
+  it("rejects unsupported action predicates", () => {
+    const document = parse(fs.readFileSync("data/tabula/exploration.toml", "utf8"));
+    const action = document.encounter.flatMap((encounter) => encounter.action)
+      .find((candidate) => typeof candidate.predicate === "string" && candidate.predicate.length > 0);
+    action.predicate = "typo-predicate";
+    expect(() => transformExplorationData(document)).toThrow(/unsupported predicate/u);
+  });
+
   it("round-trips every effect kind with defaults and removes stale fields", () => {
     const rootDir = fixtureRoot();
     let data = readExplorationEditorData({ rootDir });

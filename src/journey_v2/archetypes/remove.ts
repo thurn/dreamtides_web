@@ -1,55 +1,19 @@
-import { fitScores, fitLooByEntry } from "../signals/fit";
+import { fitLooByEntry } from "../signals/fit";
 import { bandSample, type MerchantRng } from "../signals/rng";
 import {
   assembleOfferTrace,
-  catalogTraceCandidates,
   deckEntryTraceCandidates,
 } from "../trace/buildTrace";
 import type { MerchantOfferTrace } from "../trace/types";
 import type {
   MerchantApplyPayload,
-  MerchantCatalogCard,
   MerchantContext,
   MerchantDeckCard,
 } from "../types";
-import type { FitModel } from "../../draft/replay/fit-model";
-import type { CardData } from "../../types/cards";
-import { grantCandidatePool, singleComponentByUuid } from "./grant";
+import { grantCandidatePool } from "./grant";
 import type { MerchantArchetypeBuilder, MerchantChoiceCandidateDraft, MerchantOfferDraft } from "./types";
-import { selectionMetadata, selectMerchantReward } from "./sharedSelection";
+import { augurySelectionPolicy, selectionMetadata, selectMerchantReward } from "./sharedSelection";
 import { auguryArchetype } from "../../data/augury-data";
-
-// ---------------------------------------------------------------------------
-// Internal helpers
-// ---------------------------------------------------------------------------
-
-/**
- * Returns a UUID-keyed fit value for each candidate against the current deck.
- * When no fit model is present, every candidate scores 0.
- * (Mirrors the private helper in grant.ts — duplicated here to avoid a
- * dependency inversion; kept thin.)
- */
-function fitValueByUuid(
-  context: MerchantContext,
-  candidates: readonly MerchantCatalogCard[],
-): Map<string, number> {
-  const result = new Map<string, number>();
-  const fitModel: FitModel | undefined = context.fitModel;
-  if (fitModel === undefined) {
-    for (const card of candidates) result.set(card.cardUuid, 0);
-    return result;
-  }
-  const deck: readonly CardData[] = context.deckCards.map((dc) => dc.card);
-  const scores = fitScores(
-    candidates.map((c) => c.card),
-    deck,
-    fitModel,
-  );
-  for (const card of candidates) {
-    result.set(card.cardUuid, scores.get(card.cardUuid)?.fit ?? 0);
-  }
-  return result;
-}
 
 /** Returns the band size for a pool under a band fraction. */
 function bandSizeFor(
@@ -248,7 +212,7 @@ export const purgeBuilder: MerchantArchetypeBuilder = {
       context,
       archetypeId: "purge",
       mechanicId: "purge-deck-entry",
-      policyId: "purge-misfit",
+      policyId: augurySelectionPolicy(context, "purge"),
       request: { constraints: { allowStarters: true } },
     });
     const entryId = selection?.bindings.deckEntryIds[0];
@@ -333,18 +297,28 @@ export const purgeReplaceBuilder: MerchantArchetypeBuilder = {
     const purgeTarget = purgeSampled[0];
     if (purgeTarget === undefined) return null;
 
-    // Select 4 fit-band replacements from the grant pool.
+    // Select the configured number of replacements from the grant pool.
     const pool = grantCandidatePool(context);
     if (pool.length === 0) return null;
-
-    const fitByUuid = fitValueByUuid(context, pool);
-    const replacements = bandSample(
-      pool,
-      (card) => fitByUuid.get(card.cardUuid) ?? 0,
-      chooserSize,
-      rng,
+    const replacementSelection = selectMerchantReward({
+      context,
+      archetypeId: "purge_replace",
+      mechanicId: "catalog-card-chooser",
+      policyId: augurySelectionPolicy(context, "purge_replace"),
+      request: {
+        count: chooserSize,
+        constraints: { excludeOwned: true },
+      },
+    });
+    const replacementByUuid = new Map(pool.map((card) => [card.cardUuid, card]));
+    const replacements = (replacementSelection?.bindings.cardUuids ?? []).flatMap(
+      (cardUuid) => {
+        const card = replacementByUuid.get(cardUuid);
+        return card === undefined ? [] : [card];
+      },
     );
     if (
+      replacementSelection === null ||
       replacements.length < chooserSize
     ) return null;
 
@@ -388,28 +362,7 @@ export const purgeReplaceBuilder: MerchantArchetypeBuilder = {
         candidates,
       },
       targetKey: `${purgeTarget.entryId}:${replacements.map((c) => c.cardUuid).join(",")}`,
-      // The chooser the player picks among is the 4 replacements (scored by fit
-      // over the grant pool); the fixed removal target is recorded in the notes.
-      trace: assembleOfferTrace({
-        decision: "scored_cards",
-        keyKind: "cardUuid",
-        candidates: catalogTraceCandidates(
-          pool,
-          fitByUuid,
-          singleComponentByUuid(pool, "fit", fitByUuid),
-          context.draftPoolCardUuids,
-        ),
-        selectedKeys: replacements.map((c) => c.cardUuid),
-        selectedCount: replacements.length,
-        bandFraction: context.rewardSelection.tuning.bandFraction,
-        bandMinimum: context.rewardSelection.tuning.bandMinimum,
-        notes: [
-          `removeEntry=${purgeTarget.entryId}`,
-          `removeCardUuid=${purgeTarget.deckCard.cardUuid}`,
-          `removeMisfit=${String(purgeTarget.misfitScore)}`,
-          `looThreshold=${String(purgeSel.looThreshold)}`,
-        ],
-      }),
+      ...selectionMetadata(replacementSelection),
     };
   },
 };
