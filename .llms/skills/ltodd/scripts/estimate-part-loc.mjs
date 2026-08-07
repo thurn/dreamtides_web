@@ -63,6 +63,16 @@ function isExperimentalDraftSource(relativePath) {
 
 // Rules are ordered. The first matching part owns the whole file for estimation.
 const partRules = [
+  // Reusable catalog controls, surfaces, communication, and journey chrome
+  // belong to the design system even when their names mention gameplay.
+  {
+    directory: "cumulus",
+    patterns: [
+      /^src\/cumulus\/components\/(?:controls|overlay|status|typography)\//,
+      /^src\/cumulus\/components\/hud\/(?:CoopPresenceStatus|EssenceValue|JourneyStatusBar|Motes|TideDisc|TidesInfoLabel)\.tsx$/,
+      /^src\/cumulus\/primitives\/Pressable\.tsx$/,
+    ],
+  },
   {
     directory: "tutorial",
     patterns: [/tutorial/i],
@@ -157,9 +167,8 @@ const partRules = [
     patterns: [
       /^src\/components\/(?:CumulusJourneyChrome|JourneyUtilityMenuController|ScreenRouter)\./,
       /^src\/cumulus\/CumulusRoot\.tsx$/,
-      /^src\/cumulus\/components\/(?:controls|overlay)\//,
       /^src\/cumulus\/internal\/reveal\//,
-      /^src\/cumulus\/primitives\/(?:Pressable|motion-time|pointer-gesture|press-feedback|safe-area|use-scale-to-fit)\./,
+      /^src\/cumulus\/primitives\/(?:motion-time|pointer-gesture|press-feedback|safe-area|use-scale-to-fit)\./,
       /^src\/cumulus\/screens\/(?:chrome-geometry|use-is-desktop)\./,
       /^src\/screens\/cumulus_adapters\/registry\.tsx$/,
     ],
