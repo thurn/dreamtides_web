@@ -56,9 +56,11 @@ contracts.
    `data/tabula/cards.ron` generates `data/tabula/cards.toml`. Existing
    TypeScript readers retain their paths and source-facing key names during the
    migration.
-4. **RON uses a deliberately TOML-representable subset.** Canonical data gains
-   RON's nested structure, raw strings, comments, and trailing commas without
-   introducing values that the compatibility TOML cannot represent.
+4. **Canonical data may use RON's full typed value model.** Dataset source
+   schemas may use named structs, enums, tuples, options, ranges, chars, byte
+   strings, maps, heterogeneous collections, numeric forms, and pinned official
+   extensions. Dataset adapters lower those values into the established TOML
+   compatibility contract.
 5. **Authored fields use snake_case.** Dataset adapters explicitly map RON field
    paths to the existing TOML schema. Conversion never guesses whether an
    underscore should become a hyphen or preserve an underscore.
@@ -102,7 +104,8 @@ for those datasets are in scope.
 - Changing runtime data types, game rules, balance, copy, UUIDs, record order,
   or cross-reference semantics as part of the format migration.
 - Converting repository and tool configuration such as `.codex/config.toml`.
-- Supporting arbitrary RON features that cannot round-trip through TOML.
+- Inventing one schema-blind mapping from every possible RON value to TOML.
+  Rich RON values are compiled through explicit dataset adapters.
 - A general-purpose RON/TOML conversion utility for unrelated repositories.
 - A bidirectional authoring workflow in which developers edit generated TOML.
 - Preserving byte-level blame across the one-time syntax conversion. The
@@ -145,6 +148,7 @@ conversion graph. It records, per dataset:
 - canonical RON path;
 - generated TOML path;
 - accepted `ron_format_version`;
+- Rust source-schema type;
 - compatibility-adapter version;
 - compatibility-key adapter;
 - dependent datasets whose TypeScript validation must run together;
@@ -163,26 +167,32 @@ editor operations.
 
 ## RON authoring contract
 
-Canonical files use anonymous structs and snake_case field names. The supported
-value model is the intersection of RON and TOML:
+Canonical files deserialize into dataset-specific Rust source types through the
+pinned official RON and Serde crates. The RON source schema is allowed to model
+the domain directly instead of imitating TOML. Struct fields use snake_case;
+named types and enum variants follow Rust identifier conventions.
 
-- anonymous structs and maps with string keys;
-- homogeneous lists;
-- UTF-8 strings, including RON raw strings and multiline raw strings;
-- booleans;
-- signed 64-bit integers; and
-- finite floating-point values representable by TOML.
+Any RON construct supported by the pinned parser may be used when the dataset's
+Rust source schema and compatibility adapter define its meaning. This includes:
 
-Optional values are represented by omitting the field. Map keys must be strings
-and all struct fields must be valid Rust identifiers. Structs represent
-schema-owned records. Maps are reserved for genuinely dynamic dictionaries;
-their authored string keys pass through verbatim rather than participating in
-field-case mapping.
+- named and anonymous structs;
+- unit, newtype, tuple, and struct enum variants;
+- tuples and tuple structs;
+- explicit `Some`/`None` values;
+- ranges, chars, and byte strings;
+- maps with typed non-string keys;
+- lists containing typed heterogeneous enum variants;
+- the numeric forms accepted by RON; and
+- official RON extensions enabled by the source document and admitted by the
+  dataset schema.
 
-The compiler rejects RON enums, named structs, tuples used as domain values,
-`Some`/`None`, ranges, chars, byte strings, non-string map keys, heterogeneous
-arrays, non-finite floats, integers outside TOML's range, duplicate fields, and
-any extension not explicitly admitted by this contract.
+The compiler does not require these values to have a direct TOML equivalent.
+It deserializes the canonical document into the typed source model, then the
+dataset adapter lowers that model into a separate compatibility model that the
+TOML serializer can represent. Parser errors, unknown fields, duplicate struct
+fields, invalid variants, and values outside the dataset's declared Rust types
+remain ordinary malformed-source errors rather than restrictions imposed by
+TOML.
 
 Every canonical document carries the reserved source-only field
 `ron_format_version`. Dataset adapters validate it before conversion and omit
@@ -207,7 +217,8 @@ field such as `energy_cost` may need to become `energy-cost`, while a field in
 another dataset may need to remain `card_id` or become camelCase. A recursive
 global case conversion is therefore unsafe.
 
-Each dataset selects an explicit compatibility adapter. An adapter defines:
+Each dataset selects a typed source schema and explicit compatibility adapter.
+An adapter defines:
 
 - source field path to generated field path mappings;
 - top-level collection names;
@@ -216,12 +227,33 @@ Each dataset selects an explicit compatibility adapter. An adapter defines:
   `ron_format_version`; and
 - any representation conversion required by the current TOML contract.
 
-Mappings of schema-owned struct fields are total. Compilation fails when an
-authored struct field is not covered, two source paths target the same generated
-path, or a mapped value does not fit the target TOML representation. Adding a
-new RON field therefore requires a deliberate compatibility decision. Dynamic
-map keys preserve their authored spelling and are validated against their
-dataset's map-key contract.
+The adapter is normal Rust code from the typed source model to a typed or
+ordered TOML compatibility model. It may use a direct representation where RON
+and TOML align, or deliberately lower a richer value:
+
+| RON source construct | Possible compatibility representation |
+| --- | --- |
+| Named struct | TOML table; the type name is validated and may be omitted |
+| Enum variant | Existing string discriminator or discriminated TOML table |
+| Tuple or tuple struct | TOML array, positional table, or named table |
+| `Some(value)` / `None` | Value, field omission, or declared sentinel |
+| Range | Start/end/inclusive table or the dataset's existing compact form |
+| Char | One-character string |
+| Byte string | Integer array, hexadecimal string, or base64 string |
+| Non-string map key | Reversible encoded key or ordered key/value entries |
+| Heterogeneous enum list | Mixed TOML array or discriminated table entries |
+| Numeric value outside consumer range | Declared string or structured value |
+
+These are available strategies, not global encodings. The dataset adapter
+chooses the representation that matches its existing TypeScript contract. A
+new dataset is equally free to establish a new TOML contract, provided its
+TypeScript compiler validates that contract explicitly.
+
+Mappings are total. Compilation fails when a source field or variant is not
+covered, two source values target the same generated path, or the lowered value
+does not fit the declared TOML compatibility type. Adding a source field or
+variant therefore requires a deliberate compatibility decision rather than a
+global case or value heuristic.
 
 The adapters preserve the current handling of values such as blank spark,
 variable energy cost, absent optional art, nested action tables, and current
@@ -233,8 +265,10 @@ cross-dataset references.
 
 The repository contains one Cargo binary crate under `tools/game-data/`. A
 pinned stable Rust toolchain and lockfile make local and CI builds reproducible.
-The binary depends on the official RON and TOML ecosystem and has no network or
-service dependency at runtime.
+The binary depends on the official RON, Serde, and TOML ecosystem and has no
+network or service dependency at runtime. Dataset source models deserialize
+RON's typed forms directly; compatibility models serialize the adapter output
+to TOML without routing through a generic JSON-like value.
 
 Its public commands are:
 
@@ -425,7 +459,10 @@ Prove the full pipeline with three noncanonical conversion fixtures modeled on:
 
 The proof must establish cross-platform deterministic TOML, structured errors,
 staged TypeScript validation, content-aware publication, and source-preserving
-edits before production datasets move.
+edits before production datasets move. A synthetic source-schema fixture uses
+named structs, enum variants, tuples, options, ranges, typed map keys, chars,
+byte strings, and numeric edge cases to prove that rich RON values pass through
+typed adapter lowering rather than a TOML-shaped generic value restriction.
 
 ### Read-only catalogs
 
@@ -509,9 +546,11 @@ operation rather than production game behavior.
 
 Synthetic unit and property tests cover:
 
-- every permitted and rejected RON value category;
+- typed deserialization and lowering for named structs, every enum shape,
+  tuples, options, ranges, chars, byte strings, typed map keys, heterogeneous
+  enum lists, numeric edge cases, and enabled official extensions;
 - deterministic serialization and stable ordering;
-- compatibility-key mapping completeness and collision rejection;
+- compatibility-field and variant coverage plus collision rejection;
 - quoted, raw, multiline, Unicode, and delimiter-containing strings;
 - integer and floating-point boundaries;
 - atomic batch staging and content-aware publication;
@@ -519,9 +558,9 @@ Synthetic unit and property tests cover:
 - structured syntax/schema diagnostics; and
 - source-preserving field and record edits across comments and nested values.
 
-Official RON parser fixtures applicable to the supported subset are included or
-referenced at their pinned version. Tests do not imply support for excluded RON
-features.
+Official RON parser fixtures are included or referenced at their pinned version.
+Dataset tests demonstrate each rich construct that the source schema uses and
+its exact compatibility representation.
 
 ### TypeScript and integration tests
 
@@ -579,6 +618,8 @@ the browser error buffer remaining empty.
 - Build and deployment fail before external effects when generation or
   validation fails.
 - Conversion is deterministic across supported development and CI platforms.
+- Canonical sources may use the full typed RON model supported by the pinned
+  parser when their dataset source schema and adapter define the lowering.
 - Editor saves update canonical RON by stable ID and preserve unrelated source
   bytes.
 - RON, TOML, and derived JSON editor writes publish atomically or roll back
@@ -630,8 +671,10 @@ while the manifest enforces one source of truth for every migrated catalog.
 - Rust becomes a required development, CI, and deployment toolchain. The pinned
   toolchain, Cargo cache, and narrow crate reduce but do not erase that cost.
 - The compatibility adapters are an intentional second schema boundary. Total
-  mappings and parity tests make that boundary explicit rather than relying on
-  case-conversion heuristics.
+  field and variant coverage plus parity tests make that boundary explicit
+  rather than relying on generic case- or value-conversion heuristics. Rich RON
+  constructs add adapter code where their compatibility representation is not
+  direct.
 - Source-preserving RON editing is more involved than pure serialization. It is
   required to retain the editors' established preservation and rollback
   contracts.
