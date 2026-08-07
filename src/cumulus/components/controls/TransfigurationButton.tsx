@@ -5,6 +5,7 @@ import type { TransfigurationType } from "../../../types/journey";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
+import { useMessages } from "../../hooks/use-messages";
 import { EssenceValue } from "../hud/EssenceValue";
 import { StandaloneGlyph } from "./StandaloneGlyph";
 
@@ -65,6 +66,7 @@ export function TransfigurationButton({
   onPress,
   testId,
 }: TransfigurationButtonProps) {
+  const t = useMessages();
   const canSelect = form.affordable && !disabled;
   const glyph = TRANSFIGURATION_FORM_GLYPHS[form.type];
   const accent = TRANSFIGURATION_COLORS[form.type];
@@ -78,11 +80,10 @@ export function TransfigurationButton({
       role="radio"
       aria-checked={selected}
       aria-description={form.description}
-      aria-label={`${form.type}, ${
-        form.essenceCost === 0
-          ? "free"
-          : `${String(form.essenceCost)} essence`
-      }`}
+      aria-label={t("transfiguration-form-choice", {
+        form: form.type,
+        essenceCost: form.essenceCost,
+      })}
       disabled={!canSelect}
       data-testid={testId}
       onClick={canSelect ? () => onPress(form.type) : undefined}

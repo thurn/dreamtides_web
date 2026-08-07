@@ -12,6 +12,10 @@ vi.mock("../state/journey-context", async (importOriginal) => {
   return { ...actual, useJourney: vi.fn() };
 });
 
+vi.mock("./JourneyCardTutorialController", () => ({
+  JourneyCardTutorialController: () => null,
+}));
+
 let root: Root;
 let container: HTMLDivElement;
 
@@ -128,8 +132,9 @@ describe("CumulusJourneyChrome", () => {
         ?.className,
     ).toBe("bxf bx-cog");
     const deck = container.querySelector<HTMLButtonElement>(
-      '[aria-label="View deck — 17 cards"]',
+      "[data-journey-deck-target]",
     );
+    expect(deck?.getAttribute("aria-label")).not.toBe("");
     act(() => deck?.click());
     expect(onViewDeck).toHaveBeenCalledTimes(1);
   });

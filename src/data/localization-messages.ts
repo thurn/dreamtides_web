@@ -9,6 +9,235 @@ export const FLUENT_MESSAGE_IDS = [
   "journey-complete-stat-cards",
   "journey-complete-stat-dreamsigns",
   "journey-complete-stat-essence",
+  "deck-browser-title",
+  "deck-browser-card-count",
+  "deck-browser-close",
+  "deck-browser-empty",
+  "deck-browser-no-filter-matches",
+  "deck-browser-filter-accessible-name",
+  "deck-browser-sort-accessible-name",
+  "journey-status-deck-open",
+  "journey-status-dreamsigns-open",
+  "battle-zone-browser-viewer-title",
+  "battle-zone-browser-opponent-title",
+  "battle-zone-browser-shared-banished-title",
+  "battle-zone-browser-total-count",
+  "battle-zone-browser-filtered-count",
+  "battle-zone-browser-viewer-option",
+  "battle-zone-browser-opponent-option",
+  "battle-zone-browser-close",
+  "battle-zone-browser-empty",
+  "battle-zone-browser-no-filter-matches",
+  "exploration-outcome-rewards-gained",
+  "exploration-outcome-cards-purging",
+  "exploration-outcome-purge-and-gain",
+  "exploration-next-battle-modifier",
+  "exploration-card-purge-for-essence",
+  "exploration-spirit-animal-essence-summary",
+  "exploration-card-copies-gained",
+  "exploration-purge-and-copy-complete",
+  "exploration-card-transfiguring",
+  "exploration-purge-before-copy",
+  "exploration-dream-avatar-changed",
+  "exploration-dreamsign-purging",
+  "battle-figment-create-action",
+  "battle-card-memory-counter-count",
+  "battle-banished-cards-open",
+  "battle-figment-merge-announcement",
+  "battle-phase-indicator",
+  "battle-victory-summary",
+  "battle-victory-essence-gained",
+  "battle-participant-status",
+  "battle-dreamwell-card-description",
+  "battle-dreamwell-energy-added",
+  "battle-card-pile-face-down-position",
+  "battle-point-count",
+  "battle-card-pile-label",
+  "battle-challenger-label",
+  "battle-figment-merge-confirmation-title",
+  "battle-foresee-title",
+  "battle-card-note-title",
+  "battle-log-turn-title",
+  "card-pool-browser-count",
+  "card-pool-viewer-title",
+  "card-pool-source-option",
+  "card-pool-empty-state",
+  "card-pool-sort-option",
+  "card-pool-type-filter-option",
+  "card-pool-sort-direction",
+  "card-pool-subtype-filter-label",
+  "card-pool-all-subtypes-option",
+  "card-pool-cost-filter-label",
+  "card-pool-cost-filter-option",
+  "card-pool-close-action",
+  "card-pool-search-label",
+  "card-pool-sort-label",
+  "card-pool-tide-provenance-title",
+  "card-pool-tide-provenance-summary",
+  "card-pool-tide-provenance-description",
+  "card-pool-replay-record-title",
+  "card-pool-replay-record-description",
+  "card-pool-construction-title",
+  "card-pool-construction-summary",
+  "card-pool-construction-description",
+  "card-pool-replay-pick-title",
+  "card-pool-replay-pick-summary",
+  "card-pool-replay-card-label",
+  "tutorial-battle-challenge-outcome",
+  "dreamsign-replacement-capacity",
+  "dreamsign-object-accessible-name",
+  "tide-object-accessible-name",
+  "character-dialogue-accessible-name",
+  "card-order-reorder-action",
+  "card-transfiguration-badge",
+  "card-rules-transfiguration-changed",
+  "transfiguration-form-choice",
+  "augury-card-choice-copy-count",
+  "augury-offer-card-gift-title",
+  "augury-offer-card-gift-description",
+  "augury-offer-card-draft-title",
+  "augury-offer-card-draft-description",
+  "augury-offer-copies-draft-title",
+  "augury-offer-copies-draft-description",
+  "augury-offer-category-draft-title",
+  "augury-offer-category-draft-description",
+  "augury-offer-transfigured-draft-title",
+  "augury-offer-transfigured-draft-description",
+  "augury-offer-card-bundle-title",
+  "augury-offer-card-bundle-description",
+  "augury-offer-transfigure-card-title",
+  "augury-offer-transfigure-card-description",
+  "augury-offer-transfigure-starters-title",
+  "augury-offer-transfigure-one-starter-description",
+  "augury-offer-transfigure-two-starters-description",
+  "augury-offer-reclaim-reduction-title",
+  "augury-offer-reclaim-reduction-description",
+  "augury-offer-subtype-change-title",
+  "augury-offer-subtype-change-description",
+  "augury-offer-purge-card-title",
+  "augury-offer-purge-card-description",
+  "augury-offer-trade-card-title",
+  "augury-offer-trade-card-description",
+  "augury-offer-duplicate-card-title",
+  "augury-offer-duplicate-one-card-description",
+  "augury-offer-duplicate-card-choice-description",
+  "augury-offer-dreamsign-gift-title",
+  "augury-offer-dreamsign-gift-description",
+  "augury-offer-dreamsign-draft-title",
+  "augury-offer-dreamsign-draft-description",
+  "augury-offer-add-site-title",
+  "augury-offer-add-site-description",
+  "gamble-wager-prize-title",
+  "gamble-wager-prize-description",
+  "gamble-wager-prize-accessible-name",
+  "gamble-gravok-bet-accessible-name",
+  "gamble-ladder-draw-accessible-name",
+  "gamble-starway-tier-group-accessible-name",
+  "gamble-starway-tier-action",
+  "gamble-starway-tier-action-accessible-name",
+  "gamble-starway-cash-out-accessible-name",
+  "gamble-four-suit-draw-accessible-name",
+  "dream-avatar-art-accessible-name",
+  "atlas-node-accessible-name",
+  "card-stat-accessible-name",
+  "card-stat-custom-accessible-name",
+  "journey-failed-title",
+  "journey-failed-message",
+  "journey-failed-reason",
+  "journey-failed-stat-label",
+  "journey-failed-summary-missing",
+  "journey-failed-new-journey-action",
+  "battle-result-title",
+  "battle-result-reopen-action",
+  "battle-result-essence-earned-label",
+  "battle-continue-action",
+  "battle-result-keep-inspecting-action",
+  "battle-result-reset-run-action",
+  "battle-prompt-switch-side",
+  "battle-turn-announcement",
+  "battle-card-picker-zone-caption",
+  "battle-card-picker-submit-action",
+  "battle-card-picker-selected-count",
+  "battle-card-picker-empty-state",
+  "battle-card-picker-progress",
+  "battle-control-group-accessible-name",
+  "battle-previous-phase-action",
+  "battle-card-picker-skip-action",
+  "battle-flow-action",
+  "battle-figment-merge-target",
+  "battle-figment-merge-spark-detail",
+  "exploration-pack-title",
+  "exploration-pack-choose-action",
+  "exploration-pack-choose-accessible-name",
+  "gamble-four-suit-outcome-accessible-name",
+  "battle-tutorial-dismiss-action",
+  "rules-text-bolt-accessible-name",
+  "rules-text-source-accessible-name",
+  "battle-dreamwell-reveal-description",
+  "draft-pick-progress",
+  "exploration-battle-modifier-announcement",
+  "exploration-next-battle-label",
+  "exploration-essence-gained-title",
+  "exploration-purge-essence-calculation",
+  "exploration-spirit-animal-essence-calculation",
+  "playing-card-accessible-name",
+  "card-type-line",
+  "exploration-choices-accessible-name",
+  "exploration-return-action",
+  "exploration-smaller-hand-cost-accessible-name",
+  "exploration-opening-hand-change-announcement",
+  "exploration-next-battle-card-cost-reduction",
+  "exploration-site-offer-modifier-accessible-name",
+  "exploration-site-offer-modifier-title",
+  "exploration-site-offer-modifier-detail",
+  "exploration-no-cards-taken",
+  "gamble-gravok-bet-action",
+  "gamble-gravok-gates-accessible-name",
+  "gamble-gravok-outcome-headline",
+  "gamble-ladder-stage-accessible-name",
+  "gamble-ladder-outcome-headline",
+  "gamble-starway-outcome-headline",
+  "gamble-starway-prize-at-stake",
+  "gamble-four-suit-picker-title",
+  "gamble-four-suit-picker-instruction",
+  "gamble-four-suit-picker-empty-state",
+  "gamble-four-suit-stage-accessible-name",
+  "gamble-four-suit-essence-outcome",
+  "gamble-four-suit-result-headline",
+  "gamble-play-again-action",
+  "gamble-leave-action",
+  "gamble-choose-replacement-action",
+  "gamble-replacement-not-yet-action",
+  "gamble-replacement-close-action",
+  "gamble-draw-action",
+  "gamble-take-prize-action",
+  "gamble-four-suit-choose-another-card-action",
+  "battle-card-exhausted-accessible-name",
+  "battle-targeting-card-accessible-name",
+  "battle-figment-merge-blocked-title",
+  "battle-figment-merge-blocked-exhaustion",
+  "battle-figment-merge-legionnaire-warning",
+  "battle-figment-merge-confirm-action",
+  "battle-figment-merge-cancel-action",
+  "battle-tutorial-target-selection-title",
+  "battle-tutorial-target-selection-instruction",
+  "battle-tutorial-target-selection-cancel-action",
+  "battle-tutorial-movement-error",
+  "transfiguration-picker-title",
+  "transfiguration-picker-instruction",
+  "transfiguration-reforged-card-caption",
+  "transfiguration-picker-empty-state",
+  "transfiguration-form-picker-title",
+  "transfiguration-choose-again-action",
+  "transfiguration-decline-action",
+  "transfiguration-confirm-action",
+  "duplication-picker-title",
+  "duplication-picker-instruction",
+  "duplication-picker-empty-state",
+  "duplication-decline-action",
+  "duplication-confirm-action",
+  "journey-start-carousel-navigation-action",
+  "tide-alignment-name",
 ] as const;
 
 export interface FluentMessageArgumentsById {
@@ -23,6 +252,509 @@ export interface FluentMessageArgumentsById {
     readonly count: FluentVariable;
   };
   readonly "journey-complete-stat-essence": never;
+  readonly "deck-browser-title": never;
+  readonly "deck-browser-card-count": { readonly count: FluentVariable };
+  readonly "deck-browser-close": never;
+  readonly "deck-browser-empty": never;
+  readonly "deck-browser-no-filter-matches": never;
+  readonly "deck-browser-filter-accessible-name": {
+    readonly selection: FluentVariable;
+  };
+  readonly "deck-browser-sort-accessible-name": {
+    readonly selection: FluentVariable;
+  };
+  readonly "journey-status-deck-open": { readonly count: FluentVariable };
+  readonly "journey-status-dreamsigns-open": { readonly count: FluentVariable };
+  readonly "battle-zone-browser-viewer-title": {
+    readonly zone: FluentVariable;
+  };
+  readonly "battle-zone-browser-opponent-title": {
+    readonly zone: FluentVariable;
+  };
+  readonly "battle-zone-browser-shared-banished-title": never;
+  readonly "battle-zone-browser-total-count": {
+    readonly count: FluentVariable;
+  };
+  readonly "battle-zone-browser-filtered-count": {
+    readonly totalCount: FluentVariable;
+    readonly visibleCount: FluentVariable;
+  };
+  readonly "battle-zone-browser-viewer-option": {
+    readonly count: FluentVariable;
+  };
+  readonly "battle-zone-browser-opponent-option": {
+    readonly count: FluentVariable;
+  };
+  readonly "battle-zone-browser-close": { readonly zone: FluentVariable };
+  readonly "battle-zone-browser-empty": never;
+  readonly "battle-zone-browser-no-filter-matches": never;
+  readonly "exploration-outcome-rewards-gained": {
+    readonly rewardCount: FluentVariable;
+  };
+  readonly "exploration-outcome-cards-purging": {
+    readonly purgedCardCount: FluentVariable;
+  };
+  readonly "exploration-outcome-purge-and-gain": {
+    readonly purgedCardCount: FluentVariable;
+    readonly rewardCount: FluentVariable;
+  };
+  readonly "exploration-next-battle-modifier": {
+    readonly amount: FluentVariable;
+    readonly modifier: FluentVariable;
+  };
+  readonly "exploration-card-purge-for-essence": {
+    readonly cardName: FluentVariable;
+    readonly essenceAmount: FluentVariable;
+  };
+  readonly "exploration-spirit-animal-essence-summary": {
+    readonly cardCount: FluentVariable;
+    readonly essencePerCard: FluentVariable;
+    readonly totalEssence: FluentVariable;
+  };
+  readonly "exploration-card-copies-gained": {
+    readonly copyCount: FluentVariable;
+  };
+  readonly "exploration-purge-and-copy-complete": {
+    readonly copyCount: FluentVariable;
+    readonly purgedCardName: FluentVariable;
+    readonly sourceCardName: FluentVariable;
+  };
+  readonly "exploration-card-transfiguring": {
+    readonly cardName: FluentVariable;
+    readonly form: FluentVariable;
+  };
+  readonly "exploration-purge-before-copy": {
+    readonly purgedCardName: FluentVariable;
+    readonly sourceCardName: FluentVariable;
+  };
+  readonly "exploration-dream-avatar-changed": {
+    readonly dreamAvatarName: FluentVariable;
+  };
+  readonly "exploration-dreamsign-purging": {
+    readonly dreamsignName: FluentVariable;
+  };
+  readonly "battle-figment-create-action": { readonly count: FluentVariable };
+  readonly "battle-card-memory-counter-count": {
+    readonly count: FluentVariable;
+  };
+  readonly "battle-banished-cards-open": { readonly count: FluentVariable };
+  readonly "battle-figment-merge-announcement": {
+    readonly figmentName: FluentVariable;
+    readonly sparkCount: FluentVariable;
+  };
+  readonly "battle-phase-indicator": {
+    readonly owner: FluentVariable;
+    readonly phase: FluentVariable;
+  };
+  readonly "battle-victory-summary": {
+    readonly opponentName: FluentVariable;
+    readonly opponentScore: FluentVariable;
+    readonly playerScore: FluentVariable;
+    readonly turnCount: FluentVariable;
+  };
+  readonly "battle-victory-essence-gained": { readonly amount: FluentVariable };
+  readonly "battle-participant-status": {
+    readonly currentEnergy: FluentVariable;
+    readonly maxEnergy: FluentVariable;
+    readonly owner: FluentVariable;
+    readonly points: FluentVariable;
+    readonly pointsToWin: FluentVariable;
+  };
+  readonly "battle-dreamwell-card-description": {
+    readonly cardName: FluentVariable;
+    readonly energyAmount: FluentVariable;
+  };
+  readonly "battle-dreamwell-energy-added": {
+    readonly energyAmount: FluentVariable;
+  };
+  readonly "battle-card-pile-face-down-position": {
+    readonly pileLabel: FluentVariable;
+    readonly position: FluentVariable;
+  };
+  readonly "battle-point-count": { readonly count: FluentVariable };
+  readonly "battle-card-pile-label": {
+    readonly owner: FluentVariable;
+    readonly zone: FluentVariable;
+  };
+  readonly "battle-challenger-label": { readonly owner: FluentVariable };
+  readonly "battle-figment-merge-confirmation-title": {
+    readonly figmentName: FluentVariable;
+  };
+  readonly "battle-foresee-title": { readonly count: FluentVariable };
+  readonly "battle-card-note-title": { readonly cardName: FluentVariable };
+  readonly "battle-log-turn-title": { readonly turn: FluentVariable };
+  readonly "card-pool-browser-count": {
+    readonly totalCount: FluentVariable;
+    readonly visibleCount: FluentVariable;
+  };
+  readonly "card-pool-viewer-title": { readonly context: FluentVariable };
+  readonly "card-pool-source-option": { readonly source: FluentVariable };
+  readonly "card-pool-empty-state": { readonly source: FluentVariable };
+  readonly "card-pool-sort-option": { readonly sort: FluentVariable };
+  readonly "card-pool-type-filter-option": { readonly type: FluentVariable };
+  readonly "card-pool-sort-direction": { readonly direction: FluentVariable };
+  readonly "card-pool-subtype-filter-label": never;
+  readonly "card-pool-all-subtypes-option": never;
+  readonly "card-pool-cost-filter-label": never;
+  readonly "card-pool-cost-filter-option": { readonly cost: FluentVariable };
+  readonly "card-pool-close-action": never;
+  readonly "card-pool-search-label": never;
+  readonly "card-pool-sort-label": never;
+  readonly "card-pool-tide-provenance-title": never;
+  readonly "card-pool-tide-provenance-summary": {
+    readonly tideCount: FluentVariable;
+  };
+  readonly "card-pool-tide-provenance-description": {
+    readonly copyCap: FluentVariable;
+    readonly dealSize: FluentVariable;
+    readonly facetAvailableCount: FluentVariable;
+    readonly facetDrawnCount: FluentVariable;
+  };
+  readonly "card-pool-replay-record-title": never;
+  readonly "card-pool-replay-record-description": {
+    readonly sourceFile: FluentVariable;
+  };
+  readonly "card-pool-construction-title": never;
+  readonly "card-pool-construction-summary": {
+    readonly algorithm: FluentVariable;
+  };
+  readonly "card-pool-construction-description": never;
+  readonly "card-pool-replay-pick-title": {
+    readonly pickNumber: FluentVariable;
+  };
+  readonly "card-pool-replay-pick-summary": {
+    readonly cardList: FluentVariable;
+    readonly hasPicks: FluentVariable;
+  };
+  readonly "card-pool-replay-card-label": {
+    readonly cardName: FluentVariable;
+    readonly picked: FluentVariable;
+  };
+  readonly "tutorial-battle-challenge-outcome": {
+    readonly loserName: FluentVariable;
+    readonly loserOwner: FluentVariable;
+    readonly winnerName: FluentVariable;
+  };
+  readonly "dreamsign-replacement-capacity": { readonly count: FluentVariable };
+  readonly "dreamsign-object-accessible-name": {
+    readonly dreamsignName: FluentVariable;
+  };
+  readonly "tide-object-accessible-name": { readonly tideName: FluentVariable };
+  readonly "character-dialogue-accessible-name": {
+    readonly speakerName: FluentVariable;
+  };
+  readonly "card-order-reorder-action": { readonly itemLabel: FluentVariable };
+  readonly "card-transfiguration-badge": { readonly form: FluentVariable };
+  readonly "card-rules-transfiguration-changed": {
+    readonly form: FluentVariable;
+  };
+  readonly "transfiguration-form-choice": {
+    readonly essenceCost: FluentVariable;
+    readonly form: FluentVariable;
+  };
+  readonly "augury-card-choice-copy-count": { readonly count: FluentVariable };
+  readonly "augury-offer-card-gift-title": never;
+  readonly "augury-offer-card-gift-description": {
+    readonly cardName: FluentVariable;
+  };
+  readonly "augury-offer-card-draft-title": never;
+  readonly "augury-offer-card-draft-description": never;
+  readonly "augury-offer-copies-draft-title": never;
+  readonly "augury-offer-copies-draft-description": {
+    readonly copyCount: FluentVariable;
+  };
+  readonly "augury-offer-category-draft-title": never;
+  readonly "augury-offer-category-draft-description": {
+    readonly categoryName: FluentVariable;
+  };
+  readonly "augury-offer-transfigured-draft-title": never;
+  readonly "augury-offer-transfigured-draft-description": never;
+  readonly "augury-offer-card-bundle-title": { readonly count: FluentVariable };
+  readonly "augury-offer-card-bundle-description": {
+    readonly count: FluentVariable;
+  };
+  readonly "augury-offer-transfigure-card-title": never;
+  readonly "augury-offer-transfigure-card-description": {
+    readonly cardName: FluentVariable;
+  };
+  readonly "augury-offer-transfigure-starters-title": never;
+  readonly "augury-offer-transfigure-one-starter-description": {
+    readonly cardName: FluentVariable;
+  };
+  readonly "augury-offer-transfigure-two-starters-description": {
+    readonly firstCardName: FluentVariable;
+    readonly secondCardName: FluentVariable;
+  };
+  readonly "augury-offer-reclaim-reduction-title": never;
+  readonly "augury-offer-reclaim-reduction-description": {
+    readonly cardName: FluentVariable;
+  };
+  readonly "augury-offer-subtype-change-title": never;
+  readonly "augury-offer-subtype-change-description": {
+    readonly cardName: FluentVariable;
+    readonly subtypeName: FluentVariable;
+  };
+  readonly "augury-offer-purge-card-title": never;
+  readonly "augury-offer-purge-card-description": {
+    readonly cardName: FluentVariable;
+  };
+  readonly "augury-offer-trade-card-title": never;
+  readonly "augury-offer-trade-card-description": {
+    readonly cardName: FluentVariable;
+  };
+  readonly "augury-offer-duplicate-card-title": {
+    readonly candidateCount: FluentVariable;
+  };
+  readonly "augury-offer-duplicate-one-card-description": {
+    readonly cardName: FluentVariable;
+  };
+  readonly "augury-offer-duplicate-card-choice-description": {
+    readonly candidateCount: FluentVariable;
+  };
+  readonly "augury-offer-dreamsign-gift-title": never;
+  readonly "augury-offer-dreamsign-gift-description": {
+    readonly dreamsignName: FluentVariable;
+  };
+  readonly "augury-offer-dreamsign-draft-title": never;
+  readonly "augury-offer-dreamsign-draft-description": never;
+  readonly "augury-offer-add-site-title": never;
+  readonly "augury-offer-add-site-description": {
+    readonly siteName: FluentVariable;
+  };
+  readonly "gamble-wager-prize-title": { readonly targetLabel: FluentVariable };
+  readonly "gamble-wager-prize-description": {
+    readonly dreamsignName: FluentVariable;
+    readonly essenceAmount: FluentVariable;
+    readonly hasDreamsign: FluentVariable;
+  };
+  readonly "gamble-wager-prize-accessible-name": {
+    readonly dreamsignName: FluentVariable;
+    readonly essenceAmount: FluentVariable;
+    readonly hasDreamsign: FluentVariable;
+    readonly targetLabel: FluentVariable;
+  };
+  readonly "gamble-gravok-bet-accessible-name": {
+    readonly essenceCost: FluentVariable;
+    readonly gateName: FluentVariable;
+  };
+  readonly "gamble-ladder-draw-accessible-name": {
+    readonly attemptNumber: FluentVariable;
+    readonly essenceCost: FluentVariable;
+  };
+  readonly "gamble-starway-tier-group-accessible-name": never;
+  readonly "gamble-starway-tier-action": { readonly stage: FluentVariable };
+  readonly "gamble-starway-tier-action-accessible-name": {
+    readonly essenceCost: FluentVariable;
+    readonly stage: FluentVariable;
+    readonly tierNumber: FluentVariable;
+  };
+  readonly "gamble-starway-cash-out-accessible-name": {
+    readonly essenceAmount: FluentVariable;
+  };
+  readonly "gamble-four-suit-draw-accessible-name": {
+    readonly essenceCost: FluentVariable;
+  };
+  readonly "dream-avatar-art-accessible-name": {
+    readonly avatarName: FluentVariable;
+    readonly avatarTitle: FluentVariable;
+    readonly hasTitle: FluentVariable;
+  };
+  readonly "atlas-node-accessible-name": {
+    readonly biomeName: FluentVariable;
+    readonly hasBiomeName: FluentVariable;
+    readonly hasKnownDreamsign: FluentVariable;
+    readonly role: FluentVariable;
+    readonly state: FluentVariable;
+  };
+  readonly "card-stat-accessible-name": {
+    readonly change: FluentVariable;
+    readonly stat: FluentVariable;
+  };
+  readonly "card-stat-custom-accessible-name": {
+    readonly baseName: FluentVariable;
+    readonly change: FluentVariable;
+  };
+  readonly "journey-failed-title": { readonly result: FluentVariable };
+  readonly "journey-failed-message": { readonly result: FluentVariable };
+  readonly "journey-failed-reason": { readonly reason: FluentVariable };
+  readonly "journey-failed-stat-label": { readonly stat: FluentVariable };
+  readonly "journey-failed-summary-missing": never;
+  readonly "journey-failed-new-journey-action": never;
+  readonly "battle-result-title": { readonly outcome: FluentVariable };
+  readonly "battle-result-reopen-action": { readonly outcome: FluentVariable };
+  readonly "battle-result-essence-earned-label": never;
+  readonly "battle-continue-action": never;
+  readonly "battle-result-keep-inspecting-action": never;
+  readonly "battle-result-reset-run-action": never;
+  readonly "battle-prompt-switch-side": { readonly side: FluentVariable };
+  readonly "battle-turn-announcement": { readonly owner: FluentVariable };
+  readonly "battle-card-picker-zone-caption": {
+    readonly highlighted: FluentVariable;
+    readonly owner: FluentVariable;
+    readonly zone: FluentVariable;
+  };
+  readonly "battle-card-picker-submit-action": {
+    readonly hasRequiredSelection: FluentVariable;
+  };
+  readonly "battle-card-picker-selected-count": {
+    readonly requiredCount: FluentVariable;
+    readonly selectedCount: FluentVariable;
+  };
+  readonly "battle-card-picker-empty-state": never;
+  readonly "battle-card-picker-progress": {
+    readonly owner: FluentVariable;
+    readonly promptLabel: FluentVariable;
+    readonly requiredCount: FluentVariable;
+    readonly selectedCount: FluentVariable;
+  };
+  readonly "battle-control-group-accessible-name": never;
+  readonly "battle-previous-phase-action": never;
+  readonly "battle-card-picker-skip-action": never;
+  readonly "battle-flow-action": { readonly action: FluentVariable };
+  readonly "battle-figment-merge-target": { readonly status: FluentVariable };
+  readonly "battle-figment-merge-spark-detail": {
+    readonly sparkCount: FluentVariable;
+  };
+  readonly "exploration-pack-title": { readonly packNumber: FluentVariable };
+  readonly "exploration-pack-choose-action": never;
+  readonly "exploration-pack-choose-accessible-name": {
+    readonly packNumber: FluentVariable;
+  };
+  readonly "gamble-four-suit-outcome-accessible-name": {
+    readonly outcomeLabel: FluentVariable;
+    readonly suit: FluentVariable;
+  };
+  readonly "battle-tutorial-dismiss-action": {
+    readonly speakerName: FluentVariable;
+  };
+  readonly "rules-text-bolt-accessible-name": { readonly kind: FluentVariable };
+  readonly "rules-text-source-accessible-name": {
+    readonly owner: FluentVariable;
+    readonly rulesText: FluentVariable;
+  };
+  readonly "battle-dreamwell-reveal-description": {
+    readonly cardName: FluentVariable;
+    readonly hasRules: FluentVariable;
+    readonly rulesText: FluentVariable;
+  };
+  readonly "draft-pick-progress": {
+    readonly pickNumber: FluentVariable;
+    readonly pickTotal: FluentVariable;
+  };
+  readonly "exploration-battle-modifier-announcement": {
+    readonly amount: FluentVariable;
+    readonly modifier: FluentVariable;
+  };
+  readonly "exploration-next-battle-label": never;
+  readonly "exploration-essence-gained-title": never;
+  readonly "exploration-purge-essence-calculation": {
+    readonly essencePerSpark: FluentVariable;
+    readonly spark: FluentVariable;
+  };
+  readonly "exploration-spirit-animal-essence-calculation": {
+    readonly cardCount: FluentVariable;
+    readonly essencePerCard: FluentVariable;
+  };
+  readonly "playing-card-accessible-name": {
+    readonly rank: FluentVariable;
+    readonly state: FluentVariable;
+    readonly suit: FluentVariable;
+  };
+  readonly "card-type-line": {
+    readonly cardType: FluentVariable;
+    readonly hasSubtype: FluentVariable;
+    readonly presentation: FluentVariable;
+    readonly subtype: FluentVariable;
+  };
+  readonly "exploration-choices-accessible-name": never;
+  readonly "exploration-return-action": never;
+  readonly "exploration-smaller-hand-cost-accessible-name": {
+    readonly energyCostReduction: FluentVariable;
+    readonly openingHandDelta: FluentVariable;
+  };
+  readonly "exploration-opening-hand-change-announcement": {
+    readonly openingHandDelta: FluentVariable;
+  };
+  readonly "exploration-next-battle-card-cost-reduction": {
+    readonly energyCostReduction: FluentVariable;
+  };
+  readonly "exploration-site-offer-modifier-accessible-name": never;
+  readonly "exploration-site-offer-modifier-title": never;
+  readonly "exploration-site-offer-modifier-detail": never;
+  readonly "exploration-no-cards-taken": never;
+  readonly "gamble-gravok-bet-action": never;
+  readonly "gamble-gravok-gates-accessible-name": never;
+  readonly "gamble-gravok-outcome-headline": {
+    readonly outcome: FluentVariable;
+  };
+  readonly "gamble-ladder-stage-accessible-name": never;
+  readonly "gamble-ladder-outcome-headline": {
+    readonly outcome: FluentVariable;
+  };
+  readonly "gamble-starway-outcome-headline": {
+    readonly outcome: FluentVariable;
+  };
+  readonly "gamble-starway-prize-at-stake": never;
+  readonly "gamble-four-suit-picker-title": never;
+  readonly "gamble-four-suit-picker-instruction": never;
+  readonly "gamble-four-suit-picker-empty-state": never;
+  readonly "gamble-four-suit-stage-accessible-name": never;
+  readonly "gamble-four-suit-essence-outcome": {
+    readonly essenceAmount: FluentVariable;
+  };
+  readonly "gamble-four-suit-result-headline": {
+    readonly outcome: FluentVariable;
+  };
+  readonly "gamble-play-again-action": never;
+  readonly "gamble-leave-action": never;
+  readonly "gamble-choose-replacement-action": never;
+  readonly "gamble-replacement-not-yet-action": never;
+  readonly "gamble-replacement-close-action": never;
+  readonly "gamble-draw-action": never;
+  readonly "gamble-take-prize-action": never;
+  readonly "gamble-four-suit-choose-another-card-action": never;
+  readonly "battle-card-exhausted-accessible-name": never;
+  readonly "battle-targeting-card-accessible-name": never;
+  readonly "battle-figment-merge-blocked-title": never;
+  readonly "battle-figment-merge-blocked-exhaustion": never;
+  readonly "battle-figment-merge-legionnaire-warning": {
+    readonly sparkCount: FluentVariable;
+  };
+  readonly "battle-figment-merge-confirm-action": never;
+  readonly "battle-figment-merge-cancel-action": never;
+  readonly "battle-tutorial-target-selection-title": never;
+  readonly "battle-tutorial-target-selection-instruction": never;
+  readonly "battle-tutorial-target-selection-cancel-action": never;
+  readonly "battle-tutorial-movement-error": {
+    readonly reason: FluentVariable;
+  };
+  readonly "transfiguration-picker-title": never;
+  readonly "transfiguration-picker-instruction": {
+    readonly state: FluentVariable;
+  };
+  readonly "transfiguration-reforged-card-caption": {
+    readonly form: FluentVariable;
+  };
+  readonly "transfiguration-picker-empty-state": {
+    readonly state: FluentVariable;
+  };
+  readonly "transfiguration-form-picker-title": never;
+  readonly "transfiguration-choose-again-action": never;
+  readonly "transfiguration-decline-action": {
+    readonly presentation: FluentVariable;
+  };
+  readonly "transfiguration-confirm-action": { readonly state: FluentVariable };
+  readonly "duplication-picker-title": never;
+  readonly "duplication-picker-instruction": { readonly state: FluentVariable };
+  readonly "duplication-picker-empty-state": { readonly state: FluentVariable };
+  readonly "duplication-decline-action": {
+    readonly presentation: FluentVariable;
+  };
+  readonly "duplication-confirm-action": { readonly state: FluentVariable };
+  readonly "journey-start-carousel-navigation-action": {
+    readonly direction: FluentVariable;
+  };
+  readonly "tide-alignment-name": { readonly tide: FluentVariable };
 }
 
 export type FluentMessageId = (typeof FLUENT_MESSAGE_IDS)[number];

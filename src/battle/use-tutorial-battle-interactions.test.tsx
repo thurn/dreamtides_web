@@ -608,9 +608,7 @@ describe("useTutorialBattleInteractions", () => {
       });
     });
 
-    expect(latest?.movementStatusMessage).toBe(
-      "This character is exhausted and cannot move to the front rank.",
-    );
+    expect(latest?.movementStatusMessage).toBe("exhausted-front-rank");
     expect(mocks.battleCommand).not.toHaveBeenCalled();
     expect(getLogEntries()).toContainEqual(
       expect.objectContaining({

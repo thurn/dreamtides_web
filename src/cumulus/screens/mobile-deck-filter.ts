@@ -76,13 +76,6 @@ export const BASE_DECK_TYPE_FILTER_OPTIONS: readonly DeckControlOption<DeckTypeF
  */
 export const SUBTYPE_FILTER_MIN_COUNT = 4;
 
-/** Pluralize a subtype for its filter label ("Warrior" → "Warriors"). */
-function pluralizeSubtype(subtype: string): string {
-  if (/(?:s|x|z|ch|sh)$/i.test(subtype)) return `${subtype}es`;
-  if (/[^aeiou]y$/i.test(subtype)) return `${subtype.slice(0, -1)}ies`;
-  return `${subtype}s`;
-}
-
 /**
  * The type-filter options for a specific deck: the three base options, then a
  * "just <Subtype>" option for every subtype the deck holds more than
@@ -105,7 +98,9 @@ export function buildDeckTypeFilterOptions(
     .map(
       ([subtype]): DeckControlOption<DeckTypeFilter> => ({
         value: `subtype:${subtype}`,
-        label: pluralizeSubtype(subtype),
+        // Subtype names are authored display values. Keep the semantic name
+        // intact; English suffix rules cannot safely produce localized labels.
+        label: subtype,
       }),
     );
   return [...BASE_DECK_TYPE_FILTER_OPTIONS, ...subtypeOptions];

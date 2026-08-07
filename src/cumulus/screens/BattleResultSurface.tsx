@@ -4,6 +4,7 @@ import { EssenceValue } from "../components/hud/EssenceValue";
 import { Motes } from "../components/hud/Motes";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { token } from "../primitives/tokens";
+import { useMessages } from "../hooks/use-messages";
 import { MOBILE_BATTLE_INSPECTOR_RAIL_TRACK } from "./mobile-battle-layout";
 import { JOURNEY_RESULT_CONTENT_MAX_WIDTH_PX } from "./journey-result-layout";
 
@@ -12,7 +13,10 @@ export type MobileBattleResultOutcome = "victory" | "defeat" | "draw";
 export type MobileBattleResultView =
   | {
       readonly outcome: "victory";
-      readonly summary: string;
+      readonly opponentName: string;
+      readonly playerScore: number;
+      readonly opponentScore: number;
+      readonly turnCount: number;
       readonly essenceReward: number;
     }
   | {
@@ -34,14 +38,6 @@ const REWARD_CALLOUT_MAX_WIDTH_PX = 280;
 const REOPEN_CONTROL_MAX_WIDTH_PX = 220;
 // Two slow Cumulus motion beats give the currency payoff time to read.
 const ESSENCE_COUNT_UP_DURATION_MS = 840;
-
-function titleFor(outcome: "defeat" | "draw"): string {
-  return outcome === "defeat" ? "Defeat." : "Draw.";
-}
-
-function reopenLabel(outcome: "defeat" | "draw"): string {
-  return outcome === "defeat" ? "Defeat — Reopen" : "Draw — Reopen";
-}
 
 function useEssenceCountUp(target: number): {
   readonly value: number;
@@ -91,6 +87,7 @@ function ReopenControl({
   readonly outcome: "defeat" | "draw";
   readonly onAction?: (action: MobileBattleResultAction) => void;
 }): ReactElement {
+  const t = useMessages();
   return (
     <div
       className="cumulus"
@@ -104,7 +101,7 @@ function ReopenControl({
       }}
     >
       <GlassButton
-        label={reopenLabel(outcome)}
+        label={t("battle-result-reopen-action", { outcome })}
         disabled={onAction === undefined}
         testId="battle-result-reopen"
         onPress={() => onAction?.("reopen")}
@@ -122,6 +119,7 @@ function VictoryReward({
   readonly onAction?: (action: MobileBattleResultAction) => void;
   readonly centerOnBattlefield: boolean;
 }): ReactElement {
+  const t = useMessages();
   const [committing, setCommitting] = useState(false);
   const { value, complete } = useEssenceCountUp(view.essenceReward);
 
@@ -189,7 +187,7 @@ function VictoryReward({
               color: token("--reward"),
             }}
           >
-            Victory!
+            {t("battle-result-title", { outcome: "victory" })}
           </h1>
           <p
             data-battle-reward-summary=""
@@ -200,7 +198,12 @@ function VictoryReward({
               textShadow: token("--text-outline-media"),
             }}
           >
-            {view.summary}
+            {t("battle-victory-summary", {
+              opponentName: view.opponentName,
+              playerScore: view.playerScore,
+              opponentScore: view.opponentScore,
+              turnCount: view.turnCount,
+            })}
           </p>
         </header>
 
@@ -226,10 +229,12 @@ function VictoryReward({
                   textTransform: "uppercase",
                 }}
               >
-                Essence Earned
+                {t("battle-result-essence-earned-label")}
               </span>
               <span
-                aria-label={`Gained ${String(view.essenceReward)} essence`}
+                aria-label={t("battle-victory-essence-gained", {
+                  amount: view.essenceReward,
+                })}
                 data-battle-reward-essence-value=""
                 style={{ font: token("--t-display") }}
               >
@@ -240,7 +245,7 @@ function VictoryReward({
         </div>
 
         <GlassButton
-          label="Continue"
+          label={t("battle-continue-action")}
           variant="accent"
           disabled={continueDisabled}
           testId="battle-reward-continue"
@@ -267,6 +272,7 @@ function DefeatOrDrawResult({
   readonly onAction?: (action: MobileBattleResultAction) => void;
   readonly centerOnBattlefield: boolean;
 }): ReactElement {
+  const t = useMessages();
   if (view.dismissed) {
     return <ReopenControl outcome={view.outcome} onAction={onAction} />;
   }
@@ -329,7 +335,7 @@ function DefeatOrDrawResult({
                 color: token("--text-primary"),
               }}
             >
-              {titleFor(view.outcome)}
+              {t("battle-result-title", { outcome: view.outcome })}
             </h1>
             <div
               style={{
@@ -340,14 +346,14 @@ function DefeatOrDrawResult({
               }}
             >
               <GlassButton
-                label="Keep Inspecting"
+                label={t("battle-result-keep-inspecting-action")}
                 variant="accent"
                 disabled={onAction === undefined}
                 testId="battle-result-inspect"
                 onPress={() => onAction?.("dismiss")}
               />
               <GlassButton
-                label="Reset Run…"
+                label={t("battle-result-reset-run-action")}
                 variant="danger"
                 disabled={onAction === undefined}
                 testId="battle-result-reset"

@@ -24,6 +24,7 @@ import {
   type DreamAvatarOfferView,
   type JourneyStartScreenProps,
 } from "./journey-start-shared";
+import { useMessages } from "../hooks/use-messages";
 
 /** Invisible touch slop padded around each mobile tide disc so it is easier to
  * press; the disc row reabsorbs it with negative margins so the visual layout
@@ -154,6 +155,7 @@ function EdgeChevron({
   dir: "left" | "right";
   onClick: () => void;
 }) {
+  const t = useMessages();
   return (
     <div
       onPointerDown={(event: React.PointerEvent) => {
@@ -169,7 +171,9 @@ function EdgeChevron({
       <IconButton
         size="sm"
         glyph={dir === "left" ? GLYPHS.chevronLeft : GLYPHS.chevronRight}
-        label={dir === "left" ? "Previous" : "Next"}
+        label={t("journey-start-carousel-navigation-action", {
+          direction: dir === "left" ? "previous" : "next",
+        })}
         onPress={onClick}
       />
     </div>

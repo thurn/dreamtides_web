@@ -11,12 +11,6 @@ export function buildJourneyFailedView(
   return {
     result: summary.result,
     reason: summary.reason,
-    title: summary.result === "defeat" ? "Journey Ended" : "Stalemate",
-    message:
-      summary.result === "defeat"
-        ? "Your journey ends here."
-        : "Neither side could claim the dream.",
-    reasonLabel: formatJourneyFailureReason(summary.reason),
     dreamAvatar:
       state.dreamAvatar === null
         ? null
@@ -33,30 +27,14 @@ export function buildJourneyFailedView(
     stats: [
       {
         id: "battles",
-        label: "Battles Won",
         value: state.completionLevel,
       },
-      { id: "round", label: "Final Round", value: summary.turnNumber },
-      { id: "playerScore", label: "Your Score", value: summary.playerScore },
+      { id: "round", value: summary.turnNumber },
+      { id: "playerScore", value: summary.playerScore },
       {
         id: "enemyScore",
-        label: "Opponent Score",
         value: summary.enemyScore,
       },
     ],
   };
-}
-
-/** Convert the persisted reason discriminator into player-facing copy. */
-export function formatJourneyFailureReason(
-  reason: NonNullable<JourneyState["failureSummary"]>["reason"],
-): string {
-  switch (reason) {
-    case "score_target_reached":
-      return "Score Threshold Reached";
-    case "turn_limit_reached":
-      return "Turn Limit Reached";
-    case "forced_result":
-      return "Forced Result";
-  }
 }

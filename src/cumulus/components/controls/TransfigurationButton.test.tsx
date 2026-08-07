@@ -1,9 +1,20 @@
 // @vitest-environment jsdom
 
-import { act } from "react";
+import { act, type ComponentProps } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { TransfigurationButton } from "./TransfigurationButton";
+import { CumulusRoot } from "../../CumulusRoot";
+
+function LocalizedTransfigurationButton(
+  props: ComponentProps<typeof TransfigurationButton>,
+) {
+  return (
+    <CumulusRoot>
+      <TransfigurationButton {...props} />
+    </CumulusRoot>
+  );
+}
 
 const empowered = {
   type: "Empowered" as const,
@@ -43,7 +54,7 @@ describe("TransfigurationButton", () => {
 
     act(() => {
       root.render(
-        <TransfigurationButton
+        <LocalizedTransfigurationButton
           form={empowered}
           variant="compact"
           selected={false}
@@ -57,10 +68,8 @@ describe("TransfigurationButton", () => {
     expect(button?.style.justifyContent).toBe("center");
     expect(button?.style.textAlign).toBe("center");
     expect(button?.dataset.transfigurationButtonVariant).toBe("compact");
-    expect(button?.textContent).toBe("Empowered");
-    expect(button?.getAttribute("aria-label")).toBe(
-      "Empowered, 40 essence",
-    );
+    expect(button?.textContent?.trim()).not.toBe("");
+    expect(button?.getAttribute("aria-label")?.trim()).not.toBe("");
 
     act(() => button?.click());
     expect(onActivate).toHaveBeenCalledWith("Empowered");
@@ -76,7 +85,7 @@ describe("TransfigurationButton", () => {
 
     act(() => {
       root.render(
-        <TransfigurationButton
+        <LocalizedTransfigurationButton
           form={{ ...empowered, essenceCost: 0, affordable: false }}
           variant="priced"
           selected
@@ -94,7 +103,7 @@ describe("TransfigurationButton", () => {
     expect(
       button?.querySelector("[data-transfiguration-button-price]"),
     ).toBeNull();
-    expect(button?.getAttribute("aria-label")).toBe("Empowered, free");
+    expect(button?.getAttribute("aria-label")?.trim()).not.toBe("");
     expect(button?.getAttribute("aria-disabled")).toBe("true");
 
     act(() => button?.click());

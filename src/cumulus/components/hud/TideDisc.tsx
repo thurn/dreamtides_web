@@ -19,6 +19,7 @@ import { Pressable } from "../../primitives/Pressable";
 import { richText } from "../card/rich-text";
 import { glossaryInfoCard } from "../card/glossary-info-card";
 import { GLOSSARY_IDS } from "../../../data/glossary";
+import { useMessages } from "../../hooks/use-messages";
 
 /** The tide disc's touch-friendly diameter, in px. */
 export const TIDE_DISC_LG_PX = 40;
@@ -46,6 +47,7 @@ export function TideDisc({
   label,
   description,
 }: TideDiscProps) {
+  const t = useMessages();
   const v = tideVisual(tide);
   const diameter = TIDE_DISC_LG_PX;
   const binding = useRevealSource({
@@ -61,7 +63,7 @@ export function TideDisc({
       ref={binding.ref}
       {...binding.sourceProps}
       data-tide-disc={id}
-      aria-label={`Tide: ${label}`}
+      aria-label={t("tide-object-accessible-name", { tideName: label })}
       tabIndex={0}
       style={{
         ...binding.sourceProps.style,

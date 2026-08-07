@@ -19,7 +19,7 @@ export function PoolViewerAdapter({
   replayRecord = null,
   resolvedPackage = null,
   tides4Provenance = null,
-  title = "Pool Viewer",
+  title = "pool",
   variant = "overlay",
 }: PoolViewerAdapterInput) {
   const [source, setSource] = useState<PoolViewerSourceId>("run");

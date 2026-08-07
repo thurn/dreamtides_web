@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { act } from "react";
+import { act, type ComponentProps } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createTestBattleInit } from "../../testing/create-battle-init";
@@ -12,6 +12,13 @@ import {
   makeBattleTestState,
 } from "../test-support";
 import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
+import { CumulusRoot } from "../../cumulus/CumulusRoot";
+
+function LocalizedBattleDeckOrderPicker(
+  props: ComponentProps<typeof BattleDeckOrderPicker>,
+) {
+  return <CumulusRoot><BattleDeckOrderPicker {...props} /></CumulusRoot>;
+}
 
 beforeEach(() => {
   (
@@ -48,7 +55,7 @@ describe("BattleDeckOrderPicker", () => {
     const root = createRoot(container);
     act(() => {
       root.render(
-        <BattleDeckOrderPicker
+        <LocalizedBattleDeckOrderPicker
           initialOrder={initialOrder}
           onCancel={onCancel}
           onConfirm={onConfirm}
@@ -109,7 +116,7 @@ describe("BattleDeckOrderPicker", () => {
     const root = createRoot(container);
     act(() => {
       root.render(
-        <BattleDeckOrderPicker
+        <LocalizedBattleDeckOrderPicker
           initialOrder={initialOrder}
           onCancel={onCancel}
           onConfirm={onConfirm}

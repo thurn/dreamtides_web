@@ -97,7 +97,7 @@ export function CumulusBattleZoneBrowser({
       }}
     >
       <CardZoneBrowserOverlay
-        ownerLabel={browser.side === perspectiveSide ? "Your" : "Opponent"}
+        owner={browser.side === perspectiveSide ? "viewer" : "opponent"}
         zone={browser.zone}
         cards={cards}
         ownerSwitch={

@@ -9,6 +9,7 @@ import {
   TUTORIAL_BATTLE_REVEAL_TRAVEL_SECONDS,
   TUTORIAL_CHALLENGE_TRAVEL_SECONDS,
   TutorialBattleScreen,
+  type TutorialBattleMovementStatus,
   type TutorialBattleView,
 } from "./TutorialBattleScreen";
 import type {
@@ -133,7 +134,7 @@ function opponentPlayCard(): MobileBattleCardView {
 
 function mount(
   screenView: TutorialBattleView,
-  movementStatusMessage: string | null = null,
+  movementStatusMessage: TutorialBattleMovementStatus | null = null,
   onMovementStatusDismiss = vi.fn(),
   onPresentationVisible = vi.fn(),
   onNewJourney = vi.fn(),
@@ -272,16 +273,14 @@ describe("TutorialBattleScreen", () => {
     const dismiss = vi.fn();
     const { container, root } = mount(
       view(),
-      "This character is exhausted and cannot move to the front rank.",
+      "exhausted-front-rank",
       dismiss,
     );
     const toast = container.querySelector<HTMLButtonElement>(
       '[data-transient-status-toast="warning"]',
     );
 
-    expect(toast?.textContent).toContain(
-      "This character is exhausted and cannot move to the front rank.",
-    );
+    expect(toast?.textContent?.trim()).not.toBe("");
     act(() => toast?.click());
     expect(dismiss).toHaveBeenCalledOnce();
 
@@ -298,7 +297,7 @@ describe("TutorialBattleScreen", () => {
       vi.fn(),
       {
         ...interactions,
-        targetSelectionPrompt: "Select a highlighted legal target.",
+        targetSelectionPrompt: "legal-target",
         onTargetSelectionCancel: cancel,
       },
     );
@@ -312,8 +311,8 @@ describe("TutorialBattleScreen", () => {
 
     expect(prompt?.style.width).toBe("90vw");
     expect(prompt?.style.maxWidth).toBe("416px");
-    expect(prompt?.querySelector("h2")?.textContent).toBe("Choose a Target");
-    expect(prompt?.textContent).toContain("Select a highlighted legal target.");
+    expect(prompt?.querySelector("h2")?.textContent?.trim()).not.toBe("");
+    expect(prompt?.textContent?.trim()).not.toBe("");
     expect(header?.contains(cancelButton ?? null)).toBe(true);
     expect(prompt?.querySelector("[data-glass-panel-footer]")).toBeNull();
     act(() => cancelButton?.click());

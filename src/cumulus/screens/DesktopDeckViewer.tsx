@@ -46,6 +46,7 @@ import { SegmentedControl } from "../components/controls/SegmentedControl";
 import { IconButton } from "../components/controls/IconButton";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
+import { useMessages } from "../hooks/use-messages";
 import type { DeckCardView } from "./MobileDeckViewer";
 import {
   TideDiscReveal,
@@ -123,6 +124,7 @@ const DREAM_AVATAR_PORTRAIT_PX = DREAMSIGN_TILE_PX;
  * (the dark margin) or Escape closes it.
  */
 export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
+  const t = useMessages();
   const [filterSort, setFilterSort] = useState<DesktopDeckFilterSort>(
     DEFAULT_DESKTOP_DECK_FILTER_SORT,
   );
@@ -171,7 +173,7 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Your deck"
+        aria-label={t("deck-browser-title")}
         // Presses inside the content never reach the surface, so only an outside
         // press closes.
         onPointerDown={(e) => {
@@ -261,6 +263,7 @@ function SidebarSectionHeader({ label }: { label: string }) {
  * corner close disc wearing the shared glass surface.
  */
 function Header({ count, onClose }: { count: number; onClose: () => void }) {
+  const t = useMessages();
   return (
     <header
       style={{
@@ -286,17 +289,17 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
             color: token("--text-primary"),
           }}
         >
-          Your Deck
+          {t("deck-browser-title")}
         </h2>
         <Eyebrow>
-          {count} {count === 1 ? "Card" : "Cards"}
+          {t("deck-browser-card-count", { count })}
         </Eyebrow>
       </div>
       <IconButton
         placement="onGlass"
         glyph={GLYPHS.close}
         size="sm"
-        label="Close deck"
+        label={t("deck-browser-close")}
         onPress={onClose}
       />
     </header>
@@ -571,6 +574,7 @@ function DeckGrid({
   visible: DeckCardView[];
   size: DeckCardSize;
 }) {
+  const t = useMessages();
   const tileWidth = DECK_CARD_SIZE_PX[size];
   const lowCount = visible.length > 0 && visible.length <= 3;
   const lowCountTileWidth = Math.max(tileWidth, DECK_CARD_SIZE_PX.large);
@@ -584,9 +588,9 @@ function DeckGrid({
       }}
     >
       {cards.length === 0 ? (
-        <GridPlaceholder message="Your deck is empty." />
+        <GridPlaceholder message={t("deck-browser-empty")} />
       ) : visible.length === 0 ? (
-        <GridPlaceholder message="No cards match these filters." />
+        <GridPlaceholder message={t("deck-browser-no-filter-matches")} />
       ) : (
         <div
           data-deck-card-grid=""

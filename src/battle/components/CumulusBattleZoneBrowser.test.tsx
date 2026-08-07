@@ -100,7 +100,9 @@ describe("CumulusBattleZoneBrowser", () => {
     const mounted = mount("deck");
     const { container, state } = mounted;
 
-    expect(container.textContent).toContain("Your Deck");
+    expect(
+      container.querySelector('[data-card-zone-browser="viewer:deck"]'),
+    ).not.toBeNull();
     expect(
       container.querySelector<HTMLInputElement>(
         '[data-testid="card-zone-browser-search"]',
@@ -135,19 +137,18 @@ describe("CumulusBattleZoneBrowser", () => {
       perspectiveSide: "enemy",
     });
 
-    expect(mounted.container.querySelector("h2")?.textContent).toBe(
-      "Banished Cards",
+    expect(
+      mounted.container.querySelector('[data-card-zone-browser-owner="opponent"]'),
+    ).not.toBeNull();
+    const [viewerTab, opponentTab] = Array.from(
+      mounted.container.querySelectorAll<HTMLButtonElement>('[role="tab"]'),
     );
-    const yourTab = Array.from(
-      mounted.container.querySelectorAll<HTMLButtonElement>('[role="tab"]'),
-    ).find((button) => button.textContent === "Your Cards · 0");
-    const opponentTab = Array.from(
-      mounted.container.querySelectorAll<HTMLButtonElement>('[role="tab"]'),
-    ).find((button) => button.textContent === "Opponent Cards · 0");
-    expect(yourTab?.getAttribute("aria-selected")).toBe("false");
+    expect(viewerTab?.getAttribute("aria-selected")).toBe("false");
+    expect(viewerTab?.getAttribute("aria-label")).not.toBe("");
     expect(opponentTab?.getAttribute("aria-selected")).toBe("true");
+    expect(opponentTab?.getAttribute("aria-label")).not.toBe("");
 
-    act(() => yourTab?.click());
+    act(() => viewerTab?.click());
     expect(mounted.onSideChange).toHaveBeenCalledWith("enemy");
 
     act(() => mounted.root.unmount());

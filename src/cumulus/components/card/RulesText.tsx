@@ -23,6 +23,11 @@ import { rulesTextDefinitionCards } from "./rules-text-reveal";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
+import { appLocalization } from "../../../data/localization";
+import type { MessageFormatter } from "../../hooks/use-messages";
+
+const formatRulesTextMessage = ((id, variables) =>
+  appLocalization.getString(id, variables)) as MessageFormatter;
 
 /**
  * Renders rules text with:
@@ -303,7 +308,9 @@ function renderSegment(
     return (
       <span
         key={key}
-        aria-label={segment.count >= 2 ? "interrupt" : "fast"}
+        aria-label={formatRulesTextMessage("rules-text-bolt-accessible-name", {
+          kind: segment.count >= 2 ? "interrupt" : "fast",
+        })}
         style={{ color: BOLT_ICON_COLOR, whiteSpace: "nowrap" }}
       >
         {Array.from({ length: segment.count }, (_, index) => (
@@ -508,14 +515,10 @@ function rulesTextEntityType(owner: RulesTextOwner): string {
 }
 
 function rulesTextAriaLabel(owner: RulesTextOwner, text: string): string {
-  switch (owner.kind) {
-    case "card":
-      return `Card rules: ${text}`;
-    case "dreamAvatar":
-      return `Avatar ability: ${text}`;
-    case "dreamsign":
-      return `Dreamsign ability: ${text}`;
-  }
+  return formatRulesTextMessage("rules-text-source-accessible-name", {
+    owner: owner.kind,
+    rulesText: text,
+  });
 }
 
 function RulesTextSource({

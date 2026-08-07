@@ -31,6 +31,7 @@ import { IconButton } from "../components/controls/IconButton";
 import { Select } from "../components/controls/Select";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
+import { useMessages } from "../hooks/use-messages";
 import {
   type DeckControlOption,
   type DeckFilterSort,
@@ -190,6 +191,7 @@ function TopBand({
   count: number;
   controls: React.ReactNode;
 }) {
+  const t = useMessages();
   return (
     <div
       style={{
@@ -236,7 +238,7 @@ function TopBand({
               color: token("--text-primary"),
             }}
           >
-            Your Deck
+            {t("deck-browser-title")}
           </div>
           {/* Card-count eyebrow: the whole deck's size, styled with the shared
               eyebrow tokens and pluralized exactly as the desktop header's count
@@ -249,7 +251,7 @@ function TopBand({
               color: token("--text-secondary"),
             }}
           >
-            {count} {count === 1 ? "Card" : "Cards"}
+            {t("deck-browser-card-count", { count })}
           </div>
         </div>
         <div style={{ position: "absolute", top: 0, right: 0 }}>
@@ -257,7 +259,8 @@ function TopBand({
             placement="onGlass"
             glyph={GLYPHS.close}
             size="md"
-            label="Close deck"
+            label={t("deck-browser-close")}
+            testId="mobile-deck-close"
             onPress={onClose}
           />
         </div>
@@ -285,6 +288,7 @@ function DeckControls({
   typeFilterOptions: DeckControlOption<DeckTypeFilter>[];
   onFilterSortChange: (next: DeckFilterSort) => void;
 }) {
+  const t = useMessages();
   return (
     <div
       style={{
@@ -299,10 +303,12 @@ function DeckControls({
         size="sm"
         leadingGlyph={GLYPHS.filter}
         align="start"
-        ariaLabel={`Filter: ${deckTypeFilterLabel(
-          filterSort.typeFilter,
-          typeFilterOptions,
-        )}`}
+        ariaLabel={t("deck-browser-filter-accessible-name", {
+          selection: deckTypeFilterLabel(
+            filterSort.typeFilter,
+            typeFilterOptions,
+          ),
+        })}
         options={typeFilterOptions.map((option) => ({
           value: option.value,
           label: option.label,
@@ -319,7 +325,9 @@ function DeckControls({
         size="sm"
         leadingGlyph={GLYPHS.sort}
         align="end"
-        ariaLabel={`Sort: ${deckSortLabel(filterSort.sort)}`}
+        ariaLabel={t("deck-browser-sort-accessible-name", {
+          selection: deckSortLabel(filterSort.sort),
+        })}
         options={DECK_SORT_OPTIONS.map((option) => ({
           value: option.value,
           label: option.label,
@@ -366,10 +374,12 @@ function DeckTile({
 
 /** Shown when the deck has no cards. */
 function EmptyDeck() {
-  return <GridPlaceholder message="Your deck is empty." />;
+  const t = useMessages();
+  return <GridPlaceholder message={t("deck-browser-empty")} />;
 }
 
 /** Shown when a filter hides every card in a non-empty deck. */
 function NoMatches() {
-  return <GridPlaceholder message="No cards match this filter." />;
+  const t = useMessages();
+  return <GridPlaceholder message={t("deck-browser-no-filter-matches")} />;
 }

@@ -4,6 +4,7 @@
 
 import { useState } from "react";
 import { token } from "../../primitives/tokens";
+import { useMessages } from "../../hooks/use-messages";
 import {
   dreamAvatarCutoutSrc,
   dreamAvatarPortraitFocus,
@@ -36,8 +37,13 @@ export function DreamAvatarStage({
   dreamAvatar,
   variant,
 }: DreamAvatarStageProps) {
+  const t = useMessages();
   const [broken, setBroken] = useState(false);
-  const alt = `${dreamAvatar.name}, ${dreamAvatar.title}`;
+  const alt = t("dream-avatar-art-accessible-name", {
+    avatarName: dreamAvatar.name,
+    avatarTitle: dreamAvatar.title,
+    hasTitle: dreamAvatar.title === "" ? "no" : "yes",
+  });
   const focus = dreamAvatarPortraitFocus(dreamAvatar);
   const focusPercentX = Math.round(focus.x * 1000) / 10;
   const focusPercentY = Math.round(focus.y * 1000) / 10;

@@ -14,6 +14,7 @@ import { useRef, useState, type CSSProperties } from "react";
 import { assetUrl } from "../../../runtime/asset-url";
 import type { DreamAvatarPortraitFocus } from "../../../types/content";
 import { token } from "../../primitives/tokens";
+import { useMessages } from "../../hooks/use-messages";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
@@ -175,8 +176,13 @@ function DreamAvatarPortraitSurface({
   dreamAvatar,
   variant = "panel",
 }: Omit<DreamAvatarPortraitProps, "profile" | "onPress" | "unavailable">) {
+  const t = useMessages();
   const [broken, setBroken] = useState(false);
-  const alt = `${dreamAvatar.name}, ${dreamAvatar.title}`;
+  const alt = t("dream-avatar-art-accessible-name", {
+    avatarName: dreamAvatar.name,
+    avatarTitle: dreamAvatar.title,
+    hasTitle: dreamAvatar.title === "" ? "no" : "yes",
+  });
   const focus = dreamAvatarPortraitFocus(dreamAvatar);
 
   return (

@@ -17,10 +17,10 @@ import {
   JOURNEY_RESULT_CONTENT_MAX_WIDTH_PX,
   JOURNEY_RESULT_TOP_CHROME_CLEARANCE,
 } from "./journey-result-layout";
+import { useMessages } from "../hooks/use-messages";
 
 export interface JourneyFailedStatView {
   id: "battles" | "round" | "playerScore" | "enemyScore";
-  label: string;
   value: number;
 }
 
@@ -32,9 +32,6 @@ export interface JourneyFailedDreamAvatarView extends DreamAvatarVisual {
 export interface JourneyFailedView {
   result: JourneyFailureBattleResult;
   reason: JourneyFailureReason;
-  title: string;
-  message: string;
-  reasonLabel: string;
   dreamAvatar: JourneyFailedDreamAvatarView | null;
   stats: readonly JourneyFailedStatView[];
 }
@@ -49,6 +46,7 @@ export function JourneyFailedScreen({
   view,
   onNewJourney,
 }: JourneyFailedScreenProps): ReactElement {
+  const t = useMessages();
   return (
     <div
       className="cumulus"
@@ -105,8 +103,7 @@ export function JourneyFailedScreen({
               textAlign: "center",
             }}
           >
-            Journey failure summary not found. Return to the journey menu to
-            begin again.
+            {t("journey-failed-summary-missing")}
           </p>
         ) : (
           <div
@@ -138,7 +135,7 @@ export function JourneyFailedScreen({
                     color: token("--text-primary"),
                   }}
                 >
-                  {view.title}
+                  {t("journey-failed-title", { result: view.result })}
                 </h1>
                 <p
                   style={{
@@ -147,7 +144,7 @@ export function JourneyFailedScreen({
                     color: token("--text-muted"),
                   }}
                 >
-                  {view.message}
+                  {t("journey-failed-message", { result: view.result })}
                 </p>
               </header>
 
@@ -198,7 +195,7 @@ export function JourneyFailedScreen({
                         color: token("--danger"),
                       }}
                     >
-                      {view.reasonLabel}
+                      {t("journey-failed-reason", { reason: view.reason })}
                     </p>
                     <dl
                       data-journey-failed-summary=""
@@ -227,7 +224,7 @@ export function JourneyFailedScreen({
               }}
             >
               <GlassButton
-                label="New Journey"
+                label={t("journey-failed-new-journey-action")}
                 variant="accent"
                 onPress={onNewJourney}
                 testId="journey-failed-start-new-run"
@@ -241,6 +238,7 @@ export function JourneyFailedScreen({
 }
 
 function SummaryStat({ stat }: { readonly stat: JourneyFailedStatView }) {
+  const t = useMessages();
   return (
     <div
       data-journey-failed-stat={stat.id}
@@ -269,7 +267,7 @@ function SummaryStat({ stat }: { readonly stat: JourneyFailedStatView }) {
           color: token("--text-on-glass-muted"),
         }}
       >
-        {stat.label}
+        {t("journey-failed-stat-label", { stat: stat.id })}
       </dt>
     </div>
   );

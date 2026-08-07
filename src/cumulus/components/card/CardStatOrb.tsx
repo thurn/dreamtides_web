@@ -10,29 +10,13 @@ import { useFitText } from "../controls/useFitText";
 import { type Glyph } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
 import { renderCardChangeBadge } from "./card-change-badge";
+import { useMessages } from "../../hooks/use-messages";
 
 export type CardStatOrbVariant = "energy" | "spark" | "dreamwellEnergy";
 export type CardStatChangeBadge = "empowered" | "kindled";
 
 /** Purple fill for the Dreamwell energy mark; the number stays white. */
 export const DREAMWELL_ENERGY_ICON_COLOR: CumulusColor = "#a855f7";
-
-const DEFAULT_LABEL: Readonly<Record<CardStatOrbVariant, string>> = {
-  energy: "energy cost",
-  spark: "spark",
-  dreamwellEnergy: "energy added",
-};
-
-const CHANGE_BADGE_BY_TYPE: Readonly<
-  Record<CardStatChangeBadge, { label: string }>
-> = {
-  empowered: {
-    label: "Empowered",
-  },
-  kindled: {
-    label: "Kindled",
-  },
-};
 
 /**
  * A 30px badge at the card chrome's canonical 500px design width. Deriving it
@@ -142,10 +126,18 @@ export function CardStatOrb({
   ariaLabel,
   changeBadge,
 }: CardStatOrbProps) {
-  const label = ariaLabel ?? DEFAULT_LABEL[variant];
+  const t = useMessages();
+  const label =
+    ariaLabel === undefined
+      ? t("card-stat-accessible-name", {
+          stat: variant,
+          change: changeBadge ?? "none",
+        })
+      : t("card-stat-custom-accessible-name", {
+          baseName: ariaLabel,
+          change: changeBadge ?? "none",
+        });
   const icon = ICON_BY_VARIANT[variant];
-  const badge =
-    changeBadge === undefined ? undefined : CHANGE_BADGE_BY_TYPE[changeBadge];
   // The digit box edge equals the CSS digit size; the digit sits over the
   // glyph's body so it reads over the fullest region rather than the edges.
   const numberBoxSize = numberSizeVar;
@@ -178,7 +170,7 @@ export function CardStatOrb({
   const orb = (
     <span
       data-card-stat={variant}
-      aria-label={badge === undefined ? label : `${label}, ${badge.label}`}
+      aria-label={label}
       role="img"
       style={{
         position: "relative",
@@ -232,7 +224,7 @@ export function CardStatOrb({
       >
         {value}
       </div>
-      {badge === undefined ? null : (
+      {changeBadge === undefined ? null : (
         <span
           data-card-stat-change={changeBadge}
           aria-hidden="true"

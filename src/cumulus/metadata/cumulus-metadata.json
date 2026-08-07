@@ -2913,7 +2913,7 @@
     },
     {
       "name": "deck",
-      "tsType": "string | number",
+      "tsType": "number",
       "unionMembers": [],
       "required": false,
       "defaultValue": "0",

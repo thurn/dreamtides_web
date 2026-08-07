@@ -13,6 +13,7 @@ import { artRef, resolveArtRef } from "../cumulus/primitives/art";
 import { glyph } from "../cumulus/primitives/glyph";
 import { token } from "../cumulus/primitives/tokens";
 import { useIsDesktop } from "../cumulus/screens/use-is-desktop";
+import { useMessages } from "../cumulus/hooks/use-messages";
 import { MERCHANT_ARCHETYPE_BUILDERS } from "../journey_v2/archetypes/registry";
 import type { MerchantArchetypeId } from "../journey_v2/archetypes/types";
 import { asCardId, asCardName } from "../types/card-identity";
@@ -289,6 +290,7 @@ function hydrateOfferCards(
 }
 
 export default function OffersDebugApp(): ReactElement {
+  const t = useMessages();
   const isDesktop = useIsDesktop();
   const [lastPressed, setLastPressed] = useState<string | null>(null);
   const [cardsById, setCardsById] = useState<ReadonlyMap<
@@ -422,7 +424,7 @@ export default function OffersDebugApp(): ReactElement {
             aria-live="polite"
             style={{ margin: 0, minHeight: 20, font: token("--t-caption") }}
           >
-            {selected === null ? "" : offerTileDescription(selected)}
+            {selected === null ? "" : offerTileDescription(selected, t)}
           </p>
         </header>
 

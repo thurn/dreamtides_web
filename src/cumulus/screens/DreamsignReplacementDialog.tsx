@@ -4,6 +4,7 @@ import { GlassButton } from "../components/controls/GlassButton";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { GlassDialog } from "../components/overlay/GlassDialog";
 import { token } from "../primitives/tokens";
+import { useMessages } from "../hooks/use-messages";
 
 /** The pending and currently held Dreamsigns shown by a replacement choice. */
 export interface DreamsignReplacementView {
@@ -28,10 +29,13 @@ export function DreamsignReplacementDialog({
   cancelLabel,
   closeLabel,
 }: DreamsignReplacementDialogProps) {
+  const t = useMessages();
   return (
     <GlassDialog
       title="Choose a Dreamsign to Replace"
-      subtitle={`You can hold ${String(view.maxDreamsigns)} dreamsigns.`}
+      subtitle={t("dreamsign-replacement-capacity", {
+        count: view.maxDreamsigns,
+      })}
       onClose={onCancel}
       closeLabel={closeLabel}
     >

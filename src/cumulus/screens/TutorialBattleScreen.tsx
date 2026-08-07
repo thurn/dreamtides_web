@@ -34,9 +34,14 @@ import {
   BattleTutorialGuidance,
   type BattleTutorialGuidanceView,
 } from "./BattleTutorialGuidance";
+import { useMessages } from "../hooks/use-messages";
 
 export type TutorialBattleOwnership =
   "driver" | "observer" | "paused-driver-absent" | "terminal";
+export type TutorialBattleMovementStatus =
+  | "send-failed"
+  | "exhausted-front-rank"
+  | "no-legal-cell";
 export const TUTORIAL_CHALLENGE_TRAVEL_SECONDS =
   motionTimeSeconds("--dur-slow");
 
@@ -102,7 +107,7 @@ export interface TutorialBattleView {
 export interface TutorialBattleScreenProps {
   readonly view: TutorialBattleView;
   readonly interactions: MobileBattleInteractions;
-  readonly movementStatusMessage: string | null;
+  readonly movementStatusMessage: TutorialBattleMovementStatus | null;
   readonly onMovementStatusDismiss: () => void;
   readonly onForeseeConfirm: (resolution: {
     readonly viewedCardIds: readonly string[];
@@ -129,6 +134,7 @@ export function TutorialBattleScreen({
   onGuidanceDurationComplete,
   onPresentationVisible,
 }: TutorialBattleScreenProps): ReactElement {
+  const t = useMessages();
   const reduceMotion = useReducedMotion();
   const turnAnnouncementKey = `${view.battle.battleId}:${view.battle.inspector.turn}:${view.battle.activeSide}`;
   const [completedTurnAnnouncementKey, setCompletedTurnAnnouncementKey] =
@@ -373,15 +379,15 @@ export function TutorialBattleScreen({
           }}
         >
           <GlassPanel
-            title="Choose a Target"
-            subtitle={interactions.targetSelectionPrompt}
+            title={t("battle-tutorial-target-selection-title")}
+            subtitle={t("battle-tutorial-target-selection-instruction")}
             headerSpacing="compact"
             headerDivider={false}
             radius="control"
             rightAccessory={{
               kind: "glassButton",
               button: {
-                label: "Cancel",
+                label: t("battle-tutorial-target-selection-cancel-action"),
                 testId: "tutorial-target-cancel",
                 onPress: () => interactions.onTargetSelectionCancel?.(),
               },
@@ -393,7 +399,16 @@ export function TutorialBattleScreen({
       ) : null}
       {movementStatusMessage !== null ? (
         <TransientStatusToast
-          copy={{ message: movementStatusMessage }}
+          copy={{
+            message: t("battle-tutorial-movement-error", {
+              reason:
+                movementStatusMessage === "send-failed"
+                  ? "sendFailed"
+                  : movementStatusMessage === "exhausted-front-rank"
+                    ? "exhaustedFrontRank"
+                    : "noLegalCell",
+            }),
+          }}
           onDismiss={onMovementStatusDismiss}
         />
       ) : null}

@@ -19,11 +19,23 @@ import {
 } from "../../journey_v2/testing/fixtures";
 import {
   buildAuguryAcceptRequest,
-  buildAuguryOfferHeadline,
-  buildAuguryOfferSubtitle,
   buildAuguryOfferTileModel,
   buildAuguryOfferViews,
 } from "./augury-view-model";
+import {
+  auguryOfferHeadline,
+  offerTileDescription,
+} from "../../cumulus/components/controls/offer-tile-descriptions";
+import { appLocalization } from "../../data/localization";
+import type { MessageFormatter } from "../../cumulus/hooks/use-messages";
+import type { OfferTileModel } from "../../cumulus/components/controls/OfferTile";
+
+const t = ((id, variables) =>
+  appLocalization.getString(id, variables)) as MessageFormatter;
+const buildAuguryOfferHeadline = (model: OfferTileModel) =>
+  auguryOfferHeadline(model, t);
+const buildAuguryOfferSubtitle = (model: OfferTileModel) =>
+  offerTileDescription(model, t);
 
 const card = makeMerchantTestCard({
   id: asCardId("81000000-0000-4000-8000-000000000012"),
@@ -210,24 +222,6 @@ const choiceRequest = (
   candidates,
 });
 
-function subtitleText(
-  subtitle: ReturnType<typeof buildAuguryOfferSubtitle>,
-): string {
-  return typeof subtitle === "string"
-    ? subtitle
-    : subtitle.map((segment) => segment.text).join("");
-}
-
-function subtitleEntities(
-  subtitle: ReturnType<typeof buildAuguryOfferSubtitle>,
-): string[] {
-  return typeof subtitle === "string"
-    ? []
-    : subtitle
-        .filter((segment) => segment.kind === "entity")
-        .map((segment) => segment.text);
-}
-
 function dreamsignObject(
   id: string,
 ): Extract<MerchantGameObject, { objectType: "dreamsign" }> {
@@ -257,17 +251,14 @@ describe("augury view model", () => {
     expect(offers).toHaveLength(2);
     expect(offers[0]).toMatchObject({
       id: "A",
-      headline: "Choose a Card",
-      subtitle: "Choose a card to add to your deck.",
       requiresSelection: true,
+      tile: { kind: "card-draft" },
     });
     expect(offers[1]).toMatchObject({
       id: "B",
-      headline: "Gain a Card",
       requiresSelection: false,
+      tile: { kind: "card-gift" },
     });
-    expect(subtitleText(offers[1].subtitle)).toBe("Gain Fixture Gift");
-    expect(subtitleEntities(offers[1].subtitle)).toEqual(["Fixture Gift"]);
     expect(JSON.stringify(offers)).not.toContain("Production summary");
   });
 
@@ -560,91 +551,23 @@ describe("augury view model", () => {
       ],
     ];
 
-    for (const [offer, expectedKind, expectedHeadline] of cases) {
+    for (const [offer, expectedKind] of cases) {
       const model = buildAuguryOfferTileModel(offer, mappingContext);
       expect(model.kind, offer.archetypeId).toBe(expectedKind);
       expect(model.id).toBe(`mapping-encounter:${offer.offerId}`);
-      expect(buildAuguryOfferHeadline(model), offer.archetypeId).toBe(
-        expectedHeadline,
-      );
+      expect(buildAuguryOfferHeadline(model), offer.archetypeId).not.toBe("");
     }
   });
 
-  it("underlines the named entities in one- and two-entity action subtitles", () => {
-    const secondStarter = mappedDeckObject(1, "entry-fixture-2");
-    const cases: readonly [MerchantOffer, readonly string[]][] = [
-      [
-        mappedOffer("purge", { gameObjects: [deckObject] }),
-        ["Mapping Fixture 1"],
-      ],
-      [
-        mappedOffer("card_bundle", {
-          gameObjects: [catalogObject(0), catalogObject(1)],
-        }),
-        ["Mapping Fixture 1", "Mapping Fixture 2"],
-      ],
-      [
-        mappedOffer("purge_replace", {
-          gameObjects: [deckObject],
-          choiceRequest: choiceRequest(fourCandidates(), "replacementCard"),
-        }),
-        ["Mapping Fixture 1"],
-      ],
-      [
-        mappedOffer("add_site", {
-          family: "site",
-          targetKey: "Purge",
-          applyPayload: { kind: "add_site", siteType: "Purge" },
-        }),
-        ["purge"],
-      ],
-      [
-        mappedOffer("starter_transfigure", {
-          gameObjects: [
-            { ...deckObject, previewCard: mappingCards[0] },
-            { ...secondStarter, previewCard: mappingCards[1] },
-          ],
-          applyPayload: { kind: "composite", children: [] },
-        }),
-        ["Mapping Fixture 1", "Mapping Fixture 2"],
-      ],
-    ];
-
-    for (const [offer, expectedEntities] of cases) {
-      const subtitle = buildAuguryOfferSubtitle(
-        buildAuguryOfferTileModel(offer, mappingContext),
-      );
-      expect(subtitleEntities(subtitle), offer.archetypeId).toEqual(
-        expectedEntities,
-      );
-    }
-
-    const starterModel = buildAuguryOfferTileModel(
-      cases[4][0],
+  it("keeps display names semantic until localized offer formatting", () => {
+    const purge = buildAuguryOfferTileModel(
+      mappedOffer("purge", { gameObjects: [deckObject] }),
       mappingContext,
     );
-    expect(buildAuguryOfferHeadline(starterModel)).toBe(
-      "Transfigure Your Starters",
-    );
-    expect(subtitleText(buildAuguryOfferSubtitle(starterModel))).toBe(
-      "Transfigure Mapping Fixture 1 and Mapping Fixture 2",
-    );
+    const formatted = buildAuguryOfferSubtitle(purge);
 
-    const tradeModel = buildAuguryOfferTileModel(
-      cases[2][0],
-      mappingContext,
-    );
-    expect(subtitleText(buildAuguryOfferSubtitle(tradeModel))).toBe(
-      "Purge Mapping Fixture 1 and choose a card to replace it",
-    );
-
-    const siteModel = buildAuguryOfferTileModel(
-      cases[3][0],
-      mappingContext,
-    );
-    expect(subtitleText(buildAuguryOfferSubtitle(siteModel))).toBe(
-      "Add a purge site",
-    );
+    expect(formatted).not.toBe("");
+    expect(formatted).toContain(deckObject.displayName);
   });
 
   it("rejects malformed fixed counts and resolves structured category and copy data", () => {

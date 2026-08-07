@@ -12,6 +12,7 @@ import { revealEntityId } from "../../internal/reveal/identity";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
 import { type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
+import { useMessages } from "../../hooks/use-messages";
 import type { InfoCardProps } from "../overlay/InfoCard";
 import "./atlas.css";
 
@@ -146,6 +147,7 @@ export function AtlasNode({
   model,
   onPress,
 }: AtlasNodeProps): React.ReactElement {
+  const t = useMessages();
   const { node, role } = model;
   const isStarter = role === "starter";
   const isBoss = role === "boss";
@@ -188,11 +190,13 @@ export function AtlasNode({
     (model.isReachable === false ? " cumulus-atlas-node-unreachable" : "") +
     (isBoss ? " cumulus-atlas-node-boss" : "") +
     (isStarter ? " cumulus-atlas-node-start" : "");
-  const ariaLabel =
-    `${node.biomeName === "" ? "Unrevealed dreamscape" : node.biomeName} - ${node.state}` +
-    (isStarter ? " - starting dreamscape" : "") +
-    (isBoss ? " - final boss" : "") +
-    (model.knownDreamsignRef !== null ? " - known dreamsign here" : "");
+  const ariaLabel = t("atlas-node-accessible-name", {
+    hasBiomeName: node.biomeName === "" ? "no" : "yes",
+    biomeName: node.biomeName,
+    state: node.state,
+    role,
+    hasKnownDreamsign: model.knownDreamsignRef === null ? "no" : "yes",
+  });
   const nodeStyle = {
     width: "100%",
     height: "100%",

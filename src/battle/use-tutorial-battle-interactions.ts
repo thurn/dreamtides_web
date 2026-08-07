@@ -15,6 +15,7 @@ import type {
   MobileBattleInteractions,
   MobileBattleSlotTarget,
 } from "../cumulus/screens/MobileBattleScreen";
+import type { TutorialBattleMovementStatus } from "../cumulus/screens/TutorialBattleScreen";
 import type { TutorialBattleControllerPlan } from "./tutorial-battle-controller";
 import { selectBattleCardLocation, selectBattlefieldSlotOccupant } from "./state/selectors";
 import {
@@ -70,7 +71,7 @@ export function useTutorialBattleInteractions(
 ): {
   readonly interactions: MobileBattleInteractions;
   readonly confirmedPromptId: number | null;
-  readonly movementStatusMessage: string | null;
+  readonly movementStatusMessage: TutorialBattleMovementStatus | null;
   readonly dismissMovementStatus: () => void;
   readonly resolvePrompt: (resolution: PromptResolution) => void;
 } {
@@ -95,7 +96,7 @@ export function useTutorialBattleInteractions(
   >(null);
   const [targetingCardId, setTargetingCardId] = useState<string | null>(null);
   const [movementStatusMessage, setMovementStatusMessage] =
-    useState<string | null>(null);
+    useState<TutorialBattleMovementStatus | null>(null);
   const movementAttemptSequence = useRef(0);
   const pendingMovementOutcomes = useRef<PendingMovementOutcome[]>([]);
   const [movementFoldReceipt, setMovementFoldReceipt] =
@@ -277,8 +278,7 @@ export function useTutorialBattleInteractions(
         pendingMovementOutcomes.current.filter(
           (pending) => pending.attemptId !== attemptId,
         );
-      const message = "Movement failed to send. Try again.";
-      setMovementStatusMessage(message);
+      setMovementStatusMessage("send-failed");
       logEvent("tutorial_battle_human_move_submission_failed", {
         battleId: board.battleId,
         clientId,
@@ -311,13 +311,13 @@ export function useTutorialBattleInteractions(
       battleCardId === null
         ? null
         : selectBattleCardLocation(board, battleCardId);
-    const message =
+    const movementStatus =
       (reason === "no-eligible-slot" || reason === "ineligible-slot") &&
       instance?.status.isExhausted === true &&
       board.activeSide === "enemy" &&
       board.phase === "dusk"
-        ? "This character is exhausted and cannot move to the front rank."
-        : "No legal battlefield cell is available for this movement.";
+        ? "exhausted-front-rank"
+        : "no-legal-cell";
     const attemptId =
       pendingCard?.source === "battlefield"
         ? pendingCard.attemptId
@@ -327,7 +327,7 @@ export function useTutorialBattleInteractions(
             "movement",
             "untracked",
           ].join(":");
-    setMovementStatusMessage(message);
+    setMovementStatusMessage(movementStatus);
     logEvent("tutorial_battle_human_move_rejected", {
       battleId: board.battleId,
       clientId,
@@ -344,7 +344,7 @@ export function useTutorialBattleInteractions(
         pendingCard?.source === "battlefield"
           ? pendingCard.sourceTarget
           : null,
-      message,
+      movementStatus,
     });
   }, [board, clientId, pendingCard]);
   const logMovementDropResolution = useCallback((
@@ -396,7 +396,7 @@ export function useTutorialBattleInteractions(
         ? pendingCard.sourceTarget
         : null,
     targetSelectionCardId: targetingCardId,
-    targetSelectionPrompt: targetingCardId === null ? null : "Select a highlighted legal target.",
+    targetSelectionPrompt: targetingCardId === null ? null : "legal-target",
     targetableCardIds,
     onHandCardActivate: (battleCardId) => {
       if (!canAct || board === null || board.activeSide !== "player" || board.phase !== "day") return;

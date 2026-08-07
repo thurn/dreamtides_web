@@ -16,7 +16,7 @@ import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import { dreamsignRevealSpec } from "../hud/Dreamsign";
-import { EssenceValue } from "../hud/EssenceValue";
+import { useMessages } from "../../hooks/use-messages";
 
 type WagerRevealSourceBinding = ReturnType<typeof useRevealSource>;
 
@@ -228,8 +228,13 @@ function PlayingCardRim({
 function frontAriaLabel(
   rank: PlayingCardRank,
   suit: PlayingCardSuit,
+  t: ReturnType<typeof useMessages>,
 ): string {
-  return `${rank} of ${suit}`;
+  return t("playing-card-accessible-name", {
+    state: "visible",
+    rank,
+    suit,
+  });
 }
 
 export interface PlayingCardSuitMarkProps {
@@ -387,6 +392,7 @@ export type PlayingCardProps =
  * Reprise uses its concealed suit-grid variant and built-in result flip.
  */
 export function PlayingCard(props: PlayingCardProps): ReactElement {
+  const t = useMessages();
   const reduceMotion = useReducedMotion() === true;
   const size = props.size ?? "wager";
   const emphasis = props.emphasis ?? "standard";
@@ -400,9 +406,14 @@ export function PlayingCard(props: PlayingCardProps): ReactElement {
     : showingDrawnCard
       ? props.drawnCard
       : null;
-  const label = visibleCard === null
-    ? "Face-down four-suit playing card"
-    : frontAriaLabel(visibleCard.rank, visibleCard.suit);
+  const label =
+    visibleCard === null
+      ? t("playing-card-accessible-name", {
+          state: "concealed",
+          rank: "",
+          suit: "",
+        })
+      : frontAriaLabel(visibleCard.rank, visibleCard.suit, t);
   const state = props.variant === "rankSuit"
     ? "visible"
     : showingDrawnCard
@@ -591,17 +602,23 @@ function WagerPrizeCardObject({
 }: WagerPrizeCardProps & {
   revealBinding?: WagerRevealSourceBinding;
 }): ReactElement {
+  const t = useMessages();
   const reduceMotion = useReducedMotion() === true;
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const showingDrawnCard = revealDrawnCard && drawnCard !== null;
-  const rewardLabel = `${String(essenceReward)} Essence${
-    rewardDreamsign === null ? "" : ` and ${rewardDreamsign.name}`
-  }`;
-  const prizeLabel = `Draw ${targetLabel}. Win ${rewardLabel}.`;
+  const rewardVariables = {
+    essenceAmount: essenceReward,
+    hasDreamsign: rewardDreamsign === null ? "no" : "yes",
+    dreamsignName: rewardDreamsign?.name ?? "",
+  } as const;
+  const prizeLabel = t("gamble-wager-prize-accessible-name", {
+    targetLabel,
+    ...rewardVariables,
+  });
   const drawnCardLabel =
     drawnCard === null
       ? prizeLabel
-      : frontAriaLabel(drawnCard.rank, drawnCard.suit);
+      : frontAriaLabel(drawnCard.rank, drawnCard.suit, t);
   const prizeFaceContent = (
     <>
       <div
@@ -636,7 +653,7 @@ function WagerPrizeCardObject({
             font: size === "wager" ? token("--t-title") : token("--t-title-sm"),
           }}
         >
-          {`Draw ${targetLabel}`}
+          {t("gamble-wager-prize-title", { targetLabel })}
         </h2>
         <p
           data-wager-prize-description=""
@@ -646,21 +663,14 @@ function WagerPrizeCardObject({
               size === "wager" ? token("--t-body") : token("--t-body-sm"),
           }}
         >
-          Win <EssenceValue amount={essenceReward} tone="inherit" />
-          {rewardDreamsign !== null && " and "}
-          {rewardDreamsign !== null && (
-            <span
-              data-testid={dreamsignTestId}
-              data-wager-prize-dreamsign-name=""
-              style={{
-                display: "inline-block",
-                font: "inherit",
-                textDecoration: "underline",
-              }}
-            >
-              {rewardDreamsign.name}
-            </span>
-          )}
+          <span
+            data-testid={rewardDreamsign === null ? undefined : dreamsignTestId}
+            data-wager-prize-dreamsign-name={
+              rewardDreamsign === null ? undefined : ""
+            }
+          >
+            {t("gamble-wager-prize-description", rewardVariables)}
+          </span>
         </p>
       </div>
       <PlayingCardRim
@@ -740,7 +750,9 @@ function WagerPrizeCardObject({
             {...revealBinding.sourceProps}
             role="button"
             tabIndex={showingDrawnCard ? -1 : 0}
-            aria-label={`Dreamsign: ${rewardDreamsign?.name ?? ""}`}
+            aria-label={t("dreamsign-object-accessible-name", {
+              dreamsignName: rewardDreamsign?.name ?? "",
+            })}
             aria-hidden={showingDrawnCard || undefined}
             pressFeedback="stationary"
             hoverFeedback="stationary"

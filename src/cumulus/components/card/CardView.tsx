@@ -21,7 +21,6 @@ import {
   CARD_ASPECT_RATIO,
   CARD_CORNER_RADIUS,
 } from "./card-aspect";
-import { formatTypeLine } from "./card-text";
 import { computeCardTextScale } from "./card-display-scale";
 import { BOLT_ICON_CLASS } from "../controls/StandaloneGlyph";
 import { InlineGlyph } from "../typography/InlineGlyph";
@@ -38,6 +37,7 @@ import type { CardTransfigurationDisplay } from "../../../runtime/transfiguratio
 import { TRANSFIGURE_MARK_START } from "../../../runtime/transfigure-markers";
 import { renderRulesText } from "./RulesText";
 import { useFitText } from "../controls/useFitText";
+import { useMessages } from "../../hooks/use-messages";
 import { DESKTOP_MIN_WIDTH } from "../../screens/use-is-desktop";
 import { Pressable } from "../../primitives/Pressable";
 import { useRevealSource } from "../../internal/reveal/context";
@@ -772,6 +772,7 @@ interface GameCardSurfaceProps extends CardViewProps {
 }
 
 function GameCardSurface(props: GameCardSurfaceProps) {
+  const t = useMessages();
   const {
     card: sourceCard,
     onPress,
@@ -859,7 +860,12 @@ function GameCardSurface(props: GameCardSurfaceProps) {
     ? null
     : cardIdenticonUri(card.id !== "" ? card.id : card.name);
 
-  const typeLine = formatTypeLine(card);
+  const typeLine = t("card-type-line", {
+    presentation: card.cardType === "Character" ? "character" : "other",
+    hasSubtype: card.subtype === "" ? "no" : "yes",
+    cardType: card.cardType,
+    subtype: card.subtype,
+  });
   const rarityStyle = rarityStyleFor(card);
   const attributeChips = buildAttributeChips(card);
 
@@ -1044,8 +1050,12 @@ function GameCardSurface(props: GameCardSurfaceProps) {
           className={glyph(
             `bxf ${TRANSFIGURATION_ICONS[transfiguration.type]}`,
           )}
-          aria-label={`${transfiguration.type} transfiguration`}
-          title={`${transfiguration.type} Transfiguration`}
+          aria-label={t("card-transfiguration-badge", {
+            form: transfiguration.type,
+          })}
+          title={t("card-transfiguration-badge", {
+            form: transfiguration.type,
+          })}
           style={{
             flex: "0 0 auto",
             marginLeft: "0.35em",
@@ -1440,10 +1450,12 @@ function GameCardSurface(props: GameCardSurfaceProps) {
               {renderedRulesNode}
             </div>
           ) : null}
-          {rulesTextChanged ? (
+          {rulesTextChanged && transfiguration !== undefined ? (
             <span
               data-card-rules-text-change={transfiguration?.type}
-              title={`Rules text changed by ${transfiguration?.type ?? "unknown"} transfiguration`}
+              title={t("card-rules-transfiguration-changed", {
+                form: transfiguration.type,
+              })}
               style={{
                 position: "absolute",
                 right:
@@ -1457,7 +1469,9 @@ function GameCardSurface(props: GameCardSurfaceProps) {
             >
               {renderCardChangeBadge({
                 sizeVar: "var(--cv-transfiguration-change-badge-size)",
-                ariaLabel: `Rules text changed by ${transfiguration?.type ?? "unknown"} transfiguration`,
+                ariaLabel: t("card-rules-transfiguration-changed", {
+                  form: transfiguration.type,
+                }),
               })}
             </span>
           ) : null}

@@ -55,6 +55,7 @@ import { motionTimeSeconds } from "../primitives/motion-time";
 import { Pressable } from "../primitives/Pressable";
 import { safeAreaInsetAtLeast } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
+import { useMessages } from "../hooks/use-messages";
 import {
   MENU_BUTTON_PX,
   MENU_EDGE_INSET_DESKTOP_PX,
@@ -702,6 +703,7 @@ function ExplorationNarrativeChoices({
   readonly reduceMotion: boolean;
   readonly onActivate: (action: ExplorationActionView) => void;
 }) {
+  const t = useMessages();
   const characters = useMemo(() => Array.from(narrative), [narrative]);
   const [visibleCharacterCount, setVisibleCharacterCount] = useState(
     reduceMotion ? characters.length : 0,
@@ -784,7 +786,7 @@ function ExplorationNarrativeChoices({
       </p>
       <motion.div
         role="group"
-        aria-label="Exploration choices"
+        aria-label={t("exploration-choices-accessible-name")}
         aria-hidden={revealedChoiceCount === 0}
         data-exploration-choices-state={
           revealedChoiceCount === actions.length
@@ -1314,6 +1316,7 @@ export function ExplorationSiteScreen({
   onResolve,
   onExit,
 }: ExplorationSiteScreenProps) {
+  const t = useMessages();
   const reduceMotion = useReducedMotion() === true;
   const isDesktop = useIsDesktop();
   const cardTargetRef = useRef<HTMLDivElement>(null);
@@ -1461,10 +1464,17 @@ export function ExplorationSiteScreen({
     purgedRewardCards.length === 0;
   const rewardStageAnnouncement =
     purgedRewardCards.length === 0
-      ? `Gained ${String(rewardItems.length)} ${rewardItems.length === 1 ? "reward" : "rewards"}`
+      ? t("exploration-outcome-rewards-gained", {
+          rewardCount: rewardItems.length,
+        })
       : rewardItems.length === 0
-        ? `Purging ${String(purgedRewardCards.length)} ${purgedRewardCards.length === 1 ? "card" : "cards"}`
-        : `Purging ${String(purgedRewardCards.length)} ${purgedRewardCards.length === 1 ? "card" : "cards"} and gaining ${String(rewardItems.length)} ${rewardItems.length === 1 ? "reward" : "rewards"}`;
+        ? t("exploration-outcome-cards-purging", {
+            purgedCardCount: purgedRewardCards.length,
+          })
+        : t("exploration-outcome-purge-and-gain", {
+            purgedCardCount: purgedRewardCards.length,
+            rewardCount: rewardItems.length,
+          });
   const rewardIdentity = explorationRewardIdentity(
     view.resolvedActionId,
     view.reward,
@@ -2528,7 +2538,7 @@ export function ExplorationSiteScreen({
           }}
         >
           <Pressable
-            aria-label="Return to Exploration"
+            aria-label={t("exploration-return-action")}
             pressFeedback="stationary"
             hoverFeedback="stationary"
             onClick={
@@ -2675,7 +2685,10 @@ export function ExplorationSiteScreen({
               transfigurationRevealed ? "transfigured" : "original"
             }
             role="status"
-            aria-label={`Transfiguring ${transfigurationReward.before.displaySnapshot.name} into its ${transfigurationReward.after.transfiguration.type} form`}
+            aria-label={t("exploration-card-transfiguring", {
+              cardName: transfigurationReward.before.displaySnapshot.name,
+              form: transfigurationReward.after.transfiguration.type,
+            })}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{
@@ -2806,7 +2819,12 @@ export function ExplorationSiteScreen({
             }
             data-exploration-copy-count={purgeAndCopyReward.count}
             role="status"
-            aria-label={`Purging ${purgeAndCopyReward.purgedCard.model.displaySnapshot.name} before copying ${purgeAndCopyReward.source.model.displaySnapshot.name}`}
+            aria-label={t("exploration-purge-before-copy", {
+              purgedCardName:
+                purgeAndCopyReward.purgedCard.model.displaySnapshot.name,
+              sourceCardName:
+                purgeAndCopyReward.source.model.displaySnapshot.name,
+            })}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{
@@ -2866,8 +2884,16 @@ export function ExplorationSiteScreen({
             role="status"
             aria-label={
               purgeAndCopyReward === null
-                ? `Gained ${String(cardCopiesReward.count)} ${cardCopiesReward.count === 1 ? "copy" : "copies"}`
-                : `Purged ${purgeAndCopyReward.purgedCard.model.displaySnapshot.name} and gained ${String(cardCopiesReward.count)} ${cardCopiesReward.count === 1 ? "copy" : "copies"} of ${purgeAndCopyReward.source.model.displaySnapshot.name}`
+                ? t("exploration-card-copies-gained", {
+                    copyCount: cardCopiesReward.count,
+                  })
+                : t("exploration-purge-and-copy-complete", {
+                    purgedCardName:
+                      purgeAndCopyReward.purgedCard.model.displaySnapshot.name,
+                    copyCount: cardCopiesReward.count,
+                    sourceCardName:
+                      purgeAndCopyReward.source.model.displaySnapshot.name,
+                  })
             }
             initial={{ opacity: 0, scale: reduceMotion ? 1 : 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -3026,7 +3052,13 @@ export function ExplorationSiteScreen({
             data-exploration-battle-modifier-amount={battleModifierReward.amount}
             data-exploration-battles-remaining={battleModifierReward.battlesRemaining}
             role="status"
-            aria-label={`${String(battleModifierReward.amount)} additional ${battleModifierReward.modifier === "opening-hand" ? "opening hand cards" : "starting energy"} in the next battle`}
+            aria-label={t("exploration-next-battle-modifier", {
+              amount: battleModifierReward.amount,
+              modifier:
+                battleModifierReward.modifier === "opening-hand"
+                  ? "opening-hand"
+                  : "starting-energy",
+            })}
             style={{
               position: "fixed",
               inset: 0,
@@ -3037,8 +3069,14 @@ export function ExplorationSiteScreen({
             }}
           >
             <RadialAnnouncement
-              headline={`+${String(battleModifierReward.amount)} ${battleModifierReward.modifier === "opening-hand" ? "Cards" : "●"}`}
-              detail="Next Battle"
+              headline={t("exploration-battle-modifier-announcement", {
+                amount: battleModifierReward.amount,
+                modifier:
+                  battleModifierReward.modifier === "opening-hand"
+                    ? "openingHand"
+                    : "startingEnergy",
+              })}
+              detail={t("exploration-next-battle-label")}
               tone="reward"
               size={isDesktop ? "compact" : "mini"}
               duration="extended"
@@ -3062,7 +3100,11 @@ export function ExplorationSiteScreen({
               smallerHandDiscountReward.battlesRemaining
             }
             role="status"
-            aria-label="One fewer opening card and cards cost one energy less in the next battle"
+            aria-label={t("exploration-smaller-hand-cost-accessible-name", {
+              openingHandDelta: smallerHandDiscountReward.openingHandDelta,
+              energyCostReduction:
+                smallerHandDiscountReward.energyCostReduction,
+            })}
             style={{
               position: "fixed",
               inset: 0,
@@ -3073,8 +3115,13 @@ export function ExplorationSiteScreen({
             }}
           >
             <RadialAnnouncement
-              headline="−1 Card"
-              detail="Next Battle · Cards −1●"
+              headline={t("exploration-opening-hand-change-announcement", {
+                openingHandDelta: smallerHandDiscountReward.openingHandDelta,
+              })}
+              detail={t("exploration-next-battle-card-cost-reduction", {
+                energyCostReduction:
+                  smallerHandDiscountReward.energyCostReduction,
+              })}
               tone="reward"
               size={isDesktop ? "compact" : "mini"}
               duration="extended"
@@ -3093,7 +3140,9 @@ export function ExplorationSiteScreen({
             }
             data-exploration-dream-avatar-id={dreamAvatarReward.current.id}
             role="status"
-            aria-label={`${dreamAvatarReward.current.name} is now your Dream Avatar`}
+            aria-label={t("exploration-dream-avatar-changed", {
+              dreamAvatarName: dreamAvatarReward.current.name,
+            })}
             initial={{ opacity: 0, scale: reduceMotion ? 1 : 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{
@@ -3139,7 +3188,7 @@ export function ExplorationSiteScreen({
             data-exploration-source-site-id={siteOfferModifierReward.sourceSiteId}
             data-exploration-source-action-id={siteOfferModifierReward.sourceActionId}
             role="status"
-            aria-label="The next Draft or Shop will contain transfigured cards"
+            aria-label={t("exploration-site-offer-modifier-accessible-name")}
             style={{
               position: "fixed",
               inset: 0,
@@ -3150,8 +3199,8 @@ export function ExplorationSiteScreen({
             }}
           >
             <RadialAnnouncement
-              headline="Transfigured Cards"
-              detail="Next Draft or Shop"
+              headline={t("exploration-site-offer-modifier-title")}
+              detail={t("exploration-site-offer-modifier-detail")}
               tone="reward"
               size={isDesktop ? "compact" : "mini"}
               duration="extended"
@@ -3168,7 +3217,7 @@ export function ExplorationSiteScreen({
             data-exploration-outcome={resolvedReward.semanticKind ?? "objects"}
             data-exploration-reward-count="0"
             role="status"
-            aria-label="No cards taken"
+            aria-label={t("exploration-no-cards-taken")}
             style={{
               position: "fixed",
               inset: 0,
@@ -3179,7 +3228,7 @@ export function ExplorationSiteScreen({
             }}
           >
             <RadialAnnouncement
-              headline="No Cards Taken"
+              headline={t("exploration-no-cards-taken")}
               tone="reward"
               size={isDesktop ? "compact" : "mini"}
               duration="extended"
@@ -3426,7 +3475,10 @@ export function ExplorationSiteScreen({
             }
             data-exploration-essence-gained={cardPurgeReward.totalEssence}
             role="status"
-            aria-label={`Purging ${cardPurgeReward.card.model.displaySnapshot.name} for ${String(cardPurgeReward.totalEssence)} Essence`}
+            aria-label={t("exploration-card-purge-for-essence", {
+              cardName: cardPurgeReward.card.model.displaySnapshot.name,
+              essenceAmount: cardPurgeReward.totalEssence,
+            })}
             style={{
               position: "fixed",
               inset: 0,
@@ -3494,8 +3546,11 @@ export function ExplorationSiteScreen({
           >
             <RadialAnnouncement
               announcementId={`exploration:${view.siteId}:${view.resolvedActionId ?? "purged-card-essence"}`}
-              headline="Essence Gained"
-              detail={`${String(cardPurgeReward.essencePerSpark)} × ${String(cardPurgeReward.spark)} ✦`}
+              headline={t("exploration-essence-gained-title")}
+              detail={t("exploration-purge-essence-calculation", {
+                essencePerSpark: cardPurgeReward.essencePerSpark,
+                spark: cardPurgeReward.spark,
+              })}
               essenceGained={cardPurgeReward.totalEssence}
               tone="reward"
               size={isDesktop ? "standard" : "compact"}
@@ -3511,7 +3566,9 @@ export function ExplorationSiteScreen({
           <section
             data-exploration-purged-dreamsign-stage=""
             role="status"
-            aria-label={`Purging ${dreamsignPurgeReward.dreamsign.name}`}
+            aria-label={t("exploration-dreamsign-purging", {
+              dreamsignName: dreamsignPurgeReward.dreamsign.name,
+            })}
             style={{
               position: "fixed",
               inset: 0,
@@ -3570,7 +3627,7 @@ export function ExplorationSiteScreen({
           >
             <RadialAnnouncement
               announcementId={`exploration:${view.siteId}:${view.resolvedActionId ?? "purged-dreamsign-essence"}`}
-              headline="Essence Gained"
+              headline={t("exploration-essence-gained-title")}
               essenceGained={dreamsignPurgeReward.totalEssence}
               tone="reward"
               size={isDesktop ? "standard" : "compact"}
@@ -3589,7 +3646,11 @@ export function ExplorationSiteScreen({
               essenceReward.cards.length
             }
             role="status"
-            aria-label={`${String(essenceReward.cards.length)} Spirit Animal cards grant ${String(essenceReward.totalEssence)} Essence total, ${String(essenceReward.essencePerCard)} each`}
+            aria-label={t("exploration-spirit-animal-essence-summary", {
+              cardCount: essenceReward.cards.length,
+              totalEssence: essenceReward.totalEssence,
+              essencePerCard: essenceReward.essencePerCard,
+            })}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{
@@ -3693,8 +3754,11 @@ export function ExplorationSiteScreen({
           >
             <RadialAnnouncement
               announcementId={`exploration:${view.siteId}:${view.resolvedActionId ?? "essence"}`}
-              headline="Essence Gained"
-              detail={`${String(essenceReward.essencePerCard)} × ${String(essenceReward.cards.length)} Spirit Animals`}
+              headline={t("exploration-essence-gained-title")}
+              detail={t("exploration-spirit-animal-essence-calculation", {
+                essencePerCard: essenceReward.essencePerCard,
+                cardCount: essenceReward.cards.length,
+              })}
               essenceGained={essenceReward.totalEssence}
               tone="reward"
               size={isDesktop ? "standard" : "compact"}
@@ -4051,7 +4115,9 @@ export function ExplorationSiteScreen({
                             : `${token("--space-xs")} 0 ${token("--space-s")}`,
                         }}
                       >
-                        Pack {String(pack.index + 1)}
+                        {t("exploration-pack-title", {
+                          packNumber: pack.index + 1,
+                        })}
                       </strong>
                       <span data-exploration-pack-cards="" style={{ display: "grid", gridTemplateColumns: `repeat(${String(pack.cards.length)}, minmax(0, 1fr))`, gap: token("--space-xs") }}>
                         {pack.cards.map((card) => <GameCard key={card.entryId} model={card.model} />)}
@@ -4067,8 +4133,11 @@ export function ExplorationSiteScreen({
                         }}
                       >
                         <GlassButton
-                          label="Choose"
-                          accessibilityLabel={`Choose Pack ${String(pack.index + 1)}`}
+                          label={t("exploration-pack-choose-action")}
+                          accessibilityLabel={t(
+                            "exploration-pack-choose-accessible-name",
+                            { packNumber: pack.index + 1 },
+                          )}
                           variant="accent"
                           placement="onGlass"
                           onPress={() => onResolve(activeAction.id, { packIndex: pack.index })}

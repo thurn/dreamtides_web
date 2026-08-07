@@ -33,6 +33,7 @@ import {
   MENU_EDGE_INSET_MOBILE_PX,
 } from "./chrome-geometry";
 import { useIsDesktop } from "./use-is-desktop";
+import { useMessages } from "../hooks/use-messages";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
@@ -131,6 +132,7 @@ export function DraftScreen({
   onReroll = NOOP,
   onTutorialShown,
 }: DraftScreenProps) {
+  const t = useMessages();
   const isDesktop = useIsDesktop();
   const wideDraftRow = useIsDesktop(DRAFT_ROW_MIN_WIDTH_PX);
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
@@ -331,7 +333,10 @@ export function DraftScreen({
             textShadow: token("--text-outline-media"),
           }}
         >
-          {`Draft (${String(view.pickNumber)}/${String(view.pickTotal)})`}
+          {t("draft-pick-progress", {
+            pickNumber: view.pickNumber,
+            pickTotal: view.pickTotal,
+          })}
         </div>
       </div>
 

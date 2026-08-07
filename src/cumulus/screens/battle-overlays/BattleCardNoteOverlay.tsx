@@ -6,6 +6,7 @@ import { TextField } from "../../components/controls/TextField";
 import { GlassDialog } from "../../components/overlay/GlassDialog";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
+import { useMessages } from "../../hooks/use-messages";
 
 export type BattleCardNoteExpiryOption =
   | "end-of-this-turn"
@@ -43,11 +44,12 @@ export function BattleCardNoteOverlay({
   onCancel,
   onSubmit,
 }: BattleCardNoteOverlayProps): ReactElement {
+  const t = useMessages();
   const hasText = text.trim().length > 0;
 
   return (
     <GlassDialog
-      title={`Annotate ${cardName}`}
+      title={t("battle-card-note-title", { cardName })}
       subtitle="Notes appear on the card and in the inspector."
       closeLabel="Cancel note"
       onClose={onCancel}

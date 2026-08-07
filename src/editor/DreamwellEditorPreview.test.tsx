@@ -4,6 +4,7 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it } from "vitest";
 import { DreamwellEditorPreview } from "./DreamwellEditorPreview";
+import { CumulusRoot } from "../cumulus/CumulusRoot";
 
 beforeEach(() => {
   (
@@ -21,7 +22,8 @@ describe("DreamwellEditorPreview", () => {
 
     act(() => {
       root.render(
-        <DreamwellEditorPreview
+        <CumulusRoot>
+          <DreamwellEditorPreview
           card={{
             id: "ee8e040e-f3de-4622-9cff-a9f1866e2fc3",
             name: "Editable Beacon",
@@ -35,7 +37,8 @@ describe("DreamwellEditorPreview", () => {
               <button type="button">{defaultNode ?? "Add rules text"}</button>
             ),
           }}
-        />,
+          />
+        </CumulusRoot>,
       );
     });
 

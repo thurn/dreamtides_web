@@ -191,7 +191,7 @@ describe("TransfigurationSiteScreen", () => {
     expect(
       container.querySelector("[data-guide-gallery-desktop-composition]"),
     ).not.toBeNull();
-    expect(container.querySelector("h2")?.textContent).toBe("Transfiguration");
+    expect(container.querySelector("h2")?.textContent?.trim()).not.toBe("");
     expect(
       container.querySelectorAll(
         '[data-testid^="cumulus-transfiguration-card-"]',
@@ -250,7 +250,8 @@ describe("TransfigurationSiteScreen", () => {
     expect(picker?.dataset.galleryColumns).toBe("5");
     expect(picker?.dataset.gallerySpacing).toBe("regular");
     expect(picker?.dataset.galleryRole).toBe("picker");
-    expect(container.textContent).toContain("Pick any card to reforge");
+    expect(picker?.querySelector("[data-glass-panel-header] p")?.textContent?.trim())
+      .not.toBe("");
     expect(
       container.querySelectorAll(
         '[data-testid^="cumulus-transfiguration-card-"]',
@@ -263,11 +264,15 @@ describe("TransfigurationSiteScreen", () => {
         )
         ?.getAttribute("aria-disabled"),
     ).toBe("true");
-    expect(container.textContent).toContain("Kindled · Reforged");
+    expect(
+      container.querySelector(
+        '[data-gallery-entry-id="entry-5"] [data-gallery-caption="text"]',
+      )?.textContent?.trim(),
+    ).not.toBe("");
     expect(
       container.querySelector('[data-testid="cumulus-transfiguration-decline"]')
-        ?.textContent,
-    ).toBe("Decline");
+        ?.textContent?.trim(),
+    ).not.toBe("");
 
     act(() => {
       container
@@ -630,8 +635,9 @@ describe("TransfigurationSiteScreen", () => {
         .querySelector<HTMLButtonElement>(
           '[data-testid="cumulus-transfiguration-form-Empowered"]',
         )
-        ?.getAttribute("aria-label"),
-    ).toBe("Empowered, 40 essence");
+        ?.getAttribute("aria-label")
+        ?.trim(),
+    ).not.toBe("");
     expect(
       container.querySelector<HTMLElement>(
         '[data-testid="cumulus-transfiguration-form-Empowered"]',

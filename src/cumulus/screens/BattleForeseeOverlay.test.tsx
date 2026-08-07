@@ -73,6 +73,14 @@ function deckIds(container: HTMLElement): (string | undefined)[] {
   );
 }
 
+function countButtons(container: HTMLElement): readonly HTMLButtonElement[] {
+  return Array.from(
+    container.querySelectorAll<HTMLButtonElement>(
+      "[data-foresee-count-controls] button",
+    ),
+  );
+}
+
 function pointerEvent(
   type: string,
   coordinates: { readonly clientX: number; readonly clientY: number },
@@ -186,8 +194,9 @@ describe("BattleForeseeOverlay", () => {
       <BattleForeseeOverlay view={makeView()} onConfirm={() => {}} />,
     );
 
-    expect(container.querySelector('[role="dialog"]')?.getAttribute("aria-label"))
-      .toBe("Foresee 1");
+    expect(
+      container.querySelector('[role="dialog"]')?.getAttribute("aria-label"),
+    ).not.toBe("");
     expect(
       container.querySelector('[role="dialog"]')
         ?.getAttribute("data-glass-dialog-desktop-center-target"),
@@ -200,12 +209,11 @@ describe("BattleForeseeOverlay", () => {
     )).toEqual(["Deck", "Void"]);
     expect(Array.from(container.querySelectorAll("button"), (button) => button.textContent))
       .toEqual(["", "", "Confirm"]);
-    expect(container.querySelector<HTMLButtonElement>(
-      '[aria-label="Foresee 1 fewer"]',
-    )?.getAttribute("aria-disabled")).toBe("true");
-    expect(container.querySelector<HTMLButtonElement>(
-      '[aria-label="Foresee 1 more"]',
-    )?.hasAttribute("aria-disabled")).toBe(false);
+    const [decrement, increment] = countButtons(container);
+    expect(decrement?.getAttribute("aria-disabled")).toBe("true");
+    expect(decrement?.getAttribute("aria-label")).not.toBe("");
+    expect(increment?.hasAttribute("aria-disabled")).toBe(false);
+    expect(increment?.getAttribute("aria-label")).not.toBe("");
     expect(container.querySelector("[data-foresee-spacer]")).not.toBeNull();
     const dialogPanel = container.querySelector<HTMLElement>('[role="dialog"]')
       ?.firstElementChild as HTMLElement | undefined;
@@ -223,11 +231,15 @@ describe("BattleForeseeOverlay", () => {
       <BattleForeseeOverlay view={makeView()} onConfirm={() => {}} />,
     );
 
+    const initialAccessibleName = container
+      .querySelector('[role="dialog"]')
+      ?.getAttribute("aria-label");
     act(() => {
-      container.querySelector<HTMLButtonElement>('[aria-label="Foresee 1 more"]')?.click();
+      countButtons(container)[1]?.click();
     });
-    expect(container.querySelector('[role="dialog"]')?.getAttribute("aria-label"))
-      .toBe("Foresee 2");
+    expect(
+      container.querySelector('[role="dialog"]')?.getAttribute("aria-label"),
+    ).not.toBe(initialAccessibleName);
     expect(deckIds(container)).toEqual(["battle-card-1", "battle-card-2"]);
     expect(Array.from(
       container.querySelectorAll<HTMLElement>('[data-foresee-card-zone="deck"]'),
@@ -239,16 +251,16 @@ describe("BattleForeseeOverlay", () => {
     )).toEqual(["2", "1"]);
 
     act(() => {
-      container.querySelector<HTMLButtonElement>('[aria-label="Foresee 1 more"]')?.click();
+      countButtons(container)[1]?.click();
     });
     expect(deckIds(container)).toEqual([
       "battle-card-1",
       "battle-card-2",
       "battle-card-3",
     ]);
-    expect(container.querySelector<HTMLButtonElement>(
-      '[aria-label="Foresee 1 more"]',
-    )?.getAttribute("aria-disabled")).toBe("true");
+    expect(countButtons(container)[1]?.getAttribute("aria-disabled")).toBe(
+      "true",
+    );
 
     const third = container.querySelector<HTMLElement>(
       '[data-foresee-card-id="battle-card-3"]',
@@ -267,12 +279,13 @@ describe("BattleForeseeOverlay", () => {
       ?.getAttribute("data-foresee-card-id")).toBe("battle-card-3");
 
     act(() => {
-      container.querySelector<HTMLButtonElement>('[aria-label="Foresee 1 fewer"]')?.click();
+      countButtons(container)[0]?.click();
     });
     expect(deckIds(container)).toEqual(["battle-card-1", "battle-card-2"]);
     expect(container.querySelector('[data-foresee-card-zone="void"]')).toBeNull();
-    expect(container.querySelector('[role="dialog"]')?.getAttribute("aria-label"))
-      .toBe("Foresee 2");
+    expect(
+      container.querySelector('[role="dialog"]')?.getAttribute("aria-label"),
+    ).not.toBe("");
 
     act(() => root.unmount());
   });

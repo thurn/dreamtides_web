@@ -10,6 +10,7 @@ import { revealEntityId } from "../../internal/reveal/identity";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
+import { useMessages } from "../../hooks/use-messages";
 import { StandaloneGlyph } from "../controls/StandaloneGlyph";
 import { EssenceValue } from "../hud/EssenceValue";
 import {
@@ -90,7 +91,10 @@ export interface CardChoiceGridCardView {
     direction: "left" | "right";
   };
   /** Optional selected-card quantity shown over the lower corner. */
-  quantityBadge?: string;
+  quantityBadge?: {
+    /** Positive number of copies represented by the badge. */
+    count: number;
+  };
   /** Pending operation shown as a semantic icon over the lower-right corner. */
   operation?: CardChoiceOperation;
 }
@@ -391,35 +395,10 @@ function CardChoiceGridItem({
             }
           />
           {card.quantityBadge !== undefined && (
-            <span
-              aria-label={`${card.quantityBadge} copies`}
-              data-card-choice-quantity-badge=""
-              style={{
-                position: "absolute",
-                right:
-                  card.operation === undefined
-                    ? token("--space-xs")
-                    : undefined,
-                left:
-                  card.operation === undefined
-                    ? undefined
-                    : token("--space-xs"),
-                bottom: token("--space-xs"),
-                zIndex: 20,
-                width: 36,
-                height: 36,
-                borderRadius: token("--radius-control"),
-                display: "grid",
-                placeItems: "center",
-                color: token("--text-on-accent"),
-                background: token("--accent-bright"),
-                boxShadow: token("--shadow-md"),
-                font: token("--t-button-sm"),
-                pointerEvents: "none",
-              }}
-            >
-              {card.quantityBadge}
-            </span>
+            <CardChoiceQuantityBadge
+              count={card.quantityBadge.count}
+              operationPresent={card.operation !== undefined}
+            />
           )}
           {operationPresentation !== null && (
             <span
@@ -458,6 +437,41 @@ function CardChoiceGridItem({
       </div>
       {card.caption !== undefined && captionNode(card.caption)}
     </div>
+  );
+}
+
+function CardChoiceQuantityBadge({
+  count,
+  operationPresent,
+}: {
+  readonly count: number;
+  readonly operationPresent: boolean;
+}): ReactElement {
+  const t = useMessages();
+  return (
+    <span
+      aria-label={t("augury-card-choice-copy-count", { count })}
+      data-card-choice-quantity-badge=""
+      style={{
+        position: "absolute",
+        right: operationPresent ? undefined : token("--space-xs"),
+        left: operationPresent ? token("--space-xs") : undefined,
+        bottom: token("--space-xs"),
+        zIndex: 20,
+        width: 36,
+        height: 36,
+        borderRadius: token("--radius-control"),
+        display: "grid",
+        placeItems: "center",
+        color: token("--text-on-accent"),
+        background: token("--accent-bright"),
+        boxShadow: token("--shadow-md"),
+        font: token("--t-button-sm"),
+        pointerEvents: "none",
+      }}
+    >
+      {count}×
+    </span>
   );
 }
 

@@ -372,7 +372,7 @@ describe("ExplorationCandidatesEditorApp", () => {
     const control = container.querySelector<HTMLElement>(
       `[data-testid='encounter-variable-${CARD_ID}-pair-1-1-count']`,
     )!;
-    expect(control.getAttribute("aria-label")).toBe("Count: 1");
+    expect(control.getAttribute("aria-label")).toBe("Count");
 
     await act(async () => {
       control.querySelector<HTMLButtonElement>("[aria-label^='Increase Count']")!.click();

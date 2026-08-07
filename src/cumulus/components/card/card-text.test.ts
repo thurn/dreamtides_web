@@ -2,15 +2,12 @@ import { describe, it, expect } from "vitest";
 import {
   tokenizeRulesSymbols,
   tokenizeRulesText,
-  formatTypeLine,
   type TextSegment,
 } from "./card-text";
 import {
   GLOSSARY,
   glossaryRulesTextForms,
 } from "../../../data/glossary";
-import type { CardData } from "../../../types/cards";
-import { asCardId, asCardName } from "../../../types/card-identity";
 
 // Representative live glossary entries, so the term-dependent tokenizer tests
 // track the data instead of hardcoding names that change as the glossary
@@ -412,45 +409,5 @@ describe("tokenizeRulesText", () => {
     const result = tokenizeRulesText("⍏");
     expect(result).toEqual([{ kind: "symbol", symbol: "spark", char: "⍏" }]);
     expect((result[0] as { char: string }).char).not.toBe("☆");
-  });
-});
-
-function makeCard(overrides: Partial<CardData>): CardData {
-  return {
-    cardNumber: 1,
-    cardType: "Character",
-    subtype: "",
-    isStarter: false,
-    energyCost: 3,
-    spark: 2,
-    isFast: false,
-    renderedText: "Test text.",
-    imageNumber: 1,
-    artOwned: true,
-    ...overrides,
-    id: asCardId(overrides.id ?? "test-card"),
-    name: asCardName(overrides.name ?? "Test Card"),
-  };
-}
-
-describe("formatTypeLine", () => {
-  it("shows card type alone when subtype is empty", () => {
-    const card = makeCard({ cardType: "Event", subtype: "" });
-    expect(formatTypeLine(card)).toBe("Event");
-  });
-
-  it("shows subtype when subtype is *", () => {
-    const card = makeCard({ cardType: "Character", subtype: "*" });
-    expect(formatTypeLine(card)).toBe("*");
-  });
-
-  it("shows subtype alone for Character cards", () => {
-    const card = makeCard({ cardType: "Character", subtype: "Ancient" });
-    expect(formatTypeLine(card)).toBe("Ancient");
-  });
-
-  it("handles Event type with subtype", () => {
-    const card = makeCard({ cardType: "Event", subtype: "Spell" });
-    expect(formatTypeLine(card)).toBe("Event — Spell");
   });
 });

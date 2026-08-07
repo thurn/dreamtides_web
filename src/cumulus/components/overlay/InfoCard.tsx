@@ -28,7 +28,8 @@ import { renderRulesSymbolsInline } from "../card/RulesText";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { controlChrome } from "../../internal/control-treatment";
 import { applySymbolReplacements } from "../../primitives/symbol-replacements";
-import { tideVisual, tideAlignmentLabel, type Tide } from "../hud/tide-spec";
+import { tideVisual, type Tide } from "../hud/tide-spec";
+import { useMessages } from "../../hooks/use-messages";
 
 /* ---- authored component geometry ---- */
 const CARD_W = 248; // every info card is this wide
@@ -380,6 +381,11 @@ export function infoCardNativeWidth(
 interface InfoCardContentOverride {
   readonly title?: React.ReactNode;
   readonly body?: React.ReactNode;
+}
+
+function TideAlignmentName({ tide }: { readonly tide: Tide }): React.ReactElement {
+  const t = useMessages();
+  return <>{t("tide-alignment-name", { tide })}</>;
 }
 
 function InfoCardBody(
@@ -766,7 +772,7 @@ function InfoCardBody(
           <div>
             <div style={tHeadline}>{titleContent}</div>
             <div style={{ ...tMeta, color: v.fg, marginTop: token("--space-xs") }}>
-              {tideAlignmentLabel(tide)}
+              <TideAlignmentName tide={tide} />
             </div>
           </div>
         </div>

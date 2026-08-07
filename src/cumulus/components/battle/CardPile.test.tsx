@@ -1,6 +1,11 @@
 // @vitest-environment jsdom
 
-import { act, type HTMLAttributes, type ReactNode } from "react";
+import {
+  act,
+  type ComponentProps,
+  type HTMLAttributes,
+  type ReactNode,
+} from "react";
 import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { asCardId, asCardName } from "../../../types/card-identity";
@@ -35,6 +40,15 @@ import {
   CardPile,
   type BattlePileCard,
 } from "./CardPile";
+import { CumulusRoot } from "../../CumulusRoot";
+
+function LocalizedCardPile(props: ComponentProps<typeof CardPile>) {
+  return (
+    <CumulusRoot>
+      <CardPile {...props} />
+    </CumulusRoot>
+  );
+}
 
 const CARD_ID = asCardId("11111111-1111-4111-8111-111111111111");
 const MODEL: GameCardModel = {
@@ -78,7 +92,7 @@ describe("CardPile", () => {
 
     act(() => {
       root.render(
-        <CardPile
+        <LocalizedCardPile
           cards={CARDS}
           label="Enemy void"
           testId="enemy-void"
@@ -143,7 +157,7 @@ describe("CardPile", () => {
 
     act(() => {
       root.render(
-        <CardPile
+        <LocalizedCardPile
           cards={[{ face: "down", id: "deck-top" }]}
           label="Player deck"
         />,
@@ -171,7 +185,7 @@ describe("CardPile", () => {
 
     act(() => {
       root.render(
-        <CardPile
+        <LocalizedCardPile
           cards={[
             {
               face: "up",
@@ -203,7 +217,7 @@ describe("CardPile", () => {
 
     act(() => {
       root.render(
-        <CardPile
+        <LocalizedCardPile
           cards={[{ face: "up", id: "void-top", model: MODEL }]}
           label="Player void"
           onPress={onActivate}
@@ -228,7 +242,7 @@ describe("CardPile", () => {
 
     act(() => {
       root.render(
-        <CardPile
+        <LocalizedCardPile
           cards={[]}
           label="Player void"
           emptyState="outlined"

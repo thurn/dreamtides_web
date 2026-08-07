@@ -9,6 +9,7 @@ import type { GlassControlPlacement } from "../../primitives/control-placement";
 import { Pressable } from "../../primitives/Pressable";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
+import { useMessages } from "../../hooks/use-messages";
 import { StandaloneGlyph } from "./StandaloneGlyph";
 
 export interface CardOrderEditorItem {
@@ -89,6 +90,7 @@ function CardOrderEditorRow({
   readonly itemCount: number;
   readonly onMove: (from: number, to: number) => void;
 }): ReactElement {
+  const t = useMessages();
   const controls = useDragControls();
 
   const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>): void => {
@@ -156,7 +158,9 @@ function CardOrderEditorRow({
       </span>
       <Pressable
         as="button"
-        aria-label={`Reorder ${item.label}`}
+        aria-label={t("card-order-reorder-action", {
+          itemLabel: item.label,
+        })}
         aria-keyshortcuts="ArrowUp ArrowDown"
         data-card-order-drag-handle={item.id}
         onPointerDown={(event: PointerEvent<HTMLButtonElement>) =>

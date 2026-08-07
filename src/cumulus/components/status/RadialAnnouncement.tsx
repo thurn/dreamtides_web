@@ -10,6 +10,7 @@ import { InlineGlyph } from "../typography/InlineGlyph";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { motionTimeSeconds } from "../../primitives/motion-time";
 import { token } from "../../primitives/tokens";
+import { useMessages } from "../../hooks/use-messages";
 
 export const RADIAL_ANNOUNCEMENT_DURATION_MS = 2_100;
 export const RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS = 3_360;
@@ -363,13 +364,14 @@ function CardScoreAnnouncement({
   points,
   announcementId,
 }: RadialAnnouncementCardScoreProps): ReactElement {
+  const t = useMessages();
   const reduceMotion = useReducedMotion();
   const animationDuration = reduceMotion ? 0 : CARD_SCORE_ANIMATION_SECONDS;
   return (
     <div
       role="status"
       aria-live="polite"
-      aria-label={`${String(points)} points`}
+      aria-label={t("battle-point-count", { count: points })}
       data-radial-announcement={announcementId ?? ""}
       data-radial-announcement-variant="card-score"
       data-radial-announcement-tone="accent"
@@ -627,6 +629,7 @@ function MergeTargetAnnouncement(
     | RadialAnnouncementAvailableTargetProps
     | RadialAnnouncementBlockedTargetProps,
 ): ReactElement {
+  const t = useMessages();
   const blocked = props.status === "blocked";
   const tone: RadialAnnouncementTone = blocked ? "danger" : "accent";
   const orbitColor = blocked ? token("--danger") : token("--border-accent");
@@ -693,11 +696,17 @@ function MergeTargetAnnouncement(
           }}
         >
           <span data-radial-announcement-headline="">
-            {blocked ? "Cannot Merge" : "Merge"}
+            {t("battle-figment-merge-target", {
+              status: blocked ? "blocked" : "available",
+            })}
           </span>
           {!blocked ? (
             <span data-radial-announcement-detail="">
-              {renderRulesSymbolsInline(`+${String(props.addedSpark)}✦`)}
+              {renderRulesSymbolsInline(
+                t("battle-figment-merge-spark-detail", {
+                  sparkCount: props.addedSpark,
+                }),
+              )}
             </span>
           ) : null}
         </span>

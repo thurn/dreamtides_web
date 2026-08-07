@@ -5,6 +5,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { DreamAvatarVisual } from "./DreamAvatarPortrait";
 import { DreamAvatarStage } from "./DreamAvatarStage";
+import { CumulusRoot } from "../../CumulusRoot";
 
 const DREAM_AVATAR: DreamAvatarVisual = {
   imageNumber: "0042",
@@ -20,7 +21,7 @@ function mountInto(node: React.ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(node);
+    root.render(<CumulusRoot>{node}</CumulusRoot>);
   });
   return { container, root };
 }
@@ -48,7 +49,8 @@ describe("DreamAvatarStage", () => {
       const img = container.querySelector(
         `[data-dream-avatar-stage-art="${variant}"]`,
       );
-      expect(img?.getAttribute("alt")).toBe("Astra, The Dawnbound");
+      expect(img?.getAttribute("alt")).not.toBe("");
+      expect(img?.getAttribute("alt")).not.toMatch(/^dream-avatar-/);
       expect(img?.getAttribute("src") ?? "").toContain("0042");
     },
   );

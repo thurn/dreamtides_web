@@ -17,7 +17,7 @@ The persistent, transparent bottom HUD for journey screens. Its journey variant 
 | `stageRef` | `RefObject<HTMLElement \| null>` | yes | — | Ref to the screen root (position:absolute inset:0 in the scaled frame). Required. |
 | `essence` | `number` | no | — | Essence total shown in the HUD. |
 | `dreamsigns` | `Dreamsign[]` | no | `[]` | The Dreamsigns to dock. Journey overflow opens a viewer; battle Dreamsigns flow bottom-up and right-to-left in two-high columns. |
-| `deck` | `string \| number` | no | `0` | Deck size (used in the deck button's aria-label). |
+| `deck` | `number` | no | `0` | Deck size (used in the deck button's aria-label). |
 | `onViewDeck` | `(() => void)` | no | — | Open the deck viewer — fired on a tap / click of the deck sprite. |
 | `dreamAvatar` | `QsbDreamAvatar` | no | — |  |
 | `size` | `"compact" \| "grand"` | no | `compact` | HUD size. `compact` (default) is the mobile / touch size; `grand` is the larger desktop size the dreamscape screen picks above the wide-viewport breakpoint. |

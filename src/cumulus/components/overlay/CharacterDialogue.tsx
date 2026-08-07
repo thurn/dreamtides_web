@@ -7,6 +7,7 @@ import { assetUrl } from "../../../runtime/asset-url";
 import { motionTimeSeconds } from "../../primitives/motion-time";
 import { resolveArtRef, type ArtRef } from "../../primitives/art";
 import { token } from "../../primitives/tokens";
+import { useMessages } from "../../hooks/use-messages";
 import { SpeechBubble } from "./SpeechBubble";
 
 const DIALOGUE_FRAME_URL = assetUrl("/atlas/Round_frame.png");
@@ -81,6 +82,7 @@ export function CharacterDialogue({
   testId,
   playbackSpeed = 1,
 }: CharacterDialogueProps): ReactElement {
+  const t = useMessages();
   const reduceMotion = useReducedMotion() === true;
   const targetOpacity = visible ? 1 : 0;
   const portraitSize = DIALOGUE_PORTRAIT_SIZE[size];
@@ -89,7 +91,9 @@ export function CharacterDialogue({
   return (
     <motion.section
       aria-hidden={!visible}
-      aria-label={`${dialogue.speakerName} speaks`}
+      aria-label={t("character-dialogue-accessible-name", {
+        speakerName: dialogue.speakerName,
+      })}
       data-character-dialogue=""
       data-character-dialogue-size={size}
       data-character-dialogue-visible={String(visible)}

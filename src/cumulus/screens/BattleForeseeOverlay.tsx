@@ -16,6 +16,7 @@ import { GLYPHS } from "../primitives/glyph";
 import { POINTER_MOVEMENT_SLOP_PX } from "../primitives/pointer-gesture";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "./use-is-desktop";
+import { useMessages } from "../hooks/use-messages";
 
 /** Card width and the minimum empty travel lane before the Void indicator. */
 const FORESEE_CARD_WIDTH_DESKTOP_PX = 180;
@@ -84,6 +85,7 @@ export function BattleForeseeOverlay({
   view,
   onConfirm,
 }: BattleForeseeOverlayProps): ReactElement {
+  const t = useMessages();
   const isDesktop = useIsDesktop();
   const cardWidthPx = isDesktop
     ? FORESEE_CARD_WIDTH_DESKTOP_PX
@@ -342,7 +344,7 @@ export function BattleForeseeOverlay({
 
   return (
     <GlassDialog
-      title={`Foresee ${String(count)}`}
+      title={t("battle-foresee-title", { count })}
       desktopCenterTarget="battlefield"
     >
       <div

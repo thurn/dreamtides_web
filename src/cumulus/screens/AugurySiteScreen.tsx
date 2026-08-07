@@ -21,14 +21,16 @@ import {
   OFFER_TILE_COMPACT_SIZE,
 } from "../components/controls/OfferTile";
 import {
+  auguryOfferHeadline,
+  offerTileDescription,
+} from "../components/controls/offer-tile-descriptions";
+import {
   SiteNode,
   type DreamscapeSiteModel,
 } from "../components/dreamscape/SiteNode";
 import { Dreamsign } from "../components/hud/Dreamsign";
-import {
-  GlassPanel,
-  type GlassPanelTextSegment,
-} from "../components/overlay/GlassPanel";
+import { GlassPanel } from "../components/overlay/GlassPanel";
+import { useMessages } from "../hooks/use-messages";
 import type { ArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
@@ -74,8 +76,6 @@ export type AuguryOfferVisualView =
 
 export interface AuguryOfferView {
   id: string;
-  headline: string;
-  subtitle: string | readonly GlassPanelTextSegment[];
   requiresSelection: boolean;
   tile: OfferTileModel;
   visual: AuguryOfferVisualView;
@@ -355,6 +355,7 @@ function OfferDetailPanel({
   onChooseAgain: () => void;
   onConfirm: (offer: AuguryOfferView) => void;
 }) {
+  const t = useMessages();
   const confirmDisabled = disabled || (offer.requiresSelection && selectedChoiceId === undefined);
   return (
     <article
@@ -363,10 +364,8 @@ function OfferDetailPanel({
       style={{ width: "100%", height: "100%", minWidth: 0, minHeight: 0, pointerEvents: "auto" }}
     >
       <GlassPanel
-        title={offer.headline}
-        {...(typeof offer.subtitle === "string"
-          ? { subtitle: offer.subtitle }
-          : { structuredSubtitle: offer.subtitle })}
+        title={auguryOfferHeadline(offer.tile, t)}
+        subtitle={offerTileDescription(offer.tile, t)}
         headerSpacing="medium"
         footer={
           <div
@@ -431,14 +430,14 @@ function OfferDetailVisual({
 }) {
   const choices = (
     items: readonly AuguryCardChoiceView[],
-    selectedBadge?: string,
+    selectedCopyCount?: number,
   ) => (
     <CardChoices
       offerId={offerId}
       choices={items}
       layout={layout}
       selectedChoiceId={selectedChoiceId}
-      selectedBadge={selectedBadge}
+      selectedCopyCount={selectedCopyCount}
       onSelect={onSelect}
     />
   );
@@ -446,7 +445,7 @@ function OfferDetailVisual({
     case "cards":
       return <CardRow cards={visual.cards} layout={layout} />;
     case "cardChoices":
-      return choices(visual.choices, visual.doubled ? "2x" : undefined);
+      return choices(visual.choices, visual.doubled ? 2 : undefined);
     case "beforeAfter":
       return (
         <div style={{ display: "grid", gap: token("--space-s") }}>
@@ -523,7 +522,7 @@ function cardGridColumns(
   return "five";
 }
 
-function CardChoices({ offerId, choices, layout, fit = "choice", columns = cardGridColumns(choices.length, layout), selectedChoiceId, selectedBadge, onSelect }: { offerId: string; choices: readonly AuguryCardChoiceView[]; layout: "mobile" | "desktop"; fit?: CardChoiceGridSiteFit; columns?: CardChoiceGridColumns; selectedChoiceId?: string; selectedBadge?: string; onSelect: (offerId: string, choiceId: string) => void }) {
+function CardChoices({ offerId, choices, layout, fit = "choice", columns = cardGridColumns(choices.length, layout), selectedChoiceId, selectedCopyCount, onSelect }: { offerId: string; choices: readonly AuguryCardChoiceView[]; layout: "mobile" | "desktop"; fit?: CardChoiceGridSiteFit; columns?: CardChoiceGridColumns; selectedChoiceId?: string; selectedCopyCount?: number; onSelect: (offerId: string, choiceId: string) => void }) {
   return (
     <CardChoiceGrid
       cards={choices.map((choice) => ({
@@ -531,7 +530,10 @@ function CardChoices({ offerId, choices, layout, fit = "choice", columns = cardG
         model: choice.card.model,
         selection:
           selectedChoiceId === choice.id ? "highlighted" : undefined,
-        quantityBadge: selectedChoiceId === choice.id ? selectedBadge : undefined,
+        quantityBadge:
+          selectedChoiceId === choice.id && selectedCopyCount !== undefined
+            ? { count: selectedCopyCount }
+            : undefined,
         testId: `cumulus-augury-choice-${choice.id}`,
       }))}
       columns={columns}

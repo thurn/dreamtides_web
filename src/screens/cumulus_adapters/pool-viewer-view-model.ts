@@ -4,7 +4,7 @@ import type { CardData } from "../../types/cards";
 import type { ResolvedDreamAvatarPackage, Tides4ProvenanceSummary } from "../../types/content";
 import type { DraftState } from "../../types/draft";
 import type { CardChoiceGridCardView as CardGalleryCardView } from "../../cumulus/components/card/CardChoiceGrid";
-import type { PoolViewerCostFilter, PoolViewerDisclosureView, PoolViewerFilterView, PoolViewerReplayRowView, PoolViewerSourceId, PoolViewerView } from "../../cumulus/screens/PoolViewerScreen";
+import type { PoolViewerCostFilter, PoolViewerDisclosureView, PoolViewerFilterView, PoolViewerReplayRowView, PoolViewerSourceId, PoolViewerTitleKind, PoolViewerView } from "../../cumulus/screens/PoolViewerScreen";
 
 export const DEFAULT_POOL_VIEWER_FILTERS: PoolViewerFilterView = {
   query: "",
@@ -30,7 +30,7 @@ export interface BuildPoolViewerViewInput {
   tides4Provenance: Tides4ProvenanceSummary | null;
   source: PoolViewerSourceId;
   filters: PoolViewerFilterView;
-  title: string;
+  title: PoolViewerTitleKind;
   frame: "fullScreen" | "floating";
 }
 
@@ -46,24 +46,16 @@ export interface PoolViewerAdapterInput {
   replayRecord?: DraftRecord | null;
   resolvedPackage?: ResolvedDreamAvatarPackage | null;
   tides4Provenance?: Tides4ProvenanceSummary | null;
-  title?: string;
+  title?: PoolViewerTitleKind;
   variant?: "overlay" | "floating";
 }
-
-const SOURCE_LABELS: Record<PoolViewerSourceId, string> = {
-  run: "Run Pool", tides: "Tide Decks", catalog: "All Cards", signature: "Signature Cards", deck: "Record Deck", history: "Pick History",
-};
-
-const EMPTY_LABELS: Record<PoolViewerSourceId, string> = {
-  run: "No run pool cards are available.", tides: "This run has no tide decks.", catalog: "No cards match the current filters.", signature: "This avatar has no signature cards.", deck: "The replay record has no resolvable deck cards.", history: "The replay record has no pick history.",
-};
 
 /** Maps complete domain inputs into deterministic screen data with UUID-based identity. */
 export function buildPoolViewerView(input: BuildPoolViewerViewInput): PoolViewerView {
   const byId = cardsById(input.cardDatabase);
   const isReplay = input.draftState?.mode === "replay" && input.replayRecord !== null;
   const sources = sourceOptions(isReplay, input.resolvedPackage, input.tides4Provenance);
-  const source = sources.some((option) => option.id === input.source) ? input.source : sources[0]?.id ?? "run";
+  const source = sources.includes(input.source) ? input.source : sources[0] ?? "run";
   const entries = entriesFor(source, input, byId);
   const filtered = filterEntries(entries, input.filters);
   const cards = filtered.map((entry) => cardView(entry));
@@ -78,10 +70,7 @@ export function buildPoolViewerView(input: BuildPoolViewerViewInput): PoolViewer
     cards,
     totalCount: source === "history" ? replayRows.length : entries.length,
     visibleCount: source === "history" ? replayRows.length : cards.length,
-    emptyLabel: EMPTY_LABELS[source],
-    sortOptions: [
-      { value: "name", label: "Name" }, { value: "cardNumber", label: "Number" }, { value: "cost", label: "Cost" }, { value: "type", label: "Type" }, { value: "subtype", label: "Subtype" }, { value: "spark", label: "Spark" },
-    ],
+    sortOptions: ["name", "cardNumber", "cost", "type", "subtype", "spark"],
     subtypeOptions: subtypeOptions(entries),
     disclosures,
     replayRows,
@@ -96,7 +85,7 @@ function cardsById(database: ReadonlyMap<number, CardData>): ReadonlyMap<string,
 function sourceOptions(isReplay: boolean, pkg: ResolvedDreamAvatarPackage | null, tides: Tides4ProvenanceSummary | null) {
   const ids: PoolViewerSourceId[] = isReplay ? ["deck", "history", "catalog"] : ["run", ...(tides?.tides.length ? ["tides" as const] : []), "catalog"];
   if ((pkg?.dreamAvatar.signatureCardIds?.length ?? 0) > 0) ids.push("signature");
-  return ids.map((id) => ({ id, label: SOURCE_LABELS[id] }));
+  return ids;
 }
 
 function entriesFor(source: PoolViewerSourceId, input: BuildPoolViewerViewInput, byId: ReadonlyMap<string, CardData>): PoolEntry[] {
@@ -150,14 +139,14 @@ function buildReplayRows(record: DraftRecord, byId: ReadonlyMap<string, CardData
   return record.packs.map((pack, pickIndex) => {
     const ids = record.packIds[pickIndex] ?? []; const picked = new Set((record.pickIds[pickIndex] ?? []).map((id) => id.toLowerCase()));
     const labels = (record.pickIds[pickIndex] ?? []).map((id, index) => byId.get(id.toLowerCase())?.name ?? record.picks[pickIndex]?.[index] ?? id);
-    return { entryId: `replay:${record.id}:pick:${String(pickIndex + 1)}`, title: `Pick ${String(pickIndex + 1)}`, summary: labels.length > 0 ? `Chose ${labels.join(", ")}` : "No pick recorded", cards: pack.map((fallbackLabel, cardIndex) => { const id = ids[cardIndex]; const card = id === undefined ? undefined : byId.get(id.toLowerCase()); return { entryId: `replay:${record.id}:pick:${String(pickIndex + 1)}:card:${String(cardIndex)}`, label: card?.name ?? fallbackLabel, picked: id !== undefined && picked.has(id.toLowerCase()), cardId: card?.id ?? null }; }) };
+    return { entryId: `replay:${record.id}:pick:${String(pickIndex + 1)}`, pickNumber: pickIndex + 1, pickedCardNames: labels, cards: pack.map((fallbackLabel, cardIndex) => { const id = ids[cardIndex]; const card = id === undefined ? undefined : byId.get(id.toLowerCase()); return { entryId: `replay:${record.id}:pick:${String(pickIndex + 1)}:card:${String(cardIndex)}`, label: card?.name ?? fallbackLabel, picked: id !== undefined && picked.has(id.toLowerCase()), cardId: card?.id ?? null }; }) };
   });
 }
 
 function buildDisclosures(tides: Tides4ProvenanceSummary | null, record: DraftRecord | null, source: PoolViewerSourceId, variant: PoolVariant | null, replay: boolean) {
   const rows: PoolViewerDisclosureView[] = [];
-  if (tides !== null) rows.push({ id: "tides", title: "Tide provenance", summary: `${String(tides.tides.length)} tides`, body: `Built to ${String(tides.dealSize)} cards at a ${String(tides.cap)}-copy cap; ${String(tides.facetDrawnCount)} of ${String(tides.facetAvailableCount)} theme tides were drawn.` });
-  if (source === "deck" && record !== null) rows.push({ id: "record", title: "Replay record", summary: record.id, body: `Record deck loaded from ${record.sourceFile}.` });
-  if (tides === null && !replay && variant !== null) rows.push({ id: "algorithm", title: "Pool construction", summary: `algo: ${variant}`, body: "The active run pool is shown with its remaining copies." });
+  if (tides !== null) rows.push({ id: "tides", tideCount: tides.tides.length, dealSize: tides.dealSize, copyCap: tides.cap, facetDrawnCount: tides.facetDrawnCount, facetAvailableCount: tides.facetAvailableCount });
+  if (source === "deck" && record !== null) rows.push({ id: "record", recordId: record.id, sourceFile: record.sourceFile });
+  if (tides === null && !replay && variant !== null) rows.push({ id: "algorithm", variant });
   return rows;
 }

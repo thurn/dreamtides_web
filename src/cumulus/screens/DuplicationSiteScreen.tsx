@@ -9,6 +9,7 @@ import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
+import { useMessages } from "../hooks/use-messages";
 
 export type DuplicationGuideView = GuideGalleryGuideView;
 
@@ -50,6 +51,7 @@ export function DuplicationSiteScreen({
   onClose,
   onDuplicate,
 }: DuplicationSiteScreenProps) {
+  const t = useMessages();
   const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
   const [confirming, setConfirming] = useState(false);
   const locked = confirming || view.alreadyAccepted;
@@ -104,23 +106,27 @@ export function DuplicationSiteScreen({
             }}
           >
             <CardPickerPanel
-              title="Duplication"
-              subtitle={
-                view.ready
+              title={t("duplication-picker-title")}
+              subtitle={t("duplication-picker-instruction", {
+                state: view.ready
                   ? view.isEnhanced
-                    ? "Choose any card to copy"
-                    : "Choose a card to copy"
-                  : "Gathering possibilities…"
-              }
+                    ? "enhanced"
+                    : "standard"
+                  : "loading",
+              })}
               footerActions={[
                 {
-                  label: desktop ? "Decline Offer" : "Decline",
+                  label: t("duplication-decline-action", {
+                    presentation: desktop ? "full" : "compact",
+                  }),
                   disabled: locked,
                   onPress: onClose,
                   testId: "cumulus-duplication-decline",
                 },
                 {
-                  label: confirming ? "Duplicating…" : "Duplicate",
+                  label: t("duplication-confirm-action", {
+                    state: confirming ? "pending" : "ready",
+                  }),
                   variant: "accent",
                   disabled: selectedEntryId === null || locked,
                   onPress: commitDuplicate,
@@ -140,9 +146,9 @@ export function DuplicationSiteScreen({
                 },
                 disabled: locked,
               }))}
-              emptyLabel={
-                view.ready ? "No cards available to copy." : "Gathering possibilities…"
-              }
+              emptyLabel={t("duplication-picker-empty-state", {
+                state: view.ready ? "empty" : "loading",
+              })}
               testId="cumulus-duplication-card-gallery"
               onCardPress={toggleSelection}
             />

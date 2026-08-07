@@ -13,6 +13,7 @@ import {
 import { CardBack } from "./CardBack";
 import { battleCardLayoutId } from "./battle-card-layout";
 import { Pressable } from "../../primitives/Pressable";
+import { useMessages } from "../../hooks/use-messages";
 
 /** A face-down physical card instance. */
 export interface FaceDownPileCard {
@@ -128,6 +129,7 @@ export function CardPile({
   onPress,
   testId,
 }: CardPileProps) {
+  const t = useMessages();
   const visibleCards = cards.slice(0, CARD_PILE_VISIBLE_LAYER_CAP);
   const stageStyle = cardStageStyle();
 
@@ -175,7 +177,12 @@ export function CardPile({
         >
           <div style={stageStyle}>
             {card.face === "down" ? (
-              <CardBack label={`${label}, face-down card ${String(depth + 1)}`} />
+              <CardBack
+                label={t("battle-card-pile-face-down-position", {
+                  pileLabel: label,
+                  position: depth + 1,
+                })}
+              />
             ) : (
               <CardView
                 card={card.model.displaySnapshot}

@@ -7,6 +7,7 @@ import {
 import type { CardId } from "../../../types/card-identity";
 import type { ArtCrop } from "../../../types/cards";
 import { token } from "../../primitives/tokens";
+import { useMessages } from "../../hooks/use-messages";
 import { CardStatOrb } from "../card/CardStatOrb";
 import { RulesText } from "../card/RulesText";
 import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
@@ -74,6 +75,7 @@ function artStyle(art: ArtCrop): CSSProperties {
  * idle animation.
  */
 export function DreamwellCard({ model, testId }: DreamwellCardProps) {
+  const t = useMessages();
   const card = model.displaySnapshot;
   const [artErrored, setArtErrored] = useState(false);
 
@@ -92,7 +94,11 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
     spec: {
       primary: {
         kind: "source",
-        description: [card.name, rules].filter(Boolean).join(". "),
+        description: t("battle-dreamwell-reveal-description", {
+          cardName: card.name,
+          hasRules: rules === "" ? "no" : "yes",
+          rulesText: rules,
+        }),
       },
       secondaries: definitions,
     },
@@ -109,7 +115,10 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
       pressFeedback="stationary"
       role="group"
       tabIndex={hasDefinitions ? 0 : undefined}
-      aria-label={`${card.name}: adds ${String(card.energyAdded)} energy`}
+      aria-label={t("battle-dreamwell-card-description", {
+        cardName: card.name,
+        energyAmount: card.energyAdded,
+      })}
       data-cumulus-dreamwell-card=""
       data-dreamwell-card={model.cardId}
       data-testid={testId}
@@ -159,7 +168,9 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
           sizeVar="14cqw"
           numberSizeVar="8cqw"
           numberCapPx={72}
-          ariaLabel={`${String(card.energyAdded)} energy added`}
+          ariaLabel={t("battle-dreamwell-energy-added", {
+            energyAmount: card.energyAdded,
+          })}
         />
       </div>
       <div

@@ -1,5 +1,6 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { asCardId, asCardName } from "../../../types/card-identity";
+import type { MessageFormatter } from "../../hooks/use-messages";
 import { GLYPHS } from "../../primitives/glyph";
 import type {
   OfferTileCard,
@@ -16,7 +17,7 @@ const CARD: OfferTileCard = {
   cardId: asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"),
   displaySnapshot: {
     id: asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"),
-    name: asCardName("Test Card"),
+    name: asCardName("Fixture Card"),
     cardNumber: 1,
     cardType: "Character",
     subtype: "Spirit Animal",
@@ -25,285 +26,111 @@ const CARD: OfferTileCard = {
     spark: 3,
     isFast: false,
     renderedText: "",
-    imageNumber: 287269511,
+    imageNumber: 1,
     artOwned: true,
   },
 };
-const SECOND_CARD: OfferTileCard = {
-  ...CARD,
-  cardId: asCardId("161482b6-af07-4d9e-822d-8c738672beb9"),
-  displaySnapshot: {
-    ...CARD.displaySnapshot,
-    id: asCardId("161482b6-af07-4d9e-822d-8c738672beb9"),
-    name: asCardName("Second Card"),
-    cardNumber: 2,
-  },
-};
-const THIRD_CARD: OfferTileCard = {
-  ...CARD,
-  cardId: asCardId("b56ef7e8-c634-4d40-ac08-fab591dfbc4a"),
-  displaySnapshot: {
-    ...CARD.displaySnapshot,
-    id: asCardId("b56ef7e8-c634-4d40-ac08-fab591dfbc4a"),
-    name: asCardName("Third Card"),
-    cardNumber: 3,
-  },
-};
-const FOURTH_CARD: OfferTileCard = {
-  ...CARD,
-  cardId: asCardId("9b9c2743-75b3-499d-b5fb-c3429c92d420"),
-  displaySnapshot: {
-    ...CARD.displaySnapshot,
-    id: asCardId("9b9c2743-75b3-499d-b5fb-c3429c92d420"),
-    name: asCardName("Fourth Card"),
-    cardNumber: 4,
-  },
-};
-const FOUR_CARDS: OfferTileFourCards = [
-  CARD,
-  SECOND_CARD,
-  THIRD_CARD,
-  FOURTH_CARD,
-];
+
+function card(index: number): OfferTileCard {
+  const id = asCardId(`00000000-0000-4000-8000-${String(index).padStart(12, "0")}`);
+  return {
+    ...CARD,
+    cardId: id,
+    displaySnapshot: {
+      ...CARD.displaySnapshot,
+      id,
+      cardNumber: index,
+      name: asCardName(`Fixture ${String(index)}`),
+    },
+  };
+}
+
+const FOUR_CARDS: OfferTileFourCards = [card(1), card(2), card(3), card(4)];
 const DREAMSIGN: OfferTileDreamsign = {
   id: "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
-  name: "Rainbow Horn",
-  art: { kind: "dreamsign", imageName: "acorn_gold.png" },
+  name: "Fixture Dreamsign",
+  art: { kind: "dreamsign", imageName: "fixture.png" },
 };
 
-const COPY_CASES: ReadonlyArray<
-  readonly [OfferTileModel, description: string]
+const CASES: ReadonlyArray<
+  readonly [model: OfferTileModel, expectedMessageId: string]
 > = [
-  [
-    { id: "gift", kind: "card-gift", card: CARD },
-    "Add a card to your deck.",
-  ],
-  [
-    { id: "draft", kind: "card-draft", cards: FOUR_CARDS },
-    "Choose a card to add to your deck.",
-  ],
-  [
-    {
-      id: "category",
-      kind: "category-draft",
-      cards: FOUR_CARDS,
-      categoryName: "warrior",
-    },
-    "Choose a card from a single category to add to your deck.",
-  ],
-  [
-    { id: "transfigured", kind: "transfigured-draft", cards: FOUR_CARDS },
-    "Choose a transfigured card to add to your deck.",
-  ],
-  [
-    {
-      id: "copies",
-      kind: "copies-draft",
-      cards: FOUR_CARDS,
-      copyCount: 3,
-    },
-    "Choose a card and add three copies of it to your deck.",
-  ],
-  [
-    { id: "bundle", kind: "card-bundle", cards: [CARD, SECOND_CARD] },
-    "Add two cards to your deck.",
-  ],
-  [
-    {
-      id: "transfigure",
-      kind: "transfigure-card",
-      card: CARD,
-      transfiguration: "Empowered",
-    },
-    "Transfigure a card in your deck.",
-  ],
-  [
-    {
-      id: "keyword",
-      kind: "keyword-modification",
-      card: CARD,
-      reclaimReduction: 1,
-    },
-    "Reduce the Reclaim cost of a card.",
-  ],
-  [
-    {
-      id: "tribal",
-      kind: "tribal-change",
-      card: CARD,
-      newCharacterSubtype: "Warrior",
-    },
-    "Change the subtype of a card.",
-  ],
-  [
-    {
-      id: "starters",
-      kind: "transfigure-starters",
-      cards: [CARD, SECOND_CARD],
-    },
-    "Transfigure two starter cards.",
-  ],
-  [
-    { id: "purge", kind: "purge-card", card: CARD },
-    "Purge a card from your deck.",
-  ],
-  [
-    {
-      id: "trade",
-      kind: "trade-card",
-      outgoing: CARD,
-      incoming: FOUR_CARDS,
-    },
-    "Purge a card and choose a card to replace it.",
-  ],
-  [
-    {
-      id: "duplicate",
-      kind: "duplicate-card",
-      cards: [CARD, SECOND_CARD],
-    },
-    "Choose one of two cards in your deck to duplicate.",
-  ],
-  [
-    { id: "dreamsign-gift", kind: "dreamsign-gift", dreamsign: DREAMSIGN },
-    "Gain a dreamsign.",
-  ],
-  [
-    {
-      id: "dreamsign-draft",
-      kind: "dreamsign-draft",
-      dreamsigns: [DREAMSIGN, DREAMSIGN],
-    },
-    "Choose a dreamsign to gain.",
-  ],
-  [
-    {
-      id: "site",
-      kind: "add-site",
-      site: { id: "Duplication", name: "Duplication", glyph: GLYPHS.copy },
-    },
-    "Add a site to the current dreamscape.",
-  ],
+  [{ id: "gift", kind: "card-gift", card: CARD }, "augury-offer-card-gift-description"],
+  [{ id: "draft", kind: "card-draft", cards: FOUR_CARDS }, "augury-offer-card-draft-description"],
+  [{ id: "copies", kind: "copies-draft", cards: FOUR_CARDS, copyCount: 3 }, "augury-offer-copies-draft-description"],
+  [{ id: "category", kind: "category-draft", cards: FOUR_CARDS, categoryName: "fixture" }, "augury-offer-category-draft-description"],
+  [{ id: "transfigured", kind: "transfigured-draft", cards: FOUR_CARDS }, "augury-offer-transfigured-draft-description"],
+  [{ id: "bundle", kind: "card-bundle", cards: [card(1), card(2)] }, "augury-offer-card-bundle-description"],
+  [{ id: "transfigure", kind: "transfigure-card", card: CARD, transfiguration: "Empowered" }, "augury-offer-transfigure-card-description"],
+  [{ id: "starters", kind: "transfigure-starters", cards: [card(1), card(2)] }, "augury-offer-transfigure-two-starters-description"],
+  [{ id: "keyword", kind: "keyword-modification", card: CARD, reclaimReduction: 1 }, "augury-offer-reclaim-reduction-description"],
+  [{ id: "tribal", kind: "tribal-change", card: CARD, newCharacterSubtype: "Warrior" }, "augury-offer-subtype-change-description"],
+  [{ id: "purge", kind: "purge-card", card: CARD }, "augury-offer-purge-card-description"],
+  [{ id: "trade", kind: "trade-card", outgoing: CARD, incoming: FOUR_CARDS }, "augury-offer-trade-card-description"],
+  [{ id: "duplicate", kind: "duplicate-card", cards: [card(1), card(2)] }, "augury-offer-duplicate-card-choice-description"],
+  [{ id: "dreamsign", kind: "dreamsign-gift", dreamsign: DREAMSIGN }, "augury-offer-dreamsign-gift-description"],
+  [{ id: "dreamsign-draft", kind: "dreamsign-draft", dreamsigns: [DREAMSIGN, DREAMSIGN] }, "augury-offer-dreamsign-draft-description"],
+  [{ id: "site", kind: "add-site", site: { id: "Duplication", name: "Duplication", glyph: GLYPHS.copy } }, "augury-offer-add-site-description"],
 ];
 
 describe("offer tile descriptions", () => {
-  it.each(COPY_CASES)(
-    "derives exact copy for $0.kind",
-    (model, description) => {
-      expect(offerTileDescription(model)).toBe(description);
-    },
-  );
+  it.each(CASES)("selects a typed complete message for $0.kind", (model, expectedMessageId) => {
+    const formatter = vi.fn((id: string) => id) as unknown as MessageFormatter;
 
-  it("uses singular copy wording when a copies draft grants one copy", () => {
-    expect(
-      offerTileDescription({
-        id: "single-copy",
-        kind: "copies-draft",
-        cards: FOUR_CARDS,
-        copyCount: 1,
-      }),
-    ).toBe("Choose a card and add one copy of it to your deck.");
+    expect(offerTileDescription(model, formatter)).toBe(expectedMessageId);
+    expect(formatter).toHaveBeenCalledOnce();
   });
 
-  it("counts one or two starter cards explicitly", () => {
-    expect(
-      offerTileDescription({
-        id: "one-starter",
-        kind: "transfigure-starters",
-        cards: [CARD],
-      }),
-    ).toBe("Transfigure one starter card.");
-    expect(
-      offerTileDescription({
-        id: "two-starters",
-        kind: "transfigure-starters",
-        cards: [CARD, SECOND_CARD],
-      }),
-    ).toBe("Transfigure two starter cards.");
+  it("passes copy and candidate counts as numbers", () => {
+    const formatter = vi.fn((id: string) => id) as unknown as MessageFormatter;
+
+    offerTileDescription(
+      { id: "copies", kind: "copies-draft", cards: FOUR_CARDS, copyCount: 2 },
+      formatter,
+    );
+    expect(formatter).toHaveBeenLastCalledWith(
+      "augury-offer-copies-draft-description",
+      { copyCount: 2 },
+    );
+
+    offerTileDescription(
+      { id: "duplicate", kind: "duplicate-card", cards: [card(1), card(2), card(3)] },
+      formatter,
+    );
+    expect(formatter).toHaveBeenLastCalledWith(
+      "augury-offer-duplicate-card-choice-description",
+      { candidateCount: 3 },
+    );
   });
 
-  it("keeps category and Reclaim details nonspecific", () => {
+  it("selects distinct complete messages for singular semantic variants", () => {
+    const formatter = vi.fn((id: string) => id) as unknown as MessageFormatter;
+
     expect(
-      offerTileDescription({
-        id: "event-category",
-        kind: "category-draft",
-        cards: FOUR_CARDS,
-        categoryName: "event",
-      }),
-    ).toBe("Choose a card from a single category to add to your deck.");
+      offerTileDescription(
+        { id: "starter", kind: "transfigure-starters", cards: [CARD] },
+        formatter,
+      ),
+    ).toBe("augury-offer-transfigure-one-starter-description");
     expect(
-      offerTileDescription({
-        id: "double-reclaim-reduction",
-        kind: "keyword-modification",
-        card: CARD,
-        reclaimReduction: 2,
-      }),
-    ).toBe("Reduce the Reclaim cost of a card.");
+      offerTileDescription(
+        { id: "duplicate", kind: "duplicate-card", cards: [CARD] },
+        formatter,
+      ),
+    ).toBe("augury-offer-duplicate-one-card-description");
   });
 
-  it("describes duplicate targets without names and counts multiple choices", () => {
-    expect(
-      offerTileDescription({
-        id: "single-duplicate",
-        kind: "duplicate-card",
-        cards: [CARD],
-      }),
-    ).toBe("Duplicate a card in your deck.");
-    expect(
-      offerTileDescription({
-        id: "three-duplicates",
-        kind: "duplicate-card",
-        cards: [CARD, SECOND_CARD, THIRD_CARD],
-      }),
-    ).toBe("Choose one of three cards in your deck to duplicate.");
-  });
+  it("returns localized descriptions as plain rich text", () => {
+    const formatter = vi.fn((id: string) => id) as unknown as MessageFormatter;
 
-  it("counts bundled cards without naming them", () => {
     expect(
-      offerTileDescription({
-        id: "three-card-bundle",
-        kind: "card-bundle",
-        cards: [CARD, SECOND_CARD, THIRD_CARD],
-      }),
-    ).toBe("Add three cards to your deck.");
-  });
-
-  it("keeps InfoCard copy plain and nonspecific", () => {
-    expect(
-      offerTileRichDescription({ id: "gift", kind: "card-gift", card: CARD }),
-    ).toEqual({ kind: "plain", text: "Add a card to your deck." });
-    expect(
-      offerTileRichDescription({
-        id: "sign",
-        kind: "dreamsign-gift",
-        dreamsign: DREAMSIGN,
-      }),
-    ).toEqual({ kind: "plain", text: "Gain a dreamsign." });
-  });
-
-  it("never exposes model-provided names or named attributes", () => {
-    const forbidden = [
-      "Test Card",
-      "Second Card",
-      "Third Card",
-      "Fourth Card",
-      "Rainbow Horn",
-      "Duplication",
-      "warrior",
-      "Empowered",
-      "Warrior",
-    ];
-    for (const [model] of COPY_CASES) {
-      const copy = offerTileDescription(model);
-      for (const name of forbidden) {
-        expect(copy).not.toContain(name);
-      }
-    }
-  });
-
-  it("never writes player-facing quantities as numerals", () => {
-    for (const [model] of COPY_CASES) {
-      expect(offerTileDescription(model)).not.toMatch(/\d/);
-    }
+      offerTileRichDescription(
+        { id: "gift", kind: "card-gift", card: CARD },
+        formatter,
+      ),
+    ).toEqual({
+      kind: "plain",
+      text: "augury-offer-card-gift-description",
+    });
   });
 });

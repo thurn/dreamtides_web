@@ -21,7 +21,6 @@ import {
   selectBattlefieldSlotOccupant,
   selectFailureOverlayResult,
 } from "../state/selectors";
-import { formatPhaseLabel } from "../ui/format";
 import type {
   BattleCommandSourceSurface,
   BattleDeckCardDefinition,
@@ -1573,7 +1572,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
         onClose={() => setIsPoolViewerOpen(false)}
         onPoolCardDragEnd={handleCardDragEnd}
         onPoolCardDragStart={handlePoolCardDragStart}
-        title="Battle Pool Viewer"
+        title="battle"
         variant="floating"
       />
       <MobileBattleScreenAdapter
@@ -1717,7 +1716,6 @@ type BattleFlowTarget = {
   phase: BattlePhase;
   activeSide: BattleSide;
   turnNumber: number;
-  preview: string;
 };
 
 function computePhaseControlTarget(
@@ -1752,12 +1750,9 @@ function computePhaseControlTarget(
       ? decrementBattleTurnPair(state.activeSide, state.turnNumber)
       : advanceBattleTurnPair(state.activeSide, state.turnNumber)
     : { activeSide: state.activeSide, turnNumber: state.turnNumber };
-  const action = control === "previous" ? "Return" : "Advance";
-
   return {
     phase,
     ...turnPair,
-    preview: `${action} to ${formatPhaseLabel(phase)}`,
   };
 }
 

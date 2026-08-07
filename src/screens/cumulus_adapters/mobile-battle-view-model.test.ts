@@ -172,7 +172,10 @@ describe("buildMobileBattleView", () => {
     expect(buildMobileBattleResultView(init, board, false)).toEqual({
       outcome: "victory",
       essenceReward: 30,
-      summary: "Defeated Enemy Caller · 10–5 · 6 turns",
+      opponentName: "Enemy Caller",
+      playerScore: 10,
+      opponentScore: 5,
+      turnCount: 6,
     });
 
     board.result = "defeat";
@@ -462,7 +465,6 @@ describe("buildMobileBattleView", () => {
     expect(mismatched.cardPicker).toBeNull();
     expect(mismatched.promptNotice).toEqual({
       promptSide: "player",
-      message: "Switch to the Player side to resolve this choice.",
     });
   });
 

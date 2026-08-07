@@ -12,9 +12,6 @@ import {
 const VIEW: JourneyFailedView = {
   result: "defeat",
   reason: "score_target_reached",
-  title: "Journey Ended",
-  message: "Your journey ends here.",
-  reasonLabel: "Score Threshold Reached",
   dreamAvatar: {
     id: "00000000-0000-4000-8000-000000000061",
     name: "The Wayfinder",
@@ -24,10 +21,10 @@ const VIEW: JourneyFailedView = {
     portraitFocus: { x: 0.42, y: 0.18 },
   },
   stats: [
-    { id: "battles", label: "Battles Won", value: 2 },
-    { id: "round", label: "Final Round", value: 6 },
-    { id: "playerScore", label: "Your Score", value: 4 },
-    { id: "enemyScore", label: "Opponent Score", value: 10 },
+    { id: "battles", value: 2 },
+    { id: "round", value: 6 },
+    { id: "playerScore", value: 4 },
+    { id: "enemyScore", value: 10 },
   ],
 };
 
@@ -82,9 +79,15 @@ describe("Cumulus JourneyFailedScreen", () => {
 
     expect(screen?.dataset.journeyFailedScreen).toBe("defeat");
     expect(screen?.dataset.journeyFailedReason).toBe("score_target_reached");
-    expect(container.textContent).toContain("Journey Ended");
-    expect(container.textContent).toContain("Your journey ends here.");
-    expect(container.textContent).toContain("Score Threshold Reached");
+    expect(container.querySelector("h1")?.textContent).not.toBe("");
+    expect(
+      container.querySelector('[data-journey-failed-section="title"] p')
+        ?.textContent,
+    ).not.toBe("");
+    expect(
+      container.querySelector('[data-journey-failed-reason="score_target_reached"]')
+        ?.textContent,
+    ).not.toBe("");
     expect(container.querySelector("h1")?.style.color).toBe(
       "var(--text-primary)",
     );

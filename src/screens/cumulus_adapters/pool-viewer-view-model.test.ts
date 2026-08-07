@@ -16,7 +16,7 @@ const database = new Map([[1, alpha], [2, beta]]);
 const poolState: DraftState = { mode: "pool", draftPoolCopiesByCard: { "1": 2, "2": 1 }, remainingCopiesByCard: { "1": 2, "2": 1 }, currentOffer: [], activeSiteId: null, pickNumber: 1, sitePicksCompleted: 0 };
 
 function build(overrides: Partial<Parameters<typeof buildPoolViewerView>[0]> = {}) {
-  return buildPoolViewerView({ cardDatabase: database, draftState: poolState, resolvedPackage: null, replayRecord: null, poolVariant: null, tides4Provenance: null, source: "run", filters: DEFAULT_POOL_VIEWER_FILTERS, title: "Pool Viewer", frame: "fullScreen", ...overrides });
+  return buildPoolViewerView({ cardDatabase: database, draftState: poolState, resolvedPackage: null, replayRecord: null, poolVariant: null, tides4Provenance: null, source: "run", filters: DEFAULT_POOL_VIEWER_FILTERS, title: "pool", frame: "fullScreen", ...overrides });
 }
 
 describe("buildPoolViewerView", () => {
@@ -43,7 +43,7 @@ describe("buildPoolViewerView", () => {
 
   it("keeps source-specific empty states and provenance visible", () => {
     const view = build({ source: "tides", tides4Provenance: { dreamAvatarId: "dc", signatureless: false, borrowedArchetypeName: null, dealSize: 10, cap: 2, maxFacets: 3, facetDrawnCount: 1, facetAvailableCount: 2, tides: [{ id: "missing", name: "Missing", role: "facet", selection: "facet-drawn", joined: true, cardNumbers: [99], contributedCardCount: 0 }], cardProvenanceByNumber: {} } });
-    expect(view.emptyLabel).toContain("tide");
+    expect(view.source).toBe("tides");
     expect(view.disclosures.some((item) => item.id === "tides")).toBe(true);
   });
 

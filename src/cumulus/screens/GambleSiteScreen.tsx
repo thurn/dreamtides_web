@@ -39,6 +39,7 @@ import type { ArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
+import { useMessages } from "../hooks/use-messages";
 import { DreamsignReplacementDialog } from "./DreamsignReplacementDialog";
 import type { DreamsignReplacementView } from "./DreamsignReplacementDialog";
 import {
@@ -830,10 +831,14 @@ function GambleBetButton({
   selected: boolean;
   onChooseGate: (gateId: GravokGateId) => void;
 }) {
+  const t = useMessages();
   const button = (
     <GlassButton
-      label="Bet"
-      accessibilityLabel={`Bet on ${gate.name} for ${String(view.wagerCost)} Essence`}
+      label={t("gamble-gravok-bet-action")}
+      accessibilityLabel={t("gamble-gravok-bet-accessible-name", {
+        gateName: gate.name,
+        essenceCost: view.wagerCost,
+      })}
       essenceCost={view.wagerCost}
       size={layout === "mobile" ? "compact" : "standard"}
       variant="accent"
@@ -881,10 +886,13 @@ function GambleOutcome({
   result: GambleResultView;
   layout: "mobile" | "desktop";
 }) {
+  const t = useMessages();
   return (
     <RadialAnnouncement
       announcementId={result.id}
-      headline={result.won ? "Won!" : "Bust!"}
+      headline={t("gamble-gravok-outcome-headline", {
+        outcome: result.won ? "won" : "bust",
+      })}
       detail={result.won ? result.rewardDreamsign?.name : undefined}
       essenceGained={result.won ? result.essenceGained : undefined}
       tone={result.won ? "reward" : "danger"}
@@ -974,6 +982,7 @@ function GravokWagerScreen({
   onPlayAgain: () => void;
   onReplaceDreamsign: (dreamsignId: string) => void;
 }) {
+  const t = useMessages();
   const reduceMotion = useReducedMotion() === true;
   const [revealStarted, setRevealStarted] = useState(false);
   const [outcomeVisible, setOutcomeVisible] = useState(false);
@@ -1110,7 +1119,7 @@ function GravokWagerScreen({
             }}
           >
             <section
-              aria-label="Three wager gates"
+              aria-label={t("gamble-gravok-gates-accessible-name")}
               data-gamble-gates=""
               style={{
                 position: "relative",
@@ -1204,14 +1213,14 @@ function GravokWagerScreen({
                 >
                   {view.canPlayAgain && (
                     <GlassButton
-                      label="Play Again"
+                      label={t("gamble-play-again-action")}
                       variant="accent"
                       testId="gamble-play-again"
                       onPress={onPlayAgain}
                     />
                   )}
                   <GlassButton
-                    label="Leave"
+                    label={t("gamble-leave-action")}
                     testId="gamble-leave-after-round"
                     onPress={onLeave}
                   />
@@ -1244,7 +1253,7 @@ function GravokWagerScreen({
                 }}
               >
                 <GlassButton
-                  label="Leave"
+                  label={t("gamble-leave-action")}
                   testId="gamble-leave"
                   onPress={onLeave}
                 />
@@ -1254,7 +1263,7 @@ function GravokWagerScreen({
               !replacementVisible &&
               !outcomeVisible && (
                 <GlassButton
-                  label="Choose Replacement"
+                  label={t("gamble-choose-replacement-action")}
                   variant="accent"
                   testId="gamble-open-replacement"
                   onPress={() => setReplacementVisible(true)}
@@ -1267,8 +1276,8 @@ function GravokWagerScreen({
       {replacementVisible && view.replacement !== null && (
         <DreamsignReplacementDialog
           view={view.replacement}
-          cancelLabel="Not Yet"
-          closeLabel="Close replacement choice"
+          cancelLabel={t("gamble-replacement-not-yet-action")}
+          closeLabel={t("gamble-replacement-close-action")}
           onCancel={() => setReplacementVisible(false)}
           onReplace={onReplaceDreamsign}
         />
@@ -1290,6 +1299,7 @@ function LadderClimbScreen({
   onOutcomeShown: () => void;
   onReplaceDreamsign: (dreamsignId: string) => void;
 }) {
+  const t = useMessages();
   const reduceMotion = useReducedMotion() === true;
   const [revealedResultId, setRevealedResultId] = useState<string | null>(null);
   const [outcomeResultId, setOutcomeResultId] = useState<string | null>(null);
@@ -1435,7 +1445,7 @@ function LadderClimbScreen({
             }}
           >
             <section
-              aria-label="Ladder climb"
+              aria-label={t("gamble-ladder-stage-accessible-name")}
               data-ladder-climb-stage=""
               style={{
                 position: "relative",
@@ -1464,7 +1474,9 @@ function LadderClimbScreen({
                 >
                   <RadialAnnouncement
                     announcementId={result.id}
-                    headline={result.won ? "Won" : "Miss"}
+                    headline={t("gamble-ladder-outcome-headline", {
+                      outcome: result.won ? "won" : "miss",
+                    })}
                     tone={result.won ? "reward" : "danger"}
                     size={layout === "mobile" ? "mini" : "wager"}
                     duration="extended"
@@ -1536,8 +1548,14 @@ function LadderClimbScreen({
               >
                 {view.nextDraw !== null && (
                   <GlassButton
-                    label="Draw"
-                    accessibilityLabel={`Draw attempt ${String(view.nextDraw.attemptNumber)} for ${String(view.nextDraw.cost)} Essence`}
+                    label={t("gamble-draw-action")}
+                    accessibilityLabel={t(
+                      "gamble-ladder-draw-accessible-name",
+                      {
+                        attemptNumber: view.nextDraw.attemptNumber,
+                        essenceCost: view.nextDraw.cost,
+                      },
+                    )}
                     essenceCost={view.nextDraw.cost}
                     variant="accent"
                     disabled={
@@ -1554,7 +1572,7 @@ function LadderClimbScreen({
                   />
                 )}
                 <GlassButton
-                  label="Leave"
+                  label={t("gamble-leave-action")}
                   testId={
                     result === null
                       ? "gamble-ladder-leave"
@@ -1568,7 +1586,7 @@ function LadderClimbScreen({
               !replacementVisible &&
               !outcomeVisible && (
                 <GlassButton
-                  label="Choose Replacement"
+                  label={t("gamble-choose-replacement-action")}
                   variant="accent"
                   testId="gamble-ladder-open-replacement"
                   onPress={() => setReplacementVisible(true)}
@@ -1581,8 +1599,8 @@ function LadderClimbScreen({
       {replacementVisible && view.replacement !== null && (
         <DreamsignReplacementDialog
           view={view.replacement}
-          cancelLabel="Not Yet"
-          closeLabel="Close replacement choice"
+          cancelLabel={t("gamble-replacement-not-yet-action")}
+          closeLabel={t("gamble-replacement-close-action")}
           onCancel={() => setReplacementVisible(false)}
           onReplace={onReplaceDreamsign}
         />
@@ -1606,6 +1624,7 @@ function StarwayStairsScreen({
   onCashOut: () => void;
   onPlayAgain: () => void;
 }) {
+  const t = useMessages();
   const reduceMotion = useReducedMotion() === true;
   const [revealedResultId, setRevealedResultId] = useState<string | null>(null);
   const [outcomeResultId, setOutcomeResultId] = useState<string | null>(null);
@@ -1725,7 +1744,7 @@ function StarwayStairsScreen({
             }}
           >
             <section
-              aria-label="Starway Stairs tiers"
+              aria-label={t("gamble-starway-tier-group-accessible-name")}
               data-starway-stairs-tiers=""
               style={{
                 position: "relative",
@@ -1799,9 +1818,13 @@ function StarwayStairsScreen({
                         >
                           <RadialAnnouncement
                             announcementId={view.result.id}
-                            headline={view.result.busted ? "Bust!" : "Safe!"}
+                            headline={t("gamble-starway-outcome-headline", {
+                              outcome: view.result.busted ? "bust" : "safe",
+                            })}
                             detail={
-                              view.result.busted ? undefined : "Prize at stake"
+                              view.result.busted
+                                ? undefined
+                                : t("gamble-starway-prize-at-stake")
                             }
                             essenceGained={
                               !view.result.busted &&
@@ -1837,12 +1860,19 @@ function StarwayStairsScreen({
               {currentTier !== null && (
                 <div data-starway-tier-button={currentTier.tierNumber}>
                   <GlassButton
-                    label={currentTier.tierNumber === 1 ? "Bet" : "Climb"}
-                    accessibilityLabel={
-                      currentTier.tierNumber === 1
-                        ? `Bet ${String(view.wagerAmount)} Essence on Starway Stairs`
-                        : `Climb to tier ${String(currentTier.tierNumber)} for ${String(view.wagerAmount)} Essence`
-                    }
+                    label={t("gamble-starway-tier-action", {
+                      stage:
+                        currentTier.tierNumber === 1 ? "initial" : "climb",
+                    })}
+                    accessibilityLabel={t(
+                      "gamble-starway-tier-action-accessible-name",
+                      {
+                        stage:
+                          currentTier.tierNumber === 1 ? "initial" : "climb",
+                        tierNumber: currentTier.tierNumber,
+                        essenceCost: view.wagerAmount,
+                      },
+                    )}
                     essenceValue={view.wagerAmount}
                     size={layout === "mobile" ? "compact" : "standard"}
                     variant="accent"
@@ -1861,8 +1891,11 @@ function StarwayStairsScreen({
               )}
               {view.cashOutReward !== null && (
                 <GlassButton
-                  label="Take"
-                  accessibilityLabel={`Take ${String(view.cashOutReward)} Essence`}
+                  label={t("gamble-take-prize-action")}
+                  accessibilityLabel={t(
+                    "gamble-starway-cash-out-accessible-name",
+                    { essenceAmount: view.cashOutReward },
+                  )}
                   essenceValue={view.cashOutReward}
                   size={layout === "mobile" ? "compact" : "standard"}
                   disabled={decisionPending}
@@ -1878,7 +1911,7 @@ function StarwayStairsScreen({
                 <>
                   {view.canPlayAgain && (
                     <GlassButton
-                      label="Play Again"
+                      label={t("gamble-play-again-action")}
                       size={layout === "mobile" ? "compact" : "standard"}
                       variant="accent"
                       disabled={decisionPending}
@@ -1890,7 +1923,7 @@ function StarwayStairsScreen({
                     />
                   )}
                   <GlassButton
-                    label="Leave"
+                    label={t("gamble-leave-action")}
                     size={layout === "mobile" ? "compact" : "standard"}
                     testId="gamble-starway-leave-after-result"
                     onPress={onLeave}
@@ -1898,7 +1931,7 @@ function StarwayStairsScreen({
                 </>
               ) : view.result === null && currentTier?.tierNumber === 1 ? (
                 <GlassButton
-                  label="Leave"
+                  label={t("gamble-leave-action")}
                   size={layout === "mobile" ? "compact" : "standard"}
                   testId="gamble-starway-leave"
                   onPress={onLeave}
@@ -1927,6 +1960,7 @@ function FourSuitRepriseScreen({
   onChooseTransfiguration: (type: TransfigurationType) => void;
   onPlayAgain: () => void;
 }) {
+  const t = useMessages();
   const reduceMotion = useReducedMotion() === true;
   const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
   const [revealedResultId, setRevealedResultId] = useState<string | null>(null);
@@ -2083,11 +2117,11 @@ function FourSuitRepriseScreen({
               }}
             >
               <CardPickerPanel
-                title="Four-Suit Reprise"
-                subtitle="Choose a card to wager"
+                title={t("gamble-four-suit-picker-title")}
+                subtitle={t("gamble-four-suit-picker-instruction")}
                 footerActions={[
                   {
-                    label: "Leave",
+                    label: t("gamble-leave-action"),
                     onPress: onLeave,
                     testId: "gamble-four-suit-leave",
                   },
@@ -2097,7 +2131,7 @@ function FourSuitRepriseScreen({
                   model: card.model,
                   testId: `gamble-four-suit-card-${card.entryId}`,
                 }))}
-                emptyLabel="No eligible cards remain."
+                emptyLabel={t("gamble-four-suit-picker-empty-state")}
                 testId="gamble-four-suit-card-gallery"
                 onCardPress={setSelectedEntryId}
               />
@@ -2188,7 +2222,7 @@ function FourSuitRepriseScreen({
             }}
           >
             <section
-              aria-label="Four-Suit Reprise wager"
+              aria-label={t("gamble-four-suit-stage-accessible-name")}
               data-four-suit-stage=""
               style={{
                 position: "relative",
@@ -2279,7 +2313,13 @@ function FourSuitRepriseScreen({
                       <div
                         key={outcome.suit}
                         data-four-suit-outcome={outcome.suit}
-                        aria-label={`${outcome.suit}: ${outcome.label}`}
+                        aria-label={t(
+                          "gamble-four-suit-outcome-accessible-name",
+                          {
+                            suit: outcome.suit,
+                            outcomeLabel: outcome.label,
+                          },
+                        )}
                         style={{
                           display: "grid",
                           gridTemplateColumns:
@@ -2304,19 +2344,15 @@ function FourSuitRepriseScreen({
                           }
                         />
                         <span>
-                          {outcome.outcome === "transfiguration" ? (
-                            "Transfigure"
-                          ) : outcome.outcome === "essence" ? (
-                            <>
-                              Gain{" "}
-                              <EssenceValue
-                                amount={view.essenceReward}
-                                tone="inherit"
-                              />
-                            </>
-                          ) : (
-                            outcome.label
-                          )}
+                          {outcome.outcome === "transfiguration"
+                            ? t("gamble-four-suit-result-headline", {
+                                outcome: "transfiguration",
+                              })
+                            : outcome.outcome === "essence"
+                              ? t("gamble-four-suit-essence-outcome", {
+                                  essenceAmount: view.essenceReward,
+                                })
+                              : outcome.label}
                         </span>
                       </div>
                     ))}
@@ -2337,15 +2373,9 @@ function FourSuitRepriseScreen({
                 >
                   <RadialAnnouncement
                     announcementId={activeResult.id}
-                    headline={
-                      activeResult.outcome === "transfiguration"
-                        ? "Transfigure"
-                        : activeResult.outcome === "essence"
-                          ? "Gained"
-                          : activeResult.outcome === "duplication"
-                            ? "Duplicated"
-                            : "Purged"
-                    }
+                    headline={t("gamble-four-suit-result-headline", {
+                      outcome: activeResult.outcome,
+                    })}
                     essenceGained={
                       activeResult.essenceGained > 0
                         ? activeResult.essenceGained
@@ -2385,7 +2415,7 @@ function FourSuitRepriseScreen({
                 >
                   <IconButton
                     glyph={GLYPHS.refreshCcw}
-                    label="Choose another card"
+                    label={t("gamble-four-suit-choose-another-card-action")}
                     size="sm"
                     disabled={decisionPending}
                     testId="gamble-four-suit-choose-again"
@@ -2406,8 +2436,11 @@ function FourSuitRepriseScreen({
                 {view.phase === "choose" && selectedCard !== null ? (
                   <>
                     <GlassButton
-                      label="Draw"
-                      accessibilityLabel={`Draw for ${String(view.drawCost)} Essence`}
+                      label={t("gamble-draw-action")}
+                      accessibilityLabel={t(
+                        "gamble-four-suit-draw-accessible-name",
+                        { essenceCost: view.drawCost },
+                      )}
                       essenceCost={view.drawCost}
                       size={layout === "mobile" ? "compact" : "standard"}
                       variant="accent"
@@ -2423,7 +2456,7 @@ function FourSuitRepriseScreen({
                       }}
                     />
                     <GlassButton
-                      label="Leave"
+                      label={t("gamble-leave-action")}
                       size={layout === "mobile" ? "compact" : "standard"}
                       disabled={decisionPending}
                       testId="gamble-four-suit-leave-selected"
@@ -2434,7 +2467,7 @@ function FourSuitRepriseScreen({
                   <>
                     {view.canPlayAgain && !decisionPending && (
                       <GlassButton
-                        label="Play Again"
+                        label={t("gamble-play-again-action")}
                         size={layout === "mobile" ? "compact" : "standard"}
                         variant="accent"
                         disabled={decisionPending}
@@ -2446,7 +2479,7 @@ function FourSuitRepriseScreen({
                       />
                     )}
                     <GlassButton
-                      label="Leave"
+                      label={t("gamble-leave-action")}
                       size={layout === "mobile" ? "compact" : "standard"}
                       testId="gamble-four-suit-leave-after-result"
                       onPress={onLeave}

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { act } from "react";
+import { act, type ComponentProps } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { BattleDebugEdit } from "../debug/commands";
@@ -14,6 +14,13 @@ import {
 } from "../state/figment-catalog";
 import { makeBattleTestCardDatabase, makeBattleTestDreamAvatars, makeBattleTestSite, makeBattleTestState } from "../test-support";
 import { BattleFigmentCreator } from "./BattleFigmentCreator";
+import { CumulusRoot } from "../../cumulus/CumulusRoot";
+
+function LocalizedBattleFigmentCreator(
+  props: ComponentProps<typeof BattleFigmentCreator>,
+) {
+  return <CumulusRoot><BattleFigmentCreator {...props} /></CumulusRoot>;
+}
 
 function state() {
   return createInitialBattleState(createTestBattleInit({ battleEntryKey: "test", site: makeBattleTestSite(), state: makeBattleTestState(), cardDatabase: makeBattleTestCardDatabase(), dreamAvatars: makeBattleTestDreamAvatars() }));
@@ -34,7 +41,7 @@ afterEach(() => {
 describe("BattleFigmentCreator", () => {
   it("uses Cumulus dialog controls, exposes every catalog type, and dispatches a valid target", () => {
     const board = state(); const submits: BattleDebugEdit[] = []; const host = document.createElement("div"); document.body.append(host); const root = createRoot(host);
-    act(() => root.render(<BattleFigmentCreator initialSide="player" state={board} onClose={() => undefined} onSubmit={(edit) => submits.push(edit)} />));
+    act(() => root.render(<LocalizedBattleFigmentCreator initialSide="player" state={board} onClose={() => undefined} onSubmit={(edit) => submits.push(edit)} />));
     expect(document.querySelector('[data-battle-figment-creator]')).not.toBeNull();
     act(() => document.querySelector<HTMLButtonElement>('button[aria-label="Figment type"]')?.click());
     expect(document.querySelectorAll('[role="option"]')).toHaveLength(FIGMENT_CATALOG_ENTRIES.length);
@@ -65,7 +72,7 @@ describe("BattleFigmentCreator", () => {
 
   it("keeps type-derived spark and keyword display in the Cumulus form", () => {
     const board = state(); const host = document.createElement("div"); document.body.append(host); const root = createRoot(host);
-    act(() => root.render(<BattleFigmentCreator initialSide="player" state={board} onClose={() => undefined} onSubmit={() => undefined} />));
+    act(() => root.render(<LocalizedBattleFigmentCreator initialSide="player" state={board} onClose={() => undefined} onSubmit={() => undefined} />));
     chooseType("Ember");
     const spark = document.querySelector<HTMLInputElement>('[data-battle-figment-field="spark"] input');
     expect(spark?.value).toBe("1");
@@ -94,7 +101,7 @@ describe("BattleFigmentCreator", () => {
     const root = createRoot(host);
 
     act(() => root.render(
-      <BattleFigmentCreator
+      <LocalizedBattleFigmentCreator
         initialSide="player"
         state={board}
         onClose={() => undefined}
@@ -124,7 +131,7 @@ describe("BattleFigmentCreator", () => {
     let rememberedTypeId: string | undefined;
 
     act(() => root.render(
-      <BattleFigmentCreator
+      <LocalizedBattleFigmentCreator
         initialSide="player"
         state={board}
         onClose={() => undefined}
@@ -141,7 +148,7 @@ describe("BattleFigmentCreator", () => {
     document.body.append(reopenedHost);
     const reopenedRoot = createRoot(reopenedHost);
     act(() => reopenedRoot.render(
-      <BattleFigmentCreator
+      <LocalizedBattleFigmentCreator
         initialSide="player"
         initialTypeId={rememberedTypeId}
         state={board}

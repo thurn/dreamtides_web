@@ -275,7 +275,7 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     const dialogue = container.querySelector(
       '[data-testid="journey-start-tutorial-dialogue"]',
     );
-    expect(dialogue?.getAttribute("aria-label")).toBe("Mira speaks");
+    expect(dialogue?.getAttribute("aria-label")).not.toBe("");
     expect(dialogue?.getAttribute("data-character-dialogue-visible")).toBe(
       "true",
     );

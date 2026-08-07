@@ -14,6 +14,7 @@ import { CardBrowserPanel } from "../components/card/CardBrowserPanel";
 import type { CardChoiceGridCardView as CardGalleryCardView } from "../components/card/CardChoiceGrid";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
+import { useMessages } from "../hooks/use-messages";
 import { useIsDesktop } from "./use-is-desktop";
 
 export type CardZoneBrowserZone = "deck" | "void" | "banished";
@@ -36,8 +37,8 @@ export interface CardZoneBrowserOwnerSwitch {
 }
 
 export interface CardZoneBrowserOverlayProps {
-  /** Human-facing owner prefix, such as `Your` or `Enemy`. */
-  readonly ownerLabel: string;
+  /** Viewer-relative owner used only to select localized presentation. */
+  readonly owner: CardZoneBrowserOwner;
   /** Card zone whose contents are being inspected. */
   readonly zone: CardZoneBrowserZone;
   /** Resolved physical card entries in the zone's current order. */
@@ -79,12 +80,6 @@ const FILTER_OPTIONS = [
 ];
 
 const DESKTOP_BROWSER_MAX_WIDTH_PX = 1180;
-
-function zoneLabel(zone: CardZoneBrowserZone): string {
-  if (zone === "deck") return "Deck";
-  if (zone === "void") return "Void";
-  return "Banished";
-}
 
 function filteredCards(
   cards: readonly CardGalleryCardView[],
@@ -130,7 +125,7 @@ function filteredCards(
  * remain callback intents owned by the live controller.
  */
 export function CardZoneBrowserOverlay({
-  ownerLabel,
+  owner,
   zone,
   cards,
   ownerSwitch,
@@ -140,6 +135,7 @@ export function CardZoneBrowserOverlay({
   onCardContextMenu,
   onCardDoubleTap,
 }: CardZoneBrowserOverlayProps): ReactElement {
+  const t = useMessages();
   const isDesktop = useIsDesktop();
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<CardZoneBrowserSort>("current");
@@ -187,8 +183,11 @@ export function CardZoneBrowserOverlay({
   }, [isDesktop]);
 
   const subtitle = visibleCards.length === cards.length
-    ? `${String(cards.length)} ${cards.length === 1 ? "Card" : "Cards"}`
-    : `${String(visibleCards.length)} of ${String(cards.length)} Cards`;
+    ? t("battle-zone-browser-total-count", { count: cards.length })
+    : t("battle-zone-browser-filtered-count", {
+        visibleCount: visibleCards.length,
+        totalCount: cards.length,
+      });
   const galleryCards = visibleCards.map((card, index) => ({
     ...card,
     // A mobile hold is reserved for the GameCard reading reveal. Leaving the
@@ -205,11 +204,15 @@ export function CardZoneBrowserOverlay({
         options: [
           {
             value: "viewer",
-            label: `Your Cards · ${String(ownerSwitch.viewerCount)}`,
+            label: t("battle-zone-browser-viewer-option", {
+              count: ownerSwitch.viewerCount,
+            }),
           },
           {
             value: "opponent",
-            label: `Opponent Cards · ${String(ownerSwitch.opponentCount)}`,
+            label: t("battle-zone-browser-opponent-option", {
+              count: ownerSwitch.opponentCount,
+            }),
           },
         ],
         value: ownerSwitch.value,
@@ -250,8 +253,10 @@ export function CardZoneBrowserOverlay({
         },
       };
   const title = ownerSwitch === undefined
-    ? `${ownerLabel} ${zoneLabel(zone)}`
-    : "Banished Cards";
+    ? owner === "viewer"
+      ? t("battle-zone-browser-viewer-title", { zone })
+      : t("battle-zone-browser-opponent-title", { zone })
+    : t("battle-zone-browser-shared-banished-title");
 
   return (
     <motion.div
@@ -259,7 +264,7 @@ export function CardZoneBrowserOverlay({
       aria-modal="true"
       aria-label={title}
       className="cumulus"
-      data-card-zone-browser={`${ownerLabel.toLocaleLowerCase()}:${zone}`}
+      data-card-zone-browser={`${owner}:${zone}`}
       data-card-zone-browser-owner={ownerSwitch?.value}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -304,13 +309,17 @@ export function CardZoneBrowserOverlay({
             kind: "iconButton",
             button: {
               glyph: GLYPHS.close,
-              label: `Close ${zoneLabel(zone).toLocaleLowerCase()} browser`,
+              label: t("battle-zone-browser-close", { zone }),
               onPress: onClose,
             },
           }}
           toolbar={toolbar}
           cards={galleryCards}
-          emptyLabel={cards.length === 0 ? "No Cards." : "No Matching Cards."}
+          emptyLabel={
+            cards.length === 0
+              ? t("battle-zone-browser-empty")
+              : t("battle-zone-browser-no-filter-matches")
+          }
           presentation="overlay"
           onCardDragStart={onCardDragStart}
           onCardDragEnd={onCardDragEnd}

@@ -51,9 +51,7 @@ import type {
   OfferTileModel,
   OfferTileStarterCards,
 } from "../../cumulus/components/controls/OfferTile";
-import { offerTileDescription } from "../../cumulus/components/controls/offer-tile-descriptions";
 import type { DreamscapeSiteModel } from "../../cumulus/components/dreamscape/SiteNode";
-import type { GlassPanelTextSegment } from "../../cumulus/components/overlay/GlassPanel";
 import type {
   AuguryCardChoiceView,
   AuguryCardView,
@@ -114,130 +112,6 @@ function toCardView(
         : { transfiguration: object.transfiguration }),
     },
   };
-}
-
-function titleCardinal(value: number): string {
-  if (value === 1) return "One";
-  if (value === 2) return "Two";
-  if (value === 3) return "Three";
-  if (value === 4) return "Four";
-  return String(value);
-}
-
-function offerCardName(card: OfferTileCard): string {
-  return card.displaySnapshot.name;
-}
-
-function indefiniteArticle(label: string): "a" | "an" {
-  return /^[aeiou]/i.test(label) ? "an" : "a";
-}
-
-function namedEntitySubtitle(
-  action: string,
-  entityNames: readonly string[],
-  suffix = "",
-): AuguryOfferView["subtitle"] {
-  const segments: GlassPanelTextSegment[] = [
-    { kind: "text", text: `${action} ` },
-  ];
-  entityNames.forEach((name, index) => {
-    if (index > 0) segments.push({ kind: "text", text: " and " });
-    segments.push({ kind: "entity", text: name });
-  });
-  if (suffix !== "") segments.push({ kind: "text", text: suffix });
-  return segments;
-}
-
-/** Player-facing detail title derived from the offer's action category. */
-export function buildAuguryOfferHeadline(model: OfferTileModel): string {
-  switch (model.kind) {
-    case "card-gift":
-      return "Gain a Card";
-    case "card-draft":
-    case "copies-draft":
-    case "category-draft":
-      return "Choose a Card";
-    case "transfigured-draft":
-      return "Choose a Transfigured Card";
-    case "card-bundle":
-      return `Gain ${titleCardinal(model.cards.length)} Cards`;
-    case "transfigure-card":
-      return "Transfigure a Card";
-    case "transfigure-starters":
-      return "Transfigure Your Starters";
-    case "keyword-modification":
-      return "Reduce Reclaim";
-    case "tribal-change":
-      return "Change a Character Type";
-    case "purge-card":
-      return "Purge a Card";
-    case "trade-card":
-      return "Trade a Card";
-    case "duplicate-card":
-      return model.cards.length === 1 ? "Duplicate a Card" : "Choose a Card";
-    case "dreamsign-gift":
-      return "Gain a Dreamsign";
-    case "dreamsign-draft":
-      return "Choose a Dreamsign";
-    case "add-site":
-      return "Add a Site";
-  }
-}
-
-/** Supporting detail copy with named outcomes identified at point of display. */
-export function buildAuguryOfferSubtitle(
-  model: OfferTileModel,
-): AuguryOfferView["subtitle"] {
-  switch (model.kind) {
-    case "card-gift":
-      return namedEntitySubtitle("Gain", [offerCardName(model.card)]);
-    case "card-bundle":
-      return model.cards.length === 2
-        ? namedEntitySubtitle("Gain", model.cards.map(offerCardName))
-        : offerTileDescription(model);
-    case "transfigure-card":
-      return namedEntitySubtitle("Transfigure", [offerCardName(model.card)]);
-    case "transfigure-starters":
-      return namedEntitySubtitle("Transfigure", model.cards.map(offerCardName));
-    case "keyword-modification":
-      return namedEntitySubtitle("Reduce Reclaim for", [
-        offerCardName(model.card),
-      ]);
-    case "tribal-change":
-      return namedEntitySubtitle(
-        "Make",
-        [offerCardName(model.card)],
-        ` ${indefiniteArticle(model.newCharacterSubtype)} ${model.newCharacterSubtype}`,
-      );
-    case "purge-card":
-      return namedEntitySubtitle("Purge", [offerCardName(model.card)]);
-    case "trade-card":
-      return namedEntitySubtitle(
-        "Purge",
-        [offerCardName(model.outgoing)],
-        " and choose a card to replace it",
-      );
-    case "duplicate-card":
-      return model.cards.length === 1
-        ? namedEntitySubtitle("Duplicate", [offerCardName(model.cards[0])])
-        : offerTileDescription(model);
-    case "dreamsign-gift":
-      return namedEntitySubtitle("Gain", [model.dreamsign.name]);
-    case "add-site": {
-      const siteName = model.site.name.toLowerCase();
-      return namedEntitySubtitle(
-        `Add ${indefiniteArticle(siteName)}`,
-        [siteName],
-        " site",
-      );
-    }
-    case "card-draft":
-    case "copies-draft":
-    case "category-draft":
-    case "transfigured-draft":
-    case "dreamsign-draft":
-      return offerTileDescription(model);
-  }
 }
 
 function sitePreviewModel(
@@ -762,8 +636,6 @@ export function buildAuguryOfferViews(
     const tile = buildAuguryOfferTileModel(offer, context);
     return {
       id: offer.offerId,
-      headline: offer.detailHeadline ?? buildAuguryOfferHeadline(tile),
-      subtitle: offer.detailSubtitle ?? buildAuguryOfferSubtitle(tile),
       requiresSelection: (offer.choiceRequest?.candidates.length ?? 0) > 0,
       tile,
       visual: buildOfferVisual(offer, context, context.sitesData),

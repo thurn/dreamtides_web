@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/essence-value`
 
-Real consumers: **13** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **12** (imports outside `src/cumulus/docs/` and tests).
 
 The canonical Essence amount: a tight inline value for player-facing currency text, with a named solid reward badge for values placed over art.
 

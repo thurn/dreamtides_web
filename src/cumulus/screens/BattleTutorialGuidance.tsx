@@ -18,6 +18,7 @@ import { token } from "../primitives/tokens";
 import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
 import { useIsDesktop } from "./use-is-desktop";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
+import { useMessages } from "../hooks/use-messages";
 
 export type BattleTutorialGuidanceSourceView =
   | {
@@ -183,6 +184,7 @@ export function BattleTutorialGuidance({
   onDismiss,
   onDurationComplete,
 }: BattleTutorialGuidanceProps): ReactElement {
+  const t = useMessages();
   const desktop = useIsDesktop();
   const reduceMotion = useReducedMotion() ?? false;
   const [retainedView, setRetainedView] =
@@ -513,7 +515,9 @@ export function BattleTutorialGuidance({
           role="button"
           tabIndex={active ? 0 : -1}
           disabled={!active}
-          aria-label={`Dismiss ${renderedView.dialogue.speakerName} tutorial`}
+          aria-label={t("battle-tutorial-dismiss-action", {
+            speakerName: renderedView.dialogue.speakerName,
+          })}
           data-testid="battle-tutorial-dismiss"
           hoverFeedback="stationary"
           pressFeedback="stationary"

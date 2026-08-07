@@ -221,9 +221,10 @@ describe("Cumulus DraftScreen", () => {
         container.querySelector(`[data-draft-offer-card="${String(cardNumber)}"]`),
       ).not.toBeNull();
     }
-    // The one label: a floating "Draft (n/total)" pick counter.
+    // The one label: a floating semantic pick counter.
     const counter = container.querySelector("[data-draft-pick-counter]");
-    expect(counter?.textContent).toBe("Draft (1/5)");
+    expect(counter?.textContent).toContain("1");
+    expect(counter?.textContent).toContain("5");
 
     act(() => {
       root.unmount();

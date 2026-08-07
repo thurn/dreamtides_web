@@ -19,6 +19,7 @@ import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
+import { useMessages } from "../hooks/use-messages";
 
 export type TransfigurationGuideView = GuideGalleryGuideView;
 
@@ -362,24 +363,23 @@ export function TransfigurationPickerPanel({
   readonly onClose: () => void;
   readonly onPick: (entryId: string) => void;
 }) {
+  const t = useMessages();
   const desktop = layout === "desktop";
   const enhanced = isEnhanced;
   return (
     <CardPickerPanel
-      title="Transfiguration"
-      subtitle={
-        ready
-          ? enhanced
-            ? "Pick any card to reforge"
-            : "Choose a card to reforge"
-          : "Heating the forge…"
-      }
+      title={t("transfiguration-picker-title")}
+      subtitle={t("transfiguration-picker-instruction", {
+        state: ready ? (enhanced ? "enhanced" : "standard") : "loading",
+      })}
       rightAccessory={
         enhanced || !desktop
           ? {
               kind: "glassButton",
               button: {
-                label: "Decline",
+                label: t("transfiguration-decline-action", {
+                  presentation: "compact",
+                }),
                 onPress: onClose,
                 testId: "cumulus-transfiguration-decline",
               },
@@ -390,7 +390,9 @@ export function TransfigurationPickerPanel({
         desktop && !enhanced
           ? [
               {
-                label: "Decline Offer",
+                label: t("transfiguration-decline-action", {
+                  presentation: "full",
+                }),
                 onPress: onClose,
                 testId: "cumulus-transfiguration-decline",
               },
@@ -407,12 +409,14 @@ export function TransfigurationPickerPanel({
             ? undefined
             : {
                 kind: "text" as const,
-                text: `${candidate.reforgedType} · Reforged`,
+                text: t("transfiguration-reforged-card-caption", {
+                  form: candidate.reforgedType,
+                }),
               },
       }))}
-      emptyLabel={
-        ready ? "No eligible cards to reforge." : "Heating the forge…"
-      }
+      emptyLabel={t("transfiguration-picker-empty-state", {
+        state: ready ? "empty" : "loading",
+      })}
       testId="cumulus-transfiguration-picker"
       onCardPress={onPick}
     />
@@ -441,6 +445,7 @@ export function TransfigurationDetailPanel({
   readonly onSelectForm: (type: TransfigurationType) => void;
   readonly onConfirm: (form: TransfigurationFormView) => void;
 }) {
+  const t = useMessages();
   const mobile = layout === "mobile";
   const activeForm =
     candidate.forms.find((form) => form.type === selectedFormType) ?? null;
@@ -467,7 +472,7 @@ export function TransfigurationDetailPanel({
       }}
     >
       <GlassPanel
-        title="Choose Its New Form"
+        title={t("transfiguration-form-picker-title")}
         headerSpacing={mobile ? "compact" : "medium"}
         footer={
           <div
@@ -485,7 +490,7 @@ export function TransfigurationDetailPanel({
             {onBack !== undefined && (
               <GlassButton
                 placement="onGlass"
-                label="Choose Again"
+                label={t("transfiguration-choose-again-action")}
                 disabled={confirming}
                 onPress={onBack}
                 testId="cumulus-transfiguration-choose-again"
@@ -494,7 +499,9 @@ export function TransfigurationDetailPanel({
             <GlassButton
               placement="onGlass"
               variant="accent"
-              label={confirming ? "Reforging…" : "Transfigure"}
+              label={t("transfiguration-confirm-action", {
+                state: confirming ? "pending" : "ready",
+              })}
               essenceCost={
                 showConfirmEssenceCost
                   ? activeForm?.essenceCost ?? null
@@ -502,10 +509,25 @@ export function TransfigurationDetailPanel({
               }
               widthReservations={showConfirmEssenceCost
                 ? [
-                    { label: "Transfigure", essenceCost: null },
+                    {
+                      label: t("transfiguration-confirm-action", {
+                        state: "ready",
+                      }),
+                      essenceCost: null,
+                    },
                     ...candidate.forms.flatMap((form) => [
-                      { label: "Transfigure", essenceCost: form.essenceCost },
-                      { label: "Reforging…", essenceCost: form.essenceCost },
+                      {
+                        label: t("transfiguration-confirm-action", {
+                          state: "ready",
+                        }),
+                        essenceCost: form.essenceCost,
+                      },
+                      {
+                        label: t("transfiguration-confirm-action", {
+                          state: "pending",
+                        }),
+                        essenceCost: form.essenceCost,
+                      },
                     ]),
                   ]
                 : [

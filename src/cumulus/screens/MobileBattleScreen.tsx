@@ -73,6 +73,7 @@ import {
   MOBILE_BATTLE_MIN_FRONT_RANK_SLOTS,
 } from "./mobile-battle-layout";
 import { useIsDesktop } from "./use-is-desktop";
+import { useMessages } from "../hooks/use-messages";
 import {
   BattleResultSurface,
   type MobileBattleResultAction,
@@ -142,7 +143,6 @@ export interface MobileBattleHandView {
 
 export interface MobileBattlePromptNoticeView {
   readonly promptSide: MobileBattleOwner;
-  readonly message: string;
 }
 
 /** The complete, presentation-ready mobile battle board. */
@@ -484,7 +484,7 @@ export interface MobileBattleInteractions {
   readonly figmentMergeTargets?: readonly MobileBattleFigmentMergeTarget[];
   /** A tutorial play awaiting a legal battlefield target. */
   readonly targetSelectionCardId?: string | null;
-  readonly targetSelectionPrompt?: string | null;
+  readonly targetSelectionPrompt?: "legal-target" | null;
   readonly targetableCardIds?: readonly string[];
   readonly onHandCardActivate: (battleCardId: string) => void;
   readonly onBattlefieldCardActivate?: (battleCardId: string) => void;
@@ -585,13 +585,6 @@ const PHASE_LIGHT_LEFT = {
   dusk: "50%",
   night: "70%",
   challenge: "90%",
-} satisfies Record<MobileBattlePhase, string>;
-const PHASE_LABEL = {
-  dawn: "Dawn",
-  day: "Day",
-  dusk: "Dusk",
-  night: "Night",
-  challenge: "Challenge",
 } satisfies Record<MobileBattlePhase, string>;
 const PHASE_GLYPH = {
   dawn: GLYPHS.phaseDawn,
@@ -739,6 +732,7 @@ function BattleTurnAnnouncement({
   readonly onComplete?: (side: MobileBattleOwner) => void;
   readonly playbackSpeed: number;
 }) {
+  const t = useMessages();
   const sequence = useRef(1);
   const previousSide = useRef(activeSide);
   const onCompleteRef = useRef(onComplete);
@@ -771,8 +765,9 @@ function BattleTurnAnnouncement({
 
   if (announcement === null) return null;
 
-  const label =
-    announcement.side === perspective ? "Your Turn" : "Opponent Turn";
+  const label = t("battle-turn-announcement", {
+    owner: announcement.side === perspective ? "viewer" : "opponent",
+  });
   return (
     <RadialAnnouncement
       key={announcement.key}
@@ -819,6 +814,7 @@ function FigmentMergeAnimation({
 }: {
   readonly animation: FigmentMergeAnimationState;
 }) {
+  const t = useMessages();
   const reduceMotion = useReducedMotion();
   const deltaX = animation.targetRect.left - animation.sourceRect.left;
   const deltaY = animation.targetRect.top - animation.sourceRect.top;
@@ -826,7 +822,10 @@ function FigmentMergeAnimation({
     <div
       role="status"
       aria-live="polite"
-      aria-label={`${animation.target.figmentLabel} merged for ${String(animation.target.addedSpark)} spark`}
+      aria-label={t("battle-figment-merge-announcement", {
+        figmentName: animation.target.figmentLabel,
+        sparkCount: animation.target.addedSpark,
+      })}
       data-battle-figment-merge-animation=""
       data-battle-figment-merge-source={animation.target.sourceBattleCardId}
       data-battle-figment-merge-destination={
@@ -1109,6 +1108,7 @@ function SideZones({
   readonly zoneLabels: "none" | "voids";
   readonly interactions?: MobileBattleInteractions;
 }) {
+  const t = useMessages();
   const deck = toDeckPile(side.deckCardIds);
   const voidPile = toVoidPile(side.voidCards);
   const ownsVisibleDreamwell = dreamwell?.side === owner;
@@ -1197,7 +1197,10 @@ function SideZones({
         >
           <CardPile
             cards={deck}
-            label={`${position === "near" ? "Your" : "Opponent"} deck`}
+            label={t("battle-card-pile-label", {
+              owner: position === "near" ? "viewer" : "opponent",
+              zone: "deck",
+            })}
             onPress={
               interactions?.onZoneOpen === undefined
                 ? undefined
@@ -1296,7 +1299,10 @@ function SideZones({
         >
           <CardPile
             cards={voidPile}
-            label={`${position === "near" ? "Your" : "Opponent"} void`}
+            label={t("battle-card-pile-label", {
+              owner: position === "near" ? "viewer" : "opponent",
+              zone: "void",
+            })}
             emptyState="outlined"
             emptyLabel={zoneLabels === "voids" ? "Void" : undefined}
             onPress={
@@ -1321,11 +1327,14 @@ function PhaseIndicator({
   readonly position: BattleBoardPosition;
   readonly phase: MobileBattlePhase;
 }) {
-  const ownerLabel = position === "near" ? "Your" : "Opponent";
+  const t = useMessages();
   return (
     <div
       role="img"
-      aria-label={`${ownerLabel} turn, ${PHASE_LABEL[phase]} phase`}
+      aria-label={t("battle-phase-indicator", {
+        owner: position === "near" ? "viewer" : "opponent",
+        phase,
+      })}
       data-battle-phase-indicator={owner}
       data-battle-mobile-phase={phase}
       style={{
@@ -1475,11 +1484,14 @@ function ChallengerChevron({
   readonly owner: MobileBattleOwner;
   readonly position: BattleBoardPosition;
 }) {
+  const t = useMessages();
   const direction = position === "far" ? "down" : "up";
   return (
     <div
       role="img"
-      aria-label={`${owner === "enemy" ? "Opponent" : "Player"} challenger`}
+      aria-label={t("battle-challenger-label", {
+        owner: owner === "enemy" ? "opponent" : "player",
+      })}
       data-battle-challenger-chevron={owner}
       data-battle-challenger-chevron-direction={direction}
       data-battle-challenger-chevron-style="circle-badge"
@@ -1939,6 +1951,7 @@ function BattleCardStatusIndicators({
 }: {
   readonly card: MobileBattleCardView;
 }) {
+  const t = useMessages();
   return (
     <div
       data-battle-card-status-indicators=""
@@ -1946,7 +1959,7 @@ function BattleCardStatusIndicators({
     >
       {card.exhausted ? (
         <div
-          aria-label="Exhausted"
+          aria-label={t("battle-card-exhausted-accessible-name")}
           data-battle-card-status="exhausted"
           style={{
             ...BATTLE_CARD_STATUS_BADGE_STYLE,
@@ -1967,7 +1980,9 @@ function BattleCardStatusIndicators({
       ) : null}
       {card.storedTime > 0 ? (
         <div
-          aria-label={`${String(card.storedTime)} memory counter${card.storedTime === 1 ? "" : "s"}`}
+          aria-label={t("battle-card-memory-counter-count", {
+            count: card.storedTime,
+          })}
           data-battle-card-status="stored-time"
           style={{
             ...BATTLE_CARD_STATUS_BADGE_STYLE,
@@ -3055,11 +3070,12 @@ function TargetingCardStage({
   readonly card: MobileBattleCardView;
   readonly isDesktop: boolean;
 }) {
+  const t = useMessages();
   return (
     <div
       data-battle-targeting-card-stage=""
       role="group"
-      aria-label="Card awaiting a target"
+      aria-label={t("battle-targeting-card-accessible-name")}
       style={{
         gridColumn: 1,
         gridRow: 5,
@@ -3408,15 +3424,13 @@ function closestOpenBackRankSlot(
 function pickerZoneCaption(
   candidate: MobileBattleCardPickerCandidateView,
   perspective: BattlePerspectiveSide,
+  t: ReturnType<typeof useMessages>,
 ): string {
-  const owner = candidate.owner === perspective ? "Your" : "Opponent";
-  const zone =
-    candidate.zone === "backRank"
-      ? "Back Rank"
-      : candidate.zone === "frontRank"
-        ? "Front Rank"
-        : candidate.zone[0].toUpperCase() + candidate.zone.slice(1);
-  return candidate.highlighted ? "Just Drawn" : `${owner} ${zone}`;
+  return t("battle-card-picker-zone-caption", {
+    highlighted: candidate.highlighted ? "yes" : "no",
+    owner: candidate.owner === perspective ? "viewer" : "opponent",
+    zone: candidate.zone,
+  });
 }
 
 function CardPickerGallery({
@@ -3434,6 +3448,7 @@ function CardPickerGallery({
   readonly interactions?: MobileBattleInteractions;
   readonly perspective: BattlePerspectiveSide;
 }) {
+  const t = useMessages();
   const requiredCount = Math.min(
     cardPicker.count,
     cardPicker.candidates.length,
@@ -3443,14 +3458,16 @@ function CardPickerGallery({
     selectedPickerCardIds.length === requiredCount &&
     interactions?.onCardPickerSubmit !== undefined;
   const submitAction = {
-    label: requiredCount === 0 ? "Continue" : "Submit",
+    label: t("battle-card-picker-submit-action", {
+      hasRequiredSelection: requiredCount === 0 ? "no" : "yes",
+    }),
     variant: "accent" as const,
     disabled: !canSubmit,
     testId: "battle-card-picker-submit",
     onPress: () => interactions?.onCardPickerSubmit?.(selectedPickerCardIds),
   };
   const skipAction = {
-    label: "Skip",
+    label: t("battle-card-picker-skip-action"),
     disabled:
       !cardPicker.canResolve || interactions?.onCardPickerSkip === undefined,
     testId: "battle-card-picker-skip",
@@ -3489,7 +3506,10 @@ function CardPickerGallery({
           title={cardPicker.label}
           subtitle={
             cardPicker.subtitle ??
-            `${String(selectedPickerCardIds.length)}/${String(requiredCount)} selected`
+            t("battle-card-picker-selected-count", {
+              selectedCount: selectedPickerCardIds.length,
+              requiredCount,
+            })
           }
           cards={cardPicker.candidates.map((candidate) => {
             const selected = selectedPickerCardIds.includes(
@@ -3505,12 +3525,12 @@ function CardPickerGallery({
                   : undefined,
               caption: {
                 kind: "text" as const,
-                text: pickerZoneCaption(candidate, perspective),
+                text: pickerZoneCaption(candidate, perspective, t),
               },
               testId: `battle-card-picker-candidate-${candidate.instanceId}`,
             };
           })}
-          emptyLabel="No valid targets."
+          emptyLabel={t("battle-card-picker-empty-state")}
           presentation="overlay"
           testId="battle-card-picker-gallery-panel"
           footerActions={
@@ -3533,10 +3553,10 @@ function ControlRow({
   isDesktop,
   interactions,
   layoutBackSlotCount,
-  nextPhaseLabel,
+  nextPhaseAction,
   phaseNavigation,
   perspective,
-  tutorialNextLabel,
+  tutorialNextAction,
 }: {
   readonly aiApproval: MobileBattleAiApprovalView | null;
   readonly cardPicker: MobileBattleCardPickerView | null;
@@ -3545,11 +3565,12 @@ function ControlRow({
   readonly isDesktop: boolean;
   readonly interactions?: MobileBattleInteractions;
   readonly layoutBackSlotCount: number;
-  readonly nextPhaseLabel: "Continue" | "Next Phase";
+  readonly nextPhaseAction: "continue" | "nextPhase";
   readonly phaseNavigation: "both" | "end-turn" | "tutorial" | "hidden";
   readonly perspective: BattlePerspectiveSide;
-  readonly tutorialNextLabel: "End Turn" | "Start Challenge";
+  readonly tutorialNextAction: "endTurn" | "startChallenge";
 }) {
+  const t = useMessages();
   const disabled = interactions?.canInteract !== true;
   const hasAlternateNextControls = aiApproval !== null || choicePrompt !== null;
   const requiredPickerCount =
@@ -3563,7 +3584,7 @@ function ControlRow({
   return (
     <div
       data-battle-mobile-row="control-row"
-      aria-label="Battle controls"
+      aria-label={t("battle-control-group-accessible-name")}
       style={{
         ...ROW_STYLE,
         gridColumn: 1,
@@ -3616,23 +3637,28 @@ function ControlRow({
               whiteSpace: "nowrap",
             }}
           >
-            {cardPicker.label} from{" "}
-            {(cardPicker.candidateOwner ?? cardPicker.side) === perspective
-              ? "your hand"
-              : "the opponent hand"}{" "}
-            · {String(selectedPickerCardIds.length)}/
-            {String(requiredPickerCount)}
+            {t("battle-card-picker-progress", {
+              promptLabel: cardPicker.label,
+              owner:
+                (cardPicker.candidateOwner ?? cardPicker.side) === perspective
+                  ? "viewer"
+                  : "opponent",
+              selectedCount: selectedPickerCardIds.length,
+              requiredCount: requiredPickerCount,
+            })}
           </span>
           {cardPicker.optional ? (
             <GlassButton
-              label="Skip"
+              label={t("battle-card-picker-skip-action")}
               disabled={!cardPicker.canResolve}
               testId="battle-card-picker-skip"
               onPress={() => interactions?.onCardPickerSkip?.()}
             />
           ) : null}
           <GlassButton
-            label={requiredPickerCount === 0 ? "Continue" : "Submit"}
+            label={t("battle-card-picker-submit-action", {
+              hasRequiredSelection: requiredPickerCount === 0 ? "no" : "yes",
+            })}
             variant="accent"
             disabled={
               !canSubmitPicker || interactions?.onCardPickerSubmit === undefined
@@ -3669,7 +3695,7 @@ function ControlRow({
               <IconButton
                 glyph={GLYPHS.arrowLeft}
                 size="sm"
-                label="Back"
+                label={t("battle-previous-phase-action")}
                 disabled={disabled}
                 onPress={() => interactions?.onPreviousPhase()}
               />
@@ -3711,13 +3737,14 @@ function ControlRow({
               ))
             ) : aiApproval === null ? (
               <GlassButton
-                label={
-                  phaseNavigation === "end-turn"
-                    ? "End Turn"
-                    : phaseNavigation === "tutorial"
-                      ? tutorialNextLabel
-                      : nextPhaseLabel
-                }
+                label={t("battle-flow-action", {
+                  action:
+                    phaseNavigation === "end-turn"
+                      ? "endTurn"
+                      : phaseNavigation === "tutorial"
+                        ? tutorialNextAction
+                        : nextPhaseAction,
+                })}
                 variant="accent"
                 disabled={disabled}
                 testId={
@@ -3763,8 +3790,13 @@ function BattleControlMessage({
   readonly choicePrompt: MobileBattleChoicePromptView | null;
   readonly promptNotice: MobileBattlePromptNoticeView | null;
 }) {
+  const t = useMessages();
   const message =
-    promptNotice?.message ?? choicePrompt?.label ?? aiApproval?.description;
+    (promptNotice === null
+      ? undefined
+      : t("battle-prompt-switch-side", { side: promptNotice.promptSide })) ??
+    choicePrompt?.label ??
+    aiApproval?.description;
   if (message === undefined) return null;
   return (
     <div
@@ -4536,6 +4568,7 @@ export function MobileBattleScreen({
   inspectorVisibility = "available",
   cardLayoutGroup = "owned",
 }: MobileBattleScreenProps) {
+  const t = useMessages();
   const isDesktop = useIsDesktop();
   const isDockLayout = useIsDesktop(INSPECTOR_DOCK_MIN_WIDTH);
   const inspectorStartsOpen = inspectorDefault === "responsive" && isDockLayout;
@@ -4555,7 +4588,7 @@ export function MobileBattleScreen({
     useState<MobileBattleFigmentMergeTarget | null>(null);
   const [mergeConfirmation, setMergeConfirmation] =
     useState<MobileBattleFigmentMergeTarget | null>(null);
-  const [mergeNotice, setMergeNotice] = useState<string | null>(null);
+  const [mergeNotice, setMergeNotice] = useState<"exhaustion" | null>(null);
   const [mergeAnimation, setMergeAnimation] =
     useState<FigmentMergeAnimationState | null>(null);
   const mergeAnimationSequence = useRef(1);
@@ -4703,9 +4736,7 @@ export function MobileBattleScreen({
       }
       if (mergeTarget.status === "blocked-exhaustion") {
         setHoveredMergeTarget(null);
-        setMergeNotice(
-          "An exhausted figment cannot be merged with one that isn't exhausted.",
-        );
+        setMergeNotice("exhaustion");
         return;
       }
       if (mergeTarget.requiresConfirmation) {
@@ -5062,14 +5093,14 @@ export function MobileBattleScreen({
           isDesktop={isDesktop}
           interactions={interactions}
           layoutBackSlotCount={layoutBackSlotCount}
-          nextPhaseLabel={view.dreamwell === null ? "Next Phase" : "Continue"}
+          nextPhaseAction={view.dreamwell === null ? "nextPhase" : "continue"}
           phaseNavigation={phaseNavigation}
           perspective={view.perspective}
-          tutorialNextLabel={
+          tutorialNextAction={
             (view.activeSide === "enemy" && view.phase === "dusk") ||
             (view.activeSide === "player" && view.phase === "night")
-              ? "Start Challenge"
-              : "End Turn"
+              ? "startChallenge"
+              : "endTurn"
           }
         />
         {targetingCard === null ? null : (
@@ -5150,7 +5181,9 @@ export function MobileBattleScreen({
             <IconButton
               glyph={GLYPHS.block}
               size="sm"
-              label={`Open banished cards, ${String(banishedCardCount)} total`}
+              label={t("battle-banished-cards-open", {
+                count: banishedCardCount,
+              })}
               testId="near-battle-banished"
               onPress={() =>
                 interactions.onZoneOpen?.({
@@ -5275,17 +5308,22 @@ export function MobileBattleScreen({
       ) : null}
       {mergeNotice !== null ? (
         <TransientStatusToast
-          copy={{ title: "Merge Blocked", message: mergeNotice }}
+          copy={{
+            title: t("battle-figment-merge-blocked-title"),
+            message: t("battle-figment-merge-blocked-exhaustion"),
+          }}
           onDismiss={() => setMergeNotice(null)}
         />
       ) : null}
       {mergeConfirmation !== null ? (
         <GlassDialog
-          title={`Merge ${mergeConfirmation.figmentLabel}?`}
+          title={t("battle-figment-merge-confirmation-title", {
+            figmentName: mergeConfirmation.figmentLabel,
+          })}
           presentation="popup"
           desktopCenterTarget="battlefield"
           onClose={() => setMergeConfirmation(null)}
-          closeLabel="Cancel figment merge"
+          closeLabel={t("battle-figment-merge-cancel-action")}
         >
           <div
             data-battle-figment-merge-confirmation=""
@@ -5303,7 +5341,9 @@ export function MobileBattleScreen({
               }}
             >
               {renderRulesSymbolsInline(
-                `Only ${String(mergeConfirmation.addedSpark)}✦ from this Legionnaire will be added. Its Warrior-count bonus does not transfer. This merge cannot be undone.`,
+                t("battle-figment-merge-legionnaire-warning", {
+                  sparkCount: mergeConfirmation.addedSpark,
+                }),
               )}
             </p>
             <div
@@ -5314,12 +5354,12 @@ export function MobileBattleScreen({
               }}
             >
               <GlassButton
-                label="Cancel"
+                label={t("battle-figment-merge-cancel-action")}
                 placement="onGlass"
                 onPress={() => setMergeConfirmation(null)}
               />
               <GlassButton
-                label="Merge"
+                label={t("battle-figment-merge-confirm-action")}
                 variant="accent"
                 placement="onGlass"
                 testId="battle-figment-merge-confirm"

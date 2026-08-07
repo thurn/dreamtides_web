@@ -1,6 +1,7 @@
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
+import { useMessages } from "../../hooks/use-messages";
 import {
   DreamAvatarPortrait,
   type DreamAvatarVisual,
@@ -55,12 +56,18 @@ export function BattleStatusDisplay({
   pointsToWin,
   testId,
 }: BattleStatusDisplayProps) {
-  const ownerLabel = relationship === "near" ? "Your side" : "Opponent";
+  const t = useMessages();
 
   return (
     <div
       role="group"
-      aria-label={`${ownerLabel}: ${String(currentEnergy)} of ${String(maxEnergy)} energy, ${String(points)} of ${String(pointsToWin)} points`}
+      aria-label={t("battle-participant-status", {
+        owner: relationship === "near" ? "viewer" : "opponent",
+        currentEnergy,
+        maxEnergy,
+        points,
+        pointsToWin,
+      })}
       data-battle-status=""
       data-owner={owner}
       data-relationship={relationship}

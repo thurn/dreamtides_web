@@ -7,12 +7,13 @@ import { CardOrderEditor } from "./CardOrderEditor";
 import { DisclosureSection } from "./DisclosureSection";
 import { NumberStepper } from "./NumberStepper";
 import { TextField } from "./TextField";
+import { CumulusRoot } from "../../CumulusRoot";
 
 function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
-  act(() => root.render(element));
+  act(() => root.render(<CumulusRoot>{element}</CumulusRoot>));
   return { container, root };
 }
 
@@ -28,7 +29,7 @@ describe("inspector Cumulus controls", () => {
     const decrement = vi.fn();
     const increment = vi.fn();
     const { container, root } = mount(<NumberStepper label="Energy" value={2} displayValue="2/4" resource="energy" decrementLabel="Decrease energy" incrementLabel="Increase energy" onDecrement={decrement} onIncrement={increment} />);
-    expect(container.querySelector('[role="group"]')?.getAttribute("aria-label")).toBe("Energy: 2/4");
+    expect(container.querySelector('[role="group"]')?.getAttribute("aria-label")).toBe("Energy");
     expect(container.querySelector("i.bxf.bx-fire-alt")).not.toBeNull();
     act(() => { (container.querySelector('button[aria-label="Decrease energy"]') as HTMLButtonElement).click(); (container.querySelector('button[aria-label="Increase energy"]') as HTMLButtonElement).click(); });
     expect(decrement).toHaveBeenCalledOnce();

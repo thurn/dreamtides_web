@@ -4,24 +4,29 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { CardStatOrb } from "./CardStatOrb";
+import { CumulusRoot } from "../../CumulusRoot";
 
 function mountOrb(
   value: string,
   changeBadge?: "empowered" | "kindled",
+  ariaLabel?: string,
 ) {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
     root.render(
-      <CardStatOrb
-        variant={changeBadge === "kindled" ? "spark" : "energy"}
-        value={value}
-        sizeVar="60px"
-        numberSizeVar="45px"
-        numberCapPx={45}
-        changeBadge={changeBadge}
-      />,
+      <CumulusRoot>
+        <CardStatOrb
+          variant={changeBadge === "kindled" ? "spark" : "energy"}
+          value={value}
+          sizeVar="60px"
+          numberSizeVar="45px"
+          numberCapPx={45}
+          changeBadge={changeBadge}
+          ariaLabel={ariaLabel}
+        />
+      </CumulusRoot>,
     );
   });
   return { container, root };
@@ -51,9 +56,8 @@ describe("CardStatOrb transfiguration badge", () => {
     );
     const badgeFace = badge?.querySelector<HTMLElement>(":scope > span");
 
-    expect(orb?.getAttribute("aria-label")).toContain(
-      changeBadge === "empowered" ? "Empowered" : "Kindled",
-    );
+    expect(orb?.getAttribute("aria-label")).not.toBe("");
+    expect(orb?.getAttribute("aria-label")).not.toMatch(/^card-stat-/);
     expect(orb?.querySelector<HTMLElement>(":scope > div")?.style.color).toBe(
       "rgb(255, 255, 255)",
     );
@@ -83,4 +87,26 @@ describe("CardStatOrb transfiguration badge", () => {
       container.remove();
     },
   );
+
+  it("keeps a custom accessible name while announcing its change badge", () => {
+    const unchanged = mountOrb("2", undefined, "Custom stat context");
+    const unchangedLabel = unchanged.container
+      .querySelector<HTMLElement>("[data-card-stat]")
+      ?.getAttribute("aria-label");
+    act(() => unchanged.root.unmount());
+    unchanged.container.remove();
+
+    const changed = mountOrb("2", "empowered", "Custom stat context");
+    const changedLabel = changed.container
+      .querySelector<HTMLElement>("[data-card-stat]")
+      ?.getAttribute("aria-label");
+
+    expect(unchangedLabel).not.toBe("");
+    expect(changedLabel).not.toBe("");
+    expect(changedLabel).not.toBe(unchangedLabel);
+    expect(changedLabel).not.toMatch(/^card-stat-/);
+
+    act(() => changed.root.unmount());
+    changed.container.remove();
+  });
 });

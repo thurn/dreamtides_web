@@ -1,4 +1,3 @@
-import type { CardData } from "../../../types/cards";
 import {
   lookupGlossaryTerm,
   type GlossaryCatalogEntry,
@@ -591,21 +590,4 @@ export function tokenizeRulesText(text: string): TextSegment[] {
  */
 export function tokenizeRulesSymbols(text: string): TextSegment[] {
   return bindIconsToText(scanSegments(text, false));
-}
-
-/** Format the card type and subtype line. */
-export function formatTypeLine(
-  card: Pick<CardData, "cardType" | "subtype">,
-): string {
-  if (card.cardType === "Character") {
-    if (card.subtype) {
-      return card.subtype;
-    }
-    return "";
-  }
-
-  if (card.subtype) {
-    return `${card.cardType} — ${card.subtype}`;
-  }
-  return card.cardType;
 }

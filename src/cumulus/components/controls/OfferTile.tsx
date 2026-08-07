@@ -13,6 +13,7 @@ import type { CardId } from "../../../types/card-identity";
 import type { FrozenCardData } from "../../../types/cards";
 import type { TransfigurationType } from "../../../types/journey";
 import { useRevealSource } from "../../internal/reveal/context";
+import { useMessages } from "../../hooks/use-messages";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import type { ArtRef } from "../../primitives/art";
@@ -215,6 +216,8 @@ export function OfferTile({
   size = "standard",
   testId = "offer-tile",
 }: OfferTileProps): ReactElement {
+  const t = useMessages();
+  const description = offerTileDescription(model, t);
   const binding = useRevealSource({
     identity: {
       entityType: "offer",
@@ -225,7 +228,7 @@ export function OfferTile({
         kind: "infoCard",
         card: {
           variant: "text",
-          body: offerTileRichDescription(model),
+          body: offerTileRichDescription(model, t),
         },
       },
       secondaries: [],
@@ -246,7 +249,7 @@ export function OfferTile({
       as="button"
       ref={binding.ref}
       {...binding.sourceProps}
-      aria-label={offerTileDescription(model)}
+      aria-label={description}
       data-testid={testId}
       data-offer-tile=""
       data-offer-tile-kind={model.kind}

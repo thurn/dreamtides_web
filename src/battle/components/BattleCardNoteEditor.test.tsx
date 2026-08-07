@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { act } from "react";
+import { act, type ComponentProps } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { BattleDebugEdit } from "../debug/commands";
@@ -8,6 +8,13 @@ import { createTestBattleInit } from "../../testing/create-battle-init";
 import { createInitialBattleState } from "../state/create-initial-state";
 import { makeBattleTestCardDatabase, makeBattleTestDreamAvatars, makeBattleTestSite, makeBattleTestState } from "../test-support";
 import { BattleCardNoteEditor } from "./BattleCardNoteEditor";
+import { CumulusRoot } from "../../cumulus/CumulusRoot";
+
+function LocalizedBattleCardNoteEditor(
+  props: ComponentProps<typeof BattleCardNoteEditor>,
+) {
+  return <CumulusRoot><BattleCardNoteEditor {...props} /></CumulusRoot>;
+}
 
 function createState() {
   return createInitialBattleState(createTestBattleInit({ battleEntryKey: "test", site: makeBattleTestSite(), state: makeBattleTestState(), cardDatabase: makeBattleTestCardDatabase(), dreamAvatars: makeBattleTestDreamAvatars() }));
@@ -25,7 +32,7 @@ describe("BattleCardNoteEditor", () => {
   it("uses a Cumulus dialog/form and submits the default next-turn expiry", () => {
     const state = createState(); const battleCardId = state.sides.player.hand[0]; const onSubmit = vi.fn<(edit: BattleDebugEdit) => void>();
     const host = document.createElement("div"); document.body.append(host); const root = createRoot(host);
-    act(() => root.render(<BattleCardNoteEditor battleCardId={battleCardId} state={state} generateNoteId={() => "note-1"} onClose={() => undefined} onSubmit={onSubmit} />));
+    act(() => root.render(<LocalizedBattleCardNoteEditor battleCardId={battleCardId} state={state} generateNoteId={() => "note-1"} onClose={() => undefined} onSubmit={onSubmit} />));
     expect(document.querySelector('[data-battle-note-editor]')).not.toBeNull();
     const input = document.querySelector<HTMLInputElement>('[data-battle-note-field="text"] input');
     act(() => { if (input !== null) { input.value = "remember this"; input.dispatchEvent(new Event("input", { bubbles: true })); input.dispatchEvent(new Event("change", { bubbles: true })); } });
@@ -38,7 +45,7 @@ describe("BattleCardNoteEditor", () => {
   it("preserves manual and after-N expiry resolution through Cumulus controls", () => {
     const state = createState(); const battleCardId = state.sides.player.hand[0]; const onSubmit = vi.fn<(edit: BattleDebugEdit) => void>();
     const host = document.createElement("div"); document.body.append(host); const root = createRoot(host);
-    act(() => root.render(<BattleCardNoteEditor battleCardId={battleCardId} state={state} generateNoteId={() => "note-2"} onClose={() => undefined} onSubmit={onSubmit} />));
+    act(() => root.render(<LocalizedBattleCardNoteEditor battleCardId={battleCardId} state={state} generateNoteId={() => "note-2"} onClose={() => undefined} onSubmit={onSubmit} />));
     const input = document.querySelector<HTMLInputElement>('[data-battle-note-field="text"] input');
     act(() => { if (input !== null) { input.value = "persist"; input.dispatchEvent(new Event("input", { bubbles: true })); input.dispatchEvent(new Event("change", { bubbles: true })); } });
     choose("Note expiry", "Manual Dismissal");

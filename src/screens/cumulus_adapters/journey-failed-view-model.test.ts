@@ -38,9 +38,6 @@ describe("buildJourneyFailedView", () => {
     expect(view).toMatchObject({
       result: "defeat",
       reason: "score_target_reached",
-      title: "Journey Ended",
-      message: "Your journey ends here.",
-      reasonLabel: "Score Threshold Reached",
       dreamAvatar: {
         id: "dream-avatar-uuid",
         name: "The Wayfinder",
@@ -57,10 +54,9 @@ describe("buildJourneyFailedView", () => {
     ]);
   });
 
-  it.each([
-    ["turn_limit_reached", "Turn Limit Reached"],
-    ["forced_result", "Forced Result"],
-  ] as const)("formats the %s reason", (reason, label) => {
+  it.each(["turn_limit_reached", "forced_result"] as const)(
+    "preserves the semantic %s reason",
+    (reason) => {
     const view = buildJourneyFailedView(
       state({
         failureSummary: {
@@ -70,8 +66,9 @@ describe("buildJourneyFailedView", () => {
       }),
     );
 
-    expect(view?.reasonLabel).toBe(label);
-  });
+      expect(view?.reason).toBe(reason);
+    },
+  );
 
   it("uses the draw copy and tolerates a missing DreamAvatar", () => {
     const view = buildJourneyFailedView(
@@ -86,8 +83,6 @@ describe("buildJourneyFailedView", () => {
 
     expect(view).toMatchObject({
       result: "draw",
-      title: "Stalemate",
-      message: "Neither side could claim the dream.",
       dreamAvatar: null,
     });
   });

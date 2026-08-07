@@ -62,7 +62,7 @@ export function NumberStepper({
   return (
     <div
       role="group"
-      aria-label={`${label}: ${displayValue ?? String(value)}`}
+      aria-label={label}
       data-testid={testId}
       style={{
         display: "grid",

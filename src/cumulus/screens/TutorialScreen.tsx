@@ -14,6 +14,7 @@ import { token } from "../primitives/tokens";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { GLYPHS } from "../primitives/glyph";
 import { IconButton } from "../components/controls/IconButton";
+import { useMessages } from "../hooks/use-messages";
 import type { BattleStatusDreamAvatarProfile } from "../components/battle/BattleStatusDisplay";
 import { CardBack } from "../components/battle/CardBack";
 import {
@@ -1285,6 +1286,7 @@ function TutorialChallengeAnimation({
   readonly playbackSpeed: number;
   readonly onComplete: () => void;
 }): ReactElement | null {
+  const t = useMessages();
   const [started, setStarted] = useState(false);
   const [geometry, setGeometry] = useState<TutorialChallengeGeometry | null>(
     null,
@@ -1426,7 +1428,11 @@ function TutorialChallengeAnimation({
   return (
     <div
       role="status"
-      aria-label={`${winner.card.model.displaySnapshot.name} wins the challenge. ${loser.card.model.displaySnapshot.name} dissolves into the ${loser.owner === "enemy" ? "opponent" : "player"} void.`}
+      aria-label={t("tutorial-battle-challenge-outcome", {
+        winnerName: winner.card.model.displaySnapshot.name,
+        loserName: loser.card.model.displaySnapshot.name,
+        loserOwner: loser.owner === "enemy" ? "opponent" : "player",
+      })}
       data-tutorial-challenge-animation=""
       data-tutorial-challenge-winner-card-id={winner.card.model.cardId}
       data-tutorial-challenge-loser-card-id={loser.card.model.cardId}

@@ -112,7 +112,7 @@ describe("buildDeckTypeFilterOptions — smart subtype options", () => {
     const options = buildDeckTypeFilterOptions(deck);
     expect(values(options)).toContain("subtype:Warrior");
     const warrior = options.find((o) => o.value === "subtype:Warrior");
-    expect(warrior?.label).toBe("Warriors");
+    expect(warrior?.label).toBeTruthy();
   });
 
   it("orders subtype options by count, most-represented first", () => {

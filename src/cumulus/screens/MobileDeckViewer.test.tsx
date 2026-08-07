@@ -5,6 +5,7 @@ import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { MobileDeckViewer, type MobileDeckView } from "./MobileDeckViewer";
+import { CumulusRoot } from "../CumulusRoot";
 
 vi.mock("../components/card/CardView", () => ({
   GameCard: ({ model }: { model: { cardId: string } }) => <div data-rendered-card-id={model.cardId} />,
@@ -29,10 +30,19 @@ describe("MobileDeckViewer", () => {
   it("renders UUID-backed GameCard models and closes from the shared control", () => {
     const close = vi.fn(); const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<MobileDeckViewer view={view()} onClose={close} />));
+    act(() =>
+      root.render(
+        <CumulusRoot>
+          <MobileDeckViewer view={view()} onClose={close} />
+        </CumulusRoot>,
+      ),
+    );
     expect(container.querySelector('[data-deck-entry-id="entry-a"]')?.getAttribute("data-card-id")).toBe("11111111-1111-4111-8111-111111111111");
     expect(container.querySelector('[data-rendered-card-id]')?.getAttribute("data-rendered-card-id")).toBe("11111111-1111-4111-8111-111111111111");
-    const closeButton = [...container.querySelectorAll("button")].find((button) => button.getAttribute("aria-label") === "Close deck");
+    const closeButton = container.querySelector<HTMLButtonElement>(
+      '[data-testid="mobile-deck-close"]',
+    );
+    expect(closeButton?.getAttribute("aria-label")).not.toBe("");
     act(() => closeButton?.click()); expect(close).toHaveBeenCalledOnce();
     act(() => root.unmount()); container.remove();
   });

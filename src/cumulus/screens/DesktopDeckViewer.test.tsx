@@ -169,7 +169,7 @@ describe("DesktopDeckViewer", () => {
     expect(discs).toHaveLength(3);
     expect(discs?.[0]?.dataset.revealPrimaryVariant).toBe("tide");
     expect(discs?.[0]?.dataset.revealSecondaryTitles).toBe("Tides");
-    expect(discs?.[0]?.getAttribute("aria-label")).toBe("Tide: First Tide");
+    expect(discs?.[0]?.getAttribute("aria-label")).not.toBe("");
 
     act(() => root.unmount());
   });

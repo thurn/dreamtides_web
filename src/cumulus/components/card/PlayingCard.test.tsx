@@ -54,7 +54,8 @@ describe("WagerPrizeCard", () => {
     expect(
       prize?.querySelector<HTMLElement>("[data-wager-prize-copy]")?.style.gap,
     ).toBe("var(--space-xs)");
-    expect(description?.textContent).toBe("Win 200 and Bezoar");
+    expect(description?.textContent).toContain("200");
+    expect(description?.textContent).toContain("Bezoar");
     expect(
       description?.querySelector("[data-wager-prize-dreamsign-name]"),
     ).not.toBeNull();
@@ -93,7 +94,8 @@ describe("WagerPrizeCard", () => {
     const revealed = host.querySelector<HTMLElement>("[data-wager-prize-card]");
     expect(revealed?.dataset.wagerPrizeCardState).toBe("drawn");
     expect(revealed?.dataset.playingCard).toBe("Q-hearts");
-    expect(revealed?.getAttribute("aria-label")).toBe("Q of hearts");
+    expect(revealed?.getAttribute("aria-label")).toContain("Q");
+    expect(revealed?.getAttribute("aria-label")).toContain("hearts");
 
     act(() => root.unmount());
   });

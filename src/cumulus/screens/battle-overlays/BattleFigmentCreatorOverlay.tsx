@@ -7,6 +7,7 @@ import { TextField } from "../../components/controls/TextField";
 import { GlassDialog } from "../../components/overlay/GlassDialog";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
+import { useMessages } from "../../hooks/use-messages";
 
 export type BattleFigmentSide = "player" | "enemy";
 export type BattleFigmentZone =
@@ -87,6 +88,7 @@ export function BattleFigmentCreatorOverlay({
   onCancel,
   onSubmit,
 }: BattleFigmentCreatorOverlayProps): ReactElement {
+  const t = useMessages();
   const fieldLabelStyle = {
     color: token("--text-on-glass-muted"),
     font: token("--t-caption"),
@@ -237,7 +239,7 @@ export function BattleFigmentCreatorOverlay({
             onPress={onCancel}
           />
           <GlassButton
-            label={count === 1 ? "Create Figment" : `Create ${String(count)} Figments`}
+            label={t("battle-figment-create-action", { count })}
             placement="onGlass"
             variant="accent"
             disabled={!canSubmit}

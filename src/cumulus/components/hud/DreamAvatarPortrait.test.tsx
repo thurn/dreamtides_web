@@ -23,7 +23,7 @@ function mountInto(node: React.ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(node);
+    root.render(<CumulusRoot>{node}</CumulusRoot>);
   });
   return { container, root };
 }
@@ -56,9 +56,7 @@ describe("DreamAvatarPortrait variants", () => {
 
   it("registers a strict profile reveal only when semantic profile data is supplied", () => {
     const { container } = mountInto(
-      <CumulusRoot>
-        <DreamAvatarPortrait dreamAvatar={DC} variant="panel" profile={{ id: "00000000-0000-4000-8000-000000000061", ability: "Gain 1 essence." }} />
-      </CumulusRoot>,
+      <DreamAvatarPortrait dreamAvatar={DC} variant="panel" profile={{ id: "00000000-0000-4000-8000-000000000061", ability: "Gain 1 essence." }} />,
     );
     const source = container.querySelector<HTMLElement>("[data-dream-avatar-source]")!;
     expect(source.dataset.revealFeedback).toBe("measured");

@@ -41,6 +41,7 @@ import { richText } from "../card/rich-text";
 import { glossaryInfoCard } from "../card/glossary-info-card";
 import { GLOSSARY_IDS } from "../../../data/glossary";
 import { token } from "../../primitives/tokens";
+import { useMessages } from "../../hooks/use-messages";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
 import { IconButton } from "../controls/IconButton";
 import { StandaloneGlyph } from "../controls/StandaloneGlyph";
@@ -133,7 +134,7 @@ export interface JourneyStatusBarProps {
    * flow bottom-up and right-to-left in two-high columns. */
   dreamsigns?: QsbDreamsign[];
   /** Deck size (used in the deck button's aria-label). */
-  deck?: number | string;
+  deck?: number;
   /** Open the deck viewer — fired on a tap / click of the deck sprite. */
   onViewDeck?: () => void;
   dreamAvatar?: QsbDreamAvatar;
@@ -159,12 +160,15 @@ function QsbOverflowStack({
   scale?: number;
   onOpenWindow: () => void;
 }): ReactElement {
+  const t = useMessages();
   const size = Math.round(36 * scale);
   return (
     <Pressable
       as="button"
       onClick={onOpenWindow}
-      aria-label={`View ${String(signs.length)} dreamsigns`}
+      aria-label={t("journey-status-dreamsigns-open", {
+        count: signs.length,
+      })}
       style={{
         display: "flex",
         alignItems: "center",
@@ -512,11 +516,12 @@ function QsbHudBar({
   scale = 1,
 }: {
   essence?: number;
-  deck?: number | string;
+  deck?: number;
   onViewDeck?: () => void;
   dreamAvatar?: QsbDreamAvatar;
   scale?: number;
 }): ReactElement {
+  const t = useMessages();
   return (
     <div
       style={{
@@ -546,7 +551,7 @@ function QsbHudBar({
         as="button"
         className="qsbDeck"
         data-journey-deck-target=""
-        aria-label={`View deck — ${String(deck)} cards`}
+        aria-label={t("journey-status-deck-open", { count: deck })}
         onClick={onViewDeck}
         style={{
           height: Math.round(66 * scale),

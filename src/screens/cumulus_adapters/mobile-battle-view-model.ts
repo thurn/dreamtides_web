@@ -143,7 +143,6 @@ export function buildMobileBattleView(
       promptSide !== null && !ownsPrompt
         ? {
             promptSide,
-            message: `Switch to the ${promptSide === "enemy" ? "Opponent" : "Player"} side to resolve this choice.`,
           }
         : null,
     aiApproval:
@@ -212,14 +211,13 @@ export function buildMobileBattleResultView(
     return { outcome: board.result, dismissed };
   }
 
-  const turnLabel = `${String(board.turnNumber)} turn${board.turnNumber === 1 ? "" : "s"}`;
   return {
     outcome: "victory",
     essenceReward: init.essenceReward,
-    summary:
-      `Defeated ${init.enemyDescriptor.name} · ` +
-      `${String(board.sides.player.score)}–${String(board.sides.enemy.score)} · ` +
-      turnLabel,
+    opponentName: init.enemyDescriptor.name,
+    playerScore: board.sides.player.score,
+    opponentScore: board.sides.enemy.score,
+    turnCount: board.turnNumber,
   };
 }
 
