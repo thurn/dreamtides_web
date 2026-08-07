@@ -248,8 +248,7 @@ reveal and draws, and the result announcement.
 
 Choosing `Play Again` clears the settled hand before the fresh-hand intent is
 submitted. Every card flips face down simultaneously, then both complete hands
-and their total discs travel away together through the inverse of the cards'
-arrival motion.
+and their total discs fade out together in place.
 
 A push starts a fresh paid hand without advancing the attempt count. Every
 dealer win advances the attempt count and may start another paid hand through

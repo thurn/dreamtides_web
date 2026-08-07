@@ -1961,7 +1961,7 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     act(() => root.unmount());
   });
 
-  it("conceals and dismisses the complete settled table before playing again", () => {
+  it("conceals and fades the complete settled table before playing again", () => {
     vi.useFakeTimers();
     const onPlayAgain = vi.fn();
     const { container, root } = mount(
@@ -2028,6 +2028,9 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     )).toHaveLength(4);
     expect(container.querySelectorAll(
       '[data-blackjack-total-departure-phase="departing"]',
+    )).toHaveLength(2);
+    expect(container.querySelectorAll(
+      '[data-blackjack-hand-departure-phase="departing"]',
     )).toHaveLength(2);
     expect([...container.querySelectorAll('[data-blackjack-card]')]).toEqual(cards);
     expect([...container.querySelectorAll('[data-blackjack-total]')]).toEqual(totals);

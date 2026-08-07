@@ -333,6 +333,7 @@ const FOUR_SUIT_PANEL_RIM_HEIGHT = 2;
 const BLACKJACK_CARD_ARRIVAL_SECONDS = FADE_DURATION_SECONDS * 1.5;
 const BLACKJACK_CARD_ARRIVAL_MS =
   BLACKJACK_CARD_ARRIVAL_SECONDS * 1_000;
+const BLACKJACK_DEPARTURE_FADE_MS = FADE_DURATION_SECONDS * 1_000;
 const BLACKJACK_CARD_READING_MS = PLAYING_CARD_FLIP_DURATION_MS * 0.75;
 const BLACKJACK_CONCEALED_READING_MS = PLAYING_CARD_FLIP_DURATION_MS;
 const BLACKJACK_TURN_READING_MS = PLAYING_CARD_FLIP_DURATION_MS;
@@ -2214,7 +2215,7 @@ function BlackjackScreen({
       : PLAYING_CARD_FLIP_DURATION_MS;
     const departureDurationMs = reduceMotion
       ? REDUCED_MOTION_DELAY_MS
-      : BLACKJACK_CARD_ARRIVAL_MS;
+      : BLACKJACK_DEPARTURE_FADE_MS;
     playAgainTimeoutsRef.current = [
       window.setTimeout(() => {
         commitPresentation({
@@ -2269,6 +2270,19 @@ function BlackjackScreen({
         <motion.div
           layout
           data-blackjack-hand={owner}
+          data-blackjack-hand-departure-phase={presentation.departurePhase}
+          initial={false}
+          animate={{
+            opacity: presentation.departurePhase === "departing" ? 0 : 1,
+          }}
+          transition={{
+            duration: reduceMotion ? 0 : FADE_DURATION_SECONDS,
+            ease: DREAM_EASE,
+            layout: {
+              duration: reduceMotion ? 0 : BLACKJACK_CARD_ARRIVAL_SECONDS,
+              ease: DREAM_EASE,
+            },
+          }}
           style={{
             width: "100%",
             maxWidth: BLACKJACK_HAND_MAX_WIDTH[layout],
@@ -2283,7 +2297,6 @@ function BlackjackScreen({
             const key = blackjackCardKey(owner, index, card);
             const revealed = revealedKeys.has(key) &&
               presentation.departurePhase === "idle";
-            const isDeparting = presentation.departurePhase === "departing";
             return (
               <motion.div
                 key={key}
@@ -2302,11 +2315,7 @@ function BlackjackScreen({
                         scale: 0.78,
                       }
                 }
-                animate={
-                  isDeparting
-                    ? { y: token("--space-5xl"), scale: 0.78 }
-                    : { y: 0, scale: 1 }
-                }
+                animate={{ y: 0, scale: 1 }}
                 transition={{
                   duration: reduceMotion ? 0 : BLACKJACK_CARD_ARRIVAL_SECONDS,
                   ease: DREAM_EASE,
@@ -2361,11 +2370,6 @@ function BlackjackScreen({
             data-blackjack-total-departure-phase={
               presentation.departurePhase
             }
-            animate={
-              presentation.departurePhase === "departing"
-                ? { y: token("--space-5xl"), scale: 0.78 }
-                : { y: 0, scale: 1 }
-            }
             style={{
               width: BLACKJACK_TOTAL_SIZE[layout],
               height: BLACKJACK_TOTAL_SIZE[layout],
@@ -2374,8 +2378,6 @@ function BlackjackScreen({
               placeItems: "center",
             }}
             transition={{
-              duration: reduceMotion ? 0 : BLACKJACK_CARD_ARRIVAL_SECONDS,
-              ease: DREAM_EASE,
               layout: {
                 duration: reduceMotion ? 0 : BLACKJACK_CARD_ARRIVAL_SECONDS,
                 ease: DREAM_EASE,
