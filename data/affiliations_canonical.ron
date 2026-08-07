@@ -1,133 +1,137 @@
 #![enable(implicit_some)]
-[
-  AffiliationDefinition(
-    id: "spirit_animals",
-    name: "Spirit Animals",
-    atlas_card_theme: "Spirit Animal",
-    signature_card_ids: [
-      "9b9c2743-75b3-499d-b5fb-c3429c92d420",
-      "401bb341-8385-41e9-8f6f-7b48e9ce174d",
-      "c8579b20-95ff-4b1d-b4c6-6bd049fc4760",
-      "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6",
-      "d30bd488-f921-49cb-a44f-353c54cb6548",
-    ],
-    bias: (random_draw_max_multiplier: 2.0, opponent_deck_max_multiplier: 2.0),
-  ),
-  AffiliationDefinition(
-    id: "erode_void",
-    name: "The Void",
-    atlas_card_theme: "Void",
-    signature_card_ids: [
-      "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1",
-      "25d00336-5ad7-433b-8ced-71720a9f074a",
-      "1ce0f0f2-4b1a-483d-b93b-74c36e946a08",
-      "738a5af0-f848-4d48-bceb-9a43c9b11066",
-      "6f1833a0-30f5-4718-9a3e-7620beb72bfc",
-    ],
-    bias: (random_draw_max_multiplier: 2.0, opponent_deck_max_multiplier: 2.0),
-  ),
-  AffiliationDefinition(
-    id: "removal",
-    name: "Tempo",
-    atlas_card_theme: "Tempo",
-    signature_card_ids: [
-      "954e8d50-d494-4fb2-b4c7-74979083b774",
-      "4f29a241-9265-4669-a189-5a2a91923e12",
-      "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
-      "7be2e6d7-abff-4c44-a0c3-35460da1693c",
-      "8a6fc6ea-9a88-441e-bdc2-d40dfec37481",
-      "3e6a5236-9850-4a69-9fe1-48389365a399",
-      "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
-    ],
-    bias: (random_draw_max_multiplier: 2.0, opponent_deck_max_multiplier: 2.0),
-  ),
-  AffiliationDefinition(
-    id: "storm_events",
-    name: "Events",
-    atlas_card_theme: "Event",
-    signature_card_ids: [
-      "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
-      "967c714f-40c5-4a77-8e22-40691a2755d4",
-      "be72bd04-21a6-4035-a117-2b7213ad1a34",
-      "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
-      "3cda9dd7-cb81-43c1-9db5-1444d7363e13",
-    ],
-    bias: (random_draw_max_multiplier: 2.0, opponent_deck_max_multiplier: 2.0),
-  ),
-  AffiliationDefinition(
-    id: "inexpensive_characters",
-    name: "Characters",
-    atlas_card_theme: "Character",
-    signature_card_ids: [
-      "9b9c2743-75b3-499d-b5fb-c3429c92d420",
-      "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49",
-      "975f49d3-213a-43fc-8079-5fe40f126a7b",
-      "e455225f-c444-44a2-8796-805cae2b755f",
-      "29c4c45d-33df-42ac-bf28-387eb00264aa",
-    ],
-    bias: (random_draw_max_multiplier: 2.0, opponent_deck_max_multiplier: 2.0),
-  ),
-  AffiliationDefinition(
-    id: "warriors",
-    name: "Warriors",
-    atlas_card_theme: "Warrior",
-    signature_card_ids: [
-      "724a1362-3f0f-4b77-b14e-22c0b877349a",
-      "1ce0f0f2-4b1a-483d-b93b-74c36e946a08",
-      "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49",
-      "6f1833a0-30f5-4718-9a3e-7620beb72bfc",
-      "78673e2b-a6d1-43de-8850-3d3327de5cc6",
-    ],
-    bias: (random_draw_max_multiplier: 2.0, opponent_deck_max_multiplier: 2.0),
-  ),
-  AffiliationDefinition(
-    id: "abandon_sacrifice",
-    name: "Abandon",
-    atlas_card_theme: "Abandon",
-    signature_card_ids: [
-      "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005",
-      "a9b5afaa-e149-4bf4-9007-077e8e9f12e6",
-      "8855e20c-e23f-4499-a5e8-a7a46ff81d2b",
-      "eae928f6-aab2-415e-b4b1-b9c3ed8e6818",
-      "5639053e-1fe3-4a42-b9c3-3fdf894bfab6",
-    ],
-    bias: (random_draw_max_multiplier: 2.0, opponent_deck_max_multiplier: 2.0),
-  ),
-  AffiliationDefinition(
-    id: "survivors",
-    name: "Survivors",
-    atlas_card_theme: "Survivor",
-    signature_card_ids: [
-      "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1",
-      "f3985df4-0867-4fd6-8312-6b358dc26883",
-      "ea118471-164b-4d7f-bb02-044c862ed07e",
-      "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40",
-    ],
-    bias: (random_draw_max_multiplier: 2.0, opponent_deck_max_multiplier: 2.0),
-  ),
-  AffiliationDefinition(
-    id: "figments",
-    name: "Figments",
-    atlas_card_theme: "Figment",
-    signature_card_ids: [
-      "f4082c01-fdc8-4583-afdb-76bac980b3bf",
-      "89c0d03c-2199-415a-bc66-89e451034328",
-      "cbabe603-1333-42bd-85c0-555c664b60b3",
-      "90a6a7a0-b739-475e-8379-647741aab423",
-    ],
-    bias: (random_draw_max_multiplier: 2.0, opponent_deck_max_multiplier: 2.0),
-  ),
-  AffiliationDefinition(
-    id: "discard",
-    name: "Discard",
-    atlas_card_theme: "Discard",
-    signature_card_ids: [
-      "68978d92-aa8b-4873-bb0b-6e52f12b0849",
-      "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4",
-      "6f1833a0-30f5-4718-9a3e-7620beb72bfc",
-      "975f49d3-213a-43fc-8079-5fe40f126a7b",
-      "4124a05c-b6dd-4334-b202-59fa17d77668",
-    ],
-    bias: (random_draw_max_multiplier: 2.0, opponent_deck_max_multiplier: 2.0),
-  ),
-]
+AffiliationCatalog(
+  // Makes a dreamscape's affiliation affect which cards its Dream Sites offer.
+  // Drafts, shops, Augury rewards, and other random card draws give more weight
+  // to cards resembling the affiliation's signature cards. This value caps
+  // that boost: 1.0 disables it, while 2.0 lets the strongest match receive
+  // twice its base selection weight. Every candidate remains eligible.
+  default_random_draw_max_multiplier: 2.0,
+  // Makes opponents encountered in an affiliated dreamscape bring decks shaped
+  // around that affiliation's theme. During deck construction, cards resembling
+  // its signature cards receive more weight. This value caps that boost: 1.0
+  // disables it, while 2.0 gives the strongest match twice its base deck-building
+  // weight. Other candidate cards remain eligible.
+  default_opponent_deck_max_multiplier: 2.0,
+  affiliations: [
+    AffiliationDefinition(
+      id: "spirit_animals",
+      name: "Spirit Animals",
+      atlas_card_theme: "Spirit Animal",
+      signature_card_ids: [
+        "9b9c2743-75b3-499d-b5fb-c3429c92d420",
+        "401bb341-8385-41e9-8f6f-7b48e9ce174d",
+        "c8579b20-95ff-4b1d-b4c6-6bd049fc4760",
+        "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6",
+        "d30bd488-f921-49cb-a44f-353c54cb6548",
+      ],
+    ),
+    AffiliationDefinition(
+      id: "erode_void",
+      name: "The Void",
+      atlas_card_theme: "Void",
+      signature_card_ids: [
+        "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1",
+        "25d00336-5ad7-433b-8ced-71720a9f074a",
+        "1ce0f0f2-4b1a-483d-b93b-74c36e946a08",
+        "738a5af0-f848-4d48-bceb-9a43c9b11066",
+        "6f1833a0-30f5-4718-9a3e-7620beb72bfc",
+      ],
+    ),
+    AffiliationDefinition(
+      id: "removal",
+      name: "Tempo",
+      atlas_card_theme: "Tempo",
+      signature_card_ids: [
+        "954e8d50-d494-4fb2-b4c7-74979083b774",
+        "4f29a241-9265-4669-a189-5a2a91923e12",
+        "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+        "7be2e6d7-abff-4c44-a0c3-35460da1693c",
+        "8a6fc6ea-9a88-441e-bdc2-d40dfec37481",
+        "3e6a5236-9850-4a69-9fe1-48389365a399",
+        "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+      ],
+    ),
+    AffiliationDefinition(
+      id: "storm_events",
+      name: "Events",
+      atlas_card_theme: "Event",
+      signature_card_ids: [
+        "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+        "967c714f-40c5-4a77-8e22-40691a2755d4",
+        "be72bd04-21a6-4035-a117-2b7213ad1a34",
+        "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+        "3cda9dd7-cb81-43c1-9db5-1444d7363e13",
+      ],
+    ),
+    AffiliationDefinition(
+      id: "inexpensive_characters",
+      name: "Characters",
+      atlas_card_theme: "Character",
+      signature_card_ids: [
+        "9b9c2743-75b3-499d-b5fb-c3429c92d420",
+        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49",
+        "975f49d3-213a-43fc-8079-5fe40f126a7b",
+        "e455225f-c444-44a2-8796-805cae2b755f",
+        "29c4c45d-33df-42ac-bf28-387eb00264aa",
+      ],
+    ),
+    AffiliationDefinition(
+      id: "warriors",
+      name: "Warriors",
+      atlas_card_theme: "Warrior",
+      signature_card_ids: [
+        "724a1362-3f0f-4b77-b14e-22c0b877349a",
+        "1ce0f0f2-4b1a-483d-b93b-74c36e946a08",
+        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49",
+        "6f1833a0-30f5-4718-9a3e-7620beb72bfc",
+        "78673e2b-a6d1-43de-8850-3d3327de5cc6",
+      ],
+    ),
+    AffiliationDefinition(
+      id: "abandon_sacrifice",
+      name: "Abandon",
+      atlas_card_theme: "Abandon",
+      signature_card_ids: [
+        "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005",
+        "a9b5afaa-e149-4bf4-9007-077e8e9f12e6",
+        "8855e20c-e23f-4499-a5e8-a7a46ff81d2b",
+        "eae928f6-aab2-415e-b4b1-b9c3ed8e6818",
+        "5639053e-1fe3-4a42-b9c3-3fdf894bfab6",
+      ],
+    ),
+    AffiliationDefinition(
+      id: "survivors",
+      name: "Survivors",
+      atlas_card_theme: "Survivor",
+      signature_card_ids: [
+        "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1",
+        "f3985df4-0867-4fd6-8312-6b358dc26883",
+        "ea118471-164b-4d7f-bb02-044c862ed07e",
+        "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40",
+      ],
+    ),
+    AffiliationDefinition(
+      id: "figments",
+      name: "Figments",
+      atlas_card_theme: "Figment",
+      signature_card_ids: [
+        "f4082c01-fdc8-4583-afdb-76bac980b3bf",
+        "89c0d03c-2199-415a-bc66-89e451034328",
+        "cbabe603-1333-42bd-85c0-555c664b60b3",
+        "90a6a7a0-b739-475e-8379-647741aab423",
+      ],
+    ),
+    AffiliationDefinition(
+      id: "discard",
+      name: "Discard",
+      atlas_card_theme: "Discard",
+      signature_card_ids: [
+        "68978d92-aa8b-4873-bb0b-6e52f12b0849",
+        "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4",
+        "6f1833a0-30f5-4718-9a3e-7620beb72bfc",
+        "975f49d3-213a-43fc-8079-5fe40f126a7b",
+        "4124a05c-b6dd-4334-b202-59fa17d77668",
+      ],
+    ),
+  ],
+)
