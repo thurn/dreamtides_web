@@ -1961,7 +1961,7 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     act(() => root.unmount());
   });
 
-  it("offers a fresh hand after a settled push", () => {
+  it("dismisses a settled hand in reverse deal order before playing again", () => {
     vi.useFakeTimers();
     const onPlayAgain = vi.fn();
     const { container, root } = mount(
@@ -1996,11 +1996,24 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       />,
     );
     void act(() => vi.runAllTimers());
+    expect(
+      container.querySelector('[data-blackjack-card="dealer:1"]')
+        ?.getAttribute("data-blackjack-card-departure-order"),
+    ).toBe("0");
+    expect(
+      container.querySelector('[data-blackjack-card="player:0"]')
+        ?.getAttribute("data-blackjack-card-departure-order"),
+    ).toBe("3");
     act(() => {
       container.querySelector<HTMLButtonElement>(
         '[data-testid="gamble-blackjack-play-again"]',
       )?.click();
     });
+    expect(
+      container.querySelector('[data-blackjack-cards-departing="true"]'),
+    ).not.toBeNull();
+    expect(onPlayAgain).not.toHaveBeenCalled();
+    void act(() => vi.runAllTimers());
     expect(onPlayAgain).toHaveBeenCalledOnce();
     act(() => root.unmount());
   });

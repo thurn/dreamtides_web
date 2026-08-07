@@ -246,6 +246,10 @@ its cards to keep every tile visible as more cards arrive. The dealer's hole
 card waits for the dealer turn. Reading holds separate each card, the dealer
 reveal and draws, and the result announcement.
 
+Choosing `Play Again` clears the settled hand before the fresh-hand intent is
+submitted. Cards leave one at a time in reverse deal order through the inverse
+of their arrival travel and scale motion.
+
 A push starts a fresh paid hand without advancing the attempt count. A player
 bust advances the attempt count and may start another paid hand through attempt
 three. Wins and non-bust dealer wins end the visit.
