@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 import {
+  formatPathSummary,
   parseArguments,
   summarizePathNeighborhoods,
 } from "../.llms/skills/ltodd/scripts/estimate-part-loc.mjs";
@@ -43,6 +44,40 @@ describe("estimate-part-loc path summaries", () => {
     expect(summarizePathNeighborhoods(records, 1)).toEqual([
       { path: "src/alpha/alpha.ts", lines: 10 },
     ]);
+  });
+
+  it("prints each ranked path on its own line", () => {
+    const parts = [
+      {
+        numeral: "I",
+        directory: "dreamtides",
+        title: "Foundations and Game Objects",
+      },
+    ];
+    const records = [
+      {
+        kind: "part",
+        directory: "dreamtides",
+        path: "src/cards/Card.tsx",
+        lines: 80,
+      },
+      {
+        kind: "part",
+        directory: "dreamtides",
+        path: "src/rules/resolve.ts",
+        lines: 100,
+      },
+    ];
+
+    expect(formatPathSummary(parts, records)).toBe(
+      [
+        "Highest-line-count production source neighborhoods by LToDD part",
+        "",
+        "I /dreamtides — Foundations and Game Objects",
+        "      100  src/rules/resolve.ts",
+        "       80  src/cards/Card.tsx",
+      ].join("\n"),
+    );
   });
 
   it("keeps concise paths and exhaustive details mutually exclusive", () => {

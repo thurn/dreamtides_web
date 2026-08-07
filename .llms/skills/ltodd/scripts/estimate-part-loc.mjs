@@ -406,30 +406,33 @@ export function summarizePathNeighborhoods(records, limit = pathSummaryLimit) {
     .slice(0, limit);
 }
 
-function printPaths(parts, records) {
-  const numeralWidth =
-    Math.max(...parts.map((part) => part.numeral.length)) + 2;
-  const directoryWidth =
-    Math.max(...parts.map((part) => part.directory.length + 1)) + 2;
-
-  process.stdout.write(
-    "Highest-line-count production source neighborhoods by LToDD part\n",
-  );
+export function formatPathSummary(parts, records) {
+  const sections = [];
   for (const part of parts) {
     const matching = records.filter(
       (record) => record.kind === "part" && record.directory === part.directory,
     );
     const neighborhoods = summarizePathNeighborhoods(matching);
-    const paths = neighborhoods
-      .map(
-        (neighborhood) =>
-          `${neighborhood.path} (${formatInteger(neighborhood.lines)})`,
-      )
-      .join("; ");
-    process.stdout.write(
-      `${part.numeral.padEnd(numeralWidth)}${`/${part.directory}`.padEnd(directoryWidth)}${paths}\n`,
+    sections.push(
+      [
+        `${part.numeral} /${part.directory} — ${part.title}`,
+        ...neighborhoods.map(
+          (neighborhood) =>
+            `  ${formatInteger(neighborhood.lines).padStart(7)}  ${neighborhood.path}`,
+        ),
+      ].join("\n"),
     );
   }
+
+  return [
+    "Highest-line-count production source neighborhoods by LToDD part",
+    "",
+    sections.join("\n\n"),
+  ].join("\n");
+}
+
+function printPaths(parts, records) {
+  process.stdout.write(`${formatPathSummary(parts, records)}\n`);
 }
 
 async function main() {
