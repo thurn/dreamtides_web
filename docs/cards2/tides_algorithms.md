@@ -47,5 +47,5 @@ the freshness and annotation checks. Runtime loading validates the artifact in
 
 Historical draft-pool implementations and their supporting data, tools, and
 design notes are archived by Git commit
-`463042baeaf73f5d6dea9bc594e926265f5629c5`. Inspect that commit's parent to read
+`0457e320ad07813934f5c4683eb9da7cd28994f1`. Inspect that commit's parent to read
 their final source, or the commit diff to see the complete retirement.
