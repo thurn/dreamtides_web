@@ -51,8 +51,19 @@ typed dataset module. For a large catalog, parse it mechanically to summarize:
 - cross-record and cross-catalog invariants.
 
 Inventory every identifier-bearing field and identifier encoded as a map key.
-Validate its UUID version and report every non-UUIDv4 source identifier before
-conversion.
+Classify each one before conversion:
+
+- Use an enum for a small, bounded, internal vocabulary whose members represent
+  modes, algorithms, positions, or other concepts that should change alongside
+  the Rust model.
+- Use UUID identity for an open or growing entity set, cross-catalog records,
+  and especially entities whose user-facing names may change independently of
+  their identity.
+
+For fields classified as entity identities, validate their UUID version and
+report every non-UUIDv4 source identifier before conversion. For fields
+classified as enums, inventory every observed value and prove exhaustive
+compatibility lowering.
 
 Classify each observed field as a domain concept, compatibility encoding, or
 derived value. Do not let `CompatDocument`, a synthetic `data` map, kebab-case
@@ -78,15 +89,20 @@ edit:
   compatibility contract is ordered.
 - Keep presentation/template text as strings while typing identifiers,
   predicates, modes, and behavior.
-- Use a lowercase, hyphenated RFC 4122 version-4 UUID for every primary ID,
-  foreign key, nested/action ID, reference-list entry, and keyed identifier.
-  Model each as `uuid::Uuid` or a domain newtype around it.
+- Use enums for small closed internal sets such as algorithm choices, modes, or
+  fixed positions. Use a lowercase, hyphenated RFC 4122 version-4 UUID for
+  durable entity identities and their foreign keys, nested/action IDs,
+  reference-list entries, and keyed identifiers. Model UUIDs as `uuid::Uuid` or
+  a domain newtype around it.
 - Do not add schema-version fields. The typed model and compiler build define
   the source contract.
 
-Assign a fresh UUIDv4 to each legacy slug, name, integer, or other identifier.
-Rewrite every reference consistently and preserve an explicit old-to-new map in
-the parity probe. Never carry a non-UUID value forward as a canonical ID.
+For legacy values classified as entity identity, assign a fresh UUIDv4 to each
+slug, name, integer, or other identifier, rewrite every reference consistently,
+and preserve an explicit old-to-new map in the parity probe. For values
+classified as a closed vocabulary, migrate them to enum variants and preserve
+an explicit legacy-value-to-variant map in the parity probe. Never use mutable
+display text as canonical identity.
 
 Start the candidate with `#![enable(implicit_some)]`. Write present optional
 values without `Some(...)`, and omit absent/defaulted fields when the Serde
@@ -109,9 +125,9 @@ recreate it in a temporary crate.
 - Use `Vec` and `IndexMap` deliberately to preserve required order.
 - Represent intentional schema defaults with Serde defaults and pair them with
   `skip_serializing_if` when editor serialization should retain compact RON.
-- Add the Serde-enabled `uuid` crate to `tools/game-data` when it is not already
-  available. Validate UUID version, RFC 4122 variant, and lowercase hyphenated
-  formatting at the typed boundary.
+- Add the Serde-enabled `uuid` crate to `tools/game-data` when the dataset has
+  UUID identities and it is not already available. Validate UUID version, RFC
+  4122 variant, and lowercase hyphenated formatting at the typed boundary.
 - Keep `ron::Value`, `toml::Value`, untyped maps, and string discriminators out
   of the source model unless the domain is genuinely dynamic.
 - Validate identities, references, and cross-field invariants before lowering.
@@ -167,8 +183,10 @@ TOML to prove:
   the explicit UUID mapping, including array order and scalar types;
 - record counts, unique IDs, references, cardinalities, defaults, and every
   observed exceptional variant;
-- parsing of every candidate ID as `uuid::Uuid` with `Version::Random`,
-  `Variant::RFC4122`, and lowercase hyphenated formatting; and
+- parsing of every candidate UUID identity as `uuid::Uuid` with
+  `Version::Random`, `Variant::RFC4122`, and lowercase hyphenated formatting;
+- exhaustive lowering and mapping coverage for every enum-backed legacy value;
+  and
 - complete mapping coverage for every legacy identifier and reference.
 
 In explicit design-only mode, create a temporary crate with the pinned `ron`,
