@@ -1,49 +1,91 @@
+# Version of this authored-file contract. Increment when the schema changes.
 schema-version = 1
 
 [battle]
+# Journey decks below this size are repeated until they meet the minimum.
 minimum-deck-size = 25
+# Number of cards dealt to the player when a battle begins.
 player-opening-hand-size = 5
+# Number of cards dealt to the opponent when a battle begins.
 enemy-opening-hand-size = 5
+# Score needed to win at each zero-indexed completion level. Later levels reuse
+# the final entry.
 score-targets = [10, 25]
+# Maximum number of turns before the battle reaches its turn-limit outcome.
 turn-limit = 50
+# Maximum energy either side can accumulate during a battle.
 energy-cap = 10
+# Maximum cards held before basic automation discards excess cards.
 hand-limit = 10
+# Side that takes the first turn. Valid values are "player" and "enemy".
 starting-side = "player"
+# Whether the player omits their normal draw on their first turn.
 skip-player-opening-draw = true
+# Number of opponent deck cards highlighted as DreamAvatar signature cards.
 opponent-signature-card-count = 3
 
 [dreamwell]
+# Dreamwell card orders included once, at the start of the first cycle.
 opening-orders = [0]
+# Dreamwell card orders sampled in the first and every subsequent cycle.
 recurring-orders = [1, 2, 3, 4]
+# Cards sampled from each recurring order per cycle.
 cards-per-recurring-order = 5
+# Cycles repeat until the constructed Dreamwell deck reaches this length.
 minimum-constructed-length = 62
 
 [progression]
+# All layer values are zero-indexed completion levels.
+# First layer where the opposing DreamAvatar's ability is enabled.
 ability-active-from-layer = 1
+# First layer where opponents may receive a Dreamsign.
 dreamsigns-from-layer = 3
+# First layer where Legendary cards remain in opponent decks.
 legendaries-from-layer = 5
+# Starter cards inserted at each layer after cutting weak non-Starters. Missing
+# later entries mean that no Starter cards are inserted.
 starter-dilution = [10, 5]
 
 [coherent-draft]
+# Target distinct-card count at the first and last Atlas layers. Intermediate
+# layers use linear interpolation.
 distinct-card-curve = { first = 14, last = 30 }
+# Cards over-drafted and then pruned at the first and last Atlas layers.
 removal-curve = { first = 2, last = 8 }
+# Draft-choice exploration at the first and last Atlas layers. Higher values
+# make picks more varied; lower values make picks greedier.
 temperature-curve = { first = 0.45, last = 0.12 }
+# Number of seeded candidate drafts generated before choosing the best result.
 best-of = 4
+# Multiplier for affiliation fit when ranking candidate drafts.
 affiliation-objective-weight = 1
+# Number of adapted draft records used to assemble the simulated pack source.
 pack-source-records = 48
 
 [coherent-draft.coherence]
+# Number of closest real corpus decks averaged for the neighbor-similarity term.
 nearest-neighbors = 10
+# Blend weight for similarity to nearby real corpus decks.
 neighbor-weight = 0.5
+# Blend weight for how often pairs of cards occur together in the corpus.
 cooccurrence-weight = 0.3
+# Blend weight for how reliably the model re-selects cards from this deck.
+# The three blend weights must sum to 1.
 self-consistency-weight = 0.2
+# Unrelated candidate cards compared with each held-out deck card.
 self-distractors = 12
+# A held-out card counts as recovered when ranked within this many candidates.
 self-recall-k = 4
 
 [corpus-selection]
+# Multiplier for dreamscape-affiliation fit when ranking known-good decks;
+# DreamAvatar signature fit supplies the primary score.
 affiliation-weight = 0.25
+# Number of highest-ranked decks eligible for deterministic seeded sampling.
 top-ranked-sampling-window = 8
 
+# Each journey-ai-deck table adds one canonical cards.toml UUID to the AI deck.
+# count is the number of copies of that UUID. Card IDs must be unique here.
 [[journey-ai-deck]]
 card-id = "5a980eff-6ec7-44d8-9977-b98e66bbc2c8"
 count = 3
@@ -85,32 +127,57 @@ card-id = "944e15d2-d680-4ebe-8d18-36826f4b1535"
 count = 3
 
 [ai]
+# Preset ID used by AI-controlled opponents in ordinary journey battles.
 journey-default-preset = "standard"
+# Preset ID used by deterministic tutorial battle automation.
 tutorial-default-preset = "standard"
 
 [ai.evaluation]
+# Multiplier for the AI score minus the player score.
 score-difference-weight = 10
+# Multiplier for the AI-versus-player front-rank Spark difference.
 front-rank-spark-weight = 1
+# Multiplier for the AI-versus-player back-rank Spark difference.
 back-rank-spark-weight = 0.5
+# Value assigned to each card currently in the AI's hand.
 hand-card-weight = 1.5
+# Multiplier for card-specific strategic value hints supplied by AI card models.
 value-hint-weight = 1
+# Penalty applied to each point of AI energy left unspent in a candidate plan.
 energy-waste-weight = 0.25
+# Multiplier for estimated points the AI can score in the next Challenge.
 expected-points-weight = 1
 
 [ai.opponent-model]
+# Per-card prior used to estimate whether the hidden opponent hand has removal.
 removal-prior = 0.1
+# Hard upper bound on opponent responses sampled for a candidate plan.
 sample-safety-cap = 16
 
 [ai.opponent-model.response-archetype-priors]
+# Relative sampling weights for modeled opponent responses. These need not sum
+# to 1; the model normalizes them when evaluating responses.
+# Weight for allowing all challengers through without assigning blockers.
 no-blocks = 1
+# Weight for blocking the challenger with the highest Spark first.
 block-biggest = 2
+# Weight for seeking even trades between blockers and challengers.
 trade-evenly = 3
 
+# Each ai.presets table defines a selectable bundle of search settings.
 [[ai.presets]]
+# Stable identifier referenced by the journey and tutorial default keys above.
 id = "standard"
+# Maximum candidate states retained at each breadth-search step.
 beam-width = 12
+# Opponent-response aggregation: "expectiminimax" uses the weighted mean;
+# "worstCase" uses the lowest sampled result.
 opponent-mode = "expectiminimax"
+# Opponent responses requested per candidate, capped by sample-safety-cap.
 sample-count = 8
+# Maximum number of actions explored along one candidate plan.
 search-depth = 16
+# Wall-clock planning budget for each journey AI decision.
 journey-planning-budget-ms = 100
+# Deterministic state-expansion budget for each tutorial AI decision.
 tutorial-expansion-budget = 256
