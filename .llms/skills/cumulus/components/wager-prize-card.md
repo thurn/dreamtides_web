@@ -19,15 +19,14 @@ When a Dreamsign is present, the entire prize face is its hover and press reveal
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `prizeId` | `WagerPrizeCardId` = `"six" \| "nine" \| "jack" \| "ladder-climb" \| "starway-1" \| "starway-2" \| "starway-3" \| "blackjack"` | yes | — | Stable Gamble choice represented by this prize object. |
+| `targetLabel` | `string` | yes | — | Draw condition shown as authored compact notation. |
 | `size` | `WagerPrizeCardSize` = `"wagerCompact" \| "wager"` | no | — | Named desktop or mobile square size. Defaults to `wager`. |
+| `drawnCard` | `{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } \| null` | yes | — | Committed card shown on the reverse face after a bet. |
+| `revealDrawnCard` | `boolean` | no | — | Turn the prize face over to its committed card. |
 | `dreamsignTestId` | `string` | no | — | Optional stable selector for the prize Dreamsign name. |
 | `emphasis` | `WagerPrizeCardEmphasis` = `"standard" \| "current" \| "muted"` | no | — | Accent current tier, foreground-muted alternative, or standard priority. |
 | `essenceReward` | `number` | yes | — | Essence awarded on a win. |
 | `rewardDreamsign` | `Dreamsign \| null` | yes | — | Dreamsign appended to the Essence reward, when present. |
-| `presentation` | `"threshold" \| "rewardOnly"` | no | — | Show the standard target condition and reward face. Show one centered flat reward without a draw condition or reverse face. |
-| `targetLabel` | `string` | no | — | Draw condition shown as authored compact notation. |
-| `drawnCard` | `{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } \| null` | no | — | Committed card shown on the reverse face after a bet. |
-| `revealDrawnCard` | `boolean` | no | — | Turn the prize face over to its committed card. |
 
 ## Usage
 
