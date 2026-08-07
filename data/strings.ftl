@@ -740,10 +740,22 @@ augury-offer-copies-draft-description =
     }
 # Detail title for an Augury offer whose candidates share one card category.
 augury-offer-category-draft-title = Choose a Card
-# Description for an Augury offer whose choices share one category.
-# $categoryName is the authored display name of that category, such as Event or
-# Character, and has unknown grammar.
-augury-offer-category-draft-description = Choose a card from the { $categoryName } category to add to your deck.
+# Description for an Augury offer whose choices share one category. $category
+# is "character", "event", "cheap", "mid-cost", "expensive", "fast",
+# "subtype", or "package". $categoryName is the canonical subtype or package
+# display name with unknown grammar for the last two variants, and is empty for
+# the stable variants. The player chooses one card for their current deck.
+augury-offer-category-draft-description =
+    { $category ->
+        [character] Choose a { -character } card to add to your deck.
+        [event] Choose an { -event-card } to add to your deck.
+        [cheap] Choose a cheap card to add to your deck.
+        [mid-cost] Choose a mid-cost card to add to your deck.
+        [expensive] Choose an expensive card to add to your deck.
+        [fast] Choose a fast card to add to your deck.
+        [subtype] Choose one { $categoryName } card to add to your deck.
+       *[package] Choose one card from the { $categoryName } to add to your deck.
+    }
 
 # Detail title for an Augury offer whose card choices arrive transfigured.
 augury-offer-transfigured-draft-title = Choose a Transfigured Card

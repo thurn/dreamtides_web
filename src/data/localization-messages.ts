@@ -465,6 +465,7 @@ export interface FluentMessageArgumentsById {
   };
   readonly "augury-offer-category-draft-title": never;
   readonly "augury-offer-category-draft-description": {
+    readonly category: FluentVariable;
     readonly categoryName: FluentVariable;
   };
   readonly "augury-offer-transfigured-draft-title": never;

@@ -131,7 +131,7 @@ export function buildOfferTileDebugModels(
     category_draft_known: {
       id: "debug:category_draft_known",
       kind: "category-draft",
-      categoryName: "spirit animal",
+      category: { kind: "subtype", name: "Spirit Animal" },
       cards: CATEGORY_DRAFT,
     },
     card_bundle: {

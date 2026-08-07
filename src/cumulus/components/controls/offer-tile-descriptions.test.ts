@@ -58,7 +58,7 @@ const CASES: ReadonlyArray<
   [{ id: "gift", kind: "card-gift", card: CARD }, "augury-offer-card-gift-description"],
   [{ id: "draft", kind: "card-draft", cards: FOUR_CARDS }, "augury-offer-card-draft-description"],
   [{ id: "copies", kind: "copies-draft", cards: FOUR_CARDS, copyCount: 3 }, "augury-offer-copies-draft-description"],
-  [{ id: "category", kind: "category-draft", cards: FOUR_CARDS, categoryName: "fixture" }, "augury-offer-category-draft-description"],
+  [{ id: "category", kind: "category-draft", cards: FOUR_CARDS, category: { kind: "subtype", name: "fixture" } }, "augury-offer-category-draft-description"],
   [{ id: "transfigured", kind: "transfigured-draft", cards: FOUR_CARDS }, "augury-offer-transfigured-draft-description"],
   [{ id: "bundle", kind: "card-bundle", cards: [card(1), card(2)] }, "augury-offer-card-bundle-description"],
   [{ id: "transfigure", kind: "transfigure-card", card: CARD, transfiguration: "Empowered" }, "augury-offer-transfigure-card-description"],
@@ -100,6 +100,38 @@ describe("offer tile descriptions", () => {
     expect(formatter).toHaveBeenLastCalledWith(
       "augury-offer-duplicate-card-choice-description",
       { candidateCount: 3 },
+    );
+  });
+
+  it("passes semantic category variants to Fluent", () => {
+    const formatter = vi.fn((id: string) => id) as unknown as MessageFormatter;
+
+    offerTileDescription(
+      {
+        id: "event",
+        kind: "category-draft",
+        cards: FOUR_CARDS,
+        category: { kind: "event" },
+      },
+      formatter,
+    );
+    expect(formatter).toHaveBeenLastCalledWith(
+      "augury-offer-category-draft-description",
+      { category: "event", categoryName: "" },
+    );
+
+    offerTileDescription(
+      {
+        id: "subtype",
+        kind: "category-draft",
+        cards: FOUR_CARDS,
+        category: { kind: "subtype", name: "Fixture" },
+      },
+      formatter,
+    );
+    expect(formatter).toHaveBeenLastCalledWith(
+      "augury-offer-category-draft-description",
+      { category: "subtype", categoryName: "Fixture" },
     );
   });
 

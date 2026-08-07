@@ -2,7 +2,9 @@ import type { MessageFormatter } from "../../hooks/use-messages";
 import { richText, type RichText } from "../card/rich-text";
 import type { OfferTileModel } from "./OfferTile";
 
-function cardName(model: { readonly displaySnapshot: { readonly name: string } }): string {
+function cardName(model: {
+  readonly displaySnapshot: { readonly name: string };
+}): string {
   return model.displaySnapshot.name;
 }
 
@@ -69,7 +71,8 @@ export function offerTileDescription(
       });
     case "category-draft":
       return t("augury-offer-category-draft-description", {
-        categoryName: model.categoryName,
+        category: model.category.kind,
+        categoryName: "name" in model.category ? model.category.name : "",
       });
     case "transfigured-draft":
       return t("augury-offer-transfigured-draft-description");

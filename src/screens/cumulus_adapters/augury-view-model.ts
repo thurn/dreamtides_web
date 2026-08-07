@@ -12,7 +12,10 @@ import {
   generateMerchantEncounterWithDebug,
   resolveOfferPresentation,
 } from "../../journey_v2";
-import { buildCategoryUniverse } from "../../journey_v2/archetypes/categories";
+import {
+  buildCategoryUniverse,
+  type MerchantCategory,
+} from "../../journey_v2/archetypes/categories";
 import type {
   MerchantAcceptRequest,
   MerchantCatalogCard,
@@ -44,6 +47,7 @@ import type {
   OfferTileCard,
   OfferTileBundleCards,
   OfferTileCardChoices,
+  OfferTileCategory,
   OfferTileCharacterSubtype,
   OfferTileDreamsignChoices,
   OfferTileDreamsign,
@@ -303,13 +307,43 @@ function copyCount(offer: MerchantOffer): number {
   return counts[0];
 }
 
-function categoryName(offer: MerchantOffer, context: MerchantContext): string {
+export function projectOfferTileCategory(
+  category: MerchantCategory,
+): OfferTileCategory {
+  switch (category.id) {
+    case "type:Character":
+      return { kind: "character" };
+    case "type:Event":
+      return { kind: "event" };
+    case "cost:cheap":
+      return { kind: "cheap" };
+    case "cost:mid":
+      return { kind: "mid-cost" };
+    case "cost:big":
+      return { kind: "expensive" };
+    case "fast":
+      return { kind: "fast" };
+    default:
+      if (category.id.startsWith("subtype:")) {
+        return { kind: "subtype", name: category.label };
+      }
+      if (category.id.startsWith("cluster:")) {
+        return { kind: "package", name: category.label };
+      }
+      return unavailable("category_draft_known has an unsupported category id");
+  }
+}
+
+function offerTileCategory(
+  offer: MerchantOffer,
+  context: MerchantContext,
+): OfferTileCategory {
   const category = buildCategoryUniverse(context).find((candidate) =>
     offer.targetKey.startsWith(`${candidate.id}:`),
   );
   if (category === undefined)
     unavailable("category_draft_known has an unknown category id");
-  return category.label;
+  return projectOfferTileCategory(category);
 }
 
 export function buildAuguryOfferTileModel(
@@ -342,7 +376,7 @@ export function buildAuguryOfferTileModel(
         id,
         kind: "category-draft",
         cards: fourCards(candidateCards(offer, [2, 3, 4])),
-        categoryName: categoryName(offer, context),
+        category: offerTileCategory(offer, context),
       };
     case "copies_draft":
       return {

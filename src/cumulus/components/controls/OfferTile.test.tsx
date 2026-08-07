@@ -320,7 +320,7 @@ describe("OfferTile", () => {
           id: "category",
           kind: "category-draft",
           cards: CARDS,
-          categoryName: "Character",
+          category: { kind: "character" },
         },
       ],
     ];

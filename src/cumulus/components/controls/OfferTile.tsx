@@ -124,6 +124,18 @@ interface OfferTileBase {
   id: string;
 }
 
+export type OfferTileCategory =
+  | {
+      /** Stable category whose complete player-facing phrase is localized. */
+      kind: "character" | "event" | "cheap" | "mid-cost" | "expensive" | "fast";
+    }
+  | {
+      /** Category whose canonical subtype or package name is data-defined. */
+      kind: "subtype" | "package";
+      /** Canonical display name inserted into the category-specific phrase. */
+      name: string;
+    };
+
 /**
  * Strict symbolic compositions for every Augury offer category. The
  * component owns the composition; callers provide only UUID-backed subjects.
@@ -137,8 +149,8 @@ export type OfferTileModel =
   | (OfferTileBase & {
       kind: "category-draft";
       cards: OfferTileCardChoices;
-      /** Player-facing category noun, such as `warrior` or `Event`. */
-      categoryName: string;
+      /** Semantic category used to select a complete localized phrase. */
+      category: OfferTileCategory;
     })
   | (OfferTileBase & {
       kind: "copies-draft";

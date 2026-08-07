@@ -21,6 +21,7 @@ import {
   buildAuguryAcceptRequest,
   buildAuguryOfferTileModel,
   buildAuguryOfferViews,
+  projectOfferTileCategory,
 } from "./augury-view-model";
 import {
   auguryOfferHeadline,
@@ -589,7 +590,7 @@ describe("augury view model", () => {
     );
     expect(category).toMatchObject({
       kind: "category-draft",
-      categoryName: "Character",
+      category: { kind: "character" },
     });
     expect(copies).toMatchObject({ kind: "copies-draft", copyCount: 2 });
     for (const count of [2, 3, 4]) {
@@ -625,5 +626,33 @@ describe("augury view model", () => {
         mappingContext,
       ),
     ).toThrow(/requires 2 to 4 candidates/);
+  });
+
+  it("projects every generated category family to a semantic localization variant", () => {
+    const cases = [
+      ["type:Character", "Character", { kind: "character" }],
+      ["type:Event", "Event", { kind: "event" }],
+      ["cost:cheap", "cheap card", { kind: "cheap" }],
+      ["cost:mid", "mid-cost card", { kind: "mid-cost" }],
+      ["cost:big", "expensive card", { kind: "expensive" }],
+      ["fast", "fast card", { kind: "fast" }],
+      ["subtype:Ancient", "Ancient", { kind: "subtype", name: "Ancient" }],
+      [
+        "cluster:7",
+        "Skull Weaver package",
+        { kind: "package", name: "Skull Weaver package" },
+      ],
+    ] as const;
+
+    for (const [id, label, expected] of cases) {
+      expect(
+        projectOfferTileCategory({
+          id,
+          label,
+          memberUuids: [],
+          deckAffine: false,
+        }),
+      ).toEqual(expected);
+    }
   });
 });
