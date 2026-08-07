@@ -46,6 +46,17 @@ describe("fast review plan", () => {
     });
   });
 
+  it("selects localization contract checks for Fluent source changes", () => {
+    expect(buildReviewPlan(["data/tabula/strings.flt"])).toMatchObject({
+      shouldTypecheck: false,
+      shouldValidate: true,
+      testInputs: [
+        "data/tabula/strings.flt",
+        "scripts/generate-localization-types.test.mjs",
+      ],
+    });
+  });
+
   it("routes repository scripts to related tests without typed source lint", () => {
     expect(buildReviewPlan(["scripts/review.mjs"])).toMatchObject({
       lintFiles: [],

@@ -1,5 +1,4 @@
 import type { ReactElement } from "react";
-import { useLocalization } from "@fluent/react";
 import { GlassButton } from "../components/controls/GlassButton";
 import {
   DreamAvatarPortrait,
@@ -8,6 +7,7 @@ import {
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { Motes } from "../components/hud/Motes";
 import { GlassPanel } from "../components/overlay/GlassPanel";
+import { useMessages } from "../hooks/use-messages";
 import { token } from "../primitives/tokens";
 import {
   JOURNEY_RESULT_BOTTOM_SAFE_PADDING,
@@ -21,17 +21,6 @@ export interface JourneyCompleteStatView {
   value: number;
   kind: "number" | "essence";
 }
-
-const STAT_LABEL_MESSAGE_IDS: Record<
-  JourneyCompleteStatView["id"],
-  string
-> = {
-  battles: "journey-complete-stat-battles",
-  dreamscapes: "journey-complete-stat-dreamscapes",
-  cards: "journey-complete-stat-cards",
-  dreamsigns: "journey-complete-stat-dreamsigns",
-  essence: "journey-complete-stat-essence",
-};
 
 export interface JourneyCompleteDreamAvatarView extends DreamAvatarVisual {
   id: string;
@@ -53,7 +42,7 @@ export function JourneyCompleteScreen({
   view,
   onNewJourney,
 }: JourneyCompleteScreenProps): ReactElement {
-  const { l10n } = useLocalization();
+  const t = useMessages();
 
   return (
     <div
@@ -123,7 +112,7 @@ export function JourneyCompleteScreen({
                   color: token("--text-primary"),
                 }}
               >
-                {l10n.getString("journey-complete-title")}
+                {t("journey-complete-title")}
               </h1>
             </header>
 
@@ -176,10 +165,9 @@ export function JourneyCompleteScreen({
                       <SummaryStat
                         key={stat.id}
                         stat={stat}
-                        label={l10n.getString(
-                          STAT_LABEL_MESSAGE_IDS[stat.id],
-                          { count: stat.value },
-                        )}
+                        label={t(`journey-complete-stat-${stat.id}`, {
+                          count: stat.value,
+                        })}
                       />
                     ))}
                   </dl>
@@ -197,7 +185,7 @@ export function JourneyCompleteScreen({
             }}
           >
             <GlassButton
-              label={l10n.getString("journey-complete-new-journey")}
+              label={t("journey-complete-new-journey")}
               variant="accent"
               onPress={onNewJourney}
               testId="journey-complete-new-journey"

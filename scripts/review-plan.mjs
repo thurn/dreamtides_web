@@ -12,6 +12,7 @@ const TEST_INPUT_EXTENSIONS = new Set([
   ".ts",
   ".tsx",
   ".css",
+  ".flt",
   ".json",
   ".jsonc",
   ".toml",
@@ -21,6 +22,14 @@ const SOURCE_TREE_CONTRACT_TESTS = [
   "scripts/cumulus-generated-docs-drift.test.mjs",
   "scripts/cumulus-ui-boundary.test.mjs",
 ];
+
+const LOCALIZATION_CONTRACT_INPUTS = new Set([
+  "data/tabula/strings.flt",
+  "scripts/generate-localization-types.mjs",
+  "src/data/localization-messages.ts",
+]);
+const LOCALIZATION_CONTRACT_TEST =
+  "scripts/generate-localization-types.test.mjs";
 
 function isProductionSourceInput(file) {
   return (
@@ -71,6 +80,9 @@ export function buildReviewPlan(files, fileExists = () => true) {
   const testInputs = existingFiles.filter(isTestInput);
   if (changedFiles.some(isProductionSourceInput)) {
     testInputs.push(...SOURCE_TREE_CONTRACT_TESTS);
+  }
+  if (changedFiles.some((file) => LOCALIZATION_CONTRACT_INPUTS.has(file))) {
+    testInputs.push(LOCALIZATION_CONTRACT_TEST);
   }
 
   return {

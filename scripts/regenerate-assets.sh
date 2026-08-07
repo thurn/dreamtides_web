@@ -26,8 +26,9 @@
 #    5. generate-cumulus-tokens    src/cumulus/primitives/tokens.ts
 #    6. generate-cumulus-metadata  src/cumulus/metadata/cumulus-metadata.json
 #    7. generate-cumulus-docs   .llms/skills/cumulus/ component reference + index
-#    8. check-tides4          confirm the tides4 freshness gate passes
-#    9. check-tide-annotations  confirm each tide label matches its deck contents
+#    8. generate-localization-types  src/data/localization-messages.ts
+#    9. check-tides4          confirm the tides4 freshness gate passes
+#   10. check-tide-annotations  confirm each tide label matches its deck contents
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -62,8 +63,11 @@ if [[ ! -d node_modules ]]; then
 fi
 
 if [[ "$FAST" == true ]]; then
-  step "1/1  setup-assets — refresh runtime bundles from TOML content"
+  step "1/2  setup-assets — refresh runtime bundles from TOML content"
   node scripts/setup-assets.mjs
+
+  step "2/2  generate-localization-types — refresh typed message contracts"
+  node scripts/generate-localization-types.mjs
 
   step "Done — fast content regeneration complete"
   git status --short -- data/tabula || true
@@ -77,31 +81,34 @@ EOF
   exit 0
 fi
 
-step "1/9  setup-assets — build public/ inputs from source"
+step "1/10  setup-assets — build public/ inputs from source"
 node scripts/setup-assets.mjs
 
-step "2/9  bake-merchant-corpus — data/merchant_corpus.json"
+step "2/10  bake-merchant-corpus — data/merchant_corpus.json"
 node scripts/bake-merchant-corpus.mjs
 
-step "3/9  bake-tides4 — data/tides4.jsonc + markdown"
+step "3/10  bake-tides4 — data/tides4.jsonc + markdown"
 node scripts/bake-tides4.mjs
 
-step "4/9  setup-assets — copy fresh artifacts into public/"
+step "4/10  setup-assets — copy fresh artifacts into public/"
 node scripts/setup-assets.mjs
 
-step "5/9  generate-cumulus-tokens — src/cumulus/primitives/tokens.ts"
+step "5/10  generate-cumulus-tokens — src/cumulus/primitives/tokens.ts"
 node scripts/generate-cumulus-tokens.mjs
 
-step "6/9  generate-cumulus-metadata — src/cumulus/metadata/cumulus-metadata.json"
+step "6/10  generate-cumulus-metadata — src/cumulus/metadata/cumulus-metadata.json"
 node scripts/generate-cumulus-metadata.mjs
 
-step "7/9  generate-cumulus-docs — .llms/skills/cumulus component reference"
+step "7/10  generate-cumulus-docs — .llms/skills/cumulus component reference"
 node scripts/generate-cumulus-docs.mjs
 
-step "8/9  check-tides4 — verify the freshness gate"
+step "8/10  generate-localization-types — src/data/localization-messages.ts"
+node scripts/generate-localization-types.mjs
+
+step "9/10  check-tides4 — verify the freshness gate"
 node scripts/check-tides4.mjs
 
-step "9/9  check-tide-annotations — verify tide labels match their decks"
+step "10/10  check-tide-annotations — verify tide labels match their decks"
 node scripts/check-tide-annotations.mjs
 
 step "Done — git-tracked files changed by this run"

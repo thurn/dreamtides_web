@@ -52,15 +52,16 @@ function mockedRun(...arguments_) {
 }
 
 describe("regenerate-assets.sh", () => {
-  it("runs only setup-assets in fast mode", () => {
+  it("runs only content generators in fast mode", () => {
     const result = mockedRun("--fast");
 
     expect(result.status).toBe(0);
     expect(result.commands).toEqual([
       "node scripts/setup-assets.mjs",
+      "node scripts/generate-localization-types.mjs",
       "git status --short -- data/tabula",
     ]);
-    expect(result.stdout).toContain("1/1  setup-assets");
+    expect(result.stdout).toContain("1/2  setup-assets");
     expect(result.stdout).toContain("fast content regeneration complete");
   });
 
@@ -68,7 +69,9 @@ describe("regenerate-assets.sh", () => {
     const result = mockedRun();
 
     expect(result.status).toBe(0);
-    expect(result.commands.filter((command) => command.startsWith("node "))).toEqual([
+    expect(
+      result.commands.filter((command) => command.startsWith("node ")),
+    ).toEqual([
       "node scripts/setup-assets.mjs",
       "node scripts/bake-merchant-corpus.mjs",
       "node scripts/bake-tides4.mjs",
@@ -76,6 +79,7 @@ describe("regenerate-assets.sh", () => {
       "node scripts/generate-cumulus-tokens.mjs",
       "node scripts/generate-cumulus-metadata.mjs",
       "node scripts/generate-cumulus-docs.mjs",
+      "node scripts/generate-localization-types.mjs",
       "node scripts/check-tides4.mjs",
       "node scripts/check-tide-annotations.mjs",
     ]);
