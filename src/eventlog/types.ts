@@ -104,6 +104,8 @@ export interface ContentConfig {
   auguryFoldHash?: string;
   /** Exploration effect definitions, defaults, copy, and encounter catalog. */
   explorationFoldHash?: string;
+  /** Tutorial scenario fields which can change reducer outcomes. */
+  tutorialFoldHash?: string;
   opponentsFoldHash?: string;
   defaultStartingEssence?: number;
   dreamsignCap?: number;
@@ -116,6 +118,7 @@ export interface PinnedContentConfig extends ContentConfig {
   rewardSelectionFoldHash: string;
   auguryFoldHash: string;
   explorationFoldHash: string;
+  tutorialFoldHash: string;
   opponentsFoldHash: string;
   defaultStartingEssence: number;
   dreamsignCap: number;

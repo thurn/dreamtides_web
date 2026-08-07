@@ -17,6 +17,7 @@ import {
   poolVariantNeedsTides4,
 } from "./data/journey-content";
 import { loadTutorialConfiguration } from "./data/tutorial-actions";
+import { tutorialStarterDeckSize } from "./data/tutorial-actions";
 import { getFirebaseDatabase } from "./firebase/app-config";
 import { RoomGate } from "./coop/RoomGate";
 import {
@@ -630,19 +631,22 @@ export default function App({
       loadTutorialConfiguration(),
     ])
       .then(([loadedContent, tutorial]) => {
+        logEvent("tutorial_configuration_loaded", {
+          contentHash: tutorial.contentHash,
+          foldHash: tutorial.foldHash,
+          featuredCards: tutorial.battle.featuredCards,
+          playerDreamAvatarId: tutorial.battle.playerDreamAvatarId,
+          enemyDreamAvatarId: tutorial.battle.enemyDreamAvatarId,
+          derivedDeckSize: tutorialStarterDeckSize(tutorial.battle),
+          startingEnergy: tutorial.battle.startingEnergy,
+          scoreToWin: tutorial.battle.scoreToWin,
+          handoff: tutorial.battle.handoff,
+        });
         const content = {
           ...loadedContent,
-          tutorialJourneyStart: tutorial.journeyStart,
-          tutorialDreamscape: tutorial.dreamscape,
-          tutorialAtlas: tutorial.atlas,
-          tutorialDraft: tutorial.draft,
-          tutorialPurge: tutorial.purge,
-          tutorialDreamsignRevelation: tutorial.dreamsignRevelation,
-          tutorialBattleStart: tutorial.battleStart,
-          tutorialTriggers: tutorial.triggers,
-          tutorialBattle: tutorial.battle,
+          tutorial,
         };
-        // Register the five real reducer content providers from the loaded
+        // Register the reducer content providers from the loaded
         // content BEFORE any room folds an event. Until this runs, every
         // provider-backed event (START_JOURNEY, SELECT_DREAM_AVATAR, ADD_CARD,
         // ADD_DREAMSIGN, content-coupled OPEN_SITE / REROLL_SHOP / BEGIN_BATTLE)
@@ -722,6 +726,10 @@ export default function App({
     );
   }
 
+  if (journeyContent.tutorial === undefined) {
+    throw new Error("Tutorial configuration is missing from journey content.");
+  }
+
   if (firebaseError !== null) {
     return (
       <ApplicationStateScreen
@@ -766,7 +774,10 @@ export default function App({
       economyData={journeyContent.economyData}
       rewardSelectionData={journeyContent.rewardSelectionData}
       auguryData={journeyContent.auguryData}
-      explorationFoldHash={journeyContent.exploration?.foldHash ?? "missing-exploration-content"}
+      explorationFoldHash={
+        journeyContent.exploration?.foldHash ?? "missing-exploration-content"
+      }
+      tutorialFoldHash={journeyContent.tutorial.foldHash}
       frontDoorEntry={frontDoorEntry}
     >
       {(context) => (

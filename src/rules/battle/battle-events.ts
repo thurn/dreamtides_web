@@ -121,7 +121,7 @@ import {
   selectStarterCardLegalTargetIds,
   starterCardRequiresTarget,
 } from "../../battle/starter-card-targets";
-import { TUTORIAL_DREAM_AVATAR_ID } from "../../data/tutorial-cards";
+import { configuredTutorialJourneyDreamAvatarId } from "../front-door";
 import { resetJourney } from "../journey/lifecycle";
 import { canVisitSite, completeJourneySite, findSite } from "../journey/sites";
 
@@ -392,6 +392,8 @@ export function exitTutorialBattle(
     return null;
   }
   const reset = resetJourney(state, ctx);
+  const tutorialDreamAvatarId = configuredTutorialJourneyDreamAvatarId();
+  if (tutorialDreamAvatarId === null) return null;
   return {
     ...reset,
     frontDoor: { phase: "journey", journeyId: null, tutorial: null },
@@ -400,7 +402,7 @@ export function exitTutorialBattle(
       ...reset.journey,
       screen: {
         type: "journeyStart",
-        tutorialDreamAvatarId: TUTORIAL_DREAM_AVATAR_ID,
+        tutorialDreamAvatarId,
       },
     },
   };

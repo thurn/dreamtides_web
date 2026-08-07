@@ -13,9 +13,17 @@ export function LoadingScreenAdapter({
 }) {
   const hasLoggedPresentation = useRef(false);
   const { state, mutations } = useFrontDoor();
-  const { cardDatabase } = useJourney();
+  const { journeyContent } = useJourney();
+  const { cardDatabase } = journeyContent;
+  const featuredCards = journeyContent.tutorial?.battle.featuredCards;
+  if (featuredCards === undefined) {
+    throw new Error("Tutorial loading configuration is missing.");
+  }
   const source = state.journeyId?.startsWith("event:") ? "main_menu" : "direct";
-  const view = useMemo(() => buildLoadingView(cardDatabase), [cardDatabase]);
+  const view = useMemo(
+    () => buildLoadingView(cardDatabase, featuredCards),
+    [cardDatabase, featuredCards],
+  );
 
   useEffect(() => {
     if (hasLoggedPresentation.current) return;

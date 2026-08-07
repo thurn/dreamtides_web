@@ -1,3 +1,4 @@
+/* eslint-disable max-lines -- this adapter keeps the full screen wiring together. */
 // Adapter for the Cumulus Purge site. Wiring only: acquire live journey state,
 // build the view-model, log the visit, and commit the selected deck entries.
 
@@ -10,7 +11,8 @@ import type { FirstVisitSiteTutorialView } from "../../cumulus/screens/site-tuto
 
 export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
   const { state, mutations, journeyContent } = useJourney();
-  const { cardDatabase, guides, tutorialPurge } = journeyContent;
+  const { cardDatabase, guides } = journeyContent;
+  const tutorialPurge = journeyContent.tutorial?.purge;
   const node =
     state.currentDreamscape !== null
       ? (state.atlas.nodes[state.currentDreamscape] ?? null)
@@ -36,7 +38,16 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
             tutorialConfiguration: tutorialPurge,
             economyData: journeyContent.economyData,
           }),
-    [state, node, site, cardDatabase, tutorialPurge, guide, guideLine, journeyContent.economyData],
+    [
+      state,
+      node,
+      site,
+      cardDatabase,
+      tutorialPurge,
+      guide,
+      guideLine,
+      journeyContent.economyData,
+    ],
   );
 
   const handleTutorialShown = useCallback(
@@ -106,7 +117,8 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
         purgedEntryIds: entryIds,
         count: purgedCardIds.length,
         totalCost: cost,
-        nightmareCardsRemoved: purgedEntries.filter((entry) => entry.isBane).length,
+        nightmareCardsRemoved: purgedEntries.filter((entry) => entry.isBane)
+          .length,
         isEnhanced: site.isEnhanced,
         essenceBefore: state.essence,
         essenceAfter: Math.max(0, state.essence - cost),

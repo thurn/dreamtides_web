@@ -1,11 +1,13 @@
 import { describe, expect, it } from "vitest";
-import {
-  TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
-  TUTORIAL_WORLDS_AWAIT_CARD_ID,
-} from "../../data/tutorial-cards";
+import { TEST_TUTORIAL_FEATURED_CARDS } from "../../test/tutorial-configuration-fixture";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { buildLoadingView } from "./loading-view-model";
+
+const TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID =
+  TEST_TUTORIAL_FEATURED_CARDS.enemyStarterCardId;
+const TUTORIAL_WORLDS_AWAIT_CARD_ID =
+  TEST_TUTORIAL_FEATURED_CARDS.loadingEventCardId;
 
 function card(cardNumber: number, id: string): CardData {
   return {
@@ -33,6 +35,7 @@ describe("buildLoadingView", () => {
         [champion.cardNumber, champion],
         [worlds.cardNumber, worlds],
       ]),
+      TEST_TUTORIAL_FEATURED_CARDS,
     );
 
     expect(view.runeboundChampion.cardId).toBe(champion.id);
@@ -44,7 +47,10 @@ describe("buildLoadingView", () => {
   it("fails loudly when an authored UUID is absent", () => {
     const champion = card(1, TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID);
     expect(() =>
-      buildLoadingView(new Map([[champion.cardNumber, champion]])),
+      buildLoadingView(
+        new Map([[champion.cardNumber, champion]]),
+        TEST_TUTORIAL_FEATURED_CARDS,
+      ),
     ).toThrow(TUTORIAL_WORLDS_AWAIT_CARD_ID);
   });
 });

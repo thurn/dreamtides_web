@@ -1,12 +1,23 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import type { EventContext, GameEvent, Genesis } from "../eventlog/types";
+import { TUTORIAL_PLAYER_CARD_INSTANCE_ID } from "../data/tutorial-cards";
 import {
-  TUTORIAL_OPPONENT_CARD_ID,
-  TUTORIAL_PLAYER_CARD_ID,
-  TUTORIAL_PLAYER_CARD_INSTANCE_ID,
-} from "../data/tutorial-cards";
+  TEST_TUTORIAL_FEATURED_CARDS,
+  TEST_TUTORIAL_PLAYER_AVATAR_ID,
+} from "../test/tutorial-configuration-fixture";
+import { registerTutorialFrontDoorContentProvider } from "./front-door";
 import { genesisFoldState } from "./fold-state";
 import { reduceGameEvent } from "./reducer";
+
+const TUTORIAL_OPPONENT_CARD_ID = TEST_TUTORIAL_FEATURED_CARDS.opponentCardId;
+const TUTORIAL_PLAYER_CARD_ID = TEST_TUTORIAL_FEATURED_CARDS.playerCardId;
+
+beforeEach(() => {
+  registerTutorialFrontDoorContentProvider({
+    playerCardId: TUTORIAL_PLAYER_CARD_ID,
+    journeyDreamAvatarId: TEST_TUTORIAL_PLAYER_AVATAR_ID,
+  });
+});
 
 const GENESIS: Genesis = {
   seed: "front-door-seed",

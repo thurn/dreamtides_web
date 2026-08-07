@@ -146,10 +146,13 @@ clears the room's battle slice and resumes the imported journey screen.
 
 ### Tutorial authoring
 
-The standalone tutorial is an ordered action sequence authored in
-`data/tabula/tutorial.toml`. `scripts/setup-assets.mjs` validates that source
-and generates the browser-readable `public/tutorial-data.json` snapshot. The
-Tutorial Editor reads and writes the same action model during development.
+The standalone tutorial scenario is authored in `data/tabula/tutorial.toml`.
+It includes presentation actions, guidance, featured identities, battle setup,
+and the playable handoff. `scripts/setup-assets.mjs` validates that source and
+generates the browser-readable `public/tutorial-data.json` snapshot. The
+Tutorial Editor reads and writes the same action model during development. See
+[`tutorial_data.md`](tutorial_data.md) for the complete authoring schema and
+generated-data flow.
 
 Every tutorial beat, including instructional messages, is represented by a
 typed `TutorialAction`. Player-facing copy belongs on the authored action so it

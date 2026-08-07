@@ -89,7 +89,7 @@ export function BattleSiteRoute({
           init={preview}
           cardDatabase={cardDatabase}
           isTutorialJourney={state.isTutorialJourney === true}
-          tutorialConfiguration={journeyContent.tutorialBattleStart}
+          tutorialConfiguration={journeyContent.tutorial?.battleStart}
           onBegin={beginBattle}
         />
       </CumulusJourneyChrome>

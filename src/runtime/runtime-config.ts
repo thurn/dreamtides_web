@@ -106,6 +106,7 @@ export function contentConfigFromRuntime(
   rewardSelectionData: RewardSelectionData,
   auguryData: AuguryData,
   explorationFoldHash: string,
+  tutorialFoldHash: string,
 ): PinnedContentConfig {
   return {
     poolVariant: config.poolVariant ?? draftData.pool.defaultStrategy,
@@ -117,6 +118,7 @@ export function contentConfigFromRuntime(
     rewardSelectionFoldHash: rewardSelectionData.foldHash,
     auguryFoldHash: auguryData.foldHash,
     explorationFoldHash,
+    tutorialFoldHash,
     opponentsFoldHash: opponentsData.foldHash,
     defaultStartingEssence: economyData.journey.defaultStartingEssence,
     dreamsignCap: economyData.journey.dreamsignCap,
@@ -138,6 +140,7 @@ export function contentConfigsEqual(
     a.rewardSelectionFoldHash === b.rewardSelectionFoldHash &&
     a.auguryFoldHash === b.auguryFoldHash &&
     a.explorationFoldHash === b.explorationFoldHash &&
+    a.tutorialFoldHash === b.tutorialFoldHash &&
     a.opponentsFoldHash === b.opponentsFoldHash &&
     a.defaultStartingEssence === b.defaultStartingEssence &&
     a.dreamsignCap === b.dreamsignCap

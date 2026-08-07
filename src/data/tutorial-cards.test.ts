@@ -1,11 +1,12 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../types/cards";
-import {
-  loadTutorialCards,
-  TUTORIAL_OPPONENT_CARD_ID,
-  TUTORIAL_PLAYER_CARD_ID,
-  TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
-} from "./tutorial-cards";
+import { loadTutorialCards } from "./tutorial-cards";
+import { TEST_TUTORIAL_FEATURED_CARDS } from "../test/tutorial-configuration-fixture";
+
+const TUTORIAL_OPPONENT_CARD_ID = TEST_TUTORIAL_FEATURED_CARDS.opponentCardId;
+const TUTORIAL_PLAYER_CARD_ID = TEST_TUTORIAL_FEATURED_CARDS.playerCardId;
+const TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID =
+  TEST_TUTORIAL_FEATURED_CARDS.enemyStarterCardId;
 
 afterEach(() => {
   vi.unstubAllGlobals();

@@ -75,12 +75,9 @@ export function JourneyStartScreenAdapter() {
     () =>
       buildJourneyStartGuideDialogue(
         tutorialDreamAvatarId,
-        journeyContent.tutorialJourneyStart?.speechBubble,
+        journeyContent.tutorial?.journeyStart.speechBubble,
       ),
-    [
-      journeyContent.tutorialJourneyStart?.speechBubble,
-      tutorialDreamAvatarId,
-    ],
+    [journeyContent.tutorial?.journeyStart.speechBubble, tutorialDreamAvatarId],
   );
 
   const handleGuideDialogueShown = useCallback(() => {
@@ -100,11 +97,7 @@ export function JourneyStartScreenAdapter() {
         text: guideDialogue.model.text,
       },
     );
-  }, [
-    guideDialogue,
-    journeySeed,
-    tutorialDreamAvatarId,
-  ]);
+  }, [guideDialogue, journeySeed, tutorialDreamAvatarId]);
 
   const handlePick = useCallback(
     (dreamAvatarId: string) => {
@@ -128,9 +121,7 @@ export function JourneyStartScreenAdapter() {
       guideDialogue={guideDialogue}
       onGuideDialogueShown={handleGuideDialogueShown}
       onPick={handlePick}
-      onReroll={
-        tutorialDreamAvatarId === undefined ? handleReroll : undefined
-      }
+      onReroll={tutorialDreamAvatarId === undefined ? handleReroll : undefined}
     />
   );
 }

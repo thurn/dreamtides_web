@@ -10,8 +10,14 @@ import {
   parseTutorialSiteConfiguration,
   parseTutorialTriggers,
 } from "./tutorial-actions";
+import {
+  makeTutorialBattleConfiguration,
+  TEST_TUTORIAL_FEATURED_CARDS,
+} from "../test/tutorial-configuration-fixture";
 
 const ACTIONS_RESPONSE = {
+  contentHash: "0".repeat(64),
+  foldHash: "1".repeat(64),
   journeyStart: {
     speechBubble: {
       speaker: "mira",
@@ -106,11 +112,7 @@ const ACTIONS_RESPONSE = {
     },
   ],
   triggers: [],
-  battle: {
-    playerDraws: [],
-    enemyDraws: [],
-    dreamwellDraws: [],
-  },
+  battle: makeTutorialBattleConfiguration(),
 };
 
 function successfulFetcher() {
@@ -157,8 +159,7 @@ describe("parseTutorialActions", () => {
             horizontalOffset: 20,
             verticalOffset: 0,
             bubbleWidth: 450,
-            text:
-              "For the [yellow]Abyss[/yellow] and its [purple]events[purple]!",
+            text: "For the [yellow]Abyss[/yellow] and its [purple]events[purple]!",
           },
           wait: 3,
         },
@@ -174,8 +175,7 @@ describe("parseTutorialActions", () => {
           horizontalOffset: 20,
           verticalOffset: 0,
           bubbleWidth: 450,
-          text:
-            "For the [yellow]Abyss[/yellow] and its [purple]events[purple]!",
+          text: "For the [yellow]Abyss[/yellow] and its [purple]events[purple]!",
         },
         wait: 3,
       },
@@ -275,9 +275,7 @@ describe("parseTutorialActions", () => {
 
   it("parses persistent journey-start guidance from authored data", () => {
     expect(
-      parseTutorialJourneyStartConfiguration(
-        ACTIONS_RESPONSE.journeyStart,
-      ),
+      parseTutorialJourneyStartConfiguration(ACTIONS_RESPONSE.journeyStart),
     ).toEqual(ACTIONS_RESPONSE.journeyStart);
     expect(() =>
       parseTutorialJourneyStartConfiguration({
@@ -866,100 +864,122 @@ describe("parseTutorialActions", () => {
   it("parses a UUID-matched no-valid-targets trigger", () => {
     const cardId = "4408b942-09a0-4f4e-a403-10c708c6e3c5";
     expect(
-      parseTutorialTriggers([{
+      parseTutorialTriggers([
+        {
+          id: "flashpoint-no-valid-targets",
+          on: ["card-no-valid-targets"],
+          priority: 10,
+          duration: 4,
+          bubbleWidth: 500,
+          match: { kind: "card-id", cardId },
+          text: "There are no valid targets for this card",
+        },
+      ]),
+    ).toEqual([
+      {
         id: "flashpoint-no-valid-targets",
         on: ["card-no-valid-targets"],
         priority: 10,
+        speaker: "mira",
         duration: 4,
+        horizontalOffset: 0,
+        verticalOffset: 0,
         bubbleWidth: 500,
         match: { kind: "card-id", cardId },
         text: "There are no valid targets for this card",
-      }]),
-    ).toEqual([{
-      id: "flashpoint-no-valid-targets",
-      on: ["card-no-valid-targets"],
-      priority: 10,
-      speaker: "mira",
-      duration: 4,
-      horizontalOffset: 0,
-      verticalOffset: 0,
-      bubbleWidth: 500,
-      match: { kind: "card-id", cardId },
-      text: "There are no valid targets for this card",
-    }]);
+      },
+    ]);
   });
 
   it("parses a first-seen transfiguration concept trigger", () => {
-    const text = "Cards can be [yellow]transfigured[/yellow] to change their cost, spark, or abilities";
+    const text =
+      "Cards can be [yellow]transfigured[/yellow] to change their cost, spark, or abilities";
     expect(
-      parseTutorialTriggers([{
+      parseTutorialTriggers([
+        {
+          id: "transfiguration",
+          on: ["transfiguration-seen"],
+          delay: { "transfiguration-seen": 1 },
+          duration: 5,
+          bubbleWidth: 500,
+          match: { kind: "any" },
+          text,
+        },
+      ]),
+    ).toMatchObject([
+      {
         id: "transfiguration",
         on: ["transfiguration-seen"],
         delay: { "transfiguration-seen": 1 },
-        duration: 5,
-        bubbleWidth: 500,
-        match: { kind: "any" },
         text,
-      }]),
-    ).toMatchObject([{
-      id: "transfiguration",
-      on: ["transfiguration-seen"],
-      delay: { "transfiguration-seen": 1 },
-      text,
-    }]);
+      },
+    ]);
   });
 
   it("parses a first-resolved Challenge concept trigger", () => {
-    const text = "If there is a tie in spark (✦) values, both characters in the challenge are dissolved";
+    const text =
+      "If there is a tie in spark (✦) values, both characters in the challenge are dissolved";
     expect(
-      parseTutorialTriggers([{
+      parseTutorialTriggers([
+        {
+          id: "spark-tie",
+          on: ["challenge-resolved"],
+          duration: 5,
+          bubbleWidth: 500,
+          match: { kind: "any" },
+          text,
+        },
+      ]),
+    ).toMatchObject([
+      {
         id: "spark-tie",
         on: ["challenge-resolved"],
-        duration: 5,
-        bubbleWidth: 500,
-        match: { kind: "any" },
         text,
-      }]),
-    ).toMatchObject([{
-      id: "spark-tie",
-      on: ["challenge-resolved"],
-      text,
-    }]);
+      },
+    ]);
   });
 
   it("parses an opponent reposition opportunity concept trigger", () => {
     expect(
-      parseTutorialTriggers([{
+      parseTutorialTriggers([
+        {
+          id: "opponent-reposition-opportunity",
+          on: ["opponent-reposition-opportunity"],
+          duration: 5,
+          bubbleWidth: 500,
+          match: { kind: "any" },
+          text: "Repositioning explanation.",
+        },
+      ]),
+    ).toMatchObject([
+      {
         id: "opponent-reposition-opportunity",
         on: ["opponent-reposition-opportunity"],
-        duration: 5,
-        bubbleWidth: 500,
         match: { kind: "any" },
-        text: "Repositioning explanation.",
-      }]),
-    ).toMatchObject([{
-      id: "opponent-reposition-opportunity",
-      on: ["opponent-reposition-opportunity"],
-      match: { kind: "any" },
-    }]);
+      },
+    ]);
   });
 
   it("parses a player Night phase concept trigger", () => {
     expect(
-      parseTutorialTriggers([{
+      parseTutorialTriggers([
+        {
+          id: "player-night-phase",
+          on: ["player-night-phase"],
+          duration: 6,
+          bubbleWidth: 500,
+          match: { kind: "any" },
+          text: "Night guidance with ❖ timing marks.",
+        },
+      ]),
+    ).toMatchObject([
+      {
         id: "player-night-phase",
         on: ["player-night-phase"],
         duration: 6,
-        bubbleWidth: 500,
         match: { kind: "any" },
-        text: "Night guidance with ❖ timing marks.",
-      }]),
-    ).toMatchObject([{
-      id: "player-night-phase",
-      on: ["player-night-phase"],
-      duration: 6,
-      match: { kind: "any" },
-    }]);
+      },
+    ]);
   });
 });
 
@@ -981,9 +1001,9 @@ describe("parseTutorialDreamscapeConfiguration", () => {
 
 describe("parseTutorialAtlasConfiguration", () => {
   it("preserves the authored delay and rejects invalid values", () => {
-    expect(
-      parseTutorialAtlasConfiguration(ACTIONS_RESPONSE.atlas),
-    ).toEqual(ACTIONS_RESPONSE.atlas);
+    expect(parseTutorialAtlasConfiguration(ACTIONS_RESPONSE.atlas)).toEqual(
+      ACTIONS_RESPONSE.atlas,
+    );
     expect(() =>
       parseTutorialAtlasConfiguration({
         speechBubble: {
@@ -997,10 +1017,23 @@ describe("parseTutorialAtlasConfiguration", () => {
 
 describe("parseTutorialBattleConfiguration", () => {
   it("preserves UUID-authored draw order and rejects invalid entries", () => {
-    const battle = {
+    const battle = makeTutorialBattleConfiguration({
+      featuredCards: {
+        ...TEST_TUTORIAL_FEATURED_CARDS,
+        dreamwellCardId: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+      },
+      starterDeck: [
+        { cardId: TEST_TUTORIAL_FEATURED_CARDS.playerCardId, copies: 3 },
+        { cardId: TEST_TUTORIAL_FEATURED_CARDS.enemyStarterCardId, copies: 3 },
+        { cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8", copies: 3 },
+        { cardId: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", copies: 3 },
+      ],
       playerDraws: ["5a980eff-6ec7-44d8-9977-b98e66bbc2c8"],
       enemyDraws: ["a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"],
-      dreamwellDraws: ["7171ff89-ebe4-42d0-8863-9b4b0531cad2"],
+      dreamwellDraws: [
+        "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+        TEST_TUTORIAL_FEATURED_CARDS.dreamwellCardId,
+      ],
       aiActionOverrides: [
         {
           id: "play-card-after-dreamwell",
@@ -1015,7 +1048,7 @@ describe("parseTutorialBattleConfiguration", () => {
           },
         },
       ],
-    };
+    });
     expect(parseTutorialBattleConfiguration(battle)).toEqual(battle);
     expect(() =>
       parseTutorialBattleConfiguration({
@@ -1026,10 +1059,7 @@ describe("parseTutorialBattleConfiguration", () => {
     expect(() =>
       parseTutorialBattleConfiguration({
         ...battle,
-        dreamwellDraws: [
-          battle.dreamwellDraws[0],
-          battle.dreamwellDraws[0],
-        ],
+        dreamwellDraws: [battle.dreamwellDraws[0], battle.dreamwellDraws[0]],
       }),
     ).toThrow(/must not repeat/u);
     expect(() =>
@@ -1059,25 +1089,29 @@ describe("parseTutorialBattleConfiguration", () => {
     expect(() =>
       parseTutorialBattleConfiguration({
         ...battle,
-        aiActionOverrides: [{
-          ...battle.aiActionOverrides[0],
-          trigger: {
-            ...battle.aiActionOverrides[0].trigger,
-            cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+        aiActionOverrides: [
+          {
+            ...battle.aiActionOverrides[0],
+            trigger: {
+              ...battle.aiActionOverrides[0].trigger,
+              cardId: "03e4e701-4720-4278-8198-9b7e0514d4cf",
+            },
           },
-        }],
+        ],
       }),
     ).toThrow(/must appear in dreamwellDraws/u);
     expect(() =>
       parseTutorialBattleConfiguration({
         ...battle,
-        aiActionOverrides: [{
-          ...battle.aiActionOverrides[0],
-          action: {
-            kind: "play-card",
-            cardId: "00000000-0000-4000-8000-000000000101",
+        aiActionOverrides: [
+          {
+            ...battle.aiActionOverrides[0],
+            action: {
+              kind: "play-card",
+              cardId: "00000000-0000-4000-8000-000000000101",
+            },
           },
-        }],
+        ],
       }),
     ).toThrow(/registered semantic play automation/u);
   });

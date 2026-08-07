@@ -10,6 +10,14 @@ import type {
 import { CumulusRoot } from "../CumulusRoot";
 import { TutorialEditorRail } from "./TutorialEditorRail";
 
+const TEST_TUTORIAL_FEATURED_CARDS = {
+  playerCardId: "11111111-1111-4111-8111-111111111111",
+  opponentCardId: "22222222-2222-4222-8222-222222222222",
+  enemyStarterCardId: "33333333-3333-4333-8333-333333333333",
+  loadingEventCardId: "44444444-4444-4444-8444-444444444444",
+  dreamwellCardId: "55555555-5555-4555-8555-555555555555",
+} as const;
+
 vi.mock("framer-motion", () => ({
   motion: {
     span: () => <span role="status" />,
@@ -81,6 +89,7 @@ function EditorHarness({
     <CumulusRoot>
       <TutorialEditorRail
         actions={actions}
+        featuredCards={TEST_TUTORIAL_FEATURED_CARDS}
         saveStatus="idle"
         saveError={null}
         onActionsChange={(next, persist) => {
@@ -137,6 +146,7 @@ describe("TutorialEditorRail", () => {
         <CumulusRoot>
           <TutorialEditorRail
             actions={actions}
+            featuredCards={TEST_TUTORIAL_FEATURED_CARDS}
             saveStatus="idle"
             saveError={null}
             onActionsChange={vi.fn()}
@@ -594,6 +604,7 @@ describe("TutorialEditorRail", () => {
         <CumulusRoot>
           <TutorialEditorRail
             actions={actions}
+            featuredCards={TEST_TUTORIAL_FEATURED_CARDS}
             saveStatus="idle"
             saveError={null}
             onActionsChange={vi.fn()}
@@ -635,9 +646,7 @@ describe("TutorialEditorRail", () => {
       ...document.body.querySelectorAll<HTMLButtonElement>(
         'button[role="option"]',
       ),
-    ].find((option) =>
-      option.textContent?.includes("Animate Avatar Portrait"),
-    );
+    ].find((option) => option.textContent?.includes("Animate Avatar Portrait"));
     expect(animationOption).toBeDefined();
     act(() => animationOption?.click());
 
@@ -754,7 +763,7 @@ describe("TutorialEditorRail", () => {
         {
           id: "draw-opponent-card",
           action: "draw-opponent-card",
-          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
           wait: 0,
         },
       ],
@@ -833,7 +842,7 @@ describe("TutorialEditorRail", () => {
           id: "draw-dreamwell-card",
           action: "draw-dreamwell-card",
           owner: "enemy",
-          cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+          cardId: TEST_TUTORIAL_FEATURED_CARDS.dreamwellCardId,
           wait: 0,
         },
       ],
@@ -843,7 +852,7 @@ describe("TutorialEditorRail", () => {
       container.querySelector<HTMLInputElement>(
         '[data-testid="tutorial-action-card-id-draw-dreamwell-card"]',
       )?.value,
-    ).toBe("02e8ea92-1218-413c-9f0b-4c865a3921d3");
+    ).toBe(TEST_TUTORIAL_FEATURED_CARDS.dreamwellCardId);
 
     act(() => root.unmount());
     container.remove();
@@ -878,7 +887,7 @@ describe("TutorialEditorRail", () => {
         {
           id: "reposition-opponent-character",
           action: "reposition-opponent-character",
-          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
           wait: 0,
         },
       ],
@@ -888,7 +897,7 @@ describe("TutorialEditorRail", () => {
       container.querySelector<HTMLInputElement>(
         '[data-testid="tutorial-action-card-id-reposition-opponent-character"]',
       )?.value,
-    ).toBe("229ab3a1-3720-41a2-924c-8fe112188f8e");
+    ).toBe(TEST_TUTORIAL_FEATURED_CARDS.opponentCardId);
 
     act(() => root.unmount());
     container.remove();
@@ -911,8 +920,7 @@ describe("TutorialEditorRail", () => {
         'button[role="option"]',
       ),
     ].find(
-      (option) =>
-        option.textContent?.trim() === "Reposition Player Character",
+      (option) => option.textContent?.trim() === "Reposition Player Character",
     );
     expect(repositionOption).toBeDefined();
     act(() => repositionOption?.click());
@@ -923,8 +931,8 @@ describe("TutorialEditorRail", () => {
         {
           id: "reposition-player-character",
           action: "reposition-player-character",
-          cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
-          opposingCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          cardId: TEST_TUTORIAL_FEATURED_CARDS.playerCardId,
+          opposingCardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
           wait: 0,
         },
       ],
@@ -934,12 +942,12 @@ describe("TutorialEditorRail", () => {
       container.querySelector<HTMLInputElement>(
         '[data-testid="tutorial-action-card-id-reposition-player-character"]',
       )?.value,
-    ).toBe("e83014d3-9d35-4e80-a1b3-9b25360ad2af");
+    ).toBe(TEST_TUTORIAL_FEATURED_CARDS.playerCardId);
     expect(
       container.querySelector<HTMLInputElement>(
         '[data-testid="tutorial-action-opposing-card-id-reposition-player-character"]',
       )?.value,
-    ).toBe("229ab3a1-3720-41a2-924c-8fe112188f8e");
+    ).toBe(TEST_TUTORIAL_FEATURED_CARDS.opponentCardId);
 
     act(() => root.unmount());
     container.remove();
@@ -971,7 +979,7 @@ describe("TutorialEditorRail", () => {
         {
           id: "reveal-and-play-opponent-card",
           action: "reveal-and-play-opponent-card",
-          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
           revealDuration: 2,
           wait: 0,
         },
@@ -989,7 +997,7 @@ describe("TutorialEditorRail", () => {
         {
           id: "reveal-and-play-opponent-card",
           action: "reveal-and-play-opponent-card",
-          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
           revealDuration: 2,
           speechBubble: {
             speaker: "mira",
@@ -1018,7 +1026,7 @@ describe("TutorialEditorRail", () => {
         {
           id: "reveal-and-play-opponent-card",
           action: "reveal-and-play-opponent-card",
-          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
           revealDuration: 2,
           speechBubble: {
             speaker: "mira",
@@ -1047,7 +1055,7 @@ describe("TutorialEditorRail", () => {
         {
           id: "reveal-and-play-opponent-card",
           action: "reveal-and-play-opponent-card",
-          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
           revealDuration: 2,
           speechBubble: {
             speaker: "mira",
@@ -1076,7 +1084,7 @@ describe("TutorialEditorRail", () => {
         {
           id: "reveal-and-play-opponent-card",
           action: "reveal-and-play-opponent-card",
-          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
           revealDuration: 2.5,
           speechBubble: {
             speaker: "mira",

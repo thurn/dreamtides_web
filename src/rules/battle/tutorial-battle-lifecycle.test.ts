@@ -15,7 +15,14 @@ import type { EventContext } from "../../eventlog/types";
 import type { FoldState } from "../fold-state";
 import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
 import type { TutorialAction } from "../../types/tutorial";
-import { TUTORIAL_DREAM_AVATAR_ID } from "../../data/tutorial-cards";
+import {
+  makeTutorialBattleConfiguration,
+  makeTutorialConfiguration,
+  TEST_TUTORIAL_PLAYER_AVATAR_ID,
+} from "../../test/tutorial-configuration-fixture";
+import { registerTutorialFrontDoorContentProvider } from "../front-door";
+
+const TUTORIAL_DREAM_AVATAR_ID = TEST_TUTORIAL_PLAYER_AVATAR_ID;
 
 const GENESIS = {
   seed: "tutorial-room-seed",
@@ -173,6 +180,10 @@ function card(cardNumber: number, id: string): CardData {
 }
 
 function content(): JourneyContent {
+  registerTutorialFrontDoorContentProvider({
+    playerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+    journeyDreamAvatarId: TUTORIAL_DREAM_AVATAR_ID,
+  });
   const cards = [
     ...STARTERS.map(([number, id]) => card(number, id)),
     card(520, "229ab3a1-3720-41a2-924c-8fe112188f8e"),
@@ -221,25 +232,28 @@ function content(): JourneyContent {
         imageNumber: 99,
       },
     ],
-    tutorialBattle: {
-      playerDraws: PLAYER_DRAW_SEQUENCE,
-      enemyDraws: ENEMY_DRAW_SEQUENCE,
-      dreamwellDraws: DREAMWELL_SEQUENCE,
-      aiActionOverrides: [
-        {
-          id: TWILIGHT_OVERRIDE_ID,
-          trigger: {
-            kind: "after-dreamwell",
-            side: "enemy",
-            cardId: FIGMENT_DREAMWELL_CARD_ID,
+    tutorial: makeTutorialConfiguration(
+      makeTutorialBattleConfiguration({
+        starterDeck: STARTERS.map(([, cardId]) => ({ cardId, copies: 3 })),
+        playerDraws: PLAYER_DRAW_SEQUENCE,
+        enemyDraws: ENEMY_DRAW_SEQUENCE,
+        dreamwellDraws: DREAMWELL_SEQUENCE,
+        aiActionOverrides: [
+          {
+            id: TWILIGHT_OVERRIDE_ID,
+            trigger: {
+              kind: "after-dreamwell",
+              side: "enemy",
+              cardId: FIGMENT_DREAMWELL_CARD_ID,
+            },
+            action: {
+              kind: "play-card",
+              cardId: TUTORIAL_TWILIGHT_CARD_ID,
+            },
           },
-          action: {
-            kind: "play-card",
-            cardId: TUTORIAL_TWILIGHT_CARD_ID,
-          },
-        },
-      ],
-    },
+        ],
+      }),
+    ),
     dreamsignTemplates: [],
     dreamscapes: [],
     affiliations: [],
@@ -330,7 +344,10 @@ function handInstanceId(
   return instanceId;
 }
 
-afterEach(() => registerTutorialBattleInitProvider(null));
+afterEach(() => {
+  registerTutorialBattleInitProvider(null);
+  registerTutorialFrontDoorContentProvider(null);
+});
 
 describe("tutorial battle lifecycle", () => {
   it("materializes the live battle before any client claims the room", () => {
@@ -366,20 +383,23 @@ describe("tutorial battle lifecycle", () => {
       ...supportCard,
       renderedText: "Support – Supported characters have +2✦.",
     });
-    tutorialContent.tutorialTriggers = [
-      {
-        id: "support",
-        on: ["card-play"],
-        priority: 100,
-        speaker: "player",
-        duration: 5,
-        horizontalOffset: 12,
-        verticalOffset: -20,
-        bubbleWidth: 300,
-        match: { kind: "glossary", id: "support" },
-        text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
-      },
-    ];
+    tutorialContent.tutorial = {
+      ...tutorialContent.tutorial!,
+      triggers: [
+        {
+          id: "support",
+          on: ["card-play"],
+          priority: 100,
+          speaker: "player",
+          duration: 5,
+          horizontalOffset: 12,
+          verticalOffset: -20,
+          bubbleWidth: 300,
+          match: { kind: "glossary", id: "support" },
+          text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
+        },
+      ],
+    };
     registerTutorialBattleInitProvider(
       createTutorialBattleInitProvider(tutorialContent),
     );
@@ -453,20 +473,23 @@ describe("tutorial battle lifecycle", () => {
       ...enemySupportCard,
       renderedText: "Support – Supported characters have +2✦.",
     });
-    tutorialContent.tutorialTriggers = [
-      {
-        id: "support",
-        on: ["card-play"],
-        priority: 100,
-        speaker: "mira",
-        duration: 3,
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 700,
-        match: { kind: "glossary", id: "support" },
-        text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
-      },
-    ];
+    tutorialContent.tutorial = {
+      ...tutorialContent.tutorial!,
+      triggers: [
+        {
+          id: "support",
+          on: ["card-play"],
+          priority: 100,
+          speaker: "mira",
+          duration: 3,
+          horizontalOffset: 0,
+          verticalOffset: 0,
+          bubbleWidth: 700,
+          match: { kind: "glossary", id: "support" },
+          text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
+        },
+      ],
+    };
     registerTutorialBattleInitProvider(
       createTutorialBattleInitProvider(tutorialContent),
     );
@@ -535,20 +558,23 @@ describe("tutorial battle lifecycle", () => {
 
   it("opens phase guidance after entering the player's Dusk reposition window", () => {
     const tutorialContent = content();
-    tutorialContent.tutorialTriggers = [
-      {
-        id: "opponent-reposition-opportunity",
-        on: ["opponent-reposition-opportunity"],
-        priority: 10,
-        speaker: "mira",
-        duration: 5,
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 500,
-        match: { kind: "any" },
-        text: "Repositioning explanation.",
-      },
-    ];
+    tutorialContent.tutorial = {
+      ...tutorialContent.tutorial!,
+      triggers: [
+        {
+          id: "opponent-reposition-opportunity",
+          on: ["opponent-reposition-opportunity"],
+          priority: 10,
+          speaker: "mira",
+          duration: 5,
+          horizontalOffset: 0,
+          verticalOffset: 0,
+          bubbleWidth: 500,
+          match: { kind: "any" },
+          text: "Repositioning explanation.",
+        },
+      ],
+    };
     registerTutorialBattleInitProvider(
       createTutorialBattleInitProvider(tutorialContent),
     );
@@ -607,20 +633,23 @@ describe("tutorial battle lifecycle", () => {
 
   it("opens six-second guidance when the player's post-script Night begins", () => {
     const tutorialContent = content();
-    tutorialContent.tutorialTriggers = [
-      {
-        id: "player-night-phase",
-        on: ["player-night-phase"],
-        priority: 10,
-        speaker: "mira",
-        duration: 6,
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 500,
-        match: { kind: "any" },
-        text: "Night guidance with ❖ timing marks.",
-      },
-    ];
+    tutorialContent.tutorial = {
+      ...tutorialContent.tutorial!,
+      triggers: [
+        {
+          id: "player-night-phase",
+          on: ["player-night-phase"],
+          priority: 10,
+          speaker: "mira",
+          duration: 6,
+          horizontalOffset: 0,
+          verticalOffset: 0,
+          bubbleWidth: 500,
+          match: { kind: "any" },
+          text: "Night guidance with ❖ timing marks.",
+        },
+      ],
+    };
     registerTutorialBattleInitProvider(
       createTutorialBattleInitProvider(tutorialContent),
     );
@@ -767,25 +796,29 @@ describe("tutorial battle lifecycle", () => {
 
   it("stacks card and Dreamwell draws from the authored battle configuration", () => {
     const tutorialContent = content();
-    tutorialContent.tutorialBattle = {
-      playerDraws: [
-        PLAYER_DRAW_SEQUENCE[1],
-        PLAYER_DRAW_SEQUENCE[0],
-        ...PLAYER_DRAW_SEQUENCE.slice(2),
-      ],
-      enemyDraws: [
-        ENEMY_DRAW_SEQUENCE[1],
-        ENEMY_DRAW_SEQUENCE[0],
-        ...ENEMY_DRAW_SEQUENCE.slice(2),
-      ],
-      dreamwellDraws: [
-        DREAMWELL_SEQUENCE[0],
-        DREAMWELL_SEQUENCE[1],
-        DREAMWELL_SEQUENCE[3],
-        DREAMWELL_SEQUENCE[2],
-        ...DREAMWELL_SEQUENCE.slice(4),
-      ],
-      aiActionOverrides: [],
+    tutorialContent.tutorial = {
+      ...tutorialContent.tutorial!,
+      battle: {
+        ...tutorialContent.tutorial!.battle,
+        playerDraws: [
+          PLAYER_DRAW_SEQUENCE[1],
+          PLAYER_DRAW_SEQUENCE[0],
+          ...PLAYER_DRAW_SEQUENCE.slice(2),
+        ],
+        enemyDraws: [
+          ENEMY_DRAW_SEQUENCE[1],
+          ENEMY_DRAW_SEQUENCE[0],
+          ...ENEMY_DRAW_SEQUENCE.slice(2),
+        ],
+        dreamwellDraws: [
+          DREAMWELL_SEQUENCE[0],
+          DREAMWELL_SEQUENCE[1],
+          DREAMWELL_SEQUENCE[3],
+          DREAMWELL_SEQUENCE[2],
+          ...DREAMWELL_SEQUENCE.slice(4),
+        ],
+        aiActionOverrides: [],
+      },
     };
     registerTutorialBattleInitProvider(
       createTutorialBattleInitProvider(tutorialContent),
@@ -809,6 +842,93 @@ describe("tutorial battle lifecycle", () => {
       DREAMWELL_SEQUENCE[3],
       DREAMWELL_SEQUENCE[2],
     ]);
+  });
+
+  it("materializes a synthetic configured handoff board deterministically", () => {
+    const tutorialContent = content();
+    const configuredBattle = {
+      ...tutorialContent.tutorial!.battle,
+      scoreToWin: 13,
+      handoff: {
+        activeSide: "enemy" as const,
+        turnNumber: 7,
+        phase: "night" as const,
+        dreamwellDeckIndex: 4,
+        player: {
+          currentEnergy: 6,
+          maxEnergy: 8,
+          score: 3,
+          dreamwellCardIndex: 2,
+          dreamwellDrawnTurn: 6,
+        },
+        enemy: {
+          currentEnergy: 2,
+          maxEnergy: 8,
+          score: 5,
+          dreamwellCardIndex: 3,
+          dreamwellDrawnTurn: 7,
+        },
+        placements: [
+          {
+            cardRole: "player" as const,
+            side: "player" as const,
+            source: "deck" as const,
+            zone: "backRank" as const,
+            slotId: "B2",
+          },
+          {
+            cardRole: "enemyStarter" as const,
+            side: "enemy" as const,
+            source: "deck" as const,
+            zone: "frontRank" as const,
+            slotId: "F7",
+          },
+          {
+            cardRole: "opponent" as const,
+            side: "player" as const,
+            source: "created" as const,
+            zone: "void" as const,
+          },
+        ],
+      },
+    };
+    tutorialContent.tutorial = {
+      ...tutorialContent.tutorial!,
+      battle: configuredBattle,
+    };
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(tutorialContent),
+    );
+
+    const first = begin().state.battle!;
+    const second = begin().state.battle!;
+    expect(first).toEqual(second);
+    expect(first.init.scoreToWin).toBe(13);
+    expect(first.board).toMatchObject({
+      activeSide: "enemy",
+      turnNumber: 7,
+      phase: "night",
+      dreamwellDeckIndex: 4,
+      sides: {
+        player: {
+          currentEnergy: 6,
+          maxEnergy: 8,
+          score: 3,
+          dreamwellCardIndex: 2,
+          dreamwellDrawnTurn: 6,
+        },
+        enemy: {
+          currentEnergy: 2,
+          maxEnergy: 8,
+          score: 5,
+          dreamwellCardIndex: 3,
+          dreamwellDrawnTurn: 7,
+        },
+      },
+    });
+    expect(first.board.sides.player.backRank.B2).not.toBeNull();
+    expect(first.board.sides.enemy.frontRank.F7).not.toBeNull();
+    expect(ids(first, "player", "void")).toContain(TUTORIAL_TWILIGHT_CARD_ID);
   });
 
   it("derives the durable handoff hands from the authored action snapshot", () => {
@@ -1386,8 +1506,22 @@ describe("tutorial battle lifecycle", () => {
   });
 
   it("restarts under transferred room control, then hands victory into the tutorial DreamAvatar offer", () => {
+    const tutorialContent = content();
+    const configuredAvatarId =
+      tutorialContent.tutorial!.battle.enemyDreamAvatarId;
+    tutorialContent.tutorial = {
+      ...tutorialContent.tutorial!,
+      battle: {
+        ...tutorialContent.tutorial!.battle,
+        playerDreamAvatarId: configuredAvatarId,
+      },
+    };
+    registerTutorialFrontDoorContentProvider({
+      playerCardId: tutorialContent.tutorial.battle.featuredCards.playerCardId,
+      journeyDreamAvatarId: configuredAvatarId,
+    });
     registerTutorialBattleInitProvider(
-      createTutorialBattleInitProvider(content()),
+      createTutorialBattleInitProvider(tutorialContent),
     );
     const first = begin();
     const beforeJourney = first.state.journey;
@@ -1422,7 +1556,7 @@ describe("tutorial battle lifecycle", () => {
       ids(original, "player", "deck"),
     );
     const replay = createTutorialBattleInitProvider(
-      content(),
+      tutorialContent,
     ).beginTutorialBattle({
       journey: beforeJourney,
       actions: TUTORIAL_ACTIONS,
@@ -1455,7 +1589,7 @@ describe("tutorial battle lifecycle", () => {
         ...beforeJourney,
         screen: {
           type: "journeyStart",
-          tutorialDreamAvatarId: TUTORIAL_DREAM_AVATAR_ID,
+          tutorialDreamAvatarId: configuredAvatarId,
         },
       },
     });
@@ -2323,20 +2457,23 @@ describe("tutorial battle lifecycle", () => {
 
   it("opens figment guidance after an opponent Dreamwell reveal creates a figment", () => {
     const tutorialContent = content();
-    tutorialContent.tutorialTriggers = [
-      {
-        id: "figment-created",
-        on: ["figment-created"],
-        priority: 100,
-        speaker: "mira",
-        duration: 6,
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 500,
-        match: { kind: "any" },
-        text: "Figments are token representations of characters.",
-      },
-    ];
+    tutorialContent.tutorial = {
+      ...tutorialContent.tutorial!,
+      triggers: [
+        {
+          id: "figment-created",
+          on: ["figment-created"],
+          priority: 100,
+          speaker: "mira",
+          duration: 6,
+          horizontalOffset: 0,
+          verticalOffset: 0,
+          bubbleWidth: 500,
+          match: { kind: "any" },
+          text: "Figments are token representations of characters.",
+        },
+      ],
+    };
     registerTutorialBattleInitProvider(
       createTutorialBattleInitProvider(tutorialContent),
     );

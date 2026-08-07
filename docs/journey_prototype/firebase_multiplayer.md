@@ -84,8 +84,8 @@ keep the same reducer protocol, so active rooms resume across those deploys.
 An incompatible reducer protocol opens the version gate; a content mismatch
 opens the configuration gate. Draft URL settings can be adopted when the Atlas,
 economy, and opponent hashes agree. A catalog hash mismatch offers a new room
-using the local content. Opponent rules require reducer protocol
-`dreamtides-coop-v15`.
+using the local content. Tutorial and opponent rules require reducer protocol
+`dreamtides-coop-v17`.
 
 ### Event log
 

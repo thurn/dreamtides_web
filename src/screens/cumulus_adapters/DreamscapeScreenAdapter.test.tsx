@@ -14,6 +14,7 @@ import { LayerName } from "../../types/layer-name";
 import type { DreamscapeScreenProps } from "../../cumulus/screens/DreamscapeScreen";
 import { logEvent, logEventOnce } from "../../logging";
 import { DreamscapeScreenAdapter } from "./DreamscapeScreenAdapter";
+import { makeTutorialConfiguration } from "../../test/tutorial-configuration-fixture";
 import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
 
@@ -142,14 +143,17 @@ describe("DreamscapeScreenAdapter", () => {
         hasSeenStartingDeckPopup: true,
       }),
       {
-        tutorialDreamscape: {
-          speechBubble: {
-            speaker: "mira",
-            delay: 2,
-            horizontalOffset: 0,
-            verticalOffset: 0,
-            bubbleWidth: 700,
-            text: "Visit [purple]Dream Sites[/purple].",
+        tutorial: {
+          ...makeTutorialConfiguration(),
+          dreamscape: {
+            speechBubble: {
+              speaker: "mira",
+              delay: 2,
+              horizontalOffset: 0,
+              verticalOffset: 0,
+              bubbleWidth: 700,
+              text: "Visit [purple]Dream Sites[/purple].",
+            },
           },
         },
       },
@@ -355,11 +359,13 @@ describe("DreamscapeScreenAdapter", () => {
       mutations,
       makeState({
         maxDreamsigns: 1,
-        dreamsigns: [{
-          id: "held-dreamsign-1",
-          name: "Held One",
-          effectDescription: "First held dreamsign.",
-        }],
+        dreamsigns: [
+          {
+            id: "held-dreamsign-1",
+            name: "Held One",
+            effectDescription: "First held dreamsign.",
+          },
+        ],
       }),
     );
     const container = document.createElement("div");

@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 import {
   DEFAULT_TUTORIAL_JSON_PATH,
   DEFAULT_TUTORIAL_TOML_PATH,
+  normalizeTutorialConfiguration,
   readTutorialConfiguration,
   serializeTutorialToml,
   validateTutorialActions,
@@ -29,7 +30,9 @@ const defaultFileSystem = {
 };
 
 function jsonResponse(res, statusCode, body) {
-  res.writeHead(statusCode, { "Content-Type": "application/json; charset=utf-8" });
+  res.writeHead(statusCode, {
+    "Content-Type": "application/json; charset=utf-8",
+  });
   res.end(JSON.stringify(body));
 }
 
@@ -51,7 +54,11 @@ function readJsonBody(req) {
       body += chunk;
       if (Buffer.byteLength(body, "utf8") > MAX_BODY_BYTES) {
         tooLarge = true;
-        reject(Object.assign(new Error("Request body is too large."), { code: "BODY_TOO_LARGE" }));
+        reject(
+          Object.assign(new Error("Request body is too large."), {
+            code: "BODY_TOO_LARGE",
+          }),
+        );
       }
     });
     req.on("end", () => {
@@ -59,7 +66,11 @@ function readJsonBody(req) {
       try {
         resolveBody(JSON.parse(body));
       } catch {
-        reject(Object.assign(new Error("Request body must be valid JSON."), { code: "INVALID_JSON" }));
+        reject(
+          Object.assign(new Error("Request body must be valid JSON."), {
+            code: "INVALID_JSON",
+          }),
+        );
       }
     });
     req.on("error", reject);
@@ -104,7 +115,9 @@ export function createTutorialEditorApiMiddleware({
           res,
           500,
           "TUTORIAL_LOAD_FAILED",
-          error instanceof Error ? error.message : "Failed to load tutorial actions.",
+          error instanceof Error
+            ? error.message
+            : "Failed to load tutorial actions.",
         );
       }
       return;
@@ -112,16 +125,24 @@ export function createTutorialEditorApiMiddleware({
 
     if (req.method !== "PUT") {
       res.setHeader("Allow", "GET, PUT");
-      errorResponse(res, 405, "METHOD_NOT_ALLOWED", "Use GET or PUT for tutorial actions.");
+      errorResponse(
+        res,
+        405,
+        "METHOD_NOT_ALLOWED",
+        "Use GET or PUT for tutorial actions.",
+      );
       return;
     }
 
     try {
       const body = await readJsonBody(req);
       if (body === null || typeof body !== "object" || Array.isArray(body)) {
-        throw Object.assign(new Error("Request body must contain an actions array."), {
-          code: "INVALID_TUTORIAL_ACTIONS",
-        });
+        throw Object.assign(
+          new Error("Request body must contain an actions array."),
+          {
+            code: "INVALID_TUTORIAL_ACTIONS",
+          },
+        );
       }
       const actions = validateTutorialActions(body.actions);
       const {
@@ -134,10 +155,21 @@ export function createTutorialEditorApiMiddleware({
         battleStart,
         triggers,
         battle,
-      } =
-        readTutorialConfiguration({ rootDir });
+      } = readTutorialConfiguration({ rootDir });
       const tomlPath = join(rootDir, DEFAULT_TUTORIAL_TOML_PATH);
       const jsonPath = join(rootDir, DEFAULT_TUTORIAL_JSON_PATH);
+      const configuration = normalizeTutorialConfiguration({
+        journeyStart,
+        dreamscape,
+        atlas,
+        draft,
+        purge,
+        dreamsignRevelation,
+        battleStart,
+        actions,
+        triggers,
+        battle,
+      });
       atomicWrite(
         fileSystem,
         tomlPath,
@@ -157,18 +189,7 @@ export function createTutorialEditorApiMiddleware({
       atomicWrite(
         fileSystem,
         jsonPath,
-        `${JSON.stringify({
-          journeyStart,
-          dreamscape,
-          atlas,
-          draft,
-          purge,
-          dreamsignRevelation,
-          battleStart,
-          actions,
-          triggers,
-          battle,
-        }, null, 2)}\n`,
+        `${JSON.stringify(configuration, null, 2)}\n`,
       );
       jsonResponse(res, 200, { actions });
     } catch (error) {
@@ -185,7 +206,9 @@ export function createTutorialEditorApiMiddleware({
         res,
         500,
         "TUTORIAL_SAVE_FAILED",
-        error instanceof Error ? error.message : "Failed to save tutorial actions.",
+        error instanceof Error
+          ? error.message
+          : "Failed to save tutorial actions.",
       );
     }
   };

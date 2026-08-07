@@ -1,8 +1,16 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse, stringify } from "smol-toml";
 import { parseGlossarySource } from "./glossary-source.mjs";
+import {
+  assertTutorialBattleConfigurationContracts,
+  assertTutorialDeckSufficiency,
+  isTutorialBattlePhase,
+  isTutorialFeaturedCardRole,
+  isTutorialHandoffSlotLegal,
+} from "./tutorial-battle-contracts.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const SEMANTIC_PLAY_CARD_IDS = new Set(
@@ -53,15 +61,223 @@ function validateCardDrawList(value, field) {
   if (
     !Array.isArray(value) ||
     !value.every(
-      (cardId) =>
-        typeof cardId === "string" && CARD_UUID_PATTERN.test(cardId),
+      (cardId) => typeof cardId === "string" && CARD_UUID_PATTERN.test(cardId),
     )
   ) {
-    throw invalid(
-      `Tutorial battle ${field} must be an array of card UUIDs.`,
-    );
+    throw invalid(`Tutorial battle ${field} must be an array of card UUIDs.`);
   }
   return [...value];
+}
+
+function validateUuid(value, field) {
+  if (typeof value !== "string" || !CARD_UUID_PATTERN.test(value)) {
+    throw invalid(`Tutorial battle ${field} must be a UUID.`);
+  }
+  return value;
+}
+
+function validateInteger(value, field, minimum = 0) {
+  if (!Number.isInteger(value) || value < minimum) {
+    throw invalid(
+      `Tutorial battle ${field} must be an integer of at least ${String(minimum)}.`,
+    );
+  }
+  return value;
+}
+
+function validateFeaturedCards(value) {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw invalid("Tutorial battle must contain a featuredCards table.");
+  }
+  return {
+    playerCardId: validateUuid(
+      value.playerCardId,
+      "featuredCards.playerCardId",
+    ),
+    opponentCardId: validateUuid(
+      value.opponentCardId,
+      "featuredCards.opponentCardId",
+    ),
+    enemyStarterCardId: validateUuid(
+      value.enemyStarterCardId,
+      "featuredCards.enemyStarterCardId",
+    ),
+    loadingEventCardId: validateUuid(
+      value.loadingEventCardId,
+      "featuredCards.loadingEventCardId",
+    ),
+    dreamwellCardId: validateUuid(
+      value.dreamwellCardId,
+      "featuredCards.dreamwellCardId",
+    ),
+  };
+}
+
+function validateStarterDeck(value) {
+  if (!Array.isArray(value) || value.length === 0) {
+    throw invalid("Tutorial battle starterDeck must be a non-empty array.");
+  }
+  const seen = new Set();
+  return value.map((entry, index) => {
+    if (entry === null || typeof entry !== "object" || Array.isArray(entry)) {
+      throw invalid(
+        `Tutorial battle starterDeck entry ${String(index + 1)} must be a table.`,
+      );
+    }
+    const cardId = validateUuid(
+      entry.cardId,
+      `starterDeck[${String(index)}].cardId`,
+    );
+    if (seen.has(cardId)) {
+      throw invalid(`Tutorial battle starterDeck repeats card UUID ${cardId}.`);
+    }
+    seen.add(cardId);
+    return {
+      cardId,
+      copies: validateInteger(
+        entry.copies,
+        `starterDeck[${String(index)}].copies`,
+        1,
+      ),
+    };
+  });
+}
+
+function validateScriptedBoard(value) {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw invalid("Tutorial battle must contain a scriptedBoard table.");
+  }
+  const playerBackRankIndex = validateInteger(
+    value.playerBackRankIndex,
+    "scriptedBoard.playerBackRankIndex",
+  );
+  const playerFrontRankIndex = validateInteger(
+    value.playerFrontRankIndex,
+    "scriptedBoard.playerFrontRankIndex",
+  );
+  if (playerBackRankIndex >= 3 || playerFrontRankIndex >= 2) {
+    throw invalid(
+      "Tutorial battle scriptedBoard indices must fit the compact three-slot back rank and two-slot front rank.",
+    );
+  }
+  return { playerBackRankIndex, playerFrontRankIndex };
+}
+
+function validateHandoffSide(value, side) {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw invalid(`Tutorial battle handoff must contain a ${side} table.`);
+  }
+  const currentEnergy = validateInteger(
+    value.currentEnergy,
+    `handoff.${side}.currentEnergy`,
+  );
+  const maxEnergy = validateInteger(
+    value.maxEnergy,
+    `handoff.${side}.maxEnergy`,
+  );
+  if (currentEnergy > maxEnergy) {
+    throw invalid(
+      `Tutorial battle handoff.${side}.currentEnergy must not exceed maxEnergy.`,
+    );
+  }
+  return {
+    currentEnergy,
+    maxEnergy,
+    score: validateInteger(value.score, `handoff.${side}.score`),
+    dreamwellCardIndex: validateInteger(
+      value.dreamwellCardIndex,
+      `handoff.${side}.dreamwellCardIndex`,
+    ),
+    dreamwellDrawnTurn: validateInteger(
+      value.dreamwellDrawnTurn,
+      `handoff.${side}.dreamwellDrawnTurn`,
+    ),
+  };
+}
+
+function validateHandoffPlacements(value) {
+  if (!Array.isArray(value) || value.length === 0) {
+    throw invalid(
+      "Tutorial battle handoff placements must be a non-empty array.",
+    );
+  }
+  const occupied = new Set();
+  return value.map((entry, index) => {
+    if (entry === null || typeof entry !== "object" || Array.isArray(entry)) {
+      throw invalid(
+        `Tutorial battle handoff placement ${String(index + 1)} must be a table.`,
+      );
+    }
+    if (!isTutorialFeaturedCardRole(entry.cardRole)) {
+      throw invalid(
+        `Tutorial battle handoff placement ${String(index + 1)} has an invalid cardRole.`,
+      );
+    }
+    if (entry.side !== "player" && entry.side !== "enemy") {
+      throw invalid(
+        `Tutorial battle handoff placement ${String(index + 1)} must target player or enemy.`,
+      );
+    }
+    if (entry.source !== "deck" && entry.source !== "created") {
+      throw invalid(
+        `Tutorial battle handoff placement ${String(index + 1)} must use deck or created source.`,
+      );
+    }
+    if (entry.zone === "void") {
+      return {
+        cardRole: entry.cardRole,
+        side: entry.side,
+        source: entry.source,
+        zone: "void",
+      };
+    }
+    if (
+      (entry.zone !== "frontRank" && entry.zone !== "backRank") ||
+      !isTutorialHandoffSlotLegal(entry.side, entry.zone, entry.slotId)
+    ) {
+      throw invalid(
+        `Tutorial battle handoff placement ${String(index + 1)} must use a legal rank slot.`,
+      );
+    }
+    const address = `${entry.side}:${entry.zone}:${entry.slotId}`;
+    if (occupied.has(address)) {
+      throw invalid(`Tutorial battle handoff placement repeats ${address}.`);
+    }
+    occupied.add(address);
+    return {
+      cardRole: entry.cardRole,
+      side: entry.side,
+      source: entry.source,
+      zone: entry.zone,
+      slotId: entry.slotId,
+    };
+  });
+}
+
+function validateHandoff(value) {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw invalid("Tutorial battle must contain a handoff table.");
+  }
+  if (value.activeSide !== "player" && value.activeSide !== "enemy") {
+    throw invalid(
+      "Tutorial battle handoff activeSide must be player or enemy.",
+    );
+  }
+  if (!isTutorialBattlePhase(value.phase)) {
+    throw invalid("Tutorial battle handoff phase is invalid.");
+  }
+  return {
+    activeSide: value.activeSide,
+    turnNumber: validateInteger(value.turnNumber, "handoff.turnNumber", 1),
+    phase: value.phase,
+    dreamwellDeckIndex: validateInteger(
+      value.dreamwellDeckIndex,
+      "handoff.dreamwellDeckIndex",
+    ),
+    player: validateHandoffSide(value.player, "player"),
+    enemy: validateHandoffSide(value.enemy, "enemy"),
+    placements: validateHandoffPlacements(value.placements),
+  };
 }
 
 function validateTutorialBattleAiActionOverrides(value) {
@@ -136,6 +352,20 @@ export function validateTutorialBattleConfiguration(value) {
     throw invalid("Tutorial data must contain a battle table.");
   }
   const battle = {
+    featuredCards: validateFeaturedCards(value.featuredCards),
+    playerDreamAvatarId: validateUuid(
+      value.playerDreamAvatarId,
+      "playerDreamAvatarId",
+    ),
+    enemyDreamAvatarId: validateUuid(
+      value.enemyDreamAvatarId,
+      "enemyDreamAvatarId",
+    ),
+    startingEnergy: validateInteger(value.startingEnergy, "startingEnergy"),
+    scoreToWin: validateInteger(value.scoreToWin, "scoreToWin", 1),
+    starterDeck: validateStarterDeck(value.starterDeck),
+    scriptedBoard: validateScriptedBoard(value.scriptedBoard),
+    handoff: validateHandoff(value.handoff),
     playerDraws: validateCardDrawList(value.playerDraws, "playerDraws"),
     enemyDraws: validateCardDrawList(value.enemyDraws, "enemyDraws"),
     dreamwellDraws: validateCardDrawList(
@@ -163,7 +393,13 @@ export function validateTutorialBattleConfiguration(value) {
       );
     }
   }
+  assertTutorialBattleConfigurationContracts(battle, invalid);
   return battle;
+}
+
+/** The one derived tutorial deck-size contract shared by UI and battle init. */
+export function tutorialStarterDeckSize(battle) {
+  return battle.starterDeck.reduce((total, entry) => total + entry.copies, 0);
 }
 
 function invalid(message) {
@@ -316,7 +552,11 @@ function validateTutorialTriggerDelay(value, events, triggerId) {
         `Tutorial trigger ${JSON.stringify(triggerId)} delay must reference one of its trigger events.`,
       );
     }
-    if (typeof seconds !== "number" || !Number.isFinite(seconds) || seconds < 0) {
+    if (
+      typeof seconds !== "number" ||
+      !Number.isFinite(seconds) ||
+      seconds < 0
+    ) {
       throw invalid(
         `Tutorial trigger ${JSON.stringify(triggerId)} must have non-negative finite event delays.`,
       );
@@ -336,7 +576,9 @@ function validatePersistentTutorialConfiguration(value, configurationId) {
     true,
   );
   if (parsed.speaker !== "mira") {
-    throw invalid(`Tutorial ${configurationId} speech bubble must target Mira.`);
+    throw invalid(
+      `Tutorial ${configurationId} speech bubble must target Mira.`,
+    );
   }
   return {
     speechBubble: {
@@ -701,7 +943,11 @@ export function validateTutorialTriggers(value) {
   }
   const ids = new Set();
   return value.map((candidate, index) => {
-    if (candidate === null || typeof candidate !== "object" || Array.isArray(candidate)) {
+    if (
+      candidate === null ||
+      typeof candidate !== "object" ||
+      Array.isArray(candidate)
+    ) {
       throw invalid(`Tutorial trigger ${index + 1} must be a table.`);
     }
     const { id } = candidate;
@@ -726,7 +972,9 @@ export function validateTutorialTriggers(value) {
     }
     const priority = candidate.priority ?? 100;
     if (typeof priority !== "number" || !Number.isFinite(priority)) {
-      throw invalid(`Tutorial trigger ${JSON.stringify(id)} must have a finite priority.`);
+      throw invalid(
+        `Tutorial trigger ${JSON.stringify(id)} must have a finite priority.`,
+      );
     }
     const triggerDelay = validateTutorialTriggerDelay(
       candidate.delay,
@@ -739,13 +987,17 @@ export function validateTutorialTriggers(value) {
       true,
     );
     if (speechBubble.duration <= 0) {
-      throw invalid(`Tutorial trigger ${JSON.stringify(id)} must have a positive duration.`);
+      throw invalid(
+        `Tutorial trigger ${JSON.stringify(id)} must have a positive duration.`,
+      );
     }
     const { delay: _normalizedScalarDelay, ...triggerSpeechBubble } =
       speechBubble;
     const match = candidate.match;
     if (match === null || typeof match !== "object" || Array.isArray(match)) {
-      throw invalid(`Tutorial trigger ${JSON.stringify(id)} must have a match table.`);
+      throw invalid(
+        `Tutorial trigger ${JSON.stringify(id)} must have a match table.`,
+      );
     }
     let normalizedMatch;
     if (match.kind === "glossary") {
@@ -766,7 +1018,9 @@ export function validateTutorialTriggers(value) {
     } else if (match.kind === "any") {
       normalizedMatch = { kind: "any" };
     } else {
-      throw invalid(`Tutorial trigger ${JSON.stringify(id)} has an unsupported matcher.`);
+      throw invalid(
+        `Tutorial trigger ${JSON.stringify(id)} has an unsupported matcher.`,
+      );
     }
     if (
       normalizedMatch.kind === "any" &&
@@ -794,14 +1048,12 @@ export function validateTutorialTriggers(value) {
   });
 }
 
-/** Read and validate the complete authored tutorial configuration. */
-export function readTutorialConfiguration({
-  rootDir = ROOT,
-  tutorialTomlPath = DEFAULT_TUTORIAL_TOML_PATH,
-} = {}) {
-  const source = readFileSync(join(rootDir, tutorialTomlPath), "utf8");
-  const parsed = parse(source);
-  return {
+function hashConfiguration(value) {
+  return createHash("sha256").update(JSON.stringify(value)).digest("hex");
+}
+
+export function normalizeTutorialConfiguration(parsed) {
+  const normalized = {
     journeyStart: validateTutorialJourneyStartConfiguration(
       parsed.journeyStart,
     ),
@@ -818,6 +1070,92 @@ export function readTutorialConfiguration({
     triggers: validateTutorialTriggers(parsed.triggers ?? []),
     battle: validateTutorialBattleConfiguration(parsed.battle),
   };
+  assertTutorialDeckSufficiency(normalized.battle, normalized.actions, invalid);
+  return {
+    contentHash: hashConfiguration(normalized),
+    foldHash: hashConfiguration({
+      battle: normalized.battle,
+      triggers: normalized.triggers,
+    }),
+    ...normalized,
+  };
+}
+
+/** Fail asset generation when tutorial UUIDs do not resolve in their catalogs. */
+export function validateTutorialCatalogReferences(
+  configuration,
+  { cardIds, dreamAvatarIds, dreamwellCardIds },
+) {
+  const cards = new Set(cardIds);
+  const avatars = new Set(dreamAvatarIds);
+  const dreamwell = new Set(dreamwellCardIds);
+  const battle = configuration.battle;
+  const requiredCards = new Set([
+    battle.featuredCards.playerCardId,
+    battle.featuredCards.opponentCardId,
+    battle.featuredCards.enemyStarterCardId,
+    battle.featuredCards.loadingEventCardId,
+    ...battle.starterDeck.map((entry) => entry.cardId),
+    ...battle.playerDraws,
+    ...battle.enemyDraws,
+    ...battle.aiActionOverrides.map((override) => override.action.cardId),
+  ]);
+  for (const action of configuration.actions) {
+    if ("cardId" in action && action.action !== "draw-dreamwell-card") {
+      requiredCards.add(action.cardId);
+    }
+    if ("opposingCardId" in action) requiredCards.add(action.opposingCardId);
+    if ("challengerCardId" in action)
+      requiredCards.add(action.challengerCardId);
+    if ("blockerCardId" in action) requiredCards.add(action.blockerCardId);
+  }
+  for (const trigger of configuration.triggers) {
+    if (trigger.match.kind === "card-id")
+      requiredCards.add(trigger.match.cardId);
+  }
+  for (const cardId of requiredCards) {
+    if (!cards.has(cardId)) {
+      throw invalid(
+        `Tutorial references card ${cardId}, which is absent from cards.toml.`,
+      );
+    }
+  }
+  for (const avatarId of [
+    battle.playerDreamAvatarId,
+    battle.enemyDreamAvatarId,
+  ]) {
+    if (!avatars.has(avatarId)) {
+      throw invalid(
+        `Tutorial references Dream Avatar ${avatarId}, which is absent from dream_avatars.toml.`,
+      );
+    }
+  }
+  const requiredDreamwell = new Set([
+    battle.featuredCards.dreamwellCardId,
+    ...battle.dreamwellDraws,
+    ...battle.aiActionOverrides.map((override) => override.trigger.cardId),
+    ...configuration.actions
+      .filter((action) => action.action === "draw-dreamwell-card")
+      .map((action) => action.cardId),
+  ]);
+  for (const cardId of requiredDreamwell) {
+    if (!dreamwell.has(cardId)) {
+      throw invalid(
+        `Tutorial references Dreamwell card ${cardId}, which is absent from dreamwell.toml.`,
+      );
+    }
+  }
+  return configuration;
+}
+
+/** Read and validate the complete authored tutorial configuration. */
+export function readTutorialConfiguration({
+  rootDir = ROOT,
+  tutorialTomlPath = DEFAULT_TUTORIAL_TOML_PATH,
+} = {}) {
+  const source = readFileSync(resolve(rootDir, tutorialTomlPath), "utf8");
+  const parsed = parse(source);
+  return normalizeTutorialConfiguration(parsed);
 }
 
 /** Read only the ordered action sequence for existing editor consumers. */
@@ -838,36 +1176,23 @@ export function serializeTutorialToml(
   dreamsignRevelation,
   battleStart,
 ) {
-  const normalized = validateTutorialActions(actions);
-  const normalizedTriggers = validateTutorialTriggers(triggers);
-  const normalizedBattle = validateTutorialBattleConfiguration(battle);
-  const normalizedJourneyStart =
-    validateTutorialJourneyStartConfiguration(journeyStart);
-  const normalizedDreamscape =
-    validateTutorialDreamscapeConfiguration(dreamscape);
-  const normalizedAtlas = validateTutorialAtlasConfiguration(atlas);
-  const normalizedDraft =
-    validateTutorialSiteConfiguration(draft, "draft");
-  const normalizedPurge = validateTutorialSiteConfiguration(purge, "purge");
-  const normalizedDreamsignRevelation =
-    validateTutorialSiteConfiguration(
-      dreamsignRevelation,
-      "dreamsign-revelation",
-    );
-  const normalizedBattleStart =
-    validateTutorialBattleStartConfiguration(battleStart);
-  return `# Ordered actions and first-occurrence battle tutorials.\n\n${stringify({
-    journeyStart: normalizedJourneyStart,
-    dreamscape: normalizedDreamscape,
-    atlas: normalizedAtlas,
-    draft: normalizedDraft,
-    purge: normalizedPurge,
-    dreamsignRevelation: normalizedDreamsignRevelation,
-    battleStart: normalizedBattleStart,
-    battle: normalizedBattle,
-    actions: normalized,
-    triggers: normalizedTriggers,
-  })}`;
+  const {
+    contentHash: _contentHash,
+    foldHash: _foldHash,
+    ...normalized
+  } = normalizeTutorialConfiguration({
+    journeyStart,
+    dreamscape,
+    atlas,
+    draft,
+    purge,
+    dreamsignRevelation,
+    battleStart,
+    battle,
+    actions,
+    triggers,
+  });
+  return `# Complete standalone tutorial scenario.\n\n${stringify(normalized)}`;
 }
 
 /** Refresh the browser-readable generated artifact from tutorial.toml. */
@@ -876,50 +1201,18 @@ export function refreshTutorialDataJson({
   tutorialTomlPath = DEFAULT_TUTORIAL_TOML_PATH,
   tutorialJsonPath = DEFAULT_TUTORIAL_JSON_PATH,
 } = {}) {
-  const {
-    journeyStart,
-    dreamscape,
-    atlas,
-    draft,
-    purge,
-    dreamsignRevelation,
-    battleStart,
-    actions,
-    triggers,
-    battle,
-  } =
-    readTutorialConfiguration({
-      rootDir,
-      tutorialTomlPath,
-    });
-  const absoluteJsonPath = join(rootDir, tutorialJsonPath);
+  const configuration = readTutorialConfiguration({
+    rootDir,
+    tutorialTomlPath,
+  });
+  const absoluteJsonPath = resolve(rootDir, tutorialJsonPath);
   mkdirSync(dirname(absoluteJsonPath), { recursive: true });
   writeFileSync(
     absoluteJsonPath,
-    `${JSON.stringify({
-      journeyStart,
-      dreamscape,
-      atlas,
-      draft,
-      purge,
-      dreamsignRevelation,
-      battleStart,
-      actions,
-      triggers,
-      battle,
-    }, null, 2)}\n`,
+    `${JSON.stringify(configuration, null, 2)}\n`,
   );
   return {
-    journeyStart,
-    dreamscape,
-    atlas,
-    draft,
-    purge,
-    dreamsignRevelation,
-    battleStart,
-    actions,
-    triggers,
-    battle,
+    ...configuration,
     path: absoluteJsonPath,
   };
 }

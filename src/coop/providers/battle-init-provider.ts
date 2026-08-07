@@ -38,25 +38,9 @@ import type {
 } from "../../types/tutorial";
 import { advanceAtlas } from "../../atlas/atlas-generator";
 import { resolveBattleAiConfiguration } from "../../types/opponents-data";
+import { tutorialFeaturedCardId } from "../../data/tutorial-actions";
 
 const deferredOpponentLogs = new Map<number, () => void>();
-
-const TUTORIAL_STARTER_CARD_IDS = [
-  "5a980eff-6ec7-44d8-9977-b98e66bbc2c8", // #510
-  "647f5150-b2e0-424b-9480-27557642524e", // #511
-  "e83014d3-9d35-4e80-a1b3-9b25360ad2af", // #512
-  "a28ad36d-fa74-4190-a463-7efd3a6233d0", // #513
-  "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", // #514
-  "5ab11bef-5dcd-49f5-be49-ae2ccde76e70", // #515
-  "4408b942-09a0-4f4e-a403-10c708c6e3c5", // #516
-  "2162742c-09d0-4e62-ae49-0f8f79b45adc", // #517
-  "910b4cf9-dec7-4e03-af4f-7d5ae342eeba", // #518
-  "944e15d2-d680-4ebe-8d18-36826f4b1535", // #519
-] as const;
-
-const TUTORIAL_TWILIGHT_ID = "229ab3a1-3720-41a2-924c-8fe112188f8e";
-const TENSHO_ID = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
-const THREXAN_ID = "B99936CA-97F9-4930-AF5A-FA9EF92557EF";
 
 /**
  * A battle at `(siteId, completionLevel, dreamscapeId)` always has the same
@@ -120,7 +104,7 @@ function buildBattleInit(
     fitModel: content.fitModel,
     draftRecords: content.draftRecords,
     deferOpponentLog,
-    tutorialTriggers: content.tutorialTriggers,
+    tutorialTriggers: content.tutorial?.triggers,
   });
 }
 
@@ -256,22 +240,29 @@ function createTutorialBattleInit(
   battleConfiguration: TutorialBattleConfiguration,
 ): BattleInit {
   const makeDeck = (side: BattleSide): BattleDeckCardDefinition[] => {
-    const definitions = TUTORIAL_STARTER_CARD_IDS.flatMap((cardId) =>
-      Array.from({ length: 3 }, (_unused, copy) => {
-        const card = cardById(content, cardId);
-        return {
-          ...createBaseBattleDeckCardDefinition(card),
-          sourceDeckEntryId: `tutorial:${side}:${cardId}:${String(copy)}`,
-        };
-      }),
+    const definitions = battleConfiguration.starterDeck.flatMap(
+      ({ cardId, copies }) =>
+        Array.from({ length: copies }, (_unused, copy) => {
+          const card = cardById(content, cardId);
+          return {
+            ...createBaseBattleDeckCardDefinition(card),
+            sourceDeckEntryId: `tutorial:${side}:${cardId}:${String(copy)}`,
+          };
+        }),
     );
     return createBattleRng(
       deriveBattleSeed(`${key}:${side}`),
       "playerDeckOrder",
     ).shuffle(definitions);
   };
-  const tensho = dreamAvatarById(content, TENSHO_ID);
-  const threxan = dreamAvatarById(content, THREXAN_ID);
+  const playerDreamAvatar = dreamAvatarById(
+    content,
+    battleConfiguration.playerDreamAvatarId,
+  );
+  const enemyDreamAvatar = dreamAvatarById(
+    content,
+    battleConfiguration.enemyDreamAvatarId,
+  );
   return {
     battleId,
     battleEntryKey: key,
@@ -282,7 +273,7 @@ function createTutorialBattleInit(
     isFinalBoss: false,
     essenceReward: 0,
     openingHandSize: 0,
-    scoreToWin: 10,
+    scoreToWin: battleConfiguration.scoreToWin,
     // The tutorial mode metadata is authoritative for disabled turn-limit
     // behavior. This numeric value keeps the shared engine's current contract.
     turnLimit: Number.MAX_SAFE_INTEGER,
@@ -296,7 +287,7 @@ function createTutorialBattleInit(
     ),
     startingSide: "player",
     playerDrawSkipsTurnOne: false,
-    tutorialTriggers: content.tutorialTriggers ?? [],
+    tutorialTriggers: content.tutorial?.triggers ?? [],
     journeyDeckEntries: [],
     playerDeckOrder: makeDeck("player"),
     dreamwellDeck: tutorialDreamwellDeck(
@@ -304,15 +295,17 @@ function createTutorialBattleInit(
       key,
       battleConfiguration.dreamwellDraws,
     ),
-    enemyDescriptor: tutorialEnemyDescriptor(threxan),
+    enemyDescriptor: tutorialEnemyDescriptor(enemyDreamAvatar),
     enemyDeckDefinition: makeDeck("enemy"),
     dreamAvatarSummary: {
-      id: tensho.id,
-      name: tensho.name,
-      title: tensho.title,
-      renderedText: tensho.renderedText,
-      imageNumber: tensho.imageNumber,
-      ...(tensho.portraitFocus ? { portraitFocus: tensho.portraitFocus } : {}),
+      id: playerDreamAvatar.id,
+      name: playerDreamAvatar.name,
+      title: playerDreamAvatar.title,
+      renderedText: playerDreamAvatar.renderedText,
+      imageNumber: playerDreamAvatar.imageNumber,
+      ...(playerDreamAvatar.portraitFocus
+        ? { portraitFocus: playerDreamAvatar.portraitFocus }
+        : {}),
     },
     dreamsignSummaries: [],
     atlasSnapshot: journey.atlas,
@@ -325,15 +318,34 @@ function arrangeTutorialHandoff(
   actions: readonly TutorialAction[],
   battleConfiguration: TutorialBattleConfiguration,
 ): void {
-  const playerStarter = takeCard(
-    board,
-    "player",
-    "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
-  );
-  const enemyStarter = takeCard(
-    board,
-    "enemy",
-    "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+  const placementCards = battleConfiguration.handoff.placements.map(
+    (placement, index) => {
+      const cardId = tutorialFeaturedCardId(
+        battleConfiguration.featuredCards,
+        placement.cardRole,
+      );
+      if (placement.source === "deck") {
+        return {
+          placement,
+          instanceId: takeCard(board, placement.side, cardId),
+        };
+      }
+      const definition = createBaseBattleDeckCardDefinition(
+        cardById(content, cardId),
+      );
+      return {
+        placement,
+        instanceId: allocateBattleCardInstance(board, {
+          definition: {
+            ...definition,
+            sourceDeckEntryId: `tutorial:${placement.side}:handoff:${String(index)}:${cardId}`,
+          },
+          owner: placement.side,
+          controller: placement.side,
+          provenance: tutorialProvenance(),
+        }),
+      };
+    },
   );
   const authoredHands = deriveTutorialHandCardIds(actions);
   const playerHand = materializeAuthoredHand(
@@ -348,83 +360,49 @@ function arrangeTutorialHandoff(
     "enemy",
     authoredHands.enemy,
   );
-  const twilight = createBaseBattleDeckCardDefinition(
-    cardById(content, TUTORIAL_TWILIGHT_ID),
-  );
-  const enemyTwilightVoid = allocateBattleCardInstance(board, {
-    definition: {
-      ...twilight,
-      sourceDeckEntryId: "tutorial:enemy:twilight:void",
-    },
-    owner: "enemy",
-    controller: "enemy",
-    provenance: tutorialProvenance(),
-  });
   stackTutorialDeck(board, "player", battleConfiguration.playerDraws);
   stackTutorialEnemyDeck(board, battleConfiguration.enemyDraws);
 
-  board.activeSide = "player";
-  board.turnNumber = 4;
-  board.phase = "dawn";
-  board.dreamwellDeckIndex = 2;
-  board.sides.player.currentEnergy = 5;
-  board.sides.player.maxEnergy = 5;
-  board.sides.player.score = 0;
+  board.activeSide = battleConfiguration.handoff.activeSide;
+  board.turnNumber = battleConfiguration.handoff.turnNumber;
+  board.phase = battleConfiguration.handoff.phase;
+  board.dreamwellDeckIndex = battleConfiguration.handoff.dreamwellDeckIndex;
+  applyTutorialHandoffSide(board, "player", battleConfiguration.handoff.player);
   board.sides.player.hand = playerHand;
-  // Center the authored tutorial's compact 2/3 formation in the canonical
-  // rules-engine board. Responsive battlefield windows preserve these lanes:
-  // F0 is the authored center front cell and B1 is its right-center back cell.
-  board.sides.player.frontRank = {
-    F0: null,
-    F1: null,
-    F2: null,
-    F3: null,
-    F4: playerStarter,
-    F5: null,
-    F6: null,
-    F7: null,
-    F8: null,
-  };
-  board.sides.player.backRank = {
-    B0: null,
-    B1: null,
-    B2: null,
-    B3: null,
-    B4: null,
-  };
-  board.sides.player.dreamwellCardIndex = 1;
-  board.sides.player.dreamwellDrawnTurn = 3;
-
-  board.sides.enemy.currentEnergy = 0;
-  board.sides.enemy.maxEnergy = 5;
-  board.sides.enemy.score = 2;
+  applyTutorialHandoffSide(board, "enemy", battleConfiguration.handoff.enemy);
   board.sides.enemy.hand = enemyHand;
-  board.sides.enemy.void = [enemyTwilightVoid];
-  board.sides.enemy.frontRank = {
-    F0: null,
-    F1: null,
-    F2: null,
-    F3: null,
-    F4: null,
-    F5: null,
-    F6: null,
-    F7: null,
-    F8: null,
-  };
-  board.sides.enemy.backRank = {
-    B0: null,
-    B1: null,
-    B2: null,
-    B3: null,
-    B4: null,
-    B5: enemyStarter,
-    B6: null,
-    B7: null,
-    B8: null,
-    B9: null,
-  };
-  board.sides.enemy.dreamwellCardIndex = 0;
-  board.sides.enemy.dreamwellDrawnTurn = 2;
+  for (const side of ["player", "enemy"] as const) {
+    board.sides[side].void = [];
+    clearRank(board.sides[side].frontRank);
+    clearRank(board.sides[side].backRank);
+  }
+  for (const { placement, instanceId } of placementCards) {
+    if (placement.zone === "void") {
+      board.sides[placement.side].void.push(instanceId);
+      continue;
+    }
+    const rank =
+      placement.zone === "frontRank"
+        ? board.sides[placement.side].frontRank
+        : board.sides[placement.side].backRank;
+    (rank as Record<string, string | null>)[placement.slotId] = instanceId;
+  }
+}
+
+function applyTutorialHandoffSide(
+  board: BattleMutableState,
+  side: BattleSide,
+  configuration: TutorialBattleConfiguration["handoff"][BattleSide],
+): void {
+  board.sides[side].currentEnergy = configuration.currentEnergy;
+  board.sides[side].maxEnergy = configuration.maxEnergy;
+  board.sides[side].score = configuration.score;
+  board.sides[side].dreamwellCardIndex = configuration.dreamwellCardIndex;
+  board.sides[side].dreamwellDrawnTurn = configuration.dreamwellDrawnTurn;
+}
+
+function clearRank(rank: Record<string, string | null>): void {
+  for (const slotId of Object.keys(rank)) rank[slotId] = null;
 }
 
 function deriveTutorialHandCardIds(
@@ -568,12 +546,12 @@ function tutorialDreamwellDeck(
 function requireTutorialBattleConfiguration(
   content: JourneyContent,
 ): TutorialBattleConfiguration {
-  if (content.tutorialBattle === undefined) {
+  if (content.tutorial === undefined) {
     throw new Error(
-      "Tutorial battle draw configuration is missing from tutorial data.",
+      "Tutorial battle configuration is missing from tutorial data.",
     );
   }
-  return content.tutorialBattle;
+  return content.tutorial.battle;
 }
 
 function cardById(content: JourneyContent, cardId: string) {

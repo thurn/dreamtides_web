@@ -1,3 +1,4 @@
+/* eslint-disable max-lines -- this adapter keeps the full screen wiring together. */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DreamscapeScreen } from "../../cumulus/screens/DreamscapeScreen";
 import { logEvent, logEventOnce } from "../../logging";
@@ -17,24 +18,28 @@ import {
 /** Wires the live journey fold to the pure Cumulus Dreamscape screen. */
 export function DreamscapeScreenAdapter() {
   const { state, mutations, journeyContent } = useJourney();
-  const node = state.currentDreamscape === null
-    ? undefined
-    : state.atlas.nodes[state.currentDreamscape];
-  const [replacementSiteId, setReplacementSiteId] = useState<string | null>(null);
+  const node =
+    state.currentDreamscape === null
+      ? undefined
+      : state.atlas.nodes[state.currentDreamscape];
+  const [replacementSiteId, setReplacementSiteId] = useState<string | null>(
+    null,
+  );
   const view = useMemo(
-    () => node === undefined
-      ? null
-      : buildDreamscapeView(
-          node,
-          state,
-          journeyContent.atlasData,
-          replacementSiteId,
-          journeyContent.tutorialDreamscape,
-          journeyContent.draftData.offers.picksPerSite,
-        ),
+    () =>
+      node === undefined
+        ? null
+        : buildDreamscapeView(
+            node,
+            state,
+            journeyContent.atlasData,
+            replacementSiteId,
+            journeyContent.tutorial?.dreamscape,
+            journeyContent.draftData.offers.picksPerSite,
+          ),
     [
       journeyContent.atlasData,
-      journeyContent.tutorialDreamscape,
+      journeyContent.tutorial?.dreamscape,
       journeyContent.draftData.offers.picksPerSite,
       node,
       replacementSiteId,
@@ -44,7 +49,12 @@ export function DreamscapeScreenAdapter() {
   const loggedNodeRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (node === undefined || view === null || loggedNodeRef.current === node.id) return;
+    if (
+      node === undefined ||
+      view === null ||
+      loggedNodeRef.current === node.id
+    )
+      return;
     loggedNodeRef.current = node.id;
     logEvent(
       "dreamscape_overview_presented",
@@ -52,51 +62,68 @@ export function DreamscapeScreenAdapter() {
     );
   }, [node, state.completionLevel, view]);
 
-  const handleSelectSite = useCallback((siteId: string) => {
-    if (node === undefined) return;
-    const selection = resolveDreamscapeSiteSelection(node, siteId, state.essence);
-    if (selection === null) return;
-    logEvent("site_entered", selection.fields);
-    if (selection.site.type === "Essence") {
-      if (state.siteRuntime[siteId]?.kind !== "essence") {
-        mutations.ensureEssenceSiteRuntime(siteId, selection.site.isEnhanced);
+  const handleSelectSite = useCallback(
+    (siteId: string) => {
+      if (node === undefined) return;
+      const selection = resolveDreamscapeSiteSelection(
+        node,
+        siteId,
+        state.essence,
+      );
+      if (selection === null) return;
+      logEvent("site_entered", selection.fields);
+      if (selection.site.type === "Essence") {
+        if (state.siteRuntime[siteId]?.kind !== "essence") {
+          mutations.ensureEssenceSiteRuntime(siteId, selection.site.isEnhanced);
+        }
+      } else if (selection.site.type === "Reward") {
+        if (state.siteRuntime[siteId]?.kind !== "reward") {
+          mutations.ensureRewardSiteRuntime(siteId);
+        }
+      } else {
+        mutations.enterSite(siteId);
       }
-    } else if (selection.site.type === "Reward") {
-      if (state.siteRuntime[siteId]?.kind !== "reward") {
-        mutations.ensureRewardSiteRuntime(siteId);
+    },
+    [mutations, node, state.essence, state.siteRuntime],
+  );
+
+  const handleInlineRewardAnimationComplete = useCallback(
+    (siteId: string) => {
+      if (node === undefined) return;
+      const site = node.sites.find((candidate) => candidate.id === siteId);
+      const resolution = resolveInlineReward(
+        site,
+        state.siteRuntime[siteId],
+        state,
+      );
+      if (resolution === null) return;
+      if (resolution.kind === "replacement") {
+        setReplacementSiteId(siteId);
+        return;
       }
-    } else {
-      mutations.enterSite(siteId);
-    }
-  }, [mutations, node, state.essence, state.siteRuntime]);
+      logEvent("site_completed", resolution.fields);
+      if (resolution.kind === "essence") mutations.acceptEssenceSite(siteId);
+      else mutations.acceptRewardSite(siteId);
+    },
+    [mutations, node, state],
+  );
 
-  const handleInlineRewardAnimationComplete = useCallback((siteId: string) => {
-    if (node === undefined) return;
-    const site = node.sites.find((candidate) => candidate.id === siteId);
-    const resolution = resolveInlineReward(site, state.siteRuntime[siteId], state);
-    if (resolution === null) return;
-    if (resolution.kind === "replacement") {
-      setReplacementSiteId(siteId);
-      return;
-    }
-    logEvent("site_completed", resolution.fields);
-    if (resolution.kind === "essence") mutations.acceptEssenceSite(siteId);
-    else mutations.acceptRewardSite(siteId);
-  }, [mutations, node, state]);
-
-  const handleReplaceDreamsign = useCallback((dreamsignId: string) => {
-    if (replacementSiteId === null || node === undefined) return;
-    const resolution = resolveRewardReplacement(
-      node,
-      state,
-      replacementSiteId,
-      dreamsignId,
-    );
-    if (resolution === null) return;
-    logEvent("site_completed", resolution.fields);
-    mutations.acceptRewardSite(resolution.siteId, resolution.purgeIndex);
-    setReplacementSiteId(null);
-  }, [mutations, node, replacementSiteId, state]);
+  const handleReplaceDreamsign = useCallback(
+    (dreamsignId: string) => {
+      if (replacementSiteId === null || node === undefined) return;
+      const resolution = resolveRewardReplacement(
+        node,
+        state,
+        replacementSiteId,
+        dreamsignId,
+      );
+      if (resolution === null) return;
+      logEvent("site_completed", resolution.fields);
+      mutations.acceptRewardSite(resolution.siteId, resolution.purgeIndex);
+      setReplacementSiteId(null);
+    },
+    [mutations, node, replacementSiteId, state],
+  );
 
   const handleDeclineReward = useCallback(() => {
     if (replacementSiteId === null || node === undefined) return;
@@ -109,7 +136,11 @@ export function DreamscapeScreenAdapter() {
 
   const handleGuideDialogueShown = useCallback(() => {
     if (node === undefined || view?.guideDialogue === undefined) return;
-    const entry = buildDreamscapeGuidanceLog(node.id, state, view.guideDialogue);
+    const entry = buildDreamscapeGuidanceLog(
+      node.id,
+      state,
+      view.guideDialogue,
+    );
     logEventOnce(entry.key, "tutorial_dreamscape_guidance_shown", entry.fields);
   }, [node, state, view?.guideDialogue]);
 

@@ -8,6 +8,9 @@ import { getLogEntries, resetLog } from "../../logging";
 import { TutorialScreenAdapter } from "./TutorialScreenAdapter";
 import type { TutorialScreenProps } from "../../cumulus/screens/TutorialScreen";
 import type { DreamAvatarContent } from "../../types/content";
+import { makeTutorialConfiguration } from "../../test/tutorial-configuration-fixture";
+
+const TUTORIAL_CONFIGURATION = makeTutorialConfiguration();
 
 const DREAM_AVATARS: readonly DreamAvatarContent[] = [
   {
@@ -120,6 +123,12 @@ vi.mock("../../state/front-door-context", () => ({
       beginTutorialBattle: mocks.beginTutorialBattle,
       completeTutorialAction: mocks.completeTutorialAction,
     },
+  }),
+}));
+
+vi.mock("../../state/journey-context", () => ({
+  useJourney: () => ({
+    journeyContent: { tutorial: TUTORIAL_CONFIGURATION },
   }),
 }));
 

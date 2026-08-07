@@ -32,8 +32,13 @@ vi.mock("./data/journey-content", () => ({
   poolVariantNeedsTides4: vi.fn(() => false),
 }));
 vi.mock("./data/tutorial-actions", () => ({
+  tutorialStarterDeckSize: (battle: {
+    starterDeck: readonly { copies: number }[];
+  }) => battle.starterDeck.reduce((total, entry) => total + entry.copies, 0),
   loadTutorialConfiguration: vi.fn(() =>
     Promise.resolve({
+      contentHash: "0".repeat(64),
+      foldHash: "1".repeat(64),
       journeyStart: {
         speechBubble: {
           speaker: "mira",
@@ -114,7 +119,26 @@ vi.mock("./data/tutorial-actions", () => ({
       },
       actions: [],
       triggers: [],
-      battle: { playerDraws: [], enemyDraws: [], dreamwellDraws: [] },
+      battle: {
+        featuredCards: {
+          playerCardId: "00000000-0000-4000-8000-000000000001",
+          opponentCardId: "00000000-0000-4000-8000-000000000002",
+          enemyStarterCardId: "00000000-0000-4000-8000-000000000003",
+          loadingEventCardId: "00000000-0000-4000-8000-000000000004",
+          dreamwellCardId: "00000000-0000-4000-8000-000000000005",
+        },
+        playerDreamAvatarId: "00000000-0000-4000-8000-000000000006",
+        enemyDreamAvatarId: "00000000-0000-4000-8000-000000000007",
+        startingEnergy: 4,
+        scoreToWin: 10,
+        starterDeck: [
+          { cardId: "00000000-0000-4000-8000-000000000001", copies: 30 },
+        ],
+        handoff: { activeSide: "player" },
+        playerDraws: [],
+        enemyDraws: [],
+        dreamwellDraws: [],
+      },
     }),
   ),
 }));

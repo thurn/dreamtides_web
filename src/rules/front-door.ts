@@ -1,10 +1,27 @@
 import type { EventContext } from "../eventlog/types";
 import { parseTutorialActions } from "../data/tutorial-actions";
-import {
-  TUTORIAL_PLAYER_CARD_ID,
-  TUTORIAL_PLAYER_CARD_INSTANCE_ID,
-} from "../data/tutorial-cards";
+import { TUTORIAL_PLAYER_CARD_INSTANCE_ID } from "../data/tutorial-cards";
 import type { FrontDoorState } from "./fold-state";
+
+/** Fold-safe identities loaded from the pinned tutorial scenario. */
+export interface TutorialFrontDoorContentProvider {
+  readonly playerCardId: string;
+  readonly journeyDreamAvatarId: string;
+}
+
+let tutorialContentProvider: TutorialFrontDoorContentProvider | null = null;
+
+/** Register tutorial identities before any room event is folded. */
+export function registerTutorialFrontDoorContentProvider(
+  provider: TutorialFrontDoorContentProvider | null,
+): void {
+  tutorialContentProvider = provider;
+}
+
+/** Resolve the configured post-victory avatar for pure battle decisions. */
+export function configuredTutorialJourneyDreamAvatarId(): string | null {
+  return tutorialContentProvider?.journeyDreamAvatarId ?? null;
+}
 
 const MAIN_ACTION_IDS: ReadonlySet<string> = new Set([
   "new-journey",
@@ -35,6 +52,8 @@ export function frontDoorAction(
   if (typeof actionId !== "string") return null;
 
   if (surface === "tutorial") {
+    const configuredPlayerCardId = tutorialContentProvider?.playerCardId;
+    if (configuredPlayerCardId === undefined) return null;
     const tutorial = state.tutorial;
     const detail = payload.detail;
     const currentAction =
@@ -59,9 +78,8 @@ export function frontDoorAction(
     if (
       play.runId !== tutorial.runId ||
       play.cardInstanceId !== TUTORIAL_PLAYER_CARD_INSTANCE_ID ||
-      play.cardId !== TUTORIAL_PLAYER_CARD_ID ||
-      (targetSlotId !== null &&
-        !isTutorialPlayerBackSlotId(targetSlotId))
+      play.cardId !== configuredPlayerCardId ||
+      (targetSlotId !== null && !isTutorialPlayerBackSlotId(targetSlotId))
     ) {
       return null;
     }
@@ -71,7 +89,7 @@ export function frontDoorAction(
         ...tutorial,
         playerCardPlay: {
           cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
-          cardId: TUTORIAL_PLAYER_CARD_ID,
+          cardId: configuredPlayerCardId,
           targetSlotId,
         },
       },
@@ -117,7 +135,10 @@ export function beginTutorial(
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): FrontDoorState | null {
-  if (state.phase !== "tutorial") return null;
+  const configuredPlayerCardId = tutorialContentProvider?.playerCardId;
+  if (state.phase !== "tutorial" || configuredPlayerCardId === undefined) {
+    return null;
+  }
   let actions;
   try {
     actions = parseTutorialActions(payload.actions);
@@ -139,23 +160,22 @@ export function beginTutorial(
     startAtEnd === true
       ? null
       : startActionId === undefined
-      ? actions.length === 0
-        ? null
-        : 0
-      : actions.findIndex((action) => action.id === startActionId);
+        ? actions.length === 0
+          ? null
+          : 0
+        : actions.findIndex((action) => action.id === startActionId);
   if (startActionIndex === -1) return null;
   const completedActionCount =
     startAtEnd === true ? actions.length : (startActionIndex ?? 0);
-  const playerCardPlay =
-    actions
-      .slice(0, completedActionCount)
-      .some((action) => action.action === "end-turn")
-      ? {
-          cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
-          cardId: TUTORIAL_PLAYER_CARD_ID,
-          targetSlotId: null,
-        }
-      : null;
+  const playerCardPlay = actions
+    .slice(0, completedActionCount)
+    .some((action) => action.action === "end-turn")
+    ? {
+        cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+        cardId: configuredPlayerCardId,
+        targetSlotId: null,
+      }
+    : null;
   return {
     ...state,
     tutorial: {

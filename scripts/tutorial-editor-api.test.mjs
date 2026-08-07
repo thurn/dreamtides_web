@@ -5,14 +5,25 @@ import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { parse } from "smol-toml";
 import { createTutorialEditorApiMiddleware } from "./tutorial-editor-api.mjs";
+import {
+  readTutorialConfiguration,
+  serializeTutorialToml,
+} from "./tutorial-data.mjs";
 
 const servers = [];
+const EXPECTED_PLAYER_DRAWS = [
+  "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+  "647f5150-b2e0-424b-9480-27557642524e",
+  "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
+  "944e15d2-d680-4ebe-8d18-36826f4b1535",
+  "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
+];
 
 afterEach(async () => {
   await Promise.all(
-    servers.splice(0).map(
-      (server) => new Promise((resolve) => server.close(resolve)),
-    ),
+    servers
+      .splice(0)
+      .map((server) => new Promise((resolve) => server.close(resolve))),
   );
 });
 
@@ -32,18 +43,39 @@ async function startApi(rootDir) {
 function fixtureRoot() {
   const rootDir = mkdtempSync(join(tmpdir(), "tutorial-editor-api-"));
   mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
+  const configuration = readTutorialConfiguration();
+  const actions = [
+    {
+      id: "old",
+      action: "display-speech-bubble",
+      speechBubble: {
+        speaker: "mira",
+        duration: 3,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 700,
+        text: "Old.",
+      },
+      wait: 0,
+    },
+  ];
+  const triggers = configuration.triggers.filter(
+    (trigger) => trigger.id === "support",
+  );
   writeFileSync(
     join(rootDir, "data", "tabula", "tutorial.toml"),
-    '[journeyStart.speechBubble]\nspeaker = "mira"\nhorizontalOffset = 40\nverticalOffset = 0\nbubbleWidth = 550\ntext = "Choose a [purple]Dream Avatar[/purple]."\n\n[dreamscape.speechBubble]\nspeaker = "mira"\ndelay = 2\nhorizontalOffset = 0\nverticalOffset = 0\nbubbleWidth = 700\ntext = "Visit [purple]Dream Sites[/purple]."\n\n[atlas.speechBubble]\nspeaker = "mira"\ndelay = 1\nhorizontalOffset = 0\nverticalOffset = 0\nbubbleWidth = 700\ntext = "Choose the next [purple]dream[/purple]."\n\n[draft.speechBubble]\nspeaker = "mira"\nhorizontalOffset = 0\nverticalOffset = 0\nbubbleWidth = 600\ntext = "Draft a card."\n\n[dreamsignRevelation.speechBubble]\nspeaker = "mira"\nhorizontalOffset = 0\nverticalOffset = 0\nbubbleWidth = 600\ntext = "Choose a Dreamsign."\n\n[battle]\nplayerDraws = ["5a980eff-6ec7-44d8-9977-b98e66bbc2c8"]\nenemyDraws = ["a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"]\ndreamwellDraws = ["7171ff89-ebe4-42d0-8863-9b4b0531cad2"]\n\n[[actions]]\nid = "old"\naction = "display-speech-bubble"\nspeechBubble = { speaker = "mira", duration = 3, horizontalOffset = 0, verticalOffset = 0, bubbleWidth = 700, text = "Old." }\nwait = 0\n\n[[triggers]]\nid = "support"\non = ["card-play"]\npriority = 100\nduration = 3\nmatch = { kind = "glossary", id = "support" }\ntext = "Support."\n',
-  );
-  const tutorialPath = join(rootDir, "data", "tabula", "tutorial.toml");
-  writeFileSync(
-    tutorialPath,
-    `${readFileSync(tutorialPath, "utf8")}\n[battleStart.firstBattle.speechBubble]\nspeaker = "mira"\ndelay = 1\nhorizontalOffset = 0\nverticalOffset = 0\nbubbleWidth = 700\ntext = "Review the first opponent."\n\n[battleStart.secondBattle.speechBubble]\nspeaker = "mira"\ndelay = 1\nhorizontalOffset = 0\nverticalOffset = 0\nbubbleWidth = 700\ntext = "Prepare for the second battle."\n`,
-  );
-  writeFileSync(
-    tutorialPath,
-    `${readFileSync(tutorialPath, "utf8")}\n[purge.speechBubble]\nspeaker = "mira"\nhorizontalOffset = 0\nverticalOffset = 0\nbubbleWidth = 600\ntext = "Purge a card."\n`,
+    serializeTutorialToml(
+      actions,
+      triggers,
+      configuration.battle,
+      configuration.journeyStart,
+      configuration.dreamscape,
+      configuration.atlas,
+      configuration.draft,
+      configuration.purge,
+      configuration.dreamsignRevelation,
+      configuration.battleStart,
+    ),
   );
   return rootDir;
 }
@@ -52,17 +84,15 @@ describe("tutorial editor api", () => {
   it("loads and atomically replaces the complete ordered action list", async () => {
     const rootDir = fixtureRoot();
     const origin = await startApi(rootDir);
-    const loaded = await fetch(`${origin}/api/editor/tutorial`).then((response) =>
-      response.json(),
+    const loaded = await fetch(`${origin}/api/editor/tutorial`).then(
+      (response) => response.json(),
     );
     expect(loaded.actions[0].id).toBe("old");
     expect(loaded.triggers.map((trigger) => trigger.id)).toEqual(["support"]);
-    expect(loaded.battle.playerDraws).toEqual([
-      "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
-    ]);
+    expect(loaded.battle.playerDraws).toEqual(EXPECTED_PLAYER_DRAWS);
     expect(loaded.battleStart.firstBattle.speechBubble.delay).toBe(1);
     expect(loaded.battleStart.secondBattle.speechBubble.delay).toBe(1);
-    expect(loaded.purge.speechBubble.text).toBe("Purge a card.");
+    expect(loaded.purge.speechBubble.text.length).toBeGreaterThan(0);
 
     const actions = [
       {
@@ -100,128 +130,45 @@ describe("tutorial editor api", () => {
     expect(savedResponse.status).toBe(200);
     expect((await savedResponse.json()).actions).toEqual(actions);
     expect(
-      parse(readFileSync(join(rootDir, "data", "tabula", "tutorial.toml"), "utf8")),
+      parse(
+        readFileSync(join(rootDir, "data", "tabula", "tutorial.toml"), "utf8"),
+      ),
     ).toMatchObject({
       actions,
-      journeyStart: {
-        speechBubble: {
-          horizontalOffset: 40,
-          bubbleWidth: 550,
-        },
-      },
-      dreamscape: {
-        speechBubble: {
-          delay: 2,
-          text: "Visit [purple]Dream Sites[/purple].",
-        },
-      },
-      atlas: {
-        speechBubble: {
-          delay: 1,
-          text: "Choose the next [purple]dream[/purple].",
-        },
-      },
-      draft: {
-        speechBubble: {
-          bubbleWidth: 600,
-          text: "Draft a card.",
-        },
-      },
-      purge: {
-        speechBubble: {
-          bubbleWidth: 600,
-          text: "Purge a card.",
-        },
-      },
-      dreamsignRevelation: {
-        speechBubble: {
-          bubbleWidth: 600,
-          text: "Choose a Dreamsign.",
-        },
-      },
-      battleStart: {
-        firstBattle: {
-          speechBubble: {
-            delay: 1,
-            text: "Review the first opponent.",
-          },
-        },
-        secondBattle: {
-          speechBubble: {
-            delay: 1,
-            text: "Prepare for the second battle.",
-          },
-        },
-      },
-      triggers: [{ id: "support" }],
-      battle: {
-        playerDraws: ["5a980eff-6ec7-44d8-9977-b98e66bbc2c8"],
-      },
+      journeyStart: loaded.journeyStart,
+      dreamscape: loaded.dreamscape,
+      atlas: loaded.atlas,
+      draft: loaded.draft,
+      purge: loaded.purge,
+      dreamsignRevelation: loaded.dreamsignRevelation,
+      battleStart: loaded.battleStart,
+      triggers: loaded.triggers,
+      battle: loaded.battle,
     });
     expect(
-      JSON.parse(readFileSync(join(rootDir, "public", "tutorial-data.json"), "utf8")),
+      JSON.parse(
+        readFileSync(join(rootDir, "public", "tutorial-data.json"), "utf8"),
+      ),
     ).toMatchObject({
       actions,
-      journeyStart: {
-        speechBubble: {
-          horizontalOffset: 40,
-          bubbleWidth: 550,
-        },
-      },
-      dreamscape: {
-        speechBubble: {
-          delay: 2,
-          text: "Visit [purple]Dream Sites[/purple].",
-        },
-      },
-      atlas: {
-        speechBubble: {
-          delay: 1,
-          text: "Choose the next [purple]dream[/purple].",
-        },
-      },
-      draft: {
-        speechBubble: {
-          bubbleWidth: 600,
-          text: "Draft a card.",
-        },
-      },
-      purge: {
-        speechBubble: {
-          bubbleWidth: 600,
-          text: "Purge a card.",
-        },
-      },
-      dreamsignRevelation: {
-        speechBubble: {
-          bubbleWidth: 600,
-          text: "Choose a Dreamsign.",
-        },
-      },
-      battleStart: {
-        firstBattle: {
-          speechBubble: {
-            delay: 1,
-            text: "Review the first opponent.",
-          },
-        },
-        secondBattle: {
-          speechBubble: {
-            delay: 1,
-            text: "Prepare for the second battle.",
-          },
-        },
-      },
-      triggers: [{ id: "support" }],
-      battle: {
-        playerDraws: ["5a980eff-6ec7-44d8-9977-b98e66bbc2c8"],
-      },
+      journeyStart: loaded.journeyStart,
+      dreamscape: loaded.dreamscape,
+      atlas: loaded.atlas,
+      draft: loaded.draft,
+      purge: loaded.purge,
+      dreamsignRevelation: loaded.dreamsignRevelation,
+      battleStart: loaded.battleStart,
+      triggers: loaded.triggers,
+      battle: loaded.battle,
     });
   });
 
   it("rejects invalid actions without changing tutorial.toml", async () => {
     const rootDir = fixtureRoot();
-    const original = readFileSync(join(rootDir, "data", "tabula", "tutorial.toml"), "utf8");
+    const original = readFileSync(
+      join(rootDir, "data", "tabula", "tutorial.toml"),
+      "utf8",
+    );
     const origin = await startApi(rootDir);
     const response = await fetch(`${origin}/api/editor/tutorial`, {
       method: "PUT",
@@ -238,8 +185,8 @@ describe("tutorial editor api", () => {
       }),
     });
     expect(response.status).toBe(400);
-    expect(readFileSync(join(rootDir, "data", "tabula", "tutorial.toml"), "utf8")).toBe(
-      original,
-    );
+    expect(
+      readFileSync(join(rootDir, "data", "tabula", "tutorial.toml"), "utf8"),
+    ).toBe(original);
   });
 });

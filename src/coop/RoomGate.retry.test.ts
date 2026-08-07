@@ -45,6 +45,7 @@ const CONTENT_CONFIG: PinnedContentConfig = {
   rewardSelectionFoldHash: "c".repeat(64),
   auguryFoldHash: "d".repeat(64),
   explorationFoldHash: "e".repeat(64),
+  tutorialFoldHash: "t".repeat(64),
   opponentsFoldHash: "b".repeat(64),
   defaultStartingEssence: 17,
   dreamsignCap: 4,

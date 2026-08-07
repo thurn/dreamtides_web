@@ -17,7 +17,7 @@ import { opponentsFixture } from "../testing/opponents-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 
-const REDUCER_VERSION = "dreamtides-coop-v16";
+const REDUCER_VERSION = "dreamtides-coop-v17";
 const ATLAS_FOLD_HASH = "fixture-atlas-fold-hash";
 const DRAFT_DATA = draftDataFixture();
 const ECONOMY = economyFixture();
@@ -29,6 +29,7 @@ const PINNED_ECONOMY = {
   rewardSelectionFoldHash: CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
   auguryFoldHash: CONFIG_DATA_FIXTURE.auguryData.foldHash,
   explorationFoldHash: "fixture-exploration-fold-hash",
+  tutorialFoldHash: "fixture-tutorial-fold-hash",
 };
 
 // Captured subscriber so a test can hand RoomGate a chosen log node.
@@ -135,6 +136,7 @@ function mount(config: RuntimeConfig): void {
         rewardSelectionData={CONFIG_DATA_FIXTURE.rewardSelectionData}
         auguryData={CONFIG_DATA_FIXTURE.auguryData}
         explorationFoldHash="fixture-exploration-fold-hash"
+        tutorialFoldHash="fixture-tutorial-fold-hash"
       >
         {() => <div data-room-children="true">room children</div>}
       </RoomGate>,
@@ -255,6 +257,31 @@ describe("RoomGate content-config gate", () => {
 
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
     expect(container.textContent).toContain("Opponent Rules");
+  });
+
+  it("gates a room pinned to different tutorial rules", async () => {
+    mount(runtimeConfig());
+    await flush();
+
+    act(() => {
+      deliverNode?.(
+        nodeWith(
+          genesisWith({
+            poolVariant: "tides4",
+            draftMode: "pool",
+            fresh20PackSize: null,
+            atlasFoldHash: ATLAS_FOLD_HASH,
+            draftFoldHash: DRAFT_DATA.foldHash,
+            ...PINNED_ECONOMY,
+            tutorialFoldHash: "c".repeat(64),
+          }),
+        ),
+      );
+    });
+    await flush();
+
+    expect(container.querySelector("[data-config-gate]")).not.toBeNull();
+    expect(container.querySelector("[data-room-children]")).toBeNull();
   });
 
   it("does not adopt a room whose Draft fold hash differs", async () => {

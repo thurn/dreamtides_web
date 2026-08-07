@@ -14,6 +14,7 @@ import type {
 export function useTutorialPresentationLogging(
   playback: TutorialPlaybackState | null,
   view: TutorialView,
+  featuredDreamwellCardId: string,
   playbackSpeed = 1,
 ): void {
   const loggedActionKey = useRef<string | null>(null);
@@ -53,7 +54,7 @@ export function useTutorialPresentationLogging(
     loggedActionKey.current = key;
     logEvent("tutorial_action_presented", {
       runId: view.playbackRunId,
-      ...tutorialActionLogDetails(current),
+      ...tutorialActionLogDetails(current, featuredDreamwellCardId),
       ...(current.action === "resolve-challenge" &&
       view.challenge !== null &&
       view.challenge !== undefined
@@ -92,6 +93,7 @@ export function useTutorialPresentationLogging(
   }, [
     playback,
     playbackSpeed,
+    featuredDreamwellCardId,
     view.currentAction,
     view.dialogue,
     view.playbackRunId,
@@ -101,10 +103,7 @@ export function useTutorialPresentationLogging(
 /** Log the authored How to Play action's local presentation lifecycle. */
 export function useTutorialHowToPlayLogging(
   battleId: string,
-): Pick<
-  TutorialScreenProps,
-  "onHowToPlayPresented" | "onHowToPlayDismissed"
-> {
+): Pick<TutorialScreenProps, "onHowToPlayPresented" | "onHowToPlayDismissed"> {
   const onHowToPlayPresented = useCallback(
     (
       runId: string,

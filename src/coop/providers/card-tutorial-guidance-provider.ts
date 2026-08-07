@@ -41,7 +41,7 @@ export function createCardTutorialGuidanceContentProvider(
     cardsById.set(card.id, card);
   }
   return {
-    triggers: content.tutorialTriggers ?? [],
+    triggers: content.tutorial?.triggers ?? [],
     cardById: (cardId) => cardsById.get(cardId),
     hasVisibleTransfigurationReward: (journey, site) => {
       if (site.type === "Exploration") {

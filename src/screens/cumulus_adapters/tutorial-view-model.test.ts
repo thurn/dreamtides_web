@@ -5,13 +5,30 @@ import type { DreamwellCard } from "../../data/dreamwell-database";
 import type { DreamAvatarContent } from "../../types/content";
 import {
   buildTutorialView as buildTutorialViewFromCatalog,
-  TUTORIAL_OPPONENT_CARD_ID,
   TUTORIAL_PLAYER_CARD_INSTANCE_ID,
-  TUTORIAL_PLAYER_CARD_ID,
-  tutorialActionLogDetails,
+  tutorialActionLogDetails as tutorialActionLogDetailsFromView,
 } from "./tutorial-view-model";
-import { TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID } from "../../data/tutorial-cards";
-import type { TutorialSpeechBubble } from "../../types/tutorial";
+import type {
+  TutorialAction,
+  TutorialSpeechBubble,
+} from "../../types/tutorial";
+import {
+  makeTutorialBattleConfiguration,
+  TEST_TUTORIAL_FEATURED_CARDS,
+} from "../../test/tutorial-configuration-fixture";
+
+const TUTORIAL_BATTLE_CONFIGURATION = makeTutorialBattleConfiguration();
+const TUTORIAL_OPPONENT_CARD_ID = TEST_TUTORIAL_FEATURED_CARDS.opponentCardId;
+const TUTORIAL_PLAYER_CARD_ID = TEST_TUTORIAL_FEATURED_CARDS.playerCardId;
+const TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID =
+  TEST_TUTORIAL_FEATURED_CARDS.enemyStarterCardId;
+
+function tutorialActionLogDetails(action: TutorialAction) {
+  return tutorialActionLogDetailsFromView(
+    action,
+    TEST_TUTORIAL_FEATURED_CARDS.dreamwellCardId,
+  );
+}
 
 const TUTORIAL_DREAM_AVATARS: readonly DreamAvatarContent[] = [
   {
@@ -35,12 +52,13 @@ const TUTORIAL_DREAM_AVATARS: readonly DreamAvatarContent[] = [
 ];
 
 function buildTutorialView(
-  playback: Parameters<typeof buildTutorialViewFromCatalog>[1] = null,
-  cards: Parameters<typeof buildTutorialViewFromCatalog>[2] = null,
-  dreamwellCards: Parameters<typeof buildTutorialViewFromCatalog>[3] = null,
+  playback: Parameters<typeof buildTutorialViewFromCatalog>[2] = null,
+  cards: Parameters<typeof buildTutorialViewFromCatalog>[3] = null,
+  dreamwellCards: Parameters<typeof buildTutorialViewFromCatalog>[4] = null,
 ) {
   return buildTutorialViewFromCatalog(
     TUTORIAL_DREAM_AVATARS,
+    TUTORIAL_BATTLE_CONFIGURATION,
     playback,
     cards,
     dreamwellCards,
@@ -139,6 +157,88 @@ const VOLTSURGE: DreamwellCard = {
 };
 
 describe("buildTutorialView", () => {
+  it("uses a synthetic scenario for identities, deck size, energy, target, and compact slots", () => {
+    const battleConfiguration = makeTutorialBattleConfiguration({
+      featuredCards: {
+        ...TEST_TUTORIAL_FEATURED_CARDS,
+        playerCardId: RUNEBOUND_CHAMPION.id,
+      },
+      playerDreamAvatarId: TUTORIAL_DREAM_AVATARS[1].id,
+      enemyDreamAvatarId: TUTORIAL_DREAM_AVATARS[0].id,
+      startingEnergy: 9,
+      scoreToWin: 17,
+      starterDeck: [{ cardId: RUNEBOUND_CHAMPION.id, copies: 7 }],
+      scriptedBoard: {
+        playerBackRankIndex: 2,
+        playerFrontRankIndex: 1,
+      },
+    });
+    const actions: readonly TutorialAction[] = [
+      {
+        id: "opponent-draw",
+        action: "draw-opponent-card",
+        cardId: OPPONENT_CARD.id,
+        wait: 0,
+      },
+      {
+        id: "opponent-play",
+        action: "reveal-and-play-opponent-card",
+        cardId: OPPONENT_CARD.id,
+        revealDuration: 0,
+        wait: 0,
+      },
+      {
+        id: "opponent-reposition",
+        action: "reposition-opponent-character",
+        cardId: OPPONENT_CARD.id,
+        wait: 0,
+      },
+      {
+        id: "how-to-play",
+        action: "display-how-to-play",
+        trigger: "immediate",
+        text: "Fixture instructions.",
+        wait: 0,
+      },
+      { id: "end-turn", action: "end-turn", wait: 0 },
+      {
+        id: "player-reposition",
+        action: "reposition-player-character",
+        cardId: RUNEBOUND_CHAMPION.id,
+        opposingCardId: OPPONENT_CARD.id,
+        wait: 0,
+      },
+    ];
+    const tutorial = buildTutorialViewFromCatalog(
+      TUTORIAL_DREAM_AVATARS,
+      battleConfiguration,
+      {
+        runId: "synthetic-config",
+        actions,
+        currentActionIndex: null,
+        playerCardPlay: {
+          cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+          cardId: RUNEBOUND_CHAMPION.id,
+          targetSlotId: null,
+        },
+      },
+      [RUNEBOUND_CHAMPION, OPPONENT_CARD],
+    );
+
+    expect(tutorial.dreamAvatars.player.profile.id).toBe(
+      TUTORIAL_DREAM_AVATARS[1].id,
+    );
+    expect(tutorial.battle.player.deckCardIds).toHaveLength(6);
+    expect(tutorial.battle.player.status).toMatchObject({
+      currentEnergy: 4,
+      maxEnergy: 9,
+      pointsToWin: 17,
+    });
+    expect(tutorial.battle.player.frontRank[1]?.card?.model.cardId).toBe(
+      RUNEBOUND_CHAMPION.id,
+    );
+  });
+
   it("resolves tutorial Dream Avatar display identity from the catalog by UUID", () => {
     const dreamAvatars = TUTORIAL_DREAM_AVATARS.map((dreamAvatar) =>
       dreamAvatar.id === "BFC40414-5264-41BF-86E1-A0F41EE4F5B5"
@@ -152,7 +252,10 @@ describe("buildTutorialView", () => {
         : dreamAvatar,
     );
 
-    const tutorial = buildTutorialViewFromCatalog(dreamAvatars);
+    const tutorial = buildTutorialViewFromCatalog(
+      dreamAvatars,
+      TUTORIAL_BATTLE_CONFIGURATION,
+    );
 
     expect(tutorial.dreamAvatars.player.visual).toEqual({
       name: "Gunnar Deepforge",

@@ -4,7 +4,6 @@ import type { SiteGenerationContext } from "../atlas/atlas-generator";
 import { regenerateAtlasForProgress } from "../atlas/atlas-generator";
 import { createDefaultState } from "../state/journey-context";
 import { createDreamsign } from "../data/dreamsigns";
-import { TUTORIAL_DREAM_AVATAR_ID } from "../data/tutorial-cards";
 import { createQaJourneyFoundation } from "./qa-journey-foundation";
 import { buildExplorationRuntime } from "../coop/providers/exploration-provider";
 
@@ -66,10 +65,9 @@ const DREAM_AVATAR_SELECT_SCENE: QaScene = {
     "The choose-your-avatar screen a run opens on, parked directly on " +
     "journeyStart for UI QA without creating a game from the lobby.",
   landsOnJourneyStart: true,
-  build: (journeyContent) => createDefaultState(journeyContent.economyData.journey),
+  build: (journeyContent) =>
+    createDefaultState(journeyContent.economyData.journey),
 };
-
-export { TUTORIAL_DREAM_AVATAR_ID };
 
 /**
  * Tutorial DreamAvatar selection: the normal journey-start presentation and
@@ -83,7 +81,8 @@ const TUTORIAL_DREAM_AVATAR_SELECT_SCENE: QaScene = {
   landsOnJourneyStart: true,
   build: (journeyContent) => {
     const tutorialDreamAvatar = journeyContent.dreamAvatars.find(
-      (dreamAvatar) => dreamAvatar.id === TUTORIAL_DREAM_AVATAR_ID,
+      (dreamAvatar) =>
+        dreamAvatar.id === journeyContent.tutorial?.battle.playerDreamAvatarId,
     );
     if (tutorialDreamAvatar === undefined) return null;
     return {
@@ -183,12 +182,14 @@ const RANDOM_SITE_ATLAS_SCENE: QaScene = {
     if (state === null || dreamscape === undefined) return null;
 
     const target = Object.values(state.atlas.nodes).find(
-      (node) => node.state === "available" && node.id !== state.atlas.bossNodeId,
+      (node) =>
+        node.state === "available" && node.id !== state.atlas.bossNodeId,
     );
     if (target === undefined) return null;
 
     const signatureIndex = target.sites.findIndex(
-      (site) => site.isEnhanced && site.type !== "Battle" && site.type !== "Draft",
+      (site) =>
+        site.isEnhanced && site.type !== "Battle" && site.type !== "Draft",
     );
     if (signatureIndex < 0) return null;
 
@@ -200,7 +201,9 @@ const RANDOM_SITE_ATLAS_SCENE: QaScene = {
       isVisited: false,
       randomSite: {
         mode: "homeChoice",
-        candidateSiteTypes: [...journeyContent.atlasData.randomSite.destinations],
+        candidateSiteTypes: [
+          ...journeyContent.atlasData.randomSite.destinations,
+        ],
       },
     };
     const node = {
@@ -347,8 +350,7 @@ function tutorialBattleScene(displayLayer: 1 | 2): QaScene {
   return {
     id: `tutorial-battle${String(displayLayer)}`,
     label: `Tutorial Battle (Layer ${String(displayLayer)})`,
-    description:
-      `The tutorial journey's Layer ${String(displayLayer)} keeper battle, parked on the opposing Avatar preview.`,
+    description: `The tutorial journey's Layer ${String(displayLayer)} keeper battle, parked on the opposing Avatar preview.`,
     build: (journeyContent) => {
       const state = battleLayerSceneState(displayLayer)(journeyContent);
       return state === null ? null : { ...state, isTutorialJourney: true };
@@ -671,7 +673,10 @@ function explorationScene(
       if (state === null) return null;
       const cards = [...journeyContent.cardDatabase.values()];
       const selected = new Map<number, (typeof cards)[number]>();
-      const add = (matches: (card: (typeof cards)[number]) => boolean, count: number): void => {
+      const add = (
+        matches: (card: (typeof cards)[number]) => boolean,
+        count: number,
+      ): void => {
         for (const card of cards) {
           if (!matches(card) || selected.has(card.cardNumber)) continue;
           selected.set(card.cardNumber, card);
@@ -688,7 +693,8 @@ function explorationScene(
           card.cardType === "Character" &&
           card.energyCost !== null &&
           card.energyCost <=
-            journeyContent.rewardSelectionData.tuning.costBands.cheapCharacterMaximum,
+            journeyContent.rewardSelectionData.tuning.costBands
+              .cheapCharacterMaximum,
         4,
       );
       add(
@@ -853,39 +859,55 @@ function siteScene(
 function randomSiteScene(mode: "single" | "homeChoice"): QaScene {
   return {
     id: mode === "single" ? "random-site" : "random-site-home",
-    label: mode === "single" ? "Random Site (Hosted Shop)" : "Random Site (Home Choice)",
-    description: mode === "single"
-      ? "A configured enhanced destination hosted by Random Site's presenting guide."
-      : "Random Site's home choice with configured persisted destinations ready to be offered.",
+    label:
+      mode === "single"
+        ? "Random Site (Hosted Shop)"
+        : "Random Site (Home Choice)",
+    description:
+      mode === "single"
+        ? "A configured enhanced destination hosted by Random Site's presenting guide."
+        : "Random Site's home choice with configured persisted destinations ready to be offered.",
     build: (journeyContent) => {
       const destination = journeyContent.atlasData.randomSite.destinations[0];
       const guideId = journeyContent.atlasData.randomSite.guideId;
       if (destination === undefined || typeof guideId !== "string") return null;
-      const state = parkOnSite(mode === "single" ? destination : "RandomSite", true)(journeyContent);
-      if (state === null || state.currentDreamscape === null || state.activeSiteId === null) return null;
+      const state = parkOnSite(
+        mode === "single" ? destination : "RandomSite",
+        true,
+      )(journeyContent);
+      if (
+        state === null ||
+        state.currentDreamscape === null ||
+        state.activeSiteId === null
+      )
+        return null;
       const node = state.atlas.nodes[state.currentDreamscape];
-      const sites = node.sites.map((site) => site.id !== state.activeSiteId
-        ? site
-        : mode === "single"
-          ? {
-              ...site,
-              type: destination,
-              guideIdOverride: guideId,
-              randomSite: {
-                mode: "single" as const,
-                candidateSiteTypes: [destination],
-                destinationSiteType: destination,
-                materialized: true,
+      const sites = node.sites.map((site) =>
+        site.id !== state.activeSiteId
+          ? site
+          : mode === "single"
+            ? {
+                ...site,
+                type: destination,
+                guideIdOverride: guideId,
+                randomSite: {
+                  mode: "single" as const,
+                  candidateSiteTypes: [destination],
+                  destinationSiteType: destination,
+                  materialized: true,
+                },
+              }
+            : {
+                ...site,
+                type: "RandomSite" as const,
+                randomSite: {
+                  mode: "homeChoice" as const,
+                  candidateSiteTypes: [
+                    ...journeyContent.atlasData.randomSite.destinations,
+                  ],
+                },
               },
-            }
-          : {
-              ...site,
-              type: "RandomSite" as const,
-              randomSite: {
-                mode: "homeChoice" as const,
-                candidateSiteTypes: [...journeyContent.atlasData.randomSite.destinations],
-              },
-            });
+      );
       return {
         ...state,
         atlas: {
@@ -959,21 +981,11 @@ export const QA_SCENES: readonly QaScene[] = [
     true,
   ),
   siteScene("augury", "Augury", "Augury"),
-  siteScene(
-    "augury-enhanced",
-    "Augury (Enhanced)",
-    "Augury",
-    true,
-  ),
+  siteScene("augury-enhanced", "Augury (Enhanced)", "Augury", true),
   randomSiteScene("single"),
   randomSiteScene("homeChoice"),
   siteScene("gamble", "Gamble", "Gamble"),
-  siteScene(
-    "gamble-enhanced",
-    "Gamble (Farpoint)",
-    "Gamble",
-    true,
-  ),
+  siteScene("gamble-enhanced", "Gamble (Farpoint)", "Gamble", true),
   explorationScene(false),
   explorationScene(true),
   explorationScene(false, "duplicates"),

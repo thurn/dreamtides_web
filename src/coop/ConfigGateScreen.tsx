@@ -32,7 +32,9 @@ export function ConfigGateScreen({
     roomContentConfig.economyFoldHash === localContentConfig.economyFoldHash &&
     roomContentConfig.opponentsFoldHash !== undefined &&
     roomContentConfig.opponentsFoldHash ===
-      localContentConfig.opponentsFoldHash;
+      localContentConfig.opponentsFoldHash &&
+    roomContentConfig.tutorialFoldHash !== undefined &&
+    roomContentConfig.tutorialFoldHash === localContentConfig.tutorialFoldHash;
 
   const handleUseRoomSettings = useCallback(() => {
     if (!canAdopt || roomContentConfig === undefined) return;
@@ -102,6 +104,7 @@ function describeConfig(
       { label: "Draft Rules", value: "Unavailable" },
       { label: "Economy Rules", value: "Unavailable" },
       { label: "Opponent Rules", value: "Unavailable" },
+      { label: "Tutorial Rules", value: "Unavailable" },
     ];
   }
   return [
@@ -129,6 +132,10 @@ function describeConfig(
     {
       label: "Opponent Rules",
       value: config.opponentsFoldHash?.slice(0, 12) ?? "Unavailable",
+    },
+    {
+      label: "Tutorial Rules",
+      value: config.tutorialFoldHash?.slice(0, 12) ?? "Unavailable",
     },
   ];
 }

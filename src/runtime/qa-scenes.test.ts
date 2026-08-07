@@ -20,11 +20,16 @@ import {
 } from "../__test-helpers__/pool-context";
 import {
   QA_SCENES,
-  TUTORIAL_DREAM_AVATAR_ID,
   buildQaScene,
   findQaScene,
   qaSceneLoadsBattle,
 } from "./qa-scenes";
+import {
+  makeTutorialConfiguration,
+  TEST_TUTORIAL_PLAYER_AVATAR_ID,
+} from "../test/tutorial-configuration-fixture";
+
+const TUTORIAL_DREAM_AVATAR_ID = TEST_TUTORIAL_PLAYER_AVATAR_ID;
 
 function makeDreamAvatar(id = "dream-avatar-1"): DreamAvatarContent {
   return {
@@ -65,6 +70,7 @@ function makeJourneyContent(
     ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
     cardDatabase,
+    tutorial: makeTutorialConfiguration(),
     dreamAvatars: [makeDreamAvatar()],
     dreamwellCards: [],
     dreamsignTemplates: [],

@@ -49,7 +49,7 @@ export function DraftSiteScreenAdapter({ siteId }: { siteId: string }) {
         site,
         sitePicksCompleted: progress.sitePicksCompleted,
         journeyState: state,
-        tutorialConfiguration: journeyContent.tutorialDraft,
+        tutorialConfiguration: journeyContent.tutorial?.draft,
         defaultPickCount: journeyContent.draftData.offers.picksPerSite,
       }),
     [
@@ -60,7 +60,7 @@ export function DraftSiteScreenAdapter({ siteId }: { siteId: string }) {
       node,
       site,
       state,
-      journeyContent.tutorialDraft,
+      journeyContent.tutorial?.draft,
       journeyContent.draftData.offers.picksPerSite,
     ],
   );

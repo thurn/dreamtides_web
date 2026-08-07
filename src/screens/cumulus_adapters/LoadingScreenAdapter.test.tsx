@@ -5,9 +5,9 @@ import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../../cumulus/CumulusRoot";
 import {
-  TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
-  TUTORIAL_WORLDS_AWAIT_CARD_ID,
-} from "../../data/tutorial-cards";
+  makeTutorialConfiguration,
+  TEST_TUTORIAL_FEATURED_CARDS,
+} from "../../test/tutorial-configuration-fixture";
 import { getLogEntries, resetLog } from "../../logging";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
@@ -18,6 +18,10 @@ const coopMocks = vi.hoisted(() => ({
   advanceFrontDoor: vi.fn().mockResolvedValue(1),
   cardDatabase: new Map<number, CardData>(),
 }));
+const TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID =
+  TEST_TUTORIAL_FEATURED_CARDS.enemyStarterCardId;
+const TUTORIAL_WORLDS_AWAIT_CARD_ID =
+  TEST_TUTORIAL_FEATURED_CARDS.loadingEventCardId;
 
 vi.mock("../../state/front-door-context", () => ({
   useFrontDoor: () => ({
@@ -27,7 +31,12 @@ vi.mock("../../state/front-door-context", () => ({
 }));
 
 vi.mock("../../state/journey-context", () => ({
-  useJourney: () => ({ cardDatabase: coopMocks.cardDatabase }),
+  useJourney: () => ({
+    journeyContent: {
+      cardDatabase: coopMocks.cardDatabase,
+      tutorial: makeTutorialConfiguration(),
+    },
+  }),
 }));
 
 function card(cardNumber: number, id: string): CardData {

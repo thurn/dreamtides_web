@@ -34,6 +34,7 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
     rewardSelectionFoldHash,
     auguryFoldHash,
     explorationFoldHash,
+    tutorialFoldHash,
     opponentsFoldHash,
     defaultStartingEssence,
     dreamsignCap,
@@ -51,6 +52,7 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
     !(rewardSelectionFoldHash === undefined || typeof rewardSelectionFoldHash === "string") ||
     !(auguryFoldHash === undefined || typeof auguryFoldHash === "string") ||
     !(explorationFoldHash === undefined || typeof explorationFoldHash === "string") ||
+    !(tutorialFoldHash === undefined || typeof tutorialFoldHash === "string") ||
     !(
       opponentsFoldHash === undefined || typeof opponentsFoldHash === "string"
     ) ||
@@ -72,6 +74,7 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
     ...(rewardSelectionFoldHash === undefined ? {} : { rewardSelectionFoldHash }),
     ...(auguryFoldHash === undefined ? {} : { auguryFoldHash }),
     ...(explorationFoldHash === undefined ? {} : { explorationFoldHash }),
+    ...(tutorialFoldHash === undefined ? {} : { tutorialFoldHash }),
     ...(opponentsFoldHash === undefined ? {} : { opponentsFoldHash }),
     ...(defaultStartingEssence === undefined ? {} : { defaultStartingEssence }),
     ...(dreamsignCap === undefined ? {} : { dreamsignCap }),

@@ -315,6 +315,7 @@ describe("contentConfigFromRuntime", () => {
   const economyData = economyFixture();
   const opponentsData = opponentsFixture();
   const explorationFoldHash = "fixture-exploration-fold-hash";
+  const tutorialFoldHash = "fixture-tutorial-fold-hash";
 
   it("extracts the fold-relevant slice with defaults for absent optionals", () => {
     expect(
@@ -327,6 +328,7 @@ describe("contentConfigFromRuntime", () => {
         CONFIG_DATA_FIXTURE.rewardSelectionData,
         CONFIG_DATA_FIXTURE.auguryData,
         explorationFoldHash,
+        tutorialFoldHash,
       ),
     ).toEqual({
       poolVariant: DEFAULT_POOL_VARIANT,
@@ -338,6 +340,7 @@ describe("contentConfigFromRuntime", () => {
       rewardSelectionFoldHash: CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
       auguryFoldHash: CONFIG_DATA_FIXTURE.auguryData.foldHash,
       explorationFoldHash,
+      tutorialFoldHash,
       opponentsFoldHash: opponentsData.foldHash,
       defaultStartingEssence: economyData.journey.defaultStartingEssence,
       dreamsignCap: economyData.journey.dreamsignCap,
@@ -355,6 +358,7 @@ describe("contentConfigFromRuntime", () => {
         CONFIG_DATA_FIXTURE.rewardSelectionData,
         CONFIG_DATA_FIXTURE.auguryData,
         explorationFoldHash,
+        tutorialFoldHash,
       ),
     ).toEqual({
       poolVariant: DEFAULT_POOL_VARIANT,
@@ -366,6 +370,7 @@ describe("contentConfigFromRuntime", () => {
       rewardSelectionFoldHash: CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
       auguryFoldHash: CONFIG_DATA_FIXTURE.auguryData.foldHash,
       explorationFoldHash,
+      tutorialFoldHash,
       opponentsFoldHash: opponentsData.foldHash,
       defaultStartingEssence: economyData.journey.defaultStartingEssence,
       dreamsignCap: economyData.journey.dreamsignCap,
@@ -383,6 +388,7 @@ describe("contentConfigFromRuntime", () => {
         CONFIG_DATA_FIXTURE.rewardSelectionData,
         CONFIG_DATA_FIXTURE.auguryData,
         explorationFoldHash,
+        tutorialFoldHash,
       ).poolVariant,
     ).toBe("idf2");
   });
@@ -400,6 +406,7 @@ describe("contentConfigsEqual", () => {
     rewardSelectionFoldHash: CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
     auguryFoldHash: CONFIG_DATA_FIXTURE.auguryData.foldHash,
     explorationFoldHash: "fixture-exploration-fold-hash",
+    tutorialFoldHash: "fixture-tutorial-fold-hash",
     opponentsFoldHash: opponentsFixture().foldHash,
     defaultStartingEssence: economyData.journey.defaultStartingEssence,
     dreamsignCap: economyData.journey.dreamsignCap,
@@ -428,9 +435,21 @@ describe("contentConfigsEqual", () => {
     expect(
       contentConfigsEqual(base, { ...base, economyFoldHash: "different" }),
     ).toBe(false);
-    expect(contentConfigsEqual(base, { ...base, rewardSelectionFoldHash: "different" })).toBe(false);
-    expect(contentConfigsEqual(base, { ...base, auguryFoldHash: "different" })).toBe(false);
-    expect(contentConfigsEqual(base, { ...base, explorationFoldHash: "different" })).toBe(false);
+    expect(
+      contentConfigsEqual(base, {
+        ...base,
+        rewardSelectionFoldHash: "different",
+      }),
+    ).toBe(false);
+    expect(
+      contentConfigsEqual(base, { ...base, auguryFoldHash: "different" }),
+    ).toBe(false);
+    expect(
+      contentConfigsEqual(base, { ...base, explorationFoldHash: "different" }),
+    ).toBe(false);
+    expect(
+      contentConfigsEqual(base, { ...base, tutorialFoldHash: "different" }),
+    ).toBe(false);
     expect(
       contentConfigsEqual(base, { ...base, opponentsFoldHash: "different" }),
     ).toBe(false);
@@ -452,6 +471,7 @@ describe("applyContentConfigToSearch", () => {
       rewardSelectionFoldHash: CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
       auguryFoldHash: CONFIG_DATA_FIXTURE.auguryData.foldHash,
       explorationFoldHash: "fixture-exploration-fold-hash",
+      tutorialFoldHash: "fixture-tutorial-fold-hash",
       opponentsFoldHash: opponentsFixture().foldHash,
       defaultStartingEssence: economyData.journey.defaultStartingEssence,
       dreamsignCap: economyData.journey.dreamsignCap,
@@ -494,8 +514,7 @@ describe("applyContentConfigToSearch", () => {
           config.atlasFoldHash ?? "fixture-atlas-fold-hash",
           {
             ...draftDataFixture(),
-            foldHash:
-              config.draftFoldHash ?? draftDataFixture().foldHash,
+            foldHash: config.draftFoldHash ?? draftDataFixture().foldHash,
           },
           {
             ...economyData,
@@ -507,13 +526,17 @@ describe("applyContentConfigToSearch", () => {
           },
           {
             ...CONFIG_DATA_FIXTURE.rewardSelectionData,
-            foldHash: config.rewardSelectionFoldHash ?? CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
+            foldHash:
+              config.rewardSelectionFoldHash ??
+              CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
           },
           {
             ...CONFIG_DATA_FIXTURE.auguryData,
-            foldHash: config.auguryFoldHash ?? CONFIG_DATA_FIXTURE.auguryData.foldHash,
+            foldHash:
+              config.auguryFoldHash ?? CONFIG_DATA_FIXTURE.auguryData.foldHash,
           },
           config.explorationFoldHash ?? "fixture-exploration-fold-hash",
+          config.tutorialFoldHash ?? "fixture-tutorial-fold-hash",
         ),
       ).toEqual(config);
     }

@@ -24,14 +24,8 @@ import {
   stripJsonComments,
 } from "./lib/card-refs.mjs";
 import {
-  validateTutorialDreamscapeConfiguration,
-  validateTutorialAtlasConfiguration,
-  validateTutorialJourneyStartConfiguration,
-  validateTutorialSiteConfiguration,
-  validateTutorialBattleStartConfiguration,
-  validateTutorialActions,
-  validateTutorialBattleConfiguration,
-  validateTutorialTriggers,
+  readTutorialConfiguration,
+  validateTutorialCatalogReferences,
 } from "./tutorial-data.mjs";
 import { collectAtlasAssetSources, compileAtlasData } from "./atlas-data.mjs";
 import { compileEconomyData } from "./economy-data.mjs";
@@ -748,15 +742,18 @@ function transformTomlRecord(record) {
 
 /** Convert and validate the authored Exploration encounter catalog. */
 export function transformExplorationData(source) {
-  const effectDefinitions = source["effect-kind"] === undefined
-    ? EXPLORATION_EFFECT_DEFINITIONS
-    : buildExplorationEffectDefinitions(source);
+  const effectDefinitions =
+    source["effect-kind"] === undefined
+      ? EXPLORATION_EFFECT_DEFINITIONS
+      : buildExplorationEffectDefinitions(source);
   const effectDefinitionByKind = new Map(
     effectDefinitions.map((definition) => [definition.kind, definition]),
   );
   const actionsPerEncounter = source.encounters?.["actions-per-encounter"] ?? 2;
   if (actionsPerEncounter !== 2) {
-    throw new Error("exploration.toml: encounters.actions-per-encounter must be 2 for the two-choice screen contract");
+    throw new Error(
+      "exploration.toml: encounters.actions-per-encounter must be 2 for the two-choice screen contract",
+    );
   }
   const customCards = (source["custom-card"] ?? []).map((raw) => {
     const card = transformTomlRecord(raw);
@@ -780,9 +777,7 @@ export function transformExplorationData(source) {
     return {
       ...encounter,
       action: (encounter.action ?? []).map((action) => {
-        const definition = effectDefinitionByKind.get(
-          action.effectKind,
-        );
+        const definition = effectDefinitionByKind.get(action.effectKind);
         const specialVariables = [
           ...new Set(action.effectText?.match(/\$[A-Z][A-Z0-9_]*/gu) ?? []),
         ];
@@ -827,7 +822,10 @@ export function transformExplorationData(source) {
       );
     }
     encounterIds.add(encounter.cardId.toLowerCase());
-    if (!Array.isArray(encounter.action) || encounter.action.length !== actionsPerEncounter) {
+    if (
+      !Array.isArray(encounter.action) ||
+      encounter.action.length !== actionsPerEncounter
+    ) {
       throw new Error(
         `exploration.toml: encounter ${encounter.cardId} must have exactly ${String(actionsPerEncounter)} actions`,
       );
@@ -844,9 +842,7 @@ export function transformExplorationData(source) {
           `exploration.toml: action ${action.id} has unknown effect-kind ${String(action.effectKind)}`,
         );
       }
-      const definition = effectDefinitionByKind.get(
-        action.effectKind,
-      );
+      const definition = effectDefinitionByKind.get(action.effectKind);
       if (
         definition?.allowedSelectionPolicyIds !== undefined &&
         !definition.allowedSelectionPolicyIds.includes(action.selectionPolicyId)
@@ -1013,10 +1009,12 @@ export function transformExplorationData(source) {
     kind: definition.kind,
     label: definition.label,
     canonicalMechanicId: definition.canonicalMechanicId,
-    ...(definition.defaultSelectionPolicyId === undefined ? {} : {
-      defaultSelectionPolicyId: definition.defaultSelectionPolicyId,
-      allowedSelectionPolicyIds: definition.allowedSelectionPolicyIds,
-    }),
+    ...(definition.defaultSelectionPolicyId === undefined
+      ? {}
+      : {
+          defaultSelectionPolicyId: definition.defaultSelectionPolicyId,
+          allowedSelectionPolicyIds: definition.allowedSelectionPolicyIds,
+        }),
     copy: definition.copy,
     fields: definition.fields,
   }));
@@ -1572,59 +1570,33 @@ export function setupAssets({
     publicDir,
   });
 
-  const tutorialSource = parse(readFileSync(tutorialTomlPath, "utf8"));
-  const tutorialJourneyStart = validateTutorialJourneyStartConfiguration(
-    tutorialSource.journeyStart,
-  );
-  const tutorialDreamscape = validateTutorialDreamscapeConfiguration(
-    tutorialSource.dreamscape,
-  );
-  const tutorialAtlas = validateTutorialAtlasConfiguration(
-    tutorialSource.atlas,
-  );
-  const tutorialDraft = validateTutorialSiteConfiguration(
-    tutorialSource.draft,
-    "draft",
-  );
-  const tutorialPurge = validateTutorialSiteConfiguration(
-    tutorialSource.purge,
-    "purge",
-  );
-  const tutorialDreamsignRevelation = validateTutorialSiteConfiguration(
-    tutorialSource.dreamsignRevelation,
-    "dreamsign-revelation",
-  );
-  const tutorialBattleStart = validateTutorialBattleStartConfiguration(
-    tutorialSource.battleStart,
-  );
-  const tutorialActions = validateTutorialActions(tutorialSource.actions);
-  const tutorialTriggers = validateTutorialTriggers(
-    tutorialSource.triggers ?? [],
-  );
-  const tutorialBattle = validateTutorialBattleConfiguration(
-    tutorialSource.battle,
-  );
+  const tutorialConfiguration = readTutorialConfiguration({
+    rootDir: ROOT,
+    tutorialTomlPath,
+  });
+  const tutorialDreamAvatars = parse(
+    readFileSync(dreamAvatarV2TomlPath, "utf8"),
+  ).dreamAvatar;
+  const tutorialDreamwellCards = parse(
+    readFileSync(dreamwellTomlPath, "utf8"),
+  ).dreamwell;
+  if (!Array.isArray(tutorialDreamAvatars)) {
+    throw new Error("Expected [[dreamAvatar]] array in dream_avatars.toml");
+  }
+  if (!Array.isArray(tutorialDreamwellCards)) {
+    throw new Error("Expected [[dreamwell]] array in dreamwell.toml");
+  }
+  validateTutorialCatalogReferences(tutorialConfiguration, {
+    cardIds: jsonCards.map((card) => card.id),
+    dreamAvatarIds: tutorialDreamAvatars.map((avatar) => avatar.id),
+    dreamwellCardIds: tutorialDreamwellCards.map((card) => card.id),
+  });
   writeFileSync(
     tutorialJsonPath,
-    `${JSON.stringify(
-      {
-        journeyStart: tutorialJourneyStart,
-        dreamscape: tutorialDreamscape,
-        atlas: tutorialAtlas,
-        draft: tutorialDraft,
-        purge: tutorialPurge,
-        dreamsignRevelation: tutorialDreamsignRevelation,
-        battleStart: tutorialBattleStart,
-        actions: tutorialActions,
-        triggers: tutorialTriggers,
-        battle: tutorialBattle,
-      },
-      null,
-      2,
-    )}\n`,
+    `${JSON.stringify(tutorialConfiguration, null, 2)}\n`,
   );
   console.log(
-    `Wrote ${tutorialActions.length} tutorial actions and ${tutorialTriggers.length} triggers to tutorial-data.json`,
+    `Wrote ${tutorialConfiguration.actions.length} tutorial actions and ${tutorialConfiguration.triggers.length} triggers to tutorial-data.json`,
   );
 
   // Real per-deck card lists bundled for the draft test's `decklists` pool
@@ -2155,10 +2127,7 @@ export function setupAssets({
   const jsonDraftData = compileDraftData(
     parse(readFileSync(draftTomlPath, "utf8")),
   );
-  writeFileSync(
-    draftJsonPath,
-    JSON.stringify(jsonDraftData, null, 2) + "\n",
-  );
+  writeFileSync(draftJsonPath, JSON.stringify(jsonDraftData, null, 2) + "\n");
   console.log("Wrote Draft data to draft-data.json");
 
   console.log("Parsing reward_selection.toml...");

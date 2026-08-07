@@ -113,6 +113,7 @@ interface RoomGateProps {
   rewardSelectionData: RewardSelectionData;
   auguryData: AuguryData;
   explorationFoldHash: string;
+  tutorialFoldHash: string;
   /** Scene stamped into genesis only when this mount creates a fresh room. */
   frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting" | "journey">;
   children: (context: RoomReadyContext) => ReactNode;
@@ -234,6 +235,7 @@ function hasPinnedContentConfig(genesis: Genesis): genesis is PinnedGenesis {
     typeof genesis.contentConfig.rewardSelectionFoldHash === "string" &&
     typeof genesis.contentConfig.auguryFoldHash === "string" &&
     typeof genesis.contentConfig.explorationFoldHash === "string" &&
+    typeof genesis.contentConfig.tutorialFoldHash === "string" &&
     typeof genesis.contentConfig.opponentsFoldHash === "string" &&
     typeof genesis.contentConfig.defaultStartingEssence === "number" &&
     typeof genesis.contentConfig.dreamsignCap === "number"
@@ -267,6 +269,7 @@ export function RoomGate({
   rewardSelectionData,
   auguryData,
   explorationFoldHash,
+  tutorialFoldHash,
   frontDoorEntry,
   children,
 }: RoomGateProps): ReactNode {
@@ -282,8 +285,19 @@ export function RoomGate({
         rewardSelectionData,
         auguryData,
         explorationFoldHash,
+        tutorialFoldHash,
       ),
-    [atlasFoldHash, auguryData, draftData, economyData, explorationFoldHash, opponentsData, rewardSelectionData, runtimeConfig],
+    [
+      atlasFoldHash,
+      auguryData,
+      draftData,
+      economyData,
+      explorationFoldHash,
+      opponentsData,
+      rewardSelectionData,
+      runtimeConfig,
+      tutorialFoldHash,
+    ],
   );
   const autoCreateFiredRef = useRef(false);
   const [activeRoomId, setActiveRoomId] = useState<string | null>(gameId);
@@ -469,6 +483,7 @@ export function RoomGate({
       rewardSelectionFoldHash: localContentConfig.rewardSelectionFoldHash,
       auguryFoldHash: localContentConfig.auguryFoldHash,
       explorationFoldHash: localContentConfig.explorationFoldHash,
+      tutorialFoldHash: localContentConfig.tutorialFoldHash,
       opponentsFoldHash: localContentConfig.opponentsFoldHash,
       defaultStartingEssence: localContentConfig.defaultStartingEssence,
       dreamsignCap: localContentConfig.dreamsignCap,

@@ -21,6 +21,7 @@ const GENESIS: Genesis = {
     rewardSelectionFoldHash: "fixture-reward-selection-fold-hash",
     auguryFoldHash: "fixture-augury-fold-hash",
     explorationFoldHash: "fixture-exploration-fold-hash",
+    tutorialFoldHash: "fixture-tutorial-fold-hash",
     defaultStartingEssence: 137,
     dreamsignCap: 9,
   },
@@ -132,12 +133,19 @@ describe("RTDB log wire decoding", () => {
       .toBe("fixture-draft-fold-hash");
   });
 
+  it("round-trips the pinned tutorial fold hash", () => {
+    expect(
+      decodeGenesis(JSON.stringify(GENESIS))?.contentConfig?.tutorialFoldHash,
+    ).toBe("fixture-tutorial-fold-hash");
+  });
+
   it.each([
     ["draftFoldHash", 42],
     ["economyFoldHash", 42],
     ["rewardSelectionFoldHash", 42],
     ["auguryFoldHash", 42],
     ["explorationFoldHash", 42],
+    ["tutorialFoldHash", 42],
     ["defaultStartingEssence", -1],
     ["dreamsignCap", 1.5],
   ])("rejects a malformed %s field", (field, value) => {

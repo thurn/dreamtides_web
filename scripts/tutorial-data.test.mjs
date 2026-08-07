@@ -5,7 +5,9 @@ import { describe, expect, it } from "vitest";
 import { parse } from "smol-toml";
 import {
   readTutorialActions,
+  readTutorialConfiguration,
   refreshTutorialDataJson,
+  normalizeTutorialConfiguration,
   serializeTutorialToml,
   validateTutorialActions,
   validateTutorialAtlasConfiguration,
@@ -14,9 +16,70 @@ import {
   validateTutorialDreamscapeConfiguration,
   validateTutorialSiteConfiguration,
   validateTutorialTriggers,
+  validateTutorialCatalogReferences,
 } from "./tutorial-data.mjs";
 
 const FIXTURE_BATTLE = {
+  featuredCards: {
+    playerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+    opponentCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+    enemyStarterCardId: "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+    loadingEventCardId: "944e15d2-d680-4ebe-8d18-36826f4b1535",
+    dreamwellCardId: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+  },
+  playerDreamAvatarId: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+  enemyDreamAvatarId: "B99936CA-97F9-4930-AF5A-FA9EF92557EF",
+  startingEnergy: 7,
+  scoreToWin: 12,
+  starterDeck: [
+    { cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af", copies: 10 },
+    { cardId: "a28ad36d-fa74-4190-a463-7efd3a6233d0", copies: 10 },
+    { cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8", copies: 10 },
+    { cardId: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", copies: 10 },
+  ],
+  scriptedBoard: { playerBackRankIndex: 1, playerFrontRankIndex: 1 },
+  handoff: {
+    activeSide: "enemy",
+    turnNumber: 6,
+    phase: "day",
+    dreamwellDeckIndex: 1,
+    player: {
+      currentEnergy: 4,
+      maxEnergy: 7,
+      score: 1,
+      dreamwellCardIndex: 0,
+      dreamwellDrawnTurn: 5,
+    },
+    enemy: {
+      currentEnergy: 3,
+      maxEnergy: 7,
+      score: 4,
+      dreamwellCardIndex: 0,
+      dreamwellDrawnTurn: 5,
+    },
+    placements: [
+      {
+        cardRole: "player",
+        side: "player",
+        source: "deck",
+        zone: "frontRank",
+        slotId: "F2",
+      },
+      {
+        cardRole: "enemyStarter",
+        side: "enemy",
+        source: "deck",
+        zone: "backRank",
+        slotId: "B3",
+      },
+      {
+        cardRole: "opponent",
+        side: "enemy",
+        source: "created",
+        zone: "void",
+      },
+    ],
+  },
   playerDraws: ["5a980eff-6ec7-44d8-9977-b98e66bbc2c8"],
   enemyDraws: ["a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"],
   dreamwellDraws: ["7171ff89-ebe4-42d0-8863-9b4b0531cad2"],
@@ -111,8 +174,7 @@ const FIXTURE_ACTIONS = [
       horizontalOffset: 0,
       verticalOffset: 100,
       bubbleWidth: 650,
-      text:
-        "First [yellow]line[/yellow].\nAn [purple]event[purple] resolves once.",
+      text: "First [yellow]line[/yellow].\nAn [purple]event[purple] resolves once.",
     },
     wait: 1.5,
   },
@@ -181,10 +243,133 @@ const FIXTURE_ACTIONS = [
 ];
 
 describe("tutorial data", () => {
+  it("computes deterministic complete and fold hashes", () => {
+    const first = readTutorialConfiguration();
+    const second = readTutorialConfiguration();
+    expect(first.contentHash).toMatch(/^[0-9a-f]{64}$/u);
+    expect(first.foldHash).toMatch(/^[0-9a-f]{64}$/u);
+    expect(second).toEqual(first);
+
+    const changed = normalizeTutorialConfiguration({
+      ...first,
+      battle: {
+        ...first.battle,
+        startingEnergy: first.battle.startingEnergy + 1,
+      },
+    });
+    expect(changed.contentHash).not.toBe(first.contentHash);
+    expect(changed.foldHash).not.toBe(first.foldHash);
+
+    const copyOnly = normalizeTutorialConfiguration({
+      ...first,
+      journeyStart: {
+        speechBubble: {
+          ...first.journeyStart.speechBubble,
+          text: `${first.journeyStart.speechBubble.text} Fixture.`,
+        },
+      },
+    });
+    expect(copyOnly.contentHash).not.toBe(first.contentHash);
+    expect(copyOnly.foldHash).toBe(first.foldHash);
+  });
+
+  it("rejects missing fields, duplicate deck entries, illegal slots, and insufficient decks", () => {
+    expect(() =>
+      validateTutorialBattleConfiguration({
+        ...FIXTURE_BATTLE,
+        featuredCards: undefined,
+      }),
+    ).toThrow(/featuredCards/u);
+    expect(() =>
+      validateTutorialBattleConfiguration({
+        ...FIXTURE_BATTLE,
+        starterDeck: [
+          FIXTURE_BATTLE.starterDeck[0],
+          FIXTURE_BATTLE.starterDeck[0],
+        ],
+      }),
+    ).toThrow(/repeats card UUID/u);
+    expect(() =>
+      validateTutorialBattleConfiguration({
+        ...FIXTURE_BATTLE,
+        handoff: {
+          ...FIXTURE_BATTLE.handoff,
+          placements: [
+            {
+              cardRole: "player",
+              side: "player",
+              source: "deck",
+              zone: "backRank",
+              slotId: "B9",
+            },
+          ],
+        },
+      }),
+    ).toThrow(/legal rank slot/u);
+    expect(() =>
+      normalizeTutorialConfiguration({
+        journeyStart: FIXTURE_JOURNEY_START,
+        dreamscape: FIXTURE_DREAMSCAPE,
+        atlas: FIXTURE_ATLAS,
+        draft: FIXTURE_SITE_TUTORIAL,
+        purge: FIXTURE_SITE_TUTORIAL,
+        dreamsignRevelation: FIXTURE_SITE_TUTORIAL,
+        battleStart: FIXTURE_BATTLE_START,
+        actions: FIXTURE_ACTIONS,
+        triggers: [],
+        battle: {
+          ...FIXTURE_BATTLE,
+          playerDraws: [
+            FIXTURE_BATTLE.playerDraws[0],
+            FIXTURE_BATTLE.playerDraws[0],
+          ],
+          starterDeck: FIXTURE_BATTLE.starterDeck.map((entry) => ({
+            ...entry,
+            copies: 1,
+          })),
+        },
+      }),
+    ).toThrow(/insufficient copies/u);
+  });
+
+  it("validates every configured UUID against its authored catalog", () => {
+    const configuration = readTutorialConfiguration();
+    const cardSource = parse(readFileSync("data/tabula/cards.toml", "utf8"));
+    const avatarSource = parse(
+      readFileSync("data/tabula/dream_avatars.toml", "utf8"),
+    );
+    const dreamwellSource = parse(
+      readFileSync("data/tabula/dreamwell.toml", "utf8"),
+    );
+    const catalogs = {
+      cardIds: cardSource.cards.map((card) => card.id),
+      dreamAvatarIds: avatarSource.dreamAvatar.map((avatar) => avatar.id),
+      dreamwellCardIds: dreamwellSource.dreamwell.map((card) => card.id),
+    };
+    expect(validateTutorialCatalogReferences(configuration, catalogs)).toBe(
+      configuration,
+    );
+    expect(() =>
+      validateTutorialCatalogReferences(
+        {
+          ...configuration,
+          battle: {
+            ...configuration.battle,
+            featuredCards: {
+              ...configuration.battle.featuredCards,
+              playerCardId: "00000000-0000-4000-8000-000000000123",
+            },
+          },
+        },
+        catalogs,
+      ),
+    ).toThrow(/absent from cards.toml/u);
+  });
+
   it("normalizes persistent dreamscape guidance and rejects invalid delays", () => {
-    expect(
-      validateTutorialDreamscapeConfiguration(FIXTURE_DREAMSCAPE),
-    ).toEqual(FIXTURE_DREAMSCAPE);
+    expect(validateTutorialDreamscapeConfiguration(FIXTURE_DREAMSCAPE)).toEqual(
+      FIXTURE_DREAMSCAPE,
+    );
     expect(() =>
       validateTutorialDreamscapeConfiguration({
         speechBubble: {
@@ -262,6 +447,8 @@ describe("tutorial data", () => {
         readFileSync(join(rootDir, "public", "tutorial-data.json"), "utf8"),
       ),
     ).toEqual({
+      contentHash: result.contentHash,
+      foldHash: result.foldHash,
       journeyStart: FIXTURE_JOURNEY_START,
       dreamscape: FIXTURE_DREAMSCAPE,
       atlas: FIXTURE_ATLAS,
@@ -332,25 +519,29 @@ describe("tutorial data", () => {
     expect(() =>
       validateTutorialBattleConfiguration({
         ...FIXTURE_BATTLE,
-        aiActionOverrides: [{
-          ...FIXTURE_BATTLE.aiActionOverrides[0],
-          trigger: {
-            ...FIXTURE_BATTLE.aiActionOverrides[0].trigger,
-            cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+        aiActionOverrides: [
+          {
+            ...FIXTURE_BATTLE.aiActionOverrides[0],
+            trigger: {
+              ...FIXTURE_BATTLE.aiActionOverrides[0].trigger,
+              cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+            },
           },
-        }],
+        ],
       }),
     ).toThrow(/must appear in dreamwellDraws/u);
     expect(() =>
       validateTutorialBattleConfiguration({
         ...FIXTURE_BATTLE,
-        aiActionOverrides: [{
-          ...FIXTURE_BATTLE.aiActionOverrides[0],
-          action: {
-            kind: "play-card",
-            cardId: "00000000-0000-4000-8000-000000000101",
+        aiActionOverrides: [
+          {
+            ...FIXTURE_BATTLE.aiActionOverrides[0],
+            action: {
+              kind: "play-card",
+              cardId: "00000000-0000-4000-8000-000000000101",
+            },
           },
-        }],
+        ],
       }),
     ).toThrow(/registered semantic play automation/u);
   });
@@ -432,9 +623,7 @@ describe("tutorial data", () => {
       validateTutorialActions([{ ...FIXTURE_ACTIONS[1], duration: -1 }]),
     ).toThrow(/non-negative portrait duration/u);
     expect(() =>
-      validateTutorialActions([
-        { ...FIXTURE_ACTIONS[3], revealDuration: -1 },
-      ]),
+      validateTutorialActions([{ ...FIXTURE_ACTIONS[3], revealDuration: -1 }]),
     ).toThrow(/non-negative card reveal duration/u);
     expect(() =>
       validateTutorialActions([
@@ -623,10 +812,8 @@ describe("tutorial data", () => {
           FIXTURE_SITE_TUTORIAL,
           FIXTURE_BATTLE_START,
         ),
-      )
-        .triggers,
-    )
-      .toEqual(triggers);
+      ).triggers,
+    ).toEqual(triggers);
     expect(() =>
       validateTutorialTriggers([
         {
@@ -644,99 +831,121 @@ describe("tutorial data", () => {
   it("normalizes a UUID-matched no-valid-targets trigger", () => {
     const cardId = "4408b942-09a0-4f4e-a403-10c708c6e3c5";
     expect(
-      validateTutorialTriggers([{
+      validateTutorialTriggers([
+        {
+          id: "flashpoint-no-valid-targets",
+          on: ["card-no-valid-targets"],
+          priority: 10,
+          duration: 4,
+          bubbleWidth: 500,
+          match: { kind: "card-id", cardId },
+          text: "There are no valid targets for this card",
+        },
+      ]),
+    ).toEqual([
+      {
         id: "flashpoint-no-valid-targets",
         on: ["card-no-valid-targets"],
         priority: 10,
+        speaker: "mira",
         duration: 4,
+        horizontalOffset: 0,
+        verticalOffset: 0,
         bubbleWidth: 500,
         match: { kind: "card-id", cardId },
         text: "There are no valid targets for this card",
-      }]),
-    ).toEqual([{
-      id: "flashpoint-no-valid-targets",
-      on: ["card-no-valid-targets"],
-      priority: 10,
-      speaker: "mira",
-      duration: 4,
-      horizontalOffset: 0,
-      verticalOffset: 0,
-      bubbleWidth: 500,
-      match: { kind: "card-id", cardId },
-      text: "There are no valid targets for this card",
-    }]);
+      },
+    ]);
   });
 
   it("normalizes a first-seen transfiguration concept trigger", () => {
-    const text = "Cards can be [yellow]transfigured[/yellow] to change their cost, spark, or abilities";
+    const text =
+      "Cards can be [yellow]transfigured[/yellow] to change their cost, spark, or abilities";
     expect(
-      validateTutorialTriggers([{
+      validateTutorialTriggers([
+        {
+          id: "transfiguration",
+          on: ["transfiguration-seen"],
+          delay: { "transfiguration-seen": 1 },
+          duration: 5,
+          bubbleWidth: 500,
+          match: { kind: "any" },
+          text,
+        },
+      ]),
+    ).toMatchObject([
+      {
         id: "transfiguration",
         on: ["transfiguration-seen"],
         delay: { "transfiguration-seen": 1 },
-        duration: 5,
-        bubbleWidth: 500,
-        match: { kind: "any" },
         text,
-      }]),
-    ).toMatchObject([{
-      id: "transfiguration",
-      on: ["transfiguration-seen"],
-      delay: { "transfiguration-seen": 1 },
-      text,
-    }]);
+      },
+    ]);
   });
 
   it("normalizes a first-resolved Challenge concept trigger", () => {
-    const text = "If there is a tie in spark (✦) values, both characters in the challenge are dissolved";
+    const text =
+      "If there is a tie in spark (✦) values, both characters in the challenge are dissolved";
     expect(
-      validateTutorialTriggers([{
+      validateTutorialTriggers([
+        {
+          id: "spark-tie",
+          on: ["challenge-resolved"],
+          duration: 5,
+          bubbleWidth: 500,
+          match: { kind: "any" },
+          text,
+        },
+      ]),
+    ).toMatchObject([
+      {
         id: "spark-tie",
         on: ["challenge-resolved"],
-        duration: 5,
-        bubbleWidth: 500,
-        match: { kind: "any" },
         text,
-      }]),
-    ).toMatchObject([{
-      id: "spark-tie",
-      on: ["challenge-resolved"],
-      text,
-    }]);
+      },
+    ]);
   });
 
   it("normalizes an opponent reposition opportunity concept trigger", () => {
     expect(
-      validateTutorialTriggers([{
+      validateTutorialTriggers([
+        {
+          id: "opponent-reposition-opportunity",
+          on: ["opponent-reposition-opportunity"],
+          duration: 5,
+          bubbleWidth: 500,
+          match: { kind: "any" },
+          text: "Repositioning explanation.",
+        },
+      ]),
+    ).toMatchObject([
+      {
         id: "opponent-reposition-opportunity",
         on: ["opponent-reposition-opportunity"],
-        duration: 5,
-        bubbleWidth: 500,
         match: { kind: "any" },
-        text: "Repositioning explanation.",
-      }]),
-    ).toMatchObject([{
-      id: "opponent-reposition-opportunity",
-      on: ["opponent-reposition-opportunity"],
-      match: { kind: "any" },
-    }]);
+      },
+    ]);
   });
 
   it("normalizes a player Night phase concept trigger", () => {
     expect(
-      validateTutorialTriggers([{
+      validateTutorialTriggers([
+        {
+          id: "player-night-phase",
+          on: ["player-night-phase"],
+          duration: 6,
+          bubbleWidth: 500,
+          match: { kind: "any" },
+          text: "Night guidance with ❖ timing marks.",
+        },
+      ]),
+    ).toMatchObject([
+      {
         id: "player-night-phase",
         on: ["player-night-phase"],
         duration: 6,
-        bubbleWidth: 500,
         match: { kind: "any" },
-        text: "Night guidance with ❖ timing marks.",
-      }]),
-    ).toMatchObject([{
-      id: "player-night-phase",
-      on: ["player-night-phase"],
-      duration: 6,
-      match: { kind: "any" },
-    }]);
+      },
+    ]);
   });
 });

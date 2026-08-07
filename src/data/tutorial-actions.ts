@@ -12,11 +12,21 @@ import type {
   TutorialTriggerDefinition,
   TutorialTriggerDelay,
   TutorialTriggerEvent,
+  TutorialFeaturedCardRole,
+  TutorialFeaturedCards,
 } from "../types/tutorial";
 import { parseTutorialBattleAiActionOverrides } from "../types/tutorial-ai-action-overrides";
 import semanticPlayCardIds from "../battle/semantic-play-card-ids.json";
 import { glossaryEntry } from "./glossary";
 import { parseTutorialInstructionMarkup } from "./tutorial-instruction-markup";
+import {
+  assertTutorialBattleConfigurationContracts,
+  assertTutorialDeckSufficiency,
+  isTutorialBattlePhase,
+  isTutorialFeaturedCardRole,
+  isTutorialHandoffSlotLegal,
+  tutorialFeaturedCardId as resolveTutorialFeaturedCardId,
+} from "../../scripts/tutorial-battle-contracts.mjs";
 
 const ACTION_ID_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u;
 const DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH = 700;
@@ -24,15 +34,235 @@ const DEFAULT_DREAM_AVATAR_SPEECH_BUBBLE_WIDTH = 300;
 const SEMANTIC_PLAY_CARD_IDS: ReadonlySet<string> = new Set(
   semanticPlayCardIds,
 );
+const SHA256_PATTERN = /^[0-9a-f]{64}$/u;
+const tutorialValidationError = (message: string): Error => new Error(message);
+
+function parseUuid(value: unknown, field: string): string {
+  if (typeof value !== "string" || !isCardId(value)) {
+    throw new Error(`Tutorial battle ${field} must be a UUID.`);
+  }
+  return value;
+}
+
+function parseInteger(value: unknown, field: string, minimum = 0): number {
+  if (!Number.isInteger(value) || (value as number) < minimum) {
+    throw new Error(
+      `Tutorial battle ${field} must be an integer of at least ${String(minimum)}.`,
+    );
+  }
+  return value as number;
+}
+
+function parseSide(value: unknown, field: string): "player" | "enemy" {
+  if (value === "player" || value === "enemy") return value;
+  throw new Error(`Tutorial battle ${field} must be player or enemy.`);
+}
+
+function parseFeaturedCards(value: unknown): TutorialFeaturedCards {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error("Tutorial battle must contain a featuredCards table.");
+  }
+  const record = value as Record<string, unknown>;
+  return {
+    playerCardId: parseUuid(record.playerCardId, "featuredCards.playerCardId"),
+    opponentCardId: parseUuid(
+      record.opponentCardId,
+      "featuredCards.opponentCardId",
+    ),
+    enemyStarterCardId: parseUuid(
+      record.enemyStarterCardId,
+      "featuredCards.enemyStarterCardId",
+    ),
+    loadingEventCardId: parseUuid(
+      record.loadingEventCardId,
+      "featuredCards.loadingEventCardId",
+    ),
+    dreamwellCardId: parseUuid(
+      record.dreamwellCardId,
+      "featuredCards.dreamwellCardId",
+    ),
+  };
+}
+
+function parseStarterDeck(value: unknown) {
+  if (!Array.isArray(value) || value.length === 0) {
+    throw new Error("Tutorial battle starterDeck must be a non-empty array.");
+  }
+  const seen = new Set<string>();
+  return value.map((candidate, index) => {
+    if (
+      candidate === null ||
+      typeof candidate !== "object" ||
+      Array.isArray(candidate)
+    ) {
+      throw new Error(
+        `Tutorial battle starterDeck entry ${String(index + 1)} must be a table.`,
+      );
+    }
+    const record = candidate as Record<string, unknown>;
+    const cardId = parseUuid(
+      record.cardId,
+      `starterDeck[${String(index)}].cardId`,
+    );
+    if (seen.has(cardId)) {
+      throw new Error(
+        `Tutorial battle starterDeck repeats card UUID ${cardId}.`,
+      );
+    }
+    seen.add(cardId);
+    return {
+      cardId,
+      copies: parseInteger(
+        record.copies,
+        `starterDeck[${String(index)}].copies`,
+        1,
+      ),
+    };
+  });
+}
+
+function parseScriptedBoard(value: unknown) {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error("Tutorial battle must contain a scriptedBoard table.");
+  }
+  const record = value as Record<string, unknown>;
+  const playerBackRankIndex = parseInteger(
+    record.playerBackRankIndex,
+    "scriptedBoard.playerBackRankIndex",
+  );
+  const playerFrontRankIndex = parseInteger(
+    record.playerFrontRankIndex,
+    "scriptedBoard.playerFrontRankIndex",
+  );
+  if (playerBackRankIndex >= 3 || playerFrontRankIndex >= 2) {
+    throw new Error(
+      "Tutorial battle scriptedBoard indices must fit the compact three-slot back rank and two-slot front rank.",
+    );
+  }
+  return { playerBackRankIndex, playerFrontRankIndex };
+}
+
+function parseHandoffSide(value: unknown, side: "player" | "enemy") {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error(`Tutorial battle handoff must contain a ${side} table.`);
+  }
+  const record = value as Record<string, unknown>;
+  const currentEnergy = parseInteger(
+    record.currentEnergy,
+    `handoff.${side}.currentEnergy`,
+  );
+  const maxEnergy = parseInteger(record.maxEnergy, `handoff.${side}.maxEnergy`);
+  if (currentEnergy > maxEnergy) {
+    throw new Error(
+      `Tutorial battle handoff.${side}.currentEnergy must not exceed maxEnergy.`,
+    );
+  }
+  return {
+    currentEnergy,
+    maxEnergy,
+    score: parseInteger(record.score, `handoff.${side}.score`),
+    dreamwellCardIndex: parseInteger(
+      record.dreamwellCardIndex,
+      `handoff.${side}.dreamwellCardIndex`,
+    ),
+    dreamwellDrawnTurn: parseInteger(
+      record.dreamwellDrawnTurn,
+      `handoff.${side}.dreamwellDrawnTurn`,
+    ),
+  };
+}
+
+function parseHandoffPlacements(value: unknown) {
+  if (!Array.isArray(value) || value.length === 0) {
+    throw new Error(
+      "Tutorial battle handoff placements must be a non-empty array.",
+    );
+  }
+  const occupied = new Set<string>();
+  return value.map((candidate, index) => {
+    if (
+      candidate === null ||
+      typeof candidate !== "object" ||
+      Array.isArray(candidate)
+    ) {
+      throw new Error(
+        `Tutorial battle handoff placement ${String(index + 1)} must be a table.`,
+      );
+    }
+    const record = candidate as Record<string, unknown>;
+    if (!isTutorialFeaturedCardRole(record.cardRole)) {
+      throw new Error(
+        `Tutorial battle handoff placement ${String(index + 1)} has an invalid cardRole.`,
+      );
+    }
+    const side = parseSide(
+      record.side,
+      `handoff placement ${String(index + 1)} side`,
+    );
+    if (record.source !== "deck" && record.source !== "created") {
+      throw new Error(
+        `Tutorial battle handoff placement ${String(index + 1)} must use deck or created source.`,
+      );
+    }
+    const source: "deck" | "created" = record.source;
+    const shared = {
+      cardRole: record.cardRole,
+      side,
+      source,
+    };
+    if (record.zone === "void") return { ...shared, zone: "void" as const };
+    if (
+      (record.zone !== "frontRank" && record.zone !== "backRank") ||
+      typeof record.slotId !== "string" ||
+      !isTutorialHandoffSlotLegal(side, record.zone, record.slotId)
+    ) {
+      throw new Error(
+        `Tutorial battle handoff placement ${String(index + 1)} must use a legal rank slot.`,
+      );
+    }
+    const address = `${side}:${record.zone}:${record.slotId}`;
+    if (occupied.has(address)) {
+      throw new Error(`Tutorial battle handoff placement repeats ${address}.`);
+    }
+    occupied.add(address);
+    const zone: "frontRank" | "backRank" = record.zone;
+    return {
+      ...shared,
+      zone,
+      slotId: record.slotId,
+    };
+  });
+}
+
+function parseHandoff(value: unknown) {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error("Tutorial battle must contain a handoff table.");
+  }
+  const record = value as Record<string, unknown>;
+  const activeSide = parseSide(record.activeSide, "handoff activeSide");
+  if (!isTutorialBattlePhase(record.phase)) {
+    throw new Error("Tutorial battle handoff phase is invalid.");
+  }
+  return {
+    activeSide,
+    turnNumber: parseInteger(record.turnNumber, "handoff.turnNumber", 1),
+    phase: record.phase,
+    dreamwellDeckIndex: parseInteger(
+      record.dreamwellDeckIndex,
+      "handoff.dreamwellDeckIndex",
+    ),
+    player: parseHandoffSide(record.player, "player"),
+    enemy: parseHandoffSide(record.enemy, "enemy"),
+    placements: parseHandoffPlacements(record.placements),
+  };
+}
 
 function parseCardDrawList(
   value: unknown,
   field: "playerDraws" | "enemyDraws" | "dreamwellDraws",
 ): readonly string[] {
   if (!Array.isArray(value)) {
-    throw new Error(
-      `Tutorial battle ${field} must be an array of card UUIDs.`,
-    );
+    throw new Error(`Tutorial battle ${field} must be an array of card UUIDs.`);
   }
   const cardIds: string[] = [];
   for (const cardId of value as unknown[]) {
@@ -55,18 +285,31 @@ export function parseTutorialBattleConfiguration(
   }
   const record = value as Record<string, unknown>;
   const battle = {
+    featuredCards: parseFeaturedCards(record.featuredCards),
+    playerDreamAvatarId: parseUuid(
+      record.playerDreamAvatarId,
+      "playerDreamAvatarId",
+    ),
+    enemyDreamAvatarId: parseUuid(
+      record.enemyDreamAvatarId,
+      "enemyDreamAvatarId",
+    ),
+    startingEnergy: parseInteger(record.startingEnergy, "startingEnergy"),
+    scoreToWin: parseInteger(record.scoreToWin, "scoreToWin", 1),
+    starterDeck: parseStarterDeck(record.starterDeck),
+    scriptedBoard: parseScriptedBoard(record.scriptedBoard),
+    handoff: parseHandoff(record.handoff),
     playerDraws: parseCardDrawList(record.playerDraws, "playerDraws"),
     enemyDraws: parseCardDrawList(record.enemyDraws, "enemyDraws"),
-    dreamwellDraws: parseCardDrawList(
-      record.dreamwellDraws,
-      "dreamwellDraws",
-    ),
+    dreamwellDraws: parseCardDrawList(record.dreamwellDraws, "dreamwellDraws"),
     aiActionOverrides: parseTutorialBattleAiActionOverrides(
       record.aiActionOverrides ?? [],
     ),
   };
   if (new Set(battle.dreamwellDraws).size !== battle.dreamwellDraws.length) {
-    throw new Error("Tutorial battle dreamwellDraws must not repeat a card UUID.");
+    throw new Error(
+      "Tutorial battle dreamwellDraws must not repeat a card UUID.",
+    );
   }
   for (const override of battle.aiActionOverrides) {
     if (!battle.dreamwellDraws.includes(override.trigger.cardId)) {
@@ -80,7 +323,23 @@ export function parseTutorialBattleConfiguration(
       );
     }
   }
+  assertTutorialBattleConfigurationContracts(battle, tutorialValidationError);
   return battle;
+}
+
+/** Resolve a stable authored role to its configured card UUID. */
+export function tutorialFeaturedCardId(
+  featuredCards: TutorialFeaturedCards,
+  role: TutorialFeaturedCardRole,
+): string {
+  return resolveTutorialFeaturedCardId(featuredCards, role);
+}
+
+/** The deck-size value displayed and initialized from the starter-deck recipe. */
+export function tutorialStarterDeckSize(
+  battle: TutorialBattleConfiguration,
+): number {
+  return battle.starterDeck.reduce((total, entry) => total + entry.copies, 0);
 }
 
 function parseTutorialSpeechBubble(
@@ -221,7 +480,9 @@ function parsePersistentTutorialConfiguration(
     true,
   );
   if (parsed === undefined || parsed.speaker !== "mira") {
-    throw new Error(`Tutorial ${configurationId} speech bubble must target Mira.`);
+    throw new Error(
+      `Tutorial ${configurationId} speech bubble must target Mira.`,
+    );
   }
   return {
     speechBubble: {
@@ -638,7 +899,9 @@ export function parseTutorialTriggers(
       );
     }
     if (ids.has(record.id)) {
-      throw new Error(`Tutorial trigger id ${JSON.stringify(record.id)} is duplicated.`);
+      throw new Error(
+        `Tutorial trigger id ${JSON.stringify(record.id)} is duplicated.`,
+      );
     }
     ids.add(record.id);
     if (
@@ -695,7 +958,10 @@ export function parseTutorialTriggers(
     const match = record.match as Record<string, unknown>;
     let parsedMatch: TutorialTriggerDefinition["match"];
     if (match.kind === "glossary") {
-      if (typeof match.id !== "string" || glossaryEntry(match.id) === undefined) {
+      if (
+        typeof match.id !== "string" ||
+        glossaryEntry(match.id) === undefined
+      ) {
         throw new Error(
           `Tutorial trigger ${JSON.stringify(record.id)} must reference an existing glossary id.`,
         );
@@ -780,7 +1046,22 @@ export async function loadTutorialConfiguration(
     throw new Error("Tutorial data response must be an object.");
   }
   const record = body as Record<string, unknown>;
+  if (
+    typeof record.contentHash !== "string" ||
+    !SHA256_PATTERN.test(record.contentHash) ||
+    typeof record.foldHash !== "string" ||
+    !SHA256_PATTERN.test(record.foldHash)
+  ) {
+    throw new Error(
+      "Tutorial data must contain valid contentHash and foldHash values.",
+    );
+  }
+  const actions = parseTutorialActions(record.actions);
+  const battle = parseTutorialBattleConfiguration(record.battle);
+  assertTutorialDeckSufficiency(battle, actions, tutorialValidationError);
   return {
+    contentHash: record.contentHash,
+    foldHash: record.foldHash,
     journeyStart: parseTutorialJourneyStartConfiguration(record.journeyStart),
     dreamscape: parseTutorialDreamscapeConfiguration(record.dreamscape),
     atlas: parseTutorialAtlasConfiguration(record.atlas),
@@ -791,8 +1072,8 @@ export async function loadTutorialConfiguration(
       "dreamsign-revelation",
     ),
     battleStart: parseTutorialBattleStartConfiguration(record.battleStart),
-    actions: parseTutorialActions(record.actions),
+    actions,
     triggers: parseTutorialTriggers(record.triggers ?? []),
-    battle: parseTutorialBattleConfiguration(record.battle),
+    battle,
   };
 }

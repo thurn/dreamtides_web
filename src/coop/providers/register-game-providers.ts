@@ -1,4 +1,4 @@
-// The single entry point that wires the REAL content generators behind the five
+// The single entry point that wires the REAL content generators behind the
 // reducer content seams. Until this runs, every provider-backed event
 // (`START_JOURNEY`, `SELECT_DREAM_AVATAR`, `ADD_CARD`, `ADD_DREAMSIGN`,
 // content-coupled `OPEN_SITE`, `REROLL_SHOP`, `BEGIN_BATTLE`) BOUNCES.
@@ -31,6 +31,7 @@ import { registerDraftContentProvider } from "../../rules/journey/draft";
 import { registerJourneyLifecycleContentProvider } from "../../rules/journey/lifecycle";
 import { registerSiteContentProvider } from "../../rules/journey/sites";
 import { registerCardTutorialGuidanceContentProvider } from "../../rules/card-tutorial-guidance";
+import { registerTutorialFrontDoorContentProvider } from "../../rules/front-door";
 import {
   createBattleCompletionProvider,
   createBattleInitProvider,
@@ -43,11 +44,19 @@ import { createSiteContentProvider } from "./site-provider";
 import { createCardTutorialGuidanceContentProvider } from "./card-tutorial-guidance-provider";
 
 /**
- * Register the real content providers on all five reducer seams from the loaded
+ * Register the real content providers on every reducer seam from the loaded
  * journey content. Idempotent; the last registration wins. Call once, before
  * folding any event.
  */
 export function registerGameProviders(content: JourneyContent): void {
+  registerTutorialFrontDoorContentProvider(
+    content.tutorial === undefined
+      ? null
+      : {
+          playerCardId: content.tutorial.battle.featuredCards.playerCardId,
+          journeyDreamAvatarId: content.tutorial.battle.playerDreamAvatarId,
+        },
+  );
   registerJourneyLifecycleContentProvider(
     createJourneyLifecycleContentProvider(content),
   );
@@ -68,6 +77,7 @@ export function registerGameProviders(content: JourneyContent): void {
  * {@link registerGameProviders}.
  */
 export function clearGameProviders(): void {
+  registerTutorialFrontDoorContentProvider(null);
   registerJourneyLifecycleContentProvider(null);
   registerDeckContentProvider(null);
   registerDraftContentProvider(null);

@@ -1,42 +1,67 @@
+/* eslint-disable max-lines -- this adapter keeps the full screen wiring together. */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { logEventOnce } from "../../logging";
 import type { Dreamsign } from "../../types/journey";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import { DreamsignRevelationScreen } from "../../cumulus/screens/DreamsignRevelationScreen";
 import { useJourney } from "../../state/journey-context";
-import { buildDreamsignRevelationView, resolveDreamsignRevelationGuide } from "./dreamsign-revelation-view-model";
+import {
+  buildDreamsignRevelationView,
+  resolveDreamsignRevelationGuide,
+} from "./dreamsign-revelation-view-model";
 import type { FirstVisitSiteTutorialView } from "../../cumulus/screens/site-tutorial-view";
 
 const FLY_TO_HUD_MS = 900;
 
-export function DreamsignRevelationScreenAdapter({ siteId }: { siteId: string }) {
+export function DreamsignRevelationScreenAdapter({
+  siteId,
+}: {
+  siteId: string;
+}) {
   const { state, mutations, journeyContent } = useJourney();
-  const node = state.currentDreamscape === null ? null : state.atlas.nodes[state.currentDreamscape] ?? null;
+  const node =
+    state.currentDreamscape === null
+      ? null
+      : (state.atlas.nodes[state.currentDreamscape] ?? null);
   const site = node?.sites.find((candidate) => candidate.id === siteId) ?? null;
   const runtime = state.siteRuntime[siteId];
   const offerRuntime = runtime?.kind === "dreamsignOffer" ? runtime : null;
   const options = offerRuntime?.offeredDreamsigns ?? null;
-  const optionCount = site?.isEnhanced === true
-    ? journeyContent.economyData.siteRewards.dreamsignRevelation.enhancedOfferCount
-    : journeyContent.economyData.siteRewards.dreamsignRevelation.standardOfferCount;
+  const optionCount =
+    site?.isEnhanced === true
+      ? journeyContent.economyData.siteRewards.dreamsignRevelation
+          .enhancedOfferCount
+      : journeyContent.economyData.siteRewards.dreamsignRevelation
+          .standardOfferCount;
   const remainingDreamsignPoolKey = state.remainingDreamsignPool.join("\u0000");
-  const guide = resolveDreamsignRevelationGuide(journeyContent.guides, site?.guideIdOverride);
+  const guide = resolveDreamsignRevelationGuide(
+    journeyContent.guides,
+    site?.guideIdOverride,
+  );
   const guideLine = useMemo(
-    () => guide?.dialog.length ? guide.dialog[Math.floor(Math.random() * guide.dialog.length)] : null,
+    () =>
+      guide?.dialog.length
+        ? guide.dialog[Math.floor(Math.random() * guide.dialog.length)]
+        : null,
     [guide],
   );
   const [claimedIndex, setClaimedIndex] = useState<number | null>(null);
-  const [pendingPurgeDreamsign, setPendingPurgeDreamsign] = useState<Dreamsign | null>(null);
+  const [pendingPurgeDreamsign, setPendingPurgeDreamsign] =
+    useState<Dreamsign | null>(null);
   const timeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (runtime === undefined) mutations.ensureDreamsignOfferRuntime(siteId, optionCount);
+    if (runtime === undefined)
+      mutations.ensureDreamsignOfferRuntime(siteId, optionCount);
   }, [mutations, optionCount, remainingDreamsignPoolKey, runtime, siteId]);
 
   useEffect(() => {
     if (options === null || site === null) return;
-    logEventOnce(`dreamsign-revelation:${site.id}:site-entered`, "site_entered",
-      { siteType: site.type, isEnhanced: site.isEnhanced, optionCount });
+    logEventOnce(
+      `dreamsign-revelation:${site.id}:site-entered`,
+      "site_entered",
+      { siteType: site.type, isEnhanced: site.isEnhanced, optionCount },
+    );
   }, [site?.id, site?.type, site?.isEnhanced, optionCount, options]);
 
   useEffect(
@@ -48,18 +73,33 @@ export function DreamsignRevelationScreenAdapter({ siteId }: { siteId: string })
 
   const view = useMemo(
     () =>
-      buildDreamsignRevelationView({ state, sceneNode: node, guide, guideLine,
-        offeredDreamsigns: options, pendingPurgeDreamsign,
-        tutorialConfiguration: journeyContent.tutorialDreamsignRevelation }),
-    [state, node, guide, guideLine, options, pendingPurgeDreamsign,
-      journeyContent.tutorialDreamsignRevelation],
+      buildDreamsignRevelationView({
+        state,
+        sceneNode: node,
+        guide,
+        guideLine,
+        offeredDreamsigns: options,
+        pendingPurgeDreamsign,
+        tutorialConfiguration: journeyContent.tutorial?.dreamsignRevelation,
+      }),
+    [
+      state,
+      node,
+      guide,
+      guideLine,
+      options,
+      pendingPurgeDreamsign,
+      journeyContent.tutorial?.dreamsignRevelation,
+    ],
   );
 
   useEffect(() => {
     if (guide === null || site === null) return;
-    logEventOnce(`dreamsign-revelation:${site.id}:guide:${guide.id}`,
+    logEventOnce(
+      `dreamsign-revelation:${site.id}:guide:${guide.id}`,
       "dream_guide_presented",
-      { guideId: guide.id, siteType: site.type, isEnhanced: site.isEnhanced });
+      { guideId: guide.id, siteType: site.type, isEnhanced: site.isEnhanced },
+    );
   }, [guide, site]);
 
   const handleTutorialShown = useCallback(
@@ -67,12 +107,16 @@ export function DreamsignRevelationScreenAdapter({ siteId }: { siteId: string })
       logEventOnce(
         `first-visit-site-tutorial:${tutorial.id}`,
         "first_visit_site_tutorial_presented",
-        { tutorialId: tutorial.id, siteId, siteType: "DreamsignRevelation",
+        {
+          tutorialId: tutorial.id,
+          siteId,
+          siteType: "DreamsignRevelation",
           text: tutorial.model.text,
           delaySeconds: tutorial.delaySeconds ?? 0,
           horizontalOffset: tutorial.horizontalOffset,
           verticalOffset: tutorial.verticalOffset,
-          bubbleWidth: tutorial.bubbleWidth },
+          bubbleWidth: tutorial.bubbleWidth,
+        },
       );
     },
     [siteId],
@@ -105,9 +149,9 @@ export function DreamsignRevelationScreenAdapter({ siteId }: { siteId: string })
     (dreamsignId: string) => {
       if (pendingPurgeDreamsign === null) return;
       const index = state.dreamsigns.findIndex(
-        (dreamsign) => requireDreamsignId(
-          dreamsign, "Dreamsign Revelation replacement",
-        ) === dreamsignId,
+        (dreamsign) =>
+          requireDreamsignId(dreamsign, "Dreamsign Revelation replacement") ===
+          dreamsignId,
       );
       if (index < 0) return;
       mutations.acceptDreamsignOffer(siteId, pendingPurgeDreamsign, index);

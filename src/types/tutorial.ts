@@ -114,8 +114,10 @@ export type TutorialTriggerMatcher =
     };
 
 /** One TOML-authored first-occurrence tutorial shared across journey and battle. */
-export interface TutorialTriggerDefinition
-  extends Omit<TutorialSpeechBubble, "delay"> {
+export interface TutorialTriggerDefinition extends Omit<
+  TutorialSpeechBubble,
+  "delay"
+> {
   readonly id: string;
   readonly on: readonly TutorialTriggerEvent[];
   readonly priority: number;
@@ -125,6 +127,10 @@ export interface TutorialTriggerDefinition
 
 /** Complete generated tutorial configuration. */
 export interface TutorialConfiguration {
+  /** Hash of the complete normalized tutorial artifact. */
+  readonly contentHash: string;
+  /** Hash of configuration which can change the cooperative fold. */
+  readonly foldHash: string;
   readonly journeyStart: TutorialJourneyStartConfiguration;
   readonly dreamscape: TutorialDreamscapeConfiguration;
   readonly atlas: TutorialAtlasConfiguration;
@@ -137,8 +143,78 @@ export interface TutorialConfiguration {
   readonly battle: TutorialBattleConfiguration;
 }
 
-/** UUID-authored draw order used after the tutorial enters playable battle. */
+/** Stable semantic card roles shared by tutorial presentation and battle setup. */
+export type TutorialFeaturedCardRole =
+  "player" | "opponent" | "enemyStarter" | "loadingEvent";
+
+/** UUIDs selected once and reused anywhere the tutorial needs that role. */
+export interface TutorialFeaturedCards {
+  readonly playerCardId: string;
+  readonly opponentCardId: string;
+  readonly enemyStarterCardId: string;
+  readonly loadingEventCardId: string;
+  readonly dreamwellCardId: string;
+}
+
+/** One card and copy count in the shared tutorial starter-deck recipe. */
+export interface TutorialStarterDeckEntry {
+  readonly cardId: string;
+  readonly copies: number;
+}
+
+/** Compact scripted-battle placement used before the live handoff. */
+export interface TutorialScriptedBoardConfiguration {
+  readonly playerBackRankIndex: number;
+  readonly playerFrontRankIndex: number;
+}
+
+/** Authored side state at the playable tutorial-battle handoff. */
+export interface TutorialBattleHandoffSideConfiguration {
+  readonly currentEnergy: number;
+  readonly maxEnergy: number;
+  readonly score: number;
+  readonly dreamwellCardIndex: number;
+  readonly dreamwellDrawnTurn: number;
+}
+
+/** A configured card role materialized into a rank or void at handoff. */
+export type TutorialBattleHandoffPlacement = Readonly<
+  {
+    cardRole: TutorialFeaturedCardRole;
+    side: "player" | "enemy";
+    source: "deck" | "created";
+  } & ({ zone: "frontRank" | "backRank"; slotId: string } | { zone: "void" })
+>;
+
+/** Complete authored board state at the playable tutorial-battle handoff. */
+export interface TutorialBattleHandoffConfiguration {
+  readonly activeSide: "player" | "enemy";
+  readonly turnNumber: number;
+  readonly phase:
+    | "dreamwell"
+    | "draw"
+    | "dawn"
+    | "day"
+    | "dusk"
+    | "night"
+    | "challenge"
+    | "ending";
+  readonly dreamwellDeckIndex: number;
+  readonly player: TutorialBattleHandoffSideConfiguration;
+  readonly enemy: TutorialBattleHandoffSideConfiguration;
+  readonly placements: readonly TutorialBattleHandoffPlacement[];
+}
+
+/** UUID-authored scenario used before and after the playable battle handoff. */
 export interface TutorialBattleConfiguration {
+  readonly featuredCards: TutorialFeaturedCards;
+  readonly playerDreamAvatarId: string;
+  readonly enemyDreamAvatarId: string;
+  readonly startingEnergy: number;
+  readonly scoreToWin: number;
+  readonly starterDeck: readonly TutorialStarterDeckEntry[];
+  readonly scriptedBoard: TutorialScriptedBoardConfiguration;
+  readonly handoff: TutorialBattleHandoffConfiguration;
   readonly playerDraws: readonly string[];
   readonly enemyDraws: readonly string[];
   /** Complete shared deck prefix, including authored pre-handoff draws. */

@@ -62,6 +62,7 @@ import type {
   TutorialAction,
   TutorialDreamAvatarOwner,
   TutorialEditorSaveStatus,
+  TutorialFeaturedCards,
   TutorialHowToPlayTrigger,
 } from "../../types/tutorial";
 import { renderTutorialInstructionParagraph } from "../internal/tutorial-instruction-text";
@@ -153,6 +154,7 @@ export interface TutorialView {
 
 export interface TutorialEditorView {
   readonly actions: readonly TutorialAction[];
+  readonly featuredCards: TutorialFeaturedCards;
   readonly saveStatus: TutorialEditorSaveStatus;
   readonly saveError: string | null;
 }
@@ -497,8 +499,7 @@ function TutorialDreamwellEmergence({
                 destinationBox.height / 2 -
                 (sourceBox.top + sourceBox.height / 2);
               const scale = destinationBox.width / sourceBox.width;
-              layer.dataset.tutorialDreamwellEmergenceTarget =
-                "paired-dialog";
+              layer.dataset.tutorialDreamwellEmergenceTarget = "paired-dialog";
               return `translateX(-50%) translate(${String(deltaX)}px, ${String(deltaY)}px) scale(${String(scale)})`;
             })();
       animation = layer.animate(
@@ -819,9 +820,7 @@ function TutorialDreamAvatarArrival({
           : playerTargetBox.top - screenBox.top;
       const travelDistance = Math.abs(playerTargetY - centeredY);
       const startY =
-        owner === "enemy"
-          ? targetY + travelDistance
-          : targetY - travelDistance;
+        owner === "enemy" ? targetY + travelDistance : targetY - travelDistance;
       setTrajectory({
         startX: targetBox.left - screenBox.left,
         startY,
@@ -2824,8 +2823,8 @@ export function TutorialScreen({
     dreamwellEmergedActionKey === howToPlayActionKey;
   const howToPlayCompanion =
     howToPlayVisible || howToPlayDreamwellArrived
-    ? (view.howToPlay?.companion ?? null)
-    : null;
+      ? (view.howToPlay?.companion ?? null)
+      : null;
   const stageHowToPlayDreamwell =
     howToPlayActionKey !== null &&
     view.howToPlay?.companion !== null &&
@@ -3146,7 +3145,9 @@ export function TutorialScreen({
             text={view.howToPlay.text}
             companion={
               howToPlayCompanion ??
-              (stageHowToPlayDreamwell ? view.howToPlay.companion ?? null : null)
+              (stageHowToPlayDreamwell
+                ? (view.howToPlay.companion ?? null)
+                : null)
             }
             cardWidth={
               view.howToPlay.cardWidth ??

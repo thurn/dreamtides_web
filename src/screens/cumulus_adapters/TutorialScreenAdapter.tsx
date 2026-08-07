@@ -1,3 +1,4 @@
+/* eslint-disable max-lines -- tutorial orchestration is intentionally centralized here. */
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { TutorialScreen } from "../../cumulus/screens/TutorialScreen";
 import { logEvent } from "../../logging";
@@ -9,18 +10,29 @@ import { useTutorialEndTurn } from "../../state/use-tutorial-end-turn";
 import { useTutorialPlayerReposition } from "../../state/use-tutorial-player-reposition";
 import { useTutorialCards } from "../../state/use-tutorial-cards";
 import { useTutorialBattleHandoff } from "../../state/use-tutorial-battle-handoff";
-import { useTutorialHowToPlayLogging, useTutorialPresentationLogging } from "../../state/use-tutorial-presentation-logging";
+import {
+  useTutorialHowToPlayLogging,
+  useTutorialPresentationLogging,
+} from "../../state/use-tutorial-presentation-logging";
 import type { DreamAvatarContent } from "../../types/content";
 import type { TutorialDreamAvatarOwner } from "../../types/tutorial";
 import * as tutorialView from "./tutorial-view-model";
+import { useJourney } from "../../state/journey-context";
 export function TutorialScreenAdapter({
-  dreamAvatars, playbackSpeed = 1, directLive = false,
+  dreamAvatars,
+  playbackSpeed = 1,
+  directLive = false,
 }: {
   readonly dreamAvatars: readonly DreamAvatarContent[];
   readonly playbackSpeed?: number;
   readonly directLive?: boolean;
 }) {
   const { state, mutations } = useFrontDoor();
+  const { journeyContent } = useJourney();
+  const battleConfiguration = journeyContent.tutorial?.battle;
+  if (battleConfiguration === undefined) {
+    throw new Error("Tutorial battle configuration is missing.");
+  }
   const {
     actions: authoredActions,
     loaded: actionsLoaded,
@@ -40,15 +52,16 @@ export function TutorialScreenAdapter({
       tutorialCards === null ||
       state.tutorial !== null ||
       state.journeyId === null
-    ) return;
+    )
+      return;
     const intentKey = `tutorial:${state.journeyId}:begin`;
     if (beginRequestedKey.current === intentKey) return;
     beginRequestedKey.current = intentKey;
     void mutations
-      .beginTutorial(
-        authoredActions,
-        { intentKey, ...(directLive ? { startAtEnd: true } : {}) },
-      )
+      .beginTutorial(authoredActions, {
+        intentKey,
+        ...(directLive ? { startAtEnd: true } : {}),
+      })
       .catch((error: unknown) => {
         beginRequestedKey.current = null;
         logEvent("tutorial_begin_failed", {
@@ -69,13 +82,19 @@ export function TutorialScreenAdapter({
     () =>
       tutorialView.buildTutorialView(
         dreamAvatars,
+        battleConfiguration,
         state.tutorial,
         tutorialCards?.cards ?? null,
         tutorialCards?.dreamwell ?? null,
       ),
-    [dreamAvatars, state.tutorial, tutorialCards],
+    [battleConfiguration, dreamAvatars, state.tutorial, tutorialCards],
   );
-  useTutorialPresentationLogging(state.tutorial, view, playbackSpeed);
+  useTutorialPresentationLogging(
+    state.tutorial,
+    view,
+    battleConfiguration.featuredCards.dreamwellCardId,
+    playbackSpeed,
+  );
   const howToPlayLogging = useTutorialHowToPlayLogging(view.battle.battleId);
   const completeAction = mutations.completeTutorialAction;
   const handleActionComplete = useTutorialActionComplete(completeAction);
@@ -91,8 +110,14 @@ export function TutorialScreenAdapter({
     },
     [view.battle.battleId, view.currentAction?.id],
   );
-  const handlePlayerCardPlay = useTutorialCardPlay(mutations.action, view.battle.battleId);
-  const handleEndTurn = useTutorialEndTurn(completeAction, view.battle.battleId);
+  const handlePlayerCardPlay = useTutorialCardPlay(
+    mutations.action,
+    view.battle.battleId,
+  );
+  const handleEndTurn = useTutorialEndTurn(
+    completeAction,
+    view.battle.battleId,
+  );
   const handlePlayerCharacterReposition = useTutorialPlayerReposition(
     mutations.completeTutorialAction,
     view.battle.battleId,
@@ -103,7 +128,12 @@ export function TutorialScreenAdapter({
       playbackSpeed={playbackSpeed}
       editor={
         import.meta.env.DEV
-          ? { actions: authoredActions, saveStatus, saveError }
+          ? {
+              actions: authoredActions,
+              featuredCards: battleConfiguration.featuredCards,
+              saveStatus,
+              saveError,
+            }
           : undefined
       }
       onActionComplete={handleActionComplete}

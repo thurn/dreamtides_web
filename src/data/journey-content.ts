@@ -89,15 +89,7 @@ import {
 } from "../draft/replay/draft-records";
 import { createInitialReplayDraftState } from "../draft/draft-engine";
 import type { ReplayDraftState } from "../types/draft";
-import type {
-  TutorialAtlasConfiguration,
-  TutorialBattleConfiguration,
-  TutorialBattleStartConfiguration,
-  TutorialDreamscapeConfiguration,
-  TutorialJourneyStartConfiguration,
-  TutorialSiteConfiguration,
-  TutorialTriggerDefinition,
-} from "../types/tutorial";
+import type { TutorialConfiguration } from "../types/tutorial";
 import {
   TUTORIAL_JOURNEY_POOL,
   type TutorialJourneyPool,
@@ -115,24 +107,8 @@ export interface JourneyContent {
   /** The shared Dreamwell deck source, drawn from during battle. */
   dreamwellCards: readonly DreamwellCard[];
   dreamsignTemplates: readonly DreamsignTemplate[];
-  /** Supplemental first-occurrence tutorials shared by journey cards and battle. */
-  tutorialTriggers?: readonly TutorialTriggerDefinition[];
-  /** Authored draw order for the standalone playable tutorial battle. */
-  tutorialBattle?: TutorialBattleConfiguration;
-  /** Authored guidance shown beside the fixed tutorial journey-start offer. */
-  tutorialJourneyStart?: TutorialJourneyStartConfiguration;
-  /** Authored guidance shown over the first tutorial dreamscape. */
-  tutorialDreamscape?: TutorialDreamscapeConfiguration;
-  /** Authored guidance shown on the first tutorial Atlas visit. */
-  tutorialAtlas?: TutorialAtlasConfiguration;
-  /** Authored guidance shown throughout the first Draft site visit. */
-  tutorialDraft?: TutorialSiteConfiguration;
-  /** Authored guidance shown throughout the first Purge site visit. */
-  tutorialPurge?: TutorialSiteConfiguration;
-  /** Authored guidance shown throughout the first Dreamsign Revelation visit. */
-  tutorialDreamsignRevelation?: TutorialSiteConfiguration;
-  /** Authored guidance shown on the first two tutorial-journey battle previews. */
-  tutorialBattleStart?: TutorialBattleStartConfiguration;
+  /** Complete normalized tutorial scenario loaded from tutorial.toml. */
+  tutorial?: TutorialConfiguration;
   /** Fixed three-tide draft pool used by the tutorial journey handoff. */
   tutorialJourneyPool?: TutorialJourneyPool;
   /**
