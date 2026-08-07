@@ -1,4 +1,4 @@
 interface:
   display_name: "Convert TOML to RON"
-  short_description: "Design idiomatic RON from TOML sources"
-  default_prompt: "Use $convert-toml-to-ron to create an idiomatic RON equivalent of this TOML file."
+  short_description: "Design RON with reusable Rust adapters"
+  default_prompt: "Use $convert-toml-to-ron to design a production-ready canonical RON candidate and its reusable Rust adapter."

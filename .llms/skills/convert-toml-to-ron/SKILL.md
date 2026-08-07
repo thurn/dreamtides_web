@@ -1,214 +1,194 @@
 ---
 name: convert-toml-to-ron
-description: Design an idiomatic canonical Rusty Object Notation (.ron) candidate from a compatibility-shaped or draft RON catalog, or from legacy TOML when no RON input exists. Use when asked to convert, port, experiment with, or redesign a data catalog as real typed RON, especially when producing a sibling such as data/affiliations_canonical.ron from a CompatDocument input.
+description: Design an idiomatic canonical Rusty Object Notation candidate from a compatibility-shaped RON catalog or legacy TOML and, by default, implement its reusable dataset-specific Rust source model, compatibility-TOML lowerer, UUIDv4 identity migration, and synthetic tests in the Dreamtides game-data crate without activating the candidate in production. Use when asked to convert, port, experiment with, or redesign a data catalog as typed RON, especially when producing a sibling such as `data/affiliations_canonical.ron`. Use disposable standalone Rust validation only when the user explicitly requests a design-only artifact or no repository compiler exists.
 ---
 
-# Design Canonical RON
+# Design Production-Ready Canonical RON
 
-Treat the conversion as domain modeling. The existing file is evidence about
-the data, not a schema to reproduce. Feel free to make assumptions and
-idealized layout choices; the user is not asking for a 1:1 port unless they say
-otherwise.
+Treat conversion as domain modeling, not punctuation replacement. Preserve
+semantic source information while replacing compatibility wrappers, string
+discriminators, repeated defaults, and incidental nesting with an intentional
+authored model.
 
-Many `.ron` files in this repository are compatibility-shaped migration
-artifacts: they wrap JSON- or TOML-shaped data in `CompatDocument`, retain
-stringly typed keys and discriminators, and may include generated positional
-comments. Treat these files as inputs to this process, not examples of good RON.
+Assume the candidate is likely to reach production. Build the reusable Rust
+model and compatibility lowerer once during design, then leave activation to
+`implement-canonical-ron` after review.
 
-## Output contract
+## Choose the workflow
 
-- Prefer the existing `.ron` file as the migration input when one exists. Use
-  the corresponding TOML and generated projections as parity references, not as
-  competing schema authorities.
-- Write a separate candidate named `<stem>_canonical.ron` beside the input by
-  default. For example, read `data/affiliations.ron` and write
-  `data/affiliations_canonical.ron`.
-- Do not overwrite the input, change the manifest, replace a loader, or make the
-  candidate canonical at runtime unless the user explicitly asks for
-  integration.
-- Preserve all semantic source information. Do not preserve compatibility
-  wrappers, map/list nesting, key spelling, ordering annotations, or other
-  representational artifacts merely because they appear in the input.
-- Use a lowercase, hyphenated RFC 4122 version-4 UUID for every identifier in
-  the candidate. This applies to primary IDs, foreign keys, nested/action IDs,
-  reference lists, and identifiers encoded as map keys. Explicitly flag every
-  source identifier that is not UUIDv4, assign it a fresh UUIDv4, rewrite every
-  reference to it, and retain an old-to-new mapping in the parity validator.
-  Do not carry a legacy slug, name, integer, or other non-UUID value forward as
-  an ID.
+Use the **production-intended workflow by default** in this repository:
 
-## Workflow
+- write `data/<stem>_canonical.ron` beside the current source;
+- add the durable dataset module under `tools/game-data/src/models/`;
+- export that module so its tests compile;
+- implement compatibility lowering and synthetic tests there; and
+- prove the real candidate with an ignored parity probe that imports the same
+  durable code and retains any old-to-new UUID mapping for activation.
 
-1. Inspect representative input sections, consumer types, compiler or adapter
-   code, validation code, and domain documentation. If the catalog is large, do
-   not dump it into context. Parse it to summarize record counts, stable IDs,
-   key unions, optional fields, value types, repeated defaults, closed
-   vocabularies, exceptional records, and cross-record invariants. Inventory
-   every identifier-bearing field and keyed identifier, validate its UUID
-   version, and report all non-UUIDv4 identifiers before converting them.
-2. Classify the observed shape before designing anything:
-   - **Domain concepts** belong in the candidate in an intentionally modeled
-     form.
-   - **Compatibility encoding** such as `CompatDocument`, a synthetic `data`
-     map, kebab-case keys, loose discriminator fields, and index comments does
-     not constrain the candidate shape.
-   - **Derived or duplicated data** should be authored only when the canonical
-     source model truly owns it. Confirm how it is derived before omitting it,
-     and prove parity rather than silently dropping it.
-3. Sketch the intended Rust source types independently of the input encoding.
-   Ask what an author should edit and what invariants the type system should
-   enforce. Then design the RON that naturally deserializes into those types.
-   Explicitly reject a design that is only the compatibility tree with RON
-   punctuation.
-4. Design the RON shape:
-   - When a document consists solely of homogeneous definitions, make the list
-     itself the top-level value and deserialize it as `Vec<Definition>`. Use a
-     document record only when the domain has multiple independent root fields.
-     Prefer explicit stable ID fields, and use maps only when keyed lookup is
-     part of the authored domain model.
-   - Give entries in long lists a named record such as `CardDefinition(...)` or
-     `ActionDefinition(...)`; anonymous inline records such as `art: (...)` are
-     fine when the surrounding field already supplies enough context.
-   - Turn closed vocabularies and discriminated behavior into enums. Put
-     variant-specific parameters inside the variant instead of keeping a wide
-     record of unrelated optional fields.
-   - Keep scalar concepts scalar. Introduce a sequence only when the concept is
-     inherently plural; use an explicit compound variant for exceptional forms.
-   - Hoist repeated values only when they represent a dataset-wide rule or
-     default, not merely because every current record happens to match.
-   - Order primary authored content before secondary metadata. Rename and
-     regroup fields around domain meaning while preserving their semantics.
-   - Keep presentation and template-substitution text as strings, while typing
-     runtime identifiers, predicates, and modes.
-   - Model every identifier as `uuid::Uuid` or a domain newtype around it. Emit
-     UUIDv4 values in lowercase hyphenated form, including references and
-     identifiers nested inside variants or lists.
-   - Do not add schema-version fields. The typed source model and compiler build
-     define the current contract. Evolve source models compatibly with optional
-     or defaulted fields and deliberate adapter handling for new variants.
-5. Start the candidate with `#![enable(implicit_some)]`. Write present
-   `Option<T>` values as `value` instead of `Some(value)`, and omit absent or
-   default-valued fields when the Serde schema supports omission. Skip this
-   extension only when the target parser cannot support it or the user requests
-   explicit `Some`.
-6. Use normal quoted strings by default. Use raw strings only when multiline
-   content or escaping makes them materially clearer.
-7. Generate large catalogs mechanically. Fail on unknown or missing input keys,
-   duplicate stable IDs, candidate IDs that are not UUIDv4, unsupported
-   variants, invalid or incompletely migrated references, and violated
-   invariants so the transformation cannot silently discard or reinterpret
-   data.
+Do not change the dataset manifest, compiler adapter dispatch, production
+source filename, generated outputs, or runtime/editor ownership. Those are the
+reviewed cutover performed by `implement-canonical-ron`.
 
-## Modeling examples
+Use a **design-only workflow** only when the user explicitly wants an isolated
+experiment, says no production code should be added, or the repository has no
+appropriate Rust compiler. In that mode, validate in a temporary crate and
+leave only the candidate. State that a later integration will need to port the
+temporary model.
 
-A compatibility input such as this:
+## 1. Understand the source and consumers
 
-```ron
-CompatDocument(
-    data: {
-        "actions": [
-            { "id": "gather", "effect-kind": "draft-card", "count": 1 },
-        ],
-    },
-)
-```
+Prefer the current `.ron` source when one exists. Use its generated TOML and
+runtime projections as parity references.
 
-does not imply that the wrapper, string keys, or discriminator belong in the
-candidate. A modeled candidate might instead be:
+Inspect representative source sections, direct consumers, compiler/adapter
+code, validation, domain documentation, stable-ID references, and the closest
+typed dataset module. For a large catalog, parse it mechanically to summarize:
 
-```ron
-#![enable(implicit_some)]
-[
-    ActionDefinition(
-        id: "a60022e4-aa68-49ac-a389-bf3c8a29fe1c",
-        effect: DraftCard(count: 1),
-    ),
-]
-```
+- root shape, record count, stable IDs, and order-sensitive collections;
+- key unions, scalar types, optional fields, empty sentinels, and defaults;
+- closed vocabularies, discriminator families, and exceptional records;
+- duplicate or derived values and their actual source of truth; and
+- cross-record and cross-catalog invariants.
 
-Use named entries in long lists and anonymous records inline:
+Inventory every identifier-bearing field and identifier encoded as a map key.
+Validate its UUID version and report every non-UUIDv4 source identifier before
+conversion.
 
-```ron
-#![enable(implicit_some)]
-[
-    CardDefinition(
-        id: "7be2e6d7-abff-4c44-a0c3-35460da1693c",
-        rarity: Legendary,
-        art: (image: 454095982, owned: true),
-    ),
-]
-```
+Classify each observed field as a domain concept, compatibility encoding, or
+derived value. Do not let `CompatDocument`, a synthetic `data` map, kebab-case
+keys, positional comments, or loose TOML tables determine the canonical shape.
 
-Replace a string discriminator and its loose parameters with one typed value:
+## 2. Model the canonical document
 
-```ron
-effect: DraftCard(
-    predicate: Warrior,
-    count: 1,
-    offer_count: 4,
-),
-```
+Design the Rust source types and RON together around what an author should
+edit:
 
-Keep a common scalar form simple and name the exceptional compound form:
+- Use a top-level `Vec<Definition>` for a homogeneous catalog. Use a named
+  document record for multiple independent root concepts or dataset-wide
+  defaults.
+- Give long-list entries named record types. Use anonymous inline records only
+  when the field name supplies enough meaning.
+- Turn closed vocabularies and discriminated behavior into enums, with
+  variant-specific fields inside each variant.
+- Keep scalar concepts scalar and model exceptional compound forms explicitly.
+- Hoist repeated values only when they are genuine catalog rules or defaults.
+  For example, affiliation selection multipliers belong at the catalog root
+  when entries inherit them.
+- Preserve lists and ordered maps only when the authored concept or
+  compatibility contract is ordered.
+- Keep presentation/template text as strings while typing identifiers,
+  predicates, modes, and behavior.
+- Use a lowercase, hyphenated RFC 4122 version-4 UUID for every primary ID,
+  foreign key, nested/action ID, reference-list entry, and keyed identifier.
+  Model each as `uuid::Uuid` or a domain newtype around it.
+- Do not add schema-version fields. The typed model and compiler build define
+  the source contract.
 
-```ron
-energy_cost: Fixed(3),
-// Alternatives: `Variable` for `X`, or `FixedAndVariable(3)` for `3,X`.
-```
+Assign a fresh UUIDv4 to each legacy slug, name, integer, or other identifier.
+Rewrite every reference consistently and preserve an explicit old-to-new map in
+the parity probe. Never carry a non-UUID value forward as a canonical ID.
 
-## Validate with Rust
+Start the candidate with `#![enable(implicit_some)]`. Write present optional
+values without `Some(...)`, and omit absent/defaulted fields when the Serde
+model intentionally supports omission. Prefer quoted strings; use raw strings
+only when multiline text or escaping becomes clearer.
 
-Validate with the real `ron` and Serde crates, not a text or bracket check.
+Generate large candidates mechanically. Fail on unknown or missing input keys,
+duplicate IDs, non-UUIDv4 candidate IDs, unsupported variants, invalid or
+incompletely migrated references, and violated invariants.
 
-1. Create a temporary crate outside the repository:
+## 3. Write the durable Rust handoff
 
-   ```sh
-   validation_dir=$(mktemp -d /tmp/ron-validation.XXXXXX)
-   cargo init --quiet --bin --name ron_validation "$validation_dir"
-   ```
+Create `tools/game-data/src/models/<dataset>.rs` during the production-intended
+workflow. This file is the implementation the cutover will activate; do not
+recreate it in a temporary crate.
 
-2. Add the dependencies required by the actual inputs to its `Cargo.toml`:
+- Derive `Deserialize`, `Serialize`, `Debug`, `Clone`, and `PartialEq` where
+  useful.
+- Add `#[serde(deny_unknown_fields)]` to every record.
+- Use `Vec` and `IndexMap` deliberately to preserve required order.
+- Represent intentional schema defaults with Serde defaults and pair them with
+  `skip_serializing_if` when editor serialization should retain compact RON.
+- Add the Serde-enabled `uuid` crate to `tools/game-data` when it is not already
+  available. Validate UUID version, RFC 4122 variant, and lowercase hyphenated
+  formatting at the typed boundary.
+- Keep `ron::Value`, `toml::Value`, untyped maps, and string discriminators out
+  of the source model unless the domain is genuinely dynamic.
+- Validate identities, references, and cross-field invariants before lowering.
 
-   ```toml
-   [dependencies]
-   ron = "0.10"
-   serde = { version = "1", features = ["derive"] }
-   toml = "0.9" # Include when TOML is a parity input.
-   uuid = { version = "1", features = ["serde"] }
-   ```
+Implement `lower(source: RootType) -> anyhow::Result<toml::Value>` or the
+repository's current equivalent in the same module. Map every compatibility
+field deliberately:
 
-3. In `src/main.rs`, define two strict typed models:
-   - an input model that can deserialize the compatibility RON or legacy TOML;
-   - the intended canonical structs and enums that define the candidate design.
+- preserve established TOML key spelling, nesting, scalar types, sentinels,
+  and record order;
+- expand top-level canonical defaults and other hoisted values into repeated
+  compatibility fields;
+- exhaustively lower enums and compound variants; and
+- emit compatibility defaults even when the canonical source omits them.
 
-   Add `#[derive(Deserialize)]` and `#[serde(deny_unknown_fields)]` to every
-   record. Represent omitted fields with `Option<T>` or `#[serde(default)]`.
-   Do not use `ron::Value`, `serde_json::Value`, or an untyped map as a
-   substitute for proving the candidate schema.
-4. Convert both typed forms into a shared semantic comparison model, derive
-   `PartialEq`, and assert equality. This comparison should permit deliberate
-   renaming, regrouping, enum modeling, and default hoisting while proving that
-   every source value has an accounted-for meaning. When migrating legacy IDs,
-   compare through an explicit old-to-new UUID mapping and prove that all
-   references resolve through that same mapping.
-5. Also assert source/output record counts, unique stable IDs, enum coverage,
-   reference validity, required nested cardinalities, repeated-default
-   assumptions, and every exceptional variant. Parse every candidate ID as a
-   `uuid::Uuid`, assert `Version::Random` and `Variant::RFC4122`, assert
-   lowercase hyphenated formatting, and fail if any identifier-bearing source
-   value was neither already UUIDv4 nor included in the migration mapping. If
-   TOML and compatibility RON both exist, first prove that they carry the same
-   semantic data or report the discrepancy.
-6. Run the validator against the real files, passing the compatibility input,
-   candidate, and optional TOML parity source explicitly:
+Do not serialize canonical structs directly when their natural Serde shape
+differs from the compatibility contract.
 
-   ```sh
-   cargo run --quiet --manifest-path "$validation_dir/Cargo.toml" -- \
-     /absolute/path/input.ron \
-     /absolute/path/input_canonical.ron \
-     /absolute/path/input.toml
-   ```
+Export the module from `tools/game-data/src/models/mod.rs` so its unit tests are
+compiled, but do not add it to compiler adapter dispatch or the manifest yet.
 
-Run the repository's normal checks afterward. Leave the candidate as a review
-artifact; integration into the compiler and runtime is a separate task unless
-the user asks for it.
+## 4. Test reusable behavior once
+
+Add permanent deterministic tests beside the durable model for:
+
+- every enum/behavior variant and exceptional compound form;
+- optional/defaulted fields and compatibility sentinels;
+- exact compatibility keys and order-sensitive collections;
+- duplicate IDs, invalid references, UUIDv4 enforcement, and cross-field
+  invariants; and
+- relevant Unicode, multiline, numeric, and empty-collection cases.
+
+Use distinct synthetic top-level defaults to prove that lowering expands the
+correct values instead of hard-coding current production values. Do not make
+permanent unit tests depend on mutable production copy, counts, tuning, or
+default algorithm choices.
+
+## 5. Prove the real candidate without duplicating code
+
+Add a narrowly scoped `#[ignore]` Rust parity probe inside the existing
+game-data crate. Import the durable source model and lowerer; never redefine
+them. Keep this probe through candidate review so the activation phase can
+reuse its old-to-new UUID map and parity logic, then remove it after successful
+cutover.
+
+Run it explicitly against the real current source, candidate, and generated
+TOML to prove:
+
+- strict deserialization of the complete candidate;
+- semantic equality of current compatibility RON and generated TOML when both
+  exist;
+- equality between lowered canonical data and compatibility data after applying
+  the explicit UUID mapping, including array order and scalar types;
+- record counts, unique IDs, references, cardinalities, defaults, and every
+  observed exceptional variant;
+- parsing of every candidate ID as `uuid::Uuid` with `Version::Random`,
+  `Variant::RFC4122`, and lowercase hyphenated formatting; and
+- complete mapping coverage for every legacy identifier and reference.
+
+In explicit design-only mode, create a temporary crate with the pinned `ron`,
+Serde, `uuid`, and optional `toml` dependencies, define strict input and
+canonical types, and compare both through a shared semantic model. This is the
+fallback, not the repository default.
+
+## 6. Leave a reviewable handoff
+
+Run Rust formatting, the model's focused tests, the ignored parity probe, RON
+formatting, and the repository's diff-aware review. Leave the
+production-intended review with:
+
+- `data/<stem>_canonical.ron`;
+- `tools/game-data/src/models/<dataset>.rs` containing the tested source model,
+  lowerer, synthetic tests, and ignored parity probe/UUID map;
+- its export from `models/mod.rs` and any required crate dependency updates;
+  and
+- the current production source, manifest, adapter dispatch, and generated
+  outputs unchanged.
+
+Report the exact durable artifacts that `implement-canonical-ron` should reuse.
+The next phase should activate and cut over this code, not rewrite it.

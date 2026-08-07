@@ -1,217 +1,149 @@
 ---
 name: implement-canonical-ron
-description: Promote a reviewed suffixed `_canonical.ron` candidate into Dreamtides production as the canonical unsuffixed `.ron` source, with strict dataset-specific Rust types, an explicit RON-to-compatibility-TOML adapter, manifest/compiler registration, parity proof, generated artifacts, tests, and editor integration when applicable. Use when asked to implement, integrate, ship, promote, cut over, or replace a compatibility-shaped production RON file with its canonical modeled RON counterpart, such as replacing `data/affiliations.ron` with `data/affiliations_canonical.ron`.
+description: Activate a reviewed production-intended `_canonical.ron` candidate by reusing its existing dataset-specific Rust source model, compatibility-TOML lowerer, and synthetic tests, then registering the adapter, replacing the production RON source, regenerating outputs, proving parity, and completing editor integration when applicable. Use when asked to implement, integrate, ship, promote, cut over, or replace a compatibility-shaped production RON file with a canonical modeled candidate such as `data/affiliations_canonical.ron`.
 ---
 
-# Implement Canonical RON
+# Activate Canonical RON
 
-Treat this as a production migration between two intentionally different
-source models. Preserve runtime data, record order, stable IDs, references,
-generated artifacts, and consumer behavior while making the modeled RON
-document the authored source. Do not expect or pursue a field-for-field port.
+Treat this as activation of already-tested design artifacts, not a second
+implementation pass. Preserve runtime data, record order, stable IDs,
+references, generated artifacts, and consumer behavior while switching authored
+ownership to the modeled RON source.
 
-Start from a reviewed candidate produced by `convert-toml-to-ron`. If the
-candidate is missing, compatibility-shaped, or lacks a typed semantic parity
-proof, use that companion skill first. Keep domain redesign and production
-integration as separate review stages.
+## Required handoff
 
-## Production contract
+Expect `convert-toml-to-ron` to have produced all of the following:
 
-- Replace `data/<stem>.ron` with the reviewed
-  `data/<stem>_canonical.ron` content and remove the suffixed candidate. Leave
-  exactly one canonical RON source for the dataset.
-- Add dataset-specific Rust source types under `tools/game-data/src/models/`.
-  Deserialize the canonical RON into those types through the pinned `ron` and
-  Serde crates.
-- Preserve canonical modeling decisions such as dataset-level defaults,
-  grouped domain concepts, typed variants, and renamed fields. Do not flatten
-  the candidate back into per-record compatibility fields merely to resemble
-  the production input it replaces.
-- Lower the typed source model explicitly into the existing compatibility TOML
-  shape. Keep TypeScript, browser, build, editor-read, and asset-generation
-  consumers on the generated TOML or existing generated JSON boundary.
-- Register a dataset-specific schema and adapter in the compiler and
-  `data/game-data-manifest.ron`. Do not use `CompatDocument` for the promoted
-  dataset.
-- Preserve semantic values and ordering exactly unless the user separately
-  authorizes a data correction. Treat an unexplained parity difference as a
-  blocker, not an opportunity to normalize production data.
-- Keep generated TOML at its established path and preserve its tracked or
-  ignored policy. Regenerate downstream artifacts through repository commands.
-- For an editor-backed dataset, complete typed mutation, stable-ID routing,
-  serialization, revision, rollback, and browser QA before cutover. A read-only
-  dataset needs no editor write implementation.
+- `data/<stem>_canonical.ron`;
+- `tools/game-data/src/models/<dataset>.rs` with strict source types and the
+  compatibility lowerer;
+- an export from `tools/game-data/src/models/mod.rs`; and
+- passing synthetic model/adapter tests; and
+- an ignored real-data parity probe containing the approved old-to-new UUID map
+  when legacy identifiers were migrated.
 
-## 1. Establish the migration boundary
+If these durable Rust artifacts are absent, use `convert-toml-to-ron` to create
+them in the repository. Do not reconstruct them in a disposable crate and then
+write them again here.
 
-Inspect all of the following before editing:
+## 1. Audit, do not rewrite
 
-- the canonical candidate, current production RON, and generated TOML;
-- the dataset manifest entry and its dependencies, refresh operation, identity,
-  and editor capability;
-- `tools/game-data/src/compiler.rs`, `manifest.rs`, `models/mod.rs`, and the
-  closest existing typed model and adapter;
-- every direct consumer of the generated TOML and affected derived JSON;
-- validation, hot-reload, regeneration, build, deploy, and editor paths; and
-- domain documentation and stable-ID/reference invariants.
+Inspect the candidate, durable model/lowerer, current production RON, generated
+TOML, manifest entry, compiler registries, consumers, dependencies, refresh
+operation, identity strategy, and editor capability.
 
-Summarize root types, record counts, stable IDs, enum variants, optional and
-defaulted fields, order-sensitive collections, sentinels in the compatibility
-format, references, and exceptional records. Identify each deliberate
-many-to-one or one-to-many mapping between the source models. For example, a
-canonical catalog may hoist repeated record values into top-level defaults that
-the adapter must expand back onto every compatibility record. Use UUIDs or the
-dataset's established stable identifier throughout the migration; never use
-display names as identity.
+Confirm that the durable code still:
 
-Materialize a clean current compatibility output before changing the adapter.
-Keep temporary parsed TOML and derived-artifact oracles outside the committed
-tree, or use the repository parity tooling when its configured historical base
-contains the compatibility outputs. Verify that the oracle exists before the
-cutover; do not assume the current merge base still tracks generated TOML.
-Compare parsed semantics rather than generated headers, since source and
-adapter fingerprints intentionally change.
+- deserializes the complete candidate with strict records and typed variants;
+- preserves canonical concepts such as catalog-level defaults, grouped data,
+  and renamed fields;
+- expands hoisted values into the exact established TOML fields;
+- preserves order, scalar types, sentinels, IDs, and references; and
+- rejects duplicate identities, non-UUIDv4 canonical IDs, incomplete UUID
+  mappings, and invalid combinations.
 
-## 2. Implement the typed source model
+Make only review-driven corrections to these existing artifacts. Do not replace
+them with a fresh implementation merely because the activation agent would have
+modeled them differently.
 
-Create `tools/game-data/src/models/<dataset>.rs` and model the candidate as
-authored:
+Materialize a clean current compatibility output before cutover. Save parsed
+TOML and affected derived artifacts outside the committed tree, or use a
+historical parity base that actually contains the compatibility outputs.
+Compare parsed semantics rather than generated headers because source and
+adapter fingerprints change.
 
-- Derive `Deserialize`, `Serialize`, `Debug`, `Clone`, and `PartialEq` where
-  useful for parsing, editor round trips, and tests.
-- Add `#[serde(deny_unknown_fields)]` to every record so misspelled or stale
-  authored fields fail closed.
-- Represent closed vocabularies and discriminated behavior as enums. Put
-  variant-specific fields inside their variants.
-- Preserve authored sequence order with `Vec`. Use `IndexMap` when map order is
-  part of the compatibility contract; use unordered maps only when order is
-  semantically irrelevant.
-- Match `#![enable(implicit_some)]` with `Option<T>` fields. Use Serde defaults
-  only for intentional schema defaults, and pair them with
-  `skip_serializing_if` when editor serialization should preserve the compact
-  authored form.
-- Model top-level defaults as first-class catalog fields. Give per-record
-  overrides an explicit typed representation only when the canonical design
-  supports them; do not duplicate the default into every canonical entry.
-- Keep runtime identifiers typed or validated at the model/adapter boundary.
-  Validate duplicate IDs and cross-record references before lowering.
-- Avoid `ron::Value`, `serde_json::Value`, `toml::Value`, untyped maps, and
-  string discriminators in the source model. Dynamic values are acceptable
-  only where the domain itself is intentionally dynamic.
+## 2. Complete editor support when required
 
-Parse the complete real candidate with these types early. A model that only
-passes hand-written fixtures is insufficient evidence that production data is
-covered.
+For a read-only dataset, proceed directly to activation.
 
-## 3. Lower into compatibility TOML
+For an editor-backed dataset, use `build-ron-editor` to implement typed mutation
+against the durable source model before cutover. Require stable-ID routing,
+preservation of unrelated typed values and ordering, deterministic
+serialization, source revisions, atomic publication/rollback, and the normal
+browser save and recovery workflow.
 
-Implement `lower(source: RootType) -> anyhow::Result<toml::Value>` or the
-repository's current equivalent. Treat this as a named compatibility adapter,
-not as the source schema.
+Do not activate a semantic-editor dataset while its editor still writes the
+compatibility source or generated TOML.
 
-Account deliberately for every compatibility field:
+## 3. Register the existing adapter
 
-- reproduce established TOML key spelling, table/list nesting, scalar types,
-  empty-string or empty-list sentinels, and record order;
-- expand top-level canonical defaults and other hoisted domain values into the
-  repeated compatibility fields expected by existing consumers;
-- convert source enums and compound variants exhaustively into their established
-  compatibility representations;
-- emit compatibility defaults even when the canonical RON omits them;
-- reject duplicate identities, missing referenced records, invalid
-  combinations, and dataset invariants before serialization; and
-- use `toml::Value` only at this output boundary, or use strict serializable
-  compatibility structs when they make the mapping clearer.
+Wire the reviewed module through every production registry:
 
-Do not serialize the canonical source structs directly when their natural
-Serde representation differs from the compatibility TOML contract. The
-compiler should deserialize typed RON, lower it, and then call the established
-TOML serializer.
-
-Add deterministic synthetic unit tests covering:
-
-- every enum/behavior variant and exceptional compound form;
-- omitted/defaulted/optional fields and compatibility sentinels;
-- exact compatibility keys and order-sensitive collections;
-- duplicate IDs, invalid references, and cross-field invariants; and
-- Unicode, quoting, multiline text, numeric types, and empty collections when
-  the dataset uses them.
-
-Do not make permanent unit tests depend on mutable production copy, counts,
-tuning, or default algorithm choices. Use the real catalog only in one-time
-parity and repository reference-integrity validation.
-
-## 4. Register the typed adapter
-
-Wire the new module through every compiler registry:
-
-1. Export the module from `tools/game-data/src/models/mod.rs`.
-2. Add a dataset-specific adapter branch in `compiler.rs` that parses the
-   source root type and calls its lowering function.
-3. Add the adapter ID to manifest validation and any other exhaustive adapter
+1. Add a dataset-specific branch in `tools/game-data/src/compiler.rs` that
+   parses the existing root type and calls its existing lowerer.
+2. Add the adapter ID to manifest validation and every other exhaustive adapter
    registry or test fixture.
-4. Update the manifest entry from `compat_document_v1` / `compat_v1` to clear
-   dataset-specific schema and adapter IDs. Increment the adapter version when
-   the compatibility output contract changes; otherwise establish version 1
-   for the new adapter according to repository convention.
-5. Preserve the dataset ID, canonical `data/<stem>.ron` source path, generated
+3. Update the dataset manifest entry from `compat_document_v1` / `compat_v1` to
+   explicit dataset-specific schema and adapter IDs.
+4. Preserve the dataset ID, `data/<stem>.ron` source path, generated
    `data/<stem>.toml` output path, dependencies, refresh operation, identity,
    editor capability, and RON migration state.
+5. Establish adapter version 1 for the new typed adapter unless the repository
+   convention or a compatibility-output change requires another version.
 
-Search for string registries instead of assuming the compiler match and
-manifest validator are the only registration points.
+Search for adapter and dataset string registries instead of assuming the
+compiler match and manifest validator are the only registration points.
 
-## 5. Cut over atomically
+## 4. Cut over atomically
 
-Keep the current source available as a temporary parity oracle until the typed
-adapter parses and lowers the candidate successfully. Then make one coherent
-change that:
+Make one coherent activation change that:
 
-1. replaces `data/<stem>.ron` with the candidate content;
+1. replaces `data/<stem>.ron` with the reviewed candidate content;
 2. removes `data/<stem>_canonical.ron`;
-3. activates the typed schema and adapter;
-4. compiles the established generated TOML path; and
-5. regenerates every affected runtime artifact.
+3. activates the existing typed schema and lowerer;
+4. applies the approved old-to-new UUID mapping to every dependent source and
+   reference when identifiers changed;
+5. compiles the established generated TOML path; and
+6. regenerates every affected runtime artifact.
 
-Do not commit a state with two canonical sources or a manifest pointing at the
-suffixed review candidate. Do not hand-edit generated TOML or JSON to force
-parity.
+Leave exactly one canonical RON source. Do not point the manifest at the
+suffixed review candidate, keep dual production sources, or hand-edit generated
+TOML/JSON to force parity.
 
-Compare the new parsed TOML to the saved compatibility oracle recursively,
-including array order and scalar types. This is output-semantic parity, not
-structural parity between the canonical RON and compatibility-shaped source.
-Compare affected generated runtime artifacts byte for byte when the repository
-contract requires it. Investigate every difference back to a source field and
-adapter branch.
+## 5. Prove the production boundary
 
-If the canonical design intentionally omits duplicated or derived data, prove
-that the adapter recreates the exact compatibility values from their declared
-source. If it cannot, the candidate does not yet preserve production semantics;
-return to the design stage instead of silently dropping the values.
+Compare the new parsed TOML recursively with the saved compatibility oracle,
+including array order and scalar types. When identifiers changed, normalize the
+comparison through the reviewed old-to-new UUID map and require every differing
+ID/reference to be explained by it. This proves output semantics, not
+structural similarity between the two source models. Compare unaffected runtime
+artifacts byte for byte; compare affected artifacts through the same UUID map
+and trace every other difference to a source field and lowerer branch.
 
-## 6. Verify the production workflow
+If the canonical design omits duplicated values or hoists defaults, require the
+existing lowerer to recreate the exact compatibility values from the canonical
+source. Return to design only when that durable mapping is genuinely wrong;
+otherwise preserve the reviewed model.
 
-Run focused checks while iterating, then the repository's diff-aware review.
-At minimum:
+Add activation-specific tests only for new registration, generation, editor,
+or integration behavior. Do not duplicate the source-model and lowering tests
+already delivered with the candidate.
 
-1. format the Rust and RON changes with repository tooling;
-2. run the typed model/adapter Rust tests;
+Remove the ignored production-data parity probe only after final parity and
+reference validation pass. Its source model, lowerer, and synthetic tests stay.
+
+## 6. Verify and finish
+
+Run focused checks while iterating, then at minimum:
+
+1. format Rust and RON with repository tooling;
+2. run the existing model/adapter tests;
 3. compile and check the selected dataset through the normal game-data
    pipeline;
-4. run game-data semantic parity against the prior production source, using the
-   saved pre-cutover oracle when no tracked historical TOML baseline exists;
-5. run the affected TypeScript validators and generated-artifact tests;
+4. run semantic parity against the saved pre-cutover oracle or a valid tracked
+   historical baseline;
+5. run affected TypeScript validators and generated-artifact tests;
 6. run `scripts/regenerate-assets.sh` and include its tracked output;
 7. run `npm run review`; and
-8. inspect `git status` to confirm one production RON source, no suffixed
-   candidate, and the expected generated-file tracking state.
+8. confirm one production RON source, no suffixed candidate, and the expected
+   generated-file tracking state.
 
 For read-only migrations, browser screenshots are unnecessary. For
-editor-backed migrations, exercise a normal save, a validation failure, a stale
-revision, and recovery through the browser; verify the canonical RON changes,
-the generated TOML/JSON refreshes, unrelated typed values and order survive,
-and the captured error buffer is empty.
+editor-backed migrations, exercise a normal save, validation failure, stale
+revision, and recovery; verify canonical RON and generated outputs, preservation
+of unrelated values/order, and an empty captured error buffer.
 
-Update affected documentation and source comments to describe RON as authored
-data and TOML as the generated compatibility boundary. State the current system
-directly and keep UUID/stable-ID terminology accurate.
+Update affected documentation and source comments to state the current RON
+authoring and generated TOML compatibility boundaries directly. Use UUIDs or
+the dataset's established stable identity, never display names, for migration
+logic and tests.
