@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/wager-prize-card`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The shared Gamble reward object: a playing-card superellipse with threshold-and-reverse or flat-reward presentations.
+The shared Gamble reward object: a playing-card superellipse with threshold-and-reverse, flat-reward, or closest-to-21 presentations.
 
 > **Guidance:** Use the flat-reward presentation when the game has one persistent prize instead of a draw threshold.
 
@@ -24,7 +24,7 @@ When a Dreamsign is present, the entire prize face is its hover and press reveal
 | `emphasis` | `WagerPrizeCardEmphasis` = `"standard" \| "current" \| "muted"` | no | — | Accent current tier, foreground-muted alternative, or standard priority. |
 | `essenceReward` | `number` | yes | — | Essence awarded on a win. |
 | `rewardDreamsign` | `Dreamsign \| null` | yes | — | Dreamsign appended to the Essence reward, when present. |
-| `presentation` | `"threshold" \| "rewardOnly"` | no | — | Show the standard target condition and reward face. Show one centered flat reward without a draw condition or reverse face. |
+| `presentation` | `"threshold" \| "rewardOnly" \| "closestToTwentyOne"` | no | — | Show the standard target condition and reward face. Show one centered flat reward without a draw condition or reverse face. Show the fixed Twenty-One win condition above its flat reward. |
 | `targetLabel` | `string` | no | — | Draw condition shown as authored compact notation. |
 | `drawnCard` | `{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } \| null` | no | — | Committed card shown on the reverse face after a bet. |
 | `revealDrawnCard` | `boolean` | no | — | Turn the prize face over to its committed card. |
@@ -50,6 +50,18 @@ When a Dreamsign is present, the entire prize face is its hover and press reveal
 <WagerPrizeCard
   prizeId="twenty-one"
   presentation="rewardOnly"
+  essenceReward={300}
+  rewardDreamsign={null}
+/>
+
+```
+
+### Closest to 21
+
+```tsx
+<WagerPrizeCard
+  prizeId="twenty-one"
+  presentation="closestToTwentyOne"
   essenceReward={300}
   rewardDreamsign={null}
 />

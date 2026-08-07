@@ -1,7 +1,8 @@
 import type { EconomyData } from "../types/economy-data";
 import type { StandardPlayingCard } from "../types/gamble";
 
-export const TWENTY_ONE_RULES_VERSION = "twenty-one-v2";
+export const TWENTY_ONE_RULES_VERSION = "twenty-one-v3";
+export const TWENTY_ONE_MAX_ATTEMPTS = 3;
 
 export type TwentyOneOutcome = "player-win" | "dealer-win" | "push";
 

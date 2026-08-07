@@ -620,6 +620,8 @@ export interface TwentyOneSiteRuntime {
   isFarpoint: boolean;
   wagerCost: number;
   prizeEssence: number;
+  /** Paid-hand number; only a player bust advances this counter. */
+  attemptNumber: number;
   shuffleCommitment: string;
   /** Complete deterministic shoe; cards past deckCursor have not been drawn. */
   committedDeck: StandardPlayingCard[];

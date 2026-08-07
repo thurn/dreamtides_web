@@ -17,7 +17,7 @@ import { opponentsFixture } from "../testing/opponents-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 
-const REDUCER_VERSION = "dreamtides-coop-v19";
+const REDUCER_VERSION = "dreamtides-coop-v20";
 const ATLAS_FOLD_HASH = "fixture-atlas-fold-hash";
 const SITES_FOLD_HASH = "fixture-sites-fold-hash";
 const DRAFT_DATA = draftDataFixture();

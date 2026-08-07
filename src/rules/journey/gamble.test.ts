@@ -1170,6 +1170,7 @@ function twentyOneRuntime(
     isFarpoint: false,
     wagerCost: 50,
     prizeEssence: 300,
+    attemptNumber: 1,
     shuffleCommitment: "twenty-one-hand",
     committedDeck: [...cards],
     deckCursor: 0,
@@ -1310,6 +1311,60 @@ describe("Twenty-One", () => {
       essenceAwarded: 0,
       resultSettled: true,
     });
+
+    registerSiteContentProvider({
+      economyData: ECONOMY,
+      openSite: () => ({
+        runtime: twentyOneRuntime(
+          [
+            { rank: "10", suit: "hearts" },
+            { rank: "9", suit: "clubs" },
+            { rank: "5", suit: "spades" },
+            { rank: "7", suit: "diamonds" },
+          ],
+          { shuffleCommitment: "bust-retry-hand" },
+        ),
+      }),
+    });
+    const replayed = apply(settled.state, "PLAY_AGAIN_TWENTY_ONE", {
+      siteId: SITE_ID,
+      previousShuffleCommitment: "twenty-one-hand",
+    });
+    expect(replayed.outcome).toBe("applied");
+    expect(replayed.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      attemptNumber: 2,
+      shuffleCommitment: "bust-retry-hand",
+      wagerPaid: true,
+    });
+  });
+
+  it("allows at most three paid attempts after player busts", () => {
+    const state = twentyOneStateWith(
+      [],
+      {},
+      {
+        attemptNumber: 3,
+        shuffleCommitment: "third-attempt",
+        playerCards: [
+          { rank: "K", suit: "clubs" },
+          { rank: "9", suit: "hearts" },
+          { rank: "5", suit: "diamonds" },
+        ],
+        dealerCards: [
+          { rank: "10", suit: "spades" },
+          { rank: "6", suit: "clubs" },
+        ],
+        dealerRevealed: true,
+        wagerPaid: true,
+        outcome: "dealer-win",
+        resultSettled: true,
+      },
+    );
+    const replayed = apply(state, "PLAY_AGAIN_TWENTY_ONE", {
+      siteId: SITE_ID,
+      previousShuffleCommitment: "third-attempt",
+    });
+    expect(replayed.outcome).toBe("bounced");
   });
 
   it("advances directly through the dealer turn when a hit reaches 21", () => {

@@ -4519,14 +4519,15 @@
     },
     {
       "name": "presentation",
-      "tsType": "\"threshold\" | \"rewardOnly\"",
+      "tsType": "\"threshold\" | \"rewardOnly\" | \"closestToTwentyOne\"",
       "unionMembers": [
         "threshold",
-        "rewardOnly"
+        "rewardOnly",
+        "closestToTwentyOne"
       ],
       "required": false,
       "defaultValue": null,
-      "description": "Show the standard target condition and reward face.\nShow one centered flat reward without a draw condition or reverse face."
+      "description": "Show the standard target condition and reward face.\nShow one centered flat reward without a draw condition or reverse face.\nShow the fixed Twenty-One win condition above its flat reward."
     },
     {
       "name": "targetLabel",

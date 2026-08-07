@@ -234,6 +234,7 @@ describe("gamble-site-logging-view-model", () => {
       isFarpoint: false,
       wagerCost: 50,
       prizeEssence: 300,
+      attemptNumber: 1,
       shuffleCommitment: "twenty-one-hand",
       committedDeck: [
         { rank: "10", suit: "clubs" },

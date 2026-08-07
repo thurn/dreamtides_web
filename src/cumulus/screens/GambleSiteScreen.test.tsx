@@ -189,6 +189,8 @@ const TWENTY_ONE_VIEW: TwentyOneSiteView = {
   runtimeReady: true,
   wagerCost: 50,
   prizeEssence: 300,
+  attemptNumber: 1,
+  maxAttempts: 3,
   canAffordWager: true,
   playerCards: [],
   playerTotal: null,
@@ -1722,7 +1724,7 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     );
     expect(container.querySelector("[data-twenty-one-title]")).toBeNull();
     const rewardTile = container.querySelector<HTMLElement>(
-      '[data-wager-prize-card="twenty-one"][data-wager-prize-presentation="rewardOnly"]',
+      '[data-wager-prize-card="twenty-one"][data-wager-prize-presentation="closestToTwentyOne"]',
     );
     expect(rewardTile?.dataset.wagerPrizeEssenceReward).toBe("300");
     expect(container.querySelector("[data-dreamsign]")).toBeNull();
@@ -1769,6 +1771,8 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     );
     expect(container.querySelector("[data-twenty-one-title]")).toBeNull();
     expect(container.querySelectorAll('[data-twenty-one-card]')).toHaveLength(0);
+    expect(container.querySelector('[data-twenty-one-total="dealer"]')
+      ?.getAttribute("data-twenty-one-total-value")).toBeNull();
     void act(() => vi.advanceTimersToNextTimer());
     expect(container.querySelectorAll('[data-twenty-one-card]')).toHaveLength(1);
     expect(container.querySelector('[data-twenty-one-card]')
@@ -1789,6 +1793,9 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     expect(container.querySelector('[data-twenty-one-total="player"]')
       ?.getAttribute("data-twenty-one-total-value")).toBe("16");
     expect(container.querySelectorAll("[data-twenty-one-hand-label]")).toHaveLength(0);
+    const firstPlayerLeft = container.querySelector<HTMLElement>(
+      '[data-twenty-one-card="player:0"]',
+    )?.style.left;
     expect(
       container.querySelector('[data-testid="gamble-twenty-one-hit"]')
         ?.textContent,
@@ -1831,6 +1838,9 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       );
     });
     void act(() => vi.runAllTimers());
+    expect(container.querySelector<HTMLElement>(
+      '[data-twenty-one-card="player:0"]',
+    )?.style.left).toBe(firstPlayerLeft);
     expect(
       container.querySelector<HTMLButtonElement>(
         '[data-testid="gamble-twenty-one-hit"]',

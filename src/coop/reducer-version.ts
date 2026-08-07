@@ -5,7 +5,7 @@
  * compatible rules fixes. Bump it only when this client cannot safely fold or
  * append to rooms written by the preceding reducer protocol.
  */
-export const CURRENT_REDUCER_VERSION = "dreamtides-coop-v19";
+export const CURRENT_REDUCER_VERSION = "dreamtides-coop-v20";
 
 /**
  * Build-scoped reducer ids from deployed clients whose fold behavior was

@@ -72,7 +72,7 @@ flow.
 | Tidemark Ladder Climb | Attempts cost 0/5/10/15 Essence. | Every attempt is free. |
 | Starway Stairs | Each tier draw costs 30 Essence. | Each tier draw costs 20 Essence. |
 | Four-Suit Reprise | Each draw costs 25 Essence. | Each draw costs 15 Essence. |
-| Twenty-One | The hand costs 50 Essence. | The hand costs 40 Essence. |
+| Twenty-One | Each hand costs 70 Essence. | Each hand costs 40 Essence. |
 
 All odds, rewards, thresholds, outcome mappings, and limits are identical at
 ordinary and Farpoint Station sites.
@@ -216,7 +216,7 @@ outcomes, replay limit, and odds are unchanged.
 
 ## 5. Twenty-One
 
-Twenty-One is blackjack against Gravok. The player wagers 50 Essence for each
+Twenty-One is blackjack against Gravok. The player wagers 70 Essence for each
 hand, then the player and dealer each receive two cards from one shuffled
 52-card shoe. The dealer shows the first card and keeps the second face down.
 Every card occupies its own squircle tile. Aces count as 1 or 11 to make the
@@ -232,17 +232,26 @@ stands on every 17 including soft 17.
 | --- | --- |
 | Player total beats the dealer, or dealer busts | Gain 300 Essence. |
 | Equal totals | Refund the wager and offer a fresh hand. |
-| Dealer total beats the player, or player busts | No reward. |
+| Dealer total beats the player | No reward. |
+| Player busts | No reward; offer another paid hand when fewer than three attempts have been played. |
 
-The flat reward occupies a centered squircle tile. Each unlabeled running total
-sits to the right of its hand. Cards enter one at a time in deal order with the
-face-down side showing, then flip to their visible face; the dealer's hole card
-waits for the dealer turn. Reading holds separate each card, the dealer reveal
-and draws, and the result announcement.
+The fixed middle reward tile reads `Closest ≤21` and `Wins 300 Essence`. The
+dealer hand stays above it and the player hand stays below it. Each unlabeled
+running total appears immediately after its hand once the current deal or draw
+animation finishes. Cards occupy stable slots, enter one at a time in deal
+order with the face-down side showing, then flip to their visible face; the
+dealer's hole card waits for the dealer turn. Reading holds separate each card,
+the dealer reveal and draws, and the result announcement.
 
-Exact enumeration of the 52-card shoe without replacement gives optimal play a
-43.80% win rate, 7.95% push rate, and 48.25% loss rate per hand. Replaying every
-push gives the ordinary site +92.76 Essence EV across the complete visit.
+A push starts a fresh paid hand without advancing the attempt count. A player
+bust advances the attempt count and may start another paid hand through attempt
+three. Wins and non-bust dealer wins end the visit.
+
+Exact enumeration of one 52-card shoe without replacement gives optimal play a
+43.80% win rate, 7.95% push rate, and 48.25% loss rate before the limited bust
+retries are applied. An optimal-control balance model that includes the value
+of those retries puts the ordinary site's complete-visit EV at approximately
++98 Essence.
 
 ### Farpoint Station
 
