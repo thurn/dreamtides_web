@@ -177,6 +177,10 @@ CompatDocument(
             /*[0]*/
             "Four-Suit Reprise is the game. Choose one card; the suit decides what becomes of it.",
           ],
+          "gamble-blackjack": [
+            /*[0]*/
+            "Blackjack is the game. Beat my hand without going over 21!",
+          ],
         },
       },
       /*[9]*/

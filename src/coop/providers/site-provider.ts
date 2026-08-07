@@ -15,6 +15,7 @@ import type {
   GambleSiteRuntime,
   StarwayStairsSiteRuntime,
   TidemarkLadderClimbSiteRuntime,
+  BlackjackSiteRuntime,
   RewardSiteRuntime,
   SiteRuntimeState,
   SiteState,
@@ -40,6 +41,10 @@ import {
   FOUR_SUIT_REPRISE_RULES_VERSION,
   fourSuitRepriseDrawCost,
 } from "../../data/four-suit-reprise";
+import {
+  BLACKJACK_RULES_VERSION,
+  blackjackWagerCost,
+} from "../../data/blackjack";
 import { createDreamsign } from "../../data/dreamsigns";
 import { generateRewardSiteData } from "../../rewards/reward-generator";
 import { drawDreamsignOptions } from "../../dreamsign/dreamsign-pool";
@@ -348,6 +353,34 @@ function buildFourSuitRepriseRuntime(
   };
 }
 
+function buildBlackjackRuntime(
+  site: SiteState,
+  content: JourneyContent,
+  rng: () => number,
+): BlackjackSiteRuntime {
+  const economy = content.economyData.gamble.blackjack;
+  return {
+    kind: "gamble",
+    gameId: "blackjack",
+    rulesVersion: BLACKJACK_RULES_VERSION,
+    isFarpoint: site.isEnhanced,
+    wagerCost: blackjackWagerCost(economy, site.isEnhanced),
+    prizeEssence: economy.prizeEssence,
+    attemptNumber: 1,
+    shuffleCommitment: gambleShuffleCommitment(rng),
+    committedDeck: rngShuffle(STANDARD_PLAYING_CARD_DECK, rng),
+    deckCursor: 0,
+    playerCards: [],
+    dealerCards: [],
+    dealerRevealed: false,
+    wagerPaid: false,
+    playerDecision: null,
+    outcome: null,
+    resultSettled: false,
+    essenceAwarded: 0,
+  };
+}
+
 function buildGambleRuntime(
   journey: JourneyState,
   site: SiteState,
@@ -392,6 +425,8 @@ function buildGambleRuntime(
     runtime =
       fourSuitRuntime ??
       buildGambleFallbackRuntime(journey, site, content, rng);
+  } else if (gameId === "blackjack") {
+    runtime = buildBlackjackRuntime(site, content, rng);
   } else {
     runtime = buildGravokWagerRuntime(journey, site, content, rng);
   }

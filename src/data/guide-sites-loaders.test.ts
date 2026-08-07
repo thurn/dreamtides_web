@@ -144,6 +144,7 @@ describe("compiled guide and site artifact loaders", () => {
       "gamble-ladder-climb": ["Fixture ladder without its slot."],
       "gamble-starway-stairs": ["Fixture stairs."],
       "gamble-four-suit-reprise": ["Fixture suits."],
+      "gamble-blackjack": ["Fixture blackjack."],
     };
     gambleGuide.guides[0].dialogue = gambleDialogue;
     vi.stubGlobal(

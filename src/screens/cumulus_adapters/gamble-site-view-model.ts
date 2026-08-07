@@ -7,6 +7,7 @@ import type {
   GravokWagerSiteView,
   LadderClimbSiteView,
   StarwayStairsSiteView,
+  BlackjackSiteView,
 } from "../../cumulus/screens/GambleSiteScreen";
 import type { TransfigurationCandidateView } from "../../cumulus/screens/TransfigurationSiteScreen";
 import {
@@ -23,10 +24,7 @@ import {
   starwayStairsDrawTargetLabel,
   starwayStairsEssenceReward,
 } from "../../data/starway-stairs";
-import {
-  eligibleFourSuitRepriseTargets,
-  FOUR_SUIT_REPRISE_MAX_ROUNDS,
-} from "../../data/four-suit-reprise";
+import { eligibleFourSuitRepriseTargets } from "../../data/four-suit-reprise";
 import {
   BLACKJACK_MAX_ATTEMPTS,
   blackjackEssenceAward,
@@ -46,6 +44,7 @@ import type {
   SiteState,
   StarwayStairsSiteRuntime,
   TidemarkLadderClimbSiteRuntime,
+  BlackjackSiteRuntime,
 } from "../../types/journey";
 import type { GravokGateId } from "../../types/gamble";
 import type { EconomyData } from "../../types/economy-data";
@@ -352,8 +351,8 @@ function buildBlackjackSiteView(params: {
   state: JourneyState;
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: "Gamble" };
-  guide: DreamGuideContent | null;
-  atlasData: AtlasData;
+  guide: DreamGuideContent;
+  guideLine: string;
   runtime: BlackjackSiteRuntime;
   economyData: EconomyData;
 }): BlackjackSiteView {
@@ -381,10 +380,7 @@ function buildBlackjackSiteView(params: {
     ...commonGambleView({
       sceneNode: params.sceneNode,
       guide: params.guide,
-      guideLine: BLACKJACK_GUIDE_LINE,
-      randomSiteGuideLine: params.site.randomSite?.materialized === true
-        ? params.atlasData.randomSite.guideLine
-        : null,
+      guideLine: params.guideLine,
     }),
     isFarpoint: runtime.isFarpoint,
     runtimeReady: true,
@@ -582,6 +578,9 @@ export function buildGambleSiteView(params: {
   }
   if (runtime.gameId === "four-suit-reprise") {
     return buildFourSuitRepriseSiteView({ ...params, runtime });
+  }
+  if (runtime.gameId === "blackjack") {
+    return buildBlackjackSiteView({ ...params, runtime });
   }
   return buildGravokWagerSiteView({ ...params, runtime });
 }

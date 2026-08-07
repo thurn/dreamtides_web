@@ -18,6 +18,7 @@ const GAME_IDS = [
   "tidemark-ladder-climb",
   "starway-stairs",
   "four-suit-reprise",
+  "blackjack",
 ] as const;
 const FALLBACK_GAME_IDS = [
   "gravok-three-gate-wager",
@@ -180,7 +181,7 @@ function isSitesData(value: unknown): value is SitesData {
     !isRecord(gamble.selection) ||
     !hasExactKeys(gamble.selection, ["fallbackGame", "games"]) ||
     !Array.isArray(gamble.selection.games) ||
-    gamble.selection.games.length !== 4 ||
+    gamble.selection.games.length !== GAME_IDS.length ||
     !isRecord(gamble.threeGate) ||
     !hasExactKeys(gamble.threeGate, ["maxRetries", "gates"]) ||
     !Array.isArray(gamble.threeGate.gates) ||

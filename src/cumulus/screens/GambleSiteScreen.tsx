@@ -15,6 +15,7 @@ import type {
   TransfigurationType,
 } from "../../types/journey";
 import type { FourSuitRepriseOutcome } from "../../data/four-suit-reprise";
+import { blackjackHandTotal } from "../../data/blackjack";
 import type { SitesData } from "../../types/sites-data";
 import {
   PlayingCard,
@@ -235,22 +236,24 @@ export interface FourSuitRepriseSiteView {
   canPlayAgain: boolean;
 }
 
-export interface TwentyOneSiteView {
-  gameId: "twenty-one";
+export interface BlackjackSiteView {
+  gameId: "blackjack";
   siteId: string;
+  /** Stable committed-shoe identity for one animated hand. */
+  handId: string;
   scene: ArtRef | null;
   isFarpoint: boolean;
   runtimeReady: boolean;
   wagerCost: number;
   prizeEssence: number;
+  attemptNumber: number;
+  maxAttempts: number;
   canAffordWager: boolean;
   playerCards: readonly { rank: PlayingCardRank; suit: PlayingCardSuit }[];
   playerTotal: number | null;
   dealerCards: readonly { rank: PlayingCardRank; suit: PlayingCardSuit }[];
   dealerTotal: number | null;
   dealerRevealed: boolean;
-  /** Visible player and dealer totals for the current phase. */
-  title: string;
   outcome: "player-win" | "dealer-win" | "push" | null;
   essenceAwarded: number;
   resultSettled: boolean;
@@ -265,7 +268,7 @@ export type GambleSiteView =
   | LadderClimbSiteView
   | StarwayStairsSiteView
   | FourSuitRepriseSiteView
-  | TwentyOneSiteView;
+  | BlackjackSiteView;
 
 export interface GambleSiteScreenProps {
   /** View-model rendered by the pure screen. */
@@ -299,9 +302,9 @@ export interface GambleSiteScreenProps {
   /** Advance the shared visit to another distinct-card round. */
   onPlayAgainFourSuit?: () => void;
   /** Pay the wager and deal the player and dealer opening hands. */
-  onDealTwentyOne?: () => void;
+  onDealBlackjack?: () => void;
   /** Reveal the next player card. */
-  onHitTwentyOne?: () => void;
+  onHitBlackjack?: () => void;
   /** Finish the player turn and resolve the dealer. */
   onStandBlackjack?: () => void;
   /** Apply a terminal Blackjack reward after its announcement appears. */
@@ -970,21 +973,23 @@ export function GambleSiteScreen({
   onFourSuitOutcomeShown = () => undefined,
   onChooseFourSuitTransfiguration = () => undefined,
   onPlayAgainFourSuit = () => undefined,
-  onDealTwentyOne = () => undefined,
-  onHitTwentyOne = () => undefined,
-  onStandTwentyOne = () => undefined,
-  onTwentyOneOutcomeShown = () => undefined,
+  onDealBlackjack = () => undefined,
+  onHitBlackjack = () => undefined,
+  onStandBlackjack = () => undefined,
+  onBlackjackOutcomeShown = () => undefined,
+  onPlayAgainBlackjack = () => undefined,
   onReplaceDreamsign,
 }: GambleSiteScreenProps) {
-  if (view.gameId === "twenty-one") {
+  if (view.gameId === "blackjack") {
     return (
-      <TwentyOneScreen
+      <BlackjackScreen
         view={view}
-        onDeal={onDealTwentyOne}
-        onHit={onHitTwentyOne}
-        onStand={onStandTwentyOne}
+        onDeal={onDealBlackjack}
+        onHit={onHitBlackjack}
+        onStand={onStandBlackjack}
         onLeave={onLeave}
-        onOutcomeShown={onTwentyOneOutcomeShown}
+        onOutcomeShown={onBlackjackOutcomeShown}
+        onPlayAgain={onPlayAgainBlackjack}
       />
     );
   }
@@ -2059,13 +2064,15 @@ function BlackjackScreen({
   onStand,
   onLeave,
   onOutcomeShown,
+  onPlayAgain,
 }: {
-  view: TwentyOneSiteView;
+  view: BlackjackSiteView;
   onDeal: () => void;
   onHit: () => void;
   onStand: () => void;
   onLeave: () => void;
   onOutcomeShown: () => void;
+  onPlayAgain: () => void;
 }) {
   const reduceMotion = useReducedMotion() === true;
   const [presentation, setPresentation] = useState<BlackjackPresentationState>({
@@ -2082,6 +2089,14 @@ function BlackjackScreen({
   const settledResultIdRef = useRef<string | null>(null);
   const onOutcomeShownRef = useRef(onOutcomeShown);
   const playAgainTimeoutsRef = useRef<number[]>([]);
+
+  const commitPresentation = useCallback(
+    (next: BlackjackPresentationState) => {
+      presentationRef.current = next;
+      setPresentation(next);
+    },
+    [],
+  );
 
   useEffect(() => {
     onOutcomeShownRef.current = onOutcomeShown;
@@ -2183,24 +2198,121 @@ function BlackjackScreen({
       } else {
         cursor += concealedReadingMs;
       }
-    }, reduceMotion ? REDUCED_MOTION_DELAY_MS : BET_SETTLE_DELAY_MS);
-    return () => window.clearTimeout(timeout);
-  }, [reduceMotion, view.dealerCards.length, view.playerCards.length, view.resultId]);
+    };
+
+    const openingOrder = [
+      ["player", 0, true],
+      ["dealer", 0, true],
+      ["player", 1, true],
+      ["dealer", 1, false],
+    ] as const;
+    for (const [owner, index, revealAfterArrival] of openingOrder) {
+      const count = owner === "player"
+        ? plannedPlayerCount
+        : plannedDealerCount;
+      if (count <= index) planCardArrival(owner, index, revealAfterArrival);
+    }
+    while (plannedPlayerCount < view.playerCards.length) {
+      planCardArrival("player", plannedPlayerCount, true);
+    }
+
+    const holeCard = view.dealerCards[1];
+    if (view.dealerRevealed && holeCard !== undefined) {
+      const holeCardKey = blackjackCardKey("dealer", 1, holeCard);
+      if (!plannedRevealedKeys.has(holeCardKey)) {
+        timelineHasWork = true;
+        plannedRevealedKeys.add(holeCardKey);
+        schedule(cursor, () => {
+          patchPresentation({
+            revealedCardKeys: [...new Set([
+              ...presentationRef.current.revealedCardKeys,
+              holeCardKey,
+            ])],
+          });
+        });
+        cursor += flipMs + cardReadingMs;
+      }
+    }
+    while (plannedDealerCount < view.dealerCards.length) {
+      planCardArrival("dealer", plannedDealerCount, true);
+    }
+
+    const outcomeNeedsPresentation =
+      view.resultId !== null && initial.outcomeResultId !== view.resultId;
+    if (timelineHasWork || outcomeNeedsPresentation) {
+      patchPresentation({
+        actionsVisible: false,
+        outcomeResultId: null,
+      });
+    }
+
+    if (view.resultId !== null && outcomeNeedsPresentation) {
+      const resultId = view.resultId;
+      cursor += outcomeReadingMs;
+      schedule(cursor, () => {
+        patchPresentation({
+          outcomeResultId: resultId,
+        });
+        setDecisionPending(false);
+        if (
+          !view.resultSettled &&
+          settledResultIdRef.current !== resultId
+        ) {
+          settledResultIdRef.current = resultId;
+          onOutcomeShownRef.current();
+        }
+      });
+    } else if (view.resultId === null && (timelineHasWork || handChanged)) {
+      cursor += turnReadingMs;
+      schedule(cursor, () => {
+        patchPresentation({
+          actionsVisible: true,
+        });
+        setDecisionPending(false);
+      });
+    } else if (view.playerCards.length === 0) {
+      patchPresentation({ actionsVisible: true, outcomeResultId: null });
+      setDecisionPending(false);
+    }
+
+    return () => {
+      for (const timer of timers) window.clearTimeout(timer);
+    };
+  }, [
+    commitPresentation,
+    dealerCardSignature,
+    playerCardSignature,
+    reduceMotion,
+    view.dealerCards,
+    view.dealerRevealed,
+    view.handId,
+    view.playerCards,
+    view.resultId,
+    view.resultSettled,
+  ]);
 
   useEffect(() => {
     if (
       view.resultId === null ||
-      outcomeResultId !== view.resultId ||
+      presentation.outcomeResultId !== view.resultId ||
       !view.resultSettled
     ) {
       return;
     }
     const timeout = window.setTimeout(() => {
-      setOutcomeResultId(null);
-      setActionsVisible(true);
+      commitPresentation({
+        ...presentationRef.current,
+        outcomeResultId: null,
+        actionsVisible: true,
+      });
     }, RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS);
     return () => window.clearTimeout(timeout);
-  }, [outcomeResultId, view.resultId, view.resultSettled]);
+  }, [
+    commitPresentation,
+    presentation.outcomeResultId,
+    view.resultId,
+    view.resultSettled,
+  ]);
 
   const beginPlayAgain = () => {
     if (decisionPending) return;
@@ -2231,8 +2343,8 @@ function BlackjackScreen({
   };
 
   const renderHand = (
-    cards: TwentyOneSiteView["playerCards"],
-    owner: "dealer" | "player",
+    cards: BlackjackSiteView["playerCards"],
+    owner: BlackjackHandOwner,
     layout: "desktop" | "mobile",
   ) => {
     const visibleCardCount = owner === "player"
@@ -2384,26 +2496,20 @@ function BlackjackScreen({
               },
             }}
           >
-            {holeCard ? (
-              <PlayingCard
-                variant="faceDown"
-                drawnCard={card}
-                revealDrawnCard={view.dealerRevealed}
-                size="wagerCompact"
-              />
-            ) : (
-              <PlayingCard
-                variant="rankSuit"
-                rank={card.rank}
-                suit={card.suit}
-                size="wagerCompact"
+            {visibleTotal !== null && (
+              <RadialAnnouncement
+                variant="hand-total"
+                total={visibleTotal}
+                owner={owner}
+                size={layout === "mobile" ? "mini" : "compact"}
+                announcementId={`${view.handId ?? "undealt"}:${owner}:${String(visibleTotal)}`}
               />
             )}
           </motion.div>
-        );
-      })}
-    </section>
-  );
+        </motion.div>
+      </section>
+    );
+  };
 
   return (
     <GuideGallerySiteLayout
@@ -2445,70 +2551,55 @@ function BlackjackScreen({
             data-blackjack-table=""
             data-blackjack-departure-phase={presentation.departurePhase}
             style={{
-              margin: 0,
-              color: token("--text-primary"),
-              font: token(layout === "desktop" ? "--t-title" : "--t-title-sm"),
-              textAlign: "center",
-              textShadow: token("--text-outline-media"),
+              position: "relative",
+              width: "100%",
+              height: BLACKJACK_TABLE_HEIGHT[layout],
+              flex: "0 0 auto",
             }}
           >
-            {view.title}
-          </h2>
-          <div
-            data-twenty-one-prize=""
-            style={{
-              color: token("--text-primary"),
-              font: token("--t-body"),
-              textShadow: token("--text-outline-media"),
-            }}
-          >
-            Win <EssenceValue amount={view.prizeEssence} tone="inherit" />
-          </div>
-          {view.playerCards.length > 0 && (
+            {renderHand(view.dealerCards, "dealer", layout)}
             <div
-              data-twenty-one-table=""
+              data-blackjack-prize=""
               style={{
-                position: "relative",
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: token("--space-xs"),
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                width: BLACKJACK_REWARD_PANEL_WIDTH[layout],
+                transform: "translate(-50%, -50%)",
               }}
             >
-              <div
-                data-twenty-one-hand-label="dealer"
-                style={{
-                  color: token("--text-primary"),
-                  font: token("--t-eyebrow"),
-                  textShadow: token("--text-outline-media"),
-                  textTransform: "uppercase",
-                }}
-              >
-                Dealer
-              </div>
-              {renderHand(view.dealerCards, "dealer", layout)}
-              <div
-                data-twenty-one-hand-label="player"
-                style={{
-                  color: token("--text-primary"),
-                  font: token("--t-eyebrow"),
-                  textShadow: token("--text-outline-media"),
-                  textTransform: "uppercase",
-                }}
-              >
-                Player
-              </div>
-              {renderHand(view.playerCards, "player", layout)}
+              <GlassPanel radius="control" testId="blackjack-reward-panel">
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: token("--space-xxs"),
+                    padding: `${token("--space-s")} ${token("--space-m")}`,
+                    textAlign: "center",
+                  }}
+                >
+                  <h2
+                    style={{ margin: 0, font: token("--t-title-sm") }}
+                  >
+                    Closest to 21 Without Going Over
+                  </h2>
+                  <p style={{ margin: 0, font: token("--t-body-sm") }}>
+                    Wins <EssenceValue amount={view.prizeEssence} tone="inherit" />
+                  </p>
+                </div>
+              </GlassPanel>
             </div>
-          )}
+            {renderHand(view.playerCards, "player", layout)}
+          </div>
           <div
-            data-twenty-one-outcome-region=""
+            data-blackjack-outcome-region=""
             style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
           >
-            {view.resultId !== null && outcomeResultId === view.resultId && (
+            {view.resultId !== null &&
+              presentation.outcomeResultId === view.resultId && (
               <div
-                data-twenty-one-outcome=""
+                data-blackjack-outcome=""
                 style={{
                   position: "absolute",
                   inset: 0,
@@ -2544,17 +2635,24 @@ function BlackjackScreen({
               </div>
             )}
           </div>
-          <div
-            data-twenty-one-actions=""
-            aria-hidden={!actionsVisible || undefined}
+          <motion.div
+            data-blackjack-actions=""
+            data-blackjack-actions-visible={presentation.actionsVisible ? "true" : "false"}
+            aria-hidden={!presentation.actionsVisible || undefined}
+            initial={reduceMotion ? false : { opacity: 0 }}
+            animate={{ opacity: presentation.actionsVisible ? 1 : 0 }}
+            transition={{
+              duration: reduceMotion ? 0 : FADE_DURATION_SECONDS,
+              ease: DREAM_EASE,
+            }}
             style={{
               minHeight: token("--touch-min"),
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               gap: token("--space-xs"),
-              visibility: actionsVisible ? "visible" : "hidden",
-              pointerEvents: actionsVisible ? "auto" : "none",
+              visibility: presentation.actionsVisible ? "visible" : "hidden",
+              pointerEvents: presentation.actionsVisible ? "auto" : "none",
             }}
           >
             {!view.playerCards.length ? (
@@ -2564,13 +2662,13 @@ function BlackjackScreen({
                   essenceCost={view.wagerCost}
                   variant="accent"
                   disabled={decisionPending || !view.runtimeReady || !view.canAffordWager}
-                  testId="gamble-twenty-one-deal"
+                  testId="gamble-blackjack-deal"
                   onPress={() => {
                     setDecisionPending(true);
                     onDeal();
                   }}
                 />
-                <GlassButton label="Leave" testId="gamble-twenty-one-leave" onPress={onLeave} />
+                <GlassButton label="Leave" testId="gamble-blackjack-leave" onPress={onLeave} />
               </>
             ) : view.outcome === null ? (
               <>
@@ -2578,7 +2676,7 @@ function BlackjackScreen({
                   label="Hit"
                   variant="accent"
                   disabled={decisionPending}
-                  testId="gamble-twenty-one-hit"
+                  testId="gamble-blackjack-hit"
                   onPress={() => {
                     setDecisionPending(true);
                     onHit();
@@ -2586,7 +2684,7 @@ function BlackjackScreen({
                 />
                 <GlassButton
                   label="Stand"
-                  testId="gamble-twenty-one-stand"
+                  testId="gamble-blackjack-stand"
                   disabled={decisionPending}
                   onPress={() => {
                     setDecisionPending(true);
@@ -2613,7 +2711,7 @@ function BlackjackScreen({
                 />
               </>
             )}
-          </div>
+          </motion.div>
         </main>
       )}
     />

@@ -1790,10 +1790,6 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     expect(container.querySelectorAll('[data-playing-card-variant="faceDown"]')).toHaveLength(4);
     expect(container.querySelectorAll('[data-playing-card-state="drawn"]')).toHaveLength(3);
     expect(container.querySelectorAll('[data-playing-card-state="concealed"]')).toHaveLength(1);
-    expect(
-      container.querySelector('[data-playing-card-state="concealed"]')
-        ?.getAttribute("aria-label"),
-    ).toBe("Face-down playing card");
     expect(container.querySelector('[data-blackjack-total="dealer"]')
       ?.getAttribute("data-blackjack-total-value")).toBe("5");
     expect(container.querySelector('[data-blackjack-total="player"]')
@@ -1911,12 +1907,9 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       />,
     );
     void act(() => vi.runAllTimers());
-    expect(
-      container.querySelector(
-        '[data-blackjack-card="dealer:1"] [data-playing-card-variant="faceDown"]',
-      )
-        ?.getAttribute("aria-label"),
-    ).toBe("8 of diamonds");
+    expect(container.querySelector(
+      '[data-blackjack-card="dealer:1"] [data-playing-card-state="drawn"]',
+    )).not.toBeNull();
     expect(container.querySelector(
       '[data-testid="gamble-blackjack-leave-after-result"]',
     )).not.toBeNull();

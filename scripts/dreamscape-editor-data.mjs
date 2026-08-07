@@ -288,6 +288,7 @@ const SPECIALIZED_DIALOGUE_CONTEXTS = [
   "gamble-ladder-climb",
   "gamble-starway-stairs",
   "gamble-four-suit-reprise",
+  "gamble-blackjack",
 ];
 
 function guideBlockRange(source, guideId) {

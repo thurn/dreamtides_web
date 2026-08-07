@@ -27,12 +27,14 @@ const GUIDE_DIALOGUE_CONTEXTS = new Set([
   "gamble-ladder-climb",
   "gamble-starway-stairs",
   "gamble-four-suit-reprise",
+  "gamble-blackjack",
 ]);
 const GAMBLE_DIALOGUE_CONTEXTS = [
   "gamble-three-gate",
   "gamble-ladder-climb",
   "gamble-starway-stairs",
   "gamble-four-suit-reprise",
+  "gamble-blackjack",
 ] as const;
 const TEMPLATE_SLOT = /\{([^{}]+)\}/gu;
 

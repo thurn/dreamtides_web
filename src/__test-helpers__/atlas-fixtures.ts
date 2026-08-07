@@ -131,6 +131,7 @@ export const MINIMAL_SITES_DATA: SitesData = {
         { id: "tidemark-ladder-climb", weight: 1 },
         { id: "starway-stairs", weight: 1 },
         { id: "four-suit-reprise", weight: 1 },
+        { id: "blackjack", weight: 1 },
       ],
     },
     threeGate: {

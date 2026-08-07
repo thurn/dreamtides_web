@@ -1313,6 +1313,7 @@ describe("Blackjack", () => {
     });
 
     registerSiteContentProvider({
+      sitesData: MINIMAL_SITES_DATA,
       economyData: ECONOMY,
       openSite: () => ({
         runtime: blackjackRuntime(
@@ -1355,6 +1356,7 @@ describe("Blackjack", () => {
     });
     const settled = settleBlackjack(dealt.state);
     registerSiteContentProvider({
+      sitesData: MINIMAL_SITES_DATA,
       economyData: ECONOMY,
       openSite: () => ({
         runtime: blackjackRuntime(
@@ -1460,6 +1462,7 @@ describe("Blackjack", () => {
     });
 
     registerSiteContentProvider({
+      sitesData: MINIMAL_SITES_DATA,
       economyData: ECONOMY,
       openSite: () => ({
         runtime: blackjackRuntime(

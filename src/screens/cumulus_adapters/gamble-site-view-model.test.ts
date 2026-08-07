@@ -10,6 +10,7 @@ import type {
   SiteState,
   StarwayStairsSiteRuntime,
   TidemarkLadderClimbSiteRuntime,
+  BlackjackSiteRuntime,
 } from "../../types/journey";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
@@ -850,7 +851,8 @@ describe("gamble-site-view-model — Blackjack", () => {
       },
       sceneNode: null,
       site: GAMBLE_SITE,
-      guide: null,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
     });
     expect(view?.gameId).toBe("blackjack");
     if (view?.gameId !== "blackjack") {
@@ -893,7 +895,8 @@ describe("gamble-site-view-model — Blackjack", () => {
       },
       sceneNode: null,
       site: GAMBLE_SITE,
-      guide: null,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
     });
     expect(view?.gameId).toBe("blackjack");
     if (view?.gameId !== "blackjack") {
@@ -925,7 +928,8 @@ describe("gamble-site-view-model — Blackjack", () => {
       },
       sceneNode: null,
       site: GAMBLE_SITE,
-      guide: null,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
     });
     expect(view?.gameId).toBe("blackjack");
     if (view?.gameId !== "blackjack") {
@@ -958,7 +962,8 @@ describe("gamble-site-view-model — Blackjack", () => {
       },
       sceneNode: null,
       site: GAMBLE_SITE,
-      guide: null,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
     });
     expect(view?.gameId).toBe("blackjack");
     if (view?.gameId !== "blackjack") {
@@ -994,7 +999,8 @@ describe("gamble-site-view-model — Blackjack", () => {
       },
       sceneNode: null,
       site: GAMBLE_SITE,
-      guide: null,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
     });
     expect(finalAttemptView?.gameId).toBe("blackjack");
     if (finalAttemptView?.gameId === "blackjack") {

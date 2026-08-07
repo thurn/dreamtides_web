@@ -96,6 +96,11 @@ export interface EconomyData {
       enhancedDrawPrice: number;
       essenceReward: number;
     };
+    blackjack: {
+      standardWager: number;
+      enhancedWager: number;
+      prizeEssence: number;
+    };
   };
   exploration: { defaultEssencePerSpark: number };
 }

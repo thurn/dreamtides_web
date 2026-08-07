@@ -17,12 +17,14 @@ const GUIDE_DIALOGUE_CONTEXTS = new Set([
   "gamble-ladder-climb",
   "gamble-starway-stairs",
   "gamble-four-suit-reprise",
+  "gamble-blackjack",
 ]);
 const GAMBLE_GAME_IDS = [
   "gravok-three-gate-wager",
   "tidemark-ladder-climb",
   "starway-stairs",
   "four-suit-reprise",
+  "blackjack",
 ];
 const RANKS = [
   "2",
@@ -246,6 +248,7 @@ export function compileDreamGuidesData(sourceValue, catalogs = {}) {
         "gamble-ladder-climb",
         "gamble-starway-stairs",
         "gamble-four-suit-reprise",
+        "gamble-blackjack",
       ]) {
         if (dialogue[context] === undefined)
           fail(file, `${path}.dialogue`, `missing ${context} context`);
@@ -566,7 +569,7 @@ export function compileSitesData(sourceValue, catalogs = {}) {
     fail(
       file,
       "gamble.selection.games",
-      "must cover all four game ids in structural order",
+      "must cover every game id in structural order",
     );
   const selection = {
     fallbackGame: string(

@@ -283,6 +283,7 @@ export function compileEconomyData(sourceValue) {
     "ladder-climb",
     "starway-stairs",
     "four-suit-reprise",
+    "blackjack",
   ]);
   const threeGate = keys(gamble["three-gate"], "gamble.three-gate", [
     "standard-wager",
@@ -357,6 +358,11 @@ export function compileEconomyData(sourceValue) {
     "gamble.four-suit-reprise",
     ["standard-draw-price", "enhanced-draw-price", "essence-reward"],
   );
+  const blackjack = keys(gamble.blackjack, "gamble.blackjack", [
+    "standard-wager",
+    "enhanced-wager",
+    "prize-essence",
+  ]);
   const exploration = keys(root.exploration, "exploration", [
     "default-essence-per-spark",
   ]);
@@ -519,6 +525,20 @@ export function compileEconomyData(sourceValue) {
         essenceReward: count(
           fourSuit["essence-reward"],
           "gamble.four-suit-reprise.essence-reward",
+        ),
+      },
+      blackjack: {
+        standardWager: count(
+          blackjack["standard-wager"],
+          "gamble.blackjack.standard-wager",
+        ),
+        enhancedWager: count(
+          blackjack["enhanced-wager"],
+          "gamble.blackjack.enhanced-wager",
+        ),
+        prizeEssence: count(
+          blackjack["prize-essence"],
+          "gamble.blackjack.prize-essence",
         ),
       },
     },

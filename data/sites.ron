@@ -77,6 +77,8 @@ CompatDocument(
           {"id": "starway-stairs", "weight": 1},
           /*[3]*/
           {"id": "four-suit-reprise", "weight": 1},
+          /*[4]*/
+          {"id": "blackjack", "weight": 1},
         ],
       },
       "three-gate": {

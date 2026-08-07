@@ -69,7 +69,7 @@ ${GUIDE_SITE_TYPES.map((siteType, index) => {
     siteType === "RandomSite"
       ? 'random-site = ["Fixture roads."]\n'
       : siteType === "Gamble"
-        ? 'gamble-three-gate = ["Fixture gates."]\ngamble-ladder-climb = ["Fixture {win-essence} ladder."]\ngamble-starway-stairs = ["Fixture stairs."]\ngamble-four-suit-reprise = ["Fixture suits."]\n'
+        ? 'gamble-three-gate = ["Fixture gates."]\ngamble-ladder-climb = ["Fixture {win-essence} ladder."]\ngamble-starway-stairs = ["Fixture stairs."]\ngamble-four-suit-reprise = ["Fixture suits."]\ngamble-blackjack = ["Fixture blackjack."]\n'
         : "";
   return `[[guides]]
 id = "${id}"

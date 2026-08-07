@@ -65,7 +65,7 @@ describe("Blackjack rules", () => {
 
   it("uses one enhanced wager discount and one flat prize", () => {
     const config = economyFixture().gamble.blackjack;
-    expect(blackjackWagerCost(config, false)).toBe(50);
+    expect(blackjackWagerCost(config, false)).toBe(90);
     expect(blackjackWagerCost(config, true)).toBe(40);
     expect(blackjackEssenceAward(50, 300, "player-win")).toBe(300);
     expect(blackjackEssenceAward(50, 300, "push")).toBe(50);

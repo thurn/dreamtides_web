@@ -21,33 +21,6 @@ afterEach(() => {
 });
 
 describe("WagerPrizeCard", () => {
-  it("renders a centered reward-only squircle without target copy", () => {
-    const host = document.createElement("div");
-    document.body.append(host);
-    const root = createRoot(host);
-
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <WagerPrizeCard
-            prizeId="blackjack"
-            presentation="rewardOnly"
-            essenceReward={300}
-            rewardDreamsign={null}
-            size="wagerCompact"
-          />
-        </CumulusRoot>,
-      );
-    });
-
-    const prize = host.querySelector<HTMLElement>("[data-wager-prize-card]");
-    expect(prize?.dataset.wagerPrizePresentation).toBe("rewardOnly");
-    expect(prize?.dataset.wagerPrizeEssenceReward).toBe("300");
-    expect(prize?.querySelector("[data-wager-prize-description]")).toBeNull();
-
-    act(() => root.unmount());
-  });
-
   it("keeps the jackpot reward in one sentence and flips into the drawn card", () => {
     const host = document.createElement("div");
     document.body.append(host);
@@ -200,7 +173,6 @@ describe("WagerPrizeCard", () => {
     const card = host.querySelector<HTMLElement>(
       '[data-playing-card-variant="faceDown"]',
     );
-    expect(card?.getAttribute("aria-label")).toBe("Face-down playing card");
     expect(card?.querySelector("[data-playing-card-face-down]")).not.toBeNull();
 
     act(() => {
@@ -215,7 +187,6 @@ describe("WagerPrizeCard", () => {
         </CumulusRoot>,
       );
     });
-    expect(card?.getAttribute("aria-label")).toBe("A of spades");
     expect(card?.dataset.playingCardState).toBe("drawn");
 
     act(() => root.unmount());

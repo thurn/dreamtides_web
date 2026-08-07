@@ -109,6 +109,10 @@
         {
           "id": "four-suit-reprise",
           "weight": 1
+        },
+        {
+          "id": "blackjack",
+          "weight": 1
         }
       ]
     },
@@ -263,6 +267,6 @@
       "homeDreamscapeId": "grid_city"
     }
   },
-  "contentHash": "55793b1d63ccc34b7db73932454bf8362058f928032c3600804dc4fa18f957c8",
-  "foldHash": "f2158d573c3fb29e088ad72239ea79ae753a3b11a660ed80fa343708547dfd0a"
+  "contentHash": "2e67f090fbd23087c726d300f55ce0c526f894f1f2057f856a1ab05f7504ac32",
+  "foldHash": "fe3e1e05552bdc7c6169fd90a322f30bb94e3ef0bfeae5858da52e78ba8098e5"
 }

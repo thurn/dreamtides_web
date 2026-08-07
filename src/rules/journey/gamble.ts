@@ -19,6 +19,13 @@ import {
   eligibleFourSuitRepriseTargets,
   fourSuitRepriseOutcomeForSuit,
 } from "../../data/four-suit-reprise";
+import {
+  BLACKJACK_MAX_ATTEMPTS,
+  blackjackEssenceAward,
+  blackjackHandValue,
+  blackjackOpeningOutcome,
+  resolveBlackjackDealer,
+} from "../../data/blackjack";
 import type { GravokGateId } from "../../types/gamble";
 import type {
   DeckEntry,
@@ -26,6 +33,7 @@ import type {
   FourSuitRepriseSiteRuntime,
   GambleSiteRuntime,
   GravokWagerSiteRuntime,
+  BlackjackSiteRuntime,
   JourneyState,
   StarwayStairsSiteRuntime,
   TidemarkLadderClimbSiteRuntime,
@@ -102,6 +110,14 @@ function fourSuitRuntimeFor(
 ): FourSuitRepriseSiteRuntime | null {
   const runtime = runtimeFor(journey, siteId);
   return runtime?.gameId === "four-suit-reprise" ? runtime : null;
+}
+
+function blackjackRuntimeFor(
+  journey: JourneyState,
+  siteId: string,
+): BlackjackSiteRuntime | null {
+  const runtime = runtimeFor(journey, siteId);
+  return runtime?.gameId === "blackjack" ? runtime : null;
 }
 
 function latestFourSuitRound(runtime: FourSuitRepriseSiteRuntime) {

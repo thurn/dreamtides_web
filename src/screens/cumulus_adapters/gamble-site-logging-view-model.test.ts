@@ -260,9 +260,27 @@ describe("gamble-site-logging-view-model", () => {
     };
     const view = { gameId: "blackjack" } as unknown as BlackjackSiteView;
 
-    logGamblePrepared("fixture-site", runtime, view, economyFixture());
-    logGambleResolved("fixture-site", runtime, view, economyFixture());
-    logGambleSettled("fixture-site", runtime, view, economyFixture());
+    logGamblePrepared(
+      "fixture-site",
+      runtime,
+      view,
+      economyFixture(),
+      MINIMAL_SITES_DATA,
+    );
+    logGambleResolved(
+      "fixture-site",
+      runtime,
+      view,
+      economyFixture(),
+      MINIMAL_SITES_DATA,
+    );
+    logGambleSettled(
+      "fixture-site",
+      runtime,
+      view,
+      economyFixture(),
+      MINIMAL_SITES_DATA,
+    );
 
     expect(getLogEntries()).toHaveLength(3);
     expect(getLogEntries()[0]).toMatchObject({

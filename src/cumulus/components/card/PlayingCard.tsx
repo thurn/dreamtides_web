@@ -92,7 +92,8 @@ export type WagerPrizeCardId =
   | "ladder-climb"
   | "starway-1"
   | "starway-2"
-  | "starway-3";
+  | "starway-3"
+  | "blackjack";
 
 /** Named square sizes reserved for Gamble prize cards. */
 export type WagerPrizeCardSize = "wagerCompact" | "wager";
@@ -382,10 +383,25 @@ type FourSuitPlayingCardProps = PlayingCardBaseProps & {
   revealDrawnCard?: boolean;
 };
 
-/** Official visible-rank and concealed-four-suit playing-card variants. */
+type FaceDownPlayingCardProps = PlayingCardBaseProps & {
+  /** Render a conventional face-down card, optionally flipping to its committed face. */
+  variant: "faceDown";
+  rank?: never;
+  suit?: never;
+  /** Committed face available when the dealer reveals this card. */
+  drawnCard: {
+    rank: PlayingCardRank;
+    suit: PlayingCardSuit;
+  };
+  /** Flip the face-down card to its committed rank and suit. */
+  revealDrawnCard?: boolean;
+};
+
+/** Official visible, face-down, and concealed-four-suit playing-card variants. */
 export type PlayingCardProps =
   | RankSuitPlayingCardProps
-  | FourSuitPlayingCardProps;
+  | FourSuitPlayingCardProps
+  | FaceDownPlayingCardProps;
 
 /**
  * A standalone playing card on the shared glass superellipse. Four-Suit
@@ -398,7 +414,7 @@ export function PlayingCard(props: PlayingCardProps): ReactElement {
   const emphasis = props.emphasis ?? "standard";
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const showingDrawnCard =
-    props.variant === "fourSuit" &&
+    props.variant !== "rankSuit" &&
     props.revealDrawnCard === true &&
     props.drawnCard !== null;
   const visibleCard = props.variant === "rankSuit"
@@ -441,7 +457,9 @@ export function PlayingCard(props: PlayingCardProps): ReactElement {
       role="img"
       aria-label={label}
       data-playing-card={visibleCard === null
-        ? "four-suit"
+        ? props.variant === "faceDown"
+          ? "face-down"
+          : "four-suit"
         : `${visibleCard.rank}-${visibleCard.suit}`}
       data-playing-card-variant={props.variant}
       data-playing-card-state={state}
@@ -481,7 +499,13 @@ export function PlayingCard(props: PlayingCardProps): ReactElement {
         >
           <div
             aria-hidden={showingDrawnCard || undefined}
-            data-playing-card-four-suit-face=""
+            data-playing-card-concealed-face={props.variant}
+            data-playing-card-four-suit-face={
+              props.variant === "fourSuit" ? "" : undefined
+            }
+            data-playing-card-face-down={
+              props.variant === "faceDown" ? "" : undefined
+            }
             style={surfaceStyle}
           >
             <div

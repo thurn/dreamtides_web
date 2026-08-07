@@ -96,6 +96,11 @@ export function economyFixture(): EconomyData {
         enhancedDrawPrice: 0,
         essenceReward: 100,
       },
+      blackjack: {
+        standardWager: 90,
+        enhancedWager: 40,
+        prizeEssence: 300,
+      },
     },
     exploration: { defaultEssencePerSpark: 40 },
   };

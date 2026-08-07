@@ -116,6 +116,7 @@ CompatDocument(
         ],
       },
       "four-suit-reprise": {"standard-draw-price": 25, "enhanced-draw-price": 15, "essence-reward": 100},
+      "blackjack": {"standard-wager": 90, "enhanced-wager": 40, "prize-essence": 300},
     },
     "exploration": {"default-essence-per-spark": 40},
   },

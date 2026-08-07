@@ -141,6 +141,9 @@
         ],
         "gamble-four-suit-reprise": [
           "Four-Suit Reprise is the game. Choose one card; the suit decides what becomes of it."
+        ],
+        "gamble-blackjack": [
+          "Blackjack is the game. Beat my hand without going over 21!"
         ]
       }
     },
@@ -159,5 +162,5 @@
       }
     }
   ],
-  "contentHash": "7dd9aa48fa3c1a8fd567c0891ade88ec8138e629f524ab6d19667d46f653132f"
+  "contentHash": "d2423a14c19732d5a77883a0215a4900b7b267b1e804207f09c90310f043ab3a"
 }

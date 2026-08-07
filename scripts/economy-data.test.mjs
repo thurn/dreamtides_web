@@ -56,6 +56,11 @@ function fixture() {
         "enhanced-draw-price": 11,
         "essence-reward": 83,
       },
+      blackjack: {
+        "standard-wager": 53,
+        "enhanced-wager": 41,
+        "prize-essence": 307,
+      },
     },
     exploration: { "default-essence-per-spark": 43 },
   };

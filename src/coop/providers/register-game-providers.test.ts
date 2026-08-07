@@ -350,11 +350,15 @@ describe("registerGameProviders (real content providers)", () => {
           expect(gambleRuntime.shuffleCommitments).toHaveLength(3);
           expect(gambleRuntime.committedCards).toHaveLength(3);
           expect(gambleRuntime.results).toEqual([]);
-        } else {
+        } else if (gambleRuntime.gameId === "four-suit-reprise") {
           expect(gambleRuntime.shuffleCommitments).toHaveLength(3);
           expect(gambleRuntime.committedCards).toHaveLength(3);
           expect(gambleRuntime.targets.length).toBeGreaterThan(0);
           expect(gambleRuntime.rounds).toEqual([]);
+        } else {
+          expect(gambleRuntime.committedDeck).toHaveLength(52);
+          expect(gambleRuntime.playerCards).toEqual([]);
+          expect(gambleRuntime.dealerCards).toEqual([]);
         }
       }
     }
@@ -716,7 +720,7 @@ function makeMerchantFixture(): {
 }
 
 describe("createSiteContentProvider — Gamble", () => {
-  it("chooses either game randomly unless a game is forced", () => {
+  it("chooses among every configured game unless one is forced", () => {
     resetLog();
     const fixture = makeMerchantFixture();
     const site = makeMerchantTestSite({ id: "gamble-site", type: "Gamble" });
@@ -747,9 +751,14 @@ describe("createSiteContentProvider — Gamble", () => {
     const randomStarway = provider.openSite({
       journey,
       site,
-      rng: () => 0.6,
+      rng: () => 0.5,
     });
     const randomFourSuit = provider.openSite({
+      journey,
+      site,
+      rng: () => 0.7,
+    });
+    const randomBlackjack = provider.openSite({
       journey,
       site,
       rng: () => 0.999,
@@ -778,6 +787,12 @@ describe("createSiteContentProvider — Gamble", () => {
       rng: () => 0,
       gambleGameId: "four-suit-reprise",
     });
+    const forcedBlackjack = provider.openSite({
+      journey,
+      site,
+      rng: () => 0,
+      gambleGameId: "blackjack",
+    });
     const farpointThreeGate = provider.openSite({
       journey,
       site: farpointSite,
@@ -795,6 +810,12 @@ describe("createSiteContentProvider — Gamble", () => {
       site: farpointSite,
       rng: () => 0,
       gambleGameId: "four-suit-reprise",
+    });
+    const farpointBlackjack = provider.openSite({
+      journey,
+      site: farpointSite,
+      rng: () => 0,
+      gambleGameId: "blackjack",
     });
 
     expect(
@@ -822,6 +843,12 @@ describe("createSiteContentProvider — Gamble", () => {
       drawCost:
         fixture.content.economyData.gamble.fourSuitReprise.standardDrawPrice,
     });
+    expect(randomBlackjack?.runtime).toMatchObject({
+      kind: "gamble",
+      gameId: "blackjack",
+      wagerCost: 90,
+      prizeEssence: 300,
+    });
     expect(forcedThreeGate?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "gravok-three-gate-wager",
@@ -843,6 +870,12 @@ describe("createSiteContentProvider — Gamble", () => {
         fixture.content.economyData.gamble.fourSuitReprise.standardDrawPrice,
       phase: "choose",
     });
+    expect(forcedBlackjack?.runtime).toMatchObject({
+      kind: "gamble",
+      gameId: "blackjack",
+      wagerCost: 90,
+      prizeEssence: 300,
+    });
     expect(farpointThreeGate?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "gravok-three-gate-wager",
@@ -858,6 +891,12 @@ describe("createSiteContentProvider — Gamble", () => {
       gameId: "four-suit-reprise",
       drawCost:
         fixture.content.economyData.gamble.fourSuitReprise.enhancedDrawPrice,
+    });
+    expect(farpointBlackjack?.runtime).toMatchObject({
+      kind: "gamble",
+      gameId: "blackjack",
+      wagerCost: 40,
+      prizeEssence: 300,
     });
     if (
       forcedFourSuit?.runtime.kind === "gamble" &&

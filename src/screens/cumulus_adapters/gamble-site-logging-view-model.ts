@@ -4,6 +4,10 @@ import {
   starwayStairsEssenceReward,
   starwayStairsTierRule,
 } from "../../data/starway-stairs";
+import {
+  BLACKJACK_MAX_ATTEMPTS,
+  blackjackHandTotal,
+} from "../../data/blackjack";
 import { logEventOnce } from "../../logging";
 import type { GambleSiteRuntime, SiteState } from "../../types/journey";
 import type { EconomyData } from "../../types/economy-data";
@@ -27,6 +31,29 @@ export function logGamblePrepared(
   economyData: EconomyData,
   sitesData: SitesData,
 ): void {
+  if (runtime.gameId === "blackjack" && view.gameId === "blackjack") {
+    logEventOnce(
+      `Gamble:${siteId}:blackjack-prepared:${runtime.shuffleCommitment}`,
+      "gamble_game_prepared",
+      {
+        siteId,
+        gameId: runtime.gameId,
+        rulesVersion: runtime.rulesVersion,
+        sitesFoldHash: sitesData.foldHash,
+        isFarpoint: runtime.isFarpoint,
+        wagerCost: runtime.wagerCost,
+        prizeEssence: runtime.prizeEssence,
+        attemptNumber: runtime.attemptNumber,
+        maxAttempts: BLACKJACK_MAX_ATTEMPTS,
+        shuffleCommitment: runtime.shuffleCommitment,
+        openingDealOrder: ["player", "dealer", "player", "dealer"],
+        dealerRule: "stand-soft-17",
+        winReward: economyData.gamble.blackjack.prizeEssence,
+        pushReward: runtime.wagerCost,
+      },
+    );
+    return;
+  }
   if (
     runtime.gameId === "four-suit-reprise" &&
     view.gameId === "four-suit-reprise"
@@ -179,6 +206,33 @@ export function logGambleResolved(
   economyData: EconomyData,
   sitesData: SitesData,
 ): void {
+  if (runtime.gameId === "blackjack" && view.gameId === "blackjack") {
+    if (!runtime.wagerPaid || runtime.playerDecision === null) return;
+    const visibleDealerCards = runtime.dealerRevealed
+      ? runtime.dealerCards
+      : runtime.dealerCards.slice(0, 1);
+    logEventOnce(
+      `Gamble:${siteId}:blackjack-state:${runtime.shuffleCommitment}:${String(runtime.deckCursor)}:${runtime.playerDecision}:${runtime.outcome ?? "playing"}`,
+      "gamble_wager_resolved",
+      {
+        siteId,
+        gameId: runtime.gameId,
+        rulesVersion: runtime.rulesVersion,
+        sitesFoldHash: sitesData.foldHash,
+        attemptNumber: runtime.attemptNumber,
+        playerDecision: runtime.playerDecision,
+        payment: runtime.playerDecision === "deal" ? runtime.wagerCost : 0,
+        playerCards: runtime.playerCards,
+        playerTotal: blackjackHandTotal(runtime.playerCards),
+        dealerCards: visibleDealerCards,
+        dealerTotal: blackjackHandTotal(visibleDealerCards),
+        dealerRevealed: runtime.dealerRevealed,
+        deckCursor: runtime.deckCursor,
+        outcome: runtime.outcome,
+      },
+    );
+    return;
+  }
   if (runtime.gameId === "four-suit-reprise") {
     const result = runtime.rounds[runtime.rounds.length - 1];
     if (result === undefined) return;
@@ -299,6 +353,27 @@ export function logGambleSettled(
   economyData: EconomyData,
   sitesData: SitesData,
 ): void {
+  if (runtime.gameId === "blackjack") {
+    if (!runtime.resultSettled) return;
+    logEventOnce(
+      `Gamble:${siteId}:blackjack-settled:${runtime.shuffleCommitment}`,
+      "gamble_wager_settled",
+      {
+        siteId,
+        gameId: runtime.gameId,
+        rulesVersion: runtime.rulesVersion,
+        sitesFoldHash: sitesData.foldHash,
+        attemptNumber: runtime.attemptNumber,
+        playerTotal: blackjackHandTotal(runtime.playerCards),
+        dealerTotal: blackjackHandTotal(runtime.dealerCards),
+        outcome: runtime.outcome,
+        wagerPayment: runtime.wagerCost,
+        essenceGained: runtime.essenceAwarded,
+        netEssenceChange: runtime.essenceAwarded - runtime.wagerCost,
+      },
+    );
+    return;
+  }
   if (runtime.gameId === "four-suit-reprise") {
     const result = runtime.rounds[runtime.rounds.length - 1];
     if (result === undefined || !result.resultSettled) return;
@@ -326,7 +401,10 @@ export function logGambleSettled(
     );
     return;
   }
-  if (runtime.gameId === "gravok-three-gate-wager") {
+  if (
+    runtime.gameId === "gravok-three-gate-wager" &&
+    view.gameId === "gravok-three-gate-wager"
+  ) {
     if (runtime.result?.essenceSettled !== true) return;
     logEventOnce(
       `Gamble:${siteId}:settled:${view.result?.id ?? "unknown"}`,

@@ -14,6 +14,7 @@ const GAME_IDS = [
   "tidemark-ladder-climb",
   "starway-stairs",
   "four-suit-reprise",
+  "blackjack",
 ];
 
 function dreamscapesFixture() {
@@ -56,6 +57,7 @@ function guidesFixture() {
               "gamble-ladder-climb": ["Win {win-essence} Fixture Essence."],
               "gamble-starway-stairs": ["Fixture stairs."],
               "gamble-four-suit-reprise": ["Fixture suits."],
+              "gamble-blackjack": ["Fixture blackjack."],
             }
           : {}),
       },
@@ -326,7 +328,7 @@ describe("canonical Dream Guide and Sites compilers", () => {
     const missingGame = sitesFixture();
     missingGame.gamble.selection.games.pop();
     expect(() => compileSitesData(missingGame, catalogs)).toThrow(
-      /all four game ids/u,
+      /every game id in structural order/u,
     );
 
     expect(() =>
