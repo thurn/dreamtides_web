@@ -1,195 +1,196 @@
-# LToDD Content Patterns
+# LToDD content patterns
 
-Read this reference when planning a new chapter, reorganizing a chapter, or
-publishing a prototype image. The patterns illustrate useful shapes for
-different subjects. They are not templates, required headings, or reusable game
-content.
+Read this reference when creating or substantially reorganizing a chapter. The
+patterns show useful explanatory sequences. They are not required headings or
+templates.
 
 ## Contents
 
-- [Choosing a shape](#choosing-a-shape)
-- [Part and primary-chapter pattern](#part-and-primary-chapter-pattern)
-- [Gameplay-system pattern](#gameplay-system-pattern)
-- [Screen-and-flow pattern](#screen-and-flow-pattern)
-- [Supplemental deep-dive pattern](#supplemental-deep-dive-pattern)
-- [Cross-cutting-principle pattern](#cross-cutting-principle-pattern)
-- [Opening scope paragraphs](#opening-scope-paragraphs)
-- [Index catalog entries](#index-catalog-entries)
+- [Choose a reader question](#choose-a-reader-question)
+- [Foundational primary chapter](#foundational-primary-chapter)
+- [Gameplay system](#gameplay-system)
+- [Screen and flow](#screen-and-flow)
+- [Supplemental deep dive](#supplemental-deep-dive)
+- [Opening paragraphs](#opening-paragraphs)
+- [Definitions and early references](#definitions-and-early-references)
+- [Index entries](#index-entries)
 - [Glossary entries](#glossary-entries)
 - [Prototype images](#prototype-images)
 
-## Choosing a shape
+## Choose a reader question
 
-Find the chapter's central reader question before choosing headings. A useful
-structure makes the answer and its rationale easy to locate. Combine or discard
-the patterns when the subject demands a different sequence.
+Decide what a new technical contributor should understand after reading the
+chapter. Build the section order from the prerequisites of that answer.
 
-Prefer sections that name a meaningful decision or phase of play. Avoid
-long component inventories, one heading per source module, and generic buckets
-that separate every rule from its rationale.
+Prefer headings that name a recognizable concept, phase, or rule. Avoid one
+heading per source module, generic buckets such as “Implementation” or “State,”
+and long inventories that separate rules from the flow where they operate.
 
-## Part and primary-chapter pattern
+Do not let a technically intricate research area dominate an overview unless
+it also dominates the reader's understanding of the system.
 
-Start a part with the primary chapter whose filename mirrors the part
-directory. Give that chapter the full conceptual span of the part. A useful
-progression is:
+## Foundational primary chapter
 
-1. Establish the subject's purpose and place in Dreamtides.
-2. Define its player-facing concepts, authored inputs, and durable state.
-3. Explain its major flows and algorithms in the order readers need them.
-4. Keep each consequential decision beside its rationale and effects.
-5. Orient the reader to relevant screens without detailing presentation.
-6. Close local loops, edge cases, and handoffs so the chapter stands alone.
+Use this pattern for a part that introduces a broad game system or Dreamtides
+itself:
 
-Do not structure the primary around supplements that might be written later.
-Once it is complete, identify a few unusually complex systems or algorithms
-that could support a deeper treatment, and present those candidates outside the
-book for the user's judgment.
+1. Explain the subject in one or two plain paragraphs.
+2. Walk through its normal lifecycle at a high level.
+3. Define the core objects and resources when the lifecycle first needs them.
+4. Explain each major phase, choice, and result in order.
+5. Add the rules and algorithms that govern those phases.
+6. Explain identity, persistent and temporary state, copying, derived values,
+   and deterministic randomness after their purpose is clear.
+7. Link to adjacent chapters that own deeper rules.
 
-## Gameplay-system pattern
+For a chapter about Dreamtides, the reader should learn what kind of game it is
+and how a journey proceeds before learning how card identifiers work. For a
+chapter about battles, the reader should learn the objective and turn flow
+before learning the exact lifetime of a battle card.
 
-Use this shape when the chapter explains rules, state, or an algorithm that
-operates across several screens.
+End when the part's promised conceptual account is complete. Do not append a
+generic invariant list or extra technical sections solely to increase length.
 
-A compact progression often works:
+## Gameplay system
 
-1. Open with the system's purpose and when it matters to the player.
-2. Establish the player-facing concepts and durable state.
+Use this pattern for rules or an algorithm that operates across several phases:
+
+1. State what the system does and when it runs.
+2. Define the minimum state needed to follow it.
 3. Explain the normal sequence in resolution order.
-4. Place each major choice or constraint beside its design reason.
-5. Describe randomness, ordering, and persistence near the step they affect.
-6. Cover only edge cases that materially change an outcome.
-7. Close a complex sequence with a one- or two-sentence worked example.
-8. Link each phase to the concise screen coverage that orients prototype use.
+4. Put choices, constraints, and results beside the relevant step.
+5. State random sampling and ordering where they affect the result.
+6. Cover edge cases that produce a materially different outcome.
+7. Give one short example if several state changes are otherwise hard to track.
+8. Link to the chapter that owns the surrounding lifecycle.
 
-Good section titles name the decisions: “Offers preserve commitment,” “Payment
-follows selection,” or “The result persists at departure.” They tell the reader
-more than “Logic,” “State,” or “Implementation.”
+Headings should make the flow easy to scan. “Choose an offer,” “Pay its cost,”
+and “Apply the result” are usually clearer than “Selection logic,” “Economy,”
+and “Persistence.”
 
-## Screen-and-flow pattern
+## Screen and flow
 
-Use this shape when the chapter explains one player destination and the flow
-through it.
+Use this pattern when a screen is the clearest way to explain one destination
+or interaction:
 
-Start with the screen's role in the larger journey and the state on arrival.
-Then supplement the prototype without transcribing it:
+1. State the screen's role in the larger game flow.
+2. State what information is present when the player arrives.
+3. Explain the principal choice and each distinct semantic outcome.
+4. Explain the state or algorithm that selects what appears.
+5. Specify non-obvious placement, coordination, priority, or interruption rules.
+6. End with the handoff into the next game state.
 
-1. Describe the screen's role, principal interaction, and handoff in one or two
-   sentences.
-2. Briefly name every visible Cumulus component without explaining its API.
-3. Give every distinct player choice or outcome a one-sentence semantic result.
-4. Explain the state or algorithm that selects what the player sees.
-5. Fully specify non-obvious placement, safe-area, responsive, reveal,
-   collision, priority, or interruption algorithms.
-6. State the flow's animation and choreography philosophy once near the top.
-7. Use a representative screenshot only when it adds useful orientation.
-8. End at the handoff into the next canonical game state.
+Name shared Cumulus components only when that helps connect the flow to the
+design system. Leave routine presentation, component APIs, and motion details
+to Cumulus and the prototype.
 
-Keep the component inventory brief. Do not reproduce normal component behavior,
-detailed composition, or shot-by-shot presentation that readers can inspect in
-the prototype and Cumulus documentation.
+## Supplemental deep dive
 
-## Supplemental deep-dive pattern
+Use this pattern only after the owning primary chapter exists and the user has
+selected a focused complex system:
 
-Use this shape only after the owning primary chapter exists and the user has
-selected a complex system or algorithm for deeper treatment:
+1. Name the exact contract being deepened and link to the primary chapter.
+2. State inputs, output, state ownership, and preconditions.
+3. Explain evaluation or resolution in order.
+4. State exact selection domains, formulas, constants, and random draws.
+5. Cover edge cases and interruption boundaries that change the result.
+6. Give a compact example when it clarifies several transitions.
+7. Link back to the primary for the surrounding game flow.
 
-1. Open with the exact contract being deepened and link back to the primary.
-2. Identify inputs, outputs, state ownership, and preconditions.
-3. Explain evaluation or resolution in consequential order.
-4. State formulas, constants, random domains, invariants, and persistence.
-5. Cover meaningful edge cases and interruption or failure boundaries.
-6. Give a compact worked example when it clarifies multiple state changes.
-7. Link back to the primary for the surrounding system and player experience.
+Revise the primary chapter in the same change so it explains where the deep
+dive fits. Keep presentation details and source structure out of the
+supplement.
 
-Revise the primary in the same change so it summarizes the algorithm's place
-and links to the supplement. Keep the supplement focused: detailed screen
-presentation and ordinary Cumulus behavior remain outside LToDD.
+## Opening paragraphs
 
-## Cross-cutting-principle pattern
+A primary chapter opening should first answer what the subject is. It may then
+identify the surrounding flow and useful adjacent chapters.
 
-Use this shape for a design rule that governs many systems, such as information
-disclosure, commitment, pacing, or the physical treatment of game objects.
+Useful shape:
 
-Lead with the principle and the player experience it protects. Organize the body
-around its consequences:
+> A dream journey is one complete run of Dreamtides. The player builds a deck,
+> travels through a generated Dream Atlas, resolves sites and battles, and
+> either defeats the final opponent or loses the journey. This chapter explains
+> that lifecycle and the state carried between its phases.
 
-1. Define the principle in concrete Dreamtides terms.
-2. Explain the pressure or failure mode it addresses without recounting design
-   history.
-3. State how the principle constrains rules, presentation, and interaction.
-4. Show its application in a few distinct contexts through internal links.
-5. Define genuine boundaries so authors do not overapply it.
+A focused chapter can open more narrowly:
 
-Repeat a locally necessary constraint in each affected chapter. Use this chapter
-as the primary explanation of why those repeated constraints form one system.
+> A battle is a turn-based contest between the player's deck and an opponent's
+> deck. This chapter defines its objective, turn sequence, legal actions, and
+> result. Read the battle setup chapter for opponent and starting-state
+> selection.
 
-## Opening scope paragraphs
+Do not open with a catalog of authored definitions, runtime objects, source
+types, or internal IDs unless the chapter's declared subject is the data model
+itself.
 
-Place a compact paragraph immediately after the level-one title. Answer what the
-chapter specifies, when to read it, and where adjacent detail lives.
+## Definitions and early references
 
-An effective paragraph has this information shape:
+Define a term where the reader first needs it:
 
-> This chapter specifies how a journey chooses and resolves its next
-> destination. Read it when implementing destination availability, player
-> commitment, or the handoff into a site. Use the prototype for detailed screen
-> presentation and the Cumulus documentation for standard component behavior.
+> **Essence** (◆) is the currency spent at sites.
 
-Adapt the prose to the subject. Do not repeat these sentences mechanically.
+If a term appears before its full section, add a short explanation and link:
 
-## Index catalog entries
+> The player chooses a **Dream Avatar**, the character that supplies the
+> starting deck and abilities. See [Dream Avatars](#dream-avatars).
 
-Group chapter entries beneath part headings. Give each part a concise sentence
-explaining its purpose in the overall book. List the matching primary chapter
-first, followed by any supplements. Write the exact chapter title, stable
-underscore path, role label, and one sentence explaining when to read it.
+Do not rely on capitalization to signal vocabulary. Bold the first definition,
+then write the term normally. Do not introduce a named keyword or status merely
+to demonstrate that such categories exist.
+
+For a calculation without separate identity, use ordinary prose:
+
+> The card definition, persistent modifications, and current context determine
+> the card's resolved values.
+
+Do not invent a new object name for the result unless rules refer to that result
+as an independent object.
+
+## Index entries
+
+Group entries beneath part headings. Give each part one concise purpose
+sentence. List the matching primary chapter first, followed by selected
+supplements. Use the exact chapter title, stable path, role label, and a sentence
+that tells the reader when to use it.
 
 Use these shapes:
 
-> 1. **Primary:** [Part Title](part_name/part_name.md) — Read this chapter when
->    building or understanding the part as a whole.
-> 2. **Supplement:** [Algorithm Title](part_name/algorithm_name.md) — Read this
+> 1. **Primary:** [Part title](part_name/part_name.md) — Read this chapter when
+>    learning or implementing the part as a whole.
+> 2. **Supplement:** [Algorithm title](part_name/algorithm_name.md) — Read this
 >    chapter when implementing the focused algorithm in full detail.
 
-Keep the parts and their entries in authoritative reading order. Include the
-root `glossary.md` exactly once as a book-level reference. Keep planning state,
-authorship, dates, and chapter numbers out of entries, directories, and
-filenames.
+The em dash in an index entry is a separator, not a parenthetical aside. Keep
+planning notes, dates, status, and possible future chapters out of the index.
 
 ## Glossary entries
 
-Use one level-two heading per term and sort headings alphabetically. Define the
-user-facing term in one compact paragraph. Link the primary chapter that owns
-its complete rules or design significance.
+Use one level-two heading per stable project term and sort entries
+alphabetically. Define the term in one compact paragraph and link the primary
+chapter that owns its rules.
 
-Prefer definitions that distinguish nearby concepts and state their gameplay
-role. Avoid source synonyms, abbreviations that players never see, and copied
-catalog entries.
+Do not add source-only synonyms, helper object names, or a separate term for
+every derived value. The glossary catalogs reusable Dreamtides vocabulary, not
+all bold text in the book.
 
 ## Prototype images
 
-Place a selective representative image exactly where it orients the reader or
-clarifies a spatial or algorithmic relationship. Use the reference-style
-Markdown printed by
-`.llms/skills/ltodd/scripts/publish-image.mjs`:
+Place an image only where it gives useful visual orientation. Use the
+reference-style Markdown printed by the publishing helper:
 
 ```markdown
-![One destination awaiting the player's choice][img-4df53c0d8f1a]
+![One destination awaiting a choice][img-4df53c0d8f1a]
 
-_The available destination holds visual focus before commitment._
+_The available destination is ready for selection._
 
 [img-4df53c0d8f1a]: https://storage.googleapis.com/redacted-firebase-project.firebasestorage.app/ltodd/sites/site_arrival/destination-choice-4df53c0d8f1a.png
 ```
 
-The publisher supplies the content hash in the reference label and URL. Keep
-the image and italic caption together. The reference definition may live at the
-end of the chapter when that makes the prose easier to scan. Do not add images
-for every state, outcome, viewport, or animation key moment. Add a second image
-only when it communicates a distinct fact that prototype play does not make
-easy to locate.
+Keep the image and italic caption together. The reference definition may live
+at the end of the chapter. Alt text describes the visible evidence. The caption
+states why the image is useful without repeating the alt text.
 
-Alt text describes the visible evidence in 10-59 characters. The caption states
-why that evidence matters in context without repeating the alt text. Review the
-surrounding prose after inspecting the capture and correct any factual mismatch
-the image reveals.
+Do not add images for every state, viewport, or animation moment. Add another
+image only when it communicates a distinct fact that is hard to locate in the
+prototype.

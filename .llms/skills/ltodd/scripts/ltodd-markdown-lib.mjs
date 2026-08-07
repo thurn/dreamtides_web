@@ -12,7 +12,7 @@ const NAME_SEGMENT = BOOK_SEGMENT_PATTERN;
 const CHAPTER_NAME = /^[a-z0-9]+(?:_[a-z0-9]+)*\.md$/;
 const IMAGE_ORIGIN = `${PUBLIC_ORIGIN}/${DEFAULT_BUCKET}`;
 export const CHAPTER_CHARACTER_LIMIT = 40_000;
-export const CHAPTER_CHARACTER_TARGET = 20_000;
+export const CHAPTER_CHARACTER_REFERENCE = 20_000;
 const LEAKAGE_PATTERNS = [
   [/(?:^|\W)draft_records(?:_adapted)?(?:\W|$)/i, "draft-record source"],
   [/\bIDF\b/, "IDF"],
@@ -22,9 +22,29 @@ const LEAKAGE_PATTERNS = [
   [/(?:^|\W)\/editor(?:\W|$)/i, "editor route"],
   [/\bReact\b/, "React"],
   [/\bDOM\b/, "DOM"],
+  [/\bCSS\b/, "CSS"],
+  [/\bbrowser\b/i, "browser-specific behavior"],
+  [/\blocalStorage\b/, "browser storage"],
   [/\bTypeScript\b/i, "TypeScript"],
+  [/\b(?:reloaded?|reloading|reloads)\b/i, "platform reload behavior"],
+  [/\bfold\b/i, "state-fold architecture"],
+  [/\bserializ(?:e|es|ed|ing|able|ation)\b/i, "serialization strategy"],
   [/(?:^|\W)src\//, "source path"],
   [/\blocalhost\b/i, "localhost"],
+];
+const EDITORIAL_PATTERNS = [
+  [
+    /—[^—\n]{1,160}—/,
+    "use parentheses, commas, or sentences instead of an em-dash parenthetical",
+  ],
+  [
+    /\b(?:the|these) (?:remaining|following) sections?\b/i,
+    "replace vague section roadmap prose with a concrete dependency",
+  ],
+  [
+    /\bthis section (?:covers|defines|describes|explains|explores)\b/i,
+    "replace section metadiscourse with the subject itself",
+  ],
 ];
 
 function physicalLines(source) {
@@ -273,6 +293,11 @@ function validateMarkdownFile(relativePath, source, errors, warnings) {
             `review possible implementation or scope leakage: ${label}`,
           ),
         );
+      }
+    }
+    for (const [pattern, message] of EDITORIAL_PATTERNS) {
+      if (pattern.test(line)) {
+        warnings.push(diagnostic(relativePath, lineNumber, message));
       }
     }
   }

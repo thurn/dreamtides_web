@@ -3,34 +3,23 @@ name: ltodd
 description: >-
   Author and revise the Living Tome of Dreamtides Design in the repository's
   top-level ltodd directory. Use only when the user explicitly invokes $ltodd
-  to create parts or chapters, propagate a game-design change through every
-  affected chapter, or change canonical terminology or models across the book.
-  Never invoke this skill implicitly and never edit LToDD without explicit
-  invocation.
+  to create or revise chapters, propagate a game-design change through the
+  book, or change canonical terminology or models. Never invoke this skill
+  implicitly and never edit LToDD without explicit invocation.
 ---
 
 # Living Tome of Dreamtides Design
 
-The Living Tome of Dreamtides Design, or LToDD, is the canonical,
-several-hundred-page book whose primary purpose is to explain Dreamtides'
-algorithms: the inputs and rules that select content, resolve outcomes,
-transform hidden state, coordinate UI behavior, and produce what the player
-sees. Precisely documenting screen presentation or animation choreography is
-not LToDD's goal. It records only enough about each screen, interaction, and
-outcome to orient the reader, while fully explaining non-obvious UI algorithms.
-LToDD also records the game rules and design rationale needed to understand
-those algorithms. It supplements hands-on use of the prototype and the Cumulus
-component documentation. Together, those resources should let an expert
-developer or implementation LLM unfamiliar with the repository reimplement
-Dreamtides correctly without reading TypeScript source.
+LToDD explains Dreamtides to technical contributors who do not know the game or
+the repository. It describes the intended game in implementation-neutral prose:
+the main concepts, rules, algorithms, state transitions, and reasons behind
+non-obvious decisions. A contributor should be able to understand the system
+and reproduce its behavior without reverse-engineering the TypeScript source.
 
-Write the canonical, implementation-grade account of what cannot be learned
-reliably by playing the prototype. Preserve the production game's intended
-behavior while presenting its rules, algorithms, state, and rationale as a
-coherent clean design rather than an account of the current codebase. Give
-screens, interactions, and outcomes enough concise coverage to orient the
-reader, but leave detailed presentation and ordinary component behavior to the
-prototype and Cumulus documentation.
+LToDD is not source documentation, a data-model inventory, a product pitch, or
+a transcript of the prototype. Write direct technical prose. Introduce the game
+before its internal machinery, and explain only the technical distinctions that
+the design actually needs.
 
 ## Load the authoring guidance
 
@@ -38,271 +27,227 @@ Read [references/writing-guide.md](references/writing-guide.md) completely
 before researching or editing LToDD.
 
 Read [references/content-patterns.md](references/content-patterns.md) before
-creating a chapter, substantially reorganizing one, or publishing a chapter
-image. Use its patterns as examples, not templates.
+creating a chapter or substantially reorganizing one. Use its patterns as
+examples, not templates.
 
 Read [references/source-part-map.md](references/source-part-map.md) when
-deciding which part owns a subject or when routing source research across the
-book. Treat it as nonbinding discovery guidance: `ltodd/index.md` remains
-authoritative, and observed production behavior remains stronger evidence than
-source location. Run `scripts/estimate-part-loc.mjs` when a rough comparison of
-the parts' current source footprints would help.
+deciding which part owns a subject or where to begin source research.
+`ltodd/index.md` remains the authority for book ownership.
+
+Before creating or rewriting a primary chapter, read
+`docs/journeys/journeys.md` and `docs/battle_rules/battle_rules.md` for the
+preferred explanatory style. Follow their directness and concept order without
+copying their structure mechanically. Treat the battle rules as a trusted
+secondary source when the subject includes battle.
 
 When the subject includes a screen or interaction, read the project-local
-`.llms/skills/cumulus/SKILL.md` and the references needed to identify every
-Cumulus component on the screen and distinguish standard component behavior
-from screen-specific UI algorithms. Do not reproduce component APIs. When the
-subject includes battle rules, read `docs/battle_rules/battle_rules.md` as a
-trusted secondary source.
+`.llms/skills/cumulus/SKILL.md` and only the references needed for that screen.
+Use Cumulus to identify established component names and shared presentation
+contracts. Do not reproduce component APIs in LToDD.
 
 ## Authoring workflow
 
-### 1. Establish the book and requested change
+### 1. Establish the requested change
 
-Work only in the top-level `ltodd/` directory. Organize the book as an ordered
-series of parts. Keep `index.md` and `glossary.md` at the book root. Each
-populated part has exactly one primary chapter and may have supplemental
-chapters:
+Work only in the top-level `ltodd/` directory. The book contains an ordered set
+of parts, a root `index.md`, and a root `glossary.md`. Each populated part has
+one primary chapter and may have supplemental chapters:
 
-- The primary chapter is `ltodd/<part>/<part>.md`; its filename always matches
-  its directory.
-- Supplemental chapters are `ltodd/<part>/<subject>.md` siblings whose
-  filenames do not match the directory.
+- `ltodd/<part>/<part>.md` is the primary chapter.
+- `ltodd/<part>/<subject>.md` is a supplement.
 
-Name part directories and chapters with stable lowercase underscore names. The
-primary chapter defines the part's complete subject in a clear, detailed,
-self-contained way. A supplemental chapter gives a deeper account of one
-especially complex system or algorithm within that subject. Do not use
-supplements to document UI presentation or to partition an ordinary primary
-chapter into arbitrary fragments.
+Use stable lowercase underscore names for directories and files. Write the
+primary chapter before any supplement. A primary chapter introduces the whole
+part to a new contributor. A supplement gives a deeper account of one unusually
+complex system or algorithm after the primary chapter already provides the
+needed context.
 
-If the book does not exist when the first chapter is requested, create these
-files as part of that authoring request:
+If the book does not exist when the first chapter is requested, create
+`index.md`, `glossary.md`, the part directory, and its primary chapter as one
+change. Do not create the book merely to test the skill.
 
-- `ltodd/index.md`, containing a short “How to read this book” passage and the
-  authoritative structure, purpose, and chapter catalog for every ordered
-  part;
-- `ltodd/glossary.md`, containing the alphabetical canonical terminology
-  catalog; and
-- the requested part directory and its matching primary chapter.
+Treat one invocation as one design change rather than one file edit. Update
+every affected chapter, glossary definition, index entry, and cross-reference.
+Avoid unrelated cleanup.
 
-Do not create the book merely to install or test this skill.
+### 2. Discover the affected book surface
 
-Write a part's primary chapter before proposing or writing supplements. If a
-request names a new subject without explicitly identifying it as a supplement,
-treat it as work on the primary chapter of the owning part. Never create a
-supplement for a part whose primary chapter is absent.
+Read `ltodd/index.md` first. Use its part descriptions to identify likely
+owners. Read every plausibly affected primary chapter in full, followed by any
+relevant supplements. Search the corpus for the changed terms, duplicated
+rules, links, and nearby concepts before and after editing.
 
-Treat one invocation as one coherent design change, not as one chapter. Update
-every affected chapter, index entry, glossary definition, and cross-reference.
-Avoid unrelated editorial cleanup.
+Do not load the whole book by default. Follow the index and the links from the
+chapters that own the subject.
 
-### 2. Discover relevant chapters
+### 3. Research the behavior
 
-Read `ltodd/index.md` first. Use its part purposes and chapter scope statements
-to identify candidates. Always read the primary chapter of every plausibly
-affected part in full, then read the supplements implicated by the change.
-Search the corpus for relevant titles, opening scope paragraphs, headings,
-links, user-facing terms, rules, and duplicated constraints. Fully read every
-plausibly affected chapter before editing it.
+Use evidence in this order:
 
-Do not load the entire book by default. Use the index and search results as
-routing metadata, then follow relevant chapter links. After editing, repeat the
-corpus search to find stale terms or repeated rules that also need revision.
-
-### 3. Research the design
-
-Resolve facts in this order:
-
-1. Play the relevant production game flow locally to establish the screen,
-   interaction, outcome, and terminology that readers can observe themselves.
-2. Inspect production data and code for hidden rules, ordering, state, exact
-   gameplay behavior, and non-obvious UI algorithms.
-3. Inspect `logs/journey-log.jsonl` when reconstructing an algorithmic decision
-   from a production game is useful.
-4. Treat existing LToDD chapters as canonical except where the requested change
+1. Use the production game flow to learn what the player can observe and which
+   terms the game presents.
+2. Inspect production data and code for hidden rules, ordering, state changes,
+   exact algorithms, and edge cases.
+3. Inspect `logs/journey-log.jsonl` when reconstructing a production decision
+   would answer how an algorithm behaved.
+4. Treat existing LToDD chapters as canonical unless the requested change
    revises them.
-5. Use `docs/battle_rules/battle_rules.md` as a trusted secondary source for
-   battle.
-6. Treat every other Markdown document as a lead that requires verification.
-7. Ask the user to resolve contradictions, design intent, or rationale that the
-   artifacts cannot establish.
+5. Use the battle rules as a trusted secondary source for battle.
+6. Treat other Markdown documents as leads that require verification.
+7. Use explicit user decisions as the intended design, even when the current
+   implementation has not reached that design yet.
 
-Use production routes and player behavior as research evidence. Research the
-observable flow so the book can supplement it rather than transcribe it. Do not
-turn debug entry points, test fixtures, editor tools, or source organization
-into book content.
+Research across module boundaries. Source ownership, type names, helper
+objects, routes, debug tools, and test fixtures are evidence, not a chapter
+outline. Do not turn them into book concepts without a design reason.
 
-### 4. Interview before writing
+When evidence conflicts with an explicit user decision, document the user's
+design. When evidence conflicts internally and no intent is known, ask the user
+to choose before writing the disputed behavior.
 
-Complete the discoverable research first. Then ask one batch of three to five
-intent-dependent questions before writing. Prefer questions about:
+### 4. Ask only material, concrete questions
 
-- the intended player experience or design objective;
-- which behavior is canonical when evidence conflicts;
-- the rationale or tradeoff behind a consequential decision;
-- edge cases that materially change the design; and
-- clean terminology or modeling choices required for a rewrite.
+Do not require an interview. Ask a question only when all of these are true:
 
-Include the evidence behind each question and a recommended answer. Ask fewer
-questions, or none, when a small change is already fully specified. Never ask
-for facts that the running game, data, code, logs, or existing LToDD can answer.
+- the answer changes the canonical design;
+- the prototype, data, code, logs, existing chapters, and prior user feedback
+  do not settle it; and
+- choosing without the user would create a material risk of writing the wrong
+  system.
 
-After the user answers, state a compact writing plan and proceed. Pause again
-only when a material choice remains unresolved.
+Ask the smallest useful batch. Each question must identify the exact object or
+transition, describe the conflicting evidence, and give a concrete example of
+how the answers differ. Ask for a specific choice. Do not ask the user to
+endorse abstract goals, broad design values, or unexplained terminology.
 
-### 5. Write the canonical design
+Good question shape:
 
-Preserve exact intended behavior while replacing incidental source structure
-with a clean, internally coherent model. Use user-facing terminology. Define a
-new implementation-neutral term only when the UI provides none and the concept
-is necessary to explain the design.
+> A copied card can either retain the source card's persistent modifications or
+> start from the shared card definition. The current copy rule does X, while the
+> existing chapter says Y. Which behavior should LToDD specify?
 
-Write around decisions and keep each decision beside its rationale and
-consequences. Specify algorithms as exact, implementation-neutral contracts at
-a high level: identify their inputs, outputs, ordering, formulas, constants,
-invariants, edge cases, and rationale when those details are consequential. Do
-not translate them into pseudocode or recite current source structure.
+After the answer, proceed. Ask again only if a new material conflict appears.
 
-Treat the prototype and Cumulus documentation as companion references:
+### 5. Plan the reader's path
 
-- Give every meaningful screen or screen family one or two sentences that
-  explain its role, interaction, and handoff.
-- Briefly name every Cumulus component visible on the screen, then delegate its
-  standard appearance, behavior, and API to Cumulus documentation.
-- Give every distinct player choice or outcome a short description of its
-  semantic result and durable consequences; one sentence is usually enough.
-- State the governing animation and choreography philosophy once near the start
-  of the relevant flow. Do not provide shot-by-shot animation, timing, easing,
-  or routine transition specifications.
-- Fully explain non-obvious UI algorithms, including their decision rules and
-  rationale. Safe-area avoidance, responsive selection, object positioning,
-  reveal coordination, collision handling, priority, and interruption policy
-  are in scope when applicable.
+Before drafting, write a short private outline based on what a new technical
+contributor needs to learn. For a primary chapter, use this default order unless
+the subject clearly needs another:
 
-Exclude normal React component behavior and details that a reader can learn by
-using the prototype or consulting a Cumulus component API. Include concise
-screen and outcome coverage even when the observable behavior needs no deeper
-explanation.
+1. Answer what the system is and where it fits in Dreamtides.
+2. Explain the normal lifecycle or main loop.
+3. Introduce the core objects, resources, choices, and outcomes as they become
+   necessary.
+4. Explain important rules and algorithms beside the phase where they operate.
+5. Put identity, derived values, persistence boundaries, randomness contracts,
+   and other narrow technical models after the reader understands why they
+   matter.
+6. Link to adjacent chapters for concepts that have their full definition
+   elsewhere.
 
-Do not leave TODOs, alternatives, uncertainty, speculative explanations, or
-image placeholders in a chapter.
+Allocate space by importance to the reader, not by source line count or by how
+interesting an internal mechanism is. A foundational chapter should spend most
+of its space explaining the game, not card copying, identifiers, random state,
+or generic invariants.
+
+### 6. Write the canonical design
+
+Write in plain, active, present-tense prose for a technical audience. Use
+specific nouns and verbs. Prefer a direct definition or state transition over
+an abstract claim about experience, clarity, importance, or philosophy.
+
+Describe one coherent design. Preserve exact rules where exactness matters, but
+do not mirror source structure. Explain algorithms through their inputs,
+outputs, ordering, selection domains, and visible or persistent results. Include
+constants and edge cases only when an implementation needs them to reproduce
+the behavior. Do not write source code or pseudocode.
+
+Keep the book independent of implementation platform and storage strategy.
+Describe game state, identity, restoration requirements, and deterministic
+randomness without naming browser behavior, application frameworks, event-log
+reduction, storage formats, or serialization mechanisms. A chapter may name a
+specific algorithm when the algorithm itself is part of the intended design.
+
+Do not promote every source type or helper into a canonical noun. Before naming
+a technical concept, ask whether it has distinct identity, state, or behavior
+that a clean implementation must represent. If it is only a calculation or
+resolved view, explain the calculation in ordinary prose. Use the shortest
+unambiguous term for a real concept.
+
+Do not call an authored status or implementation difference a defect unless the
+user has established that it is a bug. Use neutral descriptions of current
+state and intended design.
 
 #### Write a primary chapter
 
-Make the primary chapter a coherent, detailed account of the whole part. It
-must stand alone when first written: explain every concept and consequential
-rule needed to understand the subject, and do not mention, reserve space for,
-or rely on supplements that do not exist. Organize it around the part's major
-design decisions rather than around possible future chapter boundaries.
+Open with a plain explanation of the subject for a contributor with no project
+context. The opening should answer what the system is before it names specialized
+objects. Introduce concepts in dependency order and keep narrow technical
+contracts near the end unless an earlier rule depends on them.
 
-After the primary chapter is complete and validated, propose two to four
-specific supplemental topics that might merit a deeper dive. Propose only
-complex systems or algorithms for which a separate treatment would add real
-implementation value. Give each candidate a stable subject, a one-sentence
-scope, the concrete depth it would add beyond the primary, and a recommendation
-about whether it is worth writing. Make these proposals in the user-facing
-handoff, not as planning notes or placeholders in the book. Do not create a
-proposed supplement until the user selects it.
+The chapter must stand alone at the level promised by its part. It does not need
+to exhaust every implementation detail. Do not mention hypothetical
+supplements, reserve gaps for them, or use generic invariant checklists to create
+the appearance of completeness.
+
+After validating a new primary chapter, propose supplemental topics only when a
+specific system or algorithm genuinely needs deeper treatment. Make proposals
+outside the book and do not create them without user selection.
 
 #### Write a supplemental chapter
 
-Use a supplement for a focused, unusually complex system or algorithm within
-the part. Specify that subject at greater depth without turning the chapter
-into source documentation or detailed UI description. When adding or revising
-a supplement, update the primary chapter to summarize the relationship and
-link to the deeper treatment, update `index.md`, and repair every affected
-cross-reference. Keep the primary chapter independently useful as the clear,
-detailed account of the part; a reader should understand the system's purpose,
-place, and governing rules before following the supplement.
+Open with the exact subject being deepened and link to the owning primary
+chapter. Give the focused system enough context to be understood, then specify
+its contract without repeating the whole part. Update the primary chapter and
+index in the same change.
 
 #### Control chapter size
 
-Aim for roughly 20,000 Unicode characters per primary or supplemental chapter,
-including Markdown and whitespace. The tools normalize CRLF line endings to LF
-and count Unicode code points. This is a density target, not a minimum: prefer
-a complete shorter chapter to padding. A chapter must not exceed 40,000
-characters. At typical English prose density, 20,000 characters is about
-3,000–3,500 words or roughly 275–325 wrapped lines; 40,000 characters is about
-6,000–7,000 words. Use
-`node .llms/skills/ltodd/scripts/measure-chapters.mjs` to inspect the actual
-counts. The 80-column wrapping rule is formatting, not a chapter-size target.
+Treat roughly 20,000 Unicode characters as a loose planning reference, not a
+goal to hit. Complete, concise chapters may be substantially shorter. Never add
+detail, examples, rationale, or sections to approach the reference size. A
+chapter must not exceed 40,000 characters. Use
+`node .llms/skills/ltodd/scripts/measure-chapters.mjs` to inspect counts.
 
-When a chapter approaches the hard limit, remove bloat first. If the remaining
-detail is a coherent, unusually complex system or algorithm, keep the primary
-chapter's complete overview and move the deeper treatment into a supplement.
-Update the primary, index, and every affected link in the same change.
+### 7. Audit terminology and navigation
 
-### 6. Capture and publish prototype images
+Perform a first-use audit after drafting:
 
-Capture live prototype evidence while the relevant state is available during
-research. Publish a representative image when it materially helps the reader
-recognize a screen, flow, spatial relationship, or non-obvious UI algorithm.
-Use images selectively; do not capture every outcome, transient state,
-responsive branch, or animation key moment. The prototype remains the detailed
-visual reference.
+1. List every Dreamtides-specific noun, named status, resource, symbol,
+   algorithm, and technical distinction in the chapter.
+2. Find its first occurrence.
+3. Define it there, give a brief parenthetical explanation and link to its
+   owning section, or defer the term until the definition is useful.
+4. Add a glossary entry only when the term is a reusable canonical concept, not
+   merely a code label or derived value.
+5. Remove unexplained lists of keywords, statuses, or ability categories.
 
-Follow `docs/journey_prototype/qa_tooling.md` to start the prototype on a
-non-default port and manage an isolated `agent-browser` session. Reach the
-canonical state through the normal player workflow. A registered `?goto=` scene
-may stage a difficult state, but the captured frame must contain only canonical
-player-facing presentation. Exclude debug controls, annotations, browser chrome,
-pointer highlights, and authoring tools.
+Bold a term once when the prose gives its first real definition. Write ordinary
+game terms in lowercase. Reserve capitals for proper names and sentence starts.
+Use sentence case for headings. If a concept is mentioned before its full
+treatment, give enough meaning to continue and link directly to that section.
 
-Before each capture:
+Use parentheses, commas, or separate sentences for asides. Do not place a
+parenthetical aside between em dashes. Avoid vague roadmap sentences that say
+only what later sections will discuss.
 
-1. Set the intended desktop or narrow viewport at 2x device scale.
-2. Assert `location.href`, `window.innerWidth`, and the visible game state.
-3. Confirm `window.__caps` exists and contains no render errors, unhandled
-   rejections, or console errors.
-4. Capture the full viewport or a deliberately selected game region to a PNG or
-   JPEG outside the repository, such as `/tmp/ltodd-<subject>.png`.
-5. Check the pixel dimensions with `file`, inspect the image visually, and
-   recapture it if important content is clipped, obscured, illegible, or in an
-   unintended transient state.
+### 8. Use prototype images selectively
 
-A representative desktop capture uses these commands after the state is staged:
+Capture and publish an image only when it materially helps a reader recognize a
+screen or understand a spatial relationship. Follow
+`docs/journey_prototype/qa_tooling.md`, capture canonical player-facing output
+without debug or platform chrome, inspect it, and keep the local binary outside
+the repository.
 
-```bash
-/opt/homebrew/bin/agent-browser --session ltodd-<subject> \
-  set viewport 1440 900 2
-/opt/homebrew/bin/agent-browser --session ltodd-<subject> \
-  eval '({url: location.href, width: innerWidth, errors: window.__caps})'
-/opt/homebrew/bin/agent-browser --session ltodd-<subject> \
-  screenshot /tmp/ltodd-<subject>.png
-file /tmp/ltodd-<subject>.png
-```
+Publish with `npm run publish-ltodd-image --` and the arguments documented by
+`scripts/publish-image.mjs`. Paste the generated reference-style Markdown next
+to the prose it supports. Never invent a URL, commit an image binary, or leave
+an image placeholder. If publishing is unavailable, omit the image and report
+the blocker outside the book.
 
-Use `npx agent-browser` when the Homebrew binary is unavailable. Use a unique
-session name for each authoring run and close that exact session after capture.
+### 9. Format and validate
 
-Publish the inspected image with the helper from the repository root:
-
-```bash
-npm run publish-ltodd-image -- \
-  --file /tmp/ltodd-destination-choice.png \
-  --part sites --chapter site_arrival --slug destination-choice \
-  --alt "One destination awaiting the player's choice" \
-  --caption "The available destination holds visual focus before commitment."
-```
-
-The helper validates the image, gives its bytes a content-addressed name under
-`ltodd/<part>/<chapter>/`, uploads it to the project's public Google Cloud
-Storage bucket with immutable caching, verifies the public response, and prints
-reference-style Markdown. Paste that Markdown beside the prose it supports.
-Keep the generated URL reference in the same chapter. Never add the local image
-binary to Git, overwrite a published object, invent a URL, or use `--dry-run`
-output in the book.
-
-If `gcloud` cannot access the bucket, run `gcloud auth login` and select the
-`redacted-firebase-project` project. If a suitable canonical state cannot be
-captured, omit the image and report the blocker rather than leaving a
-placeholder. Close the isolated browser session and stop only the development
-server started for the capture after the needed images are published.
-
-### 7. Format and validate
-
-Run the formatter, then the checker from the repository root:
+Run these commands from the repository root:
 
 ```bash
 node .llms/skills/ltodd/scripts/measure-chapters.mjs
@@ -310,13 +255,12 @@ node .llms/skills/ltodd/scripts/format-markdown.mjs --write
 node .llms/skills/ltodd/scripts/format-markdown.mjs --check
 ```
 
-Resolve every error. Inspect and resolve every implementation-leakage warning;
-do not ignore warnings merely because they are non-fatal. Review the formatted
-diff for factual accuracy, local completeness, information density, link
-quality, and accidental changes outside the requested design.
+Resolve every error and inspect every warning. Then review the formatted diff
+for factual accuracy, concept order, undefined terms, accidental title case,
+platform leakage, vague prose, unnecessary repetition, and broken reading
+paths.
 
-Finish only when every populated part has its matching primary chapter, the
-affected rules and algorithms are consistent across the corpus, concise screen
-and outcome coverage is present, the index and glossary are current, every
-included image is live and useful, chapter counts respect the hard limit, no
-material question remains, and the checker passes.
+Finish only when the change describes one resolved design, a new contributor
+can follow each chapter from its opening, technical depth is proportional to
+reader importance, every specialized term is handled at first use, affected
+chapters agree, the index and glossary are current, and the checker passes.

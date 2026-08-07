@@ -1,351 +1,400 @@
-# LToDD Writing Guide
+# LToDD writing guide
 
 Read this guide before researching, creating, or revising any LToDD chapter. It
-defines the book's canon, editorial standard, presentation boundary, and
-navigation contract.
+defines the book's audience, evidence rules, explanatory order, prose style,
+terminology, and completion standard.
 
 ## Contents
 
-- [Canon and scope](#canon-and-scope)
-- [Clean design from prototype evidence](#clean-design-from-prototype-evidence)
-- [Information density and precision](#information-density-and-precision)
-- [Terminology and authored data](#terminology-and-authored-data)
+- [Audience and purpose](#audience-and-purpose)
+- [Canon and research evidence](#canon-and-research-evidence)
+- [Explain the game before the machinery](#explain-the-game-before-the-machinery)
+- [Plain technical prose](#plain-technical-prose)
+- [Terminology and first use](#terminology-and-first-use)
+- [Technical models earn their names](#technical-models-earn-their-names)
+- [Implementation-neutral contracts](#implementation-neutral-contracts)
+- [Algorithms, rules, and rationale](#algorithms-rules-and-rationale)
+- [Authored data](#authored-data)
 - [Screens, outcomes, and Cumulus](#screens-outcomes-and-cumulus)
-- [Parts, primary chapters, and supplements](#parts-primary-chapters-and-supplements)
-- [Chapter organization](#chapter-organization)
-- [Discovery and cross-references](#discovery-and-cross-references)
-- [Worked examples](#worked-examples)
+- [Parts, chapters, and size](#parts-chapters-and-size)
+- [Cross-references and the glossary](#cross-references-and-the-glossary)
+- [Examples, tables, and symbols](#examples-tables-and-symbols)
 - [Prototype images](#prototype-images)
-- [Completion standard](#completion-standard)
+- [Editorial audit](#editorial-audit)
 
-## Canon and scope
+## Audience and purpose
 
-Describe the intended production game presented at the root, `/main`,
-`/loading`, and `/tutorial` routes. Cover the default single-player experience:
-its rules, algorithms, state, content semantics, interaction outcomes,
-game-design philosophy, and non-obvious UI algorithms and philosophy.
+Write for a technical contributor who understands software and game
+development but has no prior Dreamtides context. The reader should not need to
+know the source tree, internal type names, or project history.
 
-LToDD supplements the playable prototype and Cumulus documentation. Assume the
-reader uses the prototype for detailed visual and interaction behavior and the
-Cumulus documentation for component appearance, standard behavior, and APIs.
-Give each meaningful screen and outcome enough concise coverage to orient that
-research, but do not duplicate what those companion references make obvious.
+LToDD explains the intended production game. Cover the concepts, lifecycle,
+rules, algorithms, state changes, content semantics, and non-obvious reasons an
+implementation needs. Give enough screen and interaction context to connect
+those rules to the playable game. Leave detailed visual presentation and
+standard component behavior to the prototype and Cumulus documentation.
 
-Describe one canonical design. Do not discuss alternative implementations,
-discarded behavior, editor tools, scripts, test infrastructure, debug controls,
-or multiplayer and co-op behavior. Treat a deliberately designed loading state
-as game content. Treat incidental network, invalid-data, and prototype recovery
-states as implementation concerns unless the user explicitly establishes one as
-part of the game design.
+The book is neither a pitch nor a complete implementation specification. Its
+job is to teach the system accurately and efficiently. If a detail does not
+help the reader understand or reproduce the design, omit it.
+
+## Canon and research evidence
+
+Use the production flow to learn observable behavior and terminology. Use code,
+data, and logs to uncover hidden rules, ordering, random choices, state changes,
+and edge cases. Research behavior across modules rather than assuming one type
+or directory owns the concept.
+
+Treat evidence as follows:
+
+- Explicit user decisions define the intended design.
+- Existing LToDD is canonical until the requested change revises it.
+- Production behavior and authored data establish the current system.
+- Code and logs explain behavior that cannot be learned by playing.
+- Battle rules are a trusted secondary source for battle.
+- Other Markdown documents are research leads that require verification.
+
+Ask the user only when unresolved evidence supports materially different
+designs. State the exact conflict and show a concrete example of the differing
+result. Do not ask broad questions about goals, values, or experience when a
+specific rule is what needs a decision.
+
+Present the resolved design, not the research trail. Do not cite source files,
+symbols, tests, debug routes, temporary notes, or legacy documents in a
+chapter. Do not describe removed behavior or compare the current design with an
+older version.
+
+Use neutral language when current behavior differs from the intended design.
+Do not label a status, unusual data value, or implementation difference a bug
+unless that classification has been established.
+
+## Explain the game before the machinery
+
+A primary chapter is the entry point for a part. Its first responsibility is to
+teach a newcomer what the subject is and how it fits into Dreamtides.
+
+The opening paragraphs should answer the reader's immediate questions in plain
+language:
+
+- What is this system?
+- When does it operate?
+- What does the player do or observe?
+- What does it produce or change?
+
+Continue in dependency order. A reliable sequence for a foundational chapter
+is:
+
+1. Give the overall purpose and normal lifecycle.
+2. Introduce the first objects and resources needed to follow that lifecycle.
+3. Explain choices, resolution, and outcomes in the order they occur.
+4. Add rules and algorithms beside the phase where they matter.
+5. Explain technical distinctions, identity, persistence, derived values, and
+   deterministic randomness after their gameplay role is clear.
+6. Link to adjacent chapters for systems that own deeper rules.
+
+Do not open a general chapter with authored data shapes, runtime instances,
+identifier schemes, copying rules, durable-state inventories, randomness, or a
+list of invariants. Those subjects may be important later. They are rarely the
+first thing a new contributor needs.
+
+Research depth does not determine prose emphasis. A large or intricate source
+subsystem may need only one paragraph in an overview. Spend words according to
+what the reader must understand, not according to source line count.
+
+## Plain technical prose
+
+Write direct, active, present-tense sentences. Prefer concrete nouns, state
+changes, conditions, and results. Match the tone of
+`docs/journeys/journeys.md` and `docs/battle_rules/battle_rules.md`.
+
+Avoid promotional, literary, or design-theory language. Adjectives such as
+“meaningful,” “legible,” “transformative,” “consequential,” or “tactical” do not
+explain a system by themselves. Replace them with the exact rule or result.
+
+Do not write:
+
+> The loop creates a meaningful tactical rhythm in which every choice reshapes
+> the experience.
+
+Write the observable sequence:
+
+> After each battle, the player chooses one reward. The chosen reward changes
+> the deck used by later battles.
+
+Use rationale when it explains a non-obvious rule. State the rule first, then
+the specific problem it prevents or property it preserves. Omit generic claims
+that a rule improves clarity, agency, pacing, or strategy unless the next
+sentence identifies exactly how.
+
+Remove throat-clearing and roadmap prose. Sentences such as “This section
+explores the systems that govern cards” or “The remaining sections define
+shared conventions” do not help unless they name a concrete dependency or
+reading choice.
+
+Use parentheses, commas, or separate sentences for parenthetical information.
+Do not enclose a parenthetical aside with em dashes. An em dash may still act as
+a simple separator in a compact catalog entry.
+
+Use sentence case for headings. Capitalize proper names such as Dreamtides and
+Dream Atlas. Write common game terms such as card, battle, journey, status, and
+ability in lowercase.
+
+## Terminology and first use
+
+Never require a new reader to infer a project term from context. At the first
+use of every specialized term, do one of the following:
+
+- define it in the same sentence;
+- give a short parenthetical explanation and link to its defining section; or
+- defer the term until the definition is useful.
+
+When a concept needs a brief early mention, explain enough to continue and link
+to its full treatment. For example:
+
+> The player first chooses a **Dream Avatar**, the character that supplies the
+> journey's starting deck and abilities. See [Dream Avatars](#dream-avatars).
+
+Do not repeatedly use a term and define it several sections later. A glossary
+entry does not excuse an unexplained first use in the chapter.
+
+Bold a canonical term once, at its first real definition. Do not bold ordinary
+uses, capitalize a term to make it look canonical, or turn every source type
+into book vocabulary.
+
+Prefer the shortest name that remains unambiguous in context. If “card
+instance” and “battle card” distinguish two real lifetimes, use those terms.
+Do not lengthen them mechanically to “journey card instance” and “battle card
+instance” when the shorter terms are clear.
+
+Before finishing, search for every named resource, symbol, status, keyword,
+algorithm, object category, and identity distinction. Inspect its first
+occurrence. Name a technical algorithm by kind on first use, such as “the
+Xoshiro256PlusPlus pseudorandom number generator.”
+
+Do not name-drop lists of keywords, status values, or ability categories that
+the chapter does not explain. Either define the items that matter or refer to
+the owning system in general terms.
+
+## Technical models earn their names
+
+Source code often names helper values, resolved views, adapters, and temporary
+objects. These are not automatically concepts in the game design.
+
+Create a canonical noun only when the distinction has at least one of these
+properties:
+
+- distinct identity that rules can refer to;
+- state with a different lifetime or owner;
+- multiplicity that changes behavior;
+- rules that treat the object differently from nearby concepts; or
+- a boundary a clean implementation must preserve.
+
+For example, a persistent card instance and a battle card are distinct because
+one card instance can produce several battle cards, each with independent
+battle-local state. A calculated set of card values is not necessarily another
+object. Explain it as “the card's resolved values” unless the design gives that
+result its own identity or behavior.
+
+Prefer composition over invented entities. State that a definition, persistent
+modifications, and current context determine a card's resolved values. Do not
+create an extra canonical object solely because the implementation has a type
+for that calculation.
+
+When deciding whether state should be stored directly or derived, explain the
+actual design risks: loss of the base value, fragile reversal, order-dependent
+stacking, context changes, copy semantics, or poor diagnostics. Do not invent a
+new noun merely to discuss those risks.
+
+## Implementation-neutral contracts
+
+Describe the game independently of platform, application framework, and storage
+format. A valid implementation may use different runtime and persistence
+machinery while preserving the same design.
+
+State what must remain true:
+
+- which identity persists across phases;
+- which state is temporary and which affects later play;
+- which values must be restored to continue the same game;
+- which random generator and full generator state determine future results;
+- which operations may create multiple independent copies; and
+- which ordering affects the result.
+
+Do not prescribe browser actions, URLs, framework state, event-log reduction,
+database layout, file format, or serialization strategy. Avoid implementation
+terms such as reload, reducer, fold, component state, or storage key when the
+design requirement is simply that a game can resume with the same state.
+
+A stable authored TOML key may be named when it forms part of the implementation
+package. Explain its meaning and constraints, but do not let the source shape
+dictate the chapter's conceptual model.
+
+## Algorithms, rules, and rationale
+
+Explain an algorithm at the highest level that still lets a clean
+implementation reproduce the intended result. Include only the relevant parts
+of this contract:
+
+- inputs and preconditions;
+- output or state change;
+- evaluation and resolution order;
+- selection pool and exclusions;
+- when randomness is sampled;
+- fixed constants that are intrinsic rules;
+- edge cases that change an outcome; and
+- the reason for a non-obvious constraint.
+
+Use ordered steps when order matters, equations when a formula is the clearest
+expression, and narrow tables for exact mappings. Do not write source code,
+pseudocode, type signatures, or source-oriented control flow.
+
+Keep a rule beside the phase where it operates. Do not collect unrelated rules
+into an “invariants” section merely because they are easy to enumerate. A short
+summary table is useful only when it helps compare several rules already
+explained in context.
+
+Explain randomness next to the choice it affects. Distinguish deterministic
+reproduction from a persistence mechanism. State the generator and the state
+that controls future draws without specifying how that state is stored.
+
+## Authored data
+
+Treat authored catalogs as accompanying implementation inputs. Explain the
+meaning and constraints of stable fields when they are needed to implement the
+rules. Do not reproduce current catalog entries, curated lists, names, UUIDs,
+or mutable values in prose.
+
+Use abstract examples when an authored entry is needed. Describe “a card with a
+cost-reduction ability” rather than naming a current card. Card names are not
+unique and never identify cards in technical reasoning.
 
 Treat Tide membership as manually curated authored data. Do not describe draft
-records, document frequency, IDF, the construction of `tides4`, or any algorithm
-derived from those materials. When production logic currently depends on such an
-algorithm, describe the clean version-controlled TOML input that supplies the
-resulting design behavior.
-
-Assume the shipped TOML files, playable prototype, and Cumulus documentation
-accompany LToDD as part of the implementation package. A chapter may name a
-stable TOML file or key when that helps define the interface between authored
-data and game behavior. Explain the key's meaning, constraints, and
-consumption. Do not copy its current value or enumerate its entries. State fixed
-design constants in prose when they are intrinsic rules rather than mutable
-authored configuration.
-
-## Clean design from prototype evidence
-
-Use the prototype to determine observable behavior and terminology, not
-architecture. The production UI is the reader's detailed reference for screens,
-interactions, and motion. Code and data expose rules and non-obvious UI
-algorithms that playing cannot. Logs can reveal how a production algorithm
-reached a particular decision.
-
-Do not assume source modules, types, identifiers, or data shapes form a good
-explanatory model. Replace legacy iteration with the simplest coherent model
-that reproduces the intended behavior. Preserve consequential ordering,
-randomness, state transitions, persistence, and algorithmic choices even when
-the new description groups them differently.
-
-When observed behavior, source logic, existing chapters, and apparent intent
-conflict, stop and ask the user which design is canonical. Do not canonize a bug
-or silently substitute an inferred ideal. Publish only the resolved design.
-
-Keep research provenance out of the book. Do not cite source files, symbols,
-legacy Markdown, temporary notes, test fixtures, or debug routes. Link to TOML
-interfaces, other LToDD chapters, and durable external design references only
-when they are part of the clean implementation package.
-
-## Information density and precision
-
-Write for an expert implementer who knows game development, can play the
-prototype, and can read Cumulus component documentation, but does not know
-Dreamtides or its TypeScript source. Introduce concepts with compact sentences,
-then use bullets, numbered lists, or narrow tables when enumeration is clearer.
-Prefer one precise statement over several qualifying sentences.
-
-Make every non-obvious rule, algorithm, state transition, and design decision
-explicit. The prototype may own visible presentation detail, and Cumulus may
-own standard component behavior. Do not rely on genre convention,
-implementation habits, or the reader's intuition to supply an unstated gameplay
-or algorithmic requirement.
-
-Describe behavior in plain, active, present-tense prose. Do not use RFC
-keywords, discuss permitted variants, or present multiple designs. Put each
-decision beside the rationale and consequences that make it intelligible.
-
-Specify all details needed to reproduce the canonical system, including:
-
-- inputs, outputs, preconditions, and state ownership;
-- rules, invariants, and meaningful edge cases;
-- evaluation and resolution order;
-- random selection domains and when randomness is sampled;
-- persistence boundaries and transitions between durable states;
-- algorithmic structure and internal models that materially explain behavior;
-- a concise description of every meaningful player choice and outcome;
-- non-obvious UI selection, placement, coordination, and interruption rules;
-- the design goal or player experience behind consequential decisions.
-
-Include implementation detail when it expresses a stable, useful clean-rewrite
-contract. Exclude details that merely recite TypeScript, React, DOM structure,
-source file ownership, normal component composition, or temporary prototype
-machinery. Describe an algorithm through exact prose, ordered steps, equations,
-or compact tables at the highest level that preserves its contract. Do not write
-pseudocode.
-
-Do not include source code, pseudocode, diagrams, or Mermaid. Use exact prose,
-ordered steps, equations, or compact tables when an algorithm needs formal
-detail. Keep tables narrow enough for the 80-column limit; use lists when a
-table would become wide or sparse.
-
-Remove repetition, throat-clearing, generic advice, and implementation trivia.
-A complete short chapter is preferable to padding toward the editorial target
-of roughly 20,000 characters. Reserve supplements for systems or algorithms
-whose unusual complexity rewards a deeper treatment after the primary chapter
-has already explained the part clearly and in detail.
-
-## Terminology and authored data
-
-Use the names players see in the game. Never substitute a source-only label
-because it is convenient or familiar to the current implementation. When the UI
-has no term for a concept necessary to explain the design, introduce one clear
-implementation-neutral term, define it immediately, and add it to the glossary.
-
-Functionally exclude references to specific cards, Dream Avatars, Dreamsigns,
-Tides, encounters, or other authored entries. The accompanying TOML catalogs own
-that content. Use abstract fixtures when an example needs an entry: “assume a
-Dreamsign exists with this ability.” Do not reproduce names, UUIDs, catalog
-values, or current curated lists.
-
-Use `glossary.md` as the canonical alphabetical terminology catalog. Give each
-term a concise definition and link its primary chapter. Still explain an
-essential term in local context when a reader needs it to understand the
-surrounding section.
+record corpora, frequency metrics, historical derivation, or experimental pool
+construction. Describe the canonical authored input consumed by the game.
 
 ## Screens, outcomes, and Cumulus
 
-Treat the prototype and Cumulus documentation as companion parts of the design.
-Read the Cumulus skill and relevant references before describing a screen or
-interaction. Use established Cumulus names rather than inventing nearly
-equivalent visual concepts.
+Use the prototype to understand visible behavior and the handoff between game
+states. Use Cumulus documentation for standard component presentation and
+interaction.
 
-For each meaningful screen or screen family:
+For each screen or screen family that materially helps explain the flow:
 
-- give one or two sentences explaining its role, principal interaction, and
-  handoff;
-- briefly name every Cumulus component visible on it;
-- describe each distinct player choice or outcome in one concise sentence,
-  including the semantic result and durable consequence; and
-- use a representative screenshot selectively when it materially helps the
-  reader recognize the screen or understand a spatial relationship.
+- state its role in the larger system;
+- describe the principal choice or interaction;
+- state the semantic result and any later effect; and
+- explain only the non-obvious selection, placement, coordination, or
+  interruption algorithms.
 
-Delegate component appearance, APIs, material, typography, spacing, ordinary
-press and focus behavior, and generic motion to Cumulus. Do not explain normal
-React composition or restate how a component works.
+Name Cumulus components only when the name helps a contributor connect the
+chapter to the shared design system. Do not inventory every component by
+default, reproduce APIs, or narrate routine presentation and motion.
 
-State the governing animation and choreography philosophy once near the start
-of the relevant chapter or flow. Individual screens and outcomes do not need
-shot-by-shot motion, timing, easing, or routine transition descriptions. Explain
-motion locally only when it communicates a hidden rule, changes gameplay state,
-or participates in a non-obvious coordination algorithm.
+Discuss input methods or accessibility behavior only when a game-specific rule
+changes. Leave standard focus, contrast, text scaling, and reduced-motion
+contracts to Cumulus.
 
-Fully specify UI algorithms that cannot be recovered simply by playing. Common
-examples include safe-area avoidance, responsive mode selection, object and
-Info Card positioning, collision resolution, reveal coordination, priority,
-interruption, and focus or input routing with game-specific consequences. Give
-their inputs, ordering, invariants, meaningful constants, edge cases, and
-rationale in exact high-level prose rather than pseudocode.
+## Parts, chapters, and size
 
-Discuss mouse, keyboard, touch, controller, or accessibility behavior when it
-changes the canonical interaction or relies on a non-obvious screen-specific
-rule. Delegate standard input, focus, contrast, text scaling, and reduced-motion
-contracts to Cumulus. Avoid web-platform concepts such as CSS layout, DOM
-events, browser storage, and React component structure.
+Organize the book as part directories beneath `ltodd/`. Each part contains one
+primary chapter whose filename matches the directory and may contain selected
+supplements. Keep `index.md` and `glossary.md` at the root.
 
-## Parts, primary chapters, and supplements
+The primary chapter explains the complete subject at onboarding depth. It must
+stand alone, but “complete” does not mean every internal edge case or data
+structure. It means the reader understands what the system is, how its main
+flow works, which rules define it, and where linked systems take over.
 
-Organize LToDD as an ordered series of coherent, discoverable subject areas
-such as Cumulus or Sites. Each populated part has exactly one primary chapter,
-whose filename mirrors its directory:
+A supplement owns one focused system whose complexity would otherwise obscure
+the primary chapter. It is not a place to move ordinary explanation, screen
+catalogs, or source-module details.
 
-- `ltodd/cumulus/cumulus.md` is the primary chapter of `/cumulus`.
-- Any other Markdown chapter in `ltodd/cumulus/` is a supplement.
+Begin every chapter with exactly one level-one title followed by a plain prose
+opening. Use lowercase underscore filenames and no frontmatter, dates,
+authorship, research notes, or design history. Keep physical lines at 80
+columns except for unbreakable external URLs.
 
-The primary chapter owns the part's complete conceptual account. Write it first
-and make it stand alone: introduce the whole subject, state its consequential
-rules and decisions, give the algorithms enough detail to understand their
-role, and do not depend on hypothetical supplements. Do not seed it with
-placeholders, forward references, or artificial gaps for possible later work.
+Use 20,000 Unicode characters as a loose planning reference only. A clear
+chapter may be much shorter. Never add examples, tables, rationale, or technical
+detail to approach that size. The hard limit is 40,000 characters for an
+ordinary chapter.
 
-After finishing and validating a new primary chapter, assess whether two to
-four especially complex systems or algorithms might benefit from supplemental
-chapters. Present those candidates to the user with a scope and rationale; do
-not add them to the book until selected. A primary chapter that already gives
-the topic sufficient depth needs no supplements.
+## Cross-references and the glossary
 
-A supplemental chapter owns a narrow deep dive. It typically formalizes a
-complex selection, resolution, state-transition, or coordination algorithm at
-greater depth. It does not exist to catalog screens, describe ordinary UI,
-mirror source modules, or shorten the primary mechanically. When adding one,
-revise the primary to summarize and link the deeper treatment while preserving
-the primary as a clear, detailed, independently useful account of the part.
+Use `index.md` as the authoritative reading order and ownership map. Each part
+gets a short purpose statement, its primary chapter first, then selected
+supplements. Scope statements should tell a reader when the chapter is useful.
 
-Reuse an existing part whenever its purpose fits. Create a part when the new
-subject would otherwise make an existing part incoherent, and create its
-matching primary chapter as the first chapter. Never create an empty part or a
-part containing only supplements.
+Link sections when the reading dependency is real:
 
-## Chapter organization
+- Link an early brief definition to its fuller section.
+- Link to another chapter that owns a prerequisite or a deeper system.
+- Link repeated local facts to the chapter that owns the complete rule.
 
-Keep `ltodd/index.md` and `ltodd/glossary.md` at the book root. Place every
-ordinary chapter exactly one level down as
-`ltodd/<part_name>/<chapter_name>.md`. Use lowercase underscore names without
-numeric prefixes for both parts and chapters. A chapter contains no YAML
-frontmatter, version label, update date, authorship, research notes, or design
-history. Git owns history.
+Do not use links as a substitute for the sentence needed to understand the
+current paragraph. Do not scatter a critical rule across several chapters.
+Avoid turning ordinary prose into a dense navigation list.
 
-Make each part a coherent, discoverable subject area such as Cumulus or sites.
-Reuse an existing part whenever its scope fits. Create a part when the new
-subject would otherwise make an existing part incoherent; do not create a
-directory merely to hold one arbitrarily isolated chapter.
+Add a glossary entry for stable Dreamtides vocabulary used across contexts.
+Define the term compactly and link its owning primary chapter. Do not add source
+synonyms, one-off helper labels, derived views, or every bold phrase.
 
-Begin each chapter with exactly one level-one title. Follow it with a compact
-opening paragraph that answers:
+## Examples, tables, and symbols
 
-- what the chapter specifies;
-- when an implementer should read it; and
-- which adjacent chapters own prerequisites or intentionally separated detail.
+Use a concrete example when it clarifies multiple state changes, identity,
+multiplicity, ordering, or an edge case. State the minimum initial conditions,
+walk through the relevant change, and name the result. Omit examples that only
+repeat the preceding sentence.
 
-Choose the remaining structure around the subject's important design decisions.
-Do not force universal headings or include empty sections. Use the structural
-patterns in `content-patterns.md` as adaptable examples.
+Use tables for exact mappings and comparisons. Put a symbol directly in the
+symbol table that defines it. Do not explain a missing row in prose.
 
-Keep every physical line at 80 columns or fewer. An unbreakable external URL in
-a reference definition is the sole exception. This is a formatting rule, not a
-chapter-size measure.
-
-Aim for roughly 20,000 Unicode characters in each primary or supplemental
-chapter, counting Markdown and whitespace. The tools normalize CRLF line
-endings to LF and count Unicode code points. Treat the target as a density
-guide, not a minimum. A chapter must not exceed 40,000 characters. Roughly
-3,000–3,500 English words or 275–325 lines wrapped to 80 columns often lands
-near the target; prose varies, so use the measurement script rather than
-relying on the heuristic. The hard cap does not apply to the book-level
-`index.md` or `glossary.md` references.
-
-## Discovery and cross-references
-
-Make `index.md` the authoritative book structure, reading order, and discovery
-map. Start it with the book title and a compact “How to read this book” paragraph
-that explains the primary-and-supplemental structure and tells an implementer
-to choose a part by purpose, begin with its primary chapter, and follow a
-supplement when deeper algorithmic detail is relevant.
-
-Give every part a heading and a concise purpose statement describing what the
-part contributes to the overall book. For every populated part, list the
-matching primary chapter first and label it **Primary**. Follow it with each
-optional chapter labeled **Supplement** in canonical reading order. List every
-ordinary chapter exactly once. Give each entry the chapter's exact title, its
-stable path link, and a short scope statement answering “when should I read
-this?” List `glossary.md` exactly once as a book-level reference. Do not list
-possible future supplements or place authorship, status, planning notes, or
-dates in the index.
-
-Give each concept a primary chapter, then repeat the exact facts and constraints
-a reader needs locally. Link to the primary chapter for the complete system.
-Never force a reader to assemble a critical rule from scattered references. When
-a repeated fact changes, update every occurrence in the same change.
-
-Prefer links that clarify ownership or reading order. Avoid link density that
-turns ordinary prose into a navigation list.
-
-## Worked examples
-
-Add a concrete one- or two-sentence example when a gameplay flow, algorithm, or
-interaction has multiple state changes. Use another example only to reveal a
-materially different branch or edge case. Omit an example when it would simply
-repeat a static description.
-
-Use abstract content fixtures rather than named catalog entries. State the
-minimum initial conditions, walk through the meaningful change, and name the
-observable result. Keep examples canonical; do not introduce a hypothetical
-variant of the design.
+Keep examples abstract rather than naming authored catalog entries. Use actual
+parentheses for short clarifications when they improve first-use definitions.
 
 ## Prototype images
 
-Include a live prototype screenshot when it materially helps the reader
-recognize a screen, follow a flow, or understand a spatial relationship or
-non-obvious UI algorithm. Use images selectively. A chapter or screen family
-usually needs no more than one representative view; add another only when it
-communicates a distinct fact that prose and hands-on use of the prototype do not
-make clear. Do not document every outcome, viewport, transient state, or motion
-key moment with an image.
+Use a live prototype image only when it helps the reader recognize a screen or
+understand a spatial relationship that prose does not convey efficiently. Most
+chapters do not need an image for every state or flow.
 
-Every image shows canonical player-facing presentation at a deliberate desktop
-or narrow viewport. Exclude debug controls, browser chrome, annotations,
-pointer highlights, and incidental loading or error states. Capture at 2x device
-scale, verify the dimensions, inspect the rendered image, and confirm the
-prototype error buffer is empty before publishing it.
+Show canonical player-facing presentation without debug controls, annotations,
+pointer highlights, or platform chrome. Inspect the image before publishing and
+confirm the prototype reports no render or console errors. Keep image binaries
+outside version control.
 
-Publish the inspected binary with the skill's `publish-image.mjs` helper. It
-stores the image in the project's public Google Cloud Storage bucket beneath
-the chapter's content-addressed `ltodd/<part>/<chapter>/` namespace and prints
-the required reference-style Markdown. Keep binaries outside version control.
+Publish through the skill helper. Place the generated reference-style Markdown
+beside the supporting prose, with useful alt text and a concise italic caption.
+Do not commit local paths, invented URLs, temporary links, or image
+placeholders.
 
-Place the image beside the prose it supports, followed immediately by a concise
-italic caption. Give the image useful alt text that describes the visible
-evidence. Keep its generated URL reference in the same chapter. Screenshots may
-carry ordinary visual detail because the prototype is a companion reference;
-all non-obvious rules and algorithms still belong in prose.
+## Editorial audit
 
-Every committed image link resolves to the project's public bucket. Do not
-commit image-plan comments, local file paths, invented URLs, expiring signed
-URLs, or output from the publisher's dry-run mode. When a suitable canonical
-capture is unavailable, omit the image and report the blocker outside the book.
+Read the completed chapter once as a newcomer and once as an implementer.
 
-## Completion standard
+During the newcomer pass, verify:
 
-Before finishing an LToDD change, confirm that:
+- the opening explains the subject before using specialized vocabulary;
+- the main lifecycle appears before narrow technical machinery;
+- every specialized term is defined, briefly explained and linked, or deferred
+  at first use;
+- common game terms are lowercase and first definitions are bolded once;
+- cross-links appear where a concept precedes its full treatment;
+- no vague roadmap sentence, pitch language, or ornamental phrasing remains;
+- parenthetical asides use parentheses, commas, or separate sentences; and
+- the chapter is concise enough that the important concepts remain prominent.
 
-- the prose describes one resolved canonical design;
-- every populated part has exactly one matching primary chapter;
-- each primary chapter remains a clear, detailed account of its complete part;
-- every supplement is a justified deep dive into a complex system or algorithm;
-- every affected chapter and duplicated rule agrees;
-- the index scope statements and reading order remain accurate;
-- the glossary contains every introduced or changed project term;
-- non-obvious behavior, algorithms, and rationale are locally complete;
-- every gameplay and algorithmic requirement is explicit rather than implied;
-- consequential game-design and UI-design philosophy is stated beside the
-  behavior it explains;
-- every meaningful screen and outcome has concise orienting coverage;
-- screens briefly name their visible Cumulus components and delegate standard
-  behavior and APIs to Cumulus documentation;
-- detailed presentation and choreography are left to the prototype;
-- UI algorithms are specified with enough precision to reproduce their
-  decisions without reading TypeScript;
-- TOML references describe stable interfaces without copying current values;
-- no specific authored content, excluded system, or web implementation leaks
-  into the chapter;
-- every worked example and prototype image adds distinct information;
-- no TODO, alternative, uncertainty, or speculative claim remains; and
-- the formatter and checker pass after all warnings are reviewed.
+During the implementation pass, verify:
+
+- rules, inputs, ordering, state changes, and edge cases are exact where needed;
+- source helpers have not become unnecessary canonical concepts;
+- identity distinctions correspond to real lifetime, multiplicity, or behavior;
+- platform, framework, storage, and serialization choices do not leak in;
+- user decisions are represented even when implementation evidence differs;
+- terminology is consistent with the glossary and adjacent chapters;
+- tables contain every symbol or mapping they claim to define;
+- examples add information rather than padding; and
+- no TODO, alternative design, uncertainty, or speculative claim remains.
+
+Finally, search the corpus for changed terms and duplicated rules, update the
+index and glossary, run the formatter and checker, and inspect every warning.

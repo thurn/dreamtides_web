@@ -20,9 +20,9 @@ this reference or reproduce its source organization in an LToDD chapter.
 5. Verify consequential behavior in the production flow before writing it as
    canonical.
 
-A file may inform several parts. For example, a Card component contributes
-evidence about both Game Objects and Cumulus, while a Purge screen contributes
-evidence about both Sites and Deckbuilding. Map the behavior by design
+A file may inform several parts. For example, a card component contributes
+evidence about both game objects and Cumulus, while a purge screen contributes
+evidence about both sites and deckbuilding. Map the behavior by design
 responsibility rather than forcing every file into exactly one part.
 
 ## Estimating relative source size
@@ -55,7 +55,7 @@ that accident into the book map.
   They are evidence for the relevant gameplay part, not independent book
   subjects.
 - `src/rules/` usually provides the strongest source evidence for resolution
-  order, invariants, and durable consequences. Confirm presentation and
+  order, state changes, and lasting results. Confirm presentation and
   player-facing terminology in the production flow.
 - `src/cumulus/primitives/` and generic reusable components help identify each
   screen's brief component inventory. Cumulus documentation owns their standard
@@ -77,22 +77,26 @@ that accident into the book map.
 - Editor, debug, QA, test, generated-documentation, and build-tool sources are
   research aids or implementation infrastructure rather than book subjects.
 
-## `/dreamtides` — Foundations and Game Objects
+## `/dreamtides` — Foundations and game objects
 
-Start with the shared Card, Dream Avatar, Dreamsign, Figment, resource, content,
+Begin by reconstructing the whole game and journey lifecycle. Use the main game
+flow, `docs/journeys/journeys.md`, journey state, and the major destination and
+battle handoffs to establish what Dreamtides is before researching its internal
+object models.
+
+Then inspect shared card, Dream Avatar, Dreamsign, figment, resource, content,
 and identity models under `src/types/` and `src/data/`. Card catalog loading,
-effective Card transformations, glossary-backed rules language, and the semantic
-Card and collectible components under `src/cumulus/components/` are common
-evidence sources. Within that component family, galleries, playing-card
-presentation, rich rules text, stat orbs, and glossary reveals help reconstruct
-how a readable effective Card is assembled from the underlying object model.
+rules-language resolution, and the semantic card and collectible components
+under `src/cumulus/components/` provide evidence for how definitions,
+persistent instances, modifications, and current context determine what the
+player sees. Treat resolved component data as a calculation unless the rules
+give it separate identity or behavior.
 
-Keep acquisition and deck evolution in `/draft_deckbuilding`, Site
-transactions in `/sites`, and contest-time resolution in the Battle
-parts. Cumulus owns the reusable visual and interaction contracts of the same
-objects.
+Keep acquisition and deck evolution in `/draft_deckbuilding`, site
+transactions in `/sites`, and contest-time resolution in the battle parts.
+Cumulus owns the reusable visual and interaction contracts of the same objects.
 
-## `/cumulus` — The Cumulus Design System
+## `/cumulus` — The Cumulus design system
 
 Use `src/cumulus/primitives/`, `src/cumulus/components/`, and the `/cumulus`
 documentation route to identify the components visible on each screen. The
@@ -105,7 +109,7 @@ Put coordinated gestures, screen arrangement algorithms, and other non-obvious
 UI behavior in `/cumulus_interaction`, and put a screen's particular meaning in
 its gameplay part.
 
-## `/cumulus_interaction` — Interaction and Screen Composition
+## `/cumulus_interaction` — Interaction and screen composition
 
 Start with the shared press primitive, the entity-reveal coordinator under
 `src/cumulus/internal/reveal/`, `CumulusRoot`, reusable control and overlay
@@ -119,37 +123,38 @@ presentation to Cumulus documentation and the prototype.
 Gameplay parts own the consequences of an action and the state-dependent
 arrangement of a particular destination or contest.
 
-## `/journeys` — Dream Journeys and the Dream Atlas
+## `/journeys` — Dream journeys and the Dream Atlas
 
 Start with journey state and lifecycle rules under `src/state/` and
 `src/rules/journey/`, then follow the Atlas generator, affiliation logic,
 Dreamscape and Atlas data, and the journey-start, Dreamscape, Atlas, completion,
 and failure screens and adapters. Application-level progression and handoffs can
-help reconstruct the complete run. Journey content assembly, global events and
-reducers, invariants, the persistent status display, the front door, the main
-menu, and loading states expose the connective rules between those phases.
+help reconstruct the complete run. Journey content assembly, persistent status,
+the front door, the main menu, and loading states expose the connective rules
+between those phases. Treat the implementation's state machinery as evidence
+for those rules rather than as book vocabulary.
 
-Destination mechanics belong in the Site parts, Battle mechanics in the Battle
+Destination mechanics belong in the site parts, battle mechanics in the battle
 parts, and authored teaching restrictions in `/tutorial`.
 
-## `/draft_deckbuilding` — Draft Pools, Tides, and Deckbuilding
+## `/draft_deckbuilding` — Draft pools, Tides, and deckbuilding
 
 Start with the canonical Tide-backed pool path under `src/draft/`, the authored
-Tide input, Draft rules, and Draft presentation. Follow journey deck rules,
+Tide input, draft rules, and draft presentation. Follow journey deck rules,
 entry identity, deck viewers, and the Purge, Duplication, Transfiguration, and
-type-change logic and presentation for deck evolution. The Draft engine, pool
-support models, Card multiplicity, pool inspection, and starting-deck reveal
+type-change logic and presentation for deck evolution. The draft engine, pool
+support models, card multiplicity, pool inspection, and starting-deck reveal
 clarify how the authored supply becomes a persistent player deck.
 
 Historical pool derivation and experimental draft modes are outside the book.
 The stable authored Tide result is the canonical input. Site arrival, payment,
-and departure belong in `/sites`, even when the Site changes the deck.
+and departure belong in `/sites`, even when the site changes the deck.
 
-## `/sites` — Journey Economy and Dream Sites
+## `/sites` — Journey economy and Dream Sites
 
-Start with journey Site, shop, reward, and economy rules; pricing and reward
-helpers; authored economy data; and the Site screens and adapters for markets,
-Dreamsign Revelation, inline rewards, Random Site, and shared destination
+Start with journey site, shop, reward, and economy rules; pricing and reward
+helpers; authored economy data; and the site screens and adapters for markets,
+Dreamsign Revelation, inline rewards, random site, and shared destination
 flows. These sources inform availability, entry, enhancement, prepared
 randomness, Guide hosting, payment, reward receipt, completion, and return to
 the Dreamscape. Site intent resolution, shop generation, reward effects,
@@ -158,7 +163,7 @@ presentation shared by several destinations.
 
 The deck mutation performed by Purge, Duplication, or Transfiguration belongs in
 `/draft_deckbuilding`. Augury, Exploration, and Gamble continue in their own
-parts after the shared Site handoff.
+parts after the shared site handoff.
 
 ## `/exploration_augury` — Augury and Exploration
 
@@ -172,14 +177,14 @@ operation archetypes, journey context, fit and Dreamsign signals, merchant
 generation, dialogue, decision traces, and offer presentation as one connected
 pipeline.
 
-Underlying Card changes belong in `/draft_deckbuilding`; shared prices and
-rewards belong in `/sites`; future Battle modifiers also need coverage in
-the relevant Battle part.
+Underlying card changes belong in `/draft_deckbuilding`; shared prices and
+rewards belong in `/sites`; future battle modifiers also need coverage in the
+relevant battle part.
 
 ## `/gamble_site` — Gamble
 
-Start with the journey Gamble rules, Gamble state types, authored data for each
-chance game, and the Gamble screen, builder, and adapter. These sources inform
+Start with the journey gamble rules, gamble state types, authored data for each
+chance game, and the gamble screen, builder, and adapter. These sources inform
 wagers, committed hidden outcomes, reveals, settlement, repeated rounds,
 cashing out, enhancement, payouts, Dreamsign awards, replacement, and reveal
 sequencing philosophy.
@@ -187,11 +192,11 @@ sequencing philosophy.
 Shared Essence and Dreamsign economics remain in `/sites` and Game
 Object identity remains in `/dreamtides`.
 
-## `/battle_setup` — Battle Setup and Opposition
+## `/battle_setup` — Battle setup and opposition
 
 Start with `src/battle/integration/`, opponent package and deck construction,
-`src/battle/ai/`, initial Battle state, Dreamwell and Figment catalogs, the
-Battle initialization provider, and the Battle-start screen and adapter. These
+`src/battle/ai/`, initial battle state, Dreamwell and figment catalogs, the
+battle initialization provider, and the battle-start screen and adapter. These
 sources inform participants, objectives, decks, Dreamsigns, initial zones and
 resources, deterministic setup, opponent coherence, difficulty, decision
 priorities, and the preview of the coming contest. Corpus-backed deck selection,
@@ -201,47 +206,47 @@ evaluation explain how an opponent package becomes a legible opposing strategy.
 Rules governing legal play belong in `/battle_rules`; the live player-facing
 contest belongs in `/battle_outcomes`.
 
-## `/battle_rules` — Battle Rules and Resolution
+## `/battle_rules` — Battle rules and resolution
 
-Start with `src/rules/battle/`, `src/battle/engine/`, Battle state transitions
-and selectors, and the shared Battle types. Use
+Start with `src/rules/battle/`, `src/battle/engine/`, battle state transitions
+and selectors, and the shared battle types. Use
 `docs/battle_rules/battle_rules.md` as the trusted secondary source required by
-the skill. These sources inform zones, turns, timing, priority, Energy, Card
+the skill. These sources inform zones, turns, timing, priority, energy, card
 play, costs, legality, targeting, effects, triggers, counters, repositioning,
-Challenges, Spark, scoring, Fatigue, created Cards, Figments, resolution order,
-and terminal conditions. The state fold, event driver, effect runner and tables,
-basic automation, and state selectors provide the clearest evidence for exact
-ordering and automatic consequences.
+challenges, spark, scoring, fatigue, created cards, figments, resolution order,
+and terminal conditions. The effect runner, rules tables, automation, and state
+selectors provide evidence for exact ordering and automatic results. Translate
+that evidence into state transitions and rules rather than runtime architecture.
 
 Debug-edit commands and inspector behavior are outside the canonical rules.
 Opponent decision policy belongs in `/battle_setup`; presentation and rewards
 belong in `/battle_outcomes`.
 
-## `/battle_outcomes` — Battle Presentation and Outcomes
+## `/battle_outcomes` — Battle presentation and outcomes
 
-Start with the live Battle controllers and components under `src/battle/`, the
-playable Battle screen, Battle-specific Cumulus components and overlays, Battle
+Start with the live battle controllers and components under `src/battle/`, the
+playable battle screen, battle-specific Cumulus components and overlays, battle
 view-model builders and adapters, the result surface, and the reward handoff.
-These sources inform Battle-specific algorithms, participant status, action and
+These sources inform battle-specific algorithms, participant status, action and
 target consequences, responsive selection, inspection, rewards, and durable
 journey consequences. Briefly cover the context menu, zone browser, Foresee
-view, Battle log, Figment creation, Card notes, deck ordering, and Dreamwell
+view, battle log, figment creation, card notes, deck ordering, and Dreamwell
 history as distinct player workflows, while leaving their detailed presentation
 to the prototype.
 
 The legal and state-changing meaning of those interactions remains in
 `/battle_rules`; shared reward economics remain in `/sites`.
 
-## `/tutorial` — Tutorial Journey and Teaching
+## `/tutorial` — Tutorial journey and teaching
 
 Start with tutorial-authored data and types, tutorial guidance rules, tutorial
 state hooks and controllers, front-door and loading presentation, and the
-Tutorial, tutorial-Battle, and guided-journey screens, builders, and adapters.
+Tutorial, tutorial battle, and guided-journey screens, builders, and adapters.
 These sources inform authored action restrictions, guidance triggers,
-instruction timing, contextual Card help, the cinematic lesson, tutorial
-Battle, and the transition into the guided journey. The authored action
-timeline, fixed journey pool, tutorial AI overrides, controller timing, Card and
-Site guidance, and speech-bubble presentation define how that teaching sequence
+instruction timing, contextual card help, the cinematic lesson, tutorial
+battle, and the transition into the guided journey. The authored action
+timeline, fixed journey pool, tutorial AI overrides, controller timing, card and
+site guidance, and speech-bubble presentation define how that teaching sequence
 stays deterministic and context-sensitive.
 
 The primary gameplay parts remain authoritative for every rule being taught.

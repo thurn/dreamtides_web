@@ -492,6 +492,77 @@ test("warns about implementation leakage without failing validation", async () =
   });
 });
 
+test("warns about platform and storage strategy leakage", async () => {
+  const files = validFiles();
+  files["journey/journey.md"] = files["journey/journey.md"].replace(
+    "Assume an authored destination exists with one available action. Selecting",
+    "After the browser reloads, serialized state is restored by a fold. Selecting",
+  );
+
+  await withBook(files, async (bookDirectory) => {
+    const result = await validateBook(bookDirectory);
+    assert.deepEqual(result.errors, []);
+    assert.ok(
+      result.warnings.some((warning) =>
+        warning.includes("browser-specific behavior"),
+      ),
+    );
+    assert.ok(
+      result.warnings.some((warning) =>
+        warning.includes("platform reload behavior"),
+      ),
+    );
+    assert.ok(
+      result.warnings.some((warning) =>
+        warning.includes("serialization strategy"),
+      ),
+    );
+    assert.ok(
+      result.warnings.some((warning) =>
+        warning.includes("state-fold architecture"),
+      ),
+    );
+  });
+});
+
+test("warns about recurring editorial failure modes", async () => {
+  const files = validFiles();
+  files["journey/journey.md"] = files["journey/journey.md"]
+    .replace(
+      "Assume an authored destination exists with one available action. Selecting",
+      "The journey — one complete run — begins with a choice. Selecting",
+    )
+    .replace(
+      "## Decisions advance the journey",
+      [
+        "## Decisions advance the journey",
+        "",
+        "The remaining sections define shared conventions.",
+        "This section explores journey state.",
+      ].join("\n"),
+    );
+
+  await withBook(files, async (bookDirectory) => {
+    const result = await validateBook(bookDirectory);
+    assert.deepEqual(result.errors, []);
+    assert.ok(
+      result.warnings.some((warning) =>
+        warning.includes("em-dash parenthetical"),
+      ),
+    );
+    assert.ok(
+      result.warnings.some((warning) =>
+        warning.includes("vague section roadmap prose"),
+      ),
+    );
+    assert.ok(
+      result.warnings.some((warning) =>
+        warning.includes("section metadiscourse"),
+      ),
+    );
+  });
+});
+
 test("enforces the Unicode chapter character cap", async () => {
   const files = validFiles();
   files["journey/journey.md"] = [
@@ -522,8 +593,9 @@ test("reports chapter roles and character counts", async () => {
       `${measurement.stdout}\n${measurement.stderr}`,
     );
     assert.match(measurement.stdout, /journey\/journey\.md\s+primary/);
-    assert.ok(measurement.stdout.includes("Editorial target: 20,000"));
+    assert.ok(measurement.stdout.includes("Loose planning reference: 20,000"));
     assert.ok(measurement.stdout.includes("hard limit: 40,000"));
+    assert.ok(measurement.stdout.includes("Shorter chapters are expected"));
   });
 });
 

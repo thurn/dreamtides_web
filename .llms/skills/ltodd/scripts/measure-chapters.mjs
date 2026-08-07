@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 
 import {
   CHAPTER_CHARACTER_LIMIT,
-  CHAPTER_CHARACTER_TARGET,
+  CHAPTER_CHARACTER_REFERENCE,
   countUnicodeCharacters,
 } from "./ltodd-markdown-lib.mjs";
 
@@ -114,7 +114,7 @@ function printMeasurements(measurements) {
   }
 
   process.stdout.write(
-    `\nEditorial target: ${format.format(CHAPTER_CHARACTER_TARGET)} characters; hard limit: ${format.format(CHAPTER_CHARACTER_LIMIT)}.\n`,
+    `\nLoose planning reference: ${format.format(CHAPTER_CHARACTER_REFERENCE)} characters; hard limit: ${format.format(CHAPTER_CHARACTER_LIMIT)}. Shorter chapters are expected.\n`,
   );
 }
 
