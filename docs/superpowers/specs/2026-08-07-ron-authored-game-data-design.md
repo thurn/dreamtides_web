@@ -101,12 +101,9 @@ requiring raw parsed TOML types to match. Other datasets use parsed-value
 parity unless their adapter documents an equally specific semantic
 normalization.
 
-The candidates are sufficient for read/build conversion. The Exploration
-candidate is not a complete editor schema because the editor can author a
-per-action selection policy that Exploration schema version 1 cannot represent.
-Its editor cutover therefore uses the version 2 source addition defined in
-Editor operation vocabulary while retaining the existing TOML compatibility
-schema.
+The candidates are sufficient for read/build conversion and editor-backed
+migration without source schema changes. Editor controls without a corresponding
+source field are rejected as described in Editor operation vocabulary.
 
 Read, build, review, watch, and deployment conversion are feasible with the
 official parser and explicit adapters. Source-preserving editor mutation is the
@@ -284,13 +281,11 @@ unsupported version before lowering.
 The compatibility adapter decides whether and how that source version appears
 in TOML. Draft and Exploration schema version 1 map `schema_version` to the
 established `schema-version = 1`. Cards schema version 1 is source-only because
-`cards.toml` has no schema marker. Source and compatibility versions need not
-advance together: the editor-capable Exploration source schema version 2 still
-emits compatibility `schema-version = 1` because its new optional field lowers
-into the existing TOML contract. A separate per-document RON format version
-would duplicate the source-schema contract and is not required. Parser behavior
-is pinned by the Cargo lockfile and toolchain; a parser upgrade is reviewed and
-tested as a compiler change.
+`cards.toml` has no schema marker. The migration accepts these existing source
+schema versions without advancing them. A separate per-document RON format
+version would duplicate the source-schema contract and is not required. Parser
+behavior is pinned by the Cargo lockfile and toolchain; a parser upgrade is
+reviewed and tested as a compiler change.
 
 The authoring style uses trailing commas and stable field order. Long rules text
 and narrative copy use raw strings with the minimum safe hash delimiter. The
@@ -610,14 +605,12 @@ It maps the template ID, variables, and selections into one
 `TemplateInvocation`. The current action ID must equal the request's expected
 action ID, so a reordered or replaced slot cannot be overwritten accidentally.
 
-The current `exploration.ron` candidate does not carry per-action selection
-policy overrides, while the Exploration editor exposes that control. Before
-editor cutover, Exploration source schema version 2 adds a defaulted optional
-`selection_policy` enum to `ActionDefinition`. The compiler may compile version
-1 read-only, while editing requires version 2. The adapter emits
-`selection-policy-id` when authored. `canonicalMechanicId` remains derived from
-the selected effect definition: Rust validates a compatibility request's value
-when present but does not duplicate it in RON.
+Per-action selection-policy overrides are not Exploration RON fields. Rust
+validates that a compatibility request's `selectionPolicyId` matches the
+selected effect definition's default and does not duplicate it in RON. A
+different value fails with `FIELD_NOT_APPLICABLE`, and the editor disables the
+override control for a RON source. `canonicalMechanicId` is likewise derived
+from the selected effect definition and validated rather than duplicated.
 
 Template text remains in its existing template source. A template save first
 uses the current TypeScript template logic to compute every affected action's
@@ -686,9 +679,8 @@ Patch construction follows fixed rules:
   default values. They do not delete fields, so a save cannot orphan a field
   comment.
 - Exploration action saves replace only the values of `label`, `effect_text`,
-  `effect`, `selection_policy`, and `template`, inserting the optional policy
-  field when required. The action ID and other top-level field trivia remain
-  untouched. An attempted action-ID change is rejected.
+  `effect`, and `template`. The action ID and other top-level field trivia
+  remain untouched. An attempted action-ID change is rejected.
 - If a replacement span itself contains a comment, the patch proceeds only
   when the operation can update narrower child values and retain that comment.
   A shape change that would discard or ambiguously relocate it fails with
@@ -864,7 +856,7 @@ Exit criteria: Cards saves preserve unrelated RON bytes and comments, and
 
 Goal: prove multi-file operation batching and exhaustive typed effect mapping.
 
-- Add `selection_policy` to source schema version 2 while emitting TOML v1.
+- Reject per-action selection-policy overrides with `FIELD_NOT_APPLICABLE`.
 - Implement encounter prose, action, and template replacement operations.
 - Validate action slot plus ID and exhaustively map every effect variant.
 - Publish template changes and affected actions in one transaction.
@@ -964,7 +956,7 @@ Synthetic unit and property tests cover:
 - Cards field-to-domain transformations, including every energy and kind
   variant plus per-card `tides` rejection;
 - Exploration prose and action transformations across unit and struct effect
-  variants plus the version 2 action selection policy;
+  variants plus per-action selection-policy override rejection;
 - comment preservation plus deterministic `COMMENT_CONFLICT` rejection for
   unsafe shape changes.
 
