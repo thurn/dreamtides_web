@@ -192,6 +192,12 @@ function commandFor(step, extraArgs = []) {
   if (step === "lint") {
     return [process.execPath, [join(root, "scripts", "run-eslint.mjs"), ...extraArgs]];
   }
+  if (step === "ron-format-check") {
+    return [
+      process.execPath,
+      [join(root, "scripts", "format-ron.mjs"), "--check"],
+    ];
+  }
   if (step === "typecheck") {
     const buildInfo = nodeModulePath(
       ".cache",
@@ -257,19 +263,31 @@ function executionPlan() {
   if (task === "full") {
     return [
       { step: "validate", args: [] },
+      { step: "ron-format-check", args: [] },
       { step: "lint", args: [] },
       { step: "typecheck", args: [] },
       { step: "test", args: [] },
     ];
   }
-  if (task === "lint-full") return [{ step: "lint", args: passthrough }];
+  if (task === "lint-full") {
+    return [
+      { step: "ron-format-check", args: [] },
+      { step: "lint", args: passthrough },
+    ];
+  }
   if (task === "test-full") return [{ step: "test", args: passthrough }];
   if (task === "lint") {
-    return reviewPlan.lintFiles.length === 0 && passthrough.length === 0
-      ? []
-      : [{ step: "lint", args: passthrough.length > 0
-        ? passthrough
-        : reviewPlan.lintFiles }];
+    const steps = [];
+    if (reviewPlan.shouldCheckRonFormatting) {
+      steps.push({ step: "ron-format-check", args: [] });
+    }
+    if (reviewPlan.lintFiles.length > 0 || passthrough.length > 0) {
+      steps.push({
+        step: "lint",
+        args: passthrough.length > 0 ? passthrough : reviewPlan.lintFiles,
+      });
+    }
+    return steps;
   }
   if (task === "test") {
     if (passthrough.length > 0) return [{ step: "test", args: passthrough }];
@@ -280,6 +298,9 @@ function executionPlan() {
   if (task === "quick") {
     const steps = [];
     if (reviewPlan.shouldValidate) steps.push({ step: "validate", args: [] });
+    if (reviewPlan.shouldCheckRonFormatting) {
+      steps.push({ step: "ron-format-check", args: [] });
+    }
     if (reviewPlan.lintFiles.length > 0) {
       steps.push({ step: "lint", args: reviewPlan.lintFiles });
     }

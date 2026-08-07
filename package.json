@@ -24,6 +24,8 @@
     "validate": "node scripts/review.mjs validate",
     "review": "node scripts/review.mjs quick",
     "review:full": "node scripts/review.mjs full",
+    "format:ron": "node scripts/format-ron.mjs",
+    "format:ron:check": "node scripts/format-ron.mjs --check",
     "setup-assets": "node scripts/setup-assets.mjs",
     "cumulus-tokens": "node scripts/generate-cumulus-tokens.mjs",
     "cumulus-metadata": "node scripts/generate-cumulus-metadata.mjs",

@@ -1,0 +1,66 @@
+// @vitest-environment node
+
+import { describe, expect, it } from "vitest";
+import { formatRon } from "./ron-format.mjs";
+
+const options = { indentWidth: 2, printWidth: 60 };
+
+describe("RON formatter", () => {
+  it("keeps short nested values dense and wraps long records", () => {
+    const source = `Catalog( title: "A deliberately long catalog title", entries: [ Entry( id: "one", point: ( x: 1, y: 2, ), ), ], )`;
+
+    expect(formatRon(source, options)).toBe(`Catalog(
+  title: "A deliberately long catalog title",
+  entries: [Entry(id: "one", point: (x: 1, y: 2))],
+)
+`);
+  });
+
+  it("preserves comments and literal contents while changing whitespace", () => {
+    const source = `(\n    // Field guidance.\n    text: r#"first line\nsecond: [line]"#,\n    nested: /* exact comment */ ( value: "// not a comment", ),\n)`;
+    const formatted = formatRon(source, options);
+
+    expect(formatted).toBe(`(
+  // Field guidance.
+  text: r#"first line
+second: [line]"#,
+  nested: /* exact comment */ (value: "// not a comment"),
+)
+`);
+    expect(formatted).toContain("// Field guidance.");
+    expect(formatted).toContain('r#"first line\nsecond: [line]"#');
+    expect(formatted).toContain("/* exact comment */");
+  });
+
+  it("is idempotent", () => {
+    const source = `#![enable(implicit_some)]\n[\n  Thing( a: 1, b: [2, 3], ),\n]`;
+    const once = formatRon(source, options);
+
+    expect(formatRon(once, options)).toBe(once);
+  });
+
+  it("keeps the comma that distinguishes a single-element tuple", () => {
+    expect(formatRon("[(1,), (field: 1,)]", options)).toBe(
+      "[(1,), (field: 1)]\n",
+    );
+  });
+
+  it("normalizes safe trailing commas according to group layout", () => {
+    expect(
+      formatRon("Record(first: 1, second: 2)", {
+        indentWidth: 2,
+        printWidth: 20,
+      }),
+    ).toBe(`Record(
+  first: 1,
+  second: 2,
+)
+`);
+  });
+
+  it("rejects unbalanced delimiters", () => {
+    expect(() => formatRon("[(])", options)).toThrow(
+      "Expected closing delimiter )",
+    );
+  });
+});

@@ -74,6 +74,15 @@ function isTestInput(file) {
   ) && TEST_INPUT_EXTENSIONS.has(extname(file));
 }
 
+function isRonFormattingInput(file) {
+  return (
+    extname(file) === ".ron" ||
+    file === ".ronfmt.json" ||
+    file === "scripts/format-ron.mjs" ||
+    file === "scripts/ron-format.mjs"
+  );
+}
+
 export function buildReviewPlan(files, fileExists = () => true) {
   const changedFiles = [...new Set(files)].sort();
   const existingFiles = changedFiles.filter(fileExists);
@@ -91,6 +100,7 @@ export function buildReviewPlan(files, fileExists = () => true) {
       file.startsWith("src/") && LINTABLE_EXTENSIONS.has(extname(file))),
     shouldTypecheck: changedFiles.some(isTypecheckInput),
     shouldValidate: changedFiles.some(isValidationInput),
+    shouldCheckRonFormatting: changedFiles.some(isRonFormattingInput),
     testInputs: [...new Set(testInputs)].sort(),
   };
 }

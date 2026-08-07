@@ -8,6 +8,7 @@ describe("fast review plan", () => {
     expect(buildReviewPlan(["docs/notes.md"])).toEqual({
       changedFiles: ["docs/notes.md"],
       lintFiles: [],
+      shouldCheckRonFormatting: false,
       shouldTypecheck: false,
       shouldValidate: false,
       testInputs: [],
@@ -27,6 +28,7 @@ describe("fast review plan", () => {
         "src/state/journey-state-actions.test.ts",
         "src/state/journey-state-actions.ts",
       ],
+      shouldCheckRonFormatting: false,
       shouldTypecheck: true,
       shouldValidate: false,
       testInputs: [
@@ -62,6 +64,14 @@ describe("fast review plan", () => {
       lintFiles: [],
       shouldTypecheck: false,
       testInputs: ["scripts/review.mjs"],
+    });
+  });
+
+  it("selects the RON formatting gate for RON sources and formatter config", () => {
+    expect(
+      buildReviewPlan([".ronfmt.json", "data/tabula/cards.ron"]),
+    ).toMatchObject({
+      shouldCheckRonFormatting: true,
     });
   });
 
