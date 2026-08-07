@@ -1,65 +1,108 @@
 # The Augury and Exploration Sites
 
-Augury and Exploration are one-use Dream Sites that turn the current journey
-into a persistent reward or modification. **Augury** presents two generated
-visions chosen for the player's current deck and inventory. **Exploration**
-opens one authored scene built around a card's art, then asks the player to
-choose between two actions. Both sites may add or remove cards, change
-particular
-[card instances](../dreamtides/dreamtides.md#card-definitions-and-instances),
-grant [Dreamsigns](../dreamtides/dreamtides.md#dream-avatars-and-dreamsigns), or
-create effects for a later site or battle.
+Augury and Exploration are Dream Sites built around consequential choices.
+**Augury** presents two generated visions tailored to the current deck and
+inventory. **Exploration** opens an authored scene built around a card's art,
+then asks the player to choose between two actions.
 
-The sites share one reward-selection system, but use it differently. Augury
-assembles its offers from reusable reward families. Exploration starts from
-authored prose and actions, then uses the same policies to prepare any cards,
-Dreamsigns, deck entries, Dream Avatars, or site types those actions need. Both
-sites prepare random results before the player chooses. Acceptance validates the
-prepared result, applies one outcome atomically, and records enough identity to
-reconstruct what happened.
+Their rewards can:
 
-## Preparing a reward
+- Add cards or
+  [Dreamsigns](../dreamtides/dreamtides.md#dream-avatars-and-dreamsigns).
+- Remove or modify specific
+  [card instances](../dreamtides/dreamtides.md#card-definitions-and-instances).
+- Change the deck as a whole.
+- Create an effect for a later site or battle.
 
-Reward preparation begins from a snapshot of the journey at site entry. The
-snapshot includes the journey seed, site identity, effective deck, owned and
-available Dreamsigns, resolved draft pool, Dream Avatar, and relevant authored
-content. Selection uses card UUIDs and concrete deck-entry IDs; names are
-display text only.
+Both sites separate preparation from resolution:
 
-A **selection policy** defines how one mechanic ranks and samples its legal
-candidates. The principal policies consider:
+- Entering the site prepares a deterministic encounter and its random targets.
+- The player sees the prepared possibilities and makes one choice.
+- Resolution validates that choice and applies the complete outcome atomically.
+- The journey records the result so it can be reconstructed after resuming.
 
-- Card fit: how well a card works with the effective current deck.
-- Card quality: an authored, deck-independent strength signal, sometimes blended
-  with normalized fit.
-- Deck-entry centrality: how strongly one card instance contributes to the
-  deck's existing relationships.
-- Purge or duplicate value: the benefit of removing or copying a particular
-  entry, including the resulting change in deck fit.
-- Transfiguration value: the benefit of an applicable form combined with the
-  target card's centrality.
-- Dreamsign match: the relationship between an unowned Dreamsign's authored
-  features and the effective deck.
-- Fixed or uniform selection for authored targets and choices that need no
-  scoring.
+## How Augury builds its offers
 
-A scored policy ranks candidates by score, breaks ties by stable identity, keeps
-a configured top band, and samples uniformly from that band without replacement.
+Augury constructs each vision in two stages:
+
+1. **Choose an offer archetype.** An offer archetype is a reusable recipe with
+   an eligibility rule, reward family, lottery weight, selection policy, and
+   reward parameters. Only enabled archetypes with legal targets enter the
+   weighted lottery.
+2. **Select the concrete targets.** The chosen archetype runs its selection
+   policy to determine the particular card, deck entry, Dreamsign, or site in
+   the offer. If the recipe cannot produce a complete reward, Augury removes it
+   from that slot's pool and tries another archetype.
+
+The first offer draws from all eligible archetypes. The second draws after
+excluding the first offer's entire family. A completed Augury encounter
+therefore contains two different kinds of reward, even when one family contains
+many archetypes.
+
+### Selection policies
+
+A **selection policy** defines how one mechanic filters, ranks, and samples its
+legal targets. Production uses several policies because “a good card to gain,”
+“a good card to copy,” and “a good card to remove” are different questions:
+
+- **Fixed** validates and uses a target named by authored content.
+- **Uniform** samples equally from the legal candidates.
+- **Card fit** favors cards that work with the effective current deck.
+- **Card fit and quality** blends deck fit with an authored, deck-independent
+  strength signal.
+- **Card bundle** chooses a seed card, then adds cards that relate to the seed,
+  the growing bundle, and the player's deck.
+- **Purge misfit** favors starters and entries whose removal least harms deck
+  fit.
+- **Duplicate value** favors entries whose additional copy combines card quality
+  with strong contribution to deck fit.
+- **Deck-entry centrality** favors an instance that contributes strongly to the
+  deck's relationships.
+- **Transfiguration value** favors an applicable form with high mechanical
+  benefit on a central card.
+- **Dreamsign match** compares an unowned Dreamsign's authored features with the
+  effective deck.
+- **Site uniform** samples equally from the utility site types allowed for an
+  add-site reward.
+
+Augury assigns one of these policies to every offer archetype. Exploration uses
+the same policy engine to select an encounter uniformly and to prepare any card,
+deck entry, Dreamsign, Dream Avatar, or site required by an authored action. The
+author still defines the scene, its two actions, and their effect kinds;
+selection policy supplies only the variable targets required by those rules.
+
+### Ranking and reproducibility
+
+Reward preparation starts from a snapshot of the journey at site entry. It
+includes the journey seed, site identity, effective deck, owned and available
+Dreamsigns, resolved draft pool, Dream Avatar, and relevant authored content.
+Selection uses card UUIDs and concrete deck-entry IDs; names are display text
+only.
+
+A scored policy:
+
+- Ranks candidates by score and breaks ties by stable identity.
+- Keeps a configured leading band of candidates.
+- Samples uniformly from that band without replacement.
+
 The standard band contains the larger of one quarter of the legal pool or five
-candidates, capped by the pool size; individual mechanics may use a narrower or
-wider band. Bundle selection instead chooses a seed card, then grows the bundle
-from cards that relate well to the seed, the growing bundle, and the player's
-deck.
+candidates, capped by the pool size. Individual mechanics can use a narrower or
+wider band. This keeps rewards responsive to the deck without always producing
+the single highest score.
 
 Each selection receives an independent deterministic stream derived from the
-journey seed, site identity, stable selection key, policy, and draw purpose.
-Preparing one action therefore does not consume randomness belonging to another.
-The prepared result records its rules version, content revision, candidate
-digest, scores, band, selected identities, fallbacks, and draw count. These
-traces make a production choice reconstructible even when several fit or
+journey seed, site identity, selection key, policy, and draw purpose. Preparing
+one action does not consume randomness belonging to another. Its trace records:
+
+- Rules and content versions.
+- Candidate count, digest, scores, and sampled band.
+- Selected identities and any fallbacks.
+- Randomness scope and draw count.
+
+These records make a production choice reconstructible when several ranking or
 fallback rules contributed to it.
 
-## Augury
+## Presenting and resolving Augury
 
 Augury is hosted by Aldric, the Seer. On entry, Aldric appears with two circular
 Offer Tiles. Each is a symbolic summary of one reward: card or Dreamsign art, an
@@ -68,12 +111,6 @@ opens its full details. A direct offer can then be confirmed; an offer with
 several candidates first requires a choice. The player can return to the
 two-tile comparison before confirming. When the encounter permits it, the player
 may decline both visions and complete the site without a reward.
-
-An **offer archetype** is a reusable recipe with an eligibility rule, reward
-family, lottery weight, target-selection policy, and reward parameters. Authored
-configuration enables or disables each archetype. Only enabled archetypes with
-legal targets enter the lottery. If a recipe cannot finish building a reward,
-Augury removes it from that slot's pool and draws again.
 
 Every archetype belongs to one **offer family**:
 
@@ -87,13 +124,10 @@ Every archetype belongs to one **offer family**:
 - **Dreamsign:** Gain an unowned Dreamsign selected for the current deck.
 - **Site:** Add one eligible utility site to the current dreamscape.
 
-The first offer is a weighted draw from all eligible archetypes. The second is a
-separate weighted draw after excluding the first offer's family. The player
-therefore compares two different kinds of reward even when one family contains
-many archetypes. Grant candidates normally exclude starter, special, and
-already-owned cards; category drafts also stay within the journey's resolved
-draft pool. Deck-changing offers use concrete card instances so an improvement,
-purge, or duplication applies to the copy that was evaluated.
+Grant candidates normally exclude starter, special, and already-owned cards;
+category drafts also stay within the journey's resolved draft pool.
+Deck-changing offers use concrete card instances so an improvement, purge, or
+duplication applies to the copy that was evaluated.
 
 The prepared encounter has a signature derived from the journey snapshot and the
 two visible offers. Confirmation names the encounter, offer, archetype, and any
@@ -104,25 +138,46 @@ completes and the player returns to the dreamscape.
 
 ## Exploration encounters
 
-An **Exploration encounter** is an authored scene keyed by a source card UUID.
+An **Exploration encounter** is an authored scene containing:
+
+- A source card UUID.
+- One prose passage.
+- Exactly two authored actions.
+
 The source card supplies the framed card shown on arrival and the full art used
-inside the scene. It owns one prose passage and exactly two authored actions.
-The card is a narrative and visual anchor: it need not be in the player's deck,
-and entering its scene does not itself acquire, remove, or modify that card.
+inside the scene. It is a narrative and visual anchor: it need not be in the
+player's deck, and entering its scene does not itself acquire, remove, or modify
+that card.
 
-Each action has a stable ID, label, concise effect text, effect kind, and the
-parameters required by that mechanic. Its text may refer to a prepared card or
-Dreamsign as an inspectable game object. An action may resolve immediately,
-require a follow-up choice, or contain both a prepared target and a later
-selection. Follow-ups can choose card instances, catalog cards, packs, a
-transfiguration, a subtype, a Dreamsign to gain or replace, or a Dream Avatar.
+Each action defines:
 
-At site entry, Exploration deterministically shuffles the valid encounter
-catalog. It tries encounters in that order while preparing both actions. An
-encounter is used only when its source card exists and both actions can prepare
-their required offers. If a draft lacks enough eligible cards, a Dreamsign
-cannot be granted, or another target is unavailable, Exploration tries the next
-encounter. The presented pair is therefore fully actionable.
+- A stable ID.
+- A player-facing label and concise effect text.
+- An effect kind.
+- The quantities, predicates, fixed objects, or other parameters required by
+  that effect.
+- Any prepared card or Dreamsign that its text presents as an inspectable game
+  object.
+
+An action may resolve immediately, require a follow-up choice, or combine a
+prepared target with a later player selection. A follow-up can ask for:
+
+- One or more card instances or catalog cards.
+- A card pack, transfiguration, or subtype.
+- A Dreamsign to gain, replace, or give up.
+- A new Dream Avatar.
+
+At site entry, Exploration:
+
+1. Filters the catalog to encounters whose source card exists.
+2. Deterministically shuffles those encounters with the uniform policy.
+3. Tries them in that order while preparing both actions.
+4. Uses the first encounter for which both actions can produce their required
+   offers.
+
+If a draft lacks enough eligible cards, a Dreamsign cannot be granted, or
+another target is unavailable, Exploration tries the next encounter. The
+presented pair is therefore fully actionable.
 
 Prepared card rewards normally draw from unowned, non-special cards in the
 resolved draft pool and exclude the source card. Prepared deck targets use the
@@ -175,12 +230,17 @@ calculating and applying the complete result. Multi-object gains, mass deck
 changes, purge-and-copy exchanges, and effects with both benefits and Nightmares
 cannot partially succeed.
 
-The persisted resolution records the action and player selection, every card or
-Dreamsign gained or purged, affected deck-entry IDs, Essence gained, chosen
-transfiguration or subtype, and any future-site or next-battle modifier. A
-purged card keeps its pre-resolution deck-entry snapshot so the outcome can show
-exactly what left the deck. New copies receive new entry IDs, while
-modifications retain the targeted instance's identity.
+The persisted resolution records:
+
+- The action and player selection.
+- Every card or Dreamsign gained or purged.
+- Affected deck-entry IDs and any pre-resolution snapshot needed to show what
+  left the deck.
+- Essence gained and the chosen transfiguration or subtype.
+- Any future-site or next-battle modifier.
+
+New copies receive new entry IDs, while modifications retain the targeted
+instance's identity.
 
 The scene remains open after the state change while presenting the outcome.
 Cards and Dreamsigns appear as tangible objects and travel toward their journey
