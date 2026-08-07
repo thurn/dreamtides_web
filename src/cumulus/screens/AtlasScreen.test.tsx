@@ -13,7 +13,11 @@ import type {
 } from "../components/atlas/AtlasNode";
 import { artRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
-import { AtlasScreen, type AtlasView } from "./AtlasScreen";
+import {
+  AtlasScreen,
+  type AtlasNodePlacementView,
+  type AtlasView,
+} from "./AtlasScreen";
 
 /**
  * Stub matchMedia (jsdom lacks it; Pressable + useIsDesktop + the InfoCard
@@ -242,20 +246,15 @@ function nodeItem(
   state: DreamscapeNode["state"],
   layer: LayerName,
   extra: {
-    isStarter?: boolean;
-    isBoss?: boolean;
+    role?: AtlasNodeModel["role"];
     semantic?: Partial<
       Pick<AtlasNodeModel, "primary" | "dreamsign" | "site" | "affiliation">
     >;
   } = {},
-): AtlasNodeModel {
-  return {
+): AtlasNodePlacementView {
+  const model: AtlasNodeModel = {
     node: makeNode(id, state, layer),
-    left: 500,
-    top: 400,
-    size: 132,
-    isStarter: extra.isStarter ?? false,
-    isBoss: extra.isBoss ?? false,
+    role: extra.role ?? "regular",
     isReachable: true,
     iconRef: null,
     unrevealedFrameRef: artRef.atlasAsset("fixture-frame.png"),
@@ -266,6 +265,7 @@ function nodeItem(
     site: extra.semantic?.site ?? null,
     affiliation: extra.semantic?.affiliation ?? null,
   };
+  return { model, left: 500, top: 400, boxSize: 132 };
 }
 
 function makeView(): AtlasView {
@@ -273,9 +273,9 @@ function makeView(): AtlasView {
     stageWidth: 1080,
     stageHeight: 1920,
     nodes: [
-      nodeItem("starter", "completed", LayerName.One, { isStarter: true }),
+      nodeItem("starter", "completed", LayerName.One, { role: "starter" }),
       nodeItem("frontier", "available", LayerName.Two),
-      nodeItem("boss", "revealedLocked", LayerName.Seven, { isBoss: true }),
+      nodeItem("boss", "revealedLocked", LayerName.Seven, { role: "boss" }),
     ],
     edges: [
       {
@@ -352,6 +352,14 @@ describe("Cumulus AtlasScreen", () => {
     expect(container.querySelectorAll("[data-node-state]")).toHaveLength(3);
     expect(container.querySelector("[data-node-starting]")).not.toBeNull();
     expect(container.querySelector("[data-node-boss]")).not.toBeNull();
+    const frontierPlacement = container.querySelector<HTMLElement>(
+      '[data-atlas-node-placement="frontier"]',
+    );
+    expect(frontierPlacement?.style.left).toBe("500px");
+    expect(frontierPlacement?.style.top).toBe("400px");
+    expect(frontierPlacement?.style.width).toBe("132px");
+    expect(frontierPlacement?.style.height).toBe("132px");
+    expect(frontierPlacement?.style.transform).toBe("translate(-50%, -50%)");
     expect(
       container.querySelector("[data-journey-status-bar-anchor]"),
     ).toBeNull();

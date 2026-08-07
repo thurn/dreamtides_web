@@ -54,13 +54,6 @@ export const ATLAS_NODE_SIZE_MOBILE = 200;
 /** Mobile starter / boss anchor-node diameter (stage pixels). */
 export const ATLAS_ANCHOR_NODE_SIZE_MOBILE = 224;
 /**
- * Multiplier applied to the site / dreamsign badge sizes on the mobile atlas, so
- * they stay legible once the narrow portrait viewport scales the whole stage
- * down. Desktop keeps its badges at their node-relative size (an implicit 1).
- */
-export const ATLAS_BADGE_SCALE_MOBILE = 1.5;
-
-/**
  * The portrait design canvas the vertical (mobile) atlas stage scales to fit
  * (letterboxed). Homed here in-Cumulus, alongside the node sizes, so both the
  * layout adapter (`src/screens/cumulus_adapters/atlas-view-model.ts`) and the

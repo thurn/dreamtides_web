@@ -25,11 +25,7 @@ function node(id: string): DreamscapeNode {
 function item(id: string, overrides: Partial<AtlasNodeModel>): AtlasNodeModel {
   return {
     node: node(id),
-    left: 0,
-    top: 0,
-    size: 120,
-    isStarter: false,
-    isBoss: false,
+    role: "regular",
     isReachable: true,
     iconRef: null,
     unrevealedFrameRef: artRef.atlasAsset("fixture-frame.png"),

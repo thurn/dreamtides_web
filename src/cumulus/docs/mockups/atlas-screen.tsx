@@ -19,8 +19,7 @@ import {
   ATLAS_STAGE_WIDTH,
 } from "../../components/atlas/atlas-display";
 import type { AtlasEdgeKind } from "../../components/atlas/AtlasEdge";
-import type { AtlasNodeModel } from "../../components/atlas/AtlasNode";
-import { AtlasScreen, type AtlasEdgeView } from "../../screens/AtlasScreen";
+import { AtlasScreen, type AtlasEdgeView, type AtlasNodePlacementView } from "../../screens/AtlasScreen";
 import {
   type AtlasFixtureRole,
   atlasFixtureNodes,
@@ -66,13 +65,14 @@ const EDGES: {
 
 export function AtlasScreenMockup() {
   // The production mobile node sizes suit the vertical portrait stage.
-  const nodes: AtlasNodeModel[] = atlasFixtureNodes(nodeSizing(true)).map(
+  const nodes: AtlasNodePlacementView[] = atlasFixtureNodes(nodeSizing(true)).map(
     (fixture) => {
       const at = PLACEMENTS[fixture.role];
       return {
-        ...fixture.item,
+        model: fixture.item,
         left: at.left,
         top: at.top,
+        boxSize: fixture.boxSize,
       };
     },
   );

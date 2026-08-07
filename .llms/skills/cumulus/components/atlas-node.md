@@ -14,7 +14,7 @@ One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engin
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `model` | `AtlasNodeModel` | yes | — | Placed face plus UUID-backed semantic Atlas reveal data. |
+| `model` | `AtlasNodeModel` | yes | — | UUID-backed semantic Atlas face and reveal data. |
 | `onPress` | `(nodeId: string) => void` | yes | — | Enter the node's dreamscape. Available nodes invoke this with their UUID. |
 
 ### `model`: the `AtlasNodeModel` model
@@ -22,17 +22,12 @@ One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engin
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `node` | `DreamscapeNode` | no |  |
-| `left` | `number` | no | Stage-space centre in the fixed Atlas design canvas. |
-| `top` | `number` | no |  |
-| `size` | `number` | no | Rendered node diameter in stage pixels. |
-| `isStarter` | `boolean` | no |  |
-| `isBoss` | `boolean` | no |  |
+| `role` | `AtlasNodeRole` | no |  |
 | `isReachable` | `boolean` | no |  |
 | `iconRef` | `ArtRef \| null` | no |  |
 | `unrevealedFrameRef` | `ArtRef` | no |  |
 | `siteBadgeGlyph` | `Glyph \| null` | no |  |
 | `knownDreamsignRef` | `ArtRef \| null` | no |  |
-| `badgeScale` | `number` | yes |  |
 | `primary` | `AtlasNodePrimary` | no |  |
 | `dreamsign` | `AtlasNodeDreamsign \| null` | no |  |
 | `site` | `AtlasNodeSite \| null` | no |  |
@@ -47,12 +42,13 @@ import { AtlasNode } from "src/cumulus/components/atlas/AtlasNode";
 
 <div className="dream-atlas">
   <div className="nodes">
-    {models.map((model) => (
-      <AtlasNode
+    {nodes.map(({ model, left, top, boxSize }) => (
+      <div
         key={model.node.id}
-        model={model}
-        onPress={(id) => enterDreamscape(id)}
-      />
+        style={{ position: "absolute", left, top, width: boxSize, height: boxSize, transform: "translate(-50%, -50%)" }}
+      >
+        <AtlasNode model={model} onPress={(id) => enterDreamscape(id)} />
+      </div>
     ))}
   </div>
 </div>

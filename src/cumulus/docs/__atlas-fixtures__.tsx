@@ -4,23 +4,22 @@ import type { AtlasNodeModel, AtlasNodePrimary } from "../components/atlas/Atlas
 import {
   ATLAS_ANCHOR_NODE_SIZE_DESKTOP,
   ATLAS_ANCHOR_NODE_SIZE_MOBILE,
-  ATLAS_BADGE_SCALE_MOBILE,
   ATLAS_NODE_SIZE_DESKTOP,
   ATLAS_NODE_SIZE_MOBILE,
 } from "../components/atlas/atlas-display";
 import { artRef } from "../primitives/art";
 import { glyph } from "../primitives/glyph";
 
-export interface NodeSizing { nodeSize: number; anchorNodeSize: number; badgeScale: number }
+export interface NodeSizing { nodeSize: number; anchorNodeSize: number }
 
 export function nodeSizing(mobile: boolean): NodeSizing {
   return mobile
-    ? { nodeSize: ATLAS_NODE_SIZE_MOBILE, anchorNodeSize: ATLAS_ANCHOR_NODE_SIZE_MOBILE, badgeScale: ATLAS_BADGE_SCALE_MOBILE }
-    : { nodeSize: ATLAS_NODE_SIZE_DESKTOP, anchorNodeSize: ATLAS_ANCHOR_NODE_SIZE_DESKTOP, badgeScale: 1 };
+    ? { nodeSize: ATLAS_NODE_SIZE_MOBILE, anchorNodeSize: ATLAS_ANCHOR_NODE_SIZE_MOBILE }
+    : { nodeSize: ATLAS_NODE_SIZE_DESKTOP, anchorNodeSize: ATLAS_ANCHOR_NODE_SIZE_DESKTOP };
 }
 
 export type AtlasFixtureRole = "starter" | "completed" | "available" | "revealedLocked" | "unrevealed" | "forgone" | "boss";
-export interface AtlasFixtureNode { role: AtlasFixtureRole; item: AtlasNodeModel }
+export interface AtlasFixtureNode { role: AtlasFixtureRole; item: AtlasNodeModel; boxSize: number }
 
 const UUIDS: Record<AtlasFixtureRole, string> = {
   starter: "00000000-0000-4000-8000-000000000081",
@@ -73,14 +72,15 @@ export function atlasFixtureNodes(sizing: NodeSizing): AtlasFixtureNode[] {
     } : null;
     return {
       role,
+      boxSize: isStarter || isBoss ? sizing.anchorNodeSize : sizing.nodeSize,
       item: {
-        node: node(role, state), left: 0, top: 0,
-        size: isStarter || isBoss ? sizing.anchorNodeSize : sizing.nodeSize,
-        isStarter, isBoss, isReachable: role !== "forgone",
+        node: node(role, state),
+        role: isStarter ? "starter" : isBoss ? "boss" : "regular",
+        isReachable: role !== "forgone",
         iconRef: isHidden ? null : artRef.dreamscapeIcon(isBoss ? "limbo" : role === "starter" ? "firstlight_meadow" : role === "completed" ? "tumbleleaf_village" : role === "available" ? "frostforge" : "hopes_end"),
         unrevealedFrameRef: artRef.atlasAsset("Round_frame_main.png"),
         siteBadgeGlyph: isHidden || isStarter || isBoss ? null : badge,
-        knownDreamsignRef: dreamsign?.art ?? null, badgeScale: sizing.badgeScale,
+        knownDreamsignRef: dreamsign?.art ?? null,
         primary: primary(role), dreamsign, site: null, affiliation: null,
       },
     };

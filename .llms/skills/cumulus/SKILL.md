@@ -298,7 +298,7 @@ material together. Product and screen code use the semantic Cumulus names.
 
 Components take structured model objects and named content slots, and decide
 their own rendering from them — a `GameCard` takes a card model, an
-`AtlasNode` takes an `AtlasNodeView`, rules text is a structured `RichText`
+`AtlasNode` takes an `AtlasNodeModel`, rules text is a structured `RichText`
 body. When you are tempted to pass JSX into a component so it "renders what I
 built", check the component's reference file for the model it actually
 accepts and build that instead. Passing an arbitrary ReactNode where a model

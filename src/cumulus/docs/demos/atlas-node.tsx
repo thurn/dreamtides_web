@@ -16,13 +16,13 @@ import { AtlasNode } from "../../components/atlas/AtlasNode";
 import type { CumulusComponent } from "../registry";
 
 interface AtlasNodeDemoArgs {
-  /** Draw the nodes at the larger mobile production sizes + enlarged badges. */
+  /** Draw the nodes at the larger mobile production sizes. */
   mobileSizing?: boolean;
 }
 
 function AtlasNodeDemo({ mobileSizing = false }: AtlasNodeDemoArgs) {
   const sizing = nodeSizing(mobileSizing);
-  const items = atlasFixtureNodes(sizing).map((fixture) => fixture.item);
+  const items = atlasFixtureNodes(sizing);
 
   // Lay the nodes out in a compact grid (4 per row); each node centres itself on
   // its left/top so the row/column pitch is the node-centre spacing. The pitch
@@ -57,12 +57,20 @@ function AtlasNodeDemo({ mobileSizing = false }: AtlasNodeDemoArgs) {
       }}
     >
       <div className="nodes">
-        {placed.map((item) => (
-          <AtlasNode
+        {placed.map(({ item, boxSize, left, top }) => (
+          <div
             key={item.node.id}
-            model={item}
-            onPress={() => undefined}
-          />
+            style={{
+              position: "absolute",
+              left,
+              top,
+              width: boxSize,
+              height: boxSize,
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <AtlasNode model={item} onPress={() => undefined} />
+          </div>
         ))}
       </div>
     </div>
@@ -84,12 +92,13 @@ export const atlasNodeDemo: CumulusComponent = {
 
 <div className="dream-atlas">
   <div className="nodes">
-    {models.map((model) => (
-      <AtlasNode
+    {nodes.map(({ model, left, top, boxSize }) => (
+      <div
         key={model.node.id}
-        model={model}
-        onPress={(id) => enterDreamscape(id)}
-      />
+        style={{ position: "absolute", left, top, width: boxSize, height: boxSize, transform: "translate(-50%, -50%)" }}
+      >
+        <AtlasNode model={model} onPress={(id) => enterDreamscape(id)} />
+      </div>
     ))}
   </div>
 </div>`,

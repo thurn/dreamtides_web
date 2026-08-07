@@ -8,7 +8,8 @@ import path from "node:path";
  * A number-typed visual knob — `size?: number`, `gap?: number`, `scale?: number`
  * — is an arbitrary-customization escape hatch: it lets a caller dial any pixel
  * value they like instead of choosing from the design system's enumerated
- * scale. This rule flags such members on an EXPORTED `*Props` / `*View` type in
+ * scale. This rule flags such members on an EXPORTED `*Props`, `*View`, or
+ * `*Model` type in
  * `src/cumulus/components/`. The strict form is an enumerated string variant
  * (`size?: "sm" | "md" | "lg"`); the component maps the token to its own fixed
  * measure.
@@ -27,7 +28,7 @@ import path from "node:path";
  * exception is a deliberate, commented decision in the config rather than a
  * silent skip.
  *
- * Scope: only EXPORTED `*Props` / `*View` declarations (an internal, co-located
+ * Scope: only EXPORTED `*Props`, `*View`, and `*Model` declarations (an internal, co-located
  * spec type keeps its numeric fields — rename it away from a knob word if it is
  * genuinely private) under `src/cumulus/components/`. `__*__` fixture files and
  * files outside that surface are a no-op. Only a member whose OWN type is a
@@ -35,7 +36,7 @@ import path from "node:path";
  * (`art: { scale: number }`) is a private layout detail, not a public knob.
  */
 
-/** Repo-relative POSIX dir prefixes whose exported `*Props`/`*View` types this rule guards. */
+/** Repo-relative POSIX dir prefixes whose exported public types this rule guards. */
 const SURFACE_PREFIXES = ["src/cumulus/components/"];
 
 /** The visual-knob words. A member named exactly one of these, or using one at
@@ -99,7 +100,7 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Ban number-typed visual knobs (size/gap/scale/…) on exported Cumulus *Props/*View types; use an enumerated string variant instead.",
+        "Ban number-typed visual knobs (size/gap/scale/…) on exported Cumulus *Props/*View/*Model types; use an enumerated string variant instead.",
     },
     schema: [
       {
@@ -142,9 +143,9 @@ const rule = {
     const options = context.options?.[0] ?? {};
     const allow = new Set(Array.isArray(options.allow) ? options.allow : []);
 
-    /** A type declaration is a public component surface when its name ends in `Props` or `View`. */
+    /** A type declaration is a public component surface model or prop shape. */
     function isSurfaceName(name) {
-      return typeof name === "string" && /(?:Props|View)$/.test(name);
+      return typeof name === "string" && /(?:Props|View|Model)$/.test(name);
     }
 
     /** True when a declaration node is directly exported (`export interface …`). */

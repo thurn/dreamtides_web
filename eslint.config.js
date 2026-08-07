@@ -129,24 +129,13 @@ export default tseslint.config(
   {
     // The styled public component surface. A number-typed visual knob
     // (`size?: number`, `gap?: number`, `scale?: number`) on an exported
-    // *Props/*View type is an arbitrary-customization escape hatch; the strict
+    // *Props/*View/*Model type is an arbitrary-customization escape hatch; the strict
     // form is an enumerated string variant the component maps to its own
-    // measure. The `allow` list names the production measures that genuinely
-    // have no enumerable form (a computed stage-pixel diameter, a px anchor
-    // offset, a fixed box width) — each is a box/measure/multiplier, not a
-    // style knob, and carries a comment saying why.
+    // measure.
     files: ["src/cumulus/components/**/*.{ts,tsx}"],
     plugins: { cumulus: cumulusPlugin },
     rules: {
-      "cumulus/no-numeric-style-props": [
-        "error",
-        {
-          allow: [
-            "AtlasNodeView.size", // computed stage-pixel node diameter (1920x1080 space)
-            "AtlasNodeView.badgeScale", // mobile atlas badge-size multiplier
-          ],
-        },
-      ],
+      "cumulus/no-numeric-style-props": "error",
     },
   },
   {

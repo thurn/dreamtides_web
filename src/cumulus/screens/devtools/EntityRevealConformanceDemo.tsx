@@ -30,7 +30,7 @@ const ATLAS_MODEL: AtlasNodeModel = {
     sites: [], position: { x: 0, y: 0 }, state: "available", enhancedSiteType: null,
     forwardIds: [], backwardIds: [], knownDreamsignId: "44444444-4444-4444-8444-444444444444",
   },
-  left: 92, top: 92, size: 112, isStarter: false, isBoss: false, isReachable: true,
+  role: "regular", isReachable: true,
   iconRef: artRef.dreamscapeIcon("wilderveil"), siteBadgeGlyph: GLYPHS.water,
   unrevealedFrameRef: artRef.atlasAsset("fixture-frame.png"),
   knownDreamsignRef: artRef.dreamsign("runes.png"),
@@ -133,7 +133,7 @@ export function EntityRevealConformanceDemo() {
         <article><h2>InfoCard</h2><InfoCard variant="text" title="Primary only" body={richText.plain("Strict visual content.")} /></article>
         <article data-conformance-info-secondaries="" style={{ width: 120 }}><h2>InfoCard group source</h2><DreamAvatarPortrait dreamAvatar={DREAM_AVATAR} variant="thumb" profile={{ id: DREAM_AVATAR.id, ability: "Nightmare is a Bane. Discover. Ephemeral." }} /></article>
         <article><h2>Inline</h2><p>Resolve <GlossaryTerm entry={{ term: "Bane", definition: "The Nightmare card, a penalty card forced into your deck." }} text="Bane" /> here.</p></article>
-        <article style={{ position: "relative", width: 184, height: 184 }}><h2>Atlas</h2><AtlasNode model={ATLAS_MODEL} onPress={() => undefined} /></article>
+        <article style={{ position: "relative", width: 184, height: 184 }}><h2>Atlas</h2><div style={{ width: 112, height: 112 }}><AtlasNode model={ATLAS_MODEL} onPress={() => undefined} /></div></article>
         <article data-conformance-battle-fixture="" style={{ width: 160 }}><h2>Battle</h2><GameCard model={{ cardId: BATTLE_CARD.id, displaySnapshot: BATTLE_CARD }} /></article>
         <article data-conformance-generated-battle-fixture="" style={{ width: 160 }}><h2>Generated battle figment</h2><GameCard model={{ cardId: GENERATED_BATTLE_CARD.id, displaySnapshot: GENERATED_BATTLE_CARD }} figment /></article>
       </section>

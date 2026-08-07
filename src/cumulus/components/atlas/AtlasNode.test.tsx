@@ -66,11 +66,7 @@ function model(
       backwardIds: [],
       knownDreamsignId: DREAMSIGN_ID,
     },
-    left: 500,
-    top: 400,
-    size: 132,
-    isStarter: false,
-    isBoss: false,
+    role: "regular",
     isReachable: true,
     iconRef: artRef.dreamscapeIcon("wilderveil"),
     unrevealedFrameRef: artRef.atlasAsset("fixture-frame.png"),
@@ -207,18 +203,17 @@ describe("AtlasNode semantic reveal contract", () => {
   });
 
   it.each([
-    ["available", false, false],
-    ["completed", false, false],
-    ["revealedLocked", false, false],
-    ["unrevealed", false, false],
-    ["completed", true, false],
-    ["revealedLocked", false, true],
+    ["available", "regular"],
+    ["completed", "regular"],
+    ["revealedLocked", "regular"],
+    ["unrevealed", "regular"],
+    ["completed", "starter"],
+    ["revealedLocked", "boss"],
   ] as const)(
-    "keeps %s starter=%s boss=%s focusable and descriptive",
-    (state, isStarter, isBoss) => {
+    "keeps %s role=%s focusable and descriptive",
+    (state, role) => {
       const value = model(state, {
-        isStarter,
-        isBoss,
+        role,
         primary:
           state === "unrevealed"
             ? {
@@ -241,10 +236,20 @@ describe("AtlasNode semantic reveal contract", () => {
       expect(source.dataset.revealPrimaryVariant).toBe(
         state === "unrevealed" ? "text" : "atlasReveal",
       );
-      expect(source.dataset.nodeStarting).toBe(isStarter ? "true" : undefined);
-      expect(source.dataset.nodeBoss).toBe(isBoss ? "true" : undefined);
+      expect(source.dataset.nodeStarting).toBe(role === "starter" ? "true" : undefined);
+      expect(source.dataset.nodeBoss).toBe(role === "boss" ? "true" : undefined);
     },
   );
+
+  it("fills the caller-owned layout box without positioning itself", () => {
+    const { source } = renderNode(model("available"));
+    expect(source.style.width).toBe("100%");
+    expect(source.style.height).toBe("100%");
+    expect(source.style.left).toBe("");
+    expect(source.style.top).toBe("");
+    expect(source.style.marginLeft).toBe("");
+    expect(source.style.marginTop).toBe("");
+  });
 
   it("activates only an available node", () => {
     const available = renderNode(model("available"));

@@ -69,25 +69,20 @@ export interface AtlasNodeAffiliation {
 }
 
 /**
- * Strict semantic model for one Dream Atlas node. It contains placed face data
- * plus the Atlas primary and related domain entities; AtlasNode decides their
+ * Strict semantic model for one Dream Atlas node. It contains face data plus
+ * the Atlas primary and related domain entities; AtlasNode decides their
  * InfoCard variants and descending Dreamsign → site → affiliation priority.
  */
+export type AtlasNodeRole = "regular" | "starter" | "boss";
+
 export interface AtlasNodeModel {
   node: DreamscapeNode;
-  /** Stage-space centre in the fixed Atlas design canvas. */
-  left: number;
-  top: number;
-  /** Rendered node diameter in stage pixels. */
-  size: number;
-  isStarter: boolean;
-  isBoss: boolean;
+  role: AtlasNodeRole;
   isReachable: boolean;
   iconRef: ArtRef | null;
   unrevealedFrameRef: ArtRef;
   siteBadgeGlyph: Glyph | null;
   knownDreamsignRef: ArtRef | null;
-  badgeScale?: number;
   primary: AtlasNodePrimary;
   dreamsign: AtlasNodeDreamsign | null;
   site: AtlasNodeSite | null;
@@ -140,7 +135,7 @@ function atlasNodeRevealSpec(model: AtlasNodeModel): RevealSpec {
 }
 
 export interface AtlasNodeProps {
-  /** Placed face plus UUID-backed semantic Atlas reveal data. */
+  /** UUID-backed semantic Atlas face and reveal data. */
   model: AtlasNodeModel;
   /** Enter the node's dreamscape. Available nodes invoke this with their UUID. */
   onPress: (nodeId: string) => void;
@@ -151,7 +146,9 @@ export function AtlasNode({
   model,
   onPress,
 }: AtlasNodeProps): React.ReactElement {
-  const { node, isStarter, isBoss } = model;
+  const { node, role } = model;
+  const isStarter = role === "starter";
+  const isBoss = role === "boss";
   const isAvailable = node.state === "available";
   const binding = useRevealSource({
     identity: {
@@ -197,17 +194,11 @@ export function AtlasNode({
     (isBoss ? " - final boss" : "") +
     (model.knownDreamsignRef !== null ? " - known dreamsign here" : "");
   const nodeStyle = {
-    left: model.left,
-    top: model.top,
-    width: model.size,
-    height: model.size,
-    marginLeft: -model.size / 2,
-    marginTop: -model.size / 2,
+    width: "100%",
+    height: "100%",
     touchAction: "pan-x pan-y",
     WebkitTapHighlightColor: "transparent",
     cursor: isAvailable ? "pointer" : "default",
-    "--atlas-node-size": `${String(model.size)}px`,
-    "--atlas-badge-scale": String(model.badgeScale ?? 1),
     ...binding.sourceProps.style,
   } as CSSProperties;
   const selectableHighlightStyle = {

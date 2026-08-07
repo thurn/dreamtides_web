@@ -186,8 +186,8 @@ describe("resolveAtlasNodeGeometry", () => {
     expect(geometry.get("middle")!.size).toBeLessThan(
       geometry.get("starter")!.size,
     );
-    expect(geometry.get("starter")!.isStarter).toBe(true);
-    expect(geometry.get("boss")!.isBoss).toBe(true);
+    expect(geometry.get("starter")!.role).toBe("starter");
+    expect(geometry.get("boss")!.role).toBe("boss");
   });
 
   it("returns an empty map for an atlas with no positioned nodes", () => {
@@ -362,35 +362,35 @@ describe("buildAtlasMapNodes", () => {
     };
     const items = buildAtlasMapNodes(makeVerticalAtlas(), content);
     expect(items).toHaveLength(3);
-    const boss = items.find((item) => item.node.id === "boss");
-    expect(boss?.isBoss).toBe(true);
-    expect(boss?.primary.placeName).toBe("Synthetic boss place");
-    expect(boss?.primary.sceneArt).toEqual({
+    const boss = items.find((item) => item.model.node.id === "boss");
+    expect(boss?.model.role).toBe("boss");
+    expect(boss?.model.primary.placeName).toBe("Synthetic boss place");
+    expect(boss?.model.primary.sceneArt).toEqual({
       kind: "dreamscape-scene",
       dreamscapeId: "synthetic-boss-scene",
     });
     // An available (revealed) node's card is not the unrevealed variant, even
     // with no dreamscape content resolved.
-    const middle = items.find((item) => item.node.id === "middle");
-    expect(middle?.primary.sceneArt).toBeNull(); // available but no dreamscape content
+    const middle = items.find((item) => item.model.node.id === "middle");
+    expect(middle?.model.primary.sceneArt).toBeNull(); // available but no dreamscape content
   });
 
   it("fades a forgone sibling and renders it as an unrevealed, badge-free frame", () => {
     const items = buildAtlasMapNodes(makeForgoneAtlas(), EMPTY_CONTENT);
-    const chosen = items.find((item) => item.node.id === "chosen");
-    const passed = items.find((item) => item.node.id === "passed");
+    const chosen = items.find((item) => item.model.node.id === "chosen");
+    const passed = items.find((item) => item.model.node.id === "passed");
     // Every positioned node still renders — the passed-by sibling is faded, not
     // dropped.
     expect(items).toHaveLength(4);
-    expect(chosen?.isReachable).toBe(true);
-    expect(passed?.isReachable).toBe(false);
+    expect(chosen?.model.isReachable).toBe(true);
+    expect(passed?.model.isReachable).toBe(false);
     // The unreachable node reveals nothing: no dreamscape icon, no site badge,
     // no known-dreamsign card, and its reveal card reads as unrevealed.
-    expect(passed?.iconRef).toBeNull();
-    expect(passed?.siteBadgeGlyph).toBeNull();
-    expect(passed?.knownDreamsignRef).toBeNull();
-    expect(passed?.dreamsign).toBeNull();
-    expect(passed?.primary.sceneArt).toBeNull();
+    expect(passed?.model.iconRef).toBeNull();
+    expect(passed?.model.siteBadgeGlyph).toBeNull();
+    expect(passed?.model.knownDreamsignRef).toBeNull();
+    expect(passed?.model.dreamsign).toBeNull();
+    expect(passed?.model.primary.sceneArt).toBeNull();
   });
 
   it("carries a resident dreamscape's signature site as a standard site info card", () => {
@@ -457,14 +457,14 @@ describe("buildAtlasMapNodes", () => {
     };
 
     const items = buildAtlasMapNodes(atlas, content);
-    const middle = items.find((item) => item.node.id === "middle");
+    const middle = items.find((item) => item.model.node.id === "middle");
 
-    expect(middle?.site).toMatchObject({
+    expect(middle?.model.site).toMatchObject({
       name: "Augury",
     });
-    expect(middle?.site?.blurb.length).toBeGreaterThan(0);
-    expect(middle?.site?.icon).toBe("fixture-atlas-icon");
-    expect(middle?.affiliation).toEqual({
+    expect(middle?.model.site?.blurb.length).toBeGreaterThan(0);
+    expect(middle?.model.site?.icon).toBe("fixture-atlas-icon");
+    expect(middle?.model.affiliation).toEqual({
       id: "figments",
       title: "Fixture title Figments",
       body: "Fixture body Figment",

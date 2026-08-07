@@ -67,7 +67,7 @@ ruleTester.run("no-numeric-style-props", rule, {
       options: [{ allow: ["DreamAvatarPortraitProps.size"] }],
     },
     {
-      name: "a knob-worded number on a non-*Props/*View type is out of scope",
+      name: "a knob-worded number on a non-public-surface type is out of scope",
       filename: COMPONENT,
       code: `export interface SizeSpec { size?: number; gap?: number; }`,
     },
@@ -114,6 +114,12 @@ ruleTester.run("no-numeric-style-props", rule, {
       name: "a camelCase knob suffix on an exported *View is flagged",
       filename: "src/cumulus/components/atlas/AtlasNode.tsx",
       code: `export interface AtlasNodeView { badgeScale?: number; }`,
+      errors: [{ messageId: "numericKnob" }],
+    },
+    {
+      name: "a numeric knob on an exported semantic *Model is flagged",
+      filename: "src/cumulus/components/atlas/AtlasNode.tsx",
+      code: `export interface AtlasNodeModel { size: number; }`,
       errors: [{ messageId: "numericKnob" }],
     },
     {

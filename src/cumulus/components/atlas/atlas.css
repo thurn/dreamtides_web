@@ -3,8 +3,8 @@
  * and `AtlasEdge` carry their own presentation and render identically in the
  * /cumulus doc site and in the live atlas screen.
  *
- * Every selector uses the `cumulus-atlas-*` component namespace, so AtlasNode
- * and AtlasEdge need no screen-owned wrapper class. The `--atlas-*` semantic
+ * Every selector uses the `cumulus-atlas-*` component namespace. The
+ * `--atlas-*` semantic
  * material tokens are declared by
  * `cumulus-tokens.css`; the live screen and /cumulus specimens both nest this
  * surface inside `.cumulus`, so the same authored material resolves everywhere.
@@ -57,12 +57,10 @@
 
 /* ---- Nodes ---- */
 .cumulus-atlas-node {
-  position: absolute;
-  /* Centre the node on its stage-space left/top through negative margins set
-     inline per node (-size/2), NOT `transform: translate(-50%,-50%)`: an
-     available node renders through Pressable, which owns the element transform
-     for its press/hover scale, so the centering must stay off transform to
-     compose cleanly. */
+  position: relative;
+  width: 100%;
+  height: 100%;
+  container-type: inline-size;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -237,15 +235,8 @@
 }
 
 /* ---- Node badges ----
-   Badge diameters and glyph sizes are a fixed fraction of the node's own
-   diameter (`--atlas-node-size`, set inline per node by AtlasNode), so every
-   badge scales in lock-step with its node, then times `--atlas-badge-scale`
-   (also set inline per node) so a profile can enlarge the badges on top of
-   that. The base fractions are the desktop badge sizes divided by the desktop
-   node diameter (132px); with the desktop scale of 1 desktop badges are
-   pixel-unchanged. The mobile profile draws larger nodes *and* sets a larger
-   badge scale, so the site / dreamsign icons stay legibly large once the
-   portrait viewport scales the whole stage down. */
+   Badge diameters and glyph sizes are component-owned fractions of the node's
+   own container. Large node boxes use the roomier internal badge treatment. */
 .cumulus-atlas-site-badges {
   position: absolute;
   bottom: -3px;
@@ -256,8 +247,8 @@
   gap: var(--space-xs);
 }
 .cumulus-atlas-site-badge {
-  width: calc(var(--atlas-node-size) * 0.27 * var(--atlas-badge-scale, 1));
-  height: calc(var(--atlas-node-size) * 0.27 * var(--atlas-badge-scale, 1));
+  width: 27cqi;
+  height: 27cqi;
   border-radius: 50%;
   background: var(--badge-disc-gradient);
   border: 1px solid var(--border-accent);
@@ -268,15 +259,15 @@
   box-shadow: 0 2px 7px var(--atlas-badge-shadow);
 }
 .cumulus-atlas-site-badge-glyph {
-  font-size: calc(var(--atlas-node-size) * 0.16 * var(--atlas-badge-scale, 1));
+  font-size: 16cqi;
   line-height: 1;
 }
 .cumulus-atlas-boss-badge {
   position: absolute;
   top: 2px;
   right: 2px;
-  width: calc(var(--atlas-node-size) * 0.23);
-  height: calc(var(--atlas-node-size) * 0.23);
+  width: 23cqi;
+  height: 23cqi;
   border-radius: 50%;
   z-index: 6;
   background: var(--atlas-boss-badge-background);
@@ -284,7 +275,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(var(--atlas-node-size) * 0.12);
+  font-size: 12cqi;
   border: 2px solid var(--atlas-boss-badge-border);
   box-shadow: 0 0 14px var(--atlas-boss-badge-glow);
 }
@@ -292,8 +283,8 @@
   position: absolute;
   top: -6px;
   right: -6px;
-  width: calc(var(--atlas-node-size) * 0.35 * var(--atlas-badge-scale, 1));
-  height: calc(var(--atlas-node-size) * 0.35 * var(--atlas-badge-scale, 1));
+  width: 35cqi;
+  height: 35cqi;
   border-radius: 50%;
   z-index: 7;
   background: var(--badge-disc-gradient);
@@ -304,11 +295,32 @@
   box-shadow: 0 0 14px var(--atlas-known-badge-glow);
 }
 .cumulus-atlas-known-badge img {
-  width: calc(var(--atlas-node-size) * 0.26 * var(--atlas-badge-scale, 1));
-  height: calc(var(--atlas-node-size) * 0.26 * var(--atlas-badge-scale, 1));
+  width: 26cqi;
+  height: 26cqi;
   object-fit: contain;
   filter: drop-shadow(0 1px 3px var(--atlas-known-image-shadow));
   pointer-events: none;
+}
+
+@container (min-width: 180px) {
+  .cumulus-atlas-site-badge {
+    width: 40.5cqi;
+    height: 40.5cqi;
+  }
+
+  .cumulus-atlas-site-badge-glyph {
+    font-size: 24cqi;
+  }
+
+  .cumulus-atlas-known-badge {
+    width: 52.5cqi;
+    height: 52.5cqi;
+  }
+
+  .cumulus-atlas-known-badge img {
+    width: 39cqi;
+    height: 39cqi;
+  }
 }
 .cumulus-atlas-known-badge::after {
   content: "";

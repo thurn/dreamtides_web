@@ -22,7 +22,6 @@ import {
 import {
   ATLAS_ANCHOR_NODE_SIZE_DESKTOP,
   ATLAS_ANCHOR_NODE_SIZE_MOBILE,
-  ATLAS_BADGE_SCALE_MOBILE,
   ATLAS_NODE_SIZE_DESKTOP,
   ATLAS_NODE_SIZE_MOBILE,
   ATLAS_STAGE_HEIGHT,
@@ -34,12 +33,14 @@ import type {
   AtlasNodeDreamsign,
   AtlasNodeModel,
   AtlasNodePrimary,
+  AtlasNodeRole,
   AtlasNodeSite,
 } from "../../cumulus/components/atlas/AtlasNode";
 import { artRef } from "../../cumulus/primitives/art";
 import { glyph } from "../../cumulus/primitives/glyph";
 import type {
   AtlasEdgeView,
+  AtlasNodePlacementView,
   AtlasView,
 } from "../../cumulus/screens/AtlasScreen";
 import type { JourneyContent } from "../../data/journey-content";
@@ -109,10 +110,6 @@ export interface AtlasLayoutProfile {
   nodeSize: number;
   anchorNodeSize: number;
   edgeAnchorHorizontal?: boolean;
-  /** Multiplier applied to the site / dreamsign badge sizes on top of their
-   * node-relative fraction. Mobile enlarges the badges so they stay legible
-   * once the narrow portrait viewport scales the whole stage down. */
-  badgeScale: number;
 }
 
 /**
@@ -134,7 +131,6 @@ export const ATLAS_LAYOUT_DESKTOP: AtlasLayoutProfile = {
   contentRect: { top: 150, bottom: 900, left: 160, right: 1760 },
   nodeSize: ATLAS_NODE_SIZE_DESKTOP,
   anchorNodeSize: ATLAS_ANCHOR_NODE_SIZE_DESKTOP,
-  badgeScale: 1,
 };
 
 /** Mobile: a portrait stage read bottom-up, with larger nodes drawn together so
@@ -149,10 +145,6 @@ export const ATLAS_LAYOUT_MOBILE: AtlasLayoutProfile = {
   nodeSize: ATLAS_NODE_SIZE_MOBILE,
   anchorNodeSize: ATLAS_ANCHOR_NODE_SIZE_MOBILE,
   edgeAnchorHorizontal: true,
-  // Enlarge the site / dreamsign badges by half again so they read clearly on
-  // the phone atlas, where the whole stage is scaled down to fit the portrait
-  // viewport.
-  badgeScale: ATLAS_BADGE_SCALE_MOBILE,
 };
 
 /** Picks the layout profile for the viewport class. */
@@ -165,8 +157,7 @@ interface NodeGeometry {
   left: number;
   top: number;
   size: number;
-  isStarter: boolean;
-  isBoss: boolean;
+  role: AtlasNodeRole;
 }
 
 /**
@@ -227,8 +218,12 @@ export function resolveAtlasNodeGeometry(
   const lerp = (t: number, a: number, b: number): number => a + t * (b - a);
 
   for (const node of positioned) {
-    const isStarter = node.id === atlas.startingNodeId;
-    const isBoss = node.id === atlas.bossNodeId;
+    const role: AtlasNodeRole =
+      node.id === atlas.startingNodeId
+        ? "starter"
+        : node.id === atlas.bossNodeId
+          ? "boss"
+          : "regular";
     // The layer axis is generator `position.x` (starter min → boss max); the
     // spread axis is `position.y`, centred within the layer.
     const layer = norm(node.position.x, minX, maxX);
@@ -248,9 +243,8 @@ export function resolveAtlasNodeGeometry(
     geometry.set(node.id, {
       left,
       top,
-      size: isStarter || isBoss ? anchorNodeSize : nodeSize,
-      isStarter,
-      isBoss,
+      size: role === "starter" || role === "boss" ? anchorNodeSize : nodeSize,
+      role,
     });
   }
 
@@ -425,7 +419,7 @@ function buildNodeCard(
 } {
   const dreamsign = buildDreamsignCard(node, journeyContent, isReachable);
 
-  if (geo.isBoss) {
+  if (geo.role === "boss") {
     const { boss } = journeyContent.atlasData;
     const bossIncarnation =
       atlas.bossIncarnationId != null
@@ -525,12 +519,12 @@ function buildNodeCard(
   };
 }
 
-/** Builds the placed node items — faces and resolved hover cards. */
+/** Builds screen placements around semantic node faces and resolved hover cards. */
 export function buildAtlasMapNodes(
   atlas: DreamAtlas,
   journeyContent: JourneyContent,
   profile: AtlasLayoutProfile = ATLAS_LAYOUT_MOBILE,
-): AtlasNodeModel[] {
+): AtlasNodePlacementView[] {
   const geometry = resolveAtlasNodeGeometry(atlas, profile);
   // A node the player can no longer reach is faded and never reveals its site:
   // it renders as a dimmed, unrevealed frame regardless of what the generator
@@ -538,7 +532,7 @@ export function buildAtlasMapNodes(
   // covers the passed-by siblings in the current and previous layers and any
   // deeper node cut off from the frontier.
   const reachable = reachableAtlasNodeIds(atlas);
-  const items: AtlasNodeModel[] = [];
+  const items: AtlasNodePlacementView[] = [];
   for (const node of Object.values(atlas.nodes)) {
     const geo = geometry.get(node.id);
     if (geo === undefined) {
@@ -556,7 +550,7 @@ export function buildAtlasMapNodes(
 
     // The node face: the boss is always the icon; a revealed dreamscape shows
     // its circular icon; an unrevealed node shows the empty round frame.
-    const iconRef = geo.isBoss
+    const iconRef = geo.role === "boss"
       ? artRef.dreamscapeIcon(journeyContent.atlasData.boss.iconArtId)
       : dreamscape === null
         ? null
@@ -566,8 +560,8 @@ export function buildAtlasMapNodes(
     // dreamscapes.
     const revealedSite = revealedAtlasSite(node);
     const siteBadgeGlyph =
-      geo.isBoss ||
-      geo.isStarter ||
+      geo.role === "boss" ||
+      geo.role === "starter" ||
       dreamscape === null ||
       revealedSite === null
         ? null
@@ -586,13 +580,9 @@ export function buildAtlasMapNodes(
         ? artRef.dreamsign(dreamsignTemplate.imageName)
         : null;
 
-    items.push({
+    const model: AtlasNodeModel = {
       node,
-      left: geo.left,
-      top: geo.top,
-      size: geo.size,
-      isStarter: geo.isStarter,
-      isBoss: geo.isBoss,
+      role: geo.role,
       isReachable,
       iconRef,
       unrevealedFrameRef: artRef.atlasAsset(
@@ -600,8 +590,13 @@ export function buildAtlasMapNodes(
       ),
       siteBadgeGlyph,
       knownDreamsignRef,
-      badgeScale: profile.badgeScale,
       ...buildNodeCard(node, geo, journeyContent, atlas, isReachable),
+    };
+    items.push({
+      model,
+      left: geo.left,
+      top: geo.top,
+      boxSize: geo.size,
     });
   }
   return items;

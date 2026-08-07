@@ -20,6 +20,7 @@ import {
   CONTAINER_COMPONENTS,
   CONTAINER_PRIMITIVES,
 } from "../eslint-rules/cumulus-containers.js";
+import { isKnobName } from "../eslint-rules/no-numeric-style-props.js";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -33,6 +34,7 @@ const COMPONENT_ROOTS = [
   resolve(ROOT, "src/cumulus/primitives"),
   resolve(ROOT, "src/cumulus/screens"),
 ];
+const STRICT_COMPONENT_ROOTS = COMPONENT_ROOTS.slice(0, 2);
 
 /** Collect `.tsx` sources, skipping `__*__` fixtures (mirrors the generator). */
 function collectComponentFiles(dir) {
@@ -60,6 +62,9 @@ const files = COMPONENT_ROOTS.flatMap((dir) =>
   collectComponentFiles(dir),
 ).sort();
 const surface = extractPropMeta(files);
+const strictComponentSurface = extractPropMeta(
+  STRICT_COMPONENT_ROOTS.flatMap((dir) => collectComponentFiles(dir)).sort(),
+);
 
 /** Props whose very presence re-opens an arbitrary-customization escape hatch. */
 const BANNED_PROP_NAMES = new Set(["style", "className"]);
@@ -123,6 +128,26 @@ describe("Cumulus strict-API contract (resolved surface)", () => {
     expect(propNames).not.toContain("sizePx");
     expect(propNames).not.toContain("width");
     expect(propNames).not.toContain("height");
+  });
+
+  it("component models expose no numeric visual knobs", () => {
+    const offenders = [];
+    for (const [component, props] of Object.entries(strictComponentSurface)) {
+      for (const prop of props ?? []) {
+        const fields = prop.nested?.fields ?? [];
+        for (const field of fields) {
+          if (
+            isKnobName(field.name) &&
+            /(?:^|\|\s*)number(?:\s*\||$)/.test(field.tsType ?? "")
+          ) {
+            offenders.push(
+              `${component}.${prop.name}.${field.name}: ${field.tsType}`,
+            );
+          }
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
   });
 
   it("component primary-action props use the onPress convention", () => {

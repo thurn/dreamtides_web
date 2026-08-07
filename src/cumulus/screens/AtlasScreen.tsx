@@ -37,6 +37,16 @@ export interface AtlasEdgeView {
   kind: AtlasEdgeKind;
 }
 
+/** Screen-owned stage placement for one semantic Atlas node. */
+export interface AtlasNodePlacementView {
+  model: AtlasNodeModel;
+  /** Stage-space centre in the fixed Atlas design canvas. */
+  left: number;
+  top: number;
+  /** Square node box in stage pixels. */
+  boxSize: number;
+}
+
 /** Everything the atlas screen renders, mapped from live journey state. */
 export interface AtlasView {
   /** The design canvas the stage scales to fit (letterboxed): portrait on
@@ -44,7 +54,7 @@ export interface AtlasView {
   stageWidth: number;
   stageHeight: number;
   /** Placed nodes, running starter → boss along the map's layer axis. */
-  nodes: AtlasNodeModel[];
+  nodes: AtlasNodePlacementView[];
   /** Forward connectors between nodes. */
   edges: AtlasEdgeView[];
   /** Mira's delayed tutorial-only explanation of the Atlas. */
@@ -125,12 +135,21 @@ export function AtlasScreen({
           </svg>
 
           <div data-atlas-node-layer="" style={nodeLayerStyle}>
-            {view.nodes.map((model) => (
-              <AtlasNode
+            {view.nodes.map(({ model, left, top, boxSize }) => (
+              <div
                 key={model.node.id}
-                model={model}
-                onPress={onEnterNode}
-              />
+                data-atlas-node-placement={model.node.id}
+                style={{
+                  position: "absolute",
+                  left,
+                  top,
+                  width: boxSize,
+                  height: boxSize,
+                  transform: "translate(-50%, -50%)",
+                }}
+              >
+                <AtlasNode model={model} onPress={onEnterNode} />
+              </div>
             ))}
           </div>
         </div>
@@ -193,8 +212,11 @@ function usePreloadImages(urls: string[]): void {
   }, [urls]);
 }
 
-function AtlasPreflight({ nodes }: { nodes: AtlasNodeModel[] }) {
-  const urls = useMemo(() => atlasPreflightImageUrls(nodes), [nodes]);
+function AtlasPreflight({ nodes }: { nodes: AtlasNodePlacementView[] }) {
+  const urls = useMemo(
+    () => atlasPreflightImageUrls(nodes.map(({ model }) => model)),
+    [nodes],
+  );
   usePreloadImages(urls);
 
   return (

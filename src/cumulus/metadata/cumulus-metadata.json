@@ -53,7 +53,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Placed face plus UUID-backed semantic Atlas reveal data.",
+      "description": "UUID-backed semantic Atlas face and reveal data.",
       "nested": {
         "name": "AtlasNodeModel",
         "fields": [
@@ -64,32 +64,8 @@
             "description": ""
           },
           {
-            "name": "left",
-            "tsType": "number",
-            "optional": false,
-            "description": "Stage-space centre in the fixed Atlas design canvas."
-          },
-          {
-            "name": "top",
-            "tsType": "number",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "size",
-            "tsType": "number",
-            "optional": false,
-            "description": "Rendered node diameter in stage pixels."
-          },
-          {
-            "name": "isStarter",
-            "tsType": "boolean",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "isBoss",
-            "tsType": "boolean",
+            "name": "role",
+            "tsType": "AtlasNodeRole",
             "optional": false,
             "description": ""
           },
@@ -121,12 +97,6 @@
             "name": "knownDreamsignRef",
             "tsType": "ArtRef | null",
             "optional": false,
-            "description": ""
-          },
-          {
-            "name": "badgeScale",
-            "tsType": "number",
-            "optional": true,
             "description": ""
           },
           {
