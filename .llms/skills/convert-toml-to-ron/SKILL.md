@@ -1,26 +1,62 @@
 ---
 name: convert-toml-to-ron
-description: Create an idiomatic Rusty Object Notation (.ron) equivalent of a TOML configuration or catalog. Use when asked to convert, port, experiment with, or redesign a .toml file as RON, including large or structurally complex TOML sources.
+description: Design an idiomatic canonical Rusty Object Notation (.ron) candidate from a compatibility-shaped or draft RON catalog, or from legacy TOML when no RON input exists. Use when asked to convert, port, experiment with, or redesign a data catalog as real typed RON, especially when producing a sibling such as data/affiliations_canonical.ron from a CompatDocument input.
 ---
 
-# Convert TOML to RON
+# Design Canonical RON
 
-Treat the conversion as domain modeling. Feel free to make assumptions and
+Treat the conversion as domain modeling. The existing file is evidence about
+the data, not a schema to reproduce. Feel free to make assumptions and
 idealized layout choices; the user is not asking for a 1:1 port unless they say
 otherwise.
 
+Many `.ron` files in this repository are compatibility-shaped migration
+artifacts: they wrap JSON- or TOML-shaped data in `CompatDocument`, retain
+stringly typed keys and discriminators, and may include generated positional
+comments. Treat these files as inputs to this process, not examples of good RON.
+
+## Output contract
+
+- Prefer the existing `.ron` file as the migration input when one exists. Use
+  the corresponding TOML and generated projections as parity references, not as
+  competing schema authorities.
+- Write a separate candidate named `<stem>_canonical.ron` beside the input by
+  default. For example, read `data/affiliations.ron` and write
+  `data/affiliations_canonical.ron`.
+- Do not overwrite the input, change the manifest, replace a loader, or make the
+  candidate canonical at runtime unless the user explicitly asks for
+  integration.
+- Preserve all semantic source information. Do not preserve compatibility
+  wrappers, map/list nesting, key spelling, ordering annotations, or other
+  representational artifacts merely because they appear in the input.
+
 ## Workflow
 
-1. Inspect representative source sections, consumer types, and validation code.
-   For a large TOML file, do not dump the whole file into context. Parse it to
-   summarize record counts, key unions, optional fields, value types, and closed
-   vocabularies.
-2. Design the RON shape:
+1. Inspect representative input sections, consumer types, compiler or adapter
+   code, validation code, and domain documentation. If the catalog is large, do
+   not dump it into context. Parse it to summarize record counts, stable IDs,
+   key unions, optional fields, value types, repeated defaults, closed
+   vocabularies, exceptional records, and cross-record invariants.
+2. Classify the observed shape before designing anything:
+   - **Domain concepts** belong in the candidate in an intentionally modeled
+     form.
+   - **Compatibility encoding** such as `CompatDocument`, a synthetic `data`
+     map, kebab-case keys, loose discriminator fields, and index comments does
+     not constrain the candidate shape.
+   - **Derived or duplicated data** should be authored only when the canonical
+     source model truly owns it. Confirm how it is derived before omitting it,
+     and prove parity rather than silently dropping it.
+3. Sketch the intended Rust source types independently of the input encoding.
+   Ask what an author should edit and what invariants the type system should
+   enforce. Then design the RON that naturally deserializes into those types.
+   Explicitly reject a design that is only the compatibility tree with RON
+   punctuation.
+4. Design the RON shape:
    - When a document consists solely of homogeneous definitions, make the list
      itself the top-level value and deserialize it as `Vec<Definition>`. Use a
-     document record only when the source has multiple independent root fields.
+     document record only when the domain has multiple independent root fields.
      Prefer explicit stable ID fields, and use maps only when keyed lookup is
-     part of the domain model.
+     part of the authored domain model.
    - Give entries in long lists a named record such as `CardDefinition(...)` or
      `ActionDefinition(...)`; anonymous inline records such as `art: (...)` are
      fine when the surrounding field already supplies enough context.
@@ -29,24 +65,53 @@ otherwise.
      record of unrelated optional fields.
    - Keep scalar concepts scalar. Introduce a sequence only when the concept is
      inherently plural; use an explicit compound variant for exceptional forms.
-   - Order primary authored content before secondary metadata. Preserve every
-     semantic source value even when renaming or regrouping it.
+   - Hoist repeated values only when they represent a dataset-wide rule or
+     default, not merely because every current record happens to match.
+   - Order primary authored content before secondary metadata. Rename and
+     regroup fields around domain meaning while preserving their semantics.
    - Keep presentation and template-substitution text as strings, while typing
      runtime identifiers, predicates, and modes.
    - Do not add schema-version fields. The typed source model and compiler build
      define the current contract. Evolve source models compatibly with optional
      or defaulted fields and deliberate adapter handling for new variants.
-3. Start the file with `#![enable(implicit_some)]`. Write present `Option<T>`
-   values as `value` instead of `Some(value)`, and omit absent or default-valued
-   fields when the Serde schema supports omission. Skip this extension only when
-   the target parser cannot support it or the user requests explicit `Some`.
-4. Use normal quoted strings by default. Use raw strings only when multiline
+5. Start the candidate with `#![enable(implicit_some)]`. Write present
+   `Option<T>` values as `value` instead of `Some(value)`, and omit absent or
+   default-valued fields when the Serde schema supports omission. Skip this
+   extension only when the target parser cannot support it or the user requests
+   explicit `Some`.
+6. Use normal quoted strings by default. Use raw strings only when multiline
    content or escaping makes them materially clearer.
-5. Generate large catalogs mechanically. Fail on unknown or missing TOML keys,
-   duplicate stable IDs, unsupported variants, and invalid source invariants so
-   the transformation cannot silently discard data.
+7. Generate large catalogs mechanically. Fail on unknown or missing input keys,
+   duplicate stable IDs, unsupported variants, invalid references, and violated
+   invariants so the transformation cannot silently discard or reinterpret
+   data.
 
 ## Modeling examples
+
+A compatibility input such as this:
+
+```ron
+CompatDocument(
+    data: {
+        "actions": [
+            { "id": "gather", "effect-kind": "draft-card", "count": 1 },
+        ],
+    },
+)
+```
+
+does not imply that the wrapper, string keys, or discriminator belong in the
+candidate. A modeled candidate might instead be:
+
+```ron
+#![enable(implicit_some)]
+[
+    ActionDefinition(
+        id: "gather",
+        effect: DraftCard(count: 1),
+    ),
+]
+```
 
 Use named entries in long lists and anonymous records inline:
 
@@ -89,43 +154,42 @@ Validate with the real `ron` and Serde crates, not a text or bracket check.
    cargo init --quiet --bin --name ron_validation "$validation_dir"
    ```
 
-2. Add these dependencies to its `Cargo.toml`:
+2. Add the dependencies required by the actual inputs to its `Cargo.toml`:
 
    ```toml
    [dependencies]
    ron = "0.10"
    serde = { version = "1", features = ["derive"] }
-   toml = "0.9"
+   toml = "0.9" # Include when TOML is a parity input.
    ```
 
-3. In `src/main.rs`, define the intended Rust structs and enums rather than
-   deserializing into a generic value. Add `#[derive(Deserialize)]` and
-   `#[serde(deny_unknown_fields)]` to every record. Represent omitted fields
-   with `Option<T>` or `#[serde(default)]`, then parse the actual output:
+3. In `src/main.rs`, define two strict typed models:
+   - an input model that can deserialize the compatibility RON or legacy TOML;
+   - the intended canonical structs and enums that define the candidate design.
 
-   ```rust
-   fn main() -> Result<(), Box<dyn std::error::Error>> {
-       let mut args = std::env::args().skip(1);
-       let ron_path = args.next().expect("RON path");
-       let toml_path = args.next().expect("TOML path");
-       let ron_cards: Vec<CardDefinition> = ron::from_str(&std::fs::read_to_string(ron_path)?)?;
-       let toml_catalog: TomlCatalog = toml::from_str(&std::fs::read_to_string(toml_path)?)?;
-       assert_eq!(ron_cards.len(), toml_catalog.cards.len());
-       Ok(())
-   }
-   ```
-
-4. Parse the TOML source with `toml::from_str`. For strongest validation,
-   canonicalize both typed forms, derive `PartialEq`, and assert equality. At
-   minimum, assert source/output record counts, unique stable IDs, enum
-   coverage, required nested cardinalities, and every exceptional variant.
-5. Run the validator against the real files:
+   Add `#[derive(Deserialize)]` and `#[serde(deny_unknown_fields)]` to every
+   record. Represent omitted fields with `Option<T>` or `#[serde(default)]`.
+   Do not use `ron::Value`, `serde_json::Value`, or an untyped map as a
+   substitute for proving the candidate schema.
+4. Convert both typed forms into a shared semantic comparison model, derive
+   `PartialEq`, and assert equality. This comparison should permit deliberate
+   renaming, regrouping, enum modeling, and default hoisting while proving that
+   every source value has an accounted-for meaning.
+5. Also assert source/output record counts, unique stable IDs, enum coverage,
+   reference validity, required nested cardinalities, repeated-default
+   assumptions, and every exceptional variant. If TOML and compatibility RON
+   both exist, first prove that they carry the same semantic data or report the
+   discrepancy.
+6. Run the validator against the real files, passing the compatibility input,
+   candidate, and optional TOML parity source explicitly:
 
    ```sh
    cargo run --quiet --manifest-path "$validation_dir/Cargo.toml" -- \
-     /absolute/path/output.ron /absolute/path/source.toml
+     /absolute/path/input.ron \
+     /absolute/path/input_canonical.ron \
+     /absolute/path/input.toml
    ```
 
-Run the repository's normal checks afterward. Create only the sidecar `.ron`
-file; do not replace the TOML loader, compiler, or canonical source unless the
-user asks for integration.
+Run the repository's normal checks afterward. Leave the candidate as a review
+artifact; integration into the compiler and runtime is a separate task unless
+the user asks for it.

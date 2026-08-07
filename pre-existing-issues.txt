@@ -13,3 +13,9 @@ Fresh worktrees could not run `scripts/regenerate-assets.sh` because
 before `setup-assets.mjs` invoked the game-data compiler. This task resolves the
 ordering defect by loading glossary IDs only when tutorial triggers are
 validated, after generated compatibility data has been materialized.
+
+Fresh worktrees still cannot run `scripts/regenerate-assets.sh` directly because
+`scripts/exploration-editor-schema.mjs` reads the gitignored generated
+`data/exploration.toml` during module import, before `setup-assets.mjs` can invoke
+the game-data compiler. Running `npm run game-data:compile` first works around
+the ordering defect.
