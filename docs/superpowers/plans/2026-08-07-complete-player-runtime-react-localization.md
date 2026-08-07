@@ -10,7 +10,11 @@
 
 **Scope:** Code-authored player-runtime copy rendered by React, including copy prepared by non-React helpers
 
-**Out of scope:** Authored game-data prose, editor and operator tools, debug/inspector UI, image viewer, Cumulus documentation and demos, QA fixtures, tests, locale selection, and additional locale files
+**Out of scope:** Authored game-data prose, editor and operator tools,
+debug/inspector UI, image viewer, Cumulus documentation and demos,
+player-facing localization of test-authored fixture copy, locale selection, and
+additional locale files. Tests and QA fixtures still change when needed to
+verify production contracts without asserting English wording.
 
 ## Outcome
 
@@ -28,6 +32,15 @@ selectors stay locale-neutral and deterministic.
 This project phase centralizes the existing English source and makes the player
 runtime translation-ready. It does not add a locale picker, locale persistence,
 translated catalogs, or deployment changes.
+
+The persisted battle-prompt shape is part of the deterministic room fold. This
+implementation therefore increments `CURRENT_REDUCER_VERSION` from
+`dreamtides-coop-v17` to `dreamtides-coop-v18`. Version 17 rooms are classified
+as incompatible and open the existing Version Gate; they are never folded or
+appended to by a version 18 client. `COMPATIBLE_LEGACY_REDUCER_VERSIONS` remains
+empty. Legacy prompt normalization applies only to an explicit `LOAD_STATE`
+battle payload imported into a version 18 room, not to a version 17 room's
+compacted base snapshot.
 
 ## Start Here for an Implementing Agent
 
@@ -50,6 +63,10 @@ translated catalogs, or deployment changes.
 7. Commit each coherent task with a detailed commit message and push it
    immediately. Run the single independent review only after the integrated
    implementation is complete.
+8. Task 9 changes deterministic fold state. Increment the reducer protocol to
+   `dreamtides-coop-v18` in the same coherent commit as the prompt-state change;
+   do not add version 17 to the compatible-version set or attempt mixed-version
+   room participation.
 
 ## Existing Localization Architecture
 
@@ -100,6 +117,26 @@ Include:
   included React surface, notably battle effects, Exploration presentation,
   deck controls, Dreamscape labels, and Transfiguration offers.
 
+Task 1 turns this boundary into one exported, tested inventory. In addition to
+the role- and prefix-based React scope, it must enumerate the current non-React
+copy producers by exact repository path. The initial inventory includes:
+
+- `src/cumulus/screens/mobile-deck-filter.ts` and
+  `src/cumulus/screens/desktop-deck-filter.ts`;
+- `src/screens/cumulus_adapters/main-menu-view-model.ts`,
+  `src/screens/cumulus_adapters/dreamscape-view-model.ts`,
+  `src/screens/cumulus_adapters/exploration-view-model.ts`, and
+  `src/screens/cumulus_adapters/mobile-battle-view-model.ts`;
+- `src/transfiguration/transfiguration-logic.ts`;
+- `src/rules/battle/effect-step.ts`,
+  `src/rules/battle/effect-runner-core.ts`,
+  `src/rules/battle/dreamwell-effects-table.ts`, and
+  `src/rules/battle/battle-card-effects-table.ts`.
+
+Add another exact path whenever the migration discovers a non-React module that
+chooses or constructs copy for an included player surface. The inventory test
+must fail when a listed path is absent or is not recognized as protected.
+
 Exclude:
 
 - `src/editor/`, `src/debug/`, `src/image_viewer/`,
@@ -108,6 +145,14 @@ Exclude:
 - `JourneyDebugEditorScreen.tsx`, `TutorialEditorRail.tsx`, battle inspector and
   context-menu commands, figment-creator developer controls, QA-scene metadata,
   test fixtures, snapshots, and test files.
+- Exact mixed-role exclusions currently include `src/coop/FuzzProbe.tsx`,
+  `src/screens/CardSourceOverlay.tsx`, `src/screens/DebugScreen.tsx`,
+  `src/screens/JourneyDebugEditor.tsx`,
+  `src/battle/components/BattleContextMenu.tsx`,
+  `src/battle/components/BattleFigmentCreator.tsx`, and
+  `src/battle/components/BattleLogDrawer.tsx`. If player copy is introduced into
+  one of these files, reclassify that copy or split the player surface rather
+  than relying on the file exclusion.
 - Authored prose and vocabulary loaded from RON, JSON, card rules, tutorial
   configuration, glossary data, or similar catalogs. Card names, Dreamsign
   names, guide names, site blurbs, rules text, and glossary definitions remain
@@ -133,9 +178,11 @@ Treat these as locale-neutral technical values:
 
 ## Research Findings: Remaining High-Confidence Inventory
 
-The inventory below identifies concrete seams found in the current tree. The
-lint pass in Task 1 remains the completion authority because literal searches
-produce both false positives and developer-only results.
+The inventory below identifies concrete seams found in the current tree. Task
+1's tested ownership inventory and broad literal rule are the completion
+authority. Repository-wide candidate searches remain a required audit that can
+discover a producer missing from the protected inventory; every such producer
+must be added to that inventory before acceptance.
 
 ### Bootstrap, errors, and cooperative play
 
@@ -284,7 +331,7 @@ union. The exact generated syntax may vary, but it must express this contract:
 
 ```ts
 type FluentMessageDescriptor =
-  | { readonly id: MessageWithoutVariables }
+  | { readonly id: MessageWithoutVariables; readonly variables?: never }
   | { readonly id: MessageWithVariables; readonly variables: ExactVariables };
 ```
 
@@ -294,16 +341,28 @@ Requirements:
 - A descriptor for a message with variables requires exactly the generated
   variable fields. A descriptor for a message without variables does not need a
   variables property.
-- Values transported in persisted descriptors are JSON-safe semantic scalars,
-  using strings for selector enums and numbers for numeric selectors. Dates,
-  React nodes, functions, Fluent objects, and formatted strings are invalid.
+- Define the persisted scalar contract as `string | number`. Selector enums and
+  opaque display values use strings; numeric selectors and displayed numeric
+  values use numbers. Every number must be finite. Booleans, `null`, dates,
+  temporal objects, React nodes, functions, Fluent objects, arrays, nested
+  objects, `NaN`, infinities, and formatted strings are invalid.
+- Generated descriptor variable properties use the persisted scalar type, while
+  the direct React `t(id, variables)` API retains the Fluent runtime's broader
+  presentation-only variable support. Export a descriptor-construction helper
+  that rejects extra keys even when variables arrive through an aliased object,
+  and require non-React or persisted producers to use that helper.
 - Export one descriptor formatter adjacent to `useMessages()`. Callers should
   use direct `t(id, variables)` when no descriptor crosses a non-React boundary.
-- Add a runtime structural guard for untrusted persisted descriptors. It must
-  verify the ID against `FLUENT_MESSAGE_IDS`, require an object for variables
-  when the message contract has variables, and accept only JSON-safe scalar
-  values. The formatter must have a generic localized fallback path for invalid
-  legacy data; raw IDs must never appear in the player UI.
+- Generate a readonly message-ID-to-variable-name table from the parsed catalog.
+  The runtime structural guard for untrusted persisted descriptors must verify
+  the ID against `FLUENT_MESSAGE_IDS`, compare the supplied variable keys with
+  that generated table for exact equality using own enumerable keys, require a
+  plain object with `Object.prototype` or `null` as its prototype for a
+  variable-bearing message, reject a `variables` property for a message without
+  variables, and validate every value against the persisted scalar contract.
+  The formatter must use a catalog message named
+  `localization-invalid-message-fallback` for invalid data; raw IDs and invalid
+  variable values must never appear in the player UI.
 
 ### State and view-model boundaries
 
@@ -316,6 +375,25 @@ Requirements:
   into a translated sentence.
 - Semantic IDs, UUIDs, counts, option indices, and enum values remain the source
   of behavior, logging, equality, and selection.
+
+### Reducer protocol and persistence compatibility
+
+- Descriptor-bearing `ActivePrompt` values change the byte-level deterministic
+  `FoldState`; this is a reducer protocol change, not a presentation-only patch.
+- Set `CURRENT_REDUCER_VERSION` to `dreamtides-coop-v18` when Task 9 lands.
+  Keep `COMPATIBLE_LEGACY_REDUCER_VERSIONS` empty. A version 18 client gates a
+  version 17 room before constructing a `LogClient`, decoding its compaction
+  snapshot, folding its events, or appending an intent.
+- `GAME_ENGINE_CONFIG` continues to encode and decode version 18 compaction
+  snapshots as the current descriptor shape. Add a descriptor-bearing snapshot
+  round-trip test. Do not add a version 17 prompt migration to the compaction
+  codec because version 17 rooms are intentionally outside the compatible room
+  protocol.
+- `LOAD_STATE` is a separate explicit import/QA seam inside a version 18 room.
+  It accepts and normalizes the finite legacy prompt strings described in Task
+  9, then validates the resulting descriptors before the fold is committed.
+- Documentation and tests must describe version 18 room behavior directly:
+  current rooms fold descriptors, and version 17 rooms open the Version Gate.
 
 ### Fluent authoring
 
@@ -347,6 +425,7 @@ before the migrations spread across the tree.
 - `eslint-rules/ui-boundary-roles.js`
 - `eslint-rules/no-manual-count-copy.js` and its test
 - new localization lint rule and test under `eslint-rules/`
+- new `scripts/audit-player-localization.mjs` candidate audit and focused test
 - `eslint.config.js`
 - `docs/journey_prototype/localization-grammar-audit.md`
 
@@ -354,34 +433,57 @@ before the migrations spread across the tree.
 
 1. Create a rule such as `no-unlocalized-player-copy`. Reuse
    `outerUiRole()` for outer React files and define the included Cumulus and
-   adapter prefixes in one exported scope helper.
-2. Reject static English JSX text and static strings supplied to copy-bearing
-   JSX props, including `label`, `title`, `subtitle`, `message`, `description`,
-   `detail`, `placeholder`, `alt`, `emptyLabel`, `busyLabel`, `aria-label`, and
-   tooltip/help equivalents.
-3. Reject static English template quasis and copy-shaped object properties in
-   player presentation builders. Cover `label`, `title`, `subtitle`, `message`,
-   `description`, `detail`, `busyLabel`, `effectText`, and option-label arrays.
+   adapter prefixes plus the exact non-React producer inventory in one exported
+   scope helper. Include player-facing `APP_SHELL`, `STATE_ADAPTER`, and
+   `EMERGENCY_FALLBACK` files, then explicitly exclude the named operator,
+   inspector, synthetic-probe, fixture, docs, and devtool paths. A mixed player
+   and developer file remains protected; use narrow node-level suppressions for
+   its demonstrably developer-only literals.
+2. Inspect every static string literal and static template quasi in a protected
+   file, not only strings already found in a copy-shaped JSX prop. Treat an
+   alphabetic human-language token as a candidate even when it is one word such
+   as `Back`, `Loading`, or `Yes`. Reject player-copy JSX text, JSX expression
+   children such as `{"Text"}`, aliased constants, variable initializers,
+   default parameter or prop values, return values, ternary branches, switch
+   maps, arrays, option objects, and binary concatenation.
+3. Give copy-bearing JSX props and object properties stricter handling,
+   including `label`, `title`, `subtitle`, `message`, `description`, `detail`,
+   `placeholder`, `alt`, `emptyLabel`, `busyLabel`, `aria-label`, `effectText`,
+   option-label arrays, and tooltip/help equivalents. Static content in these
+   shapes is presumed player copy unless a narrow suppression documents an
+   excluded surface or opaque authored-data fixture.
 4. Permit short machine tokens, data/test/ARIA state attributes, CSS, icons,
    routes, log event names, thrown developer errors, and values obtained from
    authored-data variables. Prefer syntactic certainty over guessing; ambiguous
    literals should require a narrow inline suppression with a reason.
-5. Keep rule tests synthetic. Include rejected JSX text, copy props, template
-   literals, nested option objects, and view-model fields; include accepted
-   `useMessages()` calls, descriptors, UUIDs, data attributes, CSS, logs,
-   developer errors, and authored variables.
+5. Keep rule tests synthetic. Include every rejected construction named in
+   steps 2 and 3, nested option objects, and non-React producer fields; include
+   accepted `useMessages()` calls, descriptors, UUIDs, data attributes, CSS,
+   logs, developer errors, authored variables, and reason-bearing narrow
+   suppressions. Add inventory tests for each role, prefix, exclusion, and exact
+   non-React producer path.
 6. Build and test the rule at the start, then enable it as an error after Tasks
    3–10 have cleared the included scope. Do not add a baseline or a directory
    allowlist for player code.
-7. Update the grammar audit with the exact runtime boundary, authored RON/data
+7. Add a deterministic repository-wide candidate-audit command that searches
+   production `.ts` and `.tsx` files outside the protected inventory for static
+   English-like JSX, strings, templates, and concatenation. Its output is an
+   audit queue rather than a baseline: classify each result as a missing player
+   producer, an authored-data source, a machine/diagnostic value, or an excluded
+   developer surface. Add every missing producer to the exported inventory and
+   rerun until no unclassified candidate remains.
+8. Update the grammar audit with the exact runtime boundary, authored RON/data
    exclusions, and enforcement command. Remove stale TOML terminology where it
    describes catalogs that are RON in the current tree.
 
-**Focused verification:** run the new rule test, the existing manual-count rule
-test, and ESLint against representative included and excluded files.
+**Focused verification:** run the new rule and inventory tests, the existing
+manual-count rule test, ESLint against representative included and excluded
+files, and the repository-wide candidate audit with zero unclassified results.
 
-**Done when:** the rule can be enabled with zero player-runtime findings and a
-new literal in any protected shape fails a synthetic test or lint run.
+**Done when:** every known React surface and non-React copy producer is in the
+tested scope, the rule can be enabled with zero player-runtime findings, every
+static construction named above fails a synthetic test or lint run, and the
+candidate audit contains no unclassified result or missing producer.
 
 ### Task 2: Generate and format typed message descriptors
 
@@ -401,19 +503,29 @@ state and persisted battle prompts.
 1. Extend the generator with `FluentMessageDescriptor` and the metadata needed
    by its runtime guard. Derive both from the parsed catalog; do not maintain a
    second hand-written ID list.
-2. Add `formatMessageDescriptor(t, descriptor)` or an equivalent typed helper.
-   Keep `useMessages()` as the direct formatter API.
+2. Add the exact-key descriptor-construction helper and
+   `formatMessageDescriptor(t, descriptor)` or an equivalent formatter. The
+   formatter accepts untrusted input and invokes the runtime guard; keep
+   `useMessages()` as the direct formatter API.
 3. Add compile-time assertions for: a valid message without variables, a valid
    variable-bearing message, unknown ID rejection, missing variables rejection,
-   and misspelled variable rejection.
-4. Add runtime guard tests for valid JSON round trips, unknown IDs, wrong
-   variable containers, and non-scalar values. Test fallback behavior by
-   asserting non-empty output and absence of the raw ID, not English wording.
-5. Run `npm run localization-types` and verify the generated file is clean on a
+   misspelled variable rejection, and extra-key rejection when the variables
+   object is first assigned to an alias.
+4. Add the translator-described `localization-invalid-message-fallback` catalog
+   message. It is a generic player-safe status and takes no variables.
+5. Add runtime guard tests for valid JSON round trips, unknown IDs, a missing or
+   extra variable key, a `variables` property on an argument-free message,
+   arrays and non-plain variable containers, `null`, booleans, nested objects,
+   dates, `NaN`, and positive or negative infinity. Test fallback behavior by
+   asserting non-empty output and absence of the raw ID or invalid value, not
+   English wording.
+6. Run `npm run localization-types` and verify the generated file is clean on a
    second run.
 
-**Done when:** application and battle code can carry a descriptor without
-importing Fluent runtime objects, and only React display code formats it.
+**Done when:** application and battle code can carry an exact, finite-scalar
+descriptor without importing Fluent runtime objects, invalid untrusted shapes
+always take the localized fallback path, and only React display code formats a
+valid descriptor.
 
 ### Task 3: Localize application state, bootstrap, and cooperative status
 
@@ -683,25 +795,36 @@ that formats their presentation.
 - `src/rules/battle/dreamwell-effects-table.ts` and test
 - `src/rules/battle/battle-card-effects-table.ts` and production tests
 - `src/rules/journey/lifecycle.ts` and test
+- `src/coop/reducer-version.ts` and test
+- `src/coop/RoomGate.tsx` compatibility tests
+- `src/rules/replay/replay.ts` compaction-codec tests
+- `docs/journey_prototype/firebase_multiplayer.md`
 - battle driver, replay, reducer, and lifecycle fixtures that construct prompts
 
 **Implementation:**
 
-1. Change `EffectPrompt` so picker title, optional subtitle, confirmation title,
+1. Increment `CURRENT_REDUCER_VERSION` from `dreamtides-coop-v17` to
+   `dreamtides-coop-v18` in the same commit as the new prompt state. Keep
+   `COMPATIBLE_LEGACY_REDUCER_VERSIONS` empty. Update the version classifier,
+   Room Gate, fixtures, and multiplayer documentation so v18 is current and v17
+   deterministically takes the incompatible Version Gate before any room fold or
+   append begins.
+2. Change `EffectPrompt` so picker title, optional subtitle, confirmation title,
    choice title, and choice options are `FluentMessageDescriptor` values. Keep
    candidates, count, optional, highlight, resolve/build callbacks, and step
    ordering unchanged.
-2. Change `ActivePrompt` to the JSON-safe descriptor shape. Confirm still
+3. Change `ActivePrompt` to the JSON-safe descriptor shape. Confirm still
    materializes as a two-option `choice`, but its affirmative and skip options
    use descriptors. Foresee remains count/card IDs.
-3. Add complete catalog messages for every production prompt meaning listed in
+4. Add complete catalog messages for every production prompt meaning listed in
    the research inventory. Use numeric variables where the same prompt meaning
    can vary by count. Give subtitle/explanation its own complete message only
    because it occupies a distinct subtitle placement.
-4. Keep prompt kind, candidate UUIDs, required count, optional flag, option
+5. Keep prompt kind, candidate UUIDs, required count, optional flag, option
    order, option index, highlight IDs, run cursor, and resolution edits exactly
    stable. Add before/after semantic snapshots in tests if needed to prove this.
-5. Add a load-time normalization function at `asValidBattleFoldState()` before
+6. Add a `LOAD_STATE` import normalization function at
+   `asValidBattleFoldState()` before
    the descriptor-aware shape guard. For a legacy `label`/`subtitle` prompt:
    - identify the built-in prompt from `run.scriptRef`, cursor, prompt kind, and
      known effect definition when possible;
@@ -710,17 +833,27 @@ that formats their presentation.
    - map known `Yes`/`Skip` option positions to their semantic descriptors;
    - map an unrecognized legacy title or option to a generic localized prompt or
      generic option descriptor without changing its resolution index.
-6. Validate normalized descriptors against generated message IDs and JSON-safe
-   variables. Malformed structural prompt data still bounces as before.
-7. Do not write formatted prompt text into the event log. New rooms derive the
+7. Validate normalized descriptors with the exact-key, finite-scalar runtime
+   guard from Task 2. Malformed structural prompt data still bounces as before.
+8. Keep the compaction codec on the current v18 shape. Add a
+   `GAME_ENGINE_CONFIG.encode`/`decode` round trip containing every active prompt
+   kind and assert exact descriptor preservation. Version gating is the
+   compatibility boundary for v17 room base snapshots; the codec is not a
+   cross-protocol migration seam.
+9. Do not write formatted prompt text into the event log. New rooms derive the
    same descriptors by folding the same effect script, independent of locale.
 
 **Tests:**
 
 - Compile-time prompt construction for every prompt kind.
+- Reducer-version classification proving v18 is current, v17 is incompatible,
+  and the compatible-legacy set is empty; Room Gate reaches the Version Gate
+  before creating a log client for a v17 room.
 - Effect-runner tests proving the active descriptor, candidates, highlight IDs,
   option order, and resolution behavior.
 - JSON round trip of each active prompt kind.
+- Version 18 `GAME_ENGINE_CONFIG` compaction-snapshot encode/decode and replay
+  with a descriptor-bearing pending prompt plus at least one live event.
 - `LOAD_STATE` normalization for known picker, subtitle, choice, confirm, and
   unknown legacy labels; malformed prompt rejection remains covered.
 - Replay/cooperative fold tests proving identical candidates, prompt IDs,
@@ -728,8 +861,10 @@ that formats their presentation.
 - Production prompt inventory test that walks effect tables or uses stable
   synthetic definitions and verifies every descriptor ID exists in the bundle.
 
-**Done when:** `PendingPrompt` contains only descriptors and semantic data, and a
-legacy saved battle can load without persisting English into the new shape.
+**Done when:** v18 rooms fold and compact only descriptors and semantic data,
+v17 rooms deterministically stop at the Version Gate, mixed-version clients
+cannot participate in one room, and a legacy `LOAD_STATE` battle payload can be
+imported without persisting English into the v18 shape.
 
 ### Task 10: Format battle prompts and localize normal battle overlays
 
@@ -765,7 +900,9 @@ legacy saved battle can load without persisting English into the new shape.
    controls, prompt validation, and normal empty-zone copy.
 6. In `MobileBattleScreen.tsx`, migrate only the player path reached through
    `PlayableBattleScreen`. Leave inspector, context menu, debug deck filling,
-   figment creator, and operator commands outside the localization rule scope.
+   figment creator, and operator commands untranslated; where they share the
+   protected file, use narrow node-level lint suppressions that identify the
+   developer-only render branch.
 
 **Tests:** picker/choice render by descriptor ID; option resolution by index;
 prompt logs contain IDs/arguments and omit formatted labels; note expiry states;
@@ -790,7 +927,10 @@ all normal battle overlay grammar comes from Fluent.
    weakening count-selector enforcement.
 4. Update `docs/journey_prototype/localization.md` and the grammar audit with:
    the descriptor contract, player boundary, authored RON/data boundary, battle
-   prompt persistence rule, testing rule, and commands for regeneration/audit.
+   prompt persistence rule, v18 compatibility boundary, testing rule, and
+   commands for regeneration/audit. Update
+   `docs/journey_prototype/firebase_multiplayer.md` with the current v18 reducer
+   protocol and Version Gate behavior for v17 rooms.
 5. Regenerate `src/data/localization-messages.ts` and any affected Cumulus
    metadata. Run `npm run localization-types` once more and require a clean diff
    on the second run.
@@ -816,7 +956,12 @@ architecture.
    cross-cutting architecture and lint infrastructure, `npm run review:full`.
 4. Inspect Fluent diagnostics while formatting every new selector domain. Test
    0, 1, and 2 for every valid count domain; document when zero is impossible.
-5. Verify generated files are synchronized and `git diff --check` is clean.
+5. Run the localization inventory tests and repository-wide candidate audit.
+   Require zero lint findings and zero unclassified candidates outside the
+   protected inventory.
+6. Run reducer-version, Room Gate, `LOAD_STATE`, compaction-codec, and replay
+   tests proving the v18 boundary and descriptor persistence contract.
+7. Verify generated files are synchronized and `git diff --check` is clean.
 
 **Browser QA:** use `/opt/homebrew/bin/agent-browser` against a Vite port other
 than 5173, with a unique session. Assert `location.href` and viewport width
@@ -875,12 +1020,16 @@ integration. This avoids high-conflict generated-file edits.
   diagnostic payload, authored-data value, or explicit developer/fixture
   exclusion.
 - `FluentMessageDescriptor` is generated, ID-safe, variable-safe, JSON-safe for
-  persisted use, and formatted only at presentation boundaries.
+  persisted use, restricted to strings and finite numbers, exact-key validated
+  at runtime, and formatted only at presentation boundaries. Invalid data uses
+  `localization-invalid-message-fallback` without exposing raw IDs or values.
 - Application-state views and battle prompts carry semantic values or
   descriptors, not formatted copy.
-- Battle prompts survive JSON round trips, legacy `LOAD_STATE` normalization,
-  replay, and cooperative folding with identical candidates, option indices,
-  cursors, and resolutions.
+- Version 18 is the current reducer protocol, version 17 rooms open the Version
+  Gate before folding or appending, and the compatible-legacy set is empty.
+- Battle prompts survive JSON and v18 compaction-snapshot round trips, legacy
+  `LOAD_STATE` normalization, replay, and cooperative folding with identical
+  candidates, option indices, cursors, and resolutions.
 - Transfiguration logic emits semantic change data while eligibility, preview,
   and mutations remain stable.
 - Exploration preserves authored data verbatim and renders code-authored
@@ -907,3 +1056,5 @@ integration. This avoids high-conflict generated-file edits.
 - Changing battle resolution, event action shapes, candidate UUIDs, prompt
   indices, random sampling, or cooperative synchronization.
 - Production deployment.
+- Mixed-version participation in version 17 rooms; the Version Gate is the
+  compatibility boundary for the prompt-state protocol change.
