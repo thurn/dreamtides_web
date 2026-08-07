@@ -36,8 +36,9 @@ node .llms/skills/ltodd/scripts/estimate-part-loc.mjs
 It reads the current part names from `ltodd/index.md`, scans physical lines in
 production-oriented TS, TSX, and CSS files, assigns each included file to the
 first matching part heuristic, and prints file count, line count, and share for
-every part. Add `--details` to audit every assignment plus the excluded and
-unassigned files.
+every part. Add `--paths` for one line per part listing its five largest source
+neighborhoods by assigned line count. Add `--details` to audit every assignment
+plus the excluded and unassigned files.
 
 The result estimates research surface area, not book length or design
 importance. Shared files receive one dominant owner for counting even when they

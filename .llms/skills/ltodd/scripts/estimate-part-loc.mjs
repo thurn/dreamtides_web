@@ -6,11 +6,13 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
+const scriptPath = fileURLToPath(import.meta.url);
+const scriptDirectory = path.dirname(scriptPath);
 const repositoryRoot = path.resolve(scriptDirectory, "../../../..");
 const sourceRoot = path.join(repositoryRoot, "src");
 const indexPath = path.join(repositoryRoot, "ltodd", "index.md");
 const sourceExtensions = new Set([".css", ".ts", ".tsx"]);
+const pathSummaryLimit = 5;
 
 const alwaysExcluded = [
   /(?:^|\/)__test-helpers__(?:\/|$)/,
@@ -175,11 +177,7 @@ const partRules = [
   },
   {
     directory: "game_foundations",
-    patterns: [
-      /^src\/data\//,
-      /^src\/rules\//,
-      /^src\/types\//,
-    ],
+    patterns: [/^src\/data\//, /^src\/rules\//, /^src\/types\//],
   },
   {
     directory: "cumulus",
@@ -189,18 +187,24 @@ const partRules = [
 
 function usage() {
   return [
-    "Usage: estimate-part-loc.mjs [--details]",
+    "Usage: estimate-part-loc.mjs [--details | --paths]",
     "",
     "Estimates physical TS, TSX, and CSS lines associated with each LToDD part.",
     "Use --details to print every file assignment and the excluded/unassigned files.",
+    "Use --paths to print the five highest-line-count source neighborhoods per part.",
   ].join("\n");
 }
 
-function parseArguments(argumentsList) {
+export function parseArguments(argumentsList) {
   let details = false;
+  let paths = false;
   for (const argument of argumentsList) {
     if (argument === "--details") {
       details = true;
+      continue;
+    }
+    if (argument === "--paths") {
+      paths = true;
       continue;
     }
     if (argument === "--help" || argument === "-h") {
@@ -208,7 +212,10 @@ function parseArguments(argumentsList) {
     }
     throw new Error(`unknown argument: ${argument}`);
   }
-  return { details };
+  if (details && paths) {
+    throw new Error("--details and --paths cannot be used together");
+  }
+  return { details, paths };
 }
 
 async function readParts() {
@@ -373,6 +380,58 @@ function printDetails(parts, records) {
   }
 }
 
+export function summarizePathNeighborhoods(records, limit = pathSummaryLimit) {
+  const neighborhoods = new Map();
+  for (const record of records) {
+    const directory = path.posix.dirname(record.path);
+    const neighborhood = neighborhoods.get(directory) ?? {
+      directory,
+      files: [],
+      lines: 0,
+    };
+    neighborhood.files.push(record.path);
+    neighborhood.lines += record.lines;
+    neighborhoods.set(directory, neighborhood);
+  }
+
+  return [...neighborhoods.values()]
+    .map((neighborhood) => ({
+      path:
+        neighborhood.files.length === 1
+          ? neighborhood.files[0]
+          : `${neighborhood.directory}/`,
+      lines: neighborhood.lines,
+    }))
+    .sort((a, b) => b.lines - a.lines || a.path.localeCompare(b.path))
+    .slice(0, limit);
+}
+
+function printPaths(parts, records) {
+  const numeralWidth =
+    Math.max(...parts.map((part) => part.numeral.length)) + 2;
+  const directoryWidth =
+    Math.max(...parts.map((part) => part.directory.length + 1)) + 2;
+
+  process.stdout.write(
+    "Highest-line-count production source neighborhoods by LToDD part\n",
+  );
+  for (const part of parts) {
+    const matching = records.filter(
+      (record) => record.kind === "part" && record.directory === part.directory,
+    );
+    const neighborhoods = summarizePathNeighborhoods(matching);
+    const paths = neighborhoods
+      .map(
+        (neighborhood) =>
+          `${neighborhood.path} (${formatInteger(neighborhood.lines)})`,
+      )
+      .join("; ");
+    process.stdout.write(
+      `${part.numeral.padEnd(numeralWidth)}${`/${part.directory}`.padEnd(directoryWidth)}${paths}\n`,
+    );
+  }
+}
+
 async function main() {
   const options = parseArguments(process.argv.slice(2));
   if (options.help) {
@@ -398,11 +457,17 @@ async function main() {
     });
   }
 
-  printSummary(parts, records);
-  if (options.details) printDetails(parts, records);
+  if (options.paths) {
+    printPaths(parts, records);
+  } else {
+    printSummary(parts, records);
+    if (options.details) printDetails(parts, records);
+  }
 }
 
-main().catch((error) => {
-  process.stderr.write(`${error instanceof Error ? error.message : error}\n`);
-  process.exitCode = 1;
-});
+if (process.argv[1] && path.resolve(process.argv[1]) === scriptPath) {
+  main().catch((error) => {
+    process.stderr.write(`${error instanceof Error ? error.message : error}\n`);
+    process.exitCode = 1;
+  });
+}
