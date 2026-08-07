@@ -24,6 +24,8 @@
     "validate": "node scripts/review.mjs validate",
     "review": "node scripts/review.mjs quick",
     "review:full": "node scripts/review.mjs full",
+    "format:fluent": "node scripts/format-fluent.mjs",
+    "format:fluent:check": "node scripts/format-fluent.mjs --check",
     "format:ron": "node scripts/format-ron.mjs",
     "format:ron:check": "node scripts/format-ron.mjs --check",
     "game-data:compile": "node scripts/game-data-pipeline.mjs compile",

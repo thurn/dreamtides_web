@@ -26,11 +26,15 @@ const SOURCE_TREE_CONTRACT_TESTS = [
 
 const LOCALIZATION_CONTRACT_INPUTS = new Set([
   "data/strings.ftl",
+  "scripts/fluent-format.mjs",
+  "scripts/format-fluent.mjs",
   "scripts/generate-localization-types.mjs",
   "src/data/localization-messages.ts",
 ]);
-const LOCALIZATION_CONTRACT_TEST =
-  "scripts/generate-localization-types.test.mjs";
+const LOCALIZATION_CONTRACT_TESTS = [
+  "scripts/format-fluent.test.mjs",
+  "scripts/generate-localization-types.test.mjs",
+];
 
 function isProductionSourceInput(file) {
   return (
@@ -86,6 +90,14 @@ function isRonFormattingInput(file) {
   );
 }
 
+function isFluentFormattingInput(file) {
+  return (
+    extname(file) === ".ftl" ||
+    file === "scripts/fluent-format.mjs" ||
+    file === "scripts/format-fluent.mjs"
+  );
+}
+
 export function buildReviewPlan(files, fileExists = () => true) {
   const changedFiles = [...new Set(files)].sort();
   const existingFiles = changedFiles.filter(fileExists);
@@ -94,13 +106,14 @@ export function buildReviewPlan(files, fileExists = () => true) {
     testInputs.push(...SOURCE_TREE_CONTRACT_TESTS);
   }
   if (changedFiles.some((file) => LOCALIZATION_CONTRACT_INPUTS.has(file))) {
-    testInputs.push(LOCALIZATION_CONTRACT_TEST);
+    testInputs.push(...LOCALIZATION_CONTRACT_TESTS);
   }
 
   return {
     changedFiles,
     lintFiles: existingFiles.filter((file) =>
       file.startsWith("src/") && LINTABLE_EXTENSIONS.has(extname(file))),
+    shouldCheckFluentFormatting: changedFiles.some(isFluentFormattingInput),
     shouldTypecheck: changedFiles.some(isTypecheckInput),
     shouldValidate: changedFiles.some(isValidationInput),
     shouldCheckRonFormatting: changedFiles.some(isRonFormattingInput),

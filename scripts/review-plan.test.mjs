@@ -8,6 +8,7 @@ describe("fast review plan", () => {
     expect(buildReviewPlan(["docs/notes.md"])).toEqual({
       changedFiles: ["docs/notes.md"],
       lintFiles: [],
+      shouldCheckFluentFormatting: false,
       shouldCheckRonFormatting: false,
       shouldTypecheck: false,
       shouldTestGameData: false,
@@ -18,8 +19,8 @@ describe("fast review plan", () => {
 
   it("selects bounded checks for application changes", () => {
     expect(buildReviewPlan([
-      "src/state/journey-state-actions.test.ts",
-      "src/state/journey-state-actions.ts",
+        "src/state/journey-state-actions.test.ts",
+        "src/state/journey-state-actions.ts",
     ])).toEqual({
       changedFiles: [
         "src/state/journey-state-actions.test.ts",
@@ -29,6 +30,7 @@ describe("fast review plan", () => {
         "src/state/journey-state-actions.test.ts",
         "src/state/journey-state-actions.ts",
       ],
+      shouldCheckFluentFormatting: false,
       shouldCheckRonFormatting: false,
       shouldTypecheck: true,
       shouldTestGameData: false,
@@ -66,6 +68,19 @@ describe("fast review plan", () => {
       shouldValidate: true,
       testInputs: [
         "data/strings.ftl",
+        "scripts/format-fluent.test.mjs",
+        "scripts/generate-localization-types.test.mjs",
+      ],
+      shouldCheckFluentFormatting: true,
+    });
+  });
+
+  it("selects the Fluent formatting gate for formatter changes", () => {
+    expect(buildReviewPlan(["scripts/fluent-format.mjs"])).toMatchObject({
+      shouldCheckFluentFormatting: true,
+      testInputs: [
+        "scripts/fluent-format.mjs",
+        "scripts/format-fluent.test.mjs",
         "scripts/generate-localization-types.test.mjs",
       ],
     });
@@ -89,8 +104,8 @@ describe("fast review plan", () => {
 
   it("does not pass deleted files to lint or Vitest", () => {
     expect(buildReviewPlan(
-      ["src/deleted.ts", "src/live.ts"],
-      (file) => file === "src/live.ts",
+        ["src/deleted.ts", "src/live.ts"],
+        (file) => file === "src/live.ts",
     )).toMatchObject({
       changedFiles: ["src/deleted.ts", "src/live.ts"],
       lintFiles: ["src/live.ts"],

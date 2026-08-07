@@ -76,3 +76,10 @@ do not become application variables.
 Term values use the canonical title-style game vocabulary. A complete message
 may use a contextual lexical form when sentence casing, compounding, or idiom
 requires one.
+
+## Formatting
+
+Run `npm run format:fluent` to format the English Fluent resource with the
+canonical `@fluent/syntax` serializer. Run `npm run format:fluent:check` to
+verify formatting without modifying the file. The formatter rejects invalid
+syntax and confirms that its output parses to the same Fluent syntax tree.

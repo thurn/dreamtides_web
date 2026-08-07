@@ -198,6 +198,12 @@ function commandFor(step, extraArgs = []) {
       [join(root, "scripts", "format-ron.mjs"), "--check"],
     ];
   }
+  if (step === "fluent-format-check") {
+    return [
+      process.execPath,
+      [join(root, "scripts", "format-fluent.mjs"), "--check"],
+    ];
+  }
   if (step === "typecheck") {
     const buildInfo = nodeModulePath(
       ".cache",
@@ -272,6 +278,7 @@ function executionPlan() {
   if (task === "full") {
     return [
       { step: "validate", args: [] },
+      { step: "fluent-format-check", args: [] },
       { step: "ron-format-check", args: [] },
       { step: "rust-test", args: [] },
       { step: "clean-game-data", args: [] },
@@ -282,6 +289,7 @@ function executionPlan() {
   }
   if (task === "lint-full") {
     return [
+      { step: "fluent-format-check", args: [] },
       { step: "ron-format-check", args: [] },
       { step: "lint", args: passthrough },
     ];
@@ -294,6 +302,9 @@ function executionPlan() {
   }
   if (task === "lint") {
     const steps = [];
+    if (reviewPlan.shouldCheckFluentFormatting) {
+      steps.push({ step: "fluent-format-check", args: [] });
+    }
     if (reviewPlan.shouldCheckRonFormatting) {
       steps.push({ step: "ron-format-check", args: [] });
     }
@@ -322,6 +333,9 @@ function executionPlan() {
   if (task === "quick") {
     const steps = [];
     if (reviewPlan.shouldValidate) steps.push({ step: "validate", args: [] });
+    if (reviewPlan.shouldCheckFluentFormatting) {
+      steps.push({ step: "fluent-format-check", args: [] });
+    }
     if (reviewPlan.shouldCheckRonFormatting) {
       steps.push({ step: "ron-format-check", args: [] });
     }
