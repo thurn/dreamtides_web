@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { compileAuguryData } from "./augury-data.mjs";
 
 const source = () => parse(readFileSync(
-  resolve(import.meta.dirname, "../data/tabula/augury.toml"),
+  resolve(import.meta.dirname, "../data/augury.toml"),
   "utf8",
 ));
 

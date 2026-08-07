@@ -16,7 +16,7 @@ from typing import Any
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPTS_DIR.parents[3]
-DEFAULT_CARDS = REPO_ROOT / "data/tabula/cards.toml"
+DEFAULT_CARDS = REPO_ROOT / "data/cards.toml"
 DEFAULT_CANDIDATES = REPO_ROOT / "data/exploration_candidates.json"
 
 

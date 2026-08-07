@@ -1,6 +1,6 @@
 ---
 name: implement-exploration-encounters
-description: Implement selected Dreamtides exploration encounter designs from data/exploration_candidates.json in the live data/tabula/exploration.toml catalog. Use when finding candidate card UUIDs absent from live Exploration, generating a selected encounter TOML workset, integrating one or more candidate encounters, adding or extending Exploration effect kinds, building Cumulus choice and outcome UI, creating mandatory outcome animations, or verifying a candidate encounter end to end.
+description: Implement selected Dreamtides exploration encounter designs from data/exploration_candidates.json in the live data/exploration.toml catalog. Use when finding candidate card UUIDs absent from live Exploration, generating a selected encounter TOML workset, integrating one or more candidate encounters, adding or extending Exploration effect kinds, building Cumulus choice and outcome UI, creating mandatory outcome animations, or verifying a candidate encounter end to end.
 ---
 
 # Implement Exploration Encounters
@@ -33,7 +33,7 @@ shows the player exactly what happened.
    `card-id`, case-insensitively. Stop with the report when the selected set is
    empty.
 5. Keep the workset as scratch input. Do not commit it or copy it wholesale over
-   `data/tabula/exploration.toml`.
+   `data/exploration.toml`.
 
 The preparation script delegates selected-prose/action rendering to the
 repository's `generate-selected-encounters-toml.mjs`, validates both catalogs,
@@ -83,7 +83,7 @@ matrix.
 6. Update Exploration logs so a production event sequence can reconstruct the
    authored action, minted offers, player selection, state transition, and
    displayed outcome.
-7. Add the completed encounters to `data/tabula/exploration.toml`. Keep exactly
+7. Add the completed encounters to `data/exploration.toml`. Keep exactly
    two actions per encounter and globally unique action IDs.
 8. Make catalog validation structural rather than tying CI to the current
    production encounter count.

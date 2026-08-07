@@ -5,7 +5,7 @@
 // hold MTG card names. Output: docs/draft_records_adapted/*.jsonc — the same
 // records with every card array adapted to Dreamtides.
 //
-// Adaptation rule (the `mtg-name` bridge in data/tabula/cards.toml is the link
+// Adaptation rule (the `mtg-name` bridge in data/cards.toml is the link
 // between the two pools):
 //
 //   * Group every cards_v2 card by its `mtg-name`. A single MTG card maps to one
@@ -45,7 +45,7 @@ const outIdx = argv.indexOf("--out");
 const OUT = outIdx !== -1 ? resolve(argv[outIdx + 1]) : join(ROOT, "docs", "draft_records_adapted");
 
 const cardsV2 = parse(
-  readFileSync(join(ROOT, "data", "tabula", "cards.toml"), "utf8"),
+  readFileSync(join(ROOT, "data", "cards.toml"), "utf8"),
 ).cards;
 const { idToName } = buildCardMaps(cardsV2);
 

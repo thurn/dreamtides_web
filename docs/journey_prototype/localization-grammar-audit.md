@@ -89,7 +89,7 @@ dimensions, equality checks, or parsers. Cards continue to use UUID identity.
 
 ### Exploration authored prose
 
-`data/tabula/exploration.toml` stores English action labels, effects, follow-up
+`data/exploration.toml` stores English action labels, effects, follow-up
 titles, and follow-up subtitles. `configuredFollowupCopy()` in
 `src/screens/cumulus_adapters/exploration-view-model.ts` substitutes semantic
 values into those templates; `appendFixedTransfigurationEffect()` and the
@@ -114,7 +114,7 @@ for these follow-up and effect descriptions.
 `copies-label`; `src/journey_v2/archetypes/improve.ts` also constructs authored
 card/form and subtype-change descriptions. The generator in
 `src/journey_v2/encounter/generateMerchantEncounter.ts` expands those fields
-through English templates from `data/tabula/augury.toml` into persisted
+through English templates from `data/augury.toml` into persisted
 `MerchantOffer` title, summary, prompt, and detail fields. The production
 Cumulus Augury adapter derives its display from semantic offer objects and does
 not read those formatted fields. They are deterministic catalog/debug data. A
@@ -126,7 +126,7 @@ would mix locale output with replayable Journey data.
 
 `src/data/glossary-terms.ts` tokenizes ASCII English rules text, matches English
 word forms, evaluates English regular-expression contexts, and renders catalog
-templates from `data/tabula/glossary.toml`. Card, Dream Avatar, and Dreamsign
+templates from `data/glossary.toml`. Card, Dream Avatar, and Dreamsign
 rules text is also authored English. The parser's consumers build glossary
 reveal cards from those matches. `src/cumulus/internal/reveal/context.tsx` then
 assembles hidden accessibility descriptions by joining authored rules,

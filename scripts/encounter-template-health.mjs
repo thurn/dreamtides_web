@@ -76,7 +76,7 @@ function parseTemplateDiagnostic(raw, index) {
 
 export function readEncounterTemplateHealth({
   rootDir = ROOT,
-  explorationPath = join("data", "tabula", "exploration.toml"),
+  explorationPath = join("data", "exploration.toml"),
   catalogPath = DEFAULT_TEMPLATE_CATALOG_PATH,
   balanceScriptPath = DEFAULT_TEMPLATE_BALANCE_SCRIPT_PATH,
   pythonExecutable = "python3",

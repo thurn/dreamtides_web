@@ -25,7 +25,7 @@ const SOURCE_TREE_CONTRACT_TESTS = [
 ];
 
 const LOCALIZATION_CONTRACT_INPUTS = new Set([
-  "data/tabula/strings.ftl",
+  "data/strings.ftl",
   "scripts/generate-localization-types.mjs",
   "src/data/localization-messages.ts",
 ]);

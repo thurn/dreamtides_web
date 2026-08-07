@@ -20,7 +20,7 @@ import {
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/figments";
-const FIGMENT_TOML_DIR = join("data", "tabula");
+const FIGMENT_TOML_DIR = join("data");
 const FIGMENT_JSON_PATH = join("public", "figments-data.json");
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
 
@@ -87,12 +87,12 @@ function resolveRequestedTomlPath(rootDir, requested) {
     return { ok: false, message: "The toml file must have a .toml extension." };
   }
 
-  const tabulaDir = resolve(rootDir, FIGMENT_TOML_DIR);
+  const dataDir = resolve(rootDir, FIGMENT_TOML_DIR);
   const target = resolve(rootDir, candidate);
-  const within = relative(tabulaDir, target);
+  const within = relative(dataDir, target);
 
   if (within === "" || within.startsWith("..") || isAbsolute(within) || within.includes(sep)) {
-    return { ok: false, message: "The toml file must be located in data/tabula." };
+    return { ok: false, message: "The toml file must be located in data." };
   }
 
   return { ok: true, relativePath: join(FIGMENT_TOML_DIR, within) };
@@ -329,7 +329,7 @@ function generateFigmentDataJsonFromToml(patchedSource, fileSystem) {
   const tempRoot = fileSystem.mkdtempSync(join(tmpdir(), "journey-figment-editor-refresh-"));
 
   try {
-    fileSystem.mkdirSync(join(tempRoot, "data", "tabula"), { recursive: true });
+    fileSystem.mkdirSync(join(tempRoot, "data"), { recursive: true });
     fileSystem.mkdirSync(join(tempRoot, "public"), { recursive: true });
     fileSystem.writeFileSync(join(tempRoot, DEFAULT_FIGMENT_TOML_PATH), patchedSource);
 

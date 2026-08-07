@@ -1000,7 +1000,7 @@ mod tests {
 
     fn catalog() -> ExplorationCatalog {
         let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-        ron::from_str(&fs::read_to_string(root.join("data/tabula/exploration.ron")).unwrap())
+        ron::from_str(&fs::read_to_string(root.join("data/exploration.ron")).unwrap())
             .unwrap()
     }
 

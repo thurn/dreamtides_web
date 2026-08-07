@@ -150,7 +150,7 @@ export function buildExplorationEffectDefinitions(source) {
 }
 
 const authoredSource = parse(readFileSync(
-  resolve(import.meta.dirname, "../data/tabula/exploration.toml"),
+  resolve(import.meta.dirname, "../data/exploration.toml"),
   "utf8",
 ));
 

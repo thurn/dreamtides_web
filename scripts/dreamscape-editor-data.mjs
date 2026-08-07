@@ -14,17 +14,15 @@ export { SITE_TYPES };
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 export const DEFAULT_DREAMSCAPE_TOML_PATH = join(
   "data",
-  "tabula",
   "dreamscapes.toml",
 );
 const DREAMSCAPE_JSON_PATH = join("public", "dreamscapes-data.json");
 export const DREAM_GUIDES_TOML_PATH = join(
   "data",
-  "tabula",
   "dream_guides.toml",
 );
-const AFFILIATIONS_TOML_PATH = join("data", "tabula", "affiliations.toml");
-const DREAM_AVATARS_TOML_PATH = join("data", "tabula", "dream_avatars.toml");
+const AFFILIATIONS_TOML_PATH = join("data", "affiliations.toml");
+const DREAM_AVATARS_TOML_PATH = join("data", "dream_avatars.toml");
 
 /**
  * Each non-starter dreamscape must list 3-4 resident DreamAvatars and every

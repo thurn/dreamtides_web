@@ -13,8 +13,8 @@ describe("dreamscape editor atomic catalog writes", () => {
   it("recompiles the real guide, Dreamscape, Site, and Economy contracts together", () => {
     const artifacts = generateCatalogArtifacts(
       ROOT,
-      readFileSync(resolve(ROOT, "data/tabula/dreamscapes.toml"), "utf8"),
-      readFileSync(resolve(ROOT, "data/tabula/dream_guides.toml"), "utf8"),
+      readFileSync(resolve(ROOT, "data/dreamscapes.toml"), "utf8"),
+      readFileSync(resolve(ROOT, "data/dream_guides.toml"), "utf8"),
       { readFileSync },
     );
 

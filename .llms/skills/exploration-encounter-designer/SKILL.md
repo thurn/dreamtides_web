@@ -178,7 +178,7 @@ commentary.
    the script cannot resolve exactly one readable file. Never design from the
    filename hint alone.
 
-3. Read the canonical card record in `data/tabula/cards.toml` by UUID. Verify
+3. Read the canonical card record in `data/cards.toml` by UUID. Verify
    the supplied identity, ability, and image number rather than silently
    substituting different data. Treat the supplied `card_type` and `subtype`
    as authoritative; do not recategorize the art.
@@ -353,7 +353,7 @@ commentary.
    ```
 
    Do not open `data/templates.json` directly. The script reads the canonical
-   catalog and production prevalence in `data/tabula/exploration.toml`
+   catalog and production prevalence in `data/exploration.toml`
    exclusively, then prints the complete selectable `templates` list for this
    run. Review every returned template before committing; do not stop after
    finding the first ten plausible entries. Every selectable template reports

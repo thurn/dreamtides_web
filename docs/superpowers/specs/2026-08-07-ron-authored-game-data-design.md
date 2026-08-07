@@ -24,7 +24,7 @@ tracked RON -> Rust conversion -> staged TOML -> TypeScript validation
 
 ## Context
 
-The repository has 26 tracked game-data TOML files: 25 under `data/tabula/` and
+The repository has 26 game-data TOML catalogs under `data/`, including
 `data/exploration_candidates.toml`. Together they contain approximately 20,000
 lines. It also has three production-shaped RON candidates beside their TOML
 counterparts: `draft.ron`, `cards.ron`, and `exploration.ron`. These files are
@@ -118,7 +118,7 @@ maintain its own RON parser.
    and tests do not parse RON. RON parsing and serialization belong to the Rust
    tool.
 3. **Generated TOML keeps its current path and schema.** For example,
-   `data/tabula/cards.ron` generates `data/tabula/cards.toml`. Existing
+   `data/cards.ron` generates `data/cards.toml`. Existing
    TypeScript readers retain their paths and source-facing key names during the
    migration.
 4. **Canonical data uses typed RON directly.** Dataset source schemas may use
@@ -146,8 +146,7 @@ maintain its own RON parser.
 
 ## Scope
 
-The migration covers the tracked game-data TOMLs under `data/tabula/` and the
-Exploration candidate catalog:
+The migration covers the game-data catalogs under `data/`:
 
 - core entities: cards, Dream Avatars, Dreamsigns, Dreamwell cards, figments,
   dreamscapes, guides, sites, affiliations, and Apollyon incarnations;
@@ -180,18 +179,17 @@ for those datasets are in scope.
 Canonical RON and generated TOML share a basename and directory:
 
 ```text
-data/tabula/cards.ron                    # tracked source
-data/tabula/cards.toml                   # ignored generated compatibility file
-data/tabula/exploration.ron              # tracked source
-data/tabula/exploration.toml             # ignored generated compatibility file
+data/cards.ron                    # tracked source
+data/cards.toml                   # ignored generated compatibility file
+data/exploration.ron              # tracked source
+data/exploration.toml             # ignored generated compatibility file
 data/exploration_candidates.ron          # tracked source
 data/exploration_candidates.toml         # ignored generated compatibility file
 ```
 
 Keeping generated TOML at the current path makes the format boundary invisible
-to TypeScript readers. `.gitignore` lists only the generated targets declared in
-the game-data manifest; it does not ignore arbitrary TOML elsewhere in the
-repository.
+to TypeScript readers. `.gitignore` ignores generated compatibility TOML under
+`data/`; repository and tool configuration TOML elsewhere remains tracked.
 
 Every generated TOML begins with a short generated-file warning naming its RON
 source, source SHA-256, compiler build version, adapter version, and

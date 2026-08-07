@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { parse } from "smol-toml";
-import cardsSource from "../../../data/tabula/cards.toml?raw";
-import dreamwellSource from "../../../data/tabula/dreamwell.toml?raw";
-import dreamAvatarsSource from "../../../data/tabula/dream_avatars.toml?raw";
-import figmentsSource from "../../../data/tabula/figments.toml?raw";
-import tutorialSource from "../../../data/tabula/tutorial.toml?raw";
+import cardsSource from "../../../data/cards.toml?raw";
+import dreamwellSource from "../../../data/dreamwell.toml?raw";
+import dreamAvatarsSource from "../../../data/dream_avatars.toml?raw";
+import figmentsSource from "../../../data/figments.toml?raw";
+import tutorialSource from "../../../data/tutorial.toml?raw";
 import { isHighlightedRulesTextTerm } from "../../cumulus/components/card/RulesText";
 import { lookupGlossaryTerm } from "../../data/glossary";
 import { parseTutorialTriggers } from "../../data/tutorial-actions";

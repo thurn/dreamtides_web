@@ -1,6 +1,6 @@
 # Opponent Data
 
-`data/tabula/opponents.ron` is the authoritative source for battle setup,
+`data/opponents.ron` is the authoritative source for battle setup,
 Dreamwell construction, opponent progression and deck generation, the journey
 AI deck, and AI tuning. Asset setup strictly validates and normalizes the file
 into gitignored `public/opponents-data.json`. The browser loads that artifact as

@@ -30,12 +30,12 @@ describe("RON generation Vite integration", () => {
         ensure,
         debounceMs: 10,
         list: () => ({ datasets: [
-          { id: "cards", source: "data/tabula/cards.ron" },
-          { id: "draft", source: "data/tabula/draft.ron" },
+          { id: "cards", source: "data/cards.ron" },
+          { id: "draft", source: "data/draft.ron" },
         ] }),
       }).configureServer(instance);
       expect(ensure).toHaveBeenNthCalledWith(1, { rootDir });
-      const listener = listeners.get(join(rootDir, "data", "tabula"));
+      const listener = listeners.get(join(rootDir, "data"));
       listener("change", "cards.ron");
       listener("change", "cards.ron");
       await vi.advanceTimersByTimeAsync(10);
@@ -45,7 +45,7 @@ describe("RON generation Vite integration", () => {
       expect(instance.ws.send).toHaveBeenCalledWith({
         type: "custom",
         event: "game-data:generated",
-        data: { datasetId: "cards", source: "data/tabula/cards.ron" },
+        data: { datasetId: "cards", source: "data/cards.ron" },
       });
     } finally {
       watch.mockRestore();
@@ -69,7 +69,7 @@ describe("RON generation Vite integration", () => {
     try {
       await gameDataRonPlugin({
         rootDir, ensure, debounceMs: 10,
-        list: () => ({ datasets: [{ id: "draft", source: "data/tabula/draft.ron" }] }),
+        list: () => ({ datasets: [{ id: "draft", source: "data/draft.ron" }] }),
       }).configureServer(instance);
       listener("change", "draft.ron");
       await vi.advanceTimersByTimeAsync(10);

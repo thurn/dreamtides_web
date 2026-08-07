@@ -1,6 +1,6 @@
 # Storm — Card Pool
 
-A companion to [storm.md](storm.md), listing every CardsV2 card with a specific affinity for the Storm archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards.toml`.
+A companion to [storm.md](storm.md), listing every CardsV2 card with a specific affinity for the Storm archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/cards.toml`.
 
 ## Per-cast payoffs (the count cash-outs)
 

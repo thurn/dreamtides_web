@@ -3,7 +3,7 @@
 // Every maintained system that names cards in data — including the signature
 // lists in `dream_avatars.toml` and adapted draft records under
 // `docs/draft_records_adapted` — keys cards by their `id` UUID
-// from `data/tabula/cards.toml`. The UUID is stable across display renames,
+// from `data/cards.toml`. The UUID is stable across display renames,
 // so renaming a card in `cards.toml` keeps every one of those files in sync.
 //
 // The adapted draft records (`docs/draft_records_adapted/*.jsonc`) store one

@@ -28,10 +28,10 @@ import {
 } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-export const DEFAULT_EXPLORATION_TOML_PATH = join("data", "tabula", "exploration.toml");
+export const DEFAULT_EXPLORATION_TOML_PATH = join("data", "exploration.toml");
 export const DEFAULT_EXPLORATION_TEMPLATES_PATH = join("data", "templates.json");
-export const DEFAULT_EXPLORATION_CARDS_PATH = join("data", "tabula", "cards.toml");
-export const DEFAULT_EXPLORATION_DREAMSIGNS_PATH = join("data", "tabula", "dreamsigns.toml");
+export const DEFAULT_EXPLORATION_CARDS_PATH = join("data", "cards.toml");
+export const DEFAULT_EXPLORATION_DREAMSIGNS_PATH = join("data", "dreamsigns.toml");
 export const DEFAULT_EXPLORATION_JSON_PATH = join("public", "exploration-data.json");
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;

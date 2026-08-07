@@ -1,6 +1,6 @@
 // Affiliation reweighting. Every non-starter dreamscape carries an
 // `affiliationId` naming the thematic faction backing it (see
-// `data/tabula/affiliations.toml`). When the player draws random card content
+// `data/affiliations.toml`). When the player draws random card content
 // inside an affiliated dreamscape — a draft offer, a shop's card slots, an
 // Augury reward card — the affiliation pulls the draw toward cards that fit its
 // theme without ever removing any card from the running: every card keeps a

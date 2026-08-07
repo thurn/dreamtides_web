@@ -6,7 +6,7 @@ Author: brainstorming session, 2026-05-28.
 ## Goal
 
 Create a standalone card editor for the journey prototype at `/editor`. The
-editor reads all card records from `data/tabula/rendered-cards.toml`, displays
+editor reads all card records from `data/rendered-cards.toml`, displays
 them in a full-card grid, and writes inline edits back to the TOML source as
 soon as the user confirms an edit with Enter.
 
@@ -55,7 +55,7 @@ The editor supports:
 
 The journey prototype currently loads cards from generated
 `public/card-data.json` through `src/data/card-database.ts`. The source of that
-generated JSON is `data/tabula/rendered-cards.toml`, transformed by
+generated JSON is `data/rendered-cards.toml`, transformed by
 `scripts/setup-assets.mjs`.
 
 The transform normalizes TOML fields into runtime `CardData`:
@@ -94,7 +94,7 @@ The editor has three main layers:
 - **Editor card UI**: a grid of editable card previews that reuse the journey
   prototype's card chrome, art, pips, type line, and rules text rendering.
 - **Local editor API**: Vite dev-server middleware that reads and patches
-  `data/tabula/rendered-cards.toml` and refreshes `public/card-data.json`
+  `data/rendered-cards.toml` and refreshes `public/card-data.json`
   through the focused card transform.
 
 The browser never writes files directly. All disk writes go through the local
@@ -104,7 +104,7 @@ Vite middleware.
 
 ### `GET /api/editor/cards`
 
-Reads `data/tabula/rendered-cards.toml`, parses the `[[cards]]` array, and
+Reads `data/rendered-cards.toml`, parses the `[[cards]]` array, and
 returns editor records ordered by TOML order.
 
 Each returned record includes:
@@ -137,7 +137,7 @@ The endpoint:
 2. Locates the `[[cards]]` block whose `id` UUID matches the route parameter.
 3. Validates the field and value.
 4. Applies a targeted text patch to that field inside that card block.
-5. Writes `data/tabula/rendered-cards.toml`.
+5. Writes `data/rendered-cards.toml`.
 6. Refreshes `public/card-data.json` through the focused card transform.
 7. Returns the confirmed editor record and save timing metadata.
 
@@ -427,12 +427,12 @@ Keep implementation units small:
 ## Acceptance Criteria
 
 - `/editor` loads without Firebase or room setup.
-- The editor displays all cards from `data/tabula/rendered-cards.toml`.
+- The editor displays all cards from `data/rendered-cards.toml`.
 - Editor saves identify cards by UUID.
 - Search, filters, sorting, sort direction, and scale controls work and update
   URL parameters via `replaceState`.
 - Double-clicking each supported card field enters inline edit mode.
-- Enter confirms and saves edits to `data/tabula/rendered-cards.toml`.
+- Enter confirms and saves edits to `data/rendered-cards.toml`.
 - Escape discards edits.
 - Blur does not save.
 - Cost and spark special values round-trip correctly.

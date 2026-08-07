@@ -1,6 +1,6 @@
 # Economy Data
 
-`data/tabula/economy.ron` is the authoritative source for direct economy
+`data/economy.ron` is the authoritative source for direct economy
 tuning. The asset build validates and normalizes it into
 `public/economy-data.json`; the browser loads that document as `EconomyData`
 before a room begins folding events.

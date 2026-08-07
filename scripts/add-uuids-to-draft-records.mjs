@@ -35,7 +35,7 @@ const limitIdx = argv.indexOf("--limit");
 const limit = limitIdx !== -1 ? Number(argv[limitIdx + 1]) : Infinity;
 
 const cardsV2 = parse(
-  readFileSync(join(ROOT, "data", "tabula", "cards.toml"), "utf8"),
+  readFileSync(join(ROOT, "data", "cards.toml"), "utf8"),
 ).cards;
 const { idToName } = buildCardMaps(cardsV2);
 

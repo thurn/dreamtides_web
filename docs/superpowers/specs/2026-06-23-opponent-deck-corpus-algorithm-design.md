@@ -27,7 +27,7 @@ so it *can* later become the live path, but no battle wiring is in scope here.
   exactly **one battle per layer**: layer 0 = first battle (starter dreamscape),
   layer 6 = boss.
 - Dreamscapes carry an `affiliation-id`; affiliations
-  ([data/tabula/affiliations.toml](../../data/tabula/affiliations.toml)) carry a
+  ([data/affiliations.toml](../../data/affiliations.toml)) carry a
   curated `signatureCards` UUID list.
 - 32 Dream Avatars; **20 carry `signature-card-ids`**, 12 do not.
 - Cards have `rarity` of `""`, `"Starter"` (10 cards), or `"Legendary"` (8 cards);
@@ -43,9 +43,9 @@ All of these are available at runtime (some require a new generated artifact, no
 - **IDF statistics** computed over the known-good corpus (document frequency,
   per-card IDF, per-deck L2 norms).
 - **Dream Avatar signatures** — `signatureCardIds` from
-  [data/tabula/dream_avatars.toml](../../data/tabula/dream_avatars.toml).
+  [data/dream_avatars.toml](../../data/dream_avatars.toml).
 - **Affiliation signatures** — `signatureCards` from
-  [data/tabula/affiliations.toml](../../data/tabula/affiliations.toml); the
+  [data/affiliations.toml](../../data/affiliations.toml); the
   dreamscape's affiliation is resolved the same way `buildOpponentDeck` does today.
 - **Card catalog** — for `rarity` / `isStarter` (`public/cards_v2-data.json`).
 - **Dreamsign signature data** (new artifact) — see "Dreamsign synergy" below.
@@ -220,7 +220,7 @@ mirroring how Dream Avatars carry signature cards.
 
 ### New artifact
 
-`data/tabula/dreamsign_signatures.toml`, one entry per dreamsign:
+`data/dreamsign_signatures.toml`, one entry per dreamsign:
 
 ```toml
 [[dreamsign]]
@@ -322,7 +322,7 @@ to?" — yes.
    gap.
 2. Extract the shared IDF-fit module; refactor `/sigdecks` onto it.
 3. Run the dreamsign classification subagent workflow; produce and validate
-   `data/tabula/dreamsign_signatures.toml`; wire it through `setup-assets.mjs`.
+   `data/dreamsign_signatures.toml`; wire it through `setup-assets.mjs`.
 4. Implement `buildCorpusOpponentDeck` (Stage A + Stage B) with logging.
 5. Add the algorithm registry + switcher + provenance panel to `OpponentDebugApp`.
 6. Verification: lint, typecheck, tests, and browser QA of `/opponent` in both

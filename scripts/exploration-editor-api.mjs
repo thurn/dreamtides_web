@@ -18,7 +18,7 @@ const BASE_PATH = "/api/editor/exploration";
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
 const TEMPLATE_ID_PATTERN = /^\d+$/u;
 const EXPLORATION_SOURCE_PATHS = [
-  "data/tabula/exploration.ron",
+  "data/exploration.ron",
   "data/templates.json",
 ];
 

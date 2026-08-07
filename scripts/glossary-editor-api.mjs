@@ -14,7 +14,7 @@ import {
 } from "./glossary-source.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const GLOSSARY_PATH = join("data", "tabula", "glossary.toml");
+const GLOSSARY_PATH = join("data", "glossary.toml");
 const BASE_PATH = "/api/editor/glossary";
 const MAX_BODY_BYTES = 1024 * 1024;
 let writeSerial = 0;

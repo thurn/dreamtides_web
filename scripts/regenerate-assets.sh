@@ -71,7 +71,7 @@ if [[ "$FAST" == true ]]; then
   node scripts/generate-localization-types.mjs
 
   step "Done — fast content regeneration complete"
-  git status --short -- data/tabula || true
+  git status --short -- data || true
 
   cat <<'EOF'
 

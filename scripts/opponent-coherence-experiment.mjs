@@ -43,9 +43,9 @@ const readText = (p) => readFileSync(resolve(ROOT, p), "utf8");
 // Authored tuning used by the runtime opponent builder.
 // ---------------------------------------------------------------------------
 
-const authoredCards = parse(readText("data/tabula/cards.toml")).cards;
+const authoredCards = parse(readText("data/cards.toml")).cards;
 const opponentsData = compileOpponentsData(
-  parse(readText("data/tabula/opponents.toml")),
+  parse(readText("data/opponents.toml")),
   { cardIds: authoredCards.map((card) => card.id) },
 );
 const coherentConfig = opponentsData.coherentDraft;
@@ -58,7 +58,7 @@ const COHERENCE_TUNING = {
   selfRecallK: coherentConfig.coherence.selfRecallK,
 };
 
-const LAYER_COUNT = parse(readText("data/tabula/atlas.toml")).layers.length;
+const LAYER_COUNT = parse(readText("data/atlas.toml")).layers.length;
 const MIN_DISTINCT = coherentConfig.distinctCardCurve.first;
 const MAX_DISTINCT = coherentConfig.distinctCardCurve.last;
 const MIN_REMOVALS = coherentConfig.removalCurve.first;
@@ -693,7 +693,7 @@ function run() {
 
   // Affiliation fit: build affiliated decks per affiliation, compare to neutral.
   const affiliationsToml =
-    parse(readText("data/tabula/affiliations.toml")).affiliations ?? [];
+    parse(readText("data/affiliations.toml")).affiliations ?? [];
   const affLevel = Math.floor(LAYER_COUNT / 2);
   const affiliationResults = [];
   for (const aff of affiliationsToml) {

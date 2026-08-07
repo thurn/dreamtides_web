@@ -27,7 +27,7 @@ scripts/
   merchant-experiment.ts          # NEW: metrics harness (run via vite-node)
 data/
   merchant_corpus.json            # NEW: baked quality/multiplicity/clusters
-  tabula/dreamsign_profiles.toml  # NEW: curated dreamsign profiles
+  dreamsign_profiles.toml         # NEW: curated dreamsign profiles
 src/data/
   merchant-corpus.ts              # NEW: loader + types for baked artifact
   dreamsign-profiles.ts           # NEW: loader + types for profiles
@@ -71,7 +71,7 @@ docs/journey2/rewards.md          # REWRITE: describe v3 as current state
 
 The script reads `docs/draft_records_adapted/*.jsonc` (strip comments with
 `stripJsonComments` from `scripts/lib/card-refs.mjs`; per-seat records as
-`scripts/setup-assets.mjs` parses them) and `data/tabula/cards.toml` (via
+`scripts/setup-assets.mjs` parses them) and `data/cards.toml` (via
 `loadCardMaps` from the same lib for name<->UUID mapping). It computes, keyed
 by card UUID:
 
@@ -156,14 +156,14 @@ re-implementations).
 - Create: `src/data/merchant-corpus.ts`
 - Create: `src/data/dreamsign-profiles.ts`
 - Modify: `src/data/journey-content.ts`
-- Create: `data/tabula/dreamsign_profiles.toml` (placeholder with 2 entries;
+- Create: `data/dreamsign_profiles.toml` (placeholder with 2 entries;
   Task 4 fills it)
 - Test: `src/data/merchant-corpus.test.ts`, `src/data/dreamsign-profiles.test.ts`
 
-Wire the two data files into the app the same way existing tabula data flows:
+Wire the two data files into the app through the existing game-data flow:
 `setup-assets.mjs` copies `data/merchant_corpus.json` to
 `public/merchant-corpus-data.json` and parses
-`data/tabula/dreamsign_profiles.toml` (table array `[[dreamsigns]]`, fields
+`data/dreamsign_profiles.toml` (table array `[[dreamsigns]]`, fields
 per spec section "Dreamsign profiles and matching": `id`, `subtypes`,
 `card-types`, `cost-bands`, `keywords`, `quality`) into
 `public/dreamsign-profiles-data.json` with kebab->camel field names.
@@ -232,9 +232,9 @@ scores).
 ### Task 4: Dreamsign profile curation
 
 **Files:**
-- Modify: `data/tabula/dreamsign_profiles.toml`
+- Modify: `data/dreamsign_profiles.toml`
 
-Dispatch a subagent that reads `data/tabula/dreamsigns.toml` end to end and,
+Dispatch a subagent that reads `data/dreamsigns.toml` end to end and,
 for **every** dreamsign, deeply reads `effectDescription` and writes a profile
 row: which hard deck features the ability rewards (`subtypes` only from real
 card subtypes, `card-types` from Character/Event, `cost-bands` from

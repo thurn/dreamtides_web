@@ -38,7 +38,7 @@ export interface AuguryArchetypeData {
   copy: AuguryCopyTemplates;
 }
 
-/** Validated browser data compiled from data/tabula/augury.toml. */
+/** Validated browser data compiled from data/augury.toml. */
 export interface AuguryData {
   schemaVersion: 1;
   contentHash: string;

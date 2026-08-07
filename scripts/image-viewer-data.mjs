@@ -58,10 +58,10 @@ export const ART_REWORK_TAG = "Art Rework";
 export const ART_OK_TAG = "Art OK";
 
 /** Default card data file used to decide which images are already in use. */
-export const DEFAULT_CARDS_TOML = join("data", "tabula", "cards.toml");
+export const DEFAULT_CARDS_TOML = join("data", "cards.toml");
 
 /** Default figment catalog scanned for image numbers claimed by a figment. */
-export const DEFAULT_FIGMENTS_TOML = join("data", "tabula", "figments.toml");
+export const DEFAULT_FIGMENTS_TOML = join("data", "figments.toml");
 
 /**
  * Card data files scanned for the names an image number has ever been given.
@@ -69,7 +69,7 @@ export const DEFAULT_FIGMENTS_TOML = join("data", "tabula", "figments.toml");
  * Shutterstock image has been published under.
  */
 export const DEFAULT_NAME_HISTORY_TOMLS = [
-  join("data", "tabula", "cards.toml"),
+  join("data", "cards.toml"),
 ];
 
 /**

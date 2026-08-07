@@ -47,7 +47,7 @@ to lead their deck and may have some number of Dreamsigns:
   Dreamsign pool, and default reward bias as described in
   [Draft Pool Construction](#draft-pool-construction).
 - **Dreamsigns:** Cards with 2D illustrations of objects which provide more
-  minor ongoing effects, defined in `data/tabula/dreamsigns.ron`. A dreamsign
+  minor ongoing effects, defined in `data/dreamsigns.ron`. A dreamsign
   the player gains is kept for the rest of the run; its effect can apply during
   battles, on the journey map, or both (for example, a battle effect such as "Once
   per turn, when you discard a card, your next card this turn costs 2 less," or a

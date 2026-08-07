@@ -45,8 +45,10 @@ const imageViewerStatePath = path.join(
 export const encounterCandidatesWatchPattern =
   path.resolve(path.join(__dirname, "data", "exploration_candidates.json")) +
   "*";
+export const generatedDataTomlWatchPattern =
+  path.resolve(path.join(__dirname, "data")) + "/*.toml*";
 export const generatedCardDataWatchPaths = [
-  path.join(__dirname, "data", "tabula", "cards.toml"),
+  path.join(__dirname, "data", "cards.toml"),
   path.join(__dirname, "public", "card-data.json"),
   path.join(__dirname, "public", "cards_v2-data.json"),
 ].map((filePath) => path.resolve(filePath));
@@ -243,7 +245,7 @@ function dreamsignEditorApiPlugin(): Plugin {
         basePaths: ["/api/editor/dreamsigns", "/api/editor/dreamsign-tags"],
         collectionPath: "/api/editor/dreamsigns",
         datasets: ["dreamsigns", "dreamsign-tags"],
-        sourcePaths: ["data/tabula/dreamsigns.ron", "data/tabula/dreamsigns.tags.ron"],
+        sourcePaths: ["data/dreamsigns.ron", "data/dreamsigns.tags.ron"],
         createLegacy: (rootDir) => createDreamsignEditorApiMiddleware({ rootDir }),
       }));
     },
@@ -261,7 +263,7 @@ function glossaryEditorApiPlugin(): Plugin {
         basePaths: ["/api/editor/glossary"],
         collectionPath: "/api/editor/glossary",
         datasets: ["glossary"],
-        sourcePaths: ["data/tabula/glossary.ron"],
+        sourcePaths: ["data/glossary.ron"],
         createLegacy: (rootDir) => createGlossaryEditorApiMiddleware({ rootDir }),
       }));
     },
@@ -275,7 +277,7 @@ function glossaryEditorApiPlugin(): Plugin {
  * glossary editor keeps its local draft and save state.
  */
 export const glossaryDataWatchPath = path.resolve(
-  path.join(__dirname, "data", "tabula", "glossary.toml"),
+  path.join(__dirname, "data", "glossary.toml"),
 );
 
 export function glossaryDataHotReloadPlugin(
@@ -300,7 +302,7 @@ export function glossaryDataHotReloadPlugin(
             pendingReload = null;
             try {
               refreshSitesData({ rootDir: __dirname });
-              // data/tabula is excluded from Vite's normal watcher, so explicitly
+              // Generated TOML is excluded from Vite's normal watcher, so explicitly
               // invalidate the `glossary.toml?raw` module before reloading. A
               // reload without this step can reuse Vite's cached TOML transform.
               server.moduleGraph.onFileChange(glossaryDataWatchPath);
@@ -346,7 +348,7 @@ function dreamAvatarEditorApiPlugin(): Plugin {
         basePaths: ["/api/editor/dream-avatars"],
         collectionPath: "/api/editor/dream-avatars",
         datasets: ["dream-avatars"],
-        sourcePaths: ["data/tabula/dream_avatars.ron", "data/tides4.jsonc"],
+        sourcePaths: ["data/dream_avatars.ron", "data/tides4.jsonc"],
         createLegacy: (rootDir) => createDreamAvatarEditorApiMiddleware({ rootDir }),
       }));
     },
@@ -377,7 +379,7 @@ function dreamscapeEditorApiPlugin(): Plugin {
         basePaths: ["/api/editor/dreamscapes"],
         collectionPath: "/api/editor/dreamscapes",
         datasets: ["dreamscapes", "dream-guides"],
-        sourcePaths: ["data/tabula/dreamscapes.ron", "data/tabula/dream_guides.ron"],
+        sourcePaths: ["data/dreamscapes.ron", "data/dream_guides.ron"],
         createLegacy: (rootDir) => createDreamscapeEditorApiMiddleware({ rootDir }),
       }));
     },
@@ -395,7 +397,7 @@ function figmentEditorApiPlugin(): Plugin {
         basePaths: ["/api/editor/figments"],
         collectionPath: "/api/editor/figments",
         datasets: ["figments"],
-        sourcePaths: ["data/tabula/figments.ron"],
+        sourcePaths: ["data/figments.ron"],
         createLegacy: (rootDir) => createFigmentEditorApiMiddleware({ rootDir }),
       }));
     },
@@ -404,7 +406,7 @@ function figmentEditorApiPlugin(): Plugin {
 
 /**
  * Dev-only Vite plugin that hot-reloads figment data into a running battle when
- * `data/tabula/figments.toml` is edited. The TOML directory is ignored by the
+ * `data/figments.toml` is edited. Generated TOML is ignored by the
  * dev watcher (see `server.watch.ignored`), so this plugin watches the file
  * directly, regenerates `public/figments-data.json` via
  * {@link refreshFigmentDataJson}, and emits a `figment-data:changed` custom HMR
@@ -415,7 +417,7 @@ function figmentEditorApiPlugin(): Plugin {
  */
 function figmentDataHotReloadPlugin(): Plugin {
   const figmentTomlPath = path.resolve(
-    path.join(__dirname, "data", "tabula", "figments.toml"),
+    path.join(__dirname, "data", "figments.toml"),
   );
   const tomlDir = path.dirname(figmentTomlPath);
   const tomlBasename = path.basename(figmentTomlPath);
@@ -503,7 +505,7 @@ function dreamwellEditorApiPlugin(): Plugin {
         basePaths: ["/api/editor/dreamwell"],
         collectionPath: "/api/editor/dreamwell",
         datasets: ["dreamwell"],
-        sourcePaths: ["data/tabula/dreamwell.ron"],
+        sourcePaths: ["data/dreamwell.ron"],
         createLegacy: (rootDir) => createDreamwellEditorApiMiddleware({ rootDir }),
       }));
     },
@@ -521,7 +523,7 @@ function tutorialEditorApiPlugin(): Plugin {
         basePaths: ["/api/editor/tutorial"],
         collectionPath: "/api/editor/tutorial",
         datasets: ["tutorial"],
-        sourcePaths: ["data/tabula/tutorial.ron"],
+        sourcePaths: ["data/tutorial.ron"],
         createLegacy: (rootDir) => createTutorialEditorApiMiddleware({ rootDir }),
       }));
     },
@@ -530,7 +532,7 @@ function tutorialEditorApiPlugin(): Plugin {
 
 /**
  * Dev-only Vite plugin that hot-reloads Dreamwell data into a running battle
- * when `data/tabula/dreamwell.toml` is edited. The TOML directory is ignored by
+ * when `data/dreamwell.toml` is edited. Generated TOML is ignored by
  * the dev watcher (see `server.watch.ignored`), so this plugin watches the file
  * directly, regenerates `public/dreamwell-data.json` via
  * {@link refreshDreamwellDataJson}, and emits a `dreamwell-data:changed` custom
@@ -541,7 +543,7 @@ function tutorialEditorApiPlugin(): Plugin {
  */
 function dreamwellDataHotReloadPlugin(): Plugin {
   const dreamwellTomlPath = path.resolve(
-    path.join(__dirname, "data", "tabula", "dreamwell.toml"),
+    path.join(__dirname, "data", "dreamwell.toml"),
   );
   const tomlDir = path.dirname(dreamwellTomlPath);
   const tomlBasename = path.basename(dreamwellTomlPath);
@@ -620,8 +622,8 @@ function dreamwellDataHotReloadPlugin(): Plugin {
  * (`dreamscapes.toml`, `dream_guides.toml`, `sites.toml`, `affiliations.toml`,
  * `atlas.toml`, `apollyon_incarnations.toml`, `dreamsign_profiles.toml`).
  *
- * The dev watcher ignores `data/tabula/` (see `server.watch.ignored`), so a TOML
- * save normally has no effect on the page. This plugin watches the directory
+ * The dev watcher ignores generated TOML (see `server.watch.ignored`), so a
+ * TOML save normally has no effect on the page. This plugin watches the directory
  * directly with `fs.watch`, and on a change to one of the registered TOMLs it
  * regenerates that config's JSON via {@link regenerateConfigData}, including
  * Atlas data when a referenced catalog changes (the same TOML->JSON transforms
@@ -634,7 +636,7 @@ function dreamwellDataHotReloadPlugin(): Plugin {
  * debounced. `apply: "serve"` keeps this out of production builds.
  */
 function configDataHotReloadPlugin(): Plugin {
-  const tomlDir = path.resolve(path.join(__dirname, "data", "tabula"));
+  const tomlDir = path.resolve(path.join(__dirname, "data"));
   const watchedBasenames = new Set(SIMPLE_CONFIG_TOML_BASENAMES);
 
   return {
@@ -719,9 +721,9 @@ function imageViewerApiPlugin(): Plugin {
     configureServer(server) {
       server.middlewares.use(
         createImageViewerApiMiddleware({
-          cardsTomlPath: path.join(__dirname, "data", "tabula", "cards.toml"),
+          cardsTomlPath: path.join(__dirname, "data", "cards.toml"),
           nameHistoryTomlPaths: [
-            path.join(__dirname, "data", "tabula", "cards.toml"),
+            path.join(__dirname, "data", "cards.toml"),
           ],
           statePath: imageViewerStatePath,
         }),
@@ -763,7 +765,7 @@ function savedJourneysApiPlugin(): Plugin {
 
 /**
  * Dev-only Vite plugin that hot-reloads card data into the running browser when
- * `data/tabula/cards.toml` is edited. The dev watcher ignores the TOML
+ * `data/cards.toml` is edited. The dev watcher ignores the TOML
  * directory (see `server.watch.ignored`), so a TOML save normally has no effect
  * on the page; this plugin watches the file directly with `fs.watch`, and on
  * change:
@@ -791,7 +793,7 @@ function savedJourneysApiPlugin(): Plugin {
  */
 export function cardDataHotReloadPlugin(): Plugin {
   const cardTomlPath = path.resolve(
-    path.join(__dirname, "data", "tabula", "cards.toml"),
+    path.join(__dirname, "data", "cards.toml"),
   );
   const tomlDir = path.dirname(cardTomlPath);
   const tomlBasename = path.basename(cardTomlPath);
@@ -1054,7 +1056,7 @@ export default defineConfig({
   ],
   server: {
     watch: {
-      // The card editor APIs write card and tag TOML files under data/tabula
+      // The card editor APIs write card and tag TOML files under data
       // (via temp-file swaps) and regenerate the generated card data on every
       // save. regenerateCardData() writes the two public card JSON catalogs
       // (public/card-data.json and public/cards_v2-data.json). Files in public/
@@ -1070,8 +1072,7 @@ export default defineConfig({
       // full reload on any tsconfig change. Ignoring these directories keeps
       // creating a worktree from reloading the dev server.
       ignored: [
-        path.resolve(path.join(__dirname, "data", "tabula")) + "/**",
-        path.resolve(path.join(__dirname, "data", "exploration_candidates.toml")),
+        generatedDataTomlWatchPattern,
         imageViewerStatePath,
         // Exploration candidates editor saves atomically rotate the JSON source through
         // sibling .tmp/.bak files. Ignore the source and transaction siblings
@@ -1089,8 +1090,8 @@ export default defineConfig({
         path.resolve(path.join(__dirname, ".claude", "worktrees")) + "/**",
         // The dreamAvatar editor writes data/tides4.jsonc (tide-pool edits) and
         // regenerates the public dream-avatar/tides4 JSON catalogs on every save.
-        // tides4.jsonc sits outside data/tabula and the JSON outputs live under
-        // public/, so all three are otherwise watched; ignoring them keeps a
+        // tides4.jsonc is canonical JSONC and the generated JSON outputs live
+        // under public/, so all three are otherwise watched; ignoring them keeps a
         // dream-avatar-editor save from reloading the page mid-edit.
         path.resolve(path.join(__dirname, "data", "tides4.jsonc")),
         path.resolve(

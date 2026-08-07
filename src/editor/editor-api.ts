@@ -119,7 +119,7 @@ async function readJsonResponse<T>(response: Response): Promise<T> {
 }
 
 /**
- * The `source` URL parameter selects a canonical RON file under `data/tabula`.
+ * The `source` URL parameter selects a canonical RON file under `data`.
  * When absent, the Cards dataset is selected. The same value is forwarded to
  * editor API requests so reads and semantic saves stay pinned to one source.
  */

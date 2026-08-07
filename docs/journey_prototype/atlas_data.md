@@ -1,6 +1,6 @@
 # Dream Atlas Data
 
-`data/tabula/atlas.ron` is the authoritative Atlas document. The asset build
+`data/atlas.ron` is the authoritative Atlas document. The asset build
 validates and normalizes it into `public/atlas-data.json`; the browser loads that
 document as `AtlasData` through `loadAtlasData()`.
 

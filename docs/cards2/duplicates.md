@@ -12,8 +12,8 @@ no name at all. Cards are referenced below by name where one exists, otherwise a
 `(unnamed)`, always followed by their stat line `[cost●/spark✦ type]`.
 
 Each group and family below carries a **Tag** naming a card tag in
-`data/tabula/cards.tags.toml`. Every member card of the group is assigned that
-tag in `data/tabula/cards.toml`, so the set can be pulled up directly in the
+`data/cards.tags.toml`. Every member card of the group is assigned that
+tag in `data/cards.toml`, so the set can be pulled up directly in the
 card editor by filtering on the tag. Some cards belong to two families and carry
 both tags. The removal families (§2.2, §2.12–§2.14) all share the broad `Removal`
 tag.

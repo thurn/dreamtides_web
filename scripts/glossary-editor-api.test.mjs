@@ -24,7 +24,7 @@ function fixtureEntries() {
 async function startApi(source = serializeGlossarySource(fixtureEntries())) {
   const root = mkdtempSync(join(tmpdir(), "glossary-api-"));
   roots.push(root);
-  const dataDir = join(root, "data", "tabula");
+  const dataDir = join(root, "data");
   mkdirSync(dataDir, { recursive: true });
   writeFileSync(join(dataDir, "glossary.toml"), source);
   const middleware = createGlossaryEditorApiMiddleware({ rootDir: root });
@@ -61,7 +61,7 @@ describe("glossary editor API", () => {
       }),
     });
     expect(response.status).toBe(200);
-    const source = readFileSync(join(root, "data", "tabula", "glossary.toml"), "utf8");
+    const source = readFileSync(join(root, "data", "glossary.toml"), "utf8");
     const entries = parseGlossarySource(source);
     expect(entries[0]).toMatchObject({
       id: "spark",
@@ -74,7 +74,7 @@ describe("glossary editor API", () => {
 
   it("adds and removes definition-only term presentation", async () => {
     const { root, origin } = await startApi();
-    const path = join(root, "data", "tabula", "glossary.toml");
+    const path = join(root, "data", "glossary.toml");
 
     const markResponse = await fetch(`${origin}/api/editor/glossary/spark`, {
       method: "PATCH",
@@ -129,7 +129,7 @@ definition = "Contextual copy."
 
     expect(response.status).toBe(200);
     expect(
-      readFileSync(join(root, "data", "tabula", "glossary.toml"), "utf8"),
+      readFileSync(join(root, "data", "glossary.toml"), "utf8"),
     ).toBe(source.replace(
       'definition = "Combat power."',
       'definition = "Updated combat power."',
@@ -138,7 +138,7 @@ definition = "Contextual copy."
 
   it("rejects a non-integer priority without changing the TOML", async () => {
     const { root, origin } = await startApi();
-    const path = join(root, "data", "tabula", "glossary.toml");
+    const path = join(root, "data", "glossary.toml");
     const before = readFileSync(path, "utf8");
     const response = await fetch(`${origin}/api/editor/glossary/spark`, {
       method: "PATCH",
@@ -151,7 +151,7 @@ definition = "Contextual copy."
 
   it("rejects duplicate rules-text forms without changing the TOML", async () => {
     const { root, origin } = await startApi();
-    const path = join(root, "data", "tabula", "glossary.toml");
+    const path = join(root, "data", "glossary.toml");
     const before = readFileSync(path, "utf8");
     const response = await fetch(`${origin}/api/editor/glossary/spark`, {
       method: "PATCH",

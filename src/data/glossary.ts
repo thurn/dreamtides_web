@@ -1,4 +1,4 @@
-import glossarySource from "../../data/tabula/glossary.toml?raw";
+import glossarySource from "../../data/glossary.toml?raw";
 import { parseGlossarySource } from "../../scripts/glossary-source.mjs";
 
 /** A TOML-authored explanatory Info Card entry. */
@@ -115,7 +115,7 @@ export function requireGlossaryEntry(id: string): GlossaryCatalogEntry {
   const entry = glossaryEntry(id);
   if (entry === undefined) {
     throw new Error(
-      `Missing glossary entry "${id}" in data/tabula/glossary.toml.`,
+      `Missing glossary entry "${id}" in data/glossary.toml.`,
     );
   }
   return entry;

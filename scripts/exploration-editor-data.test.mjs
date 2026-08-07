@@ -24,12 +24,12 @@ const roots = [];
 function fixtureRoot() {
   const rootDir = fs.mkdtempSync(join(tmpdir(), "exploration-editor-data-"));
   roots.push(rootDir);
-  fs.mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
+  fs.mkdirSync(join(rootDir, "data"), { recursive: true });
   fs.mkdirSync(join(rootDir, "public"), { recursive: true });
   for (const relative of [
-    "data/tabula/exploration.toml",
-    "data/tabula/cards.toml",
-    "data/tabula/dreamsigns.toml",
+    "data/exploration.toml",
+    "data/cards.toml",
+    "data/dreamsigns.toml",
     "data/templates.json",
     "public/exploration-data.json",
   ]) {
@@ -87,7 +87,7 @@ describe("exploration editor data", () => {
   });
 
   it("rejects unknown chooser-copy slots at the TOML compiler boundary", () => {
-    const document = parse(fs.readFileSync("data/tabula/exploration.toml", "utf8"));
+    const document = parse(fs.readFileSync("data/exploration.toml", "utf8"));
     document["effect-kind"][0].copy["followup-title"] = "Choose {unknown}";
     expect(() => buildExplorationEffectDefinitions(document)).toThrow(
       /unknown copy slot \{unknown\}/u,
@@ -95,17 +95,17 @@ describe("exploration editor data", () => {
   });
 
   it("rejects unknown and incompatible canonical selection contracts", () => {
-    const unknownMechanic = parse(fs.readFileSync("data/tabula/exploration.toml", "utf8"));
+    const unknownMechanic = parse(fs.readFileSync("data/exploration.toml", "utf8"));
     unknownMechanic["effect-kind"][0]["canonical-mechanic-id"] = "typo-mechanic";
     expect(() => buildExplorationEffectDefinitions(unknownMechanic)).toThrow(/canonical-mechanic-id is unknown/u);
 
-    const unknownPolicy = parse(fs.readFileSync("data/tabula/exploration.toml", "utf8"));
+    const unknownPolicy = parse(fs.readFileSync("data/exploration.toml", "utf8"));
     const gainCard = unknownPolicy["effect-kind"].find(({ kind }) => kind === "gain-card");
     gainCard["allowed-selection-policy-ids"] = ["typo-policy"];
     gainCard["default-selection-policy-id"] = "typo-policy";
     expect(() => buildExplorationEffectDefinitions(unknownPolicy)).toThrow(/selection-policy-id is unknown/u);
 
-    const incompatible = parse(fs.readFileSync("data/tabula/exploration.toml", "utf8"));
+    const incompatible = parse(fs.readFileSync("data/exploration.toml", "utf8"));
     const draft = incompatible["effect-kind"].find(({ kind }) => kind === "draft-card");
     draft["allowed-selection-policy-ids"] = ["purge-misfit"];
     draft["default-selection-policy-id"] = "purge-misfit";
@@ -113,7 +113,7 @@ describe("exploration editor data", () => {
   });
 
   it("rejects unsupported action predicates", () => {
-    const document = parse(fs.readFileSync("data/tabula/exploration.toml", "utf8"));
+    const document = parse(fs.readFileSync("data/exploration.toml", "utf8"));
     const action = document.encounter.flatMap((encounter) => encounter.action)
       .find((candidate) => typeof candidate.predicate === "string" && candidate.predicate.length > 0);
     action.predicate = "typo-predicate";
@@ -142,7 +142,7 @@ describe("exploration editor data", () => {
       }
     }
 
-    const document = parse(fs.readFileSync(join(rootDir, "data/tabula/exploration.toml"), "utf8"));
+    const document = parse(fs.readFileSync(join(rootDir, "data/exploration.toml"), "utf8"));
     expect(JSON.parse(fs.readFileSync(join(rootDir, "public/exploration-data.json"), "utf8")))
       .toEqual(transformExplorationData(document));
   });
@@ -191,7 +191,7 @@ describe("exploration editor data", () => {
 
   it("preserves system-managed comments and unrelated records on targeted writes", () => {
     const rootDir = fixtureRoot();
-    const path = join(rootDir, "data/tabula/exploration.toml");
+    const path = join(rootDir, "data/exploration.toml");
     const before = fs.readFileSync(path, "utf8");
     const data = readExplorationEditorData({ rootDir });
     const target = data.encounters[0];
@@ -212,7 +212,7 @@ describe("exploration editor data", () => {
 
   it("propagates template copy only to matching actions and preserves placeholders", () => {
     const rootDir = fixtureRoot();
-    const path = join(rootDir, "data/tabula/exploration.toml");
+    const path = join(rootDir, "data/exploration.toml");
     const data = readExplorationEditorData({ rootDir });
     const unrelatedEncounter = data.encounters.find((encounter) =>
       encounter.actions.every((action) => action.templateId !== 14));
@@ -242,7 +242,7 @@ describe("exploration editor data", () => {
 
   it("rolls back every destination when an atomic replacement fails", () => {
     const rootDir = fixtureRoot();
-    const explorationPath = join(rootDir, "data/tabula/exploration.toml");
+    const explorationPath = join(rootDir, "data/exploration.toml");
     const jsonPath = join(rootDir, "public/exploration-data.json");
     const beforeExploration = fs.readFileSync(explorationPath, "utf8");
     const beforeJson = fs.readFileSync(jsonPath, "utf8");
@@ -265,7 +265,7 @@ describe("exploration editor data", () => {
 
   it("rejects unknown UUID references without touching authored data", () => {
     const rootDir = fixtureRoot();
-    const path = join(rootDir, "data/tabula/exploration.toml");
+    const path = join(rootDir, "data/exploration.toml");
     const before = fs.readFileSync(path, "utf8");
     const encounter = readExplorationEditorData({ rootDir }).encounters[0];
     expect(() => updateExplorationAction({

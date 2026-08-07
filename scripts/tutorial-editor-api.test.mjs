@@ -42,7 +42,7 @@ async function startApi(rootDir) {
 
 function fixtureRoot() {
   const rootDir = mkdtempSync(join(tmpdir(), "tutorial-editor-api-"));
-  mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
+  mkdirSync(join(rootDir, "data"), { recursive: true });
   const configuration = readTutorialConfiguration();
   const actions = [
     {
@@ -63,7 +63,7 @@ function fixtureRoot() {
     (trigger) => trigger.id === "support",
   );
   writeFileSync(
-    join(rootDir, "data", "tabula", "tutorial.toml"),
+    join(rootDir, "data", "tutorial.toml"),
     serializeTutorialToml(
       actions,
       triggers,
@@ -131,7 +131,7 @@ describe("tutorial editor api", () => {
     expect((await savedResponse.json()).actions).toEqual(actions);
     expect(
       parse(
-        readFileSync(join(rootDir, "data", "tabula", "tutorial.toml"), "utf8"),
+        readFileSync(join(rootDir, "data", "tutorial.toml"), "utf8"),
       ),
     ).toMatchObject({
       actions,
@@ -166,7 +166,7 @@ describe("tutorial editor api", () => {
   it("rejects invalid actions without changing tutorial.toml", async () => {
     const rootDir = fixtureRoot();
     const original = readFileSync(
-      join(rootDir, "data", "tabula", "tutorial.toml"),
+      join(rootDir, "data", "tutorial.toml"),
       "utf8",
     );
     const origin = await startApi(rootDir);
@@ -186,7 +186,7 @@ describe("tutorial editor api", () => {
     });
     expect(response.status).toBe(400);
     expect(
-      readFileSync(join(rootDir, "data", "tabula", "tutorial.toml"), "utf8"),
+      readFileSync(join(rootDir, "data", "tutorial.toml"), "utf8"),
     ).toBe(original);
   });
 });

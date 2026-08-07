@@ -1,6 +1,6 @@
 # Warrior Aggro — Card Pool
 
-A companion to [warrior-aggro.md](warrior-aggro.md), listing every CardsV2 card with a specific affinity for the Warrior Aggro archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards.toml`.
+A companion to [warrior-aggro.md](warrior-aggro.md), listing every CardsV2 card with a specific affinity for the Warrior Aggro archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/cards.toml`.
 
 ## Explosive deployment enablers
 

@@ -5,7 +5,7 @@
 //
 // Inputs are the adapted draft records (`docs/draft_records_adapted/*.jsonc`,
 // parsed per seat exactly the way `scripts/setup-assets.mjs` bundles them) and
-// `data/tabula/cards.toml` for the name<->UUID maps. Everything in the
+// `data/cards.toml` for the name<->UUID maps. Everything in the
 // artifact is keyed by card UUID; display names appear only in console output.
 //
 // Per card UUID the bake computes:
@@ -437,7 +437,7 @@ function buildClusters(labels, idf, quality) {
  */
 export function computeMerchantCorpus({
   recordsDir = resolve(ROOT, SOURCE),
-  cardsTomlPath = join(ROOT, "data", "tabula", "cards.toml"),
+  cardsTomlPath = join(ROOT, "data", "cards.toml"),
 } = {}) {
   const cardMaps = loadCardMaps(cardsTomlPath);
   const records = buildDraftRecords(recordsDir, cardMaps);

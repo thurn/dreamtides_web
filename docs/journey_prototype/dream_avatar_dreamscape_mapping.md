@@ -1,8 +1,8 @@
 # Dream Avatar ↔ Dreamscape mapping
 
-Every non-starter dreamscape in `data/tabula/dreamscapes.ron` lists the 3–4
+Every non-starter dreamscape in `data/dreamscapes.ron` lists the 3–4
 Dream Avatars that call it home, under a `dream-avatar-ids` field. Together these
-lists **partition** `data/tabula/dream_avatars.ron`: each of the 32
+lists **partition** `data/dream_avatars.ron`: each of the 32
 Dream Avatars belongs to exactly one dreamscape, and no Dream Avatar is shared.
 The starter region (Firstlight Meadow) has no residents.
 

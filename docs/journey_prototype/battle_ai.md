@@ -2,7 +2,7 @@
 
 This document describes the design for an automated opponent ("Battle AI") for
 the journey prototype's playable battle. The AI plays the UUID-keyed deck
-authored in `data/tabula/opponents.ron`, makes decisions with a blend of
+authored in `data/opponents.ron`, makes decisions with a blend of
 heuristics, shallow search, and light Monte Carlo sampling, and observes the
 planning budget of its resolved preset.
 

@@ -391,7 +391,7 @@ function dedupe(names) {
  * id->card-number index for the tie-break. Returns { records, numberOf }.
  */
 export function loadCorpus() {
-  const cardsV2 = parse(readText("data/tabula/cards.toml")).cards;
+  const cardsV2 = parse(readText("data/cards.toml")).cards;
   if (!Array.isArray(cardsV2)) {
     throw new Error("Expected [[cards]] array in cards.toml");
   }

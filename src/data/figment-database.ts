@@ -6,7 +6,7 @@ import type { ArtCrop } from "../types/cards";
 
 /**
  * The shape of a figment entry in `/figments-data.json` (generated from
- * `data/tabula/figments.toml` by `setup-assets`). Mirrors the camelCased fields
+ * `data/figments.toml` by `setup-assets`). Mirrors the camelCased fields
  * the figment editor writes.
  */
 interface FigmentDataEntry {

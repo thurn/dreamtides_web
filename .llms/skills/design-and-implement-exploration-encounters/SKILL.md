@@ -1,6 +1,6 @@
 ---
 name: design-and-implement-exploration-encounters
-description: Design a random or UUID-selected batch of Dreamtides Exploration encounters and ship the winning designs directly into data/tabula/exploration.toml as complete replayable behavior. Use when expanding the live Exploration catalog, designing and implementing encounter batches in one pass, porting new card-art encounters straight to production, or adding the effect kinds, Cumulus choices, persisted outcomes, animations, logs, tests, and browser QA required by new Exploration mechanics.
+description: Design a random or UUID-selected batch of Dreamtides Exploration encounters and ship the winning designs directly into data/exploration.toml as complete replayable behavior. Use when expanding the live Exploration catalog, designing and implementing encounter batches in one pass, porting new card-art encounters straight to production, or adding the effect kinds, Cumulus choices, persisted outcomes, animations, logs, tests, and browser QA required by new Exploration mechanics.
 ---
 
 # Design and Implement Exploration Encounters
@@ -127,7 +127,7 @@ end-to-end verification.
 For every winner:
 
 1. Add exactly one encounter with exactly two actions to
-   `data/tabula/exploration.toml`. Preserve `template-id`,
+   `data/exploration.toml`. Preserve `template-id`,
    `template-variables`, optional `selection`, rendered `effect-text`, and the
    generated globally unique action IDs unless a structural conflict requires a
    deterministic UUID-based replacement.

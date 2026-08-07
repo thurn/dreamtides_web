@@ -21,7 +21,7 @@ Dreamtides card pool.
 | → cube design philosophy | `docs/calebgannon/everything-i-have-learned-about-cube-design.md` |
 | Adapted output (Dreamtides) | `docs/cards2/` |
 | → worked example to match | `docs/cards2/dreamtides_archetypes.md` |
-| The card pool | `data/tabula/cards.toml` |
+| The card pool | `data/cards.toml` |
 | Authoritative Dreamtides rules | `docs/battle_rules/battle_rules.md` |
 | Card text formatting rules | `docs/cards2/style_guide.md` |
 
@@ -31,7 +31,7 @@ those rules rather than assuming the MTG interaction carries over unchanged.
 
 ## The Card Bridge: `mtg-name`
 
-Each card in `data/tabula/cards.toml` carries an `mtg-name` field naming the
+Each card in `data/cards.toml` carries an `mtg-name` field naming the
 Synergy Cube card it was adapted from. This is the bridge between the two pools.
 
 ```toml
@@ -57,7 +57,7 @@ Two critical facts about this mapping:
 Dump all name ↔ mtg-name pairs:
 
 ```bash
-grep -E '^(name|mtg-name) =' data/tabula/cards.toml | paste - -
+grep -E '^(name|mtg-name) =' data/cards.toml | paste - -
 ```
 
 Extract full text (type, cost, spark, rendered-text) for a set of card names —
@@ -67,7 +67,7 @@ claim** before writing prose about it:
 ```bash
 python3 - <<'PY'
 import re
-toml = open('data/tabula/cards.toml').read()
+toml = open('data/cards.toml').read()
 blocks = toml.split('[[cards]]')
 want = {"Celestial Reverie", "Wake the Fallen", "Reclaimer of Lost Paths"}  # edit
 def field(b, k):
@@ -94,7 +94,7 @@ A name that doesn't resolve is a bug.
 ```bash
 python3 - <<'PY'
 import re
-names = set(re.findall(r'\nname = "(.*?)"', open('data/tabula/cards.toml').read()))
+names = set(re.findall(r'\nname = "(.*?)"', open('data/cards.toml').read()))
 used = ["Spirit Bond", "Outsiders"]  # paste the card names referenced in your doc
 print("MISSING:", [u for u in used if u not in names])
 PY

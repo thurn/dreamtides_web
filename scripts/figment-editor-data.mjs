@@ -6,7 +6,7 @@ import { patchTomlRecord } from "./card-editor-data.mjs";
 import { transformFigment } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-export const DEFAULT_FIGMENT_TOML_PATH = join("data", "tabula", "figments.toml");
+export const DEFAULT_FIGMENT_TOML_PATH = join("data", "figments.toml");
 const FIGMENT_JSON_PATH = join("public", "figments-data.json");
 
 /**

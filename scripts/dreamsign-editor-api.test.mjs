@@ -47,10 +47,10 @@ color = "#1d4ed8"
 
 function writeFixtureRoot() {
   const rootDir = mkdtempSync(join(tmpdir(), "journey-dreamsign-editor-api-"));
-  mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
+  mkdirSync(join(rootDir, "data"), { recursive: true });
   mkdirSync(join(rootDir, "public"), { recursive: true });
-  writeFileSync(join(rootDir, "data", "tabula", "dreamsigns.toml"), fixtureToml());
-  writeFileSync(join(rootDir, "data", "tabula", "dreamsigns.tags.toml"), fixtureTagsToml());
+  writeFileSync(join(rootDir, "data", "dreamsigns.toml"), fixtureToml());
+  writeFileSync(join(rootDir, "data", "dreamsigns.tags.toml"), fixtureTagsToml());
   writeFileSync(join(rootDir, "public", "dreamsign-data.json"), "[]\n");
   return rootDir;
 }
@@ -119,7 +119,7 @@ describe("createDreamsignEditorApiMiddleware", () => {
     expect(save.body.clientRevision).toBe(3);
     expect(save.body.dreamsign["rendered-text"]).toBe("Updated effect.");
     expect(
-      readFileSync(join(rootDir, "data", "tabula", "dreamsigns.toml"), "utf8"),
+      readFileSync(join(rootDir, "data", "dreamsigns.toml"), "utf8"),
     ).toContain('rendered-text = "Updated effect."');
     expect(
       JSON.parse(readFileSync(join(rootDir, "public", "dreamsign-data.json"), "utf8"))[0]
@@ -168,7 +168,7 @@ describe("createDreamsignEditorApiMiddleware", () => {
     expect(save.body.tags).toEqual([{ name: "economy", color: "#1d4ed8" }]);
     expect(save.body.dreamsigns[1].tags).toEqual([]);
     expect(
-      readFileSync(join(rootDir, "data", "tabula", "dreamsigns.toml"), "utf8"),
+      readFileSync(join(rootDir, "data", "dreamsigns.toml"), "utf8"),
     ).toContain("tags = []");
 
     rmSync(rootDir, { recursive: true, force: true });

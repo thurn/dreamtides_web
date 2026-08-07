@@ -14,7 +14,7 @@ import {
 import { transformDreamsign } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-export const DEFAULT_DREAMSIGN_TOML_PATH = join("data", "tabula", "dreamsigns.toml");
+export const DEFAULT_DREAMSIGN_TOML_PATH = join("data", "dreamsigns.toml");
 const DREAMSIGN_JSON_PATH = join("public", "dreamsign-data.json");
 
 export const EDITABLE_DREAMSIGN_FIELDS = new Set(["name", "rendered-text", "tags"]);

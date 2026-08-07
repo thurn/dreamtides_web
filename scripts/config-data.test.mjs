@@ -17,7 +17,7 @@ import {
 } from "./config-data.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const REQUIRED_TABULA_FILES = [
+const REQUIRED_DATA_FILES = [
   "affiliations.toml",
   "atlas.toml",
   "dream_guides.toml",
@@ -31,13 +31,13 @@ let tempRoot = null;
 
 function makeFixtureRoot() {
   tempRoot = mkdtempSync(join(tmpdir(), "atlas-config-data-"));
-  const tabulaDir = join(tempRoot, "data", "tabula");
-  mkdirSync(tabulaDir, { recursive: true });
+  const dataDir = join(tempRoot, "data");
+  mkdirSync(dataDir, { recursive: true });
   mkdirSync(join(tempRoot, "public"), { recursive: true });
-  for (const filename of REQUIRED_TABULA_FILES) {
+  for (const filename of REQUIRED_DATA_FILES) {
     copyFileSync(
-      join(ROOT, "data", "tabula", filename),
-      join(tabulaDir, filename),
+      join(ROOT, "data", filename),
+      join(dataDir, filename),
     );
   }
   return tempRoot;
@@ -89,7 +89,7 @@ describe("regenerateConfigData Atlas dependencies", () => {
     regenerateConfigData("economy.toml", { rootDir });
     const jsonPath = join(rootDir, "public", "economy-data.json");
     const before = JSON.parse(readFileSync(jsonPath, "utf8"));
-    const sourcePath = join(rootDir, "data", "tabula", "economy.toml");
+    const sourcePath = join(rootDir, "data", "economy.toml");
     const source = readFileSync(sourcePath, "utf8");
     writeFileSync(
       sourcePath,
@@ -110,7 +110,7 @@ describe("regenerateConfigData Atlas dependencies", () => {
 
     regenerateConfigData("dream_guides.toml", options);
     const before = readSitesData(rootDir);
-    const guidesPath = join(rootDir, "data", "tabula", "dream_guides.toml");
+    const guidesPath = join(rootDir, "data", "dream_guides.toml");
     const guides = readFileSync(guidesPath, "utf8");
     const changed = guides
       .replace('site-type = "Shop"', 'site-type = "__swap__"')
@@ -129,7 +129,7 @@ describe("regenerateConfigData Atlas dependencies", () => {
 
   it("validates Atlas glossary references during a glossary-only refresh", () => {
     const rootDir = makeFixtureRoot();
-    const glossaryPath = join(rootDir, "data", "tabula", "glossary.toml");
+    const glossaryPath = join(rootDir, "data", "glossary.toml");
     const glossary = readFileSync(glossaryPath, "utf8");
     const changed = glossary.replace(
       'id = "site-battle"',

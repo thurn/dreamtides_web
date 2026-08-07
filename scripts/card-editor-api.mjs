@@ -64,13 +64,13 @@ const API_FACETS = {
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/cards";
 const CARD_TOML_PATH = DEFAULT_CARD_TOML_PATH;
-const CARD_TOML_DIR = join("data", "tabula");
+const CARD_TOML_DIR = join("data");
 const CARD_JSON_PATH = join("public", "card-data.json");
-const CARD_RON_PATH = join("data", "tabula", "cards.ron");
+const CARD_RON_PATH = join("data", "cards.ron");
 const CARD_SOURCE_PATHS = [
   CARD_RON_PATH,
-  join("data", "tabula", "cards.tags.ron"),
-  join("data", "tabula", "cards.tides.ron"),
+  join("data", "cards.tags.ron"),
+  join("data", "cards.tides.ron"),
 ];
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
 
@@ -124,8 +124,8 @@ function tomlParamFromUrl(url) {
 }
 
 // Resolve the `toml` query parameter to a repository-relative path that is
-// guaranteed to live directly inside `data/tabula`. The value may be a bare
-// filename (`cards.toml`) or the full relative path (`data/tabula/cards.toml`).
+// guaranteed to live directly inside `data`. The value may be a bare
+// filename (`cards.toml`) or the full relative path (`data/cards.toml`).
 // When the parameter is absent the canonical card file (cards.toml) is used.
 function resolveRequestedTomlPath(rootDir, requested) {
   if (requested === null || requested === undefined || requested.trim() === "") {
@@ -150,12 +150,12 @@ function resolveRequestedTomlPath(rootDir, requested) {
     return { ok: false, message: "The toml file must have a .toml extension." };
   }
 
-  const tabulaDir = resolve(rootDir, CARD_TOML_DIR);
+  const dataDir = resolve(rootDir, CARD_TOML_DIR);
   const target = resolve(rootDir, candidate);
-  const within = relative(tabulaDir, target);
+  const within = relative(dataDir, target);
 
   if (within === "" || within.startsWith("..") || isAbsolute(within) || within.includes(sep)) {
-    return { ok: false, message: "The toml file must be located in data/tabula." };
+    return { ok: false, message: "The toml file must be located in data." };
   }
 
   return { ok: true, relativePath: join(CARD_TOML_DIR, within) };
@@ -367,7 +367,7 @@ function generateCardDataJsonFromToml(patchedSource, fileSystem) {
   const tempRoot = fileSystem.mkdtempSync(join(tmpdir(), "journey-card-editor-refresh-"));
 
   try {
-    fileSystem.mkdirSync(join(tempRoot, "data", "tabula"), { recursive: true });
+    fileSystem.mkdirSync(join(tempRoot, "data"), { recursive: true });
     fileSystem.mkdirSync(join(tempRoot, "public"), { recursive: true });
     fileSystem.writeFileSync(join(tempRoot, CARD_TOML_PATH), patchedSource);
 

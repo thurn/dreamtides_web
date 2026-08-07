@@ -13,7 +13,7 @@ from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
-DEFAULT_CARDS = REPO_ROOT / "data/tabula/cards.toml"
+DEFAULT_CARDS = REPO_ROOT / "data/cards.toml"
 
 
 def load_cards(path: Path) -> list[dict[str, Any]]:

@@ -1,9 +1,9 @@
 # Game data authoring
 
 The canonical game-data catalogs are the manifest-declared `.ron` files under
-`data/` and `data/tabula/`. `data/game-data-manifest.ron` assigns each dataset
-its source schema, compatibility adapter, dependencies, generated TOML path,
-refresh behavior, editor capability, and stable-identity strategy.
+`data/`. `data/game-data-manifest.ron` assigns each dataset its source schema,
+compatibility adapter, dependencies, generated TOML path, refresh behavior,
+editor capability, and stable-identity strategy.
 
 The pinned Rust compiler in `tools/game-data/` uses the official `ron` and
 Serde implementations. It lowers canonical sources to deterministic TOML at

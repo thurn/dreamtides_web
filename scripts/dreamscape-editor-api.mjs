@@ -278,14 +278,14 @@ export function generateCatalogArtifacts(
   const dreamscapes = deriveDreamscapesData(sourceDreamscapes, guides);
   const glossary = parse(
     fileSystem.readFileSync(
-      join(rootDir, "data", "tabula", "glossary.toml"),
+      join(rootDir, "data", "glossary.toml"),
       "utf8",
     ),
   );
   const sites = compileSitesData(
     parse(
       fileSystem.readFileSync(
-        join(rootDir, "data", "tabula", "sites.toml"),
+        join(rootDir, "data", "sites.toml"),
         "utf8",
       ),
     ),
@@ -295,7 +295,7 @@ export function generateCatalogArtifacts(
       economy: compileEconomyData(
         parse(
           fileSystem.readFileSync(
-            join(rootDir, "data", "tabula", "economy.toml"),
+            join(rootDir, "data", "economy.toml"),
             "utf8",
           ),
         ),

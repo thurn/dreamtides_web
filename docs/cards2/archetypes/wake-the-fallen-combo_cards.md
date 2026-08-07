@@ -1,6 +1,6 @@
 # Wake the Fallen / Shadow March Combo — Card Pool
 
-A companion to [wake-the-fallen-combo.md](wake-the-fallen-combo.md), listing every CardsV2 card with a specific affinity for the Wake the Fallen / Shadow March Combo archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards.toml`.
+A companion to [wake-the-fallen-combo.md](wake-the-fallen-combo.md), listing every CardsV2 card with a specific affinity for the Wake the Fallen / Shadow March Combo archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/cards.toml`.
 
 ## Mass-return engines
 

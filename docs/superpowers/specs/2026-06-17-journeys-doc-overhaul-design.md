@@ -92,28 +92,28 @@ Major gaps this spec closes:
 - Selection: `src/screens/JourneyStartScreen.tsx`,
   `src/data/dream-avatar-selection.ts`
 - Asset pipeline: `scripts/setup-assets.mjs`
-- Data: `data/tabula/*.toml`
+- Data: `data/*.toml`
 
 ## 5. New TOML data (configured per the Golden Rule)
 
 All new files compile to JSON via `scripts/setup-assets.mjs` (kebab→camel) and
 load through `fetch()` like existing assets.
 
-- `data/tabula/dreamscapes.toml` — 11 dreamscapes. Fields: `id`, `name`,
+- `data/dreamscapes.toml` — 11 dreamscapes. Fields: `id`, `name`,
   `aesthetic`, `guide-id` (null for Firstlight), `signature-site`,
   `affiliation-id` (null for Firstlight). Firstlight Meadow is
   flagged as the fixed starter with an explicit fixed-site list.
-- `data/tabula/dream_guides.toml` — 10 guides. Fields: `id`, `name`,
+- `data/dream_guides.toml` — 10 guides. Fields: `id`, `name`,
   `home-dreamscape-id`, `site-type`, `dialog` (per-event lines),
   `home-specialty` (structured enhancement config).
-- `data/tabula/affiliations.toml` — affiliations. Fields: `id`, `name`,
+- `data/affiliations.toml` — affiliations. Fields: `id`, `name`,
   `signature-cards` (UUID list — small curated sets authored so the IDF math is
   real), `weight-strength` (reweighting strength), `opponent-bias-strength`.
-- `data/tabula/atlas.toml` — `layer-specs` (per-layer width or width
+- `data/atlas.toml` — `layer-specs` (per-layer width or width
   range), `connection-average`, `bonus-reveal-distribution` (0–2 weights),
   `repeat-discourage-strength`, `known-dreamsign` config (`max-per-atlas` = 2,
   `eligible-layers` = 3–6, `placement-probability`, early-reveal bias).
-- Optional `data/tabula/sites.toml` if per-site counts/prices are not already
+- Optional `data/sites.toml` if per-site counts/prices are not already
   inline (shop item counts, restock cost 50, market item count 3, etc.).
 
 > All numeric values above are TOML-tunable and treated as subject to change.

@@ -1,6 +1,6 @@
 # Tutorial Data
 
-`data/tabula/tutorial.ron` is the authoritative source for the standalone
+`data/tutorial.ron` is the authoritative source for the standalone
 tutorial scenario, the playable battle handoff, tutorial-journey guidance, and
 supplemental first-occurrence explanations. Run `npm run regenerate-assets`
 after editing it. Asset generation validates the source and writes the complete

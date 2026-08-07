@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { compileRewardSelectionData } from "./reward-selection-data.mjs";
 
 const source = () => parse(readFileSync(
-  resolve(import.meta.dirname, "../data/tabula/reward_selection.toml"),
+  resolve(import.meta.dirname, "../data/reward_selection.toml"),
   "utf8",
 ));
 

@@ -15,7 +15,7 @@ names and authored metadata were not features in the analysis.
 The primary model represented each deck as a binary card-incidence vector,
 weighted each UUID by inverse deck frequency, and applied spherical k-means
 with 12 independent initializations. A second model represented decks using
-only current rules features from `data/tabula/cards.toml`: card type,
+only current rules features from `data/cards.toml`: card type,
 subtype, cost, and terms and phrases from rendered rules text. The two models
 had normalized mutual information of 0.692, with especially strong agreement
 on event chains, discard, cheap-character recursion, Outsiders, reclaim loops,

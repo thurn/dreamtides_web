@@ -11,7 +11,6 @@ export const DEFAULT_ENCOUNTER_CANDIDATES_PATH = join(
 );
 export const DEFAULT_ENCOUNTER_CARD_PATH = join(
   "data",
-  "tabula",
   "cards.toml",
 );
 export const DEFAULT_ENCOUNTER_TEMPLATES_PATH = join("data", "templates.json");

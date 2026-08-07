@@ -334,12 +334,12 @@ describe("tutorial data", () => {
 
   it("validates every configured UUID against its authored catalog", () => {
     const configuration = readTutorialConfiguration();
-    const cardSource = parse(readFileSync("data/tabula/cards.toml", "utf8"));
+    const cardSource = parse(readFileSync("data/cards.toml", "utf8"));
     const avatarSource = parse(
-      readFileSync("data/tabula/dream_avatars.toml", "utf8"),
+      readFileSync("data/dream_avatars.toml", "utf8"),
     );
     const dreamwellSource = parse(
-      readFileSync("data/tabula/dreamwell.toml", "utf8"),
+      readFileSync("data/dreamwell.toml", "utf8"),
     );
     const catalogs = {
       cardIds: cardSource.cards.map((card) => card.id),
@@ -414,9 +414,9 @@ describe("tutorial data", () => {
 
   it("round-trips typed actions through TOML and generated JSON", () => {
     const rootDir = mkdtempSync(join(tmpdir(), "tutorial-data-"));
-    mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
+    mkdirSync(join(rootDir, "data"), { recursive: true });
     writeFileSync(
-      join(rootDir, "data", "tabula", "tutorial.toml"),
+      join(rootDir, "data", "tutorial.toml"),
       serializeTutorialToml(
         FIXTURE_ACTIONS,
         [],

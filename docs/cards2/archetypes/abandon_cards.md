@@ -1,6 +1,6 @@
 # Abandon — Card Pool
 
-A companion to [abandon.md](abandon.md), listing every CardsV2 card with a specific affinity for the Abandon archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards.toml`.
+A companion to [abandon.md](abandon.md), listing every CardsV2 card with a specific affinity for the Abandon archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/cards.toml`.
 
 ## Abandon outlets
 

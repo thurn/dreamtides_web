@@ -17,9 +17,9 @@ from typing import Any
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPTS_DIR.parents[3]
-DEFAULT_CARDS = REPO_ROOT / "data/tabula/cards.toml"
-DEFAULT_DREAMSIGNS = REPO_ROOT / "data/tabula/dreamsigns.toml"
-DEFAULT_EXPLORATION = REPO_ROOT / "data/tabula/exploration.toml"
+DEFAULT_CARDS = REPO_ROOT / "data/cards.toml"
+DEFAULT_DREAMSIGNS = REPO_ROOT / "data/dreamsigns.toml"
+DEFAULT_EXPLORATION = REPO_ROOT / "data/exploration.toml"
 DEFAULT_TEMPLATES = REPO_ROOT / "data/templates.json"
 DEFAULT_JOURNEY_TYPES = REPO_ROOT / "src/types/journey.ts"
 DEFAULT_IMAGES_DIR = Path("/Users/dthurn/Documents/shutterstock/images")

@@ -39,7 +39,7 @@ Selecting the fixed Dream Avatar starts the authored tutorial journey and
 changes the room to normal collaborative control in the same event. Both
 players can take journey actions and manually control either battle side while
 the journey continues to use the guidance and first-occurrence triggers authored
-in `data/tabula/tutorial.toml`.
+in `data/tutorial.toml`.
 
 ## `tutorialSpeed`
 
@@ -192,7 +192,7 @@ in the player's hand and two cards in the opponent's hand.
 `goto=tutorial-victory` opens the tutorial battle victory payoff directly. Its
 New Journey action enters the fixed tutorial Dream Avatar selection in the same
 room. That selection presents the three authored Valor tides from
-`data/tabula/tutorial_journey_pool.toml`; choosing the avatar starts a journey with
+`data/tutorial_journey_pool.toml`; choosing the avatar starts a journey with
 their 150-card pool and collaborative room control.
 
 For the Exploration QA scenes, `card=<UUID>` selects the authored encounter for
@@ -288,7 +288,7 @@ The standalone `/glossary` route edits the reusable explanatory Info Cards
 shown for rules terms, resources, tides, sites, and other shared game concepts.
 It provides a searchable catalog and an interactive Info Card whose rendered
 title and description edit in place. Saved copy and rules-text variants write
-to `data/tabula/glossary.toml` through the local Vite development server.
+to `data/glossary.toml` through the local Vite development server.
 
 ## Examples
 

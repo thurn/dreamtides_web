@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use super-subagent-driven-development (recommended) or super-executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build a standalone `/editor` card editor that loads every source card from `data/tabula/rendered-cards.toml`, edits supported fields inline, and writes confirmed edits back to TOML by UUID.
+**Goal:** Build a standalone `/editor` card editor that loads every source card from `data/rendered-cards.toml`, edits supported fields inline, and writes confirmed edits back to TOML by UUID.
 
 **Architecture:** Add focused Node-side editor helpers and Vite middleware for TOML reading, targeted patching, validation, and focused `public/card-data.json` refresh. Add a React editor route that bypasses the journey runtime, reuses shared card rendering primitives with the normal journey card UI, keeps display state in URL query parameters, and performs optimistic per-field saves.
 
@@ -141,7 +141,7 @@ export function refreshCardDataJson({ rootDir } = {}) {}
 
 Implementation requirements:
 
-- `readEditorCards` reads `data/tabula/rendered-cards.toml`, parses with `smol-toml`, and returns all source cards in TOML order.
+- `readEditorCards` reads `data/rendered-cards.toml`, parses with `smol-toml`, and returns all source cards in TOML order.
 - Returned editor records include raw TOML-facing editable fields and a preview `CardData` produced by `transformCard`.
 - `validateCardEdit` returns structured success or failure, not thrown validation errors.
 - `patchRenderedCardsToml` locates the `[[cards]]` block by exact `id` UUID and replaces one editable field.
@@ -643,7 +643,7 @@ Dispatch a separate QA subagent using the QA Gate Protocol. The subagent must ve
 - Clicking away does not save.
 - Saving state and saved state are visible without causing layout jump.
 - The QA edit is restored to the original card name before the subagent exits.
-- `git diff -- data/tabula/rendered-cards.toml` is clean after restoration.
+- `git diff -- data/rendered-cards.toml` is clean after restoration.
 - `node scripts/generated-card-data-drift.mjs` reports generated card data matches the TOML source after restoration.
 - `window.__caps` has empty `errors`, `rejections`, and `consoleErrors`.
 
@@ -727,7 +727,7 @@ Dispatch a separate QA subagent using the QA Gate Protocol. The subagent must ve
 - Blank spark edit saves and removes the spark pip.
 - Invalid cost or spark shows readable validation feedback near the edited field.
 - Each QA edit is restored to the original value before the subagent exits.
-- `git diff -- data/tabula/rendered-cards.toml` is clean after restoration.
+- `git diff -- data/rendered-cards.toml` is clean after restoration.
 - `node scripts/generated-card-data-drift.mjs` reports generated card data matches the TOML source after restoration.
 - Validation messages are not clipped inside the card at 1280x800 and 1440x900.
 - `window.__caps` has empty `errors`, `rejections`, and `consoleErrors`.
@@ -800,7 +800,7 @@ Dispatch a separate QA subagent using the QA Gate Protocol. The subagent must ve
 - Card type text is display-only.
 - Changing subtype updates toolbar subtype filters without a page reload.
 - Each QA edit is restored to the original subtype before the subagent exits.
-- `git diff -- data/tabula/rendered-cards.toml` is clean after restoration.
+- `git diff -- data/rendered-cards.toml` is clean after restoration.
 - `node scripts/generated-card-data-drift.mjs` reports generated card data matches the TOML source after restoration.
 - Type-line labels and subtype validation messages are aligned and readable.
 - `window.__caps` has empty `errors`, `rejections`, and `consoleErrors`.
@@ -881,7 +881,7 @@ Dispatch a separate QA subagent using the QA Gate Protocol. The subagent must ve
 - Shift+Enter inserts a newline.
 - Saved multiline text renders correctly in the card.
 - Each QA edit is restored to the original rules text before the subagent exits.
-- `git diff -- data/tabula/rendered-cards.toml` is clean after restoration.
+- `git diff -- data/rendered-cards.toml` is clean after restoration.
 - `node scripts/generated-card-data-drift.mjs` reports generated card data matches the TOML source after restoration.
 - Textarea, helper text, and validation messages are not clipped or overlapping at 1280x800 and 1440x900.
 - `window.__caps` has empty `errors`, `rejections`, and `consoleErrors`.
@@ -960,7 +960,7 @@ Dispatch a separate QA subagent using the QA Gate Protocol. The subagent must ve
 - The grid remains scrollable and other cards remain interactive after a failure.
 - Error messages are visually associated with the edited field.
 - Error messages do not clip or overlap neighboring cards at 1280x800 and 1440x900.
-- `git diff -- data/tabula/rendered-cards.toml` is clean after the subagent exits.
+- `git diff -- data/rendered-cards.toml` is clean after the subagent exits.
 - `node scripts/generated-card-data-drift.mjs` reports generated card data matches the TOML source after the subagent exits.
 - `window.__caps` has empty `errors`, `rejections`, and `consoleErrors` except for the intentionally forced failed request if it is surfaced by the browser; the subagent must distinguish intentional request failure from render/runtime errors.
 
@@ -1025,7 +1025,7 @@ Dispatch a separate QA subagent using the QA Gate Protocol. The subagent must ve
 - Controls remain usable through repeated interactions.
 - Card grid scrolling is stable and does not clip active editors.
 - All QA edits are restored before the subagent exits.
-- `git diff -- data/tabula/rendered-cards.toml` is clean after restoration.
+- `git diff -- data/rendered-cards.toml` is clean after restoration.
 - `node scripts/generated-card-data-drift.mjs` reports generated card data matches the TOML source after restoration.
 - `window.__caps` has empty `errors`, `rejections`, and `consoleErrors` except intentional failed-request noise from validation/failure checks.
 
@@ -1071,7 +1071,7 @@ Run:
 git status --short
 ```
 
-Expected: no unexpected tracked changes. If QA left edits in `data/tabula/rendered-cards.toml`, restore the original card values through the editor or the focused save path, then rerun this step.
+Expected: no unexpected tracked changes. If QA left edits in `data/rendered-cards.toml`, restore the original card values through the editor or the focused save path, then rerun this step.
 
 - [ ] **Step 2: Confirm generated card data is synced**
 

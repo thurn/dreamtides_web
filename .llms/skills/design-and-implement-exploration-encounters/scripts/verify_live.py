@@ -14,7 +14,7 @@ from typing import Any
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPTS_DIR.parents[3]
-DEFAULT_EXPLORATION = REPO_ROOT / "data/tabula/exploration.toml"
+DEFAULT_EXPLORATION = REPO_ROOT / "data/exploration.toml"
 AUTHORED_ACTION_FIELDS = (
     "id",
     "label",

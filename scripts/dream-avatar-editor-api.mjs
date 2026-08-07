@@ -22,7 +22,7 @@ import {
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/dream-avatars";
-const DREAM_AVATAR_TOML_DIR = join("data", "tabula");
+const DREAM_AVATAR_TOML_DIR = join("data");
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
 
 const defaultFileSystem = {
@@ -78,12 +78,12 @@ function resolveRequestedTomlPath(rootDir, requested) {
     return { ok: false, message: "The toml file must have a .toml extension." };
   }
 
-  const tabulaDir = resolve(rootDir, DREAM_AVATAR_TOML_DIR);
+  const dataDir = resolve(rootDir, DREAM_AVATAR_TOML_DIR);
   const target = resolve(rootDir, candidate);
-  const within = relative(tabulaDir, target);
+  const within = relative(dataDir, target);
 
   if (within === "" || within.startsWith("..") || isAbsolute(within) || within.includes(sep)) {
-    return { ok: false, message: "The toml file must be located in data/tabula." };
+    return { ok: false, message: "The toml file must be located in data." };
   }
 
   return { ok: true, relativePath: join(DREAM_AVATAR_TOML_DIR, within) };

@@ -329,7 +329,7 @@ export default function GlossaryEditorApp({
           <h1>Info Card Glossary</h1>
           <p>Author the reusable explanations players discover on hover or press.</p>
         </div>
-        <span data-glossary-file="">data/tabula/glossary.ron</span>
+        <span data-glossary-file="">data/glossary.ron</span>
       </header>
 
       {loadState.kind === "loading" ? (

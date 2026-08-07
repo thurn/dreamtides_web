@@ -58,7 +58,7 @@ export interface RewardSelectionTuning {
   tribes: readonly string[];
 }
 
-/** Validated browser data compiled from data/tabula/reward_selection.toml. */
+/** Validated browser data compiled from data/reward_selection.toml. */
 export interface RewardSelectionData {
   schemaVersion: 1;
   rulesVersion: "1";

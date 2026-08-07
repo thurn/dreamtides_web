@@ -45,9 +45,9 @@ card-number = 2
 
 function writeFixtureRoot() {
   const rootDir = mkdtempSync(join(tmpdir(), "journey-dreamwell-editor-api-"));
-  mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
+  mkdirSync(join(rootDir, "data"), { recursive: true });
   mkdirSync(join(rootDir, "public"), { recursive: true });
-  writeFileSync(join(rootDir, "data", "tabula", "dreamwell.toml"), fixtureToml());
+  writeFileSync(join(rootDir, "data", "dreamwell.toml"), fixtureToml());
   writeFileSync(join(rootDir, "public", "dreamwell-data.json"), "[]\n");
   return rootDir;
 }
@@ -116,7 +116,7 @@ describe("createDreamwellEditorApiMiddleware", () => {
     expect(save.body.clientRevision).toBe(7);
     expect(save.body.dreamwell["energy-added"]).toBe(3);
     expect(
-      readFileSync(join(rootDir, "data", "tabula", "dreamwell.toml"), "utf8"),
+      readFileSync(join(rootDir, "data", "dreamwell.toml"), "utf8"),
     ).toContain("energy-added = 3");
     expect(
       JSON.parse(readFileSync(join(rootDir, "public", "dreamwell-data.json"), "utf8"))[0]

@@ -69,7 +69,7 @@ function firstCardDifference(expected, actual) {
 }
 
 export function expectedCardDataFromToml({ rootDir = ROOT } = {}) {
-  const cardTomlPath = join(rootDir, "data", "tabula", "cards.toml");
+  const cardTomlPath = join(rootDir, "data", "cards.toml");
   const parsedCards = parse(readFileSync(cardTomlPath, "utf8"));
   const allCards = parsedCards.cards;
 

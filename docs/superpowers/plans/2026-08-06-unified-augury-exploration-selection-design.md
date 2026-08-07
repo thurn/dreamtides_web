@@ -74,7 +74,7 @@ members of the add-site candidate pool.
 
 [merchant-v3]: ../specs/2026-06-09-dream-merchant-v3-design.md
 [journeys]: ../../journeys/journeys.md
-[exploration-catalog]: ../../../data/tabula/exploration.toml
+[exploration-catalog]: ../../../data/exploration.toml
 [exploration-provider]: ../../../src/coop/providers/exploration-provider.ts
 [augury-registry]: ../../../src/journey_v2/archetypes/registry.ts
 [merchant-context]: ../../../src/journey_v2/context/buildMerchantContext.ts
@@ -83,7 +83,7 @@ members of the add-site candidate pool.
 [site-fold]: ../../../src/rules/journey/sites.ts
 [reward-effects]: ../../../src/rules/journey/reward-effects.ts
 [coop-actions]: ../../../src/coop/actions.ts
-[dreamsign-profiles]: ../../../data/tabula/dreamsign_profiles.toml
+[dreamsign-profiles]: ../../../data/dreamsign_profiles.toml
 [dreamsign-match]: ../../../src/journey_v2/signals/dreamsignMatch.ts
 [exploration-schema]: ../../../scripts/exploration-editor-schema.mjs
 [gamble-mechanics]: ../../gamble/gravok-gamble-mechanics.md

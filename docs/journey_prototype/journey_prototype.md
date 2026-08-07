@@ -27,11 +27,11 @@ validated, generated compatibility TOML. It is idempotent and then:
    `~/Library/Caches/io.github.dreamtides.tv/image_cache/`.
 4. Copies `data/tides4.jsonc` into `public/tides4-data.json` with comments
    stripped.
-5. Compiles generated `data/tabula/atlas.toml` into validated `public/atlas-data.json`.
+5. Compiles generated `data/atlas.toml` into validated `public/atlas-data.json`.
 6. Compiles and cross-validates the canonical Dream Guide and Site catalogs,
    derives Dreamscape assignments, and emits `public/dream-guides-data.json`,
    `public/dreamscapes-data.json`, and `public/sites-data.json`.
-7. Compiles generated `data/tabula/opponents.toml` into validated
+7. Compiles generated `data/opponents.toml` into validated
    `public/opponents-data.json`.
 
 The generated `public/cards/`, `public/card-data.json`,
@@ -41,7 +41,7 @@ The generated `public/cards/`, `public/card-data.json`,
 Battle and opponent tuning is documented in
 [Opponent Data](opponents_data.md). Battle setup, Dreamwell schedules,
 progression curves, opponent construction, and named AI presets are authored in
-`data/tabula/opponents.ron`.
+`data/opponents.ron`.
 
 Other commands:
 
@@ -106,7 +106,7 @@ The important ownership boundaries are:
   tutorial, live battle, victory, and journey.
 
 Atlas graph generation, boss content, presentation copy, and asset references
-are authored in `data/tabula/atlas.ron`. See [Dream Atlas Data](atlas_data.md)
+are authored in `data/atlas.ron`. See [Dream Atlas Data](atlas_data.md)
 for the schema, validation rules, hashing, and Layer VII Limbo semantics. Guide
 identity, home and specialty assignments, dialogue, site presentation, and
 cross-site mechanics are documented in
@@ -153,7 +153,7 @@ clears the room's battle slice and resumes the imported journey screen.
 
 ### Tutorial authoring
 
-The standalone tutorial scenario is authored in `data/tabula/tutorial.ron`.
+The standalone tutorial scenario is authored in `data/tutorial.ron`.
 It includes presentation actions, guidance, featured identities, battle setup,
 and the playable handoff. `scripts/setup-assets.mjs` validates that source and
 generates the browser-readable `public/tutorial-data.json` snapshot. The

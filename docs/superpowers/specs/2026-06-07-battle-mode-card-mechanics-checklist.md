@@ -5,8 +5,8 @@ support, derived from a survey of the card pool.
 
 **Sources surveyed**
 - Rules vocabulary/definitions: `/Users/dthurn/quest_prototype/docs/battle_rules/battle_rules.md`
-- Card pool: `/Users/dthurn/quest_prototype/data/tabula/cards.toml` (519 cards; 375 Character, 144 Event)
-- Identity cards: `/Users/dthurn/quest_prototype/data/tabula/dream_avatars.toml` (32 dream avatars)
+- Card pool: `/Users/dthurn/quest_prototype/data/cards.toml` (519 cards; 375 Character, 144 Event)
+- Identity cards: `/Users/dthurn/quest_prototype/data/dream_avatars.toml` (32 dream avatars)
 
 **Counting method:** frequencies are occurrence counts of the symbol/phrase across all
 `rendered-text` fields, computed with UTF-8-correct regex (Python `re`). Multi-byte symbols

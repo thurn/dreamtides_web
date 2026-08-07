@@ -395,7 +395,7 @@ occasionally a curveball.
 
 ## Dreamsign profiles and matching
 
-`data/tabula/dreamsign_profiles.toml` is the one curated file. Dreamsigns
+`data/dreamsign_profiles.toml` is the one curated file. Dreamsigns
 never appear in draft records, so they get no corpus signal. A subagent
 deep-reads each dreamsign's ability text (no regexes) and records a structured
 profile, reviewed by hand:
@@ -529,7 +529,7 @@ New:
 - Stage-1 archetype roll and stage-2 band sampling in
   `encounter/generateMerchantEncounter.ts` (rewritten).
 - `data/merchant_corpus.json` + bake script + parity check.
-- `data/tabula/dreamsign_profiles.toml` + subagent curation pass.
+- `data/dreamsign_profiles.toml` + subagent curation pass.
 - `scripts/merchant-experiment.ts` (run via `vite-node`) + `merchant-metric` npm script.
 
 Deleted:

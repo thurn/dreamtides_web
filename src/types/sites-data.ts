@@ -16,7 +16,7 @@ export interface SiteTypeData {
 export type FourSuitRepriseOutcome =
   "transfiguration" | "essence" | "duplication" | "purge";
 
-/** Validated browser data compiled from data/tabula/sites.toml. */
+/** Validated browser data compiled from data/sites.toml. */
 export interface SitesData {
   schemaVersion: 1;
   contentHash: string;

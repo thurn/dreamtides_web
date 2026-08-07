@@ -12,10 +12,10 @@ import { describe, expect, it } from "vitest";
 import { checkGeneratedCardData, expectedCardDataFromToml } from "./generated-card-data-drift.mjs";
 
 function writeFixtureToml(rootDir, rarityLine = 'rarity = "Legendary"\n') {
-  const tabulaDir = join(rootDir, "data", "tabula");
-  mkdirSync(tabulaDir, { recursive: true });
+  const dataDir = join(rootDir, "data");
+  mkdirSync(dataDir, { recursive: true });
   writeFileSync(
-    join(tabulaDir, "cards.toml"),
+    join(dataDir, "cards.toml"),
     `[[cards]]
 name = "Knowledge Restored"
 id = "ded25ef2-3c3f-4012-8717-8dec3def1854"

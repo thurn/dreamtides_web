@@ -59,7 +59,7 @@ describe("regenerate-assets.sh", () => {
     expect(result.commands).toEqual([
       "node scripts/setup-assets.mjs",
       "node scripts/generate-localization-types.mjs",
-      "git status --short -- data/tabula",
+      "git status --short -- data",
     ]);
     expect(result.stdout).toContain("1/2  setup-assets");
     expect(result.stdout).toContain("fast content regeneration complete");

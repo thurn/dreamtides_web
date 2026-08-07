@@ -50,7 +50,7 @@ Integration tests against the real journey state-action / generator interface, m
 This task is **additive**: it adds new TOML, loaders, types, and `SiteType` members, but removes nothing (no `Cleanse`/`omens`/`DreamJourney` removal, no `DreamAtlas` reshape). That keeps every existing consumer compiling. The destructive switches happen in Tasks 2 and 5.
 
 **Files:**
-- Create: `data/tabula/dreamscapes.toml`, `data/tabula/dream_guides.toml`, `data/tabula/affiliations.toml`, `data/tabula/atlas.toml`
+- Create: `data/dreamscapes.toml`, `data/dream_guides.toml`, `data/affiliations.toml`, `data/atlas.toml`
 - Create: `src/data/dreamscapes.ts` (loader + types re-export), `src/data/atlas-data.ts` (loader)
 - Modify: `scripts/setup-assets.mjs` (parse + transform + write the four new files; add params to `setupAssets({...})` mirroring `dreamsignTomlPath`)
 - Modify: `src/types/journey.ts` (add `SiteType` members; add new content + atlas-v2 types as *new* interfaces)
@@ -62,10 +62,10 @@ This task is **additive**: it adds new TOML, loaders, types, and `SiteType` memb
 Author placeholder-but-real content:
 - `dreamscapes.toml`: 11 `[[dreamscapes]]` entries from the doc's dreamscape list (Firstlight Meadow + the 10 named ones). Fields per the spec §5: `id`, `name`, `aesthetic`, `guide-id` (omit/empty for Firstlight), `signature-site`, `affiliation-id` (omit/empty for Firstlight). Firstlight carries `is-starter = true` and a `fixed-sites` list (`["Draft","Draft","DreamsignRevelation","Purge","Battle"]`).
 - `dream_guides.toml`: 10 `[[guides]]` from the doc's Home Specialties table — `id`, `name`, `home-dreamscape-id`, `site-type`, `dialog` (one or two placeholder lines), `home-specialty` (a free-form description string sourced from the doc's enhancement column).
-- `affiliations.toml`: one `[[affiliations]]` per distinct affiliation in the doc — `id`, `name`, `signature-cards` (a small curated list of 3–8 real card UUIDs from `data/tabula/cards.toml` that fit the affiliation theme), `weight-strength` (default e.g. `2.0`), `opponent-bias-strength` (default e.g. `2.0`).
+- `affiliations.toml`: one `[[affiliations]]` per distinct affiliation in the doc — `id`, `name`, `signature-cards` (a small curated list of 3–8 real card UUIDs from `data/cards.toml` that fit the affiliation theme), `weight-strength` (default e.g. `2.0`), `opponent-bias-strength` (default e.g. `2.0`).
 - `atlas.toml`: `layer-specs` (array of 7 entries, each `{min, max}` width: `1,2,3,{3,4},{3,5},{3,5},1`), `connection-average = 2.0`, `bonus-reveal = {min=0, max=2, mode=1}`, `repeat-discourage-strength`, and `[known-dreamsign] max-per-atlas = 2, eligible-layers = [3,4,5,6], placement-probability, early-reveal-bias`.
 
-Affiliation→signature-card curation: pick UUIDs by reading `data/tabula/cards.toml` for cards matching the theme (e.g. Warriors → cards whose text/subtype fit warriors). These are placeholder curations; the IDF math (Task 4) is what must be real.
+Affiliation→signature-card curation: pick UUIDs by reading `data/cards.toml` for cards matching the theme (e.g. Warriors → cards whose text/subtype fit warriors). These are placeholder curations; the IDF math (Task 4) is what must be real.
 
 - [ ] **Step 2: Write the failing loader/shape test.**
 
@@ -155,7 +155,7 @@ export interface AtlasData {
 - [ ] **Step 10: Commit.**
 
 ```bash
-git add data/tabula scripts/setup-assets.mjs src/data/dreamscapes.ts src/data/atlas-data.ts src/types/journey.ts src/data/dreamscapes.test.ts public
+git add data scripts/setup-assets.mjs src/data/dreamscapes.ts src/data/atlas-data.ts src/types/journey.ts src/data/dreamscapes.test.ts public
 git commit -m "feat(journeys): add dreamscape/guide/affiliation/atlas-data data + types"
 ```
 

@@ -17,9 +17,9 @@ from template_rendering import PLACEHOLDER_RE, SPECIAL_RE
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
 DEFAULT_TEMPLATE_CATALOG = REPO_ROOT / "data/templates.json"
-DEFAULT_CARDS_DATA = Path(__file__).resolve().parents[4] / "data/tabula/cards.toml"
+DEFAULT_CARDS_DATA = Path(__file__).resolve().parents[4] / "data/cards.toml"
 DEFAULT_DREAMSIGNS_DATA = (
-    Path(__file__).resolve().parents[4] / "data/tabula/dreamsigns.toml"
+    Path(__file__).resolve().parents[4] / "data/dreamsigns.toml"
 )
 DEFAULT_TRANSFIGURATIONS_DATA = (
     Path(__file__).resolve().parents[4] / "src/types/journey.ts"

@@ -18,7 +18,7 @@ export const DEFAULT_CANDIDATES_PATH = resolve(
 );
 export const DEFAULT_EXPLORATION_PATH = resolve(
   REPOSITORY_ROOT,
-  "data/tabula/exploration.toml",
+  "data/exploration.toml",
 );
 export const DEFAULT_TEMPLATES_PATH = resolve(
   REPOSITORY_ROOT,

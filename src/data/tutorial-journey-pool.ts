@@ -1,5 +1,5 @@
 import { parse } from "smol-toml";
-import tutorialJourneyPoolSource from "../../data/tabula/tutorial_journey_pool.toml?raw";
+import tutorialJourneyPoolSource from "../../data/tutorial_journey_pool.toml?raw";
 import { DEFAULT_TIDES4_TUNING } from "../draft/pool/variant-tides4";
 
 export interface TutorialJourneyPoolCard {

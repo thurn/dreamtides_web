@@ -23,7 +23,6 @@ const SEMANTIC_PLAY_CARD_IDS = new Set(
 );
 export const DEFAULT_TUTORIAL_TOML_PATH = join(
   "data",
-  "tabula",
   "tutorial.toml",
 );
 export const DEFAULT_TUTORIAL_JSON_PATH = join("public", "tutorial-data.json");
@@ -51,11 +50,16 @@ const TUTORIAL_TRIGGER_EVENTS = new Set([
   "player-night-phase",
   "transfiguration-seen",
 ]);
-const GLOSSARY_IDS = new Set(
-  parseGlossarySource(
-    readFileSync(join(ROOT, "data", "tabula", "glossary.toml"), "utf8"),
-  ).map((entry) => entry.id),
-);
+let glossaryIds;
+
+function readGlossaryIds() {
+  glossaryIds ??= new Set(
+    parseGlossarySource(
+      readFileSync(join(ROOT, "data", "glossary.toml"), "utf8"),
+    ).map((entry) => entry.id),
+  );
+  return glossaryIds;
+}
 
 function validateCardDrawList(value, field) {
   if (
@@ -1001,7 +1005,7 @@ export function validateTutorialTriggers(value) {
     }
     let normalizedMatch;
     if (match.kind === "glossary") {
-      if (typeof match.id !== "string" || !GLOSSARY_IDS.has(match.id)) {
+      if (typeof match.id !== "string" || !readGlossaryIds().has(match.id)) {
         throw invalid(
           `Tutorial trigger ${JSON.stringify(id)} must reference an existing glossary id.`,
         );

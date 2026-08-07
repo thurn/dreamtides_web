@@ -16,7 +16,7 @@ import { parse as parseToml } from "smol-toml";
 import { STARTER_CARD_NUMBERS } from "./starter-cards";
 
 const ROOT = process.cwd();
-const TABULA = join(ROOT, "data", "tabula");
+const DATA_DIR = join(ROOT, "data");
 
 const CARD_ID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
@@ -33,7 +33,7 @@ interface RawDreamAvatar {
 }
 
 const cards = (
-  parseToml(readFileSync(join(TABULA, "cards.toml"), "utf8")) as {
+  parseToml(readFileSync(join(DATA_DIR, "cards.toml"), "utf8")) as {
     cards?: RawCard[];
   }
 ).cards ?? [];
@@ -52,7 +52,7 @@ describe("card references resolve to real cards", () => {
   it("every signature card is a real card UUID", () => {
     const dreamAvatars = (
       parseToml(
-        readFileSync(join(TABULA, "dream_avatars.toml"), "utf8"),
+        readFileSync(join(DATA_DIR, "dream_avatars.toml"), "utf8"),
       ) as { dreamAvatar?: RawDreamAvatar[] }
     ).dreamAvatar ?? [];
     let checked = 0;
@@ -67,7 +67,7 @@ describe("card references resolve to real cards", () => {
 
   it("the tutorial tag identifies exactly the UUID-authored tutorial pool", () => {
     const tutorialPool = parseToml(
-      readFileSync(join(TABULA, "tutorial_journey_pool.toml"), "utf8"),
+      readFileSync(join(DATA_DIR, "tutorial_journey_pool.toml"), "utf8"),
     ) as {
       tides?: Array<{ cards?: Array<{ id: string }> }>;
     };
@@ -92,7 +92,7 @@ describe("card references resolve to real cards", () => {
     expect(taggedCardIds).toEqual(poolCardIds);
 
     const tagRegistry = parseToml(
-      readFileSync(join(TABULA, "cards.tags.toml"), "utf8"),
+      readFileSync(join(DATA_DIR, "cards.tags.toml"), "utf8"),
     ) as { tags?: Array<{ name?: string }> };
     expect(tagRegistry.tags?.some((tag) => tag.name === "tutorial")).toBe(true);
   });

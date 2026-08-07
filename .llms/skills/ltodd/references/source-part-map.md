@@ -72,7 +72,7 @@ that accident into the book map.
   those decisions to their gameplay parts. The co-op transport, room event log,
   synchronization architecture, and Firebase implementation remain outside the
   canonical single-player book.
-- Authored TOML under `data/tabula/` accompanies the book. Explain each stable
+- Authored RON under `data/` accompanies the book. Explain each stable
   catalog interface and its consumption without copying its entries into prose.
 - Editor, debug, QA, test, generated-documentation, and build-tool sources are
   research aids or implementation infrastructure rather than book subjects.

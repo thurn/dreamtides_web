@@ -177,7 +177,7 @@ fn validate_relative_data_path(path: &str, extension: &str) -> Result<()> {
     {
         bail!("invalid manifest data path: {}", path.display());
     }
-    if path.parent() != Some(Path::new("data")) && path.parent() != Some(Path::new("data/tabula")) {
+    if path.parent() != Some(Path::new("data")) {
         bail!(
             "manifest target is outside approved data roots: {}",
             path.display()

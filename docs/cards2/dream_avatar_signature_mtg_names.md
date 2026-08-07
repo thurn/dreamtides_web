@@ -2,10 +2,10 @@
 
 The MTG card (`mtg-name`) that each Dream Avatar signature card was reskinned
 from. Signatures come from the `signature-cards` field in
-`data/tabula/dream_avatars.toml`; the `mtg-name` for each
-Dreamtides card name is read from `data/tabula/cards.toml`. Each
+`data/dream_avatars.toml`; the `mtg-name` for each
+Dreamtides card name is read from `data/cards.toml`. Each
 Dream Avatar heading also shows its own title and ability from
-`data/tabula/dream_avatars.toml`.
+`data/dream_avatars.toml`.
 
 ## Blink / Celestial Reverie Combo
 

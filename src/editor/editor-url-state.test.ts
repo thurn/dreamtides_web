@@ -277,7 +277,7 @@ describe("editor URL display state", () => {
   });
 
   it("preserves the canonical source selection across display-state URL updates", () => {
-    window.history.pushState(null, "", "/editor?toml=data/tabula/cards.toml");
+    window.history.pushState(null, "", "/editor?toml=data/cards.toml");
     const replaceState = vi.spyOn(window.history, "replaceState");
 
     replaceEditorDisplayStateInUrl({
@@ -288,7 +288,7 @@ describe("editor URL display state", () => {
     expect(replaceState).toHaveBeenCalledWith(
       null,
       "",
-      "/editor?q=spark&source=data%2Ftabula%2Fcards.toml",
+      "/editor?q=spark&source=data%2Fcards.toml",
     );
     replaceState.mockRestore();
   });

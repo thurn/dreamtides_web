@@ -6,7 +6,7 @@ import { patchTomlRecord, validateArtCrop } from "./card-editor-data.mjs";
 import { transformDreamwell } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-export const DEFAULT_DREAMWELL_TOML_PATH = join("data", "tabula", "dreamwell.toml");
+export const DEFAULT_DREAMWELL_TOML_PATH = join("data", "dreamwell.toml");
 const DREAMWELL_JSON_PATH = join("public", "dreamwell-data.json");
 
 /**

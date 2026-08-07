@@ -5,7 +5,7 @@ archetype, this lists every Dreamtides card connected to it. The lists are
 derived from the Powered Synergy Cube catalogue in
 [../calebgannon/archetype_cards.md](../calebgannon/archetype_cards.md): each
 Synergy Cube card tied to an archetype is mapped to its Dreamtides
-counterpart through the `mtg-name` bridge in `data/tabula/cards.toml`. Where
+counterpart through the `mtg-name` bridge in `data/cards.toml`. Where
 one Synergy Cube card became several Dreamtides cards, every variant is listed;
 a card appears under multiple archetypes wherever the source connects it to more
 than one. Archetypes follow the order in `dreamtides_archetypes.md`.

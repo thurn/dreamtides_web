@@ -4,7 +4,7 @@
 - **Status:** Proposed (awaiting review)
 - **Owner:** Derek Thurn
 - **Authoritative rules:** `docs/battle_rules/battle_rules.md`
-- **Card data:** `data/tabula/cards.toml` (519 cards), `data/tabula/dream_avatars.toml`
+- **Card data:** `data/cards.toml` (519 cards), `data/dream_avatars.toml`
 
 ## 1. Context & Problem
 
@@ -401,5 +401,5 @@ today, but the trigger slot must still exist.
 - Live resolver: `src/battle/automation/basic-automation.ts:238` (`resolveChallenge`).
 - Vestigial resolver to delete: `src/battle/engine/judgment.ts`.
 - Support adjacency (dead for scoring): `src/battle/engine/support.ts`.
-- Starter cards (AI deck): `data/tabula/cards.toml:9264–9433` (numbers 510–519).
+- Starter cards (AI deck): `data/cards.toml:9264–9433` (numbers 510–519).
 - Tests asserting automation-off: `src/battle/components/PlayableBattleScreen.test.tsx:339–359, 361–388`.

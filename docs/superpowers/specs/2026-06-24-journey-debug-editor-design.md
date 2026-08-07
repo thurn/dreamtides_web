@@ -30,7 +30,7 @@ At minimum it must support:
   `{ entryId, cardNumber, transfiguration, typeChange?, keywordModification?, isBane }`.
   The `isBane` marker is derived from Nightmare's canonical UUID.
   Base stats (energy cost, spark, subtype) come from `CardData`
-  (`src/types/cards.ts`, sourced from `data/tabula/cards.toml`); per-entry
+  (`src/types/cards.ts`, sourced from `data/cards.toml`); per-entry
   overrides today are transfiguration, typeChange (cardType + subtype), and
   keywordModification (fast / reclaim).
 - **Persistence:** journey state lives in a Firebase RTDB room. All writes go

@@ -49,8 +49,8 @@ const DEFAULT_ATLAS_ASSET_SOURCE_DIRS = {
   bossFigureDir: DREAM_GUIDE_ART_DIR,
 };
 
-function parsedArray(tabulaDir, filename, key) {
-  const value = parse(readFileSync(join(tabulaDir, filename), "utf8"))[key];
+function parsedArray(dataDir, filename, key) {
+  const value = parse(readFileSync(join(dataDir, filename), "utf8"))[key];
   if (!Array.isArray(value)) {
     throw new Error(`Expected [[${key}]] array in ${filename}`);
   }
@@ -58,27 +58,27 @@ function parsedArray(tabulaDir, filename, key) {
 }
 
 function compileAtlasAtRoot(rootDir, atlasAssetSourceDirs) {
-  const tabulaDir = join(rootDir, "data", "tabula");
+  const dataDir = join(rootDir, "data");
   const atlasSource = parse(
-    readFileSync(join(tabulaDir, "atlas.toml"), "utf8"),
+    readFileSync(join(dataDir, "atlas.toml"), "utf8"),
   );
   const assetSources = collectAtlasAssetSources(atlasAssetSourceDirs);
   return compileAtlasData(atlasSource, {
     dreamscapes: compileGuideSiteCatalogsAtRoot(rootDir).dreamscapes,
-    affiliations: parsedArray(tabulaDir, "affiliations.toml", "affiliations"),
+    affiliations: parsedArray(dataDir, "affiliations.toml", "affiliations"),
     ...(assetSources === undefined ? {} : { assetSources }),
   });
 }
 
 function compileGuideSiteCatalogsAtRoot(rootDir) {
-  const tabulaDir = join(rootDir, "data", "tabula");
+  const dataDir = join(rootDir, "data");
   const rawDreamscapes = parsedArray(
-    tabulaDir,
+    dataDir,
     "dreamscapes.toml",
     "dreamscapes",
   );
   const guides = compileDreamGuidesData(
-    parse(readFileSync(join(tabulaDir, "dream_guides.toml"), "utf8")),
+    parse(readFileSync(join(dataDir, "dream_guides.toml"), "utf8")),
     {
       dreamscapes: rawDreamscapes,
       portraitSources: collectGuidePortraitSources(DREAM_GUIDE_ART_DIR),
@@ -86,15 +86,15 @@ function compileGuideSiteCatalogsAtRoot(rootDir) {
   );
   const dreamscapes = deriveDreamscapesData(rawDreamscapes, guides);
   const economy = compileEconomyData(
-    parse(readFileSync(join(tabulaDir, "economy.toml"), "utf8")),
+    parse(readFileSync(join(dataDir, "economy.toml"), "utf8")),
   );
   const sites = compileSitesData(
-    parse(readFileSync(join(tabulaDir, "sites.toml"), "utf8")),
+    parse(readFileSync(join(dataDir, "sites.toml"), "utf8")),
     {
       guides,
       dreamscapes,
       economy,
-      glossaryIds: parsedArray(tabulaDir, "glossary.toml", "entries").map(
+      glossaryIds: parsedArray(dataDir, "glossary.toml", "entries").map(
         (entry) => entry.id,
       ),
     },
@@ -282,7 +282,7 @@ export function regenerateConfigData(
     throw new Error(`No simple config registered for ${tomlBasename}`);
   }
 
-  const tomlPath = join(rootDir, "data", "tabula", config.tomlFile);
+  const tomlPath = join(rootDir, "data", config.tomlFile);
   const jsonPath = join(rootDir, "public", config.jsonFile);
   const parsed = parse(readFileSync(tomlPath, "utf8"));
 

@@ -10,7 +10,7 @@ import { NIGHTMARE_CARD_ID } from "../src/data/nightmare-identity.ts";
 import { transformCard } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-export const DEFAULT_CARD_TOML_PATH = join("data", "tabula", "cards.toml");
+export const DEFAULT_CARD_TOML_PATH = join("data", "cards.toml");
 const CARD_JSON_PATH = join("public", "card-data.json");
 
 export const EDITABLE_CARD_FIELDS = new Set([
@@ -104,8 +104,8 @@ export function defaultTagColor(name) {
 }
 
 // A facet registry lives in a sidecar TOML next to the card file it annotates:
-// `data/tabula/cards.toml` -> `data/tabula/cards.tags.toml` (tags) or
-// `data/tabula/cards.tides.toml` (tides).
+// `data/cards.toml` -> `data/cards.tags.toml` (tags) or
+// `data/cards.tides.toml` (tides).
 function facetRegistryPathFor(cardTomlPath, facet) {
   return cardTomlPath.replace(/\.toml$/iu, facet.registrySuffix);
 }

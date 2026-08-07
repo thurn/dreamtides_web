@@ -28,7 +28,7 @@ to implement it. The battle rules remain authoritative for game semantics.
 
 - [Dreamtides Battle Rules](../battle_rules/battle_rules.md) defines the fixed
   field, materialization, combination, Gain Control, and figment rules.
-- [Figment Catalog](../../data/tabula/figments.ron) authors stable figment
+- [Figment Catalog](../../data/figments.ron) authors stable figment
   identities, base spark, rules text, keywords, and presentation data.
 - [Journey Prototype](journey_prototype.md) explains the folded room-event
   architecture and current battle model.

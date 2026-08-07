@@ -48,9 +48,9 @@ Read logs for all production game design debugging.
 
 # Cards
 
-Card data lives in data/tabula/cards.ron
+Card data lives in data/cards.ron
 
-Dream Avatars live in data/tabula/dream_avatars.ron
+Dream Avatars live in data/dream_avatars.ron
 
 Please always identify cards by UUID, *never* by card name.
 

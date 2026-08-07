@@ -12,7 +12,7 @@ import { GameCard } from "../../components/card/CardView";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 
-// Curated real card UUIDs from data/tabula/cards.toml (shared with the demo).
+// Curated real card UUIDs from data/cards.toml (shared with the demo).
 // Split into a small "board" set (played characters) and a "hand" set so the
 // scene reads as an in-progress battle. Keyed and resolved by UUID only.
 const BOARD_CARD_IDS = [

@@ -87,13 +87,13 @@ ${specialDialogue}`;
 
 function writeFixture() {
   const rootDir = mkdtempSync(join(tmpdir(), "dreamscape-editor-data-test-"));
-  mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
+  mkdirSync(join(rootDir, "data"), { recursive: true });
   writeFileSync(
-    join(rootDir, "data", "tabula", "dreamscapes.toml"),
+    join(rootDir, "data", "dreamscapes.toml"),
     fixtureToml(),
   );
   writeFileSync(
-    join(rootDir, "data", "tabula", "dream_guides.toml"),
+    join(rootDir, "data", "dream_guides.toml"),
     fixtureGuidesToml(),
   );
   return rootDir;
@@ -253,9 +253,9 @@ describe("refreshDreamscapesDataJson", () => {
 describe("catalog readers", () => {
   it("read guide and affiliation options when the catalogs exist", () => {
     const rootDir = writeFixture();
-    mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
+    mkdirSync(join(rootDir, "data"), { recursive: true });
     writeFileSync(
-      join(rootDir, "data", "tabula", "affiliations.toml"),
+      join(rootDir, "data", "affiliations.toml"),
       `[[affiliations]]\nid = "affil_one"\nname = "Affiliation One"\n`,
     );
 

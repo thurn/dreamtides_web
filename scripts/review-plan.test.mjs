@@ -43,15 +43,15 @@ describe("fast review plan", () => {
   });
 
   it("adds asset validation for production data without forcing typecheck", () => {
-    expect(buildReviewPlan(["data/tabula/cards.toml"])).toMatchObject({
+    expect(buildReviewPlan(["data/cards.toml"])).toMatchObject({
       shouldTypecheck: false,
       shouldValidate: true,
-      testInputs: ["data/tabula/cards.toml"],
+      testInputs: ["data/cards.toml"],
     });
   });
 
   it("selects Rust compiler tests for canonical RON and orchestration changes", () => {
-    expect(buildReviewPlan(["data/tabula/cards.ron"])).toMatchObject({
+    expect(buildReviewPlan(["data/cards.ron"])).toMatchObject({
       shouldTestGameData: true,
       shouldValidate: true,
     });
@@ -61,11 +61,11 @@ describe("fast review plan", () => {
   });
 
   it("selects localization contract checks for Fluent source changes", () => {
-    expect(buildReviewPlan(["data/tabula/strings.ftl"])).toMatchObject({
+    expect(buildReviewPlan(["data/strings.ftl"])).toMatchObject({
       shouldTypecheck: false,
       shouldValidate: true,
       testInputs: [
-        "data/tabula/strings.ftl",
+        "data/strings.ftl",
         "scripts/generate-localization-types.test.mjs",
       ],
     });
@@ -81,7 +81,7 @@ describe("fast review plan", () => {
 
   it("selects the RON formatting gate for RON sources and formatter config", () => {
     expect(
-      buildReviewPlan([".ronfmt.json", "data/tabula/cards.ron"]),
+      buildReviewPlan([".ronfmt.json", "data/cards.ron"]),
     ).toMatchObject({
       shouldCheckRonFormatting: true,
     });

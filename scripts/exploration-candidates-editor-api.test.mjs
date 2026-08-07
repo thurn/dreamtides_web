@@ -56,7 +56,7 @@ describe("Exploration candidates editor API", () => {
 
   beforeEach(() => {
     rootDir = mkdtempSync(join(tmpdir(), "exploration-candidates-editor-api-"));
-    mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
+    mkdirSync(join(rootDir, "data"), { recursive: true });
     mkdirSync(join(rootDir, "curated-art"), { recursive: true });
     mkdirSync(join(rootDir, "source-art"), { recursive: true });
     writeFileSync(
@@ -71,7 +71,7 @@ describe("Exploration candidates editor API", () => {
       ], null, 2)}\n`,
     );
     writeFileSync(
-      join(rootDir, "data", "tabula", "cards.toml"),
+      join(rootDir, "data", "cards.toml"),
       `[[cards]]\nid = "${CARD_ID}"\nname = "The Test Crossing"\nrendered-text = "Gain 1●."\nimage-number = 42\n`,
     );
     middleware = createExplorationCandidatesEditorApiMiddleware({

@@ -3,7 +3,7 @@ import type { ArtCrop } from "../types/cards";
 /**
  * The shared Dreamwell cards drawn one per turn during the Dreamwell phase
  * (docs/battle_rules/battle_rules.md). The catalog is generated from
- * `data/tabula/dreamwell.toml` by `scripts/setup-assets.mjs` and served at
+ * `data/dreamwell.toml` by `scripts/setup-assets.mjs` and served at
  * `/dreamwell-data.json`.
  */
 export interface DreamwellCard {

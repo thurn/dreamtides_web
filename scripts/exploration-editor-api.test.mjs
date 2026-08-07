@@ -34,12 +34,12 @@ describe("exploration editor API", () => {
 
   beforeEach(() => {
     rootDir = fs.mkdtempSync(join(tmpdir(), "exploration-editor-api-"));
-    fs.mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
+    fs.mkdirSync(join(rootDir, "data"), { recursive: true });
     fs.mkdirSync(join(rootDir, "public"), { recursive: true });
     for (const relative of [
-      "data/tabula/exploration.toml",
-      "data/tabula/cards.toml",
-      "data/tabula/dreamsigns.toml",
+      "data/exploration.toml",
+      "data/cards.toml",
+      "data/dreamsigns.toml",
       "data/templates.json",
       "public/exploration-data.json",
     ]) fs.copyFileSync(relative, join(rootDir, relative));

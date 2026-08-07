@@ -119,13 +119,13 @@ export interface CreateBattleInitInput {
    */
   dreamscapes?: readonly DreamscapeContent[];
   /**
-   * Thematic affiliations backing dreamscapes (`data/tabula/affiliations.toml`).
+   * Thematic affiliations backing dreamscapes (`data/affiliations.toml`).
    * Resolved together with {@link dreamscapes} to bias the opponent deck toward
    * the battle's affiliation. Optional, mirroring {@link dreamscapes}.
    */
   affiliations?: readonly AffiliationContent[];
   /**
-   * The shared Dreamwell card catalog (`data/tabula/dreamwell.toml`). Built into
+   * The shared Dreamwell card catalog (`data/dreamwell.toml`). Built into
    * the per-battle Dreamwell deck both players draw from. Optional so
    * battle-engine tests can omit it; an empty list yields an empty Dreamwell
    * deck (energy then stays at its starting value).

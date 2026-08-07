@@ -18,7 +18,7 @@ import {
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 
-// Curated real card UUIDs from data/tabula/cards.toml (a mix of Character
+// Curated real card UUIDs from data/cards.toml (a mix of Character
 // and Event so the filter has something to actually filter). Resolved and
 // keyed by UUID only, never by name.
 const CARD_IDS = [

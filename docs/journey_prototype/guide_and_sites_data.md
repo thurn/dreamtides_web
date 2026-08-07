@@ -1,6 +1,6 @@
 # Dream Guide and Site Data
 
-`data/tabula/dream_guides.ron` and `data/tabula/sites.ron` are the canonical
+`data/dream_guides.ron` and `data/sites.ron` are the canonical
 cross-site authoring catalogs. Full asset setup validates and compiles them to
 `public/dream-guides-data.json` and `public/sites-data.json`; the browser loads
 both documents before constructing `JourneyContent`.

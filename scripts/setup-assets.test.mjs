@@ -47,11 +47,11 @@ describe("generateOpponentsData", () => {
     const opponentsJsonPath = join(tempRoot, "opponents-data.json");
     const opponentsTomlPath = join(
       import.meta.dirname,
-      "../data/tabula/opponents.toml",
+      "../data/opponents.toml",
     );
     const cardIds = parse(
       readFileSync(
-        join(import.meta.dirname, "../data/tabula/cards.toml"),
+        join(import.meta.dirname, "../data/cards.toml"),
         "utf8",
       ),
     ).cards.map((card) => card.id);
@@ -74,7 +74,7 @@ describe("transformExplorationData", () => {
   it("compiles a non-empty UUID-keyed catalog with two actions per encounter", () => {
     const source = parse(
       readFileSync(
-        join(import.meta.dirname, "../data/tabula/exploration.toml"),
+        join(import.meta.dirname, "../data/exploration.toml"),
         "utf8",
       ),
     );

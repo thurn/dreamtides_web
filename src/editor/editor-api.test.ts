@@ -109,15 +109,15 @@ describe("editor-api", () => {
   it("reads the canonical source selection from the URL", () => {
     expect(editorTomlParam()).toBeNull();
 
-    window.history.replaceState({}, "", "/editor?toml=data/tabula/cards.toml");
-    expect(editorTomlParam()).toBe("data/tabula/cards.toml");
+    window.history.replaceState({}, "", "/editor?toml=data/cards.toml");
+    expect(editorTomlParam()).toBe("data/cards.toml");
 
     window.history.replaceState({}, "", "/editor?toml=");
     expect(editorTomlParam()).toBeNull();
   });
 
   it("forwards the canonical source selection on the card load request", async () => {
-    window.history.replaceState({}, "", "/editor?toml=data/tabula/cards.toml");
+    window.history.replaceState({}, "", "/editor?toml=data/cards.toml");
     const fetchMock = vi.fn(
       () =>
         Promise.resolve(
@@ -129,7 +129,7 @@ describe("editor-api", () => {
     await loadEditorCards();
 
     expect(fetchMock).toHaveBeenCalledWith(
-      "/api/editor/cards?source=data%2Ftabula%2Fcards.toml",
+      "/api/editor/cards?source=data%2Fcards.toml",
       expect.anything(),
     );
   });

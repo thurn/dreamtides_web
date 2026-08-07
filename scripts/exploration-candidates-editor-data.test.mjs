@@ -59,7 +59,7 @@ function documentFixture() {
 
 function writeFixtureRoot() {
   const rootDir = mkdtempSync(join(tmpdir(), "journey-exploration-candidates-editor-data-"));
-  mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
+  mkdirSync(join(rootDir, "data"), { recursive: true });
   writeFileSync(
     join(rootDir, "data", "exploration_candidates.json"),
     `${JSON.stringify(documentFixture(), null, 2)}\n`,
@@ -74,7 +74,7 @@ function writeFixtureRoot() {
     ], null, 2)}\n`,
   );
   writeFileSync(
-    join(rootDir, "data", "tabula", "cards.toml"),
+    join(rootDir, "data", "cards.toml"),
     `[[cards]]\nid = "${CARD_ID}"\nname = "Fixture Guide"\nrendered-text = "Gain 1●."\nimage-number = 42\n\n[[cards]]\nid = "${UNRELATED_CARD_ID}"\nname = "Blank Rules Card"\nrendered-text = ""\nimage-number = 43\n`,
   );
   return rootDir;
@@ -82,7 +82,7 @@ function writeFixtureRoot() {
 
 function writeRuntimeSelectionFixtureRoot() {
   const rootDir = mkdtempSync(join(tmpdir(), "journey-encounter-runtime-cards-"));
-  mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
+  mkdirSync(join(rootDir, "data"), { recursive: true });
   writeFileSync(
     join(rootDir, "data", "exploration_candidates.json"),
     `${JSON.stringify({
@@ -128,7 +128,7 @@ function writeRuntimeSelectionFixtureRoot() {
     ].join("\n");
   });
   writeFileSync(
-    join(rootDir, "data", "tabula", "cards.toml"),
+    join(rootDir, "data", "cards.toml"),
     [
       `[[cards]]\nid = "${SPIRIT_CARD_ID}"\nname = "Fallback Spirit"\ncard-type = "Character"\nsubtype = "Spirit Animal"\nenergy-cost = 4`,
       `[[cards]]\nid = "${CARD_ID}"\nname = "Fixture Guide"\nrendered-text = "Gain 1●."\nimage-number = 42\ncard-type = "Event"\nsubtype = ""\nenergy-cost = 3`,
@@ -286,7 +286,7 @@ describe("Exploration candidates editor data", () => {
 
   it("preserves UUID-backed card and dreamsign variables as rendered entity parts", () => {
     const rootDir = mkdtempSync(join(tmpdir(), "journey-encounter-entity-references-"));
-    mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
+    mkdirSync(join(rootDir, "data"), { recursive: true });
     writeFileSync(
       join(rootDir, "data", "exploration_candidates.json"),
       `${JSON.stringify({
@@ -322,7 +322,7 @@ describe("Exploration candidates editor data", () => {
       ], null, 2)}\n`,
     );
     writeFileSync(
-      join(rootDir, "data", "tabula", "cards.toml"),
+      join(rootDir, "data", "cards.toml"),
       `[[cards]]\nid = "${CARD_ID}"\nname = "Fixture Guide"\nrendered-text = "Gain 1●."\nimage-number = 42\n\n[[cards]]\nid = "${UNRELATED_CARD_ID}"\nname = "Fixture Ally"\nrendered-text = "Gain 2●."\nimage-number = 43\n`,
     );
 

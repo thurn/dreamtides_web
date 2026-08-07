@@ -26,8 +26,8 @@ DEFAULT_CANDIDATES = REPO_ROOT / "data/exploration_candidates.json"
 DEFAULT_VALIDATOR = DESIGNER_SCRIPTS / "validate-exploration.py"
 DEFAULT_ART_FINDER = DESIGNER_SCRIPTS / "find-card-art.py"
 DEFAULT_TEMPLATES = REPO_ROOT / "data/templates.json"
-DEFAULT_CARDS = REPO_ROOT / "data/tabula/cards.toml"
-DEFAULT_DREAMSIGNS = REPO_ROOT / "data/tabula/dreamsigns.toml"
+DEFAULT_CARDS = REPO_ROOT / "data/cards.toml"
+DEFAULT_DREAMSIGNS = REPO_ROOT / "data/dreamsigns.toml"
 DEFAULT_TRANSFIGURATIONS = REPO_ROOT / "src/types/journey.ts"
 
 

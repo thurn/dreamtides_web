@@ -16,7 +16,7 @@ import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 
 // The featured card and a few reference cards, all real UUIDs from
-// data/tabula/cards.toml. The featured card carries multi-ability rules text
+// data/cards.toml. The featured card carries multi-ability rules text
 // with keyword highlighting; the reference set spans other keyword treatments.
 const FEATURED_CARD_ID = "1268a899-b209-46bb-bce4-6def1dcd0404";
 const REFERENCE_CARD_IDS = [

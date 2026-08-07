@@ -12,11 +12,10 @@ import { compileEconomyData } from "./economy-data.mjs";
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 export const DEFAULT_DREAM_AVATAR_TOML_PATH = join(
   "data",
-  "tabula",
   "dream_avatars.toml",
 );
 export const TIDES4_SOURCE_PATH = join("data", "tides4.jsonc");
-export const DEFAULT_ECONOMY_TOML_PATH = join("data", "tabula", "economy.toml");
+export const DEFAULT_ECONOMY_TOML_PATH = join("data", "economy.toml");
 const DREAM_AVATAR_JSON_PATH = join("public", "dream-avatars-v2-data.json");
 const TIDES4_JSON_PATH = join("public", "tides4-data.json");
 

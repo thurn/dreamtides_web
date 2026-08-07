@@ -1,9 +1,9 @@
 # Localization Vocabulary
 
-The English Fluent source is `data/tabula/strings.ftl`. Its first section is
+The English Fluent source is `data/strings.ftl`. Its first section is
 the shared vocabulary for concepts that recur across Journey, Dreamscape,
 Dreamsign, deck, site, and battle screens. The set follows the canonical terms
-used by `data/tabula/glossary.toml` and the player-facing Cumulus surfaces.
+used by `data/glossary.toml` and the player-facing Cumulus surfaces.
 
 Fluent terms begin with `-` and are private to the localization resource. React
 code requests complete message IDs through `useMessages()`; messages reference

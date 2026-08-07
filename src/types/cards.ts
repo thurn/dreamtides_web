@@ -11,7 +11,7 @@ export const CARD_RARITIES = ["Legendary", "Starter", "Special"] as const;
  * exist are `Legendary` (powerful cards that get the gold frame in
  * `GameCard`), `Starter` (cards that seed the fixed starter deck), and
  * `Special` (including Nightmare, the sole Bane card, which journey effects
- * add by canonical UUID). Sourced from `data/tabula/cards.toml`
+ * add by canonical UUID). Sourced from `data/cards.toml`
  * and surfaced through the setup-assets transform.
  */
 export type Rarity = (typeof CARD_RARITIES)[number];

@@ -25,7 +25,7 @@ export interface AtlasFillProfile {
   siteWeights: Partial<Record<SiteType, number>>;
 }
 
-/** Validated browser data compiled from data/tabula/atlas.toml. */
+/** Validated browser data compiled from data/atlas.toml. */
 export interface AtlasData {
   schemaVersion: 1;
   contentHash: string;

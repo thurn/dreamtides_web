@@ -25,8 +25,8 @@ function writeFixtureRoot() {
       ...(index === 1 ? { balance_class: "unique_effect" } : {}),
     })),
   ));
-  mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
-  writeFileSync(join(rootDir, "data", "tabula", "exploration.toml"), [
+  mkdirSync(join(rootDir, "data"), { recursive: true });
+  writeFileSync(join(rootDir, "data", "exploration.toml"), [
     "# selected actions: pair-1 (rank 1)",
     "[[encounter]]",
     'card-id = "11111111-1111-4111-8111-111111111111"',
