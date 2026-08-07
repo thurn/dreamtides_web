@@ -68,7 +68,7 @@ const partRules = [
   {
     directory: "cumulus",
     patterns: [
-      /^src\/cumulus\/components\/(?:controls|overlay|status|typography)\//,
+      /^src\/cumulus\/components\/(?:card|controls|overlay|status|typography)\//,
       /^src\/cumulus\/components\/hud\/(?:CoopPresenceStatus|EssenceValue|JourneyStatusBar|Motes|TideDisc|TidesInfoLabel)\.tsx$/,
       /^src\/cumulus\/primitives\/Pressable\.tsx$/,
     ],
@@ -176,7 +176,6 @@ const partRules = [
   {
     directory: "game_foundations",
     patterns: [
-      /^src\/cumulus\/components\/card\//,
       /^src\/data\//,
       /^src\/rules\//,
       /^src\/types\//,
