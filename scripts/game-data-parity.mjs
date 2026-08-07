@@ -4,13 +4,13 @@ import { parse } from "smol-toml";
 import { ensureGameData, listGameData } from "./game-data-pipeline.mjs";
 
 const rootDir = process.cwd();
-const base = process.env.GAME_DATA_PARITY_BASE ?? execFileSync(
-  "git", ["merge-base", "HEAD", "master"], { cwd: rootDir, encoding: "utf8" },
-).trim();
+const configuredBase = process.env.GAME_DATA_PARITY_BASE?.trim();
+const base = configuredBase === "" || configuredBase === undefined ? null : configuredBase;
 await ensureGameData({ rootDir });
 const manifest = listGameData({ rootDir });
 
 function oracle(path) {
+  if (base === null) return readFileSync(path, "utf8");
   return execFileSync("git", ["show", `${base}:${path}`], {
     cwd: rootDir,
     encoding: "utf8",
@@ -42,23 +42,27 @@ function equal(left, right) {
 }
 
 const datasets = manifest.datasets.map((dataset) => {
-  const before = normalizeCorrections(dataset.id, parse(oracle(dataset.output)));
   const after = parse(readFileSync(dataset.output, "utf8"));
-  if (!equal(before, after)) throw new Error(`semantic parity failed for ${dataset.id}`);
+  if (base !== null) {
+    const before = normalizeCorrections(dataset.id, parse(oracle(dataset.output)));
+    if (!equal(before, after)) throw new Error(`semantic parity failed for ${dataset.id}`);
+  }
   return { id: dataset.id, records: Array.isArray(Object.values(after)[0]) ? Object.values(after)[0].length : null };
 });
 
-execFileSync("git", ["diff", "--exit-code", base, "--", "public", "src/generated/config"], {
+const artifactBase = base ?? "HEAD";
+execFileSync("git", ["diff", "--exit-code", artifactBase, "--", "public", "src/generated/config"], {
   cwd: rootDir,
   stdio: "inherit",
 });
 console.log(JSON.stringify({
   ok: true,
-  base,
+  mode: base === null ? "current" : "historical",
+  base: artifactBase,
   datasets,
-  corrections: [
+  corrections: base === null ? [] : [
     { cardId: "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", field: "energy-cost", from: "2", to: 2 },
     { cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e", field: "spark", from: "2", to: 2 },
   ],
-  derivedArtifacts: "byte-identical",
+  derivedArtifacts: `byte-identical to ${artifactBase}`,
 }, null, 2));

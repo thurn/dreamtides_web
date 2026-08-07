@@ -3,9 +3,14 @@
 The RON migration covers every dataset declared in
 `data/game-data-manifest.ron`. `npm run game-data:parity` compiles current RON,
 parses each generated compatibility document through the production TOML
-parser, compares it with the tracked pre-migration document at the master merge
-base, preserves array order, and checks tracked runtime JSON artifacts byte for
-byte.
+parser, and checks tracked runtime JSON artifacts byte for byte against `HEAD`.
+This default current-data mode remains useful as canonical catalogs evolve.
+
+Set `GAME_DATA_PARITY_BASE` to a Git revision when producing a migration report
+on a branch whose manifest output paths are tracked at that revision. Historical
+mode additionally compares each parsed compatibility document with that
+revision while preserving array order, then checks the runtime JSON artifacts
+against the same revision.
 
 The parity command validates all 26 catalogs: affiliations, Apollyon
 incarnations, Atlas, Augury, Cards, card tags, card tides, Draft, Dream Avatars,
