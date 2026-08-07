@@ -98,6 +98,12 @@ export interface ContentConfig {
   draftFoldHash?: string;
   /** Economy coefficients and genesis defaults pinned independently of URL settings. */
   economyFoldHash?: string;
+  /** Shared reward-selection scoring and eligibility tuning. */
+  rewardSelectionFoldHash?: string;
+  /** Augury archetype, dialogue, reaction, and offer-copy configuration. */
+  auguryFoldHash?: string;
+  /** Exploration effect definitions, defaults, copy, and encounter catalog. */
+  explorationFoldHash?: string;
   opponentsFoldHash?: string;
   defaultStartingEssence?: number;
   dreamsignCap?: number;
@@ -107,6 +113,9 @@ export interface PinnedContentConfig extends ContentConfig {
   atlasFoldHash: string;
   draftFoldHash: string;
   economyFoldHash: string;
+  rewardSelectionFoldHash: string;
+  auguryFoldHash: string;
+  explorationFoldHash: string;
   opponentsFoldHash: string;
   defaultStartingEssence: number;
   dreamsignCap: number;

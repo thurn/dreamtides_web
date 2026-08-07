@@ -31,6 +31,9 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
     atlasFoldHash,
     draftFoldHash,
     economyFoldHash,
+    rewardSelectionFoldHash,
+    auguryFoldHash,
+    explorationFoldHash,
     opponentsFoldHash,
     defaultStartingEssence,
     dreamsignCap,
@@ -45,6 +48,9 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
     !(atlasFoldHash === undefined || typeof atlasFoldHash === "string") ||
     !(draftFoldHash === undefined || typeof draftFoldHash === "string") ||
     !(economyFoldHash === undefined || typeof economyFoldHash === "string") ||
+    !(rewardSelectionFoldHash === undefined || typeof rewardSelectionFoldHash === "string") ||
+    !(auguryFoldHash === undefined || typeof auguryFoldHash === "string") ||
+    !(explorationFoldHash === undefined || typeof explorationFoldHash === "string") ||
     !(
       opponentsFoldHash === undefined || typeof opponentsFoldHash === "string"
     ) ||
@@ -63,6 +69,9 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
     ...(atlasFoldHash === undefined ? {} : { atlasFoldHash }),
     ...(draftFoldHash === undefined ? {} : { draftFoldHash }),
     ...(economyFoldHash === undefined ? {} : { economyFoldHash }),
+    ...(rewardSelectionFoldHash === undefined ? {} : { rewardSelectionFoldHash }),
+    ...(auguryFoldHash === undefined ? {} : { auguryFoldHash }),
+    ...(explorationFoldHash === undefined ? {} : { explorationFoldHash }),
     ...(opponentsFoldHash === undefined ? {} : { opponentsFoldHash }),
     ...(defaultStartingEssence === undefined ? {} : { defaultStartingEssence }),
     ...(dreamsignCap === undefined ? {} : { dreamsignCap }),

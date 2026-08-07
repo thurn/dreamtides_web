@@ -34,6 +34,11 @@ import { buildPoolData } from "../draft/pool/pool-data";
 import { loadFigmentDatabase } from "./figment-database";
 import { loadExplorationContent, type ExplorationContent } from "./exploration";
 import {
+  loadRewardSelectionData,
+  type RewardSelectionData,
+} from "./reward-selection-data";
+import { loadAuguryData, type AuguryData } from "./augury-data";
+import {
   buildIdIndex,
   loadAffinityCorpus,
   loadCardsV2Database,
@@ -102,6 +107,10 @@ export interface JourneyContent {
   cardDatabase: Map<number, CardData>;
   /** Authored Exploration encounters and their site-specific reward content. */
   exploration?: ExplorationContent;
+  /** Shared deterministic reward tuning compiled from reward_selection.toml. */
+  rewardSelectionData: RewardSelectionData;
+  /** Augury composition, archetype weights, dialogue, and copy templates. */
+  auguryData: AuguryData;
   dreamAvatars: DreamAvatarContent[];
   /** The shared Dreamwell deck source, drawn from during battle. */
   dreamwellCards: readonly DreamwellCard[];
@@ -824,6 +833,8 @@ export async function loadJourneyContent(
   const [
     cardDatabase,
     exploration,
+    rewardSelectionData,
+    auguryData,
     draftDreamAvatars,
     dreamwellCards,
     dreamsignTemplates,
@@ -851,6 +862,8 @@ export async function loadJourneyContent(
   ] = await Promise.all([
     loadCardsV2Database(),
     loadExplorationContent(),
+    loadRewardSelectionData(),
+    loadAuguryData(),
     loadDreamAvatarsV2(),
     loadDreamwellCards(),
     loadDreamsignTemplates(),
@@ -1010,6 +1023,8 @@ export async function loadJourneyContent(
   return {
     cardDatabase,
     exploration,
+    rewardSelectionData,
+    auguryData,
     dreamAvatars,
     dreamwellCards,
     dreamsignTemplates,

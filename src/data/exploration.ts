@@ -114,13 +114,49 @@ export interface ExplorationEncounterContent {
   actions: readonly [ExplorationActionContent, ExplorationActionContent];
 }
 
+export interface ExplorationEffectFieldContent {
+  key: string;
+  label: string;
+  control: string;
+  optional?: boolean;
+  defaultValue?: unknown;
+  min?: number;
+  step?: number;
+  resource?: string;
+  templateIds?: readonly number[];
+}
+
+export interface ExplorationEffectDefinitionContent {
+  kind: ExplorationEffectKind;
+  label: string;
+  canonicalMechanicId: RewardMechanicId;
+  defaultSelectionPolicyId?: RewardSelectionPolicyId;
+  allowedSelectionPolicyIds?: readonly RewardSelectionPolicyId[];
+  copy: Readonly<{
+    followupTitle: string;
+    followupSubtitle: string;
+  }>;
+  fields: readonly ExplorationEffectFieldContent[];
+}
+
 export interface ExplorationContent {
+  /** Present on compiler output; optional only for focused synthetic fixtures. */
+  schemaVersion?: 1;
+  actionsPerEncounter?: number;
+  contentHash?: string;
+  foldHash?: string;
+  effectKinds?: readonly ExplorationEffectDefinitionContent[];
   customCards: readonly CardData[];
   customDreamsigns: readonly Dreamsign[];
   encounters: readonly ExplorationEncounterContent[];
 }
 
 interface RawExplorationData {
+  schemaVersion?: number;
+  actionsPerEncounter?: number;
+  contentHash?: string;
+  foldHash?: string;
+  effectKinds?: ExplorationEffectDefinitionContent[];
   customCards?: CardData[];
   customDreamsigns?: Dreamsign[];
   encounters?: Array<{
@@ -156,6 +192,27 @@ export async function loadExplorationContent(): Promise<ExplorationContent> {
     );
   }
   const raw = (await response.json()) as RawExplorationData;
+  if (
+    raw.schemaVersion !== 1 || raw.actionsPerEncounter !== 2 ||
+    typeof raw.contentHash !== "string" || !/^[0-9a-f]{64}$/u.test(raw.contentHash) ||
+    raw.foldHash !== raw.contentHash || !Array.isArray(raw.effectKinds) || raw.effectKinds.length === 0
+  ) {
+    throw new Error("Invalid Exploration data: malformed compiler metadata");
+  }
+  const effectKindIds = new Set<string>();
+  for (const definition of raw.effectKinds) {
+    if (
+      typeof definition.kind !== "string" ||
+      effectKindIds.has(definition.kind) || typeof definition.label !== "string" ||
+      typeof definition.canonicalMechanicId !== "string" ||
+      typeof definition.copy?.followupTitle !== "string" ||
+      typeof definition.copy?.followupSubtitle !== "string" ||
+      !Array.isArray(definition.fields)
+    ) {
+      throw new Error("Invalid Exploration data: malformed effect-kind definition");
+    }
+    effectKindIds.add(definition.kind);
+  }
   const customCards = (raw.customCards ?? []).map((card) => ({
     ...card,
     id: asCardId(card.id),
@@ -188,6 +245,9 @@ export async function loadExplorationContent(): Promise<ExplorationContent> {
     }
     encounterIds.add(encounterId);
     for (const action of encounter.actions) {
+      if (!effectKindIds.has(action.effectKind)) {
+        throw new Error(`Invalid Exploration data: unknown effect kind ${action.effectKind}`);
+      }
       if (actionIds.has(action.id)) {
         throw new Error(
           `Invalid Exploration data: duplicate action id ${action.id}`,
@@ -197,10 +257,23 @@ export async function loadExplorationContent(): Promise<ExplorationContent> {
     }
   }
   return {
+    schemaVersion: 1,
+    actionsPerEncounter: raw.actionsPerEncounter,
+    contentHash: raw.contentHash,
+    foldHash: raw.foldHash,
+    effectKinds: raw.effectKinds,
     customCards,
     customDreamsigns: raw.customDreamsigns ?? [],
     encounters,
   };
+}
+
+/** Resolve TOML-authored effect metadata by its persisted effect kind. */
+export function explorationEffectDefinition(
+  content: ExplorationContent,
+  kind: ExplorationEffectKind,
+): ExplorationEffectDefinitionContent | null {
+  return content.effectKinds?.find((entry) => entry.kind === kind) ?? null;
 }
 
 /** Resolve an encounter by its source-card UUID. */

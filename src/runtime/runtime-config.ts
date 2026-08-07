@@ -5,6 +5,8 @@ import type { ContentConfig, PinnedContentConfig } from "../eventlog/types";
 import type { EconomyData } from "../types/economy-data";
 import type { OpponentsData } from "../types/opponents-data";
 import type { DraftData } from "../types/draft-data";
+import type { RewardSelectionData } from "../types/reward-selection-data";
+import type { AuguryData } from "../types/augury-data";
 import { asCardId, isCardId, type CardId } from "../types/card-identity";
 import type { GambleGameId } from "../types/gamble";
 
@@ -101,6 +103,9 @@ export function contentConfigFromRuntime(
   draftData: DraftData,
   economyData: EconomyData,
   opponentsData: OpponentsData,
+  rewardSelectionData: RewardSelectionData,
+  auguryData: AuguryData,
+  explorationFoldHash: string,
 ): PinnedContentConfig {
   return {
     poolVariant: config.poolVariant ?? draftData.pool.defaultStrategy,
@@ -109,6 +114,9 @@ export function contentConfigFromRuntime(
     atlasFoldHash,
     draftFoldHash: draftData.foldHash,
     economyFoldHash: economyData.foldHash,
+    rewardSelectionFoldHash: rewardSelectionData.foldHash,
+    auguryFoldHash: auguryData.foldHash,
+    explorationFoldHash,
     opponentsFoldHash: opponentsData.foldHash,
     defaultStartingEssence: economyData.journey.defaultStartingEssence,
     dreamsignCap: economyData.journey.dreamsignCap,
@@ -127,6 +135,9 @@ export function contentConfigsEqual(
     a.atlasFoldHash === b.atlasFoldHash &&
     a.draftFoldHash === b.draftFoldHash &&
     a.economyFoldHash === b.economyFoldHash &&
+    a.rewardSelectionFoldHash === b.rewardSelectionFoldHash &&
+    a.auguryFoldHash === b.auguryFoldHash &&
+    a.explorationFoldHash === b.explorationFoldHash &&
     a.opponentsFoldHash === b.opponentsFoldHash &&
     a.defaultStartingEssence === b.defaultStartingEssence &&
     a.dreamsignCap === b.dreamsignCap

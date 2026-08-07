@@ -15,6 +15,7 @@ import type { RuntimeConfig } from "../runtime/runtime-config";
 import { economyFixture } from "../testing/economy-fixture";
 import { opponentsFixture } from "../testing/opponents-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
+import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 
 const REDUCER_VERSION = "dreamtides-coop-v16";
 const ATLAS_FOLD_HASH = "fixture-atlas-fold-hash";
@@ -25,6 +26,9 @@ const PINNED_ECONOMY = {
   defaultStartingEssence: ECONOMY.journey.defaultStartingEssence,
   dreamsignCap: ECONOMY.journey.dreamsignCap,
   opponentsFoldHash: opponentsFixture().foldHash,
+  rewardSelectionFoldHash: CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
+  auguryFoldHash: CONFIG_DATA_FIXTURE.auguryData.foldHash,
+  explorationFoldHash: "fixture-exploration-fold-hash",
 };
 
 // Captured subscriber so a test can hand RoomGate a chosen log node.
@@ -128,6 +132,9 @@ function mount(config: RuntimeConfig): void {
         draftData={DRAFT_DATA}
         economyData={ECONOMY}
         opponentsData={opponentsFixture()}
+        rewardSelectionData={CONFIG_DATA_FIXTURE.rewardSelectionData}
+        auguryData={CONFIG_DATA_FIXTURE.auguryData}
+        explorationFoldHash="fixture-exploration-fold-hash"
       >
         {() => <div data-room-children="true">room children</div>}
       </RoomGate>,

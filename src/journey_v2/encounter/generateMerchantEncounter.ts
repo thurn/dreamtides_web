@@ -7,7 +7,11 @@ import type {
 } from "../archetypes/types";
 import { renderMerchantDialogue } from "../dialogue/dialogue";
 import { merchantRng, weightedSample } from "../signals/rng";
-import { MERCHANT_TUNING } from "../tuning";
+import { auguryArchetype } from "../../data/augury-data";
+import {
+  auguryCountWord,
+  renderAuguryTemplate,
+} from "../../data/augury-data";
 import type {
   MerchantContext,
   MerchantEncounter,
@@ -86,8 +90,14 @@ function toStableJsonValue(value: unknown): StableJsonValue {
   return null;
 }
 
-function weightFor(builder: MerchantArchetypeBuilder): number {
-  return MERCHANT_TUNING.weights[builder.archetypeId];
+function weightFor(
+  context: MerchantContext,
+  builder: MerchantArchetypeBuilder,
+): number {
+  return auguryArchetype(
+    context.rewardSelection.content.auguryData,
+    builder.archetypeId,
+  ).weight;
 }
 
 /**
@@ -109,7 +119,11 @@ function rollSlot(
   const attempts: MerchantRollAttempt[] = [];
   while (pool.length > 0) {
     const rng = merchantRng(...saltParts, "archetype", String(attempt));
-    const builder = weightedSample(pool, weightFor, rng);
+    const builder = weightedSample(
+      pool,
+      (candidate) => weightFor(context, candidate),
+      rng,
+    );
     if (builder === null) return { result: null, attempts };
     const buildRng = merchantRng(...saltParts, "target", builder.archetypeId);
     const draft = builder.build(
@@ -204,21 +218,61 @@ function signatureFor(
 function draftToOffer(
   draft: MerchantOfferDraft,
   offerId: string,
+  context: MerchantContext,
 ): Omit<MerchantOffer, "encounterSignature"> {
+  const config = auguryArchetype(
+    context.rewardSelection.content.auguryData,
+    draft.archetypeId,
+  );
+  const objectNames = draft.gameObjects.map((object) => object.displayName);
+  const choiceCount = draft.choiceRequest?.candidates.length ?? 0;
+  const count = choiceCount > 0 ? choiceCount : Math.max(1, objectNames.length);
+  const firstChoiceName = draft.choiceRequest?.candidates[0]?.gameObjects[0]
+    ?.displayName;
+  const firstObject = draft.gameObjects[0];
+  const inferredTransfiguration = firstObject?.badge?.label;
+  const values = {
+    card: objectNames[0] ?? firstChoiceName ?? draft.targetKey,
+    cards: objectNames.join(", "),
+    count,
+    "count-word": auguryCountWord(count),
+    site: draft.targetKey,
+    transfiguration: inferredTransfiguration ?? draft.targetKey.split(":").slice(-1)[0] ?? "",
+    subtype: inferredTransfiguration?.replace(/^Becomes a /u, "") ?? draft.targetKey.split(":").slice(-1)[0] ?? "",
+    ...draft.copyVariables,
+  } as const;
+  const renderedCandidates = draft.choiceRequest?.candidates.map((candidate) => {
+    const card = candidate.gameObjects[0]?.displayName ?? candidate.choiceId;
+    const transfiguration = candidate.gameObjects[0]?.badge?.label ?? values.transfiguration;
+    const candidateValues = { ...values, card, transfiguration };
+    return {
+      ...candidate,
+      title: renderAuguryTemplate(config.copy.candidateTitle, candidateValues),
+      summary: renderAuguryTemplate(config.copy.candidateSummary, candidateValues),
+    };
+  });
   return {
     offerId,
     archetypeId: draft.archetypeId,
     family: draft.family,
-    title: draft.title,
-    summary: draft.summary,
+    title: renderAuguryTemplate(config.copy.title, values),
+    summary: renderAuguryTemplate(config.copy.summary, values),
+    detailHeadline: renderAuguryTemplate(config.copy.detailHeadline, values),
+    detailSubtitle: renderAuguryTemplate(config.copy.detailSubtitle, values),
     targetKey: draft.targetKey,
     gameObjects: draft.gameObjects,
     ...(draft.applyPayload === undefined
       ? {}
       : { applyPayload: draft.applyPayload }),
-    ...(draft.choiceRequest === undefined
+    ...(draft.choiceRequest === undefined || renderedCandidates === undefined
       ? {}
-      : { choiceRequest: draft.choiceRequest }),
+      : {
+          choiceRequest: {
+            ...draft.choiceRequest,
+            prompt: renderAuguryTemplate(config.copy.prompt, values),
+            candidates: renderedCandidates,
+          },
+        }),
     ...(draft.trace === undefined ? {} : { trace: draft.trace }),
     ...(draft.mechanicId === undefined ? {} : { mechanicId: draft.mechanicId }),
     ...(draft.policyId === undefined ? {} : { policyId: draft.policyId }),
@@ -274,9 +328,18 @@ function assertValidEncounter(encounter: MerchantEncounter): void {
 export function generateMerchantEncounterWithDebug(
   context: MerchantContext,
 ): { encounter: MerchantEncounter; debug: MerchantEncounterGenerationDebug } {
-  const eligible = MERCHANT_ARCHETYPE_BUILDERS.filter((builder) =>
-    builder.eligible(context),
-  );
+  const eligible = MERCHANT_ARCHETYPE_BUILDERS.filter((builder) => {
+    const config = auguryArchetype(
+      context.rewardSelection.content.auguryData,
+      builder.archetypeId,
+    );
+    if (config.family !== builder.family) {
+      throw new Error(
+        `Augury archetype ${builder.archetypeId} has mismatched family ${config.family}`,
+      );
+    }
+    return config.enabled && builder.eligible(context);
+  });
   const eligibleArchetypeIds = eligible.map((builder) => builder.archetypeId);
 
   // A non-zero debug reroll nonce mixes a "reroll|N" suffix into the salt so
@@ -338,8 +401,8 @@ export function generateMerchantEncounterWithDebug(
   const slotB = rolledB.result;
 
   const unsignedOffers = [
-    draftToOffer(slotA.draft, OFFER_IDS[0]),
-    draftToOffer(slotB.draft, OFFER_IDS[1]),
+    draftToOffer(slotA.draft, OFFER_IDS[0], context),
+    draftToOffer(slotB.draft, OFFER_IDS[1], context),
   ];
   const encounterSignature = signatureFor(context, unsignedOffers);
   const offers: MerchantOffer[] = unsignedOffers.map((offer) => ({

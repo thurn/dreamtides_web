@@ -770,8 +770,8 @@ export function buildAuguryOfferViews(
     const tile = buildAuguryOfferTileModel(offer, context);
     return {
       id: offer.offerId,
-      headline: buildAuguryOfferHeadline(tile),
-      subtitle: buildAuguryOfferSubtitle(tile),
+      headline: offer.detailHeadline ?? buildAuguryOfferHeadline(tile),
+      subtitle: offer.detailSubtitle ?? buildAuguryOfferSubtitle(tile),
       requiresSelection: (offer.choiceRequest?.candidates.length ?? 0) > 0,
       tile,
       visual: buildOfferVisual(offer, context, context.atlasData),
@@ -811,6 +811,7 @@ export function buildAugurySiteModel(params: {
     siteId: params.site.id,
     scene,
     guide: buildAuguryGuideView(params.guide, params.guideLine),
+    allowDecline: params.journeyContent.auguryData.encounter.allowDecline,
   };
   try {
     const context = buildMerchantContext({

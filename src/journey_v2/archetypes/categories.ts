@@ -1,5 +1,4 @@
 import { clustersOf } from "../signals/corpus";
-import { MERCHANT_TUNING } from "../tuning";
 import type { CardData } from "../../types/cards";
 import type { MerchantContext, MerchantCatalogCard } from "../types";
 
@@ -15,11 +14,12 @@ export interface MerchantCategory {
 
 type CostBand = "cheap" | "mid" | "big";
 
-function costBandOf(card: CardData): CostBand | null {
+function costBandOf(card: CardData, context: MerchantContext): CostBand | null {
   const cost = card.energyCost;
   if (cost === null) return null;
-  if (cost <= 1) return "cheap";
-  if (cost <= 3) return "mid";
+  const bands = context.rewardSelection.tuning.costBands;
+  if (cost <= bands.cheapMaximum) return "cheap";
+  if (cost >= bands.midMinimum && cost <= bands.midMaximum) return "mid";
   return "big";
 }
 
@@ -81,7 +81,7 @@ export function buildCategoryUniverse(
       cardType === "Event" ? "Event" : "Character",
       (card) => card.cardType === cardType,
       1,
-      2,
+      context.rewardSelection.tuning.categoryDeckAffineMinimum,
     );
   }
 
@@ -93,13 +93,13 @@ export function buildCategoryUniverse(
     subtypeCounts.set(subtype, (subtypeCounts.get(subtype) ?? 0) + 1);
   }
   for (const [subtype, count] of subtypeCounts) {
-    if (count < MERCHANT_TUNING.subtypeMinPoolCards) continue;
+    if (count < context.rewardSelection.tuning.subtypeMinPoolCards) continue;
     addPredicateCategory(
       `subtype:${subtype}`,
       subtype,
       (card) => card.subtype === subtype,
-      MERCHANT_TUNING.subtypeMinPoolCards,
-      2,
+      context.rewardSelection.tuning.subtypeMinPoolCards,
+      context.rewardSelection.tuning.categoryDeckAffineMinimum,
     );
   }
 
@@ -108,9 +108,9 @@ export function buildCategoryUniverse(
     addPredicateCategory(
       `cost:${band}`,
       COST_BAND_LABELS[band],
-      (card) => costBandOf(card) === band,
+      (card) => costBandOf(card, context) === band,
       1,
-      2,
+      context.rewardSelection.tuning.categoryDeckAffineMinimum,
     );
   }
 
@@ -119,8 +119,8 @@ export function buildCategoryUniverse(
     "fast",
     "fast card",
     (card) => card.isFast,
-    MERCHANT_TUNING.subtypeMinPoolCards,
-    2,
+    context.rewardSelection.tuning.subtypeMinPoolCards,
+    context.rewardSelection.tuning.categoryDeckAffineMinimum,
   );
 
   // Corpus clusters, labelled by flagship display name.
@@ -145,7 +145,9 @@ export function buildCategoryUniverse(
         id: `cluster:${String(cluster.id)}`,
         label: `${flagship} package`,
         memberUuids,
-        deckAffine: deckMatches >= 1,
+        deckAffine:
+          deckMatches >=
+          context.rewardSelection.tuning.categoryClusterAffineMinimum,
       });
     }
   }

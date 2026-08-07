@@ -63,6 +63,9 @@ describe("transformExplorationData", () => {
       ),
     );
     const compiled = transformExplorationData(source);
+    expect(compiled.schemaVersion).toBe(1);
+    expect(compiled.effectKinds).toHaveLength(34);
+    expect(compiled.foldHash).toBe(compiled.contentHash);
     const actions = compiled.encounters.flatMap(
       (encounter) => encounter.action,
     );
@@ -134,6 +137,12 @@ describe("transformExplorationData", () => {
     expect(effectKinds).toContain("gain-offered-card");
     expect(effectKinds).toContain("gain-essence-per-card");
     expect(effectKinds).toContain("increase-spark-all");
+  });
+
+  it("enforces the Exploration screen's two-choice encounter contract", () => {
+    const source = syntheticExplorationSource();
+    source.encounters = { "actions-per-encounter": 3 };
+    expect(() => transformExplorationData(source)).toThrow(/must be 2/u);
   });
 
   it("compiles custom Dreamsigns as canonical collectible data", () => {
@@ -250,9 +259,8 @@ describe("transformExplorationData", () => {
 
     const missingCount = structuredClone(offered);
     delete missingCount.encounter[0].action[0].count;
-    expect(() => transformExplorationData(missingCount)).toThrow(
-      /positive whole-number count/,
-    );
+    expect(transformExplorationData(missingCount).encounters[0].action[0].count)
+      .toBe(1);
     const missingCard = structuredClone(offered);
     delete missingCard.encounter[0].action[1]["card-id"];
     expect(() => transformExplorationData(missingCard)).toThrow(
@@ -260,9 +268,9 @@ describe("transformExplorationData", () => {
     );
     const missingForm = structuredClone(offered);
     delete missingForm.encounter[1].action[0].transfiguration;
-    expect(() => transformExplorationData(missingForm)).toThrow(
-      /requires transfiguration/,
-    );
+    expect(
+      transformExplorationData(missingForm).encounters[1].action[0].transfiguration,
+    ).toBe("Empowered");
   });
 });
 

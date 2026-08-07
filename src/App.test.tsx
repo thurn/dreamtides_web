@@ -4,6 +4,7 @@ import { act } from "react";
 import { economyFixture } from "./testing/economy-fixture";
 import { opponentsFixture } from "./testing/opponents-fixture";
 import { draftDataFixture } from "./testing/draft-data-fixture";
+import { CONFIG_DATA_FIXTURE } from "./testing/config-data-fixture";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
@@ -369,6 +370,7 @@ function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
 
 function makeJourneyContent(): JourneyContent {
   return {
+    ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
     cardDatabase: new Map<number, CardData>(),
     dreamAvatars: [],
@@ -390,6 +392,7 @@ function setJourneyState(state: JourneyState): void {
     mutations: makeMutations(),
     cardDatabase: new Map<number, CardData>(),
     journeyContent: {
+      ...CONFIG_DATA_FIXTURE,
       draftData: draftDataFixture(),
       cardDatabase: new Map(),
       dreamAvatars: [],
@@ -686,6 +689,7 @@ describe("JourneyApp", () => {
       mutations,
       cardDatabase: new Map<number, CardData>(),
       journeyContent: {
+        ...CONFIG_DATA_FIXTURE,
         draftData: draftDataFixture(),
         cardDatabase: new Map(),
         dreamAvatars: [],

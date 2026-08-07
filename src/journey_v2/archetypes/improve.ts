@@ -9,9 +9,11 @@ import {
 } from "../../transfiguration/transfiguration-logic";
 import type { CardData } from "../../types/cards";
 import type { CardTypeChange, TransfigurationType } from "../../types/journey";
+import type { RewardSelectionTuning } from "../../types/reward-selection-data";
+import { auguryArchetype } from "../../data/augury-data";
+import { MERCHANT_TUNING } from "../tuning";
 import { centrality } from "../signals/fit";
 import { bandSample, type MerchantRng } from "../signals/rng";
-import { MERCHANT_TUNING } from "../tuning";
 import {
   assembleOfferTrace,
   type TraceCandidateInput,
@@ -90,32 +92,27 @@ export function transfigurationBenefit(
   card: CardData,
   transfiguration: TransfigurationType,
   preview: CardData,
+  tuning: RewardSelectionTuning["transfigurationBenefit"] = MERCHANT_TUNING.transfigurationBenefit,
 ): number {
   switch (transfiguration) {
     case "Empowered": {
       const oldCost = card.energyCost ?? 0;
       const newCost = preview.energyCost ?? 0;
-      return clamp01((oldCost - newCost) / 2);
+      return clamp01((oldCost - newCost) / tuning.empoweredCostDivisor);
     }
     case "Kindled": {
       const oldSpark = card.spark ?? 0;
       const newSpark = preview.spark ?? 0;
-      return clamp01((newSpark - oldSpark) / 4);
+      return clamp01((newSpark - oldSpark) / tuning.kindledSparkDivisor);
     }
     case "Amplified":
-      return 0.4;
     case "Inspired":
-      return 0.55;
     case "Enduring":
-      return 0.55;
     case "Hastened":
-      return 0.5;
     case "Resonant":
-      return 0.5;
     case "Attuned":
-      return 0.5;
     case "Perfected":
-      return 0.65;
+      return tuning.flat[transfiguration] ?? 0;
   }
 }
 
@@ -127,8 +124,10 @@ export function transfigurationBenefit(
  */
 export function merchantTransfigurations(
   card: CardData,
+  allowed: readonly TransfigurationType[] = MERCHANT_TUNING.allowedTransfigurations,
 ): readonly TransfigurationType[] {
-  return eligibleTransfigurations(card).filter((type) => type !== "Perfected");
+  const allowedSet = new Set(allowed);
+  return eligibleTransfigurations(card).filter((type) => allowedSet.has(type));
 }
 
 // --- transfigure --------------------------------------------------------------
@@ -160,9 +159,17 @@ export function transfigureCandidatePairs(
   for (const deckCard of context.deckCards) {
     if (deckCard.deckEntry.transfiguration !== null) continue;
     const base = deckCard.card;
-    for (const transfiguration of merchantTransfigurations(base)) {
+    for (const transfiguration of merchantTransfigurations(
+      base,
+      context.rewardSelection.tuning.allowedTransfigurations,
+    )) {
       const preview = applyTransfigurationToCard(base, transfiguration);
-      const benefit = transfigurationBenefit(base, transfiguration, preview);
+      const benefit = transfigurationBenefit(
+        base,
+        transfiguration,
+        preview,
+        context.rewardSelection.tuning.transfigurationBenefit,
+      );
       if (benefit <= 0) continue;
       all.push({
         deckCard,
@@ -254,8 +261,6 @@ export const transfigureBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "transfigure",
       family: "improve",
-      title: `${target.deckCard.displayName}: ${target.transfiguration}`,
-      summary: "Permanently improve a deck card.",
       gameObjects: [transfigurePreviewObject(target)],
       applyPayload: transfigurePayload(target),
       targetKey: `${target.entryId}:${target.transfiguration}`,
@@ -276,17 +281,26 @@ function transfigurableStarters(
   return context.deckCards.filter((deckCard) => {
     if (!deckCard.card.isStarter) return false;
     if (deckCard.deckEntry.transfiguration !== null) return false;
-    return positiveBenefitTransfigurations(deckCard.card).length > 0;
+    return positiveBenefitTransfigurations(context, deckCard.card).length > 0;
   });
 }
 
 /** Eligible transfigurations of a card whose benefit is strictly positive. */
 function positiveBenefitTransfigurations(
+  context: MerchantContext,
   card: CardData,
 ): readonly TransfigurationType[] {
-  return merchantTransfigurations(card).filter((transfiguration) => {
+  return merchantTransfigurations(
+    card,
+    context.rewardSelection.tuning.allowedTransfigurations,
+  ).filter((transfiguration) => {
     const preview = applyTransfigurationToCard(card, transfiguration);
-    return transfigurationBenefit(card, transfiguration, preview) > 0;
+    return transfigurationBenefit(
+      card,
+      transfiguration,
+      preview,
+      context.rewardSelection.tuning.transfigurationBenefit,
+    ) > 0;
   });
 }
 
@@ -308,6 +322,10 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
   build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
     const starters = transfigurableStarters(context);
     if (starters.length === 0) return null;
+    const maximumTargets = auguryArchetype(
+      context.rewardSelection.content.auguryData,
+      "starter_transfigure",
+    ).quantities.maximumTargets;
 
     const desired = selectMerchantCount({
       context,
@@ -315,7 +333,7 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
       mechanicId: "transfigure-deck-entry",
       policyId: "uniform",
       minimum: 1,
-      maximum: Math.min(2, starters.length),
+      maximum: Math.min(maximumTargets, starters.length),
     });
     const selection = selectMerchantReward({
       context,
@@ -343,7 +361,12 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
         deckCard,
         entryId: deckCard.entryId,
         transfiguration: chosen,
-        benefit: transfigurationBenefit(deckCard.card, chosen, preview),
+        benefit: transfigurationBenefit(
+          deckCard.card,
+          chosen,
+          preview,
+          context.rewardSelection.tuning.transfigurationBenefit,
+        ),
         preview,
       };
       children.push(transfigurePayload(pair));
@@ -356,8 +379,6 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "starter_transfigure",
       family: "improve",
-      title: `Improve ${String(children.length)} starter card${children.length === 1 ? "" : "s"}`,
-      summary: "Polish your starter cards.",
       gameObjects,
       applyPayload: payload,
       targetKey: gameObjects
@@ -447,13 +468,6 @@ function buildKeywordModPair(
   };
 }
 
-function keywordModSummary(variant: KeywordModVariant): string {
-  switch (variant) {
-    case "reduce_reclaim":
-      return "Reduce a Reclaim cost.";
-  }
-}
-
 /**
  * `keyword_mod` — *Reduce a Reclaim cost.*
  *
@@ -480,8 +494,6 @@ export const keywordModBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "keyword_mod",
       family: "improve",
-      title: `${target.deckCard.displayName}: ${keywordModSummary(target.variant)}`,
-      summary: keywordModSummary(target.variant),
       gameObjects: [
         {
           objectType: "deckCard",
@@ -517,14 +529,10 @@ export const keywordModBuilder: MerchantArchetypeBuilder = {
 // --- tribal_change ------------------------------------------------------------
 
 /** The four main tribes a deck can commit to. */
-export const TRIBES = [
-  "Warrior",
-  "Spirit Animal",
-  "Survivor",
-  "Outsider",
-] as const;
+export type Tribe = string;
 
-export type Tribe = (typeof TRIBES)[number];
+/** Generated compatibility view of the TOML-authored tribe list. */
+export const TRIBES = MERCHANT_TUNING.tribes;
 
 /** A (off-tribe Character entry, active tribe) candidate pair. */
 export interface TribalChangeCandidatePair {
@@ -539,13 +547,17 @@ function activeTribes(context: MerchantContext): ReadonlySet<Tribe> {
   for (const deckCard of context.deckCards) {
     const effective = effectiveCardFor(deckCard);
     if (effective.cardType !== "Character") continue;
-    const tribe = TRIBES.find((t) => t === effective.subtype);
+    const tribe = context.rewardSelection.tuning.tribes.find(
+      (candidate) => candidate === effective.subtype,
+    );
     if (tribe === undefined) continue;
     counts.set(tribe, (counts.get(tribe) ?? 0) + 1);
   }
   const active = new Set<Tribe>();
   for (const [tribe, count] of counts) {
-    if (count >= MERCHANT_TUNING.tribalThreshold) active.add(tribe);
+    if (count >= context.rewardSelection.tuning.tribalThreshold) {
+      active.add(tribe);
+    }
   }
   return active;
 }
@@ -602,10 +614,15 @@ export const tribalChangeBuilder: MerchantArchetypeBuilder = {
 
     const deck = context.deckCards.map((deckCard) => deckCard.card);
     const scoreFor = (pair: TribalChangeCandidatePair): number =>
-      centrality(pair.deckCard.card, deck, context.fitModel);
+      centrality(
+        pair.deckCard.card,
+        deck,
+        context.fitModel,
+        context.rewardSelection.tuning.centrality,
+      );
     const target = bandSample(pairs, scoreFor, 1, rng, {
-      bandFraction: MERCHANT_TUNING.tribalBandFraction,
-      bandMinimum: MERCHANT_TUNING.tribalBandMinimum,
+      bandFraction: context.rewardSelection.tuning.tribalBandFraction,
+      bandMinimum: context.rewardSelection.tuning.tribalBandMinimum,
     })[0];
     if (target === undefined) return null;
 
@@ -618,8 +635,6 @@ export const tribalChangeBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "tribal_change",
       family: "improve",
-      title: `${target.deckCard.displayName} becomes a ${target.tribe}`,
-      summary: `Change a character's subtype to ${target.tribe}.`,
       gameObjects: [
         {
           objectType: "deckCard",
@@ -652,8 +667,8 @@ export const tribalChangeBuilder: MerchantArchetypeBuilder = {
           components: { centrality: scoreFor(pair) },
         })),
         selectedKeys: [`${target.entryId}:${target.tribe}`],
-        bandFraction: MERCHANT_TUNING.tribalBandFraction,
-        bandMinimum: MERCHANT_TUNING.tribalBandMinimum,
+        bandFraction: context.rewardSelection.tuning.tribalBandFraction,
+        bandMinimum: context.rewardSelection.tuning.tribalBandMinimum,
         notes: [`activeTribes=${[...activeTribes(context)].join(",")}`],
       }),
     };

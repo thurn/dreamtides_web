@@ -18,6 +18,9 @@ const GENESIS: Genesis = {
     atlasFoldHash: "fixture-atlas-fold-hash",
     draftFoldHash: "fixture-draft-fold-hash",
     economyFoldHash: "fixture-economy-fold-hash",
+    rewardSelectionFoldHash: "fixture-reward-selection-fold-hash",
+    auguryFoldHash: "fixture-augury-fold-hash",
+    explorationFoldHash: "fixture-exploration-fold-hash",
     defaultStartingEssence: 137,
     dreamsignCap: 9,
   },
@@ -132,6 +135,9 @@ describe("RTDB log wire decoding", () => {
   it.each([
     ["draftFoldHash", 42],
     ["economyFoldHash", 42],
+    ["rewardSelectionFoldHash", 42],
+    ["auguryFoldHash", 42],
+    ["explorationFoldHash", 42],
     ["defaultStartingEssence", -1],
     ["dreamsignCap", 1.5],
   ])("rejects a malformed %s field", (field, value) => {

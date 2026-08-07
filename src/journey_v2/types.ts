@@ -159,6 +159,9 @@ export interface MerchantOffer {
   family: MerchantOfferFamily;
   title: string;
   summary: string;
+  /** TOML-authored detail copy resolved when the offer is generated. */
+  detailHeadline?: string;
+  detailSubtitle?: string;
   targetKey: string;
   gameObjects: readonly MerchantGameObject[];
   applyPayload?: MerchantApplyPayload;

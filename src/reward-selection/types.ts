@@ -6,6 +6,7 @@ import type {
   TransfigurationType,
 } from "../types/journey";
 import type { JourneyContent } from "../data/journey-content";
+import type { RewardSelectionTuning } from "../types/reward-selection-data";
 
 export const SELECTION_RULES_VERSION = "1" as const;
 
@@ -77,6 +78,7 @@ export interface RewardSelectionContext {
   journeySeed: string;
   site: SiteState;
   content: JourneyContent;
+  tuning: RewardSelectionTuning;
   deckEntries: readonly DeckEntry[];
   effectiveDeckCards: readonly {
     entry: DeckEntry;

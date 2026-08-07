@@ -7,6 +7,7 @@
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
+import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
 //
 //   START_JOURNEY -> SELECT_DREAM_AVATAR -> OPEN_SITE (every content-coupled site
 //   type) -> REROLL_SHOP -> BEGIN_BATTLE
@@ -145,6 +146,7 @@ function makeJourneyContent(): JourneyContent {
     [...starterCards, ...corpusCards].map((card) => [card.cardNumber, card]),
   );
   return {
+    ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
     cardDatabase,
     dreamAvatars: [makeDreamAvatar(DREAM_AVATAR_ID)],

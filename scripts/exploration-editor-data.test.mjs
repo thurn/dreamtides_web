@@ -13,6 +13,7 @@ import {
   updateExplorationTemplate,
 } from "./exploration-editor-data.mjs";
 import {
+  buildExplorationEffectDefinitions,
   EXPLORATION_EFFECT_DEFINITIONS,
   EXPLORATION_EFFECT_FIELD_KEYS,
 } from "./exploration-editor-schema.mjs";
@@ -83,6 +84,14 @@ describe("exploration editor data", () => {
     expect(byKind.get("gain-nightmare-and-card")).toMatchObject({
       canonicalMechanicId: "gain-nightmare-and-card",
     });
+  });
+
+  it("rejects unknown chooser-copy slots at the TOML compiler boundary", () => {
+    const document = parse(fs.readFileSync("data/tabula/exploration.toml", "utf8"));
+    document["effect-kind"][0].copy["followup-title"] = "Choose {unknown}";
+    expect(() => buildExplorationEffectDefinitions(document)).toThrow(
+      /unknown copy slot \{unknown\}/u,
+    );
   });
 
   it("round-trips every effect kind with defaults and removes stale fields", () => {

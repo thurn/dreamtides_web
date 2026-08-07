@@ -5,6 +5,8 @@ import {
 } from "../../draft/replay/fit-model";
 import type { CardData } from "../../types/cards";
 import type { MerchantDeckCard } from "../types";
+import type { RewardSelectionTuning } from "../../types/reward-selection-data";
+import { MERCHANT_TUNING } from "../tuning";
 
 export type { CandidateFitScore };
 
@@ -143,16 +145,21 @@ export function centrality(
   card: CardData,
   deck: readonly CardData[],
   fitModel: FitModel | undefined,
+  tuning: RewardSelectionTuning["centrality"] = MERCHANT_TUNING.centrality,
 ): number {
   if (fitModel !== undefined) {
     const deckNumbers = deck.map((c) => c.cardNumber);
     const scored = scoreCandidatesForDeck([card.cardNumber], deckNumbers, fitModel);
     const score = scored.get(card.cardNumber);
     if (score !== undefined && (score.prior > 0 || score.cooccur > 0)) {
-      return clamp01(0.65 * score.prior + 0.35 * score.cooccur);
+      return clamp01(
+        tuning.priorWeight * score.prior +
+        tuning.cooccurrenceWeight * score.cooccur,
+      );
     }
   }
   // Fallback: no model or no signal
   const spark = card.spark;
-  return 0.25 + (spark !== null && spark >= 3 ? 0.15 : 0);
+  return tuning.fallback +
+    (spark !== null && spark >= tuning.sparkThreshold ? tuning.sparkBonus : 0);
 }

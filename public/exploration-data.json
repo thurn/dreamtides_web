@@ -1,4 +1,782 @@
 {
+  "schemaVersion": 1,
+  "actionsPerEncounter": 2,
+  "effectKinds": [
+    {
+      "kind": "purge-and-copy",
+      "label": "Purge and copy",
+      "canonicalMechanicId": "purge-and-duplicate",
+      "copy": {
+        "followupTitle": "Exchange Familiar Forms",
+        "followupSubtitle": "First choose a card to purge, then choose a different card to copy."
+      },
+      "fields": []
+    },
+    {
+      "kind": "gain-dreamsign",
+      "label": "Gain Dreamsign",
+      "canonicalMechanicId": "gain-dreamsign",
+      "defaultSelectionPolicyId": "fixed",
+      "allowedSelectionPolicyIds": [
+        "fixed"
+      ],
+      "copy": {
+        "followupTitle": "{action-label}",
+        "followupSubtitle": "Choose a Dreamsign to replace."
+      },
+      "fields": [
+        {
+          "key": "dreamsignId",
+          "label": "Dreamsign",
+          "control": "dreamsign"
+        }
+      ]
+    },
+    {
+      "kind": "gain-card",
+      "label": "Gain card",
+      "canonicalMechanicId": "gain-card",
+      "defaultSelectionPolicyId": "fixed",
+      "allowedSelectionPolicyIds": [
+        "fixed"
+      ],
+      "copy": {
+        "followupTitle": "",
+        "followupSubtitle": ""
+      },
+      "fields": [
+        {
+          "key": "cardId",
+          "label": "Card",
+          "control": "card"
+        }
+      ]
+    },
+    {
+      "kind": "transfigure-selected",
+      "label": "Transfigure selected card",
+      "canonicalMechanicId": "transfigure-deck-entry",
+      "defaultSelectionPolicyId": "transfiguration-value",
+      "allowedSelectionPolicyIds": [
+        "uniform",
+        "transfiguration-value"
+      ],
+      "copy": {
+        "followupTitle": "",
+        "followupSubtitle": ""
+      },
+      "fields": [
+        {
+          "key": "predicate",
+          "label": "Card predicate",
+          "control": "predicate",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "purge-selected",
+      "label": "Purge selected cards",
+      "canonicalMechanicId": "purge-deck-entry",
+      "defaultSelectionPolicyId": "purge-misfit",
+      "allowedSelectionPolicyIds": [
+        "uniform",
+        "purge-misfit"
+      ],
+      "copy": {
+        "followupTitle": "Feed the Fire",
+        "followupSubtitle": "Choose an Event to purge."
+      },
+      "fields": [
+        {
+          "key": "predicate",
+          "label": "Card predicate",
+          "control": "predicate",
+          "optional": true
+        },
+        {
+          "key": "count",
+          "label": "Count",
+          "control": "number",
+          "defaultValue": 1,
+          "min": 1,
+          "templateIds": [
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "choose-pack",
+      "label": "Choose a pack",
+      "canonicalMechanicId": "pack-chooser",
+      "defaultSelectionPolicyId": "card-bundle",
+      "allowedSelectionPolicyIds": [
+        "uniform",
+        "card-fit",
+        "card-bundle"
+      ],
+      "copy": {
+        "followupTitle": "{action-label}",
+        "followupSubtitle": "Choose one pack to add to your deck."
+      },
+      "fields": [
+        {
+          "key": "predicate",
+          "label": "Card predicate",
+          "control": "predicate",
+          "defaultValue": "character"
+        },
+        {
+          "key": "packCount",
+          "label": "Pack count",
+          "control": "number",
+          "defaultValue": 2,
+          "min": 1
+        },
+        {
+          "key": "packSize",
+          "label": "Pack size",
+          "control": "number",
+          "defaultValue": 3,
+          "min": 1
+        }
+      ]
+    },
+    {
+      "kind": "draft-card",
+      "label": "Draft a card",
+      "canonicalMechanicId": "catalog-card-chooser",
+      "defaultSelectionPolicyId": "card-fit",
+      "allowedSelectionPolicyIds": [
+        "uniform",
+        "card-fit",
+        "card-fit-quality"
+      ],
+      "copy": {
+        "followupTitle": "{action-label}",
+        "followupSubtitle": "Choose one offered card."
+      },
+      "fields": [
+        {
+          "key": "predicate",
+          "label": "Card predicate",
+          "control": "predicate",
+          "defaultValue": "character"
+        },
+        {
+          "key": "offerCount",
+          "label": "Offer count",
+          "control": "number",
+          "defaultValue": 4,
+          "min": 1
+        },
+        {
+          "key": "count",
+          "label": "Copies",
+          "control": "number",
+          "defaultValue": 1,
+          "min": 1,
+          "templateIds": [
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "purge-for-essence",
+      "label": "Purge for essence",
+      "canonicalMechanicId": "purge-for-essence",
+      "defaultSelectionPolicyId": "purge-misfit",
+      "allowedSelectionPolicyIds": [
+        "uniform",
+        "purge-misfit"
+      ],
+      "copy": {
+        "followupTitle": "Trade Away a Figure",
+        "followupSubtitle": "Choose a card to purge for {essence-per-spark} essence per ✦."
+      },
+      "fields": [
+        {
+          "key": "essencePerSpark",
+          "label": "Essence per spark",
+          "control": "number",
+          "defaultValue": 40,
+          "min": 1,
+          "step": 10,
+          "resource": "essence"
+        }
+      ]
+    },
+    {
+      "kind": "change-subtype-selected",
+      "label": "Change selected subtype",
+      "canonicalMechanicId": "change-entry-subtype",
+      "defaultSelectionPolicyId": "deck-entry-centrality",
+      "allowedSelectionPolicyIds": [
+        "uniform",
+        "deck-entry-centrality"
+      ],
+      "copy": {
+        "followupTitle": "{action-label}",
+        "followupSubtitle": "Choose a Character to become {subtype}."
+      },
+      "fields": [
+        {
+          "key": "predicate",
+          "label": "Card predicate",
+          "control": "predicate",
+          "optional": true
+        },
+        {
+          "key": "subtype",
+          "label": "Subtype",
+          "control": "subtype"
+        }
+      ]
+    },
+    {
+      "kind": "change-subtype-all",
+      "label": "Choose subtype for all characters",
+      "canonicalMechanicId": "change-deck-subtype",
+      "copy": {
+        "followupTitle": "{action-label}",
+        "followupSubtitle": "Choose the subtype for every Character in your deck."
+      },
+      "fields": [
+        {
+          "key": "subtypeOptions",
+          "label": "Subtype options",
+          "control": "subtype-options"
+        }
+      ]
+    },
+    {
+      "kind": "take-cards",
+      "label": "Take offered cards",
+      "canonicalMechanicId": "catalog-card-chooser",
+      "defaultSelectionPolicyId": "card-fit",
+      "allowedSelectionPolicyIds": [
+        "uniform",
+        "card-fit",
+        "card-fit-quality"
+      ],
+      "copy": {
+        "followupTitle": "{action-label}",
+        "followupSubtitle": "Choose any number of offered cards."
+      },
+      "fields": [
+        {
+          "key": "predicate",
+          "label": "Card predicate",
+          "control": "predicate",
+          "defaultValue": "character"
+        },
+        {
+          "key": "offerCount",
+          "label": "Offer count",
+          "control": "number",
+          "defaultValue": 4,
+          "min": 1
+        }
+      ]
+    },
+    {
+      "kind": "replace-selected-with-card",
+      "label": "Replace selected card with a fixed card",
+      "canonicalMechanicId": "replace-deck-entry",
+      "defaultSelectionPolicyId": "fixed",
+      "allowedSelectionPolicyIds": [
+        "fixed"
+      ],
+      "copy": {
+        "followupTitle": "{action-label}",
+        "followupSubtitle": "Choose a card to replace."
+      },
+      "fields": [
+        {
+          "key": "predicate",
+          "label": "Card predicate",
+          "control": "predicate",
+          "optional": true
+        },
+        {
+          "key": "cardId",
+          "label": "Replacement card",
+          "control": "card"
+        }
+      ]
+    },
+    {
+      "kind": "replace-selected",
+      "label": "Replace selected card",
+      "canonicalMechanicId": "replace-deck-entry",
+      "defaultSelectionPolicyId": "card-fit-quality",
+      "allowedSelectionPolicyIds": [
+        "uniform",
+        "card-fit-quality"
+      ],
+      "copy": {
+        "followupTitle": "Release a Fellow Swimmer",
+        "followupSubtitle": "Choose a Spirit Animal to exchange."
+      },
+      "fields": [
+        {
+          "key": "predicate",
+          "label": "Replacement predicate",
+          "control": "predicate",
+          "defaultValue": "character"
+        }
+      ]
+    },
+    {
+      "kind": "gain-nightmare-and-card",
+      "label": "Gain Nightmares and a card",
+      "canonicalMechanicId": "gain-nightmare-and-card",
+      "defaultSelectionPolicyId": "fixed",
+      "allowedSelectionPolicyIds": [
+        "fixed"
+      ],
+      "copy": {
+        "followupTitle": "",
+        "followupSubtitle": ""
+      },
+      "fields": [
+        {
+          "key": "cardId",
+          "label": "Card",
+          "control": "card"
+        },
+        {
+          "key": "nightmareCount",
+          "label": "Nightmare count",
+          "control": "number",
+          "defaultValue": 1,
+          "min": 1
+        }
+      ]
+    },
+    {
+      "kind": "gain-random-cards",
+      "label": "Gain random cards",
+      "canonicalMechanicId": "gain-card",
+      "defaultSelectionPolicyId": "card-bundle",
+      "allowedSelectionPolicyIds": [
+        "uniform",
+        "card-fit",
+        "card-fit-quality",
+        "card-bundle"
+      ],
+      "copy": {
+        "followupTitle": "",
+        "followupSubtitle": ""
+      },
+      "fields": [
+        {
+          "key": "predicate",
+          "label": "Card predicate",
+          "control": "predicate",
+          "defaultValue": "character"
+        },
+        {
+          "key": "count",
+          "label": "Count",
+          "control": "number",
+          "defaultValue": 1,
+          "min": 1,
+          "templateIds": [
+            13
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "transfigure-fixed-selected",
+      "label": "Apply a fixed transfiguration",
+      "canonicalMechanicId": "transfigure-deck-entry",
+      "defaultSelectionPolicyId": "transfiguration-value",
+      "allowedSelectionPolicyIds": [
+        "uniform",
+        "transfiguration-value"
+      ],
+      "copy": {
+        "followupTitle": "{action-label}",
+        "followupSubtitle": "Choose a card to become {transfiguration}."
+      },
+      "fields": [
+        {
+          "key": "predicate",
+          "label": "Card predicate",
+          "control": "predicate",
+          "optional": true
+        },
+        {
+          "key": "transfiguration",
+          "label": "Transfiguration",
+          "control": "transfiguration",
+          "defaultValue": "Empowered"
+        }
+      ]
+    },
+    {
+      "kind": "gain-offered-card",
+      "label": "Gain an offered card",
+      "canonicalMechanicId": "gain-card",
+      "defaultSelectionPolicyId": "card-fit-quality",
+      "allowedSelectionPolicyIds": [
+        "uniform",
+        "card-fit",
+        "card-fit-quality"
+      ],
+      "copy": {
+        "followupTitle": "",
+        "followupSubtitle": ""
+      },
+      "fields": [
+        {
+          "key": "predicate",
+          "label": "Offer predicate",
+          "control": "predicate",
+          "defaultValue": "character"
+        },
+        {
+          "key": "count",
+          "label": "Copies",
+          "control": "number",
+          "defaultValue": 1,
+          "min": 1,
+          "templateIds": [
+            12
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "transfigure-next-draft-or-shop",
+      "label": "Transfigure the next Draft or Shop",
+      "canonicalMechanicId": "next-site-transfiguration",
+      "copy": {
+        "followupTitle": "",
+        "followupSubtitle": ""
+      },
+      "fields": []
+    },
+    {
+      "kind": "gain-essence-per-card",
+      "label": "Gain essence per card",
+      "canonicalMechanicId": "gain-essence-by-deck-predicate",
+      "copy": {
+        "followupTitle": "",
+        "followupSubtitle": ""
+      },
+      "fields": [
+        {
+          "key": "predicate",
+          "label": "Card predicate",
+          "control": "predicate",
+          "defaultValue": "character"
+        },
+        {
+          "key": "essencePerCard",
+          "label": "Essence per card",
+          "control": "number",
+          "defaultValue": 10,
+          "min": 1,
+          "step": 10,
+          "resource": "essence"
+        }
+      ]
+    },
+    {
+      "kind": "increase-spark-all",
+      "label": "Increase spark for all characters",
+      "canonicalMechanicId": "increase-deck-spark",
+      "copy": {
+        "followupTitle": "",
+        "followupSubtitle": ""
+      },
+      "fields": [
+        {
+          "key": "sparkBonus",
+          "label": "Spark bonus",
+          "control": "number",
+          "defaultValue": 1,
+          "min": 1,
+          "resource": "spark"
+        }
+      ]
+    },
+    {
+      "kind": "gain-random-dreamsign",
+      "label": "Gain random Dreamsign",
+      "canonicalMechanicId": "gain-dreamsign",
+      "defaultSelectionPolicyId": "dreamsign-match",
+      "allowedSelectionPolicyIds": [
+        "uniform",
+        "dreamsign-match"
+      ],
+      "copy": {
+        "followupTitle": "{action-label}",
+        "followupSubtitle": "Choose a Dreamsign to replace."
+      },
+      "fields": []
+    },
+    {
+      "kind": "purge-dreamsign-for-essence",
+      "label": "Purge Dreamsign for essence",
+      "canonicalMechanicId": "purge-dreamsign-for-essence",
+      "copy": {
+        "followupTitle": "{action-label}",
+        "followupSubtitle": "Choose a Dreamsign to purge."
+      },
+      "fields": [
+        {
+          "key": "essence",
+          "label": "Essence",
+          "control": "number",
+          "defaultValue": 50,
+          "min": 1,
+          "step": 10,
+          "resource": "essence"
+        }
+      ]
+    },
+    {
+      "kind": "make-fast-all",
+      "label": "Make all cards fast",
+      "canonicalMechanicId": "make-deck-fast",
+      "copy": {
+        "followupTitle": "",
+        "followupSubtitle": ""
+      },
+      "fields": []
+    },
+    {
+      "kind": "reduce-cost-all-and-gain-nightmares",
+      "label": "Reduce costs and gain Nightmares",
+      "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+      "copy": {
+        "followupTitle": "",
+        "followupSubtitle": ""
+      },
+      "fields": [
+        {
+          "key": "energyCostReduction",
+          "label": "Energy cost reduction",
+          "control": "number",
+          "defaultValue": 1,
+          "min": 1,
+          "resource": "energy"
+        },
+        {
+          "key": "nightmareCount",
+          "label": "Nightmare count",
+          "control": "number",
+          "defaultValue": 3,
+          "min": 1
+        }
+      ]
+    },
+    {
+      "kind": "copy-selected-card",
+      "label": "Copy a selected deck card",
+      "canonicalMechanicId": "duplicate-deck-entry",
+      "defaultSelectionPolicyId": "duplicate-value",
+      "allowedSelectionPolicyIds": [
+        "uniform",
+        "duplicate-value"
+      ],
+      "copy": {
+        "followupTitle": "{action-label}",
+        "followupSubtitle": "Choose a card to gain {count} copies of."
+      },
+      "fields": [
+        {
+          "key": "predicate",
+          "label": "Card predicate",
+          "control": "predicate",
+          "optional": true
+        },
+        {
+          "key": "count",
+          "label": "Copies",
+          "control": "number",
+          "defaultValue": 1,
+          "min": 1
+        }
+      ]
+    },
+    {
+      "kind": "copy-selected-cards",
+      "label": "Copy selected deck cards",
+      "canonicalMechanicId": "duplicate-deck-entry",
+      "defaultSelectionPolicyId": "duplicate-value",
+      "allowedSelectionPolicyIds": [
+        "uniform",
+        "duplicate-value"
+      ],
+      "copy": {
+        "followupTitle": "{action-label}",
+        "followupSubtitle": "Choose {count} cards to copy."
+      },
+      "fields": [
+        {
+          "key": "count",
+          "label": "Cards to copy",
+          "control": "number",
+          "defaultValue": 2,
+          "min": 1
+        }
+      ]
+    },
+    {
+      "kind": "copy-offered-deck-card",
+      "label": "Copy an offered deck card",
+      "canonicalMechanicId": "duplicate-deck-entry",
+      "defaultSelectionPolicyId": "duplicate-value",
+      "allowedSelectionPolicyIds": [
+        "uniform",
+        "duplicate-value"
+      ],
+      "copy": {
+        "followupTitle": "{action-label}",
+        "followupSubtitle": "Choose one offered card to copy."
+      },
+      "fields": [
+        {
+          "key": "offerCount",
+          "label": "Offer count",
+          "control": "number",
+          "defaultValue": 4,
+          "min": 1
+        }
+      ]
+    },
+    {
+      "kind": "next-battle-opening-hand",
+      "label": "Increase next opening hand",
+      "canonicalMechanicId": "next-battle-modifier",
+      "copy": {
+        "followupTitle": "",
+        "followupSubtitle": ""
+      },
+      "fields": [
+        {
+          "key": "count",
+          "label": "Additional cards",
+          "control": "number",
+          "defaultValue": 1,
+          "min": 1
+        }
+      ]
+    },
+    {
+      "kind": "next-battle-starting-energy",
+      "label": "Increase next starting energy",
+      "canonicalMechanicId": "next-battle-modifier",
+      "copy": {
+        "followupTitle": "",
+        "followupSubtitle": ""
+      },
+      "fields": [
+        {
+          "key": "count",
+          "label": "Additional energy",
+          "control": "number",
+          "defaultValue": 1,
+          "min": 1,
+          "resource": "energy"
+        }
+      ]
+    },
+    {
+      "kind": "next-battle-smaller-hand-and-cost-discount",
+      "label": "Reduce next opening hand and card costs",
+      "canonicalMechanicId": "next-battle-modifier",
+      "copy": {
+        "followupTitle": "",
+        "followupSubtitle": ""
+      },
+      "fields": []
+    },
+    {
+      "kind": "choose-dream-avatar",
+      "label": "Choose a new Dream Avatar",
+      "canonicalMechanicId": "choose-dream-avatar",
+      "defaultSelectionPolicyId": "uniform",
+      "allowedSelectionPolicyIds": [
+        "uniform"
+      ],
+      "copy": {
+        "followupTitle": "{action-label}",
+        "followupSubtitle": "Choose your new Dream Avatar."
+      },
+      "fields": [
+        {
+          "key": "offerCount",
+          "label": "Offer count",
+          "control": "number",
+          "defaultValue": 3,
+          "min": 1
+        }
+      ]
+    },
+    {
+      "kind": "purge-duplicates-and-grant-reclaim",
+      "label": "Purge duplicates and grant Reclaim",
+      "canonicalMechanicId": "purge-duplicates-and-grant-reclaim",
+      "copy": {
+        "followupTitle": "",
+        "followupSubtitle": ""
+      },
+      "fields": []
+    },
+    {
+      "kind": "transfigured-card-draft",
+      "label": "Draft a transfigured card",
+      "canonicalMechanicId": "transfigured-card-chooser",
+      "defaultSelectionPolicyId": "card-fit",
+      "allowedSelectionPolicyIds": [
+        "uniform",
+        "card-fit",
+        "card-fit-quality"
+      ],
+      "copy": {
+        "followupTitle": "{action-label}",
+        "followupSubtitle": "Choose one offered transfigured card."
+      },
+      "fields": [
+        {
+          "key": "predicate",
+          "label": "Card predicate",
+          "control": "predicate",
+          "defaultValue": "character"
+        },
+        {
+          "key": "offerCount",
+          "label": "Offer count",
+          "control": "number",
+          "defaultValue": 4,
+          "min": 1
+        }
+      ]
+    },
+    {
+      "kind": "add-site",
+      "label": "Add a disclosed site",
+      "canonicalMechanicId": "add-site",
+      "defaultSelectionPolicyId": "site-uniform",
+      "allowedSelectionPolicyIds": [
+        "site-uniform"
+      ],
+      "copy": {
+        "followupTitle": "",
+        "followupSubtitle": ""
+      },
+      "fields": []
+    }
+  ],
   "customCards": [],
   "customDreamsigns": [],
   "encounters": [
@@ -7,6 +785,7 @@
       "prose": "A young lantern bearer approaches a towering window of stars.",
       "action": [
         {
+          "count": 1,
           "id": "161482b6-af07-4d9e-822d-8c738672beb9:pair-5:template-11",
           "label": "Invite someone through",
           "effectText": "Gain $OFFERED_CARD",
@@ -1012,5 +1791,7 @@
         }
       ]
     }
-  ]
+  ],
+  "contentHash": "4aca1b1f1dbad9f114d9190dfb2c979db9017092e4e42e8834a3fa0a7f9eb603",
+  "foldHash": "4aca1b1f1dbad9f114d9190dfb2c979db9017092e4e42e8834a3fa0a7f9eb603"
 }

@@ -17,6 +17,8 @@ import { asCardId, asCardName } from "../types/card-identity";
 import { MINIMAL_ATLAS_DATA } from "../__test-helpers__/atlas-fixtures";
 import { opponentsFixture } from "../testing/opponents-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
+import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
+import explorationJson from "../../public/exploration-data.json";
 
 const DRAFT_HASH = "d".repeat(64);
 const DRAFT_DATA = draftDataFixture({
@@ -113,6 +115,11 @@ describe("loadJourneyContent", () => {
       );
     const failingPathSet = new Set(failingPaths);
     const explorationData = {
+      schemaVersion: explorationJson.schemaVersion,
+      actionsPerEncounter: explorationJson.actionsPerEncounter,
+      contentHash: explorationJson.contentHash,
+      foldHash: explorationJson.foldHash,
+      effectKinds: explorationJson.effectKinds,
       customCards: [],
       customDreamsigns: [],
       encounters: Array.from({ length: 14 }, (_value, encounterIndex) => ({
@@ -161,6 +168,18 @@ describe("loadJourneyContent", () => {
           return Promise.resolve({
             ok: true,
             json: () => Promise.resolve(explorationData),
+          });
+        }
+        if (path === "/reward-selection-data.json") {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve(CONFIG_DATA_FIXTURE.rewardSelectionData),
+          });
+        }
+        if (path === "/augury-data.json") {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve(CONFIG_DATA_FIXTURE.auguryData),
           });
         }
         if (path === "/dreamwell-data.json") {

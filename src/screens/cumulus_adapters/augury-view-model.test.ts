@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
+import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
 import type {
   MerchantChoiceCandidate,
   MerchantContext,
@@ -152,6 +153,7 @@ const mappingContext = {
   cardByUuid: new Map(mappingCards.map((value) => [value.id, value])),
   draftPoolCardUuids: new Set(mappingCards.map((value) => value.id)),
   merchantCorpus: undefined,
+  rewardSelection: { tuning: CONFIG_DATA_FIXTURE.rewardSelectionData.tuning },
 } as unknown as MerchantContext;
 
 function fourCandidates(payloadCopies = 1): MerchantChoiceCandidate[] {
@@ -239,7 +241,10 @@ function dreamsignObject(
 }
 
 describe("augury view model", () => {
-  const context = { deckEntryById: new Map() } as unknown as MerchantContext;
+  const context = {
+    deckEntryById: new Map(),
+    rewardSelection: { tuning: CONFIG_DATA_FIXTURE.rewardSelectionData.tuning },
+  } as unknown as MerchantContext;
 
   it("maps both offers to short object-first views without production summaries", () => {
     const offers = buildAuguryOfferViews(encounter(), context);

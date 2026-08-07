@@ -1,4 +1,4 @@
-import { dreamsignBuilder } from "./dreamsign";
+import { dreamsignBuilder, dreamsignDraftBuilder } from "./dreamsign";
 import { duplicateBuilder } from "./duplicate";
 import {
   cardBundleBuilder,
@@ -12,8 +12,10 @@ import {
 import {
   starterTransfigureBuilder,
   transfigureBuilder,
+  keywordModBuilder,
+  tribalChangeBuilder,
 } from "./improve";
-import { purgeBuilder } from "./remove";
+import { purgeBuilder, purgeReplaceBuilder } from "./remove";
 import { addSiteBuilder } from "./site";
 import type { MerchantArchetypeBuilder } from "./types";
 
@@ -21,10 +23,9 @@ import type { MerchantArchetypeBuilder } from "./types";
  * Every registered archetype builder. Stage 1 of the generator weighted-rolls
  * over the eligible subset of this list.
  *
- * Each builder is weighted in `MERCHANT_TUNING.weights` and family-tabled in
- * `MERCHANT_ARCHETYPE_FAMILIES`; the registry invariant test cross-checks both
- * tables against this list. Archetypes still pending implementation are added
- * here as their family files are filled in.
+ * Each builder is enabled, weighted, and family-checked against augury.toml at
+ * encounter generation. Keeping all implementations registered lets a designer
+ * activate a dormant archetype with a data edit.
  */
 export const MERCHANT_ARCHETYPE_BUILDERS: readonly MerchantArchetypeBuilder[] = [
   strongCardBuilder,
@@ -36,8 +37,12 @@ export const MERCHANT_ARCHETYPE_BUILDERS: readonly MerchantArchetypeBuilder[] = 
   transfiguredDraftBuilder,
   transfigureBuilder,
   starterTransfigureBuilder,
+  keywordModBuilder,
+  tribalChangeBuilder,
   purgeBuilder,
+  purgeReplaceBuilder,
   duplicateBuilder,
   dreamsignBuilder,
+  dreamsignDraftBuilder,
   addSiteBuilder,
 ];

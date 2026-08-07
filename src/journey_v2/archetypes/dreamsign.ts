@@ -4,13 +4,13 @@ import {
   dreamsignScoreBreakdown,
 } from "../signals/dreamsignMatch";
 import { bandSample, merchantRng, weightedSample, type MerchantRng } from "../signals/rng";
-import { MERCHANT_TUNING } from "../tuning";
+import { auguryArchetype } from "../../data/augury-data";
 import { assembleOfferTrace } from "../trace/buildTrace";
 import type { MerchantDreamsignTier, MerchantOfferTrace } from "../trace/types";
 import type { CardData } from "../../types/cards";
 import type { DreamsignTemplate } from "../../types/content";
-import type { MerchantContext, MerchantChoiceCandidate, MerchantGameObject } from "../types";
-import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
+import type { MerchantContext, MerchantGameObject } from "../types";
+import type { MerchantArchetypeBuilder, MerchantChoiceCandidateDraft, MerchantOfferDraft } from "./types";
 import { selectionMetadata, selectMerchantReward } from "./sharedSelection";
 
 function deckCardData(context: MerchantContext): readonly CardData[] {
@@ -48,12 +48,22 @@ function suitedDreamsignPool(
 ): { pool: readonly DreamsignTemplate[]; tier: MerchantDreamsignTier } {
   const profiles = context.dreamsignProfiles;
   const covered = context.candidateDreamsigns.filter((template) =>
-    dreamsignHasDeckCoverage(profiles?.get(template.id), deck),
+    dreamsignHasDeckCoverage(
+      profiles?.get(template.id),
+      deck,
+      context.rewardSelection.tuning.dreamsign,
+      context.rewardSelection.tuning.costBands,
+    ),
   );
   if (covered.length >= minimumDesired) return { pool: covered, tier: "covered" };
 
   const suited = context.candidateDreamsigns.filter(
-    (template) => dreamsignMatchScore(profiles?.get(template.id), deck) > 0,
+    (template) => dreamsignMatchScore(
+      profiles?.get(template.id),
+      deck,
+      context.rewardSelection.tuning.dreamsign,
+      context.rewardSelection.tuning.costBands,
+    ) > 0,
   );
   if (suited.length >= minimumDesired) return { pool: suited, tier: "generic" };
 
@@ -85,6 +95,8 @@ function buildDreamsignTrace(params: {
       const breakdown = dreamsignScoreBreakdown(
         profiles?.get(template.id),
         params.deck,
+        params.context.rewardSelection.tuning.dreamsign,
+        params.context.rewardSelection.tuning.costBands,
       );
       return {
         key: template.id,
@@ -106,11 +118,6 @@ function buildDreamsignTrace(params: {
   });
 }
 
-/** Minimum count for the `dreamsign_draft` chooser. */
-const DREAMSIGN_DRAFT_MIN_COUNT = 2;
-/** Maximum count for the `dreamsign_draft` chooser. */
-const DREAMSIGN_DRAFT_MAX_COUNT = 4;
-
 /**
  * Seeded-pick a chooser count in [minCount, maxCount], capped by the available
  * band size. Uses `weightedSample` with equal weights over the eligible range so
@@ -119,9 +126,11 @@ const DREAMSIGN_DRAFT_MAX_COUNT = 4;
 function seededDreamsignCount(
   bandSize: number,
   rng: MerchantRng,
+  minimum: number,
+  maximum: number,
 ): number {
-  const max = Math.min(DREAMSIGN_DRAFT_MAX_COUNT, bandSize);
-  const min = Math.min(DREAMSIGN_DRAFT_MIN_COUNT, max);
+  const max = Math.min(maximum, bandSize);
+  const min = Math.min(minimum, max);
   if (min >= max) return min;
   const options = Array.from({ length: max - min + 1 }, (_, i) => min + i);
   return weightedSample(options, () => 1, rng) ?? min;
@@ -157,8 +166,6 @@ export const dreamsignBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "dreamsign",
       family: "dreamsign",
-      title: `Gain the ${target.name} dreamsign`,
-      summary: "Add this dreamsign to your collection.",
       gameObjects: [dreamsignGameObject(target)],
       applyPayload: {
         kind: "add_dreamsign",
@@ -182,9 +189,17 @@ export const dreamsignDraftBuilder: MerchantArchetypeBuilder = {
   archetypeId: "dreamsign_draft",
   family: "dreamsign",
   eligible(context: MerchantContext): boolean {
-    return context.candidateDreamsigns.length >= DREAMSIGN_DRAFT_MIN_COUNT;
+    const minimum = auguryArchetype(
+      context.rewardSelection.content.auguryData,
+      "dreamsign_draft",
+    ).quantities.minimumChooserSize;
+    return context.candidateDreamsigns.length >= minimum;
   },
   build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
+    const quantities = auguryArchetype(
+      context.rewardSelection.content.auguryData,
+      "dreamsign_draft",
+    ).quantities;
     const deck = deckCardData(context);
     const profiles = context.dreamsignProfiles;
 
@@ -195,14 +210,14 @@ export const dreamsignDraftBuilder: MerchantArchetypeBuilder = {
     const { pool: candidates, tier } = suitedDreamsignPool(
       context,
       deck,
-      DREAMSIGN_DRAFT_MIN_COUNT,
+      quantities.minimumChooserSize,
     );
-    if (candidates.length < DREAMSIGN_DRAFT_MIN_COUNT) return null;
+    if (candidates.length < quantities.minimumChooserSize) return null;
 
     // Compute band size using the same formula as bandSample
     const n = candidates.length;
-    const bandFraction = MERCHANT_TUNING.dreamsignBandFraction;
-    const bandMinimum = MERCHANT_TUNING.bandMinimum;
+    const bandFraction = context.rewardSelection.tuning.dreamsignBandFraction;
+    const bandMinimum = context.rewardSelection.tuning.dreamsignBandMinimum;
     const bandSize = Math.min(
       n,
       Math.max(Math.ceil(bandFraction * n), Math.min(bandMinimum, n)),
@@ -216,26 +231,37 @@ export const dreamsignDraftBuilder: MerchantArchetypeBuilder = {
       "dreamsign_draft",
       "count",
     );
-    const count = seededDreamsignCount(bandSize, countRng);
-    if (count < DREAMSIGN_DRAFT_MIN_COUNT) return null;
+    const count = seededDreamsignCount(
+      bandSize,
+      countRng,
+      quantities.minimumChooserSize,
+      quantities.maximumChooserSize,
+    );
+    if (count < quantities.minimumChooserSize) return null;
 
     // Step 3: band-sample `count` dreamsigns
     const sampled = bandSample(
       candidates,
-      (template) => dreamsignMatchScore(profiles?.get(template.id), deck),
+      (template) => dreamsignMatchScore(
+        profiles?.get(template.id),
+        deck,
+        context.rewardSelection.tuning.dreamsign,
+        context.rewardSelection.tuning.costBands,
+      ),
       count,
       rng,
-      { bandFraction: MERCHANT_TUNING.dreamsignBandFraction },
+      {
+        bandFraction: context.rewardSelection.tuning.dreamsignBandFraction,
+        bandMinimum: context.rewardSelection.tuning.dreamsignBandMinimum,
+      },
     );
 
-    if (sampled.length < DREAMSIGN_DRAFT_MIN_COUNT) return null;
+    if (sampled.length < quantities.minimumChooserSize) return null;
 
     // Step 4: build the chooser candidates
-    const choiceCandidates: MerchantChoiceCandidate[] = sampled.map(
-      (template): MerchantChoiceCandidate => ({
+    const choiceCandidates: MerchantChoiceCandidateDraft[] = sampled.map(
+      (template): MerchantChoiceCandidateDraft => ({
         choiceId: template.id,
-        title: template.name,
-        summary: "Add this dreamsign to your collection.",
         gameObjects: [dreamsignGameObject(template)],
         applyPayload: {
           kind: "add_dreamsign",
@@ -252,12 +278,9 @@ export const dreamsignDraftBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "dreamsign_draft",
       family: "dreamsign",
-      title: `Pick a dreamsign (1 of ${String(sampled.length)})`,
-      summary: "Choose a dreamsign for your collection.",
       gameObjects: sampled.map(dreamsignGameObject),
       choiceRequest: {
         choiceType: "dreamsign",
-        prompt: "Choose a dreamsign",
         candidates: choiceCandidates,
       },
       targetKey,
@@ -268,8 +291,8 @@ export const dreamsignDraftBuilder: MerchantArchetypeBuilder = {
         deck,
         selectedIds: sampled.map((t) => t.id),
         selectedCount: sampled.length,
-        bandFraction: MERCHANT_TUNING.dreamsignBandFraction,
-        bandMinimum: MERCHANT_TUNING.bandMinimum,
+        bandFraction: context.rewardSelection.tuning.dreamsignBandFraction,
+        bandMinimum: context.rewardSelection.tuning.dreamsignBandMinimum,
       }),
     };
   },

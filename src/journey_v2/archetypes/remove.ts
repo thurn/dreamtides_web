@@ -1,6 +1,5 @@
 import { fitScores, fitLooByEntry } from "../signals/fit";
 import { bandSample, type MerchantRng } from "../signals/rng";
-import { MERCHANT_TUNING } from "../tuning";
 import {
   assembleOfferTrace,
   catalogTraceCandidates,
@@ -10,15 +9,15 @@ import type { MerchantOfferTrace } from "../trace/types";
 import type {
   MerchantApplyPayload,
   MerchantCatalogCard,
-  MerchantChoiceCandidate,
   MerchantContext,
   MerchantDeckCard,
 } from "../types";
 import type { FitModel } from "../../draft/replay/fit-model";
 import type { CardData } from "../../types/cards";
 import { grantCandidatePool, singleComponentByUuid } from "./grant";
-import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
+import type { MerchantArchetypeBuilder, MerchantChoiceCandidateDraft, MerchantOfferDraft } from "./types";
 import { selectionMetadata, selectMerchantReward } from "./sharedSelection";
+import { auguryArchetype } from "../../data/augury-data";
 
 // ---------------------------------------------------------------------------
 // Internal helpers
@@ -53,13 +52,17 @@ function fitValueByUuid(
 }
 
 /** Returns the band size for a pool under a band fraction. */
-function bandSizeFor(poolSize: number, bandFraction: number): number {
+function bandSizeFor(
+  poolSize: number,
+  bandFraction: number,
+  bandMinimum: number,
+): number {
   if (poolSize === 0) return 0;
   return Math.min(
     poolSize,
     Math.max(
       Math.ceil(bandFraction * poolSize),
-      Math.min(MERCHANT_TUNING.bandMinimum, poolSize),
+      Math.min(bandMinimum, poolSize),
     ),
   );
 }
@@ -117,7 +120,7 @@ export function purgeSelection(context: MerchantContext): PurgeSelection {
   // Only entries that appear in looScores are considered for the fraction.
   const looValues = [...looScores.values()].sort((a, b) => a - b);
   const thresholdCount = Math.ceil(
-    MERCHANT_TUNING.purgeMisfitFraction * looValues.length,
+    context.rewardSelection.tuning.purgeMisfitFraction * looValues.length,
   );
   // All entries with loo <= looThreshold qualify (worst fraction).
   // Use -Infinity when there are no scored entries so nothing qualifies.
@@ -135,7 +138,8 @@ export function purgeSelection(context: MerchantContext): PurgeSelection {
     if (deckCard.card.isStarter) {
       // Starters are always candidates.
       // Misfit score: 1 (worst possible) + bonus to rank near the band bottom.
-      const misfitScore = 1 + MERCHANT_TUNING.starterPurgeBonus;
+      const misfitScore =
+        1 + context.rewardSelection.tuning.starterPurgeBonus;
       candidates.push({
         deckCard,
         entryId: deckCard.entryId,
@@ -170,6 +174,7 @@ export function purgeCandidates(
 
 /** Assembles the `deck_entry_rank` trace for a purge selection. */
 export function purgeTrace(
+  context: MerchantContext,
   selection: PurgeSelection,
   selectedEntryIds: readonly string[],
   extraNotes: readonly string[] = [],
@@ -191,12 +196,13 @@ export function purgeTrace(
     ),
     selectedKeys: selectedEntryIds,
     selectedCount: selectedEntryIds.length,
-    bandFraction: MERCHANT_TUNING.bandFraction,
+    bandFraction: context.rewardSelection.tuning.bandFraction,
+    bandMinimum: context.rewardSelection.tuning.bandMinimum,
     notes: [
-      `purgeMisfitFraction=${String(MERCHANT_TUNING.purgeMisfitFraction)}`,
+      `purgeMisfitFraction=${String(context.rewardSelection.tuning.purgeMisfitFraction)}`,
       `looThreshold=${String(selection.looThreshold)}`,
       `scoredEntryCount=${String(selection.scoredEntryCount)}`,
-      `starterPurgeBonus=${String(MERCHANT_TUNING.starterPurgeBonus)}`,
+      `starterPurgeBonus=${String(context.rewardSelection.tuning.starterPurgeBonus)}`,
       ...extraNotes,
     ],
   });
@@ -231,7 +237,9 @@ export const purgeBuilder: MerchantArchetypeBuilder = {
   family: "remove",
 
   eligible(context: MerchantContext): boolean {
-    if (context.deckCards.length < MERCHANT_TUNING.minDeckForPurge) return false;
+    if (
+      context.deckCards.length < context.rewardSelection.tuning.minDeckForPurge
+    ) return false;
     return purgeCandidates(context).length > 0;
   },
 
@@ -250,8 +258,6 @@ export const purgeBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "purge",
       family: "remove",
-      title: `Remove ${target.displayName}`,
-      summary: "Remove this card from your deck.",
       gameObjects: [
         {
           objectType: "deckCard",
@@ -280,7 +286,15 @@ export const purgeBuilder: MerchantArchetypeBuilder = {
  */
 function replacementHalfEligible(context: MerchantContext): boolean {
   const pool = grantCandidatePool(context);
-  return bandSizeFor(pool.length, MERCHANT_TUNING.bandFraction) >= 4;
+  const chooserSize = auguryArchetype(
+    context.rewardSelection.content.auguryData,
+    "purge_replace",
+  ).quantities.chooserSize;
+  return bandSizeFor(
+    pool.length,
+    context.rewardSelection.tuning.bandFraction,
+    context.rewardSelection.tuning.bandMinimum,
+  ) >= chooserSize;
 }
 
 /**
@@ -301,6 +315,10 @@ export const purgeReplaceBuilder: MerchantArchetypeBuilder = {
   },
 
   build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
+    const chooserSize = auguryArchetype(
+      context.rewardSelection.content.auguryData,
+      "purge_replace",
+    ).quantities.chooserSize;
     // Select the removal target (same as purge).
     const purgeSel = purgeSelection(context);
     const purgeCands = purgeSel.candidates;
@@ -323,17 +341,17 @@ export const purgeReplaceBuilder: MerchantArchetypeBuilder = {
     const replacements = bandSample(
       pool,
       (card) => fitByUuid.get(card.cardUuid) ?? 0,
-      4,
+      chooserSize,
       rng,
     );
-    if (replacements.length < 4) return null;
+    if (
+      replacements.length < chooserSize
+    ) return null;
 
     const remove = removeDeckEntryPayload(purgeTarget.deckCard);
 
-    const candidates: MerchantChoiceCandidate[] = replacements.map((card) => ({
+    const candidates: MerchantChoiceCandidateDraft[] = replacements.map((card) => ({
       choiceId: card.cardUuid,
-      title: card.displayName,
-      summary: "A replacement for your removed card.",
       gameObjects: [card],
       applyPayload: {
         kind: "composite",
@@ -353,8 +371,6 @@ export const purgeReplaceBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "purge_replace",
       family: "remove",
-      title: `Remove ${purgeTarget.deckCard.displayName} and draft a replacement`,
-      summary: "Remove a card and pick one of four replacements.",
       gameObjects: [
         {
           objectType: "deckCard",
@@ -369,7 +385,6 @@ export const purgeReplaceBuilder: MerchantArchetypeBuilder = {
       ],
       choiceRequest: {
         choiceType: "replacementCard",
-        prompt: "Pick a replacement",
         candidates,
       },
       targetKey: `${purgeTarget.entryId}:${replacements.map((c) => c.cardUuid).join(",")}`,
@@ -386,7 +401,8 @@ export const purgeReplaceBuilder: MerchantArchetypeBuilder = {
         ),
         selectedKeys: replacements.map((c) => c.cardUuid),
         selectedCount: replacements.length,
-        bandFraction: MERCHANT_TUNING.bandFraction,
+        bandFraction: context.rewardSelection.tuning.bandFraction,
+        bandMinimum: context.rewardSelection.tuning.bandMinimum,
         notes: [
           `removeEntry=${purgeTarget.entryId}`,
           `removeCardUuid=${purgeTarget.deckCard.cardUuid}`,

@@ -16,6 +16,8 @@ import type {
 } from "../eventlog/types";
 import type { EconomyData } from "../types/economy-data";
 import type { OpponentsData } from "../types/opponents-data";
+import type { RewardSelectionData } from "../types/reward-selection-data";
+import type { AuguryData } from "../types/augury-data";
 import type { DraftData } from "../types/draft-data";
 import {
   createRoomEvictingStale,
@@ -108,6 +110,9 @@ interface RoomGateProps {
   /** Validated economy content and journey defaults pinned into room genesis. */
   economyData: EconomyData;
   opponentsData: OpponentsData;
+  rewardSelectionData: RewardSelectionData;
+  auguryData: AuguryData;
+  explorationFoldHash: string;
   /** Scene stamped into genesis only when this mount creates a fresh room. */
   frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting" | "journey">;
   children: (context: RoomReadyContext) => ReactNode;
@@ -226,6 +231,9 @@ function hasPinnedContentConfig(genesis: Genesis): genesis is PinnedGenesis {
     typeof genesis.contentConfig.atlasFoldHash === "string" &&
     typeof genesis.contentConfig.draftFoldHash === "string" &&
     typeof genesis.contentConfig.economyFoldHash === "string" &&
+    typeof genesis.contentConfig.rewardSelectionFoldHash === "string" &&
+    typeof genesis.contentConfig.auguryFoldHash === "string" &&
+    typeof genesis.contentConfig.explorationFoldHash === "string" &&
     typeof genesis.contentConfig.opponentsFoldHash === "string" &&
     typeof genesis.contentConfig.defaultStartingEssence === "number" &&
     typeof genesis.contentConfig.dreamsignCap === "number"
@@ -256,6 +264,9 @@ export function RoomGate({
   draftData,
   economyData,
   opponentsData,
+  rewardSelectionData,
+  auguryData,
+  explorationFoldHash,
   frontDoorEntry,
   children,
 }: RoomGateProps): ReactNode {
@@ -268,8 +279,11 @@ export function RoomGate({
         draftData,
         economyData,
         opponentsData,
+        rewardSelectionData,
+        auguryData,
+        explorationFoldHash,
       ),
-    [atlasFoldHash, draftData, economyData, opponentsData, runtimeConfig],
+    [atlasFoldHash, auguryData, draftData, economyData, explorationFoldHash, opponentsData, rewardSelectionData, runtimeConfig],
   );
   const autoCreateFiredRef = useRef(false);
   const [activeRoomId, setActiveRoomId] = useState<string | null>(gameId);
@@ -452,6 +466,9 @@ export function RoomGate({
       atlasFoldHash: localContentConfig.atlasFoldHash,
       draftFoldHash: localContentConfig.draftFoldHash,
       economyFoldHash: localContentConfig.economyFoldHash,
+      rewardSelectionFoldHash: localContentConfig.rewardSelectionFoldHash,
+      auguryFoldHash: localContentConfig.auguryFoldHash,
+      explorationFoldHash: localContentConfig.explorationFoldHash,
       opponentsFoldHash: localContentConfig.opponentsFoldHash,
       defaultStartingEssence: localContentConfig.defaultStartingEssence,
       dreamsignCap: localContentConfig.dreamsignCap,

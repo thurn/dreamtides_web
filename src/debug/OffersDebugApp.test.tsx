@@ -52,8 +52,8 @@ describe("OffersDebugApp", () => {
 
     const tiles = container.querySelectorAll("[data-offer-tile]");
     expect(tiles).toHaveLength(OFFER_TILE_DEBUG_ARCHETYPE_IDS.length);
-    expect(MERCHANT_ARCHETYPE_BUILDERS).toHaveLength(13);
-    expect(OFFER_TILE_DEBUG_ARCHETYPE_IDS).toHaveLength(12);
+    expect(MERCHANT_ARCHETYPE_BUILDERS).toHaveLength(17);
+    expect(OFFER_TILE_DEBUG_ARCHETYPE_IDS).toHaveLength(16);
     expect(OFFER_TILE_DEBUG_ARCHETYPE_IDS).not.toContain("strong_card");
     expect(OFFER_TILE_DEBUG_ARCHETYPE_IDS).toContain("category_draft_known");
     const motionDelays = [...tiles].map(

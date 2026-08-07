@@ -1,7 +1,6 @@
 import { fitLooByEntry } from "../signals/fit";
 import { qualityOf } from "../signals/corpus";
 import type { MerchantRng } from "../signals/rng";
-import { MERCHANT_TUNING } from "../tuning";
 import {
   assembleOfferTrace,
   deckEntryTraceCandidates,
@@ -9,12 +8,12 @@ import {
 import type { MerchantOfferTrace } from "../trace/types";
 import type {
   MerchantApplyPayload,
-  MerchantChoiceCandidate,
   MerchantContext,
   MerchantDeckCard,
 } from "../types";
-import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
+import type { MerchantArchetypeBuilder, MerchantChoiceCandidateDraft, MerchantOfferDraft } from "./types";
 import { selectionMetadata, selectMerchantReward } from "./sharedSelection";
+import { auguryArchetype } from "../../data/augury-data";
 
 // ---------------------------------------------------------------------------
 // Candidate selection
@@ -62,7 +61,7 @@ function duplicateCandidates(context: MerchantContext): readonly DuplicateCandid
   const qualityNorm = minMaxNormalize(qualities);
   const looNorm = minMaxNormalize(looValues);
 
-  const blend = MERCHANT_TUNING.duplicateBlend;
+  const blend = context.rewardSelection.tuning.duplicateBlend;
   return eligible.map((dc, i) => ({
     deckCard: dc,
     entryId: dc.entryId,
@@ -73,6 +72,7 @@ function duplicateCandidates(context: MerchantContext): readonly DuplicateCandid
 
 /** Assembles the `deck_entry_rank` trace for the duplicate candidate set. */
 export function duplicateTrace(
+  context: MerchantContext,
   candidates: readonly DuplicateCandidate[],
   selectedEntryIds: readonly string[],
 ): MerchantOfferTrace {
@@ -89,8 +89,9 @@ export function duplicateTrace(
     ),
     selectedKeys: selectedEntryIds,
     selectedCount: selectedEntryIds.length,
-    bandFraction: MERCHANT_TUNING.bandFraction,
-    blend: MERCHANT_TUNING.duplicateBlend,
+    bandFraction: context.rewardSelection.tuning.bandFraction,
+    bandMinimum: context.rewardSelection.tuning.bandMinimum,
+    blend: context.rewardSelection.tuning.duplicateBlend,
   });
 }
 
@@ -131,12 +132,19 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
   },
 
   build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+    const chooserSize = auguryArchetype(
+      context.rewardSelection.content.auguryData,
+      "duplicate",
+    ).quantities.chooserSize;
     const selection = selectMerchantReward({
       context,
       archetypeId: "duplicate",
       mechanicId: "duplicate-deck-entry",
       policyId: "duplicate-value",
-      request: { count: 3, upTo: true },
+      request: {
+        count: chooserSize,
+        upTo: true,
+      },
     });
     if (selection === null) return null;
     const sampled = selection.bindings.deckEntryIds.flatMap((entryId) => {
@@ -159,8 +167,6 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
       return {
         archetypeId: "duplicate",
         family: "duplicate",
-        title: `Duplicate ${target.deckCard.displayName}`,
-        summary: "Add another copy of a deck card.",
         gameObjects: [
           {
             objectType: "deckCard",
@@ -179,10 +185,8 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
     }
 
     // Multiple candidates → chooser.
-    const choiceCandidates: MerchantChoiceCandidate[] = sampled.map((entry) => ({
+    const choiceCandidates: MerchantChoiceCandidateDraft[] = sampled.map((entry) => ({
       choiceId: entry.entryId,
-      title: entry.deckCard.displayName,
-      summary: "Duplicate this card.",
       gameObjects: [
         {
           objectType: "deckCard",
@@ -200,12 +204,9 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "duplicate",
       family: "duplicate",
-      title: "Duplicate a deck card",
-      summary: "Pick a card from your deck to duplicate.",
       gameObjects: [],
       choiceRequest: {
         choiceType: "catalogCard",
-        prompt: "Pick 1 of up to 3",
         candidates: choiceCandidates,
       },
       targetKey: sampled.map((e) => e.entryId).join(","),

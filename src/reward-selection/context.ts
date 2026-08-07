@@ -35,6 +35,9 @@ function selectionContentRevision(content: JourneyContent): string {
     fitModel: content.fitModel,
     corpus: content.merchantCorpus,
     profiles: content.dreamsignProfiles,
+    rewardSelectionFoldHash: content.rewardSelectionData.foldHash,
+    auguryFoldHash: content.auguryData.foldHash,
+    explorationFoldHash: content.exploration?.foldHash ?? null,
   });
 }
 
@@ -62,6 +65,7 @@ export function buildRewardSelectionContext(input: {
     journeySeed: journeyState.seed,
     site,
     content: journeyContent,
+    tuning: journeyContent.rewardSelectionData.tuning,
     deckEntries: journeyState.deck,
     effectiveDeckCards,
     cardByUuid,

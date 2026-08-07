@@ -1,7 +1,7 @@
 import type { MerchantRng } from "../signals/rng";
 import type {
   MerchantApplyPayload,
-  MerchantChoiceRequest,
+  MerchantChoiceCandidate,
   MerchantContext,
   MerchantGameObject,
 } from "../types";
@@ -11,6 +11,7 @@ import type {
   RewardSelectionPolicyId,
   RewardSelectionTrace,
 } from "../../reward-selection/types";
+import type { AuguryCopySlot } from "../../types/augury-data";
 
 /** The 17 offer archetypes across the 6 families. */
 export type MerchantArchetypeId =
@@ -108,6 +109,11 @@ export const MERCHANT_ARCHETYPE_LABELS: Readonly<
   add_site: "Site: Add a site",
 };
 
+export type MerchantChoiceCandidateDraft = Omit<
+  MerchantChoiceCandidate,
+  "title" | "summary"
+>;
+
 /**
  * A built offer before it is assigned an offer id (`A`/`B`) and an encounter
  * signature. One draft is one reward; chooser drafts carry a
@@ -116,13 +122,16 @@ export const MERCHANT_ARCHETYPE_LABELS: Readonly<
 export interface MerchantOfferDraft {
   archetypeId: MerchantArchetypeId;
   family: MerchantOfferFamily;
-  title: string;
-  summary: string;
+  /** Values supplied to the archetype's TOML-authored copy templates. */
+  copyVariables?: Partial<Record<AuguryCopySlot, string | number>>;
   gameObjects: readonly MerchantGameObject[];
   /** Direct reward payload (mutually exclusive in practice with `choiceRequest`). */
   applyPayload?: MerchantApplyPayload;
   /** Chooser reward (<= 4 candidates). */
-  choiceRequest?: MerchantChoiceRequest;
+  choiceRequest?: {
+    choiceType: "catalogCard" | "dreamsign" | "replacementCard";
+    candidates: readonly MerchantChoiceCandidateDraft[];
+  };
   /** Stable identity of the offer's target, used by metrics and repetition checks. */
   targetKey: string;
   /**

@@ -1,0 +1,474 @@
+{
+  "schemaVersion": 1,
+  "encounter": {
+    "offerCount": 2,
+    "distinctFamilies": true,
+    "allowDecline": true
+  },
+  "dialogue": {
+    "fallbackLine": "Something here was meant for you.",
+    "acceptReactions": [
+      "It already looks at home with you.",
+      "The dream settles. Go well.",
+      "A fair bargain, and a quiet one.",
+      "Carry it gently. It will carry you.",
+      "There. The road feels lighter now.",
+      "The dark approves, I think.",
+      "Some trades the morning never undoes."
+    ]
+  },
+  "archetypes": [
+    {
+      "id": "fit_card_grant",
+      "enabled": true,
+      "family": "grant",
+      "weight": 10,
+      "selectionPolicyId": "card-fit",
+      "quantities": {
+        "grantedCopies": 1
+      },
+      "dialogueLines": [
+        "Some things drift a long way only to find their owner.",
+        "I kept this shaped like the hollow you carry.",
+        "It has been waiting to belong to someone. To you.",
+        "A stranger that will feel like an old friend.",
+        "This was always going to end up in your hands."
+      ],
+      "copy": {
+        "title": "Receive {card}",
+        "summary": "Add this card to your deck.",
+        "prompt": "",
+        "candidateTitle": "{card}",
+        "candidateSummary": "Add this card to your deck.",
+        "detailHeadline": "Gain a Card",
+        "detailSubtitle": "Gain {card}"
+      }
+    },
+    {
+      "id": "fit_card_draft",
+      "enabled": true,
+      "family": "grant",
+      "weight": 10,
+      "selectionPolicyId": "card-fit",
+      "quantities": {
+        "chooserSize": 4,
+        "grantedCopies": 1
+      },
+      "dialogueLines": [
+        "Several roads, and each one bends quietly toward you.",
+        "Kindred things, gathered. Take whichever leans your way.",
+        "I sifted the tide and kept only what suits you.",
+        "All of these already half-belong to you.",
+        "Choose freely — none of them are strangers to your path."
+      ],
+      "copy": {
+        "title": "Draft a card",
+        "summary": "Choose one of {count-word} cards to keep.",
+        "prompt": "Pick 1 of these cards",
+        "candidateTitle": "{card}",
+        "candidateSummary": "Add this card to your deck.",
+        "detailHeadline": "Choose a Card",
+        "detailSubtitle": "Choose a card to add to your deck."
+      }
+    },
+    {
+      "id": "copies_draft",
+      "enabled": true,
+      "family": "grant",
+      "weight": 6,
+      "selectionPolicyId": "card-fit-quality",
+      "quantities": {
+        "chooserSize": 4,
+        "grantedCopies": 2
+      },
+      "dialogueLines": [
+        "Whatever you cherish, the dream will gladly echo.",
+        "Hold a thing close enough and it learns to return.",
+        "One becomes two when you want it badly enough.",
+        "Take it once; the dream remembers it twice.",
+        "What repeats becomes certain. Choose what you trust."
+      ],
+      "copy": {
+        "title": "Draft a card, doubled",
+        "summary": "Choose one of {count-word} cards and keep two copies.",
+        "prompt": "Pick 1 — you keep two copies",
+        "candidateTitle": "{card}",
+        "candidateSummary": "Add two copies of this card to your deck.",
+        "detailHeadline": "Choose a Card",
+        "detailSubtitle": "Choose a card and add two copies of it to your deck."
+      }
+    },
+    {
+      "id": "strong_card",
+      "enabled": true,
+      "family": "grant",
+      "weight": 8,
+      "selectionPolicyId": "card-fit-quality",
+      "quantities": {
+        "grantedCopies": 1
+      },
+      "dialogueLines": [
+        "Something fierce is sleeping here, and it stirs for you.",
+        "Not gentle, this one. But it was made to win.",
+        "Raw weather in a small shape. Carry it carefully.",
+        "I keep the dangerous ones for travelers who can hold them.",
+        "Power, plainly. The dream doesn't dress it up."
+      ],
+      "copy": {
+        "title": "Receive {card}",
+        "summary": "A powerful card.",
+        "prompt": "",
+        "candidateTitle": "{card}",
+        "candidateSummary": "A powerful card.",
+        "detailHeadline": "Gain a Card",
+        "detailSubtitle": "Gain {card}"
+      }
+    },
+    {
+      "id": "category_draft_known",
+      "enabled": true,
+      "family": "grant",
+      "weight": 10,
+      "selectionPolicyId": "card-fit",
+      "quantities": {
+        "chooserSize": 4,
+        "grantedCopies": 1
+      },
+      "dialogueLines": [
+        "A drawer of kindred things, all leaning the same way.",
+        "Where you are going, your kin have gone before.",
+        "I gathered a little family for you. Pick one to keep.",
+        "Same blood, different faces. Choose the one that calls.",
+        "These belong to one another, and soon to you."
+      ],
+      "copy": {
+        "title": "Draft {category}",
+        "summary": "Choose one of {count-word} {category} cards.",
+        "prompt": "Pick 1 of these {category} cards",
+        "candidateTitle": "{card}",
+        "candidateSummary": "Add this {category} card to your deck.",
+        "detailHeadline": "Choose a Card",
+        "detailSubtitle": "Choose a card from a single category to add to your deck."
+      }
+    },
+    {
+      "id": "card_bundle",
+      "enabled": true,
+      "family": "grant",
+      "weight": 8,
+      "selectionPolicyId": "card-bundle",
+      "quantities": {
+        "bundleSize": 3,
+        "minimumBundleSize": 2
+      },
+      "dialogueLines": [
+        "These were never meant to travel alone.",
+        "Apart they are quiet; together they sing.",
+        "I bound them because they finish each other's sentences.",
+        "A knot of things that only make sense as one.",
+        "Keep them whole and you'll hear them hum."
+      ],
+      "copy": {
+        "title": "Gain {count} cards that work together",
+        "summary": "Receive this {count}-card bundle.",
+        "prompt": "",
+        "candidateTitle": "{card}",
+        "candidateSummary": "Part of this card bundle.",
+        "detailHeadline": "Gain {count-word} Cards",
+        "detailSubtitle": "Add {count-word} cards to your deck."
+      }
+    },
+    {
+      "id": "transfigured_draft",
+      "enabled": true,
+      "family": "grant",
+      "weight": 6,
+      "selectionPolicyId": "card-fit",
+      "quantities": {
+        "chooserSize": 4,
+        "grantedCopies": 1
+      },
+      "dialogueLines": [
+        "I finish my work before I ever offer it.",
+        "These came to me dull and leave me gleaming.",
+        "Already sharpened, every one, by my own hand.",
+        "No raw material here — only what I've already perfected.",
+        "I polished these in the long dark. Look how they shine."
+      ],
+      "copy": {
+        "title": "Draft a transfigured card",
+        "summary": "Choose one of {count-word} cards that arrive already transfigured.",
+        "prompt": "Pick 1 of these transfigured cards",
+        "candidateTitle": "{card} ({transfiguration})",
+        "candidateSummary": "Arrives already {transfiguration}.",
+        "detailHeadline": "Choose a Transfigured Card",
+        "detailSubtitle": "Choose a transfigured card to add to your deck."
+      }
+    },
+    {
+      "id": "transfigure",
+      "enabled": true,
+      "family": "improve",
+      "weight": 10,
+      "selectionPolicyId": "transfiguration-value",
+      "quantities": {
+        "targetCount": 1
+      },
+      "dialogueLines": [
+        "Even a dreaming thing can be honed.",
+        "There is a finer version of this, waiting inside.",
+        "Give me a moment with it, and it will thank you.",
+        "Unfinished. But I see what it longs to become.",
+        "A little heat, a little patience, and it changes."
+      ],
+      "copy": {
+        "title": "{card}: {transfiguration}",
+        "summary": "Permanently improve a deck card.",
+        "prompt": "",
+        "candidateTitle": "{card}",
+        "candidateSummary": "Apply {transfiguration}.",
+        "detailHeadline": "Transfigure a Card",
+        "detailSubtitle": "Transfigure {card}"
+      }
+    },
+    {
+      "id": "starter_transfigure",
+      "enabled": true,
+      "family": "improve",
+      "weight": 6,
+      "selectionPolicyId": "transfiguration-value",
+      "quantities": {
+        "maximumTargets": 2
+      },
+      "dialogueLines": [
+        "The first things you carried still hunger to grow.",
+        "Humble beginnings reward a careful hand.",
+        "What you started with can yet become more.",
+        "Old companions, given a second and brighter draft.",
+        "Even the plainest seed remembers how to bloom."
+      ],
+      "copy": {
+        "title": "Improve {count} starter cards",
+        "summary": "Polish your starter cards.",
+        "prompt": "",
+        "candidateTitle": "{card}",
+        "candidateSummary": "Transfigure this starter card.",
+        "detailHeadline": "Transfigure Your Starters",
+        "detailSubtitle": "Transfigure {count-word} starter cards."
+      }
+    },
+    {
+      "id": "keyword_mod",
+      "enabled": false,
+      "family": "improve",
+      "weight": 8,
+      "selectionPolicyId": "deck-entry-centrality",
+      "quantities": {
+        "targetCount": 1
+      },
+      "dialogueLines": [
+        "A small new habit can change a whole life.",
+        "One trick it never knew it wanted to learn.",
+        "Teach an old thing a new word and watch it wake.",
+        "Barely a change. It will feel like a different soul.",
+        "A single new gift, and everything after it shifts."
+      ],
+      "copy": {
+        "title": "{card}: {transfiguration}",
+        "summary": "{transfiguration}",
+        "prompt": "",
+        "candidateTitle": "{card}",
+        "candidateSummary": "{transfiguration}",
+        "detailHeadline": "Reduce Reclaim",
+        "detailSubtitle": "Reduce Reclaim for {card}"
+      }
+    },
+    {
+      "id": "tribal_change",
+      "enabled": false,
+      "family": "improve",
+      "weight": 6,
+      "selectionPolicyId": "deck-entry-centrality",
+      "quantities": {
+        "targetCount": 1
+      },
+      "dialogueLines": [
+        "Blood is only a story. It can be retold.",
+        "Born to one kin, but it would run better with another.",
+        "Let me change the company it keeps.",
+        "A new family suits it better than the old one did.",
+        "It only ever wanted to belong somewhere else."
+      ],
+      "copy": {
+        "title": "{card} becomes a {subtype}",
+        "summary": "Change a character's subtype to {subtype}.",
+        "prompt": "",
+        "candidateTitle": "{card}",
+        "candidateSummary": "Become a {subtype}.",
+        "detailHeadline": "Change a Character Type",
+        "detailSubtitle": "Make {card} a {subtype}"
+      }
+    },
+    {
+      "id": "purge",
+      "enabled": true,
+      "family": "remove",
+      "weight": 8,
+      "selectionPolicyId": "purge-misfit",
+      "quantities": {
+        "targetCount": 1
+      },
+      "dialogueLines": [
+        "Some weight is only weight. Set it down with me.",
+        "Travel lighter. Leave the dead branch behind.",
+        "Not everything you carry is still worth carrying.",
+        "Let me take the stone from your shoe.",
+        "Release it, and feel how the road opens."
+      ],
+      "copy": {
+        "title": "Remove {card}",
+        "summary": "Remove this card from your deck.",
+        "prompt": "",
+        "candidateTitle": "{card}",
+        "candidateSummary": "Remove this card from your deck.",
+        "detailHeadline": "Purge a Card",
+        "detailSubtitle": "Purge {card}"
+      }
+    },
+    {
+      "id": "purge_replace",
+      "enabled": false,
+      "family": "remove",
+      "weight": 8,
+      "selectionPolicyId": "card-fit-quality",
+      "quantities": {
+        "chooserSize": 4
+      },
+      "dialogueLines": [
+        "Let the withered branch fall; another bud waits.",
+        "Trade the burden for something that pulls its weight.",
+        "Out with the silence, in with a clearer note.",
+        "Give me the stone; I'll hand you a seed.",
+        "One leaves so a better thing can take its seat."
+      ],
+      "copy": {
+        "title": "Remove {card} and draft a replacement",
+        "summary": "Remove a card and pick one of {count-word} replacements.",
+        "prompt": "Pick a replacement",
+        "candidateTitle": "{card}",
+        "candidateSummary": "A replacement for your removed card.",
+        "detailHeadline": "Trade a Card",
+        "detailSubtitle": "Purge {card} and choose a card to replace it"
+      }
+    },
+    {
+      "id": "duplicate",
+      "enabled": true,
+      "family": "duplicate",
+      "weight": 8,
+      "selectionPolicyId": "duplicate-value",
+      "quantities": {
+        "chooserSize": 3,
+        "grantedCopies": 1
+      },
+      "dialogueLines": [
+        "The mirror is fond of your finest reflection.",
+        "Whatever you love most, the dream will love twice.",
+        "Some things are worth seeing again, and again.",
+        "Point to your treasure and I will echo it.",
+        "Doubling what already works is the oldest magic."
+      ],
+      "copy": {
+        "title": "Duplicate {card}",
+        "summary": "Add another copy of a deck card.",
+        "prompt": "Pick 1 of up to {count}",
+        "candidateTitle": "{card}",
+        "candidateSummary": "Duplicate this card.",
+        "detailHeadline": "Choose a Card",
+        "detailSubtitle": "Choose one of {count-word} cards in your deck to duplicate."
+      }
+    },
+    {
+      "id": "dreamsign",
+      "enabled": true,
+      "family": "dreamsign",
+      "weight": 8,
+      "selectionPolicyId": "dreamsign-match",
+      "quantities": {
+        "grantedCopies": 1
+      },
+      "dialogueLines": [
+        "A quiet star to walk beneath, all the way home.",
+        "A blessing that keeps working while you sleep.",
+        "Something to watch over the long road ahead.",
+        "Carry this and the nights grow a little softer.",
+        "A faithful light. It asks nothing and gives daily."
+      ],
+      "copy": {
+        "title": "Gain the {card} dreamsign",
+        "summary": "Add this dreamsign to your collection.",
+        "prompt": "",
+        "candidateTitle": "{card}",
+        "candidateSummary": "Add this dreamsign to your collection.",
+        "detailHeadline": "Gain a Dreamsign",
+        "detailSubtitle": "Gain {card}"
+      }
+    },
+    {
+      "id": "dreamsign_draft",
+      "enabled": false,
+      "family": "dreamsign",
+      "weight": 6,
+      "selectionPolicyId": "dreamsign-match",
+      "quantities": {
+        "minimumChooserSize": 2,
+        "maximumChooserSize": 4,
+        "grantedCopies": 1
+      },
+      "dialogueLines": [
+        "Several stars lean close. Choose one to follow.",
+        "These lights all hum — listen for the one that's yours.",
+        "Pick the patron whose silence sounds like home.",
+        "A blessing fits best when it is freely chosen.",
+        "Many guardians offered; you may keep a single one."
+      ],
+      "copy": {
+        "title": "Pick a dreamsign (1 of {count})",
+        "summary": "Choose a dreamsign for your collection.",
+        "prompt": "Choose a dreamsign",
+        "candidateTitle": "{card}",
+        "candidateSummary": "Add this dreamsign to your collection.",
+        "detailHeadline": "Choose a Dreamsign",
+        "detailSubtitle": "Choose a dreamsign to gain."
+      }
+    },
+    {
+      "id": "add_site",
+      "enabled": true,
+      "family": "site",
+      "weight": 6,
+      "selectionPolicyId": "site-uniform",
+      "quantities": {
+        "targetCount": 1
+      },
+      "dialogueLines": [
+        "I can open a door where there was only wall.",
+        "Your map has room for one more strange place.",
+        "Let me fold a new stop into the road ahead.",
+        "Somewhere worth visiting, drawn fresh just for you.",
+        "The dreamscape will widen, if you let it."
+      ],
+      "copy": {
+        "title": "Add a {site} to this dreamscape",
+        "summary": "A {site} will appear on the current dreamscape map.",
+        "prompt": "",
+        "candidateTitle": "{site}",
+        "candidateSummary": "Add this site to the current dreamscape.",
+        "detailHeadline": "Add a Site",
+        "detailSubtitle": "Add a {site} site"
+      }
+    }
+  ],
+  "contentHash": "271944a5d396f75812af29a67e03641dae6909c5798fef8ca7759fd293ea5271",
+  "foldHash": "271944a5d396f75812af29a67e03641dae6909c5798fef8ca7759fd293ea5271"
+}

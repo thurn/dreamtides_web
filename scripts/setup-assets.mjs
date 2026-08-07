@@ -36,8 +36,13 @@ import {
 import { collectAtlasAssetSources, compileAtlasData } from "./atlas-data.mjs";
 import { compileEconomyData } from "./economy-data.mjs";
 import { compileDraftData } from "./draft-data.mjs";
+import { compileRewardSelectionData } from "./reward-selection-data.mjs";
+import { compileAuguryData } from "./augury-data.mjs";
 import { compileOpponentsData } from "./opponents-data.mjs";
-import { EXPLORATION_EFFECT_DEFINITION_BY_KIND } from "./exploration-editor-schema.mjs";
+import {
+  buildExplorationEffectDefinitions,
+  EXPLORATION_EFFECT_DEFINITIONS,
+} from "./exploration-editor-schema.mjs";
 
 // Re-exported for `setup-assets.test.mjs`, which exercises the JSONC comment
 // stripper alongside the asset-build helpers defined here.
@@ -742,6 +747,16 @@ function transformTomlRecord(record) {
 
 /** Convert and validate the authored Exploration encounter catalog. */
 export function transformExplorationData(source) {
+  const effectDefinitions = source["effect-kind"] === undefined
+    ? EXPLORATION_EFFECT_DEFINITIONS
+    : buildExplorationEffectDefinitions(source);
+  const effectDefinitionByKind = new Map(
+    effectDefinitions.map((definition) => [definition.kind, definition]),
+  );
+  const actionsPerEncounter = source.encounters?.["actions-per-encounter"] ?? 2;
+  if (actionsPerEncounter !== 2) {
+    throw new Error("exploration.toml: encounters.actions-per-encounter must be 2 for the two-choice screen contract");
+  }
   const customCards = (source["custom-card"] ?? []).map((raw) => {
     const card = transformTomlRecord(raw);
     return {
@@ -764,13 +779,21 @@ export function transformExplorationData(source) {
     return {
       ...encounter,
       action: (encounter.action ?? []).map((action) => {
-        const definition = EXPLORATION_EFFECT_DEFINITION_BY_KIND.get(
+        const definition = effectDefinitionByKind.get(
           action.effectKind,
         );
         const specialVariables = [
           ...new Set(action.effectText?.match(/\$[A-Z][A-Z0-9_]*/gu) ?? []),
         ];
+        const defaults = Object.fromEntries(
+          (definition?.fields ?? []).flatMap((entry) =>
+            entry.defaultValue === undefined || action[entry.key] !== undefined
+              ? []
+              : [[entry.key, entry.defaultValue]],
+          ),
+        );
         return {
+          ...defaults,
           ...action,
           ...(definition?.canonicalMechanicId === undefined
             ? {}
@@ -803,9 +826,9 @@ export function transformExplorationData(source) {
       );
     }
     encounterIds.add(encounter.cardId.toLowerCase());
-    if (!Array.isArray(encounter.action) || encounter.action.length !== 2) {
+    if (!Array.isArray(encounter.action) || encounter.action.length !== actionsPerEncounter) {
       throw new Error(
-        `exploration.toml: encounter ${encounter.cardId} must have exactly 2 actions`,
+        `exploration.toml: encounter ${encounter.cardId} must have exactly ${String(actionsPerEncounter)} actions`,
       );
     }
     for (const action of encounter.action) {
@@ -820,7 +843,7 @@ export function transformExplorationData(source) {
           `exploration.toml: action ${action.id} has unknown effect-kind ${String(action.effectKind)}`,
         );
       }
-      const definition = EXPLORATION_EFFECT_DEFINITION_BY_KIND.get(
+      const definition = effectDefinitionByKind.get(
         action.effectKind,
       );
       if (
@@ -976,7 +999,33 @@ export function transformExplorationData(source) {
     }
   }
 
-  return { customCards, customDreamsigns, encounters };
+  const effectKinds = effectDefinitions.map((definition) => ({
+    kind: definition.kind,
+    label: definition.label,
+    canonicalMechanicId: definition.canonicalMechanicId,
+    ...(definition.defaultSelectionPolicyId === undefined ? {} : {
+      defaultSelectionPolicyId: definition.defaultSelectionPolicyId,
+      allowedSelectionPolicyIds: definition.allowedSelectionPolicyIds,
+    }),
+    copy: definition.copy,
+    fields: definition.fields,
+  }));
+  const hashPayload = {
+    schemaVersion: 1,
+    actionsPerEncounter,
+    effectKinds,
+    customCards,
+    customDreamsigns,
+    encounters,
+  };
+  const contentHash = createHash("sha256")
+    .update(JSON.stringify(hashPayload))
+    .digest("hex");
+  return {
+    ...hashPayload,
+    contentHash,
+    foldHash: contentHash,
+  };
 }
 
 /**
@@ -1407,6 +1456,8 @@ export function setupAssets({
   dreamscapesTomlPath = join(DATA_DIR, "tabula", "dreamscapes.toml"),
   dreamGuidesTomlPath = join(DATA_DIR, "tabula", "dream_guides.toml"),
   explorationTomlPath = join(DATA_DIR, "tabula", "exploration.toml"),
+  rewardSelectionTomlPath = join(DATA_DIR, "tabula", "reward_selection.toml"),
+  auguryTomlPath = join(DATA_DIR, "tabula", "augury.toml"),
   affiliationsTomlPath = join(DATA_DIR, "tabula", "affiliations.toml"),
   atlasTomlPath = join(DATA_DIR, "tabula", "atlas.toml"),
   economyTomlPath = join(DATA_DIR, "tabula", "economy.toml"),
@@ -1422,6 +1473,7 @@ export function setupAssets({
   tutorialTomlPath = join(DATA_DIR, "tabula", "tutorial.toml"),
   merchantCorpusJsonPath = join(DATA_DIR, "merchant_corpus.json"),
   publicDir = PUBLIC_DIR,
+  generatedConfigDir = join(ROOT, "src", "generated", "config"),
   imageCacheDir = IMAGE_CACHE_DIR,
   dreamAvatarArtDir = defaultDreamAvatarArtDir(),
   dreamsignArtDir = DREAMSIGN_ART_DIR,
@@ -1481,6 +1533,13 @@ export function setupAssets({
   const dreamscapesJsonPath = join(publicDir, "dreamscapes-data.json");
   const dreamGuidesJsonPath = join(publicDir, "dream-guides-data.json");
   const explorationJsonPath = join(publicDir, "exploration-data.json");
+  const rewardSelectionJsonPath = join(publicDir, "reward-selection-data.json");
+  const auguryJsonPath = join(publicDir, "augury-data.json");
+  const generatedRewardSelectionJsonPath = join(
+    generatedConfigDir,
+    "reward-selection-data.json",
+  );
+  const generatedAuguryJsonPath = join(generatedConfigDir, "augury-data.json");
   const affiliationsJsonPath = join(publicDir, "affiliations-data.json");
   const atlasJsonPath = join(publicDir, "atlas-data.json");
   const economyJsonPath = join(publicDir, "economy-data.json");
@@ -2091,6 +2150,29 @@ export function setupAssets({
     JSON.stringify(jsonDraftData, null, 2) + "\n",
   );
   console.log("Wrote Draft data to draft-data.json");
+
+  console.log("Parsing reward_selection.toml...");
+  const jsonRewardSelectionData = compileRewardSelectionData(
+    parse(readFileSync(rewardSelectionTomlPath, "utf8")),
+  );
+  const serializedRewardSelectionData =
+    JSON.stringify(jsonRewardSelectionData, null, 2) + "\n";
+  mkdirSync(generatedConfigDir, { recursive: true });
+  writeFileSync(rewardSelectionJsonPath, serializedRewardSelectionData);
+  writeFileSync(
+    generatedRewardSelectionJsonPath,
+    serializedRewardSelectionData,
+  );
+  console.log("Wrote reward selection data to reward-selection-data.json");
+
+  console.log("Parsing augury.toml...");
+  const jsonAuguryData = compileAuguryData(
+    parse(readFileSync(auguryTomlPath, "utf8")),
+  );
+  const serializedAuguryData = JSON.stringify(jsonAuguryData, null, 2) + "\n";
+  writeFileSync(auguryJsonPath, serializedAuguryData);
+  writeFileSync(generatedAuguryJsonPath, serializedAuguryData);
+  console.log("Wrote Augury data to augury-data.json");
 
   console.log("Parsing opponents.toml...");
   generateOpponentsData({

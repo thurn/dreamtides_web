@@ -687,7 +687,8 @@ function explorationScene(
         (card) =>
           card.cardType === "Character" &&
           card.energyCost !== null &&
-          card.energyCost <= 2,
+          card.energyCost <=
+            journeyContent.rewardSelectionData.tuning.costBands.cheapCharacterMaximum,
         4,
       );
       add(

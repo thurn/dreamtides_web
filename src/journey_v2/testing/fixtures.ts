@@ -27,6 +27,7 @@ import type {
   SiteState,
 } from "../../types/journey";
 import { createDefaultState } from "../../state/journey-context";
+import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
 
 export const TEST_CARD_UUIDS = {
   ordinary: "11111111-1111-4111-8111-111111111111",
@@ -158,6 +159,7 @@ export function makeMerchantTestContent({
   dreamsignProfiles?: ReadonlyMap<string, DreamsignProfile>;
 }): JourneyContent {
   return {
+    ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
     cardDatabase: new Map(cards.map((card) => [card.cardNumber, card])),
     dreamAvatars: [],

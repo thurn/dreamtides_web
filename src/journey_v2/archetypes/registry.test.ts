@@ -4,12 +4,9 @@ import { MERCHANT_ARCHETYPE_BUILDERS } from "./registry";
 import { MERCHANT_ARCHETYPE_FAMILIES } from "./types";
 
 describe("merchant archetype registry", () => {
-  it("excludes retired Augury offer types", () => {
+  it("registers every TOML-configurable Augury offer type", () => {
     const ids = MERCHANT_ARCHETYPE_BUILDERS.map((builder) => builder.archetypeId);
-    expect(ids).not.toContain("keyword_mod");
-    expect(ids).not.toContain("tribal_change");
-    expect(ids).not.toContain("purge_replace");
-    expect(ids).not.toContain("dreamsign_draft");
+    expect(ids.sort()).toEqual(Object.keys(MERCHANT_ARCHETYPE_FAMILIES).sort());
   });
 
   it("registers each archetype id at most once", () => {

@@ -18,6 +18,8 @@ import {
 } from "./atlas-data.mjs";
 import { compileEconomyData } from "./economy-data.mjs";
 import { compileDraftData } from "./draft-data.mjs";
+import { compileRewardSelectionData } from "./reward-selection-data.mjs";
+import { compileAuguryData } from "./augury-data.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const ATLAS_DEPENDENCY_TOMLS = new Set([
@@ -110,6 +112,18 @@ export const SIMPLE_CONFIGS = [
     jsonFile: "draft-data.json",
     arrayKey: null,
     transform: compileDraftData,
+  },
+  {
+    tomlFile: "reward_selection.toml",
+    jsonFile: "reward-selection-data.json",
+    arrayKey: null,
+    transform: compileRewardSelectionData,
+  },
+  {
+    tomlFile: "augury.toml",
+    jsonFile: "augury-data.json",
+    arrayKey: null,
+    transform: compileAuguryData,
   },
   {
     tomlFile: "apollyon_incarnations.toml",

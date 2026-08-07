@@ -8,7 +8,6 @@ import {
 } from "../../reward-selection";
 import type { MerchantArchetypeId, MerchantOfferDraft } from "./types";
 import type { MerchantContext } from "../types";
-import { MERCHANT_TUNING } from "../tuning";
 import type {
   MerchantOfferTrace,
   MerchantTraceDecision,
@@ -45,9 +44,9 @@ function legacyTraceFor(selection: RewardSelectionResult): MerchantOfferTrace {
   const notes = selection.trace.policyId === "purge-misfit"
     ? [
         ...selection.trace.fallback,
-        `purgeMisfitFraction=${String(MERCHANT_TUNING.purgeMisfitFraction)}`,
+        `purgeMisfitFraction=${String(selection.trace.tuning.purgeMisfitFraction ?? "unavailable")}`,
         `looThreshold=${String(threshold ?? "unavailable")}`,
-        `starterPurgeBonus=${String(MERCHANT_TUNING.starterPurgeBonus)}`,
+        `starterPurgeBonus=${String(selection.trace.tuning.starterPurgeBonus ?? "unavailable")}`,
       ]
     : [
         ...selection.trace.fallback,

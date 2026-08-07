@@ -764,6 +764,9 @@ export default function App({
       draftData={journeyContent.draftData}
       opponentsData={journeyContent.opponentsData}
       economyData={journeyContent.economyData}
+      rewardSelectionData={journeyContent.rewardSelectionData}
+      auguryData={journeyContent.auguryData}
+      explorationFoldHash={journeyContent.exploration?.foldHash ?? "missing-exploration-content"}
       frontDoorEntry={frontDoorEntry}
     >
       {(context) => (

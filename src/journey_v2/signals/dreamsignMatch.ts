@@ -1,5 +1,7 @@
 import type { DreamsignProfile } from "../../data/dreamsign-profiles";
 import type { CardData } from "../../types/cards";
+import type { RewardSelectionTuning } from "../../types/reward-selection-data";
+import { MERCHANT_TUNING } from "../tuning";
 
 /**
  * Deck cards exhibiting a feature for it to count as *fully* covered. Coverage
@@ -7,21 +9,11 @@ import type { CardData } from "../../types/cards";
  * credit), so a dreamsign keyed to a feature the deck genuinely supports rises
  * and one keyed to a feature the deck lacks falls to zero coverage.
  */
-const FEATURE_FULL_COVERAGE = 3;
-
-/**
- * Baseline coverage for a featureless (or unprofiled) dreamsign — one that
- * suits any deck equally. Pitched below a specific dreamsign whose features the
- * deck covers, and above one whose features the deck does not, so a generic
- * blessing is a reasonable fallback but never beats a genuinely suited sign.
- */
-const FEATURELESS_COVERAGE = 0.4;
-
-/** Quality weight: 1.2 / 1.0 / 0.8 for quality tiers 1 / 2 / 3. */
-function qualityWeight(quality: 1 | 2 | 3): number {
-  if (quality === 1) return 1.2;
-  if (quality === 3) return 0.8;
-  return 1.0;
+function qualityWeight(
+  quality: 1 | 2 | 3,
+  tuning: RewardSelectionTuning["dreamsign"],
+): number {
+  return tuning.qualityWeight[String(quality) as "1" | "2" | "3"];
 }
 
 /**
@@ -29,13 +21,17 @@ function qualityWeight(quality: 1 | 2 | 3): number {
  * cheap: energyCost <= 1, mid: energyCost 2–3, big: energyCost >= 4.
  * Cards with null energyCost (variable cost) are excluded from band matching.
  */
-function matchesCostBand(card: CardData, band: "cheap" | "mid" | "big"): boolean {
+function matchesCostBand(
+  card: CardData,
+  band: "cheap" | "mid" | "big",
+  tuning: RewardSelectionTuning["costBands"],
+): boolean {
   const cost = card.energyCost;
   if (cost === null) return false;
-  if (band === "cheap") return cost <= 1;
-  if (band === "mid") return cost >= 2 && cost <= 3;
+  if (band === "cheap") return cost <= tuning.cheapMaximum;
+  if (band === "mid") return cost >= tuning.midMinimum && cost <= tuning.midMaximum;
   // big
-  return cost >= 4;
+  return cost >= tuning.bigMinimum;
 }
 
 /**
@@ -68,9 +64,10 @@ function countSatisfying(deckCards: readonly CardData[], predicate: (c: CardData
 function featureCoverage(
   deckCards: readonly CardData[],
   predicate: (c: CardData) => boolean,
+  fullCoverageCount: number,
 ): number {
   const count = countSatisfying(deckCards, predicate);
-  return Math.min(1, count / FEATURE_FULL_COVERAGE);
+  return Math.min(1, count / fullCoverageCount);
 }
 
 /**
@@ -109,6 +106,8 @@ export interface DreamsignScoreBreakdown {
 function profileCoverage(
   profile: DreamsignProfile | undefined,
   deckCards: readonly CardData[],
+  tuning: RewardSelectionTuning["dreamsign"],
+  costBands: RewardSelectionTuning["costBands"],
 ): DreamsignCoverage {
   if (profile === undefined) {
     return { featureCount: 0, meanCoverage: 0 };
@@ -125,7 +124,7 @@ function profileCoverage(
   }
 
   for (const band of profile.costBands) {
-    features.push((c) => matchesCostBand(c, band));
+    features.push((c) => matchesCostBand(c, band, costBands));
   }
 
   for (const keyword of profile.keywords) {
@@ -138,7 +137,11 @@ function profileCoverage(
 
   let coverageSum = 0;
   for (const predicate of features) {
-    coverageSum += featureCoverage(deckCards, predicate);
+    coverageSum += featureCoverage(
+      deckCards,
+      predicate,
+      tuning.fullCoverageCount,
+    );
   }
   return {
     featureCount: features.length,
@@ -161,8 +164,10 @@ function profileCoverage(
 export function dreamsignMatchScore(
   profile: DreamsignProfile | undefined,
   deckCards: readonly CardData[],
+  tuning: RewardSelectionTuning["dreamsign"] = MERCHANT_TUNING.dreamsign,
+  costBands: RewardSelectionTuning["costBands"] = MERCHANT_TUNING.costBands,
 ): number {
-  return dreamsignScoreBreakdown(profile, deckCards).score;
+  return dreamsignScoreBreakdown(profile, deckCards, tuning, costBands).score;
 }
 
 /**
@@ -174,11 +179,15 @@ export function dreamsignMatchScore(
 export function dreamsignScoreBreakdown(
   profile: DreamsignProfile | undefined,
   deckCards: readonly CardData[],
+  tuning: RewardSelectionTuning["dreamsign"] = MERCHANT_TUNING.dreamsign,
+  costBands: RewardSelectionTuning["costBands"] = MERCHANT_TUNING.costBands,
 ): DreamsignScoreBreakdown {
-  const weight = qualityWeight(profile?.quality ?? 2);
-  const coverage = profileCoverage(profile, deckCards);
+  const weight = qualityWeight(profile?.quality ?? 2, tuning);
+  const coverage = profileCoverage(profile, deckCards, tuning, costBands);
   const featureless = coverage.featureCount === 0;
-  const coverageBase = featureless ? FEATURELESS_COVERAGE : coverage.meanCoverage;
+  const coverageBase = featureless
+    ? tuning.featurelessCoverage
+    : coverage.meanCoverage;
   return {
     score: coverageBase * weight,
     featureCount: coverage.featureCount,
@@ -200,7 +209,9 @@ export function dreamsignScoreBreakdown(
 export function dreamsignHasDeckCoverage(
   profile: DreamsignProfile | undefined,
   deckCards: readonly CardData[],
+  tuning: RewardSelectionTuning["dreamsign"] = MERCHANT_TUNING.dreamsign,
+  costBands: RewardSelectionTuning["costBands"] = MERCHANT_TUNING.costBands,
 ): boolean {
-  const coverage = profileCoverage(profile, deckCards);
+  const coverage = profileCoverage(profile, deckCards, tuning, costBands);
   return coverage.featureCount > 0 && coverage.meanCoverage > 0;
 }

@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "rulesVersion": "1",
+  "tuning": {
+    "bandFraction": 0.25,
+    "bandMinimum": 5,
+    "strongBandFraction": 0.15,
+    "strongBandMinimum": 5,
+    "dreamsignBandFraction": 0.4,
+    "dreamsignBandMinimum": 5,
+    "tribalBandFraction": 0.25,
+    "tribalBandMinimum": 2,
+    "minDeckForFit": 6,
+    "minDeckForPurge": 8,
+    "purgeMisfitFraction": 0.2,
+    "starterPurgeBonus": 0.25,
+    "tribalThreshold": 4,
+    "subtypeMinPoolCards": 12,
+    "bundleGrowthBandSize": 5,
+    "strongBlend": {
+      "fit": 0.7,
+      "quality": 0.3
+    },
+    "copiesBlend": {
+      "fit": 0.6,
+      "quality": 0.4
+    },
+    "duplicateBlend": {
+      "quality": 0.5,
+      "fitLoo": 0.5
+    },
+    "transfigureBlend": {
+      "benefit": 0.7,
+      "centrality": 0.3
+    },
+    "bundleBlend": {
+      "seed": 0.5,
+      "bundle": 0.3,
+      "fit": 0.2
+    },
+    "categoryAffineWeight": 0.75,
+    "categoryDeckAffineMinimum": 2,
+    "categoryClusterAffineMinimum": 1,
+    "centrality": {
+      "priorWeight": 0.65,
+      "cooccurrenceWeight": 0.35,
+      "fallback": 0.25,
+      "sparkThreshold": 3,
+      "sparkBonus": 0.15
+    },
+    "dreamsign": {
+      "fullCoverageCount": 3,
+      "featurelessCoverage": 0.4,
+      "qualityWeight": {
+        "1": 1.2,
+        "2": 1,
+        "3": 0.8
+      }
+    },
+    "costBands": {
+      "cheapMaximum": 1,
+      "midMinimum": 2,
+      "midMaximum": 3,
+      "bigMinimum": 4,
+      "cheapCharacterMaximum": 2
+    },
+    "allowedTransfigurations": [
+      "Empowered",
+      "Amplified",
+      "Kindled",
+      "Inspired",
+      "Enduring",
+      "Hastened",
+      "Resonant",
+      "Attuned"
+    ],
+    "transfigurationBenefit": {
+      "empoweredCostDivisor": 2,
+      "kindledSparkDivisor": 4,
+      "flat": {
+        "Amplified": 0.4,
+        "Inspired": 0.55,
+        "Enduring": 0.55,
+        "Hastened": 0.5,
+        "Resonant": 0.5,
+        "Attuned": 0.5,
+        "Perfected": 0.65
+      }
+    },
+    "placeableSiteTypes": [
+      "Shop",
+      "Purge",
+      "Transfiguration",
+      "Duplication"
+    ],
+    "tribes": [
+      "Spirit Animal",
+      "Survivor",
+      "Warrior",
+      "Outsider"
+    ]
+  },
+  "contentHash": "2b7204a3e6e4e2f1d12326eafbe79c715d12242cdca8ac088254d677c3ba889b",
+  "foldHash": "2b7204a3e6e4e2f1d12326eafbe79c715d12242cdca8ac088254d677c3ba889b"
+}

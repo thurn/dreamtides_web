@@ -10,7 +10,6 @@ import {
 } from "../journey_v2/signals/dreamsignMatch";
 import { centrality, fitLooByEntry, fitScores } from "../journey_v2/signals/fit";
 import type { CandidateFitScore } from "../journey_v2/signals/fit";
-import { MERCHANT_TUNING } from "../journey_v2/tuning";
 import { createRewardSelectionStream } from "./rng";
 import { compareStableKeys, stableDigest } from "./stable";
 import {
@@ -39,13 +38,6 @@ interface Candidate {
   transfiguration?: TransfigurationType;
 }
 
-const DEFAULT_SITE_TYPES: readonly SiteType[] = [
-  "Shop",
-  "Purge",
-  "Transfiguration",
-  "Duplication",
-];
-
 function failure(
   request: RewardSelectionRequest,
   reason: RewardSelectionFailure["reason"],
@@ -71,7 +63,7 @@ function matchesPredicate(card: CardData, predicate: RewardCardPredicate): boole
     case "event":
       return card.cardType === "Event";
     case "cheap-character":
-      return card.cardType === "Character" && card.energyCost !== null && card.energyCost <= 2;
+      return card.cardType === "Character" && card.energyCost !== null;
     case "spirit-animal":
       return card.cardType === "Character" && card.subtype === "Spirit Animal";
     case "survivor":
@@ -128,7 +120,12 @@ function ordinaryCatalogCandidates(
       (!useDraftPool || resolvedPool.has(card.id)) &&
       (constraints.excludeOwned !== true || !context.ownedCardUuids.has(card.id)),
     )
-    .filter((card) => !excluded.has(card.id) && matchesPredicate(card, predicate))
+    .filter((card) =>
+      !excluded.has(card.id) &&
+      matchesPredicate(card, predicate) &&
+      (predicate !== "cheap-character" ||
+        (card.energyCost ?? Infinity) <= context.tuning.costBands.cheapCharacterMaximum),
+    )
     .sort((left, right) => compareStableKeys(left.id, right.id));
 }
 
@@ -142,7 +139,12 @@ function cardCandidates(
     const card = constraints.fixedCardUuid === undefined
       ? undefined
       : context.cardByUuid.get(constraints.fixedCardUuid);
-    if (card === undefined || !matchesPredicate(card, constraints.predicate ?? "any")) {
+    if (
+      card === undefined ||
+      !matchesPredicate(card, constraints.predicate ?? "any") ||
+      (constraints.predicate === "cheap-character" &&
+        (card.energyCost ?? Infinity) > context.tuning.costBands.cheapCharacterMaximum)
+    ) {
       return failure(request, "fixed_target_unavailable", "fixed card is unavailable");
     }
     return [{ key: card.id, card, score: 0, components: {} }];
@@ -166,7 +168,7 @@ function cardCandidates(
     ? new Map<string, CandidateFitScore>()
     : fitScores(cards, deck, fitModel);
   const fitAvailable =
-    context.deckEntries.length >= MERCHANT_TUNING.minDeckForFit && scoredFit.size > 0;
+    context.deckEntries.length >= context.tuning.minDeckForFit && scoredFit.size > 0;
   const corpus = context.content.merchantCorpus;
   const qualityAvailable = cards.some((card) => corpus?.cards.has(card.id) === true);
   const fitRaw = cards.map((card) => scoredFit.get(card.id)?.fit ?? 0);
@@ -195,7 +197,7 @@ function cardCandidates(
     });
   }
 
-  const blend = request.cardFitQualityBlend ?? MERCHANT_TUNING.strongBlend;
+  const blend = request.cardFitQualityBlend ?? context.tuning.strongBlend;
   if (!fitAvailable) fallback.push("fit-unavailable", "quality");
   if (!fitAvailable && !qualityAvailable) fallback.push("quality-unavailable", "uniform");
   return cards.map((card, index) => ({
@@ -223,6 +225,8 @@ function deckEntryCandidates(
   const excludedEntryIds = new Set(constraints.excludedDeckEntryIds ?? []);
   let entries = context.effectiveDeckCards.filter(({ entry, effectiveCard }) =>
     matchesPredicate(effectiveCard, predicate) &&
+    (predicate !== "cheap-character" ||
+      (effectiveCard.energyCost ?? Infinity) <= context.tuning.costBands.cheapCharacterMaximum) &&
     !excludedCardUuids.has(effectiveCard.id) &&
     !excludedEntryIds.has(entry.entryId) &&
     (constraints.allowNightmare === true || !entry.isBane) &&
@@ -265,7 +269,7 @@ function deckEntryCandidates(
     : fitLooByEntry(merchantDeck, context.content.fitModel);
 
   if (request.policyId === "purge-misfit") {
-    if (context.deckEntries.length < MERCHANT_TUNING.minDeckForPurge) {
+    if (context.deckEntries.length < context.tuning.minDeckForPurge) {
       return failure(request, "no_legal_candidates", "deck is too small for purge policy");
     }
     const eligibleIds = new Set(entries.map(({ entry }) => entry.entryId));
@@ -277,7 +281,7 @@ function deckEntryCandidates(
       })
       .sort((left, right) => left.value - right.value || compareStableKeys(left.entryId, right.entryId));
     const thresholdCount = Math.ceil(
-      MERCHANT_TUNING.purgeMisfitFraction * scoredNonStarters.length,
+      context.tuning.purgeMisfitFraction * scoredNonStarters.length,
     );
     const threshold = thresholdCount === 0
       ? -Infinity
@@ -289,7 +293,7 @@ function deckEntryCandidates(
           key: entry.entryId,
           entryId: entry.entryId,
           card: baseCard,
-          score: 1 + MERCHANT_TUNING.starterPurgeBonus,
+          score: 1 + context.tuning.starterPurgeBonus,
           components: { loo: 0, starter: 1, threshold },
         }];
       }
@@ -319,8 +323,8 @@ function deckEntryCandidates(
       entryId: entry.entryId,
       card: baseCard,
       score:
-        MERCHANT_TUNING.duplicateBlend.quality * qualityNormalized[index] +
-        MERCHANT_TUNING.duplicateBlend.fitLoo * looNormalized[index],
+        context.tuning.duplicateBlend.quality * qualityNormalized[index] +
+        context.tuning.duplicateBlend.fitLoo * looNormalized[index],
       components: {
         quality: qualityNormalized[index],
         fitLoo: looNormalized[index],
@@ -331,7 +335,12 @@ function deckEntryCandidates(
   if (request.policyId === "deck-entry-centrality") {
     const deck = context.effectiveDeckCards.map(({ effectiveCard }) => effectiveCard);
     return entries.map(({ entry, baseCard, effectiveCard }) => {
-      const score = centrality(effectiveCard, deck, context.content.fitModel);
+      const score = centrality(
+        effectiveCard,
+        deck,
+        context.content.fitModel,
+        context.tuning.centrality,
+      );
       return {
         key: entry.entryId,
         entryId: entry.entryId,
@@ -362,7 +371,12 @@ function transfigurationCandidates(
   const deck = context.effectiveDeckCards.map(({ effectiveCard }) => effectiveCard);
   const result: Candidate[] = [];
   for (const { entry, baseCard, effectiveCard } of context.effectiveDeckCards) {
-    if (entry.transfiguration !== null || !matchesPredicate(effectiveCard, predicate)) continue;
+    if (
+      entry.transfiguration !== null ||
+      !matchesPredicate(effectiveCard, predicate) ||
+      (predicate === "cheap-character" &&
+        (effectiveCard.energyCost ?? Infinity) > context.tuning.costBands.cheapCharacterMaximum)
+    ) continue;
     if (constraints.starterOnly === true && !effectiveCard.isStarter) continue;
     if (
       constraints.starterOnly !== true &&
@@ -370,16 +384,29 @@ function transfigurationCandidates(
       effectiveCard.isStarter
     ) continue;
     if (constraints.fixedDeckEntryId !== undefined && entry.entryId !== constraints.fixedDeckEntryId) continue;
-    const forms = merchantTransfigurations(baseCard).filter((form) =>
+    const forms = merchantTransfigurations(
+      baseCard,
+      context.tuning.allowedTransfigurations,
+    ).filter((form) =>
       (constraints.allowPerfected === true || form !== "Perfected") &&
       (constraints.fixedTransfiguration === undefined || form === constraints.fixedTransfiguration) &&
       (allowed.size === 0 || allowed.has(form)),
     );
     for (const form of forms) {
       const preview = applyTransfigurationToCard(baseCard, form);
-      const benefit = transfigurationBenefit(baseCard, form, preview);
+      const benefit = transfigurationBenefit(
+        baseCard,
+        form,
+        preview,
+        context.tuning.transfigurationBenefit,
+      );
       if (benefit <= 0) continue;
-      const cardCentrality = centrality(effectiveCard, deck, context.content.fitModel);
+      const cardCentrality = centrality(
+        effectiveCard,
+        deck,
+        context.content.fitModel,
+        context.tuning.centrality,
+      );
       result.push({
         key: `${entry.entryId}:${form}`,
         entryId: entry.entryId,
@@ -387,8 +414,8 @@ function transfigurationCandidates(
         transfiguration: form,
         score: request.policyId === "uniform"
           ? 0
-          : MERCHANT_TUNING.transfigureBlend.benefit * benefit +
-            MERCHANT_TUNING.transfigureBlend.centrality * cardCentrality,
+          : context.tuning.transfigureBlend.benefit * benefit +
+            context.tuning.transfigureBlend.centrality * cardCentrality,
         components: { benefit, centrality: cardCentrality },
       });
     }
@@ -410,7 +437,10 @@ function transfiguredCatalogCandidates(
   const allowed = new Set(request.constraints?.allowedTransfigurations ?? []);
   const candidates = built.flatMap((candidate): Candidate[] => {
     if (candidate.card === undefined) return [];
-    const forms = merchantTransfigurations(candidate.card).filter((form) =>
+    const forms = merchantTransfigurations(
+      candidate.card,
+      context.tuning.allowedTransfigurations,
+    ).filter((form) =>
       (request.constraints?.allowPerfected === true || form !== "Perfected") &&
       (request.constraints?.fixedTransfiguration === undefined ||
         form === request.constraints.fixedTransfiguration) &&
@@ -423,6 +453,7 @@ function transfiguredCatalogCandidates(
           candidate.card!,
           form,
           applyTransfigurationToCard(candidate.card!, form),
+          context.tuning.transfigurationBenefit,
         ),
       }))
       .filter(({ benefit }) => benefit > 0)
@@ -486,10 +517,20 @@ function dreamsignCandidates(
   const deck = context.effectiveDeckCards.map(({ effectiveCard }) => effectiveCard);
   const profiles = context.content.dreamsignProfiles;
   const covered = legal.filter((dreamsign) =>
-    dreamsignHasDeckCoverage(profiles?.get(dreamsign.id), deck),
+    dreamsignHasDeckCoverage(
+      profiles?.get(dreamsign.id),
+      deck,
+      context.tuning.dreamsign,
+      context.tuning.costBands,
+    ),
   );
   const positive = legal.filter((dreamsign) =>
-    dreamsignScoreBreakdown(profiles?.get(dreamsign.id), deck).score > 0,
+    dreamsignScoreBreakdown(
+      profiles?.get(dreamsign.id),
+      deck,
+      context.tuning.dreamsign,
+      context.tuning.costBands,
+    ).score > 0,
   );
   const desired = request.count;
   const pool = covered.length >= desired
@@ -503,7 +544,12 @@ function dreamsignCandidates(
     fallback.push("dreamsign-generic");
   }
   return pool.map((dreamsign) => {
-    const breakdown = dreamsignScoreBreakdown(profiles?.get(dreamsign.id), deck);
+    const breakdown = dreamsignScoreBreakdown(
+      profiles?.get(dreamsign.id),
+      deck,
+      context.tuning.dreamsign,
+      context.tuning.costBands,
+    );
     return {
       key: dreamsign.id,
       dreamsign,
@@ -534,10 +580,11 @@ function otherCandidates(
   }
   if (request.mechanicId === "add-site") {
     if (request.policyId !== "site-uniform") return failure(request, "unsupported_mechanic_policy");
-    const allowed = request.constraints?.allowedSiteTypes ?? DEFAULT_SITE_TYPES;
+    const configured = context.tuning.placeableSiteTypes;
+    const allowed = request.constraints?.allowedSiteTypes ?? configured;
     if (
       allowed.length === 0 ||
-      allowed.some((siteType) => !DEFAULT_SITE_TYPES.includes(siteType))
+      allowed.some((siteType) => !configured.includes(siteType))
     ) {
       return failure(request, "invalid_request", "add-site contains an unsupported site type");
     }
@@ -630,7 +677,10 @@ function keyKind(request: RewardSelectionRequest): RewardCandidateKeyKind {
   }
 }
 
-function tuningFor(request: RewardSelectionRequest): {
+function tuningFor(
+  context: RewardSelectionContext,
+  request: RewardSelectionRequest,
+): {
   fraction: number;
   minimum: number;
   values: Record<string, number>;
@@ -640,11 +690,14 @@ function tuningFor(request: RewardSelectionRequest): {
     return { fraction: 1, minimum: request.count, values: {} };
   }
   if (request.policyId === "dreamsign-match") {
-    const minimum = Math.max(request.count, request.count === 1 ? 2 : request.count);
+    const minimum = Math.max(request.count, context.tuning.dreamsignBandMinimum);
     return {
-      fraction: MERCHANT_TUNING.dreamsignBandFraction,
+      fraction: context.tuning.dreamsignBandFraction,
       minimum,
-      values: { dreamsignBandFraction: MERCHANT_TUNING.dreamsignBandFraction },
+      values: {
+        dreamsignBandFraction: context.tuning.dreamsignBandFraction,
+        dreamsignBandMinimum: context.tuning.dreamsignBandMinimum,
+      },
     };
   }
   const required = request.mechanicId === "pack-chooser"
@@ -652,31 +705,38 @@ function tuningFor(request: RewardSelectionRequest): {
     : request.count;
   const values: Record<string, number> = {};
   if (request.policyId === "card-fit-quality") {
-    const blend = request.cardFitQualityBlend ?? MERCHANT_TUNING.strongBlend;
+    const blend = request.cardFitQualityBlend ?? context.tuning.strongBlend;
     values.fitWeight = blend.fit;
     values.qualityWeight = blend.quality;
   }
   if (request.policyId === "duplicate-value") {
-    values.qualityWeight = MERCHANT_TUNING.duplicateBlend.quality;
-    values.fitLooWeight = MERCHANT_TUNING.duplicateBlend.fitLoo;
+    values.qualityWeight = context.tuning.duplicateBlend.quality;
+    values.fitLooWeight = context.tuning.duplicateBlend.fitLoo;
   }
   if (request.policyId === "transfiguration-value") {
-    values.benefitWeight = MERCHANT_TUNING.transfigureBlend.benefit;
-    values.centralityWeight = MERCHANT_TUNING.transfigureBlend.centrality;
+    values.benefitWeight = context.tuning.transfigureBlend.benefit;
+    values.centralityWeight = context.tuning.transfigureBlend.centrality;
   }
   if (request.policyId === "card-bundle") {
-    values.seedWeight = MERCHANT_TUNING.bundleBlend.seed;
-    values.bundleWeight = MERCHANT_TUNING.bundleBlend.bundle;
-    values.fitWeight = MERCHANT_TUNING.bundleBlend.fit;
+    values.seedWeight = context.tuning.bundleBlend.seed;
+    values.bundleWeight = context.tuning.bundleBlend.bundle;
+    values.fitWeight = context.tuning.bundleBlend.fit;
   }
+  if (request.policyId === "purge-misfit") {
+    values.purgeMisfitFraction = context.tuning.purgeMisfitFraction;
+    values.starterPurgeBonus = context.tuning.starterPurgeBonus;
+  }
+  const usesStrongBand =
+    request.mechanicId === "gain-card" && request.policyId === "card-fit-quality";
   return {
-    fraction:
-      request.mechanicId === "gain-card" && request.policyId === "card-fit-quality"
-        ? MERCHANT_TUNING.strongBandFraction
-        : MERCHANT_TUNING.bandFraction,
+    fraction: usesStrongBand
+      ? context.tuning.strongBandFraction
+      : context.tuning.bandFraction,
     minimum: request.policyId === "card-bundle"
-      ? Math.max(MERCHANT_TUNING.bandMinimum, required)
-      : MERCHANT_TUNING.bandMinimum,
+      ? Math.max(context.tuning.bandMinimum, required)
+      : usesStrongBand
+        ? context.tuning.strongBandMinimum
+        : context.tuning.bandMinimum,
     values,
   };
 }
@@ -745,7 +805,7 @@ export function selectReward(
   const candidates = canonicalRank(built);
   if (candidates.length === 0) return failure(request, "no_legal_candidates");
 
-  const tuning = tuningFor(request);
+  const tuning = tuningFor(context, request);
   const size = bandSize(candidates.length, tuning.fraction, tuning.minimum);
   if (size < required && request.upTo !== true) {
     return failure(
@@ -784,7 +844,7 @@ export function selectReward(
       const bundleScores = fitModel === undefined
         ? new Map<string, CandidateFitScore>()
         : fitScores(candidateCards, bundleCards, fitModel);
-      const blend = MERCHANT_TUNING.bundleBlend;
+      const blend = context.tuning.bundleBlend;
       remaining.sort((left, right) => {
         const leftScore =
           blend.seed * (seedScores.get(left.card?.id ?? "")?.cooccur ?? 0) +
@@ -796,7 +856,10 @@ export function selectReward(
           blend.fit * (right.components.fit ?? 0);
         return rightScore - leftScore || compareStableKeys(left.key, right.key);
       });
-      const growBandSize = Math.min(5, remaining.length);
+      const growBandSize = Math.min(
+        context.tuning.bundleGrowthBandSize,
+        remaining.length,
+      );
       const growIndex = Math.min(
         Math.floor((bundleGrowthStream ?? candidateStream).draw() * growBandSize),
         growBandSize - 1,
@@ -921,5 +984,3 @@ export function selectReward(
   };
   return result;
 }
-
-export { DEFAULT_SITE_TYPES as ADD_SITE_CANDIDATE_TYPES };

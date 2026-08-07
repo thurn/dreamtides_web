@@ -3,6 +3,7 @@ import type { SiteType } from "../../types/journey";
 import type { MerchantContext } from "../types";
 import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
 import { selectionMetadata, selectMerchantReward } from "./sharedSelection";
+import { MERCHANT_TUNING } from "../tuning";
 
 /**
  * Site types the merchant can place on the current dreamscape.
@@ -11,16 +12,10 @@ import { selectionMetadata, selectMerchantReward } from "./sharedSelection";
  * player already controls via dedicated mechanics. The list covers all the
  * rewarding/utility sites a player would be excited to add.
  */
-export const MERCHANT_PLACEABLE_SITE_TYPES: readonly SiteType[] = [
-  "Shop",
-  "Purge",
-  "Transfiguration",
-  "Duplication",
-] as const;
+/** Generated compatibility view of the TOML-authored placeable site list. */
+export const MERCHANT_PLACEABLE_SITE_TYPES = MERCHANT_TUNING.placeableSiteTypes;
 
-/**
- * Human-readable labels for site types, used in the offer title.
- */
+/** Human-readable labels for site types, used while resolving copy slots. */
 const SITE_TYPE_LABELS: Record<string, string> = {
   Shop: "Shop",
   Purge: "Purge Site",
@@ -58,7 +53,10 @@ export const addSiteBuilder: MerchantArchetypeBuilder = {
       mechanicId: "add-site",
       policyId: "site-uniform",
       request: {
-        constraints: { allowedSiteTypes: MERCHANT_PLACEABLE_SITE_TYPES },
+        constraints: {
+          allowedSiteTypes:
+            context.rewardSelection.tuning.placeableSiteTypes,
+        },
       },
     });
     const siteType = selection?.bindings.siteTypes[0];
@@ -69,8 +67,7 @@ export const addSiteBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "add_site",
       family: "site",
-      title: `Add a ${label} to this dreamscape`,
-      summary: `A ${label} will appear on the current dreamscape map.`,
+      copyVariables: { site: label },
       gameObjects: [],
       applyPayload: {
         kind: "add_site",

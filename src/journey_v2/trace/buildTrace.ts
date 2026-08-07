@@ -1,4 +1,3 @@
-import { MERCHANT_TUNING } from "../tuning";
 import type { MerchantCatalogCard, MerchantDeckCard } from "../types";
 import type {
   MerchantDreamsignTier,
@@ -7,6 +6,7 @@ import type {
   MerchantTraceDecision,
   MerchantTraceKeyKind,
 } from "./types";
+import { MERCHANT_TUNING } from "../tuning";
 
 /**
  * Cap on the candidates carried per offer line. Small candidate sets (choosers

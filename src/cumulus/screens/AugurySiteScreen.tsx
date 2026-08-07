@@ -88,6 +88,8 @@ export interface AugurySiteView {
   guide: AuguryGuideView;
   offers: readonly AuguryOfferView[];
   unavailableMessage: string | null;
+  /** TOML-authored encounter rule; absent synthetic fixtures default to allowed. */
+  allowDecline?: boolean;
 }
 
 export type AuguryChoiceResult = { ok: true } | { ok: false; message: string };
@@ -292,12 +294,14 @@ export function AugurySiteScreen({
                     </div>
                   ))}
                 </div>
-                <GlassButton
-                  label="Decline Offer"
-                  disabled={committingOfferId !== null}
-                  onPress={onClose}
-                  testId="cumulus-augury-decline"
-                />
+                {view.allowDecline !== false ? (
+                  <GlassButton
+                    label="Decline Offer"
+                    disabled={committingOfferId !== null}
+                    onPress={onClose}
+                    testId="cumulus-augury-decline"
+                  />
+                ) : null}
               </motion.div>
             ) : (
               <motion.div key="unavailable" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={transition} style={{ pointerEvents: "auto" }}>

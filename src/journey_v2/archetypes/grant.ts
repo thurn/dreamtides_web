@@ -4,7 +4,6 @@ import {
   weightedSample,
   type MerchantRng,
 } from "../signals/rng";
-import { MERCHANT_TUNING } from "../tuning";
 import type { CardData } from "../../types/cards";
 import {
   applyTransfigurationToCard,
@@ -12,9 +11,9 @@ import {
   type CardTransfigurationDisplay,
 } from "../../transfiguration/transfiguration-logic";
 import type { TransfigurationType } from "../../types/journey";
+import { auguryArchetype } from "../../data/augury-data";
 import type {
   MerchantApplyPayload,
-  MerchantChoiceCandidate,
   MerchantContext,
   MerchantCatalogCard,
 } from "../types";
@@ -25,7 +24,11 @@ import {
 import type { MerchantOfferTrace } from "../trace/types";
 import { buildCategoryUniverse, type MerchantCategory } from "./categories";
 import { merchantTransfigurations, transfigurationBenefit } from "./improve";
-import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
+import type {
+  MerchantArchetypeBuilder,
+  MerchantChoiceCandidateDraft,
+  MerchantOfferDraft,
+} from "./types";
 import {
   selectionMetadata,
   selectMerchantCount,
@@ -184,12 +187,9 @@ function addCatalogCardPayload(card: MerchantCatalogCard): MerchantApplyPayload 
 function catalogChoiceCandidate(
   card: MerchantCatalogCard,
   payload: MerchantApplyPayload,
-  summary: string,
-): MerchantChoiceCandidate {
+): MerchantChoiceCandidateDraft {
   return {
     choiceId: card.cardUuid,
-    title: card.displayName,
-    summary,
     gameObjects: [catalogGameObject(card)],
     applyPayload: payload,
     cardUuid: card.cardUuid,
@@ -201,13 +201,17 @@ function catalogChoiceCandidate(
  * Returns the band size for a candidate pool under a band fraction (mirrors
  * `bandSample`'s sizing so eligibility can require a full chooser).
  */
-function bandSizeFor(poolSize: number, bandFraction: number): number {
+function bandSizeFor(
+  poolSize: number,
+  bandFraction: number,
+  bandMinimum: number,
+): number {
   if (poolSize === 0) return 0;
   return Math.min(
     poolSize,
     Math.max(
       Math.ceil(bandFraction * poolSize),
-      Math.min(MERCHANT_TUNING.bandMinimum, poolSize),
+      Math.min(bandMinimum, poolSize),
     ),
   );
 }
@@ -237,7 +241,7 @@ export function strongScoreByUuid(
   // band. Rank on quality alone until the deck is large enough for fit to mean
   // something — matching `copies_draft` and the `card_bundle`/`transfigured_draft`
   // fit-or-quality fallback.
-  if (context.deckCards.length < MERCHANT_TUNING.minDeckForFit) {
+  if (context.deckCards.length < context.rewardSelection.tuning.minDeckForFit) {
     const scoreByUuid = qualityValueByUuid(context, pool);
     return {
       scoreByUuid,
@@ -253,7 +257,7 @@ export function strongScoreByUuid(
   const fitRaw = pool.map((card) => fitByUuid.get(card.cardUuid) ?? 0);
   const qualityNorm = minMaxNormalize(qualityRaw);
   const fitNorm = minMaxNormalize(fitRaw);
-  const { quality, fit } = MERCHANT_TUNING.strongBlend;
+  const { quality, fit } = context.rewardSelection.tuning.strongBlend;
   const scoreByUuid = new Map<string, number>();
   const componentsByUuid = new Map<string, Record<string, number>>();
   pool.forEach((card, i) => {
@@ -286,8 +290,6 @@ export const strongCardBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "strong_card",
       family: "grant",
-      title: `Receive ${target.displayName}`,
-      summary: "A powerful card.",
       gameObjects: [catalogGameObject(target)],
       applyPayload: addCatalogCardPayload(target),
       targetKey: target.cardUuid,
@@ -309,7 +311,7 @@ export const fitCardGrantBuilder: MerchantArchetypeBuilder = {
   family: "grant",
   eligible(context: MerchantContext): boolean {
     return (
-      context.deckCards.length >= MERCHANT_TUNING.minDeckForFit &&
+      context.deckCards.length >= context.rewardSelection.tuning.minDeckForFit &&
       grantCandidatePool(context).length > 0
     );
   },
@@ -327,8 +329,6 @@ export const fitCardGrantBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "fit_card_grant",
       family: "grant",
-      title: `Receive ${target.displayName}`,
-      summary: "Add this card to your deck.",
       gameObjects: [catalogGameObject(target)],
       applyPayload: addCatalogCardPayload(target),
       targetKey: target.cardUuid,
@@ -348,38 +348,52 @@ export const fitCardDraftBuilder: MerchantArchetypeBuilder = {
   archetypeId: "fit_card_draft",
   family: "grant",
   eligible(context: MerchantContext): boolean {
-    if (context.deckCards.length < MERCHANT_TUNING.minDeckForFit) return false;
+    const chooserSize = auguryArchetype(
+      context.rewardSelection.content.auguryData,
+      "fit_card_draft",
+    ).quantities.chooserSize;
+    if (context.deckCards.length < context.rewardSelection.tuning.minDeckForFit) return false;
     const pool = grantCandidatePool(context);
-    return bandSizeFor(pool.length, MERCHANT_TUNING.bandFraction) >= 4;
+    return bandSizeFor(
+      pool.length,
+      context.rewardSelection.tuning.bandFraction,
+      context.rewardSelection.tuning.bandMinimum,
+    ) >= chooserSize;
   },
   build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+    const chooserSize = auguryArchetype(
+      context.rewardSelection.content.auguryData,
+      "fit_card_draft",
+    ).quantities.chooserSize;
     const selection = selectMerchantReward({
       context,
       archetypeId: "fit_card_draft",
       mechanicId: "catalog-card-chooser",
       policyId: "card-fit",
-      request: { count: 4, constraints: { excludeOwned: true } },
+      request: {
+        count: chooserSize,
+        constraints: { excludeOwned: true },
+      },
     });
     const sampled = selectedCatalogCards(context, selection?.bindings.cardUuids ?? []);
-    if (selection === null || sampled.length < 4) return null;
+    if (
+      selection === null ||
+      sampled.length < chooserSize
+    ) return null;
 
     const candidates = sampled.map((card) =>
       catalogChoiceCandidate(
         card,
         addCatalogCardPayload(card),
-        "Add this card to your deck.",
       ),
     );
 
     return {
       archetypeId: "fit_card_draft",
       family: "grant",
-      title: "Draft a card",
-      summary: "Choose one of four cards to keep.",
       gameObjects: [],
       choiceRequest: {
         choiceType: "catalogCard",
-        prompt: "Pick 1 of these cards",
         candidates,
       },
       targetKey: sampled.map((card) => card.cardUuid).join(","),
@@ -405,7 +419,7 @@ export function copiesScoreByUuid(
 ): ScoredGrantPool {
   // Cold start: too few deck cards for fit to be meaningful, so rank on
   // quality alone — still surfaces strong doubling targets early.
-  if (context.deckCards.length < MERCHANT_TUNING.minDeckForFit) {
+  if (context.deckCards.length < context.rewardSelection.tuning.minDeckForFit) {
     const scoreByUuid = qualityValueByUuid(context, pool);
     return {
       scoreByUuid,
@@ -421,7 +435,7 @@ export function copiesScoreByUuid(
   );
   const fitNorm = minMaxNormalize(fitRaw);
   const qualityNorm = minMaxNormalize(qualityRaw);
-  const { fit, quality } = MERCHANT_TUNING.copiesBlend;
+  const { fit, quality } = context.rewardSelection.tuning.copiesBlend;
   const scoreByUuid = new Map<string, number>();
   const componentsByUuid = new Map<string, Record<string, number>>();
   pool.forEach((card, i) => {
@@ -435,44 +449,62 @@ export const copiesDraftBuilder: MerchantArchetypeBuilder = {
   archetypeId: "copies_draft",
   family: "grant",
   eligible(context: MerchantContext): boolean {
+    const chooserSize = auguryArchetype(
+      context.rewardSelection.content.auguryData,
+      "copies_draft",
+    ).quantities.chooserSize;
     const pool = grantCandidatePool(context);
-    return bandSizeFor(pool.length, MERCHANT_TUNING.bandFraction) >= 4;
+    return bandSizeFor(
+      pool.length,
+      context.rewardSelection.tuning.bandFraction,
+      context.rewardSelection.tuning.bandMinimum,
+    ) >= chooserSize;
   },
   build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+    const grantedCopies = auguryArchetype(
+      context.rewardSelection.content.auguryData,
+      "copies_draft",
+    ).quantities.grantedCopies;
+    const chooserSize = auguryArchetype(
+      context.rewardSelection.content.auguryData,
+      "copies_draft",
+    ).quantities.chooserSize;
     const selection = selectMerchantReward({
       context,
       archetypeId: "copies_draft",
       mechanicId: "catalog-card-chooser",
       policyId: "card-fit-quality",
       request: {
-        count: 4,
+        count: chooserSize,
         constraints: { excludeOwned: true },
-        cardFitQualityBlend: MERCHANT_TUNING.copiesBlend,
+        cardFitQualityBlend: context.rewardSelection.tuning.copiesBlend,
       },
     });
     const sampled = selectedCatalogCards(context, selection?.bindings.cardUuids ?? []);
-    if (selection === null || sampled.length < 4) return null;
+    if (
+      selection === null ||
+      sampled.length < chooserSize
+    ) return null;
 
     const candidates = sampled.map((card) =>
       catalogChoiceCandidate(
         card,
         {
           kind: "composite",
-          children: [addCatalogCardPayload(card), addCatalogCardPayload(card)],
+          children: Array.from(
+            { length: grantedCopies },
+            () => addCatalogCardPayload(card),
+          ),
         },
-        "You receive 2 copies.",
       ),
     );
 
     return {
       archetypeId: "copies_draft",
       family: "grant",
-      title: "Draft a card, doubled",
-      summary: "Choose one of four cards and keep two copies.",
       gameObjects: [],
       choiceRequest: {
         choiceType: "catalogCard",
-        prompt: "Pick 1 — you keep two copies",
         candidates,
       },
       targetKey: sampled.map((card) => card.cardUuid).join(","),
@@ -506,7 +538,7 @@ export function fitOrQualityByUuid(
   context: MerchantContext,
   candidates: readonly MerchantCatalogCard[],
 ): Map<string, number> {
-  if (context.deckCards.length < MERCHANT_TUNING.minDeckForFit) {
+  if (context.deckCards.length < context.rewardSelection.tuning.minDeckForFit) {
     return qualityValueByUuid(context, candidates);
   }
   return fitValueByUuid(context, candidates);
@@ -542,16 +574,15 @@ function categoryCandidatePool(
 function offerableCategories(
   context: MerchantContext,
 ): readonly MerchantCategory[] {
+  const chooserSize = auguryArchetype(
+    context.rewardSelection.content.auguryData,
+    "category_draft_known",
+  ).quantities.chooserSize;
   return buildCategoryUniverse(context).filter(
     (category) =>
       categoryCandidatePool(context, category).length >=
-      MERCHANT_TUNING.categoryDraftSize,
+      chooserSize,
   );
-}
-
-/** "a" / "an" for a category label, so titles read "Draft an Event". */
-function indefiniteArticle(label: string): "a" | "an" {
-  return /^[aeiou]/i.test(label) ? "an" : "a";
 }
 
 export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
@@ -561,14 +592,18 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
     return offerableCategories(context).length > 0;
   },
   build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
+    const chooserSize = auguryArchetype(
+      context.rewardSelection.content.auguryData,
+      "category_draft_known",
+    ).quantities.chooserSize;
     const categories = offerableCategories(context);
     if (categories.length === 0) return null;
     const category = weightedSample(
       categories,
       (candidate) =>
         candidate.deckAffine
-          ? MERCHANT_TUNING.categoryAffineWeight
-          : 1 - MERCHANT_TUNING.categoryAffineWeight,
+          ? context.rewardSelection.tuning.categoryAffineWeight
+          : 1 - context.rewardSelection.tuning.categoryAffineWeight,
       rng,
     );
     if (category === null) return null;
@@ -580,7 +615,7 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
       mechanicId: "catalog-card-chooser",
       policyId: "card-fit",
       request: {
-        count: MERCHANT_TUNING.categoryDraftSize,
+        count: chooserSize,
         constraints: {
           allowedCardUuids: pool.map((card) => card.cardUuid),
           excludeOwned: true,
@@ -589,25 +624,24 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
     });
     const sampled = selectedCatalogCards(context, selection?.bindings.cardUuids ?? []);
     if (selection === null) return null;
-    if (sampled.length < MERCHANT_TUNING.categoryDraftSize) return null;
+    if (sampled.length < chooserSize) {
+      return null;
+    }
 
     const candidates = sampled.map((card) =>
       catalogChoiceCandidate(
         card,
         addCatalogCardPayload(card),
-        `A ${category.label} card.`,
       ),
     );
 
     return {
       archetypeId: "category_draft_known",
       family: "grant",
-      title: `Draft ${indefiniteArticle(category.label)} ${category.label}`,
-      summary: `Choose one of four ${category.label} cards.`,
+      copyVariables: { category: category.label },
       gameObjects: [],
       choiceRequest: {
         choiceType: "catalogCard",
-        prompt: `Pick 1 of these ${category.label} cards`,
         candidates,
       },
       targetKey: `${category.id}:${sampled.map((card) => card.cardUuid).join(",")}`,
@@ -656,13 +690,17 @@ export const cardBundleBuilder: MerchantArchetypeBuilder = {
     return grantCandidatePool(context).length > 0;
   },
   build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+    const quantities = auguryArchetype(
+      context.rewardSelection.content.auguryData,
+      "card_bundle",
+    ).quantities;
     const bundleSize = selectMerchantCount({
       context,
       archetypeId: "card_bundle",
       mechanicId: "gain-card",
       policyId: "card-bundle",
-      minimum: 2,
-      maximum: 3,
+      minimum: quantities.minimumBundleSize,
+      maximum: quantities.bundleSize,
     });
     const selection = selectMerchantReward({
       context,
@@ -682,8 +720,6 @@ export const cardBundleBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "card_bundle",
       family: "grant",
-      title: `Gain ${String(bundle.length)} cards that work together`,
-      summary: `Receive this ${String(bundle.length)}-card bundle.`,
       gameObjects: bundle.map((card) => catalogGameObject(card)),
       applyPayload: payload,
       targetKey: bundle.map((card) => card.cardUuid).join(","),
@@ -710,13 +746,24 @@ interface TransfiguredChoice {
   display: CardTransfigurationDisplay;
 }
 
-export function bestTransfiguration(card: CardData): TransfigurationType | null {
-  const eligible = merchantTransfigurations(card);
+export function bestTransfiguration(
+  context: MerchantContext,
+  card: CardData,
+): TransfigurationType | null {
+  const eligible = merchantTransfigurations(
+    card,
+    context.rewardSelection.tuning.allowedTransfigurations,
+  );
   let best: TransfigurationType | null = null;
   let bestBenefit = -Infinity;
   for (const transfiguration of eligible) {
     const preview = applyTransfigurationToCard(card, transfiguration);
-    const benefit = transfigurationBenefit(card, transfiguration, preview);
+    const benefit = transfigurationBenefit(
+      card,
+      transfiguration,
+      preview,
+      context.rewardSelection.tuning.transfigurationBenefit,
+    );
     if (benefit > bestBenefit) {
       bestBenefit = benefit;
       best = transfiguration;
@@ -729,7 +776,10 @@ function transfigurableCandidates(
   context: MerchantContext,
 ): readonly MerchantCatalogCard[] {
   return grantCandidatePool(context).filter(
-    (card) => merchantTransfigurations(card.card).length > 0,
+    (card) => merchantTransfigurations(
+      card.card,
+      context.rewardSelection.tuning.allowedTransfigurations,
+    ).length > 0,
   );
 }
 
@@ -737,16 +787,31 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
   archetypeId: "transfigured_draft",
   family: "grant",
   eligible(context: MerchantContext): boolean {
+    const chooserSize = auguryArchetype(
+      context.rewardSelection.content.auguryData,
+      "transfigured_draft",
+    ).quantities.chooserSize;
     const pool = transfigurableCandidates(context);
-    return bandSizeFor(pool.length, MERCHANT_TUNING.bandFraction) >= 4;
+    return bandSizeFor(
+      pool.length,
+      context.rewardSelection.tuning.bandFraction,
+      context.rewardSelection.tuning.bandMinimum,
+    ) >= chooserSize;
   },
   build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+    const chooserSize = auguryArchetype(
+      context.rewardSelection.content.auguryData,
+      "transfigured_draft",
+    ).quantities.chooserSize;
     const selection = selectMerchantReward({
       context,
       archetypeId: "transfigured_draft",
       mechanicId: "transfigured-card-chooser",
       policyId: "card-fit",
-      request: { count: 4, constraints: { excludeOwned: true } },
+      request: {
+        count: chooserSize,
+        constraints: { excludeOwned: true },
+      },
     });
     if (selection === null) return null;
     const chosenForms = new Map(
@@ -765,12 +830,12 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
         display: built.display,
       });
     }
-    if (choices.length < 4) return null;
+    if (choices.length < chooserSize) {
+      return null;
+    }
 
-    const candidates: MerchantChoiceCandidate[] = choices.map((choice) => ({
+    const candidates: MerchantChoiceCandidateDraft[] = choices.map((choice) => ({
       choiceId: choice.card.cardUuid,
-      title: `${choice.card.displayName} (${choice.transfiguration})`,
-      summary: `Arrives already ${choice.transfiguration}.`,
       gameObjects: [
         {
           ...catalogGameObject(choice.card),
@@ -792,12 +857,9 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "transfigured_draft",
       family: "grant",
-      title: "Draft a transfigured card",
-      summary: "Choose one of four cards that arrive already transfigured.",
       gameObjects: [],
       choiceRequest: {
         choiceType: "catalogCard",
-        prompt: "Pick 1 of these transfigured cards",
         candidates,
       },
       targetKey: choices

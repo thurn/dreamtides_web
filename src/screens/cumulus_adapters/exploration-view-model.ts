@@ -15,6 +15,7 @@ import type {
 import type { TransfigurationCandidateView } from "../../cumulus/screens/TransfigurationSiteScreen";
 import {
   explorationActionUsesSpecialVariable,
+  explorationEffectDefinition,
   explorationEncounterForCard,
   type ExplorationActionContent,
   type ExplorationPredicate,
@@ -42,6 +43,7 @@ import {
   offeredTransfigurationForms,
   transfigurationEffectDetails,
 } from "../../transfiguration/transfiguration-logic";
+import { MERCHANT_TUNING } from "../../journey_v2/tuning";
 
 const FALLBACK_GUIDE_ID = "layaway";
 const FALLBACK_GUIDE_NAME = '"Layaway"';
@@ -59,6 +61,7 @@ export function resolveExplorationGuide(
 function matchesPredicate(
   card: CardData,
   predicate: ExplorationPredicate,
+  content: JourneyContent,
 ): boolean {
   switch (predicate) {
     case "character":
@@ -69,7 +72,9 @@ function matchesPredicate(
       return (
         card.cardType === "Character" &&
         card.energyCost !== null &&
-        card.energyCost <= 2
+        card.energyCost <=
+          (content.rewardSelectionData?.tuning.costBands.cheapCharacterMaximum ??
+            MERCHANT_TUNING.costBands.cheapCharacterMaximum)
       );
     case "spirit-animal":
       return card.cardType === "Character" && card.subtype === "Spirit Animal";
@@ -140,7 +145,7 @@ function eligibleDeckCards(
     if (card === null) return [];
     if (
       predicate !== undefined &&
-      !matchesPredicate(card.model.displaySnapshot, predicate)
+      !matchesPredicate(card.model.displaySnapshot, predicate, content)
     ) {
       return [];
     }
@@ -162,7 +167,7 @@ function freeTransfigurationCandidates(
     const base = content.cardDatabase.get(entry.cardNumber);
     if (base === undefined) return [];
     const card = resolveDeckEntryCard(base, entry);
-    if (predicate !== undefined && !matchesPredicate(card, predicate)) return [];
+    if (predicate !== undefined && !matchesPredicate(card, predicate, content)) return [];
     const forms = offeredTransfigurationForms(card, null).map((offer) => {
       const preview = buildTransfigurationDisplay(card, offer.type);
       return {
@@ -258,6 +263,32 @@ function deckFollowup(
   };
 }
 
+function configuredFollowupCopy(
+  action: ExplorationActionContent,
+  content: JourneyContent,
+  key: "followupTitle" | "followupSubtitle",
+  fallback: string,
+): string {
+  const exploration = content.exploration;
+  const template = exploration === undefined
+    ? undefined
+    : explorationEffectDefinition(exploration, action.effectKind)?.copy[key];
+  if (template === undefined || template === "") return fallback;
+  const values: Readonly<Record<string, string | number>> = {
+    "action-label": action.label,
+    count: action.count ?? 1,
+    subtype: action.subtype ?? "Outsider",
+    transfiguration: action.transfiguration ?? "Kindled",
+    "essence-per-spark":
+      action.essencePerSpark ?? content.economyData.exploration.defaultEssencePerSpark,
+  };
+  return template.replace(/\{([^{}]+)\}/gu, (slot, name: string) => {
+    const value = values[name];
+    if (value === undefined) throw new Error(`Exploration copy is missing ${slot}`);
+    return String(value);
+  });
+}
+
 function followupForAction(
   action: ExplorationActionContent,
   offer: ExplorationActionOfferRuntime,
@@ -272,8 +303,8 @@ function followupForAction(
   switch (action.effectKind) {
     case "purge-and-copy":
       return deckFollowup(
-        "Exchange Familiar Forms",
-        "First choose a card to purge, then choose a different card to copy.",
+        configuredFollowupCopy(action, content, "followupTitle", "Exchange Familiar Forms"),
+        configuredFollowupCopy(action, content, "followupSubtitle", "First choose a card to purge, then choose a different card to copy."),
         eligibleDeckCards(state, content),
         "purge-and-copy",
         undefined,
@@ -294,16 +325,16 @@ function followupForAction(
       };
     case "purge-selected":
       return deckFollowup(
-        "Feed the Fire",
-        "Choose an Event to purge.",
+        configuredFollowupCopy(action, content, "followupTitle", "Feed the Fire"),
+        configuredFollowupCopy(action, content, "followupSubtitle", "Choose an Event to purge."),
         deckCards,
         "single",
         "purge",
       );
     case "purge-for-essence":
       return deckFollowup(
-        "Trade Away a Figure",
-        `Choose a card to purge for ${String(action.essencePerSpark ?? content.economyData.exploration.defaultEssencePerSpark)} essence per ✦.`,
+        configuredFollowupCopy(action, content, "followupTitle", "Trade Away a Figure"),
+        configuredFollowupCopy(action, content, "followupSubtitle", `Choose a card to purge for ${String(action.essencePerSpark ?? content.economyData.exploration.defaultEssencePerSpark)} essence per ✦.`),
         eligibleDeckCards(state, content),
         "single",
         "purge",
@@ -311,8 +342,8 @@ function followupForAction(
     case "change-subtype-selected":
       if (hasMintedDeckCard) return { kind: "none" };
       return deckFollowup(
-        action.label,
-        `Choose a Character to become ${action.subtype ?? "Outsider"}.`,
+        configuredFollowupCopy(action, content, "followupTitle", action.label),
+        configuredFollowupCopy(action, content, "followupSubtitle", `Choose a Character to become ${action.subtype ?? "Outsider"}.`),
         deckCards,
         "single",
         "change",
@@ -320,16 +351,16 @@ function followupForAction(
     case "copy-selected-card":
       if (hasMintedDeckCard) return { kind: "none" };
       return deckFollowup(
-        action.label,
-        `Choose a card to gain ${String(action.count ?? 1)} copies of.`,
+        configuredFollowupCopy(action, content, "followupTitle", action.label),
+        configuredFollowupCopy(action, content, "followupSubtitle", `Choose a card to gain ${String(action.count ?? 1)} copies of.`),
         deckCards,
         "single",
         "copy",
       );
     case "copy-selected-cards":
       return deckFollowup(
-        action.label,
-        `Choose ${String(action.count ?? 2)} cards to copy.`,
+        configuredFollowupCopy(action, content, "followupTitle", action.label),
+        configuredFollowupCopy(action, content, "followupSubtitle", `Choose ${String(action.count ?? 2)} cards to copy.`),
         deckCards,
         "exact",
         "copy",
@@ -337,16 +368,16 @@ function followupForAction(
       );
     case "copy-offered-deck-card":
       return deckFollowup(
-        action.label,
-        "Choose one offered card to copy.",
+        configuredFollowupCopy(action, content, "followupTitle", action.label),
+        configuredFollowupCopy(action, content, "followupSubtitle", "Choose one offered card to copy."),
         offeredDeckCards(offer.offeredDeckEntryIds ?? [], state, content),
         "single",
         "copy",
       );
     case "replace-selected":
       return deckFollowup(
-        "Release a Fellow Swimmer",
-        "Choose a Spirit Animal to exchange.",
+        configuredFollowupCopy(action, content, "followupTitle", "Release a Fellow Swimmer"),
+        configuredFollowupCopy(action, content, "followupSubtitle", "Choose a Spirit Animal to exchange."),
         deckCards.filter((card) =>
           Object.prototype.hasOwnProperty.call(
             offer.replacementCardIdByEntryId,
@@ -358,8 +389,8 @@ function followupForAction(
       );
     case "replace-selected-with-card":
       return deckFollowup(
-        action.label,
-        "Choose a card to replace.",
+        configuredFollowupCopy(action, content, "followupTitle", action.label),
+        configuredFollowupCopy(action, content, "followupSubtitle", "Choose a card to replace."),
         deckCards,
         "single",
         "purge",
@@ -367,8 +398,8 @@ function followupForAction(
     case "transfigure-fixed-selected":
       if (hasMintedDeckCard) return { kind: "none" };
       return deckFollowup(
-        action.label,
-        `Choose a card to become ${action.transfiguration ?? "Kindled"}.`,
+        configuredFollowupCopy(action, content, "followupTitle", action.label),
+        configuredFollowupCopy(action, content, "followupSubtitle", `Choose a card to become ${action.transfiguration ?? "Kindled"}.`),
         deckCards.filter(
           (card) =>
             state.deck.find((entry) => entry.entryId === card.entryId)
@@ -383,8 +414,8 @@ function followupForAction(
       );
     case "draft-card":
       return deckFollowup(
-        action.label,
-        "Choose one offered card.",
+        configuredFollowupCopy(action, content, "followupTitle", action.label),
+        configuredFollowupCopy(action, content, "followupSubtitle", "Choose one offered card."),
         offeredCards(offer.offeredCardIds, content),
         "single",
         undefined,
@@ -393,8 +424,8 @@ function followupForAction(
       );
     case "transfigured-card-draft":
       return deckFollowup(
-        action.label,
-        "Choose one offered transfigured card.",
+        configuredFollowupCopy(action, content, "followupTitle", action.label),
+        configuredFollowupCopy(action, content, "followupSubtitle", "Choose one offered transfigured card."),
         offeredCards(offer.offeredCardIds, content, offer.transfigurationByCardId),
         "single",
         undefined,
@@ -408,8 +439,8 @@ function followupForAction(
       const cards = offeredCards(offer.offeredCardIds, content);
       return {
         kind: "cards",
-        title: action.label,
-        subtitle: "Choose any number of offered cards.",
+        title: configuredFollowupCopy(action, content, "followupTitle", action.label),
+        subtitle: configuredFollowupCopy(action, content, "followupSubtitle", "Choose any number of offered cards."),
         cards,
         mode: "exact",
         selectionKey: "cardIds",
@@ -420,8 +451,8 @@ function followupForAction(
     case "choose-pack":
       return {
         kind: "packs",
-        title: action.label,
-        subtitle: "Choose one pack to add to your deck.",
+        title: configuredFollowupCopy(action, content, "followupTitle", action.label),
+        subtitle: configuredFollowupCopy(action, content, "followupSubtitle", "Choose one pack to add to your deck."),
         packs: offer.packCardIds.map((ids, index) => ({
           index,
           cards: offeredCards(ids, content),
@@ -430,8 +461,8 @@ function followupForAction(
     case "change-subtype-all":
       return {
         kind: "subtypes",
-        title: action.label,
-        subtitle: "Choose the subtype for every Character in your deck.",
+        title: configuredFollowupCopy(action, content, "followupTitle", action.label),
+        subtitle: configuredFollowupCopy(action, content, "followupSubtitle", "Choose the subtype for every Character in your deck."),
         options: action.subtypeOptions ?? [],
       };
     case "gain-dreamsign":
@@ -439,8 +470,8 @@ function followupForAction(
       if (state.dreamsigns.length >= state.maxDreamsigns) {
         return {
           kind: "dreamsigns",
-          title: action.label,
-          subtitle: "Choose a Dreamsign to replace.",
+          title: configuredFollowupCopy(action, content, "followupTitle", action.label),
+          subtitle: configuredFollowupCopy(action, content, "followupSubtitle", "Choose a Dreamsign to replace."),
           selectionKey: "replacedDreamsignId",
           dreamsigns: heldDreamsignChoices(state),
         };
@@ -449,16 +480,16 @@ function followupForAction(
     case "purge-dreamsign-for-essence":
       return {
         kind: "dreamsigns",
-        title: action.label,
-        subtitle: "Choose a Dreamsign to purge.",
+        title: configuredFollowupCopy(action, content, "followupTitle", action.label),
+        subtitle: configuredFollowupCopy(action, content, "followupSubtitle", "Choose a Dreamsign to purge."),
         selectionKey: "dreamsignId",
         dreamsigns: heldDreamsignChoices(state),
       };
     case "choose-dream-avatar":
       return {
         kind: "dreamAvatars",
-        title: action.label,
-        subtitle: "Choose your new Dream Avatar.",
+        title: configuredFollowupCopy(action, content, "followupTitle", action.label),
+        subtitle: configuredFollowupCopy(action, content, "followupSubtitle", "Choose your new Dream Avatar."),
         dreamAvatars: (offer.offeredDreamAvatarIds ?? []).flatMap((id) => {
           const dreamAvatar = dreamAvatarById(content, id);
           return dreamAvatar === null ? [] : [dreamAvatar];

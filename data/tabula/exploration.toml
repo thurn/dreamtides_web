@@ -1,3 +1,726 @@
+# Schema version for the Exploration compiler and runtime parser.
+schema-version = 1
+
+[encounters]
+# Two-choice screen contract: every authored encounter must present two actions.
+actions-per-encounter = 2
+
+# Each effect-kind entry defines one designer-selectable mechanic. The kind is
+# persisted in encounters; label is editor copy; template-ids document compatible
+# design templates; canonical-mechanic-id connects to shared reward selection.
+# default-selection-policy-id is applied when an action omits an override, while
+# allowed-selection-policy-ids bounds designer-authored policy overrides.
+# copy strings accept {action-label}, {count}, {subtype}, {transfiguration}, and
+# {essence-per-spark}; blank strings mean that the mechanic has no chooser copy.
+# Field entries describe editor controls and compiler defaults. optional controls
+# whether omission is legal; default-value is materialized into generated JSON;
+# min/step/resource are editor affordances; field template-ids narrow applicability.
+
+# Purge and copy: purge-and-duplicate.
+[[effect-kind]]
+kind = "purge-and-copy"
+label = "Purge and copy"
+template-ids = [61]
+canonical-mechanic-id = "purge-and-duplicate"
+
+[effect-kind.copy]
+followup-title = "Exchange Familiar Forms"
+followup-subtitle = "First choose a card to purge, then choose a different card to copy."
+
+# Gain Dreamsign: gain-dreamsign.
+[[effect-kind]]
+kind = "gain-dreamsign"
+label = "Gain Dreamsign"
+template-ids = [27]
+canonical-mechanic-id = "gain-dreamsign"
+default-selection-policy-id = "fixed"
+allowed-selection-policy-ids = ["fixed"]
+
+[effect-kind.copy]
+followup-title = "{action-label}"
+followup-subtitle = "Choose a Dreamsign to replace."
+
+[[effect-kind.field]]
+key = "dreamsignId"
+label = "Dreamsign"
+control = "dreamsign"
+
+# Gain card: gain-card.
+[[effect-kind]]
+kind = "gain-card"
+label = "Gain card"
+template-ids = [10]
+canonical-mechanic-id = "gain-card"
+default-selection-policy-id = "fixed"
+allowed-selection-policy-ids = ["fixed"]
+
+[effect-kind.copy]
+followup-title = ""
+followup-subtitle = ""
+
+[[effect-kind.field]]
+key = "cardId"
+label = "Card"
+control = "card"
+
+# Transfigure selected card: transfigure-deck-entry.
+[[effect-kind]]
+kind = "transfigure-selected"
+label = "Transfigure selected card"
+template-ids = [17]
+canonical-mechanic-id = "transfigure-deck-entry"
+default-selection-policy-id = "transfiguration-value"
+allowed-selection-policy-ids = ["uniform","transfiguration-value"]
+
+[effect-kind.copy]
+followup-title = ""
+followup-subtitle = ""
+
+[[effect-kind.field]]
+key = "predicate"
+label = "Card predicate"
+control = "predicate"
+optional = true
+
+# Purge selected cards: purge-deck-entry.
+[[effect-kind]]
+kind = "purge-selected"
+label = "Purge selected cards"
+template-ids = [3,4,5,6]
+canonical-mechanic-id = "purge-deck-entry"
+default-selection-policy-id = "purge-misfit"
+allowed-selection-policy-ids = ["uniform","purge-misfit"]
+
+[effect-kind.copy]
+followup-title = "Feed the Fire"
+followup-subtitle = "Choose an Event to purge."
+
+[[effect-kind.field]]
+key = "predicate"
+label = "Card predicate"
+control = "predicate"
+optional = true
+
+[[effect-kind.field]]
+key = "count"
+label = "Count"
+control = "number"
+default-value = 1
+min = 1
+template-ids = [5,6]
+
+# Choose a pack: pack-chooser.
+[[effect-kind]]
+kind = "choose-pack"
+label = "Choose a pack"
+template-ids = [36]
+canonical-mechanic-id = "pack-chooser"
+default-selection-policy-id = "card-bundle"
+allowed-selection-policy-ids = ["uniform","card-fit","card-bundle"]
+
+[effect-kind.copy]
+followup-title = "{action-label}"
+followup-subtitle = "Choose one pack to add to your deck."
+
+[[effect-kind.field]]
+key = "predicate"
+label = "Card predicate"
+control = "predicate"
+default-value = "character"
+
+[[effect-kind.field]]
+key = "packCount"
+label = "Pack count"
+control = "number"
+default-value = 2
+min = 1
+
+[[effect-kind.field]]
+key = "packSize"
+label = "Pack size"
+control = "number"
+default-value = 3
+min = 1
+
+# Draft a card: catalog-card-chooser.
+[[effect-kind]]
+kind = "draft-card"
+label = "Draft a card"
+template-ids = [14,15]
+canonical-mechanic-id = "catalog-card-chooser"
+default-selection-policy-id = "card-fit"
+allowed-selection-policy-ids = ["uniform","card-fit","card-fit-quality"]
+
+[effect-kind.copy]
+followup-title = "{action-label}"
+followup-subtitle = "Choose one offered card."
+
+[[effect-kind.field]]
+key = "predicate"
+label = "Card predicate"
+control = "predicate"
+default-value = "character"
+
+[[effect-kind.field]]
+key = "offerCount"
+label = "Offer count"
+control = "number"
+default-value = 4
+min = 1
+
+[[effect-kind.field]]
+key = "count"
+label = "Copies"
+control = "number"
+default-value = 1
+min = 1
+template-ids = [15]
+
+# Purge for essence: purge-for-essence.
+[[effect-kind]]
+kind = "purge-for-essence"
+label = "Purge for essence"
+template-ids = [60]
+canonical-mechanic-id = "purge-for-essence"
+default-selection-policy-id = "purge-misfit"
+allowed-selection-policy-ids = ["uniform","purge-misfit"]
+
+[effect-kind.copy]
+followup-title = "Trade Away a Figure"
+followup-subtitle = "Choose a card to purge for {essence-per-spark} essence per ✦."
+
+[[effect-kind.field]]
+key = "essencePerSpark"
+label = "Essence per spark"
+control = "number"
+default-value = 40
+min = 1
+step = 10
+resource = "essence"
+
+# Change selected subtype: change-entry-subtype.
+[[effect-kind]]
+kind = "change-subtype-selected"
+label = "Change selected subtype"
+template-ids = [53,58]
+canonical-mechanic-id = "change-entry-subtype"
+default-selection-policy-id = "deck-entry-centrality"
+allowed-selection-policy-ids = ["uniform","deck-entry-centrality"]
+
+[effect-kind.copy]
+followup-title = "{action-label}"
+followup-subtitle = "Choose a Character to become {subtype}."
+
+[[effect-kind.field]]
+key = "predicate"
+label = "Card predicate"
+control = "predicate"
+optional = true
+
+[[effect-kind.field]]
+key = "subtype"
+label = "Subtype"
+control = "subtype"
+
+# Choose subtype for all characters: change-deck-subtype.
+[[effect-kind]]
+kind = "change-subtype-all"
+label = "Choose subtype for all characters"
+template-ids = [67]
+canonical-mechanic-id = "change-deck-subtype"
+
+[effect-kind.copy]
+followup-title = "{action-label}"
+followup-subtitle = "Choose the subtype for every Character in your deck."
+
+[[effect-kind.field]]
+key = "subtypeOptions"
+label = "Subtype options"
+control = "subtype-options"
+
+# Take offered cards: catalog-card-chooser.
+[[effect-kind]]
+kind = "take-cards"
+label = "Take offered cards"
+template-ids = [16]
+canonical-mechanic-id = "catalog-card-chooser"
+default-selection-policy-id = "card-fit"
+allowed-selection-policy-ids = ["uniform","card-fit","card-fit-quality"]
+
+[effect-kind.copy]
+followup-title = "{action-label}"
+followup-subtitle = "Choose any number of offered cards."
+
+[[effect-kind.field]]
+key = "predicate"
+label = "Card predicate"
+control = "predicate"
+default-value = "character"
+
+[[effect-kind.field]]
+key = "offerCount"
+label = "Offer count"
+control = "number"
+default-value = 4
+min = 1
+
+# Replace selected card with a fixed card: replace-deck-entry.
+[[effect-kind]]
+kind = "replace-selected-with-card"
+label = "Replace selected card with a fixed card"
+template-ids = [47]
+canonical-mechanic-id = "replace-deck-entry"
+default-selection-policy-id = "fixed"
+allowed-selection-policy-ids = ["fixed"]
+
+[effect-kind.copy]
+followup-title = "{action-label}"
+followup-subtitle = "Choose a card to replace."
+
+[[effect-kind.field]]
+key = "predicate"
+label = "Card predicate"
+control = "predicate"
+optional = true
+
+[[effect-kind.field]]
+key = "cardId"
+label = "Replacement card"
+control = "card"
+
+# Replace selected card: replace-deck-entry.
+[[effect-kind]]
+kind = "replace-selected"
+label = "Replace selected card"
+template-ids = [7]
+canonical-mechanic-id = "replace-deck-entry"
+default-selection-policy-id = "card-fit-quality"
+allowed-selection-policy-ids = ["uniform","card-fit-quality"]
+
+[effect-kind.copy]
+followup-title = "Release a Fellow Swimmer"
+followup-subtitle = "Choose a Spirit Animal to exchange."
+
+[[effect-kind.field]]
+key = "predicate"
+label = "Replacement predicate"
+control = "predicate"
+default-value = "character"
+
+# Gain Nightmares and a card: gain-nightmare-and-card.
+[[effect-kind]]
+kind = "gain-nightmare-and-card"
+label = "Gain Nightmares and a card"
+template-ids = [70]
+canonical-mechanic-id = "gain-nightmare-and-card"
+default-selection-policy-id = "fixed"
+allowed-selection-policy-ids = ["fixed"]
+
+[effect-kind.copy]
+followup-title = ""
+followup-subtitle = ""
+
+[[effect-kind.field]]
+key = "cardId"
+label = "Card"
+control = "card"
+
+[[effect-kind.field]]
+key = "nightmareCount"
+label = "Nightmare count"
+control = "number"
+default-value = 1
+min = 1
+
+# Gain random cards: gain-card.
+[[effect-kind]]
+kind = "gain-random-cards"
+label = "Gain random cards"
+template-ids = [9,13]
+canonical-mechanic-id = "gain-card"
+default-selection-policy-id = "card-bundle"
+allowed-selection-policy-ids = ["uniform","card-fit","card-fit-quality","card-bundle"]
+
+[effect-kind.copy]
+followup-title = ""
+followup-subtitle = ""
+
+[[effect-kind.field]]
+key = "predicate"
+label = "Card predicate"
+control = "predicate"
+default-value = "character"
+
+[[effect-kind.field]]
+key = "count"
+label = "Count"
+control = "number"
+default-value = 1
+min = 1
+template-ids = [13]
+
+# Apply a fixed transfiguration: transfigure-deck-entry.
+[[effect-kind]]
+kind = "transfigure-fixed-selected"
+label = "Apply a fixed transfiguration"
+template-ids = [18,19]
+canonical-mechanic-id = "transfigure-deck-entry"
+default-selection-policy-id = "transfiguration-value"
+allowed-selection-policy-ids = ["uniform","transfiguration-value"]
+
+[effect-kind.copy]
+followup-title = "{action-label}"
+followup-subtitle = "Choose a card to become {transfiguration}."
+
+[[effect-kind.field]]
+key = "predicate"
+label = "Card predicate"
+control = "predicate"
+optional = true
+
+[[effect-kind.field]]
+key = "transfiguration"
+label = "Transfiguration"
+control = "transfiguration"
+default-value = "Empowered"
+
+# Gain an offered card: gain-card.
+[[effect-kind]]
+kind = "gain-offered-card"
+label = "Gain an offered card"
+template-ids = [11,12]
+canonical-mechanic-id = "gain-card"
+default-selection-policy-id = "card-fit-quality"
+allowed-selection-policy-ids = ["uniform","card-fit","card-fit-quality"]
+
+[effect-kind.copy]
+followup-title = ""
+followup-subtitle = ""
+
+[[effect-kind.field]]
+key = "predicate"
+label = "Offer predicate"
+control = "predicate"
+default-value = "character"
+
+[[effect-kind.field]]
+key = "count"
+label = "Copies"
+control = "number"
+default-value = 1
+min = 1
+template-ids = [12]
+
+# Transfigure the next Draft or Shop: next-site-transfiguration.
+[[effect-kind]]
+kind = "transfigure-next-draft-or-shop"
+label = "Transfigure the next Draft or Shop"
+template-ids = [37]
+canonical-mechanic-id = "next-site-transfiguration"
+
+[effect-kind.copy]
+followup-title = ""
+followup-subtitle = ""
+
+# Gain essence per card: gain-essence-by-deck-predicate.
+[[effect-kind]]
+kind = "gain-essence-per-card"
+label = "Gain essence per card"
+template-ids = [59]
+canonical-mechanic-id = "gain-essence-by-deck-predicate"
+
+[effect-kind.copy]
+followup-title = ""
+followup-subtitle = ""
+
+[[effect-kind.field]]
+key = "predicate"
+label = "Card predicate"
+control = "predicate"
+default-value = "character"
+
+[[effect-kind.field]]
+key = "essencePerCard"
+label = "Essence per card"
+control = "number"
+default-value = 10
+min = 1
+step = 10
+resource = "essence"
+
+# Increase spark for all characters: increase-deck-spark.
+[[effect-kind]]
+kind = "increase-spark-all"
+label = "Increase spark for all characters"
+template-ids = [64]
+canonical-mechanic-id = "increase-deck-spark"
+
+[effect-kind.copy]
+followup-title = ""
+followup-subtitle = ""
+
+[[effect-kind.field]]
+key = "sparkBonus"
+label = "Spark bonus"
+control = "number"
+default-value = 1
+min = 1
+resource = "spark"
+
+# Gain random Dreamsign: gain-dreamsign.
+[[effect-kind]]
+kind = "gain-random-dreamsign"
+label = "Gain random Dreamsign"
+template-ids = [28]
+canonical-mechanic-id = "gain-dreamsign"
+default-selection-policy-id = "dreamsign-match"
+allowed-selection-policy-ids = ["uniform","dreamsign-match"]
+
+[effect-kind.copy]
+followup-title = "{action-label}"
+followup-subtitle = "Choose a Dreamsign to replace."
+
+# Purge Dreamsign for essence: purge-dreamsign-for-essence.
+[[effect-kind]]
+kind = "purge-dreamsign-for-essence"
+label = "Purge Dreamsign for essence"
+template-ids = [62]
+canonical-mechanic-id = "purge-dreamsign-for-essence"
+
+[effect-kind.copy]
+followup-title = "{action-label}"
+followup-subtitle = "Choose a Dreamsign to purge."
+
+[[effect-kind.field]]
+key = "essence"
+label = "Essence"
+control = "number"
+default-value = 50
+min = 1
+step = 10
+resource = "essence"
+
+# Make all cards fast: make-deck-fast.
+[[effect-kind]]
+kind = "make-fast-all"
+label = "Make all cards fast"
+template-ids = [66]
+canonical-mechanic-id = "make-deck-fast"
+
+[effect-kind.copy]
+followup-title = ""
+followup-subtitle = ""
+
+# Reduce costs and gain Nightmares: reduce-deck-cost-and-add-nightmares.
+[[effect-kind]]
+kind = "reduce-cost-all-and-gain-nightmares"
+label = "Reduce costs and gain Nightmares"
+template-ids = [65]
+canonical-mechanic-id = "reduce-deck-cost-and-add-nightmares"
+
+[effect-kind.copy]
+followup-title = ""
+followup-subtitle = ""
+
+[[effect-kind.field]]
+key = "energyCostReduction"
+label = "Energy cost reduction"
+control = "number"
+default-value = 1
+min = 1
+resource = "energy"
+
+[[effect-kind.field]]
+key = "nightmareCount"
+label = "Nightmare count"
+control = "number"
+default-value = 3
+min = 1
+
+# Copy a selected deck card: duplicate-deck-entry.
+[[effect-kind]]
+kind = "copy-selected-card"
+label = "Copy a selected deck card"
+template-ids = [49,50]
+canonical-mechanic-id = "duplicate-deck-entry"
+default-selection-policy-id = "duplicate-value"
+allowed-selection-policy-ids = ["uniform","duplicate-value"]
+
+[effect-kind.copy]
+followup-title = "{action-label}"
+followup-subtitle = "Choose a card to gain {count} copies of."
+
+[[effect-kind.field]]
+key = "predicate"
+label = "Card predicate"
+control = "predicate"
+optional = true
+
+[[effect-kind.field]]
+key = "count"
+label = "Copies"
+control = "number"
+default-value = 1
+min = 1
+
+# Copy selected deck cards: duplicate-deck-entry.
+[[effect-kind]]
+kind = "copy-selected-cards"
+label = "Copy selected deck cards"
+template-ids = [51]
+canonical-mechanic-id = "duplicate-deck-entry"
+default-selection-policy-id = "duplicate-value"
+allowed-selection-policy-ids = ["uniform","duplicate-value"]
+
+[effect-kind.copy]
+followup-title = "{action-label}"
+followup-subtitle = "Choose {count} cards to copy."
+
+[[effect-kind.field]]
+key = "count"
+label = "Cards to copy"
+control = "number"
+default-value = 2
+min = 1
+
+# Copy an offered deck card: duplicate-deck-entry.
+[[effect-kind]]
+kind = "copy-offered-deck-card"
+label = "Copy an offered deck card"
+template-ids = [55]
+canonical-mechanic-id = "duplicate-deck-entry"
+default-selection-policy-id = "duplicate-value"
+allowed-selection-policy-ids = ["uniform","duplicate-value"]
+
+[effect-kind.copy]
+followup-title = "{action-label}"
+followup-subtitle = "Choose one offered card to copy."
+
+[[effect-kind.field]]
+key = "offerCount"
+label = "Offer count"
+control = "number"
+default-value = 4
+min = 1
+
+# Increase next opening hand: next-battle-modifier.
+[[effect-kind]]
+kind = "next-battle-opening-hand"
+label = "Increase next opening hand"
+template-ids = [38]
+canonical-mechanic-id = "next-battle-modifier"
+
+[effect-kind.copy]
+followup-title = ""
+followup-subtitle = ""
+
+[[effect-kind.field]]
+key = "count"
+label = "Additional cards"
+control = "number"
+default-value = 1
+min = 1
+
+# Increase next starting energy: next-battle-modifier.
+[[effect-kind]]
+kind = "next-battle-starting-energy"
+label = "Increase next starting energy"
+template-ids = [39]
+canonical-mechanic-id = "next-battle-modifier"
+
+[effect-kind.copy]
+followup-title = ""
+followup-subtitle = ""
+
+[[effect-kind.field]]
+key = "count"
+label = "Additional energy"
+control = "number"
+default-value = 1
+min = 1
+resource = "energy"
+
+# Reduce next opening hand and card costs: next-battle-modifier.
+[[effect-kind]]
+kind = "next-battle-smaller-hand-and-cost-discount"
+label = "Reduce next opening hand and card costs"
+template-ids = [81]
+canonical-mechanic-id = "next-battle-modifier"
+
+[effect-kind.copy]
+followup-title = ""
+followup-subtitle = ""
+
+# Choose a new Dream Avatar: choose-dream-avatar.
+[[effect-kind]]
+kind = "choose-dream-avatar"
+label = "Choose a new Dream Avatar"
+template-ids = [57]
+canonical-mechanic-id = "choose-dream-avatar"
+default-selection-policy-id = "uniform"
+allowed-selection-policy-ids = ["uniform"]
+
+[effect-kind.copy]
+followup-title = "{action-label}"
+followup-subtitle = "Choose your new Dream Avatar."
+
+[[effect-kind.field]]
+key = "offerCount"
+label = "Offer count"
+control = "number"
+default-value = 3
+min = 1
+
+# Purge duplicates and grant Reclaim: purge-duplicates-and-grant-reclaim.
+[[effect-kind]]
+kind = "purge-duplicates-and-grant-reclaim"
+label = "Purge duplicates and grant Reclaim"
+template-ids = [79]
+canonical-mechanic-id = "purge-duplicates-and-grant-reclaim"
+
+[effect-kind.copy]
+followup-title = ""
+followup-subtitle = ""
+
+# Draft a transfigured card: transfigured-card-chooser.
+[[effect-kind]]
+kind = "transfigured-card-draft"
+label = "Draft a transfigured card"
+template-ids = [83]
+canonical-mechanic-id = "transfigured-card-chooser"
+default-selection-policy-id = "card-fit"
+allowed-selection-policy-ids = ["uniform","card-fit","card-fit-quality"]
+
+[effect-kind.copy]
+followup-title = "{action-label}"
+followup-subtitle = "Choose one offered transfigured card."
+
+[[effect-kind.field]]
+key = "predicate"
+label = "Card predicate"
+control = "predicate"
+default-value = "character"
+
+[[effect-kind.field]]
+key = "offerCount"
+label = "Offer count"
+control = "number"
+default-value = 4
+min = 1
+
+# Add a disclosed site: add-site.
+[[effect-kind]]
+kind = "add-site"
+label = "Add a disclosed site"
+template-ids = [84]
+canonical-mechanic-id = "add-site"
+default-selection-policy-id = "site-uniform"
+allowed-selection-policy-ids = ["site-uniform"]
+
+[effect-kind.copy]
+followup-title = ""
+followup-subtitle = ""
+
 # Exploration encounters are keyed by the UUID of the card whose artwork and
 # mechanics inspire the scene. Each encounter has exactly two player actions.
 # Template metadata traces each production action back to the selected design.

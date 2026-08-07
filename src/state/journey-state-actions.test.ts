@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { economyFixture } from "../testing/economy-fixture";
 import { opponentsFixture } from "../testing/opponents-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
+import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import {
   loadTestAffiliations,
   loadTestAtlasData,
@@ -86,6 +87,7 @@ function makeJourneyContent(
   );
 
   return {
+    ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
     cardDatabase,
     dreamAvatars: [dreamAvatar],

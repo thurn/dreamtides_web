@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
+import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
 import { MINIMAL_ATLAS_DATA } from "../../__test-helpers__/atlas-fixtures";
 import { resolveDeckEntryCard } from "../../card-type-change";
 import type {
@@ -97,6 +98,7 @@ function contentFixture(
     ],
   };
   return {
+    ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
     cardDatabase: new Map(cards.map((entry) => [entry.cardNumber, entry])),
     exploration,

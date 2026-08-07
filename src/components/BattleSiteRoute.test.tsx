@@ -4,6 +4,7 @@ import { StrictMode, act, type ReactElement } from "react";
 import { economyFixture } from "../testing/economy-fixture";
 import { opponentsFixture } from "../testing/opponents-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
+import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
@@ -172,6 +173,7 @@ function setJourneyState(
     mutations: {} as ReturnType<typeof useJourney>["mutations"],
     cardDatabase: makeBattleTestCardDatabase(),
     journeyContent: {
+      ...CONFIG_DATA_FIXTURE,
       draftData: draftDataFixture(),
       cardDatabase: makeBattleTestCardDatabase(),
       dreamAvatars: makeBattleTestDreamAvatars(),
