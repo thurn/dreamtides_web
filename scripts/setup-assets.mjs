@@ -39,8 +39,7 @@ import {
 } from "./guide-sites-data.mjs";
 import {
   buildExplorationEffectDefinitions,
-  EXPLORATION_EFFECT_DEFINITIONS,
-} from "./exploration-editor-schema.mjs";
+} from "./exploration-effect-definitions.mjs";
 
 // Re-exported for `setup-assets.test.mjs`, which exercises the JSONC comment
 // stripper alongside the asset-build helpers defined here.
@@ -744,10 +743,11 @@ function transformTomlRecord(record) {
 
 /** Convert and validate the authored Exploration encounter catalog. */
 export function transformExplorationData(source) {
-  const effectDefinitions =
+  const effectDefinitions = buildExplorationEffectDefinitions(
     source["effect-kind"] === undefined
-      ? EXPLORATION_EFFECT_DEFINITIONS
-      : buildExplorationEffectDefinitions(source);
+      ? parse(readFileSync(join(DATA_DIR, "exploration.toml"), "utf8"))
+      : source,
+  );
   const effectDefinitionByKind = new Map(
     effectDefinitions.map((definition) => [definition.kind, definition]),
   );
