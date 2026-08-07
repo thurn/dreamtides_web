@@ -1,4 +1,5 @@
 import type { ReactElement } from "react";
+import { useLocalization } from "@fluent/react";
 import { GlassButton } from "../components/controls/GlassButton";
 import {
   DreamAvatarPortrait,
@@ -17,10 +18,20 @@ import {
 
 export interface JourneyCompleteStatView {
   id: "battles" | "dreamscapes" | "cards" | "dreamsigns" | "essence";
-  label: string;
   value: number;
   kind: "number" | "essence";
 }
+
+const STAT_LABEL_MESSAGE_IDS: Record<
+  JourneyCompleteStatView["id"],
+  string
+> = {
+  battles: "journey-complete-stat-battles",
+  dreamscapes: "journey-complete-stat-dreamscapes",
+  cards: "journey-complete-stat-cards",
+  dreamsigns: "journey-complete-stat-dreamsigns",
+  essence: "journey-complete-stat-essence",
+};
 
 export interface JourneyCompleteDreamAvatarView extends DreamAvatarVisual {
   id: string;
@@ -42,6 +53,8 @@ export function JourneyCompleteScreen({
   view,
   onNewJourney,
 }: JourneyCompleteScreenProps): ReactElement {
+  const { l10n } = useLocalization();
+
   return (
     <div
       className="cumulus"
@@ -110,7 +123,7 @@ export function JourneyCompleteScreen({
                   color: token("--text-primary"),
                 }}
               >
-                Journey Complete
+                {l10n.getString("journey-complete-title")}
               </h1>
             </header>
 
@@ -160,7 +173,14 @@ export function JourneyCompleteScreen({
                     }}
                   >
                     {view.stats.map((stat) => (
-                      <SummaryStat key={stat.id} stat={stat} />
+                      <SummaryStat
+                        key={stat.id}
+                        stat={stat}
+                        label={l10n.getString(
+                          STAT_LABEL_MESSAGE_IDS[stat.id],
+                          { count: stat.value },
+                        )}
+                      />
                     ))}
                   </dl>
                 </div>
@@ -177,7 +197,7 @@ export function JourneyCompleteScreen({
             }}
           >
             <GlassButton
-              label="New Journey"
+              label={l10n.getString("journey-complete-new-journey")}
               variant="accent"
               onPress={onNewJourney}
               testId="journey-complete-new-journey"
@@ -189,7 +209,13 @@ export function JourneyCompleteScreen({
   );
 }
 
-function SummaryStat({ stat }: { readonly stat: JourneyCompleteStatView }) {
+function SummaryStat({
+  stat,
+  label,
+}: {
+  readonly stat: JourneyCompleteStatView;
+  readonly label: string;
+}) {
   return (
     <div
       data-journey-complete-stat={stat.id}
@@ -226,7 +252,7 @@ function SummaryStat({ stat }: { readonly stat: JourneyCompleteStatView }) {
           color: token("--text-on-glass-muted"),
         }}
       >
-        {stat.label}
+        {label}
       </dt>
     </div>
   );

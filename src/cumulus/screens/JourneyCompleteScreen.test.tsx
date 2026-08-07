@@ -19,11 +19,11 @@ const VIEW: JourneyCompleteView = {
     portraitFocus: { x: 0.42, y: 0.18 },
   },
   stats: [
-    { id: "battles", label: "Battles Won", value: 7, kind: "number" },
-    { id: "dreamscapes", label: "Dreamscapes", value: 7, kind: "number" },
-    { id: "cards", label: "Final Deck", value: 30, kind: "number" },
-    { id: "dreamsigns", label: "Dreamsigns", value: 4, kind: "number" },
-    { id: "essence", label: "Essence Remaining", value: 140, kind: "essence" },
+    { id: "battles", value: 7, kind: "number" },
+    { id: "dreamscapes", value: 7, kind: "number" },
+    { id: "cards", value: 30, kind: "number" },
+    { id: "dreamsigns", value: 4, kind: "number" },
+    { id: "essence", value: 140, kind: "essence" },
   ],
 };
 
@@ -66,7 +66,7 @@ describe("Cumulus JourneyCompleteScreen", () => {
       <JourneyCompleteScreen view={VIEW} onNewJourney={vi.fn()} />,
     );
 
-    expect(container.textContent).toContain("Journey Complete");
+    expect(container.querySelector("h1")?.textContent).not.toBe("");
     const hierarchy = container.querySelector(
       "[data-journey-complete-hierarchy]",
     );

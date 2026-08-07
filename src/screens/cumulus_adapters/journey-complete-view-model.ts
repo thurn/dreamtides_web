@@ -25,31 +25,26 @@ export function buildJourneyCompleteView(state: JourneyState): JourneyCompleteVi
     stats: [
       {
         id: "battles",
-        label: "Battles Won",
         value: state.completionLevel,
         kind: "number",
       },
       {
         id: "dreamscapes",
-        label: "Dreamscapes",
         value: completedDreamscapes,
         kind: "number",
       },
       {
         id: "cards",
-        label: "Final Deck",
         value: state.deck.length,
         kind: "number",
       },
       {
         id: "dreamsigns",
-        label: "Dreamsigns",
         value: state.dreamsigns.length,
         kind: "number",
       },
       {
         id: "essence",
-        label: "Essence Remaining",
         value: state.essence,
         kind: "essence",
       },

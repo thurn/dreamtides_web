@@ -1,0 +1,22 @@
+# English source strings for the Project Fluent localization proof of concept.
+
+journey-complete-title = Journey Complete
+journey-complete-new-journey = New Journey
+
+journey-complete-stat-battles =
+    { $count ->
+        [one] Battle Won
+       *[other] Battles Won
+    }
+journey-complete-stat-dreamscapes =
+    { $count ->
+        [one] Dreamscape
+       *[other] Dreamscapes
+    }
+journey-complete-stat-cards = Final Deck
+journey-complete-stat-dreamsigns =
+    { $count ->
+        [one] Dreamsign
+       *[other] Dreamsigns
+    }
+journey-complete-stat-essence = Essence Remaining
