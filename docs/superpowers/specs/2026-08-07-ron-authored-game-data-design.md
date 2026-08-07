@@ -101,6 +101,13 @@ requiring raw parsed TOML types to match. Other datasets use parsed-value
 parity unless their adapter documents an equally specific semantic
 normalization.
 
+The candidates are sufficient for read/build conversion but are not complete
+editor schemas. The Cards editor can assign per-card tides, which Cards schema
+version 1 cannot represent. The Exploration editor can author a per-action
+selection policy, which Exploration schema version 1 cannot represent. Their
+editor cutovers therefore use the version 2 source additions defined in Editor
+operation vocabulary while retaining the existing TOML compatibility schemas.
+
 Read, build, review, watch, and deployment conversion are feasible with the
 official parser and explicit adapters. Source-preserving editor mutation is the
 highest-risk portion. The official parser supplies semantic values and spanned
@@ -277,10 +284,13 @@ unsupported version before lowering.
 The compatibility adapter decides whether and how that source version appears
 in TOML. Draft and Exploration schema version 1 map `schema_version` to the
 established `schema-version = 1`. Cards schema version 1 is source-only because
-`cards.toml` has no schema marker. A separate per-document RON format version
-would duplicate this contract and is not required. Parser behavior is pinned by
-the Cargo lockfile and toolchain; a parser upgrade is reviewed and tested as a
-compiler change.
+`cards.toml` has no schema marker. Source and compatibility versions need not
+advance together: the editor-capable Exploration source schema version 2 still
+emits compatibility `schema-version = 1` because its new optional field lowers
+into the existing TOML contract. A separate per-document RON format version
+would duplicate the source-schema contract and is not required. Parser behavior
+is pinned by the Cargo lockfile and toolchain; a parser upgrade is reviewed and
+tested as a compiler change.
 
 The authoring style uses trailing commas and stable field order. Long rules text
 and narrative copy use raw strings with the minimum safe hash delimiter. The
@@ -386,8 +396,8 @@ Its public commands are:
   publishing them;
 - `migrate`: perform the one-time TOML-to-RON conversion for a selected dataset;
   and
-- `stage-edit`: apply one editor operation to a staged RON source and produce
-  the corresponding staged TOML.
+- `stage-edit`: apply one editor operation or ordered operation batch to staged
+  RON sources and produce the corresponding staged TOML.
 
 The binary accepts the repository root explicitly for tests and worktrees. It
 resolves and validates every path before reading or writing and refuses targets
@@ -510,72 +520,212 @@ Editor source selection uses a dataset ID or a validated canonical `.ron` path.
 The final URL/API vocabulary calls this `source`; it does not present generated
 TOML as an editable choice.
 
-For a save, the middleware:
+### Revisions and write serialization
 
-1. validates the request and stable record identifier;
-2. asks `stage-edit` to patch a copy of canonical RON;
-3. compiles that staged RON to staged TOML;
-4. runs the existing TypeScript field, dataset, reference, and JSON validation;
-5. prepares all affected RON, TOML, registry, and JSON writes;
-6. atomically publishes the transaction; and
-7. returns the confirmed record read through the generated compatibility path.
+Every editor load returns the confirmed compatibility data and a
+`sourceRevision`. This is a SHA-256 over the ordered bytes of every canonical
+writable source represented by that editor surface. The Cards revision covers
+the card catalog plus its tag and tide registries. The Exploration revision
+covers the catalog plus the encounter-template source. It is distinct from the
+existing `clientRevision`, which remains an echoed browser request number used
+only to ignore an old response.
 
-Cards are always selected by UUID. Other catalogs use their established stable
-ID. Positional records such as ordered tutorial actions use a schema-defined
-stable locator and reject a stale client revision rather than guessing by copy
-or array contents.
+Every save includes both revisions. The browser maintains one promise queue per
+selected source and sends saves in order, updating `sourceRevision` after each
+confirmation. Optimistic UI may continue while a save is queued. A failed save
+pauses that queue, discards later unsubmitted operations, and reloads confirmed
+data before accepting another edit.
 
-### RON source patching
+The middleware also serializes writes by dataset and acquires the repository
+transaction lock. After acquiring the lock it rereads the canonical sources and
+recomputes `sourceRevision`. A mismatch returns HTTP 409 with
+`STALE_SOURCE`, the current revision, and the current confirmed record or
+editor payload. It performs no automatic merge and writes no files. This makes
+manual edits, a second browser tab, and another local process deterministic.
 
-Source preservation remains a hard editor requirement, but it is a separate
-implementation from typed deserialization. `stage-edit` uses a repository-owned
-token and span index that understands line and nested block comments, ordinary
-and raw strings, byte strings, escapes, identifiers, commas, and balanced
-delimiters. It records named-struct, field, sequence-element, and map-entry
-ranges without interpreting their domain meaning. The official RON parser then
-provides the semantic source of truth.
+### Editor operation vocabulary
 
-The patcher locates a record through its schema-declared ID field, never by
-searching arbitrary string contents. It can replace an existing field value,
-insert an omitted defaulted field at its schema-defined position, or replace a
-complete record. A narrow field edit changes only that value's source range.
-Record replacement changes only the identified record. Unrelated records,
-fields, comments, ordering, and whitespace remain byte-identical.
+The browser API retains its current compatibility-facing field names. The Node
+middleware validates those values, then translates them into a closed,
+dataset-specific Rust operation. `stage-edit` accepts one operation or an
+ordered batch as JSON on standard input and writes only beneath the supplied
+staging root. It never edits the working tree itself.
 
-Cards edits normally splice one field value. A change between energy-cost or
-card-kind variants replaces that enum value as a unit. Exploration prose edits
-splice the prose value, while action edits replace one complete
-`ActionDefinition`; this matches the current editor's semantic save boundary
-and safely changes the effect variant and its valid field set together.
+The initial Cards operations are:
 
-The editor patch layer formats newly inserted values canonically. It selects a
-normal quoted string for one-line text and a minimum-delimiter raw string for
-multiline or escape-heavy text. It reparses the complete candidate RON before
-returning it.
+- `set_card_field`, identified by card UUID, for `name`, `rules`,
+  `energy_cost`, `card_type`, `subtype`, `spark`, `tags`, `tides`,
+  `image_number`, and `art_crop`;
+- `upsert_facet`, identified by facet kind and target name, to add an entry or
+  update its color; and
+- `delete_facet`, identified by facet kind and name, which removes the registry
+  entry and that exact value from every affected card in the same staged batch.
 
-Full-document editors may use canonical serialization only when their existing
-save contract already replaces the complete document. Dataset-level and field
-editors use targeted patching.
+The middleware maps `rendered-text` to `rules`, `energy-cost` to
+`energy_cost`, `image-number` to `art.image`, and `art` to `art.crop`.
+`energy_cost` accepts exactly the source model's `Fixed(n)`, `Variable`, and
+`FixedAndVariable(n)` shapes; the browser accepts `n`, `X`, and `n,X` and sends
+the typed operation. `name`, rules, tags, image, and crop update their direct
+source fields. Empty tags and tides are written explicitly as empty lists by
+the editor rather than deleting an authored field.
 
-Before editor migration begins, the span index must parse and reproduce all
-three current RON candidates byte-for-byte and pass mutation fixtures for:
+Card type, subtype, and spark are three views of the single `kind` value:
 
-- a field before and after raw Unicode rules text;
-- insertion of omitted Cards defaults;
-- replacement of every Cards energy and kind variant shape;
-- an Exploration prose edit;
-- replacement of unit and struct action-effect variants;
-- nested template-variable and selection maps; and
-- misleading identifiers, UUIDs, delimiters, and assignment-like text inside
-  comments and strings.
+- changing Character to Event replaces the complete `Character(...)` value
+  with `Event`; generated subtype and spark become their established blank
+  compatibility values;
+- changing Event to Character creates `Character(subtype: "", spark: None)`;
+- changing subtype or spark on a Character patches that nested field;
+- blank Character spark writes explicit `None`, which is valid with
+  `implicit_some`; and
+- nonblank subtype or spark edits on an Event fail with
+  `FIELD_NOT_APPLICABLE`. The migrated UI disables those controls for Events.
 
-A third-party lossless parser may replace the repository-owned index only after
-it passes this corpus and mutation suite. Semantic conversion and editor
-cutover do not depend on that replacement.
+The current `cards.ron` candidate has no `tides` field, while the Cards editor
+already exposes per-card tides. Cards source schema version 2 adds a defaulted
+`tides: Vec<String>` field and the adapter emits the compatibility key when it
+is nonempty. The compiler may accept version 1 for read-only conversion during
+the transition, but the manifest enables Cards editor capability only for
+version 2. Tag and tide registry files become manifest datasets with stable
+registry-entry operations; they are not edited as unregistered sidecar paths.
 
-The TypeScript transaction layer retains backup-and-rollback behavior for
-filesystem failures. A failed validation or write leaves the canonical RON,
-generated TOML, and runtime JSON at the same confirmed revision.
+The existing registry PUT endpoint may remain compatibility-shaped. The
+middleware diffs its submitted ordered list against the confirmed registry and
+translates it into an ordered upsert/delete batch. A removed name retains the
+current cascade behavior; a newly named entry is an addition rather than an
+implicit rename.
+
+The initial Exploration operations are:
+
+- `set_encounter_prose`, identified by encounter card UUID;
+- `replace_action`, identified by encounter card UUID, slot 0 or 1, and the
+  expected current action ID; and
+- `replace_template`, identified by template ID, with the complete set of
+  affected normalized actions included in the same operation batch.
+
+`replace_action` accepts the current compatibility-shaped editor action after
+TypeScript normalization. Rust exhaustively maps `effectKind` and its allowed
+fields to one typed action-effect enum variant. Unknown fields, a missing
+required field, or a field belonging to another variant fail before patching.
+It maps the template ID, variables, and selections into one
+`TemplateInvocation`. The current action ID must equal the request's expected
+action ID, so a reordered or replaced slot cannot be overwritten accidentally.
+
+The current `exploration.ron` candidate does not carry per-action selection
+policy overrides, while the Exploration editor exposes that control. Before
+editor cutover, Exploration source schema version 2 adds a defaulted optional
+`selection_policy` enum to `ActionDefinition`. The compiler may compile version
+1 read-only, while editing requires version 2. The adapter emits
+`selection-policy-id` when authored. `canonicalMechanicId` remains derived from
+the selected effect definition: Rust validates a compatibility request's value
+when present but does not duplicate it in RON.
+
+Template text remains in its existing template source. A template save first
+uses the current TypeScript template logic to compute every affected action's
+effect text, variables, and selections. The transaction stages that template
+source and sends the resulting ordered `replace_action` batch to Rust. One
+invalid action rejects the complete template save.
+
+### `stage-edit` execution contract
+
+For each operation batch, the middleware and Rust tool perform these steps:
+
+1. Node validates the HTTP body, references, and editor-level normalization.
+2. Under the transaction lock, Node verifies `sourceRevision` and copies every
+   writable canonical source to the staging root.
+3. Rust strictly deserializes the staged RON into the versioned dataset type and
+   rejects duplicate identities before locating a target.
+4. Rust applies the operation to an in-memory clone to produce the exact
+   intended typed result.
+5. The span index creates a non-overlapping byte replacement plan against the
+   original staged source and applies replacements from highest offset to
+   lowest.
+6. Rust strictly deserializes the patched source and requires it to equal the
+   intended typed result. It also verifies that bytes outside the declared
+   replacement ranges are unchanged.
+7. Rust compiles staged TOML; Node runs the existing TypeScript compilers,
+   reference checks, and derived-JSON generation against the staged paths.
+8. The publication transaction commits all canonical RON, template or registry
+   sources, generated TOML, and derived JSON, then returns a new
+   `sourceRevision` and the confirmed compatibility record.
+
+Any failure before publication leaves working-tree sources unchanged. A
+publication failure follows the journal and recovery contract in Deterministic
+conversion. Watch and HMR notifications are emitted only after confirmation.
+
+### Span index and patch rules
+
+The span index is a lossless, byte-oriented companion to the official semantic
+parser. Its lexer recognizes the pinned RON grammar: extension attributes,
+identifiers, every numeric form, characters, ordinary and raw strings, byte
+strings, range tokens, commas, whitespace, line comments, and nested block
+comments. Its delimiter tree records exact spans for structs and enum payloads,
+sequence elements, map entries, named fields, field values, separators, and
+leading and trailing trivia. UTF-8 byte offsets are converted to line and
+column only for diagnostics.
+
+Schema-specific traversal interprets that tree. Cards are located only as
+elements of root `cards` whose direct `id` field equals the requested UUID.
+Exploration encounters are located only in root `encounters` by direct
+`card_id`; actions are then selected by validated slot and action ID. A UUID
+inside comments, prose, rules, template metadata, or a nested object is never a
+locator. Missing and duplicate targets are errors.
+
+Patch construction follows fixed rules:
+
+- An existing scalar, collection, enum, or struct field edit replaces only the
+  field's value span. The field name, comma, indentation, and surrounding
+  comments remain untouched.
+- A nested edit, such as Character spark or art crop, replaces the narrowest
+  existing nested value. A variant change replaces the containing enum value,
+  not the complete card record.
+- A missing field is inserted according to the source schema's canonical field
+  order, immediately before the next present field's leading trivia. If there
+  is no later field, it is inserted before the struct's trailing trivia and
+  closing delimiter. Indentation and newline style come from sibling fields.
+- Editor operations write explicit `None` or empty collections for edited
+  default values. They do not delete fields, so a save cannot orphan a field
+  comment.
+- Exploration action saves replace only the values of `label`, `effect_text`,
+  `effect`, `selection_policy`, and `template`, inserting the optional policy
+  field when required. The action ID and other top-level field trivia remain
+  untouched. An attempted action-ID change is rejected.
+- If a replacement span itself contains a comment, the patch proceeds only
+  when the operation can update narrower child values and retain that comment.
+  A shape change that would discard or ambiguously relocate it fails with
+  `COMMENT_CONFLICT` and names the source path. There is no whole-document or
+  whole-record serialization fallback.
+- A semantic no-op returns the existing bytes and does not trigger TOML, JSON,
+  watcher, or HMR writes.
+
+New values use dataset formatting rules. Card rules use a raw string with the
+minimum safe hash delimiter. One-line prose, labels, and effect text use escaped
+strings; multiline values use raw strings. Tags and tides remain inline string
+lists, crop remains an inline anonymous struct, and named enum or struct
+payloads use four-space indentation with trailing commas. Existing values keep
+their authored spelling and layout until that value is edited.
+
+Before editor migration begins, the span index must reproduce all three current
+RON candidates byte-for-byte and pass mutation fixtures covering every rule
+above. A third-party lossless parser may replace it only after passing the same
+corpus and mutation suite.
+
+### Editor error contract
+
+Editor failures use stable codes and source paths:
+
+- `STALE_SOURCE` (409) for a revision mismatch;
+- `RECORD_NOT_FOUND` (404) for a missing stable identity;
+- `FIELD_NOT_APPLICABLE` or `INVALID_EDIT` (400) for an invalid operation;
+- `COMMENT_CONFLICT` (409) when preservation prevents a shape-changing edit;
+- `MALFORMED_SOURCE` or `COMPATIBILITY_VALIDATION_FAILED` (422) for RON,
+  adapter, TOML, or TypeScript validation failures; and
+- `PUBLICATION_FAILED` (500) for a transaction failure, with recovery status
+  included in the response.
+
+Diagnostics include dataset ID, canonical source, record locator, semantic
+field path, and RON line and column when available. They do not include full
+authored records or copy.
 
 ## Migration strategy
 
@@ -702,7 +852,16 @@ Synthetic unit and property tests cover:
 - atomic batch staging and content-aware publication;
 - manifest path containment and duplicate detection;
 - structured syntax/schema diagnostics; and
-- source-preserving field and record edits across comments and nested values.
+- byte-identical span indexing for every current production RON source;
+- direct and nested field replacement, canonical insertion, explicit defaults,
+  non-overlapping batch application, and semantic no-ops;
+- stable-identity lookup that ignores UUID-like text in comments and values;
+- Cards field-to-domain transformations, including every energy and kind
+  variant plus the version 2 defaulted tides field;
+- Exploration prose and action transformations across unit and struct effect
+  variants plus the version 2 action selection policy;
+- comment preservation plus deterministic `COMMENT_CONFLICT` rejection for
+  unsafe shape changes.
 
 Official RON parser fixtures are included or referenced at their pinned version.
 Dataset tests demonstrate each rich construct that the source schema uses and
@@ -721,7 +880,13 @@ Synthetic fixtures cover:
 - targeted HMR after a valid RON edit;
 - last-valid-data behavior after an invalid RON edit;
 - editor reads from generated TOML and writes canonical RON;
-- stable-ID edit routing and stale-revision rejection; and
+- source and client revision separation, per-source browser queuing, confirmed
+  revision advancement, and stale-source rejection;
+- stable-ID edit routing, action slot plus ID validation, registry diffing, and
+  facet-removal cascades;
+- ordered template resynchronization as one all-or-nothing operation batch;
+- structured editor error responses and confirmed-data reload after a failed
+  save; and
 - path traversal and undeclared-dataset rejection.
 
 Existing compiler and editor tests migrate to synthetic RON inputs where they
@@ -773,6 +938,10 @@ the browser error buffer remaining empty.
   representation; its dataset adapter supplies the compatibility encoding.
 - Editor saves update canonical RON by stable ID and preserve unrelated source
   bytes.
+- Every editor save is a declared dataset operation with an expected source
+  revision; stale writes fail without mutation.
+- Shape-changing edits preserve comments through narrower patches or fail with
+  `COMMENT_CONFLICT`; serialization is never used as a silent fallback.
 - RON, TOML, and derived JSON editor writes use atomic per-file replacement and
   a recoverable transaction that rolls back failures.
 - Migration parity demonstrates unchanged runtime data, record order, UUID
@@ -826,9 +995,14 @@ while the manifest enforces one source of truth for every migrated catalog.
   rather than relying on generic case- or value-conversion heuristics. Rich RON
   constructs add adapter code where their compatibility representation is not
   direct.
-- Source-preserving RON editing is more involved than pure serialization. It is
-  required to retain the editors' established preservation and rollback
-  contracts.
+- Source-preserving RON editing requires a maintained lexer, span index, and
+  closed operation vocabulary in addition to Serde models. Each new editor
+  control needs an explicit source operation and comment-safe patch strategy.
+  `COMMENT_CONFLICT` makes the unsupported cases visible instead of risking
+  source loss.
+- Per-source save queues trade parallel field writes for deterministic revision
+  handling. Saves are local and small, and the measured RON parse cost leaves
+  ample latency budget for serialization.
 - Ignored generated TOML can surprise developers running low-level scripts.
   Supported entry points materialize it, generated headers explain ownership,
   and bypassed scripts fail with a direct recovery command.
