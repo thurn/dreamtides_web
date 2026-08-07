@@ -16,13 +16,18 @@ supplements provide deeper implementation treatment where useful.
 
 Directory: `/dreamtides`
 
-The player promise, nested journey and Battle loops, information disclosure,
-meaningful commitment, authored identity, deterministic randomness, durable
-state, and the relationship between rules, presentation, and rationale. This
-part also defines Cards and their identities, anatomy, types, subtypes, symbols,
-and rules language; concrete deck entries and effective Cards; Dream Avatars;
-Dreamsigns; resources; persistent Card modifications; and created objects.
-Specific gameplay algorithms appear with the systems that use them.
+The nested journey and Battle scopes; authored definitions and runtime
+instances; deterministic randomness; durable state; and the boundary between
+rules and presentation. This part also defines Cards and their identities,
+anatomy, types, subtypes, symbols, and rules language; concrete deck entries and
+effective Cards; Dream Avatars; Dreamsigns; resources; persistent Card
+modifications; and created objects. Specific gameplay algorithms appear with the
+systems that use them.
+
+1. **Primary:**
+   [Foundations of Dreamtides and Its Game Objects](dreamtides/dreamtides.md) —
+   Read this chapter when you need the shared state model, identity rules, Card
+   model, foundational object types, durable actions, or random-state contract.
 
 ## Part II: The Cumulus Design System
 
