@@ -238,7 +238,6 @@ battle-zone-browser-filtered-count =
         [one] { $visibleCount } of { $totalCount } { -card(number: "one") }
        *[other] { $visibleCount } of { $totalCount } { -card(number: "other") }
     }
-
 # Label for the local-player option in a battle zone owner switch. $count is
 # the non-negative number of that player's banished cards and can be zero.
 battle-zone-browser-viewer-option =
@@ -435,14 +434,16 @@ battle-victory-essence-gained = Gained { $amount } { -essence }
 # maximums and the points-to-win target are positive integers.
 battle-participant-status =
     { $owner ->
-        [viewer] Your side: { $currentEnergy } of { $maxEnergy } { -energy }, { $points } of { $pointsToWin } { $pointsToWin ->
-            [one] { -point(number: "one") }
-           *[other] { -point(number: "other") }
-        }
-       *[opponent] Opponent: { $currentEnergy } of { $maxEnergy } { -energy }, { $points } of { $pointsToWin } { $pointsToWin ->
-            [one] { -point(number: "one") }
-           *[other] { -point(number: "other") }
-        }
+        [viewer]
+            Your side: { $currentEnergy } of { $maxEnergy } { -energy }, { $points } of { $pointsToWin } { $pointsToWin ->
+                [one] { -point(number: "one") }
+               *[other] { -point(number: "other") }
+            }
+       *[opponent]
+            Opponent: { $currentEnergy } of { $maxEnergy } { -energy }, { $points } of { $pointsToWin } { $pointsToWin ->
+                [one] { -point(number: "one") }
+               *[other] { -point(number: "other") }
+            }
     }
 # Accessible name for a Dreamwell card. $cardName is its canonical display name
 # with unknown grammatical gender; $energyAmount is the non-negative Energy the
@@ -505,7 +506,6 @@ card-pool-browser-count =
         [one] { $visibleCount } of { $totalCount } { -card(number: "one") }
        *[other] { $visibleCount } of { $totalCount } { -card(number: "other") }
     }
-
 # Title of the card-pool browser. $context is "pool" in the Journey utility
 # overlay and "battle" in the floating battle inspector.
 card-pool-viewer-title =
@@ -603,7 +603,6 @@ card-pool-tide-provenance-description =
         [one] Built to { $dealSize } { -card(number: "one") }
        *[other] Built to { $dealSize } { -card(number: "other") }
     } with a per-card copy cap of { $copyCap }; { $facetDrawnCount } of { $facetAvailableCount } theme Tides were drawn.
-
 # Title of the disclosure describing the loaded replay record.
 card-pool-replay-record-title = Replay record
 # Description of the replay deck source. $sourceFile is a developer-authored
@@ -756,7 +755,6 @@ augury-offer-category-draft-description =
         [subtype] Choose one { $categoryName } card to add to your deck.
        *[package] Choose one card from the { $categoryName } to add to your deck.
     }
-
 # Detail title for an Augury offer whose card choices arrive transfigured.
 augury-offer-transfigured-draft-title = Choose a Transfigured Card
 # Description for an Augury offer that adds one already-transfigured card chosen
