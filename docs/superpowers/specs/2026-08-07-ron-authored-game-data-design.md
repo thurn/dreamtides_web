@@ -1,7 +1,7 @@
 # RON-Authored Game Data with Generated TOML
 
 Date: 2026-08-07  
-Status: proposed design, ready for implementation planning
+Status: proposed design; conversion feasibility assessed; editor gate required
 
 ## Goal
 
@@ -24,10 +24,11 @@ tracked RON -> Rust conversion -> staged TOML -> TypeScript validation
 
 ## Context
 
-The repository currently has 26 tracked game-data TOML files: 25 under
-`data/tabula/` and `data/exploration_candidates.toml`. Together they contain
-approximately 20,000 lines. `data/tabula/cards.toml` is the largest at roughly
-233 KB and 521 card records.
+The repository has 26 tracked game-data TOML files: 25 under `data/tabula/` and
+`data/exploration_candidates.toml`. Together they contain approximately 20,000
+lines. It also has three production-shaped RON candidates beside their TOML
+counterparts: `draft.ron`, `cards.ron`, and `exploration.ron`. These files are
+the starting point for the migration rather than disposable syntax examples.
 
 TOML is consumed in several different ways:
 
@@ -43,6 +44,74 @@ The TypeScript-facing shapes include kebab-case, snake_case, and camelCase
 source keys. Those shapes are established inputs to the existing compilers.
 The generated runtime JSON and all UUID-based references are established output
 contracts.
+
+## Feasibility assessment against the current RON files
+
+The three candidates establish that this design needs a typed compiler, not a
+schema-blind format converter. Their current shapes and required lowerings are:
+
+- Draft is a 1.2 KB anonymous root with enum-keyed `rarity_caps` and
+  `strategies` maps. The adapter converts rarity map entries to
+  `[[rarity-caps]]`, converts the `Tides4` key and value to
+  `default-strategy = "tides4"` plus `[pool.tides4]`, and maps snake_case fields
+  to kebab-case.
+- Cards is a 304 KB catalog of 521 `CardDefinition` records using
+  `implicit_some`, `Fixed`, `Variable`, `FixedAndVariable`, `Character`,
+  `Event`, optional crop data, and omitted defaults. The adapter materializes
+  the established flat TOML card record, including card type, subtype, spark,
+  speed booleans, blank rarity, empty tags, art defaults, and explicit field
+  mappings.
+- Exploration is a 65 KB `ExplorationCatalog` with 34 typed effect definitions,
+  29 encounters, 58 actions, effect enums with unit and struct variants,
+  predicate enums, typed defaults, and dynamic template metadata. The adapter
+  lowers effect and policy enums to their established IDs, flattens each
+  action-effect variant into `effect-kind` plus its fields, and maps
+  `TemplateInvocation` to template IDs, variables, and selection tables.
+
+A scratch feasibility harness using `ron` 0.12.2 and Serde-derived source
+types with unknown-field rejection deserialized all three complete documents.
+On the local development machine, Draft parsed in under 1 ms, Cards in about
+22 ms, and Exploration in about 6 ms. The typed results contained 521 cards,
+34 effect definitions, 29 encounters, and 58 actions. These timings are
+diagnostic evidence, not performance test thresholds.
+
+The card UUIDs, encounter card UUIDs, and action IDs in RON exactly match the
+TOML counts and order. Full semantic parity still requires the real adapters
+and the existing TypeScript compilers; successful RON deserialization alone is
+not a parity result.
+
+The compiler must deserialize directly into dataset source types. The official
+`ron::Value` representation does not retain enum identities. For example, a
+unit variant becomes an undifferentiated unit value and a newtype variant loses
+its variant name. That makes a generic RON-value-to-TOML-value walk incapable
+of distinguishing `Legendary` from another unit variant or `Fixed(2)` from a
+different newtype variant. Typed Rust enums retain exactly the information the
+adapters need. Narrow metadata leaves such as Exploration template variables
+may use a dynamic value type when their schema deliberately permits strings,
+integers, booleans, and small string-keyed objects.
+
+The current Cards candidate intentionally normalizes two historical TOML
+representations. The energy cost for UUID
+`29d25251-8b42-4d3d-97e6-6c3abaabd9a2` and the spark for UUID
+`229ab3a1-3720-41a2-924c-8fe112188f8e` are quoted numeric strings in TOML but
+are `Fixed(2)` in RON. Both representations produce the same existing
+TypeScript card result. Cards parity therefore compares the output of the
+existing card compiler, including energy and spark normalization, rather than
+requiring raw parsed TOML types to match. Other datasets use parsed-value
+parity unless their adapter documents an equally specific semantic
+normalization.
+
+Read, build, review, watch, and deployment conversion are feasible with the
+official parser and explicit adapters. Source-preserving editor mutation is the
+highest-risk portion. The official parser supplies semantic values and spanned
+errors rather than a lossless concrete syntax tree. In an August 2026 spike,
+`ron-edit` 0.2 parsed Draft but failed on the named `CardDefinition` records,
+while `tree-sitter-ron` 0.2 parsed Draft and the Exploration body after a
+preamble shim but reported an error on the raw Unicode rules strings in Cards.
+Neither dependency is an acceptable editor foundation as-is. The editor phase
+therefore starts with a dedicated span-indexing prototype against all three
+production candidates and does not cut over an editor-backed dataset until that
+prototype passes the preservation tests in this document.
 
 ## Decisions
 
@@ -130,10 +199,10 @@ the game-data manifest; it does not ignore arbitrary TOML elsewhere in the
 repository.
 
 Every generated TOML begins with a short generated-file warning naming its RON
-source, source SHA-256, compiler format version, and regeneration command. It
-is valid input to `smol-toml` and makes accidental direct edits obvious. The
-warning is the only compiler-added content; data ordering and values come from
-RON.
+source, source SHA-256, compiler build version, adapter version, and
+regeneration command. It is valid input to `smol-toml` and makes accidental
+direct edits obvious. The warning is the only compiler-added content; data
+ordering and values come from RON.
 
 A clean checkout may have no generated game-data TOML. Supported development,
 review, build, and deployment entry points materialize it before TypeScript
@@ -147,10 +216,9 @@ conversion graph. It records, per dataset:
 - stable dataset ID;
 - canonical RON path;
 - generated TOML path;
-- accepted `ron_format_version`;
-- Rust source-schema type;
+- accepted dataset `schema_version` values;
+- registered Rust source-schema and adapter ID;
 - compatibility-adapter version;
-- compatibility-key adapter;
 - dependent datasets whose TypeScript validation must run together;
 - focused runtime JSON refresh operation;
 - editor capability and record identity strategy; and
@@ -194,17 +262,25 @@ fields, invalid variants, and values outside the dataset's declared Rust types
 remain ordinary malformed-source errors rather than restrictions imposed by
 TOML.
 
-Every canonical document carries the reserved source-only field
-`ron_format_version`. Dataset adapters validate it before conversion and omit
-it from generated TOML. RON format migrations are explicit tool operations;
-ordinary compilation does not silently reinterpret an older format version.
+Source structs reject unknown fields. Omitted values are accepted only where
+the source type declares an explicit option or schema default; the Cards
+defaults are examples. The compiler validates dynamic leaves such as
+Exploration template metadata recursively and rejects value kinds outside that
+leaf's declared vocabulary. These schema checks preserve author intent while
+allowing every typed construct that has a defined adapter lowering.
 
-Dataset domain schemas remain independent. A canonical source corresponding to
-an existing TOML domain schema marker authors that value as its dataset field
-`schema_version`; the compatibility adapter maps it to that dataset's exact
-established output key, including `schema-version` or `schema_version`, and the
-existing TypeScript compiler continues to validate it. `ron_format_version`
-never supplies or changes a dataset's `schema_version`.
+Every canonical document carries its dataset field `schema_version`. This is
+the version of the typed source schema and adapter contract. The manifest lists
+the versions accepted by the compiled adapter, and compilation fails on an
+unsupported version before lowering.
+
+The compatibility adapter decides whether and how that source version appears
+in TOML. Draft and Exploration schema version 1 map `schema_version` to the
+established `schema-version = 1`. Cards schema version 1 is source-only because
+`cards.toml` has no schema marker. A separate per-document RON format version
+would duplicate this contract and is not required. Parser behavior is pinned by
+the Cargo lockfile and toolchain; a parser upgrade is reviewed and tested as a
+compiler change.
 
 The authoring style uses trailing commas and stable field order. Long rules text
 and narrative copy use raw strings with the minimum safe hash delimiter. The
@@ -223,8 +299,8 @@ An adapter defines:
 - source field path to generated field path mappings;
 - top-level collection names;
 - array-of-table and nested-table representation;
-- fields omitted from compatibility output, including
-  `ron_format_version`; and
+- fields omitted from compatibility output, such as Cards
+  `schema_version`; and
 - any representation conversion required by the current TOML contract.
 
 The adapter is normal Rust code from the typed source model to a typed or
@@ -254,6 +330,36 @@ covered, two source values target the same generated path, or the lowered value
 does not fit the declared TOML compatibility type. Adding a source field or
 variant therefore requires a deliberate compatibility decision rather than a
 global case or value heuristic.
+
+The first three adapters have concrete contracts:
+
+- Draft iterates the ordered rarity and strategy maps. Each rarity key becomes
+  the `rarity` string in one `[[rarity-caps]]` entry. `Tides4` becomes the
+  `"tides4"` default strategy and the `[pool.tides4]` table. The adapter rejects
+  a default strategy without a matching strategy definition.
+- Cards maps `rules` to `rendered-text`, `mtg_origin` to `mtg-name`, `number` to
+  `card-number`, and the art fields to `image-number`, `art-owned`, and `art`.
+  `Fixed(n)`, `Variable`, and `FixedAndVariable(n)` become `n`, `"X"`, and
+  `"n,X"`. `Event` and `Character` materialize `card-type`, subtype, and spark.
+  The default speed emits both speed flags as false, `Fast` emits
+  `is-fast = true` and `is-interrupt = false`, and `Interrupt` emits both flags
+  as true. Omitted rarity, tags, art ownership, crop, and character spark use
+  the compatibility defaults already present in `cards.toml`.
+- Exploration maps each effect-kind, mechanic, policy, control, resource, and
+  predicate enum through an explicit exhaustive match. Effect definitions
+  become `[[effect-kind]]` entries; typed default wrappers such as `Integer(1)`
+  and `Text("character")` become ordinary TOML values. Each action-effect
+  variant becomes its kebab-case `effect-kind` plus the fields valid for that
+  variant. `TemplateInvocation.id`, `variables`, and `selections` become
+  `template-id`, `template-variables`, and `selection`; an omitted variables
+  map materializes as `{}` because that is the established TOML shape. Field
+  key enums use the current camelCase editor keys, not a generic case rule.
+
+The compatibility models use ordered vectors and maps or a deliberate TOML
+document builder. Source models use ordered maps for document-order-sensitive
+data, including the enum-keyed Draft maps and recursive Exploration template
+objects. Hash-map iteration, key sorting that changes authored order, and
+serializer-dependent table ordering are outside the output contract.
 
 The adapters preserve the current handling of values such as blank spark,
 variable energy cost, absent optional art, nested action tables, and current
@@ -290,9 +396,10 @@ diagnostics; interactive use receives concise human-readable diagnostics. The
 Node launcher builds the locked crate on cache miss and invokes the cached
 binary directly for subsequent watch and editor operations.
 
-Compilation reports dataset ID, source path, RON format version, compatibility-
-adapter version, source hash, generated hash, duration, and whether the output
-differs. It never emits game data values or authored copy into routine logs.
+Compilation reports dataset ID, source path, dataset schema version,
+compatibility-adapter version, source hash, generated hash, duration, and
+whether the output differs. It never emits game data values or authored copy
+into routine logs.
 
 ## Deterministic conversion
 
@@ -308,8 +415,11 @@ generated files untouched. Successful conversion hands the staged paths to the
 Node orchestration layer for semantic validation.
 
 Publication compares staged and visible bytes. Unchanged files are discarded;
-changed files are moved into place with same-filesystem atomic renames. Batch
-publication commits every validated generated TOML or none of them.
+changed files are moved into place with same-filesystem atomic renames. A
+repository lock, transaction journal, and backups coordinate multi-file
+publication. An in-process failure rolls back completed replacements; startup
+recovers an interrupted journal before any reader runs. Watch and HMR events
+are released only after the journal commits.
 
 ## TypeScript orchestration and validation
 
@@ -417,11 +527,26 @@ or array contents.
 
 ### RON source patching
 
-Source preservation remains a hard editor requirement. `stage-edit` uses a
-syntax-aware RON source model that understands comments, raw strings, escapes,
-and balanced nested structures. A narrow field edit changes only that value's
-source range. Record replacement changes only the identified record. Unrelated
-records, fields, comments, ordering, and whitespace remain byte-identical.
+Source preservation remains a hard editor requirement, but it is a separate
+implementation from typed deserialization. `stage-edit` uses a repository-owned
+token and span index that understands line and nested block comments, ordinary
+and raw strings, byte strings, escapes, identifiers, commas, and balanced
+delimiters. It records named-struct, field, sequence-element, and map-entry
+ranges without interpreting their domain meaning. The official RON parser then
+provides the semantic source of truth.
+
+The patcher locates a record through its schema-declared ID field, never by
+searching arbitrary string contents. It can replace an existing field value,
+insert an omitted defaulted field at its schema-defined position, or replace a
+complete record. A narrow field edit changes only that value's source range.
+Record replacement changes only the identified record. Unrelated records,
+fields, comments, ordering, and whitespace remain byte-identical.
+
+Cards edits normally splice one field value. A change between energy-cost or
+card-kind variants replaces that enum value as a unit. Exploration prose edits
+splice the prose value, while action edits replace one complete
+`ActionDefinition`; this matches the current editor's semantic save boundary
+and safely changes the effect variant and its valid field set together.
 
 The editor patch layer formats newly inserted values canonically. It selects a
 normal quoted string for one-line text and a minimum-delimiter raw string for
@@ -431,6 +556,22 @@ returning it.
 Full-document editors may use canonical serialization only when their existing
 save contract already replaces the complete document. Dataset-level and field
 editors use targeted patching.
+
+Before editor migration begins, the span index must parse and reproduce all
+three current RON candidates byte-for-byte and pass mutation fixtures for:
+
+- a field before and after raw Unicode rules text;
+- insertion of omitted Cards defaults;
+- replacement of every Cards energy and kind variant shape;
+- an Exploration prose edit;
+- replacement of unit and struct action-effect variants;
+- nested template-variable and selection maps; and
+- misleading identifiers, UUIDs, delimiters, and assignment-like text inside
+  comments and strings.
+
+A third-party lossless parser may replace the repository-owned index only after
+it passes this corpus and mutation suite. Semantic conversion and editor
+cutover do not depend on that replacement.
 
 The TypeScript transaction layer retains backup-and-rollback behavior for
 filesystem failures. A failed validation or write leaves the canonical RON,
@@ -449,20 +590,23 @@ datasets as migration inputs without changing their canonical files.
 
 ### Representative proof
 
-Prove the full pipeline with three noncanonical conversion fixtures modeled on:
+Implement the first three source modules and adapters against the checked-in
+`draft.ron`, `cards.ron`, and `exploration.ron` candidates while their TOML
+counterparts remain the tracked compatibility oracle. This proof covers compact
+enum-keyed configuration, the complete 521-card catalog, and the complete typed
+Exploration catalog rather than smaller look-alike fixtures.
 
-- `draft.toml`, for compact nested configuration;
-- `cards.toml`, for a large ordered record catalog, Unicode, optional fields,
-  inline art data, and multiline rules text; and
-- `exploration.toml`, for nested arrays, action records, compatibility key
-  mappings, and editor-shaped changes.
+The proof must establish deterministic TOML on macOS and Linux, structured
+errors, staged TypeScript validation, content-aware publication, and full
+semantic parity before any of the three files becomes canonical. Draft can cut
+over after this read/build proof. Cards and Exploration additionally require the
+editor feasibility gate and editor integration tests.
 
-The proof must establish cross-platform deterministic TOML, structured errors,
-staged TypeScript validation, content-aware publication, and source-preserving
-edits before production datasets move. A synthetic source-schema fixture uses
-named structs, enum variants, tuples, options, ranges, typed map keys, chars,
-byte strings, and numeric edge cases to prove that rich RON values pass through
-typed adapter lowering rather than a TOML-shaped generic value restriction.
+A synthetic source-schema fixture covers typed constructs absent from these
+three catalogs, including tuple variants, explicit options, ranges, typed map
+keys, chars, byte strings, heterogeneous enum collections, and numeric edge
+cases. It proves that rich RON values pass through typed adapter lowering rather
+than a TOML-shaped generic value restriction.
 
 ### Read-only catalogs
 
@@ -479,9 +623,8 @@ Dream Avatars and Dreamscapes, glossary and tutorial, then Exploration and its
 candidate catalog.
 
 Editor UI and API source terminology changes in the same dataset batch as its
-canonical source. A mixed migration build can serve editors for both source
-formats through explicit manifest state; each individual editor points at only
-one canonical source.
+canonical source. A mixed migration build uses explicit manifest state; each
+individual editor points at only one canonical source.
 
 ### Convergence
 
@@ -497,27 +640,30 @@ Every dataset cutover uses the pre-migration TypeScript output as a temporary
 oracle:
 
 1. parse the tracked TOML through the current pipeline;
-2. convert it mechanically to RON while retaining record order, values, and
-   meaningful comments;
+2. use the checked-in RON candidate or mechanically create one while retaining
+   record order, domain values, and meaningful comments;
 3. generate compatibility TOML from RON;
 4. run that TOML through the same TypeScript pipeline; and
-5. deep-compare normalized compiler results and byte-compare deterministic JSON
-   artifacts where the current pipeline is deterministic.
+5. deep-compare dataset-defined semantic projections and byte-compare
+   deterministic JSON artifacts where the current pipeline is deterministic.
 
 Differences are classified before the cutover. Formatting and the generated
-header may differ in TOML; parsed values, compiler outputs, UUID references,
-record order, string code points, and runtime artifacts must agree. Filesystem-
-dependent art discovery is compared through stable logical asset references,
-not machine-specific absolute paths or symlink metadata.
+header may differ in TOML. Compiler outputs, UUID references, record order,
+string code points, and runtime artifacts must agree. Parsed TOML values also
+agree except for adapter-declared normalizations that the existing TypeScript
+compiler maps to the same result, such as the two numeric-string Card values
+represented by `Fixed(2)`. Filesystem-dependent art discovery is compared
+through stable logical asset references, not machine-specific absolute paths or
+symlink metadata.
 
 These production-data comparisons are migration commands and review evidence,
 not permanent CI tests. Permanent tests use synthetic fixtures so routine game
 data changes do not fail tests by changing mutable production values.
 
-The TOML-to-RON migration utility carries leading, field, inline, and
-record-boundary comments through a syntax-aware TOML document model. A review
-report lists comments it cannot attach unambiguously. The dataset does not cut
-over until those cases are intentionally placed in RON.
+For remaining datasets, the TOML-to-RON migration utility carries leading,
+field, inline, and record-boundary comments through a syntax-aware TOML document
+model. A review report lists comments it cannot attach unambiguously. The
+dataset cuts over after those cases are intentionally placed in RON.
 
 ## Failure behavior and diagnostics
 
@@ -570,6 +716,7 @@ Synthetic fixtures cover:
 - clean-checkout generation before build and tests;
 - focused validation against staged paths;
 - rollback after Rust, TypeScript, JSON, or filesystem failure;
+- startup recovery of an interrupted publication journal;
 - debounce and watcher convergence without reload loops;
 - targeted HMR after a valid RON edit;
 - last-valid-data behavior after an invalid RON edit;
@@ -593,6 +740,8 @@ Implementation is complete when:
 - `npm run build` succeeds with an empty generated-TOML cache;
 - the deployment path fails before external changes when RON is invalid;
 - every migrated dataset passes its one-time parity report;
+- Draft, Cards, and Exploration pass typed-deserialization and adapter parity
+  against their checked-in RON candidates;
 - generated TOML is absent from `git ls-files` and present after generation;
 - editing a generated TOML produces a warning and is overwritten by the next
   compile; and
@@ -620,10 +769,12 @@ the browser error buffer remaining empty.
 - Conversion is deterministic across supported development and CI platforms.
 - Canonical sources may use the full typed RON model supported by the pinned
   parser when their dataset source schema and adapter define the lowering.
+- A source construct is never rejected solely because TOML lacks a direct
+  representation; its dataset adapter supplies the compatibility encoding.
 - Editor saves update canonical RON by stable ID and preserve unrelated source
   bytes.
-- RON, TOML, and derived JSON editor writes publish atomically or roll back
-  together.
+- RON, TOML, and derived JSON editor writes use atomic per-file replacement and
+  a recoverable transaction that rolls back failures.
 - Migration parity demonstrates unchanged runtime data, record order, UUID
   references, and generated artifacts.
 - Permanent tests use synthetic stable fixtures and the repository review suite
