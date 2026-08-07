@@ -101,12 +101,12 @@ requiring raw parsed TOML types to match. Other datasets use parsed-value
 parity unless their adapter documents an equally specific semantic
 normalization.
 
-The candidates are sufficient for read/build conversion but are not complete
-editor schemas. The Cards editor can assign per-card tides, which Cards schema
-version 1 cannot represent. The Exploration editor can author a per-action
-selection policy, which Exploration schema version 1 cannot represent. Their
-editor cutovers therefore use the version 2 source additions defined in Editor
-operation vocabulary while retaining the existing TOML compatibility schemas.
+The candidates are sufficient for read/build conversion. The Exploration
+candidate is not a complete editor schema because the editor can author a
+per-action selection policy that Exploration schema version 1 cannot represent.
+Its editor cutover therefore uses the version 2 source addition defined in
+Editor operation vocabulary while retaining the existing TOML compatibility
+schema.
 
 Read, build, review, watch, and deployment conversion are feasible with the
 official parser and explicit adapters. Source-preserving editor mutation is the
@@ -163,7 +163,7 @@ Exploration candidate catalog:
 
 - core entities: cards, Dream Avatars, Dreamsigns, Dreamwell cards, figments,
   dreamscapes, guides, sites, affiliations, and Apollyon incarnations;
-- card and Dreamsign tag registries plus card tide annotations;
+- card and Dreamsign tag registries plus the card tide registry;
 - gameplay configuration: Atlas, Augury, draft, economy, opponents, reward
   selection, tutorial, and tutorial journey pool;
 - Exploration runtime configuration and Exploration candidates; and
@@ -554,20 +554,21 @@ staging root. It never edits the working tree itself.
 The initial Cards operations are:
 
 - `set_card_field`, identified by card UUID, for `name`, `rules`,
-  `energy_cost`, `card_type`, `subtype`, `spark`, `tags`, `tides`,
-  `image_number`, and `art_crop`;
+  `energy_cost`, `card_type`, `subtype`, `spark`, `tags`, `image_number`, and
+  `art_crop`;
 - `upsert_facet`, identified by facet kind and target name, to add an entry or
   update its color; and
 - `delete_facet`, identified by facet kind and name, which removes the registry
-  entry and that exact value from every affected card in the same staged batch.
+  entry and, for tags, that exact value from every affected card in the same
+  staged batch.
 
 The middleware maps `rendered-text` to `rules`, `energy-cost` to
 `energy_cost`, `image-number` to `art.image`, and `art` to `art.crop`.
 `energy_cost` accepts exactly the source model's `Fixed(n)`, `Variable`, and
 `FixedAndVariable(n)` shapes; the browser accepts `n`, `X`, and `n,X` and sends
 the typed operation. `name`, rules, tags, image, and crop update their direct
-source fields. Empty tags and tides are written explicitly as empty lists by
-the editor rather than deleting an authored field.
+source fields. Empty tags are written explicitly as an empty list by the editor
+rather than deleting the authored field.
 
 Card type, subtype, and spark are three views of the single `kind` value:
 
@@ -581,13 +582,11 @@ Card type, subtype, and spark are three views of the single `kind` value:
 - nonblank subtype or spark edits on an Event fail with
   `FIELD_NOT_APPLICABLE`. The migrated UI disables those controls for Events.
 
-The current `cards.ron` candidate has no `tides` field, while the Cards editor
-already exposes per-card tides. Cards source schema version 2 adds a defaulted
-`tides: Vec<String>` field and the adapter emits the compatibility key when it
-is nonempty. The compiler may accept version 1 for read-only conversion during
-the transition, but the manifest enables Cards editor capability only for
-version 2. Tag and tide registry files become manifest datasets with stable
-registry-entry operations; they are not edited as unregistered sidecar paths.
+Per-card `tides` is not a Cards RON field. A `set_card_field` operation for
+`tides` fails with `FIELD_NOT_APPLICABLE`, and the editor disables that control
+for a RON source. Tag and tide registry files become manifest datasets with
+stable registry-entry operations; they are not edited as unregistered sidecar
+paths.
 
 The existing registry PUT endpoint may remain compatibility-shaped. The
 middleware diffs its submitted ordered list against the confirmed registry and
@@ -700,10 +699,10 @@ Patch construction follows fixed rules:
 
 New values use dataset formatting rules. Card rules use a raw string with the
 minimum safe hash delimiter. One-line prose, labels, and effect text use escaped
-strings; multiline values use raw strings. Tags and tides remain inline string
-lists, crop remains an inline anonymous struct, and named enum or struct
-payloads use four-space indentation with trailing commas. Existing values keep
-their authored spelling and layout until that value is edited.
+strings; multiline values use raw strings. Tags remain inline string lists,
+crop remains an inline anonymous struct, and named enum or struct payloads use
+four-space indentation with trailing commas. Existing values keep their
+authored spelling and layout until that value is edited.
 
 Before editor migration begins, the span index must reproduce all three current
 RON candidates byte-for-byte and pass mutation fixtures covering every rule
@@ -851,7 +850,7 @@ all production RON candidates pass the span-index corpus gate.
 
 Goal: complete the first browser-to-RON editing workflow.
 
-- Add defaulted per-card `tides` to Cards source schema version 2.
+- Reject per-card `tides` edits with `FIELD_NOT_APPLICABLE`.
 - Implement card-field, facet, cascade, and registry-diff operations.
 - Test every energy, kind, optional-field, collection, and crop mapping.
 - Make the API read generated data and submit revisioned operations.
@@ -963,7 +962,7 @@ Synthetic unit and property tests cover:
   non-overlapping batch application, and semantic no-ops;
 - stable-identity lookup that ignores UUID-like text in comments and values;
 - Cards field-to-domain transformations, including every energy and kind
-  variant plus the version 2 defaulted tides field;
+  variant plus per-card `tides` rejection;
 - Exploration prose and action transformations across unit and struct effect
   variants plus the version 2 action selection policy;
 - comment preservation plus deterministic `COMMENT_CONFLICT` rejection for
