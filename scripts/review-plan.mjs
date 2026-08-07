@@ -12,7 +12,7 @@ const TEST_INPUT_EXTENSIONS = new Set([
   ".ts",
   ".tsx",
   ".css",
-  ".flt",
+  ".ftl",
   ".json",
   ".jsonc",
   ".toml",
@@ -24,7 +24,7 @@ const SOURCE_TREE_CONTRACT_TESTS = [
 ];
 
 const LOCALIZATION_CONTRACT_INPUTS = new Set([
-  "data/tabula/strings.flt",
+  "data/tabula/strings.ftl",
   "scripts/generate-localization-types.mjs",
   "src/data/localization-messages.ts",
 ]);

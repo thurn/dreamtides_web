@@ -1,6 +1,6 @@
 import { FluentBundle, FluentResource } from "@fluent/bundle";
 import { ReactLocalization } from "@fluent/react";
-import englishSource from "../../data/tabula/strings.flt?raw";
+import englishSource from "../../data/tabula/strings.ftl?raw";
 
 const englishBundle = new FluentBundle("en-US");
 const [resourceError] = englishBundle.addResource(

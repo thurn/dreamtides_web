@@ -5,7 +5,7 @@ import { FluentParser, Message, Visitor } from "@fluent/syntax";
 import { format } from "prettier";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-export const SOURCE_PATH = resolve(ROOT, "data/tabula/strings.flt");
+export const SOURCE_PATH = resolve(ROOT, "data/tabula/strings.ftl");
 export const OUTPUT_PATH = resolve(ROOT, "src/data/localization-messages.ts");
 
 class VariableCollector extends Visitor {

@@ -144,7 +144,7 @@ score = { $count } { $unit }
     }
   });
 
-  it("keeps the committed types synchronized with strings.flt", async () => {
+  it("keeps the committed types synchronized with strings.ftl", async () => {
     expect(readFileSync(OUTPUT_PATH, "utf8")).toBe(
       await generateLocalizationTypes(),
     );

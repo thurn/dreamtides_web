@@ -49,11 +49,11 @@ describe("fast review plan", () => {
   });
 
   it("selects localization contract checks for Fluent source changes", () => {
-    expect(buildReviewPlan(["data/tabula/strings.flt"])).toMatchObject({
+    expect(buildReviewPlan(["data/tabula/strings.ftl"])).toMatchObject({
       shouldTypecheck: false,
       shouldValidate: true,
       testInputs: [
-        "data/tabula/strings.flt",
+        "data/tabula/strings.ftl",
         "scripts/generate-localization-types.test.mjs",
       ],
     });
