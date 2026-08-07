@@ -29,9 +29,9 @@ export interface CumulusUISystem {
 export const CUMULUS_UI_SYSTEMS = [
   {
     id: "entity-reveals",
-    title: "Entity Reveal Coordinator",
+    title: "Entity Reveals",
     blurb:
-      "The application-wide interaction and placement system for semantic entity reveals. It coordinates named sources, input modality, measurement, safe bounds, portal rendering, ordered secondary cards, dismissal, and diagnostics while strict surfaces such as InfoCard own their visual content.",
+      "Give cards, icons, portraits, terms, and other game objects a consistent way to show readable details. Render a reveal-enabled Cumulus component with its semantic data; hover, keyboard, touch, placement, accessibility, and dismissal behavior come with it.",
     Preview: EntityRevealCoordinatorPreview,
     Docs: EntityRevealCoordinatorDocs,
   },

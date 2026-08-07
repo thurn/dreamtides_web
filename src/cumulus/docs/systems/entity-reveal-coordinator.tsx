@@ -2,13 +2,106 @@ import type { CSSProperties, ReactNode } from "react";
 import { TideDisc } from "../../components/hud/TideDisc";
 import { TidesInfoLabel } from "../../components/hud/TidesInfoLabel";
 import { token } from "../../primitives/tokens";
+import { UsageSection } from "../UsageSection";
 
 const flowSteps = [
-  ["Named source", "Owns semantic identity and strict reveal content."],
-  ["Source binding", "Registers interaction handlers with the root coordinator."],
-  ["Coordinator", "Chooses one active group and owns its lifecycle."],
-  ["Overlay + geometry", "Measures content and selects safe placement."],
-  ["Strict surface", "InfoCard or GameCard renders the visual content."],
+  [
+    "Render an entity",
+    "Use a reveal-enabled component such as GameCard, Dreamsign, or TideDisc.",
+  ],
+  [
+    "The player inspects it",
+    "Hover or focus with a keyboard, or press and hold on a touch screen.",
+  ],
+  [
+    "Readable details appear",
+    "Cumulus shows the full object and any useful definitions in safe screen space.",
+  ],
+] as const;
+
+const concepts = [
+  [
+    "Entity",
+    "A game object with stable meaning and identity, such as a card, Dreamsign, tide, avatar, site, or glossary term.",
+  ],
+  [
+    "Source",
+    "The compact thing already visible on the screen—the card, icon, portrait, value, or text that the player inspects.",
+  ],
+  [
+    "Reveal",
+    "The temporary, read-only detail view. It may contain one primary card plus related definitions or referenced cards.",
+  ],
+  [
+    "Action",
+    "An optional click, quick tap, or keyboard action such as selecting a card. Touch-holding reads the reveal without firing it.",
+  ],
+] as const;
+
+const revealComponents = [
+  {
+    id: "game-card",
+    name: "GameCard",
+    use: "Playable cards, battlefield cards, and compact card collections.",
+    api: "model; optional onPress, unavailable, selection, exhausted, presentation",
+    note: "The model supplies a UUID and a complete display snapshot. The reveal includes the full card, status and glossary definitions, and referenced Figments when present.",
+  },
+  {
+    id: "dream-avatar-portrait",
+    name: "DreamAvatarPortrait",
+    use: "Avatar portraits that should expose the avatar's title and ability.",
+    api: "dreamAvatar; profile to enable the reveal; optional onPress and unavailable",
+    note: "Without profile, the portrait is decorative art and has no reveal behavior.",
+  },
+  {
+    id: "dreamsign",
+    name: "Dreamsign",
+    use: "Dreamsign art in lists, rewards, shops, and the journey HUD.",
+    api: "dreamsign, sizePx; optional onPress, unavailable, variant",
+    note: "The Dreamsign's UUID, art, rules text, and glossary terms supply its reveal.",
+  },
+  {
+    id: "tide-disc",
+    name: "TideDisc",
+    use: "A compact tide glyph that still needs a name and explanation.",
+    api: "tide, id, label, description",
+    note: "The reveal shows the named tide, its description, and the shared Tides definition.",
+  },
+  {
+    id: "rules-text",
+    name: "RulesText",
+    use: "Standalone rules copy whose terms need contextual definitions.",
+    api: "text, owner; glossaryInteraction defaults to source",
+    note: "Use glossaryInteraction=\"delegated\" when a containing entity, such as GameCard, already owns the reveal.",
+  },
+  {
+    id: "essence-value",
+    name: "EssenceValue",
+    use: "Essence amounts that should explain the currency on inspection.",
+    api: "amount; optional entity enables the reveal",
+    note: "Without entity, EssenceValue is a passive formatted value.",
+  },
+  {
+    id: "atlas-node",
+    name: "AtlasNode",
+    use: "Dream Atlas destinations with scene, site, affiliation, and reward details.",
+    api: "model, onPress",
+    note: "Availability in the model decides whether the node activates; it remains readable in other states.",
+  },
+  {
+    id: "site-node",
+    name: "SiteNode",
+    use: "Sites placed in a Dreamscape scene or shown as a choice or reward.",
+    api: "model, motion, onSelect; optional presentation",
+    note: "The model supplies the stable site identity, label, icon, state, and whether selection is allowed.",
+  },
+  {
+    id: "offer-tile",
+    name: "OfferTile",
+    use: "The two symbolic choices in Augury.",
+    api: "model, onPress; optional size",
+    note: "This component owns Augury's special above-offer placement; callers do not configure reveal placement.",
+  },
 ] as const;
 
 const sectionHeadingStyle: CSSProperties = {
@@ -29,6 +122,12 @@ const surfaceStyle: CSSProperties = {
   background: token("--surface-card"),
   border: `1px solid ${token("--border-soft")}`,
   borderRadius: token("--radius-control"),
+};
+
+const inlineCodeStyle: CSSProperties = {
+  color: token("--text-primary"),
+  fontFamily: token("--font-meta"),
+  fontSize: "12px",
 };
 
 function Section({
@@ -54,9 +153,9 @@ function Section({
 function Flow({ compact = false }: { readonly compact?: boolean }) {
   return (
     <div
-      className="cumulus-system-flow"
+      className="cumulus-system-flow cumulus-system-flow--entity-reveals"
       data-entity-reveal-flow={compact ? "preview" : "docs"}
-      aria-label="Entity reveal coordination flow"
+      aria-label="How a player reads an entity reveal"
     >
       {flowSteps.map(([title, description], index) => (
         <div
@@ -94,9 +193,7 @@ function Flow({ compact = false }: { readonly compact?: boolean }) {
             <span
               className="cumulus-system-flow__arrow"
               aria-hidden="true"
-              style={{
-                color: token("--accent-bright"),
-              }}
+              style={{ color: token("--accent-bright") }}
             >
               →
             </span>
@@ -139,9 +236,7 @@ function LiveRevealStage() {
     >
       <div
         className="cumulus-entity-reveal-demo-row"
-        style={{
-          gap: token("--space-2xl"),
-        }}
+        style={{ gap: token("--space-2xl") }}
       >
         <div
           data-entity-reveal-demo-source="left"
@@ -153,7 +248,7 @@ function LiveRevealStage() {
           }}
         >
           <span style={{ color: token("--text-muted"), font: token("--t-caption") }}>
-            Left source
+            Valor
           </span>
           <TideDisc
             tide="valor"
@@ -165,7 +260,7 @@ function LiveRevealStage() {
 
         <div
           style={{
-            maxWidth: 260,
+            maxWidth: 300,
             textAlign: "center",
             color: token("--text-secondary"),
             font: token("--t-body-sm"),
@@ -173,8 +268,9 @@ function LiveRevealStage() {
         >
           <TidesInfoLabel />
           <p style={{ margin: `${token("--space-s")} 0 0` }}>
-            Hover or focus a source. On touch, press and hold. The coordinator
-            measures the reveal and chooses its safe side.
+            Move your pointer over either disc, or Tab to it. On a touch screen,
+            press and hold. Notice that the details choose a side with enough
+            room and disappear when you move away.
           </p>
         </div>
 
@@ -188,7 +284,7 @@ function LiveRevealStage() {
           }}
         >
           <span style={{ color: token("--text-muted"), font: token("--t-caption") }}>
-            Right source
+            Vision
           </span>
           <TideDisc
             tide="vision"
@@ -202,38 +298,15 @@ function LiveRevealStage() {
   );
 }
 
-const responsibilities = [
-  [
-    "Named semantic component",
-    "Resolves UUID-backed domain data into one strict primary, ordered secondaries, optional adjacent cards, and activation. It attaches the private source binding to its visible trigger.",
-  ],
-  [
-    "CumulusRoot coordinator",
-    "Registers mounted sources, arbitrates one active reveal group, runs the input state machine, owns dismissal and accessibility descriptions, and records open/close diagnostics.",
-  ],
-  [
-    "Reveal overlay",
-    "Portals a pointer-transparent group to document.body, renders a hidden measurement pass, observes content size, and places the final group above screen stacking contexts.",
-  ],
-  [
-    "Placement geometry",
-    "Chooses desktop or mobile layout from the visual viewport, respects physical safe areas and scroll boundaries, reserves persistent HUD space, and keeps the highest-priority prefix that fits.",
-  ],
-  [
-    "InfoCard and GameCard",
-    "Own strict visual content, intrinsic geometry, and rendering. They do not select a trigger, portal, open state, or screen position.",
-  ],
-  [
-    "Product screen",
-    "Renders the named semantic component and supplies domain data plus activation callbacks. It does not construct reveal specs, anchors, delays, sides, or controlled shown state.",
-  ],
-] as const;
-
-function Responsibilities() {
+function DefinitionGrid({
+  rows,
+}: {
+  readonly rows: readonly (readonly [string, string])[];
+}) {
   return (
-    <div className="cumulus-system-responsibilities" data-entity-reveal-responsibilities="">
-      {responsibilities.map(([owner, contract]) => (
-        <div key={owner} style={{ display: "contents" }}>
+    <div className="cumulus-system-definition-grid">
+      {rows.map(([term, definition]) => (
+        <div key={term} style={{ display: "contents" }}>
           <div
             style={{
               padding: token("--space-m"),
@@ -242,7 +315,7 @@ function Responsibilities() {
               font: token("--t-button-sm"),
             }}
           >
-            {owner}
+            {term}
           </div>
           <div
             style={{
@@ -252,7 +325,7 @@ function Responsibilities() {
               font: token("--t-body-sm"),
             }}
           >
-            {contract}
+            {definition}
           </div>
         </div>
       ))}
@@ -279,6 +352,10 @@ function ContractList({ children }: { readonly children: ReactNode }) {
   );
 }
 
+function CodeExample({ children }: { readonly children: string }) {
+  return <UsageSection examples={[{ code: children }]} />;
+}
+
 export function EntityRevealCoordinatorDocs() {
   return (
     <div
@@ -289,121 +366,243 @@ export function EntityRevealCoordinatorDocs() {
         paddingBottom: token("--space-4xl"),
       }}
     >
-      <Section id="entity-reveal-contract" title="System Contract">
+      <Section id="entity-reveal-introduction" title="What Is An Entity Reveal?">
         <p style={bodyStyle}>
-          Entity reveals are coordinated behavior, not a feature of any one
-          React component. Named semantic sources supply identity and content;
-          one application-wide coordinator decides when that content is active,
-          measures it, places it, and renders it through strict surfaces. This
-          keeps screens declarative and gives every entity the same interaction,
-          accessibility, placement, dismissal, and logging contract.
+          An entity reveal is the temporary detail view that appears when a
+          player asks to inspect a game object. It lets a small card, icon,
+          portrait, value, or piece of rules text remain compact while its full
+          meaning is still easy to read. The reveal is for information; it does
+          not navigate away from the current screen or ask the player to manage
+          a popup.
+        </p>
+        <p style={bodyStyle}>
+          You do not place an “entity reveal” component yourself. Reveal
+          behavior is already built into semantic Cumulus components such as
+          GameCard, Dreamsign, and TideDisc. Render the component with its real
+          domain data and it supplies its own detail content, interaction, and
+          accessibility behavior.
         </p>
         <Flow />
+        <DefinitionGrid rows={concepts} />
       </Section>
 
-      <Section id="entity-reveal-live-behavior" title="Live Behavior">
+      <Section id="entity-reveal-live-behavior" title="Try It">
         <p style={bodyStyle}>
-          These are production TideDisc and TidesInfoLabel sources using the real
-          coordinator. Their reveal cards render through the root portal rather
-          than inside this documentation stage.
+          The two discs below are ordinary TideDisc components running through
+          the same reveal system as the game. Try the input method you expect
+          your players to use.
         </p>
         <LiveRevealStage />
       </Section>
 
-      <Section id="entity-reveal-responsibility" title="Responsibility Boundary">
-        <Responsibilities />
-      </Section>
+      <Section id="entity-reveal-quick-start" title="Quick Start">
+        <p style={bodyStyle}>
+          Choose the Cumulus component that represents the object, then pass its
+          semantic model. There is no reveal state, anchor, placement, delay, or
+          portal prop to configure.
+        </p>
+        <CodeExample>{`<GameCard
+  model={{ cardId: card.id, displaySnapshot: card }}
+  onPress={() => selectCard(card.id)}
+/>
 
-      <Section id="entity-reveal-input" title="Input And Lifecycle">
-        <ContractList>
-          <li>
-            Fine pointers reveal immediately on hover. Keyboard focus reveals
-            the same group, and Escape suppresses the current focus visit.
-          </li>
-          <li>
-            Touch begins with a short intent filter. A quick release may activate
-            an actionable source; holding reads the reveal without activating it.
-          </li>
-          <li>
-            Pointer movement, release or cancellation, scroll, drag, resize,
-            orientation change, window blur, route change, source unmount, and
-            replacement dismiss centrally.
-          </li>
-          <li>
-            Exactly one pointer-transparent reveal group is active. Source
-            feedback remains on the trigger; the overlay never intercepts input.
-          </li>
-        </ContractList>
-      </Section>
-
-      <Section id="entity-reveal-placement" title="Measurement And Placement">
-        <ContractList>
-          <li>
-            A hidden measurement pass renders the complete primary, secondary,
-            and adjacent content before any visible placement is committed.
-          </li>
-          <li>
-            Desktop InfoCards normally sit beside their source on the side with
-            enough safe space. Complete source cards may remain in place while
-            their ordered definitions appear beside them.
-          </li>
-          <li>
-            Below the 900px coordinator breakpoint, mobile placement uses 45% of
-            the visual viewport per card and accounts for the touch point and a
-            clearance circle around the finger.
-          </li>
-          <li>
-            Physical safe-area insets, the nearest scrolling boundary, and the
-            desktop journey status bar constrain the usable placement rectangle.
-          </li>
-          <li>
-            Ordered secondaries and adjacent cards preserve their semantic
-            priority: the coordinator renders the longest prefix that fits and
-            logs any truncation or fallback.
-          </li>
-          <li>
-            OfferTile may request the single Augury-specific desktop exception,
-            which centers its body-only InfoCard above that offer. Other sources
-            use automatic placement.
-          </li>
-        </ContractList>
-      </Section>
-
-      <Section id="entity-reveal-usage" title="Using The System">
+<TideDisc
+  tide="valor"
+  id={tideDeck.id}
+  label={tideDeck.label}
+  description={tideDeck.description}
+/>`}</CodeExample>
         <div style={surfaceStyle}>
-          <ol
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: token("--space-s"),
-              margin: 0,
-              paddingLeft: token("--space-l"),
-              color: token("--text-secondary"),
-              font: token("--t-body"),
-            }}
-          >
-            <li>
-              Start with the named semantic component for the entity: GameCard,
-              AtlasNode, Dreamsign, DreamAvatarPortrait, TideDisc, EssenceValue,
-              SiteNode, GlossaryTerm, or another registered
-              source.
-            </li>
-            <li>
-              Pass UUID-backed domain data and any activation callback. The
-              application entry already mounts exactly one CumulusRoot.
-            </li>
-            <li>
-              Let the component derive and register the reveal. Do not render a
-              popup InfoCard from a screen or calculate an anchor, delay, side,
-              portal, or open state there.
-            </li>
-            <li>
-              When a new entity kind is genuinely required, implement its named
-              component inside Cumulus and bind it to the private coordinator
-              contract there.
-            </li>
-          </ol>
+          <p style={{ ...bodyStyle, maxWidth: "none" }}>
+            <strong style={{ color: token("--text-primary") }}>What happens:</strong>{" "}
+            GameCard derives a complete reading copy and the relevant status,
+            timing, glossary, and Figment details from its model. TideDisc builds
+            a tide InfoCard from its label and description. Both register with
+            the CumulusRoot already mounted by the application.
+          </p>
         </div>
+      </Section>
+
+      <Section id="entity-reveal-components" title="Choose A Reveal-Enabled Component">
+        <p style={bodyStyle}>
+          The component is the public API. Its normal props contain everything
+          the reveal needs; follow the component link for the complete prop
+          table and visual examples.
+        </p>
+        <div className="cumulus-entity-reveal-component-grid">
+          {revealComponents.map((component) => (
+            <article key={component.id} style={surfaceStyle}>
+              <h3 style={{ margin: 0, font: token("--t-button") }}>
+                <a
+                  href={`#/${component.id}`}
+                  style={{ color: token("--accent-bright") }}
+                >
+                  {component.name} →
+                </a>
+              </h3>
+              <p
+                style={{
+                  margin: `${token("--space-s")} 0 0`,
+                  color: token("--text-secondary"),
+                  font: token("--t-body-sm"),
+                }}
+              >
+                {component.use}
+              </p>
+              <p
+                style={{
+                  margin: `${token("--space-s")} 0 0`,
+                  color: token("--text-muted"),
+                  font: token("--t-caption"),
+                }}
+              >
+                <strong style={{ color: token("--text-primary") }}>Reveal API:</strong>{" "}
+                <code style={inlineCodeStyle}>{component.api}</code>
+              </p>
+              <p
+                style={{
+                  margin: `${token("--space-s")} 0 0`,
+                  color: token("--text-muted"),
+                  font: token("--t-caption"),
+                }}
+              >
+                {component.note}
+              </p>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="entity-reveal-input" title="How Players Use It">
+        <DefinitionGrid
+          rows={[
+            [
+              "Mouse or hover-capable pen",
+              "Hovering shows the reveal immediately. Moving away dismisses it. Clicking still performs the component's onPress action when one is supplied.",
+            ],
+            [
+              "Keyboard",
+              "Tabbing to the source shows the same reveal. Enter or Space performs its action. Escape hides the reveal for the current focus visit.",
+            ],
+            [
+              "Touch",
+              "A quick tap performs the action. Pressing and holding shows the reveal and suppresses the action, so reading never accidentally selects or buys the entity.",
+            ],
+            [
+              "Dismissal",
+              "The reveal closes when the player leaves, releases, scrolls, drags, changes route, resizes, rotates, or moves focus. Only one reveal is shown at a time.",
+            ],
+          ]}
+        />
+      </Section>
+
+      <Section id="entity-reveal-content" title="What The Reveal Contains">
+        <p style={bodyStyle}>
+          Each reveal-enabled component translates its domain model into an
+          ordered group. Callers provide meaning; the component decides how that
+          meaning should be presented.
+        </p>
+        <DefinitionGrid
+          rows={[
+            [
+              "Primary",
+              "The main thing being read: usually an InfoCard, a complete GameCard, or the already-visible source when its full content is readable in place.",
+            ],
+            [
+              "Secondary details",
+              "Related InfoCards in importance order, such as Exhausted, timing rules, keyword definitions, or a Dreamsign's rules terms.",
+            ],
+            [
+              "Adjacent cards",
+              "Small referenced card objects, such as materialized Figment previews. These appear when a desktop layout has room and are omitted on touch layouts.",
+            ],
+          ]}
+        />
+        <p style={bodyStyle}>
+          If every detail cannot fit safely, Cumulus preserves that order and
+          shows the highest-priority prefix. The player always gets the primary
+          content first.
+        </p>
+      </Section>
+
+      <Section id="entity-reveal-usage" title="Usage Rules">
+        <ContractList>
+          <li>
+            Pass stable domain identity and resolved display data. Cards use
+            UUIDs, and the <code style={inlineCodeStyle}>displaySnapshot.id</code>{" "}
+            must match <code style={inlineCodeStyle}>cardId</code>. Never use a
+            display name as identity.
+          </li>
+          <li>
+            Supply <code style={inlineCodeStyle}>onPress</code> or the component's
+            named action callback only when the source is actionable. Use
+            <code style={inlineCodeStyle}> unavailable</code> when it should stay
+            readable without responding to selection.
+          </li>
+          <li>
+            Let a layout wrapper size and position the source component. Reveal
+            placement is automatic and accounts for the viewport, safe areas,
+            scroll containers, the source position, the player's finger, and
+            persistent HUD space.
+          </li>
+          <li>
+            Use <code style={inlineCodeStyle}>InfoCard</code> to define visual
+            information content, not as a screen-owned popup. A reveal-enabled
+            component decides when and where InfoCard appears.
+          </li>
+          <li>
+            The application entry mounts one <code style={inlineCodeStyle}>CumulusRoot</code>.
+            Product screens beneath it do not mount another root or keep reveal
+            state in React.
+          </li>
+        </ContractList>
+      </Section>
+
+      <Section id="entity-reveal-implementation" title="How It Works">
+        <p style={bodyStyle}>
+          A reveal-enabled component privately registers its stable identity,
+          detail specification, visible source element, and optional action with
+          the coordinator installed by CumulusRoot. The coordinator interprets
+          mouse, keyboard, pen, and touch input as one consistent interaction
+          lifecycle.
+        </p>
+        <p style={bodyStyle}>
+          Before showing anything, the overlay renders the complete group in a
+          hidden measurement pass. It then chooses a mobile or desktop layout,
+          keeps the group inside the usable viewport, and renders it through a
+          pointer-transparent portal above application overlays. Open, close,
+          placement fallback, and truncation data are logged so a production
+          interaction can be reconstructed.
+        </p>
+      </Section>
+
+      <Section id="entity-reveal-extension" title="Adding A New Entity Type">
+        <p style={bodyStyle}>
+          First check whether an existing reveal-enabled component already
+          represents the object. If the object is genuinely new, add a named
+          semantic component inside Cumulus. That component owns the mapping
+          from domain data to its primary and secondary detail cards and uses the
+          private reveal-source binding internally.
+        </p>
+        <CodeExample>{`const binding = useRevealSource({
+  identity: { entityType, entityId },
+  spec: { primary, secondaries, adjacentCards },
+  onActivate,
+});
+
+return (
+  <Pressable ref={binding.ref} {...binding.sourceProps}>
+    {/* the visible source */}
+  </Pressable>
+);`}</CodeExample>
+        <p style={bodyStyle}>
+          This is a contributor extension point, not a screen API. Product
+          screens consume the finished named component and its typed props.
+          Keep component actions named <code style={inlineCodeStyle}>onPress</code>{" "}
+          (or a specific name such as <code style={inlineCodeStyle}>onNodePress</code>),
+          and keep placement, timing, and controlled open state out of the
+          public props.
+        </p>
       </Section>
 
       <Section id="entity-reveal-related" title="Related References">
@@ -413,19 +612,19 @@ export function EntityRevealCoordinatorDocs() {
             href="#/info-card"
             style={{ color: token("--accent-bright"), font: token("--t-body-sm") }}
           >
-            InfoCard visual contract →
+            InfoCard component →
           </a>
           <a
             href="#/game-card"
             style={{ color: token("--accent-bright"), font: token("--t-body-sm") }}
           >
-            GameCard source contract →
+            GameCard component →
           </a>
           <a
             href="/?demo=entity-reveals"
             style={{ color: token("--accent-bright"), font: token("--t-body-sm") }}
           >
-            Open deterministic conformance harness ↗
+            Open the deterministic interaction harness ↗
           </a>
         </div>
       </Section>
