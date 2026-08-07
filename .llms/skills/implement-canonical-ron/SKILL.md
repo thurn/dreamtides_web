@@ -1,6 +1,6 @@
 ---
 name: implement-canonical-ron
-description: Activate a reviewed production-intended `_canonical.ron` candidate by reusing its existing dataset-specific Rust source model, compatibility-TOML lowerer, and synthetic tests, then registering the adapter, replacing the production RON source, regenerating outputs, proving parity, and completing editor integration when applicable. Use when asked to implement, integrate, ship, promote, cut over, or replace a compatibility-shaped production RON file with a canonical modeled candidate such as `data/affiliations_canonical.ron`.
+description: Activate a reviewed production-intended `_canonical.ron` candidate by reusing its existing dataset-specific Rust source model, compatibility-TOML lowerer, and synthetic tests, then registering the adapter, replacing the production RON source, regenerating outputs, proving parity, and invoking `build-ron-editor` before cutover whenever an existing UI, API, or save path can edit the dataset. Use when asked to implement, integrate, ship, promote, cut over, or replace a compatibility-shaped production RON file with a canonical modeled candidate such as `data/affiliations_canonical.ron`.
 ---
 
 # Activate Canonical RON
@@ -30,7 +30,11 @@ write them again here.
 
 Inspect the candidate, durable model/lowerer, current production RON, generated
 TOML, manifest entry, compiler registries, consumers, dependencies, refresh
-operation, identity strategy, and editor capability.
+operation, identity strategy, and editor capability. Independently search for
+the dataset ID, RON/TOML filenames, and generated artifact names across editor
+routes, UI components, API handlers, staging transactions, hot-reload code, and
+tests. Do not infer that a dataset has no editor solely from a `read_only`
+manifest entry.
 
 Confirm that the durable code still:
 
@@ -54,16 +58,37 @@ adapter fingerprints change.
 
 ## 2. Complete editor support when required
 
-For a read-only dataset, proceed directly to activation.
+Classify the dataset from the traced save path:
 
-For an editor-backed dataset, use `build-ron-editor` to implement typed mutation
-against the durable source model before cutover. Require stable-ID routing,
-preservation of unrelated typed values and ordering, deterministic
-serialization, source revisions, atomic publication/rollback, and the normal
-browser save and recovery workflow.
+- If no writable editor UI, API, semantic operation, or save route exists,
+  record that evidence and proceed directly to activation.
+- If any existing UI/API flow can edit the dataset, its generated TOML, or a
+  companion catalog in the same save transaction,
+  invoke `$build-ron-editor` and follow that skill completely as part of the
+  activation, even when the manifest currently says `read_only` or the editor
+  is generic.
+- If an editor surface exists but its write capability is ambiguous, trace a
+  representative field from the control to publication before deciding. Treat
+  a reachable save path as editor-backed.
 
-Do not activate a semantic-editor dataset while its editor still writes the
-compatibility source or generated TOML.
+Trace every source catalog mutated by each editor operation. A cross-catalog
+save expands the editor-migration scope to all sources in that transaction;
+do not migrate only the named activation candidate.
+
+When invoked, `$build-ron-editor` owns the editor migration. Reuse the durable
+source model for the activation candidate and the appropriate typed model for
+every companion source. Implement typed semantic operations against canonical
+RON. Require stable-ID routing, operation-sized source patches, preservation of
+unrelated comments/literals/order, formatter-clean typed equivalence, source
+revisions, atomic multi-source publication/rollback, generated-artifact
+validation, and the normal browser save and recovery workflow.
+
+Begin the editor migration before the source-replacement phase. The editor and
+activation may become coherent together in one working tree, but do not accept
+or commit the activation until a normal UI save reaches every production-intended
+canonical RON source and the `$build-ron-editor` completion standard passes.
+The editor must not patch generated TOML or adopt a whole compatibility
+document as an ordinary save.
 
 ## 3. Register the existing adapter
 
@@ -141,7 +166,8 @@ Run focused checks while iterating, then at minimum:
 For read-only migrations, browser screenshots are unnecessary. For
 editor-backed migrations, exercise a normal save, validation failure, stale
 revision, and recovery; verify canonical RON and generated outputs, preservation
-of unrelated values/order, and an empty captured error buffer.
+of unrelated comments/literals/values/order, an operation-sized source diff,
+formatter-clean RON, and an empty captured error buffer.
 
 Update affected documentation and source comments to state the current RON
 authoring and generated TOML compatibility boundaries directly. Use UUIDs or

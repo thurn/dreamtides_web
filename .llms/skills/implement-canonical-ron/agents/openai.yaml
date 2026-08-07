@@ -1,4 +1,4 @@
 interface:
   display_name: "Activate Canonical RON"
-  short_description: "Activate reviewed RON without rewriting adapters"
-  default_prompt: "Use $implement-canonical-ron to activate this reviewed canonical RON candidate and its existing Rust adapter."
+  short_description: "Activate RON and migrate existing editors"
+  default_prompt: "Use $implement-canonical-ron to activate this reviewed candidate, reuse its Rust adapter, and migrate any existing editor to canonical RON."
