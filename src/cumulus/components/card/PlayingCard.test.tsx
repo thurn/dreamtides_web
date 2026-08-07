@@ -21,33 +21,6 @@ afterEach(() => {
 });
 
 describe("WagerPrizeCard", () => {
-  it("renders the closest-to-21 reward hierarchy", () => {
-    const host = document.createElement("div");
-    document.body.append(host);
-    const root = createRoot(host);
-
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <WagerPrizeCard
-            prizeId="twenty-one"
-            presentation="closestToTwentyOne"
-            essenceReward={300}
-            rewardDreamsign={null}
-            size="wagerCompact"
-          />
-        </CumulusRoot>,
-      );
-    });
-
-    const prize = host.querySelector<HTMLElement>("[data-wager-prize-card]");
-    expect(prize?.dataset.wagerPrizePresentation).toBe("closestToTwentyOne");
-    expect(prize?.querySelector("[data-wager-prize-title]")).not.toBeNull();
-    expect(prize?.querySelector("[data-wager-prize-description]")).not.toBeNull();
-
-    act(() => root.unmount());
-  });
-
   it("renders a centered reward-only squircle without target copy", () => {
     const host = document.createElement("div");
     document.body.append(host);

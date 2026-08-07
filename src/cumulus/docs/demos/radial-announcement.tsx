@@ -23,6 +23,7 @@ function RadialAnnouncementDemo(args: Record<string, unknown>) {
   const variant =
     args.variant === "card-score" ||
     args.variant === "merge-target" ||
+    args.variant === "hand-total" ||
     args.variant === "victory"
       ? args.variant
       : "announcement";
@@ -43,7 +44,15 @@ function RadialAnnouncementDemo(args: Record<string, unknown>) {
       }}
     >
       <style>{FROZEN_ANNOUNCEMENT_CSS}</style>
-      {variant === "card-score" ? (
+      {variant === "hand-total" ? (
+        <div style={{ display: "grid", height: "100%", placeItems: "center" }}>
+          <RadialAnnouncement
+            variant="hand-total"
+            owner="player"
+            total={17}
+          />
+        </div>
+      ) : variant === "card-score" ? (
         <RadialAnnouncement variant="card-score" points={points} />
       ) : variant === "merge-target" ? (
         status === "blocked" ? (
@@ -73,11 +82,11 @@ export const radialAnnouncementDemo: CumulusComponent = {
   id: "radial-announcement",
   title: "Radial Announcement",
   blurb:
-    "The single orbiting circular status system for scene announcements, card scoring, merge targets, and terminal victory.",
+    "The single orbiting circular status system for scene announcements, card scoring, merge targets, playing-hand totals, and terminal victory.",
   callout:
     "Use a strict named variant for every orbiting circular status moment.",
   details: [
-    "Each enum branch owns its established production choreography—including the card-attached scoring travel—while callers only place it in the relevant scene or card context.",
+    "Each enum branch owns its established production choreography—including card-attached scoring travel and persistent hand-total orbits—while callers only place it in the relevant scene or card context.",
   ],
   group: "Components",
   docName: "RadialAnnouncement",
@@ -100,6 +109,13 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
   variant="card-score"
   points={3}
   announcementId="challenge-resolved:player:5:F0"
+/>`,
+    },
+    {
+      code: `<RadialAnnouncement
+  variant="hand-total"
+  owner="player"
+  total={17}
 />`,
     },
   ],

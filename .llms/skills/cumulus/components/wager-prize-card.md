@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/wager-prize-card`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The shared Gamble reward object: a playing-card superellipse with threshold-and-reverse, flat-reward, or closest-to-21 presentations.
+The shared Gamble reward object: a playing-card superellipse with threshold-and-reverse or flat-reward presentations.
 
 > **Guidance:** Use the flat-reward presentation when the game has one persistent prize instead of a draw threshold.
 
@@ -50,18 +50,6 @@ When a Dreamsign is present, the entire prize face is its hover and press reveal
 <WagerPrizeCard
   prizeId="twenty-one"
   presentation="rewardOnly"
-  essenceReward={300}
-  rewardDreamsign={null}
-/>
-
-```
-
-### Closest to 21
-
-```tsx
-<WagerPrizeCard
-  prizeId="twenty-one"
-  presentation="closestToTwentyOne"
   essenceReward={300}
   rewardDreamsign={null}
 />

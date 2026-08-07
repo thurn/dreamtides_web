@@ -226,6 +226,35 @@ describe("RadialAnnouncement", () => {
     container.remove();
   });
 
+  it("renders a persistent orbiting hand total", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => {
+      root.render(
+        <RadialAnnouncement
+          variant="hand-total"
+          owner="dealer"
+          total={17}
+          size="mini"
+        />,
+      );
+    });
+
+    const total = container.querySelector<HTMLElement>(
+      '[data-radial-announcement-variant="hand-total"]',
+    );
+    expect(total?.dataset.radialAnnouncementOwner).toBe("dealer");
+    expect(total?.dataset.radialAnnouncementTotal).toBe("17");
+    expect(total?.getAttribute("aria-label")).toContain("17");
+    expect(total?.querySelector<HTMLElement>(
+      "[data-radial-announcement-hand-total-orbit]",
+    )?.style.animation).toContain("infinite");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("renders a canonical glyph in place of the headline copy", () => {
     const container = document.createElement("div");
     document.body.append(container);

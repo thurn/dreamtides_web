@@ -128,7 +128,7 @@ That implementation term does not cross the component API boundary.
 | Tides Info Label | Components | 1 | [components/tides-info-label.md](components/tides-info-label.md) | The typographic Tides eyebrow: a filled one-em information glyph followed by uppercase copy, with one shared definition reveal across the complete label. |
 | Transfiguration Button | Components | 1 | [components/transfiguration-button.md](components/transfiguration-button.md) | The canonical forge-form choice: compact and optionally priced controls with shared glyph, color, state, and accessibility behavior. |
 | Transient Status Toast | Components | 3 | [components/transient-status-toast.md](components/transient-status-toast.md) | The fixed, safe-area-aware short-lived warning surface for structured player-facing status copy. |
-| Radial Announcement | Components | 4 | [components/radial-announcement.md](components/radial-announcement.md) | The single orbiting circular status system for scene announcements, card scoring, merge targets, and terminal victory. |
+| Radial Announcement | Components | 4 | [components/radial-announcement.md](components/radial-announcement.md) | The single orbiting circular status system for scene announcements, card scoring, merge targets, playing-hand totals, and terminal victory. |
 | Motes | Components | 11 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
 | Info Card | Components | 5 | [components/info-card.md](components/info-card.md) | The strict information-card presentation. |
 | Editable Info Card | Components | 5 | [components/editable-info-card.md](components/editable-info-card.md) | The constrained authoring form of InfoCard. |
@@ -155,7 +155,7 @@ That implementation term does not cross the component API boundary.
 | Dreamsign | Components | 12 | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
 | Dreamsign Gallery Panel | Components | 1 | [components/dreamsign-gallery-panel.md](components/dreamsign-gallery-panel.md) | The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art, essence captions, a close disc, and one bare-glyph end action. |
 | Site Node | Components | 3 | [components/site-node.md](components/site-node.md) | The dreamscape site disc: a floating circular node carrying a glyph and accent ring. |
-| Wager Prize Card | Components | 1 | [components/wager-prize-card.md](components/wager-prize-card.md) | The shared Gamble reward object: a playing-card superellipse with threshold-and-reverse, flat-reward, or closest-to-21 presentations. |
+| Wager Prize Card | Components | 1 | [components/wager-prize-card.md](components/wager-prize-card.md) | The shared Gamble reward object: a playing-card superellipse with threshold-and-reverse or flat-reward presentations. |
 <!-- END GENERATED COMPONENT INDEX -->
 
 ## Customization: step back before adding any knob

@@ -8,11 +8,11 @@ Components · Live demo & interactive props: `/cumulus#/radial-announcement`
 
 Real consumers: **4** (imports outside `src/cumulus/docs/` and tests).
 
-The single orbiting circular status system for scene announcements, card scoring, merge targets, and terminal victory.
+The single orbiting circular status system for scene announcements, card scoring, merge targets, playing-hand totals, and terminal victory.
 
 > **Guidance:** Use a strict named variant for every orbiting circular status moment.
 
-Each enum branch owns its established production choreography—including the card-attached scoring travel—while callers only place it in the relevant scene or card context.
+Each enum branch owns its established production choreography—including card-attached scoring travel and persistent hand-total orbits—while callers only place it in the relevant scene or card context.
 
 ## Props
 
@@ -55,5 +55,15 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
   variant="card-score"
   points={3}
   announcementId="challenge-resolved:player:5:F0"
+/>
+```
+
+### Variant 3
+
+```tsx
+<RadialAnnouncement
+  variant="hand-total"
+  owner="player"
+  total={17}
 />
 ```

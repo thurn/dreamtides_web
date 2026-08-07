@@ -235,13 +235,14 @@ stands on every 17 including soft 17.
 | Dealer total beats the player | No reward. |
 | Player busts | No reward; offer another paid hand when fewer than three attempts have been played. |
 
-The fixed middle reward tile reads `Closest ≤21` and `Wins 300 Essence`. The
+The fixed middle glass panel reads `Closest ≤21` and `Wins 300 Essence`. The
 dealer hand stays above it and the player hand stays below it. Each unlabeled
-running total appears immediately after its hand once the current deal or draw
-animation finishes. Cards occupy stable slots, enter one at a time in deal
-order with the face-down side showing, then flip to their visible face; the
-dealer's hole card waits for the dealer turn. Reading holds separate each card,
-the dealer reveal and draws, and the result announcement.
+running total appears in a black orbiting disc immediately after its hand once
+the current deal or draw animation finishes. Cards enter one at a time in deal
+order with the face-down side showing, then flip to their visible face. Each
+hand smoothly reflows and scales its cards to keep every tile visible as more
+cards arrive. The dealer's hole card waits for the dealer turn. Reading holds
+separate each card, the dealer reveal and draws, and the result announcement.
 
 A push starts a fresh paid hand without advancing the attempt count. A player
 bust advances the attempt count and may start another paid hand through attempt

@@ -1,5 +1,6 @@
 // RadialAnnouncement — the one orbiting circular status presentation for
-// scene announcements, card scoring, merge targets, and victory moments.
+// scene announcements, card scoring, merge targets, hand totals, and victory
+// moments.
 
 import { useState, type ReactElement } from "react";
 import { motion, useReducedMotion } from "framer-motion";
@@ -110,6 +111,11 @@ const RADIAL_ANNOUNCEMENT_CSS = `
     0% { opacity: 0.3; transform: rotate(0deg); }
     50% { opacity: 0.9; }
     100% { opacity: 0.3; transform: rotate(360deg); }
+  }
+
+  @keyframes radial-announcement-hand-total-orbit {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 
   @keyframes radial-announcement-victory-arrival {
@@ -248,13 +254,27 @@ export interface RadialAnnouncementVictoryProps
   headline: string;
 }
 
+/** A persistent playing-hand total with a continuously orbiting rim. */
+export interface RadialAnnouncementHandTotalProps
+  extends RadialAnnouncementCommonProps {
+  /** Selects the compact playing-hand total presentation. */
+  variant: "hand-total";
+  /** Numeric value shown at the end of the hand. */
+  total: number;
+  /** Owner included in the accessible total announcement. */
+  owner: "dealer" | "player";
+  /** Named compact disc diameter. Defaults to compact. */
+  size?: "mini" | "compact";
+}
+
 /** Strict models for every orbiting circular status presentation. */
 export type RadialAnnouncementProps =
   | RadialAnnouncementSceneProps
   | RadialAnnouncementCardScoreProps
   | RadialAnnouncementAvailableTargetProps
   | RadialAnnouncementBlockedTargetProps
-  | RadialAnnouncementVictoryProps;
+  | RadialAnnouncementVictoryProps
+  | RadialAnnouncementHandTotalProps;
 
 type RadialAnnouncementImplementationProps = RadialAnnouncementProps & {
   readonly variant?: RadialAnnouncementProps["variant"];
@@ -271,7 +291,8 @@ function toneColor(tone: RadialAnnouncementTone): string {
 
 /**
  * The single orbiting circular status system. Named variants cover transient
- * scene announcements, card scoring, merge targets, and terminal victory.
+ * scene announcements, card scoring, merge targets, hand totals, and terminal
+ * victory.
  */
 export function RadialAnnouncement(props: RadialAnnouncementProps): ReactElement;
 export function RadialAnnouncement({
@@ -325,6 +346,21 @@ export function RadialAnnouncement({
       />
     );
   }
+  if (variant === "hand-total") {
+    const handTotalProps = props as Omit<
+      RadialAnnouncementHandTotalProps,
+      "variant"
+    >;
+    return (
+      <HandTotalAnnouncement
+        variant="hand-total"
+        total={handTotalProps.total}
+        owner={handTotalProps.owner}
+        size={size === "mini" ? "mini" : "compact"}
+        announcementId={handTotalProps.announcementId}
+      />
+    );
+  }
   return (
     <SceneAnnouncement
       {...(props as Omit<RadialAnnouncementSceneProps, "variant">)}
@@ -333,6 +369,70 @@ export function RadialAnnouncement({
       size={size}
       duration={duration}
     />
+  );
+}
+
+function HandTotalAnnouncement({
+  total,
+  owner,
+  size = "compact",
+  announcementId,
+}: RadialAnnouncementHandTotalProps): ReactElement {
+  const reduceMotion = useReducedMotion() === true;
+  const diameter = size === "mini" ? 52 : 60;
+  return (
+    <motion.div
+      role="status"
+      aria-live="polite"
+      aria-label={`${owner === "dealer" ? "Dealer" : "Player"} total ${String(total)}`}
+      data-radial-announcement={announcementId ?? ""}
+      data-radial-announcement-variant="hand-total"
+      data-radial-announcement-owner={owner}
+      data-radial-announcement-total={total}
+      initial={reduceMotion ? false : { opacity: 0, scale: 0.68 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{
+        duration: reduceMotion ? 0 : motionTimeSeconds("--dur-slow"),
+        ease: [0.22, 0.61, 0.36, 1],
+      }}
+      style={{
+        position: "relative",
+        width: diameter,
+        height: diameter,
+        flex: "0 0 auto",
+        display: "grid",
+        placeItems: "center",
+        borderRadius: token("--radius-pill"),
+        background: token("--bg-sunken"),
+        boxShadow: `${token("--shadow-lg")}, ${token("--glow-accent-soft")}`,
+        color: token("--text-primary"),
+        font: token("--t-title-sm"),
+        textShadow: token("--text-outline-media"),
+        pointerEvents: "none",
+      }}
+    >
+      <style>{RADIAL_ANNOUNCEMENT_CSS}</style>
+      <span
+        aria-hidden="true"
+        data-radial-announcement-orbit=""
+        data-radial-announcement-hand-total-orbit=""
+        style={{
+          position: "absolute",
+          inset: token("--space-xxs"),
+          borderWidth: token("--space-xxs"),
+          borderStyle: "solid",
+          borderTopColor: token("--text-primary"),
+          borderRightColor: token("--border-accent"),
+          borderBottomColor: token("--border-accent"),
+          borderLeftColor: token("--border-accent"),
+          borderRadius: token("--radius-pill"),
+          animation: reduceMotion
+            ? undefined
+            : `radial-announcement-hand-total-orbit calc(${token("--dur-slow")} * 4) linear infinite`,
+        }}
+      />
+      <span data-radial-announcement-headline="">{total}</span>
+    </motion.div>
   );
 }
 
