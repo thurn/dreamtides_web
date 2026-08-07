@@ -101,13 +101,13 @@ migration without source schema changes. Editor controls without a corresponding
 source field are rejected as described in Editor operation vocabulary.
 
 Read, build, review, watch, deployment conversion, and typed editor mutation are
-feasible with the official parser, serializer, and explicit adapters. Editor
-saves may normalize a complete RON document to the project's standard format;
-byte-for-byte preservation of nonstandard formatting is not a requirement. The
-editor phase starts with a round-trip prototype against all three production
-candidates to select official serialization or an existing formatter that
-produces deterministic, readable RON. The repository does not implement or
-maintain its own RON parser.
+feasible with the official parser, source-preserving field replacement, the
+repository formatter, and explicit adapters. Editor saves retain source bytes
+outside the declared operation and run the standard formatter against the
+staged result. The editor phase starts with a round-trip prototype against all
+three production candidates to prove deterministic, readable RON and isolated
+source diffs. The repository does not implement or maintain its own general RON
+parser.
 
 ## Decisions
 
@@ -599,8 +599,9 @@ For each operation batch, the middleware and Rust tool perform these steps:
    rejects duplicate identities before locating a target.
 4. Rust applies the operation to an in-memory clone to produce the exact
    intended typed result.
-5. Rust serializes the intended result through the pinned editor formatting
-   strategy into staged RON. This may normalize the complete document.
+5. Rust replaces the declared field value in the staged RON while retaining
+   unrelated source bytes; the Node transaction applies the repository RON
+   formatter to the staged result.
 6. Rust strictly deserializes the serialized source, requires it to equal the
    intended typed result, and requires a second serialization to be
    byte-identical to the first.
@@ -621,11 +622,12 @@ in the top-level sequence by their direct UUID. Exploration encounters are
 located only in root `encounters` by direct `card_id`; actions are then selected
 by validated slot and action ID. Missing and duplicate targets are errors.
 
-The editor prototype selects either the official `ron` serializer with a pinned
-pretty configuration or an existing maintained formatter. The selected strategy
-must produce deterministic, readable output for all three production candidates
-and may reformat the complete affected document. The repository does not build
-a lexer, concrete syntax tree, delimiter index, or byte-patching implementation.
+The editor uses a bounded source locator for each supported dataset operation,
+then verifies the complete patched document against the intended typed value
+with the official `ron` parser. The repository formatter owns whitespace and
+wrapping. The locator understands RON literals, comments, and nested delimiters
+only to identify the registered record and field span; it is not a general RON
+parser.
 
 Typed mutation follows fixed rules:
 
@@ -639,11 +641,11 @@ Typed mutation follows fixed rules:
   `template`. An attempted action-ID change is rejected.
 - A semantic no-op does not publish RON, TOML, JSON, watcher, or HMR writes.
 
-The prototype documents how the selected serializer or formatter handles
-comments. Authoring guidance that must survive serialization is moved to Rust
-schema documentation or another formatter-supported location before that
-dataset's editor cutover. Arbitrary whitespace, comments, and nonstandard
-spelling are not byte-preservation contracts.
+Editor field operations preserve unrelated comments, whitespace, literal
+spellings, and record boundaries. The repository formatter may adjust the
+edited value's surrounding layout when required by the standard format. A
+one-line scalar edit changes exactly one source line when its formatted value
+remains one line.
 
 Before editor migration begins, all three current RON candidates must survive a
 semantic round trip, serialize idempotently, preserve string code points and
@@ -984,8 +986,10 @@ the browser error buffer remaining empty.
 - Conversion is deterministic across supported development and CI platforms.
 - Canonical sources may use constructs supported by the pinned `ron` crate when
   their dataset source schema and adapter define the required lowering.
-- Editor saves update canonical RON by stable ID, preserve unrelated typed
-  values and collection order, and produce deterministic standard formatting.
+- Editor saves update canonical RON by stable ID, preserve unrelated source
+  bytes, typed values, and collection order, and produce deterministic standard
+  formatting. A one-line scalar edit produces a one-line source diff when its
+  formatted representation remains one line.
 - Every editor save is a declared dataset operation with an expected source
   revision; stale writes fail without mutation.
 - Failed and stale saves preserve later local drafts and unsent operations for

@@ -35,6 +35,23 @@ function fixture() {
 }
 
 describe("game-data publication", () => {
+  it("applies the repository RON formatter to staged editor sources", () => {
+    const { root, stage } = fixture();
+    writeFileSync(join(root, ".ronfmt.json"), JSON.stringify({ indentWidth: 2, printWidth: 120 }));
+    writeFileSync(
+      join(stage, "data", "cards.ron"),
+      "// preserved\n[CardDefinition(name:\"Fixture\",id:\"00000000-0000-4000-8000-000000000001\",)]\n",
+    );
+
+    gameDataPipelineInternals.formatStagedRonSources(root, stage, ["data/cards.ron"]);
+
+    expect(readFileSync(join(stage, "data", "cards.ron"), "utf8")).toBe(
+      `// preserved
+[CardDefinition(name: "Fixture", id: "00000000-0000-4000-8000-000000000001")]
+`,
+    );
+  });
+
   it("publishes changed bytes and suppresses semantic no-op writes", () => {
     const { root, stage, output, manifest } = fixture();
     writeFileSync(join(root, output), "old\n");

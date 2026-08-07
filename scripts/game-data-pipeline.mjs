@@ -21,6 +21,7 @@ import { execFileSync } from "node:child_process";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parse } from "smol-toml";
+import { formatRon } from "./ron-format.mjs";
 
 const MODULE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const MANIFEST_PATH = join("data", "game-data-manifest.ron");
@@ -383,6 +384,18 @@ export function sourceRevision(rootDir, sourcePaths) {
   return hash.digest("hex");
 }
 
+function formatStagedRonSources(rootDir, stageRoot, sourcePaths) {
+  const config = JSON.parse(readFileSync(join(rootDir, ".ronfmt.json"), "utf8"));
+  for (const sourcePath of sourcePaths) {
+    if (!sourcePath.endsWith(".ron")) continue;
+    const staged = assertRepositoryRelativePath(stageRoot, sourcePath);
+    if (!existsSync(staged)) continue;
+    const source = readFileSync(staged, "utf8");
+    const formatted = formatRon(source, config);
+    if (formatted !== source) writeFileSync(staged, formatted);
+  }
+}
+
 export async function stageAndPublishGameDataEdit({
   rootDir = MODULE_ROOT,
   dataset,
@@ -423,6 +436,7 @@ export async function stageAndPublishGameDataEdit({
         input: JSON.stringify({ dataset, operations }),
       },
     );
+    formatStagedRonSources(rootDir, stageRoot, sourcePaths);
     const stagedSidecarChanged = Object.keys(stagedFiles).some((relativePath) => {
       const staged = assertRepositoryRelativePath(stageRoot, relativePath);
       const visible = assertRepositoryRelativePath(rootDir, relativePath);
@@ -501,6 +515,7 @@ export async function stageAndPublishCompatibilityEdit({
       });
       changed ||= edit.changed;
     }
+    formatStagedRonSources(rootDir, stageRoot, sourcePaths);
     const sidecarChanged = sourcePaths.some((relativePath) => {
       const staged = assertRepositoryRelativePath(stageRoot, relativePath);
       const visible = assertRepositoryRelativePath(rootDir, relativePath);
@@ -532,7 +547,7 @@ export async function stageAndPublishCompatibilityEdit({
   }
 }
 
-export const gameDataPipelineInternals = { publish };
+export const gameDataPipelineInternals = { formatStagedRonSources, publish };
 
 async function main() {
   const command = process.argv[2] ?? "compile";

@@ -1,6 +1,7 @@
 use std::collections::BTreeSet;
 use std::fs;
 use std::io::Write;
+use std::ops::Range;
 use std::path::Path;
 
 use anyhow::{Context, Result, bail};
@@ -157,6 +158,7 @@ fn edit_cards(
         ron::from_str(&original_text).context("MALFORMED_SOURCE: staged Cards RON is invalid")?;
     reject_duplicate_cards(&original)?;
     let mut cards = original.clone();
+    let mut cards_text = original_text;
     let mut tags = read_compat(manifest, staging_root, "card-tags")?;
     let mut tides = read_compat(manifest, staging_root, "card-tides")?;
     let original_tags = tags.clone();
@@ -169,8 +171,12 @@ fn edit_cards(
                 field,
                 value,
             } => {
-                let card = unique_card_mut(&mut cards, &card_id)?;
-                set_card_field(card, &field, value)?;
+                let index = unique_card_index(&cards, &card_id)?;
+                let before = cards[index].clone();
+                set_card_field(&mut cards[index], &field, value)?;
+                if cards[index] != before {
+                    cards_text = patch_card_source_field(&cards_text, &cards[index], &field)?;
+                }
             }
             EditOperation::UpsertFacet { facet, name, color } => {
                 validate_facet(&name, &color)?;
@@ -195,7 +201,11 @@ fn edit_cards(
                 )?;
                 if matches!(facet, Facet::Tags) {
                     for card in &mut cards {
+                        let before = card.tags.len();
                         card.tags.retain(|tag| tag != &name);
+                        if card.tags.len() != before {
+                            cards_text = patch_card_source_field(&cards_text, card, "tags")?;
+                        }
                     }
                 }
             }
@@ -204,7 +214,6 @@ fn edit_cards(
     }
     reject_duplicate_cards(&cards)?;
 
-    let cards_text = serialize_ron(&cards, true)?;
     verify_round_trip::<Vec<CardDefinition>>(&cards_text, &cards)?;
     let tags_text = serialize_ron(&tags, false)?;
     verify_round_trip::<CompatDocument>(&tags_text, &tags)?;
@@ -212,7 +221,9 @@ fn edit_cards(
     verify_round_trip::<CompatDocument>(&tides_text, &tides)?;
     let changed = cards != original || tags != original_tags || tides != original_tides;
     if changed {
-        atomic_write(&cards_path, cards_text.as_bytes())?;
+        if cards != original {
+            atomic_write(&cards_path, cards_text.as_bytes())?;
+        }
         if tags != original_tags {
             atomic_write(
                 &staging_root.join(&manifest.dataset("card-tags")?.source),
@@ -713,24 +724,350 @@ fn dynamic_value_from_json(value: &JsonValue) -> Result<DynamicValue> {
     }
 }
 
-fn unique_card_mut<'a>(
-    cards: &'a mut [CardDefinition],
-    id: &str,
-) -> Result<&'a mut CardDefinition> {
+fn unique_card_index(cards: &[CardDefinition], id: &str) -> Result<usize> {
     let matches = cards
         .iter()
-        .filter(|card| card.id.eq_ignore_ascii_case(id))
-        .count();
-    if matches == 0 {
+        .enumerate()
+        .filter(|(_, card)| card.id.eq_ignore_ascii_case(id))
+        .map(|(index, _)| index)
+        .collect::<Vec<_>>();
+    if matches.is_empty() {
         bail!("RECORD_NOT_FOUND: card UUID {id}");
     }
-    if matches > 1 {
+    if matches.len() > 1 {
         bail!("MALFORMED_SOURCE: duplicate card UUID {id}");
     }
-    Ok(cards
-        .iter_mut()
-        .find(|card| card.id.eq_ignore_ascii_case(id))
-        .unwrap())
+    Ok(matches[0])
+}
+
+fn patch_card_source_field(source: &str, card: &CardDefinition, field: &str) -> Result<String> {
+    let source_field = match field {
+        "name" => "name",
+        "rules" | "rendered-text" => "rules",
+        "energy_cost" | "energy-cost" => "energy_cost",
+        "card_type" | "card-type" | "subtype" | "spark" => "kind",
+        "tags" => "tags",
+        "image_number" | "image-number" | "art_crop" | "art" => "art",
+        _ => bail!("INVALID_EDIT: unsupported Cards field {field}"),
+    };
+    let replacement = render_card_source_field(card, source_field)?;
+    let record = card_record_range(source, &card.id)?;
+    if let Some(value) = top_level_field_value_range(source, record.clone(), source_field)? {
+        return Ok(format!(
+            "{}{}{}",
+            &source[..value.start],
+            replacement,
+            &source[value.end..]
+        ));
+    }
+    if source_field != "tags" {
+        bail!(
+            "MALFORMED_SOURCE: missing field {source_field} on card {}",
+            card.id
+        );
+    }
+
+    let closing = record.end - 1;
+    let closing_line = source[..closing]
+        .rfind('\n')
+        .map_or(record.start, |offset| offset + 1);
+    Ok(format!(
+        "{}    tags: {},\n{}",
+        &source[..closing_line],
+        replacement,
+        &source[closing_line..]
+    ))
+}
+
+fn render_card_source_field(card: &CardDefinition, field: &str) -> Result<String> {
+    match field {
+        "name" => Ok(ron::to_string(&card.name)?),
+        "rules" => Ok(raw_ron_string(&card.rules)),
+        "energy_cost" => Ok(render_orb(&card.energy_cost)),
+        "kind" => match &card.kind {
+            CardKind::Event => Ok("Event".into()),
+            CardKind::Character { subtype, spark } => {
+                let subtype = ron::to_string(subtype)?;
+                Ok(match spark {
+                    Some(spark) => format!(
+                        "Character(subtype: {subtype}, spark: {})",
+                        render_orb(spark)
+                    ),
+                    None => format!("Character(subtype: {subtype})"),
+                })
+            }
+        },
+        "tags" => Ok(format!(
+            "[{}]",
+            card.tags
+                .iter()
+                .map(ron::to_string)
+                .collect::<std::result::Result<Vec<_>, _>>()?
+                .join(", ")
+        )),
+        "art" => {
+            let mut fields = vec![format!("image: {}", card.art.image)];
+            if card.art.owned {
+                fields.push("owned: true".into());
+            }
+            if let Some(crop) = &card.art.crop {
+                fields.push(format!(
+                    "crop: (x: {}, y: {}, scale: {})",
+                    ron::to_string(&crop.x)?,
+                    ron::to_string(&crop.y)?,
+                    ron::to_string(&crop.scale)?
+                ));
+            }
+            Ok(format!("({})", fields.join(", ")))
+        }
+        _ => bail!("INVALID_EDIT: unsupported Cards source field {field}"),
+    }
+}
+
+fn render_orb(value: &OrbValue) -> String {
+    match value {
+        OrbValue::Fixed(value) => format!("Fixed({value})"),
+        OrbValue::Variable => "Variable".into(),
+        OrbValue::FixedAndVariable(value) => format!("FixedAndVariable({value})"),
+    }
+}
+
+fn raw_ron_string(value: &str) -> String {
+    for hash_count in 1.. {
+        let hashes = "#".repeat(hash_count);
+        if !value.contains(&format!("\"{hashes}")) {
+            return format!("r{hashes}\"{value}\"{hashes}");
+        }
+    }
+    unreachable!("a finite string always has an unused raw-string delimiter")
+}
+
+fn card_record_range(source: &str, id: &str) -> Result<Range<usize>> {
+    let id_literal = ron::to_string(id)?;
+    let marker = format!("\n    id: {id_literal},");
+    let matches = source
+        .match_indices(&marker)
+        .map(|(offset, _)| offset)
+        .collect::<Vec<_>>();
+    if matches.is_empty() {
+        bail!("RECORD_NOT_FOUND: card UUID {id}");
+    }
+    if matches.len() > 1 {
+        bail!("MALFORMED_SOURCE: duplicate card UUID {id}");
+    }
+    let record_marker = "\n  CardDefinition(";
+    let start = source[..matches[0]]
+        .rfind(record_marker)
+        .map(|offset| offset + 1)
+        .context("MALFORMED_SOURCE: card record has no CardDefinition boundary")?;
+    let opening = source[start..]
+        .find('(')
+        .map(|offset| start + offset)
+        .context("MALFORMED_SOURCE: card record has no opening delimiter")?;
+    let closing = matching_delimiter(source, opening)?;
+    Ok(start..closing + 1)
+}
+
+fn top_level_field_value_range(
+    source: &str,
+    record: Range<usize>,
+    field: &str,
+) -> Result<Option<Range<usize>>> {
+    let bytes = source.as_bytes();
+    let opening = source[record.clone()]
+        .find('(')
+        .map(|offset| record.start + offset)
+        .context("MALFORMED_SOURCE: card record has no opening delimiter")?;
+    let mut stack = vec![b'('];
+    let mut cursor = opening + 1;
+    let mut found = None;
+    while cursor < record.end {
+        if let Some(next) = skip_ron_literal_or_comment(bytes, cursor)? {
+            cursor = next;
+            continue;
+        }
+        if stack.len() == 1 && (bytes[cursor].is_ascii_alphabetic() || bytes[cursor] == b'_') {
+            let name_start = cursor;
+            cursor += 1;
+            while cursor < record.end
+                && (bytes[cursor].is_ascii_alphanumeric() || bytes[cursor] == b'_')
+            {
+                cursor += 1;
+            }
+            let mut colon = cursor;
+            while colon < record.end && bytes[colon].is_ascii_whitespace() {
+                colon += 1;
+            }
+            if bytes.get(colon) == Some(&b':') && &source[name_start..cursor] == field {
+                let mut value_start = colon + 1;
+                while value_start < record.end && bytes[value_start].is_ascii_whitespace() {
+                    value_start += 1;
+                }
+                let value_end = top_level_value_end(source, value_start, record.end)?;
+                if found.replace(value_start..value_end).is_some() {
+                    bail!("MALFORMED_SOURCE: duplicate field {field} in card record");
+                }
+            }
+            continue;
+        }
+        match bytes[cursor] {
+            b'(' | b'[' | b'{' => stack.push(bytes[cursor]),
+            b')' | b']' | b'}' => {
+                let expected = matching_open(bytes[cursor]);
+                if stack.pop() != Some(expected) {
+                    bail!("MALFORMED_SOURCE: mismatched delimiter in Cards RON");
+                }
+            }
+            _ => {}
+        }
+        cursor += 1;
+    }
+    Ok(found)
+}
+
+fn top_level_value_end(source: &str, start: usize, limit: usize) -> Result<usize> {
+    let bytes = source.as_bytes();
+    let mut stack = Vec::new();
+    let mut cursor = start;
+    while cursor < limit {
+        if let Some(next) = skip_ron_literal_or_comment(bytes, cursor)? {
+            cursor = next;
+            continue;
+        }
+        match bytes[cursor] {
+            b'(' | b'[' | b'{' => stack.push(bytes[cursor]),
+            b')' | b']' | b'}' => {
+                let expected = matching_open(bytes[cursor]);
+                if stack.pop() != Some(expected) {
+                    bail!("MALFORMED_SOURCE: mismatched delimiter in Cards field");
+                }
+            }
+            b',' if stack.is_empty() => {
+                let mut end = cursor;
+                while end > start && bytes[end - 1].is_ascii_whitespace() {
+                    end -= 1;
+                }
+                return Ok(end);
+            }
+            _ => {}
+        }
+        cursor += 1;
+    }
+    bail!("MALFORMED_SOURCE: Cards field has no terminating comma")
+}
+
+fn matching_delimiter(source: &str, opening: usize) -> Result<usize> {
+    let bytes = source.as_bytes();
+    let mut stack = vec![bytes[opening]];
+    let mut cursor = opening + 1;
+    while cursor < bytes.len() {
+        if let Some(next) = skip_ron_literal_or_comment(bytes, cursor)? {
+            cursor = next;
+            continue;
+        }
+        match bytes[cursor] {
+            b'(' | b'[' | b'{' => stack.push(bytes[cursor]),
+            b')' | b']' | b'}' => {
+                let expected = matching_open(bytes[cursor]);
+                if stack.pop() != Some(expected) {
+                    bail!("MALFORMED_SOURCE: mismatched delimiter in Cards RON");
+                }
+                if stack.is_empty() {
+                    return Ok(cursor);
+                }
+            }
+            _ => {}
+        }
+        cursor += 1;
+    }
+    bail!("MALFORMED_SOURCE: unterminated CardDefinition")
+}
+
+fn matching_open(closing: u8) -> u8 {
+    match closing {
+        b')' => b'(',
+        b']' => b'[',
+        b'}' => b'{',
+        _ => unreachable!("only closing delimiters are matched"),
+    }
+}
+
+fn skip_ron_literal_or_comment(bytes: &[u8], start: usize) -> Result<Option<usize>> {
+    if bytes.get(start..start + 2) == Some(b"//") {
+        let end = bytes[start + 2..]
+            .iter()
+            .position(|byte| *byte == b'\n')
+            .map_or(bytes.len(), |offset| start + 2 + offset + 1);
+        return Ok(Some(end));
+    }
+    if bytes.get(start..start + 2) == Some(b"/*") {
+        let mut depth = 1;
+        let mut cursor = start + 2;
+        while cursor < bytes.len() && depth > 0 {
+            if bytes.get(cursor..cursor + 2) == Some(b"/*") {
+                depth += 1;
+                cursor += 2;
+            } else if bytes.get(cursor..cursor + 2) == Some(b"*/") {
+                depth -= 1;
+                cursor += 2;
+            } else {
+                cursor += 1;
+            }
+        }
+        if depth != 0 {
+            bail!("MALFORMED_SOURCE: unterminated block comment in Cards RON");
+        }
+        return Ok(Some(cursor));
+    }
+
+    let (quote, raw_prefix) = if matches!(bytes.get(start), Some(b'\"' | b'\'')) {
+        (Some(start), None)
+    } else if bytes.get(start) == Some(&b'b') && matches!(bytes.get(start + 1), Some(b'\"' | b'\''))
+    {
+        (Some(start + 1), None)
+    } else if bytes.get(start) == Some(&b'r') {
+        (None, Some(start + 1))
+    } else if bytes.get(start..start + 2) == Some(b"br") {
+        (None, Some(start + 2))
+    } else {
+        (None, None)
+    };
+    if let Some(quote) = quote {
+        let delimiter = bytes[quote];
+        let mut cursor = quote + 1;
+        while cursor < bytes.len() {
+            if bytes[cursor] == b'\\' {
+                cursor += 2;
+            } else if bytes[cursor] == delimiter {
+                return Ok(Some(cursor + 1));
+            } else {
+                cursor += 1;
+            }
+        }
+        bail!("MALFORMED_SOURCE: unterminated quoted literal in Cards RON");
+    }
+    if let Some(mut cursor) = raw_prefix {
+        let hash_start = cursor;
+        while bytes.get(cursor) == Some(&b'#') {
+            cursor += 1;
+        }
+        if bytes.get(cursor) != Some(&b'\"') {
+            return Ok(None);
+        }
+        let hash_count = cursor - hash_start;
+        cursor += 1;
+        while cursor < bytes.len() {
+            if bytes[cursor] == b'\"'
+                && bytes.get(cursor + 1..cursor + 1 + hash_count)
+                    == Some(&bytes[hash_start..hash_start + hash_count])
+            {
+                return Ok(Some(cursor + 1 + hash_count));
+            }
+            cursor += 1;
+        }
+        bail!("MALFORMED_SOURCE: unterminated raw string in Cards RON");
+    }
+    Ok(None)
 }
 
 fn reject_duplicate_cards(cards: &[CardDefinition]) -> Result<()> {
@@ -998,10 +1335,41 @@ mod tests {
     use super::*;
     use serde_json::{Map, json};
 
+    const CARD_ID: &str = "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5";
+
+    const CARD_SOURCE: &str = r##"// Stable catalog guidance.
+#![enable(implicit_some)]
+[
+  CardDefinition(
+    name: "Lone Arrival",
+    id: "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5",
+    rules: r#"Offering
+
+    tags: ["inside rules"],
+▸Materialized: Dissolve an enemy."#,
+    energy_cost: Fixed(5),
+    kind: Character(subtype: "Visitor", spark: Fixed(3)),
+    art: (image: 2033720048, crop: (x: 0.0, y: 0.595, scale: 1.17)),
+    number: 142,
+    mtg_origin: "Solitude",
+    tags: ["Art Rework", "June30", "Art OK"],
+  ),
+  CardDefinition(
+    name: "Unrelated Card",
+    id: "00000000-0000-4000-8000-000000000002",
+    rules: r#"Draw a card."#,
+    energy_cost: Variable,
+    kind: Event,
+    art: (image: 2),
+    number: 2,
+    mtg_origin: "Fixture",
+  ),
+]
+"##;
+
     fn catalog() -> ExplorationCatalog {
         let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-        ron::from_str(&fs::read_to_string(root.join("data/exploration.ron")).unwrap())
-            .unwrap()
+        ron::from_str(&fs::read_to_string(root.join("data/exploration.ron")).unwrap()).unwrap()
     }
 
     fn action(kind: EffectKind) -> JsonValue {
@@ -1116,6 +1484,70 @@ mod tests {
                 .to_string()
                 .contains("FIELD_NOT_APPLICABLE")
         );
+    }
+
+    #[test]
+    fn card_rules_edit_changes_exactly_one_source_line() {
+        let mut cards: Vec<CardDefinition> = ron::from_str(CARD_SOURCE).unwrap();
+        let index = unique_card_index(&cards, CARD_ID).unwrap();
+        set_card_field(
+            &mut cards[index],
+            "rendered-text",
+            json!(
+                "Offering, Veil\n\n    tags: [\"inside rules\"],\n▸Materialized: Dissolve an enemy."
+            ),
+        )
+        .unwrap();
+
+        let patched = patch_card_source_field(CARD_SOURCE, &cards[index], "rendered-text").unwrap();
+        let changed_lines = CARD_SOURCE
+            .lines()
+            .zip(patched.lines())
+            .filter(|(before, after)| before != after)
+            .collect::<Vec<_>>();
+
+        assert_eq!(CARD_SOURCE.lines().count(), patched.lines().count());
+        assert_eq!(
+            changed_lines,
+            vec![("    rules: r#\"Offering", "    rules: r#\"Offering, Veil")]
+        );
+        assert!(patched.starts_with("// Stable catalog guidance.\n"));
+        assert_eq!(
+            ron::from_str::<Vec<CardDefinition>>(&patched).unwrap(),
+            cards
+        );
+    }
+
+    #[test]
+    fn card_source_patch_round_trips_every_editable_shape() {
+        let edits = [
+            ("name", json!("Quoted \"Name\"")),
+            ("energy-cost", json!("3,X")),
+            ("card-type", json!("Event")),
+            ("subtype", json!("Guide")),
+            ("spark", json!("X")),
+            ("tags", json!(["first", "second"])),
+            ("image-number", json!(42)),
+            ("art", json!({ "x": -0.25, "y": 1.0, "scale": 1.5 })),
+        ];
+
+        for (field, value) in edits {
+            let mut cards: Vec<CardDefinition> = ron::from_str(CARD_SOURCE).unwrap();
+            let index = unique_card_index(&cards, CARD_ID).unwrap();
+            set_card_field(&mut cards[index], field, value).unwrap();
+            let patched = patch_card_source_field(CARD_SOURCE, &cards[index], field).unwrap();
+
+            assert!(
+                patched.starts_with("// Stable catalog guidance.\n"),
+                "{field}"
+            );
+            assert!(patched.contains("name: \"Unrelated Card\""), "{field}");
+            assert_eq!(
+                ron::from_str::<Vec<CardDefinition>>(&patched).unwrap(),
+                cards,
+                "{field}"
+            );
+        }
     }
 
     #[test]
