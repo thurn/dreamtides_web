@@ -14,9 +14,12 @@ The Living Tome of Dreamtides Design, or LToDD, is the canonical,
 several-hundred-page book whose primary purpose is to explain Dreamtides'
 algorithms: the inputs and rules that select content, resolve outcomes,
 transform hidden state, coordinate UI behavior, and produce what the player
-sees. It also records the game rules and design rationale needed to understand
-those algorithms. LToDD supplements hands-on use of the prototype and the
-Cumulus component documentation. Together, those resources should let an expert
+sees. Precisely documenting screen presentation or animation choreography is
+not LToDD's goal. It records only enough about each screen, interaction, and
+outcome to orient the reader, while fully explaining non-obvious UI algorithms.
+LToDD also records the game rules and design rationale needed to understand
+those algorithms. It supplements hands-on use of the prototype and the Cumulus
+component documentation. Together, those resources should let an expert
 developer or implementation LLM unfamiliar with the repository reimplement
 Dreamtides correctly without reading TypeScript source.
 
