@@ -5,9 +5,41 @@ description: Use when adding, editing, reviewing, or migrating player-facing Dre
 
 # Localization
 
+> [!WARNING]
+> Existing player-facing source English is immutable unless the user explicitly
+> authorizes a separate copy change. A localization or localization-infrastructure
+> task may move, parameterize, or restructure existing copy, but it must preserve
+> the exact rendered wording for every state, including capitalization,
+> punctuation, meaningful whitespace, interpolated values, accessible names, and
+> accessible descriptions. Never rewrite, shorten, delete, or “improve” existing
+> copy to satisfy lint, tests, types, Fluent syntax, selector design, or tooling.
+> Preserve the copy and fix the implementation around it; if exact parity is not
+> possible, stop and report the conflict instead of changing the text.
+
 Create complete, translator-ready messages whose meaning survives changes in
 grammar, word order, writing system, and culture. Treat translator context as
 part of the feature contract, not optional commentary.
+
+## Preserve existing source-copy parity
+
+Treat the pre-change source-English output as a feature contract. This rule
+applies to visible strings and accessibility-only language. It does not prevent
+authoring copy for a genuinely new surface or making a copy change the user has
+explicitly requested.
+
+For migrations, inventory the existing output before editing and compare it
+with the localized output afterward. Cover every finite semantic branch and
+representative valid numeric states, including zero when it can occur. Review
+wording, capitalization, punctuation, interpolation order, and meaningful
+spacing independently from the structural tests.
+
+Lint and structural tests establish localization architecture; they do not
+authorize copy edits and they do not prove source-copy parity. Keep repository
+tests semantic and locale-neutral as required. Use a task-local parity ledger,
+temporary comparison output, and diff review to prove that existing English
+rendering stayed identical without committing tests that assert English UI
+strings. When the original construction is awkward or grammatically flawed,
+move it faithfully and file any desired copy improvement as separate work.
 
 ## Read the localization contract
 
@@ -124,15 +156,18 @@ semantic selectors or data attributes when QA needs them.
 
 ## Verify the result
 
-1. Run `npm run localization-types` and inspect generated-contract drift.
-2. Add focused structural or formatting tests for variables, selector branches,
+1. For a migration, compare every moved source-English unit and each dynamic
+   branch against the pre-change parity ledger. Resolve any wording difference
+   before treating lint or test success as meaningful.
+2. Run `npm run localization-types` and inspect generated-contract drift.
+3. Add focused structural or formatting tests for variables, selector branches,
    and parse diagnostics. Do not assert specific UI strings.
-3. Run the relevant component tests and `npm run review`.
-4. For runtime or presentation changes, exercise the normal workflow with
+4. Run the relevant component tests and `npm run review`.
+5. For runtime or presentation changes, exercise the normal workflow with
    browser QA. Check representative counts such as `0`, `1`, and `2` when they
    are valid, narrow layouts, clipping or overflow, accessibility output, raw
    message-ID leakage, and `window.__caps`.
-5. Review every new description independently from the English value: confirm
+6. Review every new description independently from the English value: confirm
    that it explains the intended experience rather than paraphrasing the text.
 
 Before finishing, confirm that a translator can determine meaning, variable

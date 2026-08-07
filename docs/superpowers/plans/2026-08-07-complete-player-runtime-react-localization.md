@@ -1,5 +1,17 @@
 # Complete Player-Runtime React Localization
 
+> [!WARNING]
+> **Exact source-English parity is mandatory.** This migration may change where
+> existing player-facing copy lives and how semantic variables reach it, but it
+> may not change the rendered English for any existing state. Preserve every
+> word, capitalization choice, punctuation mark, meaningful space,
+> interpolation, visible label, accessible name, and accessible description.
+> Never rewrite, shorten, delete, or “improve” copy to clear localization lint,
+> make a test pass, simplify a selector, satisfy Fluent syntax, or avoid a typed
+> descriptor. Move the existing utterance faithfully and fix the architecture
+> around it. Any copy change requires separate, explicit user authorization; if
+> exact parity is impossible, stop and report the conflict.
+
 **Status:** Approved implementation plan, expanded for autonomous execution
 
 **Catalog:** `data/tabula/strings.ftl`
@@ -33,6 +45,28 @@ This project phase centralizes the existing English source and makes the player
 runtime translation-ready. It does not add a locale picker, locale persistence,
 translated catalogs, or deployment changes.
 
+### Source-copy parity contract
+
+The source-English output at the branch's starting commit is the baseline for
+this migration. Before editing, record that commit hash. For each task, maintain
+a task-local parity ledger that maps every moved literal or constructed
+utterance to its new Fluent message and semantic variable inputs. The ledger is
+review evidence, not a committed test fixture.
+
+Static copy must match exactly after formatting. For constructed copy, compare
+every finite enum, boolean, presence, and option branch, plus every valid count
+domain at `0`, `1`, and `2` and any additional behavior-changing boundary.
+Include visible text, placeholders, tooltips, image descriptions, accessible
+names, accessible descriptions, error states, and fallback states.
+
+Localization lint and semantic tests prove architecture and behavior; they do
+not prove copy parity and never authorize changing source English. Keep tests
+locale-neutral as required by `AGENTS.md`. Prove parity with the task-local
+ledger, temporary before/after formatter output, direct review of moved values,
+and browser inspection. Do not commit tests whose expectations are English UI
+strings. Existing awkward wording is migrated faithfully; any desired copy edit
+is separate work requiring explicit user authorization.
+
 The persisted battle-prompt shape is part of the deterministic room fold. This
 implementation therefore increments `CURRENT_REDUCER_VERSION` from
 `dreamtides-coop-v17` to `dreamtides-coop-v18`. Version 17 rooms are classified
@@ -47,23 +81,25 @@ compacted base snapshot.
 1. Read this document, `AGENTS.md`, `.llms/skills/localization/SKILL.md`,
    `docs/journey_prototype/localization.md`, and
    `docs/journey_prototype/localization-grammar-audit.md` before editing.
-2. Use the repository-required `wt` worktree workflow. Run `npm install`, then
+2. Record the starting commit as the immutable source-copy parity baseline and
+   create the task-local parity ledger before changing the first string.
+3. Use the repository-required `wt` worktree workflow. Run `npm install`, then
    `scripts/regenerate-assets.sh` once in the fresh worktree as required by the
    repository workflow.
-3. Implement Task 1 and Task 2 first. They define the inventory boundary and
+4. Implement Task 1 and Task 2 first. They define the inventory boundary and
    typed contract used by every later task.
-4. Tasks 3 through 8 may be assigned independently after Task 2. Task 9 depends
+5. Tasks 3 through 8 may be assigned independently after Task 2. Task 9 depends
    on Task 2; Task 10 depends on Task 9. Task 11 follows all migration tasks.
    Task 12 is the integration and acceptance pass.
-5. For every task, add catalog messages and translator descriptions in the same
-   change as the code that consumes them. Run the named focused tests before
-   handing the task back.
-6. Do not use English UI strings as test expectations or selectors. Use roles,
+6. For every task, add catalog messages and translator descriptions in the same
+   change as the code that consumes them. Update and verify that task's parity
+   ledger before handing the task back.
+7. Do not use English UI strings as test expectations or selectors. Use roles,
    state attributes, semantic IDs, event payloads, and formatter diagnostics.
-7. Commit each coherent task with a detailed commit message and push it
+8. Commit each coherent task with a detailed commit message and push it
    immediately. Run the single independent review only after the integrated
    implementation is complete.
-8. Task 9 changes deterministic fold state. Increment the reducer protocol to
+9. Task 9 changes deterministic fold state. Increment the reducer protocol to
    `dreamtides-coop-v18` in the same coherent commit as the prompt-state change;
    do not add version 17 to the compatible-version set or attempt mixed-version
    room participation.
@@ -475,6 +511,10 @@ before the migrations spread across the tree.
 8. Update the grammar audit with the exact runtime boundary, authored RON/data
    exclusions, and enforcement command. Remove stale TOML terminology where it
    describes catalogs that are RON in the current tree.
+9. Treat each lint finding as a location/structure defect only. Closing a
+   finding by deleting, shortening, rewording, repunctuating, or changing the
+   capitalization of existing player copy fails the task even when lint and
+   tests pass. Link every migrated finding to its parity-ledger entry.
 
 **Focused verification:** run the new rule and inventory tests, the existing
 manual-count rule test, ESLint against representative included and excluded
@@ -961,7 +1001,15 @@ architecture.
    protected inventory.
 6. Run reducer-version, Room Gate, `LOAD_STATE`, compaction-codec, and replay
    tests proving the v18 boundary and descriptor persistence contract.
-7. Verify generated files are synchronized and `git diff --check` is clean.
+7. Complete the source-copy parity audit against the recorded starting commit.
+   For each ledger entry, compare the old construction with temporary formatted
+   output for every valid semantic branch and required numeric boundary. Record
+   the comparison result without converting English output into a committed test
+   expectation. Any mismatch is a release blocker regardless of lint and test
+   status.
+8. Finalize the parity ledger and retain it as required input to the independent
+   review after browser QA.
+9. Verify generated files are synchronized and `git diff --check` is clean.
 
 **Browser QA:** use `/opt/homebrew/bin/agent-browser` against a Vite port other
 than 5173, with a unique session. Assert `location.href` and viewport width
@@ -984,11 +1032,15 @@ For each workflow, verify controls remain actionable, state transitions and
 semantic attributes are correct, text and accessible descriptions are non-empty,
 no raw Fluent IDs are visible, no text is clipped or overlapped at either
 viewport, and `window.__caps` contains no render errors, unhandled rejections, or
-console errors.
+console errors. Compare the rendered English and accessibility output with the
+parity ledger for the exercised states; browser QA is not permission to accept
+copy drift that appears visually harmless.
 
 Request one independent review after automated and browser QA. Give the reviewer
-this plan and the full branch diff. Verify each finding against the code, fix
-confirmed issues, then commit with a detailed description and push immediately.
+this plan, the parity ledger, and the full branch diff. Require the reviewer to
+check that moved source English was preserved, not merely that the localization
+architecture is valid. Verify each finding against the code, fix confirmed
+issues, then commit with a detailed description and push immediately.
 
 ## Dependency and Parallelization Map
 
@@ -1014,6 +1066,11 @@ integration. This avoids high-conflict generated-file edits.
 
 ## Acceptance Criteria
 
+- Every existing player-visible and accessibility-only source-English utterance
+  matches the recorded pre-migration output across all valid semantic branches.
+  No lint, type, Fluent, test, layout, or implementation concern has been
+  resolved by changing existing wording, capitalization, punctuation,
+  meaningful spacing, interpolation, or fallback copy.
 - The protected player-runtime scope contains no code-authored English
   translation units outside `strings.ftl`.
 - Every remaining raw string in scope is demonstrably a machine token,
