@@ -1,117 +1,121 @@
 # Dreamtides
 
 Dreamtides is a single-player roguelike deckbuilding game. The player builds a
-deck over the course of a **Dream Journey**, then uses that deck in a series of
-card-game **Battles**. Journey decisions determine which Cards and upgrades are
-available in later Battles; Battle results determine whether the journey
-continues.
+deck over the course of a [**dream journey**](#a-dream-journey), then uses that
+deck in a series of card-game [**battles**](#battles). Journey decisions
+determine which cards and upgrades are available in later battles; battle
+results determine whether the journey continues.
 
 This chapter is an introduction to the game for new contributors. It explains
-how journeys and Battles fit together, introduces the main game objects, and
+how journeys and battles fit together, introduces the main game objects, and
 defines the shared conventions used by the more detailed chapters in this book.
 
-## A Dream Journey
+## A dream journey
 
-A Dream Journey is one complete run, from Dream Avatar selection to victory or
-defeat. The main activity during a journey is building and refining the deck
-that the player brings into each Battle.
+A dream journey is one complete run, from selecting a
+[**dream avatar**](#dream-avatars-and-dreamsigns)—the character that leads the
+player's deck—to victory or defeat. The main activity during a journey is
+building and refining the deck that the player brings into each battle.
 
-At the start of a journey, the player chooses one of three **Dream Avatars**.
-The selected Dream Avatar supplies a fixed starter deck and starting Essence. It
-also influences the Cards, Dreamsigns, and rewards that can appear during the
-run. Once the journey has been assembled, the player enters its first
-dreamscape.
+At the start of a journey, the player chooses one of three dream avatars. The
+selected dream avatar supplies a fixed starter deck and starting
+[essence](#resources-and-scope). It also influences the [cards](#cards),
+rewards, and [**dreamsigns**](#dream-avatars-and-dreamsigns)—passive effects
+collected during the journey—that can appear during the run. Once the journey
+has been assembled, the player enters its first dreamscape.
 
 The journey takes place on the **Dream Atlas**, a branching map of
-**dreamscapes**. Each dreamscape contains several **Sites**. Sites let the
-player draft or buy Cards, remove unwanted Cards, modify or duplicate Cards,
-gain Dreamsigns, collect Essence, or resolve other encounters. Every dreamscape
-ends with a Battle that must be completed before the player can continue along
+**dreamscapes**. Each dreamscape contains several **sites**. Sites let the
+player draft or buy cards, remove unwanted cards, modify or duplicate cards,
+gain dreamsigns, collect essence, or resolve other encounters. Every dreamscape
+ends with a battle that must be completed before the player can continue along
 the Atlas.
 
 The normal journey loop is:
 
 1. Choose the next reachable dreamscape on the Dream Atlas.
-2. Visit its Sites to change the deck or other journey state.
-3. Fight the dreamscape's Battle using the resulting deck.
-4. Apply the Battle result and continue to the next dreamscape.
+2. Visit its sites to change the deck or other journey state.
+3. Fight the dreamscape's battle using the resulting deck.
+4. Apply the battle result and continue to the next dreamscape.
 
-The final destination contains the journey's boss Battle. Winning that Battle
+The final destination contains the journey's boss battle. Winning that battle
 wins the journey. A journey normally ends in defeat when the player loses a
-Battle.
+battle.
 
-Journey state includes the current deck, selected Dream Avatar, owned
-Dreamsigns, Essence, Atlas progress, completed Sites, and effects that apply to
-future Sites or Battles. These values persist between Battles. Details of Atlas
-generation, Site behavior, rewards, shops, and deckbuilding belong to their
+Journey state includes the current deck, selected dream avatar, owned
+dreamsigns, essence, Atlas progress, completed sites, and effects that apply to
+future sites or battles. These values persist between battles. Details of Atlas
+generation, site behavior, rewards, shops, and deckbuilding belong to their
 respective chapters.
 
 ## Battles
 
-A Battle is a two-player card game between the player and an automated opponent.
-Each participant brings a deck and a Dream Avatar. Dreamsigns and other journey
-effects may also change the initial Battle state or apply rules throughout the
+A battle is a two-player card game between the player and an automated opponent.
+Each participant brings a deck and a dream avatar. Dreamsigns and other journey
+effects may also change the initial battle state or apply rules throughout the
 match.
 
-Players use **Character** and **Event** Cards:
+Players use two main types of [cards](#cards):
 
-- Characters enter play and remain there until removed. Each Character has
-  **Spark**, the value used to resolve Challenges against opposing Characters.
-- Events produce an effect when they resolve, then move to the Void.
+- **Characters** enter play and remain there until removed. Each character has
+  [**spark**](#resources-and-scope), the value used to resolve challenges
+  against opposing characters.
+- **Events** produce an effect when they resolve, then move to the void.
 
-Cards are played by spending **Energy**. Energy comes from the shared
-**Dreamwell**, a deck of special Cards used by both players. Drawing from the
-Dreamwell increases a player's Energy production and may provide an additional
-effect. The Dreamwell replaces the dedicated resource Cards used by many other
-card games.
+Cards are played by spending [**energy**](#resources-and-scope). Energy comes
+from the shared **Dreamwell**, a deck of special cards used by both players.
+Drawing from the Dreamwell increases a player's energy production and may
+provide an additional effect. The Dreamwell replaces the dedicated resource
+cards used by many other card games.
 
 Characters occupy a staggered play area with front and back ranks. During each
-turn, the active player positions front-rank Characters as challengers and the
-opponent positions Characters across from them as blockers. A blocked Challenge
-compares the two Characters' Spark; an unblocked Character scores Points equal
-to its Spark. The first player to reach the Battle's target number of Points
-wins.
+turn, the active player positions front-rank characters as challengers and the
+opponent positions characters across from them as blockers. A blocked challenge
+compares the two characters' spark; an unblocked character scores
+[points](#resources-and-scope) equal to its spark. The first player to reach the
+battle's target number of points wins.
 
-The Battle Rules chapters define turn structure, zones, timing, costs,
-Challenges, keywords, created Cards, and victory. For this chapter, the
-important boundary is that a Battle is built from the current journey and has
-its own temporary state. Hands, zones, current Energy, counters, temporary
-effects, and Character positions belong to the Battle. Changes to the journey
+The battle rules chapters define turn structure, zones, timing, costs,
+challenges, keywords, created cards, and victory. For this chapter, the
+important boundary is that a battle is built from the current journey and has
+its own temporary state. Hands, zones, current energy, counters, temporary
+effects, and character positions belong to the battle. Changes to the journey
 deck occur only when a journey rule explicitly makes them persistent.
 
-When a Battle ends, its result returns to the surrounding journey. A victory may
-grant Essence or other rewards and unlock the next Atlas choice. A defeat
+When a battle ends, its result returns to the surrounding journey. A victory may
+grant essence or other rewards and unlock the next Atlas choice. A defeat
 normally ends the run. Battle-local state is discarded once its outcome has been
 applied.
 
 ## Cards
 
-Cards are the main rules objects shared by journeys and Battles. A Card has a
-name, art, type, Energy cost, and rules text. It may also have a subtype, Spark,
-timing properties, and an optional status.
+**Cards** are the main rules objects shared by journeys and battles. A card has
+a name, art, type, energy cost, and rules text. It may also have a subtype,
+spark, timing properties, and an optional status.
 
-Dreamtides has two main Card types:
+Dreamtides has two main card types:
 
-- A **Character** has Spark and a subtype such as Warrior, Guide, or Spirit
-  Animal. Subtypes are open-ended rules tags; other Cards can refer to them.
-- An **Event** has an effect that occurs when the Card resolves. Events usually
-  have no Spark and may omit a subtype.
+- A character has spark and a subtype such as warrior, guide, or spirit animal.
+  Subtypes are open-ended rules tags; other cards can refer to them.
+- An event has an effect that occurs when the card resolves. Events usually have
+  no spark and may omit a subtype.
 
-A Card can have a fixed Energy cost, a variable `X` cost, or multiple ordered
-cost components. Character Spark can likewise be fixed or variable. An absent
-Spark value is different from zero Spark: Events normally have no Spark, while a
-Character with zero Spark still has the stat.
+A card can have a fixed energy cost, a variable `X` cost, or multiple ordered
+cost components. Character spark can likewise be fixed or variable. An absent
+spark value is different from zero spark: events normally have no spark, while a
+character with zero spark still has the stat.
 
-Cards may be **Fast** or **Interrupts**, which changes when they can be played.
-Every Interrupt is also Fast. Some Events have **Reclaim**, allowing them to be
-played from the Void. The Battle Rules define the exact timing and behavior of
+Cards may be **fast** or **interrupts**, which changes when they can be played.
+Every interrupt is also fast. Some events have **reclaim**, allowing them to be
+played from the void. The battle rules define the exact timing and behavior of
 these properties.
 
-An optional Card status identifies Cards that particular systems treat
-differently. Current statuses include Starter, Legendary, Special, and Tutorial.
+An optional card status identifies cards that particular systems treat
+differently. Current statuses include starter, legendary, special, and tutorial.
 Statuses are unordered labels, not a rarity scale. A system that uses a status
-defines its meaning; for example, Starter marks Cards used to assemble a starter
-deck.
+defines its meaning; for example, starter marks cards used to assemble a starter
+deck. The distinction between a base card and a modified copy is described in
+[Card definitions and instances](#card-definitions-and-instances).
 
 ### Rules text and symbols
 
@@ -119,113 +123,111 @@ Card rules text uses a shared vocabulary and symbols:
 
 | Symbol | Meaning                       |
 | ------ | ----------------------------- |
-| `●`    | Energy                        |
-| `✦`    | Spark                         |
-| `⍟`    | Points                        |
-| `⧗`    | Counters stored by a Card     |
-| `☾`    | Exhaust as an activation cost |
-| `▸`    | A named trigger               |
-| `❖`    | Fast                          |
-| `❖❖`   | Interrupt                     |
+| `●`    | energy                        |
+| `◆`    | essence                       |
+| `✦`    | spark                         |
+| `⍟`    | points                        |
+| `⧗`    | counters stored by a card     |
+| `☾`    | exhaust as an activation cost |
+| `▸`    | a named trigger               |
+| `❖`    | fast                          |
+| `❖❖`   | interrupt                     |
 
-Essence uses `◆` when it appears in rules or reward text. The rules glossary
-defines shared keywords such as Reclaim, Materialize, Dissolve, and Foresee. A
-glossary definition may depend on its surrounding text; for example, a printed
-Reclaim cost should be included when explaining that instance of Reclaim.
+The rules glossary defines shared keywords such as reclaim, materialize,
+dissolve, and foresee. A glossary definition may depend on its surrounding text;
+for example, a printed reclaim cost should be included when explaining that
+instance of reclaim.
 
 Rules text belongs to a specific game object and is interpreted as one complete
 block. Presentation may replace symbols with icons and expose glossary
 definitions, but it does not alter the authored rule.
 
-## Dream Avatars and Dreamsigns
+## Dream avatars and dreamsigns
 
-A **Dream Avatar** is the character that leads a deck. Its definition includes a
-name, title, ability, starting Essence, visual representation, and signature
-Cards. The player selects one Dream Avatar for a journey, and both participants
-bring one into each Battle. A Dream Avatar begins a Battle in play rather than
+A dream avatar is the character that leads a deck. Its definition includes a
+name, title, ability, starting essence, visual representation, and signature
+cards. The player selects one dream avatar for a journey, and both participants
+bring one into each battle. A dream avatar begins a battle in play rather than
 being drawn from the deck.
 
-Dream Avatars connect the journey and Battle layers. During journey setup, the
-selected Avatar determines the starter deck and influences the pools used to
-generate later Cards and Dreamsigns. During Battle, its ongoing, triggered, or
+Dream avatars connect the journey and battle layers. During journey setup, the
+selected avatar determines the starter deck and influences the pools used to
+generate later cards and dreamsigns. During battle, its ongoing, triggered, or
 activated ability helps define the deck's strategy.
 
-A **Dreamsign** is a passive effect collected during a journey. Dreamsigns can
-affect journey systems, Battle rules, or both. Each has a stable ID, name, rules
-text, and art. An acquired Dreamsign remains with the journey unless a rule
+A dreamsign is a passive effect collected during a journey. Dreamsigns can
+affect journey systems, battle rules, or both. Each has a stable ID, name, rules
+text, and art. An acquired dreamsign remains with the journey unless a rule
 replaces or removes it.
 
 Dreamsign acquisition, capacity, and offer generation belong to the journey
-economy and Site chapters. The system affected by a Dreamsign owns the exact
+economy and site chapters. The system affected by a dreamsign owns the exact
 timing of its effect.
 
 ## Resources and scope
 
 Dreamtides uses several numeric resources. Each belongs to a particular scope:
 
-- **Essence** is the journey currency. Sites and Battle rewards grant it; shops
-  and other Sites spend it.
-- **Energy** is the resource spent to play Cards and activate abilities during a
-  Battle. The Dreamwell increases each player's Energy production.
-- **Spark** is a Character's power in Challenges.
-- **Points** measure progress toward winning a Battle.
-- **Counters** are stored by individual Battle Cards and spent or inspected by
+- **Essence** is the journey currency. Sites and battle rewards grant it; shops
+  and other sites spend it.
+- **Energy** is the resource spent to play cards and activate abilities during a
+  battle. The Dreamwell increases each player's energy production.
+- **Spark** is a character's power in challenges.
+- **Points** measure progress toward winning a battle.
+- **Counters** are stored by individual battle cards and spent or inspected by
   their rules.
 
-These values are not interchangeable. Journey Essence is not Battle Energy. A
-persistent Spark increase applied to one journey Card is distinct from a
-temporary Spark increase applied to its Battle counterpart. Implementations must
+These values are not interchangeable. Journey essence is not battle energy. A
+persistent spark increase applied to one journey card is distinct from a
+temporary spark increase applied to its battle counterpart. Implementations must
 update the scope that owns the value.
 
 ## Card definitions and instances
 
-The remaining sections define technical conventions shared by systems that
-create, modify, or display Cards.
-
-A **Card definition** is the authored base Card. Its definition ID is a UUID and
-does not change when a Card is acquired, copied, or modified. The Card's name is
+A **card definition** is the authored base card. Its definition ID is a UUID and
+does not change when a card is acquired, copied, or modified. The card's name is
 display text, not identity. Names are allowed to collide, so lookup, equality,
 grouping, and deduplication always use IDs.
 
-A **Card instance** is one specific Card based on a definition. It has an
+A **card instance** is one specific card based on a definition. It has an
 instance ID in addition to its definition ID. If a deck contains two copies of
 the same definition, the copies have different instance IDs. A modification to
 one copy does not affect the other or the base definition.
 
-Journey deck entries are persistent Card instances. When a deck entry is used in
-a Battle, the Battle creates its own Card instance and records which journey
-entry it came from. This lets Battle rules track each copy independently without
+Journey deck entries are persistent card instances. When a deck entry is used in
+a battle, the battle creates its own card instance and records which journey
+entry it came from. This lets battle rules track each copy independently without
 putting zones, counters, and temporary effects into the journey deck.
 
-Copying a Card creates a new instance with the same definition ID. Created Cards
-also have a definition ID identifying the base Card they started from and a new
-instance ID identifying the created object. Creating the same Figment twice, for
-example, produces two Battle instances of the same Figment definition.
+Copying a card creates a new instance with the same definition ID. Created cards
+also have a definition ID identifying the base card they started from and a new
+instance ID identifying the created object. Creating the same figment twice, for
+example, produces two battle instances of the same figment definition.
 
 Instance IDs that become part of game state must be reproducible from that
 state. Clocks and unrelated random UUIDs cannot determine gameplay identity.
 
-## Persistent modifications and effective Cards
+## Persistent modifications and effective cards
 
-Journey effects can modify one deck entry without changing its base Card
-definition. Persistent modifications include Transfigurations, type or subtype
-changes, keyword changes, Energy-cost reductions, Reclaim changes, and Spark
+Journey effects can modify one deck entry without changing its base card
+definition. Persistent modifications include transfigurations, type or subtype
+changes, keyword changes, energy-cost reductions, reclaim changes, and spark
 bonuses.
 
-An **effective Card** is the resolved version of a Card in its current context.
+An **effective card** is the resolved version of a card in its current context.
 For a journey deck entry, resolution starts from the base definition and applies
-the entry's persistent modifications. A Battle can then apply Battle-local
+the entry's persistent modifications. A battle can then apply battle-local
 changes to its own instance. Each system's detailed chapter defines the
 algorithms and order for the changes it owns.
 
-Presentation receives the complete effective Card. A compact Card and its full
+Presentation receives the complete effective card. A compact card and its full
 inspection view must use the same resolved values so they cannot disagree about
-cost, type, Spark, or rules text. The effective Card is derived data; the base
-definition, journey entry, and Battle instance remain the owners of state.
+cost, type, spark, or rules text. The effective card is derived data; the base
+definition, journey entry, and battle instance remain the owners of state.
 
 ## Content and deterministic behavior
 
-Cards, Dream Avatars, Dreamsigns, Figments, and other authored objects are
+Cards, dream avatars, dreamsigns, figments, and other authored objects are
 defined in data catalogs. Catalog IDs are the stable interface between authored
 content and game systems. Rules should resolve names and visual data from those
 IDs only when needed for presentation.
@@ -238,5 +240,5 @@ evolve independently.
 
 Game rules determine legal actions and resulting state. Presentation displays
 that state and collects player intent. It does not choose random outcomes,
-identify Cards by name, calculate persistent modifications, or own state needed
+identify cards by name, calculate persistent modifications, or own state needed
 to continue the game.

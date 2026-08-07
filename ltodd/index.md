@@ -16,16 +16,16 @@ supplements provide deeper implementation treatment where useful.
 
 Directory: `/dreamtides`
 
-An introduction to Dreamtides for new contributors: how Dream Journeys and
-Battles fit together, how a run progresses, and the roles of Cards, Dream
-Avatars, Dreamsigns, the Dreamwell, and game resources. This part also defines
-the shared conventions for Card identity, persistent modifications, effective
-Cards, created objects, authored content, and deterministic behavior. Specific
+An introduction to Dreamtides for new contributors: how dream journeys and
+battles fit together, how a run progresses, and the roles of cards, dream
+avatars, dreamsigns, the Dreamwell, and game resources. This part also defines
+the shared conventions for card identity, persistent modifications, effective
+cards, created objects, authored content, and deterministic behavior. Specific
 gameplay algorithms appear with the systems that use them.
 
 1. **Primary:** [Dreamtides](dreamtides/dreamtides.md) — Read this chapter when
    you are new to the project and need an overview of the game, the relationship
-   between journeys and Battles, its primary game objects, and the technical
+   between journeys and battles, its primary game objects, and the technical
    conventions shared by later parts.
 
 ## Part II: The Cumulus Design System
