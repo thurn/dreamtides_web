@@ -90,32 +90,25 @@ adapters need. Narrow metadata leaves such as Exploration template variables
 may use a dynamic value type when their schema deliberately permits strings,
 integers, booleans, and small string-keyed objects.
 
-The current Cards candidate intentionally normalizes two historical TOML
-representations. The energy cost for UUID
-`29d25251-8b42-4d3d-97e6-6c3abaabd9a2` and the spark for UUID
-`229ab3a1-3720-41a2-924c-8fe112188f8e` are quoted numeric strings in TOML but
-are `Fixed(2)` in RON. Both representations produce the same existing
-TypeScript card result. Cards parity therefore compares the output of the
-existing card compiler, including energy and spark normalization, rather than
-requiring raw parsed TOML types to match. Other datasets use parsed-value
-parity unless their adapter documents an equally specific semantic
-normalization.
+The energy cost for UUID `29d25251-8b42-4d3d-97e6-6c3abaabd9a2` and the spark
+for UUID `229ab3a1-3720-41a2-924c-8fe112188f8e` are mistakenly quoted numeric
+strings in TOML but are `Fixed(2)` in RON. A standalone data-cleanup commit
+corrects those TOML values to numeric `2` before the Cards parity baseline is
+captured. The migration itself then requires parsed-value parity without an
+adapter-specific exception.
 
 The candidates are sufficient for read/build conversion and editor-backed
 migration without source schema changes. Editor controls without a corresponding
 source field are rejected as described in Editor operation vocabulary.
 
-Read, build, review, watch, and deployment conversion are feasible with the
-official parser and explicit adapters. Source-preserving editor mutation is the
-highest-risk portion. The official parser supplies semantic values and spanned
-errors rather than a lossless concrete syntax tree. In an August 2026 spike,
-`ron-edit` 0.2 parsed Draft but failed on the named `CardDefinition` records,
-while `tree-sitter-ron` 0.2 parsed Draft and the Exploration body after a
-preamble shim but reported an error on the raw Unicode rules strings in Cards.
-Neither dependency is an acceptable editor foundation as-is. The editor phase
-therefore starts with a dedicated span-indexing prototype against all three
-production candidates and does not cut over an editor-backed dataset until that
-prototype passes the preservation tests in this document.
+Read, build, review, watch, deployment conversion, and typed editor mutation are
+feasible with the official parser, serializer, and explicit adapters. Editor
+saves may normalize a complete RON document to the project's standard format;
+byte-for-byte preservation of nonstandard formatting is not a requirement. The
+editor phase starts with a round-trip prototype against all three production
+candidates to select official serialization or an existing formatter that
+produces deterministic, readable RON. The repository does not implement or
+maintain its own RON parser.
 
 ## Decisions
 
@@ -129,11 +122,10 @@ prototype passes the preservation tests in this document.
    `data/tabula/cards.ron` generates `data/tabula/cards.toml`. Existing
    TypeScript readers retain their paths and source-facing key names during the
    migration.
-4. **Canonical data may use RON's full typed value model.** Dataset source
-   schemas may use named structs, enums, tuples, options, ranges, chars, byte
-   strings, maps, heterogeneous collections, numeric forms, and pinned official
-   extensions. Dataset adapters lower those values into the established TOML
-   compatibility contract.
+4. **Canonical data uses typed RON directly.** Dataset source schemas may use
+   constructs supported by the pinned `ron` crate. When a schema adopts a value
+   that has no direct TOML equivalent, its adapter adds a reasonable lowering
+   for that concrete use case.
 5. **Authored fields use snake_case.** Dataset adapters explicitly map RON field
    paths to the existing TOML schema. Conversion never guesses whether an
    underscore should become a hyphen or preserve an underscore.
@@ -204,9 +196,9 @@ repository.
 
 Every generated TOML begins with a short generated-file warning naming its RON
 source, source SHA-256, compiler build version, adapter version, and
-regeneration command. It is valid input to `smol-toml` and makes accidental
-direct edits obvious. The warning is the only compiler-added content; data
-ordering and values come from RON.
+manifest-entry fingerprint, plus the regeneration command. It is valid input to
+`smol-toml` and makes accidental direct edits obvious. The warning is the only
+compiler-added content; data ordering and values come from RON.
 
 A clean checkout may have no generated game-data TOML. Supported development,
 review, build, and deployment entry points materialize it before TypeScript
@@ -245,18 +237,10 @@ the domain directly instead of imitating TOML. Struct fields use snake_case;
 named types and enum variants follow Rust identifier conventions.
 
 Any RON construct supported by the pinned parser may be used when the dataset's
-Rust source schema and compatibility adapter define its meaning. This includes:
-
-- named and anonymous structs;
-- unit, newtype, tuple, and struct enum variants;
-- tuples and tuple structs;
-- explicit `Some`/`None` values;
-- ranges, chars, and byte strings;
-- maps with typed non-string keys;
-- lists containing typed heterogeneous enum variants;
-- the numeric forms accepted by RON; and
-- official RON extensions enabled by the source document and admitted by the
-  dataset schema.
+Rust source schema and compatibility adapter define its meaning. The compiler
+does not predefine compatibility encodings for constructs that no canonical
+dataset uses. A dataset adds the necessary Rust lowering when its schema first
+adopts such a construct.
 
 The compiler does not require these values to have a direct TOML equivalent.
 It deserializes the canonical document into the typed source model, then the
@@ -309,26 +293,10 @@ An adapter defines:
 - any representation conversion required by the current TOML contract.
 
 The adapter is normal Rust code from the typed source model to a typed or
-ordered TOML compatibility model. It may use a direct representation where RON
-and TOML align, or deliberately lower a richer value:
-
-| RON source construct | Possible compatibility representation |
-| --- | --- |
-| Named struct | TOML table; the type name is validated and may be omitted |
-| Enum variant | Existing string discriminator or discriminated TOML table |
-| Tuple or tuple struct | TOML array, positional table, or named table |
-| `Some(value)` / `None` | Value, field omission, or declared sentinel |
-| Range | Start/end/inclusive table or the dataset's existing compact form |
-| Char | One-character string |
-| Byte string | Integer array, hexadecimal string, or base64 string |
-| Non-string map key | Reversible encoded key or ordered key/value entries |
-| Heterogeneous enum list | Mixed TOML array or discriminated table entries |
-| Numeric value outside consumer range | Declared string or structured value |
-
-These are available strategies, not global encodings. The dataset adapter
-chooses the representation that matches its existing TypeScript contract. A
-new dataset is equally free to establish a new TOML contract, provided its
-TypeScript compiler validates that contract explicitly.
+ordered TOML compatibility model. It uses a direct representation where RON and
+TOML align and adds an explicit, dataset-specific representation where they do
+not. The adapter implements only the source fields and variants in that
+dataset's declared schema and preserves its existing TypeScript contract.
 
 Mappings are total. Compilation fails when a source field or variant is not
 covered, two source values target the same generated path, or the lowered value
@@ -402,9 +370,9 @@ Node launcher builds the locked crate on cache miss and invokes the cached
 binary directly for subsequent watch and editor operations.
 
 Compilation reports dataset ID, source path, dataset schema version,
-compatibility-adapter version, source hash, generated hash, duration, and
-whether the output differs. It never emits game data values or authored copy
-into routine logs.
+compatibility-adapter version, source hash, manifest-entry fingerprint,
+generated hash, duration, and whether the output differs. It never emits game
+data values or authored copy into routine logs.
 
 ## Deterministic conversion
 
@@ -447,10 +415,13 @@ also prevents a semantically invalid RON save from disrupting a running local
 game that can continue using its last valid generated data.
 
 On command startup, missing generated TOML is normal and triggers compilation.
-A generated output whose recorded source hash differs is stale and triggers
-compilation. Supported standalone data scripts invoke a lightweight freshness
-assertion before their first read; an absent or mismatched generated header
-fails with a message naming the command that materializes game data.
+A generated output is stale when any part of its recorded generation
+fingerprint differs: source SHA-256, compiler build version, compatibility
+adapter version, or relevant manifest entry. The compiler build version changes
+whenever the Rust crate sources or lockfile that can affect output change.
+Supported standalone data scripts invoke a lightweight freshness assertion
+before their first read; an absent or mismatched generated header fails with a
+message naming the command that materializes game data.
 
 ## Local development and hot reload
 
@@ -528,8 +499,11 @@ only to ignore an old response.
 Every save includes both revisions. The browser maintains one promise queue per
 selected source and sends saves in order, updating `sourceRevision` after each
 confirmation. Optimistic UI may continue while a save is queued. A failed save
-pauses that queue, discards later unsubmitted operations, and reloads confirmed
-data before accepting another edit.
+pauses submission and reloads confirmed server data while preserving later
+local drafts and unsent operations in their current editable state. Those
+operations are not submitted against the new revision automatically; the user
+may retry or cancel them after reviewing the confirmed state. No failed or
+stale save silently discards a local draft.
 
 The middleware also serializes writes by dataset and acquires the repository
 transaction lock. After acquiring the lock it rereads the canonical sources and
@@ -629,12 +603,11 @@ For each operation batch, the middleware and Rust tool perform these steps:
    rejects duplicate identities before locating a target.
 4. Rust applies the operation to an in-memory clone to produce the exact
    intended typed result.
-5. The span index creates a non-overlapping byte replacement plan against the
-   original staged source and applies replacements from highest offset to
-   lowest.
-6. Rust strictly deserializes the patched source and requires it to equal the
-   intended typed result. It also verifies that bytes outside the declared
-   replacement ranges are unchanged.
+5. Rust serializes the intended result through the pinned editor formatting
+   strategy into staged RON. This may normalize the complete document.
+6. Rust strictly deserializes the serialized source, requires it to equal the
+   intended typed result, and requires a second serialization to be
+   byte-identical to the first.
 7. Rust compiles staged TOML; Node runs the existing TypeScript compilers,
    reference checks, and derived-JSON generation against the staged paths.
 8. The publication transaction commits all canonical RON, template or registry
@@ -645,61 +618,41 @@ Any failure before publication leaves working-tree sources unchanged. A
 publication failure follows the journal and recovery contract in Deterministic
 conversion. Watch and HMR notifications are emitted only after confirmation.
 
-### Span index and patch rules
+### RON serialization and edit rules
 
-The span index is a lossless, byte-oriented companion to the official semantic
-parser. Its lexer recognizes the pinned RON grammar: extension attributes,
-identifiers, every numeric form, characters, ordinary and raw strings, byte
-strings, range tokens, commas, whitespace, line comments, and nested block
-comments. Its delimiter tree records exact spans for structs and enum payloads,
-sequence elements, map entries, named fields, field values, separators, and
-leading and trailing trivia. UTF-8 byte offsets are converted to line and
-column only for diagnostics.
+Editor operations traverse the strictly typed source model. Cards are located
+only in root `cards` by their direct UUID. Exploration encounters are located
+only in root `encounters` by direct `card_id`; actions are then selected by
+validated slot and action ID. Missing and duplicate targets are errors.
 
-Schema-specific traversal interprets that tree. Cards are located only as
-elements of root `cards` whose direct `id` field equals the requested UUID.
-Exploration encounters are located only in root `encounters` by direct
-`card_id`; actions are then selected by validated slot and action ID. A UUID
-inside comments, prose, rules, template metadata, or a nested object is never a
-locator. Missing and duplicate targets are errors.
+The editor prototype selects either the official `ron` serializer with a pinned
+pretty configuration or an existing maintained formatter. The selected strategy
+must produce deterministic, readable output for all three production candidates
+and may reformat the complete affected document. The repository does not build
+a lexer, concrete syntax tree, delimiter index, or byte-patching implementation.
 
-Patch construction follows fixed rules:
+Typed mutation follows fixed rules:
 
-- An existing scalar, collection, enum, or struct field edit replaces only the
-  field's value span. The field name, comma, indentation, and surrounding
-  comments remain untouched.
-- A nested edit, such as Character spark or art crop, replaces the narrowest
-  existing nested value. A variant change replaces the containing enum value,
-  not the complete card record.
-- A missing field is inserted according to the source schema's canonical field
-  order, immediately before the next present field's leading trivia. If there
-  is no later field, it is inserted before the struct's trailing trivia and
-  closing delimiter. Indentation and newline style come from sibling fields.
-- Editor operations write explicit `None` or empty collections for edited
-  default values. They do not delete fields, so a save cannot orphan a field
-  comment.
-- Exploration action saves replace only the values of `label`, `effect_text`,
-  `effect`, and `template`. The action ID and other top-level field trivia
-  remain untouched. An attempted action-ID change is rejected.
-- If a replacement span itself contains a comment, the patch proceeds only
-  when the operation can update narrower child values and retain that comment.
-  A shape change that would discard or ambiguously relocate it fails with
-  `COMMENT_CONFLICT` and names the source path. There is no whole-document or
-  whole-record serialization fallback.
-- A semantic no-op returns the existing bytes and does not trigger TOML, JSON,
-  watcher, or HMR writes.
+- Each operation changes only its declared typed fields. Unrelated typed values,
+  collection order, and stable identities remain equal before and after the
+  operation.
+- Dataset serialization policy consistently handles omitted defaults, explicit
+  options, and empty collections. Semantic typed equality, rather than the
+  previous spelling of those values, is authoritative.
+- Exploration action saves may change `label`, `effect_text`, `effect`, and
+  `template`. An attempted action-ID change is rejected.
+- A semantic no-op does not publish RON, TOML, JSON, watcher, or HMR writes.
 
-New values use dataset formatting rules. Card rules use a raw string with the
-minimum safe hash delimiter. One-line prose, labels, and effect text use escaped
-strings; multiline values use raw strings. Tags remain inline string lists,
-crop remains an inline anonymous struct, and named enum or struct payloads use
-four-space indentation with trailing commas. Existing values keep their
-authored spelling and layout until that value is edited.
+The prototype documents how the selected serializer or formatter handles
+comments. Authoring guidance that must survive serialization is moved to Rust
+schema documentation or another formatter-supported location before that
+dataset's editor cutover. Arbitrary whitespace, comments, and nonstandard
+spelling are not byte-preservation contracts.
 
-Before editor migration begins, the span index must reproduce all three current
-RON candidates byte-for-byte and pass mutation fixtures covering every rule
-above. A third-party lossless parser may replace it only after passing the same
-corpus and mutation suite.
+Before editor migration begins, all three current RON candidates must survive a
+semantic round trip, serialize idempotently, preserve string code points and
+collection order, and receive a reviewed formatting diff. Editor cutover is
+blocked on those results, not on byte identity with the input.
 
 ### Editor error contract
 
@@ -708,7 +661,6 @@ Editor failures use stable codes and source paths:
 - `STALE_SOURCE` (409) for a revision mismatch;
 - `RECORD_NOT_FOUND` (404) for a missing stable identity;
 - `FIELD_NOT_APPLICABLE` or `INVALID_EDIT` (400) for an invalid operation;
-- `COMMENT_CONFLICT` (409) when preservation prevents a shape-changing edit;
 - `MALFORMED_SOURCE` or `COMPATIBILITY_VALIDATION_FAILED` (422) for RON,
   adapter, TOML, or TypeScript validation failures; and
 - `PUBLICATION_FAILED` (500) for a transaction failure, with recovery status
@@ -741,13 +693,10 @@ The proof must establish deterministic TOML on macOS and Linux, structured
 errors, staged TypeScript validation, content-aware publication, and full
 semantic parity before any of the three files becomes canonical. Draft can cut
 over after this read/build proof. Cards and Exploration additionally require the
-editor feasibility gate and editor integration tests.
-
-A synthetic source-schema fixture covers typed constructs absent from these
-three catalogs, including tuple variants, explicit options, ranges, typed map
-keys, chars, byte strings, heterogeneous enum collections, and numeric edge
-cases. It proves that rich RON values pass through typed adapter lowering rather
-than a TOML-shaped generic value restriction.
+editor round-trip gate and editor integration tests. Repository tests cover the
+source constructs and compatibility mappings that canonical datasets actually
+use; the `ron` crate remains responsible for its parser's general language
+coverage.
 
 ### Read-only catalogs
 
@@ -786,15 +735,17 @@ when they do not change the same compiler, generated file, or editor boundary.
 Goal: compile declared RON datasets into deterministic staged TOML.
 
 - Freeze manifest, source-version, header, diagnostic, and exit-code contracts.
-- Add fixtures for every supported RON value shape and numeric boundary.
+- Add fixtures for the source shapes and adapter mappings used by the three
+  representative datasets.
 - Create the pinned Rust workspace, manifest loader, and dataset dispatch.
 - Implement typed Draft, Cards, and Exploration compatibility adapters.
 - Implement deterministic TOML serialization and atomic staging.
 - Add unit, property, golden, invalid-input, and determinism tests.
 - Benchmark all three complete RON candidates.
 
-Exit criteria: `compile` and `compile-all` produce stable staged TOML for all
-three candidates and return the specified structured diagnostics on failure.
+Exit criteria: `compile` and `compile --dataset <id>` produce stable staged TOML
+for all three candidates and return the specified structured diagnostics on
+failure.
 
 ### Milestone 2: Integrate generation with TypeScript workflows
 
@@ -823,20 +774,23 @@ Goal: establish unchanged runtime behavior before canonical ownership changes.
 Exit criteria: Draft is RON-authored in development and release paths; Cards
 and Exploration have approved parity reports and complete adapters.
 
-### Milestone 4: Implement the source-preserving edit engine
+### Milestone 4: Implement typed RON editing
 
-Goal: safely apply semantic edit operations without reserializing source files.
+Goal: safely apply semantic edit operations through official RON parsing and
+deterministic standard formatting.
 
-- Implement lexing, delimiter trees, schema traversal, spans, and trivia rules.
-- Implement stable-ID lookup, narrow replacement, and canonical insertion.
-- Apply non-overlapping operation batches and detect semantic no-ops.
+- Select and pin the official serialization or maintained formatting strategy.
+- Implement stable-ID lookup and closed typed mutation operations.
+- Apply ordered operation batches and detect semantic no-ops.
 - Add revisions, locking, staging, typed equality checks, and publication.
 - Implement the specified editor errors and diagnostic payloads.
-- Add corpus byte-identity tests for every current RON source.
-- Test insertion, comment conflicts, stale writes, rollback, and recovery.
+- Add semantic round-trip, formatting-idempotence, and order-preservation tests
+  for every current RON source.
+- Test typed edits, stale writes, rollback, and recovery.
 
 Exit criteria: `stage-edit` applies every declared fixture operation safely and
-all production RON candidates pass the span-index corpus gate.
+all production RON candidates pass the semantic round-trip and formatting gate
+without a repository-owned RON parser.
 
 ### Milestone 5: Cut over the Cards editor
 
@@ -847,10 +801,11 @@ Goal: complete the first browser-to-RON editing workflow.
 - Test every energy, kind, optional-field, collection, and crop mapping.
 - Make the API read generated data and submit revisioned operations.
 - Add the browser save queue, stale UI, applicability, and recovery.
+- Preserve local drafts across failed or stale saves.
 - QA successful, invalid, conflicting, concurrent, and recovered saves.
 
-Exit criteria: Cards saves preserve unrelated RON bytes and comments, and
-`cards.ron` is canonical for development, editor use, build, and deployment.
+Exit criteria: Cards saves preserve unrelated typed values and collection order,
+and `cards.ron` is canonical for development, editor use, build, and deployment.
 
 ### Milestone 6: Cut over the Exploration editor
 
@@ -896,12 +851,11 @@ oracle:
 
 Differences are classified before the cutover. Formatting and the generated
 header may differ in TOML. Compiler outputs, UUID references, record order,
-string code points, and runtime artifacts must agree. Parsed TOML values also
-agree except for adapter-declared normalizations that the existing TypeScript
-compiler maps to the same result, such as the two numeric-string Card values
-represented by `Fixed(2)`. Filesystem-dependent art discovery is compared
-through stable logical asset references, not machine-specific absolute paths or
-symlink metadata.
+string code points, parsed TOML values, and runtime artifacts must agree.
+Pre-existing data errors are corrected in separately reviewed commits before
+the applicable parity baseline is captured. Filesystem-dependent art discovery
+is compared through stable logical asset references, not machine-specific
+absolute paths or symlink metadata.
 
 These production-data comparisons are migration commands and review evidence,
 not permanent CI tests. Permanent tests use synthetic fixtures so routine game
@@ -939,30 +893,27 @@ operation rather than production game behavior.
 
 Synthetic unit and property tests cover:
 
-- typed deserialization and lowering for named structs, every enum shape,
-  tuples, options, ranges, chars, byte strings, typed map keys, heterogeneous
-  enum lists, numeric edge cases, and enabled official extensions;
+- typed deserialization and lowering for every source field and variant used by
+  a canonical dataset or editor operation;
 - deterministic serialization and stable ordering;
 - compatibility-field and variant coverage plus collision rejection;
 - quoted, raw, multiline, Unicode, and delimiter-containing strings;
-- integer and floating-point boundaries;
 - atomic batch staging and content-aware publication;
 - manifest path containment and duplicate detection;
-- structured syntax/schema diagnostics; and
-- byte-identical span indexing for every current production RON source;
-- direct and nested field replacement, canonical insertion, explicit defaults,
-  non-overlapping batch application, and semantic no-ops;
-- stable-identity lookup that ignores UUID-like text in comments and values;
+- structured syntax/schema diagnostics;
+- semantic round trips, formatting idempotence, and order preservation for every
+  current production RON source;
+- typed field and variant mutation, ordered batches, defaults, and semantic
+  no-ops;
+- stable-identity lookup within the typed model;
 - Cards field-to-domain transformations, including every energy and kind
   variant plus per-card `tides` rejection;
 - Exploration prose and action transformations across unit and struct effect
-  variants plus per-action selection-policy override rejection;
-- comment preservation plus deterministic `COMMENT_CONFLICT` rejection for
-  unsafe shape changes.
+  variants plus per-action selection-policy override rejection.
 
-Official RON parser fixtures are included or referenced at their pinned version.
-Dataset tests demonstrate each rich construct that the source schema uses and
-its exact compatibility representation.
+The `ron` crate owns general parser-language coverage. Repository tests add
+focused coverage when a dataset schema or adapter adopts a new construct; they
+do not duplicate the dependency's tests for unused RON syntax.
 
 ### TypeScript and integration tests
 
@@ -974,6 +925,8 @@ Synthetic fixtures cover:
 - rollback after Rust, TypeScript, JSON, or filesystem failure;
 - startup recovery of an interrupted publication journal;
 - debounce and watcher convergence without reload loops;
+- regeneration when the source, compiler build, adapter, or manifest fingerprint
+  changes;
 - targeted HMR after a valid RON edit;
 - last-valid-data behavior after an invalid RON edit;
 - editor reads from generated TOML and writes canonical RON;
@@ -982,8 +935,8 @@ Synthetic fixtures cover:
 - stable-ID edit routing, action slot plus ID validation, registry diffing, and
   facet-removal cascades;
 - ordered template resynchronization as one all-or-nothing operation batch;
-- structured editor error responses and confirmed-data reload after a failed
-  save; and
+- structured editor error responses, confirmed-data reload after a failed save,
+  and preservation of later local drafts and unsent operations; and
 - path traversal and undeclared-dataset rejection.
 
 Existing compiler and editor tests migrate to synthetic RON inputs where they
@@ -1023,22 +976,22 @@ the browser error buffer remaining empty.
 - Generated TOML uses current paths and compatibility schemas and is excluded
   from version control.
 - Supported entry points generate and validate TOML before reading it.
+- Generated-output freshness includes source, compiler build, adapter, and
+  manifest-entry fingerprints.
 - Local RON changes produce focused validated TOML and runtime refreshes.
 - Invalid changes preserve the last valid local runtime artifacts and produce
   actionable RON diagnostics.
 - Build and deployment fail before external effects when generation or
   validation fails.
 - Conversion is deterministic across supported development and CI platforms.
-- Canonical sources may use the full typed RON model supported by the pinned
-  parser when their dataset source schema and adapter define the lowering.
-- A source construct is never rejected solely because TOML lacks a direct
-  representation; its dataset adapter supplies the compatibility encoding.
-- Editor saves update canonical RON by stable ID and preserve unrelated source
-  bytes.
+- Canonical sources may use constructs supported by the pinned `ron` crate when
+  their dataset source schema and adapter define the required lowering.
+- Editor saves update canonical RON by stable ID, preserve unrelated typed
+  values and collection order, and produce deterministic standard formatting.
 - Every editor save is a declared dataset operation with an expected source
   revision; stale writes fail without mutation.
-- Shape-changing edits preserve comments through narrower patches or fail with
-  `COMMENT_CONFLICT`; serialization is never used as a silent fallback.
+- Failed and stale saves preserve later local drafts and unsent operations for
+  user review, retry, or cancellation.
 - RON, TOML, and derived JSON editor writes use atomic per-file replacement and
   a recoverable transaction that rolls back failures.
 - Migration parity demonstrates unchanged runtime data, record order, UUID
@@ -1053,8 +1006,8 @@ the browser error buffer remaining empty.
 This would eliminate the compatibility TOML but make every Node, Vite, browser,
 test, and editor path depend on a TypeScript RON implementation. The available
 JavaScript ecosystem has a smaller compatibility and maintenance surface than
-the official Rust implementation, and comment-preserving editor writes would
-still require separate syntax tooling.
+the official Rust implementation, and editor writes would still require typed
+mutation and deterministic serialization.
 
 ### Generate JSON directly from RON
 
@@ -1088,15 +1041,14 @@ while the manifest enforces one source of truth for every migrated catalog.
 - Rust becomes a required development, CI, and deployment toolchain. The pinned
   toolchain, Cargo cache, and narrow crate reduce but do not erase that cost.
 - The compatibility adapters are an intentional second schema boundary. Total
-  field and variant coverage plus parity tests make that boundary explicit
-  rather than relying on generic case- or value-conversion heuristics. Rich RON
-  constructs add adapter code where their compatibility representation is not
-  direct.
-- Source-preserving RON editing requires a maintained lexer, span index, and
-  closed operation vocabulary in addition to Serde models. Each new editor
-  control needs an explicit source operation and comment-safe patch strategy.
-  `COMMENT_CONFLICT` makes the unsupported cases visible instead of risking
-  source loss.
+  coverage of each declared dataset schema plus parity tests makes that boundary
+  explicit rather than relying on generic case- or value-conversion heuristics.
+  A newly used RON construct adds adapter code only when its compatibility
+  representation is not direct.
+- Whole-document RON serialization may normalize formatting and comments during
+  an editor save. The editor round-trip gate reviews that behavior per dataset,
+  moves durable authoring guidance to an appropriate supported location, and
+  requires deterministic standard formatting without a repository-owned parser.
 - Per-source save queues trade parallel field writes for deterministic revision
   handling. Saves are local and small, and the measured RON parse cost leaves
   ample latency budget for serialization.
