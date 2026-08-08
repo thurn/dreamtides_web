@@ -357,13 +357,9 @@ pub fn validate_references(
 
 #[cfg(test)]
 mod tests {
-    use std::fs;
-    use std::path::Path;
-
     use pretty_assertions::assert_eq;
 
     use super::*;
-    use crate::models::compat::CompatDocument;
 
     const SYNTHETIC_TIDE_ID_MAP: [(&str, &str); 3] = [
         ("first", "10000000-0000-4000-8000-000000000001"),
@@ -637,90 +633,6 @@ mod tests {
                 .unwrap_err()
                 .to_string()
                 .contains("unknown Dreamsign")
-        );
-    }
-
-    #[test]
-    #[ignore = "real-catalog parity probe retained for canonical tutorial journey pool review"]
-    fn canonical_candidate_matches_current_compatibility_sources() {
-        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-        let current_ron: CompatDocument = ron::from_str(
-            &fs::read_to_string(root.join("data/tutorial_journey_pool.ron")).unwrap(),
-        )
-        .unwrap();
-        let current_toml: toml::Value = toml::from_str(
-            &fs::read_to_string(root.join("data/tutorial_journey_pool.toml")).unwrap(),
-        )
-        .unwrap();
-        assert_eq!(current_ron.data, current_toml);
-
-        let canonical: TutorialJourneyPoolCatalog = ron::from_str(
-            &fs::read_to_string(root.join("data/tutorial_journey_pool_canonical.ron")).unwrap(),
-        )
-        .unwrap();
-        assert_eq!(lower(canonical.clone()).unwrap(), current_ron.data);
-
-        let cards: Vec<crate::models::cards::CardDefinition> =
-            ron::from_str(&fs::read_to_string(root.join("data/cards.ron")).unwrap()).unwrap();
-        let dream_avatars: Vec<crate::models::dream_avatars::AvatarDefinition> =
-            ron::from_str(&fs::read_to_string(root.join("data/dream_avatars.ron")).unwrap())
-                .unwrap();
-        let dreamsigns: Vec<crate::models::dreamsigns::DreamsignDefinition> =
-            ron::from_str(&fs::read_to_string(root.join("data/dreamsigns.ron")).unwrap()).unwrap();
-        validate_references(
-            &canonical,
-            &cards.into_iter().map(|card| card.id).collect(),
-            &dream_avatars
-                .into_iter()
-                .map(|avatar| avatar.id.to_string())
-                .collect(),
-            &dreamsigns
-                .into_iter()
-                .map(|dreamsign| dreamsign.id.to_string())
-                .collect(),
-        )
-        .unwrap();
-
-        let canonical_tide_ids = canonical
-            .tides
-            .iter()
-            .map(|tide| tide.id.to_string())
-            .collect::<BTreeSet<_>>();
-        let mapped_tide_ids = LEGACY_TIDE_ID_MAP
-            .iter()
-            .map(|(_, canonical)| (*canonical).to_owned())
-            .collect::<BTreeSet<_>>();
-        assert_eq!(canonical_tide_ids, mapped_tide_ids);
-        assert_eq!(canonical_tide_ids.len(), canonical.tides.len());
-        for id in canonical_tide_ids {
-            let parsed = Uuid::parse_str(&id).unwrap();
-            assert_eq!(parsed.get_version(), Some(Version::Random));
-            assert_eq!(parsed.get_variant(), Variant::RFC4122);
-            assert_eq!(parsed.hyphenated().to_string(), id);
-        }
-
-        let legacy_tide_ids = current_toml["tides"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|tide| tide["id"].as_str().unwrap().to_owned())
-            .collect::<BTreeSet<_>>();
-        let mapped_legacy_ids = LEGACY_TIDE_ID_MAP
-            .iter()
-            .map(|(legacy, _)| (*legacy).to_owned())
-            .collect::<BTreeSet<_>>();
-        assert_eq!(legacy_tide_ids, mapped_legacy_ids);
-        assert_eq!(canonical.tides.len(), 3);
-        assert_eq!(canonical.opening.offers.len(), 2);
-        assert_eq!(canonical.opening.dreamsign_ids.len(), 1);
-        assert_eq!(
-            canonical
-                .tides
-                .iter()
-                .flat_map(|tide| &tide.cards)
-                .map(|card| card.copies)
-                .sum::<u32>(),
-            canonical.pool_size
         );
     }
 }

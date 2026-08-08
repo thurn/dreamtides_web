@@ -12,7 +12,7 @@ use crate::manifest::{Dataset, Manifest, MigrationState};
 use crate::models::{
     affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft, dream_avatars,
     dream_guides, dreamscapes, dreamsigns, dreamwell, economy, exploration, figments, glossary,
-    opponents, reward_selection, sites, tutorial,
+    opponents, reward_selection, sites, tutorial, tutorial_journey_pool,
 };
 
 pub const BUILD_VERSION: &str = env!("GAME_DATA_BUILD_VERSION");
@@ -238,6 +238,43 @@ fn adapt(
         "glossary_v1" => glossary::lower(parse_ron(source, dataset)?),
         "sites_v1" => sites::lower(parse_ron(source, dataset)?),
         "tutorial_v1" => tutorial::lower(parse_ron(source, dataset)?),
+        "tutorial_journey_pool_v1" => {
+            let catalog: tutorial_journey_pool::TutorialJourneyPoolCatalog =
+                parse_ron(source, dataset)?;
+            let cards_dataset = manifest.dataset("cards")?;
+            let cards: Vec<cards::CardDefinition> = parse_ron(
+                &fs::read_to_string(root.join(&cards_dataset.source))
+                    .with_context(|| format!("read cards source {}", cards_dataset.source))?,
+                cards_dataset,
+            )?;
+            let avatars_dataset = manifest.dataset("dream-avatars")?;
+            let avatars: Vec<dream_avatars::AvatarDefinition> = parse_ron(
+                &fs::read_to_string(root.join(&avatars_dataset.source)).with_context(|| {
+                    format!("read DreamAvatars source {}", avatars_dataset.source)
+                })?,
+                avatars_dataset,
+            )?;
+            let dreamsigns_dataset = manifest.dataset("dreamsigns")?;
+            let dreamsigns: Vec<dreamsigns::DreamsignDefinition> = parse_ron(
+                &fs::read_to_string(root.join(&dreamsigns_dataset.source)).with_context(|| {
+                    format!("read Dreamsigns source {}", dreamsigns_dataset.source)
+                })?,
+                dreamsigns_dataset,
+            )?;
+            tutorial_journey_pool::validate_references(
+                &catalog,
+                &cards.into_iter().map(|card| card.id).collect(),
+                &avatars
+                    .into_iter()
+                    .map(|avatar| avatar.id.to_string())
+                    .collect(),
+                &dreamsigns
+                    .into_iter()
+                    .map(|dreamsign| dreamsign.id.to_string())
+                    .collect(),
+            )?;
+            tutorial_journey_pool::lower(catalog)
+        }
         "compat_v1" => {
             let document: compat::CompatDocument = parse_ron(source, dataset)?;
             Ok(document.data)
@@ -567,6 +604,9 @@ mod tests {
                 }
                 "tutorial_v1" => {
                     canonical::<tutorial::TutorialCatalog>(&source, true);
+                }
+                "tutorial_journey_pool_v1" => {
+                    canonical::<tutorial_journey_pool::TutorialJourneyPoolCatalog>(&source, true);
                 }
                 "compat_v1" => {
                     canonical::<compat::CompatDocument>(&source, false);

@@ -100,6 +100,7 @@ impl Manifest {
             "glossary_v1",
             "sites_v1",
             "tutorial_v1",
+            "tutorial_journey_pool_v1",
             "compat_v1",
         ];
         for dataset in &self.datasets {
