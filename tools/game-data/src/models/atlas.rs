@@ -223,7 +223,7 @@ pub enum SiteType {
 }
 
 impl SiteType {
-    fn as_compat(self) -> &'static str {
+    pub(crate) fn as_compat(self) -> &'static str {
         match self {
             Self::Battle => "Battle",
             Self::Draft => "Draft",

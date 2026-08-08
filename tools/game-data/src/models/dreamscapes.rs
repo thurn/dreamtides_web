@@ -146,14 +146,9 @@ pub fn lower(source: Vec<DreamscapeDefinition>) -> Result<toml::Value> {
                         signature_site,
                         fixed_sites,
                     } => (
-                        Some(site_type_compatibility_name(signature_site)),
+                        Some(signature_site.as_compat()),
                         Some(true),
-                        Some(
-                            fixed_sites
-                                .into_iter()
-                                .map(site_type_compatibility_name)
-                                .collect(),
-                        ),
+                        Some(fixed_sites.into_iter().map(SiteType::as_compat).collect()),
                         None,
                         None,
                     ),
@@ -349,25 +344,6 @@ pub(crate) fn canonical_id(compatibility_id: &str) -> Result<DreamscapeId> {
         .and_then(|canonical| DreamscapeId::parse(canonical).map_err(anyhow::Error::msg))
 }
 
-fn site_type_compatibility_name(site_type: SiteType) -> &'static str {
-    match site_type {
-        SiteType::Battle => "Battle",
-        SiteType::Draft => "Draft",
-        SiteType::Shop => "Shop",
-        SiteType::Purge => "Purge",
-        SiteType::Essence => "Essence",
-        SiteType::Transfiguration => "Transfiguration",
-        SiteType::Duplication => "Duplication",
-        SiteType::Reward => "Reward",
-        SiteType::Augury => "Augury",
-        SiteType::DreamsignMarket => "DreamsignMarket",
-        SiteType::DreamsignRevelation => "DreamsignRevelation",
-        SiteType::RandomSite => "RandomSite",
-        SiteType::Gamble => "Gamble",
-        SiteType::Exploration => "Exploration",
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use pretty_assertions::assert_eq;
@@ -486,7 +462,7 @@ mod tests {
             (SiteType::Exploration, "Exploration"),
         ];
         for (site_type, expected) in cases {
-            assert_eq!(site_type_compatibility_name(site_type), expected);
+            assert_eq!(site_type.as_compat(), expected);
         }
     }
 

@@ -16,3 +16,4 @@ pub mod figments;
 pub mod glossary;
 pub mod opponents;
 pub mod reward_selection;
+pub mod sites;

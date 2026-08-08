@@ -1,0 +1,200 @@
+// Journey site presentation, random-site behavior, card choices, and Gamble rules.
+
+#![enable(implicit_some)]
+SitesCatalog(
+  site_types: [
+    SiteMetadata(
+      site: Battle,
+      icon: "bxf bx-sword-alt",
+      glossary_id: "6827ba8b-a226-4c01-9a22-1b72a4d7767c",
+    ),
+
+    SiteMetadata(
+      site: Draft,
+      icon: "bxf bx-rectangle-vertical",
+      glossary_id: "1fb39b08-bcb7-4e5d-a831-9ed64f56dd9c",
+    ),
+
+    SiteMetadata(
+      site: Shop,
+      icon: "bxf bx-store-alt-2",
+      glossary_id: "4b691029-0cf2-4dbe-a0e2-6f6b112e52c4",
+    ),
+
+    SiteMetadata(
+      site: Purge,
+      icon: "bxf bx-hot",
+      glossary_id: "c617c6de-bd1b-43bb-bf8a-7f7acbb15979",
+    ),
+
+    SiteMetadata(
+      site: Essence,
+      icon: "bxf bx-diamond-alt",
+      glossary_id: "ea9cb1b4-853a-4eec-aeb8-9c0215ec7edf",
+    ),
+
+    SiteMetadata(
+      site: Transfiguration,
+      icon: "fa-solid fa-hammer",
+      glossary_id: "d7587a2f-e72f-41d3-92cd-f14280b87509",
+    ),
+
+    SiteMetadata(
+      site: Duplication,
+      icon: "bxf bx-copy",
+      glossary_id: "3da7fde7-66c7-4af9-ae62-0598ce94050a",
+    ),
+
+    SiteMetadata(
+      site: Reward,
+      icon: "bxf bx-treasure-chest",
+      glossary_id: "b9ae4351-e23e-47d4-aec8-03b942dafd54",
+    ),
+
+    SiteMetadata(
+      site: Augury,
+      icon: "bxf bx-eye",
+      glossary_id: "3447ccd7-60c8-4770-8bcd-7f67e7b5bbef",
+    ),
+
+    SiteMetadata(
+      site: DreamsignMarket,
+      icon: "bxf bx-pyramid",
+      glossary_id: "49bb5066-5403-4ae0-a911-84a377e7c9ce",
+    ),
+
+    SiteMetadata(
+      site: DreamsignRevelation,
+      icon: "bxf bx-meteor",
+      glossary_id: "b685e2a2-66ee-49cb-830a-f43c20268470",
+    ),
+
+    SiteMetadata(
+      site: RandomSite,
+      icon: "fa-solid fa-question",
+      glossary_id: "3fc1d43a-151e-4acc-b3be-44bdb015f9bb",
+    ),
+
+    SiteMetadata(
+      site: Gamble,
+      icon: "bxf bx-coin",
+      glossary_id: "85d54d2c-86d9-495b-8698-59123f3bfe08",
+    ),
+
+    SiteMetadata(
+      site: Exploration,
+      icon: "bxf bx-compass",
+      glossary_id: "fa6c9553-2485-48ef-9fac-1514688c3a34",
+    ),
+  ],
+
+  fallback_site_type: FallbackSiteType(
+    icon: "bx bx-help-circle",
+    name: "Unknown Site",
+    description: "An unfamiliar site from an earlier dream.",
+  ),
+
+  random_site: RandomSiteRules(
+    destinations: [
+      Shop,
+      DreamsignMarket,
+      DreamsignRevelation,
+      Transfiguration,
+      Duplication,
+      Purge,
+      Augury,
+      Gamble,
+      Exploration,
+    ],
+    home_choice_count: 3,
+    away_choice_count: 1,
+    insufficient_destinations: Fail,
+  ),
+
+  card_choices: CardChoiceRules(
+    transfiguration: CardChoiceLimits(standard: Count(3), enhanced: All),
+    duplication: CardChoiceLimits(standard: Count(3), enhanced: All),
+  ),
+
+  gamble: GambleRules(
+    // The standard deck size is the denominator for every authored card-count probability below.
+    standard_deck_size: 52,
+    selection: GambleSelection(
+      fallback_game: GravokThreeGateWager,
+      games: [
+        WeightedGame(game: GravokThreeGateWager, weight: 1),
+
+        WeightedGame(game: TidemarkLadderClimb, weight: 1),
+
+        WeightedGame(game: StarwayStairs, weight: 1),
+
+        WeightedGame(game: FourSuitReprise, weight: 1),
+
+        WeightedGame(game: Blackjack, weight: 1),
+      ],
+    ),
+    three_gate: ThreeGateRules(
+      max_retries: 2,
+      gates: [
+        GateDefinition(
+          gate: Six,
+          name: "Six Gate",
+          threshold: Six,
+          winning_card_count: 36,
+          awards_dreamsign: false,
+        ),
+
+        GateDefinition(
+          gate: Nine,
+          name: "Nine Gate",
+          threshold: Nine,
+          winning_card_count: 24,
+          awards_dreamsign: false,
+        ),
+
+        GateDefinition(
+          gate: Jack,
+          name: "Jack Gate",
+          threshold: Jack,
+          winning_card_count: 16,
+          awards_dreamsign: true,
+        ),
+      ],
+    ),
+    ladder_climb: LadderClimbRules(
+      strong_pool_limit: 50,
+      attempts: [
+        LadderAttempt(attempt: One, threshold: Queen, winning_card_count: 12),
+
+        LadderAttempt(attempt: Two, threshold: Ten, winning_card_count: 20),
+
+        LadderAttempt(attempt: Three, threshold: Eight, winning_card_count: 28),
+
+        LadderAttempt(attempt: Four, threshold: Six, winning_card_count: 36),
+      ],
+    ),
+    starway_stairs: StarwayStairsRules(
+      max_retries: 2,
+      tiers: [
+        StarwayTier(tier: One, highest_bust_rank: Two, bust_card_count: 4),
+
+        StarwayTier(tier: Two, highest_bust_rank: Four, bust_card_count: 12),
+
+        StarwayTier(tier: Three, highest_bust_rank: Seven, bust_card_count: 24),
+      ],
+    ),
+    four_suit_reprise: FourSuitRepriseRules(
+      max_rounds: 3,
+      matching_suit_card_count: 13,
+      outcomes: [
+        SuitOutcome(suit: Spades, outcome: Transfiguration, label: "Transfigure"),
+
+        SuitOutcome(suit: Diamonds, outcome: Essence, label: "Unchanged + 100 Essence"),
+
+        SuitOutcome(suit: Hearts, outcome: Duplication, label: "Duplicate"),
+
+        SuitOutcome(suit: Clubs, outcome: Purge, label: "Purge"),
+      ],
+    ),
+  ),
+)
