@@ -9,7 +9,7 @@
       adapter_version: 1,
       dependencies: [],
       refresh: "affiliations-data",
-      editor: read_only,
+      editor: semantic,
       identity: "id",
       state: ron,
     ),

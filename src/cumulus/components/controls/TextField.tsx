@@ -12,6 +12,8 @@ export interface TextFieldProps {
   value: string;
   /** Reports edited text. */
   onChange: (value: string) => void;
+  /** Commits the current value on blur or Enter. */
+  onCommit?: (value: string) => void;
   /** Text or search semantics. Defaults to text. */
   kind?: TextFieldKind;
   /** Optional placeholder. */
@@ -33,6 +35,7 @@ export function TextField({
   label,
   value,
   onChange,
+  onCommit,
   kind = "text",
   placeholder,
   supportingText,
@@ -64,6 +67,12 @@ export function TextField({
         data-testid={testId}
         onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
         onInput={(event) => onChange(event.currentTarget.value)}
+        onBlur={(event) => onCommit?.(event.currentTarget.value)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            event.currentTarget.blur();
+          }
+        }}
         style={{
           ...chrome.trigger,
           width: "100%",

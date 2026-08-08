@@ -577,9 +577,58 @@ async function main() {
     }, null, 2));
     return;
   }
-  throw new Error("Usage: node scripts/game-data-pipeline.mjs <compile|check|list> [--root PATH]");
+  if (command === "edit") {
+    const datasetFlag = process.argv.indexOf("--dataset");
+    const revisionFlag = process.argv.indexOf("--expected-source-revision");
+    if (datasetFlag === -1 || revisionFlag === -1) {
+      throw new Error("edit requires --dataset and --expected-source-revision");
+    }
+    const dataset = process.argv[datasetFlag + 1];
+    const expectedSourceRevision = process.argv[revisionFlag + 1];
+    const manifest = listGameData({ rootDir });
+    const entry = manifest.datasets.find((candidate) => candidate.id === dataset);
+    if (entry === undefined || entry.editor !== "semantic") {
+      throw new Error(`FIELD_NOT_APPLICABLE: ${dataset} is not a semantic editor dataset`);
+    }
+    let input = "";
+    for await (const chunk of process.stdin) input += chunk;
+    const operations = JSON.parse(input);
+    if (!Array.isArray(operations)) throw new Error("INVALID_EDIT: operations must be an array");
+    const result = await stageAndPublishGameDataEdit({
+      rootDir,
+      dataset,
+      operations,
+      sourcePaths: [entry.source],
+      expectedSourceRevision,
+    });
+    console.log(JSON.stringify(result));
+    return;
+  }
+  if (command === "revision") {
+    const datasetFlag = process.argv.indexOf("--dataset");
+    if (datasetFlag === -1) throw new Error("revision requires --dataset");
+    const dataset = process.argv[datasetFlag + 1];
+    const manifest = listGameData({ rootDir });
+    const entry = manifest.datasets.find((candidate) => candidate.id === dataset);
+    if (entry === undefined) throw new Error(`unknown game-data dataset id: ${dataset}`);
+    console.log(JSON.stringify({ dataset, sourceRevision: sourceRevision(rootDir, [entry.source]) }));
+    return;
+  }
+  throw new Error("Usage: node scripts/game-data-pipeline.mjs <compile|check|list|edit|revision> [--root PATH]");
 }
 
 if (process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  await main();
+  try {
+    await main();
+  } catch (error) {
+    console.error(JSON.stringify({
+      ok: false,
+      error: {
+        code: error?.code ?? "GAME_DATA_FAILED",
+        message: error?.message ?? String(error),
+        currentSourceRevision: error?.currentSourceRevision,
+      },
+    }));
+    process.exitCode = 1;
+  }
 }

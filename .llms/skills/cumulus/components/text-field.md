@@ -17,6 +17,7 @@ The reusable labeled text and search input on Cumulus control chrome, with suppo
 | `label` | `string` | yes | — | Visible field label. |
 | `value` | `string` | yes | — | Controlled value. |
 | `onChange` | `(value: string) => void` | yes | — | Reports edited text. |
+| `onCommit` | `((value: string) => void)` | no | — | Commits the current value on blur or Enter. |
 | `kind` | `TextFieldKind` = `"text" \| "search"` | no | `text` | Text or search semantics. Defaults to text. |
 | `placeholder` | `string` | no | — | Optional placeholder. |
 | `supportingText` | `string` | no | — | Optional supporting copy beneath the control. |

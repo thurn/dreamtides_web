@@ -4290,6 +4290,14 @@
       "description": "Reports edited text."
     },
     {
+      "name": "onCommit",
+      "tsType": "((value: string) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Commits the current value on blur or Enter."
+    },
+    {
       "name": "kind",
       "tsType": "TextFieldKind",
       "unionMembers": [

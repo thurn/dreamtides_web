@@ -1,0 +1,13 @@
+# Tabula
+
+Tabula is a Tauri v2 developer tool for editing canonical Dreamtides RON catalogs. The proof of concept supports `data/affiliations.ron` with immediate, revision-checked semantic saves.
+
+Run `npm install` in this directory, then `npm run tauri dev`. The app discovers the enclosing Dreamtides repository; **Open repository** can select a different checkout. `npm run dev -- --port 5185` runs the non-mutating browser fixture at `http://localhost:5185/?demo=1` for UI development.
+
+## Editor architecture
+
+The frontend communicates through the closed `EditorSnapshot`, `EditorOperation`, and `EditorTransport` contracts in `src/editor.ts`. `editorRegistry` is the extension point for another custom catalog editor. Each editor owns its typed snapshot, semantic operations, and presentation while sharing transport behavior and Cumulus components.
+
+The Tauri backend loads typed RON plus the generated card catalog and delegates writes to `scripts/game-data-pipeline.mjs edit`. That pipeline checks the source revision, applies operation-sized RON patches in the Rust game-data editor, validates and compiles the complete staged data tree, and publishes atomically. Tabula logs operation kinds and outcomes to `logs/tabula-log.jsonl` without logging field contents.
+
+Run all proof-of-concept checks from the repository root with `npm run tabula:check`.

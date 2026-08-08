@@ -1,0 +1,25 @@
+:root { background: #120e1c; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 900px; min-height: 100vh; }
+button { font: inherit; }
+.app-shell, .loading { min-height: 100vh; color: var(--text-on-glass); font-family: var(--font-ui); background: linear-gradient(180deg, color-mix(in srgb, var(--surface-chrome-strong) 42%, transparent), var(--surface-chrome-strong)), url('/main-menu/background.jpg') center / cover fixed; }
+.loading { display: grid; place-items: center; padding: var(--space-2xl); }
+.topbar { height: 88px; padding: var(--space-l) var(--space-2xl); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--glass-rim); background: color-mix(in srgb, var(--surface-chrome-strong) 70%, transparent); backdrop-filter: blur(var(--glass-blur)); }
+.topbar h1 { margin: 0; font: var(--t-title); }
+.topbar p { margin: var(--space-xs) 0 0; color: var(--text-on-glass-muted); font: var(--t-caption); }
+.topbar-actions { display: flex; align-items: center; gap: var(--space-s); }
+.status { color: var(--text-on-glass-muted); font: var(--t-caption); margin-right: var(--space-s); max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.status.stale { color: var(--danger); }
+.workspace { height: calc(100vh - 88px); display: grid; grid-template-columns: minmax(260px, 22vw) 1fr; gap: var(--space-l); padding: var(--space-l); overflow: hidden; }
+.record-list { display: grid; gap: var(--space-xs); padding: var(--space-m); overflow: auto; max-height: calc(100vh - 210px); }
+.record-row { border: 1px solid transparent; border-radius: var(--radius-control); padding: var(--space-m); display: grid; gap: var(--space-xs); text-align: left; color: var(--text-on-glass); background: transparent; }
+.record-row[data-selected="true"] { background: var(--glass-on-glass-fill); border-color: var(--glass-on-glass-rim); }
+.record-row span { color: var(--text-on-glass-muted); font: var(--t-caption); }
+.detail-column { display: grid; grid-auto-rows: max-content; gap: var(--space-l); overflow: auto; padding-right: var(--space-xs); align-content: start; }
+.panel-body { padding: var(--space-l); }
+.field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-l); }
+.signature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--space-l); }
+.signature-card { display: grid; gap: var(--space-s); align-content: start; }
+.signature-card > button { justify-self: center; }
+.browser-overlay { position: fixed; inset: 0; z-index: 100; padding: var(--space-l); background: color-mix(in srgb, var(--surface-chrome-strong) 82%, transparent); backdrop-filter: blur(var(--glass-blur)); }
+@media (max-width: 1100px) { .field-grid { grid-template-columns: 1fr; } }

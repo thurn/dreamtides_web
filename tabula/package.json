@@ -1,0 +1,36 @@
+{
+  "name": "tabula",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "test": "vitest run",
+    "check": "npm run test && npm run build && cargo test --manifest-path src-tauri/Cargo.toml",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@fluent/bundle": "^0.19.1",
+    "@fluent/react": "^0.15.2",
+    "@fortawesome/fontawesome-free": "^7.2.0",
+    "@tauri-apps/api": "^2.8.0",
+    "@tauri-apps/plugin-dialog": "^2.4.0",
+    "framer-motion": "^12.23.24",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.8.4",
+    "@tailwindcss/vite": "^4.1.14",
+    "@types/node": "^24.7.2",
+    "@types/react": "^19.1.16",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.4",
+    "jsdom": "^27.0.1",
+    "typescript": "~5.8.3",
+    "tailwindcss": "^4.1.14",
+    "vite": "^7.1.7",
+    "vitest": "^3.2.4"
+  }
+}

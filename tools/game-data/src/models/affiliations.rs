@@ -31,7 +31,7 @@ impl CanonicalUuid {
         self.0.hyphenated().to_string()
     }
 
-    fn parse(value: &str) -> Result<Self, String> {
+    pub fn parse(value: &str) -> Result<Self, String> {
         let uuid = Uuid::parse_str(value).map_err(|error| error.to_string())?;
         if uuid.get_version() != Some(Version::Random) || uuid.get_variant() != Variant::RFC4122 {
             return Err("identifier must be an RFC 4122 UUIDv4".into());
@@ -110,7 +110,7 @@ pub fn lower(source: AffiliationCatalog) -> Result<toml::Value> {
     })?)
 }
 
-fn validate(source: &AffiliationCatalog) -> Result<()> {
+pub fn validate(source: &AffiliationCatalog) -> Result<()> {
     validate_multiplier(
         "default_random_draw_max_multiplier",
         source.default_random_draw_max_multiplier,

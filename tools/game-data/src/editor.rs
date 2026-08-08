@@ -12,6 +12,7 @@ use serde_json::Value as JsonValue;
 
 use crate::compiler::{EditReport, sha256};
 use crate::manifest::Manifest;
+use crate::models::affiliations::{self, AffiliationCatalog, CanonicalUuid};
 use crate::models::cards::{CardDefinition, CardKind, Crop, OrbValue};
 use crate::models::compat::CompatDocument;
 use crate::models::dream_avatars::{self, AvatarDefinition, DreamAvatarId};
@@ -48,6 +49,19 @@ struct EditRequest {
 #[derive(Debug, Deserialize)]
 #[serde(tag = "operation", rename_all = "snake_case", deny_unknown_fields)]
 enum EditOperation {
+    SetAffiliationCatalogField {
+        field: String,
+        value: JsonValue,
+    },
+    SetAffiliationField {
+        affiliation_id: String,
+        field: String,
+        value: JsonValue,
+    },
+    ReplaceAffiliationSignatureCards {
+        affiliation_id: String,
+        card_ids: Vec<String>,
+    },
     SetCardField {
         card_id: String,
         field: String,
@@ -155,6 +169,7 @@ pub fn stage_edit(
         .context("INVALID_EDIT: request must match the closed editor operation schema")?;
     manifest.dataset(&request.dataset)?;
     match request.dataset.as_str() {
+        "affiliations" => edit_affiliations(manifest, staging_root, request.operations),
         "cards" => edit_cards(manifest, staging_root, request.operations),
         "dream-avatars" => edit_dream_avatars(manifest, staging_root, request.operations),
         "dream-guides" => edit_dream_guides(manifest, staging_root, request.operations),
@@ -293,6 +308,249 @@ fn render_ron_value<T: serde::Serialize + ?Sized>(
         .unwrap_or(&serialized)
         .trim_end_matches('\n')
         .to_owned())
+}
+
+fn edit_affiliations(
+    manifest: &Manifest,
+    staging_root: &Path,
+    operations: Vec<EditOperation>,
+) -> Result<EditReport> {
+    let dataset = manifest.dataset("affiliations")?;
+    if dataset.adapter != "affiliations_v1"
+        || dataset.editor != crate::manifest::EditorCapability::Semantic
+    {
+        bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for affiliations");
+    }
+    let source_path = staging_root.join(&dataset.source);
+    let original_text = fs::read_to_string(&source_path)
+        .with_context(|| format!("read staged affiliation source {}", source_path.display()))?;
+    let original: AffiliationCatalog = ron::from_str(&original_text)
+        .context("MALFORMED_SOURCE: staged affiliation RON is invalid")?;
+    affiliations::validate(&original)
+        .context("MALFORMED_SOURCE: staged affiliation catalog is invalid")?;
+    let cards_dataset = manifest.dataset("cards")?;
+    let cards_text = fs::read_to_string(staging_root.join(&cards_dataset.source))?;
+    let cards: Vec<CardDefinition> =
+        ron::from_str(&cards_text).context("MALFORMED_SOURCE: staged card RON is invalid")?;
+    let card_ids = cards
+        .iter()
+        .map(|card| card.id.as_str())
+        .collect::<BTreeSet<_>>();
+    let mut catalog = original.clone();
+    let mut source = original_text;
+
+    for operation in operations {
+        match operation {
+            EditOperation::SetAffiliationCatalogField { field, value } => {
+                let number = value.as_f64().with_context(|| {
+                    format!("INVALID_EDIT: affiliation catalog field {field} must be a number")
+                })?;
+                match field.as_str() {
+                    "default_random_draw_max_multiplier" => {
+                        catalog.default_random_draw_max_multiplier = number
+                    }
+                    "default_opponent_deck_max_multiplier" => {
+                        catalog.default_opponent_deck_max_multiplier = number
+                    }
+                    _ => bail!("INVALID_EDIT: unsupported affiliation catalog field {field}"),
+                }
+                source = patch_affiliation_catalog_field(&source, &catalog, &field)?;
+            }
+            EditOperation::SetAffiliationField {
+                affiliation_id,
+                field,
+                value,
+            } => {
+                let index = unique_affiliation_index(&catalog, &affiliation_id)?;
+                let text = json_string(value, &field)?;
+                if text.trim().is_empty() {
+                    bail!("INVALID_EDIT: affiliation {field} must not be blank");
+                }
+                match field.as_str() {
+                    "name" => catalog.affiliations[index].name = text,
+                    "atlas_card_theme" => catalog.affiliations[index].atlas_card_theme = text,
+                    _ => bail!("INVALID_EDIT: unsupported affiliation field {field}"),
+                }
+                source = patch_affiliation_field(&source, &catalog.affiliations[index], &field)?;
+            }
+            EditOperation::ReplaceAffiliationSignatureCards {
+                affiliation_id,
+                card_ids: requested,
+            } => {
+                let index = unique_affiliation_index(&catalog, &affiliation_id)?;
+                let parsed = requested
+                    .iter()
+                    .map(|id| {
+                        if !card_ids.contains(id.as_str()) {
+                            bail!("RECORD_NOT_FOUND: signature card UUID {id}");
+                        }
+                        CanonicalUuid::parse(id).map_err(|error| {
+                            anyhow::anyhow!("INVALID_EDIT: signature card identity {id}: {error}")
+                        })
+                    })
+                    .collect::<Result<Vec<_>>>()?;
+                catalog.affiliations[index].signature_card_ids = parsed;
+                source = patch_affiliation_field(
+                    &source,
+                    &catalog.affiliations[index],
+                    "signature_card_ids",
+                )?;
+            }
+            _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to affiliations"),
+        }
+    }
+
+    affiliations::validate(&catalog)
+        .context("INVALID_EDIT: affiliation edit violates the catalog contract")?;
+    verify_round_trip::<AffiliationCatalog>(&source, &catalog)?;
+    let changed = catalog != original;
+    if changed {
+        atomic_write(&source_path, source.as_bytes())?;
+    }
+    Ok(EditReport {
+        ok: true,
+        changed,
+        dataset_id: "affiliations".into(),
+        source_revision: revision(staging_root, manifest, &["affiliations"])?,
+    })
+}
+
+fn unique_affiliation_index(catalog: &AffiliationCatalog, id: &str) -> Result<usize> {
+    let requested = CanonicalUuid::parse(id)
+        .map_err(|error| anyhow::anyhow!("INVALID_EDIT: affiliation identity {id}: {error}"))?;
+    let matches = catalog
+        .affiliations
+        .iter()
+        .enumerate()
+        .filter(|(_, affiliation)| affiliation.id == requested)
+        .map(|(index, _)| index)
+        .collect::<Vec<_>>();
+    match matches.as_slice() {
+        [] => bail!("RECORD_NOT_FOUND: affiliation identity {id}"),
+        [index] => Ok(*index),
+        _ => bail!("MALFORMED_SOURCE: duplicate affiliation identity {id}"),
+    }
+}
+
+fn affiliation_catalog_range(source: &str) -> Result<Range<usize>> {
+    let matches = named_struct_ranges(source, "AffiliationCatalog")?;
+    match matches.as_slice() {
+        [] => bail!("MALFORMED_SOURCE: missing AffiliationCatalog boundary"),
+        [range] => Ok(range.clone()),
+        _ => bail!("MALFORMED_SOURCE: duplicate AffiliationCatalog boundary"),
+    }
+}
+
+fn patch_affiliation_catalog_field(
+    source: &str,
+    catalog: &AffiliationCatalog,
+    field: &str,
+) -> Result<String> {
+    let replacement = match field {
+        "default_random_draw_max_multiplier" => {
+            ron::to_string(&catalog.default_random_draw_max_multiplier)?
+        }
+        "default_opponent_deck_max_multiplier" => {
+            ron::to_string(&catalog.default_opponent_deck_max_multiplier)?
+        }
+        _ => bail!("INVALID_EDIT: unsupported affiliation catalog field {field}"),
+    };
+    patch_field_value(
+        source,
+        affiliation_catalog_range(source)?,
+        field,
+        &replacement,
+    )
+}
+
+fn patch_affiliation_field(
+    source: &str,
+    affiliation: &crate::models::affiliations::AffiliationDefinition,
+    field: &str,
+) -> Result<String> {
+    let record = affiliation_record_range(source, &affiliation.id.to_string())?;
+    let replacement = match field {
+        "name" => ron::to_string(&affiliation.name)?,
+        "atlas_card_theme" => ron::to_string(&affiliation.atlas_card_theme)?,
+        "signature_card_ids" => ron::to_string(
+            &affiliation
+                .signature_card_ids
+                .iter()
+                .map(ToString::to_string)
+                .collect::<Vec<_>>(),
+        )?,
+        _ => bail!("INVALID_EDIT: unsupported affiliation field {field}"),
+    };
+    patch_field_value(source, record, field, &replacement)
+}
+
+fn affiliation_record_range(source: &str, id: &str) -> Result<Range<usize>> {
+    let mut matches = Vec::new();
+    for record in named_struct_ranges(source, "AffiliationDefinition")? {
+        let identity = top_level_field_value_range(source, record.clone(), "id")?
+            .context("MALFORMED_SOURCE: affiliation record is missing id")?;
+        let parsed: String = ron::from_str(&source[identity])
+            .context("MALFORMED_SOURCE: affiliation id is not a string")?;
+        if parsed == id {
+            matches.push(record);
+        }
+    }
+    match matches.as_slice() {
+        [] => bail!("RECORD_NOT_FOUND: AffiliationDefinition identity {id}"),
+        [range] => Ok(range.clone()),
+        _ => bail!("MALFORMED_SOURCE: duplicate AffiliationDefinition identity {id}"),
+    }
+}
+
+fn named_struct_ranges(source: &str, name: &str) -> Result<Vec<Range<usize>>> {
+    let bytes = source.as_bytes();
+    let mut cursor = 0;
+    let mut ranges = Vec::new();
+    while cursor < bytes.len() {
+        if let Some(next) = skip_ron_literal_or_comment(bytes, cursor)? {
+            cursor = next;
+            continue;
+        }
+        if bytes[cursor].is_ascii_alphabetic() || bytes[cursor] == b'_' {
+            let start = cursor;
+            cursor += 1;
+            while cursor < bytes.len()
+                && (bytes[cursor].is_ascii_alphanumeric() || bytes[cursor] == b'_')
+            {
+                cursor += 1;
+            }
+            if &source[start..cursor] != name {
+                continue;
+            }
+            while cursor < bytes.len() && bytes[cursor].is_ascii_whitespace() {
+                cursor += 1;
+            }
+            if bytes.get(cursor) == Some(&b'(') {
+                let end = matching_delimiter(source, cursor)? + 1;
+                ranges.push(start..end);
+                cursor = end;
+            }
+            continue;
+        }
+        cursor += 1;
+    }
+    Ok(ranges)
+}
+
+fn patch_field_value(
+    source: &str,
+    record: Range<usize>,
+    field: &str,
+    replacement: &str,
+) -> Result<String> {
+    let range = top_level_field_value_range(source, record, field)?
+        .with_context(|| format!("MALFORMED_SOURCE: missing field {field}"))?;
+    Ok(format!(
+        "{}{}{}",
+        &source[..range.start],
+        replacement,
+        &source[range.end..]
+    ))
 }
 
 fn edit_dreamscapes(
@@ -4325,7 +4583,6 @@ mod tests {
             metadata
         );
     }
-
     const TUTORIAL_EDITOR_SOURCE: &str = r###"// Preserve catalog guidance.
 #![enable(implicit_some)]
 TutorialCatalog(
@@ -4442,6 +4699,76 @@ TutorialCatalog(
               "wait": 0
             }]))
             .is_err()
+        );
+    }
+    const AFFILIATION_SOURCE: &str = r###"// Catalog guidance stays byte-stable; AffiliationCatalog(fake: true).
+#![enable(implicit_some)]
+AffiliationCatalog(
+  default_random_draw_max_multiplier: 1.25,
+  default_opponent_deck_max_multiplier: 3.5,
+  affiliations: [
+    AffiliationDefinition (
+      // AffiliationDefinition(id: "comment-only")
+      id : "00000000-0000-4000-8000-000000000031",
+      name: r#"First Affiliation"#,
+      atlas_card_theme: "Dawn",
+      signature_card_ids: ["00000000-0000-4000-8000-000000000101"],
+    ),
+    // Unrelated record comment.
+    AffiliationDefinition(
+      id: "00000000-0000-4000-8000-000000000032",
+      name: "Unrelated",
+      atlas_card_theme: "Dusk",
+      signature_card_ids: ["00000000-0000-4000-8000-000000000102"],
+    ),
+  ],
+)
+"###;
+
+    #[test]
+    fn affiliation_scalar_edits_change_only_the_target_values() {
+        let mut catalog: AffiliationCatalog = ron::from_str(AFFILIATION_SOURCE).unwrap();
+        catalog.default_random_draw_max_multiplier = 2.0;
+        let global = patch_affiliation_catalog_field(
+            AFFILIATION_SOURCE,
+            &catalog,
+            "default_random_draw_max_multiplier",
+        )
+        .unwrap();
+        assert!(global.contains("default_random_draw_max_multiplier: 2.0,"));
+        assert!(global.contains("// Unrelated record comment."));
+
+        catalog.affiliations[0].name = "Renamed".into();
+        let patched = patch_affiliation_field(&global, &catalog.affiliations[0], "name").unwrap();
+        assert!(patched.contains("name: \"Renamed\","));
+        assert!(patched.contains("name: \"Unrelated\","));
+        verify_round_trip::<AffiliationCatalog>(&patched, &catalog).unwrap();
+    }
+
+    #[test]
+    fn affiliation_signature_replacement_preserves_order_and_unrelated_source() {
+        let mut catalog: AffiliationCatalog = ron::from_str(AFFILIATION_SOURCE).unwrap();
+        catalog.affiliations[0].signature_card_ids = vec![
+            CanonicalUuid::parse("00000000-0000-4000-8000-000000000102").unwrap(),
+            CanonicalUuid::parse("00000000-0000-4000-8000-000000000101").unwrap(),
+        ];
+        let patched = patch_affiliation_field(
+            AFFILIATION_SOURCE,
+            &catalog.affiliations[0],
+            "signature_card_ids",
+        )
+        .unwrap();
+        assert!(patched.contains(
+            "[\"00000000-0000-4000-8000-000000000102\",\"00000000-0000-4000-8000-000000000101\"]"
+        ));
+        assert!(patched.contains("// Unrelated record comment."));
+        verify_round_trip::<AffiliationCatalog>(&patched, &catalog).unwrap();
+        catalog.affiliations[0].signature_card_ids.clear();
+        assert!(
+            affiliations::validate(&catalog)
+                .unwrap_err()
+                .to_string()
+                .contains("no signature cards")
         );
     }
 }
