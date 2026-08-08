@@ -5,4 +5,5 @@ pub mod augury;
 pub mod cards;
 pub mod compat;
 pub mod draft;
+pub mod dream_avatars;
 pub mod exploration;
