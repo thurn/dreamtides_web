@@ -159,8 +159,17 @@ fn edit_cards(
     reject_duplicate_cards(&original)?;
     let mut cards = original.clone();
     let mut cards_text = original_text;
-    let mut metadata = read_compat(manifest, staging_root, "internal-card-metadata")?;
+    let metadata_path = staging_root.join(&manifest.dataset("internal-card-metadata")?.source);
+    let original_metadata_text = fs::read_to_string(&metadata_path).with_context(|| {
+        format!(
+            "read staged card metadata source {}",
+            metadata_path.display()
+        )
+    })?;
+    let mut metadata: CompatDocument = ron::from_str(&original_metadata_text)
+        .context("MALFORMED_SOURCE: staged internal card metadata RON is invalid")?;
     let original_metadata = metadata.clone();
+    let mut metadata_text = original_metadata_text;
 
     for operation in operations {
         match operation {
@@ -170,10 +179,19 @@ fn edit_cards(
                 value,
             } => {
                 let index = unique_card_index(&cards, &card_id)?;
-                let before = cards[index].clone();
-                set_card_field(&mut cards[index], &field, value)?;
-                if cards[index] != before {
-                    cards_text = patch_card_source_field(&cards_text, &cards[index], &field)?;
+                if field == "tags" {
+                    let before = metadata.clone();
+                    set_card_metadata_tags(&mut metadata, &card_id, value)?;
+                    if metadata != before {
+                        metadata_text =
+                            patch_card_metadata_record(&metadata_text, &metadata, &card_id)?;
+                    }
+                } else {
+                    let before = cards[index].clone();
+                    set_card_field(&mut cards[index], &field, value)?;
+                    if cards[index] != before {
+                        cards_text = patch_card_source_field(&cards_text, &cards[index], &field)?;
+                    }
                 }
             }
             EditOperation::UpsertFacet { facet, name, color } => {
@@ -183,12 +201,9 @@ fn edit_cards(
             EditOperation::DeleteFacet { facet, name } => {
                 delete_facet(&mut metadata, facet, &name)?;
                 if matches!(facet, Facet::Tags) {
-                    for card in &mut cards {
-                        let before = card.tags.len();
-                        card.tags.retain(|tag| tag != &name);
-                        if card.tags.len() != before {
-                            cards_text = patch_card_source_field(&cards_text, card, "tags")?;
-                        }
+                    for card_id in remove_tag_from_card_metadata(&mut metadata, &name)? {
+                        metadata_text =
+                            patch_card_metadata_record(&metadata_text, &metadata, &card_id)?;
                     }
                 }
             }
@@ -198,7 +213,8 @@ fn edit_cards(
     reject_duplicate_cards(&cards)?;
 
     verify_round_trip::<Vec<CardDefinition>>(&cards_text, &cards)?;
-    let metadata_text = serialize_ron(&metadata, false)?;
+    let serialized_metadata = serialize_ron(&metadata, false)?;
+    let metadata_text = preserve_card_metadata_source(&serialized_metadata, &metadata_text)?;
     verify_round_trip::<CompatDocument>(&metadata_text, &metadata)?;
     let changed = cards != original || metadata != original_metadata;
     if changed {
@@ -206,10 +222,7 @@ fn edit_cards(
             atomic_write(&cards_path, cards_text.as_bytes())?;
         }
         if metadata != original_metadata {
-            atomic_write(
-                &staging_root.join(&manifest.dataset("internal-card-metadata")?.source),
-                metadata_text.as_bytes(),
-            )?;
+            atomic_write(&metadata_path, metadata_text.as_bytes())?;
         }
     }
     Ok(EditReport {
@@ -717,7 +730,6 @@ fn patch_card_source_field(source: &str, card: &CardDefinition, field: &str) -> 
         "rules" | "rendered-text" => "rules",
         "energy_cost" | "energy-cost" => "energy_cost",
         "card_type" | "card-type" | "subtype" | "spark" => "kind",
-        "tags" => "tags",
         "image_number" | "image-number" | "art_crop" | "art" => "art",
         _ => bail!("INVALID_EDIT: unsupported Cards field {field}"),
     };
@@ -731,23 +743,10 @@ fn patch_card_source_field(source: &str, card: &CardDefinition, field: &str) -> 
             &source[value.end..]
         ));
     }
-    if source_field != "tags" {
-        bail!(
-            "MALFORMED_SOURCE: missing field {source_field} on card {}",
-            card.id
-        );
-    }
-
-    let closing = record.end - 1;
-    let closing_line = source[..closing]
-        .rfind('\n')
-        .map_or(record.start, |offset| offset + 1);
-    Ok(format!(
-        "{}    tags: {},\n{}",
-        &source[..closing_line],
-        replacement,
-        &source[closing_line..]
-    ))
+    bail!(
+        "MALFORMED_SOURCE: missing field {source_field} on card {}",
+        card.id
+    )
 }
 
 fn render_card_source_field(card: &CardDefinition, field: &str) -> Result<String> {
@@ -768,14 +767,6 @@ fn render_card_source_field(card: &CardDefinition, field: &str) -> Result<String
                 })
             }
         },
-        "tags" => Ok(format!(
-            "[{}]",
-            card.tags
-                .iter()
-                .map(ron::to_string)
-                .collect::<std::result::Result<Vec<_>, _>>()?
-                .join(", ")
-        )),
         "art" => {
             let mut fields = vec![format!("image: {}", card.art.image)];
             if card.art.owned {
@@ -1084,20 +1075,7 @@ fn set_card_field(card: &mut CardDefinition, field: &str, value: JsonValue) -> R
             }
             CardKind::Event => bail!("FIELD_NOT_APPLICABLE: spark does not apply to Event cards"),
         },
-        "tags" => {
-            let values = value
-                .as_array()
-                .context("INVALID_EDIT: tags must be an array")?;
-            card.tags = values
-                .iter()
-                .map(|entry| {
-                    entry
-                        .as_str()
-                        .map(str::to_owned)
-                        .context("INVALID_EDIT: every tag must be a string")
-                })
-                .collect::<Result<Vec<_>>>()?;
-        }
+        "tags" => bail!("FIELD_NOT_APPLICABLE: tags are stored in internal card metadata"),
         "image_number" | "image-number" => {
             card.art.image = value
                 .as_i64()
@@ -1170,12 +1148,6 @@ fn json_number(value: Option<&JsonValue>, field: &str) -> Result<f64> {
         .with_context(|| format!("INVALID_EDIT: {field} must be a number"))
 }
 
-fn read_compat(manifest: &Manifest, staging_root: &Path, id: &str) -> Result<CompatDocument> {
-    let path = staging_root.join(&manifest.dataset(id)?.source);
-    ron::from_str(&fs::read_to_string(&path)?)
-        .with_context(|| format!("MALFORMED_SOURCE: {id} RON is invalid"))
-}
-
 fn facet_array_mut(document: &mut CompatDocument, facet: Facet) -> Result<&mut Vec<toml::Value>> {
     let key = match facet {
         Facet::Tags => "tags",
@@ -1245,6 +1217,150 @@ fn delete_facet(document: &mut CompatDocument, facet: Facet, name: &str) -> Resu
         bail!("RECORD_NOT_FOUND: facet {name}");
     }
     Ok(())
+}
+
+fn card_metadata_table_mut(
+    document: &mut CompatDocument,
+) -> Result<&mut toml::map::Map<String, toml::Value>> {
+    document
+        .data
+        .as_table_mut()
+        .and_then(|data| data.get_mut("cards"))
+        .and_then(toml::Value::as_table_mut)
+        .context("MALFORMED_SOURCE: internal card metadata must contain a cards table")
+}
+
+fn card_metadata_record_mut<'a>(
+    document: &'a mut CompatDocument,
+    card_id: &str,
+) -> Result<&'a mut toml::map::Map<String, toml::Value>> {
+    card_metadata_table_mut(document)?
+        .get_mut(card_id)
+        .and_then(toml::Value::as_table_mut)
+        .with_context(|| format!("RECORD_NOT_FOUND: internal metadata for card UUID {card_id}"))
+}
+
+fn card_metadata_record<'a>(
+    document: &'a CompatDocument,
+    card_id: &str,
+) -> Result<&'a toml::map::Map<String, toml::Value>> {
+    document
+        .data
+        .as_table()
+        .and_then(|data| data.get("cards"))
+        .and_then(toml::Value::as_table)
+        .and_then(|cards| cards.get(card_id))
+        .and_then(toml::Value::as_table)
+        .with_context(|| format!("RECORD_NOT_FOUND: internal metadata for card UUID {card_id}"))
+}
+
+fn set_card_metadata_tags(
+    document: &mut CompatDocument,
+    card_id: &str,
+    value: JsonValue,
+) -> Result<()> {
+    let values = value
+        .as_array()
+        .context("INVALID_EDIT: tags must be an array")?;
+    let tags = values
+        .iter()
+        .map(|entry| {
+            entry
+                .as_str()
+                .map(|tag| toml::Value::String(tag.to_owned()))
+                .context("INVALID_EDIT: every tag must be a string")
+        })
+        .collect::<Result<Vec<_>>>()?;
+    card_metadata_record_mut(document, card_id)?.insert("tags".into(), tags.into());
+    Ok(())
+}
+
+fn remove_tag_from_card_metadata(document: &mut CompatDocument, name: &str) -> Result<Vec<String>> {
+    let mut changed = Vec::new();
+    for (card_id, value) in card_metadata_table_mut(document)? {
+        let record = value.as_table_mut().with_context(|| {
+            format!("MALFORMED_SOURCE: internal metadata for card UUID {card_id} must be a record")
+        })?;
+        if let Some(tags) = record.get_mut("tags") {
+            let tags = tags.as_array_mut().with_context(|| {
+                format!("MALFORMED_SOURCE: tags for card UUID {card_id} must be an array")
+            })?;
+            let before = tags.len();
+            tags.retain(|tag| tag.as_str() != Some(name));
+            if tags.len() != before {
+                changed.push(card_id.clone());
+            }
+        }
+    }
+    Ok(changed)
+}
+
+fn card_metadata_value_range(source: &str, card_id: &str) -> Result<Range<usize>> {
+    let id_literal = ron::to_string(card_id)?;
+    let marker = format!("{id_literal}:");
+    let matches = source
+        .match_indices(&marker)
+        .map(|(offset, _)| offset)
+        .collect::<Vec<_>>();
+    if matches.is_empty() {
+        bail!("RECORD_NOT_FOUND: internal metadata for card UUID {card_id}");
+    }
+    if matches.len() > 1 {
+        bail!("MALFORMED_SOURCE: duplicate internal metadata for card UUID {card_id}");
+    }
+    let mut start = matches[0] + marker.len();
+    let bytes = source.as_bytes();
+    while start < bytes.len() && bytes[start].is_ascii_whitespace() {
+        start += 1;
+    }
+    Ok(start..top_level_value_end(source, start, source.len())?)
+}
+
+fn patch_card_metadata_record(
+    source: &str,
+    metadata: &CompatDocument,
+    card_id: &str,
+) -> Result<String> {
+    let range = card_metadata_value_range(source, card_id)?;
+    let replacement = ron::to_string(&toml::Value::Table(
+        card_metadata_record(metadata, card_id)?.clone(),
+    ))?;
+    Ok(format!(
+        "{}{}{}",
+        &source[..range.start],
+        replacement,
+        &source[range.end..]
+    ))
+}
+
+fn card_metadata_map_value_range(source: &str) -> Result<Range<usize>> {
+    let marker = "\"cards\":";
+    let matches = source
+        .match_indices(marker)
+        .map(|(offset, _)| offset)
+        .collect::<Vec<_>>();
+    if matches.len() != 1 {
+        bail!("MALFORMED_SOURCE: internal card metadata must contain one cards table");
+    }
+    let mut start = matches[0] + marker.len();
+    let bytes = source.as_bytes();
+    while start < bytes.len() && bytes[start].is_ascii_whitespace() {
+        start += 1;
+    }
+    Ok(start..top_level_value_end(source, start, source.len())?)
+}
+
+fn preserve_card_metadata_source(serialized: &str, source: &str) -> Result<String> {
+    let serialized_range = card_metadata_map_value_range(serialized)
+        .context("serialized internal card metadata is missing its cards table")?;
+    let source_range = card_metadata_map_value_range(source)
+        .context("source internal card metadata is missing its cards table")?;
+    Ok(format!(
+        "{}{}{}",
+        &serialized[..serialized_range.start],
+        &source[source_range],
+        &serialized[serialized_range.end..]
+    ))
 }
 
 fn serialize_ron<T: serde::Serialize>(value: &T, implicit_some: bool) -> Result<String> {
@@ -1321,9 +1437,6 @@ mod tests {
     energy_cost: Fixed(5),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
     art: (image: 2033720048, crop: (x: 0.0, y: 0.595, scale: 1.17)),
-    number: 142,
-    mtg_origin: "Solitude",
-    tags: ["Art Rework", "June30", "Art OK"],
   ),
   CardDefinition(
     name: "Unrelated Card",
@@ -1332,8 +1445,6 @@ mod tests {
     energy_cost: Variable,
     kind: Event,
     art: (image: 2),
-    number: 2,
-    mtg_origin: "Fixture",
   ),
 ]
 "##;
@@ -1497,7 +1608,6 @@ mod tests {
             ("card-type", json!("Event")),
             ("subtype", json!("Guide")),
             ("spark", json!("X")),
-            ("tags", json!(["first", "second"])),
             ("image-number", json!(42)),
             ("art", json!({ "x": -0.25, "y": 1.0, "scale": 1.5 })),
         ];
@@ -1536,9 +1646,6 @@ mod tests {
                 owned: false,
                 crop: None,
             },
-            number: 1,
-            mtg_origin: String::new(),
-            tags: vec![],
         };
         assert!(
             set_card_field(&mut event, "subtype", json!("Guide"))
@@ -1555,6 +1662,78 @@ mod tests {
                 .unwrap_err()
                 .to_string()
                 .contains("FIELD_NOT_APPLICABLE")
+        );
+    }
+
+    #[test]
+    fn card_tags_are_edited_in_id_keyed_internal_metadata() {
+        let mut document = CompatDocument {
+            data: toml::Value::Table(toml::map::Map::from_iter([(
+                "cards".into(),
+                toml::Value::Table(toml::map::Map::from_iter([(
+                    CARD_ID.into(),
+                    toml::Value::Table(toml::map::Map::from_iter([
+                        ("number".into(), 142.into()),
+                        ("mtg_origin".into(), "Solitude".into()),
+                    ])),
+                )])),
+            )])),
+        };
+
+        set_card_metadata_tags(&mut document, CARD_ID, json!(["Art OK", "tutorial"])).unwrap();
+
+        let record = card_metadata_record_mut(&mut document, CARD_ID).unwrap();
+        assert_eq!(record["number"].as_integer(), Some(142));
+        assert_eq!(record["mtg_origin"].as_str(), Some("Solitude"));
+        assert_eq!(record["tags"][0].as_str(), Some("Art OK"));
+        assert_eq!(record["tags"][1].as_str(), Some("tutorial"));
+    }
+
+    #[test]
+    fn card_tag_source_patch_preserves_unrelated_metadata_bytes() {
+        let source = r##"CompatDocument(
+  data: {
+    "cards": {
+      /* first card comment */
+      "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5": {
+        "number": 142,
+        "mtg_origin": "Solitude",
+        "tags": ["Art Rework"],
+      },
+      /* unrelated card comment */
+      "00000000-0000-4000-8000-000000000002": {
+        "number": 2,
+        "mtg_origin": "Fixture",
+      },
+    },
+    "tags": [
+      /*[0]*/
+      {"name": "Art Rework", "color": "#b91c1c"},
+      /*[1]*/
+      {"name": "Art OK", "color": "#15803d"},
+    ],
+    "tides": [],
+  },
+)
+"##;
+        let mut metadata: CompatDocument = ron::from_str(source).unwrap();
+        set_card_metadata_tags(&mut metadata, CARD_ID, json!(["Art Rework", "Art OK"])).unwrap();
+
+        let patched = patch_card_metadata_record(source, &metadata, CARD_ID).unwrap();
+        let before = card_metadata_value_range(source, CARD_ID).unwrap();
+        let after = card_metadata_value_range(&patched, CARD_ID).unwrap();
+        assert_eq!(&source[..before.start], &patched[..after.start]);
+        assert_eq!(&source[before.end..], &patched[after.end..]);
+        assert!(patched.contains("/* unrelated card comment */"));
+
+        let serialized = serialize_ron(&metadata, false).unwrap();
+        let preserved = preserve_card_metadata_source(&serialized, &patched).unwrap();
+        let patched_cards = card_metadata_map_value_range(&patched).unwrap();
+        let preserved_cards = card_metadata_map_value_range(&preserved).unwrap();
+        assert_eq!(&patched[patched_cards], &preserved[preserved_cards]);
+        assert_eq!(
+            ron::from_str::<CompatDocument>(&preserved).unwrap(),
+            metadata
         );
     }
 }

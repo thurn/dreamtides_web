@@ -177,6 +177,13 @@ detail-headline/detail-subtitle describe the expanded offer panel.
 
 ## `data/internal/internal_card_metadata.ron`
 
+### `[cards.<card-id>]`
+
+Internal metadata keyed by the card's canonical UUID. Each record supplies the
+card's numeric catalog identifier (`number`), Magic source name (`mtg_origin`),
+and optional taxonomy labels (`tags`). The cards compiler joins these fields
+into the generated `cards.toml` record with the same UUID.
+
 ### `[[tags]]`
 
 Tag registry for cards.toml.

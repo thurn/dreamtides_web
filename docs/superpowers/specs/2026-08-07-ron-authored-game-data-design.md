@@ -306,13 +306,15 @@ The first three adapters have concrete contracts:
   the `rarity` string in one `[[rarity-caps]]` entry. `Tides4` becomes the
   `"tides4"` default strategy and the `[pool.tides4]` table. The adapter rejects
   a default strategy without a matching strategy definition.
-- Cards maps `rules` to `rendered-text`, `mtg_origin` to `mtg-name`, `number` to
-  `card-number`, and the art fields to `image-number`, `art-owned`, and `art`.
+- Cards joins `number`, `mtg_origin`, and `tags` from the UUID-keyed internal
+  card metadata, maps `rules` to `rendered-text`, maps the metadata fields to
+  `card-number`, `mtg-name`, and `tags`, and maps the art fields to
+  `image-number`, `art-owned`, and `art`.
   `Fixed(n)`, `Variable`, and `FixedAndVariable(n)` become `n`, `"X"`, and
   `"n,X"`. `Event` and `Character` materialize `card-type`, subtype, and spark.
   The default speed emits both speed flags as false, `Fast` emits
   `is-fast = true` and `is-interrupt = false`, and `Interrupt` emits both flags
-  as true. Omitted rarity, tags, art ownership, crop, and character spark use
+  as true. Omitted rarity, metadata tags, art ownership, crop, and character spark use
   the compatibility defaults already present in `cards.toml`.
 - Exploration maps each effect-kind, mechanic, policy, control, resource, and
   predicate enum through an explicit exhaustive match. Effect definitions

@@ -73,15 +73,16 @@ pub fn compile(request: CompileRequest<'_>) -> Result<CompileReport> {
         let source_path = request.root.join(&dataset.source);
         let source = fs::read(&source_path)
             .with_context(|| format!("read {} source {}", dataset.id, source_path.display()))?;
-        let source_hash = sha256(&source);
+        let source_hash = dataset_source_hash(request.root, request.manifest, dataset, &source)?;
         let manifest_fingerprint = manifest_fingerprint(dataset)?;
-        let compatibility = adapt(dataset, &source).with_context(|| {
-            format!(
-                "compile dataset {} from {}",
-                dataset.id,
-                source_path.display()
-            )
-        })?;
+        let compatibility =
+            adapt(request.root, request.manifest, dataset, &source).with_context(|| {
+                format!(
+                    "compile dataset {} from {}",
+                    dataset.id,
+                    source_path.display()
+                )
+            })?;
         let body = toml::to_string_pretty(&compatibility)
             .with_context(|| format!("serialize compatibility TOML for {}", dataset.id))?;
         let generated = generated_document(
@@ -116,14 +117,33 @@ pub fn compile(request: CompileRequest<'_>) -> Result<CompileReport> {
     })
 }
 
-fn adapt(dataset: &Dataset, source: &[u8]) -> Result<toml::Value> {
+fn adapt(
+    root: &Path,
+    manifest: &Manifest,
+    dataset: &Dataset,
+    source: &[u8],
+) -> Result<toml::Value> {
     let source = std::str::from_utf8(source).context("RON source is not UTF-8")?;
     match dataset.adapter.as_str() {
         "affiliations_v1" => affiliations::lower(parse_ron(source, dataset)?),
         "apollyon_incarnations_v1" => apollyon_incarnations::lower(parse_ron(source, dataset)?),
         "atlas_v1" => atlas::lower(parse_ron(source, dataset)?),
         "draft_v1" => draft::lower(parse_ron(source, dataset)?),
-        "cards_v1" => cards::lower(parse_ron(source, dataset)?),
+        "cards_v1" => {
+            let metadata_dataset = manifest.dataset("internal-card-metadata")?;
+            let metadata_source = fs::read_to_string(root.join(&metadata_dataset.source))
+                .with_context(|| {
+                    format!(
+                        "read internal card metadata source {}",
+                        metadata_dataset.source
+                    )
+                })?;
+            let metadata: compat::CompatDocument = parse_ron(&metadata_source, metadata_dataset)?;
+            cards::lower(
+                parse_ron(source, dataset)?,
+                cards::metadata_by_id(&metadata.data)?,
+            )
+        }
         "exploration_v1" => exploration::lower(parse_ron(source, dataset)?),
         "compat_v1" => {
             let document: compat::CompatDocument = parse_ron(source, dataset)?;
@@ -131,6 +151,31 @@ fn adapt(dataset: &Dataset, source: &[u8]) -> Result<toml::Value> {
         }
         adapter => bail!("dataset {} has unsupported adapter {adapter}", dataset.id),
     }
+}
+
+fn dataset_source_hash(
+    root: &Path,
+    manifest: &Manifest,
+    dataset: &Dataset,
+    source: &[u8],
+) -> Result<String> {
+    if dataset.dependencies.is_empty() {
+        return Ok(sha256(source));
+    }
+    let mut bytes = Vec::new();
+    bytes.extend_from_slice(source);
+    bytes.push(0);
+    for dependency_id in &dataset.dependencies {
+        let dependency = manifest.dataset(dependency_id)?;
+        bytes.extend_from_slice(&fs::read(root.join(&dependency.source)).with_context(|| {
+            format!(
+                "read dependency {} source {}",
+                dependency.id, dependency.source
+            )
+        })?);
+        bytes.push(0);
+    }
+    Ok(sha256(bytes))
 }
 
 fn parse_ron<T: serde::de::DeserializeOwned>(source: &str, dataset: &Dataset) -> Result<T> {

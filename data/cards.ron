@@ -11,9 +11,6 @@
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 454095982, crop: (x: -0.426, y: 1.0, scale: 1.37)),
-    number: 1,
-    mtg_origin: "Phelia, Exuberant Shepherd",
-    tags: ["Art Rework", "July20", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -24,9 +21,6 @@
     kind: Character(subtype: "Guide", spark: Fixed(2)),
     speed: Fast,
     art: (image: 2022594419),
-    number: 2,
-    mtg_origin: "Phelia, Exuberant Shepherd",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -39,9 +33,6 @@ Draw 2 cards."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 618071684, crop: (x: 0.0, y: 1.0, scale: 1.1)),
-    number: 3,
-    mtg_origin: "Gush",
-    tags: ["Art Rework", "July8", "Art OK"],
   ),
 
   CardDefinition(
@@ -53,9 +44,6 @@ Draw 2 cards."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(0)),
     art: (image: 1196004046, crop: (x: -0.056, y: 1.0, scale: 1.67)),
-    number: 4,
-    mtg_origin: "Noble Hierarch",
-    tags: ["Elves", "Art Rework", "June19", "Art OK"],
   ),
 
   CardDefinition(
@@ -67,9 +55,6 @@ Reclaim 1●."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 2212744813, crop: (x: -0.21, y: 1.0, scale: 1.17)),
-    number: 5,
-    mtg_origin: "Ephemerate",
-    tags: ["Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -81,9 +66,6 @@ When you play a card from your void, return this character to play."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
     art: (image: 2218612335, crop: (x: -0.129, y: 0.897, scale: 1.07)),
-    number: 6,
-    mtg_origin: "Poxwalkers",
-    tags: ["Art Rework", "June22", "Art OK"],
   ),
 
   CardDefinition(
@@ -93,8 +75,6 @@ When you play a card from your void, return this character to play."#,
     energy_cost: Fixed(3),
     kind: Event,
     art: (image: 1480584617, crop: (x: 0.21, y: 0.369, scale: 1.17)),
-    number: 7,
-    mtg_origin: "Timetwister",
   ),
 
   CardDefinition(
@@ -104,9 +84,6 @@ When you play a card from your void, return this character to play."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Hacker", spark: Fixed(1)),
     art: (image: 1633431265, owned: true),
-    number: 8,
-    mtg_origin: "Currency Converter",
-    tags: ["Merfolk Looter"],
   ),
 
   CardDefinition(
@@ -118,9 +95,6 @@ Once per turn, when you discard a card, materialize a 2✦ shadow figment."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 2189428523, crop: (x: -0.042, y: 0.032, scale: 1.17)),
-    number: 9,
-    mtg_origin: "Currency Converter",
-    tags: ["Art OK"],
   ),
 
   CardDefinition(
@@ -130,9 +104,6 @@ Once per turn, when you discard a card, materialize a 2✦ shadow figment."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 1562815903),
-    number: 10,
-    mtg_origin: "Sword of the Meek",
-    tags: ["tutorial"],
   ),
 
   CardDefinition(
@@ -142,9 +113,6 @@ Once per turn, when you discard a card, materialize a 2✦ shadow figment."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 1164289066, crop: (x: 0.084, y: 1.0, scale: 1.17)),
-    number: 11,
-    mtg_origin: "Desperate Ritual",
-    tags: ["Ritual", "Art OK"],
   ),
 
   CardDefinition(
@@ -154,9 +122,6 @@ Once per turn, when you discard a card, materialize a 2✦ shadow figment."#,
     energy_cost: Fixed(2),
     kind: Event,
     art: (image: 389999815, owned: true, crop: (x: 0.353, y: 1.0, scale: 1.17)),
-    number: 12,
-    mtg_origin: "Night's Whisper",
-    tags: ["Art Rework", "July7", "Art OK"],
   ),
 
   CardDefinition(
@@ -166,9 +131,6 @@ Once per turn, when you discard a card, materialize a 2✦ shadow figment."#,
     energy_cost: Fixed(7),
     kind: Event,
     art: (image: 1913887486, crop: (x: -0.294, y: -0.102, scale: 1.17)),
-    number: 13,
-    mtg_origin: "Craterhoof Behemoth",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -178,9 +140,6 @@ Once per turn, when you discard a card, materialize a 2✦ shadow figment."#,
     energy_cost: Fixed(3),
     kind: Event,
     art: (image: 347770439),
-    number: 14,
-    mtg_origin: "Enduring Renewal",
-    tags: ["Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -190,9 +149,6 @@ Once per turn, when you discard a card, materialize a 2✦ shadow figment."#,
     energy_cost: Fixed(0),
     kind: Character(subtype: "Warrior", spark: Fixed(0)),
     art: (image: 1047769090, crop: (x: -0.294, y: 1.0, scale: 1.17)),
-    number: 15,
-    mtg_origin: "Mox Opal",
-    tags: ["Art Rework", "Art OK", "Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -202,9 +158,6 @@ Once per turn, when you discard a card, materialize a 2✦ shadow figment."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Tinkerer", spark: Fixed(1)),
     art: (image: 686903233, crop: (x: 0.0, y: 0.489, scale: 1.47)),
-    number: 16,
-    mtg_origin: "Jeskai Ascendancy",
-    tags: ["Event Payoff", "Art Rework", "July21", "Art OK"],
   ),
 
   CardDefinition(
@@ -214,9 +167,6 @@ Once per turn, when you discard a card, materialize a 2✦ shadow figment."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Musician", spark: Fixed(3)),
     art: (image: 457875112, crop: (x: 0.0, y: 0.798, scale: 1.17)),
-    number: 17,
-    mtg_origin: "Jeskai Ascendancy",
-    tags: ["Event Payoff", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -226,9 +176,6 @@ Once per turn, when you discard a card, materialize a 2✦ shadow figment."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Musician", spark: Fixed(1)),
     art: (image: 1794244540),
-    number: 18,
-    mtg_origin: "Jeskai Ascendancy",
-    tags: ["Event Payoff", "Art Rework", "July21", "Ally Audit", "Art OK"],
   ),
 
   CardDefinition(
@@ -238,9 +185,6 @@ Once per turn, when you discard a card, materialize a 2✦ shadow figment."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 2256745741, crop: (x: 0.0, y: 1.0, scale: 1.16)),
-    number: 19,
-    mtg_origin: "Recruiter of the Guard",
-    tags: ["Art Rework", "July13", "Art OK"],
   ),
 
   CardDefinition(
@@ -250,9 +194,6 @@ Once per turn, when you discard a card, materialize a 2✦ shadow figment."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 1798382125, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 20,
-    mtg_origin: "Vampiric Tutor",
-    tags: ["Discover"],
   ),
 
   CardDefinition(
@@ -264,9 +205,6 @@ Once per turn, when you discard a card, materialize a 2✦ shadow figment."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
     art: (image: 2287436067, crop: (x: -0.126, y: 0.0, scale: 1.17)),
-    number: 21,
-    mtg_origin: "Anafenza, Kin-Tree Spirit",
-    tags: ["Art Rework", "July15", "Art OK"],
   ),
 
   CardDefinition(
@@ -276,9 +214,6 @@ Once per turn, when you discard a card, materialize a 2✦ shadow figment."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 768349747, crop: (x: 0.147, y: -0.216, scale: 1.47)),
-    number: 22,
-    mtg_origin: "Containment Construct",
-    tags: ["Art Rework", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -290,9 +225,6 @@ Once per turn, when you discard a card, materialize a 2✦ shadow figment."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
     art: (image: 512756368, crop: (x: 1.0, y: 0.266, scale: 1.27)),
-    number: 23,
-    mtg_origin: "Life from the Loam",
-    tags: ["Art Rework", "June19", "Art OK"],
   ),
 
   CardDefinition(
@@ -304,9 +236,6 @@ Once per turn, when you discard a card, materialize a 2✦ shadow figment."#,
     energy_cost: Fixed(0),
     kind: Character(subtype: "Entity", spark: Fixed(0)),
     art: (image: 443761774, owned: true),
-    number: 24,
-    mtg_origin: "Life from the Loam",
-    tags: ["Art Rework", "July15", "Art OK"],
   ),
 
   CardDefinition(
@@ -316,9 +245,6 @@ Once per turn, when you discard a card, materialize a 2✦ shadow figment."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 1450052381, crop: (x: -0.08, y: 0.586, scale: 1.2)),
-    number: 25,
-    mtg_origin: "Ashnod's Altar",
-    tags: ["Art Rework", "Art OK"],
   ),
 
   CardDefinition(
@@ -330,9 +256,6 @@ When you play an event, copy it."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Tinkerer", spark: Fixed(2)),
     art: (image: 2027158298, crop: (x: 0.0, y: 0.0, scale: 1.57)),
-    number: 26,
-    mtg_origin: "Krark, the Thumbless",
-    tags: ["Event Payoff"],
   ),
 
   CardDefinition(
@@ -342,9 +265,6 @@ When you play an event, copy it."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visionary", spark: Fixed(1)),
     art: (image: 1963305277, crop: (x: 0.546, y: 1.0, scale: 1.17)),
-    number: 27,
-    mtg_origin: "Dragon's Rage Channeler",
-    tags: ["Event Payoff"],
   ),
 
   CardDefinition(
@@ -354,9 +274,6 @@ When you play an event, copy it."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Synth", spark: Fixed(1)),
     art: (image: 678431950),
-    number: 28,
-    mtg_origin: "Dragon's Rage Channeler",
-    tags: ["Art OK"],
   ),
 
   CardDefinition(
@@ -366,9 +283,6 @@ When you play an event, copy it."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Monster", spark: Fixed(2)),
     art: (image: 1450052378, crop: (x: 0.0, y: 1.0, scale: 1.37)),
-    number: 29,
-    mtg_origin: "Reclamation Sage",
-    tags: ["Removal", "Art Rework", "July16", "Art OK"],
   ),
 
   CardDefinition(
@@ -379,9 +293,6 @@ When you play an event, copy it."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 674166682, crop: (x: 0.0, y: -0.445, scale: 1.37)),
-    number: 30,
-    mtg_origin: "Lightning Bolt",
-    tags: ["Removal"],
   ),
 
   CardDefinition(
@@ -391,9 +302,6 @@ When you play an event, copy it."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 1791664445, crop: (x: 0.0, y: -0.236, scale: 1.87)),
-    number: 31,
-    mtg_origin: "Marauding Mako",
-    tags: ["Art Rework", "July21", "Art OK"],
   ),
 
   CardDefinition(
@@ -405,9 +313,6 @@ When you play a ≤2● cost character, gain 1●."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
     art: (image: 1788833075, owned: true, crop: (x: -0.084, y: 0.242, scale: 1.17)),
-    number: 32,
-    mtg_origin: "Fastbond",
-    tags: ["Character Payoff", "Art Rework", "June25", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -419,9 +324,6 @@ When you play a ≤2● cost character, gain 1●."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 2287054239, owned: true, crop: (x: -0.022, y: -0.517, scale: 1.77)),
-    number: 33,
-    mtg_origin: "Lion Sash",
-    tags: ["Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -432,9 +334,6 @@ When you play a ≤2● cost character, gain 1●."#,
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
     speed: Fast,
     art: (image: 2290648805, crop: (x: 0.0, y: -0.522, scale: 2.07)),
-    number: 34,
-    mtg_origin: "Ledger Shredder",
-    tags: ["Art Rework", "July23", "Art OK"],
   ),
 
   CardDefinition(
@@ -446,9 +345,6 @@ Reclaim – 3●, Banish 3 cards from your void."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
     art: (image: 472322395),
-    number: 35,
-    mtg_origin: "Detective's Phoenix",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -460,8 +356,6 @@ Reclaim – 3●, Banish 3 cards from your void."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 2590831715, crop: (x: 0.0, y: -0.51, scale: 1.47)),
-    number: 36,
-    mtg_origin: "Staff of the Storyteller",
   ),
 
   CardDefinition(
@@ -473,8 +367,6 @@ Reclaim – 3●, Banish 3 cards from your void."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Tinkerer", spark: Fixed(1)),
     art: (image: 454095535, crop: (x: 0.0, y: -0.681, scale: 1.77)),
-    number: 37,
-    mtg_origin: "Survival of the Fittest",
   ),
 
   CardDefinition(
@@ -485,8 +377,6 @@ Reclaim – 3●, Banish 3 cards from your void."#,
     kind: Event,
     rarity: Legendary,
     art: (image: 758082493, crop: (x: -0.63, y: 0.032, scale: 1.17)),
-    number: 38,
-    mtg_origin: "Time Walk",
   ),
 
   CardDefinition(
@@ -496,9 +386,6 @@ Reclaim – 3●, Banish 3 cards from your void."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Explorer", spark: Fixed(3)),
     art: (image: 1084620233, owned: true, crop: (x: 0.0, y: -0.083, scale: 1.27)),
-    number: 39,
-    mtg_origin: "Ramunap Excavator",
-    tags: ["Lurrus"],
   ),
 
   CardDefinition(
@@ -510,9 +397,6 @@ Reclaim – 3●, Banish 3 cards from your void."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Ancient", spark: Fixed(4)),
     art: (image: 2320845229),
-    number: 40,
-    mtg_origin: "Thing in the Ice // Awoken Horror",
-    tags: ["Event Payoff"],
   ),
 
   CardDefinition(
@@ -524,9 +408,6 @@ Reclaim – 3●, Banish 3 cards from your void."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Mage", spark: Fixed(2)),
     art: (image: 533945362, crop: (x: 0.681, y: 0.126, scale: 1.8)),
-    number: 41,
-    mtg_origin: "Thing in the Ice // Awoken Horror",
-    tags: ["Event Payoff", "Art Rework", "July22", "Art OK"],
   ),
 
   CardDefinition(
@@ -536,9 +417,6 @@ Reclaim – 3●, Banish 3 cards from your void."#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 2275146333, crop: (x: -0.319, y: 0.028, scale: 1.47)),
-    number: 42,
-    mtg_origin: "Arwen, Weaver of Hope",
-    tags: ["Art Rework", "July15", "Art OK"],
   ),
 
   CardDefinition(
@@ -548,9 +426,6 @@ Reclaim – 3●, Banish 3 cards from your void."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 1793552422, crop: (x: 0.375, y: 0.189, scale: 1.37)),
-    number: 43,
-    mtg_origin: "Aether Spellbomb",
-    tags: ["Art Rework", "June15", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -562,8 +437,6 @@ Abandon this character: Dissolve each character with cost less than or equal to 
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 776481895),
-    number: 44,
-    mtg_origin: "Ratchet Bomb",
   ),
 
   CardDefinition(
@@ -573,8 +446,6 @@ Abandon this character: Dissolve each character with cost less than or equal to 
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(2)),
     art: (image: 2278837667, crop: (x: -0.336, y: 0.369, scale: 1.17)),
-    number: 45,
-    mtg_origin: "Stonecloaker",
   ),
 
   CardDefinition(
@@ -585,9 +456,6 @@ Abandon this character: Dissolve each character with cost less than or equal to 
     kind: Character(subtype: "Vehicle", spark: Fixed(4)),
     speed: Fast,
     art: (image: 425039824, crop: (x: 0.0, y: -0.399, scale: 1.17)),
-    number: 46,
-    mtg_origin: "Stonecloaker",
-    tags: ["Art Rework", "Art OK", "July23", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -597,9 +465,6 @@ Abandon this character: Dissolve each character with cost less than or equal to 
     energy_cost: Fixed(0),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(0)),
     art: (image: 447372529, crop: (x: -1.0, y: 1.0, scale: 1.3)),
-    number: 47,
-    mtg_origin: "Lotus Petal",
-    tags: ["Lotus Petal", "Art Rework", "June17", "Art OK"],
   ),
 
   CardDefinition(
@@ -611,9 +476,6 @@ Abandon this character: Dissolve each character with cost less than or equal to 
     energy_cost: Fixed(3),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(2)),
     art: (image: 2127752129, crop: (x: 0.084, y: 1.0, scale: 1.17)),
-    number: 48,
-    mtg_origin: "Elvish Archdruid",
-    tags: ["Spirit Lord", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -625,9 +487,6 @@ Abandon this character: Dissolve each character with cost less than or equal to 
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(3)),
     art: (image: 1543022372, crop: (x: 0.168, y: 1.0, scale: 1.17)),
-    number: 49,
-    mtg_origin: "Elvish Archdruid",
-    tags: ["Spirit Lord"],
   ),
 
   CardDefinition(
@@ -639,9 +498,6 @@ When a character you control is dissolved, gain 1⍟."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
     art: (image: 410444932, crop: (x: -0.2, y: 0.298, scale: 1.0)),
-    number: 50,
-    mtg_origin: "Marionette Apprentice",
-    tags: ["Blood Artist", "Score Trigger", "Art Rework", "July13", "Ally Audit", "Art OK"],
   ),
 
   CardDefinition(
@@ -653,9 +509,6 @@ Abandon another character: Erode 1."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
     art: (image: 1639942843, crop: (x: 0.4, y: 1.0, scale: 1.17)),
-    number: 51,
-    mtg_origin: "Fiend Artisan",
-    tags: ["Free Sacrifice", "Spark Scaler", "Art OK"],
   ),
 
   CardDefinition(
@@ -665,9 +518,6 @@ Abandon another character: Erode 1."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
     art: (image: 2427491215, owned: true, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 52,
-    mtg_origin: "Fiend Artisan",
-    tags: ["Discover"],
   ),
 
   CardDefinition(
@@ -677,9 +527,6 @@ Abandon another character: Erode 1."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 1639942837, crop: (x: 0.588, y: 0.608, scale: 1.17)),
-    number: 53,
-    mtg_origin: "Experimental Synthesizer",
-    tags: ["Ichor Wellspring", "Art Rework", "June15", "Art OK"],
   ),
 
   CardDefinition(
@@ -689,9 +536,6 @@ Abandon another character: Erode 1."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 499788403, crop: (x: -0.39, y: -0.308, scale: 1.87)),
-    number: 54,
-    mtg_origin: "Conjurer's Bauble",
-    tags: ["Art Rework", "June16", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -703,9 +547,6 @@ Abandon another character: Erode 1."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 1328168246, crop: (x: -0.042, y: 1.0, scale: 1.17)),
-    number: 55,
-    mtg_origin: "Cranial Plating",
-    tags: ["Art Rework", "Art OK", "Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -715,9 +556,6 @@ Abandon another character: Erode 1."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 1785274670, owned: true, crop: (x: -0.42, y: 0.369, scale: 1.17)),
-    number: 56,
-    mtg_origin: "Cranial Plating",
-    tags: ["Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -729,9 +567,6 @@ Reclaim – 3●, Banish 7 cards from your void."#,
     energy_cost: Fixed(5),
     kind: Character(subtype: "Synth", spark: Fixed(4)),
     art: (image: 603547823, crop: (x: 0.0, y: 1.0, scale: 1.0)),
-    number: 57,
-    mtg_origin: "Ox of Agonas",
-    tags: ["Art Rework", "July20", "Art OK"],
   ),
 
   CardDefinition(
@@ -741,9 +576,6 @@ Reclaim – 3●, Banish 7 cards from your void."#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Detective", spark: Fixed(5)),
     art: (image: 2127752126, owned: true, crop: (x: -0.046, y: 1.0, scale: 1.11)),
-    number: 58,
-    mtg_origin: "Ox of Agonas",
-    tags: ["Art Rework", "July20", "Art OK"],
   ),
 
   CardDefinition(
@@ -753,9 +585,6 @@ Reclaim – 3●, Banish 7 cards from your void."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
     art: (image: 2191235669, crop: (x: -0.458, y: 1.0, scale: 1.47)),
-    number: 59,
-    mtg_origin: "Thraben Inspector",
-    tags: ["Art Rework", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -765,9 +594,6 @@ Reclaim – 3●, Banish 7 cards from your void."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
     art: (image: 1419437210, crop: (x: 0.642, y: 1.0, scale: 1.87)),
-    number: 60,
-    mtg_origin: "Viscera Seer",
-    tags: ["Art Rework", "July10", "Art OK"],
   ),
 
   CardDefinition(
@@ -779,9 +605,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
     art: (image: 2251144875, crop: (x: 0.597, y: 1.0, scale: 1.07)),
-    number: 61,
-    mtg_origin: "Devoted Druid",
-    tags: ["Art Rework", "June17", "Art OK"],
   ),
 
   CardDefinition(
@@ -791,9 +614,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Child", spark: Fixed(1)),
     art: (image: 700253824, crop: (x: 0.0, y: 1.0, scale: 1.67)),
-    number: 62,
-    mtg_origin: "Pinnacle Monk // Mystic Peak",
-    tags: ["Art Rework", "July24", "Art OK"],
   ),
 
   CardDefinition(
@@ -804,9 +624,6 @@ Reclaim 0●"#,
     kind: Event,
     speed: Fast,
     art: (image: 539226472, crop: (x: 0.171, y: 1.0, scale: 1.17)),
-    number: 63,
-    mtg_origin: "Liliana's Standard Bearer",
-    tags: ["Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -817,9 +634,6 @@ Reclaim 0●"#,
     kind: Event,
     speed: Fast,
     art: (image: 1037215606),
-    number: 64,
-    mtg_origin: "Paradoxical Outcome",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -830,9 +644,6 @@ Reclaim 0●"#,
     kind: Event,
     speed: Interrupt,
     art: (image: 1694993302, crop: (x: 0.0, y: 1.0, scale: 1.37)),
-    number: 65,
-    mtg_origin: "Spell Pierce",
-    tags: ["Counterspell", "Art Rework", "July8", "Art OK"],
   ),
 
   CardDefinition(
@@ -842,9 +653,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 682942729, owned: true, crop: (x: 0.0, y: 0.7, scale: 1.3)),
-    number: 66,
-    mtg_origin: "Elvish Reclaimer",
-    tags: ["Art Rework", "July14", "Art OK"],
   ),
 
   CardDefinition(
@@ -854,9 +662,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Ancient", spark: Fixed(3)),
     art: (image: 2131591277),
-    number: 67,
-    mtg_origin: "Mayhem Devil",
-    tags: ["Score Trigger"],
   ),
 
   CardDefinition(
@@ -868,9 +673,6 @@ X⧗: Dissolve an enemy with X✦."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 436090600, crop: (x: -0.228, y: 1.0, scale: 1.17)),
-    number: 68,
-    mtg_origin: "Mayhem Devil",
-    tags: ["Removal", "Storage Removal", "Art Rework", "June24", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -883,9 +685,6 @@ X⧗: Dissolve an enemy with X✦."#,
     kind: Character(subtype: "Monster", spark: Fixed(3)),
     speed: Fast,
     art: (image: 1037215513, crop: (x: -0.504, y: -0.659, scale: 1.97)),
-    number: 69,
-    mtg_origin: "Brazen Borrower // Petty Theft",
-    tags: ["Art Rework", "July23", "Art OK"],
   ),
 
   CardDefinition(
@@ -895,9 +694,6 @@ X⧗: Dissolve an enemy with X✦."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
     art: (image: 2438838893, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 70,
-    mtg_origin: "Zulaport Cutthroat",
-    tags: ["Blood Artist", "Score Trigger", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -908,8 +704,6 @@ X⧗: Dissolve an enemy with X✦."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 1924168811),
-    number: 71,
-    mtg_origin: "Brainstorm",
   ),
 
   CardDefinition(
@@ -921,8 +715,6 @@ Reclaim 2●."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 776481901, crop: (x: 0.084, y: 0.31, scale: 1.17)),
-    number: 72,
-    mtg_origin: "Faithless Looting",
   ),
 
   CardDefinition(
@@ -932,8 +724,6 @@ Reclaim 2●."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Synth", spark: Fixed(2)),
     art: (image: 1570031572, crop: (x: 0.0, y: 0.424, scale: 1.17)),
-    number: 73,
-    mtg_origin: "Oona's Prowler",
   ),
 
   CardDefinition(
@@ -943,9 +733,6 @@ Reclaim 2●."#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
     art: (image: 2023111778, crop: (x: 0.0, y: 0.0, scale: 1.47)),
-    number: 74,
-    mtg_origin: "Sea Gate Stormcaller",
-    tags: ["Art Rework", "July24", "Art OK"],
   ),
 
   CardDefinition(
@@ -958,9 +745,6 @@ When an outsider you control scores ⍟, draw a card."#,
     kind: Character(subtype: "Outsider", spark: Fixed(2)),
     speed: Fast,
     art: (image: 2212744819),
-    number: 75,
-    mtg_origin: "Ingenious Infiltrator",
-    tags: ["Ninja", "Art Rework", "June22", "Art OK", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -972,8 +756,6 @@ When an outsider you control scores ⍟, draw a card."#,
     rarity: Legendary,
     speed: Interrupt,
     art: (image: 1021646686, crop: (x: 0.0, y: 0.0, scale: 1.17)),
-    number: 76,
-    mtg_origin: "Ancestral Recall",
   ),
 
   CardDefinition(
@@ -983,9 +765,6 @@ When an outsider you control scores ⍟, draw a card."#,
     energy_cost: Fixed(2),
     kind: Event,
     art: (image: 2182865325, crop: (x: 0.336, y: 1.0, scale: 1.17)),
-    number: 77,
-    mtg_origin: "Incinerate",
-    tags: ["Removal"],
   ),
 
   CardDefinition(
@@ -997,9 +776,6 @@ Abandon a character: Gain 1⍟."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
     art: (image: 515170831, crop: (x: 0.0, y: 1.0, scale: 1.37)),
-    number: 78,
-    mtg_origin: "Goblin Bombardment",
-    tags: ["Art Rework", "July10", "Art OK"],
   ),
 
   CardDefinition(
@@ -1011,9 +787,6 @@ X⧗: Dissolve an enemy with X✦."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
     art: (image: 1026869440, crop: (x: 0.462, y: 1.0, scale: 1.1)),
-    number: 79,
-    mtg_origin: "Goblin Bombardment",
-    tags: ["Removal", "Storage Removal", "Art Rework", "July10", "Art OK"],
   ),
 
   CardDefinition(
@@ -1023,8 +796,6 @@ X⧗: Dissolve an enemy with X✦."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 735243058, crop: (x: -0.27, y: 0.416, scale: 1.67)),
-    number: 80,
-    mtg_origin: "Ethersworn Canonist",
   ),
 
   CardDefinition(
@@ -1034,9 +805,6 @@ X⧗: Dissolve an enemy with X✦."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
     art: (image: 1219782721, crop: (x: 0.0, y: 1.0, scale: 1.36)),
-    number: 81,
-    mtg_origin: "Sai, Master Thopterist",
-    tags: ["Art Rework", "June25", "Art Duplicate", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -1046,9 +814,6 @@ X⧗: Dissolve an enemy with X✦."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Emissary", spark: Fixed(2)),
     art: (image: 309018608, crop: (x: 0.206, y: -0.374, scale: 2.57)),
-    number: 82,
-    mtg_origin: "Sai, Master Thopterist",
-    tags: ["Figment Maker", "Art Rework", "July21", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -1058,9 +823,6 @@ X⧗: Dissolve an enemy with X✦."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Agent", spark: Fixed(2)),
     art: (image: 2216124455, crop: (x: 0.0, y: -0.533, scale: 1.67)),
-    number: 83,
-    mtg_origin: "Vendilion Clique",
-    tags: ["Art Rework", "July23", "Art OK"],
   ),
 
   CardDefinition(
@@ -1070,8 +832,6 @@ X⧗: Dissolve an enemy with X✦."#,
     energy_cost: Fixed(5),
     kind: Event,
     art: (image: 1798514905, crop: (x: 0.546, y: 1.0, scale: 1.17)),
-    number: 84,
-    mtg_origin: "Mind's Desire",
   ),
 
   CardDefinition(
@@ -1083,9 +843,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 2530615371, crop: (x: -0.084, y: -0.025, scale: 1.47)),
-    number: 85,
-    mtg_origin: "Safehold Elite",
-    tags: ["Art Rework", "July15", "Art OK"],
   ),
 
   CardDefinition(
@@ -1095,9 +852,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 496761802, owned: true, crop: (x: -0.538, y: 0.897, scale: 1.07)),
-    number: 86,
-    mtg_origin: "Scryb Ranger",
-    tags: ["Awaken", "Art Rework", "July17", "Ally Audit", "Art OK"],
   ),
 
   CardDefinition(
@@ -1107,9 +861,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Tinkerer", spark: Fixed(2)),
     art: (image: 2030910782, crop: (x: 0.084, y: -0.028, scale: 1.67)),
-    number: 87,
-    mtg_origin: "Snapcaster Mage",
-    tags: ["Art Rework", "July24", "Art OK"],
   ),
 
   CardDefinition(
@@ -1122,8 +873,6 @@ When you discard this card, it gains reclaim 2●."#,
     kind: Event,
     speed: Fast,
     art: (image: 2261959341),
-    number: 88,
-    mtg_origin: "Anje's Ravager",
   ),
 
   CardDefinition(
@@ -1133,9 +882,6 @@ When you discard this card, it gains reclaim 2●."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
     art: (image: 2675749427, crop: (x: 0.0, y: 0.15, scale: 1.66)),
-    number: 89,
-    mtg_origin: "Anje's Ravager",
-    tags: ["Art Rework", "July17", "Art OK"],
   ),
 
   CardDefinition(
@@ -1145,9 +891,6 @@ When you discard this card, it gains reclaim 2●."#,
     energy_cost: FixedAndVariable(3),
     kind: Event,
     art: (image: 2269064813, crop: (x: -0.252, y: 1.0, scale: 1.17)),
-    number: 90,
-    mtg_origin: "Engineered Explosives",
-    tags: ["Removal"],
   ),
 
   CardDefinition(
@@ -1157,9 +900,6 @@ When you discard this card, it gains reclaim 2●."#,
     energy_cost: Variable,
     kind: Event,
     art: (image: 1042405690, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 91,
-    mtg_origin: "Repeal",
-    tags: ["Art OK"],
   ),
 
   CardDefinition(
@@ -1171,8 +911,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 1913887483, owned: true),
-    number: 92,
-    mtg_origin: "Scrapwork Mutt",
   ),
 
   CardDefinition(
@@ -1183,9 +921,6 @@ Reclaim 2●"#,
     kind: Event,
     speed: Fast,
     art: (image: 793083760, crop: (x: 0.168, y: 0.032, scale: 1.17)),
-    number: 93,
-    mtg_origin: "Mystical Tutor",
-    tags: ["Discover"],
   ),
 
   CardDefinition(
@@ -1197,9 +932,6 @@ This character has +1✦ for each event in your void."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
     art: (image: 1486924802, owned: true, crop: (x: 0.0, y: -0.585, scale: 1.7)),
-    number: 94,
-    mtg_origin: "Rielle, the Everwise",
-    tags: ["Art Rework", "July24", "Art OK"],
   ),
 
   CardDefinition(
@@ -1209,8 +941,6 @@ This character has +1✦ for each event in your void."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Tinkerer", spark: Fixed(1)),
     art: (image: 1383318404, crop: (x: 0.0, y: 0.0, scale: 1.77)),
-    number: 95,
-    mtg_origin: "Rielle, the Everwise",
   ),
 
   CardDefinition(
@@ -1221,9 +951,6 @@ This character has +1✦ for each event in your void."#,
     kind: Event,
     speed: Fast,
     art: (image: 1149594743, crop: (x: 0.0, y: 0.0, scale: 1.17)),
-    number: 96,
-    mtg_origin: "Prismari Command",
-    tags: ["Removal", "tutorial"],
   ),
 
   CardDefinition(
@@ -1233,8 +960,6 @@ This character has +1✦ for each event in your void."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 450440599, crop: (x: -0.334, y: -0.438, scale: 1.27)),
-    number: 97,
-    mtg_origin: "Thassa's Oracle",
   ),
 
   CardDefinition(
@@ -1246,9 +971,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "*", spark: Fixed(1)),
     art: (image: 264681587, crop: (x: -0.512, y: -0.074, scale: 1.57)),
-    number: 98,
-    mtg_origin: "Putrid Goblin",
-    tags: ["Art Rework", "July13", "Art OK"],
   ),
 
   CardDefinition(
@@ -1260,9 +982,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
     art: (image: 432001513, crop: (x: 0.0, y: 0.266, scale: 1.17)),
-    number: 99,
-    mtg_origin: "Avacyn's Pilgrim",
-    tags: ["Elves", "Art Rework", "June18", "Art OK"],
   ),
 
   CardDefinition(
@@ -1273,9 +992,6 @@ Reclaim 0●"#,
     kind: Event,
     speed: Fast,
     art: (image: 2637215373, crop: (x: 0.0, y: 0.161, scale: 1.17)),
-    number: 100,
-    mtg_origin: "Impulse",
-    tags: ["Art Rework", "July8", "Art OK"],
   ),
 
   CardDefinition(
@@ -1287,9 +1003,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
     art: (image: 712713349, crop: (x: -0.042, y: 0.897, scale: 1.07)),
-    number: 101,
-    mtg_origin: "Chandra, Acolyte of Flame",
-    tags: ["Figment Maker", "Art Rework", "June25", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -1299,8 +1012,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 2251144881, crop: (x: -0.096, y: 0.9, scale: 1.67)),
-    number: 102,
-    mtg_origin: "Chandra, Acolyte of Flame",
   ),
 
   CardDefinition(
@@ -1310,9 +1021,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 1361568698, crop: (x: 0.0, y: 1.0, scale: 1.16)),
-    number: 103,
-    mtg_origin: "Lotus Bloom",
-    tags: ["Lotus Petal", "Art Rework", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -1323,9 +1031,6 @@ Reclaim 0●"#,
     kind: Event,
     speed: Fast,
     art: (image: 1798514908),
-    number: 104,
-    mtg_origin: "Abrupt Decay",
-    tags: ["Removal"],
   ),
 
   CardDefinition(
@@ -1335,9 +1040,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 2427491213, crop: (x: -0.294, y: 0.271, scale: 1.47)),
-    number: 105,
-    mtg_origin: "Chromatic Sphere",
-    tags: ["Lotus Petal", "Art Rework", "June17", "Art OK"],
   ),
 
   CardDefinition(
@@ -1349,9 +1051,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
     art: (image: 2216124457),
-    number: 106,
-    mtg_origin: "Wirewood Symbiote",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -1361,9 +1060,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Child", spark: Fixed(1)),
     art: (image: 758082499, crop: (x: 0.0, y: -0.197, scale: 1.87)),
-    number: 107,
-    mtg_origin: "Dreadhorde Arcanist",
-    tags: ["Art Rework", "July23", "Art OK"],
   ),
 
   CardDefinition(
@@ -1373,9 +1069,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 1511229275, crop: (x: 0.0, y: -0.346, scale: 1.57)),
-    number: 108,
-    mtg_origin: "Retrofitter Foundry",
-    tags: ["Figment Maker", "tutorial"],
   ),
 
   CardDefinition(
@@ -1385,9 +1078,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Warrior", spark: Fixed(4)),
     art: (image: 2295991865, crop: (x: -0.168, y: 0.839, scale: 1.17)),
-    number: 109,
-    mtg_origin: "Lodestone Golem",
-    tags: ["tutorial"],
   ),
 
   CardDefinition(
@@ -1397,9 +1087,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
     art: (image: 436090552, crop: (x: -0.228, y: 1.0, scale: 1.17)),
-    number: 110,
-    mtg_origin: "Augur of Autumn",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -1411,9 +1098,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Child", spark: Fixed(2)),
     art: (image: 658076071, crop: (x: 0.344, y: 0.18, scale: 1.37)),
-    number: 111,
-    mtg_origin: "Insidious Roots",
-    tags: ["Art Rework", "June24", "Art Duplicate", "Art OK", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -1423,9 +1107,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
     art: (image: 2197688373, crop: (x: -0.16, y: 1.0, scale: 1.11)),
-    number: 112,
-    mtg_origin: "Insidious Roots",
-    tags: ["Art Rework", "June19", "Art OK"],
   ),
 
   CardDefinition(
@@ -1437,9 +1118,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
     art: (image: 331258328, crop: (x: 0.0, y: 0.432, scale: 1.87)),
-    number: 113,
-    mtg_origin: "Heritage Druid",
-    tags: ["Art Rework", "June18", "Art OK"],
   ),
 
   CardDefinition(
@@ -1449,9 +1127,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 2221518875),
-    number: 114,
-    mtg_origin: "Thoughtseize",
-    tags: ["Thoughtseize", "Art Rework", "July8", "Art OK"],
   ),
 
   CardDefinition(
@@ -1461,9 +1136,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 465449504, crop: (x: 0.353, y: 0.931, scale: 1.17)),
-    number: 115,
-    mtg_origin: "Mishra's Workshop",
-    tags: ["tutorial"],
   ),
 
   CardDefinition(
@@ -1475,9 +1147,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(3),
     kind: Event,
     art: (image: 454095508, crop: (x: -0.068, y: 1.0, scale: 1.07)),
-    number: 116,
-    mtg_origin: "Empty the Warrens",
-    tags: ["Figment Maker", "Art Rework", "June26", "Art OK"],
   ),
 
   CardDefinition(
@@ -1487,9 +1156,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
     art: (image: 2667786601, crop: (x: -0.1, y: -0.434, scale: 1.4)),
-    number: 117,
-    mtg_origin: "Krark-Clan Ironworks",
-    tags: ["Art Rework", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -1500,9 +1166,6 @@ Reclaim 2●"#,
     kind: Event,
     speed: Interrupt,
     art: (image: 499788430, crop: (x: -0.456, y: 1.0, scale: 1.17)),
-    number: 118,
-    mtg_origin: "Spell Snare",
-    tags: ["Counterspell"],
   ),
 
   CardDefinition(
@@ -1512,8 +1175,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
     art: (image: 2155438705, crop: (x: -0.378, y: 1.0, scale: 1.17)),
-    number: 119,
-    mtg_origin: "Valakut Exploration",
   ),
 
   CardDefinition(
@@ -1523,9 +1184,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
     art: (image: 608687435, crop: (x: -0.544, y: 1.0, scale: 1.07)),
-    number: 120,
-    mtg_origin: "Tidehollow Sculler",
-    tags: ["Tidehollow Sculler", "Art Rework", "June22", "Art OK"],
   ),
 
   CardDefinition(
@@ -1537,8 +1195,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(0),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(0)),
     art: (image: 2438838887),
-    number: 121,
-    mtg_origin: "Chrome Mox",
   ),
 
   CardDefinition(
@@ -1550,9 +1206,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
     art: (image: 2258761879, crop: (x: 0.0, y: 0.0, scale: 1.27)),
-    number: 122,
-    mtg_origin: "Undead Butler",
-    tags: ["Self-Mill", "Art Rework", "June22", "Art OK"],
   ),
 
   CardDefinition(
@@ -1562,9 +1215,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 2218612343, owned: true, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 123,
-    mtg_origin: "Spirited Companion",
-    tags: ["ETB Draw"],
   ),
 
   CardDefinition(
@@ -1574,9 +1224,6 @@ Reclaim 2●"#,
     energy_cost: Variable,
     kind: Event,
     art: (image: 789290998, owned: true, crop: (x: 0.092, y: 1.0, scale: 1.11)),
-    number: 124,
-    mtg_origin: "Burning Inquiry",
-    tags: ["Art Rework", "July7", "Art OK"],
   ),
 
   CardDefinition(
@@ -1586,9 +1233,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 1104412877, owned: true, crop: (x: 0.042, y: 0.032, scale: 1.17)),
-    number: 125,
-    mtg_origin: "Springleaf Drum",
-    tags: ["tutorial"],
   ),
 
   CardDefinition(
@@ -1598,9 +1242,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(2),
     kind: Event,
     art: (image: 591626951),
-    number: 126,
-    mtg_origin: "Cabal Ritual",
-    tags: ["Ritual", "Art Rework", "July9", "Art OK"],
   ),
 
   CardDefinition(
@@ -1613,9 +1254,6 @@ When an outsider you control scores ⍟, foresee 1 and draw a card."#,
     kind: Character(subtype: "Outsider", spark: Fixed(2)),
     speed: Fast,
     art: (image: 1726923523),
-    number: 127,
-    mtg_origin: "Yuriko, the Tiger's Shadow",
-    tags: ["Ninja", "Art Rework", "June22", "Art OK", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -1627,9 +1265,6 @@ Reclaim 5●."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 2155438695, crop: (x: 0.294, y: 1.0, scale: 1.17)),
-    number: 128,
-    mtg_origin: "Firebolt",
-    tags: ["Removal"],
   ),
 
   CardDefinition(
@@ -1639,9 +1274,6 @@ Reclaim 5●."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 1790126246, crop: (x: 0.0, y: -0.485, scale: 1.97)),
-    number: 129,
-    mtg_origin: "Ichor Wellspring",
-    tags: ["Ichor Wellspring", "Art Rework", "June16", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -1651,9 +1283,6 @@ Reclaim 5●."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 2155438703, crop: (x: 0.0, y: 1.0, scale: 1.11)),
-    number: 130,
-    mtg_origin: "Crop Rotation",
-    tags: ["Discover", "Art Rework", "July6", "Art OK"],
   ),
 
   CardDefinition(
@@ -1663,9 +1292,6 @@ Reclaim 5●."#,
     energy_cost: Variable,
     kind: Event,
     art: (image: 2299755789),
-    number: 131,
-    mtg_origin: "Banefire",
-    tags: ["Removal"],
   ),
 
   CardDefinition(
@@ -1678,9 +1304,6 @@ Prevent a played event."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 2123360837, owned: true),
-    number: 132,
-    mtg_origin: "Force of Negation",
-    tags: ["Counterspell"],
   ),
 
   CardDefinition(
@@ -1690,9 +1313,6 @@ Prevent a played event."#,
     energy_cost: Fixed(0),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 565499662, owned: true, crop: (x: 0.448, y: 0.25, scale: 1.57)),
-    number: 133,
-    mtg_origin: "Urza's Bauble",
-    tags: ["Lotus Petal", "Art Rework", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -1704,9 +1324,6 @@ Prevent a played event."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
     art: (image: 1639942840, crop: (x: 0.446, y: 1.0, scale: 1.37)),
-    number: 134,
-    mtg_origin: "Cryptbreaker",
-    tags: ["Removal", "Figment Maker", "Art Rework", "June19", "Art OK", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -1718,9 +1335,6 @@ Prevent a played event."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
     art: (image: 635276750, crop: (x: 0.0, y: 0.243, scale: 1.37)),
-    number: 135,
-    mtg_origin: "Cryptbreaker",
-    tags: ["Figment Maker"],
   ),
 
   CardDefinition(
@@ -1731,9 +1345,6 @@ Prevent a played event."#,
     kind: Character(subtype: "Warrior", spark: Fixed(0)),
     speed: Fast,
     art: (image: 1739438663, crop: (x: 0.042, y: 0.839, scale: 1.17)),
-    number: 136,
-    mtg_origin: "Ornithopter",
-    tags: ["Vanilla", "Art Rework", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -1744,9 +1355,6 @@ Prevent a played event."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 2123360840, owned: true, crop: (x: 0.126, y: 0.0, scale: 1.17)),
-    number: 137,
-    mtg_origin: "Fatal Push",
-    tags: ["Removal", "Art Rework", "July6", "Art OK"],
   ),
 
   CardDefinition(
@@ -1758,9 +1366,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Mage", spark: Fixed(3)),
     art: (image: 2025883238, crop: (x: 0.0, y: -0.386, scale: 1.4)),
-    number: 138,
-    mtg_origin: "Stitcher's Supplier",
-    tags: ["Art Rework", "July13", "Art OK"],
   ),
 
   CardDefinition(
@@ -1770,9 +1375,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Musician", spark: Fixed(3)),
     art: (image: 1084620026, crop: (x: 0.0, y: 0.1, scale: 1.2)),
-    number: 139,
-    mtg_origin: "Molten Gatekeeper",
-    tags: ["Score Trigger", "Art Rework", "July14", "Art OK"],
   ),
 
   CardDefinition(
@@ -1782,9 +1384,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Musician", spark: Fixed(1)),
     art: (image: 519475501, crop: (x: 0.057, y: 1.0, scale: 1.11)),
-    number: 140,
-    mtg_origin: "Ignoble Hierarch",
-    tags: ["Art Rework", "June26", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -1796,9 +1395,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
     art: (image: 717263287, crop: (x: 0.136, y: 0.212, scale: 1.37)),
-    number: 141,
-    mtg_origin: "Ignoble Hierarch",
-    tags: ["Elves", "Art Rework", "June19", "Art OK"],
   ),
 
   CardDefinition(
@@ -1810,9 +1406,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(0)),
     art: (image: 1798382134, crop: (x: 0.135, y: 0.351, scale: 1.57)),
-    number: 142,
-    mtg_origin: "Mana Vault",
-    tags: ["Art Rework", "June17", "Art OK"],
   ),
 
   CardDefinition(
@@ -1824,9 +1417,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
     art: (image: 2290648807, owned: true, crop: (x: 0.494, y: -0.356, scale: 1.47)),
-    number: 143,
-    mtg_origin: "Kitchen Finks",
-    tags: ["Self-Mill"],
   ),
 
   CardDefinition(
@@ -1837,9 +1427,6 @@ Reclaim 0●"#,
     kind: Event,
     speed: Interrupt,
     art: (image: 1463121788, owned: true),
-    number: 144,
-    mtg_origin: "Path to Exile",
-    tags: ["Removal"],
   ),
 
   CardDefinition(
@@ -1851,9 +1438,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 1798514896, crop: (x: 0.0, y: -0.34, scale: 1.37)),
-    number: 145,
-    mtg_origin: "Grafted Wargear",
-    tags: ["Art Rework", "Art OK", "Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -1863,9 +1447,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
     art: (image: 1913887480),
-    number: 146,
-    mtg_origin: "Voldaren Bloodcaster // Bloodbat Summoner",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -1875,9 +1456,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
     art: (image: 2018848973, crop: (x: 0.0, y: -0.617, scale: 1.91)),
-    number: 147,
-    mtg_origin: "Eternal Witness",
-    tags: ["Art Rework", "July20", "Art OK"],
   ),
 
   CardDefinition(
@@ -1887,9 +1465,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
     art: (image: 2293194523, crop: (x: 0.0, y: 1.0, scale: 1.37)),
-    number: 148,
-    mtg_origin: "Priest of Titania",
-    tags: ["Spirit Lord", "Art Rework", "June18", "Art OK", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -1901,9 +1476,6 @@ When this character leaves play, the opponent draws a card."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
     art: (image: 425039560, crop: (x: 0.068, y: 0.897, scale: 1.07)),
-    number: 149,
-    mtg_origin: "Skyclave Apparition",
-    tags: ["Removal", "Art Rework", "June25", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -1913,9 +1485,6 @@ When this character leaves play, the opponent draws a card."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Monster", spark: Fixed(2)),
     art: (image: 524175406, crop: (x: 0.0, y: 1.0, scale: 1.0)),
-    number: 150,
-    mtg_origin: "Squandered Resources",
-    tags: ["Free Sacrifice", "Art Rework", "July14", "Art OK"],
   ),
 
   CardDefinition(
@@ -1925,8 +1494,6 @@ When this character leaves play, the opponent draws a card."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(3)),
     art: (image: 576358339, crop: (x: 0.342, y: 0.816, scale: 1.17)),
-    number: 151,
-    mtg_origin: "Endurance",
   ),
 
   CardDefinition(
@@ -1936,9 +1503,6 @@ When this character leaves play, the opponent draws a card."#,
     energy_cost: Fixed(3),
     kind: Event,
     art: (image: 1063277315, crop: (x: 0.042, y: 1.0, scale: 1.17)),
-    number: 152,
-    mtg_origin: "Seething Song",
-    tags: ["Ritual"],
   ),
 
   CardDefinition(
@@ -1950,9 +1514,6 @@ When this character leaves play, the opponent draws a card."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
     art: (image: 393588445, crop: (x: 0.0, y: 1.0, scale: 1.0)),
-    number: 153,
-    mtg_origin: "Phyrexian Tower",
-    tags: ["Art Rework", "July10", "Art OK"],
   ),
 
   CardDefinition(
@@ -1962,9 +1523,6 @@ When this character leaves play, the opponent draws a card."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Elemental", spark: Fixed(3)),
     art: (image: 2018053217, crop: (x: 0.0, y: 1.0, scale: 1.28)),
-    number: 154,
-    mtg_origin: "Anax, Hardened in the Forge",
-    tags: ["Figment Maker", "Art Rework", "July22", "Ally Audit", "Art OK"],
   ),
 
   CardDefinition(
@@ -1974,8 +1532,6 @@ When this character leaves play, the opponent draws a card."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Ancient", spark: Fixed(3)),
     art: (image: 2218612339, crop: (x: -0.378, y: 1.0, scale: 1.27)),
-    number: 155,
-    mtg_origin: "Lurrus of the Dream-Den",
   ),
 
   CardDefinition(
@@ -1985,9 +1541,6 @@ When this character leaves play, the opponent draws a card."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
     art: (image: 1246321003, crop: (x: -0.336, y: -0.398, scale: 1.47)),
-    number: 156,
-    mtg_origin: "Lurrus of the Dream-Den",
-    tags: ["Lurrus", "Art Rework", "July17", "Art OK"],
   ),
 
   CardDefinition(
@@ -1997,9 +1550,6 @@ When this character leaves play, the opponent draws a card."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 2033123270, crop: (x: 0.0, y: 0.48, scale: 1.37)),
-    number: 157,
-    mtg_origin: "Duress",
-    tags: ["Thoughtseize", "Art Rework", "July6", "Art OK"],
   ),
 
   CardDefinition(
@@ -2009,9 +1559,6 @@ When this character leaves play, the opponent draws a card."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
     art: (image: 1498497890, crop: (x: 0.084, y: 0.032, scale: 1.17)),
-    number: 158,
-    mtg_origin: "Elvish Visionary",
-    tags: ["ETB Draw"],
   ),
 
   CardDefinition(
@@ -2023,9 +1570,6 @@ When this character leaves play, the opponent draws a card."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Universal", spark: Fixed(1)),
     art: (image: 2544257347, crop: (x: -0.252, y: 1.0, scale: 1.17)),
-    number: 159,
-    mtg_origin: "Masked Vandal",
-    tags: ["Elves"],
   ),
 
   CardDefinition(
@@ -2035,9 +1579,6 @@ When this character leaves play, the opponent draws a card."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Monster", spark: Fixed(2)),
     art: (image: 748956895, crop: (x: -0.126, y: 0.976, scale: 1.16)),
-    number: 160,
-    mtg_origin: "Masked Vandal",
-    tags: ["Removal", "Art Rework", "June24", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -2048,9 +1589,6 @@ When this character leaves play, the opponent draws a card."#,
     kind: Event,
     speed: Fast,
     art: (image: 1739438660, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 161,
-    mtg_origin: "Thought Scour",
-    tags: ["Cantrips"],
   ),
 
   CardDefinition(
@@ -2060,9 +1598,6 @@ When this character leaves play, the opponent draws a card."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 2030910791, owned: true),
-    number: 162,
-    mtg_origin: "Inquisition of Kozilek",
-    tags: ["Thoughtseize"],
   ),
 
   CardDefinition(
@@ -2072,9 +1607,6 @@ When this character leaves play, the opponent draws a card."#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Ancient", spark: Fixed(3)),
     art: (image: 1207264096, crop: (x: 0.0, y: 1.0, scale: 1.37)),
-    number: 163,
-    mtg_origin: "Anger",
-    tags: ["Art Rework", "June24", "Art Duplicate", "Art OK", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -2084,9 +1616,6 @@ When this character leaves play, the opponent draws a card."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Musician", spark: Fixed(3)),
     art: (image: 631097744, crop: (x: 0.122, y: 0.398, scale: 1.27)),
-    number: 164,
-    mtg_origin: "Anger",
-    tags: ["Art Rework", "July15", "Ally Audit", "Art OK"],
   ),
 
   CardDefinition(
@@ -2098,9 +1627,6 @@ Characters you control have awakened."#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
     art: (image: 1109402492),
-    number: 165,
-    mtg_origin: "Anger",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -2112,9 +1638,6 @@ When you discard or erode this card, it gains reclaim 0●."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Synth", spark: Fixed(3)),
     art: (image: 2419795155, crop: (x: -0.042, y: 1.0, scale: 1.17)),
-    number: 166,
-    mtg_origin: "Anger",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -2127,9 +1650,6 @@ Dissolve an enemy."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 1907487244, crop: (x: 0.0, y: 1.0, scale: 1.1)),
-    number: 167,
-    mtg_origin: "Flare of Malice",
-    tags: ["Removal", "Art Rework", "June26", "Art OK"],
   ),
 
   CardDefinition(
@@ -2141,9 +1661,6 @@ Dissolve an enemy."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 2186149275, crop: (x: 0.714, y: 0.31, scale: 1.17)),
-    number: 168,
-    mtg_origin: "Zabaz, the Glimmerwasp",
-    tags: ["Art Rework", "Art OK", "Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -2155,9 +1672,6 @@ When you discard a card, this character gains +2✦ until end of turn."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
     art: (image: 695511787, owned: true, crop: (x: -0.189, y: 0.897, scale: 1.07)),
-    number: 169,
-    mtg_origin: "Conspiracy Theorist",
-    tags: ["Art Rework", "July17", "Art OK"],
   ),
 
   CardDefinition(
@@ -2169,9 +1683,6 @@ When you discard a card, it gains reclaim."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Explorer", spark: Fixed(1)),
     art: (image: 2018053211),
-    number: 170,
-    mtg_origin: "Conspiracy Theorist",
-    tags: ["Merfolk Looter", "Art Rework", "July20", "Art OK"],
   ),
 
   CardDefinition(
@@ -2181,9 +1692,6 @@ When you discard a card, it gains reclaim."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
     art: (image: 2186149279, crop: (x: 0.084, y: 0.369, scale: 1.17)),
-    number: 171,
-    mtg_origin: "Oni-Cult Anvil",
-    tags: ["Figment Maker", "Art Rework", "June17", "Art OK", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -2195,9 +1703,6 @@ When you discard a card, it gains reclaim."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 1891048570, crop: (x: 0.064, y: 0.0, scale: 1.17)),
-    number: 172,
-    mtg_origin: "Oni-Cult Anvil",
-    tags: ["Art Rework", "Art OK", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -2208,8 +1713,6 @@ When you discard a card, it gains reclaim."#,
     kind: Event,
     speed: Fast,
     art: (image: 379806730),
-    number: 173,
-    mtg_origin: "Dreams of Steel and Oil",
   ),
 
   CardDefinition(
@@ -2219,9 +1722,6 @@ When you discard a card, it gains reclaim."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 1492489850),
-    number: 174,
-    mtg_origin: "Dreams of Steel and Oil",
-    tags: ["Thoughtseize"],
   ),
 
   CardDefinition(
@@ -2231,8 +1731,6 @@ When you discard a card, it gains reclaim."#,
     energy_cost: Fixed(2),
     kind: Event,
     art: (image: 2155438713),
-    number: 175,
-    mtg_origin: "Cathartic Reunion",
   ),
 
   CardDefinition(
@@ -2242,9 +1740,6 @@ When you discard a card, it gains reclaim."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Mage", spark: Fixed(1)),
     art: (image: 1913887477, crop: (x: 0.0, y: 1.0, scale: 1.27)),
-    number: 176,
-    mtg_origin: "Young Pyromancer",
-    tags: ["Figment Maker", "Event Payoff"],
   ),
 
   CardDefinition(
@@ -2254,9 +1749,6 @@ When you discard a card, it gains reclaim."#,
     energy_cost: Fixed(5),
     kind: Event,
     art: (image: 793083757, owned: true, crop: (x: 0.452, y: 1.0, scale: 1.11)),
-    number: 177,
-    mtg_origin: "Time Spiral",
-    tags: ["Art Rework", "July10", "Art OK"],
   ),
 
   CardDefinition(
@@ -2266,9 +1758,6 @@ When you discard a card, it gains reclaim."#,
     energy_cost: Fixed(0),
     kind: Character(subtype: "Warrior", spark: Fixed(0)),
     art: (image: 2155438709, crop: (x: -0.294, y: 0.369, scale: 1.17)),
-    number: 178,
-    mtg_origin: "Mishra's Bauble",
-    tags: ["Art Rework", "Art OK"],
   ),
 
   CardDefinition(
@@ -2280,9 +1769,6 @@ When a ≤2● cost character is put into your void, draw a card."#,
     energy_cost: Fixed(5),
     kind: Character(subtype: "Ancient", spark: Fixed(8)),
     art: (image: 700254508, crop: (x: 0.0, y: 1.0, scale: 1.27)),
-    number: 179,
-    mtg_origin: "The Gitrog Monster",
-    tags: ["Art Rework", "July20", "Art OK"],
   ),
 
   CardDefinition(
@@ -2292,8 +1778,6 @@ When a ≤2● cost character is put into your void, draw a card."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(2)),
     art: (image: 1723965970, crop: (x: 0.294, y: 1.0, scale: 1.17)),
-    number: 180,
-    mtg_origin: "Elvish Warmaster",
   ),
 
   CardDefinition(
@@ -2303,9 +1787,6 @@ When a ≤2● cost character is put into your void, draw a card."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(4)),
     art: (image: 1727859040, crop: (x: 0.294, y: 1.0, scale: 1.17)),
-    number: 181,
-    mtg_origin: "Elvish Warmaster",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -2316,9 +1797,6 @@ When a ≤2● cost character is put into your void, draw a card."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 432001897, crop: (x: 0.0, y: 1.0, scale: 1.11)),
-    number: 182,
-    mtg_origin: "Lethal Scheme",
-    tags: ["Removal", "Art Rework", "July6", "Ally Audit", "Art OK"],
   ),
 
   CardDefinition(
@@ -2328,9 +1806,6 @@ When a ≤2● cost character is put into your void, draw a card."#,
     energy_cost: Variable,
     kind: Event,
     art: (image: 439817032),
-    number: 183,
-    mtg_origin: "Demonic Tutor",
-    tags: ["Discover"],
   ),
 
   CardDefinition(
@@ -2340,9 +1815,6 @@ When a ≤2● cost character is put into your void, draw a card."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
     art: (image: 1149594491),
-    number: 184,
-    mtg_origin: "Nested Shambler",
-    tags: ["Figment Maker"],
   ),
 
   CardDefinition(
@@ -2352,9 +1824,6 @@ When a ≤2● cost character is put into your void, draw a card."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Tinkerer", spark: Fixed(3)),
     art: (image: 2269064817),
-    number: 185,
-    mtg_origin: "Formidable Speaker",
-    tags: ["Art Rework", "Art OK"],
   ),
 
   CardDefinition(
@@ -2364,9 +1833,6 @@ When a ≤2● cost character is put into your void, draw a card."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Mage", spark: Fixed(2)),
     art: (image: 2025883244, owned: true, crop: (x: 0.0, y: -0.29, scale: 1.77)),
-    number: 186,
-    mtg_origin: "Thalia, Guardian of Thraben",
-    tags: ["Art Rework", "June26", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -2376,9 +1842,6 @@ When a ≤2● cost character is put into your void, draw a card."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
     art: (image: 2287054237, crop: (x: 0.0, y: 0.72, scale: 1.37)),
-    number: 187,
-    mtg_origin: "Wight of the Reliquary",
-    tags: ["Discover"],
   ),
 
   CardDefinition(
@@ -2388,9 +1851,6 @@ When a ≤2● cost character is put into your void, draw a card."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
     art: (image: 2182865323, crop: (x: -0.294, y: 1.0, scale: 1.11)),
-    number: 188,
-    mtg_origin: "Wight of the Reliquary",
-    tags: ["Spark Scaler", "Art Rework", "June22", "Art OK"],
   ),
 
   CardDefinition(
@@ -2401,9 +1861,6 @@ When a ≤2● cost character is put into your void, draw a card."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 1058321690, crop: (x: 0.454, y: 1.0, scale: 1.17)),
-    number: 189,
-    mtg_origin: "Memory Lapse",
-    tags: ["Counterspell"],
   ),
 
   CardDefinition(
@@ -2413,9 +1870,6 @@ When a ≤2● cost character is put into your void, draw a card."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Synth", spark: Fixed(1)),
     art: (image: 1180104211, owned: true),
-    number: 190,
-    mtg_origin: "Vizier of Remedies",
-    tags: ["Art Rework", "July13", "Art OK"],
   ),
 
   CardDefinition(
@@ -2427,9 +1881,6 @@ Abandon a character: Materialize this character from your void."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Synth", spark: Fixed(1)),
     art: (image: 2530614279, crop: (x: 0.256, y: 0.115, scale: 1.77)),
-    number: 191,
-    mtg_origin: "Cauldron Familiar",
-    tags: ["Art Rework", "July23", "Art OK"],
   ),
 
   CardDefinition(
@@ -2439,9 +1890,6 @@ Abandon a character: Materialize this character from your void."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
     art: (image: 457875892, crop: (x: -0.414, y: 0.3, scale: 1.17)),
-    number: 192,
-    mtg_origin: "Warren Soultrader",
-    tags: ["Free Sacrifice"],
   ),
 
   CardDefinition(
@@ -2453,9 +1901,6 @@ Abandon a character: Materialize this character from your void."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 519475330, crop: (x: 0.903, y: 0.212, scale: 1.37)),
-    number: 193,
-    mtg_origin: "Gau, Feral Youth",
-    tags: ["Art Rework", "June17", "Art OK"],
   ),
 
   CardDefinition(
@@ -2465,8 +1910,6 @@ Abandon a character: Materialize this character from your void."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
     art: (image: 700253806),
-    number: 194,
-    mtg_origin: "Gau, Feral Youth",
   ),
 
   CardDefinition(
@@ -2477,9 +1920,6 @@ Abandon a character: Materialize this character from your void."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 1164289078, owned: true, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 195,
-    mtg_origin: "Mana Tithe",
-    tags: ["Counterspell"],
   ),
 
   CardDefinition(
@@ -2490,8 +1930,6 @@ Abandon a character: Materialize this character from your void."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 489056605, owned: true, crop: (x: -0.285, y: 0.032, scale: 1.17)),
-    number: 196,
-    mtg_origin: "Expansion // Explosion",
   ),
 
   CardDefinition(
@@ -2502,9 +1940,6 @@ Abandon a character: Materialize this character from your void."#,
     kind: Event,
     speed: Fast,
     art: (image: 1196004052, crop: (x: 0.294, y: 0.398, scale: 1.17)),
-    number: 197,
-    mtg_origin: "Expansion // Explosion",
-    tags: ["Art Rework", "July7", "Art OK"],
   ),
 
   CardDefinition(
@@ -2515,9 +1950,6 @@ Abandon a character: Materialize this character from your void."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 2018053223),
-    number: 198,
-    mtg_origin: "Unholy Heat",
-    tags: ["Removal"],
   ),
 
   CardDefinition(
@@ -2527,9 +1959,6 @@ Abandon a character: Materialize this character from your void."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Renegade", spark: Fixed(2)),
     art: (image: 1626794383, crop: (x: 0.0, y: 1.0, scale: 1.37)),
-    number: 199,
-    mtg_origin: "Zuran Orb",
-    tags: ["Free Sacrifice"],
   ),
 
   CardDefinition(
@@ -2539,9 +1968,6 @@ Abandon a character: Materialize this character from your void."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Synth", spark: Fixed(1)),
     art: (image: 2189428525),
-    number: 200,
-    mtg_origin: "Zuran Orb",
-    tags: ["Free Sacrifice"],
   ),
 
   CardDefinition(
@@ -2551,9 +1977,6 @@ Abandon a character: Materialize this character from your void."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 2667786599, crop: (x: 0.0, y: -0.346, scale: 1.57)),
-    number: 201,
-    mtg_origin: "Michiko's Reign of Truth // Portrait of Michiko",
-    tags: ["Spark Scaler", "Art Rework", "Art OK", "Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -2563,9 +1986,6 @@ Abandon a character: Materialize this character from your void."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 1788833078, owned: true, crop: (x: 0.0, y: -0.345, scale: 1.81)),
-    number: 202,
-    mtg_origin: "Michiko's Reign of Truth // Portrait of Michiko",
-    tags: ["Art Rework", "Art OK", "Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -2575,9 +1995,6 @@ Abandon a character: Materialize this character from your void."#,
     energy_cost: Fixed(4),
     kind: Event,
     art: (image: 2430444889, crop: (x: 0.138, y: 1.0, scale: 1.11)),
-    number: 203,
-    mtg_origin: "Tendrils of Agony",
-    tags: ["Art Rework", "July8", "Art OK"],
   ),
 
   CardDefinition(
@@ -2587,9 +2004,6 @@ Abandon a character: Materialize this character from your void."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
     art: (image: 1902130345),
-    number: 204,
-    mtg_origin: "Deathrite Shaman",
-    tags: ["Art Rework", "July10", "Art OK"],
   ),
 
   CardDefinition(
@@ -2599,9 +2013,6 @@ Abandon a character: Materialize this character from your void."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
     art: (image: 1044240499, crop: (x: 0.096, y: -0.06, scale: 1.37)),
-    number: 205,
-    mtg_origin: "Undead Augur",
-    tags: ["Art Rework", "June22", "Art OK", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -2612,9 +2023,6 @@ Abandon a character: Materialize this character from your void."#,
     kind: Event,
     speed: Fast,
     art: (image: 1118816006, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 206,
-    mtg_origin: "Occult Epiphany",
-    tags: ["Figment Maker"],
   ),
 
   CardDefinition(
@@ -2624,9 +2032,6 @@ Abandon a character: Materialize this character from your void."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 2197688369, crop: (x: 0.0, y: 0.0, scale: 1.77)),
-    number: 207,
-    mtg_origin: "Spellskite",
-    tags: ["Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -2636,9 +2041,6 @@ Abandon a character: Materialize this character from your void."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Squad", spark: Fixed(2)),
     art: (image: 2590831711, crop: (x: 0.0, y: 0.258, scale: 1.47)),
-    number: 208,
-    mtg_origin: "Reflector Mage",
-    tags: ["Art Rework", "July22", "Art OK"],
   ),
 
   CardDefinition(
@@ -2648,9 +2050,6 @@ Abandon a character: Materialize this character from your void."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 2293194521),
-    number: 209,
-    mtg_origin: "Glimpse of Nature",
-    tags: ["tutorial"],
   ),
 
   CardDefinition(
@@ -2660,9 +2059,6 @@ Abandon a character: Materialize this character from your void."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Explorer", spark: Fixed(1)),
     art: (image: 447372526, crop: (x: 0.0, y: -0.587, scale: 1.17)),
-    number: 210,
-    mtg_origin: "Satyr Wayfinder",
-    tags: ["Self-Mill", "Art Rework", "July15", "Art OK"],
   ),
 
   CardDefinition(
@@ -2674,9 +2070,6 @@ Abandon this character: Gain X⍟ where X is the stored ⧗."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
     art: (image: 2281682691, crop: (x: -0.037, y: 1.0, scale: 1.27)),
-    number: 211,
-    mtg_origin: "Makeshift Munitions",
-    tags: ["Art Rework", "July15", "Art OK"],
   ),
 
   CardDefinition(
@@ -2688,9 +2081,6 @@ Reclaim – Abandon a character."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 1402715897),
-    number: 212,
-    mtg_origin: "Cabal Therapy",
-    tags: ["Cantrips", "Art Rework", "July7", "Art OK"],
   ),
 
   CardDefinition(
@@ -2702,9 +2092,6 @@ Reclaim 1●."#,
     energy_cost: Fixed(2),
     kind: Event,
     art: (image: 1402715894, crop: (x: 0.0, y: 1.0, scale: 1.1)),
-    number: 213,
-    mtg_origin: "Cabal Therapy",
-    tags: ["Thoughtseize", "Art Rework", "July7", "Art OK"],
   ),
 
   CardDefinition(
@@ -2715,9 +2102,6 @@ Reclaim 1●."#,
     kind: Event,
     speed: Fast,
     art: (image: 465449525, crop: (x: 0.0, y: -0.104, scale: 1.0)),
-    number: 214,
-    mtg_origin: "Demand Answers",
-    tags: ["Art Rework", "June23", "Art OK"],
   ),
 
   CardDefinition(
@@ -2728,9 +2112,6 @@ Reclaim 1●."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 461706646, crop: (x: -0.106, y: 0.869, scale: 1.27)),
-    number: 215,
-    mtg_origin: "Snap",
-    tags: ["Art Rework", "July7", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -2740,9 +2121,6 @@ Reclaim 1●."#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 1798514914, crop: (x: 0.0, y: 1.0, scale: 1.47)),
-    number: 216,
-    mtg_origin: "Arcbound Ravager",
-    tags: ["Art Rework", "Art OK", "Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -2752,9 +2130,6 @@ Reclaim 1●."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 1794244543, owned: true, crop: (x: -0.032, y: -0.445, scale: 1.37)),
-    number: 217,
-    mtg_origin: "Arcbound Ravager",
-    tags: ["tutorial"],
   ),
 
   CardDefinition(
@@ -2764,9 +2139,6 @@ Reclaim 1●."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 735243049, crop: (x: 0.083, y: 1.0, scale: 1.16)),
-    number: 218,
-    mtg_origin: "Urza, Lord High Artificer",
-    tags: ["Spark Scaler", "Art Rework", "Art OK"],
   ),
 
   CardDefinition(
@@ -2776,8 +2148,6 @@ Reclaim 1●."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Mage", spark: Fixed(3)),
     art: (image: 2278837663, owned: true, crop: (x: 0.084, y: 0.839, scale: 1.17)),
-    number: 219,
-    mtg_origin: "Urza, Lord High Artificer",
   ),
 
   CardDefinition(
@@ -2789,9 +2159,6 @@ Reclaim 1●."#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
     art: (image: 2544257339, crop: (x: 0.0, y: -0.264, scale: 1.67)),
-    number: 220,
-    mtg_origin: "Urza, Lord High Artificer",
-    tags: ["Figment Maker", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -2801,9 +2168,6 @@ Reclaim 1●."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 1897537156, owned: true, crop: (x: 0.21, y: 1.0, scale: 1.17)),
-    number: 221,
-    mtg_origin: "Steel Overseer",
-    tags: ["Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -2814,9 +2178,6 @@ Reclaim 1●."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 339410639),
-    number: 222,
-    mtg_origin: "Stern Scolding",
-    tags: ["Counterspell", "Art Rework", "July8", "Art OK"],
   ),
 
   CardDefinition(
@@ -2827,9 +2188,6 @@ Reclaim 1●."#,
     kind: Event,
     speed: Fast,
     art: (image: 1730836234, crop: (x: 0.0, y: 1.0, scale: 1.0)),
-    number: 223,
-    mtg_origin: "Magmatic Insight",
-    tags: ["Art Rework", "July8", "Art OK"],
   ),
 
   CardDefinition(
@@ -2839,9 +2197,6 @@ Reclaim 1●."#,
     energy_cost: Fixed(5),
     kind: Character(subtype: "Ancient", spark: Fixed(5)),
     art: (image: 2521694543, owned: true, crop: (x: 0.16, y: 1.0, scale: 1.47)),
-    number: 224,
-    mtg_origin: "Vengevine",
-    tags: ["Art Rework", "July14", "Art OK"],
   ),
 
   CardDefinition(
@@ -2852,9 +2207,6 @@ Reclaim 1●."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 2415692459, crop: (x: 0.0, y: 0.5, scale: 1.17)),
-    number: 225,
-    mtg_origin: "Opt",
-    tags: ["Cantrips", "Art OK"],
   ),
 
   CardDefinition(
@@ -2864,9 +2216,6 @@ Reclaim 1●."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Ancient", spark: Fixed(4)),
     art: (image: 2285036629, crop: (x: 0.3, y: 1.0, scale: 1.47)),
-    number: 226,
-    mtg_origin: "Priest of Forgotten Gods",
-    tags: ["Art Rework", "July16", "Art OK"],
   ),
 
   CardDefinition(
@@ -2878,9 +2227,6 @@ Abandon this character: Characters you control gain awakened this turn."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
     art: (image: 403770319, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 227,
-    mtg_origin: "Bitter Reunion",
-    tags: ["Art Rework", "Art OK", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -2890,8 +2236,6 @@ Abandon this character: Characters you control gain awakened this turn."#,
     energy_cost: Fixed(2),
     kind: Event,
     art: (image: 670293475, crop: (x: 0.0, y: -0.552, scale: 1.17)),
-    number: 228,
-    mtg_origin: "Bitter Reunion",
   ),
 
   CardDefinition(
@@ -2903,9 +2247,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Synth", spark: Fixed(2)),
     art: (image: 644603722),
-    number: 229,
-    mtg_origin: "Murderous Redcap",
-    tags: ["Art Rework", "July13", "Art OK"],
   ),
 
   CardDefinition(
@@ -2915,9 +2256,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(0)),
     art: (image: 529374502, crop: (x: 0.06, y: 0.369, scale: 1.57)),
-    number: 230,
-    mtg_origin: "Arbor Elf",
-    tags: ["Elves", "Art Rework", "June18", "Art OK", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -2927,9 +2265,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 1798514893, crop: (x: 0.0, y: 0.798, scale: 1.17)),
-    number: 231,
-    mtg_origin: "Perilous Myr",
-    tags: ["Art Rework", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -2939,9 +2274,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(3)),
     art: (image: 1626794386, crop: (x: 0.168, y: 0.0, scale: 1.17)),
-    number: 232,
-    mtg_origin: "Nissa, Resurgent Animist",
-    tags: ["Art Rework", "June19", "Art OK"],
   ),
 
   CardDefinition(
@@ -2951,9 +2283,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
     art: (image: 2186149271, crop: (x: 0.042, y: 1.0, scale: 1.17)),
-    number: 233,
-    mtg_origin: "Genesis Chamber",
-    tags: ["Figment Maker", "Character Payoff", "Art Rework", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -2963,9 +2292,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
     art: (image: 2025883229, crop: (x: 0.782, y: 1.0, scale: 1.11)),
-    number: 234,
-    mtg_origin: "Accursed Marauder",
-    tags: ["Art Rework", "June22", "Art OK"],
   ),
 
   CardDefinition(
@@ -2975,9 +2301,6 @@ Reclaim 0●"#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
     art: (image: 1207264102, owned: true, crop: (x: -0.368, y: 1.0, scale: 1.11)),
-    number: 235,
-    mtg_origin: "Molten Vortex",
-    tags: ["Removal", "Art Rework", "June25", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -2989,8 +2312,6 @@ Reclaim 4●"#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 1328168243, owned: true, crop: (x: 0.0, y: 1.0, scale: 1.67)),
-    number: 236,
-    mtg_origin: "Consider",
   ),
 
   CardDefinition(
@@ -3002,9 +2323,6 @@ When you discard this card, it gains reclaim 0●."#,
     energy_cost: Fixed(2),
     kind: Event,
     art: (image: 1302572584),
-    number: 237,
-    mtg_origin: "Faith's Reward",
-    tags: ["Art Rework", "June23", "Art OK"],
   ),
 
   CardDefinition(
@@ -3014,9 +2332,6 @@ When you discard this card, it gains reclaim 0●."#,
     energy_cost: Fixed(3),
     kind: Event,
     art: (image: 2155438701, crop: (x: 0.0, y: 0.398, scale: 1.17)),
-    number: 238,
-    mtg_origin: "Faith's Reward",
-    tags: ["Art Rework", "June23", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -3028,9 +2343,6 @@ Reclaim 4●"#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 2131591273),
-    number: 239,
-    mtg_origin: "Chain Lightning",
-    tags: ["Art Rework", "July9", "Art OK"],
   ),
 
   CardDefinition(
@@ -3040,9 +2352,6 @@ Reclaim 4●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 695511856, owned: true, crop: (x: -0.084, y: 0.369, scale: 1.17)),
-    number: 240,
-    mtg_origin: "Kaito Shizuki",
-    tags: ["Art Rework", "June17", "Art OK", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -3054,9 +2363,6 @@ When an outsider you control scores ⍟, draw a card and gain 2⍟."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
     art: (image: 678431947, crop: (x: -0.541, y: 0.18, scale: 1.37)),
-    number: 241,
-    mtg_origin: "Kaito Shizuki",
-    tags: ["Art Rework", "July24", "Ally Audit", "Art OK"],
   ),
 
   CardDefinition(
@@ -3067,9 +2373,6 @@ When an outsider you control scores ⍟, draw a card and gain 2⍟."#,
     kind: Event,
     speed: Fast,
     art: (image: 2299755783, owned: true, crop: (x: 0.0, y: 0.976, scale: 1.16)),
-    number: 242,
-    mtg_origin: "Ancient Grudge",
-    tags: ["Removal", "Art Rework", "July9", "Art OK"],
   ),
 
   CardDefinition(
@@ -3079,8 +2382,6 @@ When an outsider you control scores ⍟, draw a card and gain 2⍟."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
     art: (image: 1074377570, owned: true),
-    number: 243,
-    mtg_origin: "Dark Confidant",
   ),
 
   CardDefinition(
@@ -3093,9 +2394,6 @@ When an outsider you control scores ⍟, draw a card and gain 2⍟."#,
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
     rarity: Legendary,
     art: (image: 2303852065, crop: (x: 0.059, y: 0.0, scale: 1.67)),
-    number: 244,
-    mtg_origin: "Gaea's Cradle",
-    tags: ["Spirit Lord", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -3105,9 +2403,6 @@ When an outsider you control scores ⍟, draw a card and gain 2⍟."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 2430444885, owned: true, crop: (x: 0.042, y: 1.0, scale: 1.47)),
-    number: 245,
-    mtg_origin: "Giver of Runes",
-    tags: ["Art Rework", "June25", "Art Duplicate", "Art OK", "Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -3117,8 +2412,6 @@ When an outsider you control scores ⍟, draw a card and gain 2⍟."#,
     energy_cost: Fixed(3),
     kind: Event,
     art: (image: 1739438657, crop: (x: 0.042, y: 1.0, scale: 1.17)),
-    number: 246,
-    mtg_origin: "Bonus Round",
   ),
 
   CardDefinition(
@@ -3128,8 +2421,6 @@ When an outsider you control scores ⍟, draw a card and gain 2⍟."#,
     energy_cost: FixedAndVariable(2),
     kind: Event,
     art: (image: 703988038, crop: (x: 0.546, y: 0.608, scale: 1.17)),
-    number: 247,
-    mtg_origin: "The Meathook Massacre",
   ),
 
   CardDefinition(
@@ -3139,9 +2430,6 @@ When an outsider you control scores ⍟, draw a card and gain 2⍟."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(2)),
     art: (image: 2303852061, crop: (x: -0.071, y: 1.0, scale: 1.16)),
-    number: 248,
-    mtg_origin: "Allosaurus Shepherd",
-    tags: ["Art Rework", "June18", "Art OK", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -3151,9 +2439,6 @@ When an outsider you control scores ⍟, draw a card and gain 2⍟."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
     art: (image: 2023111793, crop: (x: -0.294, y: 0.032, scale: 1.17)),
-    number: 249,
-    mtg_origin: "Cruel Celebrant",
-    tags: ["Blood Artist", "Score Trigger", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -3164,9 +2449,6 @@ When an outsider you control scores ⍟, draw a card and gain 2⍟."#,
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
     speed: Fast,
     art: (image: 2191235665, crop: (x: 0.11, y: -0.1, scale: 1.67)),
-    number: 250,
-    mtg_origin: "Spellseeker",
-    tags: ["Discover", "Art Rework", "June26", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -3176,9 +2458,6 @@ When an outsider you control scores ⍟, draw a card and gain 2⍟."#,
     energy_cost: Fixed(4),
     kind: Event,
     art: (image: 1968259702),
-    number: 251,
-    mtg_origin: "Turnabout",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -3191,9 +2470,6 @@ When an outsider you control scores ⍟, draw a card and gain 2⍟."#,
     kind: Character(subtype: "Synth", spark: Fixed(3)),
     speed: Interrupt,
     art: (image: 1794244546),
-    number: 252,
-    mtg_origin: "Flare of Denial",
-    tags: ["Counterspell"],
   ),
 
   CardDefinition(
@@ -3205,9 +2481,6 @@ Reclaim 6●"#,
     energy_cost: Fixed(2),
     kind: Event,
     art: (image: 2586513021, owned: true, crop: (x: -0.049, y: 1.0, scale: 1.07)),
-    number: 253,
-    mtg_origin: "Sevinne's Reclamation",
-    tags: ["Art Rework", "July7", "Art OK"],
   ),
 
   CardDefinition(
@@ -3219,8 +2492,6 @@ Reclaim 5●."#,
     energy_cost: Fixed(4),
     kind: Event,
     art: (image: 686903113, crop: (x: -0.342, y: 0.608, scale: 1.17)),
-    number: 254,
-    mtg_origin: "Sevinne's Reclamation",
   ),
 
   CardDefinition(
@@ -3232,8 +2503,6 @@ The next time you play an event this turn, copy it."#,
     energy_cost: Fixed(3),
     kind: Event,
     art: (image: 608686832, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 255,
-    mtg_origin: "Flare of Duplication",
   ),
 
   CardDefinition(
@@ -3243,9 +2512,6 @@ The next time you play an event this turn, copy it."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
     art: (image: 2155438711, owned: true, crop: (x: -0.002, y: 1.0, scale: 1.11)),
-    number: 256,
-    mtg_origin: "Monument to Endurance",
-    tags: ["Art Rework", "July21", "Art OK"],
   ),
 
   CardDefinition(
@@ -3255,9 +2521,6 @@ The next time you play an event this turn, copy it."#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Monster", spark: Fixed(2)),
     art: (image: 1790126252, crop: (x: 0.0, y: 1.0, scale: 1.11)),
-    number: 257,
-    mtg_origin: "Intruder Alarm",
-    tags: ["Art Rework", "July14", "Ally Audit", "Art OK"],
   ),
 
   CardDefinition(
@@ -3267,9 +2530,6 @@ The next time you play an event this turn, copy it."#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Super", spark: Fixed(3)),
     art: (image: 1734025934),
-    number: 258,
-    mtg_origin: "Intruder Alarm",
-    tags: ["Character Payoff", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -3279,9 +2539,6 @@ The next time you play an event this turn, copy it."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Mage", spark: Fixed(2)),
     art: (image: 2320845233, crop: (x: 0.0, y: -0.266, scale: 2.57)),
-    number: 259,
-    mtg_origin: "Saheeli, Sublime Artificer",
-    tags: ["Figment Maker", "Event Payoff", "Art Rework", "July22", "Art OK"],
   ),
 
   CardDefinition(
@@ -3291,9 +2548,6 @@ The next time you play an event this turn, copy it."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Synth", spark: Fixed(3)),
     art: (image: 443761831),
-    number: 260,
-    mtg_origin: "Saheeli, Sublime Artificer",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -3303,8 +2557,6 @@ The next time you play an event this turn, copy it."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
     art: (image: 1005938035, crop: (x: 0.0, y: -0.627, scale: 1.57)),
-    number: 261,
-    mtg_origin: "Dualcaster Mage",
   ),
 
   CardDefinition(
@@ -3316,9 +2568,6 @@ The next time you play an event this turn, copy it."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(0)),
     art: (image: 519475345, crop: (x: 0.0, y: 1.0, scale: 1.1)),
-    number: 262,
-    mtg_origin: "Elves of Deep Shadow",
-    tags: ["Elves", "Art Rework", "June18", "Art OK"],
   ),
 
   CardDefinition(
@@ -3328,9 +2577,6 @@ The next time you play an event this turn, copy it."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Musician", spark: Fixed(2)),
     art: (image: 1005938032),
-    number: 263,
-    mtg_origin: "Aetherflux Reservoir",
-    tags: ["Score Trigger", "Art Rework", "July13", "Art OK"],
   ),
 
   CardDefinition(
@@ -3340,9 +2586,6 @@ The next time you play an event this turn, copy it."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
     art: (image: 2597662159, crop: (x: -0.21, y: 0.0, scale: 1.57)),
-    number: 264,
-    mtg_origin: "Luminarch Aspirant",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -3352,9 +2595,6 @@ The next time you play an event this turn, copy it."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(3)),
     art: (image: 2123360855),
-    number: 265,
-    mtg_origin: "Circle of Dreams Druid",
-    tags: ["Spirit Lord", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -3365,9 +2605,6 @@ The next time you play an event this turn, copy it."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 1239919309),
-    number: 266,
-    mtg_origin: "Mana Leak",
-    tags: ["Counterspell", "Art Rework", "July9", "Art OK"],
   ),
 
   CardDefinition(
@@ -3377,9 +2614,6 @@ The next time you play an event this turn, copy it."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 425039551, crop: (x: 0.057, y: 1.0, scale: 1.17)),
-    number: 267,
-    mtg_origin: "Rite of Flame",
-    tags: ["Ritual"],
   ),
 
   CardDefinition(
@@ -3390,9 +2624,6 @@ The next time you play an event this turn, copy it."#,
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
     speed: Fast,
     art: (image: 2287054241, crop: (x: 0.0, y: -0.152, scale: 1.87)),
-    number: 268,
-    mtg_origin: "Coiling Oracle",
-    tags: ["Art Rework", "July24", "Art OK"],
   ),
 
   CardDefinition(
@@ -3404,9 +2635,6 @@ Reclaim 4●."#,
     energy_cost: Fixed(2),
     kind: Event,
     art: (image: 1099575602, crop: (x: 0.0, y: 0.897, scale: 1.07)),
-    number: 269,
-    mtg_origin: "Rite of Harmony",
-    tags: ["Art Rework", "June23", "Art OK"],
   ),
 
   CardDefinition(
@@ -3418,8 +2646,6 @@ The first ≤2● cost character you play each turn costs you 0●."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Explorer", spark: Fixed(1)),
     art: (image: 1026869323, crop: (x: 0.0, y: 0.0, scale: 1.97)),
-    number: 270,
-    mtg_origin: "Exploration",
   ),
 
   CardDefinition(
@@ -3431,9 +2657,6 @@ The first ≤2● cost character you play each turn costs you 0●."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 2299755785, crop: (x: 0.0, y: 1.0, scale: 1.27)),
-    number: 271,
-    mtg_origin: "Samwise Gamgee",
-    tags: ["Art Rework", "June16", "Art OK"],
   ),
 
   CardDefinition(
@@ -3443,9 +2666,6 @@ The first ≤2● cost character you play each turn costs you 0●."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
     art: (image: 410444914, crop: (x: 0.441, y: -0.361, scale: 1.87)),
-    number: 272,
-    mtg_origin: "Llanowar Elves",
-    tags: ["Elves", "Art Rework", "June17", "Art OK"],
   ),
 
   CardDefinition(
@@ -3456,9 +2676,6 @@ The first ≤2● cost character you play each turn costs you 0●."#,
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     speed: Fast,
     art: (image: 612667703, crop: (x: 0.833, y: 1.0, scale: 1.37)),
-    number: 273,
-    mtg_origin: "Bitterbloom Bearer",
-    tags: ["Figment Maker", "Art Rework", "June24", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -3468,9 +2685,6 @@ The first ≤2● cost character you play each turn costs you 0●."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 1734998174, crop: (x: 0.0, y: 1.0, scale: 1.11)),
-    number: 274,
-    mtg_origin: "Arboreal Grazer",
-    tags: ["Art Rework", "July20", "Art OK"],
   ),
 
   CardDefinition(
@@ -3481,9 +2695,6 @@ The first ≤2● cost character you play each turn costs you 0●."#,
     kind: Event,
     speed: Fast,
     art: (image: 2027158295, owned: true),
-    number: 275,
-    mtg_origin: "Burst Lightning",
-    tags: ["Removal", "Art Rework", "July6", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -3493,8 +2704,6 @@ The first ≤2● cost character you play each turn costs you 0●."#,
     energy_cost: Fixed(2),
     kind: Event,
     art: (image: 1164289051, crop: (x: 0.126, y: 1.0, scale: 1.17)),
-    number: 276,
-    mtg_origin: "Chart a Course",
   ),
 
   CardDefinition(
@@ -3504,9 +2713,6 @@ The first ≤2● cost character you play each turn costs you 0●."#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Mage", spark: Fixed(4)),
     art: (image: 2290648803),
-    number: 277,
-    mtg_origin: "Pitiless Plunderer",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -3516,9 +2722,6 @@ The first ≤2● cost character you play each turn costs you 0●."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Mage", spark: Fixed(1)),
     art: (image: 306660617, crop: (x: 0.0, y: 0.644, scale: 1.17)),
-    number: 278,
-    mtg_origin: "Witch's Oven",
-    tags: ["Art Rework", "July22", "Art OK"],
   ),
 
   CardDefinition(
@@ -3528,9 +2731,6 @@ The first ≤2● cost character you play each turn costs you 0●."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Explorer", spark: Fixed(1)),
     art: (image: 1529898275, crop: (x: -0.313, y: -0.471, scale: 1.77)),
-    number: 279,
-    mtg_origin: "Force of Will",
-    tags: ["Art Rework", "July23", "Art OK"],
   ),
 
   CardDefinition(
@@ -3543,9 +2743,6 @@ Prevent a played card."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 2258761881, owned: true, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 280,
-    mtg_origin: "Force of Will",
-    tags: ["Counterspell"],
   ),
 
   CardDefinition(
@@ -3555,9 +2752,6 @@ Prevent a played card."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Monster", spark: Fixed(1)),
     art: (image: 1633431256, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 281,
-    mtg_origin: "Phyrexian Altar",
-    tags: ["Free Sacrifice"],
   ),
 
   CardDefinition(
@@ -3569,9 +2763,6 @@ Reclaim 1●"#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 2521694541, owned: true),
-    number: 282,
-    mtg_origin: "Darkblast",
-    tags: ["Removal"],
   ),
 
   CardDefinition(
@@ -3583,8 +2774,6 @@ At the start of your turn, if this card is in your void, you may erode 3 to plac
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 2186149269, crop: (x: 0.168, y: 0.0, scale: 1.17)),
-    number: 283,
-    mtg_origin: "Darkblast",
   ),
 
   CardDefinition(
@@ -3597,9 +2786,6 @@ When this character scores ⍟, draw a card."#,
     kind: Character(subtype: "Outsider", spark: Fixed(2)),
     speed: Fast,
     art: (image: 2433164311, crop: (x: 0.0, y: 1.0, scale: 1.1)),
-    number: 284,
-    mtg_origin: "Ninja of the Deep Hours",
-    tags: ["Ninja", "Art Rework", "June22", "Art OK"],
   ),
 
   CardDefinition(
@@ -3609,9 +2795,6 @@ When this character scores ⍟, draw a card."#,
     energy_cost: Fixed(2),
     kind: Event,
     art: (image: 1084619579, crop: (x: -0.168, y: 0.032, scale: 1.17)),
-    number: 285,
-    mtg_origin: "Manamorphose",
-    tags: ["Ritual"],
   ),
 
   CardDefinition(
@@ -3621,9 +2804,6 @@ When this character scores ⍟, draw a card."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 1991802452),
-    number: 286,
-    mtg_origin: "Goblin Welder",
-    tags: ["Art Rework", "June16", "Art OK"],
   ),
 
   CardDefinition(
@@ -3633,9 +2813,6 @@ When this character scores ⍟, draw a card."#,
     energy_cost: Variable,
     kind: Event,
     art: (image: 1785274679),
-    number: 287,
-    mtg_origin: "Pest Infestation",
-    tags: ["Figment Maker", "Art Rework", "July6", "Art OK"],
   ),
 
   CardDefinition(
@@ -3645,9 +2822,6 @@ When this character scores ⍟, draw a card."#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
     art: (image: 2216124453, crop: (x: 0.0, y: 0.608, scale: 1.17)),
-    number: 288,
-    mtg_origin: "Gravecrawler",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -3658,8 +2832,6 @@ When this character scores ⍟, draw a card."#,
     kind: Character(subtype: "Spirit Animal", spark: Fixed(0)),
     rarity: Legendary,
     art: (image: 1104412427, crop: (x: 0.0, y: 0.0, scale: 1.47)),
-    number: 289,
-    mtg_origin: "Sol Ring",
   ),
 
   CardDefinition(
@@ -3669,9 +2841,6 @@ When this character scores ⍟, draw a card."#,
     energy_cost: Fixed(5),
     kind: Character(subtype: "Warrior", spark: Fixed(5)),
     art: (image: 432001912, crop: (x: 0.138, y: 1.0, scale: 1.61)),
-    number: 290,
-    mtg_origin: "Emry, Lurker of the Loch",
-    tags: ["Art Rework", "Art OK", "Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -3683,9 +2852,6 @@ When this character scores ⍟, draw a card."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Tinkerer", spark: Fixed(2)),
     art: (image: 1983798665),
-    number: 291,
-    mtg_origin: "Emry, Lurker of the Loch",
-    tags: ["Self-Mill", "Art Rework", "July13", "Art OK"],
   ),
 
   CardDefinition(
@@ -3697,9 +2863,6 @@ Once per turn, you may play a warrior from your void."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 1726923520, crop: (x: 0.0, y: 0.766, scale: 1.57)),
-    number: 292,
-    mtg_origin: "Emry, Lurker of the Loch",
-    tags: ["Art Rework", "July13", "Art OK"],
   ),
 
   CardDefinition(
@@ -3709,9 +2872,6 @@ Once per turn, you may play a warrior from your void."#,
     energy_cost: FixedAndVariable(1),
     kind: Event,
     art: (image: 1907495383),
-    number: 293,
-    mtg_origin: "Green Sun's Zenith",
-    tags: ["Discover"],
   ),
 
   CardDefinition(
@@ -3723,8 +2883,6 @@ Once per turn, you may play a warrior from your void."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 350514500, crop: (x: 0.0, y: 0.032, scale: 1.17)),
-    number: 294,
-    mtg_origin: "Juri, Master of the Revue",
   ),
 
   CardDefinition(
@@ -3734,9 +2892,6 @@ Once per turn, you may play a warrior from your void."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
     art: (image: 653553988),
-    number: 295,
-    mtg_origin: "Ranger-Captain of Eos",
-    tags: ["Art Rework", "July16", "Art OK"],
   ),
 
   CardDefinition(
@@ -3746,8 +2901,6 @@ Once per turn, you may play a warrior from your void."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
     art: (image: 2597662163),
-    number: 296,
-    mtg_origin: "Ranger-Captain of Eos",
   ),
 
   CardDefinition(
@@ -3757,9 +2910,6 @@ Once per turn, you may play a warrior from your void."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Ancient", spark: Fixed(7)),
     art: (image: 1577968036, crop: (x: 0.0, y: 1.0, scale: 1.07)),
-    number: 297,
-    mtg_origin: "Hogaak, Arisen Necropolis",
-    tags: ["Art Rework", "July10", "Art OK"],
   ),
 
   CardDefinition(
@@ -3769,9 +2919,6 @@ Once per turn, you may play a warrior from your void."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Companions", spark: Fixed(3)),
     art: (image: 2022594416, crop: (x: 0.029, y: 0.0, scale: 1.47)),
-    number: 298,
-    mtg_origin: "Six",
-    tags: ["Art Rework", "July20", "Art OK"],
   ),
 
   CardDefinition(
@@ -3781,9 +2928,6 @@ Once per turn, you may play a warrior from your void."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Child", spark: Fixed(3)),
     art: (image: 2033123267, owned: true),
-    number: 299,
-    mtg_origin: "Six",
-    tags: ["Art OK"],
   ),
 
   CardDefinition(
@@ -3795,8 +2939,6 @@ Discard your hand: Draw one card per stored ⧗."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Child", spark: Fixed(3)),
     art: (image: 2023111790, crop: (x: 0.0, y: -0.142, scale: 1.47)),
-    number: 300,
-    mtg_origin: "Bomat Courier",
   ),
 
   CardDefinition(
@@ -3806,9 +2948,6 @@ Discard your hand: Draw one card per stored ⧗."#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Mage", spark: Fixed(1)),
     art: (image: 695511784, crop: (x: 0.0, y: 1.0, scale: 1.11)),
-    number: 301,
-    mtg_origin: "Blade Splicer",
-    tags: ["Art Rework", "July20", "Art OK"],
   ),
 
   CardDefinition(
@@ -3818,9 +2957,6 @@ Discard your hand: Draw one card per stored ⧗."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
     art: (image: 2131591279, crop: (x: 0.084, y: 0.032, scale: 1.17)),
-    number: 302,
-    mtg_origin: "Torens, Fist of the Angels",
-    tags: ["Figment Maker", "Character Payoff"],
   ),
 
   CardDefinition(
@@ -3830,8 +2966,6 @@ Discard your hand: Draw one card per stored ⧗."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
     art: (image: 2221822105, crop: (x: 0.168, y: 0.032, scale: 1.17)),
-    number: 303,
-    mtg_origin: "Birchlore Rangers",
   ),
 
   CardDefinition(
@@ -3841,9 +2975,6 @@ Discard your hand: Draw one card per stored ⧗."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Tinkerer", spark: Fixed(3)),
     art: (image: 1621160803, crop: (x: 0.0, y: 1.0, scale: 1.11)),
-    number: 304,
-    mtg_origin: "Agatha's Soul Cauldron",
-    tags: ["Art Rework", "July17", "Art OK"],
   ),
 
   CardDefinition(
@@ -3855,9 +2986,6 @@ Discard your hand: Draw one card per stored ⧗."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Explorer", spark: Fixed(1)),
     art: (image: 2127752141, crop: (x: 0.04, y: -0.691, scale: 1.77)),
-    number: 305,
-    mtg_origin: "Watcher for Tomorrow",
-    tags: ["Art Rework", "July24", "Art OK"],
   ),
 
   CardDefinition(
@@ -3867,9 +2995,6 @@ Discard your hand: Draw one card per stored ⧗."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 691496698),
-    number: 306,
-    mtg_origin: "Fecundity",
-    tags: ["Art Rework", "July14", "Ally Audit", "Art OK"],
   ),
 
   CardDefinition(
@@ -3882,9 +3007,6 @@ When this character scores ⍟, draw a card, then discard a card."#,
     kind: Character(subtype: "Outsider", spark: Fixed(1)),
     speed: Fast,
     art: (image: 461706976, crop: (x: 0.0, y: 0.665, scale: 1.17)),
-    number: 307,
-    mtg_origin: "Moon-Circuit Hacker",
-    tags: ["Ninja"],
   ),
 
   CardDefinition(
@@ -3895,8 +3017,6 @@ When this character scores ⍟, draw a card, then discard a card."#,
     kind: Event,
     speed: Fast,
     art: (image: 1058321645, crop: (x: -0.042, y: 0.032, scale: 1.17)),
-    number: 308,
-    mtg_origin: "Brought Back",
   ),
 
   CardDefinition(
@@ -3906,9 +3026,6 @@ When this character scores ⍟, draw a card, then discard a card."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 762927766, crop: (x: 0.334, y: -0.244, scale: 1.77)),
-    number: 309,
-    mtg_origin: "Jadar, Ghoulcaller of Nephalia",
-    tags: ["Art Rework", "July16", "Ally Audit", "Art OK"],
   ),
 
   CardDefinition(
@@ -3918,8 +3035,6 @@ When this character scores ⍟, draw a card, then discard a card."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Explorer", spark: Fixed(1)),
     art: (image: 1785274667, crop: (x: -0.33, y: 0.565, scale: 1.97)),
-    number: 310,
-    mtg_origin: "Veteran Explorer",
   ),
 
   CardDefinition(
@@ -3931,9 +3046,6 @@ Reclaim 3●"#,
     energy_cost: Fixed(5),
     kind: Event,
     art: (image: 1213574263, crop: (x: 0.0, y: 0.043, scale: 1.0)),
-    number: 311,
-    mtg_origin: "Echo of Eons",
-    tags: ["Art Rework", "July8", "Art OK"],
   ),
 
   CardDefinition(
@@ -3944,9 +3056,6 @@ Reclaim 3●"#,
     kind: Character(subtype: "Thopter", spark: Fixed(2)),
     speed: Fast,
     art: (image: 511427890, crop: (x: 0.45, y: 1.0, scale: 1.11)),
-    number: 312,
-    mtg_origin: "Whitemane Lion",
-    tags: ["ETB Bounce", "Art Rework", "July22", "Ally Audit", "Art OK"],
   ),
 
   CardDefinition(
@@ -3956,9 +3065,6 @@ Reclaim 3●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 2424248083),
-    number: 313,
-    mtg_origin: "Thopter Foundry",
-    tags: ["Figment Maker", "tutorial"],
   ),
 
   CardDefinition(
@@ -3970,9 +3076,6 @@ Reclaim 3●"#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
     art: (image: 1180104046, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 314,
-    mtg_origin: "Fatestitcher",
-    tags: ["Awaken", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -3982,8 +3085,6 @@ Reclaim 3●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Detective", spark: Fixed(2)),
     art: (image: 1219782715, crop: (x: 0.0, y: 0.0, scale: 1.57)),
-    number: 315,
-    mtg_origin: "Scheming Fence",
   ),
 
   CardDefinition(
@@ -3993,9 +3094,6 @@ Reclaim 3●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Synth", spark: Fixed(2)),
     art: (image: 1740270995, crop: (x: 0.0, y: -0.321, scale: 1.87)),
-    number: 316,
-    mtg_origin: "Scheming Fence",
-    tags: ["Art Rework", "July24", "Art OK"],
   ),
 
   CardDefinition(
@@ -4005,9 +3103,6 @@ Reclaim 3●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 1792373854, crop: (x: -0.198, y: -0.71, scale: 2.27)),
-    number: 317,
-    mtg_origin: "Esper Sentinel",
-    tags: ["tutorial"],
   ),
 
   CardDefinition(
@@ -4017,9 +3112,6 @@ Reclaim 3●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 2025883235, owned: true, crop: (x: 0.0, y: -0.471, scale: 1.77)),
-    number: 318,
-    mtg_origin: "Grim Lavamancer",
-    tags: ["Art Rework", "July22", "Art OK"],
   ),
 
   CardDefinition(
@@ -4032,9 +3124,6 @@ Prevent a played card unless the opponent pays 1●."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 1897537153, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 319,
-    mtg_origin: "Daze",
-    tags: ["Counterspell"],
   ),
 
   CardDefinition(
@@ -4046,9 +3135,6 @@ Prevent a played card unless the opponent pays 1●."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Monster", spark: Fixed(2)),
     art: (image: 581686579, crop: (x: -0.24, y: 0.28, scale: 1.37)),
-    number: 320,
-    mtg_origin: "Knight of the Reliquary",
-    tags: ["Art Rework", "July16", "Art OK"],
   ),
 
   CardDefinition(
@@ -4058,9 +3144,6 @@ Prevent a played card unless the opponent pays 1●."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
     art: (image: 2586513023),
-    number: 321,
-    mtg_origin: "Knight of the Reliquary",
-    tags: ["Art Rework", "July16", "Art OK"],
   ),
 
   CardDefinition(
@@ -4072,9 +3155,6 @@ Prevent a played card unless the opponent pays 1●."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 789291016, crop: (x: 0.0, y: 0.242, scale: 1.17)),
-    number: 322,
-    mtg_origin: "Baleful Strix",
-    tags: ["ETB Draw", "Art Rework", "July27", "July24", "Art OK"],
   ),
 
   CardDefinition(
@@ -4084,8 +3164,6 @@ Prevent a played card unless the opponent pays 1●."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 1314287447, crop: (x: 0.178, y: 0.212, scale: 1.37)),
-    number: 323,
-    mtg_origin: "High Tide",
   ),
 
   CardDefinition(
@@ -4097,9 +3175,6 @@ When you materialize a non-figment warrior, this character gains +1 spark."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Noble", spark: Fixed(1)),
     art: (image: 2415692455, crop: (x: 0.0, y: -0.237, scale: 1.87)),
-    number: 324,
-    mtg_origin: "Ingenious Smith",
-    tags: ["Art Rework", "July14", "Art OK"],
   ),
 
   CardDefinition(
@@ -4109,9 +3184,6 @@ When you materialize a non-figment warrior, this character gains +1 spark."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
     art: (image: 1913887474, crop: (x: -0.42, y: 0.839, scale: 1.17)),
-    number: 325,
-    mtg_origin: "Quirion Ranger",
-    tags: ["Awaken", "Art Rework", "June18", "Art OK", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -4123,9 +3195,6 @@ Reclaim – Discard a card"#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 581686492),
-    number: 326,
-    mtg_origin: "Lava Dart",
-    tags: ["Removal"],
   ),
 
   CardDefinition(
@@ -4137,9 +3206,6 @@ Reclaim – Discard a card"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
     art: (image: 1727859046, crop: (x: -0.049, y: 0.897, scale: 1.07)),
-    number: 327,
-    mtg_origin: "Living Twister",
-    tags: ["Art Rework", "July23", "Art OK"],
   ),
 
   CardDefinition(
@@ -4151,9 +3217,6 @@ Reclaim – Discard a card"#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
     art: (image: 1694993299, crop: (x: -0.1, y: -0.348, scale: 1.47)),
-    number: 328,
-    mtg_origin: "Living Twister",
-    tags: ["Removal", "Art Rework", "July23", "Ally Audit", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -4163,8 +3226,6 @@ Reclaim – Discard a card"#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Synth", spark: Fixed(5)),
     art: (image: 2424248089, owned: true, crop: (x: 0.882, y: 0.032, scale: 1.17)),
-    number: 329,
-    mtg_origin: "Asmoranomardicadaistinaculdacar",
   ),
 
   CardDefinition(
@@ -4176,9 +3237,6 @@ Reclaim – Discard a card"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
     art: (image: 682942723, crop: (x: 0.779, y: 0.574, scale: 1.47)),
-    number: 330,
-    mtg_origin: "Asmoranomardicadaistinaculdacar",
-    tags: ["Removal", "Figment Maker", "Art Rework", "June16", "Art OK"],
   ),
 
   CardDefinition(
@@ -4188,9 +3246,6 @@ Reclaim – Discard a card"#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 1470059006),
-    number: 331,
-    mtg_origin: "Bone Shards",
-    tags: ["Removal", "Art Rework", "June23", "Art OK"],
   ),
 
   CardDefinition(
@@ -4200,9 +3255,6 @@ Reclaim – Discard a card"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 2586513025, crop: (x: 0.21, y: 1.0, scale: 1.17)),
-    number: 332,
-    mtg_origin: "Pyrite Spellbomb",
-    tags: ["Art Rework", "June15", "Art OK"],
   ),
 
   CardDefinition(
@@ -4214,9 +3266,6 @@ Reclaim – Discard a card"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 2131591267, crop: (x: 0.252, y: 0.212, scale: 1.17)),
-    number: 333,
-    mtg_origin: "Ornithopter of Paradise",
-    tags: ["Art Rework", "June15", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -4228,8 +3277,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(4),
     kind: Event,
     art: (image: 1258823161, crop: (x: -0.504, y: 1.0, scale: 1.17)),
-    number: 334,
-    mtg_origin: "Deep Analysis",
   ),
 
   CardDefinition(
@@ -4239,9 +3286,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(2),
     kind: Event,
     art: (image: 1225878706, crop: (x: 0.322, y: 1.0, scale: 1.11)),
-    number: 335,
-    mtg_origin: "Brain Freeze",
-    tags: ["Art Rework", "July6", "Art OK"],
   ),
 
   CardDefinition(
@@ -4253,9 +3297,6 @@ Reclaim 2●"#,
     kind: Event,
     speed: Interrupt,
     art: (image: 2303852059, owned: true, crop: (x: -0.294, y: 0.032, scale: 1.17)),
-    number: 336,
-    mtg_origin: "Galvanic Blast",
-    tags: ["Removal", "Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -4265,8 +3306,6 @@ Reclaim 2●"#,
     energy_cost: FixedAndVariable(3),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
     art: (image: 316023560, crop: (x: 0.522, y: 0.032, scale: 1.17)),
-    number: 337,
-    mtg_origin: "Thieving Skydiver",
   ),
 
   CardDefinition(
@@ -4280,9 +3319,6 @@ Support - Supported characters have +2✦.
     kind: Character(subtype: "Musician", spark: Fixed(1)),
     speed: Fast,
     art: (image: 1021646683, crop: (x: -0.084, y: -0.163, scale: 1.27)),
-    number: 338,
-    mtg_origin: "Ice-Fang Coatl",
-    tags: ["ETB Draw", "Art Rework", "July27", "July24", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -4293,8 +3329,6 @@ Support - Supported characters have +2✦.
     kind: Event,
     speed: Interrupt,
     art: (image: 1708315387, owned: true),
-    number: 339,
-    mtg_origin: "Swords to Plowshares",
   ),
 
   CardDefinition(
@@ -4306,8 +3340,6 @@ Support - Supported characters have +2✦.
     energy_cost: Fixed(6),
     kind: Character(subtype: "Ancient", spark: Fixed(6)),
     art: (image: 1716379555, crop: (x: -0.084, y: 1.0, scale: 1.17)),
-    number: 340,
-    mtg_origin: "Baloth Prime",
   ),
 
   CardDefinition(
@@ -4317,9 +3349,6 @@ Support - Supported characters have +2✦.
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 457875913, crop: (x: 0.0, y: -0.681, scale: 1.57)),
-    number: 341,
-    mtg_origin: "Serum Visions",
-    tags: ["Cantrips"],
   ),
 
   CardDefinition(
@@ -4331,8 +3360,6 @@ Characters of the chosen type have +1✦."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
     art: (image: 529374478, crop: (x: 0.228, y: 1.0, scale: 1.07)),
-    number: 342,
-    mtg_origin: "Metallic Mimic",
   ),
 
   CardDefinition(
@@ -4342,9 +3369,6 @@ Characters of the chosen type have +1✦."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 1798382140, owned: true, crop: (x: -0.045, y: 0.64, scale: 1.47)),
-    number: 343,
-    mtg_origin: "Patchwork Automaton",
-    tags: ["tutorial"],
   ),
 
   CardDefinition(
@@ -4356,9 +3380,6 @@ Characters of the chosen type have +1✦."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 626543207, crop: (x: 0.172, y: -0.636, scale: 1.57)),
-    number: 344,
-    mtg_origin: "The Underworld Cookbook",
-    tags: ["Art Rework", "June25", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -4368,9 +3389,6 @@ Characters of the chosen type have +1✦."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Super", spark: Fixed(1)),
     art: (image: 1246320997, crop: (x: 0.0, y: 0.0, scale: 1.47)),
-    number: 345,
-    mtg_origin: "Sylvan Safekeeper",
-    tags: ["Art Rework", "July14", "Ally Audit", "Art OK"],
   ),
 
   CardDefinition(
@@ -4380,9 +3398,6 @@ Characters of the chosen type have +1✦."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 1042405648),
-    number: 346,
-    mtg_origin: "Preordain",
-    tags: ["Cantrips"],
   ),
 
   CardDefinition(
@@ -4392,8 +3407,6 @@ Characters of the chosen type have +1✦."#,
     energy_cost: Fixed(0),
     kind: Event,
     art: (image: 708313726, crop: (x: -0.294, y: 1.0, scale: 1.17)),
-    number: 347,
-    mtg_origin: "Lion's Eye Diamond",
   ),
 
   CardDefinition(
@@ -4404,9 +3417,6 @@ Characters of the chosen type have +1✦."#,
     kind: Event,
     speed: Fast,
     art: (image: 2427491217, crop: (x: -0.353, y: 0.805, scale: 1.17)),
-    number: 348,
-    mtg_origin: "Nettlecyst",
-    tags: ["Art Rework", "June23", "Art OK", "Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -4417,8 +3427,6 @@ Characters of the chosen type have +1✦."#,
     kind: Character(subtype: "Explorer", spark: Fixed(0)),
     rarity: Legendary,
     art: (image: 2419795159, crop: (x: 0.0, y: 1.0, scale: 1.37)),
-    number: 349,
-    mtg_origin: "Aluren",
   ),
 
   CardDefinition(
@@ -4430,8 +3438,6 @@ When you abandon a character, draw a card and this character gains +1✦."#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Visitor", spark: Fixed(4)),
     art: (image: 529374445, crop: (x: -0.105, y: -0.654, scale: 1.57)),
-    number: 350,
-    mtg_origin: "Korvold, Fae-Cursed King",
   ),
 
   CardDefinition(
@@ -4443,9 +3449,6 @@ When you abandon a character, draw a card and this character gains +1✦."#,
     energy_cost: Fixed(0),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(0)),
     art: (image: 1129012706, crop: (x: -0.042, y: 1.0, scale: 1.1)),
-    number: 351,
-    mtg_origin: "Mox Diamond",
-    tags: ["Art Rework", "June19", "Art OK"],
   ),
 
   CardDefinition(
@@ -4455,9 +3458,6 @@ When you abandon a character, draw a card and this character gains +1✦."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
     art: (image: 670293463, crop: (x: 0.0, y: -0.352, scale: 1.37)),
-    number: 352,
-    mtg_origin: "Refurbished Familiar",
-    tags: ["Art Rework", "July22", "Art OK"],
   ),
 
   CardDefinition(
@@ -4469,9 +3469,6 @@ When you abandon a character, draw a card and this character gains +1✦."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 1721490838, crop: (x: -0.126, y: -0.131, scale: 1.17)),
-    number: 353,
-    mtg_origin: "Scrapyard Recombiner",
-    tags: ["Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -4481,9 +3478,6 @@ When you abandon a character, draw a card and this character gains +1✦."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Mage", spark: Fixed(3)),
     art: (image: 2285036623, crop: (x: 0.0, y: -0.096, scale: 1.37)),
-    number: 354,
-    mtg_origin: "Slogurk, the Overslime",
-    tags: ["Art Rework", "July24", "Art OK"],
   ),
 
   CardDefinition(
@@ -4495,9 +3489,6 @@ When you abandon a character, draw a card and this character gains +1✦."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 1511229272, crop: (x: 0.0, y: -0.362, scale: 1.37)),
-    number: 355,
-    mtg_origin: "Chromatic Star",
-    tags: ["Art Rework", "June17", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -4509,8 +3500,6 @@ When you abandon a character, draw a card and this character gains +1✦."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Synth", spark: Fixed(1)),
     art: (image: 539227177),
-    number: 356,
-    mtg_origin: "Changeling Outcast",
   ),
 
   CardDefinition(
@@ -4521,9 +3510,6 @@ When you abandon a character, draw a card and this character gains +1✦."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 2018848967, crop: (x: -0.046, y: 1.0, scale: 1.16)),
-    number: 357,
-    mtg_origin: "Snuff Out",
-    tags: ["Removal", "Art Rework", "July6", "Art OK"],
   ),
 
   CardDefinition(
@@ -4535,9 +3521,6 @@ Reclaim – Discard a card."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 666342238, owned: true, crop: (x: 0.192, y: 1.0, scale: 1.1)),
-    number: 358,
-    mtg_origin: "Raven's Crime",
-    tags: ["Art Rework", "July7", "Art OK"],
   ),
 
   CardDefinition(
@@ -4549,9 +3532,6 @@ Reclaim – Discard a card."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Explorer", spark: Fixed(1)),
     art: (image: 316023017, crop: (x: -0.07, y: 0.897, scale: 1.07)),
-    number: 359,
-    mtg_origin: "Faerie Seer",
-    tags: ["Art Rework", "July21", "Art OK"],
   ),
 
   CardDefinition(
@@ -4561,9 +3541,6 @@ Reclaim – Discard a card."#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Ancient", spark: Fixed(3)),
     art: (image: 695511850, crop: (x: -0.006, y: 1.0, scale: 1.16)),
-    number: 360,
-    mtg_origin: "Crucible of Worlds",
-    tags: ["Art Rework", "July16", "Art OK"],
   ),
 
   CardDefinition(
@@ -4573,9 +3550,6 @@ Reclaim – Discard a card."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
     art: (image: 281111747, crop: (x: 0.054, y: -0.4, scale: 1.97)),
-    number: 361,
-    mtg_origin: "Bridge from Below",
-    tags: ["Figment Maker", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -4585,9 +3559,6 @@ Reclaim – Discard a card."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 2023111781, crop: (x: 0.092, y: 1.0, scale: 1.11)),
-    number: 362,
-    mtg_origin: "Digsite Engineer",
-    tags: ["Spark Scaler", "Art Rework", "June24", "Art Duplicate", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -4597,8 +3568,6 @@ Reclaim – Discard a card."#,
     energy_cost: Fixed(8),
     kind: Character(subtype: "Ancient", spark: Fixed(7)),
     art: (image: 2290648801, owned: true, crop: (x: 0.433, y: 1.0, scale: 1.11)),
-    number: 363,
-    mtg_origin: "Scourge of Nel Toth",
   ),
 
   CardDefinition(
@@ -4608,9 +3577,6 @@ Reclaim – Discard a card."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(0)),
     art: (image: 662452981, owned: true, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 364,
-    mtg_origin: "Elvish Mystic",
-    tags: ["Elves", "Art Rework", "June18", "Art OK"],
   ),
 
   CardDefinition(
@@ -4620,9 +3586,6 @@ Reclaim – Discard a card."#,
     energy_cost: Fixed(0),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 2027158301, owned: true),
-    number: 365,
-    mtg_origin: "Memnite",
-    tags: ["Vanilla", "tutorial"],
   ),
 
   CardDefinition(
@@ -4632,9 +3595,6 @@ Reclaim – Discard a card."#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
     art: (image: 1383318395),
-    number: 366,
-    mtg_origin: "Loran of the Third Path",
-    tags: ["Removal", "Art Rework", "July17", "Art OK"],
   ),
 
   CardDefinition(
@@ -4644,9 +3604,6 @@ Reclaim – Discard a card."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Musician", spark: Fixed(2)),
     art: (image: 744309595, crop: (x: 0.0, y: 1.0, scale: 1.16)),
-    number: 367,
-    mtg_origin: "Loran of the Third Path",
-    tags: ["Art Rework", "July17", "Art OK"],
   ),
 
   CardDefinition(
@@ -4660,9 +3617,6 @@ When you discard this card, it gains reclaim 0●.
     kind: Event,
     speed: Fast,
     art: (image: 1722480805, crop: (x: -0.047, y: 1.0, scale: 1.1)),
-    number: 368,
-    mtg_origin: "Blast from the Past",
-    tags: ["Removal", "Art Rework", "July9", "Art OK"],
   ),
 
   CardDefinition(
@@ -4674,9 +3628,6 @@ When you discard this card, it gains reclaim 0●.
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 337161542, owned: true, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 369,
-    mtg_origin: "Junk Diver",
-    tags: ["Art Rework", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -4686,8 +3637,6 @@ When you discard this card, it gains reclaim 0●.
     energy_cost: FixedAndVariable(1),
     kind: Event,
     art: (image: 662452591),
-    number: 370,
-    mtg_origin: "Rally the Ancestors",
   ),
 
   CardDefinition(
@@ -4697,9 +3646,6 @@ When you discard this card, it gains reclaim 0●.
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(2)),
     art: (image: 2027158304, crop: (x: 0.252, y: 1.0, scale: 1.17)),
-    number: 371,
-    mtg_origin: "Fauna Shaman",
-    tags: ["Discover"],
   ),
 
   CardDefinition(
@@ -4709,9 +3655,6 @@ When you discard this card, it gains reclaim 0●.
     energy_cost: Fixed(2),
     kind: Character(subtype: "Tinkerer", spark: Fixed(2)),
     art: (image: 353287676, crop: (x: 0.0, y: 0.328, scale: 1.0)),
-    number: 372,
-    mtg_origin: "Oswald Fiddlebender",
-    tags: ["Discover", "Art Rework", "July15", "Art OK"],
   ),
 
   CardDefinition(
@@ -4721,9 +3664,6 @@ When you discard this card, it gains reclaim 0●.
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 2364396767, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 373,
-    mtg_origin: "Portable Hole",
-    tags: ["Removal", "tutorial"],
   ),
 
   CardDefinition(
@@ -4735,9 +3675,6 @@ X●: This character gains +X✦ until end of turn."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
     art: (image: 2295991869, crop: (x: 0.0, y: 1.0, scale: 1.07)),
-    number: 374,
-    mtg_origin: "Blazing Rootwalla",
-    tags: ["Art Rework", "June25", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -4747,9 +3684,6 @@ X●: This character gains +X✦ until end of turn."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Explorer", spark: Fixed(1)),
     art: (image: 1185684772, owned: true),
-    number: 375,
-    mtg_origin: "Blazing Rootwalla",
-    tags: ["Art OK"],
   ),
 
   CardDefinition(
@@ -4759,9 +3693,6 @@ X●: This character gains +X✦ until end of turn."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 2681394203, crop: (x: 0.0, y: 0.0, scale: 1.47)),
-    number: 376,
-    mtg_origin: "Oust",
-    tags: ["Art Rework", "June23", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -4773,9 +3704,6 @@ X⧗: Dissolve a ≤X✦ enemy."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 2295991863, owned: true, crop: (x: 0.21, y: 1.0, scale: 1.17)),
-    number: 377,
-    mtg_origin: "Walking Ballista",
-    tags: ["Removal", "Storage Removal"],
   ),
 
   CardDefinition(
@@ -4785,9 +3713,6 @@ X⧗: Dissolve a ≤X✦ enemy."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 2661986989, crop: (x: 0.159, y: 0.141, scale: 1.47)),
-    number: 378,
-    mtg_origin: "Walking Ballista",
-    tags: ["Art Rework", "June15", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -4797,9 +3722,6 @@ X⧗: Dissolve a ≤X✦ enemy."#,
     energy_cost: Variable,
     kind: Character(subtype: "X", spark: Variable),
     art: (image: 289214153, crop: (x: 0.7, y: 1.0, scale: 1.17)),
-    number: 379,
-    mtg_origin: "Walking Ballista",
-    tags: ["Art Rework", "July10", "Art OK"],
   ),
 
   CardDefinition(
@@ -4809,9 +3731,6 @@ X⧗: Dissolve a ≤X✦ enemy."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
     art: (image: 2018848979),
-    number: 380,
-    mtg_origin: "Nether Traitor",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -4823,9 +3742,6 @@ X⧗: Dissolve a ≤X✦ enemy."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 2521694539, crop: (x: 0.252, y: 0.0, scale: 1.17)),
-    number: 381,
-    mtg_origin: "Gingerbrute",
-    tags: ["Art Rework", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -4837,9 +3753,6 @@ X⧗: Dissolve a ≤X✦ enemy."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
     art: (image: 1047769120, crop: (x: -0.294, y: 0.424, scale: 1.17)),
-    number: 382,
-    mtg_origin: "Boreal Druid",
-    tags: ["Elves", "Self-Mill"],
   ),
 
   CardDefinition(
@@ -4851,9 +3764,6 @@ X⧗: Dissolve a ≤X✦ enemy."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(2)),
     art: (image: 1169640025, crop: (x: -0.294, y: 1.0, scale: 1.17)),
-    number: 383,
-    mtg_origin: "Llanowar Visionary",
-    tags: ["ETB Draw"],
   ),
 
   CardDefinition(
@@ -4863,8 +3773,6 @@ X⧗: Dissolve a ≤X✦ enemy."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Elemental", spark: Fixed(2)),
     art: (image: 2023111784),
-    number: 384,
-    mtg_origin: "Jace, Vryn's Prodigy // Jace, Telepath Unbound",
   ),
 
   CardDefinition(
@@ -4874,9 +3782,6 @@ X⧗: Dissolve a ≤X✦ enemy."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 1047769036, crop: (x: -0.286, y: 0.032, scale: 1.77)),
-    number: 385,
-    mtg_origin: "Jace, Vryn's Prodigy // Jace, Telepath Unbound",
-    tags: ["Merfolk Looter", "Art Rework", "July22", "Art OK"],
   ),
 
   CardDefinition(
@@ -4886,9 +3791,6 @@ X⧗: Dissolve a ≤X✦ enemy."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 703988032, crop: (x: -0.042, y: -0.276, scale: 1.37)),
-    number: 386,
-    mtg_origin: "Deep-Cavern Bat",
-    tags: ["Tidehollow Sculler", "Art Rework", "June25", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -4898,9 +3800,6 @@ X⧗: Dissolve a ≤X✦ enemy."#,
     energy_cost: Fixed(2),
     kind: Event,
     art: (image: 2430444883, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 387,
-    mtg_origin: "Tinker",
-    tags: ["Discover", "Art Rework", "July9", "Art OK"],
   ),
 
   CardDefinition(
@@ -4912,8 +3811,6 @@ X⧗: Dissolve a ≤X✦ enemy."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 2269064809, owned: true, crop: (x: 0.42, y: 0.032, scale: 1.17)),
-    number: 388,
-    mtg_origin: "Bazaar of Baghdad",
   ),
 
   CardDefinition(
@@ -4923,9 +3820,6 @@ X⧗: Dissolve a ≤X✦ enemy."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 1289324164, owned: true),
-    number: 389,
-    mtg_origin: "Phyrexian Revoker",
-    tags: ["tutorial"],
   ),
 
   CardDefinition(
@@ -4937,9 +3831,6 @@ When you play a character, gain 1●."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Musician", spark: Fixed(2)),
     art: (image: 753489184, crop: (x: -0.07, y: -0.231, scale: 1.3)),
-    number: 390,
-    mtg_origin: "Earthcraft",
-    tags: ["Character Payoff", "Art Rework", "June24", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -4951,9 +3842,6 @@ Reclaim – Discard X cards."#,
     energy_cost: Variable,
     kind: Event,
     art: (image: 1053081881, crop: (x: -0.047, y: 1.0, scale: 1.1)),
-    number: 391,
-    mtg_origin: "Conflagrate",
-    tags: ["Art Rework", "July8", "Art OK"],
   ),
 
   CardDefinition(
@@ -4965,9 +3853,6 @@ X⧗: Materialize a random character with cost X● from the opponent's deck."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Tinkerer", spark: Fixed(3)),
     art: (image: 515170852, crop: (x: 0.671, y: 0.032, scale: 1.17)),
-    number: 392,
-    mtg_origin: "Lonis, Cryptozoologist",
-    tags: ["Free Sacrifice", "Figment Maker", "Character Payoff"],
   ),
 
   CardDefinition(
@@ -4979,9 +3864,6 @@ Reclaim 5●."#,
     energy_cost: Fixed(3),
     kind: Event,
     art: (image: 1068257321, crop: (x: -0.126, y: 0.897, scale: 1.07)),
-    number: 393,
-    mtg_origin: "Increasing Vengeance",
-    tags: ["Art Rework", "July6", "Art OK"],
   ),
 
   CardDefinition(
@@ -4993,9 +3875,6 @@ Reclaim – Abandon a character."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 1190830255, crop: (x: 0.0, y: 1.0, scale: 1.1)),
-    number: 394,
-    mtg_origin: "Bloodghast",
-    tags: ["Art Rework", "June23", "Art OK"],
   ),
 
   CardDefinition(
@@ -5005,9 +3884,6 @@ Reclaim – Abandon a character."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 2521694547, crop: (x: 0.0, y: 0.311, scale: 1.47)),
-    number: 395,
-    mtg_origin: "Skullclamp",
-    tags: ["Art Rework", "Art OK", "Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -5017,8 +3893,6 @@ Reclaim – Abandon a character."#,
     energy_cost: Fixed(8),
     kind: Character(subtype: "Ancient", spark: Fixed(8)),
     art: (image: 2421338073, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 396,
-    mtg_origin: "Greater Gargadon",
   ),
 
   CardDefinition(
@@ -5030,9 +3904,6 @@ Reclaim – Abandon a character."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Ancient", spark: Fixed(3)),
     art: (image: 2186149281, crop: (x: 0.0, y: 1.0, scale: 1.37)),
-    number: 397,
-    mtg_origin: "Aftermath Analyst",
-    tags: ["Self-Mill", "Art Rework", "July17", "Art OK"],
   ),
 
   CardDefinition(
@@ -5045,8 +3916,6 @@ Banish a ≤3● cost enemy."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 2033123279, owned: true),
-    number: 398,
-    mtg_origin: "March of Otherworldly Light",
   ),
 
   CardDefinition(
@@ -5058,9 +3927,6 @@ Banish a ≤3● cost enemy."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 432001921, crop: (x: 0.025, y: 1.0, scale: 1.2)),
-    number: 399,
-    mtg_origin: "Wizard's Rockets",
-    tags: ["Art Rework", "June17", "Art OK"],
   ),
 
   CardDefinition(
@@ -5072,9 +3938,6 @@ Banish a ≤3● cost enemy."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 485518048),
-    number: 400,
-    mtg_origin: "Hangarback Walker",
-    tags: ["Figment Maker"],
   ),
 
   CardDefinition(
@@ -5085,8 +3948,6 @@ Banish a ≤3● cost enemy."#,
     kind: Event,
     speed: Fast,
     art: (image: 1786390157, crop: (x: -0.168, y: 1.0, scale: 1.17)),
-    number: 401,
-    mtg_origin: "Treasure Cruise",
   ),
 
   CardDefinition(
@@ -5096,9 +3957,6 @@ Banish a ≤3● cost enemy."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
     art: (image: 2590831717, owned: true, crop: (x: 0.456, y: 0.761, scale: 1.17)),
-    number: 402,
-    mtg_origin: "Vault Skirge",
-    tags: ["Art Rework", "June16", "Art OK"],
   ),
 
   CardDefinition(
@@ -5108,9 +3966,6 @@ Banish a ≤3● cost enemy."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 1725212353, crop: (x: 0.0, y: 0.214, scale: 1.57)),
-    number: 403,
-    mtg_origin: "Smuggler's Copter",
-    tags: ["Art Rework", "June16", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -5120,9 +3975,6 @@ Banish a ≤3● cost enemy."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 1790126255, crop: (x: 0.783, y: 1.0, scale: 1.17)),
-    number: 404,
-    mtg_origin: "Myr Retriever",
-    tags: ["tutorial"],
   ),
 
   CardDefinition(
@@ -5132,9 +3984,6 @@ Banish a ≤3● cost enemy."#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Ancient", spark: Fixed(4)),
     art: (image: 2256745747, crop: (x: 0.216, y: 1.0, scale: 1.57)),
-    number: 405,
-    mtg_origin: "Teshar, Ancestor's Apostle",
-    tags: ["Art Rework", "July15", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -5144,9 +3993,6 @@ Banish a ≤3● cost enemy."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Musician", spark: Fixed(4)),
     art: (image: 1074373424),
-    number: 406,
-    mtg_origin: "Losheel, Clockwork Scholar",
-    tags: ["Art Rework", "June15", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -5156,9 +4002,6 @@ Banish a ≤3● cost enemy."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Mage", spark: Fixed(2)),
     art: (image: 1289324101, owned: true, crop: (x: 0.252, y: 1.0, scale: 1.17)),
-    number: 407,
-    mtg_origin: "Losheel, Clockwork Scholar",
-    tags: ["Art Rework", "June15", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -5169,9 +4012,6 @@ Banish a ≤3● cost enemy."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 1042405558, owned: true, crop: (x: 0.0, y: 1.0, scale: 1.11)),
-    number: 408,
-    mtg_origin: "Mana Drain",
-    tags: ["Counterspell", "Art Rework", "July9", "Art OK"],
   ),
 
   CardDefinition(
@@ -5183,9 +4023,6 @@ Banish a ≤3● cost enemy."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
     art: (image: 425039590, crop: (x: 0.0, y: 0.266, scale: 1.17)),
-    number: 409,
-    mtg_origin: "Fyndhorn Elves",
-    tags: ["Elves", "Art Rework", "June18", "Art OK"],
   ),
 
   CardDefinition(
@@ -5196,9 +4033,6 @@ Banish a ≤3● cost enemy."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 1200949264, owned: true, crop: (x: 0.126, y: 0.398, scale: 1.17)),
-    number: 410,
-    mtg_origin: "Remand",
-    tags: ["Counterspell", "Art Rework", "July9", "Art OK"],
   ),
 
   CardDefinition(
@@ -5210,9 +4044,6 @@ Reclaim 3●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
     art: (image: 674166508, crop: (x: -0.385, y: 1.0, scale: 1.47)),
-    number: 411,
-    mtg_origin: "Birds of Paradise",
-    tags: ["Elves"],
   ),
 
   CardDefinition(
@@ -5222,8 +4053,6 @@ Reclaim 3●"#,
     energy_cost: Fixed(2),
     kind: Event,
     art: (image: 2600774401, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 412,
-    mtg_origin: "Expressive Iteration",
   ),
 
   CardDefinition(
@@ -5233,9 +4062,6 @@ Reclaim 3●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(7)),
     art: (image: 2022594404, owned: true, crop: (x: -0.012, y: 1.0, scale: 1.1)),
-    number: 413,
-    mtg_origin: "Porcelain Legionnaire",
-    tags: ["Art Rework", "June24", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -5247,9 +4073,6 @@ Reclaim 3●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 591626954, crop: (x: 0.0, y: 0.936, scale: 1.0)),
-    number: 414,
-    mtg_origin: "Goblin Engineer",
-    tags: ["Self-Mill", "Art Rework", "July16", "Art OK"],
   ),
 
   CardDefinition(
@@ -5259,9 +4082,6 @@ Reclaim 3●"#,
     energy_cost: Fixed(4),
     kind: Event,
     art: (image: 2285036625, crop: (x: 0.504, y: 0.398, scale: 1.17)),
-    number: 415,
-    mtg_origin: "Collected Company",
-    tags: ["Art Rework", "June26", "Art OK"],
   ),
 
   CardDefinition(
@@ -5271,9 +4091,6 @@ Reclaim 3●"#,
     energy_cost: Fixed(4),
     kind: Event,
     art: (image: 1200949222, owned: true, crop: (x: 0.084, y: 0.032, scale: 1.17)),
-    number: 416,
-    mtg_origin: "Damn",
-    tags: ["Art OK"],
   ),
 
   CardDefinition(
@@ -5283,9 +4100,6 @@ Reclaim 3●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(2)),
     art: (image: 507270340, crop: (x: 0.741, y: 1.0, scale: 1.17)),
-    number: 417,
-    mtg_origin: "Rofellos, Llanowar Emissary",
-    tags: ["Spirit Lord", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -5295,9 +4109,6 @@ Reclaim 3●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
     art: (image: 1114007978, crop: (x: 0.0, y: 1.0, scale: 1.47)),
-    number: 418,
-    mtg_origin: "Bloodsoaked Champion",
-    tags: ["Art Rework", "June15", "Art OK", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -5309,9 +4120,6 @@ Reclaim 3●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Synth", spark: Fixed(1)),
     art: (image: 2438838891, crop: (x: -0.353, y: 0.0, scale: 1.17)),
-    number: 419,
-    mtg_origin: "Mons's Goblin Waiters",
-    tags: ["Free Sacrifice"],
   ),
 
   CardDefinition(
@@ -5321,9 +4129,6 @@ Reclaim 3●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 2544257341, crop: (x: 0.954, y: 1.0, scale: 1.11)),
-    number: 420,
-    mtg_origin: "Putrid Imp",
-    tags: ["Art Rework", "July17", "Art OK"],
   ),
 
   CardDefinition(
@@ -5335,8 +4140,6 @@ Reclaim 1●."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
     art: (image: 1289324113),
-    number: 421,
-    mtg_origin: "Putrid Imp",
   ),
 
   CardDefinition(
@@ -5346,9 +4149,6 @@ Reclaim 1●."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
     art: (image: 1387670426),
-    number: 422,
-    mtg_origin: "Zombie Infestation",
-    tags: ["Figment Maker", "Art Rework", "June22", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -5361,9 +4161,6 @@ Reclaim 1●."#,
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     speed: Interrupt,
     art: (image: 2657255499, crop: (x: -0.078, y: 0.188, scale: 1.97)),
-    number: 423,
-    mtg_origin: "Spellstutter Sprite",
-    tags: ["Counterspell", "Art Rework", "July24", "Art OK"],
   ),
 
   CardDefinition(
@@ -5373,9 +4170,6 @@ Reclaim 1●."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Survivor", spark: Fixed(3)),
     art: (image: 2258761883, crop: (x: -0.21, y: 0.608, scale: 1.17)),
-    number: 424,
-    mtg_origin: "Headless Rider",
-    tags: ["Figment Maker", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -5387,9 +4181,6 @@ Reclaim 1●."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(0)),
     art: (image: 1470059003, crop: (x: 0.0, y: -0.573, scale: 1.67)),
-    number: 425,
-    mtg_origin: "Wall of Omens",
-    tags: ["ETB Draw", "Art Rework", "June25", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -5399,9 +4190,6 @@ Reclaim 1●."#,
     energy_cost: Fixed(2),
     kind: Event,
     art: (image: 2123360849, crop: (x: 0.046, y: 1.0, scale: 1.11)),
-    number: 426,
-    mtg_origin: "Chatterstorm",
-    tags: ["Figment Maker", "Art Rework", "July7", "Art OK"],
   ),
 
   CardDefinition(
@@ -5413,9 +4201,6 @@ Reclaim 1●."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "*", spark: Fixed(1)),
     art: (image: 2191235661),
-    number: 427,
-    mtg_origin: "Mirror Entity",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -5425,9 +4210,6 @@ Reclaim 1●."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 1213574257),
-    number: 428,
-    mtg_origin: "Mirror Entity",
-    tags: ["Art Rework", "June15", "Art OK", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -5439,9 +4221,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(2),
     kind: Event,
     art: (image: 1687930282, crop: (x: 0.042, y: 1.0, scale: 1.1)),
-    number: 429,
-    mtg_origin: "Lingering Souls",
-    tags: ["Figment Maker", "Art Rework", "July9", "Art OK"],
   ),
 
   CardDefinition(
@@ -5453,8 +4232,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
     art: (image: 1114007534, crop: (x: -0.084, y: 1.0, scale: 1.17)),
-    number: 430,
-    mtg_origin: "Joraga Treespeaker",
   ),
 
   CardDefinition(
@@ -5464,9 +4241,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
     art: (image: 730423177, crop: (x: -0.753, y: 1.0, scale: 1.47)),
-    number: 431,
-    mtg_origin: "Chatterfang, Squirrel General",
-    tags: ["Figment Maker"],
   ),
 
   CardDefinition(
@@ -5478,9 +4252,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
     art: (image: 1180104511, crop: (x: 0.175, y: 1.0, scale: 2.07)),
-    number: 432,
-    mtg_origin: "Chatterfang, Squirrel General",
-    tags: ["Art Rework", "July22", "Art OK"],
   ),
 
   CardDefinition(
@@ -5491,8 +4262,6 @@ Reclaim 2●"#,
     kind: Event,
     speed: Interrupt,
     art: (image: 323698610, crop: (x: 0.0, y: 0.608, scale: 1.17)),
-    number: 433,
-    mtg_origin: "Prismatic Ending",
   ),
 
   CardDefinition(
@@ -5503,9 +4272,6 @@ Reclaim 2●"#,
     kind: Event,
     speed: Fast,
     art: (image: 1790126243, crop: (x: 0.252, y: 1.0, scale: 1.17)),
-    number: 434,
-    mtg_origin: "Enlightened Tutor",
-    tags: ["tutorial"],
   ),
 
   CardDefinition(
@@ -5517,9 +4283,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 2293194529, owned: true),
-    number: 435,
-    mtg_origin: "Blasting Station",
-    tags: ["Character Payoff"],
   ),
 
   CardDefinition(
@@ -5529,9 +4292,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visionary", spark: Fixed(3)),
     art: (image: 2030910779, crop: (x: 0.0, y: -0.038, scale: 1.36)),
-    number: 436,
-    mtg_origin: "Birgi, God of Storytelling // Harnfel, Horn of Bounty",
-    tags: ["Art Rework", "July17", "Art OK"],
   ),
 
   CardDefinition(
@@ -5541,9 +4301,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
     art: (image: 2221822101),
-    number: 437,
-    mtg_origin: "Birgi, God of Storytelling // Harnfel, Horn of Bounty",
-    tags: ["Event Payoff"],
   ),
 
   CardDefinition(
@@ -5555,9 +4312,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Child", spark: Fixed(1)),
     art: (image: 519475348, crop: (x: -0.34, y: 1.0, scale: 1.57)),
-    number: 438,
-    mtg_origin: "Paradise Mantle",
-    tags: ["Character Payoff"],
   ),
 
   CardDefinition(
@@ -5567,9 +4321,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(3),
     kind: Event,
     art: (image: 1139536448, crop: (x: 0.0, y: 1.0, scale: 1.11)),
-    number: 439,
-    mtg_origin: "Wheel of Fortune",
-    tags: ["Art Rework", "July7", "Art OK"],
   ),
 
   CardDefinition(
@@ -5580,8 +4331,6 @@ Reclaim 2●"#,
     kind: Event,
     speed: Interrupt,
     art: (image: 2269064815),
-    number: 440,
-    mtg_origin: "Dig Through Time",
   ),
 
   CardDefinition(
@@ -5593,9 +4342,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Vehicle", spark: Fixed(3)),
     art: (image: 539227192, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 441,
-    mtg_origin: "Kor Skyfisher",
-    tags: ["ETB Bounce", "Art Rework", "July21", "Ally Audit", "Art OK"],
   ),
 
   CardDefinition(
@@ -5605,9 +4351,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 717263302, crop: (x: -0.353, y: 1.0, scale: 1.17)),
-    number: 442,
-    mtg_origin: "Ponder",
-    tags: ["Cantrips", "tutorial"],
   ),
 
   CardDefinition(
@@ -5617,9 +4360,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 450347140, crop: (x: -0.689, y: 1.0, scale: 1.37)),
-    number: 443,
-    mtg_origin: "Signal Pest",
-    tags: ["Art Rework", "Art OK", "Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -5629,9 +4369,6 @@ Reclaim 2●"#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(0)),
     art: (image: 1200949225, crop: (x: 0.0, y: 0.0, scale: 1.17)),
-    number: 444,
-    mtg_origin: "Master of Etherium",
-    tags: ["Spark Scaler", "Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -5643,9 +4380,6 @@ When you return another character to your hand, reduce its cost by 1●."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 511427716, crop: (x: -0.285, y: 0.608, scale: 1.17)),
-    number: 445,
-    mtg_origin: "Shrieking Drake",
-    tags: ["ETB Bounce", "Art Rework", "June24", "Art Duplicate", "Art OK", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -5655,9 +4389,6 @@ When you return another character to your hand, reduce its cost by 1●."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
     art: (image: 2127752123, crop: (x: -0.084, y: -0.29, scale: 1.37)),
-    number: 446,
-    mtg_origin: "Nettle Sentinel",
-    tags: ["Art Rework", "June18", "Art OK"],
   ),
 
   CardDefinition(
@@ -5667,9 +4398,6 @@ When you return another character to your hand, reduce its cost by 1●."#,
     energy_cost: Fixed(3),
     kind: Event,
     art: (image: 1728839131),
-    number: 447,
-    mtg_origin: "Frantic Search",
-    tags: ["Art OK"],
   ),
 
   CardDefinition(
@@ -5679,9 +4407,6 @@ When you return another character to your hand, reduce its cost by 1●."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor"),
     art: (image: 1016596177, crop: (x: -0.252, y: 0.869, scale: 1.17)),
-    number: 448,
-    mtg_origin: "Imperial Recruiter",
-    tags: ["Art Rework", "June24", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -5691,9 +4416,6 @@ When you return another character to your hand, reduce its cost by 1●."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Survivor", spark: Fixed(3)),
     art: (image: 1347487814, crop: (x: -0.294, y: 1.0, scale: 1.16)),
-    number: 449,
-    mtg_origin: "Midnight Reaper",
-    tags: ["Art Rework", "June19", "Art OK", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -5703,8 +4425,6 @@ When you return another character to your hand, reduce its cost by 1●."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
     art: (image: 658076065, crop: (x: -1.0, y: 0.0, scale: 1.17)),
-    number: 450,
-    mtg_origin: "Shambling Ghast",
   ),
 
   CardDefinition(
@@ -5715,9 +4435,6 @@ When you return another character to your hand, reduce its cost by 1●."#,
     kind: Event,
     rarity: Legendary,
     art: (image: 2191235671, owned: true, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 451,
-    mtg_origin: "Black Lotus",
-    tags: ["Ritual"],
   ),
 
   CardDefinition(
@@ -5727,9 +4444,6 @@ When you return another character to your hand, reduce its cost by 1●."#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Synth", spark: Fixed(2)),
     art: (image: 410445436, crop: (x: 0.0, y: -0.412, scale: 1.37)),
-    number: 452,
-    mtg_origin: "Squee, Goblin Nabob",
-    tags: ["Art Rework", "July15", "Art OK"],
   ),
 
   CardDefinition(
@@ -5739,9 +4453,6 @@ When you return another character to your hand, reduce its cost by 1●."#,
     energy_cost: FixedAndVariable(2),
     kind: Event,
     art: (image: 644603677, owned: true, crop: (x: 0.0, y: -0.3, scale: 1.27)),
-    number: 453,
-    mtg_origin: "Finale of Promise",
-    tags: ["Art Rework", "July9", "Art OK"],
   ),
 
   CardDefinition(
@@ -5753,8 +4464,6 @@ When you return another character to your hand, reduce its cost by 1●."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Synth"),
     art: (image: 2216124449, crop: (x: 0.0, y: 0.0, scale: 1.67)),
-    number: 454,
-    mtg_origin: "Aether Vial",
   ),
 
   CardDefinition(
@@ -5764,9 +4473,6 @@ When you return another character to your hand, reduce its cost by 1●."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 1159163608, crop: (x: -0.318, y: 1.0, scale: 1.37)),
-    number: 455,
-    mtg_origin: "Inti, Seneschal of the Sun",
-    tags: ["Art Rework", "June26", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -5776,8 +4482,6 @@ When you return another character to your hand, reduce its cost by 1●."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Child", spark: Fixed(2)),
     art: (image: 2415692463, owned: true, crop: (x: 0.042, y: 1.0, scale: 1.17)),
-    number: 456,
-    mtg_origin: "Inti, Seneschal of the Sun",
   ),
 
   CardDefinition(
@@ -5787,8 +4491,6 @@ When you return another character to your hand, reduce its cost by 1●."#,
     energy_cost: Fixed(3),
     kind: Event,
     art: (image: 670293472),
-    number: 457,
-    mtg_origin: "Second Sunrise",
   ),
 
   CardDefinition(
@@ -5798,9 +4500,6 @@ When you return another character to your hand, reduce its cost by 1●."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Mage", spark: Fixed(2)),
     art: (image: 2303852063, crop: (x: 0.42, y: 0.032, scale: 1.17)),
-    number: 458,
-    mtg_origin: "Umbral Collar Zealot",
-    tags: ["Free Sacrifice", "Art OK", "Art Rework"],
   ),
 
   CardDefinition(
@@ -5812,9 +4511,6 @@ When you play a spirit animal, you may pay 1● to draw a card."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(2)),
     art: (image: 2594220423, crop: (x: -0.21, y: 1.0, scale: 1.17)),
-    number: 459,
-    mtg_origin: "Leaf-Crowned Visionary",
-    tags: ["Spirit Lord", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -5824,9 +4520,6 @@ When you play a spirit animal, you may pay 1● to draw a card."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Synth", spark: Fixed(3)),
     art: (image: 1134692546, crop: (x: -0.252, y: 0.869, scale: 1.17)),
-    number: 460,
-    mtg_origin: "Shardless Agent",
-    tags: ["Art Rework", "June26", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -5836,9 +4529,6 @@ When you play a spirit animal, you may pay 1● to draw a card."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visionary", spark: Fixed(2)),
     art: (image: 649133680, crop: (x: 0.0, y: 0.869, scale: 1.17)),
-    number: 461,
-    mtg_origin: "Blood Artist",
-    tags: ["Score Trigger", "Art Rework", "July10", "Art OK"],
   ),
 
   CardDefinition(
@@ -5850,9 +4540,6 @@ When you discard a card, gain 1⍟."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
     art: (image: 1926604865, crop: (x: -0.086, y: 1.0, scale: 1.1)),
-    number: 462,
-    mtg_origin: "Glint-Horn Buccaneer",
-    tags: ["Score Trigger", "Art Rework", "July21", "Art OK"],
   ),
 
   CardDefinition(
@@ -5862,9 +4549,6 @@ When you discard a card, gain 1⍟."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Explorer", spark: Fixed(3)),
     art: (image: 772547359, crop: (x: 0.0, y: -0.478, scale: 1.67)),
-    number: 463,
-    mtg_origin: "Glint-Horn Buccaneer",
-    tags: ["Art Rework", "July21", "Art OK"],
   ),
 
   CardDefinition(
@@ -5875,8 +4559,6 @@ When you discard a card, gain 1⍟."#,
     kind: Character(subtype: "Synth", spark: Fixed(3)),
     speed: Interrupt,
     art: (image: 2586513027),
-    number: 464,
-    mtg_origin: "Spell Queller",
   ),
 
   CardDefinition(
@@ -5886,8 +4568,6 @@ When you discard a card, gain 1⍟."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
     art: (image: 2364396771, owned: true, crop: (x: -0.096, y: 0.6, scale: 1.67)),
-    number: 465,
-    mtg_origin: "Basking Rootwalla",
   ),
 
   CardDefinition(
@@ -5897,9 +4577,6 @@ When you discard a card, gain 1⍟."#,
     energy_cost: Fixed(10),
     kind: Character(subtype: "Ancient", spark: Fixed(4)),
     art: (image: 2421338071, crop: (x: 0.0, y: 1.0, scale: 1.47)),
-    number: 466,
-    mtg_origin: "Finale of Devastation",
-    tags: ["Art Rework", "July13", "Ally Audit", "Art OK"],
   ),
 
   CardDefinition(
@@ -5909,9 +4586,6 @@ When you discard a card, gain 1⍟."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 1633431262, owned: true),
-    number: 467,
-    mtg_origin: "Finale of Devastation",
-    tags: ["Discover", "tutorial"],
   ),
 
   CardDefinition(
@@ -5921,9 +4595,6 @@ When you discard a card, gain 1⍟."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
     art: (image: 1104412604, crop: (x: 0.0, y: 0.218, scale: 1.47)),
-    number: 468,
-    mtg_origin: "Relentless Dead",
-    tags: ["Art Rework", "July14", "Art OK"],
   ),
 
   CardDefinition(
@@ -5933,9 +4604,6 @@ When you discard a card, gain 1⍟."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
     art: (image: 2123360834, crop: (x: 0.504, y: 1.0, scale: 1.11)),
-    number: 469,
-    mtg_origin: "Relentless Dead",
-    tags: ["Art Rework", "June19", "Art OK"],
   ),
 
   CardDefinition(
@@ -5945,9 +4613,6 @@ When you discard a card, gain 1⍟."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
     art: (image: 2438838889, crop: (x: 0.0, y: -0.496, scale: 1.57)),
-    number: 470,
-    mtg_origin: "Carrion Feeder",
-    tags: ["Art Rework", "June19", "Art OK"],
   ),
 
   CardDefinition(
@@ -5958,9 +4623,6 @@ When you discard a card, gain 1⍟."#,
     kind: Character(subtype: "Warrior", spark: Fixed(0)),
     rarity: Legendary,
     art: (image: 2419795161, crop: (x: 0.0, y: 1.0, scale: 1.11)),
-    number: 471,
-    mtg_origin: "Mana Crypt",
-    tags: ["Art Rework", "Art OK"],
   ),
 
   CardDefinition(
@@ -5972,9 +4634,6 @@ When you discard a card, gain 1⍟."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     art: (image: 515170243, crop: (x: -0.162, y: 1.0, scale: 1.37)),
-    number: 472,
-    mtg_origin: "Ravenous Squirrel",
-    tags: ["Art Rework", "July20", "Art OK"],
   ),
 
   CardDefinition(
@@ -5984,9 +4643,6 @@ When you discard a card, gain 1⍟."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 717263497),
-    number: 473,
-    mtg_origin: "Dark Ritual",
-    tags: ["Ritual"],
   ),
 
   CardDefinition(
@@ -5998,9 +4654,6 @@ When you discard a card, gain 1⍟."#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 1794244549, crop: (x: 0.0, y: 0.0, scale: 1.17)),
-    number: 474,
-    mtg_origin: "Marketback Walker",
-    tags: ["Art Rework", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -6012,9 +4665,6 @@ When you discard a card, gain 1⍟."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
     art: (image: 1557999812, crop: (x: -0.002, y: 1.0, scale: 1.07)),
-    number: 475,
-    mtg_origin: "Hidden Stockpile",
-    tags: ["Figment Maker", "Art Rework", "June26", "Art Duplicate", "Art OK", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -6027,9 +4677,6 @@ When you discard a card, gain 1⍟."#,
     kind: Character(subtype: "Visitor", spark: Fixed(4)),
     speed: Fast,
     art: (image: 443761822, crop: (x: 0.0, y: 0.4, scale: 1.17)),
-    number: 476,
-    mtg_origin: "Solitude",
-    tags: ["Removal", "Art Rework", "July21", "Art OK"],
   ),
 
   CardDefinition(
@@ -6039,8 +4686,6 @@ When you discard a card, gain 1⍟."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
     art: (image: 1971751580, crop: (x: -0.546, y: 1.0, scale: 1.17)),
-    number: 477,
-    mtg_origin: "Stitcher's Supplier",
   ),
 
   CardDefinition(
@@ -6050,9 +4695,6 @@ When you discard a card, gain 1⍟."#,
     energy_cost: Variable,
     kind: Character(subtype: "Warrior", spark: Variable),
     art: (image: 393588439, owned: true, crop: (x: -0.228, y: 1.0, scale: 1.17)),
-    number: 478,
-    mtg_origin: "Stonecoil Serpent",
-    tags: ["Art Rework", "Art OK"],
   ),
 
   CardDefinition(
@@ -6062,9 +4704,6 @@ When you discard a card, gain 1⍟."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
     art: (image: 478671154, crop: (x: 0.062, y: 0.0, scale: 1.67)),
-    number: 479,
-    mtg_origin: "Ophiomancer",
-    tags: ["Art Rework", "July16", "Ally Audit", "Art OK"],
   ),
 
   CardDefinition(
@@ -6076,9 +4715,6 @@ When you discard a card, gain 1⍟."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
     art: (image: 492981619, crop: (x: 0.353, y: 0.266, scale: 1.17)),
-    number: 480,
-    mtg_origin: "Spawning Pit",
-    tags: ["Figment Maker", "Art Rework", "June15", "Art OK"],
   ),
 
   CardDefinition(
@@ -6090,9 +4726,6 @@ When you discard a card, gain 1⍟."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
     art: (image: 768349750, crop: (x: 0.0, y: -0.668, scale: 1.67)),
-    number: 481,
-    mtg_origin: "Soulherder",
-    tags: ["Art Rework", "July23", "Ally Audit", "Art OK"],
   ),
 
   CardDefinition(
@@ -6102,9 +4735,6 @@ When you discard a card, gain 1⍟."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
     art: (image: 789291004),
-    number: 482,
-    mtg_origin: "Bloodghast",
-    tags: ["Art Rework", "July14", "Art OK"],
   ),
 
   CardDefinition(
@@ -6115,9 +4745,6 @@ When you discard a card, gain 1⍟."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 1282908322, owned: true, crop: (x: 0.084, y: 1.0, scale: 1.17)),
-    number: 483,
-    mtg_origin: "Counterspell",
-    tags: ["Counterspell", "Art OK"],
   ),
 
   CardDefinition(
@@ -6129,8 +4756,6 @@ Reclaim 1●."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
     art: (image: 1727859043, crop: (x: 0.0, y: -0.142, scale: 1.47)),
-    number: 484,
-    mtg_origin: "Rotting Rats",
   ),
 
   CardDefinition(
@@ -6140,9 +4765,6 @@ Reclaim 1●."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 2189428529, crop: (x: -0.024, y: 0.669, scale: 1.67)),
-    number: 485,
-    mtg_origin: "Diamond Lion",
-    tags: ["Art Rework", "June15", "Art OK"],
   ),
 
   CardDefinition(
@@ -6155,9 +4777,6 @@ Reclaim 1●."#,
     kind: Character(subtype: "Visitor", spark: Fixed(0)),
     rarity: Legendary,
     art: (image: 2216124451, owned: true, crop: (x: -0.126, y: 1.0, scale: 1.17)),
-    number: 486,
-    mtg_origin: "Tolarian Academy",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -6169,8 +4788,6 @@ When you materialize a character with cost X●, draw a card."#,
     energy_cost: FixedAndVariable(2),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
     art: (image: 2127752120, owned: true),
-    number: 487,
-    mtg_origin: "Ineffable Blessing",
   ),
 
   CardDefinition(
@@ -6180,9 +4797,6 @@ When you materialize a character with cost X●, draw a card."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
     art: (image: 2639857441, crop: (x: -0.322, y: 1.0, scale: 1.11)),
-    number: 488,
-    mtg_origin: "Altar of Dementia",
-    tags: ["Art Rework", "Art OK"],
   ),
 
   CardDefinition(
@@ -6192,9 +4806,6 @@ When you materialize a character with cost X●, draw a card."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
     art: (image: 2590831713, crop: (x: 0.714, y: 1.0, scale: 1.17)),
-    number: 489,
-    mtg_origin: "Scrap Trawler",
-    tags: ["Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -6204,9 +4815,6 @@ When you materialize a character with cost X●, draw a card."#,
     energy_cost: Fixed(4),
     kind: Character(subtype: "Warrior", spark: Fixed(5)),
     art: (image: 247705264, crop: (x: 0.0, y: -0.343, scale: 1.5)),
-    number: 490,
-    mtg_origin: "Sneaky Snacker",
-    tags: ["Art Rework", "June26", "Art Duplicate", "Art OK"],
   ),
 
   CardDefinition(
@@ -6219,9 +4827,6 @@ When you return a character you control to hand, reduce its cost by 2●."#,
     kind: Character(subtype: "Outsider", spark: Fixed(4)),
     speed: Fast,
     art: (image: 2127752144, crop: (x: 0.126, y: 0.032, scale: 1.17)),
-    number: 491,
-    mtg_origin: "Thousand-Faced Shadow",
-    tags: ["Ninja", "Ally Audit"],
   ),
 
   CardDefinition(
@@ -6231,9 +4836,6 @@ When you return a character you control to hand, reduce its cost by 2●."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
     art: (image: 1740270992, crop: (x: 0.0, y: 1.0, scale: 1.37)),
-    number: 492,
-    mtg_origin: "Scrapheap Scrounger",
-    tags: ["Art Rework", "June15", "Art OK"],
   ),
 
   CardDefinition(
@@ -6243,8 +4845,6 @@ When you return a character you control to hand, reduce its cost by 2●."#,
     energy_cost: Fixed(3),
     kind: Event,
     art: (image: 1005938023),
-    number: 493,
-    mtg_origin: "Yawgmoth's Will",
   ),
 
   CardDefinition(
@@ -6255,9 +4855,6 @@ When you return a character you control to hand, reduce its cost by 2●."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 2023111787, crop: (x: -0.622, y: 1.0, scale: 1.17)),
-    number: 494,
-    mtg_origin: "Bitter Triumph",
-    tags: ["Removal"],
   ),
 
   CardDefinition(
@@ -6267,9 +4864,6 @@ When you return a character you control to hand, reduce its cost by 2●."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
     art: (image: 2421338075, crop: (x: -0.139, y: -0.394, scale: 1.47)),
-    number: 495,
-    mtg_origin: "Workshop Assistant",
-    tags: ["tutorial"],
   ),
 
   CardDefinition(
@@ -6281,8 +4875,6 @@ When you discard or erode this card, it gains reclaim 3●."#,
     energy_cost: Fixed(5),
     kind: Event,
     art: (image: 478671142, crop: (x: 0.228, y: 1.0, scale: 1.17)),
-    number: 496,
-    mtg_origin: "Past in Flames",
   ),
 
   CardDefinition(
@@ -6294,8 +4886,6 @@ When you discard or erode this card, it gains reclaim 3●."#,
     energy_cost: Fixed(3),
     kind: Character(subtype: "Survivor", spark: Fixed(3)),
     art: (image: 1252796545, crop: (x: 0.399, y: -0.678, scale: 1.87)),
-    number: 497,
-    mtg_origin: "Master of Death",
   ),
 
   CardDefinition(
@@ -6307,9 +4897,6 @@ Support – Supported warriors have +3✦."#,
     energy_cost: Fixed(5),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
     art: (image: 2303852057, crop: (x: -0.064, y: 0.64, scale: 1.37)),
-    number: 498,
-    mtg_origin: "Thought Monitor",
-    tags: ["Art Rework", "June16", "Art OK", "Ally Audit", "tutorial"],
   ),
 
   CardDefinition(
@@ -6319,9 +4906,6 @@ Support – Supported warriors have +3✦."#,
     energy_cost: Fixed(5),
     kind: Character(subtype: "Warrior", spark: Fixed(5)),
     art: (image: 2212744817, crop: (x: 0.096, y: 0.314, scale: 1.67)),
-    number: 499,
-    mtg_origin: "Thought Monitor",
-    tags: ["Art Rework", "June16", "Art OK"],
   ),
 
   CardDefinition(
@@ -6332,9 +4916,6 @@ Support – Supported warriors have +3✦."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 2530614283, owned: true, crop: (x: 0.0, y: 0.814, scale: 1.0)),
-    number: 500,
-    mtg_origin: "Dismember",
-    tags: ["Art Rework", "June23", "Art OK"],
   ),
 
   CardDefinition(
@@ -6344,9 +4925,6 @@ Support – Supported warriors have +3✦."#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Explorer", spark: Fixed(1)),
     art: (image: 712713373, crop: (x: 0.0, y: 1.0, scale: 1.67)),
-    number: 501,
-    mtg_origin: "Past in Flames",
-    tags: ["Art Rework", "July16", "Art OK"],
   ),
 
   CardDefinition(
@@ -6356,9 +4934,6 @@ Support – Supported warriors have +3✦."#,
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(2)),
     art: (image: 1648927918, crop: (x: 0.378, y: 1.0, scale: 1.17)),
-    number: 502,
-    mtg_origin: "Wirewood Symbiote",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -6370,8 +4945,6 @@ Reclaim 3●"#,
     energy_cost: Fixed(2),
     kind: Event,
     art: (image: 2293194527, crop: (x: 0.126, y: 1.0, scale: 1.37)),
-    number: 503,
-    mtg_origin: "Diabolic Intent",
   ),
 
   CardDefinition(
@@ -6381,9 +4954,6 @@ Reclaim 3●"#,
     energy_cost: Fixed(2),
     kind: Event,
     art: (image: 2033123273),
-    number: 504,
-    mtg_origin: "Dread Fugue",
-    tags: ["Art Rework", "July8", "Art OK"],
   ),
 
   CardDefinition(
@@ -6395,9 +4965,6 @@ When you discard this card, it gains reclaim."#,
     energy_cost: Fixed(2),
     kind: Event,
     art: (image: 1798514902, crop: (x: -0.21, y: 0.242, scale: 1.17)),
-    number: 505,
-    mtg_origin: "Gamble",
-    tags: ["Art Rework", "June23", "Art OK"],
   ),
 
   CardDefinition(
@@ -6409,9 +4976,6 @@ Reclaim 4●"#,
     energy_cost: Fixed(3),
     kind: Event,
     art: (image: 2123360843, crop: (x: 0.084, y: 1.0, scale: 1.17)),
-    number: 506,
-    mtg_origin: "Hard Evidence",
-    tags: ["Art Rework", "July10", "Art OK"],
   ),
 
   CardDefinition(
@@ -6421,9 +4985,6 @@ Reclaim 4●"#,
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     art: (image: 1295291155, crop: (x: 0.0, y: 0.331, scale: 1.77)),
-    number: 507,
-    mtg_origin: "Monoskelion",
-    tags: ["Art Rework", "June16", "Art OK", "tutorial"],
   ),
 
   CardDefinition(
@@ -6436,9 +4997,6 @@ When an enemy scores ⍟, return this card from your void to your hand."#,
     kind: Event,
     speed: Interrupt,
     art: (image: 450440617, crop: (x: -0.342, y: 0.032, scale: 1.17)),
-    number: 508,
-    mtg_origin: "Punishing Fire",
-    tags: ["Removal"],
   ),
 
   CardDefinition(
@@ -6448,9 +5006,6 @@ When an enemy scores ⍟, return this card from your void to your hand."#,
     energy_cost: Fixed(1),
     kind: Event,
     art: (image: 2182865341, crop: (x: 0.672, y: 1.0, scale: 1.11)),
-    number: 509,
-    mtg_origin: "Swift Reconfiguration",
-    tags: ["Art Rework", "July6", "Art OK"],
   ),
 
   CardDefinition(
@@ -6461,9 +5016,6 @@ When an enemy scores ⍟, return this card from your void to your hand."#,
     kind: Character(subtype: "Musician", spark: Fixed(1)),
     rarity: Starter,
     art: (image: 507269458, crop: (x: -0.684, y: 1.0, scale: 1.17)),
-    number: 510,
-    mtg_origin: "",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -6474,8 +5026,6 @@ When an enemy scores ⍟, return this card from your void to your hand."#,
     kind: Character(subtype: "Visionary", spark: Fixed(1)),
     rarity: Starter,
     art: (image: 1016596168, crop: (x: 0.042, y: 1.0, scale: 1.17)),
-    number: 511,
-    mtg_origin: "",
   ),
 
   CardDefinition(
@@ -6486,8 +5036,6 @@ When an enemy scores ⍟, return this card from your void to your hand."#,
     kind: Character(subtype: "Spirit Animal", spark: Fixed(4)),
     rarity: Starter,
     art: (image: 2654359867, crop: (x: 0.294, y: 0.032, scale: 1.17)),
-    number: 512,
-    mtg_origin: "",
   ),
 
   CardDefinition(
@@ -6498,8 +5046,6 @@ When an enemy scores ⍟, return this card from your void to your hand."#,
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
     rarity: Starter,
     art: (image: 2427491211, crop: (x: 0.0, y: 0.644, scale: 1.17)),
-    number: 513,
-    mtg_origin: "",
   ),
 
   CardDefinition(
@@ -6510,8 +5056,6 @@ When an enemy scores ⍟, return this card from your void to your hand."#,
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
     rarity: Starter,
     art: (image: 1793552419, crop: (x: 0.21, y: 1.0, scale: 1.17)),
-    number: 514,
-    mtg_origin: "",
   ),
 
   CardDefinition(
@@ -6522,9 +5066,6 @@ When an enemy scores ⍟, return this card from your void to your hand."#,
     kind: Character(subtype: "Synth", spark: Fixed(6)),
     rarity: Starter,
     art: (image: 2123360831, crop: (x: -0.42, y: 1.0, scale: 1.17)),
-    number: 515,
-    mtg_origin: "",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -6535,8 +5076,6 @@ When an enemy scores ⍟, return this card from your void to your hand."#,
     kind: Event,
     rarity: Starter,
     art: (image: 635276744),
-    number: 516,
-    mtg_origin: "",
   ),
 
   CardDefinition(
@@ -6547,8 +5086,6 @@ When an enemy scores ⍟, return this card from your void to your hand."#,
     kind: Event,
     rarity: Starter,
     art: (image: 2633345429, crop: (x: -0.336, y: 0.839, scale: 1.17)),
-    number: 517,
-    mtg_origin: "",
   ),
 
   CardDefinition(
@@ -6559,8 +5096,6 @@ When an enemy scores ⍟, return this card from your void to your hand."#,
     kind: Event,
     rarity: Starter,
     art: (image: 2603708601, crop: (x: 0.0, y: 1.0, scale: 1.17)),
-    number: 518,
-    mtg_origin: "",
   ),
 
   CardDefinition(
@@ -6571,9 +5106,6 @@ When an enemy scores ⍟, return this card from your void to your hand."#,
     kind: Event,
     rarity: Starter,
     art: (image: 1225878700, crop: (x: -0.672, y: 0.839, scale: 1.17)),
-    number: 519,
-    mtg_origin: "",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -6584,9 +5116,6 @@ When an enemy scores ⍟, return this card from your void to your hand."#,
     kind: Character(subtype: "Musician", spark: Fixed(2)),
     rarity: Tutorial,
     art: (image: 1792373848, crop: (x: 0.4, y: -0.3, scale: 2.17)),
-    number: 520,
-    mtg_origin: "",
-    tags: ["Ally Audit"],
   ),
 
   CardDefinition(
@@ -6597,7 +5126,5 @@ When an enemy scores ⍟, return this card from your void to your hand."#,
     kind: Event,
     rarity: Special,
     art: (image: 1486924805),
-    number: 10002,
-    mtg_origin: "",
   ),
 ]
