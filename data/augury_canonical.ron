@@ -1,11 +1,20 @@
-// Authored Augury encounter rules, dialogue, offer behavior, and presentation.
+// Augury encounter rules, dialogue, offer behavior, and presentation.
 
 #![enable(implicit_some)]
 AuguryCatalog(
-  encounter: (offer_count: 2, distinct_families: true, allow_decline: true),
+  encounter: (
+    // Number of offers generated whenever the player visits an Augury site.
+    offer_count: 2,
+    // Prevents both offer slots from drawing behaviors in the same family.
+    distinct_families: true,
+    // Allows the player to leave without accepting either offer.
+    allow_decline: true,
+  ),
 
   dialogue: (
+    // Used when encounter generation cannot select a behavior-specific opening line.
     fallback_line: "Something here was meant for you.",
+    // One line is selected after the player accepts an offer.
     accept_reactions: [
       "It already looks at home with you.",
       "The dream settles. Go well.",
@@ -17,8 +26,17 @@ AuguryCatalog(
     ],
   ),
 
+  // Every definition has a stable UUID identity and a typed behavior. The
+  // behavior determines its compatibility ID, family, supported selection
+  // policies, and behavior-specific quantities. `selection_policy` ranks the
+  // eligible targets for an offer. `enabled` controls encounter eligibility
+  // while retaining the definition, and `weight` is relative to other eligible
+  // definitions. `dialogue_lines` supplies behavior-specific opening lines.
+  // `copy` fields are presentation templates whose supported placeholders are
+  // validated by the compiler.
   archetypes: [
     ArchetypeDefinition(
+      id: "77ad1a09-aba0-4875-b462-e6efe94bdc3d",
       behavior: FitCardGrant(selection_policy: CardFit, granted_copies: 1),
       enabled: true,
       weight: 10,
@@ -39,7 +57,9 @@ AuguryCatalog(
         detail_subtitle: "Gain {card}",
       ),
     ),
+
     ArchetypeDefinition(
+      id: "8f8db592-b62c-414e-9195-68641722cf50",
       behavior: FitCardDraft(selection_policy: CardFit, chooser_size: 4, granted_copies: 1),
       enabled: true,
       weight: 10,
@@ -60,7 +80,9 @@ AuguryCatalog(
         detail_subtitle: "Choose a card to add to your deck.",
       ),
     ),
+
     ArchetypeDefinition(
+      id: "b4ccca83-2a1d-4474-ba6d-4b95aefeed9b",
       behavior: CopiesDraft(selection_policy: CardFitQuality, chooser_size: 4, granted_copies: 2),
       enabled: true,
       weight: 6,
@@ -81,7 +103,9 @@ AuguryCatalog(
         detail_subtitle: "Choose a card and add {copies-word} {copies-label} of it to your deck.",
       ),
     ),
+
     ArchetypeDefinition(
+      id: "c4ac3d68-e814-43ea-9be3-ced3fd1bbe89",
       behavior: StrongCard(selection_policy: CardFitQuality, granted_copies: 1),
       enabled: true,
       weight: 8,
@@ -102,7 +126,9 @@ AuguryCatalog(
         detail_subtitle: "Gain {card}",
       ),
     ),
+
     ArchetypeDefinition(
+      id: "beecc1d9-9546-4ca2-858c-214527c7e530",
       behavior: CategoryDraftKnown(selection_policy: CardFit, chooser_size: 4, granted_copies: 1),
       enabled: true,
       weight: 10,
@@ -123,7 +149,9 @@ AuguryCatalog(
         detail_subtitle: "Choose a card from a single category to add to your deck.",
       ),
     ),
+
     ArchetypeDefinition(
+      id: "dfd3976a-b1dc-44fe-9aab-c13bd2c195e4",
       behavior: CardBundle(bundle_size: 3, minimum_bundle_size: 2),
       enabled: true,
       weight: 8,
@@ -144,7 +172,9 @@ AuguryCatalog(
         detail_subtitle: "Add {count-word} cards to your deck.",
       ),
     ),
+
     ArchetypeDefinition(
+      id: "a5ac636d-9269-4379-9c61-567583fe9926",
       behavior: TransfiguredDraft(selection_policy: CardFit, chooser_size: 4, granted_copies: 1),
       enabled: true,
       weight: 6,
@@ -165,7 +195,9 @@ AuguryCatalog(
         detail_subtitle: "Choose a transfigured card to add to your deck.",
       ),
     ),
+
     ArchetypeDefinition(
+      id: "ec872e81-b7b4-4d81-9c69-1ca5317f6144",
       behavior: Transfigure(selection_policy: TransfigurationValue),
       enabled: true,
       weight: 10,
@@ -186,7 +218,9 @@ AuguryCatalog(
         detail_subtitle: "Transfigure {card}",
       ),
     ),
+
     ArchetypeDefinition(
+      id: "65a59007-6618-4f82-82ae-7da3bc6a205a",
       behavior: StarterTransfigure(selection_policy: TransfigurationValue, maximum_targets: 2),
       enabled: true,
       weight: 6,
@@ -207,7 +241,9 @@ AuguryCatalog(
         detail_subtitle: "Transfigure {count-word} starter cards.",
       ),
     ),
+
     ArchetypeDefinition(
+      id: "bd973dd3-e993-42b6-95bb-d24ac1062442",
       behavior: KeywordMod(selection_policy: DeckEntryCentrality),
       enabled: false,
       weight: 8,
@@ -228,7 +264,9 @@ AuguryCatalog(
         detail_subtitle: "Reduce Reclaim for {card}",
       ),
     ),
+
     ArchetypeDefinition(
+      id: "a177d574-d4bd-4c49-aaa4-52d5db74c6cb",
       behavior: TribalChange(selection_policy: DeckEntryCentrality),
       enabled: false,
       weight: 6,
@@ -249,7 +287,9 @@ AuguryCatalog(
         detail_subtitle: "Make {card} a {subtype}",
       ),
     ),
+
     ArchetypeDefinition(
+      id: "df34c427-5e27-42d1-b903-c1d6d6dddd78",
       behavior: Purge(selection_policy: PurgeMisfit),
       enabled: true,
       weight: 8,
@@ -270,7 +310,9 @@ AuguryCatalog(
         detail_subtitle: "Purge {card}",
       ),
     ),
+
     ArchetypeDefinition(
+      id: "5bff7fe7-e69c-4f8a-84ae-edd37a68e60b",
       behavior: PurgeReplace(selection_policy: CardFitQuality, chooser_size: 4),
       enabled: false,
       weight: 8,
@@ -291,7 +333,9 @@ AuguryCatalog(
         detail_subtitle: "Purge {card} and choose a card to replace it",
       ),
     ),
+
     ArchetypeDefinition(
+      id: "521bd487-0b3e-429e-a2f6-56010dd029c4",
       behavior: Duplicate(selection_policy: DuplicateValue, chooser_size: 3, granted_copies: 1),
       enabled: true,
       weight: 8,
@@ -312,7 +356,9 @@ AuguryCatalog(
         detail_subtitle: "Choose one of {count-word} cards in your deck to duplicate.",
       ),
     ),
+
     ArchetypeDefinition(
+      id: "432102c0-91c0-4954-acd0-3404d2148a25",
       behavior: Dreamsign(selection_policy: DreamsignMatch),
       enabled: true,
       weight: 8,
@@ -333,7 +379,9 @@ AuguryCatalog(
         detail_subtitle: "Gain {card}",
       ),
     ),
+
     ArchetypeDefinition(
+      id: "71ec2bb5-b0d7-481f-9233-6b3e4052bade",
       behavior: DreamsignDraft(selection_policy: DreamsignMatch, minimum_chooser_size: 2, maximum_chooser_size: 4),
       enabled: false,
       weight: 6,
@@ -354,7 +402,9 @@ AuguryCatalog(
         detail_subtitle: "Choose a dreamsign to gain.",
       ),
     ),
+
     ArchetypeDefinition(
+      id: "1003a54d-1659-490b-aa48-b88b9da5df68",
       behavior: AddSite,
       enabled: true,
       weight: 6,

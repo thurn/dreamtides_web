@@ -79,6 +79,10 @@ edit:
   defaults.
 - Give long-list entries named record types. Use anonymous inline records only
   when the field name supplies enough meaning.
+- Keep an explicit UUIDv4 `id` on every entity definition. A typed `behavior`,
+  `kind`, or other discriminator complements identity; it does not replace it.
+  Never discard a source identifier without assigning and retaining its
+  canonical UUIDv4 mapping.
 - Turn closed vocabularies and discriminated behavior into enums, with
   variant-specific fields inside each variant.
 - Keep scalar concepts scalar and model exceptional compound forms explicitly.
@@ -96,6 +100,13 @@ edit:
   a domain newtype around it.
 - Do not add schema-version fields. The typed model and compiler build define
   the source contract.
+- Add concise comments for fields whose semantics, units, invariants, fallback
+  behavior, weighting, or compatibility role are not obvious from their names.
+  Describe the catalog's purpose directly in file-level comments; labels such
+  as "authored data" or "authored catalog" add no useful information.
+- Separate named long-list definitions with a blank line. Format struct-like
+  enum variants across multiple lines with one field per line when the
+  repository formatter preserves that layout.
 
 For legacy values classified as entity identity, assign a fresh UUIDv4 to each
 slug, name, integer, or other identifier, rewrite every reference consistently,

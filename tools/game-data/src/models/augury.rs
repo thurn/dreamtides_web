@@ -1,7 +1,10 @@
 use std::collections::BTreeSet;
+use std::fmt;
 
 use anyhow::{Result, bail};
-use serde::{Deserialize, Serialize};
+use serde::de::Error as _;
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use uuid::{Uuid, Variant, Version};
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
@@ -29,6 +32,7 @@ pub struct Dialogue {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct ArchetypeDefinition {
+    pub id: AuguryId,
     pub behavior: ArchetypeBehavior,
     pub enabled: bool,
     pub weight: u32,
@@ -163,6 +167,51 @@ pub struct CopyTemplates {
 }
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub struct AuguryId(Uuid);
+
+impl AuguryId {
+    pub fn as_hyphenated(self) -> String {
+        self.0.hyphenated().to_string()
+    }
+
+    fn parse(value: &str) -> std::result::Result<Self, String> {
+        let uuid = Uuid::parse_str(value).map_err(|error| error.to_string())?;
+        if uuid.get_version() != Some(Version::Random) || uuid.get_variant() != Variant::RFC4122 {
+            return Err("Augury identifier must be an RFC 4122 UUIDv4".into());
+        }
+        if uuid.hyphenated().to_string() != value {
+            return Err("Augury identifier must use lowercase hyphenated UUID formatting".into());
+        }
+        Ok(Self(uuid))
+    }
+}
+
+impl fmt::Display for AuguryId {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.0.hyphenated().fmt(formatter)
+    }
+}
+
+impl Serialize for AuguryId {
+    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        serializer.serialize_str(&self.to_string())
+    }
+}
+
+impl<'de> Deserialize<'de> for AuguryId {
+    fn deserialize<D>(deserializer: D) -> std::result::Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let value = String::deserialize(deserializer)?;
+        Self::parse(&value).map_err(D::Error::custom)
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 enum ArchetypeKind {
     FitCardGrant,
     FitCardDraft,
@@ -223,6 +272,28 @@ impl ArchetypeKind {
             Self::Dreamsign => "dreamsign",
             Self::DreamsignDraft => "dreamsign_draft",
             Self::AddSite => "add_site",
+        }
+    }
+
+    fn canonical_id(self) -> &'static str {
+        match self {
+            Self::FitCardGrant => "77ad1a09-aba0-4875-b462-e6efe94bdc3d",
+            Self::FitCardDraft => "8f8db592-b62c-414e-9195-68641722cf50",
+            Self::CopiesDraft => "b4ccca83-2a1d-4474-ba6d-4b95aefeed9b",
+            Self::StrongCard => "c4ac3d68-e814-43ea-9be3-ced3fd1bbe89",
+            Self::CategoryDraftKnown => "beecc1d9-9546-4ca2-858c-214527c7e530",
+            Self::CardBundle => "dfd3976a-b1dc-44fe-9aab-c13bd2c195e4",
+            Self::TransfiguredDraft => "a5ac636d-9269-4379-9c61-567583fe9926",
+            Self::Transfigure => "ec872e81-b7b4-4d81-9c69-1ca5317f6144",
+            Self::StarterTransfigure => "65a59007-6618-4f82-82ae-7da3bc6a205a",
+            Self::KeywordMod => "bd973dd3-e993-42b6-95bb-d24ac1062442",
+            Self::TribalChange => "a177d574-d4bd-4c49-aaa4-52d5db74c6cb",
+            Self::Purge => "df34c427-5e27-42d1-b903-c1d6d6dddd78",
+            Self::PurgeReplace => "5bff7fe7-e69c-4f8a-84ae-edd37a68e60b",
+            Self::Duplicate => "521bd487-0b3e-429e-a2f6-56010dd029c4",
+            Self::Dreamsign => "432102c0-91c0-4954-acd0-3404d2148a25",
+            Self::DreamsignDraft => "71ec2bb5-b0d7-481f-9233-6b3e4052bade",
+            Self::AddSite => "1003a54d-1659-490b-aa48-b88b9da5df68",
         }
     }
 }
@@ -545,13 +616,24 @@ fn validate(source: &AuguryCatalog) -> Result<()> {
     )?;
 
     let mut kinds = BTreeSet::new();
+    let mut ids = BTreeSet::new();
     let mut enabled_families = BTreeSet::new();
     let mut enabled_count = 0;
     for (index, archetype) in source.archetypes.iter().enumerate() {
         let path = format!("archetypes[{index}]");
         let kind = archetype.behavior.kind();
+        if !ids.insert(archetype.id) {
+            bail!("{path}.id duplicates {}", archetype.id);
+        }
         if !kinds.insert(kind) {
             bail!("{path}.behavior duplicates {}", kind.as_compat());
+        }
+        if archetype.id.as_hyphenated() != kind.canonical_id() {
+            bail!(
+                "{path}.id must be {} for behavior {}",
+                kind.canonical_id(),
+                kind.as_compat()
+            );
         }
         if archetype.weight == 0 {
             bail!("{path}.weight must be positive");
@@ -742,7 +824,9 @@ mod tests {
     }
 
     fn definition(behavior: ArchetypeBehavior) -> ArchetypeDefinition {
+        let id = AuguryId::parse(behavior.kind().canonical_id()).unwrap();
         ArchetypeDefinition {
+            id,
             behavior,
             enabled: true,
             weight: 3,
@@ -881,6 +965,37 @@ mod tests {
                 "FitCardGrant(selection_policy: CardFit, granted_copies: 1, surprise: true)",
             )
             .is_err()
+        );
+    }
+
+    #[test]
+    fn rejects_non_uuidv4_duplicate_and_behavior_mismatched_ids() {
+        for invalid in [
+            "fit_card_grant",
+            "77AD1A09-ABA0-4875-B462-E6EFE94BDC3D",
+            "77ad1a09-aba0-3875-b462-e6efe94bdc3d",
+            "77ad1a09aba04875b462e6efe94bdc3d",
+        ] {
+            assert!(ron::from_str::<AuguryId>(&format!("\"{invalid}\"")).is_err());
+        }
+
+        let mut duplicate = catalog();
+        duplicate.archetypes[1].id = duplicate.archetypes[0].id;
+        assert!(
+            lower(duplicate)
+                .unwrap_err()
+                .to_string()
+                .contains("id duplicates")
+        );
+
+        let mut mismatched = catalog();
+        mismatched.archetypes[0].id =
+            AuguryId::parse(ArchetypeKind::FitCardDraft.canonical_id()).unwrap();
+        assert!(
+            lower(mismatched)
+                .unwrap_err()
+                .to_string()
+                .contains("for behavior fit_card_grant")
         );
     }
 
@@ -1043,27 +1158,95 @@ mod tests {
                 .unwrap();
         assert_eq!(canonical.archetypes.len(), 17);
 
-        const LEGACY_BEHAVIORS: [(&str, ArchetypeKind); 17] = [
-            ("fit_card_grant", ArchetypeKind::FitCardGrant),
-            ("fit_card_draft", ArchetypeKind::FitCardDraft),
-            ("copies_draft", ArchetypeKind::CopiesDraft),
-            ("strong_card", ArchetypeKind::StrongCard),
-            ("category_draft_known", ArchetypeKind::CategoryDraftKnown),
-            ("card_bundle", ArchetypeKind::CardBundle),
-            ("transfigured_draft", ArchetypeKind::TransfiguredDraft),
-            ("transfigure", ArchetypeKind::Transfigure),
-            ("starter_transfigure", ArchetypeKind::StarterTransfigure),
-            ("keyword_mod", ArchetypeKind::KeywordMod),
-            ("tribal_change", ArchetypeKind::TribalChange),
-            ("purge", ArchetypeKind::Purge),
-            ("purge_replace", ArchetypeKind::PurgeReplace),
-            ("duplicate", ArchetypeKind::Duplicate),
-            ("dreamsign", ArchetypeKind::Dreamsign),
-            ("dreamsign_draft", ArchetypeKind::DreamsignDraft),
-            ("add_site", ArchetypeKind::AddSite),
+        const LEGACY_BEHAVIORS: [(&str, &str, ArchetypeKind); 17] = [
+            (
+                "fit_card_grant",
+                "77ad1a09-aba0-4875-b462-e6efe94bdc3d",
+                ArchetypeKind::FitCardGrant,
+            ),
+            (
+                "fit_card_draft",
+                "8f8db592-b62c-414e-9195-68641722cf50",
+                ArchetypeKind::FitCardDraft,
+            ),
+            (
+                "copies_draft",
+                "b4ccca83-2a1d-4474-ba6d-4b95aefeed9b",
+                ArchetypeKind::CopiesDraft,
+            ),
+            (
+                "strong_card",
+                "c4ac3d68-e814-43ea-9be3-ced3fd1bbe89",
+                ArchetypeKind::StrongCard,
+            ),
+            (
+                "category_draft_known",
+                "beecc1d9-9546-4ca2-858c-214527c7e530",
+                ArchetypeKind::CategoryDraftKnown,
+            ),
+            (
+                "card_bundle",
+                "dfd3976a-b1dc-44fe-9aab-c13bd2c195e4",
+                ArchetypeKind::CardBundle,
+            ),
+            (
+                "transfigured_draft",
+                "a5ac636d-9269-4379-9c61-567583fe9926",
+                ArchetypeKind::TransfiguredDraft,
+            ),
+            (
+                "transfigure",
+                "ec872e81-b7b4-4d81-9c69-1ca5317f6144",
+                ArchetypeKind::Transfigure,
+            ),
+            (
+                "starter_transfigure",
+                "65a59007-6618-4f82-82ae-7da3bc6a205a",
+                ArchetypeKind::StarterTransfigure,
+            ),
+            (
+                "keyword_mod",
+                "bd973dd3-e993-42b6-95bb-d24ac1062442",
+                ArchetypeKind::KeywordMod,
+            ),
+            (
+                "tribal_change",
+                "a177d574-d4bd-4c49-aaa4-52d5db74c6cb",
+                ArchetypeKind::TribalChange,
+            ),
+            (
+                "purge",
+                "df34c427-5e27-42d1-b903-c1d6d6dddd78",
+                ArchetypeKind::Purge,
+            ),
+            (
+                "purge_replace",
+                "5bff7fe7-e69c-4f8a-84ae-edd37a68e60b",
+                ArchetypeKind::PurgeReplace,
+            ),
+            (
+                "duplicate",
+                "521bd487-0b3e-429e-a2f6-56010dd029c4",
+                ArchetypeKind::Duplicate,
+            ),
+            (
+                "dreamsign",
+                "432102c0-91c0-4954-acd0-3404d2148a25",
+                ArchetypeKind::Dreamsign,
+            ),
+            (
+                "dreamsign_draft",
+                "71ec2bb5-b0d7-481f-9233-6b3e4052bade",
+                ArchetypeKind::DreamsignDraft,
+            ),
+            (
+                "add_site",
+                "1003a54d-1659-490b-aa48-b88b9da5df68",
+                ArchetypeKind::AddSite,
+            ),
         ];
         let legacy = current_ron.data["archetype"].as_array().unwrap();
-        for ((entry, definition), (legacy_id, kind)) in legacy
+        for ((entry, definition), (legacy_id, canonical_id, kind)) in legacy
             .iter()
             .zip(&canonical.archetypes)
             .zip(LEGACY_BEHAVIORS)
@@ -1071,6 +1254,11 @@ mod tests {
             assert_eq!(entry["id"].as_str(), Some(legacy_id));
             assert_eq!(definition.behavior.kind(), kind);
             assert_eq!(kind.as_compat(), legacy_id);
+            assert_eq!(definition.id.as_hyphenated(), canonical_id);
+            let parsed = Uuid::parse_str(canonical_id).unwrap();
+            assert_eq!(parsed.get_version(), Some(Version::Random));
+            assert_eq!(parsed.get_variant(), Variant::RFC4122);
+            assert_eq!(parsed.hyphenated().to_string(), canonical_id);
             assert_eq!(
                 entry["selection-policy-id"].as_str(),
                 Some(definition.behavior.selection_policy_compat())
