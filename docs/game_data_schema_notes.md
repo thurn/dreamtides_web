@@ -1157,7 +1157,11 @@ cycle and are the starting cards for each player.
 
 ## `data/economy.ron`
 
-### `schema-version = 1`
+The authored source is a typed `EconomyCatalog`. Its `economy_v1` adapter
+lowers typed fields and closed identities into `data/economy.toml`. The field
+anchors below describe that generated compatibility document.
+
+### `schema-version = 1` (generated)
 
 Version of the economy authoring contract consumed by the asset compiler.
 

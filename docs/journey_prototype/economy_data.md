@@ -1,9 +1,10 @@
 # Economy Data
 
-`data/economy.ron` is the authoritative source for direct economy
-tuning. The asset build validates and normalizes it into
-`public/economy-data.json`; the browser loads that document as `EconomyData`
-before a room begins folding events.
+`data/economy.ron` is the authoritative typed `EconomyCatalog` source for
+direct economy tuning. The game-data compiler validates it and lowers it into
+the generated `data/economy.toml` compatibility document. The asset build
+validates and normalizes that document into `public/economy-data.json`; the
+browser loads the JSON as `EconomyData` before a room begins folding events.
 
 TypeScript owns pricing formulas, eligibility, reward modifiers, seeded random
 streams, weighted sampling, and Gamble algorithms. RON owns the coefficients,
@@ -14,8 +15,9 @@ remains in `exploration.ron`.
 
 ## Schema
 
-The root `schema-version` is `1`. Compilation requires every v1 section and
-rejects unknown keys.
+The authored root is `EconomyCatalog`. Compilation requires every typed
+section, rejects unknown fields and invalid enum identities, and emits
+`schema-version = 1` at the TOML compatibility boundary.
 
 | Section           | Authored contract                                                                                                  |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------ |
@@ -41,12 +43,15 @@ identities the corresponding algorithms implement.
 ## Generated artifact and hot reload
 
 Run `scripts/regenerate-assets.sh` to regenerate all derived artifacts. The
-economy-specific compiler is `scripts/economy-data.mjs`, and the generated JSON
-is gitignored because it is reproduced from RON.
+Rust `economy_v1` adapter owns the RON-to-TOML lowering, and
+`scripts/economy-data.mjs` owns the TOML-to-JSON validation and normalization.
+The generated TOML and JSON are gitignored because they are reproduced from
+RON.
 
-During Vite development, saving `economy.ron` recompiles
-`public/economy-data.json` and reloads the journey app. Full asset setup and the
-targeted Vite path call the same compiler and emit the same formatted JSON.
+During Vite development, saving `economy.ron` recompiles the compatibility
+TOML and `public/economy-data.json`, then reloads the journey app. Full asset
+setup and the targeted Vite path call the same compilers and emit the same
+formatted artifacts.
 
 ## Room compatibility and hashes
 

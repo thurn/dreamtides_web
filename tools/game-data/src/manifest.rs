@@ -88,6 +88,7 @@ impl Manifest {
             "dreamsign_tags_v1",
             "dreamsigns_v1",
             "cards_v2",
+            "economy_v1",
             "exploration_v1",
             "compat_v1",
         ];
