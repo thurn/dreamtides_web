@@ -9,4 +9,6 @@ pub mod draft;
 pub mod dream_avatars;
 #[cfg(test)]
 pub mod dream_guides;
+#[cfg(test)]
+pub mod dreamscapes;
 pub mod exploration;
