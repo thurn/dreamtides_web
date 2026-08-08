@@ -95,6 +95,7 @@ impl Manifest {
             "exploration_v1",
             "internal_ai_v1",
             "opponents_v1",
+            "reward_selection_v1",
             "figments_v1",
             "compat_v1",
         ];

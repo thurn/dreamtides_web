@@ -4,7 +4,7 @@ import { parseAuguryData } from "../data/augury-data";
 import { parseRewardSelectionData } from "../data/reward-selection-data";
 
 /**
- * Generated compatibility view of the TOML-authored reward-selection tuning.
+ * Generated compatibility view of the RON-authored reward-selection tuning.
  * Runtime selection uses the JourneyContent instance so Vite hot reloads apply;
  * this export keeps isolated algorithm tests and analysis scripts concise.
  */

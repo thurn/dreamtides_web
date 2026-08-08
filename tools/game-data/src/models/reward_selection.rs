@@ -715,13 +715,9 @@ where
 
 #[cfg(test)]
 mod tests {
-    use std::fs;
-    use std::path::Path;
-
     use pretty_assertions::assert_eq;
 
     use super::*;
-    use crate::models::compat::CompatDocument;
 
     fn synthetic_source() -> &'static str {
         r##"#![enable(implicit_some)]
@@ -991,61 +987,6 @@ RewardSelectionCatalog(
         assert!(
             error.contains(expected),
             "expected {error:?} to contain {expected:?}"
-        );
-    }
-
-    #[test]
-    #[ignore = "real-catalog parity probe retained for canonical reward-selection review"]
-    fn canonical_candidate_matches_current_compatibility_sources() {
-        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-        let current_ron: CompatDocument =
-            ron::from_str(&fs::read_to_string(root.join("data/reward_selection.ron")).unwrap())
-                .unwrap();
-        let current_toml: toml::Value =
-            toml::from_str(&fs::read_to_string(root.join("data/reward_selection.toml")).unwrap())
-                .unwrap();
-        assert_eq!(current_ron.data, current_toml);
-
-        let canonical: RewardSelectionCatalog = ron::from_str(
-            &fs::read_to_string(root.join("data/reward_selection_canonical.ron")).unwrap(),
-        )
-        .unwrap();
-        assert_eq!(lower(canonical.clone()).unwrap(), current_ron.data);
-
-        assert_eq!(
-            canonical
-                .dreamsign
-                .quality_weights
-                .iter()
-                .map(|entry| entry.quality)
-                .collect::<BTreeSet<_>>(),
-            DreamsignQuality::ALL.into_iter().collect()
-        );
-        assert_eq!(
-            canonical
-                .transfiguration
-                .flat_benefits
-                .iter()
-                .map(|entry| entry.form)
-                .collect::<BTreeSet<_>>(),
-            FlatBenefitForm::ALL.into_iter().collect()
-        );
-        assert_eq!(canonical.transfiguration.allowed_forms.len(), 8);
-        assert_eq!(canonical.site.placeable_types.len(), 4);
-        assert_eq!(current_toml.as_table().unwrap().len(), 12);
-        assert_eq!(
-            current_toml["dreamsign"]["quality-weight"]
-                .as_table()
-                .unwrap()
-                .len(),
-            3
-        );
-        assert_eq!(
-            current_toml["transfiguration"]["flat-benefit"]
-                .as_table()
-                .unwrap()
-                .len(),
-            7
         );
     }
 }

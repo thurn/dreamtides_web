@@ -1915,163 +1915,163 @@ Deterministic state-expansion budget for each tutorial AI decision.
 
 ## `data/reward_selection.ron`
 
-### `schema-version = 1`
-
 Shared reward-selection rules used by Augury, Exploration, and other sites.
 Changing a value here changes deterministic reward generation and therefore
 changes the fold hash pinned into newly created multiplayer rooms.
-Schema understood by scripts/reward-selection-data.mjs.
+The typed `RewardSelectionCatalog` is compiled to `data/reward_selection.toml`;
+scripts/reward-selection-data.mjs validates that compatibility output for the
+browser runtime.
 
-### `rules-version = "1"`
+### `rules_version: V1`
 
 Salt contract used by deterministic selection streams. Increment only when
 the selection algorithm itself changes, not for ordinary balance edits.
 
-### `fraction = 0.25`
+### `fraction: 0.25`
 
 Fraction of ranked candidates eligible for uniform sampling.
 
-### `minimum = 5`
+### `minimum: 5`
 
 Minimum candidates retained when the source pool is large enough.
 
-### `fraction = 0.15`
+### `fraction: 0.15`
 
 A tighter band keeps unsolicited strong-card gifts near the top of the fit ranking.
 
-### `fraction = 0.40`
+### `fraction: 0.40`
 
 Dreamsign populations are small, so their sampling band is deliberately wider.
 
-### `min-deck-for-fit = 6`
+### `min_deck_for_fit: 6`
 
 Deck cards required before fit-based selection is trusted.
 
-### `min-deck-for-purge = 8`
+### `min_deck_for_purge: 8`
 
 Deck cards required before purge offers are allowed.
 
-### `purge-misfit-fraction = 0.20`
+### `purge_misfit_fraction: 0.20`
 
 Bottom share of leave-one-out fit scores eligible for purge.
 
-### `starter-purge-bonus = 0.25`
+### `starter_purge_bonus: 0.25`
 
 Extra purge-misfit score applied to starter cards.
 
-### `subtype-min-pool-cards = 12`
+### `subtype_min_pool_cards: 12`
 
 Non-starter pool cards required before a subtype becomes a draft category.
 
-### `growth-band-size = 5`
+### `growth_band_size: 5`
 
 Candidate cards inspected at each bundle-growth step.
 
-### `fit = 0.70`
+### `fit: 0.70`
 
 Normalized deck-fit contribution to strong-card ranking.
 
-### `quality = 0.30`
+### `quality: 0.30`
 
 Normalized historical card-quality contribution.
 
-### `quality = 0.50`
+### `quality: 0.50`
 
 Historical quality contribution to duplicate ranking.
 
-### `fit-loo = 0.50`
+### `fit_leave_one_out: 0.50`
 
 Leave-one-out deck-fit contribution to duplicate ranking.
 
-### `benefit = 0.70`
+### `benefit: 0.70`
 
 Mechanical improvement contribution to transfiguration ranking.
 
-### `centrality = 0.30`
+### `centrality: 0.30`
 
 Deck-centrality contribution to transfiguration ranking.
 
-### `seed = 0.50`
+### `seed: 0.50`
 
 Affinity to the first card selected for the bundle.
 
-### `bundle = 0.30`
+### `bundle: 0.30`
 
 Affinity to every card already selected for the bundle.
 
-### `fit = 0.20`
+### `fit: 0.20`
 
 Fit to the player's current deck.
 
-### `affine-weight = 0.75`
+### `affine_weight: 0.75`
 
 Probability mass assigned to categories already represented in the deck.
 
-### `deck-affine-minimum = 2`
+### `deck_affine_minimum: 2`
 
 Deck matches required for ordinary categories to count as deck-affine.
 
-### `cluster-affine-minimum = 1`
+### `cluster_affine_minimum: 1`
 
 Deck matches required for a corpus cluster to count as deck-affine.
 
-### `prior-weight = 0.65`
+### `prior_weight: 0.65`
 
 Prior and co-occurrence weights used when the fit model has signal.
 
-### `fallback = 0.25`
+### `fallback: 0.25`
 
 Centrality used when the fit model has no signal.
 
-### `spark-threshold = 3`
+### `spark_threshold: 3`
 
 Spark at or above this value receives the fallback bonus.
 
-### `full-coverage-count = 3`
+### `full_coverage_count: 3`
 
 Matching deck cards required for full coverage of one profile feature.
 
-### `featureless-coverage = 0.40`
+### `featureless_coverage: 0.40`
 
 Coverage assigned to a Dreamsign with no authored features.
 
-### `"1" = 1.20`
+### `(quality: One, weight: 1.20)`
 
 Multipliers for Dreamsign quality tiers 1, 2, and 3.
 
-### `cheap-maximum = 1`
+### `cheap_maximum: 1`
 
 Inclusive maximum energy cost for the cheap band.
 
-### `mid-minimum = 2`
+### `mid_minimum: 2`
 
 Inclusive bounds for the mid-cost band.
 
-### `big-minimum = 4`
+### `big_minimum: 4`
 
 Inclusive minimum energy cost for the big band.
 
-### `cheap-character-maximum = 2`
+### `cheap_character_maximum: 2`
 
 Inclusive maximum used by the Exploration cheap-character predicate.
 
-### `allowed-forms = ["Empowered", "Amplified", "Kindled", "Inspired", "Enduring", "Hastened", "Resonant", "Attuned"]`
+### `allowed_forms: [Empowered, Amplified, Kindled, Inspired, Enduring, Hastened, Resonant, Attuned]`
 
 Forms Augury and shared selection may choose without an explicit override.
 
-### `empowered-cost-divisor = 2`
+### `empowered_cost_divisor: 2`
 
 Divisor used to normalize energy-cost reduction from Empowered.
 
-### `kindled-spark-divisor = 4`
+### `kindled_spark_divisor: 4`
 
 Divisor used to normalize Spark growth from Kindled.
 
-### `Amplified = 0.40`
+### `(form: Amplified, benefit: 0.40)`
 
 Fixed benefit scores for forms whose value is not a direct numeric delta.
 
-### `placeable-types = ["Shop", "Purge", "Transfiguration", "Duplication"]`
+### `placeable_types: [Shop, Purge, Transfiguration, Duplication]`
 
 Site types eligible for an add-site reward.
 

@@ -12,6 +12,7 @@ use crate::manifest::{Dataset, Manifest, MigrationState};
 use crate::models::{
     affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft, dream_avatars,
     dream_guides, dreamscapes, dreamsigns, dreamwell, economy, exploration, figments, opponents,
+    reward_selection,
 };
 
 pub const BUILD_VERSION: &str = env!("GAME_DATA_BUILD_VERSION");
@@ -232,6 +233,7 @@ fn adapt(
             opponents::validate_card_references(&internal_ai, &known_card_ids)?;
             opponents::lower(catalog, battle, internal_ai)
         }
+        "reward_selection_v1" => reward_selection::lower(parse_ron(source, dataset)?),
         "figments_v1" => figments::lower(parse_ron(source, dataset)?),
         "compat_v1" => {
             let document: compat::CompatDocument = parse_ron(source, dataset)?;
@@ -547,6 +549,9 @@ mod tests {
                 }
                 "opponents_v1" => {
                     canonical::<opponents::OpponentsCatalog>(&source, true);
+                }
+                "reward_selection_v1" => {
+                    canonical::<reward_selection::RewardSelectionCatalog>(&source, true);
                 }
                 "figments_v1" => {
                     canonical::<Vec<figments::FigmentDefinition>>(&source, true);
