@@ -3,6 +3,10 @@
 
 #![enable(implicit_some)]
 AtlasCatalog(
+  // Default node-count ranges for special layer kinds. Individual standard
+  // layers author their node counts inline below.
+  layer_defaults: (starter_node_count: (min: 1, max: 1), boss_node_count: (min: 1, max: 1)),
+
   // Layers are listed in travel order. `position` is the stable layer identity,
   // while `rules` chooses how that layer is generated. All `min`/`max` ranges
   // below are inclusive.
@@ -153,6 +157,8 @@ AtlasCatalog(
     // Stable UUID persisted on the special Layer Seven node. It identifies
     // Limbo without resolving a normal dreamscape definition.
     dreamscape_id: "f31e1199-70bc-4110-85f9-505afebb02c4",
+    // Compatibility identity emitted for runtime consumers of atlas.toml.
+    compatibility_dreamscape_id: "limbo",
     // Place label stored on and displayed for the boss node.
     place: "Limbo",
     // Base character name used when no per-run Apollyon incarnation supplies a

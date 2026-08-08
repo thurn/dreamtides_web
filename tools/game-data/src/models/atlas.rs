@@ -5,8 +5,6 @@ use indexmap::IndexMap;
 use serde::{Deserialize, Deserializer, Serialize, Serializer, de::Error as _};
 use uuid::{Uuid, Variant, Version};
 
-const LIMBO_UUID: &str = "f31e1199-70bc-4110-85f9-505afebb02c4";
-
 macro_rules! uuid_id {
     ($name:ident) => {
         #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
@@ -54,6 +52,7 @@ uuid_id!(DreamscapeId);
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct AtlasCatalog {
+    pub layer_defaults: LayerDefaults,
     pub layers: Vec<LayerDefinition>,
     pub graph: GraphRules,
     pub dreamscape_selection: DreamscapeSelectionRules,
@@ -62,6 +61,13 @@ pub struct AtlasCatalog {
     pub known_dreamsign: KnownDreamsignRules,
     pub boss: BossDefinition,
     pub presentation: Presentation,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct LayerDefaults {
+    pub starter_node_count: IntegerRange,
+    pub boss_node_count: IntegerRange,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -250,6 +256,7 @@ pub struct KnownDreamsignRules {
 #[serde(deny_unknown_fields)]
 pub struct BossDefinition {
     pub dreamscape_id: DreamscapeId,
+    pub compatibility_dreamscape_id: String,
     pub place: String,
     pub name: String,
     pub fallback_title: String,
@@ -300,9 +307,16 @@ pub fn lower(source: AtlasCatalog) -> Result<toml::Value> {
 
     let mut root = toml::map::Map::new();
     root.insert("schema-version".into(), 1_i64.into());
+    let layer_defaults = source.layer_defaults;
     root.insert(
         "layers".into(),
-        toml::Value::Array(source.layers.into_iter().map(lower_layer).collect()),
+        toml::Value::Array(
+            source
+                .layers
+                .into_iter()
+                .map(|layer| lower_layer(layer, &layer_defaults))
+                .collect(),
+        ),
     );
     root.insert(
         "graph".into(),
@@ -331,7 +345,7 @@ pub fn lower(source: AtlasCatalog) -> Result<toml::Value> {
         toml::Value::Table(lower_known_dreamsign(source.known_dreamsign)),
     );
     let assets = lower_assets(&source.presentation, &source.boss.art);
-    root.insert("boss".into(), toml::Value::Table(lower_boss(source.boss)?));
+    root.insert("boss".into(), toml::Value::Table(lower_boss(source.boss)));
     root.insert(
         "presentation".into(),
         toml::Value::Table(lower_presentation(&source.presentation)),
@@ -341,6 +355,11 @@ pub fn lower(source: AtlasCatalog) -> Result<toml::Value> {
 }
 
 fn validate(source: &AtlasCatalog) -> Result<()> {
+    validate_range(
+        "starter_node_count",
+        source.layer_defaults.starter_node_count,
+    )?;
+    validate_range("boss_node_count", source.layer_defaults.boss_node_count)?;
     ensure!(
         source.layers.len() == LayerPosition::ALL.len(),
         "Atlas must define exactly seven layers"
@@ -452,8 +471,8 @@ fn validate(source: &AtlasCatalog) -> Result<()> {
         "affiliation body template must contain {{card-theme}}"
     );
     ensure!(
-        source.boss.dreamscape_id == DreamscapeId::parse(LIMBO_UUID)?,
-        "boss references a dreamscape UUID without a compatibility mapping"
+        !source.boss.compatibility_dreamscape_id.trim().is_empty(),
+        "boss compatibility dreamscape id must be non-empty"
     );
     Ok(())
 }
@@ -487,7 +506,7 @@ fn validate_layer_references(label: &str, layers: &[LayerPosition]) -> Result<()
     Ok(())
 }
 
-fn lower_layer(layer: LayerDefinition) -> toml::Value {
+fn lower_layer(layer: LayerDefinition, defaults: &LayerDefaults) -> toml::Value {
     let mut table = toml::map::Map::new();
     table.insert("name".into(), layer.position.as_compat().into());
     match layer.rules {
@@ -495,7 +514,7 @@ fn lower_layer(layer: LayerDefinition) -> toml::Value {
             table.insert("role".into(), "starter".into());
             table.insert(
                 "node-count".into(),
-                range_table(IntegerRange { min: 1, max: 1 }),
+                range_table(defaults.starter_node_count),
             );
             table.insert(
                 "mandatory-sites".into(),
@@ -520,10 +539,7 @@ fn lower_layer(layer: LayerDefinition) -> toml::Value {
             mandatory_sites,
         } => {
             table.insert("role".into(), "boss".into());
-            table.insert(
-                "node-count".into(),
-                range_table(IntegerRange { min: 1, max: 1 }),
-            );
+            table.insert("node-count".into(), range_table(defaults.boss_node_count));
             table.insert("site-count".into(), range_table(site_count));
             table.insert("fill-profile".into(), fill_profile.as_compat().into());
             table.insert("mandatory-sites".into(), site_count_table(mandatory_sites));
@@ -665,14 +681,12 @@ fn lower_known_dreamsign(value: KnownDreamsignRules) -> toml::map::Map<String, t
     ])
 }
 
-fn lower_boss(value: BossDefinition) -> Result<toml::map::Map<String, toml::Value>> {
-    let dreamscape_id = if value.dreamscape_id == DreamscapeId::parse(LIMBO_UUID)? {
-        "limbo"
-    } else {
-        bail!("boss references a dreamscape UUID without a compatibility mapping")
-    };
-    Ok(toml::map::Map::from_iter([
-        ("dreamscape-id".into(), dreamscape_id.into()),
+fn lower_boss(value: BossDefinition) -> toml::map::Map<String, toml::Value> {
+    toml::map::Map::from_iter([
+        (
+            "dreamscape-id".into(),
+            value.compatibility_dreamscape_id.into(),
+        ),
         ("place".into(), value.place.into()),
         ("name".into(), value.name.into()),
         ("fallback-title".into(), value.fallback_title.into()),
@@ -683,7 +697,7 @@ fn lower_boss(value: BossDefinition) -> Result<toml::map::Map<String, toml::Valu
         ("scene-art-id".into(), value.art.scene.key.into()),
         ("icon-art-id".into(), value.art.icon.key.into()),
         ("figure-art-id".into(), value.art.figure.key.into()),
-    ]))
+    ])
 }
 
 fn lower_presentation(value: &Presentation) -> toml::map::Map<String, toml::Value> {
@@ -759,6 +773,10 @@ mod tests {
             })
             .collect();
         AtlasCatalog {
+            layer_defaults: LayerDefaults {
+                starter_node_count: IntegerRange { min: 1, max: 2 },
+                boss_node_count: IntegerRange { min: 2, max: 3 },
+            },
             layers,
             graph: GraphRules {
                 connection_average: 2.5,
@@ -810,7 +828,8 @@ mod tests {
                 early_reveal_bias: 1.5,
             },
             boss: BossDefinition {
-                dreamscape_id: DreamscapeId::parse(LIMBO_UUID).unwrap(),
+                dreamscape_id: DreamscapeId::parse("00000000-0000-4000-8000-000000000001").unwrap(),
+                compatibility_dreamscape_id: "boss-dreamscape".into(),
                 place: "Límbø".into(),
                 name: "Apollyon".into(),
                 fallback_title: "Doom".into(),
@@ -864,8 +883,12 @@ mod tests {
         );
         assert_eq!(output["layers"][6]["role"].as_str(), Some("boss"));
         assert_eq!(
+            output["layers"][0]["node-count"]["max"].as_integer(),
+            Some(2)
+        );
+        assert_eq!(
             output["layers"][6]["node-count"]["min"].as_integer(),
-            Some(1)
+            Some(2)
         );
         assert_eq!(output["fill-profiles"][0]["id"].as_str(), Some("early"));
         assert_eq!(
@@ -877,6 +900,10 @@ mod tests {
             Some("omit-fill")
         );
         assert_eq!(output["boss"]["place"].as_str(), Some("Límbø"));
+        assert_eq!(
+            output["boss"]["dreamscape-id"].as_str(),
+            Some("boss-dreamscape")
+        );
         assert_eq!(
             output["boss"]["fallback-introduction"].as_str(),
             Some("First line\nSecond line")
@@ -928,18 +955,26 @@ mod tests {
                 .to_string()
                 .contains("minimum exceeds maximum")
         );
+
+        let mut bad_default = catalog();
+        bad_default.layer_defaults.starter_node_count = IntegerRange { min: 2, max: 1 };
+        assert!(
+            lower(bad_default)
+                .unwrap_err()
+                .to_string()
+                .contains("minimum exceeds maximum")
+        );
     }
 
     #[test]
-    fn rejects_an_unmapped_dreamscape_uuid() {
+    fn rejects_a_blank_boss_compatibility_id() {
         let mut source = catalog();
-        source.boss.dreamscape_id =
-            DreamscapeId::parse("7604f4bf-f922-4a14-b55c-e521d0a41e23").unwrap();
+        source.boss.compatibility_dreamscape_id = "  ".into();
         assert!(
             lower(source)
                 .unwrap_err()
                 .to_string()
-                .contains("without a compatibility mapping")
+                .contains("compatibility dreamscape id must be non-empty")
         );
     }
 
