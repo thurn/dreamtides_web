@@ -1,0 +1,115 @@
+// Defines journey currency costs, rewards, shop inventories, and gamble payouts.
+
+#![enable(implicit_some)]
+EconomyCatalog(
+  journey: (default_starting_essence: 200, dreamsign_cap: 12),
+
+  shop: (
+    prices: (standard_card: 100, specialty_card: 200, dreamsign: 50),
+    stock: [
+      ShopStock(shop: CardShop, card_slots: 5, dreamsign_slots: 0),
+
+      ShopStock(shop: SpecialtyShop, card_slots: 5, dreamsign_slots: 0),
+
+      ShopStock(shop: DreamsignMarket, card_slots: 0, dreamsign_slots: 3),
+    ],
+    discounts: (
+      // Relative weights select how many generated offers receive a discount.
+      slot_counts: [(value: 1, weight: 1), (value: 2, weight: 1)],
+      percentages: [
+        (value: 30, weight: 1),
+        (value: 40, weight: 1),
+        (value: 50, weight: 1),
+        (value: 60, weight: 1),
+        (value: 70, weight: 1),
+        (value: 80, weight: 1),
+        (value: 90, weight: 1),
+      ],
+    ),
+    reroll: (standard_price: 50, enhanced_price: 0, max_per_visit: 1),
+  ),
+
+  site_rewards: (
+    essence: (standard: (min: 200, max: 300), enhanced: (min: 400, max: 600)),
+    reward_fallback_essence: (min: 150, max: 350),
+    dreamsign_revelation: (standard_offer_count: 3, enhanced_offer_count: 4),
+  ),
+
+  purge: (
+    // Each entry prices the next paid purge; the list length is the visit cap.
+    marginal_costs: [40, 60, 90, 130, 180, 240],
+    enhanced_discount_percent: 30,
+  ),
+
+  transfiguration: (
+    minimum_cost: 0,
+    maximum_cost: 100,
+    // Cost bands use this increment for their base, jitter, and floor values.
+    step: 10,
+    form_bands: [
+      FormCostBand(form: Amplified, cost: (base: 10, jitter: 20, floor: 10)),
+
+      FormCostBand(form: Attuned, cost: (base: 10, jitter: 20, floor: 10)),
+
+      FormCostBand(form: Inspired, cost: (base: 20, jitter: 20, floor: 10)),
+
+      FormCostBand(form: Enduring, cost: (base: 50, jitter: 30, floor: 20)),
+
+      FormCostBand(form: Resonant, cost: (base: 50, jitter: 30, floor: 20)),
+
+      FormCostBand(form: Perfected, cost: (base: 100, jitter: 0, floor: 100)),
+    ],
+    stat_delta_bands: [
+      StatDeltaCostBand(magnitude: One, cost: (base: 10, jitter: 20, floor: 10)),
+
+      StatDeltaCostBand(magnitude: Two, cost: (base: 30, jitter: 20, floor: 10)),
+
+      StatDeltaCostBand(magnitude: Three, cost: (base: 50, jitter: 20, floor: 30)),
+
+      StatDeltaCostBand(magnitude: FourOrMore, cost: (base: 70, jitter: 20, floor: 50)),
+    ],
+  ),
+
+  battle_reward: (base_essence: 100, essence_per_completion_level: 50, minimum_essence: 0),
+
+  gamble: (
+    three_gate: (
+      standard_wager: 50,
+      enhanced_wager: 45,
+      rewards: [
+        GateReward(gate: Six, essence: 100),
+
+        GateReward(gate: Nine, essence: 150),
+
+        GateReward(gate: Jack, essence: 200),
+      ],
+    ),
+    ladder_climb: (
+      win_essence: 25,
+      attempts: [
+        LadderAttempt(attempt: One, standard_cost: 0, enhanced_cost: 0),
+
+        LadderAttempt(attempt: Two, standard_cost: 5, enhanced_cost: 0),
+
+        LadderAttempt(attempt: Three, standard_cost: 10, enhanced_cost: 0),
+
+        LadderAttempt(attempt: Four, standard_cost: 15, enhanced_cost: 0),
+      ],
+    ),
+    starway_stairs: (
+      standard_wager: 30,
+      enhanced_wager: 20,
+      tiers: [
+        StarwayTier(tier: One, essence_reward: 60),
+
+        StarwayTier(tier: Two, essence_reward: 140),
+
+        StarwayTier(tier: Three, essence_reward: 300),
+      ],
+    ),
+    four_suit_reprise: (standard_draw_price: 25, enhanced_draw_price: 15, essence_reward: 100),
+    blackjack: (standard_wager: 90, enhanced_wager: 40, prize_essence: 300),
+  ),
+
+  exploration: (default_essence_per_spark: 40),
+)
