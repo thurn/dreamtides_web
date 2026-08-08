@@ -1,20 +1,7 @@
-// Battle setup, Dreamwell construction, opponent progression and deck generation, and AI tuning.
+// Dreamwell construction, opponent progression, and opponent deck generation.
 
 #![enable(implicit_some)]
 OpponentsCatalog(
-  battle: BattleRules(
-    minimum_deck_size: 25,
-    player_opening_hand_size: 5,
-    enemy_opening_hand_size: 5,
-    score_targets: [10, 25],
-    turn_limit: 50,
-    energy_cap: 10,
-    hand_limit: 10,
-    starting_side: Player,
-    skip_player_opening_draw: true,
-    opponent_signature_card_count: 3,
-  ),
-
   dreamwell: DreamwellRules(
     // Orders drawn once when constructing the initial Dreamwell.
     opening_orders: [0],
@@ -51,61 +38,4 @@ OpponentsCatalog(
   ),
 
   corpus_selection: CorpusSelectionRules(affiliation_weight: 0.25, top_ranked_sampling_window: 8),
-
-  journey_ai_deck: [
-    DeckEntry(card_id: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8", count: 3),
-
-    DeckEntry(card_id: "647f5150-b2e0-424b-9480-27557642524e", count: 3),
-
-    DeckEntry(card_id: "e83014d3-9d35-4e80-a1b3-9b25360ad2af", count: 3),
-
-    DeckEntry(card_id: "a28ad36d-fa74-4190-a463-7efd3a6233d0", count: 3),
-
-    DeckEntry(card_id: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", count: 3),
-
-    DeckEntry(card_id: "5ab11bef-5dcd-49f5-be49-ae2ccde76e70", count: 3),
-
-    DeckEntry(card_id: "4408b942-09a0-4f4e-a403-10c708c6e3c5", count: 3),
-
-    DeckEntry(card_id: "2162742c-09d0-4e62-ae49-0f8f79b45adc", count: 3),
-
-    DeckEntry(card_id: "910b4cf9-dec7-4e03-af4f-7d5ae342eeba", count: 3),
-
-    DeckEntry(card_id: "944e15d2-d680-4ebe-8d18-36826f4b1535", count: 3),
-  ],
-
-  ai: AiRules(
-    journey_default_preset: Standard,
-    tutorial_default_preset: Standard,
-    evaluation: EvaluationWeights(
-      score_difference: 10.0,
-      front_rank_spark: 1.0,
-      back_rank_spark: 0.5,
-      hand_card: 1.5,
-      value_hint: 1.0,
-      energy_waste: 0.25,
-      expected_points: 1.0,
-    ),
-    opponent_model: OpponentModelRules(
-      removal_prior: 0.1,
-      sample_safety_cap: 16,
-      response_archetype_priors: ResponseArchetypePriors(
-        no_blocks: 1.0,
-        block_biggest: 2.0,
-        trade_evenly: 3.0,
-      ),
-    ),
-    presets: {
-      Standard: AiPreset(
-        beam_width: 12,
-        opponent_mode: Expectiminimax,
-        sample_count: 8,
-        search_depth: 16,
-        // Journey planning stops when this wall-clock budget is exhausted.
-        journey_planning_budget_ms: 100,
-        // Tutorial planning uses a deterministic expansion count for synchronized clients.
-        tutorial_expansion_budget: 256,
-      ),
-    },
-  ),
 )

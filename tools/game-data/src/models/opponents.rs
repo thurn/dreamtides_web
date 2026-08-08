@@ -11,13 +11,27 @@ use uuid::{Uuid, Variant, Version};
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct OpponentsCatalog {
-    pub battle: BattleRules,
     pub dreamwell: DreamwellRules,
     pub progression: ProgressionRules,
     pub coherent_draft: CoherentDraftRules,
     pub corpus_selection: CorpusSelectionRules,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct InternalAiCatalog {
     pub journey_ai_deck: Vec<DeckEntry>,
     pub ai: AiRules,
+}
+
+struct CombinedCatalog {
+    battle: BattleRules,
+    dreamwell: DreamwellRules,
+    progression: ProgressionRules,
+    coherent_draft: CoherentDraftRules,
+    corpus_selection: CorpusSelectionRules,
+    journey_ai_deck: Vec<DeckEntry>,
+    ai: AiRules,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -266,6 +280,22 @@ struct CompatibilityCatalog {
 }
 
 #[derive(Serialize)]
+struct CompatibilityBattleCatalog {
+    #[serde(rename = "schema-version")]
+    schema_version: u32,
+    battle: CompatibilityBattleRules,
+}
+
+#[derive(Serialize)]
+struct CompatibilityInternalAiCatalog {
+    #[serde(rename = "schema-version")]
+    schema_version: u32,
+    #[serde(rename = "journey-ai-deck")]
+    journey_ai_deck: Vec<CompatibilityDeckEntry>,
+    ai: CompatibilityAiRules,
+}
+
+#[derive(Serialize)]
 struct CompatibilityBattleRules {
     #[serde(rename = "minimum-deck-size")]
     minimum_deck_size: u32,
@@ -434,38 +464,25 @@ struct CompatibilityAiPreset {
     tutorial_expansion_budget: u32,
 }
 
-pub fn lower(source: OpponentsCatalog) -> Result<toml::Value> {
+pub fn lower(
+    opponents: OpponentsCatalog,
+    battle: BattleRules,
+    internal_ai: InternalAiCatalog,
+) -> Result<toml::Value> {
+    let source = CombinedCatalog {
+        battle,
+        dreamwell: opponents.dreamwell,
+        progression: opponents.progression,
+        coherent_draft: opponents.coherent_draft,
+        corpus_selection: opponents.corpus_selection,
+        journey_ai_deck: internal_ai.journey_ai_deck,
+        ai: internal_ai.ai,
+    };
     validate(&source)?;
-
-    let presets = source
-        .ai
-        .presets
-        .iter()
-        .map(|(id, preset)| CompatibilityAiPreset {
-            id: id.as_compat(),
-            beam_width: preset.beam_width,
-            opponent_mode: preset.opponent_mode.as_compat(),
-            sample_count: preset.sample_count,
-            search_depth: preset.search_depth,
-            journey_planning_budget_ms: preset.journey_planning_budget_ms,
-            tutorial_expansion_budget: preset.tutorial_expansion_budget,
-        })
-        .collect();
 
     let compatibility = CompatibilityCatalog {
         schema_version: 1,
-        battle: CompatibilityBattleRules {
-            minimum_deck_size: source.battle.minimum_deck_size,
-            player_opening_hand_size: source.battle.player_opening_hand_size,
-            enemy_opening_hand_size: source.battle.enemy_opening_hand_size,
-            score_targets: source.battle.score_targets,
-            turn_limit: source.battle.turn_limit,
-            energy_cap: source.battle.energy_cap,
-            hand_limit: source.battle.hand_limit,
-            starting_side: source.battle.starting_side.as_compat(),
-            skip_player_opening_draw: source.battle.skip_player_opening_draw,
-            opponent_signature_card_count: source.battle.opponent_signature_card_count,
-        },
+        battle: compatibility_battle(&source.battle),
         dreamwell: CompatibilityDreamwellRules {
             opening_orders: source.dreamwell.opening_orders,
             recurring_orders: source.dreamwell.recurring_orders,
@@ -509,58 +526,102 @@ pub fn lower(source: OpponentsCatalog) -> Result<toml::Value> {
             affiliation_weight: compatibility_number(source.corpus_selection.affiliation_weight),
             top_ranked_sampling_window: source.corpus_selection.top_ranked_sampling_window,
         },
-        journey_ai_deck: source
-            .journey_ai_deck
-            .into_iter()
-            .map(|entry| CompatibilityDeckEntry {
-                card_id: entry.card_id.as_hyphenated(),
-                count: entry.count,
-            })
-            .collect(),
-        ai: CompatibilityAiRules {
-            journey_default_preset: source.ai.journey_default_preset.as_compat(),
-            tutorial_default_preset: source.ai.tutorial_default_preset.as_compat(),
-            evaluation: CompatibilityEvaluationWeights {
-                score_difference_weight: compatibility_number(
-                    source.ai.evaluation.score_difference,
-                ),
-                front_rank_spark_weight: compatibility_number(
-                    source.ai.evaluation.front_rank_spark,
-                ),
-                back_rank_spark_weight: compatibility_number(source.ai.evaluation.back_rank_spark),
-                hand_card_weight: compatibility_number(source.ai.evaluation.hand_card),
-                value_hint_weight: compatibility_number(source.ai.evaluation.value_hint),
-                energy_waste_weight: compatibility_number(source.ai.evaluation.energy_waste),
-                expected_points_weight: compatibility_number(source.ai.evaluation.expected_points),
-            },
-            opponent_model: CompatibilityOpponentModelRules {
-                removal_prior: compatibility_number(source.ai.opponent_model.removal_prior),
-                sample_safety_cap: source.ai.opponent_model.sample_safety_cap,
-                response_archetype_priors: CompatibilityResponseArchetypePriors {
-                    no_blocks: compatibility_number(
-                        source.ai.opponent_model.response_archetype_priors.no_blocks,
-                    ),
-                    block_biggest: compatibility_number(
-                        source
-                            .ai
-                            .opponent_model
-                            .response_archetype_priors
-                            .block_biggest,
-                    ),
-                    trade_evenly: compatibility_number(
-                        source
-                            .ai
-                            .opponent_model
-                            .response_archetype_priors
-                            .trade_evenly,
-                    ),
-                },
-            },
-            presets,
-        },
+        journey_ai_deck: compatibility_deck(&source.journey_ai_deck),
+        ai: compatibility_ai(&source.ai),
     };
 
     Ok(toml::Value::try_from(compatibility)?)
+}
+
+pub fn lower_battle(source: BattleRules) -> Result<toml::Value> {
+    validate_battle_rules(&source)?;
+    let compatibility = CompatibilityBattleCatalog {
+        schema_version: 1,
+        battle: compatibility_battle(&source),
+    };
+    Ok(toml::Value::try_from(compatibility)?)
+}
+
+pub fn lower_internal_ai(source: InternalAiCatalog) -> Result<toml::Value> {
+    validate_internal_ai(&source)?;
+    let compatibility = CompatibilityInternalAiCatalog {
+        schema_version: 1,
+        journey_ai_deck: compatibility_deck(&source.journey_ai_deck),
+        ai: compatibility_ai(&source.ai),
+    };
+    Ok(toml::Value::try_from(compatibility)?)
+}
+
+fn compatibility_battle(source: &BattleRules) -> CompatibilityBattleRules {
+    CompatibilityBattleRules {
+        minimum_deck_size: source.minimum_deck_size,
+        player_opening_hand_size: source.player_opening_hand_size,
+        enemy_opening_hand_size: source.enemy_opening_hand_size,
+        score_targets: source.score_targets.clone(),
+        turn_limit: source.turn_limit,
+        energy_cap: source.energy_cap,
+        hand_limit: source.hand_limit,
+        starting_side: source.starting_side.as_compat(),
+        skip_player_opening_draw: source.skip_player_opening_draw,
+        opponent_signature_card_count: source.opponent_signature_card_count,
+    }
+}
+
+fn compatibility_deck(source: &[DeckEntry]) -> Vec<CompatibilityDeckEntry> {
+    source
+        .iter()
+        .map(|entry| CompatibilityDeckEntry {
+            card_id: entry.card_id.as_hyphenated(),
+            count: entry.count,
+        })
+        .collect()
+}
+
+fn compatibility_ai(source: &AiRules) -> CompatibilityAiRules {
+    CompatibilityAiRules {
+        journey_default_preset: source.journey_default_preset.as_compat(),
+        tutorial_default_preset: source.tutorial_default_preset.as_compat(),
+        evaluation: CompatibilityEvaluationWeights {
+            score_difference_weight: compatibility_number(source.evaluation.score_difference),
+            front_rank_spark_weight: compatibility_number(source.evaluation.front_rank_spark),
+            back_rank_spark_weight: compatibility_number(source.evaluation.back_rank_spark),
+            hand_card_weight: compatibility_number(source.evaluation.hand_card),
+            value_hint_weight: compatibility_number(source.evaluation.value_hint),
+            energy_waste_weight: compatibility_number(source.evaluation.energy_waste),
+            expected_points_weight: compatibility_number(source.evaluation.expected_points),
+        },
+        opponent_model: CompatibilityOpponentModelRules {
+            removal_prior: compatibility_number(source.opponent_model.removal_prior),
+            sample_safety_cap: source.opponent_model.sample_safety_cap,
+            response_archetype_priors: CompatibilityResponseArchetypePriors {
+                no_blocks: compatibility_number(
+                    source.opponent_model.response_archetype_priors.no_blocks,
+                ),
+                block_biggest: compatibility_number(
+                    source
+                        .opponent_model
+                        .response_archetype_priors
+                        .block_biggest,
+                ),
+                trade_evenly: compatibility_number(
+                    source.opponent_model.response_archetype_priors.trade_evenly,
+                ),
+            },
+        },
+        presets: source
+            .presets
+            .iter()
+            .map(|(id, preset)| CompatibilityAiPreset {
+                id: id.as_compat(),
+                beam_width: preset.beam_width,
+                opponent_mode: preset.opponent_mode.as_compat(),
+                sample_count: preset.sample_count,
+                search_depth: preset.search_depth,
+                journey_planning_budget_ms: preset.journey_planning_budget_ms,
+                tutorial_expansion_budget: preset.tutorial_expansion_budget,
+            })
+            .collect(),
+    }
 }
 
 fn compatibility_number(value: f64) -> toml::Value {
@@ -572,7 +633,7 @@ fn compatibility_number(value: f64) -> toml::Value {
 }
 
 pub fn validate_card_references(
-    source: &OpponentsCatalog,
+    source: &InternalAiCatalog,
     known_card_ids: &BTreeSet<CardId>,
 ) -> Result<()> {
     for entry in &source.journey_ai_deck {
@@ -586,12 +647,8 @@ pub fn validate_card_references(
     Ok(())
 }
 
-fn validate(source: &OpponentsCatalog) -> Result<()> {
-    require_positive("battle.minimum_deck_size", source.battle.minimum_deck_size)?;
-    require_nonempty_positive("battle.score_targets", &source.battle.score_targets)?;
-    require_positive("battle.turn_limit", source.battle.turn_limit)?;
-    require_positive("battle.energy_cap", source.battle.energy_cap)?;
-    require_positive("battle.hand_limit", source.battle.hand_limit)?;
+fn validate(source: &CombinedCatalog) -> Result<()> {
+    validate_battle_rules(&source.battle)?;
 
     validate_orders(&source.dreamwell)?;
     require_positive(
@@ -640,6 +697,20 @@ fn validate(source: &OpponentsCatalog) -> Result<()> {
     validate_deck(&source.journey_ai_deck)?;
     validate_ai(&source.ai)?;
     Ok(())
+}
+
+fn validate_battle_rules(source: &BattleRules) -> Result<()> {
+    require_positive("battle.minimum_deck_size", source.minimum_deck_size)?;
+    require_nonempty_positive("battle.score_targets", &source.score_targets)?;
+    require_positive("battle.turn_limit", source.turn_limit)?;
+    require_positive("battle.energy_cap", source.energy_cap)?;
+    require_positive("battle.hand_limit", source.hand_limit)?;
+    Ok(())
+}
+
+fn validate_internal_ai(source: &InternalAiCatalog) -> Result<()> {
+    validate_deck(&source.journey_ai_deck)?;
+    validate_ai(&source.ai)
 }
 
 fn validate_orders(source: &DreamwellRules) -> Result<()> {
@@ -877,18 +948,6 @@ mod tests {
 
     fn catalog() -> OpponentsCatalog {
         OpponentsCatalog {
-            battle: BattleRules {
-                minimum_deck_size: 7,
-                player_opening_hand_size: 2,
-                enemy_opening_hand_size: 3,
-                score_targets: vec![4, 9],
-                turn_limit: 11,
-                energy_cap: 12,
-                hand_limit: 13,
-                starting_side: StartingSide::Enemy,
-                skip_player_opening_draw: false,
-                opponent_signature_card_count: 2,
-            },
             dreamwell: DreamwellRules {
                 opening_orders: vec![8],
                 recurring_orders: vec![9, 10],
@@ -924,6 +983,26 @@ mod tests {
                 affiliation_weight: 0.75,
                 top_ranked_sampling_window: 5,
             },
+        }
+    }
+
+    fn battle() -> BattleRules {
+        BattleRules {
+            minimum_deck_size: 7,
+            player_opening_hand_size: 2,
+            enemy_opening_hand_size: 3,
+            score_targets: vec![4, 9],
+            turn_limit: 11,
+            energy_cap: 12,
+            hand_limit: 13,
+            starting_side: StartingSide::Enemy,
+            skip_player_opening_draw: false,
+            opponent_signature_card_count: 2,
+        }
+    }
+
+    fn internal_ai() -> InternalAiCatalog {
+        InternalAiCatalog {
             journey_ai_deck: vec![
                 DeckEntry {
                     card_id: CARD_ONE.parse().unwrap(),
@@ -972,7 +1051,7 @@ mod tests {
 
     #[test]
     fn lowers_every_compatibility_key_and_enum_variant() {
-        let lowered = lower(catalog()).unwrap();
+        let lowered = lower(catalog(), battle(), internal_ai()).unwrap();
         assert_eq!(lowered["schema-version"].as_integer(), Some(1));
         assert_eq!(lowered["battle"]["starting-side"].as_str(), Some("enemy"));
         assert_eq!(
@@ -996,26 +1075,48 @@ mod tests {
             Some("worstCase")
         );
 
-        let mut player = catalog();
-        player.battle.starting_side = StartingSide::Player;
-        player.ai.presets[&AiPresetId::Standard].opponent_mode = OpponentMode::Expectiminimax;
-        let lowered = lower(player).unwrap();
+        let mut player_battle = battle();
+        player_battle.starting_side = StartingSide::Player;
+        let mut expectiminimax_ai = internal_ai();
+        expectiminimax_ai.ai.presets[&AiPresetId::Standard].opponent_mode =
+            OpponentMode::Expectiminimax;
+        let lowered = lower(catalog(), player_battle, expectiminimax_ai).unwrap();
         assert_eq!(lowered["battle"]["starting-side"].as_str(), Some("player"));
         assert_eq!(
             lowered["ai"]["presets"][0]["opponent-mode"].as_str(),
             Some("expectiminimax")
         );
+
+        let standalone_battle = lower_battle(battle()).unwrap();
+        let standalone_ai = lower_internal_ai(internal_ai()).unwrap();
+        let composed = lower(catalog(), battle(), internal_ai()).unwrap();
+        assert_eq!(composed["battle"], standalone_battle["battle"]);
+        assert_eq!(
+            composed["journey-ai-deck"],
+            standalone_ai["journey-ai-deck"]
+        );
+        assert_eq!(composed["ai"], standalone_ai["ai"]);
     }
 
     #[test]
     fn rejects_unknown_fields_and_non_uuidv4_card_identities() {
-        let source = ron::ser::to_string(&catalog()).unwrap();
-        let unknown = source.replacen(
+        let source = ron::ser::to_string(&battle()).unwrap();
+        let unknown_battle = source.replacen(
             "minimum_deck_size:7",
             "minimum_deck_size:7,surprise:true",
             1,
         );
-        assert!(ron::from_str::<OpponentsCatalog>(&unknown).is_err());
+        assert!(ron::from_str::<BattleRules>(&unknown_battle).is_err());
+        let source = ron::ser::to_string(&catalog()).unwrap();
+        let unknown_opponents = source.replacen(
+            "cards_per_recurring_order:2",
+            "cards_per_recurring_order:2,surprise:true",
+            1,
+        );
+        assert!(ron::from_str::<OpponentsCatalog>(&unknown_opponents).is_err());
+        let source = ron::ser::to_string(&internal_ai()).unwrap();
+        let unknown_ai = source.replacen("count:2", "count:2,surprise:true", 1);
+        assert!(ron::from_str::<InternalAiCatalog>(&unknown_ai).is_err());
         for invalid in [
             "legacy-card",
             "00000000-0000-3000-8000-000000000001",
@@ -1029,39 +1130,39 @@ mod tests {
     fn rejects_invalid_collections_curves_weights_and_preset_references() {
         let mut source = catalog();
         source.dreamwell.recurring_orders.push(8);
-        assert_error_contains(source, "appears in opening and recurring");
+        assert_opponents_error_contains(source, "appears in opening and recurring");
 
         let mut source = catalog();
         source.coherent_draft.distinct_card_curve = CountCurve { first: 9, last: 8 };
-        assert_error_contains(source, "non-decreasing");
+        assert_opponents_error_contains(source, "non-decreasing");
 
         let mut source = catalog();
         source.coherent_draft.temperature_curve = TemperatureCurve {
             first: 0.2,
             last: 0.8,
         };
-        assert_error_contains(source, "non-increasing");
+        assert_opponents_error_contains(source, "non-increasing");
 
         let mut source = catalog();
         source.coherent_draft.coherence.self_consistency_weight = 0.4;
-        assert_error_contains(source, "weights must sum to 1");
+        assert_opponents_error_contains(source, "weights must sum to 1");
 
-        let mut source = catalog();
+        let mut source = internal_ai();
         source.journey_ai_deck[1].card_id = source.journey_ai_deck[0].card_id;
-        assert_error_contains(source, "duplicate card");
+        assert_internal_ai_error_contains(source, "duplicate card");
 
-        let mut source = catalog();
+        let mut source = internal_ai();
         source.ai.presets.clear();
-        assert_error_contains(source, "presets must not be empty");
+        assert_internal_ai_error_contains(source, "presets must not be empty");
 
-        let mut source = catalog();
+        let mut source = internal_ai();
         source.ai.presets[&AiPresetId::Standard].sample_count = 8;
-        assert_error_contains(source, "sample_count must not exceed");
+        assert_internal_ai_error_contains(source, "sample_count must not exceed");
     }
 
     #[test]
     fn validates_foreign_card_references() {
-        let source = catalog();
+        let source = internal_ai();
         let known = BTreeSet::from([CARD_ONE.parse().unwrap(), CARD_TWO.parse().unwrap()]);
         validate_card_references(&source, &known).unwrap();
 
@@ -1074,8 +1175,18 @@ mod tests {
         );
     }
 
-    fn assert_error_contains(source: OpponentsCatalog, expected: &str) {
-        let error = lower(source).unwrap_err().to_string();
+    fn assert_opponents_error_contains(source: OpponentsCatalog, expected: &str) {
+        let error = lower(source, battle(), internal_ai())
+            .unwrap_err()
+            .to_string();
+        assert!(
+            error.contains(expected),
+            "{error:?} did not contain {expected:?}"
+        );
+    }
+
+    fn assert_internal_ai_error_contains(source: InternalAiCatalog, expected: &str) {
+        let error = lower_internal_ai(source).unwrap_err().to_string();
         assert!(
             error.contains(expected),
             "{error:?} did not contain {expected:?}"

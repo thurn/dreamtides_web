@@ -2,7 +2,7 @@
 
 This document describes the design for an automated opponent ("Battle AI") for
 the journey prototype's playable battle. The AI plays the UUID-keyed deck
-authored in `data/opponents.ron`, makes decisions with a blend of
+authored in `data/internal/internal_ai.ron`, makes decisions with a blend of
 heuristics, shallow search, and light Monte Carlo sampling, and observes the
 planning budget of its resolved preset.
 
@@ -74,10 +74,10 @@ It is written to be read alongside:
 
 ## Authored Configuration
 
-`opponents.ron` owns the journey AI deck, evaluation weights, removal and
-response priors, sample safety cap, and named presets. A preset contains beam
-width, opponent-response mode, sample count, search depth, journey planning
-budget, and deterministic tutorial expansion budget. `BattleInit` persists the
+`data/internal/internal_ai.ron` owns the journey AI deck, evaluation weights,
+removal and response priors, sample safety cap, and named presets. A preset
+contains beam width, opponent-response mode, sample count, search depth,
+journey planning budget, and deterministic tutorial expansion budget. `BattleInit` persists the
 complete resolved preset and ID, and both AI controllers consume that folded
 configuration. Terminal evaluation receives the same persisted `scoreToWin`
 used by battle resolution.

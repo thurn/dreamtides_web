@@ -1668,52 +1668,58 @@ and is not a unique catalog key.
 "awakened", or "" for none) and is carried by every figment of the
 type. `spark` is the base spark of a single figment.
 
-## `data/opponents.ron`
+## `data/battle.ron`
 
-The typed `OpponentsCatalog` document is lowered to the established generated
-TOML compatibility contract. Its nested records group battle, Dreamwell,
-progression, drafting, corpus selection, deck, and AI settings.
+The typed `BattleRules` document defines the shared battle setup contract and
+is composed into the generated opponent runtime data.
 
-### `battle.minimum_deck_size: 25`
+### `minimum_deck_size: 25`
 
 Journey decks below this size are repeated until they meet the minimum.
 
-### `battle.player_opening_hand_size: 5`
+### `player_opening_hand_size: 5`
 
 Number of cards dealt to the player when a battle begins.
 
-### `battle.enemy_opening_hand_size: 5`
+### `enemy_opening_hand_size: 5`
 
 Number of cards dealt to the opponent when a battle begins.
 
-### `battle.score_targets: [10, 25]`
+### `score_targets: [10, 25]`
 
 Score needed to win at each zero-indexed completion level. Later levels reuse
 the final entry.
 
-### `battle.turn_limit: 50`
+### `turn_limit: 50`
 
 Maximum number of turns before the battle reaches its turn-limit outcome.
 
-### `battle.energy_cap: 10`
+### `energy_cap: 10`
 
 Maximum energy either side can accumulate during a battle.
 
-### `battle.hand_limit: 10`
+### `hand_limit: 10`
 
 Maximum cards held before basic automation discards excess cards.
 
-### `battle.starting_side: Player`
+### `starting_side: Player`
 
 Side that takes the first turn. Valid values are `Player` and `Enemy`.
 
-### `battle.skip_player_opening_draw: true`
+### `skip_player_opening_draw: true`
 
 Whether the player omits their normal draw on their first turn.
 
-### `battle.opponent_signature_card_count: 3`
+### `opponent_signature_card_count: 3`
 
 Number of opponent deck cards highlighted as DreamAvatar signature cards.
+
+## `data/opponents.ron`
+
+The typed `OpponentsCatalog` document defines Dreamwell construction, opponent
+progression, coherent drafting, and corpus selection. The compiler composes it
+with the battle and internal AI catalogs for the generated opponent runtime
+data.
 
 ### `dreamwell.opening_orders: [0]`
 
@@ -1808,6 +1814,11 @@ DreamAvatar signature fit supplies the primary score.
 ### `corpus_selection.top_ranked_sampling_window: 8`
 
 Number of highest-ranked decks eligible for deterministic seeded sampling.
+
+## `data/internal/internal_ai.ron`
+
+The typed `InternalAiCatalog` document defines the automated opponent's
+UUID-keyed deck, evaluation model, response model, and planning presets.
 
 ### `journey_ai_deck: [DeckEntry(...)]`
 

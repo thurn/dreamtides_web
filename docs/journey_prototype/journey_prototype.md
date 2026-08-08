@@ -39,9 +39,9 @@ The generated `public/cards/`, `public/card-data.json`,
 `public/opponents-data.json` paths are gitignored.
 
 Battle and opponent tuning is documented in
-[Opponent Data](opponents_data.md). Battle setup, Dreamwell schedules,
-progression curves, opponent construction, and named AI presets are authored in
-`data/opponents.ron`.
+[Opponent Data](opponents_data.md). Core battle setup is authored in
+`data/battle.ron`, opponent construction in `data/opponents.ron`, and automated
+opponent configuration in `data/internal/internal_ai.ron`.
 
 Other commands:
 

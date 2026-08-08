@@ -130,6 +130,7 @@ fn adapt(
         "apollyon_incarnations_v1" => apollyon_incarnations::lower(parse_ron(source, dataset)?),
         "atlas_v1" => atlas::lower(parse_ron(source, dataset)?),
         "augury_v1" => augury::lower(parse_ron(source, dataset)?),
+        "battle_v1" => opponents::lower_battle(parse_ron(source, dataset)?),
         "draft_v1" => draft::lower(parse_ron(source, dataset)?),
         "dream_avatar_metadata_v1" => dream_avatars::lower_metadata(parse_ron(source, dataset)?),
         "dream_avatars_v1" => {
@@ -211,25 +212,25 @@ fn adapt(
         }
         "economy_v1" => economy::lower(parse_ron(source, dataset)?),
         "exploration_v1" => exploration::lower(parse_ron(source, dataset)?),
+        "internal_ai_v1" => {
+            let catalog: opponents::InternalAiCatalog = parse_ron(source, dataset)?;
+            let known_card_ids = known_opponent_card_ids(root, manifest)?;
+            opponents::validate_card_references(&catalog, &known_card_ids)?;
+            opponents::lower_internal_ai(catalog)
+        }
         "opponents_v1" => {
             let catalog: opponents::OpponentsCatalog = parse_ron(source, dataset)?;
-            let cards_dataset = manifest.dataset("cards")?;
-            let card_source = fs::read_to_string(root.join(&cards_dataset.source))
-                .with_context(|| format!("read cards source {}", cards_dataset.source))?;
-            let cards: Vec<cards::CardDefinition> = parse_ron(&card_source, cards_dataset)?;
-            let known_card_ids = cards
-                .into_iter()
-                .map(|card| {
-                    card.id
-                        .parse::<opponents::CardId>()
-                        .map_err(anyhow::Error::msg)
-                        .with_context(|| {
-                            format!("parse card identity {} for opponents validation", card.id)
-                        })
-                })
-                .collect::<Result<_>>()?;
-            opponents::validate_card_references(&catalog, &known_card_ids)?;
-            opponents::lower(catalog)
+            let battle_dataset = manifest.dataset("battle")?;
+            let battle_source = fs::read_to_string(root.join(&battle_dataset.source))
+                .with_context(|| format!("read battle source {}", battle_dataset.source))?;
+            let battle = parse_ron(&battle_source, battle_dataset)?;
+            let ai_dataset = manifest.dataset("internal-ai")?;
+            let ai_source = fs::read_to_string(root.join(&ai_dataset.source))
+                .with_context(|| format!("read internal AI source {}", ai_dataset.source))?;
+            let internal_ai = parse_ron(&ai_source, ai_dataset)?;
+            let known_card_ids = known_opponent_card_ids(root, manifest)?;
+            opponents::validate_card_references(&internal_ai, &known_card_ids)?;
+            opponents::lower(catalog, battle, internal_ai)
         }
         "figments_v1" => figments::lower(parse_ron(source, dataset)?),
         "compat_v1" => {
@@ -238,6 +239,27 @@ fn adapt(
         }
         adapter => bail!("dataset {} has unsupported adapter {adapter}", dataset.id),
     }
+}
+
+fn known_opponent_card_ids(
+    root: &Path,
+    manifest: &Manifest,
+) -> Result<std::collections::BTreeSet<opponents::CardId>> {
+    let cards_dataset = manifest.dataset("cards")?;
+    let card_source = fs::read_to_string(root.join(&cards_dataset.source))
+        .with_context(|| format!("read cards source {}", cards_dataset.source))?;
+    let cards: Vec<cards::CardDefinition> = parse_ron(&card_source, cards_dataset)?;
+    cards
+        .into_iter()
+        .map(|card| {
+            card.id
+                .parse::<opponents::CardId>()
+                .map_err(anyhow::Error::msg)
+                .with_context(|| {
+                    format!("parse card identity {} for opponents validation", card.id)
+                })
+        })
+        .collect()
 }
 
 fn dataset_source_hash(
@@ -478,6 +500,9 @@ mod tests {
                 "augury_v1" => {
                     canonical::<augury::AuguryCatalog>(&source, true);
                 }
+                "battle_v1" => {
+                    canonical::<opponents::BattleRules>(&source, true);
+                }
                 "cards_v2" => {
                     canonical::<Vec<CardDefinition>>(&source, true);
                 }
@@ -516,6 +541,9 @@ mod tests {
                 }
                 "exploration_v1" => {
                     canonical::<ExplorationCatalog>(&source, true);
+                }
+                "internal_ai_v1" => {
+                    canonical::<opponents::InternalAiCatalog>(&source, true);
                 }
                 "opponents_v1" => {
                     canonical::<opponents::OpponentsCatalog>(&source, true);

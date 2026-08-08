@@ -1,10 +1,17 @@
-# Opponent Data
+# Battle, Opponent, and Internal AI Data
 
-`data/opponents.ron` is the authoritative source for battle setup,
-Dreamwell construction, opponent progression and deck generation, the journey
-AI deck, and AI tuning. Asset setup strictly validates and normalizes the file
-into gitignored `public/opponents-data.json`. The browser loads that artifact as
-required `JourneyContent.opponentsData` before room gameplay mounts.
+Three typed RON catalogs own the battle configuration boundary:
+
+- `data/battle.ron` defines core battle setup shared by player and opponent
+  controllers.
+- `data/opponents.ron` defines Dreamwell construction, opponent progression,
+  and opponent deck generation.
+- `data/internal/internal_ai.ron` defines the journey AI deck and automated
+  opponent tuning.
+
+Asset setup strictly validates all three sources and composes them into the
+gitignored `public/opponents-data.json` runtime artifact. The browser loads that
+artifact as required `JourneyContent.opponentsData` before room gameplay mounts.
 
 TypeScript owns mechanics such as interpolation, seeded selection, pruning,
 rank geometry, fatigue, and card-effect automation. RON owns the schedules,
@@ -14,22 +21,24 @@ tutorial-specific sequencing remain in `tutorial.ron`.
 
 ## Schema
 
-The typed `OpponentsCatalog` root and its nested record and enum types define
-the authored contract. Every field is required and unknown fields fail
-compilation. The game-data compiler lowers this source to the established
-`data/opponents.toml` compatibility shape consumed by asset generation.
+The typed `BattleRules`, `OpponentsCatalog`, and `InternalAiCatalog` roots and
+their nested record and enum types define the authored contract. Every field is
+required and unknown fields fail compilation. The game-data compiler generates
+`data/battle.toml`, `data/opponents.toml`, and
+`data/internal/internal_ai.toml`; the composed `data/opponents.toml`
+compatibility shape is consumed by asset generation.
 
-| Section             | Authored contract                                                                                                                                   |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `battle`            | Minimum deck size, both opening-hand sizes, score targets, turn/energy/hand limits, starting side, opening-draw behavior, and signature-card count. |
-| `dreamwell`         | One-time opening orders, recurring orders, cards drawn per recurring order, and minimum constructed deck length.                                    |
-| `progression`       | Ability, Dreamsign, and Legendary unlock layers plus the starter-dilution schedule.                                                                 |
-| `coherent_draft`    | Distinct-card, removal, and temperature curves; best-of count; affiliation objective; record source count; and coherence scoring coefficients.      |
-| `corpus_selection`  | Affiliation weight and the top-ranked seeded sampling window.                                                                                       |
-| `journey_ai_deck`   | Card UUID and positive copy count for each journey AI deck entry.                                                                                   |
-| `ai.evaluation`     | Static board-evaluation weights.                                                                                                                    |
-| `ai.opponent-model` | Removal prior, response-archetype priors, and the global sampling safety cap.                                                                       |
-| `ai.presets`        | Named search breadth, response mode, sample count, search depth, journey time budget, and deterministic tutorial expansion budget.                  |
+| Source | Section | Authored contract |
+| --- | --- | --- |
+| `battle.ron` | root | Minimum deck size, both opening-hand sizes, score targets, turn/energy/hand limits, starting side, opening-draw behavior, and signature-card count. |
+| `opponents.ron` | `dreamwell` | One-time opening orders, recurring orders, cards drawn per recurring order, and minimum constructed deck length. |
+| `opponents.ron` | `progression` | Ability, Dreamsign, and Legendary unlock layers plus the starter-dilution schedule. |
+| `opponents.ron` | `coherent_draft` | Distinct-card, removal, and temperature curves; best-of count; affiliation objective; record source count; and coherence scoring coefficients. |
+| `opponents.ron` | `corpus_selection` | Affiliation weight and the top-ranked seeded sampling window. |
+| `internal_ai.ron` | `journey_ai_deck` | Card UUID and positive copy count for each journey AI deck entry. |
+| `internal_ai.ron` | `ai.evaluation` | Static board-evaluation weights. |
+| `internal_ai.ron` | `ai.opponent-model` | Removal prior, response-archetype priors, and the global sampling safety cap. |
+| `internal_ai.ron` | `ai.presets` | Named search breadth, response mode, sample count, search depth, journey time budget, and deterministic tutorial expansion budget. |
 
 Layer numbers are zero-indexed completion levels. Curve endpoints map to the
 first and last Atlas layers and code linearly interpolates intermediate layers.
@@ -45,10 +54,11 @@ absent from `cards.ron`. Failures identify the RON path that needs correction.
 
 ## Generated artifact and hashes
 
-Run `scripts/regenerate-assets.sh` after editing the catalog. The game-data
-compiler generates `data/opponents.toml`, then `scripts/opponents-data.mjs`
-validates that compatibility document and generates the runtime JSON. Generated
-TOML and JSON are reproducible from RON and are not committed.
+Run `scripts/regenerate-assets.sh` after editing any of the three catalogs. The
+game-data compiler generates their compatibility TOML and composes
+`data/opponents.toml`; `scripts/opponents-data.mjs` validates that document and
+generates the runtime JSON. Generated TOML and runtime JSON are reproducible and
+gitignored.
 
 The normalized document contains SHA-256 `contentHash` and `foldHash` fields.
 Both cover the complete v1 normalized document and therefore have the same

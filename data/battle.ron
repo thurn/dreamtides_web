@@ -1,0 +1,24 @@
+// Core battle setup rules shared by player and opponent controllers.
+
+#![enable(implicit_some)]
+BattleRules(
+  minimum_deck_size: 25,
+
+  player_opening_hand_size: 5,
+
+  enemy_opening_hand_size: 5,
+
+  score_targets: [10, 25],
+
+  turn_limit: 50,
+
+  energy_cap: 10,
+
+  hand_limit: 10,
+
+  starting_side: Player,
+
+  skip_player_opening_draw: true,
+
+  opponent_signature_card_count: 3,
+)
