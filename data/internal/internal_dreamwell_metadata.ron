@@ -1,0 +1,74 @@
+// Compatibility-only numbering for generated Dreamwell records.
+
+#![enable(implicit_some)]
+[
+  DreamwellCardMetadata(id: "32d64cb6-9856-43a2-9451-fcb14007a9a6", number: 1),
+
+  DreamwellCardMetadata(id: "5e17dc4b-b654-4962-ba5a-7b042852a980", number: 2),
+
+  DreamwellCardMetadata(id: "5ec17498-9028-4a01-80a0-67c91b03d505", number: 3),
+
+  DreamwellCardMetadata(id: "f9b479cf-02cb-40e1-bb64-70b29977bf15", number: 4),
+
+  DreamwellCardMetadata(id: "02e8ea92-1218-413c-9f0b-4c865a3921d3", number: 5),
+
+  DreamwellCardMetadata(id: "de98477c-e216-4618-bff1-0e24bd982fdb", number: 6),
+
+  DreamwellCardMetadata(id: "ee1ef770-29ea-4a63-a1f9-7e97b5b8870d", number: 7),
+
+  DreamwellCardMetadata(id: "cf0f0a05-2a94-407c-8c22-e41b925f9c03", number: 8),
+
+  DreamwellCardMetadata(id: "fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5", number: 9),
+
+  DreamwellCardMetadata(id: "558a1f1b-7dc1-4d83-9f00-c6af2187a954", number: 10),
+
+  DreamwellCardMetadata(id: "14dec460-3ec6-40c1-978f-67e70cb0b227", number: 11),
+
+  DreamwellCardMetadata(id: "03e4e701-4720-4278-8198-9b7e0514d4cf", number: 12),
+
+  DreamwellCardMetadata(id: "662b7393-751c-4aa9-8150-5f20b4d176a4", number: 13),
+
+  DreamwellCardMetadata(id: "7171ff89-ebe4-42d0-8863-9b4b0531cad2", number: 14),
+
+  DreamwellCardMetadata(id: "fa8704fe-759f-408d-992d-d8f9d5ffd760", number: 15),
+
+  DreamwellCardMetadata(id: "2b23a60c-209c-4c75-b63c-b7f73b2e1a56", number: 16),
+
+  DreamwellCardMetadata(id: "9954cede-8a16-4053-b6e9-da745f4540f5", number: 17),
+
+  DreamwellCardMetadata(id: "3a4293da-55a1-4094-898a-df402ffa1c92", number: 18),
+
+  DreamwellCardMetadata(id: "d585b78a-dfe3-4e12-95ac-432c3c880540", number: 19),
+
+  DreamwellCardMetadata(id: "a3033051-8eb7-4fbf-93d6-f947ed68974d", number: 20),
+
+  DreamwellCardMetadata(id: "556057bb-b134-497e-86c2-c6f30049e9e3", number: 21),
+
+  DreamwellCardMetadata(id: "20be0fdd-d691-40a9-b4f8-15689ea7ebaa", number: 22),
+
+  DreamwellCardMetadata(id: "a57f1276-3fb6-4527-b538-953fbace35cf", number: 23),
+
+  DreamwellCardMetadata(id: "f61431f3-33bd-42ff-a229-b4013582e86e", number: 24),
+
+  DreamwellCardMetadata(id: "51caf26d-83bf-45a9-bc80-010d353277db", number: 25),
+
+  DreamwellCardMetadata(id: "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a", number: 26),
+
+  DreamwellCardMetadata(id: "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf", number: 31),
+
+  DreamwellCardMetadata(id: "2ad68489-044a-40d1-9be6-e62497a4e1fd", number: 32),
+
+  DreamwellCardMetadata(id: "af2ef62f-d31b-4544-a2b0-f5aab03c2d7c", number: 33),
+
+  DreamwellCardMetadata(id: "91deefd2-0400-4c78-ab9f-f6db864ff7e2", number: 37),
+
+  DreamwellCardMetadata(id: "8f5f2e26-44b5-447b-90d0-eaf22ab29fed", number: 39),
+
+  DreamwellCardMetadata(id: "a0fbcbd9-96ee-4392-add7-e1d436f99553", number: 41),
+
+  DreamwellCardMetadata(id: "06e62e45-53f9-4264-9aa6-2575b445332a", number: 43),
+
+  DreamwellCardMetadata(id: "120ec4c2-aa7b-48f4-be9f-f39820e565ca", number: 44),
+
+  DreamwellCardMetadata(id: "446095b1-ec4d-40d7-8eed-a8221d339ea2", number: 46),
+]

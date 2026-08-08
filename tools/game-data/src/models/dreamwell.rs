@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 
 use anyhow::{Result, bail, ensure};
@@ -9,13 +9,19 @@ use uuid::{Uuid, Variant, Version};
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct DreamwellCardDefinition {
-    pub id: DreamwellCardId,
-    pub catalog_number: u32,
     pub name: String,
-    pub rules_text: String,
-    pub deck_tier: DeckTier,
+    pub id: DreamwellCardId,
+    pub ability_text: Vec<String>,
     pub energy_added: u32,
-    pub artwork: Artwork,
+    pub deck_tier: DeckTier,
+    pub art: Art,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct DreamwellCardMetadata {
+    pub id: DreamwellCardId,
+    pub number: u32,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
@@ -41,10 +47,10 @@ impl DeckTier {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct Artwork {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub image: Option<u32>,
-    pub is_owned: bool,
+pub struct Art {
+    pub image: u32,
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub owned: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub crop: Option<ArtCrop>,
 }
@@ -133,31 +139,60 @@ struct CompatibilityArtCrop {
     scale: toml::Value,
 }
 
-pub fn lower(source: Vec<DreamwellCardDefinition>) -> Result<toml::Value> {
+pub fn lower(
+    source: Vec<DreamwellCardDefinition>,
+    metadata: Vec<DreamwellCardMetadata>,
+) -> Result<toml::Value> {
     validate(&source)?;
+    let mut metadata_by_id = BTreeMap::new();
+    let mut numbers = BTreeSet::new();
+    for record in metadata {
+        ensure!(
+            record.number > 0,
+            "Dreamwell card {} compatibility number must be greater than zero",
+            record.id
+        );
+        ensure!(
+            numbers.insert(record.number),
+            "duplicate Dreamwell compatibility number: {}",
+            record.number
+        );
+        ensure!(
+            metadata_by_id.insert(record.id, record).is_none(),
+            "duplicate Dreamwell metadata id"
+        );
+    }
     let dreamwell = source
         .into_iter()
-        .map(|card| CompatibilityCard {
-            name: card.name,
-            id: card.id.to_string(),
-            rendered_text: card.rules_text,
-            order: card.deck_tier.compatibility_order(),
-            energy_added: card.energy_added,
-            card_type: "Dreamwell",
-            image_number: card.artwork.image,
-            art_owned: card.artwork.is_owned,
-            card_number: card.catalog_number,
-            art: card.artwork.crop.map(|crop| CompatibilityArtCrop {
-                x: compatibility_number(crop.x),
-                y: compatibility_number(crop.y),
-                scale: compatibility_number(crop.scale),
-            }),
+        .map(|card| {
+            let metadata = metadata_by_id.remove(&card.id).ok_or_else(|| {
+                anyhow::anyhow!("missing metadata for Dreamwell card {}", card.id)
+            })?;
+            Ok(CompatibilityCard {
+                name: card.name,
+                id: card.id.to_string(),
+                rendered_text: card.ability_text.join("\n\n"),
+                order: card.deck_tier.compatibility_order(),
+                energy_added: card.energy_added,
+                card_type: "Dreamwell",
+                image_number: Some(card.art.image),
+                art_owned: card.art.owned,
+                card_number: metadata.number,
+                art: card.art.crop.map(|crop| CompatibilityArtCrop {
+                    x: number(crop.x),
+                    y: number(crop.y),
+                    scale: number(crop.scale),
+                }),
+            })
         })
-        .collect();
+        .collect::<Result<Vec<_>>>()?;
+    if let Some(id) = metadata_by_id.keys().next() {
+        bail!("metadata references unknown Dreamwell card {id}");
+    }
     Ok(toml::Value::try_from(CompatibilityCatalog { dreamwell })?)
 }
 
-fn compatibility_number(value: f64) -> toml::Value {
+fn number(value: f64) -> toml::Value {
     if value.fract() == 0.0 && value >= i64::MIN as f64 && value <= i64::MAX as f64 {
         toml::Value::Integer(value as i64)
     } else {
@@ -168,7 +203,6 @@ fn compatibility_number(value: f64) -> toml::Value {
 fn validate(source: &[DreamwellCardDefinition]) -> Result<()> {
     ensure!(!source.is_empty(), "Dreamwell catalog must not be empty");
     let mut ids = BTreeSet::new();
-    let mut catalog_numbers = BTreeSet::new();
 
     for card in source {
         ensure!(
@@ -177,27 +211,11 @@ fn validate(source: &[DreamwellCardDefinition]) -> Result<()> {
             card.id
         );
         ensure!(
-            card.catalog_number > 0,
-            "Dreamwell card {} catalog number must be greater than zero",
-            card.id
-        );
-        ensure!(
-            catalog_numbers.insert(card.catalog_number),
-            "duplicate Dreamwell catalog number: {}",
-            card.catalog_number
-        );
-        ensure!(
             !card.name.trim().is_empty(),
             "Dreamwell card {} has an empty name",
             card.id
         );
-        if let Some(crop) = &card.artwork.crop {
-            if card.artwork.image.is_none() {
-                bail!(
-                    "Dreamwell card {} has an art crop without an image",
-                    card.id
-                );
-            }
+        if let Some(crop) = &card.art.crop {
             ensure!(
                 crop.x.is_finite() && crop.y.is_finite(),
                 "Dreamwell card {} art crop offsets must be finite",
@@ -230,36 +248,59 @@ mod tests {
         r##"#![enable(implicit_some)]
 [
   DreamwellCardDefinition(
-    id: "00000000-0000-4000-8000-000000000001",
-    catalog_number: 7,
     name: "Première lumière",
-    rules_text: "Draw a card.\nThen gain 1●.",
-    deck_tier: Starting,
+    id: "00000000-0000-4000-8000-000000000001",
+    ability_text: ["Draw a card.", "Then gain 1●."],
     energy_added: 2,
-    artwork: (
+    deck_tier: Starting,
+    art: (
       image: 42,
-      is_owned: true,
+      owned: true,
       crop: (x: -0.25, y: 0.5, scale: 1.2),
     ),
   ),
 
   DreamwellCardDefinition(
-    id: "00000000-0000-4000-8000-000000000002",
-    catalog_number: 11,
     name: "Second",
-    rules_text: "",
-    deck_tier: Four,
+    id: "00000000-0000-4000-8000-000000000002",
+    ability_text: [],
     energy_added: 0,
-    artwork: (is_owned: false),
+    deck_tier: Four,
+    art: (image: 43),
   ),
 ]
 "##
     }
 
+    fn synthetic_metadata() -> &'static str {
+        r##"[
+  DreamwellCardMetadata(
+    id: "00000000-0000-4000-8000-000000000001",
+    number: 7,
+  ),
+  DreamwellCardMetadata(
+    id: "00000000-0000-4000-8000-000000000002",
+    number: 11,
+  ),
+]
+"##
+    }
+
+    fn parse_source(source: &str) -> Vec<DreamwellCardDefinition> {
+        ron::from_str(source).unwrap()
+    }
+
+    fn parse_metadata(source: &str) -> Vec<DreamwellCardMetadata> {
+        ron::from_str(source).unwrap()
+    }
+
     #[test]
     fn lowers_ordered_cards_and_compatibility_fields() {
-        let source: Vec<DreamwellCardDefinition> = ron::from_str(synthetic_source()).unwrap();
-        let lowered = lower(source).unwrap();
+        let lowered = lower(
+            parse_source(synthetic_source()),
+            parse_metadata(synthetic_metadata()),
+        )
+        .unwrap();
         let cards = lowered["dreamwell"].as_array().unwrap();
 
         assert_eq!(cards.len(), 2);
@@ -268,7 +309,7 @@ mod tests {
         assert_eq!(cards[0]["name"].as_str(), Some("Première lumière"));
         assert_eq!(
             cards[0]["rendered-text"].as_str(),
-            Some("Draw a card.\nThen gain 1●.")
+            Some("Draw a card.\n\nThen gain 1●.")
         );
         assert_eq!(cards[0]["order"].as_integer(), Some(0));
         assert_eq!(cards[1]["order"].as_integer(), Some(4));
@@ -280,11 +321,15 @@ mod tests {
         assert_eq!(cards[0]["art"]["x"].as_float(), Some(-0.25));
         assert_eq!(cards[0]["art"]["y"].as_float(), Some(0.5));
         assert_eq!(cards[0]["art"]["scale"].as_float(), Some(1.2));
-        assert!(cards[1].get("image-number").is_none());
+        assert_eq!(cards[1]["image-number"].as_integer(), Some(43));
+        assert_eq!(cards[1]["art-owned"].as_bool(), Some(false));
+        assert_eq!(cards[1]["rendered-text"].as_str(), Some(""));
         assert!(cards[1].get("art").is_none());
         assert!(cards[0].get("catalog_number").is_none());
+        assert!(cards[0].get("number").is_none());
+        assert!(cards[0].get("ability_text").is_none());
         assert!(cards[0].get("deck_tier").is_none());
-        assert!(cards[0].get("artwork").is_none());
+        assert!(cards[0].get("owned").is_none());
     }
 
     #[test]
@@ -303,9 +348,14 @@ mod tests {
 
     #[test]
     fn rejects_unknown_fields_and_noncanonical_identifiers() {
-        let unknown =
-            synthetic_source().replace("catalog_number: 7,", "catalog_number: 7, surprise: true,");
+        let unknown = synthetic_source().replace(
+            "ability_text: [\"Draw a card.\", \"Then gain 1●.\"],",
+            "ability_text: [\"Draw a card.\", \"Then gain 1●.\"], surprise: true,",
+        );
         assert!(ron::from_str::<Vec<DreamwellCardDefinition>>(&unknown).is_err());
+        let unknown_metadata =
+            synthetic_metadata().replace("number: 7,", "number: 7, surprise: true,");
+        assert!(ron::from_str::<Vec<DreamwellCardMetadata>>(&unknown_metadata).is_err());
 
         for invalid in [
             "legacy_slug",
@@ -326,34 +376,64 @@ mod tests {
     fn rejects_duplicate_and_invalid_catalog_values() {
         assert_lower_error(
             &synthetic_source().replace(SECOND_ID, FIRST_ID),
+            synthetic_metadata(),
             "duplicate Dreamwell card id",
         );
         assert_lower_error(
-            &synthetic_source().replace("catalog_number: 11", "catalog_number: 7"),
-            "duplicate Dreamwell catalog number",
+            synthetic_source(),
+            &synthetic_metadata().replace("number: 11", "number: 7"),
+            "duplicate Dreamwell compatibility number",
         );
         assert_lower_error(
-            &synthetic_source().replace("catalog_number: 7", "catalog_number: 0"),
-            "catalog number must be greater than zero",
+            synthetic_source(),
+            &synthetic_metadata().replace("number: 7", "number: 0"),
+            "compatibility number must be greater than zero",
         );
         assert_lower_error(
             &synthetic_source().replace("name: \"Première lumière\"", "name: \"   \""),
+            synthetic_metadata(),
             "empty name",
         );
         assert_lower_error(
-            &synthetic_source().replace("image: 42,", "image: None,"),
-            "art crop without an image",
-        );
-        assert_lower_error(
             &synthetic_source().replace("scale: 1.2", "scale: 0.0"),
+            synthetic_metadata(),
             "scale must be finite and positive",
+        );
+
+        let mut missing_metadata = parse_metadata(synthetic_metadata());
+        missing_metadata.pop();
+        assert!(
+            lower(parse_source(synthetic_source()), missing_metadata)
+                .unwrap_err()
+                .to_string()
+                .contains("missing metadata")
+        );
+
+        let mut extra_metadata = parse_metadata(synthetic_metadata());
+        extra_metadata.push(
+            parse_metadata(
+                r#"[DreamwellCardMetadata(
+                  id: "00000000-0000-4000-8000-000000000003",
+                  number: 12,
+                )]"#,
+            )
+            .pop()
+            .unwrap(),
+        );
+        assert!(
+            lower(parse_source(synthetic_source()), extra_metadata)
+                .unwrap_err()
+                .to_string()
+                .contains("metadata references unknown Dreamwell card")
         );
     }
 
-    fn assert_lower_error(source: &str, expected: &str) {
-        let parsed: Vec<DreamwellCardDefinition> = ron::from_str(source).unwrap();
+    fn assert_lower_error(source: &str, metadata: &str, expected: &str) {
         assert!(
-            lower(parsed).unwrap_err().to_string().contains(expected),
+            lower(parse_source(source), parse_metadata(metadata))
+                .unwrap_err()
+                .to_string()
+                .contains(expected),
             "error did not contain {expected}"
         );
     }
@@ -371,7 +451,12 @@ mod tests {
         let canonical: Vec<DreamwellCardDefinition> =
             ron::from_str(&fs::read_to_string(root.join("data/dreamwell_canonical.ron")).unwrap())
                 .unwrap();
-        let lowered = lower(canonical.clone()).unwrap();
+        let metadata: Vec<DreamwellCardMetadata> = ron::from_str(
+            &fs::read_to_string(root.join("data/internal/internal_dreamwell_metadata.ron"))
+                .unwrap(),
+        )
+        .unwrap();
+        let lowered = lower(canonical.clone(), metadata.clone()).unwrap();
         assert_eq!(
             normalize_table_order(lowered),
             normalize_table_order(current_ron.data.clone())
@@ -386,15 +471,15 @@ mod tests {
         let canonical_ids: BTreeSet<_> = canonical.iter().map(|card| card.id.to_string()).collect();
         assert_eq!(canonical_ids, compatibility_ids);
 
-        let compatibility_numbers: BTreeSet<_> = compatibility_cards
+        let numbers: BTreeSet<_> = compatibility_cards
             .iter()
             .map(|card| card["card-number"].as_integer().unwrap())
             .collect();
-        let canonical_numbers: BTreeSet<_> = canonical
+        let metadata_numbers: BTreeSet<_> = metadata
             .iter()
-            .map(|card| i64::from(card.catalog_number))
+            .map(|record| i64::from(record.number))
             .collect();
-        assert_eq!(canonical_numbers, compatibility_numbers);
+        assert_eq!(metadata_numbers, numbers);
 
         let compatibility_images: BTreeSet<_> = compatibility_cards
             .iter()
@@ -404,7 +489,7 @@ mod tests {
         assert_eq!(
             canonical
                 .iter()
-                .filter(|card| card.artwork.crop.is_some())
+                .filter(|card| card.art.crop.is_some())
                 .count(),
             compatibility_cards
                 .iter()
