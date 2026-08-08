@@ -1,0 +1,128 @@
+// Dream guides, their home Dreamscapes, specialties, and site dialogue.
+
+#![enable(implicit_some)]
+[
+  GuideDefinition(
+    id: "4e5067ec-265d-4dba-8fa8-2afbd4fde9ab",
+    name: "Tobias Tanglefur",
+    home_dreamscape_id: "48ffbb3a-b9a4-4693-a24a-f6e7e516a408",
+    portrait_source: "tobias.png",
+    site_dialogue: ["Welcome, friend! Browse a while.", "I've set aside something just for you."],
+    specialty: Shop(description: "Tobias offers strong cards at a steep discount."),
+  ),
+
+  GuideDefinition(
+    id: "113cb023-12df-4b9c-982c-f0c8bba30377",
+    name: "Amunet, the Tomb-Keeper",
+    home_dreamscape_id: "bb80eae2-df13-42ee-b58a-b21022a7e193",
+    portrait_source: "amunet.png",
+    site_dialogue: ["The sands remember all dreams.", "Choose, and I shall show you another."],
+    specialty: DreamsignMarket(
+      description: "Amunet will restock the dreamsign choices once at no cost.",
+    ),
+  ),
+
+  GuideDefinition(
+    id: "706a4443-2826-4459-8127-040632cb93fd",
+    name: "Sigrún",
+    home_dreamscape_id: "11c5cadb-123c-4fcf-8871-28fc69ab39e0",
+    portrait_source: "sigrun.png",
+    site_dialogue: [
+      "The frost reveals what is hidden. Pick one sign to claim.",
+      "Your path is clearer than most. Pick one sign to claim.",
+    ],
+    specialty: DreamsignRevelation(
+      description: "Sigrún offers several dreamsign choices, tailored to your deck.",
+    ),
+  ),
+
+  GuideDefinition(
+    id: "9890b3c2-74f7-4b4a-bb39-61c2c6d53cbb",
+    name: "Durgan Forgehammer",
+    home_dreamscape_id: "4be83951-e0f3-46ec-8a28-6e57299125be",
+    portrait_source: "durgan.png",
+    site_dialogue: ["Stoke the forge — let's reshape it.", "Any card, any temper you like."],
+    specialty: Transfiguration(description: "Durgan can transfigure any card in your deck."),
+  ),
+
+  GuideDefinition(
+    id: "e0aaa9a6-9038-48b9-8847-63681426190e",
+    name: "Deacon Holt",
+    home_dreamscape_id: "19d9a162-4c77-426e-88f0-2b06b5bf0b52",
+    portrait_source: "holt.png",
+    site_dialogue: ["We endure together, don't we?", "Pick one, and I'll make another."],
+    specialty: Duplication(description: "Deacon Holt can pick any card to duplicate."),
+  ),
+
+  GuideDefinition(
+    id: "87e9ae46-57c6-407a-af96-bd5f5323dabc",
+    name: "Master Takeshi",
+    home_dreamscape_id: "b6468878-b519-43e6-8b23-c2947ca61c64",
+    portrait_source: "takeshi.png",
+    site_dialogue: ["Let go of what weighs you down.", "A cleaner blade cuts truer."],
+    specialty: Purge(description: "Master Takeshi will purge cards from your deck at no cost."),
+  ),
+
+  GuideDefinition(
+    id: "232e7de1-b7b9-4631-b6a3-1ab178c7ff9a",
+    name: "Aldric, the Seer",
+    home_dreamscape_id: "887c5f2a-5994-4311-9704-ee4d7246c924",
+    portrait_source: "aldric.png",
+    site_dialogue: [
+      "Two paths unfold before you. Choose one to shape your dream.",
+      "Weigh both visions, then pick one path for your dream.",
+      "The dream divides here. Choose one vision and make it yours.",
+      "Two futures call to you. You may follow only one.",
+      "Look closely at each path, then choose the one your dream will take.",
+    ],
+    specialty: Augury(description: "Aldric offers curated visions of the future."),
+  ),
+
+  GuideDefinition(
+    id: "869a07ae-5532-4a65-abfa-26a89713a82b",
+    name: "Maddox",
+    home_dreamscape_id: "316a3d41-47c3-4850-8c13-d8d2c9de4a0b",
+    portrait_source: "maddox.png",
+    site_dialogue: ["Let’s see where this road takes us."],
+    specialty: RandomSite(
+      description: "Maddox presents three random enhanced sites and lets you choose one.",
+      dialogue: ["Three roads. Pick your poison."],
+    ),
+  ),
+
+  GuideDefinition(
+    id: "579eaf53-0643-4cba-9c0c-da04b9c52822",
+    name: "Gravok",
+    home_dreamscape_id: "535cb467-c35a-4663-8d17-36530673d75b",
+    portrait_source: "gravok.png",
+    site_dialogue: ["Fortune favors the bold, traveler.", "No fee tonight. Big stakes, though."],
+    specialty: Gamble(
+      description: "Gravok offers you his highest rewards and best odds.",
+      dialogue: GambleDialogue(
+        three_gate: ["The game's called Three Gates. Place your bet on the next card drawn!"],
+        ladder_climb: [
+          "The game's Ladder Climb. Match or beat the target to win {win-essence} Essence and a Dreamsign. Try again with better odds if you miss!",
+        ],
+        starway_stairs: ["Starway Stairs is the game. Keep betting to see how high you can go!"],
+        four_suit_reprise: [
+          "Four-Suit Reprise is the game. Choose one card; the suit decides what becomes of it.",
+        ],
+        blackjack: ["Blackjack is the game. Beat my hand without going over 21!"],
+      ),
+    ),
+  ),
+
+  GuideDefinition(
+    id: "078e102a-f235-4794-9bb5-a5c42262782a",
+    name: "\"Layaway\"",
+    home_dreamscape_id: "d609c490-5a05-4c48-8c28-6f46590eb21a",
+    portrait_source: "layaway.png",
+    site_dialogue: [
+      "Every card dreams, friend. Draw one, and we'll step inside.",
+      "Pick a direction. The dream will make the path.",
+    ],
+    specialty: Exploration(
+      description: "Layaway guides you deeper into the dream within the drawn card.",
+    ),
+  ),
+]

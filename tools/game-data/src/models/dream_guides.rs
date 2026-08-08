@@ -1,0 +1,731 @@
+use std::collections::BTreeSet;
+use std::fmt;
+
+use anyhow::{Result, bail};
+use serde::de::Error as _;
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use uuid::{Uuid, Variant, Version};
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct GuideDefinition {
+    pub id: GuideId,
+    pub name: String,
+    pub home_dreamscape_id: DreamscapeId,
+    pub portrait_source: String,
+    pub site_dialogue: Vec<String>,
+    pub specialty: GuideSpecialty,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub enum GuideSpecialty {
+    Shop {
+        description: String,
+    },
+    DreamsignMarket {
+        description: String,
+    },
+    DreamsignRevelation {
+        description: String,
+    },
+    Transfiguration {
+        description: String,
+    },
+    Duplication {
+        description: String,
+    },
+    Purge {
+        description: String,
+    },
+    Augury {
+        description: String,
+    },
+    RandomSite {
+        description: String,
+        dialogue: Vec<String>,
+    },
+    Gamble {
+        description: String,
+        dialogue: GambleDialogue,
+    },
+    Exploration {
+        description: String,
+    },
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct GambleDialogue {
+    pub three_gate: Vec<String>,
+    pub ladder_climb: Vec<String>,
+    pub starway_stairs: Vec<String>,
+    pub four_suit_reprise: Vec<String>,
+    pub blackjack: Vec<String>,
+}
+
+macro_rules! canonical_uuid {
+    ($name:ident, $label:literal) => {
+        #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+        pub struct $name(Uuid);
+
+        impl $name {
+            fn parse(value: &str) -> std::result::Result<Self, String> {
+                let uuid = Uuid::parse_str(value).map_err(|error| error.to_string())?;
+                if uuid.get_version() != Some(Version::Random)
+                    || uuid.get_variant() != Variant::RFC4122
+                {
+                    return Err(concat!($label, " must be an RFC 4122 UUIDv4").into());
+                }
+                if uuid.hyphenated().to_string() != value {
+                    return Err(
+                        concat!($label, " must use lowercase hyphenated UUID formatting").into(),
+                    );
+                }
+                Ok(Self(uuid))
+            }
+        }
+
+        impl fmt::Display for $name {
+            fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+                self.0.hyphenated().fmt(formatter)
+            }
+        }
+
+        impl Serialize for $name {
+            fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                serializer.serialize_str(&self.to_string())
+            }
+        }
+
+        impl<'de> Deserialize<'de> for $name {
+            fn deserialize<D>(deserializer: D) -> std::result::Result<Self, D::Error>
+            where
+                D: Deserializer<'de>,
+            {
+                let value = String::deserialize(deserializer)?;
+                Self::parse(&value).map_err(D::Error::custom)
+            }
+        }
+    };
+}
+
+canonical_uuid!(GuideId, "Dream guide identifier");
+canonical_uuid!(DreamscapeId, "home Dreamscape identifier");
+
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+enum SpecialtyKind {
+    Shop,
+    DreamsignMarket,
+    DreamsignRevelation,
+    Transfiguration,
+    Duplication,
+    Purge,
+    Augury,
+    RandomSite,
+    Gamble,
+    Exploration,
+}
+
+impl SpecialtyKind {
+    const ALL: [Self; 10] = [
+        Self::Shop,
+        Self::DreamsignMarket,
+        Self::DreamsignRevelation,
+        Self::Transfiguration,
+        Self::Duplication,
+        Self::Purge,
+        Self::Augury,
+        Self::RandomSite,
+        Self::Gamble,
+        Self::Exploration,
+    ];
+
+    fn compatibility_name(self) -> &'static str {
+        match self {
+            Self::Shop => "Shop",
+            Self::DreamsignMarket => "DreamsignMarket",
+            Self::DreamsignRevelation => "DreamsignRevelation",
+            Self::Transfiguration => "Transfiguration",
+            Self::Duplication => "Duplication",
+            Self::Purge => "Purge",
+            Self::Augury => "Augury",
+            Self::RandomSite => "RandomSite",
+            Self::Gamble => "Gamble",
+            Self::Exploration => "Exploration",
+        }
+    }
+}
+
+impl GuideSpecialty {
+    fn kind(&self) -> SpecialtyKind {
+        match self {
+            Self::Shop { .. } => SpecialtyKind::Shop,
+            Self::DreamsignMarket { .. } => SpecialtyKind::DreamsignMarket,
+            Self::DreamsignRevelation { .. } => SpecialtyKind::DreamsignRevelation,
+            Self::Transfiguration { .. } => SpecialtyKind::Transfiguration,
+            Self::Duplication { .. } => SpecialtyKind::Duplication,
+            Self::Purge { .. } => SpecialtyKind::Purge,
+            Self::Augury { .. } => SpecialtyKind::Augury,
+            Self::RandomSite { .. } => SpecialtyKind::RandomSite,
+            Self::Gamble { .. } => SpecialtyKind::Gamble,
+            Self::Exploration { .. } => SpecialtyKind::Exploration,
+        }
+    }
+
+    fn description(&self) -> &str {
+        match self {
+            Self::Shop { description }
+            | Self::DreamsignMarket { description }
+            | Self::DreamsignRevelation { description }
+            | Self::Transfiguration { description }
+            | Self::Duplication { description }
+            | Self::Purge { description }
+            | Self::Augury { description }
+            | Self::RandomSite { description, .. }
+            | Self::Gamble { description, .. }
+            | Self::Exploration { description } => description,
+        }
+    }
+}
+
+#[derive(Serialize)]
+struct CompatibilityCatalog {
+    #[serde(rename = "schema-version")]
+    schema_version: u32,
+    guides: Vec<CompatibilityGuide>,
+}
+
+#[derive(Serialize)]
+struct CompatibilityGuide {
+    id: String,
+    name: String,
+    #[serde(rename = "home-dreamscape-id")]
+    home_dreamscape_id: String,
+    #[serde(rename = "site-type")]
+    site_type: &'static str,
+    #[serde(rename = "portrait-source")]
+    portrait_source: String,
+    #[serde(rename = "home-specialty")]
+    home_specialty: String,
+    dialogue: CompatibilityDialogue,
+}
+
+#[derive(Default, Serialize)]
+struct CompatibilityDialogue {
+    site: Vec<String>,
+    #[serde(rename = "random-site", skip_serializing_if = "Option::is_none")]
+    random_site: Option<Vec<String>>,
+    #[serde(rename = "gamble-three-gate", skip_serializing_if = "Option::is_none")]
+    gamble_three_gate: Option<Vec<String>>,
+    #[serde(
+        rename = "gamble-ladder-climb",
+        skip_serializing_if = "Option::is_none"
+    )]
+    gamble_ladder_climb: Option<Vec<String>>,
+    #[serde(
+        rename = "gamble-starway-stairs",
+        skip_serializing_if = "Option::is_none"
+    )]
+    gamble_starway_stairs: Option<Vec<String>>,
+    #[serde(
+        rename = "gamble-four-suit-reprise",
+        skip_serializing_if = "Option::is_none"
+    )]
+    gamble_four_suit_reprise: Option<Vec<String>>,
+    #[serde(rename = "gamble-blackjack", skip_serializing_if = "Option::is_none")]
+    gamble_blackjack: Option<Vec<String>>,
+}
+
+pub fn lower(source: Vec<GuideDefinition>) -> Result<toml::Value> {
+    validate(&source)?;
+    let guides = source.into_iter().map(lower_guide).collect();
+    Ok(toml::Value::try_from(CompatibilityCatalog {
+        schema_version: 1,
+        guides,
+    })?)
+}
+
+fn lower_guide(source: GuideDefinition) -> CompatibilityGuide {
+    let kind = source.specialty.kind();
+    let description = source.specialty.description().to_owned();
+    let mut dialogue = CompatibilityDialogue {
+        site: source.site_dialogue,
+        ..CompatibilityDialogue::default()
+    };
+    match source.specialty {
+        GuideSpecialty::RandomSite {
+            dialogue: random_site,
+            ..
+        } => dialogue.random_site = Some(random_site),
+        GuideSpecialty::Gamble {
+            dialogue: gamble, ..
+        } => {
+            dialogue.gamble_three_gate = Some(gamble.three_gate);
+            dialogue.gamble_ladder_climb = Some(gamble.ladder_climb);
+            dialogue.gamble_starway_stairs = Some(gamble.starway_stairs);
+            dialogue.gamble_four_suit_reprise = Some(gamble.four_suit_reprise);
+            dialogue.gamble_blackjack = Some(gamble.blackjack);
+        }
+        GuideSpecialty::Shop { .. }
+        | GuideSpecialty::DreamsignMarket { .. }
+        | GuideSpecialty::DreamsignRevelation { .. }
+        | GuideSpecialty::Transfiguration { .. }
+        | GuideSpecialty::Duplication { .. }
+        | GuideSpecialty::Purge { .. }
+        | GuideSpecialty::Augury { .. }
+        | GuideSpecialty::Exploration { .. } => {}
+    }
+    CompatibilityGuide {
+        id: source.id.to_string(),
+        name: source.name,
+        home_dreamscape_id: source.home_dreamscape_id.to_string(),
+        site_type: kind.compatibility_name(),
+        portrait_source: source.portrait_source,
+        home_specialty: description,
+        dialogue,
+    }
+}
+
+fn validate(source: &[GuideDefinition]) -> Result<()> {
+    let mut guide_ids = BTreeSet::new();
+    let mut home_ids = BTreeSet::new();
+    let mut specialties = BTreeSet::new();
+    for (index, guide) in source.iter().enumerate() {
+        let path = format!("guides[{index}]");
+        if !guide_ids.insert(guide.id) {
+            bail!("{path}.id duplicates {}", guide.id);
+        }
+        if !home_ids.insert(guide.home_dreamscape_id) {
+            bail!(
+                "{path}.home_dreamscape_id duplicates {}",
+                guide.home_dreamscape_id
+            );
+        }
+        if !specialties.insert(guide.specialty.kind()) {
+            bail!(
+                "{path}.specialty duplicates {}",
+                guide.specialty.kind().compatibility_name()
+            );
+        }
+        validate_text(&format!("{path}.name"), &guide.name)?;
+        validate_text(&format!("{path}.portrait_source"), &guide.portrait_source)?;
+        validate_text(
+            &format!("{path}.specialty.description"),
+            guide.specialty.description(),
+        )?;
+        validate_dialogue(
+            &format!("{path}.site_dialogue"),
+            &guide.site_dialogue,
+            &[],
+            &[],
+        )?;
+        match &guide.specialty {
+            GuideSpecialty::RandomSite { dialogue, .. } => {
+                validate_dialogue(&format!("{path}.specialty.dialogue"), dialogue, &[], &[])?;
+            }
+            GuideSpecialty::Gamble { dialogue, .. } => {
+                validate_dialogue(
+                    &format!("{path}.specialty.dialogue.three_gate"),
+                    &dialogue.three_gate,
+                    &[],
+                    &[],
+                )?;
+                validate_dialogue(
+                    &format!("{path}.specialty.dialogue.ladder_climb"),
+                    &dialogue.ladder_climb,
+                    &["win-essence"],
+                    &["win-essence"],
+                )?;
+                validate_dialogue(
+                    &format!("{path}.specialty.dialogue.starway_stairs"),
+                    &dialogue.starway_stairs,
+                    &[],
+                    &[],
+                )?;
+                validate_dialogue(
+                    &format!("{path}.specialty.dialogue.four_suit_reprise"),
+                    &dialogue.four_suit_reprise,
+                    &[],
+                    &[],
+                )?;
+                validate_dialogue(
+                    &format!("{path}.specialty.dialogue.blackjack"),
+                    &dialogue.blackjack,
+                    &[],
+                    &[],
+                )?;
+            }
+            GuideSpecialty::Shop { .. }
+            | GuideSpecialty::DreamsignMarket { .. }
+            | GuideSpecialty::DreamsignRevelation { .. }
+            | GuideSpecialty::Transfiguration { .. }
+            | GuideSpecialty::Duplication { .. }
+            | GuideSpecialty::Purge { .. }
+            | GuideSpecialty::Augury { .. }
+            | GuideSpecialty::Exploration { .. } => {}
+        }
+    }
+    let expected: BTreeSet<_> = SpecialtyKind::ALL.into_iter().collect();
+    if specialties != expected {
+        let missing = expected
+            .difference(&specialties)
+            .map(|kind| kind.compatibility_name())
+            .collect::<Vec<_>>();
+        bail!(
+            "guides must cover each guide specialty exactly once; missing {}",
+            missing.join(", ")
+        );
+    }
+    Ok(())
+}
+
+fn validate_text(path: &str, value: &str) -> Result<()> {
+    if value.trim().is_empty() {
+        bail!("{path} must be non-empty");
+    }
+    Ok(())
+}
+
+fn validate_dialogue(
+    path: &str,
+    lines: &[String],
+    allowed_placeholders: &[&str],
+    required_placeholders: &[&str],
+) -> Result<()> {
+    if lines.is_empty() {
+        bail!("{path} must not be empty");
+    }
+    let mut found = BTreeSet::new();
+    for (index, line) in lines.iter().enumerate() {
+        validate_text(&format!("{path}[{index}]"), line)?;
+        for placeholder in placeholders(line) {
+            if !allowed_placeholders.contains(&placeholder) {
+                bail!("{path}[{index}] contains unsupported placeholder {{{placeholder}}}");
+            }
+            found.insert(placeholder);
+        }
+    }
+    for required in required_placeholders {
+        if !found.contains(required) {
+            bail!("{path} is missing placeholder {{{required}}}");
+        }
+    }
+    Ok(())
+}
+
+fn placeholders(value: &str) -> Vec<&str> {
+    let mut result = Vec::new();
+    let mut remaining = value;
+    while let Some(open) = remaining.find('{') {
+        let after_open = &remaining[open + 1..];
+        let Some(close) = after_open.find('}') else {
+            break;
+        };
+        result.push(&after_open[..close]);
+        remaining = &after_open[close + 1..];
+    }
+    result
+}
+
+#[cfg(test)]
+mod tests {
+    use std::collections::{BTreeMap, BTreeSet};
+    use std::fs;
+    use std::path::Path;
+
+    use pretty_assertions::assert_eq;
+
+    use super::*;
+    use crate::models::compat::CompatDocument;
+
+    const FIRST_GUIDE_ID: &str = "00000000-0000-4000-8000-000000000001";
+    const FIRST_HOME_ID: &str = "00000000-0000-4000-8000-000000000101";
+
+    fn synthetic_source() -> &'static str {
+        r##"// Synthetic Dream guide definitions.
+
+#![enable(implicit_some)]
+[
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000001", name: "Guide 1", home_dreamscape_id: "00000000-0000-4000-8000-000000000101", portrait_source: "one.png", site_dialogue: ["Site 1"], specialty: Shop(description: "Shop copy")),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000002", name: "Guide 2", home_dreamscape_id: "00000000-0000-4000-8000-000000000102", portrait_source: "two.png", site_dialogue: ["Site 2"], specialty: DreamsignMarket(description: "Market copy")),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000003", name: "Guide 3", home_dreamscape_id: "00000000-0000-4000-8000-000000000103", portrait_source: "three.png", site_dialogue: ["Site 3"], specialty: DreamsignRevelation(description: "Revelation copy")),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000004", name: "Guide 4", home_dreamscape_id: "00000000-0000-4000-8000-000000000104", portrait_source: "four.png", site_dialogue: ["Site 4"], specialty: Transfiguration(description: "Transfiguration copy")),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000005", name: "Guide 5", home_dreamscape_id: "00000000-0000-4000-8000-000000000105", portrait_source: "five.png", site_dialogue: ["Site 5"], specialty: Duplication(description: "Duplication copy")),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000006", name: "Guide 6", home_dreamscape_id: "00000000-0000-4000-8000-000000000106", portrait_source: "six.png", site_dialogue: ["Site 6"], specialty: Purge(description: "Purge copy")),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000007", name: "Guide 7", home_dreamscape_id: "00000000-0000-4000-8000-000000000107", portrait_source: "seven.png", site_dialogue: ["Site 7"], specialty: Augury(description: "Augury copy")),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000008", name: "Guide 8", home_dreamscape_id: "00000000-0000-4000-8000-000000000108", portrait_source: "eight.png", site_dialogue: ["Site 8"], specialty: RandomSite(description: "Random copy", dialogue: ["Random line"])),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000009", name: "Guide 9", home_dreamscape_id: "00000000-0000-4000-8000-000000000109", portrait_source: "nine.png", site_dialogue: ["Site 9"], specialty: Gamble(description: "Gamble copy", dialogue: GambleDialogue(three_gate: ["Three Gate"], ladder_climb: ["Win {win-essence}"], starway_stairs: ["Stairs"], four_suit_reprise: ["Reprise"], blackjack: ["Blackjack"]))),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000010", name: "Guïde 10", home_dreamscape_id: "00000000-0000-4000-8000-000000000110", portrait_source: "ten.png", site_dialogue: ["Site 10\ncontinues"], specialty: Exploration(description: "Exploration copy")),
+]
+"##
+    }
+
+    fn catalog() -> Vec<GuideDefinition> {
+        ron::from_str(synthetic_source()).unwrap()
+    }
+
+    #[test]
+    fn lowers_all_specialties_ordered_dialogue_unicode_and_multiline_copy() {
+        let output = lower(catalog()).unwrap();
+        assert_eq!(output["schema-version"].as_integer(), Some(1));
+        let guides = output["guides"].as_array().unwrap();
+        assert_eq!(guides.len(), 10);
+        assert_eq!(guides[0]["id"].as_str(), Some(FIRST_GUIDE_ID));
+        assert_eq!(
+            guides[0]["home-dreamscape-id"].as_str(),
+            Some(FIRST_HOME_ID)
+        );
+        assert_eq!(guides[9]["name"].as_str(), Some("Guïde 10"));
+        assert_eq!(
+            guides[9]["dialogue"]["site"][0].as_str(),
+            Some("Site 10\ncontinues")
+        );
+
+        let site_types = guides
+            .iter()
+            .map(|guide| guide["site-type"].as_str().unwrap())
+            .collect::<Vec<_>>();
+        assert_eq!(
+            site_types,
+            vec![
+                "Shop",
+                "DreamsignMarket",
+                "DreamsignRevelation",
+                "Transfiguration",
+                "Duplication",
+                "Purge",
+                "Augury",
+                "RandomSite",
+                "Gamble",
+                "Exploration",
+            ]
+        );
+        assert_eq!(
+            guides[7]["dialogue"]["random-site"][0].as_str(),
+            Some("Random line")
+        );
+        assert_eq!(
+            guides[8]["dialogue"]["gamble-ladder-climb"][0].as_str(),
+            Some("Win {win-essence}")
+        );
+        assert!(guides[0]["dialogue"].get("random-site").is_none());
+        assert!(guides[7]["dialogue"].get("gamble-blackjack").is_none());
+    }
+
+    #[test]
+    fn rejects_unknown_fields_and_noncanonical_uuid_identities() {
+        let unknown =
+            synthetic_source().replace("name: \"Guide 1\",", "name: \"Guide 1\", surprise: true,");
+        assert!(ron::from_str::<Vec<GuideDefinition>>(&unknown).is_err());
+        let unknown_dialogue = synthetic_source().replace(
+            "three_gate: [\"Three Gate\"],",
+            "three_gate: [\"Three Gate\"], surprise: [\"No\"],",
+        );
+        assert!(ron::from_str::<Vec<GuideDefinition>>(&unknown_dialogue).is_err());
+
+        for invalid in [
+            "legacy_slug",
+            "00000000-0000-3000-8000-000000000001",
+            "00000000-0000-4000-c000-000000000001",
+            "AAAAAAAA-AAAA-4AAA-8AAA-AAAAAAAAAAAA",
+        ] {
+            assert!(ron::from_str::<GuideId>(&format!("\"{invalid}\"")).is_err());
+            assert!(ron::from_str::<DreamscapeId>(&format!("\"{invalid}\"")).is_err());
+        }
+    }
+
+    #[test]
+    fn rejects_duplicate_identity_home_specialty_and_empty_copy() {
+        let source = catalog();
+
+        let mut duplicate_id = source.clone();
+        duplicate_id[1].id = duplicate_id[0].id;
+        assert!(
+            lower(duplicate_id)
+                .unwrap_err()
+                .to_string()
+                .contains(".id duplicates")
+        );
+
+        let mut duplicate_home = source.clone();
+        duplicate_home[1].home_dreamscape_id = duplicate_home[0].home_dreamscape_id;
+        assert!(
+            lower(duplicate_home)
+                .unwrap_err()
+                .to_string()
+                .contains("home_dreamscape_id duplicates")
+        );
+
+        let mut duplicate_specialty = source.clone();
+        duplicate_specialty[1].specialty = duplicate_specialty[0].specialty.clone();
+        assert!(
+            lower(duplicate_specialty)
+                .unwrap_err()
+                .to_string()
+                .contains("specialty duplicates")
+        );
+
+        let mut empty_name = source.clone();
+        empty_name[0].name = "  ".into();
+        assert!(
+            lower(empty_name)
+                .unwrap_err()
+                .to_string()
+                .contains("name must be non-empty")
+        );
+
+        let mut empty_dialogue = source;
+        empty_dialogue[0].site_dialogue.clear();
+        assert!(
+            lower(empty_dialogue)
+                .unwrap_err()
+                .to_string()
+                .contains("site_dialogue must not be empty")
+        );
+    }
+
+    #[test]
+    fn rejects_unsupported_and_missing_dialogue_placeholders() {
+        let mut unsupported = catalog();
+        unsupported[0].site_dialogue[0] = "Unexpected {slot}".into();
+        assert!(
+            lower(unsupported)
+                .unwrap_err()
+                .to_string()
+                .contains("unsupported placeholder {slot}")
+        );
+
+        let mut missing = catalog();
+        let GuideSpecialty::Gamble { dialogue, .. } = &mut missing[8].specialty else {
+            panic!("synthetic Gamble guide")
+        };
+        dialogue.ladder_climb[0] = "No reward slot".into();
+        assert!(
+            lower(missing)
+                .unwrap_err()
+                .to_string()
+                .contains("missing placeholder {win-essence}")
+        );
+    }
+
+    #[test]
+    #[ignore = "real-catalog parity probe retained for canonical Dream guide review"]
+    fn canonical_candidate_matches_current_compatibility_sources() {
+        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+        let current_ron: CompatDocument =
+            ron::from_str(&fs::read_to_string(root.join("data/dream_guides.ron")).unwrap())
+                .unwrap();
+        let current_toml: toml::Value =
+            toml::from_str(&fs::read_to_string(root.join("data/dream_guides.toml")).unwrap())
+                .unwrap();
+        assert_eq!(current_ron.data, current_toml);
+
+        let canonical: Vec<GuideDefinition> = ron::from_str(
+            &fs::read_to_string(root.join("data/dream_guides_canonical.ron")).unwrap(),
+        )
+        .unwrap();
+        assert_eq!(canonical.len(), 10);
+
+        let guide_ids = legacy_guide_id_map();
+        let dreamscape_ids = legacy_dreamscape_id_map();
+        assert_eq!(guide_ids.len(), canonical.len());
+        assert_eq!(dreamscape_ids.len(), canonical.len());
+        assert_uuidv4_map(&guide_ids);
+        assert_uuidv4_map(&dreamscape_ids);
+
+        let canonical_guide_ids: BTreeSet<_> =
+            canonical.iter().map(|guide| guide.id.to_string()).collect();
+        assert_eq!(
+            canonical_guide_ids,
+            guide_ids.values().map(|id| (*id).to_owned()).collect()
+        );
+        let canonical_home_ids: BTreeSet<_> = canonical
+            .iter()
+            .map(|guide| guide.home_dreamscape_id.to_string())
+            .collect();
+        assert_eq!(
+            canonical_home_ids,
+            dreamscape_ids.values().map(|id| (*id).to_owned()).collect()
+        );
+
+        let mut normalized = current_ron.data.clone();
+        for guide in normalized["guides"].as_array_mut().unwrap() {
+            let legacy_guide_id = guide["id"].as_str().unwrap();
+            guide["id"] = guide_ids
+                .get(legacy_guide_id)
+                .unwrap_or_else(|| panic!("unmapped legacy guide id {legacy_guide_id}"))
+                .to_string()
+                .into();
+            let legacy_home_id = guide["home-dreamscape-id"].as_str().unwrap();
+            guide["home-dreamscape-id"] = dreamscape_ids
+                .get(legacy_home_id)
+                .unwrap_or_else(|| panic!("unmapped legacy Dreamscape id {legacy_home_id}"))
+                .to_string()
+                .into();
+        }
+        assert_eq!(lower(canonical).unwrap(), normalized);
+
+        let dreamscapes_ron: CompatDocument =
+            ron::from_str(&fs::read_to_string(root.join("data/dreamscapes.ron")).unwrap()).unwrap();
+        let dreamscapes_toml: toml::Value =
+            toml::from_str(&fs::read_to_string(root.join("data/dreamscapes.toml")).unwrap())
+                .unwrap();
+        assert_eq!(dreamscapes_ron.data, dreamscapes_toml);
+        let nonstarter_ids: BTreeSet<_> = dreamscapes_ron.data["dreamscapes"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|dreamscape| {
+                dreamscape.get("is-starter").and_then(toml::Value::as_bool) != Some(true)
+            })
+            .map(|dreamscape| dreamscape["id"].as_str().unwrap())
+            .collect();
+        assert_eq!(nonstarter_ids, dreamscape_ids.keys().copied().collect());
+    }
+
+    fn assert_uuidv4_map(mapping: &BTreeMap<&str, &str>) {
+        for id in mapping.values() {
+            let uuid = Uuid::parse_str(id).unwrap();
+            assert_eq!(uuid.get_version(), Some(Version::Random));
+            assert_eq!(uuid.get_variant(), Variant::RFC4122);
+            assert_eq!(uuid.hyphenated().to_string(), *id);
+        }
+    }
+
+    fn legacy_guide_id_map() -> BTreeMap<&'static str, &'static str> {
+        BTreeMap::from([
+            ("tobias_tanglefur", "4e5067ec-265d-4dba-8fa8-2afbd4fde9ab"),
+            (
+                "amunet_the_tomb_keeper",
+                "113cb023-12df-4b9c-982c-f0c8bba30377",
+            ),
+            ("sigrun", "706a4443-2826-4459-8127-040632cb93fd"),
+            ("durgan_forgehammer", "9890b3c2-74f7-4b4a-bb39-61c2c6d53cbb"),
+            ("deacon_holt", "e0aaa9a6-9038-48b9-8847-63681426190e"),
+            ("master_takeshi", "87e9ae46-57c6-407a-af96-bd5f5323dabc"),
+            ("aldric_the_seer", "232e7de1-b7b9-4631-b6a3-1ab178c7ff9a"),
+            ("maddox", "869a07ae-5532-4a65-abfa-26a89713a82b"),
+            ("gravok", "579eaf53-0643-4cba-9c0c-da04b9c52822"),
+            ("layaway", "078e102a-f235-4794-9bb5-a5c42262782a"),
+        ])
+    }
+
+    fn legacy_dreamscape_id_map() -> BTreeMap<&'static str, &'static str> {
+        BTreeMap::from([
+            ("tumbleleaf_village", "48ffbb3a-b9a4-4693-a24a-f6e7e516a408"),
+            ("pharaohs_gate", "bb80eae2-df13-42ee-b58a-b21022a7e193"),
+            ("winterwake_fjords", "11c5cadb-123c-4fcf-8871-28fc69ab39e0"),
+            ("frostforge", "4be83951-e0f3-46ec-8a28-6e57299125be"),
+            ("hopes_end", "19d9a162-4c77-426e-88f0-2b06b5bf0b52"),
+            ("tsukiren", "b6468878-b519-43e6-8b23-c2947ca61c64"),
+            ("wilderveil", "887c5f2a-5994-4311-9704-ee4d7246c924"),
+            ("rust_expanse", "316a3d41-47c3-4850-8c13-d8d2c9de4a0b"),
+            ("farpoint_station", "535cb467-c35a-4663-8d17-36530673d75b"),
+            ("grid_city", "d609c490-5a05-4c48-8c28-6f46590eb21a"),
+        ])
+    }
+}

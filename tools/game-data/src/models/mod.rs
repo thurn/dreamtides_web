@@ -8,4 +8,6 @@ pub mod compat;
 pub mod draft;
 #[cfg(test)]
 pub mod dream_avatars;
+#[cfg(test)]
+pub mod dream_guides;
 pub mod exploration;
