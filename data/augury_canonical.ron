@@ -28,10 +28,9 @@ AuguryCatalog(
 
   archetypes: [
     ArchetypeDefinition(
-      // Stable entity identity; compatibility lowering maps this UUID to the behavior ID.
       id: "77ad1a09-aba0-4875-b462-e6efe94bdc3d",
-      // Determines the compatibility ID and family. `selection_policy` ranks eligible targets;
-      // behavior-specific integer fields set chooser and reward quantities.
+      // Effect of this reward offer. A `selection_policy` ranks eligible
+      // targets for the effect.
       behavior: FitCardGrant(selection_policy: CardFit, granted_copies: 1),
       // Controls encounter eligibility while retaining the definition in the catalog.
       enabled: true,
