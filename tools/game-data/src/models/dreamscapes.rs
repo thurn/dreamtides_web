@@ -8,7 +8,7 @@ use uuid::{Uuid, Variant, Version};
 
 use super::atlas::SiteType;
 
-const LEGACY_ID_MAP: [(&str, &str); 11] = [
+const LEGACY_ID_MAP: [(&str, &str); 12] = [
     ("firstlight_meadow", "0217b10e-bf48-4e27-95f0-846fd802b730"),
     ("tumbleleaf_village", "08e11635-9f04-48fd-a9c8-5a9f68c80958"),
     ("pharaohs_gate", "b25b9906-8380-45bf-9435-678ce18316ea"),
@@ -20,6 +20,7 @@ const LEGACY_ID_MAP: [(&str, &str); 11] = [
     ("rust_expanse", "6f16a1c9-c2fa-494d-9d9d-4da00e011491"),
     ("farpoint_station", "138eff95-3301-4f76-aeb1-31bf0dc8963d"),
     ("grid_city", "6c03e9d1-21fe-4c13-b940-2325d308cb14"),
+    ("limbo", "f31e1199-70bc-4110-85f9-505afebb02c4"),
 ];
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -27,7 +28,6 @@ const LEGACY_ID_MAP: [(&str, &str); 11] = [
 pub struct DreamscapeDefinition {
     pub id: DreamscapeId,
     pub name: String,
-    pub art_direction: String,
     pub kind: DreamscapeKind,
 }
 
@@ -38,10 +38,11 @@ pub enum DreamscapeKind {
         signature_site: SiteType,
         fixed_sites: Vec<SiteType>,
     },
-    Affiliated {
+    Standard {
         affiliation_id: AffiliationId,
-        dream_avatar_ids: Vec<DreamAvatarId>,
+        opponent_dream_avatar_ids: Vec<DreamAvatarId>,
     },
+    Boss,
 }
 
 macro_rules! canonical_uuid {
@@ -106,7 +107,6 @@ struct CompatibilityCatalog {
 struct CompatibilityDreamscape {
     id: &'static str,
     name: String,
-    aesthetic: String,
     #[serde(rename = "signature-site", skip_serializing_if = "Option::is_none")]
     signature_site: Option<&'static str>,
     #[serde(rename = "is-starter", skip_serializing_if = "Option::is_none")]
@@ -142,34 +142,37 @@ pub fn lower(source: Vec<DreamscapeDefinition>) -> Result<toml::Value> {
                         None,
                         None,
                     ),
-                    DreamscapeKind::Affiliated {
+                    DreamscapeKind::Standard {
                         affiliation_id,
-                        dream_avatar_ids,
+                        opponent_dream_avatar_ids,
                     } => (
                         None,
                         None,
                         None,
                         Some(affiliation_id.to_string()),
                         Some(
-                            dream_avatar_ids
+                            opponent_dream_avatar_ids
                                 .into_iter()
                                 .map(|avatar_id| avatar_id.to_string().to_ascii_uppercase())
                                 .collect(),
                         ),
                     ),
+                    DreamscapeKind::Boss => return Ok(None),
                 };
-            Ok(CompatibilityDreamscape {
+            Ok(Some(CompatibilityDreamscape {
                 id,
                 name: dreamscape.name,
-                aesthetic: dreamscape.art_direction,
                 signature_site,
                 is_starter,
                 fixed_sites,
                 affiliation_id,
                 dream_avatar_ids,
-            })
+            }))
         })
-        .collect::<Result<Vec<_>>>()?;
+        .collect::<Result<Vec<_>>>()?
+        .into_iter()
+        .flatten()
+        .collect();
     Ok(toml::Value::try_from(CompatibilityCatalog { dreamscapes })?)
 }
 
@@ -179,6 +182,7 @@ fn validate(source: &[DreamscapeDefinition]) -> Result<()> {
     let mut affiliation_ids = BTreeSet::new();
     let mut dream_avatar_ids = BTreeSet::new();
     let mut starter_count = 0;
+    let mut boss_count = 0;
 
     for dreamscape in source {
         ensure!(
@@ -191,12 +195,7 @@ fn validate(source: &[DreamscapeDefinition]) -> Result<()> {
             "Dreamscape {} has an empty name",
             dreamscape.id
         );
-        ensure!(
-            !dreamscape.art_direction.trim().is_empty(),
-            "Dreamscape {} has empty art direction",
-            dreamscape.id
-        );
-        compatibility_key(dreamscape.id)?;
+        let legacy_id = compatibility_key(dreamscape.id)?;
 
         match &dreamscape.kind {
             DreamscapeKind::Starter {
@@ -215,31 +214,39 @@ fn validate(source: &[DreamscapeDefinition]) -> Result<()> {
                     dreamscape.id
                 );
             }
-            DreamscapeKind::Affiliated {
+            DreamscapeKind::Standard {
                 affiliation_id,
-                dream_avatar_ids: residents,
+                opponent_dream_avatar_ids,
             } => {
+                ensure!(
+                    legacy_id != "limbo",
+                    "Limbo must use the Boss Dreamscape kind"
+                );
                 ensure!(
                     affiliation_ids.insert(*affiliation_id),
                     "Dreamscapes repeat affiliation id {affiliation_id}"
                 );
                 ensure!(
-                    (3..=4).contains(&residents.len()),
-                    "Dreamscape {} must have three or four resident DreamAvatars",
+                    (3..=4).contains(&opponent_dream_avatar_ids.len()),
+                    "Dreamscape {} must have three or four opponent DreamAvatars",
                     dreamscape.id
                 );
-                let mut local_residents = BTreeSet::new();
-                for resident_id in residents {
+                let mut local_opponents = BTreeSet::new();
+                for opponent_id in opponent_dream_avatar_ids {
                     ensure!(
-                        local_residents.insert(*resident_id),
-                        "Dreamscape {} repeats resident DreamAvatar {resident_id}",
+                        local_opponents.insert(*opponent_id),
+                        "Dreamscape {} repeats opponent DreamAvatar {opponent_id}",
                         dreamscape.id
                     );
                     ensure!(
-                        dream_avatar_ids.insert(*resident_id),
-                        "DreamAvatar {resident_id} belongs to more than one Dreamscape"
+                        dream_avatar_ids.insert(*opponent_id),
+                        "opponent DreamAvatar {opponent_id} belongs to more than one Dreamscape"
                     );
                 }
+            }
+            DreamscapeKind::Boss => {
+                boss_count += 1;
+                ensure!(legacy_id == "limbo", "Boss Dreamscape must be Limbo");
             }
         }
     }
@@ -247,6 +254,10 @@ fn validate(source: &[DreamscapeDefinition]) -> Result<()> {
     ensure!(
         starter_count == 1,
         "Dreamscape catalog must contain exactly one starter; found {starter_count}"
+    );
+    ensure!(
+        boss_count == 1,
+        "Dreamscape catalog must contain exactly one boss; found {boss_count}"
     );
     Ok(())
 }
@@ -291,6 +302,7 @@ mod tests {
 
     const STARTER_ID: &str = "0217b10e-bf48-4e27-95f0-846fd802b730";
     const REGION_ID: &str = "08e11635-9f04-48fd-a9c8-5a9f68c80958";
+    const BOSS_ID: &str = "f31e1199-70bc-4110-85f9-505afebb02c4";
     const AFFILIATION_ID: &str = "4b715cd0-8b41-4b82-9cef-c47b15e8992b";
     const AVATAR_ONE: &str = "94e7c651-25e9-4a62-9de4-eaf5ba20542c";
     const AVATAR_TWO: &str = "3ebaba62-9000-429d-b203-2a5a9724389a";
@@ -303,7 +315,6 @@ mod tests {
   DreamscapeDefinition(
     id: "{STARTER_ID}",
     name: "Opening",
-    art_direction: "Morning mist over a quiet field.",
     kind: Starter(
       signature_site: Draft,
       fixed_sites: [Draft, Draft, DreamsignRevelation, Battle],
@@ -312,12 +323,12 @@ mod tests {
   DreamscapeDefinition(
     id: "{REGION_ID}",
     name: "Région",
-    art_direction: "Moonlight across old stone.",
-    kind: Affiliated(
+    kind: Standard(
       affiliation_id: "{AFFILIATION_ID}",
-      dream_avatar_ids: ["{AVATAR_ONE}", "{AVATAR_TWO}", "{AVATAR_THREE}"],
+      opponent_dream_avatar_ids: ["{AVATAR_ONE}", "{AVATAR_TWO}", "{AVATAR_THREE}"],
     ),
   ),
+  DreamscapeDefinition(id: "{BOSS_ID}", name: "Final Dream", kind: Boss),
 ]
 "##
         )
@@ -332,10 +343,6 @@ mod tests {
         assert_eq!(dreamscapes.len(), 2);
         assert_eq!(dreamscapes[0]["id"].as_str(), Some("firstlight_meadow"));
         assert_eq!(dreamscapes[0]["name"].as_str(), Some("Opening"));
-        assert_eq!(
-            dreamscapes[0]["aesthetic"].as_str(),
-            Some("Morning mist over a quiet field.")
-        );
         assert_eq!(dreamscapes[0]["is-starter"].as_bool(), Some(true));
         assert_eq!(
             dreamscapes[0]["fixed-sites"].as_array().unwrap(),
@@ -357,6 +364,11 @@ mod tests {
                 .as_table()
                 .unwrap()
                 .contains_key("signature-site")
+        );
+        assert!(
+            dreamscapes
+                .iter()
+                .all(|dreamscape| dreamscape["id"].as_str() != Some("limbo"))
         );
     }
 
@@ -409,11 +421,19 @@ mod tests {
 
         let multiple_starters = synthetic_source().replace(
             &format!(
-                "kind: Affiliated(\n      affiliation_id: \"{AFFILIATION_ID}\",\n      dream_avatar_ids: [\"{AVATAR_ONE}\", \"{AVATAR_TWO}\", \"{AVATAR_THREE}\"],\n    )"
+                "kind: Standard(\n      affiliation_id: \"{AFFILIATION_ID}\",\n      opponent_dream_avatar_ids: [\"{AVATAR_ONE}\", \"{AVATAR_TWO}\", \"{AVATAR_THREE}\"],\n    )"
             ),
             "kind: Starter(signature_site: Battle, fixed_sites: [Battle])",
         );
         assert_error_contains(&multiple_starters, "exactly one starter");
+
+        let no_boss = synthetic_source().replace(
+            &format!(
+                "  DreamscapeDefinition(id: \"{BOSS_ID}\", name: \"Final Dream\", kind: Boss),\n"
+            ),
+            "",
+        );
+        assert_error_contains(&no_boss, "exactly one boss");
 
         let missing_signature = synthetic_source().replace(
             "fixed_sites: [Draft, Draft, DreamsignRevelation, Battle]",
@@ -425,19 +445,13 @@ mod tests {
             &format!("[\"{AVATAR_ONE}\", \"{AVATAR_TWO}\", \"{AVATAR_THREE}\"]"),
             &format!("[\"{AVATAR_ONE}\", \"{AVATAR_TWO}\"]"),
         );
-        assert_error_contains(&too_few_residents, "three or four resident");
+        assert_error_contains(&too_few_residents, "three or four opponent");
 
-        let duplicate_resident = synthetic_source().replace(AVATAR_THREE, AVATAR_ONE);
-        assert_error_contains(&duplicate_resident, "repeats resident DreamAvatar");
+        let duplicate_opponent = synthetic_source().replace(AVATAR_THREE, AVATAR_ONE);
+        assert_error_contains(&duplicate_opponent, "repeats opponent DreamAvatar");
 
         let empty_name = synthetic_source().replace("name: \"Opening\"", "name: \"  \"");
         assert_error_contains(&empty_name, "empty name");
-
-        let empty_art_direction = synthetic_source().replace(
-            "art_direction: \"Morning mist over a quiet field.\"",
-            "art_direction: \"  \"",
-        );
-        assert_error_contains(&empty_art_direction, "empty art direction");
     }
 
     fn assert_error_contains(source: &str, expected: &str) {
@@ -463,7 +477,17 @@ mod tests {
             &fs::read_to_string(root.join("data/dreamscapes_canonical.ron")).unwrap(),
         )
         .unwrap();
-        assert_eq!(lower(canonical.clone()).unwrap(), current_ron.data);
+        let mut normalized = current_ron.data.clone();
+        for dreamscape in normalized["dreamscapes"].as_array_mut().unwrap() {
+            assert!(
+                dreamscape
+                    .as_table_mut()
+                    .unwrap()
+                    .remove("aesthetic")
+                    .is_some()
+            );
+        }
+        assert_eq!(lower(canonical.clone()).unwrap(), normalized);
 
         let legacy_to_canonical: BTreeMap<_, _> = LEGACY_ID_MAP.into_iter().collect();
         assert_eq!(legacy_to_canonical.len(), canonical.len());
@@ -480,7 +504,7 @@ mod tests {
                 .collect()
         );
 
-        let compatibility_ids: BTreeSet<_> = current_ron.data["dreamscapes"]
+        let compatibility_ids: BTreeSet<_> = normalized["dreamscapes"]
             .as_array()
             .unwrap()
             .iter()
@@ -488,7 +512,11 @@ mod tests {
             .collect();
         assert_eq!(
             compatibility_ids,
-            legacy_to_canonical.keys().copied().collect()
+            legacy_to_canonical
+                .keys()
+                .copied()
+                .filter(|id| *id != "limbo")
+                .collect()
         );
 
         verify_canonical_uuids(&canonical);
@@ -498,13 +526,13 @@ mod tests {
     fn verify_canonical_uuids(canonical: &[DreamscapeDefinition]) {
         for dreamscape in canonical {
             assert_canonical_uuid(&dreamscape.id.to_string());
-            if let DreamscapeKind::Affiliated {
+            if let DreamscapeKind::Standard {
                 affiliation_id,
-                dream_avatar_ids,
+                opponent_dream_avatar_ids,
             } = &dreamscape.kind
             {
                 assert_canonical_uuid(&affiliation_id.to_string());
-                for avatar_id in dream_avatar_ids {
+                for avatar_id in opponent_dream_avatar_ids {
                     assert_canonical_uuid(&avatar_id.to_string());
                 }
             }
@@ -545,13 +573,14 @@ mod tests {
 
         let mut referenced_avatars = BTreeSet::new();
         for dreamscape in canonical {
-            if let DreamscapeKind::Affiliated {
+            if let DreamscapeKind::Standard {
                 affiliation_id,
-                dream_avatar_ids,
+                opponent_dream_avatar_ids,
             } = &dreamscape.kind
             {
                 assert!(known_affiliations.contains(affiliation_id.to_string().as_str()));
-                referenced_avatars.extend(dream_avatar_ids.iter().map(ToString::to_string));
+                referenced_avatars
+                    .extend(opponent_dream_avatar_ids.iter().map(ToString::to_string));
             }
         }
         assert_eq!(referenced_avatars, known_avatars);
@@ -580,6 +609,18 @@ mod tests {
                 .copied()
                 .filter(|id| *id != starter_key)
                 .collect()
+        );
+
+        let boss = canonical
+            .iter()
+            .find(|dreamscape| matches!(dreamscape.kind, DreamscapeKind::Boss))
+            .unwrap();
+        let atlas_source: super::super::atlas::AtlasCatalog =
+            ron::from_str(&fs::read_to_string(root.join("data/atlas.ron")).unwrap()).unwrap();
+        let atlas_compatibility = super::super::atlas::lower(atlas_source).unwrap();
+        assert_eq!(
+            atlas_compatibility["boss"]["dreamscape-id"].as_str(),
+            Some(compatibility_key(boss.id).unwrap())
         );
     }
 }

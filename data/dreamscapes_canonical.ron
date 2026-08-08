@@ -5,8 +5,6 @@
   DreamscapeDefinition(
     id: "0217b10e-bf48-4e27-95f0-846fd802b730",
     name: "Firstlight Meadow",
-    // Guides scene selection and provides editor fallback copy when scene art is unavailable.
-    art_direction: "A tranquil meadow at sunrise.",
     kind: Starter(
       // The starter has no resident guide, so its signature site is defined here.
       signature_site: Draft,
@@ -18,12 +16,11 @@
   DreamscapeDefinition(
     id: "08e11635-9f04-48fd-a9c8-5a9f68c80958",
     name: "Tumbleleaf Village",
-    art_direction: "A cozy fantasy village of anthropomorphic animals.",
-    kind: Affiliated(
+    kind: Standard(
       // Shapes card selection and opponent construction in this region.
       affiliation_id: "4b715cd0-8b41-4b82-9cef-c47b15e8992b",
-      // Resident DreamAvatars offered by region-aware selection algorithms.
-      dream_avatar_ids: [
+      // Restricts opponent selection to these DreamAvatars when using the corpus algorithm.
+      opponent_dream_avatar_ids: [
         "94e7c651-25e9-4a62-9de4-eaf5ba20542c",
         "3ebaba62-9000-429d-b203-2a5a9724389a",
         "2c53b1b9-9291-4bba-8d3a-f40b545c8f3c",
@@ -34,10 +31,9 @@
   DreamscapeDefinition(
     id: "b25b9906-8380-45bf-9435-678ce18316ea",
     name: "Pharaoh's Gate",
-    art_direction: "An ancient Egyptian realm of sun-baked stone and gold.",
-    kind: Affiliated(
+    kind: Standard(
       affiliation_id: "c3815562-e80d-4afc-8ba6-91bd60ad323e",
-      dream_avatar_ids: [
+      opponent_dream_avatar_ids: [
         "c72cfd7b-408b-47f6-adf1-1e486a7e20d3",
         "6488452d-4e9e-466c-96df-716d4ec646b1",
         "60bd584b-5bc8-4ee7-8a98-cbb304eb71ab",
@@ -49,10 +45,9 @@
   DreamscapeDefinition(
     id: "7d793d30-8a0f-4f84-a446-cdde502710e8",
     name: "Winterwake Fjords",
-    art_direction: "A snowy viking village beneath frozen cliffs.",
-    kind: Affiliated(
+    kind: Standard(
       affiliation_id: "a544314c-2e90-42b1-ba04-06c7f2f0a6f9",
-      dream_avatar_ids: [
+      opponent_dream_avatar_ids: [
         "fe2510d9-bfee-4c35-97f9-30e0cd2e2851",
         "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
         "5e28154d-770a-4b84-8aac-9de44f5d7d02",
@@ -63,10 +58,9 @@
   DreamscapeDefinition(
     id: "8e7d0818-ba6a-4dc9-8b3d-a12c62aefa44",
     name: "Frostforge",
-    art_direction: "A dwarven fortress of anvils and glowing forges.",
-    kind: Affiliated(
+    kind: Standard(
       affiliation_id: "04103386-ca4e-42a0-9a90-150297a20e91",
-      dream_avatar_ids: [
+      opponent_dream_avatar_ids: [
         "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
         "84e7020c-7384-4cc3-a20f-ab05f03cc375",
         "f6208407-c4e9-42ac-b533-346704f5e39e",
@@ -77,10 +71,9 @@
   DreamscapeDefinition(
     id: "562f9d1f-5bbf-4dc5-9edd-7e8d538a1651",
     name: "Hope's End",
-    art_direction: "A rural town in the grip of a zombie apocalypse.",
-    kind: Affiliated(
+    kind: Standard(
       affiliation_id: "8b30f0bf-6b9d-47c0-92ba-80f62ae8899d",
-      dream_avatar_ids: [
+      opponent_dream_avatar_ids: [
         "6029be40-75b9-4c07-912f-9718b6c5c747",
         "3c4773e4-f8e1-4686-86cb-b407a42489d4",
         "1cc5a88a-134f-42f7-a0ae-95ace44b3745",
@@ -91,10 +84,9 @@
   DreamscapeDefinition(
     id: "823dc726-db0f-4367-8442-70600a20ad2e",
     name: "Tsukiren",
-    art_direction: "A samurai-era Japanese kingdom of paper lanterns and steel.",
-    kind: Affiliated(
+    kind: Standard(
       affiliation_id: "33dee3b4-19d2-4788-9cef-b69057385844",
-      dream_avatar_ids: [
+      opponent_dream_avatar_ids: [
         "bf72adff-7d74-4be8-9b93-1db7ba13a1db",
         "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
         "91d4c3b5-fd63-480b-9ed5-979109a227bb",
@@ -105,10 +97,9 @@
   DreamscapeDefinition(
     id: "f52bdeb1-0db6-44ee-80ea-b99bd18dff7d",
     name: "Wilderveil",
-    art_direction: "An enchanted forest of ancient trees and drifting lights.",
-    kind: Affiliated(
+    kind: Standard(
       affiliation_id: "c674a92f-3860-4851-8357-dd4f3e469674",
-      dream_avatar_ids: [
+      opponent_dream_avatar_ids: [
         "b9bf6d4b-907c-4750-b51c-811aff29de59",
         "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4",
         "16b579fe-c15b-4df6-8262-d45ce44732ae",
@@ -119,10 +110,9 @@
   DreamscapeDefinition(
     id: "6f16a1c9-c2fa-494d-9d9d-4da00e011491",
     name: "The Rust Expanse",
-    art_direction: "A Mad-Max post-apocalyptic wasteland of scrap and dust.",
-    kind: Affiliated(
+    kind: Standard(
       affiliation_id: "d1a8f46d-0efe-4ae6-bda3-0866d5d20633",
-      dream_avatar_ids: [
+      opponent_dream_avatar_ids: [
         "133e22dd-f81b-406d-b4e3-98c346d7fd4e",
         "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
         "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
@@ -133,10 +123,9 @@
   DreamscapeDefinition(
     id: "138eff95-3301-4f76-aeb1-31bf0dc8963d",
     name: "Farpoint Station",
-    art_direction: "A sci-fi outpost clinging to a distant planet.",
-    kind: Affiliated(
+    kind: Standard(
       affiliation_id: "96258dfd-33c9-44a7-96a5-6747eb42cc60",
-      dream_avatar_ids: [
+      opponent_dream_avatar_ids: [
         "9e19b3d1-12f2-43c1-9cb1-08de7cd32e32",
         "8a2fcd65-bba7-459c-a6b0-f0391b9293fd",
         "b99936ca-97f9-4930-af5a-fa9ef92557ef",
@@ -147,15 +136,21 @@
   DreamscapeDefinition(
     id: "6c03e9d1-21fe-4c13-b940-2325d308cb14",
     name: "Grid City",
-    art_direction: "A neon-drenched cyberpunk city of rain and chrome.",
-    kind: Affiliated(
+    kind: Standard(
       affiliation_id: "0f09352d-3a1d-44db-a58e-229ab834cdc3",
-      dream_avatar_ids: [
+      opponent_dream_avatar_ids: [
         "86026206-1b11-4f38-a24e-fd3c697f5353",
         "b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e",
         "ba973428-6d90-4847-b779-cb7e25a5ac84",
         "4d5e3933-7dd6-406b-922d-dd78acfa044a",
       ],
     ),
+  ),
+
+  DreamscapeDefinition(
+    id: "f31e1199-70bc-4110-85f9-505afebb02c4",
+    name: "Limbo",
+    // Boss composition and presentation are defined by the Atlas catalog.
+    kind: Boss,
   ),
 ]
