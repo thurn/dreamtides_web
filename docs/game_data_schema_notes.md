@@ -16,12 +16,12 @@ fields. These curations are chosen by theme and serve as
 probes for the shared IDF reweighting math.
 
 Fields:
-  id                                      UUIDv4 referenced by dreamscapes.
-  name                                    Player-facing affiliation name.
-  atlas_card_theme                        Theme label used by Atlas generation.
-  signature_card_ids                      Curated card UUIDs exemplifying the theme.
-  default_random_draw_max_multiplier      Pull strength for random card content.
-  default_opponent_deck_max_multiplier    Pull strength for opponent deck bias.
+id UUIDv4 referenced by dreamscapes.
+name Player-facing affiliation name.
+atlas_card_theme Theme label used by Atlas generation.
+signature_card_ids Curated card UUIDs exemplifying the theme.
+default_random_draw_max_multiplier Pull strength for random card content.
+default_opponent_deck_max_multiplier Pull strength for opponent deck bias.
 
 ## `data/apollyon_incarnations.ron`
 
@@ -32,12 +32,12 @@ generation one incarnation is chosen to present Apollyon, swapping in that
 guise's title and short deck description.
 
 Fields:
-  id           Lowercase RFC 4122 UUIDv4 identifier for the incarnation.
-  title        Player-facing epithet shown as Apollyon's title.
-  description  Short, surfaced description of the incarnation's deck.
-  deck_archetype
-               Internal deck-archetype label. Generated compatibility TOML
-               publishes this as `deck-type`; it is never shown in the UI.
+id Lowercase RFC 4122 UUIDv4 identifier for the incarnation.
+title Player-facing epithet shown as Apollyon's title.
+description Short, surfaced description of the incarnation's deck.
+deck_archetype
+Internal deck-archetype label. Generated compatibility TOML
+publishes this as `deck-type`; it is never shown in the UI.
 
 ## `data/atlas.ron`
 
@@ -159,14 +159,14 @@ site specialty. Runtime dreamscape guide and signature-site fields are derived
 from these assignments.
 
 Fields:
-  id                  Lowercase UUIDv4 identity for the guide.
-  name                Player-facing guide name.
-  home_dreamscape_id  Lowercase UUIDv4 foreign key for the guide's home.
-  portrait_source     Source filename in the external dream-guide art catalog.
-  site_dialogue       Ordered dialogue used by the guide's site presentation.
-  specialty           Typed specialty variant defining the signature site and
-                      its enhancement description. RandomSite and Gamble carry
-                      their additional dialogue in the variant payload.
+id Lowercase UUIDv4 identity for the guide.
+name Player-facing guide name.
+home_dreamscape_id Lowercase UUIDv4 foreign key for the guide's home.
+portrait_source Source filename in the external dream-guide art catalog.
+site_dialogue Ordered dialogue used by the guide's site presentation.
+specialty Typed specialty variant defining the signature site and
+its enhancement description. RandomSite and Gamble carry
+their additional dialogue in the variant payload.
 
 ## `data/dreamscapes.ron`
 
@@ -175,11 +175,11 @@ typed `DreamscapeDefinition` records. `data/dreamscapes.toml` is the generated
 compatibility boundary consumed by the journey prototype.
 
 Fields:
-  id    Lowercase UUIDv4 identity referenced by authored catalogs.
-  name  Player-facing dreamscape name.
-  art   Scene and atlas-node asset references, each pairing a stable runtime
-        key with its authoring filename.
-  kind  Closed `Starter`, `Standard`, or `Boss` role variant.
+id Lowercase UUIDv4 identity referenced by authored catalogs.
+name Player-facing dreamscape name.
+art Scene and atlas-node asset references, each pairing a stable runtime
+key with its authoring filename.
+kind Closed `Starter`, `Standard`, or `Boss` role variant.
 
 `Starter` defines the signature site and ordered fixed-site sequence.
 `Standard` defines one affiliation UUID and an ordered roster of three or four
@@ -264,12 +264,12 @@ rewards. The merchant uses these to score how well each dreamsign fits
 the player's current deck.
 
 Fields (all lists default to empty = generically useful):
-  id         — dreamsign UUID (must match dreamsigns.toml)
-  subtypes   — card subtypes the dreamsign rewards (e.g. ["Warrior"])
-  card-types — card types rewarded: "Character", "Event"
-  cost-bands — cost bands rewarded: "cheap" (<=1), "mid" (2-3), "big" (>=4)
-  keywords   — keyword mechanics rewarded: "reclaim", "fast"
-  quality    — 1 = premium, 2 = solid, 3 = niche
+id — dreamsign UUID (must match dreamsigns.toml)
+subtypes — card subtypes the dreamsign rewards (e.g. ["Warrior"])
+card-types — card types rewarded: "Character", "Event"
+cost-bands — cost bands rewarded: "cheap" (<=1), "mid" (2-3), "big" (>=4)
+keywords — keyword mechanics rewarded: "reclaim", "fast"
+quality — 1 = premium, 2 = solid, 3 = niche
 
 Curated 2026-06-14. Should be reviewed by the design owner before shipping.
 Amplified Acorn — once per turn, discarding a card reduces your next card's
@@ -1070,6 +1070,7 @@ Managed by the dreamsign editor's "Manage tags" panel.
 
 Dreamwell cards
 ---------------
+
 Shared cards drawn one per turn during the Dreamwell phase (see
 docs/battle_rules/battle_rules.md). Each card permanently raises the drawing
 player's maximum ● by its `energy_added` value and may carry bonus-effect
@@ -2008,16 +2009,25 @@ emits the `schema-version = 1` compatibility TOML consumed by asset generation.
 
 ## `data/tutorial.ron`
 
-### `[journeyStart.speechBubble]`
+Typed `TutorialCatalog` source for the complete standalone tutorial scenario.
+The `tutorial_v1` adapter emits the camel-case compatibility TOML consumed by
+the runtime asset pipeline.
 
-Complete standalone tutorial scenario.
+### `journey_guidance`
 
-### `playerDraws = [`
+Persistent guidance for journey surfaces and the first two battles.
+
+### `battle.player_draws`
 
 Cards are drawn from each list in order after the authored tutorial actions
 hand control to the playable battle.
 
-### `dreamwellDraws = [`
+### `battle.dreamwell_draws`
 
 This is the complete shared Dreamwell deck prefix, including the two cards
 drawn by authored actions before the playable battle begins.
+
+### `actions` and `triggers`
+
+Ordered typed variants keyed by UUIDv4 identities. The adapter maps reviewed
+legacy identities at the generated compatibility boundary.

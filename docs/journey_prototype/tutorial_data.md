@@ -3,39 +3,40 @@
 `data/tutorial.ron` is the authoritative source for the standalone
 tutorial scenario, the playable battle handoff, tutorial-journey guidance, and
 supplemental first-occurrence explanations. Run `npm run regenerate-assets`
-after editing it. Asset generation validates the source and writes the complete
+after editing it. The typed `tutorial_v1` adapter validates the source, emits
+the compatibility boundary at `data/tutorial.toml`, and writes the complete
 normalized browser artifact to `public/tutorial-data.json`.
 
 ## Scenario identity
 
-`battle.featuredCards` assigns stable semantic roles to the cards reused by the
+`battle.featured_cards` assigns stable semantic roles to the cards reused by the
 tutorial:
 
-- `playerCardId`: the scripted player character
-- `opponentCardId`: the scripted opponent character
-- `enemyStarterCardId`: the enemy character shown during loading and placed at
+- `player_card_id`: the scripted player character
+- `opponent_card_id`: the scripted opponent character
+- `enemy_starter_card_id`: the enemy character shown during loading and placed at
   the live handoff
-- `loadingEventCardId`: the event shown during loading
-- `dreamwellCardId`: the featured Dreamwell card
+- `loading_event_card_id`: the event shown during loading
+- `dreamwell_card_id`: the featured Dreamwell card
 
 Every field is a catalog UUID. Ordinary card roles resolve against
 `cards.ron`; `dreamwellCardId` resolves against `dreamwell.ron`.
-`playerDreamAvatarId` and `enemyDreamAvatarId` resolve against
+`player_dream_avatar_id` and `enemy_dream_avatar_id` resolve against
 `dream_avatars.ron`.
 
 ## Battle setup
 
-The `battle` table contains `startingEnergy`, `scoreToWin`, and
-`starterDeck`. Each inline `starterDeck` entry has a `cardId` and a positive
+The `battle` record contains `starting_energy`, `score_to_win`, and
+`starter_deck`. Each `StarterDeckEntry` has a `card_id` and a positive
 `copies` count. The displayed and initialized deck size is the sum of those
 counts.
 
-`battle.scriptedBoard` selects the compact player back-rank and front-rank
+`battle.scripted_board` selects the compact player back-rank and front-rank
 indices used by the scripted presentation. Back-rank indices range from 0 to 2;
 front-rank indices range from 0 to 1.
 
-`playerDraws`, `enemyDraws`, and `dreamwellDraws` define deterministic draw
-prefixes. `aiActionOverrides` defines state-matched semantic AI actions. The
+`player_draws`, `enemy_draws`, and `dreamwell_draws` define deterministic draw
+prefixes. `ai_action_overrides` defines state-matched semantic AI actions. The
 validator checks that the starter recipe contains enough copies for scripted
 hands, configured draws, deck-backed placements, and the three-card Erode
 state.
@@ -55,20 +56,24 @@ scripted sequence:
   a placement sourced from `created` creates an instance with tutorial
   provenance.
 
-Rank placements use canonical slot IDs. Front-rank slots are `F0` through
+Rank placements use canonical `slot_id` values. Front-rank slots are `F0` through
 `F8`; the player back rank uses `B0` through `B4`; the enemy back rank uses
 `B0` through `B9`. Void placements omit `slotId`.
 
 ## Guidance and actions
 
 `actions` is the ordered front-door tutorial sequence. `triggers` contains
-shared first-occurrence explanations. The `journeyStart`, `dreamscape`,
-`atlas`, `draft`, `purge`, `dreamsignRevelation`, and `battleStart` tables
+shared first-occurrence explanations. The `journey_start`, `dreamscape`,
+`atlas`, `draft`, `purge`, `dreamsign_revelation`, `first_battle`, and
+`second_battle` records
 configure persistent Mira guidance on their journey surfaces.
 
-The development Tutorial Editor edits the `actions` array. Saving serializes
-the complete normalized RON document and preserves every guidance, trigger,
-and battle setup table.
+Each action, trigger, and AI override has a UUIDv4 identity. The development
+Tutorial Editor applies typed semantic operations to the ordered `actions`
+collection. Scalar saves patch the authored value span; behavior and structural
+saves patch the affected subtree. Every save validates the complete typed
+catalog, regenerates compatibility TOML and browser JSON in staging, and
+publishes them with the canonical source under one source revision.
 
 ## Validation and hashes
 

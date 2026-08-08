@@ -1,33 +1,20 @@
-import {
-  mkdirSync,
-  readFileSync,
-  renameSync,
-  unlinkSync,
-  writeFileSync,
-} from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  DEFAULT_TUTORIAL_JSON_PATH,
-  DEFAULT_TUTORIAL_TOML_PATH,
-  normalizeTutorialConfiguration,
   readTutorialConfiguration,
-  serializeTutorialToml,
+  refreshTutorialDataJson,
   validateTutorialActions,
 } from "./tutorial-data.mjs";
+import {
+  sourceRevision,
+  stageAndPublishGameDataEdit,
+} from "./game-data-pipeline.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/tutorial";
 const MAX_BODY_BYTES = 1024 * 1024;
-let writeSerial = 0;
 
-const defaultFileSystem = {
-  mkdirSync,
-  readFileSync,
-  renameSync,
-  unlinkSync,
-  writeFileSync,
-};
+export const TUTORIAL_EDITOR_SOURCE_PATHS = ["data/tutorial.ron"];
 
 function jsonResponse(res, statusCode, body) {
   res.writeHead(statusCode, {
@@ -36,12 +23,10 @@ function jsonResponse(res, statusCode, body) {
   res.end(JSON.stringify(body));
 }
 
-function errorResponse(res, statusCode, code, message) {
-  jsonResponse(res, statusCode, { error: { code, message } });
-}
-
-function requestPath(url) {
-  return (url ?? "/").split("?", 1)[0];
+function errorResponse(res, statusCode, code, message, details) {
+  jsonResponse(res, statusCode, {
+    error: { code, message, ...(details === undefined ? {} : { details }) },
+  });
 }
 
 function readJsonBody(req) {
@@ -77,30 +62,39 @@ function readJsonBody(req) {
   });
 }
 
-function atomicWrite(fileSystem, destination, content) {
-  writeSerial += 1;
-  const temporary = `${destination}.tutorial-editor-${String(process.pid)}-${String(writeSerial)}.tmp`;
-  fileSystem.mkdirSync(dirname(destination), { recursive: true });
-  try {
-    fileSystem.writeFileSync(temporary, content);
-    fileSystem.renameSync(temporary, destination);
-  } catch (error) {
-    try {
-      fileSystem.unlinkSync(temporary);
-    } catch {
-      // The temporary path may not have been created.
-    }
-    throw error;
+function statusFor(error) {
+  if (error.code === "STALE_SOURCE") return 409;
+  if (error.code === "BODY_TOO_LARGE") return 413;
+  if (
+    ["INVALID_JSON", "INVALID_EDIT", "INVALID_TUTORIAL_ACTIONS"].includes(
+      error.code,
+    )
+  ) {
+    return 400;
   }
+  if (
+    ["MALFORMED_SOURCE", "COMPATIBILITY_VALIDATION_FAILED"].includes(error.code)
+  ) {
+    return 422;
+  }
+  return error.statusCode ?? 500;
 }
 
-/** Vite dev middleware for loading and atomically saving tutorial.toml. */
+function collectionPayload(rootDir, revision) {
+  return {
+    ...readTutorialConfiguration({ rootDir }),
+    sourceRevision: revision(rootDir, TUTORIAL_EDITOR_SOURCE_PATHS),
+  };
+}
+
+/** Vite dev middleware for source-preserving edits to canonical Tutorial RON. */
 export function createTutorialEditorApiMiddleware({
   rootDir = ROOT,
-  fileSystem = defaultFileSystem,
+  publishEdit = stageAndPublishGameDataEdit,
+  revision = sourceRevision,
 } = {}) {
   return async function tutorialEditorApi(req, res, next) {
-    const pathname = requestPath(req.url);
+    const pathname = (req.url ?? "/").split("?", 1)[0];
     if (pathname !== BASE_PATH) {
       next();
       return;
@@ -108,8 +102,7 @@ export function createTutorialEditorApiMiddleware({
 
     if (req.method === "GET") {
       try {
-        const configuration = readTutorialConfiguration({ rootDir });
-        jsonResponse(res, 200, configuration);
+        jsonResponse(res, 200, collectionPayload(rootDir, revision));
       } catch (error) {
         errorResponse(
           res,
@@ -136,79 +129,57 @@ export function createTutorialEditorApiMiddleware({
 
     try {
       const body = await readJsonBody(req);
-      if (body === null || typeof body !== "object" || Array.isArray(body)) {
+      if (
+        body === null ||
+        typeof body !== "object" ||
+        Array.isArray(body) ||
+        typeof body.expectedSourceRevision !== "string"
+      ) {
         throw Object.assign(
-          new Error("Request body must contain an actions array."),
+          new Error("Every Tutorial save requires expectedSourceRevision."),
           {
-            code: "INVALID_TUTORIAL_ACTIONS",
+            code: "INVALID_EDIT",
           },
         );
       }
       const actions = validateTutorialActions(body.actions);
-      const {
-        journeyStart,
-        dreamscape,
-        atlas,
-        draft,
-        purge,
-        dreamsignRevelation,
-        battleStart,
-        triggers,
-        battle,
-      } = readTutorialConfiguration({ rootDir });
-      const tomlPath = join(rootDir, DEFAULT_TUTORIAL_TOML_PATH);
-      const jsonPath = join(rootDir, DEFAULT_TUTORIAL_JSON_PATH);
-      const configuration = normalizeTutorialConfiguration({
-        journeyStart,
-        dreamscape,
-        atlas,
-        draft,
-        purge,
-        dreamsignRevelation,
-        battleStart,
-        actions,
-        triggers,
-        battle,
+      const result = await publishEdit({
+        rootDir,
+        dataset: "tutorial",
+        operations: [{ operation: "replace_tutorial_actions", actions }],
+        sourcePaths: TUTORIAL_EDITOR_SOURCE_PATHS,
+        expectedSourceRevision: body.expectedSourceRevision,
+        additionalPublishPaths: ["public/tutorial-data.json"],
+        prepareDerivedArtifacts: ({ stageRoot }) => {
+          refreshTutorialDataJson({ rootDir: stageRoot });
+        },
       });
-      atomicWrite(
-        fileSystem,
-        tomlPath,
-        serializeTutorialToml(
-          actions,
-          triggers,
-          battle,
-          journeyStart,
-          dreamscape,
-          atlas,
-          draft,
-          purge,
-          dreamsignRevelation,
-          battleStart,
-        ),
-      );
-      atomicWrite(
-        fileSystem,
-        jsonPath,
-        `${JSON.stringify(configuration, null, 2)}\n`,
-      );
-      jsonResponse(res, 200, { actions });
+      jsonResponse(res, 200, {
+        actions: readTutorialConfiguration({ rootDir }).actions,
+        sourceRevision:
+          result.sourceRevision ??
+          revision(rootDir, TUTORIAL_EDITOR_SOURCE_PATHS),
+      });
     } catch (error) {
-      const code = error?.code;
-      if (code === "BODY_TOO_LARGE") {
-        errorResponse(res, 413, code, error.message);
-        return;
-      }
-      if (code === "INVALID_JSON" || code === "INVALID_TUTORIAL_ACTIONS") {
-        errorResponse(res, 400, code, error.message);
-        return;
+      let confirmed;
+      if (error?.code === "STALE_SOURCE") {
+        confirmed = collectionPayload(rootDir, revision);
       }
       errorResponse(
         res,
-        500,
-        "TUTORIAL_SAVE_FAILED",
+        statusFor(error),
+        error?.code ?? "TUTORIAL_SAVE_FAILED",
         error instanceof Error
           ? error.message
           : "Failed to save tutorial actions.",
+        {
+          datasetId: "tutorial",
+          source: TUTORIAL_EDITOR_SOURCE_PATHS[0],
+          ...(error?.currentSourceRevision === undefined
+            ? {}
+            : { currentSourceRevision: error.currentSourceRevision }),
+          ...(confirmed === undefined ? {} : { confirmed }),
+        },
       );
     }
   };

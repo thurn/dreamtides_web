@@ -99,6 +99,7 @@ impl Manifest {
             "figments_v1",
             "glossary_v1",
             "sites_v1",
+            "tutorial_v1",
             "compat_v1",
         ];
         for dataset in &self.datasets {

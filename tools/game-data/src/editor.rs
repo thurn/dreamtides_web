@@ -34,6 +34,9 @@ use crate::models::figments::{
     FigmentDefinition,
 };
 use crate::models::glossary::{self, GlossaryDefinition, GlossaryId, TermPresentation};
+use crate::models::tutorial::{
+    self, ActionDefinition as TutorialActionDefinition, TutorialCatalog,
+};
 
 #[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -108,6 +111,9 @@ enum EditOperation {
         field: String,
         value: JsonValue,
     },
+    ReplaceTutorialActions {
+        actions: JsonValue,
+    },
     ReplaceAction {
         card_id: String,
         slot: usize,
@@ -158,8 +164,135 @@ pub fn stage_edit(
         "exploration" => edit_exploration(manifest, staging_root, request.operations),
         "figments" => edit_figments(manifest, staging_root, request.operations),
         "glossary" => edit_glossary(manifest, staging_root, request.operations),
+        "tutorial" => edit_tutorial(manifest, staging_root, request.operations),
         dataset => edit_compat(manifest, staging_root, dataset, request.operations),
     }
+}
+
+fn edit_tutorial(
+    manifest: &Manifest,
+    staging_root: &Path,
+    operations: Vec<EditOperation>,
+) -> Result<EditReport> {
+    let dataset = manifest.dataset("tutorial")?;
+    if dataset.adapter != "tutorial_v1"
+        || dataset.editor != crate::manifest::EditorCapability::Semantic
+    {
+        bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for Tutorial");
+    }
+    let source_path = staging_root.join(&dataset.source);
+    let original_text = fs::read_to_string(&source_path)
+        .with_context(|| format!("read staged Tutorial source {}", source_path.display()))?;
+    let original: TutorialCatalog = ron::from_str(&original_text)
+        .context("MALFORMED_SOURCE: staged Tutorial RON is invalid")?;
+    tutorial::validate(&original)
+        .context("MALFORMED_SOURCE: staged Tutorial catalog is invalid")?;
+    let mut catalog = original.clone();
+    let mut source_text = original_text;
+
+    for operation in operations {
+        match operation {
+            EditOperation::ReplaceTutorialActions { actions } => {
+                let replacement = tutorial::actions_from_compatibility_json(actions)
+                    .context("INVALID_EDIT: Tutorial actions are invalid")?;
+                reject_duplicate_tutorial_actions(&replacement)?;
+                source_text = patch_tutorial_actions(&source_text, &catalog.actions, &replacement)?;
+                catalog.actions = replacement;
+                tutorial::validate(&catalog)
+                    .context("INVALID_EDIT: Tutorial edit violates the catalog contract")?;
+            }
+            _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to Tutorial"),
+        }
+    }
+
+    verify_round_trip::<TutorialCatalog>(&source_text, &catalog)?;
+    let changed = catalog != original;
+    if changed {
+        atomic_write(&source_path, source_text.as_bytes())?;
+    }
+    Ok(EditReport {
+        ok: true,
+        changed,
+        dataset_id: "tutorial".into(),
+        source_revision: revision(staging_root, manifest, &["tutorial"])?,
+    })
+}
+
+fn reject_duplicate_tutorial_actions(actions: &[TutorialActionDefinition]) -> Result<()> {
+    let mut ids = BTreeSet::new();
+    for action in actions {
+        if !ids.insert(action.id.to_string()) {
+            bail!("INVALID_EDIT: duplicate Tutorial action UUID {}", action.id);
+        }
+    }
+    Ok(())
+}
+
+fn patch_tutorial_actions(
+    source: &str,
+    before: &[TutorialActionDefinition],
+    after: &[TutorialActionDefinition],
+) -> Result<String> {
+    let same_structure = before.len() == after.len()
+        && before
+            .iter()
+            .zip(after)
+            .all(|(left, right)| left.id == right.id);
+    if !same_structure {
+        let catalog = tutorial_catalog_range(source)?;
+        let actions = top_level_field_value_range(source, catalog, "actions")?
+            .context("MALFORMED_SOURCE: Tutorial catalog is missing actions")?;
+        return replace_source_ranges(source, vec![(actions, render_ron_value(after, true)?)]);
+    }
+
+    let mut patched = source.to_owned();
+    for (old, new) in before.iter().zip(after) {
+        if old == new {
+            continue;
+        }
+        let record = tutorial_action_record_range(&patched, &new.id.to_string())?;
+        if old.wait_seconds != new.wait_seconds {
+            let wait = top_level_field_value_range(&patched, record.clone(), "wait_seconds")?
+                .context("MALFORMED_SOURCE: Tutorial action is missing wait_seconds")?;
+            patched =
+                replace_source_ranges(&patched, vec![(wait, ron::to_string(&new.wait_seconds)?)])?;
+        }
+        if old.behavior != new.behavior {
+            let record = tutorial_action_record_range(&patched, &new.id.to_string())?;
+            let behavior = top_level_field_value_range(&patched, record, "behavior")?
+                .context("MALFORMED_SOURCE: Tutorial action is missing behavior")?;
+            patched = replace_source_ranges(
+                &patched,
+                vec![(behavior, render_ron_value(&new.behavior, true)?)],
+            )?;
+        }
+    }
+    Ok(patched)
+}
+
+fn tutorial_catalog_range(source: &str) -> Result<Range<usize>> {
+    let marker = "TutorialCatalog(";
+    let start = source
+        .find(marker)
+        .context("MALFORMED_SOURCE: Tutorial catalog boundary is missing")?;
+    let opening = start + marker.len() - 1;
+    Ok(start..matching_delimiter(source, opening)? + 1)
+}
+
+fn tutorial_action_record_range(source: &str, id: &str) -> Result<Range<usize>> {
+    typed_record_range_at_indent(source, "ActionDefinition", "id", id, 4)
+}
+
+fn render_ron_value<T: serde::Serialize + ?Sized>(
+    value: &T,
+    implicit_some: bool,
+) -> Result<String> {
+    let serialized = serialize_ron(value, implicit_some)?;
+    Ok(serialized
+        .strip_prefix("#![enable(implicit_some)]\n")
+        .unwrap_or(&serialized)
+        .trim_end_matches('\n')
+        .to_owned())
 }
 
 fn edit_dreamscapes(
@@ -2303,8 +2436,21 @@ fn typed_record_range(
     identity_field: &str,
     identity: &str,
 ) -> Result<Range<usize>> {
+    typed_record_range_at_indent(source, record_type, identity_field, identity, 2)
+}
+
+fn typed_record_range_at_indent(
+    source: &str,
+    record_type: &str,
+    identity_field: &str,
+    identity: &str,
+    record_indent: usize,
+) -> Result<Range<usize>> {
     let identity_literal = ron::to_string(identity)?;
-    let marker = format!("\n    {identity_field}: {identity_literal},");
+    let marker = format!(
+        "\n{}{identity_field}: {identity_literal},",
+        " ".repeat(record_indent + 2)
+    );
     let matches = source
         .match_indices(&marker)
         .map(|(offset, _)| offset)
@@ -2315,7 +2461,7 @@ fn typed_record_range(
     if matches.len() > 1 {
         bail!("MALFORMED_SOURCE: duplicate {record_type} identity {identity}");
     }
-    let record_marker = format!("\n  {record_type}(");
+    let record_marker = format!("\n{}{record_type}(", " ".repeat(record_indent));
     let start = source[..matches[0]]
         .rfind(&record_marker)
         .map(|offset| offset + 1)
@@ -2876,7 +3022,7 @@ fn preserve_card_metadata_source(serialized: &str, source: &str) -> Result<Strin
     ))
 }
 
-fn serialize_ron<T: serde::Serialize>(value: &T, implicit_some: bool) -> Result<String> {
+fn serialize_ron<T: serde::Serialize + ?Sized>(value: &T, implicit_some: bool) -> Result<String> {
     let mut extensions = Extensions::empty();
     if implicit_some {
         extensions |= Extensions::IMPLICIT_SOME;
@@ -4177,6 +4323,125 @@ mod tests {
         assert_eq!(
             ron::from_str::<CompatDocument>(&preserved).unwrap(),
             metadata
+        );
+    }
+
+    const TUTORIAL_EDITOR_SOURCE: &str = r###"// Preserve catalog guidance.
+#![enable(implicit_some)]
+TutorialCatalog(
+  actions: [
+    ActionDefinition(
+      id: "11111111-1111-4111-8111-111111111111",
+      wait_seconds: 1,
+      behavior: DisplaySpeechBubble(
+        speech_bubble: SpeechBubble(
+          duration_seconds: 3,
+          maximum_width_pixels: 700,
+          text: r#"Raw tutorial text"#,
+        ),
+      ),
+    ),
+
+    /* Preserve the unrelated action comment. */
+    ActionDefinition(
+      id: "22222222-2222-4222-8222-222222222222",
+      wait_seconds: 0,
+      behavior: DrawOpponentCard(
+        card_id: "33333333-3333-4333-8333-333333333333",
+      ),
+    ),
+  ],
+)
+"###;
+
+    fn tutorial_fixture_actions() -> Vec<TutorialActionDefinition> {
+        tutorial::actions_from_compatibility_json(json!([
+          {
+            "id": "11111111-1111-4111-8111-111111111111",
+            "action": "display-speech-bubble",
+            "speechBubble": {
+              "speaker": "mira",
+              "duration": 3,
+              "horizontalOffset": 0,
+              "verticalOffset": 0,
+              "bubbleWidth": 700,
+              "text": "Raw tutorial text"
+            },
+            "wait": 1
+          },
+          {
+            "id": "22222222-2222-4222-8222-222222222222",
+            "action": "draw-opponent-card",
+            "cardId": "33333333-3333-4333-8333-333333333333",
+            "wait": 0
+          }
+        ]))
+        .unwrap()
+    }
+
+    fn parse_tutorial_actions(source: &str) -> Vec<TutorialActionDefinition> {
+        let catalog = tutorial_catalog_range(source).unwrap();
+        let actions = top_level_field_value_range(source, catalog, "actions")
+            .unwrap()
+            .unwrap();
+        ron::from_str(&format!("#![enable(implicit_some)]\n{}", &source[actions])).unwrap()
+    }
+
+    #[test]
+    fn tutorial_scalar_patch_changes_one_line_and_preserves_unrelated_source() {
+        let before = tutorial_fixture_actions();
+        let mut after = before.clone();
+        after[0].wait_seconds = tutorial::Scalar::Integer(2);
+        let patched = patch_tutorial_actions(TUTORIAL_EDITOR_SOURCE, &before, &after).unwrap();
+        let changed_lines = TUTORIAL_EDITOR_SOURCE
+            .lines()
+            .zip(patched.lines())
+            .filter(|(left, right)| left != right)
+            .count();
+        assert_eq!(changed_lines, 1);
+        assert!(patched.starts_with("// Preserve catalog guidance.\n"));
+        assert!(patched.contains("/* Preserve the unrelated action comment. */"));
+        assert!(patched.contains("text: r#\"Raw tutorial text\"#"));
+        assert_eq!(parse_tutorial_actions(&patched), after);
+    }
+
+    #[test]
+    fn tutorial_behavior_and_structural_edits_round_trip_typed_actions() {
+        let before = tutorial_fixture_actions();
+        let mut behavior_edit = before.clone();
+        behavior_edit[0].behavior = tutorial::TutorialAction::EndTurn {
+            speech_bubble: None,
+        };
+        let patched =
+            patch_tutorial_actions(TUTORIAL_EDITOR_SOURCE, &before, &behavior_edit).unwrap();
+        assert_eq!(parse_tutorial_actions(&patched), behavior_edit);
+        assert!(patched.contains("/* Preserve the unrelated action comment. */"));
+
+        let reordered = before.iter().cloned().rev().collect::<Vec<_>>();
+        let reordered_source =
+            patch_tutorial_actions(TUTORIAL_EDITOR_SOURCE, &before, &reordered).unwrap();
+        assert_eq!(parse_tutorial_actions(&reordered_source), reordered);
+        assert!(reordered_source.starts_with("// Preserve catalog guidance.\n"));
+
+        let inserted = before[..1].to_vec();
+        let inserted_source =
+            patch_tutorial_actions(TUTORIAL_EDITOR_SOURCE, &before, &inserted).unwrap();
+        assert_eq!(parse_tutorial_actions(&inserted_source), inserted);
+        assert_eq!(
+            patch_tutorial_actions(TUTORIAL_EDITOR_SOURCE, &before, &before).unwrap(),
+            TUTORIAL_EDITOR_SOURCE
+        );
+    }
+
+    #[test]
+    fn tutorial_editor_rejects_non_uuid_new_identity() {
+        assert!(
+            tutorial::actions_from_compatibility_json(json!([{
+              "id": "new-action",
+              "action": "end-turn",
+              "wait": 0
+            }]))
+            .is_err()
         );
     }
 }

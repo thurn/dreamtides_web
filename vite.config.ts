@@ -379,9 +379,7 @@ function figmentEditorApiPlugin(): Plugin {
       const editorRoot = process.env.DREAMTIDES_EDITOR_DATA_ROOT;
       const rootDir =
         editorRoot === undefined ? __dirname : path.resolve(editorRoot);
-      server.middlewares.use(
-        createFigmentEditorApiMiddleware({ rootDir }),
-      );
+      server.middlewares.use(createFigmentEditorApiMiddleware({ rootDir }));
     },
   };
 }
@@ -498,15 +496,7 @@ function tutorialEditorApiPlugin(): Plugin {
     apply: "serve",
     configureServer(server) {
       server.middlewares.use(
-        createRonEditorBridge({
-          rootDir: __dirname,
-          basePaths: ["/api/editor/tutorial"],
-          collectionPath: "/api/editor/tutorial",
-          datasets: ["tutorial"],
-          sourcePaths: ["data/tutorial.ron"],
-          createLegacy: (rootDir) =>
-            createTutorialEditorApiMiddleware({ rootDir }),
-        }),
+        createTutorialEditorApiMiddleware({ rootDir: __dirname }),
       );
     },
   };

@@ -1,7 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 
-use anyhow::{Result, ensure};
+use anyhow::{Context, Result, ensure};
 use indexmap::IndexMap;
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
@@ -401,7 +401,7 @@ pub fn lower(source: TutorialCatalog) -> Result<toml::Value> {
     Ok(toml::Value::try_from(compatibility)?)
 }
 
-fn validate(source: &TutorialCatalog) -> Result<()> {
+pub(crate) fn validate(source: &TutorialCatalog) -> Result<()> {
     let mut entity_ids = BTreeSet::new();
     for action in &source.actions {
         ensure!(
@@ -734,10 +734,11 @@ struct CompatibilityPersistentSpeechBubble {
     text: String,
 }
 
-#[derive(Serialize)]
+#[derive(Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 struct CompatibilitySpeechBubble {
-    speaker: &'static str,
+    speaker: String,
+    #[serde(default)]
     #[serde(skip_serializing_if = "Scalar::is_zero")]
     delay: Scalar,
     duration: Scalar,
@@ -844,7 +845,7 @@ struct CompatibilityAiAction {
     card_id: String,
 }
 
-#[derive(Serialize)]
+#[derive(Deserialize, Serialize)]
 struct CompatibilityAction {
     id: String,
     #[serde(flatten)]
@@ -852,7 +853,7 @@ struct CompatibilityAction {
     wait: Scalar,
 }
 
-#[derive(Serialize)]
+#[derive(Deserialize, Serialize)]
 #[serde(tag = "action", rename_all = "kebab-case")]
 enum CompatibilityActionBehavior {
     DisplaySpeechBubble {
@@ -860,23 +861,23 @@ enum CompatibilityActionBehavior {
         speech_bubble: CompatibilitySpeechBubble,
     },
     DisplayHowToPlay {
-        trigger: &'static str,
+        trigger: String,
         #[serde(skip_serializing_if = "Option::is_none")]
-        companion: Option<&'static str>,
+        companion: Option<String>,
         #[serde(rename = "cardWidth", skip_serializing_if = "Option::is_none")]
         card_width: Option<u32>,
         text: String,
     },
     AnimateDreamAvatarPortrait {
-        owner: &'static str,
+        owner: String,
         pause: Scalar,
         duration: Scalar,
     },
     DrawCard {
-        owner: &'static str,
+        owner: String,
         #[serde(rename = "cardId")]
         card_id: String,
-        reason: &'static str,
+        reason: String,
     },
     DrawOpponentCard {
         #[serde(rename = "cardId")]
@@ -907,7 +908,7 @@ enum CompatibilityActionBehavior {
         blocker_card_id: String,
     },
     DrawDreamwellCard {
-        owner: &'static str,
+        owner: String,
         #[serde(rename = "cardId")]
         card_id: String,
         #[serde(rename = "revealDuration", skip_serializing_if = "Option::is_none")]
@@ -1125,8 +1126,8 @@ fn lower_action(value: ActionDefinition) -> Result<CompatibilityAction> {
             card_width_pixels,
             text,
         } => CompatibilityActionBehavior::DisplayHowToPlay {
-            trigger: how_to_play_trigger(trigger),
-            companion: companion.map(|_| "dreamwell-card"),
+            trigger: how_to_play_trigger(trigger).into(),
+            companion: companion.map(|_| "dreamwell-card".into()),
             card_width: card_width_pixels,
             text,
         },
@@ -1135,7 +1136,7 @@ fn lower_action(value: ActionDefinition) -> Result<CompatibilityAction> {
             pause_seconds,
             duration_seconds,
         } => CompatibilityActionBehavior::AnimateDreamAvatarPortrait {
-            owner: side(owner),
+            owner: side(owner).into(),
             pause: pause_seconds,
             duration: duration_seconds,
         },
@@ -1144,9 +1145,9 @@ fn lower_action(value: ActionDefinition) -> Result<CompatibilityAction> {
             card_id,
             reason,
         } => CompatibilityActionBehavior::DrawCard {
-            owner: side(owner),
+            owner: side(owner).into(),
             card_id: card_id.to_string(),
-            reason: draw_reason(reason),
+            reason: draw_reason(reason).into(),
         },
         TutorialAction::DrawOpponentCard { card_id } => {
             CompatibilityActionBehavior::DrawOpponentCard {
@@ -1186,7 +1187,7 @@ fn lower_action(value: ActionDefinition) -> Result<CompatibilityAction> {
             card_id,
             reveal_duration_seconds,
         } => CompatibilityActionBehavior::DrawDreamwellCard {
-            owner: side(owner),
+            owner: side(owner).into(),
             card_id: card_id.to_string(),
             reveal_duration: reveal_duration_seconds,
         },
@@ -1203,7 +1204,7 @@ fn lower_action(value: ActionDefinition) -> Result<CompatibilityAction> {
 
 fn lower_speech_bubble(value: SpeechBubble) -> CompatibilitySpeechBubble {
     CompatibilitySpeechBubble {
-        speaker: speaker(value.speaker),
+        speaker: speaker(value.speaker).into(),
         delay: value.delay_seconds,
         duration: value.duration_seconds,
         horizontal_offset: value.horizontal_offset_pixels,
@@ -1316,10 +1317,171 @@ fn trigger_event(value: TriggerEvent) -> &'static str {
 }
 
 fn compatibility_id(id: EntityId, mapping: &[(&str, &str)]) -> Result<String> {
-    mapping
+    Ok(mapping
         .iter()
         .find_map(|(legacy, uuid)| (*uuid == id.to_string()).then(|| (*legacy).to_owned()))
-        .ok_or_else(|| anyhow::anyhow!("no compatibility identifier mapping for {id}"))
+        .unwrap_or_else(|| id.to_string()))
+}
+
+pub(crate) fn actions_from_compatibility_json(
+    value: serde_json::Value,
+) -> Result<Vec<ActionDefinition>> {
+    let actions: Vec<CompatibilityAction> = serde_json::from_value(value)
+        .context("Tutorial actions must match the compatibility action schema")?;
+    actions
+        .into_iter()
+        .map(ActionDefinition::try_from)
+        .collect()
+}
+
+fn entity_id_from_compatibility(value: &str, mapping: &[(&str, &str)]) -> Result<EntityId> {
+    let canonical = mapping
+        .iter()
+        .find_map(|(legacy, uuid)| (*legacy == value).then_some(*uuid))
+        .unwrap_or(value);
+    EntityId::parse(canonical).map_err(anyhow::Error::msg)
+}
+
+impl TryFrom<CompatibilityAction> for ActionDefinition {
+    type Error = anyhow::Error;
+
+    fn try_from(value: CompatibilityAction) -> Result<Self> {
+        let behavior = match value.behavior {
+            CompatibilityActionBehavior::DisplaySpeechBubble { speech_bubble } => {
+                TutorialAction::DisplaySpeechBubble {
+                    speech_bubble: speech_bubble.try_into()?,
+                }
+            }
+            CompatibilityActionBehavior::DisplayHowToPlay {
+                trigger,
+                companion,
+                card_width,
+                text,
+            } => TutorialAction::DisplayHowToPlay {
+                trigger: match trigger.as_str() {
+                    "immediate" => HowToPlayTrigger::Immediate,
+                    "player-turn-announcement-complete" => {
+                        HowToPlayTrigger::PlayerTurnAnnouncementComplete
+                    }
+                    "enemy-turn-announcement-complete" => {
+                        HowToPlayTrigger::EnemyTurnAnnouncementComplete
+                    }
+                    _ => anyhow::bail!("unsupported How to Play trigger {trigger}"),
+                },
+                companion: match companion.as_deref() {
+                    None => None,
+                    Some("dreamwell-card") => Some(HowToPlayCompanion::DreamwellCard),
+                    Some(other) => anyhow::bail!("unsupported How to Play companion {other}"),
+                },
+                card_width_pixels: card_width,
+                text,
+            },
+            CompatibilityActionBehavior::AnimateDreamAvatarPortrait {
+                owner,
+                pause,
+                duration,
+            } => TutorialAction::AnimateDreamAvatarPortrait {
+                owner: parse_side(&owner)?,
+                pause_seconds: pause,
+                duration_seconds: duration,
+            },
+            CompatibilityActionBehavior::DrawCard {
+                owner,
+                card_id,
+                reason,
+            } => TutorialAction::DrawCard {
+                owner: parse_side(&owner)?,
+                card_id: EntityId::parse(&card_id).map_err(anyhow::Error::msg)?,
+                reason: match reason.as_str() {
+                    "dreamwell-effect" => CardDrawReason::DreamwellEffect,
+                    "turn-draw" => CardDrawReason::TurnDraw,
+                    _ => anyhow::bail!("unsupported card draw reason {reason}"),
+                },
+            },
+            CompatibilityActionBehavior::DrawOpponentCard { card_id } => {
+                TutorialAction::DrawOpponentCard {
+                    card_id: EntityId::parse(&card_id).map_err(anyhow::Error::msg)?,
+                }
+            }
+            CompatibilityActionBehavior::RevealAndPlayOpponentCard {
+                card_id,
+                reveal_duration,
+                speech_bubble,
+            } => TutorialAction::RevealAndPlayOpponentCard {
+                card_id: EntityId::parse(&card_id).map_err(anyhow::Error::msg)?,
+                reveal_duration_seconds: reveal_duration,
+                speech_bubble: speech_bubble.map(TryInto::try_into).transpose()?,
+            },
+            CompatibilityActionBehavior::RepositionOpponentCharacter { card_id } => {
+                TutorialAction::RepositionOpponentCharacter {
+                    card_id: EntityId::parse(&card_id).map_err(anyhow::Error::msg)?,
+                }
+            }
+            CompatibilityActionBehavior::RepositionPlayerCharacter {
+                card_id,
+                opposing_card_id,
+            } => TutorialAction::RepositionPlayerCharacter {
+                card_id: EntityId::parse(&card_id).map_err(anyhow::Error::msg)?,
+                opposing_card_id: EntityId::parse(&opposing_card_id).map_err(anyhow::Error::msg)?,
+            },
+            CompatibilityActionBehavior::ResolveChallenge {
+                challenger_card_id,
+                blocker_card_id,
+            } => TutorialAction::ResolveChallenge {
+                challenger_card_id: EntityId::parse(&challenger_card_id)
+                    .map_err(anyhow::Error::msg)?,
+                blocker_card_id: EntityId::parse(&blocker_card_id).map_err(anyhow::Error::msg)?,
+            },
+            CompatibilityActionBehavior::DrawDreamwellCard {
+                owner,
+                card_id,
+                reveal_duration,
+            } => TutorialAction::DrawDreamwellCard {
+                owner: parse_side(&owner)?,
+                card_id: EntityId::parse(&card_id).map_err(anyhow::Error::msg)?,
+                reveal_duration_seconds: reveal_duration,
+            },
+            CompatibilityActionBehavior::EndTurn { speech_bubble } => TutorialAction::EndTurn {
+                speech_bubble: speech_bubble.map(TryInto::try_into).transpose()?,
+            },
+        };
+        let action = Self {
+            id: entity_id_from_compatibility(&value.id, ACTION_IDS)?,
+            wait_seconds: value.wait,
+            behavior,
+        };
+        validate_action(&action)?;
+        Ok(action)
+    }
+}
+
+impl TryFrom<CompatibilitySpeechBubble> for SpeechBubble {
+    type Error = anyhow::Error;
+
+    fn try_from(value: CompatibilitySpeechBubble) -> Result<Self> {
+        Ok(Self {
+            speaker: match value.speaker.as_str() {
+                "mira" => Speaker::Mira,
+                "player" => Speaker::Player,
+                "enemy" => Speaker::Enemy,
+                other => anyhow::bail!("unsupported speech bubble speaker {other}"),
+            },
+            delay_seconds: value.delay,
+            duration_seconds: value.duration,
+            horizontal_offset_pixels: value.horizontal_offset,
+            vertical_offset_pixels: value.vertical_offset,
+            maximum_width_pixels: value.bubble_width,
+            text: value.text,
+        })
+    }
+}
+
+fn parse_side(value: &str) -> Result<Side> {
+    match value {
+        "player" => Ok(Side::Player),
+        "enemy" => Ok(Side::Enemy),
+        _ => anyhow::bail!("unsupported Tutorial side {value}"),
+    }
 }
 
 const ACTION_IDS: &[(&str, &str)] = &[
@@ -1460,13 +1622,9 @@ const GLOSSARY_IDS: &[(&str, &str)] = &[
 
 #[cfg(test)]
 mod tests {
-    use std::fs;
-    use std::path::Path;
-
     use pretty_assertions::assert_eq;
 
     use super::*;
-    use crate::models::compat::CompatDocument;
 
     fn entity(value: &str) -> EntityId {
         EntityId::parse(value).unwrap()
@@ -1867,60 +2025,5 @@ mod tests {
                 .get("slotId")
                 .is_none()
         );
-    }
-
-    #[test]
-    #[ignore = "real-catalog parity probe retained for canonical Tutorial review"]
-    fn canonical_candidate_matches_current_compatibility_sources() {
-        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-        let current_ron: CompatDocument =
-            ron::from_str(&fs::read_to_string(root.join("data/tutorial.ron")).unwrap()).unwrap();
-        let current_toml: toml::Value =
-            toml::from_str(&fs::read_to_string(root.join("data/tutorial.toml")).unwrap()).unwrap();
-        assert_eq!(current_ron.data, current_toml);
-
-        let canonical: TutorialCatalog =
-            ron::from_str(&fs::read_to_string(root.join("data/tutorial_canonical.ron")).unwrap())
-                .unwrap();
-        let lowered = lower(canonical.clone()).unwrap();
-        assert_eq!(lowered, current_ron.data);
-        assert_eq!(canonical.actions.len(), ACTION_IDS.len());
-        assert_eq!(canonical.triggers.len(), TRIGGER_IDS.len());
-        assert_eq!(
-            canonical.battle.ai_action_overrides.len(),
-            AI_OVERRIDE_IDS.len()
-        );
-
-        let action_ids: BTreeSet<_> = canonical
-            .actions
-            .iter()
-            .map(|entry| entry.id.to_string())
-            .collect();
-        let trigger_ids: BTreeSet<_> = canonical
-            .triggers
-            .iter()
-            .map(|entry| entry.id.to_string())
-            .collect();
-        assert_eq!(
-            action_ids,
-            ACTION_IDS.iter().map(|(_, id)| (*id).to_owned()).collect()
-        );
-        assert_eq!(
-            trigger_ids,
-            TRIGGER_IDS.iter().map(|(_, id)| (*id).to_owned()).collect()
-        );
-        let observed_events: BTreeSet<_> = canonical
-            .triggers
-            .iter()
-            .flat_map(|entry| entry.on.iter().copied().map(|event| trigger_event(event)))
-            .collect();
-        assert_eq!(observed_events.len(), 9);
-        let observed_actions: BTreeSet<_> = lowered["actions"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|entry| entry["action"].as_str().unwrap())
-            .collect();
-        assert_eq!(observed_actions.len(), 11);
     }
 }

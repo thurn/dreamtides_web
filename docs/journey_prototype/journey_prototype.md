@@ -153,11 +153,12 @@ clears the room's battle slice and resumes the imported journey screen.
 
 ### Tutorial authoring
 
-The standalone tutorial scenario is authored in `data/tutorial.ron`.
-It includes presentation actions, guidance, featured identities, battle setup,
-and the playable handoff. `scripts/setup-assets.mjs` validates that source and
-generates the browser-readable `public/tutorial-data.json` snapshot. The
-Tutorial Editor reads and writes the same action model during development. See
+The standalone tutorial scenario is authored as a typed `TutorialCatalog` in
+`data/tutorial.ron`. It includes presentation actions, guidance, featured
+identities, battle setup, and the playable handoff. The game-data compiler
+generates `data/tutorial.toml`, and asset setup generates the browser-readable
+`public/tutorial-data.json` snapshot. The Tutorial Editor applies typed,
+source-preserving action operations during development. See
 [`tutorial_data.md`](tutorial_data.md) for the complete authoring schema and
 generated-data flow.
 

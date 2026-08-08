@@ -10,6 +10,8 @@ import type {
 import { CumulusRoot } from "../CumulusRoot";
 import { TutorialEditorRail } from "./TutorialEditorRail";
 
+const NEW_ACTION_ID = "11111111-1111-4111-8111-111111111111";
+
 const TEST_TUTORIAL_FEATURED_CARDS = {
   playerCardId: "11111111-1111-4111-8111-111111111111",
   opponentCardId: "22222222-2222-4222-8222-222222222222",
@@ -66,6 +68,7 @@ function setTextareaValue(textarea: HTMLTextAreaElement, value: string): void {
 }
 
 beforeEach(() => {
+  vi.spyOn(globalThis.crypto, "randomUUID").mockReturnValue(NEW_ACTION_ID);
   (
     globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
   ).IS_REACT_ACT_ENVIRONMENT = true;
@@ -211,7 +214,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: "display-speech-bubble",
+          id: NEW_ACTION_ID,
           action: "display-speech-bubble",
           speechBubble: {
             speaker: "mira",
@@ -261,7 +264,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: "display-how-to-play",
+          id: NEW_ACTION_ID,
           action: "display-how-to-play",
           trigger: "immediate",
           cardWidth: 500,
@@ -273,7 +276,7 @@ describe("TutorialEditorRail", () => {
     );
     expect(
       container.querySelector<HTMLTextAreaElement>(
-        '[data-testid="tutorial-action-text-display-how-to-play"]',
+        `[data-testid="tutorial-action-text-${NEW_ACTION_ID}"]`,
       )?.value,
     ).toBe(expectedText);
 
@@ -292,7 +295,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: "display-how-to-play",
+          id: NEW_ACTION_ID,
           action: "display-how-to-play",
           trigger: "immediate",
           companion: "dreamwell-card",
@@ -313,7 +316,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: "display-how-to-play",
+          id: NEW_ACTION_ID,
           action: "display-how-to-play",
           trigger: "immediate",
           companion: "dreamwell-card",
@@ -354,7 +357,7 @@ describe("TutorialEditorRail", () => {
     act(() => addBubble?.click());
 
     const speech = container.querySelector<HTMLTextAreaElement>(
-      '[data-testid="tutorial-action-speech-bubble-text-end-turn"]',
+      `[data-testid="tutorial-action-speech-bubble-text-${NEW_ACTION_ID}"]`,
     );
     expect(speech).not.toBeNull();
     act(() => {
@@ -368,7 +371,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: "end-turn",
+          id: NEW_ACTION_ID,
           action: "end-turn",
           speechBubble: {
             speaker: "mira",
@@ -654,7 +657,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: "animate-dream-avatar-portrait",
+          id: NEW_ACTION_ID,
           action: "animate-dream-avatar-portrait",
           owner: "player",
           pause: 1,
@@ -685,7 +688,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: "animate-dream-avatar-portrait",
+          id: NEW_ACTION_ID,
           action: "animate-dream-avatar-portrait",
           owner: "enemy",
           pause: 1,
@@ -704,7 +707,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: "animate-dream-avatar-portrait",
+          id: NEW_ACTION_ID,
           action: "animate-dream-avatar-portrait",
           owner: "enemy",
           pause: 1.5,
@@ -723,7 +726,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: "animate-dream-avatar-portrait",
+          id: NEW_ACTION_ID,
           action: "animate-dream-avatar-portrait",
           owner: "enemy",
           pause: 1.5,
@@ -761,7 +764,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: "draw-opponent-card",
+          id: NEW_ACTION_ID,
           action: "draw-opponent-card",
           cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
           wait: 0,
@@ -803,7 +806,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: "end-turn",
+          id: NEW_ACTION_ID,
           action: "end-turn",
           wait: 0,
         },
@@ -839,7 +842,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: "draw-dreamwell-card",
+          id: NEW_ACTION_ID,
           action: "draw-dreamwell-card",
           owner: "enemy",
           cardId: TEST_TUTORIAL_FEATURED_CARDS.dreamwellCardId,
@@ -850,7 +853,7 @@ describe("TutorialEditorRail", () => {
     );
     expect(
       container.querySelector<HTMLInputElement>(
-        '[data-testid="tutorial-action-card-id-draw-dreamwell-card"]',
+        `[data-testid="tutorial-action-card-id-${NEW_ACTION_ID}"]`,
       )?.value,
     ).toBe(TEST_TUTORIAL_FEATURED_CARDS.dreamwellCardId);
 
@@ -885,7 +888,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: "reposition-opponent-character",
+          id: NEW_ACTION_ID,
           action: "reposition-opponent-character",
           cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
           wait: 0,
@@ -895,7 +898,7 @@ describe("TutorialEditorRail", () => {
     );
     expect(
       container.querySelector<HTMLInputElement>(
-        '[data-testid="tutorial-action-card-id-reposition-opponent-character"]',
+        `[data-testid="tutorial-action-card-id-${NEW_ACTION_ID}"]`,
       )?.value,
     ).toBe(TEST_TUTORIAL_FEATURED_CARDS.opponentCardId);
 
@@ -929,7 +932,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: "reposition-player-character",
+          id: NEW_ACTION_ID,
           action: "reposition-player-character",
           cardId: TEST_TUTORIAL_FEATURED_CARDS.playerCardId,
           opposingCardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
@@ -940,12 +943,12 @@ describe("TutorialEditorRail", () => {
     );
     expect(
       container.querySelector<HTMLInputElement>(
-        '[data-testid="tutorial-action-card-id-reposition-player-character"]',
+        `[data-testid="tutorial-action-card-id-${NEW_ACTION_ID}"]`,
       )?.value,
     ).toBe(TEST_TUTORIAL_FEATURED_CARDS.playerCardId);
     expect(
       container.querySelector<HTMLInputElement>(
-        '[data-testid="tutorial-action-opposing-card-id-reposition-player-character"]',
+        `[data-testid="tutorial-action-opposing-card-id-${NEW_ACTION_ID}"]`,
       )?.value,
     ).toBe(TEST_TUTORIAL_FEATURED_CARDS.opponentCardId);
 
@@ -977,7 +980,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: "reveal-and-play-opponent-card",
+          id: NEW_ACTION_ID,
           action: "reveal-and-play-opponent-card",
           cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
           revealDuration: 2,
@@ -995,7 +998,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: "reveal-and-play-opponent-card",
+          id: NEW_ACTION_ID,
           action: "reveal-and-play-opponent-card",
           cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
           revealDuration: 2,
@@ -1024,7 +1027,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: "reveal-and-play-opponent-card",
+          id: NEW_ACTION_ID,
           action: "reveal-and-play-opponent-card",
           cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
           revealDuration: 2,
@@ -1053,7 +1056,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: "reveal-and-play-opponent-card",
+          id: NEW_ACTION_ID,
           action: "reveal-and-play-opponent-card",
           cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
           revealDuration: 2,
@@ -1082,7 +1085,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: "reveal-and-play-opponent-card",
+          id: NEW_ACTION_ID,
           action: "reveal-and-play-opponent-card",
           cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
           revealDuration: 2.5,

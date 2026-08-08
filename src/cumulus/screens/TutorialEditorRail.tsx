@@ -120,14 +120,10 @@ const HOW_TO_PLAY_COMPANION_OPTIONS = [
 }[];
 
 function nextActionId(
-  actionName: TutorialActionName,
-  actions: readonly TutorialAction[],
+  _actionName: TutorialActionName,
+  _actions: readonly TutorialAction[],
 ): string {
-  const ids = new Set(actions.map((action) => action.id));
-  if (!ids.has(actionName)) return actionName;
-  let suffix = 2;
-  while (ids.has(`${actionName}-${String(suffix)}`)) suffix += 1;
-  return `${actionName}-${String(suffix)}`;
+  return crypto.randomUUID();
 }
 
 function defaultAction(
