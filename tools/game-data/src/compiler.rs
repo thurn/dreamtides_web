@@ -11,7 +11,7 @@ use sha2::{Digest, Sha256};
 use crate::manifest::{Dataset, Manifest, MigrationState};
 use crate::models::{
     affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft, dream_avatars,
-    dream_guides, dreamscapes, dreamsigns, dreamwell, economy, exploration, opponents,
+    dream_guides, dreamscapes, dreamsigns, dreamwell, economy, exploration, figments, opponents,
 };
 
 pub const BUILD_VERSION: &str = env!("GAME_DATA_BUILD_VERSION");
@@ -231,6 +231,7 @@ fn adapt(
             opponents::validate_card_references(&catalog, &known_card_ids)?;
             opponents::lower(catalog)
         }
+        "figments_v1" => figments::lower(parse_ron(source, dataset)?),
         "compat_v1" => {
             let document: compat::CompatDocument = parse_ron(source, dataset)?;
             Ok(document.data)
@@ -518,6 +519,9 @@ mod tests {
                 }
                 "opponents_v1" => {
                     canonical::<opponents::OpponentsCatalog>(&source, true);
+                }
+                "figments_v1" => {
+                    canonical::<Vec<figments::FigmentDefinition>>(&source, true);
                 }
                 "compat_v1" => {
                     canonical::<compat::CompatDocument>(&source, false);

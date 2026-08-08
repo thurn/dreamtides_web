@@ -29,6 +29,10 @@ use crate::models::exploration::{
     ActionDefinition, ActionEffect, DynamicValue, EffectKind, ExplorationCatalog, Predicate,
     TemplateInvocation,
 };
+use crate::models::figments::{
+    ArtCrop as FigmentArtCrop, CharacterType as FigmentCharacterType, FigmentBehavior,
+    FigmentDefinition,
+};
 
 #[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -93,6 +97,11 @@ enum EditOperation {
         field: String,
         value: JsonValue,
     },
+    SetFigmentField {
+        figment_id: String,
+        field: String,
+        value: JsonValue,
+    },
     ReplaceAction {
         card_id: String,
         slot: usize,
@@ -141,6 +150,7 @@ pub fn stage_edit(
         "dreamsigns" => edit_dreamsigns(manifest, staging_root, request.operations),
         "dreamwell" => edit_dreamwell(manifest, staging_root, request.operations),
         "exploration" => edit_exploration(manifest, staging_root, request.operations),
+        "figments" => edit_figments(manifest, staging_root, request.operations),
         dataset => edit_compat(manifest, staging_root, dataset, request.operations),
     }
 }
@@ -941,6 +951,184 @@ fn replace_source_ranges(
         previous_start = range.start;
     }
     Ok(result)
+}
+
+fn edit_figments(
+    manifest: &Manifest,
+    staging_root: &Path,
+    operations: Vec<EditOperation>,
+) -> Result<EditReport> {
+    let dataset = manifest.dataset("figments")?;
+    if dataset.adapter != "figments_v1"
+        || dataset.editor != crate::manifest::EditorCapability::Semantic
+    {
+        bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for Figments");
+    }
+    let source_path = staging_root.join(&dataset.source);
+    let original_text = fs::read_to_string(&source_path)
+        .with_context(|| format!("read staged Figment source {}", source_path.display()))?;
+    let original: Vec<FigmentDefinition> =
+        ron::from_str(&original_text).context("MALFORMED_SOURCE: staged Figment RON is invalid")?;
+    crate::models::figments::lower(original.clone())
+        .context("MALFORMED_SOURCE: staged Figment catalog is invalid")?;
+    let mut figments = original.clone();
+    let mut source_text = original_text;
+
+    for operation in operations {
+        match operation {
+            EditOperation::SetFigmentField {
+                figment_id,
+                field,
+                value,
+            } => {
+                let index = unique_figment_index(&figments, &figment_id)?;
+                set_figment_field(&mut figments[index], &field, value)?;
+                source_text = patch_figment_source_field(&source_text, &figments[index], &field)?;
+            }
+            _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to Figments"),
+        }
+    }
+
+    crate::models::figments::lower(figments.clone())
+        .context("INVALID_EDIT: Figment edit violates the catalog contract")?;
+    verify_round_trip::<Vec<FigmentDefinition>>(&source_text, &figments)?;
+    let changed = figments != original;
+    if changed {
+        atomic_write(&source_path, source_text.as_bytes())?;
+    }
+    Ok(EditReport {
+        ok: true,
+        changed,
+        dataset_id: "figments".into(),
+        source_revision: revision(staging_root, manifest, &["figments"])?,
+    })
+}
+
+fn unique_figment_index(figments: &[FigmentDefinition], id: &str) -> Result<usize> {
+    let matches = figments
+        .iter()
+        .enumerate()
+        .filter(|(_, figment)| figment.id.to_string() == id)
+        .map(|(index, _)| index)
+        .collect::<Vec<_>>();
+    match matches.as_slice() {
+        [] => bail!("RECORD_NOT_FOUND: Figment UUID {id}"),
+        [index] => Ok(*index),
+        _ => bail!("MALFORMED_SOURCE: duplicate Figment UUID {id}"),
+    }
+}
+
+fn set_figment_field(figment: &mut FigmentDefinition, field: &str, value: JsonValue) -> Result<()> {
+    match field {
+        "name" => figment.name = json_string(value, field)?,
+        "subtype" => {
+            figment.character_type = match json_string(value, field)?.as_str() {
+                "Warrior" => FigmentCharacterType::Warrior,
+                "Shadow" => FigmentCharacterType::Shadow,
+                "Spirit Animal" => FigmentCharacterType::SpiritAnimal,
+                "Monstrosity" => FigmentCharacterType::Monstrosity,
+                "Survivor" => FigmentCharacterType::Survivor,
+                "Wraith" => FigmentCharacterType::Wraith,
+                "Ethereal" => FigmentCharacterType::Ethereal,
+                "Ember" => FigmentCharacterType::Ember,
+                "Outsider" => FigmentCharacterType::Outsider,
+                _ => bail!("INVALID_EDIT: subtype must be a canonical Figment character type"),
+            };
+        }
+        "spark" => figment.base_spark = figment_json_u32(&value, "spark")?,
+        "rendered-text" => {
+            figment.behavior = match json_string(value, field)?.as_str() {
+                "" => FigmentBehavior::Vanilla,
+                "Vengeful" => FigmentBehavior::Vengeful,
+                "Awakened" => FigmentBehavior::Awakened,
+                "This character has +1✦ for each other warrior you control." => {
+                    FigmentBehavior::Legionnaire
+                }
+                _ => bail!("INVALID_EDIT: rendered-text must match a canonical Figment behavior"),
+            };
+        }
+        "image-number" => figment.image_number = figment_json_u32(&value, "image-number")?,
+        "art" => {
+            let object = value
+                .as_object()
+                .context("INVALID_EDIT: art must be an object")?;
+            figment.art = Some(FigmentArtCrop {
+                x: json_number(object.get("x"), "art.x")?,
+                y: json_number(object.get("y"), "art.y")?,
+                scale: json_number(object.get("scale"), "art.scale")?,
+            });
+        }
+        _ => bail!("INVALID_EDIT: unsupported Figment field {field}"),
+    }
+    Ok(())
+}
+
+fn figment_json_u32(value: &JsonValue, field: &str) -> Result<u32> {
+    let value = value
+        .as_u64()
+        .with_context(|| format!("INVALID_EDIT: {field} must be a non-negative integer"))?;
+    u32::try_from(value).with_context(|| format!("INVALID_EDIT: {field} exceeds u32"))
+}
+
+fn patch_figment_source_field(
+    source: &str,
+    figment: &FigmentDefinition,
+    field: &str,
+) -> Result<String> {
+    let source_field = match field {
+        "name" => "name",
+        "subtype" => "character_type",
+        "spark" => "base_spark",
+        "rendered-text" => "behavior",
+        "image-number" => "image_number",
+        "art" => "art",
+        _ => bail!("INVALID_EDIT: unsupported Figment field {field}"),
+    };
+    let record = typed_record_range(source, "FigmentDefinition", "id", &figment.id.to_string())?;
+    let replacement = render_figment_source_field(figment, source_field)?;
+    if let Some(value) = top_level_field_value_range(source, record.clone(), source_field)? {
+        return Ok(format!(
+            "{}{}{}",
+            &source[..value.start],
+            replacement,
+            &source[value.end..]
+        ));
+    }
+    if source_field == "art" {
+        let image = top_level_field_value_range(source, record.clone(), "image_number")?
+            .context("MALFORMED_SOURCE: Figment is missing image_number")?;
+        let comma_offset = source[image.end..record.end]
+            .find(',')
+            .context("MALFORMED_SOURCE: image_number is missing its trailing comma")?;
+        let insertion = image.end + comma_offset + 1;
+        return Ok(format!(
+            "{}\n    art: {},{}",
+            &source[..insertion],
+            replacement,
+            &source[insertion..]
+        ));
+    }
+    bail!("MALFORMED_SOURCE: Figment is missing field {source_field}")
+}
+
+fn render_figment_source_field(figment: &FigmentDefinition, field: &str) -> Result<String> {
+    match field {
+        "name" => Ok(ron::to_string(&figment.name)?),
+        "character_type" => Ok(ron::to_string(&figment.character_type)?),
+        "base_spark" => Ok(figment.base_spark.to_string()),
+        "behavior" => Ok(ron::to_string(&figment.behavior)?),
+        "image_number" => Ok(figment.image_number.to_string()),
+        "art" => {
+            let art = figment.art.context("art must be present when rendering")?;
+            Ok(format!(
+                "(x: {}, y: {}, scale: {})",
+                ron::to_string(&art.x)?,
+                ron::to_string(&art.y)?,
+                ron::to_string(&art.scale)?,
+            ))
+        }
+        _ => bail!("INVALID_EDIT: unsupported Figment source field {field}"),
+    }
 }
 
 fn edit_compat(
@@ -2829,6 +3017,106 @@ mod tests {
   ],
 )
 "###;
+
+    const FIGMENT_ID: &str = "00000000-0000-4000-8000-000000000031";
+    const FIGMENT_SOURCE: &str = r###"// Stable Figment catalog guidance.
+
+#![enable(implicit_some)]
+[
+  // Edited record comment.
+  FigmentDefinition(
+    id: "00000000-0000-4000-8000-000000000031",
+    name: r#"Raw Figment"#,
+    character_type: Warrior,
+    base_spark: 1,
+    behavior: Vanilla,
+    image_number: 31,
+  ),
+
+  /* Unrelated record comment. */
+  FigmentDefinition(
+    id: "00000000-0000-4000-8000-000000000032",
+    name: "Unrelated Figment",
+    character_type: Shadow,
+    base_spark: 2,
+    behavior: Vengeful,
+    image_number: 32,
+    art: (x: 0.0, y: 0.25, scale: 1.5),
+  ),
+]
+"###;
+
+    #[test]
+    fn figment_scalar_patch_changes_one_line_and_preserves_unrelated_source() {
+        let mut figments: Vec<FigmentDefinition> = ron::from_str(FIGMENT_SOURCE).unwrap();
+        let index = unique_figment_index(&figments, FIGMENT_ID).unwrap();
+        let unrelated_before = typed_record_range(
+            FIGMENT_SOURCE,
+            "FigmentDefinition",
+            "id",
+            "00000000-0000-4000-8000-000000000032",
+        )
+        .unwrap();
+        set_figment_field(&mut figments[index], "spark", json!(3)).unwrap();
+        let patched =
+            patch_figment_source_field(FIGMENT_SOURCE, &figments[index], "spark").unwrap();
+        let changed_lines = FIGMENT_SOURCE
+            .lines()
+            .zip(patched.lines())
+            .filter(|(before, after)| before != after)
+            .count();
+        assert_eq!(changed_lines, 1);
+        let unrelated_after = typed_record_range(
+            &patched,
+            "FigmentDefinition",
+            "id",
+            "00000000-0000-4000-8000-000000000032",
+        )
+        .unwrap();
+        assert_eq!(&FIGMENT_SOURCE[unrelated_before], &patched[unrelated_after]);
+        assert!(patched.contains("name: r#\"Raw Figment\"#"));
+        assert_eq!(
+            ron::from_str::<Vec<FigmentDefinition>>(&patched).unwrap(),
+            figments
+        );
+    }
+
+    #[test]
+    fn figment_editor_round_trips_every_field_shape_and_inserts_optional_art() {
+        let mut figments: Vec<FigmentDefinition> = ron::from_str(FIGMENT_SOURCE).unwrap();
+        let index = unique_figment_index(&figments, FIGMENT_ID).unwrap();
+        let mut patched = FIGMENT_SOURCE.to_owned();
+        for (field, value) in [
+            ("name", json!("Edited Figment")),
+            ("subtype", json!("Spirit Animal")),
+            ("spark", json!(4)),
+            ("rendered-text", json!("Awakened")),
+            ("image-number", json!(99)),
+            ("art", json!({ "x": -0.25, "y": 0.5, "scale": 1.75 })),
+        ] {
+            set_figment_field(&mut figments[index], field, value).unwrap();
+            patched = patch_figment_source_field(&patched, &figments[index], field).unwrap();
+        }
+        assert!(patched.contains("art: (x: -0.25, y: 0.5, scale: 1.75),"));
+        assert!(patched.contains("/* Unrelated record comment. */"));
+        assert_eq!(
+            ron::from_str::<Vec<FigmentDefinition>>(&patched).unwrap(),
+            figments
+        );
+        crate::models::figments::lower(figments).unwrap();
+    }
+
+    #[test]
+    fn figment_editor_rejects_invalid_identities_variants_and_numbers() {
+        let mut figments: Vec<FigmentDefinition> = ron::from_str(FIGMENT_SOURCE).unwrap();
+        let index = unique_figment_index(&figments, FIGMENT_ID).unwrap();
+        assert!(unique_figment_index(&figments, "not-a-uuid").is_err());
+        assert!(set_figment_field(&mut figments[index], "subtype", json!("Visitor")).is_err());
+        assert!(
+            set_figment_field(&mut figments[index], "rendered-text", json!("Custom text")).is_err()
+        );
+        assert!(set_figment_field(&mut figments[index], "spark", json!(-1)).is_err());
+    }
 
     #[test]
     fn dreamsign_scalar_patch_changes_one_line_and_preserves_unrelated_source() {

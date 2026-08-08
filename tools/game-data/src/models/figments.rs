@@ -213,13 +213,9 @@ fn validate(source: &[FigmentDefinition]) -> Result<()> {
 
 #[cfg(test)]
 mod tests {
-    use std::fs;
-    use std::path::Path;
-
     use pretty_assertions::assert_eq;
 
     use super::*;
-    use crate::models::compat::CompatDocument;
 
     const FIRST_ID: &str = "00000000-0000-4000-8000-000000000001";
     const SECOND_ID: &str = "00000000-0000-4000-8000-000000000002";
@@ -383,55 +379,4 @@ mod tests {
         );
     }
 
-    #[test]
-    #[ignore = "real-catalog parity probe retained for canonical Figment review"]
-    fn canonical_candidate_matches_current_compatibility_sources() {
-        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-        let current_ron: CompatDocument =
-            ron::from_str(&fs::read_to_string(root.join("data/figments.ron")).unwrap()).unwrap();
-        let current_toml: toml::Value =
-            toml::from_str(&fs::read_to_string(root.join("data/figments.toml")).unwrap()).unwrap();
-        assert_eq!(current_ron.data, current_toml);
-
-        let canonical: Vec<FigmentDefinition> =
-            ron::from_str(&fs::read_to_string(root.join("data/figments_canonical.ron")).unwrap())
-                .unwrap();
-        assert_eq!(lower(canonical.clone()).unwrap(), current_ron.data);
-
-        let canonical_ids: BTreeSet<_> = canonical
-            .iter()
-            .map(|figment| figment.id.to_string())
-            .collect();
-        let compatibility_ids: BTreeSet<_> = current_toml["figments"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|figment| figment["id"].as_str().unwrap().to_owned())
-            .collect();
-        assert_eq!(canonical_ids.len(), canonical.len());
-        assert_eq!(canonical_ids, compatibility_ids);
-        assert_eq!(
-            canonical.len(),
-            current_toml["figments"].as_array().unwrap().len()
-        );
-
-        for id in canonical_ids {
-            let parsed = Uuid::parse_str(&id).unwrap();
-            assert_eq!(parsed.get_version(), Some(Version::Random));
-            assert_eq!(parsed.get_variant(), Variant::RFC4122);
-            assert_eq!(parsed.hyphenated().to_string(), id);
-        }
-
-        let behaviors: BTreeSet<_> = canonical
-            .iter()
-            .map(|figment| format!("{:?}", figment.behavior))
-            .collect();
-        assert_eq!(
-            behaviors,
-            ["Awakened", "Legionnaire", "Vanilla", "Vengeful"]
-                .into_iter()
-                .map(str::to_owned)
-                .collect()
-        );
-    }
 }

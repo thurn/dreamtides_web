@@ -399,16 +399,11 @@ function figmentEditorApiPlugin(): Plugin {
     name: "figment-editor-api",
     apply: "serve",
     configureServer(server) {
+      const editorRoot = process.env.DREAMTIDES_EDITOR_DATA_ROOT;
+      const rootDir =
+        editorRoot === undefined ? __dirname : path.resolve(editorRoot);
       server.middlewares.use(
-        createRonEditorBridge({
-          rootDir: __dirname,
-          basePaths: ["/api/editor/figments"],
-          collectionPath: "/api/editor/figments",
-          datasets: ["figments"],
-          sourcePaths: ["data/figments.ron"],
-          createLegacy: (rootDir) =>
-            createFigmentEditorApiMiddleware({ rootDir }),
-        }),
+        createFigmentEditorApiMiddleware({ rootDir }),
       );
     },
   };
@@ -426,21 +421,23 @@ function figmentEditorApiPlugin(): Plugin {
  * builds.
  */
 function figmentDataHotReloadPlugin(): Plugin {
-  const figmentTomlPath = path.resolve(
-    path.join(__dirname, "data", "figments.toml"),
-  );
-  const tomlDir = path.dirname(figmentTomlPath);
-  const tomlBasename = path.basename(figmentTomlPath);
-
   return {
     name: "figment-data-hot-reload",
     apply: "serve",
     configureServer(server) {
+      const editorRoot = process.env.DREAMTIDES_EDITOR_DATA_ROOT;
+      const rootDir =
+        editorRoot === undefined ? __dirname : path.resolve(editorRoot);
+      const figmentTomlPath = path.resolve(
+        path.join(rootDir, "data", "figments.toml"),
+      );
+      const tomlDir = path.dirname(figmentTomlPath);
+      const tomlBasename = path.basename(figmentTomlPath);
       let pendingReload: ReturnType<typeof setTimeout> | null = null;
 
       const regenerateAndReload = (): void => {
         try {
-          refreshFigmentDataJson({ rootDir: __dirname });
+          refreshFigmentDataJson({ rootDir });
           console.log(
             "[figment-data] figments.toml changed -> regenerated figments-data.json -> notifying running app",
           );

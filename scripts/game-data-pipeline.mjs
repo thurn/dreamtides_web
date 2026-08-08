@@ -403,6 +403,8 @@ export async function stageAndPublishGameDataEdit({
   sourcePaths,
   expectedSourceRevision,
   stagedFiles = {},
+  prepareDerivedArtifacts,
+  additionalPublishPaths = [],
 } = {}) {
   rootDir = resolve(rootDir);
   const release = acquireLock(rootDir);
@@ -454,10 +456,13 @@ export async function stageAndPublishGameDataEdit({
       ["compile", "--staging-root", stageRoot],
       { dataRoot: stageRoot },
     );
+    if (prepareDerivedArtifacts !== undefined) {
+      await prepareDerivedArtifacts({ stageRoot, compileReport });
+    }
     validateTomlDocuments(manifest, stageRoot);
     validateWithTypeScript(rootDir, stageRoot);
     const publication = publish(rootDir, stageRoot, manifest, {
-      canonicalPaths: sourcePaths,
+      canonicalPaths: [...sourcePaths, ...additionalPublishPaths],
       lockHeld: true,
     });
     return {

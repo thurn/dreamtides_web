@@ -1,40 +1,21 @@
-import {
-  existsSync,
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  renameSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
-import { tmpdir } from "node:os";
-import { isAbsolute, join, relative, resolve, sep } from "node:path";
+import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  DEFAULT_FIGMENT_TOML_PATH,
-  patchFigmentsToml,
   readEditorFigments,
   refreshFigmentDataJson,
   validateFigmentEdit,
 } from "./figment-editor-data.mjs";
+import {
+  sourceRevision,
+  stageAndPublishGameDataEdit,
+} from "./game-data-pipeline.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/figments";
-const FIGMENT_TOML_DIR = join("data");
 const FIGMENT_JSON_PATH = join("public", "figments-data.json");
+export const FIGMENT_SOURCE_PATH = join("data", "figments.ron");
+export const FIGMENT_EDITOR_SOURCE_PATHS = [FIGMENT_SOURCE_PATH];
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
-
-const defaultFileSystem = {
-  existsSync,
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  renameSync,
-  rmSync,
-  writeFileSync,
-};
-
-let saveCounter = 0;
 
 function elapsedMs(start) {
   return Number((performance.now() - start).toFixed(3));
@@ -62,40 +43,28 @@ function rawPathFromUrl(url) {
   return (url ?? "/").split("?", 1)[0];
 }
 
-function tomlParamFromUrl(url) {
+function sourceParamFromUrl(url) {
   const queryIndex = (url ?? "").indexOf("?");
   if (queryIndex === -1) {
     return null;
   }
-  return new URLSearchParams((url ?? "").slice(queryIndex + 1)).get("toml");
+  const params = new URLSearchParams((url ?? "").slice(queryIndex + 1));
+  return params.get("source") ?? params.get("toml");
 }
 
-function resolveRequestedTomlPath(rootDir, requested) {
+function resolveRequestedSource(requested) {
   if (requested === null || requested === undefined || requested.trim() === "") {
-    return { ok: true, relativePath: DEFAULT_FIGMENT_TOML_PATH };
+    return { ok: true };
   }
 
-  const trimmed = requested.trim();
-  if (trimmed.includes("\0")) {
-    return { ok: false, message: "The toml parameter is invalid." };
-  }
-
-  const hasDirectory = trimmed.includes("/") || trimmed.includes("\\");
-  const candidate = hasDirectory ? trimmed : join(FIGMENT_TOML_DIR, trimmed);
-
-  if (!candidate.toLowerCase().endsWith(".toml")) {
-    return { ok: false, message: "The toml file must have a .toml extension." };
-  }
-
-  const dataDir = resolve(rootDir, FIGMENT_TOML_DIR);
-  const target = resolve(rootDir, candidate);
-  const within = relative(dataDir, target);
-
-  if (within === "" || within.startsWith("..") || isAbsolute(within) || within.includes(sep)) {
-    return { ok: false, message: "The toml file must be located in data." };
-  }
-
-  return { ok: true, relativePath: join(FIGMENT_TOML_DIR, within) };
+  const normalized = requested
+    .trim()
+    .replaceAll("\\", "/")
+    .replace(/^data\//u, "")
+    .replace(/\.toml$/iu, ".ron");
+  return normalized === "figments.ron"
+    ? { ok: true }
+    : { ok: false, message: "The Figment editor source must be data/figments.ron." };
 }
 
 function decodePathSegment(segment) {
@@ -262,89 +231,44 @@ function assertPatchBody(body) {
   if (!Object.hasOwn(body, "value")) {
     return { ok: false, code: "INVALID_REQUEST", message: "PATCH body value is required." };
   }
+  if (typeof body.expectedSourceRevision !== "string") {
+    return {
+      ok: false,
+      code: "INVALID_REQUEST",
+      message: "Every save requires expectedSourceRevision.",
+    };
+  }
   return { ok: true };
 }
 
-function tempPathFor(destination, extension) {
-  saveCounter += 1;
-  return `${destination}.${process.pid}.${Date.now()}.${saveCounter}.${extension}`;
+function loadEditorData(rootDir) {
+  return readEditorFigments({ rootDir });
 }
 
-function preparedWrite(destination, content) {
+function collectionResponse(rootDir, revision, loadData) {
   return {
-    destination,
-    temp: tempPathFor(destination, "tmp"),
-    backup: tempPathFor(destination, "bak"),
-    content,
+    figments: loadData(rootDir),
+    sourceRevision: revision(rootDir, FIGMENT_EDITOR_SOURCE_PATHS),
   };
 }
 
-function commitFiles(writes, fileSystem) {
-  const preexisting = new Set(
-    writes.filter((write) => fileSystem.existsSync(write.destination)),
-  );
-
-  try {
-    for (const write of writes) {
-      fileSystem.writeFileSync(write.temp, write.content);
-    }
-    for (const write of writes) {
-      if (preexisting.has(write)) {
-        fileSystem.renameSync(write.destination, write.backup);
-      }
-    }
-    for (const write of writes) {
-      fileSystem.renameSync(write.temp, write.destination);
-    }
-  } catch (error) {
-    for (const write of writes) {
-      fileSystem.rmSync(write.temp, { force: true, recursive: true });
-    }
-    for (const write of writes) {
-      if (preexisting.has(write)) {
-        if (fileSystem.existsSync(write.backup)) {
-          fileSystem.rmSync(write.destination, { force: true, recursive: true });
-          fileSystem.renameSync(write.backup, write.destination);
-        }
-      } else {
-        fileSystem.rmSync(write.destination, { force: true, recursive: true });
-      }
-    }
-    throw error;
-  }
-
-  for (const write of writes) {
-    if (!preexisting.has(write)) {
-      continue;
-    }
-    try {
-      fileSystem.rmSync(write.backup, { force: true, recursive: true });
-    } catch {
-      // Backups are removed after every destination file is committed.
-    }
-  }
+function statusFor(error) {
+  if (error.code === "STALE_SOURCE") return 409;
+  if (error.code === "RECORD_NOT_FOUND") return 404;
+  if (["INVALID_EDIT", "FIELD_NOT_APPLICABLE"].includes(error.code)) return 400;
+  if (["MALFORMED_SOURCE", "COMPATIBILITY_VALIDATION_FAILED"].includes(error.code)) return 422;
+  return error.statusCode ?? 500;
 }
 
-function generateFigmentDataJsonFromToml(patchedSource, fileSystem) {
-  const tempRoot = fileSystem.mkdtempSync(join(tmpdir(), "journey-figment-editor-refresh-"));
-
-  try {
-    fileSystem.mkdirSync(join(tempRoot, "data"), { recursive: true });
-    fileSystem.mkdirSync(join(tempRoot, "public"), { recursive: true });
-    fileSystem.writeFileSync(join(tempRoot, DEFAULT_FIGMENT_TOML_PATH), patchedSource);
-
-    refreshFigmentDataJson({ rootDir: tempRoot });
-
-    const figmentJson = fileSystem.readFileSync(join(tempRoot, FIGMENT_JSON_PATH), "utf8");
-    JSON.parse(figmentJson);
-
-    return figmentJson;
-  } finally {
-    fileSystem.rmSync(tempRoot, { recursive: true, force: true });
-  }
-}
-
-async function handlePatch(req, res, rootDir, figmentId, figmentTomlPath, fileSystem) {
+async function handlePatch(
+  req,
+  res,
+  rootDir,
+  figmentId,
+  publishEdit,
+  revision,
+  loadData,
+) {
   let body;
   try {
     body = await readJsonRequest(req);
@@ -387,40 +311,32 @@ async function handlePatch(req, res, rootDir, figmentId, figmentTomlPath, fileSy
   }
 
   const totalStart = performance.now();
-  const readStart = performance.now();
-  const beforeFigments = readEditorFigments({ rootDir, figmentTomlPath });
-  const readMs = elapsedMs(readStart);
+  const beforeFigments = loadData(rootDir);
 
   if (!beforeFigments.some((figment) => figment.id === figmentId)) {
     figmentNotFound(res, figmentId);
     return;
   }
 
-  const tomlPath = join(rootDir, figmentTomlPath);
-  const patchStart = performance.now();
-  const source = fileSystem.readFileSync(tomlPath, "utf8");
-  const patched = patchFigmentsToml(source, {
-    figmentId,
-    field: body.field,
-    value: validation.value,
+  const result = await publishEdit({
+    rootDir,
+    dataset: "figments",
+    operations: [{
+      operation: "set_figment_field",
+      figment_id: figmentId,
+      field: validation.field,
+      value: validation.value,
+    }],
+    sourcePaths: FIGMENT_EDITOR_SOURCE_PATHS,
+    expectedSourceRevision: body.expectedSourceRevision,
+    prepareDerivedArtifacts: ({ stageRoot }) => {
+      refreshFigmentDataJson({ rootDir: stageRoot });
+    },
+    additionalPublishPaths: [FIGMENT_JSON_PATH],
   });
-  const patchMs = elapsedMs(patchStart);
-
-  const refreshesFigmentJson = figmentTomlPath === DEFAULT_FIGMENT_TOML_PATH;
-  const refreshStart = performance.now();
-  const writes = [preparedWrite(tomlPath, patched.source)];
-  if (refreshesFigmentJson) {
-    const figmentJson = generateFigmentDataJsonFromToml(patched.source, fileSystem);
-    writes.push(preparedWrite(join(rootDir, FIGMENT_JSON_PATH), figmentJson));
-  }
-  commitFiles(writes, fileSystem);
-  const refreshMs = elapsedMs(refreshStart);
-
-  const confirmStart = performance.now();
-  const confirmedFigment = readEditorFigments({ rootDir, figmentTomlPath }).find(
+  const confirmedFigment = loadData(rootDir).find(
     (figment) => figment.id === figmentId,
   );
-  const confirmMs = elapsedMs(confirmStart);
 
   if (confirmedFigment === undefined) {
     figmentNotFound(res, figmentId);
@@ -429,12 +345,14 @@ async function handlePatch(req, res, rootDir, figmentId, figmentTomlPath, fileSy
 
   jsonResponse(res, 200, {
     figment: confirmedFigment,
+    sourceRevision:
+      result.sourceRevision ?? revision(rootDir, FIGMENT_EDITOR_SOURCE_PATHS),
     ...(Object.hasOwn(body, "clientRevision") ? { clientRevision: body.clientRevision } : {}),
     timing: {
-      readMs,
-      patchMs,
-      refreshMs,
-      confirmMs,
+      readMs: 0,
+      patchMs: 0,
+      refreshMs: 0,
+      confirmMs: 0,
       totalMs: elapsedMs(totalStart),
     },
   });
@@ -442,7 +360,9 @@ async function handlePatch(req, res, rootDir, figmentId, figmentTomlPath, fileSy
 
 export function createFigmentEditorApiMiddleware({
   rootDir = ROOT,
-  fileSystem = defaultFileSystem,
+  publishEdit = stageAndPublishGameDataEdit,
+  revision = sourceRevision,
+  loadData = loadEditorData,
 } = {}) {
   return async function figmentEditorApiMiddleware(req, res, next) {
     const rawPath = rawPathFromUrl(req.url);
@@ -459,35 +379,49 @@ export function createFigmentEditorApiMiddleware({
         return;
       }
 
-      const tomlResolution = resolveRequestedTomlPath(rootDir, tomlParamFromUrl(req.url));
-      if (!tomlResolution.ok) {
-        errorResponse(res, 400, "INVALID_TOML", tomlResolution.message);
-        return;
-      }
-
-      const figmentTomlPath = tomlResolution.relativePath;
-      if (!fileSystem.existsSync(join(rootDir, figmentTomlPath))) {
-        errorResponse(res, 404, "TOML_NOT_FOUND", "The requested toml file was not found.", {
-          toml: figmentTomlPath,
-        });
+      const sourceResolution = resolveRequestedSource(sourceParamFromUrl(req.url));
+      if (!sourceResolution.ok) {
+        errorResponse(res, 400, "INVALID_SOURCE", sourceResolution.message);
         return;
       }
 
       if (req.method === "GET" && route.resource === "collection") {
-        jsonResponse(res, 200, {
-          figments: readEditorFigments({ rootDir, figmentTomlPath }),
-        });
+        jsonResponse(res, 200, collectionResponse(rootDir, revision, loadData));
         return;
       }
 
       if (req.method === "PATCH" && route.resource === "figment") {
-        await handlePatch(req, res, rootDir, route.figmentId, figmentTomlPath, fileSystem);
+        await handlePatch(
+          req,
+          res,
+          rootDir,
+          route.figmentId,
+          publishEdit,
+          revision,
+          loadData,
+        );
         return;
       }
 
       methodNotAllowed(res, route.resource === "collection" ? ["GET"] : ["PATCH"]);
     } catch (error) {
-      errorResponse(res, 500, "SAVE_FAILED", error instanceof Error ? error.message : "Save failed.");
+      const confirmed = error.code === "STALE_SOURCE"
+        ? collectionResponse(rootDir, revision, loadData)
+        : undefined;
+      errorResponse(
+        res,
+        statusFor(error),
+        error.code ?? "PUBLICATION_FAILED",
+        error instanceof Error ? error.message : "Figment editor transaction failed.",
+        {
+          datasetId: "figments",
+          source: FIGMENT_SOURCE_PATH,
+          ...(error.currentSourceRevision === undefined
+            ? {}
+            : { currentSourceRevision: error.currentSourceRevision }),
+          ...(confirmed === undefined ? {} : { confirmed }),
+        },
+      );
     }
   };
 }

@@ -44,6 +44,7 @@ export interface FigmentDisplayState {
 
 export interface LoadEditorFigmentsResponse {
   figments: EditorFigmentRecord[];
+  sourceRevision: string;
 }
 
 export interface SaveEditorFigmentFieldRequest {
@@ -75,6 +76,7 @@ export interface EditorSaveTiming {
 
 export interface SaveEditorFigmentFieldResponse {
   figment: EditorFigmentRecord;
+  sourceRevision: string;
   clientRevision?: number;
   timing: EditorSaveTiming;
 }
