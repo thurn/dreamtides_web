@@ -1217,7 +1217,7 @@ fn lower_speech_bubble(value: SpeechBubble) -> CompatibilitySpeechBubble {
 fn lower_trigger(value: TriggerDefinition) -> Result<CompatibilityTrigger> {
     let matcher = match value.matcher {
         TriggerMatcher::Glossary { glossary_id } => CompatibilityMatcher::Glossary {
-            id: compatibility_id(glossary_id, GLOSSARY_IDS)?,
+            id: glossary_id.to_string(),
         },
         TriggerMatcher::EventCard => CompatibilityMatcher::CardType { card_type: "event" },
         TriggerMatcher::Card { card_id } => CompatibilityMatcher::CardId {
@@ -2006,6 +2006,10 @@ mod tests {
 
         let triggers = lowered["triggers"].as_array().unwrap();
         assert_eq!(triggers[0]["match"]["kind"].as_str(), Some("glossary"));
+        assert_eq!(
+            triggers[0]["match"]["id"].as_str(),
+            Some("59f426ac-b9cb-47af-a00a-8cbab941c6c4")
+        );
         assert_eq!(triggers[1]["match"]["kind"].as_str(), Some("card-type"));
         assert_eq!(triggers[2]["match"]["kind"].as_str(), Some("card-id"));
         assert_eq!(triggers[3]["match"]["kind"].as_str(), Some("any"));
