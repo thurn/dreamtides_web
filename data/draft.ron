@@ -1,4 +1,6 @@
-(
+// Configures Draft-site offers, run-wide rarity limits, and draft-pool generation.
+
+DraftDocument(
   offers: (
     // Number of cards shown to the player in each draft offer.
     cards_per_offer: 4,
