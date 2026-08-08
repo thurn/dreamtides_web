@@ -12,6 +12,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { createDreamwellEditorApiMiddleware } from "./dreamwell-editor-api.mjs";
+import { refreshDreamwellDataJson } from "./dreamwell-editor-data.mjs";
 
 const FIRST_ID = "11111111-1111-4111-8111-111111111111";
 const SECOND_ID = "22222222-2222-4222-8222-222222222222";
@@ -48,12 +49,26 @@ function writeFixtureRoot() {
   mkdirSync(join(rootDir, "data"), { recursive: true });
   mkdirSync(join(rootDir, "public"), { recursive: true });
   writeFileSync(join(rootDir, "data", "dreamwell.toml"), fixtureToml());
+  writeFileSync(join(rootDir, "data", "dreamwell.ron"), "synthetic canonical source\n");
   writeFileSync(join(rootDir, "public", "dreamwell-data.json"), "[]\n");
   return rootDir;
 }
 
-async function startApi(rootDir) {
-  const middleware = createDreamwellEditorApiMiddleware({ rootDir });
+async function startApi(rootDir, overrides = {}) {
+  const publishEdit = overrides.publishEdit ?? (async (request) => {
+    const operation = request.operations[0];
+    const sourcePath = join(rootDir, "data", "dreamwell.toml");
+    const source = readFileSync(sourcePath, "utf8");
+    if (operation.field !== "energy-added") throw new Error("unexpected test operation");
+    writeFileSync(sourcePath, source.replace("energy-added = 2", `energy-added = ${operation.value}`));
+    refreshDreamwellDataJson({ rootDir });
+    return { sourceRevision: "revision-2" };
+  });
+  const middleware = createDreamwellEditorApiMiddleware({
+    rootDir,
+    publishEdit,
+    revision: overrides.revision ?? (() => "revision-1"),
+  });
   const server = createServer((req, res) => {
     middleware(req, res, () => {
       res.writeHead(418, { "Content-Type": "application/json" });
@@ -96,6 +111,7 @@ describe("createDreamwellEditorApiMiddleware", () => {
 
     const load = await requestJson(origin, "/api/editor/dreamwell");
     expect(load.response.status).toBe(200);
+    expect(load.body.sourceRevision).toBe("revision-1");
     expect(load.body.dreamwell.map((record) => record.id)).toEqual([
       FIRST_ID,
       SECOND_ID,
@@ -109,11 +125,13 @@ describe("createDreamwellEditorApiMiddleware", () => {
         field: "energy-added",
         value: 3,
         clientRevision: 7,
+        expectedSourceRevision: "revision-1",
       }),
     });
 
     expect(save.response.status).toBe(200);
     expect(save.body.clientRevision).toBe(7);
+    expect(save.body.sourceRevision).toBe("revision-2");
     expect(save.body.dreamwell["energy-added"]).toBe(3);
     expect(
       readFileSync(join(rootDir, "data", "dreamwell.toml"), "utf8"),
@@ -133,7 +151,12 @@ describe("createDreamwellEditorApiMiddleware", () => {
     const save = await requestJson(origin, `/api/editor/dreamwell/${FIRST_ID}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: FIRST_ID, field: "order", value: 9 }),
+      body: JSON.stringify({
+        id: FIRST_ID,
+        field: "order",
+        value: 9,
+        expectedSourceRevision: "revision-1",
+      }),
     });
 
     expect(save.response.status).toBe(400);
@@ -150,12 +173,115 @@ describe("createDreamwellEditorApiMiddleware", () => {
     const save = await requestJson(origin, `/api/editor/dreamwell/${missingId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: missingId, field: "name", value: "Nope" }),
+      body: JSON.stringify({
+        id: missingId,
+        field: "name",
+        value: "Nope",
+        expectedSourceRevision: "revision-1",
+      }),
     });
 
     expect(save.response.status).toBe(404);
     expect(save.body.error).toMatchObject({ code: "DREAMWELL_NOT_FOUND" });
 
+    rmSync(rootDir, { recursive: true, force: true });
+  });
+
+  it("publishes a closed typed operation and reports stale source recovery", async () => {
+    const rootDir = writeFixtureRoot();
+    const requests = [];
+    const stale = new Error("canonical RON changed after load");
+    stale.code = "STALE_SOURCE";
+    stale.currentSourceRevision = "revision-current";
+    const origin = await startApi(rootDir, {
+      publishEdit: async (request) => {
+        requests.push(request);
+        throw stale;
+      },
+      revision: () => "revision-current",
+    });
+
+    const save = await requestJson(origin, `/api/editor/dreamwell/${FIRST_ID}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: FIRST_ID,
+        field: "name",
+        value: "Daybreak Ridge",
+        expectedSourceRevision: "revision-stale",
+      }),
+    });
+
+    expect(requests[0]).toMatchObject({
+      dataset: "dreamwell",
+      sourcePaths: ["data/dreamwell.ron"],
+      expectedSourceRevision: "revision-stale",
+      operations: [{
+        operation: "set_dreamwell_field",
+        dreamwell_id: FIRST_ID,
+        field: "name",
+        value: "Daybreak Ridge",
+      }],
+    });
+    expect(save.response.status).toBe(409);
+    expect(save.body.error).toMatchObject({
+      code: "STALE_SOURCE",
+      details: {
+        currentSourceRevision: "revision-current",
+        confirmed: { sourceRevision: "revision-current" },
+      },
+    });
+
+    rmSync(rootDir, { recursive: true, force: true });
+  });
+
+  it("does not publish a request without a source revision", async () => {
+    const rootDir = writeFixtureRoot();
+    let published = false;
+    const origin = await startApi(rootDir, {
+      publishEdit: async () => {
+        published = true;
+      },
+    });
+
+    const save = await requestJson(origin, `/api/editor/dreamwell/${FIRST_ID}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: FIRST_ID, field: "name", value: "No revision" }),
+    });
+
+    expect(save.response.status).toBe(400);
+    expect(published).toBe(false);
+    rmSync(rootDir, { recursive: true, force: true });
+  });
+
+  it("keeps canonical and generated files unchanged when publication fails", async () => {
+    const rootDir = writeFixtureRoot();
+    const ronBefore = readFileSync(join(rootDir, "data", "dreamwell.ron"), "utf8");
+    const tomlBefore = readFileSync(join(rootDir, "data", "dreamwell.toml"), "utf8");
+    const origin = await startApi(rootDir, {
+      publishEdit: async () => {
+        const error = new Error("synthetic publication failure");
+        error.code = "PUBLICATION_FAILED";
+        throw error;
+      },
+    });
+
+    const save = await requestJson(origin, `/api/editor/dreamwell/${FIRST_ID}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: FIRST_ID,
+        field: "name",
+        value: "Unpublished",
+        expectedSourceRevision: "revision-1",
+      }),
+    });
+
+    expect(save.response.status).toBe(500);
+    expect(save.body.error.code).toBe("PUBLICATION_FAILED");
+    expect(readFileSync(join(rootDir, "data", "dreamwell.ron"), "utf8")).toBe(ronBefore);
+    expect(readFileSync(join(rootDir, "data", "dreamwell.toml"), "utf8")).toBe(tomlBefore);
     rmSync(rootDir, { recursive: true, force: true });
   });
 });

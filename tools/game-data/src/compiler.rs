@@ -11,7 +11,7 @@ use sha2::{Digest, Sha256};
 use crate::manifest::{Dataset, Manifest, MigrationState};
 use crate::models::{
     affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft, dream_avatars,
-    dream_guides, dreamscapes, dreamsigns, economy, exploration, opponents,
+    dream_guides, dreamscapes, dreamsigns, dreamwell, economy, exploration, opponents,
 };
 
 pub const BUILD_VERSION: &str = env!("GAME_DATA_BUILD_VERSION");
@@ -177,6 +177,22 @@ fn adapt(
                 metadata_dataset,
             )?;
             dreamsigns::lower(definitions, metadata)
+        }
+        "dreamwell_metadata_v1" => dreamwell::lower_metadata(parse_ron(source, dataset)?),
+        "dreamwell_v1" => {
+            let definitions: Vec<dreamwell::DreamwellCardDefinition> = parse_ron(source, dataset)?;
+            let metadata_dataset = manifest.dataset("internal-dreamwell-metadata")?;
+            let metadata_path = root.join(&metadata_dataset.source);
+            let metadata: Vec<dreamwell::DreamwellCardMetadata> = parse_ron(
+                &fs::read_to_string(&metadata_path).with_context(|| {
+                    format!(
+                        "read internal Dreamwell metadata source {}",
+                        metadata_path.display()
+                    )
+                })?,
+                metadata_dataset,
+            )?;
+            dreamwell::lower(definitions, metadata)
         }
         "cards_v2" => {
             let metadata_dataset = manifest.dataset("internal-card-metadata")?;
@@ -490,6 +506,12 @@ mod tests {
                 }
                 "economy_v1" => {
                     canonical::<economy::EconomyCatalog>(&source, true);
+                }
+                "dreamwell_v1" => {
+                    canonical::<Vec<dreamwell::DreamwellCardDefinition>>(&source, true);
+                }
+                "dreamwell_metadata_v1" => {
+                    canonical::<Vec<dreamwell::DreamwellCardMetadata>>(&source, true);
                 }
                 "exploration_v1" => {
                     canonical::<ExplorationCatalog>(&source, true);

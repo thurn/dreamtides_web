@@ -24,6 +24,7 @@ use crate::models::dreamsigns::{
     self, DreamsignDefinition, DreamsignId, DreamsignMetadataCatalog, DreamsignTag,
     DreamsignTagCatalog,
 };
+use crate::models::dreamwell::{self, ArtCrop, DeckTier, DreamwellCardDefinition};
 use crate::models::exploration::{
     ActionDefinition, ActionEffect, DynamicValue, EffectKind, ExplorationCatalog, Predicate,
     TemplateInvocation,
@@ -87,6 +88,11 @@ enum EditOperation {
         dreamscape_id: String,
         opponent_ids: Vec<String>,
     },
+    SetDreamwellField {
+        dreamwell_id: String,
+        field: String,
+        value: JsonValue,
+    },
     ReplaceAction {
         card_id: String,
         slot: usize,
@@ -133,6 +139,7 @@ pub fn stage_edit(
         "dream-guides" => edit_dream_guides(manifest, staging_root, request.operations),
         "dreamscapes" => edit_dreamscapes(manifest, staging_root, request.operations),
         "dreamsigns" => edit_dreamsigns(manifest, staging_root, request.operations),
+        "dreamwell" => edit_dreamwell(manifest, staging_root, request.operations),
         "exploration" => edit_exploration(manifest, staging_root, request.operations),
         dataset => edit_compat(manifest, staging_root, dataset, request.operations),
     }
@@ -328,6 +335,211 @@ fn patch_dreamscape_source_field(
             .with_context(|| format!("MALFORMED_SOURCE: Dreamscape is missing {source_field}"))?
     };
     replace_source_ranges(source, vec![(range, replacement)])
+}
+
+fn edit_dreamwell(
+    manifest: &Manifest,
+    staging_root: &Path,
+    operations: Vec<EditOperation>,
+) -> Result<EditReport> {
+    let dataset = manifest.dataset("dreamwell")?;
+    if dataset.adapter != "dreamwell_v1"
+        || dataset.editor != crate::manifest::EditorCapability::Semantic
+    {
+        bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for dreamwell");
+    }
+    let source_path = staging_root.join(&dataset.source);
+    let original_text = fs::read_to_string(&source_path)
+        .with_context(|| format!("read staged Dreamwell source {}", source_path.display()))?;
+    let original: Vec<DreamwellCardDefinition> = ron::from_str(&original_text)
+        .context("MALFORMED_SOURCE: staged Dreamwell RON is invalid")?;
+    dreamwell::validate(&original)
+        .context("MALFORMED_SOURCE: staged Dreamwell catalog is invalid")?;
+    let mut cards = original.clone();
+    let mut source_text = original_text;
+
+    for operation in operations {
+        match operation {
+            EditOperation::SetDreamwellField {
+                dreamwell_id,
+                field,
+                value,
+            } => {
+                let index = unique_dreamwell_index(&cards, &dreamwell_id)?;
+                set_dreamwell_field(&mut cards[index], &field, value)?;
+                source_text = patch_dreamwell_source_field(&source_text, &cards[index], &field)?;
+            }
+            _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to Dreamwell"),
+        }
+    }
+
+    dreamwell::validate(&cards)
+        .context("INVALID_EDIT: Dreamwell edit violates the catalog contract")?;
+    verify_round_trip::<Vec<DreamwellCardDefinition>>(&source_text, &cards)?;
+    let changed = cards != original;
+    if changed {
+        atomic_write(&source_path, source_text.as_bytes())?;
+    }
+    Ok(EditReport {
+        ok: true,
+        changed,
+        dataset_id: "dreamwell".into(),
+        source_revision: revision(staging_root, manifest, &["dreamwell"])?,
+    })
+}
+
+fn unique_dreamwell_index(cards: &[DreamwellCardDefinition], id: &str) -> Result<usize> {
+    let matches = cards
+        .iter()
+        .enumerate()
+        .filter(|(_, card)| card.id.to_string() == id)
+        .map(|(index, _)| index)
+        .collect::<Vec<_>>();
+    match matches.as_slice() {
+        [] => bail!("RECORD_NOT_FOUND: Dreamwell card UUID {id}"),
+        [index] => Ok(*index),
+        _ => bail!("MALFORMED_SOURCE: duplicate Dreamwell card UUID {id}"),
+    }
+}
+
+fn set_dreamwell_field(
+    card: &mut DreamwellCardDefinition,
+    field: &str,
+    value: JsonValue,
+) -> Result<()> {
+    match field {
+        "name" => {
+            let name = json_string(value, field)?;
+            if name.trim().is_empty() {
+                bail!("INVALID_EDIT: Dreamwell card name must not be blank");
+            }
+            card.name = name;
+        }
+        "rendered-text" | "ability_text" => {
+            let text = json_string(value, field)?;
+            card.ability_text = text.split("\n\n").map(str::to_owned).collect();
+        }
+        "energy-added" | "energy_added" => card.energy_added = json_u32(value, field)?,
+        "order" | "deck_tier" => {
+            card.deck_tier = match json_u32(value, field)? {
+                0 => DeckTier::Starting,
+                1 => DeckTier::One,
+                2 => DeckTier::Two,
+                3 => DeckTier::Three,
+                4 => DeckTier::Four,
+                _ => bail!("INVALID_EDIT: Dreamwell order must be in [0, 4]"),
+            };
+        }
+        "image-number" | "image_number" => card.art.image = json_u32(value, field)?,
+        "art" => {
+            let object = value
+                .as_object()
+                .context("INVALID_EDIT: art must be an object")?;
+            let crop = ArtCrop {
+                x: json_number(object.get("x"), "art.x")?,
+                y: json_number(object.get("y"), "art.y")?,
+                scale: json_number(object.get("scale"), "art.scale")?,
+            };
+            if !crop.x.is_finite()
+                || !crop.y.is_finite()
+                || !crop.scale.is_finite()
+                || crop.scale <= 0.0
+            {
+                bail!(
+                    "INVALID_EDIT: Dreamwell art crop must contain finite offsets and a positive scale"
+                );
+            }
+            card.art.crop = Some(crop);
+        }
+        _ => bail!("INVALID_EDIT: unsupported Dreamwell field {field}"),
+    }
+    Ok(())
+}
+
+fn patch_dreamwell_source_field(
+    source: &str,
+    card: &DreamwellCardDefinition,
+    field: &str,
+) -> Result<String> {
+    let source_field = match field {
+        "name" => "name",
+        "rendered-text" | "ability_text" => "ability_text",
+        "energy-added" | "energy_added" => "energy_added",
+        "order" | "deck_tier" => "deck_tier",
+        "image-number" | "image_number" | "art" => "art",
+        _ => bail!("INVALID_EDIT: unsupported Dreamwell field {field}"),
+    };
+    let record = typed_record_range(
+        source,
+        "DreamwellCardDefinition",
+        "id",
+        &card.id.to_string(),
+    )?;
+    let range = top_level_field_value_range(source, record.clone(), source_field)?
+        .with_context(|| format!("MALFORMED_SOURCE: Dreamwell card is missing {source_field}"))?;
+    if matches!(field, "image-number" | "image_number") {
+        let image = top_level_field_value_range(source, range, "image")?
+            .context("MALFORMED_SOURCE: Dreamwell art is missing image")?;
+        return replace_source_ranges(source, vec![(image, card.art.image.to_string())]);
+    }
+    if field == "art" {
+        let replacement = render_dreamwell_crop(
+            card.art
+                .crop
+                .as_ref()
+                .context("INVALID_EDIT: Dreamwell crop must be present")?,
+        )?;
+        if let Some(crop) = top_level_field_value_range(source, range.clone(), "crop")? {
+            return replace_source_ranges(source, vec![(crop, replacement)]);
+        }
+        let closing = range.end - 1;
+        let art_source = &source[range.clone()];
+        let (insertion_at, insertion) = if art_source.contains('\n') {
+            let closing_line = source[..closing]
+                .rfind('\n')
+                .map(|offset| offset + 1)
+                .context("MALFORMED_SOURCE: multiline Dreamwell art has no closing line")?;
+            let closing_indent = &source[closing_line..closing];
+            (
+                closing_line,
+                format!("{}  crop: {},\n", closing_indent, replacement),
+            )
+        } else {
+            (closing, format!(", crop: {replacement}"))
+        };
+        return replace_source_ranges(source, vec![(insertion_at..insertion_at, insertion)]);
+    }
+    let replacement = match source_field {
+        "name" => ron::to_string(&card.name)?,
+        "ability_text" => {
+            let clauses = card
+                .ability_text
+                .iter()
+                .map(ron::to_string)
+                .collect::<Result<Vec<_>, _>>()?;
+            format!("[{}]", clauses.join(", "))
+        }
+        "energy_added" => card.energy_added.to_string(),
+        "deck_tier" => match card.deck_tier {
+            DeckTier::Starting => "Starting".into(),
+            DeckTier::One => "One".into(),
+            DeckTier::Two => "Two".into(),
+            DeckTier::Three => "Three".into(),
+            DeckTier::Four => "Four".into(),
+        },
+        "art" => unreachable!(),
+        _ => unreachable!(),
+    };
+    replace_source_ranges(source, vec![(range, replacement)])
+}
+
+fn render_dreamwell_crop(crop: &ArtCrop) -> Result<String> {
+    Ok(format!(
+        "(x: {}, y: {}, scale: {})",
+        ron::to_string(&crop.x)?,
+        ron::to_string(&crop.y)?,
+        ron::to_string(&crop.scale)?
+    ))
 }
 
 fn edit_dreamsigns(
@@ -2451,6 +2663,123 @@ mod tests {
   ),
 ]
 "###;
+
+    const DREAMWELL_EDITOR_SOURCE: &str = r###"// Stable Dreamwell guidance.
+
+#![enable(implicit_some)]
+[
+  // Edited record comment.
+  DreamwellCardDefinition(
+    name: r#"Raw Horizon"#,
+    id: "00000000-0000-4000-8000-000000000021",
+    ability_text: ["First paragraph", "Second paragraph"],
+    energy_added: 2,
+    deck_tier: Starting,
+    art: (
+      image: 7,
+      // Preserve nested art provenance guidance.
+      owned: true,
+    ),
+  ),
+
+  /* Unrelated record comment. */
+  DreamwellCardDefinition(
+    name: "Unrelated Dreamwell",
+    id: "00000000-0000-4000-8000-000000000022",
+    ability_text: ["Unrelated ability."],
+    energy_added: 1,
+    deck_tier: Two,
+    art: (image: 8, crop: (x: 0.25, y: -0.5, scale: 1.5)),
+  ),
+]
+"###;
+
+    #[test]
+    fn dreamwell_scalar_edit_is_operation_sized_and_preserves_source() {
+        let mut cards: Vec<DreamwellCardDefinition> =
+            ron::from_str(DREAMWELL_EDITOR_SOURCE).unwrap();
+        set_dreamwell_field(&mut cards[0], "energy-added", json!(3)).unwrap();
+        let patched =
+            patch_dreamwell_source_field(DREAMWELL_EDITOR_SOURCE, &cards[0], "energy-added")
+                .unwrap();
+
+        assert_eq!(
+            DREAMWELL_EDITOR_SOURCE
+                .lines()
+                .zip(patched.lines())
+                .filter(|(before, after)| before != after)
+                .count(),
+            1
+        );
+        assert!(patched.contains("/* Unrelated record comment. */"));
+        assert_eq!(
+            ron::from_str::<Vec<DreamwellCardDefinition>>(&patched).unwrap(),
+            cards
+        );
+    }
+
+    #[test]
+    fn dreamwell_editor_maps_every_supported_field_to_typed_ron() {
+        let cases = [
+            ("name", json!("New Horizon")),
+            ("rendered-text", json!("First\n\nSecond")),
+            ("energy-added", json!(4)),
+            ("order", json!(4)),
+            ("image-number", json!(99)),
+            ("art", json!({ "x": 0.5, "y": -0.25, "scale": 1.75 })),
+        ];
+        for (field, value) in cases {
+            let mut cards: Vec<DreamwellCardDefinition> =
+                ron::from_str(DREAMWELL_EDITOR_SOURCE).unwrap();
+            set_dreamwell_field(&mut cards[0], field, value).unwrap();
+            let patched =
+                patch_dreamwell_source_field(DREAMWELL_EDITOR_SOURCE, &cards[0], field).unwrap();
+            assert_eq!(
+                ron::from_str::<Vec<DreamwellCardDefinition>>(&patched).unwrap(),
+                cards,
+                "field {field} failed typed round trip"
+            );
+            assert!(patched.contains("/* Unrelated record comment. */"));
+            assert!(patched.contains("// Preserve nested art provenance guidance."));
+        }
+    }
+
+    #[test]
+    fn dreamwell_editor_rejects_invalid_identity_and_values() {
+        let mut cards: Vec<DreamwellCardDefinition> =
+            ron::from_str(DREAMWELL_EDITOR_SOURCE).unwrap();
+        assert!(
+            unique_dreamwell_index(&cards, "missing")
+                .unwrap_err()
+                .to_string()
+                .contains("RECORD_NOT_FOUND")
+        );
+        assert!(set_dreamwell_field(&mut cards[0], "order", json!(5)).is_err());
+        assert!(
+            set_dreamwell_field(&mut cards[0], "art", json!({ "x": 0, "y": 0, "scale": 0 }))
+                .is_err()
+        );
+        assert!(set_dreamwell_field(&mut cards[0], "card-number", json!(1)).is_err());
+    }
+
+    #[test]
+    fn dreamwell_semantic_no_op_preserves_source_bytes() {
+        let mut cards: Vec<DreamwellCardDefinition> =
+            ron::from_str(DREAMWELL_EDITOR_SOURCE).unwrap();
+        let original = cards.clone();
+        set_dreamwell_field(&mut cards[0], "name", json!("Raw Horizon")).unwrap();
+        let patched =
+            patch_dreamwell_source_field(DREAMWELL_EDITOR_SOURCE, &cards[0], "name").unwrap();
+
+        assert_eq!(cards, original);
+        assert_ne!(patched, DREAMWELL_EDITOR_SOURCE);
+        assert_eq!(
+            ron::from_str::<Vec<DreamwellCardDefinition>>(&patched).unwrap(),
+            cards
+        );
+        // edit_dreamwell compares typed catalogs before writing, so this
+        // normalized replacement is deliberately suppressed as a no-op.
+    }
 
     const DREAMSIGN_ID: &str = "00000000-0000-4000-8000-000000000021";
     const DREAMSIGN_SOURCE: &str = r###"// Stable Dreamsign guidance.

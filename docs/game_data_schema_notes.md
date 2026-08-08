@@ -1142,18 +1142,24 @@ Managed by the dreamsign editor's "Manage tags" panel.
 
 ## `data/dreamwell.ron`
 
-### `[[dreamwell]]`
+### `DreamwellCardDefinition`
 
 Dreamwell cards
 ---------------
 Shared cards drawn one per turn during the Dreamwell phase (see
 docs/battle_rules/battle_rules.md). Each card permanently raises the drawing
-player's maximum ● by its `energy-added` value and may carry a bonus effect in
-`rendered-text`, formatted per docs/cards2/style_guide.md.
+player's maximum ● by its `energy_added` value and may carry bonus-effect
+paragraphs in `ability_text`, formatted per docs/cards2/style_guide.md.
 
-`order` sets the card's position in the Dreamwell deck (0-4): all #1 cards are
-shuffled above the #2 cards, and so on. #0 cards appear only during the first
-cycle and are the starting cards for each player.
+`deck_tier` sets the card's position in the Dreamwell deck. `Starting` cards
+appear only during the first cycle; tiers `One` through `Four` recur in
+ascending order. `art` owns the image identity, provenance flag, and optional
+pan/zoom crop. Compatibility-only card numbers are keyed by UUID in
+`data/internal/internal_dreamwell_metadata.ron`.
+
+The game-data compiler generates `data/dreamwell.toml` for runtime consumers.
+The Dreamwell editor applies UUID-routed semantic operations to this RON source
+and publishes the regenerated compatibility and runtime artifacts atomically.
 
 ## `data/economy.ron`
 

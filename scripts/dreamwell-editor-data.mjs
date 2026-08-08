@@ -2,7 +2,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
-import { patchTomlRecord, validateArtCrop } from "./card-editor-data.mjs";
+import { validateArtCrop } from "./card-editor-data.mjs";
 import { transformDreamwell } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -161,23 +161,6 @@ export function validateDreamwellEdit(field, rawValue) {
   }
 
   return validationFailure(field, "This field is not editable.", rawValue);
-}
-
-export function patchDreamwellToml(source, { dreamwellId, field, value }) {
-  return patchTomlRecord(source, {
-    id: dreamwellId,
-    tableName: "dreamwell",
-    editableFields: EDITABLE_DREAMWELL_FIELDS,
-    validateEdit: validateDreamwellEdit,
-    field,
-    value,
-    // The art crop is absent on cards that have never been framed, and
-    // `image-number` is absent on cards that have never been assigned art, so
-    // each is appended to the record block on first save rather than replaced
-    // in place.
-    optionalFields: new Set(["art", "image-number"]),
-    notFoundNoun: "Dreamwell card",
-  });
 }
 
 export function refreshDreamwellDataJson({

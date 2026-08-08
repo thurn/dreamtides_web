@@ -125,7 +125,7 @@ export interface CreateBattleInitInput {
    */
   affiliations?: readonly AffiliationContent[];
   /**
-   * The shared Dreamwell card catalog (`data/dreamwell.toml`). Built into
+   * The shared generated Dreamwell card catalog (`data/dreamwell.toml`). Built into
    * the per-battle Dreamwell deck both players draw from. Optional so
    * battle-engine tests can omit it; an empty list yields an empty Dreamwell
    * deck (energy then stays at its starting value).

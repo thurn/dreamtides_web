@@ -36,9 +36,9 @@ export type DreamwellSize = "small" | "medium" | "large";
 export const MAX_DREAMWELL_ORDER = 4;
 
 /**
- * A Dreamwell record as the editor sees it. Keeps the TOML-facing kebab-case
- * keys (`rendered-text`, `energy-added`, `image-number`) so the save payloads
- * map straight onto the source fields.
+ * A Dreamwell record as the editor sees it. Keeps the generated compatibility
+ * keys (`rendered-text`, `energy-added`, `image-number`) used by the UI; the
+ * typed editor adapter maps them to canonical RON fields.
  */
 export interface EditorDreamwellRecord {
   id: string;
@@ -68,6 +68,7 @@ export interface DreamwellDisplayState {
 
 export interface LoadEditorDreamwellResponse {
   dreamwell: EditorDreamwellRecord[];
+  sourceRevision: string;
 }
 
 export interface SaveEditorDreamwellFieldRequest {
@@ -87,6 +88,7 @@ export interface EditorSaveTiming {
 
 export interface SaveEditorDreamwellFieldResponse {
   dreamwell: EditorDreamwellRecord;
+  sourceRevision: string;
   clientRevision?: number;
   timing: EditorSaveTiming;
 }

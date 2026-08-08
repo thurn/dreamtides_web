@@ -1,40 +1,20 @@
-import {
-  existsSync,
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  renameSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
-import { tmpdir } from "node:os";
-import { isAbsolute, join, relative, resolve, sep } from "node:path";
+import { existsSync } from "node:fs";
+import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   DEFAULT_DREAMWELL_TOML_PATH,
-  patchDreamwellToml,
   readEditorDreamwell,
-  refreshDreamwellDataJson,
   validateDreamwellEdit,
 } from "./dreamwell-editor-data.mjs";
+import {
+  sourceRevision,
+  stageAndPublishGameDataEdit,
+} from "./game-data-pipeline.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/dreamwell";
-const DREAMWELL_TOML_DIR = join("data");
-const DREAMWELL_JSON_PATH = join("public", "dreamwell-data.json");
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
-
-const defaultFileSystem = {
-  existsSync,
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  renameSync,
-  rmSync,
-  writeFileSync,
-};
-
-let saveCounter = 0;
+export const DREAMWELL_EDITOR_SOURCE_PATHS = ["data/dreamwell.ron"];
 
 function elapsedMs(start) {
   return Number((performance.now() - start).toFixed(3));
@@ -62,40 +42,33 @@ function rawPathFromUrl(url) {
   return (url ?? "/").split("?", 1)[0];
 }
 
-function tomlParamFromUrl(url) {
+function sourceParamFromUrl(url) {
   const queryIndex = (url ?? "").indexOf("?");
   if (queryIndex === -1) {
     return null;
   }
-  return new URLSearchParams((url ?? "").slice(queryIndex + 1)).get("toml");
+  const params = new URLSearchParams((url ?? "").slice(queryIndex + 1));
+  return params.get("source") ?? params.get("toml");
 }
 
-function resolveRequestedTomlPath(rootDir, requested) {
+function resolveRequestedSource(requested) {
   if (requested === null || requested === undefined || requested.trim() === "") {
     return { ok: true, relativePath: DEFAULT_DREAMWELL_TOML_PATH };
   }
 
   const trimmed = requested.trim();
   if (trimmed.includes("\0")) {
-    return { ok: false, message: "The toml parameter is invalid." };
+    return { ok: false, message: "The source parameter is invalid." };
   }
 
-  const hasDirectory = trimmed.includes("/") || trimmed.includes("\\");
-  const candidate = hasDirectory ? trimmed : join(DREAMWELL_TOML_DIR, trimmed);
-
-  if (!candidate.toLowerCase().endsWith(".toml")) {
-    return { ok: false, message: "The toml file must have a .toml extension." };
+  const normalized = trimmed
+    .replaceAll("\\", "/")
+    .replace(/^data\//u, "")
+    .replace(/\.toml$/iu, ".ron");
+  if (normalized !== "dreamwell.ron") {
+    return { ok: false, message: "The Dreamwell editor source must be data/dreamwell.ron." };
   }
-
-  const dataDir = resolve(rootDir, DREAMWELL_TOML_DIR);
-  const target = resolve(rootDir, candidate);
-  const within = relative(dataDir, target);
-
-  if (within === "" || within.startsWith("..") || isAbsolute(within) || within.includes(sep)) {
-    return { ok: false, message: "The toml file must be located in data." };
-  }
-
-  return { ok: true, relativePath: join(DREAMWELL_TOML_DIR, within) };
+  return { ok: true, relativePath: DEFAULT_DREAMWELL_TOML_PATH };
 }
 
 function decodePathSegment(segment) {
@@ -265,86 +238,7 @@ function assertPatchBody(body) {
   return { ok: true };
 }
 
-function tempPathFor(destination, extension) {
-  saveCounter += 1;
-  return `${destination}.${process.pid}.${Date.now()}.${saveCounter}.${extension}`;
-}
-
-function preparedWrite(destination, content) {
-  return {
-    destination,
-    temp: tempPathFor(destination, "tmp"),
-    backup: tempPathFor(destination, "bak"),
-    content,
-  };
-}
-
-function commitFiles(writes, fileSystem) {
-  const preexisting = new Set(
-    writes.filter((write) => fileSystem.existsSync(write.destination)),
-  );
-
-  try {
-    for (const write of writes) {
-      fileSystem.writeFileSync(write.temp, write.content);
-    }
-    for (const write of writes) {
-      if (preexisting.has(write)) {
-        fileSystem.renameSync(write.destination, write.backup);
-      }
-    }
-    for (const write of writes) {
-      fileSystem.renameSync(write.temp, write.destination);
-    }
-  } catch (error) {
-    for (const write of writes) {
-      fileSystem.rmSync(write.temp, { force: true, recursive: true });
-    }
-    for (const write of writes) {
-      if (preexisting.has(write)) {
-        if (fileSystem.existsSync(write.backup)) {
-          fileSystem.rmSync(write.destination, { force: true, recursive: true });
-          fileSystem.renameSync(write.backup, write.destination);
-        }
-      } else {
-        fileSystem.rmSync(write.destination, { force: true, recursive: true });
-      }
-    }
-    throw error;
-  }
-
-  for (const write of writes) {
-    if (!preexisting.has(write)) {
-      continue;
-    }
-    try {
-      fileSystem.rmSync(write.backup, { force: true, recursive: true });
-    } catch {
-      // Backups are removed after every destination file is committed.
-    }
-  }
-}
-
-function generateDreamwellDataJsonFromToml(patchedSource, fileSystem) {
-  const tempRoot = fileSystem.mkdtempSync(join(tmpdir(), "journey-dreamwell-editor-refresh-"));
-
-  try {
-    fileSystem.mkdirSync(join(tempRoot, "data"), { recursive: true });
-    fileSystem.mkdirSync(join(tempRoot, "public"), { recursive: true });
-    fileSystem.writeFileSync(join(tempRoot, DEFAULT_DREAMWELL_TOML_PATH), patchedSource);
-
-    refreshDreamwellDataJson({ rootDir: tempRoot });
-
-    const dreamwellJson = fileSystem.readFileSync(join(tempRoot, DREAMWELL_JSON_PATH), "utf8");
-    JSON.parse(dreamwellJson);
-
-    return dreamwellJson;
-  } finally {
-    fileSystem.rmSync(tempRoot, { recursive: true, force: true });
-  }
-}
-
-async function handlePatch(req, res, rootDir, dreamwellId, dreamwellTomlPath, fileSystem) {
+async function handlePatch(req, res, options, dreamwellId) {
   let body;
   try {
     body = await readJsonRequest(req);
@@ -377,6 +271,11 @@ async function handlePatch(req, res, rootDir, dreamwellId, dreamwellTomlPath, fi
     return;
   }
 
+  if (typeof body.expectedSourceRevision !== "string") {
+    errorResponse(res, 400, "INVALID_REQUEST", "Every save requires expectedSourceRevision.");
+    return;
+  }
+
   const validation = validateDreamwellEdit(body.field, body.value);
   if (!validation.ok) {
     errorResponse(res, 400, "INVALID_EDIT", validation.message, {
@@ -388,7 +287,7 @@ async function handlePatch(req, res, rootDir, dreamwellId, dreamwellTomlPath, fi
 
   const totalStart = performance.now();
   const readStart = performance.now();
-  const beforeDreamwell = readEditorDreamwell({ rootDir, dreamwellTomlPath });
+  const beforeDreamwell = readEditorDreamwell({ rootDir: options.rootDir });
   const readMs = elapsedMs(readStart);
 
   if (!beforeDreamwell.some((card) => card.id === dreamwellId)) {
@@ -396,28 +295,24 @@ async function handlePatch(req, res, rootDir, dreamwellId, dreamwellTomlPath, fi
     return;
   }
 
-  const tomlPath = join(rootDir, dreamwellTomlPath);
   const patchStart = performance.now();
-  const source = fileSystem.readFileSync(tomlPath, "utf8");
-  const patched = patchDreamwellToml(source, {
-    dreamwellId,
-    field: body.field,
-    value: validation.value,
+  const result = await options.publishEdit({
+    rootDir: options.rootDir,
+    dataset: "dreamwell",
+    operations: [{
+      operation: "set_dreamwell_field",
+      dreamwell_id: dreamwellId,
+      field: validation.field,
+      value: validation.value,
+    }],
+    sourcePaths: DREAMWELL_EDITOR_SOURCE_PATHS,
+    expectedSourceRevision: body.expectedSourceRevision,
   });
   const patchMs = elapsedMs(patchStart);
-
-  const refreshesDreamwellJson = dreamwellTomlPath === DEFAULT_DREAMWELL_TOML_PATH;
-  const refreshStart = performance.now();
-  const writes = [preparedWrite(tomlPath, patched.source)];
-  if (refreshesDreamwellJson) {
-    const dreamwellJson = generateDreamwellDataJsonFromToml(patched.source, fileSystem);
-    writes.push(preparedWrite(join(rootDir, DREAMWELL_JSON_PATH), dreamwellJson));
-  }
-  commitFiles(writes, fileSystem);
-  const refreshMs = elapsedMs(refreshStart);
+  const refreshMs = 0;
 
   const confirmStart = performance.now();
-  const confirmedDreamwell = readEditorDreamwell({ rootDir, dreamwellTomlPath }).find(
+  const confirmedDreamwell = readEditorDreamwell({ rootDir: options.rootDir }).find(
     (card) => card.id === dreamwellId,
   );
   const confirmMs = elapsedMs(confirmStart);
@@ -427,8 +322,15 @@ async function handlePatch(req, res, rootDir, dreamwellId, dreamwellTomlPath, fi
     return;
   }
 
+  console.log(
+    `[dreamwell-editor] saved ${dreamwellId}.${validation.field} = ${JSON.stringify(validation.value)}`,
+  );
+
   jsonResponse(res, 200, {
     dreamwell: confirmedDreamwell,
+    sourceRevision:
+      result.sourceRevision ??
+      options.revision(options.rootDir, DREAMWELL_EDITOR_SOURCE_PATHS),
     ...(Object.hasOwn(body, "clientRevision") ? { clientRevision: body.clientRevision } : {}),
     timing: {
       readMs,
@@ -442,8 +344,10 @@ async function handlePatch(req, res, rootDir, dreamwellId, dreamwellTomlPath, fi
 
 export function createDreamwellEditorApiMiddleware({
   rootDir = ROOT,
-  fileSystem = defaultFileSystem,
+  publishEdit = stageAndPublishGameDataEdit,
+  revision = sourceRevision,
 } = {}) {
+  const options = { rootDir, publishEdit, revision };
   return async function dreamwellEditorApiMiddleware(req, res, next) {
     const rawPath = rawPathFromUrl(req.url);
 
@@ -459,14 +363,14 @@ export function createDreamwellEditorApiMiddleware({
         return;
       }
 
-      const tomlResolution = resolveRequestedTomlPath(rootDir, tomlParamFromUrl(req.url));
-      if (!tomlResolution.ok) {
-        errorResponse(res, 400, "INVALID_TOML", tomlResolution.message);
+      const sourceResolution = resolveRequestedSource(sourceParamFromUrl(req.url));
+      if (!sourceResolution.ok) {
+        errorResponse(res, 400, "INVALID_SOURCE", sourceResolution.message);
         return;
       }
 
-      const dreamwellTomlPath = tomlResolution.relativePath;
-      if (!fileSystem.existsSync(join(rootDir, dreamwellTomlPath))) {
+      const dreamwellTomlPath = sourceResolution.relativePath;
+      if (!existsSync(join(rootDir, dreamwellTomlPath))) {
         errorResponse(res, 404, "TOML_NOT_FOUND", "The requested toml file was not found.", {
           toml: dreamwellTomlPath,
         });
@@ -476,18 +380,42 @@ export function createDreamwellEditorApiMiddleware({
       if (req.method === "GET" && route.resource === "collection") {
         jsonResponse(res, 200, {
           dreamwell: readEditorDreamwell({ rootDir, dreamwellTomlPath }),
+          sourceRevision: revision(rootDir, DREAMWELL_EDITOR_SOURCE_PATHS),
         });
         return;
       }
 
       if (req.method === "PATCH" && route.resource === "dreamwell") {
-        await handlePatch(req, res, rootDir, route.dreamwellId, dreamwellTomlPath, fileSystem);
+        await handlePatch(req, res, options, route.dreamwellId);
         return;
       }
 
       methodNotAllowed(res, route.resource === "collection" ? ["GET"] : ["PATCH"]);
     } catch (error) {
-      errorResponse(res, 500, "SAVE_FAILED", error instanceof Error ? error.message : "Save failed.");
+      const statusCode = error.code === "STALE_SOURCE" ? 409
+        : error.code === "RECORD_NOT_FOUND" ? 404
+          : ["INVALID_EDIT", "FIELD_NOT_APPLICABLE"].includes(error.code) ? 400
+            : ["MALFORMED_SOURCE", "COMPATIBILITY_VALIDATION_FAILED"].includes(error.code) ? 422
+              : 500;
+      errorResponse(
+        res,
+        statusCode,
+        error.code ?? "PUBLICATION_FAILED",
+        error instanceof Error ? error.message : "Save failed.",
+        {
+          datasetId: "dreamwell",
+          source: DREAMWELL_EDITOR_SOURCE_PATHS[0],
+          ...(error.currentSourceRevision === undefined ? {} : {
+            currentSourceRevision: error.currentSourceRevision,
+          }),
+          ...(error.code === "STALE_SOURCE" ? {
+            confirmed: {
+              dreamwell: readEditorDreamwell({ rootDir }),
+              sourceRevision: revision(rootDir, DREAMWELL_EDITOR_SOURCE_PATHS),
+            },
+          } : {}),
+        },
+      );
     }
   };
 }

@@ -511,15 +511,7 @@ function dreamwellEditorApiPlugin(): Plugin {
     apply: "serve",
     configureServer(server) {
       server.middlewares.use(
-        createRonEditorBridge({
-          rootDir: __dirname,
-          basePaths: ["/api/editor/dreamwell"],
-          collectionPath: "/api/editor/dreamwell",
-          datasets: ["dreamwell"],
-          sourcePaths: ["data/dreamwell.ron"],
-          createLegacy: (rootDir) =>
-            createDreamwellEditorApiMiddleware({ rootDir }),
-        }),
+        createDreamwellEditorApiMiddleware({ rootDir: __dirname }),
       );
     },
   };

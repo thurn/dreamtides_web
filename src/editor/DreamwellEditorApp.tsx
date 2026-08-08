@@ -282,6 +282,20 @@ export default function DreamwellEditorApp({
     };
   }, [apiClient, loadAttempt]);
 
+  useEffect(() => {
+    const reloadConfirmedSource = () =>
+      setLoadAttempt((attempt) => attempt + 1);
+    window.addEventListener(
+      "game-data-editor:save-failed",
+      reloadConfirmedSource,
+    );
+    return () =>
+      window.removeEventListener(
+        "game-data-editor:save-failed",
+        reloadConfirmedSource,
+      );
+  }, []);
+
   const loadedDreamwell =
     loadStatus.kind === "loaded" ? loadStatus.dreamwell : [];
   const sortedVisible = useMemo(

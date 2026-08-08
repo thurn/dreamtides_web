@@ -112,6 +112,12 @@ struct CompatibilityCatalog {
 }
 
 #[derive(Serialize)]
+struct CompatibilityMetadataCatalog {
+    #[serde(rename = "dreamwellMetadata")]
+    entries: Vec<DreamwellCardMetadata>,
+}
+
+#[derive(Serialize)]
 struct CompatibilityCard {
     name: String,
     id: String,
@@ -192,6 +198,12 @@ pub fn lower(
     Ok(toml::Value::try_from(CompatibilityCatalog { dreamwell })?)
 }
 
+pub fn lower_metadata(metadata: Vec<DreamwellCardMetadata>) -> Result<toml::Value> {
+    Ok(toml::Value::try_from(CompatibilityMetadataCatalog {
+        entries: metadata,
+    })?)
+}
+
 fn number(value: f64) -> toml::Value {
     if value.fract() == 0.0 && value >= i64::MIN as f64 && value <= i64::MAX as f64 {
         toml::Value::Integer(value as i64)
@@ -200,7 +212,7 @@ fn number(value: f64) -> toml::Value {
     }
 }
 
-fn validate(source: &[DreamwellCardDefinition]) -> Result<()> {
+pub(crate) fn validate(source: &[DreamwellCardDefinition]) -> Result<()> {
     ensure!(!source.is_empty(), "Dreamwell catalog must not be empty");
     let mut ids = BTreeSet::new();
 
@@ -233,13 +245,9 @@ fn validate(source: &[DreamwellCardDefinition]) -> Result<()> {
 
 #[cfg(test)]
 mod tests {
-    use std::fs;
-    use std::path::Path;
-
     use pretty_assertions::assert_eq;
 
     use super::*;
-    use crate::models::compat::CompatDocument;
 
     const FIRST_ID: &str = "00000000-0000-4000-8000-000000000001";
     const SECOND_ID: &str = "00000000-0000-4000-8000-000000000002";
@@ -436,92 +444,5 @@ mod tests {
                 .contains(expected),
             "error did not contain {expected}"
         );
-    }
-
-    #[test]
-    #[ignore = "real-catalog parity probe retained for canonical Dreamwell review"]
-    fn canonical_candidate_matches_current_compatibility_sources() {
-        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-        let current_ron: CompatDocument =
-            ron::from_str(&fs::read_to_string(root.join("data/dreamwell.ron")).unwrap()).unwrap();
-        let current_toml: toml::Value =
-            toml::from_str(&fs::read_to_string(root.join("data/dreamwell.toml")).unwrap()).unwrap();
-        assert_eq!(current_ron.data, current_toml);
-
-        let canonical: Vec<DreamwellCardDefinition> =
-            ron::from_str(&fs::read_to_string(root.join("data/dreamwell_canonical.ron")).unwrap())
-                .unwrap();
-        let metadata: Vec<DreamwellCardMetadata> = ron::from_str(
-            &fs::read_to_string(root.join("data/internal/internal_dreamwell_metadata.ron"))
-                .unwrap(),
-        )
-        .unwrap();
-        let lowered = lower(canonical.clone(), metadata.clone()).unwrap();
-        assert_eq!(
-            normalize_table_order(lowered),
-            normalize_table_order(current_ron.data.clone())
-        );
-
-        let compatibility_cards = current_ron.data["dreamwell"].as_array().unwrap();
-        assert_eq!(canonical.len(), compatibility_cards.len());
-        let compatibility_ids: BTreeSet<_> = compatibility_cards
-            .iter()
-            .map(|card| card["id"].as_str().unwrap().to_owned())
-            .collect();
-        let canonical_ids: BTreeSet<_> = canonical.iter().map(|card| card.id.to_string()).collect();
-        assert_eq!(canonical_ids, compatibility_ids);
-
-        let numbers: BTreeSet<_> = compatibility_cards
-            .iter()
-            .map(|card| card["card-number"].as_integer().unwrap())
-            .collect();
-        let metadata_numbers: BTreeSet<_> = metadata
-            .iter()
-            .map(|record| i64::from(record.number))
-            .collect();
-        assert_eq!(metadata_numbers, numbers);
-
-        let compatibility_images: BTreeSet<_> = compatibility_cards
-            .iter()
-            .map(|card| card["image-number"].as_integer().unwrap())
-            .collect();
-        assert_eq!(compatibility_images.len(), compatibility_cards.len());
-        assert_eq!(
-            canonical
-                .iter()
-                .filter(|card| card.art.crop.is_some())
-                .count(),
-            compatibility_cards
-                .iter()
-                .filter(|card| card.get("art").is_some())
-                .count()
-        );
-
-        for card in canonical {
-            let value = card.id.to_string();
-            let parsed = Uuid::parse_str(&value).unwrap();
-            assert_eq!(parsed.get_version(), Some(Version::Random));
-            assert_eq!(parsed.get_variant(), Variant::RFC4122);
-            assert_eq!(parsed.hyphenated().to_string(), value);
-        }
-    }
-
-    fn normalize_table_order(value: toml::Value) -> toml::Value {
-        match value {
-            toml::Value::Array(values) => {
-                toml::Value::Array(values.into_iter().map(normalize_table_order).collect())
-            }
-            toml::Value::Table(table) => {
-                let mut entries: Vec<_> = table.into_iter().collect();
-                entries.sort_by(|left, right| left.0.cmp(&right.0));
-                toml::Value::Table(
-                    entries
-                        .into_iter()
-                        .map(|(key, value)| (key, normalize_table_order(value)))
-                        .collect(),
-                )
-            }
-            scalar => scalar,
-        }
     }
 }

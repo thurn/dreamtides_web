@@ -87,6 +87,8 @@ impl Manifest {
             "dreamsign_metadata_v1",
             "dreamsign_tags_v1",
             "dreamsigns_v1",
+            "dreamwell_metadata_v1",
+            "dreamwell_v1",
             "cards_v2",
             "economy_v1",
             "exploration_v1",
