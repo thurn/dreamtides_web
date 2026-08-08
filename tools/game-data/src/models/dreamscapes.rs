@@ -36,7 +36,7 @@ pub struct DreamscapeDefinition {
 #[serde(deny_unknown_fields)]
 pub struct DreamscapeArt {
     pub scene: AssetReference,
-    pub icon: AssetReference,
+    pub atlas_node: AssetReference,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -198,8 +198,8 @@ fn validate(source: &[DreamscapeDefinition]) -> Result<()> {
     let mut dream_avatar_ids = BTreeSet::new();
     let mut scene_keys = BTreeSet::new();
     let mut scene_sources = BTreeSet::new();
-    let mut icon_keys = BTreeSet::new();
-    let mut icon_sources = BTreeSet::new();
+    let mut atlas_node_keys = BTreeSet::new();
+    let mut atlas_node_sources = BTreeSet::new();
     let mut starter_count = 0;
     let mut boss_count = 0;
 
@@ -225,11 +225,11 @@ fn validate(source: &[DreamscapeDefinition]) -> Result<()> {
         )?;
         validate_asset_reference(
             dreamscape,
-            "icon",
-            &dreamscape.art.icon,
+            "atlas node",
+            &dreamscape.art.atlas_node,
             legacy_id,
-            &mut icon_keys,
-            &mut icon_sources,
+            &mut atlas_node_keys,
+            &mut atlas_node_sources,
         )?;
 
         match &dreamscape.kind {
@@ -388,7 +388,7 @@ mod tests {
     name: "Opening",
     art: (
       scene: (key: "firstlight_meadow", source: "opening.png"),
-      icon: (key: "firstlight_meadow", source: "opening_icon.png"),
+      atlas_node: (key: "firstlight_meadow", source: "opening_icon.png"),
     ),
     kind: Starter(
       signature_site: Draft,
@@ -400,7 +400,7 @@ mod tests {
     name: "Région",
     art: (
       scene: (key: "tumbleleaf_village", source: "region.png"),
-      icon: (key: "tumbleleaf_village", source: "region_icon.png"),
+      atlas_node: (key: "tumbleleaf_village", source: "region_icon.png"),
     ),
     kind: Standard(
       affiliation_id: "{AFFILIATION_ID}",
@@ -412,7 +412,7 @@ mod tests {
     name: "Final Dream",
     art: (
       scene: (key: "limbo", source: "final.png"),
-      icon: (key: "limbo", source: "final_icon.png"),
+      atlas_node: (key: "limbo", source: "final_icon.png"),
     ),
     kind: Boss,
   ),
@@ -521,7 +521,7 @@ mod tests {
 
         let no_boss = synthetic_source().replace(
             &format!(
-                "  DreamscapeDefinition(\n    id: \"{BOSS_ID}\",\n    name: \"Final Dream\",\n    art: (\n      scene: (key: \"limbo\", source: \"final.png\"),\n      icon: (key: \"limbo\", source: \"final_icon.png\"),\n    ),\n    kind: Boss,\n  ),\n"
+                "  DreamscapeDefinition(\n    id: \"{BOSS_ID}\",\n    name: \"Final Dream\",\n    art: (\n      scene: (key: \"limbo\", source: \"final.png\"),\n      atlas_node: (key: \"limbo\", source: \"final_icon.png\"),\n    ),\n    kind: Boss,\n  ),\n"
             ),
             "",
         );
@@ -678,8 +678,11 @@ mod tests {
             if !matches!(dreamscape.kind, DreamscapeKind::Boss) {
                 assert_eq!(dreamscape.art.scene.key, legacy_id);
                 assert_eq!(dreamscape.art.scene.source, format!("{legacy_id}.png"));
-                assert_eq!(dreamscape.art.icon.key, legacy_id);
-                assert_eq!(dreamscape.art.icon.source, format!("{legacy_id}_icon.png"));
+                assert_eq!(dreamscape.art.atlas_node.key, legacy_id);
+                assert_eq!(
+                    dreamscape.art.atlas_node.source,
+                    format!("{legacy_id}_icon.png")
+                );
             }
             if let DreamscapeKind::Standard {
                 affiliation_id,
@@ -728,8 +731,11 @@ mod tests {
         assert_eq!(boss.name, atlas_source.boss.place);
         assert_eq!(boss.art.scene.key, atlas_source.boss.art.scene.key);
         assert_eq!(boss.art.scene.source, atlas_source.boss.art.scene.source);
-        assert_eq!(boss.art.icon.key, atlas_source.boss.art.icon.key);
-        assert_eq!(boss.art.icon.source, atlas_source.boss.art.icon.source);
+        assert_eq!(boss.art.atlas_node.key, atlas_source.boss.art.icon.key);
+        assert_eq!(
+            boss.art.atlas_node.source,
+            atlas_source.boss.art.icon.source
+        );
         let atlas_compatibility = super::super::atlas::lower(atlas_source).unwrap();
         assert_eq!(
             atlas_compatibility["boss"]["dreamscape-id"].as_str(),
