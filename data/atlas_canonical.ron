@@ -10,6 +10,7 @@ AtlasCatalog(
     // The starter rule always creates one node. Its sites come from the starter
     // dreamscape's fixed site list, so it needs no counts or fill profile here.
     LayerDefinition(position: One, rules: Starter),
+
     LayerDefinition(
       position: Two,
       rules: Standard(
@@ -26,6 +27,7 @@ AtlasCatalog(
         mandatory_sites: {Draft: 2, Purge: 1, Augury: 1},
       ),
     ),
+
     LayerDefinition(
       position: Three,
       rules: Standard(
@@ -35,6 +37,7 @@ AtlasCatalog(
         mandatory_sites: {Draft: 1, Purge: 1},
       ),
     ),
+
     LayerDefinition(
       position: Four,
       rules: Standard(
@@ -44,14 +47,25 @@ AtlasCatalog(
         mandatory_sites: {Draft: 1},
       ),
     ),
+
     LayerDefinition(
       position: Five,
-      rules: Standard(node_count: (min: 3, max: 5), site_count: (min: 3, max: 6), fill_profile: Late),
+      rules: Standard(
+        node_count: (min: 3, max: 5),
+        site_count: (min: 3, max: 6),
+        fill_profile: Late,
+      ),
     ),
+
     LayerDefinition(
       position: Six,
-      rules: Standard(node_count: (min: 3, max: 5), site_count: (min: 3, max: 6), fill_profile: Late),
+      rules: Standard(
+        node_count: (min: 3, max: 5),
+        site_count: (min: 3, max: 6),
+        fill_profile: Late,
+      ),
     ),
+
     // The boss rule always creates one special Limbo node. It has no normal
     // dreamscape signature site, but its utility sites use the named profile
     // and still end with Battle.
@@ -113,7 +127,10 @@ AtlasCatalog(
       // default above when an entry is also another guide's signature type.
       site_weights: {Essence: 3.0, Transfiguration: 1.0, Duplication: 1.0},
     ),
-    Late: FillProfile(signature_site_weight: 3.0, site_weights: {Essence: 3.0, Transfiguration: 5.0, Duplication: 5.0}),
+    Late: FillProfile(
+      signature_site_weight: 3.0,
+      site_weights: {Essence: 3.0, Transfiguration: 5.0, Duplication: 5.0},
+    ),
   },
 
   known_dreamsign: (
@@ -171,6 +188,9 @@ AtlasCatalog(
     // Templates for a revealed dreamscape's affiliation card. `{name}` is the
     // affiliation name; `{card-theme}` comes from that affiliation's
     // `atlas_card_theme`. The compiler requires exactly these placeholders.
-    affiliation: (title_template: "Affiliation: {name}", body_template: "{card-theme} cards are more likely here."),
+    affiliation: (
+      title_template: "Affiliation: {name}",
+      body_template: "{card-theme} cards are more likely here.",
+    ),
   ),
 )

@@ -30,6 +30,7 @@ AffiliationCatalog(
         "d30bd488-f921-49cb-a44f-353c54cb6548",
       ],
     ),
+
     AffiliationDefinition(
       id: "c3815562-e80d-4afc-8ba6-91bd60ad323e",
       name: "The Void",
@@ -42,6 +43,7 @@ AffiliationCatalog(
         "6f1833a0-30f5-4718-9a3e-7620beb72bfc",
       ],
     ),
+
     AffiliationDefinition(
       id: "a544314c-2e90-42b1-ba04-06c7f2f0a6f9",
       name: "Tempo",
@@ -56,6 +58,7 @@ AffiliationCatalog(
         "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
       ],
     ),
+
     AffiliationDefinition(
       id: "04103386-ca4e-42a0-9a90-150297a20e91",
       name: "Events",
@@ -68,6 +71,7 @@ AffiliationCatalog(
         "3cda9dd7-cb81-43c1-9db5-1444d7363e13",
       ],
     ),
+
     AffiliationDefinition(
       id: "8b30f0bf-6b9d-47c0-92ba-80f62ae8899d",
       name: "Characters",
@@ -80,6 +84,7 @@ AffiliationCatalog(
         "29c4c45d-33df-42ac-bf28-387eb00264aa",
       ],
     ),
+
     AffiliationDefinition(
       id: "33dee3b4-19d2-4788-9cef-b69057385844",
       name: "Warriors",
@@ -92,6 +97,7 @@ AffiliationCatalog(
         "78673e2b-a6d1-43de-8850-3d3327de5cc6",
       ],
     ),
+
     AffiliationDefinition(
       id: "c674a92f-3860-4851-8357-dd4f3e469674",
       name: "Abandon",
@@ -104,6 +110,7 @@ AffiliationCatalog(
         "5639053e-1fe3-4a42-b9c3-3fdf894bfab6",
       ],
     ),
+
     AffiliationDefinition(
       id: "d1a8f46d-0efe-4ae6-bda3-0866d5d20633",
       name: "Survivors",
@@ -115,6 +122,7 @@ AffiliationCatalog(
         "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40",
       ],
     ),
+
     AffiliationDefinition(
       id: "96258dfd-33c9-44a7-96a5-6747eb42cc60",
       name: "Figments",
@@ -126,6 +134,7 @@ AffiliationCatalog(
         "90a6a7a0-b739-475e-8379-647741aab423",
       ],
     ),
+
     AffiliationDefinition(
       id: "0f09352d-3a1d-44db-a58e-229ab834cdc3",
       name: "Discard",

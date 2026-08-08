@@ -328,10 +328,11 @@ function segmentHasNamedRecord(nodes) {
   );
 }
 
-function shouldSeparateRootSegments(group, segments, indentLevel) {
-  if (indentLevel !== 0 || segments.length < 2) return false;
+function shouldSeparateSegments(group, segments, indentLevel) {
+  if (segments.length < 2) return false;
 
   const isRecordWithNamedFields =
+    indentLevel === 0 &&
     group.open.text === "(" &&
     group.nodes.some(
       (node) => node.kind === "token" && node.token.kind === "colon",
@@ -379,7 +380,7 @@ function renderSequence(writer, nodes, indentLevel, options) {
 
 function renderGroup(writer, group, indentLevel, options) {
   const segments = splitAtCommas(group.nodes);
-  const separateRootSegments = shouldSeparateRootSegments(
+  const separateSegments = shouldSeparateSegments(
     group,
     segments,
     indentLevel,
@@ -388,7 +389,7 @@ function renderGroup(writer, group, indentLevel, options) {
     indentLevel === 0 &&
     group.nodes.some((node) => firstToken(node).newlinesBefore >= 2);
   const flat =
-    separateRootSegments || hasIntentionalRootBlankLine
+    separateSegments || hasIntentionalRootBlankLine
       ? null
       : flatGroup(group);
   if (
@@ -414,8 +415,8 @@ function renderGroup(writer, group, indentLevel, options) {
       segment.nodes.length === 0 ? null : firstToken(segment.nodes[0]);
     if (
       index > 0 &&
-      indentLevel === 0 &&
-      (separateRootSegments || segmentFirstToken?.newlinesBefore >= 2)
+      (separateSegments ||
+        (indentLevel === 0 && segmentFirstToken?.newlinesBefore >= 2))
     ) {
       writer.blankLine(childIndent);
     }
@@ -454,7 +455,7 @@ function comparableTokens(source) {
 
 export function formatRon(source, options = {}) {
   const indentWidth = options.indentWidth ?? 2;
-  const printWidth = options.printWidth ?? 120;
+  const printWidth = options.printWidth ?? 100;
   if (!Number.isInteger(indentWidth) || indentWidth < 0) {
     throw new Error("indentWidth must be a non-negative integer");
   }

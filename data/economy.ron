@@ -87,9 +87,17 @@ CompatDocument(
         {"minimum-delta": 4, "base": 70, "jitter": 20, "floor": 50},
       ],
     },
-    "battle-reward": {"base-essence": 100, "essence-per-completion-level": 50, "minimum-essence": 0},
+    "battle-reward": {
+      "base-essence": 100,
+      "essence-per-completion-level": 50,
+      "minimum-essence": 0,
+    },
     "gamble": {
-      "three-gate": {"standard-wager": 50, "enhanced-wager": 45, "rewards": {"six": 100, "nine": 150, "jack": 200}},
+      "three-gate": {
+        "standard-wager": 50,
+        "enhanced-wager": 45,
+        "rewards": {"six": 100, "nine": 150, "jack": 200},
+      },
       "ladder-climb": {
         "win-essence": 25,
         "attempts": [
@@ -115,7 +123,11 @@ CompatDocument(
           {"tier": 3, "essence-reward": 300},
         ],
       },
-      "four-suit-reprise": {"standard-draw-price": 25, "enhanced-draw-price": 15, "essence-reward": 100},
+      "four-suit-reprise": {
+        "standard-draw-price": 25,
+        "enhanced-draw-price": 15,
+        "essence-reward": 100,
+      },
       "blackjack": {"standard-wager": 90, "enhanced-wager": 40, "prize-essence": 300},
     },
     "exploration": {"default-essence-per-spark": 40},

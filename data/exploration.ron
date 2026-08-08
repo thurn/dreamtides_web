@@ -15,6 +15,7 @@ ExplorationCatalog(
         subtitle: "First choose a card to purge, then choose a different card to copy.",
       ),
     ),
+
     EffectDefinition(
       kind: GainDreamsign,
       label: "Gain Dreamsign",
@@ -24,6 +25,7 @@ ExplorationCatalog(
       selection_policy: (default: Fixed, allowed: [Fixed]),
       fields: [FieldDefinition(key: DreamsignId, label: "Dreamsign", control: Dreamsign)],
     ),
+
     EffectDefinition(
       kind: GainCard,
       label: "Gain card",
@@ -33,6 +35,7 @@ ExplorationCatalog(
       selection_policy: (default: Fixed, allowed: [Fixed]),
       fields: [FieldDefinition(key: CardId, label: "Card", control: Card)],
     ),
+
     EffectDefinition(
       kind: TransfigureSelected,
       label: "Transfigure selected card",
@@ -40,8 +43,16 @@ ExplorationCatalog(
       templates: [17],
       followup: (title: "", subtitle: ""),
       selection_policy: (default: TransfigurationValue, allowed: [Uniform, TransfigurationValue]),
-      fields: [FieldDefinition(key: Predicate, label: "Card predicate", control: Predicate, optional: true)],
+      fields: [
+        FieldDefinition(
+          key: Predicate,
+          label: "Card predicate",
+          control: Predicate,
+          optional: true,
+        ),
+      ],
     ),
+
     EffectDefinition(
       kind: PurgeSelected,
       label: "Purge selected cards",
@@ -50,7 +61,13 @@ ExplorationCatalog(
       followup: (title: "Feed the Fire", subtitle: "Choose an Event to purge."),
       selection_policy: (default: PurgeMisfit, allowed: [Uniform, PurgeMisfit]),
       fields: [
-        FieldDefinition(key: Predicate, label: "Card predicate", control: Predicate, optional: true),
+        FieldDefinition(
+          key: Predicate,
+          label: "Card predicate",
+          control: Predicate,
+          optional: true,
+        ),
+
         FieldDefinition(
           key: Count,
           label: "Count",
@@ -61,6 +78,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EffectDefinition(
       kind: ChoosePack,
       label: "Choose a pack",
@@ -69,11 +87,31 @@ ExplorationCatalog(
       followup: (title: "{action-label}", subtitle: "Choose one pack to add to your deck."),
       selection_policy: (default: CardBundle, allowed: [Uniform, CardFit, CardBundle]),
       fields: [
-        FieldDefinition(key: Predicate, label: "Card predicate", control: Predicate, default: Text("character")),
-        FieldDefinition(key: PackCount, label: "Pack count", control: Number, default: Integer(2), minimum: 1),
-        FieldDefinition(key: PackSize, label: "Pack size", control: Number, default: Integer(3), minimum: 1),
+        FieldDefinition(
+          key: Predicate,
+          label: "Card predicate",
+          control: Predicate,
+          default: Text("character"),
+        ),
+
+        FieldDefinition(
+          key: PackCount,
+          label: "Pack count",
+          control: Number,
+          default: Integer(2),
+          minimum: 1,
+        ),
+
+        FieldDefinition(
+          key: PackSize,
+          label: "Pack size",
+          control: Number,
+          default: Integer(3),
+          minimum: 1,
+        ),
       ],
     ),
+
     EffectDefinition(
       kind: DraftCard,
       label: "Draft a card",
@@ -82,11 +120,32 @@ ExplorationCatalog(
       followup: (title: "{action-label}", subtitle: "Choose one offered card."),
       selection_policy: (default: CardFit, allowed: [Uniform, CardFit, CardFitQuality]),
       fields: [
-        FieldDefinition(key: Predicate, label: "Card predicate", control: Predicate, default: Text("character")),
-        FieldDefinition(key: OfferCount, label: "Offer count", control: Number, default: Integer(4), minimum: 1),
-        FieldDefinition(key: Count, label: "Copies", control: Number, default: Integer(1), minimum: 1, templates: [15]),
+        FieldDefinition(
+          key: Predicate,
+          label: "Card predicate",
+          control: Predicate,
+          default: Text("character"),
+        ),
+
+        FieldDefinition(
+          key: OfferCount,
+          label: "Offer count",
+          control: Number,
+          default: Integer(4),
+          minimum: 1,
+        ),
+
+        FieldDefinition(
+          key: Count,
+          label: "Copies",
+          control: Number,
+          default: Integer(1),
+          minimum: 1,
+          templates: [15],
+        ),
       ],
     ),
+
     EffectDefinition(
       kind: PurgeForEssence,
       label: "Purge for essence",
@@ -109,6 +168,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EffectDefinition(
       kind: ChangeSubtypeSelected,
       label: "Change selected subtype",
@@ -117,18 +177,31 @@ ExplorationCatalog(
       followup: (title: "{action-label}", subtitle: "Choose a Character to become {subtype}."),
       selection_policy: (default: DeckEntryCentrality, allowed: [Uniform, DeckEntryCentrality]),
       fields: [
-        FieldDefinition(key: Predicate, label: "Card predicate", control: Predicate, optional: true),
+        FieldDefinition(
+          key: Predicate,
+          label: "Card predicate",
+          control: Predicate,
+          optional: true,
+        ),
+
         FieldDefinition(key: Subtype, label: "Subtype", control: Subtype),
       ],
     ),
+
     EffectDefinition(
       kind: ChangeSubtypeAll,
       label: "Choose subtype for all characters",
       mechanic: ChangeDeckSubtype,
       templates: [67],
-      followup: (title: "{action-label}", subtitle: "Choose the subtype for every Character in your deck."),
-      fields: [FieldDefinition(key: SubtypeOptions, label: "Subtype options", control: SubtypeOptions)],
+      followup: (
+        title: "{action-label}",
+        subtitle: "Choose the subtype for every Character in your deck.",
+      ),
+      fields: [
+        FieldDefinition(key: SubtypeOptions, label: "Subtype options", control: SubtypeOptions),
+      ],
     ),
+
     EffectDefinition(
       kind: TakeCards,
       label: "Take offered cards",
@@ -137,10 +210,23 @@ ExplorationCatalog(
       followup: (title: "{action-label}", subtitle: "Choose any number of offered cards."),
       selection_policy: (default: CardFit, allowed: [Uniform, CardFit, CardFitQuality]),
       fields: [
-        FieldDefinition(key: Predicate, label: "Card predicate", control: Predicate, default: Text("character")),
-        FieldDefinition(key: OfferCount, label: "Offer count", control: Number, default: Integer(4), minimum: 1),
+        FieldDefinition(
+          key: Predicate,
+          label: "Card predicate",
+          control: Predicate,
+          default: Text("character"),
+        ),
+
+        FieldDefinition(
+          key: OfferCount,
+          label: "Offer count",
+          control: Number,
+          default: Integer(4),
+          minimum: 1,
+        ),
       ],
     ),
+
     EffectDefinition(
       kind: ReplaceSelectedWithCard,
       label: "Replace selected card with a fixed card",
@@ -149,21 +235,37 @@ ExplorationCatalog(
       followup: (title: "{action-label}", subtitle: "Choose a card to replace."),
       selection_policy: (default: Fixed, allowed: [Fixed]),
       fields: [
-        FieldDefinition(key: Predicate, label: "Card predicate", control: Predicate, optional: true),
+        FieldDefinition(
+          key: Predicate,
+          label: "Card predicate",
+          control: Predicate,
+          optional: true,
+        ),
+
         FieldDefinition(key: CardId, label: "Replacement card", control: Card),
       ],
     ),
+
     EffectDefinition(
       kind: ReplaceSelected,
       label: "Replace selected card",
       mechanic: ReplaceDeckEntry,
       templates: [7],
-      followup: (title: "Release a Fellow Swimmer", subtitle: "Choose a Spirit Animal to exchange."),
+      followup: (
+        title: "Release a Fellow Swimmer",
+        subtitle: "Choose a Spirit Animal to exchange.",
+      ),
       selection_policy: (default: CardFitQuality, allowed: [Uniform, CardFitQuality]),
       fields: [
-        FieldDefinition(key: Predicate, label: "Replacement predicate", control: Predicate, default: Text("character")),
+        FieldDefinition(
+          key: Predicate,
+          label: "Replacement predicate",
+          control: Predicate,
+          default: Text("character"),
+        ),
       ],
     ),
+
     EffectDefinition(
       kind: GainNightmareAndCard,
       label: "Gain Nightmares and a card",
@@ -173,6 +275,7 @@ ExplorationCatalog(
       selection_policy: (default: Fixed, allowed: [Fixed]),
       fields: [
         FieldDefinition(key: CardId, label: "Card", control: Card),
+
         FieldDefinition(
           key: NightmareCount,
           label: "Nightmare count",
@@ -182,18 +285,36 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EffectDefinition(
       kind: GainRandomCards,
       label: "Gain random cards",
       mechanic: GainCard,
       templates: [9, 13],
       followup: (title: "", subtitle: ""),
-      selection_policy: (default: CardBundle, allowed: [Uniform, CardFit, CardFitQuality, CardBundle]),
+      selection_policy: (
+        default: CardBundle,
+        allowed: [Uniform, CardFit, CardFitQuality, CardBundle],
+      ),
       fields: [
-        FieldDefinition(key: Predicate, label: "Card predicate", control: Predicate, default: Text("character")),
-        FieldDefinition(key: Count, label: "Count", control: Number, default: Integer(1), minimum: 1, templates: [13]),
+        FieldDefinition(
+          key: Predicate,
+          label: "Card predicate",
+          control: Predicate,
+          default: Text("character"),
+        ),
+
+        FieldDefinition(
+          key: Count,
+          label: "Count",
+          control: Number,
+          default: Integer(1),
+          minimum: 1,
+          templates: [13],
+        ),
       ],
     ),
+
     EffectDefinition(
       kind: TransfigureFixedSelected,
       label: "Apply a fixed transfiguration",
@@ -202,7 +323,13 @@ ExplorationCatalog(
       followup: (title: "{action-label}", subtitle: "Choose a card to become {transfiguration}."),
       selection_policy: (default: TransfigurationValue, allowed: [Uniform, TransfigurationValue]),
       fields: [
-        FieldDefinition(key: Predicate, label: "Card predicate", control: Predicate, optional: true),
+        FieldDefinition(
+          key: Predicate,
+          label: "Card predicate",
+          control: Predicate,
+          optional: true,
+        ),
+
         FieldDefinition(
           key: Transfiguration,
           label: "Transfiguration",
@@ -211,6 +338,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EffectDefinition(
       kind: GainOfferedCard,
       label: "Gain an offered card",
@@ -219,10 +347,24 @@ ExplorationCatalog(
       followup: (title: "", subtitle: ""),
       selection_policy: (default: CardFitQuality, allowed: [Uniform, CardFit, CardFitQuality]),
       fields: [
-        FieldDefinition(key: Predicate, label: "Offer predicate", control: Predicate, default: Text("character")),
-        FieldDefinition(key: Count, label: "Copies", control: Number, default: Integer(1), minimum: 1, templates: [12]),
+        FieldDefinition(
+          key: Predicate,
+          label: "Offer predicate",
+          control: Predicate,
+          default: Text("character"),
+        ),
+
+        FieldDefinition(
+          key: Count,
+          label: "Copies",
+          control: Number,
+          default: Integer(1),
+          minimum: 1,
+          templates: [12],
+        ),
       ],
     ),
+
     EffectDefinition(
       kind: TransfigureNextDraftOrShop,
       label: "Transfigure the next Draft or Shop",
@@ -230,6 +372,7 @@ ExplorationCatalog(
       templates: [37],
       followup: (title: "", subtitle: ""),
     ),
+
     EffectDefinition(
       kind: GainEssencePerCard,
       label: "Gain essence per card",
@@ -237,7 +380,13 @@ ExplorationCatalog(
       templates: [59],
       followup: (title: "", subtitle: ""),
       fields: [
-        FieldDefinition(key: Predicate, label: "Card predicate", control: Predicate, default: Text("character")),
+        FieldDefinition(
+          key: Predicate,
+          label: "Card predicate",
+          control: Predicate,
+          default: Text("character"),
+        ),
+
         FieldDefinition(
           key: EssencePerCard,
           label: "Essence per card",
@@ -249,6 +398,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EffectDefinition(
       kind: IncreaseSparkAll,
       label: "Increase spark for all characters",
@@ -266,6 +416,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EffectDefinition(
       kind: GainRandomDreamsign,
       label: "Gain random Dreamsign",
@@ -274,6 +425,7 @@ ExplorationCatalog(
       followup: (title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
       selection_policy: (default: DreamsignMatch, allowed: [Uniform, DreamsignMatch]),
     ),
+
     EffectDefinition(
       kind: PurgeDreamsignForEssence,
       label: "Purge Dreamsign for essence",
@@ -292,6 +444,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EffectDefinition(
       kind: MakeFastAll,
       label: "Make all cards fast",
@@ -299,6 +452,7 @@ ExplorationCatalog(
       templates: [66],
       followup: (title: "", subtitle: ""),
     ),
+
     EffectDefinition(
       kind: ReduceCostAllAndGainNightmares,
       label: "Reduce costs and gain Nightmares",
@@ -314,6 +468,7 @@ ExplorationCatalog(
           minimum: 1,
           resource: Energy,
         ),
+
         FieldDefinition(
           key: NightmareCount,
           label: "Nightmare count",
@@ -323,6 +478,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EffectDefinition(
       kind: CopySelectedCard,
       label: "Copy a selected deck card",
@@ -331,10 +487,23 @@ ExplorationCatalog(
       followup: (title: "{action-label}", subtitle: "Choose a card to gain {count} copies of."),
       selection_policy: (default: DuplicateValue, allowed: [Uniform, DuplicateValue]),
       fields: [
-        FieldDefinition(key: Predicate, label: "Card predicate", control: Predicate, optional: true),
-        FieldDefinition(key: Count, label: "Copies", control: Number, default: Integer(1), minimum: 1),
+        FieldDefinition(
+          key: Predicate,
+          label: "Card predicate",
+          control: Predicate,
+          optional: true,
+        ),
+
+        FieldDefinition(
+          key: Count,
+          label: "Copies",
+          control: Number,
+          default: Integer(1),
+          minimum: 1,
+        ),
       ],
     ),
+
     EffectDefinition(
       kind: CopySelectedCards,
       label: "Copy selected deck cards",
@@ -342,8 +511,17 @@ ExplorationCatalog(
       templates: [51],
       followup: (title: "{action-label}", subtitle: "Choose {count} cards to copy."),
       selection_policy: (default: DuplicateValue, allowed: [Uniform, DuplicateValue]),
-      fields: [FieldDefinition(key: Count, label: "Cards to copy", control: Number, default: Integer(2), minimum: 1)],
+      fields: [
+        FieldDefinition(
+          key: Count,
+          label: "Cards to copy",
+          control: Number,
+          default: Integer(2),
+          minimum: 1,
+        ),
+      ],
     ),
+
     EffectDefinition(
       kind: CopyOfferedDeckCard,
       label: "Copy an offered deck card",
@@ -352,9 +530,16 @@ ExplorationCatalog(
       followup: (title: "{action-label}", subtitle: "Choose one offered card to copy."),
       selection_policy: (default: DuplicateValue, allowed: [Uniform, DuplicateValue]),
       fields: [
-        FieldDefinition(key: OfferCount, label: "Offer count", control: Number, default: Integer(4), minimum: 1),
+        FieldDefinition(
+          key: OfferCount,
+          label: "Offer count",
+          control: Number,
+          default: Integer(4),
+          minimum: 1,
+        ),
       ],
     ),
+
     EffectDefinition(
       kind: NextBattleOpeningHand,
       label: "Increase next opening hand",
@@ -362,9 +547,16 @@ ExplorationCatalog(
       templates: [38],
       followup: (title: "", subtitle: ""),
       fields: [
-        FieldDefinition(key: Count, label: "Additional cards", control: Number, default: Integer(1), minimum: 1),
+        FieldDefinition(
+          key: Count,
+          label: "Additional cards",
+          control: Number,
+          default: Integer(1),
+          minimum: 1,
+        ),
       ],
     ),
+
     EffectDefinition(
       kind: NextBattleStartingEnergy,
       label: "Increase next starting energy",
@@ -382,6 +574,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EffectDefinition(
       kind: NextBattleSmallerHandAndCostDiscount,
       label: "Reduce next opening hand and card costs",
@@ -389,6 +582,7 @@ ExplorationCatalog(
       templates: [81],
       followup: (title: "", subtitle: ""),
     ),
+
     EffectDefinition(
       kind: ChooseDreamAvatar,
       label: "Choose a new Dream Avatar",
@@ -397,9 +591,16 @@ ExplorationCatalog(
       followup: (title: "{action-label}", subtitle: "Choose your new Dream Avatar."),
       selection_policy: (default: Uniform, allowed: [Uniform]),
       fields: [
-        FieldDefinition(key: OfferCount, label: "Offer count", control: Number, default: Integer(3), minimum: 1),
+        FieldDefinition(
+          key: OfferCount,
+          label: "Offer count",
+          control: Number,
+          default: Integer(3),
+          minimum: 1,
+        ),
       ],
     ),
+
     EffectDefinition(
       kind: PurgeDuplicatesAndGrantReclaim,
       label: "Purge duplicates and grant Reclaim",
@@ -407,6 +608,7 @@ ExplorationCatalog(
       templates: [79],
       followup: (title: "", subtitle: ""),
     ),
+
     EffectDefinition(
       kind: TransfiguredCardDraft,
       label: "Draft a transfigured card",
@@ -415,10 +617,23 @@ ExplorationCatalog(
       followup: (title: "{action-label}", subtitle: "Choose one offered transfigured card."),
       selection_policy: (default: CardFit, allowed: [Uniform, CardFit, CardFitQuality]),
       fields: [
-        FieldDefinition(key: Predicate, label: "Card predicate", control: Predicate, default: Text("character")),
-        FieldDefinition(key: OfferCount, label: "Offer count", control: Number, default: Integer(4), minimum: 1),
+        FieldDefinition(
+          key: Predicate,
+          label: "Card predicate",
+          control: Predicate,
+          default: Text("character"),
+        ),
+
+        FieldDefinition(
+          key: OfferCount,
+          label: "Offer count",
+          control: Number,
+          default: Integer(4),
+          minimum: 1,
+        ),
       ],
     ),
+
     EffectDefinition(
       kind: AddSite,
       label: "Add a disclosed site",
@@ -439,8 +654,12 @@ ExplorationCatalog(
           id: "161482b6-af07-4d9e-822d-8c738672beb9:pair-5:template-11",
           effect_text: "Gain $OFFERED_CARD",
           effect: GainOfferedCard(predicate: CheapCharacter),
-          template: TemplateInvocation(id: 11, selections: {"$OFFERED_CARD": {"predicate": "≤2● cost Character"}}),
+          template: TemplateInvocation(
+            id: 11,
+            selections: {"$OFFERED_CARD": {"predicate": "≤2● cost Character"}},
+          ),
         ),
+
         ActionDefinition(
           label: "Send a possession through",
           id: "161482b6-af07-4d9e-822d-8c738672beb9:pair-5:template-17",
@@ -450,6 +669,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "738a5af0-f848-4d48-bceb-9a43c9b11066",
       prose: "An armored traveler hunches beside a doorway veiled in luminous grids.",
@@ -461,15 +681,20 @@ ExplorationCatalog(
           effect: GainRandomCards(predicate: Survivor, count: 2),
           template: TemplateInvocation(id: 13, variables: {"count": 2, "predicate": "Survivor"}),
         ),
+
         ActionDefinition(
           label: "Choose a Guide",
           id: "738a5af0-f848-4d48-bceb-9a43c9b11066:pair-1:template-14",
           effect_text: "Draft a Survivor from 4 choices",
           effect: DraftCard(predicate: Survivor, count: 1, offer_count: 4),
-          template: TemplateInvocation(id: 14, variables: {"predicate": "Survivor", "offer_count": 4}),
+          template: TemplateInvocation(
+            id: 14,
+            variables: {"predicate": "Survivor", "offer_count": 4},
+          ),
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "401bb341-8385-41e9-8f6f-7b48e9ce174d",
       prose: "A heavy-furred wolf prowls low through blazing grass, its eyes shining.",
@@ -479,8 +704,12 @@ ExplorationCatalog(
           id: "401bb341-8385-41e9-8f6f-7b48e9ce174d:pair-1:template-14",
           effect_text: "Draft a Spirit Animal from 4 choices",
           effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
-          template: TemplateInvocation(id: 14, variables: {"predicate": "Spirit Animal", "offer_count": 4}),
+          template: TemplateInvocation(
+            id: 14,
+            variables: {"predicate": "Spirit Animal", "offer_count": 4},
+          ),
         ),
+
         ActionDefinition(
           label: "Invite Another to Follow",
           id: "401bb341-8385-41e9-8f6f-7b48e9ce174d:pair-1:template-58",
@@ -490,6 +719,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "8b5eb29c-146f-46fb-9407-55004128fba7",
       prose: "A skull-faced guardian extends a lantern ablaze with drifting motes.",
@@ -501,18 +731,28 @@ ExplorationCatalog(
           effect: GainCard(card_id: "e26e0ac8-d6c9-4b0c-8672-4f73651f2586"),
           template: TemplateInvocation(
             id: 10,
-            variables: {"card_id": {"id": "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", "display_name": "Lantern Keeper"}},
+            variables: {
+              "card_id": {
+                "id": "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
+                "display_name": "Lantern Keeper",
+              },
+            },
           ),
         ),
+
         ActionDefinition(
           label: "Study the Motes",
           id: "8b5eb29c-146f-46fb-9407-55004128fba7:pair-1:template-14",
           effect_text: "Draft a ≤2● cost Character from 4 choices",
           effect: DraftCard(predicate: CheapCharacter, count: 1, offer_count: 4),
-          template: TemplateInvocation(id: 14, variables: {"predicate": "≤2● cost Character", "offer_count": 4}),
+          template: TemplateInvocation(
+            id: 14,
+            variables: {"predicate": "≤2● cost Character", "offer_count": 4},
+          ),
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "954e8d50-d494-4fb2-b4c7-74979083b774",
       prose: "A gunman stands braced as cables of shadow stream from him.",
@@ -524,9 +764,15 @@ ExplorationCatalog(
           effect: GainCard(card_id: "87aba308-00b4-40d8-a46f-4e6f58a664a8"),
           template: TemplateInvocation(
             id: 10,
-            variables: {"card_id": {"id": "87aba308-00b4-40d8-a46f-4e6f58a664a8", "display_name": "Breach Artist"}},
+            variables: {
+              "card_id": {
+                "id": "87aba308-00b4-40d8-a46f-4e6f58a664a8",
+                "display_name": "Breach Artist",
+              },
+            },
           ),
         ),
+
         ActionDefinition(
           label: "Accept His Commission",
           id: "954e8d50-d494-4fb2-b4c7-74979083b774:pair-1:template-58",
@@ -536,6 +782,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "b8ecc46d-bd92-4826-a416-7ce177e69cbf",
       prose: "An owl perches heavily on a branch, dense plumage backlit.",
@@ -545,17 +792,25 @@ ExplorationCatalog(
           id: "b8ecc46d-bd92-4826-a416-7ce177e69cbf:pair-1:template-14",
           effect_text: "Draft a Spirit Animal from 4 choices",
           effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
-          template: TemplateInvocation(id: 14, variables: {"predicate": "Spirit Animal", "offer_count": 4}),
+          template: TemplateInvocation(
+            id: 14,
+            variables: {"predicate": "Spirit Animal", "offer_count": 4},
+          ),
         ),
+
         ActionDefinition(
           label: "Answer its low call",
           id: "b8ecc46d-bd92-4826-a416-7ce177e69cbf:pair-1:template-13",
           effect_text: "Gain 2 random Spirit Animal cards",
           effect: GainRandomCards(predicate: SpiritAnimal, count: 2),
-          template: TemplateInvocation(id: 13, variables: {"count": 2, "predicate": "Spirit Animal"}),
+          template: TemplateInvocation(
+            id: 13,
+            variables: {"count": 2, "predicate": "Spirit Animal"},
+          ),
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "e2f542eb-090f-4a22-a42c-a120eb6caaa3",
       prose: "Beneath a starry haze, a dark whale banks with fins extended.",
@@ -567,18 +822,28 @@ ExplorationCatalog(
           effect: GainCard(card_id: "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5"),
           template: TemplateInvocation(
             id: 10,
-            variables: {"card_id": {"id": "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", "display_name": "Cloudmantle Ray"}},
+            variables: {
+              "card_id": {
+                "id": "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5",
+                "display_name": "Cloudmantle Ray",
+              },
+            },
           ),
         ),
+
         ActionDefinition(
           label: "Follow Its Crossing",
           id: "e2f542eb-090f-4a22-a42c-a120eb6caaa3:pair-1:template-14",
           effect_text: "Draft a Spirit Animal from 4 choices",
           effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
-          template: TemplateInvocation(id: 14, variables: {"predicate": "Spirit Animal", "offer_count": 4}),
+          template: TemplateInvocation(
+            id: 14,
+            variables: {"predicate": "Spirit Animal", "offer_count": 4},
+          ),
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
       prose: "An elephant looms through starry haze, bright tusks sharply curved.",
@@ -591,19 +856,27 @@ ExplorationCatalog(
           template: TemplateInvocation(
             id: 27,
             variables: {
-              "dreamsign_name": {"id": "2D4EB3EE-0931-45ED-8365-69F18096EAD5", "display_name": "Charm Pouch"},
+              "dreamsign_name": {
+                "id": "2D4EB3EE-0931-45ED-8365-69F18096EAD5",
+                "display_name": "Charm Pouch",
+              },
             },
           ),
         ),
+
         ActionDefinition(
           label: "Sound a gathering call",
           id: "46783333-78f9-4146-a8ec-0d1b81e1bf2f:pair-1:template-59",
           effect_text: "Gain 15 essence for each Spirit Animal card in your deck",
           effect: GainEssencePerCard(predicate: SpiritAnimal, essence_per_card: 15),
-          template: TemplateInvocation(id: 59, variables: {"essence_per_card": 15, "predicate": "Spirit Animal"}),
+          template: TemplateInvocation(
+            id: 59,
+            variables: {"essence_per_card": 15, "predicate": "Spirit Animal"},
+          ),
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "886c9d49-b25f-4ddd-97f0-2ec4b42eda89",
       prose: "A colossal rider looms through star-filled haze, long hair streaming.",
@@ -613,8 +886,12 @@ ExplorationCatalog(
           id: "886c9d49-b25f-4ddd-97f0-2ec4b42eda89:pair-5:template-36",
           effect_text: "Choose one of 2 packs of 3 Warrior cards to add to your deck",
           effect: ChoosePack(predicate: Warrior, pack_count: 2, pack_size: 3),
-          template: TemplateInvocation(id: 36, variables: {"pack_count": 2, "pack_size": 3, "predicate": "Warrior"}),
+          template: TemplateInvocation(
+            id: 36,
+            variables: {"pack_count": 2, "pack_size": 3, "predicate": "Warrior"},
+          ),
         ),
+
         ActionDefinition(
           label: "Receive Their Blessing",
           id: "886c9d49-b25f-4ddd-97f0-2ec4b42eda89:pair-5:template-64",
@@ -624,6 +901,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "15b63630-d9f8-473b-9717-15ad91ff2f16",
       prose: "Branching currents surround a figure kneeling inside a ruptured chamber.",
@@ -635,15 +913,20 @@ ExplorationCatalog(
           effect: MakeFastAll,
           template: TemplateInvocation(id: 66),
         ),
+
         ActionDefinition(
           label: "Overload the aperture",
           id: "15b63630-d9f8-473b-9717-15ad91ff2f16:pair-1:template-65",
           effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 Nightmare cards.",
           effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
-          template: TemplateInvocation(id: 65, variables: {"energy_cost_reduction": 1, "nightmare_count": 3}),
+          template: TemplateInvocation(
+            id: 65,
+            variables: {"energy_cost_reduction": 1, "nightmare_count": 3},
+          ),
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "764b62f6-6af9-40ad-8d1f-653cc1a11030",
       prose: "A cloaked warrior leans forward, raising a bright-emblemed standard through smoke.",
@@ -653,17 +936,25 @@ ExplorationCatalog(
           id: "764b62f6-6af9-40ad-8d1f-653cc1a11030:pair-5:template-36",
           effect_text: "Choose one of 2 packs of 3 Warrior cards to add to your deck",
           effect: ChoosePack(predicate: Warrior, pack_count: 2, pack_size: 3),
-          template: TemplateInvocation(id: 36, variables: {"pack_count": 2, "pack_size": 3, "predicate": "Warrior"}),
+          template: TemplateInvocation(
+            id: 36,
+            variables: {"pack_count": 2, "pack_size": 3, "predicate": "Warrior"},
+          ),
         ),
+
         ActionDefinition(
           label: "Charge Through the Smoke",
           id: "764b62f6-6af9-40ad-8d1f-653cc1a11030:pair-5:template-65",
           effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 Nightmare cards.",
           effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
-          template: TemplateInvocation(id: 65, variables: {"energy_cost_reduction": 1, "nightmare_count": 3}),
+          template: TemplateInvocation(
+            id: 65,
+            variables: {"energy_cost_reduction": 1, "nightmare_count": 3},
+          ),
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
       prose: "A solitary man pauses on a gnarled bough beneath suspended lanterns.",
@@ -675,6 +966,7 @@ ExplorationCatalog(
           effect: PurgeAndCopy,
           template: TemplateInvocation(id: 61),
         ),
+
         ActionDefinition(
           label: "Present a Written Charm",
           id: "e26e0ac8-d6c9-4b0c-8672-4f73651f2586:pair-1:template-19",
@@ -688,6 +980,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "123baf70-305a-4583-bdba-a10b5153fbeb",
       prose: "A masked soldier braces a long rifle amid smoke-darkened wreckage.",
@@ -697,8 +990,12 @@ ExplorationCatalog(
           id: "123baf70-305a-4583-bdba-a10b5153fbeb:pair-1:template-15",
           effect_text: "Draft a Survivor from 4 choices and gain 2 copies of it",
           effect: DraftCard(predicate: Survivor, count: 2, offer_count: 4),
-          template: TemplateInvocation(id: 15, variables: {"predicate": "Survivor", "offer_count": 4, "count": 2}),
+          template: TemplateInvocation(
+            id: 15,
+            variables: {"predicate": "Survivor", "offer_count": 4, "count": 2},
+          ),
         ),
+
         ActionDefinition(
           label: "Request Field Training",
           id: "123baf70-305a-4583-bdba-a10b5153fbeb:pair-1:template-19",
@@ -712,6 +1009,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "e455225f-c444-44a2-8796-805cae2b755f",
       prose: "A witch extends both hands as stones hover around her.",
@@ -723,6 +1021,7 @@ ExplorationCatalog(
           effect: GainRandomDreamsign,
           template: TemplateInvocation(id: 28),
         ),
+
         ActionDefinition(
           label: "Break the suspended pattern",
           id: "e455225f-c444-44a2-8796-805cae2b755f:pair-3:template-62",
@@ -732,6 +1031,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6",
       prose: "Three sealed figures press through billowing haze, opaque visors hidden beneath hoods.",
@@ -747,6 +1047,7 @@ ExplorationCatalog(
             selections: {"$DECK_CARD": {"predicate": "≤2● cost Character"}},
           ),
         ),
+
         ActionDefinition(
           label: "Recruit an Ally",
           id: "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6:pair-5:template-9",
@@ -756,6 +1057,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "f9a65b32-537b-457c-9eaf-b512cf1f3791",
       prose: "Luminous seams thread a heavy thorax; articulated legs fold above a branch beneath spread wings.",
@@ -771,6 +1073,7 @@ ExplorationCatalog(
             selections: {"$DECK_CARD": {"predicate": "≤2● cost Character"}},
           ),
         ),
+
         ActionDefinition(
           label: "Compare the repeating plates",
           id: "f9a65b32-537b-457c-9eaf-b512cf1f3791:pair-2:template-55",
@@ -780,6 +1083,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034",
       prose: "A skeletal giant reaches across water, its shape repeating in broken reflections.",
@@ -792,10 +1096,14 @@ ExplorationCatalog(
           template: TemplateInvocation(
             id: 27,
             variables: {
-              "dreamsign_name": {"id": "EB55B141-82F8-4BA4-B319-420F762E9EE4", "display_name": "Mortal Skull"},
+              "dreamsign_name": {
+                "id": "EB55B141-82F8-4BA4-B319-420F762E9EE4",
+                "display_name": "Mortal Skull",
+              },
             },
           ),
         ),
+
         ActionDefinition(
           label: "Hold the hollow gaze",
           id: "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034:pair-1:template-38",
@@ -805,6 +1113,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "86fd585b-e9d0-4dc1-bce9-488014b9316d",
       prose: "A luminous jellyfish glides among stars, its flowing tendrils brightly lit.",
@@ -816,6 +1125,7 @@ ExplorationCatalog(
           effect: NextBattleOpeningHand(count: 2),
           template: TemplateInvocation(id: 38, variables: {"count": 2}),
         ),
+
         ActionDefinition(
           label: "Follow its radiant wake",
           id: "86fd585b-e9d0-4dc1-bce9-488014b9316d:pair-1:template-39",
@@ -825,6 +1135,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "b1d36337-5668-4f1d-b155-2d07fc00f872",
       prose: "A lone astronaut stands rigid where luminous steps meet a vast black aperture.",
@@ -836,6 +1147,7 @@ ExplorationCatalog(
           effect: ChooseDreamAvatar(offer_count: 3),
           template: TemplateInvocation(id: 57),
         ),
+
         ActionDefinition(
           label: "Enter the aperture alone",
           id: "b1d36337-5668-4f1d-b155-2d07fc00f872:pair-1:template-79",
@@ -845,6 +1157,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "edb479be-68a5-45bc-bd19-2602156edb57",
       prose: "A colossal eagle beats broad wings through canyon haze, dark feathers edged with glare.",
@@ -860,15 +1173,20 @@ ExplorationCatalog(
             selections: {"$OFFERED_CARD": {"predicate": "Spirit Animal"}},
           ),
         ),
+
         ActionDefinition(
           label: "Join its flight",
           id: "edb479be-68a5-45bc-bd19-2602156edb57:pair-1:template-16",
           effect_text: "Take any number of Spirit Animal cards from 4 choices",
           effect: TakeCards(predicate: SpiritAnimal, offer_count: 4),
-          template: TemplateInvocation(id: 16, variables: {"offer_count": 4, "predicate": "Spirit Animal"}),
+          template: TemplateInvocation(
+            id: 16,
+            variables: {"offer_count": 4, "predicate": "Spirit Animal"},
+          ),
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e",
       prose: "A lone fisher casts a slender line across misty, light-speckled water.",
@@ -883,15 +1201,20 @@ ExplorationCatalog(
             variables: {"count": 2, "offer_count": 4, "predicate": "≤2● cost Character"},
           ),
         ),
+
         ActionDefinition(
           label: "Guide his cast",
           id: "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e:pair-1:template-16",
           effect_text: "Take any number of ≤2● cost Character cards from 4 choices",
           effect: TakeCards(predicate: CheapCharacter, offer_count: 4),
-          template: TemplateInvocation(id: 16, variables: {"offer_count": 4, "predicate": "≤2● cost Character"}),
+          template: TemplateInvocation(
+            id: 16,
+            variables: {"offer_count": 4, "predicate": "≤2● cost Character"},
+          ),
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "2ce84a16-1295-4738-9e2d-1f57590b2269",
       prose: "A hooded warrior stands rigid as marked slabs orbit a luminous sword.",
@@ -901,8 +1224,12 @@ ExplorationCatalog(
           id: "2ce84a16-1295-4738-9e2d-1f57590b2269:pair-3:template-16",
           effect_text: "Take any number of ≤2● cost Character cards from 4 choices",
           effect: TakeCards(predicate: CheapCharacter, offer_count: 4),
-          template: TemplateInvocation(id: 16, variables: {"offer_count": 4, "predicate": "≤2● cost Character"}),
+          template: TemplateInvocation(
+            id: 16,
+            variables: {"offer_count": 4, "predicate": "≤2● cost Character"},
+          ),
         ),
+
         ActionDefinition(
           label: "Answer His Summons",
           id: "2ce84a16-1295-4738-9e2d-1f57590b2269:pair-3:template-12",
@@ -916,6 +1243,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "9d14885c-a757-40cc-b43e-87dbec7ec379",
       prose: "A tentacled colossus surges through a furnace-bright rupture.",
@@ -928,10 +1256,14 @@ ExplorationCatalog(
           template: TemplateInvocation(
             id: 47,
             variables: {
-              "card_id": {"id": "1658d9a0-c3b0-4eb7-babc-4933acf362c4", "display_name": "Glimpse of Infinity"},
+              "card_id": {
+                "id": "1658d9a0-c3b0-4eb7-babc-4933acf362c4",
+                "display_name": "Glimpse of Infinity",
+              },
             },
           ),
         ),
+
         ActionDefinition(
           label: "Witness its emergence",
           id: "9d14885c-a757-40cc-b43e-87dbec7ec379:pair-1:template-16",
@@ -941,6 +1273,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2",
       prose: "An immense creature crouches between slender trunks, rough limbs glowing with narrow lines.",
@@ -952,6 +1285,7 @@ ExplorationCatalog(
           effect: TransfigureFixedSelected(transfiguration: "Empowered"),
           template: TemplateInvocation(id: 18, variables: {"transfiguration": "Empowered"}),
         ),
+
         ActionDefinition(
           label: "Follow its lowered gaze",
           id: "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2:pair-4:template-37",
@@ -961,6 +1295,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "1dc8f23e-58bd-47e5-9510-b48315fba1df",
       prose: "A dark-coated explorer holds a bright lantern as wind whips his hair.",
@@ -972,6 +1307,7 @@ ExplorationCatalog(
           effect: TransfigureSelected(count: 1),
           template: TemplateInvocation(id: 17),
         ),
+
         ActionDefinition(
           label: "Follow his light onward",
           id: "1dc8f23e-58bd-47e5-9510-b48315fba1df:pair-3:template-37",
@@ -981,6 +1317,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "7ad10754-690c-45fa-abe6-28944da6eef6",
       prose: "A rigid figure fractures into dark pieces beside a molten fissure.",
@@ -992,6 +1329,7 @@ ExplorationCatalog(
           effect: CopySelectedCards(count: 2),
           template: TemplateInvocation(id: 51, variables: {"count": 2}),
         ),
+
         ActionDefinition(
           label: "Fuse the glowing fragments",
           id: "7ad10754-690c-45fa-abe6-28944da6eef6:pair-1:template-50",
@@ -1001,6 +1339,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "7dd2214f-8d16-453a-9f28-62712e64eae1",
       prose: "A black firefly hovers, amber abdomen blazing.",
@@ -1012,15 +1351,20 @@ ExplorationCatalog(
           effect: NextBattleStartingEnergy(count: 2),
           template: TemplateInvocation(id: 39, variables: {"count": 2}),
         ),
+
         ActionDefinition(
           label: "Gather its amber light",
           id: "7dd2214f-8d16-453a-9f28-62712e64eae1:pair-4:template-59",
           effect_text: "Gain 15 essence for each Spirit Animal card in your deck",
           effect: GainEssencePerCard(predicate: SpiritAnimal, essence_per_card: 15),
-          template: TemplateInvocation(id: 59, variables: {"essence_per_card": 15, "predicate": "Spirit Animal"}),
+          template: TemplateInvocation(
+            id: 59,
+            variables: {"essence_per_card": 15, "predicate": "Spirit Animal"},
+          ),
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "5b2b2188-b9f0-4b3b-9185-26a820d343c7",
       prose: "A suited astronaut crosses glassy water as blue canyon light spills ahead.",
@@ -1032,6 +1376,7 @@ ExplorationCatalog(
           effect: NextBattleStartingEnergy(count: 2),
           template: TemplateInvocation(id: 39, variables: {"count": 2}),
         ),
+
         ActionDefinition(
           label: "Enter the blue radiance",
           id: "5b2b2188-b9f0-4b3b-9185-26a820d343c7:pair-2:template-81",
@@ -1041,6 +1386,7 @@ ExplorationCatalog(
         ),
       ],
     ),
+
     EncounterDefinition(
       card_id: "77f31db4-0397-49a7-8886-f5459ee960e9",
       prose: "An armored warrior sweeps a glowing scythe through wind-driven sand.",
@@ -1052,6 +1398,7 @@ ExplorationCatalog(
           effect: PurgeForEssence(essence_per_spark: 20),
           template: TemplateInvocation(id: 60, variables: {"essence_per_spark": 20}),
         ),
+
         ActionDefinition(
           label: "Barter",
           id: "77f31db4-0397-49a7-8886-f5459ee960e9:pair-1:template-61",

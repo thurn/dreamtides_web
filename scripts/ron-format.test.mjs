@@ -78,6 +78,30 @@ Catalog(value: 1)
 `);
   });
 
+  it("separates named records in nested lists without separating atom entries", () => {
+    const source = `Catalog(
+      entries: [
+        AffiliationDefinition(id: "one", signature_card_ids: ["alpha", "beta"]),
+        AffiliationDefinition(id: "two", signature_card_ids: ["gamma", "delta"]),
+      ],
+    )`;
+
+    expect(formatRon(source, options)).toBe(`Catalog(
+  entries: [
+    AffiliationDefinition(
+      id: "one",
+      signature_card_ids: ["alpha", "beta"],
+    ),
+
+    AffiliationDefinition(
+      id: "two",
+      signature_card_ids: ["gamma", "delta"],
+    ),
+  ],
+)
+`);
+  });
+
   it("is idempotent", () => {
     const source = `#![enable(implicit_some)]\n[\n  Thing( a: 1, b: [2, 3], ),\n]`;
     const once = formatRon(source, options);

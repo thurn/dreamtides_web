@@ -13,7 +13,11 @@ CompatDocument(
       /*[4]*/
       {"type": "Essence", "icon": "bxf bx-diamond-alt", "glossary-id": "site-essence"},
       /*[5]*/
-      {"type": "Transfiguration", "icon": "fa-solid fa-hammer", "glossary-id": "site-transfiguration"},
+      {
+        "type": "Transfiguration",
+        "icon": "fa-solid fa-hammer",
+        "glossary-id": "site-transfiguration",
+      },
       /*[6]*/
       {"type": "Duplication", "icon": "bxf bx-copy", "glossary-id": "site-duplication"},
       /*[7]*/
@@ -23,7 +27,11 @@ CompatDocument(
       /*[9]*/
       {"type": "DreamsignMarket", "icon": "bxf bx-pyramid", "glossary-id": "site-dreamsign-market"},
       /*[10]*/
-      {"type": "DreamsignRevelation", "icon": "bxf bx-meteor", "glossary-id": "site-dreamsign-revelation"},
+      {
+        "type": "DreamsignRevelation",
+        "icon": "bxf bx-meteor",
+        "glossary-id": "site-dreamsign-revelation",
+      },
       /*[11]*/
       {"type": "RandomSite", "icon": "fa-solid fa-question", "glossary-id": "site-random-site"},
       /*[12]*/

@@ -1,10 +1,12 @@
 # RON formatting
 
 The repository formats tracked RON sources with two-space indentation and a
-120-column target. Short lists, maps, tuples, and structs remain on one line;
-larger values break at their top-level commas. String and comment contents are
-preserved exactly. A leading file comment is separated from the top-level RON
-value and attributes by a blank line.
+100-column target. Short lists, maps, tuples, and structs remain on one line;
+larger values break at their top-level commas. Lists of named records use a
+blank line between entries, while lists of simple values use ordinary line
+breaks without blank separators. String and comment contents are preserved
+exactly. A leading file comment is separated from the top-level RON value and
+attributes by a blank line.
 
 Format every tracked or unignored RON file:
 
@@ -32,6 +34,6 @@ Project settings live in `.ronfmt.json`:
 ```json
 {
   "indentWidth": 2,
-  "printWidth": 120
+  "printWidth": 100
 }
 ```
