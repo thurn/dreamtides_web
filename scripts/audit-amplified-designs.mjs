@@ -32,7 +32,11 @@ for (const card of cards) {
   if (amplified.trim() === "" || amplified === base) {
     errors.push(`${card.id}: amplified-text must be nonempty and changed`);
   }
-  for (const error of amplifiedStructuralErrors(base, amplified)) {
+  for (const error of amplifiedStructuralErrors(
+    base,
+    amplified,
+    card["card-type"],
+  )) {
     errors.push(`${card.id}: Amplified ${error}`);
   }
 }

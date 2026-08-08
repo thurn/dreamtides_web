@@ -312,6 +312,7 @@ export function transformCard(card) {
     const structuralErrors = amplifiedStructuralErrors(
       card["rendered-text"] ?? "",
       card["amplified-text"],
+      card["card-type"],
     );
     if (structuralErrors.length > 0) {
       throw new Error(

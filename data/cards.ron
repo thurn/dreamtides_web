@@ -5234,7 +5234,6 @@
     name: "Abolish",
     id: "29088c75-c2c9-40dc-a77a-65360e464b45",
     ability_text: ["Prevent a played card."],
-    amplified_text: ["Prevent a played card. Draw a card."],
     energy_cost: Fixed(2),
     kind: Event,
     speed: Interrupt,

@@ -29,7 +29,7 @@ export const discoverCriteria = (text) =>
     ),
   ].map((match) => match[1].replaceAll(/\s+/gu, " ").trim().toLowerCase());
 
-export function amplifiedStructuralErrors(base, amplified) {
+export function amplifiedStructuralErrors(base, amplified, cardType) {
   const errors = [];
   for (const [label, collect] of [
     ["an activated ability cost", activatedCosts],
@@ -44,6 +44,13 @@ export function amplifiedStructuralErrors(base, amplified) {
   }
   if (!/\bFast\b/u.test(base) && /\bFast\b/u.test(amplified)) {
     errors.push("adds Fast");
+  }
+  if (
+    cardType === "Event" &&
+    !/\bdraws?\b/iu.test(base) &&
+    /\bdraws?\b/iu.test(amplified)
+  ) {
+    errors.push("adds draw to an Event without base draw");
   }
   return errors;
 }

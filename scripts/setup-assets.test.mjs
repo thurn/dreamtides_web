@@ -884,6 +884,39 @@ describe("transformCard Amplified text", () => {
     expect(result.amplifiedText).toBe("Draw 2 cards.");
   });
 
+  it("allows an authored Character Amplified form to add draw", () => {
+    const result = transformCard({
+      name: "Amplified fixture",
+      id: "amplified-fixture",
+      "card-number": 1,
+      "card-type": "Character",
+      "energy-cost": 2,
+      "is-fast": false,
+      "rendered-text": "Gain 2●.",
+      "amplified-text": "Gain 2●. Draw a card.",
+      "image-number": 1,
+      "art-owned": false,
+    });
+    expect(result.amplifiedText).toContain("Draw a card");
+  });
+
+  it("rejects an authored Event Amplified form that adds draw", () => {
+    expect(() =>
+      transformCard({
+        name: "Amplified fixture",
+        id: "amplified-fixture",
+        "card-number": 1,
+        "card-type": "Event",
+        "energy-cost": 2,
+        "is-fast": false,
+        "rendered-text": "Gain 2●.",
+        "amplified-text": "Gain 2●. Draw a card.",
+        "image-number": 1,
+        "art-owned": false,
+      }),
+    ).toThrow(/adds draw to an Event without base draw/u);
+  });
+
   it("allows an Amplified form to improve a discovered card after selection", () => {
     const result = transformCard({
       name: "Amplified fixture",
