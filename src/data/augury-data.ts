@@ -21,6 +21,8 @@ export function parseAuguryData(value: unknown): AuguryData {
   for (const entry of value.archetypes) {
     if (
       !isRecord(entry) || typeof entry.id !== "string" || ids.has(entry.id) ||
+      typeof entry.name !== "string" || entry.name.trim() === "" ||
+      typeof entry.description !== "string" || entry.description.trim() === "" ||
       typeof entry.enabled !== "boolean" || typeof entry.family !== "string" ||
       typeof entry.weight !== "number" || !Number.isFinite(entry.weight) || entry.weight <= 0 ||
       typeof entry.selectionPolicyId !== "string" || !isRecord(entry.quantities) ||

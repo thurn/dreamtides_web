@@ -25,6 +25,8 @@ pub struct EncounterRules {
 #[serde(deny_unknown_fields)]
 pub struct ArchetypeDefinition {
     pub id: AuguryId,
+    pub name: String,
+    pub description: String,
     pub ability: ArchetypeAbility,
     pub weight: u32,
 }
@@ -509,6 +511,8 @@ fn lower_archetype(source: ArchetypeDefinition) -> toml::Value {
     let kind = source.ability.kind();
     let mut output = toml::map::Map::new();
     output.insert("id".into(), kind.as_compat().into());
+    output.insert("name".into(), source.name.into());
+    output.insert("description".into(), source.description.into());
     output.insert("enabled".into(), true.into());
     output.insert("family".into(), source.ability.family().as_compat().into());
     output.insert("weight".into(), i64::from(source.weight).into());
@@ -551,6 +555,12 @@ fn validate(source: &AuguryCatalog) -> Result<()> {
         }
         if archetype.weight == 0 {
             bail!("{path}.weight must be positive");
+        }
+        if archetype.name.trim().is_empty() {
+            bail!("{path}.name must be non-empty");
+        }
+        if archetype.description.trim().is_empty() {
+            bail!("{path}.description must be non-empty");
         }
         validate_ability(&path, &archetype.ability)?;
         families.insert(archetype.ability.family());
@@ -658,6 +668,8 @@ mod tests {
         let id = AuguryId::parse(ability.kind().canonical_id()).unwrap();
         ArchetypeDefinition {
             id,
+            name: format!("Synthetic {}", ability.kind().as_compat()),
+            description: format!("Synthetic description for {}.", ability.kind().as_compat()),
             ability,
             weight: 3,
         }
@@ -755,6 +767,18 @@ mod tests {
         let archetypes = output["archetype"].as_array().unwrap();
         assert_eq!(archetypes.len(), 17);
         assert_eq!(archetypes[0]["id"].as_str(), Some("fit_card_grant"));
+        assert!(
+            archetypes[0]["name"]
+                .as_str()
+                .unwrap()
+                .starts_with("Synthetic ")
+        );
+        assert!(
+            archetypes[0]["description"]
+                .as_str()
+                .unwrap()
+                .ends_with('.')
+        );
         assert_eq!(
             archetypes[0]["selection-policy-id"].as_str(),
             Some("uniform")
@@ -898,6 +922,24 @@ mod tests {
                 .unwrap_err()
                 .to_string()
                 .contains("weight must be positive")
+        );
+
+        let mut empty_name = catalog();
+        empty_name.archetypes[0].name = "  ".into();
+        assert!(
+            lower(empty_name)
+                .unwrap_err()
+                .to_string()
+                .contains("name must be non-empty")
+        );
+
+        let mut empty_description = catalog();
+        empty_description.archetypes[0].description.clear();
+        assert!(
+            lower(empty_description)
+                .unwrap_err()
+                .to_string()
+                .contains("description must be non-empty")
         );
 
         let mut out_of_range = catalog();

@@ -1,8 +1,5 @@
 import { useMemo } from "react";
-import {
-  MERCHANT_ARCHETYPE_LABELS,
-  type MerchantArchetypeId,
-} from "../journey_v2";
+import type { MerchantArchetypeId } from "../journey_v2";
 import {
   buildAugurySiteModel,
   resolveAuguryGuide,
@@ -12,6 +9,7 @@ import type { DreamscapeNode, SiteState } from "../types/journey";
 import { GLYPHS } from "../cumulus/primitives/glyph";
 import type { JourneyUtilityMenuAction } from "./JourneyUtilityMenuController";
 import { guideDialogueLines } from "../data/dreamscapes";
+import { auguryArchetype } from "../data/augury-data";
 
 /** Builds the Augury commands contributed to the shared Cumulus menu. */
 export function useAuguryJourneyMenuActions(
@@ -50,9 +48,13 @@ export function useAuguryJourneyMenuActions(
     const forceCategory = mutations.forceAuguryArchetype;
     if (forceCategory !== undefined) {
       const forcedArchetypeId = result.context?.forcedArchetypeId ?? null;
+      const archetypeName = (archetypeId: MerchantArchetypeId) =>
+        auguryArchetype(journeyContent.auguryData, archetypeId).name;
       const eligibleArchetypes = [
         ...(result.debug?.eligibleArchetypeIds ?? []),
-      ].sort(compareArchetypeLabels);
+      ].sort((left, right) =>
+        archetypeName(left).localeCompare(archetypeName(right))
+      );
       actions.push({
         id: "forceJourneyCategory",
         kind: "group",
@@ -72,7 +74,7 @@ export function useAuguryJourneyMenuActions(
             id: `forceJourneyCategory:${archetypeId}`,
             kind: "action" as const,
             glyph: GLYPHS.check,
-            label: MERCHANT_ARCHETYPE_LABELS[archetypeId],
+            label: archetypeName(archetypeId),
             active: forcedArchetypeId === archetypeId,
             onCommand: () => forceCategory(site.id, archetypeId),
           })),
@@ -90,14 +92,5 @@ export function useAuguryJourneyMenuActions(
       });
     }
     return actions;
-  }, [mutations, result, site]);
-}
-
-function compareArchetypeLabels(
-  left: MerchantArchetypeId,
-  right: MerchantArchetypeId,
-): number {
-  return MERCHANT_ARCHETYPE_LABELS[left].localeCompare(
-    MERCHANT_ARCHETYPE_LABELS[right],
-  );
+  }, [journeyContent.auguryData, mutations, result, site]);
 }

@@ -81,7 +81,7 @@ export function compileAuguryData(sourceValue) {
   const seen = new Set();
   const archetypes = root.archetype.map((raw, index) => {
     const path = `archetype[${String(index)}]`;
-    const source = exact(raw, path, ["id", "enabled", "family", "weight", "selection-policy-id", "quantities"]);
+    const source = exact(raw, path, ["id", "name", "description", "enabled", "family", "weight", "selection-policy-id", "quantities"]);
     const id = nonempty(source.id, `${path}.id`);
     const contract = ARCHETYPE_CONTRACTS.get(id);
     if (contract === undefined) fail(`${path}.id`, "unknown archetype id");
@@ -108,6 +108,8 @@ export function compileAuguryData(sourceValue) {
     }
     return {
       id,
+      name: nonempty(source.name, `${path}.name`),
+      description: nonempty(source.description, `${path}.description`),
       enabled: source.enabled,
       family: source.family,
       weight: positive(source.weight, `${path}.weight`),

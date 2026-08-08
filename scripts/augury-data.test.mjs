@@ -24,6 +24,16 @@ describe("compileAuguryData", () => {
     expect(() => compileAuguryData(invalid)).toThrow(/copy.*unknown key/u);
   });
 
+  it("requires authored archetype names and descriptions", () => {
+    const missingName = source();
+    delete missingName.archetype[0].name;
+    expect(() => compileAuguryData(missingName)).toThrow(/missing key name/u);
+
+    const emptyDescription = source();
+    emptyDescription.archetype[0].description = "  ";
+    expect(() => compileAuguryData(emptyDescription)).toThrow(/description.*non-empty string/u);
+  });
+
   it("rejects policies that the archetype mechanic cannot execute", () => {
     const invalid = source();
     invalid.archetype.find(({ id }) => id === "fit_card_grant")["selection-policy-id"] = "purge-misfit";

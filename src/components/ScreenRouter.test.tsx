@@ -36,10 +36,8 @@ import {
   makeMerchantTestJourneyState,
 } from "../journey_v2/testing/fixtures";
 import { getLogEntries, resetLog } from "../logging";
-import {
-  MERCHANT_ARCHETYPE_LABELS,
-  type MerchantArchetypeId,
-} from "../journey_v2";
+import type { MerchantArchetypeId } from "../journey_v2";
+import { auguryArchetype } from "../data/augury-data";
 
 const motionPreference = vi.hoisted(() => ({
   reduced: false,
@@ -546,10 +544,11 @@ describe("ScreenRouter Augury routing", () => {
       imageNumber: "0000",
       startingEssence: 180,
     };
+    const journeyContent = merchantContent();
     const container = renderWithJourney({
       state,
       mutations,
-      journeyContent: merchantContent(),
+      journeyContent,
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
@@ -587,7 +586,7 @@ describe("ScreenRouter Augury routing", () => {
     const categoryLabel =
       firstEligible === undefined
         ? ""
-        : MERCHANT_ARCHETYPE_LABELS[firstEligible];
+        : auguryArchetype(journeyContent.auguryData, firstEligible).name;
     const category = menuRow(categoryLabel);
     expect(category).toBeDefined();
     act(() => category?.click());

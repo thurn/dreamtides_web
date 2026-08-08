@@ -13,7 +13,6 @@ export { MERCHANT_ARCHETYPE_BUILDERS } from "./archetypes/registry";
 export {
   isTransfigurationMerchantArchetype,
   MERCHANT_ARCHETYPE_FAMILIES,
-  MERCHANT_ARCHETYPE_LABELS,
 } from "./archetypes/types";
 export { MERCHANT_TUNING } from "./tuning";
 export { buildMerchantDeckSnapshot } from "./trace/deckSnapshot";

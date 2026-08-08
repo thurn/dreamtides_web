@@ -6,6 +6,10 @@ import type { RewardSelectionPolicyId } from "../reward-selection/types";
 
 export interface AuguryArchetypeData {
   id: MerchantArchetypeId;
+  /** Internal label used by debugging and authoring tools. */
+  name: string;
+  /** Concise internal explanation of the reward's complete behavior. */
+  description: string;
   enabled: boolean;
   family: MerchantOfferFamily;
   weight: number;
