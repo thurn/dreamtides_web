@@ -936,13 +936,9 @@ fn validate_text(label: &str, value: &str) -> Result<()> {
 
 #[cfg(test)]
 mod tests {
-    use std::fs;
-    use std::path::Path;
-
     use pretty_assertions::assert_eq;
 
     use super::*;
-    use crate::models::compat::CompatDocument;
 
     const SYNTHETIC_GLOSSARY_ID_MAP: [(&str, &str); 14] = [
         ("glossary-battle", "00000000-0000-4000-8000-000000000001"),
@@ -1296,124 +1292,6 @@ mod tests {
                 .to_string()
                 .contains(expected),
             "error did not contain {expected}"
-        );
-    }
-
-    #[test]
-    #[ignore = "real-catalog parity probe retained for canonical Sites review"]
-    fn canonical_candidate_matches_current_compatibility_sources() {
-        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-        let current_ron: CompatDocument =
-            ron::from_str(&fs::read_to_string(root.join("data/sites.ron")).unwrap()).unwrap();
-        let current_toml: toml::Value =
-            toml::from_str(&fs::read_to_string(root.join("data/sites.toml")).unwrap()).unwrap();
-        assert_eq!(current_ron.data, current_toml);
-
-        let canonical: SitesCatalog =
-            ron::from_str(&fs::read_to_string(root.join("data/sites_canonical.ron")).unwrap())
-                .unwrap();
-        assert_eq!(lower(canonical.clone()).unwrap(), current_ron.data);
-
-        let canonical_ids: BTreeSet<_> = canonical
-            .site_types
-            .iter()
-            .map(|metadata| metadata.glossary_id.to_string())
-            .collect();
-        let mapped_ids: BTreeSet<_> = LEGACY_GLOSSARY_ID_MAP
-            .iter()
-            .map(|(_legacy, canonical)| (*canonical).to_owned())
-            .collect();
-        assert_eq!(canonical_ids.len(), canonical.site_types.len());
-        assert_eq!(canonical_ids, mapped_ids);
-        for id in canonical_ids {
-            let parsed = Uuid::parse_str(&id).unwrap();
-            assert_eq!(parsed.get_version(), Some(Version::Random));
-            assert_eq!(parsed.get_variant(), Variant::RFC4122);
-            assert_eq!(parsed.hyphenated().to_string(), id);
-        }
-
-        let compatibility_glossary_ids: BTreeSet<_> = current_toml["site-types"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|metadata| metadata["glossary-id"].as_str().unwrap().to_owned())
-            .collect();
-        let mapped_legacy_ids: BTreeSet<_> = LEGACY_GLOSSARY_ID_MAP
-            .iter()
-            .map(|(legacy, _canonical)| (*legacy).to_owned())
-            .collect();
-        assert_eq!(compatibility_glossary_ids, mapped_legacy_ids);
-
-        let glossary: CompatDocument =
-            ron::from_str(&fs::read_to_string(root.join("data/glossary.ron")).unwrap()).unwrap();
-        let glossary_ids: BTreeSet<_> = glossary.data["entries"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|entry| entry["id"].as_str().unwrap().to_owned())
-            .collect();
-        assert!(mapped_legacy_ids.is_subset(&glossary_ids));
-
-        assert_eq!(
-            canonical
-                .site_types
-                .iter()
-                .map(|metadata| metadata.site.as_compat())
-                .collect::<Vec<_>>(),
-            SITE_TYPES.map(SiteType::as_compat)
-        );
-        assert_eq!(
-            canonical
-                .gamble
-                .selection
-                .games
-                .iter()
-                .map(|game| game.game)
-                .collect::<Vec<_>>(),
-            GambleGame::ALL
-        );
-        assert_eq!(
-            canonical
-                .gamble
-                .three_gate
-                .gates
-                .iter()
-                .map(|gate| gate.gate)
-                .collect::<Vec<_>>(),
-            Gate::ALL
-        );
-        assert_eq!(
-            canonical
-                .gamble
-                .ladder_climb
-                .attempts
-                .iter()
-                .map(|attempt| attempt.attempt)
-                .collect::<Vec<_>>(),
-            Attempt::ALL
-        );
-        assert_eq!(
-            canonical
-                .gamble
-                .starway_stairs
-                .tiers
-                .iter()
-                .map(|tier| tier.tier)
-                .collect::<Vec<_>>(),
-            Tier::ALL
-        );
-        assert_eq!(
-            canonical
-                .gamble
-                .four_suit_reprise
-                .outcomes
-                .iter()
-                .map(|outcome| (outcome.suit, outcome.outcome))
-                .collect::<Vec<_>>(),
-            PlayingCardSuit::ALL
-                .into_iter()
-                .zip(FourSuitOutcome::ALL)
-                .collect::<Vec<_>>()
         );
     }
 }

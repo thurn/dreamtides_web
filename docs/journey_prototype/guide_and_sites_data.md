@@ -1,9 +1,10 @@
 # Dream Guide and Site Data
 
 `data/dream_guides.ron` and `data/sites.ron` are the canonical
-cross-site authoring catalogs. Full asset setup validates and compiles them to
-`public/dream-guides-data.json` and `public/sites-data.json`; the browser loads
-both documents before constructing `JourneyContent`.
+cross-site authoring catalogs. The game-data compiler lowers the typed Sites
+catalog to generated compatibility TOML, and full asset setup compiles the
+catalogs to `public/dream-guides-data.json` and `public/sites-data.json`; the
+browser loads both documents before constructing `JourneyContent`.
 
 TypeScript owns structural identities and algorithms: `SiteType`, Gamble game
 IDs, the standard card deck, fixed gate and suit identities, routing, reducers,
@@ -30,19 +31,20 @@ authored Draft signature.
 
 ## Sites
 
-The Site document uses `schema-version = 1` and contains:
+The Site document is a typed `SitesCatalog`; its generated `sites.toml`
+compatibility document carries `schema-version = 1`. The source contains:
 
 | Section                 | Authored contract                                                                            |
 | ----------------------- | -------------------------------------------------------------------------------------------- |
-| `site-types`            | Exactly one icon and glossary reference for every `SiteType`.                                |
-| `fallback-site-type`    | Neutral presentation for an unknown site identifier.                                         |
-| `random-site`           | Eligible destinations, home and away choice counts, and the insufficient-destination policy. |
-| `card-choice-limits`    | Standard and enhanced candidate counts for Transfiguration and Duplication.                  |
+| `site_types`            | Exactly one icon and glossary reference for every `SiteType`.                                |
+| `fallback_site_type`    | Neutral presentation for an unknown site identifier.                                         |
+| `random_site`           | Eligible destinations, home and away choice counts, and the insufficient-destination policy. |
+| `card_choices`          | Standard and enhanced candidate counts for Transfiguration and Duplication.                  |
 | `gamble.selection`      | Game weights and a guaranteed supported fallback.                                            |
-| `gamble.three-gate`     | Gate order and win/lose results.                                                             |
-| `gamble.ladder-climb`   | Attempt count, target range, and ordered reward tiers.                                       |
-| `gamble.starway-stairs` | Attempt count, target range, and ordered reward tiers.                                       |
-| `gamble.four-suit`      | Draw count, suit order, ranking order, and result table.                                     |
+| `gamble.three_gate`     | Gate order and win/lose results.                                                             |
+| `gamble.ladder_climb`   | Attempt count, target range, and ordered reward tiers.                                       |
+| `gamble.starway_stairs` | Attempt count, target range, and ordered reward tiers.                                       |
+| `gamble.four_suit_reprise` | Draw count, suit order, ranking order, and result table.                                  |
 
 Four-Suit prices and Essence rewards live in `economy.ron`. The other Gamble
 prices and rewards continue to use the existing Economy catalog. The Sites

@@ -2077,11 +2077,10 @@ Site types eligible for an add-site reward.
 
 ## `data/sites.ron`
 
-### `schema-version = 1`
-
-Canonical cross-site presentation and rules configuration. Structural site
-and Gamble identifiers remain code-owned; this catalog supplies the authored
-metadata and tuning for those fixed identities.
+Typed `SitesCatalog` source for cross-site presentation and rules configuration.
+Structural site and Gamble identifiers remain code-owned; this catalog supplies
+the authored metadata and tuning for those fixed identities. The Sites adapter
+emits the `schema-version = 1` compatibility TOML consumed by asset generation.
 
 ## `data/tutorial.ron`
 

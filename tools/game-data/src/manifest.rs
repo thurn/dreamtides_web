@@ -97,6 +97,7 @@ impl Manifest {
             "opponents_v1",
             "reward_selection_v1",
             "figments_v1",
+            "sites_v1",
             "compat_v1",
         ];
         for dataset in &self.datasets {
