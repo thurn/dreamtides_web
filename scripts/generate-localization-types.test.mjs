@@ -4,7 +4,7 @@ import { FluentParser, Term, Visitor } from "@fluent/syntax";
 import { describe, expect, it } from "vitest";
 import {
   OUTPUT_PATH,
-  SOURCE_PATH,
+  SOURCE_PATHS,
   buildLocalizationTypesSource,
   generateLocalizationTypes,
   parseMessageContracts,
@@ -14,6 +14,10 @@ import {
   formatLocalizationDiagnostics,
   validateLocalizationSource,
 } from "./validate-localization-source.mjs";
+import {
+  combineLocalizationResources,
+  loadEnglishLocalizationResources,
+} from "./localization-catalog.mjs";
 
 const INVARIANT_TERM_IDS = [
   "dreamtides",
@@ -95,7 +99,7 @@ score = { $count } { $unit }
   });
 
   it("keeps the standard Fluent vocabulary explicit and inflectable", () => {
-    const source = readFileSync(SOURCE_PATH, "utf8");
+    const source = productionSource();
     const resource = new FluentParser({ withSpans: false }).parse(source);
     const terms = resource.body.filter((entry) => entry instanceof Term);
     const variablesByTerm = new Map(
@@ -124,7 +128,7 @@ score = { $count } { $unit }
   });
 
   it("formats every standard term and both English number facets", () => {
-    const source = readFileSync(SOURCE_PATH, "utf8");
+    const source = productionSource();
     const probes = [
       ...INVARIANT_TERM_IDS.map((id) => `probe-${id} = { -${id} }`),
       ...COUNTABLE_TERM_IDS.flatMap((id) => [
@@ -232,18 +236,22 @@ unsafe-plural = { $count } { -card }
   });
 
   it("keeps the production catalog free of unsafe article and plural patterns", () => {
-    const diagnostics = validateLocalizationSource(
-      readFileSync(SOURCE_PATH, "utf8"),
+    const diagnostics = SOURCE_PATHS.flatMap((sourcePath) =>
+      validateLocalizationSource(readFileSync(sourcePath, "utf8")),
     );
     expect(diagnostics, formatLocalizationDiagnostics(diagnostics)).toEqual([]);
   });
 
-  it("keeps the committed types synchronized with strings.ftl", async () => {
+  it("keeps the committed types synchronized with the English catalog", async () => {
     expect(readFileSync(OUTPUT_PATH, "utf8")).toBe(
       await generateLocalizationTypes(),
     );
   });
 });
+
+function productionSource() {
+  return combineLocalizationResources(loadEnglishLocalizationResources());
+}
 
 function formatProbe(bundle, id) {
   const pattern = bundle.getMessage(id)?.value;

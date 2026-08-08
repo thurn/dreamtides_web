@@ -2,8 +2,9 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { formatFluent } from "./fluent-format.mjs";
+import { loadEnglishLocalizationResources } from "./localization-catalog.mjs";
 
-const DEFAULT_FILES = ["data/strings.ftl"];
+const DEFAULT_FILES = loadEnglishLocalizationResources().map(({ path }) => path);
 
 export function runFluentFormatter(args, root = process.cwd()) {
   const check = args.includes("--check");

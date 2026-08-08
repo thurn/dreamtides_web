@@ -1,27 +1,30 @@
 import { readFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { resolve } from "node:path";
 import {
   formatLocalizationDiagnostics,
   validateLocalizationSource,
 } from "./validate-localization-source.mjs";
+import { loadEnglishLocalizationResources } from "./localization-catalog.mjs";
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const SOURCE_PATH = resolve(ROOT, "data/strings.ftl");
 const requestedPath = process.argv[2];
 const readsStdin = requestedPath === "-";
-const sourcePath = readsStdin
-  ? "<stdin>"
+const resources = readsStdin
+  ? [{ path: "<stdin>", source: readFileSync(0, "utf8") }]
   : requestedPath === undefined
-    ? SOURCE_PATH
-    : resolve(requestedPath);
-const diagnostics = validateLocalizationSource(
-  readFileSync(readsStdin ? 0 : sourcePath, "utf8"),
-);
+    ? loadEnglishLocalizationResources()
+    : [
+        {
+          path: resolve(requestedPath),
+          source: readFileSync(resolve(requestedPath), "utf8"),
+        },
+      ];
+const failures = resources
+  .map(({ path, source }) =>
+    formatLocalizationDiagnostics(validateLocalizationSource(source), path),
+  )
+  .filter(Boolean);
 
-if (diagnostics.length > 0) {
-  process.stderr.write(
-    `${formatLocalizationDiagnostics(diagnostics, sourcePath)}\n`,
-  );
+if (failures.length > 0) {
+  process.stderr.write(`${failures.join("\n")}\n`);
   process.exitCode = 1;
 }

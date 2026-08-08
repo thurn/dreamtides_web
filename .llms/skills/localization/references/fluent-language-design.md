@@ -32,7 +32,7 @@ translate differently.
 Use Fluent terms for stable, canonical vocabulary such as Dreamtides world
 concepts. Terms are private to the resource and support locale-specific
 morphology. Read `docs/journey_prototype/localization.md` and reuse the terms at
-the top of `data/strings.ftl` before introducing another term.
+`data/locales/en-US/terms.ftl` before introducing another term.
 
 Do not force every occurrence through a term when idiom, compounding, sentence
 case, or grammar calls for a contextual translation. Consistency means

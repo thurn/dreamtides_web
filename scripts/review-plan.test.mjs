@@ -19,10 +19,12 @@ describe("fast review plan", () => {
   });
 
   it("selects bounded checks for application changes", () => {
-    expect(buildReviewPlan([
+    expect(
+      buildReviewPlan([
         "src/state/journey-state-actions.test.ts",
         "src/state/journey-state-actions.ts",
-    ])).toEqual({
+      ]),
+    ).toEqual({
       changedFiles: [
         "src/state/journey-state-actions.test.ts",
         "src/state/journey-state-actions.ts",
@@ -65,17 +67,35 @@ describe("fast review plan", () => {
   });
 
   it("selects localization contract checks for Fluent source changes", () => {
-    expect(buildReviewPlan(["data/strings.ftl"])).toMatchObject({
+    expect(
+      buildReviewPlan(["data/locales/en-US/battle-prompts.ftl"]),
+    ).toMatchObject({
       shouldLintLocalization: true,
       shouldTypecheck: false,
       shouldValidate: true,
       testInputs: [
-        "data/strings.ftl",
+        "data/locales/en-US/battle-prompts.ftl",
         "scripts/format-fluent.test.mjs",
         "scripts/generate-localization-types.test.mjs",
+        "scripts/localization-catalog.test.mjs",
       ],
       shouldCheckFluentFormatting: true,
     });
+  });
+
+  it("selects localization contract checks for the locale manifest", () => {
+    expect(buildReviewPlan(["data/locales/en-US/manifest.json"])).toMatchObject(
+      {
+        shouldLintLocalization: true,
+        shouldValidate: true,
+        testInputs: [
+          "data/locales/en-US/manifest.json",
+          "scripts/format-fluent.test.mjs",
+          "scripts/generate-localization-types.test.mjs",
+          "scripts/localization-catalog.test.mjs",
+        ],
+      },
+    );
   });
 
   it("selects the Fluent formatting gate for formatter changes", () => {
@@ -85,6 +105,7 @@ describe("fast review plan", () => {
         "scripts/fluent-format.mjs",
         "scripts/format-fluent.test.mjs",
         "scripts/generate-localization-types.test.mjs",
+        "scripts/localization-catalog.test.mjs",
       ],
     });
   });
@@ -104,18 +125,18 @@ describe("fast review plan", () => {
   });
 
   it("selects the RON formatting gate for RON sources and formatter config", () => {
-    expect(
-      buildReviewPlan([".ronfmt.json", "data/cards.ron"]),
-    ).toMatchObject({
+    expect(buildReviewPlan([".ronfmt.json", "data/cards.ron"])).toMatchObject({
       shouldCheckRonFormatting: true,
     });
   });
 
   it("does not pass deleted files to lint or Vitest", () => {
-    expect(buildReviewPlan(
+    expect(
+      buildReviewPlan(
         ["src/deleted.ts", "src/live.ts"],
         (file) => file === "src/live.ts",
-    )).toMatchObject({
+      ),
+    ).toMatchObject({
       changedFiles: ["src/deleted.ts", "src/live.ts"],
       lintFiles: ["src/live.ts"],
       shouldTypecheck: true,
@@ -128,10 +149,9 @@ describe("fast review plan", () => {
   });
 
   it("selects source-tree contracts for deleted production files", () => {
-    expect(buildReviewPlan(
-      ["src/screens/RemovedScreen.tsx"],
-      () => false,
-    )).toMatchObject({
+    expect(
+      buildReviewPlan(["src/screens/RemovedScreen.tsx"], () => false),
+    ).toMatchObject({
       lintFiles: [],
       shouldTypecheck: true,
       testInputs: [

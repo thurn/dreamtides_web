@@ -25,21 +25,28 @@ const SOURCE_TREE_CONTRACT_TESTS = [
 ];
 
 const LOCALIZATION_CONTRACT_INPUTS = new Set([
-  "data/strings.ftl",
   "scripts/fluent-format.mjs",
   "scripts/format-fluent.mjs",
   "scripts/generate-localization-types.mjs",
+  "scripts/localization-catalog.mjs",
   "src/data/localization-messages.ts",
 ]);
 const LOCALIZATION_CONTRACT_TESTS = [
   "scripts/format-fluent.test.mjs",
   "scripts/generate-localization-types.test.mjs",
+  "scripts/localization-catalog.test.mjs",
 ];
 const LOCALIZATION_LINT_INPUTS = new Set([
-  "data/strings.ftl",
   "scripts/validate-localization-source.mjs",
   "scripts/lint-localization-source.mjs",
 ]);
+
+function isLocalizationCatalogInput(file) {
+  return (
+    file.startsWith("data/locales/") &&
+    [".ftl", ".json"].includes(extname(file))
+  );
+}
 
 function isProductionSourceInput(file) {
   return (
@@ -51,14 +58,15 @@ function isProductionSourceInput(file) {
 
 function isTypecheckInput(file) {
   return (
-    file.startsWith("src/") ||
-    file.startsWith("eslint-rules/") ||
-    file === "package.json" ||
-    file === "package-lock.json" ||
-    file.startsWith("tsconfig") ||
-    file === "vite.config.ts" ||
-    file === "vitest.config.ts"
-  ) && [".ts", ".tsx", ".json"].includes(extname(file));
+    (file.startsWith("src/") ||
+      file.startsWith("eslint-rules/") ||
+      file === "package.json" ||
+      file === "package-lock.json" ||
+      file.startsWith("tsconfig") ||
+      file === "vite.config.ts" ||
+      file === "vitest.config.ts") &&
+    [".ts", ".tsx", ".json"].includes(extname(file))
+  );
 }
 
 function isValidationInput(file) {
@@ -75,15 +83,16 @@ function isValidationInput(file) {
 
 function isTestInput(file) {
   return (
-    file.startsWith("src/") ||
-    file.startsWith("scripts/") ||
-    file.startsWith("eslint-rules/") ||
-    file.startsWith("data/") ||
-    file === "package.json" ||
-    file === "package-lock.json" ||
-    file === "vite.config.ts" ||
-    file === "vitest.config.ts"
-  ) && TEST_INPUT_EXTENSIONS.has(extname(file));
+    (file.startsWith("src/") ||
+      file.startsWith("scripts/") ||
+      file.startsWith("eslint-rules/") ||
+      file.startsWith("data/") ||
+      file === "package.json" ||
+      file === "package-lock.json" ||
+      file === "vite.config.ts" ||
+      file === "vitest.config.ts") &&
+    TEST_INPUT_EXTENSIONS.has(extname(file))
+  );
 }
 
 function isRonFormattingInput(file) {
@@ -110,24 +119,37 @@ export function buildReviewPlan(files, fileExists = () => true) {
   if (changedFiles.some(isProductionSourceInput)) {
     testInputs.push(...SOURCE_TREE_CONTRACT_TESTS);
   }
-  if (changedFiles.some((file) => LOCALIZATION_CONTRACT_INPUTS.has(file))) {
+  if (
+    changedFiles.some(
+      (file) =>
+        isLocalizationCatalogInput(file) ||
+        LOCALIZATION_CONTRACT_INPUTS.has(file),
+    )
+  ) {
     testInputs.push(...LOCALIZATION_CONTRACT_TESTS);
   }
 
   return {
     changedFiles,
-    lintFiles: existingFiles.filter((file) =>
-      file.startsWith("src/") && LINTABLE_EXTENSIONS.has(extname(file))),
+    lintFiles: existingFiles.filter(
+      (file) =>
+        file.startsWith("src/") && LINTABLE_EXTENSIONS.has(extname(file)),
+    ),
     shouldCheckFluentFormatting: changedFiles.some(isFluentFormattingInput),
-    shouldLintLocalization: changedFiles.some((file) =>
-      LOCALIZATION_LINT_INPUTS.has(file),
+    shouldLintLocalization: changedFiles.some(
+      (file) =>
+        isLocalizationCatalogInput(file) || LOCALIZATION_LINT_INPUTS.has(file),
     ),
     shouldTypecheck: changedFiles.some(isTypecheckInput),
     shouldValidate: changedFiles.some(isValidationInput),
     shouldCheckRonFormatting: changedFiles.some(isRonFormattingInput),
-    shouldTestGameData: changedFiles.some((file) =>
-      file.endsWith(".ron") || file.startsWith("tools/game-data/") ||
-      file === "rust-toolchain.toml" || file === "scripts/game-data-pipeline.mjs"),
+    shouldTestGameData: changedFiles.some(
+      (file) =>
+        file.endsWith(".ron") ||
+        file.startsWith("tools/game-data/") ||
+        file === "rust-toolchain.toml" ||
+        file === "scripts/game-data-pipeline.mjs",
+    ),
     testInputs: [...new Set(testInputs)].sort(),
   };
 }

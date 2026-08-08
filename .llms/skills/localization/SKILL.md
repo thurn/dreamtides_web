@@ -1,6 +1,6 @@
 ---
 name: localization
-description: Use when adding, editing, reviewing, or migrating player-facing Dreamtides text or locales, including Fluent messages and terms in data/strings.ftl, useMessages integration, translator comments and descriptions, glossary work, plural or select logic, localization QA, and audits for hard-coded UI copy. Triggers on localization, internationalization, i18n, l10n, translation, Fluent, FTL, translator context, translator descriptions, plurals, grammatical gender or case, articles, classifiers, and locale-aware copy.
+description: Use when adding, editing, reviewing, or migrating player-facing Dreamtides text or locales, including Fluent messages and terms in data/locales, useMessages integration, translator comments and descriptions, glossary work, plural or select logic, localization QA, and audits for hard-coded UI copy. Triggers on localization, internationalization, i18n, l10n, translation, Fluent, FTL, translator context, translator descriptions, plurals, grammatical gender or case, articles, classifiers, and locale-aware copy.
 ---
 
 # Localization
@@ -47,7 +47,7 @@ Before editing localization code or copy, read:
 
 - `docs/journey_prototype/localization.md` for this repository's Fluent term
   model;
-- the relevant portion of `data/strings.ftl`;
+- the relevant resource under `data/locales/en-US`;
 - `data/glossary.toml` when a canonical game concept or keyword appears.
 
 Read [references/translator-descriptions.md](references/translator-descriptions.md)
@@ -128,8 +128,9 @@ Use Fluent comment levels deliberately:
 - `##` for a related group;
 - `###` for resource-wide context.
 
-Keep the English source in `data/strings.ftl`. Add or extend a shared
-term only when the concept recurs and has a stable canonical meaning. Follow
+Keep the English source in the resources listed by
+`data/locales/en-US/manifest.json`. Add or extend a shared term only when the
+concept recurs and has a stable canonical meaning. Follow
 the repository's literal grammatical-number facet convention for countable
 terms; the installed Fluent parser cannot forward a runtime variable into a
 term argument.

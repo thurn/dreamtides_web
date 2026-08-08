@@ -1,11 +1,17 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { FluentParser, Message, Visitor } from "@fluent/syntax";
 import { format } from "prettier";
+import {
+  combineLocalizationResources,
+  loadEnglishLocalizationResources,
+} from "./localization-catalog.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-export const SOURCE_PATH = resolve(ROOT, "data/strings.ftl");
+export const SOURCE_PATHS = loadEnglishLocalizationResources().map(
+  ({ path }) => path,
+);
 export const OUTPUT_PATH = resolve(ROOT, "src/data/localization-messages.ts");
 
 class VariableCollector extends Visitor {
@@ -122,7 +128,9 @@ export type FluentMessageArguments<Id extends FluentMessageId> =
 }
 
 export async function generateLocalizationTypes() {
-  const source = readFileSync(SOURCE_PATH, "utf8");
+  const source = combineLocalizationResources(
+    loadEnglishLocalizationResources(),
+  );
   return format(buildLocalizationTypesSource(parseMessageContracts(source)), {
     parser: "typescript",
   });

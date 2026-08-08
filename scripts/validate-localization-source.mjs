@@ -87,7 +87,7 @@ export function validateLocalizationSource(source) {
 
 export function formatLocalizationDiagnostics(
   diagnostics,
-  sourcePath = "data/strings.ftl",
+  sourcePath = "<Fluent resource>",
 ) {
   if (diagnostics.length === 0) return "";
   return [

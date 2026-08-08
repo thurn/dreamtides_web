@@ -1,9 +1,29 @@
-# Localization Vocabulary
+# Localization Catalog
 
-The English Fluent source is `data/strings.ftl`. Its first section is
-the shared vocabulary for concepts that recur across Journey, Dreamscape,
-Dreamsign, deck, site, and battle screens. The set follows the canonical terms
-used by `data/glossary.toml` and the player-facing Cumulus surfaces.
+The English Fluent catalog is stored in `data/locales/en-US`. Its
+`manifest.json` lists every resource in bundle order. Each locale mirrors this
+directory structure and supplies the same set of resource files.
+
+The catalog is organized by player-facing responsibility:
+
+- `terms.ftl` contains shared vocabulary and localization diagnostics;
+- `app-shell.ftl` contains loading, errors, menus, and application chrome;
+- `coop.ftl` contains cooperative rooms, presence, conflicts, and shared
+  settings;
+- `journey.ftl` contains Journey progression and navigation;
+- `cards.ftl` contains cards, decks, collections, and rules presentation;
+- `sites.ftl` contains Journey sites and their outcomes;
+- `battle.ftl` contains battle presentation and controls;
+- `battle-prompts.ftl` contains battle choices and pending prompts;
+- `accessibility.ftl` contains accessibility-only names, descriptions, and
+  narration.
+
+Visible messages remain with their feature even when the same value is also
+used as an accessible label. Messages belong in `accessibility.ftl` when their
+purpose is exclusively assistive output.
+
+The shared vocabulary follows the canonical terms used by
+`data/glossary.toml` and the player-facing Cumulus surfaces.
 
 Fluent terms begin with `-` and are private to the localization resource. React
 code requests complete message IDs through `useMessages()`; messages reference
@@ -12,7 +32,8 @@ terms when they need canonical game vocabulary.
 ## Typed runtime contract
 
 `scripts/generate-localization-types.mjs` generates
-`src/data/localization-messages.ts` from `data/strings.ftl`. The generated
+`src/data/localization-messages.ts` from every resource listed by the English
+locale manifest. The generated
 module contains the message-ID union, exact variable contracts, and the
 JSON-safe `FluentMessageDescriptor` union. Descriptors contain a known message
 ID and finite string/number variables, so they can cross view-model, replay,
@@ -109,7 +130,7 @@ requires one.
 
 ## Formatting
 
-Run `npm run format:fluent` to format the English Fluent resource with the
+Run `npm run format:fluent` to format the English Fluent resources with the
 canonical `@fluent/syntax` serializer. Run `npm run format:fluent:check` to
 verify formatting without modifying the file. The formatter rejects invalid
 syntax and confirms that its output parses to the same Fluent syntax tree.

@@ -94,7 +94,8 @@ titles, and follow-up subtitles. `configuredFollowupCopy()` in
 `src/screens/cumulus_adapters/exploration-view-model.ts` substitutes semantic
 values into those templates. Authored action prose remains opaque at the React
 boundary; code-authored disclosures use typed Fluent messages from
-`data/strings.ftl`. `src/cumulus/screens/ExplorationSiteScreen.tsx` renders
+the English catalog under `data/locales/en-US`.
+`src/cumulus/screens/ExplorationSiteScreen.tsx` renders
 the resulting authored values and semantic disclosures without parsing card or
 site names.
 
