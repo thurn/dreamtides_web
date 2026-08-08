@@ -28,7 +28,22 @@ const LEGACY_ID_MAP: [(&str, &str); 12] = [
 pub struct DreamscapeDefinition {
     pub id: DreamscapeId,
     pub name: String,
+    pub art: DreamscapeArt,
     pub kind: DreamscapeKind,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct DreamscapeArt {
+    pub scene: AssetReference,
+    pub icon: AssetReference,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct AssetReference {
+    pub key: String,
+    pub source: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -181,6 +196,10 @@ fn validate(source: &[DreamscapeDefinition]) -> Result<()> {
     let mut dreamscape_ids = BTreeSet::new();
     let mut affiliation_ids = BTreeSet::new();
     let mut dream_avatar_ids = BTreeSet::new();
+    let mut scene_keys = BTreeSet::new();
+    let mut scene_sources = BTreeSet::new();
+    let mut icon_keys = BTreeSet::new();
+    let mut icon_sources = BTreeSet::new();
     let mut starter_count = 0;
     let mut boss_count = 0;
 
@@ -196,6 +215,22 @@ fn validate(source: &[DreamscapeDefinition]) -> Result<()> {
             dreamscape.id
         );
         let legacy_id = compatibility_key(dreamscape.id)?;
+        validate_asset_reference(
+            dreamscape,
+            "scene",
+            &dreamscape.art.scene,
+            legacy_id,
+            &mut scene_keys,
+            &mut scene_sources,
+        )?;
+        validate_asset_reference(
+            dreamscape,
+            "icon",
+            &dreamscape.art.icon,
+            legacy_id,
+            &mut icon_keys,
+            &mut icon_sources,
+        )?;
 
         match &dreamscape.kind {
             DreamscapeKind::Starter {
@@ -262,6 +297,42 @@ fn validate(source: &[DreamscapeDefinition]) -> Result<()> {
     Ok(())
 }
 
+fn validate_asset_reference(
+    dreamscape: &DreamscapeDefinition,
+    role: &str,
+    asset: &AssetReference,
+    compatibility_key: &str,
+    keys: &mut BTreeSet<String>,
+    sources: &mut BTreeSet<String>,
+) -> Result<()> {
+    ensure!(
+        !asset.key.trim().is_empty(),
+        "Dreamscape {} has an empty {role} art key",
+        dreamscape.id
+    );
+    ensure!(
+        !asset.source.trim().is_empty(),
+        "Dreamscape {} has an empty {role} art source",
+        dreamscape.id
+    );
+    ensure!(
+        asset.key == compatibility_key,
+        "Dreamscape {} {role} art key must match its legacy compatibility key",
+        dreamscape.id
+    );
+    ensure!(
+        keys.insert(asset.key.clone()),
+        "Dreamscapes repeat {role} art key {}",
+        asset.key
+    );
+    ensure!(
+        sources.insert(asset.source.clone()),
+        "Dreamscapes repeat {role} art source {}",
+        asset.source
+    );
+    Ok(())
+}
+
 fn compatibility_key(id: DreamscapeId) -> Result<&'static str> {
     let canonical = id.to_string();
     LEGACY_ID_MAP
@@ -315,6 +386,10 @@ mod tests {
   DreamscapeDefinition(
     id: "{STARTER_ID}",
     name: "Opening",
+    art: (
+      scene: (key: "firstlight_meadow", source: "opening.png"),
+      icon: (key: "firstlight_meadow", source: "opening_icon.png"),
+    ),
     kind: Starter(
       signature_site: Draft,
       fixed_sites: [Draft, Draft, DreamsignRevelation, Battle],
@@ -323,12 +398,24 @@ mod tests {
   DreamscapeDefinition(
     id: "{REGION_ID}",
     name: "Région",
+    art: (
+      scene: (key: "tumbleleaf_village", source: "region.png"),
+      icon: (key: "tumbleleaf_village", source: "region_icon.png"),
+    ),
     kind: Standard(
       affiliation_id: "{AFFILIATION_ID}",
       opponent_dream_avatar_ids: ["{AVATAR_ONE}", "{AVATAR_TWO}", "{AVATAR_THREE}"],
     ),
   ),
-  DreamscapeDefinition(id: "{BOSS_ID}", name: "Final Dream", kind: Boss),
+  DreamscapeDefinition(
+    id: "{BOSS_ID}",
+    name: "Final Dream",
+    art: (
+      scene: (key: "limbo", source: "final.png"),
+      icon: (key: "limbo", source: "final_icon.png"),
+    ),
+    kind: Boss,
+  ),
 ]
 "##
         )
@@ -369,6 +456,11 @@ mod tests {
             dreamscapes
                 .iter()
                 .all(|dreamscape| dreamscape["id"].as_str() != Some("limbo"))
+        );
+        assert!(
+            dreamscapes
+                .iter()
+                .all(|dreamscape| !dreamscape.as_table().unwrap().contains_key("art"))
         );
     }
 
@@ -429,7 +521,7 @@ mod tests {
 
         let no_boss = synthetic_source().replace(
             &format!(
-                "  DreamscapeDefinition(id: \"{BOSS_ID}\", name: \"Final Dream\", kind: Boss),\n"
+                "  DreamscapeDefinition(\n    id: \"{BOSS_ID}\",\n    name: \"Final Dream\",\n    art: (\n      scene: (key: \"limbo\", source: \"final.png\"),\n      icon: (key: \"limbo\", source: \"final_icon.png\"),\n    ),\n    kind: Boss,\n  ),\n"
             ),
             "",
         );
@@ -452,6 +544,15 @@ mod tests {
 
         let empty_name = synthetic_source().replace("name: \"Opening\"", "name: \"  \"");
         assert_error_contains(&empty_name, "empty name");
+
+        let wrong_art_key = synthetic_source().replace(
+            "scene: (key: \"tumbleleaf_village\", source: \"region.png\")",
+            "scene: (key: \"wrong\", source: \"region.png\")",
+        );
+        assert_error_contains(&wrong_art_key, "must match its legacy compatibility key");
+
+        let duplicate_art_source = synthetic_source().replace("region.png", "opening.png");
+        assert_error_contains(&duplicate_art_source, "repeat scene art source");
     }
 
     fn assert_error_contains(source: &str, expected: &str) {
@@ -573,6 +674,13 @@ mod tests {
 
         let mut referenced_avatars = BTreeSet::new();
         for dreamscape in canonical {
+            let legacy_id = compatibility_key(dreamscape.id).unwrap();
+            if !matches!(dreamscape.kind, DreamscapeKind::Boss) {
+                assert_eq!(dreamscape.art.scene.key, legacy_id);
+                assert_eq!(dreamscape.art.scene.source, format!("{legacy_id}.png"));
+                assert_eq!(dreamscape.art.icon.key, legacy_id);
+                assert_eq!(dreamscape.art.icon.source, format!("{legacy_id}_icon.png"));
+            }
             if let DreamscapeKind::Standard {
                 affiliation_id,
                 opponent_dream_avatar_ids,
@@ -617,6 +725,11 @@ mod tests {
             .unwrap();
         let atlas_source: super::super::atlas::AtlasCatalog =
             ron::from_str(&fs::read_to_string(root.join("data/atlas.ron")).unwrap()).unwrap();
+        assert_eq!(boss.name, atlas_source.boss.place);
+        assert_eq!(boss.art.scene.key, atlas_source.boss.art.scene.key);
+        assert_eq!(boss.art.scene.source, atlas_source.boss.art.scene.source);
+        assert_eq!(boss.art.icon.key, atlas_source.boss.art.icon.key);
+        assert_eq!(boss.art.icon.source, atlas_source.boss.art.icon.source);
         let atlas_compatibility = super::super::atlas::lower(atlas_source).unwrap();
         assert_eq!(
             atlas_compatibility["boss"]["dreamscape-id"].as_str(),
