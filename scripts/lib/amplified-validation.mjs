@@ -1,10 +1,5 @@
 /** Structural invariants shared by runtime-data generation and catalog audit. */
 
-export const drawAmounts = (text) =>
-  [...text.matchAll(/\bDraw(?: up to)?(?: an?| (\d+)) cards?\b/giu)].map(
-    (match) => Number(match[1] ?? 1),
-  );
-
 export const activatedCosts = (text) =>
   text.split("\n\n").flatMap((paragraph) => {
     const colon = paragraph.indexOf(":");
@@ -27,21 +22,21 @@ export const cadencePhrases = (text) =>
 export const reclaimClauses = (text) =>
   text.split("\n\n").filter((paragraph) => /\bReclaim\b/u.test(paragraph));
 
+export const discoverCriteria = (text) =>
+  [
+    ...text.matchAll(
+      /\bDiscover\s+(.+?)(?=,\s*then\s+materialize\b|\s+and\s+materialize\b|[.!?]|$)/giu,
+    ),
+  ].map((match) => match[1].replaceAll(/\s+/gu, " ").trim().toLowerCase());
+
 export function amplifiedStructuralErrors(base, amplified) {
   const errors = [];
-  const baseDraw = drawAmounts(base);
-  const amplifiedDraw = drawAmounts(amplified);
-  if (
-    amplifiedDraw.length > baseDraw.length ||
-    amplifiedDraw.some((amount, index) => amount > (baseDraw[index] ?? 0))
-  ) {
-    errors.push("adds or increases draw");
-  }
   for (const [label, collect] of [
     ["an activated ability cost", activatedCosts],
     ["a named trigger", namedTriggers],
     ["trigger cadence", cadencePhrases],
     ["Reclaim text", reclaimClauses],
+    ["Discover criteria", discoverCriteria],
   ]) {
     if (JSON.stringify(collect(amplified)) !== JSON.stringify(collect(base))) {
       errors.push(`changes ${label}`);

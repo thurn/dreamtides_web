@@ -868,6 +868,59 @@ describe("transformCard Amplified text", () => {
     expect(result.amplifiedText).toBe("Gain 3●.");
   });
 
+  it("allows an authored Amplified form to increase draw", () => {
+    const result = transformCard({
+      name: "Amplified fixture",
+      id: "amplified-fixture",
+      "card-number": 1,
+      "card-type": "Event",
+      "energy-cost": 2,
+      "is-fast": false,
+      "rendered-text": "Draw a card.",
+      "amplified-text": "Draw 2 cards.",
+      "image-number": 1,
+      "art-owned": false,
+    });
+    expect(result.amplifiedText).toBe("Draw 2 cards.");
+  });
+
+  it("allows an Amplified form to improve a discovered card after selection", () => {
+    const result = transformCard({
+      name: "Amplified fixture",
+      id: "amplified-fixture",
+      "card-number": 1,
+      "card-type": "Event",
+      "energy-cost": 2,
+      "is-fast": false,
+      "rendered-text":
+        "Discover a ≤2● cost character, then materialize it.",
+      "amplified-text":
+        "Discover a ≤2● cost character, then materialize it with awakened.",
+      "image-number": 1,
+      "art-owned": false,
+    });
+    expect(result.amplifiedText).toContain("with awakened");
+  });
+
+  it("rejects an authored Amplified form that changes Discover criteria", () => {
+    expect(() =>
+      transformCard({
+        name: "Amplified fixture",
+        id: "amplified-fixture",
+        "card-number": 1,
+        "card-type": "Event",
+        "energy-cost": 2,
+        "is-fast": false,
+        "rendered-text":
+          "Discover a ≤2● cost character, then materialize it.",
+        "amplified-text":
+          "Discover a ≤3● cost character, then materialize it.",
+        "image-number": 1,
+        "art-owned": false,
+      }),
+    ).toThrow(/changes Discover criteria/u);
+  });
+
   it("rejects authored text that changes activated costs", () => {
     expect(() =>
       transformCard({
