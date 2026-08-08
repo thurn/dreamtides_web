@@ -1,275 +1,169 @@
-CompatDocument(
-  data: {
-    "schema-version": 1,
-    "encounter": {"offer-count": 2, "distinct-families": true, "allow-decline": true},
-    "archetype": [
-      /*[0]*/
-      {
-        "id": "fit_card_grant",
-        "name": "Grant: Fit card (gift)",
-        "presentation": {
-          "headline": {"kind": "text", "text": "Gain a Card"},
-          "subtitle": {"kind": "text", "text": "Gain {cardName}"},
-        },
-        "enabled": true,
-        "family": "grant",
-        "weight": 10,
-        "selection-policy-id": "card-fit",
-        "quantities": {"granted-copies": 1},
-      },
-      /*[1]*/
-      {
-        "id": "fit_card_draft",
-        "name": "Grant: Fit card draft",
-        "presentation": {
-          "headline": {"kind": "text", "text": "Choose a Card"},
-          "subtitle": {"kind": "text", "text": "Choose a card to add to your deck."},
-        },
-        "enabled": true,
-        "family": "grant",
-        "weight": 10,
-        "selection-policy-id": "card-fit",
-        "quantities": {"chooser-size": 4, "granted-copies": 1},
-      },
-      /*[2]*/
-      {
-        "id": "copies_draft",
-        "name": "Grant: Copies draft",
-        "presentation": {
-          "headline": {"kind": "text", "text": "Choose a Card"},
-          "subtitle": {
-            "kind": "count",
-            "one": "Choose a card and add {count} copy of it to your deck.",
-            "other": "Choose a card and add {count} copies of it to your deck.",
-          },
-        },
-        "enabled": true,
-        "family": "grant",
-        "weight": 6,
-        "selection-policy-id": "card-fit-quality",
-        "quantities": {"chooser-size": 4, "granted-copies": 2},
-      },
-      /*[3]*/
-      {
-        "id": "strong_card",
-        "name": "Grant: Strong card",
-        "presentation": {
-          "headline": {"kind": "text", "text": "Gain a Card"},
-          "subtitle": {"kind": "text", "text": "Gain {cardName}"},
-        },
-        "enabled": true,
-        "family": "grant",
-        "weight": 8,
-        "selection-policy-id": "card-fit-quality",
-        "quantities": {"granted-copies": 1},
-      },
-      /*[4]*/
-      {
-        "id": "category_draft_known",
-        "name": "Grant: Category draft",
-        "presentation": {
-          "headline": {"kind": "text", "text": "Choose a Card"},
-          "subtitle": {
-            "kind": "category",
-            "character": "Choose a Character card to add to your deck.",
-            "event": "Choose an Event Card to add to your deck.",
-            "cheap": "Choose a cheap card to add to your deck.",
-            "mid-cost": "Choose a mid-cost card to add to your deck.",
-            "expensive": "Choose an expensive card to add to your deck.",
-            "fast": "Choose a fast card to add to your deck.",
-            "subtype": "Choose one {categoryName} card to add to your deck.",
-            "package": "Choose one card from the {categoryName} to add to your deck.",
-          },
-        },
-        "enabled": true,
-        "family": "grant",
-        "weight": 10,
-        "selection-policy-id": "card-fit",
-        "quantities": {"chooser-size": 4, "granted-copies": 1},
-      },
-      /*[5]*/
-      {
-        "id": "card_bundle",
-        "name": "Grant: Card bundle",
-        "presentation": {
-          "headline": {"kind": "count", "one": "Gain {count} Card", "other": "Gain {count} Cards"},
-          "subtitle": {
-            "kind": "count",
-            "one": "Add {count} Card to your deck.",
-            "other": "Add {count} Cards to your deck.",
-          },
-        },
-        "enabled": true,
-        "family": "grant",
-        "weight": 8,
-        "selection-policy-id": "card-bundle",
-        "quantities": {"bundle-size": 3, "minimum-bundle-size": 2},
-      },
-      /*[6]*/
-      {
-        "id": "transfigured_draft",
-        "name": "Grant: Transfigured draft",
-        "presentation": {
-          "headline": {"kind": "text", "text": "Choose a Transfigured Card"},
-          "subtitle": {"kind": "text", "text": "Choose a transfigured card to add to your deck."},
-        },
-        "enabled": true,
-        "family": "grant",
-        "weight": 6,
-        "selection-policy-id": "card-fit",
-        "quantities": {"chooser-size": 4, "granted-copies": 1},
-      },
-      /*[7]*/
-      {
-        "id": "transfigure",
-        "name": "Improve: Transfigure",
-        "presentation": {
-          "headline": {"kind": "text", "text": "Transfigure a Card"},
-          "subtitle": {"kind": "text", "text": "Transfigure {cardName}"},
-        },
-        "enabled": true,
-        "family": "improve",
-        "weight": 10,
-        "selection-policy-id": "transfiguration-value",
-        "quantities": {},
-      },
-      /*[8]*/
-      {
-        "id": "starter_transfigure",
-        "name": "Improve: Starter transfigure",
-        "presentation": {
-          "headline": {"kind": "text", "text": "Transfigure Your Starters"},
-          "subtitle": {
-            "kind": "count",
-            "one": "Transfigure {cardName}",
-            "other": "Transfigure {firstCardName} and {secondCardName}",
-          },
-        },
-        "enabled": true,
-        "family": "improve",
-        "weight": 6,
-        "selection-policy-id": "transfiguration-value",
-        "quantities": {"maximum-targets": 2},
-      },
-      /*[9]*/
-      {
-        "id": "keyword_mod",
-        "name": "Improve: Keyword modifier",
-        "presentation": {
-          "headline": {"kind": "text", "text": "Reduce Reclaim"},
-          "subtitle": {"kind": "text", "text": "Reduce Reclaim for {cardName}"},
-        },
-        "enabled": false,
-        "family": "improve",
-        "weight": 8,
-        "selection-policy-id": "deck-entry-centrality",
-        "quantities": {},
-      },
-      /*[10]*/
-      {
-        "id": "tribal_change",
-        "name": "Improve: Tribal change",
-        "presentation": {
-          "headline": {"kind": "text", "text": "Change a Character Type"},
-          "subtitle": {
-            "kind": "text",
-            "text": "Change the subtype of {cardName} to {subtypeName}.",
-          },
-        },
-        "enabled": false,
-        "family": "improve",
-        "weight": 6,
-        "selection-policy-id": "deck-entry-centrality",
-        "quantities": {},
-      },
-      /*[11]*/
-      {
-        "id": "purge",
-        "name": "Remove: Purge",
-        "presentation": {
-          "headline": {"kind": "text", "text": "Purge a Card"},
-          "subtitle": {"kind": "text", "text": "Purge {cardName}"},
-        },
-        "enabled": true,
-        "family": "remove",
-        "weight": 8,
-        "selection-policy-id": "purge-misfit",
-        "quantities": {},
-      },
-      /*[12]*/
-      {
-        "id": "purge_replace",
-        "name": "Remove: Purge & replace",
-        "presentation": {
-          "headline": {"kind": "text", "text": "Trade a Card"},
-          "subtitle": {"kind": "text", "text": "Purge {cardName} and choose a replacement card."},
-        },
-        "enabled": false,
-        "family": "remove",
-        "weight": 8,
-        "selection-policy-id": "card-fit-quality",
-        "quantities": {"chooser-size": 4},
-      },
-      /*[13]*/
-      {
-        "id": "duplicate",
-        "name": "Duplicate: Duplicate card",
-        "presentation": {
-          "headline": {"kind": "count", "one": "Duplicate a Card", "other": "Choose a Card"},
-          "subtitle": {
-            "kind": "count",
-            "one": "Duplicate {cardName}",
-            "other": "Choose one of {count} cards in your deck to duplicate.",
-          },
-        },
-        "enabled": true,
-        "family": "duplicate",
-        "weight": 8,
-        "selection-policy-id": "duplicate-value",
-        "quantities": {"chooser-size": 3, "granted-copies": 1},
-      },
-      /*[14]*/
-      {
-        "id": "dreamsign",
-        "name": "Dreamsign: Grant dreamsign",
-        "presentation": {
-          "headline": {"kind": "text", "text": "Gain a Dreamsign"},
-          "subtitle": {"kind": "text", "text": "Gain {dreamsignName}"},
-        },
-        "enabled": true,
-        "family": "dreamsign",
-        "weight": 8,
-        "selection-policy-id": "dreamsign-match",
-        "quantities": {},
-      },
-      /*[15]*/
-      {
-        "id": "dreamsign_draft",
-        "name": "Dreamsign: Dreamsign draft",
-        "presentation": {
-          "headline": {"kind": "text", "text": "Choose a Dreamsign"},
-          "subtitle": {"kind": "text", "text": "Choose a dreamsign to gain."},
-        },
-        "enabled": false,
-        "family": "dreamsign",
-        "weight": 6,
-        "selection-policy-id": "dreamsign-match",
-        "quantities": {"minimum-chooser-size": 2, "maximum-chooser-size": 4},
-      },
-      /*[16]*/
-      {
-        "id": "add_site",
-        "name": "Site: Add a site",
-        "presentation": {
-          "headline": {"kind": "text", "text": "Add a Site"},
-          "subtitle": {"kind": "text", "text": "Add the {siteName} site."},
-        },
-        "enabled": true,
-        "family": "site",
-        "weight": 6,
-        "selection-policy-id": "site-uniform",
-        "quantities": {},
-      },
-    ],
-  },
+// Augury encounter rules and offer abilities.
+
+#![enable(implicit_some)]
+AuguryCatalog(
+  encounter: (
+    // Number of offers generated whenever the player visits an Augury site.
+    offer_count: 2,
+    // Prevents both offer slots from drawing abilities in the same family.
+    distinct_families: true,
+    // Allows the player to leave without accepting either offer.
+    allow_decline: true,
+  ),
+
+  archetypes: [
+    ArchetypeDefinition(
+      id: "77ad1a09-aba0-4875-b462-e6efe94bdc3d",
+      // Internal label used by debugging and authoring tools.
+      name: "Grant: Fit card (gift)",
+      // Player-facing offer copy. Placeholders resolve from the surfaced reward.
+      presentation: (headline: Text("Gain a Card"), subtitle: Text("Gain {cardName}")),
+      // Effect of this reward offer. A `selection_policy` ranks eligible
+      // targets for the ability.
+      ability: FitCardGrant(selection_policy: CardFit, granted_copies: 1),
+      // Relative selection weight among eligible definitions.
+      weight: 10,
+    ),
+
+    ArchetypeDefinition(
+      id: "8f8db592-b62c-414e-9195-68641722cf50",
+      name: "Grant: Fit card draft",
+      presentation: (
+        headline: Text("Choose a Card"),
+        subtitle: Text("Choose a card to add to your deck."),
+      ),
+      ability: FitCardDraft(selection_policy: CardFit, chooser_size: 4, granted_copies: 1),
+      weight: 10,
+    ),
+
+    ArchetypeDefinition(
+      id: "b4ccca83-2a1d-4474-ba6d-4b95aefeed9b",
+      name: "Grant: Copies draft",
+      presentation: (
+        headline: Text("Choose a Card"),
+        subtitle: Count(
+          one: "Choose a card and add {count} copy of it to your deck.",
+          other: "Choose a card and add {count} copies of it to your deck.",
+        ),
+      ),
+      ability: CopiesDraft(selection_policy: CardFitQuality, chooser_size: 4, granted_copies: 2),
+      weight: 6,
+    ),
+
+    ArchetypeDefinition(
+      id: "c4ac3d68-e814-43ea-9be3-ced3fd1bbe89",
+      name: "Grant: Strong card",
+      presentation: (headline: Text("Gain a Card"), subtitle: Text("Gain {cardName}")),
+      ability: StrongCard(selection_policy: CardFitQuality, granted_copies: 1),
+      weight: 8,
+    ),
+
+    ArchetypeDefinition(
+      id: "beecc1d9-9546-4ca2-858c-214527c7e530",
+      name: "Grant: Category draft",
+      presentation: (
+        headline: Text("Choose a Card"),
+        subtitle: Category(
+          character: "Choose a Character card to add to your deck.",
+          event: "Choose an Event Card to add to your deck.",
+          cheap: "Choose a cheap card to add to your deck.",
+          mid_cost: "Choose a mid-cost card to add to your deck.",
+          expensive: "Choose an expensive card to add to your deck.",
+          fast: "Choose a fast card to add to your deck.",
+          subtype: "Choose one {categoryName} card to add to your deck.",
+          package: "Choose one card from the {categoryName} to add to your deck.",
+        ),
+      ),
+      ability: CategoryDraftKnown(selection_policy: CardFit, chooser_size: 4, granted_copies: 1),
+      weight: 10,
+    ),
+
+    ArchetypeDefinition(
+      id: "dfd3976a-b1dc-44fe-9aab-c13bd2c195e4",
+      name: "Grant: Card bundle",
+      presentation: (
+        headline: Count(one: "Gain {count} Card", other: "Gain {count} Cards"),
+        subtitle: Count(
+          one: "Add {count} Card to your deck.",
+          other: "Add {count} Cards to your deck.",
+        ),
+      ),
+      ability: CardBundle(bundle_size: 3, minimum_bundle_size: 2),
+      weight: 8,
+    ),
+
+    ArchetypeDefinition(
+      id: "a5ac636d-9269-4379-9c61-567583fe9926",
+      name: "Grant: Transfigured draft",
+      presentation: (
+        headline: Text("Choose a Transfigured Card"),
+        subtitle: Text("Choose a transfigured card to add to your deck."),
+      ),
+      ability: TransfiguredDraft(selection_policy: CardFit, chooser_size: 4, granted_copies: 1),
+      weight: 6,
+    ),
+
+    ArchetypeDefinition(
+      id: "ec872e81-b7b4-4d81-9c69-1ca5317f6144",
+      name: "Improve: Transfigure",
+      presentation: (
+        headline: Text("Transfigure a Card"),
+        subtitle: Text("Transfigure {cardName}"),
+      ),
+      ability: Transfigure(selection_policy: TransfigurationValue),
+      weight: 10,
+    ),
+
+    ArchetypeDefinition(
+      id: "65a59007-6618-4f82-82ae-7da3bc6a205a",
+      name: "Improve: Starter transfigure",
+      presentation: (
+        headline: Text("Transfigure Your Starters"),
+        subtitle: Count(
+          one: "Transfigure {cardName}",
+          other: "Transfigure {firstCardName} and {secondCardName}",
+        ),
+      ),
+      ability: StarterTransfigure(selection_policy: TransfigurationValue, maximum_targets: 2),
+      weight: 6,
+    ),
+
+    ArchetypeDefinition(
+      id: "df34c427-5e27-42d1-b903-c1d6d6dddd78",
+      name: "Remove: Purge",
+      presentation: (headline: Text("Purge a Card"), subtitle: Text("Purge {cardName}")),
+      ability: Purge(selection_policy: PurgeMisfit),
+      weight: 8,
+    ),
+
+    ArchetypeDefinition(
+      id: "521bd487-0b3e-429e-a2f6-56010dd029c4",
+      name: "Duplicate: Duplicate card",
+      presentation: (
+        headline: Count(one: "Duplicate a Card", other: "Choose a Card"),
+        subtitle: Count(
+          one: "Duplicate {cardName}",
+          other: "Choose one of {count} cards in your deck to duplicate.",
+        ),
+      ),
+      ability: Duplicate(selection_policy: DuplicateValue, chooser_size: 3, granted_copies: 1),
+      weight: 8,
+    ),
+
+    ArchetypeDefinition(
+      id: "432102c0-91c0-4954-acd0-3404d2148a25",
+      name: "Dreamsign: Grant dreamsign",
+      presentation: (headline: Text("Gain a Dreamsign"), subtitle: Text("Gain {dreamsignName}")),
+      ability: Dreamsign(selection_policy: DreamsignMatch),
+      weight: 8,
+    ),
+
+    ArchetypeDefinition(
+      id: "1003a54d-1659-490b-aa48-b88b9da5df68",
+      name: "Site: Add a site",
+      presentation: (headline: Text("Add a Site"), subtitle: Text("Add the {siteName} site.")),
+      ability: AddSite,
+      weight: 6,
+    ),
+  ],
 )
