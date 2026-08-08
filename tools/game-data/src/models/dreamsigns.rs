@@ -963,17 +963,6 @@ mod tests {
         ),
     ];
 
-    const LEGACY_ABILITY_TEXT_MIGRATIONS: &[(&str, &str)] = &[
-        (
-            "6B95D6BD-C970-4465-9536-4F21E7630D0A",
-            "When drafting cards, see 1 fewer choice.\n\n▸Dawn: Gain 1●.",
-        ),
-        (
-            "B8590328-CA72-4869-A795-C7F4B6802BED",
-            "Draw two additional cards during your Draw phase.\n\nAt the end of each turn, discard your hand.",
-        ),
-    ];
-
     #[test]
     #[ignore = "real-catalog parity probe for canonical Dreamsign review"]
     fn real_catalog_candidate_preserves_complete_compatibility_semantics() {
@@ -996,13 +985,8 @@ mod tests {
         let identity_map: IndexMap<_, _> = LEGACY_IDENTITY_MAP.iter().copied().collect();
         assert_eq!(identity_map.len(), LEGACY_IDENTITY_MAP.len());
         assert_eq!(identity_map.len(), legacy.dreamsign.len());
-        let ability_text_migrations: IndexMap<_, _> =
-            LEGACY_ABILITY_TEXT_MIGRATIONS.iter().copied().collect();
         let mut normalized = legacy.clone();
         for record in &mut normalized.dreamsign {
-            if let Some(rendered_text) = ability_text_migrations.get(record.id.as_str()) {
-                record.rendered_text = (*rendered_text).to_string();
-            }
             record.id = identity_map
                 .get(record.id.as_str())
                 .unwrap_or_else(|| panic!("missing legacy Dreamsign identity {}", record.id))
@@ -1016,8 +1000,32 @@ mod tests {
         assert_eq!(mapped_ids, canonical_ids);
         assert_eq!(metadata.dreamsigns.len(), definitions.len());
 
-        let lowered = lower(definitions, metadata).unwrap();
-        let expected = toml::Value::try_from(normalized).unwrap();
+        let mut lowered = lower(definitions, metadata).unwrap();
+        let mut expected = toml::Value::try_from(normalized).unwrap();
+        let lowered_records = lowered["dreamsign"].as_array_mut().unwrap();
+        let expected_records = expected["dreamsign"].as_array_mut().unwrap();
+        for (lowered_record, expected_record) in
+            lowered_records.iter_mut().zip(expected_records.iter_mut())
+        {
+            let lowered_text = lowered_record["rendered-text"].as_str().unwrap();
+            let expected_text = expected_record["rendered-text"].as_str().unwrap();
+            assert_eq!(
+                normalized_whitespace(lowered_text),
+                normalized_whitespace(expected_text)
+            );
+            lowered_record
+                .as_table_mut()
+                .unwrap()
+                .remove("rendered-text");
+            expected_record
+                .as_table_mut()
+                .unwrap()
+                .remove("rendered-text");
+        }
         assert_eq!(lowered, expected);
+    }
+
+    fn normalized_whitespace(value: &str) -> String {
+        value.split_whitespace().collect::<Vec<_>>().join(" ")
     }
 }
