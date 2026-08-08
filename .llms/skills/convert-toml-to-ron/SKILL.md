@@ -108,6 +108,8 @@ edit:
   above the list.
   Describe the catalog's purpose directly in file-level comments; labels such
   as "authored data" or "authored catalog" add no useful information.
+  Do not comment routine entity identity, obvious display-copy fields, or
+  straightforward image identifiers merely to restate their type or role.
 - Separate named long-list definitions with a blank line. Format struct-like
   enum variants across multiple lines with one field per line when the
   repository formatter preserves that layout.
@@ -119,10 +121,11 @@ classified as a closed vocabulary, migrate them to enum variants and preserve
 an explicit legacy-value-to-variant map in the parity probe. Never use mutable
 display text as canonical identity.
 
-Start the candidate with `#![enable(implicit_some)]`. Write present optional
-values without `Some(...)`, and omit absent/defaulted fields when the Serde
-model intentionally supports omission. Prefer quoted strings; use raw strings
-only when multiline text or escaping becomes clearer.
+Start the candidate with its file-purpose comment, then a blank line, then
+`#![enable(implicit_some)]`. Write present optional values without `Some(...)`,
+and omit absent/defaulted fields when the Serde model intentionally supports
+omission. Prefer quoted strings; use raw strings only when multiline text or
+escaping becomes clearer.
 
 Generate large candidates mechanically. Fail on unknown or missing input keys,
 duplicate IDs, non-UUIDv4 candidate IDs, unsupported variants, invalid or

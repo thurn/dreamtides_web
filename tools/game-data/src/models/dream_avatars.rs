@@ -8,16 +8,16 @@ use uuid::{Uuid, Variant, Version};
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct DreamAvatarDefinition {
-    pub id: DreamAvatarId,
+pub struct AvatarDefinition {
     pub name: String,
+    pub id: DreamAvatarId,
+    pub ability_text: Vec<String>,
     pub title: String,
-    pub ability_text: String,
     pub portrait: Portrait,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub starting_essence: Option<u32>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub signature: Option<Signature>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub signature_card_ids: Vec<CardId>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -36,14 +36,9 @@ pub struct PortraitFocus {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub enum Signature {
-    DerivedFromMtgArchetype {
-        mtg_archetype: String,
-        card_ids: Vec<CardId>,
-    },
-    Curated {
-        card_ids: Vec<CardId>,
-    },
+pub struct AvatarMetadata {
+    pub avatar_id: DreamAvatarId,
+    pub mtg_archetype: String,
 }
 
 macro_rules! canonical_uuid {
@@ -118,8 +113,6 @@ struct CompatibilityDreamAvatar {
     rendered_text: String,
     #[serde(rename = "starting-essence", skip_serializing_if = "Option::is_none")]
     starting_essence: Option<u32>,
-    #[serde(rename = "mtg-name", skip_serializing_if = "Option::is_none")]
-    mtg_name: Option<String>,
     #[serde(rename = "signature-cards", skip_serializing_if = "Option::is_none")]
     signature_cards: Option<Vec<String>>,
 }
@@ -151,25 +144,18 @@ struct CompatibilityColumn {
     bold: Option<bool>,
 }
 
-pub fn lower(source: Vec<DreamAvatarDefinition>) -> Result<toml::Value> {
+pub fn lower(source: Vec<AvatarDefinition>) -> Result<toml::Value> {
     validate(&source)?;
     let dream_avatars = source
         .into_iter()
         .map(|avatar| {
-            let (mtg_name, signature_cards) = match avatar.signature {
-                None => (None, None),
-                Some(Signature::DerivedFromMtgArchetype {
-                    mtg_archetype,
-                    card_ids,
-                }) => (
-                    Some(mtg_archetype),
-                    Some(card_ids.into_iter().map(|id| id.to_string()).collect()),
-                ),
-                Some(Signature::Curated { card_ids }) => (
-                    None,
-                    Some(card_ids.into_iter().map(|id| id.to_string()).collect()),
-                ),
-            };
+            let signature_cards = (!avatar.signature_card_ids.is_empty()).then(|| {
+                avatar
+                    .signature_card_ids
+                    .into_iter()
+                    .map(|id| id.to_string())
+                    .collect()
+            });
             CompatibilityDreamAvatar {
                 name: avatar.name,
                 title: avatar.title,
@@ -179,9 +165,8 @@ pub fn lower(source: Vec<DreamAvatarDefinition>) -> Result<toml::Value> {
                     x: avatar.portrait.focus.x,
                     y: avatar.portrait.focus.y,
                 },
-                rendered_text: avatar.ability_text,
+                rendered_text: avatar.ability_text.join("\n\n"),
                 starting_essence: avatar.starting_essence,
-                mtg_name,
                 signature_cards,
             }
         })
@@ -234,7 +219,7 @@ fn compatibility_metadata() -> CompatibilityMetadata {
     }
 }
 
-fn validate(source: &[DreamAvatarDefinition]) -> Result<()> {
+fn validate(source: &[AvatarDefinition]) -> Result<()> {
     let mut ids = BTreeSet::new();
     let mut images = BTreeSet::new();
     for avatar in source {
@@ -253,24 +238,29 @@ fn validate(source: &[DreamAvatarDefinition]) -> Result<()> {
                 avatar.id
             );
         }
-        for (field, value) in [
-            ("name", &avatar.name),
-            ("title", &avatar.title),
-            ("ability_text", &avatar.ability_text),
-        ] {
+        for (field, value) in [("name", &avatar.name), ("title", &avatar.title)] {
             if value.trim().is_empty() {
                 bail!("DreamAvatar {} has an empty {field}", avatar.id);
             }
         }
-        validate_focus(avatar)?;
-        if let Some(signature) = &avatar.signature {
-            validate_signature(avatar.id, signature)?;
+        if avatar.ability_text.is_empty() {
+            bail!("DreamAvatar {} has no ability text", avatar.id);
         }
+        for (index, paragraph) in avatar.ability_text.iter().enumerate() {
+            if paragraph.trim().is_empty() {
+                bail!(
+                    "DreamAvatar {} ability_text[{index}] must be non-empty",
+                    avatar.id
+                );
+            }
+        }
+        validate_focus(avatar)?;
+        validate_signature_ids(avatar.id, &avatar.signature_card_ids)?;
     }
     Ok(())
 }
 
-fn validate_focus(avatar: &DreamAvatarDefinition) -> Result<()> {
+fn validate_focus(avatar: &AvatarDefinition) -> Result<()> {
     for (axis, value) in [
         ("x", avatar.portrait.focus.x),
         ("y", avatar.portrait.focus.y),
@@ -285,26 +275,50 @@ fn validate_focus(avatar: &DreamAvatarDefinition) -> Result<()> {
     Ok(())
 }
 
-fn validate_signature(avatar_id: DreamAvatarId, signature: &Signature) -> Result<()> {
-    let card_ids = match signature {
-        Signature::DerivedFromMtgArchetype {
-            mtg_archetype,
-            card_ids,
-        } => {
-            if mtg_archetype.trim().is_empty() {
-                bail!("DreamAvatar {avatar_id} has an empty MTG archetype");
-            }
-            card_ids
-        }
-        Signature::Curated { card_ids } => card_ids,
-    };
-    if card_ids.is_empty() {
-        bail!("DreamAvatar {avatar_id} signature must contain at least one card");
-    }
+fn validate_signature_ids(avatar_id: DreamAvatarId, card_ids: &[CardId]) -> Result<()> {
     let mut unique = BTreeSet::new();
     for card_id in card_ids {
         if !unique.insert(*card_id) {
             bail!("DreamAvatar {avatar_id} repeats signature card id {card_id}");
+        }
+    }
+    Ok(())
+}
+
+pub fn validate_internal_metadata(
+    avatars: &[AvatarDefinition],
+    metadata: &[AvatarMetadata],
+) -> Result<()> {
+    let avatar_ids: BTreeSet<_> = avatars.iter().map(|avatar| avatar.id).collect();
+    let mut metadata_ids = BTreeSet::new();
+    for entry in metadata {
+        if !avatar_ids.contains(&entry.avatar_id) {
+            bail!(
+                "internal avatar metadata references unknown DreamAvatar {}",
+                entry.avatar_id
+            );
+        }
+        if !metadata_ids.insert(entry.avatar_id) {
+            bail!(
+                "duplicate internal avatar metadata for DreamAvatar {}",
+                entry.avatar_id
+            );
+        }
+        if entry.mtg_archetype.trim().is_empty() {
+            bail!(
+                "internal avatar metadata for {} has an empty MTG archetype",
+                entry.avatar_id
+            );
+        }
+        let avatar = avatars
+            .iter()
+            .find(|avatar| avatar.id == entry.avatar_id)
+            .expect("validated metadata reference");
+        if avatar.signature_card_ids.is_empty() {
+            bail!(
+                "internal avatar metadata for {} requires signature cards",
+                entry.avatar_id
+            );
         }
     }
     Ok(())
@@ -327,38 +341,49 @@ mod tests {
     const CARD_TWO: &str = "00000000-0000-4000-8000-000000000102";
 
     fn synthetic_source() -> &'static str {
-        r##"#![enable(implicit_some)]
+        r##"// Synthetic DreamAvatar definitions.
+
+#![enable(implicit_some)]
 [
-  DreamAvatarDefinition(
-    id: "00000000-0000-4000-8000-000000000001",
+  AvatarDefinition(
     name: "Límbø",
+    id: "00000000-0000-4000-8000-000000000001",
+    ability_text: ["First line", "Second line"],
     title: "First",
-    ability_text: "First line\nSecond line",
     portrait: (image: 7, focus: (x: 0.25, y: 0.75)),
     starting_essence: 137,
-    signature: DerivedFromMtgArchetype(
-      mtg_archetype: "An Archetype",
-      card_ids: [
-        "00000000-0000-4000-8000-000000000101",
-        "00000000-0000-4000-8000-000000000102",
-      ],
-    ),
+    signature_card_ids: [
+      "00000000-0000-4000-8000-000000000101",
+      "00000000-0000-4000-8000-000000000102",
+    ],
   ),
-  DreamAvatarDefinition(
-    id: "00000000-0000-4000-8000-000000000002",
+  AvatarDefinition(
     name: "Second",
-    title: "Curated",
-    ability_text: "Ability",
+    id: "00000000-0000-4000-8000-000000000002",
+    ability_text: ["Ability"],
+    title: "Without signatures",
     portrait: (image: 42, focus: (x: 0.5, y: 0.4)),
-    signature: Curated(card_ids: ["00000000-0000-4000-8000-000000000102"]),
+  ),
+]
+"##
+    }
+
+    fn synthetic_metadata() -> &'static str {
+        r##"// Synthetic internal avatar metadata.
+
+#![enable(implicit_some)]
+[
+  AvatarMetadata(
+    avatar_id: "00000000-0000-4000-8000-000000000001",
+    mtg_archetype: "An Archetype",
   ),
 ]
 "##
     }
 
     #[test]
-    fn lowers_ordered_records_signature_variants_and_optional_tuning() {
-        let source: Vec<DreamAvatarDefinition> = ron::from_str(synthetic_source()).unwrap();
+    fn lowers_ordered_records_ability_paragraphs_signatures_and_optional_tuning() {
+        let source: Vec<AvatarDefinition> = ron::from_str(synthetic_source()).unwrap();
         let output = lower(source).unwrap();
         let avatars = output["dreamAvatar"].as_array().unwrap();
         assert_eq!(avatars.len(), 2);
@@ -367,17 +392,17 @@ mod tests {
         assert_eq!(avatars[0]["image-number"].as_str(), Some("0007"));
         assert_eq!(
             avatars[0]["rendered-text"].as_str(),
-            Some("First line\nSecond line")
+            Some("First line\n\nSecond line")
         );
         assert_eq!(avatars[0]["starting-essence"].as_integer(), Some(137));
-        assert_eq!(avatars[0]["mtg-name"].as_str(), Some("An Archetype"));
+        assert!(avatars[0].get("mtg-name").is_none());
         assert_eq!(
             avatars[0]["signature-cards"].as_array().unwrap(),
             &vec![CARD_ONE.into(), CARD_TWO.into()]
         );
         assert!(avatars[1].get("starting-essence").is_none());
         assert!(avatars[1].get("mtg-name").is_none());
-        assert_eq!(avatars[1]["signature-cards"][0].as_str(), Some(CARD_TWO));
+        assert!(avatars[1].get("signature-cards").is_none());
         assert_eq!(output["metadata"]["schema_version"].as_integer(), Some(1));
         assert_eq!(
             output["metadata"]["columns"][5]["key"].as_str(),
@@ -386,28 +411,25 @@ mod tests {
     }
 
     #[test]
-    fn omits_the_complete_signature_contract_when_absent() {
-        let mut source: Vec<DreamAvatarDefinition> = ron::from_str(synthetic_source()).unwrap();
+    fn omits_signature_cards_when_absent() {
+        let mut source: Vec<AvatarDefinition> = ron::from_str(synthetic_source()).unwrap();
         source.truncate(1);
-        source[0].signature = None;
+        source[0].signature_card_ids.clear();
         let output = lower(source).unwrap();
         let avatar = &output["dreamAvatar"][0];
-        assert!(avatar.get("mtg-name").is_none());
         assert!(avatar.get("signature-cards").is_none());
     }
 
     #[test]
-    fn rejects_unknown_fields_unknown_variants_and_noncanonical_ids() {
+    fn rejects_unknown_fields_and_noncanonical_ids() {
         let unknown =
             synthetic_source().replace("name: \"Límbø\",", "name: \"Límbø\", surprise: true,");
-        assert!(ron::from_str::<Vec<DreamAvatarDefinition>>(&unknown).is_err());
-        assert!(ron::from_str::<Signature>("Unknown(card_ids: [])").is_err());
-        assert!(
-            ron::from_str::<Signature>(&format!(
-                "Curated(card_ids: [\"{CARD_ONE}\"], surprise: true)"
-            ))
-            .is_err()
+        assert!(ron::from_str::<Vec<AvatarDefinition>>(&unknown).is_err());
+        let unknown_metadata = synthetic_metadata().replace(
+            "mtg_archetype: \"An Archetype\",",
+            "mtg_archetype: \"An Archetype\", surprise: true,",
         );
+        assert!(ron::from_str::<Vec<AvatarMetadata>>(&unknown_metadata).is_err());
         for invalid in [
             "legacy_slug",
             "00000000-0000-3000-8000-000000000001",
@@ -418,12 +440,12 @@ mod tests {
         }
         let invalid_card =
             synthetic_source().replacen(CARD_ONE, "00000000-0000-3000-8000-000000000101", 1);
-        assert!(ron::from_str::<Vec<DreamAvatarDefinition>>(&invalid_card).is_err());
+        assert!(ron::from_str::<Vec<AvatarDefinition>>(&invalid_card).is_err());
     }
 
     #[test]
-    fn rejects_duplicate_identity_art_invalid_focus_and_invalid_signatures() {
-        let source: Vec<DreamAvatarDefinition> = ron::from_str(synthetic_source()).unwrap();
+    fn rejects_duplicate_identity_art_invalid_focus_text_signatures_and_metadata() {
+        let source: Vec<AvatarDefinition> = ron::from_str(synthetic_source()).unwrap();
 
         let mut duplicate_id = source.clone();
         duplicate_id[1].id = duplicate_id[0].id;
@@ -461,30 +483,66 @@ mod tests {
                 .contains("empty name")
         );
 
-        let mut empty_archetype = source.clone();
-        if let Some(Signature::DerivedFromMtgArchetype { mtg_archetype, .. }) =
-            &mut empty_archetype[0].signature
-        {
-            mtg_archetype.clear();
-        }
+        let mut empty_text = source.clone();
+        empty_text[0].ability_text.clear();
         assert!(
-            lower(empty_archetype)
+            lower(empty_text)
                 .unwrap_err()
                 .to_string()
-                .contains("empty MTG archetype")
+                .contains("no ability text")
         );
 
-        let mut duplicate_card = source;
-        if let Some(Signature::DerivedFromMtgArchetype { card_ids, .. }) =
-            &mut duplicate_card[0].signature
-        {
-            card_ids[1] = card_ids[0];
-        }
+        let mut empty_paragraph = source.clone();
+        empty_paragraph[0].ability_text[0] = "  ".into();
+        assert!(
+            lower(empty_paragraph)
+                .unwrap_err()
+                .to_string()
+                .contains("ability_text[0]")
+        );
+
+        let mut duplicate_card = source.clone();
+        duplicate_card[0].signature_card_ids[1] = duplicate_card[0].signature_card_ids[0];
         assert!(
             lower(duplicate_card)
                 .unwrap_err()
                 .to_string()
                 .contains("repeats signature card")
+        );
+
+        let metadata: Vec<AvatarMetadata> = ron::from_str(synthetic_metadata()).unwrap();
+        let mut duplicate_metadata = metadata.clone();
+        duplicate_metadata.push(metadata[0].clone());
+        assert!(
+            validate_internal_metadata(&source, &duplicate_metadata)
+                .unwrap_err()
+                .to_string()
+                .contains("duplicate internal avatar metadata")
+        );
+
+        let mut unknown_metadata = metadata.clone();
+        unknown_metadata[0].avatar_id = source[1].id;
+        assert!(
+            validate_internal_metadata(&source[..1], &unknown_metadata)
+                .unwrap_err()
+                .to_string()
+                .contains("unknown DreamAvatar")
+        );
+
+        assert!(
+            validate_internal_metadata(&source, &unknown_metadata)
+                .unwrap_err()
+                .to_string()
+                .contains("requires signature cards")
+        );
+
+        let mut empty_archetype = metadata;
+        empty_archetype[0].mtg_archetype.clear();
+        assert!(
+            validate_internal_metadata(&source, &empty_archetype)
+                .unwrap_err()
+                .to_string()
+                .contains("empty MTG archetype")
         );
     }
 
@@ -500,11 +558,16 @@ mod tests {
                 .unwrap();
         assert_eq!(current_ron.data, current_toml);
 
-        let canonical: Vec<DreamAvatarDefinition> = ron::from_str(
+        let canonical: Vec<AvatarDefinition> = ron::from_str(
             &fs::read_to_string(root.join("data/dream_avatars_canonical.ron")).unwrap(),
         )
         .unwrap();
         assert_eq!(canonical.len(), 32);
+        let internal_metadata: Vec<AvatarMetadata> = ron::from_str(
+            &fs::read_to_string(root.join("data/internal/internal_avatar_metadata.ron")).unwrap(),
+        )
+        .unwrap();
+        validate_internal_metadata(&canonical, &internal_metadata).unwrap();
 
         let id_map = legacy_id_map();
         assert_eq!(id_map.len(), canonical.len());
@@ -526,8 +589,25 @@ mod tests {
                 .unwrap_or_else(|| panic!("unmapped legacy DreamAvatar id {legacy_id}"))
                 .to_string()
                 .into();
+            avatar.as_table_mut().unwrap().remove("mtg-name");
         }
         assert_eq!(lower(canonical.clone()).unwrap(), normalized);
+
+        let expected_metadata: BTreeMap<_, _> = current_ron.data["dreamAvatar"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter_map(|avatar| {
+                let mtg_archetype = avatar.get("mtg-name")?.as_str().unwrap();
+                let legacy_id = avatar["id"].as_str().unwrap();
+                Some((id_map[legacy_id].to_owned(), mtg_archetype.to_owned()))
+            })
+            .collect();
+        let actual_metadata: BTreeMap<_, _> = internal_metadata
+            .iter()
+            .map(|entry| (entry.avatar_id.to_string(), entry.mtg_archetype.clone()))
+            .collect();
+        assert_eq!(actual_metadata, expected_metadata);
 
         let cards: toml::Value =
             toml::from_str(&fs::read_to_string(root.join("data/cards.toml")).unwrap()).unwrap();
@@ -542,14 +622,8 @@ mod tests {
             assert_eq!(parsed.get_version(), Some(Version::Random));
             assert_eq!(parsed.get_variant(), Variant::RFC4122);
             assert_eq!(parsed.hyphenated().to_string(), avatar.id.to_string());
-            if let Some(signature) = &avatar.signature {
-                let ids = match signature {
-                    Signature::DerivedFromMtgArchetype { card_ids, .. }
-                    | Signature::Curated { card_ids } => card_ids,
-                };
-                for card_id in ids {
-                    assert!(card_ids.contains(card_id.to_string().as_str()));
-                }
+            for card_id in &avatar.signature_card_ids {
+                assert!(card_ids.contains(card_id.to_string().as_str()));
             }
         }
 

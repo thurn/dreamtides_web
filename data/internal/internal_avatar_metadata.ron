@@ -1,0 +1,79 @@
+// Internal MTG archetype references used to maintain DreamAvatar signature profiles.
+
+#![enable(implicit_some)]
+[
+  AvatarMetadata(
+    avatar_id: "133e22dd-f81b-406d-b4e3-98c346d7fd4e",
+    mtg_archetype: "Lurrus of the Dream-Den",
+  ),
+
+  AvatarMetadata(avatar_id: "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4", mtg_archetype: "Viscera Seer"),
+
+  AvatarMetadata(
+    avatar_id: "16b579fe-c15b-4df6-8262-d45ce44732ae",
+    mtg_archetype: "Phyrexian Altar",
+  ),
+
+  AvatarMetadata(
+    avatar_id: "86026206-1b11-4f38-a24e-fd3c697f5353",
+    mtg_archetype: "Inti, Seneschal of the Sun",
+  ),
+
+  AvatarMetadata(avatar_id: "6488452d-4e9e-466c-96df-716d4ec646b1", mtg_archetype: "Vengevine"),
+
+  AvatarMetadata(
+    avatar_id: "b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e",
+    mtg_archetype: "Containment Construct",
+  ),
+
+  AvatarMetadata(
+    avatar_id: "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+    mtg_archetype: "Zombie Infestation",
+  ),
+
+  AvatarMetadata(avatar_id: "60bd584b-5bc8-4ee7-8a98-cbb304eb71ab", mtg_archetype: "Cryptbreaker"),
+
+  AvatarMetadata(
+    avatar_id: "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+    mtg_archetype: "Snapcaster Mage",
+  ),
+
+  AvatarMetadata(avatar_id: "2b7e921d-0cd7-4c20-a415-9e7eede7b477", mtg_archetype: "Bonus Round"),
+
+  AvatarMetadata(
+    avatar_id: "84e7020c-7384-4cc3-a20f-ab05f03cc375",
+    mtg_archetype: "Dragon's Rage Channeler",
+  ),
+
+  AvatarMetadata(
+    avatar_id: "f6208407-c4e9-42ac-b533-346704f5e39e",
+    mtg_archetype: "Young Pyromancer",
+  ),
+
+  AvatarMetadata(
+    avatar_id: "94e7c651-25e9-4a62-9de4-eaf5ba20542c",
+    mtg_archetype: "Priest of Titania",
+  ),
+
+  AvatarMetadata(avatar_id: "3ebaba62-9000-429d-b203-2a5a9724389a", mtg_archetype: "Aluren"),
+
+  AvatarMetadata(
+    avatar_id: "2c53b1b9-9291-4bba-8d3a-f40b545c8f3c",
+    mtg_archetype: "Glimpse of Nature",
+  ),
+
+  AvatarMetadata(
+    avatar_id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+    mtg_archetype: "Urza, Lord High Artificer",
+  ),
+
+  AvatarMetadata(
+    avatar_id: "bf72adff-7d74-4be8-9b93-1db7ba13a1db",
+    mtg_archetype: "Mishra's Workshop",
+  ),
+
+  AvatarMetadata(
+    avatar_id: "91d4c3b5-fd63-480b-9ed5-979109a227bb",
+    mtg_archetype: "Emry, Lurker of the Loch",
+  ),
+]

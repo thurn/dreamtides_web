@@ -1,477 +1,429 @@
-#![enable(implicit_some)]
 // DreamAvatar identities, portrait presentation, abilities, and card-signature profiles.
+
+#![enable(implicit_some)]
 [
-  DreamAvatarDefinition(
-    // Stable identity referenced by Dreamscapes, tides, tutorials, and saved journeys.
-    id: "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+  AvatarDefinition(
     name: "Drusus Calvus",
+    id: "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+    ability_text: ["At the start of your first turn, gain 1●."],
     title: "Triumphator",
-    // Player-facing battle ability text.
-    ability_text: "At the start of your first turn, gain 1●.",
-    portrait: (
-      // Four-digit portrait asset number; leading zeroes are added by compatibility lowering.
-      image: 83,
-      // Normalized head center in the 1024×1536 portrait canvas.
-      focus: (x: 0.5, y: 0.14),
-    ),
+    portrait: (image: 83, focus: (x: 0.5, y: 0.14)),
   ),
 
-  DreamAvatarDefinition(
-    id: "b99936ca-97f9-4930-af5a-fa9ef92557ef",
+  AvatarDefinition(
     name: "Threxan",
+    id: "b99936ca-97f9-4930-af5a-fa9ef92557ef",
+    ability_text: ["At the start of your first turn, draw a card."],
     title: "the Resounding Wrath",
-    ability_text: "At the start of your first turn, draw a card.",
     portrait: (image: 25, focus: (x: 0.5, y: 0.2)),
   ),
 
-  DreamAvatarDefinition(
-    id: "f0f5449e-01c2-4635-bce1-76b179fc2108",
+  AvatarDefinition(
     name: "Vethran",
+    id: "f0f5449e-01c2-4635-bce1-76b179fc2108",
+    ability_text: ["3●, X●, ☾: Discover a card with cost X●."],
     title: "Whisperer of Wraiths",
-    ability_text: "3●, X●, ☾: Discover a card with cost X●.",
     portrait: (image: 73, focus: (x: 0.5, y: 0.17)),
   ),
 
-  DreamAvatarDefinition(
-    id: "c72cfd7b-408b-47f6-adf1-1e486a7e20d3",
+  AvatarDefinition(
     name: "Seld Rakor",
+    id: "c72cfd7b-408b-47f6-adf1-1e486a7e20d3",
+    ability_text: [
+      "At the start of your turn, if there are 3 or more cards in your void, foresee 1.",
+    ],
     title: "Standing Orders",
-    ability_text: "At the start of your turn, if there are 3 or more cards in your void, foresee 1.",
     portrait: (image: 71, focus: (x: 0.5, y: 0.183)),
   ),
 
-  DreamAvatarDefinition(
-    id: "b9bf6d4b-907c-4750-b51c-811aff29de59",
+  AvatarDefinition(
     name: "Ossian",
+    id: "b9bf6d4b-907c-4750-b51c-811aff29de59",
+    ability_text: ["2●, ☾, Abandon a character with 1✦: Draw a card."],
     title: "the Reckoning Blade",
-    ability_text: "2●, ☾, Abandon a character with 1✦: Draw a card.",
     portrait: (image: 22, focus: (x: 0.54, y: 0.281)),
   ),
 
-  DreamAvatarDefinition(
-    id: "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+  AvatarDefinition(
     name: "Kaleth",
+    id: "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+    ability_text: ["2●, ☾: Awaken a character you control."],
     title: "The Dreaming",
-    ability_text: "2●, ☾: Awaken a character you control.",
     portrait: (image: 26, focus: (x: 0.5, y: 0.206)),
   ),
 
-  DreamAvatarDefinition(
-    id: "8a2fcd65-bba7-459c-a6b0-f0391b9293fd",
+  AvatarDefinition(
     name: "Calloway Flint",
+    id: "8a2fcd65-bba7-459c-a6b0-f0391b9293fd",
+    ability_text: ["❖❖ – 4●, ☾: Draw a card."],
     title: "Cutthroat Admiral",
-    ability_text: "❖❖ – 4●, ☾: Draw a card.",
     portrait: (image: 52, focus: (x: 0.5, y: 0.256)),
   ),
 
-  DreamAvatarDefinition(
-    id: "1cc5a88a-134f-42f7-a0ae-95ace44b3745",
+  AvatarDefinition(
     name: "Senemhet",
+    id: "1cc5a88a-134f-42f7-a0ae-95ace44b3745",
+    ability_text: ["▸Dawn: If you have 5●, gain 1●."],
     title: "Lord of the Radiant Court",
-    ability_text: "▸Dawn: If you have 5●, gain 1●.",
     portrait: (image: 35, focus: (x: 0.5, y: 0.237)),
   ),
 
-  DreamAvatarDefinition(
-    id: "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
+  AvatarDefinition(
     name: "Karev Soltis",
+    id: "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
+    ability_text: [
+      "Once per turn, when the opponent scores ⍟, draw a card unless the opponent pays 1●.",
+    ],
     title: "Breach Respondent",
-    ability_text: "Once per turn, when the opponent scores ⍟, draw a card unless the opponent pays 1●.",
     portrait: (image: 37, focus: (x: 0.5, y: 0.198)),
   ),
 
-  DreamAvatarDefinition(
-    id: "ba973428-6d90-4847-b779-cb7e25a5ac84",
+  AvatarDefinition(
     name: "Tessa",
+    id: "ba973428-6d90-4847-b779-cb7e25a5ac84",
+    ability_text: ["When you play your second card in a turn, draw a card, then discard a card."],
     title: "Gleaner of Dust",
-    ability_text: "When you play your second card in a turn, draw a card, then discard a card.",
     portrait: (image: 51, focus: (x: 0.491, y: 0.196)),
   ),
 
-  DreamAvatarDefinition(
-    id: "9e19b3d1-12f2-43c1-9cb1-08de7cd32e32",
+  AvatarDefinition(
     name: "Serenath Veyl",
+    id: "9e19b3d1-12f2-43c1-9cb1-08de7cd32e32",
+    ability_text: ["1●, ☾: If you materialized a figment this turn, draw a card."],
     title: "Cantor of the Unreal",
-    ability_text: "1●, ☾: If you materialized a figment this turn, draw a card.",
     portrait: (image: 98, focus: (x: 0.53, y: 0.177)),
   ),
 
-  DreamAvatarDefinition(
-    id: "6029be40-75b9-4c07-912f-9718b6c5c747",
+  AvatarDefinition(
     name: "Korrax",
+    id: "6029be40-75b9-4c07-912f-9718b6c5c747",
+    ability_text: ["▸Night: Give a character you control +1✦."],
     title: "Iron Sovereign",
-    ability_text: "▸Night: Give a character you control +1✦.",
     portrait: (image: 3, focus: (x: 0.5, y: 0.2)),
   ),
 
-  DreamAvatarDefinition(
-    id: "133e22dd-f81b-406d-b4e3-98c346d7fd4e",
+  AvatarDefinition(
     name: "Kell Tarn",
+    id: "133e22dd-f81b-406d-b4e3-98c346d7fd4e",
+    ability_text: [
+      "Once per turn, if there are 7 or more cards in your void, you may play a character from your void.",
+    ],
     title: "Wreckoner",
-    ability_text: "Once per turn, if there are 7 or more cards in your void, you may play a character from your void.",
     portrait: (image: 13, focus: (x: 0.5, y: 0.209)),
-    signature: DerivedFromMtgArchetype(
-      // Design reference used to derive this avatar’s representative card set.
-      mtg_archetype: "Lurrus of the Dream-Den",
-      card_ids: [
-        "4644db03-fbcd-4af5-a229-17962ce093d5",
-        "cd4d689d-1442-4a19-8e6a-182b425d066d",
-        "ea118471-164b-4d7f-bb02-044c862ed07e",
-        "7f90d17b-9146-4550-a372-a9d77e814ce6",
-        "23a7aca4-3c64-4963-a9a0-d3638822df48",
-        "ffec9fdd-d948-4756-b7df-39b9e982613e",
-      ],
-    ),
+    signature_card_ids: [
+      "4644db03-fbcd-4af5-a229-17962ce093d5",
+      "cd4d689d-1442-4a19-8e6a-182b425d066d",
+      "ea118471-164b-4d7f-bb02-044c862ed07e",
+      "7f90d17b-9146-4550-a372-a9d77e814ce6",
+      "23a7aca4-3c64-4963-a9a0-d3638822df48",
+      "ffec9fdd-d948-4756-b7df-39b9e982613e",
+    ],
   ),
 
-  DreamAvatarDefinition(
-    id: "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4",
+  AvatarDefinition(
     name: "Caedryn",
+    id: "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4",
+    ability_text: [
+      "2●, ☾, Abandon a character: Materialize a random character with cost 1● higher from your deck.",
+    ],
     title: "Shrouded Inquisitor",
-    ability_text: "2●, ☾, Abandon a character: Materialize a random character with cost 1● higher from your deck.",
     portrait: (image: 112, focus: (x: 0.55, y: 0.2)),
-    signature: DerivedFromMtgArchetype(
-      mtg_archetype: "Viscera Seer",
-      card_ids: [
-        "4644db03-fbcd-4af5-a229-17962ce093d5",
-        "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa",
-        "4eb42989-7498-4995-a3ab-89eb026b0c13",
-        "6b739127-1a23-4c5d-877a-8829dd7a8b8c",
-        "2e8571c0-4faf-4e7a-a702-26952d2035ee",
-      ],
-    ),
+    signature_card_ids: [
+      "4644db03-fbcd-4af5-a229-17962ce093d5",
+      "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa",
+      "4eb42989-7498-4995-a3ab-89eb026b0c13",
+      "6b739127-1a23-4c5d-877a-8829dd7a8b8c",
+      "2e8571c0-4faf-4e7a-a702-26952d2035ee",
+    ],
   ),
 
-  DreamAvatarDefinition(
-    id: "16b579fe-c15b-4df6-8262-d45ce44732ae",
+  AvatarDefinition(
     name: "Kragg",
+    id: "16b579fe-c15b-4df6-8262-d45ce44732ae",
+    ability_text: [
+      "Once per turn, when you abandon a character, the next character you play this turn costs 2● less.",
+    ],
     title: "Spent-Blood Chieftain",
-    ability_text: "Once per turn, when you abandon a character, the next character you play this turn costs 2● less.",
     portrait: (image: 64, focus: (x: 0.51, y: 0.2)),
-    signature: DerivedFromMtgArchetype(
-      mtg_archetype: "Phyrexian Altar",
-      card_ids: [
-        "cf173b05-7bf2-465b-91e2-41f213c536d1",
-        "9adbe3db-d872-4b75-92b5-d7f2798c22ce",
-        "f95cae7b-6502-4dbe-ae26-16853959d9a3",
-        "680abf68-d7bb-47cf-885a-d808dc0a8e09",
-        "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b",
-        "85251f03-c873-46d8-81be-ab421c901a53",
-      ],
-    ),
+    signature_card_ids: [
+      "cf173b05-7bf2-465b-91e2-41f213c536d1",
+      "9adbe3db-d872-4b75-92b5-d7f2798c22ce",
+      "f95cae7b-6502-4dbe-ae26-16853959d9a3",
+      "680abf68-d7bb-47cf-885a-d808dc0a8e09",
+      "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b",
+      "85251f03-c873-46d8-81be-ab421c901a53",
+    ],
   ),
 
-  DreamAvatarDefinition(
-    id: "86026206-1b11-4f38-a24e-fd3c697f5353",
+  AvatarDefinition(
     name: "Vrakmoth",
+    id: "86026206-1b11-4f38-a24e-fd3c697f5353",
+    ability_text: ["Once per turn, when you discard a card, draw a card with ephemeral."],
     title: "Ashbroker",
-    ability_text: "Once per turn, when you discard a card, draw a card with ephemeral.",
     portrait: (image: 87, focus: (x: 0.49, y: 0.18)),
-    signature: DerivedFromMtgArchetype(
-      mtg_archetype: "Inti, Seneschal of the Sun",
-      card_ids: [
-        "6d6ce556-60df-486f-b2d8-5df168a6f75e",
-        "5a27e236-86d7-442f-81d2-fb29a2b7f12a",
-        "3a4ee059-4b6a-4a85-b3b8-a472834ea843",
-        "31501d09-5dde-44f4-a938-7ca95ad988a0",
-        "4fe9f53e-149a-4b9f-8fac-f75560c986f2",
-        "e455225f-c444-44a2-8796-805cae2b755f",
-        "29c4c45d-33df-42ac-bf28-387eb00264aa",
-        "6fa9c440-3912-4b1e-868c-840ae772fe1c",
-      ],
-    ),
+    signature_card_ids: [
+      "6d6ce556-60df-486f-b2d8-5df168a6f75e",
+      "5a27e236-86d7-442f-81d2-fb29a2b7f12a",
+      "3a4ee059-4b6a-4a85-b3b8-a472834ea843",
+      "31501d09-5dde-44f4-a938-7ca95ad988a0",
+      "4fe9f53e-149a-4b9f-8fac-f75560c986f2",
+      "e455225f-c444-44a2-8796-805cae2b755f",
+      "29c4c45d-33df-42ac-bf28-387eb00264aa",
+      "6fa9c440-3912-4b1e-868c-840ae772fe1c",
+    ],
   ),
 
-  DreamAvatarDefinition(
-    id: "6488452d-4e9e-466c-96df-716d4ec646b1",
+  AvatarDefinition(
     name: "Seraveth",
+    id: "6488452d-4e9e-466c-96df-716d4ec646b1",
+    ability_text: [
+      "When you play your second character in a turn, a character in your void gains reclaim 2● until end of turn.",
+    ],
     title: "Twice-Mourned",
-    ability_text: "When you play your second character in a turn, a character in your void gains reclaim 2● until end of turn.",
     portrait: (image: 17, focus: (x: 0.479, y: 0.239)),
-    signature: DerivedFromMtgArchetype(
-      mtg_archetype: "Vengevine",
-      card_ids: [
-        "06a4709d-fbef-4ea2-aa5e-caa2beac80ab",
-        "01298848-1ebb-48a1-b00b-d7e0af890870",
-        "f3985df4-0867-4fd6-8312-6b358dc26883",
-        "cd7ff671-2317-4a54-b9da-acfefb90e6b0",
-        "c36e67ab-fbee-4d83-b57b-34d34f60e17c",
-        "f95cae7b-6502-4dbe-ae26-16853959d9a3",
-      ],
-    ),
+    signature_card_ids: [
+      "06a4709d-fbef-4ea2-aa5e-caa2beac80ab",
+      "01298848-1ebb-48a1-b00b-d7e0af890870",
+      "f3985df4-0867-4fd6-8312-6b358dc26883",
+      "cd7ff671-2317-4a54-b9da-acfefb90e6b0",
+      "c36e67ab-fbee-4d83-b57b-34d34f60e17c",
+      "f95cae7b-6502-4dbe-ae26-16853959d9a3",
+    ],
   ),
 
-  DreamAvatarDefinition(
-    id: "b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e",
+  AvatarDefinition(
     name: "Corvath",
+    id: "b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e",
+    ability_text: ["Once per turn, when you discard a card, it gains reclaim until end of turn."],
     title: "the Salvage-Born",
-    ability_text: "Once per turn, when you discard a card, it gains reclaim until end of turn.",
     portrait: (image: 44, focus: (x: 0.5, y: 0.179)),
-    signature: DerivedFromMtgArchetype(
-      mtg_archetype: "Containment Construct",
-      card_ids: [
-        "ed4d5342-0690-40b7-ab48-6b76035466f2",
-        "b4838d67-f055-4fd3-a64d-0a4d2b6678cc",
-        "79b37916-c05d-4818-9d67-3b90e340926e",
-        "650b2ed4-f016-46c0-815a-f53fffe08a9a",
-        "770b21e4-ea6a-4910-8fca-2ec5b8813da1",
-        "af739e3d-bc61-4fab-bf81-a22e78d7e524",
-      ],
-    ),
+    signature_card_ids: [
+      "ed4d5342-0690-40b7-ab48-6b76035466f2",
+      "b4838d67-f055-4fd3-a64d-0a4d2b6678cc",
+      "79b37916-c05d-4818-9d67-3b90e340926e",
+      "650b2ed4-f016-46c0-815a-f53fffe08a9a",
+      "770b21e4-ea6a-4910-8fca-2ec5b8813da1",
+      "af739e3d-bc61-4fab-bf81-a22e78d7e524",
+    ],
   ),
 
-  DreamAvatarDefinition(
-    id: "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+  AvatarDefinition(
     name: "Kael Voss",
+    id: "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+    ability_text: ["2●, ☾, Discard a card: Materialize a 1✦ survivor figment."],
     title: "Recon Commander",
-    ability_text: "2●, ☾, Discard a card: Materialize a 1✦ survivor figment.",
     portrait: (image: 7, focus: (x: 0.5, y: 0.164)),
-    signature: DerivedFromMtgArchetype(
-      mtg_archetype: "Zombie Infestation",
-      card_ids: [
-        "9495f501-f627-4b74-a848-b3d928641229",
-        "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa",
-        "5a747998-7219-4e23-be42-b8cb3be12348",
-        "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15",
-        "831bc7cf-e8c9-4943-8156-91b7397ef849",
-        "3e802ecd-a83b-491b-9528-a4672d0e986f",
-      ],
-    ),
+    signature_card_ids: [
+      "9495f501-f627-4b74-a848-b3d928641229",
+      "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa",
+      "5a747998-7219-4e23-be42-b8cb3be12348",
+      "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15",
+      "831bc7cf-e8c9-4943-8156-91b7397ef849",
+      "3e802ecd-a83b-491b-9528-a4672d0e986f",
+    ],
   ),
 
-  DreamAvatarDefinition(
-    id: "60bd584b-5bc8-4ee7-8a98-cbb304eb71ab",
+  AvatarDefinition(
     name: "Vaela",
+    id: "60bd584b-5bc8-4ee7-8a98-cbb304eb71ab",
+    ability_text: ["When a card leaves your void, a random card in your void gains reclaim."],
     title: "Ember Among Remnants",
-    ability_text: "When a card leaves your void, a random card in your void gains reclaim.",
     portrait: (image: 28, focus: (x: 0.508, y: 0.193)),
-    signature: DerivedFromMtgArchetype(
-      mtg_archetype: "Cryptbreaker",
-      card_ids: [
-        "4e1c0192-2649-489f-aad3-75ff2887c0a7",
-        "4733876a-d6b1-48d2-b322-5f71aee9f3d6",
-        "f68774ce-0e94-489f-90a5-68e03a549ff6",
-        "ffec9fdd-d948-4756-b7df-39b9e982613e",
-        "bedee263-27b9-4d73-ab77-6b5c747dff69",
-        "16d2e85d-f940-43dd-9867-784b3a5ec5d7",
-      ],
-    ),
+    signature_card_ids: [
+      "4e1c0192-2649-489f-aad3-75ff2887c0a7",
+      "4733876a-d6b1-48d2-b322-5f71aee9f3d6",
+      "f68774ce-0e94-489f-90a5-68e03a549ff6",
+      "ffec9fdd-d948-4756-b7df-39b9e982613e",
+      "bedee263-27b9-4d73-ab77-6b5c747dff69",
+      "16d2e85d-f940-43dd-9867-784b3a5ec5d7",
+    ],
   ),
 
-  DreamAvatarDefinition(
-    id: "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+  AvatarDefinition(
     name: "Edran",
+    id: "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+    ability_text: ["❖ – 4●, ☾: Materialize a 1✦ outsider figment."],
     title: "the Invocant",
-    ability_text: "❖ – 4●, ☾: Materialize a 1✦ outsider figment.",
     portrait: (image: 80, focus: (x: 0.55, y: 0.276)),
-    signature: Curated(
-      // Hand-selected representative cards for this avatar’s play pattern.
-      card_ids: [
-        "954e8d50-d494-4fb2-b4c7-74979083b774",
-        "4f29a241-9265-4669-a189-5a2a91923e12",
-        "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
-      ],
-    ),
+    signature_card_ids: [
+      "954e8d50-d494-4fb2-b4c7-74979083b774",
+      "4f29a241-9265-4669-a189-5a2a91923e12",
+      "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+    ],
   ),
 
-  DreamAvatarDefinition(
-    id: "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+  AvatarDefinition(
     name: "Zeva",
+    id: "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+    ability_text: [
+      "❖❖ – 2●, ☾, Discard a card: An event in your void gains reclaim until end of turn.",
+    ],
     title: "the Dredger",
-    ability_text: "❖❖ – 2●, ☾, Discard a card: An event in your void gains reclaim until end of turn.",
     portrait: (image: 5, focus: (x: 0.487, y: 0.193)),
-    signature: DerivedFromMtgArchetype(
-      mtg_archetype: "Snapcaster Mage",
-      card_ids: [
-        "954e8d50-d494-4fb2-b4c7-74979083b774",
-        "8cb543d7-e70b-4526-b473-bb17dcaee2a7",
-        "87aba308-00b4-40d8-a46f-4e6f58a664a8",
-        "3b5f5686-f63b-4998-b713-2f6777ecbb5f",
-        "8e003d04-e489-4c55-9c72-fc5612909d07",
-        "99101fce-f2b4-4032-b999-317ce3e4a6dd",
-      ],
-    ),
+    signature_card_ids: [
+      "954e8d50-d494-4fb2-b4c7-74979083b774",
+      "8cb543d7-e70b-4526-b473-bb17dcaee2a7",
+      "87aba308-00b4-40d8-a46f-4e6f58a664a8",
+      "3b5f5686-f63b-4998-b713-2f6777ecbb5f",
+      "8e003d04-e489-4c55-9c72-fc5612909d07",
+      "99101fce-f2b4-4032-b999-317ce3e4a6dd",
+    ],
   ),
 
-  DreamAvatarDefinition(
-    id: "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+  AvatarDefinition(
     name: "Kasane",
+    id: "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+    ability_text: ["4●, ☾: Copy the next event you play this turn."],
     title: "Wearer of the Stolen Face",
-    ability_text: "4●, ☾: Copy the next event you play this turn.",
     portrait: (image: 60, focus: (x: 0.513, y: 0.223)),
-    signature: DerivedFromMtgArchetype(
-      mtg_archetype: "Bonus Round",
-      card_ids: [
-        "4d4618bd-4779-4953-b446-dab05e1da5db",
-        "4752fc43-6696-4bc3-88d0-4d5b97622fa8",
-        "2690912e-0295-4d12-a603-5946d37902d3",
-        "120ea441-f6ff-434b-973c-bde459f65368",
-        "c430ed7b-523e-4580-9a53-d43d11265633",
-      ],
-    ),
+    signature_card_ids: [
+      "4d4618bd-4779-4953-b446-dab05e1da5db",
+      "4752fc43-6696-4bc3-88d0-4d5b97622fa8",
+      "2690912e-0295-4d12-a603-5946d37902d3",
+      "120ea441-f6ff-434b-973c-bde459f65368",
+      "c430ed7b-523e-4580-9a53-d43d11265633",
+    ],
   ),
 
-  DreamAvatarDefinition(
-    id: "84e7020c-7384-4cc3-a20f-ab05f03cc375",
+  AvatarDefinition(
     name: "Rael",
+    id: "84e7020c-7384-4cc3-a20f-ab05f03cc375",
+    ability_text: ["When you play your second event in a turn, foresee 2."],
     title: "Chain Accelerant",
-    ability_text: "When you play your second event in a turn, foresee 2.",
     portrait: (image: 106, focus: (x: 0.515, y: 0.201)),
-    signature: DerivedFromMtgArchetype(
-      mtg_archetype: "Dragon's Rage Channeler",
-      card_ids: [
-        "6fa9c440-3912-4b1e-868c-840ae772fe1c",
-        "c11eb833-a45b-4983-949d-848039d0504c",
-        "9a18d375-1b6d-4df4-95ec-c7c5c3f36379",
-        "b6d1df72-d989-4689-a599-4490a0c2568d",
-        "027ae231-6569-49bb-866f-7c36ec794a11",
-      ],
-    ),
+    signature_card_ids: [
+      "6fa9c440-3912-4b1e-868c-840ae772fe1c",
+      "c11eb833-a45b-4983-949d-848039d0504c",
+      "9a18d375-1b6d-4df4-95ec-c7c5c3f36379",
+      "b6d1df72-d989-4689-a599-4490a0c2568d",
+      "027ae231-6569-49bb-866f-7c36ec794a11",
+    ],
   ),
 
-  DreamAvatarDefinition(
-    id: "f6208407-c4e9-42ac-b533-346704f5e39e",
+  AvatarDefinition(
     name: "Ovanel",
+    id: "f6208407-c4e9-42ac-b533-346704f5e39e",
+    ability_text: ["2●, ☾: If you played an event this turn, draw an event."],
     title: "Lector of the Receding Rite",
-    ability_text: "2●, ☾: If you played an event this turn, draw an event.",
     portrait: (image: 78, focus: (x: 0.5, y: 0.162)),
-    signature: DerivedFromMtgArchetype(
-      mtg_archetype: "Young Pyromancer",
-      card_ids: [
-        "3811a0a2-66af-4c06-b179-948dfa9b2ee3",
-        "95711262-8510-475c-a572-c1cd144d54cb",
-        "006e2f95-59a2-4cda-a777-e64f4aa31060",
-        "18979c10-39b8-42fb-ac1d-dd784da498d1",
-      ],
-    ),
+    signature_card_ids: [
+      "3811a0a2-66af-4c06-b179-948dfa9b2ee3",
+      "95711262-8510-475c-a572-c1cd144d54cb",
+      "006e2f95-59a2-4cda-a777-e64f4aa31060",
+      "18979c10-39b8-42fb-ac1d-dd784da498d1",
+    ],
   ),
 
-  DreamAvatarDefinition(
-    id: "fe2510d9-bfee-4c35-97f9-30e0cd2e2851",
+  AvatarDefinition(
     name: "Yveth Coravel",
+    id: "fe2510d9-bfee-4c35-97f9-30e0cd2e2851",
+    ability_text: ["2●, ☾: Return a character you control to hand. Its cost is reduced by 1●."],
     title: "Scion of the Returning Tide",
-    ability_text: "2●, ☾: Return a character you control to hand. Its cost is reduced by 1●.",
     portrait: (image: 84, focus: (x: 0.503, y: 0.201)),
-    signature: Curated(
-      card_ids: [
-        "caaee8a9-0c22-41b4-950f-4c1131b98221",
-        "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5",
-        "b4754e5a-29e6-418c-bdfa-8e0230a21b7b",
-        "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5",
-        "eed92573-8052-494c-adae-9838de5375a1",
-      ],
-    ),
+    signature_card_ids: [
+      "caaee8a9-0c22-41b4-950f-4c1131b98221",
+      "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5",
+      "b4754e5a-29e6-418c-bdfa-8e0230a21b7b",
+      "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5",
+      "eed92573-8052-494c-adae-9838de5375a1",
+    ],
   ),
 
-  DreamAvatarDefinition(
-    id: "94e7c651-25e9-4a62-9de4-eaf5ba20542c",
+  AvatarDefinition(
     name: "Grath",
+    id: "94e7c651-25e9-4a62-9de4-eaf5ba20542c",
+    ability_text: ["4●, ☾: Gain 1● for each spirit animal you control."],
     title: "Packmaster",
-    ability_text: "4●, ☾: Gain 1● for each spirit animal you control.",
     portrait: (image: 95, focus: (x: 0.51, y: 0.169)),
-    signature: DerivedFromMtgArchetype(
-      mtg_archetype: "Priest of Titania",
-      card_ids: [
-        "61060827-8bed-4b63-b63d-6c3b0536e941",
-        "c8579b20-95ff-4b1d-b4c6-6bd049fc4760",
-        "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6",
-        "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5",
-        "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a",
-        "a36898f6-707e-4b28-89dc-ec896f484203",
-      ],
-    ),
+    signature_card_ids: [
+      "61060827-8bed-4b63-b63d-6c3b0536e941",
+      "c8579b20-95ff-4b1d-b4c6-6bd049fc4760",
+      "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6",
+      "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5",
+      "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a",
+      "a36898f6-707e-4b28-89dc-ec896f484203",
+    ],
   ),
 
-  DreamAvatarDefinition(
-    id: "3ebaba62-9000-429d-b203-2a5a9724389a",
+  AvatarDefinition(
     name: "Radulf",
+    id: "3ebaba62-9000-429d-b203-2a5a9724389a",
+    ability_text: [
+      "If you control 3 or more characters, the first character you play each turn costs 1● less.",
+    ],
     title: "Hegemon of Shattered Thrones",
-    ability_text: "If you control 3 or more characters, the first character you play each turn costs 1● less.",
     portrait: (image: 45, focus: (x: 0.5, y: 0.173)),
-    signature: DerivedFromMtgArchetype(
-      mtg_archetype: "Aluren",
-      card_ids: [
-        "f38ab9b6-bea7-4c6e-b5db-2609796ba46b",
-        "d30bd488-f921-49cb-a44f-353c54cb6548",
-        "caaee8a9-0c22-41b4-950f-4c1131b98221",
-        "de946f5a-1e27-4d40-ae44-9ef8cc041949",
-        "33cf7dca-d8d2-42b7-854a-b3f503b03488",
-      ],
-    ),
+    signature_card_ids: [
+      "f38ab9b6-bea7-4c6e-b5db-2609796ba46b",
+      "d30bd488-f921-49cb-a44f-353c54cb6548",
+      "caaee8a9-0c22-41b4-950f-4c1131b98221",
+      "de946f5a-1e27-4d40-ae44-9ef8cc041949",
+      "33cf7dca-d8d2-42b7-854a-b3f503b03488",
+    ],
   ),
 
-  DreamAvatarDefinition(
-    id: "2c53b1b9-9291-4bba-8d3a-f40b545c8f3c",
+  AvatarDefinition(
     name: "Demetrios",
+    id: "2c53b1b9-9291-4bba-8d3a-f40b545c8f3c",
+    ability_text: ["When you play your second character in a turn, draw a card with ephemeral."],
     title: "Strategos of the Phalanx",
-    ability_text: "When you play your second character in a turn, draw a card with ephemeral.",
     portrait: (image: 100, focus: (x: 0.539, y: 0.211)),
-    signature: DerivedFromMtgArchetype(
-      mtg_archetype: "Glimpse of Nature",
-      card_ids: [
-        "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a",
-        "7992dbb5-ca45-4066-aca3-ff1d6d87619e",
-        "61060827-8bed-4b63-b63d-6c3b0536e941",
-        "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277",
-        "d30bd488-f921-49cb-a44f-353c54cb6548",
-      ],
-    ),
+    signature_card_ids: [
+      "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a",
+      "7992dbb5-ca45-4066-aca3-ff1d6d87619e",
+      "61060827-8bed-4b63-b63d-6c3b0536e941",
+      "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277",
+      "d30bd488-f921-49cb-a44f-353c54cb6548",
+    ],
   ),
 
-  DreamAvatarDefinition(
-    id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+  AvatarDefinition(
     name: "Eldrik",
+    id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+    ability_text: ["The first warrior you play each turn costs 1● less."],
     title: "The Clan-Caller",
-    ability_text: "The first warrior you play each turn costs 1● less.",
     portrait: (image: 108, focus: (x: 0.58, y: 0.233)),
-    signature: DerivedFromMtgArchetype(
-      mtg_archetype: "Urza, Lord High Artificer",
-      card_ids: [
-        "41044897-b70a-4e2b-8eb6-baf843a14a43",
-        "a9b5afaa-e149-4bf4-9007-077e8e9f12e6",
-        "b977afaf-f583-45ec-8e34-99fbfa4e9190",
-        "90a6a7a0-b739-475e-8379-647741aab423",
-        "8c117d3f-09af-4312-9897-694a76bd23c6",
-        "57bb1572-6075-4efd-a592-102b134132fd",
-      ],
-    ),
+    signature_card_ids: [
+      "41044897-b70a-4e2b-8eb6-baf843a14a43",
+      "a9b5afaa-e149-4bf4-9007-077e8e9f12e6",
+      "b977afaf-f583-45ec-8e34-99fbfa4e9190",
+      "90a6a7a0-b739-475e-8379-647741aab423",
+      "8c117d3f-09af-4312-9897-694a76bd23c6",
+      "57bb1572-6075-4efd-a592-102b134132fd",
+    ],
   ),
 
-  DreamAvatarDefinition(
-    id: "bf72adff-7d74-4be8-9b93-1db7ba13a1db",
+  AvatarDefinition(
     name: "Tensho",
+    id: "bf72adff-7d74-4be8-9b93-1db7ba13a1db",
+    ability_text: [
+      "2●, ☾: Materialize a 0✦ figment copy of the last warrior you played this turn.",
+    ],
     title: "Daimyo of Lacquered Fury",
-    ability_text: "2●, ☾: Materialize a 0✦ figment copy of the last warrior you played this turn.",
     portrait: (image: 29, focus: (x: 0.5, y: 0.22)),
-    signature: DerivedFromMtgArchetype(
-      mtg_archetype: "Mishra's Workshop",
-      card_ids: [
-        "426825c7-7259-41af-ac1c-c042b878d69b",
-        "81074582-dfb3-497c-8c04-f97a24d6b1d4",
-        "8c117d3f-09af-4312-9897-694a76bd23c6",
-        "4b2f044c-0afe-432a-a121-2ea785bb1182",
-        "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
-      ],
-    ),
+    signature_card_ids: [
+      "426825c7-7259-41af-ac1c-c042b878d69b",
+      "81074582-dfb3-497c-8c04-f97a24d6b1d4",
+      "8c117d3f-09af-4312-9897-694a76bd23c6",
+      "4b2f044c-0afe-432a-a121-2ea785bb1182",
+      "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+    ],
   ),
 
-  DreamAvatarDefinition(
-    id: "91d4c3b5-fd63-480b-9ed5-979109a227bb",
+  AvatarDefinition(
     name: "Valdren",
+    id: "91d4c3b5-fd63-480b-9ed5-979109a227bb",
+    ability_text: ["2●, ☾: A warrior in your void gains reclaim until end of turn."],
     title: "Warhost Exemplar",
-    ability_text: "2●, ☾: A warrior in your void gains reclaim until end of turn.",
     portrait: (image: 56, focus: (x: 0.5, y: 0.228)),
-    signature: DerivedFromMtgArchetype(
-      mtg_archetype: "Emry, Lurker of the Loch",
-      card_ids: [
-        "b977afaf-f583-45ec-8e34-99fbfa4e9190",
-        "90a6a7a0-b739-475e-8379-647741aab423",
-        "6497d8b1-85b8-486d-99e2-5c141486d508",
-        "1b4d2adc-64ab-4020-bae6-b35321898bf0",
-        "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c",
-        "b64f0beb-6ba4-4559-b6ab-091c2f60a613",
-        "66959155-9e79-459e-afdb-eb4c0fbdeb11",
-      ],
-    ),
+    signature_card_ids: [
+      "b977afaf-f583-45ec-8e34-99fbfa4e9190",
+      "90a6a7a0-b739-475e-8379-647741aab423",
+      "6497d8b1-85b8-486d-99e2-5c141486d508",
+      "1b4d2adc-64ab-4020-bae6-b35321898bf0",
+      "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c",
+      "b64f0beb-6ba4-4559-b6ab-091c2f60a613",
+      "66959155-9e79-459e-afdb-eb4c0fbdeb11",
+    ],
   ),
 ]
