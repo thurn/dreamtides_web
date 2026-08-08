@@ -15,6 +15,7 @@ use crate::manifest::Manifest;
 use crate::models::cards::{CardDefinition, CardKind, Crop, OrbValue};
 use crate::models::compat::CompatDocument;
 use crate::models::dream_avatars::{self, AvatarDefinition, DreamAvatarId};
+use crate::models::dream_guides::{self, GuideDefinition, GuideId};
 use crate::models::exploration::{
     ActionDefinition, ActionEffect, DynamicValue, EffectKind, ExplorationCatalog, Predicate,
     TemplateInvocation,
@@ -52,6 +53,14 @@ enum EditOperation {
         avatar_id: String,
         field: String,
         value: JsonValue,
+    },
+    SwapDreamGuideHomes {
+        first_guide_id: String,
+        second_guide_id: String,
+    },
+    SwapDreamGuideSpecialties {
+        first_guide_id: String,
+        second_guide_id: String,
     },
     ReplaceAction {
         card_id: String,
@@ -96,9 +105,153 @@ pub fn stage_edit(
     match request.dataset.as_str() {
         "cards" => edit_cards(manifest, staging_root, request.operations),
         "dream-avatars" => edit_dream_avatars(manifest, staging_root, request.operations),
+        "dream-guides" => edit_dream_guides(manifest, staging_root, request.operations),
         "exploration" => edit_exploration(manifest, staging_root, request.operations),
         dataset => edit_compat(manifest, staging_root, dataset, request.operations),
     }
+}
+
+fn edit_dream_guides(
+    manifest: &Manifest,
+    staging_root: &Path,
+    operations: Vec<EditOperation>,
+) -> Result<EditReport> {
+    let dataset = manifest.dataset("dream-guides")?;
+    if dataset.adapter != "dream_guides_v1"
+        || dataset.editor != crate::manifest::EditorCapability::Semantic
+    {
+        bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for dream-guides");
+    }
+    let source_path = staging_root.join(&dataset.source);
+    let original_text = fs::read_to_string(&source_path)
+        .with_context(|| format!("read staged Dream guide source {}", source_path.display()))?;
+    let original: Vec<GuideDefinition> = ron::from_str(&original_text)
+        .context("MALFORMED_SOURCE: staged Dream guide RON is invalid")?;
+    dream_guides::validate(&original)
+        .context("MALFORMED_SOURCE: staged Dream guide catalog is invalid")?;
+    let mut guides = original.clone();
+    let mut source_text = original_text;
+
+    for operation in operations {
+        let (first_id, second_id, field) = match operation {
+            EditOperation::SwapDreamGuideHomes {
+                first_guide_id,
+                second_guide_id,
+            } => (first_guide_id, second_guide_id, "home_dreamscape_id"),
+            EditOperation::SwapDreamGuideSpecialties {
+                first_guide_id,
+                second_guide_id,
+            } => (first_guide_id, second_guide_id, "specialty"),
+            _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to Dream guides"),
+        };
+        let first = unique_dream_guide_index(&guides, &first_id)?;
+        let second = unique_dream_guide_index(&guides, &second_id)?;
+        if first == second {
+            continue;
+        }
+        source_text =
+            swap_dream_guide_source_field(&source_text, &mut guides, first, second, field)?;
+        dream_guides::validate(&guides)
+            .context("INVALID_EDIT: Dream guide swap violates the catalog contract")?;
+    }
+
+    verify_round_trip::<Vec<GuideDefinition>>(&source_text, &guides)?;
+    let changed = guides != original;
+    if changed {
+        atomic_write(&source_path, source_text.as_bytes())?;
+    }
+    Ok(EditReport {
+        ok: true,
+        changed,
+        dataset_id: "dream-guides".into(),
+        source_revision: revision(staging_root, manifest, &["dream-guides"])?,
+    })
+}
+
+fn unique_dream_guide_index(guides: &[GuideDefinition], id: &str) -> Result<usize> {
+    let literal = ron::to_string(id)?;
+    let requested = match ron::from_str::<GuideId>(&literal) {
+        Ok(id) => id,
+        Err(_) => dream_guides::canonical_guide_id(id).context(
+            "INVALID_EDIT: Dream guide identity must be a canonical UUIDv4 or registered compatibility key",
+        )?,
+    };
+    let matches = guides
+        .iter()
+        .enumerate()
+        .filter(|(_, guide)| guide.id == requested)
+        .map(|(index, _)| index)
+        .collect::<Vec<_>>();
+    if matches.is_empty() {
+        bail!("RECORD_NOT_FOUND: Dream guide identity {id}");
+    }
+    if matches.len() > 1 {
+        bail!("MALFORMED_SOURCE: duplicate Dream guide identity {id}");
+    }
+    Ok(matches[0])
+}
+
+fn swap_dream_guide_source_field(
+    source: &str,
+    guides: &mut [GuideDefinition],
+    first: usize,
+    second: usize,
+    field: &str,
+) -> Result<String> {
+    let first_record = typed_record_range(
+        source,
+        "GuideDefinition",
+        "id",
+        &guides[first].id.to_string(),
+    )?;
+    let second_record = typed_record_range(
+        source,
+        "GuideDefinition",
+        "id",
+        &guides[second].id.to_string(),
+    )?;
+    let first_range = top_level_field_value_range(source, first_record, field)?
+        .with_context(|| format!("MALFORMED_SOURCE: Dream guide is missing {field}"))?;
+    let second_range = top_level_field_value_range(source, second_record, field)?
+        .with_context(|| format!("MALFORMED_SOURCE: Dream guide is missing {field}"))?;
+    let first_source = source[first_range.clone()].to_owned();
+    let second_source = source[second_range.clone()].to_owned();
+
+    match field {
+        "home_dreamscape_id" => {
+            let value = guides[first].home_dreamscape_id;
+            guides[first].home_dreamscape_id = guides[second].home_dreamscape_id;
+            guides[second].home_dreamscape_id = value;
+        }
+        "specialty" => {
+            let value = guides[first].specialty.clone();
+            guides[first].specialty = guides[second].specialty.clone();
+            guides[second].specialty = value;
+        }
+        _ => bail!("INVALID_EDIT: unsupported Dream guide source field {field}"),
+    }
+
+    replace_source_ranges(
+        source,
+        vec![(first_range, second_source), (second_range, first_source)],
+    )
+}
+
+fn replace_source_ranges(
+    source: &str,
+    mut replacements: Vec<(Range<usize>, String)>,
+) -> Result<String> {
+    replacements.sort_by_key(|(range, _)| std::cmp::Reverse(range.start));
+    let mut result = source.to_owned();
+    let mut previous_start = source.len();
+    for (range, replacement) in replacements {
+        if range.end > previous_start || range.start > range.end || range.end > source.len() {
+            bail!("MALFORMED_SOURCE: overlapping or invalid RON source replacement");
+        }
+        result.replace_range(range.clone(), &replacement);
+        previous_start = range.start;
+    }
+    Ok(result)
 }
 
 fn edit_compat(
@@ -1734,6 +1887,51 @@ mod tests {
 ]
 "###;
 
+    const DREAM_GUIDE_EDITOR_SOURCE: &str = r###"// Stable Dream guide guidance.
+
+#![enable(implicit_some)]
+[
+  // First guide comment.
+  GuideDefinition(
+    id: "00000000-0000-4000-8000-000000000001",
+    name: r#"Raw Guide"#,
+    home_dreamscape_id: "00000000-0000-4000-8000-000000000101",
+    portrait_source: "one.png",
+    site_dialogue: [r#"Raw dialogue"#],
+    specialty: Shop(description: "Shop copy"),
+  ),
+  GuideDefinition(
+    id: "00000000-0000-4000-8000-000000000002",
+    name: "Nested Guide",
+    home_dreamscape_id: "00000000-0000-4000-8000-000000000102",
+    portrait_source: "two.png",
+    site_dialogue: ["Nested dialogue"],
+    specialty: RandomSite(
+      description: "Random copy",
+      dialogue: ["Random line"],
+    ),
+  ),
+  /* Unrelated guide comment. */
+  GuideDefinition(
+    id: "00000000-0000-4000-8000-000000000003",
+    name: "Unrelated Guide",
+    home_dreamscape_id: "00000000-0000-4000-8000-000000000103",
+    portrait_source: "three.png",
+    site_dialogue: ["Unrelated dialogue"],
+    specialty: Gamble(
+      description: "Gamble copy",
+      dialogue: GambleDialogue(
+        three_gate: ["Three Gate"],
+        ladder_climb: ["Win {win-essence}"],
+        starway_stairs: ["Stairs"],
+        four_suit_reprise: ["Reprise"],
+        blackjack: ["Blackjack"],
+      ),
+    ),
+  ),
+]
+"###;
+
     #[test]
     fn dream_avatar_scalar_patch_changes_one_line_and_preserves_unrelated_source() {
         let mut avatars: Vec<AvatarDefinition> = ron::from_str(DREAM_AVATAR_SOURCE).unwrap();
@@ -1754,6 +1952,80 @@ mod tests {
         assert_eq!(
             ron::from_str::<Vec<AvatarDefinition>>(&patched).unwrap(),
             avatars
+        );
+    }
+
+    #[test]
+    fn dream_guide_home_swap_changes_two_lines_and_preserves_unrelated_source() {
+        let source = DREAM_GUIDE_EDITOR_SOURCE;
+        let mut guides: Vec<GuideDefinition> = ron::from_str(source).unwrap();
+        let unrelated_before = typed_record_range(
+            source,
+            "GuideDefinition",
+            "id",
+            "00000000-0000-4000-8000-000000000003",
+        )
+        .unwrap();
+        let patched =
+            swap_dream_guide_source_field(source, &mut guides, 0, 1, "home_dreamscape_id").unwrap();
+        let changed_lines = source
+            .lines()
+            .zip(patched.lines())
+            .filter(|(before, after)| before != after)
+            .count();
+        assert_eq!(changed_lines, 2);
+        assert!(patched.contains("site_dialogue: [r#\"Raw dialogue\"#]"));
+        assert!(patched.starts_with("// Stable Dream guide guidance.\n"));
+        let unrelated_after = typed_record_range(
+            &patched,
+            "GuideDefinition",
+            "id",
+            "00000000-0000-4000-8000-000000000003",
+        )
+        .unwrap();
+        assert_eq!(
+            &source[unrelated_before], &patched[unrelated_after],
+            "unrelated records must remain byte-identical"
+        );
+        assert_eq!(
+            ron::from_str::<Vec<GuideDefinition>>(&patched).unwrap(),
+            guides
+        );
+    }
+
+    #[test]
+    fn dream_guide_specialty_swap_preserves_nested_source_and_order() {
+        let source = DREAM_GUIDE_EDITOR_SOURCE;
+        let mut guides: Vec<GuideDefinition> = ron::from_str(source).unwrap();
+        let ids_before = guides.iter().map(|guide| guide.id).collect::<Vec<_>>();
+        let patched =
+            swap_dream_guide_source_field(source, &mut guides, 0, 1, "specialty").unwrap();
+        assert!(patched.contains("specialty: RandomSite("));
+        assert!(patched.contains("description: \"Random copy\""));
+        assert!(patched.contains("dialogue: [\"Random line\"]"));
+        assert!(patched.contains("specialty: Shop(description: \"Shop copy\")"));
+        assert_eq!(
+            guides.iter().map(|guide| guide.id).collect::<Vec<_>>(),
+            ids_before
+        );
+        assert_eq!(
+            ron::from_str::<Vec<GuideDefinition>>(&patched).unwrap(),
+            guides
+        );
+    }
+
+    #[test]
+    fn dream_guide_routes_reject_unknown_identities_and_accept_canonical_ids() {
+        let guides: Vec<GuideDefinition> = ron::from_str(DREAM_GUIDE_EDITOR_SOURCE).unwrap();
+        assert_eq!(
+            unique_dream_guide_index(&guides, "00000000-0000-4000-8000-000000000001").unwrap(),
+            0
+        );
+        assert!(
+            unique_dream_guide_index(&guides, "not-a-guide")
+                .unwrap_err()
+                .to_string()
+                .contains("registered compatibility key")
         );
     }
 

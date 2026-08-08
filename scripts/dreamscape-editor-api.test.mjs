@@ -1,15 +1,63 @@
-import { describe, expect, it } from "vitest";
-import { readFileSync } from "node:fs";
+import { EventEmitter } from "node:events";
+import { describe, expect, it, vi } from "vitest";
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   commitFiles,
+  createDreamscapeEditorApiMiddleware,
   generateCatalogArtifacts,
 } from "./dreamscape-editor-api.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 
+async function invokePatch(middleware, body) {
+  const req = new EventEmitter();
+  req.method = "PATCH";
+  req.url = `/api/editor/dreamscapes/${body.id}`;
+  req.setEncoding = vi.fn();
+  const result = new Promise((resolveResult) => {
+    const res = {
+      writeHead(status) {
+        this.status = status;
+      },
+      end(text) {
+        this.body = JSON.parse(text);
+        resolveResult(this);
+      },
+    };
+    void middleware(req, res, vi.fn());
+  });
+  queueMicrotask(() => {
+    req.emit("data", JSON.stringify(body));
+    req.emit("end");
+  });
+  return result;
+}
+
 describe("dreamscape editor atomic catalog writes", () => {
+  it.each(["guide-id", "signature-site"])(
+    "rejects %s writes routed to the legacy Dreamscape endpoint",
+    async (field) => {
+      const rootDir = mkdtempSync(resolve(tmpdir(), "dreamscape-editor-api-"));
+      mkdirSync(resolve(rootDir, "data"));
+      const sourcePath = resolve(rootDir, "data/dreamscapes.toml");
+      writeFileSync(sourcePath, "fixture source\n");
+      const middleware = createDreamscapeEditorApiMiddleware({ rootDir });
+
+      const result = await invokePatch(middleware, {
+        id: "realm_one",
+        field,
+        value: "anything",
+      });
+
+      expect(result.status).toBe(400);
+      expect(result.body.error).toMatchObject({ code: "INVALID_EDIT" });
+      expect(readFileSync(sourcePath, "utf8")).toBe("fixture source\n");
+    },
+  );
+
   it("recompiles the real guide, Dreamscape, Site, and Economy contracts together", () => {
     const artifacts = generateCatalogArtifacts(
       ROOT,

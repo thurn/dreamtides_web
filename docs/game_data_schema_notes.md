@@ -229,22 +229,20 @@ consumers.
 
 ## `data/dream_guides.ron`
 
-### `schema-version = 1`
-
 Dream Guides are the canonical identity and ownership catalog for every
 non-starter dreamscape. Each guide owns one home dreamscape and one signature
 site specialty. Runtime dreamscape guide and signature-site fields are derived
 from these assignments.
 
 Fields:
-  id                  Stable identifier referenced by dreamscapes.
+  id                  Lowercase UUIDv4 identity for the guide.
   name                Player-facing guide name.
-  home-dreamscape-id  The dreamscape this guide calls home.
-  site-type           The SiteType this guide enhances (the home dreamscape's
-                      signature site).
-  portrait-source     Source filename in the external dream-guide art catalog.
-  dialogue            Named dialogue contexts consumed by site presentations.
-  home-specialty      Description of the enhancement granted at the home site.
+  home_dreamscape_id  Lowercase UUIDv4 foreign key for the guide's home.
+  portrait_source     Source filename in the external dream-guide art catalog.
+  site_dialogue       Ordered dialogue used by the guide's site presentation.
+  specialty           Typed specialty variant defining the signature site and
+                      its enhancement description. RandomSite and Gamble carry
+                      their additional dialogue in the variant payload.
 
 ## `data/dreamscapes.ron`
 
@@ -259,7 +257,7 @@ steers its draft and battle content.
 Fields:
   id              Stable identifier referenced by guides and atlas generation.
   name            Player-facing dreamscape name.
-  Guide residency and signature sites are derived from dream_guides.toml.
+  Guide residency and signature sites are derived from `dream_guides.ron`.
   signature-site  Authored only for the starter's fixed Draft identity.
   affiliation-id  Thematic affiliation id steering content (omitted for starter).
   is-starter      Present and true only on the run's opening dreamscape.

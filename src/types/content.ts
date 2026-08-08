@@ -70,7 +70,7 @@ export interface DreamscapeContent {
 
 /**
  * A Dream Guide: the resident character of a non-starter dreamscape, sourced
- * from dream_guides.toml. The guide enhances `siteType` (their home
+ * from the generated Dream Guide catalog. The guide enhances `siteType` (their home
  * dreamscape's signature site); `homeSpecialty` describes that enhancement.
  */
 export interface DreamGuideContent {

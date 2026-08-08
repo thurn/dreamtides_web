@@ -16,8 +16,6 @@ import {
   applyDreamAvatarChanges,
   makeValidateDreamscapeEdit,
   patchDreamscapesToml,
-  patchDreamGuideAssignments,
-  swapDreamGuideSpecialties,
   planDreamAvatarAssignment,
   readAffiliationOptions,
   readDreamAvatarOptions,
@@ -277,18 +275,10 @@ export function generateCatalogArtifacts(
   });
   const dreamscapes = deriveDreamscapesData(sourceDreamscapes, guides);
   const glossary = parse(
-    fileSystem.readFileSync(
-      join(rootDir, "data", "glossary.toml"),
-      "utf8",
-    ),
+    fileSystem.readFileSync(join(rootDir, "data", "glossary.toml"), "utf8"),
   );
   const sites = compileSitesData(
-    parse(
-      fileSystem.readFileSync(
-        join(rootDir, "data", "sites.toml"),
-        "utf8",
-      ),
-    ),
+    parse(fileSystem.readFileSync(join(rootDir, "data", "sites.toml"), "utf8")),
     {
       guides,
       glossaryIds: glossary.entries.map((entry) => entry.id),
@@ -492,6 +482,17 @@ async function handlePatch(
     return;
   }
 
+  if (body.field === "guide-id" || body.field === "signature-site") {
+    errorResponse(
+      res,
+      400,
+      "INVALID_EDIT",
+      "Dream guide assignments must use the Dream guide editor endpoint.",
+      { field: body.field },
+    );
+    return;
+  }
+
   const guideOptions = readDreamGuideOptions({ rootDir });
   const guideIds = guideOptions.map((guide) => guide.id);
   const affiliationIds = readAffiliationOptions({ rootDir }).map(
@@ -537,87 +538,22 @@ async function handlePatch(
   const patchStart = performance.now();
   const source = fileSystem.readFileSync(tomlPath, "utf8");
   const guideSource = fileSystem.readFileSync(guideTomlPath, "utf8");
-  let patchedDreamscapesSource = source;
-  let patchedGuideSource = guideSource;
-  const changesGuideCatalog =
-    body.field === "guide-id" || body.field === "signature-site";
-  if (changesGuideCatalog) {
-    if (beforeDreamscape.isStarter) {
-      errorResponse(
-        res,
-        400,
-        "INVALID_EDIT",
-        "The starter guide and Draft signature are fixed.",
-        {
-          field: body.field,
-          value: validation.value,
-        },
-      );
-      return;
-    }
-    const currentGuide = guideOptions.find(
-      (guide) => guide.homeDreamscapeId === dreamscapeId,
-    );
-    const requestedGuide =
-      body.field === "guide-id"
-        ? guideOptions.find((guide) => guide.id === validation.value)
-        : guideOptions.find((guide) => guide.siteType === validation.value);
-    if (currentGuide === undefined || requestedGuide === undefined) {
-      errorResponse(
-        res,
-        400,
-        "INVALID_EDIT",
-        "The selected guide specialty is not canonical.",
-        {
-          field: body.field,
-          value: validation.value,
-        },
-      );
-      return;
-    }
-    if (currentGuide.id !== requestedGuide.id) {
-      if (body.field === "guide-id") {
-        patchedGuideSource = patchDreamGuideAssignments(guideSource, [
-          {
-            guideId: currentGuide.id,
-            field: "home-dreamscape-id",
-            value: requestedGuide.homeDreamscapeId,
-          },
-          {
-            guideId: requestedGuide.id,
-            field: "home-dreamscape-id",
-            value: currentGuide.homeDreamscapeId,
-          },
-        ]);
-      } else {
-        patchedGuideSource = swapDreamGuideSpecialties(
-          guideSource,
-          currentGuide.id,
-          requestedGuide.id,
-        );
-      }
-    }
-  } else {
-    patchedDreamscapesSource = patchDreamscapesToml(source, {
-      dreamscapeId,
-      field: body.field,
-      value: validation.value,
-      validateEdit,
-    }).source;
-  }
+  const patchedDreamscapesSource = patchDreamscapesToml(source, {
+    dreamscapeId,
+    field: body.field,
+    value: validation.value,
+    validateEdit,
+  }).source;
   const patchMs = elapsedMs(patchStart);
 
   const refreshesJson = dreamscapeTomlPath === DEFAULT_DREAMSCAPE_TOML_PATH;
   const refreshStart = performance.now();
   const writes = [preparedWrite(tomlPath, patchedDreamscapesSource)];
-  if (changesGuideCatalog) {
-    writes.push(preparedWrite(guideTomlPath, patchedGuideSource));
-  }
   if (refreshesJson) {
     const artifacts = generateCatalogArtifacts(
       rootDir,
       patchedDreamscapesSource,
-      patchedGuideSource,
+      guideSource,
       fileSystem,
     );
     writes.push(

@@ -1,10 +1,39 @@
 use std::collections::BTreeSet;
 use std::fmt;
 
-use anyhow::{Result, bail};
+use anyhow::{Context, Result, bail};
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
+
+const LEGACY_GUIDE_ID_MAP: [(&str, &str); 10] = [
+    ("tobias_tanglefur", "4e5067ec-265d-4dba-8fa8-2afbd4fde9ab"),
+    (
+        "amunet_the_tomb_keeper",
+        "113cb023-12df-4b9c-982c-f0c8bba30377",
+    ),
+    ("sigrun", "706a4443-2826-4459-8127-040632cb93fd"),
+    ("durgan_forgehammer", "9890b3c2-74f7-4b4a-bb39-61c2c6d53cbb"),
+    ("deacon_holt", "e0aaa9a6-9038-48b9-8847-63681426190e"),
+    ("master_takeshi", "87e9ae46-57c6-407a-af96-bd5f5323dabc"),
+    ("aldric_the_seer", "232e7de1-b7b9-4631-b6a3-1ab178c7ff9a"),
+    ("maddox", "869a07ae-5532-4a65-abfa-26a89713a82b"),
+    ("gravok", "579eaf53-0643-4cba-9c0c-da04b9c52822"),
+    ("layaway", "078e102a-f235-4794-9bb5-a5c42262782a"),
+];
+
+const LEGACY_DREAMSCAPE_ID_MAP: [(&str, &str); 10] = [
+    ("tumbleleaf_village", "08e11635-9f04-48fd-a9c8-5a9f68c80958"),
+    ("pharaohs_gate", "b25b9906-8380-45bf-9435-678ce18316ea"),
+    ("winterwake_fjords", "7d793d30-8a0f-4f84-a446-cdde502710e8"),
+    ("frostforge", "8e7d0818-ba6a-4dc9-8b3d-a12c62aefa44"),
+    ("hopes_end", "562f9d1f-5bbf-4dc5-9edd-7e8d538a1651"),
+    ("tsukiren", "823dc726-db0f-4367-8442-70600a20ad2e"),
+    ("wilderveil", "f52bdeb1-0db6-44ee-80ea-b99bd18dff7d"),
+    ("rust_expanse", "6f16a1c9-c2fa-494d-9d9d-4da00e011491"),
+    ("farpoint_station", "138eff95-3301-4f76-aeb1-31bf0dc8963d"),
+    ("grid_city", "6c03e9d1-21fe-4c13-b940-2325d308cb14"),
+];
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
@@ -241,15 +270,30 @@ struct CompatibilityDialogue {
 }
 
 pub fn lower(source: Vec<GuideDefinition>) -> Result<toml::Value> {
+    lower_with_maps(source, &LEGACY_GUIDE_ID_MAP, &LEGACY_DREAMSCAPE_ID_MAP)
+}
+
+fn lower_with_maps(
+    source: Vec<GuideDefinition>,
+    guide_ids: &[(&str, &str)],
+    dreamscape_ids: &[(&str, &str)],
+) -> Result<toml::Value> {
     validate(&source)?;
-    let guides = source.into_iter().map(lower_guide).collect();
+    let guides = source
+        .into_iter()
+        .map(|guide| lower_guide(guide, guide_ids, dreamscape_ids))
+        .collect::<Result<Vec<_>>>()?;
     Ok(toml::Value::try_from(CompatibilityCatalog {
         schema_version: 1,
         guides,
     })?)
 }
 
-fn lower_guide(source: GuideDefinition) -> CompatibilityGuide {
+fn lower_guide(
+    source: GuideDefinition,
+    guide_ids: &[(&str, &str)],
+    dreamscape_ids: &[(&str, &str)],
+) -> Result<CompatibilityGuide> {
     let kind = source.specialty.kind();
     let description = source.specialty.description().to_owned();
     let mut dialogue = CompatibilityDialogue {
@@ -279,18 +323,44 @@ fn lower_guide(source: GuideDefinition) -> CompatibilityGuide {
         | GuideSpecialty::Augury { .. }
         | GuideSpecialty::Exploration { .. } => {}
     }
-    CompatibilityGuide {
-        id: source.id.to_string(),
+    Ok(CompatibilityGuide {
+        id: compatibility_id(guide_ids, &source.id.to_string(), "Dream guide")?.to_owned(),
         name: source.name,
-        home_dreamscape_id: source.home_dreamscape_id.to_string(),
+        home_dreamscape_id: compatibility_id(
+            dreamscape_ids,
+            &source.home_dreamscape_id.to_string(),
+            "Dreamscape",
+        )?
+        .to_owned(),
         site_type: kind.compatibility_name(),
         portrait_source: source.portrait_source,
         home_specialty: description,
         dialogue,
-    }
+    })
 }
 
-fn validate(source: &[GuideDefinition]) -> Result<()> {
+pub fn canonical_guide_id(compatibility_id: &str) -> Result<GuideId> {
+    let canonical = LEGACY_GUIDE_ID_MAP
+        .iter()
+        .find_map(|(legacy, canonical)| (*legacy == compatibility_id).then_some(*canonical))
+        .with_context(|| {
+            format!("unknown Dream guide compatibility identifier {compatibility_id}")
+        })?;
+    GuideId::parse(canonical).map_err(anyhow::Error::msg)
+}
+
+fn compatibility_id<'a>(
+    mapping: &'a [(&str, &str)],
+    canonical: &str,
+    label: &str,
+) -> Result<&'a str> {
+    mapping
+        .iter()
+        .find_map(|(legacy, mapped)| (*mapped == canonical).then_some(*legacy))
+        .with_context(|| format!("unmapped canonical {label} identifier {canonical}"))
+}
+
+pub(crate) fn validate(source: &[GuideDefinition]) -> Result<()> {
     let mut guide_ids = BTreeSet::new();
     let mut home_ids = BTreeSet::new();
     let mut specialties = BTreeSet::new();
@@ -432,26 +502,42 @@ fn placeholders(value: &str) -> Vec<&str> {
 }
 
 #[cfg(test)]
-mod tests {
-    use std::collections::{BTreeMap, BTreeSet};
-    use std::fs;
-    use std::path::Path;
-
+pub(crate) mod tests {
     use pretty_assertions::assert_eq;
 
     use super::*;
-    use crate::models::compat::CompatDocument;
-    use crate::models::dreamscapes::{DreamscapeDefinition, DreamscapeKind};
 
-    const FIRST_GUIDE_ID: &str = "00000000-0000-4000-8000-000000000001";
-    const FIRST_HOME_ID: &str = "00000000-0000-4000-8000-000000000101";
+    const SYNTHETIC_GUIDE_ID_MAP: [(&str, &str); 10] = [
+        ("guide_1", "00000000-0000-4000-8000-000000000001"),
+        ("guide_2", "00000000-0000-4000-8000-000000000002"),
+        ("guide_3", "00000000-0000-4000-8000-000000000003"),
+        ("guide_4", "00000000-0000-4000-8000-000000000004"),
+        ("guide_5", "00000000-0000-4000-8000-000000000005"),
+        ("guide_6", "00000000-0000-4000-8000-000000000006"),
+        ("guide_7", "00000000-0000-4000-8000-000000000007"),
+        ("guide_8", "00000000-0000-4000-8000-000000000008"),
+        ("guide_9", "00000000-0000-4000-8000-000000000009"),
+        ("guide_10", "00000000-0000-4000-8000-000000000010"),
+    ];
+    const SYNTHETIC_DREAMSCAPE_ID_MAP: [(&str, &str); 10] = [
+        ("dreamscape_1", "00000000-0000-4000-8000-000000000101"),
+        ("dreamscape_2", "00000000-0000-4000-8000-000000000102"),
+        ("dreamscape_3", "00000000-0000-4000-8000-000000000103"),
+        ("dreamscape_4", "00000000-0000-4000-8000-000000000104"),
+        ("dreamscape_5", "00000000-0000-4000-8000-000000000105"),
+        ("dreamscape_6", "00000000-0000-4000-8000-000000000106"),
+        ("dreamscape_7", "00000000-0000-4000-8000-000000000107"),
+        ("dreamscape_8", "00000000-0000-4000-8000-000000000108"),
+        ("dreamscape_9", "00000000-0000-4000-8000-000000000109"),
+        ("dreamscape_10", "00000000-0000-4000-8000-000000000110"),
+    ];
 
-    fn synthetic_source() -> &'static str {
+    pub(crate) fn synthetic_source() -> &'static str {
         r##"// Synthetic Dream guide definitions.
 
 #![enable(implicit_some)]
 [
-  GuideDefinition(id: "00000000-0000-4000-8000-000000000001", name: "Guide 1", home_dreamscape_id: "00000000-0000-4000-8000-000000000101", portrait_source: "one.png", site_dialogue: ["Site 1"], specialty: Shop(description: "Shop copy")),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000001", name: "Guide 1", home_dreamscape_id: "00000000-0000-4000-8000-000000000101", portrait_source: "one.png", site_dialogue: [r#"Site 1"#], specialty: Shop(description: "Shop copy")),
   GuideDefinition(id: "00000000-0000-4000-8000-000000000002", name: "Guide 2", home_dreamscape_id: "00000000-0000-4000-8000-000000000102", portrait_source: "two.png", site_dialogue: ["Site 2"], specialty: DreamsignMarket(description: "Market copy")),
   GuideDefinition(id: "00000000-0000-4000-8000-000000000003", name: "Guide 3", home_dreamscape_id: "00000000-0000-4000-8000-000000000103", portrait_source: "three.png", site_dialogue: ["Site 3"], specialty: DreamsignRevelation(description: "Revelation copy")),
   GuideDefinition(id: "00000000-0000-4000-8000-000000000004", name: "Guide 4", home_dreamscape_id: "00000000-0000-4000-8000-000000000104", portrait_source: "four.png", site_dialogue: ["Site 4"], specialty: Transfiguration(description: "Transfiguration copy")),
@@ -471,14 +557,19 @@ mod tests {
 
     #[test]
     fn lowers_all_specialties_ordered_dialogue_unicode_and_multiline_copy() {
-        let output = lower(catalog()).unwrap();
+        let output = lower_with_maps(
+            catalog(),
+            &SYNTHETIC_GUIDE_ID_MAP,
+            &SYNTHETIC_DREAMSCAPE_ID_MAP,
+        )
+        .unwrap();
         assert_eq!(output["schema-version"].as_integer(), Some(1));
         let guides = output["guides"].as_array().unwrap();
         assert_eq!(guides.len(), 10);
-        assert_eq!(guides[0]["id"].as_str(), Some(FIRST_GUIDE_ID));
+        assert_eq!(guides[0]["id"].as_str(), Some("guide_1"));
         assert_eq!(
             guides[0]["home-dreamscape-id"].as_str(),
-            Some(FIRST_HOME_ID)
+            Some("dreamscape_1")
         );
         assert_eq!(guides[9]["name"].as_str(), Some("Guïde 10"));
         assert_eq!(
@@ -587,6 +678,17 @@ mod tests {
                 .to_string()
                 .contains("site_dialogue must not be empty")
         );
+
+        assert!(
+            lower_with_maps(
+                catalog(),
+                &SYNTHETIC_GUIDE_ID_MAP[..9],
+                &SYNTHETIC_DREAMSCAPE_ID_MAP,
+            )
+            .unwrap_err()
+            .to_string()
+            .contains("unmapped canonical Dream guide identifier")
+        );
     }
 
     #[test]
@@ -611,132 +713,5 @@ mod tests {
                 .to_string()
                 .contains("missing placeholder {win-essence}")
         );
-    }
-
-    #[test]
-    #[ignore = "real-catalog parity probe retained for canonical Dream guide review"]
-    fn canonical_candidate_matches_current_compatibility_sources() {
-        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-        let current_ron: CompatDocument =
-            ron::from_str(&fs::read_to_string(root.join("data/dream_guides.ron")).unwrap())
-                .unwrap();
-        let current_toml: toml::Value =
-            toml::from_str(&fs::read_to_string(root.join("data/dream_guides.toml")).unwrap())
-                .unwrap();
-        assert_eq!(current_ron.data, current_toml);
-
-        let canonical: Vec<GuideDefinition> = ron::from_str(
-            &fs::read_to_string(root.join("data/dream_guides_canonical.ron")).unwrap(),
-        )
-        .unwrap();
-        assert_eq!(canonical.len(), 10);
-
-        let guide_ids = legacy_guide_id_map();
-        let dreamscape_ids = legacy_dreamscape_id_map();
-        assert_eq!(guide_ids.len(), canonical.len());
-        assert_eq!(dreamscape_ids.len(), canonical.len());
-        assert_uuidv4_map(&guide_ids);
-        assert_uuidv4_map(&dreamscape_ids);
-
-        let canonical_guide_ids: BTreeSet<_> =
-            canonical.iter().map(|guide| guide.id.to_string()).collect();
-        assert_eq!(
-            canonical_guide_ids,
-            guide_ids.values().map(|id| (*id).to_owned()).collect()
-        );
-        let canonical_home_ids: BTreeSet<_> = canonical
-            .iter()
-            .map(|guide| guide.home_dreamscape_id.to_string())
-            .collect();
-        assert_eq!(
-            canonical_home_ids,
-            dreamscape_ids.values().map(|id| (*id).to_owned()).collect()
-        );
-        let canonical_dreamscapes: Vec<DreamscapeDefinition> = ron::from_str(
-            &fs::read_to_string(root.join("data/dreamscapes_canonical.ron")).unwrap(),
-        )
-        .unwrap();
-        let canonical_nonstarter_ids: BTreeSet<_> = canonical_dreamscapes
-            .iter()
-            .filter(|dreamscape| matches!(dreamscape.kind, DreamscapeKind::Standard { .. }))
-            .map(|dreamscape| dreamscape.id.to_string())
-            .collect();
-        assert_eq!(canonical_home_ids, canonical_nonstarter_ids);
-
-        let mut normalized = current_ron.data.clone();
-        for guide in normalized["guides"].as_array_mut().unwrap() {
-            let legacy_guide_id = guide["id"].as_str().unwrap();
-            guide["id"] = guide_ids
-                .get(legacy_guide_id)
-                .unwrap_or_else(|| panic!("unmapped legacy guide id {legacy_guide_id}"))
-                .to_string()
-                .into();
-            let legacy_home_id = guide["home-dreamscape-id"].as_str().unwrap();
-            guide["home-dreamscape-id"] = dreamscape_ids
-                .get(legacy_home_id)
-                .unwrap_or_else(|| panic!("unmapped legacy Dreamscape id {legacy_home_id}"))
-                .to_string()
-                .into();
-        }
-        assert_eq!(lower(canonical).unwrap(), normalized);
-
-        let dreamscapes_ron: CompatDocument =
-            ron::from_str(&fs::read_to_string(root.join("data/dreamscapes.ron")).unwrap()).unwrap();
-        let dreamscapes_toml: toml::Value =
-            toml::from_str(&fs::read_to_string(root.join("data/dreamscapes.toml")).unwrap())
-                .unwrap();
-        assert_eq!(dreamscapes_ron.data, dreamscapes_toml);
-        let nonstarter_ids: BTreeSet<_> = dreamscapes_ron.data["dreamscapes"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .filter(|dreamscape| {
-                dreamscape.get("is-starter").and_then(toml::Value::as_bool) != Some(true)
-            })
-            .map(|dreamscape| dreamscape["id"].as_str().unwrap())
-            .collect();
-        assert_eq!(nonstarter_ids, dreamscape_ids.keys().copied().collect());
-    }
-
-    fn assert_uuidv4_map(mapping: &BTreeMap<&str, &str>) {
-        for id in mapping.values() {
-            let uuid = Uuid::parse_str(id).unwrap();
-            assert_eq!(uuid.get_version(), Some(Version::Random));
-            assert_eq!(uuid.get_variant(), Variant::RFC4122);
-            assert_eq!(uuid.hyphenated().to_string(), *id);
-        }
-    }
-
-    fn legacy_guide_id_map() -> BTreeMap<&'static str, &'static str> {
-        BTreeMap::from([
-            ("tobias_tanglefur", "4e5067ec-265d-4dba-8fa8-2afbd4fde9ab"),
-            (
-                "amunet_the_tomb_keeper",
-                "113cb023-12df-4b9c-982c-f0c8bba30377",
-            ),
-            ("sigrun", "706a4443-2826-4459-8127-040632cb93fd"),
-            ("durgan_forgehammer", "9890b3c2-74f7-4b4a-bb39-61c2c6d53cbb"),
-            ("deacon_holt", "e0aaa9a6-9038-48b9-8847-63681426190e"),
-            ("master_takeshi", "87e9ae46-57c6-407a-af96-bd5f5323dabc"),
-            ("aldric_the_seer", "232e7de1-b7b9-4631-b6a3-1ab178c7ff9a"),
-            ("maddox", "869a07ae-5532-4a65-abfa-26a89713a82b"),
-            ("gravok", "579eaf53-0643-4cba-9c0c-da04b9c52822"),
-            ("layaway", "078e102a-f235-4794-9bb5-a5c42262782a"),
-        ])
-    }
-
-    fn legacy_dreamscape_id_map() -> BTreeMap<&'static str, &'static str> {
-        BTreeMap::from([
-            ("tumbleleaf_village", "08e11635-9f04-48fd-a9c8-5a9f68c80958"),
-            ("pharaohs_gate", "b25b9906-8380-45bf-9435-678ce18316ea"),
-            ("winterwake_fjords", "7d793d30-8a0f-4f84-a446-cdde502710e8"),
-            ("frostforge", "8e7d0818-ba6a-4dc9-8b3d-a12c62aefa44"),
-            ("hopes_end", "562f9d1f-5bbf-4dc5-9edd-7e8d538a1651"),
-            ("tsukiren", "823dc726-db0f-4367-8442-70600a20ad2e"),
-            ("wilderveil", "f52bdeb1-0db6-44ee-80ea-b99bd18dff7d"),
-            ("rust_expanse", "6f16a1c9-c2fa-494d-9d9d-4da00e011491"),
-            ("farpoint_station", "138eff95-3301-4f76-aeb1-31bf0dc8963d"),
-            ("grid_city", "6c03e9d1-21fe-4c13-b940-2325d308cb14"),
-        ])
     }
 }

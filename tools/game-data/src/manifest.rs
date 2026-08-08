@@ -82,6 +82,7 @@ impl Manifest {
             "draft_v1",
             "dream_avatar_metadata_v1",
             "dream_avatars_v1",
+            "dream_guides_v1",
             "cards_v2",
             "exploration_v1",
             "compat_v1",
