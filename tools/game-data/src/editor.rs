@@ -14,6 +14,7 @@ use crate::compiler::{EditReport, sha256};
 use crate::manifest::Manifest;
 use crate::models::cards::{CardDefinition, CardKind, Crop, OrbValue};
 use crate::models::compat::CompatDocument;
+use crate::models::dream_avatars::{self, AvatarDefinition, DreamAvatarId};
 use crate::models::exploration::{
     ActionDefinition, ActionEffect, DynamicValue, EffectKind, ExplorationCatalog, Predicate,
     TemplateInvocation,
@@ -46,6 +47,11 @@ enum EditOperation {
     SetEncounterProse {
         card_id: String,
         prose: String,
+    },
+    SetDreamAvatarField {
+        avatar_id: String,
+        field: String,
+        value: JsonValue,
     },
     ReplaceAction {
         card_id: String,
@@ -89,6 +95,7 @@ pub fn stage_edit(
     manifest.dataset(&request.dataset)?;
     match request.dataset.as_str() {
         "cards" => edit_cards(manifest, staging_root, request.operations),
+        "dream-avatars" => edit_dream_avatars(manifest, staging_root, request.operations),
         "exploration" => edit_exploration(manifest, staging_root, request.operations),
         dataset => edit_compat(manifest, staging_root, dataset, request.operations),
     }
@@ -231,6 +238,199 @@ fn edit_cards(
         dataset_id: "cards".into(),
         source_revision: revision(staging_root, manifest, &["cards", "internal-card-metadata"])?,
     })
+}
+
+fn edit_dream_avatars(
+    manifest: &Manifest,
+    staging_root: &Path,
+    operations: Vec<EditOperation>,
+) -> Result<EditReport> {
+    let dataset = manifest.dataset("dream-avatars")?;
+    let source_path = staging_root.join(&dataset.source);
+    let original_text = fs::read_to_string(&source_path)
+        .with_context(|| format!("read staged DreamAvatar source {}", source_path.display()))?;
+    let original: Vec<AvatarDefinition> = ron::from_str(&original_text)
+        .context("MALFORMED_SOURCE: staged DreamAvatar RON is invalid")?;
+    dream_avatars::validate(&original)
+        .context("MALFORMED_SOURCE: staged DreamAvatar catalog is invalid")?;
+    let mut avatars = original.clone();
+    let mut source_text = original_text;
+
+    for operation in operations {
+        match operation {
+            EditOperation::SetDreamAvatarField {
+                avatar_id,
+                field,
+                value,
+            } => {
+                let index = unique_dream_avatar_index(&avatars, &avatar_id)?;
+                let before = avatars[index].clone();
+                set_dream_avatar_field(&mut avatars[index], &field, value)?;
+                dream_avatars::validate(&avatars)
+                    .context("INVALID_EDIT: DreamAvatar edit violates the catalog contract")?;
+                if avatars[index] != before {
+                    source_text =
+                        patch_dream_avatar_source_field(&source_text, &avatars[index], &field)?;
+                }
+            }
+            _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to DreamAvatars"),
+        }
+    }
+
+    verify_round_trip::<Vec<AvatarDefinition>>(&source_text, &avatars)?;
+    let changed = avatars != original;
+    if changed {
+        atomic_write(&source_path, source_text.as_bytes())?;
+    }
+    Ok(EditReport {
+        ok: true,
+        changed,
+        dataset_id: "dream-avatars".into(),
+        source_revision: revision(staging_root, manifest, &["dream-avatars"])?,
+    })
+}
+
+fn unique_dream_avatar_index(avatars: &[AvatarDefinition], id: &str) -> Result<usize> {
+    let id_literal = ron::to_string(id)?;
+    let requested: DreamAvatarId = ron::from_str(&id_literal)
+        .context("INVALID_EDIT: DreamAvatar route identity must be a canonical UUIDv4")?;
+    let matches = avatars
+        .iter()
+        .enumerate()
+        .filter(|(_, avatar)| avatar.id == requested)
+        .map(|(index, _)| index)
+        .collect::<Vec<_>>();
+    if matches.is_empty() {
+        bail!("RECORD_NOT_FOUND: DreamAvatar UUID {id}");
+    }
+    if matches.len() > 1 {
+        bail!("MALFORMED_SOURCE: duplicate DreamAvatar UUID {id}");
+    }
+    Ok(matches[0])
+}
+
+fn set_dream_avatar_field(
+    avatar: &mut AvatarDefinition,
+    field: &str,
+    value: JsonValue,
+) -> Result<()> {
+    match field {
+        "name" => {
+            let value = json_string(value, field)?.trim().to_owned();
+            if value.is_empty() {
+                bail!("INVALID_EDIT: DreamAvatar name cannot be blank");
+            }
+            avatar.name = value;
+        }
+        "title" => {
+            let value = json_string(value, field)?.trim().to_owned();
+            if value.is_empty() {
+                bail!("INVALID_EDIT: DreamAvatar title cannot be blank");
+            }
+            avatar.title = value;
+        }
+        "rendered-text" | "ability_text" => {
+            let value = json_string(value, field)?;
+            let paragraphs = value.split("\n\n").map(str::to_owned).collect::<Vec<_>>();
+            if paragraphs.is_empty()
+                || paragraphs
+                    .iter()
+                    .any(|paragraph| paragraph.trim().is_empty())
+            {
+                bail!("INVALID_EDIT: DreamAvatar ability text must contain non-empty paragraphs");
+            }
+            avatar.ability_text = paragraphs;
+        }
+        "image-number" | "image_number" => {
+            let image = json_u32(value, field)?;
+            if !(1..=9_999).contains(&image) {
+                bail!("INVALID_EDIT: DreamAvatar image number must be in [1, 9999]");
+            }
+            avatar.portrait.image = image;
+        }
+        "starting-essence" | "starting_essence" => {
+            avatar.starting_essence = Some(json_u32(value, field)?);
+        }
+        _ => bail!("INVALID_EDIT: unsupported DreamAvatar field {field}"),
+    }
+    Ok(())
+}
+
+fn json_u32(value: JsonValue, field: &str) -> Result<u32> {
+    if let Some(value) = value.as_u64() {
+        return u32::try_from(value)
+            .with_context(|| format!("INVALID_EDIT: {field} is outside the supported range"));
+    }
+    let text = value
+        .as_str()
+        .with_context(|| format!("INVALID_EDIT: {field} must be a non-negative integer"))?;
+    text.parse::<u32>()
+        .with_context(|| format!("INVALID_EDIT: {field} must be a non-negative integer"))
+}
+
+fn patch_dream_avatar_source_field(
+    source: &str,
+    avatar: &AvatarDefinition,
+    field: &str,
+) -> Result<String> {
+    let source_field = match field {
+        "name" => "name",
+        "title" => "title",
+        "rendered-text" | "ability_text" => "ability_text",
+        "image-number" | "image_number" => "portrait.image",
+        "starting-essence" | "starting_essence" => "starting_essence",
+        _ => bail!("INVALID_EDIT: unsupported DreamAvatar field {field}"),
+    };
+    let record = typed_record_range(source, "AvatarDefinition", "id", &avatar.id.to_string())?;
+    let value = if source_field == "portrait.image" {
+        let portrait = top_level_field_value_range(source, record.clone(), "portrait")?
+            .context("MALFORMED_SOURCE: DreamAvatar record is missing portrait")?;
+        top_level_field_value_range(source, portrait, "image")?
+    } else {
+        top_level_field_value_range(source, record.clone(), source_field)?
+    };
+    if let Some(value) = value {
+        let replacement = render_dream_avatar_source_field(avatar, source_field)?;
+        return Ok(format!(
+            "{}{}{}",
+            &source[..value.start],
+            replacement,
+            &source[value.end..]
+        ));
+    }
+    if source_field == "starting_essence" {
+        let portrait = top_level_field_value_range(source, record.clone(), "portrait")?
+            .context("MALFORMED_SOURCE: DreamAvatar record is missing portrait")?;
+        let comma_offset = source[portrait.end..record.end]
+            .find(',')
+            .context("MALFORMED_SOURCE: portrait field is missing its trailing comma")?;
+        let insertion = portrait.end + comma_offset + 1;
+        let replacement = render_dream_avatar_source_field(avatar, source_field)?;
+        return Ok(format!(
+            "{}\n    starting_essence: {},{}",
+            &source[..insertion],
+            replacement,
+            &source[insertion..]
+        ));
+    }
+    bail!(
+        "MALFORMED_SOURCE: missing field {source_field} on DreamAvatar {}",
+        avatar.id
+    )
+}
+
+fn render_dream_avatar_source_field(avatar: &AvatarDefinition, field: &str) -> Result<String> {
+    match field {
+        "name" => Ok(ron::to_string(&avatar.name)?),
+        "title" => Ok(ron::to_string(&avatar.title)?),
+        "ability_text" => Ok(ron::to_string(&avatar.ability_text)?),
+        "portrait.image" => Ok(avatar.portrait.image.to_string()),
+        "starting_essence" => Ok(avatar
+            .starting_essence
+            .context("starting_essence must be present when rendering")?
+            .to_string()),
+        _ => bail!("INVALID_EDIT: unsupported DreamAvatar source field {field}"),
+    }
 }
 
 fn edit_exploration(
@@ -843,27 +1043,36 @@ fn render_orb(value: &OrbValue) -> String {
 }
 
 fn card_record_range(source: &str, id: &str) -> Result<Range<usize>> {
-    let id_literal = ron::to_string(id)?;
-    let marker = format!("\n    id: {id_literal},");
+    typed_record_range(source, "CardDefinition", "id", id)
+}
+
+fn typed_record_range(
+    source: &str,
+    record_type: &str,
+    identity_field: &str,
+    identity: &str,
+) -> Result<Range<usize>> {
+    let identity_literal = ron::to_string(identity)?;
+    let marker = format!("\n    {identity_field}: {identity_literal},");
     let matches = source
         .match_indices(&marker)
         .map(|(offset, _)| offset)
         .collect::<Vec<_>>();
     if matches.is_empty() {
-        bail!("RECORD_NOT_FOUND: card UUID {id}");
+        bail!("RECORD_NOT_FOUND: {record_type} identity {identity}");
     }
     if matches.len() > 1 {
-        bail!("MALFORMED_SOURCE: duplicate card UUID {id}");
+        bail!("MALFORMED_SOURCE: duplicate {record_type} identity {identity}");
     }
-    let record_marker = "\n  CardDefinition(";
+    let record_marker = format!("\n  {record_type}(");
     let start = source[..matches[0]]
-        .rfind(record_marker)
+        .rfind(&record_marker)
         .map(|offset| offset + 1)
-        .context("MALFORMED_SOURCE: card record has no CardDefinition boundary")?;
+        .with_context(|| format!("MALFORMED_SOURCE: record has no {record_type} boundary"))?;
     let opening = source[start..]
         .find('(')
         .map(|offset| start + offset)
-        .context("MALFORMED_SOURCE: card record has no opening delimiter")?;
+        .context("MALFORMED_SOURCE: record has no opening delimiter")?;
     let closing = matching_delimiter(source, opening)?;
     Ok(start..closing + 1)
 }
@@ -875,10 +1084,10 @@ fn top_level_field_value_range(
 ) -> Result<Option<Range<usize>>> {
     let bytes = source.as_bytes();
     let opening = source[record.clone()]
-        .find('(')
+        .find(['(', '[', '{'])
         .map(|offset| record.start + offset)
-        .context("MALFORMED_SOURCE: card record has no opening delimiter")?;
-    let mut stack = vec![b'('];
+        .context("MALFORMED_SOURCE: RON record has no opening delimiter")?;
+    let mut stack = vec![bytes[opening]];
     let mut cursor = opening + 1;
     let mut found = None;
     while cursor < record.end {
@@ -905,7 +1114,7 @@ fn top_level_field_value_range(
                 }
                 let value_end = top_level_value_end(source, value_start, record.end)?;
                 if found.replace(value_start..value_end).is_some() {
-                    bail!("MALFORMED_SOURCE: duplicate field {field} in card record");
+                    bail!("MALFORMED_SOURCE: duplicate field {field} in RON record");
                 }
             }
             continue;
@@ -915,7 +1124,7 @@ fn top_level_field_value_range(
             b')' | b']' | b'}' => {
                 let expected = matching_open(bytes[cursor]);
                 if stack.pop() != Some(expected) {
-                    bail!("MALFORMED_SOURCE: mismatched delimiter in Cards RON");
+                    bail!("MALFORMED_SOURCE: mismatched delimiter in RON record");
                 }
             }
             _ => {}
@@ -939,7 +1148,7 @@ fn top_level_value_end(source: &str, start: usize, limit: usize) -> Result<usize
             b')' | b']' | b'}' => {
                 let expected = matching_open(bytes[cursor]);
                 if stack.pop() != Some(expected) {
-                    bail!("MALFORMED_SOURCE: mismatched delimiter in Cards field");
+                    bail!("MALFORMED_SOURCE: mismatched delimiter in RON field");
                 }
             }
             b',' if stack.is_empty() => {
@@ -953,7 +1162,7 @@ fn top_level_value_end(source: &str, start: usize, limit: usize) -> Result<usize
         }
         cursor += 1;
     }
-    bail!("MALFORMED_SOURCE: Cards field has no terminating comma")
+    bail!("MALFORMED_SOURCE: RON field has no terminating comma")
 }
 
 fn matching_delimiter(source: &str, opening: usize) -> Result<usize> {
@@ -970,7 +1179,7 @@ fn matching_delimiter(source: &str, opening: usize) -> Result<usize> {
             b')' | b']' | b'}' => {
                 let expected = matching_open(bytes[cursor]);
                 if stack.pop() != Some(expected) {
-                    bail!("MALFORMED_SOURCE: mismatched delimiter in Cards RON");
+                    bail!("MALFORMED_SOURCE: mismatched delimiter in RON source");
                 }
                 if stack.is_empty() {
                     return Ok(cursor);
@@ -980,7 +1189,7 @@ fn matching_delimiter(source: &str, opening: usize) -> Result<usize> {
         }
         cursor += 1;
     }
-    bail!("MALFORMED_SOURCE: unterminated CardDefinition")
+    bail!("MALFORMED_SOURCE: unterminated typed RON record")
 }
 
 fn matching_open(closing: u8) -> u8 {
@@ -1476,6 +1685,7 @@ mod tests {
     use serde_json::{Map, json};
 
     const CARD_ID: &str = "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5";
+    const AVATAR_ID: &str = "00000000-0000-4000-8000-000000000011";
 
     const CARD_SOURCE: &str = r##"// Stable catalog guidance.
 #![enable(implicit_some)]
@@ -1498,6 +1708,112 @@ mod tests {
   ),
 ]
 "##;
+
+    const DREAM_AVATAR_SOURCE: &str = r###"// Stable catalog guidance.
+
+#![enable(implicit_some)]
+[
+  // Edited record comment.
+  AvatarDefinition(
+    name: r#"Raw Name"#,
+    id: "00000000-0000-4000-8000-000000000011",
+    ability_text: ["First paragraph", "Second paragraph"],
+    title: "First Title",
+    portrait: (image: 7, focus: (x: 0.25, y: 0.75)),
+    signature_card_ids: ["00000000-0000-4000-8000-000000000101"],
+  ),
+
+  /* Unrelated record comment. */
+  AvatarDefinition(
+    name: "Unrelated Avatar",
+    id: "00000000-0000-4000-8000-000000000012",
+    ability_text: ["Unrelated ability."],
+    title: "Unrelated Title",
+    portrait: (image: 8, focus: (x: 0.5, y: 0.5)),
+  ),
+]
+"###;
+
+    #[test]
+    fn dream_avatar_scalar_patch_changes_one_line_and_preserves_unrelated_source() {
+        let mut avatars: Vec<AvatarDefinition> = ron::from_str(DREAM_AVATAR_SOURCE).unwrap();
+        let index = unique_dream_avatar_index(&avatars, AVATAR_ID).unwrap();
+        set_dream_avatar_field(&mut avatars[index], "name", json!("Edited Name")).unwrap();
+        let patched =
+            patch_dream_avatar_source_field(DREAM_AVATAR_SOURCE, &avatars[index], "name").unwrap();
+
+        let changed_lines = DREAM_AVATAR_SOURCE
+            .lines()
+            .zip(patched.lines())
+            .filter(|(before, after)| before != after)
+            .count();
+        assert_eq!(changed_lines, 1);
+        assert!(patched.contains("// Edited record comment."));
+        assert!(patched.contains("/* Unrelated record comment. */"));
+        assert!(patched.contains("name: \"Unrelated Avatar\""));
+        assert_eq!(
+            ron::from_str::<Vec<AvatarDefinition>>(&patched).unwrap(),
+            avatars
+        );
+    }
+
+    #[test]
+    fn dream_avatar_patches_every_editable_field_shape_and_absent_optional_field() {
+        let mut source = DREAM_AVATAR_SOURCE.to_owned();
+        let mut avatars: Vec<AvatarDefinition> = ron::from_str(&source).unwrap();
+        let index = unique_dream_avatar_index(&avatars, AVATAR_ID).unwrap();
+        for (field, value) in [
+            ("title", json!("Edited Title")),
+            ("rendered-text", json!("One paragraph\n\nAnother paragraph")),
+            ("image-number", json!("0099")),
+            ("starting-essence", json!(137)),
+        ] {
+            set_dream_avatar_field(&mut avatars[index], field, value).unwrap();
+            source = patch_dream_avatar_source_field(&source, &avatars[index], field).unwrap();
+            assert_eq!(
+                ron::from_str::<Vec<AvatarDefinition>>(&source).unwrap(),
+                avatars
+            );
+        }
+
+        assert!(source.contains("portrait: (image: 99, focus: (x: 0.25, y: 0.75))"));
+        assert_eq!(source.matches("starting_essence:").count(), 1);
+        assert!(source.contains("name: \"Unrelated Avatar\""));
+        let ids = ron::from_str::<Vec<AvatarDefinition>>(&source)
+            .unwrap()
+            .into_iter()
+            .map(|avatar| avatar.id.to_string())
+            .collect::<Vec<_>>();
+        assert_eq!(
+            ids,
+            vec![
+                "00000000-0000-4000-8000-000000000011",
+                "00000000-0000-4000-8000-000000000012",
+            ]
+        );
+    }
+
+    #[test]
+    fn dream_avatar_editor_rejects_invalid_fields_values_and_identities() {
+        let mut avatars: Vec<AvatarDefinition> = ron::from_str(DREAM_AVATAR_SOURCE).unwrap();
+        let index = unique_dream_avatar_index(&avatars, AVATAR_ID).unwrap();
+        for (field, value) in [
+            ("name", json!("   ")),
+            ("title", json!("")),
+            ("rendered-text", json!("")),
+            ("image-number", json!(0)),
+            ("id", json!("00000000-0000-4000-8000-000000000099")),
+        ] {
+            assert!(set_dream_avatar_field(&mut avatars[index], field, value).is_err());
+        }
+        assert!(
+            unique_dream_avatar_index(&avatars, "00000000-0000-4000-8000-000000000099")
+                .unwrap_err()
+                .to_string()
+                .contains("RECORD_NOT_FOUND")
+        );
+        assert!(unique_dream_avatar_index(&avatars, "not-a-uuid").is_err());
+    }
 
     fn catalog() -> ExplorationCatalog {
         let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
@@ -1680,8 +1996,7 @@ mod tests {
             json!("Offering\n\n▸Materialized: Dissolve an enemy. Gain 1⍟."),
         )
         .unwrap();
-        let updated =
-            patch_card_source_field(&inserted, &cards[index], "amplified-text").unwrap();
+        let updated = patch_card_source_field(&inserted, &cards[index], "amplified-text").unwrap();
         assert_eq!(updated.matches("amplified_text:").count(), 1);
         assert_eq!(
             ron::from_str::<Vec<CardDefinition>>(&updated).unwrap(),
@@ -1689,10 +2004,12 @@ mod tests {
         );
 
         set_card_field(&mut cards[index], "amplified-text", json!("")).unwrap();
-        let removed =
-            patch_card_source_field(&updated, &cards[index], "amplified-text").unwrap();
+        let removed = patch_card_source_field(&updated, &cards[index], "amplified-text").unwrap();
         assert!(!removed.contains("amplified_text:"));
-        assert_eq!(ron::from_str::<Vec<CardDefinition>>(&removed).unwrap(), cards);
+        assert_eq!(
+            ron::from_str::<Vec<CardDefinition>>(&removed).unwrap(),
+            cards
+        );
     }
 
     #[test]

@@ -174,7 +174,7 @@ describe("BattleStatusDisplay", () => {
             title: "Daimyo of Lacquered Fury",
           }}
           dreamAvatarProfile={{
-            id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+            id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
             ability: "Avatar ability is not active",
             unavailable: true,
           }}
@@ -190,7 +190,7 @@ describe("BattleStatusDisplay", () => {
       "[data-dream-avatar-source]",
     );
     expect(source?.dataset.revealEntityId).toBe(
-      "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+      "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
     );
     expect(source?.getAttribute("aria-disabled")).toBe("true");
     const description = document.getElementById(

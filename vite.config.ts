@@ -89,7 +89,8 @@ export function gameDataRonPlugin(options: RonGenerationOptions = {}): Plugin {
       for (const dataset of manifest.datasets) {
         const source = path.resolve(rootDir, dataset.source);
         datasets.set(source, { id: dataset.id, source: dataset.source });
-        const names = watchedDirectories.get(path.dirname(source)) ?? new Set<string>();
+        const names =
+          watchedDirectories.get(path.dirname(source)) ?? new Set<string>();
         names.add(path.basename(source));
         watchedDirectories.set(path.dirname(source), names);
       }
@@ -109,7 +110,8 @@ export function gameDataRonPlugin(options: RonGenerationOptions = {}): Plugin {
               data: { datasetId: dataset.id, source: dataset.source },
             });
           } catch (error) {
-            const message = error instanceof Error ? error.message : String(error);
+            const message =
+              error instanceof Error ? error.message : String(error);
             console.error(`[game-data] ${dataset.id}: ${message}`);
             server.ws.send({
               type: "error",
@@ -129,10 +131,13 @@ export function gameDataRonPlugin(options: RonGenerationOptions = {}): Plugin {
         if (dataset === undefined) return;
         const pending = timers.get(dataset.id);
         if (pending !== undefined) clearTimeout(pending);
-        timers.set(dataset.id, setTimeout(() => {
-          timers.delete(dataset.id);
-          void regenerate(source);
-        }, debounceMs));
+        timers.set(
+          dataset.id,
+          setTimeout(() => {
+            timers.delete(dataset.id);
+            void regenerate(source);
+          }, debounceMs),
+        );
       };
       const watchers = [...watchedDirectories].map(([directory, names]) =>
         fs.watch(directory, { persistent: false }, (_eventType, filename) => {
@@ -141,7 +146,8 @@ export function gameDataRonPlugin(options: RonGenerationOptions = {}): Plugin {
           } else if (names.has(filename.toString())) {
             schedule(path.join(directory, filename.toString()));
           }
-        }));
+        }),
+      );
       let closed = false;
       const close = (): void => {
         if (closed) return;
@@ -206,7 +212,9 @@ function explorationCandidatesEditorApiPlugin(): Plugin {
     apply: "serve",
     configureServer(server) {
       server.middlewares.use(
-        createExplorationCandidatesRonEditorApiMiddleware({ rootDir: __dirname }),
+        createExplorationCandidatesRonEditorApiMiddleware({
+          rootDir: __dirname,
+        }),
       );
     },
   };
@@ -240,14 +248,17 @@ function dreamsignEditorApiPlugin(): Plugin {
     name: "dreamsign-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(createRonEditorBridge({
-        rootDir: __dirname,
-        basePaths: ["/api/editor/dreamsigns", "/api/editor/dreamsign-tags"],
-        collectionPath: "/api/editor/dreamsigns",
-        datasets: ["dreamsigns", "dreamsign-tags"],
-        sourcePaths: ["data/dreamsigns.ron", "data/dreamsigns.tags.ron"],
-        createLegacy: (rootDir) => createDreamsignEditorApiMiddleware({ rootDir }),
-      }));
+      server.middlewares.use(
+        createRonEditorBridge({
+          rootDir: __dirname,
+          basePaths: ["/api/editor/dreamsigns", "/api/editor/dreamsign-tags"],
+          collectionPath: "/api/editor/dreamsigns",
+          datasets: ["dreamsigns", "dreamsign-tags"],
+          sourcePaths: ["data/dreamsigns.ron", "data/dreamsigns.tags.ron"],
+          createLegacy: (rootDir) =>
+            createDreamsignEditorApiMiddleware({ rootDir }),
+        }),
+      );
     },
   };
 }
@@ -258,14 +269,17 @@ function glossaryEditorApiPlugin(): Plugin {
     name: "glossary-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(createRonEditorBridge({
-        rootDir: __dirname,
-        basePaths: ["/api/editor/glossary"],
-        collectionPath: "/api/editor/glossary",
-        datasets: ["glossary"],
-        sourcePaths: ["data/glossary.ron"],
-        createLegacy: (rootDir) => createGlossaryEditorApiMiddleware({ rootDir }),
-      }));
+      server.middlewares.use(
+        createRonEditorBridge({
+          rootDir: __dirname,
+          basePaths: ["/api/editor/glossary"],
+          collectionPath: "/api/editor/glossary",
+          datasets: ["glossary"],
+          sourcePaths: ["data/glossary.ron"],
+          createLegacy: (rootDir) =>
+            createGlossaryEditorApiMiddleware({ rootDir }),
+        }),
+      );
     },
   };
 }
@@ -343,14 +357,13 @@ function dreamAvatarEditorApiPlugin(): Plugin {
     name: "dream-avatar-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(createRonEditorBridge({
-        rootDir: __dirname,
-        basePaths: ["/api/editor/dream-avatars"],
-        collectionPath: "/api/editor/dream-avatars",
-        datasets: ["dream-avatars"],
-        sourcePaths: ["data/dream_avatars.ron", "data/tides4.jsonc"],
-        createLegacy: (rootDir) => createDreamAvatarEditorApiMiddleware({ rootDir }),
-      }));
+      const editorRoot = process.env.DREAMTIDES_EDITOR_DATA_ROOT;
+      server.middlewares.use(
+        createDreamAvatarEditorApiMiddleware({
+          rootDir:
+            editorRoot === undefined ? __dirname : path.resolve(editorRoot),
+        }),
+      );
     },
   };
 }
@@ -374,14 +387,17 @@ function dreamscapeEditorApiPlugin(): Plugin {
     name: "dreamscape-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(createRonEditorBridge({
-        rootDir: __dirname,
-        basePaths: ["/api/editor/dreamscapes"],
-        collectionPath: "/api/editor/dreamscapes",
-        datasets: ["dreamscapes", "dream-guides"],
-        sourcePaths: ["data/dreamscapes.ron", "data/dream_guides.ron"],
-        createLegacy: (rootDir) => createDreamscapeEditorApiMiddleware({ rootDir }),
-      }));
+      server.middlewares.use(
+        createRonEditorBridge({
+          rootDir: __dirname,
+          basePaths: ["/api/editor/dreamscapes"],
+          collectionPath: "/api/editor/dreamscapes",
+          datasets: ["dreamscapes", "dream-guides"],
+          sourcePaths: ["data/dreamscapes.ron", "data/dream_guides.ron"],
+          createLegacy: (rootDir) =>
+            createDreamscapeEditorApiMiddleware({ rootDir }),
+        }),
+      );
     },
   };
 }
@@ -392,14 +408,17 @@ function figmentEditorApiPlugin(): Plugin {
     name: "figment-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(createRonEditorBridge({
-        rootDir: __dirname,
-        basePaths: ["/api/editor/figments"],
-        collectionPath: "/api/editor/figments",
-        datasets: ["figments"],
-        sourcePaths: ["data/figments.ron"],
-        createLegacy: (rootDir) => createFigmentEditorApiMiddleware({ rootDir }),
-      }));
+      server.middlewares.use(
+        createRonEditorBridge({
+          rootDir: __dirname,
+          basePaths: ["/api/editor/figments"],
+          collectionPath: "/api/editor/figments",
+          datasets: ["figments"],
+          sourcePaths: ["data/figments.ron"],
+          createLegacy: (rootDir) =>
+            createFigmentEditorApiMiddleware({ rootDir }),
+        }),
+      );
     },
   };
 }
@@ -500,14 +519,17 @@ function dreamwellEditorApiPlugin(): Plugin {
     name: "dreamwell-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(createRonEditorBridge({
-        rootDir: __dirname,
-        basePaths: ["/api/editor/dreamwell"],
-        collectionPath: "/api/editor/dreamwell",
-        datasets: ["dreamwell"],
-        sourcePaths: ["data/dreamwell.ron"],
-        createLegacy: (rootDir) => createDreamwellEditorApiMiddleware({ rootDir }),
-      }));
+      server.middlewares.use(
+        createRonEditorBridge({
+          rootDir: __dirname,
+          basePaths: ["/api/editor/dreamwell"],
+          collectionPath: "/api/editor/dreamwell",
+          datasets: ["dreamwell"],
+          sourcePaths: ["data/dreamwell.ron"],
+          createLegacy: (rootDir) =>
+            createDreamwellEditorApiMiddleware({ rootDir }),
+        }),
+      );
     },
   };
 }
@@ -518,14 +540,17 @@ function tutorialEditorApiPlugin(): Plugin {
     name: "tutorial-editor-api",
     apply: "serve",
     configureServer(server) {
-      server.middlewares.use(createRonEditorBridge({
-        rootDir: __dirname,
-        basePaths: ["/api/editor/tutorial"],
-        collectionPath: "/api/editor/tutorial",
-        datasets: ["tutorial"],
-        sourcePaths: ["data/tutorial.ron"],
-        createLegacy: (rootDir) => createTutorialEditorApiMiddleware({ rootDir }),
-      }));
+      server.middlewares.use(
+        createRonEditorBridge({
+          rootDir: __dirname,
+          basePaths: ["/api/editor/tutorial"],
+          collectionPath: "/api/editor/tutorial",
+          datasets: ["tutorial"],
+          sourcePaths: ["data/tutorial.ron"],
+          createLegacy: (rootDir) =>
+            createTutorialEditorApiMiddleware({ rootDir }),
+        }),
+      );
     },
   };
 }
@@ -722,9 +747,7 @@ function imageViewerApiPlugin(): Plugin {
       server.middlewares.use(
         createImageViewerApiMiddleware({
           cardsTomlPath: path.join(__dirname, "data", "cards.toml"),
-          nameHistoryTomlPaths: [
-            path.join(__dirname, "data", "cards.toml"),
-          ],
+          nameHistoryTomlPaths: [path.join(__dirname, "data", "cards.toml")],
           statePath: imageViewerStatePath,
         }),
       );
@@ -792,9 +815,7 @@ function savedJourneysApiPlugin(): Plugin {
  * `apply: "serve"` keeps this out of production builds entirely.
  */
 export function cardDataHotReloadPlugin(): Plugin {
-  const cardTomlPath = path.resolve(
-    path.join(__dirname, "data", "cards.toml"),
-  );
+  const cardTomlPath = path.resolve(path.join(__dirname, "data", "cards.toml"));
   const tomlDir = path.dirname(cardTomlPath);
   const tomlBasename = path.basename(cardTomlPath);
 

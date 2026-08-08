@@ -32,7 +32,7 @@ function tutorialActionLogDetails(action: TutorialAction) {
 
 const TUTORIAL_DREAM_AVATARS: readonly DreamAvatarContent[] = [
   {
-    id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+    id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
     name: "Tensho",
     title: "Daimyo of Lacquered Fury",
     renderedText: "Player ability.",
@@ -41,7 +41,7 @@ const TUTORIAL_DREAM_AVATARS: readonly DreamAvatarContent[] = [
     startingEssence: 0,
   },
   {
-    id: "B99936CA-97F9-4930-AF5A-FA9EF92557EF",
+    id: "b99936ca-97f9-4930-af5a-fa9ef92557ef",
     name: "Threxan",
     title: "the Resounding Wrath",
     renderedText: "Opponent ability.",
@@ -241,7 +241,7 @@ describe("buildTutorialView", () => {
 
   it("resolves tutorial Dream Avatar display identity from the catalog by UUID", () => {
     const dreamAvatars = TUTORIAL_DREAM_AVATARS.map((dreamAvatar) =>
-      dreamAvatar.id === "BFC40414-5264-41BF-86E1-A0F41EE4F5B5"
+      dreamAvatar.id === "bfc40414-5264-41bf-86e1-a0f41ee4f5b5"
         ? {
             ...dreamAvatar,
             name: "Gunnar Deepforge",
@@ -264,7 +264,7 @@ describe("buildTutorialView", () => {
       portraitFocus: { x: 0.58, y: 0.233 },
     });
     expect(tutorial.dreamAvatars.player.profile.id).toBe(
-      "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+      "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
     );
   });
 
@@ -800,7 +800,7 @@ describe("buildTutorialView", () => {
     expect(tutorial.dreamAvatars.player).toMatchObject({
       visual: { imageNumber: "0029", name: "Tensho" },
       profile: {
-        id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+        id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
         unavailable: true,
       },
       settled: false,
@@ -883,7 +883,7 @@ describe("buildTutorialView", () => {
     expect(tutorial.dreamAvatars.player.settled).toBe(true);
     expect(tutorial.dreamAvatars.enemy).toMatchObject({
       visual: { imageNumber: "0025", name: "Threxan" },
-      profile: { id: "B99936CA-97F9-4930-AF5A-FA9EF92557EF" },
+      profile: { id: "b99936ca-97f9-4930-af5a-fa9ef92557ef" },
       settled: false,
     });
   });

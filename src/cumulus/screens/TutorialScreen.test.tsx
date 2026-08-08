@@ -319,7 +319,7 @@ const TUTORIAL_DREAM_AVATARS: TutorialView["dreamAvatars"] = {
       portraitFocus: { x: 0.5, y: 0.22 },
     },
     profile: {
-      id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+      id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
       ability: "Avatar ability is not active",
       unavailable: true,
     },
@@ -333,7 +333,7 @@ const TUTORIAL_DREAM_AVATARS: TutorialView["dreamAvatars"] = {
       portraitFocus: { x: 0.5, y: 0.2 },
     },
     profile: {
-      id: "B99936CA-97F9-4930-AF5A-FA9EF92557EF",
+      id: "b99936ca-97f9-4930-af5a-fa9ef92557ef",
       ability: "Avatar ability is not active",
       unavailable: true,
     },

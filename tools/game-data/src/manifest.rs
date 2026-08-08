@@ -79,6 +79,8 @@ impl Manifest {
             "apollyon_incarnations_v1",
             "atlas_v1",
             "draft_v1",
+            "dream_avatar_metadata_v1",
+            "dream_avatars_v1",
             "cards_v2",
             "exploration_v1",
             "compat_v1",

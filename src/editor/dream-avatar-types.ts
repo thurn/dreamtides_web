@@ -2,18 +2,10 @@ import type { Tides4Color, Tides4Role } from "../draft/pool/tides4-io";
 
 /** The inline-editable text fields on a DreamAvatar record. */
 export type EditableDreamAvatarField =
-  | "name"
-  | "title"
-  | "rendered-text"
-  | "image-number"
-  | "starting-essence";
+  "name" | "title" | "rendered-text" | "image-number" | "starting-essence";
 
 export type DreamAvatarSortField =
-  | "sourceOrder"
-  | "name"
-  | "startingEssence"
-  | "rulesTextLength"
-  | "facetCount";
+  "sourceOrder" | "name" | "startingEssence" | "rulesTextLength" | "facetCount";
 export type DreamAvatarSortDirection = "asc" | "desc";
 export type DreamAvatarSize = "small" | "medium" | "large";
 export type DreamAvatarSearchScope = "name" | "all";
@@ -61,6 +53,7 @@ export interface DreamAvatarDisplayState {
 export interface LoadEditorDreamAvatarsResponse {
   dreamAvatars: EditorDreamAvatarRecord[];
   tides: EditorTideOption[];
+  sourceRevision: string;
 }
 
 export interface SaveEditorDreamAvatarFieldRequest {
@@ -77,11 +70,14 @@ export interface SaveEditorDreamAvatarTidePoolRequest {
 
 export interface SaveEditorDreamAvatarFieldResponse {
   dreamAvatar: EditorDreamAvatarRecord;
+  sourceRevision: string;
   clientRevision?: number;
 }
 
 export interface DreamAvatarEditorApiClient {
-  loadEditorDreamAvatars(signal?: AbortSignal): Promise<LoadEditorDreamAvatarsResponse>;
+  loadEditorDreamAvatars(
+    signal?: AbortSignal,
+  ): Promise<LoadEditorDreamAvatarsResponse>;
   saveEditorDreamAvatarField(
     request: SaveEditorDreamAvatarFieldRequest,
   ): Promise<SaveEditorDreamAvatarFieldResponse>;

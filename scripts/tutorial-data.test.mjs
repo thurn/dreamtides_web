@@ -27,8 +27,8 @@ const FIXTURE_BATTLE = {
     loadingEventCardId: "944e15d2-d680-4ebe-8d18-36826f4b1535",
     dreamwellCardId: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
   },
-  playerDreamAvatarId: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
-  enemyDreamAvatarId: "B99936CA-97F9-4930-AF5A-FA9EF92557EF",
+  playerDreamAvatarId: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+  enemyDreamAvatarId: "b99936ca-97f9-4930-af5a-fa9ef92557ef",
   startingEnergy: 7,
   scoreToWin: 12,
   starterDeck: [

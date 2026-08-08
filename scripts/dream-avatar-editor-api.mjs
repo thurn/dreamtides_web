@@ -1,39 +1,29 @@
-import {
-  existsSync,
-  readFileSync,
-  renameSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
-import { isAbsolute, join, relative, resolve, sep } from "node:path";
+import { readFileSync } from "node:fs";
+import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   DEFAULT_DREAM_AVATAR_TOML_PATH,
   TIDES4_SOURCE_PATH,
-  patchDreamAvatarsToml,
   patchTides4Pool,
   readEditorDreamAvatars,
   readTideCatalog,
-  refreshDreamAvatarDataJson,
-  refreshTides4DataJson,
   validateDreamAvatarEdit,
   validateTidePool,
 } from "./dream-avatar-editor-data.mjs";
+import {
+  sourceRevision,
+  stageAndPublishGameDataEdit,
+} from "./game-data-pipeline.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/dream-avatars";
-const DREAM_AVATAR_TOML_DIR = join("data");
-const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
-
-const defaultFileSystem = {
-  existsSync,
-  readFileSync,
-  renameSync,
-  rmSync,
-  writeFileSync,
-};
-
-let saveCounter = 0;
+export const DREAM_AVATAR_SOURCE_PATH = join("data", "dream_avatars.ron");
+export const DREAM_AVATAR_EDITOR_SOURCE_PATHS = [
+  DREAM_AVATAR_SOURCE_PATH,
+  TIDES4_SOURCE_PATH,
+];
+const UUID_V4_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u;
 
 function jsonResponse(res, statusCode, body, headers = {}) {
   res.writeHead(statusCode, {
@@ -53,40 +43,33 @@ function rawPathFromUrl(url) {
   return (url ?? "/").split("?", 1)[0];
 }
 
-function tomlParamFromUrl(url) {
+function sourceParamFromUrl(url) {
   const queryIndex = (url ?? "").indexOf("?");
-  if (queryIndex === -1) {
-    return null;
-  }
-  return new URLSearchParams((url ?? "").slice(queryIndex + 1)).get("toml");
+  if (queryIndex === -1) return null;
+  const params = new URLSearchParams((url ?? "").slice(queryIndex + 1));
+  return params.get("source") ?? params.get("toml");
 }
 
-function resolveRequestedTomlPath(rootDir, requested) {
-  if (requested === null || requested === undefined || requested.trim() === "") {
-    return { ok: true, relativePath: DEFAULT_DREAM_AVATAR_TOML_PATH };
+function resolveRequestedSource(requested) {
+  if (
+    requested === null ||
+    requested === undefined ||
+    requested.trim() === ""
+  ) {
+    return { ok: true };
   }
-
-  const trimmed = requested.trim();
-  if (trimmed.includes("\0")) {
-    return { ok: false, message: "The toml parameter is invalid." };
+  const normalized = requested
+    .trim()
+    .replaceAll("\\", "/")
+    .replace(/^data\//u, "")
+    .replace(/\.toml$/iu, ".ron");
+  if (normalized !== "dream_avatars.ron") {
+    return {
+      ok: false,
+      message: "The DreamAvatar editor source must be data/dream_avatars.ron.",
+    };
   }
-
-  const hasDirectory = trimmed.includes("/") || trimmed.includes("\\");
-  const candidate = hasDirectory ? trimmed : join(DREAM_AVATAR_TOML_DIR, trimmed);
-
-  if (!candidate.toLowerCase().endsWith(".toml")) {
-    return { ok: false, message: "The toml file must have a .toml extension." };
-  }
-
-  const dataDir = resolve(rootDir, DREAM_AVATAR_TOML_DIR);
-  const target = resolve(rootDir, candidate);
-  const within = relative(dataDir, target);
-
-  if (within === "" || within.startsWith("..") || isAbsolute(within) || within.includes(sep)) {
-    return { ok: false, message: "The toml file must be located in data." };
-  }
-
-  return { ok: true, relativePath: join(DREAM_AVATAR_TOML_DIR, within) };
+  return { ok: true };
 }
 
 function isDreamAvatarApiPath(pathname) {
@@ -94,15 +77,16 @@ function isDreamAvatarApiPath(pathname) {
 }
 
 function routeForRawPath(rawPath) {
-  if (rawPath === BASE_PATH) {
-    return { ok: true, resource: "collection" };
-  }
-
+  if (rawPath === BASE_PATH) return { ok: true, resource: "collection" };
   const encodedSegment = rawPath.slice(BASE_PATH.length + 1);
   if (encodedSegment.length === 0 || encodedSegment.includes("/")) {
-    return { ok: false, statusCode: 404, code: "NOT_FOUND", message: "Endpoint was not found." };
+    return {
+      ok: false,
+      statusCode: 404,
+      code: "NOT_FOUND",
+      message: "Endpoint was not found.",
+    };
   }
-
   let dreamAvatarId;
   try {
     dreamAvatarId = decodeURIComponent(encodedSegment);
@@ -111,20 +95,18 @@ function routeForRawPath(rawPath) {
       ok: false,
       statusCode: 400,
       code: "INVALID_DREAM_AVATAR_ID",
-      message: "Route dreamAvatar id must be a canonical UUID.",
+      message: "Route DreamAvatar id must be a canonical UUIDv4.",
     };
   }
-
-  if (!UUID_PATTERN.test(dreamAvatarId)) {
+  if (!UUID_V4_PATTERN.test(dreamAvatarId)) {
     return {
       ok: false,
       statusCode: 400,
       code: "INVALID_DREAM_AVATAR_ID",
-      message: "Route dreamAvatar id must be a canonical UUID.",
+      message: "Route DreamAvatar id must be a canonical UUIDv4.",
       details: { id: dreamAvatarId },
     };
   }
-
   return { ok: true, resource: "dreamAvatar", dreamAvatarId };
 }
 
@@ -135,9 +117,7 @@ function readRequestBody(req) {
     req.on("data", (chunk) => {
       body += chunk;
     });
-    req.on("end", () => {
-      resolvePromise(body);
-    });
+    req.on("end", () => resolvePromise(body));
     req.on("error", reject);
   });
 }
@@ -157,72 +137,14 @@ function methodNotAllowed(res, allowedMethods) {
   jsonResponse(
     res,
     405,
-    { error: { code: "METHOD_NOT_ALLOWED", message: "Method is not allowed for this endpoint." } },
+    {
+      error: {
+        code: "METHOD_NOT_ALLOWED",
+        message: "Method is not allowed for this endpoint.",
+      },
+    },
     { Allow: allowedMethods.join(", ") },
   );
-}
-
-function tempPathFor(destination, extension) {
-  saveCounter += 1;
-  return `${destination}.${process.pid}.${Date.now()}.${saveCounter}.${extension}`;
-}
-
-function preparedWrite(destination, content) {
-  return {
-    destination,
-    temp: tempPathFor(destination, "tmp"),
-    backup: tempPathFor(destination, "bak"),
-    content,
-  };
-}
-
-/**
- * Commit a set of file writes atomically via temp-file swap with rollback, so a
- * crash mid-save never leaves a TOML/JSONC source or its regenerated JSON
- * partially written.
- */
-function commitFiles(writes, fileSystem) {
-  const preexisting = new Set(writes.filter((write) => fileSystem.existsSync(write.destination)));
-
-  try {
-    for (const write of writes) {
-      fileSystem.writeFileSync(write.temp, write.content);
-    }
-    for (const write of writes) {
-      if (preexisting.has(write)) {
-        fileSystem.renameSync(write.destination, write.backup);
-      }
-    }
-    for (const write of writes) {
-      fileSystem.renameSync(write.temp, write.destination);
-    }
-  } catch (error) {
-    for (const write of writes) {
-      fileSystem.rmSync(write.temp, { force: true, recursive: true });
-    }
-    for (const write of writes) {
-      if (preexisting.has(write)) {
-        if (fileSystem.existsSync(write.backup)) {
-          fileSystem.rmSync(write.destination, { force: true, recursive: true });
-          fileSystem.renameSync(write.backup, write.destination);
-        }
-      } else {
-        fileSystem.rmSync(write.destination, { force: true, recursive: true });
-      }
-    }
-    throw error;
-  }
-
-  for (const write of writes) {
-    if (!preexisting.has(write)) {
-      continue;
-    }
-    try {
-      fileSystem.rmSync(write.backup, { force: true, recursive: true });
-    } catch {
-      // Backups are removed after every destination file is committed.
-    }
-  }
 }
 
 function assertPatchBody(body) {
@@ -238,16 +160,55 @@ function assertPatchBody(body) {
   if (!Object.hasOwn(body, "value")) {
     return { ok: false, message: "PATCH body value is required." };
   }
+  if (typeof body.expectedSourceRevision !== "string") {
+    return {
+      ok: false,
+      message: "Every save requires expectedSourceRevision.",
+    };
+  }
   return { ok: true };
 }
 
-function confirmedRecord(rootDir, dreamAvatarTomlPath, dreamAvatarId) {
-  return readEditorDreamAvatars({ rootDir, dreamAvatarTomlPath }).find(
+function readEditorData(rootDir) {
+  return {
+    dreamAvatars: readEditorDreamAvatars({ rootDir }),
+    tides: readTideCatalog({ rootDir }),
+  };
+}
+
+function confirmedRecord(data, dreamAvatarId) {
+  return data.dreamAvatars.find(
     (dreamAvatar) => dreamAvatar.id === dreamAvatarId,
   );
 }
 
-async function handlePatch(req, res, rootDir, dreamAvatarId, dreamAvatarTomlPath, fileSystem) {
+function collectionResponse(rootDir, revision, loadData) {
+  return {
+    ...loadData(rootDir),
+    sourceRevision: revision(rootDir, DREAM_AVATAR_EDITOR_SOURCE_PATHS),
+  };
+}
+
+function statusFor(error) {
+  if (error.code === "STALE_SOURCE") return 409;
+  if (error.code === "RECORD_NOT_FOUND") return 404;
+  if (["INVALID_EDIT", "FIELD_NOT_APPLICABLE"].includes(error.code)) return 400;
+  if (
+    ["MALFORMED_SOURCE", "COMPATIBILITY_VALIDATION_FAILED"].includes(error.code)
+  )
+    return 422;
+  return error.statusCode ?? 500;
+}
+
+async function handlePatch(
+  req,
+  res,
+  rootDir,
+  dreamAvatarId,
+  publishEdit,
+  revision,
+  loadData,
+) {
   let body;
   try {
     body = await readJsonRequest(req);
@@ -264,41 +225,57 @@ async function handlePatch(req, res, rootDir, dreamAvatarId, dreamAvatarTomlPath
     errorResponse(res, 400, "INVALID_REQUEST", bodyResult.message);
     return;
   }
-
-  if (!UUID_PATTERN.test(body.id)) {
-    errorResponse(res, 400, "INVALID_DREAM_AVATAR_ID", "Request body id must be a canonical UUID.", {
-      id: body.id,
-    });
+  if (!UUID_V4_PATTERN.test(body.id)) {
+    errorResponse(
+      res,
+      400,
+      "INVALID_DREAM_AVATAR_ID",
+      "Request body id must be a canonical UUIDv4.",
+      { id: body.id },
+    );
     return;
   }
-
   if (body.id !== dreamAvatarId) {
-    errorResponse(res, 400, "DREAM_AVATAR_ID_MISMATCH", "Route dreamAvatar id must match request body id.", {
-      routeId: dreamAvatarId,
-      bodyId: body.id,
-    });
+    errorResponse(
+      res,
+      400,
+      "DREAM_AVATAR_ID_MISMATCH",
+      "Route DreamAvatar id must match request body id.",
+      { routeId: dreamAvatarId, bodyId: body.id },
+    );
+    return;
+  }
+  const beforeData = loadData(rootDir);
+  if (confirmedRecord(beforeData, dreamAvatarId) === undefined) {
+    errorResponse(
+      res,
+      404,
+      "DREAM_AVATAR_NOT_FOUND",
+      "DreamAvatar was not found.",
+      {
+        id: dreamAvatarId,
+      },
+    );
     return;
   }
 
-  const beforeRecord = confirmedRecord(rootDir, dreamAvatarTomlPath, dreamAvatarId);
-  if (beforeRecord === undefined) {
-    errorResponse(res, 404, "DREAM_AVATAR_NOT_FOUND", "DreamAvatar was not found.", { id: dreamAvatarId });
-    return;
-  }
-
+  let operations;
+  let stagedFiles;
   if (body.field === "tide-pool") {
-    const validation = validateTidePool(body.value, readTideCatalog({ rootDir }));
+    const validation = validateTidePool(body.value, beforeData.tides);
     if (!validation.ok) {
-      errorResponse(res, 400, "INVALID_EDIT", validation.message, { field: body.field });
+      errorResponse(res, 400, "INVALID_EDIT", validation.message, {
+        field: body.field,
+      });
       return;
     }
-
-    const tides4Abs = join(rootDir, TIDES4_SOURCE_PATH);
-    const source = fileSystem.readFileSync(tides4Abs, "utf8");
-    const patched = patchTides4Pool(source, { dreamAvatarId, pool: validation.value });
-
-    commitFiles([preparedWrite(tides4Abs, patched.source)], fileSystem);
-    refreshTides4DataJson({ rootDir });
+    const source = readFileSync(join(rootDir, TIDES4_SOURCE_PATH), "utf8");
+    const patched = patchTides4Pool(source, {
+      dreamAvatarId,
+      pool: validation.value,
+    });
+    operations = [];
+    stagedFiles = { [TIDES4_SOURCE_PATH]: patched.source };
   } else {
     const validation = validateDreamAvatarEdit(body.field, body.value);
     if (!validation.ok) {
@@ -308,82 +285,114 @@ async function handlePatch(req, res, rootDir, dreamAvatarId, dreamAvatarTomlPath
       });
       return;
     }
-
-    const tomlAbs = join(rootDir, dreamAvatarTomlPath);
-    const source = fileSystem.readFileSync(tomlAbs, "utf8");
-    const patched = patchDreamAvatarsToml(source, {
-      dreamAvatarId,
-      field: body.field,
-      value: validation.value,
-    });
-
-    commitFiles([preparedWrite(tomlAbs, patched.source)], fileSystem);
-    if (dreamAvatarTomlPath === DEFAULT_DREAM_AVATAR_TOML_PATH) {
-      refreshDreamAvatarDataJson({ rootDir, dreamAvatarTomlPath });
-    }
+    operations = [
+      {
+        operation: "set_dream_avatar_field",
+        avatar_id: dreamAvatarId,
+        field: validation.field,
+        value: validation.value,
+      },
+    ];
+    stagedFiles = {};
   }
 
-  const confirmed = confirmedRecord(rootDir, dreamAvatarTomlPath, dreamAvatarId);
+  const result = await publishEdit({
+    rootDir,
+    dataset: "dream-avatars",
+    operations,
+    sourcePaths: DREAM_AVATAR_EDITOR_SOURCE_PATHS,
+    expectedSourceRevision: body.expectedSourceRevision,
+    stagedFiles,
+  });
+  const confirmed = confirmedRecord(loadData(rootDir), dreamAvatarId);
   if (confirmed === undefined) {
-    errorResponse(res, 404, "DREAM_AVATAR_NOT_FOUND", "DreamAvatar was not found.", { id: dreamAvatarId });
-    return;
+    const error = new Error("Published DreamAvatar could not be reloaded.");
+    error.code = "PUBLICATION_FAILED";
+    throw error;
   }
-
   jsonResponse(res, 200, {
     dreamAvatar: confirmed,
-    ...(Object.hasOwn(body, "clientRevision") ? { clientRevision: body.clientRevision } : {}),
+    sourceRevision:
+      result.sourceRevision ??
+      revision(rootDir, DREAM_AVATAR_EDITOR_SOURCE_PATHS),
+    ...(Object.hasOwn(body, "clientRevision")
+      ? { clientRevision: body.clientRevision }
+      : {}),
   });
 }
 
 export function createDreamAvatarEditorApiMiddleware({
   rootDir = ROOT,
-  fileSystem = defaultFileSystem,
+  publishEdit = stageAndPublishGameDataEdit,
+  revision = sourceRevision,
+  loadData = readEditorData,
 } = {}) {
   return async function dreamAvatarEditorApiMiddleware(req, res, next) {
     const rawPath = rawPathFromUrl(req.url);
-
     if (!isDreamAvatarApiPath(rawPath)) {
       next();
       return;
     }
-
     try {
       const route = routeForRawPath(rawPath);
       if (!route.ok) {
-        errorResponse(res, route.statusCode, route.code, route.message, route.details);
+        errorResponse(
+          res,
+          route.statusCode,
+          route.code,
+          route.message,
+          route.details,
+        );
         return;
       }
-
-      const tomlResolution = resolveRequestedTomlPath(rootDir, tomlParamFromUrl(req.url));
-      if (!tomlResolution.ok) {
-        errorResponse(res, 400, "INVALID_TOML", tomlResolution.message);
+      const sourceResolution = resolveRequestedSource(
+        sourceParamFromUrl(req.url),
+      );
+      if (!sourceResolution.ok) {
+        errorResponse(res, 400, "INVALID_SOURCE", sourceResolution.message);
         return;
       }
-
-      const dreamAvatarTomlPath = tomlResolution.relativePath;
-      if (!fileSystem.existsSync(join(rootDir, dreamAvatarTomlPath))) {
-        errorResponse(res, 404, "TOML_NOT_FOUND", "The requested toml file was not found.", {
-          toml: dreamAvatarTomlPath,
-        });
-        return;
-      }
-
       if (req.method === "GET" && route.resource === "collection") {
-        jsonResponse(res, 200, {
-          dreamAvatars: readEditorDreamAvatars({ rootDir, dreamAvatarTomlPath }),
-          tides: readTideCatalog({ rootDir }),
-        });
+        jsonResponse(res, 200, collectionResponse(rootDir, revision, loadData));
         return;
       }
-
       if (req.method === "PATCH" && route.resource === "dreamAvatar") {
-        await handlePatch(req, res, rootDir, route.dreamAvatarId, dreamAvatarTomlPath, fileSystem);
+        await handlePatch(
+          req,
+          res,
+          rootDir,
+          route.dreamAvatarId,
+          publishEdit,
+          revision,
+          loadData,
+        );
         return;
       }
-
-      methodNotAllowed(res, route.resource === "collection" ? ["GET"] : ["PATCH"]);
+      methodNotAllowed(
+        res,
+        route.resource === "collection" ? ["GET"] : ["PATCH"],
+      );
     } catch (error) {
-      errorResponse(res, 500, "SAVE_FAILED", error instanceof Error ? error.message : "Save failed.");
+      let confirmed;
+      if (error.code === "STALE_SOURCE") {
+        confirmed = collectionResponse(rootDir, revision, loadData);
+      }
+      errorResponse(
+        res,
+        statusFor(error),
+        error.code ?? "PUBLICATION_FAILED",
+        error instanceof Error
+          ? error.message
+          : "DreamAvatar editor transaction failed.",
+        {
+          datasetId: "dream-avatars",
+          source: DREAM_AVATAR_SOURCE_PATH,
+          ...(error.currentSourceRevision === undefined
+            ? {}
+            : { currentSourceRevision: error.currentSourceRevision }),
+          ...(confirmed === undefined ? {} : { confirmed }),
+        },
+      );
     }
   };
 }

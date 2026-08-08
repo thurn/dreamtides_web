@@ -18,7 +18,10 @@ import DreamAvatarEditorGrid from "./DreamAvatarEditorGrid";
 import DreamAvatarEditorToolbar from "./DreamAvatarEditorToolbar";
 import DreamAvatarDetailView from "./DreamAvatarDetailView";
 import TidePoolModal from "./TidePoolModal";
-import { loadJourneyContent, type JourneyContent } from "../data/journey-content";
+import {
+  loadJourneyContent,
+  type JourneyContent,
+} from "../data/journey-content";
 import { loadTides4Decks } from "../data/cards-v2-database";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import type { Tides4DecksJson } from "../draft/pool/tides4-io";
@@ -54,7 +57,11 @@ const DEFAULT_DREAM_AVATAR_API_CLIENT: DreamAvatarEditorApiClient = {
 
 type LoadStatus =
   | { kind: "loading" }
-  | { kind: "loaded"; dreamAvatars: EditorDreamAvatarRecord[]; tides: EditorTideOption[] }
+  | {
+      kind: "loaded";
+      dreamAvatars: EditorDreamAvatarRecord[];
+      tides: EditorTideOption[];
+    }
   | { kind: "error"; message: string };
 
 export interface DreamAvatarEditorAppProps {
@@ -62,7 +69,9 @@ export interface DreamAvatarEditorAppProps {
 }
 
 function errorMessageFor(error: unknown): string {
-  return error instanceof Error ? error.message : "Unable to load editor avatars.";
+  return error instanceof Error
+    ? error.message
+    : "Unable to load editor avatars.";
 }
 
 function isAbortError(error: unknown): boolean {
@@ -71,7 +80,10 @@ function isAbortError(error: unknown): boolean {
 
 function isServerValidationError(error: unknown): boolean {
   return (
-    error !== null && typeof error === "object" && "code" in error && error.code === "INVALID_EDIT"
+    error !== null &&
+    typeof error === "object" &&
+    "code" in error &&
+    error.code === "INVALID_EDIT"
   );
 }
 
@@ -103,7 +115,10 @@ function sortValue(
   }
 }
 
-function compareSortValues(left: string | number, right: string | number): number {
+function compareSortValues(
+  left: string | number,
+  right: string | number,
+): number {
   if (typeof left === "number" && typeof right === "number") {
     return left - right;
   }
@@ -161,7 +176,9 @@ function reorderToFrozenOrder(
     .sort((left, right) => {
       const leftRank = rank.get(left.dreamAvatar.id) ?? fallback;
       const rightRank = rank.get(right.dreamAvatar.id) ?? fallback;
-      return leftRank === rightRank ? left.index - right.index : leftRank - rightRank;
+      return leftRank === rightRank
+        ? left.index - right.index
+        : leftRank - rightRank;
     })
     .map(({ dreamAvatar }) => dreamAvatar);
 }
@@ -197,23 +214,38 @@ function validateFieldSave(
   }
 
   if (field === "title") {
-    return { ok: true, value: textValue };
+    return textValue.length === 0
+      ? { ok: false, message: "Title cannot be blank." }
+      : { ok: true, value: textValue };
   }
 
   if (field === "rendered-text") {
-    return { ok: true, value: String(value) };
+    const paragraphs = String(value).split("\n\n");
+    return paragraphs.some((paragraph) => paragraph.trim().length === 0)
+      ? {
+          ok: false,
+          message: "Ability text must contain non-empty paragraphs.",
+        }
+      : { ok: true, value: String(value) };
   }
 
   if (field === "image-number") {
-    return /^\d+$/u.test(textValue)
+    if (!/^\d+$/u.test(textValue)) {
+      return { ok: false, message: "Image number must be digits, e.g. 0083." };
+    }
+    const image = Number(textValue);
+    return image >= 1 && image <= 9999
       ? { ok: true, value: textValue }
-      : { ok: false, message: "Image number must be digits, e.g. 0083." };
+      : { ok: false, message: "Image number must be between 0001 and 9999." };
   }
 
   if (field === "starting-essence") {
     return /^\d+$/u.test(textValue)
       ? { ok: true, value: Number(textValue) }
-      : { ok: false, message: "Starting essence must be a non-negative whole number." };
+      : {
+          ok: false,
+          message: "Starting essence must be a non-negative whole number.",
+        };
   }
 
   return { ok: false, message: "This field is not editable." };
@@ -222,8 +254,8 @@ function validateFieldSave(
 export default function DreamAvatarEditorApp({
   apiClient = DEFAULT_DREAM_AVATAR_API_CLIENT,
 }: DreamAvatarEditorAppProps) {
-  const [displayState, setDisplayState] = useState<DreamAvatarDisplayState>(() =>
-    parseDreamAvatarDisplayState(window.location.search),
+  const [displayState, setDisplayState] = useState<DreamAvatarDisplayState>(
+    () => parseDreamAvatarDisplayState(window.location.search),
   );
   const activeTomlLabel = useMemo(() => {
     const param = editorTomlParam();
@@ -233,16 +265,24 @@ export default function DreamAvatarEditorApp({
   }, []);
   const [loadStatus, setLoadStatus] = useState<LoadStatus>({ kind: "loading" });
   const [loadAttempt, setLoadAttempt] = useState(0);
-  const [saveState, setSaveState] = useState<EditableSaveState>(EMPTY_EDITOR_SAVE_STATE);
+  const [saveState, setSaveState] = useState<EditableSaveState>(
+    EMPTY_EDITOR_SAVE_STATE,
+  );
   const saveStateRef = useRef(saveState);
   const [tideModalId, setTideModalId] = useState<string | null>(null);
-  const [tideSaveState, setTideSaveState] = useState<Record<string, boolean>>({});
+  const [tideSaveState, setTideSaveState] = useState<Record<string, boolean>>(
+    {},
+  );
   const [tideSaveError, setTideSaveError] = useState<string | null>(null);
   const [detailId, setDetailId] = useState<string | null>(() =>
     parseDetailIdFromUrl(window.location.search),
   );
-  const [journeyContent, setJourneyContent] = useState<JourneyContent | null>(null);
-  const [journeyContentError, setJourneyContentError] = useState<string | null>(null);
+  const [journeyContent, setJourneyContent] = useState<JourneyContent | null>(
+    null,
+  );
+  const [journeyContentError, setJourneyContentError] = useState<string | null>(
+    null,
+  );
   const [tideDecks, setTideDecks] = useState<Tides4DecksJson | null>(null);
   const [tideDecksError, setTideDecksError] = useState<string | null>(null);
 
@@ -253,7 +293,9 @@ export default function DreamAvatarEditorApp({
     async function load() {
       setLoadStatus({ kind: "loading" });
       try {
-        const response = await apiClient.loadEditorDreamAvatars(controller.signal);
+        const response = await apiClient.loadEditorDreamAvatars(
+          controller.signal,
+        );
         if (!cancelled) {
           setLoadStatus({
             kind: "loaded",
@@ -282,7 +324,11 @@ export default function DreamAvatarEditorApp({
   // journey content the battle integration loads. Fetch it lazily the first time
   // a detail screen is opened so the editor's normal load path is unaffected.
   useEffect(() => {
-    if (detailId === null || journeyContent !== null || journeyContentError !== null) {
+    if (
+      detailId === null ||
+      journeyContent !== null ||
+      journeyContentError !== null
+    ) {
       return;
     }
     let cancelled = false;
@@ -346,7 +392,8 @@ export default function DreamAvatarEditorApp({
     };
   }, []);
 
-  const loadedDreamAvatars = loadStatus.kind === "loaded" ? loadStatus.dreamAvatars : [];
+  const loadedDreamAvatars =
+    loadStatus.kind === "loaded" ? loadStatus.dreamAvatars : [];
   const tides = loadStatus.kind === "loaded" ? loadStatus.tides : [];
   const sortedVisibleDreamAvatars = useMemo(
     () => filteredAndSortedDreamAvatars(loadedDreamAvatars, displayState),
@@ -356,7 +403,9 @@ export default function DreamAvatarEditorApp({
   const editing = anyFieldEditing(saveState);
   const frozenOrderRef = useRef<string[]>([]);
   if (!editing) {
-    frozenOrderRef.current = sortedVisibleDreamAvatars.map((dreamAvatar) => dreamAvatar.id);
+    frozenOrderRef.current = sortedVisibleDreamAvatars.map(
+      (dreamAvatar) => dreamAvatar.id,
+    );
   }
   const visibleDreamAvatars = editing
     ? reorderToFrozenOrder(sortedVisibleDreamAvatars, frozenOrderRef.current)
@@ -365,12 +414,16 @@ export default function DreamAvatarEditorApp({
   const tideModalDreamAvatar =
     tideModalId === null
       ? null
-      : (loadedDreamAvatars.find((dreamAvatar) => dreamAvatar.id === tideModalId) ?? null);
+      : (loadedDreamAvatars.find(
+          (dreamAvatar) => dreamAvatar.id === tideModalId,
+        ) ?? null);
 
   const detailDreamAvatar =
     detailId === null
       ? null
-      : (loadedDreamAvatars.find((dreamAvatar) => dreamAvatar.id === detailId) ?? null);
+      : (loadedDreamAvatars.find(
+          (dreamAvatar) => dreamAvatar.id === detailId,
+        ) ?? null);
 
   function handleDisplayStateChange(nextState: DreamAvatarDisplayState) {
     setDisplayState(nextState);
@@ -395,7 +448,9 @@ export default function DreamAvatarEditorApp({
     }
   }
 
-  function setEditorSaveState(updater: (current: EditableSaveState) => EditableSaveState) {
+  function setEditorSaveState(
+    updater: (current: EditableSaveState) => EditableSaveState,
+  ) {
     const next = updater(saveStateRef.current);
     saveStateRef.current = next;
     setSaveState(next);
@@ -460,7 +515,8 @@ export default function DreamAvatarEditorApp({
     const validation = validateFieldSave(field, value);
     if (
       !validation.ok ||
-      String(validation.value) === String(confirmedFieldValue(dreamAvatar, field))
+      String(validation.value) ===
+        String(confirmedFieldValue(dreamAvatar, field))
     ) {
       handleFieldCancel(dreamAvatar, field);
       return;
@@ -468,7 +524,9 @@ export default function DreamAvatarEditorApp({
     handleFieldSave(dreamAvatar, field, value);
   }
 
-  function replaceConfirmedDreamAvatar(nextDreamAvatar: EditorDreamAvatarRecord) {
+  function replaceConfirmedDreamAvatar(
+    nextDreamAvatar: EditorDreamAvatarRecord,
+  ) {
     setLoadStatus((current) => {
       if (current.kind !== "loaded") {
         return current;
@@ -518,11 +576,19 @@ export default function DreamAvatarEditorApp({
     });
 
     void apiClient
-      .saveEditorDreamAvatarField({ id: dreamAvatar.id, field, value: serverValue, clientRevision })
+      .saveEditorDreamAvatarField({
+        id: dreamAvatar.id,
+        field,
+        value: serverValue,
+        clientRevision,
+      })
       .then((response) => {
         const responseRevision = response.clientRevision ?? clientRevision;
         const currentEntry = fieldSaveEntry(saveStateRef.current, target);
-        if (currentEntry === null || responseRevision < currentEntry.submittedRevision) {
+        if (
+          currentEntry === null ||
+          responseRevision < currentEntry.submittedRevision
+        ) {
           return;
         }
         setEditorSaveState((current) =>
@@ -538,7 +604,10 @@ export default function DreamAvatarEditorApp({
       .catch((error: unknown) => {
         const message = errorMessageFor(error);
         const currentEntry = fieldSaveEntry(saveStateRef.current, target);
-        if (currentEntry !== null && clientRevision >= currentEntry.submittedRevision) {
+        if (
+          currentEntry !== null &&
+          clientRevision >= currentEntry.submittedRevision
+        ) {
           setEditorSaveState((current) => {
             if (isServerValidationError(error)) {
               return rejectSubmittedFieldSave(
@@ -561,7 +630,10 @@ export default function DreamAvatarEditorApp({
       });
   }
 
-  function handleSaveTidePool(dreamAvatar: EditorDreamAvatarRecord, pool: EditorTidePool) {
+  function handleSaveTidePool(
+    dreamAvatar: EditorDreamAvatarRecord,
+    pool: EditorTidePool,
+  ) {
     setTideSaveState((current) => ({ ...current, [dreamAvatar.id]: true }));
     setTideSaveError(null);
 
@@ -569,11 +641,17 @@ export default function DreamAvatarEditorApp({
       .saveEditorDreamAvatarTidePool({ id: dreamAvatar.id, pool })
       .then((response) => {
         replaceConfirmedDreamAvatar(response.dreamAvatar);
-        setTideSaveState((current) => ({ ...current, [dreamAvatar.id]: false }));
+        setTideSaveState((current) => ({
+          ...current,
+          [dreamAvatar.id]: false,
+        }));
         setTideModalId(null);
       })
       .catch((error: unknown) => {
-        setTideSaveState((current) => ({ ...current, [dreamAvatar.id]: false }));
+        setTideSaveState((current) => ({
+          ...current,
+          [dreamAvatar.id]: false,
+        }));
         setTideSaveError(errorMessageFor(error));
       });
   }
@@ -602,15 +680,29 @@ export default function DreamAvatarEditorApp({
     >
       <header
         className="dream-avatar-editor-header"
-        style={{ display: "flex", alignItems: "baseline", gap: "10px", flex: "0 0 auto" }}
+        style={{
+          display: "flex",
+          alignItems: "baseline",
+          gap: "10px",
+          flex: "0 0 auto",
+        }}
       >
-        <h1 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 800, lineHeight: 1.1 }}>
+        <h1
+          style={{
+            margin: 0,
+            fontSize: "1.05rem",
+            fontWeight: 800,
+            lineHeight: 1.1,
+          }}
+        >
           Avatar Editor
         </h1>
         <span aria-hidden="true" style={{ color: "rgba(247, 241, 223, 0.35)" }}>
           -
         </span>
-        <span style={{ color: "#8edbd1", fontSize: "0.82rem", fontWeight: 600 }}>
+        <span
+          style={{ color: "#8edbd1", fontSize: "0.82rem", fontWeight: 600 }}
+        >
           {loadStatus.kind === "loaded" ? activeTomlLabel : "Loading..."}
         </span>
       </header>
@@ -676,8 +768,12 @@ export default function DreamAvatarEditorApp({
 
         {loadStatus.kind === "error" ? (
           <div role="alert" style={{ maxWidth: "560px" }}>
-            <h2 style={{ margin: "0 0 8px", fontSize: "1.25rem" }}>Unable to load avatars</h2>
-            <p style={{ margin: "0 0 18px", color: "#f0c6bd" }}>{loadStatus.message}</p>
+            <h2 style={{ margin: "0 0 8px", fontSize: "1.25rem" }}>
+              Unable to load avatars
+            </h2>
+            <p style={{ margin: "0 0 18px", color: "#f0c6bd" }}>
+              {loadStatus.message}
+            </p>
             <button
               type="button"
               onClick={() => setLoadAttempt((attempt) => attempt + 1)}

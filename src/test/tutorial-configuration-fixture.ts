@@ -14,9 +14,9 @@ export const TEST_TUTORIAL_FEATURED_CARDS: TutorialFeaturedCards = {
 };
 
 export const TEST_TUTORIAL_PLAYER_AVATAR_ID =
-  "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
+  "bfc40414-5264-41bf-86e1-a0f41ee4f5b5";
 export const TEST_TUTORIAL_ENEMY_AVATAR_ID =
-  "B99936CA-97F9-4930-AF5A-FA9EF92557EF";
+  "b99936ca-97f9-4930-af5a-fa9ef92557ef";
 
 export function makeTutorialBattleConfiguration(
   overrides: Partial<TutorialBattleConfiguration> = {},

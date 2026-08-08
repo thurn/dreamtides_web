@@ -101,6 +101,12 @@ struct CompatibilityCatalog {
 }
 
 #[derive(Serialize)]
+struct CompatibilityMetadataCatalog {
+    #[serde(rename = "avatarMetadata")]
+    entries: Vec<AvatarMetadata>,
+}
+
+#[derive(Serialize)]
 struct CompatibilityDreamAvatar {
     name: String,
     title: String,
@@ -177,6 +183,13 @@ pub fn lower(source: Vec<AvatarDefinition>) -> Result<toml::Value> {
     })?)
 }
 
+pub fn lower_metadata(source: Vec<AvatarMetadata>) -> Result<toml::Value> {
+    validate_metadata_shape(&source)?;
+    Ok(toml::Value::try_from(CompatibilityMetadataCatalog {
+        entries: source,
+    })?)
+}
+
 fn compatibility_metadata() -> CompatibilityMetadata {
     CompatibilityMetadata {
         schema_version: 1,
@@ -219,7 +232,7 @@ fn compatibility_metadata() -> CompatibilityMetadata {
     }
 }
 
-fn validate(source: &[AvatarDefinition]) -> Result<()> {
+pub(crate) fn validate(source: &[AvatarDefinition]) -> Result<()> {
     let mut ids = BTreeSet::new();
     let mut images = BTreeSet::new();
     for avatar in source {
@@ -289,24 +302,12 @@ pub fn validate_internal_metadata(
     avatars: &[AvatarDefinition],
     metadata: &[AvatarMetadata],
 ) -> Result<()> {
+    validate_metadata_shape(metadata)?;
     let avatar_ids: BTreeSet<_> = avatars.iter().map(|avatar| avatar.id).collect();
-    let mut metadata_ids = BTreeSet::new();
     for entry in metadata {
         if !avatar_ids.contains(&entry.avatar_id) {
             bail!(
                 "internal avatar metadata references unknown DreamAvatar {}",
-                entry.avatar_id
-            );
-        }
-        if !metadata_ids.insert(entry.avatar_id) {
-            bail!(
-                "duplicate internal avatar metadata for DreamAvatar {}",
-                entry.avatar_id
-            );
-        }
-        if entry.mtg_archetype.trim().is_empty() {
-            bail!(
-                "internal avatar metadata for {} has an empty MTG archetype",
                 entry.avatar_id
             );
         }
@@ -324,16 +325,48 @@ pub fn validate_internal_metadata(
     Ok(())
 }
 
+fn validate_metadata_shape(metadata: &[AvatarMetadata]) -> Result<()> {
+    let mut metadata_ids = BTreeSet::new();
+    for entry in metadata {
+        if !metadata_ids.insert(entry.avatar_id) {
+            bail!(
+                "duplicate internal avatar metadata for DreamAvatar {}",
+                entry.avatar_id
+            );
+        }
+        if entry.mtg_archetype.trim().is_empty() {
+            bail!(
+                "internal avatar metadata for {} has an empty MTG archetype",
+                entry.avatar_id
+            );
+        }
+    }
+    Ok(())
+}
+
+pub fn validate_signature_card_references(
+    avatars: &[AvatarDefinition],
+    known_card_ids: &BTreeSet<String>,
+) -> Result<()> {
+    for avatar in avatars {
+        for card_id in &avatar.signature_card_ids {
+            if !known_card_ids.contains(&card_id.to_string()) {
+                bail!(
+                    "DreamAvatar {} references unknown signature card {}",
+                    avatar.id,
+                    card_id
+                );
+            }
+        }
+    }
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
-    use std::collections::{BTreeMap, BTreeSet};
-    use std::fs;
-    use std::path::Path;
-
     use pretty_assertions::assert_eq;
 
     use super::*;
-    use crate::models::compat::CompatDocument;
 
     const FIRST_ID: &str = "00000000-0000-4000-8000-000000000001";
     const SECOND_ID: &str = "00000000-0000-4000-8000-000000000002";
@@ -418,6 +451,38 @@ mod tests {
         let output = lower(source).unwrap();
         let avatar = &output["dreamAvatar"][0];
         assert!(avatar.get("signature-cards").is_none());
+    }
+
+    #[test]
+    fn lowers_internal_metadata_and_rejects_invalid_records() {
+        let metadata: Vec<AvatarMetadata> = ron::from_str(synthetic_metadata()).unwrap();
+        let output = lower_metadata(metadata.clone()).unwrap();
+        assert_eq!(
+            output["avatarMetadata"][0]["avatar_id"].as_str(),
+            Some(FIRST_ID)
+        );
+        assert_eq!(
+            output["avatarMetadata"][0]["mtg_archetype"].as_str(),
+            Some("An Archetype")
+        );
+
+        let mut duplicate = metadata.clone();
+        duplicate.push(metadata[0].clone());
+        assert!(
+            lower_metadata(duplicate)
+                .unwrap_err()
+                .to_string()
+                .contains("duplicate internal avatar metadata")
+        );
+
+        let mut empty = metadata;
+        empty[0].mtg_archetype.clear();
+        assert!(
+            lower_metadata(empty)
+                .unwrap_err()
+                .to_string()
+                .contains("empty MTG archetype")
+        );
     }
 
     #[test]
@@ -544,260 +609,5 @@ mod tests {
                 .to_string()
                 .contains("empty MTG archetype")
         );
-    }
-
-    #[test]
-    #[ignore = "real-catalog parity probe retained for canonical DreamAvatar review"]
-    fn canonical_candidate_matches_current_compatibility_sources() {
-        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-        let current_ron: CompatDocument =
-            ron::from_str(&fs::read_to_string(root.join("data/dream_avatars.ron")).unwrap())
-                .unwrap();
-        let current_toml: toml::Value =
-            toml::from_str(&fs::read_to_string(root.join("data/dream_avatars.toml")).unwrap())
-                .unwrap();
-        assert_eq!(current_ron.data, current_toml);
-
-        let canonical: Vec<AvatarDefinition> = ron::from_str(
-            &fs::read_to_string(root.join("data/dream_avatars_canonical.ron")).unwrap(),
-        )
-        .unwrap();
-        assert_eq!(canonical.len(), 32);
-        let internal_metadata: Vec<AvatarMetadata> = ron::from_str(
-            &fs::read_to_string(root.join("data/internal/internal_avatar_metadata.ron")).unwrap(),
-        )
-        .unwrap();
-        validate_internal_metadata(&canonical, &internal_metadata).unwrap();
-
-        let id_map = legacy_id_map();
-        assert_eq!(id_map.len(), canonical.len());
-        let canonical_ids: BTreeSet<_> = canonical
-            .iter()
-            .map(|avatar| avatar.id.to_string())
-            .collect();
-        assert_eq!(
-            canonical_ids,
-            id_map.values().map(|value| (*value).to_owned()).collect()
-        );
-
-        let mut normalized = current_ron.data.clone();
-        let legacy_avatars = normalized["dreamAvatar"].as_array_mut().unwrap();
-        for avatar in legacy_avatars {
-            let legacy_id = avatar["id"].as_str().unwrap();
-            avatar["id"] = id_map
-                .get(legacy_id)
-                .unwrap_or_else(|| panic!("unmapped legacy DreamAvatar id {legacy_id}"))
-                .to_string()
-                .into();
-            avatar.as_table_mut().unwrap().remove("mtg-name");
-        }
-        assert_eq!(lower(canonical.clone()).unwrap(), normalized);
-
-        let expected_metadata: BTreeMap<_, _> = current_ron.data["dreamAvatar"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .filter_map(|avatar| {
-                let mtg_archetype = avatar.get("mtg-name")?.as_str().unwrap();
-                let legacy_id = avatar["id"].as_str().unwrap();
-                Some((id_map[legacy_id].to_owned(), mtg_archetype.to_owned()))
-            })
-            .collect();
-        let actual_metadata: BTreeMap<_, _> = internal_metadata
-            .iter()
-            .map(|entry| (entry.avatar_id.to_string(), entry.mtg_archetype.clone()))
-            .collect();
-        assert_eq!(actual_metadata, expected_metadata);
-
-        let cards: toml::Value =
-            toml::from_str(&fs::read_to_string(root.join("data/cards.toml")).unwrap()).unwrap();
-        let card_ids: BTreeSet<_> = cards["cards"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|card| card["id"].as_str().unwrap())
-            .collect();
-        for avatar in &canonical {
-            let parsed = Uuid::parse_str(&avatar.id.to_string()).unwrap();
-            assert_eq!(parsed.get_version(), Some(Version::Random));
-            assert_eq!(parsed.get_variant(), Variant::RFC4122);
-            assert_eq!(parsed.hyphenated().to_string(), avatar.id.to_string());
-            for card_id in &avatar.signature_card_ids {
-                assert!(card_ids.contains(card_id.to_string().as_str()));
-            }
-        }
-
-        verify_foreign_keys(&root, &id_map);
-    }
-
-    fn verify_foreign_keys(root: &Path, id_map: &BTreeMap<&'static str, &'static str>) {
-        let dreamscapes: toml::Value =
-            toml::from_str(&fs::read_to_string(root.join("data/dreamscapes.toml")).unwrap())
-                .unwrap();
-        let referenced: BTreeSet<_> = dreamscapes["dreamscapes"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .flat_map(|dreamscape| {
-                dreamscape
-                    .get("dream-avatar-ids")
-                    .and_then(toml::Value::as_array)
-                    .into_iter()
-                    .flatten()
-                    .map(|id| id.as_str().unwrap())
-            })
-            .collect();
-        assert_eq!(referenced, id_map.keys().copied().collect());
-
-        let tutorial: toml::Value =
-            toml::from_str(&fs::read_to_string(root.join("data/tutorial.toml")).unwrap()).unwrap();
-        let tutorial_text = tutorial.to_string();
-        for legacy_id in tutorial_text
-            .split(|character: char| !(character.is_ascii_hexdigit() || character == '-'))
-            .filter(|value| value.len() == 36 && id_map.contains_key(value))
-        {
-            assert!(id_map.contains_key(legacy_id));
-        }
-
-        let tides = fs::read_to_string(root.join("data/tides4.jsonc")).unwrap();
-        for legacy_id in id_map.keys() {
-            assert!(
-                tides.contains(legacy_id),
-                "tides4 is missing DreamAvatar foreign key {legacy_id}"
-            );
-        }
-    }
-
-    fn legacy_id_map() -> BTreeMap<&'static str, &'static str> {
-        BTreeMap::from([
-            (
-                "BDD3A3A7-242C-4D2B-8071-EBE56891A340",
-                "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
-            ),
-            (
-                "B99936CA-97F9-4930-AF5A-FA9EF92557EF",
-                "b99936ca-97f9-4930-af5a-fa9ef92557ef",
-            ),
-            (
-                "F0F5449E-01C2-4635-BCE1-76B179FC2108",
-                "f0f5449e-01c2-4635-bce1-76b179fc2108",
-            ),
-            (
-                "C72CFD7B-408B-47F6-ADF1-1E486A7E20D3",
-                "c72cfd7b-408b-47f6-adf1-1e486a7e20d3",
-            ),
-            (
-                "B9BF6D4B-907C-4750-B51C-811AFF29DE59",
-                "b9bf6d4b-907c-4750-b51c-811aff29de59",
-            ),
-            (
-                "3C4773E4-F8E1-4686-86CB-B407A42489D4",
-                "3c4773e4-f8e1-4686-86cb-b407a42489d4",
-            ),
-            (
-                "8A2FCD65-BBA7-459C-A6B0-F0391B9293FD",
-                "8a2fcd65-bba7-459c-a6b0-f0391b9293fd",
-            ),
-            (
-                "1CC5A88A-134F-42F7-A0AE-95ACE44B3745",
-                "1cc5a88a-134f-42f7-a0ae-95ace44b3745",
-            ),
-            (
-                "9E4862FD-E18C-463E-9D5F-E5D73C29A66F",
-                "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
-            ),
-            (
-                "BA973428-6D90-4847-B779-CB7E25A5AC84",
-                "ba973428-6d90-4847-b779-cb7e25a5ac84",
-            ),
-            (
-                "9E19B3D1-12F2-43C1-9CB1-08DE7CD32E32",
-                "9e19b3d1-12f2-43c1-9cb1-08de7cd32e32",
-            ),
-            (
-                "6029BE40-75B9-4C07-912F-9718B6C5C747",
-                "6029be40-75b9-4c07-912f-9718b6c5c747",
-            ),
-            (
-                "133E22DD-F81B-406D-B4E3-98C346D7FD4E",
-                "133e22dd-f81b-406d-b4e3-98c346d7fd4e",
-            ),
-            (
-                "9D64A4A2-3DC7-456E-9EB2-5FE3A48883C4",
-                "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4",
-            ),
-            (
-                "16B579FE-C15B-4DF6-8262-D45CE44732AE",
-                "16b579fe-c15b-4df6-8262-d45ce44732ae",
-            ),
-            (
-                "86026206-1B11-4F38-A24E-FD3C697F5353",
-                "86026206-1b11-4f38-a24e-fd3c697f5353",
-            ),
-            (
-                "6488452D-4E9E-466C-96DF-716D4EC646B1",
-                "6488452d-4e9e-466c-96df-716d4ec646b1",
-            ),
-            (
-                "B8C1B0AB-0FE6-47D6-B576-0C2231AEB81E",
-                "b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e",
-            ),
-            (
-                "81954CA0-DA36-49DD-915C-1CCB1B2D7B05",
-                "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
-            ),
-            (
-                "60BD584B-5BC8-4EE7-8A98-CBB304EB71AB",
-                "60bd584b-5bc8-4ee7-8a98-cbb304eb71ab",
-            ),
-            (
-                "5E28154D-770A-4B84-8AAC-9DE44F5D7D02",
-                "5e28154d-770a-4b84-8aac-9de44f5d7d02",
-            ),
-            (
-                "4D5E3933-7DD6-406B-922D-DD78ACFA044A",
-                "4d5e3933-7dd6-406b-922d-dd78acfa044a",
-            ),
-            (
-                "2B7E921D-0CD7-4C20-A415-9E7EEDE7B477",
-                "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
-            ),
-            (
-                "84E7020C-7384-4CC3-A20F-AB05F03CC375",
-                "84e7020c-7384-4cc3-a20f-ab05f03cc375",
-            ),
-            (
-                "F6208407-C4E9-42AC-B533-346704F5E39E",
-                "f6208407-c4e9-42ac-b533-346704f5e39e",
-            ),
-            (
-                "FE2510D9-BFEE-4C35-97F9-30E0CD2E2851",
-                "fe2510d9-bfee-4c35-97f9-30e0cd2e2851",
-            ),
-            (
-                "94E7C651-25E9-4A62-9DE4-EAF5BA20542C",
-                "94e7c651-25e9-4a62-9de4-eaf5ba20542c",
-            ),
-            (
-                "3EBABA62-9000-429D-B203-2A5A9724389A",
-                "3ebaba62-9000-429d-b203-2a5a9724389a",
-            ),
-            (
-                "2C53B1B9-9291-4BBA-8D3A-F40B545C8F3C",
-                "2c53b1b9-9291-4bba-8d3a-f40b545c8f3c",
-            ),
-            (
-                "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
-                "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
-            ),
-            (
-                "BF72ADFF-7D74-4BE8-9B93-1DB7BA13A1DB",
-                "bf72adff-7d74-4be8-9b93-1db7ba13a1db",
-            ),
-            (
-                "91D4C3B5-FD63-480B-9ED5-979109A227BB",
-                "91d4c3b5-fd63-480b-9ed5-979109a227bb",
-            ),
-        ])
     }
 }

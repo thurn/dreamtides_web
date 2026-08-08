@@ -275,7 +275,10 @@ http://localhost:5173/editor?q=moon&type=event&sort=name&dir=desc&size=large
 
 The standalone Dream Avatar editor is available at `/dream-avatars`.
 `/avatars` and `/dreamavatars` are aliases that preserve the query string and
-hash while opening the canonical editor URL.
+hash while opening the canonical editor URL. Identity edits publish semantic
+operations to `data/dream_avatars.ron`; tide-pool edits publish a staged
+`data/tides4.jsonc` patch in the same revision-checked transaction. Successful
+saves validate and regenerate the compatibility and runtime artifacts.
 
 ## Image Viewer
 

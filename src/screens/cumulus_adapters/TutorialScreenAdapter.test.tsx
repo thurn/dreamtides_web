@@ -14,7 +14,7 @@ const TUTORIAL_CONFIGURATION = makeTutorialConfiguration();
 
 const DREAM_AVATARS: readonly DreamAvatarContent[] = [
   {
-    id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+    id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
     name: "Gunnar Deepforge",
     title: "The Hammer's Echo",
     renderedText: "Player ability.",
@@ -23,7 +23,7 @@ const DREAM_AVATARS: readonly DreamAvatarContent[] = [
     startingEssence: 0,
   },
   {
-    id: "B99936CA-97F9-4930-AF5A-FA9EF92557EF",
+    id: "b99936ca-97f9-4930-af5a-fa9ef92557ef",
     name: "Threxan",
     title: "the Resounding Wrath",
     renderedText: "Opponent ability.",
@@ -315,7 +315,7 @@ describe("TutorialScreenAdapter", () => {
 
     act(() => {
       adapterMocks.props?.onDreamAvatarArrivalComplete?.(
-        "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+        "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
         "player",
       );
     });
@@ -324,7 +324,7 @@ describe("TutorialScreenAdapter", () => {
         expect.objectContaining({
           event: "tutorial_dream_avatar_arrived",
           battleId: "tutorial-battle",
-          dreamAvatarId: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+          dreamAvatarId: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
           owner: "player",
           actionId: "dream-avatar-arrival",
           abilityActive: false,

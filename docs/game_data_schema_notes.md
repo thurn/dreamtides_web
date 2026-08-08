@@ -231,49 +231,23 @@ Maximum number of distinct facets tides4 may draw from when building the pool.
 
 ## `data/dream_avatars.ron`
 
-### `[[dreamAvatar]]`
+The canonical catalog is an ordered RON list of `AvatarDefinition` records.
+Every record contains a lowercase UUIDv4 `id`, player-facing `name` and `title`,
+one or more `ability_text` paragraphs, and a nested `portrait` with an integer
+image number plus normalized `focus` coordinates. `starting_essence` is an
+optional tuning override.
 
-DreamAvatar identities — v2 ability set
----------------------------------------
-Each entry pairs a DreamAvatar's name, title, art, and id with one of the 32
-v2 abilities. The name and art are carried over from the v1 DreamAvatar whose
-flavor best fits the new ability. Starting essence is left unset and assigned
-separately.
+`signature_card_ids` is an ordered list of card UUIDs describing the avatar's
+deck intent. The compiler validates every reference against the card catalog,
+and the tides4 bake uses these signatures to derive signature and facet tides.
+The associated MTG archetype labels live in the internal
+`data/internal/internal_avatar_metadata.ron` catalog, keyed by Dream Avatar UUID.
 
-`signature-cards` is a short UUID-keyed list standing in for "what this avatar
-wants to do". The tides4 bake uses it to derive the avatar's signature and
-facet tides.
-
-How the signature cards are chosen
-----------------------------------
-Each DreamAvatar with signatures is assigned an MTG archetype, recorded in its
-`mtg-name` field. `docs/cards2/card_associations.md` lists, for every archetype,
-the five MTG cards most uniquely associated with it across real draft decks. Each
-of those MTG cards is mapped back to its Dreamtides equivalent(s) through the
-`mtg-name` field in `data/cards.toml`, and the resulting Dreamtides
-cards form the signature list. A DreamAvatar can therefore end up with fewer than
-five signatures (when an associated MTG card has no Dreamtides equivalent) or more
-than five (when one MTG card maps to several Dreamtides cards).
-
-`portrait-focus` is the normalized head center in the 1024×1536 portrait
-canvas. The values come from a Vision body-pose / face pass over every cutout,
-with the non-human and fully masked misses authored from the alpha cutouts.
-Full-body showcases and compact square crops share this focal point.
-
-Read `docs/cards2/card_associations.md` for the full archetype-to-card
-associations and the lift-based method used to derive them. Entries whose
-signatures were authored by hand instead of derived this way carry an inline note
-in place of an `mtg-name` field.
-
-### `signature-cards = [`
-
-Signatures authored by hand around three evasive outsiders (see commit a98fbb67);
-not derived from the card_associations.md archetype mapping.
-
-### `signature-cards = [`
-
-Original hand-picked signature set; not derived from the card_associations.md
-archetype mapping.
+The compiler validates unique Dream Avatar IDs and portrait images, canonical
+UUID formatting, non-empty display and ability fields, focus coordinates in
+`[0, 1]`, unique signature references, and the internal metadata relationship.
+It lowers the typed catalog to generated `data/dream_avatars.toml` for runtime
+consumers.
 
 ## `data/dream_guides.ron`
 
@@ -316,7 +290,7 @@ Fields:
   dream-avatar-ids The 3-4 resident DreamAvatars of this region, by id (omitted
                   for the starter). Every non-starter DreamAvatar belongs to
                   exactly one dreamscape, so these lists partition
-                  dream_avatars.toml: each id appears under exactly one
+                  dream_avatars.ron: each id appears under exactly one
                   dreamscape, and the build fails if that invariant breaks.
                   Assignments are affiliation-driven where a DreamAvatar's
                   ability names the region's theme (the warriors live in

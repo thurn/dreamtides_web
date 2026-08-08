@@ -2,11 +2,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
-import { patchTomlRecord } from "./card-editor-data.mjs";
-import {
-  stripJsonComments,
-  transformDreamAvatar,
-} from "./setup-assets.mjs";
+import { stripJsonComments, transformDreamAvatar } from "./setup-assets.mjs";
 import { compileEconomyData } from "./economy-data.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -19,10 +15,9 @@ export const DEFAULT_ECONOMY_TOML_PATH = join("data", "economy.toml");
 const DREAM_AVATAR_JSON_PATH = join("public", "dream-avatars-v2-data.json");
 const TIDES4_JSON_PATH = join("public", "tides4-data.json");
 
-// The text fields edited inline live on the `dream_avatars.toml` record;
-// `tide-pool` is edited separately against `data/tides4.jsonc` and is therefore
-// not part of the TOML-patch field set.
-export const EDITABLE_DREAM_AVATAR_TOML_FIELDS = new Set([
+// Generated compatibility TOML supplies editor records. Semantic field saves
+// target canonical `dream_avatars.ron`; tide-pool saves target `tides4.jsonc`.
+export const EDITABLE_DREAM_AVATAR_FIELDS = new Set([
   "name",
   "title",
   "rendered-text",
@@ -60,7 +55,10 @@ function readTides4(rootDir, tides4Path) {
  * card lists. The editor's tide picker only needs each tide's id, role, color,
  * and the names it renders to the user.
  */
-export function readTideCatalog({ rootDir = ROOT, tides4Path = TIDES4_SOURCE_PATH } = {}) {
+export function readTideCatalog({
+  rootDir = ROOT,
+  tides4Path = TIDES4_SOURCE_PATH,
+} = {}) {
   const tides4 = readTides4(rootDir, tides4Path);
   const tides = Array.isArray(tides4.tides) ? tides4.tides : [];
   return tides.map((tide) => ({
@@ -75,25 +73,38 @@ export function readTideCatalog({ rootDir = ROOT, tides4Path = TIDES4_SOURCE_PAT
 
 function tidePoolFor(tides4, dreamAvatarId) {
   const pools = tides4.tidePoolByDreamAvatar;
-  const pool = pools !== null && typeof pools === "object" ? pools[dreamAvatarId] : undefined;
+  const pool =
+    pools !== null && typeof pools === "object"
+      ? pools[dreamAvatarId]
+      : undefined;
   if (pool === null || typeof pool !== "object") {
     return { starter: null, facets: [], neutral: [] };
   }
   return {
     starter: typeof pool.starter === "string" ? pool.starter : null,
-    facets: Array.isArray(pool.facets) ? pool.facets.filter((id) => typeof id === "string") : [],
+    facets: Array.isArray(pool.facets)
+      ? pool.facets.filter((id) => typeof id === "string")
+      : [],
     neutral: Array.isArray(pool.neutral)
       ? pool.neutral.filter((id) => typeof id === "string")
       : [],
   };
 }
 
-function editorRecordFromDreamAvatar(dreamAvatar, index, tides4, defaultStartingEssence) {
+function editorRecordFromDreamAvatar(
+  dreamAvatar,
+  index,
+  tides4,
+  defaultStartingEssence,
+) {
   return {
     id: dreamAvatar.id,
     name: dreamAvatar.name,
     title: typeof dreamAvatar.title === "string" ? dreamAvatar.title : "",
-    imageNumber: typeof dreamAvatar["image-number"] === "string" ? dreamAvatar["image-number"] : "",
+    imageNumber:
+      typeof dreamAvatar["image-number"] === "string"
+        ? dreamAvatar["image-number"]
+        : "",
     "rendered-text": dreamAvatar["rendered-text"] ?? "",
     startingEssence:
       typeof dreamAvatar["starting-essence"] === "number"
@@ -112,19 +123,22 @@ export function readEditorDreamAvatars({
   economyTomlPath = DEFAULT_ECONOMY_TOML_PATH,
 } = {}) {
   const tides4 = readTides4(rootDir, tides4Path);
-  const economy = compileEconomyData(parse(readFileSync(join(rootDir, economyTomlPath), "utf8")));
-  return readSourceDreamAvatars(rootDir, dreamAvatarTomlPath).map((dreamAvatar, index) =>
-    editorRecordFromDreamAvatar(
-      dreamAvatar,
-      index,
-      tides4,
-      economy.journey.defaultStartingEssence,
-    ),
+  const economy = compileEconomyData(
+    parse(readFileSync(join(rootDir, economyTomlPath), "utf8")),
+  );
+  return readSourceDreamAvatars(rootDir, dreamAvatarTomlPath).map(
+    (dreamAvatar, index) =>
+      editorRecordFromDreamAvatar(
+        dreamAvatar,
+        index,
+        tides4,
+        economy.journey.defaultStartingEssence,
+      ),
   );
 }
 
 export function validateDreamAvatarEdit(field, rawValue) {
-  if (!EDITABLE_DREAM_AVATAR_TOML_FIELDS.has(field)) {
+  if (!EDITABLE_DREAM_AVATAR_FIELDS.has(field)) {
     return validationFailure(field, "This field is not editable.", rawValue);
   }
 
@@ -143,12 +157,25 @@ export function validateDreamAvatarEdit(field, rawValue) {
     if (typeof rawValue !== "string") {
       return validationFailure(field, "Title must be text.", rawValue);
     }
-    return validationSuccess(field, rawValue.trim());
+    const value = rawValue.trim();
+    if (value.length === 0) {
+      return validationFailure(field, "Title cannot be blank.", rawValue);
+    }
+    return validationSuccess(field, value);
   }
 
   if (field === "rendered-text") {
     if (typeof rawValue !== "string") {
       return validationFailure(field, "Ability text must be text.", rawValue);
+    }
+    if (
+      rawValue.split("\n\n").some((paragraph) => paragraph.trim().length === 0)
+    ) {
+      return validationFailure(
+        field,
+        "Ability text must contain non-empty paragraphs.",
+        rawValue,
+      );
     }
     return validationSuccess(field, rawValue);
   }
@@ -158,9 +185,25 @@ export function validateDreamAvatarEdit(field, rawValue) {
     // `/dream-avatars/<number>.png`) and is zero-padded (e.g. "0083"), so it is
     // stored as a digit string rather than a number to preserve the padding.
     const value =
-      typeof rawValue === "number" ? String(rawValue) : typeof rawValue === "string" ? rawValue.trim() : "";
+      typeof rawValue === "number"
+        ? String(rawValue)
+        : typeof rawValue === "string"
+          ? rawValue.trim()
+          : "";
     if (!/^\d+$/u.test(value)) {
-      return validationFailure(field, "Image number must be digits, e.g. 0083.", rawValue);
+      return validationFailure(
+        field,
+        "Image number must be digits, e.g. 0083.",
+        rawValue,
+      );
+    }
+    const image = Number(value);
+    if (image < 1 || image > 9999) {
+      return validationFailure(
+        field,
+        "Image number must be between 0001 and 9999.",
+        rawValue,
+      );
     }
     return validationSuccess(field, value);
   }
@@ -171,30 +214,23 @@ export function validateDreamAvatarEdit(field, rawValue) {
       if (Number.isInteger(value) && value >= 0) {
         return validationSuccess(field, value);
       }
-      return validationFailure(field, "Starting essence must be a non-negative whole number.", rawValue);
+      return validationFailure(
+        field,
+        "Starting essence must be a non-negative whole number.",
+        rawValue,
+      );
     }
     if (typeof value === "string" && /^\d+$/u.test(value)) {
       return validationSuccess(field, Number(value));
     }
-    return validationFailure(field, "Starting essence must be a non-negative whole number.", rawValue);
+    return validationFailure(
+      field,
+      "Starting essence must be a non-negative whole number.",
+      rawValue,
+    );
   }
 
   return validationFailure(field, "This field is not editable.", rawValue);
-}
-
-export function patchDreamAvatarsToml(source, { dreamAvatarId, field, value }) {
-  return patchTomlRecord(source, {
-    id: dreamAvatarId,
-    tableName: "dreamAvatar",
-    editableFields: EDITABLE_DREAM_AVATAR_TOML_FIELDS,
-    validateEdit: validateDreamAvatarEdit,
-    field,
-    value,
-    // `starting-essence` is omitted from most records (it falls back to the
-    // default) so it is appended to the record block when first set.
-    optionalFields: new Set(["starting-essence"]),
-    notFoundNoun: "DreamAvatar",
-  });
 }
 
 /**
@@ -205,7 +241,11 @@ export function patchDreamAvatarsToml(source, { dreamAvatarId, field, value }) {
  * removed and ids kept in submitted order.
  */
 export function validateTidePool(rawValue, tideCatalog) {
-  if (rawValue === null || typeof rawValue !== "object" || Array.isArray(rawValue)) {
+  if (
+    rawValue === null ||
+    typeof rawValue !== "object" ||
+    Array.isArray(rawValue)
+  ) {
     return { ok: false, message: "Tide pool must be an object." };
   }
 
@@ -241,7 +281,10 @@ export function validateTidePool(rawValue, tideCatalog) {
       return { ok: false, message: "Starter must be a tide id or null." };
     }
     if (roleById.get(starter) !== "signature") {
-      return { ok: false, message: `Starter "${starter}" is not a signature tide.` };
+      return {
+        ok: false,
+        message: `Starter "${starter}" is not a signature tide.`,
+      };
     }
     starterValue = starter;
   }
@@ -251,7 +294,10 @@ export function validateTidePool(rawValue, tideCatalog) {
     return facetsResult;
   }
   if (facetsResult.value.length === 0) {
-    return { ok: false, message: "A DreamAvatar must have at least one facet tide." };
+    return {
+      ok: false,
+      message: "A DreamAvatar must have at least one facet tide.",
+    };
   }
 
   const neutralResult = dedupeWithRole(neutral, "neutral", "neutral");
@@ -293,7 +339,9 @@ export function patchTides4Pool(source, { dreamAvatarId, pool }) {
   );
 
   if (!entryPattern.test(source)) {
-    throw new Error(`DreamAvatar ${dreamAvatarId} was not found in tides4.jsonc`);
+    throw new Error(
+      `DreamAvatar ${dreamAvatarId} was not found in tides4.jsonc`,
+    );
   }
 
   const patched = source.replace(entryPattern, `$1${compact}$2$3`);
@@ -318,7 +366,10 @@ export function refreshDreamAvatarDataJson({
   return { count: dreamAvatars.length, path: jsonPath };
 }
 
-export function refreshTides4DataJson({ rootDir = ROOT, tides4Path = TIDES4_SOURCE_PATH } = {}) {
+export function refreshTides4DataJson({
+  rootDir = ROOT,
+  tides4Path = TIDES4_SOURCE_PATH,
+} = {}) {
   const jsonc = readFileSync(join(rootDir, tides4Path), "utf8");
   const served = JSON.stringify(JSON.parse(stripJsonComments(jsonc)));
   const jsonPath = join(rootDir, TIDES4_JSON_PATH);

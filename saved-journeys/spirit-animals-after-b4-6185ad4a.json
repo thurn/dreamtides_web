@@ -280,7 +280,7 @@
       }
     ],
     "dreamAvatar": {
-      "id": "2C53B1B9-9291-4BBA-8D3A-F40B545C8F3C",
+      "id": "2c53b1b9-9291-4bba-8d3a-f40b545c8f3c",
       "imageNumber": "0100",
       "name": "Demetrios",
       "renderedText": "When you play your second character in a turn, draw a card with ephemeral.",
@@ -391,7 +391,7 @@
       },
       "draftPoolSize": 150,
       "dreamAvatar": {
-        "id": "2C53B1B9-9291-4BBA-8D3A-F40B545C8F3C",
+        "id": "2c53b1b9-9291-4bba-8d3a-f40b545c8f3c",
         "imageNumber": "0100",
         "name": "Demetrios",
         "renderedText": "When you play your second character in a turn, draw a card with ephemeral.",

@@ -10,7 +10,7 @@ use sha2::{Digest, Sha256};
 
 use crate::manifest::{Dataset, Manifest, MigrationState};
 use crate::models::{
-    affiliations, apollyon_incarnations, atlas, cards, compat, draft, exploration,
+    affiliations, apollyon_incarnations, atlas, cards, compat, draft, dream_avatars, exploration,
 };
 
 pub const BUILD_VERSION: &str = env!("GAME_DATA_BUILD_VERSION");
@@ -129,6 +129,34 @@ fn adapt(
         "apollyon_incarnations_v1" => apollyon_incarnations::lower(parse_ron(source, dataset)?),
         "atlas_v1" => atlas::lower(parse_ron(source, dataset)?),
         "draft_v1" => draft::lower(parse_ron(source, dataset)?),
+        "dream_avatar_metadata_v1" => dream_avatars::lower_metadata(parse_ron(source, dataset)?),
+        "dream_avatars_v1" => {
+            let avatars: Vec<dream_avatars::AvatarDefinition> = parse_ron(source, dataset)?;
+            let metadata_dataset = manifest.dataset("internal-card-metadata")?;
+            let metadata_source = fs::read_to_string(root.join(&metadata_dataset.source))
+                .with_context(|| {
+                    format!(
+                        "read internal card metadata source {}",
+                        metadata_dataset.source
+                    )
+                })?;
+            let metadata: compat::CompatDocument = parse_ron(&metadata_source, metadata_dataset)?;
+            let known_card_ids = cards::metadata_by_id(&metadata.data)?.into_keys().collect();
+            dream_avatars::validate_signature_card_references(&avatars, &known_card_ids)?;
+
+            let avatar_metadata_dataset = manifest.dataset("internal-avatar-metadata")?;
+            let avatar_metadata_path = root.join(&avatar_metadata_dataset.source);
+            let avatar_metadata: Vec<dream_avatars::AvatarMetadata> =
+                ron::from_str(&fs::read_to_string(&avatar_metadata_path).with_context(|| {
+                    format!(
+                        "read internal DreamAvatar metadata source {}",
+                        avatar_metadata_path.display()
+                    )
+                })?)
+                .context("parse internal DreamAvatar metadata source")?;
+            dream_avatars::validate_internal_metadata(&avatars, &avatar_metadata)?;
+            dream_avatars::lower(avatars)
+        }
         "cards_v2" => {
             let metadata_dataset = manifest.dataset("internal-card-metadata")?;
             let metadata_source = fs::read_to_string(root.join(&metadata_dataset.source))
@@ -339,7 +367,8 @@ fn inferred_record_count(value: &toml::Value) -> Option<usize> {
 mod tests {
     use super::*;
     use crate::models::{
-        cards::CardDefinition, draft::DraftDocument, exploration::ExplorationCatalog,
+        cards::CardDefinition, draft::DraftDocument, dream_avatars::AvatarDefinition,
+        exploration::ExplorationCatalog,
     };
 
     fn repository_root() -> PathBuf {
@@ -392,6 +421,12 @@ mod tests {
                 }
                 "draft_v1" => {
                     canonical::<DraftDocument>(&source, false);
+                }
+                "dream_avatar_metadata_v1" => {
+                    canonical::<Vec<dream_avatars::AvatarMetadata>>(&source, true);
+                }
+                "dream_avatars_v1" => {
+                    canonical::<Vec<AvatarDefinition>>(&source, true);
                 }
                 "exploration_v1" => {
                     canonical::<ExplorationCatalog>(&source, true);
