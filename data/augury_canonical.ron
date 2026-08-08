@@ -1,18 +1,18 @@
-// Augury encounter rules, dialogue, offer behavior, and presentation.
+// Augury encounter rules, dialogue, offer abilities, and presentation.
 
 #![enable(implicit_some)]
 AuguryCatalog(
   encounter: (
     // Number of offers generated whenever the player visits an Augury site.
     offer_count: 2,
-    // Prevents both offer slots from drawing behaviors in the same family.
+    // Prevents both offer slots from drawing abilities in the same family.
     distinct_families: true,
     // Allows the player to leave without accepting either offer.
     allow_decline: true,
   ),
 
   dialogue: (
-    // Used when encounter generation cannot select a behavior-specific opening line.
+    // Used when encounter generation cannot select an ability-specific opening line.
     fallback_line: "Something here was meant for you.",
     // One line is selected after the player accepts an offer.
     accept_reactions: [
@@ -30,13 +30,11 @@ AuguryCatalog(
     ArchetypeDefinition(
       id: "77ad1a09-aba0-4875-b462-e6efe94bdc3d",
       // Effect of this reward offer. A `selection_policy` ranks eligible
-      // targets for the effect.
-      behavior: FitCardGrant(selection_policy: CardFit, granted_copies: 1),
-      // Controls encounter eligibility while retaining the definition in the catalog.
-      enabled: true,
+      // targets for the ability.
+      ability: FitCardGrant(selection_policy: CardFit, granted_copies: 1),
       // Relative selection weight among eligible definitions.
       weight: 10,
-      // Behavior-specific opening lines; encounter generation selects one line.
+      // Ability-specific opening lines; encounter generation selects one line.
       dialogue_lines: [
         "Some things drift a long way only to find their owner.",
         "I kept this shaped like the hollow you carry.",
@@ -58,8 +56,7 @@ AuguryCatalog(
 
     ArchetypeDefinition(
       id: "8f8db592-b62c-414e-9195-68641722cf50",
-      behavior: FitCardDraft(selection_policy: CardFit, chooser_size: 4, granted_copies: 1),
-      enabled: true,
+      ability: FitCardDraft(selection_policy: CardFit, chooser_size: 4, granted_copies: 1),
       weight: 10,
       dialogue_lines: [
         "Several roads, and each one bends quietly toward you.",
@@ -81,8 +78,7 @@ AuguryCatalog(
 
     ArchetypeDefinition(
       id: "b4ccca83-2a1d-4474-ba6d-4b95aefeed9b",
-      behavior: CopiesDraft(selection_policy: CardFitQuality, chooser_size: 4, granted_copies: 2),
-      enabled: true,
+      ability: CopiesDraft(selection_policy: CardFitQuality, chooser_size: 4, granted_copies: 2),
       weight: 6,
       dialogue_lines: [
         "Whatever you cherish, the dream will gladly echo.",
@@ -104,8 +100,7 @@ AuguryCatalog(
 
     ArchetypeDefinition(
       id: "c4ac3d68-e814-43ea-9be3-ced3fd1bbe89",
-      behavior: StrongCard(selection_policy: CardFitQuality, granted_copies: 1),
-      enabled: true,
+      ability: StrongCard(selection_policy: CardFitQuality, granted_copies: 1),
       weight: 8,
       dialogue_lines: [
         "Something fierce is sleeping here, and it stirs for you.",
@@ -127,8 +122,7 @@ AuguryCatalog(
 
     ArchetypeDefinition(
       id: "beecc1d9-9546-4ca2-858c-214527c7e530",
-      behavior: CategoryDraftKnown(selection_policy: CardFit, chooser_size: 4, granted_copies: 1),
-      enabled: true,
+      ability: CategoryDraftKnown(selection_policy: CardFit, chooser_size: 4, granted_copies: 1),
       weight: 10,
       dialogue_lines: [
         "A drawer of kindred things, all leaning the same way.",
@@ -150,8 +144,7 @@ AuguryCatalog(
 
     ArchetypeDefinition(
       id: "dfd3976a-b1dc-44fe-9aab-c13bd2c195e4",
-      behavior: CardBundle(bundle_size: 3, minimum_bundle_size: 2),
-      enabled: true,
+      ability: CardBundle(bundle_size: 3, minimum_bundle_size: 2),
       weight: 8,
       dialogue_lines: [
         "These were never meant to travel alone.",
@@ -173,8 +166,7 @@ AuguryCatalog(
 
     ArchetypeDefinition(
       id: "a5ac636d-9269-4379-9c61-567583fe9926",
-      behavior: TransfiguredDraft(selection_policy: CardFit, chooser_size: 4, granted_copies: 1),
-      enabled: true,
+      ability: TransfiguredDraft(selection_policy: CardFit, chooser_size: 4, granted_copies: 1),
       weight: 6,
       dialogue_lines: [
         "I finish my work before I ever offer it.",
@@ -196,8 +188,7 @@ AuguryCatalog(
 
     ArchetypeDefinition(
       id: "ec872e81-b7b4-4d81-9c69-1ca5317f6144",
-      behavior: Transfigure(selection_policy: TransfigurationValue),
-      enabled: true,
+      ability: Transfigure(selection_policy: TransfigurationValue),
       weight: 10,
       dialogue_lines: [
         "Even a dreaming thing can be honed.",
@@ -219,8 +210,7 @@ AuguryCatalog(
 
     ArchetypeDefinition(
       id: "65a59007-6618-4f82-82ae-7da3bc6a205a",
-      behavior: StarterTransfigure(selection_policy: TransfigurationValue, maximum_targets: 2),
-      enabled: true,
+      ability: StarterTransfigure(selection_policy: TransfigurationValue, maximum_targets: 2),
       weight: 6,
       dialogue_lines: [
         "The first things you carried still hunger to grow.",
@@ -241,55 +231,8 @@ AuguryCatalog(
     ),
 
     ArchetypeDefinition(
-      id: "bd973dd3-e993-42b6-95bb-d24ac1062442",
-      behavior: KeywordMod(selection_policy: DeckEntryCentrality),
-      enabled: false,
-      weight: 8,
-      dialogue_lines: [
-        "A small new habit can change a whole life.",
-        "One trick it never knew it wanted to learn.",
-        "Teach an old thing a new word and watch it wake.",
-        "Barely a change. It will feel like a different soul.",
-        "A single new gift, and everything after it shifts.",
-      ],
-      copy: (
-        title: "{card}: {transfiguration}",
-        summary: "{transfiguration}",
-        prompt: "",
-        candidate_title: "{card}",
-        candidate_summary: "{transfiguration}",
-        detail_headline: "Reduce Reclaim",
-        detail_subtitle: "Reduce Reclaim for {card}",
-      ),
-    ),
-
-    ArchetypeDefinition(
-      id: "a177d574-d4bd-4c49-aaa4-52d5db74c6cb",
-      behavior: TribalChange(selection_policy: DeckEntryCentrality),
-      enabled: false,
-      weight: 6,
-      dialogue_lines: [
-        "Blood is only a story. It can be retold.",
-        "Born to one kin, but it would run better with another.",
-        "Let me change the company it keeps.",
-        "A new family suits it better than the old one did.",
-        "It only ever wanted to belong somewhere else.",
-      ],
-      copy: (
-        title: "{card} becomes a {subtype}",
-        summary: "Change a character's subtype to {subtype}.",
-        prompt: "",
-        candidate_title: "{card}",
-        candidate_summary: "Become a {subtype}.",
-        detail_headline: "Change a Character Type",
-        detail_subtitle: "Make {card} a {subtype}",
-      ),
-    ),
-
-    ArchetypeDefinition(
       id: "df34c427-5e27-42d1-b903-c1d6d6dddd78",
-      behavior: Purge(selection_policy: PurgeMisfit),
-      enabled: true,
+      ability: Purge(selection_policy: PurgeMisfit),
       weight: 8,
       dialogue_lines: [
         "Some weight is only weight. Set it down with me.",
@@ -310,32 +253,8 @@ AuguryCatalog(
     ),
 
     ArchetypeDefinition(
-      id: "5bff7fe7-e69c-4f8a-84ae-edd37a68e60b",
-      behavior: PurgeReplace(selection_policy: CardFitQuality, chooser_size: 4),
-      enabled: false,
-      weight: 8,
-      dialogue_lines: [
-        "Let the withered branch fall; another bud waits.",
-        "Trade the burden for something that pulls its weight.",
-        "Out with the silence, in with a clearer note.",
-        "Give me the stone; I'll hand you a seed.",
-        "One leaves so a better thing can take its seat.",
-      ],
-      copy: (
-        title: "Remove {card} and draft a replacement",
-        summary: "Remove a card and pick one of {count-word} replacements.",
-        prompt: "Pick a replacement",
-        candidate_title: "{card}",
-        candidate_summary: "A replacement for your removed card.",
-        detail_headline: "Trade a Card",
-        detail_subtitle: "Purge {card} and choose a card to replace it",
-      ),
-    ),
-
-    ArchetypeDefinition(
       id: "521bd487-0b3e-429e-a2f6-56010dd029c4",
-      behavior: Duplicate(selection_policy: DuplicateValue, chooser_size: 3, granted_copies: 1),
-      enabled: true,
+      ability: Duplicate(selection_policy: DuplicateValue, chooser_size: 3, granted_copies: 1),
       weight: 8,
       dialogue_lines: [
         "The mirror is fond of your finest reflection.",
@@ -357,8 +276,7 @@ AuguryCatalog(
 
     ArchetypeDefinition(
       id: "432102c0-91c0-4954-acd0-3404d2148a25",
-      behavior: Dreamsign(selection_policy: DreamsignMatch),
-      enabled: true,
+      ability: Dreamsign(selection_policy: DreamsignMatch),
       weight: 8,
       dialogue_lines: [
         "A quiet star to walk beneath, all the way home.",
@@ -379,36 +297,8 @@ AuguryCatalog(
     ),
 
     ArchetypeDefinition(
-      id: "71ec2bb5-b0d7-481f-9233-6b3e4052bade",
-      behavior: DreamsignDraft(
-        selection_policy: DreamsignMatch,
-        minimum_chooser_size: 2,
-        maximum_chooser_size: 4,
-      ),
-      enabled: false,
-      weight: 6,
-      dialogue_lines: [
-        "Several stars lean close. Choose one to follow.",
-        "These lights all hum — listen for the one that's yours.",
-        "Pick the patron whose silence sounds like home.",
-        "A blessing fits best when it is freely chosen.",
-        "Many guardians offered; you may keep a single one.",
-      ],
-      copy: (
-        title: "Pick a dreamsign (1 of {count})",
-        summary: "Choose a dreamsign for your collection.",
-        prompt: "Choose a dreamsign",
-        candidate_title: "{card}",
-        candidate_summary: "Add this dreamsign to your collection.",
-        detail_headline: "Choose a Dreamsign",
-        detail_subtitle: "Choose a dreamsign to gain.",
-      ),
-    ),
-
-    ArchetypeDefinition(
       id: "1003a54d-1659-490b-aa48-b88b9da5df68",
-      behavior: AddSite,
-      enabled: true,
+      ability: AddSite,
       weight: 6,
       dialogue_lines: [
         "I can open a door where there was only wall.",

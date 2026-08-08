@@ -33,8 +33,7 @@ pub struct Dialogue {
 #[serde(deny_unknown_fields)]
 pub struct ArchetypeDefinition {
     pub id: AuguryId,
-    pub behavior: ArchetypeBehavior,
-    pub enabled: bool,
+    pub ability: ArchetypeAbility,
     pub weight: u32,
     pub dialogue_lines: Vec<String>,
     pub copy: CopyTemplates,
@@ -42,7 +41,7 @@ pub struct ArchetypeDefinition {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub enum ArchetypeBehavior {
+pub enum ArchetypeAbility {
     FitCardGrant {
         selection_policy: CardSelectionPolicy,
         granted_copies: u32,
@@ -233,26 +232,6 @@ enum ArchetypeKind {
 }
 
 impl ArchetypeKind {
-    const ALL: [Self; 17] = [
-        Self::FitCardGrant,
-        Self::FitCardDraft,
-        Self::CopiesDraft,
-        Self::StrongCard,
-        Self::CategoryDraftKnown,
-        Self::CardBundle,
-        Self::TransfiguredDraft,
-        Self::Transfigure,
-        Self::StarterTransfigure,
-        Self::KeywordMod,
-        Self::TribalChange,
-        Self::Purge,
-        Self::PurgeReplace,
-        Self::Duplicate,
-        Self::Dreamsign,
-        Self::DreamsignDraft,
-        Self::AddSite,
-    ];
-
     fn as_compat(self) -> &'static str {
         match self {
             Self::FitCardGrant => "fit_card_grant",
@@ -368,7 +347,7 @@ policy_compat!(DreamsignSelectionPolicy {
     DreamsignMatch => "dreamsign-match",
 });
 
-impl ArchetypeBehavior {
+impl ArchetypeAbility {
     fn kind(&self) -> ArchetypeKind {
         match self {
             Self::FitCardGrant { .. } => ArchetypeKind::FitCardGrant,
@@ -566,15 +545,15 @@ pub fn lower(source: AuguryCatalog) -> Result<toml::Value> {
 }
 
 fn lower_archetype(source: ArchetypeDefinition) -> toml::Value {
-    let kind = source.behavior.kind();
+    let kind = source.ability.kind();
     let mut output = toml::map::Map::new();
     output.insert("id".into(), kind.as_compat().into());
-    output.insert("enabled".into(), source.enabled.into());
-    output.insert("family".into(), source.behavior.family().as_compat().into());
+    output.insert("enabled".into(), true.into());
+    output.insert("family".into(), source.ability.family().as_compat().into());
     output.insert("weight".into(), i64::from(source.weight).into());
     output.insert(
         "selection-policy-id".into(),
-        source.behavior.selection_policy_compat().into(),
+        source.ability.selection_policy_compat().into(),
     );
     output.insert(
         "dialogue-lines".into(),
@@ -582,7 +561,7 @@ fn lower_archetype(source: ArchetypeDefinition) -> toml::Value {
     );
     output.insert(
         "quantities".into(),
-        toml::Value::Table(source.behavior.quantities()),
+        toml::Value::Table(source.ability.quantities()),
     );
     output.insert(
         "copy".into(),
@@ -617,20 +596,19 @@ fn validate(source: &AuguryCatalog) -> Result<()> {
 
     let mut kinds = BTreeSet::new();
     let mut ids = BTreeSet::new();
-    let mut enabled_families = BTreeSet::new();
-    let mut enabled_count = 0;
+    let mut families = BTreeSet::new();
     for (index, archetype) in source.archetypes.iter().enumerate() {
         let path = format!("archetypes[{index}]");
-        let kind = archetype.behavior.kind();
+        let kind = archetype.ability.kind();
         if !ids.insert(archetype.id) {
             bail!("{path}.id duplicates {}", archetype.id);
         }
         if !kinds.insert(kind) {
-            bail!("{path}.behavior duplicates {}", kind.as_compat());
+            bail!("{path}.ability duplicates {}", kind.as_compat());
         }
         if archetype.id.as_hyphenated() != kind.canonical_id() {
             bail!(
-                "{path}.id must be {} for behavior {}",
+                "{path}.id must be {} for ability {}",
                 kind.canonical_id(),
                 kind.as_compat()
             );
@@ -639,55 +617,47 @@ fn validate(source: &AuguryCatalog) -> Result<()> {
             bail!("{path}.weight must be positive");
         }
         require_nonempty_list(&format!("{path}.dialogue_lines"), &archetype.dialogue_lines)?;
-        validate_behavior(&path, &archetype.behavior)?;
+        validate_ability(&path, &archetype.ability)?;
         validate_copy(&path, &archetype.copy)?;
-        if archetype.enabled {
-            enabled_count += 1;
-            enabled_families.insert(archetype.behavior.family());
-        }
+        families.insert(archetype.ability.family());
     }
-    for kind in ArchetypeKind::ALL {
-        if !kinds.contains(&kind) {
-            bail!("archetypes is missing {}", kind.as_compat());
-        }
+    if source.archetypes.len() < 2 {
+        bail!("at least two archetypes must be present");
     }
-    if enabled_count < 2 {
-        bail!("at least two archetypes must be enabled");
-    }
-    if enabled_families.len() < 2 {
-        bail!("enabled archetypes must span at least two families");
+    if families.len() < 2 {
+        bail!("archetypes must span at least two families");
     }
     Ok(())
 }
 
-fn validate_behavior(path: &str, behavior: &ArchetypeBehavior) -> Result<()> {
+fn validate_ability(path: &str, ability: &ArchetypeAbility) -> Result<()> {
     let bounded = |name: &str, value: u32, minimum: u32, maximum: u32| -> Result<()> {
         if !(minimum..=maximum).contains(&value) {
-            bail!("{path}.behavior.{name} must be in [{minimum}, {maximum}]");
+            bail!("{path}.ability.{name} must be in [{minimum}, {maximum}]");
         }
         Ok(())
     };
-    match behavior {
-        ArchetypeBehavior::FitCardGrant { granted_copies, .. }
-        | ArchetypeBehavior::StrongCard { granted_copies, .. } => {
+    match ability {
+        ArchetypeAbility::FitCardGrant { granted_copies, .. }
+        | ArchetypeAbility::StrongCard { granted_copies, .. } => {
             bounded("granted_copies", *granted_copies, 1, 4)?;
         }
-        ArchetypeBehavior::FitCardDraft {
+        ArchetypeAbility::FitCardDraft {
             chooser_size,
             granted_copies,
             ..
         }
-        | ArchetypeBehavior::CopiesDraft {
+        | ArchetypeAbility::CopiesDraft {
             chooser_size,
             granted_copies,
             ..
         }
-        | ArchetypeBehavior::CategoryDraftKnown {
+        | ArchetypeAbility::CategoryDraftKnown {
             chooser_size,
             granted_copies,
             ..
         }
-        | ArchetypeBehavior::TransfiguredDraft {
+        | ArchetypeAbility::TransfiguredDraft {
             chooser_size,
             granted_copies,
             ..
@@ -695,23 +665,23 @@ fn validate_behavior(path: &str, behavior: &ArchetypeBehavior) -> Result<()> {
             bounded("chooser_size", *chooser_size, 2, 4)?;
             bounded("granted_copies", *granted_copies, 1, 4)?;
         }
-        ArchetypeBehavior::CardBundle {
+        ArchetypeAbility::CardBundle {
             bundle_size,
             minimum_bundle_size,
         } => {
             bounded("bundle_size", *bundle_size, 2, 3)?;
             bounded("minimum_bundle_size", *minimum_bundle_size, 2, 3)?;
             if minimum_bundle_size > bundle_size {
-                bail!("{path}.behavior.minimum_bundle_size must not exceed bundle_size");
+                bail!("{path}.ability.minimum_bundle_size must not exceed bundle_size");
             }
         }
-        ArchetypeBehavior::StarterTransfigure {
+        ArchetypeAbility::StarterTransfigure {
             maximum_targets, ..
         } => bounded("maximum_targets", *maximum_targets, 1, 2)?,
-        ArchetypeBehavior::PurgeReplace { chooser_size, .. } => {
+        ArchetypeAbility::PurgeReplace { chooser_size, .. } => {
             bounded("chooser_size", *chooser_size, 2, 4)?;
         }
-        ArchetypeBehavior::Duplicate {
+        ArchetypeAbility::Duplicate {
             chooser_size,
             granted_copies,
             ..
@@ -719,7 +689,7 @@ fn validate_behavior(path: &str, behavior: &ArchetypeBehavior) -> Result<()> {
             bounded("chooser_size", *chooser_size, 1, 3)?;
             bounded("granted_copies", *granted_copies, 1, 4)?;
         }
-        ArchetypeBehavior::DreamsignDraft {
+        ArchetypeAbility::DreamsignDraft {
             minimum_chooser_size,
             maximum_chooser_size,
             ..
@@ -727,15 +697,15 @@ fn validate_behavior(path: &str, behavior: &ArchetypeBehavior) -> Result<()> {
             bounded("minimum_chooser_size", *minimum_chooser_size, 2, 4)?;
             bounded("maximum_chooser_size", *maximum_chooser_size, 2, 4)?;
             if minimum_chooser_size > maximum_chooser_size {
-                bail!("{path}.behavior.minimum_chooser_size must not exceed maximum_chooser_size");
+                bail!("{path}.ability.minimum_chooser_size must not exceed maximum_chooser_size");
             }
         }
-        ArchetypeBehavior::Transfigure { .. }
-        | ArchetypeBehavior::KeywordMod { .. }
-        | ArchetypeBehavior::TribalChange { .. }
-        | ArchetypeBehavior::Purge { .. }
-        | ArchetypeBehavior::Dreamsign { .. }
-        | ArchetypeBehavior::AddSite => {}
+        ArchetypeAbility::Transfigure { .. }
+        | ArchetypeAbility::KeywordMod { .. }
+        | ArchetypeAbility::TribalChange { .. }
+        | ArchetypeAbility::Purge { .. }
+        | ArchetypeAbility::Dreamsign { .. }
+        | ArchetypeAbility::AddSite => {}
     }
     Ok(())
 }
@@ -823,12 +793,11 @@ mod tests {
         }
     }
 
-    fn definition(behavior: ArchetypeBehavior) -> ArchetypeDefinition {
-        let id = AuguryId::parse(behavior.kind().canonical_id()).unwrap();
+    fn definition(ability: ArchetypeAbility) -> ArchetypeDefinition {
+        let id = AuguryId::parse(ability.kind().canonical_id()).unwrap();
         ArchetypeDefinition {
             id,
-            behavior,
-            enabled: true,
+            ability,
             weight: 3,
             dialogue_lines: vec!["A line".into()],
             copy: copy(),
@@ -836,7 +805,7 @@ mod tests {
     }
 
     fn catalog() -> AuguryCatalog {
-        use ArchetypeBehavior::*;
+        use ArchetypeAbility::*;
         AuguryCatalog {
             encounter: EncounterRules {
                 offer_count: 2,
@@ -919,7 +888,7 @@ mod tests {
     }
 
     #[test]
-    fn lowers_every_behavior_policy_quantity_shape_and_encounter_rule() {
+    fn lowers_every_ability_policy_quantity_shape_and_encounter_rule() {
         let output = lower(catalog()).unwrap();
         assert_eq!(output["schema-version"].as_integer(), Some(1));
         assert_eq!(output["encounter"]["offer-count"].as_integer(), Some(2));
@@ -961,7 +930,7 @@ mod tests {
         assert!(ron::from_str::<AuguryCatalog>(source).is_err());
         assert!(ron::from_str::<CardSelectionPolicy>("Unknown").is_err());
         assert!(
-            ron::from_str::<ArchetypeBehavior>(
+            ron::from_str::<ArchetypeAbility>(
                 "FitCardGrant(selection_policy: CardFit, granted_copies: 1, surprise: true)",
             )
             .is_err()
@@ -969,7 +938,7 @@ mod tests {
     }
 
     #[test]
-    fn rejects_non_uuidv4_duplicate_and_behavior_mismatched_ids() {
+    fn rejects_non_uuidv4_duplicate_and_ability_mismatched_ids() {
         for invalid in [
             "fit_card_grant",
             "77AD1A09-ABA0-4875-B462-E6EFE94BDC3D",
@@ -995,7 +964,7 @@ mod tests {
             lower(mismatched)
                 .unwrap_err()
                 .to_string()
-                .contains("for behavior fit_card_grant")
+                .contains("for ability fit_card_grant")
         );
     }
 
@@ -1042,13 +1011,21 @@ mod tests {
     }
 
     #[test]
-    fn rejects_missing_duplicate_and_invalid_archetypes() {
-        let mut missing = catalog();
-        missing.archetypes.pop();
-        assert!(lower(missing).unwrap_err().to_string().contains("add_site"));
+    fn permits_omitted_archetypes_and_rejects_duplicate_and_invalid_archetypes() {
+        let mut omitted = catalog();
+        omitted.archetypes.pop();
+        let lowered = lower(omitted).unwrap();
+        assert_eq!(lowered["archetype"].as_array().unwrap().len(), 16);
+        assert!(
+            lowered["archetype"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .all(|entry| entry["enabled"].as_bool() == Some(true))
+        );
 
         let mut duplicate = catalog();
-        duplicate.archetypes[1].behavior = duplicate.archetypes[0].behavior.clone();
+        duplicate.archetypes[1].ability = duplicate.archetypes[0].ability.clone();
         assert!(
             lower(duplicate)
                 .unwrap_err()
@@ -1057,7 +1034,7 @@ mod tests {
         );
 
         let mut bad_range = catalog();
-        bad_range.archetypes[5].behavior = ArchetypeBehavior::CardBundle {
+        bad_range.archetypes[5].ability = ArchetypeAbility::CardBundle {
             bundle_size: 2,
             minimum_bundle_size: 3,
         };
@@ -1078,7 +1055,7 @@ mod tests {
         );
 
         let mut out_of_range = catalog();
-        out_of_range.archetypes[0].behavior = ArchetypeBehavior::FitCardGrant {
+        out_of_range.archetypes[0].ability = ArchetypeAbility::FitCardGrant {
             selection_policy: CardSelectionPolicy::CardFit,
             granted_copies: 5,
         };
@@ -1112,7 +1089,7 @@ mod tests {
     }
 
     #[test]
-    fn rejects_invalid_dialogue_templates_and_enabled_family_coverage() {
+    fn rejects_invalid_dialogue_templates_and_insufficient_family_coverage() {
         let mut empty_dialogue = catalog();
         empty_dialogue.archetypes[0].dialogue_lines.clear();
         assert!(
@@ -1132,9 +1109,9 @@ mod tests {
         );
 
         let mut one_family = catalog();
-        for archetype in &mut one_family.archetypes {
-            archetype.enabled = archetype.behavior.family() == OfferFamily::Grant;
-        }
+        one_family
+            .archetypes
+            .retain(|archetype| archetype.ability.family() == OfferFamily::Grant);
         assert!(
             lower(one_family)
                 .unwrap_err()
@@ -1156,9 +1133,9 @@ mod tests {
         let canonical: AuguryCatalog =
             ron::from_str(&fs::read_to_string(root.join("data/augury_canonical.ron")).unwrap())
                 .unwrap();
-        assert_eq!(canonical.archetypes.len(), 17);
+        assert_eq!(canonical.archetypes.len(), 13);
 
-        const LEGACY_BEHAVIORS: [(&str, &str, ArchetypeKind); 17] = [
+        const LEGACY_ABILITIES: [(&str, &str, ArchetypeKind); 13] = [
             (
                 "fit_card_grant",
                 "77ad1a09-aba0-4875-b462-e6efe94bdc3d",
@@ -1205,24 +1182,9 @@ mod tests {
                 ArchetypeKind::StarterTransfigure,
             ),
             (
-                "keyword_mod",
-                "bd973dd3-e993-42b6-95bb-d24ac1062442",
-                ArchetypeKind::KeywordMod,
-            ),
-            (
-                "tribal_change",
-                "a177d574-d4bd-4c49-aaa4-52d5db74c6cb",
-                ArchetypeKind::TribalChange,
-            ),
-            (
                 "purge",
                 "df34c427-5e27-42d1-b903-c1d6d6dddd78",
                 ArchetypeKind::Purge,
-            ),
-            (
-                "purge_replace",
-                "5bff7fe7-e69c-4f8a-84ae-edd37a68e60b",
-                ArchetypeKind::PurgeReplace,
             ),
             (
                 "duplicate",
@@ -1235,24 +1197,24 @@ mod tests {
                 ArchetypeKind::Dreamsign,
             ),
             (
-                "dreamsign_draft",
-                "71ec2bb5-b0d7-481f-9233-6b3e4052bade",
-                ArchetypeKind::DreamsignDraft,
-            ),
-            (
                 "add_site",
                 "1003a54d-1659-490b-aa48-b88b9da5df68",
                 ArchetypeKind::AddSite,
             ),
         ];
-        let legacy = current_ron.data["archetype"].as_array().unwrap();
+        let mut enabled_compatibility = current_ron.data.clone();
+        enabled_compatibility["archetype"]
+            .as_array_mut()
+            .unwrap()
+            .retain(|entry| entry["enabled"].as_bool() == Some(true));
+        let legacy = enabled_compatibility["archetype"].as_array().unwrap();
         for ((entry, definition), (legacy_id, canonical_id, kind)) in legacy
             .iter()
             .zip(&canonical.archetypes)
-            .zip(LEGACY_BEHAVIORS)
+            .zip(LEGACY_ABILITIES)
         {
             assert_eq!(entry["id"].as_str(), Some(legacy_id));
-            assert_eq!(definition.behavior.kind(), kind);
+            assert_eq!(definition.ability.kind(), kind);
             assert_eq!(kind.as_compat(), legacy_id);
             assert_eq!(definition.id.as_hyphenated(), canonical_id);
             let parsed = Uuid::parse_str(canonical_id).unwrap();
@@ -1261,9 +1223,9 @@ mod tests {
             assert_eq!(parsed.hyphenated().to_string(), canonical_id);
             assert_eq!(
                 entry["selection-policy-id"].as_str(),
-                Some(definition.behavior.selection_policy_compat())
+                Some(definition.ability.selection_policy_compat())
             );
         }
-        assert_eq!(lower(canonical).unwrap(), current_ron.data);
+        assert_eq!(lower(canonical).unwrap(), enabled_compatibility);
     }
 }
