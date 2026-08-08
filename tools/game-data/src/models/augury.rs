@@ -1,7 +1,7 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeSet;
 use std::fmt;
 
-use anyhow::{Result, bail};
+use anyhow::{bail, Result};
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
@@ -249,26 +249,6 @@ enum ArchetypeKind {
 }
 
 impl ArchetypeKind {
-    const COMPATIBILITY_ORDER: [Self; 17] = [
-        Self::FitCardGrant,
-        Self::FitCardDraft,
-        Self::CopiesDraft,
-        Self::StrongCard,
-        Self::CategoryDraftKnown,
-        Self::CardBundle,
-        Self::TransfiguredDraft,
-        Self::Transfigure,
-        Self::StarterTransfigure,
-        Self::KeywordMod,
-        Self::TribalChange,
-        Self::Purge,
-        Self::PurgeReplace,
-        Self::Duplicate,
-        Self::Dreamsign,
-        Self::DreamsignDraft,
-        Self::AddSite,
-    ];
-
     fn as_compat(self) -> &'static str {
         match self {
             Self::FitCardGrant => "fit_card_grant",
@@ -540,11 +520,6 @@ impl ArchetypeAbility {
 pub fn lower(source: AuguryCatalog) -> Result<toml::Value> {
     validate(&source)?;
 
-    let archetypes: BTreeMap<_, _> = source
-        .archetypes
-        .into_iter()
-        .map(|definition| (definition.ability.kind(), definition))
-        .collect();
     let mut root = toml::map::Map::new();
     root.insert("schema-version".into(), 1_i64.into());
     let encounter = source.encounter;
@@ -564,26 +539,12 @@ pub fn lower(source: AuguryCatalog) -> Result<toml::Value> {
     );
     root.insert(
         "archetype".into(),
-        toml::Value::Array(
-            ArchetypeKind::COMPATIBILITY_ORDER
-                .into_iter()
-                .filter_map(|kind| {
-                    archetypes
-                        .get(&kind)
-                        .cloned()
-                        .map(|definition| lower_archetype(definition, true))
-                        .or_else(|| {
-                            disabled_compatibility_definition(kind)
-                                .map(|definition| lower_archetype(definition, false))
-                        })
-                })
-                .collect(),
-        ),
+        toml::Value::Array(source.archetypes.into_iter().map(lower_archetype).collect()),
     );
     Ok(toml::Value::Table(root))
 }
 
-fn lower_archetype(source: ArchetypeDefinition, enabled: bool) -> toml::Value {
+fn lower_archetype(source: ArchetypeDefinition) -> toml::Value {
     let kind = source.ability.kind();
     let mut output = toml::map::Map::new();
     output.insert("id".into(), kind.as_compat().into());
@@ -601,7 +562,7 @@ fn lower_archetype(source: ArchetypeDefinition, enabled: bool) -> toml::Value {
             ),
         ])),
     );
-    output.insert("enabled".into(), enabled.into());
+    output.insert("enabled".into(), true.into());
     output.insert("family".into(), source.ability.family().as_compat().into());
     output.insert("weight".into(), i64::from(source.weight).into());
     output.insert(
@@ -613,63 +574,6 @@ fn lower_archetype(source: ArchetypeDefinition, enabled: bool) -> toml::Value {
         toml::Value::Table(source.ability.quantities()),
     );
     toml::Value::Table(output)
-}
-
-fn disabled_compatibility_definition(kind: ArchetypeKind) -> Option<ArchetypeDefinition> {
-    use ArchetypeAbility::*;
-
-    let (name, headline, subtitle, ability, weight) = match kind {
-        ArchetypeKind::KeywordMod => (
-            "Improve: Keyword modifier",
-            "Reduce Reclaim",
-            "Reduce Reclaim for {cardName}",
-            KeywordMod {
-                selection_policy: CentralitySelectionPolicy::DeckEntryCentrality,
-            },
-            8,
-        ),
-        ArchetypeKind::TribalChange => (
-            "Improve: Tribal change",
-            "Change a Character Type",
-            "Change the subtype of {cardName} to {subtypeName}.",
-            TribalChange {
-                selection_policy: CentralitySelectionPolicy::DeckEntryCentrality,
-            },
-            6,
-        ),
-        ArchetypeKind::PurgeReplace => (
-            "Remove: Purge & replace",
-            "Trade a Card",
-            "Purge {cardName} and choose a replacement card.",
-            PurgeReplace {
-                selection_policy: ReplacementSelectionPolicy::CardFitQuality,
-                chooser_size: 4,
-            },
-            8,
-        ),
-        ArchetypeKind::DreamsignDraft => (
-            "Dreamsign: Dreamsign draft",
-            "Choose a Dreamsign",
-            "Choose a dreamsign to gain.",
-            DreamsignDraft {
-                selection_policy: DreamsignSelectionPolicy::DreamsignMatch,
-                minimum_chooser_size: 2,
-                maximum_chooser_size: 4,
-            },
-            6,
-        ),
-        _ => return None,
-    };
-    Some(ArchetypeDefinition {
-        id: AuguryId::parse(kind.canonical_id()).expect("built-in Augury UUID must be valid"),
-        name: name.into(),
-        presentation: ArchetypePresentation {
-            headline: PresentationText::Text(headline.into()),
-            subtitle: PresentationText::Text(subtitle.into()),
-        },
-        ability,
-        weight,
-    })
 }
 
 fn lower_presentation_text(source: PresentationText) -> toml::Value {
@@ -891,9 +795,13 @@ fn validate_ability(path: &str, ability: &ArchetypeAbility) -> Result<()> {
 
 #[cfg(test)]
 mod tests {
+    use std::fs;
+    use std::path::Path;
+
     use pretty_assertions::assert_eq;
 
     use super::*;
+    use crate::models::compat::CompatDocument;
 
     fn definition(ability: ArchetypeAbility) -> ArchetypeDefinition {
         let id = AuguryId::parse(ability.kind().canonical_id()).unwrap();
@@ -1001,12 +909,10 @@ mod tests {
         let archetypes = output["archetype"].as_array().unwrap();
         assert_eq!(archetypes.len(), 17);
         assert_eq!(archetypes[0]["id"].as_str(), Some("fit_card_grant"));
-        assert!(
-            archetypes[0]["name"]
-                .as_str()
-                .unwrap()
-                .starts_with("Synthetic ")
-        );
+        assert!(archetypes[0]["name"]
+            .as_str()
+            .unwrap()
+            .starts_with("Synthetic "));
         assert_eq!(
             archetypes[0]["presentation"]["headline"]["kind"].as_str(),
             Some("text")
@@ -1055,12 +961,10 @@ mod tests {
         )"#;
         assert!(ron::from_str::<AuguryCatalog>(source).is_err());
         assert!(ron::from_str::<CardSelectionPolicy>("Unknown").is_err());
-        assert!(
-            ron::from_str::<ArchetypeAbility>(
-                "FitCardGrant(selection_policy: CardFit, granted_copies: 1, surprise: true)",
-            )
-            .is_err()
-        );
+        assert!(ron::from_str::<ArchetypeAbility>(
+            "FitCardGrant(selection_policy: CardFit, granted_copies: 1, surprise: true)",
+        )
+        .is_err());
     }
 
     #[test]
@@ -1076,22 +980,18 @@ mod tests {
 
         let mut duplicate = catalog();
         duplicate.archetypes[1].id = duplicate.archetypes[0].id;
-        assert!(
-            lower(duplicate)
-                .unwrap_err()
-                .to_string()
-                .contains("id duplicates")
-        );
+        assert!(lower(duplicate)
+            .unwrap_err()
+            .to_string()
+            .contains("id duplicates"));
 
         let mut mismatched = catalog();
         mismatched.archetypes[0].id =
             AuguryId::parse(ArchetypeKind::FitCardDraft.canonical_id()).unwrap();
-        assert!(
-            lower(mismatched)
-                .unwrap_err()
-                .to_string()
-                .contains("for ability fit_card_grant")
-        );
+        assert!(lower(mismatched)
+            .unwrap_err()
+            .to_string()
+            .contains("for ability fit_card_grant"));
     }
 
     #[test]
@@ -1142,152 +1042,84 @@ mod tests {
         omitted.archetypes.pop();
         let lowered = lower(omitted).unwrap();
         assert_eq!(lowered["archetype"].as_array().unwrap().len(), 16);
-        assert!(
-            lowered["archetype"]
-                .as_array()
-                .unwrap()
-                .iter()
-                .all(|entry| entry["enabled"].as_bool() == Some(true))
-        );
+        assert!(lowered["archetype"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .all(|entry| entry["enabled"].as_bool() == Some(true)));
 
         let mut duplicate = catalog();
         duplicate.archetypes[1].ability = duplicate.archetypes[0].ability.clone();
-        assert!(
-            lower(duplicate)
-                .unwrap_err()
-                .to_string()
-                .contains("duplicates")
-        );
+        assert!(lower(duplicate)
+            .unwrap_err()
+            .to_string()
+            .contains("duplicates"));
 
         let mut bad_range = catalog();
         bad_range.archetypes[5].ability = ArchetypeAbility::CardBundle {
             bundle_size: 2,
             minimum_bundle_size: 3,
         };
-        assert!(
-            lower(bad_range)
-                .unwrap_err()
-                .to_string()
-                .contains("must not exceed")
-        );
+        assert!(lower(bad_range)
+            .unwrap_err()
+            .to_string()
+            .contains("must not exceed"));
 
         let mut zero_weight = catalog();
         zero_weight.archetypes[0].weight = 0;
-        assert!(
-            lower(zero_weight)
-                .unwrap_err()
-                .to_string()
-                .contains("weight must be positive")
-        );
+        assert!(lower(zero_weight)
+            .unwrap_err()
+            .to_string()
+            .contains("weight must be positive"));
 
         let mut empty_name = catalog();
         empty_name.archetypes[0].name = "  ".into();
-        assert!(
-            lower(empty_name)
-                .unwrap_err()
-                .to_string()
-                .contains("name must be non-empty")
-        );
+        assert!(lower(empty_name)
+            .unwrap_err()
+            .to_string()
+            .contains("name must be non-empty"));
 
         let mut empty_subtitle = catalog();
         empty_subtitle.archetypes[0].presentation.subtitle = PresentationText::Text(String::new());
-        assert!(
-            lower(empty_subtitle)
-                .unwrap_err()
-                .to_string()
-                .contains("presentation.subtitle strings must be non-empty")
-        );
+        assert!(lower(empty_subtitle)
+            .unwrap_err()
+            .to_string()
+            .contains("presentation.subtitle strings must be non-empty"));
 
         let mut unknown_slot = catalog();
         unknown_slot.archetypes[0].presentation.subtitle =
             PresentationText::Text("Unknown {mystery}".into());
-        assert!(
-            lower(unknown_slot)
-                .unwrap_err()
-                .to_string()
-                .contains("unknown presentation slot {mystery}")
-        );
+        assert!(lower(unknown_slot)
+            .unwrap_err()
+            .to_string()
+            .contains("unknown presentation slot {mystery}"));
 
         let mut out_of_range = catalog();
         out_of_range.archetypes[0].ability = ArchetypeAbility::FitCardGrant {
             selection_policy: CardSelectionPolicy::CardFit,
             granted_copies: 5,
         };
-        assert!(
-            lower(out_of_range)
-                .unwrap_err()
-                .to_string()
-                .contains("granted_copies must be in [1, 4]")
-        );
-    }
-
-    #[test]
-    fn restores_required_disabled_compatibility_archetypes_in_stable_order() {
-        let mut source = catalog();
-        source.archetypes.retain(|definition| {
-            !matches!(
-                definition.ability.kind(),
-                ArchetypeKind::KeywordMod
-                    | ArchetypeKind::TribalChange
-                    | ArchetypeKind::PurgeReplace
-                    | ArchetypeKind::DreamsignDraft
-            )
-        });
-
-        let lowered = lower(source).unwrap();
-        let archetypes = lowered["archetype"].as_array().unwrap();
-        assert_eq!(archetypes.len(), 17);
-        assert_eq!(
-            archetypes
-                .iter()
-                .map(|entry| entry["id"].as_str().unwrap())
-                .collect::<Vec<_>>(),
-            ArchetypeKind::COMPATIBILITY_ORDER
-                .into_iter()
-                .map(ArchetypeKind::as_compat)
-                .collect::<Vec<_>>()
-        );
-        for id in [
-            "keyword_mod",
-            "tribal_change",
-            "purge_replace",
-            "dreamsign_draft",
-        ] {
-            let entry = archetypes
-                .iter()
-                .find(|entry| entry["id"].as_str() == Some(id))
-                .unwrap();
-            assert_eq!(entry["enabled"].as_bool(), Some(false));
-        }
-        assert_eq!(
-            archetypes[12]["quantities"]["chooser-size"].as_integer(),
-            Some(4)
-        );
-        assert_eq!(
-            archetypes[15]["quantities"]["maximum-chooser-size"].as_integer(),
-            Some(4)
-        );
+        assert!(lower(out_of_range)
+            .unwrap_err()
+            .to_string()
+            .contains("granted_copies must be in [1, 4]"));
     }
 
     #[test]
     fn rejects_unsupported_encounter_rules() {
         let mut offer_count = catalog();
         offer_count.encounter.offer_count = 3;
-        assert!(
-            lower(offer_count)
-                .unwrap_err()
-                .to_string()
-                .contains("offer_count must be 2")
-        );
+        assert!(lower(offer_count)
+            .unwrap_err()
+            .to_string()
+            .contains("offer_count must be 2"));
 
         let mut repeated_families = catalog();
         repeated_families.encounter.distinct_families = false;
-        assert!(
-            lower(repeated_families)
-                .unwrap_err()
-                .to_string()
-                .contains("distinct_families must be true")
-        );
+        assert!(lower(repeated_families)
+            .unwrap_err()
+            .to_string()
+            .contains("distinct_families must be true"));
     }
 
     #[test]
@@ -1296,11 +1128,118 @@ mod tests {
         one_family
             .archetypes
             .retain(|archetype| archetype.ability.family() == OfferFamily::Grant);
-        assert!(
-            lower(one_family)
-                .unwrap_err()
-                .to_string()
-                .contains("at least two families")
-        );
+        assert!(lower(one_family)
+            .unwrap_err()
+            .to_string()
+            .contains("at least two families"));
+    }
+
+    #[test]
+    #[ignore = "real-catalog parity probe retained for canonical Augury review"]
+    fn canonical_candidate_matches_current_compatibility_sources() {
+        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+        let current_ron: CompatDocument =
+            ron::from_str(&fs::read_to_string(root.join("data/augury.ron")).unwrap()).unwrap();
+        let current_toml: toml::Value =
+            toml::from_str(&fs::read_to_string(root.join("data/augury.toml")).unwrap()).unwrap();
+        assert_eq!(current_ron.data, current_toml);
+
+        let canonical: AuguryCatalog =
+            ron::from_str(&fs::read_to_string(root.join("data/augury_canonical.ron")).unwrap())
+                .unwrap();
+        assert_eq!(canonical.archetypes.len(), 13);
+
+        const LEGACY_ABILITIES: [(&str, &str, ArchetypeKind); 13] = [
+            (
+                "fit_card_grant",
+                "77ad1a09-aba0-4875-b462-e6efe94bdc3d",
+                ArchetypeKind::FitCardGrant,
+            ),
+            (
+                "fit_card_draft",
+                "8f8db592-b62c-414e-9195-68641722cf50",
+                ArchetypeKind::FitCardDraft,
+            ),
+            (
+                "copies_draft",
+                "b4ccca83-2a1d-4474-ba6d-4b95aefeed9b",
+                ArchetypeKind::CopiesDraft,
+            ),
+            (
+                "strong_card",
+                "c4ac3d68-e814-43ea-9be3-ced3fd1bbe89",
+                ArchetypeKind::StrongCard,
+            ),
+            (
+                "category_draft_known",
+                "beecc1d9-9546-4ca2-858c-214527c7e530",
+                ArchetypeKind::CategoryDraftKnown,
+            ),
+            (
+                "card_bundle",
+                "dfd3976a-b1dc-44fe-9aab-c13bd2c195e4",
+                ArchetypeKind::CardBundle,
+            ),
+            (
+                "transfigured_draft",
+                "a5ac636d-9269-4379-9c61-567583fe9926",
+                ArchetypeKind::TransfiguredDraft,
+            ),
+            (
+                "transfigure",
+                "ec872e81-b7b4-4d81-9c69-1ca5317f6144",
+                ArchetypeKind::Transfigure,
+            ),
+            (
+                "starter_transfigure",
+                "65a59007-6618-4f82-82ae-7da3bc6a205a",
+                ArchetypeKind::StarterTransfigure,
+            ),
+            (
+                "purge",
+                "df34c427-5e27-42d1-b903-c1d6d6dddd78",
+                ArchetypeKind::Purge,
+            ),
+            (
+                "duplicate",
+                "521bd487-0b3e-429e-a2f6-56010dd029c4",
+                ArchetypeKind::Duplicate,
+            ),
+            (
+                "dreamsign",
+                "432102c0-91c0-4954-acd0-3404d2148a25",
+                ArchetypeKind::Dreamsign,
+            ),
+            (
+                "add_site",
+                "1003a54d-1659-490b-aa48-b88b9da5df68",
+                ArchetypeKind::AddSite,
+            ),
+        ];
+        let mut enabled_compatibility = current_ron.data.clone();
+        enabled_compatibility["archetype"]
+            .as_array_mut()
+            .unwrap()
+            .retain(|entry| entry["enabled"].as_bool() == Some(true));
+        let legacy = enabled_compatibility["archetype"].as_array().unwrap();
+        for ((entry, definition), (legacy_id, canonical_id, kind)) in legacy
+            .iter()
+            .zip(&canonical.archetypes)
+            .zip(LEGACY_ABILITIES)
+        {
+            assert_eq!(entry["id"].as_str(), Some(legacy_id));
+            assert_eq!(definition.ability.kind(), kind);
+            assert_eq!(kind.as_compat(), legacy_id);
+            assert_eq!(definition.id.as_hyphenated(), canonical_id);
+            let parsed = Uuid::parse_str(canonical_id).unwrap();
+            assert_eq!(parsed.get_version(), Some(Version::Random));
+            assert_eq!(parsed.get_variant(), Variant::RFC4122);
+            assert_eq!(parsed.hyphenated().to_string(), canonical_id);
+            assert_eq!(
+                entry["selection-policy-id"].as_str(),
+                Some(definition.ability.selection_policy_compat())
+            );
+        }
+        assert_eq!(lower(canonical).unwrap(), enabled_compatibility);
     }
 }

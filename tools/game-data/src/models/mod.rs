@@ -1,6 +1,7 @@
 pub mod affiliations;
 pub mod apollyon_incarnations;
 pub mod atlas;
+#[cfg(test)]
 pub mod augury;
 pub mod cards;
 pub mod compat;

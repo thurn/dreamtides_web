@@ -78,7 +78,6 @@ impl Manifest {
             "affiliations_v1",
             "apollyon_incarnations_v1",
             "atlas_v1",
-            "augury_v1",
             "draft_v1",
             "dream_avatar_metadata_v1",
             "dream_avatars_v1",

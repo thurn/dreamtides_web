@@ -10,8 +10,7 @@ use sha2::{Digest, Sha256};
 
 use crate::manifest::{Dataset, Manifest, MigrationState};
 use crate::models::{
-    affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft, dream_avatars,
-    exploration,
+    affiliations, apollyon_incarnations, atlas, cards, compat, draft, dream_avatars, exploration,
 };
 
 pub const BUILD_VERSION: &str = env!("GAME_DATA_BUILD_VERSION");
@@ -129,7 +128,6 @@ fn adapt(
         "affiliations_v1" => affiliations::lower(parse_ron(source, dataset)?),
         "apollyon_incarnations_v1" => apollyon_incarnations::lower(parse_ron(source, dataset)?),
         "atlas_v1" => atlas::lower(parse_ron(source, dataset)?),
-        "augury_v1" => augury::lower(parse_ron(source, dataset)?),
         "draft_v1" => draft::lower(parse_ron(source, dataset)?),
         "dream_avatar_metadata_v1" => dream_avatars::lower_metadata(parse_ron(source, dataset)?),
         "dream_avatars_v1" => {
@@ -417,9 +415,6 @@ mod tests {
                 }
                 "atlas_v1" => {
                     canonical::<atlas::AtlasCatalog>(&source, true);
-                }
-                "augury_v1" => {
-                    canonical::<augury::AuguryCatalog>(&source, true);
                 }
                 "cards_v2" => {
                     canonical::<Vec<CardDefinition>>(&source, true);
