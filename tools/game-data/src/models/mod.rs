@@ -11,3 +11,4 @@ pub mod dreamscapes;
 pub mod dreamsigns;
 pub mod economy;
 pub mod exploration;
+pub mod figments;
