@@ -41,6 +41,11 @@ import {
   buildExplorationEffectDefinitions,
 } from "./exploration-effect-definitions.mjs";
 import { amplifiedStructuralErrors } from "./lib/amplified-validation.mjs";
+import {
+  compileGambleData,
+  compileTideAlignmentsData,
+  compileTransfigurationData,
+} from "./data-driven-catalogs.mjs";
 
 // Re-exported for `setup-assets.test.mjs`, which exercises the JSONC comment
 // stripper alongside the asset-build helpers defined here.
@@ -1469,6 +1474,9 @@ export function setupAssets({
   draftTomlPath = join(DATA_DIR, "draft.toml"),
   opponentsTomlPath = join(DATA_DIR, "opponents.toml"),
   glossaryTomlPath = join(DATA_DIR, "glossary.toml"),
+  gambleTomlPath = join(DATA_DIR, "gamble.toml"),
+  transfigurationTomlPath = join(DATA_DIR, "transfiguration.toml"),
+  tideAlignmentsTomlPath = join(DATA_DIR, "tide_alignments.toml"),
   apollyonIncarnationsTomlPath = join(
     DATA_DIR,
     "apollyon_incarnations.toml",
@@ -1548,6 +1556,12 @@ export function setupAssets({
   const affiliationsJsonPath = join(publicDir, "affiliations-data.json");
   const atlasJsonPath = join(publicDir, "atlas-data.json");
   const economyJsonPath = join(publicDir, "economy-data.json");
+  const gambleJsonPath = join(publicDir, "gamble-data.json");
+  const transfigurationJsonPath = join(publicDir, "transfiguration-data.json");
+  const tideAlignmentsJsonPath = join(publicDir, "tide-alignments-data.json");
+  const generatedGambleJsonPath = join(generatedConfigDir, "gamble-data.json");
+  const generatedTransfigurationJsonPath = join(generatedConfigDir, "transfiguration-data.json");
+  const generatedTideAlignmentsJsonPath = join(generatedConfigDir, "tide-alignments-data.json");
   const draftJsonPath = join(publicDir, "draft-data.json");
   const opponentsJsonPath = join(publicDir, "opponents-data.json");
   const apollyonIncarnationsJsonPath = join(
@@ -1965,6 +1979,20 @@ export function setupAssets({
     JSON.stringify(jsonEconomyData, null, 2) + "\n",
   );
   console.log("Wrote Economy data to economy-data.json");
+
+  const generatedCatalogs = [
+    ["Gamble", gambleTomlPath, gambleJsonPath, generatedGambleJsonPath, compileGambleData],
+    ["Transfiguration", transfigurationTomlPath, transfigurationJsonPath, generatedTransfigurationJsonPath, compileTransfigurationData],
+    ["Tide alignments", tideAlignmentsTomlPath, tideAlignmentsJsonPath, generatedTideAlignmentsJsonPath, compileTideAlignmentsData],
+  ];
+  mkdirSync(generatedConfigDir, { recursive: true });
+  for (const [label, tomlPath, publicPath, generatedPath, compileCatalog] of generatedCatalogs) {
+    console.log(`Parsing ${tomlPath.slice(tomlPath.lastIndexOf("/") + 1)}...`);
+    const serialized = `${JSON.stringify(compileCatalog(parse(readFileSync(tomlPath, "utf8"))), null, 2)}\n`;
+    writeFileSync(publicPath, serialized);
+    writeFileSync(generatedPath, serialized);
+    console.log(`Wrote ${label} data`);
+  }
 
   console.log("Parsing sites.toml...");
   const jsonSitesData = compileSitesData(

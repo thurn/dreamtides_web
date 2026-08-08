@@ -23,6 +23,11 @@ import { compileDraftData } from "./draft-data.mjs";
 import { compileRewardSelectionData } from "./reward-selection-data.mjs";
 import { compileAuguryData } from "./augury-data.mjs";
 import {
+  compileGambleData,
+  compileTideAlignmentsData,
+  compileTransfigurationData,
+} from "./data-driven-catalogs.mjs";
+import {
   collectGuidePortraitSources,
   compileDreamGuidesData,
   compileSitesData,
@@ -138,6 +143,24 @@ export function refreshGuidePortraitLinks(
  * parsed table is transformed as a single object.
  */
 export const SIMPLE_CONFIGS = [
+  {
+    tomlFile: "gamble.toml",
+    jsonFile: "gamble-data.json",
+    arrayKey: null,
+    transform: compileGambleData,
+  },
+  {
+    tomlFile: "transfiguration.toml",
+    jsonFile: "transfiguration-data.json",
+    arrayKey: null,
+    transform: compileTransfigurationData,
+  },
+  {
+    tomlFile: "tide_alignments.toml",
+    jsonFile: "tide-alignments-data.json",
+    arrayKey: null,
+    transform: compileTideAlignmentsData,
+  },
   {
     tomlFile: "dreamscapes.toml",
     jsonFile: "dreamscapes-data.json",

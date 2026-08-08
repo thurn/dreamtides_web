@@ -1,0 +1,226 @@
+GambleCatalog(
+  games: [
+    GambleGameDefinition(
+      id: GravokThreeGateWager,
+      rules_version: "three-gate-v2",
+      selection: GambleSelection(weight: 1.0, fallback: true),
+      economy: ThreeGate(
+        standard_wager: 50,
+        enhanced_wager: 45,
+        rewards: [
+          GateReward(gate: six, essence: 100),
+
+          GateReward(gate: nine, essence: 150),
+
+          GateReward(gate: jack, essence: 200),
+        ],
+      ),
+      presentation: GamblePresentation(
+        title: "Gravok's Three-Gate Wager",
+        rules_disclosure: "Choose a gate, then draw. Higher gates are harder and pay more.",
+        action_labels: [
+          AuthoredText(key: "bet", text: "Bet"),
+
+          AuthoredText(key: "leave", text: "Leave"),
+        ],
+        outcome_labels: [
+          AuthoredText(key: "won", text: "Won"),
+
+          AuthoredText(key: "bust", text: "Bust"),
+        ],
+        accessibility_description: "Choose one of three gates and draw a card to resolve the wager.",
+      ),
+      rules: ThreeGate(
+        standard_deck_size: 52,
+        max_retries: 2,
+        gates: [
+          GateDefinition(
+            gate: six,
+            threshold: Six,
+            winning_card_count: 36,
+            awards_dreamsign: false,
+          ),
+
+          GateDefinition(
+            gate: nine,
+            threshold: Nine,
+            winning_card_count: 24,
+            awards_dreamsign: false,
+          ),
+
+          GateDefinition(
+            gate: jack,
+            threshold: Jack,
+            winning_card_count: 16,
+            awards_dreamsign: true,
+          ),
+        ],
+      ),
+    ),
+
+    GambleGameDefinition(
+      id: TidemarkLadderClimb,
+      rules_version: "tidemark-ladder-climb-v2",
+      selection: GambleSelection(weight: 1.0, fallback: false),
+      economy: LadderClimb(
+        win_essence: 25,
+        attempts: [
+          AttemptPrice(attempt: 1, standard_cost: 0, enhanced_cost: 0),
+
+          AttemptPrice(attempt: 2, standard_cost: 5, enhanced_cost: 0),
+
+          AttemptPrice(attempt: 3, standard_cost: 10, enhanced_cost: 0),
+
+          AttemptPrice(attempt: 4, standard_cost: 15, enhanced_cost: 0),
+        ],
+      ),
+      presentation: GamblePresentation(
+        title: "Tidemark Ladder Climb",
+        rules_disclosure: "Draw against four successively easier targets. Each success gains essence.",
+        action_labels: [
+          AuthoredText(key: "draw", text: "Draw"),
+
+          AuthoredText(key: "leave", text: "Leave"),
+        ],
+        outcome_labels: [
+          AuthoredText(key: "won", text: "Won"),
+
+          AuthoredText(key: "lost", text: "Lost"),
+        ],
+        accessibility_description: "Draw a card on each rung of a four-step ladder.",
+      ),
+      rules: LadderClimb(
+        standard_deck_size: 52,
+        strong_pool_limit: 50,
+        attempts: [
+          LadderAttempt(attempt: 1, threshold: Queen, winning_card_count: 12),
+
+          LadderAttempt(attempt: 2, threshold: Ten, winning_card_count: 20),
+
+          LadderAttempt(attempt: 3, threshold: Eight, winning_card_count: 28),
+
+          LadderAttempt(attempt: 4, threshold: Six, winning_card_count: 36),
+        ],
+      ),
+    ),
+
+    GambleGameDefinition(
+      id: StarwayStairs,
+      rules_version: "starway-stairs-v4",
+      selection: GambleSelection(weight: 1.0, fallback: false),
+      economy: StarwayStairs(
+        standard_wager: 30,
+        enhanced_wager: 20,
+        rewards: [
+          TierReward(tier: 1, essence: 60),
+
+          TierReward(tier: 2, essence: 140),
+
+          TierReward(tier: 3, essence: 300),
+        ],
+      ),
+      presentation: GamblePresentation(
+        title: "Starway Stairs",
+        rules_disclosure: "Climb for a larger prize, but a low draw loses the wager.",
+        action_labels: [
+          AuthoredText(key: "climb", text: "Climb"),
+
+          AuthoredText(key: "take", text: "Take"),
+        ],
+        outcome_labels: [
+          AuthoredText(key: "safe", text: "Safe"),
+
+          AuthoredText(key: "bust", text: "Bust"),
+        ],
+        accessibility_description: "Choose whether to climb for a larger prize or take the current prize.",
+      ),
+      rules: StarwayStairs(
+        standard_deck_size: 52,
+        max_retries: 2,
+        tiers: [
+          StarwayTier(tier: 1, highest_bust_rank: Two, bust_card_count: 4),
+
+          StarwayTier(tier: 2, highest_bust_rank: Four, bust_card_count: 12),
+
+          StarwayTier(tier: 3, highest_bust_rank: Seven, bust_card_count: 24),
+        ],
+      ),
+    ),
+
+    GambleGameDefinition(
+      id: FourSuitReprise,
+      rules_version: "four-suit-reprise-v1",
+      selection: GambleSelection(weight: 1.0, fallback: false),
+      economy: FourSuitReprise(
+        standard_draw_price: 25,
+        enhanced_draw_price: 15,
+        essence_reward: 100,
+      ),
+      presentation: GamblePresentation(
+        title: "Four-Suit Reprise",
+        rules_disclosure: "Wager a card, then draw a suit to determine its fate.",
+        action_labels: [
+          AuthoredText(key: "draw", text: "Draw"),
+
+          AuthoredText(key: "choose-another", text: "Choose Another Card"),
+        ],
+        outcome_labels: [
+          AuthoredText(key: "transfiguration", text: "Transfigure"),
+
+          AuthoredText(key: "essence", text: "Unchanged + 100 Essence"),
+
+          AuthoredText(key: "duplication", text: "Duplicate"),
+
+          AuthoredText(key: "purge", text: "Purge"),
+        ],
+        accessibility_description: "Choose a card to wager, then draw one of four suit outcomes.",
+      ),
+      rules: FourSuitReprise(
+        standard_deck_size: 52,
+        max_rounds: 3,
+        matching_suit_card_count: 13,
+        outcomes: [
+          SuitOutcome(suit: spades, outcome: transfiguration),
+
+          SuitOutcome(suit: diamonds, outcome: essence),
+
+          SuitOutcome(suit: hearts, outcome: duplication),
+
+          SuitOutcome(suit: clubs, outcome: purge),
+        ],
+      ),
+    ),
+
+    GambleGameDefinition(
+      id: Blackjack,
+      rules_version: "blackjack-v4",
+      selection: GambleSelection(weight: 1.0, fallback: false),
+      economy: Blackjack(standard_wager: 90, enhanced_wager: 40, prize_essence: 300),
+      presentation: GamblePresentation(
+        title: "Blackjack",
+        rules_disclosure: "Closest to 21 Without Going Over",
+        action_labels: [
+          AuthoredText(key: "deal", text: "Deal"),
+
+          AuthoredText(key: "hit", text: "Hit"),
+
+          AuthoredText(key: "stand", text: "Stand"),
+        ],
+        outcome_labels: [
+          AuthoredText(key: "player-win", text: "You Win"),
+
+          AuthoredText(key: "dealer-win", text: "Dealer Wins"),
+
+          AuthoredText(key: "push", text: "Wager Returned"),
+        ],
+        accessibility_description: "Deal, hit, or stand against the dealer without going over 21.",
+      ),
+      rules: Blackjack(
+        standard_deck_size: 52,
+        max_attempts: 3,
+        target: 21,
+        dealer_stand_threshold: 17,
+      ),
+    ),
+  ],
+)

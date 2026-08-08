@@ -11,8 +11,9 @@ use sha2::{Digest, Sha256};
 use crate::manifest::{Dataset, Manifest, MigrationState};
 use crate::models::{
     affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft, dream_avatars,
-    dream_guides, dreamscapes, dreamsigns, dreamwell, economy, exploration, figments, glossary,
-    opponents, reward_selection, sites, tutorial, tutorial_journey_pool,
+    dream_guides, dreamscapes, dreamsigns, dreamwell, economy, exploration, figments, gamble,
+    glossary, opponents, reward_selection, sites, tide_alignments, transfiguration, tutorial,
+    tutorial_journey_pool,
 };
 
 pub const BUILD_VERSION: &str = env!("GAME_DATA_BUILD_VERSION");
@@ -235,6 +236,7 @@ fn adapt(
         }
         "reward_selection_v1" => reward_selection::lower(parse_ron(source, dataset)?),
         "figments_v1" => figments::lower(parse_ron(source, dataset)?),
+        "gamble_v1" => gamble::lower(parse_ron(source, dataset)?),
         "glossary_v1" => glossary::lower(parse_ron(source, dataset)?),
         "sites_v1" => sites::lower(parse_ron(source, dataset)?),
         "tutorial_v1" => tutorial::lower(parse_ron(source, dataset)?),
@@ -275,6 +277,8 @@ fn adapt(
             )?;
             tutorial_journey_pool::lower(catalog)
         }
+        "tide_alignments_v1" => tide_alignments::lower(parse_ron(source, dataset)?),
+        "transfiguration_v1" => transfiguration::lower(parse_ron(source, dataset)?),
         "compat_v1" => {
             let document: compat::CompatDocument = parse_ron(source, dataset)?;
             Ok(document.data)
@@ -596,6 +600,9 @@ mod tests {
                 "figments_v1" => {
                     canonical::<Vec<figments::FigmentDefinition>>(&source, true);
                 }
+                "gamble_v1" => {
+                    canonical::<gamble::GambleCatalog>(&source, false);
+                }
                 "glossary_v1" => {
                     canonical::<Vec<glossary::GlossaryDefinition>>(&source, true);
                 }
@@ -607,6 +614,12 @@ mod tests {
                 }
                 "tutorial_journey_pool_v1" => {
                     canonical::<tutorial_journey_pool::TutorialJourneyPoolCatalog>(&source, true);
+                }
+                "tide_alignments_v1" => {
+                    canonical::<tide_alignments::TideAlignmentCatalog>(&source, false);
+                }
+                "transfiguration_v1" => {
+                    canonical::<transfiguration::TransfigurationCatalog>(&source, true);
                 }
                 "compat_v1" => {
                     canonical::<compat::CompatDocument>(&source, false);

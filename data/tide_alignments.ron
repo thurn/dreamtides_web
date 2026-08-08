@@ -1,0 +1,43 @@
+TideAlignmentCatalog(
+  alignments: [
+    TideAlignmentDefinition(
+      id: ember,
+      display_name: "Ember",
+      glyph: TideEmber,
+      accent_color: "#fb923c",
+      accessibility_name: "Ember tide alignment",
+    ),
+
+    TideAlignmentDefinition(
+      id: valor,
+      display_name: "Valor",
+      glyph: TideValor,
+      accent_color: "#facc15",
+      accessibility_name: "Valor tide alignment",
+    ),
+
+    TideAlignmentDefinition(
+      id: vision,
+      display_name: "Vision",
+      glyph: TideVision,
+      accent_color: "#60a5fa",
+      accessibility_name: "Vision tide alignment",
+    ),
+
+    TideAlignmentDefinition(
+      id: wild,
+      display_name: "Wild",
+      glyph: TideWild,
+      accent_color: "#4ade80",
+      accessibility_name: "Wild tide alignment",
+    ),
+
+    TideAlignmentDefinition(
+      id: shadow,
+      display_name: "Shadow",
+      glyph: TideShadow,
+      accent_color: "#c084fc",
+      accessibility_name: "Shadow tide alignment",
+    ),
+  ],
+)

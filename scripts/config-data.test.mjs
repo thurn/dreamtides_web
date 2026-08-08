@@ -133,7 +133,7 @@ describe("regenerateConfigData Atlas dependencies", () => {
     const glossary = readFileSync(glossaryPath, "utf8");
     const changed = glossary.replace(
       'id = "85ffab8d-f972-4340-9b45-99f6aff6ccec"',
-      'id = "removed-site-battle"',
+      'id = "00000000-0000-4000-8000-000000000099"',
     );
     expect(changed).not.toBe(glossary);
     writeFileSync(glossaryPath, changed);

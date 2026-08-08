@@ -1,0 +1,369 @@
+{
+  "schemaVersion": 1,
+  "games": [
+    {
+      "id": "gravok-three-gate-wager",
+      "rulesVersion": "three-gate-v2",
+      "selection": {
+        "weight": 1,
+        "fallback": true
+      },
+      "economy": {
+        "kind": "threeGate",
+        "standardWager": 50,
+        "enhancedWager": 45,
+        "rewards": [
+          {
+            "gate": "six",
+            "essence": 100
+          },
+          {
+            "gate": "nine",
+            "essence": 150
+          },
+          {
+            "gate": "jack",
+            "essence": 200
+          }
+        ]
+      },
+      "presentation": {
+        "title": "Gravok's Three-Gate Wager",
+        "rulesDisclosure": "Choose a gate, then draw. Higher gates are harder and pay more.",
+        "accessibilityDescription": "Choose one of three gates and draw a card to resolve the wager.",
+        "actionLabels": [
+          {
+            "key": "bet",
+            "text": "Bet"
+          },
+          {
+            "key": "leave",
+            "text": "Leave"
+          }
+        ],
+        "outcomeLabels": [
+          {
+            "key": "won",
+            "text": "Won"
+          },
+          {
+            "key": "bust",
+            "text": "Bust"
+          }
+        ]
+      },
+      "rules": {
+        "kind": "threeGate",
+        "standardDeckSize": 52,
+        "maxRetries": 2,
+        "gates": [
+          {
+            "gate": "six",
+            "threshold": "Six",
+            "winningCardCount": 36,
+            "awardsDreamsign": false
+          },
+          {
+            "gate": "nine",
+            "threshold": "Nine",
+            "winningCardCount": 24,
+            "awardsDreamsign": false
+          },
+          {
+            "gate": "jack",
+            "threshold": "Jack",
+            "winningCardCount": 16,
+            "awardsDreamsign": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "tidemark-ladder-climb",
+      "rulesVersion": "tidemark-ladder-climb-v2",
+      "selection": {
+        "weight": 1,
+        "fallback": false
+      },
+      "economy": {
+        "kind": "ladderClimb",
+        "winEssence": 25,
+        "attempts": [
+          {
+            "attempt": 1,
+            "standardCost": 0,
+            "enhancedCost": 0
+          },
+          {
+            "attempt": 2,
+            "standardCost": 5,
+            "enhancedCost": 0
+          },
+          {
+            "attempt": 3,
+            "standardCost": 10,
+            "enhancedCost": 0
+          },
+          {
+            "attempt": 4,
+            "standardCost": 15,
+            "enhancedCost": 0
+          }
+        ]
+      },
+      "presentation": {
+        "title": "Tidemark Ladder Climb",
+        "rulesDisclosure": "Draw against four successively easier targets. Each success gains essence.",
+        "accessibilityDescription": "Draw a card on each rung of a four-step ladder.",
+        "actionLabels": [
+          {
+            "key": "draw",
+            "text": "Draw"
+          },
+          {
+            "key": "leave",
+            "text": "Leave"
+          }
+        ],
+        "outcomeLabels": [
+          {
+            "key": "won",
+            "text": "Won"
+          },
+          {
+            "key": "lost",
+            "text": "Lost"
+          }
+        ]
+      },
+      "rules": {
+        "kind": "ladderClimb",
+        "standardDeckSize": 52,
+        "strongPoolLimit": 50,
+        "attempts": [
+          {
+            "attempt": 1,
+            "threshold": "Queen",
+            "winningCardCount": 12
+          },
+          {
+            "attempt": 2,
+            "threshold": "Ten",
+            "winningCardCount": 20
+          },
+          {
+            "attempt": 3,
+            "threshold": "Eight",
+            "winningCardCount": 28
+          },
+          {
+            "attempt": 4,
+            "threshold": "Six",
+            "winningCardCount": 36
+          }
+        ]
+      }
+    },
+    {
+      "id": "starway-stairs",
+      "rulesVersion": "starway-stairs-v4",
+      "selection": {
+        "weight": 1,
+        "fallback": false
+      },
+      "economy": {
+        "kind": "starwayStairs",
+        "standardWager": 30,
+        "enhancedWager": 20,
+        "rewards": [
+          {
+            "tier": 1,
+            "essence": 60
+          },
+          {
+            "tier": 2,
+            "essence": 140
+          },
+          {
+            "tier": 3,
+            "essence": 300
+          }
+        ]
+      },
+      "presentation": {
+        "title": "Starway Stairs",
+        "rulesDisclosure": "Climb for a larger prize, but a low draw loses the wager.",
+        "accessibilityDescription": "Choose whether to climb for a larger prize or take the current prize.",
+        "actionLabels": [
+          {
+            "key": "climb",
+            "text": "Climb"
+          },
+          {
+            "key": "take",
+            "text": "Take"
+          }
+        ],
+        "outcomeLabels": [
+          {
+            "key": "safe",
+            "text": "Safe"
+          },
+          {
+            "key": "bust",
+            "text": "Bust"
+          }
+        ]
+      },
+      "rules": {
+        "kind": "starwayStairs",
+        "standardDeckSize": 52,
+        "maxRetries": 2,
+        "tiers": [
+          {
+            "tier": 1,
+            "highestBustRank": "Two",
+            "bustCardCount": 4
+          },
+          {
+            "tier": 2,
+            "highestBustRank": "Four",
+            "bustCardCount": 12
+          },
+          {
+            "tier": 3,
+            "highestBustRank": "Seven",
+            "bustCardCount": 24
+          }
+        ]
+      }
+    },
+    {
+      "id": "four-suit-reprise",
+      "rulesVersion": "four-suit-reprise-v1",
+      "selection": {
+        "weight": 1,
+        "fallback": false
+      },
+      "economy": {
+        "kind": "fourSuitReprise",
+        "standardDrawPrice": 25,
+        "enhancedDrawPrice": 15,
+        "essenceReward": 100
+      },
+      "presentation": {
+        "title": "Four-Suit Reprise",
+        "rulesDisclosure": "Wager a card, then draw a suit to determine its fate.",
+        "accessibilityDescription": "Choose a card to wager, then draw one of four suit outcomes.",
+        "actionLabels": [
+          {
+            "key": "draw",
+            "text": "Draw"
+          },
+          {
+            "key": "choose-another",
+            "text": "Choose Another Card"
+          }
+        ],
+        "outcomeLabels": [
+          {
+            "key": "transfiguration",
+            "text": "Transfigure"
+          },
+          {
+            "key": "essence",
+            "text": "Unchanged + 100 Essence"
+          },
+          {
+            "key": "duplication",
+            "text": "Duplicate"
+          },
+          {
+            "key": "purge",
+            "text": "Purge"
+          }
+        ]
+      },
+      "rules": {
+        "kind": "fourSuitReprise",
+        "standardDeckSize": 52,
+        "maxRounds": 3,
+        "matchingSuitCardCount": 13,
+        "outcomes": [
+          {
+            "suit": "spades",
+            "outcome": "transfiguration"
+          },
+          {
+            "suit": "diamonds",
+            "outcome": "essence"
+          },
+          {
+            "suit": "hearts",
+            "outcome": "duplication"
+          },
+          {
+            "suit": "clubs",
+            "outcome": "purge"
+          }
+        ]
+      }
+    },
+    {
+      "id": "blackjack",
+      "rulesVersion": "blackjack-v4",
+      "selection": {
+        "weight": 1,
+        "fallback": false
+      },
+      "economy": {
+        "kind": "blackjack",
+        "standardWager": 90,
+        "enhancedWager": 40,
+        "prizeEssence": 300
+      },
+      "presentation": {
+        "title": "Blackjack",
+        "rulesDisclosure": "Closest to 21 Without Going Over",
+        "accessibilityDescription": "Deal, hit, or stand against the dealer without going over 21.",
+        "actionLabels": [
+          {
+            "key": "deal",
+            "text": "Deal"
+          },
+          {
+            "key": "hit",
+            "text": "Hit"
+          },
+          {
+            "key": "stand",
+            "text": "Stand"
+          }
+        ],
+        "outcomeLabels": [
+          {
+            "key": "player-win",
+            "text": "You Win"
+          },
+          {
+            "key": "dealer-win",
+            "text": "Dealer Wins"
+          },
+          {
+            "key": "push",
+            "text": "Wager Returned"
+          }
+        ]
+      },
+      "rules": {
+        "kind": "blackjack",
+        "standardDeckSize": 52,
+        "maxAttempts": 3,
+        "target": 21,
+        "dealerStandThreshold": 17
+      }
+    }
+  ],
+  "contentHash": "b85e66f4346bd4a9dc62da6b25fc53e57e1afac472f3c856da824a88ebe74690",
+  "foldHash": "b85e66f4346bd4a9dc62da6b25fc53e57e1afac472f3c856da824a88ebe74690"
+}

@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "alignments": [
+    {
+      "id": "ember",
+      "displayName": "Ember",
+      "glyph": "tideEmber",
+      "accentColor": "#fb923c",
+      "accessibilityName": "Ember tide alignment"
+    },
+    {
+      "id": "valor",
+      "displayName": "Valor",
+      "glyph": "tideValor",
+      "accentColor": "#facc15",
+      "accessibilityName": "Valor tide alignment"
+    },
+    {
+      "id": "vision",
+      "displayName": "Vision",
+      "glyph": "tideVision",
+      "accentColor": "#60a5fa",
+      "accessibilityName": "Vision tide alignment"
+    },
+    {
+      "id": "wild",
+      "displayName": "Wild",
+      "glyph": "tideWild",
+      "accentColor": "#4ade80",
+      "accessibilityName": "Wild tide alignment"
+    },
+    {
+      "id": "shadow",
+      "displayName": "Shadow",
+      "glyph": "tideShadow",
+      "accentColor": "#c084fc",
+      "accessibilityName": "Shadow tide alignment"
+    }
+  ],
+  "contentHash": "f9ab1d23d339827e53e9d06c0ba0ff77ea82fd7b649d8877ca54bc4640dd7a2a"
+}

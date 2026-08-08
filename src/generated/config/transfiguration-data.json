@@ -1,0 +1,338 @@
+{
+  "schemaVersion": 1,
+  "site": {
+    "rulesVersion": "transfiguration-v1",
+    "enhancedChoiceLimit": null,
+    "formOrder": [
+      "Empowered",
+      "Amplified",
+      "Kindled",
+      "Inspired",
+      "Enduring",
+      "Hastened",
+      "Resonant",
+      "Attuned",
+      "Perfected"
+    ],
+    "standardChoiceLimit": 3,
+    "pricing": {
+      "minimumCost": 0,
+      "maximumCost": 100,
+      "step": 10,
+      "statDeltaBands": [
+        {
+          "minimumDelta": 1,
+          "maximumDelta": 1,
+          "band": {
+            "base": 10,
+            "jitter": 20,
+            "floor": 10
+          }
+        },
+        {
+          "minimumDelta": 2,
+          "maximumDelta": 2,
+          "band": {
+            "base": 30,
+            "jitter": 20,
+            "floor": 10
+          }
+        },
+        {
+          "minimumDelta": 3,
+          "maximumDelta": 3,
+          "band": {
+            "base": 50,
+            "jitter": 20,
+            "floor": 30
+          }
+        },
+        {
+          "minimumDelta": 4,
+          "band": {
+            "base": 70,
+            "jitter": 20,
+            "floor": 50
+          }
+        }
+      ]
+    }
+  },
+  "forms": [
+    {
+      "id": "Empowered",
+      "glossaryUuid": "a66c513e-500b-4891-8c09-9641ae300ba4",
+      "name": "Empowered",
+      "effectDisclosure": "Halve its ● cost, rounded down",
+      "selectedCardDescription": "Its energy cost is halved, rounded down.",
+      "accessibilityDescription": "Reduces this card's energy cost by half, rounded down.",
+      "glyph": "transfigurationEmpowered",
+      "accentColor": "#10b981",
+      "tintColor": "#6ee7b7",
+      "displayOrder": 0,
+      "merchantAllowed": true,
+      "eligibility": {
+        "kind": "positiveEnergyCost"
+      },
+      "operation": {
+        "kind": "halveEnergyCost",
+        "rounding": "Down",
+        "minimum": 0
+      },
+      "pricing": {
+        "kind": "statDelta"
+      },
+      "benefit": {
+        "kind": "ratio",
+        "divisor": 2
+      }
+    },
+    {
+      "id": "Amplified",
+      "glossaryUuid": "a2c070ca-eacd-4cca-b69d-3d48f0787a16",
+      "name": "Amplified",
+      "effectDisclosure": "Replace its ability with its authored stronger form",
+      "selectedCardDescription": "Its ability is replaced by its authored stronger form.",
+      "accessibilityDescription": "Replaces this card's rules with its authored amplified rules.",
+      "glyph": "transfigurationAmplified",
+      "accentColor": "#f59e0b",
+      "tintColor": "#fcd34d",
+      "displayOrder": 1,
+      "merchantAllowed": true,
+      "eligibility": {
+        "kind": "distinctAuthoredAmplifiedText"
+      },
+      "operation": {
+        "kind": "useAuthoredAmplifiedText"
+      },
+      "pricing": {
+        "kind": "band",
+        "base": 10,
+        "jitter": 20,
+        "floor": 10
+      },
+      "benefit": {
+        "kind": "flat",
+        "value": 0.4
+      }
+    },
+    {
+      "id": "Kindled",
+      "glossaryUuid": "f40df441-0e44-4122-b4d4-cdc4085a9ffb",
+      "name": "Kindled",
+      "effectDisclosure": "Double its ✦, or set it to 1 if it is 0",
+      "selectedCardDescription": "Its base spark is doubled, or set to 1 if it is 0.",
+      "accessibilityDescription": "Doubles this character's base spark, or sets zero spark to one.",
+      "glyph": "transfigurationKindled",
+      "accentColor": "#ef4444",
+      "tintColor": "#fca5a5",
+      "displayOrder": 2,
+      "merchantAllowed": true,
+      "eligibility": {
+        "kind": "cardType",
+        "cardType": "Character"
+      },
+      "operation": {
+        "kind": "doubleSpark",
+        "zeroResult": 1
+      },
+      "pricing": {
+        "kind": "statDelta"
+      },
+      "benefit": {
+        "kind": "ratio",
+        "divisor": 4
+      }
+    },
+    {
+      "id": "Inspired",
+      "glossaryUuid": "f0ff63b4-424b-4ae9-81d5-a4f6546afa3f",
+      "name": "Inspired",
+      "effectDisclosure": "Add \"Draw a card\" to its rules text",
+      "selectedCardDescription": "Draw a card is appended to its rules text.",
+      "accessibilityDescription": "Adds Draw a card to this event's rules.",
+      "glyph": "transfigurationInspired",
+      "accentColor": "#3b82f6",
+      "tintColor": "#93c5fd",
+      "displayOrder": 3,
+      "merchantAllowed": true,
+      "eligibility": {
+        "kind": "cardType",
+        "cardType": "Event"
+      },
+      "operation": {
+        "kind": "appendRulesClause",
+        "clause": "DrawCard"
+      },
+      "pricing": {
+        "kind": "band",
+        "base": 20,
+        "jitter": 20,
+        "floor": 10
+      },
+      "benefit": {
+        "kind": "flat",
+        "value": 0.55
+      }
+    },
+    {
+      "id": "Enduring",
+      "glossaryUuid": "eb4cfc5f-237a-47cd-9215-7cce3f15583f",
+      "name": "Enduring",
+      "effectDisclosure": "Add \"Reclaim\" to its rules text",
+      "selectedCardDescription": "Reclaim is appended to its rules text.",
+      "accessibilityDescription": "Adds Reclaim to this event's rules.",
+      "glyph": "transfigurationEnduring",
+      "accentColor": "#6366f1",
+      "tintColor": "#a5b4fc",
+      "displayOrder": 4,
+      "merchantAllowed": true,
+      "eligibility": {
+        "kind": "cardType",
+        "cardType": "Event"
+      },
+      "operation": {
+        "kind": "appendRulesClause",
+        "clause": "Reclaim"
+      },
+      "pricing": {
+        "kind": "band",
+        "base": 50,
+        "jitter": 30,
+        "floor": 20
+      },
+      "benefit": {
+        "kind": "flat",
+        "value": 0.55
+      }
+    },
+    {
+      "id": "Hastened",
+      "glossaryUuid": "19f6c2c9-dd6b-4d65-9f95-f6a3486772cc",
+      "name": "Hastened",
+      "effectDisclosure": "Make it Fast",
+      "selectedCardDescription": "It becomes Fast.",
+      "accessibilityDescription": "Makes this event Fast.",
+      "glyph": "transfigurationHastened",
+      "accentColor": "#06b6d4",
+      "tintColor": "#67e8f9",
+      "displayOrder": 5,
+      "merchantAllowed": true,
+      "eligibility": {
+        "kind": "eventWithoutFast"
+      },
+      "operation": {
+        "kind": "setFast"
+      },
+      "pricing": {
+        "kind": "free"
+      },
+      "benefit": {
+        "kind": "flat",
+        "value": 0.5
+      }
+    },
+    {
+      "id": "Resonant",
+      "glossaryUuid": "c3fa83af-ee3b-47cd-8112-5e5cc38821de",
+      "name": "Resonant",
+      "effectDisclosure": "Widen a named trigger to fire more often",
+      "selectedCardDescription": "A named trigger fires more often.",
+      "accessibilityDescription": "Widens a named trigger on this card to fire more often.",
+      "glyph": "transfigurationResonant",
+      "accentColor": "#d946ef",
+      "tintColor": "#f0abfc",
+      "displayOrder": 6,
+      "merchantAllowed": true,
+      "eligibility": {
+        "kind": "namedTrigger"
+      },
+      "operation": {
+        "kind": "widenNamedTrigger"
+      },
+      "pricing": {
+        "kind": "band",
+        "base": 50,
+        "jitter": 30,
+        "floor": 20
+      },
+      "benefit": {
+        "kind": "flat",
+        "value": 0.5
+      }
+    },
+    {
+      "id": "Attuned",
+      "glossaryUuid": "980d283a-9558-4b66-84a0-fcb91fdf4ceb",
+      "name": "Attuned",
+      "effectDisclosure": "Reduce an activated ability's cost by 1●",
+      "selectedCardDescription": "An activated ability costs 1● less.",
+      "accessibilityDescription": "Reduces an activated ability's energy cost by one.",
+      "glyph": "transfigurationAttuned",
+      "accentColor": "#f43f5e",
+      "tintColor": "#fda4af",
+      "displayOrder": 7,
+      "merchantAllowed": true,
+      "eligibility": {
+        "kind": "activatedEnergyCost"
+      },
+      "operation": {
+        "kind": "reduceActivatedEnergyCost",
+        "amount": 1,
+        "minimum": 0
+      },
+      "pricing": {
+        "kind": "band",
+        "base": 10,
+        "jitter": 20,
+        "floor": 10
+      },
+      "benefit": {
+        "kind": "flat",
+        "value": 0.5
+      }
+    },
+    {
+      "id": "Perfected",
+      "glossaryUuid": "22adf539-d2c9-4f33-9416-159d03a220ad",
+      "name": "Perfected",
+      "effectDisclosure": "Apply every available transfiguration",
+      "selectedCardDescription": "Every eligible transfiguration is applied in canonical order.",
+      "accessibilityDescription": "Applies every other eligible transfiguration to this card.",
+      "glyph": "transfigurationPerfected",
+      "accentColor": "#a855f7",
+      "tintColor": "#d8b4fe",
+      "displayOrder": 8,
+      "merchantAllowed": false,
+      "eligibility": {
+        "kind": "atLeastEligibleForms",
+        "count": 2
+      },
+      "operation": {
+        "kind": "applyEligibleForms",
+        "formOrder": [
+          "Empowered",
+          "Amplified",
+          "Kindled",
+          "Inspired",
+          "Enduring",
+          "Hastened",
+          "Resonant",
+          "Attuned"
+        ]
+      },
+      "pricing": {
+        "kind": "band",
+        "base": 100,
+        "jitter": 0,
+        "floor": 100
+      },
+      "benefit": {
+        "kind": "flat",
+        "value": 0.65
+      }
+    }
+  ],
+  "contentHash": "ffe1278b1e8c99c03d564bad68d08b103bed27ea9f15d9c9362e736343cbf5c6",
+  "foldHash": "ffe1278b1e8c99c03d564bad68d08b103bed27ea9f15d9c9362e736343cbf5c6"
+}
