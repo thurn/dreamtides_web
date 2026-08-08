@@ -18,10 +18,10 @@ describe("compileAuguryData", () => {
     expect(result.contentHash).toMatch(/^[0-9a-f]{64}$/u);
   });
 
-  it("validates offer-copy slots at compile time", () => {
+  it("rejects removed presentation fields", () => {
     const invalid = source();
-    invalid.archetype[0].copy.title = "A vision of {unknown-slot}";
-    expect(() => compileAuguryData(invalid)).toThrow(/unknown copy slot/u);
+    invalid.archetype[0].copy = { title: "Dead copy" };
+    expect(() => compileAuguryData(invalid)).toThrow(/copy.*unknown key/u);
   });
 
   it("rejects policies that the archetype mechanic cannot execute", () => {

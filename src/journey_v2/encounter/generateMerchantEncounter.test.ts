@@ -101,6 +101,28 @@ describe("generateMerchantEncounter", () => {
     }
   });
 
+  it("persists only semantic encounter and reward data", () => {
+    const content = fixtureContent({});
+    const state = makeMerchantTestJourneyState({ seed: "semantic-data" });
+    const encounter = generateMerchantEncounter(contextFor(content, state));
+
+    expect(encounter).not.toHaveProperty("dialogue");
+    expect(encounter).not.toHaveProperty("acceptReaction");
+    for (const offer of encounter.offers) {
+      expect(offer).not.toHaveProperty("title");
+      expect(offer).not.toHaveProperty("summary");
+      expect(offer).not.toHaveProperty("detailHeadline");
+      expect(offer).not.toHaveProperty("detailSubtitle");
+      if (offer.choiceRequest !== undefined) {
+        expect(offer.choiceRequest).not.toHaveProperty("prompt");
+        for (const candidate of offer.choiceRequest.candidates) {
+          expect(candidate).not.toHaveProperty("title");
+          expect(candidate).not.toHaveProperty("summary");
+        }
+      }
+    }
+  });
+
   it("records roll attempts and attaches a trace to each offer", () => {
     const content = fixtureContent({});
     for (let s = 0; s < 10; s += 1) {
@@ -210,18 +232,5 @@ describe("generateMerchantEncounter", () => {
     expect(generateMerchantEncounter(forcedContext)).toEqual(
       generateMerchantEncounter(forcedContext),
     );
-  });
-
-  it("renders a single dialogue line and an accept reaction", () => {
-    const content = fixtureContent({});
-    const state = makeMerchantTestJourneyState({ seed: "dialogue" });
-    const encounter = generateMerchantEncounter(contextFor(content, state));
-    expect(encounter.dialogue.line.length).toBeGreaterThan(0);
-    expect(
-      encounter.offers.some(
-        (offer) => offer.offerId === encounter.dialogue.offerId,
-      ),
-    ).toBe(true);
-    expect(encounter.acceptReaction.length).toBeGreaterThan(0);
   });
 });

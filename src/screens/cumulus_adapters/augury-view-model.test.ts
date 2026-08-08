@@ -47,8 +47,6 @@ const card = makeMerchantTestCard({
 function candidate(choiceId: string): MerchantChoiceCandidate {
   return {
     choiceId,
-    title: "Fixture choice",
-    summary: "Fixture summary",
     gameObjects: [
       {
         objectType: "catalogCard",
@@ -72,13 +70,10 @@ function chooserOffer(): MerchantOffer {
     encounterSignature: "encounter-fixture",
     archetypeId: "fit_card_draft",
     family: "grant",
-    title: "Production copy may change",
-    summary: "Production copy may also change",
     targetKey: "fixture-target",
     gameObjects: [],
     choiceRequest: {
       choiceType: "catalogCard",
-      prompt: "Pick one",
       candidates: [
         candidate("choice-1"),
         candidate("choice-2"),
@@ -95,8 +90,6 @@ function directOffer(): MerchantOffer {
     encounterSignature: "encounter-fixture",
     archetypeId: "strong_card",
     family: "grant",
-    title: "Production title",
-    summary: "Production summary",
     targetKey: card.id,
     gameObjects: [candidate("direct").gameObjects[0]],
     applyPayload: {
@@ -112,8 +105,6 @@ function encounter(): MerchantEncounter {
     encounterSignature: "encounter-fixture",
     siteId: "site-fixture",
     offers: [chooserOffer(), directOffer()],
-    dialogue: { line: "Fixture dialogue", offerId: "A" },
-    acceptReaction: "Fixture reaction",
   };
 }
 
@@ -183,8 +174,6 @@ function fourCandidates(payloadCopies = 1): MerchantChoiceCandidate[] {
     };
     return {
       choiceId: `mapping-choice-${String(index)}`,
-      title: "Fixture",
-      summary: "Fixture",
       gameObjects: [object],
       applyPayload:
         payloadCopies === 1
@@ -206,8 +195,6 @@ function mappedOffer(
     encounterSignature: "mapping-encounter",
     archetypeId,
     family: "grant",
-    title: "Fixture",
-    summary: "Fixture",
     targetKey: "fixture",
     gameObjects: [],
     ...overrides,
@@ -217,10 +204,9 @@ function mappedOffer(
 const choiceRequest = (
   candidates: MerchantChoiceCandidate[],
   choiceType: "catalogCard" | "dreamsign" | "replacementCard" = "catalogCard",
-) => ({
-  choiceType,
-  prompt: "Fixture",
-  candidates,
+  ) => ({
+    choiceType,
+    candidates,
 });
 
 function dreamsignObject(
@@ -526,8 +512,6 @@ describe("augury view model", () => {
           choiceRequest: choiceRequest(
             dreamsigns.map((object, index) => ({
               choiceId: `sign-choice-${String(index)}`,
-              title: "Fixture",
-              summary: "Fixture",
               gameObjects: [object],
               applyPayload: {
                 kind: "add_dreamsign",
@@ -610,8 +594,6 @@ describe("augury view model", () => {
             [
               {
                 choiceId: "one",
-                title: "Fixture",
-                summary: "Fixture",
                 gameObjects: [dreamsignObject("one")],
                 applyPayload: {
                   kind: "add_dreamsign",

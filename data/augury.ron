@@ -2,25 +2,6 @@ CompatDocument(
   data: {
     "schema-version": 1,
     "encounter": {"offer-count": 2, "distinct-families": true, "allow-decline": true},
-    "dialogue": {
-      "fallback-line": "Something here was meant for you.",
-      "accept-reactions": [
-        /*[0]*/
-        "It already looks at home with you.",
-        /*[1]*/
-        "The dream settles. Go well.",
-        /*[2]*/
-        "A fair bargain, and a quiet one.",
-        /*[3]*/
-        "Carry it gently. It will carry you.",
-        /*[4]*/
-        "There. The road feels lighter now.",
-        /*[5]*/
-        "The dark approves, I think.",
-        /*[6]*/
-        "Some trades the morning never undoes.",
-      ],
-    },
     "archetype": [
       /*[0]*/
       {
@@ -29,28 +10,7 @@ CompatDocument(
         "family": "grant",
         "weight": 10,
         "selection-policy-id": "card-fit",
-        "dialogue-lines": [
-          /*[0]*/
-          "Some things drift a long way only to find their owner.",
-          /*[1]*/
-          "I kept this shaped like the hollow you carry.",
-          /*[2]*/
-          "It has been waiting to belong to someone. To you.",
-          /*[3]*/
-          "A stranger that will feel like an old friend.",
-          /*[4]*/
-          "This was always going to end up in your hands.",
-        ],
         "quantities": {"granted-copies": 1},
-        "copy": {
-          "title": "Receive {card}",
-          "summary": "Add {copies-word} {copies-label} of this card to your deck.",
-          "prompt": "",
-          "candidate-title": "{card}",
-          "candidate-summary": "Add {copies-word} {copies-label} of this card to your deck.",
-          "detail-headline": "Gain a Card",
-          "detail-subtitle": "Gain {card}",
-        },
       },
       /*[1]*/
       {
@@ -59,28 +19,7 @@ CompatDocument(
         "family": "grant",
         "weight": 10,
         "selection-policy-id": "card-fit",
-        "dialogue-lines": [
-          /*[0]*/
-          "Several roads, and each one bends quietly toward you.",
-          /*[1]*/
-          "Kindred things, gathered. Take whichever leans your way.",
-          /*[2]*/
-          "I sifted the tide and kept only what suits you.",
-          /*[3]*/
-          "All of these already half-belong to you.",
-          /*[4]*/
-          "Choose freely — none of them are strangers to your path.",
-        ],
         "quantities": {"chooser-size": 4, "granted-copies": 1},
-        "copy": {
-          "title": "Draft a card",
-          "summary": "Choose one of {count-word} cards to keep.",
-          "prompt": "Pick 1 of these cards",
-          "candidate-title": "{card}",
-          "candidate-summary": "Add {copies-word} {copies-label} of this card to your deck.",
-          "detail-headline": "Choose a Card",
-          "detail-subtitle": "Choose a card to add to your deck.",
-        },
       },
       /*[2]*/
       {
@@ -89,28 +28,7 @@ CompatDocument(
         "family": "grant",
         "weight": 6,
         "selection-policy-id": "card-fit-quality",
-        "dialogue-lines": [
-          /*[0]*/
-          "Whatever you cherish, the dream will gladly echo.",
-          /*[1]*/
-          "Hold a thing close enough and it learns to return.",
-          /*[2]*/
-          "One becomes two when you want it badly enough.",
-          /*[3]*/
-          "Take it once; the dream remembers it twice.",
-          /*[4]*/
-          "What repeats becomes certain. Choose what you trust.",
-        ],
         "quantities": {"chooser-size": 4, "granted-copies": 2},
-        "copy": {
-          "title": "Draft a card, doubled",
-          "summary": "Choose one of {count-word} cards and keep {copies-word} {copies-label}.",
-          "prompt": "Pick 1 — you keep {copies-word} {copies-label}",
-          "candidate-title": "{card}",
-          "candidate-summary": "Add {copies-word} {copies-label} of this card to your deck.",
-          "detail-headline": "Choose a Card",
-          "detail-subtitle": "Choose a card and add {copies-word} {copies-label} of it to your deck.",
-        },
       },
       /*[3]*/
       {
@@ -119,28 +37,7 @@ CompatDocument(
         "family": "grant",
         "weight": 8,
         "selection-policy-id": "card-fit-quality",
-        "dialogue-lines": [
-          /*[0]*/
-          "Something fierce is sleeping here, and it stirs for you.",
-          /*[1]*/
-          "Not gentle, this one. But it was made to win.",
-          /*[2]*/
-          "Raw weather in a small shape. Carry it carefully.",
-          /*[3]*/
-          "I keep the dangerous ones for travelers who can hold them.",
-          /*[4]*/
-          "Power, plainly. The dream doesn\'t dress it up.",
-        ],
         "quantities": {"granted-copies": 1},
-        "copy": {
-          "title": "Receive {card}",
-          "summary": "Add {copies-word} {copies-label} of a powerful card.",
-          "prompt": "",
-          "candidate-title": "{card}",
-          "candidate-summary": "Add {copies-word} {copies-label} of this powerful card.",
-          "detail-headline": "Gain a Card",
-          "detail-subtitle": "Gain {card}",
-        },
       },
       /*[4]*/
       {
@@ -149,28 +46,7 @@ CompatDocument(
         "family": "grant",
         "weight": 10,
         "selection-policy-id": "card-fit",
-        "dialogue-lines": [
-          /*[0]*/
-          "A drawer of kindred things, all leaning the same way.",
-          /*[1]*/
-          "Where you are going, your kin have gone before.",
-          /*[2]*/
-          "I gathered a little family for you. Pick one to keep.",
-          /*[3]*/
-          "Same blood, different faces. Choose the one that calls.",
-          /*[4]*/
-          "These belong to one another, and soon to you.",
-        ],
         "quantities": {"chooser-size": 4, "granted-copies": 1},
-        "copy": {
-          "title": "Draft {category}",
-          "summary": "Choose one of {count-word} {category} cards.",
-          "prompt": "Pick 1 of these {category} cards",
-          "candidate-title": "{card}",
-          "candidate-summary": "Add {copies-word} {copies-label} of this {category} card to your deck.",
-          "detail-headline": "Choose a Card",
-          "detail-subtitle": "Choose a card from a single category to add to your deck.",
-        },
       },
       /*[5]*/
       {
@@ -179,28 +55,7 @@ CompatDocument(
         "family": "grant",
         "weight": 8,
         "selection-policy-id": "card-bundle",
-        "dialogue-lines": [
-          /*[0]*/
-          "These were never meant to travel alone.",
-          /*[1]*/
-          "Apart they are quiet; together they sing.",
-          /*[2]*/
-          "I bound them because they finish each other\'s sentences.",
-          /*[3]*/
-          "A knot of things that only make sense as one.",
-          /*[4]*/
-          "Keep them whole and you\'ll hear them hum.",
-        ],
         "quantities": {"bundle-size": 3, "minimum-bundle-size": 2},
-        "copy": {
-          "title": "Gain {count} cards that work together",
-          "summary": "Receive this {count}-card bundle.",
-          "prompt": "",
-          "candidate-title": "{card}",
-          "candidate-summary": "Part of this card bundle.",
-          "detail-headline": "Gain {count-word} Cards",
-          "detail-subtitle": "Add {count-word} cards to your deck.",
-        },
       },
       /*[6]*/
       {
@@ -209,28 +64,7 @@ CompatDocument(
         "family": "grant",
         "weight": 6,
         "selection-policy-id": "card-fit",
-        "dialogue-lines": [
-          /*[0]*/
-          "I finish my work before I ever offer it.",
-          /*[1]*/
-          "These came to me dull and leave me gleaming.",
-          /*[2]*/
-          "Already sharpened, every one, by my own hand.",
-          /*[3]*/
-          "No raw material here — only what I\'ve already perfected.",
-          /*[4]*/
-          "I polished these in the long dark. Look how they shine.",
-        ],
         "quantities": {"chooser-size": 4, "granted-copies": 1},
-        "copy": {
-          "title": "Draft a transfigured card",
-          "summary": "Choose one of {count-word} cards that arrive already transfigured.",
-          "prompt": "Pick 1 of these transfigured cards",
-          "candidate-title": "{card} ({transfiguration})",
-          "candidate-summary": "Add {copies-word} {copies-label}; each arrives already {transfiguration}.",
-          "detail-headline": "Choose a Transfigured Card",
-          "detail-subtitle": "Choose a transfigured card to add to your deck.",
-        },
       },
       /*[7]*/
       {
@@ -239,28 +73,7 @@ CompatDocument(
         "family": "improve",
         "weight": 10,
         "selection-policy-id": "transfiguration-value",
-        "dialogue-lines": [
-          /*[0]*/
-          "Even a dreaming thing can be honed.",
-          /*[1]*/
-          "There is a finer version of this, waiting inside.",
-          /*[2]*/
-          "Give me a moment with it, and it will thank you.",
-          /*[3]*/
-          "Unfinished. But I see what it longs to become.",
-          /*[4]*/
-          "A little heat, a little patience, and it changes.",
-        ],
         "quantities": {},
-        "copy": {
-          "title": "{card}: {transfiguration}",
-          "summary": "Permanently improve a deck card.",
-          "prompt": "",
-          "candidate-title": "{card}",
-          "candidate-summary": "Apply {transfiguration}.",
-          "detail-headline": "Transfigure a Card",
-          "detail-subtitle": "Transfigure {card}",
-        },
       },
       /*[8]*/
       {
@@ -269,28 +82,7 @@ CompatDocument(
         "family": "improve",
         "weight": 6,
         "selection-policy-id": "transfiguration-value",
-        "dialogue-lines": [
-          /*[0]*/
-          "The first things you carried still hunger to grow.",
-          /*[1]*/
-          "Humble beginnings reward a careful hand.",
-          /*[2]*/
-          "What you started with can yet become more.",
-          /*[3]*/
-          "Old companions, given a second and brighter draft.",
-          /*[4]*/
-          "Even the plainest seed remembers how to bloom.",
-        ],
         "quantities": {"maximum-targets": 2},
-        "copy": {
-          "title": "Improve {count} starter cards",
-          "summary": "Polish your starter cards.",
-          "prompt": "",
-          "candidate-title": "{card}",
-          "candidate-summary": "Transfigure this starter card.",
-          "detail-headline": "Transfigure Your Starters",
-          "detail-subtitle": "Transfigure {count-word} starter cards.",
-        },
       },
       /*[9]*/
       {
@@ -299,28 +91,7 @@ CompatDocument(
         "family": "improve",
         "weight": 8,
         "selection-policy-id": "deck-entry-centrality",
-        "dialogue-lines": [
-          /*[0]*/
-          "A small new habit can change a whole life.",
-          /*[1]*/
-          "One trick it never knew it wanted to learn.",
-          /*[2]*/
-          "Teach an old thing a new word and watch it wake.",
-          /*[3]*/
-          "Barely a change. It will feel like a different soul.",
-          /*[4]*/
-          "A single new gift, and everything after it shifts.",
-        ],
         "quantities": {},
-        "copy": {
-          "title": "{card}: {transfiguration}",
-          "summary": "{transfiguration}",
-          "prompt": "",
-          "candidate-title": "{card}",
-          "candidate-summary": "{transfiguration}",
-          "detail-headline": "Reduce Reclaim",
-          "detail-subtitle": "Reduce Reclaim for {card}",
-        },
       },
       /*[10]*/
       {
@@ -329,28 +100,7 @@ CompatDocument(
         "family": "improve",
         "weight": 6,
         "selection-policy-id": "deck-entry-centrality",
-        "dialogue-lines": [
-          /*[0]*/
-          "Blood is only a story. It can be retold.",
-          /*[1]*/
-          "Born to one kin, but it would run better with another.",
-          /*[2]*/
-          "Let me change the company it keeps.",
-          /*[3]*/
-          "A new family suits it better than the old one did.",
-          /*[4]*/
-          "It only ever wanted to belong somewhere else.",
-        ],
         "quantities": {},
-        "copy": {
-          "title": "{card} becomes a {subtype}",
-          "summary": "Change a character\'s subtype to {subtype}.",
-          "prompt": "",
-          "candidate-title": "{card}",
-          "candidate-summary": "Become a {subtype}.",
-          "detail-headline": "Change a Character Type",
-          "detail-subtitle": "Make {card} a {subtype}",
-        },
       },
       /*[11]*/
       {
@@ -359,28 +109,7 @@ CompatDocument(
         "family": "remove",
         "weight": 8,
         "selection-policy-id": "purge-misfit",
-        "dialogue-lines": [
-          /*[0]*/
-          "Some weight is only weight. Set it down with me.",
-          /*[1]*/
-          "Travel lighter. Leave the dead branch behind.",
-          /*[2]*/
-          "Not everything you carry is still worth carrying.",
-          /*[3]*/
-          "Let me take the stone from your shoe.",
-          /*[4]*/
-          "Release it, and feel how the road opens.",
-        ],
         "quantities": {},
-        "copy": {
-          "title": "Remove {card}",
-          "summary": "Remove this card from your deck.",
-          "prompt": "",
-          "candidate-title": "{card}",
-          "candidate-summary": "Remove this card from your deck.",
-          "detail-headline": "Purge a Card",
-          "detail-subtitle": "Purge {card}",
-        },
       },
       /*[12]*/
       {
@@ -389,28 +118,7 @@ CompatDocument(
         "family": "remove",
         "weight": 8,
         "selection-policy-id": "card-fit-quality",
-        "dialogue-lines": [
-          /*[0]*/
-          "Let the withered branch fall; another bud waits.",
-          /*[1]*/
-          "Trade the burden for something that pulls its weight.",
-          /*[2]*/
-          "Out with the silence, in with a clearer note.",
-          /*[3]*/
-          "Give me the stone; I\'ll hand you a seed.",
-          /*[4]*/
-          "One leaves so a better thing can take its seat.",
-        ],
         "quantities": {"chooser-size": 4},
-        "copy": {
-          "title": "Remove {card} and draft a replacement",
-          "summary": "Remove a card and pick one of {count-word} replacements.",
-          "prompt": "Pick a replacement",
-          "candidate-title": "{card}",
-          "candidate-summary": "A replacement for your removed card.",
-          "detail-headline": "Trade a Card",
-          "detail-subtitle": "Purge {card} and choose a card to replace it",
-        },
       },
       /*[13]*/
       {
@@ -419,28 +127,7 @@ CompatDocument(
         "family": "duplicate",
         "weight": 8,
         "selection-policy-id": "duplicate-value",
-        "dialogue-lines": [
-          /*[0]*/
-          "The mirror is fond of your finest reflection.",
-          /*[1]*/
-          "Whatever you love most, the dream will love twice.",
-          /*[2]*/
-          "Some things are worth seeing again, and again.",
-          /*[3]*/
-          "Point to your treasure and I will echo it.",
-          /*[4]*/
-          "Doubling what already works is the oldest magic.",
-        ],
         "quantities": {"chooser-size": 3, "granted-copies": 1},
-        "copy": {
-          "title": "Duplicate {card}",
-          "summary": "Add {copies-word} {copies-label} of a deck card.",
-          "prompt": "Pick 1 of up to {count}",
-          "candidate-title": "{card}",
-          "candidate-summary": "Add {copies-word} {copies-label} of this card.",
-          "detail-headline": "Choose a Card",
-          "detail-subtitle": "Choose one of {count-word} cards in your deck to duplicate.",
-        },
       },
       /*[14]*/
       {
@@ -449,28 +136,7 @@ CompatDocument(
         "family": "dreamsign",
         "weight": 8,
         "selection-policy-id": "dreamsign-match",
-        "dialogue-lines": [
-          /*[0]*/
-          "A quiet star to walk beneath, all the way home.",
-          /*[1]*/
-          "A blessing that keeps working while you sleep.",
-          /*[2]*/
-          "Something to watch over the long road ahead.",
-          /*[3]*/
-          "Carry this and the nights grow a little softer.",
-          /*[4]*/
-          "A faithful light. It asks nothing and gives daily.",
-        ],
         "quantities": {},
-        "copy": {
-          "title": "Gain the {card} dreamsign",
-          "summary": "Add this dreamsign to your collection.",
-          "prompt": "",
-          "candidate-title": "{card}",
-          "candidate-summary": "Add this dreamsign to your collection.",
-          "detail-headline": "Gain a Dreamsign",
-          "detail-subtitle": "Gain {card}",
-        },
       },
       /*[15]*/
       {
@@ -479,28 +145,7 @@ CompatDocument(
         "family": "dreamsign",
         "weight": 6,
         "selection-policy-id": "dreamsign-match",
-        "dialogue-lines": [
-          /*[0]*/
-          "Several stars lean close. Choose one to follow.",
-          /*[1]*/
-          "These lights all hum — listen for the one that\'s yours.",
-          /*[2]*/
-          "Pick the patron whose silence sounds like home.",
-          /*[3]*/
-          "A blessing fits best when it is freely chosen.",
-          /*[4]*/
-          "Many guardians offered; you may keep a single one.",
-        ],
         "quantities": {"minimum-chooser-size": 2, "maximum-chooser-size": 4},
-        "copy": {
-          "title": "Pick a dreamsign (1 of {count})",
-          "summary": "Choose a dreamsign for your collection.",
-          "prompt": "Choose a dreamsign",
-          "candidate-title": "{card}",
-          "candidate-summary": "Add this dreamsign to your collection.",
-          "detail-headline": "Choose a Dreamsign",
-          "detail-subtitle": "Choose a dreamsign to gain.",
-        },
       },
       /*[16]*/
       {
@@ -509,28 +154,7 @@ CompatDocument(
         "family": "site",
         "weight": 6,
         "selection-policy-id": "site-uniform",
-        "dialogue-lines": [
-          /*[0]*/
-          "I can open a door where there was only wall.",
-          /*[1]*/
-          "Your map has room for one more strange place.",
-          /*[2]*/
-          "Let me fold a new stop into the road ahead.",
-          /*[3]*/
-          "Somewhere worth visiting, drawn fresh just for you.",
-          /*[4]*/
-          "The dreamscape will widen, if you let it.",
-        ],
         "quantities": {},
-        "copy": {
-          "title": "Add a {site} to this dreamscape",
-          "summary": "A {site} will appear on the current dreamscape map.",
-          "prompt": "",
-          "candidate-title": "{site}",
-          "candidate-summary": "Add this site to the current dreamscape.",
-          "detail-headline": "Add a Site",
-          "detail-subtitle": "Add a {site} site",
-        },
       },
     ],
   },

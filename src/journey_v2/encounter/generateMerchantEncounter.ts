@@ -5,13 +5,8 @@ import type {
   MerchantArchetypeId,
   MerchantOfferDraft,
 } from "../archetypes/types";
-import { renderMerchantDialogue } from "../dialogue/dialogue";
 import { merchantRng, weightedSample } from "../signals/rng";
 import { auguryArchetype } from "../../data/augury-data";
-import {
-  auguryCountWord,
-  renderAuguryTemplate,
-} from "../../data/augury-data";
 import type {
   MerchantContext,
   MerchantEncounter,
@@ -179,8 +174,6 @@ function offerIdentity(offer: MerchantOffer): unknown {
     offerId: offer.offerId,
     archetypeId: offer.archetypeId,
     family: offer.family,
-    title: offer.title,
-    summary: offer.summary,
     targetKey: offer.targetKey,
   };
 }
@@ -218,61 +211,19 @@ function signatureFor(
 function draftToOffer(
   draft: MerchantOfferDraft,
   offerId: string,
-  context: MerchantContext,
 ): Omit<MerchantOffer, "encounterSignature"> {
-  const config = auguryArchetype(
-    context.rewardSelection.content.auguryData,
-    draft.archetypeId,
-  );
-  const objectNames = draft.gameObjects.map((object) => object.displayName);
-  const choiceCount = draft.choiceRequest?.candidates.length ?? 0;
-  const count = choiceCount > 0 ? choiceCount : Math.max(1, objectNames.length);
-  const firstChoiceName = draft.choiceRequest?.candidates[0]?.gameObjects[0]
-    ?.displayName;
-  const firstObject = draft.gameObjects[0];
-  const inferredTransfiguration = firstObject?.badge?.label;
-  const values = {
-    card: objectNames[0] ?? firstChoiceName ?? draft.targetKey,
-    cards: objectNames.join(", "),
-    count,
-    "count-word": auguryCountWord(count),
-    site: draft.targetKey,
-    transfiguration: inferredTransfiguration ?? draft.targetKey.split(":").slice(-1)[0] ?? "",
-    subtype: inferredTransfiguration?.replace(/^Becomes a /u, "") ?? draft.targetKey.split(":").slice(-1)[0] ?? "",
-    ...draft.copyVariables,
-  } as const;
-  const renderedCandidates = draft.choiceRequest?.candidates.map((candidate) => {
-    const card = candidate.gameObjects[0]?.displayName ?? candidate.choiceId;
-    const transfiguration = candidate.gameObjects[0]?.badge?.label ?? values.transfiguration;
-    const candidateValues = { ...values, card, transfiguration };
-    return {
-      ...candidate,
-      title: renderAuguryTemplate(config.copy.candidateTitle, candidateValues),
-      summary: renderAuguryTemplate(config.copy.candidateSummary, candidateValues),
-    };
-  });
   return {
     offerId,
     archetypeId: draft.archetypeId,
     family: draft.family,
-    title: renderAuguryTemplate(config.copy.title, values),
-    summary: renderAuguryTemplate(config.copy.summary, values),
-    detailHeadline: renderAuguryTemplate(config.copy.detailHeadline, values),
-    detailSubtitle: renderAuguryTemplate(config.copy.detailSubtitle, values),
     targetKey: draft.targetKey,
     gameObjects: draft.gameObjects,
     ...(draft.applyPayload === undefined
       ? {}
       : { applyPayload: draft.applyPayload }),
-    ...(draft.choiceRequest === undefined || renderedCandidates === undefined
+    ...(draft.choiceRequest === undefined
       ? {}
-      : {
-          choiceRequest: {
-            ...draft.choiceRequest,
-            prompt: renderAuguryTemplate(config.copy.prompt, values),
-            candidates: renderedCandidates,
-          },
-        }),
+      : { choiceRequest: draft.choiceRequest }),
     ...(draft.trace === undefined ? {} : { trace: draft.trace }),
     ...(draft.mechanicId === undefined ? {} : { mechanicId: draft.mechanicId }),
     ...(draft.policyId === undefined ? {} : { policyId: draft.policyId }),
@@ -401,8 +352,8 @@ export function generateMerchantEncounterWithDebug(
   const slotB = rolledB.result;
 
   const unsignedOffers = [
-    draftToOffer(slotA.draft, OFFER_IDS[0], context),
-    draftToOffer(slotB.draft, OFFER_IDS[1], context),
+    draftToOffer(slotA.draft, OFFER_IDS[0]),
+    draftToOffer(slotB.draft, OFFER_IDS[1]),
   ];
   const encounterSignature = signatureFor(context, unsignedOffers);
   const offers: MerchantOffer[] = unsignedOffers.map((offer) => ({
@@ -410,14 +361,10 @@ export function generateMerchantEncounterWithDebug(
     encounterSignature,
   }));
 
-  const dialogue = renderMerchantDialogue({ context, offers });
-
   const encounter: MerchantEncounter = {
     encounterSignature,
     siteId: context.site.id,
     offers,
-    dialogue: dialogue.line,
-    acceptReaction: dialogue.acceptReaction,
   };
 
   assertValidEncounter(encounter);

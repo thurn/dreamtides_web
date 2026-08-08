@@ -130,7 +130,6 @@ export type MerchantApplyPayload =
 
 export interface MerchantChoiceRequest {
   choiceType: "catalogCard" | "dreamsign" | "replacementCard";
-  prompt: string;
   candidates: readonly MerchantChoiceCandidate[];
 }
 
@@ -140,8 +139,6 @@ export interface MerchantChoice {
 
 export interface MerchantChoiceCandidate {
   choiceId: string;
-  title: string;
-  summary: string;
   gameObjects: readonly MerchantGameObject[];
   applyPayload: MerchantApplyPayload;
   cardUuid?: string;
@@ -154,11 +151,6 @@ export interface MerchantOffer {
   encounterSignature: string;
   archetypeId: MerchantArchetypeId;
   family: MerchantOfferFamily;
-  title: string;
-  summary: string;
-  /** TOML-authored detail copy resolved when the offer is generated. */
-  detailHeadline?: string;
-  detailSubtitle?: string;
   targetKey: string;
   gameObjects: readonly MerchantGameObject[];
   applyPayload?: MerchantApplyPayload;
@@ -173,21 +165,12 @@ export interface MerchantOffer {
   selectionTrace?: RewardSelectionTrace;
 }
 
-/** A single merchant line hinting at one seeded-chosen offer. */
-export interface MerchantDialogueLine {
-  line: string;
-  offerId: string;
-}
-
 export interface MerchantEncounter {
   encounterSignature: string;
   siteId: string;
   selectionRulesVersion?: string;
   selectionContentRevision?: string;
   offers: readonly MerchantOffer[];
-  dialogue: MerchantDialogueLine;
-  /** Short reaction shown after the player accepts. */
-  acceptReaction: string;
 }
 
 export interface MerchantAcceptRequest {

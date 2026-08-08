@@ -1,4 +1,4 @@
-// Augury encounter rules, dialogue, offer abilities, and presentation.
+// Augury encounter rules and offer abilities.
 
 #![enable(implicit_some)]
 AuguryCatalog(
@@ -11,21 +11,6 @@ AuguryCatalog(
     allow_decline: true,
   ),
 
-  dialogue: (
-    // Used when encounter generation cannot select an ability-specific opening line.
-    fallback_line: "Something here was meant for you.",
-    // One line is selected after the player accepts an offer.
-    accept_reactions: [
-      "It already looks at home with you.",
-      "The dream settles. Go well.",
-      "A fair bargain, and a quiet one.",
-      "Carry it gently. It will carry you.",
-      "There. The road feels lighter now.",
-      "The dark approves, I think.",
-      "Some trades the morning never undoes.",
-    ],
-  ),
-
   archetypes: [
     ArchetypeDefinition(
       id: "77ad1a09-aba0-4875-b462-e6efe94bdc3d",
@@ -34,288 +19,74 @@ AuguryCatalog(
       ability: FitCardGrant(selection_policy: CardFit, granted_copies: 1),
       // Relative selection weight among eligible definitions.
       weight: 10,
-      // Ability-specific opening lines; encounter generation selects one line.
-      dialogue_lines: [
-        "Some things drift a long way only to find their owner.",
-        "I kept this shaped like the hollow you carry.",
-        "It has been waiting to belong to someone. To you.",
-        "A stranger that will feel like an old friend.",
-        "This was always going to end up in your hands.",
-      ],
-      // Presentation templates; the compiler validates every supported placeholder.
-      copy: (
-        title: "Receive {card}",
-        summary: "Add {copies-word} {copies-label} of this card to your deck.",
-        prompt: "",
-        candidate_title: "{card}",
-        candidate_summary: "Add {copies-word} {copies-label} of this card to your deck.",
-        detail_headline: "Gain a Card",
-        detail_subtitle: "Gain {card}",
-      ),
     ),
 
     ArchetypeDefinition(
       id: "8f8db592-b62c-414e-9195-68641722cf50",
       ability: FitCardDraft(selection_policy: CardFit, chooser_size: 4, granted_copies: 1),
       weight: 10,
-      dialogue_lines: [
-        "Several roads, and each one bends quietly toward you.",
-        "Kindred things, gathered. Take whichever leans your way.",
-        "I sifted the tide and kept only what suits you.",
-        "All of these already half-belong to you.",
-        "Choose freely — none of them are strangers to your path.",
-      ],
-      copy: (
-        title: "Draft a card",
-        summary: "Choose one of {count-word} cards to keep.",
-        prompt: "Pick 1 of these cards",
-        candidate_title: "{card}",
-        candidate_summary: "Add {copies-word} {copies-label} of this card to your deck.",
-        detail_headline: "Choose a Card",
-        detail_subtitle: "Choose a card to add to your deck.",
-      ),
     ),
 
     ArchetypeDefinition(
       id: "b4ccca83-2a1d-4474-ba6d-4b95aefeed9b",
       ability: CopiesDraft(selection_policy: CardFitQuality, chooser_size: 4, granted_copies: 2),
       weight: 6,
-      dialogue_lines: [
-        "Whatever you cherish, the dream will gladly echo.",
-        "Hold a thing close enough and it learns to return.",
-        "One becomes two when you want it badly enough.",
-        "Take it once; the dream remembers it twice.",
-        "What repeats becomes certain. Choose what you trust.",
-      ],
-      copy: (
-        title: "Draft a card, doubled",
-        summary: "Choose one of {count-word} cards and keep {copies-word} {copies-label}.",
-        prompt: "Pick 1 — you keep {copies-word} {copies-label}",
-        candidate_title: "{card}",
-        candidate_summary: "Add {copies-word} {copies-label} of this card to your deck.",
-        detail_headline: "Choose a Card",
-        detail_subtitle: "Choose a card and add {copies-word} {copies-label} of it to your deck.",
-      ),
     ),
 
     ArchetypeDefinition(
       id: "c4ac3d68-e814-43ea-9be3-ced3fd1bbe89",
       ability: StrongCard(selection_policy: CardFitQuality, granted_copies: 1),
       weight: 8,
-      dialogue_lines: [
-        "Something fierce is sleeping here, and it stirs for you.",
-        "Not gentle, this one. But it was made to win.",
-        "Raw weather in a small shape. Carry it carefully.",
-        "I keep the dangerous ones for travelers who can hold them.",
-        "Power, plainly. The dream doesn't dress it up.",
-      ],
-      copy: (
-        title: "Receive {card}",
-        summary: "Add {copies-word} {copies-label} of a powerful card.",
-        prompt: "",
-        candidate_title: "{card}",
-        candidate_summary: "Add {copies-word} {copies-label} of this powerful card.",
-        detail_headline: "Gain a Card",
-        detail_subtitle: "Gain {card}",
-      ),
     ),
 
     ArchetypeDefinition(
       id: "beecc1d9-9546-4ca2-858c-214527c7e530",
       ability: CategoryDraftKnown(selection_policy: CardFit, chooser_size: 4, granted_copies: 1),
       weight: 10,
-      dialogue_lines: [
-        "A drawer of kindred things, all leaning the same way.",
-        "Where you are going, your kin have gone before.",
-        "I gathered a little family for you. Pick one to keep.",
-        "Same blood, different faces. Choose the one that calls.",
-        "These belong to one another, and soon to you.",
-      ],
-      copy: (
-        title: "Draft {category}",
-        summary: "Choose one of {count-word} {category} cards.",
-        prompt: "Pick 1 of these {category} cards",
-        candidate_title: "{card}",
-        candidate_summary: "Add {copies-word} {copies-label} of this {category} card to your deck.",
-        detail_headline: "Choose a Card",
-        detail_subtitle: "Choose a card from a single category to add to your deck.",
-      ),
     ),
 
     ArchetypeDefinition(
       id: "dfd3976a-b1dc-44fe-9aab-c13bd2c195e4",
       ability: CardBundle(bundle_size: 3, minimum_bundle_size: 2),
       weight: 8,
-      dialogue_lines: [
-        "These were never meant to travel alone.",
-        "Apart they are quiet; together they sing.",
-        "I bound them because they finish each other's sentences.",
-        "A knot of things that only make sense as one.",
-        "Keep them whole and you'll hear them hum.",
-      ],
-      copy: (
-        title: "Gain {count} cards that work together",
-        summary: "Receive this {count}-card bundle.",
-        prompt: "",
-        candidate_title: "{card}",
-        candidate_summary: "Part of this card bundle.",
-        detail_headline: "Gain {count-word} Cards",
-        detail_subtitle: "Add {count-word} cards to your deck.",
-      ),
     ),
 
     ArchetypeDefinition(
       id: "a5ac636d-9269-4379-9c61-567583fe9926",
       ability: TransfiguredDraft(selection_policy: CardFit, chooser_size: 4, granted_copies: 1),
       weight: 6,
-      dialogue_lines: [
-        "I finish my work before I ever offer it.",
-        "These came to me dull and leave me gleaming.",
-        "Already sharpened, every one, by my own hand.",
-        "No raw material here — only what I've already perfected.",
-        "I polished these in the long dark. Look how they shine.",
-      ],
-      copy: (
-        title: "Draft a transfigured card",
-        summary: "Choose one of {count-word} cards that arrive already transfigured.",
-        prompt: "Pick 1 of these transfigured cards",
-        candidate_title: "{card} ({transfiguration})",
-        candidate_summary: "Add {copies-word} {copies-label}; each arrives already {transfiguration}.",
-        detail_headline: "Choose a Transfigured Card",
-        detail_subtitle: "Choose a transfigured card to add to your deck.",
-      ),
     ),
 
     ArchetypeDefinition(
       id: "ec872e81-b7b4-4d81-9c69-1ca5317f6144",
       ability: Transfigure(selection_policy: TransfigurationValue),
       weight: 10,
-      dialogue_lines: [
-        "Even a dreaming thing can be honed.",
-        "There is a finer version of this, waiting inside.",
-        "Give me a moment with it, and it will thank you.",
-        "Unfinished. But I see what it longs to become.",
-        "A little heat, a little patience, and it changes.",
-      ],
-      copy: (
-        title: "{card}: {transfiguration}",
-        summary: "Permanently improve a deck card.",
-        prompt: "",
-        candidate_title: "{card}",
-        candidate_summary: "Apply {transfiguration}.",
-        detail_headline: "Transfigure a Card",
-        detail_subtitle: "Transfigure {card}",
-      ),
     ),
 
     ArchetypeDefinition(
       id: "65a59007-6618-4f82-82ae-7da3bc6a205a",
       ability: StarterTransfigure(selection_policy: TransfigurationValue, maximum_targets: 2),
       weight: 6,
-      dialogue_lines: [
-        "The first things you carried still hunger to grow.",
-        "Humble beginnings reward a careful hand.",
-        "What you started with can yet become more.",
-        "Old companions, given a second and brighter draft.",
-        "Even the plainest seed remembers how to bloom.",
-      ],
-      copy: (
-        title: "Improve {count} starter cards",
-        summary: "Polish your starter cards.",
-        prompt: "",
-        candidate_title: "{card}",
-        candidate_summary: "Transfigure this starter card.",
-        detail_headline: "Transfigure Your Starters",
-        detail_subtitle: "Transfigure {count-word} starter cards.",
-      ),
     ),
 
     ArchetypeDefinition(
       id: "df34c427-5e27-42d1-b903-c1d6d6dddd78",
       ability: Purge(selection_policy: PurgeMisfit),
       weight: 8,
-      dialogue_lines: [
-        "Some weight is only weight. Set it down with me.",
-        "Travel lighter. Leave the dead branch behind.",
-        "Not everything you carry is still worth carrying.",
-        "Let me take the stone from your shoe.",
-        "Release it, and feel how the road opens.",
-      ],
-      copy: (
-        title: "Remove {card}",
-        summary: "Remove this card from your deck.",
-        prompt: "",
-        candidate_title: "{card}",
-        candidate_summary: "Remove this card from your deck.",
-        detail_headline: "Purge a Card",
-        detail_subtitle: "Purge {card}",
-      ),
     ),
 
     ArchetypeDefinition(
       id: "521bd487-0b3e-429e-a2f6-56010dd029c4",
       ability: Duplicate(selection_policy: DuplicateValue, chooser_size: 3, granted_copies: 1),
       weight: 8,
-      dialogue_lines: [
-        "The mirror is fond of your finest reflection.",
-        "Whatever you love most, the dream will love twice.",
-        "Some things are worth seeing again, and again.",
-        "Point to your treasure and I will echo it.",
-        "Doubling what already works is the oldest magic.",
-      ],
-      copy: (
-        title: "Duplicate {card}",
-        summary: "Add {copies-word} {copies-label} of a deck card.",
-        prompt: "Pick 1 of up to {count}",
-        candidate_title: "{card}",
-        candidate_summary: "Add {copies-word} {copies-label} of this card.",
-        detail_headline: "Choose a Card",
-        detail_subtitle: "Choose one of {count-word} cards in your deck to duplicate.",
-      ),
     ),
 
     ArchetypeDefinition(
       id: "432102c0-91c0-4954-acd0-3404d2148a25",
       ability: Dreamsign(selection_policy: DreamsignMatch),
       weight: 8,
-      dialogue_lines: [
-        "A quiet star to walk beneath, all the way home.",
-        "A blessing that keeps working while you sleep.",
-        "Something to watch over the long road ahead.",
-        "Carry this and the nights grow a little softer.",
-        "A faithful light. It asks nothing and gives daily.",
-      ],
-      copy: (
-        title: "Gain the {card} dreamsign",
-        summary: "Add this dreamsign to your collection.",
-        prompt: "",
-        candidate_title: "{card}",
-        candidate_summary: "Add this dreamsign to your collection.",
-        detail_headline: "Gain a Dreamsign",
-        detail_subtitle: "Gain {card}",
-      ),
     ),
 
-    ArchetypeDefinition(
-      id: "1003a54d-1659-490b-aa48-b88b9da5df68",
-      ability: AddSite,
-      weight: 6,
-      dialogue_lines: [
-        "I can open a door where there was only wall.",
-        "Your map has room for one more strange place.",
-        "Let me fold a new stop into the road ahead.",
-        "Somewhere worth visiting, drawn fresh just for you.",
-        "The dreamscape will widen, if you let it.",
-      ],
-      copy: (
-        title: "Add a {site} to this dreamscape",
-        summary: "A {site} will appear on the current dreamscape map.",
-        prompt: "",
-        candidate_title: "{site}",
-        candidate_summary: "Add this site to the current dreamscape.",
-        detail_headline: "Add a Site",
-        detail_subtitle: "Add a {site} site",
-      ),
-    ),
+    ArchetypeDefinition(id: "1003a54d-1659-490b-aa48-b88b9da5df68", ability: AddSite, weight: 6),
   ],
 )

@@ -1,8 +1,4 @@
-import type {
-  AuguryArchetypeData,
-  AuguryCopySlot,
-  AuguryData,
-} from "../types/augury-data";
+import type { AuguryArchetypeData, AuguryData } from "../types/augury-data";
 import type { MerchantArchetypeId } from "../journey_v2/archetypes/types";
 
 export type { AuguryArchetypeData, AuguryData } from "../types/augury-data";
@@ -19,7 +15,6 @@ export function parseAuguryData(value: unknown): AuguryData {
     !isRecord(value) || value.schemaVersion !== 1 ||
     typeof value.contentHash !== "string" || !SHA256_HEX.test(value.contentHash) || value.foldHash !== value.contentHash ||
     !isRecord(value.encounter) || value.encounter.offerCount !== 2 || value.encounter.distinctFamilies !== true || typeof value.encounter.allowDecline !== "boolean" ||
-    !isRecord(value.dialogue) || typeof value.dialogue.fallbackLine !== "string" || !Array.isArray(value.dialogue.acceptReactions) || value.dialogue.acceptReactions.some((entry) => typeof entry !== "string") ||
     !Array.isArray(value.archetypes) || value.archetypes.length !== 17
   ) throw new Error("Failed to load Augury data: malformed augury-data.json");
   const ids = new Set<string>();
@@ -29,9 +24,7 @@ export function parseAuguryData(value: unknown): AuguryData {
       typeof entry.enabled !== "boolean" || typeof entry.family !== "string" ||
       typeof entry.weight !== "number" || !Number.isFinite(entry.weight) || entry.weight <= 0 ||
       typeof entry.selectionPolicyId !== "string" || !isRecord(entry.quantities) ||
-      Object.values(entry.quantities).some((quantity) => typeof quantity !== "number" || !Number.isInteger(quantity) || quantity <= 0) ||
-      !Array.isArray(entry.dialogueLines) || entry.dialogueLines.some((line) => typeof line !== "string") ||
-      !isRecord(entry.copy) || Object.values(entry.copy).some((copy) => typeof copy !== "string")
+      Object.values(entry.quantities).some((quantity) => typeof quantity !== "number" || !Number.isInteger(quantity) || quantity <= 0)
     ) throw new Error("Failed to load Augury data: malformed augury-data.json");
     ids.add(entry.id);
   }
@@ -48,21 +41,4 @@ export function auguryArchetype(data: AuguryData, id: MerchantArchetypeId): Augu
   const result = data.archetypes.find((entry) => entry.id === id);
   if (result === undefined) throw new Error(`Augury data is missing archetype ${id}`);
   return result;
-}
-
-const SMALL_CARDINALS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"] as const;
-
-export function auguryCountWord(value: number): string {
-  return SMALL_CARDINALS[value] ?? String(value);
-}
-
-export function renderAuguryTemplate(
-  template: string,
-  values: Partial<Record<AuguryCopySlot, string | number>>,
-): string {
-  return template.replace(/\{([^{}]+)\}/gu, (slot, key: AuguryCopySlot) => {
-    const value = values[key];
-    if (value === undefined) throw new Error(`Augury copy template is missing ${slot}`);
-    return String(value);
-  });
 }

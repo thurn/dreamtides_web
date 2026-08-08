@@ -91,7 +91,7 @@ export interface JourneyContent {
   exploration?: ExplorationContent;
   /** Shared deterministic reward tuning compiled from reward_selection.toml. */
   rewardSelectionData: RewardSelectionData;
-  /** Augury composition, archetype weights, dialogue, and copy templates. */
+  /** Augury composition, archetype weights, policies, and quantities. */
   auguryData: AuguryData;
   dreamAvatars: DreamAvatarContent[];
   /** The shared Dreamwell deck source, drawn from during battle. */

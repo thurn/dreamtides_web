@@ -104,16 +104,15 @@ presentation. Structural behavior consumes `effectKind` and UUIDs; localized
 messages are formatted after that work. The authored narrative catalog remains
 the source for follow-up and effect prose.
 
-### Augury generated catalog copy
+### Augury generated catalog data
 
 `src/journey_v2/archetypes/grant.ts`,
 `src/journey_v2/archetypes/duplicate.ts`, and
-`src/journey_v2/archetypes/improve.ts` populate authored card, form, subtype,
-and count vocabulary. The generator in
-`src/journey_v2/encounter/generateMerchantEncounter.ts` expands those fields
-into deterministic encounter data. The production Cumulus Augury adapter uses
-semantic offer objects and formats titles, summaries, prompts, and details at
-the React boundary. Locale output does not enter replayable Journey data.
+`src/journey_v2/archetypes/improve.ts` populate semantic reward objects. The
+generator in `src/journey_v2/encounter/generateMerchantEncounter.ts` assembles
+those objects into deterministic encounter data. The production Cumulus Augury
+adapter formats titles, summaries, prompts, and details at the React boundary.
+Locale output does not enter replayable Journey data.
 
 ### English rules-text and glossary parsing
 

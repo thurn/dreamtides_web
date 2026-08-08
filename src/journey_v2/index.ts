@@ -9,7 +9,6 @@ export {
   resolveMerchantDecline,
   resolveMerchantOffer,
 } from "./encounter/resolveMerchantOffer";
-export { renderMerchantDialogue } from "./dialogue/dialogue";
 export { MERCHANT_ARCHETYPE_BUILDERS } from "./archetypes/registry";
 export {
   isTransfigurationMerchantArchetype,
@@ -42,7 +41,6 @@ export type {
   MerchantContext,
   MerchantDeckCard,
   MerchantDeclineRequest,
-  MerchantDialogueLine,
   MerchantEncounter,
   MerchantGameObject,
   MerchantOffer,

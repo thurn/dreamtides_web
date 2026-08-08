@@ -21,11 +21,6 @@ const ARCHETYPE_CONTRACTS = new Map(Object.entries({
   dreamsign_draft: { family: "dreamsign", mechanicId: "gain-dreamsign", policies: ["uniform", "dreamsign-match"], quantities: { "minimum-chooser-size": quantity(2, 4), "maximum-chooser-size": quantity(2, 4) } },
   add_site: { family: "site", mechanicId: "add-site", policies: ["site-uniform"], quantities: {} },
 }));
-const COPY_SLOTS = new Set([
-  "card", "cards", "count", "count-word", "category", "site", "subtype",
-  "transfiguration", "copies", "copies-word", "copies-label",
-]);
-
 function fail(path, message) {
   throw new Error(`augury.toml ${path}: ${message}`);
 }
@@ -44,11 +39,6 @@ function exact(value, path, expected) {
 
 function nonempty(value, path) {
   if (typeof value !== "string" || value.trim() === "") fail(path, "expected a non-empty string");
-  return value;
-}
-
-function text(value, path) {
-  if (typeof value !== "string") fail(path, "expected a string");
   return value;
 }
 
@@ -79,32 +69,19 @@ function camel(key) {
   return key.replace(/-([a-z])/gu, (_, letter) => letter.toUpperCase());
 }
 
-function template(value, path) {
-  const result = text(value, path);
-  for (const match of result.matchAll(/\{([^{}]+)\}/gu)) {
-    if (!COPY_SLOTS.has(match[1])) fail(path, `unknown copy slot {${match[1]}}`);
-  }
-  return result;
-}
-
 /** Compile and strictly validate the parsed augury.toml document. */
 export function compileAuguryData(sourceValue) {
-  const root = exact(sourceValue, "root", ["schema-version", "encounter", "dialogue", "archetype"]);
+  const root = exact(sourceValue, "root", ["schema-version", "encounter", "archetype"]);
   if (positive(root["schema-version"], "schema-version") !== 1) fail("schema-version", "only schema version 1 is supported");
   const encounter = exact(root.encounter, "encounter", ["offer-count", "distinct-families", "allow-decline"]);
   if (encounter["offer-count"] !== 2) fail("encounter.offer-count", "Augury requires exactly 2 offers");
   if (encounter["distinct-families"] !== true) fail("encounter.distinct-families", "must be true");
   if (typeof encounter["allow-decline"] !== "boolean") fail("encounter.allow-decline", "expected a boolean");
-  const dialogue = exact(root.dialogue, "dialogue", ["fallback-line", "accept-reactions"]);
-  if (!Array.isArray(dialogue["accept-reactions"]) || dialogue["accept-reactions"].length === 0) {
-    fail("dialogue.accept-reactions", "expected a non-empty string array");
-  }
-  const acceptReactions = dialogue["accept-reactions"].map((line, index) => nonempty(line, `dialogue.accept-reactions[${String(index)}]`));
   if (!Array.isArray(root.archetype)) fail("archetype", "expected an array of tables");
   const seen = new Set();
   const archetypes = root.archetype.map((raw, index) => {
     const path = `archetype[${String(index)}]`;
-    const source = exact(raw, path, ["id", "enabled", "family", "weight", "selection-policy-id", "dialogue-lines", "quantities", "copy"]);
+    const source = exact(raw, path, ["id", "enabled", "family", "weight", "selection-policy-id", "quantities"]);
     const id = nonempty(source.id, `${path}.id`);
     const contract = ARCHETYPE_CONTRACTS.get(id);
     if (contract === undefined) fail(`${path}.id`, "unknown archetype id");
@@ -119,7 +96,6 @@ export function compileAuguryData(sourceValue) {
     if (!mechanicSupportsPolicy(contract.mechanicId, selectionPolicyId)) {
       fail(`${path}.selection-policy-id`, `incompatible with ${contract.mechanicId}`);
     }
-    if (!Array.isArray(source["dialogue-lines"]) || source["dialogue-lines"].length === 0) fail(`${path}.dialogue-lines`, "expected a non-empty string array");
     const rawQuantities = exact(source.quantities, `${path}.quantities`, Object.keys(contract.quantities));
     const quantities = Object.fromEntries(Object.entries(contract.quantities).map(([key, bounds]) => [
       camel(key), boundedInteger(rawQuantities[key], `${path}.quantities.${key}`, bounds),
@@ -130,7 +106,6 @@ export function compileAuguryData(sourceValue) {
     if (id === "dreamsign_draft" && quantities.minimumChooserSize > quantities.maximumChooserSize) {
       fail(`${path}.quantities.minimum-chooser-size`, "must not exceed maximum-chooser-size");
     }
-    const copy = exact(source.copy, `${path}.copy`, ["title", "summary", "prompt", "candidate-title", "candidate-summary", "detail-headline", "detail-subtitle"]);
     return {
       id,
       enabled: source.enabled,
@@ -138,16 +113,6 @@ export function compileAuguryData(sourceValue) {
       weight: positive(source.weight, `${path}.weight`),
       selectionPolicyId,
       quantities,
-      dialogueLines: source["dialogue-lines"].map((line, lineIndex) => nonempty(line, `${path}.dialogue-lines[${String(lineIndex)}]`)),
-      copy: {
-        title: template(copy.title, `${path}.copy.title`),
-        summary: template(copy.summary, `${path}.copy.summary`),
-        prompt: template(copy.prompt, `${path}.copy.prompt`),
-        candidateTitle: template(copy["candidate-title"], `${path}.copy.candidate-title`),
-        candidateSummary: template(copy["candidate-summary"], `${path}.copy.candidate-summary`),
-        detailHeadline: template(copy["detail-headline"], `${path}.copy.detail-headline`),
-        detailSubtitle: template(copy["detail-subtitle"], `${path}.copy.detail-subtitle`),
-      },
     };
   });
   for (const id of ARCHETYPE_CONTRACTS.keys()) if (!seen.has(id)) fail("archetype", `missing archetype ${id}`);
@@ -159,7 +124,6 @@ export function compileAuguryData(sourceValue) {
   const payload = {
     schemaVersion: 1,
     encounter: { offerCount: 2, distinctFamilies: true, allowDecline: encounter["allow-decline"] },
-    dialogue: { fallbackLine: nonempty(dialogue["fallback-line"], "dialogue.fallback-line"), acceptReactions },
     archetypes,
   };
   const contentHash = hash(payload);

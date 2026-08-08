@@ -13,7 +13,7 @@ import type {
 } from "../types";
 import type { MerchantArchetypeBuilder, MerchantChoiceCandidateDraft, MerchantOfferDraft } from "./types";
 import { augurySelectionPolicy, selectionMetadata, selectMerchantReward } from "./sharedSelection";
-import { auguryArchetype, auguryCountWord } from "../../data/augury-data";
+import { auguryArchetype } from "../../data/augury-data";
 
 // ---------------------------------------------------------------------------
 // Candidate selection
@@ -176,11 +176,6 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
       return {
         archetypeId: "duplicate",
         family: "duplicate",
-        copyVariables: {
-          copies: grantedCopies,
-          "copies-word": auguryCountWord(grantedCopies),
-          "copies-label": grantedCopies === 1 ? "copy" : "copies",
-        },
         gameObjects: [
           {
             objectType: "deckCard",
@@ -218,11 +213,6 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "duplicate",
       family: "duplicate",
-      copyVariables: {
-        copies: grantedCopies,
-        "copies-word": auguryCountWord(grantedCopies),
-        "copies-label": grantedCopies === 1 ? "copy" : "copies",
-      },
       gameObjects: [],
       choiceRequest: {
         choiceType: "catalogCard",

@@ -11,7 +11,7 @@ import {
   type CardTransfigurationDisplay,
 } from "../../transfiguration/transfiguration-logic";
 import type { TransfigurationType } from "../../types/journey";
-import { auguryArchetype, auguryCountWord } from "../../data/augury-data";
+import { auguryArchetype } from "../../data/augury-data";
 import type {
   MerchantApplyPayload,
   MerchantContext,
@@ -205,14 +205,6 @@ function grantedCopies(
   ).quantities.grantedCopies;
 }
 
-function copyVariables(count: number): MerchantOfferDraft["copyVariables"] {
-  return {
-    copies: count,
-    "copies-word": auguryCountWord(count),
-    "copies-label": count === 1 ? "copy" : "copies",
-  };
-}
-
 function catalogChoiceCandidate(
   card: MerchantCatalogCard,
   payload: MerchantApplyPayload,
@@ -320,7 +312,6 @@ export const strongCardBuilder: MerchantArchetypeBuilder = {
       archetypeId: "strong_card",
       family: "grant",
       gameObjects: [catalogGameObject(target)],
-      copyVariables: copyVariables(grantedCopies(context, "strong_card")),
       applyPayload: repeatedPayload(
         addCatalogCardPayload(target),
         grantedCopies(context, "strong_card"),
@@ -363,7 +354,6 @@ export const fitCardGrantBuilder: MerchantArchetypeBuilder = {
       archetypeId: "fit_card_grant",
       family: "grant",
       gameObjects: [catalogGameObject(target)],
-      copyVariables: copyVariables(grantedCopies(context, "fit_card_grant")),
       applyPayload: repeatedPayload(
         addCatalogCardPayload(target),
         grantedCopies(context, "fit_card_grant"),
@@ -431,7 +421,6 @@ export const fitCardDraftBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "fit_card_draft",
       family: "grant",
-      copyVariables: copyVariables(grantedCopies(context, "fit_card_draft")),
       gameObjects: [],
       choiceRequest: {
         choiceType: "catalogCard",
@@ -537,7 +526,6 @@ export const copiesDraftBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "copies_draft",
       family: "grant",
-      copyVariables: copyVariables(grantedCopies),
       gameObjects: [],
       choiceRequest: {
         choiceType: "catalogCard",
@@ -677,10 +665,6 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "category_draft_known",
       family: "grant",
-      copyVariables: {
-        category: category.label,
-        ...copyVariables(grantedCopies(context, "category_draft_known")),
-      },
       gameObjects: [],
       choiceRequest: {
         choiceType: "catalogCard",
@@ -899,7 +883,6 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "transfigured_draft",
       family: "grant",
-      copyVariables: copyVariables(grantedCopies(context, "transfigured_draft")),
       gameObjects: [],
       choiceRequest: {
         choiceType: "catalogCard",

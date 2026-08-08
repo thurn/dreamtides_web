@@ -4,29 +4,6 @@ import type {
 } from "../journey_v2/archetypes/types";
 import type { RewardSelectionPolicyId } from "../reward-selection/types";
 
-export type AuguryCopySlot =
-  | "card"
-  | "cards"
-  | "count"
-  | "count-word"
-  | "category"
-  | "site"
-  | "subtype"
-  | "transfiguration"
-  | "copies"
-  | "copies-word"
-  | "copies-label";
-
-export interface AuguryCopyTemplates {
-  title: string;
-  summary: string;
-  prompt: string;
-  candidateTitle: string;
-  candidateSummary: string;
-  detailHeadline: string;
-  detailSubtitle: string;
-}
-
 export interface AuguryArchetypeData {
   id: MerchantArchetypeId;
   enabled: boolean;
@@ -34,8 +11,6 @@ export interface AuguryArchetypeData {
   weight: number;
   selectionPolicyId: RewardSelectionPolicyId;
   quantities: Readonly<Record<string, number>>;
-  dialogueLines: readonly string[];
-  copy: AuguryCopyTemplates;
 }
 
 /** Validated browser data compiled from data/augury.toml. */
@@ -47,10 +22,6 @@ export interface AuguryData {
     offerCount: 2;
     distinctFamilies: true;
     allowDecline: boolean;
-  }>;
-  dialogue: Readonly<{
-    fallbackLine: string;
-    acceptReactions: readonly string[];
   }>;
   archetypes: readonly AuguryArchetypeData[];
 }

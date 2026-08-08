@@ -10,7 +10,6 @@ use uuid::{Uuid, Variant, Version};
 #[serde(deny_unknown_fields)]
 pub struct AuguryCatalog {
     pub encounter: EncounterRules,
-    pub dialogue: Dialogue,
     pub archetypes: Vec<ArchetypeDefinition>,
 }
 
@@ -24,19 +23,10 @@ pub struct EncounterRules {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct Dialogue {
-    pub fallback_line: String,
-    pub accept_reactions: Vec<String>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
 pub struct ArchetypeDefinition {
     pub id: AuguryId,
     pub ability: ArchetypeAbility,
     pub weight: u32,
-    pub dialogue_lines: Vec<String>,
-    pub copy: CopyTemplates,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -151,18 +141,6 @@ pub enum DuplicateSelectionPolicy {
 pub enum DreamsignSelectionPolicy {
     Uniform,
     DreamsignMatch,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct CopyTemplates {
-    pub title: String,
-    pub summary: String,
-    pub prompt: String,
-    pub candidate_title: String,
-    pub candidate_summary: String,
-    pub detail_headline: String,
-    pub detail_subtitle: String,
 }
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -521,23 +499,6 @@ pub fn lower(source: AuguryCatalog) -> Result<toml::Value> {
         ])),
     );
     root.insert(
-        "dialogue".into(),
-        toml::Value::Table(toml::map::Map::from_iter([
-            ("fallback-line".into(), source.dialogue.fallback_line.into()),
-            (
-                "accept-reactions".into(),
-                toml::Value::Array(
-                    source
-                        .dialogue
-                        .accept_reactions
-                        .into_iter()
-                        .map(Into::into)
-                        .collect(),
-                ),
-            ),
-        ])),
-    );
-    root.insert(
         "archetype".into(),
         toml::Value::Array(source.archetypes.into_iter().map(lower_archetype).collect()),
     );
@@ -556,27 +517,8 @@ fn lower_archetype(source: ArchetypeDefinition) -> toml::Value {
         source.ability.selection_policy_compat().into(),
     );
     output.insert(
-        "dialogue-lines".into(),
-        toml::Value::Array(source.dialogue_lines.into_iter().map(Into::into).collect()),
-    );
-    output.insert(
         "quantities".into(),
         toml::Value::Table(source.ability.quantities()),
-    );
-    output.insert(
-        "copy".into(),
-        toml::Value::Table(toml::map::Map::from_iter([
-            ("title".into(), source.copy.title.into()),
-            ("summary".into(), source.copy.summary.into()),
-            ("prompt".into(), source.copy.prompt.into()),
-            ("candidate-title".into(), source.copy.candidate_title.into()),
-            (
-                "candidate-summary".into(),
-                source.copy.candidate_summary.into(),
-            ),
-            ("detail-headline".into(), source.copy.detail_headline.into()),
-            ("detail-subtitle".into(), source.copy.detail_subtitle.into()),
-        ])),
     );
     toml::Value::Table(output)
 }
@@ -588,12 +530,6 @@ fn validate(source: &AuguryCatalog) -> Result<()> {
     if !source.encounter.distinct_families {
         bail!("encounter.distinct_families must be true");
     }
-    require_nonempty("dialogue.fallback_line", &source.dialogue.fallback_line)?;
-    require_nonempty_list(
-        "dialogue.accept_reactions",
-        &source.dialogue.accept_reactions,
-    )?;
-
     let mut kinds = BTreeSet::new();
     let mut ids = BTreeSet::new();
     let mut families = BTreeSet::new();
@@ -616,9 +552,7 @@ fn validate(source: &AuguryCatalog) -> Result<()> {
         if archetype.weight == 0 {
             bail!("{path}.weight must be positive");
         }
-        require_nonempty_list(&format!("{path}.dialogue_lines"), &archetype.dialogue_lines)?;
         validate_ability(&path, &archetype.ability)?;
-        validate_copy(&path, &archetype.copy)?;
         families.insert(archetype.ability.family());
     }
     if source.archetypes.len() < 2 {
@@ -710,67 +644,6 @@ fn validate_ability(path: &str, ability: &ArchetypeAbility) -> Result<()> {
     Ok(())
 }
 
-fn validate_copy(path: &str, copy: &CopyTemplates) -> Result<()> {
-    for (field, value) in [
-        ("title", copy.title.as_str()),
-        ("summary", copy.summary.as_str()),
-        ("prompt", copy.prompt.as_str()),
-        ("candidate_title", copy.candidate_title.as_str()),
-        ("candidate_summary", copy.candidate_summary.as_str()),
-        ("detail_headline", copy.detail_headline.as_str()),
-        ("detail_subtitle", copy.detail_subtitle.as_str()),
-    ] {
-        validate_template(&format!("{path}.copy.{field}"), value)?;
-    }
-    Ok(())
-}
-
-fn validate_template(path: &str, value: &str) -> Result<()> {
-    const SLOTS: [&str; 11] = [
-        "card",
-        "cards",
-        "count",
-        "count-word",
-        "category",
-        "site",
-        "subtype",
-        "transfiguration",
-        "copies",
-        "copies-word",
-        "copies-label",
-    ];
-    let mut remainder = value;
-    while let Some(open) = remainder.find('{') {
-        let after_open = &remainder[open + 1..];
-        let Some(close) = after_open.find('}') else {
-            break;
-        };
-        let slot = &after_open[..close];
-        if !SLOTS.contains(&slot) {
-            bail!("{path} contains unknown copy slot {{{slot}}}");
-        }
-        remainder = &after_open[close + 1..];
-    }
-    Ok(())
-}
-
-fn require_nonempty(path: &str, value: &str) -> Result<()> {
-    if value.trim().is_empty() {
-        bail!("{path} must be a non-empty string");
-    }
-    Ok(())
-}
-
-fn require_nonempty_list(path: &str, values: &[String]) -> Result<()> {
-    if values.is_empty() {
-        bail!("{path} must contain at least one string");
-    }
-    for (index, value) in values.iter().enumerate() {
-        require_nonempty(&format!("{path}[{index}]"), value)?;
-    }
-    Ok(())
-}
-
 #[cfg(test)]
 mod tests {
     use std::fs;
@@ -781,26 +654,12 @@ mod tests {
     use super::*;
     use crate::models::compat::CompatDocument;
 
-    fn copy() -> CopyTemplates {
-        CopyTemplates {
-            title: "Límbø {card}".into(),
-            summary: "First line\nSecond line {copies-word}".into(),
-            prompt: String::new(),
-            candidate_title: "{card}".into(),
-            candidate_summary: "{count-word} choices".into(),
-            detail_headline: "Detail".into(),
-            detail_subtitle: "Visit {site}".into(),
-        }
-    }
-
     fn definition(ability: ArchetypeAbility) -> ArchetypeDefinition {
         let id = AuguryId::parse(ability.kind().canonical_id()).unwrap();
         ArchetypeDefinition {
             id,
             ability,
             weight: 3,
-            dialogue_lines: vec!["A line".into()],
-            copy: copy(),
         }
     }
 
@@ -811,10 +670,6 @@ mod tests {
                 offer_count: 2,
                 distinct_families: true,
                 allow_decline: false,
-            },
-            dialogue: Dialogue {
-                fallback_line: "Fallback".into(),
-                accept_reactions: vec!["Accepted".into()],
             },
             archetypes: vec![
                 definition(FitCardGrant {
@@ -910,21 +765,12 @@ mod tests {
         );
         assert!(archetypes[7]["quantities"].as_table().unwrap().is_empty());
         assert_eq!(archetypes[16]["family"].as_str(), Some("site"));
-        assert_eq!(
-            archetypes[0]["copy"]["title"].as_str(),
-            Some("Límbø {card}")
-        );
-        assert_eq!(
-            archetypes[0]["copy"]["summary"].as_str(),
-            Some("First line\nSecond line {copies-word}")
-        );
     }
 
     #[test]
     fn rejects_unknown_fields_and_unknown_enum_variants() {
         let source = r#"AuguryCatalog(
           encounter: (offer_count: 2, distinct_families: true, allow_decline: true, surprise: true),
-          dialogue: (fallback_line: "x", accept_reactions: ["y"]),
           archetypes: [],
         )"#;
         assert!(ron::from_str::<AuguryCatalog>(source).is_err());
@@ -1089,25 +935,7 @@ mod tests {
     }
 
     #[test]
-    fn rejects_invalid_dialogue_templates_and_insufficient_family_coverage() {
-        let mut empty_dialogue = catalog();
-        empty_dialogue.archetypes[0].dialogue_lines.clear();
-        assert!(
-            lower(empty_dialogue)
-                .unwrap_err()
-                .to_string()
-                .contains("at least one")
-        );
-
-        let mut bad_template = catalog();
-        bad_template.archetypes[0].copy.title = "Unknown {mystery}".into();
-        assert!(
-            lower(bad_template)
-                .unwrap_err()
-                .to_string()
-                .contains("unknown copy slot")
-        );
-
+    fn rejects_insufficient_family_coverage() {
         let mut one_family = catalog();
         one_family
             .archetypes

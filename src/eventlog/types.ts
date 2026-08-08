@@ -102,7 +102,7 @@ export interface ContentConfig {
   economyFoldHash?: string;
   /** Shared reward-selection scoring and eligibility tuning. */
   rewardSelectionFoldHash?: string;
-  /** Augury archetype, dialogue, reaction, and offer-copy configuration. */
+  /** Augury encounter rules, archetype weights, policies, and quantities. */
   auguryFoldHash?: string;
   /** Exploration effect definitions, defaults, copy, and encounter catalog. */
   explorationFoldHash?: string;

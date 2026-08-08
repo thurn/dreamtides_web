@@ -7,7 +7,6 @@ import {
   selectMerchantReward,
 } from "./sharedSelection";
 import { MERCHANT_TUNING } from "../tuning";
-import { siteTypeName } from "../../data/sites-data";
 
 /**
  * Site types the merchant can place on the current dreamscape.
@@ -56,12 +55,9 @@ export const addSiteBuilder: MerchantArchetypeBuilder = {
     const siteType = selection?.bindings.siteTypes[0];
     if (selection === null || siteType === undefined) return null;
 
-    const label = siteTypeName(context.sitesData, siteType);
-
     return {
       archetypeId: "add_site",
       family: "site",
-      copyVariables: { site: label },
       gameObjects: [],
       applyPayload: {
         kind: "add_site",

@@ -11,7 +11,6 @@ import type {
   RewardSelectionPolicyId,
   RewardSelectionTrace,
 } from "../../reward-selection/types";
-import type { AuguryCopySlot } from "../../types/augury-data";
 
 /** The 17 offer archetypes across the 6 families. */
 export type MerchantArchetypeId =
@@ -109,10 +108,7 @@ export const MERCHANT_ARCHETYPE_LABELS: Readonly<
   add_site: "Site: Add a site",
 };
 
-export type MerchantChoiceCandidateDraft = Omit<
-  MerchantChoiceCandidate,
-  "title" | "summary"
->;
+export type MerchantChoiceCandidateDraft = MerchantChoiceCandidate;
 
 /**
  * A built offer before it is assigned an offer id (`A`/`B`) and an encounter
@@ -122,8 +118,6 @@ export type MerchantChoiceCandidateDraft = Omit<
 export interface MerchantOfferDraft {
   archetypeId: MerchantArchetypeId;
   family: MerchantOfferFamily;
-  /** Values supplied to the archetype's TOML-authored copy templates. */
-  copyVariables?: Partial<Record<AuguryCopySlot, string | number>>;
   gameObjects: readonly MerchantGameObject[];
   /** Direct reward payload (mutually exclusive in practice with `choiceRequest`). */
   applyPayload?: MerchantApplyPayload;
