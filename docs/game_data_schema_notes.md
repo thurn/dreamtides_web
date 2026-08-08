@@ -1664,238 +1664,235 @@ type. `spark` is the base spark of a single figment.
 
 ## `data/opponents.ron`
 
-### `schema-version = 1`
+The typed `OpponentsCatalog` document is lowered to the established generated
+TOML compatibility contract. Its nested records group battle, Dreamwell,
+progression, drafting, corpus selection, deck, and AI settings.
 
-Version of this authored-file contract. Increment when the schema changes.
-
-### `minimum-deck-size = 25`
+### `battle.minimum_deck_size: 25`
 
 Journey decks below this size are repeated until they meet the minimum.
 
-### `player-opening-hand-size = 5`
+### `battle.player_opening_hand_size: 5`
 
 Number of cards dealt to the player when a battle begins.
 
-### `enemy-opening-hand-size = 5`
+### `battle.enemy_opening_hand_size: 5`
 
 Number of cards dealt to the opponent when a battle begins.
 
-### `score-targets = [10, 25]`
+### `battle.score_targets: [10, 25]`
 
 Score needed to win at each zero-indexed completion level. Later levels reuse
 the final entry.
 
-### `turn-limit = 50`
+### `battle.turn_limit: 50`
 
 Maximum number of turns before the battle reaches its turn-limit outcome.
 
-### `energy-cap = 10`
+### `battle.energy_cap: 10`
 
 Maximum energy either side can accumulate during a battle.
 
-### `hand-limit = 10`
+### `battle.hand_limit: 10`
 
 Maximum cards held before basic automation discards excess cards.
 
-### `starting-side = "player"`
+### `battle.starting_side: Player`
 
-Side that takes the first turn. Valid values are "player" and "enemy".
+Side that takes the first turn. Valid values are `Player` and `Enemy`.
 
-### `skip-player-opening-draw = true`
+### `battle.skip_player_opening_draw: true`
 
 Whether the player omits their normal draw on their first turn.
 
-### `opponent-signature-card-count = 3`
+### `battle.opponent_signature_card_count: 3`
 
 Number of opponent deck cards highlighted as DreamAvatar signature cards.
 
-### `opening-orders = [0]`
+### `dreamwell.opening_orders: [0]`
 
 Dreamwell card orders included once, at the start of the first cycle.
 
-### `recurring-orders = [1, 2, 3, 4]`
+### `dreamwell.recurring_orders: [1, 2, 3, 4]`
 
 Dreamwell card orders sampled in the first and every subsequent cycle.
 
-### `cards-per-recurring-order = 5`
+### `dreamwell.cards_per_recurring_order: 5`
 
 Cards sampled from each recurring order per cycle.
 
-### `minimum-constructed-length = 62`
+### `dreamwell.minimum_constructed_length: 62`
 
 Cycles repeat until the constructed Dreamwell deck reaches this length.
 
-### `ability-active-from-layer = 1`
+### `progression.ability_active_from_layer: 1`
 
 All layer values are zero-indexed completion levels.
 First layer where the opposing DreamAvatar's ability is enabled.
 
-### `dreamsigns-from-layer = 3`
+### `progression.dreamsigns_from_layer: 3`
 
 First layer where opponents may receive a Dreamsign.
 
-### `legendaries-from-layer = 5`
+### `progression.legendaries_from_layer: 5`
 
 First layer where Legendary cards remain in opponent decks.
 
-### `starter-dilution = [10, 5]`
+### `progression.starter_dilution: [10, 5]`
 
 Starter cards inserted at each layer after cutting weak non-Starters. Missing
 later entries mean that no Starter cards are inserted.
 
-### `distinct-card-curve = { first = 14, last = 30 }`
+### `coherent_draft.distinct_card_curve: CountCurve(first: 14, last: 30)`
 
 Target distinct-card count at the first and last Atlas layers. Intermediate
 layers use linear interpolation.
 
-### `removal-curve = { first = 2, last = 8 }`
+### `coherent_draft.removal_curve: CountCurve(first: 2, last: 8)`
 
 Cards over-drafted and then pruned at the first and last Atlas layers.
 
-### `temperature-curve = { first = 0.45, last = 0.12 }`
+### `coherent_draft.temperature_curve: TemperatureCurve(first: 0.45, last: 0.12)`
 
 Draft-choice exploration at the first and last Atlas layers. Higher values
 make picks more varied; lower values make picks greedier.
 
-### `best-of = 4`
+### `coherent_draft.best_of: 4`
 
 Number of seeded candidate drafts generated before choosing the best result.
 
-### `affiliation-objective-weight = 1`
+### `coherent_draft.affiliation_objective_weight: 1.0`
 
 Multiplier for affiliation fit when ranking candidate drafts.
 
-### `pack-source-records = 48`
+### `coherent_draft.pack_source_records: 48`
 
 Number of adapted draft records used to assemble the simulated pack source.
 
-### `nearest-neighbors = 10`
+### `coherent_draft.coherence.nearest_neighbors: 10`
 
 Number of closest real corpus decks averaged for the neighbor-similarity term.
 
-### `neighbor-weight = 0.5`
+### `coherent_draft.coherence.neighbor_weight: 0.5`
 
 Blend weight for similarity to nearby real corpus decks.
 
-### `cooccurrence-weight = 0.3`
+### `coherent_draft.coherence.cooccurrence_weight: 0.3`
 
 Blend weight for how often pairs of cards occur together in the corpus.
 
-### `self-consistency-weight = 0.2`
+### `coherent_draft.coherence.self_consistency_weight: 0.2`
 
 Blend weight for how reliably the model re-selects cards from this deck.
 The three blend weights must sum to 1.
 
-### `self-distractors = 12`
+### `coherent_draft.coherence.self_distractors: 12`
 
 Unrelated candidate cards compared with each held-out deck card.
 
-### `self-recall-k = 4`
+### `coherent_draft.coherence.self_recall_k: 4`
 
 A held-out card counts as recovered when ranked within this many candidates.
 
-### `affiliation-weight = 0.25`
+### `corpus_selection.affiliation_weight: 0.25`
 
 Multiplier for dreamscape-affiliation fit when ranking known-good decks;
 DreamAvatar signature fit supplies the primary score.
 
-### `top-ranked-sampling-window = 8`
+### `corpus_selection.top_ranked_sampling_window: 8`
 
 Number of highest-ranked decks eligible for deterministic seeded sampling.
 
-### `[[journey-ai-deck]]`
+### `journey_ai_deck: [DeckEntry(...)]`
 
-Each journey-ai-deck table adds one canonical cards.toml UUID to the AI deck.
-count is the number of copies of that UUID. Card IDs must be unique here.
+Each `DeckEntry` adds one canonical card UUID and its positive copy count to the
+AI deck. Card IDs must be unique here.
 
-### `journey-default-preset = "standard"`
+### `ai.journey_default_preset: Standard`
 
 Preset ID used by AI-controlled opponents in ordinary journey battles.
 
-### `tutorial-default-preset = "standard"`
+### `ai.tutorial_default_preset: Standard`
 
 Preset ID used by deterministic tutorial battle automation.
 
-### `score-difference-weight = 10`
+### `ai.evaluation.score_difference: 10.0`
 
 Multiplier for the AI score minus the player score.
 
-### `front-rank-spark-weight = 1`
+### `ai.evaluation.front_rank_spark: 1.0`
 
 Multiplier for the AI-versus-player front-rank Spark difference.
 
-### `back-rank-spark-weight = 0.5`
+### `ai.evaluation.back_rank_spark: 0.5`
 
 Multiplier for the AI-versus-player back-rank Spark difference.
 
-### `hand-card-weight = 1.5`
+### `ai.evaluation.hand_card: 1.5`
 
 Value assigned to each card currently in the AI's hand.
 
-### `value-hint-weight = 1`
+### `ai.evaluation.value_hint: 1.0`
 
 Multiplier for card-specific strategic value hints supplied by AI card models.
 
-### `energy-waste-weight = 0.25`
+### `ai.evaluation.energy_waste: 0.25`
 
 Penalty applied to each point of AI energy left unspent in a candidate plan.
 
-### `expected-points-weight = 1`
+### `ai.evaluation.expected_points: 1.0`
 
 Multiplier for estimated points the AI can score in the next Challenge.
 
-### `removal-prior = 0.1`
+### `ai.opponent_model.removal_prior: 0.1`
 
 Per-card prior used to estimate whether the hidden opponent hand has removal.
 
-### `sample-safety-cap = 16`
+### `ai.opponent_model.sample_safety_cap: 16`
 
 Hard upper bound on opponent responses sampled for a candidate plan.
 
-### `no-blocks = 1`
+### `ai.opponent_model.response_archetype_priors.no_blocks: 1.0`
 
 Relative sampling weights for modeled opponent responses. These need not sum
 to 1; the model normalizes them when evaluating responses.
 Weight for allowing all challengers through without assigning blockers.
 
-### `block-biggest = 2`
+### `ai.opponent_model.response_archetype_priors.block_biggest: 2.0`
 
 Weight for blocking the challenger with the highest Spark first.
 
-### `trade-evenly = 3`
+### `ai.opponent_model.response_archetype_priors.trade_evenly: 3.0`
 
 Weight for seeking even trades between blockers and challengers.
 
-### `[[ai.presets]]`
+### `ai.presets: { Standard: AiPreset(...) }`
 
-Each ai.presets table defines a selectable bundle of search settings.
+Each map entry defines a selectable bundle of search settings keyed by its
+typed stable identifier.
 
-### `id = "standard"`
-
-Stable identifier referenced by the journey and tutorial default keys above.
-
-### `beam-width = 12`
+### `beam_width: 12`
 
 Maximum candidate states retained at each breadth-search step.
 
-### `opponent-mode = "expectiminimax"`
+### `opponent_mode: Expectiminimax`
 
-Opponent-response aggregation: "expectiminimax" uses the weighted mean;
-"worstCase" uses the lowest sampled result.
+Opponent-response aggregation: `Expectiminimax` uses the weighted mean;
+`WorstCase` uses the lowest sampled result.
 
-### `sample-count = 8`
+### `sample_count: 8`
 
 Opponent responses requested per candidate, capped by sample-safety-cap.
 
-### `search-depth = 16`
+### `search_depth: 16`
 
 Maximum number of actions explored along one candidate plan.
 
-### `journey-planning-budget-ms = 100`
+### `journey_planning_budget_ms: 100`
 
 Wall-clock planning budget for each journey AI decision.
 
-### `tutorial-expansion-budget = 256`
+### `tutorial_expansion_budget: 256`
 
 Deterministic state-expansion budget for each tutorial AI decision.
 

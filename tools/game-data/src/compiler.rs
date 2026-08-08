@@ -11,7 +11,7 @@ use sha2::{Digest, Sha256};
 use crate::manifest::{Dataset, Manifest, MigrationState};
 use crate::models::{
     affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft, dream_avatars,
-    dream_guides, dreamscapes, dreamsigns, economy, exploration,
+    dream_guides, dreamscapes, dreamsigns, economy, exploration, opponents,
 };
 
 pub const BUILD_VERSION: &str = env!("GAME_DATA_BUILD_VERSION");
@@ -195,6 +195,26 @@ fn adapt(
         }
         "economy_v1" => economy::lower(parse_ron(source, dataset)?),
         "exploration_v1" => exploration::lower(parse_ron(source, dataset)?),
+        "opponents_v1" => {
+            let catalog: opponents::OpponentsCatalog = parse_ron(source, dataset)?;
+            let cards_dataset = manifest.dataset("cards")?;
+            let card_source = fs::read_to_string(root.join(&cards_dataset.source))
+                .with_context(|| format!("read cards source {}", cards_dataset.source))?;
+            let cards: Vec<cards::CardDefinition> = parse_ron(&card_source, cards_dataset)?;
+            let known_card_ids = cards
+                .into_iter()
+                .map(|card| {
+                    card.id
+                        .parse::<opponents::CardId>()
+                        .map_err(anyhow::Error::msg)
+                        .with_context(|| {
+                            format!("parse card identity {} for opponents validation", card.id)
+                        })
+                })
+                .collect::<Result<_>>()?;
+            opponents::validate_card_references(&catalog, &known_card_ids)?;
+            opponents::lower(catalog)
+        }
         "compat_v1" => {
             let document: compat::CompatDocument = parse_ron(source, dataset)?;
             Ok(document.data)
@@ -473,6 +493,9 @@ mod tests {
                 }
                 "exploration_v1" => {
                     canonical::<ExplorationCatalog>(&source, true);
+                }
+                "opponents_v1" => {
+                    canonical::<opponents::OpponentsCatalog>(&source, true);
                 }
                 "compat_v1" => {
                     canonical::<compat::CompatDocument>(&source, false);

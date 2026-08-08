@@ -14,17 +14,19 @@ tutorial-specific sequencing remain in `tutorial.ron`.
 
 ## Schema
 
-The root `schema-version` is `1`. Every v1 section and field is required;
-unknown fields fail compilation.
+The typed `OpponentsCatalog` root and its nested record and enum types define
+the authored contract. Every field is required and unknown fields fail
+compilation. The game-data compiler lowers this source to the established
+`data/opponents.toml` compatibility shape consumed by asset generation.
 
 | Section             | Authored contract                                                                                                                                   |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `battle`            | Minimum deck size, both opening-hand sizes, score targets, turn/energy/hand limits, starting side, opening-draw behavior, and signature-card count. |
 | `dreamwell`         | One-time opening orders, recurring orders, cards drawn per recurring order, and minimum constructed deck length.                                    |
 | `progression`       | Ability, Dreamsign, and Legendary unlock layers plus the starter-dilution schedule.                                                                 |
-| `coherent-draft`    | Distinct-card, removal, and temperature curves; best-of count; affiliation objective; record source count; and coherence scoring coefficients.      |
-| `corpus-selection`  | Affiliation weight and the top-ranked seeded sampling window.                                                                                       |
-| `journey-ai-deck`   | Card UUID and positive copy count for each journey AI deck entry.                                                                                   |
+| `coherent_draft`    | Distinct-card, removal, and temperature curves; best-of count; affiliation objective; record source count; and coherence scoring coefficients.      |
+| `corpus_selection`  | Affiliation weight and the top-ranked seeded sampling window.                                                                                       |
+| `journey_ai_deck`   | Card UUID and positive copy count for each journey AI deck entry.                                                                                   |
 | `ai.evaluation`     | Static board-evaluation weights.                                                                                                                    |
 | `ai.opponent-model` | Removal prior, response-archetype priors, and the global sampling safety cap.                                                                       |
 | `ai.presets`        | Named search breadth, response mode, sample count, search depth, journey time budget, and deterministic tutorial expansion budget.                  |
@@ -43,9 +45,10 @@ absent from `cards.ron`. Failures identify the RON path that needs correction.
 
 ## Generated artifact and hashes
 
-Run `scripts/regenerate-assets.sh` or `npm run setup-assets` after editing the
-catalog. `scripts/opponents-data.mjs` is the shared compiler. Generated JSON is
-reproducible from RON and is not committed.
+Run `scripts/regenerate-assets.sh` after editing the catalog. The game-data
+compiler generates `data/opponents.toml`, then `scripts/opponents-data.mjs`
+validates that compatibility document and generates the runtime JSON. Generated
+TOML and JSON are reproducible from RON and are not committed.
 
 The normalized document contains SHA-256 `contentHash` and `foldHash` fields.
 Both cover the complete v1 normalized document and therefore have the same

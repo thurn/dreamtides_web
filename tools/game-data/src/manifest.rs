@@ -90,6 +90,7 @@ impl Manifest {
             "cards_v2",
             "economy_v1",
             "exploration_v1",
+            "opponents_v1",
             "compat_v1",
         ];
         for dataset in &self.datasets {

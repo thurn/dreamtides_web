@@ -868,13 +868,7 @@ fn require_positive_unit_interval(path: &str, value: f64) -> Result<()> {
 
 #[cfg(test)]
 mod tests {
-    use std::fs;
-    use std::path::Path;
-
     use pretty_assertions::assert_eq;
-
-    use crate::models::cards::CardDefinition;
-    use crate::models::compat::CompatDocument;
 
     use super::*;
 
@@ -1085,72 +1079,6 @@ mod tests {
         assert!(
             error.contains(expected),
             "{error:?} did not contain {expected:?}"
-        );
-    }
-
-    #[test]
-    #[ignore = "real-catalog parity probe retained for canonical opponents review"]
-    fn canonical_candidate_matches_current_compatibility_sources() {
-        const PRESET_MAP: [(&str, AiPresetId); 1] = [("standard", AiPresetId::Standard)];
-        const SIDE_MAP: [(&str, StartingSide); 2] = [
-            ("player", StartingSide::Player),
-            ("enemy", StartingSide::Enemy),
-        ];
-        const MODE_MAP: [(&str, OpponentMode); 2] = [
-            ("expectiminimax", OpponentMode::Expectiminimax),
-            ("worstCase", OpponentMode::WorstCase),
-        ];
-
-        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-        let current: CompatDocument =
-            ron::from_str(&fs::read_to_string(root.join("data/opponents.ron")).unwrap()).unwrap();
-        let generated: toml::Value =
-            toml::from_str(&fs::read_to_string(root.join("data/opponents.toml")).unwrap()).unwrap();
-        assert_eq!(current.data, generated);
-
-        let candidate: OpponentsCatalog =
-            ron::from_str(&fs::read_to_string(root.join("data/opponents_canonical.ron")).unwrap())
-                .unwrap();
-        assert_eq!(lower(candidate.clone()).unwrap(), current.data);
-
-        let cards: Vec<CardDefinition> =
-            ron::from_str(&fs::read_to_string(root.join("data/cards.ron")).unwrap()).unwrap();
-        let known_card_ids = cards
-            .into_iter()
-            .map(|card| card.id.parse::<CardId>().unwrap())
-            .collect::<BTreeSet<_>>();
-        validate_card_references(&candidate, &known_card_ids).unwrap();
-
-        assert_eq!(candidate.journey_ai_deck.len(), 10);
-        assert_eq!(candidate.ai.presets.len(), PRESET_MAP.len());
-        assert_eq!(
-            current.data["ai"]["presets"]
-                .as_array()
-                .unwrap()
-                .iter()
-                .map(|preset| preset["id"].as_str().unwrap())
-                .zip(candidate.ai.presets.keys().copied())
-                .collect::<Vec<_>>(),
-            PRESET_MAP
-        );
-        assert_eq!(candidate.battle.starting_side, SIDE_MAP[0].1);
-        assert_eq!(
-            candidate.ai.presets[&AiPresetId::Standard].opponent_mode,
-            MODE_MAP[0].1
-        );
-        assert_eq!(
-            SIDE_MAP
-                .iter()
-                .map(|(legacy, _)| *legacy)
-                .collect::<Vec<_>>(),
-            vec!["player", "enemy"]
-        );
-        assert_eq!(
-            MODE_MAP
-                .iter()
-                .map(|(legacy, _)| *legacy)
-                .collect::<Vec<_>>(),
-            vec!["expectiminimax", "worstCase"]
         );
     }
 }
