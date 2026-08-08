@@ -79,10 +79,11 @@ edit:
   defaults.
 - Give long-list entries named record types. Use anonymous inline records only
   when the field name supplies enough meaning.
-- Keep an explicit UUIDv4 `id` on every entity definition. A typed `behavior`,
-  `kind`, or other discriminator complements identity; it does not replace it.
-  Never discard a source identifier without assigning and retaining its
-  canonical UUIDv4 mapping.
+- Convert every source `id` field into either a UUIDv4 entity identity or a Rust
+  enum for a small closed vocabulary. Retain an explicit UUIDv4 `id` when a
+  typed `behavior`, `kind`, or other discriminator describes an entity; the
+  discriminator complements entity identity rather than replacing it. Never
+  discard a source identifier without an explicit typed migration.
 - Turn closed vocabularies and discriminated behavior into enums, with
   variant-specific fields inside each variant.
 - Keep scalar concepts scalar and model exceptional compound forms explicitly.
@@ -102,6 +103,9 @@ edit:
   the source contract.
 - Add concise comments for fields whose semantics, units, invariants, fallback
   behavior, weighting, or compatibility role are not obvious from their names.
+  Put each explanation on the first instance of that field in a repeated
+  definition list instead of collecting field documentation in a large comment
+  above the list.
   Describe the catalog's purpose directly in file-level comments; labels such
   as "authored data" or "authored catalog" add no useful information.
 - Separate named long-list definitions with a blank line. Format struct-like

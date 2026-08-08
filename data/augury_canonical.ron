@@ -26,20 +26,18 @@ AuguryCatalog(
     ],
   ),
 
-  // Every definition has a stable UUID identity and a typed behavior. The
-  // behavior determines its compatibility ID, family, supported selection
-  // policies, and behavior-specific quantities. `selection_policy` ranks the
-  // eligible targets for an offer. `enabled` controls encounter eligibility
-  // while retaining the definition, and `weight` is relative to other eligible
-  // definitions. `dialogue_lines` supplies behavior-specific opening lines.
-  // `copy` fields are presentation templates whose supported placeholders are
-  // validated by the compiler.
   archetypes: [
     ArchetypeDefinition(
+      // Stable entity identity; compatibility lowering maps this UUID to the behavior ID.
       id: "77ad1a09-aba0-4875-b462-e6efe94bdc3d",
+      // Determines the compatibility ID and family. `selection_policy` ranks eligible targets;
+      // behavior-specific integer fields set chooser and reward quantities.
       behavior: FitCardGrant(selection_policy: CardFit, granted_copies: 1),
+      // Controls encounter eligibility while retaining the definition in the catalog.
       enabled: true,
+      // Relative selection weight among eligible definitions.
       weight: 10,
+      // Behavior-specific opening lines; encounter generation selects one line.
       dialogue_lines: [
         "Some things drift a long way only to find their owner.",
         "I kept this shaped like the hollow you carry.",
@@ -47,6 +45,7 @@ AuguryCatalog(
         "A stranger that will feel like an old friend.",
         "This was always going to end up in your hands.",
       ],
+      // Presentation templates; the compiler validates every supported placeholder.
       copy: (
         title: "Receive {card}",
         summary: "Add {copies-word} {copies-label} of this card to your deck.",
