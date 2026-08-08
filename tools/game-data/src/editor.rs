@@ -727,7 +727,7 @@ fn unique_card_index(cards: &[CardDefinition], id: &str) -> Result<usize> {
 fn patch_card_source_field(source: &str, card: &CardDefinition, field: &str) -> Result<String> {
     let source_field = match field {
         "name" => "name",
-        "rules" | "rendered-text" => "rules",
+        "ability_text" | "rules" | "rendered-text" => "ability_text",
         "energy_cost" | "energy-cost" => "energy_cost",
         "card_type" | "card-type" | "subtype" | "spark" => "kind",
         "image_number" | "image-number" | "art_crop" | "art" => "art",
@@ -752,7 +752,14 @@ fn patch_card_source_field(source: &str, card: &CardDefinition, field: &str) -> 
 fn render_card_source_field(card: &CardDefinition, field: &str) -> Result<String> {
     match field {
         "name" => Ok(ron::to_string(&card.name)?),
-        "rules" => Ok(raw_ron_string(&card.rules)),
+        "ability_text" => {
+            let clauses = card
+                .ability_text
+                .iter()
+                .map(ron::to_string)
+                .collect::<Result<Vec<_>, _>>()?;
+            Ok(format!("[{}]", clauses.join(", ")))
+        }
         "energy_cost" => Ok(render_orb(&card.energy_cost)),
         "kind" => match &card.kind {
             CardKind::Event => Ok("Event".into()),
@@ -792,16 +799,6 @@ fn render_orb(value: &OrbValue) -> String {
         OrbValue::Variable => "Variable".into(),
         OrbValue::FixedAndVariable(value) => format!("FixedAndVariable({value})"),
     }
-}
-
-fn raw_ron_string(value: &str) -> String {
-    for hash_count in 1.. {
-        let hashes = "#".repeat(hash_count);
-        if !value.contains(&format!("\"{hashes}")) {
-            return format!("r{hashes}\"{value}\"{hashes}");
-        }
-    }
-    unreachable!("a finite string always has an unused raw-string delimiter")
 }
 
 fn card_record_range(source: &str, id: &str) -> Result<Range<usize>> {
@@ -1045,7 +1042,14 @@ fn reject_duplicate_cards(cards: &[CardDefinition]) -> Result<()> {
 fn set_card_field(card: &mut CardDefinition, field: &str, value: JsonValue) -> Result<()> {
     match field {
         "name" => card.name = json_string(value, field)?,
-        "rules" | "rendered-text" => card.rules = json_string(value, field)?,
+        "ability_text" | "rules" | "rendered-text" => {
+            let rendered_text = json_string(value, field)?;
+            card.ability_text = if rendered_text.is_empty() {
+                Vec::new()
+            } else {
+                rendered_text.split("\n\n").map(str::to_owned).collect()
+            };
+        }
         "energy_cost" | "energy-cost" => card.energy_cost = parse_orb(value, false)?,
         "card_type" | "card-type" => {
             let card_type = json_string(value, field)?;
@@ -1430,10 +1434,7 @@ mod tests {
   CardDefinition(
     name: "Lone Arrival",
     id: "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5",
-    rules: r#"Offering
-
-    tags: ["inside rules"],
-▸Materialized: Dissolve an enemy."#,
+    ability_text: ["Offering", "    tags: [\"inside rules\"],\n▸Materialized: Dissolve an enemy."],
     energy_cost: Fixed(5),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
     art: (image: 2033720048, crop: (x: 0.0, y: 0.595, scale: 1.17)),
@@ -1441,7 +1442,7 @@ mod tests {
   CardDefinition(
     name: "Unrelated Card",
     id: "00000000-0000-4000-8000-000000000002",
-    rules: r#"Draw a card."#,
+    ability_text: ["Draw a card."],
     energy_cost: Variable,
     kind: Event,
     art: (image: 2),
@@ -1569,7 +1570,7 @@ mod tests {
     }
 
     #[test]
-    fn card_rules_edit_changes_exactly_one_source_line() {
+    fn card_ability_text_edit_changes_exactly_one_source_line() {
         let mut cards: Vec<CardDefinition> = ron::from_str(CARD_SOURCE).unwrap();
         let index = unique_card_index(&cards, CARD_ID).unwrap();
         set_card_field(
@@ -1591,7 +1592,10 @@ mod tests {
         assert_eq!(CARD_SOURCE.lines().count(), patched.lines().count());
         assert_eq!(
             changed_lines,
-            vec![("    rules: r#\"Offering", "    rules: r#\"Offering, Veil")]
+            vec![(
+                "    ability_text: [\"Offering\", \"    tags: [\\\"inside rules\\\"],\\n▸Materialized: Dissolve an enemy.\"],",
+                "    ability_text: [\"Offering, Veil\", \"    tags: [\\\"inside rules\\\"],\\n▸Materialized: Dissolve an enemy.\"],"
+            )]
         );
         assert!(patched.starts_with("// Stable catalog guidance.\n"));
         assert_eq!(
@@ -1636,7 +1640,7 @@ mod tests {
         let mut event = CardDefinition {
             name: "Fixture".into(),
             id: "00000000-0000-4000-8000-000000000001".into(),
-            rules: String::new(),
+            ability_text: Vec::new(),
             energy_cost: OrbValue::Fixed(1),
             kind: CardKind::Event,
             speed: crate::models::cards::Speed::Normal,

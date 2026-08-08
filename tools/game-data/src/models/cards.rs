@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 pub struct CardDefinition {
     pub name: String,
     pub id: String,
-    pub rules: String,
+    pub ability_text: Vec<String>,
     pub energy_cost: OrbValue,
     pub kind: CardKind,
     #[serde(default, skip_serializing_if = "speed_is_normal")]
@@ -166,7 +166,10 @@ pub fn lower(
         record.insert("name".into(), card.name.into());
         record.insert("mtg-name".into(), metadata.mtg_origin.into());
         record.insert("id".into(), card.id.into());
-        record.insert("rendered-text".into(), card.rules.into());
+        record.insert(
+            "rendered-text".into(),
+            card.ability_text.join("\n\n").into(),
+        );
         record.insert("energy-cost".into(), card.energy_cost.compatibility_value());
         record.insert("card-type".into(), card_type.into());
         record.insert("subtype".into(), subtype.into());
@@ -214,7 +217,7 @@ mod tests {
         CardDefinition {
             name: "Unicode ✦ card".into(),
             id: "00000000-0000-4000-8000-000000000001".into(),
-            rules: "quoted \"text\"\nmultiline {value}".into(),
+            ability_text: vec!["quoted \"text\"".into(), "multiline {value}".into()],
             energy_cost,
             kind,
             speed: Speed::Interrupt,
@@ -260,6 +263,10 @@ mod tests {
         assert_eq!(record["spark"].as_str(), Some(""));
         assert_eq!(record["is-interrupt"].as_bool(), Some(true));
         assert_eq!(record["tags"][0].as_str(), Some("first"));
+        assert_eq!(
+            record["rendered-text"].as_str(),
+            Some("quoted \"text\"\n\nmultiline {value}")
+        );
 
         let event = lower(vec![card(OrbValue::Variable, CardKind::Event)], metadata(1)).unwrap();
         assert_eq!(event["cards"][0]["card-type"].as_str(), Some("Event"));

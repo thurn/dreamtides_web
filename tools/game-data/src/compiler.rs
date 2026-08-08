@@ -129,7 +129,7 @@ fn adapt(
         "apollyon_incarnations_v1" => apollyon_incarnations::lower(parse_ron(source, dataset)?),
         "atlas_v1" => atlas::lower(parse_ron(source, dataset)?),
         "draft_v1" => draft::lower(parse_ron(source, dataset)?),
-        "cards_v1" => {
+        "cards_v2" => {
             let metadata_dataset = manifest.dataset("internal-card-metadata")?;
             let metadata_source = fs::read_to_string(root.join(&metadata_dataset.source))
                 .with_context(|| {
@@ -387,7 +387,7 @@ mod tests {
                 "atlas_v1" => {
                     canonical::<atlas::AtlasCatalog>(&source, true);
                 }
-                "cards_v1" => {
+                "cards_v2" => {
                     canonical::<Vec<CardDefinition>>(&source, true);
                 }
                 "draft_v1" => {
