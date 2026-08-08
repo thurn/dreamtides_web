@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/developer-rail`
 
-Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 
 The shared edge-attached shell for persistent developer tools, with canonical glass, header hierarchy, close action, scrolling body, and optional footer.
 

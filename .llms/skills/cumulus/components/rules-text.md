@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/rules-text`
 
-Real consumers: **17** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **16** (imports outside `src/cumulus/docs/` and tests).
 
 The canonical Dreamtides rules-copy source: resource symbols and keywords render in place, while hovering, focusing, or touch-holding anywhere in the complete block reveals one contextual glossary card.
 

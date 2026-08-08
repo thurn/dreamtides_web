@@ -9,10 +9,6 @@
     linear-gradient(155deg, #101b2a, #08111d 62%, #0d1824);
 }
 
-.exploration-editor-layout[data-template-health-open="true"] {
-  grid-template-columns: minmax(0, 1fr) clamp(340px, 25vw, 400px);
-}
-
 .exploration-editor-shell {
   min-width: 0;
   width: min(100%, 96rem);
@@ -52,23 +48,11 @@
   font: var(--t-display);
 }
 
-.exploration-editor-page-actions {
-  display: flex;
-  align-items: center;
-  gap: var(--space-s);
-}
-
-.exploration-editor-page-actions > span {
+.exploration-editor-page-header > span {
   max-width: 30rem;
   color: var(--text-secondary);
   font: var(--t-body-sm);
   text-align: right;
-}
-
-@media (max-width: 1559px) {
-  .exploration-editor-layout[data-template-health-open="true"] {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
 
 .exploration-editor-list {

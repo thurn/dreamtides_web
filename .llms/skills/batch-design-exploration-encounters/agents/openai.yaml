@@ -1,4 +1,0 @@
-interface:
-  display_name: "Batch Design Exploration Encounters"
-  short_description: "Design random encounter sets in parallel"
-  default_prompt: "Use $batch-design-exploration-encounters to design encounters for 10 random unrepresented cards."

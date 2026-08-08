@@ -8,7 +8,6 @@ import { asCardId, asCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { Dreamsign } from "../types/journey";
 import ExplorationEditorApp from "./ExplorationEditorApp";
-import type { EncounterTemplateHealth } from "./exploration-candidates-editor-types";
 import type {
   ExplorationEditorClient,
   ExplorationEditorLoadResult,
@@ -162,24 +161,6 @@ const SERVER_DATA: ExplorationEditorServerData = {
   subtypes: ["Guide"],
 };
 
-const TEMPLATE_HEALTH: EncounterTemplateHealth = {
-  productionEncounters: 9,
-  recordedTemplateUses: 4,
-  catalogTemplateCount: 4,
-  meanUsesPerTemplate: 1,
-  softWarningThreshold: 1,
-  omissionThreshold: 2,
-  uniqueEffectOmissionThreshold: 1,
-  requiredTemplateCount: 3,
-  guidance: "Prefer fewer prior production uses.",
-  templates: [
-    { templateId: 14, template: "Draw a card", usageCount: 1, balanceClass: "unique_effect", status: "hidden", reasons: ["production"] },
-    { templateId: 37, template: "Gain a dreamsign", usageCount: 1, balanceClass: null, status: "warning", reasons: ["production"] },
-    { templateId: 1, template: "Gain essence", usageCount: 0, balanceClass: null, status: "unused", reasons: [] },
-    { templateId: 2, template: "Purge a card", usageCount: 2, balanceClass: null, status: "reintroduced", reasons: ["production"] },
-  ],
-};
-
 function loadResult(): ExplorationEditorLoadResult {
   return {
     ...structuredClone(SERVER_DATA),
@@ -191,7 +172,6 @@ function loadResult(): ExplorationEditorLoadResult {
 function client(overrides: Partial<ExplorationEditorClient> = {}): ExplorationEditorClient {
   return {
     load: vi.fn().mockResolvedValue(loadResult()),
-    loadTemplateHealth: vi.fn().mockResolvedValue(structuredClone(TEMPLATE_HEALTH)),
     saveProse: vi.fn(),
     saveAction: vi.fn(),
     saveTemplate: vi.fn(),
@@ -233,47 +213,6 @@ afterEach(() => {
 });
 
 describe("ExplorationEditorApp", () => {
-  it("opens the production health rail with explicit selection states and hiding rules", async () => {
-    const loadTemplateHealth = vi.fn().mockResolvedValue(structuredClone(TEMPLATE_HEALTH));
-    const { container, root } = await renderLoaded(client({ loadTemplateHealth }));
-    expect(loadTemplateHealth).not.toHaveBeenCalled();
-
-    await act(async () => {
-      container.querySelector<HTMLButtonElement>("[data-testid='template-health-trigger']")!.click();
-      await Promise.resolve();
-      await Promise.resolve();
-    });
-
-    expect(loadTemplateHealth).toHaveBeenCalledOnce();
-    expect(container.querySelector(".exploration-editor-layout")?.getAttribute("data-template-health-open"))
-      .toBe("true");
-    expect(container.textContent).toContain("What can be chosen now");
-    expect(container.textContent).toContain("3SelectableCan appear in a new design");
-    expect(container.textContent).toContain("1HiddenTemporarily excluded");
-    expect(container.textContent).toContain("Reintroduced");
-    expect(container.textContent).toContain("A hidden template restored only when fewer than 3 choices would remain.");
-    expect(container.textContent).toContain("Gain a dreamsign");
-    expect(container.textContent).toContain("Gain essence");
-    expect(container.textContent).not.toContain("Draw a card");
-
-    const unused = container.querySelector<HTMLButtonElement>("[data-testid='template-health-filter-unused']")!;
-    act(() => unused.click());
-    expect(unused.getAttribute("aria-pressed")).toBe("true");
-    expect(container.querySelector("[data-template-health-filter='unused']")).not.toBeNull();
-    expect([...container.querySelectorAll<HTMLElement>(".encounter-template-health-entry")]
-      .map((entry) => entry.dataset.templateId)).toEqual(["1"]);
-
-    const hidden = container.querySelector<HTMLButtonElement>("[data-testid='template-health-filter-hidden']")!;
-    act(() => hidden.click());
-    expect(container.textContent).toContain("Draw a card");
-    expect(container.textContent).toContain("Unique effect: hidden after 1 production use.");
-    expect(container.textContent).not.toContain("Gain a dreamsign");
-
-    act(() => container.querySelector<HTMLButtonElement>("[aria-label='Close template health']")!.click());
-    expect(container.querySelector("[data-testid='encounter-template-health-rail']")).toBeNull();
-    act(() => root.unmount());
-  });
-
   it("renders the last TOML encounter first", async () => {
     const loaded = loadResult();
     loaded.encounters.push({
@@ -299,7 +238,7 @@ describe("ExplorationEditorApp", () => {
     expect(container.textContent).toContain("Gather a company");
     expect(container.textContent).toContain("Choose one of 2 packs of 3 Character cards");
     expect(container.querySelector("img")?.getAttribute("src"))
-      .toBe("/api/editor/exploration_candidates/art/42");
+      .toBe("/exploration/42.jpg");
     const cardLink = container.querySelector<HTMLAnchorElement>(
       "a[aria-label='Open Fixture Guide exploration in a new tab']",
     );

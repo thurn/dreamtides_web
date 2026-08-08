@@ -12,13 +12,9 @@ import type { CardData } from "../types/cards";
 import type { Dreamsign } from "../types/journey";
 import EditableField from "./EditableField";
 import { EditorApiRequestError } from "./editor-api";
-import { EncounterTemplateHealthRail } from "./EncounterTemplateHealthRail";
 import { explorationEditorClient } from "./exploration-editor-api";
 import type {
   EncounterRenderedTemplatePart,
-  EncounterTemplateHealth,
-} from "./exploration-candidates-editor-types";
-import type {
   ExplorationEditorAction,
   ExplorationEditorClient,
   ExplorationEditorEffectDefinition,
@@ -699,7 +695,7 @@ function ExplorationEditorRow({
               alt={`Art for ${encounter.cardName}`}
               className="exploration-editor-art"
               loading={index < 2 ? "eager" : "lazy"}
-              src={resolveArtRef(artRef.explorationCandidatesEditorCard(encounter.imageNumber))}
+              src={resolveArtRef(artRef.explorationCard(encounter.imageNumber))}
             />
           </div>
           <div className="exploration-editor-copy">
@@ -757,12 +753,6 @@ export default function ExplorationEditorApp({
   const saveStateRef = useRef(saveStateValue);
   const [cardPickerTarget, setCardPickerTarget] = useState<CardPickerTarget | null>(null);
   const [cardPickerQuery, setCardPickerQuery] = useState("");
-  const [templateHealthOpen, setTemplateHealthOpen] = useState(false);
-  const [templateHealth, setTemplateHealth] = useState<EncounterTemplateHealth | null>(null);
-  const [templateHealthLoadState, setTemplateHealthLoadState] = useState<LoadState>("loading");
-  const [templateHealthLoadMessage, setTemplateHealthLoadMessage] = useState("");
-  const templateHealthRequestRef = useRef(0);
-  const templateHealthControllerRef = useRef<AbortController | null>(null);
 
   const setData = useCallback((next: ExplorationEditorServerData) => {
     dataRef.current = next;
@@ -825,65 +815,6 @@ export default function ExplorationEditorApp({
       ?.scrollIntoView({ block: "start" });
   }, [loadState]);
 
-  const loadTemplateHealth = useCallback(async (reason: "open" | "refresh") => {
-    const revision = templateHealthRequestRef.current + 1;
-    templateHealthRequestRef.current = revision;
-    templateHealthControllerRef.current?.abort();
-    const controller = new AbortController();
-    templateHealthControllerRef.current = controller;
-    setTemplateHealthLoadState("loading");
-    setTemplateHealthLoadMessage("");
-    try {
-      const loaded = await client.loadTemplateHealth(controller.signal);
-      if (controller.signal.aborted || templateHealthRequestRef.current !== revision) return;
-      setTemplateHealth(loaded);
-      setTemplateHealthLoadState("ready");
-      logEvent("exploration_editor_template_health_loaded", {
-        reason,
-        productionEncounters: loaded.productionEncounters,
-        catalogTemplateCount: loaded.catalogTemplateCount,
-        hiddenTemplateCount: loaded.templates.filter((entry) => entry.status === "hidden").length,
-        warningTemplateCount: loaded.templates.filter((entry) => entry.status === "warning").length,
-        unusedTemplateCount: loaded.templates.filter((entry) => entry.status === "unused").length,
-      });
-    } catch (error) {
-      if (controller.signal.aborted || templateHealthRequestRef.current !== revision) return;
-      setTemplateHealthLoadMessage(messageFor(error));
-      setTemplateHealthLoadState("error");
-      logEvent("exploration_editor_template_health_load_failed", {
-        reason,
-        message: messageFor(error),
-      });
-    }
-  }, [client]);
-
-  useEffect(() => {
-    if (templateHealthOpen && templateHealth === null && templateHealthLoadState === "loading") {
-      void loadTemplateHealth("open");
-    }
-  }, [loadTemplateHealth, templateHealth, templateHealthLoadState, templateHealthOpen]);
-
-  useEffect(() => {
-    if (!templateHealthOpen) return undefined;
-    function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") setTemplateHealthOpen(false);
-    }
-    window.addEventListener("keydown", closeOnEscape);
-    return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [templateHealthOpen]);
-
-  useEffect(() => () => templateHealthControllerRef.current?.abort(), []);
-
-  function toggleTemplateHealth() {
-    setTemplateHealthOpen((open) => {
-      const next = !open;
-      logEvent(next
-        ? "exploration_editor_template_health_opened"
-        : "exploration_editor_template_health_closed", {});
-      return next;
-    });
-  }
-
   async function chooseCard(cardId: string) {
     if (cardPickerTarget === null || dataRef.current === null) return;
     const encounter = dataRef.current.encounters.find((entry) => entry.cardId === cardPickerTarget.cardId);
@@ -918,10 +849,7 @@ export default function ExplorationEditorApp({
       ?.actions[cardPickerTarget.slot];
 
   return (
-    <div
-      className="cumulus exploration-editor-layout"
-      data-template-health-open={templateHealthOpen ? "true" : "false"}
-    >
+    <div className="cumulus exploration-editor-layout">
       <main className="exploration-editor-shell">
         <header className="exploration-editor-page-header">
           <div>
@@ -929,16 +857,7 @@ export default function ExplorationEditorApp({
             <h1>Production encounters</h1>
           </div>
           {loadState === "ready" && data !== null && (
-            <div className="exploration-editor-page-actions">
-              <span>{data.encounters.length} encounters · edits write directly to exploration.ron</span>
-              <GlassButton
-                label="Template health"
-                glyph={GLYPHS.sidebarRight}
-                pressed={templateHealthOpen}
-                testId="template-health-trigger"
-                onPress={toggleTemplateHealth}
-              />
-            </div>
+            <span>{data.encounters.length} encounters · edits write directly to exploration.ron</span>
           )}
         </header>
         {loadState === "loading" && (
@@ -990,18 +909,6 @@ export default function ExplorationEditorApp({
           onClose={() => setCardPickerTarget(null)}
           onSelect={(cardId) => void chooseCard(cardId)}
         />
-      )}
-      {templateHealthOpen && (
-        <div className="encounter-template-health-track">
-          <EncounterTemplateHealthRail
-            health={templateHealth}
-            loadState={templateHealthLoadState}
-            loadMessage={templateHealthLoadMessage}
-            onClose={() => setTemplateHealthOpen(false)}
-            onRefresh={() => void loadTemplateHealth("refresh")}
-            onFilterChange={(filter) => logEvent("exploration_editor_template_health_filter_changed", { filter })}
-          />
-        </div>
       )}
     </div>
   );

@@ -48,11 +48,6 @@ vi.mock("./GlossaryEditorApp", () => ({
   },
 }));
 
-vi.mock("./ExplorationCandidatesEditorApp", () => ({
-  default: function MockExplorationCandidatesEditorApp() {
-    return null;
-  },
-}));
 
 vi.mock("./ExplorationEditorApp", () => ({
   default: function MockExplorationEditorApp() {
@@ -202,18 +197,6 @@ describe("main editor route", () => {
 
   it("mounts the isolated glossary editor for the Vite-served /glossary/ path", async () => {
     window.history.pushState(null, "", "/glossary/");
-
-    await import("../main.tsx");
-
-    expect(mocks.appImport).not.toHaveBeenCalled();
-    expect(mocks.createRoot).toHaveBeenCalledWith(
-      document.getElementById("root"),
-    );
-    expect(mocks.render).toHaveBeenCalledTimes(1);
-  });
-
-  it("mounts the exploration candidates editor for the Vite-served /exploration_candidates/ path", async () => {
-    window.history.pushState(null, "", "/exploration_candidates/");
 
     await import("../main.tsx");
 

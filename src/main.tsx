@@ -62,10 +62,6 @@ if (pathname === "/editor" || pathname === "/cards") {
   const { default: GlossaryEditorApp } =
     await import("./editor/GlossaryEditorApp");
   renderStrict(<GlossaryEditorApp />);
-} else if (pathname === "/exploration_candidates") {
-  const { default: ExplorationCandidatesEditorApp } =
-    await import("./editor/ExplorationCandidatesEditorApp");
-  renderStrict(<ExplorationCandidatesEditorApp />);
 } else if (pathname === "/exploration") {
   const { default: ExplorationEditorApp } =
     await import("./editor/ExplorationEditorApp");

@@ -6,9 +6,9 @@ description: Design a random or UUID-selected batch of Dreamtides Exploration en
 # Design and Implement Exploration Encounters
 
 Ship one implementation-ready encounter for each selected canonical card. The
-default batch is five cards. Use private design competition for quality, but do
-not write `data/exploration_candidates.json`: each designer compares five
-concepts and emits only the winner plus four short rejection notes. Complete
+default batch is five cards. Use private design competition for quality: each
+designer compares five concepts and emits only the winner plus four short
+rejection notes. Complete
 the selected designs as live, tested behavior in the same worktree.
 
 ## Establish the isolated run
@@ -112,8 +112,7 @@ vertical slice for the assigned mechanic family: authored validation, asset
 compilation, typed runtime data, deterministic persisted offers and resolution,
 UUID-only intent, logging, semantic Cumulus outcome, dedicated animation,
 reduced motion, synthetic tests, live exploration.toml entries, generated
-assets, and focused verification. Do not use or edit
-data/exploration_candidates.json. Do not leave TODOs or partial effect paths.
+assets, and focused verification. Do not leave TODOs or partial effect paths.
 Report changed files, focused checks, and unresolved blockers.
 ```
 

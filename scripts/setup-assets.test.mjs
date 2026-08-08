@@ -744,7 +744,7 @@ rendered-text = ""
 });
 
 describe("linkExplorationArt", () => {
-  it("prefers curated art and falls back to exploration-candidates-editor source art", () => {
+  it("prefers curated Exploration art and falls back to source art", () => {
     const tempRoot = mkdtempSync(join(tmpdir(), "exploration-art-"));
     const destinationDir = join(tempRoot, "public", "exploration");
     const highResArtDir = join(tempRoot, "curated");

@@ -8,11 +8,36 @@ import type {
   RewardMechanicId,
   RewardSelectionPolicyId,
 } from "../reward-selection";
-import type {
-  EncounterRenderedTemplatePart,
-  EncounterRuntimeCardSelection,
-  EncounterTemplateHealth,
-} from "./exploration-candidates-editor-types";
+
+export type EncounterRenderedTemplatePart =
+  | { kind: "text"; text: string }
+  | {
+    kind: "variable";
+    placeholder: string;
+    variableName: string;
+    value: unknown;
+    text: string;
+  }
+  | {
+    kind: "card";
+    placeholder: string;
+    cardId: string;
+    cardName: string;
+  }
+  | {
+    kind: "dreamsign";
+    placeholder: string;
+    dreamsignId: string;
+    dreamsignName: string;
+  };
+
+export interface EncounterRuntimeCardSelection {
+  placeholder: string;
+  predicate: string | null;
+  cardId: string;
+  cardName: string;
+  source: "player_deck" | "catalog_fallback" | "offer_pool" | "starter_deck";
+}
 
 export type ExplorationEditorControl =
   | "number"
@@ -109,7 +134,6 @@ export interface ExplorationEditorLoadResult extends ExplorationEditorServerData
 
 export interface ExplorationEditorClient {
   load(signal?: AbortSignal): Promise<ExplorationEditorLoadResult>;
-  loadTemplateHealth(signal?: AbortSignal): Promise<EncounterTemplateHealth>;
   saveProse(request: {
     cardId: string;
     value: string;

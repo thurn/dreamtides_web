@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/number-stepper`
 
-Real consumers: **7** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **6** (imports outside `src/cumulus/docs/` and tests).
 
 A labeled, accessible decrement/value/increment row with optional canonical resource notation.
 

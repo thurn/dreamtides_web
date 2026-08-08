@@ -1,4 +1,0 @@
-interface:
-  display_name: "Implement Exploration Encounters"
-  short_description: "Ship candidate encounters into the live journey"
-  default_prompt: "Use $implement-exploration-encounters to implement the unrepresented exploration candidates in the live catalog."

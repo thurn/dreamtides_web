@@ -24,9 +24,8 @@ tracked RON -> Rust conversion -> staged TOML -> TypeScript validation
 
 ## Context
 
-The repository has 26 game-data TOML catalogs under `data/`, including
-`data/exploration_candidates.toml`. Together they contain approximately 20,000
-lines. It also has three production-shaped RON candidates beside their TOML
+The repository has 25 game-data TOML catalogs under `data/`. Together they
+contain approximately 20,000 lines. It also has three production-shaped RON candidates beside their TOML
 counterparts: `draft.ron`, `cards.ron`, and `exploration.ron`. These files are
 the starting point for the migration rather than disposable syntax examples.
 
@@ -183,8 +182,6 @@ data/cards.ron                    # tracked source
 data/cards.toml                   # ignored generated compatibility file
 data/exploration.ron              # tracked source
 data/exploration.toml             # ignored generated compatibility file
-data/exploration_candidates.ron          # tracked source
-data/exploration_candidates.toml         # ignored generated compatibility file
 ```
 
 Keeping generated TOML at the current path makes the format boundary invisible
